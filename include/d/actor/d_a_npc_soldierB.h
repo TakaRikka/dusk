@@ -9,7 +9,7 @@ struct daNpc_SoldierB_HIOParam {
 
 class daNpc_SoldierB_Param_c {
 public:
-    /* 80AF267C */ virtual ~daNpc_SoldierB_Param_c() {}
+    virtual ~daNpc_SoldierB_Param_c() {}
 
     static daNpc_SoldierB_HIOParam const m;
 };
@@ -41,39 +41,39 @@ public:
     typedef int (daNpc_SoldierB_c::*actionFunc)(void*);
     typedef int (daNpc_SoldierB_c::*cutFunc)(int);
 
-    /* 80AF2CAC */ daNpc_SoldierB_c();
-    /* 80AF2EC0 */ ~daNpc_SoldierB_c();
-    /* 80AF30C0 */ cPhs__Step create();
-    /* 80AF33A0 */ int CreateHeap();
-    /* 80AF356C */ int Delete();
-    /* 80AF35A0 */ int Execute();
-    /* 80AF35C0 */ int Draw();
-    /* 80AF3634 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80AF3830 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AF3850 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80AF389C */ void setParam();
-    /* 80AF39B8 */ BOOL main();
-    /* 80AF3B30 */ BOOL ctrlBtk();
-    /* 80AF3B38 */ void setAttnPos();
-    /* 80AF4030 */ void setMotionAnm(int, f32);
-    /* 80AF4130 */ void setMotion(int, f32, int);
-    /* 80AF4174 */ int drawDbgInfo();
-    /* 80AF417C */ void drawOtherMdls();
-    /* 80AF4228 */ u8 getTypeFromParam();
-    /* 80AF4248 */ BOOL isDelete();
-    /* 80AF426C */ void reset();
-    /* 80AF43E4 */ void playMotion();
-    /* 80AF4508 */ BOOL chkAction(int (daNpc_SoldierB_c::*)(void*));
-    /* 80AF4534 */ BOOL setAction(int (daNpc_SoldierB_c::*)(void*));
-    /* 80AF45DC */ BOOL selectAction();
-    /* 80AF465C */ void doNormalAction(int);
-    /* 80AF4770 */ BOOL doEvent();
-    /* 80AF49E4 */ void setLookMode(int);
-    /* 80AF4A08 */ void lookat();
-    /* 80AF4CFC */ int wait(void*);
-    /* 80AF4DBC */ int talk(void*);
-    /* 80AF4F54 */ int ECut_listenLake(int);
-    /* 80AF50AC */ int test(void*);
+    daNpc_SoldierB_c();
+    ~daNpc_SoldierB_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void setParam();
+    BOOL main();
+    BOOL ctrlBtk();
+    void setAttnPos();
+    void setMotionAnm(int, f32);
+    void setMotion(int, f32, int);
+    int drawDbgInfo();
+    void drawOtherMdls();
+    u8 getTypeFromParam();
+    BOOL isDelete();
+    void reset();
+    void playMotion();
+    BOOL chkAction(int (daNpc_SoldierB_c::*)(void*));
+    BOOL setAction(int (daNpc_SoldierB_c::*)(void*));
+    BOOL selectAction();
+    void doNormalAction(int);
+    BOOL doEvent();
+    void setLookMode(int);
+    void lookat();
+    int wait(void*);
+    int talk(void*);
+    int ECut_listenLake(int);
+    int test(void*);
 
     static char* mEvtCutNameList[2];
     static cutFunc mEvtCutList[2];

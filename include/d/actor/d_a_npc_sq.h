@@ -61,8 +61,8 @@ public:
 STATIC_ASSERT(sizeof(npc_sq_class) == 0xA44);
 
 struct daNpc_Sq_HIO_c {
-    /* 80AF5FEC */ daNpc_Sq_HIO_c();
-    /* 80AF7360 */ virtual ~daNpc_Sq_HIO_c() {}
+    daNpc_Sq_HIO_c();
+    virtual ~daNpc_Sq_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mScale;

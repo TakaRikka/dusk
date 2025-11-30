@@ -12,7 +12,6 @@
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 
-/* 8008813C-80088284 082A7C 0148+00 0/0 12/12 0/0 .text            rationalBezierRatio__8dCamMathFff */
 f32 dCamMath::rationalBezierRatio(f32 param_0, f32 param_1) {
     f64 var_f31;
     f32 var_f1 = param_0;
@@ -57,7 +56,6 @@ static f32 dummy_literal1() {
     return 1.0f;
 }
 
-/* 80088284-800882E0 082BC4 005C+00 0/0 1/1 0/0 .text            zoomFovy__8dCamMathFff */
 f32 dCamMath::zoomFovy(f32 param_0, f32 param_1) {
     cDegree deg(param_0);
 
@@ -65,7 +63,6 @@ f32 dCamMath::zoomFovy(f32 param_0, f32 param_1) {
     return cAngle::r2d(radian);
 }
 
-/* 8008831C-80088384 082C5C 0068+00 0/0 1/1 0/0 .text xyzRotateX__8dCamMathFR4cXyz7cSAngle */
 cXyz dCamMath::xyzRotateX(cXyz& i_xyz, cSAngle i_angle) {
     Mtx m;
     cXyz rot_xyz;
@@ -76,7 +73,6 @@ cXyz dCamMath::xyzRotateX(cXyz& i_xyz, cSAngle i_angle) {
     return rot_xyz;
 }
 
-/* 80088384-800883EC 082CC4 0068+00 0/0 13/13 0/0 .text xyzRotateY__8dCamMathFR4cXyz7cSAngle */
 cXyz dCamMath::xyzRotateY(cXyz& i_xyz, cSAngle i_angle) {
     Mtx m;
     cXyz rot_xyz;
@@ -87,8 +83,6 @@ cXyz dCamMath::xyzRotateY(cXyz& i_xyz, cSAngle i_angle) {
     return rot_xyz;
 }
 
-/* 800883EC-80088434 082D2C 0048+00 0/0 9/9 0/0 .text
- * xyzHorizontalDistance__8dCamMathFR4cXyzR4cXyz                */
 f32 dCamMath::xyzHorizontalDistance(cXyz& i_posA, cXyz& i_posB) {
     f64 x = i_posA.x - i_posB.x;
     f64 z = i_posA.z - i_posB.z;
@@ -96,19 +90,16 @@ f32 dCamMath::xyzHorizontalDistance(cXyz& i_posA, cXyz& i_posB) {
     return sqrt((x * x) + (z * z));
 }
 
-/* 80088434-8008845C 082D74 0028+00 1/1 0/0 0/0 .text            __ct__9dCstick_cFv */
 dCstick_c::dCstick_c() {
     mThresholdLow = 0.2f;
     mThresholdHigh = 0.95f;
     mInputSpeed = 6;
 }
 
-/* 8008845C-80088464 082D9C 0008+00 0/0 1/1 0/0 .text            Shift__9dCstick_cFUl */
 bool dCstick_c::Shift(u32 param_0) {
     return false;
 }
 
-/* 80088464-800884F0 082DA4 008C+00 1/1 0/0 0/0 .text            __ct__11dCamBGChk_cFv */
 dCamBGChk_c::dCamBGChk_c() {
     mFloorMargin = 32.0f;
 
@@ -133,7 +124,6 @@ dCamBGChk_c::dCamBGChk_c() {
     mCornerAngleMax = 120.0f;
 }
 
-/* 800884F0-8008858C 082E30 009C+00 0/0 1/1 0/0 .text            __ct__11dCamParam_cFl */
 dCamParam_c::dCamParam_c(s32 i_styleID) {
     u8* cam_data = (u8*)dComIfG_getObjectRes(dComIfGp_getCameraParamFileName(0), "camstyle.dat");
 
@@ -147,10 +137,8 @@ dCamParam_c::dCamParam_c(s32 i_styleID) {
     mMapToolArg2 = -1;
 }
 
-/* 8008858C-800885D4 082ECC 0048+00 1/0 1/1 0/0 .text            __dt__11dCamParam_cFv */
 dCamParam_c::~dCamParam_c() {}
 
-/* 800885D4-80088620 082F14 004C+00 1/1 7/7 0/0 .text            Change__11dCamParam_cFl */
 int dCamParam_c::Change(s32 i_styleID) {
     if (i_styleID >= 0 && i_styleID < mStyleNum) {
         mStyleID = i_styleID;
@@ -163,7 +151,6 @@ int dCamParam_c::Change(s32 i_styleID) {
     return 0;
 }
 
-/* 80088620-80088668 082F60 0048+00 0/0 4/4 0/0 .text            SearchStyle__11dCamParam_cFUl */
 int dCamParam_c::SearchStyle(u32 param_0) {
     int styleID = -1;
 
@@ -181,7 +168,6 @@ static f32 dummy_literal2() {
     return 0.25f;
 }
 
-/* 80088668-800888B8 082FA8 0250+00 0/0 1/1 0/0 .text            __ct__11dCamSetup_cFv */
 dCamSetup_c::dCamSetup_c() {
     mDrawNear = 1.0f;
     mDrawFar = 100000.0f;
@@ -262,10 +248,8 @@ dCamSetup_c::dCamSetup_c() {
     dCam_getBody()->EventRecoverNotime();
 }
 
-/* 800888B8-80088918 0831F8 0060+00 1/0 1/1 0/0 .text            __dt__11dCamSetup_cFv */
 dCamSetup_c::~dCamSetup_c() {}
 
-/* 80088918-80088988 083258 0070+00 0/0 1/1 0/0 .text CheckLatitudeRange__11dCamSetup_cFPs */
 bool dCamSetup_c::CheckLatitudeRange(s16* param_0) {
     s16 temp0 = cAngle::d2s(field_0x60);
     s16 temp1 = cAngle::d2s(field_0x5c);
@@ -283,7 +267,6 @@ bool dCamSetup_c::CheckLatitudeRange(s16* param_0) {
     return true;
 }
 
-/* 80088988-800889B0 0832C8 0028+00 0/0 1/1 0/0 .text            PlayerHideDist__11dCamSetup_cFv */
 f32 dCamSetup_c::PlayerHideDist() {
     if (daPy_py_c::checkNowWolf()) {
         return 120.0f;

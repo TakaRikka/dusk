@@ -24,10 +24,10 @@ struct JAUSeqCollectionData {
  */
 class JAUSeqCollection {
 public:
-    /* 802A66A0 */ JAUSeqCollection();
-    /* 802A66AC */ void init(void const*);
-    /* 802A66FC */ bool getSeqData(int, int, JAISeqData*);
-    /* 802A6754 */ bool getSeqDataRegion(JAISeqDataRegion*);
+    JAUSeqCollection();
+    void init(void const*);
+    bool getSeqData(int, int, JAISeqData*);
+    bool getSeqDataRegion(JAISeqDataRegion*);
 
     bool isValid() { return field_0x8; }
 
@@ -43,11 +43,11 @@ public:
  */
 class JAUSeqDataMgr_SeqCollection : public JAISeqDataMgr, public JAUSeqCollection {
 public:
-    /* 802A677C */ JAUSeqDataMgr_SeqCollection();
-    /* 802A67D0 */ bool setSeqDataUser(JAISeqDataUser*);
-    /* 802A67DC */ int releaseSeqData();
-    /* 802A683C */ SeqDataReturnValue getSeqData(JAISoundID, JAISeqData*);
-    /* 802A6894 */ ~JAUSeqDataMgr_SeqCollection();
+    JAUSeqDataMgr_SeqCollection();
+    bool setSeqDataUser(JAISeqDataUser*);
+    int releaseSeqData();
+    SeqDataReturnValue getSeqData(JAISoundID, JAISeqData*);
+    ~JAUSeqDataMgr_SeqCollection();
 
     const void* getResource() const { return field_0x4; }
 

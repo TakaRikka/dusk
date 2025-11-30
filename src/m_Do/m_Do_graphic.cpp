@@ -215,7 +215,6 @@ static void drawHeapMap() {
 
 #endif
 
-/* 80007D9C-80007E44 0026DC 00A8+00 1/1 0/0 0/0 .text            createTimg__FUsUsUl */
 static ResTIMG* createTimg(u16 width, u16 height, u32 format) {
     u32 bufferSize = GXGetTexBufferSize(width, height, format, GX_FALSE, 0) + 0x20;
     ResTIMG* timg;
@@ -242,7 +241,6 @@ static ResTIMG* createTimg(u16 width, u16 height, u32 format) {
     return timg;
 }
 
-/* 80450BC8-80450BCC 0000C8 0004+00 2/2 38/38 1/1 .sbss            mFader__13mDoGph_gInf_c */
 JUTFader* mDoGph_gInf_c::mFader;
 
 #if PLATFORM_WII || PLATFORM_SHIELD
@@ -250,32 +248,22 @@ ResTIMG* mDoGph_gInf_c::m_fullFrameBufferTimg;
 void* mDoGph_gInf_c::m_fullFrameBufferTex;
 #endif
 
-/* 80450BCC-80450BD0 0000CC 0004+00 3/3 8/8 1/1 .sbss            mFrameBufferTimg__13mDoGph_gInf_c
- */
 ResTIMG* mDoGph_gInf_c::mFrameBufferTimg;
 
-/* 80450BD0-80450BD4 0000D0 0004+00 3/3 6/6 0/0 .sbss            mFrameBufferTex__13mDoGph_gInf_c */
 void* mDoGph_gInf_c::mFrameBufferTex;
 
-/* 80450BD4-80450BD8 0000D4 0004+00 1/1 1/1 0/0 .sbss            mZbufferTimg__13mDoGph_gInf_c */
 ResTIMG* mDoGph_gInf_c::mZbufferTimg;
 
-/* 80450BD8-80450BDC 0000D8 0004+00 3/3 1/1 0/0 .sbss            mZbufferTex__13mDoGph_gInf_c */
 void* mDoGph_gInf_c::mZbufferTex;
 
-/* 80450BDC-80450BE0 0000DC 0004+00 3/3 3/3 1/1 .sbss            mFadeRate__13mDoGph_gInf_c */
 f32 mDoGph_gInf_c::mFadeRate;
 
-/* 80450BE0-80450BE4 0000E0 0004+00 3/3 0/0 0/0 .sbss            mFadeSpeed__13mDoGph_gInf_c */
 f32 mDoGph_gInf_c::mFadeSpeed;
 
-/* 80450590-80450594 000010 0004+00 2/2 1/1 0/0 .sdata           mBackColor__13mDoGph_gInf_c */
 GXColor mDoGph_gInf_c::mBackColor = {0, 0, 0, 0};
 
-/* 80450594-80450598 000014 0004+00 4/4 3/3 0/0 .sdata           mFadeColor__13mDoGph_gInf_c */
 GXColor mDoGph_gInf_c::mFadeColor = {0, 0, 0, 0};
 
-/* 80450BE4-80450BE8 -00001 0004+00 8/8 9/9 11/11 .sbss            None */
 /* 80450BE4 0001+00 data_80450BE4 None */
 /* 80450BE5 0001+00 data_80450BE5 None */
 /* 80450BE6 0001+00 mFade__13mDoGph_gInf_c None */
@@ -288,7 +276,6 @@ u8 mDoGph_gInf_c::mFade;
 
 bool mDoGph_gInf_c::mAutoForcus;
 
-/* 80007E44-80007F90 002784 014C+00 1/1 0/0 0/0 .text            create__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::create() {
     #if PLATFORM_WII || PLATFORM_SHIELD
     VISetTrapFilter(0);
@@ -344,10 +331,8 @@ void mDoGph_gInf_c::create() {
     VISetBlack(TRUE);
 }
 
-/* 80450BE8-80450BF0 0000E8 0008+00 1/1 0/0 0/0 .sbss            None */
 static bool data_80450BE8;
 
-/* 80007F90-80007FD8 0028D0 0048+00 1/1 2/2 0/0 .text            beginRender__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::beginRender() {
     #if PLATFORM_WII || PLATFORM_SHIELD
     VISetTrapFilter(fapGmHIO_getTrapFilter() ? 1 : 0);
@@ -371,7 +356,6 @@ void mDoGph_gInf_c::resetDimming() {
 }
 #endif
 
-/* 80007FD8-80008028 002918 0050+00 1/1 6/4 15/15 .text fadeOut__13mDoGph_gInf_cFfR8_GXColor */
 void mDoGph_gInf_c::fadeOut(f32 fadeSpeed, GXColor& fadeColor) {
     mFade = 1;
     mFadeSpeed = fadeSpeed;
@@ -379,7 +363,6 @@ void mDoGph_gInf_c::fadeOut(f32 fadeSpeed, GXColor& fadeColor) {
     mFadeRate = fadeSpeed >= 0.0f ? 0.0f : 1.0f;
 }
 
-/* 80008028-80008078 002968 0050+00 0/0 0/0 2/2 .text fadeOut_f__13mDoGph_gInf_cFfR8_GXColor */
 void mDoGph_gInf_c::fadeOut_f(f32 fadeSpeed, GXColor& fadeColor) {
     mFade = 129;
     mFadeSpeed = fadeSpeed;
@@ -387,7 +370,6 @@ void mDoGph_gInf_c::fadeOut_f(f32 fadeSpeed, GXColor& fadeColor) {
     mFadeRate = fadeSpeed >= 0.0f ? 0.0f : 1.0f;
 }
 
-/* 80008078-800080A0 0029B8 0028+00 0/0 1/1 8/8 .text            onBlure__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::onBlure() {
     onBlure(cMtx_getIdentity());
 }
@@ -396,31 +378,23 @@ void mDoGph_gInf_c::onBlure() {
 GXTexObj mDoGph_gInf_c::m_fullFrameBufferTexObj;
 #endif
 
-/* 803DD3E8-803DD408 00A108 0020+00 3/3 3/3 0/0 .bss             mFrameBufferTexObj__13mDoGph_gInf_c
- */
 GXTexObj mDoGph_gInf_c::mFrameBufferTexObj;
 
-/* 803DD408-803DD428 00A128 0020+00 1/1 0/0 0/0 .bss             mZbufferTexObj__13mDoGph_gInf_c */
 GXTexObj mDoGph_gInf_c::mZbufferTexObj;
 
-/* 803DD428-803DD43C 00A148 0014+00 2/2 3/3 0/0 .bss             m_bloom__13mDoGph_gInf_c */
 mDoGph_gInf_c::bloom_c mDoGph_gInf_c::m_bloom;
 
-/* 803DD43C-803DD470 00A15C 0030+04 2/2 0/0 0/0 .bss             mBlureMtx__13mDoGph_gInf_c */
 Mtx mDoGph_gInf_c::mBlureMtx;
 
-/* 800080A0-800080D0 0029E0 0030+00 1/1 1/1 0/0 .text            onBlure__13mDoGph_gInf_cFPA4_Cf */
 void mDoGph_gInf_c::onBlure(const Mtx m) {
     mBlureFlag = true;
     setBlureMtx(m);
 }
 
-/* 800080D0-800080F4 002A10 0024+00 0/0 3/3 7/7 .text            fadeOut__13mDoGph_gInf_cFf */
 void mDoGph_gInf_c::fadeOut(f32 fadeSpeed) {
     fadeOut(fadeSpeed, g_clearColor);
 }
 
-/* 800080F4-80008330 002A34 023C+00 1/1 0/0 0/0 .text            darwFilter__F8_GXColor */
 void darwFilter(GXColor matColor) {
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE,
@@ -459,7 +433,6 @@ void darwFilter(GXColor matColor) {
     GXEnd();
 }
 
-/* 80008330-8000841C 002C70 00EC+00 1/1 0/0 0/0 .text            calcFade__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::calcFade() {
     if (mDoGph_gInf_c::mFade != 0) {
         mFadeRate += mFadeSpeed;
@@ -688,13 +661,10 @@ void mDoGph_gInf_c::entryBaseCsr(mDoGph_gInf_c::csr_c* i_entry) {
 }
 #endif
 
-/* 8000841C-80008420 002D5C 0004+00 0/0 1/0 0/0 .text            mDoGph_BlankingON__Fv */
 void mDoGph_BlankingON() {}
 
-/* 80008420-80008424 002D60 0004+00 0/0 1/0 0/0 .text            mDoGph_BlankingOFF__Fv */
 void mDoGph_BlankingOFF() {}
 
-/* 80008424-80008450 002D64 002C+00 1/1 0/0 0/0 .text            dScnPly_BeforeOfPaint__Fv */
 static void dScnPly_BeforeOfPaint() {
     dComIfGd_reset();
 
@@ -703,13 +673,11 @@ static void dScnPly_BeforeOfPaint() {
     #endif
 }
 
-/* 80008450-80008474 002D90 0024+00 0/0 1/0 0/0 .text            mDoGph_BeforeOfDraw__Fv */
 int mDoGph_BeforeOfDraw() {
     dScnPly_BeforeOfPaint();
     return 1;
 }
 
-/* 80008474-80008630 002DB4 01BC+00 0/0 1/0 0/0 .text            mDoGph_AfterOfDraw__Fv */
 int mDoGph_AfterOfDraw() {
     if (fapGmHIO_isMenu()) {
         JUTProcBar::getManager()->setVisible(false);
@@ -793,8 +761,6 @@ void drawFilterQuad(s8 param_0, s8 param_1) {
 #define mDoGph_drawFilterQuad drawFilterQuad
 #endif
 
-/* 80008630-80009184 002F70 0B54+00 1/1 0/0 0/0 .text
- * drawDepth2__FP10view_classP15view_port_classi                */
 static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_2) {
     static GXColorS10 l_tevColor0 = {0, 0, 0, 0};
 
@@ -1038,8 +1004,6 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
     }
 }
 
-/* 800091C0-800094B4 003B00 02F4+00 1/1 0/0 0/0 .text trimming__FP10view_classP15view_port_class
- */
 static void trimming(view_class* param_0, view_port_class* param_1) {
     (void)param_0;
 
@@ -1090,7 +1054,6 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
                  param_1->scissor.height);
 }
 
-/* 800094B4-80009544 003DF4 0090+00 2/2 1/1 0/0 .text            mDoGph_drawFilterQuad__FScSc */
 #if !PLATFORM_WII
 void mDoGph_drawFilterQuad(s8 param_0, s8 param_1) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -1106,8 +1069,6 @@ void mDoGph_drawFilterQuad(s8 param_0, s8 param_1) {
 }
 #endif
 
-/* 80009544-800095F8 003E84 00B4+00 0/0 1/1 0/0 .text            create__Q213mDoGph_gInf_c7bloom_cFv
- */
 void mDoGph_gInf_c::bloom_c::create() {
     if (m_buffer == NULL) {
         u32 size = GXGetTexBufferSize(FB_WIDTH / 2, FB_HEIGHT / 2, 6, GX_FALSE, 0);
@@ -1123,8 +1084,6 @@ void mDoGph_gInf_c::bloom_c::create() {
     }
 }
 
-/* 800095F8-80009650 003F38 0058+00 0/0 1/1 0/0 .text            remove__Q213mDoGph_gInf_c7bloom_cFv
- */
 void mDoGph_gInf_c::bloom_c::remove() {
     if (m_buffer != NULL) {
         mDoExt_getArchiveHeap()->free(m_buffer);
@@ -1133,8 +1092,6 @@ void mDoGph_gInf_c::bloom_c::remove() {
     mMonoColor.a = 0;
 }
 
-/* 80009650-8000A160 003F90 0B10+00 1/1 0/0 0/0 .text            draw__Q213mDoGph_gInf_c7bloom_cFv
- */
 void mDoGph_gInf_c::bloom_c::draw() {
     bool enabled = mEnable && m_buffer != NULL;
     if (mMonoColor.a != 0 || enabled) {
@@ -1316,8 +1273,6 @@ void mDoGph_gInf_c::bloom_c::draw() {
     }
 }
 
-/* 8000A160-8000A290 004AA0 0130+00 1/1 0/0 0/0 .text
- * retry_captue_frame__FP10view_classP15view_port_classi        */
 static void retry_captue_frame(view_class* param_0, view_port_class* param_1, int param_2) {
     (void)param_0;
     (void)param_2;
@@ -1350,7 +1305,6 @@ static void retry_captue_frame(view_class* param_0, view_port_class* param_1, in
     }
 }
 
-/* 8000A290-8000A504 004BD0 0274+00 1/1 0/0 0/0 .text            motionBlure__FP10view_class */
 static void motionBlure(view_class* param_0) {
     if (g_env_light.is_blure) {
         GXLoadTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), GX_TEXMAP0);
@@ -1398,7 +1352,6 @@ static void motionBlure(view_class* param_0) {
     }
 }
 
-/* 8000A504-8000A58C 004E44 0088+00 1/1 0/0 0/0 .text            setLight__Fv */
 static void setLight() {
     GXLightObj obj;
 
@@ -1427,7 +1380,6 @@ static void captureScreenPerspDrawInfo(JPADrawInfo&) {
     // DEBUG NONMATCHING
 }
 
-/* 8000A58C-8000A604 004ECC 0078+00 1/1 0/0 0/0 .text            drawItem3D__Fv */
 static void drawItem3D() {
     Mtx item_mtx;
     dMenu_Collect3D_c::setupItem3D(item_mtx);
@@ -1444,7 +1396,6 @@ static void drawItem3D() {
     j3dSys.reinitGX();
 }
 
-/* 8000A604-8000B118 004F44 0B14+00 0/0 1/0 0/0 .text            mDoGph_Painter__Fv */
 int mDoGph_Painter() {
     #if DEBUG
     drawHeapMap();
@@ -2056,7 +2007,6 @@ int mDoGph_Painter() {
 mDoGph_HIO_c mDoGph_HIO;
 #endif
 
-/* 8000B174-8000B1D0 005AB4 005C+00 0/0 2/1 0/0 .text            mDoGph_Create__Fv */
 int mDoGph_Create() {
     JKRSolidHeap* heap = mDoExt_createSolidHeapToCurrent(0, NULL, 0);
     mDoGph_gInf_c::create();

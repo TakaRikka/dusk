@@ -59,8 +59,8 @@ STATIC_ASSERT(sizeof(obj_kbox_class) == 0x9f0);
 
 class daObj_Kbox_HIO_c : public JORReflexible {
 public:
-    /* 80C3D60C */ daObj_Kbox_HIO_c();
-    /* 80C3EF98 */ virtual ~daObj_Kbox_HIO_c() {}
+    daObj_Kbox_HIO_c();
+    virtual ~daObj_Kbox_HIO_c() {}
     void genMessage(JORMContext*);
 
     /* 0x04 */ s8 mId;

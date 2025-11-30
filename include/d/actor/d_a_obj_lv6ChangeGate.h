@@ -18,26 +18,26 @@ class daLv6ChangeGate_c : public dBgS_MoveBgActor, public request_of_phase_proce
 public:
     daLv6ChangeGate_c() : dEvLib_callback_c(this) {}
 
-    /* 80C70D38 */ void setBaseMtx();
-    /* 80C70E40 */ int create();
-    /* 80C712A8 */ u8 isSwitch();
-    /* 80C71494 */ void moveGate();
-    /* 80C715F4 */ void init_modeWait();
-    /* 80C71600 */ void modeWait();
-    /* 80C71604 */ void init_modeSlideRight();
-    /* 80C716B4 */ void modeSlideRight();
-    /* 80C7183C */ void init_modeSlideLeft();
-    /* 80C718EC */ void modeSlideLeft();
-    /* 80C71A74 */ void init_modeBreak();
-    /* 80C71AF8 */ void modeBreak();
+    void setBaseMtx();
+    int create();
+    u8 isSwitch();
+    void moveGate();
+    void init_modeWait();
+    void modeWait();
+    void init_modeSlideRight();
+    void modeSlideRight();
+    void init_modeSlideLeft();
+    void modeSlideLeft();
+    void init_modeBreak();
+    void modeBreak();
 
-    /* 80C70DD4 */ virtual int CreateHeap();
-    /* 80C712F4 */ virtual int Execute(Mtx**);
-    /* 80C71D40 */ virtual int Draw();
-    /* 80C71DE4 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
-    /* 80C72034 */ virtual ~daLv6ChangeGate_c() {}
-    /* 80C715BC */ virtual bool eventStart();
+    virtual ~daLv6ChangeGate_c() {}
+    virtual bool eventStart();
 
     int getEventID() { return fopAcM_GetParamBit(this, 24, 8); }
     int getWaitTime() { return fopAcM_GetParamBit(this, 16, 8); }

@@ -31,27 +31,27 @@ public:
     typedef int (daItemShield_c::*actionFunc)();
     typedef void (daItemShield_c::*camActionFunc)();
 
-    /* 80CD6D9C */ void initBaseMtx();
-    /* 80CD6DD8 */ void setBaseMtx();
-    /* 80CD7094 */ int Create();
-    /* 80CD724C */ virtual int __CreateHeap();
-    /* 80CD7254 */ int create();
-    /* 80CD75EC */ void bg_check();
-    /* 80CD7734 */ int action_proc_call();
-    /* 80CD77F0 */ int actionInit();
-    /* 80CD7828 */ int actionWaitInit();
-    /* 80CD7890 */ int actionWait();
-    /* 80CD7C68 */ int initActionOrderGetDemo();
-    /* 80CD7D04 */ int actionOrderGetDemo();
-    /* 80CD7D80 */ int actionGetDemo();
-    /* 80CD7E00 */ void event_proc_call();
-    /* 80CD7EBC */ void actionWaitCamDemo();
-    /* 80CD7F20 */ void actionOrderCamDemo();
-    /* 80CD7F88 */ void actionCamDemo();
-    /* 80CD7FE4 */ void actionCamDemoEnd();
-    /* 80CD7FE8 */ int execute();
-    /* 80CD80EC */ int draw();
-    /* 80CD8140 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    virtual int __CreateHeap();
+    int create();
+    void bg_check();
+    int action_proc_call();
+    int actionInit();
+    int actionWaitInit();
+    int actionWait();
+    int initActionOrderGetDemo();
+    int actionOrderGetDemo();
+    int actionGetDemo();
+    void event_proc_call();
+    void actionWaitCamDemo();
+    void actionOrderCamDemo();
+    void actionCamDemo();
+    void actionCamDemoEnd();
+    int execute();
+    int draw();
+    int _delete();
 
     u8 getSwBit2() { return (fopAcM_GetParam(this) >> 8) & 0xff; }
     u8 getSwBit() { return (fopAcM_GetParam(this) >> 16) & 0xff; }

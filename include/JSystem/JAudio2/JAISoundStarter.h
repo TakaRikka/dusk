@@ -9,11 +9,11 @@
  * 
  */
 struct JAISoundStarter : public JASGlobalInstance<JAISoundStarter> {
-    /* 802A2F6C */ JAISoundStarter(bool setInstance);
+    JAISoundStarter(bool setInstance);
 
     virtual ~JAISoundStarter();
     virtual bool startSound(JAISoundID id, JAISoundHandle* handlePtr, const JGeometry::TVec3<f32>* posPtr) = 0;
-    /* 802A2FEC */ bool startLevelSound(JAISoundID id, JAISoundHandle* handlePtr, const JGeometry::TVec3<f32>* posPtr);
+    bool startLevelSound(JAISoundID id, JAISoundHandle* handlePtr, const JGeometry::TVec3<f32>* posPtr);
 };
 
 #endif /* JAISOUNDSTARTER_H */

@@ -14,17 +14,17 @@
  */
 class daObjTrnd_c : public fopAc_ac_c {
 public:
-    /* 80D1B998 */ void setPntWind();
-    /* 80D1BA0C */ void cutPntWind();
-    /* 80D1BA30 */ void movePntWind();
-    /* 80D1BC40 */ void setCpsInfo();
-    /* 80D1BE04 */ void initBaseMtx();
-    /* 80D1BE24 */ void setBaseMtx();
-    /* 80D1BE6C */ int Create();
-    /* 80D1BFB0 */ int create();
-    /* 80D1C0F0 */ int execute();
-    /* 80D1C290 */ int draw();
-    /* 80D1C298 */ int _delete();
+    void setPntWind();
+    void cutPntWind();
+    void movePntWind();
+    void setCpsInfo();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int create();
+    int execute();
+    int draw();
+    int _delete();
 
     u32 checkSE() { return fopAcM_GetParamBit(this, 8, 1); }
     u8 getTimer() { return fopAcM_GetParamBit(this, 0, 8); }

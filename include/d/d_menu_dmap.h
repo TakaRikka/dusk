@@ -24,25 +24,25 @@ struct dMenu_DmapMapCtrl_c;
 
 class renderingDmap_c : public renderingPlusDoor_c {
 public:
-    /* 801C0380 */ virtual ~renderingDmap_c() {}
+    virtual ~renderingDmap_c() {}
 
-    /* 801C0C48 */ virtual const GXColor* getColor(int);
-    /* 801C0C10 */ virtual int getLineWidth(int);
-    /* 801C25E4 */ virtual void beforeDrawPath();
-    /* 801C0CB8 */ virtual void afterDrawPath();
-    /* 801C084C */ virtual bool hasMap() const;
-    /* 801C2614 */ virtual bool isRendAllRoom() const;
-    /* 801C261C */ virtual bool isRendDoor() const;
-    /* 801C2624 */ virtual bool isCheckFloor() const;
-    /* 801C086C */ virtual bool isDrawIconSingle2(dTres_c::data_s const*, bool, bool, int) const;
-    /* 801C262C */ virtual bool isRendRestart() const;
-    /* 801C2634 */ virtual bool isRendCursor() const;
-    /* 801C263C */ virtual bool isRendIcon() const;
-    /* 801C0B40 */ virtual f32 getPlayerCursorSize();
-    /* 801C25E8 */ virtual f32 getRestartCursorSize();
+    virtual const GXColor* getColor(int);
+    virtual int getLineWidth(int);
+    virtual void beforeDrawPath();
+    virtual void afterDrawPath();
+    virtual bool hasMap() const;
+    virtual bool isRendAllRoom() const;
+    virtual bool isRendDoor() const;
+    virtual bool isCheckFloor() const;
+    virtual bool isDrawIconSingle2(dTres_c::data_s const*, bool, bool, int) const;
+    virtual bool isRendRestart() const;
+    virtual bool isRendCursor() const;
+    virtual bool isRendIcon() const;
+    virtual f32 getPlayerCursorSize();
+    virtual f32 getRestartCursorSize();
 
-    /* 801C0B48 */ int getLineWidthZoomBig(int);
-    /* 801C0BAC */ int getLineWidthZoomSmall(int);
+    int getLineWidthZoomBig(int);
+    int getLineWidthZoomSmall(int);
 
     void entry(f32 param_0, f32 param_1, f32 param_2, s8 param_3, s8 param_4, f32 param_5) {
         field_0x34 = param_5;
@@ -54,32 +54,32 @@ public:
 
 class dMenu_DmapBg_c : public dDlst_base_c, public dMenuMapCommon_c {
 public:
-    /* 801B7F20 */ dMenu_DmapBg_c(JKRExpHeap*, STControl*);
-    /* 801B8110 */ void mapScreenInit();
-    /* 801B884C */ void mapScreenAnime();
-    /* 801B88F4 */ void mapIconScaleSet(u8);
-    /* 801B893C */ void iconScaleAnmInit(f32, f32, u8);
-    /* 801B8954 */ bool iconScaleAnm();
-    /* 801B8A0C */ void buttonIconScreenInit();
-    /* 801B8DE4 */ void setAButtonString(u32);
-    /* 801B8EBC */ void setBButtonString(u32);
-    /* 801B8F94 */ void setCButtonString(u32);
-    /* 801B90BC */ void setJButtonString(u32);
-    /* 801B90E0 */ void createExplain();
-    /* 801B9164 */ void deleteExplain();
-    /* 801B91DC */ void baseScreenInit();
-    /* 801B944C */ void setFloorMessage();
-    /* 801BA0B4 */ bool dpdMove(s8, s8, s8, u8*, u8);
-    /* 801BA0BC */ ~dMenu_DmapBg_c();
-    /* 801BA60C */ void setAllAlphaRate(f32, bool);
-    /* 801BA700 */ void setGoldAnimation(bool);
-    /* 801BA7F0 */ void setGoldFrameAlphaRate(f32);
-    /* 801BA974 */ void addGoldFrameAlphaRate();
-    /* 801BAA4C */ void decGoldFrameAlphaRate();
-    /* 801BAB10 */ void draw();
-    /* 801BB334 */ void update();
-    /* 801BB464 */ void calcCursor();
-    /* 801BB468 */ void drawCursor();
+    dMenu_DmapBg_c(JKRExpHeap*, STControl*);
+    void mapScreenInit();
+    void mapScreenAnime();
+    void mapIconScaleSet(u8);
+    void iconScaleAnmInit(f32, f32, u8);
+    bool iconScaleAnm();
+    void buttonIconScreenInit();
+    void setAButtonString(u32);
+    void setBButtonString(u32);
+    void setCButtonString(u32);
+    void setJButtonString(u32);
+    void createExplain();
+    void deleteExplain();
+    void baseScreenInit();
+    void setFloorMessage();
+    bool dpdMove(s8, s8, s8, u8*, u8);
+    ~dMenu_DmapBg_c();
+    void setAllAlphaRate(f32, bool);
+    void setGoldAnimation(bool);
+    void setGoldFrameAlphaRate(f32);
+    void addGoldFrameAlphaRate();
+    void decGoldFrameAlphaRate();
+    void draw();
+    void update();
+    void calcCursor();
+    void drawCursor();
 
     void setDPDFloorSelCurPos(s8 i_pos) { field_0xdd6 = i_pos; }
 
@@ -169,58 +169,58 @@ public:
 
 class dMenu_Dmap_c {
 public:
-    /* 801BB498 */ dMenu_Dmap_c(JKRExpHeap*, STControl*, CSTControl*, u8, u8);
-    /* 801BB634 */ void screenInit();
-    /* 801BC788 */ void getPlayerIconPos(s8, f32);
-    /* 801BC848 */ void getIconPos(s8, f32);
-    /* 801BD1D4 */ s8 getCurFloorPos();
-    /* 801BD1E8 */ s8 getDefaultCurFloorPos();
-    /* 801BD208 */ void iconMoveCalc();
-    /* 801BD3B8 */ void drawFloorScreenBack(J2DScreen*, f32, f32, J2DOrthoGraph*);
-    /* 801BD524 */ void drawFloorScreenTop(J2DScreen*, f32, f32, J2DOrthoGraph*);
-    /* 801BD690 */ bool isMapMoveState();
-    /* 801BD6C4 */ void floorChangeMode();
-    /* 801BD7C0 */ void _create();
-    /* 801BDDA4 */ void _move();
-    /* 801BDEF8 */ void setMapTexture();
-    /* 801BDF48 */ void mapBgAnime();
-    /* 801BDF6C */ void mapControl();
-    /* 801BE328 */ bool isOpen();
-    /* 801BE670 */ bool isClose();
-    /* 801BE7E0 */ void _draw();
-    /* 801BEAFC */ void itemInfo_init_proc();
-    /* 801BEB0C */ void itemInfo_proc();
-    /* 801BEB44 */ void itemSelect();
-    /* 801BEF28 */ int getNextItem(int);
-    /* 801BEFCC */ void itemSelectAnmInit();
-    /* 801BF030 */ void itemSelectAnm();
-    /* 801BF180 */ void itemInfoOpenAnm();
-    /* 801BF18C */ void itemInfoWait();
-    /* 801BF278 */ void itemInfoCloseAnm();
-    /* 801BF334 */ u8 getNextStatus();
-    /* 801BF410 */ bool isSync();
-    /* 801BF464 */ bool isKeyCheck();
-    /* 801BF4A4 */ void infoModeChange_init_proc();
-    /* 801BF528 */ void infoModeChange_proc();
-    /* 801BF688 */ void mapModeChange_init_proc();
-    /* 801BF70C */ void mapModeChange_proc();
-    /* 801BF8A0 */ void lv5_talk_init_proc();
-    /* 801BF8F8 */ void lv5_talk_proc();
-    /* 801BF9D4 */ void mapMode_init_proc();
-    /* 801BF9E0 */ void mapMode_proc();
-    /* 801BFA84 */ void floorSelect_init_proc();
-    /* 801BFA88 */ void floorSelect_proc();
-    /* 801BFC78 */ int itemCarryCheck();
-    /* 801BFCAC */ void floorChange_init_proc();
-    /* 801BFD5C */ void floorChange_proc();
-    /* 801BFF84 */ void zoomWait_init_proc();
-    /* 801BFF88 */ void zoomWait_proc();
-    /* 801C008C */ void zoomIn_init_proc();
-    /* 801C01A0 */ void zoomIn_proc();
-    /* 801C023C */ void zoomOut_init_proc();
-    /* 801C02F0 */ void zoomOut_proc();
+    dMenu_Dmap_c(JKRExpHeap*, STControl*, CSTControl*, u8, u8);
+    void screenInit();
+    void getPlayerIconPos(s8, f32);
+    void getIconPos(s8, f32);
+    s8 getCurFloorPos();
+    s8 getDefaultCurFloorPos();
+    void iconMoveCalc();
+    void drawFloorScreenBack(J2DScreen*, f32, f32, J2DOrthoGraph*);
+    void drawFloorScreenTop(J2DScreen*, f32, f32, J2DOrthoGraph*);
+    bool isMapMoveState();
+    void floorChangeMode();
+    void _create();
+    void _move();
+    void setMapTexture();
+    void mapBgAnime();
+    void mapControl();
+    bool isOpen();
+    bool isClose();
+    void _draw();
+    void itemInfo_init_proc();
+    void itemInfo_proc();
+    void itemSelect();
+    int getNextItem(int);
+    void itemSelectAnmInit();
+    void itemSelectAnm();
+    void itemInfoOpenAnm();
+    void itemInfoWait();
+    void itemInfoCloseAnm();
+    u8 getNextStatus();
+    bool isSync();
+    bool isKeyCheck();
+    void infoModeChange_init_proc();
+    void infoModeChange_proc();
+    void mapModeChange_init_proc();
+    void mapModeChange_proc();
+    void lv5_talk_init_proc();
+    void lv5_talk_proc();
+    void mapMode_init_proc();
+    void mapMode_proc();
+    void floorSelect_init_proc();
+    void floorSelect_proc();
+    int itemCarryCheck();
+    void floorChange_init_proc();
+    void floorChange_proc();
+    void zoomWait_init_proc();
+    void zoomWait_proc();
+    void zoomIn_init_proc();
+    void zoomIn_proc();
+    void zoomOut_init_proc();
+    void zoomOut_proc();
 
-    /* 801BCDF4 */ virtual ~dMenu_Dmap_c();
+    virtual ~dMenu_Dmap_c();
 
     void setInOutDir(u8 dir) { mInOutDir = dir; }
     u8 getZoomState() { return mZoomState; }

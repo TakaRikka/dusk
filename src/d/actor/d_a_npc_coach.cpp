@@ -146,7 +146,6 @@ enum Ilia_Joint {
     /* 0x4 */ JNT_ILIA_HEAD,
 };
 
-/* 8099D6D8-8099D72C 000078 0054+00 1/1 0/0 0/0 .text            jointHorseCallBack__FP8J3DJointi */
 static int jointHorseCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 != 0) {
         return 1;
@@ -160,7 +159,6 @@ static int jointHorseCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 8099D72C-8099D80C 0000CC 00E0+00 1/1 0/0 0/0 .text jointFrontWheelCallBack__FP8J3DJointi */
 static int jointFrontWheelCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 != 0) {
         return 1;
@@ -181,7 +179,6 @@ static int jointFrontWheelCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 8099D80C-8099D8EC 0001AC 00E0+00 1/1 0/0 0/0 .text jointRearWheelCallBack__FP8J3DJointi */
 static int jointRearWheelCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 != 0) {
         return 1;
@@ -202,7 +199,6 @@ static int jointRearWheelCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 809A4ED0-809A4F70 000000 00A0+00 19/19 0/0 0/0 .rodata          M_attr__12daNpcCoach_c */
 daNpcCoach_Attr_c const daNpcCoach_c::M_attr = {
     -3.0f,
     -200.0f,
@@ -260,7 +256,6 @@ daNpcCoach_Attr_c const daNpcCoach_c::M_attr = {
     0x19,
 };
 
-/* 8099D8EC-8099D9AC 00028C 00C0+00 1/1 0/0 0/0 .text            jointCoachCallBack__FP8J3DJointi */
 static int jointCoachCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 != 0) {
         return 1;
@@ -278,7 +273,6 @@ static int jointCoachCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 8099D9AC-8099DA24 00034C 0078+00 1/1 0/0 0/0 .text            arrowStickCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_cR4cXyz */
 static void arrowStickCallBack(dBgW* i_bgw, fopAc_ac_c* a_this, fopAc_ac_c* i_actor, cXyz& i_pos) {
     if (fopAcM_GetName(i_actor) == PROC_E_ARROW) {
         if (!daPy_getPlayerActorClass()->checkBoarSingleBattleSecond()) {
@@ -288,7 +282,6 @@ static void arrowStickCallBack(dBgW* i_bgw, fopAc_ac_c* a_this, fopAc_ac_c* i_ac
     }
 }
 
-/* 8099DA60-8099DBA4 000400 0144+00 1/1 0/0 0/0 .text            hitFireArrow__12daNpcCoach_cF4cXyz */
 void daNpcCoach_c::hitFireArrow(cXyz i_pos) {
     if (field_0x24c0 == 0) {
         mChYelia.mSound.startCreatureVoice(Z2SE_YELIA_V_KYAAA_TRIG, -1);
@@ -311,7 +304,6 @@ void daNpcCoach_c::hitFireArrow(cXyz i_pos) {
     }
 }
 
-/* 8099DBA4-8099DCE8 000544 0144+00 0/0 0/0 1/1 .text            deleteFireArrow__12daNpcCoach_cFUi */
 void daNpcCoach_c::deleteFireArrow(fpc_ProcID param_1) {
     for (int i = 0; i < 5; i++) {
         if (field_0x247c[i] != param_1) {
@@ -348,7 +340,6 @@ void daNpcCoach_c::deleteFireArrow(fpc_ProcID param_1) {
     }
 }
 
-/* 8099DCE8-8099DD28 000688 0040+00 0/0 0/0 1/1 .text            deleteFireArrowFromList__12daNpcCoach_cFUi */
 bool daNpcCoach_c::deleteFireArrowFromList(unsigned int i_actorID) {
     for (int i = 0; i < 5; i++) {
         if (field_0x247c[i] == i_actorID) {
@@ -359,13 +350,11 @@ bool daNpcCoach_c::deleteFireArrowFromList(unsigned int i_actorID) {
     return false;
 }
 
-/* 8099DD28-8099DD7C 0006C8 0054+00 0/0 0/0 3/3 .text            setPosAngle__12daNpcCoach_cFR4cXyzR5csXyz */
 void daNpcCoach_c::setPosAngle(cXyz& param_1, csXyz& param_2) {
     initCoachPosition(param_1, param_2);
     changeAtherPath(getRailID(), param_1, param_2);
 }
 
-/* 8099DD7C-8099DE18 00071C 009C+00 1/1 0/0 0/0 .text            ctrlJointHorse__12daNpcCoach_cFP8J3DJointP8J3DModel */
 int daNpcCoach_c::ctrlJointHorse(J3DJoint* i_joint, J3DModel* i_model) {
     int jointNo = i_joint->getJntNo();
 
@@ -382,7 +371,6 @@ int daNpcCoach_c::ctrlJointHorse(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 8099DE18-8099E0E0 0007B8 02C8+00 2/2 0/0 0/0 .text            initCoachPosition__12daNpcCoach_cFR3VecR4SVec */
 void daNpcCoach_c::initCoachPosition(Vec& i_pos, SVec& i_angle) {
     current.pos = i_pos;
     shape_angle.set(i_angle.x, i_angle.y, i_angle.z);
@@ -425,7 +413,6 @@ void daNpcCoach_c::initCoachPosition(Vec& i_pos, SVec& i_angle) {
     }
 }
 
-/* 8099E0E0-8099E138 000A80 0058+00 1/1 0/0 0/0 .text            s_sub__FPvPv */
 static void* s_sub(void* i_actor, void* i_data) {
     if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_KR && ((e_kr_class*)i_actor)->getId() >= 0) {
         return i_actor;
@@ -434,7 +421,6 @@ static void* s_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 809A4078-809A43A0 006A18 0328+00 1/1 0/0 0/0 .text            initCollision__12daNpcCoach_cFv */
 void daNpcCoach_c::initCollision() {
     static dCcD_SrcCyl const ccCylSrc = {
         {
@@ -556,7 +542,6 @@ BOOL daNpcChPath_c::setPath(int path_index, int room_no, cXyz& i_vec, bool param
     return TRUE;
 }
 
-/* 8099E138-8099E4A0 000AD8 0368+00 2/2 0/0 0/0 .text            changeAtherPath__12daNpcCoach_cFScR4cXyzR5csXyz */
 void daNpcCoach_c::changeAtherPath(s8 path_index, cXyz& param_2, csXyz& param_3) {
     mChPath.setPath(path_index, fopAcM_GetRoomNo(this), param_2, true);
 
@@ -579,16 +564,13 @@ void daNpcCoach_c::changeAtherPath(s8 path_index, cXyz& param_2, csXyz& param_3)
     }
 }
 
-/* 8099E4A0-8099E4C0 000E40 0020+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* a_this) {
     daNpcCoach_c* i_this = (daNpcCoach_c*)a_this;
     return i_this->createHeap();
 }
 
-/* 809A5130-809A5134 -00001 0004+00 7/7 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Coach";
 
-/* 809A5134-809A51AC 000004 0078+00 2/2 0/0 0/0 .data            l_horseAnmParam */
 static struct {
     int field_0x0;
     f32 field_0x4;
@@ -604,7 +586,6 @@ static struct {
     {BCK_HU_RUN_FAST, 40.0f, 2.8f, -1, 40.0f, 2.8f},
 };
 
-/* 8099F1B8-8099F4BC 001B58 0304+00 1/1 0/0 0/0 .text            setCoachBlazing__12daNpcCoach_cFUc */
 void daNpcCoach_c::setCoachBlazing(u8 damage) {
     static u16 const ParticleName[10] = {
         0x85F0, 0x85EF, 0x85E7, 0x85E8, 0x85E9,
@@ -717,7 +698,6 @@ void daNpcCoach_c::setCoachBlazing(u8 damage) {
     mChCoach.field_0x5f8[1]->setUserWork((uintptr_t)&mChCoach.field_0x5d4);
 }
 
-/* 8099E4C0-8099EAD8 000E60 0618+00 1/1 0/0 0/0 .text            createHeap__12daNpcCoach_cFv */
 int daNpcCoach_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, BMDR_HORSE);
 
@@ -841,7 +821,6 @@ int daNpcCoach_c::createHeap() {
     return 1;
 }
 
-/* 8099EB20-8099EB40 0014C0 0020+00 1/0 0/0 0/0 .text daNpcCoach_Execute__FP12daNpcCoach_c */
 static int daNpcCoach_Execute(daNpcCoach_c* i_this) {
     return i_this->execute();
 }
@@ -873,7 +852,6 @@ void daNpcCoach_c::calcYeliaMotion() {
     mChYelia.mpModelMorf->modelCalc();
 }
 
-/* 8099EB40-8099EEA0 0014E0 0360+00 1/1 0/0 0/0 .text            execute__12daNpcCoach_cFv */
 int daNpcCoach_c::execute() {
     calcHorseMotion();
     calcHarnessMotion();
@@ -927,7 +905,6 @@ int daNpcCoach_c::execute() {
     return 1;
 }
 
-/* 8099EEA0-8099F1B8 001840 0318+00 1/2 0/0 0/0 .text            checkCoachDamage__12daNpcCoach_cFv */
 void daNpcCoach_c::checkCoachDamage() {
     if (field_0x24c0 > 0) {
         if (!dComIfGp_event_runCheck() && getRailID() != 8) {
@@ -1005,7 +982,6 @@ void daNpcCoach_c::checkCoachDamage() {
     }
 }
 
-/* 8099F4BC-8099F988 001E5C 04CC+00 1/1 0/0 0/0 .text            reinsExecute__12daNpcCoach_cFv */
 void daNpcCoach_c::reinsExecute() {
     daNpcChReins_c* reins = &mChHorse.mChReins;
     if (reins->field_0x16c <= 1) {
@@ -1090,7 +1066,6 @@ void daNpcCoach_c::reinsExecute() {
     }
 }
 
-/* 8099F988-8099FCF4 002328 036C+00 1/1 0/0 0/0 .text            reinsInit__12daNpcCoach_cFv */
 void daNpcCoach_c::reinsInit() {
     daNpcChReins_c* reins = &mChHorse.mChReins;
     daNpcTheB_c* telmaB_p = (daNpcTheB_c*)fpcM_SearchByID(parentActorID);
@@ -1243,7 +1218,6 @@ void daNpcCoach_c::setWheelSmoke(daNpcChWheel_c* i_wheel, dBgS_ObjAcch* i_bgc, d
     }
 }
 
-/* 809A0728-809A0DB8 0030C8 0690+00 1/1 0/0 0/0 .text calcRearWheelRotate__12daNpcCoach_cFv */
 void daNpcCoach_c::calcRearWheelRotate() {
     if (speedF != 0.0f) {
         f32 fVar1 = mChCoach.field_0x5ec.absXZ(mChCoach.field_0x5e0);
@@ -1308,7 +1282,6 @@ s16 daNpcCoach_c::getGroundSlope(dBgS_ObjAcch* i_bgc, s16 param_2) {
     return shape_angle.x;
 }
 
-/* 8099FCF4-809A0728 002694 0A34+00 1/1 0/0 0/0 .text            calcCoachMotion__12daNpcCoach_cFv */
 void daNpcCoach_c::calcCoachMotion() {
     cXyz sp44 = mChCoach.field_0x5e0 - mChCoach.field_0x5ec;
     mChCoach.field_0x5ec = mChCoach.field_0x5e0;
@@ -1442,7 +1415,6 @@ void daNpcCoach_c::setHarnessCollision() {
     mChHarness.field_0x6a0->SetRoomId(dComIfG_Bgsp().GetRoomId(mChHarness.mBgc.m_gnd));
 }
 
-/* 809A0E00-809A1180 0037A0 0380+00 1/1 0/0 0/0 .text            calcHarnessMotion__12daNpcCoach_cFv */
 void daNpcCoach_c::calcHarnessMotion() {
     cXyz sp1c = mChHarness.field_0x6e0 - mChHarness.field_0x6ec;
     mChHarness.field_0x6ec = mChHarness.field_0x6e0;
@@ -1494,7 +1466,6 @@ void daNpcCoach_c::calcHarnessMotion() {
     calcFrontWheelRotate();
 }
 
-/* 809A1180-809A1810 003B20 0690+00 1/1 0/0 0/0 .text calcFrontWheelRotate__12daNpcCoach_cFv */
 void daNpcCoach_c::calcFrontWheelRotate() {
     if (speedF != 0.0f) {
         f32 fVar1 = mChHarness.field_0x6ec.absXZ(mChHarness.field_0x6e0);
@@ -1601,7 +1572,6 @@ void daNpcCoach_c::setHorseMtx() {
     mDoMtx_stack_c::multVecZero(&mChHorse.field_0x770);
 }
 
-/* 809A1810-809A1BE0 0041B0 03D0+00 1/1 0/0 0/0 .text            calcHorseMotion__12daNpcCoach_cFv */
 void daNpcCoach_c::calcHorseMotion() {
     f32 fVar1 = calcMaxSpeed();
     if (mChHorse.field_0x784 < fVar1) {
@@ -1661,7 +1631,6 @@ void daNpcCoach_c::eyeWink() {
     }
 }
 
-/* 809A1BE0-809A2740 004580 0B60+00 1/1 0/0 0/0 .text            calcHorseAnm__12daNpcCoach_cFv */
 void daNpcCoach_c::calcHorseAnm() {
     bool reg_r29 = 0;
     if (mChPath.isPath()) {
@@ -1869,7 +1838,6 @@ void daNpcCoach_c::resetOverAngle() {
     }
 }
 
-/* 809A2740-809A2E98 0050E0 0758+00 1/1 0/0 0/0 .text            calcHorsePath__12daNpcCoach_cFv */
 void daNpcCoach_c::calcHorsePath() {
     if (!mChPath.isPath() || mTotalDmgRecv >= attr().damage_durability) {
         return;
@@ -1932,7 +1900,6 @@ void daNpcCoach_c::calcHorsePath() {
     }
 }
 
-/* 809A2E98-809A2EB8 005838 0020+00 1/0 0/0 0/0 .text            daNpcCoach_Draw__FP12daNpcCoach_c */
 static int daNpcCoach_Draw(daNpcCoach_c* i_this) {
     return i_this->draw();
 }
@@ -1954,7 +1921,6 @@ void daNpcCoach_c::reinsDraw() {
     }
 }
 
-/* 809A2EB8-809A3300 005858 0448+00 1/1 0/0 0/0 .text            draw__12daNpcCoach_cFv */
 int daNpcCoach_c::draw() {
     cXyz sp48;
 
@@ -2012,18 +1978,15 @@ int daNpcCoach_c::draw() {
     return 1;
 }
 
-/* 809A3300-809A3308 005CA0 0008+00 1/0 0/0 0/0 .text daNpcCoach_IsDelete__FP12daNpcCoach_c */
 static int daNpcCoach_IsDelete(daNpcCoach_c* i_this) {
     return 1;
 }
 
-/* 809A3308-809A3330 005CA8 0028+00 1/0 0/0 0/0 .text            daNpcCoach_Delete__FP12daNpcCoach_c */
 static int daNpcCoach_Delete(daNpcCoach_c* i_this) {
     i_this->~daNpcCoach_c();
     return 1;
 }
 
-/* 809A3330-809A3570 005CD0 0240+00 1/1 0/0 0/0 .text            __dt__12daNpcCoach_cFv */
 daNpcCoach_c::~daNpcCoach_c() {
     if (mChHarness.field_0x6a0 != NULL && mChHarness.field_0x6a0->ChkUsed()) {
         dComIfG_Bgsp().Release(mChHarness.field_0x6a0);
@@ -2039,13 +2002,11 @@ daNpcCoach_c::~daNpcCoach_c() {
     dComIfGs_offTbox(1);
 }
 
-/* 809A3864-809A3884 006204 0020+00 1/0 0/0 0/0 .text            daNpcCoach_Create__FP10fopAc_ac_c */
 static int daNpcCoach_Create(fopAc_ac_c* a_this) {
     daNpcCoach_c* i_this = (daNpcCoach_c*)a_this;
     return i_this->create();
 }
 
-/* 809A3884-809A3928 006224 00A4+00 1/1 0/0 0/0 .text            create__12daNpcCoach_cFv */
 cPhs__Step daNpcCoach_c::create() {
     fopAcM_ct(this, daNpcCoach_c);
 
@@ -2061,7 +2022,6 @@ cPhs__Step daNpcCoach_c::create() {
     return phase;
 }
 
-/* 809A3928-809A4078 0062C8 0750+00 1/1 0/0 0/0 .text            create_init__12daNpcCoach_cFv */
 void daNpcCoach_c::create_init() {
     if (strcmp(dComIfGp_getStartStageName(), "F_SP123") == 0) {
         fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x4000);
@@ -2150,7 +2110,6 @@ void daNpcCoach_c::create_init() {
     }
 }
 
-/* 809A43A0-809A43DC 006D40 003C+00 1/1 0/0 0/0 .text            initBaseMtx__12daNpcCoach_cFv */
 void daNpcCoach_c::initBaseMtx() {
     setBaseMtx();
     fopAcM_SetMtx(this, mChHorse.mpModelMorf->getModel()->getBaseTRMtx());
@@ -2167,7 +2126,6 @@ void daNpcCoach_c::setHarnessMtx() {
     mChHarness.mHarnessModel->calc();
 }
 
-/* 809A43DC-809A46C4 006D7C 02E8+00 1/1 0/0 0/0 .text            setBaseMtx__12daNpcCoach_cFv */
 void daNpcCoach_c::setBaseMtx() {
     setHorseMtx();
     setHarnessMtx();
@@ -2176,7 +2134,6 @@ void daNpcCoach_c::setBaseMtx() {
     setYeliaMtx();
 }
 
-/* 809A46C4-809A48A8 007064 01E4+00 1/1 0/0 0/0 .text            initCoachBlazing__12daNpcCoach_cFv */
 void daNpcCoach_c::initCoachBlazing() {
     cXyz sp28;
 
@@ -2206,10 +2163,8 @@ void daNpcCoach_c::initCoachBlazing() {
     mCoachBlazing = false;
 }
 
-/* 809A48A8-809A4B9C 007248 02F4+00 1/1 0/0 0/0 .text            __ct__12daNpcCoach_cFv */
 daNpcCoach_c::daNpcCoach_c() {}
 
-/* 809A51B0-809A51D0 -00001 0020+00 1/0 0/0 0/0 .data            l_daNpcCoach_Method */
 static actor_method_class l_daNpcCoach_Method = {
     (process_method_func)daNpcCoach_Create,
     (process_method_func)daNpcCoach_Delete,
@@ -2218,7 +2173,6 @@ static actor_method_class l_daNpcCoach_Method = {
     (process_method_func)daNpcCoach_Draw,
 };
 
-/* 809A51D0-809A5200 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_COACH */
 extern actor_process_profile_definition g_profile_NPC_COACH = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

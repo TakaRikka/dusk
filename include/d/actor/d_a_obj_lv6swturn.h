@@ -14,19 +14,19 @@
  */
 class daObjLv6SwTurn_c : public dBgS_MoveBgActor {
 public:
-    /* 80C83A98 */ void initBaseMtx();
-    /* 80C83AD4 */ void setBaseMtx();
-    /* 80C83B38 */ int Create();
-    /* 80C83C10 */ int CreateHeap();
-    /* 80C83C80 */ int create1st();
-    /* 80C83D04 */ int Execute(Mtx**);
-    /* 80C83D94 */ void mode_proc_call();
-    /* 80C83E20 */ void init_modeWait();
-    /* 80C83E58 */ void modeWait();
-    /* 80C84238 */ void init_modeRotate();
-    /* 80C8425C */ void modeRotate();
-    /* 80C844F8 */ int Draw();
-    /* 80C8459C */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void mode_proc_call();
+    void init_modeWait();
+    void modeWait();
+    void init_modeRotate();
+    void modeRotate();
+    int Draw();
+    int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit((void*)this, 0, 8); };
     u8 getSwbit2() { return fopAcM_GetParamBit((void*)this, 8, 8); };

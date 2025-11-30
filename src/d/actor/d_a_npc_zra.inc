@@ -98,7 +98,6 @@ BOOL daNpc_zrA_c::wait(void* param_0) {
     return true;
 }
 
-/* 80B7FD10-80B7FE18 0078F0 0108+00 1/1 0/0 0/0 .text            walkCalc__11daNpc_zrA_cFv */
 void daNpc_zrA_c::walkCalc() {
     field_0x1550 = false;
     cXyz next_pnt;
@@ -116,7 +115,6 @@ void daNpc_zrA_c::walkCalc() {
     mOldAngle.y = mCurAngle.y;
 }
 
-/* 80B7FE18-80B800A4 0079F8 028C+00 1/1 0/0 0/0 .text            waitCalc__11daNpc_zrA_cFv */
 void daNpc_zrA_c::waitCalc() {
     if (mAcch.ChkWaterIn()) {
         if (mMotion != MOT_WAIT_SWIM) {
@@ -160,7 +158,6 @@ void daNpc_zrA_c::waitCalc() {
     }
 }
 
-/* 80B800A4-80B80228 007C84 0184+00 1/0 0/0 0/0 .text            waitSpa__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::waitSpa(void* param_0) {
     switch (mMode) {
     case 0:
@@ -199,7 +196,6 @@ BOOL daNpc_zrA_c::waitSpa(void* param_0) {
     return true;
 }
 
-/* 80B80228-80B80418 007E08 01F0+00 1/0 0/0 0/0 .text            waitLake__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::waitLake(void* param_0) {
     switch (mMode) {
     case 0:
@@ -246,7 +242,6 @@ BOOL daNpc_zrA_c::waitLake(void* param_0) {
     return true;
 }
 
-/* 80B80418-80B8064C 007FF8 0234+00 3/0 0/0 0/0 .text            talk__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::talk(void* param_0) {
     BOOL ret = false;
     BOOL bvar2 = false;
@@ -308,7 +303,6 @@ BOOL daNpc_zrA_c::talk(void* param_0) {
     return ret;
 }
 
-/* 80B8064C-80B806FC 00822C 00B0+00 1/1 0/0 0/0 .text            s_subMulti__FPvPv */
 static void* s_subMulti(void* i_proc, void* i_this) {
     if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_NPC_ZRA) {
         daNpc_zrA_c* _this = static_cast<daNpc_zrA_c*>(i_this);
@@ -324,7 +318,6 @@ static void* s_subMulti(void* i_proc, void* i_this) {
     return NULL;
 }
 
-/* 80B806FC-80B80860 0082DC 0164+00 1/0 0/0 0/0 .text            ECut_talkMulti__11daNpc_zrA_cFi */
 BOOL daNpc_zrA_c::ECut_talkMulti(int i_staffID) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     BOOL ret = false;
@@ -377,7 +370,6 @@ BOOL daNpc_zrA_c::ECut_talkMulti(int i_staffID) {
     return ret;
 }
 
-/* 80B80860-80B80A94 008440 0234+00 2/0 0/0 0/0 .text            swim__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::swim(void* param_0) {
     switch (mMode) {
     case 0:
@@ -443,7 +435,6 @@ BOOL daNpc_zrA_c::swim(void* param_0) {
     return true;
 }
 
-/* 80B80A94-80B81788 008674 0CF4+00 1/1 0/0 0/0 .text            railSwim__11daNpc_zrA_cFv */
 BOOL daNpc_zrA_c::railSwim() {
     s16 ang_step = HIO_PARAM(this).mSwimAngleSpeed;
     s16 ang_scale = 8;
@@ -678,7 +669,6 @@ BOOL daNpc_zrA_c::railSwim() {
     return true;
 }
 
-/* 80B81788-80B81918 009368 0190+00 1/1 0/0 0/0 .text            waitSwim__11daNpc_zrA_cFv */
 BOOL daNpc_zrA_c::waitSwim() {
     calcModulation();
 
@@ -723,7 +713,6 @@ BOOL daNpc_zrA_c::waitSwim() {
     return true;
 }
 
-/* 80B81918-80B81A18 0094F8 0100+00 1/1 0/0 0/0 .text            turnSwimInit__11daNpc_zrA_cFv */
 BOOL daNpc_zrA_c::turnSwimInit() {
     mPath.reverse();
     mPath.setNextIdxDst(current.pos);
@@ -745,7 +734,6 @@ BOOL daNpc_zrA_c::turnSwimInit() {
     return true;
 }
 
-/* 80B81A18-80B81CC8 0095F8 02B0+00 2/2 0/0 0/0 .text            turnSwim__11daNpc_zrA_cFv */
 BOOL daNpc_zrA_c::turnSwim() {
     s16 ang_step = HIO_PARAM(this).mSwimAngleSpeed;
     cXyz pos;
@@ -804,7 +792,6 @@ BOOL daNpc_zrA_c::turnSwim() {
     return true;
 }
 
-/* 80B81CC8-80B81D68 0098A8 00A0+00 1/1 0/0 0/0 .text            turnSwimCheck__11daNpc_zrA_cFv */
 BOOL daNpc_zrA_c::turnSwimCheck() {
     if (mSoldierType != SOLDIER_SPEAR) {
         if (mCheckSwimTurn) {
@@ -823,7 +810,6 @@ BOOL daNpc_zrA_c::turnSwimCheck() {
     return false;
 }
 
-/* 80B81D68-80B81F70 009948 0208+00 1/1 0/0 0/0 .text evasionCalc__11daNpc_zrA_cFR4cXyzR5csXyz */
 BOOL daNpc_zrA_c::evasionCalc(cXyz& param_0, csXyz& param_1) {
     BOOL ret;
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -870,7 +856,6 @@ BOOL daNpc_zrA_c::evasionCalc(cXyz& param_0, csXyz& param_1) {
     return ret;
 }
 
-/* 80B81FB8-80B8204C 009B98 0094+00 13/13 0/0 0/0 .text            calcBank__11daNpc_zrA_cFssRsRs */
 void daNpc_zrA_c::calcBank(s16 i_step, s16 i_scale, s16& i_angY, s16& o_angZ) {
     s16 ang_diff_y = i_angY - current.angle.y;
     if (ang_diff_y >= 0x4000) {
@@ -882,7 +867,6 @@ void daNpc_zrA_c::calcBank(s16 i_step, s16 i_scale, s16& i_angY, s16& o_angZ) {
     cLib_addCalcAngleS2(&o_angZ, mSwimAngleCalc.z, (s16)i_scale, i_step);
 }
 
-/* 80B8204C-80B82238 009C2C 01EC+00 1/1 0/0 0/0 .text            calcWaistAngle__11daNpc_zrA_cFv */
 void daNpc_zrA_c::calcWaistAngle() {
     if (mResetWaistAngle) {
         cLib_chaseAngleS(&mWaistAngle.x, 0, HIO_PARAM(this).mSwimAngleSpeed / 2);
@@ -922,8 +906,6 @@ void daNpc_zrA_c::calcWaistAngle() {
     }
 }
 
-/* 80B82238-80B822CC 009E18 0094+00 9/9 0/0 0/0 .text            calcWaistAngleInit__11daNpc_zrA_cFv
- */
 void daNpc_zrA_c::calcWaistAngleInit() {
     cXyz vec(0.0f, 0.0f, -HIO_PARAM(this).field_0x8c);
     mDoMtx_stack_c::ZXYrotS(mCurAngle);
@@ -933,13 +915,10 @@ void daNpc_zrA_c::calcWaistAngleInit() {
     mResetWaistAngle = false;
 }
 
-/* 80B822CC-80B822D8 009EAC 000C+00 8/8 0/0 0/0 .text            calcWaistAngleStop__11daNpc_zrA_cFv
- */
 void daNpc_zrA_c::calcWaistAngleStop() {
     mResetWaistAngle = true;
 }
 
-/* 80B822D8-80B82300 009EB8 0028+00 3/3 0/0 0/0 .text calcWaistAngleCheck__11daNpc_zrA_cFv */
 BOOL daNpc_zrA_c::calcWaistAngleCheck() {
     if (mSwimMode != SWIM_WAIT && !mResetWaistAngle) {
         return true;
@@ -948,7 +927,6 @@ BOOL daNpc_zrA_c::calcWaistAngleCheck() {
     }
 }
 
-/* 80B82300-80B8247C 009EE0 017C+00 6/6 0/0 0/0 .text            calcModulation__11daNpc_zrA_cFv */
 void daNpc_zrA_c::calcModulation() {
     if (mAcch.ChkWaterIn()) {
         if (mAcch.ChkWaterIn() && current.pos.y < mAcch.m_wtr.GetHeight() - 220.0f) {
@@ -971,7 +949,6 @@ void daNpc_zrA_c::calcModulation() {
     }
 }
 
-/* 80B8247C-80B824F4 00A05C 0078+00 2/2 0/0 0/0 .text            resetModulation__11daNpc_zrA_cFv */
 void daNpc_zrA_c::resetModulation() {
     cLib_chaseF(&mModulationOffset.y, 0.0f, 1.0f);
     cLib_chaseF(&mModulationOffset.x, 0.0f, 1.0f);
@@ -979,8 +956,6 @@ void daNpc_zrA_c::resetModulation() {
     mModulationParam = 210;
 }
 
-/* 80B824F4-80B82584 00A0D4 0090+00 17/17 0/0 0/0 .text
- * calcSwimAngle__11daNpc_zrA_cFR5csXyzR5csXyzss                */
 void daNpc_zrA_c::calcSwimAngle(csXyz& i_target, csXyz& i_calc, s16 i_scale, s16 i_step) {
     cLib_addCalcAngleS2(&i_calc.x, i_target.x, i_scale, i_step);
     cLib_addCalcAngleS2(&current.angle.x, i_calc.x, i_scale, i_step);
@@ -988,8 +963,6 @@ void daNpc_zrA_c::calcSwimAngle(csXyz& i_target, csXyz& i_calc, s16 i_scale, s16
     cLib_addCalcAngleS2(&current.angle.y, i_calc.y, i_scale, i_step);
 }
 
-/* 80B82584-80B825FC 00A164 0078+00 15/15 0/0 0/0 .text            calcSwimPos__11daNpc_zrA_cFR4cXyz
- */
 void daNpc_zrA_c::calcSwimPos(cXyz& i_speed) {
     csXyz angle = current.angle;
     angle.z = 0;
@@ -998,7 +971,6 @@ void daNpc_zrA_c::calcSwimPos(cXyz& i_speed) {
     current.pos += i_speed;
 }
 
-/* 80B825FC-80B826F0 00A1DC 00F4+00 8/8 0/0 0/0 .text            calcWaitSwim__11daNpc_zrA_cFi */
 void daNpc_zrA_c::calcWaitSwim(BOOL param_0) {
     cLib_chaseAngleS(&current.angle.x, 0, HIO_PARAM(this).mSwimAngleSpeed);
     cLib_chaseAngleS(&current.angle.z, 0, HIO_PARAM(this).mSwimAngleSpeed);
@@ -1014,7 +986,6 @@ void daNpc_zrA_c::calcWaitSwim(BOOL param_0) {
     }
 }
 
-/* 80B826F0-80B82C54 00A2D0 0564+00 1/0 0/0 0/0 .text            ECut_talkSwim__11daNpc_zrA_cFi */
 BOOL daNpc_zrA_c::ECut_talkSwim(int i_staffID) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     BOOL ret = false;
@@ -1140,7 +1111,6 @@ BOOL daNpc_zrA_c::ECut_talkSwim(int i_staffID) {
     return ret;
 }
 
-/* 80B82C54-80B82E88 00A834 0234+00 3/0 0/0 0/0 .text            waitWaterfall__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::waitWaterfall(void* param_0) {
     switch (mMode) {
     case 0:
@@ -1202,7 +1172,6 @@ BOOL daNpc_zrA_c::waitWaterfall(void* param_0) {
     return true;
 }
 
-/* 80B82E88-80B833C8 00AA68 0540+00 2/0 0/0 0/0 .text            swimWaterfall__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::swimWaterfall(void* param_0) {
     s16 angle_step = HIO_PARAM(this).mSwimAngleSpeed * 2;
     s16 angle_scale = 2;
@@ -1324,7 +1293,6 @@ BOOL daNpc_zrA_c::swimWaterfall(void* param_0) {
     return true;
 }
 
-/* 80B833C8-80B83548 00AFA8 0180+00 2/0 0/0 0/0 .text            diveWaterfall__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::diveWaterfall(void* param_0) {
     switch (mMode) {
     case 0:
@@ -1356,7 +1324,6 @@ BOOL daNpc_zrA_c::diveWaterfall(void* param_0) {
     return true;
 }
 
-/* 80B83548-80B837E8 00B128 02A0+00 2/0 0/0 0/0 .text            talkSwim__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::talkSwim(void* param_0) {
     BOOL bvar2 = false;
     int flow_id;
@@ -1428,7 +1395,6 @@ BOOL daNpc_zrA_c::talkSwim(void* param_0) {
     return false;
 }
 
-/* 80B837E8-80B83D08 00B3C8 0520+00 1/0 0/0 0/0 .text ECut_carryWaterfall__11daNpc_zrA_cFi */
 BOOL daNpc_zrA_c::ECut_carryWaterfall(int i_staffID) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     BOOL ret = false;
@@ -1562,7 +1528,6 @@ BOOL daNpc_zrA_c::ECut_carryWaterfall(int i_staffID) {
     return ret;
 }
 
-/* 80B83D08-80B83FA4 00B8E8 029C+00 1/0 0/0 0/0 .text ECut_carryWaterfallSkip__11daNpc_zrA_cFi */
 BOOL daNpc_zrA_c::ECut_carryWaterfallSkip(int i_staffID) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     BOOL ret = false;
@@ -1634,7 +1599,6 @@ BOOL daNpc_zrA_c::ECut_carryWaterfallSkip(int i_staffID) {
     return ret;
 }
 
-/* 80B83FA4-80B84200 00BB84 025C+00 1/1 0/0 0/0 .text            diveCalc__11daNpc_zrA_cFssi */
 BOOL daNpc_zrA_c::diveCalc(s16 i_angleStep, s16 i_angleScale, BOOL param_2) {
     cLib_chaseF(&mScaleFactor, HIO_PARAM(this).mMaxScaleFactor,
                 (HIO_PARAM(this).mMaxScaleFactor - 1.0f) / 30.0f);
@@ -1679,7 +1643,6 @@ BOOL daNpc_zrA_c::diveCalc(s16 i_angleStep, s16 i_angleScale, BOOL param_2) {
     }
 }
 
-/* 80B84200-80B8424C 00BDE0 004C+00 1/1 0/0 0/0 .text            s_subHoz__FPvPv */
 static void* s_subHoz(void* i_proc, void* i_this) {
     if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_NPC_HOZ) {
         return i_proc;
@@ -1687,7 +1650,6 @@ static void* s_subHoz(void* i_proc, void* i_this) {
     return NULL;
 }
 
-/* 80B8424C-80B84298 00BE2C 004C+00 3/3 0/0 0/0 .text            s_sub__FPvPv */
 static void* s_sub(void* i_proc, void* i_this) {
     if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_CANOE) {
         return i_proc;
@@ -1695,8 +1657,6 @@ static void* s_sub(void* i_proc, void* i_this) {
     return NULL;
 }
 
-/* 80B84298-80B84B74 00BE78 08DC+00 4/0 0/0 0/0 .text            waitRiverDescend__11daNpc_zrA_cFPv
- */
 BOOL daNpc_zrA_c::waitRiverDescend(void* param_0) {
     switch (mMode) {
     case 0:
@@ -1815,8 +1775,6 @@ BOOL daNpc_zrA_c::waitRiverDescend(void* param_0) {
     return true;
 }
 
-/* 80B84B74-80B85B14 00C754 0FA0+00 2/2 0/0 0/0 .text            swimRiverDescend__11daNpc_zrA_cFPv
- */
 BOOL daNpc_zrA_c::swimRiverDescend(void* param_0) {
     cXyz pos_sp94;
     cXyz swim_speed_sp88;
@@ -2038,8 +1996,6 @@ BOOL daNpc_zrA_c::swimRiverDescend(void* param_0) {
     return true;
 }
 
-/* 80B85B14-80B8601C 00D6F4 0508+00 2/0 0/0 0/0 .text            swimRiverDescend2__11daNpc_zrA_cFPv
- */
 BOOL daNpc_zrA_c::swimRiverDescend2(void* param_0) {
     cXyz pos, swim_speed;
     s16 angle_step = HIO_PARAM(this).mSwimAngleSpeed;
@@ -2124,8 +2080,6 @@ BOOL daNpc_zrA_c::swimRiverDescend2(void* param_0) {
     return true;
 }
 
-/* 80B8601C-80B86440 00DBFC 0424+00 4/0 0/0 0/0 .text            diveRiverDescend__11daNpc_zrA_cFPv
- */
 BOOL daNpc_zrA_c::diveRiverDescend(void* param_0) {
     s16 angle_step = HIO_PARAM(this).mSwimAngleSpeed * 2;
 
@@ -2206,7 +2160,6 @@ BOOL daNpc_zrA_c::diveRiverDescend(void* param_0) {
     return true;
 }
 
-/* 80B86440-80B86A2C 00E020 05EC+00 2/0 0/0 0/0 .text swimGoalRiverDescend__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::swimGoalRiverDescend(void* param_0) {
     daPy_py_c* player;
     cXyz pos, swim_speed;
@@ -2299,7 +2252,6 @@ BOOL daNpc_zrA_c::swimGoalRiverDescend(void* param_0) {
     return true;
 }
 
-/* 80B86A2C-80B86D9C 00E60C 0370+00 2/0 0/0 0/0 .text returnRiverDescend__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::returnRiverDescend(void* param_0) {
     cXyz pos, swim_speed;
     s16 angle_step = HIO_PARAM(this).mSwimAngleSpeed;
@@ -2387,7 +2339,6 @@ BOOL daNpc_zrA_c::returnRiverDescend(void* param_0) {
     return true;
 }
 
-/* 80B86D9C-80B86E78 00E97C 00DC+00 3/3 0/0 0/0 .text moveRiverPosCalc__11daNpc_zrA_cFR4cXyz */
 void daNpc_zrA_c::moveRiverPosCalc(cXyz& o_pos) {
     cXyz pos;
     mPath.getDstPos(daPy_getPlayerActorClass()->current.pos, pos);
@@ -2400,7 +2351,6 @@ void daNpc_zrA_c::moveRiverPosCalc(cXyz& o_pos) {
     }
 }
 
-/* 80B86E78-80B86FAC 00EA58 0134+00 1/1 0/0 0/0 .text            createRuppi__11daNpc_zrA_cFv */
 void daNpc_zrA_c::createRuppi() {
     int item;
     if (cLib_getRndValue(0, 5) < 4) {
@@ -2424,7 +2374,6 @@ void daNpc_zrA_c::createRuppi() {
                           &angle, &scl, &speed_f, &speed_y, -1, 0, NULL);
 }
 
-/* 80B86FAC-80B872F0 00EB8C 0344+00 3/0 0/0 0/0 .text ECut_beforeBlastzrR__11daNpc_zrA_cFi */
 BOOL daNpc_zrA_c::ECut_beforeBlastzrR(int i_staffID) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     BOOL ret = false;
@@ -2514,8 +2463,6 @@ BOOL daNpc_zrA_c::ECut_beforeBlastzrR(int i_staffID) {
     return ret;
 }
 
-/* 80B872F0-80B87510 00EED0 0220+00 1/0 0/0 0/0 .text            ECut_afterBlastzrR__11daNpc_zrA_cFi
- */
 BOOL daNpc_zrA_c::ECut_afterBlastzrR(int i_staffID) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     BOOL ret = false;
@@ -2576,8 +2523,6 @@ BOOL daNpc_zrA_c::ECut_afterBlastzrR(int i_staffID) {
     return ret;
 }
 
-/* 80B87510-80B88B04 00F0F0 15F4+00 1/0 0/0 0/0 .text            ECut_thanksBlast__11daNpc_zrA_cFi
- */
 BOOL daNpc_zrA_c::ECut_thanksBlast(int i_staffID) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     BOOL ret = false;
@@ -2911,7 +2856,6 @@ BOOL daNpc_zrA_c::ECut_thanksBlast(int i_staffID) {
     return ret;
 }
 
-/* 80B88B04-80B8A064 0106E4 1560+00 1/0 0/0 0/0 .text ECut_resultAnnounce__11daNpc_zrA_cFi */
 BOOL daNpc_zrA_c::ECut_resultAnnounce(int i_staffID) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     BOOL ret = false;
@@ -3223,7 +3167,6 @@ BOOL daNpc_zrA_c::ECut_resultAnnounce(int i_staffID) {
     return ret;
 }
 
-/* 80B8A064-80B8A3CC 011C44 0368+00 3/3 0/0 0/0 .text            calcCanoeMove__11daNpc_zrA_cFi */
 void daNpc_zrA_c::calcCanoeMove(BOOL param_0) {
     csXyz angle;
     cXyz vec;
@@ -3274,7 +3217,6 @@ void daNpc_zrA_c::calcCanoeMove(BOOL param_0) {
         ->setPosAndAngle(&field_0x159c[2], angle.y + 0x8000);
 }
 
-/* 80B8A3CC-80B8A43C 011FAC 0070+00 1/1 0/0 0/0 .text            s_subMark__FPvPv */
 static void* s_subMark(void* i_proc, void* i_this) {
     if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_ZRA_MARK) {
         daObjZraMark_c* zra_mark = static_cast<daObjZraMark_c*>(i_proc);
@@ -3286,7 +3228,6 @@ static void* s_subMark(void* i_proc, void* i_this) {
     return NULL;
 }
 
-/* 80B8A43C-80B8A54C 01201C 0110+00 1/0 0/0 0/0 .text            tobiSearch__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::tobiSearch(void* param_0) {
     daObjZraMark_c* zra_mark;
     
@@ -3317,7 +3258,6 @@ BOOL daNpc_zrA_c::tobiSearch(void* param_0) {
     return true;
 }
 
-/* 80B8A54C-80B8A648 01212C 00FC+00 2/0 0/0 0/0 .text            tobiWait__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::tobiWait(void* param_0) {
     switch (mMode) {
     case 0:
@@ -3343,7 +3283,6 @@ BOOL daNpc_zrA_c::tobiWait(void* param_0) {
     return true;
 }
 
-/* 80B8A648-80B8A7F8 012228 01B0+00 2/0 0/0 0/0 .text            tobikomi1__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::tobikomi1(void* param_0) {
     switch (mMode) {
     case 0:
@@ -3382,7 +3321,6 @@ BOOL daNpc_zrA_c::tobikomi1(void* param_0) {
     return true;
 }
 
-/* 80B8A7F8-80B8AA1C 0123D8 0224+00 2/0 0/0 0/0 .text            tobikomi2__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::tobikomi2(void* param_0) {
     f32 water_y;
 
@@ -3425,7 +3363,6 @@ BOOL daNpc_zrA_c::tobikomi2(void* param_0) {
     return true;
 }
 
-/* 80B8AA1C-80B8AB78 0125FC 015C+00 2/0 0/0 0/0 .text            tobikomi3__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::tobikomi3(void* param_0) {
     switch (mMode) {
     case 0:
@@ -3457,7 +3394,6 @@ BOOL daNpc_zrA_c::tobikomi3(void* param_0) {
     return true;
 }
 
-/* 80B8AB78-80B8B1FC 012758 0684+00 2/0 0/0 0/0 .text            tobiJump__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::tobiJump(void* param_0) {
     cXyz swim_speed;
     csXyz angle;
@@ -3556,7 +3492,6 @@ BOOL daNpc_zrA_c::tobiJump(void* param_0) {
     return true;
 }
 
-/* 80B8B1FC-80B8B3A0 012DDC 01A4+00 3/0 0/0 0/0 .text            tobiEnd__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::tobiEnd(void* param_0) {
     cXyz swim_speed;
     s16 angle_step = HIO_PARAM(this).mSwimAngleSpeed;
@@ -3599,7 +3534,6 @@ BOOL daNpc_zrA_c::tobiEnd(void* param_0) {
     return true;
 }
 
-/* 80B8B3A0-80B8B420 012F80 0080+00 1/1 0/0 0/0 .text            s_subSP__FPvPv */
 static void* s_subSP(void* i_proc, void* i_this) {
     if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_NPC_ZRA) {
         daNpc_zrA_c* other = static_cast<daNpc_zrA_c*>(i_proc);
@@ -3613,7 +3547,6 @@ static void* s_subSP(void* i_proc, void* i_this) {
     return NULL;
 }
 
-/* 80B8B420-80B8B530 013000 0110+00 1/0 0/0 0/0 .text            waitSearch__11daNpc_zrA_cFPv */
 BOOL daNpc_zrA_c::waitSearch(void* param_0) {
     switch (mMode) {
     case 0:
@@ -3645,8 +3578,6 @@ BOOL daNpc_zrA_c::waitSearch(void* param_0) {
     return true;
 }
 
-/* 80B8B530-80B8BCE8 013110 07B8+00 1/0 0/0 0/0 .text            ECut_searchPrince1__11daNpc_zrA_cFi
- */
 BOOL daNpc_zrA_c::ECut_searchPrince1(int i_staffID) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     BOOL ret = false;
@@ -3789,8 +3720,6 @@ BOOL daNpc_zrA_c::ECut_searchPrince1(int i_staffID) {
     return ret;
 }
 
-/* 80B8BCE8-80B8C3E8 0138C8 0700+00 1/0 0/0 0/0 .text            ECut_searchPrince2__11daNpc_zrA_cFi
- */
 BOOL daNpc_zrA_c::ECut_searchPrince2(int i_staffID) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     BOOL ret = false;

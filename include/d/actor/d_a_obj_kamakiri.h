@@ -17,26 +17,26 @@
  */
 class daObjKAM_c : public dInsect_c {
 public:
-    /* 80C351BC */ void InitCcSph();
-    /* 80C35228 */ void SetCcSph();
-    /* 80C352A0 */ int CreateHeap();
-    /* 80C35684 */ void ShopWaitAction();
-    /* 80C357EC */ void WaitAction();
-    /* 80C35970 */ int WallCheck();
-    /* 80C35BE4 */ void SpeedSet();
-    /* 80C35CF0 */ void WallWalk();
-    /* 80C36138 */ void WalkAction();
-    /* 80C36338 */ void MoveAction();
-    /* 80C36B20 */ void Action();
-    /* 80C36BE4 */ void ShopAction();
-    /* 80C36CA0 */ void Insect_Release();
-    /* 80C36CB8 */ void Z_BufferChk();
-    /* 80C36E34 */ void ParticleSet();
-    /* 80C36F58 */ void BoomChk();
-    /* 80C37324 */ void ObjHit();
-    /* 80C374AC */ int Execute();
-    /* 80C37724 */ int Delete();
-    /* 80C3778C */ void setBaseMtx();
+    void InitCcSph();
+    void SetCcSph();
+    int CreateHeap();
+    void ShopWaitAction();
+    void WaitAction();
+    int WallCheck();
+    void SpeedSet();
+    void WallWalk();
+    void WalkAction();
+    void MoveAction();
+    void Action();
+    void ShopAction();
+    void Insect_Release();
+    void Z_BufferChk();
+    void ParticleSet();
+    void BoomChk();
+    void ObjHit();
+    int Execute();
+    int Delete();
+    void setBaseMtx();
     int Draw() {
         if (mDraw != 0) {
             Z_BufferChk();
@@ -53,8 +53,8 @@ public:
         }
         return 1;
     }
-    /* 80C378F4 */ u8 CreateChk();
-    /* 80C37AA0 */ int create();
+    u8 CreateChk();
+    int create();
 
 private:
     /* 0x590 */ dCcD_Stts mStts;
@@ -95,8 +95,8 @@ STATIC_ASSERT(sizeof(daObjKAM_c) == 0xa68);
 
 class daObj_KamHIO_c : public JORReflexible {
 public:
-    /* 80C3518C */ daObj_KamHIO_c();
-    /* 80C38360 */ virtual ~daObj_KamHIO_c() {}
+    daObj_KamHIO_c();
+    virtual ~daObj_KamHIO_c() {}
     void genMessage(JORMContext* context) {
         // Golden insect (stag beetle)
         context->genLabel("黄金蟲(カブト)", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);

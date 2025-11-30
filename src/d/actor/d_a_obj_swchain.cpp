@@ -111,13 +111,11 @@ void daObjSwChain_HIO_c::genMessage(JORMContext* ctx) {
 static daObjSwChain_HIO_c l_HIO;
 #endif
 
-/* 80CF86B8-80CF86D8 000078 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* a_this) {
     daObjSwChain_c* i_this = (daObjSwChain_c*)a_this;
     return i_this->CreateHeap();
 }
 
-/* 80CF86D8-80CF8768 000098 0090+00 2/2 0/0 0/0 .text            GetActorName__FR13cBgS_PolyInfo */
 static s16 GetActorName(cBgS_PolyInfo& param_0) {
     if (dComIfG_Bgsp().ChkPolySafe(param_0)) {
         if (dComIfG_Bgsp().ChkMoveBG_NoDABg(param_0)) {
@@ -130,10 +128,8 @@ static s16 GetActorName(cBgS_PolyInfo& param_0) {
     return PROC_Obj_SwChain;
 }
 
-/* 80CFB798-80CFB79C -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "P_Chain";
 
-/* 80CFB79C-80CFB7DC 000004 0040+00 1/1 0/0 0/0 .data            l_sph_src */
 static dCcD_SrcSph l_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x4000, 0x11}, 0x58}},  // mObj
@@ -146,7 +142,6 @@ static dCcD_SrcSph l_sph_src = {
     }  // mSphAttr
 };
 
-/* 80CFB7DC-80CFB81C 000044 0040+00 1/1 0/0 0/0 .data            l_sph_srcCo */
 static dCcD_SrcSph l_sph_srcCo = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x10}, 0x49}},  // mObj
@@ -159,7 +154,6 @@ static dCcD_SrcSph l_sph_srcCo = {
     }  // mSphAttr
 };
 
-/* 80CF8768-80CF89C0 000128 0258+00 1/1 0/0 0/0 .text            Create__14daObjSwChain_cFv */
 int daObjSwChain_c::Create() {
     mStts.Init(0xff, 0xff, this);
     mSph1.Set(l_sph_src);
@@ -208,7 +202,6 @@ int daObjSwChain_c::Create() {
     return 1;
 }
 
-/* 80CF89C0-80CF8B00 000380 0140+00 1/1 0/0 0/0 .text            CreateHeap__14daObjSwChain_cFv */
 int daObjSwChain_c::CreateHeap() {
     mChains = new chain_s[mChainNum + 1];
 
@@ -238,7 +231,6 @@ int daObjSwChain_c::CreateHeap() {
     return 1;
 }
 
-/* 80CF8B48-80CF8DD0 000508 0288+00 1/1 0/0 0/0 .text            create1st__14daObjSwChain_cFv */
 int daObjSwChain_c::create1st() {
     fopAcM_ct(this, daObjSwChain_c);
 
@@ -309,7 +301,6 @@ int daObjSwChain_c::create1st() {
     return phase;
 }
 
-/* 80CF8ED0-80CF94E4 000890 0614+00 1/1 0/0 0/0 .text            execute__14daObjSwChain_cFv */
 int daObjSwChain_c::execute() {
 #ifdef DEBUG
     if (l_HIO.mProcessStop) {
@@ -455,12 +446,10 @@ int daObjSwChain_c::execute() {
     return 1;
 }
 
-/* 80CF94E4-80CF9500 000EA4 001C+00 1/1 0/0 0/0 .text            getChainBasePos__14daObjSwChain_cFP4cXyz */
 void daObjSwChain_c::getChainBasePos(cXyz* param_0) {
     *param_0 = home.pos;
 }
 
-/* 80CF9500-80CF99C0 000EC0 04C0+00 1/1 0/0 0/0 .text            chain_control__14daObjSwChain_cFv */
 void daObjSwChain_c::chain_control() {
     f32 fVar1;
     chain_s* chains_p2 = mChains;
@@ -596,7 +585,6 @@ void daObjSwChain_c::chain_control() {
     }
 }
 
-/* 80CF99C0-80CFA05C 001380 069C+00 1/1 0/0 0/0 .text            chain_control2__14daObjSwChain_cFv */
 void daObjSwChain_c::chain_control2() {
     daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
     chain_s* chains_p = &mChains[mChainNum];
@@ -737,7 +725,6 @@ void daObjSwChain_c::chain_control2() {
     }
 }
 
-/* 80CFA05C-80CFA124 001A1C 00C8+00 1/1 0/0 0/0 .text            initChainMtx__14daObjSwChain_cFv */
 void daObjSwChain_c::initChainMtx() {
     int iVar1 = 0;
     for (int i = 0; i < mChainNum + 1; i++) {
@@ -753,7 +740,6 @@ void daObjSwChain_c::initChainMtx() {
     setChainMtx();
 }
 
-/* 80CFA124-80CFA4A8 001AE4 0384+00 2/2 0/0 0/0 .text            setChainMtx__14daObjSwChain_cFv */
 void daObjSwChain_c::setChainMtx() {
     daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
     chain_s* chains_p1;
@@ -811,7 +797,6 @@ void daObjSwChain_c::setChainMtx() {
     cLib_addCalcAngleS2(&field_0xa6e, field_0xa70, 5, 800);
 }
 
-/* 80CFA4A8-80CFAD50 001E68 08A8+00 1/1 0/0 0/0 .text            chain_count_control__14daObjSwChain_cFv */
 void daObjSwChain_c::chain_count_control() {
     daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
     chain_s* chains_p = &mChains[getTopChainNo()];
@@ -990,7 +975,6 @@ void daObjSwChain_c::chain_count_control() {
     }
 }
 
-/* 80CFAD50-80CFB450 002710 0700+00 1/1 0/0 0/0 .text            setTension__14daObjSwChain_cFv */
 void daObjSwChain_c::setTension() {
     f32 fVar1 = pow;
     field_0xa6a = 0;
@@ -1101,12 +1085,10 @@ void daObjSwChain_c::setTension() {
     }
 }
 
-/* 80CFB450-80CFB464 002E10 0014+00 8/8 0/0 0/0 .text            getTopChainNo__14daObjSwChain_cFv */
 int daObjSwChain_c::getTopChainNo() {
     return mChainNum - mOutNum + 1;
 }
 
-/* 80CFB464-80CFB53C 002E24 00D8+00 1/1 0/0 0/0 .text            checkPlayerPull__14daObjSwChain_cFv */
 BOOL daObjSwChain_c::checkPlayerPull() {
     daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
     cXyz sp2c;
@@ -1122,7 +1104,6 @@ BOOL daObjSwChain_c::checkPlayerPull() {
     return FALSE;
 }
 
-/* 80CFB53C-80CFB5E8 002EFC 00AC+00 1/1 0/0 0/0 .text            draw__14daObjSwChain_cFv */
 int daObjSwChain_c::draw() {
     g_env_light.settingTevStruct(0, &home.pos, &tevStr);
     
@@ -1182,7 +1163,6 @@ int daObjSwChain_c::draw() {
     return 1;
 }
 
-/* 80CFB5E8-80CFB61C 002FA8 0034+00 1/1 0/0 0/0 .text            _delete__14daObjSwChain_cFv */
 int daObjSwChain_c::_delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
 #ifdef DEBUG
@@ -1191,37 +1171,31 @@ int daObjSwChain_c::_delete() {
     return 1;
 }
 
-/* 80CFB61C-80CFB63C 002FDC 0020+00 1/0 0/0 0/0 .text            daObjSwChain_Draw__FP14daObjSwChain_c */
 static int daObjSwChain_Draw(daObjSwChain_c* i_this) {
     return i_this->draw();
 }
 
-/* 80CFB63C-80CFB65C 002FFC 0020+00 1/0 0/0 0/0 .text            daObjSwChain_Execute__FP14daObjSwChain_c */
 static int daObjSwChain_Execute(daObjSwChain_c* i_this) {
     return i_this->execute();
 }
 
-/* 80CFB65C-80CFB67C 00301C 0020+00 1/0 0/0 0/0 .text            daObjSwChain_Delete__FP14daObjSwChain_c */
 static int daObjSwChain_Delete(daObjSwChain_c* i_this) {
     fpc_ProcID unused = fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
-/* 80CFB67C-80CFB69C 00303C 0020+00 1/0 0/0 0/0 .text            daObjSwChain_Create__FP10fopAc_ac_c */
 static int daObjSwChain_Create(fopAc_ac_c* a_this) {
     daObjSwChain_c* i_this = (daObjSwChain_c*)a_this;
     fpc_ProcID unused = fopAcM_GetID(a_this);
     return i_this->create1st();
 }
 
-/* 80CFB81C-80CFB83C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjSwChain_Method */
 static actor_method_class l_daObjSwChain_Method = {
     (process_method_func)daObjSwChain_Create,  (process_method_func)daObjSwChain_Delete,
     (process_method_func)daObjSwChain_Execute, 0,
     (process_method_func)daObjSwChain_Draw,
 };
 
-/* 80CFB83C-80CFB86C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_SwChain */
 extern actor_process_profile_definition g_profile_Obj_SwChain = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

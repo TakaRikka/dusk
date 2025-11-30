@@ -71,8 +71,8 @@ STATIC_ASSERT(sizeof(sq_class) == 0xB5C);
 
 class daSq_HIO_c {
 public:
-    /* 8059F66C */ daSq_HIO_c();
-    /* 805A10B0 */ virtual ~daSq_HIO_c() {}
+    daSq_HIO_c();
+    virtual ~daSq_HIO_c() {}
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ f32 mScale;

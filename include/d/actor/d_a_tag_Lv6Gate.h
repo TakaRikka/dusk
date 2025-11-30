@@ -6,10 +6,10 @@
 
 class daTagLv6Gate_c : public fopAc_ac_c {
 public:
-    /* 80D4F8B8 */ int createHeap();
-    /* 80D4FBD8 */ int create();
-    /* 80D4FEDC */ inline int execute();
-    /* 80D506AC */ int draw();
+    int createHeap();
+    int create();
+    inline int execute();
+    int draw();
 
     inline ~daTagLv6Gate_c();
 

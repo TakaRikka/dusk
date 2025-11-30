@@ -874,7 +874,6 @@ void* OSGetThreadSpecific(s32 index) {
     return NULL;
 }
 
-/* 804516D0-804516D8 000BD0 0008+00 0/0 2/1 0/0 .sbss            None */
 #include "global.h"
 extern u8 Debug_BBA_804516D0;
-u8 Debug_BBA_804516D0 ALIGN_DECL(8);
+u8 Debug_BBA_804516D0 ATTRIBUTE_ALIGN(8);

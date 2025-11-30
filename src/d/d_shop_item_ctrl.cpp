@@ -8,7 +8,6 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_a_shop_item_static.h"
 
-/* 80196914-80196958 191254 0044+00 0/0 0/0 10/10 .text            __ct__15dShopItemCtrl_cFv */
 dShopItemCtrl_c::dShopItemCtrl_c() {
     for (int i = 0; i < 7; i++) {
         mItemIndex[i] = -1;
@@ -16,11 +15,8 @@ dShopItemCtrl_c::dShopItemCtrl_c() {
     }
 }
 
-/* 80196958-801969A0 191298 0048+00 1/0 1/1 0/0 .text            __dt__15dShopItemCtrl_cFv */
 dShopItemCtrl_c::~dShopItemCtrl_c() {}
 
-/* 801969A0-80196A3C 1912E0 009C+00 0/0 3/3 3/3 .text            getCurrentPos__15dShopItemCtrl_cFi
- */
 cXyz dShopItemCtrl_c::getCurrentPos(int i_itemIdx) {
     cXyz item_pos(0.0f, 0.0f, 0.0f);
 
@@ -34,7 +30,6 @@ cXyz dShopItemCtrl_c::getCurrentPos(int i_itemIdx) {
     return item_pos;
 }
 
-/* 80196A3C-80196AF0 19137C 00B4+00 0/0 2/2 0/0 .text            isHomePos__15dShopItemCtrl_cFi */
 bool dShopItemCtrl_c::isHomePos(int i_itemIdx) {
     if (i_itemIdx >= 0 && i_itemIdx < 7 && mItemIndex[i_itemIdx] != -1) {
         daShopItem_c* item = (daShopItem_c*)fopAcM_SearchByID(mItemIndex[i_itemIdx]);
@@ -53,8 +48,6 @@ bool dShopItemCtrl_c::isHomePos(int i_itemIdx) {
     return false;
 }
 
-/* 80196AF0-80196BA4 191430 00B4+00 0/0 1/1 0/0 .text            setRotateAnime__15dShopItemCtrl_cFi
- */
 void dShopItemCtrl_c::setRotateAnime(int i_itemIdx) {
     for (int i = 0; i < 7; i++) {
         if (mItemIndex[i] != -1) {
@@ -72,7 +65,6 @@ void dShopItemCtrl_c::setRotateAnime(int i_itemIdx) {
     }
 }
 
-/* 80196BA4-80197098 1914E4 04F4+00 0/0 1/1 0/0 .text setZoomAnime__15dShopItemCtrl_cFiP4cXyzsb */
 void dShopItemCtrl_c::setZoomAnime(int param_1, cXyz* param_2, s16 param_3, bool param_4) {
     for (int i = 0; i < 7; i++) {
         if (mItemIndex[i] == -1) {

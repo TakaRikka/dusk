@@ -2,7 +2,6 @@
 
 TRKEventQueue gTRKEventQueue;
 
-/* 8036CDE8-8036CE40 367728 0058+00 0/0 1/1 0/0 .text            TRKInitializeEventQueue */
 DSError TRKInitializeEventQueue() {
     TRKInitializeMutex(&gTRKEventQueue);
     TRKAcquireMutex(&gTRKEventQueue);
@@ -13,7 +12,6 @@ DSError TRKInitializeEventQueue() {
     return DS_NoError;
 }
 
-/* 8036CD34-8036CDE8 367674 00B4+00 0/0 1/1 0/0 .text            TRKGetNextEvent */
 BOOL TRKGetNextEvent(TRKEvent* event) {
     BOOL status = 0;
     TRKAcquireMutex(&gTRKEventQueue);
@@ -29,7 +27,6 @@ BOOL TRKGetNextEvent(TRKEvent* event) {
     return status;
 }
 
-/* 8036CC54-8036CD34 367594 00E0+00 0/0 5/5 0/0 .text            TRKPostEvent */
 DSError TRKPostEvent(TRKEvent* event) {
     DSError ret = DS_NoError;
     int nextEventID;
@@ -55,14 +52,12 @@ DSError TRKPostEvent(TRKEvent* event) {
     return ret;
 }
 
-/* 8036CC3C-8036CC54 36757C 0018+00 0/0 5/5 0/0 .text            TRKConstructEvent */
 void TRKConstructEvent(TRKEvent* event, NubEventType eventType) {
     event->eventType = eventType;
     event->eventID = 0;
     event->msgBufID = -1;
 }
 
-/* 8036CC18-8036CC3C 367558 0024+00 0/0 1/1 0/0 .text            TRKDestructEvent */
 void TRKDestructEvent(TRKEvent* event) {
     TRKReleaseBuffer(event->msgBufID);
 }

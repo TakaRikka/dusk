@@ -18,24 +18,24 @@ class daHeavySw_c : public dBgS_MoveBgActor {
 public:
     enum Mode_e { MODE_WAIT, MODE_RIDE, MODE_MOVE_INIT, MODE_MOVE, MODE_MOVE_END };
 
-    /* 80C1CBC8 */ void setBaseMtx();
-    /* 80C1CC70 */ int CreateHeap();
-    /* 80C1CCDC */ int create();
-    /* 80C1CF90 */ static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-    /* 80C1CFC0 */ int Execute(Mtx**);
-    /* 80C1D02C */ void moveSwitch();
-    /* 80C1D274 */ void init_modeWait();
-    /* 80C1D280 */ void modeWait();
-    /* 80C1D2AC */ void init_modeRide();
-    /* 80C1D2D8 */ void modeRide();
-    /* 80C1D408 */ void init_modeMoveInit();
-    /* 80C1D434 */ void modeMoveInit();
-    /* 80C1D54C */ void init_modeMove();
-    /* 80C1D588 */ void modeMove();
-    /* 80C1D688 */ void init_modeMoveEnd();
-    /* 80C1D788 */ void modeMoveEnd();
-    /* 80C1D808 */ int Draw();
-    /* 80C1D91C */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+    int Execute(Mtx**);
+    void moveSwitch();
+    void init_modeWait();
+    void modeWait();
+    void init_modeRide();
+    void modeRide();
+    void init_modeMoveInit();
+    void modeMoveInit();
+    void init_modeMove();
+    void modeMove();
+    void init_modeMoveEnd();
+    void modeMoveEnd();
+    int Draw();
+    int Delete();
 
     /* 0x5A0 */ request_of_phase_process_class mPhaseReq;
     /* 0x5A8 */ J3DModel* mpModel;
@@ -60,8 +60,8 @@ public:
 
 class daHeavySw_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C1CAEC */ daHeavySw_HIO_c();
-    /* 80C1D9D8 */ virtual ~daHeavySw_HIO_c() {}
+    daHeavySw_HIO_c();
+    virtual ~daHeavySw_HIO_c() {}
 
     void genMessage(JORMContext*);
 

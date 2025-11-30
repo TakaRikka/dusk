@@ -10,7 +10,6 @@
 #include "d/d_bg_w.h"
 #include "SSystem/SComponent/c_math.h"
 
-/* 80BB820C-80BB82AC 0000EC 00A0+00 1/1 0/0 0/0 .text            __ct__16daBmWindow_HIO_cFv */
 daBmWindow_HIO_c::daBmWindow_HIO_c() {
     field_0x04 = 10;
     field_0x05 = 3;
@@ -30,7 +29,6 @@ daBmWindow_HIO_c::daBmWindow_HIO_c() {
     field_0x39 = 3;
 }
 
-/* 80BB8350-80BB8400 000230 00B0+00 2/2 0/0 0/0 .text            setBaseMtx__12daBmWindow_cFv */
 void daBmWindow_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -40,7 +38,6 @@ void daBmWindow_c::setBaseMtx() {
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80BB8400-80BB846C 0002E0 006C+00 1/0 0/0 0/0 .text            CreateHeap__12daBmWindow_cFv */
 int daBmWindow_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("H_Window", 4);
     JUT_ASSERT(285, modelData != NULL);
@@ -48,8 +45,6 @@ int daBmWindow_c::CreateHeap() {
     return mModel != NULL ? 1 : 0;
 }
 
-/* ############################################################################################## */
-/* 80BB9760-80BB9790 000024 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__12daBmWindow_c */
 dCcD_SrcGObjInf const daBmWindow_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0xd8fafdbf, 0x11}, {0}}},
     {1, 0, 0, 0, 0},
@@ -57,7 +52,6 @@ dCcD_SrcGObjInf const daBmWindow_c::mCcDObjInfo = {
     {0},
 };
 
-/* 80BB9790-80BB97C0 000054 0030+00 0/1 0/0 0/0 .rodata          l_check_area */
 static Vec const l_check_area[4] = {
     {-100.0f, -50.0f, -200.0f},
     {-100.0f, 290.0f, -200.0f},
@@ -65,7 +59,6 @@ static Vec const l_check_area[4] = {
     {100.0f, -50.0f, 200.0f},
 };
 
-/* 80BB846C-80BB869C 00034C 0230+00 1/1 0/0 0/0 .text            create__12daBmWindow_cFv */
 int daBmWindow_c::create() {
     fopAcM_ct(this, daBmWindow_c);
     if (fopAcM_isSwitch(this, (u8)fopAcM_GetParam(this))) {
@@ -119,8 +112,6 @@ int daBmWindow_c::create() {
     return rv;
 }
 
-/* 80BB88D8-80BB8930 0007B8 0058+00 1/0 0/0 0/0 .text            Execute__12daBmWindow_cFPPA3_A4_f
- */
 int daBmWindow_c::Execute(Mtx** param_1) {
     windowProc();
     *param_1 = &mModel->getBaseTRMtx();
@@ -129,10 +120,8 @@ int daBmWindow_c::Execute(Mtx** param_1) {
     return 1;
 }
 
-/* 80BB999C-80BB99D8 000014 003C+00 3/3 0/0 0/0 .bss             l_HIO */
 static daBmWindow_HIO_c l_HIO;
 
-/* 80BB982C-80BB9870 000020 0044+00 2/2 0/0 0/0 .data            mCcDCyl__12daBmWindow_c */
 dCcD_SrcCyl daBmWindow_c::mCcDCyl = {
     daBmWindow_c::mCcDObjInfo,
     {
@@ -142,7 +131,6 @@ dCcD_SrcCyl daBmWindow_c::mCcDCyl = {
     } // mCyl
 };
 
-/* 80BB8930-80BB8B3C 000810 020C+00 1/1 0/0 0/0 .text            windowProc__12daBmWindow_cFv */
 void daBmWindow_c::windowProc() {
     typedef void (daBmWindow_c::*modeFunc)();
     static modeFunc mode_proc[3] = {&daBmWindow_c::modeWait, &daBmWindow_c::modeBreak,
@@ -157,12 +145,10 @@ void daBmWindow_c::windowProc() {
     field_0xe94++;
 }
 
-/* 80BB8B3C-80BB8B48 000A1C 000C+00 1/1 0/0 0/0 .text            init_modeWait__12daBmWindow_cFv */
 void daBmWindow_c::init_modeWait() {
     mMode = WAIT;
 }
 
-/* 80BB8B48-80BB8FDC 000A28 0494+00 1/0 0/0 0/0 .text            modeWait__12daBmWindow_cFv */
 void daBmWindow_c::modeWait() {
     daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(LINK_PTR);
     cXyz cStack_2c;
@@ -235,8 +221,6 @@ void daBmWindow_c::modeWait() {
     }
 }
 
-/* 80BB8FDC-80BB90E0 000EBC 0104+00 1/1 0/0 0/0 .text
- * checkActorInRectangle__12daBmWindow_cFP10fopAc_ac_cPC4cXyzPC4cXyz */
 int daBmWindow_c::checkActorInRectangle(fopAc_ac_c* i_actor, cXyz const* i_topLeft,
                                         cXyz const* i_bottomRight) {
     cXyz actorDist = i_actor->current.pos - current.pos;
@@ -252,7 +236,6 @@ int daBmWindow_c::checkActorInRectangle(fopAc_ac_c* i_actor, cXyz const* i_topLe
     }
 }
 
-/* 80BB90E0-80BB920C 000FC0 012C+00 1/1 0/0 0/0 .text            init_modeBreak__12daBmWindow_cFv */
 void daBmWindow_c::init_modeBreak() {
     if (mpBgW != NULL) {
         dComIfG_Bgsp().Release(mpBgW);
@@ -266,13 +249,10 @@ void daBmWindow_c::init_modeBreak() {
     mMode = BREAK;
 }
 
-/* 80BB920C-80BB922C 0010EC 0020+00 1/0 0/0 0/0 .text            modeBreak__12daBmWindow_cFv */
 void daBmWindow_c::modeBreak() {
     fopAcM_delete(this);
 }
 
-/* 80BB922C-80BB9304 00110C 00D8+00 1/1 0/0 0/0 .text            init_modeBreakEff__12daBmWindow_cFv
- */
 void daBmWindow_c::init_modeBreakEff() {
     cXyz soundPos(current.pos);
     soundPos.z -= 200.0f;
@@ -282,18 +262,14 @@ void daBmWindow_c::init_modeBreakEff() {
     mMode = BREAK_EFF;
 }
 
-/* 80BB9304-80BB9324 0011E4 0020+00 1/0 0/0 0/0 .text            modeBreakEff__12daBmWindow_cFv */
 void daBmWindow_c::modeBreakEff() {
     fopAcM_delete(this);
 }
 
-/* ############################################################################################## */
-/* 80BB97F4-80BB9800 0000B8 000C+00 0/1 0/0 0/0 .rodata          particle_id$4102 */
 static u16 const particle_id[6] = {
     0x8506, 0x8507, 0x8508, 0x8509, 0x850A, 0x850B,
 };
 
-/* 80BB9324-80BB9494 001204 0170+00 2/2 0/0 0/0 .text            setBreakEffect__12daBmWindow_cFi */
 void daBmWindow_c::setBreakEffect(int param_1) {
     cXyz cStack_2c(current.pos);
     csXyz cStack_40(shape_angle);
@@ -315,7 +291,6 @@ void daBmWindow_c::setBreakEffect(int param_1) {
     }
 }
 
-/* 80BB9494-80BB9548 001374 00B4+00 1/0 0/0 0/0 .text            Draw__12daBmWindow_cFv */
 int daBmWindow_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -326,45 +301,35 @@ int daBmWindow_c::Draw() {
     return 1;
 }
 
-/* 80BB9548-80BB9578 001428 0030+00 1/0 0/0 0/0 .text            Delete__12daBmWindow_cFv */
 int daBmWindow_c::Delete() {
     dComIfG_resDelete(&mPhase, "H_Window");
     return 1;
 }
 
-/* 80BB9578-80BB95A4 001458 002C+00 1/0 0/0 0/0 .text            daBmWindow_Draw__FP12daBmWindow_c
- */
 static int daBmWindow_Draw(daBmWindow_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BB95A4-80BB95C4 001484 0020+00 1/0 0/0 0/0 .text daBmWindow_Execute__FP12daBmWindow_c */
 static int daBmWindow_Execute(daBmWindow_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BB95C4-80BB95E4 0014A4 0020+00 1/0 0/0 0/0 .text            daBmWindow_Delete__FP12daBmWindow_c
- */
 static int daBmWindow_Delete(daBmWindow_c* i_this) {
     fopAcM_GetID(i_this);
     return i_this->MoveBGDelete();
 }
 
-/* 80BB95E4-80BB9604 0014C4 0020+00 1/0 0/0 0/0 .text            daBmWindow_Create__FP10fopAc_ac_c
- */
 static int daBmWindow_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return static_cast<daBmWindow_c*>(i_this)->create();
 }
 
-/* 80BB98B8-80BB98D8 -00001 0020+00 1/0 0/0 0/0 .data            l_daBmWindow_Method */
 static actor_method_class l_daBmWindow_Method = {
     (process_method_func)daBmWindow_Create,  (process_method_func)daBmWindow_Delete,
     (process_method_func)daBmWindow_Execute, (process_method_func)NULL,
     (process_method_func)daBmWindow_Draw,
 };
 
-/* 80BB98D8-80BB9908 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_BmWindow */
 extern actor_process_profile_definition g_profile_Obj_BmWindow = {
     fpcLy_CURRENT_e,          // mLayerID
     3,                        // mListID

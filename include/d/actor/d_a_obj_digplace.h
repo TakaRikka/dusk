@@ -14,8 +14,8 @@
  */
 class daObjDigpl_c : public fopAc_ac_c {
 public:
-    /* 8057BF98 */ int create();
-    /* 8057C1EC */ int execute();
+    int create();
+    int execute();
 
 private:
     /* 0x568 */ u8 mType;
@@ -28,7 +28,7 @@ private:
     /* 0x5B8 */ dPath* mpDigPoints;
 
 public:
-    /* 8057C158 */ virtual ~daObjDigpl_c();
+    virtual ~daObjDigpl_c();
 
     u8 getSceneNum() { return (fopAcM_GetParam(this) >> 0xC) & 0xFF; }
     int getItemNum() { return getSceneNum(); }

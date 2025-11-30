@@ -11,7 +11,6 @@
 #include "d/d_item_data.h"
 #include "SSystem/SComponent/c_math.h"
 
-/* 804CE3F4-804CE438 000000 0044+00 6/6 0/0 0/0 .rodata          l_cyl_src */
 const static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xffffffff, 0x11}, 0x59}}, // mObj
@@ -26,8 +25,6 @@ const static dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 804CC7D8-804CCAD4 000078 02FC+00 1/1 0/0 0/0 .text            Reflect__FP4cXyzRC13cBgS_PolyInfof
- */
 static f32 Reflect(cXyz* i_vec, cBgS_PolyInfo const& i_wallpoly, f32 i_scale) {
     cM3dGPla plane;
 
@@ -43,8 +40,6 @@ static f32 Reflect(cXyz* i_vec, cBgS_PolyInfo const& i_wallpoly, f32 i_scale) {
     return 0.0f;
 }
 
-/* 804CCB1C-804CCB78 0003BC 005C+00 1/1 0/0 0/0 .text
- * lifeGetTgCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void lifeGetTgCallBack(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
                               fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf) {
     if (i_tgActor != NULL &&
@@ -55,8 +50,6 @@ static void lifeGetTgCallBack(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
     }
 }
 
-/* 804CCB78-804CCBE4 000418 006C+00 1/1 0/0 0/0 .text
- * lifeGetCoCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void lifeGetCoCallBack(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
                               fopAc_ac_c* i_coActorB, dCcD_GObjInf* i_coObjInfB) {
     if (i_coActorA != NULL && i_coActorB != NULL && i_coActorB == (fopAc_ac_c*)dComIfGp_getLinkPlayer()) {
@@ -66,12 +59,10 @@ static void lifeGetCoCallBack(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
     }
 }
 
-/* 804CCBE4-804CCC04 000484 0020+00 1/1 0/0 0/0 .text            initBaseMtx__11daObjLife_cFv */
 void daObjLife_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 804CCC04-804CCC6C 0004A4 0068+00 2/2 0/0 0/0 .text            setBaseMtx__11daObjLife_cFv */
 void daObjLife_c::setBaseMtx() {
     mpModel->setBaseScale(scale);
     
@@ -80,7 +71,6 @@ void daObjLife_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 804CCC6C-804CCE00 00050C 0194+00 1/1 0/0 0/0 .text            Create__11daObjLife_cFv */
 int daObjLife_c::Create() {
     scale.x = scale.y = scale.z = 0.0f;
     initBaseMtx();
@@ -109,7 +99,6 @@ int daObjLife_c::Create() {
     return 1;
 }
 
-/* 804CCE00-804CCF5C 0006A0 015C+00 1/1 0/0 0/0 .text            setEffect__11daObjLife_cFv */
 void daObjLife_c::setEffect() {
     cXyz size(1.5f, 1.5f, 1.5f);
 
@@ -126,23 +115,19 @@ void daObjLife_c::setEffect() {
     }
 }
 
-/* 804CCF5C-804CCFAC 0007FC 0050+00 2/2 0/0 0/0 .text            endEffect00__11daObjLife_cFv */
 void daObjLife_c::endEffect00() {
     mEffect0.remove();
     mEffect1.remove();
 }
 
-/* 804CCFAC-804CCFD8 00084C 002C+00 3/3 0/0 0/0 .text            endEffect02__11daObjLife_cFv */
 void daObjLife_c::endEffect02() {
     mEffect2.remove();
 }
 
-/* 804CCFD8-804CCFE0 000878 0008+00 1/0 0/0 0/0 .text            __CreateHeap__11daObjLife_cFv */
 int daObjLife_c::__CreateHeap() {
     return 1;
 }
 
-/* 804CCFE0-804CD258 000880 0278+00 1/1 0/0 0/0 .text            create__11daObjLife_cFv */
 int daObjLife_c::create() {
     fopAcM_ct(this, daObjLife_c);
 
@@ -185,7 +170,6 @@ int daObjLife_c::create() {
     return phase_state;
 }
 
-/* 804CD428-804CD5B8 000CC8 0190+00 1/1 0/0 0/0 .text            bg_check__11daObjLife_cFv */
 void daObjLife_c::bg_check() {
     f32 bounce_speed_scale = 0.7f;
 
@@ -217,7 +201,6 @@ void daObjLife_c::bg_check() {
     }
 }
 
-/* 804CD5B8-804CD660 000E58 00A8+00 3/3 0/0 0/0 .text            actionWaitInit__11daObjLife_cFv */
 int daObjLife_c::actionWaitInit() {
     mCcCyl.OnTgSPrmBit(1);
     mCcCyl.OnCoSPrmBit(1);
@@ -235,7 +218,6 @@ int daObjLife_c::actionWaitInit() {
     return 1;
 }
 
-/* 804CD660-804CD8C0 000F00 0260+00 1/0 0/0 0/0 .text            actionWait__11daObjLife_cFv */
 int daObjLife_c::actionWait() {
     if (strcmp(dComIfGp_getStartStageName(), "D_MN11A") == 0) {
         if (mLv5Counter < 20000) {
@@ -297,7 +279,6 @@ int daObjLife_c::actionWait() {
     return 1;
 }
 
-/* 804CD8C0-804CD98C 001160 00CC+00 3/3 0/0 0/0 .text initActionOrderGetDemo__11daObjLife_cFv */
 int daObjLife_c::initActionOrderGetDemo() {
     mCcCyl.OffTgSPrmBit(1);
     mCcCyl.OffCoSPrmBit(1);
@@ -319,8 +300,6 @@ int daObjLife_c::initActionOrderGetDemo() {
     return 1;
 }
 
-/* 804CD98C-804CDA08 00122C 007C+00 1/0 0/0 0/0 .text            actionOrderGetDemo__11daObjLife_cFv
- */
 int daObjLife_c::actionOrderGetDemo() {
     if (eventInfo.checkCommandItem()) {
         setStatus(STATUS_GET_DEMO_e);
@@ -336,7 +315,6 @@ int daObjLife_c::actionOrderGetDemo() {
     return 1;
 }
 
-/* 804CDA08-804CDBC8 0012A8 01C0+00 1/0 0/0 0/0 .text            actionGetDemo__11daObjLife_cFv */
 int daObjLife_c::actionGetDemo() {
     if (dComIfGp_evmng_endCheck("DEFAULT_GETITEM")) {
         dComIfGp_event_reset();
@@ -367,7 +345,6 @@ int daObjLife_c::actionGetDemo() {
     return 1;
 }
 
-/* 804CDBC8-804CDC2C 001468 0064+00 1/0 0/0 0/0 .text            actionSwOnWait__11daObjLife_cFv */
 int daObjLife_c::actionSwOnWait() {
     if (fopAcM_isSwitch(this, getSwNo()) && cLib_calcTimer<u8>(&field_0x935) == 0) {
         actionWaitInit();
@@ -376,7 +353,6 @@ int daObjLife_c::actionSwOnWait() {
     return 1;
 }
 
-/* 804CDC2C-804CDD0C 0014CC 00E0+00 1/1 0/0 0/0 .text actionInitBoomerangCarry__11daObjLife_cFv */
 int daObjLife_c::actionInitBoomerangCarry() {
     mCcCyl.OnTgSPrmBit(1);
     mCcCyl.OnCoSPrmBit(1);
@@ -392,7 +368,6 @@ int daObjLife_c::actionInitBoomerangCarry() {
     return 1;
 }
 
-/* 804CDD0C-804CDD7C 0015AC 0070+00 1/0 0/0 0/0 .text actionBoomerangCarry__11daObjLife_cFv */
 int daObjLife_c::actionBoomerangCarry() {
     fopAc_ac_c* boomerang = fopAcM_SearchByName(PROC_BOOMERANG);
     if (boomerang != NULL) {
@@ -406,19 +381,16 @@ int daObjLife_c::actionBoomerangCarry() {
     return 1;
 }
 
-/* 804CDD7C-804CDD8C 00161C 0010+00 0/0 0/0 1/1 .text            actionInitWait2__11daObjLife_cFv */
 int daObjLife_c::actionInitWait2() {
     setStatus(STATUS_WAIT_2_e);
     return 1;
 }
 
-/* 804CDD8C-804CDDAC 00162C 0020+00 1/0 0/0 0/0 .text            actionWait2__11daObjLife_cFv */
 int daObjLife_c::actionWait2() {
     attention_info.position = current.pos;
     return 1;
 }
 
-/* 804CDDAC-804CDE70 00164C 00C4+00 1/1 0/0 0/0 .text            calcScale__11daObjLife_cFv */
 void daObjLife_c::calcScale() {
     cLib_chaseF(&field_0x954, 1.0f, 0.2f);
     if (field_0x954 == 1.0f) {
@@ -435,7 +407,6 @@ void daObjLife_c::calcScale() {
     scale.setall(field_0x950 + field_0x954);
 }
 
-/* 804CDE70-804CE19C 001710 032C+00 1/1 0/0 0/0 .text            execute__11daObjLife_cFv */
 int daObjLife_c::execute() {
     static int (daObjLife_c::*l_demoFunc[])() = {
         &daObjLife_c::actionWait,
@@ -490,7 +461,6 @@ int daObjLife_c::execute() {
     return 1;
 }
 
-/* 804CE19C-804CE1F0 001A3C 0054+00 1/1 0/0 0/0 .text            draw__11daObjLife_cFv */
 int daObjLife_c::draw() {
     if (!chkDraw()) {
         return 1;
@@ -500,12 +470,10 @@ int daObjLife_c::draw() {
     return 1;
 }
 
-/* 804CE1F0-804CE214 001A90 0024+00 1/0 0/0 0/0 .text            setListStart__11daObjLife_cFv */
 void daObjLife_c::setListStart() {
     dComIfGd_setListDark();
 }
 
-/* 804CE214-804CE274 001AB4 0060+00 1/1 0/0 0/0 .text            _delete__11daObjLife_cFv */
 int daObjLife_c::_delete() {
     mSound.deleteObject();
     endEffect00();
@@ -515,29 +483,22 @@ int daObjLife_c::_delete() {
     return 1;
 }
 
-/* 804CE274-804CE294 001B14 0020+00 1/0 0/0 0/0 .text            daObjLife_Draw__FP11daObjLife_c */
 static int daObjLife_Draw(daObjLife_c* i_this) {
     return i_this->draw();
 }
 
-/* 804CE294-804CE2B4 001B34 0020+00 1/0 0/0 0/0 .text            daObjLife_Execute__FP11daObjLife_c
- */
 static int daObjLife_Execute(daObjLife_c* i_this) {
     return i_this->execute();
 }
 
-/* 804CE2B4-804CE2D4 001B54 0020+00 1/0 0/0 0/0 .text            daObjLife_Delete__FP11daObjLife_c
- */
 static int daObjLife_Delete(daObjLife_c* i_this) {
     return i_this->_delete();
 }
 
-/* 804CE2D4-804CE2F4 001B74 0020+00 1/0 0/0 0/0 .text            daObjLife_Create__FP10fopAc_ac_c */
 static int daObjLife_Create(fopAc_ac_c* i_this) {
     return ((daObjLife_c*)i_this)->create();
 }
 
-/* 804CE57C-804CE59C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjLife_Method */
 static actor_method_class l_daObjLife_Method = {
     (process_method_func)daObjLife_Create,
     (process_method_func)daObjLife_Delete,
@@ -546,7 +507,6 @@ static actor_method_class l_daObjLife_Method = {
     (process_method_func)daObjLife_Draw,
 };
 
-/* 804CE59C-804CE5CC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_LifeContainer */
 extern actor_process_profile_definition g_profile_Obj_LifeContainer = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

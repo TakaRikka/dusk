@@ -11,7 +11,6 @@ static int DspStartWork(u32 param_0, void (*param_1)(u16));
 extern int Dsp_Running_Check();
 extern int Dsp_Running_Start();
 
-/* 8029E6E0-8029E718 299020 0038+00 1/1 0/0 0/0 .text            DspHandShake__FPv */
 void DspHandShake(void*) {
     OS_REPORT("DSP InitCallback \n");
     while (DSPCheckMailFromDSP() == 0) {}
@@ -24,8 +23,7 @@ void DspHandShake(void*) {
     Dsp_Running_Start();
 }
 
-/* 803C7920-803C9820 024A40 1F00+00 1/1 0/0 0/0 .data            jdsp */
-static u8 jdsp[7936] ALIGN_DECL(32) = {
+static u8 jdsp[7936] ATTRIBUTE_ALIGN(32) = {
     0x02, 0x9F, 0x00, 0x12, 0x00, 0x00, 0x00, 0x00, 0x02, 0xFF, 0x00, 0x00, 0x02, 0xFF, 0x00, 0x00,
     0x02, 0xFF, 0x00, 0x00, 0x02, 0xFF, 0x00, 0x00, 0x02, 0xFF, 0x00, 0x00, 0x02, 0x9F, 0x06, 0xA5,
     0x02, 0x9F, 0x00, 0x4E, 0x12, 0x05, 0x02, 0xBF, 0x00, 0x57, 0x81, 0x00, 0x00, 0x9F, 0x10, 0x00,
@@ -524,13 +522,10 @@ static u8 jdsp[7936] ALIGN_DECL(32) = {
     0x80, 0x01, 0x02, 0xBF, 0x00, 0xF4, 0x02, 0xDF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 80431F80-80431FE0 05ECA0 0050+10 1/1 0/0 0/0 .bss             audio_task */
-static DSPTaskInfo audio_task ALIGN_DECL(32);
+static DSPTaskInfo audio_task ATTRIBUTE_ALIGN(32);
 
-/* 80431FE0-80433FE0 05ED00 2000+00 1/1 0/0 0/0 .bss             AUDIO_YIELD_BUFFER */
-static u8 AUDIO_YIELD_BUFFER[8192] ALIGN_DECL(32);
+static u8 AUDIO_YIELD_BUFFER[8192] ATTRIBUTE_ALIGN(32);
 
-/* 8029E720-8029E7CC 299060 00AC+00 0/0 1/1 0/0 .text            DspBoot__FPFPv_v */
 void DspBoot(void (*param_0)(void*)) {
     DspInitWork();
     OS_REPORT("Dsp をブートします\n");
@@ -552,7 +547,6 @@ void DspBoot(void (*param_0)(void*)) {
     OS_REPORT("Dspブートしました\n");
 }
 
-/* 8029E7E0-8029E8C8 299120 00E8+00 0/0 4/4 0/0 .text            DSPSendCommands2__FPUlUlPFUs_v */
 int DSPSendCommands2(u32* param_1, u32 param_2, void (*callBack)(u16)) {
     s32 i;
     BOOL interruptFlag;
@@ -590,7 +584,6 @@ int DSPSendCommands2(u32* param_1, u32 param_2, void (*callBack)(u16)) {
     return startWorkStatus;
 }
 
-/* 80433FE0-80434060 060D00 0080+00 3/3 0/0 0/0 .bss             taskwork */
 typedef struct {
     u16 field_0x0;
     u16 field_0x2;
@@ -599,20 +592,16 @@ typedef struct {
 
 static TaskWorkStruct taskwork[16];
 
-/* 8029E8E0-8029E90C 299220 002C+00 1/1 0/0 0/0 .text            DspInitWork__Fv */
 static void DspInitWork() {
     for (int i = 0; i < 16; i++) {
         taskwork[i].field_0x4 = NULL;
     }
 }
 
-/* 80451300-80451304 000800 0004+00 2/2 0/0 0/0 .sbss            taskreadp */
 static u32 taskreadp;
 
-/* 80451304-80451308 000804 0004+00 1/1 0/0 0/0 .sbss            taskwritep */
 static u32 taskwritep;
 
-/* 8029E920-8029E968 299260 0048+00 1/1 0/0 0/0 .text            DspStartWork__FUlPFUs_v */
 static int DspStartWork(u32 param_0, void (*param_1)(u16)) {
     u32 taskWritePrev = taskwritep;
     u32 writeVal = ((taskWritePrev + 1) & 0xf);
@@ -627,7 +616,6 @@ static int DspStartWork(u32 param_0, void (*param_1)(u16)) {
     return taskWritePrev + 1;
 }
 
-/* 8029E980-8029E9E8 2992C0 0068+00 0/0 1/1 0/0 .text            DspFinishWork__FUs */
 void DspFinishWork(u16 param_0) {
     if (param_0 != taskwork[taskreadp].field_0x0) {
         OS_REPORT("Error:: Not finish task\n");

@@ -14,15 +14,15 @@
  */
 class daObjKKanban_c : public dBgS_MoveBgActor {
 public:
-    /* 80C46768 */ void initBaseMtx();
-    /* 80C467A4 */ void setBaseMtx();
-    /* 80C46808 */ int Create();
-    /* 80C46928 */ void setTG();
-    /* 80C469F4 */ int CreateHeap();
-    /* 80C46A64 */ int create1st();
-    /* 80C46AE4 */ int Execute(Mtx**);
-    /* 80C46C1C */ int Draw();
-    /* 80C46CC0 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    void setTG();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     Mtx& getMoveBgMtx() { return mBgMtx; }
 

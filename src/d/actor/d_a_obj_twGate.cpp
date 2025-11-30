@@ -8,7 +8,6 @@
 #include "d/actor/d_a_obj_twGate.h"
 #include "d/d_com_inf_game.h"
 
-/* 80D205B0-80D205E4 -00001 0034+00 3/3 0/0 0/0 .data            l_resNameIdx */
 static char* l_resNameIdx[13] = {
     "twGtFiro",
     "twGtK0102",
@@ -25,7 +24,6 @@ static char* l_resNameIdx[13] = {
     "",
 };
 
-/* 80D1FAAC-80D1FAE0 0000EC 0034+00 1/1 0/0 0/0 .text            __ct__14daTwGate_HIO_cFv */
 daTwGate_HIO_c::daTwGate_HIO_c() {
     mRange = 1900.0f;
 }
@@ -37,7 +35,6 @@ void daTwGate_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 80D1FB84-80D1FC0C 0001C4 0088+00 2/2 0/0 0/0 .text            setBaseMtx__10daTwGate_cFv */
 void daTwGate_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
@@ -45,33 +42,26 @@ void daTwGate_c::setBaseMtx() {
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* ############################################################################################## */
-/* 80D2030C-80D20340 000004 0034+00 0/2 0/0 0/0 .rodata          l_bmdIdx */
 static int const l_bmdIdx[13] = {
     6, 6, 6, -1, -1, -1, 6, 6, 6, 6, 6, 6, -1,
 };
 
-/* 80D20340-80D20374 000038 0034+00 0/1 0/0 0/0 .rodata          l_dzbIdx */
 static u32 const l_dzbIdx[13] = {
     15, 15, 15, -1, -1, -1, 15, 15, 15, 15, 15, 15, -1,
 };
 
-/* 80D20374-80D203A8 00006C 0034+00 0/1 0/0 0/0 .rodata          l_btkIdx */
 static u32 const l_btkIdx[13] = {
     12, 12, 12, -1, -1, -1, 12, 12, 12, 12, 12, 12, -1,
 };
 
-/* 80D203A8-80D203DC 0000A0 0034+00 0/1 0/0 0/0 .rodata          l_brkIdx */
 static u32 const l_brkIdx[13] = {
     9, 9, 9, -1, -1, -1, 9, 9, 9, 9, 9, 9, -1,
 };
 
-/* 80D203DC-80D20410 0000D4 0034+00 0/2 0/0 0/0 .rodata          l_twFlagIdx */
 static u32 const l_twFlagIdx[13] = {
     0, 1, 2, 4, -1, -1, 0, 1, 1, 2, 2, 4, 4,
 };
 
-/* 80D20410-80D204AC 000108 009C+00 0/1 0/0 0/0 .rodata          l_cheeckPos0 */
 static Vec const l_cheeckPos0[13] = {
     {-572.6072f, 314.9037f, -20792.293f},
     {-24536.904f, -7234.991f, 73427.242f},
@@ -88,7 +78,6 @@ static Vec const l_cheeckPos0[13] = {
     {0.0f, 0.0f, 0.0f},
 };
 
-/* 80D204AC-80D20548 0001A4 009C+00 0/1 0/0 0/0 .rodata          l_cheeckPos1 */
 static Vec const l_cheeckPos1[13] = {
     {-178.19418f, 308.69842f, -20657.326f},
     {-23610.3066f, -7234.9912f, 74043.75f},
@@ -105,7 +94,6 @@ static Vec const l_cheeckPos1[13] = {
     {0.0f, 0.0f, 0.0f},
 };
 
-/* 80D1FC0C-80D1FD44 00024C 0138+00 1/0 0/0 0/0 .text            CreateHeap__10daTwGate_cFv */
 int daTwGate_c::CreateHeap() {
     J3DModelData* modelData =
         (J3DModelData*)dComIfG_getObjectRes(l_resNameIdx[mGateType], l_bmdIdx[mGateType]);
@@ -123,10 +111,8 @@ int daTwGate_c::CreateHeap() {
     return 1;
 }
 
-/* 80D206AC-80D206B4 000014 0008+00 2/2 0/0 0/0 .bss             l_HIO */
 static daTwGate_HIO_c l_HIO;
 
-/* 80D1FD44-80D1FF14 000384 01D0+00 1/1 0/0 0/0 .text            create__10daTwGate_cFv */
 int daTwGate_c::create() {
     fopAcM_ct(this, daTwGate_c);
     mGateType = getGateType();
@@ -161,7 +147,6 @@ int daTwGate_c::create() {
     return rv;
 }
 
-/* 80D1FFA4-80D200B4 0005E4 0110+00 1/0 0/0 0/0 .text            Execute__10daTwGate_cFPPA3_A4_f */
 int daTwGate_c::Execute(Mtx** i_mtx) {
     if (dComIfGs_isDarkClearLV(l_twFlagIdx[mGateType]) == TRUE) {
         fopAcM_delete(this);
@@ -186,7 +171,6 @@ int daTwGate_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80D200B4-80D20180 0006F4 00CC+00 1/0 0/0 0/0 .text            Draw__10daTwGate_cFv */
 int daTwGate_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -199,7 +183,6 @@ int daTwGate_c::Draw() {
     return 1;
 }
 
-/* 80D20180-80D201C0 0007C0 0040+00 1/0 0/0 0/0 .text            Delete__10daTwGate_cFv */
 int daTwGate_c::Delete() {
     dComIfG_resDelete(&mPhase, l_resNameIdx[mGateType]);
 
@@ -210,29 +193,24 @@ int daTwGate_c::Delete() {
     return 1;
 }
 
-/* 80D201C0-80D201EC 000800 002C+00 1/0 0/0 0/0 .text            daTwGate_Draw__FP10daTwGate_c */
 static int daTwGate_Draw(daTwGate_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80D201EC-80D2020C 00082C 0020+00 1/0 0/0 0/0 .text            daTwGate_Execute__FP10daTwGate_c */
 static int daTwGate_Execute(daTwGate_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D2020C-80D2022C 00084C 0020+00 1/0 0/0 0/0 .text            daTwGate_Delete__FP10daTwGate_c */
 static int daTwGate_Delete(daTwGate_c* i_this) {
     fopAcM_RegisterDeleteID(i_this, "daTwGate");
     return i_this->MoveBGDelete();
 }
 
-/* 80D2022C-80D2024C 00086C 0020+00 1/0 0/0 0/0 .text            daTwGate_Create__FP10fopAc_ac_c */
 static int daTwGate_Create(fopAc_ac_c* i_this) {
     fopAcM_RegisterCreateID(daTwGate_c, i_this, "daTwGate");
     return a_this->create();
 }
 
-/* 80D205E4-80D20604 -00001 0020+00 1/0 0/0 0/0 .data            l_daTwGate_Method */
 static actor_method_class l_daTwGate_Method = {
     (process_method_func)daTwGate_Create,
     (process_method_func)daTwGate_Delete,
@@ -241,7 +219,6 @@ static actor_method_class l_daTwGate_Method = {
     (process_method_func)daTwGate_Draw,
 };
 
-/* 80D20604-80D20634 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_TwGate */
 extern actor_process_profile_definition g_profile_Obj_TwGate = {
   fpcLy_CURRENT_e,               // mLayerID
   3,                             // mListID

@@ -10,8 +10,8 @@
 #include "SSystem/SComponent/c_math.h"
 
 struct daWtPillar_HIO_c : public mDoHIO_entry_c {
-    /* 80D2C6CC */ daWtPillar_HIO_c();
-    /* 80D2DF34 */ virtual ~daWtPillar_HIO_c() {}
+    daWtPillar_HIO_c();
+    virtual ~daWtPillar_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -44,7 +44,6 @@ int daWtPillar_Execute(daWtPillar_c* i_this);
 int daWtPillar_Delete(daWtPillar_c* i_this);
 int daWtPillar_Create(fopAc_ac_c* i_this);
 
-/* 80D2C6CC-80D2C768 0000EC 009C+00 1/1 0/0 0/0 .text            __ct__16daWtPillar_HIO_cFv */
 daWtPillar_HIO_c::daWtPillar_HIO_c() {
     field_0x04.setall(1.0f);
     field_0x10.setall(0);
@@ -62,7 +61,6 @@ daWtPillar_HIO_c::daWtPillar_HIO_c() {
     mEffectOscillationMinDecay = 1.0f / 100.0f;
 }
 
-/* 80D2C7B0-80D2C838 0001D0 0088+00 2/2 0/0 0/0 .text            setBaseMtx__12daWtPillar_cFv */
 void daWtPillar_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + mCurrentHeight, current.pos.z);
     mDoMtx_stack_c::transM(mEffectOscillationVerticalOffset.x, mEffectOscillationVerticalOffset.y, mEffectOscillationVerticalOffset.z);
@@ -71,13 +69,10 @@ void daWtPillar_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80D2C838-80D2C858 000258 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__12daWtPillar_cFP10fopAc_ac_c             */
 int daWtPillar_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daWtPillar_c*>(i_this)->CreateHeap();
 }
 
-/* 80D2C858-80D2C960 000278 0108+00 1/1 0/0 0/0 .text            CreateHeap__12daWtPillar_cFv */
 int daWtPillar_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("efWater", 8));
     JUT_ASSERT(369, modelData != NULL);
@@ -97,7 +92,6 @@ int daWtPillar_c::CreateHeap() {
     return 1;
 }
 
-/* 80D2E86C-80D2E884 000020 0018+00 0/1 0/0 0/0 .data            l_cull_box */
 Vec l_cull_box[2] = {
     {-30.0f, -10.0f, -30.0f},
     {30.0f, 60.0f, 30.0f}
@@ -116,19 +110,15 @@ const dCcD_SrcGObjInf daWtPillar_c::mCcDObjCoInfo = {
     {},  // mGObjCo
 };
 
-/* 80D2EB3C-80D2EB94 000014 0058+00 5/5 0/0 0/0 .bss             l_HIO */
 daWtPillar_HIO_c l_HIO;
 
-/* 80D2E884-80D2E8D0 000038 004C+00 1/2 0/0 0/0 .data            mCcDCps__12daWtPillar_c */
 dCcD_SrcCps daWtPillar_c::mCcDCps = {
     daWtPillar_c::mCcDObjInfo,
     { { {0.0f, 0.0f, 0.0f}, {0.0f,1100.0f, 0.0f}, 150.0f }}
 };
 
-/* 80D2E8D0-80D2E914 000084 0044+00 1/2 0/0 0/0 .data            mCcDCyl__12daWtPillar_c */
 dCcD_SrcCyl daWtPillar_c::mCcDCyl = {daWtPillar_c::mCcDObjCoInfo};
 
-/* 80D2C960-80D2CC0C 000380 02AC+00 1/1 0/0 0/0 .text            create__12daWtPillar_cFv */
 cPhs__Step daWtPillar_c::create() {
     fopAcM_ct(this, daWtPillar_c);
     const cPhs__Step phase = static_cast<cPhs__Step>(dComIfG_resLoad(&mPhase, "efWater"));
@@ -216,7 +206,6 @@ cPhs__Step daWtPillar_c::create() {
     return phase;
 }
 
-/* 80D2CC0C-80D2CE4C 00062C 0240+00 1/1 0/0 0/0 .text            execute__12daWtPillar_cFv */
 int daWtPillar_c::execute() {
     mModelRotationAnimation.play();
     mVerticalTextureScrollAnimation.play();
@@ -269,7 +258,6 @@ int daWtPillar_c::execute() {
     return 1;
 }
 
-/* 80D2CE4C-80D2CF98 00086C 014C+00 1/1 0/0 0/0 .text            actionMain__12daWtPillar_cFv */
 void daWtPillar_c::actionMain() {
     static actionFunc l_func[] = {
     &daWtPillar_c::actionSwWait, &daWtPillar_c::actionWait,
@@ -282,7 +270,6 @@ void daWtPillar_c::actionMain() {
     (this->*l_func[mAction])();
 }
 
-/* 80D2EA04-80D2EA14 0001B8 000E+02 1/1 0/0 0/0 .data            l_eff$3970 */
 static u16 l_eff[7] = {
     0x86E3, // Smoke-like water foam particles, placed at pillar top
     0x86E4, // Large paint splatter-type water foam particles, placed at pillar top
@@ -293,7 +280,6 @@ static u16 l_eff[7] = {
     0x86EA  // Water splash particles, placed at pillar top
 };
 
-/* 80D2CF98-80D2D278 0009B8 02E0+00 1/1 0/0 0/0 .text            effectSet__12daWtPillar_cFv */
 void daWtPillar_c::effectSet() {
     // Create foam particles at the bottom and top of the pillar
     cXyz effectOscillationOffset;
@@ -324,7 +310,6 @@ void daWtPillar_c::effectSet() {
         mBottomAndTopParticleEmmitters[6] = dComIfGp_particle_set(mBottomAndTopParticleEmmitters[6],l_eff[6], &mTopPos, NULL, NULL);
 }
 
-/* 80D2D278-80D2D3FC 000C98 0184+00 1/1 0/0 0/0 .text            effectSet2__12daWtPillar_cFv */
 void daWtPillar_c::effectSet2() {
       
     /* If the bottom of the pillar is at least 500.0 units underwater and the
@@ -351,13 +336,10 @@ void daWtPillar_c::effectSet2() {
     }
 }
 
-/* 80D2D3FC-80D2D408 000E1C 000C+00 1/1 0/0 0/0 .text            actionSwWaitInit__12daWtPillar_cFv
- */
 void daWtPillar_c::actionSwWaitInit() {
     mAction = ACTION_SW_WAIT;
 }
 
-/* 80D2D408-80D2D488 000E28 0080+00 1/0 0/0 0/0 .text            actionSwWait__12daWtPillar_cFv */
 void daWtPillar_c::actionSwWait() {
     if(dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this))) { 
         if(getEventID() != 0xFF)
@@ -367,13 +349,11 @@ void daWtPillar_c::actionSwWait() {
     }
 }
 
-/* 80D2D488-80D2D4AC 000EA8 0024+00 2/1 0/0 0/0 .text            eventStart__12daWtPillar_cFv */
 bool daWtPillar_c::eventStart() {
     actionUpFirstInit();
     return TRUE;
 }
 
-/* 80D2D4AC-80D2D588 000ECC 00DC+00 1/1 0/0 0/0 .text            actionWaitInit__12daWtPillar_cFv */
 void daWtPillar_c::actionWaitInit() {
     mWaitFrameDelay = getParam(12, 5) * 0.5f * 30.0f;
     mStartedRisingOrDoesNotRiseAndFall = field_0xB44 = false;
@@ -383,7 +363,6 @@ void daWtPillar_c::actionWaitInit() {
     mAction = ACTION_WAIT;
 }
 
-/* 80D2D588-80D2D5C0 000FA8 0038+00 1/0 0/0 0/0 .text            actionWait__12daWtPillar_cFv */
 void daWtPillar_c::actionWait() {
     if(mWaitFrameDelay)
         mWaitFrameDelay--;
@@ -391,8 +370,6 @@ void daWtPillar_c::actionWait() {
         actionUpFirstInit();
 }
 
-/* 80D2D5C0-80D2D6C4 000FE0 0104+00 3/3 0/0 0/0 .text            actionUpFirstInit__12daWtPillar_cFv
- */
 void daWtPillar_c::actionUpFirstInit() {
     mTargetMaxSpeed = (getParam(17, 5) * 100.0f * 5.0f) / 30.0f;
 
@@ -410,7 +387,6 @@ void daWtPillar_c::actionUpFirstInit() {
     mAction = ACTION_UP_FIRST;
 }
 
-/* 80D2D6C4-80D2D73C 0010E4 0078+00 1/0 0/0 0/0 .text            actionUpFirst__12daWtPillar_cFv */
 void daWtPillar_c::actionUpFirst() {
     cLib_chaseF(&speedF, mTargetMaxSpeed, mTargetMaxSpeed / 30.0f);
 
@@ -420,7 +396,6 @@ void daWtPillar_c::actionUpFirst() {
         actionUpFirstWaitInit();
 }
 
-/* 80D2D73C-80D2D780 00115C 0044+00 1/1 0/0 0/0 .text actionUpFirstWaitInit__12daWtPillar_cFv */
 void daWtPillar_c::actionUpFirstWaitInit() {
     mWaitFrameDelay = l_HIO.mUpFirstWaitFrames;
     mEffectOscillationAmplitude = l_HIO.mEffectOscillationAmplitude;
@@ -431,8 +406,6 @@ void daWtPillar_c::actionUpFirstWaitInit() {
     mAction = ACTION_UP_FIRST_WAIT;
 }
 
-/* 80D2D780-80D2D7B8 0011A0 0038+00 1/0 0/0 0/0 .text            actionUpFirstWait__12daWtPillar_cFv
- */
 void daWtPillar_c::actionUpFirstWait() {
     if(mWaitFrameDelay)
         mWaitFrameDelay--;
@@ -440,7 +413,6 @@ void daWtPillar_c::actionUpFirstWait() {
         actionUpInit();
 }
 
-/* 80D2D7B8-80D2D850 0011D8 0098+00 1/1 0/0 0/0 .text            actionUpInit__12daWtPillar_cFv */
 void daWtPillar_c::actionUpInit() {
     mTargetMaxSpeed = getParam(22, 5) * 100.0f * 5.0f / 30.0f;
 
@@ -458,7 +430,6 @@ void daWtPillar_c::actionUpInit() {
     mAction = ACTION_UP;
 }
 
-/* 80D2D850-80D2D95C 001270 010C+00 1/0 0/0 0/0 .text            actionUp__12daWtPillar_cFv */
 void daWtPillar_c::actionUp() {
     cLib_chaseF(&speedF, mTargetMaxSpeed, mTargetMaxSpeed / 30.0f);
 
@@ -475,8 +446,6 @@ void daWtPillar_c::actionUp() {
 
 }
 
-/* 80D2D95C-80D2D9A0 00137C 0044+00 1/1 0/0 0/0 .text            actionUpWaitInit__12daWtPillar_cFv
- */
 void daWtPillar_c::actionUpWaitInit() {
     mWaitFrameDelay = l_HIO.mUpWaitFrames;
     mEffectOscillationAmplitude = l_HIO.mEffectOscillationAmplitude;
@@ -487,7 +456,6 @@ void daWtPillar_c::actionUpWaitInit() {
     mAction = ACTION_UP_WAIT;
 }
 
-/* 80D2D9A0-80D2DA58 0013C0 00B8+00 1/0 0/0 0/0 .text            actionUpWait__12daWtPillar_cFv */
 void daWtPillar_c::actionUpWait() {
     mDoAud_seStartLevel(Z2SE_OBJ_WTR_CLMN_UP, &mTopPos, mMaxHeight + mTargetHeightStalactiteOffset, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
@@ -497,14 +465,12 @@ void daWtPillar_c::actionUpWait() {
         actionDownInit();
 }
 
-/* 80D2DA58-80D2DA78 001478 0020+00 1/1 0/0 0/0 .text            actionDownInit__12daWtPillar_cFv */
 void daWtPillar_c::actionDownInit() {
     speedF = 0.0f;
     mStalactiteShouldStartShaking = true;
     mAction = ACTION_DOWN;
 }
 
-/* 80D2DA78-80D2DB68 001498 00F0+00 1/0 0/0 0/0 .text            actionDown__12daWtPillar_cFv */
 void daWtPillar_c::actionDown() {
     cLib_chaseF(&speedF, l_HIO.mDownwardSpeedUnitsPerSecond / 30.0f, (l_HIO.mDownwardSpeedUnitsPerSecond / 30.0f) / 30.0f);
 
@@ -516,12 +482,10 @@ void daWtPillar_c::actionDown() {
         actionWaitInit();
 }
 
-/* 80D2DB68-80D2DB74 001588 000C+00 2/2 0/0 0/0 .text actionRockWaitInit__12daWtPillar_cFv */
 void daWtPillar_c::actionRockWaitInit() {
     mAction = ACTION_ROCK_WAIT;
 }
 
-/* 80D2DB74-80D2DC20 001594 00AC+00 1/0 0/0 0/0 .text            actionRockWait__12daWtPillar_cFv */
 void daWtPillar_c::actionRockWait() {
     mDoAud_seStartLevel(Z2SE_OBJ_WTR_CLMN_UP, &mTopPos, mMaxHeight + mTargetHeightStalactiteOffset, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
@@ -529,13 +493,10 @@ void daWtPillar_c::actionRockWait() {
         actionRockOnInit();
 }
 
-/* 80D2DC20-80D2DC2C 001640 000C+00 1/1 0/0 0/0 .text            actionRockOnInit__12daWtPillar_cFv
- */
 void daWtPillar_c::actionRockOnInit() {
     mAction = ACTION_ROCK_ON;
 }
 
-/* 80D2DC2C-80D2DD0C 00164C 00E0+00 1/0 0/0 0/0 .text            actionRockOn__12daWtPillar_cFv */
 void daWtPillar_c::actionRockOn() {
     const f32 differenceBetweenCurrentAndMaxHeightWithStalactiteWeight = cLib_addCalc(&mCurrentHeight, mMaxHeight - 250.0f, 3.0f / 5.0f, 10.0f, 0.1f);
 
@@ -545,23 +506,18 @@ void daWtPillar_c::actionRockOn() {
         actionEndInit();
 }
 
-/* 80D2DD0C-80D2DD18 00172C 000C+00 1/1 0/0 0/0 .text            actionEndInit__12daWtPillar_cFv */
 void daWtPillar_c::actionEndInit() {
     mAction = ACTION_END;
 }
 
-/* 80D2DD18-80D2DDB0 001738 0098+00 1/0 0/0 0/0 .text            actionEnd__12daWtPillar_cFv */
 void daWtPillar_c::actionEnd() {
     mDoAud_seStartLevel(Z2SE_OBJ_WTR_CLMN_UP, &mTopPos, mMaxHeight + mTargetHeightStalactiteOffset, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
-/* 80D2DDB0-80D2DDB8 0017D0 0008+00 0/0 0/0 1/1 .text            getPillarHeight__12daWtPillar_cFv
- */
 f32 daWtPillar_c::getPillarHeight() {
     return mCurrentHeight;
 }
 
-/* 80D2DDB8-80D2DE84 0017D8 00CC+00 1/1 0/0 0/0 .text            draw__12daWtPillar_cFv */
 int daWtPillar_c::draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -577,36 +533,27 @@ int daWtPillar_c::draw() {
     return 1;
 }
 
-/* 80D2DE84-80D2DEB4 0018A4 0030+00 1/1 0/0 0/0 .text            _delete__12daWtPillar_cFv */
 int daWtPillar_c::_delete() {
     dComIfG_resDelete(&mPhase, "efWater");
     return 1;
 }
 
-/* 80D2DEB4-80D2DED4 0018D4 0020+00 1/0 0/0 0/0 .text            daWtPillar_Draw__FP12daWtPillar_c
- */
 int daWtPillar_Draw(daWtPillar_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D2DED4-80D2DEF4 0018F4 0020+00 1/0 0/0 0/0 .text daWtPillar_Execute__FP12daWtPillar_c */
 int daWtPillar_Execute(daWtPillar_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D2DEF4-80D2DF14 001914 0020+00 1/0 0/0 0/0 .text            daWtPillar_Delete__FP12daWtPillar_c
- */
 int daWtPillar_Delete(daWtPillar_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80D2DF14-80D2DF34 001934 0020+00 1/0 0/0 0/0 .text            daWtPillar_Create__FP10fopAc_ac_c
- */
 int daWtPillar_Create(fopAc_ac_c* i_this) {
     return static_cast<daWtPillar_c*>(i_this)->create();
 }
 
-/* 80D2EA14-80D2EA34 -00001 0020+00 1/0 0/0 0/0 .data            l_daWtPillar_Method */
 actor_method_class l_daWtPillar_Method = {
     (process_method_func)daWtPillar_Create,
     (process_method_func)daWtPillar_Delete,
@@ -615,7 +562,6 @@ actor_method_class l_daWtPillar_Method = {
     (process_method_func)daWtPillar_Draw,
 };
 
-/* 80D2EA34-80D2EA64 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_WaterPillar */
 extern actor_process_profile_definition g_profile_Obj_WaterPillar = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

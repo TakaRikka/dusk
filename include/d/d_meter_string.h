@@ -5,17 +5,17 @@
 
 class dMeterString_c : public dMeterSub_c {
 public:
-    /* 8020ED60 */ dMeterString_c(int);
-    /* 8020F5A4 */ int createString(int);
-    /* 8020F66C */ void playBckAnimation(f32);
-    /* 8020F6EC */ void drawPikari();
-    /* 8020FA88 */ bool isLeadByte(int);
+    dMeterString_c(int);
+    int createString(int);
+    void playBckAnimation(f32);
+    void drawPikari();
+    bool isLeadByte(int);
 
-    /* 8020F1B0 */ virtual void draw();
-    /* 8020EDF4 */ virtual ~dMeterString_c();
-    /* 8020EE70 */ virtual int _create();
-    /* 8020F150 */ virtual int _execute(u32);
-    /* 8020F49C */ virtual int _delete();
+    virtual void draw();
+    virtual ~dMeterString_c();
+    virtual int _create();
+    virtual int _execute(u32);
+    virtual int _delete();
 
     f32 acc(s16 param_0, s16 param_1, s16 param_2) {
         return ((f32)(param_1 - param_2) * (f32)(param_1 - param_2)) / ((f32)(param_0 - param_2) * (f32)(param_0 - param_2));

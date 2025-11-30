@@ -10,7 +10,6 @@
 #include "d/d_procname.h"
 
 
-/* 8057C9D8-8057CA94 000078 00BC+00 1/1 0/0 0/0 .text            _create__Q28daObjEff5Act_cFv */
 int daObjEff::Act_c::_create() {
     fopAcM_ct(this, Act_c);
 
@@ -24,41 +23,28 @@ int daObjEff::Act_c::_create() {
 
 namespace daObjEff {
 namespace {
-/* 8057CA94-8057CAB4 000134 0020+00 1/0 0/0 0/0 .text
- * Mthd_Create__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv       */
 int Mthd_Create(void* i_this) {
     return static_cast<daObjEff::Act_c*>(i_this)->_create();
 }
 
-/* 8057CAB4-8057CABC 000154 0008+00 1/0 0/0 0/0 .text
- * Mthd_Delete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv       */
 int Mthd_Delete(void* i_this) {
     return 1;
 }
 
-/* 8057CABC-8057CAC4 00015C 0008+00 1/0 0/0 0/0 .text
- * Mthd_Execute__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv      */
 int Mthd_Execute(void* i_this) {
     return 1;
 }
 
-/* 8057CAC4-8057CACC 000164 0008+00 1/0 0/0 0/0 .text
- * Mthd_Draw__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv         */
 int Mthd_Draw(void* i_this) {
     return 1;
 }
 
-/* 8057CACC-8057CAD4 00016C 0008+00 1/0 0/0 0/0 .text
- * Mthd_IsDelete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv     */
 int Mthd_IsDelete(void* i_this) {
     return 1;
 }
 };  // namespace
 };  // namespace daObjEff
 
-/* ############################################################################################## */
-/* 8057CAFC-8057CB1C -00001 0020+00 1/0 0/0 0/0 .data
- * Mthd_Table__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@           */
 namespace daObjEff {
 namespace {
 static actor_method_class Mthd_Table = {
@@ -69,7 +55,6 @@ static actor_method_class Mthd_Table = {
 };
 };  // namespace daObjEff
 
-/* 8057CB1C-8057CB4C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Eff */
 extern actor_process_profile_definition g_profile_Obj_Eff = {
     fpcLy_CURRENT_e,
     9,

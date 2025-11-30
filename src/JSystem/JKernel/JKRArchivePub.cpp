@@ -9,8 +9,6 @@
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-/* 802D5778-802D57E4 2D00B8 006C+00 2/2 0/0 0/0 .text check_mount_already__10JKRArchiveFlP7JKRHeap
- */
 JKRArchive* JKRArchive::check_mount_already(s32 entryNum, JKRHeap* heap) {
     if (heap == NULL) {
         heap = JKRGetCurrentHeap();
@@ -31,8 +29,6 @@ JKRArchive* JKRArchive::check_mount_already(s32 entryNum, JKRHeap* heap) {
     return NULL;
 }
 
-/* 802D57E4-802D5840 2D0124 005C+00 0/0 1/1 0/0 .text
- * mount__10JKRArchiveFPCcQ210JKRArchive10EMountModeP7JKRHeapQ210JKRArchive15EMountDirection */
 JKRArchive* JKRArchive::mount(const char* path, EMountMode mountMode, JKRHeap* heap,
                               EMountDirection mountDirection) {
     s32 entryNum = DVDConvertPathToEntrynum(path);
@@ -42,8 +38,6 @@ JKRArchive* JKRArchive::mount(const char* path, EMountMode mountMode, JKRHeap* h
     return mount(entryNum, mountMode, heap, mountDirection);
 }
 
-/* 802D5840-802D58C8 2D0180 0088+00 0/0 1/1 0/0 .text
- * mount__10JKRArchiveFPvP7JKRHeapQ210JKRArchive15EMountDirection */
 JKRArchive* JKRArchive::mount(void* ptr, JKRHeap* heap,
                               EMountDirection mountDirection) {
     JKRArchive* archive = check_mount_already((s32)ptr, heap);
@@ -61,8 +55,6 @@ JKRArchive* JKRArchive::mount(void* ptr, JKRHeap* heap,
     return archive;
 }
 
-/* 802D58C8-802D5A38 2D0208 0170+00 1/1 1/1 0/0 .text
- * mount__10JKRArchiveFlQ210JKRArchive10EMountModeP7JKRHeapQ210JKRArchive15EMountDirection */
 JKRArchive* JKRArchive::mount(s32 entryNum, JKRArchive::EMountMode mountMode, JKRHeap* heap,
                               JKRArchive::EMountDirection mountDirection) {
     JKRArchive* archive = check_mount_already(entryNum, heap);
@@ -101,7 +93,6 @@ JKRArchive* JKRArchive::mount(s32 entryNum, JKRArchive::EMountMode mountMode, JK
     }
 }
 
-/* 802D5A38-802D5AC0 2D0378 0088+00 1/0 4/0 0/0 .text            becomeCurrent__10JKRArchiveFPCc */
 bool JKRArchive::becomeCurrent(const char* path) {
     SDIDirEntry* dirEntry;
     if (*path == '/') {
@@ -123,8 +114,6 @@ bool JKRArchive::becomeCurrent(const char* path) {
     return found;
 }
 
-/* 802D5AC0-802D5B38 2D0400 0078+00 0/0 1/1 0/0 .text
- * getDirEntry__10JKRArchiveCFPQ210JKRArchive9SDirEntryUl       */
 bool JKRArchive::getDirEntry(SDirEntry* dirEntry, u32 index) const {
     SDIFileEntry* fileEntry = findIdxResource(index);
     if (!fileEntry)
@@ -136,8 +125,6 @@ bool JKRArchive::getDirEntry(SDirEntry* dirEntry, u32 index) const {
     return true;
 }
 
-/* 802D5B38-802D5BE8 2D0478 00B0+00 0/0 9/9 0/0 .text
- * getGlbResource__10JKRArchiveFUlPCcP10JKRArchive              */
 void* JKRArchive::getGlbResource(u32 param_1, const char* path, JKRArchive* archive) {
     void* resource = NULL;
     if (archive) {
@@ -157,7 +144,6 @@ void* JKRArchive::getGlbResource(u32 param_1, const char* path, JKRArchive* arch
     return resource;
 }
 
-/* 802D5BE8-802D5C64 2D0528 007C+00 1/0 4/0 0/0 .text            getResource__10JKRArchiveFPCc */
 void* JKRArchive::getResource(const char* path) {
     JUT_ASSERT(303, isMounted());
     SDIFileEntry* fileEntry;
@@ -174,7 +160,6 @@ void* JKRArchive::getResource(const char* path) {
     return NULL;
 }
 
-/* 802D5C64-802D5CE4 2D05A4 0080+00 1/0 4/0 0/0 .text            getResource__10JKRArchiveFUlPCc */
 void* JKRArchive::getResource(u32 type, const char* path) {
     JUT_ASSERT(347, isMounted());
     SDIFileEntry* fileEntry;
@@ -191,7 +176,6 @@ void* JKRArchive::getResource(u32 type, const char* path) {
     return NULL;
 }
 
-/* 802D5CE4-802D5D38 2D0624 0054+00 0/0 1/1 0/0 .text            getIdxResource__10JKRArchiveFUl */
 void* JKRArchive::getIdxResource(u32 index) {
     JUT_ASSERT(384, isMounted());
     SDIFileEntry* fileEntry = findIdxResource(index);
@@ -202,7 +186,6 @@ void* JKRArchive::getIdxResource(u32 index) {
     return NULL;
 }
 
-/* 802D5D38-802D5D8C 2D0678 0054+00 0/0 1/1 0/0 .text            getResource__10JKRArchiveFUs */
 void* JKRArchive::getResource(u16 id) {
     JUT_ASSERT(409, isMounted());
     SDIFileEntry* fileEntry = findIdResource(id);
@@ -213,7 +196,6 @@ void* JKRArchive::getResource(u16 id) {
     return NULL;
 }
 
-/* 802D5D8C-802D5E30 2D06CC 00A4+00 1/0 4/0 0/0 .text readResource__10JKRArchiveFPvUlUlPCc */
 u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u32 type, const char* path) {
     JUT_ASSERT(493, isMounted());
     SDIFileEntry* fileEntry;
@@ -232,8 +214,6 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u32 type, const char*
     return 0;
 }
 
-/* 802D5E30-802D5ECC 2D0770 009C+00 1/0 4/0 0/0 .text            readResource__10JKRArchiveFPvUlPCc
- */
 u32 JKRArchive::readResource(void* buffer, u32 bufferSize, const char* path) {
     JUT_ASSERT(539, isMounted());
     SDIFileEntry* fileEntry;
@@ -252,7 +232,6 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, const char* path) {
     return 0;
 }
 
-/* 802D5ECC-802D5F40 2D080C 0074+00 0/0 7/7 1/1 .text readIdxResource__10JKRArchiveFPvUlUl */
 u32 JKRArchive::readIdxResource(void* buffer, u32 bufferSize, u32 index) {
     JUT_ASSERT(593, isMounted());
     SDIFileEntry* fileEntry = findIdxResource(index);
@@ -265,8 +244,6 @@ u32 JKRArchive::readIdxResource(void* buffer, u32 bufferSize, u32 index) {
     return 0;
 }
 
-/* 802D5F40-802D5FB4 2D0880 0074+00 0/0 1/1 0/0 .text            readResource__10JKRArchiveFPvUlUs
- */
 u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u16 id) {
     JUT_ASSERT(625, isMounted());
     SDIFileEntry* fileEntry = findIdResource(id);
@@ -279,8 +256,6 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u16 id) {
     return 0;
 }
 
-/* 802D5FB4-802D603C 2D08F4 0088+00 1/0 2/0 0/0 .text            removeResourceAll__10JKRArchiveFv
- */
 void JKRArchive::removeResourceAll() {
     if (mArcInfoBlock && mMountMode != MOUNT_MEM) {
         SDIFileEntry* fileEntry = mFiles;
@@ -293,7 +268,6 @@ void JKRArchive::removeResourceAll() {
     }
 }
 
-/* 802D603C-802D609C 2D097C 0060+00 1/0 2/0 0/0 .text            removeResource__10JKRArchiveFPv */
 bool JKRArchive::removeResource(void* resource) {
     JUT_ASSERT(678, resource != NULL);
     SDIFileEntry* fileEntry = findPtrResource(resource);
@@ -305,7 +279,6 @@ bool JKRArchive::removeResource(void* resource) {
     return true;
 }
 
-/* 802D609C-802D60D8 2D09DC 003C+00 1/0 4/0 0/0 .text            detachResource__10JKRArchiveFPv */
 bool JKRArchive::detachResource(void* resource) {
     JUT_ASSERT(707, resource != NULL);
     SDIFileEntry* fileEntry = findPtrResource(resource);
@@ -316,7 +289,6 @@ bool JKRArchive::detachResource(void* resource) {
     return true;
 }
 
-/* 802D60D8-802D610C 2D0A18 0034+00 1/0 4/0 0/0 .text            getResSize__10JKRArchiveCFPCv */
 u32 JKRArchive::getResSize(const void* resource) const {
     JUT_ASSERT(732, resource != NULL);
     SDIFileEntry* fileEntry = findPtrResource(resource);
@@ -326,7 +298,6 @@ u32 JKRArchive::getResSize(const void* resource) const {
     return fileEntry->data_size;
 }
 
-/* 802D610C-802D6150 2D0A4C 0044+00 0/0 1/1 0/0 .text            countResource__10JKRArchiveCFv */
 u32 JKRArchive::countResource() const {
     u32 count = 0;
     for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
@@ -337,7 +308,6 @@ u32 JKRArchive::countResource() const {
     return count;
 }
 
-/* 802D6150-802D61B0 2D0A90 0060+00 1/0 4/0 0/0 .text            countFile__10JKRArchiveCFPCc */
 u32 JKRArchive::countFile(const char* path) const {
     SDIDirEntry* dirEntry;
     if (*path == '/') {
@@ -357,7 +327,6 @@ u32 JKRArchive::countFile(const char* path) const {
     return 0;
 }
 
-/* 802D61B0-802D625C 2D0AF0 00AC+00 1/0 4/0 0/0 .text            getFirstFile__10JKRArchiveCFPCc */
 JKRFileFinder* JKRArchive::getFirstFile(const char* path) const {
     SDIDirEntry* dirEntry;
     if (*path == '/') {
@@ -379,8 +348,6 @@ JKRFileFinder* JKRArchive::getFirstFile(const char* path) const {
     return NULL;
 }
 
-/* 802D625C-802D6294 2D0B9C 0038+00 0/0 2/2 0/0 .text            getFileAttribute__10JKRArchiveCFUl
- */
 u32 JKRArchive::getFileAttribute(u32 index) const {
     SDIFileEntry* fileEntry = findIdxResource(index);
     if (fileEntry) {

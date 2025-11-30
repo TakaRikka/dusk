@@ -14,8 +14,8 @@
 
 class daLv3Water_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C587CC */ daLv3Water_HIO_c();
-    /* 80C59C34 */ virtual ~daLv3Water_HIO_c() {}
+    daLv3Water_HIO_c();
+    virtual ~daLv3Water_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -23,10 +23,8 @@ public:
     /* 0x04 */ u8 field_0x04;
 };
 
-/* 80C5A314-80C5A31C 000014 0008+00 2/2 0/0 0/0 .bss             l_HIO */
 static daLv3Water_HIO_c l_HIO;
 
-/* 80C5A15C-80C5A1B0 -00001 0054+00 3/3 0/0 0/0 .data            l_resNameIdx */
 static char* l_resNameIdx[] = {
     "Kr10water", "Kr10wat01", "Kr02wat00", "Kr03wat00", "Kr03wat01", "Kr03wat02", "Kr03wat03",
     "Kr03wat04", "Kr07wat00", "Kr08wat00", "Kr08wat01", "Kr02wat01", "Kr02wat02", "Kr02wat03",
@@ -38,12 +36,10 @@ static daLv3Water_c::modeFunc l_mode_func[] = {
     &daLv3Water_c::mode_proc_levelCtrl,
 };
 
-/* 80C587CC-80C587F0 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__16daLv3Water_HIO_cFv */
 daLv3Water_HIO_c::daLv3Water_HIO_c() {
     field_0x04 = NULL;
 }
 
-/* 80C58838-80C5891C 000158 00E4+00 2/2 0/0 0/0 .text            setBaseMtx__12daLv3Water_cFv */
 void daLv3Water_c::setBaseMtx() {
     if (mpModel2 != NULL) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
@@ -60,32 +56,26 @@ void daLv3Water_c::setBaseMtx() {
     mpModel1->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C59E70-80C59EC4 000000 0054+00 2/2 0/0 0/0 .rodata          l_bmdIdx */
 static const int l_bmdIdx[] = {
     5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
 };
 
-/* 80C59EC4-80C59F18 000054 0054+00 1/1 0/0 0/0 .rodata          l_dzbIdx */
 static const int l_dzbIdx[] = {
     13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 11, 11,
 };
 
-/* 80C59F18-80C59F6C 0000A8 0054+00 0/1 0/0 0/0 .rodata          l_btkIdx */
 static const int l_btkIdx[] = {
     9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 8,
 };
 
-/* 80C59F6C-80C59FC0 0000FC 0054+00 0/1 0/0 0/0 .rodata          l_bmdIdrIdx */
 static const int l_bmdIdrIdx[] = {
     6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, -1, -1,
 };
 
-/* 80C59FC0-80C5A014 000150 0054+00 0/1 0/0 0/0 .rodata          l_btkIdrIdx */
 static const int l_btkIdrIdx[] = {
     10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, -1, -1,
 };
 
-/* 80C5891C-80C58ABC 00023C 01A0+00 1/0 0/0 0/0 .text            CreateHeap__12daLv3Water_cFv */
 int daLv3Water_c::CreateHeap() {
     J3DModelData* modelData =
         (J3DModelData*)dComIfG_getObjectRes(l_resNameIdx[mType], l_bmdIdx[mType]);
@@ -120,7 +110,6 @@ int daLv3Water_c::CreateHeap() {
     return 1;
 }
 
-/* 80C5A018-80C5A048 0001A8 002A+06 1/1 0/0 0/0 .rodata          estimateSizeTbl$3746 */
 static u16 const estimateSizeTbl[] = {
     0x1CE0,
     0x4F90,
@@ -149,7 +138,6 @@ static u16 const estimateSizeTbl[] = {
     0x0000,
 };
 
-/* 80C58ABC-80C58D20 0003DC 0264+00 1/1 0/0 0/0 .text            create__12daLv3Water_cFv */
 int daLv3Water_c::create() {
     fopAcM_ct(this, daLv3Water_c);
 
@@ -189,8 +177,6 @@ int daLv3Water_c::create() {
     return phase;
 }
 
-/* 80C58D68-80C58E20 000688 00B8+00 1/0 0/0 0/0 .text            Execute__12daLv3Water_cFPPA3_A4_f
- */
 int daLv3Water_c::Execute(Mtx** i_mtx) {
     mBtk1.play();
 
@@ -208,7 +194,6 @@ int daLv3Water_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80C58E20-80C596F4 000740 08D4+00 2/1 0/0 0/0 .text            effectSet__12daLv3Water_cFv */
 void daLv3Water_c::effectSet() {
     switch (mType) {
     case 8:
@@ -283,7 +268,6 @@ void daLv3Water_c::effectSet() {
     }
 }
 
-/* 80C596F4-80C59754 001014 0060+00 1/0 0/0 0/0 .text            mode_proc_wait__12daLv3Water_cFv */
 void daLv3Water_c::mode_proc_wait() {
     if (mSwitch1 != mSwitch2) {
         int event = getParamEvent();
@@ -295,7 +279,6 @@ void daLv3Water_c::mode_proc_wait() {
     }
 }
 
-/* 80C59754-80C597FC 001074 00A8+00 1/1 0/0 0/0 .text mode_init_levelCtrl__12daLv3Water_cFv */
 void daLv3Water_c::mode_init_levelCtrl() {
     field_0x600 = 0;
     field_0x604 = l_HIO.field_0x04;
@@ -307,7 +290,6 @@ void daLv3Water_c::mode_init_levelCtrl() {
     mMode = LEVEL_CTRL;
 }
 
-/* 80C597FC-80C598BC 00111C 00C0+00 1/0 0/0 0/0 .text mode_proc_levelCtrl__12daLv3Water_cFv */
 void daLv3Water_c::mode_proc_levelCtrl() {
     if (field_0x604 != NULL) {
         field_0x604 = field_0x604 - 1;
@@ -328,7 +310,6 @@ void daLv3Water_c::mode_proc_levelCtrl() {
     }
 }
 
-/* 80C598BC-80C59AA0 0011DC 01E4+00 1/0 0/0 0/0 .text            Draw__12daLv3Water_cFv */
 int daLv3Water_c::Draw() {
     if (field_0x605 == NULL) {
         return 0;
@@ -376,13 +357,11 @@ int daLv3Water_c::Draw() {
     return 1;
 }
 
-/* 80C59AA0-80C59AE0 0013C0 0040+00 1/0 0/0 0/0 .text            Delete__12daLv3Water_cFv */
 int daLv3Water_c::Delete() {
     dComIfG_resDelete(&mPhase, l_resNameIdx[mType]);
     return 1;
 }
 
-/* 80C59AE0-80C59BA8 001400 00C8+00 2/1 0/0 0/0 .text            eventStart__12daLv3Water_cFv */
 bool daLv3Water_c::eventStart() {
     field_0x601 = fpcM_GetParam(this) >> 0x18;
     mSwitch1 = mSwitch2;
@@ -403,38 +382,28 @@ bool daLv3Water_c::eventStart() {
     return true;
 }
 
-/* 80C59BA8-80C59BD4 0014C8 002C+00 1/0 0/0 0/0 .text            daLv3Water_Draw__FP12daLv3Water_c
- */
 static int daLv3Water_Draw(daLv3Water_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80C59BD4-80C59BF4 0014F4 0020+00 1/0 0/0 0/0 .text daLv3Water_Execute__FP12daLv3Water_c */
 static int daLv3Water_Execute(daLv3Water_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C59BF4-80C59C14 001514 0020+00 1/0 0/0 0/0 .text            daLv3Water_Delete__FP12daLv3Water_c
- */
 static int daLv3Water_Delete(daLv3Water_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C59C14-80C59C34 001534 0020+00 1/0 0/0 0/0 .text            daLv3Water_Create__FP10fopAc_ac_c
- */
 static int daLv3Water_Create(fopAc_ac_c* i_this) {
     return static_cast<daLv3Water_c*>(i_this)->create();
 }
 
-/* 80C59C34-80C59C90 001554 005C+00 2/1 0/0 0/0 .text            __dt__16daLv3Water_HIO_cFv */
-/* 80C5A228-80C5A248 -00001 0020+00 1/0 0/0 0/0 .data            l_daLv3Water_Method */
 static actor_method_class l_daLv3Water_Method = {
     (process_method_func)daLv3Water_Create,  (process_method_func)daLv3Water_Delete,
     (process_method_func)daLv3Water_Execute, 0,
     (process_method_func)daLv3Water_Draw,
 };
 
-/* 80C5A248-80C5A278 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv3Water */
 extern actor_process_profile_definition g_profile_Obj_Lv3Water = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

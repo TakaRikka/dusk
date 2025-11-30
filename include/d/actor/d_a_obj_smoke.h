@@ -17,12 +17,12 @@ public:
         return fopAcM_GetParamBit(this,0,8);
     }
 
-    /* 80CDCE78 */ void initBaseMtx();
-    /* 80CDCE98 */ void setBaseMtx();
-    /* 80CDCEF0 */ int Create();
-    /* 80CDCF9C */ int create();
-    /* 80CDD004 */ int execute();
-    /* 80CDD0B8 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int create();
+    int execute();
+    int _delete();
 
 private:
     /* 0x568 */ JPABaseEmitter* mParticle;

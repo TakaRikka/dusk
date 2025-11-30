@@ -5,7 +5,6 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JSupport/JSUMemoryStream.h"
 
-/* 802BA7DC-802BA7FC 2B511C 0020+00 0/0 1/1 0/0 .text            __ct__11Z2FxLineMgrFv */
 Z2FxLineMgr::Z2FxLineMgr() : JASGlobalInstance<Z2FxLineMgr>(true) {
     mConfig = NULL;
     mLineID = -1;
@@ -17,8 +16,6 @@ Z2FxLineMgr::Z2FxLineMgr() : JASGlobalInstance<Z2FxLineMgr>(true) {
     #endif
 }
 
-/* 802BA7FC-802BAC28 2B513C 042C+00 0/0 1/1 0/0 .text
- * initDataArc__11Z2FxLineMgrFP10JKRArchiveP7JKRHeap            */
 void Z2FxLineMgr::initDataArc(JKRArchive* arc, JKRHeap* heap) {
     JUT_ASSERT(44, arc);
     JUT_ASSERT(45, heap);
@@ -76,7 +73,6 @@ void Z2FxLineMgr::initDataArc(JKRArchive* arc, JKRHeap* heap) {
     setLineID(-1, true, false);
 }
 
-/* 802BAC28-802BAC74 2B5568 004C+00 4/4 0/0 0/0 .text            setLineID__11Z2FxLineMgrFScbb */
 void Z2FxLineMgr::setLineID(s8 fxID, bool param_1, bool param_2) {
     JUT_ASSERT(109, fxID < mFxDataNum);
 
@@ -89,8 +85,6 @@ void Z2FxLineMgr::setLineID(s8 fxID, bool param_1, bool param_2) {
     setLine(&mConfig[mLineID], param_1, param_2);
 }
 
-/* 802BAC74-802BAE1C 2B55B4 01A8+00 1/1 0/0 0/0 .text setLine__11Z2FxLineMgrFP14Z2FxLineConfigbb
- */
 void Z2FxLineMgr::setLine(Z2FxLineConfig* config, bool param_1, bool param_2) {
     JUT_ASSERT(121, config);
 
@@ -154,12 +148,10 @@ void Z2FxLineMgr::setLine(Z2FxLineConfig* config, bool param_1, bool param_2) {
     JASDsp::setFXLine(buf2, (s16*)mFxLineBuffer[buf2], &dsp_config);
 }
 
-/* 802BAE1C-802BAE48 2B575C 002C+00 0/0 1/1 0/0 .text            setFxForceOff__11Z2FxLineMgrFb */
 void Z2FxLineMgr::setFxForceOff(bool param_0) {
     setLineID(mLineID, true, param_0);
 }
 
-/* 802BAE48-802BAEB8 2B5788 0070+00 0/0 1/1 0/0 .text            setUnderWaterFx__11Z2FxLineMgrFb */
 void Z2FxLineMgr::setUnderWaterFx(bool isUnderWaterFx) {
     if (mSetUnderWaterFx != isUnderWaterFx) {
         if (isUnderWaterFx) {
@@ -173,7 +165,6 @@ void Z2FxLineMgr::setUnderWaterFx(bool isUnderWaterFx) {
     }
 }
 
-/* 802BAEB8-802BB00C 2B57F8 0154+00 2/1 1/1 0/0 .text            setSceneFx__11Z2FxLineMgrFl */
 void Z2FxLineMgr::setSceneFx(s32 sceneNo) {
     if (Z2GetSceneMgr()->isInDarkness()) {
         setLineID(11, true, false);

@@ -17,7 +17,7 @@
  */
 class e_gob_class : public fopEn_enemy_c {
 public:
-    /* 806DEA10 */ e_gob_class();
+    e_gob_class();
 
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpModelMorf;

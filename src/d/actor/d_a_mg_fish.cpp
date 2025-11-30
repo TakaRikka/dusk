@@ -21,7 +21,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_vibration.h"
-#include "dol2asm.h"
 #include "f_op/f_op_kankyo_mng.h"
 
 #define ANM_MG_FISH_MOUTH_CLOSE     4
@@ -65,7 +64,6 @@
 #define GEDOU_KIND_ED 26
 #define GEDOU_KIND_SY 27
 
-/* 805364C4-805364CC 000020 0008+00 0/1 0/0 0/0 .data            check_kind */
 static u16 check_kind[4] = {
     0xF57F,
     0xF47F,
@@ -78,7 +76,6 @@ struct PathNode {
     Vec pos;
 };
 
-/* 80529D2C-80529D7C 0000EC 0050+00 1/1 0/0 0/0 .text            __ct__15daMg_Fish_HIO_cFv */
 daMg_Fish_HIO_c::daMg_Fish_HIO_c() {
     this->field_0x4 = -1;
     this->field_0x8 = 1.0f;
@@ -90,7 +87,6 @@ daMg_Fish_HIO_c::daMg_Fish_HIO_c() {
     this->field_0x1a = 0x0;
 }
 
-/* 80529D7C-80529E4C 00013C 00D0+00 3/3 0/0 0/0 .text            hit_vib_set__FP13mg_fish_class */
 static void hit_vib_set(mg_fish_class* i_this) {
     static s32 vib_p[4] = { 1, 2, 3, 4 };
 
@@ -107,8 +103,6 @@ static void hit_vib_set(mg_fish_class* i_this) {
     }
 }
 
-/* 80529E88-80529F10 000248 0088+00 6/6 0/0 0/0 .text            sibuki_set__FP13mg_fish_classf4cXyz
- */
 static void sibuki_set(mg_fish_class* i_this, f32 scale, cXyz i_pos) {
     double newScale = 0.4f * scale * i_this->mJointScale;
     i_pos.y = i_this->mSurfaceY;
@@ -121,7 +115,6 @@ static f32 dummy_3759() {
     return 30.0f;
 }
 
-/* 80529F10-80529F68 0002D0 0058+00 1/1 0/0 0/0 .text            s_hitfish_sub__FPvPv */
 static void* s_hitfish_sub(void* a, void* b) {
     if (fopAc_IsActor(a)) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -132,7 +125,6 @@ static void* s_hitfish_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 80529F68-8052A114 000328 01AC+00 2/2 0/0 0/0 .text            pl_check__FP13mg_fish_classf */
 static s32 pl_check(mg_fish_class* i_this, f32 speed) {
     if (i_this->mDistToPlayer < fabsf(dComIfGp_getPlayer(0)->speedF) * 10.0f + speed) {
         return 1;
@@ -148,7 +140,6 @@ static s32 pl_check(mg_fish_class* i_this, f32 speed) {
     return 0;
 }
 
-/* 8052A114-8052A1C0 0004D4 00AC+00 2/2 0/0 0/0 .text            anm_init__FP13mg_fish_classifUcf */
 static void anm_init(mg_fish_class* i_this, int i_resIndex, f32 i_morf, u8 i_mode, f32 i_speed) {
     J3DAnmTransform* anmTransform =
         (J3DAnmTransform*)dComIfG_getObjectRes(i_this->mResName, i_resIndex);
@@ -157,7 +148,6 @@ static void anm_init(mg_fish_class* i_this, int i_resIndex, f32 i_morf, u8 i_mod
     i_this->mAnmID = i_resIndex;
 }
 
-/* 8052A1C0-8052A21C 000580 005C+00 3/3 0/0 0/0 .text            mouth_open__FP13mg_fish_class */
 static void mouth_open(mg_fish_class* i_this) {
     if (i_this->mAnmTransform != NULL) {
         anm_init(i_this, ANM_MG_FISH_MOUTH_OPEN, 2.0f, 0, 1.0f);
@@ -168,7 +158,6 @@ static void mouth_open(mg_fish_class* i_this) {
     }
 }
 
-/* 8052A21C-8052A278 0005DC 005C+00 6/6 0/0 0/0 .text            mouth_close__FP13mg_fish_class */
 static void mouth_close(mg_fish_class* i_this) {
     if (i_this->mAnmTransform != NULL) {
         anm_init(i_this, ANM_MG_FISH_MOUTH_CLOSE, 2.0f, 0, 1.0f);
@@ -179,7 +168,6 @@ static void mouth_close(mg_fish_class* i_this) {
     }
 }
 
-/* 8052A278-8052A2F4 000638 007C+00 1/1 0/0 0/0 .text            s_lure_sub__FPvPv */
 static void* s_lure_sub(void* a, void* b) {
     if (fopAc_IsActor(a)) {
         if (fopAcM_GetName(a) == PROC_MG_ROD) {
@@ -195,7 +183,6 @@ static void* s_lure_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052A2F4-8052A380 0006B4 008C+00 1/1 0/0 0/0 .text            s_esa_sub__FPvPv */
 static void* s_esa_sub(void* a, void* b) {
     if (fopAc_IsActor(a)) {
         if (fopAcM_GetName(a) == PROC_MG_ROD) {
@@ -211,7 +198,6 @@ static void* s_esa_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052A380-8052A3EC 000740 006C+00 1/1 0/0 0/0 .text            s_bait_sub__FPvPv */
 static void* s_bait_sub(void* a, void* b) {
     if (fopAc_IsActor(a)) {
         if (fopAcM_GetName(a) == PROC_FR) {
@@ -227,13 +213,10 @@ static void* s_bait_sub(void* a, void* b) {
 static u8 lit_1008;
 static u8 lit_1007;
 
-/* 80536BCC-80536BE8 000054 001C+00 4/5 0/0 0/0 .bss             l_HIO */
 static daMg_Fish_HIO_c l_HIO;
 
-/* 80536BE8-80536BEC 000070 0004+00 2/2 0/0 0/0 .bss             s_fish_ct */
 static s32 s_fish_ct;
 
-/* 8052A3EC-8052A464 0007AC 0078+00 1/1 0/0 0/0 .text            s_other_search_sub__FPvPv */
 static void* s_other_search_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && b != a && fopAcM_GetName(a) == PROC_MG_FISH) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -244,7 +227,6 @@ static void* s_other_search_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052A464-8052A7BC 000824 0358+00 1/1 0/0 0/0 .text            search_lure__FP13mg_fish_classi */
 static s32 search_lure(mg_fish_class* i_this, int param_2) {
     static u8 learn_d[5] = {
         0x01, 0x02, 0x04, 0x08, 0x10,
@@ -311,7 +293,6 @@ static s32 search_lure(mg_fish_class* i_this, int param_2) {
 
 
 
-/* 805364E4-80536794 000040 02B0+00 2/2 0/0 0/0 .data            swim_path127 */
 static PathNode swim_path[43] = {
     { 0,  { -1394.0f, -80.0f, 559.0f } },
     { 1,  { -2327.0f, -80.0f, 1240.0f } },
@@ -358,7 +339,6 @@ static PathNode swim_path[43] = {
     { -1, { 0.0f, 0.0f, 0.0f } },
 };
 
-/* 8052A7BC-8052A838 000B7C 007C+00 1/2 0/0 0/0 .text            s_other_bait_sub__FPvPv */
 static void* s_other_bait_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && b != a && fopAcM_GetName(a) == PROC_MG_FISH) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -370,7 +350,6 @@ static void* s_other_bait_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052A838-8052A9F0 000BF8 01B8+00 1/1 0/0 0/0 .text            search_bait__FP13mg_fish_class */
 static s32 search_bait(mg_fish_class* i_this) {
     void* searchRes = fpcM_Search(s_bait_sub, i_this);
     if (searchRes != NULL) {
@@ -387,7 +366,6 @@ static s32 search_bait(mg_fish_class* i_this) {
     return -1;
 }
 
-/* 8052A9F0-8052ADBC 000DB0 03CC+00 2/2 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* joint, int param_1) {
     if (param_1 == 0) {
         s32 jointNo = joint->getJntNo();
@@ -448,7 +426,6 @@ static int nodeCallBack(J3DJoint* joint, int param_1) {
     return 1;
 }
 
-/* 8052ADBC-8052AFA0 00117C 01E4+00 2/2 0/0 0/0 .text            nodeCallBack2__FP8J3DJointi */
 static int nodeCallBack2(J3DJoint* joint, int param_1) {
     if (param_1 == 0) {
         s32 jointNo = joint->getJntNo();
@@ -484,7 +461,6 @@ static int nodeCallBack2(J3DJoint* joint, int param_1) {
     return 1;
 }
 
-/* 8052AFA0-8052B070 001360 00D0+00 1/1 0/0 0/0 .text            nodeCallBackLH__FP8J3DJointi */
 static int nodeCallBackLH(J3DJoint* joint, int param_1) {
     if (param_1 == 0) {
         s32 jointNo = joint->getJntNo();
@@ -501,7 +477,6 @@ static int nodeCallBackLH(J3DJoint* joint, int param_1) {
     return 1;
 }
 
-/* 8052B070-8052B148 001430 00D8+00 1/1 0/0 0/0 .text            nodeCallBackBB__FP8J3DJointi */
 static int nodeCallBackBB(J3DJoint* joint, int param_1) {
     if (param_1 == 0) {
         s32 jointNo = joint->getJntNo();
@@ -517,7 +492,6 @@ static int nodeCallBackBB(J3DJoint* joint, int param_1) {
     return 1;
 }
 
-/* 8052B148-8052B1A0 001508 0058+00 3/3 0/0 0/0 .text            s_bt_sub__FPvPv */
 static void* s_bt_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -528,7 +502,6 @@ static void* s_bt_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052B1A0-8052B1F8 001560 0058+00 2/2 0/0 0/0 .text            s_sp_sub__FPvPv */
 static void* s_sp_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -539,7 +512,6 @@ static void* s_sp_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052B1F8-8052B264 0015B8 006C+00 2/2 0/0 0/0 .text            s_lh_sub__FPvPv */
 static void* s_lh_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -551,7 +523,6 @@ static void* s_lh_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052B264-8052B2BC 001624 0058+00 2/2 0/0 0/0 .text            s_bin_sub__FPvPv */
 static void* s_bin_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -562,7 +533,6 @@ static void* s_bin_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052B2BC-8052B314 00167C 0058+00 2/2 0/0 0/0 .text            s_kn_sub__FPvPv */
 static void* s_kn_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -573,7 +543,6 @@ static void* s_kn_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052B314-8052B36C 0016D4 0058+00 2/3 0/0 0/0 .text            s_ed_sub__FPvPv */
 static void* s_ed_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -584,7 +553,6 @@ static void* s_ed_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052B36C-8052B3C4 00172C 0058+00 2/2 0/0 0/0 .text            s_sy_sub__FPvPv */
 static void* s_sy_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -595,7 +563,6 @@ static void* s_sy_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052B3C4-8052B41C 001784 0058+00 3/3 0/0 0/0 .text            s_bb_sub__FPvPv */
 static void* s_bb_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_MG_FISH) {
         mg_fish_class* fish = (mg_fish_class*)a;
@@ -606,7 +573,6 @@ static void* s_bb_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052B41C-8052B468 0017DC 004C+00 1/1 0/0 0/0 .text            s_bb2_sub__FPvPv */
 static void* s_bb2_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_E_BG) {
         return a;
@@ -614,7 +580,6 @@ static void* s_bb2_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052B468-8052B4B4 001828 004C+00 1/1 0/0 0/0 .text            s_sg_sub__FPvPv */
 static void* s_sg_sub(void* a, void* b) {
     if (fopAc_IsActor(a) && fopAcM_GetName(a) == PROC_E_SG) {
         return a;
@@ -622,8 +587,6 @@ static void* s_sg_sub(void* a, void* b) {
     return NULL;
 }
 
-/* 8052B4B4-8052B928 001874 0474+00 1/1 0/0 0/0 .text            daMg_Fish_Draw__FP13mg_fish_class
- */
 s32 daMg_Fish_Draw(mg_fish_class* i_this) {
     if (i_this->mGedouKind == GEDOU_KIND_BT ||
         i_this->mGedouKind == GEDOU_KIND_SP ||
@@ -726,7 +689,6 @@ s32 daMg_Fish_Draw(mg_fish_class* i_this) {
     return 1;
 }
 
-/* 8052B928-8052B9CC 001CE8 00A4+00 1/1 0/0 0/0 .text get_surface_y__FP13mg_fish_classP4cXyz */
 static void get_surface_y(mg_fish_class* i_this, cXyz* param_2) {
     dBgS_ObjGndChk_Spl gndChk;
     cXyz pos = *param_2;
@@ -739,7 +701,6 @@ static void get_surface_y(mg_fish_class* i_this, cXyz* param_2) {
     }
 }
 
-/* 8052B9CC-8052BAB8 001D8C 00EC+00 7/7 0/0 0/0 .text get_ground_y__FP13mg_fish_classP4cXyz */
 static f32 get_ground_y(mg_fish_class* i_this, cXyz* param_2) {
     dBgS_ObjGndChk gndChk;
     cXyz pos = *param_2;
@@ -748,7 +709,6 @@ static f32 get_ground_y(mg_fish_class* i_this, cXyz* param_2) {
     return dComIfG_Bgsp().GroundCross(&gndChk);
 }
 
-/* 8052BB30-8052BF68 001EF0 0438+00 1/1 0/0 0/0 .text            mf_swim__FP13mg_fish_class */
 static void mf_swim(mg_fish_class* i_this) {
     cXyz delta;
     switch (i_this->mActionPhase) {
@@ -811,7 +771,6 @@ static void mf_swim(mg_fish_class* i_this) {
     cLib_addCalcAngleS2(&i_this->actor.current.angle.x, i_this->mMovementPitch, 2, i_this->mMaxStep);
 }
 
-/* 8052BF68-8052BFF8 002328 0090+00 1/1 0/0 0/0 .text            pos_bg_check__FP4cXyzP4cXyz */
 static s32 pos_bg_check(cXyz* param_1, cXyz* param_2) {
     dBgS_LinChk dStack_80;
     dStack_80.Set(param_1, param_2, NULL);
@@ -824,7 +783,6 @@ static s32 pos_bg_check(cXyz* param_1, cXyz* param_2) {
     }
 }
 
-/* 8052BFF8-8052C230 0023B8 0238+00 1/1 0/0 0/0 .text            path_search__FP13mg_fish_class */
 static s16 path_search(mg_fish_class* i_this) {
     f32 maxSpeed = 500.0f;
 
@@ -857,7 +815,6 @@ static s16 path_search(mg_fish_class* i_this) {
     return -1;
 }
 
-/* 8052C230-8052C574 0025F0 0344+00 1/1 0/0 0/0 .text            mf_swim_p__FP13mg_fish_class */
 static void mf_swim_p(mg_fish_class* i_this) {
     f32 targetSpeed = 1.0f;
     switch (i_this->mActionPhase) {
@@ -906,7 +863,6 @@ static void mf_swim_p(mg_fish_class* i_this) {
     cLib_addCalcAngleS2(&i_this->actor.current.angle.x, i_this->mMovementPitch, 2, i_this->mMaxStep);
 }
 
-/* 8052C574-8052CAA0 002934 052C+00 1/1 0/0 0/0 .text            mf_swim_s__FP13mg_fish_class */
 static void mf_swim_s(mg_fish_class* i_this) {
     cXyz delta;
 
@@ -988,7 +944,6 @@ static void mf_swim_s(mg_fish_class* i_this) {
     }
 }
 
-/* 8052CAA0-8052CD68 002E60 02C8+00 1/1 0/0 0/0 .text            mf_stay__FP13mg_fish_class */
 static void mf_stay(mg_fish_class* i_this) {
     f32 f31 = 0.0f;
     f32 f30 = 0.01f;
@@ -1027,7 +982,6 @@ static void mf_stay(mg_fish_class* i_this) {
     cLib_addCalcAngleS2(&i_this->mMaxStep, 0x300, 1, 0x20);
 }
 
-/* 8052CD68-8052D3BC 003128 0654+00 1/1 0/0 0/0 .text            mf_away__FP13mg_fish_class */
 static void mf_away(mg_fish_class* i_this) {
     cXyz offsetToNext;
 
@@ -1114,7 +1068,6 @@ static void mf_away(mg_fish_class* i_this) {
     cLib_addCalcAngleS2(&i_this->actor.current.angle.x, i_this->mMovementPitch, 2,i_this-> mMaxStep);
 }
 
-/* 8052D3BC-8052DAE4 00377C 0728+00 1/1 0/0 0/0 .text            ri_swim__FP13mg_fish_class */
 static void ri_swim(mg_fish_class* i_this) {
     cXyz offsetToNext;
 
@@ -1234,7 +1187,6 @@ struct JointOffsets {
     f32 * const offsets[11];
 };
 
-/* 8052DAE4-8052DEB8 003EA4 03D4+00 1/1 0/0 0/0 .text            dmcalc__FP13mg_fish_class */
 static void dmcalc(mg_fish_class* i_this) {
     static f32 joint_offset_LM[3] = { 20.0f, 20.0f, 20.0f };
     static f32 joint_offset_BG[2] = { 20.0f, 20.0f };
@@ -1370,8 +1322,6 @@ static void dmcalc(mg_fish_class* i_this) {
     }
 }
 
-/* 8052DEB8-8052EAA0 004278 0BE8+00 1/1 0/0 0/0 .text            mf_lure_search__FP13mg_fish_class
- */
 static void mf_lure_search(mg_fish_class* i_this) {
     s32 foundLure = false;
 
@@ -1633,8 +1583,6 @@ static void mf_lure_search(mg_fish_class* i_this) {
     }
 }
 
-/* 8052EAA0-8052F120 004E60 0680+00 1/1 0/0 0/0 .text            mf_bait_search__FP13mg_fish_class
- */
 static void mf_bait_search(mg_fish_class* i_this) {
     s32 foundBait = false;
     fr_class* rod = (fr_class*)fopAcM_SearchByID(i_this->mBaitId);
@@ -1738,7 +1686,6 @@ static void mf_bait_search(mg_fish_class* i_this) {
     }
 }
 
-/* 8052F120-8052FA4C 0054E0 092C+00 1/1 0/0 0/0 .text            mf_hit__FP13mg_fish_class */
 static void mf_hit(mg_fish_class* i_this) {
     dmg_rod_class* pvVar5 = (dmg_rod_class*)fopAcM_SearchByID(i_this->mRodId);
     if (pvVar5 == NULL) {
@@ -1929,7 +1876,6 @@ static void mf_hit(mg_fish_class* i_this) {
     }
 }
 
-/* 8052FA4C-8053036C 005E0C 0920+00 1/1 0/0 0/0 .text            mf_jump__FP13mg_fish_class */
 static void mf_jump(mg_fish_class* i_this) {
     cXyz commonXyz1;
     cXyz commonXyz2;
@@ -2126,7 +2072,6 @@ static void mf_jump(mg_fish_class* i_this) {
     }
 }
 
-/* 8053036C-8053055C 00672C 01F0+00 2/2 0/0 0/0 .text            pota_set__FP13mg_fish_class */
 static void pota_set(mg_fish_class* i_this) {
     static u16 b_id[3] = {
         0x873A,
@@ -2184,7 +2129,6 @@ static void pota_set(mg_fish_class* i_this) {
     }
 }
 
-/* 8053055C-80530924 00691C 03C8+00 1/1 0/0 0/0 .text            mf_catch__FP13mg_fish_class */
 static void mf_catch(mg_fish_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if (i_this->actor.health == 2) {
@@ -2281,7 +2225,6 @@ static void mf_catch(mg_fish_class* i_this) {
     }
 }
 
-/* 80530924-8053109C 006CE4 0778+00 1/1 0/0 0/0 .text            mf_esa_search__FP13mg_fish_class */
 static void mf_esa_search(mg_fish_class* i_this) {
     s32 flag1 = 0;
     s32 flag2 = 0;
@@ -2414,7 +2357,6 @@ static void mf_esa_search(mg_fish_class* i_this) {
     }
 }
 
-/* 8053109C-805313D8 00745C 033C+00 1/1 0/0 0/0 .text            mf_esa_hit__FP13mg_fish_class */
 static void mf_esa_hit(mg_fish_class* i_this) {
     dmg_rod_class* rod = (dmg_rod_class*)fopAcM_SearchByID(i_this->mRodId);
     if (rod == NULL || (rod != NULL && rod->action != 5)) {
@@ -2478,7 +2420,6 @@ static void mf_esa_hit(mg_fish_class* i_this) {
     cLib_addCalcAngleS2(&i_this->actor.current.angle.x, i_this->mMovementPitch, 2, i_this->mMaxStep);
 }
 
-/* 805313D8-8053198C 007798 05B4+00 1/1 0/0 0/0 .text            mf_esa_catch__FP13mg_fish_class */
 static s32 mf_esa_catch(mg_fish_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     dmg_rod_class* rod = (dmg_rod_class*)fopAcM_SearchByID(i_this->mRodId);
@@ -2604,7 +2545,6 @@ static s32 mf_esa_catch(mg_fish_class* i_this) {
     return flag;
 }
 
-/* 8053198C-80531CD4 007D4C 0348+00 1/1 0/0 0/0 .text            mf_aqua__FP13mg_fish_class */
 static void mf_aqua(mg_fish_class* i_this) {
     f32 targetSpeed = 0.0f;
     switch (i_this->mActionPhase) {
@@ -2650,7 +2590,6 @@ static void mf_aqua(mg_fish_class* i_this) {
 }
 
 
-/* 80531CD4-805322E0 008094 060C+00 1/1 0/0 0/0 .text            ri_aqua__FP13mg_fish_class */
 static void ri_aqua(mg_fish_class* i_this) {
     // Two different vectors in Debug, but this messes up the stack for GZ2E01.
     // cXyz commonXyz2;
@@ -2763,7 +2702,6 @@ static void ri_aqua(mg_fish_class* i_this) {
     }
 }
 
-/* 805322E0-805324D8 0086A0 01F8+00 1/1 0/0 0/0 .text            mf_aqua_tilt__FP13mg_fish_class */
 static void mf_aqua_tilt(mg_fish_class* i_this) {
     float targetSpeed = 0.0f;
 
@@ -2814,7 +2752,6 @@ static void mf_aqua_tilt(mg_fish_class* i_this) {
     }
 }
 
-/* 805324D8-80533268 008898 0D90+00 2/1 0/0 0/0 .text            action__FP13mg_fish_class */
 static void action(mg_fish_class* i_this) {
     i_this->mDistToPlayer = fopAcM_searchPlayerDistanceXZ(&i_this->actor);
     const char* stageName = dComIfGp_getStartStageName();
@@ -3227,7 +3164,6 @@ static void action(mg_fish_class* i_this) {
     }
 }
 
-/* 80533268-80533484 009628 021C+00 1/1 0/0 0/0 .text ke_control__FP13mg_fish_classP7mf_ke_s */
 static void ke_control(mg_fish_class* i_this, mf_ke_s* rope) {
     s32 i;
     s16 pitch;
@@ -3265,7 +3201,6 @@ static void ke_control(mg_fish_class* i_this, mf_ke_s* rope) {
     }
 }
 
-/* 80533484-80533540 009844 00BC+00 1/1 0/0 0/0 .text ke_move__FP13mg_fish_classP7mf_ke_si */
 static void ke_move(mg_fish_class* i_this, mf_ke_s* param_1, int param_2) {
     ke_control(i_this, param_1);
     cXyz* pos = i_this->mLineMat.getPos(param_2);
@@ -3280,7 +3215,6 @@ static void ke_move(mg_fish_class* i_this, mf_ke_s* param_1, int param_2) {
     }
 }
 
-/* 80533540-80534964 009900 1424+00 2/1 0/0 0/0 .text daMg_Fish_Execute__FP13mg_fish_class */
 static int daMg_Fish_Execute(mg_fish_class* i_this) {
     static s32 mouth_idx[11] = { 7, 0, 9, 7, 9, 4, 7, 0, 9, 7, 9 };
 
@@ -3669,13 +3603,10 @@ static int daMg_Fish_Execute(mg_fish_class* i_this) {
     return 1;
 }
 
-/* 80534964-8053496C 00AD24 0008+00 1/0 0/0 0/0 .text daMg_Fish_IsDelete__FP13mg_fish_class */
 static int daMg_Fish_IsDelete(mg_fish_class* i_this) {
     return 1;
 }
 
-/* 8053496C-805349DC 00AD2C 0070+00 1/0 0/0 0/0 .text            daMg_Fish_Delete__FP13mg_fish_class
- */
 static int daMg_Fish_Delete(mg_fish_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhaseReq, i_this->mResName);
@@ -3688,7 +3619,6 @@ static int daMg_Fish_Delete(mg_fish_class* i_this) {
     return 1;
 }
 
-/* 805349DC-80534E90 00AD9C 04B4+00 1/1 0/0 0/0 .text            useHeapInit2__FP10fopAc_ac_c */
 static int useHeapInit2(fopAc_ac_c* i_actor) {
     mg_fish_class* i_this = (mg_fish_class*)i_actor;
 
@@ -3777,7 +3707,6 @@ static int useHeapInit2(fopAc_ac_c* i_actor) {
     return 1;
 }
 
-/* 80534ED8-80535138 00B298 0260+00 1/1 0/0 0/0 .text            useHeapImg_fisht__FP10fopAc_ac_c */
 static int useHeapImg_fisht(fopAc_ac_c* i_actor) {
     static u32 fish_bmd[11] = {
         8, 3, 3, 3, 4, 3, 8, 3,
@@ -3830,7 +3759,6 @@ static int useHeapImg_fisht(fopAc_ac_c* i_actor) {
     return 1;
 }
 
-/* 80535138-80535DA8 00B4F8 0C70+00 1/0 0/0 0/0 .text            daMg_Fish_Create__FP10fopAc_ac_c */
 static int daMg_Fish_Create(fopAc_ac_c* i_this) {
     /* 805369FC-80536A40 000558 0044+00 0/1 0/0 0/0 .data            cc_cyl_src$8395 */
     static dCcD_SrcCyl cc_cyl_src = {
@@ -4123,7 +4051,6 @@ static int daMg_Fish_Create(fopAc_ac_c* i_this) {
     return retval;
 }
 
-/* 80536A6C-80536A8C -00001 0020+00 1/0 0/0 0/0 .data            l_daMg_Fish_Method */
 static actor_method_class l_daMg_Fish_Method = {
     (process_method_func)daMg_Fish_Create,
     (process_method_func)daMg_Fish_Delete,
@@ -4132,7 +4059,6 @@ static actor_method_class l_daMg_Fish_Method = {
     (process_method_func)daMg_Fish_Draw,
 };
 
-/* 80536A8C-80536ABC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_MG_FISH */
 extern actor_process_profile_definition g_profile_MG_FISH = {
     (uint)fpcLy_CURRENT_e,  // mLayerID
     7,                      // mListID

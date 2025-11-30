@@ -13,23 +13,18 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 80BA55E0-80BA55E4 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool hioInit;
 
-/* 80BA55F0-80BA5600 000018 0010+00 2/2 0/0 0/0 .bss             l_HIO */
 static daObj_AriHIO_c l_HIO;
 
-/* 80BA268C-80BA26BC 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__14daObj_AriHIO_cFv */
 daObj_AriHIO_c::daObj_AriHIO_c() {
     field_0x4 = -1;
     mScaleMale = 1.5f;
     mScaleFemale = 2.0f;
 }
 
-/* 80BA5410-80BA5414 000008 0002+02 1/2 0/0 0/0 .rodata          l_ari_itemno */
 static u8 const l_ari_itemno[2] = {fpcNm_ITEM_M_ANT, fpcNm_ITEM_F_ANT};
 
-/* 80BA26BC-80BA2728 00011C 006C+00 1/1 0/0 0/0 .text            InitCcSph__10daObjARI_cFv */
 void daObjARI_c::InitCcSph() {
     const static dCcD_SrcSph ccSphSrc = {
         {
@@ -50,15 +45,12 @@ void daObjARI_c::InitCcSph() {
     mCcSph.OnTgNoHitMark();
 }
 
-/* 80BA2728-80BA2780 000188 0058+00 1/1 0/0 0/0 .text            SetCcSph__10daObjARI_cFv */
 void daObjARI_c::SetCcSph() {
     mCcSph.SetC(current.pos);
     mCcSph.SetR(40.0f);
     dComIfG_Ccsp()->Set(&mCcSph);
 }
 
-/* 80BA2780-80BA2854 0001E0 00D4+00 1/1 0/0 0/0 .text ctrlJoint__10daObjARI_cFP8J3DJointP8J3DModel
- */
 int daObjARI_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     int jnt_no = i_joint->getJntNo();
     mDoMtx_stack_c::copy(i_model->getAnmMtx(jnt_no));
@@ -70,7 +62,6 @@ int daObjARI_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 80BA2854-80BA28A0 0002B4 004C+00 1/1 0/0 0/0 .text            JointCallBack__FP8J3DJointi */
 static int JointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -82,12 +73,10 @@ static int JointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80BA28A0-80BA28C0 000300 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return static_cast<daObjARI_c*>(i_this)->CreateHeap();
 }
 
-/* 80BA28C0-80BA2C18 000320 0358+00 1/1 0/0 0/0 .text            CreateHeap__10daObjARI_cFv */
 int daObjARI_c::CreateHeap() {
     J3DModelData* model_data;
     if (mSex == SEX_FEMALE) {
@@ -140,13 +129,11 @@ int daObjARI_c::CreateHeap() {
     return 1;
 }
 
-/* 80BA2C60-80BA2C80 0006C0 0020+00 1/0 0/0 0/0 .text            daObjARI_Create__FP10fopAc_ac_c */
 static cPhs__Step daObjARI_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return static_cast<daObjARI_c*>(i_this)->create();
 }
 
-/* 80BA2C80-80BA2CA4 0006E0 0024+00 1/0 0/0 0/0 .text            daObjARI_Delete__FP10daObjARI_c */
 static int daObjARI_Delete(daObjARI_c* i_this) {
     fopAcM_GetID(i_this);
     i_this->Delete();
@@ -159,7 +146,6 @@ static f32 dummy() {
     return vec1.x + vec2.x;
 }
 
-/* 80BA2CA4-80BA3228 000704 0584+00 1/1 0/0 0/0 .text            WallWalk__10daObjARI_cFv */
 void daObjARI_c::WallWalk() {
     cXyz vec1(0.0f, -50.0f, speedF * 2.0f);
     cXyz vec2(0.0f, 0.0f, 0.0f);
@@ -225,7 +211,6 @@ void daObjARI_c::WallWalk() {
     shape_angle.y = current.angle.y;
 }
 
-/* 80BA3270-80BA337C 000CD0 010C+00 2/2 0/0 0/0 .text            MoveAction__10daObjARI_cFv */
 void daObjARI_c::MoveAction() {
     if (mTimer == 0) {
         cXyz delta = home.pos - current.pos;
@@ -243,7 +228,6 @@ void daObjARI_c::MoveAction() {
     WallWalk();
 }
 
-/* 80BA337C-80BA33F8 000DDC 007C+00 1/1 0/0 0/0 .text            Action__10daObjARI_cFv */
 void daObjARI_c::Action() {
     mTimer--;
     if (mTimer <= 0) {
@@ -257,13 +241,11 @@ void daObjARI_c::Action() {
     Insect_GetDemoMain();
 }
 
-/* 80BA33F8-80BA3408 000E58 0010+00 1/0 0/0 0/0 .text            Insect_Release__10daObjARI_cFv */
 void daObjARI_c::Insect_Release() {
     field_0x56c = 1;
     mAction = 1;
 }
 
-/* 80BA3408-80BA3638 000E68 0230+00 1/1 0/0 0/0 .text            checkGround__10daObjARI_cFv */
 void daObjARI_c::checkGround() {
     dBgS_LinChk lin_chk;
     lin_chk.SetObj();
@@ -284,7 +266,6 @@ void daObjARI_c::checkGround() {
     }
 }
 
-/* 80BA3638-80BA36CC 001098 0094+00 1/1 0/0 0/0 .text            B_MoveAction__10daObjARI_cFv */
 void daObjARI_c::B_MoveAction() {
     switch (mMode) {
     case 0:
@@ -305,7 +286,6 @@ void daObjARI_c::B_MoveAction() {
     }
 }
 
-/* 80BA36CC-80BA3700 00112C 0034+00 1/1 0/0 0/0 .text            FallAction__10daObjARI_cFv */
 void daObjARI_c::FallAction() {
     switch (mAction) {
     case 0:
@@ -317,7 +297,6 @@ void daObjARI_c::FallAction() {
     }
 }
 
-/* 80BA3700-80BA3824 001160 0124+00 1/1 0/0 0/0 .text            ParticleSet__10daObjARI_cFv */
 void daObjARI_c::ParticleSet() {
     if (mScreenZ > mBufferZ) {
         cLib_addCalc2(&mParticleScale, 0.0f, 1.0f, 1.0f);
@@ -333,7 +312,6 @@ void daObjARI_c::ParticleSet() {
     }
 }
 
-/* 80BA3824-80BA3B38 001284 0314+00 1/1 0/0 0/0 .text            BoomChk__10daObjARI_cFv */
 void daObjARI_c::BoomChk() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     fopAcM_searchPlayerDistanceXZ(this);
@@ -376,7 +354,6 @@ void daObjARI_c::BoomChk() {
     }
 }
 
-/* 80BA3B38-80BA3C38 001598 0100+00 1/1 0/0 0/0 .text            ObjHit__10daObjARI_cFv */
 void daObjARI_c::ObjHit() {
     if (mCcSph.ChkTgHit()) {
         cCcD_Obj* hit_obj = mCcSph.GetTgHitObj();
@@ -399,7 +376,6 @@ void daObjARI_c::ObjHit() {
     }
 }
 
-/* 80BA3C38-80BA44F0 001698 08B8+00 1/1 0/0 0/0 .text            Execute__10daObjARI_cFv */
 int daObjARI_c::Execute() {
     if (ChkGetDemo()) {
         mScreenZ = mBufferZ + 10000.0f;
@@ -518,7 +494,6 @@ int daObjARI_c::Execute() {
     return 1;
 }
 
-/* 80BA44F0-80BA466C 001F50 017C+00 1/1 0/0 0/0 .text            Z_BufferChk__10daObjARI_cFv */
 void daObjARI_c::Z_BufferChk() {
     cXyz vec2, vec1;
     vec1 = current.pos;
@@ -545,7 +520,6 @@ void daObjARI_c::Z_BufferChk() {
     mScreenZ = ((near + far * near / vec2.z) / (far - near) + 1.0f) * 0xffffff;
 }
 
-/* 80BA466C-80BA46D4 0020CC 0068+00 1/1 0/0 0/0 .text            Delete__10daObjARI_cFv */
 int daObjARI_c::Delete() {
     dComIfG_resDelete(&mPhase, "I_Ari");
     if (mHIOInit) {
@@ -557,7 +531,6 @@ int daObjARI_c::Delete() {
     return 1;
 }
 
-/* 80BA46D4-80BA473C 002134 0068+00 1/1 0/0 0/0 .text            setBaseMtx__10daObjARI_cFv */
 void daObjARI_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(mWallAlignAngle);
@@ -584,24 +557,20 @@ int daObjARI_c::Draw() {
     return 1;
 }
 
-/* 80BA473C-80BA481C 00219C 00E0+00 1/0 0/0 0/0 .text            daObjARI_Draw__FP10daObjARI_c */
 static int daObjARI_Draw(daObjARI_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80BA481C-80BA483C 00227C 0020+00 2/1 0/0 0/0 .text            daObjARI_Execute__FP10daObjARI_c */
 static int daObjARI_Execute(daObjARI_c* i_this) {
     return i_this->Execute();
 }
 
-/* 80BA54F8-80BA54FC 0000F0 0004+00 1/2 0/0 0/0 .rodata          l_musiya_num */
 static u16 const l_musiya_num[2] = {
     0x01A5, /* dSv_event_flag_c::F_0421 - Misc. - Ant (M) */
     0x01A6, /* dSv_event_flag_c::F_0422 - Misc. - Ant (F) */
 };
 
 
-/* 80BA483C-80BA49E8 00229C 01AC+00 1/1 0/0 0/0 .text            CreateChk__10daObjARI_cFv */
 bool daObjARI_c::CreateChk() {
     u8 param = (fopAcM_GetParam(this) >> 8) & 0xf;
     if (param == 0xf) {
@@ -636,7 +605,6 @@ bool daObjARI_c::CreateChk() {
     return true;
 }
 
-/* 80BA49E8-80BA5258 002448 0870+00 1/1 0/0 0/0 .text            create__10daObjARI_cFv */
 cPhs__Step daObjARI_c::create() {
     fopAcM_ct(this, daObjARI_c);
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, "I_Ari");
@@ -758,13 +726,10 @@ cPhs__Step daObjARI_c::create() {
     return step;
 }
 
-/* 80BA5358-80BA5360 002DB8 0008+00 1/0 0/0 0/0 .text            daObjARI_IsDelete__FP10daObjARI_c
- */
 static int daObjARI_IsDelete(daObjARI_c* i_this) {
     return 1;
 }
 
-/* 80BA551C-80BA553C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjARI_Method */
 static actor_method_class l_daObjARI_Method = {
     (process_method_func)daObjARI_Create,
     (process_method_func)daObjARI_Delete,
@@ -773,7 +738,6 @@ static actor_method_class l_daObjARI_Method = {
     (process_method_func)daObjARI_Draw,
 };
 
-/* 80BA553C-80BA556C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Ari */
 extern actor_process_profile_definition g_profile_Obj_Ari = {
     fpcLy_CURRENT_e,
     7,

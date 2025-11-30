@@ -34,15 +34,18 @@ struct TUtil<f32> {
     static inline f32 epsilon() { return 32.0f * FLT_EPSILON; }
     static inline f32 PI() { return 3.1415927f; }
     static inline f32 inv_sqrt(f32 x) {
+        #ifdef __MWERKS__
         if (x <= 0.0f) {
             return x;
         }
         f32 root = __frsqrte(x);
         root = 0.5f * root * (3.0f - x * (root * root));
         return root;
+        #endif
     }
 
     static inline f32 sqrt(f32 x) {
+        #ifdef __MWERKS__
         if (x <= 0.0f) {
             return x;
         }
@@ -50,6 +53,7 @@ struct TUtil<f32> {
         f32 root = __frsqrte(x);
         root = 0.5f * root * (3.0f - x * (root * root));
         return x * root;
+        #endif
     }
 };
 
@@ -122,13 +126,13 @@ struct TVec3<s16> {
 };
 
 inline void setTVec3f(const f32* vec_a, f32* vec_b) {
+#ifdef __MWERKS__
     const register f32* v_a = vec_a;
     register f32* v_b = vec_b;
 
     register f32 a_x;
     register f32 b_x;
 
-#ifdef __MWERKS__
     asm {
         psq_l a_x, 0(v_a), 0, 0
         lfs b_x, 8(v_a)
@@ -144,18 +148,21 @@ inline void setTVec3f(const Vec& vec_a, Vec& vec_b) {
 }
 
 inline float fsqrt_step(float mag) {
+    #ifdef __MWERKS__
     f32 root = __frsqrte(mag);
     return 0.5f * root * (3.0f - mag * (root * root));
+    #endif
 }
 
 inline void mulInternal(register const f32* a, register const f32* b, register float* dst) {
+#ifdef __MWERKS__
     register f32 a_x_y;
     register f32 b_x_y;
     register f32 x_y;
     register f32 za;
     register f32 zb;
     register f32 z;
-#ifdef __MWERKS__
+
     asm {
         psq_l  a_x_y, 0(a), 0, 0
         psq_l  b_x_y, 0(b), 0, 0
@@ -281,11 +288,12 @@ struct TVec3<f32> : public Vec {
     }
 
     void scale(register f32 sc) {
+#ifdef __MWERKS__
         register f32 z;
         register f32 x_y;
         register f32* dst = &x;
         register f32 zres;
-#ifdef __MWERKS__
+
         asm {
             psq_l    x_y, 0(dst),  0, 0
             psq_l    z,   8(dst),  1, 0
@@ -298,12 +306,13 @@ struct TVec3<f32> : public Vec {
     }
 
     void scale(register f32 sc, const TVec3<f32>& other) {
+#ifdef __MWERKS__
         register const f32* src = &other.x;
         register f32 z;
         register f32 x_y;
         register f32* dst = &x;
         register f32 zres;
-#ifdef __MWERKS__
+
         asm {
             psq_l    x_y, 0(src),  0, 0
             psq_l    z,   8(src),  1, 0
@@ -320,11 +329,12 @@ struct TVec3<f32> : public Vec {
     }
 
     void negateInternal(TVec3<f32>* dst) {
+#ifdef __MWERKS__
         register f32* rdst = &dst->x;
         const register f32* src = &x;
         register f32 x_y;
         register f32 z;
-#ifdef __MWERKS__
+
         asm {
             psq_l  x_y, 0(src), 0, 0
             ps_neg x_y, x_y

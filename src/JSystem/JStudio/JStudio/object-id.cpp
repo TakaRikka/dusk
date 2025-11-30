@@ -7,8 +7,6 @@
 #include "JSystem/JStudio/JStudio/object-id.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-/* 80288988-80288A78 2832C8 00F0+00 0/0 3/3 0/0 .text
- * isEqual__Q37JStudio6object7TIDDataFRCQ37JStudio6object7TIDDataRCQ37JStudio6object7TIDData */
 bool JStudio::object::TIDData::isEqual(JStudio::object::TIDData const& a,
                                        JStudio::object::TIDData const& b) {
     u32 aSize = a.getIDSize();

@@ -14,8 +14,6 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* ############################################################################################## */
-/* 80C33C80-80C33CAC 000000 002C+00 5/5 0/0 0/0 .rodata          m__18daObj_Kago_Param_c */
 daObj_Kago_Param_c::Data const daObj_Kago_Param_c::m = {
     0.0f,
     -5.0f,
@@ -44,18 +42,15 @@ const dCcD_SrcGObjInf l_ccDObjData = {
     {0} // mGObjCo
 };
 
-/* 80C33DC0-80C33DD0 000020 0010+00 2/3 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[2][2] = {
     { 3, 1 }, { 4, 1 },
 };
 
-/* 80C33DD0-80C33DD8 -00001 0008+00 2/4 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "uri_kago"
 };
 
-/* 80C33DD8-80C33E1C 000038 0044+00 1/2 0/0 0/0 .data            l_ccDCyl */
 static dCcD_SrcCyl l_ccDCyl = {
     daNpcT_c::mCcDObjData, // mObjInf
     {
@@ -65,7 +60,6 @@ static dCcD_SrcCyl l_ccDCyl = {
     } // mCyl
 };
 
-/* 80C31AEC-80C31C90 0000EC 01A4+00 1/0 0/0 0/0 .text            __dt__12daObj_Kago_cFv */
 daObj_Kago_c::~daObj_Kago_c() {
     OS_REPORT("|%06d:%x|daObj_Kago_c -> デストラクト\n", g_Counter.mCounter0, this);
     if (mType == 0 && daNpcT_chkTmpBit(7)) {
@@ -75,7 +69,6 @@ daObj_Kago_c::~daObj_Kago_c() {
     dComIfG_resDelete(&mPhase, l_resNameList[l_bmdData[0][1]]);
 }
 
-/* 80C31D5C-80C320FC 00035C 03A0+00 1/1 0/0 0/0 .text            create__12daObj_Kago_cFv */
 cPhs__Step daObj_Kago_c::create() {
     static int const heapSize[5] = {
         0x0820, 0x0820, 0, 0x0820, 0,
@@ -131,7 +124,6 @@ cPhs__Step daObj_Kago_c::create() {
     return phase;
 }
 
-/* 80C323D0-80C324B0 0009D0 00E0+00 1/1 0/0 0/0 .text            CreateHeap__12daObj_Kago_cFv */
 int daObj_Kago_c::CreateHeap() {
     J3DModelData* modelData;
     if (mType == 2 || mType == 3) {
@@ -152,14 +144,12 @@ int daObj_Kago_c::CreateHeap() {
     return 1;
 }
 
-/* 80C324B0-80C324E4 000AB0 0034+00 1/1 0/0 0/0 .text            Delete__12daObj_Kago_cFv */
 int daObj_Kago_c::Delete() {
     fopAcM_GetID(this);
     this->~daObj_Kago_c();
     return 1;
 }
 
-/* 80C324E4-80C332D0 000AE4 0DEC+00 2/2 0/0 0/0 .text            Execute__12daObj_Kago_cFv */
 int daObj_Kago_c::Execute() {
     int iVar1 = 0;
     f32 fVar1;
@@ -480,7 +470,6 @@ int daObj_Kago_c::Execute() {
     return 1;
 }
 
-/* 80C332D0-80C333F0 0018D0 0120+00 1/1 0/0 0/0 .text            Draw__12daObj_Kago_cFv */
 int daObj_Kago_c::Draw() {
     if(field_0xb9f == 0 && health != 3) {
 #if VERSION == VERSION_SHIELD_DEBUG
@@ -505,13 +494,11 @@ int daObj_Kago_c::Draw() {
     return 1;
 }
 
-/* 80C333F0-80C33410 0019F0 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__12daObj_Kago_cFP10fopAc_ac_c */
 int daObj_Kago_c::createHeapCallBack(fopAc_ac_c* actor) {
     daObj_Kago_c* i_this = (daObj_Kago_c*)actor;
     return i_this->CreateHeap();
 }
 
-/* 80C33410-80C334B4 001A10 00A4+00 2/2 0/0 0/0 .text            isDelete__12daObj_Kago_cFv */
 BOOL daObj_Kago_c::isDelete() {
     u8 rv;
     switch (mType) {
@@ -538,26 +525,22 @@ BOOL daObj_Kago_c::isDelete() {
     }
 }
 
-/* 80C334B4-80C33510 001AB4 005C+00 2/2 0/0 0/0 .text            setEnvTevColor__12daObj_Kago_cFv */
 void daObj_Kago_c::setEnvTevColor() {
     tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(field_0x7cc);
     tevStr.room_no = dComIfG_Bgsp().GetRoomId(field_0x7cc);
 }
 
-/* 80C33510-80C33554 001B10 0044+00 2/2 0/0 0/0 .text            setRoomNo__12daObj_Kago_cFv */
 void daObj_Kago_c::setRoomNo() {
     int room_id = dComIfG_Bgsp().GetRoomId(field_0x7cc);
     fopAcM_SetRoomNo(this, room_id);
     mStts.SetRoomId(room_id);
 }
 
-/* 80C33554-80C3359C 001B54 0048+00 1/1 0/0 0/0 .text            reset__12daObj_Kago_cFv */
 void daObj_Kago_c::reset() {
     memset(&field_0xb14, 0, (u8*)&field_0xba3 - (u8*)&field_0xb14);
     field_0xb0c = 1.0f;
 }
 
-/* 80C3359C-80C33620 001B9C 0084+00 1/1 0/0 0/0 .text            setMtx__12daObj_Kago_cFv */
 void daObj_Kago_c::setMtx() {
     csXyz acStack_18(shape_angle);
     acStack_18.y += field_0xb74;
@@ -567,7 +550,6 @@ void daObj_Kago_c::setMtx() {
     field_0x574->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C33620-80C337B0 001C20 0190+00 1/1 0/0 0/0 .text            getWallAngle__12daObj_Kago_cFsPs */
 int daObj_Kago_c::getWallAngle(s16 param_1, s16* param_2) {
     cXyz sp40[2];
     cXyz sp50, sp5c;
@@ -595,10 +577,8 @@ int daObj_Kago_c::getWallAngle(s16 param_1, s16* param_2) {
     return 1;
 }
 
-/* 80C33F4C-80C33F50 000054 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daObj_Kago_Param_c l_HIO;
 
-/* 80C337B0-80C338D0 001DB0 0120+00 1/1 0/0 0/0 .text setGoalPosAndAngle__12daObj_Kago_cFv */
 void daObj_Kago_c::setGoalPosAndAngle() {
     static cXyz pos(1593.0f, 659.0f, -334.0f);
     static s16 angle = 0x471C;
@@ -611,7 +591,6 @@ void daObj_Kago_c::setGoalPosAndAngle() {
     old.pos = current.pos;
 }
 
-/* 80C338D0-80C33958 001ED0 0088+00 1/1 0/0 0/0 .text            setSmokePrtcl__12daObj_Kago_cFv */
 void daObj_Kago_c::setSmokePrtcl() {
     if (field_0xb9f == 0) {
         fopAcM_effSmokeSet1(&field_0xb94, &field_0xb98, &current.pos, NULL, 0.7f, &tevStr, 1);
@@ -620,7 +599,6 @@ void daObj_Kago_c::setSmokePrtcl() {
     }
 }
 
-/* 80C33958-80C33A58 001F58 0100+00 1/1 0/0 0/0 .text            setWaterPrtcl__12daObj_Kago_cFv */
 void daObj_Kago_c::setWaterPrtcl() {
     static u16 emttrId[4] = {
         0x01B8, 0x01B9, 0x01BA, 0x01BB,
@@ -637,7 +615,6 @@ void daObj_Kago_c::setWaterPrtcl() {
     }
 }
 
-/* 80C33A58-80C33AB4 002058 005C+00 1/1 0/0 0/0 .text            setHamonPrtcl__12daObj_Kago_cFv */
 void daObj_Kago_c::setHamonPrtcl() {
     if (field_0xb9f == 0) {
         cXyz sp18(current.pos.x, mWaterY, current.pos.z);
@@ -645,38 +622,32 @@ void daObj_Kago_c::setHamonPrtcl() {
     }
 }
 
-/* 80C33AB4-80C33AD4 0020B4 0020+00 1/0 0/0 0/0 .text            daObj_Kago_Create__FPv */
 static int daObj_Kago_Create(void* param_1) {
     daObj_Kago_c* i_this = (daObj_Kago_c*)param_1;
     return i_this->create();
 }
 
-/* 80C33AD4-80C33AF4 0020D4 0020+00 1/0 0/0 0/0 .text            daObj_Kago_Delete__FPv */
 static int daObj_Kago_Delete(void* param_1) {
     daObj_Kago_c* i_this = (daObj_Kago_c*)param_1;
     return i_this->Delete();
 }
 
-/* 80C33AF4-80C33B14 0020F4 0020+00 1/0 0/0 0/0 .text            daObj_Kago_Execute__FPv */
 static int daObj_Kago_Execute(void* param_1) {
     daObj_Kago_c* i_this = (daObj_Kago_c*)param_1;
     return i_this->Execute();
 }
 
-/* 80C33B14-80C33B34 002114 0020+00 1/0 0/0 0/0 .text            daObj_Kago_Draw__FPv */
 static int daObj_Kago_Draw(void* param_1) {
     daObj_Kago_c* i_this = (daObj_Kago_c*)param_1;
     return i_this->Draw();
 }
 
-/* 80C33B34-80C33B3C 002134 0008+00 1/0 0/0 0/0 .text            daObj_Kago_IsDelete__FPv */
 static int daObj_Kago_IsDelete(void* param_1) {
     return 1;
 }
 
 AUDIO_INSTANCES;
 
-/* 80C33E24-80C33E44 -00001 0020+00 1/0 0/0 0/0 .data            daObj_Kago_MethodTable */
 static actor_method_class daObj_Kago_MethodTable = {
     (process_method_func)daObj_Kago_Create,
     (process_method_func)daObj_Kago_Delete,
@@ -685,7 +656,6 @@ static actor_method_class daObj_Kago_MethodTable = {
     (process_method_func)daObj_Kago_Draw,
 };
 
-/* 80C33E44-80C33E74 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_KAGO */
 extern actor_process_profile_definition g_profile_OBJ_KAGO = {
   fpcLy_CURRENT_e,         // mLayerID
   8,                       // mListID

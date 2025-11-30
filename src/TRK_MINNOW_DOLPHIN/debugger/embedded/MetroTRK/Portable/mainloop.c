@@ -2,7 +2,6 @@
 #include "TRK_MINNOW_DOLPHIN/ppc/Generic/targimpl.h"
 #include "trk.h"
 
-/* 8036CB20-8036CC18 367460 00F8+00 0/0 1/1 0/0 .text            TRKNubMainLoop */
 void TRKNubMainLoop(void) {
     void* msg;
     TRKEvent event;

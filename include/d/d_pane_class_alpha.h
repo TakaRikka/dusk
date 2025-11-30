@@ -9,23 +9,23 @@ class JKRExpHeap;
 
 class CPaneMgrAlpha {
 public:
-    /* 8025546C */ virtual ~CPaneMgrAlpha();
-    /* 80255758 */ virtual void setAlpha(u8);
+    virtual ~CPaneMgrAlpha();
+    virtual void setAlpha(u8);
 
-    /* 802553EC */ CPaneMgrAlpha();
-    /* 802553FC */ CPaneMgrAlpha(J2DScreen*, u64, u8, JKRExpHeap*);
-    /* 802554E0 */ void initiateAlpha(J2DPane*, JKRExpHeap*);
-    /* 802555C8 */ void show();
-    /* 80255608 */ void hide();
-    /* 8025564C */ bool isVisible();
-    /* 80255658 */ f32 rateCalc(s16, s16, u8);
-    /* 802557D0 */ void setAlphaRate(f32);
-    /* 80255828 */ f32 getAlphaRate();
-    /* 80255878 */ bool alphaAnime(s16 timer, u8 startAlpha, u8 endAlpha, u8 calcType);
-    /* 80255964 */ bool alphaAnimeLoop(s16, u8, u8, u8);
-    /* 80255A60 */ void childPaneCount(J2DPane*);
-    /* 80255ACC */ void childPaneGetAlpha(J2DPane*);
-    /* 80255B5C */ void childPaneSetAlpha(J2DPane*, u8);
+    CPaneMgrAlpha();
+    CPaneMgrAlpha(J2DScreen*, u64, u8, JKRExpHeap*);
+    void initiateAlpha(J2DPane*, JKRExpHeap*);
+    void show();
+    void hide();
+    bool isVisible();
+    f32 rateCalc(s16, s16, u8);
+    void setAlphaRate(f32);
+    f32 getAlphaRate();
+    bool alphaAnime(s16 timer, u8 startAlpha, u8 endAlpha, u8 calcType);
+    bool alphaAnimeLoop(s16, u8, u8, u8);
+    void childPaneCount(J2DPane*);
+    void childPaneGetAlpha(J2DPane*);
+    void childPaneSetAlpha(J2DPane*, u8);
 
     J2DPane* getPanePtr() { return mPane; }
     u8 getAlpha() { return getPanePtr()->getAlpha(); }
@@ -45,14 +45,14 @@ public:
 
 class CPaneMgrAlphaMorf : public CPaneMgrAlpha {
 public:
-    /* 80255C68 */ CPaneMgrAlphaMorf(J2DScreen*, u64, u8, JKRExpHeap*);
-    /* 80255D48 */ void initiateAlphaMorf();
-    /* 80255DD0 */ void setBackupAlpha();
-    /* 80255E28 */ void setAlphaMorfRate(f32);
-    /* 80255E98 */ void childPaneBackupAlpha(J2DPane*);
-    /* 80255F28 */ void childPaneSetAlphaMorf(J2DPane*, f32);
+    CPaneMgrAlphaMorf(J2DScreen*, u64, u8, JKRExpHeap*);
+    void initiateAlphaMorf();
+    void setBackupAlpha();
+    void setAlphaMorfRate(f32);
+    void childPaneBackupAlpha(J2DPane*);
+    void childPaneSetAlphaMorf(J2DPane*, f32);
 
-    /* 80255CAC */ virtual ~CPaneMgrAlphaMorf();
+    virtual ~CPaneMgrAlphaMorf();
 
 private:
     /* 0x1C */ void* mpFirstSaveAlpha;

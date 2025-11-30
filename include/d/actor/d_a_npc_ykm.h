@@ -36,7 +36,7 @@ struct daNpc_ykM_HIOParam {
 
 class daNpc_ykM_Param_c {
 public:
-    /* 80B5D6C8 */ virtual ~daNpc_ykM_Param_c() {}
+    virtual ~daNpc_ykM_Param_c() {}
 
     static daNpc_ykM_HIOParam const m;
 };
@@ -194,65 +194,65 @@ public:
     typedef int (daNpc_ykM_c::*cutFunc)(int);
     typedef BOOL (daNpc_ykM_c::*ActionFn)(void*);
     
-    /* 80B534EC */ ~daNpc_ykM_c();
-    /* 80B53698 */ cPhs__Step create();
-    /* 80B53990 */ int CreateHeap();
-    /* 80B540BC */ int Delete();
-    /* 80B540F0 */ int Execute();
-    /* 80B54110 */ int Draw();
-    /* 80B541F8 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B54218 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B54270 */ static void* srchGadget(void*, void*);
-    /* 80B5430C */ fopAc_ac_c* getTomatoPureeP();
-    /* 80B543DC */ fopAc_ac_c* getCheeseP();
-    /* 80B544B0 */ static void* srchYkm(void*, void*);
-    /* 80B5454C */ fopAc_ac_c* getOtherYkmP(int);
-    /* 80B54628 */ static void* srchYkw(void*, void*);
-    /* 80B546C4 */ fopAc_ac_c* getOtherYkwP(int);
-    /* 80B547A0 */ u8 getType();
-    /* 80B54808 */ BOOL isDelete();
-    /* 80B548A8 */ void reset();
-    /* 80B54B44 */ void afterJntAnm(int);
-    /* 80B54BD0 */ void setParam();
-    /* 80B54E5C */ BOOL checkChangeEvt();
-    /* 80B55004 */ void setAfterTalkMotion();
-    /* 80B550A4 */ void srchActors();
-    /* 80B55254 */ BOOL evtTalk();
-    /* 80B552F4 */ BOOL evtCutProc();
-    /* 80B553BC */ void action();
-    /* 80B55658 */ void beforeMove();
-    /* 80B5571C */ void afterMoved();
-    /* 80B55A64 */ void setAttnPos();
-    /* 80B560B4 */ void setCollision();
-    /* 80B5641C */ int drawDbgInfo();
-    /* 80B56424 */ void drawOtherMdl();
-    /* 80B56624 */ bool setFishAnm(int, int, f32);
-    /* 80B566E8 */ bool setLeafAnm(int, f32);
-    /* 80B567B4 */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80B5680C */ int selectAction();
-    /* 80B56954 */ BOOL chkAction(ActionFn);
-    /* 80B56980 */ int setAction(ActionFn);
-    /* 80B56A28 */ BOOL chkContinueAttnPlayer();
-    /* 80B56AB4 */ BOOL chkTouchPlayer();
-    /* 80B56B84 */ int cutSlideDown(int);
-    /* 80B572C8 */ int cutMeetingAgain(int);
-    /* 80B57638 */ int cutGetTomatoPuree(int);
-    /* 80B5806C */ int cutGetTaste(int);
-    /* 80B58A38 */ int cutLv5DungeonClear(int);
-    /* 80B59500 */ int cutFindWolf(int);
-    /* 80B59748 */ int cutStartSnowboardRace(int);
-    /* 80B59B90 */ int cutEndSnowboardRace(int);
-    /* 80B5A0B8 */ int cutHug(int);
-    /* 80B5A128 */ void setDialogueMotion();
-    /* 80B5A224 */ int dialogue();
-    /* 80B5A3FC */ BOOL wait(void*);
-    /* 80B5ABA8 */ BOOL cook(void*);
-    /* 80B5B260 */ BOOL race(void*);
-    /* 80B5BE08 */ BOOL talk(void*);
+    ~daNpc_ykM_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    static void* srchGadget(void*, void*);
+    fopAc_ac_c* getTomatoPureeP();
+    fopAc_ac_c* getCheeseP();
+    static void* srchYkm(void*, void*);
+    fopAc_ac_c* getOtherYkmP(int);
+    static void* srchYkw(void*, void*);
+    fopAc_ac_c* getOtherYkwP(int);
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void afterMoved();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    bool setFishAnm(int, int, f32);
+    bool setLeafAnm(int, f32);
+    bool afterSetMotionAnm(int, int, f32, int);
+    int selectAction();
+    BOOL chkAction(ActionFn);
+    int setAction(ActionFn);
+    BOOL chkContinueAttnPlayer();
+    BOOL chkTouchPlayer();
+    int cutSlideDown(int);
+    int cutMeetingAgain(int);
+    int cutGetTomatoPuree(int);
+    int cutGetTaste(int);
+    int cutLv5DungeonClear(int);
+    int cutFindWolf(int);
+    int cutStartSnowboardRace(int);
+    int cutEndSnowboardRace(int);
+    int cutHug(int);
+    void setDialogueMotion();
+    int dialogue();
+    BOOL wait(void*);
+    BOOL cook(void*);
+    BOOL race(void*);
+    BOOL talk(void*);
     #ifdef DEBUG
     BOOL test(void*);
     #endif
-    /* 80B5D588 */ daNpc_ykM_c(
+    daNpc_ykM_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -266,12 +266,12 @@ public:
         i_arcNames) {
         OS_REPORT("|%06d:%x|daNpc_ykM_c -> コンストラクト\n", g_Counter.mCounter0, this);
     }
-    /* 80B5D688 */ u16 getEyeballMaterialNo() { return 2; }
-    /* 80B5D690 */ s32 getHeadJointNo() { return JNT_HEAD; }
-    /* 80B5D698 */ s32 getNeckJointNo() { return JNT_NECK; }
-    /* 80B5D6A0 */ s32 getBackboneJointNo() { return JNT_BB1; }
-    /* 80B5D6A8 */ BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
-    /* 80B5D6B8 */ BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_YKM_KURA; }
+    u16 getEyeballMaterialNo() { return 2; }
+    s32 getHeadJointNo() { return JNT_HEAD; }
+    s32 getNeckJointNo() { return JNT_NECK; }
+    s32 getBackboneJointNo() { return JNT_BB1; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_YKM_KURA; }
 
     u32 getFlowNodeNo() {
         u32 rv = (u16)home.angle.x;

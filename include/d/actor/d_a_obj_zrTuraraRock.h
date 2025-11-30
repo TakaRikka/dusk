@@ -16,19 +16,19 @@
  */
 class daZrTuraRc_c : public fopAc_ac_c {
 public:
-    /* 80D41934 */ void setBaseMtx();
-    /* 80D419D4 */ int CreateHeap();
-    /* 80D41A40 */ cPhs__Step create();
-    /* 80D41EF0 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80D41F10 */ int Execute();
-    /* 80D41F78 */ void move();
-    /* 80D4204C */ void init_modeDrop();
-    /* 80D42084 */ void modeDrop();
-    /* 80D420FC */ void bgCheck();
-    /* 80D42128 */ void init_modeDropEnd();
-    /* 80D4215C */ void modeDropEnd();
-    /* 80D42160 */ int Draw();
-    /* 80D421C4 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    static int createHeapCallBack(fopAc_ac_c*);
+    int Execute();
+    void move();
+    void init_modeDrop();
+    void modeDrop();
+    void bgCheck();
+    void init_modeDropEnd();
+    void modeDropEnd();
+    int Draw();
+    int Delete();
 
 private:
     /* 0x568 */ dCcD_Stts mCcStatus;
@@ -53,8 +53,8 @@ STATIC_ASSERT(sizeof(daZrTuraRc_c) == 0x938);
 
 class daZrTuraRc_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80D4188C */ daZrTuraRc_HIO_c();
-    /* 80D422D0 */ ~daZrTuraRc_HIO_c() {}
+    daZrTuraRc_HIO_c();
+    ~daZrTuraRc_HIO_c() {}
 
     void genMessage(JORMContext*);
 

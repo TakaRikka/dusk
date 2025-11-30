@@ -93,7 +93,6 @@ static const char* sSpotName[] = {
     "D_SB10",
 };
 
-/* 802AEEA0-802AF010 2A97E0 0170+00 0/0 1/1 0/0 .text            __ct__8Z2SeqMgrFv */
 Z2SeqMgr::Z2SeqMgr() : JASGlobalInstance<Z2SeqMgr>(true) {
     mMainBgmMaster.forceIn();
     mSubBgmMaster.forceIn();
@@ -130,7 +129,6 @@ Z2SeqMgr::Z2SeqMgr() : JASGlobalInstance<Z2SeqMgr>(true) {
     mFlags.mTimeProcVolMod = false;
 }
 
-/* 802AF010-802AF408 2A9950 03F8+00 3/3 5/5 38/38 .text            bgmStart__8Z2SeqMgrFUlUll */
 void Z2SeqMgr::bgmStart(u32 bgmID, u32 fadeTime, s32 param_2) {
     switch (bgmID) {
     case -1:
@@ -229,7 +227,6 @@ void Z2SeqMgr::bgmStart(u32 bgmID, u32 fadeTime, s32 param_2) {
     #endif
 }
 
-/* 802AF408-802AF49C 2A9D48 0094+00 3/3 5/5 30/30 .text            bgmStop__8Z2SeqMgrFUll */
 void Z2SeqMgr::bgmStop(u32 fadeTime, s32 param_1) {
     if (mMainBgmHandle) {
         mMainBgmHandle->stop(fadeTime);
@@ -247,7 +244,6 @@ void Z2SeqMgr::bgmStop(u32 fadeTime, s32 param_1) {
     }
 }
 
-/* 802AF49C-802AF884 2A9DDC 03E8+00 3/2 6/6 65/65 .text            subBgmStart__8Z2SeqMgrFUl */
 void Z2SeqMgr::subBgmStart(u32 bgmID) {
     #if DEBUG
     const char** spotName = sSpotName;
@@ -453,7 +449,6 @@ void Z2SeqMgr::subBgmStart(u32 bgmID) {
     #endif
 }
 
-/* 802AF884-802AF9D0 2AA1C4 014C+00 4/3 4/4 42/42 .text            subBgmStop__8Z2SeqMgrFv */
 void Z2SeqMgr::subBgmStop() {
     switch (getSubBgmID()) {
     case Z2BGM_ITEM_GET:
@@ -548,7 +543,6 @@ void Z2SeqMgr::subBgmStop() {
     #endif
 }
 
-/* 802AF9D0-802AFB94 2AA310 01C4+00 2/2 0/0 0/0 .text            subBgmStopInner__8Z2SeqMgrFv */
 void Z2SeqMgr::subBgmStopInner() {
     if (field_0xb8 == -1) {
         return;
@@ -589,7 +583,6 @@ void Z2SeqMgr::subBgmStopInner() {
     field_0xb8 = -1;
 }
 
-/* 802AFB94-802AFDEC 2AA4D4 0258+00 1/1 3/3 46/46 .text            bgmStreamPrepare__8Z2SeqMgrFUl */
 void Z2SeqMgr::bgmStreamPrepare(u32 bgmID) {
     if (mStreamBgmHandle) {
         bgmStreamStop(0);
@@ -635,7 +628,6 @@ void Z2SeqMgr::bgmStreamPrepare(u32 bgmID) {
 }
 
 
-/* 802AFDEC-802AFE18 2AA72C 002C+00 0/0 1/1 0/0 .text            bgmStreamCheckReady__8Z2SeqMgrFv */
 bool Z2SeqMgr::bgmStreamCheckReady() {
     if (mStreamBgmHandle) {
         return mStreamBgmHandle->isPrepared();
@@ -644,7 +636,6 @@ bool Z2SeqMgr::bgmStreamCheckReady() {
     }
 }
 
-/* 802AFE18-802AFEDC 2AA758 00C4+00 1/1 4/4 46/46 .text            bgmStreamPlay__8Z2SeqMgrFv */
 void Z2SeqMgr::bgmStreamPlay() {
     if (mStreamBgmHandle) {
         mStreamBgmHandle->unlockIfLocked();
@@ -666,7 +657,6 @@ void Z2SeqMgr::bgmStreamPlay() {
     #endif
 }
 
-/* 802AFEDC-802AFF8C 2AA81C 00B0+00 2/2 1/1 27/27 .text            bgmStreamStop__8Z2SeqMgrFUl */
 void Z2SeqMgr::bgmStreamStop(u32 fadeTime) {
     if (getStreamBgmID() == 0x200003f || getStreamBgmID() == 0x200005c) {
         Z2GetStatusMgr()->setDemoName("force_end");
@@ -679,7 +669,6 @@ void Z2SeqMgr::bgmStreamStop(u32 fadeTime) {
     mStreamBgmHandle.releaseSound();
 }
 
-/* 802AFF8C-802B1DF4 2AA8CC 1E68+00 5/4 8/7 26/26 .text            changeBgmStatus__8Z2SeqMgrFl */
 void Z2SeqMgr::changeBgmStatus(s32 status) {
     if (!mMainBgmHandle) {
         return;
@@ -1130,8 +1119,6 @@ void Z2SeqMgr::changeBgmStatus(s32 status) {
     mBgmStatus = status & 0xff;
 }
 
-/* 802B1DF4-802B299C 2AC734 0BA8+00 2/2 3/3 31/31 .text            changeSubBgmStatus__8Z2SeqMgrFl
- */
 void Z2SeqMgr::changeSubBgmStatus(s32 status) {
     if (!mSubBgmHandle) {
         return;
@@ -1309,7 +1296,6 @@ void Z2SeqMgr::changeSubBgmStatus(s32 status) {
     mSubBgmStatus = status & 0xff;
 }
 
-/* 802B299C-802B2A88 2AD2DC 00EC+00 0/0 1/1 0/0 .text            onVariantBgmJumpEnd__8Z2SeqMgrFb */
 void Z2SeqMgr::onVariantBgmJumpEnd(bool param_0) {
     if (param_0) {
         u32 moveTime = 0;
@@ -1328,7 +1314,6 @@ void Z2SeqMgr::onVariantBgmJumpEnd(bool param_0) {
     Z2GetSoundMgr()->getSeqMgr()->mixOut();
 }
 
-/* 802B2A88-802B2CA4 2AD3C8 021C+00 1/1 0/0 9/9 .text            changeFishingBgm__8Z2SeqMgrFl */
 void Z2SeqMgr::changeFishingBgm(s32 param_0) {
     switch (param_0) {
     case 0:
@@ -1356,7 +1341,6 @@ void Z2SeqMgr::changeFishingBgm(s32 param_0) {
     }
 }
 
-/* 802B2CA4-802B2D64 2AD5E4 00C0+00 0/0 1/1 0/0 .text            talkInBgm__8Z2SeqMgrFv */
 void Z2SeqMgr::talkInBgm() {
     if (getStreamBgmID() == 0x2000038 || getStreamBgmID() == 0x200007c || getMainBgmID() == Z2BGM_WCS_D01) {
         return;
@@ -1365,22 +1349,18 @@ void Z2SeqMgr::talkInBgm() {
     mBgmPause.move(Z2Param::VOL_BGM_TALKING, 2);
 }
 
-/* 802B2D64-802B2DAC 2AD6A4 0048+00 0/0 1/1 0/0 .text            talkOutBgm__8Z2SeqMgrFv */
 void Z2SeqMgr::talkOutBgm() {
     mBgmPause.move(Z2Param::VOL_BGM_DEFAULT, 2);
 }
 
-/* 802B2DAC-802B2DF4 2AD6EC 0048+00 0/0 1/1 0/0 .text            menuInBgm__8Z2SeqMgrFv */
 void Z2SeqMgr::menuInBgm() {
     mBgmPause.move(Z2Param::VOL_BGM_PAUSING, 2);
 }
 
-/* 802B2DF4-802B2E3C 2AD734 0048+00 0/0 1/1 0/0 .text            menuOutBgm__8Z2SeqMgrFv */
 void Z2SeqMgr::menuOutBgm() {
     mBgmPause.move(Z2Param::VOL_BGM_DEFAULT, 2);
 }
 
-/* 802B2E3C-802B327C 2AD77C 0440+00 1/1 0/0 0/0 .text            fanfareFramework__8Z2SeqMgrFv */
 void Z2SeqMgr::fanfareFramework() {
     switch (mFanfareID) {
     case Z2BGM_OPEN_BOX:
@@ -1454,7 +1434,6 @@ void Z2SeqMgr::fanfareFramework() {
     }
 }
 
-/* 802B327C-802B3318 2ADBBC 009C+00 2/0 1/1 0/0 .text            stopWolfHowlSong__8Z2SeqMgrFv */
 void Z2SeqMgr::stopWolfHowlSong() {
     switch (mFanfareID) {
     case Z2BGM_HOWL_TOBIKUSA:
@@ -1499,7 +1478,6 @@ void Z2SeqMgr::stopWolfHowlSong() {
     }
 }
 
-/* 802B3318-802B3398 2ADC58 0080+00 0/0 1/1 0/0 .text            setHeightVolMod__8Z2SeqMgrFbUl */
 void Z2SeqMgr::setHeightVolMod(bool isVolMod, u32 fadeTime) {
     mFlags.mHeightVolMod = isVolMod;
     if (!isVolMod) {
@@ -1507,21 +1485,16 @@ void Z2SeqMgr::setHeightVolMod(bool isVolMod, u32 fadeTime) {
     }
 }
 
-/* 802B3398-802B33A8 2ADCD8 0010+00 0/0 1/1 0/0 .text            setTimeProcVolMod__8Z2SeqMgrFbUl */
 void Z2SeqMgr::setTimeProcVolMod(bool isVolMod, u32 fadeTime) {
     mFlags.mTimeProcVolMod = isVolMod;
 }
 
-/* 80450870-80450874 0002F0 0004+00 1/1 0/0 0/0 .sdata           sDeathMtBottom */
 static f32 sDeathMtBottom = -1000.0f;
 
-/* 80450874-80450878 0002F4 0004+00 1/1 0/0 0/0 .sdata           sDeathMtTop */
 static f32 sDeathMtTop = 3650.0f;
 
-/* 80450878-80450880 0002F8 0004+04 1/1 0/0 0/0 .sdata           sUnderWaterDepthMax */
 static f32 sUnderWaterDepthMax = 3500.0f;
 
-/* 802B33A8-802B3EAC 2ADCE8 0B04+00 0/0 1/1 0/0 .text            processBgmFramework__8Z2SeqMgrFv */
 void Z2SeqMgr::processBgmFramework() {
     fanfareFramework();
     battleBgmFramework();
@@ -1673,7 +1646,6 @@ void Z2SeqMgr::processBgmFramework() {
     setWindStoneVol(1.0f, 30);
 }
 
-/* 802B3EAC-802B3F40 2AE7EC 0094+00 0/0 2/2 0/0 .text            checkBgmIDPlaying__8Z2SeqMgrFUl */
 bool Z2SeqMgr::checkBgmIDPlaying(u32 bgmID) {
     if (getMainBgmID() == bgmID) {
         return true;
@@ -1690,8 +1662,6 @@ bool Z2SeqMgr::checkBgmIDPlaying(u32 bgmID) {
     return false;
 }
 
-/* 802B3F40-802B3FEC 2AE880 00AC+00 1/1 0/0 0/0 .text
- * getChildTrackVolume__8Z2SeqMgrFP14JAISoundHandlei            */
 f32 Z2SeqMgr::getChildTrackVolume(JAISoundHandle* handle, int trackId) {
     f32 volume = 0.0f;
     if (*handle) {
@@ -1707,8 +1677,6 @@ f32 Z2SeqMgr::getChildTrackVolume(JAISoundHandle* handle, int trackId) {
     return volume;
 }
 
-/* 802B3FEC-802B4128 2AE92C 013C+00 9/9 2/2 0/0 .text
- * setChildTrackVolume__8Z2SeqMgrFP14JAISoundHandleifUlff       */
 void Z2SeqMgr::setChildTrackVolume(JAISoundHandle* handle, int trackId, f32 volume,
                                    u32 moveTime, f32 pan, f32 dolby) {
     if (!*handle) {
@@ -1745,15 +1713,12 @@ void Z2SeqMgr::setChildTrackVolume(JAISoundHandle* handle, int trackId, f32 volu
     }
 }
 
-/* 802B4128-802B4164 2AEA68 003C+00 1/1 1/1 0/0 .text            resetBattleBgmParams__8Z2SeqMgrFv
- */
 void Z2SeqMgr::resetBattleBgmParams() {
     if (Z2GetSoundObjMgr() != NULL) {
         Z2GetSoundObjMgr()->setForceBattleArea(false, 700, 1100, 1500);
     }
 }
 
-/* 802B4164-802B421C 2AEAA4 00B8+00 4/4 3/3 10/10 .text            setBattleBgmOff__8Z2SeqMgrFb */
 void Z2SeqMgr::setBattleBgmOff(bool isBgmOff) {
     if (mFlags.mBattleBgmOff != isBgmOff && isBgmOff &&
         (getSubBgmID() == Z2BGM_BATTLE_NORMAL || getSubBgmID() == Z2BGM_BATTLE_TWILIGHT))
@@ -1764,7 +1729,6 @@ void Z2SeqMgr::setBattleBgmOff(bool isBgmOff) {
     mFlags.mBattleBgmOff = isBgmOff;
 }
 
-/* 802B421C-802B43D0 2AEB5C 01B4+00 0/0 1/1 0/0 .text            setBattleSearched__8Z2SeqMgrFb */
 void Z2SeqMgr::setBattleSearched(bool isBattleSearched) {
     if (!mFlags.mBattleBgmOff && Z2GetSceneMgr()->isSceneExist()
         && mFlags.mBattleSearched != isBattleSearched && mBattleSeqState != 3)
@@ -1786,12 +1750,10 @@ void Z2SeqMgr::setBattleSearched(bool isBattleSearched) {
     }
 }
 
-/* 802B43D0-802B43E0 2AED10 0010+00 3/3 0/0 0/0 .text            setBattleDistIgnore__8Z2SeqMgrFb */
 void Z2SeqMgr::setBattleDistIgnore(bool isBattleDistIgnore) {
     mFlags.mBattleDistIgnore = isBattleDistIgnore;
 }
 
-/* 802B43E0-802B4498 2AED20 00B8+00 0/0 2/2 0/0 .text            setBattleGhostMute__8Z2SeqMgrFb */
 void Z2SeqMgr::setBattleGhostMute(bool isBattleGhostMute) {
     if (getSubBgmID() == Z2BGM_BATTLE_NORMAL) {
         if (isBattleGhostMute) {
@@ -1802,7 +1764,6 @@ void Z2SeqMgr::setBattleGhostMute(bool isBattleGhostMute) {
     }
 }
 
-/* 802B4498-802B4844 2AEDD8 03AC+00 0/0 1/1 0/0 .text            setBattleDistState__8Z2SeqMgrFUc */
 void Z2SeqMgr::setBattleDistState(u8 state) {
     if (!mFlags.mBattleBgmOff && Z2GetSceneMgr()->isSceneExist()) {
         if (!mFlags.mBattleDistIgnore) {
@@ -1873,7 +1834,6 @@ void Z2SeqMgr::setBattleDistState(u8 state) {
     }
 }
 
-/* 802B4844-802B4AFC 2AF184 02B8+00 1/1 3/3 1/1 .text            setBattleSeqState__8Z2SeqMgrFUc */
 void Z2SeqMgr::setBattleSeqState(u8 state) {
     if (!mFlags.mBattleBgmOff && Z2GetSceneMgr()->isSceneExist() && mBattleSeqState != state) {
         if (state == 0) {
@@ -1913,7 +1873,6 @@ void Z2SeqMgr::setBattleSeqState(u8 state) {
     }
 }
 
-/* 802B4AFC-802B4BD0 2AF43C 00D4+00 0/0 4/4 0/0 .text            setBattleLastHit__8Z2SeqMgrFUc */
 void Z2SeqMgr::setBattleLastHit(u8 lastHit) {
     if (getSubBgmID() == Z2BGM_BATTLE_NORMAL) {
         setBattleDistIgnore(true);
@@ -1923,7 +1882,6 @@ void Z2SeqMgr::setBattleLastHit(u8 lastHit) {
     }
 }
 
-/* 802B4BD0-802B4EB0 2AF510 02E0+00 1/1 0/0 0/0 .text            battleBgmFramework__8Z2SeqMgrFv */
 void Z2SeqMgr::battleBgmFramework() {
     if (getSubBgmID() == Z2BGM_BATTLE_NORMAL || getSubBgmID() == Z2BGM_BATTLE_TWILIGHT) {
         if (mBattleSeqCount != 0) {
@@ -1971,7 +1929,6 @@ void Z2SeqMgr::battleBgmFramework() {
     }
 }
 
-/* 802B4EB0-802B5204 2AF7F0 0354+00 1/1 0/0 0/0 .text            startBattleBgm__8Z2SeqMgrFb */
 void Z2SeqMgr::startBattleBgm(bool isFadeIn) {
     if (!mFlags.mBattleBgmOff && Z2GetSceneMgr()->isSceneExist()
         && mBattleSeqState == 0 && (mFlags.mBattleDistIgnore || mBattleDistState <= 1))
@@ -2031,7 +1988,6 @@ void Z2SeqMgr::startBattleBgm(bool isFadeIn) {
     }
 }
 
-/* 802B5204-802B545C 2AFB44 0258+00 3/3 1/1 0/0 .text            stopBattleBgm__8Z2SeqMgrFUcUc */
 void Z2SeqMgr::stopBattleBgm(u8 subFadeoutTime, u8 mainFadeinTime) {
     if (mBattleSeqCount == 0) {
         s16 ivar6 = 0;
@@ -2072,7 +2028,6 @@ void Z2SeqMgr::stopBattleBgm(u8 subFadeoutTime, u8 mainFadeinTime) {
     }
 }
 
-/* 802B545C-802B556C 2AFD9C 0110+00 1/1 0/0 0/0 .text            fieldBgmStart__8Z2SeqMgrFv */
 void Z2SeqMgr::fieldBgmStart() {
     if (Z2GetSceneMgr()->isSceneExist() && mFlags.mFieldBgmPlay) {
         if (Z2GetStatusMgr()->checkDayTime()) {
@@ -2096,7 +2051,6 @@ void Z2SeqMgr::fieldBgmStart() {
     }
 }
 
-/* 802B556C-802B5750 2AFEAC 01E4+00 3/3 0/0 0/0 .text            fieldRidingMute__8Z2SeqMgrFv */
 void Z2SeqMgr::fieldRidingMute() {
     if (Z2GetSceneMgr()->isSceneExist() && mMainBgmHandle) {
         f32 volume1, volume2;
@@ -2122,13 +2076,11 @@ void Z2SeqMgr::fieldRidingMute() {
     }
 }
 
-/* 802B5750-802B579C 2B0090 004C+00 0/0 1/1 0/0 .text            onFieldBgmJumpStart__8Z2SeqMgrFv */
 void Z2SeqMgr::onFieldBgmJumpStart() {
     field_0xc8 = getChildTrackVolume(&mMainBgmHandle, 5);
     field_0xcc = getChildTrackVolume(&mMainBgmHandle, 12);
 }
 
-/* 802B579C-802B594C 2B00DC 01B0+00 0/0 1/1 0/0 .text            onFieldBgmJumpEnd__8Z2SeqMgrFv */
 void Z2SeqMgr::onFieldBgmJumpEnd() {
     setChildTrackVolume(&mMainBgmHandle, 5, field_0xc8, 0, -1.0f, -1.0f);
     setChildTrackVolume(&mMainBgmHandle, 6, field_0xc8, 0, -1.0f, -1.0f);
@@ -2150,7 +2102,6 @@ void Z2SeqMgr::onFieldBgmJumpEnd() {
     }
 }
 
-/* 802B594C-802B5E80 2B028C 0534+00 2/1 0/0 0/0 .text            fieldBgmFramework__8Z2SeqMgrFv */
 void Z2SeqMgr::fieldBgmFramework() {
     if (Z2GetSceneMgr()->isSceneExist() && !Z2GetSceneMgr()->isInDarkness()
         && (Z2GetSceneMgr()->getCurrentSceneNum() == Z2SCENE_HYRULE_FIELD || Z2GetSceneMgr()->getCurrentSceneNum() == Z2SCENE_CASTLE_TOWN_GATES)
@@ -2319,21 +2270,16 @@ void Z2SeqMgr::fieldBgmFramework() {
     }
 }
 
-/* 802B5E80-802B5E84 2B07C0 0004+00 1/1 0/0 0/0 .text            mbossBgmMuteProcess__8Z2SeqMgrFv */
 void Z2SeqMgr::mbossBgmMuteProcess() {}
 
-/* 802B5E84-802B5E88 2B07C4 0004+00 0/0 2/2 0/0 .text            bgmSetSwordUsing__8Z2SeqMgrFl */
 void Z2SeqMgr::bgmSetSwordUsing(s32 param_0) {}
 
-/* 802B5E88-802B5E8C 2B07C8 0004+00 0/0 1/1 0/0 .text            bgmNowBattle__8Z2SeqMgrFf */
 void Z2SeqMgr::bgmNowBattle(f32 param_0) {}
 
-/* 802B5E8C-802B5ED4 2B07CC 0048+00 0/0 1/1 0/0 .text            taktModeMute__8Z2SeqMgrFv */
 void Z2SeqMgr::taktModeMute() {
     mBgmPause.move(0.3f, 10);
 }
 
-/* 802B5ED4-802B5F1C 2B0814 0048+00 0/0 1/1 0/0 .text            taktModeMuteOff__8Z2SeqMgrFv */
 void Z2SeqMgr::taktModeMuteOff() {
     mBgmPause.fadeIn(10);
 }

@@ -8,17 +8,11 @@
 #include "d/actor/d_a_obj_burnbox.h"
 #include "d/d_com_inf_game.h"
 
-//
-// Declarations:
-//
-
-/* 8046E698-8046E6D4 000078 003C+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjBurnBox_cFv */
 void daObjBurnBox_c::initBaseMtx() {
     mpBoxModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 8046E6D4-8046E738 0000B4 0064+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjBurnBox_cFv */
 void daObjBurnBox_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -26,22 +20,18 @@ void daObjBurnBox_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* ############################################################################################## */
-/* 8046EE48-8046EE54 000000 000C+00 2/2 0/0 0/0 .rodata          l_bmd */
 const u32 l_bmd[3] = {
     0x04,
     0x04,
     0x03,
 };
 
-/* 8046EE54-8046EE60 00000C 000C+00 1/1 0/0 0/0 .rodata          l_heap_size */
 const u32 l_heap_size[3] = {
     0x0820,
     0x0C00,
     0x0820,
 };
 
-/* 8046EE60-8046EEA4 000018 0044+00 0/1 0/0 0/0 .rodata          l_cyl_src */
 const dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x1e}, {0x0, 0x1e}, 0x79}}, // mObj
@@ -56,7 +46,6 @@ const dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 8046E738-8046E8BC 000118 0184+00 1/0 0/0 0/0 .text            Create__14daObjBurnBox_cFv */
 int daObjBurnBox_c::Create() {
     static const u16 particle_id[5] = {
         0x8526, 0x8527, 0x8528, 0x8529, 0x8746,
@@ -90,15 +79,12 @@ int daObjBurnBox_c::Create() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 8046EED4-8046EEE0 -00001 000C+00 3/3 0/0 0/0 .data            l_arcName */
 const char* l_arcName[3] = {
     "Kkiba_00", // crate
     "Kkiba_00",
     "J_taru00", // barrel
 };
 
-/* 8046E8BC-8046E93C 00029C 0080+00 1/0 0/0 0/0 .text            CreateHeap__14daObjBurnBox_cFv */
 int daObjBurnBox_c::CreateHeap() {
     u8 type = getType();
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(l_arcName[type], l_bmd[type]);
@@ -111,7 +97,6 @@ int daObjBurnBox_c::CreateHeap() {
     return 1;
 }
 
-/* 8046E93C-8046E9EC 00031C 00B0+00 1/1 0/0 0/0 .text            create1st__14daObjBurnBox_cFv */
 cPhs__Step daObjBurnBox_c::create1st() {
     cPhs__Step phaseStep = (cPhs__Step) dComIfG_resLoad(&mPhaseReq, l_arcName[getType()]);
     if (phaseStep == cPhs_COMPLEATE_e) {
@@ -132,8 +117,6 @@ cPhs__Step daObjBurnBox_c::create1st() {
     return phaseStep;
 }
 
-/* 8046E9EC-8046EABC 0003CC 00D0+00 1/0 0/0 0/0 .text            Execute__14daObjBurnBox_cFPPA3_A4_f
- */
 int daObjBurnBox_c::Execute(Mtx** mtx) {
     field_0x724++;
     if (field_0x724 % 3 == 0) {
@@ -156,7 +139,6 @@ int daObjBurnBox_c::Execute(Mtx** mtx) {
     return 1;
 }
 
-/* 8046EABC-8046EC10 00049C 0154+00 1/0 0/0 0/0 .text            Draw__14daObjBurnBox_cFv */
 int daObjBurnBox_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpBoxModel, &tevStr);
@@ -180,46 +162,34 @@ int daObjBurnBox_c::Draw() {
     return 1;
 }
 
-/* 8046EC10-8046EC50 0005F0 0040+00 1/0 0/0 0/0 .text            Delete__14daObjBurnBox_cFv */
 int daObjBurnBox_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName[getType()]);
     return 1;
 }
 
-/* 8046EC50-8046ED44 000630 00F4+00 1/0 0/0 0/0 .text daObjBurnBox_create1st__FP14daObjBurnBox_c
- */
 int daObjBurnBox_create1st(daObjBurnBox_c* i_this) {
     fopAcM_ct(i_this, daObjBurnBox_c);
     return i_this->create1st();
 }
 
-/* 8046EDD4-8046EDF4 0007B4 0020+00 1/0 0/0 0/0 .text
- * daObjBurnBox_MoveBGDelete__FP14daObjBurnBox_c                */
 int daObjBurnBox_MoveBGDelete(daObjBurnBox_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 8046EDF4-8046EE14 0007D4 0020+00 1/0 0/0 0/0 .text
- * daObjBurnBox_MoveBGExecute__FP14daObjBurnBox_c               */
 int daObjBurnBox_MoveBGExecute(daObjBurnBox_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 8046EE14-8046EE40 0007F4 002C+00 1/0 0/0 0/0 .text daObjBurnBox_MoveBGDraw__FP14daObjBurnBox_c
- */
 int daObjBurnBox_MoveBGDraw(daObjBurnBox_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* ############################################################################################## */
-/* 8046EEE0-8046EF00 -00001 0020+00 1/0 0/0 0/0 .data            daObjBurnBox_METHODS */
 actor_method_class daObjBurnBox_METHODS = {
     (process_method_func) daObjBurnBox_create1st,     (process_method_func)daObjBurnBox_MoveBGDelete,
     (process_method_func) daObjBurnBox_MoveBGExecute, NULL,
     (process_method_func) daObjBurnBox_MoveBGDraw,
 };
 
-/* 8046EF00-8046EF30 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_BurnBox */
 extern actor_process_profile_definition g_profile_Obj_BurnBox = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

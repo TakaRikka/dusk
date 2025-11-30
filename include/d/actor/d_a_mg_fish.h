@@ -113,8 +113,8 @@ STATIC_ASSERT(sizeof(mg_fish_class) == 0xC50);
 
 class daMg_Fish_HIO_c {
 public:
-    /* 80529D2C */ daMg_Fish_HIO_c();
-    /* 805360A8 */ virtual ~daMg_Fish_HIO_c() {}
+    daMg_Fish_HIO_c();
+    virtual ~daMg_Fish_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 field_0x8;

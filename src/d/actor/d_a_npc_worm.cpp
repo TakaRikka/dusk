@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_worm.h"
-#include "dol2asm.h"
 
-/* 80B2DE78-80B2DF4C 000078 00D4+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* joint, int param_2) {
     if (param_2 == 0) {
         int jntNo = joint->getJntNo();
@@ -24,8 +22,6 @@ static int nodeCallBack(J3DJoint* joint, int param_2) {
     return 1;
 }
 
-/* 80B2DF4C-80B2E044 00014C 00F8+00 1/0 0/0 0/0 .text            daNPC_WORM_Draw__FP14npc_worm_class
- */
 static int daNPC_WORM_Draw(npc_worm_class* i_this) {
     g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
     if (i_this->field_0x5d4 > 0.01f) {
@@ -47,8 +43,6 @@ static int daNPC_WORM_Draw(npc_worm_class* i_this) {
     return 1;
 }
 
-/* 80B2E044-80B2E2C4 000244 0280+00 1/1 0/0 0/0 .text            npc_worm_ground__FP14npc_worm_class
- */
 static void npc_worm_ground(npc_worm_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     BOOL bVar2 = FALSE;
@@ -83,8 +77,6 @@ static void npc_worm_ground(npc_worm_class* i_this) {
     }
 }
 
-/* 80B2E2C4-80B2E544 0004C4 0280+00 1/1 0/0 0/0 .text            npc_worm_normal__FP14npc_worm_class
- */
 static void npc_worm_normal(npc_worm_class* i_this) {
     fopAc_ac_c* a_this = i_this;
     switch(i_this->field_0x5a8) {
@@ -138,8 +130,6 @@ static void npc_worm_normal(npc_worm_class* i_this) {
     cLib_addCalcAngleS2(&a_this->shape_angle.x, 0, 2, 0x800);
 }
 
-/* 80B2E544-80B2E678 000744 0134+00 1/1 0/0 0/0 .text            npc_worm_dive__FP14npc_worm_class
- */
 static void npc_worm_dive(npc_worm_class* i_this) {
     switch(i_this->field_0x5a8) {
     case 0:
@@ -171,7 +161,6 @@ static void npc_worm_dive(npc_worm_class* i_this) {
     cLib_addCalc2(&i_this->field_0x5d4, 1.0f, 0.1f, 0.02f);
 }
 
-/* 80B2E678-80B2E6C4 000878 004C+00 1/1 0/0 0/0 .text npc_worm_binwait__FP14npc_worm_class */
 static void npc_worm_binwait(npc_worm_class* i_this) {
     dComIfGp_getPlayer(0);
     switch(i_this->field_0x5a8) {
@@ -188,7 +177,6 @@ static void npc_worm_binwait(npc_worm_class* i_this) {
     }
 }
 
-/* 80B2E6C4-80B2EBF4 0008C4 0530+00 1/1 0/0 0/0 .text            action__FP14npc_worm_class */
 static void action(npc_worm_class* i_this) {
     fopAc_ac_c* a_this = i_this;
     cXyz local_124;
@@ -304,7 +292,6 @@ static void action(npc_worm_class* i_this) {
     }
 }
 
-/* 80B2EBF4-80B2EDD0 000DF4 01DC+00 2/1 0/0 0/0 .text daNPC_WORM_Execute__FP14npc_worm_class */
 static int daNPC_WORM_Execute(npc_worm_class* i_this) {
     i_this->field_0x5a4++;
     for (int i = 0; i < 2; i++) {
@@ -340,19 +327,16 @@ static int daNPC_WORM_Execute(npc_worm_class* i_this) {
     return 1;
 }
 
-/* 80B2EDD0-80B2EDD8 000FD0 0008+00 1/0 0/0 0/0 .text daNPC_WORM_IsDelete__FP14npc_worm_class */
 static int daNPC_WORM_IsDelete(npc_worm_class* i_this) {
     return 1;
 }
 
-/* 80B2EDD8-80B2EE08 000FD8 0030+00 1/0 0/0 0/0 .text daNPC_WORM_Delete__FP14npc_worm_class */
 static int daNPC_WORM_Delete(npc_worm_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "Alink");
     return 1;
 }
 
-/* 80B2EE08-80B2EEC0 001008 00B8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     npc_worm_class* i_this = (npc_worm_class*)a_this;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Alink", 0x30);
@@ -370,8 +354,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80B2EEC0-80B2F050 0010C0 0190+00 1/0 0/0 0/0 .text            daNPC_WORM_Create__FP10fopAc_ac_c
- */
 static int daNPC_WORM_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, npc_worm_class);
     npc_worm_class* i_this = (npc_worm_class*)a_this;
@@ -410,7 +392,6 @@ static int daNPC_WORM_Create(fopAc_ac_c* a_this) {
     return rv;
 }
 
-/* 80B2F12C-80B2F14C -00001 0020+00 1/0 0/0 0/0 .data            l_daNPC_WORM_Method */
 static actor_method_class l_daNPC_WORM_Method = {
     (process_method_func)daNPC_WORM_Create,
     (process_method_func)daNPC_WORM_Delete,
@@ -419,7 +400,6 @@ static actor_method_class l_daNPC_WORM_Method = {
     (process_method_func)daNPC_WORM_Draw,
 };
 
-/* 80B2F14C-80B2F17C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_WORM */
 extern actor_process_profile_definition g_profile_NPC_WORM = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

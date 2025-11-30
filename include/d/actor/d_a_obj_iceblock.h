@@ -37,39 +37,39 @@ public:
         ACTION_DEAD_e,
     };
 
-    /* 80C21CD8 */ static void PPCallBack(fopAc_ac_c*, fopAc_ac_c*, s16, dBgW_Base::PushPullLabel);
-    /* 80C21DC4 */ void initBaseMtx();
-    /* 80C21E24 */ void setBaseMtx();
-    /* 80C21EA4 */ u16 getPointNo();
-    /* 80C21F2C */ void loadCurrentPos();
-    /* 80C21FC8 */ int saveCurrentPos();
-    /* 80C22200 */ void enablePushPull();
-    /* 80C2224C */ void disablePushPull();
-    /* 80C227F4 */ int create1st();
-    /* 80C2294C */ int checkWalk();
-    /* 80C22B04 */ void clrCounter();
-    /* 80C22B28 */ void mode_proc_call();
-    /* 80C22EF8 */ void mode_init_wait();
-    /* 80C22F74 */ void mode_proc_wait();
-    /* 80C23058 */ void mode_init_walk();
-    /* 80C23088 */ void mode_proc_walk();
-    /* 80C23388 */ void setEffect();
-    /* 80C2350C */ int checkWallPre(s16);
-    /* 80C236C8 */ int checkBgHit();
-    /* 80C237B0 */ void bgCheck();
-    /* 80C23860 */ void init_bgCheck();
-    /* 80C238B0 */ BOOL checkFall();
-    /* 80C23A50 */ void event_proc_call();
-    /* 80C23B0C */ void actionWait();
-    /* 80C23B70 */ void actionOrderEvent();
-    /* 80C23C1C */ void actionEvent();
-    /* 80C23CA0 */ void actionDead();
+    static void PPCallBack(fopAc_ac_c*, fopAc_ac_c*, s16, dBgW_Base::PushPullLabel);
+    void initBaseMtx();
+    void setBaseMtx();
+    u16 getPointNo();
+    void loadCurrentPos();
+    int saveCurrentPos();
+    void enablePushPull();
+    void disablePushPull();
+    int create1st();
+    int checkWalk();
+    void clrCounter();
+    void mode_proc_call();
+    void mode_init_wait();
+    void mode_proc_wait();
+    void mode_init_walk();
+    void mode_proc_walk();
+    void setEffect();
+    int checkWallPre(s16);
+    int checkBgHit();
+    void bgCheck();
+    void init_bgCheck();
+    BOOL checkFall();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
 
-    /* 80C22618 */ virtual int CreateHeap();
-    /* 80C22298 */ virtual int Create();
-    /* 80C228B4 */ virtual int Execute(Mtx**);
-    /* 80C23CA4 */ virtual int Draw();
-    /* 80C23DA8 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     int getPathId() { return fopAcM_GetParamBit(this, 8, 8); }

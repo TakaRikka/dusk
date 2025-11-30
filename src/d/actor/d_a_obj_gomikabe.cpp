@@ -12,10 +12,8 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
 
-/* 80BFFD30-80BFFD34 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "GomiKabe";
 
-/* 80BFE22C-80BFE244 0000EC 0018+00 1/1 0/0 0/0 .text            __ct__19daObjGOMIKABE_HIO_cFv */
 daObjGOMIKABE_HIO_c::daObjGOMIKABE_HIO_c() {
     mId = -1;
 }
@@ -27,8 +25,6 @@ void daObjGOMIKABE_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 80BFE244-80BFE2CC 000104 0088+00 1/1 0/0 0/0 .text            initCcCylinder__15daObjGOMIKABE_cFv
- */
 void daObjGOMIKABE_c::initCcCylinder() {
     const static dCcD_SrcSph ccSphSrc = {
         {
@@ -50,7 +46,6 @@ void daObjGOMIKABE_c::initCcCylinder() {
     }
 }
 
-/* 80BFE2CC-80BFE3FC 00018C 0130+00 1/1 0/0 0/0 .text            SetCcCyl__15daObjGOMIKABE_cFv */
 void daObjGOMIKABE_c::SetCcCyl() {
     cXyz offset(-200.0f, 0.0f, 0.0f);
     cXyz sphCenter(0.0f, 0.0f, 0.0f);
@@ -63,18 +58,15 @@ void daObjGOMIKABE_c::SetCcCyl() {
     }
 }
 
-/* 80BFE438-80BFE458 0002F8 0020+00 1/0 0/0 0/0 .text daObjGOMIKABE_Create__FP10fopAc_ac_c */
 static int daObjGOMIKABE_Create(fopAc_ac_c* i_this) {
     return ((daObjGOMIKABE_c*)i_this)->create();
 }
 
-/* 80BFE458-80BFE47C 000318 0024+00 1/0 0/0 0/0 .text daObjGOMIKABE_Delete__FP15daObjGOMIKABE_c */
 static int daObjGOMIKABE_Delete(daObjGOMIKABE_c* i_this) {
     i_this->MoveBGDelete();
     return 1;
 }
 
-/* 80BFE47C-80BFE4C4 00033C 0048+00 1/1 0/0 0/0 .text            WaitAction__15daObjGOMIKABE_cFv */
 void daObjGOMIKABE_c::WaitAction() {
     cXyz cStack_28(current.pos.x, current.pos.y + 300.0f, current.pos.z);
     f32 height = current.pos.y;
@@ -83,7 +75,6 @@ void daObjGOMIKABE_c::WaitAction() {
     }
 }
 
-/* 80BFE4C4-80BFE52C 000384 0068+00 1/1 0/0 0/0 .text            BreakChk__15daObjGOMIKABE_cFv */
 void daObjGOMIKABE_c::BreakChk() {
     for (int i = 0; i < 3; i++) {
         if (mSphs[i].ChkTgHit()) {
@@ -93,7 +84,6 @@ void daObjGOMIKABE_c::BreakChk() {
     }
 }
 
-/* 80BFE52C-80BFEA24 0003EC 04F8+00 1/1 0/0 1/1 .text            BreakSet__15daObjGOMIKABE_cFv */
 void daObjGOMIKABE_c::BreakSet() {
     cXyz local_78(0.0f, 0.0f, 0.0f);
     cXyz cStack_84;
@@ -139,8 +129,6 @@ void daObjGOMIKABE_c::BreakSet() {
     }
 }
 
-/* 80BFEA60-80BFEB90 000920 0130+00 1/1 0/0 0/0 .text
- * getWaterStream__15daObjGOMIKABE_cFR4cXyzR4cXyzf              */
 void daObjGOMIKABE_c::getWaterStream(cXyz& param_1, cXyz& param_2, f32 i_scale) {
     mGndChk.SetPos(&param_1);
     cXyz local_48;
@@ -161,7 +149,6 @@ static f64 dummyLiteral3() { return 0.0; }
 static f32 dummyLiteral4() { return 2.0f; }
 static f32 dummyLiteral5() { return 3000.0f; }
 
-/* 80BFEB90-80BFED54 000A50 01C4+00 1/1 0/0 0/0 .text            SpeedSet__15daObjGOMIKABE_cFv */
 void daObjGOMIKABE_c::SpeedSet() {
     cXyz acStack_28;
     cXyz cStack_34;
@@ -194,12 +181,10 @@ void daObjGOMIKABE_c::SpeedSet() {
     }
 }
 
-/* 80BFED54-80BFED74 000C14 0020+00 1/1 0/0 0/0 .text            BreakAction__15daObjGOMIKABE_cFv */
 void daObjGOMIKABE_c::BreakAction() {
     SpeedSet();
 }
 
-/* 80BFED74-80BFEE24 000C34 00B0+00 1/1 0/0 0/0 .text            CheckCull__15daObjGOMIKABE_cFv */
 void daObjGOMIKABE_c::CheckCull() {
     if (fopAcM_searchPlayerDistance(this) > 7000.0f) {
         int notInViewNum = 0;
@@ -214,7 +199,6 @@ void daObjGOMIKABE_c::CheckCull() {
     }
 }
 
-/* 80BFEE24-80BFEEA8 000CE4 0084+00 1/1 0/0 0/0 .text checkViewArea__15daObjGOMIKABE_cF4cXyz */
 bool daObjGOMIKABE_c::checkViewArea(cXyz param_1) {
     Vec local_24;
     mDoLib_project(&param_1, &local_24);
@@ -226,7 +210,6 @@ bool daObjGOMIKABE_c::checkViewArea(cXyz param_1) {
     return rv;
 }
 
-/* 80BFEEA8-80BFEF20 000D68 0078+00 1/1 0/0 0/0 .text            Action__15daObjGOMIKABE_cFv */
 void daObjGOMIKABE_c::Action() {
     switch (mAction) {
     case ACTION_WAIT:
@@ -243,7 +226,6 @@ void daObjGOMIKABE_c::Action() {
     }
 }
 
-/* 80BFEF20-80BFEF84 000DE0 0064+00 1/1 0/0 0/0 .text            setBaseMtx__15daObjGOMIKABE_cFv */
 void daObjGOMIKABE_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -252,7 +234,6 @@ void daObjGOMIKABE_c::setBaseMtx() {
     cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80BFEF84-80BFF018 000E44 0094+00 2/2 0/0 0/0 .text            setBaseMtx2__15daObjGOMIKABE_cFv */
 void daObjGOMIKABE_c::setBaseMtx2() {
     for (int i = 0; i < 4; i++) {
         mDoMtx_stack_c::transS(mBreakPositions[i]);
@@ -262,18 +243,14 @@ void daObjGOMIKABE_c::setBaseMtx2() {
     }
 }
 
-/* 80BFF018-80BFF044 000ED8 002C+00 1/0 0/0 0/0 .text daObjGOMIKABE_Draw__FP15daObjGOMIKABE_c */
 static int daObjGOMIKABE_Draw(daObjGOMIKABE_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BFF044-80BFF064 000F04 0020+00 2/1 0/0 0/0 .text daObjGOMIKABE_Execute__FP15daObjGOMIKABE_c
- */
 static int daObjGOMIKABE_Execute(daObjGOMIKABE_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BFF064-80BFF164 000F24 0100+00 1/0 0/0 0/0 .text            CreateHeap__15daObjGOMIKABE_cFv */
 int daObjGOMIKABE_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "M_Gomikabe.bmd");
     JUT_ASSERT(250, modelData != NULL);
@@ -295,13 +272,10 @@ int daObjGOMIKABE_c::CreateHeap() {
     return 1;
 }
 
-/* 80BFFE08-80BFFE0C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool l_HIOInit;
 
-/* 80BFFE18-80BFFE20 000018 0008+00 2/2 0/0 0/0 .bss             l_HIO */
 static daObjGOMIKABE_HIO_c l_HIO;
 
-/* 80BFF164-80BFF5B4 001024 0450+00 1/1 0/0 0/0 .text            create__15daObjGOMIKABE_cFv */
 int daObjGOMIKABE_c::create() {
     fopAcM_ct(this, daObjGOMIKABE_c);
 
@@ -357,13 +331,10 @@ int daObjGOMIKABE_c::create() {
     return rv;
 }
 
-/* 80BFF8D0-80BFF8D8 001790 0008+00 1/0 0/0 0/0 .text daObjGOMIKABE_IsDelete__FP15daObjGOMIKABE_c
- */
 static int daObjGOMIKABE_IsDelete(daObjGOMIKABE_c* i_this) {
     return 1;
 }
 
-/* 80BFF8D8-80BFF938 001798 0060+00 1/0 0/0 0/0 .text            Create__15daObjGOMIKABE_cFv */
 int daObjGOMIKABE_c::Create() {
     fopAcM_setCullSizeBox(this, mBaseScale.x * -1000.0f, mBaseScale.y * -500.0f,
                           mBaseScale.z * -1000.0f, mBaseScale.x * 1000.0f, mBaseScale.y * 500.0f,
@@ -371,7 +342,6 @@ int daObjGOMIKABE_c::Create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80BFF938-80BFFA00 0017F8 00C8+00 1/0 0/0 0/0 .text Execute__15daObjGOMIKABE_cFPPA3_A4_f */
 int daObjGOMIKABE_c::Execute(Mtx** i_mtx) {
     for (int i = 0; i < 4; i++) {
         mBreakOldPositions[i] = mBreakPositions[i];
@@ -389,7 +359,6 @@ int daObjGOMIKABE_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80BFFA00-80BFFB1C 0018C0 011C+00 1/0 0/0 0/0 .text            Draw__15daObjGOMIKABE_cFv */
 int daObjGOMIKABE_c::Draw() {
     if (mAction == ACTION_WAIT) {
         g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
@@ -407,7 +376,6 @@ int daObjGOMIKABE_c::Draw() {
     return 1;
 }
 
-/* 80BFFB1C-80BFFB74 0019DC 0058+00 1/0 0/0 0/0 .text            Delete__15daObjGOMIKABE_cFv */
 int daObjGOMIKABE_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     if (mIsHIOOwner) {
@@ -417,7 +385,6 @@ int daObjGOMIKABE_c::Delete() {
     return 1;
 }
 
-/* 80BFFD34-80BFFD54 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjGOMIKABE_Method */
 static actor_method_class l_daObjGOMIKABE_Method = {
     (process_method_func)daObjGOMIKABE_Create,
     (process_method_func)daObjGOMIKABE_Delete,
@@ -426,7 +393,6 @@ static actor_method_class l_daObjGOMIKABE_Method = {
     (process_method_func)daObjGOMIKABE_Draw,
 };
 
-/* 80BFFD54-80BFFD84 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_GOMIKABE */
 extern actor_process_profile_definition g_profile_Obj_GOMIKABE = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

@@ -12,7 +12,6 @@
 
 static char* l_arcName = "L9Chand";
 
-/* 80BC8DA4-80BC8DE0 000060 003C+00 1/2 0/0 0/0 .data            s_exeProc__17daObjChandelier_c */
 daObjChandelier_proc daObjChandelier_c::s_exeProc[5] = {
     &daObjChandelier_c::exeModeWait,
     &daObjChandelier_c::exeModeStartSwg,
@@ -21,18 +20,14 @@ daObjChandelier_proc daObjChandelier_c::s_exeProc[5] = {
     &daObjChandelier_c::exeModeHookSwg,
 };
 
-/* 80BC7F38-80BC7F74 000078 003C+00 2/2 0/0 0/0 .text            __ct__17daObjChandelier_cFv */
 daObjChandelier_c::daObjChandelier_c() {
     /* empty function */
 }
 
-/* 80BC7F74-80BC8008 0000B4 0094+00 1/0 0/0 0/0 .text            __dt__17daObjChandelier_cFv */
 daObjChandelier_c::~daObjChandelier_c() {
     dComIfG_resDelete(this, l_arcName);
 }
 
-/* 80BC8008-80BC8078 000148 0070+00 1/0 0/0 0/0 .text            CreateHeap__17daObjChandelier_cFv
- */
 int daObjChandelier_c::CreateHeap() {
     J3DModelData* bmd = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     mpModel = mDoExt_J3DModel__create(bmd, 0x80000, 0x11000084);
@@ -42,7 +37,6 @@ int daObjChandelier_c::CreateHeap() {
     return 1;
 }
 
-/* 80BC8078-80BC8160 0001B8 00E8+00 1/0 0/0 0/0 .text            create1st__17daObjChandelier_cFv */
 cPhs__Step daObjChandelier_c::create1st() {
     fopAcM_ct(this, daObjChandelier_c);
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(this, l_arcName);
@@ -59,13 +53,11 @@ cPhs__Step daObjChandelier_c::create1st() {
     return step;
 }
 
-/* 80BC8160-80BC8194 0002A0 0034+00 1/0 0/0 0/0 .text            Delete__17daObjChandelier_cFv */
 int daObjChandelier_c::Delete() {
     this->~daObjChandelier_c();
     return 1;
 }
 
-/* 80BC8194-80BC8238 0002D4 00A4+00 1/0 0/0 0/0 .text            Draw__17daObjChandelier_cFv */
 int daObjChandelier_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -75,7 +67,6 @@ int daObjChandelier_c::Draw() {
     return 1;
 }
 
-/* 80BC8238-80BC82C0 000378 0088+00 1/0 0/0 0/0 .text Execute__17daObjChandelier_cFPPA3_A4_f */
 int daObjChandelier_c::Execute(Mtx** param_0) {
     if (s_exeProc[mMode] != NULL) {
         (this->*s_exeProc[mMode])();
@@ -85,8 +76,6 @@ int daObjChandelier_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80BC82C0-80BC834C 000400 008C+00 1/0 0/0 0/0 .text            exeModeWait__17daObjChandelier_cFv
- */
 void daObjChandelier_c::exeModeWait() {
     exeModeHookSwg();
     u8 sw = getSW_0();
@@ -100,7 +89,6 @@ void daObjChandelier_c::exeModeWait() {
     }
 }
 
-/* 80BC834C-80BC83E4 00048C 0098+00 1/0 0/0 0/0 .text exeModeStartSwg__17daObjChandelier_cFv */
 void daObjChandelier_c::exeModeStartSwg() {
     moveSwing(20.0f, 300.0f, 50.0f, 0.3f);
     if (mTimer >= 90) {
@@ -115,8 +103,6 @@ void daObjChandelier_c::exeModeStartSwg() {
     }
 }
 
-/* 80BC83E4-80BC84C0 000524 00DC+00 1/0 0/0 0/0 .text            exeModeDown__17daObjChandelier_cFv
- */
 void daObjChandelier_c::exeModeDown() {
     current.pos.y += speed.y;
     speed.y += gravity;
@@ -128,7 +114,6 @@ void daObjChandelier_c::exeModeDown() {
     }
 }
 
-/* 80BC84C0-80BC851C 000600 005C+00 1/0 0/0 0/0 .text exeModeEndSwg__17daObjChandelier_cFv */
 void daObjChandelier_c::exeModeEndSwg() {
     moveSwingFall();
     if (mTimer >= 60) {
@@ -140,7 +125,6 @@ void daObjChandelier_c::exeModeEndSwg() {
     }
 }
 
-/* 80BC851C-80BC85E4 00065C 00C8+00 2/1 0/0 0/0 .text exeModeHookSwg__17daObjChandelier_cFv */
 void daObjChandelier_c::exeModeHookSwg() {
     if (field_0x60a != 0 || fopAcM_checkHookCarryNow(this)) {
         f32 f1 = 10.0f;
@@ -161,7 +145,6 @@ void daObjChandelier_c::exeModeHookSwg() {
     field_0x60a = 0;
 }
 
-/* 80BC85E4-80BC86FC 000724 0118+00 1/1 0/0 0/0 .text            init__17daObjChandelier_cFv */
 void daObjChandelier_c::init() {
     mMode = MODE_WAIT;
     if (getArg_0() == 1) {
@@ -189,8 +172,6 @@ void daObjChandelier_c::init() {
     }
 }
 
-/* 80BC86FC-80BC8780 00083C 0084+00 2/2 0/0 0/0 .text            setModelMtx__17daObjChandelier_cFv
- */
 void daObjChandelier_c::setModelMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -199,8 +180,6 @@ void daObjChandelier_c::setModelMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80BC8780-80BC89B0 0008C0 0230+00 2/2 0/0 0/0 .text            moveSwing__17daObjChandelier_cFffff
- */
 void daObjChandelier_c::moveSwing(f32 param_0, f32 param_1, f32 param_2, f32 param_3) {
     f32 f1 = -param_1 + param_0 * field_0x5fc;
     shape_angle.z += (s16)(field_0x608 * (f1 * field_0x5ec));
@@ -225,7 +204,6 @@ void daObjChandelier_c::moveSwing(f32 param_0, f32 param_1, f32 param_2, f32 par
     field_0x5fc++;
 }
 
-/* 80BC89B0-80BC8B20 000AF0 0170+00 1/1 0/0 0/0 .text moveSwingFall__17daObjChandelier_cFv */
 void daObjChandelier_c::moveSwingFall() {
     static Vec TOP_POS_Y_OFFSET = { 0.0f, 3000.0f, 0.0f };
     cLib_chaseF(&field_0x5ec, 0.0f, 0.04f);
@@ -242,7 +220,6 @@ void daObjChandelier_c::moveSwingFall() {
     current.pos = vec1 + vec4;
 }
 
-/* 80BC8B20-80BC8B7C 000C60 005C+00 3/3 0/0 0/0 .text hookSwingInitParm__17daObjChandelier_cFv */
 void daObjChandelier_c::hookSwingInitParm() {
     field_0x5ec = 1.2f;
     field_0x5f0 = 0.7f;
@@ -254,32 +231,23 @@ void daObjChandelier_c::hookSwingInitParm() {
     field_0x5f8 = 5.0f;
 }
 
-/* 80BC8B7C-80BC8BDC 000CBC 0060+00 1/0 0/0 0/0 .text
- * daObjChandelier_create1st__FP17daObjChandelier_c             */
 static cPhs__Step daObjChandelier_create1st(daObjChandelier_c* i_this) {
     fopAcM_ct(i_this, daObjChandelier_c);
     return i_this->create1st();
 }
 
-/* 80BC8BDC-80BC8BFC 000D1C 0020+00 1/0 0/0 0/0 .text
- * daObjChandelier_MoveBGDelete__FP17daObjChandelier_c          */
 static int daObjChandelier_MoveBGDelete(daObjChandelier_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80BC8BFC-80BC8C1C 000D3C 0020+00 1/0 0/0 0/0 .text
- * daObjChandelier_MoveBGExecute__FP17daObjChandelier_c         */
 static int daObjChandelier_MoveBGExecute(daObjChandelier_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BC8C1C-80BC8C48 000D5C 002C+00 1/0 0/0 0/0 .text
- * daObjChandelier_MoveBGDraw__FP17daObjChandelier_c            */
 static int daObjChandelier_MoveBGDraw(daObjChandelier_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BC8DEC-80BC8E0C -00001 0020+00 1/0 0/0 0/0 .data            daObjChandelier_METHODS */
 static actor_method_class daObjChandelier_METHODS = {
     (process_method_func)daObjChandelier_create1st,
     (process_method_func)daObjChandelier_MoveBGDelete,
@@ -288,7 +256,6 @@ static actor_method_class daObjChandelier_METHODS = {
     (process_method_func)daObjChandelier_MoveBGDraw,
 };
 
-/* 80BC8E0C-80BC8E3C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Chandelier */
 extern actor_process_profile_definition g_profile_Obj_Chandelier = {
     fpcLy_CURRENT_e,
     3,

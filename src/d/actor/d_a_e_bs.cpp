@@ -10,8 +10,8 @@
 
 class daE_BS_HIO_c : public JORReflexible {
 public:
-    /* 8068E12C */ daE_BS_HIO_c();
-    /* 8069091C */ virtual ~daE_BS_HIO_c() {}
+    daE_BS_HIO_c();
+    virtual ~daE_BS_HIO_c() {}
 
     void genMessage(JORMContext* ctx);
 
@@ -32,7 +32,6 @@ enum daE_BS_ACTION {
     ACTION_DAMAGE,
 };
 
-/* 8068E12C-8068E178 0000EC 004C+00 1/1 0/0 0/0 .text            __ct__12daE_BS_HIO_cFv */
 daE_BS_HIO_c::daE_BS_HIO_c() {
     id = -1;
     base_size = 1.0f;
@@ -43,12 +42,10 @@ daE_BS_HIO_c::daE_BS_HIO_c() {
     battle_start_range = 200.0f;
 }
 
-/* 8068E178-8068E1F4 000138 007C+00 1/1 0/0 0/0 .text            wepon_anm_init__FP10e_bs_classi */
 static void wepon_anm_init(e_bs_class* i_this, int i_anm) {
     i_this->weponModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_BS", i_anm), 2, 5.0f, 1.0f, 0.0f, -1.0f, NULL);
 }
 
-/* 8068E1F4-8068E2D4 0001B4 00E0+00 5/5 0/0 0/0 .text            anm_init__FP10e_bs_classifUcf */
 static void anm_init(e_bs_class* i_this, int i_anm, f32 i_morf, u8 i_mode, f32 i_speed) {
     i_this->modelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_BS", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f);
     i_this->anm = i_anm;
@@ -60,7 +57,6 @@ static void anm_init(e_bs_class* i_this, int i_anm, f32 i_morf, u8 i_mode, f32 i
     }
 }
 
-/* 8068E2D4-8068E3D4 000294 0100+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -83,7 +79,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 8068E3D4-8068E4F0 000394 011C+00 1/0 0/0 0/0 .text            daE_BS_Draw__FP10e_bs_class */
 static int daE_BS_Draw(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -107,7 +102,6 @@ static int daE_BS_Draw(e_bs_class* i_this) {
     return 1;
 }
 
-/* 8068E4F0-8068E534 0004B0 0044+00 1/1 0/0 0/0 .text            player_way_check__FP10e_bs_class */
 static BOOL player_way_check(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -124,7 +118,6 @@ static BOOL player_way_check(e_bs_class* i_this) {
     return TRUE;
 }
 
-/* 8068E534-8068E644 0004F4 0110+00 1/1 0/0 0/0 .text            way_bg_check__FP10e_bs_classff */
 static BOOL way_bg_check(e_bs_class* i_this, f32 i_dist, f32 i_height) {
     fopAc_ac_c* actor = &i_this->enemy;
     dBgS_LinChk linchk;
@@ -150,7 +143,6 @@ static BOOL way_bg_check(e_bs_class* i_this, f32 i_dist, f32 i_height) {
     return FALSE;
 }
 
-/* 8068E644-8068E708 000604 00C4+00 2/2 0/0 0/0 .text            pl_check__FP10e_bs_classfs */
 static int pl_check(e_bs_class* i_this, f32 i_range, s16 i_angle) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -171,7 +163,6 @@ static int pl_check(e_bs_class* i_this, f32 i_range, s16 i_angle) {
     return 0;
 }
 
-/* 8068E708-8068E8C4 0006C8 01BC+00 1/1 0/0 0/0 .text            e_bs_appear__FP10e_bs_class */
 static void e_bs_appear(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -207,13 +198,10 @@ static void e_bs_appear(e_bs_class* i_this) {
     }
 }
 
-/* 80691090-80691094 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 806910A0-806910C0 000018 0020+00 6/6 0/0 0/0 .bss             l_HIO */
 static daE_BS_HIO_c l_HIO;
 
-/* 8068E8C4-8068EB50 000884 028C+00 1/1 0/0 0/0 .text            e_bs_normal__FP10e_bs_class */
 static void e_bs_normal(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp28;
@@ -275,7 +263,6 @@ static void e_bs_normal(e_bs_class* i_this) {
     }
 }
 
-/* 8068EB50-8068EF2C 000B10 03DC+00 2/1 0/0 0/0 .text            e_bs_fight_run__FP10e_bs_class */
 static void e_bs_fight_run(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp18;
@@ -366,7 +353,6 @@ static void e_bs_fight_run(e_bs_class* i_this) {
     i_this->field_0x6a8 = 1;
 }
 
-/* 8068EF2C-8068EF8C 000EEC 0060+00 1/1 0/0 0/0 .text            at_hit_check__FP10e_bs_class */
 static fopAc_ac_c* at_hit_check(e_bs_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -381,7 +367,6 @@ static fopAc_ac_c* at_hit_check(e_bs_class* i_this) {
     return NULL;
 }
 
-/* 8068EF8C-8068F15C 000F4C 01D0+00 1/1 0/0 0/0 .text            e_bs_attack__FP10e_bs_class */
 static void e_bs_attack(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp18;
@@ -427,7 +412,6 @@ static void e_bs_attack(e_bs_class* i_this) {
     }
 }
 
-/* 8068F15C-8068F208 00111C 00AC+00 1/1 0/0 0/0 .text            e_bs_damage__FP10e_bs_class */
 static void e_bs_damage(e_bs_class* i_this) {
     switch (i_this->mode) {
     case 0:
@@ -443,7 +427,6 @@ static void e_bs_damage(e_bs_class* i_this) {
     }
 }
 
-/* 8068F208-8068F4C4 0011C8 02BC+00 1/1 0/0 0/0 .text            damage_check__FP10e_bs_class */
 static void damage_check(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -511,7 +494,6 @@ static void damage_check(e_bs_class* i_this) {
     }
 }
 
-/* 8068F4C4-8068FA04 001484 0540+00 1/1 0/0 0/0 .text            action__FP10e_bs_class */
 static void action(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -663,7 +645,6 @@ static void action(e_bs_class* i_this) {
     cLib_addCalcAngleS2(&i_this->head_rot_y, i_this->field_0x6ae, 4, 0x400);
 }
 
-/* 8068FA04-8068FBDC 0019C4 01D8+00 1/1 0/0 0/0 .text            anm_se_set__FP10e_bs_class */
 static void anm_se_set(e_bs_class* i_this) {
     s8 do_sound = FALSE;
 
@@ -698,7 +679,6 @@ static void anm_se_set(e_bs_class* i_this) {
     }
 }
 
-/* 8068FBDC-8068FFA8 001B9C 03CC+00 2/1 0/0 0/0 .text            daE_BS_Execute__FP10e_bs_class */
 static int daE_BS_Execute(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp5C;
@@ -793,12 +773,10 @@ static int daE_BS_Execute(e_bs_class* i_this) {
     return 1;
 }
 
-/* 8068FFA8-8068FFB0 001F68 0008+00 1/0 0/0 0/0 .text            daE_BS_IsDelete__FP10e_bs_class */
 static int daE_BS_IsDelete(e_bs_class* i_this) {
     return 1;
 }
 
-/* 8068FFB0-80690018 001F70 0068+00 1/0 0/0 0/0 .text            daE_BS_Delete__FP10e_bs_class */
 static int daE_BS_Delete(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fpc_ProcID id = fopAcM_GetID(i_this);
@@ -816,7 +794,6 @@ static int daE_BS_Delete(e_bs_class* i_this) {
     return 1;
 }
 
-/* 80690018-80690224 001FD8 020C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_bs_class* a_this = (e_bs_class*)i_this;
 
@@ -842,7 +819,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80690224-806905B8 0021E4 0394+00 1/0 0/0 0/0 .text            daE_BS_Create__FP10fopAc_ac_c */
 static int daE_BS_Create(fopAc_ac_c* i_this) {
     e_bs_class* a_this = (e_bs_class*)i_this;
     fopAcM_ct(i_this, e_bs_class);
@@ -944,7 +920,6 @@ static int daE_BS_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 80690FC8-80690FE8 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_BS_Method */
 static actor_method_class l_daE_BS_Method = {
     (process_method_func)daE_BS_Create,
     (process_method_func)daE_BS_Delete,
@@ -953,7 +928,6 @@ static actor_method_class l_daE_BS_Method = {
     (process_method_func)daE_BS_Draw,
 };
 
-/* 80690FE8-80691018 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_BS */
 extern actor_process_profile_definition g_profile_E_BS = {
     fpcLy_CURRENT_e,       // mLayerID
     7,                     // mListID

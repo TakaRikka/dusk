@@ -8,8 +8,6 @@
 #include "d/actor/d_a_obj_ganonwall2.h"
 #include "d/d_com_inf_game.h"
 
-/* ############################################################################################## */
-/* 80BF610C-80BF616C 000000 0060+00 2/2 0/0 0/0 .rodata          l_idx */
 static u8 const l_idx[24][4] = {
     0x17, 0x05, 0x06, 0x01, 0x17, 0x05, 0x06, 0x02, 0x17, 0x05, 0x06, 0x03, 0x17, 0x05, 0x06, 0x04,
     0x17, 0x05, 0x06, 0x05, 0x05, 0x06, 0x01, 0x00, 0x06, 0x0B, 0x05, 0x00, 0x06, 0x0B, 0x05, 0x01,
@@ -19,7 +17,6 @@ static u8 const l_idx[24][4] = {
     0x13, 0x17, 0x04, 0x01, 0x13, 0x17, 0x04, 0x02, 0x13, 0x17, 0x04, 0x03, 0x17, 0x05, 0x06, 0x00,
 };
 
-/* 80BF616C-80BF61CC 000060 0060+00 0/1 0/0 0/0 .rodata          l_color */
 static const GXColor l_color[24] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x96, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -29,19 +26,15 @@ static const GXColor l_color[24] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xB4, 0xB4, 0xB4, 0xFF,
 };
 
-/* 80BF620C-80BF6210 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "V_CTGWall";
 
-/* 80BF6210-80BF6214 -00001 0004+00 1/1 0/0 0/0 .data            l_matName */
 static char* l_matName = "mat00";
 
-/* 80BF57D8-80BF5814 000078 003C+00 1/1 0/0 0/0 .text            initBaseMtx__13daObjGWall2_cFv */
 void daObjGWall2_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80BF5814-80BF5878 0000B4 0064+00 2/2 0/0 0/0 .text            setBaseMtx__13daObjGWall2_cFv */
 void daObjGWall2_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(this->shape_angle.y);
@@ -49,7 +42,6 @@ void daObjGWall2_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80BF5878-80BF5950 000118 00D8+00 1/0 0/0 0/0 .text            Create__13daObjGWall2_cFv */
 int daObjGWall2_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -66,8 +58,6 @@ int daObjGWall2_c::Create() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80BF5950-80BF5A6C 0001F0 011C+00 1/0 0/0 0/0 .text            CreateHeap__13daObjGWall2_cFv */
 int daObjGWall2_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 5);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11000284);
@@ -84,7 +74,6 @@ int daObjGWall2_c::CreateHeap() {
     return 1;
 }
 
-/* 80BF5AB4-80BF5B74 000354 00C0+00 1/1 0/0 0/0 .text            create1st__13daObjGWall2_cFv */
 int daObjGWall2_c::create1st() {
     if (getEventBit1() != 0x3FF &&
         dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[(u16)getEventBit1()]) != 0)
@@ -101,9 +90,6 @@ int daObjGWall2_c::create1st() {
     return phase;
 }
 
-/* ############################################################################################## */
-/* 80BF5B74-80BF5C0C 000414 0098+00 1/0 0/0 0/0 .text            Execute__13daObjGWall2_cFPPA3_A4_f
- */
 int daObjGWall2_c::Execute(Mtx** i_bgMtx) {
     mpBtkAnm->play();
     *i_bgMtx = &mBgMtx;
@@ -112,8 +98,6 @@ int daObjGWall2_c::Execute(Mtx** i_bgMtx) {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80BF5C0C-80BF6004 0004AC 03F8+00 1/0 0/0 0/0 .text            Draw__13daObjGWall2_cFv */
 int daObjGWall2_c::Draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -159,37 +143,28 @@ int daObjGWall2_c::Draw() {
     return 1;
 }
 
-/* 80BF6004-80BF6038 0008A4 0034+00 1/0 0/0 0/0 .text            Delete__13daObjGWall2_cFv */
 int daObjGWall2_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80BF6038-80BF6098 0008D8 0060+00 1/0 0/0 0/0 .text daObjGWall2_create1st__FP13daObjGWall2_c */
 static int daObjGWall2_create1st(daObjGWall2_c* i_this) {
     fopAcM_ct(i_this, daObjGWall2_c);
     return i_this->create1st();
 }
 
-/* 80BF6098-80BF60B8 000938 0020+00 1/0 0/0 0/0 .text daObjGWall2_MoveBGDelete__FP13daObjGWall2_c
- */
 static int daObjGWall2_MoveBGDelete(daObjGWall2_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80BF60B8-80BF60D8 000958 0020+00 1/0 0/0 0/0 .text daObjGWall2_MoveBGExecute__FP13daObjGWall2_c
- */
 static int daObjGWall2_MoveBGExecute(daObjGWall2_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BF60D8-80BF6104 000978 002C+00 1/0 0/0 0/0 .text daObjGWall2_MoveBGDraw__FP13daObjGWall2_c */
 static int daObjGWall2_MoveBGDraw(daObjGWall2_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BF6214-80BF6234 -00001 0020+00 1/0 0/0 0/0 .data            daObjGWall2_METHODS */
 static actor_method_class daObjGWall2_METHODS = {
     (process_method_func)daObjGWall2_create1st,
     (process_method_func)daObjGWall2_MoveBGDelete,
@@ -198,7 +173,6 @@ static actor_method_class daObjGWall2_METHODS = {
     (process_method_func)daObjGWall2_MoveBGDraw,
 };
 
-/* 80BF6234-80BF6264 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_GanonWall2 */
 extern actor_process_profile_definition g_profile_Obj_GanonWall2 = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

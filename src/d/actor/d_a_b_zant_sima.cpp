@@ -14,7 +14,6 @@
 #define TIMER_PLAYER 0
 #define TIMER_ZANT 1
 
-/* 806529D8-80652AAC 000078 00D4+00 1/1 0/0 0/0 .text            draw__11daB_ZANTS_cFv */
 int daB_ZANTS_c::draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -27,12 +26,10 @@ int daB_ZANTS_c::draw() {
     return 1;
 }
 
-/* 80652AAC-80652ACC 00014C 0020+00 1/0 0/0 0/0 .text            daB_ZANTS_Draw__FP11daB_ZANTS_c */
 static int daB_ZANTS_Draw(daB_ZANTS_c* i_this) {
     return i_this->draw();
 }
 
-/* 80652ACC-80652B28 00016C 005C+00 1/1 0/0 0/0 .text            zants_ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c      */
 static void zants_ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_target) {
     if (fopAcM_GetName(i_target) == PROC_ALINK) {
         ((daB_ZANTS_c*)i_this)->mPlayerID = fopAcM_GetID(i_target);
@@ -43,7 +40,6 @@ static void zants_ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_
     }
 }
 
-/* 80652B28-80652DA8 0001C8 0280+00 1/1 0/0 0/0 .text            action__11daB_ZANTS_cFv */
 void daB_ZANTS_c::action() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (player->checkMagneBootsOn()) {
@@ -106,7 +102,6 @@ void daB_ZANTS_c::action() {
     }
 }
 
-/* 80652DA8-80652E98 000448 00F0+00 1/1 0/0 0/0 .text            execute__11daB_ZANTS_cFv */
 int daB_ZANTS_c::execute() {
     mpBrkAnm->play();
     mpBtkAnm->play();
@@ -128,17 +123,14 @@ int daB_ZANTS_c::execute() {
     return 1;
 }
 
-/* 80652E98-80652EB8 000538 0020+00 2/1 0/0 0/0 .text            daB_ZANTS_Execute__FP11daB_ZANTS_c */
 static int daB_ZANTS_Execute(daB_ZANTS_c* i_this) {
     return i_this->execute();
 }
 
-/* 80652EB8-80652EC0 000558 0008+00 1/0 0/0 0/0 .text            daB_ZANTS_IsDelete__FP11daB_ZANTS_c */
 static int daB_ZANTS_IsDelete(daB_ZANTS_c* i_this) {
     return 1;
 }
 
-/* 80652EC0-80652F18 000560 0058+00 1/1 0/0 0/0 .text            _delete__11daB_ZANTS_cFv */
 int daB_ZANTS_c::_delete() {
     dComIfG_resDelete(&mPhase, "MAGNESIMA");
     if (mpBgW != NULL) {
@@ -147,12 +139,10 @@ int daB_ZANTS_c::_delete() {
     return 1;
 }
 
-/* 80652F18-80652F38 0005B8 0020+00 1/0 0/0 0/0 .text            daB_ZANTS_Delete__FP11daB_ZANTS_c */
 static int daB_ZANTS_Delete(daB_ZANTS_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80652F38-80653180 0005D8 0248+00 1/1 0/0 0/0 .text            CreateHeap__11daB_ZANTS_cFv */
 int daB_ZANTS_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("MAGNESIMA", obj_msima_class::BMDR_S_MAGNE_SIMA);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
@@ -199,12 +189,10 @@ int daB_ZANTS_c::CreateHeap() {
     return TRUE;
 }
 
-/* 806531C8-806531E8 000868 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return static_cast<daB_ZANTS_c*>(i_this)->CreateHeap();
 }
 
-/* 806531E8-80653304 000888 011C+00 1/1 0/0 0/0 .text            create__11daB_ZANTS_cFv */
 int daB_ZANTS_c::create() {
     fopAcM_ct(this, daB_ZANTS_c);
 
@@ -229,19 +217,16 @@ int daB_ZANTS_c::create() {
     return phase_state;
 }
 
-/* 80653304-80653324 0009A4 0020+00 1/0 0/0 0/0 .text            daB_ZANTS_Create__FP11daB_ZANTS_c */
 static int daB_ZANTS_Create(daB_ZANTS_c* i_this) {
     return i_this->create();
 }
 
-/* 80653370-80653390 -00001 0020+00 1/0 0/0 0/0 .data            l_daB_ZANTS_Method */
 static actor_method_class l_daB_ZANTS_Method = {
     (process_method_func)daB_ZANTS_Create,  (process_method_func)daB_ZANTS_Delete,
     (process_method_func)daB_ZANTS_Execute, (process_method_func)daB_ZANTS_IsDelete,
     (process_method_func)daB_ZANTS_Draw,
 };
 
-/* 80653390-806533C0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_B_ZANTS */
 extern actor_process_profile_definition g_profile_B_ZANTS = {
     fpcLy_CURRENT_e,
     3,

@@ -6,10 +6,10 @@
 
 class daTagHstop_c : public fopAc_ac_c {
 public:
-    /* 805A43EC */ int create();
-    /* 805A45F8 */ ~daTagHstop_c();
-    /* 805A46B8 */ void setActive();
-    /* 805A475C */ int execute();
+    int create();
+    ~daTagHstop_c();
+    void setActive();
+    int execute();
 
     static daTagHstop_c* getTop() { return m_top; }
 

@@ -6,8 +6,8 @@
 
 class dDlst_daTitle_c : public dDlst_base_c {
 public:
-    /* 80D679C8 */ virtual void draw();
-    /* 80D67B30 */ virtual ~dDlst_daTitle_c() {}
+    virtual void draw();
+    virtual ~dDlst_daTitle_c() {}
 
     /* 0x4 */ J2DScreen* Scr;
 };
@@ -26,26 +26,26 @@ class CPaneMgrAlpha;
 class daTitle_c : public fopAc_ac_c {
 public:
     //daTitle_c() {}
-    /* 80D66B54 */ int CreateHeap();
-    /* 80D66CDC */ int create();
-    /* 80D66E7C */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80D66E9C */ int Execute();
-    /* 80D66F34 */ void KeyWaitAnm();
-    /* 80D67010 */ void loadWait_init();
-    /* 80D6701C */ void loadWait_proc();
-    /* 80D672E0 */ void logoDispWaitInit();
-    /* 80D672EC */ void logoDispWait();
-    /* 80D67350 */ void logoDispAnmInit();
-    /* 80D6737C */ void logoDispAnm();
-    /* 80D674A8 */ void keyWaitInit();
-    /* 80D674B4 */ void keyWait();
-    /* 80D67544 */ void nextScene_init();
-    /* 80D67550 */ void nextScene_proc();
-    /* 80D675EC */ void fastLogoDispInit();
-    /* 80D676AC */ void fastLogoDisp();
-    /* 80D676F4 */ int getDemoPrm();
-    /* 80D67768 */ int Draw();
-    /* 80D6786C */ int Delete();
+    int CreateHeap();
+    int create();
+    static int createHeapCallBack(fopAc_ac_c*);
+    int Execute();
+    void KeyWaitAnm();
+    void loadWait_init();
+    void loadWait_proc();
+    void logoDispWaitInit();
+    void logoDispWait();
+    void logoDispAnmInit();
+    void logoDispAnm();
+    void keyWaitInit();
+    void keyWait();
+    void nextScene_init();
+    void nextScene_proc();
+    void fastLogoDispInit();
+    void fastLogoDisp();
+    int getDemoPrm();
+    int Draw();
+    int Delete();
 
 private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;

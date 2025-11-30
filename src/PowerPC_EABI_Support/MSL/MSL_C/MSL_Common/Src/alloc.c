@@ -222,7 +222,6 @@ static inline Block* __unlink(__mem_pool_obj* pool_obj, Block* bp) {
     return result;
 }
 
-/* 80362D78-8036300C 35D6B8 0294+00 2/2 0/0 0/0 .text            deallocate_from_var_pools */
 static void deallocate_from_var_pools(__mem_pool_obj* pool_obj, void* ptr) {
     SubBlock* sb = SubBlock_from_pointer(ptr);
     SubBlock* _sb;
@@ -251,7 +250,6 @@ static inline __mem_pool* get_malloc_pool(void) {
     return &protopool;
 }
 
-/* 80362C20-80362D78 35D560 0158+00 1/1 0/0 0/0 .text            deallocate_from_fixed_pools */
 void deallocate_from_fixed_pools(__mem_pool_obj* pool_obj, void* ptr, unsigned long size) {
     unsigned long i = 0;
     FixSubBlock* p;
@@ -308,7 +306,6 @@ void deallocate_from_fixed_pools(__mem_pool_obj* pool_obj, void* ptr, unsigned l
     }
 }
 
-/* 80362BC8-80362C20 35D508 0058+00 1/1 0/0 0/0 .text            __pool_free */
 void __pool_free(__mem_pool* pool, void* ptr) {
     __mem_pool_obj* pool_obj;
     unsigned long size;
@@ -327,7 +324,6 @@ void __pool_free(__mem_pool* pool, void* ptr) {
     }
 }
 
-/* 80362B58-80362BC8 35D498 0070+00 0/0 2/2 0/0 .text            free */
 void free(void* ptr) {
     __begin_critical_region(malloc_pool_access);
     __pool_free(get_malloc_pool(), ptr);

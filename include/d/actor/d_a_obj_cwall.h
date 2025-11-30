@@ -17,8 +17,8 @@ class daObjCwall_c : public dBgS_MoveBgActor {
 public:
     struct chain_s {
     public:
-        /* 80BD6E94 */ ~chain_s();
-        /* 80BD6ED0 */ chain_s();
+        ~chain_s();
+        chain_s();
 
         J3DModel* mModel;
         cXyz mPos;
@@ -31,31 +31,31 @@ public:
 
     typedef void (daObjCwall_c::*modeFunc)();
 
-    /* 80BD6A4C */ void initBaseMtx();
-    /* 80BD6A88 */ void setBaseMtx();
-    /* 80BD6AEC */ int Create();
-    /* 80BD6D08 */ int CreateHeap();
-    /* 80BD6ED4 */ int create1st();
-    /* 80BD6F80 */ int Execute(Mtx**);
-    /* 80BD7288 */ void setTension();
-    /* 80BD7718 */ void calcSePos();
-    /* 80BD7788 */ void getChainBasePos(cXyz*);
-    /* 80BD7804 */ void setChainMtx();
-    /* 80BD7AD4 */ void chain_control();
-    /* 80BD7ED8 */ void chain_control2();
-    /* 80BD84C0 */ void block_mode_proc_call();
-    /* 80BD8594 */ void initWait();
-    /* 80BD85C0 */ void modeWait();
-    /* 80BD8748 */ void initWalk();
-    /* 80BD8778 */ void modeWalk();
-    /* 80BD8BC8 */ void initClose();
-    /* 80BD8BF0 */ void modeClose();
-    /* 80BD935C */ void setPower(f32, s16*);
-    /* 80BD9414 */ BOOL checkWall();
-    /* 80BD95A0 */ BOOL checkPullNow();
-    /* 80BD977C */ BOOL checkPull();
-    /* 80BD9848 */ int Draw();
-    /* 80BD9948 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void setTension();
+    void calcSePos();
+    void getChainBasePos(cXyz*);
+    void setChainMtx();
+    void chain_control();
+    void chain_control2();
+    void block_mode_proc_call();
+    void initWait();
+    void modeWait();
+    void initWalk();
+    void modeWalk();
+    void initClose();
+    void modeClose();
+    void setPower(f32, s16*);
+    BOOL checkWall();
+    BOOL checkPullNow();
+    BOOL checkPull();
+    int Draw();
+    int Delete();
 
     u8 getArg0() { return fopAcM_GetParamBit(this, 0, 4); }
     u8 getType() { return fopAcM_GetParamBit(this, 4, 4); }

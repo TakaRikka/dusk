@@ -6,7 +6,6 @@
 #include <stdint.h>
 #include <dolphin/gx.h>
 
-/* 80314924-80314974 30F264 0050+00 1/1 0/0 0/0 .text            countVertex__12J3DShapeDrawFUl */
 u32 J3DShapeDraw::countVertex(u32 stride) {
     u32 count = 0;
     uintptr_t dlStart = (uintptr_t)getDisplayList();
@@ -23,7 +22,6 @@ u32 J3DShapeDraw::countVertex(u32 stride) {
     return count;
 }
 
-/* 80314974-80314ABC 30F2B4 0148+00 0/0 1/1 0/0 .text addTexMtxIndexInDL__12J3DShapeDrawFUlUlUl */
 // NONMATCHING regalloc
 void J3DShapeDraw::addTexMtxIndexInDL(u32 stride, u32 attrOffs, u32 valueBase) {
     u32 byteNum = countVertex(stride);
@@ -70,16 +68,13 @@ void J3DShapeDraw::addTexMtxIndexInDL(u32 stride, u32 attrOffs, u32 valueBase) {
     DCStoreRange(newDLStart, mDisplayListSize);
 }
 
-/* 80314ABC-80314AD4 30F3FC 0018+00 0/0 1/1 0/0 .text            __ct__12J3DShapeDrawFPCUcUl */
 J3DShapeDraw::J3DShapeDraw(const u8* displayList, u32 displayListSize) {
     mDisplayList = (void*)displayList;
     mDisplayListSize = displayListSize;
 }
 
-/* 80314AD4-80314B00 30F414 002C+00 0/0 3/3 0/0 .text            draw__12J3DShapeDrawCFv */
 void J3DShapeDraw::draw() const {
     GXCallDisplayList(mDisplayList, mDisplayListSize);
 }
 
-/* 80314B00-80314B48 30F440 0048+00 1/0 0/0 0/0 .text            __dt__12J3DShapeDrawFv */
 J3DShapeDraw::~J3DShapeDraw() {}

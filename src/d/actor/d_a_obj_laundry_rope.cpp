@@ -12,24 +12,15 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_path.h"
-#include "dol2asm.h"
 
-//
-// Declarations:
-//
-
-/* ############################################################################################## */
-/* 80C53304-80C53318 000000 0014+00 3/3 0/0 0/0 .rodata          M_attr__14daObjLndRope_c */
 daObjLndRope_Attr_c const daObjLndRope_c::mAttr = {-5.0f, 0.2f, 0.5f, 0.8f, 0.0f};
 
-/* 80C53318-80C53328 000014 000D+03 0/1 0/0 0/0 .rodata          l_laundryList */
 static const s8 l_laundryList[13] = {-1, -1, 3, 0, -1, 1, 1, -1, 2, 2, -1, 2, -1};
 
 u8 daObjLndRope_c::getPathId() {
     return fopAcM_GetParamBit(this, 8, 8);
 }
 
-/* 80C521F8-80C52820 000078 0628+00 1/1 0/0 0/0 .text            create_init__14daObjLndRope_cFv */
 void daObjLndRope_c::create_init() {
     gravity = attr()->mGravity;
     dPath* roomPath = dPath_GetRoomPath(getPathId(), fopAcM_GetRoomNo(this));
@@ -95,20 +86,16 @@ void daObjLndRope_c::create_init() {
     }
 }
 
-/* 80C5285C-80C52890 0006DC 0034+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjLndRope_cFv */
 void daObjLndRope_c::initBaseMtx() {
     setBaseMtx();
     fopAcM_SetMtx(this, mMtx);
 }
 
-/* 80C52890-80C528E0 000710 0050+00 1/1 0/0 0/0 .text            setBaseMtx__14daObjLndRope_cFv */
 void daObjLndRope_c::setBaseMtx() {
     mDoMtx_trans(mMtx, current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_ZXYrotM(mMtx, shape_angle.x, shape_angle.y, 0);
 }
 
-/* ############################################################################################## */
-/* 80C53364-80C533A4 000060 0040+00 0/0 0/0 0/0 .rodata          ccSphSrc$3837 */
 const static dCcD_SrcSph ccSphSrc = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x1607a, 0x11}, 0x149}},  // mObj
@@ -133,7 +120,6 @@ f32 daObjLndRope_c::getStartRate(cXyz* i_ropeSegmentPos) {
     }
 }
 
-/* 80C528E0-80C52CC8 000760 03E8+00 2/2 0/0 0/0 .text setNormalRopePos__14daObjLndRope_cFv */
 void daObjLndRope_c::setNormalRopePos() {
     cXyz* ropePos = mRopeMat.getPos(0) + 1;
     cXyz* pos1 = mPositions1;
@@ -221,7 +207,6 @@ void daObjLndRope_c::setNormalRopePos() {
     }
 }
 
-/* 80C533CC-80C533D0 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Obj_SRope";
 
 int daObjLndRope_c::createHeap() {
@@ -240,7 +225,6 @@ int daObjLndRope_c::createHeap() {
     return 1;
 }
 
-/* 80C52CC8-80C52D70 000B48 00A8+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjLndRope_c*>(i_this)->createHeap();
 }
@@ -253,7 +237,6 @@ int daObjLndRope_c::draw() {
     return 1;
 }
 
-/* 80C52D70-80C52E04 000BF0 0094+00 1/0 0/0 0/0 .text daObjLndRope_Draw__FP14daObjLndRope_c */
 static int daObjLndRope_Draw(daObjLndRope_c* i_this) {
     return i_this->draw();
 }
@@ -264,12 +247,10 @@ int daObjLndRope_c::execute() {
     return 1;
 }
 
-/* 80C52E04-80C52E34 000C84 0030+00 1/0 0/0 0/0 .text daObjLndRope_Execute__FP14daObjLndRope_c */
 static int daObjLndRope_Execute(daObjLndRope_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C52E34-80C52E3C 000CB4 0008+00 1/0 0/0 0/0 .text daObjLndRope_IsDelete__FP14daObjLndRope_c */
 static int daObjLndRope_IsDelete(daObjLndRope_c* i_this) {
     return 1;
 }
@@ -278,7 +259,6 @@ daObjLndRope_c::~daObjLndRope_c() {
     dComIfG_resDelete(&mPhase, l_arcName);
 }
 
-/* 80C52E3C-80C52F2C 000CBC 00F0+00 1/0 0/0 0/0 .text daObjLndRope_Delete__FP14daObjLndRope_c */
 static int daObjLndRope_Delete(daObjLndRope_c* i_this) {
     i_this->~daObjLndRope_c();
     return 1;
@@ -298,21 +278,16 @@ int daObjLndRope_c::create() {
     return phase;
 }
 
-/* 80C52FF8-80C53140 000E78 0148+00 1/0 0/0 0/0 .text            daObjLndRope_Create__FP10fopAc_ac_c
- */
 static int daObjLndRope_Create(fopAc_ac_c* i_this) {
     return ((daObjLndRope_c*)i_this)->create();
 }
 
-/* ############################################################################################## */
-/* 80C533D4-80C533F4 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjLndRope_Method */
 static actor_method_class l_daObjLndRope_Method = {
     (process_method_func)daObjLndRope_Create,  (process_method_func)daObjLndRope_Delete,
     (process_method_func)daObjLndRope_Execute, (process_method_func)daObjLndRope_IsDelete,
     (process_method_func)daObjLndRope_Draw,
 };
 
-/* 80C533F4-80C53424 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_LndRope */
 extern actor_process_profile_definition g_profile_Obj_LndRope = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

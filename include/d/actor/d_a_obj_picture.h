@@ -14,24 +14,24 @@
  */
 class daObjPicture_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80CAD318 */ daObjPicture_c();
-    /* 80CAD6C8 */ virtual ~daObjPicture_c();
-    /* 80CAD908 */ int createHeap();
-    /* 80CADC18 */ int create();
-    /* 80CADFB0 */ int Delete();
-    /* 80CAE05C */ int draw();
-    /* 80CAE1B8 */ int execute();
-    /* 80CAE510 */ void init();
-    /* 80CAE5B0 */ void setPicModelMtx();
-    /* 80CAE638 */ void setTmgModelMtx();
-    /* 80CAE6C4 */ void getLinePosPic(int, cXyz*);
-    /* 80CAE744 */ void getPosTmg(cXyz*);
-    /* 80CAE76C */ void setLinePos();
-    /* 80CAE8E8 */ void moveLineFall1();
-    /* 80CAEA60 */ void moveLineFall2();
-    /* 80CAED28 */ bool chkHitRope();
-    /* 80CAEDDC */ bool chkHitBombTg();
-    /* 80CAEE90 */ void setPicAtCol();
+    daObjPicture_c();
+    virtual ~daObjPicture_c();
+    int createHeap();
+    int create();
+    int Delete();
+    int draw();
+    int execute();
+    void init();
+    void setPicModelMtx();
+    void setTmgModelMtx();
+    void getLinePosPic(int, cXyz*);
+    void getPosTmg(cXyz*);
+    void setLinePos();
+    void moveLineFall1();
+    void moveLineFall2();
+    bool chkHitRope();
+    bool chkHitBombTg();
+    void setPicAtCol();
 
     int getArg_0() { return fopAcM_GetParamBit(this, 0, 4); }
     int getSW_0() { return fopAcM_GetParamBit(this, 4, 8); }

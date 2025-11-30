@@ -29,12 +29,12 @@ struct daObjSakuita_Attr_c {
  */
 class daObjSakuita_c : public fopAc_ac_c {
 public:
-    /* 80CC46F8 */ void create_init();
-    /* 80CC47F8 */ void initBaseMtx();
-    /* 80CC4818 */ void setBaseMtx();
-    /* 80CC489C */ void setPlatePos();
-    /* 80CC4A98 */ void calcAngle();
-    /* 80CC4C9C */ ~daObjSakuita_c();
+    void create_init();
+    void initBaseMtx();
+    void setBaseMtx();
+    void setPlatePos();
+    void calcAngle();
+    ~daObjSakuita_c();
 
     inline int createHeap();
     inline int draw();

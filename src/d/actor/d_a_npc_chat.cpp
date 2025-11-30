@@ -795,7 +795,6 @@ enum Type {
     /* 0x1D */ MdlWANb2_e,
 };
 
-/* 8098699C-809869B4 -00001 0018+00 8/7 0/0 0/0 .rodata          l_resMANa */
 static char* const l_resMANa[6] = {
     "MAN_a",
     "MAN_a_TW",
@@ -805,7 +804,6 @@ static char* const l_resMANa[6] = {
     "objectTW",
 };
 
-/* 809869B4-809869CC -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMADa */
 static char* const l_resMADa[6] = {
     "MAD_a",
     "MAD_a_TW",
@@ -815,7 +813,6 @@ static char* const l_resMADa[6] = {
     "objectTW",
 };
 
-/* 809869CC-809869E4 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMCNa */
 static char* const l_resMCNa[6] = {
     "MCN_a",
     "MCN_a_TW",
@@ -825,7 +822,6 @@ static char* const l_resMCNa[6] = {
     "objectTW",
 };
 
-/* 809869E4-809869FC -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMONa */
 static char* const l_resMONa[6] = {
     "MON_a",
     "MON_a_TW",
@@ -835,7 +831,6 @@ static char* const l_resMONa[6] = {
     "objectTW",
 };
 
-/* 809869FC-80986A14 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMANb */
 static char* const l_resMANb[6] = {
     "MAN_b",
     "MAN_b_TW",
@@ -845,7 +840,6 @@ static char* const l_resMANb[6] = {
     "objectTW",
 };
 
-/* 80986A14-80986A2C -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMANc */
 static char* const l_resMANc[6] = {
     "MAN_c",
     "MAN_c_TW",
@@ -855,7 +849,6 @@ static char* const l_resMANc[6] = {
     "objectTW",
 };
 
-/* 80986A2C-80986A44 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMASa */
 static char* const l_resMASa[6] = {
     "MAS_a",
     "MAS_a_TW",
@@ -865,7 +858,6 @@ static char* const l_resMASa[6] = {
     "objectTW",
 };
 
-/* 80986A44-80986A5C -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMBNa */
 static char* const l_resMBNa[6] = {
     "MBN_a",
     "MBN_a_TW",
@@ -875,7 +867,6 @@ static char* const l_resMBNa[6] = {
     "objectTW",
 };
 
-/* 80986A5C-80986A74 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMANa2 */
 static char* const l_resMANa2[6] = {
     "MAN_a2",
     "MAN_a2_TW",
@@ -885,7 +876,6 @@ static char* const l_resMANa2[6] = {
     "objectTW",
 };
 
-/* 80986A74-80986A8C -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMADa2 */
 static char* const l_resMADa2[6] = {
     "MAD_a2",
     "MAD_a2_TW",
@@ -895,7 +885,6 @@ static char* const l_resMADa2[6] = {
     "objectTW",
 };
 
-/* 80986A8C-80986AA4 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMCNa2 */
 static char* const l_resMCNa2[6] = {
     "MCN_a2",
     "MCN_a2_TW",
@@ -905,7 +894,6 @@ static char* const l_resMCNa2[6] = {
     "objectTW",
 };
 
-/* 80986AA4-80986ABC -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMONa2 */
 static char* const l_resMONa2[6] = {
     "MON_a2",
     "MON_a2_TW",
@@ -915,7 +903,6 @@ static char* const l_resMONa2[6] = {
     "objectTW",
 };
 
-/* 80986ABC-80986AD4 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMANb2 */
 static char* const l_resMANb2[6] = {
     "MAN_b2",
     "MAN_b2_TW",
@@ -925,7 +912,6 @@ static char* const l_resMANb2[6] = {
     "objectTW",
 };
 
-/* 80986AD4-80986AEC -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMANc2 */
 static char* const l_resMANc2[6] = {
     "MAN_c2",
     "MAN_c2_TW",
@@ -935,7 +921,6 @@ static char* const l_resMANc2[6] = {
     "objectTW",
 };
 
-/* 80986AEC-80986B04 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMASa2 */
 static char* const l_resMASa2[6] = {
     "MAS_a2",
     "MAS_a2_TW",
@@ -945,7 +930,6 @@ static char* const l_resMASa2[6] = {
     "objectTW",
 };
 
-/* 80986B04-80986B1C -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMBNa2 */
 static char* const l_resMBNa2[6] = {
     "MBN_a2",
     "MBN_a2_TW",
@@ -955,7 +939,6 @@ static char* const l_resMBNa2[6] = {
     "objectTW",
 };
 
-/* 80986B1C-80986B34 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWANa */
 static char* const l_resWANa[6] = {
     "WAN_a",
     "WAN_a_TW",
@@ -965,7 +948,6 @@ static char* const l_resWANa[6] = {
     "objectTW",
 };
 
-/* 80986B34-80986B4C -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWADa */
 static char* const l_resWADa[6] = {
     "WAD_a",
     "WAD_a_TW",
@@ -975,7 +957,6 @@ static char* const l_resWADa[6] = {
     "objectTW",
 };
 
-/* 80986B4C-80986B64 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMATa */
 static char* const l_resMATa[6] = {
     "MAT_a",
     "MAT_a_TW",
@@ -985,7 +966,6 @@ static char* const l_resMATa[6] = {
     "objectTW",
 };
 
-/* 80986B64-80986B7C -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWCNa */
 static char* const l_resWCNa[6] = {
     "WCN_a",
     "WCN_a_TW",
@@ -995,7 +975,6 @@ static char* const l_resWCNa[6] = {
     "objectTW",
 };
 
-/* 80986B7C-80986B94 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWONa */
 static char* const l_resWONa[6] = {
     "WON_a",
     "WON_a_TW",
@@ -1005,7 +984,6 @@ static char* const l_resWONa[6] = {
     "objectTW",
 };
 
-/* 80986B94-80986BAC -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWGNa */
 static char* const l_resWGNa[6] = {
     "WGN_a",
     "WGN_a_TW",
@@ -1015,7 +993,6 @@ static char* const l_resWGNa[6] = {
     "objectTW",
 };
 
-/* 80986BAC-80986BC4 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWANb */
 static char* const l_resWANb[6] = {
     "WAN_b",
     "WAN_b_TW",
@@ -1025,7 +1002,6 @@ static char* const l_resWANb[6] = {
     "objectTW",
 };
 
-/* 80986BC4-80986BDC -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWANa2 */
 static char* const l_resWANa2[6] = {
     "WAN_a2",
     "WAN_a2_TW",
@@ -1035,7 +1011,6 @@ static char* const l_resWANa2[6] = {
     "objectTW",
 };
 
-/* 80986BDC-80986BF4 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWADa2 */
 static char* const l_resWADa2[6] = {
     "WAD_a2",
     "WAD_a2_TW",
@@ -1045,7 +1020,6 @@ static char* const l_resWADa2[6] = {
     "objectTW",
 };
 
-/* 80986BF4-80986C0C -00001 0018+00 1/1 0/0 0/0 .rodata          l_resMATa2 */
 static char* const l_resMATa2[6] = {
     "MAT_a2",
     "MAT_a2_TW",
@@ -1055,7 +1029,6 @@ static char* const l_resMATa2[6] = {
     "objectTW",
 };
 
-/* 80986C0C-80986C24 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWCNa2 */
 static char* const l_resWCNa2[6] = {
     "WCN_a2",
     "WCN_a2_TW",
@@ -1065,7 +1038,6 @@ static char* const l_resWCNa2[6] = {
     "objectTW",
 };
 
-/* 80986C24-80986C3C -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWONa2 */
 static char* const l_resWONa2[6] = {
     "WON_a2",
     "WON_a2_TW",
@@ -1075,7 +1047,6 @@ static char* const l_resWONa2[6] = {
     "objectTW",
 };
 
-/* 80986C3C-80986C54 -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWGNa2 */
 static char* const l_resWGNa2[6] = {
     "WGN_a2",
     "WGN_a2_TW",
@@ -1085,7 +1056,6 @@ static char* const l_resWGNa2[6] = {
     "objectTW",
 };
 
-/* 80986C54-80986C6C -00001 0018+00 1/1 0/0 0/0 .rodata          l_resWANb2 */
 static char* const l_resWANb2[6] = {
     "WAN_b2",
     "WAN_b2_TW",
@@ -1095,7 +1065,6 @@ static char* const l_resWANb2[6] = {
     "objectTW",
 };
 
-/* 8098797C-809879F4 -00001 0078+00 2/2 0/0 0/0 .data            l_resNameTbl */
 static char* const* l_resNameTbl[30] = {
     l_resMANa,  l_resMADa,  l_resMCNa,  l_resMONa,
     l_resMANb,  l_resMANc,  l_resMASa,  l_resMBNa,
@@ -1112,7 +1081,6 @@ struct anmTblPrm {
     int resource_index;
 };
 
-/* 809879F4-80987AE4 000098 00F0+00 1/2 0/0 0/0 .data            l_bmdTbl */
  static anmTblPrm l_bmdTbl[30] = {
     l_resMANa[0], BMDR_MAN_A,
     l_resMADa[0], BMDR_MAD_A,
@@ -1146,7 +1114,6 @@ struct anmTblPrm {
     l_resWANb2[0], BMDR_WAN_B2,
 };
 
-/* 80987AE4-80987BD4 000188 00F0+00 1/2 0/0 0/0 .data            l_bmdTWTbl */
 static anmTblPrm l_bmdTWTbl[30] = {
     l_resMANa[1], BMDR_MAN_A_TW,
     l_resMADa[1], BMDR_MAD_A_TW,
@@ -1180,7 +1147,6 @@ static anmTblPrm l_bmdTWTbl[30] = {
     l_resWANb2[1], BMDR_WAN_B2_TW,
 };
 
-/* 80987BD4-80987CC4 000278 00F0+00 1/2 0/0 0/0 .data            l_btpTbl */
 static anmTblPrm l_btpTbl[30] = {
     l_resMANa[0], -1,
     l_resMADa[0], -1,
@@ -1214,7 +1180,6 @@ static anmTblPrm l_btpTbl[30] = {
     l_resWANb2[0], BTP_WAN_B2,
 };
 
-/* 80987CC4-80987DB4 000368 00F0+00 1/2 0/0 0/0 .data            l_btpTWTbl */
 static anmTblPrm l_btpTWTbl[30] = {
     l_resMANa[1], -1,
     l_resMADa[1], -1,
@@ -1248,7 +1213,6 @@ static anmTblPrm l_btpTWTbl[30] = {
     l_resWANb2[1], BTP_WAN_B2_TW,
 };
 
-/* 80987DB4-80987F64 -00001 01B0+00 1/1 0/0 0/0 .data            l_bckTbl_M */
 static anmTblPrm l_bckTbl_M[54] = {
     {"Mgeneral",  BCK_M_WAIT_A},
     {"Mgeneral",  BCK_M_WAIT_B},
@@ -1306,7 +1270,6 @@ static anmTblPrm l_bckTbl_M[54] = {
     {"Mgeneral",  BCK_M_SING},
 };
 
-/* 80987F64-80988114 -00001 01B0+00 1/1 0/0 0/0 .data            l_bckTbl_W */
 static anmTblPrm l_bckTbl_W[54] = {
     {"Wgeneral", BCK_W_WAIT_A},
     {"Wgeneral", BCK_W_WAIT_B},
@@ -1379,7 +1342,6 @@ struct jntTblWPrm {
     /* 0x0 */ jnt jntPrm[21];
 };
 
-/* 80988114-809898D4 0007B8 17C0+00 1/1 0/0 0/0 .data            a_jntTbl_M */
 static jntTblMPrm a_jntTbl_M[16] = {
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1734,7 +1696,6 @@ static jntTblMPrm a_jntTbl_M[16] = {
     },
 };
 
-/* 809898D4-80989CD4 001F78 0400+00 3/4 0/0 0/0 .data            a_prmTbl_M */
 struct prmTbl {
     /* 0x00 */ f32 field_0x0;
     /* 0x04 */ u8 field_0x4[0x18 - 0x4];
@@ -1817,7 +1778,6 @@ static prmTbl a_prmTbl_M[16] = {
     1.5f, 1.8f, 16.0f, 6.0f, 180.0f, 30.0f, 50.1f, 35.0f,
 };
 
-/* 80989CD4-8098B3CC 002378 16F8+00 1/1 0/0 0/0 .data            a_jntTbl_W */
 static jntTblWPrm a_jntTbl_W[14] = {
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -2156,7 +2116,6 @@ static jntTblWPrm a_jntTbl_W[14] = {
     },
 };
 
-/* 8098B3CC-8098B74C 003A70 0380+00 3/4 0/0 0/0 .data            a_prmTbl_W */
 static prmTbl a_prmTbl_W[14] = {
     -852593.0f, 0xB9, 0xB0, 0xD8, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x0F, 0xA0, 0x3A, 0x98, 0xE0, 0xC0, 0xC5, 0x68, 1.0f, 0xC8, 0x00, 0x00,
@@ -2215,26 +2174,20 @@ static prmTbl a_prmTbl_W[14] = {
     1.5f, 1.6f, 10.0f, 4.4f, 180.0f, 30.0f, 50.1f, 35.0f,
 };
 
-/* 8098B74C-8098B750 003DF0 0004+00 0/1 0/0 0/0 .data            l_evtNames */
 static char* l_evtNames[1] = {
     NULL,
 };
 
-/* 8098B750-8098B754 -00001 0004+00 0/2 0/0 0/0 .data            l_myName */
 static char* l_myName = "Chat";
 
-/* 8098BACC-8098BAD0 000054 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpcChat_Param_c l_HIO;
 
-/* 8098B754-8098B760 003DF8 000C+00 0/2 0/0 0/0 .data            mEvtSeqList__11daNpcChat_c */
 daNpcChat_c::eventFunc daNpcChat_c::mEvtSeqList[1] = {
     NULL,
 };
 
-/* 8098084C-809809D0 0000EC 0184+00 1/1 0/0 0/0 .text            __ct__11daNpcChat_cFv */
 daNpcChat_c::daNpcChat_c() {}
 
-/* 80980A60-80980C1C 000300 01BC+00 1/0 0/0 0/0 .text            __dt__11daNpcChat_cFv */
 daNpcChat_c::~daNpcChat_c() {
     removeResrc(mType, mObjNum);
 
@@ -2243,7 +2196,6 @@ daNpcChat_c::~daNpcChat_c() {
     }
 }
 
-/* 80986C6C-80986CD4 -00001 0068+00 1/1 0/0 0/0 .rodata          l_objTbl */
 static anmTblPrm const l_objTbl[13] = {
     {"object", BMDR_B_TUBO},
     {"object", BMDR_B_TUBO},
@@ -2260,7 +2212,6 @@ static anmTblPrm const l_objTbl[13] = {
     {"object", BMDR_MARO_BAG_W},
 };
 
-/* 80986CD4-80986D3C -00001 0068+00 1/1 0/0 0/0 .rodata          l_objTWTbl */
 static anmTblPrm const l_objTWTbl[13] = {
     {"objectTW", BMDR_B_TUBO_TW},
     {"objectTW", BMDR_B_TUBO_TW},
@@ -2277,7 +2228,6 @@ static anmTblPrm const l_objTWTbl[13] = {
     {"objectTW", -1},
 };
 
-/* 80986D3C-80986DA8 0003A0 006C+00 1/3 0/0 0/0 .rodata          m__17daNpcChat_Param_c */
 daNpcChat_HIOParam const daNpcChat_Param_c::m = {
     55.0f,
     -3.0f,
@@ -2314,7 +2264,6 @@ daNpcChat_HIOParam const daNpcChat_Param_c::m = {
     false,
 };
 
-/* 80980C1C-80980E20 0004BC 0204+00 1/1 0/0 0/0 .text            NpcCreate__11daNpcChat_cFi */
 BOOL daNpcChat_c::NpcCreate(int type) {
     J3DModelData* a_mdlData_p = getNpcMdlDataP(type);
 
@@ -2390,7 +2339,6 @@ BOOL daNpcChat_c::NpcCreate(int type) {
     return TRUE;
 }
 
-/* 80980E20-80980F88 0006C0 0168+00 3/1 0/0 0/0 .text            getObjNum__11daNpcChat_cFv */
 int daNpcChat_c::getObjNum() {
     int objNum;
     u32 param = (fopAcM_GetParam(this) >> 8) & 0xF;
@@ -2488,7 +2436,6 @@ int daNpcChat_c::getObjNum() {
     return objNum;
 }
 
-/* 80980F88-80980FC8 000828 0040+00 1/1 0/0 0/0 .text            ObjCreate__11daNpcChat_cFi */
 J3DModel* daNpcChat_c::ObjCreate(int param_1) {
     J3DModelData* a_mdlData_p = getObjMdlDataP(param_1);
     if (a_mdlData_p != NULL) {
@@ -2498,7 +2445,6 @@ J3DModel* daNpcChat_c::ObjCreate(int param_1) {
     return NULL;
 }
 
-/* 80980FC8-80981108 000868 0140+00 1/1 0/0 0/0 .text            ChairCreate__11daNpcChat_cFf */
 J3DModel* daNpcChat_c::ChairCreate(f32 i_scale) {
     const char* i_arcName = mTwilight ? "objectTW" : "object";
     int i_index = isM_() ? ((mTwilight != 0) ? 4 : 4) : ((mTwilight != 0) ? 5 : 5);
@@ -2522,7 +2468,6 @@ J3DModel* daNpcChat_c::ChairCreate(f32 i_scale) {
     return NULL;
 }
 
-/* 80981108-80981140 0009A8 0038+00 5/5 0/0 0/0 .text            isM___11daNpcChat_cFv */
 bool daNpcChat_c::isM_() {
     if (mAnm_p == NULL) {
         return mType < 16;
@@ -2533,7 +2478,6 @@ bool daNpcChat_c::isM_() {
     return a_jntNum == JntM_NUM_e;
 }
 
-/* 80981140-80981280 0009E0 0140+00 1/1 0/0 0/0 .text            loadResrc__11daNpcChat_cFii */
 cPhs__Step daNpcChat_c::loadResrc(int idx, int param_2) {
     cPhs__Step rv = cPhs_COMPLEATE_e;
     if (mTwilight) {
@@ -2575,7 +2519,6 @@ cPhs__Step daNpcChat_c::loadResrc(int idx, int param_2) {
     return rv;
 }
 
-/* 80981280-809812FC 000B20 007C+00 1/1 0/0 0/0 .text            getNpcMdlDataP__11daNpcChat_cFi */
 J3DModelData* daNpcChat_c::getNpcMdlDataP(int i_index) {
     if (i_index < 0 || i_index >= 30) {
         return NULL;
@@ -2587,7 +2530,6 @@ J3DModelData* daNpcChat_c::getNpcMdlDataP(int i_index) {
     return model_data;
 }
 
-/* 809812FC-80981374 000B9C 0078+00 1/1 0/0 0/0 .text            getObjMdlDataP__11daNpcChat_cFi */
 J3DModelData* daNpcChat_c::getObjMdlDataP(int i_index) {
     J3DModelData* model_data = NULL;
     const anmTblPrm* def = mTwilight ? &l_objTWTbl[i_index] : &l_objTbl[i_index];
@@ -2599,7 +2541,6 @@ J3DModelData* daNpcChat_c::getObjMdlDataP(int i_index) {
     return model_data;
 }
 
-/* 80981374-809813E8 000C14 0074+00 2/2 0/0 0/0 .text            getTexAnmP__11daNpcChat_cFi */
 J3DAnmTexPattern* daNpcChat_c::getTexAnmP(int i_index) {
     const anmTblPrm* def;
     if (mTwilight) {
@@ -2613,7 +2554,6 @@ J3DAnmTexPattern* daNpcChat_c::getTexAnmP(int i_index) {
     return NULL;
 }
 
-/* 809813E8-809814DC 000C88 00F4+00 1/1 0/0 0/0 .text            removeResrc__11daNpcChat_cFii */
 BOOL daNpcChat_c::removeResrc(int idx, int param_2) {
     if (mTwilight) {
         dComIfG_resDelete(&mPhase1, l_resNameTbl[idx][1]);
@@ -2638,7 +2578,6 @@ BOOL daNpcChat_c::removeResrc(int idx, int param_2) {
 
 inline f32 AtnOfs(int param_1) { return param_1 < 16 ? a_prmTbl_M[param_1].field_0x1c : a_prmTbl_W[param_1 - 16].field_0x1c; }
 
-/* 809814DC-80981E90 000D7C 09B4+00 1/1 0/0 0/0 .text            setAttention__11daNpcChat_cFi */
 BOOL daNpcChat_c::setAttention(int param_1) {
     static cXyz a_eyeOfsTbl[30] = {
         cXyz(0.0f, 10.0f, 0.0f),
@@ -2720,7 +2659,6 @@ inline f32 CylH(int type) {
     return (f32)(type < 16 ? a_prmTbl_M[type].field_0x30 : a_prmTbl_W[type - 16].field_0x30);
 }
 
-/* 80981E90-809822A0 001730 0410+00 1/1 0/0 0/0 .text            Create__11daNpcChat_cFv */
 cPhs__Step daNpcChat_c::Create() {
     if (!fopAcM_CheckCondition(this, fopAcCnd_INIT_e)) {
         new (this) daNpcChat_c();
@@ -2797,7 +2735,6 @@ inline f32 ObjScale(int type) {
     return (f32)(type < 16 ? a_prmTbl_M[type].field_0x18 : a_prmTbl_W[type - 16].field_0x18);
 }
 
-/* 809822A0-809823B4 001B40 0114+00 1/1 0/0 0/0 .text            CreateHeap__11daNpcChat_cFv */
 BOOL daNpcChat_c::CreateHeap() {
     J3DModel* model;
     BOOL rv = NpcCreate(mType);
@@ -2826,14 +2763,12 @@ BOOL daNpcChat_c::CreateHeap() {
     return rv;
 }
 
-/* 809823B4-809823E8 001C54 0034+00 1/1 0/0 0/0 .text            Delete__11daNpcChat_cFv */
 int daNpcChat_c::Delete() {
     fpc_ProcID id = fopAcM_GetID(this);
     this->~daNpcChat_c();
     return 1;
 }
 
-/* 809823E8-809824CC 001C88 00E4+00 2/2 0/0 0/0 .text            Execute__11daNpcChat_cFv */
 int daNpcChat_c::Execute() {
     if (!appearCheck()) {
         return 1;
@@ -2856,13 +2791,11 @@ int daNpcChat_c::Execute() {
     return 1;
 }
 
-/* 809824CC-8098250C 001D6C 0040+00 1/1 0/0 0/0 .text            Draw__11daNpcChat_cFv */
 int daNpcChat_c::Draw() {
     draw(0, 0, daNpcChat_Param_c::m.common.real_shadow_size, NULL, 0);
     return 1;
 }
 
-/* 8098250C-80982780 001DAC 0274+00 1/1 0/0 0/0 .text            draw__11daNpcChat_cFiifP11_GXColorS10i */
 int daNpcChat_c::draw(int param_1, int param_2, f32 param_3, _GXColorS10* i_color, int param_5) {
     J3DModel* model = mAnm_p->getModel();
     J3DModelData* a_mdlData_p = model->getModelData();
@@ -2953,7 +2886,6 @@ inline s16 JntRZ(int type, int jnt_no) {
     return (type < 16 ? a_jntTbl_M[type].jntPrm[jnt_no].jntR[2] : a_jntTbl_W[type - 16].jntPrm[jnt_no].jntR[2]) * 182.04445f;
 }
 
-/* 80982780-80982A98 002020 0318+00 1/1 0/0 0/0 .text            ctrlJoint__11daNpcChat_cFP8J3DJointP8J3DModel */
 int daNpcChat_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     int jntNo = i_joint->getJntNo();
     cXyz jntT(JntTX(mType, jntNo), JntTY(mType, jntNo), JntTZ(mType, jntNo));
@@ -2966,13 +2898,11 @@ int daNpcChat_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 80982A98-80982AB8 002338 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__11daNpcChat_cFP10fopAc_ac_c */
 int daNpcChat_c::createHeapCallBack(fopAc_ac_c* a_this) {
     daNpcChat_c* i_this = (daNpcChat_c*)a_this;
     return i_this->CreateHeap();
 }
 
-/* 80982AB8-80982B04 002358 004C+00 2/2 0/0 0/0 .text            ctrlJointCallBack__11daNpcChat_cFP8J3DJointi */
 int daNpcChat_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -2985,7 +2915,6 @@ int daNpcChat_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80982B04-80982B60 0023A4 005C+00 1/1 0/0 0/0 .text            s_sub__FPvPv */
 static void* s_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_CHAT) {
         ((daNpcChat_c*)i_data)->setTalkMember((daNpcChat_c*)i_actor);
@@ -2994,7 +2923,6 @@ static void* s_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80982B60-80982C10 002400 00B0+00 1/1 0/0 0/0 .text            searchGroup__11daNpcChat_cFv */
 BOOL daNpcChat_c::searchGroup() {
     switch (field_0xe38) {
         case 0:
@@ -3021,7 +2949,6 @@ BOOL daNpcChat_c::searchGroup() {
     return TRUE;
 }
 
-/* 80982C10-80982D20 0024B0 0110+00 3/2 0/0 0/0 .text            appearTimeCheck__11daNpcChat_cFv */
 BOOL daNpcChat_c::appearTimeCheck() {
     int time = dKy_darkworld_check() ? dKy_getDarktime_hour() : dKy_getdaytime_hour();
     BOOL rv = FALSE;
@@ -3079,7 +3006,6 @@ BOOL daNpcChat_c::appearTimeCheck() {
     return rv;
 }
 
-/* 80982D20-80982EB4 0025C0 0194+00 1/1 0/0 0/0 .text            appearCheck__11daNpcChat_cFv */
 BOOL daNpcChat_c::appearCheck() {
     if (searchGroup()) {
         if (mTalkNo == 0) {
@@ -3128,7 +3054,6 @@ BOOL daNpcChat_c::appearCheck() {
     return TRUE;
 }
 
-/* 80982EB4-80982F4C 002754 0098+00 1/0 0/0 0/0 .text            setParam__11daNpcChat_cFv */
 void daNpcChat_c::setParam() {
     if (checkHide()) {
         attention_info.flags = 0;
@@ -3148,7 +3073,6 @@ void daNpcChat_c::setParam() {
     #endif
 }
 
-/* 80982F4C-80982FA4 0027EC 0058+00 1/0 0/0 0/0 .text            main__11daNpcChat_cFv */
 BOOL daNpcChat_c::main() {
     if (mAction) {
         (this->*mAction)(NULL);
@@ -3158,7 +3082,6 @@ BOOL daNpcChat_c::main() {
     return TRUE;
 }
 
-/* 80982FA4-809830EC 002844 0148+00 1/0 0/0 0/0 .text            setAttnPos__11daNpcChat_cFv */
 void daNpcChat_c::setAttnPos() {
     if (field_0xe1c == 1) {
         for (int i = 0; i < 3; i++) {
@@ -3180,7 +3103,6 @@ void daNpcChat_c::setAttnPos() {
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 809830EC-80983168 00298C 007C+00 1/0 0/0 0/0 .text            setExpressionBtp__11daNpcChat_cFi */
 bool daNpcChat_c::setExpressionBtp(int i_index) {
     J3DAnmTexPattern* i_btp = getTexAnmP(i_index);
     if (i_btp == NULL) {
@@ -3197,7 +3119,6 @@ bool daNpcChat_c::setExpressionBtp(int i_index) {
     return false;
 }
 
-/* 80983168-80983584 002A08 041C+00 3/0 0/0 0/0 .text            setMotionAnm__11daNpcChat_cFif */
 void daNpcChat_c::setMotionAnm(int i_index, f32 i_morf) {
     J3DAnmTransformKey* anm;
     int i_attr = J3DFrameCtrl::EMode_LOOP;
@@ -3533,7 +3454,6 @@ void daNpcChat_c::setMotionAnm(int i_index, f32 i_morf) {
     }
 }
 
-/* 80983584-809835C8 002E24 0044+00 1/0 0/0 0/0 .text            setMotion__11daNpcChat_cFifi */
 void daNpcChat_c::setMotion(int i_motion, f32 i_morf, int param_3) {
     s16 motion = i_motion;
 
@@ -3545,12 +3465,10 @@ void daNpcChat_c::setMotion(int i_motion, f32 i_morf, int param_3) {
     }
 }
 
-/* 809835C8-809835D0 002E68 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__11daNpcChat_cFv */
 int daNpcChat_c::drawDbgInfo() {
     return 0;
 }
 
-/* 809835D0-809837A4 002E70 01D4+00 1/0 0/0 0/0 .text            drawOtherMdls__11daNpcChat_cFv */
 void daNpcChat_c::drawOtherMdls() {
     static int const a_jntNumTbl[13][2] = {
         -1, -1,
@@ -3592,7 +3510,6 @@ void daNpcChat_c::drawOtherMdls() {
     }
 }
 
-/* 809837A4-809837C0 003044 001C+00 1/1 0/0 0/0 .text            getTalkMotionNo__11daNpcChat_cFv */
 u8 daNpcChat_c::getTalkMotionNo() {
     u8 talkNo = home.angle.z & 0xFF;
     if (talkNo >= 35) {
@@ -3602,7 +3519,6 @@ u8 daNpcChat_c::getTalkMotionNo() {
     return talkNo;
 }
 
-/* 809837C0-809837EC 003060 002C+00 1/1 0/0 0/0 .text            getLookPlayerCheck__11daNpcChat_cFv */
 bool daNpcChat_c::getLookPlayerCheck() {
     u8 uVar1 = (home.angle.z >> 8) & 0xFF;
     if ((u32)uVar1 == 1 && !mTwilight) {
@@ -3612,7 +3528,6 @@ bool daNpcChat_c::getLookPlayerCheck() {
     return false;
 }
 
-/* 809837EC-809839E0 00308C 01F4+00 1/1 0/0 0/0 .text            reset__11daNpcChat_cFv */
 void daNpcChat_c::reset() {
     initialize();
     mLookat.initialize();
@@ -3664,7 +3579,6 @@ void daNpcChat_c::reset() {
     mMotionMorfOverride = 0.0f;
 }
 
-/* 809839E0-80984DD0 003280 13F0+00 1/1 0/0 0/0 .text            playMotion__11daNpcChat_cFv */
 void daNpcChat_c::playMotion() {
     daNpcF_anmPlayData dat0 = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
@@ -3833,7 +3747,6 @@ void daNpcChat_c::playMotion() {
     }
 }
 
-/* 80984DD0-80984F34 004670 0164+00 1/1 0/0 0/0 .text            playMotionAnmLoop__11daNpcChat_cFPPPQ28daNpcF_c18daNpcF_anmPlayData */
 void daNpcChat_c::playMotionAnmLoop(daNpcF_c::daNpcF_anmPlayData*** i_data) {
     daNpcF_anmPlayData* playData = NULL;
 
@@ -3869,7 +3782,6 @@ void daNpcChat_c::playMotionAnmLoop(daNpcF_c::daNpcF_anmPlayData*** i_data) {
     mMotionPrevPhase = mMotionPhase;
 }
 
-/* 80984F34-80984FDC 0047D4 00A8+00 4/4 0/0 0/0 .text            setAction__11daNpcChat_cFM11daNpcChat_cFPCvPvPv_b */
 BOOL daNpcChat_c::setAction(actionFunc action) {
     mMode = 3;
 
@@ -3887,7 +3799,6 @@ BOOL daNpcChat_c::setAction(actionFunc action) {
     return TRUE;
 }
 
-/* 80984FDC-809850D0 00487C 00F4+00 2/2 0/0 0/0 .text            step__11daNpcChat_cFsi */
 bool daNpcChat_c::step(s16 i_targetAngle, int param_2) {
     if (mTurnMode == 0) {
         mTurnTargetAngle = i_targetAngle;
@@ -3915,7 +3826,6 @@ bool daNpcChat_c::step(s16 i_targetAngle, int param_2) {
     return mTurnMode > 1;
 }
 
-/* 809850D0-80985104 004970 0034+00 1/1 0/0 0/0 .text            setTalkMember__11daNpcChat_cFP11daNpcChat_c */
 void daNpcChat_c::setTalkMember(daNpcChat_c* actor_p) {
     if (mTalkGroupNo == actor_p->getTalkGroupNo()) {
         int talkNo = actor_p->getTalkNo();
@@ -3929,7 +3839,6 @@ void daNpcChat_c::setTalkMember(daNpcChat_c* actor_p) {
     }
 }
 
-/* 80985104-8098552C 0049A4 0428+00 4/0 0/0 0/0 .text            wait__11daNpcChat_cFPv */
 bool daNpcChat_c::wait(void* param_1) {
     int staffId;
     int i_expression, i_motion;
@@ -4020,7 +3929,6 @@ bool daNpcChat_c::wait(void* param_1) {
     return true;
 }
 
-/* 8098552C-809856C8 004DCC 019C+00 2/0 0/0 0/0 .text            fear__11daNpcChat_cFPv */
 bool daNpcChat_c::fear(void* param_1) {
     switch (mMode) {
         case 0:
@@ -4060,7 +3968,6 @@ bool daNpcChat_c::fear(void* param_1) {
     return 1;
 }
 
-/* 809856C8-80985A84 004F68 03BC+00 1/0 0/0 0/0 .text            talk__11daNpcChat_cFPv */
 bool daNpcChat_c::talk(void* param_1) {
     bool rv = false;
 
@@ -4147,7 +4054,6 @@ bool daNpcChat_c::talk(void* param_1) {
     return rv;
 }
 
-/* 80985A84-80985BCC 005324 0148+00 1/0 0/0 0/0 .text            demo__11daNpcChat_cFPv */
 bool daNpcChat_c::demo(void* param_1) {
     dComIfGp_getEventManager();
 
@@ -4192,34 +4098,28 @@ bool daNpcChat_c::demo(void* param_1) {
     return true;
 }
 
-/* 80985BCC-80985BEC 00546C 0020+00 1/0 0/0 0/0 .text            daNpcChat_Create__FPv */
 static int daNpcChat_Create(void* a_this) {
     return static_cast<daNpcChat_c*>(a_this)->Create();
 }
 
-/* 80985BEC-80985C0C 00548C 0020+00 1/0 0/0 0/0 .text            daNpcChat_Delete__FPv */
 static int daNpcChat_Delete(void* a_this) {
     return static_cast<daNpcChat_c*>(a_this)->Delete();
 }
 
-/* 80985C0C-80985C2C 0054AC 0020+00 1/0 0/0 0/0 .text            daNpcChat_Execute__FPv */
 static int daNpcChat_Execute(void* a_this) {
     return static_cast<daNpcChat_c*>(a_this)->Execute();
 }
 
-/* 80985C2C-80985C4C 0054CC 0020+00 1/0 0/0 0/0 .text            daNpcChat_Draw__FPv */
 static int daNpcChat_Draw(void* a_this) {
     return static_cast<daNpcChat_c*>(a_this)->Draw();
 }
 
-/* 80985C4C-80985C54 0054EC 0008+00 1/0 0/0 0/0 .text            daNpcChat_IsDelete__FPv */
 static int daNpcChat_IsDelete(void* a_this) {
     return 1;
 }
 
 AUDIO_INSTANCES;
 
-/* 8098B94C-8098B96C -00001 0020+00 1/0 0/0 0/0 .data            daNpcChat_MethodTable */
 static actor_method_class daNpcChat_MethodTable = {
     (process_method_func)daNpcChat_Create,
     (process_method_func)daNpcChat_Delete,
@@ -4228,7 +4128,6 @@ static actor_method_class daNpcChat_MethodTable = {
     (process_method_func)daNpcChat_Draw,
 };
 
-/* 8098B96C-8098B99C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_CHAT */
 extern actor_process_profile_definition g_profile_NPC_CHAT = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

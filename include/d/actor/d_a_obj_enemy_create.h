@@ -13,14 +13,14 @@
  */
 class daObjE_CREATE_c : public fopAc_ac_c {
 public:
-    /* 80BE31BC */ void NormalAction();
-    /* 80BE345C */ void SearchAction();
-    /* 80BE34A0 */ void LoopAction();
-    /* 80BE3544 */ void Action();
-    /* 80BE359C */ int Execute();
-    /* 80BE35C0 */ int Delete();
-    /* 80BE3618 */ void NameChk();
-    /* 80BE3770 */ int create();
+    void NormalAction();
+    void SearchAction();
+    void LoopAction();
+    void Action();
+    int Execute();
+    int Delete();
+    void NameChk();
+    int create();
 
 private:
     /* 0x568 */ u8 field_0x568;

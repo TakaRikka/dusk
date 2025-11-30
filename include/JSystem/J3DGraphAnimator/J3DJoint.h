@@ -16,27 +16,27 @@ class J3DMtxBuffer;
  */
 class J3DMtxCalc {
 public:
-    /* 80325D1C */ static void setMtxBuffer(J3DMtxBuffer*);
+    static void setMtxBuffer(J3DMtxBuffer*);
 
-    /* 8000D948 */ virtual ~J3DMtxCalc() {}
-    /* 80014E90 */ virtual void setAnmTransform(J3DAnmTransform*) {
+    virtual ~J3DMtxCalc() {}
+    virtual void setAnmTransform(J3DAnmTransform*) {
         JUT_ASSERT_MSG(127, FALSE, "You cannot use this method");
     }
-    /* 80014E9C */ virtual J3DAnmTransform* getAnmTransform() {
+    virtual J3DAnmTransform* getAnmTransform() {
         JUT_ASSERT_MSG(131, FALSE, "You cannot use this method");
         return NULL;
     }
-    /* 80014E8C */ virtual void setAnmTransform(u8, J3DAnmTransform*) {
+    virtual void setAnmTransform(u8, J3DAnmTransform*) {
         JUT_ASSERT_MSG(137, FALSE, "You cannot use this method");
     }
-    /* 80014E94 */ virtual J3DAnmTransform* getAnmTransform(u8) {
+    virtual J3DAnmTransform* getAnmTransform(u8) {
         JUT_ASSERT_MSG(141, FALSE, "You cannot use this method");
         return NULL;
     }
-    /* 80014EA4 */ virtual void setWeight(u8, f32) {
+    virtual void setWeight(u8, f32) {
         JUT_ASSERT_MSG(147, FALSE, "You cannot use this method");
     }
-    /* 80014EA8 */ virtual f32 getWeight(u8) const {
+    virtual f32 getWeight(u8) const {
         JUT_ASSERT_MSG(152, FALSE, "You cannot use this method");
         return 0.0f;
     }
@@ -62,10 +62,10 @@ typedef int (*J3DJointCallBack)(J3DJoint*, int);
  */
 class J3DJoint {
 public:
-    /* 8032F13C */ void appendChild(J3DJoint*);
-    /* 8032F170 */ J3DJoint();
-    /* 8032F254 */ void entryIn();
-    /* 8032F3F8 */ void recursiveCalc();
+    void appendChild(J3DJoint*);
+    J3DJoint();
+    void entryIn();
+    void recursiveCalc();
 
     u32 getType() const { return 'NJNT'; }
 
@@ -127,7 +127,7 @@ private:
  */
 class J3DMtxCalcNoAnmBase : public J3DMtxCalc {
 public:
-    /* 8000FA8C */ virtual ~J3DMtxCalcNoAnmBase() {}
+    virtual ~J3DMtxCalcNoAnmBase() {}
 };
 
 /**
@@ -151,7 +151,7 @@ public:
  * 
  */
 struct J3DMtxCalcJ3DSysInitSoftimage {
-    /* 8032ECAC */ static void init(const Vec& param_0, const Mtx& param_1) {
+    static void init(const Vec& param_0, const Mtx& param_1) {
         J3DSys::mCurrentS = param_0;
         MTXCopy(param_1, J3DSys::mCurrentMtx);
     }
@@ -162,7 +162,7 @@ struct J3DMtxCalcJ3DSysInitSoftimage {
  * 
  */
 struct J3DMtxCalcJ3DSysInitMaya {
-    /* 8032ECAC */ static void init(const Vec&, const Mtx& param_1);
+    static void init(const Vec&, const Mtx& param_1);
 };
 
 /**
@@ -170,7 +170,7 @@ struct J3DMtxCalcJ3DSysInitMaya {
  * 
  */
 struct J3DMtxCalcJ3DSysInitBasic {
-    /* 8032EC28 */ static void init(const Vec&, const Mtx& param_1);
+    static void init(const Vec&, const Mtx& param_1);
 };
 
 /**
@@ -178,7 +178,7 @@ struct J3DMtxCalcJ3DSysInitBasic {
  * 
  */
 struct J3DMtxCalcCalcTransformSoftimage {
-    /* 8032EE50 */ static void calcTransform(J3DTransformInfo const&);
+    static void calcTransform(J3DTransformInfo const&);
 };
 
 /**
@@ -186,7 +186,7 @@ struct J3DMtxCalcCalcTransformSoftimage {
  * 
  */
 struct J3DMtxCalcCalcTransformMaya {
-    /* 8032EFBC */ static void calcTransform(J3DTransformInfo const&);
+    static void calcTransform(J3DTransformInfo const&);
 };
 
 /**
@@ -194,7 +194,7 @@ struct J3DMtxCalcCalcTransformMaya {
  * 
  */
 struct J3DMtxCalcCalcTransformBasic {
-    /* 8032ED30 */ static void calcTransform(J3DTransformInfo const&);
+    static void calcTransform(J3DTransformInfo const&);
 };
 
 #endif /* J3DJOINT_H */

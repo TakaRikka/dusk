@@ -1,6 +1,5 @@
 #include "wchar_io.h"
 
-/* 80369114-8036919C 363A54 0088+00 0/0 5/5 0/0 .text            fwide */
 int fwide(FILE* file, int mode) {
     if (file == NULL || file->file_mode.file_kind == __closed_file) {
         return 0;

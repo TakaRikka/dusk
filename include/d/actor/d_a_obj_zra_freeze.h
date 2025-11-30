@@ -14,14 +14,14 @@
  */
 class daZraFreeze_c : public fopAc_ac_c {
 public:
-    /* 80D440B8 */ void setBaseMtx();
-    /* 80D44124 */ BOOL chkActorInScreen();
-    /* 80D442BC */ cPhs__Step Create();
-    /* 80D4443C */ int CreateHeap();
-    /* 80D444C0 */ void setHitodamaPrtcl();
-    /* 80D44698 */ int Execute();
-    /* 80D449E0 */ int Draw();
-    /* 80D44A84 */ int Delete();
+    void setBaseMtx();
+    BOOL chkActorInScreen();
+    cPhs__Step Create();
+    int CreateHeap();
+    void setHitodamaPrtcl();
+    int Execute();
+    int Draw();
+    int Delete();
 
     /* 0x568 */ request_of_phase_process_class mPhaseReq;
     /* 0x570 */ J3DModel* mpModel;

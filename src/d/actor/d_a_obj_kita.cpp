@@ -10,7 +10,6 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 
-/* 80C4534C-80C4538C 0000EC 0040+00 1/1 0/0 0/0 .text            __ct__16daObj_Kita_HIO_cFv */
 daObj_Kita_HIO_c::daObj_Kita_HIO_c() {
     mId = -1;
     mModelSizeX = 1.2f;
@@ -35,8 +34,6 @@ void daObj_Kita_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 80C4538C-80C45424 00012C 0098+00 1/0 0/0 0/0 .text            daObj_Kita_Draw__FP14obj_kita_class
- */
 static int daObj_Kita_Draw(obj_kita_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     g_env_light.settingTevStruct(0x10, &a_this->current.pos, &a_this->tevStr);
@@ -47,19 +44,14 @@ static int daObj_Kita_Draw(obj_kita_class* i_this) {
     return 1;
 }
 
-/* 80C45424-80C45430 0001C4 000C+00 1/1 0/0 0/0 .text
- * ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c            */
 static void ride_call_back(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2) {
     ((obj_kita_class*)param_1)->field_0x590 = 20;
 }
 
-/* 80C45FF0-80C45FF4 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool l_HIOInit;
 
-/* 80C46000-80C46018 000018 0018+00 4/4 0/0 0/0 .bss             l_HIO */
 static daObj_Kita_HIO_c l_HIO;
 
-/* 80C45430-80C458D8 0001D0 04A8+00 1/1 0/0 0/0 .text            ita_control__FP14obj_kita_class */
 static void ita_control(obj_kita_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     cXyz local_84;
@@ -128,7 +120,6 @@ static void ita_control(obj_kita_class* i_this) {
     }
 }
 
-/* 80C458D8-80C45A10 000678 0138+00 1/1 0/0 0/0 .text            action__FP14obj_kita_class */
 static void action(obj_kita_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     cXyz cStack_24;
@@ -160,7 +151,6 @@ static void action(obj_kita_class* i_this) {
     }
 }
 
-/* 80C45A10-80C45A6C 0007B0 005C+00 2/1 0/0 0/0 .text daObj_Kita_Execute__FP14obj_kita_class */
 static int daObj_Kita_Execute(obj_kita_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     i_this->field_0x572++;
@@ -173,12 +163,10 @@ static int daObj_Kita_Execute(obj_kita_class* i_this) {
     return 1;
 }
 
-/* 80C45A6C-80C45A74 00080C 0008+00 1/0 0/0 0/0 .text daObj_Kita_IsDelete__FP14obj_kita_class */
 static int daObj_Kita_IsDelete(obj_kita_class * i_this) {
     return 1;
 }
 
-/* 80C45A74-80C45B10 000814 009C+00 1/0 0/0 0/0 .text daObj_Kita_Delete__FP14obj_kita_class */
 static int daObj_Kita_Delete(obj_kita_class* i_this) {
     fopAcM_RegisterDeleteID(i_this, "Obj_Kita");
     dComIfG_resDelete(&i_this->mPhase, "Obj_kita");
@@ -193,7 +181,6 @@ static int daObj_Kita_Delete(obj_kita_class* i_this) {
     return 1;
 }
 
-/* 80C45B10-80C45C4C 0008B0 013C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_kita_class* i_this = (obj_kita_class*)a_this;
     for (int i = 0; i < i_this->mNumKitas - 1; i++) {
@@ -219,8 +206,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80C45C4C-80C45E44 0009EC 01F8+00 1/0 0/0 0/0 .text            daObj_Kita_Create__FP10fopAc_ac_c
- */
 static int daObj_Kita_Create(fopAc_ac_c* a_this) {
     obj_kita_class* i_this = (obj_kita_class*)a_this;
     fopAcM_ct(a_this, obj_kita_class);
@@ -271,7 +256,6 @@ static int daObj_Kita_Create(fopAc_ac_c* a_this) {
     return rv;
 }
 
-/* 80C45F8C-80C45FAC -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Kita_Method */
 static actor_method_class l_daObj_Kita_Method = {
     (process_method_func)daObj_Kita_Create,
     (process_method_func)daObj_Kita_Delete,
@@ -280,7 +264,6 @@ static actor_method_class l_daObj_Kita_Method = {
     (process_method_func)daObj_Kita_Draw,
 };
 
-/* 80C45FAC-80C45FDC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_KITA */
 extern actor_process_profile_definition g_profile_OBJ_KITA = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

@@ -8,7 +8,7 @@
 
 namespace JGadget {
 namespace vector {
-/* 802DCCC8 */ u32 extend_default(u32, u32, u32);
+u32 extend_default(u32, u32, u32);
 };
 
 typedef u32 (*extendFunc)(u32, u32, u32);

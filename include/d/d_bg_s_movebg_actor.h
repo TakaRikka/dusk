@@ -12,24 +12,24 @@ public:
     /* 0x568 */ dBgW* mpBgW;
     /* 0x56C */ Mtx mBgMtx;
 
-    /* 80078624 */ dBgS_MoveBgActor();
-    /* 800786C8 */ int MoveBGCreateHeap();
-    /* 800787BC */ int MoveBGCreate(char const* i_arcName, int i_dzb_id,
+    dBgS_MoveBgActor();
+    int MoveBGCreateHeap();
+    int MoveBGCreate(char const* i_arcName, int i_dzb_id,
                                     MoveBGActor_SetFunc i_setFunc, u32 i_heapSize, Mtx* i_bgMtx);
-    /* 800788DC */ int MoveBGDelete();
-    /* 80078950 */ int MoveBGExecute();
+    int MoveBGDelete();
+    int MoveBGExecute();
 
     int MoveBGDraw() { return Draw(); }
     int MoveBGIsDelete() { return IsDelete(); }
 
-    /* 80078688 */ virtual int CreateHeap();
-    /* 80078690 */ virtual int Create();
-    /* 80078698 */ virtual int Execute(Mtx**);
-    /* 800786A0 */ virtual int Draw();
-    /* 800786A8 */ virtual int Delete();
-    /* 800786B0 */ virtual int IsDelete();
-    /* 800786B8 */ virtual int ToFore();
-    /* 800786C0 */ virtual int ToBack();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
+    virtual int IsDelete();
+    virtual int ToFore();
+    virtual int ToBack();
 
     static const char* m_name;
     static int m_dzb_id;

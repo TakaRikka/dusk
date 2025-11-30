@@ -52,7 +52,7 @@ enum Action_e {
 
 class e_po_class {
 public:
-    /* 80756900 */ e_po_class();
+    e_po_class();
 
     /* 0x000 */ fopEn_enemy_c enemy;
     /* 0x5AC */ request_of_phase_process_class mPhase;

@@ -11,9 +11,9 @@ public:
         /* 0x3 */ FULL_GRP
     };
 
-    /* 80077BA0 */ dBgS_GrpPassChk();
+    dBgS_GrpPassChk();
 
-    /* 80077BC4 */ virtual ~dBgS_GrpPassChk();
+    virtual ~dBgS_GrpPassChk();
 
     void OnWaterGrp() { mGrp |= WATER_GRP; }
     void OnSpl() { mGrp |= WATER_GRP; }

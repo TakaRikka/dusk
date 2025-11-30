@@ -11,7 +11,6 @@
 #include "d/d_msg_object.h"
 #include "d/actor/d_a_myna.h"
 
-/* 80D62DB8-80D62E5C 000078 00A4+00 1/1 0/0 0/0 .text            create__15daTag_SSDrink_cFv */
 int daTag_SSDrink_c::create() {
     fopAcM_ct(this, daTag_SSDrink_c);
     field_0x5D2 = getTypeFromParam();
@@ -22,12 +21,10 @@ int daTag_SSDrink_c::create() {
     return 4;
 }
 
-/* 80D62E5C-80D62E64 00011C 0008+00 1/1 0/0 0/0 .text            Delete__15daTag_SSDrink_cFv */
 int daTag_SSDrink_c::Delete() {
     return 1;
 }
 
-/* 80D62E64-80D62ED0 000124 006C+00 2/2 0/0 0/0 .text            Execute__15daTag_SSDrink_cFv */
 int daTag_SSDrink_c::Execute() {
     if (chkEvent()) {
         if (mProcessFunc) {
@@ -39,12 +36,10 @@ int daTag_SSDrink_c::Execute() {
     return 1;
 }
 
-/* 80D62ED0-80D62ED8 000190 0008+00 1/1 0/0 0/0 .text            Draw__15daTag_SSDrink_cFv */
 int daTag_SSDrink_c::Draw() {
     return 1;
 }
 
-/* 80D62ED8-80D62F80 000198 00A8+00 2/1 0/0 0/0 .text getTypeFromParam__15daTag_SSDrink_cFv */
 int daTag_SSDrink_c::getTypeFromParam() {
     switch (fopAcM_GetParamBit(this, 0, 4)) {
     case 0:
@@ -74,13 +69,10 @@ int daTag_SSDrink_c::getTypeFromParam() {
     }
 }
 
-/* 80D62F80-80D62F8C 000240 000C+00 2/2 0/0 0/0 .text getSwitchFromParam__15daTag_SSDrink_cFv */
 u8 daTag_SSDrink_c::getSwitchFromParam() {
     return fopAcM_GetParamBit(this, 4, 8);
 }
 
-/* 80D62F8C-80D62FC8 00024C 003C+00 3/3 0/0 0/0 .text            getFlowNodeNum__15daTag_SSDrink_cFv
- */
 u16 daTag_SSDrink_c::getFlowNodeNum() {
     u16 num = home.angle.x;
     bool bVar1 = false;
@@ -98,19 +90,16 @@ u16 daTag_SSDrink_c::getFlowNodeNum() {
     return num2 & 0xFFFF;
 }
 
-/* 80D62FC8-80D62FD4 000288 000C+00 1/1 0/0 0/0 .text            getValue__15daTag_SSDrink_cFv */
 u16 daTag_SSDrink_c::getValue() {
     return fopAcM_GetParamBit(this, 12, 16);
 }
 
-/* 80D62FD4-80D63044 000294 0070+00 1/1 0/0 0/0 .text            restart__15daTag_SSDrink_cFv */
 void daTag_SSDrink_c::restart() {
     current.angle.set(0, home.angle.y, 0);
     shape_angle = current.angle;
     setProcess(&daTag_SSDrink_c::wait);
 }
 
-/* 80D63044-80D630BC 000304 0078+00 1/1 0/0 0/0 .text            initialize__15daTag_SSDrink_cFv */
 void daTag_SSDrink_c::initialize() {
     fopAcM_setCullSizeBox(this, -30.0f, -15.0f, -30.0f, 30.0f, 45.0f, 30.0f);
     attention_info.flags = 0;
@@ -120,14 +109,10 @@ void daTag_SSDrink_c::initialize() {
     Execute();
 }
 
-/* 80D630BC-80D630E8 00037C 002C+00 2/2 0/0 0/0 .text
- * checkProcess__15daTag_SSDrink_cFM15daTag_SSDrink_cFPCvPvPv_i */
 int daTag_SSDrink_c::checkProcess(ProcessFunc i_processFunc) {
     return mProcessFunc == i_processFunc;
 }
 
-/* 80D630E8-80D631D4 0003A8 00EC+00 3/3 0/0 0/0 .text
- * setProcess__15daTag_SSDrink_cFM15daTag_SSDrink_cFPCvPvPv_i   */
 int daTag_SSDrink_c::setProcess(ProcessFunc i_processFunc) {
     int retVal = 0;
 
@@ -149,13 +134,11 @@ int daTag_SSDrink_c::setProcess(ProcessFunc i_processFunc) {
     return retVal;
 }
 
-/* 80D631D4-80D63208 000494 0034+00 1/1 0/0 0/0 .text            setAttnPos__15daTag_SSDrink_cFv */
 void daTag_SSDrink_c::setAttnPos() {
     attention_info.position = current.pos;
     eyePos = current.pos;
 }
 
-/* 80D63208-80D63384 0004C8 017C+00 1/1 0/0 0/0 .text            chkEvent__15daTag_SSDrink_cFv */
 int daTag_SSDrink_c::chkEvent() {
     int retVal = 1;
     if (!dComIfGp_getEvent().isOrderOK()) {
@@ -183,7 +166,6 @@ int daTag_SSDrink_c::chkEvent() {
     return retVal;
 }
 
-/* 80D63384-80D63490 000644 010C+00 1/1 0/0 0/0 .text            orderEvent__15daTag_SSDrink_cFv */
 int daTag_SSDrink_c::orderEvent() {
     if (!dComIfGp_getLinkPlayer()->checkWolf() && fopAcM_isSwitch(this, getSwitchFromParam()) &&
         field_0x5D3 != 0x60 && getFlowNodeNum() != 0xFFFF)
@@ -204,7 +186,6 @@ int daTag_SSDrink_c::orderEvent() {
     return 1;
 }
 
-/* 80D63490-80D635C8 000750 0138+00 2/0 0/0 0/0 .text            wait__15daTag_SSDrink_cFPv */
 int daTag_SSDrink_c::wait(void* param_0) {
     switch (mEventType) {
     case 1:
@@ -231,7 +212,6 @@ int daTag_SSDrink_c::wait(void* param_0) {
     }
 }
 
-/* 80D635C8-80D6369C 000888 00D4+00 2/0 0/0 0/0 .text            talk__15daTag_SSDrink_cFPv */
 int daTag_SSDrink_c::talk(void* param_0) {
     int retVal = 0;
     switch (mEventType) {
@@ -252,49 +232,38 @@ int daTag_SSDrink_c::talk(void* param_0) {
     return retVal;
 }
 
-/* 80D6369C-80D636BC 00095C 0020+00 1/0 0/0 0/0 .text            daTag_SSDrink_Create__FPv */
 static int daTag_SSDrink_Create(void* i_this) {
     return static_cast<daTag_SSDrink_c*>(i_this)->create();
 }
 
-/* 80D636BC-80D636DC 00097C 0020+00 1/0 0/0 0/0 .text            daTag_SSDrink_Delete__FPv */
 static int daTag_SSDrink_Delete(void* i_this) {
     return static_cast<daTag_SSDrink_c*>(i_this)->Delete();
 }
 
-/* 80D636DC-80D636FC 00099C 0020+00 1/0 0/0 0/0 .text            daTag_SSDrink_Execute__FPv */
 static int daTag_SSDrink_Execute(void* i_this) {
     return static_cast<daTag_SSDrink_c*>(i_this)->Execute();
 }
 
-/* 80D636FC-80D6371C 0009BC 0020+00 1/0 0/0 0/0 .text            daTag_SSDrink_Draw__FPv */
 static int daTag_SSDrink_Draw(void* i_this) {
     return static_cast<daTag_SSDrink_c*>(i_this)->Draw();
 }
 
-/* 80D6371C-80D63724 0009DC 0008+00 1/0 0/0 0/0 .text            daTag_SSDrink_IsDelete__FPv */
 static int daTag_SSDrink_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80D63724-80D63794 0009E4 0070+00 1/0 0/0 0/0 .text            __dt__15daTag_SSDrink_cFv */
 daTag_SSDrink_c::~daTag_SSDrink_c() {}
 
-/* 80D63794-80D63798 000A54 0004+00 1/0 0/0 0/0 .text            setSoldOut__14daObj_SSBase_cFv
- */
 void daObj_SSBase_c::setSoldOut() {
     /* empty function */
 }
 
-/* ############################################################################################## */
-/* 80D63808-80D63828 -00001 0020+00 1/0 0/0 0/0 .data            daTag_SSDrink_MethodTable */
 static actor_method_class daTag_SSDrink_MethodTable = {
     (process_method_func)daTag_SSDrink_Create,  (process_method_func)daTag_SSDrink_Delete,
     (process_method_func)daTag_SSDrink_Execute, (process_method_func)daTag_SSDrink_IsDelete,
     (process_method_func)daTag_SSDrink_Draw,
 };
 
-/* 80D63828-80D63858 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_TAG_SSDRINK */
 extern actor_process_profile_definition g_profile_TAG_SSDRINK = {
     fpcLy_CURRENT_e,
     7,

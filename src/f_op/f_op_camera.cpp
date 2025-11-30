@@ -9,7 +9,6 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_draw_tag.h"
 
-/* 8001E140-8001E180 018A80 0040+00 1/0 0/0 0/0 .text            fopCam_Draw__FP12camera_class */
 static s32 fopCam_Draw(camera_class* i_this) {
     s32 ret = 1;
     if (!dComIfGp_isPauseFlag()) {
@@ -19,7 +18,6 @@ static s32 fopCam_Draw(camera_class* i_this) {
     return ret;
 }
 
-/* 8001E180-8001E1C8 018AC0 0048+00 1/0 0/0 0/0 .text            fopCam_Execute__FP12camera_class */
 static int fopCam_Execute(camera_class* i_this) {
     int ret;
 
@@ -30,8 +28,6 @@ static int fopCam_Execute(camera_class* i_this) {
     return ret;
 }
 
-/* 8001E1C8-8001E21C 018B08 0054+00 1/0 0/0 0/0 .text            fopCam_IsDelete__FP12camera_class
- */
 int fopCam_IsDelete(camera_class* i_this) {
     int ret = fpcMtd_IsDelete((process_method_class*)i_this->submethod, i_this);
     if (ret == 1) {
@@ -41,7 +37,6 @@ int fopCam_IsDelete(camera_class* i_this) {
     return ret;
 }
 
-/* 8001E21C-8001E270 018B5C 0054+00 1/0 0/0 0/0 .text            fopCam_Delete__FP12camera_class */
 int fopCam_Delete(camera_class* i_this) {
     int ret = fpcMtd_Delete((process_method_class*)i_this->submethod, i_this);
     if (ret == 1) {
@@ -51,7 +46,6 @@ int fopCam_Delete(camera_class* i_this) {
     return ret;
 }
 
-/* 8001E270-8001E308 018BB0 0098+00 1/0 0/0 0/0 .text            fopCam_Create__FPv */
 static int fopCam_Create(void* i_this) {
     camera_class* a_this = (camera_class*)i_this;
 
@@ -76,7 +70,6 @@ static int fopCam_Create(void* i_this) {
     return ret;
 }
 
-/* 803A3860-803A3878 -00001 0014+04 0/0 2/0 0/0 .data            g_fopCam_Method */
 leafdraw_method_class g_fopCam_Method = {
     (process_method_func)fopCam_Create,  (process_method_func)fopCam_Delete,
     (process_method_func)fopCam_Execute, (process_method_func)fopCam_IsDelete,

@@ -46,7 +46,7 @@ public:
     };
 
     TParse_TSequence(const void* content) : TParseData_aligned<4>(content) {}
-    /* 802899BC */ void getData(TData*) const;
+    void getData(TData*) const;
 
     const void* get() const { return getRaw(); }
     u32 get_head() const { return *(u32*)get(); }
@@ -62,7 +62,7 @@ public:
     };
 
     TParse_TParagraph(const void* content) : TParseData_aligned<4>(content) {}
-    /* 80289A08 */ void getData(TData*) const;
+    void getData(TData*) const;
 };
 
 struct TParse_TParagraph_data : public TParseData {
@@ -75,7 +75,7 @@ struct TParse_TParagraph_data : public TParseData {
     };
 
     TParse_TParagraph_data(const void* content) : TParseData(content) {}
-    /* 80289A80 */ void getData(TData* pData) const;
+    void getData(TData* pData) const;
 };
 
 // Parses a TObject ("demo object")

@@ -29,26 +29,26 @@ public:
         ACTION_CLOSE_INIT,
     };
 
-    /* 80CECF34 */ void initBaseMtx();
-    /* 80CED024 */ void setBaseMtx();
-    /* 80CED0B8 */ int Create();
-    /* 80CED20C */ int CreateHeap();
-    /* 80CED258 */ int create();
-    /* 80CED6BC */ int Execute(Mtx**);
-    /* 80CED708 */ void action();
-    /* 80CED824 */ void actionWait();
-    /* 80CEDA24 */ void actionWaitOrderEvent();
-    /* 80CEDAAC */ void actionOrderEvent();
-    /* 80CEDB2C */ void actionEvent();
-    /* 80CEE048 */ void actionDead();
-    /* 80CEE04C */ void actionWaitClose();
-    /* 80CEE05C */ void actionCloseInit();
-    /* 80CEE0E0 */ void actionClose();
-    /* 80CEE148 */ void hint_action1();
-    /* 80CEE5D0 */ void hint_action2();
-    /* 80CEEA28 */ void hint_action3();
-    /* 80CEECFC */ int Draw();
-    /* 80CEED60 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    void action();
+    void actionWait();
+    void actionWaitOrderEvent();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    void actionWaitClose();
+    void actionCloseInit();
+    void actionClose();
+    void hint_action1();
+    void hint_action2();
+    void hint_action3();
+    int Draw();
+    int Delete();
 
     void setOpen() { mAction = ACTION_WAIT_CLOSE; }
     void setAction(u8 action) { mAction = action; }

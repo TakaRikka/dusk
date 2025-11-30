@@ -9,7 +9,7 @@ struct daNpcThe_HIOParam {
 
 class daNpcThe_Param_c {
 public:
-    /* 80AFBDA0 */ virtual ~daNpcThe_Param_c() {}
+    virtual ~daNpcThe_Param_c() {}
 
     static const daNpcThe_HIOParam m;
 };
@@ -112,37 +112,37 @@ public:
         /* 0xA */ MOT_LOOK,
     };
 
-    /* 80AF76CC */ daNpcThe_c();
-    /* 80AF78E0 */ ~daNpcThe_c();
+    daNpcThe_c();
+    ~daNpcThe_c();
     /*  inline  */ inline BOOL CreateHeap();
-    /* 80AF7AE0 */ BOOL ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80AF7CB0 */ static BOOL createHeapCallBack(fopAc_ac_c*);
-    /* 80AF8114 */ static BOOL ctrlJointCallBack(J3DJoint*, int);
-    /* 80AF8160 */ bool setExpressionAnm(int, bool);
-    /* 80AF841C */ bool setExpressionBtp(int);
-    /* 80AF8564 */ void setMotionAnm(int, f32);
-    /* 80AF8744 */ BOOL wait(void*);
-    /* 80AF8B0C */ void setMotion(int, f32, int);
-    /* 80AF8B50 */ void setExpression(int, f32);
-    /* 80AF8B7C */ BOOL waitTW(void*);
-    /* 80AF8CC4 */ BOOL talk(void*);
-    /* 80AF912C */ BOOL test(void*);
-    /* 80AF923C */ BOOL EvCut_TwResistance(int);
-    /* 80AF9244 */ BOOL EvCut_Introduction(int);
-    /* 80AF9358 */ cPhs__Step create();
-    /* 80AF9748 */ void reset();
+    BOOL ctrlJoint(J3DJoint*, J3DModel*);
+    static BOOL createHeapCallBack(fopAc_ac_c*);
+    static BOOL ctrlJointCallBack(J3DJoint*, int);
+    bool setExpressionAnm(int, bool);
+    bool setExpressionBtp(int);
+    void setMotionAnm(int, f32);
+    BOOL wait(void*);
+    void setMotion(int, f32, int);
+    void setExpression(int, f32);
+    BOOL waitTW(void*);
+    BOOL talk(void*);
+    BOOL test(void*);
+    BOOL EvCut_TwResistance(int);
+    BOOL EvCut_Introduction(int);
+    cPhs__Step create();
+    void reset();
     /*  inline  */ inline int Draw();
-    /* 80AF99F4 */ inline void setParam();
-    /* 80AF9CF0 */ inline BOOL main();
-    /* 80AF9F94 */ inline void playMotion();
-    /* 80AFA338 */ inline void playExpression();
+    inline void setParam();
+    inline BOOL main();
+    inline void playMotion();
+    inline void playExpression();
     /*  inline  */ inline void setExpressionTalkAfter();
-    /* 80AFA6CC */ inline BOOL doEvent();
-    /* 80AFADEC */ inline BOOL ctrlBtk();
-    /* 80AFAEC8 */ inline void setAttnPos();
-    /* 80AFB1C4 */ inline void lookat();
-    /* 80AFB488 */ inline BOOL drawDbgInfo();
-    /* 80AFBD9C */ void adjustShapeAngle() {}
+    inline BOOL doEvent();
+    inline BOOL ctrlBtk();
+    inline void setAttnPos();
+    inline void lookat();
+    inline BOOL drawDbgInfo();
+    void adjustShapeAngle() {}
 
     u8 getTypeFromParam() {
         switch (fopAcM_GetParam(this) & 0xff) {

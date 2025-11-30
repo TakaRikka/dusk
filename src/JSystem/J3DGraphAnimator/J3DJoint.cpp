@@ -8,8 +8,6 @@
 #include "JSystem/JMath/JMath.h"
 #include "m_Do/m_Do_mtx.h"
 
-/* 8032EC28-8032ECAC 329568 0084+00 0/0 1/1 0/0 .text
- * init__25J3DMtxCalcJ3DSysInitBasicFRC3VecRA3_A4_Cf            */
 void J3DMtxCalcJ3DSysInitBasic::init(Vec const& scale, Mtx const& mtx) {
     J3DSys::mCurrentS = scale;
     J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
@@ -17,8 +15,6 @@ void J3DMtxCalcJ3DSysInitBasic::init(Vec const& scale, Mtx const& mtx) {
                      J3DSys::mCurrentS.z);
 }
 
-/* 8032ECAC-8032ED30 3295EC 0084+00 0/0 2/2 2/2 .text
- * init__24J3DMtxCalcJ3DSysInitMayaFRC3VecRA3_A4_Cf             */
 void J3DMtxCalcJ3DSysInitMaya::init(Vec const& scale, Mtx const& mtx) {
     J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
     J3DSys::mCurrentS = scale;
@@ -26,10 +22,8 @@ void J3DMtxCalcJ3DSysInitMaya::init(Vec const& scale, Mtx const& mtx) {
                      J3DSys::mCurrentS.z);
 }
 
-/* 804515F0-804515F4 000AF0 0004+00 3/3 1/1 0/0 .sbss            mMtxBuffer__10J3DMtxCalc */
 J3DMtxBuffer* J3DMtxCalc::mMtxBuffer;
 
-/* 804515F4-804515F8 000AF4 0004+00 4/4 9/9 2/2 .sbss            mJoint__10J3DMtxCalc */
 J3DJoint* J3DMtxCalc::mJoint;
 
 inline s32 checkScaleOne(const Vec& param_0) {
@@ -40,8 +34,6 @@ inline s32 checkScaleOne(const Vec& param_0) {
     }
 }
 
-/* 8032ED30-8032EE50 329670 0120+00 0/0 1/1 0/0 .text
- * calcTransform__28J3DMtxCalcCalcTransformBasicFRC16J3DTransformInfo */
 void J3DMtxCalcCalcTransformBasic::calcTransform(J3DTransformInfo const& transInfo) {
     J3DMtxBuffer* mtxBuf = J3DMtxCalc::getMtxBuffer();
     u16 jntNo = J3DMtxCalc::getJoint()->getJntNo();
@@ -65,8 +57,6 @@ void J3DMtxCalcCalcTransformBasic::calcTransform(J3DTransformInfo const& transIn
     MTXCopy(J3DSys::mCurrentMtx, anmMtx);
 }
 
-/* 8032EE50-8032EFBC 329790 016C+00 0/0 1/1 0/0 .text
- * calcTransform__32J3DMtxCalcCalcTransformSoftimageFRC16J3DTransformInfo */
 void J3DMtxCalcCalcTransformSoftimage::calcTransform(J3DTransformInfo const& transInfo) {
     J3DMtxBuffer* mtxBuf = J3DMtxCalc::getMtxBuffer();
     u16 jntNo = J3DMtxCalc::getJoint()->getJntNo();
@@ -96,8 +86,6 @@ void J3DMtxCalcCalcTransformSoftimage::calcTransform(J3DTransformInfo const& tra
     }
 }
 
-/* 8032EFBC-8032F13C 3298FC 0180+00 0/0 6/6 2/2 .text
- * calcTransform__27J3DMtxCalcCalcTransformMayaFRC16J3DTransformInfo */
 void J3DMtxCalcCalcTransformMaya::calcTransform(J3DTransformInfo const& transInfo) {
     J3DJoint* joint = J3DMtxCalc::getJoint();
     J3DMtxBuffer* mtxBuf = J3DMtxCalc::getMtxBuffer();
@@ -140,8 +128,6 @@ void J3DMtxCalcCalcTransformMaya::calcTransform(J3DTransformInfo const& transInf
     J3DSys::mParentS.z = transInfo.mScale.z;
 }
 
-/* 8032F13C-8032F170 329A7C 0034+00 0/0 1/1 0/0 .text            appendChild__8J3DJointFP8J3DJoint
- */
 void J3DJoint::appendChild(J3DJoint* pChild) {
     if (mChild == NULL) {
         mChild = pChild;
@@ -154,7 +140,6 @@ void J3DJoint::appendChild(J3DJoint* pChild) {
     }
 }
 
-/* 8032F170-8032F254 329AB0 00E4+00 0/0 1/1 0/0 .text            __ct__8J3DJointFv */
 J3DJoint::J3DJoint() {
     mCallBackUserData = NULL;
     mCallBack = NULL;
@@ -175,7 +160,6 @@ J3DJoint::J3DJoint() {
     mMax = init2;
 }
 
-/* 8032F254-8032F3F8 329B94 01A4+00 0/0 1/1 0/0 .text            entryIn__8J3DJointFv */
 void J3DJoint::entryIn() {
     MtxP anmMtx = j3dSys.getModel()->getAnmMtx(mJntNo);
     j3dSys.getDrawBuffer(0)->setZMtx(anmMtx);
@@ -208,10 +192,8 @@ void J3DJoint::entryIn() {
     }
 }
 
-/* 804515F8-80451600 000AF8 0004+04 1/1 1/1 0/0 .sbss            mCurrentMtxCalc__8J3DJoint */
 J3DMtxCalc* J3DJoint::mCurrentMtxCalc;
 
-/* 8032F3F8-8032F5A8 329D38 01B0+00 0/0 1/1 0/0 .text            recursiveCalc__8J3DJointFv */
 void J3DJoint::recursiveCalc() {
     J3DMtxCalc* prevMtxCalc = NULL;
     Mtx prevCurrentMtx;

@@ -15,15 +15,15 @@
  */
 class daObjBhbridge_c : public dBgS_MoveBgActor {
 public:
-    /* 80BB5318 */ void RideOn_Angle(s16&, f32, s16, f32);
-    /* 80BB5380 */ int Check_RideOn();
-    /* 80BB558C */ void initBaseMtx();
-    /* 80BB55B8 */ void setBaseMtx();
-    /* 80BB5934 */ virtual int CreateHeap();
-    /* 80BB59AC */ virtual int Create();
-    /* 80BB5A14 */ virtual int Execute(Mtx**);
-    /* 80BB5E10 */ virtual int Draw();
-    /* 80BB5EB4 */ virtual int Delete();
+    void RideOn_Angle(s16&, f32, s16, f32);
+    int Check_RideOn();
+    void initBaseMtx();
+    void setBaseMtx();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     inline int create();
 

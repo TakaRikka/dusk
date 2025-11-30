@@ -16,7 +16,7 @@
  */
 class e_yr_class {
 public:
-    /* 80827D64 */ e_yr_class();
+    e_yr_class();
 
     /* 0x0   */ fopEn_enemy_c mEnemy;
     /* 0x5AC */ request_of_phase_process_class mPhaseReq;

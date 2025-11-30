@@ -9,13 +9,10 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 80D39284-80D39288 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "J_KazeD";
 
-/* 80D3922C-80D39238 000000 000C+00 3/3 0/0 0/0 .rodata          l_bck */
 static int const l_bck[3] = {5, 6, -1};
 
-/* 80D39288-80D392CC 000004 0044+00 1/1 0/0 0/0 .data            l_cyl_src */
 static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x11}, 0x79}},  // mObj
@@ -30,14 +27,12 @@ static dCcD_SrcCyl l_cyl_src = {
     }                        // mCyl
 };
 
-/* 80D38758-80D387B8 000078 0060+00 1/1 0/0 0/0 .text            initBaseMtx__13daObjWindow_cFv */
 void daObjWindow_c::initBaseMtx() {
     mpModel->calc();
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80D387B8-80D38840 0000D8 0088+00 2/2 0/0 0/0 .text            setBaseMtx__13daObjWindow_cFv */
 void daObjWindow_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -49,7 +44,6 @@ void daObjWindow_c::setBaseMtx() {
     }
 }
 
-/* 80D38840-80D388F0 000160 00B0+00 1/0 0/0 0/0 .text            Create__13daObjWindow_cFv */
 int daObjWindow_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -63,7 +57,6 @@ int daObjWindow_c::Create() {
     return 1;
 }
 
-/* 80D388F0-80D38A20 000210 0130+00 1/0 0/0 0/0 .text            CreateHeap__13daObjWindow_cFv */
 int daObjWindow_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 9);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
@@ -80,7 +73,6 @@ int daObjWindow_c::CreateHeap() {
     return 1;
 }
 
-/* 80D38A68-80D38B04 000388 009C+00 1/1 0/0 0/0 .text            create1st__13daObjWindow_cFv */
 cPhs__Step daObjWindow_c::create1st() {
     mType = getType();
     if (mType == 0xff) {
@@ -96,8 +88,6 @@ cPhs__Step daObjWindow_c::create1st() {
     return step;
 }
 
-/* 80D38B04-80D38F28 000424 0424+00 1/0 0/0 0/0 .text            Execute__13daObjWindow_cFPPA3_A4_f
- */
 int daObjWindow_c::Execute(Mtx** i_mtx) {
     if (mpBckAnm != NULL) {
         mpBckAnm->play();
@@ -137,7 +127,6 @@ int daObjWindow_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80D38F28-80D39000 000848 00D8+00 1/0 0/0 0/0 .text            Draw__13daObjWindow_cFv */
 int daObjWindow_c::Draw() {
     g_env_light.settingTevStruct(0x14, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -151,36 +140,28 @@ int daObjWindow_c::Draw() {
     return 1;
 }
 
-/* 80D39000-80D39034 000920 0034+00 1/0 0/0 0/0 .text            Delete__13daObjWindow_cFv */
 int daObjWindow_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
     return 1;
 }
 
-/* 80D39034-80D39128 000954 00F4+00 1/0 0/0 0/0 .text daObjWindow_create1st__FP13daObjWindow_c */
 static cPhs__Step daObjWindow_create1st(daObjWindow_c* i_this) {
     fopAcM_ct(i_this, daObjWindow_c);
     return i_this->create1st();
 }
 
-/* 80D391B8-80D391D8 000AD8 0020+00 1/0 0/0 0/0 .text daObjWindow_MoveBGDelete__FP13daObjWindow_c
- */
 static int daObjWindow_MoveBGDelete(daObjWindow_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D391D8-80D391F8 000AF8 0020+00 1/0 0/0 0/0 .text daObjWindow_MoveBGExecute__FP13daObjWindow_c
- */
 static int daObjWindow_MoveBGExecute(daObjWindow_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D391F8-80D39224 000B18 002C+00 1/0 0/0 0/0 .text daObjWindow_MoveBGDraw__FP13daObjWindow_c */
 static int daObjWindow_MoveBGDraw(daObjWindow_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80D392CC-80D392EC -00001 0020+00 1/0 0/0 0/0 .data            daObjWindow_METHODS */
 static actor_method_class daObjWindow_METHODS = {
     (process_method_func)daObjWindow_create1st,
     (process_method_func)daObjWindow_MoveBGDelete,
@@ -189,7 +170,6 @@ static actor_method_class daObjWindow_METHODS = {
     (process_method_func)daObjWindow_MoveBGDraw,
 };
 
-/* 80D392EC-80D3931C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Window */
 extern actor_process_profile_definition g_profile_Obj_Window = {
     fpcLy_CURRENT_e,
     3,

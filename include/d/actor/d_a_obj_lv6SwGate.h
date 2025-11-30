@@ -15,22 +15,22 @@
  */
 class daLv6SwGate_c : public dBgS_MoveBgActor {
 public:
-    /* 80C74004 */ void setBaseMtx();
-    /* 80C74158 */ int CreateHeap();
-    /* 80C7429C */ int create();
-    /* 80C74720 */ u8 isSwitch();
-    /* 80C7476C */ int Execute(Mtx**);
-    /* 80C74A3C */ void moveGate();
-    /* 80C74B48 */ void init_modeWait();
-    /* 80C74B54 */ void modeWait();
-    /* 80C74B58 */ void init_modeOpen();
-    /* 80C74B64 */ void modeOpen();
-    /* 80C74C7C */ void init_modeClose();
-    /* 80C74C94 */ void modeClose();
-    /* 80C74DBC */ void init_modeBreak();
-    /* 80C74E40 */ void modeBreak();
-    /* 80C7524C */ int Draw();
-    /* 80C752F8 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    u8 isSwitch();
+    int Execute(Mtx**);
+    void moveGate();
+    void init_modeWait();
+    void modeWait();
+    void init_modeOpen();
+    void modeOpen();
+    void init_modeClose();
+    void modeClose();
+    void init_modeBreak();
+    void modeBreak();
+    int Draw();
+    int Delete();
 
     int getSw() { return fopAcM_GetParamBit(this, 0, 8); }
     int getSwState() { return fopAcM_GetParamBit(this, 12, 4); }

@@ -17,18 +17,18 @@
  */
 class daObjCRVHAHEN_c : public fopAc_ac_c {
 public:
-    /* 80BD342C */ int HahenSet(cXyz, cXyz, cXyz, cXyz, f32);
-    /* 80BD3628 */ bool Wall_Check(cXyz, cXyz);
-    /* 80BD3720 */ void Hahen_Hakai(int, int);
-    /* 80BD38DC */ void CheckCull();
-    /* 80BD3A9C */ bool checkViewArea(cXyz*);
-    /* 80BD3B20 */ int Execute();
-    /* 80BD3B74 */ int Delete();
-    /* 80BD3C0C */ void setBaseMtx();
-    /* 80BD3DBC */ int create();
+    int HahenSet(cXyz, cXyz, cXyz, cXyz, f32);
+    bool Wall_Check(cXyz, cXyz);
+    void Hahen_Hakai(int, int);
+    void CheckCull();
+    bool checkViewArea(cXyz*);
+    int Execute();
+    int Delete();
+    void setBaseMtx();
+    int create();
 
-    /* 80BD3338 */ int CreateHeap();
-    /* 80BD3CA0 */ int Draw();
+    int CreateHeap();
+    int Draw();
 
     /* 0x568 */ cXyz mPos[10];
     /* 0x5e0 */ cXyz mVelocity[10];

@@ -14,12 +14,12 @@
  */
 class daHsTarget_c : public dBgS_MoveBgActor {
 public:
-    /* 80C1F490 */ void setBaseMtx();
-    /* 80C1F518 */ int CreateHeap();
-    /* 80C1F598 */ int create();
-    /* 80C1F6B0 */ int Execute(Mtx**);
-    /* 80C1F6C4 */ int Draw();
-    /* 80C1F728 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     u8 getModelType() { return fopAcM_GetParamBit(this, 0, 4); }
 
@@ -33,8 +33,8 @@ STATIC_ASSERT(sizeof(daHsTarget_c) == 0x5B0);
 
 class daHsTarget_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C1F42C */ daHsTarget_HIO_c();
-    /* 80C1F7F4 */ virtual ~daHsTarget_HIO_c() {}
+    daHsTarget_HIO_c();
+    virtual ~daHsTarget_HIO_c() {}
 
     void genMessage(JORMContext*);
 };

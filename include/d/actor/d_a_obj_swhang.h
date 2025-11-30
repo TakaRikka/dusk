@@ -37,30 +37,30 @@ public:
         MODE_ON_WAIT,
     };
 
-    /* 80CFB9D8 */ void initBaseMtx();
-    /* 80CFBA60 */ void setBaseMtx();
-    /* 80CFBDD0 */ int create1st();
-    /* 80CFC04C */ void calcHangPos();
-    /* 80CFC114 */ BOOL checkDown();
-    /* 80CFC194 */ void changeOnStatus();
-    /* 80CFC1F4 */ void changeOffStatus();
-    /* 80CFC4C4 */ void action();
-    /* 80CFC550 */ void checkDownSw();
-    /* 80CFC698 */ void init_modeOffWait();
-    /* 80CFC6AC */ void modeOffWait();
-    /* 80CFCA34 */ void init_modeOnWait();
-    /* 80CFCA40 */ void modeOnWait();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    void calcHangPos();
+    BOOL checkDown();
+    void changeOnStatus();
+    void changeOffStatus();
+    void action();
+    void checkDownSw();
+    void init_modeOffWait();
+    void modeOffWait();
+    void init_modeOnWait();
+    void modeOnWait();
 
     daObjSwHang_c() : dEvLib_callback_c(this) {}
 
-    /* 80CFBCB8 */ virtual int CreateHeap();
-    /* 80CFBAC8 */ virtual int Create();
-    /* 80CFC254 */ virtual int Execute(Mtx**);
-    /* 80CFCD04 */ virtual int Draw();
-    /* 80CFCD98 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
-    /* 80CFCCE0 */ virtual bool eventStart();
-    /* 80CFD034 */ virtual ~daObjSwHang_c() {}
+    virtual bool eventStart();
+    virtual ~daObjSwHang_c() {}
 
     cXyz getHangPos() { return mHangPos; }
 

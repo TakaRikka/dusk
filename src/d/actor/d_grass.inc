@@ -10,17 +10,14 @@
 #include "d/d_camera.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 805231F8-805239F8 000020 0800+00 0/1 0/0 0/0 .data            l_M_kusa05_RGBATEX */
 const u16 l_M_Hijiki00TEX__width = 31;
 const u16 l_M_Hijiki00TEX__height = 31;
 #include "assets/l_M_kusa05_RGBATEX.h"  // ALIGN 32
 
-/* 805239F8-805241F8 000820 0800+00 0/1 0/0 0/0 .data            l_M_Hijiki00TEX */
 const u16 l_M_kusa05_RGBATEX__width = 31;
 const u16 l_M_kusa05_RGBATEX__height = 31;
 #include "assets/l_M_Hijiki00TEX.h"  // ALIGN 32
 
-/* 805241F8-805245B8 001020 03C0+00 0/1 0/0 0/0 .data            l_pos */
 static u8 l_pos[960] = {
     0x3F, 0x4A, 0x56, 0xEF, 0xC2, 0x20, 0x00, 0x00, 0x41, 0xFB, 0x17, 0xE4, 0x41, 0xAA, 0xBB, 0xEA,
     0xC2, 0x20, 0x00, 0x00, 0xC1, 0xB7, 0x03, 0x7A, 0x42, 0x55, 0x8D, 0x6F, 0x43, 0x13, 0x16, 0x3F,
@@ -84,16 +81,13 @@ static u8 l_pos[960] = {
     0x40, 0xD8, 0x8F, 0xF3, 0xC1, 0xDC, 0xC3, 0xBB, 0x42, 0x96, 0x89, 0xEC, 0xC1, 0xAA, 0x6C, 0x09,
 };
 
-/* 805245B8-805245C4 0013E0 000C+00 0/1 0/0 0/0 .data            l_normal */
 static Vec l_normal = {0.0f, 1.0f, 0.0f};
 
-/* 805245C4-805245D8 0013EC 0014+00 0/1 0/0 0/0 .data            l_color */
 static GXColor l_color[] = {
     {0xFF, 0xFF, 0xFF, 0x00}, {0xFF, 0xFF, 0xFF, 0x80}, {0xFF, 0xFF, 0xFF, 0x79},
     {0xFF, 0xFF, 0xFF, 0x73}, {0xFF, 0xFF, 0xFF, 0xFF},
 };
 
-/* 805245D8-80524678 001400 00A0+00 0/1 0/0 0/0 .data            l_texCoord */
 static u8 l_texCoord[160] = {
     0x3F, 0x86, 0xF6, 0x27, 0x3F, 0x9C, 0x00, 0x00, 0x40, 0x03, 0x7B, 0x14, 0x3F, 0x9C, 0x00, 0x00,
     0x40, 0x03, 0x7B, 0x14, 0x3D, 0x00, 0x00, 0x00, 0x3F, 0x86, 0xF6, 0x27, 0x3D, 0x00, 0x00, 0x00,
@@ -107,29 +101,22 @@ static u8 l_texCoord[160] = {
     0x3F, 0x94, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00, 0xBD, 0xC0, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00,
 };
 
-/* 80524678-80524758 0014A0 00CB+15 0/1 0/0 0/0 .data            l_M_Kusa_9qDL */
 #include "assets/l_M_Kusa_9qDL.h"
 
-/* 80524758-80524838 001580 00CB+15 0/1 0/0 0/0 .data            l_M_Kusa_9q_cDL */
 #include "assets/l_M_Kusa_9q_cDL.h"
 
-/* 80524838-80524918 001660 00D4+0C 0/1 0/0 0/0 .data            l_M_TenGusaDL */
 #include "assets/l_M_TenGusaDL.h"
 
-/* 80524918-805249D8 001740 00A8+18 0/2 0/0 0/0 .data            l_Tengusa_matDL */
 #include "assets/l_Tengusa_matDL.h"
 
 l_Tengusa_matDL(l_M_Hijiki00TEX)
 
-/* 805249D8-80524A98 001800 00A8+18 0/2 0/0 0/0 .data            l_kusa9q_matDL */
 #include "assets/l_kusa9q_matDL.h"
 l_kusa9q_matDL(l_M_kusa05_RGBATEX)
 
-/* 80524A98-80524B40 0018C0 00A8+00 0/2 0/0 0/0 .data            l_kusa9q_l4_matDL */
 #include "assets/l_kusa9q_l4_matDL.h"
 l_kusa9q_l4_matDL(l_M_kusa05_RGBATEX)
 
-/* 8051D88C-8051DA20 001C2C 0194+00 1/1 0/0 0/0 .text WorkCo__13dGrass_data_cFP10fopAc_ac_cUli */
 void dGrass_data_c::WorkCo(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo) {
     cXyz sp18;
 
@@ -169,8 +156,6 @@ void dGrass_data_c::WorkCo(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo) 
     }
 }
 
-/* 8051DA20-8051DF54 001DC0 0534+00 1/1 0/0 0/0 .text
- * WorkAt_NoCutAnim__13dGrass_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfP8cCcD_Obj */
 void dGrass_data_c::WorkAt_NoCutAnim(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo, dCcMassS_HitInf* i_hitinf, cCcD_Obj* i_hitObj) {
     cXyz spC;
     dCcD_GObjInf* gobj_p = dCcD_GetGObjInf(i_hitObj);
@@ -245,8 +230,6 @@ void dGrass_data_c::WorkAt_NoCutAnim(fopAc_ac_c* i_hitActor, u32 i_massFlg, int 
     anm_p->m_state = 2;
 }
 
-/* 8051DF54-8051E1C8 0022F4 0274+00 1/1 0/0 0/0 .text
- * Direction_Set__13dGrass_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfP8cCcD_ObjP5csXyz */
 void dGrass_data_c::Direction_Set(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo,
                                   dCcMassS_HitInf* i_hitinf, cCcD_Obj* i_hitObj, csXyz* i_rotation) {
     cXyz sp8;
@@ -292,8 +275,6 @@ void dGrass_data_c::Direction_Set(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_r
 
 static u8 data_8052790d;
 
-/* 8051E1C8-8051EB4C 002568 0984+00 1/1 0/0 0/0 .text
- * WorkAt__13dGrass_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfUs */
 void dGrass_data_c::WorkAt(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo, dCcMassS_HitInf* i_hitinf,
                            u16 i_particleID) {
     cCcD_Obj* hit_obj = i_hitinf->GetAtHitObj();
@@ -386,7 +367,6 @@ void dGrass_data_c::WorkAt(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo, 
     }
 }
 
-/* 8051EB88-8051ED98 002F28 0210+00 1/1 0/0 0/0 .text            hitCheck__13dGrass_data_cFiUs */
 void dGrass_data_c::hitCheck(int i_roomNo, u16 i_particleName) {
     dCcMassS_HitInf hitinf;
     fopAc_ac_c* hit_actor;
@@ -424,13 +404,11 @@ void dGrass_data_c::hitCheck(int i_roomNo, u16 i_particleName) {
     }
 }
 
-/* 8051EDE0-8051EDF0 003180 0010+00 1/1 0/0 0/0 .text newData__13dGrass_room_cFP13dGrass_data_c */
 void dGrass_room_c::newData(dGrass_data_c* i_data) {
     i_data->mp_next = mp_data;
     mp_data = i_data;
 }
 
-/* 8051EDF0-8051EE8C 003190 009C+00 1/1 0/0 0/0 .text            deleteData__13dGrass_room_cFv */
 void dGrass_room_c::deleteData() {
     while (mp_data != NULL) {
         mp_data->m_state = 0;
@@ -445,7 +423,6 @@ void dGrass_room_c::deleteData() {
     }
 }
 
-/* 8051EE8C-8051F03C 00322C 01B0+00 1/1 0/0 0/0 .text            __ct__15dGrass_packet_cFv */
 dGrass_packet_c::dGrass_packet_c() {
     dGrass_data_c* data_p = m_data;
     for (int i = 0; i < 1500; i++) {
@@ -486,7 +463,6 @@ dGrass_packet_c::dGrass_packet_c() {
     m_deleteRoom = &dGrass_packet_c::deleteRoom;
 }
 
-/* 8051F03C-8051FABC 0033DC 0A80+00 1/0 0/0 0/0 .text            draw__15dGrass_packet_cFv */
 void dGrass_packet_c::draw() {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     cXyz spB4;
@@ -772,7 +748,6 @@ void dGrass_packet_c::draw() {
     J3DShape::resetVcdVatCache();
 }
 
-/* 8051FABC-8051FF88 003E5C 04CC+00 1/1 0/0 0/0 .text            calc__15dGrass_packet_cFv */
 void dGrass_packet_c::calc() {
     cXyz* temp_r29 = dKyw_get_wind_vec();
     f32 var_f31 = dKyw_get_wind_pow() * dKyw_get_wind_pow();
@@ -856,7 +831,6 @@ void dGrass_packet_c::calc() {
     }
 }
 
-/* 8051FF88-80520030 004328 00A8+00 2/3 0/0 0/1 .text            checkGroundY__FR4cXyz */
 static f32 checkGroundY(cXyz& param_0) {
     dBgS_GndChk sp8;
     param_0.y += 50.0f;
@@ -875,7 +849,6 @@ static f32 checkGroundY(cXyz& param_0) {
     return temp_f31;
 }
 
-/* 80520030-8052067C 0043D0 064C+00 1/1 0/0 0/0 .text            update__15dGrass_packet_cFv */
 void dGrass_packet_c::update() {
     static s16 mAngleZ[1500];
 
@@ -991,8 +964,6 @@ void dGrass_packet_c::update() {
     dComIfGd_getListPacket()->entryImm(this, 0);
 }
 
-/* 8052067C-80520770 004A1C 00F4+00 1/1 0/0 0/0 .text
- * setData__15dGrass_packet_cFP13dGrass_data_ciR4cXyziUcUcsUc   */
 void dGrass_packet_c::setData(dGrass_data_c* i_data, int i_dataNo, cXyz& i_pos, int i_roomNo,
                               u8 i_tableNo, u8 i_itemBitNo, s16 i_addCol, u8 param_7) {
     f32 y_pos;
@@ -1016,7 +987,6 @@ void dGrass_packet_c::setData(dGrass_data_c* i_data, int i_dataNo, cXyz& i_pos, 
     m_dataNum = i_dataNo;
 }
 
-/* 80520770-80520864 004B10 00F4+00 1/1 0/0 0/0 .text newData__15dGrass_packet_cFR4cXyziUcUcsUc */
 dGrass_data_c* dGrass_packet_c::newData(cXyz& i_pos, int i_roomNo, u8 i_tableNo, u8 i_itemBitNo,
                                         s16 i_addCol, u8 param_5) {
     dGrass_data_c* data_p = m_data + m_dataNum;
@@ -1041,12 +1011,10 @@ dGrass_data_c* dGrass_packet_c::newData(cXyz& i_pos, int i_roomNo, u8 i_tableNo,
     return NULL;
 }
 
-/* 80520864-80520898 004C04 0034+00 1/0 0/0 0/0 .text            deleteRoom__15dGrass_packet_cFi */
 void dGrass_packet_c::deleteRoom(int i_roomNo) {
     m_room[i_roomNo].deleteData();
 }
 
-/* 80520898-805208E4 004C38 004C+00 2/2 0/0 0/0 .text            newAnm__15dGrass_packet_cFv */
 int dGrass_packet_c::newAnm() {
     dGrass_anm_c* anm_p = m_anm + 16;
     for (int i = 16; i < 112; i++) {
@@ -1063,7 +1031,6 @@ int dGrass_packet_c::newAnm() {
     return -1;
 }
 
-/* 805208E4-8052090C 004C84 0028+00 1/1 0/0 0/0 .text            setAnm__15dGrass_packet_cFis */
 void dGrass_packet_c::setAnm(int i_idx, s16) {
     dGrass_anm_c* anm_p = m_anm + i_idx;
 

@@ -22,7 +22,7 @@ struct daNpc_Kn_HIOParam {
 
 class daNpc_Kn_Param_c {
 public:
-    /* 80A3C124 */ virtual ~daNpc_Kn_Param_c() {}
+    virtual ~daNpc_Kn_Param_c() {}
 
     static const daNpc_Kn_HIOParam m;
 };
@@ -218,137 +218,137 @@ public:
 
     void setTalkFlag(u8 i_flag) { field_0x15bd = i_flag; }
     
-    /* 80A2AFD4 */ int create();
-    /* 80A2B278 */ int CreateHeap();
-    /* 80A2B620 */ int Delete();
-    /* 80A2B654 */ int Execute();
-    /* 80A2B6B0 */ int Draw();
-    /* 80A2B764 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A2B784 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80A2B7DC */ u8 getType();
-    /* 80A2B844 */ u8 getDivideNo();
-    /* 80A2B850 */ u32 getFlowNodeNo();
-    /* 80A2B86C */ u8 getPath();
-    /* 80A2B878 */ BOOL isDelete();
-    /* 80A2B91C */ void resetCol();
-    /* 80A2B9E0 */ void reset();
-    /* 80A2BC5C */ void resetType();
-    /* 80A2BD30 */ void setParam();
-    /* 80A2BFB0 */ u32 setParamTeach03();
-    /* 80A2C044 */ u32 setParamTeach04();
-    /* 80A2C0FC */ u32 setParamTeach05();
-    /* 80A2C190 */ u32 setParamTeach06();
-    /* 80A2C1B0 */ u32 setParamTeach07();
-    /* 80A2C1D0 */ void setAfterTalkMotion();
-    /* 80A2C230 */ void srchActors();
-    /* 80A2C234 */ bool evtTalk();
-    /* 80A2C318 */ BOOL evtCutProc();
-    /* 80A2C3FC */ void action();
-    /* 80A2C484 */ void beforeMove();
-    /* 80A2C4FC */ void afterMoved();
-    /* 80A2C56C */ void setAttnPos();
-    /* 80A2C77C */ void setCollision();
-    /* 80A2C984 */ void setCollisionSword();
-    /* 80A2CB30 */ BOOL checkCollisionSword();
-    /* 80A2CBEC */ void setCollisionTeach03();
-    /* 80A2CC24 */ void setCollisionTeach04();
-    /* 80A2CD00 */ void setCollisionTeach05();
-    /* 80A2CD38 */ void setCollisionTeach06();
-    /* 80A2CD58 */ void setCollisionTeach07();
-    /* 80A2CD78 */ int drawDbgInfo();
-    /* 80A2CD80 */ void drawOtherMdl();
-    /* 80A2CF9C */ void drawGhost();
-    /* 80A2D198 */ int selectAction();
-    /* 80A2D3A4 */ void teach03_selectAction();
-    /* 80A2D3FC */ void teach04_selectAction();
-    /* 80A2D4A0 */ void teach05_selectAction();
-    /* 80A2D4F8 */ void teach06_selectAction();
-    /* 80A2D600 */ void teach07_selectAction();
-    /* 80A2D708 */ BOOL chkAction(actionFunc);
-    /* 80A2D734 */ BOOL setAction(actionFunc);
-    /* 80A2D7DC */ int wait(void*);
-    /* 80A2D9C4 */ int talk(void*);
-    /* 80A2DB94 */ int test(void*);
-    /* 80A2DCB4 */ void setSceneChange(int);
-    /* 80A2DD70 */ int ECut_noneEquipChangeTalk(int);
-    /* 80A2DF84 */ int ECut_noneEquipChangeTalkStand(int);
-    /* 80A2E26C */ int ECut_largeDamageTalk(int);
-    /* 80A2E528 */ int teach02_start(void*);
-    /* 80A2E664 */ int teach03_attackWait(void*);
-    /* 80A2EC04 */ int teach04_attackWait(void*);
-    /* 80A2EF8C */ int teach04_headBreakWait(void*);
-    /* 80A2F24C */ int teach04_finishWait(void*);
-    /* 80A2F600 */ int teach05_surpriseAttackWait(void*);
-    /* 80A2FC80 */ int teach06_superJumpWait(void*);
-    /* 80A30398 */ int teach06_divideMove(void*);
-    /* 80A305A8 */ int teach06_waitDivide(void*);
-    /* 80A30708 */ int teach06_superJumpWaitDivide(void*);
-    /* 80A30D44 */ int teach06_superJumpedDivide(void*);
-    /* 80A30EDC */ int teach06_warpDelete(void*);
-    /* 80A31028 */ int teach07_superTurnAttackWait(void*);
-    /* 80A315D0 */ int teach07_divideMove(void*);
-    /* 80A317F8 */ int teach07_waitDivide(void*);
-    /* 80A31958 */ int teach07_superTurnAttackWaitDivide(void*);
-    /* 80A31E24 */ int teach07_superTurnAttackedDivide(void*);
-    /* 80A31FBC */ int teach07_warpDelete(void*);
-    /* 80A3203C */ int ECut_secondEncount(int);
-    /* 80A324C4 */ int ECut_thirdSkillExplain(int);
-    /* 80A32D30 */ int ECut_thirdSkillGet(int);
-    /* 80A33358 */ int ECut_fourthSkillExplain(int);
-    /* 80A33D80 */ int ECut_fourthSkillGet(int);
-    /* 80A343A8 */ int ECut_fifthSkillExplain(int);
-    /* 80A34DB8 */ int ECut_fifthSkillGet(int);
-    /* 80A353E0 */ int ECut_sixthSkillExplain(int);
-    /* 80A35D88 */ int ECut_sixthSkillGet(int);
-    /* 80A363C0 */ int ECut_seventhSkillExplain(int);
-    /* 80A36C20 */ int ECut_seventhSkillGet(int);
-    /* 80A372D0 */ int setPrtcl();
-    /* 80A37430 */ int setSlipPrtcl();
-    /* 80A37558 */ int setLandingPrtcl();
-    /* 80A37598 */ void calcMagicBallPos();
-    /* 80A37670 */ void setSwordChargePtcl();
-    /* 80A37B08 */ void calcSlip();
-    /* 80A37D20 */ void calcSwordAttackMove(int);
-    /* 80A3805C */ void setSe();
-    /* 80A38520 */ static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
-    /* 80A38550 */ J3DAnmTransform* getTrnsfrmAnmP(char const*, int);
-    /* 80A3858C */ J3DAnmTransformKey* getTrnsfrmKeyAnmP(char const*, int);
-    /* 80A385C8 */ J3DAnmTexPattern* getTexPtrnAnmP(char const*, int);
-    /* 80A38604 */ J3DAnmTextureSRTKey* getTexSRTKeyAnmP(char const*, int);
-    /* 80A38640 */ BOOL setBckAnm(J3DAnmTransform*, f32, int, int, int, bool);
-    /* 80A38684 */ int setMcaMorfAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
-    /* 80A3877C */ BOOL setBtpAnm(J3DAnmTexPattern*, J3DModelData*, f32, int);
-    /* 80A387BC */ BOOL setBtkAnm(J3DAnmTextureSRTKey*, J3DModelData*, f32, int);
-    /* 80A387FC */ int loadRes(s8 const*, char const**);
-    /* 80A388B0 */ void deleteRes(s8 const*, char const**);
-    /* 80A38930 */ int execute();
-    /* 80A38BB8 */ int draw(int, int, f32, GXColorS10*, f32, int, int, int);
-    /* 80A38FAC */ void setEnvTevColor();
-    /* 80A39008 */ void setRoomNo();
-    /* 80A3904C */ BOOL checkEndAnm(f32);
-    /* 80A390F8 */ BOOL checkEndAnm(J3DFrameCtrl*, f32);
-    /* 80A3917C */ void playAllAnm();
-    /* 80A39558 */ void setMtx();
-    /* 80A395DC */ void ctrlFaceMotion();
-    /* 80A39684 */ void ctrlMotion();
-    /* 80A39738 */ int ctrlMsgAnm(int*, int*, fopAc_ac_c*, int);
-    /* 80A3A404 */ void evtChange();
-    /* 80A3A568 */ bool setFaceMotionAnm(int, bool);
-    /* 80A3A7C0 */ bool setMotionAnm(int, f32, int);
-    /* 80A3AA58 */ void setPos(cXyz);
-    /* 80A3AAF0 */ void setAngle(s16);
-    /* 80A3AB18 */ BOOL chkActorInSight(fopAc_ac_c*, f32, s16);
-    /* 80A3AC24 */ BOOL chkPointInArea(cXyz, cXyz, f32, f32, f32, s16);
-    /* 80A3ACD4 */ BOOL chkPointInArea(cXyz, cXyz, cXyz, s16);
-    /* 80A3AD50 */ int chkFindPlayer(int, s16);
-    /* 80A3AF64 */ BOOL srchPlayerActor();
-    /* 80A3B000 */ cXyz getAttnPos(fopAc_ac_c*);
-    /* 80A3B074 */ BOOL turn(s16, int, int);
-    /* 80A3B220 */ int step(s16, int, int, int, int);
-    /* 80A3B3E8 */ int initTalk(int, fopAc_ac_c**);
-    /* 80A3B448 */ BOOL talkProc(int*, int, fopAc_ac_c**, int);
-    /* 80A3B5EC */ void setHitodamaPrtcl();
-    /* 80A3B82C */ daNpc_Kn_c(daNpcT_faceMotionAnmData_c const* param_0,
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    u8 getDivideNo();
+    u32 getFlowNodeNo();
+    u8 getPath();
+    BOOL isDelete();
+    void resetCol();
+    void reset();
+    void resetType();
+    void setParam();
+    u32 setParamTeach03();
+    u32 setParamTeach04();
+    u32 setParamTeach05();
+    u32 setParamTeach06();
+    u32 setParamTeach07();
+    void setAfterTalkMotion();
+    void srchActors();
+    bool evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void afterMoved();
+    void setAttnPos();
+    void setCollision();
+    void setCollisionSword();
+    BOOL checkCollisionSword();
+    void setCollisionTeach03();
+    void setCollisionTeach04();
+    void setCollisionTeach05();
+    void setCollisionTeach06();
+    void setCollisionTeach07();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    void drawGhost();
+    int selectAction();
+    void teach03_selectAction();
+    void teach04_selectAction();
+    void teach05_selectAction();
+    void teach06_selectAction();
+    void teach07_selectAction();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    int wait(void*);
+    int talk(void*);
+    int test(void*);
+    void setSceneChange(int);
+    int ECut_noneEquipChangeTalk(int);
+    int ECut_noneEquipChangeTalkStand(int);
+    int ECut_largeDamageTalk(int);
+    int teach02_start(void*);
+    int teach03_attackWait(void*);
+    int teach04_attackWait(void*);
+    int teach04_headBreakWait(void*);
+    int teach04_finishWait(void*);
+    int teach05_surpriseAttackWait(void*);
+    int teach06_superJumpWait(void*);
+    int teach06_divideMove(void*);
+    int teach06_waitDivide(void*);
+    int teach06_superJumpWaitDivide(void*);
+    int teach06_superJumpedDivide(void*);
+    int teach06_warpDelete(void*);
+    int teach07_superTurnAttackWait(void*);
+    int teach07_divideMove(void*);
+    int teach07_waitDivide(void*);
+    int teach07_superTurnAttackWaitDivide(void*);
+    int teach07_superTurnAttackedDivide(void*);
+    int teach07_warpDelete(void*);
+    int ECut_secondEncount(int);
+    int ECut_thirdSkillExplain(int);
+    int ECut_thirdSkillGet(int);
+    int ECut_fourthSkillExplain(int);
+    int ECut_fourthSkillGet(int);
+    int ECut_fifthSkillExplain(int);
+    int ECut_fifthSkillGet(int);
+    int ECut_sixthSkillExplain(int);
+    int ECut_sixthSkillGet(int);
+    int ECut_seventhSkillExplain(int);
+    int ECut_seventhSkillGet(int);
+    int setPrtcl();
+    int setSlipPrtcl();
+    int setLandingPrtcl();
+    void calcMagicBallPos();
+    void setSwordChargePtcl();
+    void calcSlip();
+    void calcSwordAttackMove(int);
+    void setSe();
+    static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
+    J3DAnmTransform* getTrnsfrmAnmP(char const*, int);
+    J3DAnmTransformKey* getTrnsfrmKeyAnmP(char const*, int);
+    J3DAnmTexPattern* getTexPtrnAnmP(char const*, int);
+    J3DAnmTextureSRTKey* getTexSRTKeyAnmP(char const*, int);
+    BOOL setBckAnm(J3DAnmTransform*, f32, int, int, int, bool);
+    int setMcaMorfAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
+    BOOL setBtpAnm(J3DAnmTexPattern*, J3DModelData*, f32, int);
+    BOOL setBtkAnm(J3DAnmTextureSRTKey*, J3DModelData*, f32, int);
+    int loadRes(s8 const*, char const**);
+    void deleteRes(s8 const*, char const**);
+    int execute();
+    int draw(int, int, f32, GXColorS10*, f32, int, int, int);
+    void setEnvTevColor();
+    void setRoomNo();
+    BOOL checkEndAnm(f32);
+    BOOL checkEndAnm(J3DFrameCtrl*, f32);
+    void playAllAnm();
+    void setMtx();
+    void ctrlFaceMotion();
+    void ctrlMotion();
+    int ctrlMsgAnm(int*, int*, fopAc_ac_c*, int);
+    void evtChange();
+    bool setFaceMotionAnm(int, bool);
+    bool setMotionAnm(int, f32, int);
+    void setPos(cXyz);
+    void setAngle(s16);
+    BOOL chkActorInSight(fopAc_ac_c*, f32, s16);
+    BOOL chkPointInArea(cXyz, cXyz, f32, f32, f32, s16);
+    BOOL chkPointInArea(cXyz, cXyz, cXyz, s16);
+    int chkFindPlayer(int, s16);
+    BOOL srchPlayerActor();
+    cXyz getAttnPos(fopAc_ac_c*);
+    BOOL turn(s16, int, int);
+    int step(s16, int, int, int, int);
+    int initTalk(int, fopAc_ac_c**);
+    BOOL talkProc(int*, int, fopAc_ac_c**, int);
+    void setHitodamaPrtcl();
+    daNpc_Kn_c(daNpcT_faceMotionAnmData_c const* param_0,
                               daNpcT_motionAnmData_c const* param_1,
                               daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_2, int param_3,
                               daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_4, int param_5,
@@ -359,55 +359,55 @@ public:
                         OS_REPORT("|%06d:%x|daNpc_Kn_c -> コンストラクト\n", g_Counter.mCounter0, this);
                         initialize();
                     }
-    /* 80A3C998 */ u32 setParamTeach01();
-    /* 80A3CB14 */ void setCollisionTeach01();
-    /* 80A3CBFC */ void teach01_selectAction();
-    /* 80A3CCC0 */ int teach01_start(void*);
-    /* 80A3CDFC */ int teach01_attackWait(void*);
-    /* 80A3CF78 */ int teach01_swordAttackWait(void*);
-    /* 80A3D32C */ int teach01_swordFinishWait(void*);
-    /* 80A3D6D8 */ int ctrlWarp();
-    /* 80A3DCEC */ int ECut_firstEncount(int);
-    /* 80A3DEC4 */ int ECut_attackFailed(int);
-    /* 80A3E550 */ int ECut_firstSkillGet(int);
-    /* 80A3EB84 */ u32 setParamTeach02();
-    /* 80A3EE38 */ void setCollisionTeach02();
-    /* 80A3EF1C */ void teach02_selectAction();
-    /* 80A3EFE0 */ int teach02_shieldBashWait(void*);
-    /* 80A3F358 */ int teach02_finishWait(void*);
-    /* 80A3F5A4 */ int teach02_shieldReflectWait(void*);
-    /* 80A3F99C */ int ECut_secondSkillExplain(int);
-    /* 80A3FFB4 */ int ECut_reflectExplain(int);
-    /* 80A403B8 */ int ECut_secondSkillGet(int);
+    u32 setParamTeach01();
+    void setCollisionTeach01();
+    void teach01_selectAction();
+    int teach01_start(void*);
+    int teach01_attackWait(void*);
+    int teach01_swordAttackWait(void*);
+    int teach01_swordFinishWait(void*);
+    int ctrlWarp();
+    int ECut_firstEncount(int);
+    int ECut_attackFailed(int);
+    int ECut_firstSkillGet(int);
+    u32 setParamTeach02();
+    void setCollisionTeach02();
+    void teach02_selectAction();
+    int teach02_shieldBashWait(void*);
+    int teach02_finishWait(void*);
+    int teach02_shieldReflectWait(void*);
+    int ECut_secondSkillExplain(int);
+    int ECut_reflectExplain(int);
+    int ECut_secondSkillGet(int);
 
-    /* 80A3949C */ virtual int ctrlBtk();
-    /* 80A3B7B4 */ virtual int getFootLJointNo() { return -1; }
-    /* 80A3B7AC */ virtual int getFootRJointNo() { return -1; }
-    /* 80A3BD1C */ virtual u16 getEyeballLMaterialNo() { return 0; }
-    /* 80A3BD24 */ virtual u16 getEyeballRMaterialNo() { return 0; }
-    /* 80A3BD14 */ virtual u16 getEyeballMaterialNo() { return 0; }
-    /* 80A3989C */ virtual int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80A3B720 */ virtual void afterJntAnm(int) {}
-    /* 80A3B7A4 */ virtual BOOL checkChangeEvt() { return FALSE; }
-    /* 80A3B79C */ virtual BOOL evtEndProc() { return TRUE; }
-    /* 80A39BBC */ virtual int evtProc();
-    /* 80A39DBC */ virtual void setFootPos();
-    /* 80A39F84 */ virtual void setFootPrtcl(cXyz*, f32);
-    /* 80A3A254 */ virtual bool checkCullDraw();
-    /* 80A3A25C */ virtual void twilight();
-    /* 80A3B7BC */ virtual BOOL chkXYItems() { return FALSE; }
-    /* 80A3A2A8 */ virtual void evtOrder();
-    /* 80A3B708 */ virtual void decTmr();
-    /* 80A3A504 */ virtual void clrParam();
-    /* 80A3B7C4 */ virtual bool afterSetFaceMotionAnm(int, int, f32, int) { return true; }
-    /* 80A3B7CC */ virtual daNpcT_faceMotionAnmData_c getFaceMotionAnm(daNpcT_faceMotionAnmData_c arg0) {
+    virtual int ctrlBtk();
+    virtual int getFootLJointNo() { return -1; }
+    virtual int getFootRJointNo() { return -1; }
+    virtual u16 getEyeballLMaterialNo() { return 0; }
+    virtual u16 getEyeballRMaterialNo() { return 0; }
+    virtual u16 getEyeballMaterialNo() { return 0; }
+    virtual int ctrlJoint(J3DJoint*, J3DModel*);
+    virtual void afterJntAnm(int) {}
+    virtual BOOL checkChangeEvt() { return FALSE; }
+    virtual BOOL evtEndProc() { return TRUE; }
+    virtual int evtProc();
+    virtual void setFootPos();
+    virtual void setFootPrtcl(cXyz*, f32);
+    virtual bool checkCullDraw();
+    virtual void twilight();
+    virtual BOOL chkXYItems() { return FALSE; }
+    virtual void evtOrder();
+    virtual void decTmr();
+    virtual void clrParam();
+    virtual bool afterSetFaceMotionAnm(int, int, f32, int) { return true; }
+    virtual daNpcT_faceMotionAnmData_c getFaceMotionAnm(daNpcT_faceMotionAnmData_c arg0) {
         return arg0;
     }
-    /* 80A3B7FC */ virtual daNpcT_motionAnmData_c getMotionAnm(daNpcT_motionAnmData_c arg0) {
+    virtual daNpcT_motionAnmData_c getMotionAnm(daNpcT_motionAnmData_c arg0) {
         return arg0;
     }
-    /* 80A2AA0C */ virtual ~daNpc_Kn_c();
-    /* 80A2D060 */ virtual bool afterSetMotionAnm(int, int, f32, int);
+    virtual ~daNpc_Kn_c();
+    virtual bool afterSetMotionAnm(int, int, f32, int);
     
     static const dCcD_SrcGObjInf mCcDObjData;
     static char* mCutNameList[21];

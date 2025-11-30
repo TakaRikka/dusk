@@ -42,6 +42,10 @@ typedef u32 OSTick;
 #include <revolution/os/OSSemaphore.h>
 #include <revolution/os/OSUtf.h>
 #include <revolution/os/OSTimer.h>
+#include <revolution/os/OSPlayTime.h>
+#include <revolution/os/OSStateFlags.h>
+#include <revolution/os/OSIpc.h>
+#include <revolution/os/OSNandbootInfo.h>
 
 // private macro, maybe shouldn't be defined here?
 #define OFFSET(addr, align) (((u32)(addr) & ((align)-1)))
@@ -96,10 +100,19 @@ void* OSGetArenaHi(void);
 void* OSGetArenaLo(void);
 void OSSetArenaHi(void* newHi);
 void OSSetArenaLo(void* newLo);
+
+void OSSetMEM1ArenaHi(void* newHi);
+void OSSetMEM1ArenaLo(void* newLo);
+void OSSetMEM2ArenaHi(void* newHi);
+void OSSetMEM2ArenaLo(void* newLo);
+
+void* OSGetMEM1ArenaLo(void);
+void* OSGetMEM1ArenaHi(void);
+void* OSGetMEM2ArenaLo(void);
+void* OSGetMEM2ArenaHi(void);
+
 void* OSAllocFromMEM1ArenaLo(u32 size, u32 align);
 void* OSAllocFromMEM1ArenaHi(u32 size, u32 align);
-
-u32 OSGetPhysicalMemSize(void);
 
 void __OSPSInit(void);
 void __OSFPRInit(void);
@@ -132,6 +145,16 @@ typedef struct OSBootInfo_s {
     void* FSTLocation;
     u32 FSTMaxLength;
 } OSBootInfo;
+
+typedef struct OSIOSRev {
+    u8 reserved;
+    u8 major;
+    u8 minor;
+    u8 micro;
+    u8 month;
+    u8 date;
+    u16 year;
+} OSIOSRev;
 
 typedef struct OSStopwatch {
     char* name;
@@ -187,24 +210,26 @@ BOOL OSRestoreInterrupts(BOOL level);
 u32 OSGetSoundMode(void);
 void OSSetSoundMode(u32 mode);
 
-__declspec(weak) void OSReport(const char* msg, ...);
-__declspec(weak) void OSVReport(const char* msg, va_list list);
-__declspec(weak) void OSPanic(const char* file, int line, const char* msg, ...);
+u8 OSGetAppType(void);
+
+DECL_WEAK void OSReport(const char* msg, ...);
+DECL_WEAK void OSVReport(const char* msg, va_list list);
+DECL_WEAK void OSPanic(const char* file, int line, const char* msg, ...);
 void OSFatal(GXColor fg, GXColor bg, const char* msg);
 
 // do these belong here?
-__declspec(weak) void OSAttention(const char* msg, ...);
-__declspec(weak) void OSReport_Error(const char* fmt, ...);
-__declspec(weak) void OSReport_FatalError(const char* fmt, ...);
-__declspec(weak) void OSReport_System(const char* fmt, ...);
-__declspec(weak) void OSReport_Warning(const char* fmt, ...);
-__declspec(weak) void OSReportDisable(void);
-__declspec(weak) void OSReportEnable(void);
-__declspec(weak) void OSReportForceEnableOff(void);
-__declspec(weak) void OSReportForceEnableOn(void);
-__declspec(weak) void OSVReport(const char* format, va_list list);
+DECL_WEAK void OSAttention(const char* msg, ...);
+DECL_WEAK void OSReport_Error(const char* fmt, ...);
+DECL_WEAK void OSReport_FatalError(const char* fmt, ...);
+DECL_WEAK void OSReport_System(const char* fmt, ...);
+DECL_WEAK void OSReport_Warning(const char* fmt, ...);
+DECL_WEAK void OSReportDisable(void);
+DECL_WEAK void OSReportEnable(void);
+DECL_WEAK void OSReportForceEnableOff(void);
+DECL_WEAK void OSReportForceEnableOn(void);
+DECL_WEAK void OSVReport(const char* format, va_list list);
 
-__declspec(weak) void OSSwitchFiberEx(u32, u32, u32, u32, u32, u32);
+DECL_WEAK void OSSwitchFiberEx(u32, u32, u32, u32, u32, u32);
 
 #ifdef DEBUG
 #define OS_REPORT(...) OSReport(__VA_ARGS__)
@@ -243,21 +268,16 @@ void* OSUncachedToCached(void* ucaddr);
 #define OSUncachedToCached(ucaddr)   ((void*) ((u8*)(ucaddr) - (OS_BASE_UNCACHED - OS_BASE_CACHED)))
 #endif
 
+#define OSIsMEM1Region(addr) (((u32)(addr) & 0x30000000) == 0x00000000)
+#define OSIsMEM2Region(addr) (((u32)(addr) & 0x30000000) == 0x10000000)
+
 // unsorted externs
 extern OSTime __OSGetSystemTime(void);
-__declspec(weak) extern int __OSIsGcam;
+DECL_WEAK extern int __OSIsGcam;
 extern OSExecParams __OSRebootParams;
 extern OSTime __OSStartTime;
 extern int __OSInIPL;
-
-// helper for assert line numbers in different revisions
-#if SDK_REVISION < 1
-    #define LINE(l0, l1, l2) (l0)
-#elif SDK_REVISION < 2
-    #define LINE(l0, l1, l2) (l1)
-#else
-    #define LINE(l0, l1, l2) (l2)
-#endif
+extern BOOL __OSInReboot;
 
 #ifdef DEBUG
 #define ASSERTLINE(line, cond) \
@@ -287,19 +307,20 @@ extern int __OSInIPL;
 #define ASSERT(cond) ASSERTLINE(__LINE__, cond)
 
 inline s16 __OSf32tos16(register f32 inF) {
+#ifdef __MWERKS__
     register s16 out;
     u32 tmp;
     register u32* tmpPtr = &tmp;
     // clang-format off
-#ifdef __MWERKS__
+
     asm {
         psq_st inF, 0(tmpPtr), 0x1, 5
         lha out, 0(tmpPtr)
     }
-#endif
-    // clang-format on
 
+    // clang-format on
     return out;
+#endif
 }
 
 inline void OSf32tos16(f32* f, s16* out) {
@@ -307,19 +328,20 @@ inline void OSf32tos16(f32* f, s16* out) {
 }
 
 inline u8 __OSf32tou8(register f32 inF) {
+#ifdef __MWERKS__
     register u8 out;
     u32 tmp;
     register u32* tmpPtr = &tmp;
     // clang-format off
-#ifdef __MWERKS__
+
     asm {
         psq_st inF, 0(tmpPtr), 0x1, 2
         lbz out, 0(tmpPtr)
     }
-#endif
-    // clang-format on
 
+    // clang-format on
     return out;
+#endif
 }
 
 inline void OSf32tou8(f32* f, u8* out) {

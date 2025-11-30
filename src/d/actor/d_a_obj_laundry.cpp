@@ -11,16 +11,9 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 
-//
-// Declarations:
-//
-
-/* ############################################################################################## */
-/* 80C52000-80C52034 000000 0034+00 3/3 0/0 0/0 .rodata          M_attr__10daObjLdy_c */
 daObjLdy_Attr_c const daObjLdy_c::mAttr = {5.0f, 30.0f, 130.0f, -50.0f, 0.15f, 0.45f, 0.3f, 1000.0f,
                                            0.0f, 0.0f,  0.0f,   0.0f,   0,     10,    0};
 
-/* 80C50F98-80C51088 000078 00F0+00 1/1 0/0 0/0 .text            create_init__10daObjLdy_cFv */
 void daObjLdy_c::create_init() {
     fopAcM_setCullSizeBox(this, -60.0f, -200.0f, -60.0f, 60.0f, 50.0f, 60.0f);
     fopAcM_setCullSizeFar(this, 1.5f);
@@ -39,7 +32,6 @@ void daObjLdy_c::create_init() {
     initBaseMtx();
 }
 
-/* 80C51088-80C510F8 000168 0070+00 1/1 0/0 0/0 .text            initBaseMtx__10daObjLdy_cFv */
 void daObjLdy_c::initBaseMtx() {
     setBaseMtx();
 
@@ -52,7 +44,6 @@ void daObjLdy_c::initBaseMtx() {
     }
 }
 
-/* 80C510F8-80C5116C 0001D8 0074+00 2/2 0/0 0/0 .text            setBaseMtx__10daObjLdy_cFv */
 void daObjLdy_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -61,14 +52,11 @@ void daObjLdy_c::setBaseMtx() {
     PSMTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
-/* 80C5116C-80C51194 00024C 0028+00 1/1 0/0 0/0 .text getJointAngle__10daObjLdy_cFP5csXyzi */
 void daObjLdy_c::getJointAngle(csXyz* i_jointAngle, int i_index) {
     LaundJoint_c* joint = &mJoints[i_index];
     *i_jointAngle = joint->mAngle;
 }
 
-/* ############################################################################################## */
-/* 80C52054-80C52098 000054 0044+00 0/0 0/0 0/0 .rodata          ccCylSrc$3800 */
 const static dCcD_SrcCyl ccCylSrc = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x16048, 0x11}, 0x149}},  // mObj
@@ -87,8 +75,6 @@ static f32 dummy(cXyz v) {
     return 40.0f + v.abs();
 }
 
-/* 80C51194-80C51644 000274 04B0+00 1/1 0/0 0/0 .text            setNormalClothPos__10daObjLdy_cFv
- */
 void daObjLdy_c::setNormalClothPos() {
     cXyz adjustedPosition;
     cXyz windVector = dKyw_get_AllWind_vecpow(&current.pos);
@@ -152,7 +138,6 @@ void daObjLdy_c::setNormalClothPos() {
     }
 }
 
-/* 80C51644-80C5183C 000724 01F8+00 1/1 0/0 0/0 .text            calcJointAngle__10daObjLdy_cFv */
 void daObjLdy_c::calcJointAngle() {
     cXyz position;
     LaundJoint_c* joint = &mJoints[0];
@@ -171,12 +156,10 @@ void daObjLdy_c::calcJointAngle() {
     }
 }
 
-/* 80C5183C-80C51844 00091C 0008+00 1/1 0/0 0/0 .text            divorceParent__10daObjLdy_cFv */
 bool daObjLdy_c::divorceParent() {
     return true;
 }
 
-/* 80C51844-80C518FC 000924 00B8+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int i_callbackCondition) {
     J3DModel* jointModel;
     u16 jointNo;
@@ -197,7 +180,6 @@ static int nodeCallBack(J3DJoint* i_joint, int i_callbackCondition) {
     return 1;
 }
 
-/* 80C520F0-80C520F4 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "J_Sentaku";
 
 int daObjLdy_c::getObjType() {
@@ -232,7 +214,6 @@ int daObjLdy_c::createHeap() {
     return 1;
 }
 
-/* 80C518FC-80C51A98 0009DC 019C+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjLdy_c*>(i_this)->createHeap();
 }
@@ -247,7 +228,6 @@ int daObjLdy_c::daObjLdy_Draw() {
     return 1;
 }
 
-/* 80C51AE0-80C51B9C 000BC0 00BC+00 1/0 0/0 0/0 .text            daObjLdy_Draw__FP10daObjLdy_c */
 static int daObjLdy_Draw(daObjLdy_c* i_this) {
     return i_this->daObjLdy_Draw();
 }
@@ -259,13 +239,10 @@ int daObjLdy_c::daObjLdy_Execute() {
     return 1;
 }
 
-/* 80C51B9C-80C51BDC 000C7C 0040+00 1/0 0/0 0/0 .text            daObjLdy_Execute__FP10daObjLdy_c */
 static int daObjLdy_Execute(daObjLdy_c* i_this) {
     return i_this->daObjLdy_Execute();
 }
 
-/* 80C51BDC-80C51BE4 000CBC 0008+00 1/0 0/0 0/0 .text            daObjLdy_IsDelete__FP10daObjLdy_c
- */
 static int daObjLdy_IsDelete(daObjLdy_c* i_this) {
     return 1;
 }
@@ -274,7 +251,6 @@ daObjLdy_c::~daObjLdy_c() {
     dComIfG_resDelete(&mPhase, l_arcName);
 }
 
-/* 80C51BE4-80C51D2C 000CC4 0148+00 1/0 0/0 0/0 .text            daObjLdy_Delete__FP10daObjLdy_c */
 static int daObjLdy_Delete(daObjLdy_c* i_this) {
     i_this->~daObjLdy_c();
     return 1;
@@ -295,19 +271,16 @@ int daObjLdy_c::create() {
     return phase;
 }
 
-/* 80C51D68-80C51EC0 000E48 0158+00 1/0 0/0 0/0 .text            daObjLdy_Create__FP10fopAc_ac_c */
 static int daObjLdy_Create(fopAc_ac_c* i_this) {
     return ((daObjLdy_c*)i_this)->create();
 }
 
-/* 80C520F4-80C52114 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjLdy_Method */
 static actor_method_class l_daObjLdy_Method = {
     (process_method_func)daObjLdy_Create,  (process_method_func)daObjLdy_Delete,
     (process_method_func)daObjLdy_Execute, (process_method_func)daObjLdy_IsDelete,
     (process_method_func)daObjLdy_Draw,
 };
 
-/* 80C52114-80C52144 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Laundry */
 extern actor_process_profile_definition g_profile_Obj_Laundry = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

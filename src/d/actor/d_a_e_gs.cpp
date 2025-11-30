@@ -10,7 +10,6 @@
 #include "d/actor/d_a_player.h"
 #include "c/c_damagereaction.h"
 
-/* 806DF46C-806DF4B4 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__12daE_GS_HIO_cFv */
 daE_GS_HIO_c::daE_GS_HIO_c() {
     id = -1;
     base_size = 1.2f;
@@ -20,13 +19,11 @@ daE_GS_HIO_c::daE_GS_HIO_c() {
     react_distance = 300.0f;
 }
 
-/* 806DF4B4-806DF560 000134 00AC+00 1/1 0/0 0/0 .text            anm_init__FP10e_gs_classifUcf */
 static void anm_init(e_gs_class* a_this, int i_anm, f32 i_morf, u8 i_mode, f32 i_speed) {
     a_this->model_morf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_gs", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f);
     a_this->anm = i_anm;
 }
 
-/* 806DF560-806DF660 0001E0 0100+00 1/0 0/0 0/0 .text            daE_GS_Draw__FP10e_gs_class */
 static int daE_GS_Draw(e_gs_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
@@ -50,13 +47,10 @@ static int daE_GS_Draw(e_gs_class* a_this) {
     return 1;
 }
 
-/* 806DFE98-806DFE9C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 806DFEA8-806DFEC4 000018 001C+00 4/4 0/0 0/0 .bss             l_HIO */
 static daE_GS_HIO_c l_HIO;
 
-/* 806DF660-806DF7CC 0002E0 016C+00 1/1 0/0 0/0 .text            e_gs_wait__FP10e_gs_class */
 static void e_gs_wait(e_gs_class* a_this) {
     switch (a_this->mode) {
     case 0:
@@ -84,7 +78,6 @@ static void e_gs_wait(e_gs_class* a_this) {
     }
 }
 
-/* 806DF7CC-806DF874 00044C 00A8+00 1/1 0/0 0/0 .text            action__FP10e_gs_class */
 static void action(e_gs_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
@@ -104,7 +97,6 @@ static void action(e_gs_class* a_this) {
     cLib_addCalcAngleS2(&actor->shape_angle.z, actor->current.angle.z, 2, 0x2000);
 }
 
-/* 806DF874-806DFA48 0004F4 01D4+00 2/1 0/0 0/0 .text            daE_GS_Execute__FP10e_gs_class */
 static int daE_GS_Execute(e_gs_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
@@ -155,12 +147,10 @@ static int daE_GS_Execute(e_gs_class* a_this) {
     return 1;
 }
 
-/* 806DFA48-806DFA50 0006C8 0008+00 1/0 0/0 0/0 .text            daE_GS_IsDelete__FP10e_gs_class */
 static int daE_GS_IsDelete(e_gs_class* a_this) {
     return 1;
 }
 
-/* 806DFA50-806DFAB8 0006D0 0068+00 1/0 0/0 0/0 .text            daE_GS_Delete__FP10e_gs_class */
 static int daE_GS_Delete(e_gs_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
@@ -179,7 +169,6 @@ static int daE_GS_Delete(e_gs_class* a_this) {
     return 1;
 }
 
-/* 806DFAB8-806DFC00 000738 0148+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_gs_class* a_this = (e_gs_class*)i_this;
 
@@ -197,7 +186,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 806DFC00-806DFD5C 000880 015C+00 1/0 0/0 0/0 .text            daE_GS_Create__FP10fopAc_ac_c */
 static int daE_GS_Create(fopAc_ac_c* i_this) {
     e_gs_class* a_this = (e_gs_class*)i_this;
     fopAcM_ct(i_this, e_gs_class);
@@ -236,7 +224,6 @@ static int daE_GS_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 806DFE34-806DFE54 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_GS_Method */
 static actor_method_class l_daE_GS_Method = {
     (process_method_func)daE_GS_Create,
     (process_method_func)daE_GS_Delete,
@@ -245,7 +232,6 @@ static actor_method_class l_daE_GS_Method = {
     (process_method_func)daE_GS_Draw,
 };
 
-/* 806DFE54-806DFE84 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_GS */
 extern actor_process_profile_definition g_profile_E_GS = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

@@ -1,7 +1,7 @@
 #include <dolphin.h>
 
 // prototypes
-__declspec(weak) int Hu_IsStub();
+DECL_WEAK int Hu_IsStub();
 void DBInitInterrupts();
 s32 DBQueryData();
 u32 DBRead();
@@ -9,7 +9,7 @@ u32 DBWrite();
 void DBOpen();
 void DBClose();
 
-__declspec(weak) int Hu_IsStub() {
+DECL_WEAK int Hu_IsStub() {
     return 1;
 }
 

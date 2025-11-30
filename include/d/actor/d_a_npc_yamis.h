@@ -9,7 +9,7 @@ struct daNpc_yamiS_HIOParam {
 
 class daNpc_yamiS_Param_c {
 public:
-    /* 80B4CD38 */ virtual ~daNpc_yamiS_Param_c() {}
+    virtual ~daNpc_yamiS_Param_c() {}
 
     static const daNpc_yamiS_HIOParam m;
 };
@@ -43,39 +43,39 @@ public:
     typedef BOOL (daNpc_yamiS_c::*cutFunc)(int);
     typedef int (daNpc_yamiS_c::*actionFunc)(void*);
 
-    /* 80B4656C */ ~daNpc_yamiS_c();
-    /* 80B466A4 */ cPhs__Step create();
-    /* 80B46958 */ int CreateHeap();
-    /* 80B46DA8 */ int Delete();
-    /* 80B46DDC */ int Execute();
-    /* 80B46DFC */ int Draw();
-    /* 80B46EA4 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B46EC4 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B46F1C */ u8 getType();
-    /* 80B46F54 */ u32 getFlowNodeNo();
-    /* 80B46FB8 */ BOOL isDelete();
-    /* 80B47040 */ void reset();
-    /* 80B47254 */ void afterJntAnm(int);
-    /* 80B472E0 */ void setParam();
-    /* 80B473DC */ void setAfterTalkMotion();
-    /* 80B4743C */ void srchActors();
-    /* 80B47440 */ BOOL evtTalk();
-    /* 80B47524 */ BOOL evtCutProc();
-    /* 80B475EC */ void action();
-    /* 80B476D8 */ void beforeMove();
-    /* 80B47750 */ void setAttnPos();
-    /* 80B4797C */ void setCollision();
-    /* 80B47AE8 */ int drawDbgInfo();
-    /* 80B47AF0 */ void drawGhost();
-    /* 80B47B5C */ int selectAction();
-    /* 80B47BA4 */ BOOL chkAction(int (daNpc_yamiS_c::*)(void*));
-    /* 80B47BD0 */ int setAction(int (daNpc_yamiS_c::*)(void*));
-    /* 80B47C78 */ int wait(void*);
-    /* 80B47F50 */ int talk(void*);
-    /* 80B4815C */ BOOL cutStopper(int);
-    /* 80B481F0 */ BOOL _cutStopper_Init(int const&);
-    /* 80B48238 */ BOOL _cutStopper_Main(int const&);
-    /* 80B494D8 */ daNpc_yamiS_c(
+    ~daNpc_yamiS_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    u32 getFlowNodeNo();
+    BOOL isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawGhost();
+    int selectAction();
+    BOOL chkAction(int (daNpc_yamiS_c::*)(void*));
+    int setAction(int (daNpc_yamiS_c::*)(void*));
+    int wait(void*);
+    int talk(void*);
+    BOOL cutStopper(int);
+    BOOL _cutStopper_Init(int const&);
+    BOOL _cutStopper_Main(int const&);
+    daNpc_yamiS_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -85,13 +85,13 @@ public:
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
                    i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
                    i_arcNames) {}
-    /* 80B49598 */ u16 getEyeballMaterialNo() { return 1; }
-    /* 80B495A0 */ s32 getHeadJointNo() { return 4; }
-    /* 80B495A8 */ s32 getNeckJointNo() { return 3; }
-    /* 80B495B0 */ s32 getBackboneJointNo() { return 1; }
-    /* 80B495B8 */ BOOL checkChangeJoint(int i_joint) { return i_joint == 4; }
-    /* 80B495C8 */ BOOL checkRemoveJoint(int i_joint) { return i_joint == 6; }
-    /* 80B495D8 */ BOOL evtEndProc() {
+    u16 getEyeballMaterialNo() { return 1; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return 1; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == 4; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == 6; }
+    BOOL evtEndProc() {
         mJntAnm.lookNone(0);
         eventInfo.setIdx(0);
         mEvtNo = 0;

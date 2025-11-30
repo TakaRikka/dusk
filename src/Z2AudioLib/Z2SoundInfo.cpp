@@ -16,8 +16,6 @@ struct JAUStdSoundTableType {
     };
 };
 
-/* 802BB00C-802BB090 2B594C 0084+00 2/1 0/0 0/0 .text
- * getBgmSeqResourceID__11Z2SoundInfoCF10JAISoundID             */
 u16 Z2SoundInfo::getBgmSeqResourceID(JAISoundID soundID) const {
     JUT_ASSERT(20, isValid());
     JAUSoundTableItem* data = JASGlobalInstance<JAUSoundTable>::getInstance()->getData(soundID);
@@ -33,7 +31,6 @@ u16 Z2SoundInfo::getBgmSeqResourceID(JAISoundID soundID) const {
     return 0xffff;
 }
 
-/* 802BB090-802BB0D8 2B59D0 0048+00 1/0 0/0 0/0 .text getSoundType__11Z2SoundInfoCF10JAISoundID */
 int Z2SoundInfo::getSoundType(JAISoundID soundID) const {
     switch (soundID.id_.info.type.parts.sectionID) {
     case 0:
@@ -47,12 +44,10 @@ int Z2SoundInfo::getSoundType(JAISoundID soundID) const {
     return -1;
 }
 
-/* 802BB0D8-802BB0E0 2B5A18 0008+00 1/0 0/0 0/0 .text getCategory__11Z2SoundInfoCF10JAISoundID */
 int Z2SoundInfo::getCategory(JAISoundID soundID) const {
     return soundID.id_.info.type.parts.groupID;
 }
 
-/* 802BB0E0-802BB158 2B5A20 0078+00 1/0 0/0 0/0 .text getPriority__11Z2SoundInfoCF10JAISoundID */
 u32 Z2SoundInfo::getPriority(JAISoundID soundID) const {
     JUT_ASSERT(63, isValid());
     JAUSoundTableItem* data = JASGlobalInstance<JAUSoundTable>::getInstance()->getData(soundID);
@@ -65,8 +60,6 @@ u32 Z2SoundInfo::getPriority(JAISoundID soundID) const {
     return 0;
 }
 
-/* 802BB158-802BB448 2B5A98 02F0+00 0/0 1/1 0/0 .text getAudibleSwFull__11Z2SoundInfoF10JAISoundID
- */
 JAUAudibleParam Z2SoundInfo::getAudibleSwFull(JAISoundID soundID) {
     JAUAudibleParam audibleParam;
     JUT_ASSERT(82, isValid());
@@ -139,7 +132,6 @@ JAUAudibleParam Z2SoundInfo::getAudibleSwFull(JAISoundID soundID) {
     return audibleParam;
 }
 
-/* 802BB448-802BB6DC 2B5D88 0294+00 2/1 0/0 0/0 .text getAudibleSw__11Z2SoundInfoCF10JAISoundID */
 u16 Z2SoundInfo::getAudibleSw(JAISoundID soundID) const {
     JAUAudibleParam audibleParam;
     JUT_ASSERT(184, isValid());
@@ -205,8 +197,6 @@ u16 Z2SoundInfo::getAudibleSw(JAISoundID soundID) const {
     return audibleParam.field_0x0.half.f0;
 }
 
-/* 802BB6DC-802BB8B4 2B601C 01D8+00 1/0 0/0 0/0 .text
- * getSeInfo__11Z2SoundInfoCF10JAISoundIDP5JAISe                */
 void Z2SoundInfo::getSeInfo(JAISoundID soundID, JAISe* sePtr) const {
     getSoundInfo_(soundID, sePtr);
     JUT_ASSERT(292, isValid());
@@ -236,17 +226,12 @@ void Z2SoundInfo::getSeInfo(JAISoundID soundID, JAISe* sePtr) const {
     }
 }
 
-/* 802BB8B4-802BB8E0 2B61F4 002C+00 1/0 0/0 0/0 .text
- * getSeqInfo__11Z2SoundInfoCF10JAISoundIDP6JAISeq              */
 void Z2SoundInfo::getSeqInfo(JAISoundID soundID, JAISeq* seqPtr) const {
     getSoundInfo_(soundID, seqPtr);
 }
 
-/* 80455A90-80455A94 004090 0004+00 1/1 0/0 0/0 .sdata2 STRM_CH_SHIFT__20JAUStdSoundTableType */
 const u32 JAUStdSoundTableType::STRM_CH_SHIFT = 2;
 
-/* 802BB8E0-802BBA10 2B6220 0130+00 1/0 0/0 0/0 .text
- * getStreamInfo__11Z2SoundInfoCF10JAISoundIDP9JAIStream        */
 void Z2SoundInfo::getStreamInfo(JAISoundID soundID, JAIStream* streamPtr) const {
     int numChild;
     JAUSoundTableItem* data;
@@ -286,8 +271,6 @@ void Z2SoundInfo::getStreamInfo(JAISoundID soundID, JAIStream* streamPtr) const 
     }
 }
 
-/* 802BBA10-802BBA88 2B6350 0078+00 1/1 0/0 0/0 .text
- * getStreamFilePath__11Z2SoundInfoF10JAISoundID                */
 const char* Z2SoundInfo::getStreamFilePath(JAISoundID soundID) {
     JUT_ASSERT(387, isValid());
     JAUSoundTableItem* data;
@@ -305,14 +288,11 @@ const char* Z2SoundInfo::getStreamFilePath(JAISoundID soundID) {
     }
 }
 
-/* 802BBA88-802BBAC8 2B63C8 0040+00 2/1 0/0 0/0 .text
- * getStreamFileEntry__11Z2SoundInfoF10JAISoundID               */
 s32 Z2SoundInfo::getStreamFileEntry(JAISoundID soundID) {
     const char* path = getStreamFilePath(soundID);
     return !path ? -1 : DVDConvertPathToEntrynum(path);
 }
 
-/* 802BBAC8-802BBB48 2B6408 0080+00 3/3 4/4 0/0 .text getSwBit__11Z2SoundInfoCF10JAISoundID */
 int Z2SoundInfo::getSwBit(JAISoundID soundID) const {
     JUT_ASSERT(418, isValid());
     JAUSoundTableItem* data = JASGlobalInstance<JAUSoundTable>::getInstance()->getData(soundID);
@@ -328,8 +308,6 @@ int Z2SoundInfo::getSwBit(JAISoundID soundID) const {
     return 0xFFFFFFFF;
 }
 
-/* 802BBB48-802BBBE0 2B6488 0098+00 3/3 0/0 0/0 .text
- * getSoundInfo___11Z2SoundInfoCF10JAISoundIDP8JAISound         */
 void Z2SoundInfo::getSoundInfo_(JAISoundID soundID, JAISound* soundPtr) const {
     JUT_ASSERT(440, isValid());
     JAUSoundTableItem* data = JASGlobalInstance<JAUSoundTable>::getInstance()->getData(soundID);

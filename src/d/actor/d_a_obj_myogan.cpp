@@ -11,14 +11,12 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 80C9EBAC-80C9EBDC 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__18daObj_Myogan_HIO_cFv */
 daObj_Myogan_HIO_c::daObj_Myogan_HIO_c() {
     field_0x4 = -1;
     mSize = 1.0f;
     mNormalHeight = 0.0f;
 }
 
-/* 80C9EBDC-80C9EC70 00011C 0094+00 1/0 0/0 0/0 .text daObj_Myogan_Draw__FP16obj_myogan_class */
 static int daObj_Myogan_Draw(obj_myogan_class* i_this) {
     g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType_MAJI(i_this->mpModel, &i_this->tevStr);
@@ -30,13 +28,10 @@ static int daObj_Myogan_Draw(obj_myogan_class* i_this) {
     return 1;
 }
 
-/* 80C9F318-80C9F31C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool initialized;
 
-/* 80C9F328-80C9F338 000018 0010+00 3/3 0/0 0/0 .bss             l_HIO */
 static daObj_Myogan_HIO_c l_HIO;
 
-/* 80C9EC70-80C9ED5C 0001B0 00EC+00 1/1 0/0 0/0 .text            action__FP16obj_myogan_class */
 static void action(obj_myogan_class* i_this) {
     switch (i_this->mAction) {
     case 0:
@@ -59,8 +54,6 @@ static void action(obj_myogan_class* i_this) {
     i_this->mpBtk->play();
 }
 
-/* 80C9ED5C-80C9EDB8 00029C 005C+00 2/1 0/0 0/0 .text daObj_Myogan_Execute__FP16obj_myogan_class
- */
 static int daObj_Myogan_Execute(obj_myogan_class* i_this) {
     i_this->field_0x57c++;
 
@@ -74,13 +67,10 @@ static int daObj_Myogan_Execute(obj_myogan_class* i_this) {
     return 1;
 }
 
-/* 80C9EDB8-80C9EDC0 0002F8 0008+00 1/0 0/0 0/0 .text daObj_Myogan_IsDelete__FP16obj_myogan_class
- */
 static int daObj_Myogan_IsDelete(obj_myogan_class* i_this) {
     return 1;
 }
 
-/* 80C9EDC0-80C9EE28 000300 0068+00 1/0 0/0 0/0 .text daObj_Myogan_Delete__FP16obj_myogan_class */
 static int daObj_Myogan_Delete(obj_myogan_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "S_YOGAN");
     if (i_this->mInitialized) {
@@ -91,7 +81,6 @@ static int daObj_Myogan_Delete(obj_myogan_class* i_this) {
     return 1;
 }
 
-/* 80C9EE28-80C9F064 000368 023C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_myogan_class* a_this = (obj_myogan_class*)i_this;
 
@@ -139,8 +128,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80C9F0AC-80C9F1F0 0005EC 0144+00 1/0 0/0 0/0 .text            daObj_Myogan_Create__FP10fopAc_ac_c
- */
 static int daObj_Myogan_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_myogan_class);
     obj_myogan_class* a_this = (obj_myogan_class*)i_this;
@@ -174,14 +161,12 @@ static int daObj_Myogan_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 80C9F2A8-80C9F2C8 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Myogan_Method */
 static actor_method_class l_daObj_Myogan_Method = {
     (process_method_func)daObj_Myogan_Create,  (process_method_func)daObj_Myogan_Delete,
     (process_method_func)daObj_Myogan_Execute, (process_method_func)daObj_Myogan_IsDelete,
     (process_method_func)daObj_Myogan_Draw,
 };
 
-/* 80C9F2C8-80C9F2F8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_MYOGAN */
 extern actor_process_profile_definition g_profile_OBJ_MYOGAN = {
     fpcLy_CURRENT_e,
     3,

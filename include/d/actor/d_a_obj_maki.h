@@ -38,8 +38,8 @@ public:
 STATIC_ASSERT(sizeof(obj_maki_class) == 0x730);
 class daObj_Maki_HIO_c {
 public:
-    /* 80C8FE0C */ daObj_Maki_HIO_c();
-    /* 80C9089C */ virtual ~daObj_Maki_HIO_c() {};
+    daObj_Maki_HIO_c();
+    virtual ~daObj_Maki_HIO_c() {};
 
     /* 0x04 */ s8 field_0x4;
 };

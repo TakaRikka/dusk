@@ -13,8 +13,8 @@ struct J2DResReference {
     /* 0x00 */ u16 mCount;
     /* 0x02 */ u16 mOffsets[1];
 
-    /* 8030CF10 */ s8* getResReference(u16) const;
-    /* 8030CF44 */ char* getName(u16) const;
+    s8* getResReference(u16) const;
+    char* getName(u16) const;
 };
 
 /**
@@ -36,8 +36,8 @@ private:
     /* 0x00 */ J2DataManageLink* mList;
 
 public:
-    /* 8030CE18 */ void* get(char const*);
-    /* 8030CE7C */ void* get(JSUInputStream*);
+    void* get(char const*);
+    void* get(JSUInputStream*);
 };
 
 #endif /* J2DMANAGE_H */

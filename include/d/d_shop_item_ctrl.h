@@ -5,13 +5,13 @@
 
 class dShopItemCtrl_c {
 public:
-    /* 80196914 */ dShopItemCtrl_c();
-    /* 801969A0 */ cXyz getCurrentPos(int);
-    /* 80196A3C */ bool isHomePos(int);
-    /* 80196AF0 */ void setRotateAnime(int);
-    /* 80196BA4 */ void setZoomAnime(int, cXyz*, s16, bool);
+    dShopItemCtrl_c();
+    cXyz getCurrentPos(int);
+    bool isHomePos(int);
+    void setRotateAnime(int);
+    void setZoomAnime(int, cXyz*, s16, bool);
 
-    /* 80196958 */ virtual ~dShopItemCtrl_c();
+    virtual ~dShopItemCtrl_c();
 
     void setItemIndex(int i, u32 index) { mItemIndex[i] = index; }
     u32 getItemIndex(int i) { return mItemIndex[i]; }

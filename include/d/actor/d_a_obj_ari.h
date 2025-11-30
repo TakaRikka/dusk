@@ -18,27 +18,27 @@
  */
 class daObjARI_c : public dInsect_c {
 public:
-    /* 80BA26BC */ void InitCcSph();
-    /* 80BA2728 */ void SetCcSph();
-    /* 80BA2780 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80BA28C0 */ int CreateHeap();
-    /* 80BA2CA4 */ void WallWalk();
-    /* 80BA3270 */ void MoveAction();
-    /* 80BA337C */ void Action();
-    /* 80BA33F8 */ void Insect_Release();
-    /* 80BA3408 */ void checkGround();
-    /* 80BA3638 */ void B_MoveAction();
-    /* 80BA36CC */ void FallAction();
-    /* 80BA3700 */ void ParticleSet();
-    /* 80BA3824 */ void BoomChk();
-    /* 80BA3B38 */ void ObjHit();
-    /* 80BA3C38 */ int Execute();
-    /* 80BA44F0 */ void Z_BufferChk();
-    /* 80BA466C */ int Delete();
-    /* 80BA46D4 */ void setBaseMtx();
+    void InitCcSph();
+    void SetCcSph();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    int CreateHeap();
+    void WallWalk();
+    void MoveAction();
+    void Action();
+    void Insect_Release();
+    void checkGround();
+    void B_MoveAction();
+    void FallAction();
+    void ParticleSet();
+    void BoomChk();
+    void ObjHit();
+    int Execute();
+    void Z_BufferChk();
+    int Delete();
+    void setBaseMtx();
     /*  inline  */ inline int Draw();
-    /* 80BA483C */ bool CreateChk();
-    /* 80BA49E8 */ cPhs__Step create();
+    bool CreateChk();
+    cPhs__Step create();
 
 private:
     /* 0x590 */ dBgS_GndChk mGndChk;
@@ -82,8 +82,8 @@ STATIC_ASSERT(sizeof(daObjARI_c) == 0xA78);
 
 class daObj_AriHIO_c {
 public:
-    /* 80BA268C */ daObj_AriHIO_c();
-    /* 80BA5360 */ virtual ~daObj_AriHIO_c() {}
+    daObj_AriHIO_c();
+    virtual ~daObj_AriHIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mScaleFemale;

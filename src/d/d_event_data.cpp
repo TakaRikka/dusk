@@ -29,7 +29,6 @@ struct TelopDataStruct {
     u16 type;
 };
 
-/* 803A7FB0-803A8238 0050D0 0288+00 2/2 0/0 0/0 .data            TelopData */
 static TelopDataStruct TelopData[] = {
     {'D05\0', 1101, 0x1069, 3},
     {'D05A', 1101, 0xFFFF, 0},
@@ -87,10 +86,8 @@ static TelopDataStruct TelopData[] = {
     {'F126', 1141, 0xFFFF, 1},
 };
 
-/* 80450640-80450648 0000C0 0004+04 2/2 0/0 0/0 .sdata           numTelopData */
 static int numTelopData = ARRAY_SIZE(TelopData);
 
-/* 8004372C-800437C4 03E06C 0098+00 2/2 0/0 0/0 .text            getTelopNo__FPCc */
 static u16 getTelopNo(char const* i_name) {
     int i;
     s32 name = ((i_name[3] == 'B' ? 'd' : i_name[0]) << 0x18 | i_name[4] << 0x10 | i_name[5] << 8 | i_name[6]);
@@ -103,12 +100,10 @@ static u16 getTelopNo(char const* i_name) {
     return 0xFFFF;
 }
 
-/* 800437C4-800437F0 03E104 002C+00 1/1 0/0 0/0 .text            getTelopNo__Fv */
 static u16 getTelopNo() {
     return getTelopNo(dComIfGp_getStartStageName());
 }
 
-/* 800437F0-80043A14 03E130 0224+00 1/1 0/0 0/0 .text            getStartTelopNo__Fv */
 static u16 getStartTelopNo() {
     int i;
     const char* startStageName = dComIfGp_getStartStageName();
@@ -186,7 +181,6 @@ s32 event_debug_evdt_sound_adjust() {
 }
 #endif
 
-/* 80043A14-80043D60 03E354 034C+00 1/1 0/0 0/0 .text            dEvDt_Next_Stage__Fii */
 static int dEvDt_Next_Stage(int i_staffId, int i_wipe) {
     char* stage;
     s16 start;
@@ -323,7 +317,6 @@ static int dEvDt_Next_Stage(int i_staffId, int i_wipe) {
     return 1;
 }
 
-/* 80043D60-80043DC8 03E6A0 0068+00 3/3 0/0 0/0 .text            flagCheck__11dEvDtFlag_cFi */
 BOOL dEvDtFlag_c::flagCheck(int flag) {
     if (flagMaxCheck(flag)) {
         return FALSE;
@@ -336,7 +329,6 @@ BOOL dEvDtFlag_c::flagCheck(int flag) {
     }
 }
 
-/* 80043DC8-80043E30 03E708 0068+00 2/2 1/1 0/0 .text            flagSet__11dEvDtFlag_cFi */
 BOOL dEvDtFlag_c::flagSet(int flag) {
     if (flagMaxCheck(flag)) {
         return FALSE;
@@ -367,7 +359,6 @@ void dEvDtFlag_c::init() {
     }
 }
 
-/* 80043E78-80043EFC 03E7B8 0084+00 0/0 1/1 0/0 .text            finishCheck__12dEvDtEvent_cFv */
 int dEvDtEvent_c::finishCheck() {
     int i;
     for (i = 0; i < 3; i++) {
@@ -383,7 +374,6 @@ int dEvDtEvent_c::finishCheck() {
     return 1;
 }
 
-/* 80043EFC-80043F70 03E83C 0074+00 0/0 1/1 0/0 .text            forceFinish__12dEvDtEvent_cFv */
 int dEvDtEvent_c::forceFinish() {
     int i;
     for (i = 0; i < 3; i++) {
@@ -397,8 +387,6 @@ int dEvDtEvent_c::forceFinish() {
     return 1;
 }
 
-/* 80043F70-80043FD8 03E8B0 0068+00 0/0 1/1 0/0 .text
- * specialStaffProc__12dEvDtEvent_cFP12dEvDtStaff_c             */
 void dEvDtEvent_c::specialStaffProc(dEvDtStaff_c* i_staffList) {
     int i;
     dEvDtStaff_c* staff;
@@ -409,7 +397,6 @@ void dEvDtEvent_c::specialStaffProc(dEvDtStaff_c* i_staffList) {
     }
 }
 
-/* 80043FD8-8004403C 03E918 0064+00 4/4 0/0 0/0 .text specialProc_WaitStart__12dEvDtStaff_cFi */
 void dEvDtStaff_c::specialProc_WaitStart(int i_staffId) {
     int* idata = dComIfGp_evmng_getMyIntegerP(i_staffId, "Timer");
     if (idata == NULL) {
@@ -419,7 +406,6 @@ void dEvDtStaff_c::specialProc_WaitStart(int i_staffId) {
     }
 }
 
-/* 8004403C-80044080 03E97C 0044+00 4/4 0/0 0/0 .text specialProc_WaitProc__12dEvDtStaff_cFi */
 void dEvDtStaff_c::specialProc_WaitProc(int i_staffId) {
     if (mWaitTimer > 0) {
         mWaitTimer--;
@@ -428,7 +414,6 @@ void dEvDtStaff_c::specialProc_WaitProc(int i_staffId) {
     }
 }
 
-/* 80044080-80044134 03E9C0 00B4+00 2/1 0/0 0/0 .text            specialProc__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProc() {
     switch (mType) {
     case TYPE_PACKAGE:
@@ -462,7 +447,6 @@ void dEvDtStaff_c::specialProc() {
     }
 }
 
-/* 80044134-80044170 03EA74 003C+00 0/0 1/1 0/0 .text            init__12dEvDtStaff_cFv */
 void dEvDtStaff_c::init() {
     mCurrentCut = mStartCut;
     field_0x40 = true;
@@ -484,7 +468,6 @@ void dEvDtStaff_c::init() {
     }
 }
 
-/* 80044170-80044190 03EAB0 0020+00 1/1 0/0 0/0 .text            advanceCut__12dEvDtStaff_cFi */
 void dEvDtStaff_c::advanceCut(int i_cut) {
     mCurrentCut = i_cut;
     field_0x40 = true;
@@ -492,8 +475,6 @@ void dEvDtStaff_c::advanceCut(int i_cut) {
     field_0x3c = -1;
 }
 
-/* 80044190-80044324 03EAD0 0194+00 1/1 0/0 0/0 .text            specialProcLight__12dEvDtStaff_cFv
- */
 void dEvDtStaff_c::specialProcLight() {
     u8* data = mData;
 
@@ -543,7 +524,6 @@ void dEvDtStaff_c::specialProcLight() {
     dComIfGp_evmng_cutEnd(staffId);
 }
 
-/* 80044324-80044A58 03EC64 0734+00 1/1 0/0 0/0 .text specialProcMessage__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcMessage() {
     MessageData* data = (MessageData*)&mData;
     StaffWork* wk = (StaffWork*)&mWork;
@@ -745,8 +725,6 @@ void dEvDtStaff_c::specialProcMessage() {
     }
 }
 
-/* 80044A58-80044CB8 03F398 0260+00 1/1 0/0 0/0 .text            specialProcSound__12dEvDtStaff_cFv
- */
 void dEvDtStaff_c::specialProcSound() {
     SoundData* data = (SoundData*)&mData;
 
@@ -816,8 +794,6 @@ void dEvDtStaff_c::specialProcSound() {
     }
 }
 
-/* 80044CB8-80044EE4 03F5F8 022C+00 1/1 0/0 0/0 .text            specialProcCreate__12dEvDtStaff_cFv
- */
 void dEvDtStaff_c::specialProcCreate() {
     u8* data = mData;
 
@@ -887,7 +863,6 @@ void dEvDtStaff_c::specialProcCreate() {
     }
 }
 
-/* 80044EE4-80045878 03F824 0994+00 1/1 0/0 0/0 .text specialProcDirector__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcDirector() {
     DirectorData* data = (DirectorData*)mData;
     int* idata;
@@ -1243,7 +1218,6 @@ void dEvDtStaff_c::specialProcDirector() {
     }
 }
 
-/* 80045878-80045AFC 0401B8 0284+00 1/1 0/0 0/0 .text specialProcPackage__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcPackage() {
     u8* data = mData;
     char* sdata;
@@ -1335,7 +1309,6 @@ void dEvDtStaff_c::specialProcPackage() {
     }
 }
 
-/* 80045AFC-80045C34 04043C 0138+00 1/1 0/0 0/0 .text specialProcTimekeeper__12dEvDtStaff_cFv */
 void dEvDtStaff_c::specialProcTimekeeper() {
     TimerKeeperData* data = (TimerKeeperData*)&mData;
     int* idata;
@@ -1388,8 +1361,6 @@ void dEvDtStaff_c::specialProcTimekeeper() {
     }
 }
 
-/* 80045C34-800460A8 040574 0474+00 1/1 0/0 0/0 .text            specialProcEffect__12dEvDtStaff_cFv
- */
 void dEvDtStaff_c::specialProcEffect() {
     EffectData* data = (EffectData*)mData;
     int* idata;
@@ -1524,7 +1495,6 @@ void dEvDtStaff_c::specialProcEffect() {
     }
 }
 
-/* 800460A8-80046138 0409E8 0090+00 1/1 0/0 0/0 .text            startCheck__10dEvDtCut_cFv */
 int dEvDtCut_c::startCheck() {
     int i;
     int flag;
@@ -1547,7 +1517,6 @@ int dEvDtCut_c::startCheck() {
     return 1;
 }
 
-/* 80046138-8004616C 040A78 0034+00 1/1 7/7 0/0 .text            init__11dEvDtBase_cFv */
 int dEvDtBase_c::init() {
     mHeaderP = NULL;
     mEventP = NULL;
@@ -1561,7 +1530,6 @@ int dEvDtBase_c::init() {
     return 0;
 }
 
-/* 8004616C-8004628C 040AAC 0120+00 0/0 6/6 0/0 .text            init__11dEvDtBase_cFPci */
 int dEvDtBase_c::init(char* i_data, int i_roomNo) {
     init();
     if (i_data == NULL) {
@@ -1602,7 +1570,6 @@ int dEvDtBase_c::init(char* i_data, int i_roomNo) {
     return getEventNum();
 }
 
-/* 8004628C-800462FC 040BCC 0070+00 0/0 1/1 0/0 .text advanceCut__11dEvDtBase_cFP12dEvDtEvent_c */
 void dEvDtBase_c::advanceCut(dEvDtEvent_c* i_event) {
     int i;
     dEvDtStaff_c* staff;
@@ -1613,8 +1580,6 @@ void dEvDtBase_c::advanceCut(dEvDtEvent_c* i_event) {
     }
 }
 
-/* 800462FC-800463DC 040C3C 00E0+00 1/1 0/0 0/0 .text
- * advanceCutLocal__11dEvDtBase_cFP12dEvDtStaff_c               */
 BOOL dEvDtBase_c::advanceCutLocal(dEvDtStaff_c* i_staff) {
     dEvDtCut_c* cut = &mCutP[i_staff->getCurrentCut()];
 

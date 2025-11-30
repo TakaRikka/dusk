@@ -47,43 +47,43 @@ struct J2DScrnBlockHeader {
  */
 class J2DScreen : public J2DPane {
 public:
-    /* 802F8540 */ virtual ~J2DScreen();
-    /* 802F9A18 */ virtual u16 getTypeID() const;
-    /* 802F9A20 */ virtual void calcMtx();
-    /* 802F9120 */ virtual void drawSelf(f32, f32, Mtx*);
-    /* 802F90A0 */ virtual J2DPane* search(u64);
-    /* 802F90E0 */ virtual J2DPane* searchUserInfo(u64);
-    /* 802F9600 */ virtual bool isUsed(ResTIMG const*);
-    /* 802F9620 */ virtual bool isUsed(ResFONT const*);
-    /* 80053BA0 */ virtual void clearAnmTransform() { J2DPane::clearAnmTransform(); }
-    /* 802F9704 */ virtual void setAnimation(J2DAnmColor*);
-    /* 80192414 */ virtual void setAnimation(J2DAnmTransform* i_bck) { J2DPane::setAnimation(i_bck); }
-    /* 802F9798 */ virtual void setAnimation(J2DAnmTextureSRTKey*);
-    /* 802F99A8 */ virtual void setAnimation(J2DAnmVtxColor*);
-    /* 802F9838 */ virtual void setAnimation(J2DAnmTexPattern*);
-    /* 802F99C8 */ virtual void setAnimation(J2DAnmVisibilityFull*);
-    /* 802F98CC */ virtual void setAnimation(J2DAnmTevRegKey*);
-    /* 802F9A54 */ virtual void setAnimation(J2DAnmBase*);
-    /* 802F9A74 */ virtual void setAnimationVF(J2DAnmVisibilityFull*);
-    /* 802F9A78 */ virtual void setAnimationVC(J2DAnmVtxColor*);
-    /* 802F99E8 */ virtual J2DPane* createPane(J2DScrnBlockHeader const&, JSURandomInputStream*,
+    virtual ~J2DScreen();
+    virtual u16 getTypeID() const;
+    virtual void calcMtx();
+    virtual void drawSelf(f32, f32, Mtx*);
+    virtual J2DPane* search(u64);
+    virtual J2DPane* searchUserInfo(u64);
+    virtual bool isUsed(ResTIMG const*);
+    virtual bool isUsed(ResFONT const*);
+    virtual void clearAnmTransform() { J2DPane::clearAnmTransform(); }
+    virtual void setAnimation(J2DAnmColor*);
+    virtual void setAnimation(J2DAnmTransform* i_bck) { J2DPane::setAnimation(i_bck); }
+    virtual void setAnimation(J2DAnmTextureSRTKey*);
+    virtual void setAnimation(J2DAnmVtxColor*);
+    virtual void setAnimation(J2DAnmTexPattern*);
+    virtual void setAnimation(J2DAnmVisibilityFull*);
+    virtual void setAnimation(J2DAnmTevRegKey*);
+    virtual void setAnimation(J2DAnmBase*);
+    virtual void setAnimationVF(J2DAnmVisibilityFull*);
+    virtual void setAnimationVC(J2DAnmVtxColor*);
+    virtual J2DPane* createPane(J2DScrnBlockHeader const&, JSURandomInputStream*,
                                                J2DPane*, u32);
-    /* 802F8B98 */ virtual J2DPane* createPane(J2DScrnBlockHeader const&, JSURandomInputStream*,
+    virtual J2DPane* createPane(J2DScrnBlockHeader const&, JSURandomInputStream*,
                                                J2DPane*, u32, JKRArchive*);
 
-    /* 802F8498 */ J2DScreen();
-    /* 802F85A8 */ void clean();
-    /* 802F8648 */ bool setPriority(char const*, u32, JKRArchive*);
-    /* 802F8748 */ bool setPriority(JSURandomInputStream*, u32, JKRArchive*);
-    /* 802F8778 */ bool private_set(JSURandomInputStream*, u32, JKRArchive*);
-    /* 802F8834 */ bool checkSignature(JSURandomInputStream*);
-    /* 802F8894 */ bool getScreenInformation(JSURandomInputStream*);
-    /* 802F8990 */ s32 makeHierarchyPanes(J2DPane*, JSURandomInputStream*, u32, JKRArchive*);
-    /* 802F8ED4 */ void draw(f32, f32, J2DGrafContext const*);
-    /* 802F9280 */ J2DResReference* getResReference(JSURandomInputStream*, u32);
-    /* 802F937C */ bool createMaterial(JSURandomInputStream*, u32, JKRArchive*);
-    /* 802F9640 */ static void* getNameResource(char const*);
-    /* 802F9690 */ void animation();
+    J2DScreen();
+    void clean();
+    bool setPriority(char const*, u32, JKRArchive*);
+    bool setPriority(JSURandomInputStream*, u32, JKRArchive*);
+    bool private_set(JSURandomInputStream*, u32, JKRArchive*);
+    bool checkSignature(JSURandomInputStream*);
+    bool getScreenInformation(JSURandomInputStream*);
+    s32 makeHierarchyPanes(J2DPane*, JSURandomInputStream*, u32, JKRArchive*);
+    void draw(f32, f32, J2DGrafContext const*);
+    J2DResReference* getResReference(JSURandomInputStream*, u32);
+    bool createMaterial(JSURandomInputStream*, u32, JKRArchive*);
+    static void* getNameResource(char const*);
+    void animation();
 
     void setScissor(bool i_scissor) { mScissor = i_scissor; }
 

@@ -3,11 +3,8 @@
 #include "d/d_npc_lib.h"
 #include "SSystem/SComponent/c_math.h"
 
-/* 80251314-8025140C 24BC54 00F8+00 0/0 0/0 4/4 .text            __ct__16dNpcLib_lookat_cFv */
 dNpcLib_lookat_c::dNpcLib_lookat_c() {}
 
-/* 8025140C-80251534 24BD4C 0128+00 0/0 0/0 2/2 .text
- * init__16dNpcLib_lookat_cFP8J3DModelPiP5csXyzP5csXyz          */
 void dNpcLib_lookat_c::init(J3DModel* i_mdl_p, int* param_1, csXyz* param_2, csXyz* param_3) {
     int i;
     for (i = 0; i < 4; i++) {
@@ -32,8 +29,6 @@ void dNpcLib_lookat_c::init(J3DModel* i_mdl_p, int* param_1, csXyz* param_2, csX
     }
 }
 
-/* 80251534-80251B60 24BE74 062C+00 0/0 0/0 2/2 .text
- * action__16dNpcLib_lookat_cF4cXyz4cXyzP10fopAc_ac_cPA4_fi     */
 // NONMATCHING - regswap, equivalent
 void dNpcLib_lookat_c::action(cXyz param_0, cXyz param_1, fopAc_ac_c* param_2, Mtx param_3, int param_4) {
     cXyz sp90;
@@ -108,10 +103,8 @@ void dNpcLib_lookat_c::action(cXyz param_0, cXyz param_1, fopAc_ac_c* param_2, M
     }
 }
 
-/* 80251B60-80251B64 24C4A0 0004+00 0/0 0/0 2/2 .text            dbView__16dNpcLib_lookat_cFv */
 void dNpcLib_lookat_c::dbView() {}
 
-/* 80251B64-80251EF8 24C4A4 0394+00 1/1 0/0 0/0 .text            setPrm__16dNpcLib_lookat_cFv */
 void dNpcLib_lookat_c::setPrm() {
     cXyz sp14;
     int i;
@@ -133,7 +126,6 @@ void dNpcLib_lookat_c::setPrm() {
     }
 }
 
-/* 80251EF8-80252018 24C838 0120+00 1/1 0/0 0/0 .text            update__16dNpcLib_lookat_cFv */
 void dNpcLib_lookat_c::update() {
     cXyz sp50;
     csXyz sp58(csXyz::Zero);
@@ -157,7 +149,6 @@ void dNpcLib_lookat_c::update() {
 }
 
 
-/* 80252018-80252094 24C958 007C+00 1/1 0/0 0/0 .text   limitter__16dNpcLib_lookat_cFPssss */
 int dNpcLib_lookat_c::limitter(s16* o_value, s16 param_1, s16 param_2, s16 param_3) {
     int limit = param_1 + *o_value;
     BOOL rt = FALSE;

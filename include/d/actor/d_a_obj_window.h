@@ -15,14 +15,14 @@
  */
 class daObjWindow_c : public dBgS_MoveBgActor {
 public:
-    /* 80D38758 */ void initBaseMtx();
-    /* 80D387B8 */ void setBaseMtx();
-    /* 80D38840 */ int Create();
-    /* 80D388F0 */ int CreateHeap();
-    /* 80D38A68 */ cPhs__Step create1st();
-    /* 80D38B04 */ int Execute(Mtx**);
-    /* 80D38F28 */ int Draw();
-    /* 80D39000 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    cPhs__Step create1st();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     u8 getType() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getLightInf() { return fopAcM_GetParamBit(this, 8, 8); }

@@ -12,7 +12,6 @@
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
 
-/* 8085BB38-8085BB80 000078 0048+00 2/2 0/0 0/0 .text            d_kytag12_cut_turn_check__Fv */
 static BOOL d_kytag12_cut_turn_check() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     BOOL var_r3 = false;
@@ -27,7 +26,6 @@ static BOOL d_kytag12_cut_turn_check() {
     return var_r3;
 }
 
-/* 8085BB80-8085BBB8 0000C0 0038+00 1/1 0/0 0/0 .text            d_kytag12_cut_normal_check__Fv */
 static BOOL d_kytag12_cut_normal_check() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     BOOL var_r3 = true;
@@ -40,14 +38,10 @@ static BOOL d_kytag12_cut_normal_check() {
     return var_r3;
 }
 
-/* 8085BBB8-8085BBC0 0000F8 0008+00 1/0 0/0 0/0 .text            daKytag12_Draw__FP13kytag12_class
- */
 static int daKytag12_Draw(kytag12_class* param_0) {
     return 1;
 }
 
-/* 8085BBC0-8085BCD0 000100 0110+00 3/3 0/0 0/0 .text
- * daKytag12_light_swprd_proc__FP13kytag12_class                */
 static void daKytag12_light_swprd_proc(kytag12_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
@@ -75,8 +69,6 @@ static void daKytag12_light_swprd_proc(kytag12_class* i_this) {
     }
 }
 
-/* 8085BD0C-8085D1DC 00024C 14D0+00 2/1 0/0 0/0 .text
- * daKytag12_Execute_standard__FP13kytag12_class                */
 static int daKytag12_Execute_standard(kytag12_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -464,8 +456,6 @@ static int daKytag12_Execute_standard(kytag12_class* i_this) {
     return 1;
 }
 
-/* 8085D1DC-8085DFF0 00171C 0E14+00 1/1 0/0 0/0 .text daKytag12_Execute_arrival__FP13kytag12_class
- */
 static int daKytag12_Execute_arrival(kytag12_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -704,7 +694,6 @@ static int daKytag12_Execute_arrival(kytag12_class* i_this) {
     return 1;
 }
 
-/* 8085DFF0-8085ED48 002530 0D58+00 1/1 0/0 0/0 .text daKytag12_Execute_R00__FP13kytag12_class */
 static int daKytag12_Execute_R00(kytag12_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -969,7 +958,6 @@ static int daKytag12_Execute_R00(kytag12_class* i_this) {
     return 1;
 }
 
-/* 8085ED48-8085EE28 003288 00E0+00 1/0 0/0 0/0 .text daKytag12_Execute__FP13kytag12_class */
 static int daKytag12_Execute(kytag12_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -1006,19 +994,15 @@ static int daKytag12_Execute(kytag12_class* i_this) {
     return 1;
 }
 
-/* 8085EE28-8085EE30 003368 0008+00 1/0 0/0 0/0 .text daKytag12_IsDelete__FP13kytag12_class */
 static int daKytag12_IsDelete(kytag12_class* i_this) {
     return 1;
 }
 
-/* 8085EE30-8085EE48 003370 0018+00 1/0 0/0 0/0 .text            daKytag12_Delete__FP13kytag12_class
- */
 static int daKytag12_Delete(kytag12_class* i_this) {
     g_env_light.field_0x1054 = 0;
     return 1;
 }
 
-/* 8085EE48-8085EEF4 003388 00AC+00 1/0 0/0 0/0 .text            daKytag12_Create__FP10fopAc_ac_c */
 static int daKytag12_Create(fopAc_ac_c* i_this) {
     kytag12_class* a_this = (kytag12_class*)i_this;
     fopAcM_ct(a_this, kytag12_class);
@@ -1034,7 +1018,6 @@ static int daKytag12_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8085F118-8085F138 -00001 0020+00 1/0 0/0 0/0 .data            l_daKytag12_Method */
 static actor_method_class l_daKytag12_Method = {
     (process_method_func)daKytag12_Create,
     (process_method_func)daKytag12_Delete,
@@ -1043,7 +1026,6 @@ static actor_method_class l_daKytag12_Method = {
     (process_method_func)daKytag12_Draw,
 };
 
-/* 8085F138-8085F168 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KYTAG12 */
 extern actor_process_profile_definition g_profile_KYTAG12 = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

@@ -8,9 +8,9 @@ class J2DAnmTransformKey;
 
 class dSelect_cursorHIO_c {
 public:
-    /* 801941E4 */ dSelect_cursorHIO_c();
+    dSelect_cursorHIO_c();
 
-    /* 80195978 */ virtual ~dSelect_cursorHIO_c() {}
+    virtual ~dSelect_cursorHIO_c() {}
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ f32 field_0x8;
@@ -25,22 +25,22 @@ public:
 
 class dSelect_cursor_c : public dDlst_base_c {
 public:
-    /* 80194220 */ dSelect_cursor_c(u8, f32, JKRArchive*);
-    /* 80194CC0 */ void update();
-    /* 801950F4 */ void setPos(f32, f32, J2DPane*, bool);
-    /* 801951B0 */ void setParam(f32, f32, f32, f32, f32);
-    /* 801951C8 */ void setScale(f32);
-    /* 801952A0 */ void setAlphaRate(f32);
-    /* 80195330 */ int addAlpha();
-    /* 801953CC */ int decAlpha();
-    /* 80195460 */ void setBpkAnimation(J2DAnmColor*);
-    /* 801955F0 */ void setBtk0Animation(J2DAnmTextureSRTKey*);
-    /* 80195724 */ void setCursorAnimation();
-    /* 801958E0 */ void setBckAnimation(J2DAnmTransformKey*);
-    /* 80195940 */ void moveCenter(J2DPane*, f32, f32);
+    dSelect_cursor_c(u8, f32, JKRArchive*);
+    void update();
+    void setPos(f32, f32, J2DPane*, bool);
+    void setParam(f32, f32, f32, f32, f32);
+    void setScale(f32);
+    void setAlphaRate(f32);
+    int addAlpha();
+    int decAlpha();
+    void setBpkAnimation(J2DAnmColor*);
+    void setBtk0Animation(J2DAnmTextureSRTKey*);
+    void setCursorAnimation();
+    void setBckAnimation(J2DAnmTransformKey*);
+    void moveCenter(J2DPane*, f32, f32);
 
-    /* 801949EC */ virtual ~dSelect_cursor_c();
-    /* 80194C30 */ virtual void draw();
+    virtual ~dSelect_cursor_c();
+    virtual void draw();
 
     void setPos(f32 x, f32 y) {
         mPositionX = x;

@@ -10,33 +10,33 @@ struct CharInfo_c;
 
 class dMsgScrnBase_c : public dDlst_base_c {
 public:
-    /* 8023C0DC */ dMsgScrnBase_c();
-    /* 8023C16C */ void init();
-    /* 8023C32C */ void drawOutFont(f32, f32, f32);
-    /* 8023C360 */ void setString(char*, char*);
-    /* 8023C3EC */ void setRubyString(char*);
-    /* 8023C574 */ bool isTalkNow();
+    dMsgScrnBase_c();
+    void init();
+    void drawOutFont(f32, f32, f32);
+    void setString(char*, char*);
+    void setRubyString(char*);
+    bool isTalkNow();
 
-    /* 8023C274 */ virtual void draw();
-    /* 8023C124 */ virtual ~dMsgScrnBase_c();
-    /* 80238C3C */ virtual void exec() {}
-    /* 8023C234 */ virtual void multiDraw();
-    /* 8023C300 */ virtual void drawSelf();
-    /* 80238C44 */ virtual void setSelectString(char*, char*, char*) {}
-    /* 80238C40 */ virtual void setSelectRubyString(char*, char*, char*) {}
-    /* 80238C58 */ virtual void arwAnimeInit() {}
-    /* 80238C54 */ virtual void arwAnimeMove() {}
-    /* 80238C74 */ virtual void dotAnimeInit() {}
-    /* 80238C70 */ virtual void dotAnimeMove() {}
-    /* 80238C60 */ virtual bool isSelect() { return true; }
-    /* 80238C50 */ virtual void selectAnimeInit(u8, u8, f32, u8) {}
-    /* 80238C48 */ virtual bool selectAnimeMove(u8, u8, bool) { return true; }
-    /* 80238C68 */ virtual bool selectAnimeEnd() { return true; }
-    /* 8023C458 */ virtual void fukiScale(f32);
-    /* 8023C480 */ virtual void fukiTrans(f32, f32);
-    /* 8023C4A4 */ virtual void fukiAlpha(f32);
-    /* 8023C4F4 */ virtual void fontAlpha(f32);
-    /* 80238C5C */ virtual void fukiPosCalc(u8) {}
+    virtual void draw();
+    virtual ~dMsgScrnBase_c();
+    virtual void exec() {}
+    virtual void multiDraw();
+    virtual void drawSelf();
+    virtual void setSelectString(char*, char*, char*) {}
+    virtual void setSelectRubyString(char*, char*, char*) {}
+    virtual void arwAnimeInit() {}
+    virtual void arwAnimeMove() {}
+    virtual void dotAnimeInit() {}
+    virtual void dotAnimeMove() {}
+    virtual bool isSelect() { return true; }
+    virtual void selectAnimeInit(u8, u8, f32, u8) {}
+    virtual bool selectAnimeMove(u8, u8, bool) { return true; }
+    virtual bool selectAnimeEnd() { return true; }
+    virtual void fukiScale(f32);
+    virtual void fukiTrans(f32, f32);
+    virtual void fukiAlpha(f32);
+    virtual void fontAlpha(f32);
+    virtual void fukiPosCalc(u8) {}
 
     f32 getSelTextBoxPosX(int idx) { return mSelTextBoxPosX[idx]; }
     f32 getSelTextBoxPosY(int idx) { return mSelTextBoxPosY[idx]; }

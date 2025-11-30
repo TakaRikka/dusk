@@ -40,10 +40,30 @@ typedef unsigned int uint;
 //#define AT_ADDRESS(addr) __attribute__((address((addr))))
 #define AT_ADDRESS(addr)  // was removed in GCC. define in linker script instead.
 #else
-#error unknown compiler
+#define AT_ADDRESS(addr)
 #endif
 
+#ifndef ATTRIBUTE_ALIGN
+#if defined(__MWERKS__) || defined(__GNUC__)
 #define ATTRIBUTE_ALIGN(num) __attribute__((aligned(num)))
+#elif defined(_MSC_VER)
+#define ATTRIBUTE_ALIGN(num)
+#else
+#error unknown compiler
+#endif
+#endif
+
+#ifndef DECL_WEAK
+#if defined(__MWERKS__)
+#define DECL_WEAK __declspec(weak)
+#elif defined(__GNUC__)
+#define DECL_WEAK __attribute__((weak))
+#elif defined(_MSC_VER)
+#define DECL_WEAK
+#else
+#error unknown compiler
+#endif
+#endif
 
 #ifndef NULL
 #ifdef  __cplusplus
@@ -53,6 +73,6 @@ typedef unsigned int uint;
 #endif
 #endif
 
-#include "stddef.h"
+#include <stddef.h>
 
 #endif

@@ -59,22 +59,22 @@ enum daCstatueType {
  */
 class daCstatue_c : public fopAc_ac_c {
 public:
-    /* 806636AC */ void atHitCallback(fopAc_ac_c*);
-    /* 806636EC */ int createHeap();
-    /* 80663D28 */ int create();
-    /* 80664840 */ ~daCstatue_c();
-    /* 80664AA0 */ void setRoomInfo();
-    /* 80664B38 */ void setMatrix();
-    /* 80664C9C */ void posMove();
-    /* 8066555C */ void setCollision();
-    /* 80665E14 */ BOOL checkHammerReverse();
-    /* 80665F80 */ void setDemo();
-    /* 80666390 */ void setAnime();
-    /* 80666B80 */ int initBrk(u16);
-    /* 80666BF8 */ void initStopBrkBtk();
-    /* 80666C38 */ void initStartBrkBtk();
-    /* 80666DE8 */ int execute();
-    /* 80667438 */ int draw();
+    void atHitCallback(fopAc_ac_c*);
+    int createHeap();
+    int create();
+    ~daCstatue_c();
+    void setRoomInfo();
+    void setMatrix();
+    void posMove();
+    void setCollision();
+    BOOL checkHammerReverse();
+    void setDemo();
+    void setAnime();
+    int initBrk(u16);
+    void initStopBrkBtk();
+    void initStartBrkBtk();
+    int execute();
+    int draw();
 
     bool checkBossAtGroundHit() const { return mBossAtGndHit == 1; }
     bool checkNormalType() const { return mType == daCstatueType_Normal; }

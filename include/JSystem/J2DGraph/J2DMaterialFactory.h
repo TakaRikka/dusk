@@ -105,33 +105,33 @@ class JKRArchive;
  */
 class J2DMaterialFactory {
 public:
-    /* 802F2AD0 */ J2DMaterialFactory(J2DMaterialBlock const&);
-    /* 802F2C94 */ u32 countStages(int) const;
-    /* 802F2D1C */ J2DMaterial* create(J2DMaterial*, int, u32, J2DResReference*, J2DResReference*,
+    J2DMaterialFactory(J2DMaterialBlock const&);
+    u32 countStages(int) const;
+    J2DMaterial* create(J2DMaterial*, int, u32, J2DResReference*, J2DResReference*,
                                JKRArchive*) const;
-    /* 802F362C */ JUtility::TColor newMatColor(int, int) const;
-    /* 802F36CC */ u8 newColorChanNum(int) const;
-    /* 802F3704 */ J2DColorChan newColorChan(int, int) const;
-    /* 802F3758 */ u32 newTexGenNum(int) const;
-    /* 802F3790 */ J2DTexCoord newTexCoord(int, int) const;
-    /* 802F3804 */ J2DTexMtx* newTexMtx(int, int) const;
-    /* 802F38E0 */ u8 newCullMode(int) const;
-    /* 802F3920 */ u16 newTexNo(int, int) const;
-    /* 802F3968 */ u16 newFontNo(int) const;
-    /* 802F39A8 */ J2DTevOrder newTevOrder(int, int) const;
-    /* 802F3A1C */ J2DGXColorS10 newTevColor(int, int) const;
-    /* 802F3AB4 */ JUtility::TColor newTevKColor(int, int) const;
-    /* 802F3B54 */ u8 newTevStageNum(int) const;
-    /* 802F3B8C */ J2DTevStage newTevStage(int, int) const;
-    /* 802F3BEC */ J2DTevSwapModeTable newTevSwapModeTable(int, int) const;
-    /* 802F3C88 */ u8 newIndTexStageNum(int) const;
-    /* 802F3CB8 */ J2DIndTexOrder newIndTexOrder(int, int) const;
-    /* 802F3D20 */ J2DIndTexMtx newIndTexMtx(int, int) const;
-    /* 802F3E24 */ J2DIndTevStage newIndTevStage(int, int) const;
-    /* 802F3F78 */ J2DIndTexCoordScale newIndTexCoordScale(int, int) const;
-    /* 802F3FE0 */ J2DAlphaComp newAlphaComp(int) const;
-    /* 802F405C */ J2DBlend newBlend(int) const;
-    /* 802F40D8 */ u8 newDither(int) const;
+    JUtility::TColor newMatColor(int, int) const;
+    u8 newColorChanNum(int) const;
+    J2DColorChan newColorChan(int, int) const;
+    u32 newTexGenNum(int) const;
+    J2DTexCoord newTexCoord(int, int) const;
+    J2DTexMtx* newTexMtx(int, int) const;
+    u8 newCullMode(int) const;
+    u16 newTexNo(int, int) const;
+    u16 newFontNo(int) const;
+    J2DTevOrder newTevOrder(int, int) const;
+    J2DGXColorS10 newTevColor(int, int) const;
+    JUtility::TColor newTevKColor(int, int) const;
+    u8 newTevStageNum(int) const;
+    J2DTevStage newTevStage(int, int) const;
+    J2DTevSwapModeTable newTevSwapModeTable(int, int) const;
+    u8 newIndTexStageNum(int) const;
+    J2DIndTexOrder newIndTexOrder(int, int) const;
+    J2DIndTexMtx newIndTexMtx(int, int) const;
+    J2DIndTevStage newIndTevStage(int, int) const;
+    J2DIndTexCoordScale newIndTexCoordScale(int, int) const;
+    J2DAlphaComp newAlphaComp(int) const;
+    J2DBlend newBlend(int) const;
+    u8 newDither(int) const;
 
     u32 getMaterialMode(int idx) const {
         return field_0x4[field_0x8[idx]].field_0x0;

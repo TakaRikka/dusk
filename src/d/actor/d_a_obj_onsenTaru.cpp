@@ -11,7 +11,6 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-/* 80CA85CC-80CA861C 0000EC 0050+00 1/1 0/0 0/0 .text            __ct__15daOnsTaru_HIO_cFv */
 daOnsTaru_HIO_c::daOnsTaru_HIO_c() {
     mCoolTime = 120;
     mVibration = 3;
@@ -19,10 +18,8 @@ daOnsTaru_HIO_c::daOnsTaru_HIO_c() {
     mCollisionRadius = 125.0f;
 }
 
-/* 80CA9DF4-80CA9E04 000014 0010+00 4/4 0/0 0/0 .bss             l_HIO */
 static daOnsTaru_HIO_c l_HIO;
 
-/* 80CA9B80-80CA9BB0 000008 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__11daOnsTaru_c */
 const dCcD_SrcGObjInf daOnsTaru_c::mCcDObjInfo = {
     {0, {{8, 0, 0x1F}, {0xD8FADDAF, 0x1F}, {0x79}}},
     {dCcD_SE_NONE, 0, 1, 0, 0},
@@ -30,7 +27,6 @@ const dCcD_SrcGObjInf daOnsTaru_c::mCcDObjInfo = {
     {0},
 };
 
-/* 80CA9C38-80CA9C7C 000020 0044+00 2/2 0/0 0/0 .data            mCcDCyl__11daOnsTaru_c */
 dCcD_SrcCyl daOnsTaru_c::mCcDCyl = {
     daOnsTaru_c::mCcDObjInfo,
     {
@@ -40,7 +36,6 @@ dCcD_SrcCyl daOnsTaru_c::mCcDCyl = {
     }  // mCyl
 };
 
-/* 80CA86C0-80CA8748 0001E0 0088+00 2/2 0/0 0/0 .text            setBaseMtx__11daOnsTaru_cFv */
 void daOnsTaru_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -48,7 +43,6 @@ void daOnsTaru_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CA8748-80CA87B4 000268 006C+00 1/0 0/0 0/0 .text            CreateHeap__11daOnsTaru_cFv */
 int daOnsTaru_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("maroTaru", 3);
     JUT_ASSERT(231, modelData != NULL);
@@ -61,7 +55,6 @@ int daOnsTaru_c::CreateHeap() {
     return 1;
 }
 
-/* 80CA87B4-80CA8A54 0002D4 02A0+00 1/1 0/0 0/0 .text            create__11daOnsTaru_cFv */
 int daOnsTaru_c::create() {
     fopAcM_ct(this, daOnsTaru_c);
 
@@ -108,23 +101,18 @@ int daOnsTaru_c::create() {
     return phase_state;
 }
 
-/* 80CA8C20-80CA8C4C 000740 002C+00 1/1 0/0 0/0 .text
- * createHeapCallBack__11daOnsTaru_cFP10fopAc_ac_c              */
 int daOnsTaru_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return ((daOnsTaru_c*)i_this)->CreateHeap();
 }
 
-/* 80CA8C4C-80CA8C70 00076C 0024+00 1/1 0/0 0/0 .text            chkSinkAll__11daOnsTaru_cFv */
 BOOL daOnsTaru_c::chkSinkAll() {
     return mAcch.m_wtr.GetHeight() > current.pos.y + 100.0f;
 }
 
-/* 80CA8C70-80CA8C94 000790 0024+00 3/3 0/0 0/0 .text            chkWaterLineIn__11daOnsTaru_cFv */
 BOOL daOnsTaru_c::chkWaterLineIn() {
     return mAcch.m_wtr.GetHeight() > current.pos.y + 40.0f;
 }
 
-/* 80CA8C94-80CA8F38 0007B4 02A4+00 1/1 0/0 0/0 .text            bgCheck__11daOnsTaru_cFv */
 void daOnsTaru_c::bgCheck() {
     bool roof_hit = mAcch.ChkRoofHit();
     bool wall_hit = mAcch.ChkWallHit();
@@ -179,7 +167,6 @@ void daOnsTaru_c::bgCheck() {
     }
 }
 
-/* 80CA8F38-80CA9184 000A58 024C+00 1/0 0/0 0/0 .text            Execute__11daOnsTaru_cFv */
 int daOnsTaru_c::Execute() {
     field_0x594 = speed;
     mode_proc_call();
@@ -234,7 +221,6 @@ int daOnsTaru_c::Execute() {
     return 1;
 }
 
-/* 80CA9184-80CA929C 000CA4 0118+00 1/1 0/0 0/0 .text            mode_proc_call__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_proc_call() {
     typedef void (daOnsTaru_c::*mode_func)();
     static mode_func l_mode_func[] = {
@@ -251,7 +237,6 @@ void daOnsTaru_c::mode_proc_call() {
     mIsCarryNow = fopAcM_checkCarryNow(this);
 }
 
-/* 80CA929C-80CA92CC 000DBC 0030+00 2/2 0/0 0/0 .text            mode_init_wait__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_init_wait() {
     cLib_onBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     speedF = 0.0f;
@@ -259,12 +244,10 @@ void daOnsTaru_c::mode_init_wait() {
     mMode = MODE_WAIT_e;
 }
 
-/* 80CA92CC-80CA92F0 000DEC 0024+00 1/0 0/0 0/0 .text            mode_proc_wait__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_proc_wait() {
     fopAcM_posMoveF(this, mCcStts.GetCCMoveP());
 }
 
-/* 80CA92F0-80CA9320 000E10 0030+00 1/1 0/0 0/0 .text            mode_init_carry__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_init_carry() {
     mCcCyl.OffCoSetBit();
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
@@ -272,7 +255,6 @@ void daOnsTaru_c::mode_init_carry() {
     mMode = MODE_CARRY_e;
 }
 
-/* 80CA9320-80CA93C0 000E40 00A0+00 1/0 0/0 0/0 .text            mode_proc_carry__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_proc_carry() {
     daPy_getPlayerActorClass()->setGrabCollisionOffset(mGrabOffset.x, mGrabOffset.z, NULL);
 
@@ -287,7 +269,6 @@ void daOnsTaru_c::mode_proc_carry() {
     }
 }
 
-/* 80CA93C0-80CA9400 000EE0 0040+00 1/1 0/0 0/0 .text            mode_init_drop__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_init_drop() {
     mCcCyl.OnAtSetBit();
     mCollisionRadius = l_HIO.mCollisionRadius;
@@ -296,12 +277,10 @@ void daOnsTaru_c::mode_init_drop() {
     mMode = MODE_DROP_e;
 }
 
-/* 80CA9400-80CA9424 000F20 0024+00 1/0 0/0 0/0 .text            mode_proc_drop__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_proc_drop() {
     fopAcM_posMoveF(this, mCcStts.GetCCMoveP());
 }
 
-/* 80CA9424-80CA9514 000F44 00F0+00 2/2 0/0 0/0 .text            mode_init_break__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_init_break() {
     mDoAud_seStart(Z2SE_OBJ_ONSEN_TARU_BRK, &current.pos, 0,
                    dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -313,16 +292,13 @@ void daOnsTaru_c::mode_init_break() {
     mMode = MODE_BREAK_e;
 }
 
-/* 80CA9514-80CA9518 001034 0004+00 1/0 0/0 0/0 .text            mode_proc_break__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_proc_break() {}
 
-/* 80CA9518-80CA9530 001038 0018+00 2/2 0/0 0/0 .text            mode_init_sink__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_init_sink() {
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     mMode = MODE_SINK_e;
 }
 
-/* 80CA9530-80CA9620 001050 00F0+00 1/0 0/0 0/0 .text            mode_proc_sink__11daOnsTaru_cFv */
 void daOnsTaru_c::mode_proc_sink() {
     cLib_addCalc(&speedF, 0.0f, 0.05f, 0.1f, 0.01f);
     speed.y = cLib_minMaxLimit<f32>(speed.y, -15.0f, 13.0f);
@@ -346,7 +322,6 @@ void daOnsTaru_c::mode_proc_sink() {
     }
 }
 
-/* 80CA9620-80CA98B8 001140 0298+00 1/1 0/0 0/0 .text            breakEffSet__11daOnsTaru_cFv */
 void daOnsTaru_c::breakEffSet() {
     dComIfGp_particle_set(0x8A9A, &current.pos, NULL, NULL);
     dComIfGp_particle_set(0x8A9B, &current.pos, NULL, NULL);
@@ -371,7 +346,6 @@ void daOnsTaru_c::breakEffSet() {
     }
 }
 
-/* 80CA98B8-80CA995C 0013D8 00A4+00 1/0 0/0 0/0 .text            Draw__11daOnsTaru_cFv */
 int daOnsTaru_c::Draw() {
     g_env_light.settingTevStruct(0x40, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -382,42 +356,33 @@ int daOnsTaru_c::Draw() {
     return 1;
 }
 
-/* 80CA995C-80CA998C 00147C 0030+00 1/0 0/0 0/0 .text            Delete__11daOnsTaru_cFv */
 int daOnsTaru_c::Delete() {
     dComIfG_resDelete(&mPhase, "maroTaru");
     return 1;
 }
 
-/* 80CA998C-80CA99B8 0014AC 002C+00 1/0 0/0 0/0 .text            daOnsTaru_Draw__FP11daOnsTaru_c */
 static int daOnsTaru_Draw(daOnsTaru_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80CA99B8-80CA99E4 0014D8 002C+00 1/0 0/0 0/0 .text            daOnsTaru_Execute__FP11daOnsTaru_c
- */
 static int daOnsTaru_Execute(daOnsTaru_c* i_this) {
     return i_this->Execute();
 }
 
-/* 80CA99E4-80CA9A10 001504 002C+00 1/0 0/0 0/0 .text            daOnsTaru_Delete__FP11daOnsTaru_c
- */
 static int daOnsTaru_Delete(daOnsTaru_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80CA9A10-80CA9A30 001530 0020+00 1/0 0/0 0/0 .text            daOnsTaru_Create__FP10fopAc_ac_c */
 static int daOnsTaru_Create(fopAc_ac_c* i_this) {
     return ((daOnsTaru_c*)i_this)->create();
 }
 
-/* 80CA9CF4-80CA9D14 -00001 0020+00 1/0 0/0 0/0 .data            l_daOnsTaru_Method */
 static actor_method_class l_daOnsTaru_Method = {
     (process_method_func)daOnsTaru_Create,  (process_method_func)daOnsTaru_Delete,
     (process_method_func)daOnsTaru_Execute, (process_method_func)NULL,
     (process_method_func)daOnsTaru_Draw,
 };
 
-/* 80CA9D14-80CA9D44 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_OnsenTaru */
 extern actor_process_profile_definition g_profile_Obj_OnsenTaru = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

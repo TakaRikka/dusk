@@ -22,7 +22,7 @@ class daNpc_midP_HIO_c : public mDoHIO_entry_c {
 
 class daNpc_midP_Param_c {
 public:
-    /* 80A73954 */ virtual ~daNpc_midP_Param_c() {}
+    virtual ~daNpc_midP_Param_c() {}
 
     static const daNpc_midP_HIOParam m;
 };
@@ -85,47 +85,47 @@ public:
         TYPE_0,
         TYPE_1,
     };
-    /* 80A70C6C */ ~daNpc_midP_c();
-    /* 80A70D90 */ int create();
-    /* 80A71074 */ int CreateHeap();
-    /* 80A714BC */ int Delete();
-    /* 80A714F0 */ int Execute();
-    /* 80A71510 */ int Draw();
-    /* 80A715D4 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A715F4 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80A7164C */ u8 getType();
-    /* 80A7166C */ int isDelete();
-    /* 80A7168C */ void reset();
-    /* 80A717D4 */ void afterJntAnm(int);
-    /* 80A71860 */ BOOL ctrlBtk();
-    /* 80A7199C */ void setParam();
-    /* 80A71A98 */ void setAfterTalkMotion();
-    /* 80A71AF8 */ void srchActors();
-    /* 80A71AFC */ BOOL evtTalk();
-    /* 80A71BFC */ BOOL evtCutProc();
-    /* 80A71CC4 */ void action();
-    /* 80A71DB0 */ void beforeMove();
-    /* 80A71E28 */ void setAttnPos();
-    /* 80A72064 */ void setCollision();
-    /* 80A7216C */ int drawDbgInfo();
-    /* 80A72174 */ void drawGhost();
-    /* 80A721E0 */ int selectAction();
-    /* 80A72228 */ int chkAction(int (daNpc_midP_c::*)(void*));
-    /* 80A72254 */ int setAction(int (daNpc_midP_c::*)(void*));
-    /* 80A722FC */ int wait(void*);
-    /* 80A72548 */ int talk(void*);
-    /* 80A737D0 */ daNpc_midP_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
+    ~daNpc_midP_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    BOOL ctrlBtk();
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawGhost();
+    int selectAction();
+    int chkAction(int (daNpc_midP_c::*)(void*));
+    int setAction(int (daNpc_midP_c::*)(void*));
+    int wait(void*);
+    int talk(void*);
+    daNpc_midP_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
                                 daNpcT_evtData_c const* param_7, char** param_8) :
                                 daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8) {}
-    /* 80A7390C */ u16 getEyeballRMaterialNo() { return 3; }
-    /* 80A73914 */ u16 getEyeballLMaterialNo() { return 2; }
-    /* 80A7391C */ s32 getHeadJointNo() { return JNT_HEAD; }
-    /* 80A73924 */ s32 getNeckJointNo() { return JNT_NECK; }
-    /* 80A7392C */ s32 getBackboneJointNo() { return JNT_BACKBONE2; }
-    /* 80A73934 */ BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
-    /* 80A73944 */ BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_MOUTH; }
+    u16 getEyeballRMaterialNo() { return 3; }
+    u16 getEyeballLMaterialNo() { return 2; }
+    s32 getHeadJointNo() { return JNT_HEAD; }
+    s32 getNeckJointNo() { return JNT_NECK; }
+    s32 getBackboneJointNo() { return JNT_BACKBONE2; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_MOUTH; }
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

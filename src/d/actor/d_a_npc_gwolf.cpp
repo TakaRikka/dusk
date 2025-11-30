@@ -87,15 +87,12 @@ enum Motion {
     /* 0x8 */ MOT_DASHA,
 };
 
-/* 809F8F14-809F8F18 000054 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpc_GWolf_Param_c l_HIO;
 
-/* 809F8814-809F881C 000020 0008+00 1/1 0/0 0/0 .data            l_bmdGetParamList */
 static daNpc_GetParam1 l_bmdGetParamList[1] = {
     {BMDR_GW, GWOLF},
 };
 
-/* 809F881C-809F887C 000028 0060+00 0/1 0/0 0/0 .data            l_bckGetParamList */
 static daNpc_GetParam1 l_bckGetParamList[12] = {
     {-1, GWOLF},
     {-1, GWOLF},
@@ -111,17 +108,14 @@ static daNpc_GetParam1 l_bckGetParamList[12] = {
     {BCK_WL_DASHA, GWOLF},
 };
 
-/* 809F887C-809F8884 000088 0008+00 1/2 0/0 0/0 .data            l_btkGetParamList */
 static daNpc_GetParam1 l_btkGetParamList[1] = {
     {BTK_GW, GWOLF},
 };
 
-/* 809F8884-809F888C 000090 0008+00 0/0 0/0 0/0 .data            l_brkGetParamList */
 static daNpc_GetParam1 l_brkGetParamList[1] = {
     {BRK_GW, GWOLF},
 };
 
-/* 809F888C-809F8904 000098 0078+00 0/2 0/0 0/0 .data            l_evtGetParamList */
 static daNpc_GetParam1 l_evtGetParamList[15] = {
     {EVT_NONE, GWOLF},
     {EVT_ATTACK_WARP, GWOLF},
@@ -140,7 +134,6 @@ static daNpc_GetParam1 l_evtGetParamList[15] = {
     {EVT_MEET_GWOLFF, GWOLF},
 };
 
-/* 809F8904-809F8940 -00001 003C+00 0/2 0/0 0/0 .data            l_evtNames */
 static char* l_evtNames[15] = {
     NULL,
     "ATTACK_WARP",
@@ -159,17 +152,14 @@ static char* l_evtNames[15] = {
     "MEET_GWOLFF",
 };
 
-/* 809F8940-809F894C 00014C 000C+00 1/0 0/0 0/0 .data            l_loadRes_GWOLFa */
 static int l_loadRes_GWOLFa[3] = {
     GWOLF, -1, -1,
 };
 
-/* 809F894C-809F8958 000158 000C+00 1/0 0/0 0/0 .data            l_loadRes_GWOLF0 */
 static int l_loadRes_GWOLF0[3] = {
     GWOLF, -1, -1,
 };
 
-/* 809F8958-809F8968 -00001 0010+00 2/2 0/0 0/0 .data            l_loadRes_list */
 static int* l_loadRes_list[4] = {
     l_loadRes_GWOLFa,
     l_loadRes_GWOLFa,
@@ -177,13 +167,10 @@ static int* l_loadRes_list[4] = {
     l_loadRes_GWOLF0,
 };
 
-/* 809F8968-809F896C -00001 0004+00 4/7 0/0 0/0 .data            l_resNames */
 static char* l_resNames[1] = {"GWolf"};
 
-/* 809F896C-809F8970 -00001 0004+00 0/1 0/0 0/0 .data            l_myName */
 static char* l_myName = "GWolf";
 
-/* 809F8970-809F8980 00017C 000E+02 3/3 0/0 0/0 .data            l_appearTmpFlag */
 static s16 l_appearTmpFlag[7] = {
     -1,
     0x005C, // dSv_event_tmp_flag_c::T_0092 - Hero's spirit - Gold wolf identification 2
@@ -194,7 +181,6 @@ static s16 l_appearTmpFlag[7] = {
     0x0061, // dSv_event_tmp_flag_c::T_0097 - Hero's spirit - Gold wolf identification 7
 };
 
-/* 809F8980-809F8990 00018C 000E+02 2/2 0/0 0/0 .data            l_warpAppearFlag */
 static s16 l_warpAppearFlag[7] = {
     -1,
     0x01D8, // dSv_event_flag_c::F_0472 - Secret techniques - Distant howling complete (for secret technique 2)
@@ -205,7 +191,6 @@ static s16 l_warpAppearFlag[7] = {
     0x01DD, // dSv_event_flag_c::F_0477 - Secret techniques - Distant howling complete (for secret technique 7)
 };
 
-/* 809F8990-809F89A4 -00001 0014+00 0/1 0/0 0/0 .data            mEvtCutNameList__13daNpc_GWolf_c */
 char* daNpc_GWolf_c::mEvtCutNameList[5] = {
     "",
     "ATTACK_WARP",
@@ -214,7 +199,6 @@ char* daNpc_GWolf_c::mEvtCutNameList[5] = {
     "MEET_GWOLFA",
 };
 
-/* 809F89D4-809F8A10 0001E0 003C+00 0/2 0/0 0/0 .data            mEvtCutList__13daNpc_GWolf_c */
 daNpc_GWolf_c::cutFunc daNpc_GWolf_c::mEvtCutList[5] = {
     NULL,
     &daNpc_GWolf_c::ECut_attackWarp,
@@ -223,10 +207,8 @@ daNpc_GWolf_c::cutFunc daNpc_GWolf_c::mEvtCutList[5] = {
     &daNpc_GWolf_c::ECut_meetGWolf,
 };
 
-/* 809F30AC-809F3230 0000EC 0184+00 1/1 0/0 0/0 .text            __ct__13daNpc_GWolf_cFv */
 daNpc_GWolf_c::daNpc_GWolf_c() {}
 
-/* 809F32C0-809F34C0 000300 0200+00 1/0 0/0 0/0 .text            __dt__13daNpc_GWolf_cFv */
 daNpc_GWolf_c::~daNpc_GWolf_c() {
     for (int i = 0; l_loadRes_list[mType][i] >= 0; i++) {
         dComIfG_resDelete(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
@@ -237,8 +219,6 @@ daNpc_GWolf_c::~daNpc_GWolf_c() {
     }
 }
 
-/* ############################################################################################## */
-/* 809F84F4-809F8580 000000 008C+00 17/17 0/0 0/0 .rodata          m__19daNpc_GWolf_Param_c */
 daNpc_GWolf_HIOParam const daNpc_GWolf_Param_c::m = {
     30.0f,
     -4.0f,
@@ -283,7 +263,6 @@ daNpc_GWolf_HIOParam const daNpc_GWolf_Param_c::m = {
     120.0f,
 };
 
-/* 809F34C0-809F37C0 000500 0300+00 1/1 0/0 0/0 .text            create__13daNpc_GWolf_cFv */
 cPhs__Step daNpc_GWolf_c::create() {
     fopAcM_ct(this, daNpc_GWolf_c);
 
@@ -351,7 +330,6 @@ cPhs__Step daNpc_GWolf_c::create() {
     return cPhs_INIT_e;
 }
 
-/* 809F37C0-809F3A1C 000800 025C+00 1/1 0/0 0/0 .text            CreateHeap__13daNpc_GWolf_cFv */
 int daNpc_GWolf_c::CreateHeap() {
     J3DModelData* mdlData_p = NULL;
 
@@ -386,19 +364,16 @@ int daNpc_GWolf_c::CreateHeap() {
     return 1;
 }
 
-/* 809F3BD8-809F3C0C 000C18 0034+00 1/1 0/0 0/0 .text            Delete__13daNpc_GWolf_cFv */
 int daNpc_GWolf_c::Delete() {
     fopAcM_GetID(this);
     this->~daNpc_GWolf_c();
     return 1;
 }
 
-/* 809F3C0C-809F3C2C 000C4C 0020+00 2/2 0/0 0/0 .text            Execute__13daNpc_GWolf_cFv */
 int daNpc_GWolf_c::Execute() {
     return execute();
 }
 
-/* 809F3C2C-809F3CBC 000C6C 0090+00 1/1 0/0 0/0 .text            Draw__13daNpc_GWolf_cFv */
 int daNpc_GWolf_c::Draw() {
     J3DModelData* mdlData_p = mAnm_p->getModel()->getModelData();
     mdlData_p->getMaterialNodePointer(2)->setMaterialAnm(mpMatAnm);
@@ -408,7 +383,6 @@ int daNpc_GWolf_c::Draw() {
     );
 }
 
-/* 809F3CBC-809F3FB8 000CFC 02FC+00 1/1 0/0 0/0 .text draw__13daNpc_GWolf_cFiifP11_GXColorS10i */
 int daNpc_GWolf_c::draw(int param_1, int param_2, f32 param_3, _GXColorS10* i_color, int param_5) {
     J3DModel* model = mAnm_p->getModel();
     J3DModelData* mdlData_p = model->getModelData();
@@ -482,7 +456,6 @@ int daNpc_GWolf_c::draw(int param_1, int param_2, f32 param_3, _GXColorS10* i_co
     return 1;
 }
 
-/* 809F3FB8-809F41EC 000FF8 0234+00 1/1 0/0 0/0 .text            ctrlJoint__13daNpc_GWolf_cFP8J3DJointP8J3DModel */
 int daNpc_GWolf_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     int jntNo = i_joint->getJntNo();
     int i_jointList[3] = {1, 3, 4};
@@ -526,12 +499,10 @@ int daNpc_GWolf_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 809F41EC-809F420C 00122C 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__13daNpc_GWolf_cFP10fopAc_ac_c */
 int daNpc_GWolf_c::createHeapCallBack(fopAc_ac_c* a_this) {
     return static_cast<daNpc_GWolf_c*>(a_this)->CreateHeap();
 }
 
-/* 809F420C-809F4258 00124C 004C+00 1/1 0/0 0/0 .text            ctrlJointCallBack__13daNpc_GWolf_cFP8J3DJointi */
 int daNpc_GWolf_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -545,7 +516,6 @@ int daNpc_GWolf_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 809F4258-809F4390 001298 0138+00 1/0 0/0 0/0 .text            setParam__13daNpc_GWolf_cFv */
 void daNpc_GWolf_c::setParam() {
     actionFunc action = mNextAction;
     u32 flag = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
@@ -579,7 +549,6 @@ void daNpc_GWolf_c::setParam() {
     }
 }
 
-/* 809F4390-809F4558 0013D0 01C8+00 1/0 0/0 0/0 .text            main__13daNpc_GWolf_cFv */
 BOOL daNpc_GWolf_c::main() {
     if (!doEvent()) {
         doNormalAction(1);
@@ -620,7 +589,6 @@ BOOL daNpc_GWolf_c::main() {
     return TRUE;
 }
 
-/* 809F4558-809F4638 001598 00E0+00 1/0 0/0 0/0 .text            ctrlBtk__13daNpc_GWolf_cFv */
 BOOL daNpc_GWolf_c::ctrlBtk() {
     if (mpMatAnm != NULL) {
         J3DAnmTextureSRTKey* i_btk = NULL;
@@ -642,7 +610,6 @@ BOOL daNpc_GWolf_c::ctrlBtk() {
     return FALSE;
 }
 
-/* 809F4638-809F4698 001678 0060+00 1/0 0/0 0/0 .text            adjustShapeAngle__13daNpc_GWolf_cFv */
 void daNpc_GWolf_c::adjustShapeAngle() {
     s16 target = 0;
 
@@ -654,7 +621,6 @@ void daNpc_GWolf_c::adjustShapeAngle() {
     mCurAngle.x = shape_angle.x;
 }
 
-/* 809F4698-809F4BB0 0016D8 0518+00 1/0 0/0 0/0 .text            setAttnPos__13daNpc_GWolf_cFv */
 void daNpc_GWolf_c::setAttnPos() {
     static cXyz eyeOffset(35.0f, 0.0f, 0.0f);
 
@@ -733,17 +699,14 @@ void daNpc_GWolf_c::setAttnPos() {
     mCyl.ClrTgHit();
 }
 
-/* 809F4BB0-809F4BB8 001BF0 0008+00 1/0 0/0 0/0 .text setExpressionAnm__13daNpc_GWolf_cFib */
 bool daNpc_GWolf_c::setExpressionAnm(int i_index, bool i_modify) {
     return true;
 }
 
-/* 809F4BB8-809F4BBC 001BF8 0004+00 1/0 0/0 0/0 .text            setExpression__13daNpc_GWolf_cFif */
 void daNpc_GWolf_c::setExpression(int i_index, f32 i_morf) {
     /* empty function */
 }
 
-/* 809F4BBC-809F4DE8 001BFC 022C+00 2/0 0/0 0/0 .text            setMotionAnm__13daNpc_GWolf_cFif */
 void daNpc_GWolf_c::setMotionAnm(int i_index, f32 i_morf) {
     J3DAnmTransformKey* i_bck = NULL;
     J3DAnmTextureSRTKey* i_btk = NULL;
@@ -819,7 +782,6 @@ void daNpc_GWolf_c::setMotionAnm(int i_index, f32 i_morf) {
     }
 }
 
-/* 809F4DE8-809F4E2C 001E28 0044+00 1/0 0/0 0/0 .text            setMotion__13daNpc_GWolf_cFifi */
 void daNpc_GWolf_c::setMotion(int i_motion, f32 i_morf, int param_3) {
     s16 motion = i_motion;
 
@@ -831,17 +793,14 @@ void daNpc_GWolf_c::setMotion(int i_motion, f32 i_morf, int param_3) {
     }
 }
 
-/* 809F4E2C-809F4E34 001E6C 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__13daNpc_GWolf_cFv */
 BOOL daNpc_GWolf_c::drawDbgInfo() {
     return FALSE;
 }
 
-/* 809F4E34-809F4E38 001E74 0004+00 1/0 0/0 0/0 .text            drawOtherMdls__13daNpc_GWolf_cFv */
 void daNpc_GWolf_c::drawOtherMdls() {
     /* empty function */
 }
 
-/* 809F4E38-809F4E84 001E78 004C+00 1/1 0/0 0/0 .text            getTypeFromParam__13daNpc_GWolf_cFv */
 u8 daNpc_GWolf_c::getTypeFromParam() {
     switch (fopAcM_GetParam(this) & 0xFF) {
         case 0 :
@@ -857,7 +816,6 @@ u8 daNpc_GWolf_c::getTypeFromParam() {
     }
 }
 
-/* 809F4E84-809F4F00 001EC4 007C+00 2/1 0/0 0/0 .text            getModeFromParam__13daNpc_GWolf_cFv */
 int daNpc_GWolf_c::getModeFromParam() {
     u8 uVar1 = (fopAcM_GetParam(this) & 0xFF00) >> 8;
 
@@ -889,7 +847,6 @@ int daNpc_GWolf_c::getModeFromParam() {
     return -1;
 }
 
-/* 809F4F00-809F4FF4 001F40 00F4+00 1/1 0/0 0/0 .text            isDelete__13daNpc_GWolf_cFv */
 BOOL daNpc_GWolf_c::isDelete() {
     static s16 l_delFlag[7] = {
         0x0153, 0x01EC, 0x01ED, 0x01EE, 0x01EF, 0x01F0, 0x01F1,
@@ -923,7 +880,6 @@ BOOL daNpc_GWolf_c::isDelete() {
     return TRUE;
 }
 
-/* 809F4FF4-809F520C 002034 0218+00 1/1 0/0 0/0 .text            reset__13daNpc_GWolf_cFv */
 void daNpc_GWolf_c::reset() {
     initialize();
     mpMatAnm->initialize();
@@ -965,7 +921,6 @@ void daNpc_GWolf_c::reset() {
     field_0x9ee = true;
 }
 
-/* 809F520C-809F55D0 00224C 03C4+00 1/1 0/0 0/0 .text            playMotion__13daNpc_GWolf_cFv */
 void daNpc_GWolf_c::playMotion() {
     daNpcF_anmPlayData dat0 = {ANM_WAITSIT, daNpc_GWolf_Param_c::m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
@@ -1027,12 +982,10 @@ void daNpc_GWolf_c::playMotion() {
     }
 }
 
-/* 809F55D0-809F55FC 002610 002C+00 2/2 0/0 0/0 .text            chkAction__13daNpc_GWolf_cFM13daNpc_GWolf_cFPCvPvPv_i */
 BOOL daNpc_GWolf_c::chkAction(actionFunc action) {
     return mAction == action;
 }
 
-/* 809F55FC-809F56A4 00263C 00A8+00 2/2 0/0 0/0 .text            setAction__13daNpc_GWolf_cFM13daNpc_GWolf_cFPCvPvPv_i */
 BOOL daNpc_GWolf_c::setAction(actionFunc action) {
     mMode = 3;
 
@@ -1050,7 +1003,6 @@ BOOL daNpc_GWolf_c::setAction(actionFunc action) {
     return TRUE;
 }
 
-/* 809F56A4-809F5770 0026E4 00CC+00 1/1 0/0 0/0 .text            selectAction__13daNpc_GWolf_cFv */
 BOOL daNpc_GWolf_c::selectAction() {
     mNextAction = NULL;
 
@@ -1075,7 +1027,6 @@ BOOL daNpc_GWolf_c::selectAction() {
     return TRUE;
 }
 
-/* 809F5770-809F5884 0027B0 0114+00 1/1 0/0 0/0 .text            doNormalAction__13daNpc_GWolf_cFi */
 void daNpc_GWolf_c::doNormalAction(int param_1) {
     if (param_1 != 0 && hitChk2(&mCyl, TRUE, FALSE)) {
         int damage_time;
@@ -1103,7 +1054,6 @@ void daNpc_GWolf_c::doNormalAction(int param_1) {
     }
 }
 
-/* 809F5884-809F5B60 0028C4 02DC+00 1/1 0/0 0/0 .text            doEvent__13daNpc_GWolf_cFv */
 BOOL daNpc_GWolf_c::doEvent() {
     BOOL rv = FALSE;
 
@@ -1190,14 +1140,12 @@ BOOL daNpc_GWolf_c::doEvent() {
     return rv;
 }
 
-/* 809F5B60-809F5B84 002BA0 0024+00 10/10 0/0 0/0 .text            setLookMode__13daNpc_GWolf_cFi */
 void daNpc_GWolf_c::setLookMode(int i_lookMode) {
     if (i_lookMode >= 0 && i_lookMode < 5 && i_lookMode != mLookMode) {
         mLookMode = i_lookMode;
     }
 }
 
-/* 809F5B84-809F5E0C 002BC4 0288+00 1/1 0/0 0/0 .text            lookat__13daNpc_GWolf_cFv */
 void daNpc_GWolf_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model = mAnm_p->getModel();
@@ -1257,7 +1205,6 @@ void daNpc_GWolf_c::lookat() {
     mLookat.calc(this, model->getBaseTRMtx(), lookatAngle, i_snap, angle_delta, FALSE);
 }
 
-/* 809F5E0C-809F6548 002E4C 073C+00 3/0 0/0 0/0 .text            ECut_attackWarp__13daNpc_GWolf_cFi */
 BOOL daNpc_GWolf_c::ECut_attackWarp(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int iVar1 = 0;
@@ -1396,7 +1343,6 @@ BOOL daNpc_GWolf_c::ECut_attackWarp(int i_staffId) {
     return rv;
 }
 
-/* 809F6548-809F6BFC 003588 06B4+00 3/0 0/0 0/0 .text ECut_attackWarpHorse__13daNpc_GWolf_cFi */
 BOOL daNpc_GWolf_c::ECut_attackWarpHorse(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int iVar1 = 0;
@@ -1527,7 +1473,6 @@ BOOL daNpc_GWolf_c::ECut_attackWarpHorse(int i_staffId) {
     return rv;
 }
 
-/* 809F6BFC-809F7084 003C3C 0488+00 1/0 0/0 0/0 .text            ECut_howlingSessionA__13daNpc_GWolf_cFi */
 BOOL daNpc_GWolf_c::ECut_howlingSessionA(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     daPy_getPlayerActorClass();
@@ -1665,13 +1610,11 @@ BOOL daNpc_GWolf_c::ECut_howlingSessionA(int i_staffId) {
     return rv;
 }
 
-/* 809F7084-809F70A8 0040C4 0024+00 1/1 0/0 0/0 .text            callback_proc__FPvi */
 static BOOL callback_proc(void* i_actor, int i_data) {
     static_cast<daNpc_GWolf_c*>(i_actor)->meetGWolfSkip();
     return TRUE;
 }
 
-/* 809F70A8-809F70EC 0040E8 0044+00 1/1 0/0 0/0 .text            meetGWolfSkip__13daNpc_GWolf_cFv */
 void daNpc_GWolf_c::meetGWolfSkip() {
     mOrderEvtNo = EVT_NONE;
     mEventIdx = -1;
@@ -1679,7 +1622,6 @@ void daNpc_GWolf_c::meetGWolfSkip() {
     dComIfGp_event_reset();
 }
 
-/* 809F70EC-809F71E0 00412C 00F4+00 1/0 0/0 0/0 .text            ECut_meetGWolf__13daNpc_GWolf_cFi */
 BOOL daNpc_GWolf_c::ECut_meetGWolf(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     daPy_getPlayerActorClass();
@@ -1708,7 +1650,6 @@ BOOL daNpc_GWolf_c::ECut_meetGWolf(int i_staffId) {
     return TRUE;
 }
 
-/* 809F71E0-809F75C0 004220 03E0+00 1/0 0/0 0/0 .text            wait__13daNpc_GWolf_cFPv */
 BOOL daNpc_GWolf_c::wait(void* param_1) {
     switch (mMode) {
         case 0:
@@ -1787,7 +1728,6 @@ BOOL daNpc_GWolf_c::wait(void* param_1) {
     return TRUE;
 }
 
-/* 809F75C0-809F775C 004600 019C+00 1/0 0/0 0/0 .text            waitHowling__13daNpc_GWolf_cFPv */
 BOOL daNpc_GWolf_c::waitHowling(void* param_1) {
     switch (mMode) {
         case 0:
@@ -1827,7 +1767,6 @@ BOOL daNpc_GWolf_c::waitHowling(void* param_1) {
     return TRUE;
 }
 
-/* 809F775C-809F77E4 00479C 0088+00 1/0 0/0 0/0 .text            waitBrave__13daNpc_GWolf_cFPv */
 BOOL daNpc_GWolf_c::waitBrave(void* param_1) {
     switch (mMode) {
         case 0:
@@ -1843,7 +1782,6 @@ BOOL daNpc_GWolf_c::waitBrave(void* param_1) {
     return TRUE;
 }
 
-/* 809F77E4-809F797C 004824 0198+00 2/0 0/0 0/0 .text            talk__13daNpc_GWolf_cFPv */
 BOOL daNpc_GWolf_c::talk(void* param_1) {
     BOOL rv = FALSE;
     BOOL bVar1 = FALSE;
@@ -1898,7 +1836,6 @@ BOOL daNpc_GWolf_c::talk(void* param_1) {
     return rv;
 }
 
-/* 809F797C-809F7A30 0049BC 00B4+00 2/0 0/0 0/0 .text            test__13daNpc_GWolf_cFPv */
 BOOL daNpc_GWolf_c::test(void* param_1) {
     switch (mMode) {
         case 0:
@@ -1920,7 +1857,6 @@ BOOL daNpc_GWolf_c::test(void* param_1) {
     return TRUE;
 }
 
-/* 809F7A30-809F7AB0 004A70 0080+00 1/1 0/0 0/0 .text            getGroundSlope__13daNpc_GWolf_cFR12dBgS_ObjAcchs */
 s16 daNpc_GWolf_c::getGroundSlope(dBgS_ObjAcch& i_acch, s16 param_2) {
     cM3dGPla plane;
     if (dComIfG_Bgsp().GetTriPla(i_acch.m_gnd, &plane)) {
@@ -1930,34 +1866,28 @@ s16 daNpc_GWolf_c::getGroundSlope(dBgS_ObjAcch& i_acch, s16 param_2) {
     return 0;
 }
 
-/* 809F7AF8-809F7B18 004B38 0020+00 1/0 0/0 0/0 .text            daNpc_GWolf_Create__FPv */
 static int daNpc_GWolf_Create(void* a_this) {
     return static_cast<daNpc_GWolf_c*>(a_this)->create();
 }
 
-/* 809F7B18-809F7B38 004B58 0020+00 1/0 0/0 0/0 .text            daNpc_GWolf_Delete__FPv */
 static int daNpc_GWolf_Delete(void* a_this) {
     return static_cast<daNpc_GWolf_c*>(a_this)->Delete();
 }
 
-/* 809F7B38-809F7B58 004B78 0020+00 1/0 0/0 0/0 .text            daNpc_GWolf_Execute__FPv */
 static int daNpc_GWolf_Execute(void* a_this) {
     return static_cast<daNpc_GWolf_c*>(a_this)->Execute();
 }
 
-/* 809F7B58-809F7B78 004B98 0020+00 1/0 0/0 0/0 .text            daNpc_GWolf_Draw__FPv */
 static int daNpc_GWolf_Draw(void* a_this) {
     return static_cast<daNpc_GWolf_c*>(a_this)->Draw();
 }
 
-/* 809F7B78-809F7B80 004BB8 0008+00 1/0 0/0 0/0 .text            daNpc_GWolf_IsDelete__FPv */
 static int daNpc_GWolf_IsDelete(void* a_this) {
     return 1;
 }
 
 AUDIO_INSTANCES;
 
-/* 809F8D7C-809F8D9C -00001 0020+00 1/0 0/0 0/0 .data            daNpc_GWolf_MethodTable */
 static actor_method_class daNpc_GWolf_MethodTable = {
     (process_method_func)daNpc_GWolf_Create,
     (process_method_func)daNpc_GWolf_Delete,
@@ -1966,7 +1896,6 @@ static actor_method_class daNpc_GWolf_MethodTable = {
     (process_method_func)daNpc_GWolf_Draw,
 };
 
-/* 809F8D9C-809F8DCC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_GWOLF */
 extern actor_process_profile_definition g_profile_NPC_GWOLF = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID

@@ -16,26 +16,22 @@
 #include "m_Do/m_Do_mtx.h"
 #include "f_op/f_op_overlap_mng.h"
 
-/* 804510F0-804510F8 0005F0 0008+00 2/2 0/0 0/0 .sbss            g_snHIO */
 static dSn_HIO_c g_snHIO;
 
 #if VERSION == VERSION_GCN_PAL
 static int mBmgStatus;
 #endif
 
-/* 803C3094-803C30DC 0201B4 0048+00 1/2 0/0 0/0 .data            MainProc */
 typedef void (dScnName_c::*mainProcFunc)(void);
 static mainProcFunc MainProc[6] = {
     &dScnName_c::FileSelectOpen,  &dScnName_c::FileSelectMain, &dScnName_c::FileSelectClose,
     &dScnName_c::brightCheckOpen, &dScnName_c::brightCheck,    &dScnName_c::changeGameScene,
 };
 
-/* 8025878C-802587A4 2530CC 0018+00 1/1 0/0 0/0 .text            __ct__9dSn_HIO_cFv */
 dSn_HIO_c::dSn_HIO_c() {
     mFileSelWaitTime = 15;
 }
 
-/* 802587A4-80258820 2530E4 007C+00 1/0 0/0 0/0 .text            phase_1__FPc */
 static s32 phase_1(char* resName) {
     mDoAud_bgmStart(-1);
     if (dComIfG_setObjectRes(resName, (u8)0, NULL) == 0) {
@@ -45,7 +41,6 @@ static s32 phase_1(char* resName) {
     return cPhs_NEXT_e;
 }
 
-/* 80258820-80258878 253160 0058+00 1/0 0/0 0/0 .text            phase_2__FPc */
 static s32 phase_2(char* resName) {
     int syncStatus = dComIfG_syncObjectRes(resName);
 
@@ -60,8 +55,6 @@ static s32 phase_2(char* resName) {
     }
 }
 
-/* 80258878-802588A0 2531B8 0028+00 1/1 0/0 0/0 .text
- * resLoad__FP30request_of_phase_process_classPc                */
 static s32 resLoad(request_of_phase_process_class* i_phase, char* i_resName) {
     static request_of_phase_process_fn l_method[2] = {
         (request_of_phase_process_fn)phase_1, 
@@ -145,7 +138,6 @@ static const char* dummyString(int i) {
 }
 #endif
 
-/* 80258B2C-80258BC8 25346C 009C+00 1/1 0/0 0/0 .text            setView__10dScnName_cFv */
 void dScnName_c::setView() {
     C_MTXPerspective(mCamera.projMtx, mCamera.fovy, mCamera.aspect, mCamera.near,
                      mCamera.far);
@@ -170,7 +162,6 @@ void dScnName_c::bmg_data_set(){
 void dScnName_c::tex_data_set() {}
 #endif
 
-/* 80258BC8-80258C5C 253508 0094+00 1/1 0/0 0/0 .text            execute__10dScnName_cFv */
 s32 dScnName_c::execute() {
     if (fopOvlpM_IsPeek() == 0) {
         dComIfG_resetToOpening(this);
@@ -184,7 +175,6 @@ s32 dScnName_c::execute() {
     return 1;
 }
 
-/* 80258C5C-80258CC8 25359C 006C+00 1/1 0/0 0/0 .text            draw__10dScnName_cFv */
 s32 dScnName_c::draw() {
     dComIfGp_getVibration().Run();
 
@@ -200,7 +190,6 @@ s32 dScnName_c::draw() {
     return 1;
 }
 
-/* 80258CC8-80258DD0 253608 0108+00 1/1 0/0 0/0 .text            __dt__10dScnName_cFv */
 dScnName_c::~dScnName_c() {
     delete dFs_c;
     delete mBrightCheck;
@@ -215,7 +204,6 @@ dScnName_c::~dScnName_c() {
     dComIfGd_setView(NULL);
 }
 
-/* 80258DD0-80258E34 253710 0064+00 1/0 0/0 0/0 .text            FileSelectOpen__10dScnName_cFv */
 void dScnName_c::FileSelectOpen() {
     if (field_0x41e != 0) {
         field_0x41e--;
@@ -226,7 +214,6 @@ void dScnName_c::FileSelectOpen() {
     }
 }
 
-/* 80258E34-80258E78 253774 0044+00 1/0 0/0 0/0 .text            FileSelectMain__10dScnName_cFv */
 void dScnName_c::FileSelectMain() {
     dFs_c->_move();
 
@@ -235,7 +222,6 @@ void dScnName_c::FileSelectMain() {
     }
 }
 
-/* 80258E78-80258F20 2537B8 00A8+00 1/1 0/0 0/0 .text FileSelectMainNormal__10dScnName_cFv */
 void dScnName_c::FileSelectMainNormal() {
     switch(dFs_c->isSelectEnd()) {
     case 1:
@@ -248,7 +234,6 @@ void dScnName_c::FileSelectMainNormal() {
     }
 }
 
-/* 80258F20-80258FD4 253860 00B4+00 1/0 0/0 0/0 .text            FileSelectClose__10dScnName_cFv */
 void dScnName_c::FileSelectClose() {
     field_0x41e--;
 
@@ -262,7 +247,6 @@ void dScnName_c::FileSelectClose() {
     }
 }
 
-/* 80258FD4-80259008 253914 0034+00 1/0 0/0 0/0 .text            brightCheckOpen__10dScnName_cFv */
 void dScnName_c::brightCheckOpen() {
     if (!mDoRst::isReset()) {
         field_0x41e--;
@@ -272,7 +256,6 @@ void dScnName_c::brightCheckOpen() {
     }
 }
 
-/* 80259008-802590F8 253948 00F0+00 1/0 0/0 0/0 .text            brightCheck__10dScnName_cFv */
 void dScnName_c::brightCheck() {
     mBrightCheck->_move();
 
@@ -294,7 +277,6 @@ void dScnName_c::brightCheck() {
     }
 }
 
-/* 802590F8-802591C0 253A38 00C8+00 1/0 0/0 0/0 .text            changeGameScene__10dScnName_cFv */
 void dScnName_c::changeGameScene() {
     if (!mDoRst::isReset() && !fopOvlpM_IsPeek()) {
         dComIfGs_gameStart();
@@ -311,24 +293,19 @@ void dScnName_c::changeGameScene() {
     }
 }
 
-/* 802591C0-802591E0 253B00 0020+00 1/0 0/0 0/0 .text            dScnName_Draw__FP10dScnName_c */
 static int dScnName_Draw(dScnName_c* i_this) {
     return i_this->draw();
 }
 
-/* 802591E0-80259200 253B20 0020+00 1/0 0/0 0/0 .text            dScnName_Execute__FP10dScnName_c */
 static int dScnName_Execute(dScnName_c* i_this) {
     return i_this->execute();
 }
 
-/* 80259200-80259230 253B40 0030+00 1/0 0/0 0/0 .text            dScnName_IsDelete__FP10dScnName_c
- */
 static int dScnName_IsDelete(dScnName_c*) {
     dComIfGp_particle_cleanup();
     return 1;
 }
 
-/* 80259230-80259258 253B70 0028+00 1/0 0/0 0/0 .text            dScnName_Delete__FP10dScnName_c */
 static int dScnName_Delete(dScnName_c* i_this) {
     #if VERSION == VERSION_GCN_PAL
     i_this->bmg_data_set();
@@ -340,20 +317,17 @@ static int dScnName_Delete(dScnName_c* i_this) {
     return 1;
 }
 
-/* 80259258-80259294 253B98 003C+00 1/0 0/0 0/0 .text            dScnName_Create__FP11scene_class */
 static int dScnName_Create(scene_class* i_this) {
     new (i_this) dScnName_c();
     return static_cast<dScnName_c*>(i_this)->create();
 }
 
-/* 803C30DC-803C30F0 -00001 0014+00 2/0 0/0 0/0 .data            l_dScnName_Method */
 static leafdraw_method_class l_dScnName_Method = {
     (process_method_func)dScnName_Create, (process_method_func)dScnName_Delete,
     (process_method_func)dScnName_Execute, (process_method_func)dScnName_IsDelete,
     (process_method_func)dScnName_Draw,
 };
 
-/* 803C30F0-803C3118 -00001 0028+00 0/0 0/0 1/0 .data            g_profile_NAME_SCENE */
 extern scene_process_profile_definition g_profile_NAME_SCENE = {
     fpcLy_ROOT_e,
     1,
@@ -368,7 +342,6 @@ extern scene_process_profile_definition g_profile_NAME_SCENE = {
     NULL,
 };
 
-/* 803C3118-803C3140 -00001 0028+00 0/0 0/0 1/0 .data            g_profile_NAMEEX_SCENE */
 extern scene_process_profile_definition g_profile_NAMEEX_SCENE = {
     fpcLy_ROOT_e,
     1,

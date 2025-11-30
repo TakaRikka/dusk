@@ -65,7 +65,7 @@ extern J3DTevSwapModeInfo const j3dDefaultTevSwapMode;
  * 
  */
 struct J3DTevStage {
-    /* 8000E230 */ J3DTevStage() {
+    J3DTevStage() {
         setTevStageInfo(j3dDefaultTevStageInfo);
         setTevSwapModeInfo(j3dDefaultTevSwapMode);
     }
@@ -120,7 +120,7 @@ struct J3DTevStage {
         setTevAlphaOp(info.field_0xe, info.field_0xf, info.field_0x10, info.field_0x11, info.field_0x12);
     }
 
-    /* 8003AACC */ J3DTevStage(J3DTevStageInfo const& param_0) {
+    J3DTevStage(J3DTevStageInfo const& param_0) {
         setTevStageInfo(param_0);
         setTevSwapModeInfo(j3dDefaultTevSwapMode);
     }
@@ -197,7 +197,7 @@ extern J3DIndTevStageInfo const j3dDefaultIndTevStageInfo;
  * 
  */
 struct J3DIndTevStage {
-    /* 8000E14C */ J3DIndTevStage() : mInfo(0) { setIndTevStageInfo(j3dDefaultIndTevStageInfo); }
+    J3DIndTevStage() : mInfo(0) { setIndTevStageInfo(j3dDefaultIndTevStageInfo); }
     J3DIndTevStage(J3DIndTevStageInfo const& info) : mInfo(0) { setIndTevStageInfo(info); }
     void setIndTevStageInfo(J3DIndTevStageInfo const& info) {
         setIndStage(info.mIndStage);
@@ -259,7 +259,7 @@ extern const J3DTevOrderInfo j3dDefaultTevOrderInfoNull;
  * 
  */
 struct J3DTevOrder : public J3DTevOrderInfo {
-    /* 8000E140 */ J3DTevOrder() : J3DTevOrderInfo(j3dDefaultTevOrderInfoNull) {}
+    J3DTevOrder() : J3DTevOrderInfo(j3dDefaultTevOrderInfoNull) {}
     J3DTevOrder(const J3DTevOrderInfo& info) : J3DTevOrderInfo(info) {}
     J3DTevOrderInfo& getTevOrderInfo() { return *this; }
 
@@ -274,7 +274,7 @@ extern u8 const j3dDefaultTevSwapTableID;
  * 
  */
 struct J3DTevSwapModeTable {
-    /* 8000E134 */ J3DTevSwapModeTable() { mIdx = j3dDefaultTevSwapTableID; }
+    J3DTevSwapModeTable() { mIdx = j3dDefaultTevSwapTableID; }
     J3DTevSwapModeTable(J3DTevSwapModeTableInfo const& info) {
         mIdx = calcTevSwapTableID(info.field_0x0, info.field_0x1, info.field_0x2, info.field_0x3);
     }

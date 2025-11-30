@@ -8,7 +8,6 @@
 #include "d/actor/d_a_obj_sakuita.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
-#include "dol2asm.h"
 
 #ifdef DEBUG
 class daObjSakuita_Hio_c : public JORReflexible {
@@ -59,15 +58,12 @@ void daObjSakuita_Hio_c::dt() {
 static daObjSakuita_Hio_c M_hio;
 #endif
 
-/* 80CC50B4-80CC50E0 000000 002C+00 3/3 0/0 0/0 .rodata          M_attr__14daObjSakuita_c */
 daObjSakuita_Attr_c const daObjSakuita_c::M_attr = {
     20.0f, 12.0f, 70.0f, -50.0f, 0.8f, 0.5f, -6.0f, 900.0f, 20000.0f, 100.0f, 0x1400, 0x14,
 };
 
-/* 80CC512C-80CC5130 -00001 0004+00 4/4 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "A_Sakuita";
 
-/* 80CC46F8-80CC47F8 000078 0100+00 1/1 0/0 0/0 .text            create_init__14daObjSakuita_cFv */
 void daObjSakuita_c::create_init() {
     fopAcM_setCullSizeBox(this, -30.0f, -90.0f, -10.0f, 30.0f, 20.0f, 10.0f);
     gravity = attr().mGravity;
@@ -87,12 +83,10 @@ void daObjSakuita_c::create_init() {
     #endif
 }
 
-/* 80CC47F8-80CC4818 000178 0020+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjSakuita_cFv */
 void daObjSakuita_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80CC4818-80CC489C 000198 0084+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjSakuita_cFv */
 void daObjSakuita_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZrotM(field_0x744.z);
@@ -104,7 +98,6 @@ void daObjSakuita_c::setBaseMtx() {
 
 f32 dummyLiteral() { return 0.5f; }
 
-/* 80CC489C-80CC4A98 00021C 01FC+00 1/1 0/0 0/0 .text            setPlatePos__14daObjSakuita_cFv */
 void daObjSakuita_c::setPlatePos() {
     cXyz cStack_24;
     cXyz cStack_30;
@@ -135,7 +128,6 @@ void daObjSakuita_c::setPlatePos() {
     field_0x728 = field_0x71c;
 }
 
-/* 80CC4A98-80CC4B5C 000418 00C4+00 1/1 0/0 0/0 .text            calcAngle__14daObjSakuita_cFv */
 void daObjSakuita_c::calcAngle() {
     cXyz local_28 = current.pos - field_0x71c;
     field_0x744.x = cM_atan2s(local_28.z, local_28.y);
@@ -150,7 +142,6 @@ inline int daObjSakuita_c::createHeap() {
     return mModel != NULL ? 1 : 0;
 }
 
-/* 80CC4B5C-80CC4BD4 0004DC 0078+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_actor) {
     return static_cast<daObjSakuita_c*>(i_actor)->createHeap();
 }
@@ -160,7 +151,6 @@ inline int daObjSakuita_c::draw() {
     return 1;
 }
 
-/* 80CC4BD4-80CC4C14 000554 0040+00 1/0 0/0 0/0 .text daObjSakuita_Draw__FP14daObjSakuita_c */
 static int daObjSakuita_Draw(daObjSakuita_c* i_this) {
     return i_this->draw();
 }
@@ -176,24 +166,20 @@ inline int daObjSakuita_c::execute() {
     return 1;
 }
 
-/* 80CC4C14-80CC4C6C 000594 0058+00 1/0 0/0 0/0 .text daObjSakuita_Execute__FP14daObjSakuita_c */
 static int daObjSakuita_Execute(daObjSakuita_c* i_this) {
     return i_this->execute();
 }
 
-/* 80CC4C6C-80CC4C74 0005EC 0008+00 1/0 0/0 0/0 .text daObjSakuita_IsDelete__FP14daObjSakuita_c */
 static int daObjSakuita_IsDelete(daObjSakuita_c* i_this) {
     return 1;
 }
 
-/* 80CC4C74-80CC4C9C 0005F4 0028+00 1/0 0/0 0/0 .text daObjSakuita_Delete__FP14daObjSakuita_c */
 static int daObjSakuita_Delete(daObjSakuita_c* i_this) {
     fopAcM_GetID(i_this);
     i_this->~daObjSakuita_c();
     return 1;
 }
 
-/* 80CC4C9C-80CC4E40 00061C 01A4+00 1/1 0/0 0/0 .text            __dt__14daObjSakuita_cFv */
 daObjSakuita_c::~daObjSakuita_c() {
     #ifdef DEBUG
     M_hio.dt();
@@ -221,14 +207,11 @@ inline int daObjSakuita_c::create() {
     return rv;
 }
 
-/* 80CC4E40-80CC4F78 0007C0 0138+00 1/0 0/0 0/0 .text            daObjSakuita_Create__FP10fopAc_ac_c
- */
 static int daObjSakuita_Create(fopAc_ac_c* i_actor) {
     fopAcM_GetID(i_actor);
     return static_cast<daObjSakuita_c*>(i_actor)->create();
 }
 
-/* 80CC5130-80CC5150 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjSakuita_Method */
 static actor_method_class l_daObjSakuita_Method = {
     (process_method_func)daObjSakuita_Create,
     (process_method_func)daObjSakuita_Delete,
@@ -237,7 +220,6 @@ static actor_method_class l_daObjSakuita_Method = {
     (process_method_func)daObjSakuita_Draw,
 };
 
-/* 80CC5150-80CC5180 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Sakuita */
 extern actor_process_profile_definition g_profile_Obj_Sakuita = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

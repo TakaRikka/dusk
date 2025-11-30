@@ -22,31 +22,31 @@ public:
     typedef bool (daNpcDoorBoy_c::*actionFunc)(void*);
     typedef BOOL (daNpcDoorBoy_c::*EventFn)(int);
 
-    /* 809AAC8C */ daNpcDoorBoy_c();
-    /* 809AAEA0 */ ~daNpcDoorBoy_c();
-    /* 809AB088 */ cPhs__Step Create();
-    /* 809AB320 */ int CreateHeap();
-    /* 809AB4A4 */ int Delete();
-    /* 809AB4D8 */ int Execute();
-    /* 809AB4FC */ int Draw();
-    /* 809AB578 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 809AB704 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 809AB724 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 809AB770 */ void setMotion(int, f32, int);
-    /* 809AB7B8 */ void reset();
-    /* 809AB984 */ inline BOOL setAction(bool (daNpcDoorBoy_c::*)(void*));
-    /* 809ABA2C */ bool wait(void*);
-    /* 809AC064 */ bool fear(void*);
-    /* 809AC114 */ bool talk(void*);
-    /* 809AC528 */ bool demo(void*);
-    /* 809AC6F4 */ bool dummyTalk(void*);
-    /* 809AC994 */ void setParam();
-    /* 809ACA58 */ BOOL main();
-    /* 809ACC5C */ void setAttnPos();
-    /* 809ACE18 */ inline void lookat();
-    /* 809ACFF8 */ void setMotionAnm(int, f32);
-    /* 809AD0C8 */ BOOL drawDbgInfo();
-    /* 809AD938 */ void adjustShapeAngle() {}
+    daNpcDoorBoy_c();
+    ~daNpcDoorBoy_c();
+    cPhs__Step Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void setMotion(int, f32, int);
+    void reset();
+    inline BOOL setAction(bool (daNpcDoorBoy_c::*)(void*));
+    bool wait(void*);
+    bool fear(void*);
+    bool talk(void*);
+    bool demo(void*);
+    bool dummyTalk(void*);
+    void setParam();
+    BOOL main();
+    void setAttnPos();
+    inline void lookat();
+    void setMotionAnm(int, f32);
+    BOOL drawDbgInfo();
+    void adjustShapeAngle() {}
 
     inline u16 getMessageNo() { return fopAcM_GetParam(this) >> 8; }
     inline void playMotion();
@@ -82,7 +82,7 @@ STATIC_ASSERT(sizeof(daNpcDoorBoy_c) == 0xe08);
 
 class daNpcDoorBoy_Param_c {
 public:
-    /* 809AD93C */ virtual ~daNpcDoorBoy_Param_c() {}
+    virtual ~daNpcDoorBoy_Param_c() {}
 
     static daNpcDoorBoy_HIOParam const m;
 };

@@ -14,8 +14,6 @@
 #include "d/d_msg_object.h"
 #include "d/actor/d_a_obj_scannon.h"
 
-/* ############################################################################################## */
-/* 80B249E4-80B24A80 000000 009C+00 15/15 0/0 0/0 .rodata          m__18daNpc_Toby_Param_c */
 const daNpc_Toby_HIOParam daNpc_Toby_Param_c::m = {
     160.0f,
     -3.0f,
@@ -77,7 +75,7 @@ void daNpc_Toby_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
     JORFile aJStack_910;
     int len;
-    switch (reinterpret_cast<u32>(event->id)) {
+    switch ((u32)event->id) {
     case 0x40000002:
         if (aJStack_910.open(6, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL) != 0) {
             memset(msg_buffer, 0, 2000);
@@ -120,14 +118,12 @@ void daNpc_Toby_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-/* 80B24C68-80B24C80 000020 0018+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[3][2] = {
     {3, 1},
     {3, 2},
     {9, 6},
 };
 
-/* 80B24C80-80B24CB8 -00001 0038+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[7] = {
     {"", 0},
     {"NO_RESPONSE", 0},
@@ -138,7 +134,6 @@ static daNpcT_evtData_c l_evtList[7] = {
     {"CONVERSATION_ABOUT_ZRA", 4},
 };
 
-/* 80B24CB8-80B24CDC -00001 0024+00 2/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[9] = {
     "",
     "Toby",
@@ -151,25 +146,19 @@ static char* l_resNameList[9] = {
     "Toby5",
 };
 
-/* 80B24CDC-80B24CE4 000094 0006+02 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[6] = {1, 3, 4, 7, 8, -1};
 
-/* 80B24CE4-80B24CEC 00009C 0006+02 1/0 0/0 0/0 .data            l_loadResPtrn1 */
 static s8 l_loadResPtrn1[6] = {2, 3, 5, 7, 8, -1};
 
-/* 80B24CEC-80B24CF4 0000A4 0005+03 1/0 0/0 0/0 .data            l_loadResPtrn2 */
 static s8 l_loadResPtrn2[5] = {1, 3, 6, 7, -1};
 
-/* 80B24CF4-80B24CFC 0000AC 0008+00 1/0 0/0 0/0 .data            l_loadResPtrn3 */
 static s8 l_loadResPtrn3[8] = {1, 2, 3, 4, 5, 7, 8, -1};
 
-/* 80B24CFC-80B24D18 -00001 001C+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[7] = {
     l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn1, l_loadResPtrn2,
     l_loadResPtrn2, l_loadResPtrn0, l_loadResPtrn3,
 };
 
-/* 80B24D18-80B24ED8 0000D0 01C0+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[16] = {
     {-1, 0, 0, 13, 2, 3, 1},
     {5, 0, 3, 14, 0, 3, 0},
@@ -189,7 +178,6 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[16] = {
     {8, 2, 5, 22, 2, 5, 0},
 };
 
-/* 80B24ED8-80B25194 000290 02BC+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[25] = {
     {7, 2, 3, 10, 0, 3, 1, 0},
     {15, 2, 4, 10, 0, 3, 1, 0},
@@ -218,7 +206,6 @@ static daNpcT_motionAnmData_c l_motionAnmData[25] = {
     {10, 0, 8, 10, 0, 3, 0, 0},
 };
 
-/* 80B25194-80B252A4 00054C 0110+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[68] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {8, -1, 1}, {15, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {9, -1, 1}, {13, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {10, -1, 1}, {12, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -231,7 +218,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[68] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80B252A4-80B25434 00065C 0190+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[100] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {10, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {11, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -258,7 +244,6 @@ enum NPC_TOBY_CUTS {
     CUT_CONVERSATION_ABOUT_ZRA = 6,
 };
 
-/* 80B25434-80B25450 -00001 001C+00 1/1 0/0 0/0 .data            mCutNameList__12daNpc_Toby_c */
 char* daNpc_Toby_c::mCutNameList[7] = {
     "",
     "TOBY_HOUSE_FIRE",
@@ -269,7 +254,6 @@ char* daNpc_Toby_c::mCutNameList[7] = {
     "CONVERSATION_ABOUT_ZRA",
 };
 
-/* 80B25498-80B254EC 000850 0054+00 1/2 0/0 0/0 .data            mCutList__12daNpc_Toby_c */
 daNpc_Toby_c::cutFunc daNpc_Toby_c::mCutList[7] = {
     NULL,
     &daNpc_Toby_c::cutTobyHouseFire,
@@ -282,7 +266,6 @@ daNpc_Toby_c::cutFunc daNpc_Toby_c::mCutList[7] = {
 
 NPC_TOBY_HIO_CLASS l_HIO;
 
-/* 80B1E64C-80B1E798 0000EC 014C+00 1/0 0/0 0/0 .text            __dt__12daNpc_Toby_cFv */
 daNpc_Toby_c::~daNpc_Toby_c() {
     OS_REPORT("|%06d:%x|daNpc_Toby_c -> デストラクト\n", g_Counter.mCounter0, this);
     if (mpMorf[0] != NULL) {
@@ -298,7 +281,6 @@ daNpc_Toby_c::~daNpc_Toby_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-/* 80B1E798-80B1EA60 000238 02C8+00 1/1 0/0 0/0 .text            create__12daNpc_Toby_cFv */
 int daNpc_Toby_c::create() {
     static int const heapSize[7] = {
         0x3BC0, 0x3B10, 0x3B10, 0x43C0,
@@ -361,7 +343,6 @@ int daNpc_Toby_c::create() {
     return rv;
 }
 
-/* 80B1EA60-80B1ED6C 000500 030C+00 1/1 0/0 0/0 .text            CreateHeap__12daNpc_Toby_cFv */
 int daNpc_Toby_c::CreateHeap() {
     static int const bmdTypeList[1] = {2};
 
@@ -416,7 +397,6 @@ int daNpc_Toby_c::CreateHeap() {
     return 0;
 }
 
-/* 80B1EF28-80B1EF5C 0009C8 0034+00 1/1 0/0 0/0 .text            Delete__12daNpc_Toby_cFv */
 int daNpc_Toby_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Toby_c -> Delete\n", g_Counter.mCounter0, this);
     fopAcM_RegisterDeleteID(this, "NPC_TOBY");
@@ -424,12 +404,10 @@ int daNpc_Toby_c::Delete() {
     return 1;
 }
 
-/* 80B1EF5C-80B1EF7C 0009FC 0020+00 2/2 0/0 0/0 .text            Execute__12daNpc_Toby_cFv */
 int daNpc_Toby_c::Execute() {
     return daNpcT_c::execute();
 }
 
-/* 80B1EF7C-80B1F010 000A1C 0094+00 1/1 0/0 0/0 .text            Draw__12daNpc_Toby_cFv */
 int daNpc_Toby_c::Draw() {
     if (mpMatAnm[0] != NULL) {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
@@ -445,15 +423,11 @@ int daNpc_Toby_c::Draw() {
         0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
-/* 80B1F010-80B1F030 000AB0 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__12daNpc_Toby_cFP10fopAc_ac_c             */
 int daNpc_Toby_c::createHeapCallBack(fopAc_ac_c* i_this) {
     daNpc_Toby_c* a_this = static_cast<daNpc_Toby_c*>(i_this);
     return a_this->CreateHeap();
 }
 
-/* 80B1F030-80B1F088 000AD0 0058+00 1/1 0/0 0/0 .text
- * ctrlJointCallBack__12daNpc_Toby_cFP8J3DJointi                */
 int daNpc_Toby_c::ctrlJointCallBack(J3DJoint* i_joint, int i_int) {
     if (i_int == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -466,7 +440,6 @@ int daNpc_Toby_c::ctrlJointCallBack(J3DJoint* i_joint, int i_int) {
     return 1;
 }
 
-/* 80B1F088-80B1F124 000B28 009C+00 1/1 0/0 0/0 .text            srchToby__12daNpc_Toby_cFPvPv */
 void* daNpc_Toby_c::srchToby(void* i_actor, void* i_data) {
     if (mFindCount < 50) {
         fopAc_ac_c* actor_p = (fopAc_ac_c*)i_actor;
@@ -481,7 +454,6 @@ void* daNpc_Toby_c::srchToby(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80B1F124-80B1F200 000BC4 00DC+00 1/1 0/0 0/0 .text            getOtherTobyP__12daNpc_Toby_cFi */
 fopAc_ac_c* daNpc_Toby_c::getOtherTobyP(int i_int) {
     fopAc_ac_c* actor = NULL;
     f32 fVar1 = G_CM3D_F_INF;
@@ -500,7 +472,6 @@ fopAc_ac_c* daNpc_Toby_c::getOtherTobyP(int i_int) {
     return actor;
 }
 
-/* 80B1F200-80B1F274 000CA0 0074+00 2/2 0/0 0/0 .text            getType__12daNpc_Toby_cFv */
 u8 daNpc_Toby_c::getType() {
     u8 prm = fopAcM_GetParam(this);
     switch (prm & 0xFF) {
@@ -521,7 +492,6 @@ u8 daNpc_Toby_c::getType() {
     }
 }
 
-/* 80B1F274-80B1F384 000D14 0110+00 1/1 0/0 0/0 .text            isDelete__12daNpc_Toby_cFv */
 int daNpc_Toby_c::isDelete() {
     // 0x054 -  M_051 - Fought the Shadow Bulbin riding the Shadow Kargorok (?)
     // 0x136 - F_0310 - Handed Auru's note to Fyer
@@ -547,7 +517,6 @@ int daNpc_Toby_c::isDelete() {
     }
 }
 
-/* 80B1F384-80B1F5AC 000E24 0228+00 1/1 0/0 0/0 .text            reset__12daNpc_Toby_cFv */
 void daNpc_Toby_c::reset() {
     csXyz sp_0x10;
     int num_bytes = (u8*)&field_0x1004 - (u8*)&mActFunc_0;
@@ -594,7 +563,6 @@ void daNpc_Toby_c::reset() {
     setAngle(sp_0x10);
 }
 
-/* 80B1F5AC-80B1F638 00104C 008C+00 1/0 0/0 0/0 .text            afterJntAnm__12daNpc_Toby_cFi */
 void daNpc_Toby_c::afterJntAnm(int arg0) {
     if (arg0 == 1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -605,7 +573,6 @@ void daNpc_Toby_c::afterJntAnm(int arg0) {
     }
 }
 
-/* 80B1F638-80B1F784 0010D8 014C+00 1/0 0/0 0/0 .text            setParam__12daNpc_Toby_cFv */
 void daNpc_Toby_c::setParam() {
     selectAction();
     srchActors();
@@ -645,7 +612,6 @@ void daNpc_Toby_c::setParam() {
     gravity = mpHIO->m.common.gravity;
 }
 
-/* 80B1F784-80B1F950 001224 01CC+00 1/0 0/0 0/0 .text            checkChangeEvt__12daNpc_Toby_cFv */
 int daNpc_Toby_c::checkChangeEvt() {
     if (!chkAction(&daNpc_Toby_c::talk)) {
         mPreItemNo = 0;
@@ -712,7 +678,6 @@ int daNpc_Toby_c::checkChangeEvt() {
     return FALSE;
 }
 
-/* 80B1F950-80B1FA08 0013F0 00B8+00 1/0 0/0 0/0 .text setAfterTalkMotion__12daNpc_Toby_cFv */
 void daNpc_Toby_c::setAfterTalkMotion() {
     int iVar2 = 16;
     switch(mFaceMotionSeqMngr.getNo()) {
@@ -736,7 +701,6 @@ void daNpc_Toby_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(iVar2, -1.0f, 0, 0);
 }
 
-/* 80B1FA08-80B1FB34 0014A8 012C+00 1/1 0/0 0/0 .text            srchActors__12daNpc_Toby_cFv */
 void daNpc_Toby_c::srchActors() {
     switch (mType) {
     case 0:
@@ -779,7 +743,6 @@ void daNpc_Toby_c::srchActors() {
     }
 }
 
-/* 80B1FB34-80B1FBD4 0015D4 00A0+00 1/0 0/0 0/0 .text            evtTalk__12daNpc_Toby_cFv */
 int daNpc_Toby_c::evtTalk() {
     if (chkAction(&daNpc_Toby_c::talk)) {
         (this->*mActFunc_1)(NULL);
@@ -790,7 +753,6 @@ int daNpc_Toby_c::evtTalk() {
     return 1;
 }
 
-/* 80B1FBD4-80B1FC9C 001674 00C8+00 1/0 0/0 0/0 .text            evtCutProc__12daNpc_Toby_cFv */
 int daNpc_Toby_c::evtCutProc() {
     int staffId = dComIfGp_getEventManager().getMyStaffId("Toby", this, -1);
     if (staffId != -1) {
@@ -806,7 +768,6 @@ int daNpc_Toby_c::evtCutProc() {
     return FALSE;
 }
 
-/* 80B1FC9C-80B1FE68 00173C 01CC+00 1/0 0/0 0/0 .text            action__12daNpc_Toby_cFv */
 void daNpc_Toby_c::action() {
     fopAc_ac_c* actor_p = NULL;
     if (!mTwilight) {
@@ -838,7 +799,6 @@ void daNpc_Toby_c::action() {
     }
 }
 
-/* 80B1FE68-80B1FF2C 001908 00C4+00 1/0 0/0 0/0 .text            beforeMove__12daNpc_Toby_cFv */
 void daNpc_Toby_c::beforeMove() {
     fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x8000000);
     if (checkHide()) {
@@ -850,7 +810,6 @@ void daNpc_Toby_c::beforeMove() {
     }
 }
 
-/* 80B1FF2C-80B20278 0019CC 034C+00 1/0 0/0 0/0 .text            setAttnPos__12daNpc_Toby_cFv */
 void daNpc_Toby_c::setAttnPos() {
     cXyz cStack_3c(0.0f, 30.0f, 0.0f);
     mStagger.calc(0);
@@ -885,7 +844,6 @@ void daNpc_Toby_c::setAttnPos() {
     }
 }
 
-/* 80B20278-80B2042C 001D18 01B4+00 1/0 0/0 0/0 .text            setCollision__12daNpc_Toby_cFv */
 void daNpc_Toby_c::setCollision() {
     cXyz cyl_center;
     if (mHide == 0) {
@@ -928,7 +886,6 @@ void daNpc_Toby_c::setCollision() {
     mCyl1.ClrTgHit();
 }
 
-/* 80B2042C-80B20434 001ECC 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__12daNpc_Toby_cFv */
 int daNpc_Toby_c::drawDbgInfo() {
     return FALSE;
 }
@@ -966,7 +923,6 @@ static s16 dummy_lit_123017(int sel) {
 }
 #endif
 
-/* 80B20434-80B2050C 001ED4 00D8+00 1/0 0/0 0/0 .text            drawOtherMdl__12daNpc_Toby_cFv */
 void daNpc_Toby_c::drawOtherMdl() {
     J3DModel* model = mpMorf[0]->getModel();
     for (int i = 0; i < 1; i++) {
@@ -983,8 +939,6 @@ void daNpc_Toby_c::drawOtherMdl() {
     }
 }
 
-/* 80B2050C-80B20568 001FAC 005C+00 1/0 0/0 0/0 .text afterSetFaceMotionAnm__12daNpc_Toby_cFiifi
- */
 bool daNpc_Toby_c::afterSetFaceMotionAnm(int arg0, int, f32, int) {
     // Amongst all the daNpcTs, seems like this is the only one that creates a
     // non-trivial definition for this func?
@@ -1006,7 +960,6 @@ bool daNpc_Toby_c::afterSetFaceMotionAnm(int arg0, int, f32, int) {
     return true;
 }
 
-/* 80B20568-80B205F4 002008 008C+00 1/0 0/0 0/0 .text afterSetMotionAnm__12daNpc_Toby_cFiifi */
 bool daNpc_Toby_c::afterSetMotionAnm(int arg0, int, f32, int) {
     switch (arg0) {
     case 6:
@@ -1029,7 +982,6 @@ bool daNpc_Toby_c::afterSetMotionAnm(int arg0, int, f32, int) {
     return true;
 }
 
-/* 80B205F4-80B20710 002094 011C+00 1/1 0/0 0/0 .text            selectAction__12daNpc_Toby_cFv */
 int daNpc_Toby_c::selectAction() {
     mActFunc_0 = NULL;
 #if DEBUG
@@ -1060,14 +1012,10 @@ int daNpc_Toby_c::selectAction() {
     return 1;
 }
 
-/* 80B20710-80B2073C 0021B0 002C+00 2/2 0/0 0/0 .text
- * chkAction__12daNpc_Toby_cFM12daNpc_Toby_cFPCvPvPv_i          */
 int daNpc_Toby_c::chkAction(actionFunc i_func) {
     return mActFunc_1 == i_func;
 }
 
-/* 80B2073C-80B207E4 0021DC 00A8+00 2/2 0/0 0/0 .text
- * setAction__12daNpc_Toby_cFM12daNpc_Toby_cFPCvPvPv_i          */
 int daNpc_Toby_c::setAction(actionFunc i_func) {
     mMode = MODE_EXIT;
     if (mActFunc_1 != NULL) {
@@ -1083,8 +1031,6 @@ int daNpc_Toby_c::setAction(actionFunc i_func) {
     return 1;
 }
 
-/* 80B207E4-80B20AB0 002284 02CC+00 1/0 0/0 0/0 .text            cutTobyHouseFire__12daNpc_Toby_cFi
- */
 int daNpc_Toby_c::cutTobyHouseFire(int arg0) {
     fopAc_ac_c* atmt_p = mActorMngr[1].getActorP();
     int retval = 0;
@@ -1180,7 +1126,6 @@ int daNpc_Toby_c::cutTobyHouseFire(int arg0) {
     return retval;
 }
 
-/* 80B20AB0-80B20FC0 002550 0510+00 3/0 0/0 0/0 .text            cutTalkToOneself__12daNpc_Toby_cFi */
 int daNpc_Toby_c::cutTalkToOneself(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -1363,8 +1308,6 @@ int daNpc_Toby_c::cutTalkToOneself(int arg0) {
     return retval;
 }
 
-/* 80B20FC0-80B215B4 002A60 05F4+00 1/0 0/0 0/0 .text            cutRepairSCannon__12daNpc_Toby_cFi
- */
 int daNpc_Toby_c::cutRepairSCannon(int arg0) {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
     fopAc_ac_c* scannon_p = mActorMngr[2].getActorP();
@@ -1504,7 +1447,6 @@ int daNpc_Toby_c::cutRepairSCannon(int arg0) {
     return retval;
 }
 
-/* 80B215B4-80B219F4 003054 0440+00 1/0 0/0 0/0 .text            cutSCannon__12daNpc_Toby_cFi */
 int daNpc_Toby_c::cutSCannon(int arg0) {
     cXyz work;
     csXyz my_svec;
@@ -1618,8 +1560,6 @@ int daNpc_Toby_c::cutSCannon(int arg0) {
     return retval;
 }
 
-/* 80B219F4-80B22434 003494 0A40+00 3/0 0/0 0/0 .text
- * cutConversationAboutSCannon__12daNpc_Toby_cFi                */
 int daNpc_Toby_c::cutConversationAboutSCannon(int arg0) {
     fopAc_ac_c* actor_p = NULL;
     cXyz work;
@@ -1864,7 +1804,6 @@ int daNpc_Toby_c::cutConversationAboutSCannon(int arg0) {
     return retval;
 }
 
-/* 80B22434-80B22614 003ED4 01E0+00 1/0 0/0 0/0 .text cutConversationAboutZra__12daNpc_Toby_cFi */
 int daNpc_Toby_c::cutConversationAboutZra(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -1920,7 +1859,6 @@ int daNpc_Toby_c::cutConversationAboutZra(int arg0) {
     return retval;
 }
 
-/* 80B22614-80B226B0 0040B4 009C+00 5/5 0/0 0/0 .text            chkAttnZra__12daNpc_Toby_cFv */
 int daNpc_Toby_c::chkAttnZra() {
     // In practice, get Bit SW returns 0xEC for all mType == 0, otherwise 0xFF.
     // 0x0A1 - F_0063 - Lake Hylia - Used Fyer's cannon for first time
@@ -1928,7 +1866,6 @@ int daNpc_Toby_c::chkAttnZra() {
             && !dComIfGs_isSwitch(getBitSW(), fopAcM_GetRoomNo(this)));
 }
 
-/* 80B226B0-80B22D98 004150 06E8+00 2/0 0/0 0/0 .text            wait__12daNpc_Toby_cFPv */
 int daNpc_Toby_c::wait(void*) {
     switch (mMode) {
     case 0:
@@ -2055,7 +1992,6 @@ int daNpc_Toby_c::wait(void*) {
     return 1;
 }
 
-/* 80B22D98-80B22FAC 004838 0214+00 1/0 0/0 0/0 .text            walk__12daNpc_Toby_cFPv */
 int daNpc_Toby_c::walk(void*) {
     switch (mMode) {
     case 0:
@@ -2097,7 +2033,6 @@ int daNpc_Toby_c::walk(void*) {
     return 1;
 }
 
-/* 80B22FAC-80B23344 004A4C 0398+00 3/0 0/0 0/0 .text            play__12daNpc_Toby_cFPv */
 int daNpc_Toby_c::play(void* param_0) {
     daObj_AutoMata_c* actor_p = (daObj_AutoMata_c*) mActorMngr[1].getActorP();
     int reg_r29 = 1;
@@ -2176,7 +2111,6 @@ int daNpc_Toby_c::play(void* param_0) {
     return 1;
 }
 
-/* 80B23344-80B23628 004DE4 02E4+00 3/0 0/0 0/0 .text            talk__12daNpc_Toby_cFPv */
 int daNpc_Toby_c::talk(void*) {
     switch (mMode) {
     case 0:
@@ -2254,32 +2188,26 @@ int daNpc_Toby_c::test(void* param_0) {
 }
 #endif
 
-/* 80B23628-80B23648 0050C8 0020+00 1/0 0/0 0/0 .text            daNpc_Toby_Create__FPv */
 static int daNpc_Toby_Create(void* i_this) {
     return static_cast<daNpc_Toby_c*>(i_this)->create();
 }
 
-/* 80B23648-80B23668 0050E8 0020+00 1/0 0/0 0/0 .text            daNpc_Toby_Delete__FPv */
 static int daNpc_Toby_Delete(void* i_this) {
     return static_cast<daNpc_Toby_c*>(i_this)->Delete();
 }
 
-/* 80B23668-80B23688 005108 0020+00 1/0 0/0 0/0 .text            daNpc_Toby_Execute__FPv */
 static int daNpc_Toby_Execute(void* i_this) {
     return static_cast<daNpc_Toby_c*>(i_this)->Execute();
 }
 
-/* 80B23688-80B236A8 005128 0020+00 1/0 0/0 0/0 .text            daNpc_Toby_Draw__FPv */
 static int daNpc_Toby_Draw(void* i_this) {
     return static_cast<daNpc_Toby_c*>(i_this)->Draw();
 }
 
-/* 80B236A8-80B236B0 005148 0008+00 1/0 0/0 0/0 .text            daNpc_Toby_IsDelete__FPv */
 static int daNpc_Toby_IsDelete(void* i_this) {
     return true;
 }
 
-/* 80B25670-80B25690 -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Toby_MethodTable */
 static actor_method_class daNpc_Toby_MethodTable = {
     (process_method_func)daNpc_Toby_Create,
     (process_method_func)daNpc_Toby_Delete,
@@ -2288,7 +2216,6 @@ static actor_method_class daNpc_Toby_MethodTable = {
     (process_method_func)daNpc_Toby_Draw,
 };
 
-/* 80B25690-80B256C0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_TOBY */
 extern actor_process_profile_definition g_profile_NPC_TOBY = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

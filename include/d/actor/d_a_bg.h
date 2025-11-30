@@ -6,9 +6,9 @@
 
 class daBg_btkAnm_c {
 public:
-    /* 80457F34 */ int create(J3DModelData*, J3DAnmTextureSRTKey*, int);
-    /* 80458088 */ void entry(J3DModelData*);
-    /* 804580CC */ void play();
+    int create(J3DModelData*, J3DAnmTextureSRTKey*, int);
+    void entry(J3DModelData*);
+    void play();
 
     void entryFrame() { mpBtk->entryFrame(); }
     void playspeed(f32 speed) { mpBtk->setPlaySpeed(speed); }
@@ -19,9 +19,9 @@ public:
 
 class daBg_brkAnm_c {
 public:
-    /* 804580F0 */ int create(J3DModelData*, J3DAnmTevRegKey*, int);
-    /* 80458230 */ void entry(J3DModelData*);
-    /* 80458274 */ void play();
+    int create(J3DModelData*, J3DAnmTevRegKey*, int);
+    void entry(J3DModelData*);
+    void play();
 
     void entryFrame() { mpBrk->entryFrame(); }
     void entryFrame(f32 frame) { mpBrk->entryFrame(frame); }
@@ -49,11 +49,11 @@ struct daBg_Part {
  */
 class daBg_c : public fopAc_ac_c {
 public:
-    /* 80457BF8 */ const char* setArcName();
-    /* 804582B8 */ inline int createHeap();
-    /* 80458788 */ ~daBg_c();
-    /* 804588C4 */ inline int draw();
-    /* 8045906C */ inline int create();
+    const char* setArcName();
+    inline int createHeap();
+    ~daBg_c();
+    inline int draw();
+    inline int create();
     inline int execute();
     inline int isDelete();
 

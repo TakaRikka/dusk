@@ -11,8 +11,8 @@ class JKRSolidHeap;
  */
 class JAU_JASInitializer {
 public:
-    /* 802A4AD0 */ JAU_JASInitializer();
-    /* 802A4B28 */ void initJASystem(JKRSolidHeap* heap);
+    JAU_JASInitializer();
+    void initJASystem(JKRSolidHeap* heap);
 
     /* 0x00 */ u32 audioMemory_;
     /* 0x04 */ u32 audioMemSize_;
@@ -35,8 +35,8 @@ public:
  */
 class JAU_JAIInitializer {
 public:
-    /* 802A4D3C */ JAU_JAIInitializer();
-    /* 802A4D60 */ void initJAInterface();
+    JAU_JAIInitializer();
+    void initJAInterface();
 
     int field_0x0;
     int field_0x4;

@@ -7,23 +7,18 @@
 
 #include "d/actor/d_a_obj_nagaisu.h"
 
-/* 80C9F3B8-80C9F3D8 000078 0020+00 1/1 0/0 0/0 .text daObjNagaisu_c_createHeap__FP10fopAc_ac_c */
 static int daObjNagaisu_c_createHeap(fopAc_ac_c* i_this) {
     return ((daObjNagaisu_c*)i_this)->createHeap();
 }
 
-/* 80CA0408-80CA040C -00001 0004+00 4/4 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Nagaisu";
 
-/* 80C9F3D8-80C9F45C 000098 0084+00 2/2 0/0 0/0 .text            __ct__14daObjNagaisu_cFv */
 daObjNagaisu_c::daObjNagaisu_c() {}
 
-/* 80C9F4B8-80C9F5A8 000178 00F0+00 1/0 0/0 0/0 .text            __dt__14daObjNagaisu_cFv */
 daObjNagaisu_c::~daObjNagaisu_c() {
     dComIfG_resDelete(this, l_arcName);
 }
 
-/* 80C9F5A8-80C9F668 000268 00C0+00 1/1 0/0 0/0 .text            createHeap__14daObjNagaisu_cFv */
 int daObjNagaisu_c::createHeap() {
     J3DModelData* a_model_data_p = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(156, a_model_data_p != NULL);
@@ -45,7 +40,6 @@ int daObjNagaisu_c::createHeap() {
     return 1;
 }
 
-/* 80CA035C-80CA0378 000000 001C+00 3/3 0/0 0/0 .rodata          REMOVE_ISU_IDX__14daObjNagaisu_c */
 const int daObjNagaisu_c::REMOVE_ISU_IDX[] = {
     6,
     7,
@@ -56,7 +50,6 @@ const int daObjNagaisu_c::REMOVE_ISU_IDX[] = {
     29,
 };
 
-/* 80CA0378-80CA03BC 00001C 0044+00 0/1 0/0 0/0 .rodata          s_CcDCyl__15daObjIsuChild_c */
 const dCcD_SrcCyl daObjIsuChild_c::s_CcDCyl = {
     {
         {0, {{0, 0, 0}, {0x400020, 0x11}, 0}},
@@ -71,7 +64,6 @@ const dCcD_SrcCyl daObjIsuChild_c::s_CcDCyl = {
     },
 };
 
-/* 80C9F668-80C9F7A8 000328 0140+00 1/1 0/0 0/0 .text            create__14daObjNagaisu_cFv */
 int daObjNagaisu_c::create() {
     fopAcM_ct(this, daObjNagaisu_c);
 
@@ -101,7 +93,6 @@ int daObjNagaisu_c::create() {
     return phase_state;
 }
 
-/* 80C9F7A8-80C9F81C 000468 0074+00 1/1 0/0 0/0 .text            Delete__14daObjNagaisu_cFv */
 int daObjNagaisu_c::Delete() {
     daObjIsuChild_c* a_child_p = mChild;
     for (int i = 0; i < 60; i++) {
@@ -114,7 +105,6 @@ int daObjNagaisu_c::Delete() {
     return 1;
 }
 
-/* 80C9F81C-80C9F8C4 0004DC 00A8+00 1/1 0/0 0/0 .text            draw__14daObjNagaisu_cFv */
 int daObjNagaisu_c::draw() {
     g_env_light.settingTevStruct(8, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -131,7 +121,6 @@ int daObjNagaisu_c::draw() {
     return 1;
 }
 
-/* 80C9F8C4-80C9F914 000584 0050+00 1/1 0/0 0/0 .text            execute__14daObjNagaisu_cFv */
 int daObjNagaisu_c::execute() {
     daObjIsuChild_c* a_child_p = mChild;
     for (int i = 0; i < 60; i++) {
@@ -142,12 +131,10 @@ int daObjNagaisu_c::execute() {
     return 1;
 }
 
-/* 80C9F914-80C9F944 0005D4 0030+00 1/1 0/0 0/0 .text            init__14daObjNagaisu_cFv */
 void daObjNagaisu_c::init() {
     mCcStts.Init(0xFF, 0, this);
 }
 
-/* 80C9F944-80C9FA90 000604 014C+00 1/1 0/0 0/0 .text            setIsu__14daObjNagaisu_cFv */
 void daObjNagaisu_c::setIsu() {
     daObjIsuChild_c* a_child_p = mChild;
     f32 start_x_pos = current.pos.x;
@@ -200,16 +187,13 @@ void daObjNagaisu_c::setIsu() {
     }
 }
 
-/* 80C9FA90-80C9FAFC 000750 006C+00 1/1 0/0 0/0 .text            __ct__15daObjIsuChild_cFv */
 daObjIsuChild_c::daObjIsuChild_c() {
     mIsDead = false;
     mpBgW = NULL;
 }
 
-/* 80C9FCDC-80C9FD4C 00099C 0070+00 3/2 0/0 0/0 .text            __dt__15daObjIsuChild_cFv */
 daObjIsuChild_c::~daObjIsuChild_c() {}
 
-/* 80C9FD4C-80C9FE28 000A0C 00DC+00 1/1 0/0 0/0 .text            createHeap__15daObjIsuChild_cFv */
 int daObjIsuChild_c::createHeap() {
     mpBgW = new dBgW();
     if (mpBgW == NULL) {
@@ -227,8 +211,6 @@ int daObjIsuChild_c::createHeap() {
     return 1;
 }
 
-/* 80C9FE28-80C9FF54 000AE8 012C+00 1/1 0/0 0/0 .text
- * create__15daObjIsuChild_cFP14daObjNagaisu_cP9dCcD_Stts       */
 void daObjIsuChild_c::create(daObjNagaisu_c* i_parent, dCcD_Stts* i_ccStts) {
     static const int COL_OFFSET_X[] = {
         60,
@@ -252,7 +234,6 @@ void daObjIsuChild_c::create(daObjNagaisu_c* i_parent, dCcD_Stts* i_ccStts) {
     }
 }
 
-/* 80C9FF54-80CA0034 000C14 00E0+00 1/1 0/0 0/0 .text            execute__15daObjIsuChild_cFv */
 int daObjIsuChild_c::execute() {
     if (!mIsDead) {
         if (chkHit()) {
@@ -268,7 +249,6 @@ int daObjIsuChild_c::execute() {
     }
 }
 
-/* 80CA0034-80CA00B8 000CF4 0084+00 1/1 0/0 0/0 .text            draw__15daObjIsuChild_cFP6dMdl_c */
 int daObjIsuChild_c::draw(dMdl_c* i_mdl) {
     if (!mIsDead) {
         mDoMtx_stack_c::transS(mPos.x, mPos.y, mPos.z);
@@ -278,7 +258,6 @@ int daObjIsuChild_c::draw(dMdl_c* i_mdl) {
     }
 }
 
-/* 80CA00B8-80CA0118 000D78 0060+00 2/2 0/0 0/0 .text            Delete__15daObjIsuChild_cFv */
 void daObjIsuChild_c::Delete() {
     if (!mIsDead) {
         if (mpBgW != NULL && mpBgW->ChkUsed()) {
@@ -287,7 +266,6 @@ void daObjIsuChild_c::Delete() {
     }
 }
 
-/* 80CA0118-80CA0180 000DD8 0068+00 1/1 0/0 0/0 .text            chkHit__15daObjIsuChild_cFv */
 bool daObjIsuChild_c::chkHit() {
     for (int i = 0; i < 2; i++) {
         if (mCcCyl[i].ChkTgHit()) {
@@ -298,7 +276,6 @@ bool daObjIsuChild_c::chkHit() {
     return false;
 }
 
-/* 80CA0180-80CA0258 000E40 00D8+00 1/1 0/0 0/0 .text            callEmt__15daObjIsuChild_cFv */
 void daObjIsuChild_c::callEmt() {
     cXyz pos(mPos.x, mPos.y, mPos.z);
     csXyz rot(0, -0x8000, 0);
@@ -316,28 +293,23 @@ void daObjIsuChild_c::callEmt() {
     }
 }
 
-/* 80CA0258-80CA02AC 000F18 0054+00 1/0 0/0 0/0 .text daObjNagaisu_create__FP14daObjNagaisu_c */
 static int daObjNagaisu_create(daObjNagaisu_c* i_this) {
     fopAcM_ct(i_this, daObjNagaisu_c);
     return i_this->create();
 }
 
-/* 80CA02AC-80CA02CC 000F6C 0020+00 1/0 0/0 0/0 .text daObjNagaisu_Delete__FP14daObjNagaisu_c */
 static int daObjNagaisu_Delete(daObjNagaisu_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80CA02CC-80CA02EC 000F8C 0020+00 1/0 0/0 0/0 .text daObjNagaisu_execute__FP14daObjNagaisu_c */
 static int daObjNagaisu_execute(daObjNagaisu_c* i_this) {
     return i_this->execute();
 }
 
-/* 80CA02EC-80CA030C 000FAC 0020+00 1/0 0/0 0/0 .text daObjNagaisu_draw__FP14daObjNagaisu_c */
 static int daObjNagaisu_draw(daObjNagaisu_c* i_this) {
     return i_this->draw();
 }
 
-/* 80CA040C-80CA042C -00001 0020+00 1/0 0/0 0/0 .data            daObjNagaisu_METHODS */
 static actor_method_class daObjNagaisu_METHODS = {
     (process_method_func)daObjNagaisu_create,
     (process_method_func)daObjNagaisu_Delete,
@@ -346,7 +318,6 @@ static actor_method_class daObjNagaisu_METHODS = {
     (process_method_func)daObjNagaisu_draw,
 };
 
-/* 80CA042C-80CA045C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Nagaisu */
 extern actor_process_profile_definition g_profile_Obj_Nagaisu = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

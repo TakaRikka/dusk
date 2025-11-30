@@ -42,7 +42,7 @@ struct JASPortCmd : JSULink<JASPortCmd> {
 		void execCommandStay();
 	};
 
-    /* 80291060 */ static void execAllCommand();
+    static void execAllCommand();
 
     Command _10;
 	JASPortArgs* _14;

@@ -15,7 +15,7 @@
  */
 class daKey_c : public daItemBase_c {
 private:
-    /* 80CDB2E0 */ void seStartTwinkle_private(u32);
+    void seStartTwinkle_private(u32);
 
 public:
     enum daKey_Status_e {
@@ -29,33 +29,33 @@ public:
         STATUS_E_GB_e,
     };
 
-    /* 80CD9F2C */ void initBaseMtx();
-    /* 80CD9F68 */ void setBaseMtx();
-    /* 80CD9FDC */ int Create();
-    /* 80CDA15C */ int __CreateHeap();
-    /* 80CDA164 */ int create();
-    /* 80CDA680 */ void bg_check();
-    /* 80CDA7E8 */ int actionInitInit();
-    /* 80CDA81C */ int actionInit();
-    /* 80CDA8C8 */ int actionParentWaitInit();
-    /* 80CDA8FC */ int actionParentWait();
-    /* 80CDA9AC */ int actionWaitInit();
-    /* 80CDAA28 */ int actionWait();
-    /* 80CDAB74 */ int initActionOrderGetDemo();
-    /* 80CDAC18 */ int actionOrderGetDemo();
-    /* 80CDAC94 */ int actionGetDemo();
-    /* 80CDAD28 */ int actionInitSwOnWait();
-    /* 80CDADD4 */ int actionSwOnWait();
-    /* 80CDAE54 */ int actionInitBoomerangCarry();
-    /* 80CDAF40 */ int actionBoomerangCarry();
-    /* 80CDAFB4 */ void effectSet();
-    /* 80CDB0D8 */ void effectStop();
-    /* 80CDB128 */ void effectCtrl();
-    /* 80CDB36C */ int actionInitE_GB();
-    /* 80CDB3D8 */ int actionE_GB();
-    /* 80CDB404 */ int execute();
-    /* 80CDB5D4 */ int draw();
-    /* 80CDB628 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int __CreateHeap();
+    int create();
+    void bg_check();
+    int actionInitInit();
+    int actionInit();
+    int actionParentWaitInit();
+    int actionParentWait();
+    int actionWaitInit();
+    int actionWait();
+    int initActionOrderGetDemo();
+    int actionOrderGetDemo();
+    int actionGetDemo();
+    int actionInitSwOnWait();
+    int actionSwOnWait();
+    int actionInitBoomerangCarry();
+    int actionBoomerangCarry();
+    void effectSet();
+    void effectStop();
+    void effectCtrl();
+    int actionInitE_GB();
+    int actionE_GB();
+    int execute();
+    int draw();
+    int _delete();
 
     int getSwNo() { return fopAcM_GetParamBit(this, 16, 8); }
     int getSaveBitNo() { return fopAcM_GetParamBit(this, 8, 8); }

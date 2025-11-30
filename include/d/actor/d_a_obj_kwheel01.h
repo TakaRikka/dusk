@@ -18,14 +18,14 @@ public:
     daObjKWheel01_c() : dEvLib_callback_c(this) {}
     ~daObjKWheel01_c() {};
 
-    /* 80C4EA78 */ cPhs__Step create1st();
-    /* 80C4EC54 */ void setMtx();
-    /* 80C4EDCC */ int CreateHeap();
-    /* 80C4EF38 */ int Create();
-    /* 80C4F048 */ int Execute(Mtx**);
-    /* 80C4F344 */ int Draw();
-    /* 80C4F3E8 */ int Delete();
-    /* 80C4F498 */ bool eventStart();
+    cPhs__Step create1st();
+    void setMtx();
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
+    bool eventStart();
 
 private:
     /* 0x5B8 */ Mtx mNewBgMtx;

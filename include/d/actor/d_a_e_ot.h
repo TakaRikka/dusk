@@ -18,27 +18,27 @@
  */
 class daE_OT_c : public fopEn_enemy_c {
 public:
-    /* 8073A314 */ int draw();
-    /* 8073A454 */ void setBck(int, u8, f32, f32);
-    /* 8073A4F8 */ void setActionMode(int, int);
-    /* 8073A510 */ void damage_check();
-    /* 8073A7B0 */ void checkWaterSurface();
-    /* 8073A838 */ void setWaterEffect();
-    /* 8073A99C */ void setEggBreakEffect();
-    /* 8073AA40 */ void setDeathLightEffect();
-    /* 8073AB38 */ void setEggStay();
-    /* 8073AC14 */ void executeEgg();
-    /* 8073AF70 */ void executeBorn();
-    /* 8073B0D0 */ void executeAttack();
-    /* 8073B428 */ void executePanic();
-    /* 8073B854 */ void executeDamage();
-    /* 8073BB9C */ void action();
-    /* 8073BD78 */ void mtx_set();
-    /* 8073BE10 */ void cc_set();
-    /* 8073BF84 */ int execute();
-    /* 8073C058 */ int _delete();
-    /* 8073C0EC */ int CreateHeap();
-    /* 8073C31C */ cPhs__Step create();
+    int draw();
+    void setBck(int, u8, f32, f32);
+    void setActionMode(int, int);
+    void damage_check();
+    void checkWaterSurface();
+    void setWaterEffect();
+    void setEggBreakEffect();
+    void setDeathLightEffect();
+    void setEggStay();
+    void executeEgg();
+    void executeBorn();
+    void executeAttack();
+    void executePanic();
+    void executeDamage();
+    void action();
+    void mtx_set();
+    void cc_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    cPhs__Step create();
 
     int getChildNo() { return mChildNo; }
     int getActionMode() { return mAction; }

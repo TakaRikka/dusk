@@ -9,8 +9,8 @@
 
 class daPoTbox_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80CB424C */ daPoTbox_HIO_c();
-    /* 80CB4F14 */ virtual ~daPoTbox_HIO_c() {}
+    daPoTbox_HIO_c();
+    virtual ~daPoTbox_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -18,29 +18,24 @@ public:
     /* 0x8 */ f32 close_speed;
 };
 
-/* 80CB500C-80CB5014 -00001 0008+00 3/3 0/0 0/0 .data            l_type */
 static char* l_type[2] = {
     "pouBox0",
     "pouBox1",
 };
 
-/* 80CB5014-80CB501C 000028 0008+00 1/1 0/0 0/0 .data            l_bmdIdx */
 static int l_bmdIdx[] = {
     10, 8,
 };
 
-/* 80CB501C-80CB5024 000030 0008+00 1/1 0/0 0/0 .data            l_dzbIdx */
 static int l_dzbIdx[] = {
     21, 11,
 };
 
-/* 80CB424C-80CB4280 0000EC 0034+00 1/1 0/0 0/0 .text            __ct__14daPoTbox_HIO_cFv */
 daPoTbox_HIO_c::daPoTbox_HIO_c() {
     open_speed = 2.0f;
     close_speed = 12.0f;
 }
 
-/* 80CB42C8-80CB43D0 000168 0108+00 2/2 0/0 0/0 .text            setBaseMtx__10daPoTbox_cFv */
 void daPoTbox_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -60,7 +55,6 @@ void daPoTbox_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80CB43D0-80CB46C4 000270 02F4+00 1/0 0/0 0/0 .text            CreateHeap__10daPoTbox_cFv */
 int daPoTbox_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_type[mStat], l_bmdIdx[mStat]);
     JUT_ASSERT(185, modelData != NULL);
@@ -112,7 +106,6 @@ int daPoTbox_c::CreateHeap() {
     return 1;
 }
 
-/* 80CB46C4-80CB4954 000564 0290+00 1/1 0/0 0/0 .text            create__10daPoTbox_cFv */
 int daPoTbox_c::create() {
     fopAcM_ct(this, daPoTbox_c);
 
@@ -161,10 +154,8 @@ int daPoTbox_c::create() {
     return phase_state;
 }
 
-/* 80CB5134-80CB5140 000014 000C+00 1/1 0/0 0/0 .bss             l_HIO */
 static daPoTbox_HIO_c l_HIO;
 
-/* 80CB499C-80CB4AA8 00083C 010C+00 1/0 0/0 0/0 .text            Execute__10daPoTbox_cFPPA3_A4_f */
 int daPoTbox_c::Execute(Mtx** param_0) {
     static void (daPoTbox_c::*mode_proc[])() = {
         &daPoTbox_c::modeWait,
@@ -185,12 +176,10 @@ int daPoTbox_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80CB4AA8-80CB4AB4 000948 000C+00 1/1 0/0 0/0 .text            init_modeWait__10daPoTbox_cFv */
 void daPoTbox_c::init_modeWait() {
     mMode = 0;
 }
 
-/* 80CB4AB4-80CB4B10 000954 005C+00 1/0 0/0 0/0 .text            modeWait__10daPoTbox_cFv */
 void daPoTbox_c::modeWait() {
     mIsSwitch = fopAcM_isSwitch(this, getSw());
     if (mIsSwitch) {
@@ -198,7 +187,6 @@ void daPoTbox_c::modeWait() {
     }
 }
 
-/* 80CB4B10-80CB4BF8 0009B0 00E8+00 1/1 0/0 0/0 .text            init_modeOpen__10daPoTbox_cFv */
 void daPoTbox_c::init_modeOpen() {
     if (mpBgW != NULL) {
         dComIfG_Bgsp().Release(mpBgW);
@@ -216,7 +204,6 @@ void daPoTbox_c::init_modeOpen() {
     mMode = 1;
 }
 
-/* 80CB4BF8-80CB4C54 000A98 005C+00 1/0 0/0 0/0 .text            modeOpen__10daPoTbox_cFv */
 void daPoTbox_c::modeOpen() {
     int bck_play = mBck.play();
     int brk_play = mBrk.play();
@@ -226,25 +213,20 @@ void daPoTbox_c::modeOpen() {
     }
 }
 
-/* 80CB4C54-80CB4C60 000AF4 000C+00 2/2 0/0 0/0 .text            init_modeOpenEnd__10daPoTbox_cFv */
 void daPoTbox_c::init_modeOpenEnd() {
     mMode = 2;
 }
 
-/* 80CB4C60-80CB4C84 000B00 0024+00 1/0 0/0 0/0 .text            modeOpenEnd__10daPoTbox_cFv */
 void daPoTbox_c::modeOpenEnd() {
     mBtk.play();
 }
 
-/* 80CB4C84-80CB4C90 000B24 000C+00 1/1 0/0 0/0 .text            init_modeEnd__10daPoTbox_cFv */
 void daPoTbox_c::init_modeEnd() {
     mMode = 3;
 }
 
-/* 80CB4C90-80CB4C94 000B30 0004+00 1/0 0/0 0/0 .text            modeEnd__10daPoTbox_cFv */
 void daPoTbox_c::modeEnd() {}
 
-/* 80CB4C94-80CB4E14 000B34 0180+00 1/0 0/0 0/0 .text            Draw__10daPoTbox_cFv */
 int daPoTbox_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpBoxModel, &tevStr);
@@ -287,7 +269,6 @@ int daPoTbox_c::Draw() {
     return 1;
 }
 
-/* 80CB4E14-80CB4E88 000CB4 0074+00 1/0 0/0 0/0 .text            Delete__10daPoTbox_cFv */
 int daPoTbox_c::Delete() {
     dComIfG_resDelete(&mPhase, l_type[mStat]);
 
@@ -298,27 +279,22 @@ int daPoTbox_c::Delete() {
     return 1;
 }
 
-/* 80CB4E88-80CB4EB4 000D28 002C+00 1/0 0/0 0/0 .text            daPoTbox_Draw__FP10daPoTbox_c */
 static int daPoTbox_Draw(daPoTbox_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80CB4EB4-80CB4ED4 000D54 0020+00 1/0 0/0 0/0 .text            daPoTbox_Execute__FP10daPoTbox_c */
 static int daPoTbox_Execute(daPoTbox_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80CB4ED4-80CB4EF4 000D74 0020+00 1/0 0/0 0/0 .text            daPoTbox_Delete__FP10daPoTbox_c */
 static int daPoTbox_Delete(daPoTbox_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80CB4EF4-80CB4F14 000D94 0020+00 1/0 0/0 0/0 .text            daPoTbox_Create__FP10fopAc_ac_c */
 static int daPoTbox_Create(fopAc_ac_c* i_this) {
     return ((daPoTbox_c*)i_this)->create();
 }
 
-/* 80CB5084-80CB50A4 -00001 0020+00 1/0 0/0 0/0 .data            l_daPoTbox_Method */
 static actor_method_class l_daPoTbox_Method = {
     (process_method_func)daPoTbox_Create,
     (process_method_func)daPoTbox_Delete,
@@ -327,7 +303,6 @@ static actor_method_class l_daPoTbox_Method = {
     (process_method_func)daPoTbox_Draw,
 };
 
-/* 80CB50A4-80CB50D4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_poTbox */
 extern actor_process_profile_definition g_profile_Obj_poTbox = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

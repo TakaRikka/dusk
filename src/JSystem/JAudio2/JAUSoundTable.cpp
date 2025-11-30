@@ -6,7 +6,6 @@
 
 #include "JSystem/JAudio2/JAUSoundTable.h"
 
-/* 802A7114-802A7160 2A1A54 004C+00 0/0 1/1 0/0 .text            init__13JAUSoundTableFPCv */
 void JAUSoundTable::init(void const* param_0) {
     if (param_0 != NULL) {
         field_0x0.init(param_0);
@@ -15,8 +14,6 @@ void JAUSoundTable::init(void const* param_0) {
     }
 }
 
-/* 802A7160-802A728C 2A1AA0 012C+00 0/0 10/10 0/0 .text getTypeID__13JAUSoundTableCF10JAISoundID
- */
 u8 JAUSoundTable::getTypeID(JAISoundID param_0) const {
     if (param_0.isAnonymous()) {
         return 0xff;
@@ -32,7 +29,6 @@ u8 JAUSoundTable::getTypeID(JAISoundID param_0) const {
     return group->getTypeID(param_0.id_.info.waveID);
 }
 
-/* 802A728C-802A73D4 2A1BCC 0148+00 0/0 7/7 0/0 .text getData__13JAUSoundTableCF10JAISoundID */
 JAUSoundTableItem* JAUSoundTable::getData(JAISoundID param_0) const {
     if (param_0.isAnonymous()) {
         return NULL;
@@ -48,7 +44,6 @@ JAUSoundTableItem* JAUSoundTable::getData(JAISoundID param_0) const {
     return getItem(group, param_0.id_.info.waveID);
 }
 
-/* 802A73D4-802A7420 2A1D14 004C+00 0/0 1/1 0/0 .text            init__17JAUSoundNameTableFPCv */
 void JAUSoundNameTable::init(void const* param_0) {
     if (param_0 != NULL) {
         field_0x0.init(param_0);

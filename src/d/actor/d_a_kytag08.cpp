@@ -10,13 +10,10 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_spinner.h"
 
-/* 8085A578-8085A580 000078 0008+00 1/0 0/0 0/0 .text            daKytag08_Draw__FP13kytag08_class
- */
 static int daKytag08_Draw(kytag08_class* i_this) {
     return 1;
 }
 
-/* 8085A580-8085AEA0 000080 0920+00 1/0 0/0 0/0 .text daKytag08_Execute__FP13kytag08_class */
 static int daKytag08_Execute(kytag08_class* i_this) {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
     daPy_py_c* player_p = daPy_getPlayerActorClass();
@@ -192,13 +189,10 @@ static int daKytag08_Execute(kytag08_class* i_this) {
     return 1;
 }
 
-/* 8085AEA0-8085AEA8 0009A0 0008+00 1/0 0/0 0/0 .text daKytag08_IsDelete__FP13kytag08_class */
 static int daKytag08_IsDelete(kytag08_class* i_this) {
     return 1;
 }
 
-/* 8085AEA8-8085AF74 0009A8 00CC+00 1/0 0/0 0/0 .text            daKytag08_Delete__FP13kytag08_class
- */
 static int daKytag08_Delete(kytag08_class* i_this) {
     if (i_this->mpEmitter1 != NULL) {
         i_this->mpEmitter1->deleteAllParticle();
@@ -220,7 +214,6 @@ static int daKytag08_Delete(kytag08_class* i_this) {
     return 1;
 }
 
-/* 8085AF74-8085AFEC 000A74 0078+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     kytag08_class* a_this = (kytag08_class*)i_this;
 
@@ -238,7 +231,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8085AFEC-8085B23C 000AEC 0250+00 1/0 0/0 0/0 .text            daKytag08_Create__FP10fopAc_ac_c */
 static int daKytag08_Create(fopAc_ac_c* i_this) {
     kytag08_class* a_this = (kytag08_class*)i_this;
     cXyz scale(1.0f, 1.0f, 1.0f);
@@ -275,14 +267,12 @@ static int daKytag08_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 8085B318-8085B338 -00001 0020+00 1/0 0/0 0/0 .data            l_daKytag08_Method */
 static actor_method_class l_daKytag08_Method = {
     (process_method_func)daKytag08_Create,  (process_method_func)daKytag08_Delete,
     (process_method_func)daKytag08_Execute, (process_method_func)daKytag08_IsDelete,
     (process_method_func)daKytag08_Draw,
 };
 
-/* 8085B338-8085B368 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KYTAG08 */
 extern actor_process_profile_definition g_profile_KYTAG08 = {
     fpcLy_CURRENT_e,
     7,

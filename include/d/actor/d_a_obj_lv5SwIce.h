@@ -20,18 +20,18 @@ public:
         MODE_BREAK,
     };
 
-    /* 80C6CA20 */ void setBaseMtx();
-    /* 80C6CB14 */ int create();
-    /* 80C6CE28 */ void procMain();
-    /* 80C6CEB4 */ void init_modeWait();
-    /* 80C6CED0 */ void modeWait();
-    /* 80C6D0F4 */ void init_modeBreak();
-    /* 80C6D144 */ void modeBreak();
+    void setBaseMtx();
+    int create();
+    void procMain();
+    void init_modeWait();
+    void modeWait();
+    void init_modeBreak();
+    void modeBreak();
 
-    /* 80C6CAA8 */ virtual int CreateHeap();
-    /* 80C6CDD0 */ virtual int Execute(Mtx**);
-    /* 80C6D260 */ virtual int Draw();
-    /* 80C6D314 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSwBit1() { return fopAcM_GetParamBit(this, 0, 8); }
 
@@ -54,8 +54,8 @@ STATIC_ASSERT(sizeof(daLv5SwIce_c) == 0x738);
 
 class daLv5SwIce_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80C6C94C */ daLv5SwIce_HIO_c();
-    /* 80C6D418 */ virtual ~daLv5SwIce_HIO_c() {}
+    daLv5SwIce_HIO_c();
+    virtual ~daLv5SwIce_HIO_c() {}
 
     void genMessage(JORMContext*);
 

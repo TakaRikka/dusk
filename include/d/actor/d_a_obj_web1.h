@@ -41,8 +41,8 @@ STATIC_ASSERT(sizeof(obj_web1_class) == 0x770);
 
 class daObj_Web1_HIO_c {
 public:
-    /* 80D353AC */ daObj_Web1_HIO_c();
-    /* 80D36028 */ virtual ~daObj_Web1_HIO_c() {}
+    daObj_Web1_HIO_c();
+    virtual ~daObj_Web1_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
 };

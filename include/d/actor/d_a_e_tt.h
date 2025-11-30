@@ -16,36 +16,36 @@
  */
 class daE_TT_c : public fopEn_enemy_c {
 public:
-    /* 807BD7EC */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 807BD8E0 */ static int JointCallBack(J3DJoint*, int);
-    /* 807BD92C */ int draw();
-    /* 807BDAE0 */ void setBck(int, u8, f32, f32);
-    /* 807BDB84 */ void calcHitGroundSpeed();
-    /* 807BDBE4 */ void setActionMode(int, int);
-    /* 807BDC10 */ int getCutType();
-    /* 807BDC50 */ void damage_check();
-    /* 807BDE5C */ void checkWaterSurface();
-    /* 807BDF60 */ void checkFootGround();
-    /* 807BE2A8 */ void setBodyLandEffect();
-    /* 807BE438 */ void setWaterEffect();
-    /* 807BE708 */ void setDeathEyeEffect();
-    /* 807BE99C */ void setDeathFootEffect();
-    /* 807BEBAC */ bool checkPlayerSearch();
-    /* 807BED70 */ void executeWait();
-    /* 807BF358 */ void executeChase();
-    /* 807BF914 */ void executeAttack();
-    /* 807BFD38 */ void setDamageInit();
-    /* 807BFD60 */ void executeDamage();
-    /* 807BFFF4 */ void executeDeath();
-    /* 807C033C */ void executeOutRange();
-    /* 807C0530 */ void executeFirstAttack();
-    /* 807C0C28 */ void action();
-    /* 807C0E10 */ void mtx_set(int);
-    /* 807C0EE8 */ void cc_set();
-    /* 807C1024 */ int execute();
-    /* 807C1164 */ int _delete();
-    /* 807C121C */ int CreateHeap();
-    /* 807C13B4 */ int create();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int JointCallBack(J3DJoint*, int);
+    int draw();
+    void setBck(int, u8, f32, f32);
+    void calcHitGroundSpeed();
+    void setActionMode(int, int);
+    int getCutType();
+    void damage_check();
+    void checkWaterSurface();
+    void checkFootGround();
+    void setBodyLandEffect();
+    void setWaterEffect();
+    void setDeathEyeEffect();
+    void setDeathFootEffect();
+    bool checkPlayerSearch();
+    void executeWait();
+    void executeChase();
+    void executeAttack();
+    void setDamageInit();
+    void executeDamage();
+    void executeDeath();
+    void executeOutRange();
+    void executeFirstAttack();
+    void action();
+    void mtx_set(int);
+    void cc_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    int create();
 
 private:
     /* 0x5AC */ request_of_phase_process_class mPhaseReq;

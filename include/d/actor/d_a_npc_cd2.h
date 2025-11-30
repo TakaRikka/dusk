@@ -21,8 +21,8 @@ enum AnmNum {
 };
 
 struct daNpcCd2_HIO_Jnt_c : public JORReflexible {
-    /* 8015A6E8 */ virtual ~daNpcCd2_HIO_Jnt_c() {}
-    /* 8015A788 */ daNpcCd2_HIO_Jnt_c() {}
+    virtual ~daNpcCd2_HIO_Jnt_c() {}
+    daNpcCd2_HIO_Jnt_c() {}
 
     void genMessage(JORMContext*);
 
@@ -31,8 +31,8 @@ struct daNpcCd2_HIO_Jnt_c : public JORReflexible {
 };
 
 struct daNpcCd2_HIO_MChild_c {
-    /* 8015A798 */ virtual ~daNpcCd2_HIO_MChild_c() {}
-    /* 8015A808 */ daNpcCd2_HIO_MChild_c() {}
+    virtual ~daNpcCd2_HIO_MChild_c() {}
+    daNpcCd2_HIO_MChild_c() {}
 
     /* 0x004 */ daNpcCd2_HIO_Jnt_c field_0x004[19];
     /* 0x1CE */ s16 mMaxLmtX_BACKBONE;
@@ -60,8 +60,8 @@ struct daNpcCd2_HIO_MChild_c {
 };
 
 struct daNpcCd2_HIO_WChild_c {
-    /* 8015A678 */ virtual ~daNpcCd2_HIO_WChild_c() {}
-    /* 8015A730 */ daNpcCd2_HIO_WChild_c() {}
+    virtual ~daNpcCd2_HIO_WChild_c() {}
+    daNpcCd2_HIO_WChild_c() {}
 
     /* 0x004 */ daNpcCd2_HIO_Jnt_c field_0x004[21];
     /* 0x1FE */ s16 mMaxLmtX_BACKBONE;
@@ -89,8 +89,8 @@ struct daNpcCd2_HIO_WChild_c {
 };
 
 struct daNpcCd2_HIO_c : public fOpAcm_HIO_entry_c {
-    /* 8015A4D8 */ daNpcCd2_HIO_c();
-    /* 8015A860 */ virtual ~daNpcCd2_HIO_c() {}
+    daNpcCd2_HIO_c();
+    virtual ~daNpcCd2_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -221,17 +221,17 @@ inline s16 Cd2_HIO_minLmtY_HEAD(int param_1) {
 
 class PathTrace_c {
 public:
-    /* 80159A38 */ bool setPath(int, int, int, cXyz*, bool);
-    /* 80159C14 */ bool checkPoint(cXyz, f32);
-    /* 80159DC0 */ bool checkPathEnd(cXyz, f32);
-    /* 80159E54 */ void getTargetPoint(Vec*);
-    /* 80159ECC */ void setAvoidPoint();
-    /* 8015A0D0 */ void setNextPoint();
-    /* 80159F98 */ void setNextPoint(cXyz&);
-    /* 8015A264 */ int incIndex(int);
-    /* 8015A294 */ int decIndex(int);
-    /* 8015A370 */ fopAc_ac_c* checkObstacle(fopAc_ac_c*);
-    /* 8015A3E4 */ void checkObstacleSub(fopAc_ac_c*);
+    bool setPath(int, int, int, cXyz*, bool);
+    bool checkPoint(cXyz, f32);
+    bool checkPathEnd(cXyz, f32);
+    void getTargetPoint(Vec*);
+    void setAvoidPoint();
+    void setNextPoint();
+    void setNextPoint(cXyz&);
+    int incIndex(int);
+    int decIndex(int);
+    fopAc_ac_c* checkObstacle(fopAc_ac_c*);
+    void checkObstacleSub(fopAc_ac_c*);
 
     void getAvoidPoint(Vec* avoidPoint) { *avoidPoint = mAvoidPoint; }
     BOOL isClose() { return dPath_ChkClose(mPath); }
@@ -256,29 +256,29 @@ public:
 
 class daNpcCd2_c : public fopAc_ac_c {
 public:
-    /* 80157D00 */ int NpcCreate(int);
-    /* 80157F28 */ J3DModel* ObjCreate(int);
-    /* 80157F68 */ J3DModel* ChairCreate(f32);
-    /* 801580A8 */ bool isM_();
-    /* 801580F0 */ J3DAnmTransform* getAnmP(int, int);
-    /* 80158420 */ int setAttention(int);
-    /* 80158BB8 */ int loadResrc(int, int);
-    /* 80158CBC */ int removeResrc(int, int);
-    /* 80158D88 */ void setEnvTevCol();
-    /* 80158DE4 */ void setRoomNo();
-    /* 80158E28 */ void animation(int);
-    /* 80158F00 */ void setAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
-    /* 80158F6C */ int drawShadow(f32);
-    /* 80158FF0 */ int drawObj(int, J3DModel*, f32);
-    /* 801590FC */ int drawNpc();
-    /* 80159258 */ int jntNodeCB(J3DJoint*, J3DModel*);
-    /* 80159550 */ void setHitodamaParticle();
-    /* 801597C0 */ daTagEscape_c* getEscapeTag();
-    /* 80159818 */ bool checkFearSituation();
-    /* 801598E8 */ J3DModelData* getNpcMdlDataP(int);
-    /* 8015994C */ J3DModelData* getObjMdlDataP(int);
-    /* 801599C4 */ J3DAnmTexPattern* getTexAnmP(int);
-    /* 8097F030 */ virtual ~daNpcCd2_c() {}
+    int NpcCreate(int);
+    J3DModel* ObjCreate(int);
+    J3DModel* ChairCreate(f32);
+    bool isM_();
+    J3DAnmTransform* getAnmP(int, int);
+    int setAttention(int);
+    int loadResrc(int, int);
+    int removeResrc(int, int);
+    void setEnvTevCol();
+    void setRoomNo();
+    void animation(int);
+    void setAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
+    int drawShadow(f32);
+    int drawObj(int, J3DModel*, f32);
+    int drawNpc();
+    int jntNodeCB(J3DJoint*, J3DModel*);
+    void setHitodamaParticle();
+    daTagEscape_c* getEscapeTag();
+    bool checkFearSituation();
+    J3DModelData* getNpcMdlDataP(int);
+    J3DModelData* getObjMdlDataP(int);
+    J3DAnmTexPattern* getTexAnmP(int);
+    virtual ~daNpcCd2_c() {}
 
     static dCcD_SrcCyl const m_cylDat;
 

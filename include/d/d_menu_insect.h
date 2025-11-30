@@ -16,43 +16,43 @@ class JKRArchive;
 
 class dMenu_Insect_c : public dDlst_base_c {
 public:
-    /* 801D8114 */ dMenu_Insect_c(JKRExpHeap*, STControl*, CSTControl*, u8);
-    /* 801D8658 */ void _create();
-    /* 801D86C8 */ void _move();
-    /* 801D8760 */ void _draw();
-    /* 801D88EC */ bool isSync();
-    /* 801D8914 */ void init();
-    /* 801D894C */ int _open();
-    /* 801D8B2C */ int _close();
-    /* 801D8C68 */ void wait_init();
-    /* 801D8CCC */ void wait_move();
-    /* 801D8E00 */ void explain_open_init();
-    /* 801D91E4 */ void explain_open_move();
-    /* 801D9264 */ void explain_move_init();
-    /* 801D9268 */ void explain_move_move();
-    /* 801D9290 */ void select_move_init();
-    /* 801D92DC */ void select_move_move();
-    /* 801D9504 */ void explain_close_init();
-    /* 801D95AC */ void explain_close_move();
-    /* 801D9644 */ void screenSetBase();
-    /* 801D98F0 */ void screenSetExplain();
-    /* 801D9BD0 */ void screenSetDoIcon();
-    /* 801D9D4C */ static u8 getGetInsectNum();
-    /* 801D9DCC */ u8 getInsectItemID(int, int);
-    /* 801D9DE4 */ bool isGetInsect(int, int);
-    /* 801D9E20 */ bool isGiveInsect(int, int);
-    /* 801D9ED4 */ static bool isGiveInsect(u8);
-    /* 801D9E7C */ static bool isCatchInsect(u8);
-    /* 801D9F3C */ static bool isCatchNotGiveInsect(u8);
-    /* 801D9F8C */ void cursorMove();
-    /* 801DA1EC */ void setCursorPos();
-    /* 801DA2FC */ u8 dpdMove();
-    /* 801DA304 */ void setAButtonString(u16);
-    /* 801DA3B4 */ void setBButtonString(u16);
-    /* 801DA464 */ void setHIO(bool);
+    dMenu_Insect_c(JKRExpHeap*, STControl*, CSTControl*, u8);
+    void _create();
+    void _move();
+    void _draw();
+    bool isSync();
+    void init();
+    int _open();
+    int _close();
+    void wait_init();
+    void wait_move();
+    void explain_open_init();
+    void explain_open_move();
+    void explain_move_init();
+    void explain_move_move();
+    void select_move_init();
+    void select_move_move();
+    void explain_close_init();
+    void explain_close_move();
+    void screenSetBase();
+    void screenSetExplain();
+    void screenSetDoIcon();
+    static u8 getGetInsectNum();
+    u8 getInsectItemID(int, int);
+    bool isGetInsect(int, int);
+    bool isGiveInsect(int, int);
+    static bool isGiveInsect(u8);
+    static bool isCatchInsect(u8);
+    static bool isCatchNotGiveInsect(u8);
+    void cursorMove();
+    void setCursorPos();
+    u8 dpdMove();
+    void setAButtonString(u16);
+    void setBButtonString(u16);
+    void setHIO(bool);
 
-    /* 801DA630 */ virtual void draw() { _draw(); }
-    /* 801D82F4 */ virtual ~dMenu_Insect_c();
+    virtual void draw() { _draw(); }
+    virtual ~dMenu_Insect_c();
 
     u8 getStatus() { return mStatus; }
 

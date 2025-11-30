@@ -9,37 +9,31 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/actor/d_a_obj_catdoor.h"
 
-/* 80D4C1FC-80D4C204 000020 0008+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[1][2] = {
     24, 1,
 };
 
-/* 80D4C204-80D4C21C -00001 0018+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[3] = {
     {"", 0},
     {"PERU_APPEAR", 1},
     {"PERU_APPEAR_SKIP", 1},
 };
 
-/* 80D4C21C-80D4C224 -00001 0008+00 2/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "Peru",
 };
 
-/* 80D4C224-80D4C228 000048 0002+02 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[2] = {
     1, -1,
 };
 
-/* 80D4C228-80D4C234 -00001 000C+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[3] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-/* 80D4C234-80D4C2C0 000058 008C+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static u8 l_faceMotionAnmData[140] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1E,
     0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x0A,
@@ -52,7 +46,6 @@ static u8 l_faceMotionAnmData[140] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 80D4C2C0-80D4C3F4 0000E4 0134+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static u8 l_motionAnmData[308] = {
     0x00, 0x00, 0x00, 0x14, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x1B,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11,
@@ -76,7 +69,6 @@ static u8 l_motionAnmData[308] = {
     0x00, 0x01, 0x00, 0x00,
 };
 
-/* 80D4C3F4-80D4C444 000218 0050+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static u8 l_faceMotionSequenceData[80] = {
     0x00, 0x01, 0xFF, 0x01, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
     0x00, 0x02, 0xFF, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
@@ -85,7 +77,6 @@ static u8 l_faceMotionSequenceData[80] = {
     0x00, 0x04, 0xFF, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
 };
 
-/* 80D4C444-80D4C4E4 000268 00A0+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static u8 l_motionSequenceData[160] = {
     0x00, 0x00, 0xFF, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
     0x00, 0x01, 0xFF, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
@@ -99,21 +90,18 @@ static u8 l_motionSequenceData[160] = {
     0x00, 0x04, 0xFF, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
 };
 
-/* 80D4C4E4-80D4C4F0 -00001 000C+00 1/1 0/0 0/0 .data            mCutNameList__8daPeru_c */
 const char* daPeru_c::mCutNameList[3] = {
     "",
     "PERU_APPEAR",
     "PERU_APPEAR_SKIP",
 };
 
-/* 80D4C508-80D4C52C 00032C 0024+00 1/2 0/0 0/0 .data            mCutList__8daPeru_c */
 daPeru_c::cutAppearFunc daPeru_c::mCutList[3] = {
     NULL,
     &daPeru_c::cutAppear,
     &daPeru_c::cutAppear_skip,
 };
 
-/* 80D46EEC-80D46FCC 0000EC 00E0+00 1/0 0/0 0/0 .text            __dt__8daPeru_cFv */
 daPeru_c::~daPeru_c() {
     OS_REPORT("|%06d:%x|daPeru_c -> デストラクト\n", g_Counter.mCounter0, this);
     if (heap != NULL) {
@@ -122,8 +110,6 @@ daPeru_c::~daPeru_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**) l_resNameList);
 }
 
-/* ############################################################################################## */
-/* 80D4C060-80D4C0F8 000000 0098+00 19/19 0/0 0/0 .rodata          m__14daPeru_Param_c */
 PeruParams const daPeru_Param_c::m = {
     60.0f,
     -3.0f,
@@ -168,7 +154,6 @@ PeruParams const daPeru_Param_c::m = {
     0.0f,
 };
 
-/* 80D46FCC-80D4720C 0001CC 0240+00 1/1 0/0 0/0 .text            create__8daPeru_cFv */
 int daPeru_c::create() {
     daNpcT_ct(this, daPeru_c, (daNpcT_faceMotionAnmData_c*)l_faceMotionAnmData, (daNpcT_motionAnmData_c*)l_motionAnmData, (daNpcT_MotionSeqMngr_c::sequenceStepData_c*)l_faceMotionSequenceData, 4, (daNpcT_MotionSeqMngr_c::sequenceStepData_c*)l_motionSequenceData, 4, l_evtList, l_resNameList);
     OS_REPORT("------------ ルイーズ生成処理開始\n");
@@ -215,7 +200,6 @@ int daPeru_c::create() {
     return rv;
 }
 
-/* 80D4720C-80D474A0 00040C 0294+00 1/1 0/0 0/0 .text            CreateHeap__8daPeru_cFv */
 int daPeru_c::CreateHeap() {
     // Not sure how to force 0 assignment otherwise. 
     enum IdxVal {dummy_zero};
@@ -257,7 +241,6 @@ int daPeru_c::CreateHeap() {
     return 0;
 }
 
-/* 80D4765C-80D47750 00085C 00F4+00 1/1 0/0 0/0 .text            typeInitialize__8daPeru_cFv */
 int daPeru_c::typeInitialize() {
     if (mType == 0) {
         if (daNpcT_chkEvtBit(0x127)) {
@@ -278,7 +261,6 @@ int daPeru_c::typeInitialize() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D47750-80D47784 000950 0034+00 1/1 0/0 0/0 .text            Delete__8daPeru_cFv */
 int daPeru_c::Delete() {
     OS_REPORT("|%06d:%x|daPeru_c -> Delete\n", g_Counter.mCounter0, this);
     fopAcM_GetID(this);
@@ -286,12 +268,10 @@ int daPeru_c::Delete() {
     return 1;
 }
 
-/* 80D47784-80D477A4 000984 0020+00 2/2 0/0 0/0 .text            Execute__8daPeru_cFv */
 int daPeru_c::Execute() {
     return execute();
 }
 
-/* 80D477A4-80D47840 0009A4 009C+00 1/1 0/0 0/0 .text            Draw__8daPeru_cFv */
 int daPeru_c::Draw() {
     daNpcT_MatAnm_c* matAnm = mpMatAnm[0];
     if (matAnm != NULL) {
@@ -302,13 +282,10 @@ int daPeru_c::Draw() {
     draw(0, 0, daPeru_Param_c::m.field_0x00[3], NULL, 100.0f, 0, field_0xe80, 0);
 }
 
-/* 80D47840-80D47860 000A40 0020+00 1/1 0/0 0/0 .text createHeapCallBack__8daPeru_cFP10fopAc_ac_c
- */
 int daPeru_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daPeru_c*>(i_this)->CreateHeap();
 }
 
-/* 80D47860-80D478B8 000A60 0058+00 1/1 0/0 0/0 .text ctrlJointCallBack__8daPeru_cFP8J3DJointi */
 int daPeru_c::ctrlJointCallBack(J3DJoint* joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -320,7 +297,6 @@ int daPeru_c::ctrlJointCallBack(J3DJoint* joint, int param_2) {
     return 1;
 }
 
-/* 80D478B8-80D478EC 000AB8 0034+00 1/1 0/0 0/0 .text            isDelete__8daPeru_cFv */
 int daPeru_c::isDelete() {
     if (mType == 0) {
         return 0;
@@ -333,7 +309,6 @@ int daPeru_c::isDelete() {
     }
 }
 
-/* 80D478EC-80D47B20 000AEC 0234+00 1/1 0/0 0/0 .text            reset__8daPeru_cFv */
 void daPeru_c::reset() {
     initialize();
     attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(daPeru_Param_c::m.field_0x48[2], daPeru_Param_c::m.field_0x48[3]);
@@ -362,7 +337,6 @@ void daPeru_c::reset() {
     setAction(&daPeru_c::wait, 0);
 }
 
-/* 80D47B20-80D47C4C 000D20 012C+00 1/0 0/0 0/0 .text            setParam__8daPeru_cFv */
 void daPeru_c::setParam() {
     srchActors();
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
@@ -387,13 +361,11 @@ void daPeru_c::setParam() {
     mMorfFrames = daPeru_Param_c::m.field_0x00[17];
 }
 
-/* 80D47C4C-80D47CAC 000E4C 0060+00 1/0 0/0 0/0 .text            setAfterTalkMotion__8daPeru_cFv */
 void daPeru_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.getNo();
     mFaceMotionSeqMngr.setNo(2, -1.0f, 0, 0);
 }
 
-/* 80D47CAC-80D47D5C 000EAC 00B0+00 1/1 0/0 0/0 .text            srchActors__8daPeru_cFv */
 void daPeru_c::srchActors() {
     if (mActors[0].getActorP() == NULL) {
         mActors[0].entry(getEvtAreaTagP(16, 0));
@@ -411,7 +383,6 @@ void daPeru_c::srchActors() {
     }
 }
 
-/* 80D47D5C-80D47E48 000F5C 00EC+00 1/0 0/0 0/0 .text            evtTalk__8daPeru_cFv */
 int daPeru_c::evtTalk() {
     if (chkAction(&daPeru_c::talk)) {
         (this->*(mActionFunc))(0);
@@ -421,7 +392,6 @@ int daPeru_c::evtTalk() {
     return 1;
 }
 
-/* 80D47E48-80D47F10 001048 00C8+00 1/0 0/0 0/0 .text            evtCutProc__8daPeru_cFv */
 int daPeru_c::evtCutProc() {
     int rv = 0;
     int staffId = dComIfGp_getEventManager().getMyStaffId("Peru", this, -1);
@@ -436,14 +406,12 @@ int daPeru_c::evtCutProc() {
     return rv;
 }
 
-/* 80D47F10-80D47F5C 001110 004C+00 1/0 0/0 0/0 .text            action__8daPeru_cFv */
 void daPeru_c::action() {
     if (mActionFunc != NULL) {
         (this->*(mActionFunc))(0);
     }
 }
 
-/* 80D47F5C-80D481A4 00115C 0248+00 1/0 0/0 0/0 .text            setAttnPos__8daPeru_cFv */
 void daPeru_c::setAttnPos() {
     cXyz acStack_3c(10.0f, 0.0f, 0.0f);
     mStagger.calc(0);
@@ -467,7 +435,6 @@ void daPeru_c::setAttnPos() {
     mDoMtx_stack_c::multVec(&cStack_48, &attention_info.position);
 }
 
-/* 80D481A4-80D4835C 0013A4 01B8+00 1/0 0/0 0/0 .text            setCollision__8daPeru_cFv */
 void daPeru_c::setCollision() {
     f32 local_48[2] = { 20.0f, -10.0f};
     if (!mHide) {
@@ -504,13 +471,10 @@ void daPeru_c::setCollision() {
     }
 }
 
-/* 80D4835C-80D48364 00155C 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__8daPeru_cFv */
 BOOL daPeru_c::drawDbgInfo() {
     return FALSE;
 }
 
-/* 80D48364-80D48414 001564 00B0+00 13/13 0/0 0/0 .text setAction__8daPeru_cFM8daPeru_cFPCvPvi_ii
- */
 int daPeru_c::setAction(actionFunc a_func, int param_2) {
     mMode = MODE_INVALID;
     if (mActionFunc != NULL) {
@@ -524,7 +488,6 @@ int daPeru_c::setAction(actionFunc a_func, int param_2) {
     return 1;
 }
 
-/* 80D48414-80D486A0 001614 028C+00 10/0 0/0 0/0 .text            wait__8daPeru_cFi */
 int daPeru_c::wait(int param_0) {
     switch(mMode) {
     case MODE_ENTER:
@@ -575,7 +538,6 @@ int daPeru_c::wait(int param_0) {
     return 1;
 }
 
-/* 80D486A0-80D48720 0018A0 0080+00 1/1 0/0 0/0 .text            is_AppearDemo_start__8daPeru_cFv */
 BOOL daPeru_c::is_AppearDemo_start() {
     if (mActors[0].getActorP() != NULL) {
         daTag_EvtArea_c* evtArea = (daTag_EvtArea_c*)mActors[0].getActorP();
@@ -586,8 +548,6 @@ BOOL daPeru_c::is_AppearDemo_start() {
     return FALSE;
 }
 
-/* 80D48720-80D48750 001920 0030+00 1/1 0/0 0/0 .text            _AppearDemoTag_delete__8daPeru_cFv
- */
 void daPeru_c::_AppearDemoTag_delete() {
     fopAc_ac_c* actor = mActors[0].getActorP();
     if (actor != NULL) {
@@ -595,7 +555,6 @@ void daPeru_c::_AppearDemoTag_delete() {
     }
 }
 
-/* 80D48750-80D48A7C 001950 032C+00 2/0 0/0 0/0 .text            talk__8daPeru_cFi */
 int daPeru_c::talk(int param_0) {
     switch(mMode) {
     case MODE_ENTER:
@@ -651,7 +610,6 @@ int daPeru_c::talk(int param_0) {
     return 0;
 }
 
-/* 80D48A7C-80D48C58 001C7C 01DC+00 1/0 0/0 0/0 .text            jump_st__8daPeru_cFi */
 int daPeru_c::jump_st(int param_1) {
     switch(mMode) {
     case MODE_ENTER:
@@ -694,7 +652,6 @@ int daPeru_c::jump_st(int param_1) {
     return 0;
 }
 
-/* 80D48C58-80D48E34 001E58 01DC+00 1/0 0/0 0/0 .text            jump_ed__8daPeru_cFi */
 int daPeru_c::jump_ed(int param_1) {
     switch (mMode) {
     case MODE_ENTER:
@@ -734,7 +691,6 @@ int daPeru_c::jump_ed(int param_1) {
     return 0;
 }
 
-/* 80D48E34-80D48FA8 002034 0174+00 1/0 0/0 0/0 .text            sniff__8daPeru_cFi */
 int daPeru_c::sniff(int param_0) {
     switch(mMode) {
     case MODE_ENTER:
@@ -761,7 +717,6 @@ int daPeru_c::sniff(int param_0) {
     return 0;
 }
 
-/* 80D48FA8-80D4910C 0021A8 0164+00 1/0 0/0 0/0 .text            demo_appear__8daPeru_cFi */
 int daPeru_c::demo_appear(int param_0) {
     switch(mMode) {
     case MODE_ENTER:
@@ -792,7 +747,6 @@ int daPeru_c::demo_appear(int param_0) {
     return 0;
 }
 
-/* 80D4910C-80D492A8 00230C 019C+00 1/0 0/0 0/0 .text            demo_walk_to_link__8daPeru_cFi */
 int daPeru_c::demo_walk_to_link(int param_0) {
     switch(mMode) {
     case MODE_ENTER:
@@ -832,7 +786,6 @@ int daPeru_c::demo_walk_to_link(int param_0) {
     return 0;
 }
 
-/* 80D492A8-80D49418 0024A8 0170+00 1/0 0/0 0/0 .text            demo_walk_circle__8daPeru_cFi */
 int daPeru_c::demo_walk_circle(int param_0) {
     switch(mMode) {
     case MODE_ENTER:
@@ -863,7 +816,6 @@ int daPeru_c::demo_walk_circle(int param_0) {
     return 0;
 }
 
-/* 80D49418-80D4971C 002618 0304+00 1/0 0/0 0/0 .text            demo_walk_to_window__8daPeru_cFi */
 int daPeru_c::demo_walk_to_window(int param_0) {
     switch(mMode) {
     case MODE_ENTER:
@@ -906,8 +858,6 @@ int daPeru_c::demo_walk_to_window(int param_0) {
     return 0;
 }
 
-/* 80D4971C-80D499AC 00291C 0290+00 1/0 0/0 0/0 .text            demo_walk_to_pathway__8daPeru_cFi
- */
  int daPeru_c::demo_walk_to_pathway(int param_0) {
     switch(mMode) {
     case MODE_ENTER:
@@ -940,7 +890,6 @@ int daPeru_c::demo_walk_to_window(int param_0) {
      return 0;
 }
 
-/* 80D499AC-80D49A40 002BAC 0094+00 1/0 0/0 0/0 .text            cutAppear__8daPeru_cFi */
 int daPeru_c::cutAppear(int param_1) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* pCutId = dComIfGp_evmng_getMyIntegerP(param_1, "cut_id");
@@ -955,10 +904,8 @@ int daPeru_c::cutAppear(int param_1) {
     return _cutAppear_Main(*pCutId);
 }
 
-/* 80D4C83C-80D4C840 000054 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daPeru_Param_c l_HIO;
 
-/* 80D49A40-80D4A334 002C40 08F4+00 1/1 0/0 0/0 .text            _cutAppear_Init__8daPeru_cFRCi */
 int daPeru_c::_cutAppear_Init(int const& param_1) {
     switch(param_1) {
     case 10:
@@ -1064,7 +1011,6 @@ int daPeru_c::_cutAppear_Init(int const& param_1) {
     return 1;
 }
 
-/* 80D4A334-80D4A840 003534 050C+00 1/1 0/0 0/0 .text            _cutAppear_Main__8daPeru_cFRCi */
 int daPeru_c::_cutAppear_Main(int const& param_1) {
     int rv = FALSE;
     switch (param_1) {
@@ -1179,7 +1125,6 @@ int daPeru_c::_cutAppear_Main(int const& param_1) {
     return rv;
 }
 
-/* 80D4A840-80D4A920 003A40 00E0+00 1/1 0/0 0/0 .text            _catdoor_open__8daPeru_cFv */
 void daPeru_c::_catdoor_open() {
     daObjCatDoor_c* pCatDoor = (daObjCatDoor_c*)mActors[1].getActorP();
     if (pCatDoor == NULL) {
@@ -1190,8 +1135,6 @@ void daPeru_c::_catdoor_open() {
     }
 }
 
-/* 80D4A920-80D4A984 003B20 0064+00 1/1 0/0 0/0 .text            _catdoor_open_demoskip__8daPeru_cFv
- */
 void daPeru_c::_catdoor_open_demoskip() {
     daObjCatDoor_c* pCatDoor = (daObjCatDoor_c*)mActors[1].getActorP();
     if (pCatDoor == NULL) {
@@ -1202,7 +1145,6 @@ void daPeru_c::_catdoor_open_demoskip() {
     }
 }
 
-/* 80D4A984-80D4AA18 003B84 0094+00 1/0 0/0 0/0 .text            cutAppear_skip__8daPeru_cFi */
 int daPeru_c::cutAppear_skip(int param_1) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* pCutId = dComIfGp_evmng_getMyIntegerP(param_1, "cut_id");
@@ -1217,8 +1159,6 @@ int daPeru_c::cutAppear_skip(int param_1) {
     return _cutAppear_skip_Main(*pCutId);
 }
 
-/* 80D4AA18-80D4AAF0 003C18 00D8+00 1/1 0/0 0/0 .text            _cutAppear_skip_Init__8daPeru_cFRCi
- */
 int daPeru_c::_cutAppear_skip_Init(int const& param_1) {
     switch (param_1) {
     case 10:
@@ -1238,8 +1178,6 @@ int daPeru_c::_cutAppear_skip_Init(int const& param_1) {
     return 0;
 }
 
-/* 80D4AAF0-80D4AB08 003CF0 0018+00 1/1 0/0 0/0 .text            _cutAppear_skip_Main__8daPeru_cFRCi
- */
 int daPeru_c::_cutAppear_skip_Main(int const& param_0) {
     int rv = 0;
     if (param_0 == 10) {
@@ -1248,27 +1186,22 @@ int daPeru_c::_cutAppear_skip_Main(int const& param_0) {
     return rv;
 }
 
-/* 80D4AB08-80D4AB28 003D08 0020+00 1/0 0/0 0/0 .text            daPeru_Create__FPv */
 static int daPeru_Create(void* i_this) {
     return static_cast<daPeru_c*>(i_this)->create();
 }
 
-/* 80D4AB28-80D4AB48 003D28 0020+00 1/0 0/0 0/0 .text            daPeru_Delete__FPv */
 static int daPeru_Delete(void* i_this) {
     return static_cast<daPeru_c*>(i_this)->Delete();
 }
 
-/* 80D4AB48-80D4AB68 003D48 0020+00 1/0 0/0 0/0 .text            daPeru_Execute__FPv */
 static int daPeru_Execute(void* i_this) {
     return static_cast<daPeru_c*>(i_this)->Execute();
 }
 
-/* 80D4AB68-80D4AB88 003D68 0020+00 1/0 0/0 0/0 .text            daPeru_Draw__FPv */
 static int daPeru_Draw(void* i_this) {
     return static_cast<daPeru_c*>(i_this)->Draw();
 }
 
-/* 80D4AB88-80D4AB90 003D88 0008+00 1/0 0/0 0/0 .text            daPeru_IsDelete__FPv */
 static int daPeru_IsDelete(void* i_this) {
     return 1;
 }
@@ -1276,7 +1209,6 @@ static int daPeru_IsDelete(void* i_this) {
 AUDIO_INSTANCES
 
 
-/* 80D4C61C-80D4C63C -00001 0020+00 1/0 0/0 0/0 .data            daPeru_MethodTable */
 static actor_method_class daPeru_MethodTable = {
     (process_method_func)daPeru_Create,
     (process_method_func)daPeru_Delete,
@@ -1285,7 +1217,6 @@ static actor_method_class daPeru_MethodTable = {
     (process_method_func)daPeru_Draw,
 };
 
-/* 80D4C63C-80D4C66C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_PERU */
 extern actor_process_profile_definition g_profile_PERU = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

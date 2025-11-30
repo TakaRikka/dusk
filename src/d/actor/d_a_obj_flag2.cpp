@@ -54,12 +54,10 @@ public:
 daObjFlag2_Hio_c M_hio;
 #endif
 
-/* 80BEE0DC-80BEE0F0 000000 0014+00 5/5 0/0 0/0 .rodata          M_attr__12daObjFlag2_c */
 daObjFlag2_Attr_c const daObjFlag2_c::M_attr = {
     -2.0f, 0.74f, 0.68f, 40.0f, 100.0f,
 };
 
-/* 80BEE220-80BEE31C 000000 00FC+00 1/1 0/0 0/0 .data            l_pennant_flag_pos */
 static Vec l_pennant_flag_pos[21] = {
     0.0f,   0.0f,   500.0f, 0.0f,   30.0f,  400.0f, 0.0f,    -30.0f, 400.0f, 0.0f,   60.0f,
     300.0f, 0.0f,   0.0f,   300.0f, 0.0f,   -60.0f, 300.0f,  0.0f,   90.0f,  200.0f, 0.0f,
@@ -69,8 +67,6 @@ static Vec l_pennant_flag_pos[21] = {
     -30.0f, 0.0f,   0.0f,   -90.0f, 0.0f,   0.0f,   -150.0f, 0.0f,
 };
 
-/* 80BEC658-80BEC790 000078 0138+00 1/1 0/0 0/0 .text
- * initFlagPos__11FlagCloth_cFP4cXyzP10fopAc_ac_c               */
 void FlagCloth_c::initFlagPos(cXyz* pFlagPos, fopAc_ac_c* i_actor) {
     mpFlagPosition = pFlagPos;
     cXyz direction;
@@ -96,22 +92,19 @@ void FlagCloth_c::initFlagPos(cXyz* pFlagPos, fopAc_ac_c* i_actor) {
     initCcSphere(i_actor);
 }
 
-/* 80BEE31C-80BEE3C4 0000FC 00A8+00 1/1 0/0 0/0 .data            l_texCoord_64x64 */
 static f32 l_texCoord_64x64[42] = {
     1.0,  0.5,  0.8f, 0.4f, 0.8f, 0.6f, 0.6f, 0.3f, 0.6f, 0.5,  0.6f, 0.7f, 0.4f, 0.2f,
     0.4f, 0.4f, 0.4f, 0.6f, 0.4f, 0.8f, 0.2f, 0.1f, 0.2f, 0.3f, 0.2f, 0.5,  0.2f, 0.7f,
     0.2f, 0.9f, 0.0,  0.0,  0.0,  0.2f, 0.0,  0.4f, 0.0,  0.6f, 0.0,  0.8f, 0.0,  1.0,
 };
 
-/* 80BEE3C4-80BEE480 0001A4 00A8+14 1/1 0/0 0/0 .data            l_texCoord */
 static f32 l_texCoord[42] = {
     0.0,  0.5,  0.2f, 0.4f, 0.2f, 0.6f, 0.4f, 0.3f, 0.4f, 0.5,  0.4f, 0.7f, 0.6f, 0.2f,
     0.6f, 0.4f, 0.6f, 0.6f, 0.6f, 0.8f, 0.8f, 0.1f, 0.8f, 0.3f, 0.8f, 0.5,  0.8f, 0.7f,
     0.8f, 0.9f, 1.0,  0.0,  1.0,  0.2f, 1.0,  0.4f, 1.0,  0.6f, 1.0,  0.8f, 1.0,  1.0,
 };
 
-/* 80BEE480-80BEE518 000260 0098+00 1/1 0/0 0/0 .data            l_pennant_flagDL */
-static u8 l_pennant_flagDL[152] ALIGN_DECL(32) = {
+static u8 l_pennant_flagDL[152] ATTRIBUTE_ALIGN(32) = {
     0x98, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x04, 0x04, 0x04, 0x05,
     0x05, 0x05, 0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x0D, 0x0D, 0x0D, 0x0E, 0x0E, 0x0E, 0x13, 0x13,
     0x13, 0x14, 0x14, 0x14, 0x98, 0x00, 0x09, 0x01, 0x01, 0x01, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04,
@@ -124,8 +117,6 @@ static u8 l_pennant_flagDL[152] ALIGN_DECL(32) = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 80BEC7CC-80BEC928 0001EC 015C+00 1/1 0/0 0/0 .text
- * calcFlagFactor__11FlagCloth_cFP4cXyzP4cXyzP4cXyzi            */
 cXyz FlagCloth_c::calcFlagFactor(cXyz* param_1, cXyz* param_2, cXyz* param_3, int param_4) {
     static int rel_pos_idx_tbl[126] = {
         1,  2,  -1, -1, -1, -1, 3,  4,  2,  0,  -1, -1, 0,  1,  4,  5,  -1, -1, 6,  7,  4,
@@ -159,8 +150,6 @@ cXyz FlagCloth_c::calcFlagFactor(cXyz* param_1, cXyz* param_2, cXyz* param_3, in
     return flagFactor;
 }
 
-/* 80BEC928-80BECAE0 000348 01B8+00 1/1 0/0 0/0 .text
- * calcFlagFactorSub__11FlagCloth_cFP4cXyzP4cXyzP4cXyzf         */
 void FlagCloth_c::calcFlagFactorSub(cXyz* param_1, cXyz* param_2, cXyz* param_3, f32 param_4) {
     cXyz acStack_2c = *param_2 - *param_1;
     param_4 = acStack_2c.abs() - param_4;
@@ -170,7 +159,6 @@ void FlagCloth_c::calcFlagFactorSub(cXyz* param_1, cXyz* param_2, cXyz* param_3,
     *param_3 += cStack_38;
 }
 
-/* 80BECAE0-80BECC34 000500 0154+00 2/2 0/0 0/0 .text calcFlagNormal__11FlagCloth_cFP4cXyzi */
 void FlagCloth_c::calcFlagNormal(cXyz* o_normal, int param_2) {
     static int rel_pos_idx_tbl[147] = {
         1,  2,  -1, -1, -1, -1, -1, 3,  4,  2,  0,  -1, -1, -1, 0,  1,  4,  5,  -1, -1, -1,
@@ -201,8 +189,6 @@ void FlagCloth_c::calcFlagNormal(cXyz* o_normal, int param_2) {
     o_normal->set(cStack_60);
 }
 
-/* 80BECC34-80BECC78 000654 0044+00 1/1 0/0 0/0 .text            calcFlagNormalBack__11FlagCloth_cFv
- */
 inline void FlagCloth_c::calcFlagNormalBack() {
     cXyz* pNormal = getNormal();
     cXyz* pNormalBack = getNormalBack();
@@ -211,7 +197,6 @@ inline void FlagCloth_c::calcFlagNormalBack() {
     }
 }
 
-/* 80BECC78-80BECCE4 000698 006C+00 1/1 0/0 0/0 .text initCcSphere__11FlagCloth_cFP10fopAc_ac_c */
 void FlagCloth_c::initCcSphere(fopAc_ac_c* i_actor) {
     const static dCcD_SrcSph ccSphSrc = {
         {
@@ -231,7 +216,6 @@ void FlagCloth_c::initCcSphere(fopAc_ac_c* i_actor) {
     mSph.SetC(getTargetPos());
 }
 
-/* 80BECCE4-80BECD98 000704 00B4+00 1/1 0/0 0/0 .text            setCcSphere__11FlagCloth_cFv */
 void FlagCloth_c::setCcSphere() {
     if (mSph.ChkTgHit()) {
         if (mSph.GetTgHitObj()->ChkAtType(AT_TYPE_BOOMERANG)) {
@@ -247,7 +231,6 @@ void FlagCloth_c::setCcSphere() {
     dComIfG_Ccsp()->Set(&mSph);
 }
 
-/* 80BECD98-80BECF30 0007B8 0198+00 1/1 0/0 0/0 .text            execute__11FlagCloth_cFv */
 void FlagCloth_c::execute() {
     cXyz direction;
     f32 power;
@@ -280,7 +263,6 @@ void FlagCloth_c::execute() {
     DCStoreRangeNoSync(getNormalBack(), sizeof(cXyz) * 21);
 }
 
-/* 80BECF30-80BED22C 000950 02FC+00 1/0 0/0 0/0 .text            draw__11FlagCloth_cFv */
 void FlagCloth_c::draw() {
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
@@ -331,7 +313,6 @@ void FlagCloth_c::draw() {
     J3DShape::resetVcdVatCache();
 }
 
-/* 80BED22C-80BED368 000C4C 013C+00 1/1 0/0 0/0 .text            create_init__12daObjFlag2_cFv */
 void daObjFlag2_c::create_init() {
     int* pOffset = (int*)dComIfG_getObjectRes(daSetBgObj_c::getArcName(this), "spec.dat");
     f32 offset = (u16)*pOffset;
@@ -353,14 +334,12 @@ void daObjFlag2_c::create_init() {
     #endif
 }
 
-/* 80BED368-80BED3B8 000D88 0050+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjFlag2_cFv */
 void daObjFlag2_c::initBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
 }
 
-/* 80BED3B8-80BED44C 000DD8 0094+00 1/1 0/0 0/0 .text            initCollision__12daObjFlag2_cFv */
 void daObjFlag2_c::initCollision() {
     const static dCcD_SrcCyl ccCylSrc = {
         {
@@ -384,12 +363,10 @@ void daObjFlag2_c::initCollision() {
     setCollision();
 }
 
-/* 80BED44C-80BED480 000E6C 0034+00 2/2 0/0 0/0 .text            setCollision__12daObjFlag2_cFv */
 void daObjFlag2_c::setCollision() {
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 80BED480-80BED680 000EA0 0200+00 1/1 0/0 0/0 .text            createHeap__12daObjFlag2_cFv */
 int daObjFlag2_c::createHeap() {
     s8 flagNum = (u8)shape_angle.x;
     if (mFlagValid) {
@@ -422,12 +399,10 @@ int daObjFlag2_c::createHeap() {
     return mModel != NULL ? TRUE : FALSE;
 }
 
-/* 80BED680-80BED6A0 0010A0 0020+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjFlag2_c*>(i_this)->createHeap();
 }
 
-/* 80BED6A0-80BED7A4 0010C0 0104+00 1/1 0/0 0/0 .text            create__12daObjFlag2_cFv */
 int daObjFlag2_c::create() {
     fopAcM_ct(this, daObjFlag2_c);
     s8 flagNum = (u8)shape_angle.x;
@@ -453,7 +428,6 @@ int daObjFlag2_c::create() {
     return rv;
 }
 
-/* 80BEDCE0-80BEDDA0 001700 00C0+00 1/1 0/0 0/0 .text            draw__12daObjFlag2_cFv */
 int daObjFlag2_c::draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     dComIfGd_setListBG();
@@ -466,8 +440,6 @@ int daObjFlag2_c::draw() {
     return 1;
 }
 
-/* 80BEDDA0-80BEDDC0 0017C0 0020+00 1/0 0/0 0/0 .text            daObjFlag2_Draw__FP12daObjFlag2_c
- */
 static int daObjFlag2_Draw(daObjFlag2_c* i_this) {
     return i_this->draw();
 }
@@ -498,25 +470,20 @@ int daObjFlag2_c::execute() {
     return 1;
 }
 
-/* 80BEDDC0-80BEDEB0 0017E0 00F0+00 1/0 0/0 0/0 .text daObjFlag2_Execute__FP12daObjFlag2_c */
 static int daObjFlag2_Execute(daObjFlag2_c* i_this) {
     return i_this->execute();
 }
 
-/* 80BEDEB0-80BEDEB8 0018D0 0008+00 1/0 0/0 0/0 .text daObjFlag2_IsDelete__FP12daObjFlag2_c */
 static int daObjFlag2_IsDelete(daObjFlag2_c* i_this) {
     return 1;
 }
 
-/* 80BEDEB8-80BEDEE0 0018D8 0028+00 1/0 0/0 0/0 .text            daObjFlag2_Delete__FP12daObjFlag2_c
- */
 static int daObjFlag2_Delete(daObjFlag2_c* i_this) {
     fopAcM_GetID(i_this);
     i_this->~daObjFlag2_c();
     return 1;
 }
 
-/* 80BEDEE0-80BEE050 001900 0170+00 1/1 0/0 0/0 .text            __dt__12daObjFlag2_cFv */
 daObjFlag2_c::~daObjFlag2_c() {
     #ifdef DEBUG
     M_hio.dt();
@@ -528,13 +495,10 @@ daObjFlag2_c::~daObjFlag2_c() {
     dComIfG_resDelete(&mArcPhase, daSetBgObj_c::getArcName(this));
 }
 
-/* 80BEE050-80BEE070 001A70 0020+00 1/0 0/0 0/0 .text            daObjFlag2_Create__FP10fopAc_ac_c
- */
 static int daObjFlag2_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjFlag2_c*>(i_this)->create();
 }
 
-/* 80BEE95C-80BEE97C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjFlag2_Method */
 static actor_method_class l_daObjFlag2_Method = {
     (process_method_func)daObjFlag2_Create,
     (process_method_func)daObjFlag2_Delete,
@@ -543,7 +507,6 @@ static actor_method_class l_daObjFlag2_Method = {
     (process_method_func)daObjFlag2_Draw,
 };
 
-/* 80BEE97C-80BEE9AC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Flag2 */
 extern actor_process_profile_definition g_profile_Obj_Flag2 = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

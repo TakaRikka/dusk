@@ -25,21 +25,21 @@ public:
         /* 0x3 */ OUTPUT_OSR_AND_CONSOLE,
     };
 
-    /* 802E73E4 */ static JUTConsole* create(unsigned int, void*, u32);
-    /* 802E7354 */ static JUTConsole* create(unsigned int, unsigned int, JKRHeap*);
-    /* 802E746C */ JUTConsole(unsigned int, unsigned int, bool);
-    /* 802E75CC */ static size_t getObjectSizeFromBufferSize(unsigned int, unsigned int);
-    /* 802E75DC */ static size_t getLineFromObjectSize(u32, unsigned int);
-    /* 802E75EC */ void clear();
-    /* 802E7648 */ void doDraw(JUTConsole::EConsoleType) const;
-    /* 802E7BB8 */ void print_f(char const*, ...);
-    /* 802E7C38 */ void print(char const*);
-    /* 802E7F7C */ void dumpToTerminal(unsigned int);
-    /* 802E80A8 */ void scroll(int);
-    /* 802E8184 */ int getUsedLine() const;
-    /* 802E81A8 */ int getLineOffset() const;
+    static JUTConsole* create(unsigned int, void*, u32);
+    static JUTConsole* create(unsigned int, unsigned int, JKRHeap*);
+    JUTConsole(unsigned int, unsigned int, bool);
+    static size_t getObjectSizeFromBufferSize(unsigned int, unsigned int);
+    static size_t getLineFromObjectSize(u32, unsigned int);
+    void clear();
+    void doDraw(JUTConsole::EConsoleType) const;
+    void print_f(char const*, ...);
+    void print(char const*);
+    void dumpToTerminal(unsigned int);
+    void scroll(int);
+    int getUsedLine() const;
+    int getLineOffset() const;
 
-    /* 802E755C */ virtual ~JUTConsole();
+    virtual ~JUTConsole();
 
     void setOutput(unsigned int output) { mOutput = output; }
     void setPosition(int x, int y) {
@@ -123,13 +123,13 @@ public:
 */
 class JUTConsoleManager {
 public:
-    /* 802E81CC */ JUTConsoleManager();
-    /* 802E81F4 */ static JUTConsoleManager* createManager(JKRHeap*);
-    /* 802E8240 */ void appendConsole(JUTConsole*);
-    /* 802E82B0 */ void removeConsole(JUTConsole*);
-    /* 802E8384 */ void draw() const;
-    /* 802E8450 */ void drawDirect(bool) const;
-    /* 802E84C4 */ void setDirectConsole(JUTConsole*);
+    JUTConsoleManager();
+    static JUTConsoleManager* createManager(JKRHeap*);
+    void appendConsole(JUTConsole*);
+    void removeConsole(JUTConsole*);
+    void draw() const;
+    void drawDirect(bool) const;
+    void setDirectConsole(JUTConsole*);
 
     JUTConsole* getDirectConsole() const { return mDirectConsole; }
 

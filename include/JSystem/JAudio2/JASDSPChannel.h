@@ -23,21 +23,21 @@ struct JASDSPChannel {
         /* 3 */ CB_DROP,
     };
 
-    /* 8029D2F4 */ JASDSPChannel();
-    /* 8029D320 */ void free();
-    /* 8029D330 */ void start();
-    /* 8029D340 */ void drop();
-    /* 8029D534 */ void setPriority(u8);
-    /* 8029D65C */ void updateProc();
+    JASDSPChannel();
+    void free();
+    void start();
+    void drop();
+    void setPriority(u8);
+    void updateProc();
 
-    /* 8029D3C8 */ static void initAll();
-    /* 8029D44C */ static JASDSPChannel* alloc(u8, Callback, void*);
-    /* 8029D4BC */ static JASDSPChannel* allocForce(u8, Callback, void*);
-    /* 8029D540 */ static JASDSPChannel* getLowestChannel(int);
-    /* 8029D5D0 */ static JASDSPChannel* getLowestActiveChannel();
-    /* 8029D89C */ static void updateAll();
-    /* 8029D910 */ static int killActiveChannel();
-    /* 8029D948 */ static JASDSPChannel* getHandle(u32);
+    static void initAll();
+    static JASDSPChannel* alloc(u8, Callback, void*);
+    static JASDSPChannel* allocForce(u8, Callback, void*);
+    static JASDSPChannel* getLowestChannel(int);
+    static JASDSPChannel* getLowestActiveChannel();
+    static void updateAll();
+    static int killActiveChannel();
+    static JASDSPChannel* getHandle(u32);
 
     static JASDSPChannel* sDspChannels;
 

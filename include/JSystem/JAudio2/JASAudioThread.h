@@ -15,13 +15,13 @@ enum JASAudioMessage {
  * 
  */
 struct JASAudioThread : public JKRThread, public JASGlobalInstance<JASAudioThread> {
-    /* 8029CCDC */ JASAudioThread(int, int, u32);
-    /* 8029CD4C */ static void create(s32);
-    /* 8029CDC0 */ void stop();
-    /* 8029CDEC */ virtual void* run();
-    /* 8029CF68 */ static void DMACallback();
-    /* 8029CFBC */ static void DSPCallback(void*);
-    /* 8029D028 */ virtual ~JASAudioThread() {}
+    JASAudioThread(int, int, u32);
+    static void create(s32);
+    void stop();
+    virtual void* run();
+    static void DMACallback();
+    static void DSPCallback(void*);
+    virtual ~JASAudioThread() {}
 
     static JASAudioThread* getThreadPointer() { return getInstance(); }
     static int getDSPSyncCount() { return snIntCount; }

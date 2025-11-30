@@ -37,7 +37,7 @@ class daNpcTks_HIO_c
 
 class daNpcTks_Param_c {
 public:
-    /* 80B1DCEC */ virtual ~daNpcTks_Param_c() {}
+    virtual ~daNpcTks_Param_c() {}
 
     static daNpcTks_HIOParam const m;
 };
@@ -62,53 +62,53 @@ class daNpcTks_c : public daNpcF_c {
 public:
     typedef void (daNpcTks_c::*actionFunc)();
 
-    /* 80B1462C */ daNpcTks_c();
-    /* 80B14844 */ ~daNpcTks_c();
-    /* 80B14AF8 */ cPhs__Step Create();
-    /* 80B14ED0 */ int CreateHeap();
-    /* 80B153D8 */ int Delete();
-    /* 80B1540C */ int Execute();
-    /* 80B15430 */ int Draw();
-    /* 80B1548C */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80B15650 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B15670 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B156BC */ void setMtx();
-    /* 80B157C0 */ bool setExpressionAnm(int, bool);
-    /* 80B1590C */ bool setExpressionBtp(int);
-    /* 80B159E0 */ void setMotion(int, f32, int);
-    /* 80B15A24 */ void reset();
-    /* 80B160A8 */ inline BOOL setAction(actionFunc);
-    /* 80B16148 */ void wait();
-    /* 80B16344 */ void setMotionAnm(int, f32);
-    /* 80B16634 */ void waitNude();
-    /* 80B1682C */ void waitLv6();
-    /* 80B16B74 */ void talk();
-    /* 80B16FDC */ void setExpression(int, f32);
-    /* 80B17008 */ void hide();
-    /* 80B17420 */ void shake();
-    /* 80B175F4 */ void showUp();
-    /* 80B17734 */ void showUpWait();
-    /* 80B17B70 */ void lookAroundA();
-    /* 80B17D44 */ void lookAroundB();
-    /* 80B17F18 */ void in();
-    /* 80B18070 */ void damage();
-    /* 80B181EC */ void broken();
-    /* 80B183E8 */ void demo_appear();
-    /* 80B18D44 */ void demo_scannon();
-    /* 80B1926C */ void demo_Lv6Gate();
-    /* 80B1946C */ void demo_farewell();
-    /* 80B19DAC */ void demo_warpBack();
-    /* 80B1A30C */ void demo_walkBack();
-    /* 80B1A888 */ void demo_Lv7Start();
-    /* 80B1B6A0 */ void demo_Lv3PickUp();
-    /* 80B1BD64 */ void demo_Lv6PickUp();
-    /* 80B1C480 */ inline void setParam();
-    /* 80B1C4F8 */ inline BOOL main();
-    /* 80B1CB54 */ inline BOOL ctrlBtk();
-    /* 80B1CC28 */ inline void setAttnPos();
-    /* 80B1CFD0 */ inline void lookat();
-    /* 80B1D1FC */ inline BOOL drawDbgInfo();
-    /* 80B1D204 */ inline void drawOtherMdls();
+    daNpcTks_c();
+    ~daNpcTks_c();
+    cPhs__Step Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void setMtx();
+    bool setExpressionAnm(int, bool);
+    bool setExpressionBtp(int);
+    void setMotion(int, f32, int);
+    void reset();
+    inline BOOL setAction(actionFunc);
+    void wait();
+    void setMotionAnm(int, f32);
+    void waitNude();
+    void waitLv6();
+    void talk();
+    void setExpression(int, f32);
+    void hide();
+    void shake();
+    void showUp();
+    void showUpWait();
+    void lookAroundA();
+    void lookAroundB();
+    void in();
+    void damage();
+    void broken();
+    void demo_appear();
+    void demo_scannon();
+    void demo_Lv6Gate();
+    void demo_farewell();
+    void demo_warpBack();
+    void demo_walkBack();
+    void demo_Lv7Start();
+    void demo_Lv3PickUp();
+    void demo_Lv6PickUp();
+    inline void setParam();
+    inline BOOL main();
+    inline BOOL ctrlBtk();
+    inline void setAttnPos();
+    inline void lookat();
+    inline BOOL drawDbgInfo();
+    inline void drawOtherMdls();
 
     u8 getType() { return fopAcM_GetParam(this) & 0xFF; }
     u8 getSwitchNo() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }

@@ -102,8 +102,8 @@ STATIC_ASSERT(sizeof(e_hzelda_class) == 0x1460);
 
 class daE_HZELDA_HIO_c {
 public:
-    /* 806F0D4C */ daE_HZELDA_HIO_c();
-    /* 806F546C */ virtual ~daE_HZELDA_HIO_c() {}
+    daE_HZELDA_HIO_c();
+    virtual ~daE_HZELDA_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mModelSize;

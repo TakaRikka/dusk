@@ -6,15 +6,15 @@
 
 class daTagYami_c : public fopAc_ac_c {
 public:
-    /* 80D659F8 */ int create();
-    /* 80D65C24 */ int Execute();
-    /* 80D65C60 */ void calcCoC(cXyz&);
-    /* 80D65D08 */ void col_set();
-    /* 80D65D0C */ u32 chk_CoHit();
-    /* 80D65D60 */ f32 getPlDist();
-    /* 80D65EEC */ void onMidnaTagSw();
-    /* 80D65F24 */ void offMidnaTagSw2();
-    /* 80D66100 */ void setCoC(cXyz i_coC) { mCoC = i_coC; }
+    int create();
+    int Execute();
+    void calcCoC(cXyz&);
+    void col_set();
+    u32 chk_CoHit();
+    f32 getPlDist();
+    void onMidnaTagSw();
+    void offMidnaTagSw2();
+    void setCoC(cXyz i_coC) { mCoC = i_coC; }
 
     u8 get_MTagSw() { return fopAcM_GetParamBit(this, 8, 8); }
     u8 get_MTagSw2() { return fopAcM_GetParamBit(this, 16, 8); }

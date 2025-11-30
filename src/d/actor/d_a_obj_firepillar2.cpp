@@ -10,15 +10,12 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
-#include "dol2asm.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 80BE9CB8-80BE9CD8 000078 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjFPillar2_c*>(i_this)->CreateHeap();
 }
 
-/* 80BE9CD8-80BE9D5C 000098 0084+00 1/1 0/0 0/0 .text            initBaseMtx__15daObjFPillar2_cFv */
 void daObjFPillar2_c::initBaseMtx() {
     if (getKind() == KIND_MAGMA_POLE) {
         mDoMtx_stack_c::transS(current.pos);
@@ -31,7 +28,6 @@ void daObjFPillar2_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80BE9D5C-80BE9DDC 00011C 0080+00 2/2 0/0 0/0 .text            setBaseMtx__15daObjFPillar2_cFv */
 void daObjFPillar2_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -42,16 +38,13 @@ void daObjFPillar2_c::setBaseMtx() {
     }
 }
 
-/* 80BEB548-80BEB54C -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Obj_yogan";
 
-/* 80BEB54C-80BEB564 000024 0018+00 1/1 0/0 0/0 .data            l_cull_box */
-SECTION_DATA static Vec l_cull_box[2] = {
+static Vec l_cull_box[2] = {
     {-150.0f, -10.0f, -150.0f},
     {150.0f, 1200.0f, 150.0f},
 };
 
-/* 80BEB564-80BEB5B0 00003C 004C+00 1/1 0/0 0/0 .data            l_cps_src */
 static dCcD_SrcCps l_cps_src = {
     {
         {0x0, {{0x100, 0x1, 0x1d}, {0x0, 0x0}, 0x0}}, // mObj
@@ -64,7 +57,6 @@ static dCcD_SrcCps l_cps_src = {
     } // mCpsAttr
 };
 
-/* 80BE9DDC-80BEA034 00019C 0258+00 1/1 0/0 0/0 .text            Create__15daObjFPillar2_cFv */
 int daObjFPillar2_c::Create() {
     if (getKind() == KIND_MAGMA_POLE) {
         switch(getSize()) {
@@ -114,7 +106,6 @@ int daObjFPillar2_c::Create() {
     return 1;
 }
 
-/* 80BEA034-80BEA1E0 0003F4 01AC+00 1/1 0/0 0/0 .text            CreateHeap__15daObjFPillar2_cFv */
 int daObjFPillar2_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 8);
     JUT_ASSERT(363, modelData != NULL);
@@ -137,7 +128,6 @@ int daObjFPillar2_c::CreateHeap() {
     return 1;
 }
 
-/* 80BEA228-80BEA400 0005E8 01D8+00 1/1 0/0 0/0 .text            create__15daObjFPillar2_cFv */
 int daObjFPillar2_c::create() {
     fopAcM_ct(this, daObjFPillar2_c);
     if (mInitAngles == 0) {
@@ -171,7 +161,6 @@ int daObjFPillar2_c::create() {
     return rv;
 }
 
-/* 80BEA584-80BEA734 000944 01B0+00 1/1 0/0 0/0 .text            execute__15daObjFPillar2_cFv */
 int daObjFPillar2_c::execute() {
     action();
     field_0x944.x = scale.x;
@@ -201,7 +190,6 @@ int daObjFPillar2_c::execute() {
     return 1;
 }
 
-/* 80BEA734-80BEA808 000AF4 00D4+00 1/1 0/0 0/0 .text            action__15daObjFPillar2_cFv */
 void daObjFPillar2_c::action() {
     static daObjFPillar2_c::actionFunc l_func[3] = {
         &daObjFPillar2_c::actionOff,
@@ -218,50 +206,42 @@ void daObjFPillar2_c::action() {
 }
 
 
-/* 80BEB5F8-80BEB600 0000D0 0006+02 1/1 0/0 0/0 .data            l_pipe_fire_id$4005 */
-SECTION_DATA static u16 l_pipe_fire_id[3] = {
+static u16 l_pipe_fire_id[3] = {
     0x84E1,
     0x84E2,
     0x84E3,
 };
 
-/* 80BEB600-80BEB608 0000D8 0006+02 1/1 0/0 0/0 .data            l_yogan_foot_id$4014 */
-SECTION_DATA static u16 l_yogan_foot_id[3] = {
+static u16 l_yogan_foot_id[3] = {
     0x816F,
     0x8170,
     0x8171,
 };
 
-/* 80BEB608-80BEB610 0000E0 0006+02 1/0 0/0 0/0 .data            l_yogan_headL_id$4092 */
-SECTION_DATA static u16 l_yogan_headL_id[3] = {
+static u16 l_yogan_headL_id[3] = {
     0x84E4,
     0x84E5,
     0x84E6,
 };
 
-/* 80BEB610-80BEB618 0000E8 0006+02 1/0 0/0 0/0 .data            l_yogan_headM_id$4093 */
-SECTION_DATA static u16 l_yogan_headM_id[3] = {
+static u16 l_yogan_headM_id[3] = {
     0x84E7,
     0x84E8,
     0x84E9,
 };
 
-/* 80BEB618-80BEB620 0000F0 0006+02 1/0 0/0 0/0 .data            l_yogan_headS_id$4094 */
-SECTION_DATA static u16 l_yogan_headS_id[3] = {
+static u16 l_yogan_headS_id[3] = {
     0x84EA,
     0x84EB,
     0x84EC,
 };
 
-/* 80BEB620-80BEB62C -00001 000C+00 1/1 0/0 0/0 .data            l_yogan_head_id$4095 */
-SECTION_DATA static u16* l_yogan_head_id[3] = {
+static u16* l_yogan_head_id[3] = {
     l_yogan_headS_id,
     l_yogan_headM_id,
     l_yogan_headL_id,
 };
 
-/* 80BEA808-80BEA854 000BC8 004C+00 3/3 0/0 0/0 .text            actionOffInit__15daObjFPillar2_cFv
- */
 void daObjFPillar2_c::actionOffInit() {
     u8 arg0 = getArg0();
     if (arg0 == 0xff) {
@@ -274,7 +254,6 @@ void daObjFPillar2_c::actionOffInit() {
     mAction = ACTION_OFF;
 }
 
-/* 80BEA854-80BEA98C 000C14 0138+00 1/0 0/0 0/0 .text            actionOff__15daObjFPillar2_cFv */
 void daObjFPillar2_c::actionOff() {
     cLib_chaseF(&field_0x944.y, 0.0f, scale.y * 0.1f);
     if (mActionTimer == 0) {
@@ -300,7 +279,6 @@ void daObjFPillar2_c::actionOff() {
     }
 }
 
-/* 80BEA98C-80BEAAE4 000D4C 0158+00 1/1 0/0 0/0 .text actionOnWaitInit__15daObjFPillar2_cFv */
 void daObjFPillar2_c::actionOnWaitInit() {
     if (getKind() == KIND_PIPE_FIRE) {
         for (int i = 0; i < 3; i++) {
@@ -320,8 +298,6 @@ void daObjFPillar2_c::actionOnWaitInit() {
     mAction = ACTION_ON_WAIT;
 }
 
-/* 80BEAAE4-80BEAC68 000EA4 0184+00 1/0 0/0 0/0 .text            actionOnWait__15daObjFPillar2_cFv
- */
 void daObjFPillar2_c::actionOnWait() {
     cLib_chaseF(&field_0x944.y, scale.y * 0.1f, scale.y * 0.02f);
     if (mActionTimer == 0) {
@@ -349,8 +325,6 @@ void daObjFPillar2_c::actionOnWait() {
     }
 }
 
-/* 80BEAC68-80BEADD0 001028 0168+00 1/1 0/0 0/0 .text            actionOnInit__15daObjFPillar2_cFv
- */
 void daObjFPillar2_c::actionOnInit() {
     if (getKind() == KIND_MAGMA_POLE) {
         for (int i = 0; i < 3; i++) {
@@ -376,7 +350,6 @@ void daObjFPillar2_c::actionOnInit() {
     mAction = ACTION_ON;
 }
 
-/* 80BEADD0-80BEB1B4 001190 03E4+00 1/0 0/0 0/0 .text            actionOn__15daObjFPillar2_cFv */
 void daObjFPillar2_c::actionOn() {
     f32 target = scale.y;
     if (mActionTimer == 0) {
@@ -461,7 +434,6 @@ void daObjFPillar2_c::actionOn() {
     }
 }
 
-/* 80BEB1B4-80BEB278 001574 00C4+00 1/1 0/0 0/0 .text            draw__15daObjFPillar2_cFv */
 int daObjFPillar2_c::draw() {
     if (getKind() == KIND_MAGMA_POLE) {
         g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -475,7 +447,6 @@ int daObjFPillar2_c::draw() {
     return 1;
 }
 
-/* 80BEB278-80BEB3C8 001638 0150+00 1/1 0/0 0/0 .text            _delete__15daObjFPillar2_cFv */
 int daObjFPillar2_c::_delete() {
     if (field_0x980 != NULL) {
         field_0x980->becomeInvalidEmitter();
@@ -506,30 +477,24 @@ int daObjFPillar2_c::_delete() {
     return 1;
 }
 
-/* 80BEB3C8-80BEB3E8 001788 0020+00 1/0 0/0 0/0 .text daObjFPillar2_Draw__FP15daObjFPillar2_c */
 static int daObjFPillar2_Draw(daObjFPillar2_c* i_this) {
     return i_this->draw();
 }
 
-/* 80BEB3E8-80BEB408 0017A8 0020+00 1/0 0/0 0/0 .text daObjFPillar2_Execute__FP15daObjFPillar2_c
- */
 static int daObjFPillar2_Execute(daObjFPillar2_c* i_this) {
     return i_this->execute();
 }
 
-/* 80BEB408-80BEB428 0017C8 0020+00 1/0 0/0 0/0 .text daObjFPillar2_Delete__FP15daObjFPillar2_c */
 static int daObjFPillar2_Delete(daObjFPillar2_c* i_this) {
     fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
-/* 80BEB428-80BEB448 0017E8 0020+00 1/0 0/0 0/0 .text daObjFPillar2_Create__FP10fopAc_ac_c */
 static int daObjFPillar2_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return static_cast<daObjFPillar2_c*>(i_this)->create();
 }
 
-/* 80BEB62C-80BEB64C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjFPillar2_Method */
 static actor_method_class l_daObjFPillar2_Method = {
     (process_method_func)daObjFPillar2_Create,
     (process_method_func)daObjFPillar2_Delete,
@@ -538,7 +503,6 @@ static actor_method_class l_daObjFPillar2_Method = {
     (process_method_func)daObjFPillar2_Draw,
 };
 
-/* 80BEB64C-80BEB67C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_FirePillar2 */
 extern actor_process_profile_definition g_profile_Obj_FirePillar2 = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

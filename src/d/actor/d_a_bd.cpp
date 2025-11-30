@@ -14,7 +14,6 @@
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* ############################################################################################## */
 
 
 struct land_pos {
@@ -24,7 +23,6 @@ struct land_pos {
     /* 0x0C */ f32 z;
 };
 
-/* 804D9F88-804DA0C8 000000 0140+00 2/2 0/0 0/0 .data            land_pos103 */
 static land_pos land_pos103[20] = {
     {0, -556.0f, 319.0f, 6063.0f},  {0, 264.0f, 501.0f, 5199.0f},   {0, -313.0f, 267.0f, 4460.0f},
     {0, -714.0f, 116.0f, 3704.0f},  {0, -1208.0f, 100.0f, 2491.0f}, {0, -2478.0f, 135.0f, 3929.0f},
@@ -35,7 +33,6 @@ static land_pos land_pos103[20] = {
     {0, 605.0f, 81.0f, -2006.0f},   {-1, 0.0f, 0.0f, 0.0f},
 };
 
-/* 804DA0C8-804DA208 000140 0140+00 2/2 0/0 0/0 .data            land_pos127 */
 static land_pos land_pos127[20] = {
     {0, 3238.0f, 66.0f, -3141.0f},   {0, 2721.0f, 79.0f, -2194.0f}, {0, 3885.0f, 35.0f, -1399.0f},
     {0, 3862.0f, 35.0f, -220.0f},    {0, 4581.0f, 35.0f, 651.0f},   {0, 5495.0f, 35.0f, 1558.0f},
@@ -46,14 +43,11 @@ static land_pos land_pos127[20] = {
     {0, -2302.0f, 1216.0f, -242.0f}, {-1, 0.0f, 0.0f, 0.0f},
 };
 
-/* 804DA208-804DA214 000280 000C+00 3/3 0/0 0/0 .data            wait_bck */
 static int wait_bck[3] = {ANM_PITA_LEFTUP, ANM_PITA_RIGHT, ANM_PITA_DOWN};
 
-/* 804DA36C-804DA38C 000054 0020+00 8/10 0/0 0/0 .bss             l_HIO */
 static u8 l_HIOInit;
 static daBd_HIO_c l_HIO;
 
-/* 804DA3BC-804DA3EC 0000A4 0030+00 0/1 0/0 0/0 .bss             land_sp_pos */
 static cXyz land_sp_pos[4] = {
     cXyz(3350.0f, 474.0f, 1760.0f),
     cXyz(553.0f, 395.0f, -599.0f),
@@ -63,7 +57,6 @@ static cXyz land_sp_pos[4] = {
 
 static int rope_pt;
 
-/* 804D6C4C-804D6CA4 0000EC 0058+00 1/1 0/0 0/0 .text            __ct__10daBd_HIO_cFv */
 daBd_HIO_c::daBd_HIO_c() {
     id = -1;
     mBasicSize = 1.2f;
@@ -90,16 +83,13 @@ void daBd_HIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* ############################################################################################## */
 
-/* 804D6CA4-804D6D54 000144 00B0+00 8/8 0/0 0/0 .text            anm_init__FP8bd_classifUcf */
 static void anm_init(bd_class* i_this, int i_anmID, f32 i_morf, u8 i_attr, f32 i_speed) {
     i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Bd", i_anmID), i_attr, i_morf,
                            i_speed, 0.0f, -1.0f, NULL);
     i_this->mAnmID = i_anmID;
 }
 
-/* 804D6D54-804D6DD8 0001F4 0084+00 1/0 0/0 0/0 .text            daBd_Draw__FP8bd_class */
 static int daBd_Draw(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -111,9 +101,7 @@ static int daBd_Draw(bd_class* i_this) {
     return 1;
 }
 
-/* ############################################################################################## */
 
-/* 804D6DD8-804D6ED4 000278 00FC+00 1/1 0/0 0/0 .text            way_bg_check__FP8bd_class */
 static int way_bg_check(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -136,9 +124,7 @@ static int way_bg_check(bd_class* i_this) {
     return 0;
 }
 
-/* ############################################################################################## */
 
-/* 804D6F10-804D7210 0003B0 0300+00 1/1 0/0 0/0 .text            s_a_sub__FPvPv */
 static void* s_a_sub(void* i_target, void* i_bird) {
     fopAc_ac_c* a_target = (fopAc_ac_c*)i_target;
     bd_class* b_bird = (bd_class*)i_bird;
@@ -161,9 +147,7 @@ static void* s_a_sub(void* i_target, void* i_bird) {
     return NULL;
 }
 
-/* ############################################################################################## */
 
-/* 804D7210-804D7518 0006B0 0308+00 1/1 0/0 0/0 .text            pl_check__FP8bd_class */
 static void pl_check(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -207,7 +191,6 @@ static void pl_check(bd_class* i_this) {
     return;
 }
 
-/* 804D7518-804D75D0 0009B8 00B8+00 1/1 0/0 0/0 .text            pointBgCheck__FP4cXyzP4cXyz */
 static int pointBgCheck(cXyz* param_0, cXyz* param_1) {
     dBgS_LinChk sp20;
     cXyz spC = *param_1;
@@ -219,9 +202,7 @@ static int pointBgCheck(cXyz* param_0, cXyz* param_1) {
     return 0;
 }
 
-/* ############################################################################################## */
 
-/* 804D75D0-804D785C 000A70 028C+00 1/1 0/0 0/0 .text            land_check__FP8bd_class */
 static int land_check(bd_class* i_this) {
     int land_pos_len;
     land_pos* land_pos;
@@ -287,9 +268,7 @@ static int land_check(bd_class* i_this) {
     return -1;
 }
 
-/* ############################################################################################## */
 
-/* 804D785C-804D7890 000CFC 0034+00 1/1 0/0 0/0 .text            drop_check__FP8bd_class */
 static void drop_check(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -300,18 +279,14 @@ static void drop_check(bd_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 804D7890-804D78FC 000D30 006C+00 1/1 0/0 0/0 .text            turn_set__FP8bd_class */
 static void turn_set(bd_class* i_this) {
     s16 angle_table[3] = {0x8000, 0x4000, -0x4000};
     s16 angle = angle_table[(int)cM_rndF(2.99f)];
     i_this->mTargetAngleY = i_this->enemy.current.angle.y + angle;
 }
 
-/* ############################################################################################## */
 
-/* 804D78FC-804D7DF4 000D9C 04F8+00 1/1 0/0 0/0 .text            bd_ground__FP8bd_class */
 static void bd_ground(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -420,9 +395,7 @@ static void bd_ground(bd_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 804D7DF4-804D82E4 001294 04F0+00 1/1 0/0 0/0 .text            bd_fly__FP8bd_class */
 static void bd_fly(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -542,9 +515,7 @@ static void bd_fly(bd_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 804D82E4-804D8648 001784 0364+00 1/1 0/0 0/0 .text            bd_landing__FP8bd_class */
 static void bd_landing(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -608,7 +579,6 @@ static void bd_landing(bd_class* i_this) {
                         (TREG_S(3) + 1000));
 }
 
-/* 804D8648-804D8798 001AE8 0150+00 1/1 0/0 0/0 .text            bd_landing2__FP8bd_class */
 static void bd_landing2(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -635,9 +605,7 @@ static void bd_landing2(bd_class* i_this) {
                         TREG_S(7) + 1000);
 }
 
-/* ############################################################################################## */
 
-/* 804D8798-804D8A34 001C38 029C+00 1/1 0/0 0/0 .text            bd_landing3__FP8bd_class */
 static void bd_landing3(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -680,9 +648,7 @@ static void bd_landing3(bd_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 804D8A34-804D8C48 001ED4 0214+00 1/1 0/0 0/0 .text            bd_rope__FP8bd_class */
 static void bd_rope(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -720,7 +686,6 @@ static void bd_rope(bd_class* i_this) {
     }
 }
 
-/* 804D8C48-804D8E20 0020E8 01D8+00 1/1 0/0 0/0 .text            bd_kkri__FP8bd_class */
 static void bd_kkri(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -753,7 +718,6 @@ static void bd_kkri(bd_class* i_this) {
     }
 }
 
-/* 804D8E20-804D8EB8 0022C0 0098+00 1/1 0/0 0/0 .text            bd_drop__FP8bd_class */
 static void bd_drop(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -772,9 +736,7 @@ static void bd_drop(bd_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 804D8EB8-804D91F8 002358 0340+00 2/1 0/0 0/0 .text            action__FP8bd_class */
 static void action(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -890,9 +852,7 @@ static void action(bd_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 804D91F8-804D959C 002698 03A4+00 2/1 0/0 0/0 .text            daBd_Execute__FP8bd_class */
 static int daBd_Execute(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daNpc_Kkri_c* kkri;
@@ -963,12 +923,10 @@ static int daBd_Execute(bd_class* i_this) {
     return 1;
 }
 
-/* 804D959C-804D95A4 002A3C 0008+00 1/0 0/0 0/0 .text            daBd_IsDelete__FP8bd_class */
 static int daBd_IsDelete(bd_class* i_this) {
     return 1;
 }
 
-/* 804D95A4-804D960C 002A44 0068+00 1/0 0/0 0/0 .text            daBd_Delete__FP8bd_class */
 static int daBd_Delete(bd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -984,7 +942,6 @@ static int daBd_Delete(bd_class* i_this) {
     return 1;
 }
 
-/* 804D960C-804D97D4 002AAC 01C8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     bd_class* a_this = (bd_class*)i_this;
 
@@ -1009,9 +966,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* ############################################################################################## */
 
-/* 804D981C-804D9BB8 002CBC 039C+00 1/0 0/0 0/0 .text            daBd_Create__FP10fopAc_ac_c */
 static int daBd_Create(fopAc_ac_c* i_act_this) {
     bd_class* i_this = (bd_class*)i_act_this;
     fopAcM_ct(i_act_this, bd_class);
@@ -1093,14 +1048,12 @@ static int daBd_Create(fopAc_ac_c* i_act_this) {
     return phase_state;
 }
 
-/* 804DA274-804DA294 -00001 0020+00 1/0 0/0 0/0 .data            l_daBd_Method */
 static actor_method_class l_daBd_Method = {
     (process_method_func)daBd_Create,  (process_method_func)daBd_Delete,
     (process_method_func)daBd_Execute, (process_method_func)daBd_IsDelete,
     (process_method_func)daBd_Draw,
 };
 
-/* 804DA294-804DA2C4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_BD */
 extern actor_process_profile_definition g_profile_BD = {
     fpcLy_CURRENT_e,       // mLayerID
     8,                     // mListID

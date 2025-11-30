@@ -5,8 +5,6 @@
 
 #include "d/actor/d_a_alink.h"
 
-/* 8011243C-80112458 10CD7C 001C+00 1/0 0/0 0/0 .text            getIronBallCenterPos__9daAlink_cFv
- */
 cXyz* daAlink_c::getIronBallCenterPos() {
     if (mEquipItem == fpcNm_ITEM_IRONBALL) {
         return &mIronBallCenterPos;
@@ -15,7 +13,6 @@ cXyz* daAlink_c::getIronBallCenterPos() {
     return NULL;
 }
 
-/* 80112458-80112474 10CD98 001C+00 1/0 0/0 0/0 .text            getIronBallBgHit__9daAlink_cCFv */
 int daAlink_c::getIronBallBgHit() const {
     if (mEquipItem == fpcNm_ITEM_IRONBALL) {
         return field_0x301c;
@@ -24,37 +21,30 @@ int daAlink_c::getIronBallBgHit() const {
     return 0;
 }
 
-/* 80112474-801124B4 10CDB4 0040+00 0/0 2/2 1/1 .text checkIronBallThrowMode__9daAlink_cCFv */
 bool daAlink_c::checkIronBallThrowMode() const {
     return mEquipItem == fpcNm_ITEM_IRONBALL &&
            (mItemVar0.field_0x3018 == 4 || mItemVar0.field_0x3018 == 5 || mItemVar0.field_0x3018 == 6 || mItemVar0.field_0x3018 == 3);
 }
 
-/* 801124B4-801124FC 10CDF4 0048+00 0/0 1/1 1/1 .text checkIronBallThrowReturnMode__9daAlink_cCFv
- */
 bool daAlink_c::checkIronBallThrowReturnMode() const {
     return mEquipItem == fpcNm_ITEM_IRONBALL && (mItemVar0.field_0x3018 == 4 || mItemVar0.field_0x3018 == 5 || mItemVar0.field_0x3018 == 6 ||
                                       mItemVar0.field_0x3018 == 7 || mItemVar0.field_0x3018 == 3);
 }
 
-/* 801124FC-80112524 10CE3C 0028+00 1/0 0/0 0/0 .text            checkIronBallReturn__9daAlink_cCFv
- */
 bool daAlink_c::checkIronBallReturn() const {
     return mEquipItem == fpcNm_ITEM_IRONBALL && mItemVar0.field_0x3018 == 7;
 }
 
-/* 80112524-80112568 10CE64 0044+00 1/0 0/0 0/0 .text checkIronBallGroundStop__9daAlink_cCFv */
 bool daAlink_c::checkIronBallGroundStop() const {
     return mEquipItem == fpcNm_ITEM_IRONBALL && mItemVar0.field_0x3018 != 0 && mItemVar0.field_0x3018 != 8 && field_0x301e == 0 &&
            field_0x301e < 10;
 }
 
-/* 80112568-80112628 10CEA8 00C0+00 5/5 0/0 0/0 .text setIronBallWaitUpperAnime__9daAlink_cFi */
 void daAlink_c::setIronBallWaitUpperAnime(int param_0) {
     if (!checkIronBallWaitAnime() && !checkIronBallPreSwingAnime() &&
         (mItemVar0.field_0x3018 == 0 || mItemVar0.field_0x3018 == 8) && (param_0 || checkNoUpperAnime())) {
         setUpperAnimeBaseSpeed(0x19C, daAlinkHIO_ironBall_c0::m.mWaitAnmSpeed,
-                               daAlinkHIO_basic_c0::m.mAnmBlendFactor);
+                               daAlinkHIO_basic_c0::m.mBasicInterpolation);
         setFacePriBck(0xE8);
         field_0x2f96 = 254;
         field_0x2f97 = 5;
@@ -62,8 +52,6 @@ void daAlink_c::setIronBallWaitUpperAnime(int param_0) {
     }
 }
 
-/* 80112628-801126F8 10CF68 00D0+00 1/1 0/0 0/0 .text            checkIronBallDelete__9daAlink_cFv
- */
 void daAlink_c::checkIronBallDelete() {
     if (mProcID == PROC_IRON_BALL_SUBJECT || mProcID == PROC_IRON_BALL_MOVE ||
         mProcID == PROC_IRON_BALL_THROW || mProcID == PROC_IRON_BALL_RETURN) {
@@ -78,7 +66,6 @@ void daAlink_c::checkIronBallDelete() {
     }
 }
 
-/* 801126F8-80112768 10D038 0070+00 2/2 0/0 0/0 .text            setIronBallReturn__9daAlink_cFi */
 void daAlink_c::setIronBallReturn(int param_0) {
     if (param_0 && field_0x301e != 0) {
         field_0x301e--;
@@ -89,8 +76,6 @@ void daAlink_c::setIronBallReturn(int param_0) {
     }
 }
 
-/* 80112768-801127F0 10D0A8 0088+00 2/2 0/0 0/0 .text            setIronBallBgCheckPos__9daAlink_cFv
- */
 void daAlink_c::setIronBallBgCheckPos() {
     cXyz sp8;
     mDoMtx_stack_c::transS(*mIronBallChainPos);
@@ -101,7 +86,6 @@ void daAlink_c::setIronBallBgCheckPos() {
     cLib_chaseF(&mSearchBallScale, 0.0f, 2.0f);
 }
 
-/* 801127F0-80112C80 10D130 0490+00 1/1 0/0 0/0 .text            setIronBallModel__9daAlink_cFv */
 void daAlink_c::setIronBallModel() {
     JKRHeap* prev_heap = setItemHeap();
 
@@ -184,8 +168,6 @@ void daAlink_c::setIronBallModel() {
     field_0x1778.SetCoVsGrp(0x60);
 }
 
-/* 80112C84-80112E7C 10D5C4 01F8+00 1/1 0/0 0/0 .text
- * setIronBallGroundVec__9daAlink_cFPC4cXyzP4cXyz               */
 int daAlink_c::setIronBallGroundVec(cXyz const* param_0, cXyz* param_1) {
     cXyz sp3C(param_0->x, param_0->y + 50.0f, param_0->z);
 
@@ -212,8 +194,6 @@ int daAlink_c::setIronBallGroundVec(cXyz const* param_0, cXyz* param_1) {
     return 0;
 }
 
-/* 80112E7C-80113CA0 10D7BC 0E24+00 1/1 0/0 0/0 .text            setIronBallChainPos__9daAlink_cFv
- */
 void daAlink_c::setIronBallChainPos() {
     cXyz sp2A4;
     cXyz sp298;
@@ -464,7 +444,6 @@ void daAlink_c::setIronBallChainPos() {
     }
 }
 
-/* 80113CA0-80113D58 10E5E0 00B8+00 1/1 0/0 0/0 .text checkIronBallReturnChange__9daAlink_cFv */
 BOOL daAlink_c::checkIronBallReturnChange() {
     if (mProcID != PROC_IRON_BALL_THROW ||
         (!(mBodyAngle.x > 0x400) && mIronBallBgChkPos.y < (current.pos.y - 200.0f)) ||
@@ -478,7 +457,6 @@ BOOL daAlink_c::checkIronBallReturnChange() {
     return false;
 }
 
-/* 80113D58-801150E4 10E698 138C+00 1/1 0/0 0/0 .text            setIronBallPos__9daAlink_cFv */
 void daAlink_c::setIronBallPos() {
     cXyz sp10C;
     cXyz sp100;
@@ -826,14 +804,10 @@ void daAlink_c::setIronBallPos() {
     field_0x2f1c->setEffectCenter(&tevStr, &mIronBallBgChkPos, 0x3B, 0x40000, var_r25 ? &mIronBallBgChkPos : NULL, NULL, NULL, fopAcM_GetRoomNo(this), field_0x3420, 0.0f);
 }
 
-/* 801150E4-8011510C 10FA24 0028+00 10/10 0/0 0/0 .text            checkIronBallAnime__9daAlink_cCFv
- */
 BOOL daAlink_c::checkIronBallAnime() const {
     return checkIronBallPreSwingAnime() || checkIronBallSwingAnime();
 }
 
-/* 8011510C-801151E0 10FA4C 00D4+00 1/1 0/0 0/0 .text            setIronBallReadyAnime__9daAlink_cFv
- */
 void daAlink_c::setIronBallReadyAnime() {
     resetUpperAnime(UPPER_2, -1.0f);
     setSingleAnime(ANM_IRONBALL_ATTACK, daAlinkHIO_ironBall_c0::m.mPrepareAnmSpeed, 0.0f,
@@ -852,8 +826,6 @@ void daAlink_c::setIronBallReadyAnime() {
     mSearchBallScale = 0.0f;
 }
 
-/* 801151E0-80115254 10FB20 0074+00 2/2 0/0 0/0 .text            setIronBallBaseAnime__9daAlink_cFv
- */
 void daAlink_c::setIronBallBaseAnime() {
     if (checkIronBallSwingAnime() && !checkUnderMove0BckNoArc(ANM_IRONBALL_TURN)) {
         setSingleAnimeBaseSpeed(ANM_IRONBALL_TURN, daAlinkHIO_ironBall_c0::m.mTurnAnmSpeed, daAlinkHIO_ironBall_c0::m.mTurnInterpolation);
@@ -862,8 +834,6 @@ void daAlink_c::setIronBallBaseAnime() {
     }
 }
 
-/* 80115254-801153F8 10FB94 01A4+00 1/1 0/0 0/0 .text checkUpperItemActionIronBall__9daAlink_cFv
- */
 BOOL daAlink_c::checkUpperItemActionIronBall() {
     if (!itemButton() && checkReadyItem()) {
         field_0x3020 = 1;
@@ -903,7 +873,6 @@ BOOL daAlink_c::checkUpperItemActionIronBall() {
     return cancelUpperItemReadyAnime(0);
 }
 
-/* 801153F8-801154E4 10FD38 00EC+00 2/2 0/0 0/0 .text checkNextActionIronBall__9daAlink_cFv */
 int daAlink_c::checkNextActionIronBall() {
     if (mFastShotTime != 0) {
         mFastShotTime--;
@@ -925,7 +894,6 @@ int daAlink_c::checkNextActionIronBall() {
     }
 }
 
-/* 801154E4-80115564 10FE24 0080+00 1/1 0/0 0/0 .text procIronBallSubjectInit__9daAlink_cFv */
 int daAlink_c::procIronBallSubjectInit() {
     if (!commonProcInitNotSameProc(PROC_IRON_BALL_SUBJECT)) {
         return 0;
@@ -942,8 +910,6 @@ int daAlink_c::procIronBallSubjectInit() {
     return 1;
 }
 
-/* 80115564-801155EC 10FEA4 0088+00 1/0 0/0 0/0 .text            procIronBallSubject__9daAlink_cFv
- */
 int daAlink_c::procIronBallSubject() {
     if (checkIronBallAnime()) {
         setDoStatus(0x12);
@@ -958,8 +924,6 @@ int daAlink_c::procIronBallSubject() {
     return 1;
 }
 
-/* 801155EC-80115674 10FF2C 0088+00 1/1 0/0 0/0 .text            procIronBallMoveInit__9daAlink_cFv
- */
 int daAlink_c::procIronBallMoveInit() {
     if (!commonProcInitNotSameProc(PROC_IRON_BALL_MOVE)) {
         return 0;
@@ -977,7 +941,6 @@ int daAlink_c::procIronBallMoveInit() {
     return 1;
 }
 
-/* 80115674-8011577C 10FFB4 0108+00 1/0 0/0 0/0 .text            procIronBallMove__9daAlink_cFv */
 int daAlink_c::procIronBallMove() {
     if (checkIronBallAnime()) {
         setDoStatus(0x12);
@@ -997,7 +960,7 @@ int daAlink_c::procIronBallMove() {
 
             if (field_0x2f98 != 2) {
                 field_0x2f98 = 2;
-                var_f31 = daAlinkHIO_basic_c0::m.mAnmBlendFactor;
+                var_f31 = daAlinkHIO_basic_c0::m.mBasicInterpolation;
             }
         } else {
             offModeFlg(1);
@@ -1015,8 +978,6 @@ int daAlink_c::procIronBallMove() {
     return 1;
 }
 
-/* 8011577C-80115860 1100BC 00E4+00 1/1 0/0 0/0 .text            procIronBallThrowInit__9daAlink_cFv
- */
 int daAlink_c::procIronBallThrowInit() {
     commonProcInit(PROC_IRON_BALL_THROW);
     setSingleAnime(ANM_IRONBALL_ATTACK, daAlinkHIO_ironBall_c0::m.mPreThrowAnmSpeed, 22.0f, 30, daAlinkHIO_ironBall_c0::m.mPreThrowAnmInterpolation);
@@ -1035,7 +996,6 @@ int daAlink_c::procIronBallThrowInit() {
     return 1;
 }
 
-/* 80115860-801159F0 1101A0 0190+00 1/0 0/0 0/0 .text            procIronBallThrow__9daAlink_cFv */
 int daAlink_c::procIronBallThrow() {
     daPy_frameCtrl_c* temp_r29 = &mUnderFrameCtrl[0];
 
@@ -1077,7 +1037,6 @@ int daAlink_c::procIronBallThrow() {
     return 1;
 }
 
-/* 801159F0-80115AA0 110330 00B0+00 2/2 0/0 0/0 .text procIronBallReturnInit__9daAlink_cFv */
 int daAlink_c::procIronBallReturnInit() {
     commonProcInit(PROC_IRON_BALL_RETURN);
 
@@ -1095,7 +1054,6 @@ int daAlink_c::procIronBallReturnInit() {
     return 1;
 }
 
-/* 80115AA0-80115C20 1103E0 0180+00 1/0 0/0 0/0 .text            procIronBallReturn__9daAlink_cFv */
 int daAlink_c::procIronBallReturn() {
     daPy_frameCtrl_c* frameCtrl = mUnderFrameCtrl;
 

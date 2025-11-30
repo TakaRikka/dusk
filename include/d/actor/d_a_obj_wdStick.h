@@ -25,30 +25,30 @@ public:
         MODE_SINK,
     };
 
-    /* 80D31BD0 */ void setBaseMtx();
-    /* 80D31C58 */ virtual int CreateHeap();
-    /* 80D31CC4 */ int create();
-    /* 80D32168 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80D32194 */ void lightInit();
-    /* 80D32198 */ void setLight();
-    /* 80D3219C */ void setFire();
-    /* 80D3269C */ virtual int Execute();
-    /* 80D32DB4 */ void bgCheck();
-    /* 80D33348 */ void setBoundSe();
-    /* 80D333F4 */ void mode_proc_call();
-    /* 80D3350C */ void mode_init_wait();
-    /* 80D3353C */ void mode_proc_wait();
-    /* 80D33588 */ void mode_init_carry();
-    /* 80D335AC */ void mode_proc_carry();
-    /* 80D3386C */ void mode_init_drop();
-    /* 80D33890 */ void mode_proc_drop();
-    /* 80D338DC */ void mode_init_roll();
-    /* 80D338F4 */ void mode_proc_roll();
-    /* 80D33D44 */ BOOL chkWaterLineIn();
-    /* 80D33D68 */ void mode_init_sink();
-    /* 80D33D8C */ void mode_proc_sink();
-    /* 80D33EB0 */ virtual int Draw();
-    /* 80D33F14 */ virtual int Delete();
+    void setBaseMtx();
+    virtual int CreateHeap();
+    int create();
+    static int createHeapCallBack(fopAc_ac_c*);
+    void lightInit();
+    void setLight();
+    void setFire();
+    virtual int Execute();
+    void bgCheck();
+    void setBoundSe();
+    void mode_proc_call();
+    void mode_init_wait();
+    void mode_proc_wait();
+    void mode_init_carry();
+    void mode_proc_carry();
+    void mode_init_drop();
+    void mode_proc_drop();
+    void mode_init_roll();
+    void mode_proc_roll();
+    BOOL chkWaterLineIn();
+    void mode_init_sink();
+    void mode_proc_sink();
+    virtual int Draw();
+    virtual int Delete();
 
     static dCcD_SrcGObjInf const mCcDObjInfo;
     static dCcD_SrcSph mCcDSph;
@@ -89,8 +89,8 @@ STATIC_ASSERT(sizeof(daWdStick_c) == 0xaf8);
 
 class daWdStick_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80D31B4C */ daWdStick_HIO_c();
-    /* 80D34030 */ virtual ~daWdStick_HIO_c() {}
+    daWdStick_HIO_c();
+    virtual ~daWdStick_HIO_c() {}
 
     void genMessage(JORMContext*);
 

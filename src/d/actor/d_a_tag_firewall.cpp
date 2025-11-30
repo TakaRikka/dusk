@@ -17,13 +17,10 @@ struct Tag_FWall_n {
     static u16 game_over_eff_name[];
 };
 
-/* 80D58938-80D58940 000078 0008+00 1/0 0/0 0/0 .text            daTag_FWall_Draw__FP13daTag_FWall_c
- */
 static int daTag_FWall_Draw(daTag_FWall_c* i_this) {
     return 1;
 }
 
-/* 80D5950C-80D5954C 000000 0040+00 1/1 0/0 0/0 .data            cc_sph_src__11Tag_FWall_n */
 dCcD_SrcSph Tag_FWall_n::cc_sph_src = {
     {
         {0x0, {{0x400, 0x1, 0xC}, {0x0, 0x0}, 0x0}},  // mObj
@@ -36,17 +33,12 @@ dCcD_SrcSph Tag_FWall_n::cc_sph_src = {
     }                                // mSphAttr
 };
 
-/* 80D5954C-80D59554 000040 0008+00 1/1 0/0 0/0 .data            game_over_eff_name__11Tag_FWall_n
- */
 u16 Tag_FWall_n::game_over_eff_name[] = {0x84CC, 0x84CD, 0x84CE, 0x84CF};
 
-/* 80D595C0-80D595C4 000000 0004+00 1/1 0/0 0/0 .bss             fire_leader */
 static daTag_FWall_c* fire_leader;
 
-/* 80D595C4-80D595C8 000004 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 fire_num;
 
-/* 80D58940-80D5901C 000080 06DC+00 1/1 0/0 0/0 .text            execute__13daTag_FWall_cFv */
 int daTag_FWall_c::execute() {
     cXyz cam_eye = dCam_getBody()->Eye();
     cXyz pos;
@@ -158,27 +150,22 @@ int daTag_FWall_c::execute() {
     return 1;
 }
 
-/* 80D59058-80D59078 000798 0020+00 1/0 0/0 0/0 .text daTag_FWall_Execute__FP13daTag_FWall_c */
 static int daTag_FWall_Execute(daTag_FWall_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D59078-80D59080 0007B8 0008+00 1/1 0/0 0/0 .text            _delete__13daTag_FWall_cFv */
 int daTag_FWall_c::_delete() {
     return 1;
 }
 
-/* 80D59080-80D590A0 0007C0 0020+00 1/0 0/0 0/0 .text daTag_FWall_IsDelete__FP13daTag_FWall_c */
 static int daTag_FWall_IsDelete(daTag_FWall_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80D590A0-80D590A8 0007E0 0008+00 1/0 0/0 0/0 .text daTag_FWall_Delete__FP13daTag_FWall_c */
 static int daTag_FWall_Delete(daTag_FWall_c* i_this) {
     return 1;
 }
 
-/* 80D590A8-80D592D0 0007E8 0228+00 1/1 0/0 0/0 .text            create__13daTag_FWall_cFv */
 int daTag_FWall_c::create() {
     fopAcM_ct(this, daTag_FWall_c);
 
@@ -216,19 +203,16 @@ int daTag_FWall_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D594B4-80D594D4 000BF4 0020+00 1/0 0/0 0/0 .text daTag_FWall_Create__FP13daTag_FWall_c */
 static int daTag_FWall_Create(daTag_FWall_c* i_this) {
     return i_this->create();
 }
 
-/* 80D59554-80D59574 -00001 0020+00 1/0 0/0 0/0 .data            l_daTag_FWall_Method */
 static actor_method_class l_daTag_FWall_Method = {
     (process_method_func)daTag_FWall_Create,  (process_method_func)daTag_FWall_Delete,
     (process_method_func)daTag_FWall_Execute, (process_method_func)daTag_FWall_IsDelete,
     (process_method_func)daTag_FWall_Draw,
 };
 
-/* 80D59574-80D595A4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_FWall */
 extern actor_process_profile_definition g_profile_Tag_FWall = {
     fpcLy_CURRENT_e,
     7,

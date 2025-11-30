@@ -17,7 +17,6 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "JSystem/JAudio2/JAUSectionHeap.h"
 
-/* 8067C7CC-8067C874 0000EC 00A8+00 1/0 0/0 0/0 .text            daE_ARROW_Draw__FP13e_arrow_class */
 static int daE_ARROW_Draw(e_arrow_class* i_this) {
     if (i_this->field_0xa14) {
         return 1;
@@ -41,7 +40,6 @@ static u8 const lit_3983[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 8067C874-8067CB68 000194 02F4+00 1/1 0/0 0/0 .text            fire_eff_set__FP13e_arrow_class */
 static void fire_eff_set(e_arrow_class* i_this) {
     cXyz sp38;
     cXyz sp44;
@@ -100,7 +98,6 @@ static void fire_eff_set(e_arrow_class* i_this) {
     }
 }
 
-/* 8067CBA4-8067D21C 0004C4 0678+00 1/1 0/0 0/0 .text            hit_check__FP13e_arrow_class */
 static void hit_check(e_arrow_class* i_this) {
     dBgS_ObjGndChk_Spl ground_chk;
 
@@ -234,7 +231,6 @@ static void hit_check(e_arrow_class* i_this) {
     }
 }
 
-/* 8067D21C-8067D40C 000B3C 01F0+00 1/1 0/0 0/0 .text            e_arrow_shot__FP13e_arrow_class */
 static void e_arrow_shot(e_arrow_class* i_this) {
     switch (i_this->mMode) {
     case 0: {
@@ -289,7 +285,6 @@ static void e_arrow_shot(e_arrow_class* i_this) {
     }
 }
 
-/* 8067D40C-8067D530 000D2C 0124+00 1/1 0/0 0/0 .text            e_arrow_bg__FP13e_arrow_class */
 static void e_arrow_bg(e_arrow_class* i_this) {
     switch (i_this->mMode) {
     case 0:
@@ -311,7 +306,6 @@ static void e_arrow_bg(e_arrow_class* i_this) {
     }
 }
 
-/* 8067D530-8067D5FC 000E50 00CC+00 1/1 0/0 0/0 .text            e_arrow_spin__FP13e_arrow_class */
 static void e_arrow_spin(e_arrow_class* i_this) {
     switch (i_this->mMode) {
     case 0:
@@ -335,7 +329,6 @@ static void e_arrow_spin(e_arrow_class* i_this) {
     }
 }
 
-/* 8067D5FC-8067D68C 000F1C 0090+00 1/1 0/0 0/0 .text            s_limit_sub__FPvPv */
 static void* s_limit_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) != NULL && i_actor != i_data &&
         fopAcM_GetName(i_actor) == PROC_E_ARROW &&
@@ -349,7 +342,6 @@ static void* s_limit_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8067D68C-8067DA70 000FAC 03E4+00 1/1 0/0 0/0 .text e_arrow_demo_fire__FP13e_arrow_class */
 static void e_arrow_demo_fire(e_arrow_class* i_this) {
     cXyz sp9C;
     csXyz spB0;
@@ -435,8 +427,6 @@ static void e_arrow_demo_fire(e_arrow_class* i_this) {
     }
 }
 
-/* 8067DAE8-8067DB5C 001408 0074+00 1/1 0/0 0/0 .text
- * atHit_CB__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void atHit_CB(fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf, fopAc_ac_c* i_tgActor,
                      dCcD_GObjInf* i_tgObjInf) {
     if (i_tgActor != NULL && fopAcM_GetName(i_tgActor) == PROC_ALINK) {
@@ -449,8 +439,6 @@ static void atHit_CB(fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf, fopAc_ac_c
     }
 }
 
-/* 8067DB5C-8067DC58 00147C 00FC+00 1/1 0/0 0/0 .text            e_arrow_shield__FP13e_arrow_class
- */
 static void e_arrow_shield(e_arrow_class* i_this) {
     e_arrow_class* a_this = (e_arrow_class*)i_this;
     daAlink_getAlinkActorClass()->setArrowShieldPos(&a_this->current.pos, &a_this->shape_angle,
@@ -466,7 +454,6 @@ static void e_arrow_shield(e_arrow_class* i_this) {
     }
 }
 
-/* 8067DC58-8067DE54 001578 01FC+00 1/1 0/0 0/0 .text e_arrow_demo_bound__FP13e_arrow_class */
 static void e_arrow_demo_bound(e_arrow_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* const player_p = dComIfGp_getPlayer(0);
@@ -511,7 +498,6 @@ static void e_arrow_demo_bound(e_arrow_class* i_this) {
     a_this->current.pos.z = player_p->current.pos.z + 10.0f + 25.0f;
 }
 
-/* 8067DE54-8067E0BC 001774 0268+00 1/1 0/0 0/0 .text            action__FP13e_arrow_class */
 static void action(e_arrow_class* i_this) {
     s8 try_create_explosion = false;
 
@@ -573,7 +559,6 @@ static void action(e_arrow_class* i_this) {
     i_this->eyePos = i_this->current.pos;
 }
 
-/* 8067E0BC-8067E304 0019DC 0248+00 1/0 0/0 0/0 .text daE_ARROW_Execute__FP13e_arrow_class */
 static int daE_ARROW_Execute(e_arrow_class* i_this) {
     const fopAc_ac_c* a_this = static_cast<fopAc_ac_c*>(i_this);
 
@@ -635,13 +620,10 @@ static int daE_ARROW_Execute(e_arrow_class* i_this) {
     return 1;
 }
 
-/* 8067E304-8067E30C 001C24 0008+00 1/0 0/0 0/0 .text daE_ARROW_IsDelete__FP13e_arrow_class */
 static int daE_ARROW_IsDelete(e_arrow_class* i_this) {
     return 1;
 }
 
-/* 8067E30C-8067E374 001C2C 0068+00 1/0 0/0 0/0 .text            daE_ARROW_Delete__FP13e_arrow_class
- */
 static int daE_ARROW_Delete(e_arrow_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, i_this->mResName);
@@ -655,7 +637,6 @@ static int daE_ARROW_Delete(e_arrow_class* i_this) {
     return 1;
 }
 
-/* 8067E374-8067E428 001C94 00B4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_arrow_class* a_this = static_cast<e_arrow_class*>(i_this);
 
@@ -682,7 +663,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8067E428-8067E724 001D48 02FC+00 1/0 0/0 0/0 .text            daE_ARROW_Create__FP10fopAc_ac_c */
 static int daE_ARROW_Create(fopAc_ac_c* i_this) {
     e_arrow_class* const a_this = static_cast<e_arrow_class*>(i_this);
     fopAcM_ct(i_this, e_arrow_class);
@@ -767,14 +747,12 @@ static int daE_ARROW_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 8067EA60-8067EA80 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_ARROW_Method */
 static actor_method_class l_daE_ARROW_Method = {
     (process_method_func)daE_ARROW_Create,  (process_method_func)daE_ARROW_Delete,
     (process_method_func)daE_ARROW_Execute, (process_method_func)daE_ARROW_IsDelete,
     (process_method_func)daE_ARROW_Draw,
 };
 
-/* 8067EA80-8067EAB0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_ARROW */
 extern actor_process_profile_definition g_profile_E_ARROW = {
     fpcLy_CURRENT_e,
     8,

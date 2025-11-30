@@ -26,18 +26,15 @@ int daNpcPasser2_c::createHeap() {
     return rv;
 }
 
-/* 80AA74D8-80AA755C 000078 0084+00 1/1 0/0 0/0 .text            createHeapCallBack__FP10fopAc_ac_c */
 static int createHeapCallBack(fopAc_ac_c* i_this) {
     daNpcPasser2_c* actor = (daNpcPasser2_c*)i_this;
     return actor->createHeap();
 }
 
-/* 80AA8AA0-80AA8AB8 000038 0018+00 1/2 0/0 0/0 .data            ActionTable__14daNpcPasser2_c */
 daNpcPasser2_c::actionFunc daNpcPasser2_c::ActionTable[1][2] = {
     {&daNpcPasser2_c::initPath, &daNpcPasser2_c::executePath},
 };
 
-/* 80AA755C-80AA75A0 0000FC 0044+00 1/1 0/0 0/0 .text            setAction__14daNpcPasser2_cFQ214daNpcPasser2_c6Mode_e */
 void daNpcPasser2_c::setAction(daNpcPasser2_c::Mode_e i_action) {
     JUT_ASSERT(302, i_action < MODE_MAX_e);
     mPrevActionIdx = mActionIdx;
@@ -46,13 +43,11 @@ void daNpcPasser2_c::setAction(daNpcPasser2_c::Mode_e i_action) {
     callInit();
 }
 
-/* 80AA75A0-80AA75C8 000140 0028+00 1/1 0/0 0/0 .text            callInit__14daNpcPasser2_cFv */
 void daNpcPasser2_c::callInit() {
     JUT_ASSERT(320, mAction != NULL);
     (this->*mAction[0])();
 }
 
-/* 80AA75C8-80AA75F4 000168 002C+00 1/1 0/0 0/0 .text            callExecute__14daNpcPasser2_cFv */
 void daNpcPasser2_c::callExecute() {
     JUT_ASSERT(333, mAction != NULL);
     (this->*mAction[1])();
@@ -67,7 +62,6 @@ enum Rnd_Values {
     /* 0x5 */ FIVE,
 };
 
-/* 80AA75F4-80AA774C 000194 0158+00 1/0 0/0 0/0 .text            initPath__14daNpcPasser2_cFv */
 void daNpcPasser2_c::initPath() {
     if (getMoveType() == 1) {
         field_0xa3c = 1;
@@ -101,7 +95,6 @@ void daNpcPasser2_c::initPath() {
     field_0xa42 = 1;
 }
 
-/* 80AA774C-80AA78C4 0002EC 0178+00 1/0 0/0 0/0 .text            executePath__14daNpcPasser2_cFv */
 void daNpcPasser2_c::executePath() {
     if (m_path.checkPoint(current.pos, speedF)) {
         if (m_path.checkPathEnd(current.pos, speedF)) {
@@ -136,7 +129,6 @@ void daNpcPasser2_c::executePath() {
     mAcch.CrrPos(dComIfG_Bgsp());
 }
 
-/* 80AA790C-80AA7918 0004AC 000C+00 1/1 0/0 0/0 .text            setAngle__14daNpcPasser2_cFv */
 void daNpcPasser2_c::setAngle() {
     shape_angle.y = current.angle.y;
 }
@@ -159,7 +151,6 @@ void daNpcPasser2_c::setSpeed(f32 param_1, f32 param_2, f32* i_speed, int param_
     cLib_chaseF(i_speed, target, step);
 }
 
-/* 80AA7918-80AA7CB8 0004B8 03A0+00 1/1 0/0 0/0 .text            pathMoveF__14daNpcPasser2_cFv */
 void daNpcPasser2_c::pathMoveF() {
     f32 fVar1 = 0.0f;
     f32 speed = 0.0f;
@@ -206,12 +197,10 @@ void daNpcPasser2_c::pathMoveF() {
     mpMorf->setPlaySpeed(speed);
 }
 
-/* 80AA7CB8-80AA7CD8 000858 0020+00 1/0 0/0 0/0 .text            daNpcPasser2_Create__FPv */
 static int daNpcPasser2_Create(void* i_this) {
     return static_cast<daNpcPasser2_c*>(i_this)->create();
 }
 
-/* 80AA7CD8-80AA7F78 000878 02A0+00 1/1 0/0 0/0 .text            create__14daNpcPasser2_cFv */
 cPhs__Step daNpcPasser2_c::create() {
     fopAcM_ct(this, daNpcPasser2_c);
 
@@ -283,7 +272,6 @@ void daNpcPasser2_c::setBaseMtx() {
     setAttention(m_type);
 }
 
-/* 80AA7F78-80AA823C 000B18 02C4+00 1/1 0/0 0/0 .text            create_init__14daNpcPasser2_cFv */
 void daNpcPasser2_c::create_init() {
     #if DEBUG
     // NPC (C-class, D-class) Pedestrian High
@@ -317,13 +305,11 @@ void daNpcPasser2_c::create_init() {
     setBaseMtx();
 }
 
-/* 80AA823C-80AA8270 000DDC 0034+00 1/0 0/0 0/0 .text            daNpcPasser2_Delete__FPv */
 static int daNpcPasser2_Delete(void* i_this) {
     static_cast<daNpcPasser2_c*>(i_this)->~daNpcPasser2_c();
     return 1;
 }
 
-/* 80AA8270-80AA8304 000E10 0094+00 1/0 0/0 0/0 .text            __dt__14daNpcPasser2_cFv */
 daNpcPasser2_c::~daNpcPasser2_c() {
     if (m_type < 30 && m_objNum < 9) {
         removeResrc(m_type, m_objNum);
@@ -366,7 +352,6 @@ void daNpcPasser2_c::setCollision() {
     }
 }
 
-/* 80AA8304-80AA8500 000EA4 01FC+00 1/0 0/0 0/0 .text            daNpcPasser2_Execute__FPv */
 static int daNpcPasser2_Execute(void* i_this) {
     return static_cast<daNpcPasser2_c*>(i_this)->execute();
 }
@@ -377,17 +362,14 @@ int daNpcPasser2_c::draw() {
     return 1;
 }
 
-/* 80AA8500-80AA8578 0010A0 0078+00 1/0 0/0 0/0 .text            daNpcPasser2_Draw__FPv */
 static int daNpcPasser2_Draw(void* i_this) {
     return static_cast<daNpcPasser2_c*>(i_this)->draw();
 }
 
-/* 80AA8578-80AA8580 001118 0008+00 1/0 0/0 0/0 .text            daNpcPasser2_IsDelete__FPv */
 static int daNpcPasser2_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80AA8AB8-80AA8AD8 -00001 0020+00 1/0 0/0 0/0 .data            daNpcPasser2_METHODS */
 static actor_method_class daNpcPasser2_METHODS = {
     (process_method_func)daNpcPasser2_Create,
     (process_method_func)daNpcPasser2_Delete,
@@ -396,7 +378,6 @@ static actor_method_class daNpcPasser2_METHODS = {
     (process_method_func)daNpcPasser2_Draw,
 };
 
-/* 80AA8AD8-80AA8B08 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_PASSER2 */
 extern actor_process_profile_definition g_profile_NPC_PASSER2 = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

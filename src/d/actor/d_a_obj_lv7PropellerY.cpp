@@ -9,8 +9,8 @@
 
 class daPropY_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C8546C */ daPropY_HIO_c();
-    /* 80C86084 */ virtual ~daPropY_HIO_c() {}
+    daPropY_HIO_c();
+    virtual ~daPropY_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -23,19 +23,15 @@ public:
     /* 0x1C */ f32 y_offset;
 };
 
-/* 80C86194-80C8619C -00001 0008+00 3/3 0/0 0/0 .data            l_type */
 static char* l_type[2] = {
     "stickwl00",
     "stickwl01",
 };
 
-/* 80C8619C-80C861A4 000028 0008+00 1/1 0/0 0/0 .data            l_bmdIdx */
 static int l_bmdIdx[] = {4, 4};
 
-/* 80C861A4-80C861AC 000030 0008+00 1/1 0/0 0/0 .data            l_dzbIdx */
 static int l_dzbIdx[] = {7, 7};
 
-/* 80C8546C-80C854C4 0000EC 0058+00 1/1 0/0 0/0 .text            __ct__13daPropY_HIO_cFv */
 daPropY_HIO_c::daPropY_HIO_c() {
     rot_speed = 0.0f;
     rot_accel = 0.1f;
@@ -46,10 +42,8 @@ daPropY_HIO_c::daPropY_HIO_c() {
     y_offset = 0.0f;
 }
 
-/* 80C862CC-80C862EC 000014 0020+00 7/7 0/0 0/0 .bss             l_HIO */
 static daPropY_HIO_c l_HIO;
 
-/* 80C8550C-80C855A4 00018C 0098+00 2/2 0/0 0/0 .text            setBaseMtx__9daPropY_cFv */
 void daPropY_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + l_HIO.y_offset, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -57,7 +51,6 @@ void daPropY_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C855A4-80C85624 000224 0080+00 1/0 0/0 0/0 .text            CreateHeap__9daPropY_cFv */
 int daPropY_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_type[mType], l_bmdIdx[mType]);
     JUT_ASSERT(184, modelData != NULL);
@@ -70,7 +63,6 @@ int daPropY_c::CreateHeap() {
     return 1;
 }
 
-/* 80C85624-80C85810 0002A4 01EC+00 1/1 0/0 0/0 .text            create__9daPropY_cFv */
 int daPropY_c::create() {
     fopAcM_ct(this, daPropY_c);
 
@@ -128,7 +120,6 @@ int daPropY_c::create() {
     return phase_state;
 }
 
-/* 80C85810-80C85860 000490 0050+00 1/0 0/0 0/0 .text            Execute__9daPropY_cFPPA3_A4_f */
 int daPropY_c::Execute(Mtx** param_0) {
     procMain();
     *param_0 = &mpModel->getBaseTRMtx();
@@ -136,7 +127,6 @@ int daPropY_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80C85860-80C859B4 0004E0 0154+00 1/1 0/0 0/0 .text            procMain__9daPropY_cFv */
 void daPropY_c::procMain() {
     static void (daPropY_c::*mode_proc[])() = {
         &daPropY_c::modeMoveWait,
@@ -165,22 +155,18 @@ void daPropY_c::procMain() {
     (this->*mode_proc[mMode])();
 }
 
-/* 80C859B4-80C859C0 000634 000C+00 2/2 0/0 0/0 .text            init_modeMoveWait__9daPropY_cFv */
 void daPropY_c::init_modeMoveWait() {
     mMode = 0;
 }
 
-/* 80C859C0-80C859C4 000640 0004+00 1/0 0/0 0/0 .text            modeMoveWait__9daPropY_cFv */
 void daPropY_c::modeMoveWait() {}
 
-/* 80C859C4-80C859E0 000644 001C+00 2/2 0/0 0/0 .text            init_modeMove__9daPropY_cFv */
 void daPropY_c::init_modeMove() {
     fopAcM_SetSpeedF(this, 0.0f);
     field_0x5c4 = 0.0f;
     mMode = 1;
 }
 
-/* 80C859E0-80C85B08 000660 0128+00 1/0 0/0 0/0 .text            modeMove__9daPropY_cFv */
 void daPropY_c::modeMove() {
     cLib_chaseF(&speedF, 360.0f / (30.0f * l_HIO.rot_time_sec), l_HIO.field_0xc);
     field_0x5b4 = cM_deg2s(speedF);
@@ -192,13 +178,11 @@ void daPropY_c::modeMove() {
     }
 }
 
-/* 80C85B08-80C85B24 000788 001C+00 2/2 0/0 0/0 .text            init_modeWait__9daPropY_cFv */
 void daPropY_c::init_modeWait() {
     mTimer = l_HIO.wait_time;
     mMode = 2;
 }
 
-/* 80C85B24-80C85B5C 0007A4 0038+00 1/0 0/0 0/0 .text            modeWait__9daPropY_cFv */
 void daPropY_c::modeWait() {
     if (mTimer == 0) {
         init_modeMove2();
@@ -207,14 +191,12 @@ void daPropY_c::modeWait() {
     }
 }
 
-/* 80C85B5C-80C85B84 0007DC 0028+00 2/2 0/0 0/0 .text            init_modeMove2__9daPropY_cFv */
 void daPropY_c::init_modeMove2() {
     fopAcM_SetSpeedF(this, l_HIO.rot_speed);
     field_0x5c4 = 0.0f;
     mMode = 3;
 }
 
-/* 80C85B84-80C85CAC 000804 0128+00 1/0 0/0 0/0 .text            modeMove2__9daPropY_cFv */
 void daPropY_c::modeMove2() {
     cLib_chaseF(&speedF, l_HIO.max_rot_speed, l_HIO.rot_accel);
     s16 temp_r30 = cLib_addCalcAngleS(&shape_angle.y, field_0x5b6, 1, (182.04445f * fopAcM_GetSpeedF(this)), 1);
@@ -231,7 +213,6 @@ void daPropY_c::modeMove2() {
     }
 }
 
-/* 80C85CAC-80C85DD0 00092C 0124+00 1/1 0/0 0/0 .text            init_modeStop__9daPropY_cFv */
 void daPropY_c::init_modeStop() {
     if (mTurnType == 0) {
         fopAcM_SetSpeedF(this, cM_deg2s(360.0f / (30.0f * l_HIO.rot_time_sec)));
@@ -254,7 +235,6 @@ void daPropY_c::init_modeStop() {
     mMode = 4;
 }
 
-/* 80C85DD0-80C85F14 000A50 0144+00 1/0 0/0 0/0 .text            modeStop__9daPropY_cFv */
 void daPropY_c::modeStop() {
     s16 var_r30;
     if (mTurnType == 0) {
@@ -276,7 +256,6 @@ void daPropY_c::modeStop() {
     }
 }
 
-/* 80C85F14-80C85FB8 000B94 00A4+00 1/0 0/0 0/0 .text            Draw__9daPropY_cFv */
 int daPropY_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -286,7 +265,6 @@ int daPropY_c::Draw() {
     return 1;
 }
 
-/* 80C85FB8-80C85FF8 000C38 0040+00 1/0 0/0 0/0 .text            Delete__9daPropY_cFv */
 int daPropY_c::Delete() {
     dComIfG_resDelete(&mPhase, l_type[mType]);
     #if DEBUG
@@ -295,27 +273,22 @@ int daPropY_c::Delete() {
     return 1;
 }
 
-/* 80C85FF8-80C86024 000C78 002C+00 1/0 0/0 0/0 .text            daPropY_Draw__FP9daPropY_c */
 static int daPropY_Draw(daPropY_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C86024-80C86044 000CA4 0020+00 1/0 0/0 0/0 .text            daPropY_Execute__FP9daPropY_c */
 static int daPropY_Execute(daPropY_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C86044-80C86064 000CC4 0020+00 1/0 0/0 0/0 .text            daPropY_Delete__FP9daPropY_c */
 static int daPropY_Delete(daPropY_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C86064-80C86084 000CE4 0020+00 1/0 0/0 0/0 .text            daPropY_Create__FP10fopAc_ac_c */
 static int daPropY_Create(fopAc_ac_c* i_this) {
     return ((daPropY_c*)i_this)->create();
 }
 
-/* 80C86224-80C86244 -00001 0020+00 1/0 0/0 0/0 .data            l_daPropY_Method */
 static actor_method_class l_daPropY_Method = {
     (process_method_func)daPropY_Create,
     (process_method_func)daPropY_Delete,
@@ -324,7 +297,6 @@ static actor_method_class l_daPropY_Method = {
     (process_method_func)daPropY_Draw,
 };
 
-/* 80C86244-80C86274 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv7PropY */
 extern actor_process_profile_definition g_profile_Obj_Lv7PropY = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

@@ -12,7 +12,6 @@
 #include "d/d_s_play.h"
 #include "c/c_damagereaction.h"
 
-/* 80A0C998-80A0CBB0 000078 0218+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -52,8 +51,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80A0CBB0-80A0CC18 000290 0068+00 1/0 0/0 0/0 .text            daNpc_Inko_Draw__FP14npc_inko_class
- */
 static int daNpc_Inko_Draw(npc_inko_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
@@ -62,14 +59,11 @@ static int daNpc_Inko_Draw(npc_inko_class* i_this) {
     return 1;
 }
 
-/* 80A0CC18-80A0CCC8 0002F8 00B0+00 1/1 0/0 0/0 .text            anm_init__FP14npc_inko_classifUcf
- */
 static void anm_init(npc_inko_class* i_this, int i_anmId, f32 i_morf, u8 i_mode, f32 i_speed) {
     i_this->anm_p->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Npc_inko", i_anmId), i_mode, i_morf, i_speed, 0.0f, -1.0f, NULL);
     i_this->anmId = i_anmId;
 }
 
-/* 80A0CCC8-80A0DD70 0003A8 10A8+00 2/1 0/0 0/0 .text daNpc_Inko_Execute__FP14npc_inko_class */
 static int daNpc_Inko_Execute(npc_inko_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     cXyz sp78;
@@ -407,12 +401,10 @@ static int daNpc_Inko_Execute(npc_inko_class* i_this) {
     return 1;
 }
 
-/* 80A0DD70-80A0DD78 001450 0008+00 1/0 0/0 0/0 .text daNpc_Inko_IsDelete__FP14npc_inko_class */
 static int daNpc_Inko_IsDelete(npc_inko_class* i_this) {
     return 1;
 }
 
-/* 80A0DD78-80A0DDC8 001458 0050+00 1/0 0/0 0/0 .text daNpc_Inko_Delete__FP14npc_inko_class */
 static int daNpc_Inko_Delete(npc_inko_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     fpc_ProcID id = fopAcM_GetID(i_this);
@@ -425,7 +417,6 @@ static int daNpc_Inko_Delete(npc_inko_class* i_this) {
     return 1;
 }
 
-/* 80A0DDC8-80A0DF08 0014A8 0140+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* actor) {
     npc_inko_class* i_this = (npc_inko_class*)actor;
     i_this->anm_p = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Npc_inko", 8), NULL, NULL, NULL, 0, 1.0f, 0, -1, 1, 0, 0x80000, 0x11000084);
@@ -445,8 +436,6 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-/* 80A0DF08-80A0E00C 0015E8 0104+00 1/0 0/0 0/0 .text            daNpc_Inko_Create__FP10fopAc_ac_c
- */
 static int daNpc_Inko_Create(fopAc_ac_c* actor) {
     npc_inko_class* i_this = (npc_inko_class*)actor;
     fopAcM_ct(actor, npc_inko_class);
@@ -474,7 +463,6 @@ static int daNpc_Inko_Create(fopAc_ac_c* actor) {
     return phase_state;
 }
 
-/* 80A0E0F8-80A0E118 -00001 0020+00 1/0 0/0 0/0 .data            l_daNpc_Inko_Method */
 static actor_method_class l_daNpc_Inko_Method = {
     (process_method_func)daNpc_Inko_Create,
     (process_method_func)daNpc_Inko_Delete,
@@ -483,7 +471,6 @@ static actor_method_class l_daNpc_Inko_Method = {
     (process_method_func)daNpc_Inko_Draw,
 };
 
-/* 80A0E118-80A0E148 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_INKO */
 extern actor_process_profile_definition g_profile_NPC_INKO = {
   fpcLy_CURRENT_e,        // mLayerID
   8,                      // mListID

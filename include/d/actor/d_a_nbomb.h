@@ -44,36 +44,36 @@ public:
         TYPE_WATER_ENEMY,
     };
 
-    /* 804C6DCC */ void coHitCallback(fopAc_ac_c*);
-    /* 804C6E34 */ void tgHitCallback(dCcD_GObjInf*);
-    /* 804C6FD8 */ int searchEnemy(fopAc_ac_c*);
-    /* 804C7114 */ int createHeap();
-    /* 804C7324 */ int create();
-    /* 804C7EB4 */ ~daNbomb_c();
-    /* 804C8294 */ bool checkTimerStop();
-    /* 804C82D8 */ BOOL checkExplode();
-    /* 804C8430 */ void setRoomInfo();
-    /* 804C84D8 */ void setSmokePos();
-    /* 804C8588 */ void setEffect();
-    /* 804C87F0 */ void setHookshotOffset();
-    /* 804C88CC */ void setFreeze();
-    /* 804C88F0 */ BOOL checkWaterIn();
-    /* 804C8928 */ BOOL insectLineCheck();
-    /* 804C8A88 */ void setHitPolygon(int);
-    /* 804C8CF8 */ BOOL procExplodeInit();
-    /* 804C9118 */ BOOL procExplode();
-    /* 804C93E0 */ BOOL procCarryInit();
-    /* 804C955C */ BOOL procCarry();
-    /* 804C9930 */ BOOL procWaitInit();
-    /* 804C9984 */ BOOL procWait();
-    /* 804CA268 */ BOOL procFlowerWaitInit();
-    /* 804CA2EC */ BOOL procFlowerWait();
-    /* 804CA3B8 */ BOOL procBoomerangMoveInit(dCcD_GObjInf*);
-    /* 804CA4E0 */ BOOL procBoomerangMove();
-    /* 804CA688 */ BOOL procInsectMoveInit();
-    /* 804CA780 */ BOOL procInsectMove();
-    /* 804CAEE8 */ int execute();
-    /* 804CBC60 */ int draw();
+    void coHitCallback(fopAc_ac_c*);
+    void tgHitCallback(dCcD_GObjInf*);
+    int searchEnemy(fopAc_ac_c*);
+    int createHeap();
+    int create();
+    ~daNbomb_c();
+    bool checkTimerStop();
+    BOOL checkExplode();
+    void setRoomInfo();
+    void setSmokePos();
+    void setEffect();
+    void setHookshotOffset();
+    void setFreeze();
+    BOOL checkWaterIn();
+    BOOL insectLineCheck();
+    void setHitPolygon(int);
+    BOOL procExplodeInit();
+    BOOL procExplode();
+    BOOL procCarryInit();
+    BOOL procCarry();
+    BOOL procWaitInit();
+    BOOL procWait();
+    BOOL procFlowerWaitInit();
+    BOOL procFlowerWait();
+    BOOL procBoomerangMoveInit(dCcD_GObjInf*);
+    BOOL procBoomerangMove();
+    BOOL procInsectMoveInit();
+    BOOL procInsectMove();
+    int execute();
+    int draw();
 
     virtual u8 checkExplodeNow() { return field_0xb51 != 0; }
     virtual void deleteBombAndEffect() {

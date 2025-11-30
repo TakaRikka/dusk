@@ -15,46 +15,46 @@
  */
 class daLv6TogeTrap_c : public dBgS_MoveBgActor {
 public:
-    /* 80C79F10 */ void setBaseMtx();
-    /* 80C7A068 */ int create();
-    /* 80C7A6B0 */ static void* searchSekizoAct(void*, void*);
-    /* 80C7A97C */ void moveLift();
-    /* 80C7ABC8 */ void executeType1();
-    /* 80C7ACA0 */ void init_modeBound();
-    /* 80C7AD40 */ void modeBound();
-    /* 80C7ADA4 */ void init_modeBoundWait();
-    /* 80C7ADC0 */ void modeBoundWait();
-    /* 80C7AE18 */ void init_modeAcc();
-    /* 80C7AE24 */ void modeAcc();
-    /* 80C7AF10 */ void init_modeMove();
-    /* 80C7AF1C */ void modeMove();
-    /* 80C7B234 */ void init_modeBrk();
-    /* 80C7B240 */ void modeBrk();
-    /* 80C7B43C */ void init_modeMove2();
-    /* 80C7B448 */ void modeMove2();
-    /* 80C7B518 */ void init_modeWaitInit();
-    /* 80C7B530 */ void modeWaitInit();
-    /* 80C7B600 */ void init_modeWait();
-    /* 80C7B60C */ void modeWait();
-    /* 80C7B6D4 */ void executeType2();
-    /* 80C7B988 */ void init_modeWaitType2();
-    /* 80C7B9A8 */ void modeWaitType2();
-    /* 80C7BA38 */ void init_modeMoveInitType2();
-    /* 80C7BA50 */ void modeMoveInitType2();
-    /* 80C7BAE8 */ void init_modeAccType2();
-    /* 80C7BAF4 */ void modeAccType2();
-    /* 80C7BC54 */ void init_modeWaitAttackType2();
-    /* 80C7BC7C */ void modeWaitAttackType2();
-    /* 80C7BD64 */ void init_modeRotate();
-    /* 80C7BD70 */ void modeRotate();
-    /* 80C7BED8 */ void init_modeBreak();
-    /* 80C7BFE4 */ void modeBreak();
-    /* 80C7C1D8 */ void setNextPoint();
+    void setBaseMtx();
+    int create();
+    static void* searchSekizoAct(void*, void*);
+    void moveLift();
+    void executeType1();
+    void init_modeBound();
+    void modeBound();
+    void init_modeBoundWait();
+    void modeBoundWait();
+    void init_modeAcc();
+    void modeAcc();
+    void init_modeMove();
+    void modeMove();
+    void init_modeBrk();
+    void modeBrk();
+    void init_modeMove2();
+    void modeMove2();
+    void init_modeWaitInit();
+    void modeWaitInit();
+    void init_modeWait();
+    void modeWait();
+    void executeType2();
+    void init_modeWaitType2();
+    void modeWaitType2();
+    void init_modeMoveInitType2();
+    void modeMoveInitType2();
+    void init_modeAccType2();
+    void modeAccType2();
+    void init_modeWaitAttackType2();
+    void modeWaitAttackType2();
+    void init_modeRotate();
+    void modeRotate();
+    void init_modeBreak();
+    void modeBreak();
+    void setNextPoint();
 
-    /* 80C79FE8 */ virtual int CreateHeap();
-    /* 80C7A700 */ virtual int Execute(Mtx**);
-    /* 80C7C33C */ virtual int Draw();
-    /* 80C7C3E0 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSpeed() { return fopAcM_GetParamBit(this, 8, 4); }
     int getType() { return fopAcM_GetParamBit(this, 12, 4); }

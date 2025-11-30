@@ -14,30 +14,30 @@
  */
 class daDbDoor00_c : public fopAc_ac_c {
 public:
-    /* 8045D470 */ char* getAlwaysArcName();
-    /* 8045D480 */ char* getDzb();
-    /* 8045D490 */ char* getDummyBmdName();
-    /* 8045D4A0 */ char* getBmdArcName();
-    /* 8045D4B0 */ char* getBmdName();
-    /* 8045D504 */ J3DModelData* getDoorModelData();
-    /* 8045D594 */ int CreateHeap();
-    /* 8045D744 */ void calcMtx();
-    /* 8045D8F4 */ int CreateInit();
-    /* 8045D9A8 */ int create();
-    /* 8045DA68 */ int getDemoAction();
-    /* 8045DAB0 */ void demoProc();
-    /* 8045DE44 */ int checkArea();
-    /* 8045DF70 */ int checkUnlock();
-    /* 8045DF78 */ int actionWait();
-    /* 8045DF9C */ int actionLockWait();
-    /* 8045E000 */ int actionLockOff();
-    /* 8045E094 */ int actionLockDemo();
-    /* 8045E108 */ int actionCloseWait();
-    /* 8045E1C8 */ int actionOpen();
-    /* 8045E1EC */ int execute();
-    /* 8045E2DC */ int checkDraw();
-    /* 8045E31C */ int draw();
-    /* 8045E428 */ int Delete();
+    char* getAlwaysArcName();
+    char* getDzb();
+    char* getDummyBmdName();
+    char* getBmdArcName();
+    char* getBmdName();
+    J3DModelData* getDoorModelData();
+    int CreateHeap();
+    void calcMtx();
+    int CreateInit();
+    int create();
+    int getDemoAction();
+    void demoProc();
+    int checkArea();
+    int checkUnlock();
+    int actionWait();
+    int actionLockWait();
+    int actionLockOff();
+    int actionLockDemo();
+    int actionCloseWait();
+    int actionOpen();
+    int execute();
+    int checkDraw();
+    int draw();
+    int Delete();
 
     void setAction(u8 i_action) { mAction = i_action; }
 

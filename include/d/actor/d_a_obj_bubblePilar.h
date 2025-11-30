@@ -22,16 +22,16 @@ public:
         MODE_EFF_ON,
     };
 
-    /* 80BC3460 */ void setBaseMtx();
-    /* 80BC3518 */ int CreateHeap();
-    /* 80BC35D0 */ int create();
-    /* 80BC3934 */ int Execute(Mtx**);
-    /* 80BC3AB8 */ void initModeWait();
-    /* 80BC3AC4 */ void modeWait();
-    /* 80BC3C74 */ void initModeEffOn();
-    /* 80BC3C98 */ void modeEffOn();
-    /* 80BC3DB0 */ int Draw();
-    /* 80BC3E8C */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    void initModeWait();
+    void modeWait();
+    void initModeEffOn();
+    void modeEffOn();
+    int Draw();
+    int Delete();
 
     u8 getArg0() { return fopAcM_GetParamBit(this, 8, 4); }
     u8 getSw() { return fopAcM_GetParamBit(this, 0, 8); }
@@ -60,8 +60,8 @@ STATIC_ASSERT(sizeof(daBubbPilar_c) == 0x750);
 
 class daBubbPilar_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80BC33EC */ daBubbPilar_HIO_c();
-    /* 80BC3F90 */ virtual ~daBubbPilar_HIO_c() {};
+    daBubbPilar_HIO_c();
+    virtual ~daBubbPilar_HIO_c() {};
 
     void genMessage(JORMContext*);
 

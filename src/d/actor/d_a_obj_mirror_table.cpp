@@ -11,21 +11,16 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
 
-/* 80C9B2A4-80C9B2A8 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char const* l_arcName = "MR-Table";
 
-/* 80C9B244-80C9B250 000000 000C+00 3/3 0/0 0/0 .rodata          l_minPos */
 static Vec const l_minPos = {1672.183f, 4613.6299f, -21013.793f};
 
-/* 80C9B250-80C9B25C 00000C 000C+00 1/1 0/0 0/0 .rodata          l_maxPos */
 static Vec const l_maxPos = {1926.217f, 4613.6299f, -20866.969f};
 
-/* 80C99918-80C99938 000078 0020+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjMirrorTable_c*>(i_this)->createHeap();
 }
 
-/* 80C99938-80C99F34 000098 05FC+00 1/1 0/0 0/0 .text            createHeap__18daObjMirrorTable_cFv */
 int daObjMirrorTable_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 21);
     JUT_ASSERT(105, modelData != NULL);
@@ -143,7 +138,6 @@ int daObjMirrorTable_c::createHeap() {
     return 1;
 }
 
-/* 80C99F7C-80C9A040 0006DC 00C4+00 1/1 0/0 0/0 .text            isSwitch__18daObjMirrorTable_cFv */
 bool daObjMirrorTable_c::isSwitch() {
     return fopAcM_isSwitch(this, getSwitchNo())
            /* dSv_event_flag_c::F_0361 - Arbiter's Grounds - Spun the spinning pillars */
@@ -206,29 +200,22 @@ void daObjMirrorTable_c::checkOnPanel() {
     }
 }
 
-/* 80C9A040-80C9A260 0007A0 0220+00 1/1 0/0 0/0 .text
- * rideCallBack1__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c             */
 static void rideCallBack1(dBgW* i_bgW, fopAc_ac_c* i_this, fopAc_ac_c* i_actor) {
     if (fopAcM_GetName(i_actor) == PROC_ALINK) {
         static_cast<daObjMirrorTable_c*>(i_this)->checkOnPanel();
     }
 }
 
-/* 80C9A260-80C9A278 0009C0 0018+00 1/1 0/0 0/0 .text
- * rideCallBack2__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c             */
 static void rideCallBack2(dBgW* i_bgW, fopAc_ac_c* i_this, fopAc_ac_c* i_actor) {
     if (fopAcM_GetName(i_actor) == PROC_ALINK) {
         static_cast<daObjMirrorTable_c*>(i_this)->field_0x875 = 15;
     }
 }
 
-/* 80C9A278-80C9A298 0009D8 0020+00 1/0 0/0 0/0 .text
- * daObjMirrorTable_Draw__FP18daObjMirrorTable_c                */
 static int daObjMirrorTable_Draw(daObjMirrorTable_c* i_this) {
     return i_this->draw();
 }
 
-/* 80C9A298-80C9A4B0 0009F8 0218+00 1/1 0/0 0/0 .text            draw__18daObjMirrorTable_cFv */
 int daObjMirrorTable_c::draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpTableModel, &tevStr);
@@ -311,13 +298,10 @@ void daObjMirrorTable_c::setBaseMtx() {
     }
 }
 
-/* 80C9A4B0-80C9A4D0 000C10 0020+00 1/0 0/0 0/0 .text
- * daObjMirrorTable_Execute__FP18daObjMirrorTable_c             */
 static int daObjMirrorTable_Execute(daObjMirrorTable_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C9A4D0-80C9A9D4 000C30 0504+00 1/1 0/0 0/0 .text            execute__18daObjMirrorTable_cFv */
 int daObjMirrorTable_c::execute() {
     mpTableUpBckAnm->play();
     if (!mpTableUpBckAnm->isStop()) {
@@ -370,8 +354,6 @@ int daObjMirrorTable_c::execute() {
     return 1;
 }
 
-/* 80C9A9D4-80C9A9DC 001134 0008+00 1/0 0/0 0/0 .text
- * daObjMirrorTable_IsDelete__FP18daObjMirrorTable_c            */
 static int daObjMirrorTable_IsDelete(daObjMirrorTable_c* i_this) {
     return 1;
 }
@@ -389,19 +371,15 @@ daObjMirrorTable_c::~daObjMirrorTable_c() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
 }
 
-/* 80C9A9DC-80C9AAB0 00113C 00D4+00 1/0 0/0 0/0 .text
- * daObjMirrorTable_Delete__FP18daObjMirrorTable_c              */
 static int daObjMirrorTable_Delete(daObjMirrorTable_c* i_this) {
     i_this->~daObjMirrorTable_c();
     return 1;
 }
 
-/* 80C9AB10-80C9AB30 001270 0020+00 1/0 0/0 0/0 .text daObjMirrorTable_Create__FP10fopAc_ac_c */
 static cPhs__Step daObjMirrorTable_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjMirrorTable_c*>(i_this)->create();
 }
 
-/* 80C9AB30-80C9ABFC 001290 00CC+00 1/1 0/0 0/0 .text            create__18daObjMirrorTable_cFv */
 cPhs__Step daObjMirrorTable_c::create() {
     fopAcM_ct(this, daObjMirrorTable_c);
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
@@ -414,8 +392,6 @@ cPhs__Step daObjMirrorTable_c::create() {
     return step;
 }
 
-/* 80C9ABFC-80C9AFD0 00135C 03D4+00 1/1 0/0 0/0 .text            create_init__18daObjMirrorTable_cFv
- */
 void daObjMirrorTable_c::create_init() {
                                 /* dSv_event_flag_c::F_0354 - Cutscene - [cutscene] Mirror complete */
     bool mirror_complete_flag = dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[354]);
@@ -471,15 +447,12 @@ void daObjMirrorTable_c::create_init() {
     }
 }
 
-/* 80C9AFD0-80C9B220 001730 0250+00 1/1 0/0 0/0 .text            initBaseMtx__18daObjMirrorTable_cFv
- */
 void daObjMirrorTable_c::initBaseMtx() {
     fopAcM_SetMtx(this, mpTableModel->getBaseTRMtx());
     mpTableUpBckAnm->play();
     setBaseMtx();
 }
 
-/* 80C9B2A8-80C9B2C8 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjMirrorTable_Method */
 static actor_method_class l_daObjMirrorTable_Method = {
     (process_method_func)daObjMirrorTable_Create,
     (process_method_func)daObjMirrorTable_Delete,
@@ -488,7 +461,6 @@ static actor_method_class l_daObjMirrorTable_Method = {
     (process_method_func)daObjMirrorTable_Draw,
 };
 
-/* 80C9B2C8-80C9B2F8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_MirrorTable */
 extern actor_process_profile_definition g_profile_Obj_MirrorTable = {
     fpcLy_CURRENT_e,
     3,

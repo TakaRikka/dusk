@@ -7,8 +7,6 @@
 #include "JSystem/JStudio/JStudio_JParticle/object-particle.h"
 #include "JSystem/JStudio/JStudio_JStage/control.h"
 
-/* 8028E60C-8028E700 288F4C 00F4+00 0/0 1/1 0/0 .text
- * __ct__Q217JStudio_JParticle17TAdaptor_particleFPQ217JStudio_JParticle13TCreateObject */
 JStudio_JParticle::TAdaptor_particle::TAdaptor_particle(
     JStudio_JParticle::TCreateObject* param_1) :
     pCreateObject_(param_1),
@@ -30,8 +28,6 @@ JStudio_JParticle::TAdaptor_particle::TAdaptor_particle(
     JUT_ASSERT(90, pCreateObject_!=NULL);
 }
 
-/* 8028E760-8028E850 2890A0 00F0+00 1/0 0/0 0/0 .text
- * __dt__Q217JStudio_JParticle17TAdaptor_particleFv             */
 JStudio_JParticle::TAdaptor_particle::~TAdaptor_particle() {
     if (pJPAEmitter_ != NULL) {
         if (field_0x1b6 == 0) {
@@ -45,8 +41,6 @@ JStudio_JParticle::TAdaptor_particle::~TAdaptor_particle() {
     }
 }
 
-/* 8028E850-8028E97C 289190 012C+00 1/0 0/0 0/0 .text
- * adaptor_do_prepare__Q217JStudio_JParticle17TAdaptor_particleFv */
 void JStudio_JParticle::TAdaptor_particle::adaptor_do_prepare() {
     static JStudio::TAdaptor::TSetVariableValue_immediate aoData[18] = {
         JStudio::TAdaptor::TSetVariableValue_immediate(0, 0.0f),
@@ -71,13 +65,9 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_prepare() {
     adaptor_setVariableValue_immediate(aoData);
 }
 
-/* 8028E97C-8028E980 2892BC 0004+00 1/0 0/0 0/0 .text
- * adaptor_do_end__Q217JStudio_JParticle17TAdaptor_particleFv   */
 void JStudio_JParticle::TAdaptor_particle::adaptor_do_end() {
 }
 
-/* 8028E980-8028EA68 2892C0 00E8+00 1/0 0/0 0/0 .text
- * adaptor_do_update__Q217JStudio_JParticle17TAdaptor_particleFUl */
 void JStudio_JParticle::TAdaptor_particle::adaptor_do_update(u32 param_1) {
     const JStudio::TObject* pObject = adaptor_getObject();
     JUT_ASSERT(179, pObject != NULL);
@@ -148,8 +138,6 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_BEGIN_FADE_IN(
     }
 }
 
-/* 8028EAF8-8028EB24 289438 002C+00 1/0 0/0 0/0 .text
- * adaptor_do_END__Q217JStudio_JParticle17TAdaptor_particleFQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio_JParticle::TAdaptor_particle::adaptor_do_END(JStudio::data::TEOperationData param_1,
                                                           const void* pContent, u32 uSize) {
     if (param_1 == JStudio::data::UNK_0x1) {
@@ -265,8 +253,6 @@ void JStudio_JParticle::TAdaptor_particle::adaptor_do_ON_EXIT_NOT_END(JStudio::d
     }
 }
 
-/* 8028ECC0-8028F060 289600 03A0+00 1/0 0/0 0/0 .text
- * execute__Q317JStudio_JParticle17TAdaptor_particle21TJPACallback_emitter_FP14JPABaseEmitter */
 void
 JStudio_JParticle::TAdaptor_particle::TJPACallback_emitter_::execute(JPABaseEmitter* pJPAEmitter) {
     JUT_ASSERT(518, pJPAEmitter==pThis_->pJPAEmitter_);
@@ -356,8 +342,6 @@ JStudio_JParticle::TAdaptor_particle::TJPACallback_emitter_::executeAfter(JPABas
     }
 }
 
-/* 8028F098-8028F0D0 2899D8 0038+00 1/0 0/0 0/0 .text
- * draw__Q317JStudio_JParticle17TAdaptor_particle21TJPACallback_emitter_FP14JPABaseEmitter */
 void
 JStudio_JParticle::TAdaptor_particle::TJPACallback_emitter_::draw(JPABaseEmitter* pJPAEmitter) {
     if (pOld != NULL) {
@@ -365,8 +349,6 @@ JStudio_JParticle::TAdaptor_particle::TJPACallback_emitter_::draw(JPABaseEmitter
     }
 }
 
-/* 8028F0D0-8028F108 289A10 0038+00 1/0 0/0 0/0 .text
- * drawAfter__Q317JStudio_JParticle17TAdaptor_particle21TJPACallback_emitter_FP14JPABaseEmitter */
 void
 JStudio_JParticle::TAdaptor_particle::TJPACallback_emitter_::drawAfter(JPABaseEmitter* pJPAEmitter) {
     if (pOld != NULL) {
@@ -374,8 +356,6 @@ JStudio_JParticle::TAdaptor_particle::TJPACallback_emitter_::drawAfter(JPABaseEm
     }
 }
 
-/* 8028F108-8028F1C0 289A48 00B8+00 3/3 0/0 0/0 .text
- * beginParticle_fadeIn___Q217JStudio_JParticle17TAdaptor_particleFv */
 void JStudio_JParticle::TAdaptor_particle::beginParticle_fadeIn_() {
     if (pJPAEmitter_ != NULL) {
         pCreateObject_->emitter_destroy(pJPAEmitter_);
@@ -396,8 +376,6 @@ void JStudio_JParticle::TAdaptor_particle::beginParticle_fadeIn_() {
     }
 }
 
-/* 8028F1C0-8028F2E8 289B00 0128+00 1/1 0/0 0/0 .text
- * endParticle_fadeOut___Q217JStudio_JParticle17TAdaptor_particleFUl */
 void JStudio_JParticle::TAdaptor_particle::endParticle_fadeOut_(u32 param_1) {
     if (pJPAEmitter_ == NULL) {
         return;

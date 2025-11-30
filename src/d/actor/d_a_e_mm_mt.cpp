@@ -8,8 +8,6 @@
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_enemy.h"
 
-/* 80722F78-8072305C 000078 00E4+00 1/0 0/0 0/0 .text            daE_MM_MT_Draw__FP13e_mm_mt_class
- */
 static int daE_MM_MT_Draw(e_mm_mt_class* i_this) {
     i_this->enemy.model = i_this->mp_model;
     fopAc_ac_c* actor = (fopAc_ac_c*) i_this;
@@ -32,8 +30,6 @@ static int daE_MM_MT_Draw(e_mm_mt_class* i_this) {
     return 1;
 }
 
-/* 8072305C-80723270 00015C 0214+00 2/2 0/0 0/0 .text            e_mm_hookCheck__FP13e_mm_mt_class
- */
 static bool e_mm_hookCheck(e_mm_mt_class* i_this) {
 
     cCcD_Obj* hitObject;
@@ -89,8 +85,6 @@ static bool e_mm_hookCheck(e_mm_mt_class* i_this) {
     return 0;
 }
 
-/* 80723270-807234E8 000370 0278+00 1/1 0/0 0/0 .text            e_mm_mt_normal__FP13e_mm_mt_class
- */
 static void e_mm_mt_normal(e_mm_mt_class* i_this) {
     fopAc_ac_c* helmasaurActor;
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
@@ -153,8 +147,6 @@ static void e_mm_mt_normal(e_mm_mt_class* i_this) {
     }
 }
 
-/* 807234E8-80723744 0005E8 025C+00 1/1 0/0 0/0 .text            e_mm_mt_hagare__FP13e_mm_mt_class
- */
 static void e_mm_mt_hagare(e_mm_mt_class* i_this) {
     fopAc_ac_c* player = (fopAc_ac_c*) dComIfGp_getPlayer(0);
     fopAc_ac_c* actor = (fopAc_ac_c*) i_this;
@@ -210,7 +202,6 @@ static void e_mm_mt_hagare(e_mm_mt_class* i_this) {
     }
 }
 
-/* 80723744-807239CC 000844 0288+00 1/1 0/0 0/0 .text            e_mm_mt_carry__FP13e_mm_mt_class */
 static void e_mm_mt_carry(e_mm_mt_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*) &i_this->enemy;
     fopAc_ac_c* player = (fopAc_ac_c*) dComIfGp_getPlayer(0);
@@ -302,7 +293,6 @@ static s16 wall_angle_get(e_mm_mt_class* i_this) {
     return  vec1.atan2sX_Z() + 0x4000;
 }
 
-/* 80723B70-80724190 000C70 0620+00 1/1 0/0 0/0 .text            e_mm_mt_drop__FP13e_mm_mt_class */
 static void e_mm_mt_drop(e_mm_mt_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*) i_this;
 
@@ -430,7 +420,6 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
     }
 }
 
-/* 80724190-80724D40 001290 0BB0+00 1/1 0/0 0/0 .text            action__FP13e_mm_mt_class */
 static void action(e_mm_mt_class* i_this) {
     fopAc_ac_c* unusedPlayer = dComIfGp_getPlayer(0);
     fopAc_ac_c* actor = static_cast<fopAc_ac_c*>(&i_this->enemy);
@@ -713,7 +702,6 @@ static void action(e_mm_mt_class* i_this) {
     dComIfG_Ccsp()->Set(&i_this->m_sphere);
 }
 
-/* 80724D40-80724DF4 001E40 00B4+00 2/1 0/0 0/0 .text daE_MM_MT_Execute__FP13e_mm_mt_class */
 static int daE_MM_MT_Execute(e_mm_mt_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*) i_this;
     i_this->m_lifetime++;
@@ -732,13 +720,10 @@ static int daE_MM_MT_Execute(e_mm_mt_class* i_this) {
     return true;
 }
 
-/* 80724DF4-80724DFC 001EF4 0008+00 1/0 0/0 0/0 .text daE_MM_MT_IsDelete__FP13e_mm_mt_class */
 static int daE_MM_MT_IsDelete(e_mm_mt_class* i_this) {
     return 1;
 }
 
-/* 80724DFC-80724E58 001EFC 005C+00 1/0 0/0 0/0 .text            daE_MM_MT_Delete__FP13e_mm_mt_class
- */
 static int daE_MM_MT_Delete(e_mm_mt_class* i_this) {
     dComIfG_resDelete(&i_this->m_phase, "E_MM_MT");
     if (i_this->enemy.heap != NULL) {
@@ -747,7 +732,6 @@ static int daE_MM_MT_Delete(e_mm_mt_class* i_this) {
     return 1;
 }
 
-/* 80724E58-80724EE0 001F58 0088+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     J3DModelData* i_modelData;
     int resource_index = 4;
@@ -767,7 +751,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80724EE0-80725218 001FE0 0338+00 1/0 0/0 0/0 .text            daE_MM_MT_Create__FP10fopAc_ac_c */
 static int daE_MM_MT_Create(fopAc_ac_c* i_this) {
     cPhs__Step cVar1;
     bool bVar2;
@@ -859,7 +842,6 @@ static int daE_MM_MT_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 807259EC-80725A0C -00001 0020+00 1/0 0/0 0/0 .data            l_daE_MM_MT_Method */
 static actor_method_class l_daE_MM_MT_Method = {
     (process_method_func)daE_MM_MT_Create,
     (process_method_func)daE_MM_MT_Delete,
@@ -868,7 +850,6 @@ static actor_method_class l_daE_MM_MT_Method = {
     (process_method_func)daE_MM_MT_Draw,
 };
 
-/* 80725A0C-80725A3C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_MM_MT */
 extern actor_process_profile_definition g_profile_E_MM_MT = {
   fpcLy_CURRENT_e,        // mLayerID
   8,                      // mListID

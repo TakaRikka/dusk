@@ -22,8 +22,8 @@ enum daE_MM_ACTION {
 
 class daE_MM_HIO_c : public JORReflexible {
 public:
-    /* 8071F9CC */ daE_MM_HIO_c();
-    /* 80722780 */ virtual ~daE_MM_HIO_c() {}
+    daE_MM_HIO_c();
+    virtual ~daE_MM_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -42,7 +42,6 @@ public:
     /* 0x32 */ s16 donketsu_angle;
 };
 
-/* 8071F9CC-8071FA44 0000EC 0078+00 1/1 0/0 0/0 .text            __ct__12daE_MM_HIO_cFv */
 daE_MM_HIO_c::daE_MM_HIO_c() {
     id = -1;
     base_size = 1.4f;
@@ -59,13 +58,11 @@ daE_MM_HIO_c::daE_MM_HIO_c() {
     donketsu_angle = 300;
 }
 
-/* 8071FA44-8071FAF0 000164 00AC+00 8/8 0/0 0/0 .text            anm_init__FP10e_mm_classifUcf */
 static void anm_init(e_mm_class* i_this, int i_anm, f32 i_morf, u8 i_mode, f32 i_speed) {
     i_this->modelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_MM", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f);
     i_this->anm = i_anm;
 }
 
-/* 8071FAF0-8071FBC4 000210 00D4+00 1/0 0/0 0/0 .text            daE_MM_Draw__FP10e_mm_class */
 static int daE_MM_Draw(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     J3DModel* model = i_this->modelMorf->getModel();
@@ -80,7 +77,6 @@ static int daE_MM_Draw(e_mm_class* i_this) {
     return 1;
 }
 
-/* 8071FBC4-8071FC24 0002E4 0060+00 1/1 0/0 0/0 .text            pl_check__FP10e_mm_classfs */
 static BOOL pl_check(e_mm_class* i_this, f32 i_range, s16) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -91,14 +87,10 @@ static BOOL pl_check(e_mm_class* i_this, f32 i_range, s16) {
     return 0;
 }
 
-/* 80722EB0-80722EB4 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 80722EC0-80722EF4 000018 0034+00 7/7 0/0 0/0 .bss             l_HIO */
 static daE_MM_HIO_c l_HIO;
 
-/* 8071FC24-8071FE98 000344 0274+00 1/1 0/0 0/0 .text            damage_checkMetOn__FP10e_mm_class
- */
 static void damage_checkMetOn(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -169,7 +161,6 @@ static void damage_checkMetOn(e_mm_class* i_this) {
     }
 }
 
-/* 8071FE98-807201A0 0005B8 0308+00 1/1 0/0 0/0 .text            damage_check__FP10e_mm_class */
 static void damage_check(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -257,7 +248,6 @@ static void damage_check(e_mm_class* i_this) {
     }
 }
 
-/* 807201A0-807202F0 0008C0 0150+00 2/2 0/0 0/0 .text            wall_check__FP10e_mm_classf */
 static bool wall_check(e_mm_class* i_this, f32 param_1) {
     fopAc_ac_c* actor = &i_this->enemy;
     dBgS_LinChk linchk;
@@ -290,8 +280,6 @@ static bool wall_check(e_mm_class* i_this, f32 param_1) {
     return TRUE;
 }
 
-/* 807202F0-807203E0 000A10 00F0+00 2/2 0/0 0/0 .text            mGround_WaterEffSet__FP10e_mm_class
- */
 static void mGround_WaterEffSet(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     J3DModel* model = i_this->modelMorf->getModel();
@@ -313,7 +301,6 @@ static void mGround_WaterEffSet(e_mm_class* i_this) {
     }
 }
 
-/* 807203E0-80720590 000B00 01B0+00 1/1 0/0 0/0 .text            mWaterEffSet__FP10e_mm_classb */
 static void mWaterEffSet(e_mm_class* i_this, bool param_1) {
     fopAc_ac_c* actor = &i_this->enemy;
     J3DModel* model = i_this->modelMorf->getModel();
@@ -353,7 +340,6 @@ static void mWaterEffSet(e_mm_class* i_this, bool param_1) {
     }
 }
 
-/* 80720590-807206FC 000CB0 016C+00 3/3 0/0 0/0 .text            way_gake_check__FP10e_mm_class */
 static bool way_gake_check(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     dBgS_GndChk gndchk;
@@ -387,7 +373,6 @@ static bool way_gake_check(e_mm_class* i_this) {
     return FALSE;
 }
 
-/* 807206FC-80720B50 000E1C 0454+00 1/1 0/0 0/0 .text            e_mm_normal__FP10e_mm_class */
 static void e_mm_normal(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp38;
@@ -487,7 +472,6 @@ static void e_mm_normal(e_mm_class* i_this) {
     }
 }
 
-/* 80720B50-807211CC 001270 067C+00 1/1 0/0 0/0 .text            e_mm_dash__FP10e_mm_class */
 static void e_mm_dash(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp40;
@@ -645,7 +629,6 @@ static void e_mm_dash(e_mm_class* i_this) {
     cLib_addCalc2(&actor->speedF, move_speed, 1.0f, var_f30);
 }
 
-/* 807211CC-807212C8 0018EC 00FC+00 1/1 0/0 0/0 .text            e_mm_defence__FP10e_mm_class */
 static void e_mm_defence(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp14;
@@ -673,7 +656,6 @@ static void e_mm_defence(e_mm_class* i_this) {
     cLib_addCalc0(&actor->speedF, 1.0f, 3.0f);
 }
 
-/* 807212C8-807213BC 0019E8 00F4+00 1/1 0/0 0/0 .text            e_mm_magne_wait__FP10e_mm_class */
 static void e_mm_magne_wait(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp18;
@@ -696,7 +678,6 @@ static void e_mm_magne_wait(e_mm_class* i_this) {
     cLib_addCalc0(&actor->speedF, 1.0f, 3.0f);
 }
 
-/* 807213BC-80721538 001ADC 017C+00 1/1 0/0 0/0 .text            e_mm_turn__FP10e_mm_class */
 static void e_mm_turn(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -734,7 +715,6 @@ static void e_mm_turn(e_mm_class* i_this) {
     cLib_addCalc0(&actor->speedF, 1.0f, 3.0f);
 }
 
-/* 80721538-807217F4 001C58 02BC+00 1/1 0/0 0/0 .text            e_mm_damage__FP10e_mm_class */
 static void e_mm_damage(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -799,7 +779,6 @@ static void e_mm_damage(e_mm_class* i_this) {
     cLib_addCalcAngleS2(&actor->current.angle.y, i_this->field_0x6ac, 2, 0x800);
 }
 
-/* 807217F4-80721D44 001F14 0550+00 2/1 0/0 0/0 .text            action__FP10e_mm_class */
 static void action(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp40;
@@ -935,7 +914,6 @@ static void action(e_mm_class* i_this) {
     }
 }
 
-/* 80721D44-80722004 002464 02C0+00 2/1 0/0 0/0 .text            daE_MM_Execute__FP10e_mm_class */
 static int daE_MM_Execute(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp20;
@@ -1010,12 +988,10 @@ static int daE_MM_Execute(e_mm_class* i_this) {
     return 1;
 }
 
-/* 80722004-8072200C 002724 0008+00 1/0 0/0 0/0 .text            daE_MM_IsDelete__FP10e_mm_class */
 static int daE_MM_IsDelete(e_mm_class* i_this) {
     return 1;
 }
 
-/* 8072200C-80722080 00272C 0074+00 1/0 0/0 0/0 .text            daE_MM_Delete__FP10e_mm_class */
 static int daE_MM_Delete(e_mm_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -1033,7 +1009,6 @@ static int daE_MM_Delete(e_mm_class* i_this) {
     return 1;
 }
 
-/* 80722080-8072218C 0027A0 010C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_mm_class* a_this = (e_mm_class*)i_this;
 
@@ -1050,7 +1025,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8072218C-8072256C 0028AC 03E0+00 1/0 0/0 0/0 .text            daE_MM_Create__FP10fopAc_ac_c */
 static int daE_MM_Create(fopAc_ac_c* actor) {
     fopAcM_ct(actor, e_mm_class);
     e_mm_class* i_this = (e_mm_class*)actor;
@@ -1157,7 +1131,6 @@ static int daE_MM_Create(fopAc_ac_c* actor) {
     return phase_state;
 }
 
-/* 80722DEC-80722E0C -00001 0020+00 1/0 0/0 0/0 .data            l_daE_MM_Method */
 static actor_method_class l_daE_MM_Method = {
     (process_method_func)daE_MM_Create,
     (process_method_func)daE_MM_Delete,
@@ -1166,7 +1139,6 @@ static actor_method_class l_daE_MM_Method = {
     (process_method_func)daE_MM_Draw,
 };
 
-/* 80722E0C-80722E3C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_MM */
 extern actor_process_profile_definition g_profile_E_MM = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

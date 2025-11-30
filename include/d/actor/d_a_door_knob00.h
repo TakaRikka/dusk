@@ -29,44 +29,44 @@ public:
 
     typedef int (daKnob20_c::*actionFunc)();
 
-    /* 8045E888 */ char* getAlwaysArcName();
-    /* 8045E898 */ char* getEvArcName();
-    /* 8045E8A8 */ char* getDzb();
-    /* 8045E8B8 */ char* getDummyBmd();
-    /* 8045E8C8 */ char* getBmd();
-    /* 8045E91C */ J3DModelData* getDoorModelData();
-    /* 8045E960 */ int CreateHeap();
-    /* 8045EBA0 */ void calcMtx();
-    /* 8045EC44 */ int CreateInit();
-    /* 8045ED1C */ int create();
-    /* 8045EE5C */ int checkOpenDoor(int*);
-    /* 8045EEE4 */ void setActionFromFlow();
-    /* 8045EFCC */ void setEventId();
-    /* 8045F058 */ int checkArea(f32, f32, f32);
-    /* 8045F29C */ void setEventPrm();
-    /* 8045F428 */ int releaseBG();
-    /* 8045F478 */ int frontCheck();
-    /* 8045F520 */ int getDemoAction();
-    /* 8045F568 */ int demoProc();
-    /* 8045F8A4 */ void setStart(f32, f32);
-    /* 8045F94C */ void setAngle();
-    /* 8045F968 */ int adjustmentProc();
-    /* 8045FA98 */ int openInit(int);
-    /* 8045FBF8 */ int openProc(int);
-    /* 8045FCA4 */ int openEnd(int);
-    /* 8045FDF8 */ void initOpenDemo();
-    /* 8045FE68 */ void startDemoProc();
-    /* 8045FF08 */ int actionWait();
-    /* 8045FFB0 */ int actionSpecialDemo();
-    /* 8046002C */ int actionDemo();
-    /* 804600C0 */ int actionTalk();
-    /* 8046012C */ int actionTalkWait();
-    /* 804601D4 */ int actionTalkOpen();
-    /* 8046027C */ int actionInit();
-    /* 804602D8 */ int actionDead();
-    /* 804602E0 */ int execute();
-    /* 8046045C */ int draw();
-    /* 80460550 */ int Delete();
+    char* getAlwaysArcName();
+    char* getEvArcName();
+    char* getDzb();
+    char* getDummyBmd();
+    char* getBmd();
+    J3DModelData* getDoorModelData();
+    int CreateHeap();
+    void calcMtx();
+    int CreateInit();
+    int create();
+    int checkOpenDoor(int*);
+    void setActionFromFlow();
+    void setEventId();
+    int checkArea(f32, f32, f32);
+    void setEventPrm();
+    int releaseBG();
+    int frontCheck();
+    int getDemoAction();
+    int demoProc();
+    void setStart(f32, f32);
+    void setAngle();
+    int adjustmentProc();
+    int openInit(int);
+    int openProc(int);
+    int openEnd(int);
+    void initOpenDemo();
+    void startDemoProc();
+    int actionWait();
+    int actionSpecialDemo();
+    int actionDemo();
+    int actionTalk();
+    int actionTalkWait();
+    int actionTalkOpen();
+    int actionInit();
+    int actionDead();
+    int execute();
+    int draw();
+    int Delete();
 
     void setAction(u8 action) { mAction = action; }
     void offFlag(u16 flag) { field_0x60c &= ~flag; }
@@ -99,10 +99,10 @@ STATIC_ASSERT(sizeof(daKnob20_c) == 0x618);
 
 class knob_param_c {
 public:
-    /* 8045E858 */ static u32 getDoorModel(fopAc_ac_c*);
-    /* 8045E864 */ static u32 getDoorLightInf(fopAc_ac_c*);
-    /* 8045E870 */ static u16 getMsgNo(fopAc_ac_c*);
-    /* 8045E87C */ static u8 getExitNo(fopAc_ac_c*);
+    static u32 getDoorModel(fopAc_ac_c*);
+    static u32 getDoorLightInf(fopAc_ac_c*);
+    static u16 getMsgNo(fopAc_ac_c*);
+    static u8 getExitNo(fopAc_ac_c*);
 };
 
 #endif /* D_A_DOOR_KNOB00_H */

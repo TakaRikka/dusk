@@ -5,7 +5,6 @@
 #include "Z2AudioLib/Z2SceneMgr.h"
 #include "Z2AudioLib/Z2LinkMgr.h"
 
-/* 802BF920-802BF980 2BA260 0060+00 0/0 1/1 0/0 .text            __ct__13Z2SoundObjMgrFv */
 Z2SoundObjMgr::Z2SoundObjMgr() : JASGlobalInstance<Z2SoundObjMgr>(true) {
     ghostEnemyState_ = 0;
     twilightBattle_ = 0;
@@ -13,8 +12,6 @@ Z2SoundObjMgr::Z2SoundObjMgr() : JASGlobalInstance<Z2SoundObjMgr>(true) {
     setForceBattleArea(false, 700, 1100, 1500);
 }
 
-/* 802BF980-802BF994 2BA2C0 0014+00 1/1 3/3 3/3 .text setForceBattleArea__13Z2SoundObjMgrFbUsUsUs
- */
 void Z2SoundObjMgr::setForceBattleArea(bool forceBattle, u16 param_1, u16 param_2, u16 param_3) {
     forceBattle_ = forceBattle;
     enemyArea_.field_0x2 = param_1;
@@ -22,22 +19,16 @@ void Z2SoundObjMgr::setForceBattleArea(bool forceBattle, u16 param_1, u16 param_
     enemyArea_.field_0x6 = param_3;
 }
 
-/* 80455B80-80455B84 004180 0004+00 1/1 0/0 0/0 .sdata2          sAreaDefault */
 static Z2EnemyArea const sAreaDefault = {true, 700, 1100, 1500};
 
-/* 80455B88-80455B8C 004188 0004+00 1/1 0/0 0/0 .sdata2          sAreaFloating */
 static Z2EnemyArea const sAreaFloating = {false, 700, 1100, 1500};
 
-/* 80455B90-80455B94 004190 0004+00 1/1 0/0 0/0 .sdata2          sAreaWide */
 static Z2EnemyArea const sAreaWide = {true, 700, 1500, 3300};
 
-/* 80455B98-80455B9C 004198 0004+00 1/1 0/0 0/0 .sdata2          sAreaWideFloating */
 static Z2EnemyArea const sAreaWideFloating = {false, 700, 1500, 3300};
 
-/* 80455BA0-80455BA4 0041A0 0004+00 1/1 0/0 0/0 .sdata2          sAreaSmall */
 static Z2EnemyArea const sAreaSmall = {true, 300, 700, 1000};
 
-/* 80455BA8-80455BAC 0041A8 0004+00 1/1 0/0 0/0 .sdata2          sAreaSmallFloating */
 static Z2EnemyArea const sAreaSmallFloating = {false, 500, 800, 1200};
 
 struct Z2EnemyInfo {
@@ -45,7 +36,6 @@ struct Z2EnemyInfo {
     Z2EnemyArea mEnemyArea;
 };
 
-/* 803CAD70-803CB170 027E90 0400+00 3/3 0/0 0/0 .data            mEnemyInfo */
 static Z2EnemyInfo mEnemyInfo[64] = {
     {"Dummy", sAreaDefault},
     {"E_s1", {true, 700, 1200, 2000}},
@@ -113,7 +103,6 @@ static Z2EnemyInfo mEnemyInfo[64] = {
     {"B_tn", sAreaDefault},
 };
 
-/* 802BF994-802BFFEC 2BA2D4 0658+00 1/0 1/1 0/0 .text            searchEnemy__13Z2SoundObjMgrFv */
 void Z2SoundObjMgr::searchEnemy() {
     twilightBattle_ = 0;
 
@@ -356,8 +345,6 @@ void Z2SoundObjMgr::setGhostEnemyState(u8 state) {
     ghostEnemyState_ = state + (ghostEnemyState_ & 1);
 }
 
-/* 802C0074-802C0100 2BA9B4 008C+00 0/0 1/1 0/0 .text
- * getEnemyID__13Z2SoundObjMgrFPCcP26JSULink<15Z2CreatureEnemy> */
 u8 Z2SoundObjMgr::getEnemyID(const char* enemyName, JSULink<Z2CreatureEnemy>* enemyLink) {
     if (enemyName != NULL) {
         for (u8 i = 0; i < ARRAY_SIZEU(mEnemyInfo); i++) {
@@ -371,7 +358,6 @@ u8 Z2SoundObjMgr::getEnemyID(const char* enemyName, JSULink<Z2CreatureEnemy>* en
     return Z2_ENEMY_NULL;
 }
 
-/* 802C0100-802C0120 2BAA40 0020+00 1/1 1/1 0/0 .text            setBattleInit__13Z2SoundObjMgrFv */
 void Z2SoundObjMgr::setBattleInit() {
     field_0x14 = 0;
     enemuNumNear_ = 0;
@@ -381,7 +367,6 @@ void Z2SoundObjMgr::setBattleInit() {
     field_0x1a = false;
 }
 
-/* 802C0120-802C013C 2BAA60 001C+00 0/0 1/1 0/0 .text checkBattleFinish__13Z2SoundObjMgrFv */
 bool Z2SoundObjMgr::checkBattleFinish() {
     if (enemuNumVeryFar_ - field_0x18 > 0) {
         return false;
@@ -390,8 +375,6 @@ bool Z2SoundObjMgr::checkBattleFinish() {
     }
 }
 
-/* 802C013C-802C0190 2BAA7C 0054+00 0/0 1/1 0/0 .text            deleteEnemyAll__13Z2SoundObjMgrFv
- */
 void Z2SoundObjMgr::deleteEnemyAll() {
     JSULink<Z2CreatureEnemy>* i;
 
@@ -406,8 +389,6 @@ void Z2SoundObjMgr::deleteEnemyAll() {
     }
 }
 
-/* 802C0190-802C01E4 2BAAD0 0054+00 0/0 2/2 0/0 .text
- * removeEnemy__13Z2SoundObjMgrFP26JSULink<15Z2CreatureEnemy>   */
 bool Z2SoundObjMgr::removeEnemy(JSULink<Z2CreatureEnemy>* enemyLink) {
     if (enemyLink == NULL) {
         return false;
@@ -422,8 +403,6 @@ bool Z2SoundObjMgr::removeEnemy(JSULink<Z2CreatureEnemy>* enemyLink) {
     return result;
 }
 
-/* 802C01E4-802C01EC 2BAB24 0008+00 0/0 4/4 0/0 .text            isTwilightBattle__13Z2SoundObjMgrFv
- */
 u8 Z2SoundObjMgr::isTwilightBattle() {
     return twilightBattle_;
 }

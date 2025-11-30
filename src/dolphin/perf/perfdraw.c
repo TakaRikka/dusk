@@ -4,8 +4,8 @@
 
 #include "__perf.h"
 
-__declspec(weak) f32 HEIGHT(u32 a, f32 f);
-__declspec(weak) f32 COORD(u32 a);
+DECL_WEAK f32 HEIGHT(u32 a, f32 f);
+DECL_WEAK f32 COORD(u32 a);
 
 // internal macro for Perfdraw.
 #define DRAW_RECT(x1, x2, y1, y2, color)       \
@@ -299,11 +299,11 @@ static void DrawBWBar(PerfSample* s) {
 }
 
 #if DEBUG
-__declspec(weak) f32 HEIGHT(u32 a, f32 f) {
+DECL_WEAK f32 HEIGHT(u32 a, f32 f) {
     return 140.0f * ((f32) a / ((f32) MaxBusTransactions * f));
 }
 
-__declspec(weak) f32 COORD(u32 a) {
+DECL_WEAK f32 COORD(u32 a) {
     return 616.0f * ((f32) a / (f32) DrawFrameMax);
 }
 #endif

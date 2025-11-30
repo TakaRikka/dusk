@@ -9,7 +9,6 @@
 #include "f_op/f_op_draw_tag.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-/* 8001F284-8001F2C0 019BC4 003C+00 1/0 0/0 0/0 .text            fopKy_Draw__FPv */
 static int fopKy_Draw(void* i_this) {
     int ret;
     kankyo_class* a_this = (kankyo_class*)i_this;
@@ -21,7 +20,6 @@ static int fopKy_Draw(void* i_this) {
     return ret;
 }
 
-/* 8001F2C0-8001F314 019C00 0054+00 1/0 0/0 0/0 .text            fopKy_Execute__FPv */
 static int fopKy_Execute(void* i_this) {
     int ret;
     kankyo_class* a_this = (kankyo_class*)i_this;
@@ -33,7 +31,6 @@ static int fopKy_Execute(void* i_this) {
     return ret;
 }
 
-/* 8001F314-8001F368 019C54 0054+00 1/0 0/0 0/0 .text            fopKy_IsDelete__FPv */
 static int fopKy_IsDelete(void* i_this) {
     int ret;
     kankyo_class* a_this = (kankyo_class*)i_this;
@@ -46,7 +43,6 @@ static int fopKy_IsDelete(void* i_this) {
     return ret;
 }
 
-/* 8001F368-8001F3B4 019CA8 004C+00 1/0 0/0 0/0 .text            fopKy_Delete__FPv */
 static int fopKy_Delete(void* i_this) {
     kankyo_class* a_this = (kankyo_class*)i_this;
 
@@ -56,10 +52,8 @@ static int fopKy_Delete(void* i_this) {
     return ret;
 }
 
-/* 80450CE8-80450CF0 0001E8 0004+04 1/1 0/0 0/0 .sbss            fopKy_KANKYO_TYPE */
 static int fopKy_KANKYO_TYPE;
 
-/* 8001F3B4-8001F488 019CF4 00D4+00 1/0 0/0 0/0 .text            fopKy_Create__FPv */
 static int fopKy_Create(void* i_this) {
     kankyo_class* a_this = (kankyo_class*)i_this;
 
@@ -88,7 +82,6 @@ static int fopKy_Create(void* i_this) {
     return ret;
 }
 
-/* 803A3940-803A3958 -00001 0014+04 0/0 7/0 0/0 .data            g_fopKy_Method */
 leafdraw_method_class g_fopKy_Method = {
     (process_method_func)fopKy_Create,  (process_method_func)fopKy_Delete,
     (process_method_func)fopKy_Execute, (process_method_func)fopKy_IsDelete,

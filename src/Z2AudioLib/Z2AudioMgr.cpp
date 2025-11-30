@@ -16,19 +16,14 @@
 #include "Z2AudioLib/Z2AudioCS.h"
 #endif
 
-/* 80451368-80451370 000868 0004+04 1/1 251/251 900/900 .sbss            mAudioMgrPtr__10Z2AudioMgr
- */
 Z2AudioMgr* Z2AudioMgr::mAudioMgrPtr;
 
-/* 802CD248-802CD34C 2C7B88 0104+00 0/0 1/1 0/0 .text            __ct__10Z2AudioMgrFv */
 Z2AudioMgr::Z2AudioMgr() : mSoundStarter(true) {
     mAudioMgrPtr = this;
     mResettingFlag = false;
     field_0x519 = false;
 }
 
-/* 802CD34C-802CD7F8 2C7C8C 04AC+00 0/0 1/1 0/0 .text
- * init__10Z2AudioMgrFP12JKRSolidHeapUlPvP10JKRArchive          */
 // NONMATCHING JASPoolAllocObject<_> locations
 void Z2AudioMgr::init(JKRSolidHeap* heap, u32 memSize, void* baaData, JKRArchive* seqArc) {
     JAU_JASInitializer JASInitializer;
@@ -139,14 +134,12 @@ void Z2AudioMgr::init(JKRSolidHeap* heap, u32 memSize, void* baaData, JKRArchive
     #endif
 }
 
-/* 802CD888-802CD8B4 2C81C8 002C+00 0/0 5/5 0/0 .text            setOutputMode__10Z2AudioMgrFUl */
 void Z2AudioMgr::setOutputMode(u32 mode) {
     if (mode <= 2) {
         JAISetOutputMode(mode);
     }
 }
 
-/* 802CD8B4-802CD904 2C81F4 0050+00 1/1 0/0 0/0 .text            zeldaGFrameWork__10Z2AudioMgrFv */
 void Z2AudioMgr::zeldaGFrameWork() {
     processTime();
     mSpeechMgr.framework();
@@ -159,7 +152,6 @@ void Z2AudioMgr::zeldaGFrameWork() {
     #endif
 }
 
-/* 802CD904-802CD974 2C8244 0070+00 0/0 1/1 0/0 .text            gframeProcess__10Z2AudioMgrFv */
 void Z2AudioMgr::gframeProcess() {
     zeldaGFrameWork();
 
@@ -173,7 +165,6 @@ void Z2AudioMgr::gframeProcess() {
     }
 }
 
-/* 802CD974-802CD9CC 2C82B4 0058+00 0/0 3/3 0/0 .text            resetProcess__10Z2AudioMgrFUlb */
 void Z2AudioMgr::resetProcess(u32 param_0, bool param_1) {
     JUT_ASSERT(413, !mResettingFlag);
 
@@ -182,7 +173,6 @@ void Z2AudioMgr::resetProcess(u32 param_0, bool param_1) {
     mResettingFlag = true;
 }
 
-/* 802CD9CC-802CDA6C 2C830C 00A0+00 0/0 1/1 0/0 .text            resetRecover__10Z2AudioMgrFv */
 void Z2AudioMgr::resetRecover() {
     JUT_ASSERT(427, mResettingFlag);
     JUT_ASSERT(428, mAudioReseter.checkDone());
@@ -199,14 +189,11 @@ void Z2AudioMgr::resetRecover() {
 }
 
 
-/* 802CDA6C-802CDB1C 2C83AC 00B0+00 0/0 2/2 0/0 .text            hasReset__10Z2AudioMgrCFv */
 bool Z2AudioMgr::hasReset() const {
     return mResettingFlag && mAudioReseter.checkDone() &&
         (field_0x519 || (mSoundMgr.getSeMgr()->getNumActiveSe() == 0 && mSoundMgr.getSeqMgr()->getNumActiveSeqs() == 0));
 }
 
-/* 802CDB1C-802CDB68 2C845C 004C+00 1/0 1/0 0/0 .text
- * startSound__10Z2AudioMgrF10JAISoundIDP14JAISoundHandlePCQ29JGeometry8TVec3<f> */
 bool Z2AudioMgr::startSound(JAISoundID soundID, JAISoundHandle* handle,
                             const JGeometry::TVec3<f32>* posPtr) {
     if (mResettingFlag) {

@@ -4108,7 +4108,7 @@ revolution/os/OSPlayTime.c:
 revolution/os/OSLaunch.c:
 	.text       start:0x805C95C0 end:0x805C9810
 
-revolution/os/__ppc_eabi_init.c:
+revolution/os/__ppc_eabi_init.cpp:
 	.text       start:0x805C9810 end:0x805C9920
 
 revolution/exi/EXIBios.c:

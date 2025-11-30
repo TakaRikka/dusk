@@ -7,10 +7,8 @@
 
 #include "d/actor/d_a_obj_stopper2.h"
 
-/* 80CEFF24-80CEFF28 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Stop00";
 
-/* 80CEFF28-80CEFF38 -00001 0010+00 1/1 0/0 0/0 .data            l_evName */
 static char* l_evName[4] = {
     "STOP_OPEN",
     "STOP_CLOSE",
@@ -18,46 +16,37 @@ static char* l_evName[4] = {
     "STOP_CLOSE2",
 };
 
-/* 80CEFF38-80CEFF3C -00001 0004+00 1/1 0/0 0/0 .data            l_staffName */
 static char* l_staffName = "dstop";
 
-/* 80CEF338-80CEF358 000078 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjStopper2_c*)i_this)->CreateHeap();
 }
 
-/* 80CEF358-80CEF368 000098 0010+00 1/1 0/0 0/0 .text            getStopName__Fv */
 static const char* getStopName() {
     return "door-stop.bmd";
 }
 
-/* 80CEF368-80CEF38C 0000A8 0024+00 1/1 0/0 0/0 .text getStopModelData__15daObjStopper2_cFv */
 J3DModelData* daObjStopper2_c::getStopModelData() {
     return (J3DModelData*)dComIfG_getStageRes(getStopName());
 }
 
-/* 80CEF38C-80CEF3C8 0000CC 003C+00 1/1 0/0 0/0 .text            initBaseMtx__15daObjStopper2_cFv */
 void daObjStopper2_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80CEF3C8-80CEF434 000108 006C+00 2/2 0/0 0/0 .text            setBaseMtx__15daObjStopper2_cFv */
 void daObjStopper2_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + mOffsetY, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CEF434-80CEF44C 000174 0018+00 2/2 0/0 0/0 .text            getMaxOffsetY__15daObjStopper2_cFv
- */
 f32 daObjStopper2_c::getMaxOffsetY() {
     J3DJoint* root_jnt = mpModel->getModelData()->getJointNodePointer(0);
     JUT_ASSERT(154, root_jnt != NULL);
     return root_jnt->getMax()->y;
 }
 
-/* 80CEF44C-80CEF57C 00018C 0130+00 1/1 0/0 0/0 .text            Create__15daObjStopper2_cFv */
 int daObjStopper2_c::Create() {
     if (!fopAcM_isSwitch(this, getSwbit())) {
         mOffsetY = 0.0f;
@@ -85,7 +74,6 @@ int daObjStopper2_c::Create() {
     return 1;
 }
 
-/* 80CEF57C-80CEF5C8 0002BC 004C+00 1/1 0/0 0/0 .text            CreateHeap__15daObjStopper2_cFv */
 int daObjStopper2_c::CreateHeap() {
     J3DModelData* modelData = getStopModelData();
     JUT_ASSERT(206, modelData != NULL);
@@ -98,7 +86,6 @@ int daObjStopper2_c::CreateHeap() {
     return 1;
 }
 
-/* 80CEF5C8-80CEF66C 000308 00A4+00 1/1 0/0 0/0 .text            create__15daObjStopper2_cFv */
 int daObjStopper2_c::create() {
     fopAcM_ct(this, daObjStopper2_c);
 
@@ -125,14 +112,12 @@ int daObjStopper2_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80CEF66C-80CEF6A4 0003AC 0038+00 1/1 0/0 0/0 .text            execute__15daObjStopper2_cFv */
 int daObjStopper2_c::execute() {
     event_proc_call();
     setBaseMtx();
     return 1;
 }
 
-/* 80CEF6A4-80CEF760 0003E4 00BC+00 1/1 0/0 0/0 .text event_proc_call__15daObjStopper2_cFv */
 void daObjStopper2_c::event_proc_call() {
     static void (daObjStopper2_c::*l_func[])() = {
         &daObjStopper2_c::actionWait,
@@ -144,7 +129,6 @@ void daObjStopper2_c::event_proc_call() {
     (this->*l_func[mAction])();
 }
 
-/* 80CEF760-80CEF98C 0004A0 022C+00 1/0 0/0 0/0 .text            actionWait__15daObjStopper2_cFv */
 void daObjStopper2_c::actionWait() {
     BOOL is_switch = fopAcM_isSwitch(this, getSwbit());
 
@@ -191,7 +175,6 @@ void daObjStopper2_c::actionWait() {
     }
 }
 
-/* 80CEF98C-80CEFA60 0006CC 00D4+00 1/0 0/0 0/0 .text actionOrderEvent__15daObjStopper2_cFv */
 void daObjStopper2_c::actionOrderEvent() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(2);
@@ -209,7 +192,6 @@ void daObjStopper2_c::actionOrderEvent() {
     }
 }
 
-/* 80CEFA60-80CEFAD4 0007A0 0074+00 1/0 0/0 0/0 .text            actionEvent__15daObjStopper2_cFv */
 void daObjStopper2_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventIdx[field_0x584])) {
         setAction(0);
@@ -219,10 +201,8 @@ void daObjStopper2_c::actionEvent() {
     }
 }
 
-/* 80CEFAD4-80CEFAD8 000814 0004+00 1/0 0/0 0/0 .text            actionDead__15daObjStopper2_cFv */
 void daObjStopper2_c::actionDead() {}
 
-/* 80CEFAD8-80CEFD40 000818 0268+00 2/2 0/0 0/0 .text            demoProc__15daObjStopper2_cFv */
 int daObjStopper2_c::demoProc() {
     static char* action_table[3] = {
         "WAIT",
@@ -286,7 +266,6 @@ int daObjStopper2_c::demoProc() {
     return 0;
 }
 
-/* 80CEFD40-80CEFDB8 000A80 0078+00 1/1 0/0 0/0 .text            draw__15daObjStopper2_cFv */
 int daObjStopper2_c::draw() {
     if (field_0x588 == 0) {
         return 1;
@@ -298,34 +277,27 @@ int daObjStopper2_c::draw() {
     return 1;
 }
 
-/* 80CEFDB8-80CEFDEC 000AF8 0034+00 1/1 0/0 0/0 .text            _delete__15daObjStopper2_cFv */
 int daObjStopper2_c::_delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
     return 1;
 }
 
-/* 80CEFDEC-80CEFE0C 000B2C 0020+00 1/0 0/0 0/0 .text daObjStopper2_Draw__FP15daObjStopper2_c */
 static int daObjStopper2_Draw(daObjStopper2_c* i_this) {
     return i_this->draw();
 }
 
-/* 80CEFE0C-80CEFE2C 000B4C 0020+00 1/0 0/0 0/0 .text daObjStopper2_Execute__FP15daObjStopper2_c
- */
 static int daObjStopper2_Execute(daObjStopper2_c* i_this) {
     return i_this->execute();
 }
 
-/* 80CEFE2C-80CEFE4C 000B6C 0020+00 1/0 0/0 0/0 .text daObjStopper2_Delete__FP15daObjStopper2_c */
 static int daObjStopper2_Delete(daObjStopper2_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80CEFE4C-80CEFE6C 000B8C 0020+00 1/0 0/0 0/0 .text daObjStopper2_Create__FP15daObjStopper2_c */
 static int daObjStopper2_Create(daObjStopper2_c* i_this) {
     return i_this->create();
 }
 
-/* 80CEFFA8-80CEFFC8 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjStopper2_Method */
 static actor_method_class l_daObjStopper2_Method = {
     (process_method_func)daObjStopper2_Create,
     (process_method_func)daObjStopper2_Delete,
@@ -334,7 +306,6 @@ static actor_method_class l_daObjStopper2_Method = {
     (process_method_func)daObjStopper2_Draw,
 };
 
-/* 80CEFFC8-80CEFFF8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Stopper2 */
 extern actor_process_profile_definition g_profile_Obj_Stopper2 = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID

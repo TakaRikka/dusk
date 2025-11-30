@@ -12,53 +12,42 @@
 daObjSwpush2::Hio_c daObjSwpush2::Act_c::M_hio;
 #endif
 
-/* 80CFE098-80CFE0A4 000078 000C+00 1/1 0/0 0/0 .text getArcName__Q212daObjSwpush25Act_cFv */
 const char* daObjSwpush2::Act_c::getArcName() {
     return "K_swmn00";
 }
 
-/* 80CFE0A4-80CFE0B4 000084 0010+00 1/1 0/0 0/0 .text getBmdName__Q212daObjSwpush25Act_cFv */
 const char* daObjSwpush2::Act_c::getBmdName() {
     return "K_hum_isw00.bmd";
 }
 
-/* 80CFE0B4-80CFE0C4 000094 0010+00 1/1 0/0 0/0 .text getDzbName__Q212daObjSwpush25Act_cFv */
 const char* daObjSwpush2::Act_c::getDzbName() {
     return "K_hum_isw00.dzb";
 }
 
-/* 80CFE0C4-80CFE0D4 0000A4 0010+00 1/1 0/0 0/0 .text getNmlBtkName__Q212daObjSwpush25Act_cFv */
 const char* daObjSwpush2::Act_c::getNmlBtkName() {
     return "K_isw_nml.btk";
 }
 
-/* 80CFE0D4-80CFE0E4 0000B4 0010+00 1/1 0/0 0/0 .text getNmlBrkName__Q212daObjSwpush25Act_cFv */
 const char* daObjSwpush2::Act_c::getNmlBrkName() {
     return "K_isw_nml.brk";
 }
 
-/* 80CFE0E4-80CFE0F4 0000C4 0010+00 1/1 0/0 0/0 .text getOnBtkName__Q212daObjSwpush25Act_cFv */
 const char* daObjSwpush2::Act_c::getOnBtkName() {
     return "K_isw_on.btk";
 }
 
-/* 80CFE0F4-80CFE104 0000D4 0010+00 1/1 0/0 0/0 .text getRunBpkName__Q212daObjSwpush25Act_cFv */
 const char* daObjSwpush2::Act_c::getRunBpkName() {
     return "K_isw_run.bpk";
 }
 
-/* 80CFE104-80CFE114 0000E4 0010+00 1/1 0/0 0/0 .text getRunBrkName__Q212daObjSwpush25Act_cFv */
 const char* daObjSwpush2::Act_c::getRunBrkName() {
     return "K_isw_run.brk";
 }
 
-/* 80CFE114-80CFE124 0000F4 0010+00 1/1 0/0 0/0 .text getRunBtkName__Q212daObjSwpush25Act_cFv */
 const char* daObjSwpush2::Act_c::getRunBtkName() {
     return "K_isw_run.btk";
 }
 
-/* 80CFE124-80CFE154 000104 0030+00 1/1 0/0 0/0 .text            prmZ_init__Q212daObjSwpush25Act_cFv
- */
 void daObjSwpush2::Act_c::prmZ_init() {
     if (!mPrmInit) {
         mPrmZ = home.angle.z;
@@ -69,7 +58,6 @@ void daObjSwpush2::Act_c::prmZ_init() {
     }
 }
 
-/* 80CFE154-80CFE1AC 000134 0058+00 1/1 0/0 0/0 .text is_switch2__Q212daObjSwpush25Act_cCFv */
 bool daObjSwpush2::Act_c::is_switch2() const {
     int swbit = prmZ_get_swSave2();
     if (swbit == 0xFF) {
@@ -79,17 +67,12 @@ bool daObjSwpush2::Act_c::is_switch2() const {
     return fopAcM_isSwitch(this, swbit);
 }
 
-/* 80CFE1AC-80CFE1D0 00018C 0024+00 1/1 0/0 0/0 .text
- * solidHeapCB__Q212daObjSwpush25Act_cFP10fopAc_ac_c            */
 int daObjSwpush2::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
     return ((daObjSwpush2::Act_c*)i_this)->create_heap();
 }
 
-/* 80CFFBF4-80CFFC00 000000 0009+03 5/4 0/0 0/0 .rodata          M_arcname__Q212daObjSwpush25Act_c
- */
 const char daObjSwpush2::Act_c::M_arcname[9] = "K_swmn00";
 
-/* 80CFFC00-80CFFCE0 -00001 00E0+00 7/10 0/0 0/0 .rodata          M_attr__Q212daObjSwpush25Act_c */
 const daObjSwpush2::Attr_c daObjSwpush2::Act_c::M_attr[4] = {
     {
         0x2000,
@@ -165,7 +148,6 @@ const daObjSwpush2::Attr_c daObjSwpush2::Act_c::M_attr[4] = {
     },
 };
 
-/* 80CFE1D0-80CFE690 0001B0 04C0+00 1/1 0/0 0/0 .text create_heap__Q212daObjSwpush25Act_cFv */
 bool daObjSwpush2::Act_c::create_heap() {
     void* model_data = dComIfG_getObjectRes(getArcName(), getBmdName());
     JUT_ASSERT(436, model_data != NULL);
@@ -250,7 +232,6 @@ bool daObjSwpush2::Act_c::create_heap() {
     return 1;
 }
 
-/* 80CFE6D8-80CFE8CC 0006B8 01F4+00 1/1 0/0 0/0 .text create_init__Q212daObjSwpush25Act_cFv */
 bool daObjSwpush2::Act_c::create_init() {
     bool rt = true;
 
@@ -296,7 +277,6 @@ bool daObjSwpush2::Act_c::create_init() {
     return rt;
 }
 
-/* 80CFE8CC-80CFE928 0008AC 005C+00 1/1 0/0 0/0 .text create_res_load__Q212daObjSwpush25Act_cFv */
 int daObjSwpush2::Act_c::create_res_load() {
     int phase_state;
     if (attr().arcname != NULL) {
@@ -312,7 +292,6 @@ int daObjSwpush2::Act_c::create_res_load() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80CFE928-80CFEA3C 000908 0114+00 1/1 0/0 0/0 .text Mthd_Create__Q212daObjSwpush25Act_cFv */
 int daObjSwpush2::Act_c::Mthd_Create() {
     fopAcM_ct(this, daObjSwpush2::Act_c);
     
@@ -342,7 +321,6 @@ int daObjSwpush2::Act_c::Mthd_Create() {
     return phase_state;
 }
 
-/* 80CFEA3C-80CFEAB4 000A1C 0078+00 1/1 0/0 0/0 .text Mthd_Delete__Q212daObjSwpush25Act_cFv */
 int daObjSwpush2::Act_c::Mthd_Delete() {
     if (mpBgw != NULL && mpBgw->ChkUsed()) {
         if (dComIfG_Bgsp().Release(mpBgw)) {
@@ -358,8 +336,6 @@ int daObjSwpush2::Act_c::Mthd_Delete() {
     return 1;
 }
 
-/* 80CFEAB4-80CFEB3C 000A94 0088+00 2/2 0/0 0/0 .text            set_mtx__Q212daObjSwpush25Act_cFv
- */
 void daObjSwpush2::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos.x, mTopPos + (-10.0f + current.pos.y), current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -369,15 +345,11 @@ void daObjSwpush2::Act_c::set_mtx() {
     cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80CFEB3C-80CFEB78 000B1C 003C+00 1/1 0/0 0/0 .text            init_mtx__Q212daObjSwpush25Act_cFv
- */
 void daObjSwpush2::Act_c::init_mtx() {
     mpModel->setBaseScale(scale);
     set_mtx();
 }
 
-/* 80CFEB78-80CFEBE4 000B58 006C+00 1/1 0/0 0/0 .text
- * rideCB__Q212daObjSwpush25Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjSwpush2::Act_c::rideCB(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_rideActor) {
     (void)i_bgw;
     daObjSwpush2::Act_c* a_this = (daObjSwpush2::Act_c*)i_this;
@@ -400,13 +372,11 @@ void daObjSwpush2::Act_c::rideCB(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_
     }
 }
 
-/* 80CFEBE4-80CFEC4C 000BC4 0068+00 1/1 0/0 0/0 .text calc_top_pos__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::calc_top_pos() {
     cLib_addCalc(&field_0x5e8, field_0x5ec, 0.05f, 0.02f, 0.01f);
     mTopPos = -50.0f * (1.0f - field_0x5e8);
 }
 
-/* 80CFEC4C-80CFEDDC 000C2C 0190+00 1/1 0/0 0/0 .text set_push_flag__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::set_push_flag() {
     if (mShockTimer != 0) {
         mShockTimer--;
@@ -447,7 +417,6 @@ void daObjSwpush2::Act_c::set_push_flag() {
     }
 }
 
-/* 80CFEDDC-80CFEDFC 000DBC 0020+00 2/2 0/0 0/0 .text mode_upper_init__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::mode_upper_init() {
     mModeProc = 0;
     field_0x5df = 0;
@@ -455,7 +424,6 @@ void daObjSwpush2::Act_c::mode_upper_init() {
     field_0x5ec = 1.0f;
 }
 
-/* 80CFEDFC-80CFEF84 000DDC 0188+00 1/0 0/0 0/0 .text mode_upper__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::mode_upper() {
     bool do_pause_demo = false;
     bool do_sw_demo = false;
@@ -496,14 +464,11 @@ void daObjSwpush2::Act_c::mode_upper() {
     }
 }
 
-/* 80CFEF84-80CFEF98 000F64 0014+00 1/1 0/0 0/0 .text mode_u_l_init__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::mode_u_l_init() {
     mModeProc = 1;
     field_0x5f0 = 12;
 }
 
-/* 80CFEF98-80CFF168 000F78 01D0+00 1/0 0/0 0/0 .text            mode_u_l__Q212daObjSwpush25Act_cFv
- */
 void daObjSwpush2::Act_c::mode_u_l() {
     if (field_0x5f0 != 0) {
         field_0x5f0--;
@@ -535,18 +500,14 @@ void daObjSwpush2::Act_c::mode_u_l() {
     }
 }
 
-/* 80CFF168-80CFF188 001148 0020+00 2/2 0/0 0/0 .text mode_lower_init__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::mode_lower_init() {
     mModeProc = 2;
     field_0x5df = 0;
     field_0x5ec = -1.0f;
 }
 
-/* 80CFF188-80CFF18C 001168 0004+00 1/0 0/0 0/0 .text mode_lower__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::mode_lower() {}
 
-/* 80CFF18C-80CFF24C 00116C 00C0+00 1/0 0/0 0/0 .text            mode_l_u__Q212daObjSwpush25Act_cFv
- */
 void daObjSwpush2::Act_c::mode_l_u() {
     if (field_0x5e8 >= 1.0f) {
         if (field_0x5df != 0) {
@@ -560,17 +521,12 @@ void daObjSwpush2::Act_c::mode_l_u() {
     }
 }
 
-/* 80CFF24C-80CFF258 00122C 000C+00 4/4 0/0 0/0 .text demo_non_init__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::demo_non_init() {
     mDemoProc = 0;
 }
 
-/* 80CFF258-80CFF25C 001238 0004+00 1/0 0/0 0/0 .text            demo_non__Q212daObjSwpush25Act_cFv
- */
 void daObjSwpush2::Act_c::demo_non() {}
 
-/* 80CFF25C-80CFF2B4 00123C 0058+00 1/1 0/0 0/0 .text demo_reqPause_init__Q212daObjSwpush25Act_cFv
- */
 void daObjSwpush2::Act_c::demo_reqPause_init() {
     if (mDemoProc == 0) {
         mDemoProc = 1;
@@ -579,7 +535,6 @@ void daObjSwpush2::Act_c::demo_reqPause_init() {
     }
 }
 
-/* 80CFF2B4-80CFF2EC 001294 0038+00 2/1 0/0 0/0 .text demo_reqPause__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::demo_reqPause() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         demo_runPause_init(TRUE);
@@ -588,8 +543,6 @@ void daObjSwpush2::Act_c::demo_reqPause() {
     }
 }
 
-/* 80CFF2EC-80CFF31C 0012CC 0030+00 2/2 0/0 0/0 .text demo_runPause_init__Q212daObjSwpush25Act_cFi
- */
 void daObjSwpush2::Act_c::demo_runPause_init(BOOL i_setRunTime) {
     mDemoProc = 2;
     if (i_setRunTime) {
@@ -597,7 +550,6 @@ void daObjSwpush2::Act_c::demo_runPause_init(BOOL i_setRunTime) {
     }
 }
 
-/* 80CFF31C-80CFF374 0012FC 0058+00 1/0 0/0 0/0 .text demo_runPause__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::demo_runPause() {
     mDemoRunTime--;
     if (mDemoRunTime <= 0) {
@@ -606,7 +558,6 @@ void daObjSwpush2::Act_c::demo_runPause() {
     }
 }
 
-/* 80CFF374-80CFF3C8 001354 0054+00 1/1 0/0 0/0 .text demo_stop_puase__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::demo_stop_puase() {
     if (mDemoProc == 1) {
         demo_reqPause();
@@ -617,7 +568,6 @@ void daObjSwpush2::Act_c::demo_stop_puase() {
     }
 }
 
-/* 80CFF3C8-80CFF48C 0013A8 00C4+00 1/1 0/0 0/0 .text demo_reqSw_init__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::demo_reqSw_init() {
     if (dComIfGp_evmng_existence(mEventIdx)) {
         if (mDemoProc == 0 || mDemoProc == 1 || mDemoProc == 2) {
@@ -632,7 +582,6 @@ void daObjSwpush2::Act_c::demo_reqSw_init() {
     }
 }
 
-/* 80CFF48C-80CFF500 00146C 0074+00 1/0 0/0 0/0 .text demo_reqSw__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::demo_reqSw() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         demo_runSw_init();
@@ -642,12 +591,10 @@ void daObjSwpush2::Act_c::demo_reqSw() {
     }
 }
 
-/* 80CFF500-80CFF50C 0014E0 000C+00 1/1 0/0 0/0 .text demo_runSw_init__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::demo_runSw_init() {
     mDemoProc = 4;
 }
 
-/* 80CFF50C-80CFF568 0014EC 005C+00 1/0 0/0 0/0 .text demo_runSw__Q212daObjSwpush25Act_cFv */
 void daObjSwpush2::Act_c::demo_runSw() {
     if (dComIfGp_evmng_endCheck(mEventIdx)) {
         dComIfGp_event_reset();
@@ -655,7 +602,6 @@ void daObjSwpush2::Act_c::demo_runSw() {
     }
 }
 
-/* 80CFF568-80CFF8FC 001548 0394+00 1/1 0/0 0/0 .text Mthd_Execute__Q212daObjSwpush25Act_cFv */
 int daObjSwpush2::Act_c::Mthd_Execute() {
     static void (daObjSwpush2::Act_c::*demo_proc[])() = {
         &daObjSwpush2::Act_c::demo_non,
@@ -707,8 +653,6 @@ int daObjSwpush2::Act_c::Mthd_Execute() {
     return 1;
 }
 
-/* 80CFF8FC-80CFFB50 0018DC 0254+00 1/1 0/0 0/0 .text            Mthd_Draw__Q212daObjSwpush25Act_cFv
- */
 int daObjSwpush2::Act_c::Mthd_Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -744,32 +688,22 @@ int daObjSwpush2::Act_c::Mthd_Draw() {
 
 namespace daObjSwpush2 {
 namespace {
-/* 80CFFB50-80CFFB70 001B30 0020+00 1/0 0/0 0/0 .text
- * Mthd_Create__Q212daObjSwpush229@unnamed@d_a_obj_swpush2_cpp@FPv */
 int Mthd_Create(void* i_this) {
     return ((Act_c*)i_this)->Mthd_Create();
 }
 
-/* 80CFFB70-80CFFB90 001B50 0020+00 1/0 0/0 0/0 .text
- * Mthd_Delete__Q212daObjSwpush229@unnamed@d_a_obj_swpush2_cpp@FPv */
 int Mthd_Delete(void* i_this) {
     return ((Act_c*)i_this)->Mthd_Delete();
 }
 
-/* 80CFFB90-80CFFBB0 001B70 0020+00 1/0 0/0 0/0 .text
- * Mthd_Execute__Q212daObjSwpush229@unnamed@d_a_obj_swpush2_cpp@FPv */
 int Mthd_Execute(void* i_this) {
     return ((Act_c*)i_this)->Mthd_Execute();
 }
 
-/* 80CFFBB0-80CFFBD0 001B90 0020+00 1/0 0/0 0/0 .text
- * Mthd_Draw__Q212daObjSwpush229@unnamed@d_a_obj_swpush2_cpp@FPv */
 int Mthd_Draw(void* i_this) {
     return ((Act_c*)i_this)->Mthd_Draw();
 }
 
-/* 80CFFE98-80CFFEB8 -00001 0020+00 1/0 0/0 0/0 .data
- * Mthd_Table__Q212daObjSwpush229@unnamed@d_a_obj_swpush2_cpp@  */
 actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create, 
     (process_method_func)Mthd_Delete, 
@@ -780,7 +714,6 @@ actor_method_class Mthd_Table = {
 }
 }
 
-/* 80CFFEB8-80CFFEE8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Swpush2 */
 extern actor_process_profile_definition g_profile_Obj_Swpush2 = {
   fpcLy_CURRENT_e,        // mLayerID
   2,                      // mListID

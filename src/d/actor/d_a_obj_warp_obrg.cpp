@@ -12,53 +12,40 @@
 #include "d/actor/d_a_midna.h"
 #include "d/d_bg_w.h"
 
-/* 80D2B934-80D2B938 -00001 0004+00 6/6 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Obj_obrg";
 
-/* 80D2B938-80D2B940 -00001 0008+00 1/1 0/0 0/0 .data            l_portal_warp_name */
 static char* l_portal_warp_name[2] = {
     "PORTAL_WARP_OBRIDGE",
     "PORTAL_WARP_OUT_OBRIDGE",
 };
 
-/* 80D2B7F8-80D2B800 000000 0008+00 6/6 0/0 0/0 .rodata          l_bmd_idx */
 static const int l_bmd_idx[] = {12, 11};
 
-/* 80D2B800-80D2B808 000008 0008+00 0/1 0/0 0/0 .rodata          l_dzb_idx */
 static const int l_dzb_idx[] = {20, 19};
 
-/* 80D2B808-80D2B810 000010 0008+00 1/3 0/0 0/0 .rodata          l_bck_idx */
 static const int l_bck_idx[] = {8, 7};
 
-/* 80D2B810-80D2B818 000018 0008+00 0/1 0/0 0/0 .rodata          l_btk_idx */
 static const int l_btk_idx[] = {16, 15};
 
-/* 80D2B818-80D2B824 000020 000A+02 0/1 0/0 0/0 .rodata          l_beam_eff */
 static const u16 l_beam_eff[] = {0x8B4B, 0x8B4C, 0x8B4D, 0x8B4E, 0x8B53};
 
-/* 80D2B824-80D2B830 00002C 000A+02 0/1 0/0 0/0 .rodata          l_disapp_eff */
 static const u16 l_disapp_eff[] = {0x8B38, 0x8B39, 0x8B3A, 0x8B3B, 0x8B35};
 
-/* 80D2B830-80D2B838 000038 0006+02 0/1 0/0 0/0 .rodata          l_app_eff */
 static const u16 l_app_eff[] = {0x8B34, 0x8B36, 0x8B37};
 
-/* 80D2B838-80D2B844 000040 000C+00 1/1 0/0 0/0 .rodata          l_midna_wait_offset */
 static const Vec l_midna_wait_offset = {100.0f, -1265.0f, -760.0f};
 
-/* 80D2B940-80D2B948 -00001 0008+00 3/3 0/0 0/0 .data            l_staff_name */
 static char* l_staff_name[2] = {
     "WarpOB1",
     "WarpOB2",
 };
 
-/* 80D299B8-80D29A00 000078 0048+00 1/1 0/0 0/0 .text            initBaseMtx__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::initBaseMtx() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80D29A00-80D29ACC 0000C0 00CC+00 1/1 0/0 0/0 .text            setBaseMtx__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -76,7 +63,6 @@ void daObjWarpOBrg_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80D29ACC-80D29BB4 00018C 00E8+00 1/0 0/0 0/0 .text            Create__15daObjWarpOBrg_cFv */
 int daObjWarpOBrg_c::Create() {
     initBaseMtx();
     fopAcM_setCullSizeBox2(this, mpModel->getModelData());
@@ -102,7 +88,6 @@ int daObjWarpOBrg_c::Create() {
     return 1;
 }
 
-/* 80D29BB4-80D29E34 000274 0280+00 1/0 0/0 0/0 .text            CreateHeap__15daObjWarpOBrg_cFv */
 int daObjWarpOBrg_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmd_idx[getNameArg()]);
     JUT_ASSERT(254, modelData != NULL);
@@ -139,7 +124,6 @@ int daObjWarpOBrg_c::CreateHeap() {
     return 1;
 }
 
-/* 80D29E7C-80D2A008 00053C 018C+00 1/1 0/0 0/0 .text            create1st__15daObjWarpOBrg_cFv */
 int daObjWarpOBrg_c::create1st() {
     if (!mPrmInit) {
         mMsgID = home.angle.z;
@@ -192,7 +176,6 @@ int daObjWarpOBrg_c::create1st() {
     return phase_state;
 }
 
-/* 80D2A008-80D2A04C 0006C8 0044+00 1/0 0/0 0/0 .text Execute__15daObjWarpOBrg_cFPPA3_A4_f */
 int daObjWarpOBrg_c::Execute(Mtx** param_0) {
     #if VERSION == VERSION_SHIELD_DEBUG
     calcMidnaWaitPos();
@@ -204,7 +187,6 @@ int daObjWarpOBrg_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80D2A04C-80D2A194 00070C 0148+00 1/1 0/0 0/0 .text event_proc_call__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::event_proc_call() {
     static void (daObjWarpOBrg_c::*l_func[])() = {
         &daObjWarpOBrg_c::actionWait,
@@ -229,7 +211,6 @@ void daObjWarpOBrg_c::event_proc_call() {
     }
 }
 
-/* 80D2A194-80D2A4CC 000854 0338+00 1/0 0/0 0/0 .text            actionWait__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::actionWait() {
     daMidna_c* midna_p = daPy_py_c::getMidnaActor();
 
@@ -271,7 +252,6 @@ void daObjWarpOBrg_c::actionWait() {
     }
 }
 
-/* 80D2A4CC-80D2A740 000B8C 0274+00 1/0 0/0 0/0 .text actionOrderEvent__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::actionOrderEvent() {
     daMidna_c* midna_p = (daMidna_c*)daPy_py_c::getMidnaActor();
 
@@ -299,7 +279,6 @@ void daObjWarpOBrg_c::actionOrderEvent() {
     }
 }
 
-/* 80D2A740-80D2A7C4 000E00 0084+00 1/0 0/0 0/0 .text actionTalkEvent__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::actionTalkEvent() {
     if (mMsgFlow.doFlow(this, NULL, 0)) {
         setAction(ACTION_ORDER_EVENT_e);
@@ -312,7 +291,6 @@ void daObjWarpOBrg_c::actionTalkEvent() {
     }
 }
 
-/* 80D2A7C4-80D2A93C 000E84 0178+00 1/0 0/0 0/0 .text actionWarpEvent__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::actionWarpEvent() {
     if (!dComIfGp_evmng_endCheck(mEventId)) {
         demoProc();
@@ -350,7 +328,6 @@ void daObjWarpOBrg_c::actionWarpEvent() {
     }
 }
 
-/* 80D2A93C-80D2A9E4 000FFC 00A8+00 1/0 0/0 0/0 .text actionOrderEventDst__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::actionOrderEventDst() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         mStaffId = dComIfGp_evmng_getMyStaffId(l_staff_name[getNameArg()], NULL, 0);
@@ -361,17 +338,14 @@ void daObjWarpOBrg_c::actionOrderEventDst() {
     }
 }
 
-/* 80D2A9E4-80D2AA30 0010A4 004C+00 1/0 0/0 0/0 .text actionWarpEventDst__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::actionWarpEventDst() {
     if (!dComIfGp_evmng_endCheck(mEventId)) {
         demoProc();
     }
 }
 
-/* 80D2AA30-80D2AA34 0010F0 0004+00 1/0 0/0 0/0 .text            actionDead__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::actionDead() {}
 
-/* 80D2AA34-80D2B3BC 0010F4 0988+00 2/2 0/0 0/0 .text            demoProc__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::demoProc() {
     static char* action_table[4] = {
         "WAIT",
@@ -555,7 +529,6 @@ void daObjWarpOBrg_c::demoProc() {
     }
 }
 
-/* 80D2B3BC-80D2B534 001A7C 0178+00 2/2 0/0 0/0 .text checkTalkDistance__15daObjWarpOBrg_cFv */
 bool daObjWarpOBrg_c::checkTalkDistance() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 player_dist = mMidnaWaitPos.absXZ(*fopAcM_GetPosition_p(daPy_getPlayerActorClass()));
@@ -569,7 +542,6 @@ bool daObjWarpOBrg_c::checkTalkDistance() {
     }
 }
 
-/* 80D2B534-80D2B5C8 001BF4 0094+00 1/1 0/0 0/0 .text calcMidnaWaitPos__15daObjWarpOBrg_cFv */
 void daObjWarpOBrg_c::calcMidnaWaitPos() {
     cXyz offset(l_midna_wait_offset);
     mDoMtx_stack_c::transS(current.pos);
@@ -580,7 +552,6 @@ void daObjWarpOBrg_c::calcMidnaWaitPos() {
     attention_info.position.y += 250.0f;
 }
 
-/* 80D2B5C8-80D2B6C0 001C88 00F8+00 1/0 0/0 0/0 .text            Draw__15daObjWarpOBrg_cFv */
 int daObjWarpOBrg_c::Draw() {
     if (getNameArg() == 1) {
         g_env_light.settingTevStruct(32, &current.pos, &tevStr);
@@ -599,38 +570,28 @@ int daObjWarpOBrg_c::Draw() {
     return 1;
 }
 
-/* 80D2B6C0-80D2B6F4 001D80 0034+00 1/0 0/0 0/0 .text            Delete__15daObjWarpOBrg_cFv */
 int daObjWarpOBrg_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     return 1;
 }
 
-/* 80D2B6F4-80D2B768 001DB4 0074+00 1/0 0/0 0/0 .text daObjWarpOBrg_create1st__FP15daObjWarpOBrg_c
- */
 static int daObjWarpOBrg_create1st(daObjWarpOBrg_c* i_this) {
     fopAcM_ct(i_this, daObjWarpOBrg_c);
     return i_this->create1st();
 }
 
-/* 80D2B768-80D2B788 001E28 0020+00 1/0 0/0 0/0 .text
- * daObjWarpOBrg_MoveBGDelete__FP15daObjWarpOBrg_c              */
 static int daObjWarpOBrg_MoveBGDelete(daObjWarpOBrg_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D2B788-80D2B7A8 001E48 0020+00 1/0 0/0 0/0 .text
- * daObjWarpOBrg_MoveBGExecute__FP15daObjWarpOBrg_c             */
 static int daObjWarpOBrg_MoveBGExecute(daObjWarpOBrg_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D2B7A8-80D2B7D4 001E68 002C+00 1/0 0/0 0/0 .text
- * daObjWarpOBrg_MoveBGDraw__FP15daObjWarpOBrg_c                */
 static int daObjWarpOBrg_MoveBGDraw(daObjWarpOBrg_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80D2BA00-80D2BA20 -00001 0020+00 1/0 0/0 0/0 .data            daObjWarpOBrg_METHODS */
 static actor_method_class daObjWarpOBrg_METHODS = {
     (process_method_func)daObjWarpOBrg_create1st,
     (process_method_func)daObjWarpOBrg_MoveBGDelete,
@@ -639,7 +600,6 @@ static actor_method_class daObjWarpOBrg_METHODS = {
     (process_method_func)daObjWarpOBrg_MoveBGDraw,
 };
 
-/* 80D2BA20-80D2BA50 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_OrdinBrg */
 extern actor_process_profile_definition g_profile_Obj_OrdinBrg = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

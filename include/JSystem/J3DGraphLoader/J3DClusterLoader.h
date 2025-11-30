@@ -8,7 +8,7 @@
  * 
  */
 struct J3DClusterLoaderDataBase {
-    /* 80334130 */ static void* load(void const*);
+    static void* load(void const*);
 };
 
 /**
@@ -38,7 +38,7 @@ public:
 class J3DClusterLoader {
 public:
     virtual void* load(const void*) = 0;
-    /* 803345FC */ virtual ~J3DClusterLoader() {}
+    virtual ~J3DClusterLoader() {}
 };
 
 class J3DDeformData;
@@ -49,11 +49,11 @@ class J3DDeformData;
  */
 class J3DClusterLoader_v15 : public J3DClusterLoader {
 public:
-    /* 803341CC */ J3DClusterLoader_v15();
-    /* 803342F8 */ void readCluster(J3DClusterBlock const*);
+    J3DClusterLoader_v15();
+    void readCluster(J3DClusterBlock const*);
 
-    /* 80334244 */ virtual void* load(void const*);
-    /* 803341E8 */ virtual ~J3DClusterLoader_v15();
+    virtual void* load(void const*);
+    virtual ~J3DClusterLoader_v15();
 
     /* 0x04 */ J3DDeformData* mpDeformData;
 };

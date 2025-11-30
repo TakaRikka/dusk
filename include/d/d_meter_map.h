@@ -7,34 +7,34 @@ class J2DPicture;
 class dMap_c;
 class dMeterMap_c : public dDlst_base_c {
 public:
-    /* 8020D49C */ static bool isEnableDispMap();
-    /* 8020D528 */ static int getMapDispSizeTypeNo();
-    /* 8020D650 */ static bool isEnableDispMapAndMapDispSizeTypeNo();
-    /* 8020D690 */ f32 getMapDispEdgeBottomY_Layout();
-    /* 8020D698 */ bool isEventRunCheck();
-    /* 8020D72C */ f32 getMapDispEdgeLeftX_Layout();
-    /* 8020D75C */ f32 getMapDispEdgeTop();
-    /* 8020D7E4 */ s16 getDispPosInside_OffsetX();
-    /* 8020D7EC */ s16 getDispPosOutSide_OffsetX();
-    /* 8020D874 */ void setDispPosInsideFlg_SE_On();
-    /* 8020D8BC */ void setDispPosOutsideFlg_SE_On();
-    /* 8020D8F8 */ void setMapAlpha(u8);
-    /* 8020D900 */ static bool isMapOpenCheck();
-    /* 8020D948 */ dMeterMap_c(J2DScreen*);
-    /* 8020D9EC */ void _create(J2DScreen*);
-    /* 8020DC50 */ void _delete();
-    /* 8020DCE4 */ void _move(u32);
-    /* 8020DF1C */ void _draw();
-    /* 8020E070 */ void ctrlShowMap();
-    /* 8020E45C */ u8 checkMoveStatus();
-    /* 8020E4C8 */ static bool isShow(u32);
-    /* 8020E620 */ static bool isFmapScreen();
-    /* 8020E70C */ static bool isDmapScreen();
-    /* 8020E754 */ static void meter_map_move(u32);
-    /* 8020E9CC */ void keyCheck();
+    static bool isEnableDispMap();
+    static int getMapDispSizeTypeNo();
+    static bool isEnableDispMapAndMapDispSizeTypeNo();
+    f32 getMapDispEdgeBottomY_Layout();
+    bool isEventRunCheck();
+    f32 getMapDispEdgeLeftX_Layout();
+    f32 getMapDispEdgeTop();
+    s16 getDispPosInside_OffsetX();
+    s16 getDispPosOutSide_OffsetX();
+    void setDispPosInsideFlg_SE_On();
+    void setDispPosOutsideFlg_SE_On();
+    void setMapAlpha(u8);
+    static bool isMapOpenCheck();
+    dMeterMap_c(J2DScreen*);
+    void _create(J2DScreen*);
+    void _delete();
+    void _move(u32);
+    void _draw();
+    void ctrlShowMap();
+    u8 checkMoveStatus();
+    static bool isShow(u32);
+    static bool isFmapScreen();
+    static bool isDmapScreen();
+    static void meter_map_move(u32);
+    void keyCheck();
 
-    /* 8020DF68 */ virtual void draw();
-    /* 8020D990 */ virtual ~dMeterMap_c();
+    virtual void draw();
+    virtual ~dMeterMap_c();
 
     bool isDispPosInsideFlg() { return field_0x2d != 0; }
 

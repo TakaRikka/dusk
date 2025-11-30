@@ -26,14 +26,14 @@ public:
         MODE_0_e,
     };
 
-    /* 80C90AF8 */ void initWait();
-    /* 80C90B50 */ void executeWait();
-    /* 80C90C50 */ static int createHeapCallBack(fopAc_ac_c* i_this);
-    /* 80C90C70 */ int CreateHeap();
-    /* 80C90DB8 */ int create();
-    /* 80C90F6C */ inline void create_init();
-    /* 80C91448 */ ~daObjMasterSword_c();
-    /* 80C91714 */ int draw();
+    void initWait();
+    void executeWait();
+    static int createHeapCallBack(fopAc_ac_c* i_this);
+    int CreateHeap();
+    int create();
+    inline void create_init();
+    ~daObjMasterSword_c();
+    int draw();
 
     inline void initCollision();
     inline void setCollision();

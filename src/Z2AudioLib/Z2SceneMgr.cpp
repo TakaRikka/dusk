@@ -10,7 +10,6 @@
 #include "Z2AudioLib/Z2StatusMgr.h"
 #include "d/d_com_inf_game.h"
 
-/* 802B6840-802B68B0 2B1180 0070+00 0/0 1/1 0/0 .text            __ct__10Z2SceneMgrFv */
 Z2SceneMgr::Z2SceneMgr() : JASGlobalInstance<Z2SceneMgr>(true) {
     sceneNum = -1;
     BGM_ID = -1;
@@ -35,7 +34,6 @@ Z2SceneMgr::Z2SceneMgr() : JASGlobalInstance<Z2SceneMgr>(true) {
     load1stWait = 0;
 }
 
-/* 802B68B0-802B68E0 2B11F0 0030+00 0/0 1/1 0/0 .text            setInDarkness__10Z2SceneMgrFb */
 void Z2SceneMgr::setInDarkness(bool inDarkness) {
     OS_REPORT("[Z2SceneMgr::setInDarkness] inDarkness = %d\n", inDarkness);
 
@@ -129,7 +127,6 @@ static char* sSpotName[81] = {
     "D_SB10",
 };
 
-/* 802B68E0-802B697C 2B1220 009C+00 3/3 2/2 2/2 .text            setSceneExist__10Z2SceneMgrFb */
 void Z2SceneMgr::setSceneExist(bool isSceneExist) {
     sceneExist = isSceneExist;
     timer = 0;
@@ -151,7 +148,6 @@ void Z2SceneMgr::setSceneExist(bool isSceneExist) {
     }
 }
 
-/* 802B697C-802B6A18 2B12BC 009C+00 0/0 1/1 0/0 .text            setFadeOutStart__10Z2SceneMgrFUc */
 void Z2SceneMgr::setFadeOutStart(u8 fadeType) {
     OS_REPORT("[Z2SceneMgr::setFadeOutStart] fadeType = %d\n", fadeType);
 
@@ -163,7 +159,6 @@ void Z2SceneMgr::setFadeOutStart(u8 fadeType) {
     timer = -1;
 }
 
-/* 802B6A18-802B6AF8 2B1358 00E0+00 0/0 1/1 0/0 .text            setFadeInStart__10Z2SceneMgrFUc */
 void Z2SceneMgr::setFadeInStart(u8 fadeType) {
     OS_REPORT("[Z2SceneMgr::setFadeInStart] fadeType = %d\n", fadeType);
 
@@ -187,7 +182,6 @@ void Z2SceneMgr::setFadeInStart(u8 fadeType) {
     inGame = true;
 }
 
-/* 802B6AF8-802B995C 2B1438 2E64+00 8/0 1/1 0/0 .text            setSceneName__10Z2SceneMgrFPcll */
 // NONMATCHING JSULink<JAIStream>::getNext() inlining
 void Z2SceneMgr::setSceneName(char* spot, s32 room, s32 layer) {
     OS_REPORT("[Z2SceneMgr::setSceneName] spot = %s, room = %d, layer = %d\n", spot, room, layer);
@@ -1747,8 +1741,6 @@ void Z2SceneMgr::setSceneName(char* spot, s32 room, s32 layer) {
     roomNum = room;
 }
 
-/* 802B9B68-802B9C50 2B44A8 00E8+00 1/1 0/0 0/0 .text
- * sceneChange__10Z2SceneMgrF10JAISoundIDUcUcUcUcUcb            */
 void Z2SceneMgr::sceneChange(JAISoundID bgm, u8 seWave1, u8 seWave2, u8 bgmWave1, u8 bgmWave2,
                              u8 demoWave, bool param_6) {
     OS_REPORT("[Z2SceneMgr::sceneChange] bgm:0x%08x, SeWave1:%d, SeWave2:%d BgmWave1:%d BgmWave2:%d demoWave:%d (%d)\n",
@@ -1781,7 +1773,6 @@ void Z2SceneMgr::sceneChange(JAISoundID bgm, u8 seWave1, u8 seWave2, u8 bgmWave1
     Z2GetFxLineMgr()->setSceneFx(sceneNum);
 }
 
-/* 802B9C50-802B9D40 2B4590 00F0+00 0/0 1/1 0/0 .text            framework__10Z2SceneMgrFv */
 void Z2SceneMgr::framework() {
     if (load1stWait > 0) {
         load1stWait--;
@@ -1807,8 +1798,6 @@ void Z2SceneMgr::framework() {
     }
 }
 
-/* 802B9D40-802B9D98 2B4680 0058+00 0/0 1/1 0/0 .text            load1stDynamicWave__10Z2SceneMgrFv
- */
 void Z2SceneMgr::load1stDynamicWave() {
     OS_REPORT("[Z2SceneMgr::load1stDynamicWave] load1stWait:%d\n", load1stWait);
 
@@ -1820,7 +1809,6 @@ void Z2SceneMgr::load1stDynamicWave() {
     }
 }
 
-/* 802B9D98-802B9FC8 2B46D8 0230+00 2/2 0/0 0/0 .text            _load1stWaveInner_1__10Z2SceneMgrFv */
 void Z2SceneMgr::_load1stWaveInner_1() {
     OS_REPORT("[Z2SceneMgr::_load1stWaveInner_1] requestSe:%d loadedSe:%d\n", requestSeWave_1, loadedSeWave_1);
 
@@ -1871,8 +1859,6 @@ void Z2SceneMgr::_load1stWaveInner_1() {
     }
 }
 
-/* 802B9FC8-802BA09C 2B4908 00D4+00 2/2 0/0 0/0 .text            _load1stWaveInner_2__10Z2SceneMgrFv
- */
 void Z2SceneMgr::_load1stWaveInner_2() {
     OS_REPORT("[Z2SceneMgr::_load1stWaveInner_2] requestBgm:%d loadedBgm:%d\n", requestBgmWave_1, loadedBgmWave_1);
 
@@ -1896,14 +1882,10 @@ void Z2SceneMgr::_load1stWaveInner_2() {
     }
 }
 
-/* 802BA09C-802BA120 2B49DC 0084+00 0/0 1/1 0/0 .text            check1stDynamicWave__10Z2SceneMgrFv
- */
 bool Z2SceneMgr::check1stDynamicWave() {
     return load1stWait != 0 || getSeLoadStatus(requestSeWave_1) == 1 || getBgmLoadStatus(requestBgmWave_1) == 1;
 }
 
-/* 802BA120-802BA294 2B4A60 0174+00 0/0 2/2 0/0 .text            load2ndDynamicWave__10Z2SceneMgrFv
- */
 void Z2SceneMgr::load2ndDynamicWave() {
     OS_REPORT("[Z2SceneMgr::load2ndDynamicWave] requestSe:%d, loadedSe:%d requestBgm:%d loadedBgm:%d requestDemo:%d loadedDemo:%d\n",
         requestSeWave_2, loadedSeWave_2, requestBgmWave_2, loadedBgmWave_2, requestDemoWave, loadedDemoWave);
@@ -1945,7 +1927,6 @@ void Z2SceneMgr::load2ndDynamicWave() {
     }
 }
 
-/* 802BA294-802BA56C 2B4BD4 02D8+00 1/0 2/2 0/0 .text            sceneBgmStart__10Z2SceneMgrFv */
 // NONMATCHING - extra BGM_ID load
 void Z2SceneMgr::sceneBgmStart() {
     OS_REPORT("[Z2SceneMgr::sceneBgmStart] %08x\n", *(u32*)&BGM_ID);
@@ -2039,7 +2020,6 @@ void Z2SceneMgr::sceneBgmStart() {
     field_0x1a = false;
 }
 
-/* 802BA56C-802BA5C0 2B4EAC 0054+00 0/0 1/1 0/0 .text            loadStaticWaves__10Z2SceneMgrFv */
 void Z2SceneMgr::loadStaticWaves() {
     OS_REPORT("[Z2SceneMgr::loadStaticWaves] 常駐シーン波形を読み込みます\n");
     #if PLATFORM_SHIELD
@@ -2052,12 +2032,10 @@ void Z2SceneMgr::loadStaticWaves() {
     field_0x19 = 0x58;
 }
 
-/* 802BA5C0-802BA5C8 2B4F00 0008+00 0/0 1/1 0/0 .text            checkFirstWaves__10Z2SceneMgrFv */
 BOOL Z2SceneMgr::checkFirstWaves() {
     return false;
 }
 
-/* 802BA5C8-802BA630 2B4F08 0068+00 2/2 0/0 0/0 .text            eraseSeWave__10Z2SceneMgrFUl */
 bool Z2SceneMgr::eraseSeWave(u32 wave) {
     JAUSectionHeap* sectionHeap = JASGlobalInstance<JAUSectionHeap>::getInstance();
     JUT_ASSERT(2976, sectionHeap);
@@ -2072,7 +2050,6 @@ bool Z2SceneMgr::eraseSeWave(u32 wave) {
     return false;
 }
 
-/* 802BA630-802BA698 2B4F70 0068+00 2/2 0/0 0/0 .text            eraseBgmWave__10Z2SceneMgrFUl */
 bool Z2SceneMgr::eraseBgmWave(u32 wave) {
     JAUSectionHeap* sectionHeap = JASGlobalInstance<JAUSectionHeap>::getInstance();
     JUT_ASSERT(2988, sectionHeap);
@@ -2087,7 +2064,6 @@ bool Z2SceneMgr::eraseBgmWave(u32 wave) {
     return false;
 }
 
-/* 802BA698-802BA704 2B4FD8 006C+00 1/1 0/0 0/0 .text getWaveLoadStatus__10Z2SceneMgrFUlUl */
 s32 Z2SceneMgr::getWaveLoadStatus(u32 wave, u32 bank) {
     JAUSectionHeap* sectionHeap = JASGlobalInstance<JAUSectionHeap>::getInstance();
     JUT_ASSERT(3001, sectionHeap);
@@ -2118,7 +2094,6 @@ bool Z2SceneMgr::loadSceneWave(u32 wave, u32 bank) {
 }
 #endif
 
-/* 802BA704-802BA770 2B5044 006C+00 3/3 0/0 0/0 .text            loadSeWave__10Z2SceneMgrFUl */
 bool Z2SceneMgr::loadSeWave(u32 wave) {
     JAUSectionHeap* sectionHeap = JASGlobalInstance<JAUSectionHeap>::getInstance();
     JUT_ASSERT(3030, sectionHeap);
@@ -2135,7 +2110,6 @@ bool Z2SceneMgr::loadSeWave(u32 wave) {
     return false;
 }
 
-/* 802BA770-802BA7DC 2B50B0 006C+00 3/3 0/0 0/0 .text            loadBgmWave__10Z2SceneMgrFUl */
 bool Z2SceneMgr::loadBgmWave(u32 wave) {
     JAUSectionHeap* sectionHeap = JASGlobalInstance<JAUSectionHeap>::getInstance();
     JUT_ASSERT(3047, sectionHeap);

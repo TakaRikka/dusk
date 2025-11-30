@@ -1,7 +1,6 @@
 #include "file_io.h"
 #include "ctype.h"
 
-/* 803659F8-80365BB4 360338 01BC+00 0/0 1/1 0/0 .text            fclose */
 int fclose(FILE* file) {
     int flush_result, close_result;
 
@@ -22,7 +21,6 @@ int fclose(FILE* file) {
     return ((flush_result || close_result) ? -1 : 0);
 }
 
-/* 803658C0-803659F8 360200 0138+00 0/0 4/4 0/0 .text            fflush */
 int fflush(FILE* file) {
     int pos;
 
@@ -69,7 +67,6 @@ int fflush(FILE* file) {
     return 0;
 }
 
-/* 8036581C-803658C0 36015C 00A4+00 0/0 1/1 0/0 .text            __msl_strnicmp */
 int __msl_strnicmp(const char* str1, const char* str2, int n) {
     int i;
     char c1, c2;

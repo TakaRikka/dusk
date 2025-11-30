@@ -16,22 +16,22 @@
 class daObjYtaihou_c : public dBgS_MoveBgActor, public request_of_phase_process_class, public dEvLib_callback_c {
 public:
     daObjYtaihou_c() : dEvLib_callback_c(this) { mIronBallId = -1; }
-    /* 80B9FDE8 */ int create1st();
-    /* 80B9FEB0 */ void setIronBall(daObjCarry_c*);
-    /* 80B9FF08 */ int getEvent(u8);
-    /* 80B9FF1C */ void loadAngle();
-    /* 80B9FFAC */ void saveAngle();
-    /* 80BA0060 */ void setNextAngle();
-    /* 80BA0084 */ void setMtx();
-    /* 80BA0208 */ void rotateCheck();
-    /* 80BA045C */ void shotCheck();
-    /* 80BA0964 */ virtual bool eventStart();
-    /* 80BA0974 */ int CreateHeap();
-    /* 80BA09E4 */ int Create();
-    /* 80BA0A94 */ int Execute(Mtx** i_mtx);
-    /* 80BA0B4C */ int Draw();
-    /* 80BA0C1C */ int Delete();
-    /* 80BA0FA4 */ ~daObjYtaihou_c() {}
+    int create1st();
+    void setIronBall(daObjCarry_c*);
+    int getEvent(u8);
+    void loadAngle();
+    void saveAngle();
+    void setNextAngle();
+    void setMtx();
+    void rotateCheck();
+    void shotCheck();
+    virtual bool eventStart();
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx** i_mtx);
+    int Draw();
+    int Delete();
+    ~daObjYtaihou_c() {}
 
     void setAddAngle(s8 add_angle) { mAddAngle = add_angle; }
     s32 getIronBallId() { return mIronBallId; }

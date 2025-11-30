@@ -8,10 +8,10 @@
  * 
  */
 struct JASProbe {
-    /* 80290EE4 */ static void start(s32, char const*);
-    /* 80290D74 */ void start(char const*);
-    /* 80290DC4 */ void stop();
-    /* 80290F24 */ static void stop(s32);
+    static void start(s32, char const*);
+    void start(char const*);
+    void stop();
+    static void stop(s32);
 
     static JASProbe* sProbeTable[16];
 

@@ -9,8 +9,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_s_play.h"
 
-/* 80C314D8-80C3153C 000078 0064+00 1/0 0/0 0/0 .text            daObj_Kage_Draw__FP14obj_kage_class
- */
 static int daObj_Kage_Draw(obj_kage_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
@@ -20,7 +18,6 @@ static int daObj_Kage_Draw(obj_kage_class* i_this) {
     return 1;
 }
 
-/* 80C3153C-80C31764 0000DC 0228+00 2/1 0/0 0/0 .text daObj_Kage_Execute__FP14obj_kage_class */
 static int daObj_Kage_Execute(obj_kage_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz sp14;
@@ -69,12 +66,10 @@ static int daObj_Kage_Execute(obj_kage_class* i_this) {
     return 1;
 }
 
-/* 80C31764-80C3176C 000304 0008+00 1/0 0/0 0/0 .text daObj_Kage_IsDelete__FP14obj_kage_class */
 static int daObj_Kage_IsDelete(obj_kage_class* i_this) {
     return 1;
 }
 
-/* 80C3176C-80C3179C 00030C 0030+00 1/0 0/0 0/0 .text daObj_Kage_Delete__FP14obj_kage_class */
 static int daObj_Kage_Delete(obj_kage_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fpc_ProcID id = fopAcM_GetID(i_this);
@@ -82,7 +77,6 @@ static int daObj_Kage_Delete(obj_kage_class* i_this) {
     return 1;
 }
 
-/* 80C3179C-80C31808 00033C 006C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* actor) {
     obj_kage_class* i_this = (obj_kage_class*)actor;
 
@@ -97,8 +91,6 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-/* 80C31808-80C31954 0003A8 014C+00 1/0 0/0 0/0 .text            daObj_Kage_Create__FP10fopAc_ac_c
- */
 static int daObj_Kage_Create(fopAc_ac_c* actor) {
     fopAcM_ct(actor, obj_kage_class);
     obj_kage_class* i_this = (obj_kage_class*)actor;
@@ -129,7 +121,6 @@ static int daObj_Kage_Create(fopAc_ac_c* actor) {
     return phase_state;
 }
 
-/* 80C3199C-80C319BC -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Kage_Method */
 static actor_method_class l_daObj_Kage_Method = {
     (process_method_func)daObj_Kage_Create,
     (process_method_func)daObj_Kage_Delete,
@@ -138,7 +129,6 @@ static actor_method_class l_daObj_Kage_Method = {
     (process_method_func)daObj_Kage_Draw,
 };
 
-/* 80C319BC-80C319EC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_KAGE */
 extern actor_process_profile_definition g_profile_OBJ_KAGE = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

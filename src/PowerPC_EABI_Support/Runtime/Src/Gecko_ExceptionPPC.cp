@@ -11,10 +11,8 @@ typedef struct ProcessInfo {
     int active;
 } ProcessInfo;
 
-/* 8044D430-8044D440 07A150 000C+04 2/2 0/0 0/0 .bss             fragmentinfo */
 static ProcessInfo fragmentinfo[1];
 
-/* 803628E0-80362914 35D220 0034+00 0/0 1/1 0/0 .text            __register_fragment */
 int __register_fragment(struct __eti_init_info* info, char* TOC) {
     ProcessInfo* f;
     int i;
@@ -31,7 +29,6 @@ int __register_fragment(struct __eti_init_info* info, char* TOC) {
     return -1;
 }
 
-/* 803628AC-803628E0 35D1EC 0034+00 0/0 1/1 0/0 .text            __unregister_fragment */
 void __unregister_fragment(int fragmentId) {
     ProcessInfo* f;
     if (fragmentId >= 0 && fragmentId < 1) {

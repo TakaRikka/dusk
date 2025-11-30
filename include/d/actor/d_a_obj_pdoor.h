@@ -21,19 +21,19 @@ public:
         MODE_ROTATE,
     };
 
-    /* 80CA9F9C */ void initBaseMtx();
-    /* 80CA9FD8 */ void setBaseMtx();
-    /* 80CAA03C */ int Create();
-    /* 80CAA14C */ int CreateHeap();
-    /* 80CAA1BC */ int create1st();
-    /* 80CAA23C */ int Execute(Mtx**);
-    /* 80CAA290 */ void mode_proc_call();
-    /* 80CAA31C */ void init_modeWait();
-    /* 80CAA354 */ void modeWait();
-    /* 80CAA698 */ void init_modeRotate();
-    /* 80CAA6B4 */ void modeRotate();
-    /* 80CAA968 */ int Draw();
-    /* 80CAAA0C */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void mode_proc_call();
+    void init_modeWait();
+    void modeWait();
+    void init_modeRotate();
+    void modeRotate();
+    int Draw();
+    int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwbit2() { return fopAcM_GetParamBit(this, 8, 8); }

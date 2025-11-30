@@ -26,19 +26,19 @@ struct TAdaptor;
 struct TVariableValue {
     struct TOutput {
         virtual void operator()(f32, JStudio::TAdaptor*) const = 0;
-        /* 80285E0C */ virtual ~TOutput() = 0;
+        virtual ~TOutput() = 0;
     };
 
     struct TOutput_none_ : TOutput {
-        /* 80285F6C */ ~TOutput_none_();
-        /* 80285FCC */ void operator()(f32, JStudio::TAdaptor*) const;
+        ~TOutput_none_();
+        void operator()(f32, JStudio::TAdaptor*) const;
     };
 
-    /* 80285E54 */ void update(f64, JStudio::TAdaptor*);
-    /* 80285EB8 */ static void update_immediate_(JStudio::TVariableValue*, f64);
-    /* 80285ECC */ static void update_time_(JStudio::TVariableValue*, f64);
-    /* 80285F08 */ static void update_functionValue_(JStudio::TVariableValue*, f64);
-    /* 8028B568 */ TVariableValue() : field_0x4(0), field_0x8(NULL), pOutput_(&soOutput_none_) {}
+    void update(f64, JStudio::TAdaptor*);
+    static void update_immediate_(JStudio::TVariableValue*, f64);
+    static void update_time_(JStudio::TVariableValue*, f64);
+    static void update_functionValue_(JStudio::TVariableValue*, f64);
+    TVariableValue() : field_0x4(0), field_0x8(NULL), pOutput_(&soOutput_none_) {}
 
     void setValue_immediate(f32 value) {
         field_0x8 = &update_immediate_;
@@ -109,15 +109,15 @@ typedef void (TObject::*paragraphFunc)(u32, void const*, u32);
 
 class TObject : public stb::TObject {
 public:
-    /* 80286864 */ TObject(JStudio::stb::data::TParse_TBlock_object const&, JStudio::TAdaptor*);
-    /* 80286734 */ void forward_value(u32);
+    TObject(JStudio::stb::data::TParse_TBlock_object const&, JStudio::TAdaptor*);
+    void forward_value(u32);
 
-    /* 802866B0 */ virtual ~TObject() = 0;
-    /* 8028679C */ virtual void do_begin();
-    /* 802867D4 */ virtual void do_end();
+    virtual ~TObject() = 0;
+    virtual void do_begin();
+    virtual void do_end();
     virtual void do_paragraph(u32, void const*, u32) = 0;
-    /* 8028680C */ virtual void do_wait(u32);
-    /* 8028682C */ virtual void do_data(void const*, u32, void const*, u32);
+    virtual void do_wait(u32);
+    virtual void do_data(void const*, u32, void const*, u32);
 
     TAdaptor* getAdaptor() const { return mpAdaptor; }
     TControl* getControl() { return (TControl*)stb::TObject::getControl(); }
@@ -155,34 +155,34 @@ struct TAdaptor {
         pValue_ = param_1;
         uvv_ = param_2;
     }
-    /* 80285FD0 */ virtual ~TAdaptor() = 0;
-    /* 80286018 */ virtual void adaptor_do_prepare();
-    /* 8028601C */ virtual void adaptor_do_begin();
-    /* 80286020 */ virtual void adaptor_do_end();
-    /* 80286024 */ virtual void adaptor_do_update(u32);
-    /* 80286028 */ virtual void adaptor_do_data(void const*, u32, void const*, u32);
+    virtual ~TAdaptor() = 0;
+    virtual void adaptor_do_prepare();
+    virtual void adaptor_do_begin();
+    virtual void adaptor_do_end();
+    virtual void adaptor_do_update(u32);
+    virtual void adaptor_do_data(void const*, u32, void const*, u32);
 
-    /* 8028602C */ void adaptor_setVariableValue(JStudio::TControl*, u32,
+    void adaptor_setVariableValue(JStudio::TControl*, u32,
                                                  JStudio::data::TEOperationData, void const*, u32);
-    /* 802860CC */ void adaptor_setVariableValue_n(JStudio::TControl*, u32 const*, u32,
+    void adaptor_setVariableValue_n(JStudio::TControl*, u32 const*, u32,
                                                    JStudio::data::TEOperationData, void const*,
                                                    u32);
-    /* 802861C0 */ void
+    void
     adaptor_setVariableValue_immediate(JStudio::TAdaptor::TSetVariableValue_immediate const*);
-    /* 80286204 */ void adaptor_setVariableValue_Vec(u32 const*, Vec const&);
-    /* 80286274 */ void adaptor_getVariableValue_Vec(Vec*, u32 const*) const;
-    /* 802862AC */ void adaptor_setVariableValue_GXColor(u32 const*, GXColor const&);
-    /* 8028638C */ void adaptor_getVariableValue_GXColor(GXColor*, u32 const*) const;
-    /* 802864D8 */ void adaptor_updateVariableValue(JStudio::TControl*, u32);
-    /* 8028656C */ static void adaptor_setVariableValue_VOID_(JStudio::TAdaptor*, JStudio::TControl*, u32,
+    void adaptor_setVariableValue_Vec(u32 const*, Vec const&);
+    void adaptor_getVariableValue_Vec(Vec*, u32 const*) const;
+    void adaptor_setVariableValue_GXColor(u32 const*, GXColor const&);
+    void adaptor_getVariableValue_GXColor(GXColor*, u32 const*) const;
+    void adaptor_updateVariableValue(JStudio::TControl*, u32);
+    static void adaptor_setVariableValue_VOID_(JStudio::TAdaptor*, JStudio::TControl*, u32,
                                                        void const*, u32);
-    /* 80286584 */ static void adaptor_setVariableValue_IMMEDIATE_(JStudio::TAdaptor*, JStudio::TControl*,
+    static void adaptor_setVariableValue_IMMEDIATE_(JStudio::TAdaptor*, JStudio::TControl*,
                                                             u32, void const*, u32);
-    /* 802865B0 */ static void adaptor_setVariableValue_TIME_(JStudio::TAdaptor*, JStudio::TControl*, u32,
+    static void adaptor_setVariableValue_TIME_(JStudio::TAdaptor*, JStudio::TControl*, u32,
                                                        void const*, u32);
-    /* 802865DC */ static void adaptor_setVariableValue_FVR_NAME_(JStudio::TAdaptor*, JStudio::TControl*,
+    static void adaptor_setVariableValue_FVR_NAME_(JStudio::TAdaptor*, JStudio::TControl*,
                                                            u32, void const*, u32);
-    /* 80286648 */ static void adaptor_setVariableValue_FVR_INDEX_(JStudio::TAdaptor*, JStudio::TControl*,
+    static void adaptor_setVariableValue_FVR_INDEX_(JStudio::TAdaptor*, JStudio::TControl*,
                                                             u32, void const*, u32);
 
     const char* adaptor_getID_string() const;
@@ -229,7 +229,7 @@ struct TAdaptor_actor : public TAdaptor {
         , mValue()
     {
     }
-    /* 802868B0 */ virtual ~TAdaptor_actor() = 0;
+    virtual ~TAdaptor_actor() = 0;
     virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, const void*, u32)                 = 0;
     virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, const void*, u32)            = 0;
     virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, const void*, u32)          = 0;
@@ -251,15 +251,15 @@ struct TAdaptor_actor : public TAdaptor {
 };  // Size: 0x128
 
 struct TObject_actor : public TObject {
-    /* 80286910 */ TObject_actor(JStudio::stb::data::TParse_TBlock_object const&,
+    TObject_actor(JStudio::stb::data::TParse_TBlock_object const&,
                                  JStudio::TAdaptor_actor*);
     
-    /* 8028694C */ virtual void do_paragraph(u32, void const*, u32);
+    virtual void do_paragraph(u32, void const*, u32);
 };
 
 struct TAdaptor_ambientLight : public TAdaptor {
     TAdaptor_ambientLight() : TAdaptor(mValue, 4) {}
-    /* 80286C9C */ virtual ~TAdaptor_ambientLight()  = 0;
+    virtual ~TAdaptor_ambientLight()  = 0;
 
     /* 0x10 */ TVariableValue mValue[4];
 
@@ -268,10 +268,10 @@ struct TAdaptor_ambientLight : public TAdaptor {
 };
 
 struct TObject_ambientLight : public TObject {
-    /* 80286CFC */ TObject_ambientLight(JStudio::stb::data::TParse_TBlock_object const&,
+    TObject_ambientLight(JStudio::stb::data::TParse_TBlock_object const&,
                                         JStudio::TAdaptor_ambientLight*);
     
-    /* 80286D38 */ virtual void do_paragraph(u32, void const*, u32);
+    virtual void do_paragraph(u32, void const*, u32);
 };
 
 struct TAdaptor_camera : public TAdaptor {
@@ -283,7 +283,7 @@ struct TAdaptor_camera : public TAdaptor {
     };
 
     TAdaptor_camera() : TAdaptor(mValue, 12) {}
-    /* 80286E1C */ virtual ~TAdaptor_camera() = 0;
+    virtual ~TAdaptor_camera() = 0;
 
     virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, const void*, u32)               = 0;
     virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, const void*, u32)          = 0;
@@ -301,10 +301,10 @@ struct TAdaptor_camera : public TAdaptor {
 };
 
 struct TObject_camera : public TObject {
-    /* 80286E7C */ TObject_camera(JStudio::stb::data::TParse_TBlock_object const&,
+    TObject_camera(JStudio::stb::data::TParse_TBlock_object const&,
                                   JStudio::TAdaptor_camera*);
     
-    /* 80286EB8 */ virtual void do_paragraph(u32, void const*, u32);
+    virtual void do_paragraph(u32, void const*, u32);
 };
 
 struct TAdaptor_fog : public TAdaptor {
@@ -314,7 +314,7 @@ struct TAdaptor_fog : public TAdaptor {
     };
 
     TAdaptor_fog() : TAdaptor(mValue, 6) {}
-    /* 8028717C */ virtual ~TAdaptor_fog() = 0;
+    virtual ~TAdaptor_fog() = 0;
 
     /* 0x10 */ TVariableValue mValue[6];
 
@@ -324,10 +324,10 @@ struct TAdaptor_fog : public TAdaptor {
 };
 
 struct TObject_fog : public TObject {
-    /* 802871DC */ TObject_fog(JStudio::stb::data::TParse_TBlock_object const&,
+    TObject_fog(JStudio::stb::data::TParse_TBlock_object const&,
                                JStudio::TAdaptor_fog*);
     
-    /* 80287218 */ virtual void do_paragraph(u32, void const*, u32);
+    virtual void do_paragraph(u32, void const*, u32);
 };
 
 struct TAdaptor_light : public TAdaptor {
@@ -341,7 +341,7 @@ struct TAdaptor_light : public TAdaptor {
     };
 
     TAdaptor_light() : TAdaptor(mValue, 13) {}
-    /* 80287308 */ virtual ~TAdaptor_light() = 0;
+    virtual ~TAdaptor_light() = 0;
     virtual void adaptor_do_ENABLE(JStudio::data::TEOperationData, const void*, u32) = 0;
     virtual void adaptor_do_FACULTY(JStudio::data::TEOperationData, const void*, u32) = 0;
 
@@ -355,28 +355,28 @@ struct TAdaptor_light : public TAdaptor {
 };
 
 struct TObject_light : public TObject {
-    /* 80287368 */ TObject_light(JStudio::stb::data::TParse_TBlock_object const&,
+    TObject_light(JStudio::stb::data::TParse_TBlock_object const&,
                                  JStudio::TAdaptor_light*);
     
-    /* 802873A4 */ virtual void do_paragraph(u32, void const*, u32);
+    virtual void do_paragraph(u32, void const*, u32);
 };
 
 struct TAdaptor_message : public TAdaptor {
     TAdaptor_message() : TAdaptor(NULL, 0) {}
-    /* 802875E0 */ virtual ~TAdaptor_message() = 0;
+    virtual ~TAdaptor_message() = 0;
     virtual void adaptor_do_MESSAGE(JStudio::data::TEOperationData, const void*, u32) = 0;
 };
 
 struct TObject_message : public TObject {
-    /* 80287640 */ TObject_message(JStudio::stb::data::TParse_TBlock_object const&,
+    TObject_message(JStudio::stb::data::TParse_TBlock_object const&,
                                    JStudio::TAdaptor_message*);
     
-    /* 8028767C */ virtual void do_paragraph(u32, void const*, u32);
+    virtual void do_paragraph(u32, void const*, u32);
 };
 
 struct TAdaptor_particle : public TAdaptor {
     TAdaptor_particle() : TAdaptor(mValue, 20) {}
-    /* 8028770C */ virtual ~TAdaptor_particle() = 0;
+    virtual ~TAdaptor_particle() = 0;
 
     virtual void adaptor_do_PARTICLE(JStudio::data::TEOperationData, const void*, u32) = 0;
     virtual void adaptor_do_BEGIN(JStudio::data::TEOperationData, const void*, u32) = 0;
@@ -402,10 +402,10 @@ struct TAdaptor_particle : public TAdaptor {
 };
 
 struct TObject_particle : public TObject {
-    /* 8028776C */ TObject_particle(JStudio::stb::data::TParse_TBlock_object const&,
+    TObject_particle(JStudio::stb::data::TParse_TBlock_object const&,
                                     JStudio::TAdaptor_particle*);
     
-    /* 802877A8 */ virtual void do_paragraph(u32, void const*, u32);
+    virtual void do_paragraph(u32, void const*, u32);
 };
 
 struct TAdaptor_sound : public TAdaptor {
@@ -419,7 +419,7 @@ struct TAdaptor_sound : public TAdaptor {
     };
 
     TAdaptor_sound() : TAdaptor(mValue, 13) {}
-    /* 80287B3C */ virtual ~TAdaptor_sound() = 0;
+    virtual ~TAdaptor_sound() = 0;
 
     virtual void adaptor_do_SOUND(JStudio::data::TEOperationData, const void*, u32) = 0;
     virtual void adaptor_do_BEGIN(JStudio::data::TEOperationData, const void*, u32) = 0;
@@ -440,10 +440,10 @@ struct TAdaptor_sound : public TAdaptor {
 };  // Size: 0x114
 
 struct TObject_sound : public TObject {
-    /* 80287B9C */ TObject_sound(JStudio::stb::data::TParse_TBlock_object const&,
+    TObject_sound(JStudio::stb::data::TParse_TBlock_object const&,
                                  JStudio::TAdaptor_sound*);
     
-    /* 80287BD8 */ virtual void do_paragraph(u32, void const*, u32);
+    virtual void do_paragraph(u32, void const*, u32);
 };
 
 };  // namespace JStudio

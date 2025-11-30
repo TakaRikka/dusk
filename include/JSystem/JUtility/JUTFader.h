@@ -15,14 +15,14 @@ public:
         UNKSTATUS_0 = 0,
     };
 
-    /* 802E5530 */ JUTFader(int, int, int, int, JUtility::TColor);
-    /* 802E55DC */ void control();
-    /* 802E57D0 */ void setStatus(JUTFader::EStatus, int);
+    JUTFader(int, int, int, int, JUtility::TColor);
+    void control();
+    void setStatus(JUTFader::EStatus, int);
 
-    /* 802E5840 */ virtual ~JUTFader();
-    /* 802E576C */ virtual bool startFadeIn(int);
-    /* 802E579C */ virtual bool startFadeOut(int);
-    /* 802E56DC */ virtual void draw();
+    virtual ~JUTFader();
+    virtual bool startFadeIn(int);
+    virtual bool startFadeOut(int);
+    virtual void draw();
 
     s32 getStatus() const { return mStatus; }
     void setColor(JUtility::TColor color) { mColor.set(color); }

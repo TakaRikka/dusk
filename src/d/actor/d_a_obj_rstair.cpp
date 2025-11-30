@@ -10,7 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_graphic.h"
 
-/* 80CC1558-80CC1614 000078 00BC+00 1/1 0/0 0/0 .text            initBaseMtx__15daObjRotStair_cFv */
 void daObjRotStair_c::initBaseMtx() {
     mWaterModels[0]->setBaseScale(scale);
     mWaterModels[1]->setBaseScale(scale);
@@ -21,7 +20,6 @@ void daObjRotStair_c::initBaseMtx() {
     mWaterModels[1]->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CC1614-80CC16B0 000134 009C+00 2/2 0/0 0/0 .text            setBaseMtx__15daObjRotStair_cFv */
 void daObjRotStair_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -32,22 +30,18 @@ void daObjRotStair_c::setBaseMtx() {
     mWaterModels[1]->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CC2700-80CC2708 000000 0008+00 3/3 0/0 0/0 .rodata          l_wtr_bmd */
 static u32 const l_wtr_bmd[2] = {
     6, 7,
 };
 
-/* 80CC2708-80CC2710 000008 0008+00 0/1 0/0 0/0 .rodata          l_wtr_btk */
 static u32 const l_wtr_btk[2] = {
     10, 11
 };
 
-/* 80CC2710-80CC2720 000010 0010+00 2/2 0/0 0/0 .rodata          l_target_angleY */
 static s16 const l_target_angleY[8] = {
     0x7FFF, 0x4000, 0x0000, -0x4000, 0x0000, -0x4000, 0x7FFF, 0x4000,
 };
 
-/* 80CC16B0-80CC17F0 0001D0 0140+00 1/0 0/0 0/0 .text            Create__15daObjRotStair_cFv */
 int daObjRotStair_c::Create() {
     for (int i = 0; i < 4; i = i + 1) {
         mIsSw[i] = fopAcM_isSwitch(this, i + getSwNo());
@@ -76,15 +70,12 @@ int daObjRotStair_c::Create() {
     return 1;
 }
 
-/* 80CC275C-80CC2760 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "K_spkai00";
 
-/* 80CC2760-80CC276C 000024 000C+00 0/0 0/0 0/0 .data            l_water_check_offset */
 static Vec l_water_check_offset = {
     0.0f, 2000.0f, -2000.0f,
 };
 
-/* 80CC17F0-80CC19E0 000310 01F0+00 1/0 0/0 0/0 .text            CreateHeap__15daObjRotStair_cFv */
 int daObjRotStair_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(l_arcName, 5);
     JUT_ASSERT(215, modelData != NULL);
@@ -114,7 +105,6 @@ int daObjRotStair_c::CreateHeap() {
     return 1;
 }
 
-/* 80CC1A28-80CC1AF0 000548 00C8+00 1/1 0/0 0/0 .text            create1st__15daObjRotStair_cFv */
 int daObjRotStair_c::create1st() {
     if (mInit == 0) {
         field_0x5c8 = home.angle.x;
@@ -139,7 +129,6 @@ int daObjRotStair_c::create1st() {
     return rv;
 }
 
-/* 80CC1AF0-80CC1BA4 000610 00B4+00 1/0 0/0 0/0 .text Execute__15daObjRotStair_cFPPA3_A4_f */
 int daObjRotStair_c::Execute(Mtx** ppMtx) {
     move_proc_call();
     event_proc_call();
@@ -156,8 +145,6 @@ int daObjRotStair_c::Execute(Mtx** ppMtx) {
     return 1;
 }
 
-/* 80CC1BA4-80CC1C30 0006C4 008C+00 1/1 0/0 0/0 .text            move_proc_call__15daObjRotStair_cFv
- */
 void daObjRotStair_c::move_proc_call() {
     static daObjRotStair_c::modeFunc l_func[2] = {
         &daObjRotStair_c::modeWait,
@@ -166,8 +153,6 @@ void daObjRotStair_c::move_proc_call() {
     (this->*(l_func[mMode]))();
 }
 
-/* 80CC1C30-80CC1CF0 000750 00C0+00 2/2 0/0 0/0 .text            init_modeWait__15daObjRotStair_cFv
- */
 void daObjRotStair_c::init_modeWait() {
     s8 dVar3 = field_0x5e3;
     if (dVar3 >= 4) {
@@ -182,7 +167,6 @@ void daObjRotStair_c::init_modeWait() {
     mMode = MODE_WAIT;
 }
 
-/* 80CC1CF0-80CC1DF8 000810 0108+00 1/0 0/0 0/0 .text            modeWait__15daObjRotStair_cFv */
 void daObjRotStair_c::modeWait() {
     s8 dVar3 = field_0x5e3;
     if (dVar3 >= 4) {
@@ -205,7 +189,6 @@ void daObjRotStair_c::modeWait() {
     }
 }
 
-/* 80CC1DF8-80CC1EC8 000918 00D0+00 1/1 0/0 0/0 .text init_modeRotate__15daObjRotStair_cFv */
 void daObjRotStair_c::init_modeRotate() {
     s8 dVar3 = field_0x5e3;
     if (dVar3 >= 4) {
@@ -223,7 +206,6 @@ void daObjRotStair_c::init_modeRotate() {
     mMode = MODE_ROTATE;
 }
 
-/* 80CC1EC8-80CC2024 0009E8 015C+00 1/0 0/0 0/0 .text            modeRotate__15daObjRotStair_cFv */
 void daObjRotStair_c::modeRotate() {
     if (abs(mTargetAngle - shape_angle.y) < mAngleStep) {
         dComIfGp_getVibration().StartShock(8, 0x1f, cXyz(0.0f, 1.0f, 0.0f));
@@ -238,7 +220,6 @@ void daObjRotStair_c::modeRotate() {
     fopAcM_seStartLevel(this, Z2SE_OBJ_ROLLSTAIR_ROLL, 0);
 }
 
-/* 80CC2024-80CC20E0 000B44 00BC+00 1/1 0/0 0/0 .text event_proc_call__15daObjRotStair_cFv */
 void daObjRotStair_c::event_proc_call() {
     static daObjRotStair_c::actionFunc l_func[4] = {
         &daObjRotStair_c::actionWait,
@@ -250,7 +231,6 @@ void daObjRotStair_c::event_proc_call() {
     (this->*(l_func[mAction]))();
 }
 
-/* 80CC20E0-80CC2158 000C00 0078+00 1/0 0/0 0/0 .text            actionWait__15daObjRotStair_cFv */
 void daObjRotStair_c::actionWait() {
     if (mMapToolId != 0xff && field_0x5e2) {
         field_0x5e2 = false;
@@ -260,7 +240,6 @@ void daObjRotStair_c::actionWait() {
     }
 }
 
-/* 80CC2158-80CC21C0 000C78 0068+00 1/0 0/0 0/0 .text actionOrderEvent__15daObjRotStair_cFv */
 void daObjRotStair_c::actionOrderEvent() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(ACTION_EVENT);
@@ -270,7 +249,6 @@ void daObjRotStair_c::actionOrderEvent() {
     }
 }
 
-/* 80CC21C0-80CC221C 000CE0 005C+00 1/0 0/0 0/0 .text            actionEvent__15daObjRotStair_cFv */
 void daObjRotStair_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventId)) {
         setAction(ACTION_DEAD);
@@ -278,12 +256,9 @@ void daObjRotStair_c::actionEvent() {
     }
 }
 
-/* 80CC221C-80CC2220 000D3C 0004+00 1/0 0/0 0/0 .text            actionDead__15daObjRotStair_cFv */
 void daObjRotStair_c::actionDead() {
 }
 
-/* 80CC2220-80CC22A0 000D40 0080+00 1/1 0/0 0/0 .text            checkChangeSw__15daObjRotStair_cFv
- */
 int daObjRotStair_c::checkChangeSw() {
     for (int i = 0; i < 4; i++) {
         if (mIsSw[i] != fopAcM_isSwitch(this, i + getSwNo())) {
@@ -293,7 +268,6 @@ int daObjRotStair_c::checkChangeSw() {
     return -1;
 }
 
-/* 80CC22A0-80CC2310 000DC0 0070+00 1/1 0/0 0/0 .text            offSwitch__15daObjRotStair_cFi */
 void daObjRotStair_c::offSwitch(int idx) {
     for (int i = 0; i < 4; i++) {
         int swNo = getSwNo() + i;
@@ -303,8 +277,6 @@ void daObjRotStair_c::offSwitch(int idx) {
     }
 }
 
-/* 80CC2310-80CC2364 000E30 0054+00 3/3 0/0 0/0 .text            onWaterModel__15daObjRotStair_cFv
- */
 void daObjRotStair_c::onWaterModel() {
     if (!mWaterModelOn) {
         dComIfG_Bgsp().Regist(mWaterBgw, this);
@@ -312,8 +284,6 @@ void daObjRotStair_c::onWaterModel() {
     }
 }
 
-/* 80CC2364-80CC23C4 000E84 0060+00 3/3 0/0 0/0 .text            offWaterModel__15daObjRotStair_cFv
- */
 void daObjRotStair_c::offWaterModel() {
     if (mWaterModelOn) {
         if (mWaterBgw->ChkUsed()) {
@@ -323,7 +293,6 @@ void daObjRotStair_c::offWaterModel() {
     }
 }
 
-/* 80CC23C4-80CC25C0 000EE4 01FC+00 1/0 0/0 0/0 .text            Draw__15daObjRotStair_cFv */
 int daObjRotStair_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -359,7 +328,6 @@ int daObjRotStair_c::Draw() {
     return 1;
 }
 
-/* 80CC25C0-80CC262C 0010E0 006C+00 1/0 0/0 0/0 .text            Delete__15daObjRotStair_cFv */
 int daObjRotStair_c::Delete() {
     if (mWaterBgw != NULL && mWaterBgw->ChkUsed()) {
         dComIfG_Bgsp().Release(mWaterBgw);
@@ -368,33 +336,24 @@ int daObjRotStair_c::Delete() {
     return 1;
 }
 
-/* 80CC262C-80CC268C 00114C 0060+00 1/0 0/0 0/0 .text daObjRotStair_create1st__FP15daObjRotStair_c
- */
 static int daObjRotStair_create1st(daObjRotStair_c* i_this) {
     fopAcM_ct(i_this, daObjRotStair_c);
     return i_this->create1st();
 }
 
-/* 80CC268C-80CC26AC 0011AC 0020+00 1/0 0/0 0/0 .text
- * daObjRotStair_MoveBGDelete__FP15daObjRotStair_c              */
 static int daObjRotStair_MoveBGDelete(daObjRotStair_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80CC26AC-80CC26CC 0011CC 0020+00 1/0 0/0 0/0 .text
- * daObjRotStair_MoveBGExecute__FP15daObjRotStair_c             */
 static int daObjRotStair_MoveBGExecute(daObjRotStair_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80CC26CC-80CC26F8 0011EC 002C+00 1/0 0/0 0/0 .text
- * daObjRotStair_MoveBGDraw__FP15daObjRotStair_c                */
 static int daObjRotStair_MoveBGDraw(daObjRotStair_c* i_this) {
     return i_this->Draw();
 }
 
 
-/* 80CC27FC-80CC281C -00001 0020+00 1/0 0/0 0/0 .data            daObjRotStair_METHODS */
 static actor_method_class daObjRotStair_METHODS = {
     (process_method_func)daObjRotStair_create1st,
     (process_method_func)daObjRotStair_MoveBGDelete,
@@ -403,7 +362,6 @@ static actor_method_class daObjRotStair_METHODS = {
     (process_method_func)daObjRotStair_MoveBGDraw,
 };
 
-/* 80CC281C-80CC284C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_RotStair */
 extern actor_process_profile_definition g_profile_Obj_RotStair = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID

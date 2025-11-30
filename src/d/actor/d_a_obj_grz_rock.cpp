@@ -7,7 +7,6 @@
 
 #include "d/actor/d_a_obj_grz_rock.h"
 
-/* 80C14BD8-80C14C54 000078 007C+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjGrzRock_cFv */
 void daObjGrzRock_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -15,18 +14,15 @@ void daObjGrzRock_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80C14C54-80C14CB0 0000F4 005C+00 1/1 0/0 0/0 .text            setEnvTevColor__14daObjGrzRock_cFv */
 void daObjGrzRock_c::setEnvTevColor() {
     tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(mGndChk);
     tevStr.room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
 }
 
-/* 80C14CB0-80C14CF0 000150 0040+00 1/1 0/0 0/0 .text            setRoomNo__14daObjGrzRock_cFv */
 void daObjGrzRock_c::setRoomNo() {
     fopAcM_SetRoomNo(this, dComIfG_Bgsp().GetRoomId(mGndChk));
 }
 
-/* 80C14CF0-80C14DA0 000190 00B0+00 1/1 0/0 0/0 .text            setPrtcl__14daObjGrzRock_cFv */
 void daObjGrzRock_c::setPrtcl() {
     static u16 const l_prticles_id[6] = {
         dPa_RM(ID_ZI_S_BOMBROCK_FL_BREAK_A), dPa_RM(ID_ZI_S_BOMBROCK_FL_BREAK_B), dPa_RM(ID_ZI_S_BOMBROCK_FL_BREAK_C),
@@ -39,7 +35,6 @@ void daObjGrzRock_c::setPrtcl() {
     }
 }
 
-/* 80C14DA0-80C14EE0 000240 0140+00 1/0 0/0 0/0 .text            Create__14daObjGrzRock_cFv */
 int daObjGrzRock_c::Create() {
     setBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -54,10 +49,8 @@ int daObjGrzRock_c::Create() {
     return 1;
 }
 
-/* 80C1538C-80C15390 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "grZRock";
 
-/* 80C14EE0-80C14F50 000380 0070+00 1/0 0/0 0/0 .text            CreateHeap__14daObjGrzRock_cFv */
 int daObjGrzRock_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(246, modelData != NULL);
@@ -69,7 +62,6 @@ int daObjGrzRock_c::CreateHeap() {
     return 1;
 }
 
-/* 80C14F50-80C150DC 0003F0 018C+00 1/1 0/0 0/0 .text            create__14daObjGrzRock_cFv */
 cPhs__Step daObjGrzRock_c::create() {
     fopAcM_ct(this, daObjGrzRock_c);
 
@@ -106,7 +98,6 @@ cPhs__Step daObjGrzRock_c::create() {
     return phase;
 }
 
-/* 80C1514C-80C151A4 0005EC 0058+00 1/0 0/0 0/0 .text            Execute__14daObjGrzRock_cFPPA3_A4_f */
 int daObjGrzRock_c::Execute(Mtx** mtx) {
     if (mSmashFlag) {
         setPrtcl();
@@ -119,7 +110,6 @@ int daObjGrzRock_c::Execute(Mtx** mtx) {
     return 1;
 }
 
-/* 80C151A4-80C15248 000644 00A4+00 1/0 0/0 0/0 .text            Draw__14daObjGrzRock_cFv */
 int daObjGrzRock_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -129,7 +119,6 @@ int daObjGrzRock_c::Draw() {
     return 1;
 }
 
-/* 80C15248-80C152B4 0006E8 006C+00 1/0 0/0 0/0 .text            Delete__14daObjGrzRock_cFv */
 int daObjGrzRock_c::Delete() {
     for (int i = 0; i < 1; i++) {
         dComIfG_resDelete(&mPhase[i], l_arcName);
@@ -144,32 +133,26 @@ int daObjGrzRock_c::Delete() {
     return 1;
 }
 
-/* 80C152B4-80C152E0 000754 002C+00 1/0 0/0 0/0 .text daObjGrzRock_Draw__FP14daObjGrzRock_c */
 static int daObjGrzRock_Draw(daObjGrzRock_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80C152E0-80C15300 000780 0020+00 1/0 0/0 0/0 .text daObjGrzRock_Execute__FP14daObjGrzRock_c */
 static int daObjGrzRock_Execute(daObjGrzRock_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C15300-80C15308 0007A0 0008+00 1/0 0/0 0/0 .text daObjGrzRock_IsDelete__FP14daObjGrzRock_c */
 static int daObjGrzRock_IsDelete(daObjGrzRock_c* i_this) {
     return 1;
 }
 
-/* 80C15308-80C15328 0007A8 0020+00 1/0 0/0 0/0 .text daObjGrzRock_Delete__FP14daObjGrzRock_c */
 static int daObjGrzRock_Delete(daObjGrzRock_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C15328-80C15348 0007C8 0020+00 1/0 0/0 0/0 .text            daObjGrzRock_create__FP10fopAc_ac_c */
 static int daObjGrzRock_create(fopAc_ac_c* a_this) {
     return static_cast<daObjGrzRock_c*>(a_this)->create();
 }
 
-/* 80C15390-80C153B0 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjGrzRock_Method */
 static actor_method_class l_daObjGrzRock_Method = {
     (process_method_func)daObjGrzRock_create,
     (process_method_func)daObjGrzRock_Delete,
@@ -178,7 +161,6 @@ static actor_method_class l_daObjGrzRock_Method = {
     (process_method_func)daObjGrzRock_Draw,
 };
 
-/* 80C153B0-80C153E0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_GrzRock */
 extern actor_process_profile_definition g_profile_Obj_GrzRock = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

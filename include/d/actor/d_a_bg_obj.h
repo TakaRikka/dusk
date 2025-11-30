@@ -25,11 +25,11 @@ class daBgObj_c : public dBgS_MoveBgActor {
 public:
     class spec_data_c {
     public:
-        /* 804597E8 */ u8* initParticleBlock(u8*);
-        /* 80459814 */ u8* initSoundBlock(u8*);
-        /* 80459840 */ u8* initTexShareBlock(u8*);
-        /* 804598F4 */ u8* initFarInfoBlock(u8*);
-        /* 80459904 */ bool Set(void*);
+        u8* initParticleBlock(u8*);
+        u8* initSoundBlock(u8*);
+        u8* initTexShareBlock(u8*);
+        u8* initFarInfoBlock(u8*);
+        bool Set(void*);
 
         /* 0x00 */ u16 mSpecType;
         /* 0x02 */ u8 field_0x02;
@@ -46,46 +46,46 @@ public:
         /* 0x20 */ f32 mpFarInfoBlock;
     };
 
-    /* 80459B64 */ void release(dBgW*);
-    /* 80459BB4 */ void regist(dBgW*);
-    /* 80459BEC */ void initAtt();
-    /* 80459D0C */ void setAttentionInfo(fopAc_ac_c*);
-    /* 80459D3C */ void initBaseMtx();
-    /* 80459D94 */ void setBaseMtx();
-    /* 80459E04 */ void settingCullSizeBoxForCo(int);
-    /* 80459F14 */ void settingCullSizeBoxForCull(int);
-    /* 8045A0EC */ int CreateInitType0();
-    /* 8045A160 */ int CreateInitType1();
-    /* 8045A2F0 */ int CreateHeapType0();
-    /* 8045A574 */ int CreateHeapType1();
-    /* 8045A83C */ void doShareTexture();
-    /* 8045A9E8 */ int create1st();
-    /* 8045AAF0 */ void setColCommon();
-    /* 8045AB80 */ void set_tri_0();
-    /* 8045ACC0 */ void set_tri_1();
-    /* 8045AE00 */ void set_cyl_0();
-    /* 8045AE98 */ void set_tri_2();
-    /* 8045AFD4 */ void set_tri_3();
-    /* 8045B17C */ void setParticle();
-    /* 8045B3A0 */ void setSe();
-    /* 8045B44C */ BOOL checkDestroy();
-    /* 8045B534 */ BOOL checkHitAt(cCcD_Obj*);
-    /* 8045B5E0 */ void orderWait_tri();
-    /* 8045B7FC */ void orderWait_cyl();
-    /* 8045B9C4 */ void orderWait_spec();
-    /* 8045BB38 */ int actionOrderWait();
-    /* 8045BBE0 */ int actionOrder();
-    /* 8045BD50 */ int actionEvent();
-    /* 8045BDB0 */ int actionWait();
-    /* 8045BDB8 */ int ExecuteType0();
-    /* 8045BED0 */ int ExecuteType1();
-    /* 8045C25C */ void indirectProc(J3DModel*);
+    void release(dBgW*);
+    void regist(dBgW*);
+    void initAtt();
+    void setAttentionInfo(fopAc_ac_c*);
+    void initBaseMtx();
+    void setBaseMtx();
+    void settingCullSizeBoxForCo(int);
+    void settingCullSizeBoxForCull(int);
+    int CreateInitType0();
+    int CreateInitType1();
+    int CreateHeapType0();
+    int CreateHeapType1();
+    void doShareTexture();
+    int create1st();
+    void setColCommon();
+    void set_tri_0();
+    void set_tri_1();
+    void set_cyl_0();
+    void set_tri_2();
+    void set_tri_3();
+    void setParticle();
+    void setSe();
+    BOOL checkDestroy();
+    BOOL checkHitAt(cCcD_Obj*);
+    void orderWait_tri();
+    void orderWait_cyl();
+    void orderWait_spec();
+    int actionOrderWait();
+    int actionOrder();
+    int actionEvent();
+    int actionWait();
+    int ExecuteType0();
+    int ExecuteType1();
+    void indirectProc(J3DModel*);
 
-    /* 8045A940 */ virtual int CreateHeap();
-    /* 8045A2B8 */ virtual int Create();
-    /* 8045BFBC */ virtual int Execute(Mtx**);
-    /* 8045C078 */ virtual int Draw();
-    /* 8045C2E8 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     void setAction(u8 i_action) { mAction = i_action; }
 

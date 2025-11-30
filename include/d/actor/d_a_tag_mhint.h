@@ -8,10 +8,10 @@
 
 class daTagMhint_c : public fopAc_ac_c {
 public:
-    /* 805A56B8 */ int create();
-    /* 805A58E8 */ ~daTagMhint_c();
-    /* 805A5974 */ void eventOrder();
-    /* 805A5AE4 */ int execute();
+    int create();
+    ~daTagMhint_c();
+    void eventOrder();
+    int execute();
 
     bool checkNoAttention() const { return field_0x56d == 0xFF; }
     bool checkEventID() const { return mToolEventID != 0xFF; }

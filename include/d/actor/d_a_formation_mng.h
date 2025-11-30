@@ -8,8 +8,8 @@
 #include "SSystem/SComponent/c_math.h"
 
 struct daFmtMng_Path_c {
-    /* 808365B0 */ bool checkPathEnd(cXyz, f32);
-    /* 8083665C */ bool checkPoint(cXyz, f32);
+    bool checkPathEnd(cXyz, f32);
+    bool checkPoint(cXyz, f32);
 
     bool isPathClose() { return dPath_ChkClose(mPath); }
     s8 getArg0() { return mPath->m_points[field_0x4].mArg0; }
@@ -126,20 +126,20 @@ struct FmtMngAttributes {
 };
 
 struct daFmtMng_c : public fopAc_ac_c {
-    /* 80835558 */ void initWait();
-    /* 80835624 */ void initMemberPos();
-    /* 80835B24 */ void executeWait();
-    /* 80835D28 */ void initWalk();
-    /* 80835DEC */ void executeWalk();
-    /* 8083622C */ void setMovePath(FmtPos_c*, int);
-    /* 80836810 */ void initReverse();
-    /* 808368A4 */ void executeReverse();
-    /* 80836C64 */ void initMotion();
-    /* 80836E20 */ void executeMotion();
-    /* 80836F78 */ void initFight();
-    /* 80837078 */ void executeFight();
-    /* 808374B4 */ int create();
-    /* 8083750C */ void create_init();
+    void initWait();
+    void initMemberPos();
+    void executeWait();
+    void initWalk();
+    void executeWalk();
+    void setMovePath(FmtPos_c*, int);
+    void initReverse();
+    void executeReverse();
+    void initMotion();
+    void executeMotion();
+    void initFight();
+    void executeFight();
+    int create();
+    void create_init();
 
     ~daFmtMng_c() {
         FmtMember_c* member = mMember;

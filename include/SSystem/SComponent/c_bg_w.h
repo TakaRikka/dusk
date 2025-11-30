@@ -9,11 +9,11 @@ private:
     /* 0x4 vtable */
 
 public:
-    /* 802681C8 */ void Release();
-    /* 802681D4 */ bool ChkUsed() const;
-    /* 802681C0 */ void Regist(int);
+    void Release();
+    bool ChkUsed() const;
+    void Regist(int);
 
-    /* 8007E5F8 */ virtual ~cBgW_BgId() {}
+    virtual ~cBgW_BgId() {}
 
     cBgW_BgId() { Ct(); }
     void Ct() { m_id = 0x100; }

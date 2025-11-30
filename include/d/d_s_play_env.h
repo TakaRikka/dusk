@@ -3,9 +3,9 @@
 
 class dScnPly_env_otherHIO_c : public JORReflexible {
 public:
-    /* 80259440 */ dScnPly_env_otherHIO_c();
+    dScnPly_env_otherHIO_c();
 
-    /* 8025AC0C */ virtual ~dScnPly_env_otherHIO_c() {}
+    virtual ~dScnPly_env_otherHIO_c() {}
     void genMessage(JORMContext*);
 
     #ifdef DEBUG
@@ -44,9 +44,9 @@ public:
 
 class dScnPly_env_debugHIO_c : public JORReflexible {
 public:
-    /* 80259468 */ dScnPly_env_debugHIO_c();
+    dScnPly_env_debugHIO_c();
 
-    /* 8025ABC4 */ virtual ~dScnPly_env_debugHIO_c() {}
+    virtual ~dScnPly_env_debugHIO_c() {}
     void genMessage(JORMContext*);
 
     /* 0x04 */ u8 field_0x4;

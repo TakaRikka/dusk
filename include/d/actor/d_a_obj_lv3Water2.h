@@ -18,16 +18,16 @@ public:
     daLv3Water2_c() : dEvLib_callback_c(this) {}
     ~daLv3Water2_c() {}
 
-    /* 80C5A478 */ void setBaseMtx();
-    /* 80C5A4F8 */ int CreateHeap();
-    /* 80C5A5E4 */ cPhs__Step create();
-    /* 80C5A844 */ int Execute(Mtx**);
-    /* 80C5AC10 */ void mode_proc_wait();
-    /* 80C5ACB8 */ void mode_init_levelCtrl();
-    /* 80C5ACE4 */ void mode_proc_levelCtrl();
-    /* 80C5ADA4 */ int Draw();
-    /* 80C5AEFC */ int Delete();
-    /* 80C5AF3C */ bool eventStart();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    int Execute(Mtx**);
+    void mode_proc_wait();
+    void mode_init_levelCtrl();
+    void mode_proc_levelCtrl();
+    int Draw();
+    int Delete();
+    bool eventStart();
 
 private:
     /* 0x5B8 */ request_of_phase_process_class mPhase;

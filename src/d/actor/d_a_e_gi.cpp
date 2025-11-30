@@ -12,8 +12,8 @@
 
 class daE_GI_HIO_c : public JORReflexible {
 public:
-    /* 806CD48C */ daE_GI_HIO_c();
-    /* 806D098C */ virtual ~daE_GI_HIO_c() {}
+    daE_GI_HIO_c();
+    virtual ~daE_GI_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -39,8 +39,6 @@ enum daE_GI_ACTION_e {
 };
 
 namespace {
-/* 806D0FBC-806D0FFC 000038 0040+00 1/1 0/0 0/0 .data            cc_gi_src__22@unnamed@d_a_e_gi_cpp@
- */
 static dCcD_SrcSph cc_gi_src = {
     {
         {0x0, {{0x0, 0x1, 0x0}, {0xD8FBFDFF, 0x43}, 0x75}}, // mObj
@@ -53,7 +51,6 @@ static dCcD_SrcSph cc_gi_src = {
     } // mSphAttr
 };
 
-/* 806D0FFC-806D103C 000078 0040+00 1/1 0/0 0/0 .data cc_gi_att_src__22@unnamed@d_a_e_gi_cpp@ */
 static dCcD_SrcSph cc_gi_att_src = {
     {
         {0x0, {{0x100000, 0x3, 0xD}, {0xD8FBFDFF, 0x0}, 0x75}}, // mObj
@@ -67,7 +64,6 @@ static dCcD_SrcSph cc_gi_att_src = {
 };
 }
 
-/* 806CD48C-806CD4F4 0000EC 0068+00 1/1 0/0 0/0 .text            __ct__12daE_GI_HIO_cFv */
 daE_GI_HIO_c::daE_GI_HIO_c() {
     id = -1;
     model_size = 1.1f;
@@ -81,7 +77,6 @@ daE_GI_HIO_c::daE_GI_HIO_c() {
     lever_spin_time = 35;
 }
 
-/* 806CD4F4-806CD594 000154 00A0+00 1/1 0/0 0/0 .text ctrlJoint__8daE_GI_cFP8J3DJointP8J3DModel */
 int daE_GI_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     int jnt_no = i_joint->getJntNo();
     mDoMtx_stack_c::copy(i_model->getAnmMtx(jnt_no));
@@ -97,7 +92,6 @@ int daE_GI_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 806CD594-806CD5E0 0001F4 004C+00 1/1 0/0 0/0 .text JointCallBack__8daE_GI_cFP8J3DJointi */
 int daE_GI_c::JointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == NULL) {
         J3DModel* model = j3dSys.getModel();
@@ -111,7 +105,6 @@ int daE_GI_c::JointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 806CD5E0-806CD848 000240 0268+00 1/1 0/0 0/0 .text            draw__8daE_GI_cFv */
 int daE_GI_c::draw() {
     J3DModel* model = mpModelMorf->getModel();
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -147,17 +140,14 @@ int daE_GI_c::draw() {
     return 1;
 }
 
-/* 806CD848-806CD868 0004A8 0020+00 1/0 0/0 0/0 .text            daE_GI_Draw__FP8daE_GI_c */
 static int daE_GI_Draw(daE_GI_c* a_this) {
     return a_this->draw();
 }
 
-/* 806CD868-806CD90C 0004C8 00A4+00 7/7 0/0 0/0 .text            setBck__8daE_GI_cFiUcff */
 void daE_GI_c::setBck(int i_anm, u8 i_mode, f32 i_morf, f32 i_speed) {
     mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_GI", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f);
 }
 
-/* 806CD90C-806CD938 00056C 002C+00 8/8 0/0 0/0 .text            setActionMode__8daE_GI_cFii */
 void daE_GI_c::setActionMode(int i_actionMode, int i_moveMode) {
     mWallCheckRadius = 150.0f;
     mActionMode = i_actionMode;
@@ -166,13 +156,10 @@ void daE_GI_c::setActionMode(int i_actionMode, int i_moveMode) {
     offHeadLockFlg();
 }
 
-/* 806D1128-806D112C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 806D1138-806D1164 000018 002C+00 15/15 0/0 0/0 .bss             l_HIO */
 static daE_GI_HIO_c l_HIO;
 
-/* 806CD938-806CDD1C 000598 03E4+00 1/1 0/0 0/0 .text            damage_check__8daE_GI_cFv */
 void daE_GI_c::damage_check() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     
@@ -280,7 +267,6 @@ void daE_GI_c::damage_check() {
     }
 }
 
-/* 806CDD1C-806CDD8C 00097C 0070+00 2/2 0/0 0/0 .text            setWeaponAtBit__8daE_GI_cFUc */
 void daE_GI_c::setWeaponAtBit(u8 i_onBit) {
     if (!i_onBit) {
         mAtSph[0].OffAtSetBit();
@@ -295,10 +281,8 @@ void daE_GI_c::setWeaponAtBit(u8 i_onBit) {
     }   
 }
 
-/* 806D1164-806D1168 000044 0004+00 4/4 0/0 0/0 .bss             m_cry_gi */
 static daE_GI_c* m_cry_gi;
 
-/* 806CDD8C-806CDED8 0009EC 014C+00 3/3 0/0 0/0 .text            setCryStop__8daE_GI_cFv */
 bool daE_GI_c::setCryStop() {
     if (m_cry_gi == NULL) {
         if (!daPy_getPlayerActorClass()->checkNowWolf()) {
@@ -322,14 +306,12 @@ bool daE_GI_c::setCryStop() {
     return false;
 }
 
-/* 806CDED8-806CDFB0 000B38 00D8+00 1/1 0/0 0/0 .text            setAttackEffect__8daE_GI_cFv */
 void daE_GI_c::setAttackEffect() {
     cXyz size(l_HIO.model_size, l_HIO.model_size, l_HIO.model_size);
     dComIfGp_particle_setPolyColor(0x8684, mAcch.m_gnd, &current.pos, &tevStr, &shape_angle, &size, 0, NULL, -1, NULL);
     dComIfGp_particle_set(0x8685, &current.pos, &tevStr, &shape_angle, &size);
 }
 
-/* 806CDFB0-806CE0D4 000C10 0124+00 1/1 0/0 0/0 .text            setDragSwordEffect__8daE_GI_cFv */
 void daE_GI_c::setDragSwordEffect() {
     cXyz size(l_HIO.model_size, l_HIO.model_size, l_HIO.model_size);
     cXyz pos;
@@ -349,7 +331,6 @@ void daE_GI_c::setDragSwordEffect() {
     mPolyColorKey = dComIfGp_particle_setPolyColor(mPolyColorKey, 0x8689, mAcch.m_gnd, &pos, &tevStr, &shape_angle, &size, 0, NULL, -1, NULL);
 }
 
-/* 806CE0D4-806CE184 000D34 00B0+00 1/1 0/0 0/0 .text            setDeathSmokeEffect__8daE_GI_cFv */
 void daE_GI_c::setDeathSmokeEffect() {
     cXyz size(l_HIO.model_size, l_HIO.model_size, l_HIO.model_size);
     cXyz pos;
@@ -359,7 +340,6 @@ void daE_GI_c::setDeathSmokeEffect() {
     dComIfGp_particle_setPolyColor(0xE7, mAcch.m_gnd, &pos, &tevStr, &shape_angle, &size, 0, NULL, -1, NULL);
 }
 
-/* 806CE184-806CE280 000DE4 00FC+00 3/3 0/0 0/0 .text            setDamageEffect__8daE_GI_cFv */
 void daE_GI_c::setDamageEffect() {
     cXyz size(l_HIO.model_size, l_HIO.model_size, l_HIO.model_size);
     cXyz pos;
@@ -372,7 +352,6 @@ void daE_GI_c::setDamageEffect() {
     }
 }
 
-/* 806CE280-806CE31C 000EE0 009C+00 1/1 0/0 0/0 .text            s_other_gi__FPvPv */
 static void* s_other_gi(void* i_actor, void* i_other) {
     if (i_actor != i_other && fopAcM_IsActor(i_actor) && !fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_GI &&
         fopAcM_searchActorDistance((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_other) < 1000.0f)
@@ -383,7 +362,6 @@ static void* s_other_gi(void* i_actor, void* i_other) {
     return NULL;
 }
 
-/* 806CE31C-806CE3C4 000F7C 00A8+00 1/1 0/0 0/0 .text            s_battle_gi__FPvPv */
 static void* s_battle_gi(void* i_actor, void* i_other) {
     if (i_actor != i_other && fopAcM_IsActor(i_actor) && !fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_GI &&
         ((daE_GI_c*)i_actor)->isBattleOn() && fopAcM_searchActorDistance((fopAc_ac_c*)i_actor, (fopAc_ac_c*)i_other) < 500.0f)
@@ -394,7 +372,6 @@ static void* s_battle_gi(void* i_actor, void* i_other) {
     return NULL;
 }
 
-/* 806CE3C4-806CE6AC 001024 02E8+00 1/1 0/0 0/0 .text            executeSleep__8daE_GI_cFv */
 void daE_GI_c::executeSleep() {
     switch (mMoveMode) {
     case 0:
@@ -453,7 +430,6 @@ void daE_GI_c::executeSleep() {
     }
 }
 
-/* 806CE6AC-806CE858 00130C 01AC+00 1/1 0/0 0/0 .text            executeWait__8daE_GI_cFv */
 void daE_GI_c::executeWait() {
     f32 player_dist = fopAcM_searchPlayerDistance(this);
 
@@ -481,7 +457,6 @@ void daE_GI_c::executeWait() {
     }
 }
 
-/* 806CE858-806CEC94 0014B8 043C+00 1/1 0/0 0/0 .text            executeChase__8daE_GI_cFv */
 void daE_GI_c::executeChase() {
     field_0x698 = 1;
 
@@ -555,7 +530,6 @@ void daE_GI_c::executeChase() {
     }
 }
 
-/* 806CEC94-806CF0B8 0018F4 0424+00 2/1 0/0 0/0 .text            executeAttack__8daE_GI_cFv */
 void daE_GI_c::executeAttack() {
     field_0x698 = 1;
 
@@ -642,7 +616,6 @@ void daE_GI_c::executeAttack() {
     }
 }
 
-/* 806CF0B8-806CF410 001D18 0358+00 1/1 0/0 0/0 .text            executeDamage__8daE_GI_cFv */
 void daE_GI_c::executeDamage() {
     switch (mMoveMode) {
     case 0:
@@ -714,7 +687,6 @@ void daE_GI_c::executeDamage() {
     }
 }
 
-/* 806CF410-806CF720 002070 0310+00 1/1 0/0 0/0 .text            executeBiteDamage__8daE_GI_cFv */
 void daE_GI_c::executeBiteDamage() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -769,7 +741,6 @@ void daE_GI_c::executeBiteDamage() {
     }
 }
 
-/* 806CF720-806CF878 002380 0158+00 1/1 0/0 0/0 .text            PushButtonCount__8daE_GI_cFv */
 void daE_GI_c::PushButtonCount() {
     if (mPlayerStunTimer != 0) {
         if (abs((s16)(mPrevStickAngle - mDoCPd_c::getStickAngle3D(PAD_1))) > 0x1000) {
@@ -804,7 +775,6 @@ void daE_GI_c::PushButtonCount() {
     mPrevStickAngle = mDoCPd_c::getStickAngle3D(PAD_1);
 }
 
-/* 806CF878-806CFB60 0024D8 02E8+00 1/1 0/0 0/0 .text            action__8daE_GI_cFv */
 void daE_GI_c::action() {
     setWeaponAtBit(0);
     field_0x69f = 0;
@@ -888,7 +858,6 @@ void daE_GI_c::action() {
     mpModelMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
-/* 806CFB60-806CFBF0 0027C0 0090+00 1/1 0/0 0/0 .text            mtx_set__8daE_GI_cFv */
 void daE_GI_c::mtx_set() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -900,7 +869,6 @@ void daE_GI_c::mtx_set() {
     mpSwordModel->setBaseTRMtx(model->getAnmMtx(16));
 }
 
-/* 806CFBF0-806CFDF4 002850 0204+00 1/1 0/0 0/0 .text            cc_set__8daE_GI_cFv */
 void daE_GI_c::cc_set() {
     cXyz cc_center;
     J3DModel* model = mpModelMorf->getModel();
@@ -938,7 +906,6 @@ void daE_GI_c::cc_set() {
     }
 }
 
-/* 806CFDF4-806D002C 002A54 0238+00 1/1 0/0 0/0 .text            execute__8daE_GI_cFv */
 int daE_GI_c::execute() {
     if (field_0x684 != 0) {
         field_0x684--;
@@ -991,17 +958,14 @@ int daE_GI_c::execute() {
     return 1;
 }
 
-/* 806D002C-806D004C 002C8C 0020+00 2/1 0/0 0/0 .text            daE_GI_Execute__FP8daE_GI_c */
 static int daE_GI_Execute(daE_GI_c* a_this) {
     return a_this->execute();
 }
 
-/* 806D004C-806D0054 002CAC 0008+00 1/0 0/0 0/0 .text            daE_GI_IsDelete__FP8daE_GI_c */
 static int daE_GI_IsDelete(daE_GI_c* a_this) {
     return 1;
 }
 
-/* 806D0054-806D00C8 002CB4 0074+00 1/1 0/0 0/0 .text            _delete__8daE_GI_cFv */
 int daE_GI_c::_delete() {
     dComIfG_resDelete(&mPhase, "E_GI");
 
@@ -1017,12 +981,10 @@ int daE_GI_c::_delete() {
     return 1;
 }
 
-/* 806D00C8-806D00E8 002D28 0020+00 1/0 0/0 0/0 .text            daE_GI_Delete__FP8daE_GI_c */
 static int daE_GI_Delete(daE_GI_c* a_this) {
     return a_this->_delete();
 }
 
-/* 806D00E8-806D025C 002D48 0174+00 1/1 0/0 0/0 .text            CreateHeap__8daE_GI_cFv */
 int daE_GI_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_GI", 0x13);
     JUT_ASSERT(1621, modelData != NULL);
@@ -1051,12 +1013,10 @@ int daE_GI_c::CreateHeap() {
     return 1;
 }
 
-/* 806D025C-806D027C 002EBC 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return ((daE_GI_c*)i_this)->CreateHeap();
 }
 
-/* 806D027C-806D0608 002EDC 038C+00 1/1 0/0 0/1 .text            create__8daE_GI_cFv */
 int daE_GI_c::create() {
     fopAcM_ct(this, daE_GI_c);
 
@@ -1139,12 +1099,10 @@ int daE_GI_c::create() {
     return phase_state;
 }
 
-/* 806D0924-806D0944 003584 0020+00 1/0 0/0 0/0 .text            daE_GI_Create__FP8daE_GI_c */
 static int daE_GI_Create(daE_GI_c* a_this) {
     return a_this->create();
 }
 
-/* 806D1064-806D1084 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_GI_Method */
 static actor_method_class l_daE_GI_Method = {
     (process_method_func)daE_GI_Create,
     (process_method_func)daE_GI_Delete,
@@ -1153,7 +1111,6 @@ static actor_method_class l_daE_GI_Method = {
     (process_method_func)daE_GI_Draw,
 };
 
-/* 806D1084-806D10B4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_GI */
 extern actor_process_profile_definition g_profile_E_GI = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

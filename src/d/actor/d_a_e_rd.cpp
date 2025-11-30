@@ -27,8 +27,8 @@
 
 class daE_RD_HIO_c : public JORReflexible {
 public:
-    /* 80504A6C */ daE_RD_HIO_c();
-    /* 8051801C */ virtual ~daE_RD_HIO_c() {}
+    daE_RD_HIO_c();
+    virtual ~daE_RD_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -204,7 +204,6 @@ enum Joint {
     /* 0x19 */ JNT_YUBIR,
 };
 
-/* 80504A6C-80504B20 0000EC 00B4+00 1/1 0/0 0/0 .text            __ct__12daE_RD_HIO_cFv */
 daE_RD_HIO_c::daE_RD_HIO_c() {
     field_0x4 = -1;
     model_size = 1.2f;
@@ -230,7 +229,6 @@ daE_RD_HIO_c::daE_RD_HIO_c() {
     jump_g = 5.0f;
 }
 
-/* 80504B20-80504BD4 0001A0 00B4+00 5/5 0/0 0/0 .text            get_pla__FP10fopAc_ac_c */
 static fopAc_ac_c* get_pla(fopAc_ac_c* a_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     fopAc_ac_c* actor = fopAcM_SearchByName(PROC_NPC_COACH);
@@ -251,7 +249,6 @@ static fopAc_ac_c* get_pla(fopAc_ac_c* a_this) {
     
 }
 
-/* 80504BD4-80504D28 000254 0154+00 36/36 0/0 0/0 .text            anm_init__FP10e_rd_classifUcf */
 static void anm_init(e_rd_class* i_this, int i_anmID, f32 i_morf, u8 i_mode, f32 i_speed) {
     if (i_this->field_0x680 == 0) {
         if (i_this->mBossMode != 0) {
@@ -272,7 +269,6 @@ static void anm_init(e_rd_class* i_this, int i_anmID, f32 i_morf, u8 i_mode, f32
     }
 }
 
-/* 80504D28-80504DDC 0003A8 00B4+00 2/2 0/0 0/0 .text            horn_anm_init__FP10e_rd_classifUcf */
 static void horn_anm_init(e_rd_class* i_this, int i_anmID, f32 i_morf, u8 i_mode, f32 i_speed) {
     if (i_this->field_0x6a0 != 0) {
         i_this->mpMorfHornAnm->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_rdb", i_anmID),
@@ -280,7 +276,6 @@ static void horn_anm_init(e_rd_class* i_this, int i_anmID, f32 i_morf, u8 i_mode
     }
 }
 
-/* 80504DDC-805052F4 00045C 0518+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         int jointNo = i_joint->getJntNo();
@@ -368,7 +363,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 805052F4-80505404 000974 0110+00 1/1 0/0 0/0 .text            nodeCallBack_B__FP8J3DJointi */
 static int nodeCallBack_B(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         int jointNo = i_joint->getJntNo();
@@ -391,7 +385,6 @@ static int nodeCallBack_B(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80505404-805054CC 000A84 00C8+00 1/1 0/0 0/0 .text            nodeCallBack_bow__FP8J3DJointi */
 static int nodeCallBack_bow(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         int jointNo = i_joint->getJntNo();
@@ -409,7 +402,6 @@ static int nodeCallBack_bow(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 805054CC-805059A4 000B4C 04D8+00 1/0 0/0 0/0 .text            daE_RD_Draw__FP10e_rd_class */
 static int daE_RD_Draw(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     J3DModel* model;
@@ -525,7 +517,6 @@ static int daE_RD_Draw(e_rd_class* i_this) {
     return 1;
 }
 
-/* 805059A4-80505A94 001024 00F0+00 4/4 0/0 0/0 .text other_bg_check__FP10e_rd_classP10fopAc_ac_c */
 static BOOL other_bg_check(e_rd_class* i_this, fopAc_ac_c* i_other) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     dBgS_LinChk lin_chk;
@@ -547,7 +538,6 @@ static BOOL other_bg_check(e_rd_class* i_this, fopAc_ac_c* i_other) {
     return FALSE;
 }
 
-/* 80505A94-80505CD4 001114 0240+00 2/2 0/0 0/0 .text            otoCheck__FP10fopAc_ac_cf */
 static BOOL otoCheck(fopAc_ac_c* i_actor, f32 param_2) {
     SND_INFLUENCE* sound = dKy_Sound_get();
     fpc_ProcID uVar1;
@@ -573,7 +563,6 @@ static BOOL otoCheck(fopAc_ac_c* i_actor, f32 param_2) {
     return FALSE;
 }
 
-/* 80505CD4-80505D80 001354 00AC+00 1/1 0/0 0/0 .text            pl_pass_check__FP10e_rd_classf */
 static BOOL pl_pass_check(e_rd_class* i_this, f32 param_2) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* actor = get_pla(a_this);
@@ -590,13 +579,10 @@ static BOOL pl_pass_check(e_rd_class* i_this, f32 param_2) {
     return FALSE;
 }
 
-/* 80519180-80519184 000048 0004+00 2/3 0/0 0/0 .bss             boss */
 static e_rd_class* boss;
 
-/* 80519184-80519188 00004C 0004+00 1/2 0/0 0/0 .bss             None */
 static u8 l_initHIO;
 
-/* 80519194-805191E4 00005C 0050+00 14/18 0/0 0/0 .bss             l_HIO */
 static daE_RD_HIO_c l_HIO;
 
 /* 805191E4 0002+00 data_805191E4 S_find */
@@ -604,23 +590,18 @@ static s16 S_find;
 
 static s8 lbl_70_bss_AE;
 
-/* 805191F4-80519200 0000BC 000C+00 1/2 0/0 0/0 .bss             S_find_pos */
 static cXyz S_find_pos;
 
-/* 80519200-80519204 0000C8 0004+00 7/11 0/0 0/0 .bss             None */
 static u8 data_80519200;
 
 static u8 data_80519201;
 
-/* 80519204-8051922C 0000CC 0028+00 3/6 0/0 0/0 .bss             target_info */
 static fopAc_ac_c* target_info[10];
 
-/* 8051922C-80519230 0000F4 0004+00 3/6 0/0 0/0 .bss             target_info_count */
 static int target_info_count;
 
 static s8 data_80519230;
 
-/* 80505D80-80505DFC 001400 007C+00 1/1 0/0 0/0 .text            s_b_sub__FPvPv */
 static void* s_b_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && dBomb_c::checkBombActor((fopAc_ac_c*)i_actor) && 
         !((dBomb_c*)i_actor)->checkStateExplode() && target_info_count < 10) {
@@ -631,7 +612,6 @@ static void* s_b_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80505DFC-80505E44 00147C 0048+00 2/2 0/0 0/0 .text            search_bomb__FP10e_rd_classi */
 static dBomb_c* search_bomb(e_rd_class* i_this, int param_2) {
     if ((i_this->field_0xa20 & 0x10000000) == 0) {
         return NULL;
@@ -645,7 +625,6 @@ static dBomb_c* search_bomb(e_rd_class* i_this, int param_2) {
     return NULL;
 }
 
-/* 80505E44-80505F50 0014C4 010C+00 3/3 0/0 0/0 .text            way_bg_check__FP10e_rd_classf */
 static BOOL way_bg_check(e_rd_class* i_this, f32 param_2) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     dBgS_LinChk lin_chk;
@@ -668,7 +647,6 @@ static BOOL way_bg_check(e_rd_class* i_this, f32 param_2) {
     return FALSE;
 }
 
-/* 80505F50-8050610C 0015D0 01BC+00 3/3 0/0 0/0 .text            ride_off__FP10e_rd_class */
 static void ride_off(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
@@ -714,7 +692,6 @@ static void ride_off(e_rd_class* i_this) {
     a_this->home.pos = a_this->current.pos;
 }
 
-/* 8050610C-805061DC 00178C 00D0+00 1/1 0/0 0/0 .text            s_wb_sub__FPvPv */
 static void* s_wb_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_WB && ((e_wb_class*)i_actor)->mActionID != ACTION_DROP &&
         ((e_wb_class*)i_actor)->mActionID != ACTION_DAMAGE && ((e_wb_class*)i_actor)->mActionID != ACTION_A_DAMAGE && ((e_wb_class*)i_actor)->mActionID != ACTION_STAND) {
@@ -729,7 +706,6 @@ static void* s_wb_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 805061DC-8050642C 00185C 0250+00 2/2 0/0 0/0 .text            search_wb__FP10e_rd_classs */
 static fpc_ProcID search_wb(e_rd_class* i_this, s16 param_2) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -789,7 +765,6 @@ static fpc_ProcID search_wb(e_rd_class* i_this, s16 param_2) {
     return -1;
 }
 
-/* 8050642C-8050651C 001AAC 00F0+00 5/5 0/0 0/0 .text            wb_check__FP10e_rd_classs */
 static void wb_check(e_rd_class* i_this, s16 param_2) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -821,7 +796,6 @@ static void wb_check(e_rd_class* i_this, s16 param_2) {
     }
 }
 
-/* 8050651C-805065D4 001B9C 00B8+00 1/1 0/0 0/0 .text            wb_init_ride__FP10e_rd_class */
 static BOOL wb_init_ride(e_rd_class* i_this) {
     i_this->mWbActorID = search_wb(i_this, 1);
     e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
@@ -845,7 +819,6 @@ static BOOL wb_init_ride(e_rd_class* i_this) {
     return FALSE;
 }
 
-/* 805065D4-80506758 001C54 0184+00 10/10 0/0 0/0 .text            pl_check__FP10e_rd_classfs */
 static BOOL pl_check(e_rd_class* i_this, f32 param_2, s16 param_3) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* actor = get_pla(a_this);
@@ -881,17 +854,14 @@ static BOOL pl_check(e_rd_class* i_this, f32 param_2, s16 param_3) {
     return FALSE;
 }
 
-/* 80506758-8050677C 001DD8 0024+00 3/3 0/0 0/0 .text            bomb_view_check__FP10e_rd_class */
 static dBomb_c* bomb_view_check(e_rd_class* i_this) {
     return search_bomb(i_this, 1);
 }
 
-/* 8050677C-805067A0 001DFC 0024+00 1/1 0/0 0/0 .text            bomb_check__FP10e_rd_class */
 static dBomb_c* bomb_check(e_rd_class* i_this) {
     return search_bomb(i_this, 0);
 }
 
-/* 805067A0-80506890 001E20 00F0+00 5/5 0/0 0/0 .text            move_gake_check__FP10e_rd_classf */
 static BOOL move_gake_check(e_rd_class* i_this, f32 param_2) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     dBgS_GndChk gnd_chk;
@@ -911,7 +881,6 @@ static BOOL move_gake_check(e_rd_class* i_this, f32 param_2) {
     return FALSE;
 }
 
-/* 80506890-80506A60 001F10 01D0+00 1/1 0/0 0/0 .text            way_check__FP10e_rd_class */
 static BOOL way_check(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz spac;
@@ -954,7 +923,6 @@ static BOOL way_check(e_rd_class* i_this) {
     return FALSE;
 }
 
-/* 80506A60-80506C8C 0020E0 022C+00 1/1 0/0 0/0 .text            path_check__FP10e_rd_class */
 static BOOL path_check(e_rd_class* i_this) {
     static u8 check_index[255];
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
@@ -1014,7 +982,6 @@ static BOOL path_check(e_rd_class* i_this) {
     return TRUE;
 }
 
-/* 80506C8C-80507144 00230C 04B8+00 1/1 0/0 0/0 .text            e_rd_normal__FP10e_rd_class */
 static void e_rd_normal(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -1138,7 +1105,6 @@ static void e_rd_normal(e_rd_class* i_this) {
     }
 }
 
-/* 80507144-80507784 0027C4 0640+00 2/1 0/0 0/0 .text            e_rd_fight_run__FP10e_rd_class */
 static void e_rd_fight_run(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -1302,7 +1268,6 @@ static void e_rd_fight_run(e_rd_class* i_this) {
     }
 }
 
-/* 80507784-805077E4 002E04 0060+00 1/1 0/0 0/0 .text            at_hit_check__FP10e_rd_class */
 static fopAc_ac_c* at_hit_check(e_rd_class* i_this) {
     if (i_this->mMode >= 10) {
         return NULL;
@@ -1315,7 +1280,6 @@ static fopAc_ac_c* at_hit_check(e_rd_class* i_this) {
     return NULL;
 }
 
-/* 805077E4-80507B90 002E64 03AC+00 1/1 0/0 0/0 .text            e_rd_fight__FP10e_rd_class */
 static void e_rd_fight(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp3c, sp48;
@@ -1413,7 +1377,6 @@ static void e_rd_fight(e_rd_class* i_this) {
     }
 }
 
-/* 80507B90-80507F98 003210 0408+00 2/1 0/0 0/0 .text            e_rd_bow_run__FP10e_rd_class */
 static void e_rd_bow_run(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     f32 fVar1 = 0.0f;
@@ -1517,7 +1480,6 @@ static void e_rd_bow_run(e_rd_class* i_this) {
     }
 }
 
-/* 80507F98-805082C8 003618 0330+00 1/1 0/0 0/0 .text            e_rd_bow__FP10e_rd_class */
 static void e_rd_bow(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     int frame = i_this->mpModelMorf->getFrame();
@@ -1590,7 +1552,6 @@ static void e_rd_bow(e_rd_class* i_this) {
     cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 4, 0x1000);
 }
 
-/* 805082C8-80508334 003948 006C+00 1/1 0/0 0/0 .text            s_command3_sub__FPvPv */
 static void* s_command3_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && i_actor != i_data && ((e_rd_class*)i_actor)->mAction == ACTION_COMMANDER) {
         return i_actor;
@@ -1599,7 +1560,6 @@ static void* s_command3_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80508334-80508790 0039B4 045C+00 1/1 0/0 0/0 .text            e_rd_bow2__FP10e_rd_class */
 static s8 e_rd_bow2(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* actor = get_pla(a_this);
@@ -1702,7 +1662,6 @@ static s8 e_rd_bow2(e_rd_class* i_this) {
     return rv;
 }
 
-/* 80508790-80508A34 003E10 02A4+00 1/1 0/0 0/0 .text            e_rd_bow_ikki__FP10e_rd_class */
 static void e_rd_bow_ikki(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp2c;
@@ -1763,7 +1722,6 @@ static void e_rd_bow_ikki(e_rd_class* i_this) {
     a_this->current.angle.y = cM_atan2s(sp2c.x, sp2c.z);
 }
 
-/* 80508A34-80508B98 0040B4 0164+00 1/1 0/0 0/0 .text            e_rd_avoid__FP10e_rd_class */
 static void e_rd_avoid(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     int frame = i_this->mpModelMorf->getFrame();
@@ -1801,7 +1759,6 @@ static void e_rd_avoid(e_rd_class* i_this) {
     }
 }
 
-/* 80508B98-805096A0 004218 0B08+00 2/1 0/0 0/0 .text            e_rd_wb_search__FP10e_rd_class */
 static void e_rd_wb_search(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp54, sp60;
@@ -1988,7 +1945,6 @@ static void e_rd_wb_search(e_rd_class* i_this) {
     }
 }
 
-/* 805096A0-805098E4 004D20 0244+00 1/1 0/0 0/0 .text            e_rd_wb_ride__FP10e_rd_class */
 static void e_rd_wb_ride(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp1c, sp28;
@@ -2053,7 +2009,6 @@ static void e_rd_wb_ride(e_rd_class* i_this) {
     }
 }
 
-/* 805098E4-8050A3EC 004F64 0B08+00 2/1 0/0 0/0 .text            e_rd_wb_run__FP10e_rd_class */
 static void e_rd_wb_run(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp3c, sp48;
@@ -2306,7 +2261,6 @@ static void e_rd_wb_run(e_rd_class* i_this) {
     }
 }
 
-/* 8050A3EC-8050A578 005A6C 018C+00 1/1 0/0 0/0 .text            s_wbrun_sub__FPvPv */
 static void* s_wbrun_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_WB) {
         e_wb_class* bullbo = (e_wb_class*)i_actor;
@@ -2321,7 +2275,6 @@ static void* s_wbrun_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8050A578-8050A908 005BF8 0390+00 1/1 0/0 0/0 .text            e_rd_wb_run_B__FP10e_rd_class */
 static void e_rd_wb_run_B(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
@@ -2403,7 +2356,6 @@ static void e_rd_wb_run_B(e_rd_class* i_this) {
     }
 }
 
-/* 8050A908-8050AB1C 005F88 0214+00 1/1 0/0 0/0 .text            e_rd_wb_bjump__FP10e_rd_class */
 static void e_rd_wb_bjump(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
@@ -2448,7 +2400,6 @@ static void e_rd_wb_bjump(e_rd_class* i_this) {
     }
 }
 
-/* 8050AB1C-8050AF78 00619C 045C+00 2/1 0/0 0/0 .text            e_rd_bomb_action__FP10e_rd_class */
 static void e_rd_bomb_action(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp48, sp54;
@@ -2547,7 +2498,6 @@ static void e_rd_bomb_action(e_rd_class* i_this) {
     i_this->field_0x9d4 = bomb->current.pos;
 }
 
-/* 8050AF78-8050B0F4 0065F8 017C+00 1/1 0/0 0/0 .text            e_rd_s_damage__FP10e_rd_class */
 static void e_rd_s_damage(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -2592,7 +2542,6 @@ static void e_rd_s_damage(e_rd_class* i_this) {
     cLib_addCalc0(&a_this->speedF, 1.0f, 3.0f);
 }
 
-/* 8050B0F4-8050B2A8 006774 01B4+00 1/1 0/0 0/0 .text            kado_check__FP10e_rd_class */
 static int kado_check(e_rd_class* i_this) {
     static int kado_bit[2] = {
         1, 2,
@@ -2634,7 +2583,6 @@ static int kado_check(e_rd_class* i_this) {
     return rv;
 }
 
-/* 8050B2A8-8050B3E8 006928 0140+00 3/3 0/0 0/0 .text            rd_disappear__FP10e_rd_class */
 static void rd_disappear(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp1c, sp28;
@@ -2668,7 +2616,6 @@ static void rd_disappear(e_rd_class* i_this) {
     }
 }
 
-/* 8050B3E8-8050B53C 006A68 0154+00 1/1 0/0 0/0 .text            body_gake__FP10e_rd_class */
 static BOOL body_gake(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     J3DModel* model = i_this->mpModelMorf->getModel();
@@ -2690,7 +2637,6 @@ static BOOL body_gake(e_rd_class* i_this) {
     return FALSE;
 }
 
-/* 8050B5B4-8050C12C 006C34 0B78+00 2/1 0/0 0/0 .text            e_rd_damage__FP10e_rd_class */
 static void e_rd_damage(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp34, sp40;
@@ -3023,7 +2969,6 @@ static void e_rd_damage(e_rd_class* i_this) {
     }
 }
 
-/* 8050C12C-8050C2D8 0077AC 01AC+00 1/1 0/0 0/0 .text            gake_check__FP10e_rd_classf */
 static s16 gake_check(e_rd_class* i_this, f32 param_2) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     dBgS_GndChk gnd_chk;
@@ -3053,7 +2998,6 @@ static s16 gake_check(e_rd_class* i_this, f32 param_2) {
     return a_this->shape_angle.y;
 }
 
-/* 8050C2D8-8050C4B0 007958 01D8+00 1/1 0/0 0/0 .text            s_bikkuri_sub__FPvPv */
 static void* s_bikkuri_sub(void* i_actor, void* i_data) {
     if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && i_actor != i_data) {
         if (((e_rd_class*)i_actor)->mAction == ACTION_BOW3 && ((e_rd_class*)i_actor)->mMode <= 2) {
@@ -3069,7 +3013,6 @@ static void* s_bikkuri_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8050C4B0-8050C630 007B30 0180+00 1/1 0/0 0/0 .text            s_saku_sub__FPvPv */
 static void* s_saku_sub(void* i_actor, void* i_data) {
     if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_H_Saku) {
         cXyz sp14 = ((daObjH_Saku_c*)i_actor)->field_0x5e0 - ((fopAc_ac_c*)i_data)->current.pos;
@@ -3081,7 +3024,6 @@ static void* s_saku_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8050C630-8050CA64 007CB0 0434+00 1/1 0/0 0/0 .text            e_rd_drop__FP10e_rd_class */
 static void e_rd_drop(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     f32 fVar1 = 0.0f;
@@ -3186,7 +3128,6 @@ static void e_rd_drop(e_rd_class* i_this) {
     cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 3.0f);
 }
 
-/* 8050CA64-8050CB70 0080E4 010C+00 1/1 0/0 0/0 .text            e_rd_a_damage__FP10e_rd_class */
 static void e_rd_a_damage(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -3217,7 +3158,6 @@ static void e_rd_a_damage(e_rd_class* i_this) {
     cLib_addCalc0(&a_this->speedF, 1.0f, 3.0f);
 }
 
-/* 8050CB70-8050CD4C 0081F0 01DC+00 1/1 0/0 0/0 .text            e_rd_stand__FP10e_rd_class */
 static void e_rd_stand(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -3265,7 +3205,6 @@ static void e_rd_stand(e_rd_class* i_this) {
     }
 }
 
-/* 8050CD4C-8050D168 0083CC 041C+00 2/1 0/0 0/0 .text            e_rd_bow3__FP10e_rd_class */
 static s8 e_rd_bow3(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -3377,7 +3316,6 @@ static s8 e_rd_bow3(e_rd_class* i_this) {
     return 0;
 }
 
-/* 8050D168-8050D1F4 0087E8 008C+00 1/1 0/0 0/0 .text            s_command2_sub__FPvPv */
 static void* s_command2_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && ((e_rd_class*)i_actor)->mAction == ACTION_BOW3 && ((e_rd_class*)i_actor)->mMode < 10) {
         ((e_rd_class*)i_actor)->field_0x990[0] = cM_rndF(10.0f) + 10.0f;
@@ -3387,7 +3325,6 @@ static void* s_command2_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8050D1F4-8050D260 008874 006C+00 1/1 0/0 0/0 .text            s_command4_sub__FPvPv */
 static void* s_command4_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && i_actor != i_data && ((e_rd_class*)i_actor)->mAction == ACTION_BOW3) {
         return i_actor;
@@ -3396,7 +3333,6 @@ static void* s_command4_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8050D260-8050D6B4 0088E0 0454+00 2/1 0/0 0/0 .text            e_rd_commander__FP10e_rd_class */
 static void e_rd_commander(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     s8 bVar1 = 0;
@@ -3506,7 +3442,6 @@ static void e_rd_commander(e_rd_class* i_this) {
     }
 }
 
-/* 8050D6B4-8050DAB8 008D34 0404+00 1/1 0/0 0/0 .text            e_rd_excite__FP10e_rd_class */
 static void e_rd_excite(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp40;
@@ -3574,7 +3509,6 @@ static void e_rd_excite(e_rd_class* i_this) {
     cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 5.0f);
 }
 
-/* 8050DAB8-8050DC10 009138 0158+00 1/1 0/0 0/0 .text            e_rd_water__FP10e_rd_class */
 static void e_rd_water(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp28;
@@ -3620,7 +3554,6 @@ static void e_rd_water(e_rd_class* i_this) {
     }
 }
 
-/* 8050DC10-8050DE00 009290 01F0+00 2/1 0/0 0/0 .text            e_rd_kiba_start__FP10e_rd_class */
 static void e_rd_kiba_start(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -3667,7 +3600,6 @@ static void e_rd_kiba_start(e_rd_class* i_this) {
     }
 }
 
-/* 8050DE00-8050DF38 009480 0138+00 1/1 0/0 0/0 .text            e_rd_ikki2_start__FP10e_rd_class */
 static void e_rd_ikki2_start(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -3699,7 +3631,6 @@ static void e_rd_ikki2_start(e_rd_class* i_this) {
     }
 }
 
-/* 8050DF38-8050E214 0095B8 02DC+00 1/1 0/0 0/0 .text            e_rd_kiba_end__FP10e_rd_class */
 static void e_rd_kiba_end(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -3777,7 +3708,6 @@ static void e_rd_kiba_end(e_rd_class* i_this) {
     }
 }
 
-/* 8050E214-8050E430 009894 021C+00 1/1 0/0 0/0 .text            e_rd_ikki_end__FP10e_rd_class */
 static void e_rd_ikki_end(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
@@ -3829,7 +3759,6 @@ static void e_rd_ikki_end(e_rd_class* i_this) {
     }
 }
 
-/* 8050E430-8050E668 009AB0 0238+00 1/1 0/0 0/0 .text            e_rd_ikki2_end__FP10e_rd_class */
 static void e_rd_ikki2_end(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
@@ -3883,7 +3812,6 @@ static void e_rd_ikki2_end(e_rd_class* i_this) {
     }
 }
 
-/* 8050E668-8050E6B4 009CE8 004C+00 1/1 0/0 0/0 .text            s_rdb_sub__FPvPv */
 static void* s_rdb_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RDB) {
         return i_actor;
@@ -3892,7 +3820,6 @@ static void* s_rdb_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8050E6B4-8050E8F0 009D34 023C+00 1/1 0/0 0/0 .text            e_rd_lv9_end__FP10e_rd_class */
 static void e_rd_lv9_end(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     e_wb_class* bullbo = (e_wb_class*)fopAcM_SearchByID(i_this->mWbActorID);
@@ -3947,7 +3874,6 @@ static void e_rd_lv9_end(e_rd_class* i_this) {
     }
 }
 
-/* 8050E8F0-8050E948 009F70 0058+00 1/1 0/0 0/0 .text            s_boom_sub__FPvPv */
 static void* s_boom_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && ((e_rd_class*)i_actor)->field_0x99a != 0) {
         return i_actor;
@@ -3956,7 +3882,6 @@ static void* s_boom_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8050E948-8050E9E8 009FC8 00A0+00 1/1 0/0 0/0 .text            wolfkick_damage__FP10e_rd_class */
 static void wolfkick_damage(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -3971,7 +3896,6 @@ static void wolfkick_damage(e_rd_class* i_this) {
     i_this->field_0x998 = 1000;
 }
 
-/* 8050E9E8-8050EBF8 00A068 0210+00 1/1 0/0 0/0 .text            big_damage__FP10e_rd_class */
 static void big_damage(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -4021,7 +3945,6 @@ static void big_damage(e_rd_class* i_this) {
 
 }
 
-/* 8050EBF8-8050ED28 00A278 0130+00 1/1 0/0 0/0 .text            small_damage__FP10e_rd_classi */
 static void small_damage(e_rd_class* i_this, int param_2) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -4050,7 +3973,6 @@ static void small_damage(e_rd_class* i_this, int param_2) {
     i_this->field_0x9f4 = i_this->mAtInfo.mHitDirection.y;
 }
 
-/* 8050ED28-8050EEC0 00A3A8 0198+00 1/1 0/0 0/0 .text            part_break__FP10e_rd_class */
 static void part_break(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -4082,7 +4004,6 @@ static void part_break(e_rd_class* i_this) {
     }
 }
 
-/* 8050EEC0-8050FADC 00A540 0C1C+00 1/2 0/0 0/0 .text            damage_check__FP10e_rd_class */
 static void damage_check(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -4391,7 +4312,6 @@ static void damage_check(e_rd_class* i_this) {
     }
 }
 
-/* 8050FADC-8050FB34 00B15C 0058+00 1/1 0/0 0/0 .text            s_other_sub__FPvPv */
 static void* s_other_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && ((e_rd_class*)i_actor)->field_0x5b7 != 6) {
         return i_actor;
@@ -4400,7 +4320,6 @@ static void* s_other_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8050FB34-8050FC04 00B1B4 00D0+00 1/1 0/0 0/0 .text            s_ep_sub__FPvPv */
 static void* s_ep_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     
@@ -4418,7 +4337,6 @@ static void* s_ep_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8050FC04-80510250 00B284 064C+00 2/1 0/0 0/0 .text            e_rd_yagura__FP10e_rd_class */
 static s8 e_rd_yagura(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     int frame = i_this->mpModelMorf->getFrame();
@@ -4559,7 +4477,6 @@ static s8 e_rd_yagura(e_rd_class* i_this) {
     return rv;
 }
 
-/* 80510250-80510734 00B8D0 04E4+00 1/1 0/0 0/0 .text            e_rd_jyunkai__FP10e_rd_class */
 static void e_rd_jyunkai(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     f32 fVar1 = 0.0f;
@@ -4668,7 +4585,6 @@ static void e_rd_jyunkai(e_rd_class* i_this) {
     }
 }
 
-/* 80510734-80510B34 00BDB4 0400+00 2/1 0/0 0/0 .text            e_rd_sleep__FP10e_rd_class */
 static void e_rd_sleep(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     int frame = i_this->mpModelMorf->getFrame();
@@ -4783,10 +4699,8 @@ static void e_rd_sleep(e_rd_class* i_this) {
     }
 }
 
-/* 80519334-80519338 0001FC 0004+00 2/2 0/0 0/0 .bss             rd_count */
 static int rd_count;
 
-/* 80510B34-80510B98 00C1B4 0064+00 1/1 0/0 0/0 .text            s_tag_sub__FPvPv */
 static void* s_tag_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && ((e_rd_class*)i_actor)->field_0x5ba != 0) {
         rd_count++;
@@ -4795,7 +4709,6 @@ static void* s_tag_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80510B98-80510D2C 00C218 0194+00 1/1 0/0 0/0 .text            e_rd_tag__FP10e_rd_class */
 static void e_rd_tag(e_rd_class* i_this) {
     // FAKEMATCH
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
@@ -4832,7 +4745,6 @@ static void e_rd_tag(e_rd_class* i_this) {
     }
 }
 
-/* 80510D2C-80510DEC 00C3AC 00C0+00 1/1 0/0 0/0 .text            e_rd_reg__FP10e_rd_class */
 static void e_rd_reg(e_rd_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -4866,7 +4778,6 @@ static void e_rd_reg(e_rd_class* i_this) {
     }
 }
 
-/* 80510DEC-80512914 00C46C 1B28+00 2/1 0/0 0/0 .text            action__FP10e_rd_class */
 static void action(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* actor = get_pla(a_this);
@@ -5541,7 +5452,6 @@ static void action(e_rd_class* i_this) {
     setMidnaBindEffect(a_this, &i_this->mSound, &a_this->eyePos, &sp2d4);
 }
 
-/* 80512914-80512B40 00DF94 022C+00 1/1 0/0 0/0 .text            fire_eff_set__FP10e_rd_class */
 static void fire_eff_set(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp48, sp54;
@@ -5587,7 +5497,6 @@ static void fire_eff_set(e_rd_class* i_this) {
     }
 }
 
-/* 80512B40-80512BB0 00E1C0 0070+00 1/1 0/0 0/0 .text            s_wb_sub2__FPvPv */
 static void* s_wb_sub2(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_WB && target_info_count < 2) {
         target_info[target_info_count] = (fopAc_ac_c*)i_actor;
@@ -5597,7 +5506,6 @@ static void* s_wb_sub2(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80512BB0-80512C10 00E230 0060+00 1/1 0/0 0/0 .text            s_lv9dn_sub__FPvPv */
 static void* s_lv9dn_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_DN && ((e_dn_class*)i_actor)->field_0x10d8 != 0) {
         ((e_dn_class*)i_actor)->field_0x10d8 = 0;
@@ -5607,7 +5515,6 @@ static void* s_lv9dn_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80512C10-80512C70 00E290 0060+00 1/1 0/0 0/0 .text            s_lv9dn_sub2__FPvPv */
 static void* s_lv9dn_sub2(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_DN && ((e_dn_class*)i_actor)->field_0x10d8 == 0) {
         ((e_dn_class*)i_actor)->field_0x10d8 = 1;
@@ -5617,7 +5524,6 @@ static void* s_lv9dn_sub2(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80512C70-80512CBC 00E2F0 004C+00 1/1 0/0 0/0 .text            s_lv9dn_sub3__FPvPv */
 static void* s_lv9dn_sub3(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_DN) {
         ((e_dn_class*)i_actor)->mMode = 2;
@@ -5626,7 +5532,6 @@ static void* s_lv9dn_sub3(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80512CBC-80512D14 00E33C 0058+00 1/1 0/0 0/0 .text            s_lv9rd_sub__FPvPv */
 static void* s_lv9rd_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && ((e_rd_class*)i_actor)->field_0xafb != 0) {
         ((e_rd_class*)i_actor)->field_0xafb = 0;
@@ -5635,10 +5540,8 @@ static void* s_lv9rd_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80519338-8051933C 000200 0004+00 1/1 0/0 0/0 .bss             None */
 static u8 data_80519338;
 
-/* 80512D14-80512E08 00E394 00F4+00 1/1 0/0 0/0 .text            s_lv9rd_sub2__FPvPv */
 static void* s_lv9rd_sub2(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && ((e_rd_class*)i_actor)->field_0x5b7 == data_80519338 && ((e_rd_class*)i_actor)->mAction != ACTION_DROP) {
         e_rd_class* i_this = (e_rd_class*)i_actor;
@@ -5657,7 +5560,6 @@ static void* s_lv9rd_sub2(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80512E08-80512E74 00E488 006C+00 1/1 0/0 0/0 .text            s_lv9rd_sub3__FPvPv */
 static void* s_lv9rd_sub3(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_RD && (((e_rd_class*)i_actor)->field_0x5b7 == 13 || ((e_rd_class*)i_actor)->field_0x5b7 == 14)) {
         ((e_rd_class*)i_actor)->field_0x9a4 = 1;
@@ -5667,7 +5569,6 @@ static void* s_lv9rd_sub3(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80512E74-80512EC0 00E4F4 004C+00 1/1 0/0 0/0 .text            s_lv9arrow_sub__FPvPv */
 static void* s_lv9arrow_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_ARROW) {
         ((e_arrow_class*)i_actor)->field_0xa14 = 1;
@@ -5676,7 +5577,6 @@ static void* s_lv9arrow_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80512EC0-80512F18 00E540 0058+00 1/1 0/0 0/0 .text            s_lv9arrow_sub2__FPvPv */
 static void* s_lv9arrow_sub2(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_ARROW) {
         ((e_arrow_class*)i_actor)->field_0xa14 = 0;
@@ -5687,7 +5587,6 @@ static void* s_lv9arrow_sub2(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80512F18-80512FFC 00E598 00E4+00 1/1 0/0 0/0 .text            cam_3d_morf__FP10e_rd_classf */
 static void cam_3d_morf(e_rd_class* i_this, f32 param_2) {
     cLib_addCalc2(&i_this->mDemoCamCenter.x, i_this->field_0x12cc.x, param_2, i_this->field_0x12e4.x * i_this->field_0x130c);
     cLib_addCalc2(&i_this->mDemoCamCenter.y, i_this->field_0x12cc.y, param_2, i_this->field_0x12e4.y * i_this->field_0x130c);
@@ -5697,7 +5596,6 @@ static void cam_3d_morf(e_rd_class* i_this, f32 param_2) {
     cLib_addCalc2(&i_this->mDemoCamEye.z, i_this->field_0x12c0.z, param_2, i_this->field_0x12d8.z * i_this->field_0x130c);
 }
 
-/* 80512FFC-8051309C 00E67C 00A0+00 1/1 0/0 0/0 .text            cam_spd_set__FP10e_rd_class */
 static void cam_spd_set(e_rd_class* i_this) {
     i_this->field_0x12d8.x = fabsf(i_this->field_0x12c0.x - i_this->mDemoCamEye.x);
     i_this->field_0x12d8.y = fabsf(i_this->field_0x12c0.y - i_this->mDemoCamEye.y);
@@ -5708,7 +5606,6 @@ static void cam_spd_set(e_rd_class* i_this) {
     i_this->field_0x130c = 0.0f;
 }
 
-/* 8051309C-80514640 00E71C 15A4+00 2/1 0/0 0/0 .text            demo_camera__FP10e_rd_class */
 static void demo_camera(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -6236,10 +6133,8 @@ static void demo_camera(e_rd_class* i_this) {
     }
 }
 
-/* 8051933C-80519340 000204 0004+00 0/2 0/0 0/0 .bss             c_start */
 static int c_start;
 
-/* 80514640-805163C0 00FCC0 1D80+00 2/1 0/0 0/0 .text            daE_RD_Execute__FP10e_rd_class */
 static int daE_RD_Execute(e_rd_class* i_this) {
     if (c_start == 0 && dComIfGp_event_runCheck()) {
         if (data_80519201 != 0) {
@@ -6900,12 +6795,10 @@ static u8 jv_offset[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 805164D4-805164DC 011B54 0008+00 1/0 0/0 0/0 .text            daE_RD_IsDelete__FP10e_rd_class */
 static int daE_RD_IsDelete(e_rd_class* i_this) {
     return 1;
 }
 
-/* 805164DC-80516540 011B5C 0064+00 1/0 0/0 0/0 .text            daE_RD_Delete__FP10e_rd_class */
 static int daE_RD_Delete(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -6921,7 +6814,6 @@ static int daE_RD_Delete(e_rd_class* i_this) {
     return 1;
 }
 
-/* 80516540-80516980 011BC0 0440+00 1/1 0/0 0/0 .text            ride_game_actor_set__FP10e_rd_class */
 static void ride_game_actor_set(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -6988,7 +6880,6 @@ static void ride_game_actor_set(e_rd_class* i_this) {
     }
 }
 
-/* 80516980-80516B04 012000 0184+00 1/1 0/0 0/0 .text coach_game_actor_set__FP10e_rd_class */
 static void coach_game_actor_set(e_rd_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -7013,7 +6904,6 @@ static void coach_game_actor_set(e_rd_class* i_this) {
 
 static s8 instanceCount;
 
-/* 80516B04-805171FC 012184 06F8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_rd_class* i_this = (e_rd_class*)a_this;
     J3DModel* model;
@@ -7161,7 +7051,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 805171FC-80517AE0 01287C 08E4+00 1/0 0/0 0/0 .text            daE_RD_Create__FP10fopAc_ac_c */
 static cPhs__Step daE_RD_Create(fopAc_ac_c* a_this) {
     e_rd_class* i_this = (e_rd_class*)a_this;
 
@@ -7471,12 +7360,10 @@ static cPhs__Step daE_RD_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-/* 80517AE0-80517CB0 013160 01D0+00 1/1 0/0 0/0 .text            __ct__10e_rd_classFv */
 e_rd_class::e_rd_class() {}
 
 AUDIO_INSTANCES
 
-/* 80519048-80519068 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_RD_Method */
 static actor_method_class l_daE_RD_Method = {
     (process_method_func)daE_RD_Create,
     (process_method_func)daE_RD_Delete,
@@ -7485,7 +7372,6 @@ static actor_method_class l_daE_RD_Method = {
     (process_method_func)daE_RD_Draw,
 };
 
-/* 80519068-80519098 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_RD */
 extern actor_process_profile_definition g_profile_E_RD = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

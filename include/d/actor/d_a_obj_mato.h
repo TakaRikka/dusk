@@ -33,18 +33,18 @@ struct MatoData_s {
  */
 class daObjMATO_c : public fopAc_ac_c {
 public:
-    /* 80C91B58 */ void setAction(void (daObjMATO_c::*)(int), int);
-    /* 80C91D48 */ void action();
-    /* 80C91DE4 */ void hit_check();
-    /* 80C91ECC */ void start_wait(int);
-    /* 80C91F74 */ void wait(int);
-    /* 80C92044 */ void disappear(int);
-    /* 80C921A8 */ void getRupee(int);
-    /* 80C922AC */ int execute();
-    /* 80C92380 */ int _delete();
-    /* 80C9243C */ void setBaseMtx();
-    /* 80C92650 */ int mato_init();
-    /* 80C927AC */ int create();
+    void setAction(void (daObjMATO_c::*)(int), int);
+    void action();
+    void hit_check();
+    void start_wait(int);
+    void wait(int);
+    void disappear(int);
+    void getRupee(int);
+    int execute();
+    int _delete();
+    void setBaseMtx();
+    int mato_init();
+    int create();
 
     inline int CreateHeap();
     inline int draw();

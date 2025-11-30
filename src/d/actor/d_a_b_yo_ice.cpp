@@ -17,8 +17,8 @@
 
 class daB_YOI_HIO_c {
 public:
-    /* 8063A14C */ daB_YOI_HIO_c();
-    /* 8063DBD0 */ virtual ~daB_YOI_HIO_c() {}
+    daB_YOI_HIO_c();
+    virtual ~daB_YOI_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mScaleY;
@@ -27,15 +27,12 @@ public:
 
 STATIC_ASSERT(sizeof(daB_YOI_HIO_c) == 0x10);
 
-/* 8063DFE8-8063DFEC 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool hioInit;
 
-/* 8063DFF8-8063E008 000018 0010+00 3/3 0/0 0/0 .bss             l_HIO */
 static daB_YOI_HIO_c l_HIO;
 
 namespace {
 
-/* 8063DDC4-8063DE08 000020 0044+00 0/1 0/0 0/0 .data cc_yo_src__26@unnamed@d_a_b_yo_ice_cpp@ */
 static dCcD_SrcCyl cc_yo_src = {
     {
         {0x0, {{0x100000, 0x2, 0xC}, {0xD8BBFDFF, 0x43}, 0x55}}, // mObj
@@ -50,8 +47,6 @@ static dCcD_SrcCyl cc_yo_src = {
     } // mCyl
 };
 
-/* 8063DE08-8063DE4C 000064 0044+00 0/1 0/0 0/0 .data cc_yo_iron_src__26@unnamed@d_a_b_yo_ice_cpp@
- */
 static dCcD_SrcCyl cc_yo_iron_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x400000, 0x3}, 0x25}}, // mObj
@@ -66,8 +61,6 @@ static dCcD_SrcCyl cc_yo_iron_src = {
     } // mCyl
 };
 
-/* 8063DE4C-8063DE90 0000A8 0044+00 0/1 0/0 0/0 .data cc_yo_cam_src__26@unnamed@d_a_b_yo_ice_cpp@
- */
 static dCcD_SrcCyl cc_yo_cam_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x0}, 0x5}}, // mObj
@@ -84,14 +77,12 @@ static dCcD_SrcCyl cc_yo_cam_src = {
 
 }  // namespace
 
-/* 8063A14C-8063A17C 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__13daB_YOI_HIO_cFv */
 daB_YOI_HIO_c::daB_YOI_HIO_c() {
     field_0x4 = -1;
     mScaleY = 1.0f;
     mScaleXZ = 1.2f;
 }
 
-/* 8063A17C-8063A2B8 00011C 013C+00 1/1 0/0 0/0 .text            draw__9daB_YOI_cFv */
 int daB_YOI_c::draw() {
     if (mDeleteTimer != 0) {
         return 1;
@@ -116,18 +107,15 @@ int daB_YOI_c::draw() {
     return 1;
 }
 
-/* 8063A2B8-8063A2D8 000258 0020+00 1/0 0/0 0/0 .text            daB_YOI_Draw__FP9daB_YOI_c */
 static int daB_YOI_Draw(daB_YOI_c* i_this) {
     return i_this->draw();
 }
 
-/* 8063A2D8-8063A2E4 000278 000C+00 2/2 0/0 0/0 .text            setActionMode__9daB_YOI_cFii */
 void daB_YOI_c::setActionMode(int i_action, int i_mode) {
     mAction = i_action;
     mMode = i_mode;
 }
 
-/* 8063A2E4-8063A480 000284 019C+00 1/1 0/0 0/0 .text            damage_check__9daB_YOI_cFv */
 void daB_YOI_c::damage_check() {
     mCcStts.Move();
 
@@ -169,7 +157,6 @@ void daB_YOI_c::damage_check() {
     }
 }
 
-/* 8063A480-8063A628 000420 01A8+00 1/0 0/0 3/3 .text            setOperate__9daB_YOI_cFi */
 void daB_YOI_c::setOperate(int param_0) {
     switch (param_0) {
     case 0:
@@ -220,13 +207,11 @@ void daB_YOI_c::setOperate(int param_0) {
     }
 }
 
-/* 8063A628-8063A638 0005C8 0010+00 2/2 0/0 0/0 .text            setWeight__9daB_YOI_cFUc */
 void daB_YOI_c::setWeight(u8 i_weight) {
     mCcStts.SetWeight(i_weight);
     mCcCyl0.SetStts(&mCcStts);
 }
 
-/* 8063A638-8063A6F8 0005D8 00C0+00 2/2 0/0 0/0 .text            setBreakIceEffect__9daB_YOI_cFv */
 void daB_YOI_c::setBreakIceEffect() {
     static u16 break_effect_id[3] = {0x87BB, 0x87BC, 0x87BD};
     current.angle.y = fopAcM_searchPlayerAngleY(this) + 0x8000;
@@ -235,8 +220,6 @@ void daB_YOI_c::setBreakIceEffect() {
     }
 }
 
-/* 8063A6F8-8063A79C 000698 00A4+00 1/1 0/0 0/0 .text            setWallBreakIceEffect__9daB_YOI_cFv
- */
 void daB_YOI_c::setWallBreakIceEffect() {
     static u16 wall_break_effect_id[3] = {0x87B8, 0x87B9, 0x87BA};
     for (int i = 0; i < 3; i++) {
@@ -244,12 +227,10 @@ void daB_YOI_c::setWallBreakIceEffect() {
     }
 }
 
-/* 8063A79C-8063A824 00073C 0088+00 1/1 0/0 0/0 .text            setApperEffect__9daB_YOI_cFv */
 void daB_YOI_c::setApperEffect() {
     mAppearKey = dComIfGp_particle_set(mAppearKey, 0x87B5, &current.pos, &tevStr);
 }
 
-/* 8063A824-8063A8C8 0007C4 00A4+00 1/1 0/0 0/0 .text            setApperEffect2__9daB_YOI_cFv */
 void daB_YOI_c::setApperEffect2() {
     static u16 apper_effect_id[2] = {0x87B6, 0x87B7};
     for (int i = 0; i < 2; i++) {
@@ -257,7 +238,6 @@ void daB_YOI_c::setApperEffect2() {
     }
 }
 
-/* 8063A8C8-8063A96C 000868 00A4+00 2/2 0/0 0/0 .text            setLandingEffect__9daB_YOI_cFv */
 void daB_YOI_c::setLandingEffect() {
     static u16 l_landing_effect_id[6] = {0x86DC, 0x86DD, 0x86DE, 0x86DF, 0x86E0, 0x86E1};
     for (int i = 0; i < 6; i++) {
@@ -265,7 +245,6 @@ void daB_YOI_c::setLandingEffect() {
     }
 }
 
-/* 8063A96C-8063ABC0 00090C 0254+00 1/1 0/0 0/0 .text            executeFirst__9daB_YOI_cFv */
 void daB_YOI_c::executeFirst() {
     cXyz pos = mpBlizzeta->getIceCenterPos();
     f32 range = mpBlizzeta->getIceRange();
@@ -312,12 +291,10 @@ void daB_YOI_c::executeFirst() {
     }
 }
 
-/* 8063DCB0-8063DCD8 00002C 0028+00 0/1 0/0 0/0 .rodata          yoi_fall_timer */
 static int const yoi_fall_timer[10] = {
     0x00, 0x0C, 0x18, 0x24, 0x30, 0x3C, 0x48, 0x54, 0x60, 0x6C,
 };
 
-/* 8063ABC0-8063ACCC 000B60 010C+00 2/2 0/0 0/0 .text            getSingleFallPos__9daB_YOI_cFv */
 cXyz daB_YOI_c::getSingleFallPos() {
     Vec eye = dCam_getBody()->Eye();
     Vec center = dCam_getBody()->Center();
@@ -332,7 +309,6 @@ cXyz daB_YOI_c::getSingleFallPos() {
     return pos;
 }
 
-/* 8063ACCC-8063B238 000C6C 056C+00 2/1 0/0 0/0 .text            executeRiseUp__9daB_YOI_cFv */
 void daB_YOI_c::executeRiseUp() {
     cXyz center_pos = mpBlizzeta->getIceCenterPos();
     f32 range = mpBlizzeta->getIceRange();
@@ -448,7 +424,6 @@ void daB_YOI_c::executeRiseUp() {
     }
 }
 
-/* 8063B238-8063BB40 0011D8 0908+00 2/1 0/0 0/0 .text            executeSingleFall__9daB_YOI_cFv */
 void daB_YOI_c::executeSingleFall() {
     switch (mMode) {
     case 0:
@@ -586,7 +561,6 @@ void daB_YOI_c::executeSingleFall() {
     }
 }
 
-/* 8063BB40-8063C3F0 001AE0 08B0+00 1/1 0/0 0/0 .text            executeYose__9daB_YOI_cFv */
 void daB_YOI_c::executeYose() {
     cXyz center_pos = mpBlizzeta->getIceCenterPos();
     f32 range = mpBlizzeta->getIceRange();
@@ -674,7 +648,6 @@ void daB_YOI_c::executeYose() {
     }
 }
 
-/* 8063C3F0-8063C76C 002390 037C+00 1/1 0/0 0/0 .text            executeYoseFall__9daB_YOI_cFv */
 void daB_YOI_c::executeYoseFall() {
     cXyz center_pos = mpBlizzeta->getIceCenterPos();
     f32 range = mpBlizzeta->getIceRange();
@@ -748,7 +721,6 @@ void daB_YOI_c::executeYoseFall() {
     }
 }
 
-/* 8063C76C-8063C900 00270C 0194+00 1/1 0/0 0/0 .text            executeDemoRevival__9daB_YOI_cFv */
 void daB_YOI_c::executeDemoRevival() {
     cXyz center_pos = mpBlizzeta->getIceCenterPos();
     f32 range = mpBlizzeta->getIceRange();
@@ -779,7 +751,6 @@ void daB_YOI_c::executeDemoRevival() {
     }
 }
 
-/* 8063C900-8063CC90 0028A0 0390+00 1/1 0/0 0/0 .text            executeDamage__9daB_YOI_cFv */
 void daB_YOI_c::executeDamage() {
     cXyz center_pos = mpBlizzeta->getIceCenterPos();
     s16 angle_diff;
@@ -822,7 +793,6 @@ void daB_YOI_c::executeDamage() {
     }
 }
 
-/* 8063CC90-8063CD14 002C30 0084+00 1/1 0/0 0/0 .text            executeDeath__9daB_YOI_cFv */
 void daB_YOI_c::executeDeath() {
     mSoundObj.startSound(Z2SE_EN_YO_ICE_BREAK, 0, -1);
     mpBlizzeta->onIceBreak(mIcicleNo);
@@ -830,7 +800,6 @@ void daB_YOI_c::executeDeath() {
     dComIfGp_particle_levelEmitterOnEventMove(mParticleKey);
 }
 
-/* 8063CD14-8063CD90 002CB4 007C+00 1/1 0/0 0/0 .text            crack_execute__9daB_YOI_cFv */
 void daB_YOI_c::crack_execute() {
     if (current.pos.y <= 0.0f) {
         if (speed.y == 0.0f) {
@@ -843,7 +812,6 @@ void daB_YOI_c::crack_execute() {
     }
 }
 
-/* 8063CD90-8063D0C8 002D30 0338+00 2/1 0/0 0/0 .text            action__9daB_YOI_cFv */
 void daB_YOI_c::action() {
     cXyz scale(mScaleF, mScaleF, mScaleF);
     mParticleKey = dComIfGp_particle_set(mParticleKey, 0x87BE, &current.pos, &tevStr, &shape_angle,
@@ -902,7 +870,6 @@ void daB_YOI_c::action() {
     crack_execute();
 }
 
-/* 8063D0C8-8063D1B0 003068 00E8+00 1/1 0/0 0/0 .text            mtx_set__9daB_YOI_cFv */
 void daB_YOI_c::mtx_set() {
     f32 scale_y = l_HIO.mScaleY * mScaleF;
     f32 scale_xz = l_HIO.mScaleXZ * mScaleF;
@@ -918,7 +885,6 @@ void daB_YOI_c::mtx_set() {
     mpCrackModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 8063D1B0-8063D350 003150 01A0+00 1/1 0/0 0/0 .text            cc_set__9daB_YOI_cFv */
 void daB_YOI_c::cc_set() {
     cXyz center;
 
@@ -957,7 +923,6 @@ void daB_YOI_c::cc_set() {
     dComIfG_Ccsp()->Set(&mCcCyl1);
 }
 
-/* 8063D350-8063D434 0032F0 00E4+00 1/1 0/0 0/0 .text            execute__9daB_YOI_cFv */
 int daB_YOI_c::execute() {
     if (mDeleteTimer != 0) {
         dCam_getBody()->ForceLockOn(this);
@@ -991,17 +956,14 @@ int daB_YOI_c::execute() {
     }
 }
 
-/* 8063D434-8063D454 0033D4 0020+00 2/1 0/0 0/0 .text            daB_YOI_Execute__FP9daB_YOI_c */
 static int daB_YOI_Execute(daB_YOI_c* i_this) {
     return i_this->execute();
 }
 
-/* 8063D454-8063D45C 0033F4 0008+00 1/0 0/0 0/0 .text            daB_YOI_IsDelete__FP9daB_YOI_c */
 static int daB_YOI_IsDelete(daB_YOI_c* i_this) {
     return 1;
 }
 
-/* 8063D45C-8063D4D8 0033FC 007C+00 1/1 0/0 0/0 .text            _delete__9daB_YOI_cFv */
 int daB_YOI_c::_delete() {
     dComIfG_resDelete(&mPhase, "B_YO");
     
@@ -1017,12 +979,10 @@ int daB_YOI_c::_delete() {
     return 1;
 }
 
-/* 8063D4D8-8063D4F8 003478 0020+00 1/0 0/0 0/0 .text            daB_YOI_Delete__FP9daB_YOI_c */
 static int daB_YOI_Delete(daB_YOI_c* i_this) {
     return i_this->_delete();
 }
 
-/* 8063D4F8-8063D5B0 003498 00B8+00 1/1 0/0 0/0 .text            CreateHeap__9daB_YOI_cFv */
 int daB_YOI_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("B_YO", 0x21);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11000084);
@@ -1039,12 +999,10 @@ int daB_YOI_c::CreateHeap() {
     return 1;
 }
 
-/* 8063D5B0-8063D5D0 003550 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return static_cast<daB_YOI_c*>(i_this)->CreateHeap();
 }
 
-/* 8063D5D0-8063D8FC 003570 032C+00 1/1 0/0 0/0 .text            create__9daB_YOI_cFv */
 // data/rodata swap
 cPhs__Step daB_YOI_c::create() {
     fopAcM_ct(this, daB_YOI_c);
@@ -1119,17 +1077,14 @@ cPhs__Step daB_YOI_c::create() {
     return step;
 }
 
-/* 8063D8FC-8063DA7C 00389C 0180+00 1/1 0/0 0/0 .text            __ct__9daB_YOI_cFv */
 daB_YOI_c::daB_YOI_c() {
     /* empty function */
 }
 
-/* 8063DB68-8063DB88 003B08 0020+00 1/0 0/0 0/0 .text            daB_YOI_Create__FP9daB_YOI_c */
 static cPhs__Step daB_YOI_Create(daB_YOI_c* i_this) {
     return i_this->create();
 }
 
-/* 8063DF50-8063DF70 -00001 0020+00 1/0 0/0 0/0 .data            l_daB_YOI_Method */
 static actor_method_class l_daB_YOI_Method = {
     (process_method_func)daB_YOI_Create,
     (process_method_func)daB_YOI_Delete,
@@ -1138,7 +1093,6 @@ static actor_method_class l_daB_YOI_Method = {
     (process_method_func)daB_YOI_Draw,
 };
 
-/* 8063DF70-8063DFA0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_B_YOI */
 extern actor_process_profile_definition g_profile_B_YOI = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

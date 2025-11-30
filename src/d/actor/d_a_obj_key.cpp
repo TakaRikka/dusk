@@ -19,8 +19,8 @@
 
 class daObj_Key_HIO_c : public JORReflexible{
 public:
-    /* 80C3F40C */ daObj_Key_HIO_c();
-    /* 80C40F28 */ virtual ~daObj_Key_HIO_c() {}
+    daObj_Key_HIO_c();
+    virtual ~daObj_Key_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -29,15 +29,12 @@ public:
     /* 0xC */ f32 chain_size;
 };
 
-/* 80C3F40C-80C3F43C 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__15daObj_Key_HIO_cFv */
 daObj_Key_HIO_c::daObj_Key_HIO_c() {
     id = -1;
     size = 1.0f;
     chain_size = 1.5f;
 }
 
-/* 80C3F43C-80C3F4D4 00011C 0098+00 1/0 0/0 0/0 .text            daObj_Key_Draw__FP13obj_key_class
- */
 static int daObj_Key_Draw(obj_key_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
@@ -53,16 +50,12 @@ static int daObj_Key_Draw(obj_key_class* i_this) {
     return 1;
 }
 
-/* 80C41138-80C4113C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 80C41148-80C41158 000018 0010+00 4/4 0/0 0/0 .bss             l_HIO */
 static daObj_Key_HIO_c l_HIO;
 
-/* 80C41158-80C4115A 000028 0002+00 2/2 0/0 0/0 .bss             target_info_count */
 static s16 target_info_count;
 
-/* 80C3F4D4-80C3F540 0001B4 006C+00 1/1 0/0 0/0 .text            s_count_sub__FPvPv */
 static void* s_count_sub(void* i_actor, void* i_other) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_KEY && ((fopAc_ac_c*)i_actor)->field_0x560 != 0) {
         ((fopAc_ac_c*)i_actor)->health = target_info_count;
@@ -72,7 +65,6 @@ static void* s_count_sub(void* i_actor, void* i_other) {
     return NULL;
 }
 
-/* 80C3F540-80C3F600 000220 00C0+00 1/1 0/0 0/0 .text            s_master_sub__FPvPv */
 static void* s_master_sub(void* i_actor, void* i_other) {
     if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_DN) ||
         fopAcM_GetName(i_actor) == PROC_E_RD ||
@@ -93,8 +85,6 @@ static void* s_master_sub(void* i_actor, void* i_other) {
     return NULL;
 }
 
-/* 80C3F600-80C3F6B4 0002E0 00B4+00 1/1 0/0 0/0 .text            masterkey_check__FP13obj_key_class
- */
 static void masterkey_check(obj_key_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
@@ -111,7 +101,6 @@ static void masterkey_check(obj_key_class* i_this) {
     }
 }
 
-/* 80C3F6B4-80C3F728 000394 0074+00 1/1 0/0 0/0 .text            action_check__FP13obj_key_class */
 static void action_check(obj_key_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
@@ -124,8 +113,6 @@ static void action_check(obj_key_class* i_this) {
     }
 }
 
-/* 80C3F728-80C3FB84 000408 045C+00 1/1 0/0 0/0 .text            chain_control_00__FP13obj_key_class
- */
 static void chain_control_00(obj_key_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
@@ -243,8 +230,6 @@ static void chain_control_00(obj_key_class* i_this) {
     i_this->hide = FALSE;
 }
 
-/* 80C3FBC0-80C406EC 0008A0 0B2C+00 1/1 0/0 0/0 .text            chain_control_01__FP13obj_key_class
- */
 static void chain_control_01(obj_key_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
@@ -500,7 +485,6 @@ static void chain_control_01(obj_key_class* i_this) {
     i_this->hide = FALSE;
 }
 
-/* 80C406EC-80C408B4 0013CC 01C8+00 1/1 0/0 0/0 .text            action__FP13obj_key_class */
 static void action(obj_key_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     f32 temp_f31 = -3.0f + TREG_F(12);
@@ -544,7 +528,6 @@ static void action(obj_key_class* i_this) {
     }
 }
 
-/* 80C408B4-80C4093C 001594 0088+00 2/1 0/0 0/0 .text daObj_Key_Execute__FP13obj_key_class */
 static int daObj_Key_Execute(obj_key_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
@@ -560,13 +543,10 @@ static int daObj_Key_Execute(obj_key_class* i_this) {
     return 1;
 }
 
-/* 80C4093C-80C40944 00161C 0008+00 1/0 0/0 0/0 .text daObj_Key_IsDelete__FP13obj_key_class */
 static int daObj_Key_IsDelete(obj_key_class* i_this) {
     return 1;
 }
 
-/* 80C40944-80C409AC 001624 0068+00 1/0 0/0 0/0 .text            daObj_Key_Delete__FP13obj_key_class
- */
 static int daObj_Key_Delete(obj_key_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fpc_ProcID id = fopAcM_GetID(actor);
@@ -584,7 +564,6 @@ static int daObj_Key_Delete(obj_key_class* i_this) {
     return 1;
 }
 
-/* 80C409AC-80C40AB8 00168C 010C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_key_class* a_this = (obj_key_class*)i_this;
 
@@ -609,7 +588,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80C40AB8-80C40DE4 001798 032C+00 1/0 0/0 0/0 .text            daObj_Key_Create__FP10fopAc_ac_c */
 static int daObj_Key_Create(fopAc_ac_c* i_this) {
     obj_key_class* a_this = (obj_key_class*)i_this;
     fopAcM_ct(i_this, obj_key_class);
@@ -662,7 +640,6 @@ static int daObj_Key_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 80C41098-80C410B8 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Key_Method */
 static actor_method_class l_daObj_Key_Method = {
     (process_method_func)daObj_Key_Create,
     (process_method_func)daObj_Key_Delete,
@@ -671,7 +648,6 @@ static actor_method_class l_daObj_Key_Method = {
     (process_method_func)daObj_Key_Draw,
 };
 
-/* 80C410B8-80C410E8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_KEY */
 extern actor_process_profile_definition g_profile_OBJ_KEY = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

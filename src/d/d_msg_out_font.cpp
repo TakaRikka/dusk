@@ -7,15 +7,12 @@
 #include "d/d_msg_object.h"
 #include "f_op/f_op_msg_mng.h"
 
-/* 80225BB8-80225BF4 2204F8 003C+00 1/1 0/0 0/0 .text            __ct__13COutFontSet_cFv */
 COutFontSet_c::COutFontSet_c() {
     initialize();
 }
 
-/* 80225BF4-80225C3C 220534 0048+00 1/0 0/0 0/0 .text            __dt__13COutFontSet_cFv */
 COutFontSet_c::~COutFontSet_c() {}
 
-/* 80225C3C-80225C70 22057C 0034+00 2/2 0/0 0/0 .text            initialize__13COutFontSet_cFv */
 void COutFontSet_c::initialize() {
     mpTextBoxPtr = NULL;
     mPosX = 0.0f;
@@ -26,8 +23,6 @@ void COutFontSet_c::initialize() {
     mType = 0x47;
 }
 
-/* 80225C70-80225C94 2205B0 0024+00 1/1 0/0 0/0 .text
- * drawFont__13COutFontSet_cFP10J2DTextBoxUcffffUlUc            */
 void COutFontSet_c::drawFont(J2DTextBox* i_textbox, u8 i_type, f32 i_posX, f32 i_posY, f32 i_sizeX,
                              f32 i_sizeY, u32 i_color, u8 i_alpha) {
     mpTextBoxPtr = i_textbox;
@@ -40,7 +35,6 @@ void COutFontSet_c::drawFont(J2DTextBox* i_textbox, u8 i_type, f32 i_posX, f32 i
     mType = i_type;
 }
 
-/* 80225C94-80225D60 2205D4 00CC+00 0/0 5/5 0/0 .text            __ct__10COutFont_cFUc */
 COutFont_c::COutFont_c(u8 param_0) {
     field_0x242 = param_0;
 
@@ -60,7 +54,6 @@ COutFont_c::COutFont_c(u8 param_0) {
     mRupeeColor = 0;
 }
 
-/* 80225D60-80225E7C 2206A0 011C+00 1/0 0/0 0/0 .text            __dt__10COutFont_cFv */
 COutFont_c::~COutFont_c() {
     for (int i = 0; i < 35; i++) {
         delete mpOfs[i];
@@ -83,8 +76,6 @@ COutFont_c::~COutFont_c() {
     }
 }
 
-/* 80225E7C-80225EA8 2207BC 002C+00 1/0 0/0 0/0 .text            setPane__10COutFont_cFP10J2DPicture
- */
 void COutFont_c::setPane(J2DPicture* i_pic) {
     for (int i = 0; i < 70; i++) {
         mpPane[i] = i_pic;
@@ -94,7 +85,6 @@ void COutFont_c::setPane(J2DPicture* i_pic) {
     field_0x240 = false;
 }
 
-/* 80225EA8-80226CF8 2207E8 0E50+00 2/0 0/0 0/0 .text            createPane__10COutFont_cFv */
 void COutFont_c::createPane() {
     ResTIMG* img;
 
@@ -290,15 +280,12 @@ void COutFont_c::createPane() {
     field_0x240 = true;
 }
 
-/* 80226CF8-80226D4C 221638 0054+00 0/0 2/2 0/0 .text            initialize__10COutFont_cFv */
 void COutFont_c::initialize() {
     for (int i = 0; i < 35; i++) {
         mpOfs[i]->initialize();
     }
 }
 
-/* 80226D4C-80226DA8 22168C 005C+00 1/0 0/0 0/0 .text
- * drawFont__10COutFont_cFP10J2DTextBoxUcffffUlUc               */
 void COutFont_c::drawFont(J2DTextBox* i_textbox, u8 i_type, f32 i_posX, f32 i_posY, f32 i_sizeX,
                           f32 i_sizeY, u32 i_color, u8 i_alpha) {
 #if VERSION != VERSION_GCN_JPN
@@ -313,13 +300,10 @@ void COutFont_c::drawFont(J2DTextBox* i_textbox, u8 i_type, f32 i_posX, f32 i_po
     }
 }
 
-/* 80226DA8-80226DB0 2216E8 0008+00 1/0 0/0 0/0 .text            setAlphaRatio__10COutFont_cFf */
 void COutFont_c::setAlphaRatio(f32 i_ratio) {
     mAlphaRatio = i_ratio;
 }
 
-/* 80226DB0-80228448 2216F0 1698+00 2/0 0/0 0/0 .text            draw__10COutFont_cFP10J2DTextBoxfff
- */
 void COutFont_c::draw(J2DTextBox* i_textbox, f32 param_1, f32 param_2, f32 param_3) {
     s16 sp256[70];
 
@@ -677,8 +661,6 @@ void COutFont_c::draw(J2DTextBox* i_textbox, f32 param_1, f32 param_2, f32 param
     }
 }
 
-/* 80228448-80228490 222D88 0048+00 1/0 0/0 0/0 .text            reset__10COutFont_cFP10J2DTextBox
- */
 void COutFont_c::reset(J2DTextBox* i_textbox) {
     if (i_textbox != NULL) {
         for (int i = 0; i < 35; i++) {
@@ -690,8 +672,6 @@ void COutFont_c::reset(J2DTextBox* i_textbox) {
     }
 }
 
-/* 80228490-80228530 222DD0 00A0+00 1/1 0/0 0/0 .text setBlendAnime__10COutFont_cFP10J2DPictures
- */
 void COutFont_c::setBlendAnime(J2DPicture* i_pic, s16 param_1) {
     int i = param_1 % 20;
 
@@ -704,7 +684,6 @@ void COutFont_c::setBlendAnime(J2DPicture* i_pic, s16 param_1) {
     }
 }
 
-/* 80228530-80228578 222E70 0048+00 1/1 0/0 0/0 .text            getBtiName__10COutFont_cFi */
 const char* COutFont_c::getBtiName(int i_nameIdx) {
     static const char* mpIconName[] = {
         "font_00.bti",

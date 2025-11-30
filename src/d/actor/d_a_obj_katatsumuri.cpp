@@ -18,7 +18,6 @@ static u8 hioInit;
 
 static daObj_KatHIO_c l_HIO;
 
-/* 80C3996C-80C39994 0000EC 0028+00 1/1 0/0 0/0 .text            __ct__14daObj_KatHIO_cFv */
 daObj_KatHIO_c::daObj_KatHIO_c() {
     field_0x4 = -1;
     mScaleMale = 1.0f;
@@ -30,7 +29,6 @@ static u8 const l_kat_itemno[2] = {
     fpcNm_ITEM_F_SNAIL,
 };
 
-/* 80C39994-80C39A00 000114 006C+00 1/1 0/0 0/0 .text            InitCcSph__10daObjKAT_cFv */
 void daObjKAT_c::InitCcSph() {
     /* 80C3C67C-80C3C6BC 000008 0040+00 1/1 0/0 0/0 .rodata          ccSphSrc$3779 */
     const static dCcD_SrcSph ccSphSrc = {
@@ -52,15 +50,12 @@ void daObjKAT_c::InitCcSph() {
     mSph.OnTgNoHitMark();
 }
 
-/* 80C39A00-80C39A58 000180 0058+00 1/1 0/0 0/0 .text            SetCcSph__10daObjKAT_cFv */
 void daObjKAT_c::SetCcSph() {
     mSph.SetC(current.pos);
     mSph.SetR(20.0f);
     dComIfG_Ccsp()->Set(&mSph);
 }
 
-/* 80C39A58-80C39B2C 0001D8 00D4+00 1/1 0/0 0/0 .text ctrlJoint__10daObjKAT_cFP8J3DJointP8J3DModel
- */
 int daObjKAT_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     J3DJoint* joint = i_joint;
     s32 jointNo = joint->getJntNo();
@@ -73,7 +68,6 @@ int daObjKAT_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 80C39B2C-80C39B78 0002AC 004C+00 1/1 0/0 0/0 .text            JointCallBack__FP8J3DJointi */
 static int JointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -85,13 +79,11 @@ static int JointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80C39B78-80C39B98 0002F8 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     daObjKAT_c* kat = (daObjKAT_c*)i_this;
     return kat->CreateHeap();
 }
 
-/* 80C39B98-80C39E80 000318 02E8+00 1/1 0/0 0/0 .text            CreateHeap__10daObjKAT_cFv */
 int daObjKAT_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kat", 9);
     JUT_ASSERT(0x136, modelData != NULL);
@@ -146,14 +138,12 @@ int daObjKAT_c::CreateHeap() {
     return 1;
 }
 
-/* 80C39EC8-80C39EE8 000648 0020+00 1/0 0/0 0/0 .text            daObjKAT_Create__FP10fopAc_ac_c */
 static int daObjKAT_Create(fopAc_ac_c* i_this) {
     daObjKAT_c* kat = (daObjKAT_c*)i_this;
     fpc_ProcID unused = fopAcM_GetID(i_this);
     return kat->create();
 }
 
-/* 80C39EE8-80C39F0C 000668 0024+00 1/0 0/0 0/0 .text            daObjKAT_Delete__FP10daObjKAT_c */
 static int daObjKAT_Delete(daObjKAT_c* i_this) {
     fpc_ProcID unused = fopAcM_GetID(i_this);
     i_this->Delete();
@@ -176,7 +166,6 @@ f32 dummy3() {
     return 0.02f;
 }
 
-/* 80C39F0C-80C3A490 00068C 0584+00 1/1 0/0 0/0 .text            WallWalk__10daObjKAT_cFv */
 void daObjKAT_c::WallWalk() {
     s16 unkShort1;
     float unkFloat1;
@@ -257,7 +246,6 @@ void daObjKAT_c::WallWalk() {
     shape_angle.y = current.angle.y;
 }
 
-/* 80C3A4D8-80C3A628 000C58 0150+00 2/2 0/0 0/0 .text            MoveAction__10daObjKAT_cFv */
 void daObjKAT_c::MoveAction() {
     if (fopAcM_searchPlayerDistance(this) < 1500.0f) {
         cXyz unkXyz1;
@@ -287,7 +275,6 @@ void daObjKAT_c::MoveAction() {
     }
 }
 
-/* 80C3A628-80C3A680 000DA8 0058+00 1/1 0/0 0/0 .text            Action__10daObjKAT_cFv */
 void daObjKAT_c::Action() {
     field_0x7d4--;
     if (field_0x7d4 <= 0) {
@@ -297,14 +284,12 @@ void daObjKAT_c::Action() {
     Insect_GetDemoMain();
 }
 
-/* 80C3A680-80C3A698 000E00 0018+00 1/0 0/0 0/0 .text            Insect_Release__10daObjKAT_cFv */
 void daObjKAT_c::Insect_Release() {
     field_0x56c = 1;
     field_0x808 = 2;
     field_0x7c0 = 1;
 }
 
-/* 80C3A698-80C3A8C8 000E18 0230+00 1/1 0/0 0/0 .text            checkGround__10daObjKAT_cFv */
 void daObjKAT_c::checkGround() {
     dBgS_LinChk unkLinChk1;
     unkLinChk1.SetObj();
@@ -331,7 +316,6 @@ void daObjKAT_c::checkGround() {
     }
 }
 
-/* 80C3A8C8-80C3A95C 001048 0094+00 1/1 0/0 0/0 .text            F_MoveAction__10daObjKAT_cFv */
 void daObjKAT_c::F_MoveAction() {
     switch (field_0x7c1) {
     case 0:
@@ -351,7 +335,6 @@ void daObjKAT_c::F_MoveAction() {
     }
 }
 
-/* 80C3A95C-80C3A990 0010DC 0034+00 1/1 0/0 0/0 .text            FallAction__10daObjKAT_cFv */
 void daObjKAT_c::FallAction() {
     switch (field_0x7c0) {
     case 0:
@@ -362,7 +345,6 @@ void daObjKAT_c::FallAction() {
     }
 }
 
-/* 80C3A990-80C3AAB4 001110 0124+00 1/1 0/0 0/0 .text            ParticleSet__10daObjKAT_cFv */
 void daObjKAT_c::ParticleSet() {
     if (field_0x800 > field_0x804) {
         cLib_addCalc2(&field_0x80c, 0.0f, yREG_F(11) + 1.0f, 1.0f);
@@ -380,7 +362,6 @@ void daObjKAT_c::ParticleSet() {
     }
 }
 
-/* 80C3AAB4-80C3ADC8 001234 0314+00 1/1 0/0 0/0 .text            BoomChk__10daObjKAT_cFv */
 void daObjKAT_c::BoomChk() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 unused1 = fopAcM_searchPlayerDistanceXZ(this);
@@ -425,7 +406,6 @@ void daObjKAT_c::BoomChk() {
     }
 }
 
-/* 80C3ADC8-80C3AEC8 001548 0100+00 1/1 0/0 0/0 .text            ObjHit__10daObjKAT_cFv */
 void daObjKAT_c::ObjHit() {
     if (mSph.ChkTgHit() != 0) {
         cCcD_ObjHitInf* tgHitObj = mSph.GetTgHitObj();
@@ -455,7 +435,6 @@ void daObjKAT_c::ObjHit() {
     }
 }
 
-/* 80C3AEC8-80C3B754 001648 088C+00 1/1 0/0 0/0 .text            Execute__10daObjKAT_cFv */
 int daObjKAT_c::Execute() {
     if (ChkGetDemo() != 0) {
         field_0x800 = field_0x804 + 10000.0f;
@@ -604,7 +583,6 @@ int daObjKAT_c::Execute() {
     return 1;
 }
 
-/* 80C3B754-80C3B8D0 001ED4 017C+00 1/1 0/0 0/0 .text            Z_BufferChk__10daObjKAT_cFv */
 void daObjKAT_c::Z_BufferChk() {
     cXyz projected;
     cXyz curWithOff;
@@ -645,7 +623,6 @@ void daObjKAT_c::Z_BufferChk() {
     field_0x800 = ((near + far * near / projected.z) / (far - near) + 1.0f) * 16777215.0f;
 }
 
-/* 80C3B8D0-80C3B938 002050 0068+00 1/1 0/0 0/0 .text            Delete__10daObjKAT_cFv */
 int daObjKAT_c::Delete() {
     dComIfG_resDelete(&mPhase, "Kat");
     if (field_0xa70 != 0) {
@@ -658,7 +635,6 @@ int daObjKAT_c::Delete() {
     return 1;
 }
 
-/* 80C3B938-80C3B9A0 0020B8 0068+00 1/1 0/0 0/0 .text            setBaseMtx__10daObjKAT_cFv */
 void daObjKAT_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(field_0x7ea);
@@ -669,12 +645,10 @@ void daObjKAT_c::setBaseMtx() {
     mpMorfSO->modelCalc();
 }
 
-/* 80C3B9A0-80C3BA8C 002120 00EC+00 1/0 0/0 0/0 .text            daObjKAT_Draw__FP10daObjKAT_c */
 static int daObjKAT_Draw(daObjKAT_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80C3BA8C-80C3BAAC 00220C 0020+00 2/1 0/0 0/0 .text            daObjKAT_Execute__FP10daObjKAT_c */
 static int daObjKAT_Execute(daObjKAT_c* i_this) {
     return i_this->Execute();
 }
@@ -684,7 +658,6 @@ static u16 const l_musiya_num[2] = {
     0x01A2, /* dSv_event_flag_c::F_0418 - Misc. - Snail (F) */
 };
 
-/* 80C3BAAC-80C3BC58 00222C 01AC+00 1/1 0/0 0/0 .text            CreateChk__10daObjKAT_cFv */
 bool daObjKAT_c::CreateChk() {
     u8 uVar4 = (fopAcM_GetParam(this) & 0xf00) >> 8;
     if (uVar4 == 0xf) {
@@ -721,7 +694,6 @@ bool daObjKAT_c::CreateChk() {
     return true;
 }
 
-/* 80C3BC58-80C3C4C4 0023D8 086C+00 1/1 0/0 0/0 .text            create__10daObjKAT_cFv */
 int daObjKAT_c::create() {
     fopAcM_ct(this, daObjKAT_c);
 
@@ -872,13 +844,10 @@ int daObjKAT_c::create() {
     return loadResult;
 }
 
-/* 80C3C5C4-80C3C5CC 002D44 0008+00 1/0 0/0 0/0 .text            daObjKAT_IsDelete__FP10daObjKAT_c
- */
 static int daObjKAT_IsDelete(daObjKAT_c* param_0) {
     return 1;
 }
 
-/* 80C3C770-80C3C790 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjKAT_Method */
 static actor_method_class l_daObjKAT_Method = {
     (process_method_func)daObjKAT_Create,
     (process_method_func)daObjKAT_Delete,
@@ -887,7 +856,6 @@ static actor_method_class l_daObjKAT_Method = {
     (process_method_func)daObjKAT_Draw,
 };
 
-/* 80C3C790-80C3C7C0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Kat */
 extern actor_process_profile_definition g_profile_Obj_Kat = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

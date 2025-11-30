@@ -41,7 +41,6 @@
 #define PROGRESSIVE_MODE_ON  OS_PROGRESSIVE_MODE_ON
 #endif
 
-/* 804510E8-804510F0 0005E8 0008+00 1/1 0/0 0/0 .sbss            g_LogHIO */
 static dLog_HIO_c g_LogHIO;
 
 typedef void (dScnLogo_c::*execFunc)();
@@ -54,29 +53,22 @@ static execFunc l_execFunc[16] = {
     &dScnLogo_c::nextSceneChange,
 };
 
-/* 802560A4-802560B4 2509E4 0010+00 1/1 0/0 0/0 .text            __ct__10dLog_HIO_cFv */
 dLog_HIO_c::dLog_HIO_c() {}
 
-/* 802560B4-802560F8 2509F4 0044+00 1/1 0/0 0/0 .text            preLoad_dyl_create__10dScnLogo_cFv
- */
 void dScnLogo_c::preLoad_dyl_create() {
     m_preLoad_dylPhase = new request_of_phase_process_class[14];
     memset(m_preLoad_dylPhase, 0, sizeof(request_of_phase_process_class) * 14);
 }
 
-/* 802560F8-8025611C 250A38 0024+00 1/1 0/0 0/0 .text            preLoad_dyl_remove__10dScnLogo_cFv
- */
 void dScnLogo_c::preLoad_dyl_remove() {
     delete[] m_preLoad_dylPhase;
 }
 
-/* 80399FE0-80399FFC 026640 001C+00 1/1 0/0 0/0 .rodata          l_preLoad_dylKeyTbl */
 static s16 const l_preLoad_dylKeyTbl[14] = {
     0x02DC, 0x02CE, 0x0221, 0x00F2, 0x021B, 0x02F4, 0x0139,
     0x015A, 0x02E4, 0x00FE, 0x0308, 0x030F, 0x00FF, 0x013F,
 };
 
-/* 8025611C-80256198 250A5C 007C+00 2/2 0/0 0/0 .text            preLoad_dyl__10dScnLogo_cFv */
 bool dScnLogo_c::preLoad_dyl() {
     bool ret = true;
 
@@ -91,7 +83,6 @@ bool dScnLogo_c::preLoad_dyl() {
     return ret;
 }
 
-/* 80256198-80256210 250AD8 0078+00 1/1 0/0 0/0 .text            checkProgSelect__10dScnLogo_cFv */
 void dScnLogo_c::checkProgSelect() {
     #if VERSION == VERSION_GCN_PAL
     if (mDoRst::getProgSeqFlag() == 0) {
@@ -113,14 +104,12 @@ void dScnLogo_c::checkProgSelect() {
     #endif
 }
 
-/* 80256210-80256264 250B50 0054+00 1/1 0/0 0/0 .text            draw__10dScnLogo_cFv */
 int dScnLogo_c::draw() {
     cLib_calcTimer<u16>(&mTimer);
     (this->*l_execFunc[mExecCommand])();
     return 1;
 }
 
-/* 80256264-8025631C 250BA4 00B8+00 1/0 0/0 0/0 .text            progInDraw__10dScnLogo_cFv */
 void dScnLogo_c::progInDraw() {
     dComIfGd_set2DOpa(mProgressiveChoice);
     dComIfGd_set2DOpa(mProgressiveYes);
@@ -136,7 +125,6 @@ void dScnLogo_c::progInDraw() {
     }
 }
 
-/* 8025631C-802568E0 250C5C 05C4+00 1/0 0/0 0/0 .text            progSelDraw__10dScnLogo_cFv */
 void dScnLogo_c::progSelDraw() {
     dComIfGd_set2DOpa(mProgressiveChoice);
     dComIfGd_set2DOpa(mProgressiveYes);
@@ -228,7 +216,6 @@ void dScnLogo_c::progSelDraw() {
     }
 }
 
-/* 802568E0-80256A3C 251220 015C+00 1/0 0/0 0/0 .text            progOutDraw__10dScnLogo_cFv */
 void dScnLogo_c::progOutDraw() {
     dComIfGd_set2DOpa(mProgressiveChoice);
     dComIfGd_set2DOpa(mProgressiveYes);
@@ -260,7 +247,6 @@ void dScnLogo_c::progOutDraw() {
     }
 }
 
-/* 80256A3C-80256AC0 25137C 0084+00 1/0 0/0 0/0 .text            progSetDraw__10dScnLogo_cFv */
 void dScnLogo_c::progSetDraw() {
     dComIfGd_set2DOpa(mProgressiveSel);
 
@@ -271,7 +257,6 @@ void dScnLogo_c::progSetDraw() {
     }
 }
 
-/* 80256AC0-80256B3C 251400 007C+00 1/0 0/0 0/0 .text            progSet2Draw__10dScnLogo_cFv */
 void dScnLogo_c::progSet2Draw() {
     dComIfGd_set2DOpa(mProgressiveSel);
 
@@ -286,7 +271,6 @@ void dScnLogo_c::progSet2Draw() {
     }
 }
 
-/* 80256B3C-80256BF4 25147C 00B8+00 1/0 0/0 0/0 .text            progChangeDraw__10dScnLogo_cFv */
 void dScnLogo_c::progChangeDraw() {
     if (getProgressiveMode() != 0 && mTimer == 90 && field_0x209 == 0) {
         setRenderMode();
@@ -305,7 +289,6 @@ void dScnLogo_c::progChangeDraw() {
     }
 }
 
-/* 80256BF4-80256C68 251534 0074+00 1/0 0/0 0/0 .text            warningInDraw__10dScnLogo_cFv */
 void dScnLogo_c::warningInDraw() {
     dComIfGd_set2DOpa(mWarning);
 
@@ -318,7 +301,6 @@ void dScnLogo_c::warningInDraw() {
     }
 }
 
-/* 80256C68-80256DC4 2515A8 015C+00 1/0 0/0 0/0 .text            warningDispDraw__10dScnLogo_cFv */
 void dScnLogo_c::warningDispDraw() {
     dComIfGd_set2DOpa(mWarning);
     dComIfGd_set2DOpa(mWarningStart);
@@ -348,7 +330,6 @@ void dScnLogo_c::warningDispDraw() {
     }
 }
 
-/* 80256DC4-80256E48 251704 0084+00 1/0 0/0 0/0 .text            warningOutDraw__10dScnLogo_cFv */
 void dScnLogo_c::warningOutDraw() {
     dComIfGd_set2DOpa(mWarning);
 
@@ -359,7 +340,6 @@ void dScnLogo_c::warningOutDraw() {
     }
 }
 
-/* 80256E48-80256ECC 251788 0084+00 1/0 0/0 0/0 .text            nintendoInDraw__10dScnLogo_cFv */
 void dScnLogo_c::nintendoInDraw() {
     dComIfGd_set2DOpa(mNintendoLogo);
 
@@ -370,7 +350,6 @@ void dScnLogo_c::nintendoInDraw() {
     }
 }
 
-/* 80256ECC-80256F50 25180C 0084+00 1/0 0/0 0/0 .text            nintendoOutDraw__10dScnLogo_cFv */
 void dScnLogo_c::nintendoOutDraw() {
     dComIfGd_set2DOpa(mNintendoLogo);
 
@@ -381,7 +360,6 @@ void dScnLogo_c::nintendoOutDraw() {
     }
 }
 
-/* 80256F50-80256FD4 251890 0084+00 1/0 0/0 0/0 .text            dolbyInDraw__10dScnLogo_cFv */
 void dScnLogo_c::dolbyInDraw() {
     dComIfGd_set2DOpa(mDolbyLogo);
 
@@ -392,7 +370,6 @@ void dScnLogo_c::dolbyInDraw() {
     }
 }
 
-/* 80256FD4-80257058 251914 0084+00 1/0 0/0 0/0 .text            dolbyOutDraw__10dScnLogo_cFv */
 void dScnLogo_c::dolbyOutDraw() {
     dComIfGd_set2DOpa(mDolbyLogo);
 
@@ -403,14 +380,12 @@ void dScnLogo_c::dolbyOutDraw() {
     }
 }
 
-/* 80257058-80257070 251998 0018+00 1/0 0/0 0/0 .text            dolbyOutDraw2__10dScnLogo_cFv */
 void dScnLogo_c::dolbyOutDraw2() {
     if (mTimer == 0) {
         mExecCommand = EXEC_DVD_WAIT;
     }
 }
 
-/* 80257070-80257284 2519B0 0214+00 1/0 0/0 0/0 .text            dvdWaitDraw__10dScnLogo_cFv */
 void dScnLogo_c::dvdWaitDraw() {
     if (!dComIfG_syncAllObjectRes()) {
         if (mpField0Command->sync() && mpAlAnmCommand->sync() && mpFmapResCommand->sync() &&
@@ -431,14 +406,12 @@ void dScnLogo_c::dvdWaitDraw() {
     }
 }
 
-/* 80257284-802572B8 251BC4 0034+00 1/0 0/0 0/0 .text            nextSceneChange__10dScnLogo_cFv */
 void dScnLogo_c::nextSceneChange() {
     if (!mDoRst::isReset()) {
         dComIfG_changeOpeningScene(this, PROC_OPENING_SCENE);
     }
 }
 
-/* 802572B8-80257910 251BF8 0658+00 1/1 0/0 0/0 .text            __dt__10dScnLogo_cFv */
 dScnLogo_c::~dScnLogo_c() {
     if (mDoRst::isReset()) {
         if (mDoAud_zelAudio_c::isInitFlag()) {
@@ -542,7 +515,6 @@ dScnLogo_c::~dScnLogo_c() {
     #endif
 }
 
-/* 80257910-802579BC 252250 00AC+00 1/0 0/0 0/0 .text            phase_0__FP10dScnLogo_c */
 static int phase_0(dScnLogo_c* i_this) {
     mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor);
     dComIfGp_particle_create();
@@ -576,7 +548,6 @@ static int phase_0(dScnLogo_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-/* 802579BC-80257A70 2522FC 00B4+00 1/0 0/0 0/0 .text            phase_1__FP10dScnLogo_c */
 static int phase_1(dScnLogo_c* i_this) {
     if (!cDyl_InitAsyncIsDone()) {
         return cPhs_INIT_e;
@@ -602,7 +573,6 @@ static int phase_1(dScnLogo_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-/* 80257A70-80257AB4 2523B0 0044+00 1/0 0/0 0/0 .text            phase_2__FP10dScnLogo_c */
 static int phase_2(dScnLogo_c* i_this) {
     if (dComIfG_syncAllObjectRes()) {
         return cPhs_INIT_e;
@@ -611,8 +581,6 @@ static int phase_2(dScnLogo_c* i_this) {
     }
 }
 
-/* 80257AB4-80257AE0 2523F4 002C+00 1/1 0/0 0/0 .text
- * resLoad__FP30request_of_phase_process_classP10dScnLogo_c     */
 static int resLoad(request_of_phase_process_class* i_phase, dScnLogo_c* i_this) {
     static int (*l_method[3])(void*) = {(int (*)(void*))phase_0, (int (*)(void*))phase_1,
                                         (int (*)(void*))phase_2};
@@ -620,7 +588,6 @@ static int resLoad(request_of_phase_process_class* i_phase, dScnLogo_c* i_this) 
     return dComLbG_PhaseHandler(i_phase, l_method, i_this);
 }
 
-/* 80257AE0-80257C64 252420 0184+00 1/1 0/0 0/0 .text            create__10dScnLogo_cFv */
 int dScnLogo_c::create() {
     int phase_state = resLoad(&field_0x1c4, this);
     if (phase_state != cPhs_COMPLEATE_e) {
@@ -666,7 +633,6 @@ int dScnLogo_c::create() {
     return phase_state;
 }
 
-/* 80257C64-80257FEC 2525A4 0388+00 1/1 0/0 0/0 .text            logoInitGC__10dScnLogo_cFv */
 void dScnLogo_c::logoInitGC() {
     ResTIMG* nintendoImg = (ResTIMG*)dComIfG_getObjectRes(LOGO_ARC, 4);
     mNintendoLogo = new dDlst_2D_c(nintendoImg, 117, 154, 376, 104, 255);
@@ -785,7 +751,6 @@ void dScnLogo_c::logoInitGC() {
 #endif
 }
 
-/* 80257FEC-80258420 25292C 0434+00 1/1 0/0 0/0 .text            dvdDataLoad__10dScnLogo_cFv */
 void dScnLogo_c::dvdDataLoad() {
     dComIfG_setObjectRes("Always", (u8)0, NULL);
     archiveHeap->dump_sort();
@@ -887,12 +852,10 @@ void dScnLogo_c::dvdDataLoad() {
     preLoad_dyl();
 }
 
-/* 80258420-80258444 252D60 0024+00 1/0 0/0 0/0 .text            dScnLogo_Create__FP11scene_class */
 static int dScnLogo_Create(scene_class* i_this) {
     return (new (i_this) dScnLogo_c())->create();
 }
 
-/* 80258444-80258484 252D84 0040+00 1/0 0/0 0/0 .text            dScnLogo_Execute__FP10dScnLogo_c */
 static int dScnLogo_Execute(dScnLogo_c* i_this) {
     if (mDoRst::isReset()) {
         fopScnM_ChangeReq(i_this, PROC_LOGO_SCENE, 0, 5);
@@ -900,20 +863,16 @@ static int dScnLogo_Execute(dScnLogo_c* i_this) {
     return 1;
 }
 
-/* 80258484-802584A8 252DC4 0024+00 1/0 0/0 0/0 .text            dScnLogo_Draw__FP10dScnLogo_c */
 static int dScnLogo_Draw(dScnLogo_c* i_this) {
     i_this->draw();
     return 1;
 }
 
-/* 802584A8-802584D0 252DE8 0028+00 1/0 0/0 0/0 .text            dScnLogo_Delete__FP10dScnLogo_c */
 static int dScnLogo_Delete(dScnLogo_c* i_this) {
     i_this->~dScnLogo_c();
     return 1;
 }
 
-/* 802584D0-802584D8 252E10 0008+00 1/0 0/0 0/0 .text            dScnLogo_IsDelete__FP10dScnLogo_c
- */
 static int dScnLogo_IsDelete(dScnLogo_c* i_this) {
     return 1;
 }
@@ -946,8 +905,6 @@ u8 dScnLogo_c::getPalLanguage() {
 }
 #endif
 
-/* 802584D8-802584FC 252E18 0024+00 1/1 0/0 0/0 .text            setProgressiveMode__10dScnLogo_cFUc
- */
 void dScnLogo_c::setProgressiveMode(u8 mode) {
     #if VERSION == VERSION_GCN_PAL
     OSSetEuRgb60Mode(mode);
@@ -956,8 +913,6 @@ void dScnLogo_c::setProgressiveMode(u8 mode) {
     #endif
 }
 
-/* 802584FC-80258520 252E3C 0024+00 3/3 0/0 0/0 .text            getProgressiveMode__10dScnLogo_cFv
- */
 u8 dScnLogo_c::getProgressiveMode() {
     #if VERSION == VERSION_GCN_PAL
     return OSGetEuRgb60Mode();
@@ -966,8 +921,6 @@ u8 dScnLogo_c::getProgressiveMode() {
     #endif
 }
 
-/* 80258520-8025854C 252E60 002C+00 1/1 0/0 0/0 .text            isProgressiveMode__10dScnLogo_cFv
- */
 bool dScnLogo_c::isProgressiveMode() {
     #if VERSION == VERSION_GCN_PAL
     return OSGetEuRgb60Mode() == OS_EURGB60_ON;
@@ -976,15 +929,12 @@ bool dScnLogo_c::isProgressiveMode() {
     #endif
 }
 
-/* 8025854C-8025855C 252E8C 0010+00 1/1 0/0 0/0 .text            setRenderMode__10dScnLogo_cFv */
 void dScnLogo_c::setRenderMode() {
     mDoMch_render_c::setProgressiveMode();
 }
 
-/* 8025855C-802585A4 252E9C 0048+00 2/1 0/0 0/0 .text            __dt__10dLog_HIO_cFv */
 dLog_HIO_c::~dLog_HIO_c() {}
 
-/* 803C2FD0-803C2FE4 -00001 0014+00 1/0 0/0 0/0 .data            l_dScnLogo_Method */
 static dScnLogo_Method l_dScnLogo_Method[5] = {
     (dScnLogo_Method)dScnLogo_Create,
     dScnLogo_Delete,
@@ -993,7 +943,6 @@ static dScnLogo_Method l_dScnLogo_Method[5] = {
     dScnLogo_Draw,
 };
 
-/* 803C2FE4-803C300C -00001 0028+00 0/0 0/0 1/0 .data            g_profile_LOGO_SCENE */
 extern scene_process_profile_definition g_profile_LOGO_SCENE = {
     fpcLy_ROOT_e,
     1,

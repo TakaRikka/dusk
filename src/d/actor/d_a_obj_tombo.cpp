@@ -16,8 +16,8 @@
 
 class daObj_TomHIO_c : public JORReflexible {
 public:
-    /* 80D191CC */ daObj_TomHIO_c();
-    /* 80D1B618 */ virtual ~daObj_TomHIO_c() {}
+    daObj_TomHIO_c();
+    virtual ~daObj_TomHIO_c() {}
 
     #ifdef DEBUG
     void genMessage(JORMContext* context) {
@@ -41,7 +41,6 @@ public:
     /* 0x10 */ f32 mBtkSpeed;
 };
 
-/* 80D191CC-80D19200 0000EC 0034+00 1/1 0/0 0/0 .text            __ct__14daObj_TomHIO_cFv */
 daObj_TomHIO_c::daObj_TomHIO_c() {
     mId = -1;
     mMaleModelScale = 0.9f;
@@ -49,13 +48,10 @@ daObj_TomHIO_c::daObj_TomHIO_c() {
     mBtkSpeed = 1.0f;
 }
 
-/* ############################################################################################## */
-/* 80D1B6E0-80D1B6E4 000008 0002+02 1/2 0/0 0/0 .rodata          l_tom_itemno */
 static u8 const l_tom_itemno[2] = {
     fpcNm_ITEM_M_DRAGONFLY, fpcNm_ITEM_F_DRAGONFLY,
 };
 
-/* 80D19200-80D1926C 000120 006C+00 1/1 0/0 0/0 .text            InitCcSph__12daObjTOMBO_cFv */
 void daObjTOMBO_c::InitCcSph() {
     const static dCcD_SrcSph ccSphSrc = {
         {
@@ -76,19 +72,16 @@ void daObjTOMBO_c::InitCcSph() {
     mSph.OnTgNoHitMark();
 }
 
-/* 80D1926C-80D192C4 00018C 0058+00 1/1 0/0 0/0 .text            SetCcSph__12daObjTOMBO_cFv */
 void daObjTOMBO_c::SetCcSph() {
     mSph.SetC(current.pos);
     mSph.SetR(20.0f);
     dComIfG_Ccsp()->Set(&mSph);
 }
 
-/* 80D192C4-80D192E4 0001E4 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return ((daObjTOMBO_c*)i_this)->CreateHeap();
 }
 
-/* 80D192E4-80D195CC 000204 02E8+00 1/1 0/0 0/0 .text            CreateHeap__12daObjTOMBO_cFv */
 int daObjTOMBO_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Tombo", 9);
     JUT_ASSERT(259, modelData != NULL);
@@ -131,20 +124,15 @@ int daObjTOMBO_c::CreateHeap() {
     return 1;
 }
 
-/* 80D19614-80D19634 000534 0020+00 1/0 0/0 0/0 .text            daObjTOMBO_Create__FP10fopAc_ac_c
- */
 static int daObjTOMBO_Create(fopAc_ac_c* i_this) {
     return ((daObjTOMBO_c*)i_this)->create();
 }
 
-/* 80D19634-80D19658 000554 0024+00 1/0 0/0 0/0 .text            daObjTOMBO_Delete__FP12daObjTOMBO_c
- */
 static int daObjTOMBO_Delete(daObjTOMBO_c* i_this) {
     i_this->Delete();
     return 1;
 }
 
-/* 80D19658-80D19744 000578 00EC+00 2/2 0/0 0/0 .text            WaitAction__12daObjTOMBO_cFv */
 void daObjTOMBO_c::WaitAction() {
     cXyz cStack_28;
     switch (field_0x712) {
@@ -168,7 +156,6 @@ void daObjTOMBO_c::WaitAction() {
     SpeedSet();
 }
 
-/* 80D19744-80D19834 000664 00F0+00 2/2 0/0 0/0 .text            SpeedSet__12daObjTOMBO_cFv */
 void daObjTOMBO_c::SpeedSet() {
     current.pos.y += speed.y;
     cXyz cStack_1c(0.0f, 0.0f, speedF);
@@ -183,7 +170,6 @@ void daObjTOMBO_c::SpeedSet() {
     shape_angle.y = current.angle.y;
 }
 
-/* 80D19834-80D1997C 000754 0148+00 1/1 0/0 0/0 .text            CheckWater__12daObjTOMBO_cFv */
 bool daObjTOMBO_c::CheckWater() {
     dBgS_ObjGndChk_All adStack_6c;
     cXyz gndPos(current.pos.x, current.pos.y + 100.0f, current.pos.z);
@@ -197,7 +183,6 @@ bool daObjTOMBO_c::CheckWater() {
     return FALSE;
 }
 
-/* 80D199F4-80D19B48 000914 0154+00 1/1 0/0 0/0 .text            CheckGround__12daObjTOMBO_cFv */
 void daObjTOMBO_c::CheckGround() {
     dBgS_ObjGndChk_All adStack_6c;
     cXyz gndPos(current.pos.x, current.pos.y + 100.0f, current.pos.z);
@@ -216,7 +201,6 @@ void daObjTOMBO_c::CheckGround() {
     }
 }
 
-/* 80D19B48-80D19C34 000A68 00EC+00 1/1 0/0 0/0 .text            CheckWall__12daObjTOMBO_cFv */
 void daObjTOMBO_c::CheckWall() {
     dBgS_LinChk linChk;
     cXyz cStack_8c(0.0f, 0.0f, 200.0f);
@@ -231,7 +215,6 @@ void daObjTOMBO_c::CheckWall() {
     }
 }
 
-/* 80D19C34-80D19E48 000B54 0214+00 1/1 0/0 0/0 .text            SearchLink__12daObjTOMBO_cFv */
 void daObjTOMBO_c::SearchLink() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz& playerPos = fopAcM_GetPosition(player);
@@ -246,7 +229,6 @@ void daObjTOMBO_c::SearchLink() {
     }
 }
 
-/* 80D19E48-80D1A138 000D68 02F0+00 2/2 0/0 0/0 .text            LinkAction__12daObjTOMBO_cFv */
 void daObjTOMBO_c::LinkAction() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     fopAcM_GetPosition(player);
@@ -293,7 +275,6 @@ void daObjTOMBO_c::LinkAction() {
     field_0x73c = cStack_28;
 }
 
-/* 80D1A138-80D1A280 001058 0148+00 2/2 0/0 0/0 .text            MoveAction__12daObjTOMBO_cFv */
 void daObjTOMBO_c::MoveAction() {
     cXyz local_1c;
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -325,7 +306,6 @@ void daObjTOMBO_c::MoveAction() {
     }
 }
 
-/* 80D1A280-80D1A3EC 0011A0 016C+00 1/1 0/0 0/0 .text            Action__12daObjTOMBO_cFv */
 void daObjTOMBO_c::Action() {
     if (fopAcM_checkHookCarryNow(this)) {
         if (CheckWater()) {
@@ -360,7 +340,6 @@ void daObjTOMBO_c::Action() {
     Insect_GetDemoMain();
 }
 
-/* 80D1A3EC-80D1A514 00130C 0128+00 1/1 0/0 0/0 .text            ShopAction__12daObjTOMBO_cFv */
 void daObjTOMBO_c::ShopAction() {
     for (int i = 0; i < 3; i++) {
         field_0x714[i]--;
@@ -386,7 +365,6 @@ void daObjTOMBO_c::ShopAction() {
     }
 }
 
-/* 80D1A514-80D1A524 001434 0010+00 1/0 0/0 0/0 .text            Insect_Release__12daObjTOMBO_cFv */
 void daObjTOMBO_c::Insect_Release() {
     field_0x56c = 1;
     mAction = ACTION_MOVE;
@@ -399,7 +377,6 @@ static f32 dummyLiteral4() { return 0.5f; }
 static f32 dummyLiteral5() { return 0.7f; }
 static f32 dummyLiteral6() { return 0.25f; }
 
-/* 80D1A524-80D1A648 001444 0124+00 1/1 0/0 0/0 .text            ParticleSet__12daObjTOMBO_cFv */
 void daObjTOMBO_c::ParticleSet() {
     if (field_0x750 > field_0x754) {
         cLib_addCalc2(&mParticleScale, 0.0f, 1.0f, 1.0f);
@@ -415,7 +392,6 @@ void daObjTOMBO_c::ParticleSet() {
     }
 }
 
-/* 80D1A648-80D1A8BC 001568 0274+00 1/1 0/0 0/0 .text            BoomChk__12daObjTOMBO_cFv */
 void daObjTOMBO_c::BoomChk() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (mIsHitByBoomerang) {
@@ -457,13 +433,10 @@ void daObjTOMBO_c::BoomChk() {
     }
 }
 
-/* 80D1B8F0-80D1B8F4 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool l_HIOInit;
 
-/* 80D1B900-80D1B914 000018 0014+00 3/3 0/0 0/0 .bss             l_HIO */
 static daObj_TomHIO_c l_HIO;
 
-/* 80D1A904-80D1AB20 001824 021C+00 1/1 0/0 0/0 .text            Execute__12daObjTOMBO_cFv */
 int daObjTOMBO_c::Execute() {
     if (ChkGetDemo()) {
         field_0x750 = field_0x754 + 10000.0f;
@@ -502,7 +475,6 @@ int daObjTOMBO_c::Execute() {
     return 1;
 }
 
-/* 80D1AB20-80D1AC84 001A40 0164+00 1/1 0/0 0/0 .text            ObjHit__12daObjTOMBO_cFv */
 void daObjTOMBO_c::ObjHit() {
     if (mSph.ChkTgHit()) {
         cCcD_Obj* tgHitObj = mSph.GetTgHitObj();
@@ -529,7 +501,6 @@ void daObjTOMBO_c::ObjHit() {
     }
 }
 
-/* 80D1AC84-80D1AE00 001BA4 017C+00 1/1 0/0 0/0 .text            Z_BufferChk__12daObjTOMBO_cFv */
 void daObjTOMBO_c::Z_BufferChk() {
     cXyz local_5c;
     cXyz cStack_68;
@@ -559,7 +530,6 @@ void daObjTOMBO_c::Z_BufferChk() {
         ((near + ((far * near) / local_5c.z)) / (far - near) + 1.0f) * 16777215.0f;
 }
 
-/* 80D1AE00-80D1AE68 001D20 0068+00 1/1 0/0 0/0 .text            Delete__12daObjTOMBO_cFv */
 int daObjTOMBO_c::Delete() {
     dComIfG_resDelete(&mPhase, "Tombo");
     if (mIsHIOOwner) {
@@ -572,7 +542,6 @@ int daObjTOMBO_c::Delete() {
     return 1;
 }
 
-/* 80D1AE68-80D1AEC8 001D88 0060+00 1/1 0/0 0/0 .text            setBaseMtx__12daObjTOMBO_cFv */
 void daObjTOMBO_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -598,24 +567,19 @@ inline int daObjTOMBO_c::Draw() {
     return 1;
 }
 
-/* 80D1AEC8-80D1AFA8 001DE8 00E0+00 1/0 0/0 0/0 .text            daObjTOMBO_Draw__FP12daObjTOMBO_c
- */
 static int daObjTOMBO_Draw(daObjTOMBO_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80D1AFA8-80D1AFC8 001EC8 0020+00 2/1 0/0 0/0 .text daObjTOMBO_Execute__FP12daObjTOMBO_c */
 static int daObjTOMBO_Execute(daObjTOMBO_c* i_this) {
     return i_this->Execute();
 }
 
-/* 80D1B7E0-80D1B7E4 000108 0004+00 1/2 0/0 0/0 .rodata          l_musiya_num */
 static u16 const l_musiya_num[2] = {
     0x01A3, /* dSv_event_flag_c::F_0419 - Misc. - Dragonfly (M) */
     0x01A4, /* dSv_event_flag_c::F_0420 - Misc. - Dragonfly (F) */
 };
 
-/* 80D1AFC8-80D1B174 001EE8 01AC+00 1/1 0/0 0/0 .text            CreateChk__12daObjTOMBO_cFv */
 bool daObjTOMBO_c::CreateChk() {
     u8 uVar4 = (fopAcM_GetParam(this) & 0xf00) >> 8;
     if (uVar4 == 0xf) {
@@ -646,7 +610,6 @@ bool daObjTOMBO_c::CreateChk() {
     return 1;
 }
 
-/* 80D1B174-80D1B510 002094 039C+00 1/1 0/0 0/0 .text            create__12daObjTOMBO_cFv */
 int daObjTOMBO_c::create() {
     fopAcM_ct(this, daObjTOMBO_c);
     int phase = dComIfG_resLoad(&mPhase, "Tombo");
@@ -708,12 +671,10 @@ int daObjTOMBO_c::create() {
     return phase;
 }
 
-/* 80D1B610-80D1B618 002530 0008+00 1/0 0/0 0/0 .text daObjTOMBO_IsDelete__FP12daObjTOMBO_c */
 static int daObjTOMBO_IsDelete(daObjTOMBO_c* param_0) {
     return 1;
 }
 
-/* 80D1B7F8-80D1B818 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjTOMBO_Method */
 static actor_method_class l_daObjTOMBO_Method = {
     (process_method_func)daObjTOMBO_Create,
     (process_method_func)daObjTOMBO_Delete,
@@ -722,7 +683,6 @@ static actor_method_class l_daObjTOMBO_Method = {
     (process_method_func)daObjTOMBO_Draw,
 };
 
-/* 80D1B818-80D1B848 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Tombo */
 extern actor_process_profile_definition g_profile_Obj_Tombo = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

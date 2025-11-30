@@ -7,26 +7,21 @@
 
 #include "d/actor/d_a_obj_picture.h"
 
-/* 80CAD2F8-80CAD318 000078 0020+00 1/1 0/0 0/0 .text daObjPicture_c_createHeap__FP10fopAc_ac_c */
 static int daObjPicture_c_createHeap(fopAc_ac_c* i_this) {
     return ((daObjPicture_c*)i_this)->createHeap();
 }
 
-/* 80CAF0E8-80CAF0EC -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "L9Picture";
 
-/* 80CAF0EC-80CAF104 000004 0018+00 1/1 0/0 0/0 .data            l_LINE_OFFSET_POS */
 static Vec l_LINE_OFFSET_POS[] = {
     {-100.0f, 200.0f, -2.0f},
     {100.0f, 200.0f, -2.0f},
 };
 
-/* 80CAF104-80CAF110 00001C 000C+00 1/1 0/0 0/0 .data            l_PIC_AT_OFFSET_POS */
 static Vec l_PIC_AT_OFFSET_POS = {
     0.0f, 100.0f, 0.0f
 };
 
-/* 80CAD318-80CAD498 000098 0180+00 2/2 0/0 0/0 .text            __ct__14daObjPicture_cFv */
 daObjPicture_c::daObjPicture_c() {
     memset(mpBgw, 0, 8);
     mpRopestModel = NULL;
@@ -34,22 +29,18 @@ daObjPicture_c::daObjPicture_c() {
     memset(mpRopeMat, 0, 8);
 }
 
-/* 80CAD6C8-80CAD908 000448 0240+00 1/0 0/0 0/0 .text            __dt__14daObjPicture_cFv */
 daObjPicture_c::~daObjPicture_c() {
     dComIfG_resDelete(this, l_arcName);
 }
 
-/* 80CAF01C-80CAF024 000000 0008+00 6/6 0/0 0/0 .rodata          l_dzbIdx */
 static const int l_dzbIdx[] = {
     11, 10,
 };
 
-/* 80CAF024-80CAF02C 000008 0008+00 0/1 0/0 0/0 .rodata          l_PictureBmdIdx */
 static const int l_PictureBmdIdx[] = {
     6, 7,
 };
 
-/* 80CAD908-80CADC18 000688 0310+00 1/1 0/0 0/0 .text            createHeap__14daObjPicture_cFv */
 int daObjPicture_c::createHeap() {
     int bmd_idx = getArg_0() & 1;
 
@@ -121,7 +112,6 @@ int daObjPicture_c::createHeap() {
     return 1;
 }
 
-/* 80CADC18-80CADFB0 000998 0398+00 1/1 0/0 0/0 .text            create__14daObjPicture_cFv */
 int daObjPicture_c::create() {
     fopAcM_ct(this, daObjPicture_c);
 
@@ -208,7 +198,6 @@ int daObjPicture_c::create() {
     return phase_state;
 }
 
-/* 80CADFB0-80CAE05C 000D30 00AC+00 1/1 0/0 0/0 .text            Delete__14daObjPicture_cFv */
 int daObjPicture_c::Delete() {
     for (int i = 0; i < 2; i++) {
         if (i == 1 && field_0xd26 != 0) {
@@ -224,7 +213,6 @@ int daObjPicture_c::Delete() {
     return 1;
 }
 
-/* 80CAE05C-80CAE1B8 000DDC 015C+00 1/1 0/0 0/0 .text            draw__14daObjPicture_cFv */
 int daObjPicture_c::draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpRopestModel, &tevStr);
@@ -248,7 +236,6 @@ int daObjPicture_c::draw() {
     return 1;
 }
 
-/* 80CAE1B8-80CAE510 000F38 0358+00 1/1 0/0 0/0 .text            execute__14daObjPicture_cFv */
 int daObjPicture_c::execute() {
     if (field_0xd26 != 0) {
         setTmgModelMtx();
@@ -333,7 +320,6 @@ int daObjPicture_c::execute() {
     return 1;
 }
 
-/* 80CAE510-80CAE5B0 001290 00A0+00 1/1 0/0 0/0 .text            init__14daObjPicture_cFv */
 void daObjPicture_c::init() {
     field_0xd24 = 0;
     gravity = -3.0f;
@@ -348,8 +334,6 @@ void daObjPicture_c::init() {
     mDoMtx_stack_c::multVec(&sp8, &field_0xca0);
 }
 
-/* 80CAE5B0-80CAE638 001330 0088+00 2/2 0/0 0/0 .text            setPicModelMtx__14daObjPicture_cFv
- */
 void daObjPicture_c::setPicModelMtx() {
     if (field_0xd26 == 0) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
@@ -359,8 +343,6 @@ void daObjPicture_c::setPicModelMtx() {
     }
 }
 
-/* 80CAE638-80CAE6C4 0013B8 008C+00 2/2 0/0 0/0 .text            setTmgModelMtx__14daObjPicture_cFv
- */
 void daObjPicture_c::setTmgModelMtx() {
     mDoMtx_stack_c::transS(home.pos.x, home.pos.y + 325.0f, home.pos.z);
     mDoMtx_stack_c::ZXYrotM(home.angle.x, home.angle.y, home.angle.z);
@@ -368,7 +350,6 @@ void daObjPicture_c::setTmgModelMtx() {
     mpRopestModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CAE6C4-80CAE744 001444 0080+00 4/4 0/0 0/0 .text getLinePosPic__14daObjPicture_cFiP4cXyz */
 void daObjPicture_c::getLinePosPic(int param_0, cXyz* o_pos) {
     *o_pos = l_LINE_OFFSET_POS[param_0];
     mDoMtx_stack_c::transS(current.pos);
@@ -376,13 +357,10 @@ void daObjPicture_c::getLinePosPic(int param_0, cXyz* o_pos) {
     mDoMtx_stack_c::multVec(o_pos, o_pos);
 }
 
-/* 80CAE744-80CAE76C 0014C4 0028+00 2/2 0/0 0/0 .text            getPosTmg__14daObjPicture_cFP4cXyz
- */
 void daObjPicture_c::getPosTmg(cXyz* o_pos) {
     o_pos->set(home.pos.x, 325.0f + home.pos.y, home.pos.z);
 }
 
-/* 80CAE76C-80CAE8E8 0014EC 017C+00 1/1 0/0 0/0 .text            setLinePos__14daObjPicture_cFv */
 void daObjPicture_c::setLinePos() {
     cXyz tmgpos;
     cXyz picpos[2];
@@ -411,8 +389,6 @@ void daObjPicture_c::setLinePos() {
     }
 }
 
-/* 80CAE8E8-80CAEA60 001668 0178+00 1/1 0/0 0/0 .text            moveLineFall1__14daObjPicture_cFv
- */
 void daObjPicture_c::moveLineFall1() {
     cXyz picpos[2];
     getLinePosPic(0, &picpos[0]);
@@ -445,8 +421,6 @@ void daObjPicture_c::moveLineFall1() {
     }
 }
 
-/* 80CAEA60-80CAED28 0017E0 02C8+00 1/1 0/0 0/0 .text            moveLineFall2__14daObjPicture_cFv
- */
 void daObjPicture_c::moveLineFall2() {
     field_0xd27 = 1;
 
@@ -482,7 +456,6 @@ void daObjPicture_c::moveLineFall2() {
     }
 }
 
-/* 80CAED28-80CAEDDC 001AA8 00B4+00 1/1 0/0 0/0 .text            chkHitRope__14daObjPicture_cFv */
 bool daObjPicture_c::chkHitRope() {
     for (int i = 0; i < 2; i++) {
         if (mCps[i].ChkTgHit()) {
@@ -499,7 +472,6 @@ bool daObjPicture_c::chkHitRope() {
     return 0;
 }
 
-/* 80CAEDDC-80CAEE90 001B5C 00B4+00 1/1 0/0 0/0 .text            chkHitBombTg__14daObjPicture_cFv */
 bool daObjPicture_c::chkHitBombTg() {
     for (int i = 0; i < 2; i++) {
         if (mCps2[i].ChkTgHit()) {
@@ -516,7 +488,6 @@ bool daObjPicture_c::chkHitBombTg() {
     return 0;
 }
 
-/* 80CAEE90-80CAEF18 001C10 0088+00 1/1 0/0 0/0 .text            setPicAtCol__14daObjPicture_cFv */
 void daObjPicture_c::setPicAtCol() {
     mPicAtPos = l_PIC_AT_OFFSET_POS;
     mDoMtx_stack_c::transS(current.pos);
@@ -526,28 +497,23 @@ void daObjPicture_c::setPicAtCol() {
     dComIfG_Ccsp()->Set(&mAtCyl);
 }
 
-/* 80CAEF18-80CAEF6C 001C98 0054+00 1/0 0/0 0/0 .text daObjPicture_create__FP14daObjPicture_c */
 static int daObjPicture_create(daObjPicture_c* i_this) {
     fopAcM_ct(i_this, daObjPicture_c);
     return i_this->create();
 }
 
-/* 80CAEF6C-80CAEF8C 001CEC 0020+00 1/0 0/0 0/0 .text daObjPicture_Delete__FP14daObjPicture_c */
 static int daObjPicture_Delete(daObjPicture_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80CAEF8C-80CAEFAC 001D0C 0020+00 1/0 0/0 0/0 .text daObjPicture_execute__FP14daObjPicture_c */
 static int daObjPicture_execute(daObjPicture_c* i_this) {
     return i_this->execute();
 }
 
-/* 80CAEFAC-80CAEFCC 001D2C 0020+00 1/0 0/0 0/0 .text daObjPicture_draw__FP14daObjPicture_c */
 static int daObjPicture_draw(daObjPicture_c* i_this) {
     return i_this->draw();
 }
 
-/* 80CAF110-80CAF15C 000028 004C+00 1/1 0/0 0/0 .data            s_CcDCps__14daObjPicture_c */
 #if DEBUG
 const
 #endif
@@ -563,8 +529,6 @@ dCcD_SrcCps daObjPicture_c::s_CcDCps = {
     } // mCpsAttr
 };
 
-/* 80CAF15C-80CAF1A0 000074 0044+00 1/1 0/0 0/0 .data            s_CcDCyl_pic_at__14daObjPicture_c
- */
 #if DEBUG
 const
 #endif
@@ -582,7 +546,6 @@ dCcD_SrcCyl daObjPicture_c::s_CcDCyl_pic_at = {
     }  // mCyl
 };
 
-/* 80CAF1A0-80CAF1C0 -00001 0020+00 1/0 0/0 0/0 .data            daObjPicture_METHODS */
 static actor_method_class daObjPicture_METHODS = {
     (process_method_func)daObjPicture_create,
     (process_method_func)daObjPicture_Delete,
@@ -591,7 +554,6 @@ static actor_method_class daObjPicture_METHODS = {
     (process_method_func)daObjPicture_draw,
 };
 
-/* 80CAF1C0-80CAF1F0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Picture */
 extern actor_process_profile_definition g_profile_Obj_Picture = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

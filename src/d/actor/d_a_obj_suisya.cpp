@@ -9,7 +9,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 80CF0078-80CF0148 000078 00D0+00 1/1 0/0 0/0 .text            draw__14daObj_Suisya_cFv */
 int daObj_Suisya_c::draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -24,12 +23,10 @@ int daObj_Suisya_c::draw() {
     return 1;
 }
 
-/* 80CF0148-80CF0168 000148 0020+00 1/0 0/0 0/0 .text daObj_Suisya_Draw__FP14daObj_Suisya_c */
 static int daObj_Suisya_Draw(daObj_Suisya_c* i_this) {
     return i_this->draw();
 }
 
-/* 80CF0168-80CF020C 000168 00A4+00 1/1 0/0 0/0 .text            execute__14daObj_Suisya_cFv */
 int daObj_Suisya_c::execute() {
     Z2GetAudioMgr()->seStartLevel(Z2SE_OBJ_WATERMILL_ROUND, &current.pos, 0, 0, 1.0f, 1.0f,
                                          -1.0f, -1.0f, 0);
@@ -41,28 +38,23 @@ int daObj_Suisya_c::execute() {
     return 1;
 }
 
-/* 80CF020C-80CF022C 00020C 0020+00 2/1 0/0 0/0 .text daObj_Suisya_Execute__FP14daObj_Suisya_c */
 static int daObj_Suisya_Execute(daObj_Suisya_c* i_this) {
     return i_this->execute();
 }
 
-/* 80CF022C-80CF0234 00022C 0008+00 1/0 0/0 0/0 .text daObj_Suisya_IsDelete__FP14daObj_Suisya_c */
 static int daObj_Suisya_IsDelete(daObj_Suisya_c* i_this) {
     return 1;
 }
 
-/* 80CF0234-80CF0264 000234 0030+00 1/1 0/0 0/0 .text            _delete__14daObj_Suisya_cFv */
 int daObj_Suisya_c::_delete() {
     dComIfG_resDelete(&mPhase, "Obj_sui");
     return 1;
 }
 
-/* 80CF0264-80CF0284 000264 0020+00 1/0 0/0 0/0 .text daObj_Suisya_Delete__FP14daObj_Suisya_c */
 static int daObj_Suisya_Delete(daObj_Suisya_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80CF0284-80CF02F0 000284 006C+00 1/1 0/0 0/0 .text            CreateHeap__14daObj_Suisya_cFv */
 int daObj_Suisya_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Obj_sui", 3);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
@@ -73,12 +65,10 @@ int daObj_Suisya_c::CreateHeap() {
     return 1;
 }
 
-/* 80CF02F0-80CF0310 0002F0 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return static_cast<daObj_Suisya_c*>(i_this)->CreateHeap();
 }
 
-/* 80CF0310-80CF0478 000310 0168+00 1/1 0/0 0/0 .text            create__14daObj_Suisya_cFv */
 int daObj_Suisya_c::create() {
     fopAcM_ct(this, daObj_Suisya_c);
 
@@ -104,19 +94,16 @@ int daObj_Suisya_c::create() {
     return phase;
 }
 
-/* 80CF04E8-80CF0508 0004E8 0020+00 1/0 0/0 0/0 .text daObj_Suisya_Create__FP14daObj_Suisya_c */
 static int daObj_Suisya_Create(daObj_Suisya_c* i_this) {
     return i_this->create();
 }
 
-/* 80CF054C-80CF056C -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Suisya_Method */
 static actor_method_class l_daObj_Suisya_Method = {
     (process_method_func)daObj_Suisya_Create,  (process_method_func)daObj_Suisya_Delete,
     (process_method_func)daObj_Suisya_Execute, (process_method_func)daObj_Suisya_IsDelete,
     (process_method_func)daObj_Suisya_Draw,
 };
 
-/* 80CF056C-80CF059C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_SUISYA */
 extern actor_process_profile_definition g_profile_OBJ_SUISYA = {
     fpcLy_CURRENT_e,
     7,

@@ -199,24 +199,18 @@ void fopac_HIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 80018B64-80018BD0 0134A4 006C+00 0/0 7/7 562/562 .text            __ct__10fopAc_ac_cFv */
 fopAc_ac_c::fopAc_ac_c() {}
 
-/* 80018C8C-80018CE0 0135CC 0054+00 0/0 5/5 270/270 .text            __dt__10fopAc_ac_cFv */
 fopAc_ac_c::~fopAc_ac_c() {}
 
-/* 80450CB8-80450CBC 0001B8 0004+00 2/2 0/0 0/0 .sbss            g_fopAc_type */
 int g_fopAc_type;
 
-/* 80018CE0-80018D0C 013620 002C+00 0/0 12/12 391/391 .text            fopAc_IsActor__FPv */
 BOOL fopAc_IsActor(void* i_actor) {
     return fpcM_IsJustType(g_fopAc_type, ((fopAc_ac_c*)i_actor)->actor_type);
 }
 
-/* 80450CBC-80450CC0 0001BC 0004+00 2/2 1/1 0/0 .sbss            stopStatus__10fopAc_ac_c */
 u32 fopAc_ac_c::stopStatus;
 
-/* 80018D0C-80018DD8 01364C 00CC+00 1/0 0/0 0/0 .text            fopAc_Draw__FPv */
 static int fopAc_Draw(void* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     int ret = 1;
@@ -287,7 +281,6 @@ static int fopAc_Draw(void* i_this) {
     return ret;
 }
 
-/* 80018DD8-80018F78 013718 01A0+00 1/0 0/0 0/0 .text            fopAc_Execute__FPv */
 static int fopAc_Execute(void* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     int ret = 1;
@@ -383,7 +376,6 @@ static int fopAc_Execute(void* i_this) {
     return ret;
 }
 
-/* 80018F78-80018FCC 0138B8 0054+00 1/0 0/0 0/0 .text            fopAc_IsDelete__FPv */
 static int fopAc_IsDelete(void* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     int ret;
@@ -406,7 +398,6 @@ static int fopAc_IsDelete(void* i_this) {
     return ret;
 }
 
-/* 80018FCC-8001904C 01390C 0080+00 1/0 0/0 0/0 .text            fopAc_Delete__FPv */
 static int fopAc_Delete(void* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     int ret;
@@ -444,7 +435,6 @@ static int fopAc_Delete(void* i_this) {
     return ret;
 }
 
-/* 8001904C-800193FC 01398C 03B0+00 1/0 0/0 0/0 .text            fopAc_Create__FPv */
 static int fopAc_Create(void* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     int ret;
@@ -564,7 +554,6 @@ static int fopAc_Create(void* i_this) {
     return ret;
 }
 
-/* 80019404-800194FC 013D44 00F8+00 0/0 0/0 2/2 .text            initBallModel__13fopEn_enemy_cFv */
 BOOL fopEn_enemy_c::initBallModel() {
     mBallModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Alink", daAlink_c::getBallModelIdx()), 0x80000, 0x11000284);
 
@@ -582,13 +571,10 @@ BOOL fopEn_enemy_c::initBallModel() {
 
     return true;
 }
-/* 800194FC-80019520 013E3C 0024+00 2/2 0/0 2/2 .text checkBallModelDraw__13fopEn_enemy_cFv */
 bool fopEn_enemy_c::checkBallModelDraw() {
     return (mFlags & fopEn_flag_Down) && !(mFlags & (fopEn_flag_WolfDownPullEnd | fopEn_flag_WolfDownPull | fopEn_flag_CutDownHit));
 }
 
-/* 80019520-800196A0 013E60 0180+00 0/0 0/0 2/2 .text
- * setBallModelEffect__13fopEn_enemy_cFP12dKy_tevstr_c          */
 void fopEn_enemy_c::setBallModelEffect(dKy_tevstr_c* i_tevstr) {
     if (mBallModel) {
         mAnmFrame += 1.0f;
@@ -608,8 +594,6 @@ void fopEn_enemy_c::setBallModelEffect(dKy_tevstr_c* i_tevstr) {
     }
 }
 
-/* 800196A0-800197BC 013FE0 011C+00 0/0 0/0 2/2 .text
- * drawBallModel__13fopEn_enemy_cFP12dKy_tevstr_c               */
 void fopEn_enemy_c::drawBallModel(dKy_tevstr_c* i_tevstr) {
     f32 scale_target;
 
@@ -644,15 +628,12 @@ void fopEn_enemy_c::drawBallModel(dKy_tevstr_c* i_tevstr) {
     }
 }
 
-/* 803A35B0-803A35D0 -00001 0020+00 0/0 3/0 756/0 .data            g_fopAc_Method */
 extern actor_method_class g_fopAc_Method = {
     (process_method_func)fopAc_Create,  (process_method_func)fopAc_Delete,
     (process_method_func)fopAc_Execute, (process_method_func)fopAc_IsDelete,
     (process_method_func)fopAc_Draw,
 };
 
-/* 80450CC0-80450CC8 0001C0 0004+04 0/0 9/9 0/0 .sbss
- * sInstance__35JASGlobalInstance<14JAUSectionHeap>             */
 class JAUSectionHeap;
 template<>
 JAUSectionHeap* JASGlobalInstance<JAUSectionHeap>::sInstance;

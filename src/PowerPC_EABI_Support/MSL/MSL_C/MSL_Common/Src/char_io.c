@@ -3,7 +3,6 @@
 #include "misc_io.h"
 #include "wchar_io.h"
 
-/* 803652AC-80365464 35FBEC 01B8+00 1/1 0/0 0/0 .text            __put_char */
 int __put_char(int c, FILE* stream) {
     int ret;
 
@@ -62,7 +61,6 @@ exit:
     return ret;
 }
 
-/* 803651D8-803652AC 35FB18 00D4+00 0/0 1/1 0/0 .text            fputs */
 int fputs(const char* s, FILE* stream) {
     char c;
     int var_r3;

@@ -11,10 +11,10 @@
  */
 class daTagMstop_c : public fopAc_ac_c {
 public:
-    /* 805A6138 */ int create();
-    /* 805A6338 */ ~daTagMstop_c();
-    /* 805A63C4 */ void eventOrder();
-    /* 805A63F8 */ int execute();
+    int create();
+    ~daTagMstop_c();
+    void eventOrder();
+    int execute();
     bool checkNoAttention() const { return field_0x56b == 0xFF; }
 
 private:

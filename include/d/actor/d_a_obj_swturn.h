@@ -26,21 +26,21 @@ public:
         KIND_1,
     };
 
-    /* 80D00CD8 */ void initBaseMtx();
-    /* 80D00D14 */ void setBaseMtx();
-    /* 80D00D78 */ int Create();
-    /* 80D00EE4 */ int CreateHeap();
-    /* 80D00F64 */ int create1st();
-    /* 80D01074 */ int Execute(Mtx**);
-    /* 80D010D4 */ void mode_proc_call();
-    /* 80D01160 */ void init_modeWait();
-    /* 80D01198 */ void modeWait();
-    /* 80D01770 */ void init_modeRotate();
-    /* 80D018B4 */ void modeRotate();
-    /* 80D01958 */ void rotate_sub_0();
-    /* 80D01B60 */ void rotate_sub_1();
-    /* 80D01EB0 */ int Draw();
-    /* 80D01F58 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void mode_proc_call();
+    void init_modeWait();
+    void modeWait();
+    void init_modeRotate();
+    void modeRotate();
+    void rotate_sub_0();
+    void rotate_sub_1();
+    int Draw();
+    int Delete();
 
     u8 getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getModelType() { return fopAcM_GetParamBit(this, 8, 4); }

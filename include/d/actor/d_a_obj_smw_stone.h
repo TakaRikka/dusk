@@ -13,17 +13,17 @@
  */
 class daSmWStone_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80CDE538 */ daSmWStone_c();
-    /* 80CDE588 */ virtual ~daSmWStone_c();
-    /* 80CDE614 */ cPhs__Step create();
-    /* 80CDE8D8 */ int execute();
-    /* 80CDE92C */ int draw();
-    /* 80CDEA2C */ int Delete();
-    /* 80CDEAA4 */ void exeModeHowl();
-    /* 80CDEBA0 */ void setModelMtx();
-    /* 80CDEC04 */ int createHeap();
-    /* 80CDED30 */ void init();
-    /* 80CDED9C */ bool chkWlfInRange();
+    daSmWStone_c();
+    virtual ~daSmWStone_c();
+    cPhs__Step create();
+    int execute();
+    int draw();
+    int Delete();
+    void exeModeHowl();
+    void setModelMtx();
+    int createHeap();
+    void init();
+    bool chkWlfInRange();
 
     int getTuneId() { return 2; }
     u8 getSwBit0() { return fopAcM_GetParamBit(this, 0, 8); }

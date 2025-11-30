@@ -10,8 +10,8 @@ static int nodeCallBack(J3DJoint*, int);
 
 class FlagJoint_c {
 public:
-    /* 80BEC3BC */ ~FlagJoint_c();
-    /* 80BEC4E0 */ FlagJoint_c();
+    ~FlagJoint_c();
+    FlagJoint_c();
 
     csXyz mJoint1;
     csXyz mJoint2;
@@ -44,13 +44,13 @@ private:
     /* 0x5ea */ u8 field_0x568[0x5ec - 0x5ea];
 
 public:
-    /* 80BEB778 */ void create_init();
-    /* 80BEB8F0 */ void initBaseMtx();
-    /* 80BEB984 */ void getJointAngle(csXyz*, int);
-    /* 80BEB9AC */ void calcJointAngle();
-    /* 80BEBC58 */ void calcAngleSwingZ(FlagJoint_c*, f32);
-    /* 80BEBDAC */ void calcAngleSwingX(FlagJoint_c*, f32);
-    /* 80BEBE64 */ f32 getSwingY(f32);
+    void create_init();
+    void initBaseMtx();
+    void getJointAngle(csXyz*, int);
+    void calcJointAngle();
+    void calcAngleSwingZ(FlagJoint_c*, f32);
+    void calcAngleSwingX(FlagJoint_c*, f32);
+    f32 getSwingY(f32);
 
     ~daObjFlag_c() {
         dComIfG_resDelete(&this->mPhase, "FlagObj");

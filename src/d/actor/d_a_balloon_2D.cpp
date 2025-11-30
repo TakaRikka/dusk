@@ -76,7 +76,7 @@ public:
         };
         memcpy(&m, &aParam, sizeof(aParam));
     }
-    /* 806553A8 */ virtual ~daBalloon2D_HIO_c() {}
+    virtual ~daBalloon2D_HIO_c() {}
 
 #if DEBUG
     void genMessage(JORMContext*);
@@ -142,21 +142,17 @@ public:
     param m;
 };
 
-/* 806534CC-80653518 0000EC 004C+00 1/0 0/0 0/0 .text            draw__Q213daBalloon2D_c6c_listFv */
 void daBalloon2D_c::c_list::draw() {
     dComIfGp_getCurrentGrafPort()->setup2D();
     mBalloon->drawMeter();
 }
 
-/* 80653518-80653538 000138 0020+00 1/1 0/0 0/0 .text daBalloon2D_createHeap__FP10fopAc_ac_c */
 static int daBalloon2D_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daBalloon2D_c*>(i_this)->createHeap();
 }
 
-/* 806556D4-806556D8 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Balloon2D";
 
-/* 80653538-80653D24 000158 07EC+00 1/1 0/0 0/0 .text            createHeap__13daBalloon2D_cFv */
 int daBalloon2D_c::createHeap() {
     mScreen = new J2DScreen();
     if (mScreen == NULL) {
@@ -230,13 +226,10 @@ int daBalloon2D_c::createHeap() {
     return 1;
 }
 
-/* 8065577C-80655844 000014 00C8+00 3/3 0/0 0/0 .bss             l_HOSTIO */
 daBalloon2D_HIO_c l_HOSTIO;
 
-/* 80655844-80655848 0000DC 0004+00 2/2 0/0 0/0 .bss             myclass__13daBalloon2D_c */
 daBalloon2D_c* daBalloon2D_c::myclass;
 
-/* 80653D24-80653DB4 000944 0090+00 1/1 0/0 0/0 .text            create__13daBalloon2D_cFv */
 int daBalloon2D_c::create() {
     int rv = dComIfG_resLoad(this, l_arcName);
     if (rv == cPhs_COMPLEATE_e) {
@@ -250,7 +243,6 @@ int daBalloon2D_c::create() {
     return rv;
 }
 
-/* 80653DB4-80653E10 0009D4 005C+00 1/1 0/0 0/0 .text            destroy__13daBalloon2D_cFv */
 int daBalloon2D_c::destroy() {
     dComIfG_resDelete(this, l_arcName);
     myclass = NULL;
@@ -258,7 +250,6 @@ int daBalloon2D_c::destroy() {
     return 1;
 }
 
-/* 80653E10-80653EC0 000A30 00B0+00 1/1 0/0 0/0 .text            draw__13daBalloon2D_cFv */
 int daBalloon2D_c::draw() {
     if (isVisible() && !dComIfGp_isPauseFlag() &&
         !dMsgObject_isTalkNowCheck())
@@ -272,7 +263,6 @@ int daBalloon2D_c::draw() {
 }
 
 
-/* 80653EC0-80653F04 000AE0 0044+00 1/1 0/0 0/0 .text            execute__13daBalloon2D_cFv */
 int daBalloon2D_c::execute() {
     setAllAlpha();
     setComboAlpha();
@@ -280,7 +270,6 @@ int daBalloon2D_c::execute() {
     return 1;
 }
 
-/* 80653F04-80653F58 000B24 0054+00 1/1 0/0 0/0 .text            drawMeter__13daBalloon2D_cFv */
 void daBalloon2D_c::drawMeter() {
     update();
     mScreen->draw(0.0f, 0.0f, dComIfGp_getCurrentGrafPort());
@@ -288,8 +277,6 @@ void daBalloon2D_c::drawMeter() {
 }
 
 
-/* 80653F58-80653FC0 000B78 0068+00 0/0 0/0 1/1 .text            setComboCount__13daBalloon2D_cFUcUc
- */
 void daBalloon2D_c::setComboCount(u8 size, u8 comboNum) {
     if (mComboNum != comboNum) {
         setComboNum(comboNum);
@@ -299,15 +286,12 @@ void daBalloon2D_c::setComboCount(u8 size, u8 comboNum) {
     }
 }
 
-/* 80653FC0-80653FEC 000BE0 002C+00 0/0 0/0 2/2 .text            setScoreCount__13daBalloon2D_cFUl
- */
 void daBalloon2D_c::setScoreCount(u32 scoreCount) {
     if (mScoreCount != scoreCount) {
         setScoreNum(scoreCount);
     }
 }
 
-/* 80653FEC-806540B4 000C0C 00C8+00 0/0 0/0 1/1 .text addScoreCount__13daBalloon2D_cFP4cXyzUlUc */
 void daBalloon2D_c::addScoreCount(cXyz* param_1, u32 param_2, u8 param_3) {
     for (int i = 0; i < 19; i++) {
         int current = 19 - i;
@@ -325,15 +309,12 @@ void daBalloon2D_c::addScoreCount(cXyz* param_1, u32 param_2, u8 param_3) {
     field_0x5f8[0].field_0xf = param_3;
 }
 
-/* 806540B4-806540B8 000CD4 0004+00 1/1 0/0 0/0 .text            initiate__13daBalloon2D_cFv */
 void daBalloon2D_c::initiate() {
 }
 
-/* 806540B8-806540BC 000CD8 0004+00 1/1 0/0 0/0 .text            update__13daBalloon2D_cFv */
 void daBalloon2D_c::update() {
 }
 
-/* 806540BC-806541B4 000CDC 00F8+00 2/2 0/0 0/0 .text            setComboNum__13daBalloon2D_cFUc */
 void daBalloon2D_c::setComboNum(u8 comboNum) {
     if (comboNum > 99) {
         comboNum = 99;
@@ -346,8 +327,6 @@ void daBalloon2D_c::setComboNum(u8 comboNum) {
     setComboAlpha();
 }
 
-/* 806541B4-80654258 000DD4 00A4+00 2/2 0/0 0/0 .text            setBalloonSize__13daBalloon2D_cFUc
- */
 void daBalloon2D_c::setBalloonSize(u8 balloonSize) {
     mBalloonSize = balloonSize;
     switch(balloonSize) {
@@ -369,7 +348,6 @@ void daBalloon2D_c::setBalloonSize(u8 balloonSize) {
     }
 }
 
-/* 80654258-80654440 000E78 01E8+00 2/2 0/0 0/0 .text            setScoreNum__13daBalloon2D_cFi */
 void daBalloon2D_c::setScoreNum(int scoreNum) {
     if (scoreNum > 99999) {
         scoreNum = 99999;
@@ -395,7 +373,6 @@ void daBalloon2D_c::setScoreNum(int scoreNum) {
     field_0x5a8[4]->changeTexture(resTimg, 0);
 }
 
-/* 80654440-8065464C 001060 020C+00 1/1 0/0 0/0 .text            setAllAlpha__13daBalloon2D_cFv */
 void daBalloon2D_c::setAllAlpha() {
     mAllAlpha = field_0x578->getAlphaRate();
     if (isVisible()) {
@@ -426,7 +403,6 @@ void daBalloon2D_c::setAllAlpha() {
 }
 
 
-/* 8065464C-80654730 00126C 00E4+00 2/2 0/0 0/0 .text            setComboAlpha__13daBalloon2D_cFv */
 void daBalloon2D_c::setComboAlpha() {
     mComboAlpha = field_0x5a4->getAlphaRate() * field_0x578->getAlphaRate();
     if (mComboNum != 0) {
@@ -443,7 +419,6 @@ void daBalloon2D_c::setComboAlpha() {
     }
 }
 
-/* 80654730-80654E8C 001350 075C+00 1/1 0/0 0/0 .text            drawAddScore__13daBalloon2D_cFv */
 void daBalloon2D_c::drawAddScore() {
     for (s32 i = 19; i >= 0; i--) {
         if (field_0x5f8[i].field_0xe != 0) {
@@ -529,7 +504,6 @@ void daBalloon2D_c::drawAddScore() {
     }
 }
 
-/* 80654E8C-80655250 001AAC 03C4+00 2/2 0/0 0/0 .text            setHIO__13daBalloon2D_cFb */
 void daBalloon2D_c::setHIO(bool param_1) {
     if ((l_HOSTIO.m.mAdjustmentToggle != 0) || param_1) {
 #if DEBUG
@@ -589,32 +563,25 @@ void daBalloon2D_HIO_c::resetAddScoreSetFlag() {
     releaseJORMContext(ctx);
 }
 
-/* 80655250-80655304 001E70 00B4+00 1/0 0/0 0/0 .text daBalloon2D_create__FP13daBalloon2D_c */
 static int daBalloon2D_create(daBalloon2D_c* i_this) {
     fopAcM_ct(i_this, daBalloon2D_c);
     return i_this->create();
 }
 
-/* 80655304-80655340 001F24 003C+00 2/2 0/0 0/0 .text __dt__Q213daBalloon2D_c10CHeadScoreFv */
 daBalloon2D_c::CHeadScore::~CHeadScore() {
 }
 
-/* 80655340-80655344 001F60 0004+00 1/1 0/0 0/0 .text __ct__Q213daBalloon2D_c10CHeadScoreFv */
 daBalloon2D_c::CHeadScore::CHeadScore() {
 }
 
-/* 80655344-80655364 001F64 0020+00 1/0 0/0 0/0 .text daBalloon2D_destroy__FP13daBalloon2D_c */
 static int daBalloon2D_destroy(daBalloon2D_c* i_this) {
     return i_this->destroy();
 }
 
-/* 80655364-80655384 001F84 0020+00 1/0 0/0 0/0 .text daBalloon2D_execute__FP13daBalloon2D_c */
 static int daBalloon2D_execute(daBalloon2D_c* i_this) {
     return i_this->execute();
 }
 
-/* 80655384-806553A4 001FA4 0020+00 1/0 0/0 0/0 .text            daBalloon2D_draw__FP13daBalloon2D_c
- */
 static int daBalloon2D_draw(daBalloon2D_c* i_this) {
     return i_this->draw();
 }
@@ -741,8 +708,6 @@ void daBalloon2D_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* ############################################################################################## */
-/* 806556D8-806556F8 -00001 0020+00 1/0 0/0 0/0 .data            daBalloon2D_METHODS */
 static actor_method_class daBalloon2D_METHODS = {
     (process_method_func)daBalloon2D_create,
     (process_method_func)daBalloon2D_destroy,
@@ -751,7 +716,6 @@ static actor_method_class daBalloon2D_METHODS = {
     (process_method_func)daBalloon2D_draw,
 };
 
-/* 806556F8-80655728 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_BALLOON2D */
 extern actor_process_profile_definition g_profile_BALLOON2D = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID

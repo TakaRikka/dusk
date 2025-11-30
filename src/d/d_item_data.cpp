@@ -2,7 +2,6 @@
 
 #include "d/d_item_data.h"
 
-/* 803AC5A0-803ADD88 -00001 17E8+00 0/0 10/10 2/2 .data            item_resource__10dItem_data */
 dItem_itemResource dItem_data::item_resource[] = {
     {"F_gD_rupy", 0x0004, 0xFFFF, 0xFFFF, 0x0007, 0xFFFF, 0x0, 0xFF, 0x002D, 0x64, 0x0000},
     {"F_gD_rupy", 0x0004, 0xFFFF, 0xFFFF, 0x0007, 0xFFFF, 0x0, 0xFF, 0x002D, 0x3C, 0x0000},
@@ -261,7 +260,6 @@ dItem_itemResource dItem_data::item_resource[] = {
     {"T_gD_key", 0x0003, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFF, 0xFF, 0x006E, 0x64, 0x0000},
 };
 
-/* 803ADD88-803AED78 -00001 0FF0+00 0/0 3/3 14/14 .data            field_item_res__10dItem_data */
 dItem_fieldItemResource dItem_data::field_item_res[] = {
     {"Always", 0x0014, 0xFFFF, 0x0030, 0xFF, 0x1000},
     {"Always", 0x0017, 0xFFFF, 0x0031, 0x0, 0x1000},
@@ -520,7 +518,6 @@ dItem_fieldItemResource dItem_data::field_item_res[] = {
     {"T_g_key", 0x0003, 0xFFFF, 0xFFFF, 0xFF, 0x1000},
 };
 
-/* 803AED78-803AF178 00BE98 03FC+04 0/0 9/9 9/9 .data            item_info__10dItem_data */
 dItem_itemInfo dItem_data::item_info[] = {
     {15, 40, 30, 4}, {20, 70, 30, 4}, {20, 70, 30, 4},   {20, 70, 30, 4},    {20, 70, 30, 4},
     {20, 70, 30, 4}, {20, 70, 30, 4}, {20, 70, 30, 4},   {20, 40, 30, 4},    {20, 40, 30, 4},

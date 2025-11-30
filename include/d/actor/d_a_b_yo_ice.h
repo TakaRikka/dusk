@@ -20,34 +20,34 @@ class daB_YO_c;
  */
 class daB_YOI_c : public fopEn_enemy_c {
 public:
-    /* 8063A17C */ int draw();
-    /* 8063A2D8 */ void setActionMode(int, int);
-    /* 8063A2E4 */ void damage_check();
-    /* 8063A480 */ void setOperate(int);
-    /* 8063A628 */ void setWeight(u8);
-    /* 8063A638 */ void setBreakIceEffect();
-    /* 8063A6F8 */ void setWallBreakIceEffect();
-    /* 8063A79C */ void setApperEffect();
-    /* 8063A824 */ void setApperEffect2();
-    /* 8063A8C8 */ void setLandingEffect();
-    /* 8063A96C */ void executeFirst();
-    /* 8063ABC0 */ cXyz getSingleFallPos();
-    /* 8063ACCC */ void executeRiseUp();
-    /* 8063B238 */ void executeSingleFall();
-    /* 8063BB40 */ void executeYose();
-    /* 8063C3F0 */ void executeYoseFall();
-    /* 8063C76C */ void executeDemoRevival();
-    /* 8063C900 */ void executeDamage();
-    /* 8063CC90 */ void executeDeath();
-    /* 8063CD14 */ void crack_execute();
-    /* 8063CD90 */ void action();
-    /* 8063D0C8 */ void mtx_set();
-    /* 8063D1B0 */ void cc_set();
-    /* 8063D350 */ int execute();
-    /* 8063D45C */ int _delete();
-    /* 8063D4F8 */ int CreateHeap();
-    /* 8063D5D0 */ cPhs__Step create();
-    /* 8063D8FC */ daB_YOI_c();
+    int draw();
+    void setActionMode(int, int);
+    void damage_check();
+    void setOperate(int);
+    void setWeight(u8);
+    void setBreakIceEffect();
+    void setWallBreakIceEffect();
+    void setApperEffect();
+    void setApperEffect2();
+    void setLandingEffect();
+    void executeFirst();
+    cXyz getSingleFallPos();
+    void executeRiseUp();
+    void executeSingleFall();
+    void executeYose();
+    void executeYoseFall();
+    void executeDemoRevival();
+    void executeDamage();
+    void executeDeath();
+    void crack_execute();
+    void action();
+    void mtx_set();
+    void cc_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    cPhs__Step create();
+    daB_YOI_c();
 
     void setSubNumber(int i_subNumber) { mSubNumber = i_subNumber; }
 

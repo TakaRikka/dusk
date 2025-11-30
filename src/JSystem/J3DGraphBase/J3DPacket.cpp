@@ -34,7 +34,6 @@ J3DError J3DDisplayListObj::newSingleDisplayList(u32 maxSize) {
     return kJ3DError_Success;
 }
 
-/* 8031256C-803125E4 30CEAC 0078+00 0/0 1/1 0/0 .text single_To_Double__17J3DDisplayListObjFv */
 int J3DDisplayListObj::single_To_Double() {
     if (mpDisplayList[0] == mpDisplayList[1]) {
         mpDisplayList[1] = new (0x20) char[mMaxSize];
@@ -68,14 +67,10 @@ void J3DDisplayListObj::callDL() const {
     GXCallDisplayList(mpDisplayList[0], mSize);
 }
 
-/* 80434C70-80434C80 061990 0010+00 2/2 3/3 0/0 .bss             sGDLObj__17J3DDisplayListObj */
 GDLObj J3DDisplayListObj::sGDLObj;
 
-/* 804515A0-804515A8 000AA0 0004+04 3/3 0/0 0/0 .sbss            sInterruptFlag__17J3DDisplayListObj
- */
 s32 J3DDisplayListObj::sInterruptFlag;
 
-/* 80312644-80312698 30CF84 0054+00 2/2 1/1 0/0 .text            beginDL__17J3DDisplayListObjFv */
 void J3DDisplayListObj::beginDL() {
     swapBuffer();
     sInterruptFlag = OSDisableInterrupts();
@@ -83,7 +78,6 @@ void J3DDisplayListObj::beginDL() {
     GDSetCurrent(&sGDLObj);
 }
 
-/* 80312698-803126F4 30CFD8 005C+00 1/1 1/1 0/0 .text            endDL__17J3DDisplayListObjFv */
 u32 J3DDisplayListObj::endDL() {
     GDPadCurr32();
     OSRestoreInterrupts(sInterruptFlag);
@@ -93,20 +87,16 @@ u32 J3DDisplayListObj::endDL() {
     return mSize;
 }
 
-/* 803126F4-80312714 30D034 0020+00 0/0 1/1 0/0 .text            beginPatch__17J3DDisplayListObjFv
- */
 void J3DDisplayListObj::beginPatch() {
     beginDL();
 }
 
-/* 80312714-80312750 30D054 003C+00 0/0 1/1 0/0 .text            endPatch__17J3DDisplayListObjFv */
 u32 J3DDisplayListObj::endPatch() {
     OSRestoreInterrupts(sInterruptFlag);
     GDSetCurrent(NULL);
     return mSize;
 }
 
-/* 80312750-80312758 30D090 0008+00 3/0 16/0 10/0 .text entry__9J3DPacketFP13J3DDrawBuffer */
 int J3DPacket::entry(J3DDrawBuffer* pBuffer) {
     J3D_ASSERT_NULLPTR(290, pBuffer != NULL);
     return 1;
@@ -123,7 +113,6 @@ void J3DPacket::addChildPacket(J3DPacket* pPacket) {
     }
 }
 
-/* 803CD900-803CD920 02AA20 0020+00 1/1 0/0 0/0 .data            sDifferedRegister */
 static u32 sDifferedRegister[8] = {
     J3DDiffFlag_AmbColor,
     J3DDiffFlag_MatColor,
@@ -135,7 +124,6 @@ static u32 sDifferedRegister[8] = {
     J3DDiffFlag_TevStageIndirect,
 };
 
-/* 803CD920-803CD940 02AA40 0020+00 1/1 0/0 0/0 .data            sSizeOfDiffered */
 static s32 sSizeOfDiffered[8] = {
     13,
     13,
@@ -147,18 +135,14 @@ static s32 sSizeOfDiffered[8] = {
     45,
 };
 
-/* 80312778-803127B0 30D0B8 0038+00 2/2 0/0 0/0 .text            __ct__13J3DDrawPacketFv */
 J3DDrawPacket::J3DDrawPacket() {
     mFlags = 0;
     mpDisplayListObj = NULL;
     mpTexMtxObj = NULL;
 }
 
-/* 803127B0-8031280C 30D0F0 005C+00 3/2 0/0 0/0 .text            __dt__13J3DDrawPacketFv */
 J3DDrawPacket::~J3DDrawPacket() {}
 
-/* 8031280C-80312898 30D14C 008C+00 1/1 1/1 0/0 .text            newDisplayList__13J3DDrawPacketFUl
- */
 J3DError J3DDrawPacket::newDisplayList(u32 size) {
     mpDisplayListObj = new J3DDisplayListObj();
 
@@ -172,7 +156,6 @@ J3DError J3DDrawPacket::newDisplayList(u32 size) {
     return kJ3DError_Success;
 }
 
-/* 80312898-80312924 30D1D8 008C+00 0/0 1/1 0/0 .text newSingleDisplayList__13J3DDrawPacketFUl */
 J3DError J3DDrawPacket::newSingleDisplayList(u32 size) {
     mpDisplayListObj = new J3DDisplayListObj();
 
@@ -190,7 +173,6 @@ void J3DDrawPacket::draw() {
     callDL();
 }
 
-/* 80312948-803129A4 30D288 005C+00 0/0 1/1 0/0 .text            __ct__12J3DMatPacketFv */
 J3DMatPacket::J3DMatPacket() {
     mpInitShapePacket = NULL;
     mpShapePacket = NULL;
@@ -200,7 +182,6 @@ J3DMatPacket::J3DMatPacket() {
     mpMaterialAnm = NULL;
 }
 
-/* 803129A4-80312A04 30D2E4 0060+00 1/0 1/1 0/0 .text            __dt__12J3DMatPacketFv */
 J3DMatPacket::~J3DMatPacket() {}
 
 void J3DMatPacket::addShapePacket(J3DShapePacket* pShape) {
@@ -220,13 +201,11 @@ void J3DMatPacket::endDiff() {
     mpInitShapePacket->endDL();
 }
 
-/* 80312A74-80312A9C 30D3B4 0028+00 0/0 1/1 0/0 .text isSame__12J3DMatPacketCFP12J3DMatPacket */
 bool J3DMatPacket::isSame(J3DMatPacket* pOther) const {
     J3D_ASSERT_NULLPTR(521, pOther != NULL);
     return mDiffFlag == pOther->mDiffFlag && (mDiffFlag >> 31) == 0;
 }
 
-/* 80312A9C-80312B20 30D3DC 0084+00 1/0 0/0 0/0 .text            draw__12J3DMatPacketFv */
 void J3DMatPacket::draw() {
     mpMaterial->load();
     callDL();
@@ -246,7 +225,6 @@ void J3DMatPacket::draw() {
     J3DShape::resetVcdVatCache();
 }
 
-/* 80312B20-80312B74 30D460 0054+00 0/0 1/1 0/0 .text            __ct__14J3DShapePacketFv */
 J3DShapePacket::J3DShapePacket() {
     mpShape = NULL;
     mpMtxBuffer = NULL;
@@ -255,11 +233,8 @@ J3DShapePacket::J3DShapePacket() {
     mpModel = NULL;
 }
 
-/* 80312B74-80312BD4 30D4B4 0060+00 1/0 1/1 0/0 .text            __dt__14J3DShapePacketFv */
 J3DShapePacket::~J3DShapePacket() {}
 
-/* 80312BD4-80312DBC 30D514 01E8+00 1/1 0/0 0/0 .text calcDifferedBufferSize__14J3DShapePacketFUl
- */
 u32 J3DShapePacket::calcDifferedBufferSize(u32 diffFlags) {
     u32 bufferSize = 0;
 
@@ -324,8 +299,6 @@ u32 J3DShapePacket::calcDifferedBufferSize(u32 diffFlags) {
     return OSRoundUp32B(bufferSize);
 }
 
-/* 80312DBC-80312E08 30D6FC 004C+00 0/0 1/1 0/0 .text newDifferedDisplayList__14J3DShapePacketFUl
- */
 int J3DShapePacket::newDifferedDisplayList(u32 diffFlags) {
     mDiffFlag = diffFlags;
 
@@ -340,7 +313,6 @@ int J3DShapePacket::newDifferedDisplayList(u32 diffFlags) {
     return kJ3DError_Success;
 }
 
-/* 80312E08-80312F24 30D748 011C+00 2/2 0/0 0/0 .text            prepareDraw__14J3DShapePacketCFv */
 void J3DShapePacket::prepareDraw() const {
     mpModel->getVertexBuffer()->setArray();
     j3dSys.setModel(mpModel);
@@ -375,7 +347,6 @@ void J3DShapePacket::prepareDraw() const {
     mpModel->getModelData()->syncJ3DSysFlags();
 }
 
-/* 80312F24-80312FBC 30D864 0098+00 1/0 0/0 0/0 .text            draw__14J3DShapePacketFv */
 void J3DShapePacket::draw() {
     if (!checkFlag(J3DShpFlag_Hidden) && mpShape != NULL) {
         prepareDraw();
@@ -395,7 +366,6 @@ void J3DShapePacket::draw() {
     }
 }
 
-/* 80312FBC-80313044 30D8FC 0088+00 1/1 2/2 1/1 .text            drawFast__14J3DShapePacketFv */
 void J3DShapePacket::drawFast() {
     if (!checkFlag(J3DShpFlag_Hidden) && mpShape != NULL) {
         prepareDraw();
@@ -411,10 +381,8 @@ void J3DShapePacket::drawFast() {
     }
 }
 
-/* 80313044-80313048 30D984 0004+00 1/0 0/0 0/0 .text            draw__9J3DPacketFv */
 void J3DPacket::draw() {}
 
-/* 80313048-803130A8 30D988 0060+00 1/0 0/0 0/0 .text entry__12J3DMatPacketFP13J3DDrawBuffer */
 int J3DMatPacket::entry(J3DDrawBuffer* pBuffer) {
     J3DDrawBuffer::sortFunc func = J3DDrawBuffer::sortFuncTable[pBuffer->getSortMode()];
     return (pBuffer->*func)(this);

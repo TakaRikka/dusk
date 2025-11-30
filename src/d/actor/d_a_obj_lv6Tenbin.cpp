@@ -8,11 +8,6 @@
 #include "d/actor/d_a_cstatue.h"
 #include "d/actor/d_a_player.h"
 
-//
-// Declarations:
-//
-
-/* 80C768EC-80C76988 0000EC 009C+00 1/1 0/0 0/0 .text            __ct__14daTenbin_HIO_cFv */
 daTenbin_HIO_c::daTenbin_HIO_c() {
     mPlateSpacing = 480.0f;
     mFallAmount = 160.0f;
@@ -56,13 +51,10 @@ void daTenbin_HIO_c::genMessage(JORMContext* context) {
 }
 #endif
 
-/* 80C77A08-80C77A20 000000 0018+00 2/2 0/0 0/0 .data            l_cull_box */
 static cull_box l_cull_box = {-300.0f, -500.0f, -400.0f, 1200.0f, 300.0f, 1300.0f};
 
-/* 80C77ADC-80C77B20 000014 0044+00 5/5 0/0 0/0 .bss             l_HIO */
 static daTenbin_HIO_c l_HIO;
 
-/* 80C769D0-80C76BCC 0001D0 01FC+00 2/2 0/0 0/0 .text            setBaseMtx__10daTenbin_cFv */
 void daTenbin_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -84,7 +76,6 @@ void daTenbin_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80C76BCC-80C76D10 0003CC 0144+00 1/0 0/0 0/0 .text            CreateHeap__10daTenbin_cFv */
 int daTenbin_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("L6Tenbin", 5);
     JUT_ASSERT(261, modelData != NULL);
@@ -108,7 +99,6 @@ int daTenbin_c::CreateHeap() {
     return TRUE;
 }
 
-/* 80C76D10-80C76EE0 000510 01D0+00 1/1 0/0 0/0 .text            create__10daTenbin_cFv */
 int daTenbin_c::create() {
     fopAcM_ct(this, daTenbin_c);
     int phase = dComIfG_resLoad(&mPhase, "L6Tenbin");
@@ -164,8 +154,6 @@ int daTenbin_c::create() {
     return phase;
 }
 
-/* 80C76EE0-80C77078 0006E0 0198+00 1/1 0/0 0/0 .text
- * rideCallBackRight__10daTenbin_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daTenbin_c::rideCallBackRight(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c* i_act2) {
     (void)i_dBgW;
     daTenbin_c* i_tenbin = (daTenbin_c*)i_act1;
@@ -198,8 +186,6 @@ void daTenbin_c::rideCallBackRight(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c*
     }
 }
 
-/* 80C77078-80C77200 000878 0188+00 1/1 0/0 0/0 .text
- * rideCallBackLeft__10daTenbin_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daTenbin_c::rideCallBackLeft(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c* i_act2) {
     (void)i_dBgW;
     daTenbin_c* i_tenbin = (daTenbin_c*)i_act1;
@@ -232,7 +218,6 @@ void daTenbin_c::rideCallBackLeft(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c* 
     }
 }
 
-/* 80C77200-80C772BC 000A00 00BC+00 1/0 0/0 0/0 .text            Execute__10daTenbin_cFPPA3_A4_f */
 int daTenbin_c::Execute(Mtx** i_pMtx) {
     fopAcM_setCullSizeBox(this, l_cull_box.min.x - l_HIO.mPlateSpacing / 2.0f, l_cull_box.min.y,
                           l_cull_box.min.z, l_cull_box.max.x + l_HIO.mPlateSpacing / 2.0f,
@@ -249,7 +234,6 @@ int daTenbin_c::Execute(Mtx** i_pMtx) {
     return TRUE;
 }
 
-/* 80C772BC-80C77464 000ABC 01A8+00 1/1 0/0 0/0 .text            procMain__10daTenbin_cFv */
 void daTenbin_c::procMain() {
     typedef void (daTenbin_c::*func_call)(void);
     static const func_call mode_proc[] = {&daTenbin_c::modeWait};
@@ -263,12 +247,10 @@ void daTenbin_c::procMain() {
     field_0x5D0++;
 }
 
-/* 80C77464-80C77470 000C64 000C+00 1/1 0/0 0/0 .text            init_modeWait__10daTenbin_cFv */
 void daTenbin_c::init_modeWait() {
     mMode = 0;
 }
 
-/* 80C77470-80C77668 000C70 01F8+00 1/0 0/0 0/0 .text            modeWait__10daTenbin_cFv */
 void daTenbin_c::modeWait() {
     balanceCheck();
     if (mWaitTime == 0) {
@@ -300,7 +282,6 @@ void daTenbin_c::modeWait() {
     field_0x5B8 = field_0x5B4;
 }
 
-/* 80C77668-80C7772C 000E68 00C4+00 1/1 0/0 0/0 .text            balanceCheck__10daTenbin_cFv */
 void daTenbin_c::balanceCheck() {
     if (field_0x5B6 != field_0x5B2 || field_0x5B8 != field_0x5B4) {
         if (field_0x5B2 == field_0x5B4) {
@@ -323,7 +304,6 @@ void daTenbin_c::balanceCheck() {
     }
 }
 
-/* 80C7772C-80C77810 000F2C 00E4+00 1/0 0/0 0/0 .text            Draw__10daTenbin_cFv */
 int daTenbin_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel1, &tevStr);
@@ -337,7 +317,6 @@ int daTenbin_c::Draw() {
     return TRUE;
 }
 
-/* 80C77810-80C77878 001010 0068+00 1/0 0/0 0/0 .text            Delete__10daTenbin_cFv */
 int daTenbin_c::Delete() {
     dComIfG_resDelete(&mPhase, "L6Tenbin");
     if (mdBgW != NULL && mdBgW->ChkUsed()) {
@@ -349,30 +328,25 @@ int daTenbin_c::Delete() {
     return TRUE;
 }
 
-/* 80C77878-80C778A4 001078 002C+00 1/0 0/0 0/0 .text            daTenbin_Draw__FP10daTenbin_c */
 static int daTenbin_Draw(daTenbin_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C778A4-80C778C4 0010A4 0020+00 1/0 0/0 0/0 .text            daTenbin_Execute__FP10daTenbin_c */
 static int daTenbin_Execute(daTenbin_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C778C4-80C778E4 0010C4 0020+00 1/0 0/0 0/0 .text            daTenbin_Delete__FP10daTenbin_c */
 static int daTenbin_Delete(daTenbin_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     return i_this->MoveBGDelete();
 }
 
-/* 80C778E4-80C77904 0010E4 0020+00 1/0 0/0 0/0 .text            daTenbin_Create__FP10fopAc_ac_c */
 static int daTenbin_Create(fopAc_ac_c* i_this) {
     daTenbin_c* this_tenbin = (daTenbin_c*)i_this;
     fpc_ProcID id = fopAcM_GetID(i_this);
     return this_tenbin->create();
 }
 
-/* 80C77A38-80C77A58 -00001 0020+00 1/0 0/0 0/0 .data            l_daTenbin_Method */
 static actor_method_class l_daTenbin_Method = {
     (process_method_func)daTenbin_Create,  
     (process_method_func)daTenbin_Delete,
@@ -381,7 +355,6 @@ static actor_method_class l_daTenbin_Method = {
     (process_method_func)daTenbin_Draw,
 };
 
-/* 80C77A58-80C77A88 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv6Tenbin */
 extern actor_process_profile_definition g_profile_Obj_Lv6Tenbin = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

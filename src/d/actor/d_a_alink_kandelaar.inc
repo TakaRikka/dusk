@@ -10,8 +10,6 @@
 #include "m_Do/m_Do_lib.h"
 #include "SSystem/SComponent/c_math.h"
 
-/* 80110654-80110668 10AF94 0014+00 1/1 0/0 0/0 .text daAlink_searchTagKandelaar__FP10fopAc_ac_cPv
- */
 static fopAc_ac_c* daAlink_searchTagKandelaar(fopAc_ac_c* i_actor, void* i_data) {
     if (fopAcM_GetName(i_actor) == PROC_TAG_LANTERN) {
         return i_actor;
@@ -20,8 +18,6 @@ static fopAc_ac_c* daAlink_searchTagKandelaar(fopAc_ac_c* i_actor, void* i_data)
     return NULL;
 }
 
-/* 80110668-801106E8 10AFA8 0080+00 1/1 0/0 0/0 .text daAlink_searchTagKtOnFire__FP10fopAc_ac_cPv
- */
 static fopAc_ac_c* daAlink_searchTagKtOnFire(fopAc_ac_c* i_actor, void* i_data) {
     daAlink_c* player_p = daAlink_getAlinkActorClass();
 
@@ -35,8 +31,6 @@ static fopAc_ac_c* daAlink_searchTagKtOnFire(fopAc_ac_c* i_actor, void* i_data) 
     return NULL;
 }
 
-/* 801106E8-8011078C 10B028 00A4+00 1/0 0/0 0/0 .text            setKandelaarMtx__9daAlink_cFPA4_fii
- */
 void daAlink_c::setKandelaarMtx(Mtx i_mtx, int param_1, int param_2) {
     if (mpKanteraModel != NULL) {
         if (checkNoResetFlg2(FLG2_UNK_1)) {
@@ -56,7 +50,6 @@ void daAlink_c::setKandelaarMtx(Mtx i_mtx, int param_1, int param_2) {
     }
 }
 
-/* 8011078C-801107BC 10B0CC 0030+00 2/2 0/0 0/0 .text checkWaterInKandelaarOffset__9daAlink_cFf */
 BOOL daAlink_c::checkWaterInKandelaarOffset(f32 param_0) {
     f32 tmp_65 = 65.0f;  // tmp can be removed with literals
     f32 base_y_pos;
@@ -69,8 +62,6 @@ BOOL daAlink_c::checkWaterInKandelaarOffset(f32 param_0) {
     return param_0 > tmp_65 + base_y_pos;
 }
 
-/* 801107BC-80110840 10B0FC 0084+00 2/2 0/0 0/0 .text            checkWaterInKandelaar__9daAlink_cFf
- */
 void daAlink_c::checkWaterInKandelaar(f32 param_0) {
     if (checkNoResetFlg2(FLG2_UNK_1) && checkWaterInKandelaarOffset(param_0)) {
         if (mEquipItem == fpcNm_ITEM_KANTERA) {
@@ -82,21 +73,16 @@ void daAlink_c::checkWaterInKandelaar(f32 param_0) {
     }
 }
 
-/* 80110840-8011087C 10B180 003C+00 13/13 0/0 0/0 .text            offKandelaarModel__9daAlink_cFv
- */
 void daAlink_c::offKandelaarModel() {
     offNoResetFlg2(FLG2_UNK_10000001);
     mZ2Link.setKanteraState(0);
 }
 
-/* 8011087C-801108B4 10B1BC 0038+00 1/0 0/0 0/0 .text            checkUseKandelaar__9daAlink_cFi */
 bool daAlink_c::checkUseKandelaar(int param_0) {
     return (param_0 == 0 && checkNoResetFlg2(FLG2_UNK_1)) ||
            (param_0 != 0 && mEquipItem == fpcNm_ITEM_KANTERA);
 }
 
-/* 801108B4-801108EC 10B1F4 0038+00 1/0 0/0 0/0 .text            checkKandelaarSwing__9daAlink_cCFi
- */
 bool daAlink_c::checkKandelaarSwing(int param_0) const {
     if ((checkKandelaarSwingAnime() || mProcID == PROC_KANDELAAR_SWING) &&
         (dComIfGs_getOil() != 0 || param_0 == 0))
@@ -107,7 +93,6 @@ bool daAlink_c::checkKandelaarSwing(int param_0) const {
     return false;
 }
 
-/* 801108EC-80110BEC 10B22C 0300+00 1/1 0/0 0/0 .text kandelaarModelCallBack__9daAlink_cFv */
 int daAlink_c::kandelaarModelCallBack() {
     cXyz sp44;
     mDoMtx_multVecZero(J3DSys::mCurrentMtx, &sp44);
@@ -151,8 +136,6 @@ int daAlink_c::kandelaarModelCallBack() {
     return 1;
 }
 
-/* 80110BEC-80110C28 10B52C 003C+00 1/1 0/0 0/0 .text daAlink_kandelaarModelCallBack__FP8J3DJointi
- */
 static int daAlink_kandelaarModelCallBack(J3DJoint* param_0, int param_1) {
     daAlink_c* player_p = (daAlink_c*)j3dSys.getModel()->getUserArea();
 
@@ -163,8 +146,6 @@ static int daAlink_kandelaarModelCallBack(J3DJoint* param_0, int param_1) {
     return 1;
 }
 
-/* 80110C28-80110C6C 10B568 0044+00 1/0 0/0 0/0 .text            getKandelaarFlamePos__9daAlink_cFv
- */
 cXyz* daAlink_c::getKandelaarFlamePos() {
     if ((!checkNoResetFlg2((daPy_FLG2)0x20001) && !checkEndResetFlg1(ERFLG1_UNK_4)) ||
         checkWolf() || !checkNoResetFlg1(FLG1_UNK_80))
@@ -175,12 +156,10 @@ cXyz* daAlink_c::getKandelaarFlamePos() {
     return &mKandelaarFlamePos;
 }
 
-/* 80110C6C-80110C94 10B5AC 0028+00 3/3 0/0 0/0 .text checkKandelaarEquipAnime__9daAlink_cCFv */
 BOOL daAlink_c::checkKandelaarEquipAnime() const {
     return checkUpperAnime(0x264) || checkUpperAnime(0x268);
 }
 
-/* 80110C94-80110E80 10B5D4 01EC+00 1/1 0/0 0/0 .text            preKandelaarDraw__9daAlink_cFv */
 void daAlink_c::preKandelaarDraw() {
     J3DMaterial* mat_p = mpKanteraGlowModel->getModelData()->getMaterialNodePointer(0);
 
@@ -225,7 +204,6 @@ void daAlink_c::preKandelaarDraw() {
     field_0x344c = ((near + (far * near) / proj.z) / (far - near) + 1.0f) * 1.6777215E7f;
 }
 
-/* 80110E84-80110F88 10B7C4 0104+00 4/4 0/0 0/0 .text            setKandelaarModel__9daAlink_cFv */
 void daAlink_c::setKandelaarModel() {
     field_0x2f94 = 0;
 
@@ -250,8 +228,6 @@ void daAlink_c::setKandelaarModel() {
 }
 
 
-/* 80110F88-80110FE0 10B8C8 0058+00 3/3 0/0 0/0 .text            resetOilBottleModel__9daAlink_cFv
- */
 void daAlink_c::resetOilBottleModel() {
     deleteEquipItem(FALSE, TRUE);
 
@@ -263,7 +239,6 @@ void daAlink_c::resetOilBottleModel() {
     returnKeepItemData();
 }
 
-/* 80110FE0-801110B8 10B920 00D8+00 3/3 0/0 0/0 .text commonKandelaarPourInit__9daAlink_cFv */
 void daAlink_c::commonKandelaarPourInit() {
     if (checkNoResetFlg2(FLG2_UNK_1)) {
         mProcVar3.field_0x300e = 1;
@@ -281,8 +256,6 @@ void daAlink_c::commonKandelaarPourInit() {
     dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", 1, &field_0x3194, 0);
 }
 
-/* 801110B8-8011130C 10B9F8 0254+00 3/3 0/0 0/0 .text            commonKandelaarPour__9daAlink_cFi
- */
 int daAlink_c::commonKandelaarPour(int param_0) {
     simpleAnmPlay(field_0x0718);
     simpleAnmPlay(field_0x071c);
@@ -345,7 +318,6 @@ int daAlink_c::commonKandelaarPour(int param_0) {
 }
 
 
-/* 8011130C-80111440 10BC4C 0134+00 1/1 0/0 0/0 .text            initKandelaarSwing__9daAlink_cFv */
 void daAlink_c::initKandelaarSwing() {
     if (mEquipItem == fpcNm_ITEM_KANTERA) {
         if (dComIfGs_getOil() != 0) {
@@ -371,7 +343,6 @@ void daAlink_c::initKandelaarSwing() {
     field_0xFB8.SetAtMtrl(dCcD_MTRL_FIRE);
 }
 
-/* 80111440-801115CC 10BD80 018C+00 2/1 0/0 0/0 .text procKandelaarSwingInit__9daAlink_cFv */
 int daAlink_c::procKandelaarSwingInit() {
     fopAc_ac_c* catch_target_p = dComIfGp_att_getCatghTarget();
     if (catch_target_p != NULL) {
@@ -413,7 +384,6 @@ int daAlink_c::procKandelaarSwingInit() {
 }
 
 
-/* 801115CC-8011167C 10BF0C 00B0+00 1/0 0/0 0/0 .text            procKandelaarSwing__9daAlink_cFv */
 int daAlink_c::procKandelaarSwing() {
     daPy_frameCtrl_c* frameCtrl_p = mUnderFrameCtrl;
 
@@ -431,8 +401,6 @@ int daAlink_c::procKandelaarSwing() {
     return 1;
 }
 
-/* 8011167C-80111724 10BFBC 00A8+00 1/1 0/0 0/0 .text            procKandelaarPourInit__9daAlink_cFv
- */
 int daAlink_c::procKandelaarPourInit() {
     if (!dComIfGp_event_compulsory(this, 0, 0xFBFF)) {
         return 0;
@@ -448,7 +416,6 @@ int daAlink_c::procKandelaarPourInit() {
     return 1;
 }
 
-/* 80111724-8011174C 10C064 0028+00 1/0 0/0 0/0 .text            procKandelaarPour__9daAlink_cFv */
 int daAlink_c::procKandelaarPour() {
     commonKandelaarPour(0);
     return 1;

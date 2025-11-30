@@ -38,25 +38,25 @@ public:
         PAGE_TYPE_1,
     };
 
-    /* 802DD188 */ JUTCacheFont(ResFONT const*, u32, JKRHeap*);
-    /* 802DD29C */ void deleteMemBlocks_CacheFont();
-    /* 802DD320 */ void initialize_state();
-    /* 802DD35C */ int getMemorySize(ResFONT const*, u16*, u32*, u16*, u32*, u16*, u32*, u32*);
-    /* 802DD4EC */ int initiate(ResFONT const*, void*, u32, JKRHeap*);
-    /* 802DD54C */ bool internal_initiate(ResFONT const*, void*, u32, JKRHeap*);
-    /* 802DD650 */ bool allocArea(void*, u32, JKRHeap*);
-    /* 802DD804 */ bool allocArray(JKRHeap*);
-    /* 802DDB0C */ TGlyphCacheInfo* determineBlankPage();
-    /* 802DDBBC */ void getGlyphFromAram(JUTCacheFont::TGlyphCacheInfo*, JUTCacheFont::TCachePage*,
+    JUTCacheFont(ResFONT const*, u32, JKRHeap*);
+    void deleteMemBlocks_CacheFont();
+    void initialize_state();
+    int getMemorySize(ResFONT const*, u16*, u32*, u16*, u32*, u16*, u32*, u32*);
+    int initiate(ResFONT const*, void*, u32, JKRHeap*);
+    bool internal_initiate(ResFONT const*, void*, u32, JKRHeap*);
+    bool allocArea(void*, u32, JKRHeap*);
+    bool allocArray(JKRHeap*);
+    TGlyphCacheInfo* determineBlankPage();
+    void getGlyphFromAram(JUTCacheFont::TGlyphCacheInfo*, JUTCacheFont::TCachePage*,
                                          int*, int*);
-    /* 802DDD98 */ TCachePage* loadCache_char_subroutine(int*, bool);
-    /* 802DDEE0 */ void invalidiateAllCache();
-    /* 802DDF68 */ void unlink(JUTCacheFont::TGlyphCacheInfo*);
-    /* 802DDFAC */ void prepend(JUTCacheFont::TGlyphCacheInfo*);
+    TCachePage* loadCache_char_subroutine(int*, bool);
+    void invalidiateAllCache();
+    void unlink(JUTCacheFont::TGlyphCacheInfo*);
+    void prepend(JUTCacheFont::TGlyphCacheInfo*);
 
-    /* 802DD208 */ virtual ~JUTCacheFont();
-    /* 802DDCE4 */ virtual void loadImage(int, _GXTexMapID);
-    /* 802DD8EC */ virtual void setBlock();
+    virtual ~JUTCacheFont();
+    virtual void loadImage(int, _GXTexMapID);
+    virtual void setBlock();
 
     void setPagingType(EPagingType type) { mPagingType = type; }
 

@@ -21,25 +21,25 @@ public:
         ACTION_BREAK,
     };
 
-    /* 80BFE244 */ void initCcCylinder();
-    /* 80BFE2CC */ void SetCcCyl();
-    /* 80BFE47C */ void WaitAction();
-    /* 80BFE4C4 */ void BreakChk();
-    /* 80BFE52C */ void BreakSet();
-    /* 80BFEA60 */ void getWaterStream(cXyz&, cXyz&, f32);
-    /* 80BFEB90 */ void SpeedSet();
-    /* 80BFED54 */ void BreakAction();
-    /* 80BFED74 */ void CheckCull();
-    /* 80BFEE24 */ bool checkViewArea(cXyz);
-    /* 80BFEEA8 */ void Action();
-    /* 80BFEF20 */ void setBaseMtx();
-    /* 80BFEF84 */ void setBaseMtx2();
-    /* 80BFF064 */ int CreateHeap();
-    /* 80BFF164 */ int create();
-    /* 80BFF8D8 */ int Create();
-    /* 80BFF938 */ int Execute(Mtx**);
-    /* 80BFFA00 */ int Draw();
-    /* 80BFFB1C */ int Delete();
+    void initCcCylinder();
+    void SetCcCyl();
+    void WaitAction();
+    void BreakChk();
+    void BreakSet();
+    void getWaterStream(cXyz&, cXyz&, f32);
+    void SpeedSet();
+    void BreakAction();
+    void CheckCull();
+    bool checkViewArea(cXyz);
+    void Action();
+    void setBaseMtx();
+    void setBaseMtx2();
+    int CreateHeap();
+    int create();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
 private:
     /* 0x05A0 */ u8 mSwBit;
@@ -72,8 +72,8 @@ STATIC_ASSERT(sizeof(daObjGOMIKABE_c) == 0x13c4);
 
 class daObjGOMIKABE_HIO_c : public JORReflexible {
 public:
-    /* 80BFE22C */ daObjGOMIKABE_HIO_c();
-    /* 80BFFB74 */ virtual ~daObjGOMIKABE_HIO_c() {}
+    daObjGOMIKABE_HIO_c();
+    virtual ~daObjGOMIKABE_HIO_c() {}
 
     void genMessage(JORMContext* ctx);
 

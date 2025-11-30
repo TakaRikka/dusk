@@ -12,10 +12,7 @@
 #include "cmath.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
-#include "dol2asm.h"
 
-/* 80CA9E98-80CA9F9C 000078 0104+00 1/1 0/0 0/0 .text
- * PPCallBack__FP10fopAc_ac_cP10fopAc_ac_csQ29dBgW_Base13PushPullLabel */
 static fopAc_ac_c* PPCallBack(fopAc_ac_c* i_this, fopAc_ac_c* param_2, s16 param_3,
                            dBgW_Base::PushPullLabel param_4) {
     int iVar2 = cLib_checkBit<int>(param_4, 3);
@@ -42,13 +39,11 @@ static fopAc_ac_c* PPCallBack(fopAc_ac_c* i_this, fopAc_ac_c* param_2, s16 param
     return i_this;
 }
 
-/* 80CA9F9C-80CA9FD8 00017C 003C+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjPDoor_cFv */
 void daObjPDoor_c::initBaseMtx() {
     mModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80CA9FD8-80CAA03C 0001B8 0064+00 2/2 0/0 0/0 .text            setBaseMtx__12daObjPDoor_cFv */
 void daObjPDoor_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -56,16 +51,13 @@ void daObjPDoor_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80CAAB6C-80CAAB70 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "V_OsuDoor";
 
-/* 80CAAB70-80CAAB88 000024 0018+00 1/1 0/0 0/0 .data            l_cull_box */
 static f32 l_cull_box[6] = {
     0.0f, 0.0f, -600.0f,
     600.0f, 1000.0f, 600.0f,
 };
 
-/* 80CAA03C-80CAA14C 00021C 0110+00 1/0 0/0 0/0 .text            Create__12daObjPDoor_cFv */
 int daObjPDoor_c::Create() {
     BOOL isSw = fopAcM_isSwitch(this, getSwbit());
     BOOL isSw2 = fopAcM_isSwitch(this, getSwbit2());
@@ -89,7 +81,6 @@ int daObjPDoor_c::Create() {
     return 1;
 }
 
-/* 80CAA14C-80CAA1BC 00032C 0070+00 1/0 0/0 0/0 .text            CreateHeap__12daObjPDoor_cFv */
 int daObjPDoor_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 5);
     JUT_ASSERT(270, modelData != NULL);
@@ -97,7 +88,6 @@ int daObjPDoor_c::CreateHeap() {
     return mModel != NULL ? TRUE : FALSE;
 }
 
-/* 80CAA1BC-80CAA23C 00039C 0080+00 1/1 0/0 0/0 .text            create1st__12daObjPDoor_cFv */
 int daObjPDoor_c::create1st() {
     int rv = dComIfG_resLoad(&mPhase, l_arcName);
     if (rv == cPhs_COMPLEATE_e) {
@@ -109,8 +99,6 @@ int daObjPDoor_c::create1st() {
     return rv;
 }
 
-/* 80CAA23C-80CAA290 00041C 0054+00 1/0 0/0 0/0 .text            Execute__12daObjPDoor_cFPPA3_A4_f
- */
 int daObjPDoor_c::Execute(Mtx** ppMtx) {
     mode_proc_call();
     *ppMtx = &mBgMtx;
@@ -119,7 +107,6 @@ int daObjPDoor_c::Execute(Mtx** ppMtx) {
     return 1;
 }
 
-/* 80CAA290-80CAA31C 000470 008C+00 1/1 0/0 0/0 .text            mode_proc_call__12daObjPDoor_cFv */
 void daObjPDoor_c::mode_proc_call() {
     static daObjPDoor_c::modeFunc l_func[2] = {
         &daObjPDoor_c::modeWait,
@@ -128,7 +115,6 @@ void daObjPDoor_c::mode_proc_call() {
     (this->*(l_func[mMode]))();
 }
 
-/* 80CAA31C-80CAA354 0004FC 0038+00 1/1 0/0 0/0 .text            init_modeWait__12daObjPDoor_cFv */
 void daObjPDoor_c::init_modeWait() {
     field_0x5ba = 0;
     field_0x5b0 = -1;
@@ -138,7 +124,6 @@ void daObjPDoor_c::init_modeWait() {
     mMode = MODE_WAIT;
 }
 
-/* 80CAA354-80CAA698 000534 0344+00 1/0 0/0 0/0 .text            modeWait__12daObjPDoor_cFv */
 void daObjPDoor_c::modeWait() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     bool bVar3 = true;
@@ -213,8 +198,6 @@ void daObjPDoor_c::modeWait() {
     }
 }
 
-/* 80CAA698-80CAA6B4 000878 001C+00 1/1 0/0 0/0 .text            init_modeRotate__12daObjPDoor_cFv
- */
 void daObjPDoor_c::init_modeRotate() {
     field_0x5bc = 0;
     field_0x5b4 = 0;
@@ -222,7 +205,6 @@ void daObjPDoor_c::init_modeRotate() {
     mMode = MODE_ROTATE;
 }
 
-/* 80CAA6B4-80CAA968 000894 02B4+00 1/0 0/0 0/0 .text            modeRotate__12daObjPDoor_cFv */
 void daObjPDoor_c::modeRotate() {
     daPy_getPlayerActorClass();
     field_0x5b8++;
@@ -256,7 +238,6 @@ void daObjPDoor_c::modeRotate() {
     }
 }
 
-/* 80CAA968-80CAAA0C 000B48 00A4+00 1/0 0/0 0/0 .text            Draw__12daObjPDoor_cFv */
 int daObjPDoor_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -266,36 +247,29 @@ int daObjPDoor_c::Draw() {
     return 1;
 }
 
-/* 80CAAA0C-80CAAA4C 000BEC 0040+00 1/0 0/0 0/0 .text            Delete__12daObjPDoor_cFv */
 int daObjPDoor_c::Delete() {
     mpBgW->SetPushPullCallback(NULL);
     dComIfG_resDelete(&mPhase, l_arcName);
     return 1;
 }
 
-/* 80CAAA4C-80CAAAAC 000C2C 0060+00 1/0 0/0 0/0 .text daObjPDoor_create1st__FP12daObjPDoor_c */
 static int daObjPDoor_create1st(daObjPDoor_c* i_this) {
     fopAcM_ct(i_this, daObjPDoor_c);
     return i_this->create1st();
 }
 
-/* 80CAAAAC-80CAAACC 000C8C 0020+00 1/0 0/0 0/0 .text daObjPDoor_MoveBGDelete__FP12daObjPDoor_c */
 static int daObjPDoor_MoveBGDelete(daObjPDoor_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80CAAACC-80CAAAEC 000CAC 0020+00 1/0 0/0 0/0 .text daObjPDoor_MoveBGExecute__FP12daObjPDoor_c
- */
 static int daObjPDoor_MoveBGExecute(daObjPDoor_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80CAAAEC-80CAAB18 000CCC 002C+00 1/0 0/0 0/0 .text daObjPDoor_MoveBGDraw__FP12daObjPDoor_c */
 static int daObjPDoor_MoveBGDraw(daObjPDoor_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80CAABB8-80CAABD8 -00001 0020+00 1/0 0/0 0/0 .data            daObjPDoor_METHODS */
 static actor_method_class daObjPDoor_METHODS = {
     (process_method_func)daObjPDoor_create1st,
     (process_method_func)daObjPDoor_MoveBGDelete,
@@ -304,7 +278,6 @@ static actor_method_class daObjPDoor_METHODS = {
     (process_method_func)daObjPDoor_MoveBGDraw,
 };
 
-/* 80CAABD8-80CAAC08 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_PushDoor */
 extern actor_process_profile_definition g_profile_Obj_PushDoor = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

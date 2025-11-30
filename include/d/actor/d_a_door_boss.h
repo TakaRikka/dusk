@@ -23,30 +23,30 @@ public:
         /* 3 */ ACT_END,
     };
 
-    /* 8066F418 */ char* getArcName();
-    /* 8066F424 */ char* getBmd();
-    /* 8066F434 */ char* getDzb();
-    /* 8066F444 */ char* getBmd2();
-    /* 8066F454 */ J3DModelData* getDoorModelData();
-    /* 8066F4E4 */ int CreateHeap();
-    /* 8066F738 */ void calcMtx();
-    /* 8066F7EC */ int CreateInit();
-    /* 8066F8E4 */ cPhs__Step create();
-    /* 8066FAB8 */ int getDemoAction();
-    /* 8066FB00 */ void demoProc();
-    /* 8066FF04 */ void calcGoal(cXyz*, int);
-    /* 8067002C */ void smokeInit();
-    /* 806700C4 */ BOOL checkArea();
-    /* 806701F4 */ BOOL checkFront();
-    /* 80670294 */ BOOL checkOpen();
-    /* 80670320 */ BOOL actionWait();
-    /* 80670328 */ BOOL actionCloseWait();
-    /* 806703C0 */ BOOL actionOpen();
-    /* 806703E4 */ BOOL actionEnd();
-    /* 80670544 */ int execute();
-    /* 80670664 */ BOOL checkDraw();
-    /* 806706A4 */ int draw();
-    /* 80670804 */ int Delete();
+    char* getArcName();
+    char* getBmd();
+    char* getDzb();
+    char* getBmd2();
+    J3DModelData* getDoorModelData();
+    int CreateHeap();
+    void calcMtx();
+    int CreateInit();
+    cPhs__Step create();
+    int getDemoAction();
+    void demoProc();
+    void calcGoal(cXyz*, int);
+    void smokeInit();
+    BOOL checkArea();
+    BOOL checkFront();
+    BOOL checkOpen();
+    BOOL actionWait();
+    BOOL actionCloseWait();
+    BOOL actionOpen();
+    BOOL actionEnd();
+    int execute();
+    BOOL checkDraw();
+    int draw();
+    int Delete();
 
     void setAction(u8 i_action) { mAction = i_action; }
 

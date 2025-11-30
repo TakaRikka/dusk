@@ -18,26 +18,26 @@
  */
 class daObjDAN_c : public dInsect_c {
 public:
-    /* 80BDA5B4 */ void InitCcSph();
-    /* 80BDA620 */ void SetCcSph();
-    /* 80BDA698 */ int CreateHeap();
-    /* 80BDAA3C */ void SpeedSet();
-    /* 80BDAA9C */ void LinkChk();
-    /* 80BDAB14 */ void MoveAction();
-    /* 80BDAC10 */ void DamageAction();
-    /* 80BDAFDC */ void Action();
-    /* 80BDB074 */ void checkGroundPos();
-    /* 80BDB0D8 */ void Insect_Release();
-    /* 80BDB0E8 */ void Z_BufferChk();
-    /* 80BDB264 */ void ParticleSet();
-    /* 80BDB388 */ void ObjHit();
-    /* 80BDB4E0 */ void BoomChk();
-    /* 80BDB62C */ int Execute();
-    /* 80BDB928 */ int Delete();
-    /* 80BDB990 */ void setBaseMtx();
+    void InitCcSph();
+    void SetCcSph();
+    int CreateHeap();
+    void SpeedSet();
+    void LinkChk();
+    void MoveAction();
+    void DamageAction();
+    void Action();
+    void checkGroundPos();
+    void Insect_Release();
+    void Z_BufferChk();
+    void ParticleSet();
+    void ObjHit();
+    void BoomChk();
+    int Execute();
+    int Delete();
+    void setBaseMtx();
     /*  inline  */ inline int Draw();
-    /* 80BDBB0C */ bool CreateChk();
-    /* 80BDBCB8 */ cPhs__Step create();
+    bool CreateChk();
+    cPhs__Step create();
 
 private:
     /* 0x590 */ dCcD_Stts mCcStts;
@@ -81,8 +81,8 @@ STATIC_ASSERT(sizeof(daObjDAN_c) == 0xa6c);
 
 class daObj_DanHIO_c {
 public:
-    /* 80BDA58C */ daObj_DanHIO_c();
-    /* 80BDC2F0 */ virtual ~daObj_DanHIO_c() {}
+    daObj_DanHIO_c();
+    virtual ~daObj_DanHIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mScaleFemale;

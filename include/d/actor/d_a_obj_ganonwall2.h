@@ -14,14 +14,14 @@
  */
 class daObjGWall2_c : public dBgS_MoveBgActor {
 public:
-    /* 80BF57D8 */ void initBaseMtx();
-    /* 80BF5814 */ void setBaseMtx();
-    /* 80BF5878 */ int Create();
-    /* 80BF5950 */ int CreateHeap();
-    /* 80BF5AB4 */ int create1st();
-    /* 80BF5B74 */ int Execute(Mtx**);
-    /* 80BF5C0C */ int Draw();
-    /* 80BF6004 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     u32 getEventBit1() { return fopAcM_GetParamBit(this, 0, 10); }
 

@@ -93,8 +93,8 @@ public:
  */
 class JAUSoundAnimation {
 public:
-    /* 802A6F70 */ int getStartSoundIndex(f32) const;
-    /* 802A7044 */ int getEndSoundIndex(f32) const;
+    int getStartSoundIndex(f32) const;
+    int getEndSoundIndex(f32) const;
 
     u16 getNumSounds() const {
         if (mControl != NULL) {

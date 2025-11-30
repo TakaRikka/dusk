@@ -39,73 +39,73 @@ struct KC_Header {
 
 class dBgWKCol : public dBgW_Base {
 public:
-    /* 8007E6F4 */ dBgWKCol();
-    /* 8007E7D0 */ static void* initKCollision(void*);
-    /* 8007E804 */ void create(void* pprism, void* plc);
-    /* 8007E850 */ void getTriNrm(KC_PrismData*, Vec**) const;
-    /* 8007E8C0 */ cM3dGPla GetTriPla(int) const;
-    /* 8007E9A4 */ bool GetTriPnt(int, Vec*, Vec*, Vec*) const;
-    /* 8007E9D4 */ bool GetTriPnt(KC_PrismData const*, Vec*, Vec*, Vec*) const;
-    /* 8007EB70 */ void getPolyCode(int, dBgPc*) const;
-    /* 8007EBC4 */ bool chkPolyThrough(dBgPc*, cBgS_PolyPassChk*, cBgS_GrpPassChk*, cXyz&) const;
-    /* 8007FF00 */ bool ChkShdwDrawThrough(dBgPc*);
+    dBgWKCol();
+    static void* initKCollision(void*);
+    void create(void* pprism, void* plc);
+    void getTriNrm(KC_PrismData*, Vec**) const;
+    cM3dGPla GetTriPla(int) const;
+    bool GetTriPnt(int, Vec*, Vec*, Vec*) const;
+    bool GetTriPnt(KC_PrismData const*, Vec*, Vec*, Vec*) const;
+    void getPolyCode(int, dBgPc*) const;
+    bool chkPolyThrough(dBgPc*, cBgS_PolyPassChk*, cBgS_GrpPassChk*, cXyz&) const;
+    bool ChkShdwDrawThrough(dBgPc*);
 
-    /* 8007E74C */ virtual ~dBgWKCol();
-    /* 8007E86C */ virtual bool ChkNotReady() const;
-    /* 8007E87C */ virtual bool ChkLock() const;
-    /* 8007E884 */ virtual bool ChkMoveBg() const;
-    /* 8007E88C */ virtual u32 ChkMoveFlag() const;
-    /* 8007E894 */ virtual cM3dGPla GetTriPla(cBgS_PolyInfo const&) const;
-    /* 8007E980 */ virtual bool GetTriPnt(cBgS_PolyInfo const&, cXyz*, cXyz*, cXyz*) const;
-    /* 8007EB28 */ virtual cM3dGAab* GetBnd() const;
-    /* 8007EB30 */ virtual u32 GetGrpInf(cBgS_PolyInfo const&) const;
-    /* 8007EB6C */ virtual void OffMoveFlag();
-    /* 800829AC */ virtual void GetTopUnder(f32*, f32*) const;
-    /* 8007EE34 */ virtual bool LineCheck(cBgS_LinChk*);
-    /* 8007F628 */ virtual bool GroundCross(cBgS_GndChk*);
-    /* 8007F9A4 */ virtual void ShdwDraw(cBgS_ShdwDraw*);
-    /* 8007FF1C */ virtual void CaptPoly(dBgS_CaptPoly&);
-    /* 800811A0 */ virtual bool WallCorrect(dBgS_Acch*);
-    /* 80080330 */ virtual bool WallCorrectSort(dBgS_Acch*);
-    /* 80081E18 */ virtual bool RoofChk(dBgS_RoofChk*);
-    /* 80082184 */ virtual bool SplGrpChk(dBgS_SplGrpChk*);
-    /* 800824EC */ virtual bool SphChk(dBgS_SphChk*, void*);
-    /* 800829F0 */ virtual int GetGrpRoomIndex(cBgS_PolyInfo const&) const;
-    /* 80082A20 */ virtual int GetExitId(cBgS_PolyInfo const&);
-    /* 80082A50 */ virtual int GetPolyColor(cBgS_PolyInfo const&);
-    /* 80082A80 */ virtual BOOL GetHorseNoEntry(cBgS_PolyInfo const&);
-    /* 80082AB0 */ virtual int GetSpecialCode(cBgS_PolyInfo const&);
-    /* 80082AE0 */ virtual int GetSpecialCode(int);
-    /* 80082B0C */ virtual int GetMagnetCode(cBgS_PolyInfo const&);
-    /* 80082B6C */ virtual u32 GetPolyObjThrough(int);
-    /* 80082B98 */ virtual u32 GetPolyCamThrough(int);
-    /* 80082BC4 */ virtual u32 GetPolyLinkThrough(int);
-    /* 80082BF0 */ virtual u32 GetPolyArrowThrough(int);
-    /* 80082C1C */ virtual u32 GetPolyHSStick(int);
-    /* 80082C48 */ virtual u32 GetPolyBoomerangThrough(int);
-    /* 80082C74 */ virtual u32 GetPolyRopeThrough(int);
-    /* 80082CA0 */ virtual u32 GetPolyBombThrough(int);
-    /* 80082CF8 */ virtual bool GetShdwThrough(int);
-    /* 80082CCC */ virtual u32 GetUnderwaterRoofCode(int);
-    /* 80082B3C */ virtual int GetMonkeyBarsCode(cBgS_PolyInfo const&);
-    /* 80082D24 */ virtual int GetLinkNo(cBgS_PolyInfo const&);
-    /* 80082D54 */ virtual int GetWallCode(cBgS_PolyInfo const&);
-    /* 80082D84 */ virtual int GetPolyAtt0(cBgS_PolyInfo const&);
-    /* 80082DB4 */ virtual int GetPolyAtt1(cBgS_PolyInfo const&);
-    /* 80082DE4 */ virtual int GetGroundCode(cBgS_PolyInfo const&);
-    /* 80082E14 */ virtual u32 GetIronBallThrough(int);
-    /* 80082E40 */ virtual u32 GetAttackThrough(int);
-    /* 80082E6C */ virtual int GetCamMoveBG(cBgS_PolyInfo const&);
-    /* 80082E9C */ virtual int GetRoomCamId(cBgS_PolyInfo const&);
-    /* 80082ECC */ virtual int GetRoomPathId(cBgS_PolyInfo const&);
-    /* 80082EFC */ virtual int GetRoomPathPntNo(cBgS_PolyInfo const&);
-    /* 80082F2C */ virtual u8 GetPolyGrpRoomInfId(cBgS_PolyInfo const&);
-    /* 80082F5C */ virtual int GetGrpSoundId(cBgS_PolyInfo const&);
-    /* 80082F8C */ virtual void CrrPos(cBgS_PolyInfo const&, void*, bool, cXyz*, csXyz*,
+    virtual ~dBgWKCol();
+    virtual bool ChkNotReady() const;
+    virtual bool ChkLock() const;
+    virtual bool ChkMoveBg() const;
+    virtual u32 ChkMoveFlag() const;
+    virtual cM3dGPla GetTriPla(cBgS_PolyInfo const&) const;
+    virtual bool GetTriPnt(cBgS_PolyInfo const&, cXyz*, cXyz*, cXyz*) const;
+    virtual cM3dGAab* GetBnd() const;
+    virtual u32 GetGrpInf(cBgS_PolyInfo const&) const;
+    virtual void OffMoveFlag();
+    virtual void GetTopUnder(f32*, f32*) const;
+    virtual bool LineCheck(cBgS_LinChk*);
+    virtual bool GroundCross(cBgS_GndChk*);
+    virtual void ShdwDraw(cBgS_ShdwDraw*);
+    virtual void CaptPoly(dBgS_CaptPoly&);
+    virtual bool WallCorrect(dBgS_Acch*);
+    virtual bool WallCorrectSort(dBgS_Acch*);
+    virtual bool RoofChk(dBgS_RoofChk*);
+    virtual bool SplGrpChk(dBgS_SplGrpChk*);
+    virtual bool SphChk(dBgS_SphChk*, void*);
+    virtual int GetGrpRoomIndex(cBgS_PolyInfo const&) const;
+    virtual int GetExitId(cBgS_PolyInfo const&);
+    virtual int GetPolyColor(cBgS_PolyInfo const&);
+    virtual BOOL GetHorseNoEntry(cBgS_PolyInfo const&);
+    virtual int GetSpecialCode(cBgS_PolyInfo const&);
+    virtual int GetSpecialCode(int);
+    virtual int GetMagnetCode(cBgS_PolyInfo const&);
+    virtual u32 GetPolyObjThrough(int);
+    virtual u32 GetPolyCamThrough(int);
+    virtual u32 GetPolyLinkThrough(int);
+    virtual u32 GetPolyArrowThrough(int);
+    virtual u32 GetPolyHSStick(int);
+    virtual u32 GetPolyBoomerangThrough(int);
+    virtual u32 GetPolyRopeThrough(int);
+    virtual u32 GetPolyBombThrough(int);
+    virtual bool GetShdwThrough(int);
+    virtual u32 GetUnderwaterRoofCode(int);
+    virtual int GetMonkeyBarsCode(cBgS_PolyInfo const&);
+    virtual int GetLinkNo(cBgS_PolyInfo const&);
+    virtual int GetWallCode(cBgS_PolyInfo const&);
+    virtual int GetPolyAtt0(cBgS_PolyInfo const&);
+    virtual int GetPolyAtt1(cBgS_PolyInfo const&);
+    virtual int GetGroundCode(cBgS_PolyInfo const&);
+    virtual u32 GetIronBallThrough(int);
+    virtual u32 GetAttackThrough(int);
+    virtual int GetCamMoveBG(cBgS_PolyInfo const&);
+    virtual int GetRoomCamId(cBgS_PolyInfo const&);
+    virtual int GetRoomPathId(cBgS_PolyInfo const&);
+    virtual int GetRoomPathPntNo(cBgS_PolyInfo const&);
+    virtual u8 GetPolyGrpRoomInfId(cBgS_PolyInfo const&);
+    virtual int GetGrpSoundId(cBgS_PolyInfo const&);
+    virtual void CrrPos(cBgS_PolyInfo const&, void*, bool, cXyz*, csXyz*,
                                        csXyz*);
-    /* 80082F90 */ virtual void TransPos(cBgS_PolyInfo const&, void*, bool, cXyz*, csXyz*,
+    virtual void TransPos(cBgS_PolyInfo const&, void*, bool, cXyz*, csXyz*,
                                          csXyz*);
-    /* 80082F94 */ virtual void MatrixCrrPos(cBgS_PolyInfo const&, void*, bool, cXyz*,
+    virtual void MatrixCrrPos(cBgS_PolyInfo const&, void*, bool, cXyz*,
                                              csXyz*, csXyz*);
 
     KC_PrismData* getPrismData(int poly_index) const {

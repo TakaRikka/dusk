@@ -18,32 +18,32 @@
  */
 class daE_DK_c : public fopEn_enemy_c {
 public:
-    /* 806AA228 */ int draw();
-    /* 806AA5C8 */ void setBck(int i_resIndex, u8 i_attr, f32 i_morf, f32 i_rate);
-    /* 806AA68C */ void setBckCore(int i_resIndex, u8 i_attr, f32 i_morf, f32 i_rate);
-    /* 806AA730 */ void setActionMode(int i_actionMode, int i_moveMode);
-    /* 806AA73C */ void damage_check();
-    /* 806AA8B0 */ bool checkPlayerSearch();
-    /* 806AAB18 */ int checkPlayerAttack(f32);
-    /* 806AAC24 */ void checkWaterHeight();
-    /* 806AAD68 */ static void SphBgcCallBack(dBgS_SphChk*, cBgD_Vtx_t*, int, int, int, cM3dGPla*, void*);
-    /* 806AAE10 */ void setElectricEffect();
-    /* 806AB054 */ void setCoreDeadEffect();
-    /* 806AB158 */ void setBodyDeadEffect();
-    /* 806AB29C */ void executeWait();
-    /* 806AB684 */ void executeChase();
-    /* 806ABA78 */ void executeAttack();
-    /* 806ABCC8 */ void executeDamage();
-    /* 806ABE3C */ void BodyDeathMove();
-    /* 806ABF6C */ void executeDeath();
-    /* 806AC390 */ void action();
-    /* 806AC5BC */ void mtx_set();
-    /* 806AC754 */ void cc_set();
-    /* 806AC968 */ int execute();
-    /* 806ACA10 */ int _delete();
-    /* 806ACAA4 */ int CreateHeap();
-    /* 806ACE14 */ int create();
-    /* 806AD0AC */ daE_DK_c();
+    int draw();
+    void setBck(int i_resIndex, u8 i_attr, f32 i_morf, f32 i_rate);
+    void setBckCore(int i_resIndex, u8 i_attr, f32 i_morf, f32 i_rate);
+    void setActionMode(int i_actionMode, int i_moveMode);
+    void damage_check();
+    bool checkPlayerSearch();
+    int checkPlayerAttack(f32);
+    void checkWaterHeight();
+    static void SphBgcCallBack(dBgS_SphChk*, cBgD_Vtx_t*, int, int, int, cM3dGPla*, void*);
+    void setElectricEffect();
+    void setCoreDeadEffect();
+    void setBodyDeadEffect();
+    void executeWait();
+    void executeChase();
+    void executeAttack();
+    void executeDamage();
+    void BodyDeathMove();
+    void executeDeath();
+    void action();
+    void mtx_set();
+    void cc_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    int create();
+    daE_DK_c();
 
 private:
     /* 0x5AC */ request_of_phase_process_class mPhaseReq;
@@ -92,8 +92,8 @@ STATIC_ASSERT(sizeof(daE_DK_c) == 0xd54);
 
 class daE_DK_HIO_c : public JORReflexible {
 public:
-    /* 806AA1EC */ daE_DK_HIO_c();
-    /* 806AD490 */ virtual ~daE_DK_HIO_c() {}
+    daE_DK_HIO_c();
+    virtual ~daE_DK_HIO_c() {}
 
     void genMessage(JORMContext*);
 

@@ -9,7 +9,6 @@
 #include "d/actor/d_a_player.h"
 #include "math.h"
 
-/* 80D62C54-80D62C98 000000 0044+00 1/1 0/0 0/0 .data            l_cylSrc */
 static dCcD_SrcCyl l_cylSrc = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x80000, 0x11}, 0x0}},  // mObj
@@ -24,7 +23,6 @@ static dCcD_SrcCyl l_cylSrc = {
     }                        // mCyl
 };
 
-/* 80D61C18-80D61DB8 000078 01A0+00 1/1 0/0 0/0 .text            create__13daTagSppath_cFv */
 int daTagSppath_c::create() {
     fopAcM_ct(this, daTagSppath_c);
 
@@ -52,23 +50,17 @@ int daTagSppath_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D61EA4-80D61EC4 000304 0020+00 1/0 0/0 0/0 .text            daTagSppath_Create__FP10fopAc_ac_c
- */
 static int daTagSppath_Create(fopAc_ac_c* i_this) {
     return static_cast<daTagSppath_c*>(i_this)->create();
 }
 
-/* 80D61EC4-80D61FFC 000324 0138+00 1/1 0/0 0/0 .text            __dt__13daTagSppath_cFv */
 daTagSppath_c::~daTagSppath_c() {}
 
-/* 80D61FFC-80D62024 00045C 0028+00 1/0 0/0 0/0 .text daTagSppath_Delete__FP13daTagSppath_c */
 static int daTagSppath_Delete(daTagSppath_c* i_this) {
     i_this->~daTagSppath_c();
     return 1;
 }
 
-/* 80D62024-80D62978 000484 0954+00 1/1 0/0 0/1 .text
- * getNearPathPos__13daTagSppath_cFP4cXyzP5dPath                */
 int daTagSppath_c::getNearPathPos(cXyz* i_result, dPath* i_path) {
     daPy_py_c* py = daPy_getPlayerActorClass();
     cXyz* pyCurPos = &py->current.pos;
@@ -153,7 +145,6 @@ int daTagSppath_c::getNearPathPos(cXyz* i_result, dPath* i_path) {
     return bestNo;
 }
 
-/* 80D629C0-80D62BA0 000E20 01E0+00 1/1 0/0 0/0 .text            execute__13daTagSppath_cFv */
 int daTagSppath_c::execute() {
     daPy_py_c* py = daPy_getPlayerActorClass();
 
@@ -195,26 +186,20 @@ int daTagSppath_c::execute() {
     return 1;
 }
 
-/* 80D62BA0-80D62BC0 001000 0020+00 1/0 0/0 0/0 .text daTagSppath_Execute__FP13daTagSppath_c */
 static int daTagSppath_Execute(daTagSppath_c* tag) {
     return tag->execute();
 }
 
-/* 80D62BC0-80D62BC8 001020 0008+00 1/0 0/0 0/0 .text            daTagSppath_Draw__FP13daTagSppath_c
- */
 static int daTagSppath_Draw(daTagSppath_c* i_this) {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80D62C98-80D62CB8 -00001 0020+00 1/0 0/0 0/0 .data            l_daTagSppath_Method */
 static actor_method_class l_daTagSppath_Method = {
     (process_method_func)daTagSppath_Create,  (process_method_func)daTagSppath_Delete,
     (process_method_func)daTagSppath_Execute, (process_method_func)NULL,
     (process_method_func)daTagSppath_Draw,
 };
 
-/* 80D62CB8-80D62CE8 -00001 0030+00 0/0 0/0 1/0 .data g_profile_Tag_Sppath */
 extern actor_process_profile_definition g_profile_Tag_Sppath = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

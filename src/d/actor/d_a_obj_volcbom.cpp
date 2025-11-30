@@ -27,7 +27,6 @@ void daObjVolcBom_HIO_c::genMessage(JORMContext* ctx) {
 static daObjVolcBom_HIO_c l_HIO;
 #endif
 
-/* 80D24198-80D241E0 000078 0048+00 1/1 0/0 0/0 .text            eventCallBack__FPvi */
 static int eventCallBack(void* param_1, int param_2) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (param_1 != 0) {
@@ -36,14 +35,12 @@ static int eventCallBack(void* param_1, int param_2) {
     return 1;
 }
 
-/* 80D241E0-80D24238 0000C0 0058+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjVolcBom_cFv */
 void daObjVolcBom_c::initBaseMtx() {
     mModel1->setBaseScale(scale);
     mModel2->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80D24238-80D242A8 000118 0070+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjVolcBom_cFv */
 void daObjVolcBom_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -52,36 +49,28 @@ void daObjVolcBom_c::setBaseMtx() {
     mModel2->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80D26B5C-80D26B68 000000 000C+00 9/9 0/0 0/0 .rodata          l_midna_offset */
 static Vec const l_midna_offset = {
     0.0f, 1000.0f, 0.0f,
 };
 
-/* 80D26B68-80D26B6C 00000C 0002+02 0/1 0/0 0/0 .rodata          l_disapp_eff */
 static u16 const l_disapp_eff[1] = { 0x8B30 };
 
-/* 80D26B6C-80D26B74 000010 0006+02 0/1 0/0 0/0 .rodata          l_start_eff */
 static u16 const l_start_eff[3] = {
     0x8B31,
     0x8B32,
     0x8B33,
 };
 
-/* 80D26B74-80D26B7C 000018 0008+00 1/1 0/0 0/0 .rodata          l_bind_eff */
 static u16 const l_bind_eff[4] = {
     0x8B47, 0x8B48, 0x8B49, 0x8B4A,
 };
 
-/* 80D26C74-80D26C78 -00001 0004+00 5/6 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "M_VolcBom";
 
-/* 80D26C78-80D26C7C -00001 0004+00 0/1 0/0 0/0 .data            l_portal_warp_name */
 static char* l_portal_warp_name = "PORTAL_WARP_BIGVOLC";
 
-/* 80D26C7C-80D26C80 -00001 0004+00 2/2 0/0 0/0 .data            l_staff_name */
 static char* l_staff_name = "BigVolc";
 
-/* 80D26C80-80D26CC4 00002C 0044+00 0/1 0/0 0/0 .data            l_cyl_src */
 static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0x1f}, {0x0, 0x10}, 0x78}}, // mObj
@@ -96,7 +85,6 @@ static dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 80D242A8-80D244E0 000188 0238+00 1/0 0/0 0/0 .text            Create__14daObjVolcBom_cFv */
 int daObjVolcBom_c::Create() {
     int swbit = getSwbit();
     if (fopAcM_isSwitch(this, swbit)) {
@@ -148,7 +136,6 @@ int daObjVolcBom_c::Create() {
     #endif
 }
 
-/* 80D244E0-80D248AC 0003C0 03CC+00 1/0 0/0 0/0 .text            CreateHeap__14daObjVolcBom_cFv */
 int daObjVolcBom_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 12);
     JUT_ASSERT(389, modelData != NULL);
@@ -204,7 +191,6 @@ int daObjVolcBom_c::CreateHeap() {
     return 1;
 }
 
-/* 80D248F4-80D249D0 0007D4 00DC+00 1/1 0/0 0/0 .text            create1st__14daObjVolcBom_cFv */
 int daObjVolcBom_c::create1st() {
         /* dSv_event_flag_c::M_032 - Main Event - Melted Zora river ice with magma rock */
     if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[65])) {
@@ -234,8 +220,6 @@ int daObjVolcBom_c::create1st() {
     return rv;
 }
 
-/* 80D249D0-80D24A2C 0008B0 005C+00 1/0 0/0 0/0 .text            Execute__14daObjVolcBom_cFPPA3_A4_f
- */
 int daObjVolcBom_c::Execute(Mtx** i_mtx) {
     mode_proc_call();
     *i_mtx = &mBgMtx;
@@ -264,8 +248,6 @@ int daObjVolcBom_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80D24A2C-80D24B18 00090C 00EC+00 1/1 0/0 0/0 .text            mode_proc_call__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::mode_proc_call() {
     static daObjVolcBom_c::modeFunc mode_proc[4] = {
         &daObjVolcBom_c::modeWaitAppear,
@@ -295,7 +277,6 @@ void daObjVolcBom_c::mode_proc_call() {
     #endif
 }
 
-/* 80D24B18-80D24B6C 0009F8 0054+00 1/1 0/0 0/0 .text init_modeWaitAppear__14daObjVolcBom_cFv */
 void daObjVolcBom_c::init_modeWaitAppear() {
     disappear();
     clrDzb();
@@ -304,8 +285,6 @@ void daObjVolcBom_c::init_modeWaitAppear() {
     mMode = MODE_WAIT_APPEAR;
 }
 
-/* 80D24B6C-80D24D80 000A4C 0214+00 1/0 0/0 0/0 .text            modeWaitAppear__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::modeWaitAppear() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     J3DJoint* root_jnt = mModel1->getModelData()->getJointNodePointer(0);
@@ -354,8 +333,6 @@ void daObjVolcBom_c::modeWaitAppear() {
     }
 }
 
-/* 80D24D80-80D24E50 000C60 00D0+00 1/1 0/0 0/0 .text            init_modeFall__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::init_modeFall() {
     mBrk2->setPlaySpeed(1.0f);
     mBtk2->setPlaySpeed(1.0f);
@@ -368,7 +345,6 @@ void daObjVolcBom_c::init_modeFall() {
     mMode = MODE_FALL;
 }
 
-/* 80D26BB0-80D26BC0 000054 000E+02 0/1 0/0 0/0 .rodata          l_effect_id$4032 */
 static u16 const l_effect_id[7] = {
     0x85F7,
     0x85F8,
@@ -379,7 +355,6 @@ static u16 const l_effect_id[7] = {
     0x85FD,
 };
 
-/* 80D24E50-80D25024 000D30 01D4+00 1/0 0/0 0/0 .text            modeFall__14daObjVolcBom_cFv */
 void daObjVolcBom_c::modeFall() {
     bool isHomeHeight = false;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -413,14 +388,11 @@ void daObjVolcBom_c::modeFall() {
     }
 }
 
-/* 80D25024-80D25038 000F04 0014+00 1/1 0/0 0/0 .text init_modeWaitEndFallDemo__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::init_modeWaitEndFallDemo() {
     mSmokeTimer = 5;
     mMode = MODE_WAIT_END_FALL_DEMO;
 }
 
-/* 80D25038-80D25094 000F18 005C+00 1/0 0/0 0/0 .text modeWaitEndFallDemo__14daObjVolcBom_cFv */
 void daObjVolcBom_c::modeWaitEndFallDemo() {
     if (cLib_calcTimer(&mSmokeTimer) == 0) {
         setSmoke();
@@ -431,8 +403,6 @@ void daObjVolcBom_c::modeWaitEndFallDemo() {
     }
 }
 
-/* 80D25094-80D25100 000F74 006C+00 2/2 0/0 0/0 .text            init_modeWait__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::init_modeWait() {
     eyePos = current.pos;
     attention_info.position = current.pos;
@@ -441,7 +411,6 @@ void daObjVolcBom_c::init_modeWait() {
     mMode = MODE_WAIT;
 }
 
-/* 80D25100-80D25178 000FE0 0078+00 1/0 0/0 0/0 .text            modeWait__14daObjVolcBom_cFv */
 void daObjVolcBom_c::modeWait() {
     cXyz cStack_18(current.pos);
     cStack_18.y -= 750.0f;
@@ -450,31 +419,26 @@ void daObjVolcBom_c::modeWait() {
     event_proc_call();
 }
 
-/* 80D25178-80D251CC 001058 0054+00 1/1 0/0 0/0 .text            clrDzb__14daObjVolcBom_cFv */
 void daObjVolcBom_c::clrDzb() {
     if (mpBgW != NULL && mpBgW->ChkUsed()) {
         dComIfG_Bgsp().Release(mpBgW);
     }
 }
 
-/* 80D251CC-80D25224 0010AC 0058+00 1/1 0/0 0/0 .text            setDzb__14daObjVolcBom_cFv */
 void daObjVolcBom_c::setDzb() {
     if (mpBgW != NULL && !mpBgW->ChkUsed()) {
         dComIfG_Bgsp().Regist(mpBgW, this);
     }
 }
 
-/* 80D25224-80D25230 001104 000C+00 2/2 0/0 0/0 .text            appear__14daObjVolcBom_cFv */
 void daObjVolcBom_c::appear() {
     misAppearing = false;
 }
 
-/* 80D25230-80D2523C 001110 000C+00 1/1 0/0 0/0 .text            disappear__14daObjVolcBom_cFv */
 void daObjVolcBom_c::disappear() {
     misAppearing = true;
 }
 
-/* 80D2523C-80D252C8 00111C 008C+00 2/2 0/0 0/0 .text            setSmoke__14daObjVolcBom_cFv */
 void daObjVolcBom_c::setSmoke() {
     if (mSmokeEmitter == NULL) {
         mSmokeEmitter =
@@ -487,7 +451,6 @@ void daObjVolcBom_c::setSmoke() {
     }
 }
 
-/* 80D252C8-80D25364 0011A8 009C+00 3/3 0/0 0/0 .text checkTalkDistance__14daObjVolcBom_cFv */
 bool daObjVolcBom_c::checkTalkDistance() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     f32 playerDist = fopAcM_searchPlayerDistanceXZ(this);
@@ -499,7 +462,6 @@ bool daObjVolcBom_c::checkTalkDistance() {
     return false;
 }
 
-/* 80D25364-80D253FC 001244 0098+00 1/1 0/0 0/0 .text calcMidnaWaitPos__14daObjVolcBom_cFv */
 void daObjVolcBom_c::calcMidnaWaitPos() {
     cXyz cStack_18(0.0f, 1000.0f, 0.0f);
     mDoMtx_stack_c::transS(current.pos);
@@ -509,7 +471,6 @@ void daObjVolcBom_c::calcMidnaWaitPos() {
     attention_info.position.y += 250.0f;
 }
 
-/* 80D253FC-80D25528 0012DC 012C+00 1/1 0/0 0/0 .text            setSrcEffect__14daObjVolcBom_cFv */
 void daObjVolcBom_c::setSrcEffect() {
     for (int i = 0; i < 1; i++) {
         mDisappearEmitters[i] = dComIfGp_particle_set(l_disapp_eff[i], &current.pos, &home.angle, &scale,
@@ -528,8 +489,6 @@ void daObjVolcBom_c::setSrcEffect() {
     }
 }
 
-/* 80D25528-80D255F4 001408 00CC+00 1/1 0/0 0/0 .text            setBindEffect__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::setBindEffect() {
     for (int i = 0; i < 4; i++) {
         mBindEmitters[i] = dComIfGp_particle_set(l_bind_eff[i], &current.pos, &home.angle, &scale,
@@ -540,7 +499,6 @@ void daObjVolcBom_c::setBindEffect() {
     }
 }
 
-/* 80D255F4-80D25664 0014D4 0070+00 1/1 0/0 0/0 .text followBindEffect__14daObjVolcBom_cFv */
 void daObjVolcBom_c::followBindEffect() {
     for (int i = 0; i < 4; i++) {
         if (mBindEmitters[i] != NULL) {
@@ -549,8 +507,6 @@ void daObjVolcBom_c::followBindEffect() {
     }
 }
 
-/* 80D25664-80D256B8 001544 0054+00 1/1 0/0 0/0 .text            endBindEffect__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::endBindEffect() {
     for (int i = 0; i < 4; i++) {
         if (mBindEmitters[i] != NULL) {
@@ -561,8 +517,6 @@ void daObjVolcBom_c::endBindEffect() {
     }
 }
 
-/* 80D256B8-80D25758 001598 00A0+00 1/1 0/0 0/0 .text            followSrcEffect__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::followSrcEffect() {
     for (int i = 0; i < 1; i++) {
         if (mDisappearEmitters[i] != NULL) {
@@ -577,7 +531,6 @@ void daObjVolcBom_c::followSrcEffect() {
     }
 }
 
-/* 80D25758-80D257E4 001638 008C+00 1/1 0/0 0/0 .text            endSrcEffect__14daObjVolcBom_cFv */
 void daObjVolcBom_c::endSrcEffect() {
     for (int i = 0; i < 1; i++) {
         if (mDisappearEmitters[i] != NULL) {
@@ -596,8 +549,6 @@ void daObjVolcBom_c::endSrcEffect() {
     }
 }
 
-/* 80D257E4-80D25914 0016C4 0130+00 1/1 0/0 0/0 .text            event_proc_call__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::event_proc_call() {
     static daObjVolcBom_c::actionFunc l_func[6] = {
         &daObjVolcBom_c::actionWait,
@@ -619,8 +570,6 @@ void daObjVolcBom_c::event_proc_call() {
     }
 }
 
-/* 80D25914-80D25A08 0017F4 00F4+00 1/1 0/0 0/0 .text            orderZHintEvent__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::orderZHintEvent() {
     daMidna_c* midna = daPy_py_c::getMidnaActor();
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -639,7 +588,6 @@ void daObjVolcBom_c::orderZHintEvent() {
     }
 }
 
-/* 80D25A08-80D25B04 0018E8 00FC+00 1/0 0/0 0/0 .text            actionWait__14daObjVolcBom_cFv */
 void daObjVolcBom_c::actionWait() {
     if (checkTalkDistance()
            /* dSv_event_flag_c::M_051 - Main Event - Shadow Kargorok (?) (Large) event complete 
@@ -665,7 +613,6 @@ void daObjVolcBom_c::actionWait() {
     }
 }
 
-/* 80D25B04-80D25CA0 0019E4 019C+00 2/1 0/0 0/0 .text actionOrderEvent__14daObjVolcBom_cFv */
 void daObjVolcBom_c::actionOrderEvent() {
     daMidna_c* midna = daPy_py_c::getMidnaActor();
     if (eventInfo.checkCommandTalk()) {
@@ -681,7 +628,6 @@ void daObjVolcBom_c::actionOrderEvent() {
     }
 }
 
-/* 80D25CA0-80D25DEC 001B80 014C+00 1/0 0/0 0/0 .text actionOrderATalkEvent__14daObjVolcBom_cFv */
 void daObjVolcBom_c::actionOrderATalkEvent() {
     daMidna_c* midna = (daMidna_c*)daPy_py_c::getMidnaActor();
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -710,8 +656,6 @@ void daObjVolcBom_c::actionOrderATalkEvent() {
     }
 }
 
-/* 80D25DEC-80D25E78 001CCC 008C+00 1/0 0/0 0/0 .text            actionTalkEvent__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::actionTalkEvent() {
     if (mMsgFlow.doFlow(this, NULL, 0)) {
         dComIfGp_event_reset();
@@ -724,8 +668,6 @@ void daObjVolcBom_c::actionTalkEvent() {
     }
 }
 
-/* 80D25E78-80D25EE4 001D58 006C+00 1/0 0/0 0/0 .text            actionWarpEvent__14daObjVolcBom_cFv
- */
 void daObjVolcBom_c::actionWarpEvent() {
     if (!dComIfGp_evmng_endCheck(mEventId)) {
         dComIfGp_getEvent().setSkipProc(this, eventCallBack, 0);
@@ -733,10 +675,8 @@ void daObjVolcBom_c::actionWarpEvent() {
     }
 }
 
-/* 80D25EE4-80D25EE8 001DC4 0004+00 1/0 0/0 0/0 .text            actionDead__14daObjVolcBom_cFv */
 void daObjVolcBom_c::actionDead() {}
 
-/* 80D25EE8-80D26468 001DC8 0580+00 3/3 0/0 0/0 .text            demoProc__14daObjVolcBom_cFv */
 void daObjVolcBom_c::demoProc() {
     static const char* action_table[4] = {
         "WAIT",
@@ -830,7 +770,6 @@ void daObjVolcBom_c::demoProc() {
     }
 }
 
-/* 80D26468-80D264E8 002348 0080+00 1/1 0/0 0/0 .text            calcObjPos__14daObjVolcBom_cFv */
 void daObjVolcBom_c::calcObjPos() {
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 8);
     JUT_ASSERT(1459, pbck != NULL);
@@ -841,7 +780,6 @@ void daObjVolcBom_c::calcObjPos() {
     mWarpSEPos.z = info.mTranslate.z;
 }
 
-/* 80D264E8-80D266FC 0023C8 0214+00 1/0 0/0 0/0 .text            Draw__14daObjVolcBom_cFv */
 int daObjVolcBom_c::Draw() {
     if (misAppearing) {
         return 1;
@@ -896,7 +834,6 @@ int daObjVolcBom_c::Draw() {
     return 1;
 }
 
-/* 80D266FC-80D26774 0025DC 0078+00 1/0 0/0 0/0 .text            Delete__14daObjVolcBom_cFv */
 int daObjVolcBom_c::Delete() {
     #ifdef DEBUG
     if (l_HIO.field_0x04 != 0) {
@@ -920,32 +857,23 @@ int daObjVolcBom_c::Delete() {
     return 1;
 }
 
-/* 80D26774-80D268A8 002654 0134+00 1/0 0/0 0/0 .text daObjVolcBom_create1st__FP14daObjVolcBom_c
- */
 static int daObjVolcBom_create1st(daObjVolcBom_c* i_this) {
     fopAcM_ct(i_this, daObjVolcBom_c);
     return ((daObjVolcBom_c*)i_this)->create1st();
 }
 
-/* 80D26A74-80D26A94 002954 0020+00 1/0 0/0 0/0 .text
- * daObjVolcBom_MoveBGDelete__FP14daObjVolcBom_c                */
 static int daObjVolcBom_MoveBGDelete(daObjVolcBom_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D26A94-80D26AB4 002974 0020+00 1/0 0/0 0/0 .text
- * daObjVolcBom_MoveBGExecute__FP14daObjVolcBom_c               */
 static int daObjVolcBom_MoveBGExecute(daObjVolcBom_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D26AB4-80D26AE0 002994 002C+00 1/0 0/0 0/0 .text daObjVolcBom_MoveBGDraw__FP14daObjVolcBom_c
- */
 static int daObjVolcBom_MoveBGDraw(daObjVolcBom_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80D26DC4-80D26DE4 -00001 0020+00 1/0 0/0 0/0 .data            daObjVolcBom_METHODS */
 static actor_method_class daObjVolcBom_METHODS = {
     (process_method_func)daObjVolcBom_create1st,
     (process_method_func)daObjVolcBom_MoveBGDelete,
@@ -954,7 +882,6 @@ static actor_method_class daObjVolcBom_METHODS = {
     (process_method_func)daObjVolcBom_MoveBGDraw,
 };
 
-/* 80D26DE4-80D26E14 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_VolcanicBomb */
 extern actor_process_profile_definition g_profile_Obj_VolcanicBomb = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

@@ -16,9 +16,9 @@ public:
 
 class dThunder_c : public kankyo_class {
 public:
-    /* 801ADF58 */ int createHeap();
-    /* 801ADFB4 */ void adjustHeap();
-    /* 801AE458 */ int create();
+    int createHeap();
+    void adjustHeap();
+    int create();
     inline int draw();
     inline int execute(dThunder_c* i_thunder);
     inline int thunder_delete(dThunder_c* i_thunder);

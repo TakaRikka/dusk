@@ -43,7 +43,7 @@ enum daB_GO_Action {
  */
 class b_go_class : public fopEn_enemy_c {
 public:
-    /* 80603CA0 */ b_go_class();
+    b_go_class();
 
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpMorf;
@@ -76,8 +76,8 @@ STATIC_ASSERT(sizeof(b_go_class) == 0xD38);
 
 class daB_GO_HIO_c {
 public:
-    /* 806031AC */ daB_GO_HIO_c();
-    /* 80603F9C */ virtual ~daB_GO_HIO_c() {}
+    daB_GO_HIO_c();
+    virtual ~daB_GO_HIO_c() {}
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ f32 mSmallSize;

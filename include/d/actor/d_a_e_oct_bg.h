@@ -21,34 +21,34 @@ class daE_OctBg_c : public fopEn_enemy_c {
 public:
     typedef void (daE_OctBg_c::*actionFunc)();
 
-    /* 8073626C */ void setAction(actionFunc);
-    /* 80736310 */ void setSparkEffect();
-    /* 80736418 */ bool checkExplode();
-    /* 8073651C */ void action();
-    /* 80736840 */ int _delete();
-    /* 807368C8 */ void cc_set();
-    /* 80736A78 */ void mtx_set();
-    /* 80736BB4 */ bool checkNormalAttack();
-    /* 80736DAC */ bool checkChase();
-    /* 80736E30 */ void born_swim();
-    /* 80737028 */ void swim();
-    /* 80737574 */ void setChasePos(cXyz&, f32);
-    /* 8073762C */ bool checkCoreFishAttack();
-    /* 80737678 */ void chase_core();
-    /* 80737C48 */ void normal_attack();
-    /* 8073814C */ void core_fish_attack();
-    /* 80738714 */ void back_swim();
-    /* 80738914 */ bool setBombCarry(int);
-    /* 807389E8 */ void hook();
-    /* 80738A4C */ void damage();
-    /* 80738C2C */ void bomb_wait();
-    /* 80738E30 */ void damage_check();
-    /* 8073905C */ int execute();
-    /* 807390E4 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 807391D0 */ static int JointCallBack(J3DJoint*, int);
-    /* 8073921C */ int CreateHeap();
-    /* 80739424 */ int create();
-    /* 807399A4 */ int draw();
+    void setAction(actionFunc);
+    void setSparkEffect();
+    bool checkExplode();
+    void action();
+    int _delete();
+    void cc_set();
+    void mtx_set();
+    bool checkNormalAttack();
+    bool checkChase();
+    void born_swim();
+    void swim();
+    void setChasePos(cXyz&, f32);
+    bool checkCoreFishAttack();
+    void chase_core();
+    void normal_attack();
+    void core_fish_attack();
+    void back_swim();
+    bool setBombCarry(int);
+    void hook();
+    void damage();
+    void bomb_wait();
+    void damage_check();
+    int execute();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int JointCallBack(J3DJoint*, int);
+    int CreateHeap();
+    int create();
+    int draw();
 
     u8 getChaseFlag() { return field_0xbac; }
     u32 checkAction(actionFunc func) { return field_0xb58 == func; }
@@ -99,8 +99,8 @@ STATIC_ASSERT(sizeof(daE_OctBg_c) == 0xBB4);
 
 class daE_OctBg_HIO_c {
 public:
-    /* 8073620C */ daE_OctBg_HIO_c();
-    /* 80739CB8 */ virtual ~daE_OctBg_HIO_c() {}
+    daE_OctBg_HIO_c();
+    virtual ~daE_OctBg_HIO_c() {}
 
     /* 0x04 */ s8 field_0x04;
     /* 0x08 */ f32 field_0x08;

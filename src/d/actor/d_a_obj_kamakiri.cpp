@@ -18,14 +18,12 @@ static u8 l_initHIO;
 
 static daObj_KamHIO_c l_HIO;
 
-/* 80C3518C-80C351BC 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__14daObj_KamHIO_cFv */
 daObj_KamHIO_c::daObj_KamHIO_c() {
     field_0x4 = -1;
     mModelScaleMale = 1.5f;
     mModelScaleFemale = 1.2f;
 }
 
-/* 80C351BC-80C35228 00011C 006C+00 1/1 0/0 0/0 .text            InitCcSph__10daObjKAM_cFv */
 void daObjKAM_c::InitCcSph() {
     const static dCcD_SrcSph ccSphSrc = {
         {
@@ -46,20 +44,17 @@ void daObjKAM_c::InitCcSph() {
     mSphere.OnTgNoHitMark();
 }
 
-/* 80C35228-80C35280 000188 0058+00 1/1 0/0 0/0 .text            SetCcSph__10daObjKAM_cFv */
 void daObjKAM_c::SetCcSph() {
     mSphere.SetC(current.pos);
     mSphere.SetR(20.0f);
     dComIfG_Ccsp()->Set(&mSphere);
 }
 
-/* 80C35280-80C352A0 0001E0 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* param_0) {
     daObjKAM_c* i_this = (daObjKAM_c*)param_0;
     return i_this->CreateHeap();
 }
 
-/* 80C352A0-80C355F8 000200 0358+00 1/1 0/0 0/0 .text            CreateHeap__10daObjKAM_cFv */
 int daObjKAM_c::CreateHeap() {
     J3DModelData* modelData;
     if (mSex == SEX_FEMALE) {
@@ -118,21 +113,18 @@ int daObjKAM_c::CreateHeap() {
     return 1;
 }
 
-/* 80C35640-80C35660 0005A0 0020+00 1/0 0/0 0/0 .text            daObjKAM_Create__FP10fopAc_ac_c */
 static int daObjKAM_Create(fopAc_ac_c* param_0) {
     daObjKAM_c* i_this = (daObjKAM_c*)param_0;
     fpc_ProcID unused = fopAcM_GetID(param_0);
     return i_this->create();
 }
 
-/* 80C35660-80C35684 0005C0 0024+00 1/0 0/0 0/0 .text            daObjKAM_Delete__FP10daObjKAM_c */
 static int daObjKAM_Delete(daObjKAM_c* param_0) {
     fpc_ProcID unused = fopAcM_GetID(param_0);
     param_0->Delete();
     return 1;
 }
 
-/* 80C35684-80C357EC 0005E4 0168+00 1/1 0/0 0/0 .text            ShopWaitAction__10daObjKAM_cFv */
 void daObjKAM_c::ShopWaitAction() {
     switch (field_0x981) {
     case 0:
@@ -166,7 +158,6 @@ void daObjKAM_c::ShopWaitAction() {
     return;
 }
 
-/* 80C357EC-80C35970 00074C 0184+00 1/1 0/0 0/0 .text            WaitAction__10daObjKAM_cFv */
 void daObjKAM_c::WaitAction() {
     switch (field_0x981) {
     case 0:
@@ -199,7 +190,6 @@ void daObjKAM_c::WaitAction() {
     }
 }
 
-/* 80C35970-80C35B9C 0008D0 022C+00 1/1 0/0 0/0 .text            WallCheck__10daObjKAM_cFv */
 int daObjKAM_c::WallCheck() {
     dBgS_LinChk linChk;
     linChk.SetObj();
@@ -225,7 +215,6 @@ int daObjKAM_c::WallCheck() {
     return 0;
 }
 
-/* 80C35BE4-80C35CF0 000B44 010C+00 1/1 0/0 0/0 .text            SpeedSet__10daObjKAM_cFv */
 void daObjKAM_c::SpeedSet() {
     speed.y += gravity;
     cXyz unkXyz1(0.0f, speed.y, speedF);
@@ -242,7 +231,6 @@ void daObjKAM_c::SpeedSet() {
     shape_angle.y = current.angle.y;
 }
 
-/* 80C35CF0-80C36138 000C50 0448+00 1/1 0/0 0/0 .text            WallWalk__10daObjKAM_cFv */
 void daObjKAM_c::WallWalk() {
     cXyz unkXyz1(0.0f, -100.0f, (yREG_F(6) + 3.0f) * speedF);
     cXyz unkXyz2(0.0f, yREG_F(5) + 40.0f, 0.0f);
@@ -295,7 +283,6 @@ void daObjKAM_c::WallWalk() {
     shape_angle.y = current.angle.y;
 }
 
-/* 80C36138-80C36338 001098 0200+00 2/2 0/0 0/0 .text            WalkAction__10daObjKAM_cFv */
 void daObjKAM_c::WalkAction() {
     for (s32 i = 0; i < 3; i++) {
         field_0x982[i]--;
@@ -342,7 +329,6 @@ void daObjKAM_c::WalkAction() {
     WallWalk();
 }
 
-/* 80C36338-80C36B20 001298 07E8+00 2/2 0/0 0/0 .text            MoveAction__10daObjKAM_cFv */
 void daObjKAM_c::MoveAction() {
     cXyz* unkXyzP1;
 
@@ -477,7 +463,6 @@ void daObjKAM_c::MoveAction() {
     }
 }
 
-/* 80C36B20-80C36BE4 001A80 00C4+00 1/1 0/0 0/0 .text            Action__10daObjKAM_cFv */
 void daObjKAM_c::Action() {
     switch (field_0x980) {
     case 0:
@@ -497,7 +482,6 @@ void daObjKAM_c::Action() {
     mCreatureSound.startCreatureSoundLevel(Z2SE_INSCT_KIRA, 0, -1);
 }
 
-/* 80C36BE4-80C36CA0 001B44 00BC+00 1/1 0/0 0/0 .text            ShopAction__10daObjKAM_cFv */
 void daObjKAM_c::ShopAction() {
     switch (field_0x980) {
     case 0:
@@ -515,7 +499,6 @@ void daObjKAM_c::ShopAction() {
     mCreatureSound.startCreatureSoundLevel(Z2SE_INSCT_KIRA, 0, -1);
 }
 
-/* 80C36CA0-80C36CB8 001C00 0018+00 1/0 0/0 0/0 .text            Insect_Release__10daObjKAM_cFv */
 void daObjKAM_c::Insect_Release() {
     field_0x56c = 1;
     field_0x981 = 0;
@@ -528,7 +511,6 @@ f32 floatDummy() {
     return -9.0f;
 }
 
-/* 80C36CB8-80C36E34 001C18 017C+00 1/1 0/0 0/0 .text            Z_BufferChk__10daObjKAM_cFv */
 void daObjKAM_c::Z_BufferChk() {
     cXyz currentProj;
     cXyz currentOffset;
@@ -564,7 +546,6 @@ void daObjKAM_c::Z_BufferChk() {
     field_0x9b8 = ((near + (far * near) / currentProj.z) / (far - near) + 1.0f) * 16777215.0f;
 }
 
-/* 80C36E34-80C36F58 001D94 0124+00 1/1 0/0 0/0 .text            ParticleSet__10daObjKAM_cFv */
 void daObjKAM_c::ParticleSet() {
     if (field_0x9b8 > field_0x9bc) {
         cLib_addCalc2(&field_0x9a8, 0.0f, yREG_F(11) + 1.0f, 1.0f);
@@ -580,7 +561,6 @@ void daObjKAM_c::ParticleSet() {
     }
 }
 
-/* 80C36F58-80C37324 001EB8 03CC+00 1/1 0/0 0/0 .text            BoomChk__10daObjKAM_cFv */
 void daObjKAM_c::BoomChk() {
     if (field_0x9c1 != 0) {
         daPy_py_c* player = daPy_getPlayerActorClass();
@@ -637,7 +617,6 @@ void daObjKAM_c::BoomChk() {
     }
 }
 
-/* 80C37324-80C374AC 002284 0188+00 1/1 0/0 0/0 .text            ObjHit__10daObjKAM_cFv */
 void daObjKAM_c::ObjHit() {
     if (mSphere.ChkTgHit() != 0) {
         cCcD_ObjHitInf* hitObj = mSphere.GetTgHitObj();
@@ -666,7 +645,6 @@ void daObjKAM_c::ObjHit() {
     }
 }
 
-/* 80C374AC-80C37724 00240C 0278+00 1/1 0/0 0/0 .text            Execute__10daObjKAM_cFv */
 int daObjKAM_c::Execute() {
     if (ChkGetDemo() != 0) {
         field_0x9b8 = field_0x9bc + 10000.0f;
@@ -712,7 +690,6 @@ int daObjKAM_c::Execute() {
     return 1;
 }
 
-/* 80C37724-80C3778C 002684 0068+00 1/1 0/0 0/0 .text            Delete__10daObjKAM_cFv */
 int daObjKAM_c::Delete() {
     dComIfG_resDelete(&mPhase, "I_Kam");
     if (field_0xa64 != 0) {
@@ -725,7 +702,6 @@ int daObjKAM_c::Delete() {
     return 1;
 }
 
-/* 80C3778C-80C377F4 0026EC 0068+00 1/1 0/0 0/0 .text            setBaseMtx__10daObjKAM_cFv */
 void daObjKAM_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(field_0x99a);
@@ -737,24 +713,19 @@ void daObjKAM_c::setBaseMtx() {
     mpMorfSO->modelCalc();
 }
 
-/* 80C377F4-80C378D4 002754 00E0+00 1/0 0/0 0/0 .text            daObjKAM_Draw__FP10daObjKAM_c */
 static int daObjKAM_Draw(daObjKAM_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80C378D4-80C378F4 002834 0020+00 2/1 0/0 0/0 .text            daObjKAM_Execute__FP10daObjKAM_c */
 static int daObjKAM_Execute(daObjKAM_c* i_this) {
     return i_this->Execute();
 }
 
-/* ############################################################################################## */
-/* 80C384E4-80C384E8 0000DC 0004+00 1/2 0/0 0/0 .rodata          l_musiya_num */
 static u16 const l_musiya_num[2] = {
     0x019D, /* dSv_event_flag_c::F_0413 - Misc. - Mantis (M) */
     0x019E, /* dSv_event_flag_c::F_0414 - Misc. - Mantis (F) */
 };
 
-/* 80C378F4-80C37AA0 002854 01AC+00 1/1 0/0 0/0 .text            CreateChk__10daObjKAM_cFv */
 u8 daObjKAM_c::CreateChk() {
     u8 unkInt1 = (fopAcM_GetParam(this) & 0xf00) >> 8;
     if (unkInt1 == 0xf) {
@@ -792,7 +763,6 @@ u8 daObjKAM_c::CreateChk() {
     return 1;
 }
 
-/* 80C37AA0-80C38258 002A00 07B8+00 1/1 0/0 0/0 .text            create__10daObjKAM_cFv */
 int daObjKAM_c::create() {
     fopAcM_ct(this, daObjKAM_c);
 
@@ -923,20 +893,16 @@ int daObjKAM_c::create() {
     return loadResult;
 }
 
-/* 80C38358-80C38360 0032B8 0008+00 1/0 0/0 0/0 .text            daObjKAM_IsDelete__FP10daObjKAM_c
- */
 static bool daObjKAM_IsDelete(daObjKAM_c* param_0) {
     return true;
 }
 
-/* 80C3850C-80C3852C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjKAM_Method */
 static actor_method_class l_daObjKAM_Method = {
     (process_method_func)daObjKAM_Create,  (process_method_func)daObjKAM_Delete,
     (process_method_func)daObjKAM_Execute, (process_method_func)daObjKAM_IsDelete,
     (process_method_func)daObjKAM_Draw,
 };
 
-/* 80C3852C-80C3855C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Kam */
 extern actor_process_profile_definition g_profile_Obj_Kam = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

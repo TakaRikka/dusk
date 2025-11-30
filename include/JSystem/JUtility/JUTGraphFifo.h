@@ -9,9 +9,9 @@
 */
 class JUTGraphFifo {
 public:
-    /* 802DEB58 */ JUTGraphFifo(u32);
+    JUTGraphFifo(u32);
 
-    /* 802DEC34 */ virtual ~JUTGraphFifo();
+    virtual ~JUTGraphFifo();
 
     void getGpStatus() {
         GXGetGPStatus((GXBool*)&mGpStatus[0], (GXBool*)&mGpStatus[1], (GXBool*)&mGpStatus[2],

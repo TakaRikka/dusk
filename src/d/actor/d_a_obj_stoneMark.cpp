@@ -13,22 +13,18 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-/* 8059A410-8059A414 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "A_IwaAto";
 
-/* 8059A018-8059A038 000078 0020+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjSMark_cFv */
 void daObjSMark_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 8059A038-8059A080 000098 0048+00 1/1 0/0 0/0 .text            setBaseMtx__12daObjSMark_cFv */
 void daObjSMark_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     MTXCopy(mDoMtx_stack_c::get(), cullMtx);
 }
 
-/* 8059A080-8059A168 0000E0 00E8+00 1/1 0/0 0/0 .text            Create__12daObjSMark_cFv */
 int daObjSMark_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, cullMtx);
@@ -41,7 +37,6 @@ int daObjSMark_c::Create() {
     return 1;
 }
 
-/* 8059A168-8059A25C 0001C8 00F4+00 1/1 0/0 0/0 .text            create__12daObjSMark_cFv */
 int daObjSMark_c::create() {
     fopAcM_ct(this, daObjSMark_c);
 
@@ -55,7 +50,6 @@ int daObjSMark_c::create() {
     return phase;
 }
 
-/* 8059A2CC-8059A33C 00032C 0070+00 1/1 0/0 0/0 .text            draw__12daObjSMark_cFv */
 int daObjSMark_c::draw() {
     static const f32 l_shadow_size[2] = {55.0f, 85.0f};
     dComIfGd_setSimpleShadow(&current.pos, mObjAcch.GetGroundH(),
@@ -65,31 +59,22 @@ int daObjSMark_c::draw() {
     return 1;
 }
 
-/* 8059A33C-8059A370 00039C 0034+00 1/1 0/0 0/0 .text            _delete__12daObjSMark_cFv */
 int daObjSMark_c::_delete() {
     dComIfG_resDelete(&mpPhase, l_arcName);
     return 1;
 }
-/* 8059A370-8059A390 0003D0 0020+00 1/0 0/0 0/0 .text            daObjSMark_Draw__FP12daObjSMark_c
- */
 static int daObjSMark_Draw(daObjSMark_c* i_this) {
     return i_this->draw();
 }
 
-/* 8059A390-8059A3B0 0003F0 0020+00 1/0 0/0 0/0 .text            daObjSMark_Delete__FP12daObjSMark_c
- */
 static int daObjSMark_Delete(daObjSMark_c* i_this) {
     return i_this->_delete();
 }
 
-/* 8059A3B0-8059A3D0 000410 0020+00 1/0 0/0 0/0 .text            daObjSMark_Create__FP10fopAc_ac_c
- */
 static int daObjSMark_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjSMark_c*>(i_this)->create();
 }
 
-/* ############################################################################################## */
-/* 8059A414-8059A434 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjSMark_Method */
 static actor_method_class l_daObjSMark_Method = {
     (process_method_func)daObjSMark_Create,
     (process_method_func)daObjSMark_Delete,
@@ -98,7 +83,6 @@ static actor_method_class l_daObjSMark_Method = {
     (process_method_func)daObjSMark_Draw,
 };
 
-/* 8059A434-8059A464 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_StoneMark */
 extern actor_process_profile_definition g_profile_Obj_StoneMark = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

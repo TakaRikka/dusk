@@ -9,10 +9,8 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_graphic.h"
 
-/* 80C14B44-80C14B58 000014 0014+00 1/1 0/0 0/0 .bss             l_HIO */
 static daGrdWater_HIO_c l_HIO;
 
-/* 80C14A58-80C14A94 00005C 003C+00 1/2 0/0 0/0 .data            l_mode_func */
 static daGrdWater_c::modeFunc l_mode_func[5] = {
     &daGrdWater_c::modeWait,
     &daGrdWater_c::modeLevelUpA,
@@ -21,7 +19,6 @@ static daGrdWater_c::modeFunc l_mode_func[5] = {
     &daGrdWater_c::modeLevelDownB,
 };
 
-/* 80C134AC-80C134F8 0000EC 004C+00 1/1 0/0 0/0 .text            __ct__16daGrdWater_HIO_cFv */
 daGrdWater_HIO_c::daGrdWater_HIO_c() {
     field_0x04 = 100;
     field_0x05 = 100;
@@ -32,7 +29,6 @@ daGrdWater_HIO_c::daGrdWater_HIO_c() {
     field_0x10 = 0.0f;
 }
 
-/* 80C13540-80C13618 000180 00D8+00 2/2 0/0 0/0 .text            setBaseMtx__12daGrdWater_cFv */
 void daGrdWater_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -44,7 +40,6 @@ void daGrdWater_c::setBaseMtx() {
     mModel2->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C13618-80C139E4 000258 03CC+00 1/0 0/0 0/0 .text            CreateHeap__12daGrdWater_cFv */
 int daGrdWater_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Water", 18);
     JUT_ASSERT(189, modelData != NULL);
@@ -97,7 +92,6 @@ int daGrdWater_c::CreateHeap() {
     return 1;
 }
 
-/* 80C139E4-80C13DB0 000624 03CC+00 1/1 0/0 0/0 .text            create__12daGrdWater_cFv */
 int daGrdWater_c::create() {
     fopAcM_ct(this, daGrdWater_c);
     int rv = dComIfG_resLoad(&mPhase, "Water");
@@ -156,12 +150,9 @@ int daGrdWater_c::create() {
     return rv;
 }
 
-/* 80C13DB0-80C13FA4 0009F0 01F4+00 1/1 0/0 0/0 .text            __ct__12daGrdWater_cFv */
 daGrdWater_c::daGrdWater_c() {
 }
 
-/* 80C13FEC-80C14194 000C2C 01A8+00 1/0 0/0 0/0 .text            Execute__12daGrdWater_cFPPA3_A4_f
- */
 int daGrdWater_c::Execute(Mtx** pMtx) {
     mBtk1.play();
     mBtk2.play();
@@ -203,17 +194,13 @@ int daGrdWater_c::Execute(Mtx** pMtx) {
     return 1;
 }
 
-/* 80C14194-80C141A0 000DD4 000C+00 5/5 0/0 0/0 .text            init_modeWait__12daGrdWater_cFv */
 void daGrdWater_c::init_modeWait() {
     mMode = WAIT;
 }
 
-/* 80C141A0-80C141A4 000DE0 0004+00 1/0 0/0 0/0 .text            modeWait__12daGrdWater_cFv */
 void daGrdWater_c::modeWait() {
 }
 
-/* 80C141A4-80C1423C 000DE4 0098+00 1/1 0/0 0/0 .text            init_modeLevelUpA__12daGrdWater_cFv
- */
 void daGrdWater_c::init_modeLevelUpA() {
     mBck1a.reset();
     mBck2a.reset();
@@ -221,7 +208,6 @@ void daGrdWater_c::init_modeLevelUpA() {
     mMode = LEVEL_UP_A;
 }
 
-/* 80C1423C-80C142AC 000E7C 0070+00 1/0 0/0 0/0 .text            modeLevelUpA__12daGrdWater_cFv */
 void daGrdWater_c::modeLevelUpA() {
     int res1 = mBck1a.play();
     int res2 = mBck2a.play();
@@ -231,14 +217,12 @@ void daGrdWater_c::modeLevelUpA() {
     }
 }
 
-/* 80C142AC-80C14320 000EEC 0074+00 1/1 0/0 0/0 .text init_modeLevelDownA__12daGrdWater_cFv */
 void daGrdWater_c::init_modeLevelDownA() {
     mBck1b.reset();
     mBck2b.reset();
     mMode = LEVEL_DOWN_A;
 }
 
-/* 80C14320-80C1437C 000F60 005C+00 1/0 0/0 0/0 .text            modeLevelDownA__12daGrdWater_cFv */
 void daGrdWater_c::modeLevelDownA() {
     int res1 = mBck1b.play();
     int res2 = mBck2b.play();
@@ -247,8 +231,6 @@ void daGrdWater_c::modeLevelDownA() {
     }
 }
 
-/* 80C1437C-80C14414 000FBC 0098+00 1/1 0/0 0/0 .text            init_modeLevelUpB__12daGrdWater_cFv
- */
 void daGrdWater_c::init_modeLevelUpB() {
     mBck1c.reset();
     mBck2c.reset();
@@ -256,7 +238,6 @@ void daGrdWater_c::init_modeLevelUpB() {
     mMode = LEVEL_UP_B;
 }
 
-/* 80C14414-80C14484 001054 0070+00 1/0 0/0 0/0 .text            modeLevelUpB__12daGrdWater_cFv */
 void daGrdWater_c::modeLevelUpB() {
     int res1 = mBck1c.play();
     int res2 = mBck2c.play();
@@ -266,14 +247,12 @@ void daGrdWater_c::modeLevelUpB() {
     }
 }
 
-/* 80C14484-80C144F8 0010C4 0074+00 1/1 0/0 0/0 .text init_modeLevelDownB__12daGrdWater_cFv */
 void daGrdWater_c::init_modeLevelDownB() {
     mBck1d.reset();
     mBck2d.reset();
     mMode = LEVEL_DOWN_B;
 }
 
-/* 80C144F8-80C14554 001138 005C+00 1/0 0/0 0/0 .text            modeLevelDownB__12daGrdWater_cFv */
 void daGrdWater_c::modeLevelDownB() {
     int res1 = mBck1d.play();
     int res2 = mBck2d.play();
@@ -282,7 +261,6 @@ void daGrdWater_c::modeLevelDownB() {
     }
 }
 
-/* 80C14554-80C147EC 001194 0298+00 1/0 0/0 0/0 .text            Draw__12daGrdWater_cFv */
 int daGrdWater_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel2, &tevStr);
@@ -336,36 +314,27 @@ int daGrdWater_c::Draw() {
     return 1;
 }
 
-/* 80C147EC-80C1481C 00142C 0030+00 1/0 0/0 0/0 .text            Delete__12daGrdWater_cFv */
 int daGrdWater_c::Delete() {
     dComIfG_resDelete(&mPhase, "Water");
     return 1;
 }
 
-/* 80C1481C-80C14848 00145C 002C+00 1/0 0/0 0/0 .text            daGrdWater_Draw__FP12daGrdWater_c
- */
 static int daGrdWater_Draw(daGrdWater_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80C14848-80C14868 001488 0020+00 1/0 0/0 0/0 .text daGrdWater_Execute__FP12daGrdWater_c */
 static int daGrdWater_Execute(daGrdWater_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C14868-80C14888 0014A8 0020+00 1/0 0/0 0/0 .text            daGrdWater_Delete__FP12daGrdWater_c
- */
 static int daGrdWater_Delete(daGrdWater_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C14888-80C148A8 0014C8 0020+00 1/0 0/0 0/0 .text            daGrdWater_Create__FP10fopAc_ac_c
- */
 static int daGrdWater_Create(fopAc_ac_c* i_this) {
     return static_cast<daGrdWater_c*>(i_this)->create();
 }
 
-/* 80C14A94-80C14AB4 -00001 0020+00 1/0 0/0 0/0 .data            l_daGrdWater_Method */
 static actor_method_class l_daGrdWater_Method = {
     (process_method_func)daGrdWater_Create,
     (process_method_func)daGrdWater_Delete,
@@ -374,7 +343,6 @@ static actor_method_class l_daGrdWater_Method = {
     (process_method_func)daGrdWater_Draw,
 };
 
-/* 80C14AB4-80C14AE4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_GRDWATER */
 extern actor_process_profile_definition g_profile_GRDWATER = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

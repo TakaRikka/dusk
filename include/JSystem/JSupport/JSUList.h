@@ -196,19 +196,19 @@ public:
 
     JSUTree<T>* getEndChild() const { return NULL; }
 
-    JSUTree<T>* getFirstChild() const { return (JSUTree<T>*)this->getFirst(); }
+    JSUTree<T>* getFirstChild() const { return (JSUTree<T>*)this->getFirstLink(); }
 
-    JSUTree<T>* getLastChild() const { return (JSUTree<T>*)this->getLast(); }
+    JSUTree<T>* getLastChild() const { return (JSUTree<T>*)this->getLastLink(); }
 
-    JSUTree<T>* getNextChild() const { return (JSUTree<T>*)this->getNext(); }
+    JSUTree<T>* getNextChild() const { return (JSUTree<T>*)this->mNext; }
 
-    JSUTree<T>* getPrevChild() const { return (JSUTree<T>*)this->getPrev(); }
+    JSUTree<T>* getPrevChild() const { return (JSUTree<T>*)this->mPrev; }
 
     u32 getNumChildren() const { return this->getNumLinks(); }
 
-    T* getObject() const { return (T*)this->getObjectPtr(); }
+    T* getObject() const { return (T*)this->mObject; }
 
-    JSUTree<T>* getParent() const { return (JSUTree<T>*)this->getList(); }
+    JSUTree<T>* getParent() const { return (JSUTree<T>*)this->mList; }
 };
 
 /**

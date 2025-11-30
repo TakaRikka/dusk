@@ -31,8 +31,8 @@ public:
 
 class daObj_Myogan_HIO_c {
 public:
-    /* 80C9EBAC */ daObj_Myogan_HIO_c();
-    /* 80C9F1F0 */ virtual ~daObj_Myogan_HIO_c() {}
+    daObj_Myogan_HIO_c();
+    virtual ~daObj_Myogan_HIO_c() {}
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ f32 mSize;

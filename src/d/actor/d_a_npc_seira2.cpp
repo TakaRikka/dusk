@@ -7,19 +7,16 @@
 
 #include "d/actor/d_a_npc_seira2.h"
 
-/* 80AD4BB0-80AD4BC0 000020 0010+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[2][2] = {
     {4, 3},
     {17, 2},
 };
 
-/* 80AD4BC0-80AD4BD0 -00001 0010+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
 };
 
-/* 80AD4BD0-80AD4BE0 -00001 0010+00 3/4 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[4] = {
     "",
     "Seira",
@@ -27,16 +24,13 @@ static char* l_resNameList[4] = {
     "Sera",
 };
 
-/* 80AD4BE0-80AD4BE4 000050 0004+00 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[4] = {3, 1, 2, -1};
 
-/* 80AD4BE4-80AD4C00 -00001 001C+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[7] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
 };
 
-/* 80AD4C00-80AD4D88 000070 0188+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
     {-1, 0, 0, 67, 2, 1, 1},
     {14, 0, 1, 67, 2, 1, 1},
@@ -54,7 +48,6 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
     {18, 2, 1, 81, 2, 1, 0},
 };
 
-/* 80AD4D88-80AD5044 0001F8 02BC+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[25] = {
     {42, 2, 1, 45, 0, 1, 1, 12},
     {37, 2, 1, 55, 0, 1, 0, 12},
@@ -83,7 +76,6 @@ static daNpcT_motionAnmData_c l_motionAnmData[25] = {
     {38, 0, 1, 45, 0, 1, 1, 12},
 };
 
-/* 80AD5044-80AD5124 0004B4 00E0+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {7, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {8, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -94,7 +86,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] =
     {13, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80AD5124-80AD52B4 000594 0190+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[100] = {
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {4, -1, 1}, {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -111,16 +102,12 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[100] = {
     {24, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80AD52B4-80AD52B8 -00001 0004+00 1/1 0/0 0/0 .data            mCutNameList__14daNpc_Seira2_c */
 char* daNpc_Seira2_c::mCutNameList[1] = {""};
 
-/* 80AD52B8-80AD52C4 000728 000C+00 2/2 0/0 0/0 .data            mCutList__14daNpc_Seira2_c */
 daNpc_Seira2_c::cutFunc daNpc_Seira2_c::mCutList[1] = { NULL };
 
-/* 80AD5624-80AD5628 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpc_Seira2_Param_c l_HIO;
 
-/* 80AD0C0C-80AD0D58 0000EC 014C+00 1/0 0/0 0/0 .text            __dt__14daNpc_Seira2_cFv */
 daNpc_Seira2_c::~daNpc_Seira2_c() {
     deleteObject();
     if (mpMorf[0] != 0) {
@@ -134,8 +121,6 @@ daNpc_Seira2_c::~daNpc_Seira2_c() {
     deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
 }
 
-/* ############################################################################################## */
-/* 80AD4A60-80AD4AEC 000000 008C+00 9/9 0/0 0/0 .rodata          m__20daNpc_Seira2_Param_c */
 const daNpc_Seira2_HIOParam daNpc_Seira2_Param_c::m = {
     210.0f,
     -3.0f,
@@ -180,7 +165,6 @@ const daNpc_Seira2_HIOParam daNpc_Seira2_Param_c::m = {
     0.0f,
 };
 
-/* 80AD0D58-80AD0FF8 000238 02A0+00 1/1 0/0 0/0 .text            create__14daNpc_Seira2_cFv */
 int daNpc_Seira2_c::create() {
     daNpcT_ct(this, daNpc_Seira2_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
@@ -228,7 +212,6 @@ int daNpc_Seira2_c::create() {
     return rv;
 }
 
-/* 80AD0FF8-80AD134C 0004D8 0354+00 1/1 0/0 0/0 .text            CreateHeap__14daNpc_Seira2_cFv */
 int daNpc_Seira2_c::CreateHeap() {
     enum XXX { x0 = 0, x1=1};
     J3DModelData* modelData = NULL;
@@ -280,14 +263,12 @@ int daNpc_Seira2_c::CreateHeap() {
     return 0;
 }
 
-/* 80AD1508-80AD153C 0009E8 0034+00 1/1 0/0 0/0 .text            Delete__14daNpc_Seira2_cFv */
 int daNpc_Seira2_c::Delete() {
     fopAcM_GetID(this);
     this->~daNpc_Seira2_c();
     return 1;
 }
 
-/* 80AD153C-80AD1610 000A1C 00D4+00 2/2 0/0 0/0 .text            Execute__14daNpc_Seira2_cFv */
 int daNpc_Seira2_c::Execute() {
     if (!mCreating && !checkShopOpen() && !field_0x10ED) {
         initShopSystem();
@@ -307,7 +288,6 @@ int daNpc_Seira2_c::Execute() {
     return 1;
 }
 
-/* 80AD1610-80AD16A4 000AF0 0094+00 1/1 0/0 0/0 .text            Draw__14daNpc_Seira2_cFv */
 int daNpc_Seira2_c::Draw() {
     if (mpMatAnm[0] != NULL) {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
@@ -316,14 +296,10 @@ int daNpc_Seira2_c::Draw() {
     return daNpcT_c::draw(0, 0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
-/* 80AD16A4-80AD16C4 000B84 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__14daNpc_Seira2_cFP10fopAc_ac_c           */
 int daNpc_Seira2_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Seira2_c*>(i_this)->CreateHeap();
 }
 
-/* 80AD16C4-80AD171C 000BA4 0058+00 1/1 0/0 0/0 .text
- * ctrlJointCallBack__14daNpc_Seira2_cFP8J3DJointi              */
 int daNpc_Seira2_c::ctrlJointCallBack(J3DJoint* param_0, int param_1) {
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -336,7 +312,6 @@ int daNpc_Seira2_c::ctrlJointCallBack(J3DJoint* param_0, int param_1) {
     return 1;
 }
 
-/* 80AD171C-80AD179C 000BFC 0080+00 1/1 0/0 0/0 .text            getType__14daNpc_Seira2_cFv */
 u8 daNpc_Seira2_c::getType() {
     if (dComIfGs_isDarkClearLV(0)) {
         return 3;
@@ -353,8 +328,6 @@ u8 daNpc_Seira2_c::getType() {
     return 0;
 }
 
-/* 80AD179C-80AD17B8 000C7C 001C+00 1/1 0/0 0/0 .text            getFlowNodeNo__14daNpc_Seira2_cFv
- */
 int daNpc_Seira2_c::getFlowNodeNo() {
     u16 nodeNo = home.angle.x;
     if (nodeNo == 0xffff) {
@@ -364,13 +337,10 @@ int daNpc_Seira2_c::getFlowNodeNo() {
     return nodeNo;
 }
 
-/* 80AD17B8-80AD17C4 000C98 000C+00 1/1 0/0 0/0 .text            getMaxNumItem__14daNpc_Seira2_cFv
- */
 u8 daNpc_Seira2_c::getMaxNumItem() {
     return (fopAcM_GetParam(this) & 0xf000000) >> 0x18;
 }
 
-/* 80AD17C4-80AD182C 000CA4 0068+00 1/1 0/0 0/0 .text            checkBottle__14daNpc_Seira2_cFv */
 u8 daNpc_Seira2_c::checkBottle() {
     u8 prm = fopAcM_GetParam(this);
     if (dComIfGs_isDarkClearLV(0)) {
@@ -385,12 +355,10 @@ u8 daNpc_Seira2_c::checkBottle() {
     }
 }
 
-/* 80AD182C-80AD1834 000D0C 0008+00 1/1 0/0 0/0 .text            isDelete__14daNpc_Seira2_cFv */
 int daNpc_Seira2_c::isDelete() {
     return FALSE;
 }
 
-/* 80AD1834-80AD1968 000D14 0134+00 1/1 0/0 0/0 .text            reset__14daNpc_Seira2_cFv */
 void daNpc_Seira2_c::reset() {
     initialize();
     memset(&mNextAction, 0, (u8*)&field_0x10F0 - (u8*)&mNextAction);
@@ -405,7 +373,6 @@ void daNpc_Seira2_c::reset() {
     setAngle(home.angle.y);
 }
 
-/* 80AD1968-80AD19EC 000E48 0084+00 1/0 0/0 0/0 .text            afterJntAnm__14daNpc_Seira2_cFi */
 void daNpc_Seira2_c::afterJntAnm(int arg0) {
     if (arg0 == 1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -416,7 +383,6 @@ void daNpc_Seira2_c::afterJntAnm(int arg0) {
     }
 }
 
-/* 80AD19EC-80AD1B38 000ECC 014C+00 1/0 0/0 0/0 .text            setParam__14daNpc_Seira2_cFv */
 void daNpc_Seira2_c::setParam() {
     if (field_0x10EC == 1) {
         if (mShopProcess == 2) {
@@ -462,7 +428,6 @@ void daNpc_Seira2_c::setParam() {
     mMorfFrames = daNpc_Seira2_Param_c::m.common.morf_frame;
 }
 
-/* 80AD1B38-80AD1BF8 001018 00C0+00 1/0 0/0 0/0 .text setAfterTalkMotion__14daNpc_Seira2_cFv */
 void daNpc_Seira2_c::setAfterTalkMotion() {
     int iVar2 = 0;
     switch(mFaceMotionSeqMngr.getNo()) {
@@ -488,7 +453,6 @@ void daNpc_Seira2_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(iVar2, -1.0f, 0, 0);
 }
 
-/* 80AD1BF8-80AD1C60 0010D8 0068+00 1/1 0/0 0/0 .text            srchActors__14daNpc_Seira2_cFv */
 void daNpc_Seira2_c::srchActors() {
     switch (mType) {
         case 1:
@@ -503,7 +467,6 @@ void daNpc_Seira2_c::srchActors() {
     }
 }
 
-/* 80AD1C60-80AD1E04 001140 01A4+00 1/0 0/0 0/0 .text            evtTalk__14daNpc_Seira2_cFv */
 int daNpc_Seira2_c::evtTalk() {
     if (field_0x10ED) {
         if (chkAction(&daNpc_Seira2_c::shop)) {
@@ -523,7 +486,6 @@ int daNpc_Seira2_c::evtTalk() {
     return 1;
 }
 
-/* 80AD1E04-80AD1ED4 0012E4 00D0+00 1/0 0/0 0/0 .text            evtCutProc__14daNpc_Seira2_cFv */
 int daNpc_Seira2_c::evtCutProc() {
     BOOL retval = FALSE;
     int staff_id = dComIfGp_getEventManager().getMyStaffId("Seira2", this, -1);
@@ -541,7 +503,6 @@ int daNpc_Seira2_c::evtCutProc() {
     return retval;
 }
 
-/* 80AD1ED4-80AD2030 0013B4 015C+00 1/0 0/0 0/0 .text            action__14daNpc_Seira2_cFv */
 void daNpc_Seira2_c::action() {
     if (field_0x10ED == 0) {
         fopAc_ac_c* hit_chk = hitChk(&mCyl1, -1);
@@ -567,14 +528,12 @@ void daNpc_Seira2_c::action() {
     }
 }
 
-/* 80AD2030-80AD20A8 001510 0078+00 1/0 0/0 0/0 .text            beforeMove__14daNpc_Seira2_cFv */
 void daNpc_Seira2_c::beforeMove() {
     if (checkHide() || mNoDraw) {
         attention_info.flags = 0;
     }
 }
 
-/* 80AD20A8-80AD23A8 001588 0300+00 1/0 0/0 0/0 .text            setAttnPos__14daNpc_Seira2_cFv */
 void daNpc_Seira2_c::setAttnPos() {
     cXyz eyeOffset(-30.0f, 10.0f, 0.0f);
     mStagger.calc(0);
@@ -616,7 +575,6 @@ void daNpc_Seira2_c::setAttnPos() {
     }
 }
 
-/* 80AD23A8-80AD2550 001888 01A8+00 1/0 0/0 0/0 .text            setCollision__14daNpc_Seira2_cFv */
 void daNpc_Seira2_c::setCollision() {
     cXyz cStack_48;
     f32 cylH, wallR;
@@ -656,12 +614,10 @@ void daNpc_Seira2_c::setCollision() {
     mCyl1.ClrTgHit();
 }
 
-/* 80AD2550-80AD2558 001A30 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__14daNpc_Seira2_cFv */
 int daNpc_Seira2_c::drawDbgInfo() {
     return FALSE;
 }
 
-/* 80AD2558-80AD2630 001A38 00D8+00 1/0 0/0 0/0 .text            drawOtherMdl__14daNpc_Seira2_cFv */
 void daNpc_Seira2_c::drawOtherMdl() {
     if (field_0x10ED) {
         cXyz sp8;
@@ -684,8 +640,6 @@ void daNpc_Seira2_c::drawOtherMdl() {
     }
 }
 
-/* 80AD2630-80AD2710 001B10 00E0+00 2/2 0/0 0/0 .text            setBottleAnm__14daNpc_Seira2_cFiifb
- */
 bool daNpc_Seira2_c::setBottleAnm(int arg0, int arg1, f32 arg2, bool arg3) {
     static int bottlAnmData[27][2] = {
         {-1, 2}, {-1, 2}, {-1, 2}, { 6, 2}, {11, 2}, {11, 2}, {10, 2}, { 9, 2},
@@ -713,13 +667,11 @@ bool daNpc_Seira2_c::setBottleAnm(int arg0, int arg1, f32 arg2, bool arg3) {
     return true;
 }
 
-/* 80AD2710-80AD2748 001BF0 0038+00 1/0 0/0 0/0 .text afterSetMotionAnm__14daNpc_Seira2_cFiifi */
 bool daNpc_Seira2_c::afterSetMotionAnm(int arg0, int arg1, f32 arg2, int) {
     f32 var_f30 = (mCreating == 1) ? 0.0f : arg2;
     setBottleAnm(arg0, arg1, var_f30, 1);
 }
 
-/* 80AD2748-80AD2870 001C28 0128+00 1/1 0/0 0/0 .text            selectAction__14daNpc_Seira2_cFv */
 int daNpc_Seira2_c::selectAction() {
     mNextAction = NULL;
     // TODO: Debug-only set & return.
@@ -756,14 +708,10 @@ int daNpc_Seira2_c::selectAction() {
     return 1;
 }
 
-/* 80AD2870-80AD289C 001D50 002C+00 1/1 0/0 0/0 .text
- * chkAction__14daNpc_Seira2_cFM14daNpc_Seira2_cFPCvPvPv_i      */
 int daNpc_Seira2_c::chkAction(actionFunc i_action) {
     return mActFunc_0 == i_action;
 }
 
-/* 80AD289C-80AD2944 001D7C 00A8+00 2/2 0/0 0/0 .text
- * setAction__14daNpc_Seira2_cFM14daNpc_Seira2_cFPCvPvPv_i      */
 int daNpc_Seira2_c::setAction(actionFunc i_action) {
     mMode = MODE_EXIT;
     if (mActFunc_0 != NULL) {
@@ -779,14 +727,11 @@ int daNpc_Seira2_c::setAction(actionFunc i_action) {
     return 1;
 }
 
-/* 80AD2944-80AD29BC 001E24 0078+00 2/2 0/0 0/0 .text checkStageIsSeira2sShop__14daNpc_Seira2_cFv
- */
 BOOL daNpc_Seira2_c::checkStageIsSeira2sShop() {
     return 0 == strcmp("R_SP01", dComIfGp_getStartStageName())
            && dComIfGp_getStartStageRoomNo() == 1 && !dComIfG_play_c::getLayerNo(0);
 }
 
-/* 80AD29BC-80AD2B68 001E9C 01AC+00 1/0 0/0 0/0 .text            wait__14daNpc_Seira2_cFPv */
 int daNpc_Seira2_c::wait(void*) {
     int var_r30;
     switch (mMode) {
@@ -823,7 +768,6 @@ int daNpc_Seira2_c::wait(void*) {
     return 1;
 }
 
-/* 80AD2B68-80AD2D8C 002048 0224+00 2/0 0/0 0/0 .text            sit__14daNpc_Seira2_cFPv */
 int daNpc_Seira2_c::sit(void*) {
     switch (mMode) {
         case 0:
@@ -865,7 +809,6 @@ int daNpc_Seira2_c::sit(void*) {
     return 1;
 }
 
-/* 80AD2D8C-80AD2F14 00226C 0188+00 2/0 0/0 0/0 .text            happy__14daNpc_Seira2_cFPv */
 int daNpc_Seira2_c::happy(void*) {
     switch (mMode) {
         case 0:
@@ -900,7 +843,6 @@ int daNpc_Seira2_c::happy(void*) {
     return 1;
 }
 
-/* 80AD2F14-80AD31F0 0023F4 02DC+00 2/0 0/0 0/0 .text            worry__14daNpc_Seira2_cFPv */
 int daNpc_Seira2_c::worry(void*) {
     switch (mMode) {
         case 0:
@@ -952,7 +894,6 @@ int daNpc_Seira2_c::worry(void*) {
     return 1;
 }
 
-/* 80AD31F0-80AD3508 0026D0 0318+00 1/0 0/0 0/0 .text            sad__14daNpc_Seira2_cFPv */
 int daNpc_Seira2_c::sad(void*) {
     switch (mMode) {
         case 0:
@@ -998,7 +939,6 @@ int daNpc_Seira2_c::sad(void*) {
     return 1;
 }
 
-/* 80AD3508-80AD3614 0029E8 010C+00 1/0 0/0 0/0 .text            lookaround__14daNpc_Seira2_cFPv */
 int daNpc_Seira2_c::lookaround(void*) {
     switch (mMode) {
         case 0:
@@ -1026,7 +966,6 @@ int daNpc_Seira2_c::lookaround(void*) {
     return 1;
 }
 
-/* 80AD3614-80AD3720 002AF4 010C+00 1/0 0/0 0/0 .text            smile__14daNpc_Seira2_cFPv */
 int daNpc_Seira2_c::smile(void*) {
     switch (mMode) {
         case 0:
@@ -1054,7 +993,6 @@ int daNpc_Seira2_c::smile(void*) {
     return 1;
 }
 
-/* 80AD3720-80AD3890 002C00 0170+00 2/0 0/0 0/0 .text            talk__14daNpc_Seira2_cFPv */
 int daNpc_Seira2_c::talk(void*) {
     int reg_r30 = 0;
     switch (mMode) {
@@ -1097,7 +1035,6 @@ int daNpc_Seira2_c::talk(void*) {
     return 0;
 }
 
-/* 80AD3890-80AD3960 002D70 00D0+00 2/0 0/0 0/0 .text            shop__14daNpc_Seira2_cFPv */
 int daNpc_Seira2_c::shop(void*) {
     switch (mMode) {
         case 0:
@@ -1132,32 +1069,26 @@ int daNpc_Seira2_c::shop(void*) {
     return 0;
 }
 
-/* 80AD3960-80AD3980 002E40 0020+00 1/0 0/0 0/0 .text            daNpc_Seira2_Create__FPv */
 static int daNpc_Seira2_Create(void* i_this) {
     return static_cast<daNpc_Seira2_c*>(i_this)->create();
 }
 
-/* 80AD3980-80AD39A0 002E60 0020+00 1/0 0/0 0/0 .text            daNpc_Seira2_Delete__FPv */
 static int daNpc_Seira2_Delete(void* i_this) {
     return static_cast<daNpc_Seira2_c*>(i_this)->Delete();
 }
 
-/* 80AD39A0-80AD39C0 002E80 0020+00 1/0 0/0 0/0 .text            daNpc_Seira2_Execute__FPv */
 static int daNpc_Seira2_Execute(void* i_this) {
     return static_cast<daNpc_Seira2_c*>(i_this)->Execute();
 }
 
-/* 80AD39C0-80AD39E0 002EA0 0020+00 1/0 0/0 0/0 .text            daNpc_Seira2_Draw__FPv */
 static int daNpc_Seira2_Draw(void* i_this) {
     return static_cast<daNpc_Seira2_c*>(i_this)->Draw();
 }
 
-/* 80AD39E0-80AD39E8 002EC0 0008+00 1/0 0/0 0/0 .text            daNpc_Seira2_IsDelete__FPv */
 static int daNpc_Seira2_IsDelete(void*) {
     return 1;
 }
 
-/* 80AD5444-80AD5464 -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Seira2_MethodTable */
 static actor_method_class daNpc_Seira2_MethodTable = {
     (process_method_func)daNpc_Seira2_Create,
     (process_method_func)daNpc_Seira2_Delete,
@@ -1166,7 +1097,6 @@ static actor_method_class daNpc_Seira2_MethodTable = {
     (process_method_func)daNpc_Seira2_Draw,
 };
 
-/* 80AD5464-80AD5494 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_SERA2 */
 extern actor_process_profile_definition g_profile_NPC_SERA2 = {
   fpcLy_CURRENT_e,           // mLayerID
   7,                         // mListID

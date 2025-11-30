@@ -33,26 +33,26 @@ public:
     /* 0x83C */ u8 mType;
     /* 0x840 */ /* vtable */
 
-    /* 80BAD66C */ virtual ~daObj_Bed_c();
-    /* 80BAD790 */ cPhs__Step create();
-    /* 80BADB70 */ int CreateHeap();
-    /* 80BADC80 */ int Delete();
-    /* 80BADCB4 */ int Execute();
-    /* 80BADDF4 */ int Draw();
-    /* 80BADEB8 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80BADED8 */ u8 getType();
-    /* 80BADEE0 */ char* getResName();
-    /* 80BADEF0 */ int isDelete();
-    /* 80BADF34 */ void setEnvTevColor();
-    /* 80BADF90 */ void setRoomNo();
-    /* 80BADFD0 */ void setMtx();
+    virtual ~daObj_Bed_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    u8 getType();
+    char* getResName();
+    int isDelete();
+    void setEnvTevColor();
+    void setRoomNo();
+    void setMtx();
 };
 
 STATIC_ASSERT(sizeof(daObj_Bed_c) == 0x844);
 
 class daObj_Bed_Param_c {
 public:
-    /* 80BAE0FC */ virtual ~daObj_Bed_Param_c() {}
+    virtual ~daObj_Bed_Param_c() {}
 
     struct params {
         /* 0x0 */ f32 field_0x0;

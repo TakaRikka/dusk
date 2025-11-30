@@ -31,31 +31,31 @@ public:
         MODE_BOUND_WAIT,
     };
 
-    /* 80C77CC8 */ void setBaseMtx();
-    /* 80C77D50 */ int CreateHeap();
-    /* 80C77DBC */ int create();
-    /* 80C78294 */ int Execute(Mtx**);
-    /* 80C78638 */ void moveTogeRoll();
-    /* 80C78A8C */ void init_modeBound();
-    /* 80C78B7C */ void modeBound();
-    /* 80C78BD8 */ void modeBound2();
-    /* 80C78C34 */ void init_modeBoundWait();
-    /* 80C78C50 */ void modeBoundWait();
-    /* 80C78CA8 */ void init_modeAcc();
-    /* 80C78CB4 */ void modeAcc();
-    /* 80C78DA0 */ void init_modeMove();
-    /* 80C78DAC */ void modeMove();
-    /* 80C790C4 */ void init_modeBrk();
-    /* 80C790D0 */ void modeBrk();
-    /* 80C792CC */ void init_modeWaitInit();
-    /* 80C792E4 */ void modeWaitInit();
-    /* 80C79318 */ void init_modeWait();
-    /* 80C79324 */ void modeWait();
-    /* 80C79344 */ void init_modeBreak();
-    /* 80C793C8 */ void modeBreak();
-    /* 80C795E8 */ void setNextPoint();
-    /* 80C79714 */ int Draw();
-    /* 80C797B8 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    void moveTogeRoll();
+    void init_modeBound();
+    void modeBound();
+    void modeBound2();
+    void init_modeBoundWait();
+    void modeBoundWait();
+    void init_modeAcc();
+    void modeAcc();
+    void init_modeMove();
+    void modeMove();
+    void init_modeBrk();
+    void modeBrk();
+    void init_modeWaitInit();
+    void modeWaitInit();
+    void init_modeWait();
+    void modeWait();
+    void init_modeBreak();
+    void modeBreak();
+    void setNextPoint();
+    int Draw();
+    int Delete();
 
     u32 getPathID() { return fopAcM_GetParamBit(this, 0, 8); }
     u32 getSpeed() { return fopAcM_GetParamBit(this, 8, 4); }
@@ -96,8 +96,8 @@ STATIC_ASSERT(sizeof(daTogeRoll_c) == 0x117c);
 
 class daTogeRoll_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C77C2C */ daTogeRoll_HIO_c();
-    /* 80C798D0 */ ~daTogeRoll_HIO_c() {}
+    daTogeRoll_HIO_c();
+    ~daTogeRoll_HIO_c() {}
 
     void genMessage(JORMContext*);
 

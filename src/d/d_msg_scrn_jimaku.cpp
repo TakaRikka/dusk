@@ -14,7 +14,6 @@
 #include "d/d_msg_scrn_light.h"
 #include "d/d_pane_class.h"
 
-/* 80244558-80244A74 23EE98 051C+00 0/0 1/1 0/0 .text __ct__16dMsgScrnJimaku_cFUcP10JKRExpHeap */
 dMsgScrnJimaku_c::dMsgScrnJimaku_c(u8 param_0, JKRExpHeap* i_heap) {
     if (i_heap != NULL) {
         heap = i_heap;
@@ -129,7 +128,6 @@ dMsgScrnJimaku_c::dMsgScrnJimaku_c(u8 param_0, JKRExpHeap* i_heap) {
     }
 }
 
-/* 80244A74-80244C2C 23F3B4 01B8+00 1/0 0/0 0/0 .text            __dt__16dMsgScrnJimaku_cFv */
 dMsgScrnJimaku_c::~dMsgScrnJimaku_c() {
     delete mpScreen;
     mpScreen = NULL;
@@ -160,7 +158,6 @@ dMsgScrnJimaku_c::~dMsgScrnJimaku_c() {
     dComIfGp_getMsgCommonArchive()->removeResourceAll();
 }
 
-/* 80244C2C-80244D34 23F56C 0108+00 1/0 0/0 0/0 .text            exec__16dMsgScrnJimaku_cFv */
 void dMsgScrnJimaku_c::exec() {
     if (isTalkNow()) {
         fukiAlpha(1.0f);
@@ -179,13 +176,11 @@ void dMsgScrnJimaku_c::exec() {
     }
 }
 
-/* 80244D34-80244D8C 23F674 0058+00 1/0 0/0 0/0 .text            drawSelf__16dMsgScrnJimaku_cFv */
 void dMsgScrnJimaku_c::drawSelf() {
     dComIfGp_getCurrentGrafPort()->setup2D();
     drawOutFont(0.0f, 0.0f, 1.0f);
 }
 
-/* 80244D8C-80244E2C 23F6CC 00A0+00 1/0 0/0 0/0 .text            fukiAlpha__16dMsgScrnJimaku_cFf */
 void dMsgScrnJimaku_c::fukiAlpha(f32 i_alpha) {
     mpPmP_c->setAlphaRate(i_alpha * g_MsgObject_HIO_c.mSubtitleAlphaP);
 
@@ -198,11 +193,8 @@ void dMsgScrnJimaku_c::fukiAlpha(f32 i_alpha) {
     }
 }
 
-/* 80244E2C-80244E30 23F76C 0004+00 1/0 0/0 0/0 .text            fukiScale__16dMsgScrnJimaku_cFf */
 void dMsgScrnJimaku_c::fukiScale(f32 i_scale) {}
 
-/* 80244E30-80244E34 23F770 0004+00 1/0 0/0 0/0 .text            fukiTrans__16dMsgScrnJimaku_cFff */
 void dMsgScrnJimaku_c::fukiTrans(f32 i_posX, f32 i_posY) {}
 
-/* 80244E34-80244E38 23F774 0004+00 1/0 0/0 0/0 .text            fontAlpha__16dMsgScrnJimaku_cFf */
 void dMsgScrnJimaku_c::fontAlpha(f32 i_alpha) {}

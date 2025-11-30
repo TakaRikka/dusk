@@ -18,20 +18,20 @@ class daObjSwSpinner_c;
  */
 class daObjLv7Brg_c : public dBgS_MoveBgActor {
 public:
-    /* 80C863EC */ daObjSwSpinner_c* search_swspinner();
-    /* 80C86454 */ void initBaseMtx();
-    /* 80C864B4 */ void setBaseMtx();
-    /* 80C86A44 */ int create1st();
-    /* 80C86E68 */ void action();
-    /* 80C86F44 */ void mode_action();
-    /* 80C87210 */ void mode_end();
-    /* 80C87214 */ void calcCoPos();
+    daObjSwSpinner_c* search_swspinner();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    void action();
+    void mode_action();
+    void mode_end();
+    void calcCoPos();
 
-    /* 80C867CC */ virtual int CreateHeap();
-    /* 80C865B8 */ virtual int Create();
-    /* 80C86B40 */ virtual int Execute(Mtx**);
-    /* 80C87304 */ virtual int Draw();
-    /* 80C87458 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwbit2() { return fopAcM_GetParamBit(this, 8, 8); }

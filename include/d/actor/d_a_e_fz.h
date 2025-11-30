@@ -42,26 +42,26 @@ enum daE_FZ_Action {
  */
 class daE_FZ_c : public fopEn_enemy_c {
 public:
-    /* 806BE9D4 */ s32 draw();
-    /* 806BEAF8 */ void setActionMode(int, int);
-    /* 806BEB04 */ void setReflectAngle();
-    /* 806BEBA0 */ void mBoundSoundset();
-    /* 806BEC08 */ void deadnextSet(bool);
-    /* 806BED34 */ void damage_check();
-    /* 806BF444 */ bool way_gake_check();
-    /* 806BF58C */ void executeWait();
-    /* 806BF8E8 */ void executeMove();
-    /* 806BFA64 */ void executeAttack();
-    /* 806BFB60 */ void executeDamage();
-    /* 806BFF94 */ void executeRollMove();
-    /* 806C0224 */ void action();
-    /* 806C06DC */ void mtx_set();
-    /* 806C0760 */ void cc_set();
-    /* 806C08C4 */ s32 execute();
-    /* 806C0B20 */ void demoDelete();
-    /* 806C0B94 */ s32 _delete();
-    /* 806C0C28 */ s32 CreateHeap();
-    /* 806C0CD0 */ s32 create();
+    s32 draw();
+    void setActionMode(int, int);
+    void setReflectAngle();
+    void mBoundSoundset();
+    void deadnextSet(bool);
+    void damage_check();
+    bool way_gake_check();
+    void executeWait();
+    void executeMove();
+    void executeAttack();
+    void executeDamage();
+    void executeRollMove();
+    void action();
+    void mtx_set();
+    void cc_set();
+    s32 execute();
+    void demoDelete();
+    s32 _delete();
+    s32 CreateHeap();
+    s32 create();
 
 private:
     /* 0x5AC */ request_of_phase_process_class mPhaseReq;   /**< Phase request used when creating the actor. */

@@ -42,57 +42,57 @@ public:
         /* 0x24 */ dPaPo_c mPaPo;
     };
 
-    /* 809E840C */ daNpc_Grz_c();
-    /* 809E88C0 */ ~daNpc_Grz_c();
-    /* 809E8BA0 */ cPhs__Step create();
-    /* 809E8E68 */ int CreateHeap();
-    /* 809E92AC */ int Delete();
-    /* 809E92E0 */ int Execute();
-    /* 809E9324 */ int Draw();
-    /* 809E9568 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 809E979C */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 809E97BC */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 809E9808 */ void setParam();
-    /* 809E9954 */ BOOL main();
-    /* 809E9AD4 */ BOOL ctrlBtk();
-    /* 809E9BB4 */ void setAttnPos();
-    /* 809EA1DC */ void setCollisionPunch();
-    /* 809EA734 */ bool setExpressionAnm(int, bool);
-    /* 809EAA08 */ bool setExpressionBtp(int);
-    /* 809EAB34 */ void setExpression(int, f32);
-    /* 809EAB60 */ void setMotionAnm(int, f32);
-    /* 809EAD4C */ void setMotion(int, f32, int);
-    /* 809EAD90 */ int drawDbgInfo();
-    /* 809EAD98 */ void drawOtherMdls();
-    /* 809EAD9C */ int getTypeFromParam();
-    /* 809EADE8 */ BOOL isDelete();
-    /* 809EAE88 */ void reset();
-    /* 809EB154 */ void resetCol();
-    /* 809EB234 */ void playExpression();
-    /* 809EB5C0 */ void playMotion();
-    /* 809EBA3C */ BOOL chkAction(actionFunc);
-    /* 809EBA68 */ BOOL setAction(actionFunc);
-    /* 809EBB10 */ BOOL selectAction();
-    /* 809EBC04 */ void doNormalAction(int);
-    /* 809EBD18 */ BOOL doEvent();
-    /* 809EC0CC */ bool setSkipZev(int, int);
-    /* 809EC164 */ void setLookMode(int);
-    /* 809EC188 */ void lookat();
-    /* 809EC424 */ void setExpressionTalkAfter();
-    /* 809EC4C4 */ int wait(void*);
-    /* 809EC854 */ int waitSmash(void*);
-    /* 809ECBF0 */ int lieDown(void*);
-    /* 809ECCA0 */ int waitWeak(void*);
-    /* 809ECD50 */ int talk(void*);
-    /* 809ECF88 */ int test(void*);
-    /* 809ED06C */ int setPrtcl();
-    /* 809ED18C */ int doWaitCut(int);
-    /* 809ED228 */ int doRebirthCut(int);
-    /* 809ED3D4 */ int doTalkStandCut(int);
-    /* 809ED5EC */ int doGoOutCut(int);
-    /* 809EDBA4 */ int doStoneSmashCut(int);
-    /* 809EE5F0 */ int doStoneSmashSkipCut(int);
-    /* 809EF184 */ void adjustShapeAngle() {}
+    daNpc_Grz_c();
+    ~daNpc_Grz_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void setParam();
+    BOOL main();
+    BOOL ctrlBtk();
+    void setAttnPos();
+    void setCollisionPunch();
+    bool setExpressionAnm(int, bool);
+    bool setExpressionBtp(int);
+    void setExpression(int, f32);
+    void setMotionAnm(int, f32);
+    void setMotion(int, f32, int);
+    int drawDbgInfo();
+    void drawOtherMdls();
+    int getTypeFromParam();
+    BOOL isDelete();
+    void reset();
+    void resetCol();
+    void playExpression();
+    void playMotion();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    BOOL selectAction();
+    void doNormalAction(int);
+    BOOL doEvent();
+    bool setSkipZev(int, int);
+    void setLookMode(int);
+    void lookat();
+    void setExpressionTalkAfter();
+    int wait(void*);
+    int waitSmash(void*);
+    int lieDown(void*);
+    int waitWeak(void*);
+    int talk(void*);
+    int test(void*);
+    int setPrtcl();
+    int doWaitCut(int);
+    int doRebirthCut(int);
+    int doTalkStandCut(int);
+    int doGoOutCut(int);
+    int doStoneSmashCut(int);
+    int doStoneSmashSkipCut(int);
+    void adjustShapeAngle() {}
 
     u8 getPathNoFromParam() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
 
@@ -135,7 +135,7 @@ STATIC_ASSERT(sizeof(daNpc_Grz_c) == 0x1b08);
 
 class daNpc_Grz_Param_c {
 public:
-    /* 809EF188 */ virtual ~daNpc_Grz_Param_c() {}
+    virtual ~daNpc_Grz_Param_c() {}
 
     static daNpc_Grz_HIOParam const m;
 };

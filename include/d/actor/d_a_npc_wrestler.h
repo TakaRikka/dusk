@@ -75,7 +75,7 @@ struct daNpcWrestler_HIOParamSub {
 
 class daNpcWrestler_Param_c {
 public:
-    /* 80B41670 */ virtual ~daNpcWrestler_Param_c() {}
+    virtual ~daNpcWrestler_Param_c() {}
 
     static daNpcWrestler_HIOParam const m;
 };
@@ -130,78 +130,78 @@ public:
     typedef bool (daNpcWrestler_c::*actionFunc)(void*);
     typedef BOOL (daNpcWrestler_c::*EventFn)(int);
 
-    /* 80B2F28C */ daNpcWrestler_c();
-    /* 80B2F688 */ cPhs__Step Create();
-    /* 80B2F974 */ int CreateHeap();
-    /* 80B2FDB0 */ int Delete();
-    /* 80B2FDE4 */ int Execute();
-    /* 80B2FE1C */ int Draw();
-    /* 80B2FE84 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80B30150 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B30170 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B301BC */ bool checkStartUp();
-    /* 80B308B0 */ void reset();
-    /* 80B30AD8 */ inline int setAction(actionFunc);
-    /* 80B30BEC */ void checkArenaInfo();
-    /* 80B30CA4 */ bool checkArenaSub(fopAc_ac_c*);
-    /* 80B30D48 */ void setOnToArena(f32);
-    /* 80B30F00 */ inline bool wait(void*);
-    /* 80B316F4 */ inline bool talk(void*);
-    /* 80B31EB0 */ inline bool demo(void*);
-    /* 80B32058 */ inline bool gotoArena(void*);
-    /* 80B32444 */ inline bool gotoLiving(void*);
-    /* 80B32850 */ inline bool sumouReady(void*);
-    /* 80B331CC */ inline bool sumouWait(void*);
-    /* 80B339EC */ inline bool checkOutOfArenaP();
-    /* 80B33B3C */ inline bool setNextAction();
-    /* 80B34654 */ inline bool sumouPunchHit(void*);
-    /* 80B34CD0 */ inline bool sumouPunchChaseHit(void*);
-    /* 80B35364 */ inline bool sumouPunchMiss(void*);
-    /* 80B35780 */ inline bool checkOutOfArenaW();
-    /* 80B358F0 */ cXyz getJointPos(int);
-    /* 80B35968 */ inline bool sumouPunchDraw(void*);
-    /* 80B3606C */ inline bool sumouTackleHit(void*);
-    /* 80B36908 */ inline bool sumouTackleMiss(void*);
-    /* 80B36C8C */ inline bool sumouTackleDraw(void*);
-    /* 80B37270 */ inline bool sumouSideStep(void*);
-    /* 80B378F4 */ inline bool sumouLostBalance(void*);
-    /* 80B37C30 */ inline bool sumouPunchShock(void*);
-    /* 80B37FB8 */ inline bool sumouPunchChaseShock(void*);
-    /* 80B38518 */ inline bool sumouPunchStagger(void*);
-    /* 80B389A4 */ inline bool sumouTackleShock(void*);
-    /* 80B38C90 */ inline bool sumouTackleStagger(void*);
-    /* 80B39334 */ inline bool sumouTackleStaggerRelease(void*);
-    /* 80B39554 */ inline bool sumouTacklePush(void*);
-    /* 80B39C18 */ inline bool sumouTackleRelease(void*);
-    /* 80B39F88 */ inline bool demoSumouReady(void*);
-    /* 80B3AE24 */ inline bool demoSumouWin(void*);
-    /* 80B3B4B4 */ inline bool demoSumouLose(void*);
-    /* 80B3BC84 */ inline bool demoSumouWin2(void*);
-    /* 80B3C278 */ inline bool demoSumouLose2(void*);
-    /* 80B3CA2C */ inline bool demoSumouUnilateralWin(void*);
-    /* 80B3D0C0 */ inline bool demoTalkAfterLose(void*);
-    /* 80B3D584 */ inline BOOL EvCut_grDSEntry(int);
-    /* 80B3DB50 */ inline BOOL EvCut_grDSEntry2(int);
-    /* 80B3DCE8 */ inline BOOL EvCut_grDSEntry3_4(int);
-    /* 80B3E0FC */ inline BOOL EvCut_grDSEntry5(int);
-    /* 80B3E584 */ inline BOOL EvCut_grDSLose(int);
-    /* 80B3EF10 */ inline void setWrestlerVoice();
-    /* 80B3FCE8 */ inline void playMotion();
-    /* 80B40B3C */ inline void lookat();
+    daNpcWrestler_c();
+    cPhs__Step Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    bool checkStartUp();
+    void reset();
+    inline int setAction(actionFunc);
+    void checkArenaInfo();
+    bool checkArenaSub(fopAc_ac_c*);
+    void setOnToArena(f32);
+    inline bool wait(void*);
+    inline bool talk(void*);
+    inline bool demo(void*);
+    inline bool gotoArena(void*);
+    inline bool gotoLiving(void*);
+    inline bool sumouReady(void*);
+    inline bool sumouWait(void*);
+    inline bool checkOutOfArenaP();
+    inline bool setNextAction();
+    inline bool sumouPunchHit(void*);
+    inline bool sumouPunchChaseHit(void*);
+    inline bool sumouPunchMiss(void*);
+    inline bool checkOutOfArenaW();
+    cXyz getJointPos(int);
+    inline bool sumouPunchDraw(void*);
+    inline bool sumouTackleHit(void*);
+    inline bool sumouTackleMiss(void*);
+    inline bool sumouTackleDraw(void*);
+    inline bool sumouSideStep(void*);
+    inline bool sumouLostBalance(void*);
+    inline bool sumouPunchShock(void*);
+    inline bool sumouPunchChaseShock(void*);
+    inline bool sumouPunchStagger(void*);
+    inline bool sumouTackleShock(void*);
+    inline bool sumouTackleStagger(void*);
+    inline bool sumouTackleStaggerRelease(void*);
+    inline bool sumouTacklePush(void*);
+    inline bool sumouTackleRelease(void*);
+    inline bool demoSumouReady(void*);
+    inline bool demoSumouWin(void*);
+    inline bool demoSumouLose(void*);
+    inline bool demoSumouWin2(void*);
+    inline bool demoSumouLose2(void*);
+    inline bool demoSumouUnilateralWin(void*);
+    inline bool demoTalkAfterLose(void*);
+    inline BOOL EvCut_grDSEntry(int);
+    inline BOOL EvCut_grDSEntry2(int);
+    inline BOOL EvCut_grDSEntry3_4(int);
+    inline BOOL EvCut_grDSEntry5(int);
+    inline BOOL EvCut_grDSLose(int);
+    inline void setWrestlerVoice();
+    inline void playMotion();
+    inline void lookat();
 
-    /* 80B2F4A0 */ virtual ~daNpcWrestler_c();
-    /* 80B3EAE4 */ inline void setParam();
-    /* 80B3EB94 */ inline BOOL main();
-    /* 80B404FC */ inline BOOL ctrlBtk();
-    /* 80B4166C */ void adjustShapeAngle() {}
-    /* 80B405E8 */ inline void setAttnPos();
-    /* 80B3023C */ inline bool setExpressionAnm(int, bool);
-    /* 80B30654 */ inline bool setExpressionBtp(int);
-    /* 80B316C8 */ inline void setExpression(int, f32);
-    /* 80B3074C */ inline void setMotionAnm(int, f32);
-    /* 80B31680 */ void setMotion(int, f32, int);
-    /* 80B40D1C */ inline BOOL drawDbgInfo();
-    /* 80B40D24 */ inline void drawOtherMdls();
+    virtual ~daNpcWrestler_c();
+    inline void setParam();
+    inline BOOL main();
+    inline BOOL ctrlBtk();
+    void adjustShapeAngle() {}
+    inline void setAttnPos();
+    inline bool setExpressionAnm(int, bool);
+    inline bool setExpressionBtp(int);
+    inline void setExpression(int, f32);
+    inline void setMotionAnm(int, f32);
+    void setMotion(int, f32, int);
+    inline BOOL drawDbgInfo();
+    inline void drawOtherMdls();
 
     s16 getMessageNo() { return (fopAcM_GetParam(this) >> 8) & 0xFFFF; }
     int getWrestlerAction() { return mWrestlerAction; }

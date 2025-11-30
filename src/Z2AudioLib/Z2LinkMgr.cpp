@@ -5,15 +5,12 @@
 #include "Z2AudioLib/Z2AudioCS.h"
 #endif
 
-/* 802C321C-802C3220 2BDB5C 0004+00 0/0 1/1 0/0 .text setLinkGroupInfo__14Z2CreatureLinkFUc */
 void Z2CreatureLink::setLinkGroupInfo(u8) {}
 
-/* 802C3220-802C3228 -00001 0008+00 0/0 0/0 0/0 .text            setLinkHp__14Z2CreatureLinkFll */
 void Z2CreatureLink::setLinkHp(s32 linkHp, s32) {
     mLinkHp = linkHp;
 }
 
-/* 802C3228-802C328C 2BDB68 0064+00 0/0 1/1 0/0 .text setLinkSwordType__14Z2CreatureLinkFll */
 void Z2CreatureLink::setLinkSwordType(s32 swordType, s32 param_1) {
     mLinkSwordType = swordType;
     mFlag3 = param_1 == 1;
@@ -28,7 +25,6 @@ void Z2CreatureLink::setLinkSwordType(s32 swordType, s32 param_1) {
     mFlag5 = false;
 }
 
-/* 802C328C-802C32F0 2BDBCC 0064+00 0/0 1/1 0/0 .text setLinkShieldType__14Z2CreatureLinkFll */
 void Z2CreatureLink::setLinkShieldType(s32 shieldType, s32 param_1) {
     mLinkShieldType = shieldType;
     mFlag4 = param_1 == 1;
@@ -43,7 +39,6 @@ void Z2CreatureLink::setLinkShieldType(s32 shieldType, s32 param_1) {
     mFlag5 = false;
 }
 
-/* 802C32F0-802C333C 2BDC30 004C+00 0/0 1/1 0/0 .text setLinkBootsType__14Z2CreatureLinkFl */
 void Z2CreatureLink::setLinkBootsType(s32 bootsType) {
     mLinkBootsType = bootsType;
 
@@ -52,10 +47,8 @@ void Z2CreatureLink::setLinkBootsType(s32 bootsType) {
     }
 }
 
-/* 80451360-80451368 000860 0004+04 3/3 15/15 0/0 .sbss            mLinkPtr__14Z2CreatureLink */
 Z2CreatureLink* Z2CreatureLink::mLinkPtr;
 
-/* 802C333C-802C3464 2BDC7C 0128+00 0/0 1/1 0/0 .text            __ct__14Z2CreatureLinkFv */
 Z2CreatureLink::Z2CreatureLink() {
     mLinkState = 0;
     mLinkPtr = this;
@@ -82,15 +75,12 @@ Z2CreatureLink::Z2CreatureLink() {
     mUsingIronBall = false;
 }
 
-/* 802C3464-802C3500 2BDDA4 009C+00 1/0 0/0 0/0 .text            __dt__18Z2LinkSoundStarterFv */
 inline Z2LinkSoundStarter::~Z2LinkSoundStarter() {}
 
-/* 802C3500-802C35F8 2BDE40 00F8+00 2/1 1/1 0/0 .text            __dt__14Z2CreatureLinkFv */
 Z2CreatureLink::~Z2CreatureLink() {
     deleteObject();
 }
 
-/* 802C35F8-802C3638 2BDF38 0040+00 1/0 0/0 0/0 .text            deleteObject__14Z2CreatureLinkFv */
 void Z2CreatureLink::deleteObject() {
     if (mKantera.isAlive()) {
         deleteKantera();
@@ -99,7 +89,6 @@ void Z2CreatureLink::deleteObject() {
     Z2Creature::deleteObject();
 }
 
-/* 802C3638-802C3710 2BDF78 00D8+00 0/0 1/1 0/0 .text init__14Z2CreatureLinkFP3VecP3VecP3Vec */
 void Z2CreatureLink::init(Vec* animePosPtr, Vec* simplePosPtr, Vec* simple2PosPtr) {
     OS_REPORT("[Z2CreatureLink::init]");
 
@@ -121,26 +110,20 @@ void Z2CreatureLink::init(Vec* animePosPtr, Vec* simplePosPtr, Vec* simple2PosPt
     mSinkDepth = -1;
 }
 
-/* 802C3710-802C374C 2BE050 003C+00 0/0 1/1 0/0 .text            initKantera__14Z2CreatureLinkFP3Vec
- */
 void Z2CreatureLink::initKantera(Vec* posPtr) {
     mKanteraState = 0;
     mKantera.init(posPtr, 2);
 }
 
-/* 802C374C-802C3778 2BE08C 002C+00 1/1 1/1 0/0 .text            deleteKantera__14Z2CreatureLinkFv
- */
 void Z2CreatureLink::deleteKantera() {
     mKanteraState = 0;
     mKantera.deleteObject();
 }
 
-/* 802C3778-802C3780 -00001 0008+00 0/0 0/0 0/0 .text setKanteraState__14Z2CreatureLinkFUc */
 void Z2CreatureLink::setKanteraState(u8 state) {
     mKanteraState = state;
 }
 
-/* 802C3780-802C3A64 2BE0C0 02E4+00 1/0 0/0 0/0 .text            framework__14Z2CreatureLinkFUlSc */
 void Z2CreatureLink::framework(u32 mapinfo, s8 reverb) {
     Z2Creature::framework(mapinfo, reverb);
 
@@ -190,13 +173,10 @@ void Z2CreatureLink::framework(u32 mapinfo, s8 reverb) {
     }
 }
 
-/* 802C3A64-802C3A6C -00001 0008+00 0/0 0/0 0/0 .text            setSinkDepth__14Z2CreatureLinkFSc
- */
 void Z2CreatureLink::setSinkDepth(s8 sinkDepth) {
     mSinkDepth = sinkDepth;
 }
 
-/* 802C3A6C-802C3AEC 2BE3AC 0080+00 0/0 4/4 0/0 .text            setRiding__14Z2CreatureLinkFb */
 void Z2CreatureLink::setRiding(bool isRiding) {
     if (mRiding != isRiding) {
         if (isRiding) {
@@ -211,14 +191,10 @@ void Z2CreatureLink::setRiding(bool isRiding) {
     }
 }
 
-/* 802C3AEC-802C3AFC 2BE42C 0010+00 0/0 5/5 0/0 .text            setMagnetized__14Z2CreatureLinkFb
- */
 void Z2CreatureLink::setMagnetized(bool isMagnetized) {
     mMagnetized = isMagnetized;
 }
 
-/* 802C3AFC-802C3BD4 2BE43C 00D8+00 0/0 2/2 0/0 .text            setWolfEyeOpen__14Z2CreatureLinkFb
- */
 void Z2CreatureLink::setWolfEyeOpen(bool wolfEyeOpen) {
     mWolfEyeOpen = wolfEyeOpen;
 
@@ -245,8 +221,6 @@ void Z2CreatureLink::setWolfEyeOpen(bool wolfEyeOpen) {
     }
 }
 
-/* 802C3BD4-802C3E68 2BE514 0294+00 3/3 3/3 0/0 .text
- * startLinkSound__14Z2CreatureLinkF10JAISoundIDUlSc            */
 Z2SoundHandlePool* Z2CreatureLink::startLinkSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     Z2SoundHandlePool* handle = startCreatureSound(soundID, mapinfo, reverb);
 
@@ -282,8 +256,6 @@ Z2SoundHandlePool* Z2CreatureLink::startLinkSound(JAISoundID soundID, u32 mapinf
     return handle;
 }
 
-/* 802C3E68-802C4320 2BE7A8 04B8+00 1/1 3/3 0/0 .text
- * startLinkSoundLevel__14Z2CreatureLinkF10JAISoundIDUlSc       */
 JAISoundHandle* Z2CreatureLink::startLinkSoundLevel(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     #if PLATFORM_WII || PLATFORM_SHIELD
     if (Z2GetSceneMgr()->isSceneExist()) {
@@ -377,8 +349,6 @@ JAISoundHandle* Z2CreatureLink::startLinkSoundLevel(JAISoundID soundID, u32 mapi
     return handle;
 }
 
-/* 802C4320-802C45B0 2BEC60 0290+00 1/1 1/1 0/0 .text
- * startLinkVoice__14Z2CreatureLinkF10JAISoundIDSc              */
 Z2SoundHandlePool* Z2CreatureLink::startLinkVoice(JAISoundID soundID, s8 reverb) {
     if (mLinkState == 1) {
         switch (soundID) {
@@ -448,8 +418,6 @@ Z2SoundHandlePool* Z2CreatureLink::startLinkVoice(JAISoundID soundID, s8 reverb)
     return startCreatureVoice(soundID, reverb);
 }
 
-/* 802C45B0-802C46F0 2BEEF0 0140+00 0/0 1/1 0/0 .text
- * startLinkVoiceLevel__14Z2CreatureLinkF10JAISoundIDSc         */
 Z2SoundHandlePool* Z2CreatureLink::startLinkVoiceLevel(JAISoundID soundID, s8 reverb) {
     if (mLinkState == 1) {
         switch (soundID) {
@@ -487,8 +455,6 @@ Z2SoundHandlePool* Z2CreatureLink::startLinkVoiceLevel(JAISoundID soundID, s8 re
     return startCreatureVoiceLevel(soundID, reverb);
 }
 
-/* 802C46F0-802C4784 2BF030 0094+00 0/0 2/2 0/0 .text
- * startLinkSwordSound__14Z2CreatureLinkF10JAISoundIDUlSc       */
 void Z2CreatureLink::startLinkSwordSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     u32 sound_ID = soundID;  // fakematch
 
@@ -515,7 +481,6 @@ void Z2CreatureLink::startLinkSwordSound(JAISoundID soundID, u32 mapinfo, s8 rev
     }
 }
 
-/* 802C4784-802C4814 2BF0C4 0090+00 1/0 0/0 0/0 .text startCollisionSE__14Z2CreatureLinkFUlUl */
 Z2SoundHandlePool* Z2CreatureLink::startCollisionSE(u32 hitID, u32 mapinfo) {
     switch (mapinfo) {
     case 0x28:
@@ -533,8 +498,6 @@ Z2SoundHandlePool* Z2CreatureLink::startCollisionSE(u32 hitID, u32 mapinfo) {
     return mSoundObjAnime.startCollisionSE(hitID, mapinfo, NULL);
 }
 
-/* 802C4814-802C48D8 2BF154 00C4+00 0/0 4/4 2/2 .text
- * startHitItemSE__14Z2CreatureLinkFUlUlP14Z2SoundObjBasef      */
 Z2SoundHandlePool* Z2CreatureLink::startHitItemSE(u32 soundID, u32 mapinfo, Z2SoundObjBase* other, f32 speed) {
     if (other == NULL) {
         other = &mSoundObjSimple2;
@@ -558,17 +521,12 @@ Z2SoundHandlePool* Z2CreatureLink::startHitItemSE(u32 soundID, u32 mapinfo, Z2So
     return handle;
 }
 
-/* 802C48D8-802C48E8 2BF218 0010+00 0/0 1/1 0/0 .text            setResumeAttack__14Z2CreatureLinkFb
- */
 void Z2CreatureLink::setResumeAttack(bool resumeAttack) {
     mResumeAttack = resumeAttack;
 }
 
-/* 802C48E8-802C4928 2BF228 0040+00 1/1 0/0 0/0 .text            __ct__18Z2LinkSoundStarterFv */
 Z2LinkSoundStarter::Z2LinkSoundStarter() : Z2SoundStarter(false) {}
 
-/* 802C4928-802C4FFC 2BF268 06D4+00 2/0 0/0 0/0 .text
- * startSound__18Z2LinkSoundStarterF10JAISoundIDP14JAISoundHandlePCQ29JGeometry8TVec3<f>UlfffffUl */
 bool Z2LinkSoundStarter::startSound(JAISoundID soundID, JAISoundHandle* handle,
                                     const JGeometry::TVec3<f32>* posPtr, u32 mapinfo,
                                     f32 fxMix, f32 pitch, f32 volume, f32 pan,
@@ -718,43 +676,33 @@ bool Z2LinkSoundStarter::startSound(JAISoundID soundID, JAISoundHandle* handle,
     return ret;
 }
 
-/* 802C4FFC-802C5078 2BF93C 007C+00 0/0 0/0 3/3 .text            __ct__14Z2CreatureRideFv */
 Z2CreatureRide::Z2CreatureRide() : Z2RideSoundStarter(this) {
     mLinkRiding = false;
 
     setSoundStarter(this);
 }
 
-/* 802C5114-802C51EC 2BFA54 00D8+00 2/1 0/0 2/2 .text            __dt__14Z2CreatureRideFv */
 Z2CreatureRide::~Z2CreatureRide() {
     deleteObject();
 }
 
-/* 802C51EC-802C520C 2BFB2C 0020+00 1/0 0/0 0/0 .text            deleteObject__14Z2CreatureRideFv */
 void Z2CreatureRide::deleteObject() {
     Z2Creature::deleteObject();
 }
 
-/* 802C520C-802C522C 2BFB4C 0020+00 0/0 0/0 3/3 .text init__14Z2CreatureRideFP3VecP3VecUcUc */
 void Z2CreatureRide::init(Vec* animePosPtr, Vec* simplePosPtr, u8 animeHandleNum, u8 simpleHandleNum) {
     Z2Creature::init(animePosPtr, simplePosPtr, animeHandleNum, simpleHandleNum);
 }
 
-/* 802C522C-802C5234 -00001 0008+00 0/0 0/0 0/0 .text            setLinkRiding__14Z2CreatureRideFb
- */
 void Z2CreatureRide::setLinkRiding(bool isRiding) {
     mLinkRiding = isRiding;
 }
 
-/* 802C5234-802C5284 2BFB74 0050+00 1/1 0/0 0/0 .text __ct__18Z2RideSoundStarterFP14Z2CreatureRide
- */
 Z2RideSoundStarter::Z2RideSoundStarter(Z2CreatureRide* ride) : Z2SoundStarter(false) {
     mRide = ride;
     JUT_ASSERT(1294, ride);
 }
 
-/* 802C5284-802C54B8 2BFBC4 0234+00 2/0 0/0 0/0 .text
- * startSound__18Z2RideSoundStarterF10JAISoundIDP14JAISoundHandlePCQ29JGeometry8TVec3<f>UlfffffUl */
 bool Z2RideSoundStarter::startSound(JAISoundID soundID, JAISoundHandle* handle,
                                     const JGeometry::TVec3<f32>* posPtr, u32 mapinfo,
                                     f32 fxMix, f32 pitch, f32 volume, f32 pan,
@@ -809,17 +757,14 @@ bool Z2RideSoundStarter::startSound(JAISoundID soundID, JAISoundHandle* handle,
     return ret;
 }
 
-/* 802C54B8-802C54FC 2BFDF8 0044+00 0/0 0/0 1/1 .text            __ct__15Z2SoundObjCoachFv */
 Z2SoundObjCoach::Z2SoundObjCoach() {
     field_0x20 = 0.0f;
 }
 
-/* 802C54FC-802C551C 2BFE3C 0020+00 1/0 0/0 0/0 .text            init__15Z2SoundObjCoachFP3VecUc */
 void Z2SoundObjCoach::init(Vec* posPtr, u8 handleNum) {
     Z2SoundObjBase::init(posPtr, handleNum);
 }
 
-/* 802C551C-802C56C0 2BFE5C 01A4+00 0/0 0/0 1/1 .text startWheelSound__15Z2SoundObjCoachFf */
 Z2SoundHandlePool* Z2SoundObjCoach::startWheelSound(f32 param_0) {
     Z2SoundHandlePool* handle = NULL;
 
@@ -851,7 +796,6 @@ Z2SoundHandlePool* Z2SoundObjCoach::startWheelSound(f32 param_0) {
     return handle;
 }
 
-/* 802C56C0-802C57C0 2C0000 0100+00 0/0 0/0 1/1 .text startFireSound__15Z2SoundObjCoachFUs */
 Z2SoundHandlePool* Z2SoundObjCoach::startFireSound(u16 param_0) {
     Z2SoundHandlePool* handle = startLevelSound(Z2SE_COACH_FIRE, 0, -1);
     
@@ -867,8 +811,6 @@ Z2SoundHandlePool* Z2SoundObjCoach::startFireSound(u16 param_0) {
     return handle;
 }
 
-/* 802C57C0-802C588C 2C0100 00CC+00 1/0 0/0 0/0 .text
- * startSound__15Z2SoundObjCoachF10JAISoundIDUlSc               */
 Z2SoundHandlePool* Z2SoundObjCoach::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     Z2SoundHandlePool* handle = Z2SoundObjBase::startSound(soundID, mapinfo, reverb);
 

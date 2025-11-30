@@ -8,7 +8,6 @@ DSIOResult __close_file(u32 handle, u8* buffer, size_t* count, void* ref_con);
 DSIOResult __access_file(u32 handle, u8* buffer, size_t* count, void* ref_con,
                          MessageCommandID cmd);
 
-/* 80372258-80372314 36CB98 00BC+00 0/0 1/0 0/0 .text            __read_console */
 DSIOResult __read_console(u32 handle, u8* buffer, size_t* count, void* ref_con) {
     if (GetUseSerialIO() == 0) {
         return DS_IOError;
@@ -16,7 +15,6 @@ DSIOResult __read_console(u32 handle, u8* buffer, size_t* count, void* ref_con) 
     return __read_file(DS_Stdin, buffer, count, ref_con);
 }
 
-/* 8037219C-80372258 36CADC 00BC+00 0/0 1/1 0/0 .text            __TRK_write_console */
 DSIOResult __TRK_write_console(u32 handle, u8* buffer, size_t* count, void* ref_con) {
     if (GetUseSerialIO() == 0) {
         return DS_IOError;

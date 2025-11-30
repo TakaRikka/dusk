@@ -11,7 +11,6 @@
 
 static int daVrbox_color_set(vrbox_class* i_this);
 
-/* 80498518-804986B8 000078 01A0+00 1/0 0/0 0/0 .text            daVrbox_Draw__FP11vrbox_class */
 static int daVrbox_Draw(vrbox_class* i_this) {
     J3DModel* soraModel_p = i_this->mpSoraModel;
     f32 fvar = 0.0f;
@@ -63,8 +62,6 @@ static int daVrbox_Draw(vrbox_class* i_this) {
     return 1;
 }
 
-/* 804986B8-80498850 000218 0198+00 1/1 0/0 0/0 .text            daVrbox_color_set__FP11vrbox_class
- */
 static int daVrbox_color_set(vrbox_class* i_this) {
     if ((g_env_light.vrbox_kasumi_outer_col.r + g_env_light.vrbox_kasumi_outer_col.g +
          g_env_light.vrbox_kasumi_outer_col.b + g_env_light.vrbox_sky_col.r + g_env_light.vrbox_sky_col.g +
@@ -107,24 +104,18 @@ static int daVrbox_color_set(vrbox_class* i_this) {
     return 1;
 }
 
-/* 80498850-80498858 0003B0 0008+00 1/0 0/0 0/0 .text            daVrbox_Execute__FP11vrbox_class */
 static int daVrbox_Execute(vrbox_class* i_this) {
     return 1;
 }
 
-/* 80498858-80498860 0003B8 0008+00 1/0 0/0 0/0 .text            daVrbox_IsDelete__FP11vrbox_class
- */
 static int daVrbox_IsDelete(vrbox_class* i_this) {
     return 1;
 }
 
-/* 80498860-80498868 0003C0 0008+00 1/0 0/0 0/0 .text            daVrbox_Delete__FP11vrbox_class */
 static int daVrbox_Delete(vrbox_class* i_this) {
     return 1;
 }
 
-/* 80498868-804988DC 0003C8 0074+00 1/1 0/0 0/0 .text            daVrbox_solidHeapCB__FP10fopAc_ac_c
- */
 static int daVrbox_solidHeapCB(fopAc_ac_c* i_this) {
     vrbox_class* this_ = (vrbox_class*)i_this;
 
@@ -134,7 +125,6 @@ static int daVrbox_solidHeapCB(fopAc_ac_c* i_this) {
     return modelData != NULL && this_->mpSoraModel != NULL;
 }
 
-/* 804988DC-80498988 00043C 00AC+00 1/0 0/0 0/0 .text            daVrbox_Create__FP10fopAc_ac_c */
 static int daVrbox_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, vrbox_class);
     vrbox_class* this_ = (vrbox_class*)i_this;
@@ -152,15 +142,12 @@ static int daVrbox_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* ############################################################################################## */
-/* 804989A8-804989C8 -00001 0020+00 1/0 0/0 0/0 .data            l_daVrbox_Method */
 static actor_method_class l_daVrbox_Method = {
     (process_method_func)daVrbox_Create,  (process_method_func)daVrbox_Delete,
     (process_method_func)daVrbox_Execute, (process_method_func)daVrbox_IsDelete,
     (process_method_func)daVrbox_Draw,
 };
 
-/* 804989C8-804989F8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_VRBOX */
 extern actor_process_profile_definition g_profile_VRBOX = {
     fpcLy_CURRENT_e,
     7,

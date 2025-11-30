@@ -10,10 +10,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 80D67E38-80D67E3C 000078 0004+00 1/1 0/0 0/0 .text            create_init__11daWarpBug_cFv */
 void daWarpBug_c::create_init() {}
 
-/* 80D68208-80D6820C -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "WarpBug";
 
 int daWarpBug_c::createHeap() {
@@ -46,17 +44,14 @@ int daWarpBug_c::createHeap() {
     return 1;
 }
 
-/* 80D67E3C-80D68000 00007C 01C4+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daWarpBug_c*>(i_this)->createHeap();
 }
 
-/* 80D68048-80D68068 000288 0020+00 1/0 0/0 0/0 .text            daWarpBug_Draw__FP11daWarpBug_c */
 static int daWarpBug_Draw(daWarpBug_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D68068-80D68078 0002A8 0010+00 1/1 0/0 0/0 .text            draw__11daWarpBug_cFv */
 int daWarpBug_c::draw() {
 #ifdef DEBUG
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -123,14 +118,10 @@ int daWarpBug_c::execute() {
     return 1;
 }
 
-/* 80D68078-80D680D8 0002B8 0060+00 1/0 0/0 0/0 .text            daWarpBug_Execute__FP11daWarpBug_c
- */
 static int daWarpBug_Execute(daWarpBug_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D680D8-80D680E0 000318 0008+00 1/0 0/0 0/0 .text            daWarpBug_IsDelete__FP11daWarpBug_c
- */
 static int daWarpBug_IsDelete(daWarpBug_c* i_this) {
     return 1;
 }
@@ -139,8 +130,6 @@ daWarpBug_c::~daWarpBug_c() {
     dComIfG_resDelete(&mPhase, l_arcName);
 }
 
-/* 80D680E0-80D68130 000320 0050+00 1/0 0/0 0/0 .text            daWarpBug_Delete__FP11daWarpBug_c
- */
 static int daWarpBug_Delete(daWarpBug_c* i_this) {
     i_this->~daWarpBug_c();
     return 1;
@@ -161,19 +150,16 @@ int daWarpBug_c::create() {
     return phase;
 }
 
-/* 80D68130-80D681D4 000370 00A4+00 1/0 0/0 0/0 .text            daWarpBug_Create__FP10fopAc_ac_c */
 static int daWarpBug_Create(fopAc_ac_c* i_this) {
     return static_cast<daWarpBug_c*>(i_this)->create();
 }
 
-/* 80D6820C-80D6822C -00001 0020+00 1/0 0/0 0/0 .data            l_daWarpBug_Method */
 static actor_method_class l_daWarpBug_Method = {
     (process_method_func)daWarpBug_Create,  (process_method_func)daWarpBug_Delete,
     (process_method_func)daWarpBug_Execute, (process_method_func)daWarpBug_IsDelete,
     (process_method_func)daWarpBug_Draw,
 };
 
-/* 80D6822C-80D6825C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_WarpBug */
 extern actor_process_profile_definition g_profile_WarpBug = {
     fpcLy_CURRENT_e,
     7,

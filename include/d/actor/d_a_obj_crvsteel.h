@@ -16,18 +16,18 @@
  */
 class daObjCRVSTEEL_c : public dBgS_MoveBgActor {
 public:
-    /* 80BD5BFC */ void OpenSet(f32, f32);
-    /* 80BD5C18 */ void CloseSet(f32);
-    /* 80BD5C28 */ void CloseExecute();
-    /* 80BD5CA0 */ void OpenExecute();
-    /* 80BD5CC8 */ void Action();
-    /* 80BD5D10 */ void setBaseMtx();
-    /* 80BD5DB8 */ int CreateHeap();
-    /* 80BD5E30 */ int create();
-    /* 80BD60A8 */ int Create();
-    /* 80BD60EC */ int Execute(Mtx**);
-    /* 80BD6138 */ int Draw();
-    /* 80BD61BC */ int Delete();
+    void OpenSet(f32, f32);
+    void CloseSet(f32);
+    void CloseExecute();
+    void OpenExecute();
+    void Action();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
 private:
     /* 0x5A0 */ u32 mSmokeParticle1;

@@ -25,26 +25,26 @@ public:
         ACTION_WARP_EVENT_DST_e,
     };
 
-    /* 80D299B8 */ void initBaseMtx();
-    /* 80D29A00 */ void setBaseMtx();
-    /* 80D29E7C */ int create1st();
-    /* 80D2A04C */ void event_proc_call();
-    /* 80D2A194 */ void actionWait();
-    /* 80D2A4CC */ void actionOrderEvent();
-    /* 80D2A740 */ void actionTalkEvent();
-    /* 80D2A7C4 */ void actionWarpEvent();
-    /* 80D2A93C */ void actionOrderEventDst();
-    /* 80D2A9E4 */ void actionWarpEventDst();
-    /* 80D2AA30 */ void actionDead();
-    /* 80D2AA34 */ void demoProc();
-    /* 80D2B3BC */ bool checkTalkDistance();
-    /* 80D2B534 */ void calcMidnaWaitPos();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionTalkEvent();
+    void actionWarpEvent();
+    void actionOrderEventDst();
+    void actionWarpEventDst();
+    void actionDead();
+    void demoProc();
+    bool checkTalkDistance();
+    void calcMidnaWaitPos();
 
-    /* 80D29BB4 */ virtual int CreateHeap();
-    /* 80D29ACC */ virtual int Create();
-    /* 80D2A008 */ virtual int Execute(Mtx**);
-    /* 80D2B5C8 */ virtual int Draw();
-    /* 80D2B6C0 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getNameArg() { return argument; }
     u8 getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }

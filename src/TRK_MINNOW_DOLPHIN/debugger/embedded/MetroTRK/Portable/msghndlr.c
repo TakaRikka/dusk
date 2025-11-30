@@ -4,10 +4,8 @@
 #include "trk.h"
 #include <string.h>
 
-/* 8044F288-8044F290 07BFA8 0004+04 4/4 0/0 0/0 .bss             IsTRKConnected */
 static BOOL IsTRKConnected;
 
-/* 8036ECDC-8036ED84 36961C 00A8+00 0/0 1/1 0/0 .text            OutputData */
 void OutputData(void* data, int length) {
     // u8 byte;
     int i;
@@ -23,12 +21,10 @@ void OutputData(void* data, int length) {
     MWTRACE(8, "\n");
 }
 
-/* 8036ECCC-8036ECDC 36960C 0010+00 0/0 3/3 0/0 .text            GetTRKConnected */
 BOOL GetTRKConnected(void) {
     return IsTRKConnected;
 }
 
-/* 8036ECC0-8036ECCC 369600 000C+00 0/0 1/1 0/0 .text            SetTRKConnected */
 void SetTRKConnected(BOOL isTRKConnected) {
     IsTRKConnected = isTRKConnected;
 }
@@ -53,13 +49,11 @@ DSError TRKStandardACK(TRKBuffer* buffer, MessageCommandID commandID,
     return DS_NoError;
 }
 
-/* 8036EC5C-8036ECC0 36959C 0064+00 0/0 1/1 0/0 .text            TRKDoConnect */
 DSError TRKDoConnect(TRKBuffer* buffer) {
     IsTRKConnected = TRUE;
     return TRKStandardACK(buffer, 0x80, DSREPLY_NoError);
 }
 
-/* 8036EBE4-8036EC5C 369524 0078+00 0/0 1/1 0/0 .text            TRKDoDisconnect */
 DSError TRKDoDisconnect(TRKBuffer* buffer) {
     TRKEvent event;
 
@@ -70,33 +64,28 @@ DSError TRKDoDisconnect(TRKBuffer* buffer) {
     return DS_NoError;
 }
 
-/* 8036EB8C-8036EBE4 3694CC 0058+00 0/0 1/1 0/0 .text            TRKDoReset */
 DSError TRKDoReset(TRKBuffer* buffer) {
     TRKStandardACK(buffer, 0x80, DSREPLY_NoError);
     __TRK_reset();
     return DS_NoError;
 }
 
-/* 8036EB34-8036EB8C 369474 0058+00 0/0 1/1 0/0 .text            TRKDoOverride */
 DSError TRKDoOverride(TRKBuffer* buffer) {
     TRKStandardACK(buffer, 0x80, DSREPLY_NoError);
     __TRK_copy_vectors();
     return DS_NoError;
 }
 
-/* 8036EB2C-8036EB34 36946C 0008+00 0/0 1/1 0/0 .text            TRKDoVersions */
 DSError TRKDoVersions(TRKBuffer*) {
     return DS_NoError;
 }
 
-/* 8036EB24-8036EB2C 369464 0008+00 0/0 1/1 0/0 .text            TRKDoSupportMask */
 DSError TRKDoSupportMask(TRKBuffer*) {
     return DS_NoError;
 }
 
-/* 8036E8E0-8036EB24 369220 0244+00 1/0 1/1 0/0 .text            TRKDoReadMemory */
 DSError TRKDoReadMemory(TRKBuffer* buffer) {
-    u8 buf[0x820] __attribute__((aligned(32)));
+    u8 buf[0x820] ATTRIBUTE_ALIGN(32);
     size_t tempLength;
     int result;
     int replyErr;
@@ -168,9 +157,8 @@ DSError TRKDoReadMemory(TRKBuffer* buffer) {
     return TRKSendACK(buffer);
 }
 
-/* 8036E6A4-8036E8E0 368FE4 023C+00 1/0 1/1 0/0 .text            TRKDoWriteMemory */
 DSError TRKDoWriteMemory(TRKBuffer* b) {
-    u8 buf[0x820] __attribute__((aligned(32)));
+    u8 buf[0x820] ATTRIBUTE_ALIGN(32);
     size_t tempLength;
     int options;
     int result;
@@ -239,7 +227,6 @@ DSError TRKDoWriteMemory(TRKBuffer* b) {
     return TRKSendACK(b);
 }
 
-/* 8036E3C4-8036E6A4 368D04 02E0+00 0/0 1/1 0/0 .text            TRKDoReadRegisters */
 DSError TRKDoReadRegisters(TRKBuffer* b) {
     int error;
     u8 options;
@@ -318,7 +305,6 @@ DSError TRKDoReadRegisters(TRKBuffer* b) {
     }
 }
 
-/* 8036E134-8036E3C4 368A74 0290+00 0/0 1/1 0/0 .text            TRKDoWriteRegisters */
 DSError TRKDoWriteRegisters(TRKBuffer* b) {
     int error;
     int replyError;
@@ -409,7 +395,6 @@ void TRKDoFlushCache(void) {
     // UNUSED FUNCTION
 }
 
-/* 8036E084-8036E134 3689C4 00B0+00 0/0 1/1 0/0 .text            TRKDoContinue */
 DSError TRKDoContinue(TRKBuffer*) {
     MWTRACE(1, "DoContinue\n");
     if (!TRKTargetStopped()) {
@@ -435,7 +420,6 @@ DSError TRKDoContinue(TRKBuffer*) {
     }
 }
 
-/* 8036DE64-8036E084 3687A4 0220+00 0/0 1/1 0/0 .text            TRKDoStep */
 DSError TRKDoStep(TRKBuffer* b) {
     DSError result;
     u8 options;
@@ -487,7 +471,6 @@ DSError TRKDoStep(TRKBuffer* b) {
     }
 }
 
-/* 8036DDBC-8036DE64 3686FC 00A8+00 0/0 1/1 0/0 .text            TRKDoStop */
 DSError TRKDoStop(TRKBuffer* b) {
     MessageCommandID c;
 
@@ -514,7 +497,6 @@ DSError TRKDoStop(TRKBuffer* b) {
     return DS_NoError;
 }
 
-/* 8036DD14-8036DDBC 368654 00A8+00 0/0 1/1 0/0 .text            TRKDoSetOption */
 DSError TRKDoSetOption(TRKBuffer* message) {
     u8 enable = message->data[0xc];
 

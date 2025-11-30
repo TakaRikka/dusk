@@ -14,16 +14,16 @@
  */
 class daObj_Roten_c : public dBgS_MoveBgActor {
 public:
-    /* 80CC0B58 */ void initBaseMtx();
-    /* 80CC0B94 */ void setBaseMtx();
-    /* 80CC0C20 */ int Create();
-    /* 80CC0EC4 */ int CreateHeap();
-    /* 80CC0F40 */ int create();
-    /* 80CC1038 */ int Execute(Mtx**);
-    /* 80CC1138 */ int Draw();
-    /* 80CC1254 */ int Delete();
-    /* 80CC12E4 */ char* getResName();
-    /* 80CC1388 */ virtual ~daObj_Roten_c();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
+    char* getResName();
+    virtual ~daObj_Roten_c();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;

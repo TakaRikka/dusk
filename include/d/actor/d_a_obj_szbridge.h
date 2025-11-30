@@ -14,16 +14,16 @@
  */
 class daObjSZbridge_c : public dBgS_MoveBgActor, request_of_phase_process_class {
 public:
-    /* 80D04360 */ void rideActor(fopAc_ac_c*);
-    /* 80D04424 */ int create1st();
-    /* 80D044B8 */ void setMtx();
-    /* 80D04528 */ int CreateHeap();
-    /* 80D04598 */ void chkBg();
-    /* 80D048C4 */ int Create();
-    /* 80D04974 */ int Execute(Mtx**);
-    /* 80D049E4 */ int Draw();
-    /* 80D04A88 */ int Delete();
-    /* 80D04B90 */ virtual ~daObjSZbridge_c() {}
+    void rideActor(fopAc_ac_c*);
+    int create1st();
+    void setMtx();
+    int CreateHeap();
+    void chkBg();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
+    virtual ~daObjSZbridge_c() {}
 
 private:
     /* 0x5A8 */ Mtx mBgMtx;

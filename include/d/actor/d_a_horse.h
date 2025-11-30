@@ -14,8 +14,8 @@
 
 class daHorseRein_c {
 public:
-    /* 80837F2C */ void setReinPos(int);
-    /* 808383A8 */ void setReinPosPart(int);
+    void setReinPos(int);
+    void setReinPosPart(int);
 
     /* 0x00 */ cXyz* field_0x0[2];
     /* 0x08 */ int field_0x8[2];
@@ -135,102 +135,102 @@ public:
         m_demoMode = 1;
     }
 
-    /* 807E27F8 */ void onDemoJumpDistance(f32 param_1, f32 param_2) {
+    void onDemoJumpDistance(f32 param_1, f32 param_2) {
         field_0x1768 = param_1;
         field_0x176c = param_2;
         field_0x1770 = param_1;
 
     }
 
-    /* 807E28B8 */ void changeDemoPos0(cXyz const* pos) {
+    void changeDemoPos0(cXyz const* pos) {
         m_demoPos0 = *pos;
     }
 
-    /* 80838498 */ void coHitCallbackBoarJump(fopAc_ac_c*);
-    /* 80838798 */ void coHitCallbackBoarHit(fopAc_ac_c*, dCcD_GObjInf*);
-    /* 80838904 */ void coHitCallbackCowHit(fopAc_ac_c*);
-    /* 80838B78 */ int modelCallBack(int);
-    /* 80838F98 */ int createHeap();
-    /* 8083940C */ static BOOL checkEnding();
-    /* 80839498 */ int create();
-    /* 80839D1C */ void setBasAnime(int);
-    /* 80839EBC */ void resetBasAnime();
-    /* 80839ED4 */ int setDoubleAnime(f32, f32, f32, u16, u16, f32);
-    /* 8083A20C */ int setSingleAnime(u16, f32, f32, s16, f32, int);
-    /* 8083A3C4 */ void animePlay();
-    /* 8083A5AC */ int checkDemoAction();
-    /* 8083A890 */ void setStickRodeoMove();
-    /* 8083AC7C */ void setStickCallMove();
-    /* 8083ACEC */ void setDemoMoveData(u32*, cXyz const*);
-    /* 8083AEC0 */ void setDemoData();
-    /* 8083B578 */ void acceptPlayerRide();
-    /* 8083B600 */ void setStickData();
-    /* 8083B828 */ void setTurnStartVibration();
-    /* 8083B82C */ void setTurnVibration();
-    /* 8083B830 */ void setMoveAnime(f32);
-    /* 8083BF48 */ int checkHorseNoMove(int);
-    /* 8083CA80 */ BOOL checkTurnPlayerState();
-    /* 8083CB38 */ int setSpeedAndAngle();
-    /* 8083D748 */ BOOL checkWaitTurn() const;
-    /* 8083D774 */ void setRoomInfo(int);
-    /* 8083D918 */ void setBodyPart();
-    /* 8083D9D8 */ void setMatrix();
-    /* 8083DC58 */ void setDashEffect(u32*);
-    /* 8083DEEC */ void setEffect();
-    /* 8083E4D8 */ void setCollision();
-    /* 8083E6E8 */ void autoGroundHit();
-    /* 8083E760 */ void setTailAngle();
-    /* 8083E8A4 */ void setNeckAngle();
-    /* 8083EA78 */ void copyFootMatrix();
-    /* 8083EB10 */ int setFootMatrix();
-    /* 8083ED88 */ int setLegAngle(f32, int, int, s16*);
-    /* 8083F3B0 */ void footBgCheck();
-    /* 8083F9AC */ void setReinPosMoveInit(int);
-    /* 8083FDAC */ void copyReinPos();
-    /* 8083FEB4 */ void setReinPosHandSubstance(int);
-    /* 8084010C */ void setReinPosNormalSubstance();
-    /* 808402F8 */ void bgCheck();
-    /* 80840714 */ bool checkSpecialWallHitSubstance(cXyz const&) const;
-    /* 808407B0 */ void setServiceWaitTimer();
-    /* 80840800 */ BOOL checkServiceWaitAnime();
-    /* 80840844 */ BOOL checkTurnInput();
-    /* 808408F0 */ BOOL checkTgHitTurn();
-    /* 808409C0 */ BOOL checkTurnAfterFastMove(f32);
-    /* 80840B28 */ void setNeckAnimeMorf();
-    /* 80840B88 */ void setNeckAnime(u16, f32, f32, s16);
-    /* 80840CA4 */ void resetNeckAnime();
-    /* 80840CE4 */ void setLashCnt();
-    /* 80840FE0 */ void setTalkModeWolf();
-    /* 80841084 */ void setBoarHit(fopAc_ac_c*, int);
-    /* 8084116C */ void savePos();
-    /* 808411D0 */ int callHorseSubstance(cXyz const*);
-    /* 80841468 */ void setHorsePosAndAngleSubstance(cXyz const*, s16);
-    /* 808415B4 */ BOOL checkPlayerHeavy();
-    /* 80841628 */ void setTgCoGrp(u32, u32);
-    /* 80841698 */ void onRideFlgSubstance();
-    /* 808416D4 */ void offRideFlgSubstance();
-    /* 80841708 */ int procWaitInit();
-    /* 808417B8 */ int procWait();
-    /* 80841F04 */ int procMoveInit();
-    /* 80841F80 */ int procMove();
-    /* 808423DC */ int procStopInit();
-    /* 808425BC */ int procStop();
-    /* 80842878 */ int procTurnInit(int);
-    /* 80842AB0 */ int procTurn();
-    /* 80843008 */ int procJumpInit(int);
-    /* 808432E0 */ int procJump();
-    /* 80843604 */ int procLandInit(f32, int);
-    /* 80843770 */ int procLand();
-    /* 808438AC */ int procLargeDamageInit();
-    /* 8084396C */ int procLargeDamage();
-    /* 808439C8 */ int procToolDemoInit();
-    /* 80843A44 */ int procToolDemo();
-    /* 80843BFC */ void searchSceneChangeArea(fopAc_ac_c*);
-    /* 80843C74 */ int execute();
-    /* 80844590 */ int draw();
-    /* 8084478C */ ~daHorse_c();
+    void coHitCallbackBoarJump(fopAc_ac_c*);
+    void coHitCallbackBoarHit(fopAc_ac_c*, dCcD_GObjInf*);
+    void coHitCallbackCowHit(fopAc_ac_c*);
+    int modelCallBack(int);
+    int createHeap();
+    static BOOL checkEnding();
+    int create();
+    void setBasAnime(int);
+    void resetBasAnime();
+    int setDoubleAnime(f32, f32, f32, u16, u16, f32);
+    int setSingleAnime(u16, f32, f32, s16, f32, int);
+    void animePlay();
+    int checkDemoAction();
+    void setStickRodeoMove();
+    void setStickCallMove();
+    void setDemoMoveData(u32*, cXyz const*);
+    void setDemoData();
+    void acceptPlayerRide();
+    void setStickData();
+    void setTurnStartVibration();
+    void setTurnVibration();
+    void setMoveAnime(f32);
+    int checkHorseNoMove(int);
+    BOOL checkTurnPlayerState();
+    int setSpeedAndAngle();
+    BOOL checkWaitTurn() const;
+    void setRoomInfo(int);
+    void setBodyPart();
+    void setMatrix();
+    void setDashEffect(u32*);
+    void setEffect();
+    void setCollision();
+    void autoGroundHit();
+    void setTailAngle();
+    void setNeckAngle();
+    void copyFootMatrix();
+    int setFootMatrix();
+    int setLegAngle(f32, int, int, s16*);
+    void footBgCheck();
+    void setReinPosMoveInit(int);
+    void copyReinPos();
+    void setReinPosHandSubstance(int);
+    void setReinPosNormalSubstance();
+    void bgCheck();
+    bool checkSpecialWallHitSubstance(cXyz const&) const;
+    void setServiceWaitTimer();
+    BOOL checkServiceWaitAnime();
+    BOOL checkTurnInput();
+    BOOL checkTgHitTurn();
+    BOOL checkTurnAfterFastMove(f32);
+    void setNeckAnimeMorf();
+    void setNeckAnime(u16, f32, f32, s16);
+    void resetNeckAnime();
+    void setLashCnt();
+    void setTalkModeWolf();
+    void setBoarHit(fopAc_ac_c*, int);
+    void savePos();
+    int callHorseSubstance(cXyz const*);
+    void setHorsePosAndAngleSubstance(cXyz const*, s16);
+    BOOL checkPlayerHeavy();
+    void setTgCoGrp(u32, u32);
+    void onRideFlgSubstance();
+    void offRideFlgSubstance();
+    int procWaitInit();
+    int procWait();
+    int procMoveInit();
+    int procMove();
+    int procStopInit();
+    int procStop();
+    int procTurnInit(int);
+    int procTurn();
+    int procJumpInit(int);
+    int procJump();
+    int procLandInit(f32, int);
+    int procLand();
+    int procLargeDamageInit();
+    int procLargeDamage();
+    int procToolDemoInit();
+    int procToolDemo();
+    void searchSceneChangeArea(fopAc_ac_c*);
+    int execute();
+    int draw();
+    ~daHorse_c();
     
-    /* 80182D04 */ u32 getLashDashStart() const { return checkResetStateFlg0(RFLG0_LASH_DASH_START); }
+    u32 getLashDashStart() const { return checkResetStateFlg0(RFLG0_LASH_DASH_START); }
     
 
     bool checkNoBombProc() const { return m_procID == PROC_WAIT_e || m_procID == PROC_MOVE_e; }

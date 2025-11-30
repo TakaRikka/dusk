@@ -15,18 +15,18 @@
  */
 class daB_ZANTZ_c : public fopEn_enemy_c {
 public:
-    /* 806507B0 */ int draw();
-    /* 80650854 */ void setSnortEffect(int);
-    /* 806508E0 */ void calcSnortEffect();
-    /* 80650B7C */ void setMouthMode(u8);
-    /* 80650D0C */ void setAppearMode(u8);
-    /* 806510C0 */ f32 getGroundPos();
-    /* 8065127C */ void action();
-    /* 80651B1C */ void cc_set();
-    /* 80651C20 */ int execute();
-    /* 80651D1C */ int _delete();
-    /* 80651DC4 */ int CreateHeap();
-    /* 80652038 */ int create();
+    int draw();
+    void setSnortEffect(int);
+    void calcSnortEffect();
+    void setMouthMode(u8);
+    void setAppearMode(u8);
+    f32 getGroundPos();
+    void action();
+    void cc_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    int create();
 
     int getMouthMode() { return mMouthMode; }
     int getAppearMode() { return mAppearMode; }
@@ -62,8 +62,8 @@ STATIC_ASSERT(sizeof(daB_ZANTZ_c) == 0xd14);
 
 class daB_ZANTZ_HIO_c {
 public:
-    /* 8065078C */ daB_ZANTZ_HIO_c();
-    /* 8065268C */ virtual ~daB_ZANTZ_HIO_c() {}
+    daB_ZANTZ_HIO_c();
+    virtual ~daB_ZANTZ_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mModelSize;

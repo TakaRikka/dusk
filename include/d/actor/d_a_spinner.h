@@ -24,24 +24,24 @@ public:
         TAG_END,
     };
 
-    /* 804D198C */ int createHeap();
-    /* 804D1A70 */ int create();
-    /* 804D1FD0 */ ~daSpinner_c();
-    /* 804D21E0 */ void setRoomInfo();
-    /* 804D2278 */ void setMatrix();
-    /* 804D2320 */ void setEffect();
-    /* 804D25F4 */ int posMove();
-    /* 804D3090 */ void setReflectAngle();
-    /* 804D3174 */ void setWallHit(s16, u32);
-    /* 804D34B0 */ void setAnm();
-    /* 804D3618 */ int setNextPathNum();
-    /* 804D3694 */ Vec* getPathNextPos();
-    /* 804D36F4 */ int checkLineWallHit(cXyz*, cXyz*);
-    /* 804D3774 */ int checkPathMove();
-    /* 804D3D60 */ void setSpreadEffect();
-    /* 804D3F14 */ void clearSpreadEffect();
-    /* 804D3F8C */ int execute();
-    /* 804D4BB4 */ int draw();
+    int createHeap();
+    int create();
+    ~daSpinner_c();
+    void setRoomInfo();
+    void setMatrix();
+    void setEffect();
+    int posMove();
+    void setReflectAngle();
+    void setWallHit(s16, u32);
+    void setAnm();
+    int setNextPathNum();
+    Vec* getPathNextPos();
+    int checkLineWallHit(cXyz*, cXyz*);
+    int checkPathMove();
+    void setSpreadEffect();
+    void clearSpreadEffect();
+    int execute();
+    int draw();
 
     void onPathForceRemove() { mPathForceRemove = true; }
 

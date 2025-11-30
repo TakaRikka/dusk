@@ -9,7 +9,6 @@
 #include "d/d_path.h"
 #include "d/d_stage.h"
 
-/* 80097878-80097904 0921B8 008C+00 0/0 7/7 0/0 .text            Init__14d2DBSplinePathFll */
 void d2DBSplinePath::Init(s32 param_0, s32 param_1) {
     s32 tmp;
     s32 tmp2;
@@ -26,7 +25,6 @@ void d2DBSplinePath::Init(s32 param_0, s32 param_1) {
     field_0x2c = 0;
 }
 
-/* 80097904-80097A6C 092244 0168+00 0/0 5/5 0/0 .text            Step__14d2DBSplinePathFv */
 bool d2DBSplinePath::Step() {
     if (field_0x00 >= field_0x0c) {
         field_0x08 = 0;
@@ -58,7 +56,6 @@ bool d2DBSplinePath::Step() {
     return field_0x08 == 2 || field_0x08 == 3;
 }
 
-/* 80097A6C-80097B20 0923AC 00B4+00 0/0 1/1 0/0 .text            Calc__14d2DBSplinePathFP4cXyz */
 cXyz d2DBSplinePath::Calc(cXyz* v) {
     cXyz ret;
     ret.x = mCurveWeight[0] * v[mCurveKey[0]].x + mCurveWeight[1] * v[mCurveKey[1]].x + mCurveWeight[2] * v[mCurveKey[2]].x;
@@ -67,14 +64,12 @@ cXyz d2DBSplinePath::Calc(cXyz* v) {
     return ret;
 }
 
-/* 80097B20-80097B68 092460 0048+00 0/0 5/5 0/0 .text            Calc__14d2DBSplinePathFPf */
 f32 d2DBSplinePath::Calc(f32* param_0) {
     return mCurveWeight[0] * param_0[mCurveKey[0]] +
            mCurveWeight[1] * param_0[mCurveKey[1]] +
            mCurveWeight[2] * param_0[mCurveKey[2]];
 }
 
-/* 80097B68-80097C5C 0924A8 00F4+00 0/0 1/1 0/0 .text            Spot__14d2DBSplinePathFPff */
 f32 d2DBSplinePath::Spot(f32* param_1, f32 param_2) {
     int uVar10;
     if (field_0x04 < 2) {
@@ -94,14 +89,12 @@ f32 d2DBSplinePath::Spot(f32* param_1, f32 param_2) {
            fVar5 * fVar5 * 0.5f * param_1[iVar7];
 }
 
-/* 80097C5C-80097C74 09259C 0018+00 0/0 0/0 1/1 .text            Init__10dPathCurveFP5dPath */
 void dPathCurve::Init(dPath* i_path) {
     mpPath = i_path;
     field_0x00 = 1;
     field_0x04 = 0;
 }
 
-/* 80097C74-80097E8C 0925B4 0218+00 0/0 0/0 1/1 .text            bSpline2__10dPathCurveFf */
 cXyz dPathCurve::bSpline2(f32 param_0) {
     cXyz local_7c;
     int uVar12 = mpPath->m_num;

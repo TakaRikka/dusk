@@ -15,13 +15,13 @@
  */
 class daStairBlock_c : public fopAc_ac_c {
 public:
-    /* 80CE81F4 */ void setBaseMtx();
-    /* 80CE82A0 */ virtual int CreateHeap();
-    /* 80CE83F0 */ int create();
-    /* 80CE8874 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80CE88A0 */ virtual int Execute();
-    /* 80CE8B24 */ virtual int Draw();
-    /* 80CE8C08 */ virtual int Delete();
+    void setBaseMtx();
+    virtual int CreateHeap();
+    int create();
+    static int createHeapCallBack(fopAc_ac_c*);
+    virtual int Execute();
+    virtual int Draw();
+    virtual int Delete();
 
     static dCcD_SrcGObjInf const mCcDObjInfo;
     static dCcD_SrcSph mCcDSph;
@@ -39,8 +39,8 @@ STATIC_ASSERT(sizeof(daStairBlock_c) == 0x132c);
 
 class daStairBlock_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80CE816C */ daStairBlock_HIO_c();
-    /* 80CE8CDC */ virtual ~daStairBlock_HIO_c() {}
+    daStairBlock_HIO_c();
+    virtual ~daStairBlock_HIO_c() {}
 
     void genMessage(JORMContext*);
 

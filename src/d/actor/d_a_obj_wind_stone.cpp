@@ -8,26 +8,20 @@
 #include "d/actor/d_a_obj_wind_stone.h"
 #include "d/actor/d_a_alink.h"
 #include "d/d_meter2_info.h"
-#include "dol2asm.h"
 #include "dolphin/types.h"
 
-/* 80D379F8-80D37A18 000078 0020+00 1/1 0/0 0/0 .text daWindStone_c_createHeap__FP10fopAc_ac_c */
 static int daWindStone_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daWindStone_c*>(i_this)->createHeap();
 }
 
-/* 80D38634-80D38638 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "WindStone";
 
-/* 80D37A18-80D37A68 000098 0050+00 2/2 0/0 0/0 .text            __ct__13daWindStone_cFv */
 daWindStone_c::daWindStone_c() : mpBgW(NULL), field_0x5c4(0) {}
 
-/* 80D37A68-80D37AF4 0000E8 008C+00 1/0 0/0 0/0 .text            __dt__13daWindStone_cFv */
 daWindStone_c::~daWindStone_c() {
     dComIfG_resDelete(this, l_arcName);
 }
 
-/* 80D37AF4-80D37C20 000174 012C+00 1/1 0/0 0/0 .text            createHeap__13daWindStone_cFv */
 int daWindStone_c::createHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
@@ -49,13 +43,10 @@ int daWindStone_c::createHeap() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80D38608-80D38614 000000 000C+00 1/1 0/0 0/0 .rodata          @3760 */
-SECTION_RODATA static u8 const lit_3760[12] = {
+static u8 const lit_3760[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 80D37C20-80D37E2C 0002A0 020C+00 1/1 0/0 0/0 .text            create__13daWindStone_cFv */
 int daWindStone_c::create() {
     fopAcM_ct(this, daWindStone_c);
 
@@ -87,7 +78,6 @@ int daWindStone_c::create() {
     return phase;
 }
 
-/* 80D37F0C-80D37F6C 00058C 0060+00 1/1 0/0 0/0 .text            execute__13daWindStone_cFv */
 int daWindStone_c::execute() {
     switch (field_0x5c4) {
     case 0:
@@ -103,7 +93,6 @@ int daWindStone_c::execute() {
     return 1;
 }
 
-/* 80D37F6C-80D3806C 0005EC 0100+00 1/1 0/0 0/0 .text            draw__13daWindStone_cFv */
 int daWindStone_c::draw() {
     g_env_light.settingTevStruct(8, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -117,7 +106,6 @@ int daWindStone_c::draw() {
     return 1;
 }
 
-/* 80D3806C-80D3811C 0006EC 00B0+00 1/1 0/0 0/0 .text            Delete__13daWindStone_cFv */
 int daWindStone_c::Delete() {
     if (fopAcM_isSwitch(this, getSwBit1())) {
         fopAcM_offSwitch(this, getSwBit1());
@@ -129,14 +117,12 @@ int daWindStone_c::Delete() {
     return 1;
 }
 
-/* 80D3811C-80D38180 00079C 0064+00 2/2 0/0 0/0 .text            setModelMtx__13daWindStone_cFv */
 void daWindStone_c::setModelMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80D38180-80D381EC 000800 006C+00 1/1 0/0 0/0 .text            init__13daWindStone_cFv */
 void daWindStone_c::init() {
     if (!chkEveOccur()) {
         if (chkMapDispMode()) {
@@ -150,7 +136,6 @@ void daWindStone_c::init() {
     field_0x5c0 = 0;
 }
 
-/* 80D381EC-80D38278 00086C 008C+00 1/1 0/0 0/0 .text            chkWlfInRange__13daWindStone_cFv */
 bool daWindStone_c::chkWlfInRange() {
     if (dComIfGp_getPlayer(0) == NULL) {
         return false;
@@ -164,7 +149,6 @@ bool daWindStone_c::chkWlfInRange() {
     return false;
 }
 
-/* 80D38278-80D382C4 0008F8 004C+00 2/2 0/0 0/0 .text            chkEveOccur__13daWindStone_cFv */
 bool daWindStone_c::chkEveOccur() {
     if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[getDelEveFlgId()]) == false) {
         return true;
@@ -172,7 +156,6 @@ bool daWindStone_c::chkEveOccur() {
     return false;
 }
 
-/* 80D382C4-80D3835C 000944 0098+00 1/1 0/0 0/0 .text            exeModeHowl__13daWindStone_cFv */
 void daWindStone_c::exeModeHowl() {
     if (!chkEveOccur()) {
         attention_info.flags = 0;
@@ -188,8 +171,6 @@ void daWindStone_c::exeModeHowl() {
     }
 }
 
-/* 80D3835C-80D383FC 0009DC 00A0+00 1/1 0/0 0/0 .text            exeModeMapDisp__13daWindStone_cFv
- */
 void daWindStone_c::exeModeMapDisp() {
     if (dComIfGp_getEvent().isOrderOK() || !dComIfGp_event_runCheck()) {
         dMeter2Info_setGoldWolfMapType(getGoldWolfIdx());
@@ -199,8 +180,6 @@ void daWindStone_c::exeModeMapDisp() {
     }
 }
 
-/* 80D383FC-80D384C4 000A7C 00C8+00 1/1 0/0 0/0 .text            chkMapDispMode__13daWindStone_cFv
- */
 bool daWindStone_c::chkMapDispMode() {
     if (fopAcM_isSwitch(this, getSwBit2())) {
         return false;
@@ -225,8 +204,6 @@ bool daWindStone_c::chkMapDispMode() {
     return false;
 }
 
-/* 80D384C4-80D3853C 000B44 0078+00 1/1 0/0 0/0 .text            getGoldWolfIdx__13daWindStone_cFv
- */
 u8 daWindStone_c::getGoldWolfIdx() {
     switch (getTuneId()) {
     case 3:
@@ -246,37 +223,30 @@ u8 daWindStone_c::getGoldWolfIdx() {
     }
 }
 
-/* 80D3853C-80D38590 000BBC 0054+00 1/0 0/0 0/0 .text daWindStone_create__FP13daWindStone_c */
 static int daWindStone_create(daWindStone_c* i_this) {
     fopAcM_ct(i_this, daWindStone_c);
 
     return i_this->create();
 }
 
-/* 80D38590-80D385B0 000C10 0020+00 1/0 0/0 0/0 .text daWindStone_Delete__FP13daWindStone_c */
 static int daWindStone_Delete(daWindStone_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80D385B0-80D385D0 000C30 0020+00 1/0 0/0 0/0 .text daWindStone_execute__FP13daWindStone_c */
 static int daWindStone_execute(daWindStone_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D385D0-80D385F0 000C50 0020+00 1/0 0/0 0/0 .text            daWindStone_draw__FP13daWindStone_c
- */
 static int daWindStone_draw(daWindStone_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D38638-80D38658 -00001 0020+00 1/0 0/0 0/0 .data            daWindStone_METHODS */
 static actor_method_class daWindStone_METHODS = {
     (process_method_func)daWindStone_create,  (process_method_func)daWindStone_Delete,
     (process_method_func)daWindStone_execute, (process_method_func)NULL,
     (process_method_func)daWindStone_draw,
 };
 
-/* 80D38658-80D38688 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_WindStone */
 extern actor_process_profile_definition g_profile_Obj_WindStone = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

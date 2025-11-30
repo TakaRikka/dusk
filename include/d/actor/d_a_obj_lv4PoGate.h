@@ -25,30 +25,30 @@ public:
         MODE_MOVE_CLOSE3_e,
     };
 
-    /* 80C5FCA4 */ void setBaseMtx();
-    /* 80C5FDAC */ int create();
-    /* 80C5FF2C */ void moveGate();
-    /* 80C60090 */ void init_modeWait();
-    /* 80C6009C */ void modeWait();
-    /* 80C600A0 */ void init_modeMoveOpen();
-    /* 80C60150 */ void modeMoveOpen();
-    /* 80C60200 */ void init_modeMoveClose();
-    /* 80C602B0 */ void modeMoveClose();
-    /* 80C6031C */ void init_modeMoveCloseWait();
-    /* 80C60338 */ void modeMoveCloseWait();
-    /* 80C60370 */ void init_modeMoveClose2();
-    /* 80C6037C */ void modeMoveClose2();
-    /* 80C603E0 */ void init_modeMoveClose2Wait();
-    /* 80C603FC */ void modeMoveClose2Wait();
-    /* 80C60434 */ void init_modeMoveClose3();
-    /* 80C60450 */ void modeMoveClose3();
-    /* 80C604D8 */ void setSe();
-    /* 80C60534 */ void setEffect(int);
+    void setBaseMtx();
+    int create();
+    void moveGate();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMoveOpen();
+    void modeMoveOpen();
+    void init_modeMoveClose();
+    void modeMoveClose();
+    void init_modeMoveCloseWait();
+    void modeMoveCloseWait();
+    void init_modeMoveClose2();
+    void modeMoveClose2();
+    void init_modeMoveClose2Wait();
+    void modeMoveClose2Wait();
+    void init_modeMoveClose3();
+    void modeMoveClose3();
+    void setSe();
+    void setEffect(int);
 
-    /* 80C5FD40 */ virtual int CreateHeap();
-    /* 80C5FEDC */ virtual int Execute(Mtx**);
-    /* 80C605F8 */ virtual int Draw();
-    /* 80C6069C */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSw() { return fopAcM_GetParamBit(this, 0, 8); }
 
@@ -67,8 +67,8 @@ STATIC_ASSERT(sizeof(daLv4PoGate_c) == 0x5BC);
 
 class daLv4PoGate_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C5FBEC */ daLv4PoGate_HIO_c();
-    /* 80C60758 */ virtual ~daLv4PoGate_HIO_c() {};
+    daLv4PoGate_HIO_c();
+    virtual ~daLv4PoGate_HIO_c() {};
 
     void genMessage(JORMContext*);
 

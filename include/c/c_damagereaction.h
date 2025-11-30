@@ -5,9 +5,9 @@
 
 class JPTraceParticleCallBack4 : public JPAParticleCallBack {
 public:
-    /* 8001817C */ void execute(JPABaseEmitter*, JPABaseParticle*);
-    /* 800182A4 */ void draw(JPABaseEmitter*, JPABaseParticle*);
-    /* 80018328 */ ~JPTraceParticleCallBack4() {}
+    void execute(JPABaseEmitter*, JPABaseParticle*);
+    void draw(JPABaseEmitter*, JPABaseParticle*);
+    ~JPTraceParticleCallBack4() {}
 };
 
 BOOL cDmrNowMidnaTalk();

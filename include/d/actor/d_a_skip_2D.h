@@ -19,14 +19,14 @@ public:
         initiate();
     }
 
-    /* 80D4D498 */ int createHeap();
-    /* 80D4D4F4 */ int create();
-    /* 80D4D588 */ int destroy();
-    /* 80D4D590 */ int draw();
-    /* 80D4D5D0 */ int execute();
-    /* 80D4D5D8 */ void initiate();
+    int createHeap();
+    int create();
+    int destroy();
+    int draw();
+    int execute();
+    void initiate();
 
-    /* 80D4D674 */ virtual ~daSkip2D_c() {}
+    virtual ~daSkip2D_c() {}
 
     /* 0x56C */ u32 field_0x56c;
     /* 0x570 */ dMeterButton_c* mpButton;

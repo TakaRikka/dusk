@@ -14,14 +14,14 @@
  */
 class daObjKnBullet_c : public fopAc_ac_c {
 public:
-    /* 80C47118 */ int Create();
-    /* 80C47300 */ int Execute();
-    /* 80C47480 */ int Draw();
-    /* 80C47488 */ int Delete();
-    /* 80C47490 */ void setBaseMtx();
-    /* 80C474E8 */ void col_init();
-    /* 80C47558 */ BOOL col_chk();
-    /* 80C477B4 */ void hitPrtclSet();
+    int Create();
+    int Execute();
+    int Draw();
+    int Delete();
+    void setBaseMtx();
+    void col_init();
+    BOOL col_chk();
+    void hitPrtclSet();
 
     u8 getActionMode() { return mActionMode; }
     void setActionMode(u8 i_action) { mActionMode = i_action; }

@@ -1,6 +1,5 @@
 #include "d/actor/d_a_npc_kn.h"
 
-/* 80A3C998-80A3CB14 012078 017C+00 1/1 0/0 0/0 .text            setParamTeach01__10daNpc_Kn_cFv */
 u32 daNpc_Kn_c::setParamTeach01() {
     s16 talk_distance = mpHIO->m.common.talk_distance;
     s16 talk_angle = mpHIO->m.common.talk_angle;
@@ -39,8 +38,6 @@ u32 daNpc_Kn_c::setParamTeach01() {
     return (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
 }
 
-/* 80A3CB14-80A3CBFC 0121F4 00E8+00 1/1 0/0 0/0 .text            setCollisionTeach01__10daNpc_Kn_cFv
- */
 void daNpc_Kn_c::setCollisionTeach01() {
     switch (mActionMode) {
     case 0:
@@ -73,7 +70,6 @@ void daNpc_Kn_c::setCollisionTeach01() {
     }
 }
 
-/* 80A3CBFC-80A3CCC0 0122DC 00C4+00 1/1 0/0 0/0 .text teach01_selectAction__10daNpc_Kn_cFv */
 void daNpc_Kn_c::teach01_selectAction() {
     switch (mActionMode) {
     case 0:
@@ -94,7 +90,6 @@ void daNpc_Kn_c::teach01_selectAction() {
     return;
 }
 
-/* 80A3CCC0-80A3CDFC 0123A0 013C+00 1/0 0/0 0/0 .text            teach01_start__10daNpc_Kn_cFPv */
 int daNpc_Kn_c::teach01_start(void* param_0) {
     switch (mMode) {
     case 0:
@@ -114,8 +109,6 @@ int daNpc_Kn_c::teach01_start(void* param_0) {
     }
 }
 
-/* 80A3CDFC-80A3CF78 0124DC 017C+00 1/0 0/0 0/0 .text            teach01_attackWait__10daNpc_Kn_cFPv
- */
 int daNpc_Kn_c::teach01_attackWait(void* param_0) {
     switch (mMode) {
     case 0:
@@ -142,7 +135,6 @@ int daNpc_Kn_c::teach01_attackWait(void* param_0) {
     }
 }
 
-/* 80A3CF78-80A3D32C 012658 03B4+00 1/0 0/0 0/0 .text teach01_swordAttackWait__10daNpc_Kn_cFPv */
 int daNpc_Kn_c::teach01_swordAttackWait(void* param_0) {
     switch (mMode) {
     case 0:
@@ -228,7 +220,6 @@ int daNpc_Kn_c::teach01_swordAttackWait(void* param_0) {
     return 1;
 }
 
-/* 80A3D32C-80A3D6D8 012A0C 03AC+00 1/0 0/0 0/0 .text teach01_swordFinishWait__10daNpc_Kn_cFPv */
 int daNpc_Kn_c::teach01_swordFinishWait(void* param_0) {
     switch (mMode) {
     case 0:
@@ -299,7 +290,6 @@ int daNpc_Kn_c::teach01_swordFinishWait(void* param_0) {
     return 1;
 }
 
-/* 80A3D6D8-80A3DCEC 012DB8 0614+00 3/3 0/0 0/0 .text            ctrlWarp__10daNpc_Kn_cFv */
 int daNpc_Kn_c::ctrlWarp() {
     int sp28 = 0;
 
@@ -421,8 +411,6 @@ int daNpc_Kn_c::ctrlWarp() {
     return sp28;
 }
 
-/* 80A3DCEC-80A3DEC4 0133CC 01D8+00 1/0 0/0 0/0 .text            ECut_firstEncount__10daNpc_Kn_cFi
- */
 int daNpc_Kn_c::ECut_firstEncount(int i_idx) {
     dEvent_manager_c* event_manager = &dComIfGp_getEventManager();
 
@@ -482,8 +470,6 @@ int daNpc_Kn_c::ECut_firstEncount(int i_idx) {
     return rt;
 }
 
-/* 80A3DEC4-80A3E550 0135A4 068C+00 1/0 0/0 0/0 .text            ECut_attackFailed__10daNpc_Kn_cFi
- */
 int daNpc_Kn_c::ECut_attackFailed(int i_idx) {
     dEvent_manager_c* event_manager = &dComIfGp_getEventManager();
     int sp8 = 0;
@@ -619,8 +605,6 @@ int daNpc_Kn_c::ECut_attackFailed(int i_idx) {
     return rt;
 }
 
-/* 80A3E550-80A3EB84 013C30 0634+00 3/0 0/0 0/0 .text            ECut_firstSkillGet__10daNpc_Kn_cFi
- */
 int daNpc_Kn_c::ECut_firstSkillGet(int i_idx) {
     dEvent_manager_c* event_manager = &dComIfGp_getEventManager();
     int sp8 = 0;

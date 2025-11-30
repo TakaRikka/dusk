@@ -6,8 +6,8 @@
 #include "d/d_bg_w.h"
 
 struct sq_cp_s {
-    /* 80C449F8 */ ~sq_cp_s() {}
-    /* 80C44A58 */ sq_cp_s() {}
+    ~sq_cp_s() {}
+    sq_cp_s() {}
 
     /* 0x00 */ cXyz field_0x0[4];
 };
@@ -46,8 +46,8 @@ STATIC_ASSERT(sizeof(obj_ki_class) == 0x670);
 
 class daObj_Ki_HIO_c {
 public:
-    /* 80C43EEC */ daObj_Ki_HIO_c();
-    /* 80C44AA8 */ virtual ~daObj_Ki_HIO_c() {};
+    daObj_Ki_HIO_c();
+    virtual ~daObj_Ki_HIO_c() {};
 
     /* 0x4 */ s8 field_0x4;
     /* 0x5 */ u8 field_0x5;

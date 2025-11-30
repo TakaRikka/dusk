@@ -90,16 +90,12 @@ static const char* sSpotName[] = {
 };
 #endif
 
-/* 802C589C-802C58AC 2C01DC 0010+00 3/3 0/0 0/0 .text            __ct__11Z2EnvSeBaseFP3Vec */
 Z2EnvSeBase::Z2EnvSeBase(Vec* posPtr) {
     mPos = posPtr;
 }
 
-/* 802C58AC-802C5908 2C01EC 005C+00 3/3 0/0 0/0 .text            __dt__11Z2EnvSeBaseFv */
 Z2EnvSeBase::~Z2EnvSeBase() {}
 
-/* 802C5908-802C5AB4 2C0248 01AC+00 2/2 0/0 0/0 .text
- * startEnvSe__11Z2EnvSeBaseF10JAISoundIDfffffUl                */
 bool Z2EnvSeBase::startEnvSe(JAISoundID soundID, f32 fxMix, f32 volume, f32 pan, f32 dolby, f32 pitch, u32 moveSteps) {
     if (Z2GetStatusMgr()->isPaused()) {
         volume *= 0.33f;
@@ -127,8 +123,6 @@ bool Z2EnvSeBase::startEnvSe(JAISoundID soundID, f32 fxMix, f32 volume, f32 pan,
     return rv;
 }
 
-/* 802C5AB4-802C5C9C 2C03F4 01E8+00 9/9 0/0 0/0 .text
- * startEnvSeLevel__11Z2EnvSeBaseF10JAISoundIDfffffUl           */
 bool Z2EnvSeBase::startEnvSeLevel(JAISoundID soundID, f32 fxMix, f32 volume, f32 pan,
                                   f32 dolby, f32 pitch, u32 moveSteps) {
     if (Z2GetStatusMgr()->isPaused()) {
@@ -163,7 +157,6 @@ bool Z2EnvSeBase::startEnvSeLevel(JAISoundID soundID, f32 fxMix, f32 volume, f32
     return rv;
 }
 
-/* 802C5C9C-802C5D1C 2C05DC 0080+00 1/1 0/0 0/0 .text            __ct__10Z2EnvSeDirFP3Vec */
 Z2EnvSeDir::Z2EnvSeDir(Vec* dir) {
     mPan = 0.5f;
     mDolby = 0.5f;
@@ -175,10 +168,8 @@ Z2EnvSeDir::Z2EnvSeDir(Vec* dir) {
     }
 }
 
-/* 802C5D1C-802C5D70 2C065C 0054+00 1/1 0/0 0/0 .text            __dt__10Z2EnvSeDirFv */
 Z2EnvSeDir::~Z2EnvSeDir() {}
 
-/* 802C5D70-802C5D9C 2C06B0 002C+00 2/2 0/0 0/0 .text            setPanDir__10Z2EnvSeDirFP3Vec */
 void Z2EnvSeDir::setPanDir(Vec* dir) {
     JUT_ASSERT(249, dir);
     mPanDir.x = dir->x * -1000.0f;
@@ -186,7 +177,6 @@ void Z2EnvSeDir::setPanDir(Vec* dir) {
     mPanDir.z = dir->z * -1000.0f;
 }
 
-/* 802C5D9C-802C5E90 2C06DC 00F4+00 1/1 0/0 0/0 .text            calcPan__10Z2EnvSeDirFf */
 void Z2EnvSeDir::calcPan(f32 param_0) {
     if (*getHandle()) {
         if (0.0f == mPanDir.x && 0.0f == mPanDir.y && 0.0f == mPanDir.z) {
@@ -205,14 +195,11 @@ void Z2EnvSeDir::calcPan(f32 param_0) {
     }
 }
 
-/* 802C5E90-802C5ECC 2C07D0 003C+00 1/1 0/0 0/0 .text
- * startEnvSeDirLevel__10Z2EnvSeDirF10JAISoundIDff              */
 bool Z2EnvSeDir::startEnvSeDirLevel(JAISoundID soundID, f32 fxMix, f32 volume) {
     f32 var_f31 = mDolby;
     return Z2EnvSeBase::startEnvSeLevel(soundID, fxMix, volume, mPan, mDolby, 1.0f, 0);
 }
 
-/* 802C5ECC-802C5F28 2C080C 005C+00 1/1 0/0 0/0 .text            __ct__14Z2EnvSeAutoPanFv */
 Z2EnvSeAutoPan::Z2EnvSeAutoPan() {
     mPan = 0.5f;
     mDolby = 0.5f;
@@ -222,10 +209,8 @@ Z2EnvSeAutoPan::Z2EnvSeAutoPan() {
     field_0x19 = 1;
 }
 
-/* 802C5F28-802C5F7C 2C0868 0054+00 1/1 0/0 0/0 .text            __dt__14Z2EnvSeAutoPanFv */
 Z2EnvSeAutoPan::~Z2EnvSeAutoPan() {}
 
-/* 802C5F7C-802C5F98 2C08BC 001C+00 2/2 0/0 0/0 .text setPanParam__14Z2EnvSeAutoPanFffbbff */
 void Z2EnvSeAutoPan::setPanParam(f32 pan, f32 dolby, bool param_3, bool param_4, f32 param_5,
                                  f32 param_6) {
     mPan = pan;
@@ -236,7 +221,6 @@ void Z2EnvSeAutoPan::setPanParam(f32 pan, f32 dolby, bool param_3, bool param_4,
     field_0x19 = param_4;
 }
 
-/* 802C5F98-802C60E0 2C08D8 0148+00 2/2 0/0 0/0 .text            calcPan__14Z2EnvSeAutoPanFv */
 void Z2EnvSeAutoPan::calcPan() {
     if (field_0x18) {
         mPan += field_0x10;
@@ -272,15 +256,12 @@ void Z2EnvSeAutoPan::calcPan() {
     }
 }
 
-/* 802C60E0-802C611C 2C0A20 003C+00 2/2 0/0 0/0 .text
- * startEnvSeAutoPanLevel__14Z2EnvSeAutoPanF10JAISoundIDfff     */
 bool Z2EnvSeAutoPan::startEnvSeAutoPanLevel(JAISoundID soundID, f32 fxMix, f32 volume,
                                             f32 pitch) {
     f32 var_f31 = mDolby;
     return Z2EnvSeBase::startEnvSeLevel(soundID, fxMix, volume, mPan, mDolby, pitch, 0);
 }
 
-/* 802C611C-802C6540 2C0A5C 0424+00 0/0 1/1 0/0 .text            __ct__10Z2EnvSeMgrFv */
 Z2EnvSeMgr::Z2EnvSeMgr()
     : JASGlobalInstance<Z2EnvSeMgr>(true), field_0x38(), field_0x48(1.0f), field_0x4c(1.0f),
       field_0x50(1.0f), field_0x140(), mSnowPower(), mWindType(), field_0x188(), field_0x1ac(1.0f),
@@ -315,10 +296,8 @@ Z2EnvSeMgr::Z2EnvSeMgr()
     field_0x130.setParam(0.1f, 0.0037908785f, 0.005f);
 }
 
-/* 802C6540-802C66B0 2C0E80 0170+00 0/0 1/1 0/0 .text            __dt__10Z2EnvSeMgrFv */
 Z2EnvSeMgr::~Z2EnvSeMgr() {}
 
-/* 802C66B0-802C6998 2C0FF0 02E8+00 0/0 1/1 0/0 .text            framework__10Z2EnvSeMgrFv */
 void Z2EnvSeMgr::framework() {
     int sceneNum = Z2GetSceneMgr()->getCurrentSceneNum();
     if (field_0x64.getPosCount() >= 0) {
@@ -396,10 +375,8 @@ void Z2EnvSeMgr::framework() {
     }
 }
 
-/* 802C6998-802C699C 2C12D8 0004+00 0/0 1/1 0/0 .text            resetScene__10Z2EnvSeMgrFv */
 void Z2EnvSeMgr::resetScene() {}
 
-/* 802C699C-802C6AC0 2C12DC 0124+00 0/0 1/1 0/0 .text            resetSceneInner__10Z2EnvSeMgrFv */
 void Z2EnvSeMgr::resetSceneInner() {
     if (-1.0f == field_0x60) {
         field_0x38 = 0;
@@ -453,8 +430,6 @@ void Z2EnvSeMgr::resetSceneInner() {
     field_0x64.resetMultiSePos();
 }
 
-/* 802C6AC0-802C6C1C 2C1400 015C+00 0/0 1/1 0/0 .text            initSceneEnvSe__10Z2EnvSeMgrFlScf
- */
 void Z2EnvSeMgr::initSceneEnvSe(s32 sceneID, s8 room, f32 param_3) {
     field_0x60 = -1.0f;
     if (-1.0f == param_3) {
@@ -509,7 +484,6 @@ void Z2EnvSeMgr::initSceneEnvSe(s32 sceneID, s8 room, f32 param_3) {
     field_0x60 = param_3;
 }
 
-/* 802C6C1C-802C6C84 2C155C 0068+00 1/1 0/0 0/0 .text            playSceneEnvSe__10Z2EnvSeMgrFv */
 void Z2EnvSeMgr::playSceneEnvSe() {
     if (-1.0f != field_0x60) {
         if (field_0x1b8 != 100) {
@@ -519,8 +493,6 @@ void Z2EnvSeMgr::playSceneEnvSe() {
     }
 }
 
-/* 802C6C84-802C70C8 2C15C4 0444+00 2/1 1/1 0/0 .text initStaticEnvSe__10Z2EnvSeMgrFUcUcUcUcP3Vec
- */
 void Z2EnvSeMgr::initStaticEnvSe(u8 param_1, u8 param_2, u8 param_3, u8 param_4, Vec* param_5) {
     f32 dVar7;
     f32 dVar6;
@@ -669,8 +641,6 @@ void Z2EnvSeMgr::initStaticEnvSe(u8 param_1, u8 param_2, u8 param_3, u8 param_4,
     }
 }
 
-/* 802C70C8-802C780C 2C1A08 0744+00 2/1 1/1 0/0 .text            startStaticEnvSe__10Z2EnvSeMgrFSc
- */
 bool Z2EnvSeMgr::startStaticEnvSe(s8 reverb) {
     field_0x1b8 = 100;
 
@@ -857,13 +827,10 @@ bool Z2EnvSeMgr::startStaticEnvSe(s8 reverb) {
     return iVar9 && iVar11;
 }
 
-/* 802C780C-802C7830 2C214C 0024+00 0/0 1/1 0/0 .text            registWindowPos__10Z2EnvSeMgrFP3Vec
- */
 void Z2EnvSeMgr::registWindowPos(Vec* posPtr) {
     field_0x64.registMultiSePos(posPtr);
 }
 
-/* 802C7830-802C7CF4 2C2170 04C4+00 1/1 1/1 0/0 .text            startRainSe__10Z2EnvSeMgrFlSc */
 bool Z2EnvSeMgr::startRainSe(s32 param_1, s8 param_2) {
     if (mSnowPower > 0) {
         return false;
@@ -951,8 +918,6 @@ bool Z2EnvSeMgr::startRainSe(s32 param_1, s8 param_2) {
                                       0);
 }
 
-/* 802C7CF4-802C7E68 2C2634 0174+00 0/0 1/1 0/0 .text            startNearThunderSe__10Z2EnvSeMgrFSc
- */
 void Z2EnvSeMgr::startNearThunderSe(s8 param_1) {
     if (field_0x64.getPosCount() < 0) {
         f32 dVar10 = Z2Calc::getRandom(0.25f, Z2Calc::cEqualCSlope, Z2Calc::cEqualPSlope);
@@ -967,7 +932,6 @@ void Z2EnvSeMgr::startNearThunderSe(s8 param_1) {
     }
 }
 
-/* 802C7E68-802C7FB4 2C27A8 014C+00 0/0 2/2 0/0 .text startFarThunderSe__10Z2EnvSeMgrFP3VecSc */
 void Z2EnvSeMgr::startFarThunderSe(Vec* posPtr, s8 reverb) {
     if (field_0x64.getPosCount() < 0) {
         field_0x110.setPos(posPtr);
@@ -979,17 +943,14 @@ void Z2EnvSeMgr::startFarThunderSe(Vec* posPtr, s8 reverb) {
     }
 }
 
-/* 802C7FB4-802C7FBC -00001 0008+00 0/0 0/0 0/0 .text            setSnowPower__10Z2EnvSeMgrFSc */
 void Z2EnvSeMgr::setSnowPower(s8 power) {
     mSnowPower = power;
 }
 
-/* 802C7FBC-802C7FC8 2C28FC 000C+00 0/0 1/1 1/1 .text            initStrongWindSe__10Z2EnvSeMgrFv */
 void Z2EnvSeMgr::initStrongWindSe() {
     mWindType = WIND_TYPE_3;
 }
 
-/* 802C7FC8-802C800C 2C2908 0044+00 0/0 1/1 1/1 .text setWindDirection__10Z2EnvSeMgrFP3Vec */
 void Z2EnvSeMgr::setWindDirection(Vec* dir) {
     if (mWindType == WIND_TYPE_3) {
         field_0x144.setPanDir(const_cast<Vec*>(&Z2Calc::cNullVec));
@@ -998,8 +959,6 @@ void Z2EnvSeMgr::setWindDirection(Vec* dir) {
     }
 }
 
-/* 802C800C-802C80F8 2C294C 00EC+00 0/0 1/1 1/1 .text            startStrongWindSe__10Z2EnvSeMgrFSc
- */
 bool Z2EnvSeMgr::startStrongWindSe(s8 reverb) {
     field_0x144.calcPan(1.0f);
 
@@ -1022,8 +981,6 @@ bool Z2EnvSeMgr::startStrongWindSe(s8 reverb) {
     return field_0x144.startEnvSeDirLevel(aJStack_24, fxMix, 1.0f);
 }
 
-/* 802C80F8-802C8234 2C2A38 013C+00 0/0 1/1 0/0 .text            initRiverSe__10Z2EnvSeMgrFUcUcUcUc
- */
 void Z2EnvSeMgr::initRiverSe(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     field_0x188 = param_1;
     if (param_2 >= 100) {
@@ -1060,7 +1017,6 @@ void Z2EnvSeMgr::initRiverSe(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     }
 }
 
-/* 802C8234-802C8258 2C2B74 0024+00 1/1 1/1 0/0 .text registRiverSePos__10Z2EnvSeMgrFP3Vec */
 void Z2EnvSeMgr::registRiverSePos(Vec* posPtr) {
     f32 var_f31;
     if (posPtr != NULL) {
@@ -1072,8 +1028,6 @@ void Z2EnvSeMgr::registRiverSePos(Vec* posPtr) {
     mRiverSeMgr.registMultiSePos(posPtr);
 }
 
-/* 802C8258-802C8300 2C2B98 00A8+00 0/0 0/0 1/1 .text            setHyrulSewerOpen__10Z2EnvSeMgrFb
- */
 void Z2EnvSeMgr::setHyrulSewerOpen(bool isSewerOpen) {
     if (isSewerOpen) {
         field_0x1b8 = 1;
@@ -1084,7 +1038,6 @@ void Z2EnvSeMgr::setHyrulSewerOpen(bool isSewerOpen) {
     }
 }
 
-/* 802C8300-802C8730 2C2C40 0430+00 2/1 1/1 0/0 .text            startRiverSe__10Z2EnvSeMgrFSc */
 bool Z2EnvSeMgr::startRiverSe(s8 param_1) {
     #ifdef DEBUG
     const char** spotName = sSpotName;
@@ -1184,8 +1137,6 @@ bool Z2EnvSeMgr::startRiverSe(s8 param_1) {
     return r30;
 }
 
-/* 802C8730-802C886C 2C3070 013C+00 1/1 1/1 0/0 .text            initFallSe__10Z2EnvSeMgrFUcUcUcUc
- */
 void Z2EnvSeMgr::initFallSe(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     field_0x1e0 = param_1;
     if (param_2 >= 100) {
@@ -1222,8 +1173,6 @@ void Z2EnvSeMgr::initFallSe(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     }
 }
 
-/* 802C886C-802C8890 2C31AC 0024+00 0/0 1/1 0/0 .text            registFallSePos__10Z2EnvSeMgrFP3Vec
- */
 void Z2EnvSeMgr::registFallSePos(Vec* posPtr) {
     f32 var_f31;
     if (posPtr != NULL) {
@@ -1235,7 +1184,6 @@ void Z2EnvSeMgr::registFallSePos(Vec* posPtr) {
     mFallSeMgr.registMultiSePos(posPtr);
 }
 
-/* 802C8890-802C8A90 2C31D0 0200+00 1/1 1/1 0/0 .text            startFallSe__10Z2EnvSeMgrFSc */
 bool Z2EnvSeMgr::startFallSe(s8 reverb) {
     if (mFallSeMgr.getPosCount() < 0) {
         return false;
@@ -1271,7 +1219,6 @@ bool Z2EnvSeMgr::startFallSe(s8 reverb) {
     return rv;
 }
 
-/* 802C8A90-802C8C24 2C33D0 0194+00 2/1 1/1 0/0 .text            initEtcSe__10Z2EnvSeMgrFUcUcUcUc */
 void Z2EnvSeMgr::initEtcSe(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     field_0x214 = param_1;
     if (param_2 >= 100) {
@@ -1319,13 +1266,10 @@ void Z2EnvSeMgr::initEtcSe(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     }
 }
 
-/* 802C8C24-802C8C48 2C3564 0024+00 1/1 1/1 0/0 .text            registEtcSePos__10Z2EnvSeMgrFP3Vec
- */
 void Z2EnvSeMgr::registEtcSePos(Vec* posPtr) {
     mEtcSeMgr.registMultiSePos(posPtr);
 }
 
-/* 802C8C48-802C92C8 2C3588 0680+00 2/1 1/1 0/0 .text            startEtcSe__10Z2EnvSeMgrFSc */
 bool Z2EnvSeMgr::startEtcSe(s8 reverb) {
     #ifdef DEBUG
     const char** spotName = sSpotName;
@@ -1440,12 +1384,10 @@ bool Z2EnvSeMgr::startEtcSe(s8 reverb) {
     return rv;
 }
 
-/* 802C92C8-802C92EC 2C3C08 0024+00 0/0 0/0 1/1 .text registWolfSmellSePos__10Z2EnvSeMgrFP3Vec */
 void Z2EnvSeMgr::registWolfSmellSePos(Vec* posPtr) {
     mWolfSmellSeMgr.registMultiSePos(posPtr);
 }
 
-/* 802C92EC-802C93A0 2C3C2C 00B4+00 0/0 0/0 1/1 .text startFogWipeTrigger__10Z2EnvSeMgrFP3Vec */
 void Z2EnvSeMgr::startFogWipeTrigger(Vec* pos) {
     JUT_ASSERT(1919, pos);
 
@@ -1458,12 +1400,10 @@ void Z2EnvSeMgr::startFogWipeTrigger(Vec* pos) {
     }
 }
 
-/* 802C93A0-802C93E4 2C3CE0 0044+00 0/0 0/0 1/1 .text            setFogWipeWidth__10Z2EnvSeMgrFf */
 void Z2EnvSeMgr::setFogWipeWidth(f32 width) {
     mFogDensity = Z2Calc::linearTransform(width, 0.0f, 1.0f, 1.0f, 0.4f, true);
 }
 
-/* 802C93E4-802C9400 2C3D24 001C+00 3/3 2/2 0/0 .text            getFogDensity__10Z2EnvSeMgrFv */
 f32 Z2EnvSeMgr::getFogDensity() {
     if (field_0x214 == 16) {
         return mFogDensity;
@@ -1472,7 +1412,6 @@ f32 Z2EnvSeMgr::getFogDensity() {
     return 0.0f;
 }
 
-/* 802C9400-802C950C 2C3D40 010C+00 0/0 0/0 1/1 .text            startFogSe__10Z2EnvSeMgrFv */
 bool Z2EnvSeMgr::startFogSe() { 
     bool iVar5 = false;
     f32 dVar10 = field_0x2e8.calcNoise1f();
@@ -1496,7 +1435,6 @@ bool Z2EnvSeMgr::startFogSe() {
     return (iVar6 && iVar5);
 }
 
-/* 802C950C-802C9F58 2C3E4C 0A4C+00 2/0 1/1 0/0 .text initLv3WaterSe__10Z2EnvSeMgrFUcUcUcUc */
 void Z2EnvSeMgr::initLv3WaterSe(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     switch (param_1) {
     case 110:
@@ -1746,7 +1684,6 @@ void Z2EnvSeMgr::initLv3WaterSe(u8 param_1, u8 param_2, u8 param_3, u8 param_4) 
     }
 }
 
-/* 802C9F58-802CA794 2C4898 083C+00 2/0 1/1 0/0 .text registLv3WaterSePos__10Z2EnvSeMgrFUcP3Vec */
 void Z2EnvSeMgr::registLv3WaterSePos(u8 param_1, Vec* posPtr) {
     switch (param_1) {
     case 110:
@@ -1890,7 +1827,6 @@ void Z2EnvSeMgr::registLv3WaterSePos(u8 param_1, Vec* posPtr) {
     }
 }
 
-/* 802CA794-802CAAC0 2C50D4 032C+00 1/1 1/1 0/0 .text            startLv3WaterSe__10Z2EnvSeMgrFSc */
 void Z2EnvSeMgr::startLv3WaterSe(s8 reverb) {
     if (Z2GetSceneMgr()->getCurrentSceneNum() == Z2SCENE_LAKEBED_TEMPLE) {
         if (reverb >= 0) {

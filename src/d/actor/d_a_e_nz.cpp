@@ -8,14 +8,13 @@
 #include "d/actor/d_a_e_nz.h"
 #include "c/c_damagereaction.h"
 #include "d/d_cc_d.h"
-#include "dol2asm.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "f_op/f_op_actor_enemy.h"
 
 class daE_NZ_HIO_c : public JORReflexible {
 public:
-    /* 807299EC */ daE_NZ_HIO_c();
-    /* 8072BC88 */ virtual ~daE_NZ_HIO_c() {}
+    daE_NZ_HIO_c();
+    virtual ~daE_NZ_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -36,7 +35,6 @@ enum Action {
     ACTION_DAMANGE,
 };
 
-/* 8072C284-8072C28C 000038 0008+00 5/5 0/0 0/0 .data            stick_bit */
 static u8 stick_bit[8] = {
     0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80,
 };
@@ -49,7 +47,6 @@ struct StickDef {
     s16 field_0x8;
 };
 
-/* 8072C28C-8072C2DC 000040 0050+00 1/1 0/0 0/0 .data            stick_d */
 static StickDef stick_d[8] = {
     0x03, 1500, 15000, 0, 0x14,
     0x00, 0, 32767,0, 0,
@@ -61,7 +58,6 @@ static StickDef stick_d[8] = {
      0x02,  5500, -20000, 24000, 0x0F,
 };
 
-/* 807299EC-80729A3C 0000EC 0050+00 1/1 0/0 0/0 .text            __ct__12daE_NZ_HIO_cFv */
 daE_NZ_HIO_c::daE_NZ_HIO_c() {
     mId = -1;
     mBasicSize = 1.2f;
@@ -93,14 +89,12 @@ void daE_NZ_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 80729A3C-80729AE8 00013C 00AC+00 4/4 0/0 0/0 .text            anm_init__FP10e_nz_classifUcf */
 static void anm_init(e_nz_class* i_this, int param_2, f32 param_3, u8 param_4, f32 param_5) {
     i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_NZ", param_2), param_4,
                              param_3, param_5, 0.0f, -1.0f);
     i_this->field_0x5e4 = param_2;
 }
 
-/* 80729AE8-80729B24 0001E8 003C+00 1/1 0/0 0/0 .text            pl_check__FP10e_nz_classf */
 static BOOL pl_check(e_nz_class* i_this, f32 param_1) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     dComIfGp_getPlayer(0);
@@ -113,7 +107,6 @@ static BOOL pl_check(e_nz_class* i_this, f32 param_1) {
     return FALSE;
 }
 
-/* 80729B24-80729C24 000224 0100+00 1/0 0/0 0/0 .text            daE_NZ_Draw__FP10e_nz_class */
 static int daE_NZ_Draw(e_nz_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     J3DModel* model = i_this->mpMorf->getModel();
@@ -140,13 +133,10 @@ static int daE_NZ_Draw(e_nz_class* i_this) {
 
 bool l_HIOInit;
 
-/* 8072C434-8072C454 000054 0020+00 5/6 0/0 0/0 .bss             l_HIO */
 static daE_NZ_HIO_c l_HIO;
 
-/* 8072C454-8072C458 000074 0004+00 5/5 0/0 0/0 .bss             None */
 static u8 data_8072C454[4];
 
-/* 80729C24-8072A044 000324 0420+00 1/1 0/0 0/0 .text            e_nz_normal__FP10e_nz_class */
 static void e_nz_normal(e_nz_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     f32 dVar9 = 0.0f;
@@ -230,7 +220,6 @@ static void e_nz_normal(e_nz_class* i_this) {
     cLib_addCalc2(&a_this->speedF, dVar9, 1.0f, l_HIO.mSpeed * 0.25f);
 }
 
-/* 8072A044-8072A680 000744 063C+00 1/1 0/0 0/0 .text            e_nz_attack__FP10e_nz_class */
 static s8 e_nz_attack(e_nz_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     cXyz local_38;
@@ -297,7 +286,6 @@ static s8 e_nz_attack(e_nz_class* i_this) {
     return rv;
 }
 
-/* 8072A680-8072A7C4 000D80 0144+00 1/1 0/0 0/0 .text            e_nz_stick__FP10e_nz_class */
 static void e_nz_stick(e_nz_class* i_this) {
     s8 cVar4 = 0;
 
@@ -323,7 +311,6 @@ static void e_nz_stick(e_nz_class* i_this) {
     }
 }
 
-/* 8072A7C4-8072A8CC 000EC4 0108+00 1/1 0/0 0/0 .text            damage_check__FP10e_nz_class */
 static void damage_check(e_nz_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     dComIfGp_getPlayer(0);
@@ -355,7 +342,6 @@ static void damage_check(e_nz_class* i_this) {
     }
 }
 
-/* 8072A8CC-8072AA90 000FCC 01C4+00 1/1 0/0 0/0 .text            e_nz_damage__FP10e_nz_class */
 static void e_nz_damage(e_nz_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     i_this->field_0x6aa = 6;
@@ -389,8 +375,6 @@ static void e_nz_damage(e_nz_class* i_this) {
     }
 }
 
-/* 8072AA90-8072AB68 001190 00D8+00 1/1 0/0 0/0 .text
- * getPolyColor__FR13cBgS_PolyInfoiP8_GXColorP8_GXColorPUcPf    */
 static BOOL getPolyColor(cBgS_PolyInfo& param_1, int param_2, _GXColor* param_3,
                              _GXColor* param_4, u8* param_5, f32* param_6) {
     if (!dComIfG_Bgsp().ChkPolySafe(param_1)) {
@@ -412,7 +396,6 @@ static BOOL getPolyColor(cBgS_PolyInfo& param_1, int param_2, _GXColor* param_3,
     return TRUE;
 }
 
-/* 8072AB68-8072B09C 001268 0534+00 1/1 0/0 0/0 .text            action__FP10e_nz_class */
 static s8 action(e_nz_class* i_this) {
     static u16 eff_id[4] = {
         0x01B8,
@@ -538,7 +521,6 @@ static s8 action(e_nz_class* i_this) {
     return action_result;
 }
 
-/* 8072B09C-8072B5D4 00179C 0538+00 2/1 0/0 0/0 .text            daE_NZ_Execute__FP10e_nz_class */
 static int daE_NZ_Execute(e_nz_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     
@@ -657,12 +639,10 @@ static int daE_NZ_Execute(e_nz_class* i_this) {
     return 1;
 }
 
-/* 8072B5D4-8072B5DC 001CD4 0008+00 1/0 0/0 0/0 .text            daE_NZ_IsDelete__FP10e_nz_class */
 static int daE_NZ_IsDelete(e_nz_class* i_this) {
     return 1;
 }
 
-/* 8072B5DC-8072B680 001CDC 00A4+00 1/0 0/0 0/0 .text            daE_NZ_Delete__FP10e_nz_class */
 static int daE_NZ_Delete(e_nz_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     fopAcM_GetID(i_this);
@@ -683,7 +663,6 @@ static int daE_NZ_Delete(e_nz_class* i_this) {
     return 1;
 }
 
-/* 8072B680-8072B7C4 001D80 0144+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_nz_class* i_this = (e_nz_class*)a_this;
     i_this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_NZ", 13), NULL,
@@ -701,7 +680,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 8072B7C4-8072BA74 001EC4 02B0+00 1/0 0/0 0/0 .text            daE_NZ_Create__FP10fopAc_ac_c */
 static int daE_NZ_Create(fopAc_ac_c* a_this) {
     e_nz_class* i_this = (e_nz_class*)a_this;
     fopAcM_ct(a_this, e_nz_class);
@@ -759,7 +737,6 @@ static int daE_NZ_Create(fopAc_ac_c* a_this) {
 
 AUDIO_INSTANCES
 
-/* 8072C324-8072C344 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_NZ_Method */
 static actor_method_class l_daE_NZ_Method = {
     (process_method_func)daE_NZ_Create,
     (process_method_func)daE_NZ_Delete,
@@ -768,7 +745,6 @@ static actor_method_class l_daE_NZ_Method = {
     (process_method_func)daE_NZ_Draw,
 };
 
-/* 8072C344-8072C374 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_NZ */
 extern actor_process_profile_definition g_profile_E_NZ = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

@@ -13,19 +13,14 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 805A1330-805A1334 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool hioInit;
 
-/* 805A1340-805A1370 000018 0030+00 8/8 0/0 0/0 .bss             l_HIO */
 static daSq_HIO_c l_HIO;
 
-/* 805A11E8-805A11F8 000000 0010+00 2/2 0/0 0/0 .data            wait_bck */
 static u32 wait_bck[4] = {9, 10, 11, 12};
 
-/* 805A11F8-805A1204 000010 000C+00 1/1 0/0 0/0 .data            carry_wait_bck */
 static u32 carry_wait_bck[3] = {9, 9, 9};
 
-/* 8059F66C-8059F6D8 0000EC 006C+00 1/1 0/0 0/0 .text            __ct__10daSq_HIO_cFv */
 daSq_HIO_c::daSq_HIO_c() {
     field_0x4 = -1;
     mScale = 2.0f;
@@ -40,7 +35,6 @@ daSq_HIO_c::daSq_HIO_c() {
     field_0x2c = 17.0f;
 }
 
-/* 8059F6D8-8059F808 000158 0130+00 5/5 0/0 0/0 .text            anm_init__FP8sq_classifUcfi */
 static void anm_init(sq_class* i_this, int i_bck, f32 i_morf, u8 i_mode, f32 i_speed, int i_bas) {
     if (i_this->field_0x60c > 1.0f) {
         return;
@@ -56,7 +50,6 @@ static void anm_init(sq_class* i_this, int i_bck, f32 i_morf, u8 i_mode, f32 i_s
     }
 }
 
-/* 8059F808-8059F900 000288 00F8+00 1/0 0/0 0/0 .text            daSq_Draw__FP8sq_class */
 static int daSq_Draw(sq_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
@@ -72,7 +65,6 @@ static int daSq_Draw(sq_class* i_this) {
     return 1;
 }
 
-/* 8059F900-8059F9FC 000380 00FC+00 2/2 0/0 0/0 .text            way_bg_check__FP8sq_class */
 static BOOL way_bg_check(sq_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     cXyz vec1, vec2, vec3;
@@ -93,14 +85,12 @@ static BOOL way_bg_check(sq_class* i_this) {
     }
 }
 
-/* 8059F9FC-8059FA68 00047C 006C+00 2/2 0/0 0/0 .text            turn_set__FP8sq_class */
 static void turn_set(sq_class* i_this) {
     s16 angle_table[3] = {-0x8000, 0x4000, -0x4000};
     s16 angle = angle_table[(int)cM_rndF(2.99f)];
     i_this->mTargetAngleY = i_this->current.angle.y + angle;
 }
 
-/* 8059FA68-8059FE50 0004E8 03E8+00 1/1 0/0 0/0 .text            sq_normal__FP8sq_class */
 static void sq_normal(sq_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 target_speed = 0.0f;
@@ -188,7 +178,6 @@ static void sq_normal(sq_class* i_this) {
     }
 }
 
-/* 8059FE50-805A0024 0008D0 01D4+00 1/1 0/0 0/0 .text            sq_away__FP8sq_class */
 static void sq_away(sq_class* i_this) {
     f32 target_speed = 0.0f;
     cXyz player_delta = i_this->current.pos - dComIfGp_getPlayer(0)->current.pos;
@@ -227,7 +216,6 @@ static void sq_away(sq_class* i_this) {
     cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->mTargetAngleY, 2, 0x3000);
 }
 
-/* 805A0024-805A0160 000AA4 013C+00 1/1 0/0 0/0 .text            sq_carry__FP8sq_class */
 static void sq_carry(sq_class* i_this) {
     i_this->mCcSph.OffCoSetBit();
     i_this->speed.y = 0.0f;
@@ -260,7 +248,6 @@ static void sq_carry(sq_class* i_this) {
     }
 }
 
-/* 805A0160-805A021C 000BE0 00BC+00 1/1 0/0 0/0 .text            sq_fly__FP8sq_class */
 static void sq_fly(sq_class* i_this) {
     switch (i_this->mMode) {
     case 0:
@@ -280,7 +267,6 @@ static void sq_fly(sq_class* i_this) {
     }
 }
 
-/* 805A021C-805A037C 000C9C 0160+00 1/1 0/0 0/0 .text            sq_message__FP8sq_class */
 static void sq_message(sq_class* i_this) {
     int anm;
     f32 rnd;
@@ -313,7 +299,6 @@ static void sq_message(sq_class* i_this) {
     }
 }
 
-/* 805A037C-805A06A4 000DFC 0328+00 1/1 0/0 0/0 .text            action__FP8sq_class */
 static void action(sq_class* i_this) {
     cXyz vec1, vec2;
     i_this->gravity = -7.0f;
@@ -399,7 +384,6 @@ static void action(sq_class* i_this) {
     i_this->shape_angle.z = i_this->current.angle.z;
 }
 
-/* 805A06A4-805A07C8 001124 0124+00 1/1 0/0 0/0 .text            message__FP8sq_class */
 static int message(sq_class* i_this) {
     if (i_this->mIsTalking != 0) {
         i_this->mMessageTimer = 10;
@@ -427,7 +411,6 @@ static int message(sq_class* i_this) {
     return 0;
 }
 
-/* 805A07C8-805A09EC 001248 0224+00 2/1 0/0 0/0 .text            daSq_Execute__FP8sq_class */
 static int daSq_Execute(sq_class* i_this) {
     cXyz vec(0.0f, 0.0f, 0.0f);
     cLib_addCalc2(&i_this->scale.x, 1.0f, 1.0f, 0.25f);
@@ -473,12 +456,10 @@ static int daSq_Execute(sq_class* i_this) {
     return 1;
 }
 
-/* 805A09EC-805A09F4 00146C 0008+00 1/0 0/0 0/0 .text            daSq_IsDelete__FP8sq_class */
 static int daSq_IsDelete(sq_class* i_this) {
     return 1;
 }
 
-/* 805A09F4-805A0A48 001474 0054+00 1/0 0/0 0/0 .text            daSq_Delete__FP8sq_class */
 static int daSq_Delete(sq_class* i_this) {
     dComIfG_resDelete(&i_this->mPhaseReq, "Sq");
     if (i_this->mHIOInit) {
@@ -487,7 +468,6 @@ static int daSq_Delete(sq_class* i_this) {
     return 1;
 }
 
-/* 805A0A48-805A0BE8 0014C8 01A0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     sq_class* _this = static_cast<sq_class*>(i_this);
     
@@ -508,7 +488,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
                                  1, 0, 1.0f, 0, -1) ? 1 : 0;
 }
 
-/* 805A0C30-805A0FB0 0016B0 0380+00 1/0 0/0 0/0 .text            daSq_Create__FP10fopAc_ac_c */
 static cPhs__Step daSq_Create(fopAc_ac_c* i_this) {
     sq_class* _this = static_cast<sq_class*>(i_this);
     fopAcM_ct(i_this, sq_class);
@@ -596,7 +575,6 @@ static cPhs__Step daSq_Create(fopAc_ac_c* i_this) {
     return step;
 }
 
-/* 805A1284-805A12A4 -00001 0020+00 1/0 0/0 0/0 .data            l_daSq_Method */
 static actor_method_class l_daSq_Method = {
     (process_method_func)daSq_Create,
     (process_method_func)daSq_Delete,
@@ -605,7 +583,6 @@ static actor_method_class l_daSq_Method = {
     (process_method_func)daSq_Draw,
 };
 
-/* 805A12A4-805A12D4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_SQ */
 extern actor_process_profile_definition g_profile_SQ = {
     fpcLy_CURRENT_e,
     7,

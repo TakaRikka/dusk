@@ -37,7 +37,6 @@ static daObjFallObj_HIO_c l_HIO;
 
 #endif
 
-/* 80BE39B8-80BE3A24 000078 006C+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjFallObj_cFv */
 void daObjFallObj_c::initBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -46,7 +45,6 @@ void daObjFallObj_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80BE3A24-80BE3A88 0000E4 0064+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjFallObj_cFv */
 void daObjFallObj_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -54,16 +52,13 @@ void daObjFallObj_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80BE4B20-80BE4B24 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "K_drock00";
 
-/* 80BE4B24-80BE4B3C 000004 0018+00 1/1 0/0 0/0 .data            l_cull_box */
 static Vec l_cull_box[2] = {
     {-200.0f, -10000.0f, -200.0f},
     {200.0f, 600.0f, 200.0f},
 };
 
-/* 80BE3A88-80BE3BA8 000148 0120+00 1/0 0/0 0/0 .text            Create__14daObjFallObj_cFv */
 int daObjFallObj_c::Create() {
     u8 uVar1 = field_0x5d8 - 1;
     if (uVar1 != 0) {
@@ -86,7 +81,6 @@ int daObjFallObj_c::Create() {
     return 1;
 }
 
-/* 80BE3BA8-80BE3BD4 000268 002C+00 2/2 0/0 0/0 .text            getFallTime__14daObjFallObj_cFv */
 s16 daObjFallObj_c::getFallTime() {
     u32 time = getTime();
     if (time == 0) {
@@ -100,8 +94,6 @@ s16 daObjFallObj_c::getFallTime() {
     return time * 15;
 }
 
-/* 80BE3BD4-80BE3C28 000294 0054+00 1/1 0/0 0/0 .text            getFallHeight__14daObjFallObj_cFv
- */
 f32 daObjFallObj_c::getFallHeight() {
     u32 pos = getPos();
     if (pos == 0xff) {
@@ -111,7 +103,6 @@ f32 daObjFallObj_c::getFallHeight() {
     return pos * 50.0f + 300.0f;
 }
 
-/* 80BE3C28-80BE3C98 0002E8 0070+00 1/0 0/0 0/0 .text            CreateHeap__14daObjFallObj_cFv */
 int daObjFallObj_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(260, modelData != NULL);
@@ -119,7 +110,6 @@ int daObjFallObj_c::CreateHeap() {
     return mpModel != NULL ? TRUE : FALSE;
 }
 
-/* 80BE3C98-80BE3D24 000358 008C+00 1/1 0/0 0/0 .text            create1st__14daObjFallObj_cFv */
 int daObjFallObj_c::create1st() {
     field_0x5d8 = 1;
     int phase = dComIfG_resLoad(&mPhaseReq, l_arcName);
@@ -138,8 +128,6 @@ int daObjFallObj_c::create1st() {
     return phase;
 }
 
-/* 80BE3D24-80BE4138 0003E4 0414+00 1/0 0/0 0/0 .text            Execute__14daObjFallObj_cFPPA3_A4_f
- */
 int daObjFallObj_c::Execute(Mtx** i_mtx) {
     cXyz cStack_d8(0.0f, 150.0f, 160.0f);
 
@@ -180,7 +168,6 @@ int daObjFallObj_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80BE4138-80BE4228 0007F8 00F0+00 1/1 0/0 0/0 .text            action__14daObjFallObj_cFv */
 void daObjFallObj_c::action() {
     bool isHang = checkHang();
 
@@ -215,7 +202,6 @@ void daObjFallObj_c::action() {
     field_0x5e4 = false;
 }
 
-/* 80BE4228-80BE42C0 0008E8 0098+00 1/1 0/0 0/0 .text            action_wait__14daObjFallObj_cFb */
 bool daObjFallObj_c::action_wait(bool param_1) {
     if (param_1) {
         mTimer = 10;
@@ -231,7 +217,6 @@ bool daObjFallObj_c::action_wait(bool param_1) {
     return param_1;
 }
 
-/* 80BE42C0-80BE43E4 000980 0124+00 1/1 0/0 0/0 .text action_fallStart__14daObjFallObj_cFv */
 bool daObjFallObj_c::action_fallStart() {
     cLib_calcTimer(&mTimer);
     if (mTimer >= 8) {
@@ -257,7 +242,6 @@ bool daObjFallObj_c::action_fallStart() {
     return false;
 }
 
-/* 80BE43E4-80BE45F4 000AA4 0210+00 1/1 0/0 0/0 .text action_countdown__14daObjFallObj_cFv */
 void daObjFallObj_c::action_countdown() {
     bool bVar1 = true;
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -289,7 +273,6 @@ void daObjFallObj_c::action_countdown() {
     }
 }
 
-/* 80BE45F4-80BE466C 000CB4 0078+00 1/1 0/0 0/0 .text            action_fall__14daObjFallObj_cFv */
 void daObjFallObj_c::action_fall() {
     speed.y += gravity;
     if (speed.y < fopAcM_GetMaxFallSpeed(this)) {
@@ -302,10 +285,8 @@ void daObjFallObj_c::action_fall() {
     }
 }
 
-/* 80BE466C-80BE4670 000D2C 0004+00 1/1 0/0 0/0 .text            action_end__14daObjFallObj_cFv */
 void daObjFallObj_c::action_end() {}
 
-/* 80BE4670-80BE4700 000D30 0090+00 1/1 0/0 0/0 .text action_follow_fall__14daObjFallObj_cFv */
 void daObjFallObj_c::action_follow_fall() {
     if (parentActorID != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* parent = fopAcM_SearchByID(parentActorID);
@@ -319,7 +300,6 @@ void daObjFallObj_c::action_follow_fall() {
     }
 }
 
-/* 80BE4700-80BE47A0 000DC0 00A0+00 2/2 0/0 0/0 .text            checkHang__14daObjFallObj_cFv */
 bool daObjFallObj_c::checkHang() {
     bool rv = false;
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -333,7 +313,6 @@ bool daObjFallObj_c::checkHang() {
     return rv;
 }
 
-/* 80BE47A0-80BE48A4 000E60 0104+00 1/1 0/0 0/0 .text            checkHang2__14daObjFallObj_cFv */
 bool daObjFallObj_c::checkHang2() {
     fpc_ProcID procId;
     if (parentActorID == fpcM_ERROR_PROCESS_ID_e) {
@@ -377,7 +356,6 @@ bool daObjFallObj_c::checkHang2() {
     return false;
 }
 
-/* 80BE48A4-80BE4948 000F64 00A4+00 1/0 0/0 0/0 .text            Draw__14daObjFallObj_cFv */
 int daObjFallObj_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -399,7 +377,6 @@ int daObjFallObj_c::Draw() {
     return 1;
 }
 
-/* 80BE4948-80BE4990 001008 0048+00 1/0 0/0 0/0 .text            Delete__14daObjFallObj_cFv */
 int daObjFallObj_c::Delete() {
     mSoundObj.deleteObject();
     dComIfG_resDelete(&mPhaseReq, l_arcName);
@@ -410,32 +387,23 @@ int daObjFallObj_c::Delete() {
     return 1;
 }
 
-/* 80BE4990-80BE4A04 001050 0074+00 1/0 0/0 0/0 .text daObjFallObj_create1st__FP14daObjFallObj_c
- */
 static int daObjFallObj_create1st(daObjFallObj_c* i_this) {
     fopAcM_ct(i_this, daObjFallObj_c);
     return i_this->create1st();
 }
 
-/* 80BE4A04-80BE4A24 0010C4 0020+00 1/0 0/0 0/0 .text
- * daObjFallObj_MoveBGDelete__FP14daObjFallObj_c                */
 static int daObjFallObj_MoveBGDelete(daObjFallObj_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80BE4A24-80BE4A44 0010E4 0020+00 1/0 0/0 0/0 .text
- * daObjFallObj_MoveBGExecute__FP14daObjFallObj_c               */
 static int daObjFallObj_MoveBGExecute(daObjFallObj_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BE4A44-80BE4A70 001104 002C+00 1/0 0/0 0/0 .text daObjFallObj_MoveBGDraw__FP14daObjFallObj_c
- */
 static int daObjFallObj_MoveBGDraw(daObjFallObj_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80BE4B3C-80BE4B5C -00001 0020+00 1/0 0/0 0/0 .data            daObjFallObj_METHODS */
 static actor_method_class daObjFallObj_METHODS = {
     (process_method_func)daObjFallObj_create1st,
     (process_method_func)daObjFallObj_MoveBGDelete,
@@ -444,7 +412,6 @@ static actor_method_class daObjFallObj_METHODS = {
     (process_method_func)daObjFallObj_MoveBGDraw,
 };
 
-/* 80BE4B5C-80BE4B8C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_FallObj */
 extern actor_process_profile_definition g_profile_Obj_FallObj = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

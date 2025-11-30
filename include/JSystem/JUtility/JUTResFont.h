@@ -23,34 +23,34 @@ struct BlockHeader {
 */
 class JUTResFont : public JUTFont {
 public:
-    /* 802DF000 */ virtual ~JUTResFont();
-    /* 802DF48C */ virtual void setGX();
-    /* 802DF584 */ virtual void setGX(JUtility::TColor, JUtility::TColor);
-    /* 802DF7C4 */ virtual f32 drawChar_scale(f32, f32, f32, f32, int, bool);
-    /* 802DDFEC */ virtual int getLeading() const;
-    /* 802DE004 */ virtual s32 getAscent() const;
-    /* 802DE010 */ virtual s32 getDescent() const;
-    /* 802DE01C */ virtual s32 getHeight() const;
-    /* 802DDFF8 */ virtual s32 getWidth() const;
-    /* 802DFC64 */ virtual void getWidthEntry(int, JUTFont::TWidth*) const;
-    /* 802DFD0C */ virtual s32 getCellWidth() const;
-    /* 802DFD58 */ virtual s32 getCellHeight() const;
-    /* 802DDFE0 */ virtual int getFontType() const;
-    /* 802DDFD8 */ virtual ResFONT* getResFont() const;
-    /* 802DFDA4 */ virtual bool isLeadByte(int) const;
-    /* 802DFF60 */ virtual void loadImage(int, _GXTexMapID);
-    /* 802DF344 */ virtual void setBlock();
+    virtual ~JUTResFont();
+    virtual void setGX();
+    virtual void setGX(JUtility::TColor, JUtility::TColor);
+    virtual f32 drawChar_scale(f32, f32, f32, f32, int, bool);
+    virtual int getLeading() const;
+    virtual s32 getAscent() const;
+    virtual s32 getDescent() const;
+    virtual s32 getHeight() const;
+    virtual s32 getWidth() const;
+    virtual void getWidthEntry(int, JUTFont::TWidth*) const;
+    virtual s32 getCellWidth() const;
+    virtual s32 getCellHeight() const;
+    virtual int getFontType() const;
+    virtual ResFONT* getResFont() const;
+    virtual bool isLeadByte(int) const;
+    virtual void loadImage(int, _GXTexMapID);
+    virtual void setBlock();
 
-    /* 802DEF94 */ JUTResFont(ResFONT const*, JKRHeap*);
-    /* 802DEF48 */ JUTResFont();
-    /* 802DF08C */ void deleteMemBlocks_ResFont();
-    /* 802DF0B0 */ void initialize_state();
-    /* 802DF0DC */ bool initiate(ResFONT const*, JKRHeap*);
-    /* 802DF13C */ bool protected_initiate(ResFONT const*, JKRHeap*);
-    /* 802DF248 */ void countBlock();
-    /* 802DFBE8 */ void loadFont(int, _GXTexMapID, JUTFont::TWidth*);
-    /* 802DFDD8 */ int getFontCode(int) const;
-    /* 802E00C4 */ int convertSjis(int, u16*) const;
+    JUTResFont(ResFONT const*, JKRHeap*);
+    JUTResFont();
+    void deleteMemBlocks_ResFont();
+    void initialize_state();
+    bool initiate(ResFONT const*, JKRHeap*);
+    bool protected_initiate(ResFONT const*, JKRHeap*);
+    void countBlock();
+    void loadFont(int, _GXTexMapID, JUTFont::TWidth*);
+    int getFontCode(int) const;
+    int convertSjis(int, u16*) const;
 
     inline void delete_and_initialize() {
         deleteMemBlocks_ResFont();

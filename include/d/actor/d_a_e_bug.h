@@ -60,8 +60,8 @@ STATIC_ASSERT(sizeof(e_bug_class) == 0x7db0);
 
 class daE_Bug_HIO_c: public JORReflexible {
 public:
-    /* 80694B8C */ daE_Bug_HIO_c();
-    /* 80697BEC */ virtual ~daE_Bug_HIO_c() {}
+    daE_Bug_HIO_c();
+    virtual ~daE_Bug_HIO_c() {}
 
     void genMessage(JORMContext*);
 

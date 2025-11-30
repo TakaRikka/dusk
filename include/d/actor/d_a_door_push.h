@@ -26,25 +26,25 @@ public:
         ACTION_ORDER_EVENT_e,
     };
 
-    /* 80677E08 */ void initBaseMtx();
-    /* 80677F38 */ void setBaseMtx();
-    /* 8067809C */ int Create();
-    /* 806781FC */ int CreateHeap();
-    /* 80678318 */ int create1st();
-    /* 8067839C */ int Execute(Mtx**);
-    /* 8067840C */ void action();
-    /* 80678488 */ void init_modeWait();
-    /* 806784B4 */ void modeWait();
-    /* 80678664 */ void event_proc_call();
-    /* 80678708 */ void actionOpenWait();
-    /* 8067877C */ void actionOrderEvent();
-    /* 806787F8 */ void actionEvent();
-    /* 80678818 */ int demoProc();
-    /* 80678AEC */ void rotateInit();
-    /* 80678B10 */ int rotate();
-    /* 80678BC0 */ void setGoal();
-    /* 80678C70 */ int Draw();
-    /* 80678D2C */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void action();
+    void init_modeWait();
+    void modeWait();
+    void event_proc_call();
+    void actionOpenWait();
+    void actionOrderEvent();
+    void actionEvent();
+    int demoProc();
+    void rotateInit();
+    int rotate();
+    void setGoal();
+    int Draw();
+    int Delete();
 
     void setAction(u8 i_action) { mAction = i_action; }
     u32 getSceneNo() { return fopAcM_GetParamBit(this, 4, 6); }

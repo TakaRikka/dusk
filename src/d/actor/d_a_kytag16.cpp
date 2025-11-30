@@ -11,13 +11,10 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 80860C58-80860C60 000078 0008+00 1/0 0/0 0/0 .text            daKytag16_Draw__FP13kytag16_class
- */
 static int daKytag16_Draw(kytag16_class* i_this) {
     return 1;
 }
 
-/* 80860C60-80860E9C 000080 023C+00 1/0 0/0 0/0 .text daKytag16_Execute__FP13kytag16_class */
 static int daKytag16_Execute(kytag16_class* i_this) {
     bool var_r29 = false;
     f32 var_f31 = 0.0f;
@@ -79,18 +76,14 @@ static int daKytag16_Execute(kytag16_class* i_this) {
     return 1;
 }
 
-/* 80860E9C-80860EA4 0002BC 0008+00 1/0 0/0 0/0 .text daKytag16_IsDelete__FP13kytag16_class */
 static int daKytag16_IsDelete(kytag16_class* i_this) {
     return 1;
 }
 
-/* 80860EA4-80860EAC 0002C4 0008+00 1/0 0/0 0/0 .text            daKytag16_Delete__FP13kytag16_class
- */
 static int daKytag16_Delete(kytag16_class* i_this) {
     return 1;
 }
 
-/* 80860EAC-8086112C 0002CC 0280+00 2/0 0/0 0/0 .text            daKytag16_Create__FP10fopAc_ac_c */
 static int daKytag16_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, kytag16_class);
     kytag16_class* a_this = (kytag16_class*)i_this;
@@ -166,14 +159,12 @@ static int daKytag16_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 808611BC-808611DC -00001 0020+00 1/0 0/0 0/0 .data            l_daKytag16_Method */
 static actor_method_class l_daKytag16_Method = {
     (process_method_func)daKytag16_Create,  (process_method_func)daKytag16_Delete,
     (process_method_func)daKytag16_Execute, (process_method_func)daKytag16_IsDelete,
     (process_method_func)daKytag16_Draw,
 };
 
-/* 808611DC-8086120C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KYTAG16 */
 extern actor_process_profile_definition g_profile_KYTAG16 = {
     fpcLy_CURRENT_e,
     7,

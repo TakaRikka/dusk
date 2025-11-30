@@ -14,7 +14,7 @@ class J3DVertexBuffer;
  * 
  */
 struct J3DVtxColorCalc {
-    /* 8032E180 */ void calc(J3DModel*);
+    void calc(J3DModel*);
     virtual void calc(J3DVertexBuffer*);
 
     /* 0x0 */ void* vtable;  // inlined vtable?
@@ -77,15 +77,15 @@ class J3DVertexBuffer {
 public:
     J3DVertexBuffer() { init(); }
 
-    /* 80310F78 */ void setVertexData(J3DVertexData*);
-    /* 80310FD8 */ void init();
-    /* 80311030 */ ~J3DVertexBuffer();
-    /* 8031106C */ void setArray() const;
-    /* 80311090 */ s32 copyLocalVtxPosArray(u32);
-    /* 803111B0 */ s32 copyLocalVtxNrmArray(u32);
-    /* 803112D0 */ s32 copyLocalVtxArray(u32);
-    /* 80311478 */ s32 allocTransformedVtxPosArray();
-    /* 8031152C */ s32 allocTransformedVtxNrmArray();
+    void setVertexData(J3DVertexData*);
+    void init();
+    ~J3DVertexBuffer();
+    void setArray() const;
+    s32 copyLocalVtxPosArray(u32);
+    s32 copyLocalVtxNrmArray(u32);
+    s32 copyLocalVtxArray(u32);
+    s32 allocTransformedVtxPosArray();
+    s32 allocTransformedVtxNrmArray();
 
     void setCurrentVtxPos(void* pVtxPos) { mCurrentVtxPos = pVtxPos; }
     void* getCurrentVtxPos() { return mCurrentVtxPos; }

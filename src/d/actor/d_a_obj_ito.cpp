@@ -11,7 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-/* 8047B2EC-8047B324 0000EC 0038+00 1/1 0/0 0/0 .text            __ct__15daObj_Ito_HIO_cFv */
 daObj_Ito_HIO_c::daObj_Ito_HIO_c() {
     field_0x4 = -1;
     field_0x8 = 4.5f;
@@ -19,13 +18,10 @@ daObj_Ito_HIO_c::daObj_Ito_HIO_c() {
     field_0x10 = 1;
 }
 
-/* 8047D9C8-8047D9CC 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_initHio;
 
-/* 8047D9D8-8047D9EC 000018 0014+00 5/5 0/0 0/0 .bss             l_HIO */
 static daObj_Ito_HIO_c l_HIO;
 
-/* 8047B324-8047B504 000124 01E0+00 1/0 0/0 0/0 .text            daObj_Ito_Draw__FP13obj_ito_class  */
 static int daObj_Ito_Draw(obj_ito_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     if (!i_this->field_0x639) {
@@ -58,7 +54,6 @@ static int daObj_Ito_Draw(obj_ito_class* i_this) {
     return 1;
 }
 
-/* 8047B504-8047B9A4 000304 04A0+00 1/1 0/0 0/0 .text cut_line_calc__FP13obj_ito_classP5ito_si */
 static void cut_line_calc(obj_ito_class* i_this, ito_s* param_2, int param_3) {
     int i;
     fopAc_ac_c* a_this = &i_this->actor;
@@ -140,7 +135,6 @@ static void cut_line_calc(obj_ito_class* i_this, ito_s* param_2, int param_3) {
     }
 }
 
-/* 8047B9E0-8047BAF8 0007E0 0118+00 1/1 0/0 0/0 .text            cut_line__FP13obj_ito_class */
 static void cut_line(obj_ito_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -165,7 +159,6 @@ static void cut_line(obj_ito_class* i_this) {
     }
 }
 
-/* 8047BAF8-8047BF8C 0008F8 0494+00 1/1 0/0 0/0 .text            cut_set__FP13obj_ito_classi */
 static void cut_set(obj_ito_class* i_this, int param_2) {
     fopAc_ac_c* a_this = &i_this->actor;
     i_this->field_0x1038 = 1;
@@ -213,7 +206,6 @@ static void cut_set(obj_ito_class* i_this, int param_2) {
     }
 }
 
-/* 8047BF8C-8047C034 000D8C 00A8+00 1/1 0/0 0/0 .text            ito_end__FP5ito_s */
 static void ito_end(ito_s* i_this) {
     cLib_addCalc0(&i_this->field_0x250, 1.0f, 1.0f);
 
@@ -231,7 +223,6 @@ static void ito_end(ito_s* i_this) {
     }
 }
 
-/* 8047C034-8047CEE4 000E34 0EB0+00 1/1 0/0 0/0 .text            action__FP13obj_ito_class */
 static void action(obj_ito_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     obj_gm_class* actor_p = (obj_gm_class*)fopAcM_SearchByID(a_this->parentActorID);
@@ -514,7 +505,6 @@ static void action(obj_ito_class* i_this) {
     }
 }
 
-/* 8047CEE4-8047CFA8 001CE4 00C4+00 1/0 0/0 0/0 .text daObj_Ito_Execute__FP13obj_ito_class */
 static int daObj_Ito_Execute(obj_ito_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -539,12 +529,10 @@ static int daObj_Ito_Execute(obj_ito_class* i_this) {
     return 1;
 }
 
-/* 8047CFA8-8047CFB0 001DA8 0008+00 1/0 0/0 0/0 .text daObj_Ito_IsDelete__FP13obj_ito_class */
 static int daObj_Ito_IsDelete(obj_ito_class* i_this) {
     return 1;
 }
 
-/* 8047CFB0-8047D024 001DB0 0074+00 1/0 0/0 0/0 .text            daObj_Ito_Delete__FP13obj_ito_class  */
 static int daObj_Ito_Delete(obj_ito_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -561,7 +549,6 @@ static int daObj_Ito_Delete(obj_ito_class* i_this) {
     return 1;
 }
 
-/* 8047D024-8047D1D8 001E24 01B4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_ito_class* i_this = (obj_ito_class*)a_this;
 
@@ -605,7 +592,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 8047D1D8-8047D594 001FD8 03BC+00 1/0 0/0 0/0 .text            daObj_Ito_Create__FP10fopAc_ac_c */
 static cPhs__Step daObj_Ito_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, obj_ito_class);
     obj_ito_class* i_this = (obj_ito_class*)a_this;
@@ -696,7 +682,6 @@ static cPhs__Step daObj_Ito_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-/* 8047D938-8047D958 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Ito_Method */
 static actor_method_class l_daObj_Ito_Method = {
     (process_method_func)daObj_Ito_Create,
     (process_method_func)daObj_Ito_Delete,
@@ -705,7 +690,6 @@ static actor_method_class l_daObj_Ito_Method = {
     (process_method_func)daObj_Ito_Draw,
 };
 
-/* 8047D958-8047D988 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_ITO */
 extern actor_process_profile_definition g_profile_OBJ_ITO = {
   fpcLy_CURRENT_e,        // mLayerID
   4,                      // mListID

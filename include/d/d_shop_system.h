@@ -36,55 +36,55 @@ public:
             initShopSystem();
     }
 
-    /* 80197338 */ void initShopSystem();
-    /* 801975C0 */ void onFlag(int);
-    /* 801975DC */ void offFlag(int);
-    /* 801975F8 */ BOOL isFlag(int);
-    /* 80197618 */ void onSoldOutItemFlag(int);
-    /* 80197634 */ void offSoldOutItemFlag(int);
-    /* 80197650 */ BOOL isSoldOutItemFlag(int);
-    /* 80197670 */ int checkController(u8, dMsgFlow_c*);
-    /* 80197808 */ int chooseItem3(u8);
-    /* 80197DD0 */ int chooseItem5(u8);
-    /* 80198250 */ int chooseItem4(u8);
-    /* 80198444 */ int moveCursor(int, u8);
-    /* 80198488 */ int moveCursor0(int, u8);
-    /* 80198708 */ int moveCursor1(int, u8);
-    /* 80198878 */ int drawCursor();
-    /* 80198950 */ int itemRotate();
-    /* 80198A2C */ int itemZoom(cXyz*);
-    /* 801990B0 */ int seq_wait(fopAc_ac_c*, dMsgFlow_c*);
-    /* 801990B8 */ int seq_start(fopAc_ac_c*, dMsgFlow_c*);
-    /* 8019936C */ int seq_select_wait(fopAc_ac_c*, dMsgFlow_c*);
-    /* 801993C4 */ int seq_select_start(fopAc_ac_c*, dMsgFlow_c*);
-    /* 8019959C */ int seq_select(fopAc_ac_c*, dMsgFlow_c*);
-    /* 80199A18 */ int seq_moving(fopAc_ac_c*, dMsgFlow_c*);
-    /* 80199BF8 */ int seq_decide(fopAc_ac_c*, dMsgFlow_c*);
-    /* 80199D14 */ int seq_choose(fopAc_ac_c*, dMsgFlow_c*);
-    /* 80199E28 */ int seq_decide_yes(fopAc_ac_c*, dMsgFlow_c*);
-    /* 80199FA4 */ int seq_decide_no(fopAc_ac_c*, dMsgFlow_c*);
-    /* 8019A020 */ int seq_finish(fopAc_ac_c*, dMsgFlow_c*);
-    /* 8019A0C0 */ bool seq_event(fopAc_ac_c*, dMsgFlow_c*);
-    /* 8019A0D0 */ int shop_init(bool);
-    /* 8019A158 */ int shop_process(fopAc_ac_c*, dMsgFlow_c*);
-    /* 8019A238 */ void createShopItem(int);
-    /* 8019A344 */ void setSeq(u8);
-    /* 8019A354 */ void setSoldOutFlag();
-    /* 8019A364 */ void setSoldOut();
-    /* 8019A4F4 */ void setSoldOutItemHide();
-    /* 8019A564 */ void deleteObject();
-    /* 8019A5D0 */ bool searchItemActor();
-    /* 8019AB00 */ int getFlowNodeNum();
-    /* 8019AB1C */ void setSellItemMax(u8);
-    /* 8019AB24 */ BOOL checkShopOpen();
-    /* 8019AB60 */ bool checkLeftTrigger(STControl*);
-    /* 8019AB84 */ bool checkRightTrigger(STControl*);
-    /* 8019ABA8 */ bool dpdMove();
+    void initShopSystem();
+    void onFlag(int);
+    void offFlag(int);
+    BOOL isFlag(int);
+    void onSoldOutItemFlag(int);
+    void offSoldOutItemFlag(int);
+    BOOL isSoldOutItemFlag(int);
+    int checkController(u8, dMsgFlow_c*);
+    int chooseItem3(u8);
+    int chooseItem5(u8);
+    int chooseItem4(u8);
+    int moveCursor(int, u8);
+    int moveCursor0(int, u8);
+    int moveCursor1(int, u8);
+    int drawCursor();
+    int itemRotate();
+    int itemZoom(cXyz*);
+    int seq_wait(fopAc_ac_c*, dMsgFlow_c*);
+    int seq_start(fopAc_ac_c*, dMsgFlow_c*);
+    int seq_select_wait(fopAc_ac_c*, dMsgFlow_c*);
+    int seq_select_start(fopAc_ac_c*, dMsgFlow_c*);
+    int seq_select(fopAc_ac_c*, dMsgFlow_c*);
+    int seq_moving(fopAc_ac_c*, dMsgFlow_c*);
+    int seq_decide(fopAc_ac_c*, dMsgFlow_c*);
+    int seq_choose(fopAc_ac_c*, dMsgFlow_c*);
+    int seq_decide_yes(fopAc_ac_c*, dMsgFlow_c*);
+    int seq_decide_no(fopAc_ac_c*, dMsgFlow_c*);
+    int seq_finish(fopAc_ac_c*, dMsgFlow_c*);
+    bool seq_event(fopAc_ac_c*, dMsgFlow_c*);
+    int shop_init(bool);
+    int shop_process(fopAc_ac_c*, dMsgFlow_c*);
+    void createShopItem(int);
+    void setSeq(u8);
+    void setSoldOutFlag();
+    void setSoldOut();
+    void setSoldOutItemHide();
+    void deleteObject();
+    bool searchItemActor();
+    int getFlowNodeNum();
+    void setSellItemMax(u8);
+    BOOL checkShopOpen();
+    bool checkLeftTrigger(STControl*);
+    bool checkRightTrigger(STControl*);
+    bool dpdMove();
 
-    /* 801974E4 */ virtual ~dShopSystem_c();
-    /* 8019ACF0 */ virtual bool getResName2(int) { return false; }
-    /* 8019ACE0 */ virtual int beforeStartSeqAction(dMsgFlow_c*, int) { return 1; }
-    /* 8019ACE8 */ virtual int beforeSelectSeqAction(dMsgFlow_c*, int) { return 1; }
+    virtual ~dShopSystem_c();
+    virtual bool getResName2(int) { return false; }
+    virtual int beforeStartSeqAction(dMsgFlow_c*, int) { return 1; }
+    virtual int beforeSelectSeqAction(dMsgFlow_c*, int) { return 1; }
 
     bool chkSpMode() { return mSpMode == 1; }
     void onSpMode() { mSpMode = 1; }

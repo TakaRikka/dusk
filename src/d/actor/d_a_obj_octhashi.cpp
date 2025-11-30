@@ -12,7 +12,6 @@
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
 
-/* 80CA6480-80CA64C0 000000 0040+00 6/6 0/0 0/0 .rodata          ccSphSrc$3655 */
 const static dCcD_SrcSph ccSphSrc = {
     {
         {0x0, {{0x0, 0x0, 0x13}, {0x104002, 0x1f}, 0x7f}}, // mObj
@@ -29,7 +28,6 @@ static char* l_arcName[1] = {
     "Octhashi"
 };
 
-/* 80CA6588-80CA65CC 000004 0044+00 1/1 0/0 0/0 .data            ccCylSrc$3656 */
 static dCcD_SrcCyl ccCylSrc = {
     {
         {0x0, {{0x0, 0x0, 0xd}, {0x104002, 0x1f}, 0x75}}, // mObj
@@ -46,8 +44,6 @@ static dCcD_SrcCyl ccCylSrc = {
 
 static s8 l_cyl_height_init = 0;
 
-/* 80CA4BB8-80CA4D98 000078 01E0+00 1/1 0/0 0/0 .text            initCcCylinder__15daObjOCTHASHI_cFv
- */
 void daObjOCTHASHI_c::initCcCylinder() {
     if (l_cyl_height_init == 0) {
         ccCylSrc.mCyl.mHeight = (f32)(mPieceNum + 1) * 800.0f - 100.f;
@@ -70,12 +66,10 @@ void daObjOCTHASHI_c::initCcCylinder() {
     mCyl.OnCoSameActorHit();
 }
 
-/* 80CA4D98-80CA4DB8 000258 0020+00 1/0 0/0 0/0 .text daObjOCTHASHI_Create__FP10fopAc_ac_c */
 static int daObjOCTHASHI_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjOCTHASHI_c*>(i_this)->create();
 }
 
-/* 80CA4DB8-80CA4DFC 000278 0044+00 1/0 0/0 0/0 .text daObjOCTHASHI_Delete__FP15daObjOCTHASHI_c */
 static int daObjOCTHASHI_Delete(daObjOCTHASHI_c* i_this) {
     fopAcM_GetID(i_this);
     i_this->MoveBGDelete();
@@ -83,7 +77,6 @@ static int daObjOCTHASHI_Delete(daObjOCTHASHI_c* i_this) {
     return 1;
 }
 
-/* 80CA4DFC-80CA4EA4 0002BC 00A8+00 1/1 0/0 0/0 .text            SetCoSph__15daObjOCTHASHI_cFv */
 void daObjOCTHASHI_c::SetCoSph() {
     for (int idx = 0; idx < mPieceNum; ++idx) {
         mColliders[idx].OffCoSameActorHit();
@@ -93,14 +86,12 @@ void daObjOCTHASHI_c::SetCoSph() {
     }
 }
 
-/* 80CA4EA4-80CA4F24 000364 0080+00 1/1 0/0 0/0 .text            SetCoCyl__15daObjOCTHASHI_cFv */
 void daObjOCTHASHI_c::SetCoCyl() {
     mCyl.SetC(current.pos);
     mCyl.SetH(mPieceNum * 790.0f);
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 80CA4F24-80CA52F0 0003E4 03CC+00 1/1 0/0 0/0 .text            HakaiSet2__15daObjOCTHASHI_cFi */
 void daObjOCTHASHI_c::HakaiSet2(int param_0) {
     for (int idx = param_0 - 1; idx >= 0; --idx) {
         field_0x6d8 += 10.0f;
@@ -136,8 +127,6 @@ void daObjOCTHASHI_c::HakaiSet2(int param_0) {
     field_0x6c8 = 1;
 }
 
-/* 80CA52F0-80CA546C 0007B0 017C+00 1/1 0/0 0/0 .text            HakaiMotion2__15daObjOCTHASHI_cFv
- */
 void daObjOCTHASHI_c::HakaiMotion2() {
     int num_processed = 0;
     cXyz cStack_20(7.0f, 7.0f, 7.0f);
@@ -162,7 +151,6 @@ void daObjOCTHASHI_c::HakaiMotion2() {
     }
 }
 
-/* 80CA54E4-80CA55C4 0009A4 00E0+00 1/1 0/0 0/0 .text            CylAction__15daObjOCTHASHI_cFv */
 void daObjOCTHASHI_c::CylAction() {
     if (mCyl.ChkTgHit()) {
         eyePos = *mCyl.GetTgHitPosP();
@@ -178,7 +166,6 @@ void daObjOCTHASHI_c::CylAction() {
     }
 }
 
-/* 80CA55C4-80CA5844 000A84 0280+00 1/1 0/0 0/0 .text            SphAction__15daObjOCTHASHI_cFv */
 void daObjOCTHASHI_c::SphAction() {
     // The following replace the unused rodata lits:
     f32 padding[1] = {0.0f};
@@ -232,7 +219,6 @@ void daObjOCTHASHI_c::SphAction() {
     return;
 }
 
-/* 80CA5844-80CA58F4 000D04 00B0+00 1/1 0/0 0/0 .text            SphAction2__15daObjOCTHASHI_cFv */
 void daObjOCTHASHI_c::SphAction2() {
     for (int idx = 0; idx < mPieceNum; ++idx) {
         if (mColliders[idx].ChkTgHit()) {
@@ -244,7 +230,6 @@ void daObjOCTHASHI_c::SphAction2() {
     }
 }
 
-/* 80CA58F4-80CA59BC 000DB4 00C8+00 1/1 0/0 0/0 .text            Action__15daObjOCTHASHI_cFv */
 void daObjOCTHASHI_c::Action() {
     switch (field_0x6cb) {
         case 0:
@@ -271,7 +256,6 @@ void daObjOCTHASHI_c::Action() {
     }
 }
 
-/* 80CA59BC-80CA5A88 000E7C 00CC+00 1/1 0/0 0/0 .text            setBaseMtx__15daObjOCTHASHI_cFv */
 void daObjOCTHASHI_c::setBaseMtx() {
     for (int idx = 0; idx < mPieceNum; ++idx) {
         mDoMtx_stack_c::transS(field_0x5a0[idx]);
@@ -283,24 +267,18 @@ void daObjOCTHASHI_c::setBaseMtx() {
     cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80CA5A88-80CA5A94 000F48 000C+00 1/1 0/0 0/0 .text
- * rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c              */
 static void rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2) {
     static_cast<daObjOCTHASHI_c*>(param_1)->field_0x6e8 = 0x1e;
 }
 
-/* 80CA5A94-80CA5AC0 000F54 002C+00 1/0 0/0 0/0 .text daObjOCTHASHI_Draw__FP15daObjOCTHASHI_c */
 static int daObjOCTHASHI_Draw(daObjOCTHASHI_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80CA5AC0-80CA5AE0 000F80 0020+00 2/1 0/0 0/0 .text daObjOCTHASHI_Execute__FP15daObjOCTHASHI_c
- */
 static int daObjOCTHASHI_Execute(daObjOCTHASHI_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80CA5AE0-80CA5B98 000FA0 00B8+00 1/0 0/0 0/0 .text            CreateHeap__15daObjOCTHASHI_cFv */
 int daObjOCTHASHI_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName[0], "S_octhashi00.bmd");
     JUT_ASSERT(84, modelData != NULL);
@@ -317,7 +295,6 @@ int daObjOCTHASHI_c::CreateHeap() {
     return 1;
 }
 
-/* 80CA5B98-80CA5EE4 001058 034C+00 1/1 0/0 0/0 .text            create__15daObjOCTHASHI_cFv */
 int daObjOCTHASHI_c::create() {
     fopAcM_ct(this, daObjOCTHASHI_c);
     mPieceNum = fopAcM_GetParam(this) & 0xff;
@@ -356,8 +333,6 @@ int daObjOCTHASHI_c::create() {
     return phase;
 }
 
-/* 80CA6254-80CA625C 001714 0008+00 1/0 0/0 0/0 .text daObjOCTHASHI_IsDelete__FP15daObjOCTHASHI_c
- */
 static int daObjOCTHASHI_IsDelete(daObjOCTHASHI_c* param_0) {
     return 1;
 }
@@ -366,14 +341,12 @@ static void dummy() {
     delete (cCcD_GStts*)NULL;
 }
 
-/* 80CA62A4-80CA62F8 001764 0054+00 1/0 0/0 0/0 .text            Create__15daObjOCTHASHI_cFv */
 int daObjOCTHASHI_c::Create() {
     mpBgW->SetRideCallback(rideCallBack);
     fopAcM_setCullSizeBox(this, -1000.0f, -500.0f, -1000.0f, 1000.0f, 500.0f, 1000.0f);
     return 4;
 }
 
-/* 80CA62F8-80CA636C 0017B8 0074+00 1/0 0/0 0/0 .text Execute__15daObjOCTHASHI_cFPPA3_A4_f */
 int daObjOCTHASHI_c::Execute(Mtx **i_mtx) {
     Action();
     *i_mtx = &mBgMtx;
@@ -383,7 +356,6 @@ int daObjOCTHASHI_c::Execute(Mtx **i_mtx) {
     return 1;
 }
 
-/* 80CA636C-80CA6444 00182C 00D8+00 1/0 0/0 0/0 .text            Draw__15daObjOCTHASHI_cFv */
 int daObjOCTHASHI_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     for (int idx = 0; idx < mPieceNum; ++idx) {
@@ -396,13 +368,11 @@ int daObjOCTHASHI_c::Draw() {
     return 1;
 }
 
-/* 80CA6444-80CA6478 001904 0034+00 1/0 0/0 0/0 .text            Delete__15daObjOCTHASHI_cFv */
 int daObjOCTHASHI_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName[0]);
     return 1;
 }
 
-/* 80CA65CC-80CA65EC -00001 0020+00 1/0 0/0 0/0 .data            l_daObjOCTHASHI_Method */
 static actor_method_class l_daObjOCTHASHI_Method = {
     (process_method_func)daObjOCTHASHI_Create,
     (process_method_func)daObjOCTHASHI_Delete,
@@ -411,7 +381,6 @@ static actor_method_class l_daObjOCTHASHI_Method = {
     (process_method_func)daObjOCTHASHI_Draw,
 };
 
-/* 80CA65EC-80CA661C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OCTHASHI */
 extern actor_process_profile_definition g_profile_OCTHASHI = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID

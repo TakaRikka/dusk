@@ -13,16 +13,16 @@
  */
 class daSwBall_c : public fopAc_ac_c {
 public:
-    /* 80D4E054 */ BOOL checkArea_sub(fopAc_ac_c*);
-    /* 80D4E194 */ BOOL checkArea();
-    /* 80D4E248 */ void search_ball();
-    /* 80D4E374 */ int Create();
-    /* 80D4E42C */ int create();
-    /* 80D4E494 */ int execute();
-    /* 80D4E524 */ void actionRun();
-    /* 80D4E6C4 */ void actionStop();
-    /* 80D4E6C8 */ void PutCrrPos();
-    /* 80D4E90C */ int _delete();
+    BOOL checkArea_sub(fopAc_ac_c*);
+    BOOL checkArea();
+    void search_ball();
+    int Create();
+    int create();
+    int execute();
+    void actionRun();
+    void actionStop();
+    void PutCrrPos();
+    int _delete();
 
     u8 getArg0() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getArg1() { return fopAcM_GetParamBit(this, 8, 8); }

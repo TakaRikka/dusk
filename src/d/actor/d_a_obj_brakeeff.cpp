@@ -6,7 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_brakeeff.h"
-#include "dol2asm.h"
 #include "d/d_kankyo.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -34,8 +33,6 @@ u32 bef_brk[2] = {
     10,
 };
 
-/* 8046DCB8-8046DD38 000078 0080+00 1/0 0/0 0/0 .text daObj_Brakeeff_Draw__FP18obj_brakeeff_class
- */
 int daObj_Brakeeff_Draw(obj_brakeeff_class* i_this) {
     J3DModel* model = i_this->mpModel;
 
@@ -47,7 +44,6 @@ int daObj_Brakeeff_Draw(obj_brakeeff_class* i_this) {
     return 1;
 }
 
-/* 8046DD38-8046DF80 0000F8 0248+00 1/1 0/0 0/0 .text obj_brakeeff_1__FP18obj_brakeeff_class */
 void obj_brakeeff_1(obj_brakeeff_class* i_this) {
     cXyz pos (i_this->current.pos);
     cXyz misc_vector(1.0f, 1.0f, 1.0f);
@@ -97,7 +93,6 @@ void obj_brakeeff_1(obj_brakeeff_class* i_this) {
     }
 }
 
-/* 8046DF80-8046DFB0 000340 0030+00 1/1 0/0 0/0 .text            action__FP18obj_brakeeff_class */
 void action(obj_brakeeff_class* i_this) {
     switch (i_this->mMiscTimer2){
     case 0:
@@ -106,8 +101,6 @@ void action(obj_brakeeff_class* i_this) {
     }
 }
 
-/* 8046DFB0-8046E098 000370 00E8+00 2/1 0/0 0/0 .text
- * daObj_Brakeeff_Execute__FP18obj_brakeeff_class               */
 int daObj_Brakeeff_Execute(obj_brakeeff_class* i_this) {
     i_this->mMiscTimer1++;
 
@@ -132,14 +125,10 @@ int daObj_Brakeeff_Execute(obj_brakeeff_class* i_this) {
     return 1;
 }
 
-/* 8046E098-8046E0A0 000458 0008+00 1/0 0/0 0/0 .text
- * daObj_Brakeeff_IsDelete__FP18obj_brakeeff_class              */
 int daObj_Brakeeff_IsDelete(obj_brakeeff_class* i_this) {
     return 1;
 }
 
-/* 8046E0A0-8046E0F0 000460 0050+00 1/0 0/0 0/0 .text
- * daObj_Brakeeff_Delete__FP18obj_brakeeff_class                */
 int daObj_Brakeeff_Delete(obj_brakeeff_class* i_this) {
     dComIfG_resDelete(&i_this->mRequestOfPhase, "Obj_Bef");
     dComIfG_Bgsp().Release(i_this->mpDBgW);
@@ -147,7 +136,6 @@ int daObj_Brakeeff_Delete(obj_brakeeff_class* i_this) {
     return 1;
 }
 
-/* 8046E0F0-8046E2B0 0004B0 01C0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 int useHeapInit(fopAc_ac_c* i_this) {
     obj_brakeeff_class* a_this = static_cast<obj_brakeeff_class*>(i_this);
 
@@ -188,7 +176,6 @@ int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8046E2F8-8046E490 0006B8 0198+00 1/0 0/0 0/0 .text daObj_Brakeeff_Create__FP10fopAc_ac_c */
 int daObj_Brakeeff_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph cc_sph_src = {
         {
@@ -229,7 +216,6 @@ int daObj_Brakeeff_Create(fopAc_ac_c* i_this) {
 }
 
 
-/* 8046E59C-8046E5BC -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Brakeeff_Method */
 actor_method_class l_daObj_Brakeeff_Method = {
     (process_method_func)daObj_Brakeeff_Create,
     (process_method_func)daObj_Brakeeff_Delete,
@@ -238,7 +224,6 @@ actor_method_class l_daObj_Brakeeff_Method = {
     (process_method_func)daObj_Brakeeff_Draw,
 };
 
-/* 8046E5BC-8046E5EC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_BEF */
 extern actor_process_profile_definition g_profile_OBJ_BEF = {
     fpcLy_CURRENT_e,            // mLayerID
     3,                          // mListID

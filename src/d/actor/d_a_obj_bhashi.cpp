@@ -10,8 +10,6 @@
 #include "d/actor/d_a_b_mgn.h"
 #include "d/d_s_play.h"
 
-/* 80576A58-80576AC4 000078 006C+00 1/1 0/0 0/0 .text            initCcCylinder__13daObjBHASHI_cFv
- */
 void daObjBHASHI_c::initCcCylinder() {
     const static dCcD_SrcCyl ccCylSrc = {
         {
@@ -34,7 +32,6 @@ void daObjBHASHI_c::initCcCylinder() {
     mCcCyl.OnTgShield();
 }
 
-/* 80576AC4-80576B34 0000E4 0070+00 1/1 0/0 0/0 .text            setCcCylinder__13daObjBHASHI_cFv */
 void daObjBHASHI_c::setCcCylinder() {
     cXyz pos;
     pos = current.pos;
@@ -43,19 +40,15 @@ void daObjBHASHI_c::setCcCylinder() {
     dComIfG_Ccsp()->Set(&mCcCyl);
 }
 
-/* 80576B34-80576B54 000154 0020+00 1/0 0/0 0/0 .text            daObjBHASHI_Create__FP10fopAc_ac_c
- */
 static int daObjBHASHI_Create(fopAc_ac_c* i_this) {
     return ((daObjBHASHI_c*)i_this)->create();
 }
 
-/* 80576B54-80576B78 000174 0024+00 1/0 0/0 0/0 .text daObjBHASHI_Delete__FP13daObjBHASHI_c */
 static int daObjBHASHI_Delete(daObjBHASHI_c* i_this) {
     i_this->MoveBGDelete();
     return 1;
 }
 
-/* 80576B78-80576C50 000198 00D8+00 2/2 0/0 0/0 .text            Set_Hahen__13daObjBHASHI_cFv */
 void daObjBHASHI_c::Set_Hahen() {
     csXyz sp8(0, 0, 0);
 
@@ -72,7 +65,6 @@ void daObjBHASHI_c::Set_Hahen() {
     }
 }
 
-/* 80576C50-805771EC 000270 059C+00 1/1 0/0 0/0 .text            Set_Speed__13daObjBHASHI_cFssff */
 void daObjBHASHI_c::Set_Speed(s16 param_0, s16 i_hahenNum, f32 param_2, f32 param_3) {
     csXyz sp24;
     f32 var_f31;
@@ -153,7 +145,6 @@ void daObjBHASHI_c::Set_Speed(s16 param_0, s16 i_hahenNum, f32 param_2, f32 para
     }
 }
 
-/* 805771EC-80577500 00080C 0314+00 1/1 0/0 0/0 .text            Obj_Damage__13daObjBHASHI_cFv */
 void daObjBHASHI_c::Obj_Damage() {
     if (mDamageTimer == 0) {
         mCcStts.Move();
@@ -196,8 +187,6 @@ void daObjBHASHI_c::Obj_Damage() {
     }
 }
 
-/* 80577500-80577794 000B20 0294+00 0/0 0/0 1/1 .text            Obj_Damage__13daObjBHASHI_cF4cXyz
- */
 void daObjBHASHI_c::Obj_Damage(cXyz param_0) {
     field_0x11dc = cLib_targetAngleY(&param_0, &current.pos);
 
@@ -219,13 +208,11 @@ void daObjBHASHI_c::Obj_Damage(cXyz param_0) {
     fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
 }
 
-/* 80577794-805777A4 000DB4 0010+00 1/1 0/0 0/0 .text            __ct__7Hahen_cFv */
 Hahen_c::Hahen_c() {
     field_0x31 = 0;
     status = 0;
 }
 
-/* 805777A4-80577868 000DC4 00C4+00 1/1 0/0 0/0 .text            Wall_Check__7Hahen_cFv */
 void Hahen_c::Wall_Check() {
     dBgS_LinChk line_chk;
     cXyz end_pos(pos.x + speed.x, pos.y, pos.z + speed.z);
@@ -238,7 +225,6 @@ void Hahen_c::Wall_Check() {
     }
 }
 
-/* 80577868-80577C1C 000E88 03B4+00 1/1 0/0 0/0 .text            HahenMotion__7Hahen_cFv */
 void Hahen_c::HahenMotion() {
     if (status == 0) {
         f32 temp_f31 = 5.0f + nREG_F(16);
@@ -287,7 +273,6 @@ void Hahen_c::HahenMotion() {
     }
 }
 
-/* 80577C1C-80577DA4 00123C 0188+00 1/1 0/0 0/0 .text            CheckCull__7Hahen_cFv */
 bool Hahen_c::CheckCull() {
     if (pos.absXZ(fopAcM_GetPosition(daPy_getPlayerActorClass())) > 1000.0f && !checkViewArea()) {
         return false;
@@ -296,15 +281,12 @@ bool Hahen_c::CheckCull() {
     return true;
 }
 
-/* 80577DA4-80577E24 0013C4 0080+00 1/1 0/0 0/0 .text            checkViewArea__7Hahen_cFv */
 bool Hahen_c::checkViewArea() {
     Vec proj;
     mDoLib_project(&pos, &proj);
     return (proj.x >= -50.0f && proj.x <= 658.0f) && (proj.y >= -50.0f && proj.y <= 498.0f);
 }
 
-/* 80577E24-80577FE0 001444 01BC+00 1/1 0/0 0/0 .text            Rolling__13daObjBHASHI_cFP4cXyzff
- */
 void daObjBHASHI_c::Rolling(cXyz* i_pos, f32 i_range, f32 param_2) {
     fopAcM_GetPosition(daPy_getPlayerActorClass());
     if (mMode == 2) {
@@ -317,7 +299,6 @@ void daObjBHASHI_c::Rolling(cXyz* i_pos, f32 i_range, f32 param_2) {
     }
 }
 
-/* 80577FE0-805781FC 001600 021C+00 1/1 0/0 0/0 .text            Roll_Set__7Hahen_cFP4cXyzfs */
 void Hahen_c::Roll_Set(cXyz* i_pos, f32 param_1, s16 i_no) {
     f32 temp_f30 = param_1 * (2.0f + nREG_F(10) + cM_rndFX(0.2f));
     s16 angle = cLib_targetAngleY(&pos, i_pos);
@@ -337,7 +318,6 @@ void Hahen_c::Roll_Set(cXyz* i_pos, f32 param_1, s16 i_no) {
     rotation.y += (s16)0x1000;
 }
 
-/* 805781FC-805782E4 00181C 00E8+00 1/1 0/0 0/0 .text            setBaseMtx__13daObjBHASHI_cFv */
 void daObjBHASHI_c::setBaseMtx() {
     if (mMode == 2) {
         for (s16 i = 0; i < 60; i++) {
@@ -356,21 +336,16 @@ void daObjBHASHI_c::setBaseMtx() {
     cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 805782E4-80578310 001904 002C+00 1/0 0/0 0/0 .text            daObjBHASHI_Draw__FP13daObjBHASHI_c
- */
 static int daObjBHASHI_Draw(daObjBHASHI_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80578310-80578330 001930 0020+00 2/1 0/0 0/0 .text daObjBHASHI_Execute__FP13daObjBHASHI_c */
 static int daObjBHASHI_Execute(daObjBHASHI_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80578BF0-80578BF4 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "B_Hashi";
 
-/* 80578330-8057842C 001950 00FC+00 1/0 0/0 0/0 .text            CreateHeap__13daObjBHASHI_cFv */
 int daObjBHASHI_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "Lv9_R07_pillar.bmd");
     JUT_ASSERT(98, modelData != NULL);
@@ -393,7 +368,6 @@ int daObjBHASHI_c::CreateHeap() {
     return 1;
 }
 
-/* 8057842C-805786B4 001A4C 0288+00 1/1 0/0 0/0 .text            create__13daObjBHASHI_cFv */
 int daObjBHASHI_c::create() {
     fopAcM_ct(this, daObjBHASHI_c);
 
@@ -440,19 +414,15 @@ int daObjBHASHI_c::create() {
     return phase_state;
 }
 
-/* 80578780-80578788 001DA0 0008+00 1/0 0/0 0/0 .text daObjBHASHI_IsDelete__FP13daObjBHASHI_c */
 static int daObjBHASHI_IsDelete(daObjBHASHI_c* i_this) {
     return 1;
 }
 
-/* 80578788-805787CC 001DA8 0044+00 1/0 0/0 0/0 .text            Create__13daObjBHASHI_cFv */
 int daObjBHASHI_c::Create() {
     fopAcM_setCullSizeBox(this, -1000.0f, -500.0f, -1000.0f, 1000.0f, 500.0f, 1000.0f);
     return cPhs_COMPLEATE_e;
 }
 
-/* 805787CC-805788EC 001DEC 0120+00 1/0 0/0 0/0 .text            Execute__13daObjBHASHI_cFPPA3_A4_f
- */
 int daObjBHASHI_c::Execute(Mtx** param_0) {
     if (mMode != 2) {
         Obj_Damage();
@@ -490,7 +460,6 @@ int daObjBHASHI_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 805788EC-805789E8 001F0C 00FC+00 1/0 0/0 0/0 .text            Draw__13daObjBHASHI_cFv */
 int daObjBHASHI_c::Draw() {
     g_env_light.settingTevStruct(8, &current.pos, &tevStr);
 
@@ -513,7 +482,6 @@ int daObjBHASHI_c::Draw() {
     return 1;
 }
 
-/* 805789E8-80578A80 002008 0098+00 1/0 0/0 0/0 .text            Delete__13daObjBHASHI_cFv */
 int daObjBHASHI_c::Delete() {
     if (mIsHahenSimpleEntry) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "Lv9_R07_pillar_hahen.bmd");
@@ -524,7 +492,6 @@ int daObjBHASHI_c::Delete() {
     return 1;
 }
 
-/* 80578BF4-80578C14 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjBHASHI_Method */
 static actor_method_class l_daObjBHASHI_Method = {
     (process_method_func)daObjBHASHI_Create,
     (process_method_func)daObjBHASHI_Delete,
@@ -533,7 +500,6 @@ static actor_method_class l_daObjBHASHI_Method = {
     (process_method_func)daObjBHASHI_Draw,
 };
 
-/* 80578C14-80578C44 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_BHASHI */
 extern actor_process_profile_definition g_profile_Obj_BHASHI = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

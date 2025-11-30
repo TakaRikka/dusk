@@ -14,20 +14,20 @@
  */
 class daKekaiTrap_c : public dBgS_MoveBgActor {
 public:
-    /* 80C87D40 */ void setBaseMtx();
-    /* 80C87E48 */ int create();
-    /* 80C88000 */ void moveMain();
-    /* 80C88104 */ void init_modeWait();
-    /* 80C88110 */ void modeWait();
-    /* 80C88114 */ void init_modeMoveUp();
-    /* 80C88138 */ void modeMoveUp();
-    /* 80C881F0 */ void init_modeMoveDown();
-    /* 80C88214 */ void modeMoveDown();
+    void setBaseMtx();
+    int create();
+    void moveMain();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMoveUp();
+    void modeMoveUp();
+    void init_modeMoveDown();
+    void modeMoveDown();
 
-    /* 80C87DC8 */ virtual int CreateHeap();
-    /* 80C87FB0 */ virtual int Execute(Mtx**);
-    /* 80C882C8 */ virtual int Draw();
-    /* 80C8836C */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getType() { return fopAcM_GetParamBit(this, 0, 4); }
     int getSwBit() { return fopAcM_GetParamBit(this, 4, 8); }

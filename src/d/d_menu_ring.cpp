@@ -29,7 +29,6 @@
 
 #include "stdio.h"
 
-/* 803BDEAC-803BDEDC 01AFCC 0030+00 3/4 0/0 0/0 .data            stick_init */
 typedef void (dMenu_Ring_c::*initFunc)();
 static initFunc stick_init[] = {
     /* STATUS_WAIT          */ &dMenu_Ring_c::stick_wait_init,
@@ -38,7 +37,6 @@ static initFunc stick_init[] = {
     /* STATUS_EXPLAIN_FORCE */ &dMenu_Ring_c::stick_explain_force_init,
 };
 
-/* 803BDF0C-803BDF3C 01B02C 0030+00 1/2 0/0 0/0 .data            stick_proc */
 typedef void (dMenu_Ring_c::*procFunc)();
 static procFunc stick_proc[] = {
     /* STATUS_WAIT          */ &dMenu_Ring_c::stick_wait_proc,
@@ -47,8 +45,6 @@ static procFunc stick_proc[] = {
     /* STATUS_EXPLAIN_FORCE */ &dMenu_Ring_c::stick_explain_force_proc,
 };
 
-/* 801E9118-801EA708 1E3A58 15F0+00 0/0 1/1 0/0 .text
- * __ct__12dMenu_Ring_cFP10JKRExpHeapP9STControlP10CSTControlUc */
 dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i_cStick,
                            u8 i_ringOrigin) {
     static const u64 xy_text[5] = {
@@ -441,7 +437,6 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     }
 }
 
-/* 801EA708-801EAB7C 1E5048 0474+00 1/0 0/0 0/0 .text            __dt__12dMenu_Ring_cFv */
 dMenu_Ring_c::~dMenu_Ring_c() {
     mpHeap->getTotalFreeSize();
     dMeter2Info_setItemExplainWindowStatus(0);
@@ -537,7 +532,6 @@ dMenu_Ring_c::~dMenu_Ring_c() {
     dComIfGp_getRingResArchive()->removeResourceAll();
 }
 
-/* 801EAB7C-801EABE8 1E54BC 006C+00 0/0 1/1 0/0 .text            _create__12dMenu_Ring_cFv */
 /** @details
  * Initializes the very first status (which is STATUS_WAIT) after the ctor
  * and plays the item wheel opening sound
@@ -547,12 +541,10 @@ void dMenu_Ring_c::_create() {
     Z2GetAudioMgr()->seStart(Z2SE_ITEM_RING_IN, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
-/* 801EABE8-801EABEC 1E5528 0004+00 0/0 1/1 0/0 .text            _delete__12dMenu_Ring_cFv */
 void dMenu_Ring_c::_delete() {
     /* empty function */
 }
 
-/* 801EABEC-801EACC8 1E552C 00DC+00 0/0 1/1 0/0 .text            _move__12dMenu_Ring_cFv */
 /** @details
  * This is the update function which runs every frame. 
  * It runs a process based on mStatus every frame or 
@@ -579,7 +571,6 @@ void dMenu_Ring_c::_move() {
     }
 }
 
-/* 801EACC8-801EB080 1E5608 03B8+00 1/1 0/0 0/0 .text            _draw__12dMenu_Ring_cFv */
 void dMenu_Ring_c::_draw() {
     J2DGrafContext* grafPort = dComIfGp_getCurrentGrafPort();
     grafPort->setup2D();
@@ -640,12 +631,10 @@ void dMenu_Ring_c::_draw() {
     }
 }
 
-/* 801EB080-801EB0A4 1E59C0 0024+00 2/2 0/0 0/0 .text            setKanteraPos__12dMenu_Ring_cFff */
 void dMenu_Ring_c::setKanteraPos(f32 i_posX, f32 i_posY) {
     mpKanteraMeter->setPos(i_posX, i_posY);
 }
 
-/* 801EB0A4-801EB2B4 1E59E4 0210+00 0/0 1/1 0/0 .text            isOpen__12dMenu_Ring_cFv */
 bool dMenu_Ring_c::isOpen() {
     bool opened = false;
     if (mOpenCloseFrames == 0) {
@@ -686,7 +675,6 @@ bool dMenu_Ring_c::isOpen() {
     return opened;
 }
 
-/* 801EB2B4-801EB3CC 1E5BF4 0118+00 0/0 1/1 0/0 .text            isMoveEnd__12dMenu_Ring_cFv */
 bool dMenu_Ring_c::isMoveEnd() {
     bool ret = 0;
     if (mStatus == STATUS_WAIT && mOldStatus != STATUS_EXPLAIN_FORCE && mOldStatus != STATUS_EXPLAIN) {
@@ -709,7 +697,6 @@ bool dMenu_Ring_c::isMoveEnd() {
     return ret;
 }
 
-/* 801EB3CC-801EB624 1E5D0C 0258+00 0/0 1/1 0/0 .text            isClose__12dMenu_Ring_cFv */
 bool dMenu_Ring_c::isClose() {
     bool closed = true;
     if (field_0x674[0] != 0 || field_0x674[1] != 0 || field_0x674[2] != 0 || field_0x674[3] != 0) {
@@ -751,7 +738,6 @@ bool dMenu_Ring_c::isClose() {
     return closed;
 }
 
-/* 801EB624-801EB8C0 1E5F64 029C+00 1/1 0/0 0/0 .text getStickInfo__12dMenu_Ring_cFP9STControl */
 u8 dMenu_Ring_c::getStickInfo(STControl* i_stick) {
     field_0x6c2 = 0xff;
     if (i_stick->getValueStick() >= 0.75f) {
@@ -835,8 +821,6 @@ u8 dMenu_Ring_c::getStickInfo(STControl* i_stick) {
     return 0;
 }
 
-/* 801EB8C0-801EB960 1E6200 00A0+00 1/0 0/0 0/0 .text calcStickAngle__12dMenu_Ring_cFP9STControlUc
- */
 s16 dMenu_Ring_c::calcStickAngle(STControl* i_stick, u8 param_1) {
     s16 directionTrig = i_stick->getAngleStick();
     switch (param_1) {
@@ -870,7 +854,6 @@ s16 dMenu_Ring_c::calcStickAngle(STControl* i_stick, u8 param_1) {
     return directionTrig;
 }
 
-/* 801EB960-801EBA38 1E62A0 00D8+00 1/1 0/0 0/0 .text            setRotate__12dMenu_Ring_cFv */
 void dMenu_Ring_c::setRotate() {
     clacEllipsePlotAverage(mItemsTotal, g_ringHIO.mItemRingPosX + 304.0f,
                            g_ringHIO.mItemRingPosY + 224.0f);
@@ -880,7 +863,6 @@ void dMenu_Ring_c::setRotate() {
     }
 }
 
-/* 801EBA38-801EBAB8 1E6378 0080+00 1/1 0/0 0/0 .text            setItemScale__12dMenu_Ring_cFif */
 void dMenu_Ring_c::setItemScale(int i_idx, f32 i_scale) {
     for (int i = 0; i < 3; i++) {
         if (mpItemTex[i_idx][i] != NULL) {
@@ -889,8 +871,6 @@ void dMenu_Ring_c::setItemScale(int i_idx, f32 i_scale) {
     }
 }
 
-/* 801EBAB8-801EBB10 1E63F8 0058+00 2/2 0/0 0/0 .text            setButtonScale__12dMenu_Ring_cFif
- */
 void dMenu_Ring_c::setButtonScale(int i_idx, f32 i_scale) {
     i_idx += 8; // reach the offset in mpTextParent for the buttons
     if (mpTextParent[i_idx] != NULL) {
@@ -899,7 +879,6 @@ void dMenu_Ring_c::setButtonScale(int i_idx, f32 i_scale) {
     }
 }
 
-/* 801EBB10-801EBE58 1E6450 0348+00 1/1 0/0 0/0 .text            setItem__12dMenu_Ring_cFv */
 void dMenu_Ring_c::setItem() {
     u8 uVar1;
     u8 uVar2;
@@ -1010,7 +989,6 @@ void dMenu_Ring_c::setItem() {
     setJumpItem(true);
 }
 
-/* 801EBE58-801EC20C 1E6798 03B4+00 2/2 0/0 0/0 .text            setJumpItem__12dMenu_Ring_cFb */
 void dMenu_Ring_c::setJumpItem(bool i_useVibrationM) {
     for (int i = 0; i < 4; i++) {
         if (i == 2) {
@@ -1079,7 +1057,6 @@ void dMenu_Ring_c::setJumpItem(bool i_useVibrationM) {
     }
 }
 
-/* 801EC20C-801EC3B0 1E6B4C 01A4+00 2/2 0/0 0/0 .text            setScale__12dMenu_Ring_cFv */
 void dMenu_Ring_c::setScale() {
     u32 itemId;
     for (int i = 0; i < mItemsTotal; i++) {
@@ -1122,7 +1099,6 @@ void dMenu_Ring_c::setScale() {
     }
 }
 
-/* 801EC3B0-801EC504 1E6CF0 0154+00 1/1 0/0 0/0 .text            setNameString__12dMenu_Ring_cFUl */
 void dMenu_Ring_c::setNameString(u32 i_stringID) {
     J2DTextBox* textBox[4];
 #if VERSION == VERSION_GCN_JPN
@@ -1148,8 +1124,6 @@ void dMenu_Ring_c::setNameString(u32 i_stringID) {
     }
 }
 
-/* 801EC504-801EC754 1E6E44 0250+00 1/1 0/0 0/0 .text            setActiveCursor__12dMenu_Ring_cFv
- */
 void dMenu_Ring_c::setActiveCursor() {
     u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
     if (mStatus == STATUS_WAIT && mOldStatus != STATUS_EXPLAIN_FORCE && mOldStatus != STATUS_EXPLAIN && mpItemExplain->getStatus() == 0) {
@@ -1189,7 +1163,6 @@ void dMenu_Ring_c::setActiveCursor() {
     }
 }
 
-/* 801EC754-801ECB14 1E7094 03C0+00 1/1 0/0 0/0 .text            setMixItem__12dMenu_Ring_cFv */
 void dMenu_Ring_c::setMixItem() {
     u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
     bool bVar1 = false;
@@ -1273,7 +1246,6 @@ void dMenu_Ring_c::setMixItem() {
     }
 }
 
-/* 801ECB14-801ECF9C 1E7454 0488+00 1/1 0/0 0/0 .text            drawItem__12dMenu_Ring_cFv */
 void dMenu_Ring_c::drawItem() {
     field_0x684++;
     if (field_0x684 >= g_ringHIO.mItemAlphaFlashDuration) {
@@ -1331,7 +1303,6 @@ void dMenu_Ring_c::drawItem() {
     }
 }
 
-/* 801ECF9C-801ED2BC 1E78DC 0320+00 1/1 0/0 0/0 .text            drawItem2__12dMenu_Ring_cFv */
 void dMenu_Ring_c::drawItem2() {
     s32 idx = mCurrentSlot;
     if (mStatus == STATUS_WAIT || mStatus == STATUS_EXPLAIN || mStatus == STATUS_EXPLAIN_FORCE) {
@@ -1373,8 +1344,6 @@ void dMenu_Ring_c::drawItem2() {
     }
 }
 
-/* 801ED2BC-801ED31C 1E7BFC 0060+00 1/0 0/0 0/0 .text            stick_wait_init__12dMenu_Ring_cFv
- */
 void dMenu_Ring_c::stick_wait_init() {
     if (mDoCPd_c::getHoldL(PAD_1) != 0) {
         if (mDirectSelectActive) {
@@ -1389,8 +1358,6 @@ void dMenu_Ring_c::stick_wait_init() {
     mDirectSelectActive = false;
 }
 
-/* 801ED31C-801ED490 1E7C5C 0174+00 1/0 0/0 0/0 .text            stick_wait_proc__12dMenu_Ring_cFv
- */
 void dMenu_Ring_c::stick_wait_proc() {
     u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
 
@@ -1418,8 +1385,6 @@ void dMenu_Ring_c::stick_wait_proc() {
     }
 }
 
-/* 801ED490-801ED53C 1E7DD0 00AC+00 1/0 0/0 0/0 .text            stick_move_init__12dMenu_Ring_cFv
- */
 void dMenu_Ring_c::stick_move_init() {
     if (mCursorSpeed == 0) {
         mCursorSpeed = g_ringHIO.mCursorInitSpeed;
@@ -1433,8 +1398,6 @@ void dMenu_Ring_c::stick_move_init() {
     Z2GetAudioMgr()->seStart(Z2SE_ITEM_RING_ROLL, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
-/* 801ED53C-801ED934 1E7E7C 03F8+00 1/0 0/0 0/0 .text            stick_move_proc__12dMenu_Ring_cFv
- */
 void dMenu_Ring_c::stick_move_proc() {
     setDoStatus(0x24);
     if (mDirectSelectActive) {
@@ -1491,18 +1454,14 @@ void dMenu_Ring_c::stick_move_proc() {
     }
 }
 
-/* 801ED934-801ED938 1E8274 0004+00 1/0 0/0 0/0 .text stick_explain_init__12dMenu_Ring_cFv */
 void dMenu_Ring_c::stick_explain_init() {
     /* empty function */
 }
 
-/* 801ED938-801ED93C 1E8278 0004+00 1/0 0/0 0/0 .text stick_explain_force_init__12dMenu_Ring_cFv
- */
 void dMenu_Ring_c::stick_explain_force_init() {
     /* empty function */
 }
 
-/* 801ED93C-801EDA0C 1E827C 00D0+00 1/0 0/0 0/0 .text stick_explain_proc__12dMenu_Ring_cFv */
 void dMenu_Ring_c::stick_explain_proc() {
     mpItemExplain->move();
     if (mpItemExplain->getStatus() == 0) {
@@ -1519,8 +1478,6 @@ void dMenu_Ring_c::stick_explain_proc() {
     mpBlackTex->setAlpha((1.0f - alphaRatio) * 150.0f);
 }
 
-/* 801EDA0C-801EDB14 1E834C 0108+00 1/0 0/0 0/0 .text stick_explain_force_proc__12dMenu_Ring_cFv
- */
 void dMenu_Ring_c::stick_explain_force_proc() {
     mpItemExplain->move();
     u8 endButton = mpItemExplain->checkEndButton();
@@ -1537,8 +1494,6 @@ void dMenu_Ring_c::stick_explain_force_proc() {
     mpBlackTex->setAlpha((1.0f - alphaRatio) * 150.0f);
 }
 
-/* 801EDB14-801EDC98 1E8454 0184+00 2/2 0/0 0/0 .text            setSelectItem__12dMenu_Ring_cFiUc
- */
 void dMenu_Ring_c::setSelectItem(int i_idx, u8 i_itemNo) {
     f32 texScale = 1.0f;
 
@@ -1560,7 +1515,6 @@ void dMenu_Ring_c::setSelectItem(int i_idx, u8 i_itemNo) {
         mpSelectItemTexBuf[i_idx][field_0x6be[i_idx]][0]->height / 48.0f * texScale;
 }
 
-/* 801EDC98-801EDF2C 1E85D8 0294+00 1/1 0/0 0/0 .text            drawSelectItem__12dMenu_Ring_cFv */
 void dMenu_Ring_c::drawSelectItem() {
     for (int i = 0; i < 4; i++) {
         if (field_0x674[i] != 0) {
@@ -1601,7 +1555,6 @@ void dMenu_Ring_c::drawSelectItem() {
     }
 }
 
-/* 801EDF2C-801EDFDC 1E886C 00B0+00 4/4 0/0 0/0 .text setSelectItemForce__12dMenu_Ring_cFi */
 void dMenu_Ring_c::setSelectItemForce(int i_idx) {
     if (i_idx == 2) {
         if (field_0x674[i_idx] != 0) {
@@ -1617,7 +1570,6 @@ void dMenu_Ring_c::setSelectItemForce(int i_idx) {
     }
 }
 
-/* 801EDFDC-801EE058 1E891C 007C+00 1/1 0/0 0/0 .text            getCursorPos__12dMenu_Ring_cFUc */
 u8 dMenu_Ring_c::getCursorPos(u8 i_slotNo) {
     for (s32 i = 0; i < mItemsTotal; i++) {
         if (i_slotNo == dComIfGs_getLineUpItem(i)) {
@@ -1627,7 +1579,6 @@ u8 dMenu_Ring_c::getCursorPos(u8 i_slotNo) {
     return 0xff;
 }
 
-/* 801EE058-801EE15C 1E8998 0104+00 4/4 0/0 0/0 .text            getItemNum__12dMenu_Ring_cFUc */
 /** @details
  * Returns current ammo depending on the current item slot the cursor is on
  * This can be:
@@ -1667,7 +1618,6 @@ u8 dMenu_Ring_c::getItemNum(u8 i_slotNo) {
     return ret;
 }
 
-/* 801EE15C-801EE228 1E8A9C 00CC+00 4/4 0/0 0/0 .text            getItemMaxNum__12dMenu_Ring_cFUc */
 /** @details
  * Returns maximum capacity obtained depending on the currently selected item slot
  * This can be:
@@ -1707,8 +1657,6 @@ u8 dMenu_Ring_c::getItemMaxNum(u8 i_slotNo) {
     return ret;
 }
 
-/* 801EE228-801EE63C 1E8B68 0414+00 1/1 0/0 0/0 .text            checkExplainForce__12dMenu_Ring_cFv
- */
 bool dMenu_Ring_c::checkExplainForce() {
     u8 local_18[4];
 
@@ -1822,18 +1770,14 @@ bool dMenu_Ring_c::checkExplainForce() {
     return 0;
 }
 
-/* 801EE63C-801EE644 1E8F7C 0008+00 1/1 0/0 0/0 .text            checkCombineBomb__12dMenu_Ring_cFi
- */
 bool dMenu_Ring_c::checkCombineBomb(int param_0) {
     return false;
 }
 
-/* 801EE644-801EE648 1E8F84 0004+00 1/1 0/0 0/0 .text            setCombineBomb__12dMenu_Ring_cFi */
 void dMenu_Ring_c::setCombineBomb(int param_0) {
     /* empty function */
 }
 
-/* 801EE648-801EEA84 1E8F88 043C+00 2/2 0/0 0/0 .text            drawNumber__12dMenu_Ring_cFiiff */
 void dMenu_Ring_c::drawNumber(int i_itemNum, int i_itemMaxNum, f32 i_posX, f32 i_posY) {
     if (i_itemNum > 100) {
         i_itemNum = 100;
@@ -1897,14 +1841,12 @@ void dMenu_Ring_c::drawNumber(int i_itemNum, int i_itemMaxNum, f32 i_posX, f32 i
     }
 }
 
-/* 801EEA84-801EEAE4 1E93C4 0060+00 1/1 0/0 0/0 .text            getItem__12dMenu_Ring_cFiUc */
 u8 dMenu_Ring_c::getItem(int i_slot_no, u8 i_slot_no2) {
     u8 item = dComIfGs_getItem(i_slot_no, 0);
     dComIfGs_getItem(i_slot_no2, 0);
     return item;
 }
 
-/* 801EEAE4-801EEB58 1E9424 0074+00 2/2 0/0 0/0 .text            setDoStatus__12dMenu_Ring_cFUc */
 void dMenu_Ring_c::setDoStatus(u8 i_doStatus) {
     if (i_doStatus == 0 && mDoStatus == 0x24) {
         if (field_0x68e > 0) {
@@ -1922,7 +1864,6 @@ void dMenu_Ring_c::setDoStatus(u8 i_doStatus) {
     dComIfGp_setDoStatusForce(mDoStatus, 0);
 }
 
-/* 801EEB58-801EEC98 1E9498 0140+00 1/1 0/0 0/0 .text            isMixItemOn__12dMenu_Ring_cFv */
 bool dMenu_Ring_c::isMixItemOn() {
     if (!mPlayerIsWolf && dComIfGs_getItem(mItemSlots[mCurrentSlot], false) != fpcNm_ITEM_NONE) {
         u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
@@ -1947,7 +1888,6 @@ bool dMenu_Ring_c::isMixItemOn() {
     return false;
 }
 
-/* 801EEC98-801EED84 1E95D8 00EC+00 1/1 0/0 0/0 .text            isMixItemOff__12dMenu_Ring_cFv */
 bool dMenu_Ring_c::isMixItemOff() {
     if ((!mPlayerIsWolf) && (dComIfGs_getItem(mItemSlots[mCurrentSlot], 0) != fpcNm_ITEM_NONE)) {
         if ((dComIfGs_getMixItemIndex(0) == SLOT_4) &&
@@ -1964,7 +1904,6 @@ bool dMenu_Ring_c::isMixItemOff() {
     return 0;
 }
 
-/* 801EED84-801EEF14 1E96C4 0190+00 1/1 0/0 0/0 .text            setMixMessage__12dMenu_Ring_cFv */
 void dMenu_Ring_c::setMixMessage() {
     if (mpTextParent[4] != NULL) {
         if (isMixItemOff()) {
@@ -1996,7 +1935,6 @@ void dMenu_Ring_c::setMixMessage() {
     }
 }
 
-/* 801EEF14-801EF11C 1E9854 0208+00 2/2 0/0 0/0 .text            textScaleHIO__12dMenu_Ring_cFv */
 void dMenu_Ring_c::textScaleHIO() {
     for (int i = 0; i < 10; i++) {
         if (mpTextParent[i] != NULL && i != 2) {
@@ -2038,25 +1976,19 @@ void dMenu_Ring_c::textScaleHIO() {
     }
 }
 
-/* 801EF11C-801EF13C 1E9A5C 0020+00 1/1 0/0 0/0 .text            textCentering__12dMenu_Ring_cFv */
 void dMenu_Ring_c::textCentering() {
     textScaleHIO();
 }
 
-/* 801EF13C-801EF174 1E9A7C 0038+00 1/1 0/0 0/0 .text clacEllipseFunction__12dMenu_Ring_cFfff */
 f32 dMenu_Ring_c::clacEllipseFunction(f32 param_0, f32 param_1, f32 param_2) {
     return -JMAFastSqrt(param_2 * param_2 * (1.0f - (param_0 * param_0) / (param_1 * param_1)));
 }
 
-/* 801EF174-801EF1A0 1E9AB4 002C+00 1/1 0/0 0/0 .text            calcDistance__12dMenu_Ring_cFffff
- */
 f32 dMenu_Ring_c::calcDistance(f32 param_0, f32 param_1, f32 param_2, f32 param_3) {
     return JMAFastSqrt((param_2 - param_0) * (param_2 - param_0) +
                        (param_3 - param_1) * (param_3 - param_1));
 }
 
-/* 801EF1A0-801EF484 1E9AE0 02E4+00 1/1 0/0 0/0 .text clacEllipsePlotAverage__12dMenu_Ring_cFiff
- */
 void dMenu_Ring_c::clacEllipsePlotAverage(int param_0, f32 param_1, f32 param_2) {
     f32 ring_radius_h = mRingRadiusH;
     f32 ring_radius_v = mRingRadiusV;
@@ -2123,12 +2055,10 @@ void dMenu_Ring_c::clacEllipsePlotAverage(int param_0, f32 param_1, f32 param_2)
     operator delete[](ptr_01);
 }
 
-/* 801EF484-801EF48C 1E9DC4 0008+00 1/1 0/0 0/0 .text            dpdMove__12dMenu_Ring_cFv */
 bool dMenu_Ring_c::dpdMove() {
     return false;
 }
 
-/* 801EF48C-801EF560 1E9DCC 00D4+00 1/1 0/0 0/0 .text            openExplain__12dMenu_Ring_cFUc */
 u8 dMenu_Ring_c::openExplain(u8 param_0) {
     if (field_0x6cf == 0xff && field_0x6d0 == 0xff) {
         if (param_0 != 0xff) {

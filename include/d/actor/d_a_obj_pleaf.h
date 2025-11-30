@@ -27,18 +27,18 @@ private:
     /* 0x948 */ u8 mType;
 
 public:
-    /* 80CB0D4C */ virtual ~daObj_Pleaf_c();
-    /* 80CB0F08 */ int create();
-    /* 80CB134C */ int CreateHeap();
-    /* 80CB13C4 */ int Delete();
-    /* 80CB13F8 */ int Execute();
-    /* 80CB14D4 */ int Draw();
-    /* 80CB1598 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80CB15B8 */ char* getResName();
-    /* 80CB15C8 */ int isDelete();
-    /* 80CB15E8 */ void setEnvTevColor();
-    /* 80CB1644 */ void setRoomNo();
-    /* 80CB1684 */ void setMtx();
+    virtual ~daObj_Pleaf_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    char* getResName();
+    int isDelete();
+    void setEnvTevColor();
+    void setRoomNo();
+    void setMtx();
 
     u32 getType() { return 0; }
 };
@@ -47,7 +47,7 @@ STATIC_ASSERT(sizeof(daObj_Pleaf_c) == 0x950);
 
 class daObj_Pleaf_Param_c {
 public:
-    /* 80CB17F8 */ virtual ~daObj_Pleaf_Param_c() {}
+    virtual ~daObj_Pleaf_Param_c() {}
 
     struct params {
         f32 field_0x0;

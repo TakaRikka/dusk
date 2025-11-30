@@ -1,8 +1,6 @@
-#include "dol2asm.h"
 #include <dolphin.h>
 
-/* 80003540-80003590 000440 0050+00 1/1 63/63 6/6 .init            memcpy */
-SECTION_INIT void* memcpy(void* dst, const void* src, size_t n) {
+__declspec(section ".init") void* memcpy(void* dst, const void* src, size_t n) {
     const unsigned char* s;
     unsigned char* d;
 
@@ -22,8 +20,7 @@ SECTION_INIT void* memcpy(void* dst, const void* src, size_t n) {
     return dst;
 }
 
-/* 80003488-80003540 000388 00B8+00 1/1 0/0 0/0 .init            __fill_mem */
-SECTION_INIT void __fill_mem(void* dst, int val, size_t n) {
+__declspec(section ".init") void __fill_mem(void* dst, int val, size_t n) {
     unsigned long v = (unsigned char)val;
     unsigned long i;
 
@@ -81,8 +78,7 @@ SECTION_INIT void __fill_mem(void* dst, int val, size_t n) {
     return;
 }
 
-/* 80003458-80003488 000358 0030+00 1/1 55/55 137/137 .init            memset */
-SECTION_INIT void* memset(void* dst, int val, size_t n) {
+__declspec(section ".init") void* memset(void* dst, int val, size_t n) {
     __fill_mem(dst, val, n);
 
     return dst;

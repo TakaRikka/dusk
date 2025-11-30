@@ -9,10 +9,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
 
-/* 80C1C734-80C1C738 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "H_Bombkoy";
 
-/* 80C1B878-80C1B938 000078 00C0+00 1/1 0/0 0/0 .text            create1st__16daObjHBombkoya_cFv */
 int daObjHBombkoya_c::create1st() {
     if (fopAcM_isSwitch(this, getSw2No())) {
         return cPhs_ERROR_e;
@@ -33,7 +31,6 @@ int daObjHBombkoya_c::create1st() {
     return phase;
 }
 
-/* 80C1B938-80C1B9CC 000138 0094+00 1/0 0/0 0/0 .text            CreateHeap__16daObjHBombkoya_cFv */
 int daObjHBombkoya_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
@@ -47,7 +44,6 @@ int daObjHBombkoya_c::CreateHeap() {
     return 1;
 }
 
-/* 80C1C738-80C1C77C 000004 0044+00 1/1 0/0 0/0 .data            l_cc_cyl_src */
 static dCcD_SrcCyl l_cc_cyl_src = {
     {
         {0x0, {{AT_TYPE_BOMB, 0x4, 0x13}, {0x0, 0x0}, 0x0}},  // mObj
@@ -62,7 +58,6 @@ static dCcD_SrcCyl l_cc_cyl_src = {
     }                        // mCyl
 };
 
-/* 80C1B9CC-80C1BB34 0001CC 0168+00 1/0 0/0 0/0 .text            Create__16daObjHBombkoya_cFv */
 int daObjHBombkoya_c::Create() {
     mpModel->setBaseScale(scale);
     fopAcM_SetMtx(this, NULL);
@@ -89,8 +84,6 @@ int daObjHBombkoya_c::Create() {
     return 1;
 }
 
-/* 80C1BB7C-80C1BCA0 00037C 0124+00 1/1 0/0 0/0 .text
- * setParticle__16daObjHBombkoya_cFPUsiPQ216daObjHBombkoya_c7PSetTblii */
 bool daObjHBombkoya_c::setParticle(u16* i_particleIDs, int i_particleMax,
                                    daObjHBombkoya_c::PSetTbl* i_setTbl, int i_tableMax,
                                    int i_timer) {
@@ -119,7 +112,6 @@ bool daObjHBombkoya_c::setParticle(u16* i_particleIDs, int i_particleMax,
     return particle_set;
 }
 
-/* 80C1BCA0-80C1C098 0004A0 03F8+00 1/0 0/0 0/0 .text Execute__16daObjHBombkoya_cFPPA3_A4_f */
 int daObjHBombkoya_c::Execute(Mtx** param_0) {
     *param_0 = &mBgMtx;
 
@@ -233,7 +225,6 @@ int daObjHBombkoya_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80C1C098-80C1C16C 000898 00D4+00 1/0 0/0 0/0 .text            Draw__16daObjHBombkoya_cFv */
 int daObjHBombkoya_c::Draw() {
     if (mActive && !fopAcM_isSwitch(this, getSw2No())) {
         g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
@@ -247,40 +238,30 @@ int daObjHBombkoya_c::Draw() {
     return 1;
 }
 
-/* 80C1C16C-80C1C1A8 00096C 003C+00 1/0 0/0 0/0 .text            Delete__16daObjHBombkoya_cFv */
 int daObjHBombkoya_c::Delete() {
     request_of_phase_process_class* actor_phase = (request_of_phase_process_class*)this;
     dComIfG_resDelete(actor_phase, l_arcName);
     return 1;
 }
 
-/* 80C1C1A8-80C1C2BC 0009A8 0114+00 1/0 0/0 0/0 .text
- * daObjHBombkoya_create1st__FP16daObjHBombkoya_c               */
 static int daObjHBombkoya_create1st(daObjHBombkoya_c* i_this) {
     fopAcM_ct(i_this, daObjHBombkoya_c);
 
     return i_this->create1st();
 }
 
-/* 80C1C360-80C1C380 000B60 0020+00 1/0 0/0 0/0 .text
- * daObjHBombkoya_MoveBGDelete__FP16daObjHBombkoya_c            */
 static int daObjHBombkoya_MoveBGDelete(daObjHBombkoya_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C1C380-80C1C3A0 000B80 0020+00 1/0 0/0 0/0 .text
- * daObjHBombkoya_MoveBGExecute__FP16daObjHBombkoya_c           */
 static int daObjHBombkoya_MoveBGExecute(daObjHBombkoya_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C1C3A0-80C1C3CC 000BA0 002C+00 1/0 0/0 0/0 .text
- * daObjHBombkoya_MoveBGDraw__FP16daObjHBombkoya_c              */
 static int daObjHBombkoya_MoveBGDraw(daObjHBombkoya_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C1C910-80C1C930 -00001 0020+00 1/0 0/0 0/0 .data            daObjHBombkoya_METHODS */
 static actor_method_class daObjHBombkoya_METHODS = {
     (process_method_func)daObjHBombkoya_create1st,
     (process_method_func)daObjHBombkoya_MoveBGDelete,
@@ -289,7 +270,6 @@ static actor_method_class daObjHBombkoya_METHODS = {
     (process_method_func)daObjHBombkoya_MoveBGDraw,
 };
 
-/* 80C1C930-80C1C960 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_HBombkoya */
 extern actor_process_profile_definition g_profile_Obj_HBombkoya = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID

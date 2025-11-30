@@ -6,13 +6,13 @@
 
 class daLv6CstaSw_c : public fopAc_ac_c {
 public:
-    /* 80D5B358 */ void setBaseMtx();
-    /* 80D5B3B0 */ int create();
-    /* 80D5B410 */ static fopAc_ac_c* searchSekizoAct(void*, void*);
-    /* 80D5B460 */ bool areaCheck();
-    /* 80D5B600 */ int Execute();
-    /* 80D5B6B0 */ int Draw();
-    /* 80D5B6B8 */ int Delete();
+    void setBaseMtx();
+    int create();
+    static fopAc_ac_c* searchSekizoAct(void*, void*);
+    bool areaCheck();
+    int Execute();
+    int Draw();
+    int Delete();
 
     u8 getSw() { return fopAcM_GetParamBit(this, 0, 8); }
 
@@ -23,8 +23,8 @@ private:
 
 class daLv6CstaSw_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80D5B2EC */ daLv6CstaSw_HIO_c();
-    /* 80D5B740 */ virtual ~daLv6CstaSw_HIO_c();
+    daLv6CstaSw_HIO_c();
+    virtual ~daLv6CstaSw_HIO_c();
 
     void genMessage(JORMContext*);
 

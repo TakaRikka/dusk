@@ -8,7 +8,6 @@
 #include "SSystem/SComponent/c_m3d_g_cir.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-/* 80268260-80268560 262BA0 0300+00 0/0 4/4 0/0 .text cM2d_CrossCirLin__FR8cM2dGCirffffPfPf */
 void cM2d_CrossCirLin(cM2dGCir& param_0, f32 param_1, f32 param_2, f32 param_3, f32 param_4,
                       f32* param_5, f32* param_6) {
     int ans = 0;

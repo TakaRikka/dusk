@@ -16,49 +16,49 @@ public:
     typedef BOOL (daNpc_zrC_c::*ActionFn)(void*);
     typedef BOOL (daNpc_zrC_c::*EventFn)(int);
 
-    /* 80B8DC0C */ daNpc_zrC_c();
-    /* 80B8DE20 */ ~daNpc_zrC_c();
-    /* 80B8E03C */ cPhs__Step create();
-    /* 80B8E338 */ int CreateHeap();
-    /* 80B8E830 */ int Delete();
-    /* 80B8E864 */ int Execute();
-    /* 80B8E884 */ int Draw();
-    /* 80B8E914 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80B8EB48 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B8EB68 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B8EBB4 */ void setParam();
-    /* 80B8ED94 */ BOOL main();
-    /* 80B8EF2C */ BOOL ctrlBtk();
-    /* 80B8F00C */ void setAttnPos();
-    /* 80B8F56C */ bool setExpressionAnm(int, bool);
-    /* 80B8F898 */ bool setExpressionBtp(int);
-    /* 80B8F9CC */ void setExpression(int, f32);
-    /* 80B8F9F8 */ void setMotionAnm(int, f32);
-    /* 80B8FBE4 */ void setMotion(int, f32, int);
-    /* 80B8FC28 */ BOOL drawDbgInfo();
-    /* 80B8FC30 */ void drawOtherMdls();
-    /* 80B8FC34 */ u8 getTypeFromParam();
-    /* 80B8FC8C */ int isDelete();
-    /* 80B8FD10 */ void reset();
-    /* 80B8FF14 */ void playExpression();
-    /* 80B904DC */ void playMotion();
-    /* 80B90940 */ void playMotionAnm2(daNpcF_c::daNpcF_anmPlayData***);
-    /* 80B90A6C */ BOOL chkAction(ActionFn);
-    /* 80B90A98 */ BOOL setAction(ActionFn);
-    /* 80B90B40 */ BOOL selectAction();
-    /* 80B90C34 */ void doNormalAction(BOOL);
-    /* 80B90D48 */ BOOL doEvent();
-    /* 80B9113C */ void setLookMode(int);
-    /* 80B91160 */ void lookat();
-    /* 80B91418 */ void setExpressionTalkAfter();
-    /* 80B914F4 */ BOOL wait(void*);
-    /* 80B916FC */ BOOL waitSick(void*);
-    /* 80B91808 */ BOOL waitPray(void*);
-    /* 80B91F78 */ BOOL waitThrone(void*);
-    /* 80B920EC */ BOOL talk(void*);
-    /* 80B922D8 */ BOOL test(void*);
-    /* 80B923BC */ BOOL ECut_earringGet(int);
-    /* 80B9318C */ void adjustShapeAngle() {}
+    daNpc_zrC_c();
+    ~daNpc_zrC_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void setParam();
+    BOOL main();
+    BOOL ctrlBtk();
+    void setAttnPos();
+    bool setExpressionAnm(int, bool);
+    bool setExpressionBtp(int);
+    void setExpression(int, f32);
+    void setMotionAnm(int, f32);
+    void setMotion(int, f32, int);
+    BOOL drawDbgInfo();
+    void drawOtherMdls();
+    u8 getTypeFromParam();
+    int isDelete();
+    void reset();
+    void playExpression();
+    void playMotion();
+    void playMotionAnm2(daNpcF_c::daNpcF_anmPlayData***);
+    BOOL chkAction(ActionFn);
+    BOOL setAction(ActionFn);
+    BOOL selectAction();
+    void doNormalAction(BOOL);
+    BOOL doEvent();
+    void setLookMode(int);
+    void lookat();
+    void setExpressionTalkAfter();
+    BOOL wait(void*);
+    BOOL waitSick(void*);
+    BOOL waitPray(void*);
+    BOOL waitThrone(void*);
+    BOOL talk(void*);
+    BOOL test(void*);
+    BOOL ECut_earringGet(int);
+    void adjustShapeAngle() {}
 
     static char* mEvtCutNameList[2];
     static EventFn mEvtCutList[2];
@@ -206,7 +206,7 @@ public:
         /* 0x70 */ f32 field_0x70;
     };
 
-    /* 80B93190 */ virtual ~daNpc_zrC_Param_c() {}
+    virtual ~daNpc_zrC_Param_c() {}
 
     static param const m;
 };

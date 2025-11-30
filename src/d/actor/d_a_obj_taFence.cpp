@@ -12,8 +12,8 @@
 
 class daTaFence_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80D04E6C */ daTaFence_HIO_c();
-    /* 80D06000 */ virtual ~daTaFence_HIO_c() {}
+    daTaFence_HIO_c();
+    virtual ~daTaFence_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -48,10 +48,8 @@ public:
     /* 0x71 */ u8 shake_time;
 };
 
-/* 80D0633C-80D063B0 000014 0074+00 5/5 0/0 0/0 .bss             l_HIO */
 static daTaFence_HIO_c l_HIO;
 
-/* 80D04E6C-80D04F44 0000EC 00D8+00 1/1 0/0 0/0 .text            __ct__15daTaFence_HIO_cFv */
 daTaFence_HIO_c::daTaFence_HIO_c() {
     fall_init_speed = 0.0f;
     fall_max_speed = 13.0f;
@@ -87,7 +85,6 @@ daTaFence_HIO_c::daTaFence_HIO_c() {
     shake_time = 27;
 }
 
-/* 80D04F8C-80D0503C 00020C 00B0+00 2/2 0/0 0/0 .text            setBaseMtx__11daTaFence_cFv */
 void daTaFence_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -97,7 +94,6 @@ void daTaFence_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80D0503C-80D050A8 0002BC 006C+00 1/0 0/0 0/0 .text            CreateHeap__11daTaFence_cFv */
 int daTaFence_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("P_Mfence", 4);
     JUT_ASSERT(339, modelData != NULL);
@@ -110,7 +106,6 @@ int daTaFence_c::CreateHeap() {
     return 1;
 }
 
-/* 80D06114-80D06144 000034 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__11daTaFence_c */
 const dCcD_SrcGObjInf daTaFence_c::mCcDObjInfo = {
     {0, {{0x0, 0x0, 0x0}, {0x400032, 0x11}, {0x0}}},
     {dCcD_SE_SWORD, 0, 0, 0, 0},
@@ -118,7 +113,6 @@ const dCcD_SrcGObjInf daTaFence_c::mCcDObjInfo = {
     {0},
 };
 
-/* 80D061C4-80D06208 000020 0044+00 2/2 0/0 0/0 .data            mCcDCyl__11daTaFence_c */
 dCcD_SrcCyl daTaFence_c::mCcDCyl = {
     daTaFence_c::mCcDObjInfo,
     {
@@ -128,7 +122,6 @@ dCcD_SrcCyl daTaFence_c::mCcDCyl = {
     }  // mCyl
 };
 
-/* 80D050A8-80D05314 000328 026C+00 1/1 0/0 0/0 .text            create__11daTaFence_cFv */
 int daTaFence_c::create() {
     fopAcM_ct(this, daTaFence_c);
 
@@ -201,7 +194,6 @@ int daTaFence_c::create() {
     return phase_state;
 }
 
-/* 80D05550-80D055A0 0007D0 0050+00 1/0 0/0 0/0 .text            Execute__11daTaFence_cFPPA3_A4_f */
 int daTaFence_c::Execute(Mtx** param_0) {
     fenceProc();
     *param_0 = &mpModel->getBaseTRMtx();
@@ -209,7 +201,6 @@ int daTaFence_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80D06144-80D06174 000064 0030+00 0/1 0/0 0/0 .rodata          l_check_area */
 static const Vec l_check_area[4] = {
     {-225.0f, 0.0f, -100.0f},
     {-225.0f, 225.0f, -100.0f},
@@ -217,7 +208,6 @@ static const Vec l_check_area[4] = {
     {225.0f, 0.0f, 100.0f},
 };
 
-/* 80D055A0-80D057C4 000820 0224+00 1/1 0/0 0/0 .text            fenceProc__11daTaFence_cFv */
 void daTaFence_c::fenceProc() {
     static void (daTaFence_c::*mode_proc[])() = {
         &daTaFence_c::modeWait,
@@ -239,12 +229,10 @@ void daTaFence_c::fenceProc() {
     mCounter++;
 }
 
-/* 80D057C4-80D057D0 000A44 000C+00 1/1 0/0 0/0 .text            init_modeWait__11daTaFence_cFv */
 void daTaFence_c::init_modeWait() {
     mMode = 0;
 }
 
-/* 80D057D0-80D05A54 000A50 0284+00 1/0 0/0 0/0 .text            modeWait__11daTaFence_cFv */
 void daTaFence_c::modeWait() {
     daPy_py_c* player = dComIfGp_getLinkPlayer();
     if (player->checkFrontRollCrash()) {
@@ -303,8 +291,6 @@ void daTaFence_c::modeWait() {
     }
 }
 
-/* 80D05A54-80D05B5C 000CD4 0108+00 1/1 0/0 0/0 .text            init_modeMoveInit__11daTaFence_cFv
- */
 void daTaFence_c::init_modeMoveInit() {
     if (mCollapseTimer == 0) {
         mCollapseTimer = l_HIO.collapse_time;
@@ -328,7 +314,6 @@ void daTaFence_c::init_modeMoveInit() {
     mMode = 1;
 }
 
-/* 80D05B5C-80D05B94 000DDC 0038+00 1/0 0/0 0/0 .text            modeMoveInit__11daTaFence_cFv */
 void daTaFence_c::modeMoveInit() {
     if (mCollapseTimer == 0) {
         init_modeMove();
@@ -337,7 +322,6 @@ void daTaFence_c::modeMoveInit() {
     }
 }
 
-/* 80D05B94-80D05CAC 000E14 0118+00 1/1 0/0 0/0 .text            init_modeMove__11daTaFence_cFv */
 void daTaFence_c::init_modeMove() {
     for (int i = 0; i < 11; i++) {
         mCyl[i].OffCoSetBit();
@@ -365,7 +349,6 @@ void daTaFence_c::init_modeMove() {
     mMode = 2;
 }
 
-/* 80D05CAC-80D05D2C 000F2C 0080+00 1/0 0/0 0/0 .text            modeMove__11daTaFence_cFv */
 void daTaFence_c::modeMove() {
     cLib_chaseF(&speedF, mFallSpeed, mFallSpeed / 30.0f);
     if (cLib_addCalcAngleS(&shape_angle.x, field_0x1384, 1, (182.04445f * fopAcM_GetSpeedF(this)), 1) == 0) {
@@ -373,8 +356,6 @@ void daTaFence_c::modeMove() {
     }
 }
 
-/* 80D05D2C-80D05E54 000FAC 0128+00 2/2 0/0 0/0 .text            init_modeMoveEnd__11daTaFence_cFv
- */
 void daTaFence_c::init_modeMoveEnd() {
     mDoAud_seStart(Z2SE_OBJ_ATK_FENCE_FALLDOWN, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     dComIfGp_getVibration().StartShock(l_HIO.vibration, 0xF, cXyz(0.0f, 1.0f, 0.0f));
@@ -389,10 +370,8 @@ void daTaFence_c::init_modeMoveEnd() {
     mMode = 3;
 }
 
-/* 80D05E54-80D05E58 0010D4 0004+00 1/0 0/0 0/0 .text            modeMoveEnd__11daTaFence_cFv */
 void daTaFence_c::modeMoveEnd() {}
 
-/* 80D05E58-80D05EFC 0010D8 00A4+00 1/0 0/0 0/0 .text            Draw__11daTaFence_cFv */
 int daTaFence_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -402,7 +381,6 @@ int daTaFence_c::Draw() {
     return 1;
 }
 
-/* 80D05EFC-80D05F2C 00117C 0030+00 1/0 0/0 0/0 .text            Delete__11daTaFence_cFv */
 int daTaFence_c::Delete() {
     dComIfG_resDelete(&mPhase, "P_Mfence");
     #if DEBUG
@@ -411,29 +389,22 @@ int daTaFence_c::Delete() {
     return 1;
 }
 
-/* 80D05F2C-80D05F58 0011AC 002C+00 1/0 0/0 0/0 .text            daTaFence_Draw__FP11daTaFence_c */
 static int daTaFence_Draw(daTaFence_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80D05F58-80D05F78 0011D8 0020+00 1/0 0/0 0/0 .text            daTaFence_Execute__FP11daTaFence_c
- */
 static int daTaFence_Execute(daTaFence_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D05F78-80D05F98 0011F8 0020+00 1/0 0/0 0/0 .text            daTaFence_Delete__FP11daTaFence_c
- */
 static int daTaFence_Delete(daTaFence_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D05F98-80D05FB8 001218 0020+00 1/0 0/0 0/0 .text            daTaFence_Create__FP10fopAc_ac_c */
 static int daTaFence_Create(fopAc_ac_c* i_this) {
     return ((daTaFence_c*)i_this)->create();
 }
 
-/* 80D06268-80D06288 -00001 0020+00 1/0 0/0 0/0 .data            l_daTaFence_Method */
 static actor_method_class l_daTaFence_Method = {
     (process_method_func)daTaFence_Create,
     (process_method_func)daTaFence_Delete,
@@ -442,7 +413,6 @@ static actor_method_class l_daTaFence_Method = {
     (process_method_func)daTaFence_Draw,
 };
 
-/* 80D06288-80D062B8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_TaFence */
 extern actor_process_profile_definition g_profile_Obj_TaFence = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

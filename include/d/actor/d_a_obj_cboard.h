@@ -14,15 +14,15 @@
  */
 class daObjBoard_c : public dBgS_MoveBgActor {
 public:
-    /* 8057B958 */ void initBaseMtx();
-    /* 8057B978 */ void setBaseMtx();
-    /* 8057BA78 */ int create1st();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
 
-    /* 8057BA70 */ virtual int CreateHeap();
-    /* 8057B9C8 */ virtual int Create();
-    /* 8057BB74 */ virtual int Execute(Mtx**);
-    /* 8057BCC0 */ virtual int Draw();
-    /* 8057BCC8 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getNameArg() { return fopAcM_GetParamBit(this, 0, 4); }
     u8 getArg0() { return fopAcM_GetParamBit(this, 4, 4); }

@@ -4,7 +4,6 @@
 #include "JSystem/JUtility/JUTPalette.h"
 #include "dolphin/gx.h"
 
-/* 802DE234-802DE2A8 2D8B74 0074+00 0/0 30/30 0/0 .text            __dt__10JUTTextureFv */
 JUTTexture::~JUTTexture() {
     if (getCaptureFlag()) {
         delete[] field_0x3c;
@@ -14,7 +13,6 @@ JUTTexture::~JUTTexture() {
     }
 }
 
-/* 802DE2A8-802DE44C 2D8BE8 01A4+00 0/0 18/18 0/0 .text storeTIMG__10JUTTextureFPC7ResTIMGUc */
 void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
     _GXTlut tlut;
 
@@ -60,8 +58,6 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
     }
 }
 
-/* 802DE44C-802DE480 2D8D8C 0034+00 0/0 6/6 0/0 .text
- * storeTIMG__10JUTTextureFPC7ResTIMGP10JUTPalette              */
 void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1) {
     _GXTlut type;
 
@@ -73,8 +69,6 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1) {
     storeTIMG(param_0, param_1, type);
 }
 
-/* 802DE480-802DE5B0 2D8DC0 0130+00 1/1 3/3 0/0 .text
- * storeTIMG__10JUTTextureFPC7ResTIMGP10JUTPalette7_GXTlut      */
 void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1, _GXTlut param_2) {
     _GXTlut type;
 
@@ -115,7 +109,6 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1, _GXTlut 
     init();
 }
 
-/* 802DE5B0-802DE608 2D8EF0 0058+00 1/1 7/7 0/0 .text attachPalette__10JUTTextureFP10JUTPalette */
 void JUTTexture::attachPalette(JUTPalette* param_0) {
     if (mTexInfo->indexTexture) {
         if (param_0 == NULL && mEmbPalette != NULL) {
@@ -128,7 +121,6 @@ void JUTTexture::attachPalette(JUTPalette* param_0) {
     }
 }
 
-/* 802DE608-802DE658 2D8F48 0050+00 1/1 0/0 0/0 .text            init__10JUTTextureFv */
 void JUTTexture::init() {
     if (mTexInfo->numColors == 0) {
         initTexObj();
@@ -142,7 +134,6 @@ void JUTTexture::init() {
     }
 }
 
-/* 802DE658-802DE744 2D8F98 00EC+00 2/2 0/0 0/0 .text            initTexObj__10JUTTextureFv */
 void JUTTexture::initTexObj() {
     GXBool mipmapEnabled;
     if (mTexInfo->mipmapEnabled != 0) {
@@ -160,8 +151,6 @@ void JUTTexture::initTexObj() {
                     mTexInfo->doEdgeLOD, (GXAnisotropy)mTexInfo->maxAnisotropy);
 }
 
-/* 802DE744-802DE840 2D9084 00FC+00 2/2 0/0 0/0 .text            initTexObj__10JUTTextureF7_GXTlut
- */
 void JUTTexture::initTexObj(_GXTlut param_0) {
     GXBool mipmapEnabled;
     if (mTexInfo->mipmapEnabled != 0) {
@@ -180,8 +169,6 @@ void JUTTexture::initTexObj(_GXTlut param_0) {
                     mTexInfo->doEdgeLOD, (GXAnisotropy)mTexInfo->maxAnisotropy);
 }
 
-/* 802DE840-802DE890 2D9180 0050+00 0/0 14/14 0/0 .text            load__10JUTTextureF11_GXTexMapID
- */
 void JUTTexture::load(_GXTexMapID param_0) {
     if (field_0x2c) {
         field_0x2c->load();

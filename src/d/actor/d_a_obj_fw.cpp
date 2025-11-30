@@ -24,19 +24,15 @@ enum Action {
     /* 0x0 */ ACTION_FLOAT,
 };
 
-/* 80BF204C-80BF2070 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__14daObj_Fw_HIO_cFv */
 daObj_Fw_HIO_c::daObj_Fw_HIO_c() {
     field_0x4 = -1;
     size = 1.0f;
 }
 
-/* 80BF2C20-80BF2C24 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_initHIO;
 
-/* 80BF2C30-80BF2C3C 000018 000C+00 4/4 0/0 0/0 .bss             l_HIO */
 static daObj_Fw_HIO_c l_HIO;
 
-/* 80BF2070-80BF219C 000110 012C+00 1/1 0/0 0/0 .text            ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* a_this, fopAc_ac_c* param_3) {
     if (fopAcM_GetName(param_3) == PROC_ALINK) {
         obj_fw_class* i_this = (obj_fw_class*)a_this;
@@ -61,7 +57,6 @@ static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* a_this, fopAc_ac_c* param_3)
     }
 }
 
-/* 80BF219C-80BF2200 00023C 0064+00 1/0 0/0 0/0 .text            daObj_Fw_Draw__FP12obj_fw_class */
 static int daObj_Fw_Draw(obj_fw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -71,7 +66,6 @@ static int daObj_Fw_Draw(obj_fw_class* i_this) {
     return 1;
 }
 
-/* 80BF2200-80BF22AC 0002A0 00AC+00 1/1 0/0 0/0 .text            water_check__FP12obj_fw_class */
 static BOOL water_check(obj_fw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     Vec sp78;
@@ -90,7 +84,6 @@ static BOOL water_check(obj_fw_class* i_this) {
     return FALSE;
 }
 
-/* 80BF22AC-80BF24C4 00034C 0218+00 1/1 0/0 0/0 .text            fw_float__FP12obj_fw_class */
 static void fw_float(obj_fw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -131,7 +124,6 @@ static void fw_float(obj_fw_class* i_this) {
     cLib_addCalc2(&i_this->field_0x598, fVar3, 1.0f, 3.0f);
 }
 
-/* 80BF24C4-80BF2670 000564 01AC+00 1/1 0/0 0/0 .text            action__FP12obj_fw_class */
 static void action(obj_fw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp30, sp3c;
@@ -168,7 +160,6 @@ static void action(obj_fw_class* i_this) {
     }
 }
 
-/* 80BF2670-80BF2718 000710 00A8+00 2/1 0/0 0/0 .text            daObj_Fw_Execute__FP12obj_fw_class */
 static int daObj_Fw_Execute(obj_fw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -191,12 +182,10 @@ static int daObj_Fw_Execute(obj_fw_class* i_this) {
     return 1;
 }
 
-/* 80BF2718-80BF2720 0007B8 0008+00 1/0 0/0 0/0 .text            daObj_Fw_IsDelete__FP12obj_fw_class */
 static int daObj_Fw_IsDelete(obj_fw_class* i_this) {
     return 1;
 }
 
-/* 80BF2720-80BF279C 0007C0 007C+00 1/0 0/0 0/0 .text            daObj_Fw_Delete__FP12obj_fw_class */
 static int daObj_Fw_Delete(obj_fw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -215,7 +204,6 @@ static int daObj_Fw_Delete(obj_fw_class* i_this) {
     return 1;
 }
 
-/* 80BF279C-80BF28D0 00083C 0134+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_fw_class* i_this = (obj_fw_class*)a_this;
 
@@ -250,7 +238,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80BF28D0-80BF2AB0 000970 01E0+00 1/0 0/0 0/0 .text            daObj_Fw_Create__FP10fopAc_ac_c */
 static cPhs__Step daObj_Fw_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, obj_fw_class);
     obj_fw_class* i_this = (obj_fw_class*)a_this;
@@ -310,7 +297,6 @@ static cPhs__Step daObj_Fw_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-/* 80BF2BBC-80BF2BDC -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Fw_Method */
 static actor_method_class l_daObj_Fw_Method = {
     (process_method_func)daObj_Fw_Create,
     (process_method_func)daObj_Fw_Delete,
@@ -319,7 +305,6 @@ static actor_method_class l_daObj_Fw_Method = {
     (process_method_func)daObj_Fw_Draw,
 };
 
-/* 80BF2BDC-80BF2C0C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_FW */
 extern actor_process_profile_definition g_profile_OBJ_FW = {
   fpcLy_CURRENT_e,        // mLayerID
   8,                      // mListID

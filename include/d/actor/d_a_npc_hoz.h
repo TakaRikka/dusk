@@ -27,37 +27,37 @@ public:
         /* 6 */ TYPE_6,
     };
 
-    /* 80A01658 */ int create();
-    /* 80A01904 */ int CreateHeap();
-    /* 80A01D54 */ int Delete();
-    /* 80A01D88 */ int Execute();
-    /* 80A01DA8 */ int Draw();
-    /* 80A01E44 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A01E64 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80A01F54 */ u8 getType();
-    /* 80A01FC8 */ int getFlowNodeNo();
-    /* 80A01FE4 */ int isDelete();
-    /* 80A01FEC */ void reset();
-    /* 80A02370 */ void srchActors();
-    /* 80A02F80 */ int selectAction();
-    /* 80A030A8 */ int chkAction(int (daNpc_Hoz_c::*)(void*));
-    /* 80A030D4 */ int setAction(int (daNpc_Hoz_c::*)(void*));
-    /* 80A0317C */ int wait(void*);
-    /* 80A03304 */ int waitBattle(void*);
-    /* 80A03578 */ int waitTwilightBattle(void*);
-    /* 80A037E4 */ int waitBoat(void*);
-    /* 80A03BDC */ int waitBoat2(void*);
-    /* 80A03F8C */ int waitBoat1_5(void*);
-    /* 80A04400 */ int waitTw(void*);
-    /* 80A045FC */ int talk(void*);
-    /* 80A0487C */ int ECut_boatRace(int);
-    /* 80A04BE4 */ int ECut_beforeBattle(int);
-    /* 80A04CDC */ int ECut_afterBattle(int);
-    /* 80A04E24 */ int ECut_beforeBlast(int);
-    /* 80A04F6C */ int ECut_afterBlast(int);
-    /* 80A050B4 */ int ECut_yMushi(int);
-    /* 80A051C8 */ int ECut_talkBreak(int);
-    /* 80A064E4 */ daNpc_Hoz_c(daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    int getFlowNodeNo();
+    int isDelete();
+    void reset();
+    void srchActors();
+    int selectAction();
+    int chkAction(int (daNpc_Hoz_c::*)(void*));
+    int setAction(int (daNpc_Hoz_c::*)(void*));
+    int wait(void*);
+    int waitBattle(void*);
+    int waitTwilightBattle(void*);
+    int waitBoat(void*);
+    int waitBoat2(void*);
+    int waitBoat1_5(void*);
+    int waitTw(void*);
+    int talk(void*);
+    int ECut_boatRace(int);
+    int ECut_beforeBattle(int);
+    int ECut_afterBattle(int);
+    int ECut_beforeBlast(int);
+    int ECut_afterBlast(int);
+    int ECut_yMushi(int);
+    int ECut_talkBreak(int);
+    daNpc_Hoz_c(daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
                                    daNpcT_motionAnmData_c const* i_motionAnmData,
                                    daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
                                    int i_faceMotionStepNum,
@@ -70,26 +70,26 @@ public:
                         OS_REPORT("|%06d:%x|daNpc_Hoz_c -> コンストラクト\n", g_Counter.mCounter0, this);
                     }
 
-    /* 80A0150C */ virtual ~daNpc_Hoz_c();
-    /* 80A065C4 */ virtual int checkChangeJoint(int i_jointNo) { return i_jointNo == 4; }
-    /* 80A065D4 */ virtual int checkRemoveJoint(int i_jointNo) { return i_jointNo == 9; }
-    /* 80A065BC */ virtual s32 getBackboneJointNo() { return 1; }
-    /* 80A065B4 */ virtual s32 getNeckJointNo() { return 3; }
-    /* 80A065AC */ virtual s32 getHeadJointNo() { return 4; }
-    /* 80A065A4 */ virtual u16 getEyeballMaterialNo() { return 1; }
-    /* 80A021DC */ virtual void setParam();
-    /* 80A02374 */ virtual BOOL checkChangeEvt();
-    /* 80A023EC */ virtual BOOL evtTalk();
-    /* 80A024D0 */ virtual BOOL evtEndProc();
-    /* 80A0260C */ virtual BOOL evtCutProc();
-    /* 80A0236C */ virtual void setAfterTalkMotion();
-    /* 80A026D4 */ virtual int evtProc();
-    /* 80A02918 */ virtual void action();
-    /* 80A029A0 */ virtual void beforeMove();
-    /* 80A02A18 */ virtual void setAttnPos();
-    /* 80A02C50 */ virtual void setCollision();
-    /* 80A02DD4 */ virtual void evtOrder();
-    /* 80A02F78 */ virtual int drawDbgInfo();
+    virtual ~daNpc_Hoz_c();
+    virtual int checkChangeJoint(int i_jointNo) { return i_jointNo == 4; }
+    virtual int checkRemoveJoint(int i_jointNo) { return i_jointNo == 9; }
+    virtual s32 getBackboneJointNo() { return 1; }
+    virtual s32 getNeckJointNo() { return 3; }
+    virtual s32 getHeadJointNo() { return 4; }
+    virtual u16 getEyeballMaterialNo() { return 1; }
+    virtual void setParam();
+    virtual BOOL checkChangeEvt();
+    virtual BOOL evtTalk();
+    virtual BOOL evtEndProc();
+    virtual BOOL evtCutProc();
+    virtual void setAfterTalkMotion();
+    virtual int evtProc();
+    virtual void action();
+    virtual void beforeMove();
+    virtual void setAttnPos();
+    virtual void setCollision();
+    virtual void evtOrder();
+    virtual int drawDbgInfo();
 
     #if DEBUG
     int test(void*);
@@ -131,7 +131,7 @@ struct daNpc_Hoz_HIOParam {
 
 class daNpc_Hoz_Param_c {
 public:
-    /* 80A065E4 */ virtual ~daNpc_Hoz_Param_c() {}
+    virtual ~daNpc_Hoz_Param_c() {}
 
     static const daNpc_Hoz_HIOParam m;
 };

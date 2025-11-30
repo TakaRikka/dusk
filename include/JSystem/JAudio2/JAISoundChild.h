@@ -11,9 +11,9 @@ struct JASTrack;
  * 
  */
 struct JAISoundChild : JASPoolAllocObject<JAISoundChild> {
-    /* 802A2AB0 */ void init();
-    /* 802A2B28 */ void mixOut(JASTrack*);
-    /* 802A2B7C */ void calc();
+    void init();
+    void mixOut(JASTrack*);
+    void calc();
 
     JAISoundChild() { init(); }
 

@@ -9,7 +9,7 @@ struct daNpc_Knj_HIOParam {
 
 class daNpc_Knj_Param_c {
 public:
-    /* 80A6FD10 */ virtual ~daNpc_Knj_Param_c() {}
+    virtual ~daNpc_Knj_Param_c() {}
 
     static const daNpc_Knj_HIOParam m;
 };
@@ -43,33 +43,33 @@ public:
     typedef int (daNpc_Knj_c::*actionFunc)(void*);
     typedef int (daNpc_Knj_c::*cutFunc)(int);
 
-    /* 80A4356C */ ~daNpc_Knj_c();
-    /* 80A43608 */ int create();
-    /* 80A43848 */ int CreateHeap();
-    /* 80A439A0 */ int Delete();
-    /* 80A439D4 */ int Execute();
-    /* 80A439F4 */ int Draw();
-    /* 80A43A88 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A43AA8 */ u8 getType();
-    /* 80A43B1C */ int getFlowNodeNo();
-    /* 80A43B38 */ BOOL isDelete();
-    /* 80A43B40 */ void reset();
-    /* 80A43C64 */ void setParam();
-    /* 80A43D58 */ void srchActors();
-    /* 80A43D5C */ BOOL evtTalk();
-    /* 80A43E5C */ BOOL evtCutProc();
-    /* 80A43F24 */ void action();
-    /* 80A43FAC */ void beforeMove();
-    /* 80A44024 */ void setAttnPos();
-    /* 80A44080 */ BOOL drawDbgInfo();
-    /* 80A44088 */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80A44264 */ void drawGhost();
-    /* 80A442D0 */ int selectAction();
-    /* 80A44318 */ BOOL chkAction(actionFunc);
-    /* 80A44344 */ int setAction(actionFunc);
-    /* 80A443EC */ int wait(void*);
-    /* 80A44598 */ int talk(void*);
-    /* 80A45460 */ daNpc_Knj_c(
+    ~daNpc_Knj_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    u8 getType();
+    int getFlowNodeNo();
+    BOOL isDelete();
+    void reset();
+    void setParam();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    BOOL drawDbgInfo();
+    bool afterSetMotionAnm(int, int, f32, int);
+    void drawGhost();
+    int selectAction();
+    BOOL chkAction(actionFunc);
+    int setAction(actionFunc);
+    int wait(void*);
+    int talk(void*);
+    daNpc_Knj_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,

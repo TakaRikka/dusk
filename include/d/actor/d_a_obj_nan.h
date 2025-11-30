@@ -20,24 +20,24 @@ class daObjNAN_c : public dInsect_c {
 public:
     typedef void (daObjNAN_c::*actionFunc)();
 
-    /* 80CA05D4 */ void setAction(actionFunc);
-    /* 80CA0978 */ void nan_posMove();
-    /* 80CA0A2C */ void turn();
-    /* 80CA0D9C */ u8 nan_WalkAnm();
-    /* 80CA0E7C */ void wait();
-    /* 80CA1184 */ void walk();
-    /* 80CA1904 */ void bin_wait();
-    /* 80CA1A20 */ void bin_action();
-    /* 80CA1B50 */ void nan_setParticle();
-    /* 80CA1D5C */ void hook();
-    /* 80CA1F60 */ void boomerang();
-    /* 80CA2368 */ void drop();
-    /* 80CA2658 */ void hit_check();
-    /* 80CA270C */ void action();
-    /* 80CA276C */ int execute();
-    /* 80CA2904 */ int _delete();
-    /* 80CA296C */ void setBaseMtx();
-    /* 80CA2B68 */ int create();
+    void setAction(actionFunc);
+    void nan_posMove();
+    void turn();
+    u8 nan_WalkAnm();
+    void wait();
+    void walk();
+    void bin_wait();
+    void bin_action();
+    void nan_setParticle();
+    void hook();
+    void boomerang();
+    void drop();
+    void hit_check();
+    void action();
+    int execute();
+    int _delete();
+    void setBaseMtx();
+    int create();
 
     inline int CreateHeap();
     inline int draw();

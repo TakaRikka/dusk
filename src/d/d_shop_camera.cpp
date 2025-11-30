@@ -20,33 +20,27 @@ struct SeiraCam {
     /* 0x18 */ f32 field_0x34;
 };
 
-/* 803BB7C8-803BB800 0188E8 0038+00 1/0 0/0 0/0 .data            cam_seira_shop */
 static SeiraCam cam_seira_shop = {
     {0.0f, 115.0f, 0.0f},      {0.0f, 115.0f, 150.0f}, 45.0f,
     {100.0f, 155.0f, -175.0f}, {100.0f, 155.0f, 0.0f}, 45.0f,
 };
 
-/* 803BB800-803BB838 018920 0038+00 1/0 0/0 0/0 .data            cam_seira_evnt_before */
 static SeiraCam cam_seira_evnt_before = {
     {-50.0f, 115.0f, 0.0f},    {-50.0f, 115.0f, 150.0f}, 45.0f,
     {100.0f, 155.0f, -175.0f}, {100.0f, 155.0f, 0.0f},   45.0f,
 };
 
-/* 803BB838-803BB870 018958 0038+00 1/0 0/0 0/0 .data            cam_seira_evnt_after */
 static SeiraCam cam_seira_evnt_after = {
     {0.0f, 115.0f, 0.0f},      {0.0f, 115.0f, 150.0f}, 45.0f,
     {100.0f, 155.0f, -175.0f}, {100.0f, 155.0f, 0.0f}, 45.0f,
 };
 
-/* 803BB870-803BB87C -00001 000C+00 2/2 0/0 0/0 .data            shop_cam_data_tbl */
 static SeiraCam* shop_cam_data_tbl[3] = {
     &cam_seira_shop,
     &cam_seira_evnt_before,
     &cam_seira_evnt_after,
 };
 
-/* 80195C9C-80195E18 1905DC 017C+00 0/0 0/0 9/9 .text shop_cam_action_init__16ShopCam_action_cFv
- */
 int ShopCam_action_c::shop_cam_action_init() {
     Save();
 
@@ -72,7 +66,6 @@ int ShopCam_action_c::shop_cam_action_init() {
     return 1;
 }
 
-/* 80195E18-8019630C 190758 04F4+00 1/0 0/0 0/0 .text shop_cam_action__16ShopCam_action_cFv */
 int ShopCam_action_c::shop_cam_action() {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stay();
@@ -137,7 +130,6 @@ int ShopCam_action_c::shop_cam_action() {
     return 1;
 }
 
-/* 8019630C-8019635C 190C4C 0050+00 1/1 0/0 12/12 .text            Save__16ShopCam_action_cFv */
 void ShopCam_action_c::Save() {
     camera_class* camera = dComIfGp_getCamera(0);
     if (camera != NULL) {
@@ -147,7 +139,6 @@ void ShopCam_action_c::Save() {
     }
 }
 
-/* 8019635C-801963B4 190C9C 0058+00 0/0 0/0 9/9 .text EventRecoverNotime__16ShopCam_action_cFv */
 void ShopCam_action_c::EventRecoverNotime() {
     dComIfGp_getPlayer(0);
     field_0xd8 = 2;
@@ -155,7 +146,6 @@ void ShopCam_action_c::EventRecoverNotime() {
     mCamAction = NULL;
 }
 
-/* 801963B4-801964C8 190CF4 0114+00 0/0 0/0 9/9 .text            Reset__16ShopCam_action_cFv */
 void ShopCam_action_c::Reset() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     player->offPlayerNoDraw();
@@ -168,7 +158,6 @@ void ShopCam_action_c::Reset() {
     mCamAction = NULL;
 }
 
-/* 801964C8-80196544 190E08 007C+00 0/0 0/0 9/9 .text            move__16ShopCam_action_cFv */
 void ShopCam_action_c::move() {
     if (mCamAction != NULL) {
         (this->*mCamAction)();
@@ -251,7 +240,6 @@ void ShopCam_action_c::setCamDataIdx2(fopAc_ac_c* param_1, fopAc_ac_c* param_2, 
     _debugSetCamera();
 }
 
-/* 801966D4-801968B8 191014 01E4+00 2/2 0/0 0/0 .text _debugSetCamera__16ShopCam_action_cFv */
 void ShopCam_action_c::_debugSetCamera() {
     field_0x38.x = field_0xb0.x;
     field_0x38.y = field_0xb0.y;
@@ -295,8 +283,6 @@ void ShopCam_action_c::_debugSetCamera() {
     }
 }
 
-/* 801968B8-80196914 1911F8 005C+00 0/0 1/1 3/3 .text
- * setMasterCamCtrPos__16ShopCam_action_cFP4cXyz                */
 void ShopCam_action_c::setMasterCamCtrPos(cXyz* param_0) {
     if (param_0 == NULL) {
         field_0xb0.set(field_0x18->eyePos);

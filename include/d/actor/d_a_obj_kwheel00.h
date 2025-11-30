@@ -22,14 +22,14 @@ public:
     daObjKWheel00_c() : dEvLib_callback_c(this) {}
     ~daObjKWheel00_c() {}
 
-    /* 80C4D6F8 */ int create1st();
-    /* 80C4D86C */ void setMtx();
-    /* 80C4D9B8 */ int CreateHeap();
-    /* 80C4DA38 */ int Create();
-    /* 80C4DBBC */ int Execute(Mtx**);
-    /* 80C4E1B0 */ int Draw();
-    /* 80C4E254 */ int Delete();
-    /* 80C4E298 */ bool eventStart();
+    int create1st();
+    void setMtx();
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
+    bool eventStart();
 
     int getSwNo() {
         return fopAcM_GetParamBit(this, 0, 8);

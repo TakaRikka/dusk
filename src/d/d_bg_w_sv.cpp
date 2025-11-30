@@ -8,7 +8,6 @@
 #include "d/d_bg_w_sv.h"
 #include "SSystem/SComponent/c_bg_s_chk.h"
 
-/* 80082F98-80083020 07D8D8 0088+00 0/0 0/0 2/2 .text            Set__6dBgWSvFP6cBgD_tUl */
 u8 dBgWSv::Set(cBgD_t* pbgd, u32 param_1) {
     if (cBgW::Set(pbgd, 99, NULL)) {
         return 1;
@@ -23,7 +22,6 @@ u8 dBgWSv::Set(cBgD_t* pbgd, u32 param_1) {
     return field_0xc0 == NULL;
 }
 
-/* 80083020-8008308C 07D960 006C+00 0/0 0/0 3/3 .text            CopyBackVtx__6dBgWSvFv */
 void dBgWSv::CopyBackVtx() {
     if (field_0xc0 == NULL || pm_vtx_tbl == NULL) {
         return;
@@ -34,7 +32,6 @@ void dBgWSv::CopyBackVtx() {
     }
 }
 
-/* 8008308C-80083244 07D9CC 01B8+00 1/1 0/0 0/0 .text            CrrPosWork__6dBgWSvFP4cXyziii */
 bool dBgWSv::CrrPosWork(cXyz* i_pos, int i_vtx0, int i_vtx1, int i_vtx2) {
     cXyz sp34;
     cXyz sp28;
@@ -82,8 +79,6 @@ bool dBgWSv::CrrPosWork(cXyz* i_pos, int i_vtx0, int i_vtx1, int i_vtx2) {
     return 0;
 }
 
-/* 80083244-80083300 07DB84 00BC+00 1/0 0/0 0/0 .text
- * CrrPos__6dBgWSvFRC13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz     */
 void dBgWSv::CrrPos(cBgS_PolyInfo const& i_poly, void* i_actor_ptr, bool param_2, cXyz* i_pos,
                     csXyz* i_angle, csXyz* i_shapeAngle) {
     if (!(field_0xc4 & 1) && param_2) {
@@ -98,7 +93,6 @@ void dBgWSv::CrrPos(cBgS_PolyInfo const& i_poly, void* i_actor_ptr, bool param_2
     }
 }
 
-/* 80083300-8008351C 07DC40 021C+00 1/1 0/0 0/0 .text            TransPosWork__6dBgWSvFP4cXyziii */
 bool dBgWSv::TransPosWork(cXyz* i_pos, int i_vtx0, int i_vtx1, int i_vtx2) {
     cXyz sp34;
     cXyz sp28;
@@ -154,8 +148,6 @@ bool dBgWSv::TransPosWork(cXyz* i_pos, int i_vtx0, int i_vtx1, int i_vtx2) {
     return 0;
 }
 
-/* 8008351C-800835D8 07DE5C 00BC+00 1/0 0/0 0/0 .text
- * TransPos__6dBgWSvFRC13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz   */
 void dBgWSv::TransPos(cBgS_PolyInfo const& i_poly, void* i_actor_ptr, bool param_2, cXyz* i_pos,
                       csXyz* i_angle, csXyz* i_shapeAngle) {
     if (!(field_0xc4 & 1) && param_2) {
@@ -170,7 +162,5 @@ void dBgWSv::TransPos(cBgS_PolyInfo const& i_poly, void* i_actor_ptr, bool param
     }
 }
 
-/* 800835D8-800835DC 07DF18 0004+00 1/0 0/0 0/0 .text
- * MatrixCrrPos__6dBgWSvFRC13cBgS_PolyInfoPvbP4cXyzP5csXyzP5csXyz */
 void dBgWSv::MatrixCrrPos(cBgS_PolyInfo const& i_poly, void* i_actor_ptr, bool param_2, cXyz* i_pos,
                           csXyz* i_angle, csXyz* i_shapeAngle) {}

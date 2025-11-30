@@ -9,13 +9,11 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 
-/* 80598FE8-80598FF0 -00001 0008+00 3/3 0/0 0/0 .data            l_resNameIdx */
 static char* l_resNameIdx[2] = {
     "P_Rgate",
     "SDGate",
 };
 
-/* 805981EC-8059825C 0000EC 0070+00 1/1 0/0 0/0 .text            __ct__17daSwShutter_HIO_cFv */
 daSwShutter_HIO_c::daSwShutter_HIO_c() {
     mInitSpeed = 0.0f;
     mMaxSpeed = 100.0f;
@@ -29,7 +27,6 @@ daSwShutter_HIO_c::daSwShutter_HIO_c() {
     mMinAtten = 0.1f;
 }
 
-/* 805982A4-80598344 0001A4 00A0+00 2/2 0/0 0/0 .text            setBaseMtx__13daSwShutter_cFv */
 void daSwShutter_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -39,10 +36,8 @@ void daSwShutter_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80598F98-80598FA0 000020 0008+00 1/1 0/0 0/0 .rodata          l_bmdIdx */
 static const int l_bmdIdx[2] = {4, 4};
 
-/* 80598344-805983C4 000244 0080+00 1/0 0/0 0/0 .text            CreateHeap__13daSwShutter_cFv */
 int daSwShutter_c::CreateHeap() {
     J3DModelData* modelData =
         (J3DModelData*)dComIfG_getObjectRes(l_resNameIdx[mModelType], l_bmdIdx[mModelType]);
@@ -55,10 +50,8 @@ int daSwShutter_c::CreateHeap() {
     return 1;
 }
 
-/* 80598FA0-80598FA8 000028 0008+00 0/1 0/0 0/0 .rodata          l_dzbIdx */
 static const int l_dzbIdx[2] = {7, 7};
 
-/* 805983C4-80598564 0002C4 01A0+00 1/1 0/0 0/0 .text            create__13daSwShutter_cFv */
 int daSwShutter_c::create() {
     fopAcM_ct(this, daSwShutter_c);
 
@@ -104,8 +97,6 @@ int daSwShutter_c::create() {
     return phase_state;
 }
 
-/* 80598564-805985B4 000464 0050+00 1/0 0/0 0/0 .text            Execute__13daSwShutter_cFPPA3_A4_f
- */
 int daSwShutter_c::Execute(Mtx** param_0) {
     moveMain();
     *param_0 = &mpModel->getBaseTRMtx();
@@ -113,10 +104,8 @@ int daSwShutter_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 805990F4-80599120 000014 002C+00 4/4 0/0 0/0 .bss             l_HIO */
 static daSwShutter_HIO_c l_HIO;
 
-/* 805985B4-8059873C 0004B4 0188+00 1/1 0/0 0/0 .text            moveMain__13daSwShutter_cFv */
 void daSwShutter_c::moveMain() {
     typedef void (daSwShutter_c::*modeFunc)();
     static modeFunc mode_proc[] = {
@@ -135,19 +124,16 @@ void daSwShutter_c::moveMain() {
     mCounter++;
 }
 
-/* 8059873C-80598748 00063C 000C+00 1/1 0/0 0/0 .text            init_modeWait__13daSwShutter_cFv */
 void daSwShutter_c::init_modeWait() {
     mMode = MODE_WAIT;
 }
 
-/* 80598748-8059879C 000648 0054+00 1/0 0/0 0/0 .text            modeWait__13daSwShutter_cFv */
 void daSwShutter_c::modeWait() {
     if (fopAcM_isSwitch(this, getSwBit())) {
         init_modeMoveDownInit();
     }
 }
 
-/* 8059879C-805989D0 00069C 0234+00 1/1 0/0 0/0 .text init_modeMoveDownInit__13daSwShutter_cFv */
 void daSwShutter_c::init_modeMoveDownInit() {
     mShakeStrength = l_HIO.mShakeStrength;
     mShakeAmpY = l_HIO.mShakeAmpY;
@@ -170,15 +156,12 @@ void daSwShutter_c::init_modeMoveDownInit() {
     mMode = MODE_MOVE_DOWN_INIT;
 }
 
-/* 805989D0-80598A04 0008D0 0034+00 1/0 0/0 0/0 .text            modeMoveDownInit__13daSwShutter_cFv
- */
 void daSwShutter_c::modeMoveDownInit() {
     if (mShakeStrength == 0.0f) {
         init_modeMoveDown();
     }
 }
 
-/* 80598A04-80598AFC 000904 00F8+00 1/1 0/0 0/0 .text init_modeMoveDown__13daSwShutter_cFv */
 void daSwShutter_c::init_modeMoveDown() {
     fopAcM_SetSpeedF(this, l_HIO.mInitSpeed);
 
@@ -191,7 +174,6 @@ void daSwShutter_c::init_modeMoveDown() {
     mMode = MODE_MOVE_DOWN;
 }
 
-/* 80598AFC-80598D4C 0009FC 0250+00 1/0 0/0 0/0 .text            modeMoveDown__13daSwShutter_cFv */
 void daSwShutter_c::modeMoveDown() {
     cLib_chaseF(&speedF, l_HIO.mMaxSpeed, l_HIO.mAcceleration);
     f32 target_dist =
@@ -212,16 +194,12 @@ void daSwShutter_c::modeMoveDown() {
     }
 }
 
-/* 80598D4C-80598D58 000C4C 000C+00 2/2 0/0 0/0 .text init_modeMoveDownEnd__13daSwShutter_cFv */
 void daSwShutter_c::init_modeMoveDownEnd() {
     mMode = MODE_MOVE_DOWN_END;
 }
 
-/* 80598D58-80598D5C 000C58 0004+00 1/0 0/0 0/0 .text            modeMoveDownEnd__13daSwShutter_cFv
- */
 void daSwShutter_c::modeMoveDownEnd() {}
 
-/* 80598D5C-80598E00 000C5C 00A4+00 1/0 0/0 0/0 .text            Draw__13daSwShutter_cFv */
 int daSwShutter_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -232,42 +210,33 @@ int daSwShutter_c::Draw() {
     return 1;
 }
 
-/* 80598E00-80598E40 000D00 0040+00 1/0 0/0 0/0 .text            Delete__13daSwShutter_cFv */
 int daSwShutter_c::Delete() {
     dComIfG_resDelete(&mPhase, l_resNameIdx[mModelType]);
     return 1;
 }
 
-/* 80598E40-80598E6C 000D40 002C+00 1/0 0/0 0/0 .text            daSwShutter_Draw__FP13daSwShutter_c
- */
 static int daSwShutter_Draw(daSwShutter_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80598E6C-80598E8C 000D6C 0020+00 1/0 0/0 0/0 .text daSwShutter_Execute__FP13daSwShutter_c */
 static int daSwShutter_Execute(daSwShutter_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80598E8C-80598EAC 000D8C 0020+00 1/0 0/0 0/0 .text daSwShutter_Delete__FP13daSwShutter_c */
 static int daSwShutter_Delete(daSwShutter_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80598EAC-80598ECC 000DAC 0020+00 1/0 0/0 0/0 .text            daSwShutter_Create__FP10fopAc_ac_c
- */
 static int daSwShutter_Create(fopAc_ac_c* i_this) {
     return ((daSwShutter_c*)i_this)->create();
 }
 
-/* 80599050-80599070 -00001 0020+00 1/0 0/0 0/0 .data            l_daSwShutter_Method */
 static actor_method_class l_daSwShutter_Method = {
     (process_method_func)daSwShutter_Create,  (process_method_func)daSwShutter_Delete,
     (process_method_func)daSwShutter_Execute, (process_method_func)NULL,
     (process_method_func)daSwShutter_Draw,
 };
 
-/* 80599070-805990A0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_SwallShutter */
 extern actor_process_profile_definition g_profile_Obj_SwallShutter = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

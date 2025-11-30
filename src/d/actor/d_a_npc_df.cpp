@@ -11,7 +11,6 @@
 #include "d/actor/d_a_npc_henna.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* 809A538C-809A5424 0000EC 0098+00 1/0 0/0 0/0 .text            daNpc_Df_Draw__FP12npc_df_class */
 static int daNpc_Df_Draw(npc_df_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     df_s* df_p = i_this->mDfs;
@@ -27,16 +26,12 @@ static int daNpc_Df_Draw(npc_df_class* i_this) {
     return 1;
 }
 
-/* 809A6A50-809A6A54 000048 0004+00 3/4 0/0 0/0 .bss             lrl */
 static dmg_rod_class* lrl;
 
-/* 809A6A60-809A6AD0 000058 0070+00 0/2 0/0 0/0 .bss             line_check */
 static dBgS_LinChk line_check;
 
-/* 809A6ADC-809A6B30 0000D4 0054+00 0/2 0/0 0/0 .bss             gc_work */
 static dBgS_ObjGndChk gc_work;
 
-/* 809A5424-809A59DC 000184 05B8+00 1/1 0/0 0/0 .text            df_fly__FP12npc_df_classP4df_s */
 static void df_fly(npc_df_class* i_this, df_s* df_p) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -147,7 +142,6 @@ static void df_fly(npc_df_class* i_this, df_s* df_p) {
     df_p->field_0x5c = YREG_F(6) + 0.2f + ((df_p->field_0x6c & 1) - 0.5f) * (YREG_F(7) + 0.2f);
 }
 
-/* 809A59DC-809A6100 00073C 0724+00 1/1 0/0 0/0 .text            df_rod__FP12npc_df_classP4df_s */
 static void df_rod(npc_df_class* i_this, df_s* df_p) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -261,7 +255,6 @@ static void df_rod(npc_df_class* i_this, df_s* df_p) {
     }
 }
 
-/* 809A6100-809A6314 000E60 0214+00 1/1 0/0 0/0 .text            df_control__FP12npc_df_class */
 static void df_control(npc_df_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz sp34;
@@ -305,7 +298,6 @@ static void df_control(npc_df_class* i_this) {
     }
 }
 
-/* 809A6314-809A6360 001074 004C+00 1/1 0/0 0/0 .text            s_rod_sub__FPvPv */
 static void* s_rod_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_MG_ROD) {
         return i_actor;
@@ -314,19 +306,16 @@ static void* s_rod_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 809A6360-809A63AC 0010C0 004C+00 2/1 0/0 0/0 .text            daNpc_Df_Execute__FP12npc_df_class */
 static int daNpc_Df_Execute(npc_df_class* i_this) {
     lrl = (dmg_rod_class*)fpcM_Search(s_rod_sub, i_this);
     df_control(i_this);
     return 1;
 }
 
-/* 809A63AC-809A63B4 00110C 0008+00 1/0 0/0 0/0 .text            daNpc_Df_IsDelete__FP12npc_df_class */
 static int daNpc_Df_IsDelete(npc_df_class* i_this) {
     return 1;
 }
 
-/* 809A63B4-809A6478 001114 00C4+00 1/0 0/0 0/0 .text            daNpc_Df_Delete__FP12npc_df_class */
 static int daNpc_Df_Delete(npc_df_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fpc_ProcID id = fopAcM_GetID(actor);
@@ -343,7 +332,6 @@ static int daNpc_Df_Delete(npc_df_class* i_this) {
     return 1;
 }
 
-/* 809A6478-809A6564 0011D8 00EC+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     npc_df_class* actor = (npc_df_class*)i_this;
 
@@ -365,7 +353,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 809A6564-809A6728 0012C4 01C4+00 1/0 0/0 0/0 .text            daNpc_Df_Create__FP10fopAc_ac_c */
 static cPhs__Step daNpc_Df_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, npc_df_class);
     npc_df_class* actor = (npc_df_class*)i_this;
@@ -426,7 +413,6 @@ static cPhs__Step daNpc_Df_Create(fopAc_ac_c* i_this) {
 
 AUDIO_INSTANCES;
 
-/* 809A6984-809A69A4 -00001 0020+00 1/0 0/0 0/0 .data            l_daNpc_Df_Method */
 static actor_method_class l_daNpc_Df_Method = {
     (process_method_func)daNpc_Df_Create,
     (process_method_func)daNpc_Df_Delete,
@@ -435,7 +421,6 @@ static actor_method_class l_daNpc_Df_Method = {
     (process_method_func)daNpc_Df_Draw,
 };
 
-/* 809A69A4-809A69D4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_DF */
 extern actor_process_profile_definition g_profile_NPC_DF = {
   fpcLy_CURRENT_e,        // mLayerID
   9,                      // mListID

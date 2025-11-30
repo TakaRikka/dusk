@@ -13,28 +13,28 @@
  */
 class daNpcDrSol_c : public daNpcF_c {
 public:
-    /* 809ADE6C */ daNpcDrSol_c();
-    /* 809ADFE4 */ virtual ~daNpcDrSol_c();
-    /* 809AE10C */ int Create();
-    /* 809AE354 */ int CreateHeap();
-    /* 809AE51C */ int Delete();
-    /* 809AE550 */ int Execute();
-    /* 809AE5CC */ int Draw();
-    /* 809AE69C */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 809AE6BC */ void reset();
-    /* 809AE844 */ inline int setAction(bool (daNpcDrSol_c::*)(void*));
-    /* 809AE8EC */ bool chkFindPlayer();
-    /* 809AE994 */ bool wait(void*);
-    /* 809AEB94 */ bool talk(void*);
+    daNpcDrSol_c();
+    virtual ~daNpcDrSol_c();
+    int Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    void reset();
+    inline int setAction(bool (daNpcDrSol_c::*)(void*));
+    bool chkFindPlayer();
+    bool wait(void*);
+    bool talk(void*);
 
-    /* 809AEDA8 */ virtual void setParam();
-    /* 809AEE24 */ virtual BOOL main();
-    /* 809AF934 */ virtual void adjustShapeAngle() {}
-    /* 809AEFDC */ virtual void setAttnPos();
-    /* 809AF12C */ virtual void setMotionAnm(int, f32);
-    /* 809AEB18 */ virtual void setMotion(int, f32, int);
-    /* 809AF1FC */ virtual BOOL drawDbgInfo();
-    /* 809AE60C */ virtual void drawOtherMdls();
+    virtual void setParam();
+    virtual BOOL main();
+    virtual void adjustShapeAngle() {}
+    virtual void setAttnPos();
+    virtual void setMotionAnm(int, f32);
+    virtual void setMotion(int, f32, int);
+    virtual BOOL drawDbgInfo();
+    virtual void drawOtherMdls();
 
     inline void playMotion();
 
@@ -63,7 +63,7 @@ struct daNpcDrSol_HIOParam {
 
 class daNpcDrSol_Param_c {
 public:
-    /* 809AF938 */ virtual ~daNpcDrSol_Param_c() {}
+    virtual ~daNpcDrSol_Param_c() {}
 
     static const daNpcDrSol_HIOParam m;
 };

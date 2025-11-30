@@ -13,26 +13,26 @@
  */
 class daObjSwBallC_c : public fopAc_ac_c {
 public:
-    /* 80CF5CD4 */ void initBaseMtx();
-    /* 80CF5CF4 */ void setBaseMtx();
-    /* 80CF5D58 */ int Create();
-    /* 80CF5EF8 */ int CreateHeap();
-    /* 80CF606C */ int create();
-    /* 80CF6120 */ int execute();
-    /* 80CF6144 */ void event_proc_call();
-    /* 80CF6200 */ void actionWait();
-    /* 80CF629C */ void actionOrderEvent();
-    /* 80CF6344 */ void actionEvent();
-    /* 80CF63F0 */ void actionDead();
-    /* 80CF63F4 */ int demoProc();
-    /* 80CF6818 */ void setLightOnSwB();
-    /* 80CF6888 */ void setLightOffSwB();
-    /* 80CF68F8 */ void deleteLightBall();
-    /* 80CF692C */ void deleteLightBallA();
-    /* 80CF6964 */ void deleteLightBallB();
-    /* 80CF699C */ int calcLightBallScale();
-    /* 80CF6A74 */ int draw();
-    /* 80CF6BFC */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    int demoProc();
+    void setLightOnSwB();
+    void setLightOffSwB();
+    void deleteLightBall();
+    void deleteLightBallA();
+    void deleteLightBallB();
+    int calcLightBallScale();
+    int draw();
+    int _delete();
 
     void setAction(u8 action) { field_0x57f = action; }
 

@@ -24,8 +24,8 @@ struct J3DJointInitData {
  * 
  */
 struct J3DJointFactory {
-    /* 80337178 */ J3DJointFactory(J3DJointBlock const&);
-    /* 803371D0 */ J3DJoint* create(int);
+    J3DJointFactory(J3DJointBlock const&);
+    J3DJoint* create(int);
 
     J3DJointInitData* mJointInitData;
     u16* mIndexTable;

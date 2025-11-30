@@ -13,12 +13,12 @@
  */
 class daDmidna_c : public fopAc_ac_c {
 public:
-    /* 8045CED8 */ int createHeap();
-    /* 8045CFE4 */ int create();
-    /* 8045D0B4 */ ~daDmidna_c();
-    /* 8045D144 */ void setMatrix();
-    /* 8045D1A0 */ int execute();
-    /* 8045D204 */ int draw();
+    int createHeap();
+    int create();
+    ~daDmidna_c();
+    void setMatrix();
+    int execute();
+    int draw();
 
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ u8 unk_0x570[4];

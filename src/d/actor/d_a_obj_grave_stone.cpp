@@ -10,10 +10,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
 
-/* 80C13304-80C13308 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char const* l_arcName = "H_Haka";
 
-/* 80C13250-80C13280 000000 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__14daGraveStone_c */
 dCcD_SrcGObjInf const daGraveStone_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0, 0}, {0x79}}},
     {0, 0, 0, 0, 0},
@@ -21,7 +19,6 @@ dCcD_SrcGObjInf const daGraveStone_c::mCcDObjInfo = {
     {0},
 };
 
-/* 80C13280-80C132C4 000030 0044+00 1/1 0/0 0/0 .rodata          mCcDCyl__14daGraveStone_c */
 dCcD_SrcCyl const daGraveStone_c::mCcDCyl = {
     {
         {0, {{0, 0, 0}, {0, 0}, {0x79}}},
@@ -32,7 +29,6 @@ dCcD_SrcCyl const daGraveStone_c::mCcDCyl = {
     {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f},
 };
 
-/* 80C125F8-80C1266C 000078 0074+00 2/2 0/0 0/0 .text            setBaseMtx__14daGraveStone_cFv */
 void daGraveStone_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -40,7 +36,6 @@ void daGraveStone_c::setBaseMtx() {
     PSMTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80C1266C-80C12918 0000EC 02AC+00 1/1 0/0 0/0 .text            moveCalc__14daGraveStone_cFv */
 void daGraveStone_c::moveCalc() {
     if (cLib_calcTimer(&mTimer) != 0) {
         fopAcM_posMoveF(this, mColStatus.GetCCMoveP());
@@ -93,7 +88,6 @@ void daGraveStone_c::moveCalc() {
     }
 }
 
-/* 80C12918-80C12A38 000398 0120+00 1/1 0/0 0/0 .text            setPrtcl__14daGraveStone_cFv */
 int daGraveStone_c::setPrtcl() {
     for (int i = 0; i < 4; i++) {
         mPrtclMngr[i].field_0x24.setEffectCenter(
@@ -117,21 +111,17 @@ int daGraveStone_c::setPrtcl() {
     return 1;
 }
 
-/* 80C12A38-80C12A94 0004B8 005C+00 2/2 0/0 0/0 .text            setEnvTevColor__14daGraveStone_cFv
- */
 void daGraveStone_c::setEnvTevColor() {
     tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(mGndChk);
     tevStr.room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
 }
 
-/* 80C12A94-80C12AD8 000514 0044+00 2/2 0/0 0/0 .text            setRoomNo__14daGraveStone_cFv */
 void daGraveStone_c::setRoomNo() {
     s8 room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
     fopAcM_SetRoomNo(this, room_no);
     mColStatus.SetRoomId(room_no);
 }
 
-/* 80C12AD8-80C12CA4 000558 01CC+00 1/0 0/0 0/0 .text            Create__14daGraveStone_cFv */
 int daGraveStone_c::Create() {
     setBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -155,7 +145,6 @@ int daGraveStone_c::Create() {
     return 1;
 }
 
-/* 80C12CA4-80C12D1C 000724 0078+00 1/0 0/0 0/0 .text            CreateHeap__14daGraveStone_cFv */
 int daGraveStone_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "H_Haka.bmd");
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
@@ -165,7 +154,6 @@ int daGraveStone_c::CreateHeap() {
     return 1;
 }
 
-/* 80C12D1C-80C12EF0 00079C 01D4+00 1/1 0/0 0/0 .text            create__14daGraveStone_cFv */
 cPhs__Step daGraveStone_c::create() {
     fopAcM_ct(this, daGraveStone_c);
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
@@ -180,8 +168,6 @@ cPhs__Step daGraveStone_c::create() {
     return step;
 }
 
-/* 80C13030-80C13078 000AB0 0048+00 1/0 0/0 0/0 .text            Execute__14daGraveStone_cFPPA3_A4_f
- */
 int daGraveStone_c::Execute(Mtx** i_mtxP) {
     *i_mtxP = &mBgMtx;
     moveCalc();
@@ -190,7 +176,6 @@ int daGraveStone_c::Execute(Mtx** i_mtxP) {
     return 1;
 }
 
-/* 80C13078-80C1311C 000AF8 00A4+00 1/0 0/0 0/0 .text            Draw__14daGraveStone_cFv */
 int daGraveStone_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -200,7 +185,6 @@ int daGraveStone_c::Draw() {
     return 1;
 }
 
-/* 80C1311C-80C13188 000B9C 006C+00 1/0 0/0 0/0 .text            Delete__14daGraveStone_cFv */
 int daGraveStone_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     if (mpBgW != NULL && mpBgW->ChkUsed()) {
@@ -209,33 +193,26 @@ int daGraveStone_c::Delete() {
     return 1;
 }
 
-/* 80C13188-80C131B4 000C08 002C+00 1/0 0/0 0/0 .text daGraveStone_Draw__FP14daGraveStone_c */
 static int daGraveStone_Draw(daGraveStone_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C131B4-80C131D4 000C34 0020+00 1/0 0/0 0/0 .text daGraveStone_Execute__FP14daGraveStone_c */
 static int daGraveStone_Execute(daGraveStone_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C131D4-80C131DC 000C54 0008+00 1/0 0/0 0/0 .text daGraveStone_IsDelete__FP14daGraveStone_c */
 static int daGraveStone_IsDelete(daGraveStone_c* i_this) {
     return 1;
 }
 
-/* 80C131DC-80C131FC 000C5C 0020+00 1/0 0/0 0/0 .text daGraveStone_Delete__FP14daGraveStone_c */
 static int daGraveStone_Delete(daGraveStone_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C131FC-80C1321C 000C7C 0020+00 1/0 0/0 0/0 .text            daGraveStone_create__FP10fopAc_ac_c
- */
 static cPhs__Step daGraveStone_create(fopAc_ac_c* i_this) {
     return static_cast<daGraveStone_c*>(i_this)->create();
 }
 
-/* 80C13308-80C13328 -00001 0020+00 1/0 0/0 0/0 .data            l_daGraveStone_Method */
 static actor_method_class l_daGraveStone_Method = {
     (process_method_func)daGraveStone_create,
     (process_method_func)daGraveStone_Delete,
@@ -244,7 +221,6 @@ static actor_method_class l_daGraveStone_Method = {
     (process_method_func)daGraveStone_Draw,
 };
 
-/* 80C13328-80C13358 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_GraveStone */
 extern actor_process_profile_definition g_profile_Obj_GraveStone = {
     fpcLy_CURRENT_e,
     3,

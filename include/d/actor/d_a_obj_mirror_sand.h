@@ -14,8 +14,8 @@
  */
 class daObjMirrorSand_c : public fopAc_ac_c {
 public:
-    /* 80C98508 */ void initBaseMtx();
-    /* 80C98534 */ void setBaseMtx();
+    void initBaseMtx();
+    void setBaseMtx();
 
     inline ~daObjMirrorSand_c();
 

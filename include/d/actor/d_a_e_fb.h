@@ -17,28 +17,28 @@
  */
 class daE_FB_c : public fopEn_enemy_c {
 public:
-    /* 806B6520 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 806B65C0 */ static int JointCallBack(J3DJoint*, int);
-    /* 806B660C */ int draw();
-    /* 806B67E0 */ void setBck(int, u8, f32, f32);
-    /* 806B688C */ void setActionMode(int, int);
-    /* 806B6898 */ void damage_check();
-    /* 806B6D20 */ bool mBgLineCheck();
-    /* 806B6DF4 */ bool search_check();
-    /* 806B6F40 */ void executeWait();
-    /* 806B70FC */ void executeAttack();
-    /* 806B78A0 */ void executeDamage();
-    /* 806B7B88 */ void executeBullet();
-    /* 806B7DDC */ void action();
-    /* 806B80A4 */ void mtx_set();
-    /* 806B811C */ void cc_set();
-    /* 806B82B4 */ void normal_eff_set();
-    /* 806B83F0 */ void dead_eff_set();
-    /* 806B8518 */ int execute();
-    /* 806B85C8 */ int _delete();
-    /* 806B8678 */ int CreateHeap();
-    /* 806B88E0 */ cPhs__Step create();
-    /* 806B8C1C */ daE_FB_c();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int JointCallBack(J3DJoint*, int);
+    int draw();
+    void setBck(int, u8, f32, f32);
+    void setActionMode(int, int);
+    void damage_check();
+    bool mBgLineCheck();
+    bool search_check();
+    void executeWait();
+    void executeAttack();
+    void executeDamage();
+    void executeBullet();
+    void action();
+    void mtx_set();
+    void cc_set();
+    void normal_eff_set();
+    void dead_eff_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    cPhs__Step create();
+    daE_FB_c();
 
 private:
     /* 0x5AC */ request_of_phase_process_class mPhaseReq;
@@ -81,8 +81,8 @@ STATIC_ASSERT(sizeof(daE_FB_c) == 0xce8);
 
 class daE_FB_HIO_c : public JORReflexible {
 public:
-    /* 806B64AC */ daE_FB_HIO_c();
-    /* 806B8EE4 */ virtual ~daE_FB_HIO_c() {}
+    daE_FB_HIO_c();
+    virtual ~daE_FB_HIO_c() {}
 
 #if DEBUG
     void genMessage(JORMContext*);

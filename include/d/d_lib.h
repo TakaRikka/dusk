@@ -31,19 +31,19 @@ public:
         TRIG_DOWN_RIGHT,
     };
 
-    /* 80032044 */ STControl(s16 delayY, s16 delayX, s16 param_2, s16 param_3, f32 threshold,
+    STControl(s16 delayY, s16 delayX, s16 param_2, s16 param_3, f32 threshold,
                              f32 param_5, s16 param_6, s16 param_7);
-    /* 80032088 */ void setWaitParm(s16, s16, s16, s16, f32, f32, s16, s16);
-    /* 800320AC */ void init();
-    /* 800320FC */ void Xinit();
-    /* 8003212C */ void Yinit();
-    /* 8003215C */ virtual f32 getValueStick();
-    /* 8003216C */ virtual s16 getAngleStick();
-    /* 8003219C */ u8 checkTrigger();
-    /* 8003242C */ bool checkLeftTrigger();
-    /* 800324A8 */ bool checkRightTrigger();
-    /* 80032524 */ bool checkUpTrigger();
-    /* 800325A0 */ bool checkDownTrigger();
+    void setWaitParm(s16, s16, s16, s16, f32, f32, s16, s16);
+    void init();
+    void Xinit();
+    void Yinit();
+    virtual f32 getValueStick();
+    virtual s16 getAngleStick();
+    u8 checkTrigger();
+    bool checkLeftTrigger();
+    bool checkRightTrigger();
+    bool checkUpTrigger();
+    bool checkDownTrigger();
 
     void setFirstWaitTime(s16 time) { mFirstWaitTime = time; }
     s16 getYwaitTimer() { return mYwaitTimer; }
@@ -81,9 +81,9 @@ struct CSTControl : public STControl {
 };
 
 struct dLib_time_c {
-    /* 80032804 */ static OSTime getTime();
-    /* 80032880 */ static void stopTime();
-    /* 800328BC */ static void startTime();
+    static OSTime getTime();
+    static void stopTime();
+    static void startTime();
 
     static OSTime m_diffTime;
     static OSTime m_stopTime;

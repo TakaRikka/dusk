@@ -15,20 +15,16 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 
-/* 803BD050-803BD05C 01A170 000C+00 2/3 0/0 0/0 .data            map_init_process */
 typedef void (dMenu_Fishing_c::*initFunc)();
 initFunc map_init_process[] = {
     &dMenu_Fishing_c::wait_init,
 };
 
-/* 803BD068-803BD074 01A188 000C+00 1/2 0/0 0/0 .data            map_move_process */
 typedef void (dMenu_Fishing_c::*moveFunc)();
 moveFunc map_move_process[] = {
     &dMenu_Fishing_c::wait_move,
 };
 
-/* 801C4D54-801C4D98 1BF694 0044+00 0/0 2/2 0/0 .text
- * __ct__15dMenu_Fishing_cFP10JKRExpHeapP9STControlP10CSTControl */
 dMenu_Fishing_c::dMenu_Fishing_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i_cStick) {
     mpHeap = i_heap;
     mpArchive = 0;
@@ -40,7 +36,6 @@ dMenu_Fishing_c::dMenu_Fishing_c(JKRExpHeap* i_heap, STControl* i_stick, CSTCont
     mFishListScreenFrames = 0;
 }
 
-/* 801C4D98-801C504C 1BF6D8 02B4+00 1/0 0/0 0/0 .text            __dt__15dMenu_Fishing_cFv */
 dMenu_Fishing_c::~dMenu_Fishing_c() {
     delete mpString;
     mpString = NULL;
@@ -95,7 +90,6 @@ dMenu_Fishing_c::~dMenu_Fishing_c() {
     }
 }
 
-/* 801C504C-801C50B4 1BF98C 0068+00 1/1 0/0 0/0 .text            _create__15dMenu_Fishing_cFv */
 void dMenu_Fishing_c::_create() {
     mpString = new dMsgString_c();
     screenSetBase();
@@ -104,7 +98,6 @@ void dMenu_Fishing_c::_create() {
     init();
 }
 
-/* 801C50B4-801C514C 1BF9F4 0098+00 0/0 2/2 0/0 .text            _move__15dMenu_Fishing_cFv */
 void dMenu_Fishing_c::_move() {
     JKRHeap* heap = mDoExt_setCurrentHeap((JKRHeap*)mpHeap);
     u8 old_process = mProcess;
@@ -116,7 +109,6 @@ void dMenu_Fishing_c::_move() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801C514C-801C5204 1BFA8C 00B8+00 1/1 1/1 0/0 .text            _draw__15dMenu_Fishing_cFv */
 void dMenu_Fishing_c::_draw() {
     if (mpArchive) {
         J2DGrafContext* grafPort = dComIfGp_getCurrentGrafPort();
@@ -127,7 +119,6 @@ void dMenu_Fishing_c::_draw() {
     }
 }
 
-/* 801C5204-801C522C 1BFB44 0028+00 0/0 2/2 0/0 .text            isSync__15dMenu_Fishing_cFv */
 bool dMenu_Fishing_c::isSync() {
     if (mpMount != NULL && !mpMount->sync()) {
         return false;
@@ -135,7 +126,6 @@ bool dMenu_Fishing_c::isSync() {
     return true;
 }
 
-/* 801C522C-801C52E4 1BFB6C 00B8+00 1/1 0/0 0/0 .text            init__15dMenu_Fishing_cFv */
 void dMenu_Fishing_c::init() {
     #if VERSION == VERSION_GCN_PAL
     BOOL isEnglish = FALSE;
@@ -165,7 +155,6 @@ void dMenu_Fishing_c::init() {
     (this->*map_init_process[mProcess])();
 }
 
-/* 801C52E4-801C5470 1BFC24 018C+00 0/0 2/2 0/0 .text            _open__15dMenu_Fishing_cFv */
 int dMenu_Fishing_c::_open() {
     if (mpMount == NULL) {
         mpMount = mDoDvdThd_mountArchive_c::create("/res/Layout/fishres.arc", 0, NULL);
@@ -199,7 +188,6 @@ int dMenu_Fishing_c::_open() {
     }
 }
 
-/* 801C5470-801C556C 1BFDB0 00FC+00 0/0 1/1 0/0 .text            _close__15dMenu_Fishing_cFv */
 int dMenu_Fishing_c::_close() {
     s16 closeFrames = g_drawHIO.mFishListScreen.mCloseFrames;
     mFishListScreenFrames = 0;
@@ -217,22 +205,18 @@ int dMenu_Fishing_c::_close() {
     }
 }
 
-/* 801C556C-801C55A8 1BFEAC 003C+00 1/0 0/0 0/0 .text            wait_init__15dMenu_Fishing_cFv */
 // While the fishing menu is open, 
 void dMenu_Fishing_c::wait_init() {
     setAButtonString(0);
     setBButtonString(0x3F9); // "Back"
 }
 
-/* 801C55A8-801C55D8 1BFEE8 0030+00 1/0 0/0 0/0 .text            wait_move__15dMenu_Fishing_cFv */
 void dMenu_Fishing_c::wait_move() {
     if (mDoGph_gInf_c::getFader()->getStatus() == 1 && mDoCPd_c::getTrigB(PAD_1)) {
         mStatus = READY_CLOSE;
     }
 }
 
-/* 801C55D8-801C5D3C 1BFF18 0764+00 1/1 0/0 0/0 .text            screenSetBase__15dMenu_Fishing_cFv
- */
 void dMenu_Fishing_c::screenSetBase() {
     static const u64 fish_n[6] = {
         'fish_n_6', 'fish_n_5', 'fish_n_3', 'fish_n_1', 'fish_n_2', 'fish_n_4',
@@ -354,7 +338,6 @@ void dMenu_Fishing_c::screenSetBase() {
     dMeter2Info_getStringKanji(0x5a0, mpInfoNumCaughtString->getStringPtr(), NULL); // "No. Caught"
 }
 
-/* 801C5D3C-801C5EB8 1C067C 017C+00 1/1 0/0 0/0 .text screenSetDoIcon__15dMenu_Fishing_cFv */
 void dMenu_Fishing_c::screenSetDoIcon() {
     static const u64 text_a_tag[5] = {'atext1_1', 'atext1_2', 'atext1_3', 'atext1_4', 'atext1_5'};
     static const u64 text_b_tag[5] = {'btext1_1', 'btext1_2', 'btext1_3', 'btext1_4', 'btext1_5'};
@@ -376,7 +359,6 @@ void dMenu_Fishing_c::screenSetDoIcon() {
     }
 }
 
-/* 801C5EB8-801C5F68 1C07F8 00B0+00 1/1 0/0 0/0 .text setAButtonString__15dMenu_Fishing_cFUs */
 void dMenu_Fishing_c::setAButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
@@ -389,7 +371,6 @@ void dMenu_Fishing_c::setAButtonString(u16 i_stringID) {
     }
 }
 
-/* 801C5F68-801C6018 1C08A8 00B0+00 1/1 0/0 0/0 .text setBButtonString__15dMenu_Fishing_cFUs */
 void dMenu_Fishing_c::setBButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
@@ -402,7 +383,6 @@ void dMenu_Fishing_c::setBButtonString(u16 i_stringID) {
     }
 }
 
-/* 801C6018-801C605C 1C0958 0044+00 1/1 0/0 0/0 .text            getFigure__15dMenu_Fishing_cFi */
 u8 dMenu_Fishing_c::getFigure(int param_0) {
     if (param_0 < 0) {
         param_0 *= -1;
@@ -419,7 +399,6 @@ u8 dMenu_Fishing_c::getFigure(int param_0) {
     return 1;
 }
 
-/* 801C605C-801C6210 1C099C 01B4+00 1/1 0/0 0/0 .text setFishParam__15dMenu_Fishing_cFiUsUc */
 void dMenu_Fishing_c::setFishParam(int i_fishIdx, u16 i_fishCount, u8 i_fishSize) {
     u8 fishCountFigure = getFigure(i_fishCount);
     u8 fishSizeFigure = getFigure(i_fishSize);
@@ -456,7 +435,6 @@ void dMenu_Fishing_c::setFishParam(int i_fishIdx, u16 i_fishCount, u8 i_fishSize
     }
 }
 
-/* 801C6210-801C659C 1C0B50 038C+00 2/2 0/0 0/0 .text            setHIO__15dMenu_Fishing_cFb */
 void dMenu_Fishing_c::setHIO(bool i_useHIO) {
     if (i_useHIO || g_drawHIO.mFishListScreen.mDebug) {
         for (int i = 0; i < MAX_FINDABLE_FISHES; i++) {

@@ -9,9 +9,7 @@
 #include "d/actor/d_a_obj_kbox.h"
 #include "d/d_cc_d.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include "dol2asm.h"
 
-/* 80C3D60C-80C3D630 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__16daObj_Kbox_HIO_cFv */
 daObj_Kbox_HIO_c::daObj_Kbox_HIO_c() {
     mId = -1;
     mWidth = 2.0f;
@@ -28,11 +26,8 @@ void daObj_Kbox_HIO_c::genMessage(JORMContext* ctx) {
 
 static bool l_HIOInit;
 
-/* 80C3F294-80C3F2A0 000054 000C+00 3/4 0/0 0/0 .bss             l_HIO */
 static daObj_Kbox_HIO_c l_HIO;
 
-/* 80C3D630-80C3D74C 000110 011C+00 1/1 0/0 0/0 .text
- * ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c            */
 static void ride_call_back(dBgW* param_1, fopAc_ac_c* param_2, fopAc_ac_c* param_3) {
     if (fopAcM_GetName(param_3) == PROC_ALINK) {
         obj_kbox_class* i_this = (obj_kbox_class*) param_2;
@@ -53,7 +48,6 @@ static void ride_call_back(dBgW* param_1, fopAc_ac_c* param_2, fopAc_ac_c* param
     }
 }
 
-/* 80C3D74C-80C3D8BC 00022C 0170+00 1/1 0/0 0/0 .text            break_eff__FP14obj_kbox_class */
 static void break_eff(obj_kbox_class* i_this) {
     static u16 const particle_id[3] = {
         0x82AB,
@@ -73,8 +67,6 @@ static void break_eff(obj_kbox_class* i_this) {
     }
 }
 
-/* 80C3D8F8-80C3DA18 0003D8 0120+00 1/0 0/0 0/0 .text            daObj_Kbox_Draw__FP14obj_kbox_class
- */
 static int daObj_Kbox_Draw(obj_kbox_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     g_env_light.settingTevStruct(8, &a_this->current.pos, &a_this->tevStr);
@@ -94,7 +86,6 @@ static int daObj_Kbox_Draw(obj_kbox_class* i_this) {
     return 1;
 }
 
-/* 80C3DA18-80C3DAB4 0004F8 009C+00 1/1 0/0 0/0 .text            kbox_ground__FP14obj_kbox_class */
 static void kbox_ground(obj_kbox_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     i_this->mSph.OnCoSetBit();
@@ -109,7 +100,6 @@ static void kbox_ground(obj_kbox_class* i_this) {
     }
 }
 
-/* 80C3DAB4-80C3DBE4 000594 0130+00 1/1 0/0 0/0 .text            kbox_carry__FP14obj_kbox_class */
 static void kbox_carry(obj_kbox_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
@@ -141,7 +131,6 @@ static void kbox_carry(obj_kbox_class* i_this) {
     }
 }
 
-/* 80C3DBE4-80C3DDC4 0006C4 01E0+00 1/1 0/0 0/0 .text            water_check__FP14obj_kbox_class */
 static BOOL water_check(obj_kbox_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     dBgS_LinChk mLinChk;
@@ -170,7 +159,6 @@ static BOOL water_check(obj_kbox_class* i_this) {
     return FALSE;
 }
 
-/* 80C3DE3C-80C3DFAC 00091C 0170+00 1/1 0/0 0/0 .text            kbox_drop__FP14obj_kbox_class */
 static int kbox_drop(obj_kbox_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     BOOL rv = TRUE;
@@ -204,7 +192,6 @@ static int kbox_drop(obj_kbox_class* i_this) {
     return rv;
 }
 
-/* 80C3DFAC-80C3E340 000A8C 0394+00 1/1 0/0 0/0 .text            kbox_float__FP14obj_kbox_class */
 static void kbox_float(obj_kbox_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     cLib_addCalc0(&a_this->speed.y, 1.0f, 0.25f);
@@ -260,7 +247,6 @@ static void kbox_float(obj_kbox_class* i_this) {
     cLib_addCalc2(&i_this->field_0x5a8, fVar10, 1.0f, 5.0f);
 }
 
-/* 80C3E340-80C3E8E8 000E20 05A8+00 1/1 0/0 0/0 .text            action__FP14obj_kbox_class */
 static void action(obj_kbox_class* i_this) {
     fopAc_ac_c* player;
     s8 bVar2;
@@ -410,7 +396,6 @@ static void action(obj_kbox_class* i_this) {
     }
 }
 
-/* 80C3E8E8-80C3EA24 0013C8 013C+00 2/1 0/0 0/0 .text daObj_Kbox_Execute__FP14obj_kbox_class */
 static int daObj_Kbox_Execute(obj_kbox_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     i_this->field_0x578++;
@@ -437,12 +422,10 @@ static int daObj_Kbox_Execute(obj_kbox_class* i_this) {
     return 1;
 }
 
-/* 80C3EA24-80C3EA2C 001504 0008+00 1/0 0/0 0/0 .text daObj_Kbox_IsDelete__FP14obj_kbox_class */
 static int daObj_Kbox_IsDelete(obj_kbox_class* i_this) {
     return 1;
 }
 
-/* 80C3EA2C-80C3EAAC 00150C 0080+00 1/0 0/0 0/0 .text daObj_Kbox_Delete__FP14obj_kbox_class */
 static int daObj_Kbox_Delete(obj_kbox_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     fopAcM_GetID(a_this);
@@ -458,7 +441,6 @@ static int daObj_Kbox_Delete(obj_kbox_class* i_this) {
     return 1;
 }
 
-/* 80C3EAAC-80C3EBCC 00158C 0120+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_kbox_class* i_this = (obj_kbox_class*)a_this;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Obj_kbox", 4);
@@ -483,8 +465,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80C3EBCC-80C3EE98 0016AC 02CC+00 1/0 0/0 0/0 .text            daObj_Kbox_Create__FP10fopAc_ac_c
- */
 static int daObj_Kbox_Create(fopAc_ac_c* a_this) {
     obj_kbox_class* i_this = (obj_kbox_class*)a_this;
     fopAcM_ct(a_this, obj_kbox_class);
@@ -540,7 +520,6 @@ static int daObj_Kbox_Create(fopAc_ac_c* a_this) {
     return rv;
 }
 
-/* 80C3F174-80C3F194 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Kbox_Method */
 static actor_method_class l_daObj_Kbox_Method = {
     (process_method_func)daObj_Kbox_Create,
     (process_method_func)daObj_Kbox_Delete,
@@ -549,7 +528,6 @@ static actor_method_class l_daObj_Kbox_Method = {
     (process_method_func)daObj_Kbox_Draw,
 };
 
-/* 80C3F194-80C3F1C4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_KBOX */
 extern actor_process_profile_definition g_profile_OBJ_KBOX = {
   fpcLy_CURRENT_e,        // mLayerID
   8,                      // mListID

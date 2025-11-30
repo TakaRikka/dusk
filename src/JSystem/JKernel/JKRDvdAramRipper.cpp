@@ -19,8 +19,6 @@ static u8* firstSrcData();
 static u8* nextSrcData(u8*);
 static u32 dmaBufferFlush(u32);
 
-/* 802DA874-802DA918 2D51B4 00A4+00 0/0 3/3 0/0 .text
- * loadToAram__16JKRDvdAramRipperFlUl15JKRExpandSwitchUlUlPUl   */
 JKRAramBlock* JKRDvdAramRipper::loadToAram(s32 entryNumber, u32 address,
                                            JKRExpandSwitch expandSwitch, u32 param_3, u32 param_4,
                                            u32* param_5) {
@@ -32,8 +30,6 @@ JKRAramBlock* JKRDvdAramRipper::loadToAram(s32 entryNumber, u32 address,
     }
 }
 
-/* 802DA918-802DA9C0 2D5258 00A8+00 1/1 0/0 0/0 .text
- * loadToAram__16JKRDvdAramRipperFP10JKRDvdFileUl15JKRExpandSwitchUlUlPUl */
 JKRAramBlock* JKRDvdAramRipper::loadToAram(JKRDvdFile* dvdFile, u32 address,
                                            JKRExpandSwitch expandSwitch, u32 param_3, u32 param_4,
                                            u32* param_5) {
@@ -56,8 +52,6 @@ JKRAramBlock* JKRDvdAramRipper::loadToAram(JKRDvdFile* dvdFile, u32 address,
     return result;
 }
 
-/* 802DA9C0-802DAA74 2D5300 00B4+00 1/1 0/0 0/0 .text
- * loadToAram_Async__16JKRDvdAramRipperFP10JKRDvdFileUl15JKRExpandSwitchPFUl_vUlUlPUl */
 JKRADCommand* JKRDvdAramRipper::loadToAram_Async(JKRDvdFile* dvdFile, u32 address,
                                                  JKRExpandSwitch expandSwitch,
                                                  void (*callback)(u32), u32 param_4, u32 param_5,
@@ -80,14 +74,10 @@ JKRADCommand* JKRDvdAramRipper::loadToAram_Async(JKRDvdFile* dvdFile, u32 addres
     return command;
 }
 
-/* 804343B4-804343C0 0610D4 000C+00 3/3 0/0 0/0 .bss sDvdAramAsyncList__16JKRDvdAramRipper */
 JSUList<JKRADCommand> JKRDvdAramRipper::sDvdAramAsyncList;
 
-/* 804508D0-804508D4 000350 0004+00 3/3 0/0 0/0 .sdata           None */
 bool JKRDvdAramRipper::errorRetry = true;
 
-/* 802DAA74-802DADD8 2D53B4 0364+00 1/1 0/0 0/0 .text
- * callCommand_Async__16JKRDvdAramRipperFP12JKRADCommand        */
 JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
     s32 compression;
     s32 uncompressedSize;
@@ -198,8 +188,6 @@ JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
     return bVar1 == true ? command : NULL;
 }
 
-/* 802DAE48-802DAF1C 2D5788 00D4+00 1/1 0/0 0/0 .text
- * syncAram__16JKRDvdAramRipperFP12JKRADCommandi                */
 bool JKRDvdAramRipper::syncAram(JKRADCommand* command, int param_1) {
     JKRDvdFile* dvdFile = command->mDvdFile;
     OSLockMutex(&dvdFile->mMutex2);
@@ -225,82 +213,57 @@ bool JKRDvdAramRipper::syncAram(JKRADCommand* command, int param_1) {
     return true;
 }
 
-/* 802DAF1C-802DAF5C 2D585C 0040+00 1/1 0/0 0/0 .text            __ct__12JKRADCommandFv */
 JKRADCommand::JKRADCommand() : mLink(this) {
     field_0x48 = 0;
     field_0x4c = 0;
 }
 
-/* 802DAF5C-802DAFE8 2D589C 008C+00 2/2 0/0 0/0 .text            __dt__12JKRADCommandFv */
 JKRADCommand::~JKRADCommand() {
     if (field_0x4c == 1) {
         delete mDvdFile;
     }
 }
 
-/* 804343C0-804343D8 0610E0 0018+00 1/1 0/0 0/0 .bss             decompMutex */
 static OSMutex decompMutex;
 
-/* 804508D4-804508D8 000354 0004+00 1/1 1/1 0/0 .sdata           sSZSBufferSize__16JKRDvdAramRipper
- */
 u32 JKRDvdAramRipper::sSZSBufferSize = 0x00000400;
 
-/* 80451468-8045146C 000968 0004+00 3/3 0/0 0/0 .sbss            szpBuf */
 static u8* szpBuf;
 
-/* 8045146C-80451470 00096C 0004+00 3/3 0/0 0/0 .sbss            szpEnd */
 static u8* szpEnd;
 
-/* 80451470-80451474 000970 0004+00 2/2 0/0 0/0 .sbss            refBuf */
 static u8* refBuf;
 
-/* 80451474-80451478 000974 0004+00 2/2 0/0 0/0 .sbss            refEnd */
 static u8* refEnd;
 
-/* 80451478-8045147C 000978 0004+00 2/2 0/0 0/0 .sbss            refCurrent */
 static u8* refCurrent;
 
-/* 8045147C-80451480 00097C 0004+00 2/2 0/0 0/0 .sbss            dmaBuf */
 static u8* dmaBuf;
 
-/* 80451480-80451484 000980 0004+00 2/2 0/0 0/0 .sbss            dmaEnd */
 static u8* dmaEnd;
 
-/* 80451484-80451488 000984 0004+00 3/3 0/0 0/0 .sbss            dmaCurrent */
 static u8* dmaCurrent;
 
-/* 80451488-8045148C 000988 0004+00 3/3 0/0 0/0 .sbss            srcOffset */
 static u32 srcOffset;
 
-/* 8045148C-80451490 00098C 0004+00 4/4 0/0 0/0 .sbss            transLeft */
 static u32 transLeft;
 
-/* 80451490-80451494 000990 0004+00 3/3 0/0 0/0 .sbss            srcLimit */
 static u8* srcLimit;
 
-/* 80451494-80451498 000994 0004+00 3/3 0/0 0/0 .sbss            srcFile */
 static JKRDvdFile* srcFile;
 
-/* 80451498-8045149C 000998 0004+00 2/2 0/0 0/0 .sbss            fileOffset */
 static u32 fileOffset;
 
-/* 8045149C-804514A0 00099C 0004+00 2/2 0/0 0/0 .sbss            readCount */
 static int readCount;
 
-/* 804514A0-804514A4 0009A0 0004+00 2/2 0/0 0/0 .sbss            maxDest */
 static u32 maxDest;
 
-/* 804514A4-804514A8 0009A4 0004+00 1/1 0/0 0/0 .sbss            None */
 static bool data_804514A4;
 
-/* 804514A8-804514AC 0009A8 0004+00 2/2 0/0 0/0 .sbss            tsPtr */
 static u32* tsPtr;
 
-/* 804514AC-804514B0 0009AC 0004+00 1/1 0/0 0/0 .sbss            tsArea */
 static u32 tsArea;
 
-/* 802DAFE8-802DB160 2D5928 0178+00 1/1 0/0 0/0 .text
- * JKRDecompressFromDVDToAram__FP10JKRDvdFileUlUlUlUlUlPUl      */
 int JKRDecompressFromDVDToAram(JKRDvdFile* dvdFile, u32 param_1, u32 fileSize, u32 uncompressedSize,
                                u32 param_4, u32 param_5, u32* param_6) {
     BOOL level = OSDisableInterrupts();
@@ -338,7 +301,6 @@ int JKRDecompressFromDVDToAram(JKRDvdFile* dvdFile, u32 param_1, u32 fileSize, u
     return result;
 }
 
-/* 802DB160-802DB3E8 2D5AA0 0288+00 1/1 0/0 0/0 .text            decompSZS_subroutine__FPUcUl */
 static int decompSZS_subroutine(u8* src, u32 dest) {
     u32 endAddr;
     u8* copySource;
@@ -438,7 +400,6 @@ static int decompSZS_subroutine(u8* src, u32 dest) {
     return 0;
 }
 
-/* 802DB3E8-802DB49C 2D5D28 00B4+00 1/1 0/0 0/0 .text            firstSrcData__Fv */
 static u8* firstSrcData() {
     srcLimit = szpEnd - 0x19;
     u8* buffer = szpBuf;
@@ -459,7 +420,6 @@ static u8* firstSrcData() {
     return buffer;
 }
 
-/* 802DB49C-802DB580 2D5DDC 00E4+00 1/1 0/0 0/0 .text            nextSrcData__FPUc */
 static u8* nextSrcData(u8* src) {
     u32 size = szpEnd - src;
     u8* dest;
@@ -492,7 +452,6 @@ static u8* nextSrcData(u8* src) {
     return dest;
 }
 
-/* 802DB580-802DB5E8 2D5EC0 0068+00 1/1 0/0 0/0 .text            dmaBufferFlush__FUl */
 static u32 dmaBufferFlush(u32 param_1) {
     if (dmaCurrent == dmaBuf) {
         return 0;

@@ -9,7 +9,6 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_procname.h"
 
-/* 80C46698-80C46768 000078 00D0+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         s32 jointNo = i_joint->getJntNo();
@@ -27,23 +26,19 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80C46768-80C467A4 000148 003C+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjKKanban_cFv */
 void daObjKKanban_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80C467A4-80C46808 000184 0064+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjKKanban_cFv */
 void daObjKKanban_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C46F98-80C46F9C -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "H_KKanban";
 
-/* 80C46F9C-80C46FF0 000004 0054+00 1/1 0/0 0/0 .data            l_tri_src */
 static dCcD_SrcTri l_tri_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x20, 0x11}, 0x0}},  // mObj
@@ -56,7 +51,6 @@ static dCcD_SrcTri l_tri_src = {
     }                                                                 // mTriAttr
 };
 
-/* 80C46808-80C46928 0001E8 0120+00 1/0 0/0 0/0 .text            Create__14daObjKKanban_cFv */
 int daObjKKanban_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -76,7 +70,6 @@ int daObjKKanban_c::Create() {
     return 1;
 }
 
-/* 80C46928-80C469F4 000308 00CC+00 1/1 0/0 0/0 .text            setTG__14daObjKKanban_cFv */
 void daObjKKanban_c::setTG() {
     cXyz tg[3];
 
@@ -90,14 +83,12 @@ void daObjKKanban_c::setTG() {
     mTri.setPos(&tg[0], &tg[1], &tg[2]);
 }
 
-/* 80C469F4-80C46A64 0003D4 0070+00 1/0 0/0 0/0 .text            CreateHeap__14daObjKKanban_cFv */
 int daObjKKanban_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
     return mpModel != NULL ? 1 : 0;
 }
 
-/* 80C46A64-80C46AE4 000444 0080+00 1/1 0/0 0/0 .text            create1st__14daObjKKanban_cFv */
 int daObjKKanban_c::create1st() {
     int phase = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
@@ -109,8 +100,6 @@ int daObjKKanban_c::create1st() {
     return phase;
 }
 
-/* 80C46AE4-80C46C1C 0004C4 0138+00 1/0 0/0 0/0 .text            Execute__14daObjKKanban_cFPPA3_A4_f
- */
 int daObjKKanban_c::Execute(Mtx** i_mtx) {
     field_0x750++;
     mRotX = (field_0x74c + 50.0f) * cM_scos((field_0x74a + 1000) * field_0x750);
@@ -128,7 +117,6 @@ int daObjKKanban_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80C46C1C-80C46CC0 0005FC 00A4+00 1/0 0/0 0/0 .text            Draw__14daObjKKanban_cFv */
 int daObjKKanban_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -138,45 +126,34 @@ int daObjKKanban_c::Draw() {
     return 1;
 }
 
-/* 80C46CC0-80C46CF4 0006A0 0034+00 1/0 0/0 0/0 .text            Delete__14daObjKKanban_cFv */
 int daObjKKanban_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
     return 1;
 }
 
-/* 80C46CF4-80C46DF4 0006D4 0100+00 1/0 0/0 0/0 .text daObjKKanban_create1st__FP14daObjKKanban_c
- */
 static int daObjKKanban_create1st(daObjKKanban_c* i_this) {
     fopAcM_ct(i_this, daObjKKanban_c);
     return i_this->create1st();
 }
 
-/* 80C46EE0-80C46F00 0008C0 0020+00 1/0 0/0 0/0 .text
- * daObjKKanban_MoveBGDelete__FP14daObjKKanban_c                */
 static int daObjKKanban_MoveBGDelete(daObjKKanban_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C46F00-80C46F20 0008E0 0020+00 1/0 0/0 0/0 .text
- * daObjKKanban_MoveBGExecute__FP14daObjKKanban_c               */
 static int daObjKKanban_MoveBGExecute(daObjKKanban_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C46F20-80C46F4C 000900 002C+00 1/0 0/0 0/0 .text daObjKKanban_MoveBGDraw__FP14daObjKKanban_c
- */
 static int daObjKKanban_MoveBGDraw(daObjKKanban_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C46FF0-80C47010 -00001 0020+00 1/0 0/0 0/0 .data            daObjKKanban_METHODS */
 static actor_method_class daObjKKanban_METHODS = {
     (process_method_func)daObjKKanban_create1st,     (process_method_func)daObjKKanban_MoveBGDelete,
     (process_method_func)daObjKKanban_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjKKanban_MoveBGDraw,
 };
 
-/* 80C47010-80C47040 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_KKanban */
 extern actor_process_profile_definition g_profile_Obj_KKanban = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

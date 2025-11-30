@@ -6,8 +6,8 @@
 
 class daObjWchain_shape_c : public J3DPacket {
 public:
-    /* 80D31418 */ void draw();
-    /* 80D318C0 */ ~daObjWchain_shape_c() {}
+    void draw();
+    ~daObjWchain_shape_c() {}
 };
 
 /**
@@ -20,14 +20,14 @@ public:
  */
 class daObjWchain_c : public fopAc_ac_c {
 public:
-    /* 80D2FEF8 */ int createHeap();
-    /* 80D2FFBC */ cPhs__Step create();
-    /* 80D30434 */ ~daObjWchain_c();
-    /* 80D30534 */ void setMatrix();
-    /* 80D305E4 */ s16 getChainAngleZ(cXyz*, int);
-    /* 80D3080C */ void setChainPos();
-    /* 80D310AC */ int execute();
-    /* 80D31810 */ int draw();
+    int createHeap();
+    cPhs__Step create();
+    ~daObjWchain_c();
+    void setMatrix();
+    s16 getChainAngleZ(cXyz*, int);
+    void setChainPos();
+    int execute();
+    int draw();
 
     GXLightObj* getLightObj() { return &tevStr.mLightObj.mLightObj; }
     J3DModelData* getChainModelData() { return mpChainModelData; }

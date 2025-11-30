@@ -18,17 +18,17 @@
  */
 class daLv1Cdl00_c : public fopAc_ac_c {
 public:
-    /* 80C55D80 */ void setBaseMtx();
-    /* 80C55E08 */ int CreateHeap();
-    /* 80C55E74 */ cPhs__Step create();
-    /* 80C561A0 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80C561C0 */ void lightInit();
-    /* 80C56268 */ void setLight();
-    /* 80C562A0 */ void cutLight();
-    /* 80C562D8 */ void pointLightProc();
-    /* 80C56388 */ int Execute();
-    /* 80C567EC */ int Draw();
-    /* 80C56890 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    static int createHeapCallBack(fopAc_ac_c*);
+    void lightInit();
+    void setLight();
+    void cutLight();
+    void pointLightProc();
+    int Execute();
+    int Draw();
+    int Delete();
 
 private:
     /* 0x568 */ request_of_phase_process_class mPhase;
@@ -54,8 +54,8 @@ STATIC_ASSERT(sizeof(daLv1Cdl00_c) == 0x754);
 
 class daLv1Cdl00_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C55D0C */ daLv1Cdl00_HIO_c();
-    /* 80C56970 */ ~daLv1Cdl00_HIO_c() {}
+    daLv1Cdl00_HIO_c();
+    ~daLv1Cdl00_HIO_c() {}
 
     void genMessage(JORMContext*);
 

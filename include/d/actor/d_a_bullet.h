@@ -32,20 +32,20 @@ public:
     /* 0x956 */ u8 mType;
     /* 0x957 */ u8 field_0x957;
 
-    /* 8065594C */ virtual ~daBullet_c();
-    /* 80655B08 */ int create();
-    /* 80655E5C */ BOOL CreateHeap();
-    /* 80655EDC */ int Delete();
-    /* 80655F10 */ int Execute();
-    /* 806560FC */ int Draw();
-    /* 80656160 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80656180 */ const char* getResName();
-    /* 80656198 */ const char* getBmdName();
-    /* 806561B0 */ int getTypeFromParam();
-    /* 806561D0 */ void initialize();
-    /* 80656378 */ int setProcess(processFn);
-    /* 80656420 */ int wait(void*);
-    /* 806564B8 */ int move(void*);
+    virtual ~daBullet_c();
+    int create();
+    BOOL CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    const char* getResName();
+    const char* getBmdName();
+    int getTypeFromParam();
+    void initialize();
+    int setProcess(processFn);
+    int wait(void*);
+    int move(void*);
 
     static dCcD_SrcGObjInf const mCcDObjInfo;
     static dCcD_SrcSph mCcDSph;
@@ -64,7 +64,7 @@ struct daBullet_HIOParam {
 
 class daBullet_Param_c {
 public:
-    /* 806566A8 */ virtual ~daBullet_Param_c() {}
+    virtual ~daBullet_Param_c() {}
 
     static daBullet_HIOParam const m;
 };

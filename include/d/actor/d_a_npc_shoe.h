@@ -9,7 +9,7 @@ struct daNpcShoe_HIOParam {
 
 class daNpcShoe_Param_c {
 public:
-    /* 80AEA344 */ virtual ~daNpcShoe_Param_c() {}
+    virtual ~daNpcShoe_Param_c() {}
 
     static const daNpcShoe_HIOParam m;
 };
@@ -60,30 +60,30 @@ public:
         /* 0x05 */ MOT_SIT_TO_WOLF_A,
     };
 
-    /* 80AE794C */ daNpcShoe_c();
-    /* 80AE7B60 */ ~daNpcShoe_c();
-    /* 80AE7D48 */ cPhs__Step Create();
-    /* 80AE7FD8 */ BOOL CreateHeap();
-    /* 80AE81E8 */ int Delete();
-    /* 80AE821C */ int Execute();
-    /* 80AE8308 */ int Draw();
-    /* 80AE840C */ bool ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80AE8598 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AE85B8 */ static BOOL ctrlJointCallBack(J3DJoint*, int);
-    /* 80AE8604 */ void setMotion(int, f32, BOOL);
-    /* 80AE864C */ void reset();
-    /* 80AE895C */ inline int setAction(actionFunc);
-    /* 80AE8A04 */ bool wait(void*);
-    /* 80AE8E24 */ bool fear(void*);
-    /* 80AE8ED4 */ bool talk(void*);
-    /* 80AE9094 */ bool demo(void*);
-    /* 80AE92E8 */ void setParam();
-    /* 80AE93A0 */ BOOL main();
-    /* 80AE9624 */ void setAttnPos();
-    /* 80AE9820 */ inline void lookat();
-    /* 80AE9A00 */ void setMotionAnm(int, f32);
-    /* 80AE9AD0 */ inline BOOL drawDbgInfo();
-    /* 80AEA340 */ inline void adjustShapeAngle() {}
+    daNpcShoe_c();
+    ~daNpcShoe_c();
+    cPhs__Step Create();
+    BOOL CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    bool ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static BOOL ctrlJointCallBack(J3DJoint*, int);
+    void setMotion(int, f32, BOOL);
+    void reset();
+    inline int setAction(actionFunc);
+    bool wait(void*);
+    bool fear(void*);
+    bool talk(void*);
+    bool demo(void*);
+    void setParam();
+    BOOL main();
+    void setAttnPos();
+    inline void lookat();
+    void setMotionAnm(int, f32);
+    inline BOOL drawDbgInfo();
+    inline void adjustShapeAngle() {}
 
     s16 getMessageNo() { return fopAcM_GetParam(this) >> 0x10; }
 

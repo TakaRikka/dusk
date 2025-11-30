@@ -11,12 +11,12 @@ public:
         TYPE_OBJECT_e = 3,
     };
 
-    /* 805A3B24 */ int create();
-    /* 805A3DA0 */ ~daTagHjump_c();
-    /* 805A3E70 */ int execute();
+    int create();
+    ~daTagHjump_c();
+    int execute();
 
-    /* 805A3AB8 */ virtual int CreateHeap();
-    /* 805A4154 */ virtual int Draw();
+    virtual int CreateHeap();
+    virtual int Draw();
 
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpModel;

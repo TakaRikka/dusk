@@ -25,9 +25,9 @@ public:
         RESTYPE_Unk4 = 4,
     };
     JUTResReference() { mType = 0; }
-    /* 802DE078 */ void* getResource(JSUInputStream*, u32, JKRArchive*);
-    /* 802DE120 */ void* getResource(void const*, u32, JKRArchive*);
-    /* 802DE1BC */ void* getResource(u32, JKRArchive*);
+    void* getResource(JSUInputStream*, u32, JKRArchive*);
+    void* getResource(void const*, u32, JKRArchive*);
+    void* getResource(u32, JKRArchive*);
 };
 // only rough size known due to getPointer__7J2DPaneFP20JSURandomInputStreamUlP10JKRArchive
 

@@ -19,13 +19,13 @@ namespace JStage {
     * 
     */
     struct TSystem : public TObject {
-        /* 80280E90 */ virtual ~TSystem() = 0;
-        /* 80280EF0 */ virtual s32 JSGFGetType() const;
-        /* 80280EF8 */ virtual int JSGFindObject(JStage::TObject**, char const*, JStage::TEObject) const;
-        /* 80280F00 */ virtual bool JSGCreateObject(char const*, JStage::TEObject, u32);
-        /* 80280F08 */ virtual void JSGDestroyObject(JStage::TObject*);
-        /* 80280F0C */ virtual bool JSGGetSystemData(u32);
-        /* 80280F14 */ virtual void JSGSetSystemData(u32, u32);
+        virtual ~TSystem() = 0;
+        virtual s32 JSGFGetType() const;
+        virtual int JSGFindObject(JStage::TObject**, char const*, JStage::TEObject) const;
+        virtual bool JSGCreateObject(char const*, JStage::TEObject, u32);
+        virtual void JSGDestroyObject(JStage::TObject*);
+        virtual bool JSGGetSystemData(u32);
+        virtual void JSGSetSystemData(u32, u32);
     };
 };
 

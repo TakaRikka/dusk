@@ -14,7 +14,6 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-/* 803A7240-803A7250 004360 0010+00 0/0 0/0 6/6 .data            ZeroQuat */
 Quaternion ZeroQuat = {
     0.0f,
     0.0f,
@@ -63,7 +62,6 @@ void STControl::Xinit() {
     field_0x2a = mFirstWaitTime;
 }
 
-/* 8003212C-8003215C 02CA6C 0030+00 1/1 0/0 0/0 .text            Yinit__9STControlFv */
 void STControl::Yinit() {
     field_0x10 = 0;
     mDirectionTrig &= ~0x0C;
@@ -88,7 +86,6 @@ s16 CSTControl::getAngleStick() {
     return mDoCPd_c::getSubStickAngle(PAD_1);
 }
 
-/* 8003219C-8003242C 02CADC 0290+00 0/0 24/24 0/0 .text            checkTrigger__9STControlFv */
 u8 STControl::checkTrigger() {
     field_0x0d = mDirectionTrig;
     f32 stickValue = getValueStick();
@@ -227,7 +224,6 @@ bool STControl::checkDownTrigger() {
     return false;
 }
 
-/* 8003261C-80032654 02CF5C 0038+00 0/0 0/0 1/1 .text            dLib_getEventSwitchNo__Fi */
 u8 dLib_getEventSwitchNo(int param_0) {
     dStage_MapEvent_dt_c* mapEvent = dEvt_control_c::searchMapEventData(param_0);
     if (mapEvent != NULL) {
@@ -236,8 +232,6 @@ u8 dLib_getEventSwitchNo(int param_0) {
     return 0xff;
 }
 
-/* 80032654-80032738 02CF94 00E4+00 0/0 0/0 8/8 .text
- * dLib_checkActorInRectangle__FP10fopAc_ac_cP10fopAc_ac_cPC4cXyzPC4cXyz */
 BOOL dLib_checkActorInRectangle(fopAc_ac_c* param_0, fopAc_ac_c* param_1, cXyz const* param_2,
                                 cXyz const* param_3) {
     cXyz local_24 = param_0->current.pos - param_1->current.pos;
@@ -251,10 +245,8 @@ BOOL dLib_checkActorInRectangle(fopAc_ac_c* param_0, fopAc_ac_c* param_1, cXyz c
     return FALSE;
 }
 
-/* 80032738-80032804 02D078 00CC+00 0/0 4/4 0/0 .text
- * dLib_getExpandSizeFromAramArchive__FP14JKRAramArchivePCc     */
 u32 dLib_getExpandSizeFromAramArchive(JKRAramArchive* i_aramArchive, char const* param_2) {
-    u8 header[32] __attribute__((aligned(32)));
+    u8 header[32] ATTRIBUTE_ALIGN(32);
     JUT_ASSERT(1252, i_aramArchive != NULL);
     u32 address = i_aramArchive->getAramAddress(param_2);
     if (address == 0) {
@@ -273,16 +265,12 @@ u32 dLib_getExpandSizeFromAramArchive(JKRAramArchive* i_aramArchive, char const*
     return uVar5;
 }
 
-/* 80450DD8-80450DDC 0002D8 0004+00 2/2 0/0 0/0 .sbss            m_diffTime__11dLib_time_c */
 OSTime dLib_time_c::m_diffTime;
 
-/* 80450DE0-80450DE4 0002E0 0004+00 3/3 0/0 0/0 .sbss            m_stopTime__11dLib_time_c */
 OSTime dLib_time_c::m_stopTime;
 
-/* 80450DE8-80450DF0 0002E8 0008+00 3/3 0/0 0/0 .sbss            None */
 bool dLib_time_c::m_timeStopped;
 
-/* 80032804-80032880 02D144 007C+00 0/0 8/8 0/0 .text            getTime__11dLib_time_cFv */
 OSTime dLib_time_c::getTime() {
     if (!m_timeStopped) {
         return OSGetTime() - m_diffTime;
@@ -294,7 +282,6 @@ OSTime dLib_time_c::getTime() {
     return time - m_diffTime;
 }
 
-/* 80032880-800328BC 02D1C0 003C+00 0/0 1/1 0/0 .text            stopTime__11dLib_time_cFv */
 void dLib_time_c::stopTime() {
     if (!m_timeStopped) {
         m_stopTime = OSGetTime();
@@ -302,7 +289,6 @@ void dLib_time_c::stopTime() {
     }
 }
 
-/* 800328BC-80032918 02D1FC 005C+00 0/0 1/1 0/0 .text            startTime__11dLib_time_cFv */
 void dLib_time_c::startTime() {
     if (m_timeStopped) {
         m_diffTime += OSGetTime() - m_stopTime;

@@ -2,6 +2,7 @@
 #define _REVOLUTION_DVD_H_
 
 #include <revolution/types.h>
+#include <revolution/esp.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -136,6 +137,26 @@ typedef struct DVDDriveInfo {
     /* 0x08 */ u8 padding[24];
 } DVDDriveInfo;
 
+typedef struct DVDGamePartition {
+    ESTicket ticket;
+    u32 tmdSize;
+    ESTitleMeta* tmd;
+    u32 certBlobSize;
+    void* certBlob;      
+    u8* h3Hashes;
+    u8* encryptedArea;
+} DVDGamePartition;
+
+typedef struct DVDPartitionInfo {
+    DVDGamePartition* gamePartition;
+    u32 type;
+} DVDPartitionInfo;
+
+typedef struct DVDGameTOC {
+    u32 numGamePartitions;
+    DVDPartitionInfo* partitionInfos;
+} DVDGameTOC;
+
 // DVD
 void DVDInit(void);
 int DVDReadAbsAsyncPrio(DVDCommandBlock* block, void* addr, s32 length, s32 offset, DVDCBCallback callback, s32 prio);
@@ -228,6 +249,13 @@ u32 DVDLowGetCoverStatus(void);
 
 // DVD QUEUE
 void DVDDumpWaitingQueue(void);
+
+
+// unsorted revo
+BOOL DVDLowUnencryptedRead(void*, u32, u32, DVDLowCallback);
+BOOL DVDLowClosePartition(DVDLowCallback);
+BOOL DVDLowOpenPartitionWithTmdAndTicketView(const u32, const ESTicketView* const, const u32, const ESTitleMeta* const, const u32, const u8* const, DVDLowCallback);
+BOOL DVDLowOpenPartition(const u32, const ESTicket* const, const u32, const u8* const, ESTitleMeta*, DVDLowCallback);
 
 #ifdef __cplusplus
 }

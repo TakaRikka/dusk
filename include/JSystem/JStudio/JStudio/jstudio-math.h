@@ -6,9 +6,9 @@
 
 namespace JStudio {
 namespace math {
-    /* 802859DC */ void getRotation_xyz(MtxP, f32, f32, f32);
-    /* 80285B44 */ void getTransformation_SRxyzT(MtxP, Vec const&, Vec const&, Vec const&);
-    /* 80285BCC */ void getFromTransformation_SRxyzT(Vec*, Vec*, Vec*, CMtxP);
+    void getRotation_xyz(MtxP, f32, f32, f32);
+    void getTransformation_SRxyzT(MtxP, Vec const&, Vec const&, Vec const&);
+    void getFromTransformation_SRxyzT(Vec*, Vec*, Vec*, CMtxP);
 
     inline void getRotation_y(Mtx param_0, f32 param_1) {
         MTXRotRad(param_0, 0x79, DEG_TO_RAD(param_1));

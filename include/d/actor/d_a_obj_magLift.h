@@ -24,26 +24,26 @@ public:
         MODE_MOVE_WAIT_e
     };
 
-    /* 80C8DAA0 */ void setBaseMtx();
-    /* 80C8DB28 */ int CreateHeap();
-    /* 80C8DB94 */ int create();
-    /* 80C8DD38 */ int Execute(Mtx**);
-    /* 80C8DD88 */ void moveLift();
-    /* 80C8DE98 */ void modeAcc();
-    /* 80C8DF20 */ void init_modeMove();
-    /* 80C8DF2C */ void modeMove();
-    /* 80C8E1EC */ void init_modeBrk();
-    /* 80C8E1F8 */ void modeBrk();
-    /* 80C8E260 */ void init_modeWaitInit();
-    /* 80C8E26C */ void modeWaitInit();
-    /* 80C8E2A0 */ void init_modeWait();
-    /* 80C8E2AC */ void modeWait();
-    /* 80C8E2B8 */ void init_modeMoveWait();
-    /* 80C8E2C4 */ void modeMoveWait();
-    /* 80C8E318 */ void modeDead();
-    /* 80C8E31C */ void setNextPoint();
-    /* 80C8E450 */ int Draw();
-    /* 80C8E4F4 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    void moveLift();
+    void modeAcc();
+    void init_modeMove();
+    void modeMove();
+    void init_modeBrk();
+    void modeBrk();
+    void init_modeWaitInit();
+    void modeWaitInit();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMoveWait();
+    void modeMoveWait();
+    void modeDead();
+    void setNextPoint();
+    int Draw();
+    int Delete();
 
     int getMoveSpeed() { return fopAcM_GetParamBit(this, 0x8, 4); }
 
@@ -67,8 +67,8 @@ STATIC_ASSERT(sizeof(daMagLift_c) == 0x5d4);
 
 class daMagLift_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C8DA2C */ daMagLift_HIO_c();
-    /* 80C8E5B0 */ virtual ~daMagLift_HIO_c() {}
+    daMagLift_HIO_c();
+    virtual ~daMagLift_HIO_c() {}
 
     void genMessage(JORMContext*);
 

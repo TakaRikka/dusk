@@ -43,7 +43,6 @@ typedef struct {
     int precision;
 } print_format;
 
-/* 80368288-8036878C 362BC8 0504+00 3/1 0/0 0/0 .text            parse_format */
 static const char* parse_format(const char* format_string, va_list* arg, print_format* format) {
     print_format f;
     const char* s = format_string;
@@ -282,7 +281,6 @@ static const char* parse_format(const char* format_string, va_list* arg, print_f
     return ((const char*)s + 1);
 }
 
-/* 80368030-80368288 362970 0258+00 3/2 0/0 0/0 .text            long2str */
 static char* long2str(signed long num, char* buff, print_format format) {
     unsigned long unsigned_num, base;
     char* p;
@@ -386,7 +384,6 @@ static char* long2str(signed long num, char* buff, print_format format) {
     return p;
 }
 
-/* 80367D1C-80368030 36265C 0314+00 2/1 0/0 0/0 .text            longlong2str */
 static char* longlong2str(signed long long num, char* pBuf, print_format fmt) {
     unsigned long long unsigned_num, base;
     char* p;
@@ -488,7 +485,6 @@ static char* longlong2str(signed long long num, char* pBuf, print_format fmt) {
     return p;
 }
 
-/* 803679E4-80367D1C 362324 0338+00 1/1 0/0 0/0 .text            double2hex */
 static char* double2hex(long double num, char* buff, print_format format) {
     int offset, what_nibble = 0;
     char* wrk_byte_ptr;
@@ -617,7 +613,6 @@ static char* double2hex(long double num, char* buff, print_format format) {
     return p;
 }
 
-/* 803678B8-803679E4 3621F8 012C+00 1/1 0/0 0/0 .text            round_decimal */
 static void round_decimal(decimal* dec, int new_length) {
     char c;
     char* p;
@@ -671,7 +666,6 @@ static void round_decimal(decimal* dec, int new_length) {
     dec->sig.length = new_length;
 }
 
-/* 8036719C-803678B8 361ADC 071C+00 1/1 0/0 0/0 .text            float2str */
 static char* float2str(long double num, char* buff, print_format format) {
     decimal dec;
     decform form;
@@ -893,7 +887,6 @@ static char* float2str(long double num, char* buff, print_format format) {
     return p;
 }
 
-/* 80366A28-8036719C 361368 0774+00 6/6 0/0 0/0 .text            __pformatter */
 static int __pformatter(void* (*WriteProc)(void*, const char*, size_t), void* WriteProcArg,
                         const char* format_str, va_list arg) {
     int num_chars, chars_written, field_width;
@@ -1164,12 +1157,10 @@ static int __pformatter(void* (*WriteProc)(void*, const char*, size_t), void* Wr
     return chars_written;
 }
 
-/* 803669D0-80366A28 361310 0058+00 3/3 0/0 0/0 .text            __FileWrite */
 static void* __FileWrite(void* pFile, const char* pBuffer, size_t char_num) {
     return (fwrite(pBuffer, 1, char_num, (FILE*)pFile) == char_num ? pFile : 0);
 }
 
-/* 80366964-803669D0 3612A4 006C+00 3/3 0/0 0/0 .text            __StringWrite */
 static void* __StringWrite(void* pCtrl, const char* pBuffer, size_t char_num) {
     size_t chars;
     __OutStrCtrl* ctrl = (__OutStrCtrl*)pCtrl;
@@ -1183,7 +1174,6 @@ static void* __StringWrite(void* pCtrl, const char* pBuffer, size_t char_num) {
     return (void*)1;
 }
 
-/* 8036687C-80366964 3611BC 00E8+00 0/0 4/4 0/0 .text            printf */
 int printf(const char* format, ...) {
     int res;
 
@@ -1201,7 +1191,6 @@ int printf(const char* format, ...) {
     return res;
 }
 
-/* 8036679C-8036687C 3610DC 00E0+00 0/0 9/9 0/0 .text            fprintf */
 int fprintf(FILE* file, const char* format, ...) {
     int res;
 
@@ -1219,7 +1208,6 @@ int fprintf(FILE* file, const char* format, ...) {
     return res;
 }
 
-/* 80366704-8036679C 361044 0098+00 0/0 2/2 0/0 .text            vprintf */
 int vprintf(const char* format, va_list arg) {
     int ret;
 
@@ -1233,7 +1221,6 @@ int vprintf(const char* format, va_list arg) {
     return ret;
 }
 
-/* 80366690-80366704 360FD0 0074+00 0/0 8/8 0/0 .text            vsnprintf */
 int vsnprintf(char* s, size_t n, const char* format, va_list arg) {
     int end;
     __OutStrCtrl osc;
@@ -1250,14 +1237,12 @@ int vsnprintf(char* s, size_t n, const char* format, va_list arg) {
     return end;
 }
 
-/* 803665BC-80366690 360EFC 00D4+00 0/0 19/19 0/0 .text            snprintf */
 int snprintf(char* s, size_t n, const char* format, ...) {
     va_list args;
     va_start(args, format);
     return vsnprintf(s, n, format, args);
 }
 
-/* 803664DC-803665BC 360E1C 00E0+00 0/0 32/32 14/14 .text            sprintf */
 int sprintf(char* s, const char* format, ...) {
     va_list args;
     va_start(args, format);

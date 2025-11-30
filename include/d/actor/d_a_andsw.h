@@ -29,10 +29,10 @@ public:
         return fopAcM_GetParamBit(this,24,8);
     }
 
-    /* 80457978 */ int Create();
-    /* 804579B8 */ int create();
-    /* 80457A20 */ int execute();
-    /* 80457ABC */ int _delete();
+    int Create();
+    int create();
+    int execute();
+    int _delete();
 
     /* 0x568 */ u8 mSwNo;
     /* 0x568 */ u8 mSwNo2;

@@ -16,22 +16,22 @@
  */
 class daObjOCTHASHI_c : public dBgS_MoveBgActor {
 public:
-    /* 80CA4BB8 */ void initCcCylinder();
-    /* 80CA4DFC */ void SetCoSph();
-    /* 80CA4EA4 */ void SetCoCyl();
-    /* 80CA4F24 */ void HakaiSet2(int);
-    /* 80CA52F0 */ void HakaiMotion2();
-    /* 80CA54E4 */ void CylAction();
-    /* 80CA55C4 */ void SphAction();
-    /* 80CA5844 */ void SphAction2();
-    /* 80CA58F4 */ void Action();
-    /* 80CA59BC */ void setBaseMtx();
-    /* 80CA5AE0 */ int CreateHeap();
-    /* 80CA5B98 */ int create();
-    /* 80CA62A4 */ int Create();
-    /* 80CA62F8 */ int Execute(Mtx**);
-    /* 80CA636C */ int Draw();
-    /* 80CA6444 */ int Delete();
+    void initCcCylinder();
+    void SetCoSph();
+    void SetCoCyl();
+    void HakaiSet2(int);
+    void HakaiMotion2();
+    void CylAction();
+    void SphAction();
+    void SphAction2();
+    void Action();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
 private:
     /* 0x5a0 */ cXyz field_0x5a0[8];

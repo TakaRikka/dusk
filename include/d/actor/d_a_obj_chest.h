@@ -22,18 +22,18 @@ public:
         /* 2 */ ACTION_END,
     };
 
-    /* 80BC8EF8 */ void initBaseMtx();
-    /* 80BC8F34 */ void setBaseMtx();
-    /* 80BC9088 */ int Create();
-    /* 80BC9240 */ int CreateHeap();
-    /* 80BC92B0 */ int create();
-    /* 80BC970C */ int Execute(Mtx**);
-    /* 80BC9764 */ void action();
-    /* 80BC9808 */ void actionWait();
-    /* 80BC9BF0 */ void actionMove();
-    /* 80BC9DFC */ void actionEnd();
-    /* 80BC9E00 */ int Draw();
-    /* 80BC9EA4 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    void action();
+    void actionWait();
+    void actionMove();
+    void actionEnd();
+    int Draw();
+    int Delete();
 
     void setAction(u8 i_action) { mAction = i_action; }
     u8 getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }

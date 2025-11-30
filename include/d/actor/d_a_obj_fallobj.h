@@ -24,25 +24,25 @@ public:
         ACTION_FOLLOW_FALL,
     };
 
-    /* 80BE39B8 */ void initBaseMtx();
-    /* 80BE3A24 */ void setBaseMtx();
-    /* 80BE3A88 */ int Create();
-    /* 80BE3BA8 */ s16 getFallTime();
-    /* 80BE3BD4 */ f32 getFallHeight();
-    /* 80BE3C28 */ int CreateHeap();
-    /* 80BE3C98 */ int create1st();
-    /* 80BE3D24 */ int Execute(Mtx**);
-    /* 80BE4138 */ void action();
-    /* 80BE4228 */ bool action_wait(bool);
-    /* 80BE42C0 */ bool action_fallStart();
-    /* 80BE43E4 */ void action_countdown();
-    /* 80BE45F4 */ void action_fall();
-    /* 80BE466C */ void action_end();
-    /* 80BE4670 */ void action_follow_fall();
-    /* 80BE4700 */ bool checkHang();
-    /* 80BE47A0 */ bool checkHang2();
-    /* 80BE48A4 */ int Draw();
-    /* 80BE4948 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    s16 getFallTime();
+    f32 getFallHeight();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void action();
+    bool action_wait(bool);
+    bool action_fallStart();
+    void action_countdown();
+    void action_fall();
+    void action_end();
+    void action_follow_fall();
+    bool checkHang();
+    bool checkHang2();
+    int Draw();
+    int Delete();
 
     u32 getTime() { return fopAcM_GetParamBit(this, 8, 8); }
     u32 getPos() { return fopAcM_GetParamBit(this, 0x14, 8); }

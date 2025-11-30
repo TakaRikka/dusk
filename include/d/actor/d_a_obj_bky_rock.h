@@ -36,25 +36,25 @@ public:
         MODE_2,
     };
 
-    /* 80BB6858 */ daBkyRock_c();
-    /* 80BB6B5C */ virtual ~daBkyRock_c();
-    /* 80BB6C4C */ int create();
-    /* 80BB6D60 */ int execute();
-    /* 80BB6D84 */ int draw();
-    /* 80BB6EB8 */ int Delete();
-    /* 80BB6F64 */ void setModelMtx();
-    /* 80BB6FD4 */ int createHeap();
-    /* 80BB7144 */ void init();
-    /* 80BB72FC */ void middleExe();
-    /* 80BB7364 */ void exeModeNoDamage();
-    /* 80BB7458 */ void exeModeDamage();
-    /* 80BB75D8 */ void exeModePiece();
-    /* 80BB7690 */ bool chkHitBombArrow();
-    /* 80BB776C */ void initChangeModeBefore();
-    /* 80BB77FC */ void initChangeModeAfter();
-    /* 80BB7818 */ void pieceMove();
-    /* 80BB7988 */ void pieceMoveInit();
-    /* 80BB7C18 */ void callBombEmt(int, u16 const*);
+    daBkyRock_c();
+    virtual ~daBkyRock_c();
+    int create();
+    int execute();
+    int draw();
+    int Delete();
+    void setModelMtx();
+    int createHeap();
+    void init();
+    void middleExe();
+    void exeModeNoDamage();
+    void exeModeDamage();
+    void exeModePiece();
+    bool chkHitBombArrow();
+    void initChangeModeBefore();
+    void initChangeModeAfter();
+    void pieceMove();
+    void pieceMoveInit();
+    void callBombEmt(int, u16 const*);
 
     u8 getSwBit0() { return fopAcM_GetParamBit(this, 4, 8); }
     u8 getSwBit1() { return fopAcM_GetParamBit(this, 12, 8); }

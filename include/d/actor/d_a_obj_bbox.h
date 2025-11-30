@@ -15,14 +15,14 @@
  */
 class daObjBBox_c : public dBgS_MoveBgActor {
 public:
-    /* 80BACD38 */ void initBaseMtx();
-    /* 80BACD74 */ void setBaseMtx();
-    /* 80BACDD8 */ int Create();
-    /* 80BACE50 */ int CreateHeap();
-    /* 80BACEC0 */ int create1st();
-    /* 80BAD0C0 */ int Execute(Mtx**);
-    /* 80BAD234 */ int Draw();
-    /* 80BAD2D8 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     u32 getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
 

@@ -10,8 +10,8 @@ class daTagLv8Gate_c : public fopAc_ac_c {
 public:
     inline ~daTagLv8Gate_c();
 
-    /* 80D51C58 */ int createHeap();
-    /* 80D51F48 */ int execute();
+    int createHeap();
+    int execute();
 
     void initBaseMtx();
     void create_init();

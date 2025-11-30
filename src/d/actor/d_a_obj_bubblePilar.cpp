@@ -9,10 +9,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
 
-/* 80BC4224-80BC422C 000014 0008+00 1/1 0/0 0/0 .bss             l_HIO */
 static daBubbPilar_HIO_c l_HIO;
 
-/* 80BC4070-80BC40A0 000000 0030+00 3/3 0/0 0/0 .rodata          mCcDObjInfo__13daBubbPilar_c */
 const dCcD_SrcGObjInf daBubbPilar_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0x20, 0x11}, {0}}},
     {dCcD_SE_NONE, 0, 1, 0, 0},
@@ -20,19 +18,16 @@ const dCcD_SrcGObjInf daBubbPilar_c::mCcDObjInfo = {
     {0},
 };
 
-/* 80BC40DC-80BC4120 000020 0044+00 2/2 0/0 0/0 .data            mCcDCyl__13daBubbPilar_c */
 dCcD_SrcCyl daBubbPilar_c::mCcDCyl = {
     daBubbPilar_c::mCcDObjInfo,
     {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
 };
 
-/* 80BC33EC-80BC3418 0000EC 002C+00 1/1 0/0 0/0 .text            __ct__17daBubbPilar_HIO_cFv */
 daBubbPilar_HIO_c::daBubbPilar_HIO_c() {
     field_0x4 = 20;
     field_0x5 = 0;
 }
 
-/* 80BC3460-80BC3518 000160 00B8+00 2/2 0/0 0/0 .text            setBaseMtx__13daBubbPilar_cFv */
 void daBubbPilar_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -42,7 +37,6 @@ void daBubbPilar_c::setBaseMtx() {
     mModels[mModelMode]->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80BC3518-80BC35D0 000218 00B8+00 1/0 0/0 0/0 .text            CreateHeap__13daBubbPilar_cFv */
 int daBubbPilar_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("M_Crack", 4);
     JUT_ASSERT(226, modelData != NULL);
@@ -59,7 +53,6 @@ int daBubbPilar_c::CreateHeap() {
     return 1;
 }
 
-/* 80BC35D0-80BC3848 0002D0 0278+00 1/1 0/0 0/0 .text            create__13daBubbPilar_cFv */
 int daBubbPilar_c::create() {
     fopAcM_ct(this, daBubbPilar_c);
     int rv = dComIfG_resLoad(&mPhase, "M_Crack");
@@ -104,8 +97,6 @@ int daBubbPilar_c::create() {
     return rv;
 }
 
-/* 80BC3934-80BC3AB8 000634 0184+00 1/0 0/0 0/0 .text            Execute__13daBubbPilar_cFPPA3_A4_f
- */
 int daBubbPilar_c::Execute(Mtx** param_1) {
     static daBubbPilar_c::modeProc const mode_proc[2] = {
         &daBubbPilar_c::modeWait,
@@ -141,12 +132,10 @@ int daBubbPilar_c::Execute(Mtx** param_1) {
     return 1;
 }
 
-/* 80BC3AB8-80BC3AC4 0007B8 000C+00 2/2 0/0 0/0 .text            initModeWait__13daBubbPilar_cFv */
 void daBubbPilar_c::initModeWait() {
     mMode = 0;
 }
 
-/* 80BC3AC4-80BC3C74 0007C4 01B0+00 1/0 0/0 0/0 .text            modeWait__13daBubbPilar_cFv */
 void daBubbPilar_c::modeWait() {
     if (mArg0 == 0) {
         s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
@@ -168,7 +157,6 @@ void daBubbPilar_c::modeWait() {
     }
 }
 
-/* 80BC3C74-80BC3C98 000974 0024+00 2/2 0/0 0/0 .text            initModeEffOn__13daBubbPilar_cFv */
 void daBubbPilar_c::initModeEffOn() {
     if (mArg0 == 0) {
         mCyl.OffTgSetBit();
@@ -176,14 +164,12 @@ void daBubbPilar_c::initModeEffOn() {
     mMode = 1;
 }
 
-/* 80BC40AC-80BC40B4 00003C 0006+02 0/1 0/0 0/0 .rodata          particle_id$3953 */
 static u16 const particle_id[3] = {
     0x88BE,
     0x88BF,
     0x88C0,
 };
 
-/* 80BC3C98-80BC3DB0 000998 0118+00 1/0 0/0 0/0 .text            modeEffOn__13daBubbPilar_cFv */
 void daBubbPilar_c::modeEffOn() {
     s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
     mDoAud_seStartLevel(Z2SE_OBJ_WTR_STREAM, &current.pos, 0, reverb);
@@ -197,7 +183,6 @@ void daBubbPilar_c::modeEffOn() {
     }
 }
 
-/* 80BC3DB0-80BC3E8C 000AB0 00DC+00 1/0 0/0 0/0 .text            Draw__13daBubbPilar_cFv */
 int daBubbPilar_c::Draw() {
     if (mArg0 == 0) {
         g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
@@ -210,35 +195,27 @@ int daBubbPilar_c::Draw() {
     return 1;
 }
 
-/* 80BC3E8C-80BC3EBC 000B8C 0030+00 1/0 0/0 0/0 .text            Delete__13daBubbPilar_cFv */
 int daBubbPilar_c::Delete() {
     dComIfG_resDelete(&mPhase, "M_Crack");
     return 1;
 }
 
-/* 80BC3EBC-80BC3EE8 000BBC 002C+00 1/0 0/0 0/0 .text            daBubbPilar_Draw__FP13daBubbPilar_c
- */
 static int daBubbPilar_Draw(daBubbPilar_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BC3EE8-80BC3F08 000BE8 0020+00 1/0 0/0 0/0 .text daBubbPilar_Execute__FP13daBubbPilar_c */
 static int daBubbPilar_Execute(daBubbPilar_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BC3F08-80BC3F28 000C08 0020+00 1/0 0/0 0/0 .text daBubbPilar_Delete__FP13daBubbPilar_c */
 static int daBubbPilar_Delete(daBubbPilar_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80BC3F28-80BC3F48 000C28 0020+00 1/0 0/0 0/0 .text            daBubbPilar_Create__FP10fopAc_ac_c
- */
 static int daBubbPilar_Create(fopAc_ac_c* i_this) {
     return static_cast<daBubbPilar_c*>(i_this)->create();
 }
 
-/* 80BC4150-80BC4170 -00001 0020+00 1/0 0/0 0/0 .data            l_daBubbPilar_Method */
 static actor_method_class l_daBubbPilar_Method = {
     (process_method_func)daBubbPilar_Create,
     (process_method_func)daBubbPilar_Delete,
@@ -247,7 +224,6 @@ static actor_method_class l_daBubbPilar_Method = {
     (process_method_func)daBubbPilar_Draw,
 };
 
-/* 80BC4170-80BC41A0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_awaPlar */
 extern actor_process_profile_definition g_profile_Obj_awaPlar = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

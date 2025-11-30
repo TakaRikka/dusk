@@ -25,28 +25,28 @@ public:
         STATUS_BOOMERANG_CARRY,
     };
 
-    /* 80D3A268 */ void initBaseMtx();
-    /* 80D3A2A4 */ void setBaseMtx();
-    /* 80D3A2F0 */ int Create();
-    /* 80D3A474 */ int __CreateHeap();
-    /* 80D3A47C */ int create();
-    /* 80D3A8E8 */ void bg_check();
-    /* 80D3AA3C */ int actionWaitInit();
-    /* 80D3AA80 */ int actionWait();
-    /* 80D3AB9C */ int initActionOrderGetDemo();
-    /* 80D3AC64 */ int actionOrderGetDemo();
-    /* 80D3ACAC */ int actionGetDemo();
-    /* 80D3AD30 */ int actionInitSwOnWait();
-    /* 80D3AD88 */ int actionSwOnWait();
-    /* 80D3AE7C */ int actionInitBoomerangCarry();
-    /* 80D3AF5C */ int actionBoomerangCarry();
-    /* 80D3AFC0 */ void demoProc();
-    /* 80D3B164 */ void effectSet();
-    /* 80D3B250 */ void effectStop();
-    /* 80D3B2A0 */ int execute();
-    /* 80D3B428 */ int draw();
-    /* 80D3B47C */ void setListStart();
-    /* 80D3B480 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int __CreateHeap();
+    int create();
+    void bg_check();
+    int actionWaitInit();
+    int actionWait();
+    int initActionOrderGetDemo();
+    int actionOrderGetDemo();
+    int actionGetDemo();
+    int actionInitSwOnWait();
+    int actionSwOnWait();
+    int actionInitBoomerangCarry();
+    int actionBoomerangCarry();
+    void demoProc();
+    void effectSet();
+    void effectStop();
+    int execute();
+    int draw();
+    void setListStart();
+    int _delete();
 
     bool chkStatus(u8 status) { return mStatus == status; }
     void setStatus(u8 status) { mStatus = status; }

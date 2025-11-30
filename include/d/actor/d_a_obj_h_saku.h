@@ -17,16 +17,16 @@
 
 class daObjH_Saku_c : public dBgS_MoveBgActor {
 public:
-    /* 80C1552C */ void BreakSet();
-    /* 80C15810 */ u8 SpeedSet(cXyz*, cXyz*, f32);
-    /* 80C15A4C */ void Action();
-    /* 80C15E00 */ void initBaseMtx();
-    /* 80C15E44 */ void setBaseMtx();
-    /* 80C161E8 */ inline int CreateHeap();
-    /* 80C1629C */ inline int Create();
-    /* 80C162F4 */ inline int Execute(Mtx**);
-    /* 80C16340 */ inline int Draw();
-    /* 80C1641C */ inline int Delete();
+    void BreakSet();
+    u8 SpeedSet(cXyz*, cXyz*, f32);
+    void Action();
+    void initBaseMtx();
+    void setBaseMtx();
+    inline int CreateHeap();
+    inline int Create();
+    inline int Execute(Mtx**);
+    inline int Draw();
+    inline int Delete();
     inline cPhs__Step create();
 
     /* 0x5A0 */ u8 field_0x5a0;

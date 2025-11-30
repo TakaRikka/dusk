@@ -37,14 +37,10 @@ void daObjKWheel00_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* ############################################################################################## */
-/* 80C4E800-80C4E808 000000 0008+00 2/2 0/0 0/0 .rodata          l_dzbidx */
 static const u32 l_dzbidx[2] = {7, 7};
 
-/* 80C4E870-80C4E878 -00001 0008+00 3/3 0/0 0/0 .data            l_arcName */
 static const char* l_arcName[2] = { "K_Wheel00", "S_wheel00" }; // K = Kinto, S = Shirogane?
 
-/* 80C4D6F8-80C4D7A8 000078 00B0+00 1/1 0/0 0/0 .text            create1st__15daObjKWheel00_cFv */
 int daObjKWheel00_c::create1st() {
     m_type = static_cast<Type_e>(getType());
     JUT_ASSERT(118, m_type == 0 || m_type == 1);
@@ -67,7 +63,6 @@ int daObjKWheel00_c::create1st() {
 
 }
 
-/* 80C4D7A8-80C4D86C 000128 00C4+00 1/1 0/0 0/0 .text            searchLv3Water__FPvPv */
 static void* searchLv3Water(void* param_0, void* i_this) {
     daLv3Water_c* const lv3Water = static_cast<daLv3Water_c*>(param_0);
     daObjKWheel00_c* const kWheel00 = static_cast<daObjKWheel00_c*>(i_this);
@@ -85,17 +80,13 @@ static void* searchLv3Water(void* param_0, void* i_this) {
     return NULL;
 }
 
-/* ############################################################################################## */
-/* 80C4E808-80C4E810 000008 0008+00 1/1 0/0 0/0 .rodata          l_bmdidx */
 static const int l_bmdidx[2] = {4, 4};
 
-/* 80C4E810-80C4E840 000010 0030+00 1/1 0/0 0/0 .rodata          l_cull_box */
 const Vec l_cull_box[4] = {
     {-830.0f, -830.0f, -2500.0f}, {830.0f, 830.0f, 200.0f}, // Type 0
     {-560.0f, -560.0f, -350.0f}, {560.0f, 560.0f, 350.0f}   // Type 1
 };
 
-/* 80C4D86C-80C4D9B8 0001EC 014C+00 2/2 0/0 0/0 .text            setMtx__15daObjKWheel00_cFv */
 void daObjKWheel00_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -116,7 +107,6 @@ void daObjKWheel00_c::setMtx() {
     }
 }
 
-/* 80C4D9B8-80C4DA38 000338 0080+00 1/0 0/0 0/0 .text            CreateHeap__15daObjKWheel00_cFv */
 int daObjKWheel00_c::CreateHeap() {
     J3DModelData* const model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName[m_type], l_bmdidx[m_type]));
     JUT_ASSERT(206, model_data != NULL);
@@ -125,8 +115,6 @@ int daObjKWheel00_c::CreateHeap() {
     return !mpModel ? 0 : 1;
 }
 
-/* ############################################################################################## */
-/* 80C4E878-80C4E8B8 000008 0040+00 1/1 0/0 0/0 .data            l_sphSrc */
 static dCcD_SrcSph l_sphSrc = {
     {
         {0x0, {{AT_TYPE_0, 0x1, 0x0}, {0xd8fbfdff, 0x0}, 0x79}}, // mObj
@@ -139,10 +127,8 @@ static dCcD_SrcSph l_sphSrc = {
     } // mSphAttr
 };
 
-/* 80C4E8B8-80C4E8C0 000048 0008+00 2/2 0/0 0/0 .data            l_se_angle */
 u16 l_se_angle[4] = {0, 0x3FFF, 0x7FFF, 0xBFFF}; // {0°, 90°, 180°, 270°}
 
-/* 80C4DA38-80C4DBBC 0003B8 0184+00 1/0 0/0 0/0 .text            Create__15daObjKWheel00_cFv */
 int daObjKWheel00_c::Create() {
     mpModel->setBaseTRMtx(mTransformMtx);
     fopAcM_SetMtx(this, mTransformMtx);
@@ -186,7 +172,6 @@ int daObjKWheel00_c::Create() {
     return 1;
 }
 
-/* 80C4E8C0-80C4E920 000050 0060+00 1/1 0/0 0/0 .data            l_pos */
 static Vec l_pos[8] = {
     {830.0f, 0.0f, 0.0f}, {0.0f, 830.0f, 0.0f},
     {-830.0f, 0.0f, 0.0f}, {0.0f, -830.0f, 0.0f},
@@ -194,7 +179,6 @@ static Vec l_pos[8] = {
     {-560.0f, 0.0f, 0.0f}, {0.0f, -560.0f, 0.0f}
 };
 
-/* 80C4DBBC-80C4E1B0 00053C 05F4+00 1/0 0/0 0/0 .text Execute__15daObjKWheel00_cFPPA3_A4_f */
 int daObjKWheel00_c::Execute(Mtx** i_mtx) {
     eventUpdate();
 
@@ -326,7 +310,6 @@ int daObjKWheel00_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80C4E1B0-80C4E254 000B30 00A4+00 1/0 0/0 0/0 .text            Draw__15daObjKWheel00_cFv */
 int daObjKWheel00_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -338,7 +321,6 @@ int daObjKWheel00_c::Draw() {
     return 1;
 }
 
-/* 80C4E254-80C4E298 000BD4 0044+00 1/0 0/0 0/0 .text            Delete__15daObjKWheel00_cFv */
 int daObjKWheel00_c::Delete() {
     dComIfG_resDelete(this, l_arcName[m_type]);
 
@@ -349,7 +331,6 @@ int daObjKWheel00_c::Delete() {
     return 1;
 }
 
-/* 80C4E298-80C4E2C0 000C18 0028+00 2/1 0/0 0/0 .text            eventStart__15daObjKWheel00_cFv */
 bool daObjKWheel00_c::eventStart() {
     #if DEBUG
     if(getArg0())
@@ -366,8 +347,6 @@ bool daObjKWheel00_c::eventStart() {
     return true;
 }
 
-/* ############################################################################################## */
-/* 80C4E920-80C4E940 -00001 0020+00 1/0 0/0 0/0 .data            daObjKWheel00_METHODS */
 static actor_method_class daObjKWheel00_METHODS = {
     (process_method_func)daObjKWheel00_create1st,
     (process_method_func)daObjKWheel00_MoveBGDelete,
@@ -376,7 +355,6 @@ static actor_method_class daObjKWheel00_METHODS = {
     (process_method_func)daObjKWheel00_MoveBGDraw,
 };
 
-/* 80C4E940-80C4E970 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_KWheel00 */
 extern actor_process_profile_definition g_profile_Obj_KWheel00 = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID
@@ -394,27 +372,19 @@ extern actor_process_profile_definition g_profile_Obj_KWheel00 = {
   fopAc_CULLBOX_CUSTOM_e,  // cullType
 };
 
-/* 80C4E2C0-80C4E394 000C40 00D4+00 1/0 0/0 0/0 .text daObjKWheel00_create1st__FP15daObjKWheel00_c
- */
 static int daObjKWheel00_create1st(daObjKWheel00_c* i_this) {
     fopAcM_ct(i_this, daObjKWheel00_c);
     return i_this->create1st();
 }
 
-/* 80C4E5D0-80C4E5F0 000F50 0020+00 1/0 0/0 0/0 .text
- * daObjKWheel00_MoveBGDelete__FP15daObjKWheel00_c              */
 static int daObjKWheel00_MoveBGDelete(daObjKWheel00_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C4E5F0-80C4E610 000F70 0020+00 1/0 0/0 0/0 .text
- * daObjKWheel00_MoveBGExecute__FP15daObjKWheel00_c             */
 static int daObjKWheel00_MoveBGExecute(daObjKWheel00_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C4E610-80C4E63C 000F90 002C+00 1/0 0/0 0/0 .text
- * daObjKWheel00_MoveBGDraw__FP15daObjKWheel00_c                */
 static int daObjKWheel00_MoveBGDraw(daObjKWheel00_c* i_this) {
     return i_this->MoveBGDraw();
 }

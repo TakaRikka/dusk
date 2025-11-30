@@ -59,29 +59,29 @@ public:
         } field_0x8[6];
     };  // Size: 0x20
 
-    /* 8029631C */ static void initSystem(u32, u32);
-    /* 802963A8 */ JASAramStream();
-    /* 8029649C */ void init(u32, u32, StreamCallback, void*);
-    /* 8029655C */ bool prepare(s32, int);
-    /* 80296618 */ bool start();
-    /* 8029664C */ bool stop(u16);
-    /* 80296684 */ bool pause(bool);
-    /* 802966CC */ bool cancel();
-    /* 80296710 */ u32 getBlockSamples() const;
-    /* 8029673C */ static void headerLoadTask(void*);
-    /* 8029676C */ static void firstLoadTask(void*);
-    /* 80296848 */ static void loadToAramTask(void*);
-    /* 80296868 */ static void finishTask(void*);
-    /* 802968C8 */ static void prepareFinishTask(void*);
-    /* 80296920 */ bool headerLoad(u32, int);
-    /* 80296AE8 */ bool load();
-    /* 80296D74 */ static s32 channelProcCallback(void*);
-    /* 80296D94 */ static s32 dvdErrorCheck(void*);
-    /* 80296DF0 */ static void channelCallback(u32, JASChannel*, JASDsp::TChannel*, void*);
-    /* 80296E2C */ void updateChannel(u32, JASChannel*, JASDsp::TChannel*);
-    /* 802974AC */ s32 channelProc();
-    /* 80297658 */ void channelStart();
-    /* 80297870 */ void channelStop(u16);
+    static void initSystem(u32, u32);
+    JASAramStream();
+    void init(u32, u32, StreamCallback, void*);
+    bool prepare(s32, int);
+    bool start();
+    bool stop(u16);
+    bool pause(bool);
+    bool cancel();
+    u32 getBlockSamples() const;
+    static void headerLoadTask(void*);
+    static void firstLoadTask(void*);
+    static void loadToAramTask(void*);
+    static void finishTask(void*);
+    static void prepareFinishTask(void*);
+    bool headerLoad(u32, int);
+    bool load();
+    static s32 channelProcCallback(void*);
+    static s32 dvdErrorCheck(void*);
+    static void channelCallback(u32, JASChannel*, JASDsp::TChannel*, void*);
+    void updateChannel(u32, JASChannel*, JASDsp::TChannel*);
+    s32 channelProc();
+    void channelStart();
+    void channelStop(u16);
 
     void setPitch(f32 pitch) { mPitch = pitch; }
     void setVolume(f32 volume) { 

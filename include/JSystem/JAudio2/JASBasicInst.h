@@ -44,8 +44,8 @@ struct JASInst {
  */
 struct JASBasicInst : public JASInst {
     struct TKeymap {
-        /* 80298250 */ ~TKeymap();
-        /* 802982D4 */ TKeymap() { mHighKey = -1; }
+        ~TKeymap();
+        TKeymap() { mHighKey = -1; }
         void setHighKey(int key) { mHighKey = key; }
 
         /* 0x0 */ s32 mHighKey;
@@ -55,14 +55,14 @@ struct JASBasicInst : public JASInst {
         /* 0xC */ f32 field_0xc;
     };
 
-    /* 80298014 */ JASBasicInst();
-    /* 8029819C */ void setKeyRegionCount(u32, JKRHeap*);
-    /* 8029821C */ void setOsc(int, JASOscillator::Data const*);
-    /* 8029822C */ TKeymap* getKeyRegion(int);
+    JASBasicInst();
+    void setKeyRegionCount(u32, JKRHeap*);
+    void setOsc(int, JASOscillator::Data const*);
+    TKeymap* getKeyRegion(int);
 
-    /* 8029807C */ virtual ~JASBasicInst();
-    /* 802980F8 */ virtual bool getParam(int, int, JASInstParam*) const;
-    /* 802982E0 */ virtual u32 getType() const { return 'BSIC'; };
+    virtual ~JASBasicInst();
+    virtual bool getParam(int, int, JASInstParam*) const;
+    virtual u32 getType() const { return 'BSIC'; };
 
     void setVolume(f32 volume) { mVolume = volume; }
     void setPitch(f32 pitch) { mPitch = pitch; }

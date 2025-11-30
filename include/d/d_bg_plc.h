@@ -12,11 +12,11 @@ struct sBgPlc {
 
 class dBgPlc {
 public:
-    /* 80074074 */ dBgPlc();
-    /* 80074080 */ ~dBgPlc();
-    /* 800740BC */ void setBase(void*);
-    /* 800740C4 */ sBgPc* getCode(int, sBgPc**) const;
-    /* 800740DC */ u32 getGrpCode(int) const;
+    dBgPlc();
+    ~dBgPlc();
+    void setBase(void*);
+    sBgPc* getCode(int, sBgPc**) const;
+    u32 getGrpCode(int) const;
 
     static const int ZELDA_CODE_SIZE = sizeof(sBgPc);
 

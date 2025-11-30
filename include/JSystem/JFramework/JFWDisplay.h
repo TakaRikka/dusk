@@ -46,29 +46,29 @@ public:
         /* 0x1 */ UNK_METHOD_1 = 1
     };
 
-    /* 80272040 */ void ctor_subroutine(bool);
-    /* 802720F8 */ JFWDisplay(JKRHeap*, JUTXfb::EXfbNumber, bool);
-    /* 802721DC */ static JFWDisplay* createManager(_GXRenderModeObj const*, JKRHeap*,
+    void ctor_subroutine(bool);
+    JFWDisplay(JKRHeap*, JUTXfb::EXfbNumber, bool);
+    static JFWDisplay* createManager(_GXRenderModeObj const*, JKRHeap*,
                                                     JUTXfb::EXfbNumber, bool);
-    /* 802722B8 */ void prepareCopyDisp();
-    /* 802723AC */ void drawendXfb_single();
-    /* 802723F4 */ void exchangeXfb_double();
-    /* 802724FC */ void exchangeXfb_triple();
-    /* 80272574 */ void copyXfb_triple();
-    /* 802725F8 */ void preGX();
-    /* 8027268C */ void endGX();
-    /* 80272C60 */ void waitBlanking(int);
-    /* 80272E10 */ void threadSleep(s64);
-    /* 80272EB8 */ void clearEfb_init();
-    /* 80272F9C */ void clearEfb(int, int, int, int, _GXColor);
-    /* 80272F2C */ void clearEfb();
-    /* 80272F58 */ void clearEfb(_GXColor);
-    /* 8027331C */ void calcCombinationRatio();
+    void prepareCopyDisp();
+    void drawendXfb_single();
+    void exchangeXfb_double();
+    void exchangeXfb_triple();
+    void copyXfb_triple();
+    void preGX();
+    void endGX();
+    void waitBlanking(int);
+    void threadSleep(s64);
+    void clearEfb_init();
+    void clearEfb(int, int, int, int, _GXColor);
+    void clearEfb();
+    void clearEfb(_GXColor);
+    void calcCombinationRatio();
 
-    /* 80272798 */ virtual void beginRender();
-    /* 80272A04 */ virtual void endRender();
-    /* 80272AB0 */ virtual void endFrame();
-    /* 80272160 */ virtual ~JFWDisplay();
+    virtual void beginRender();
+    virtual void endRender();
+    virtual void endFrame();
+    virtual ~JFWDisplay();
 
     static JFWDisplay* getManager() { return sManager; }
 

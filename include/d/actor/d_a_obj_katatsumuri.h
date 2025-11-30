@@ -17,24 +17,24 @@
  */
 class daObjKAT_c : public dInsect_c {
 public:
-    /* 80C39994 */ void InitCcSph();
-    /* 80C39A00 */ void SetCcSph();
-    /* 80C39A58 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80C39B98 */ int CreateHeap();
-    /* 80C39F0C */ void WallWalk();
-    /* 80C3A4D8 */ void MoveAction();
-    /* 80C3A628 */ void Action();
-    /* 80C3A680 */ void Insect_Release();
-    /* 80C3A698 */ void checkGround();
-    /* 80C3A8C8 */ void F_MoveAction();
-    /* 80C3A95C */ void FallAction();
-    /* 80C3A990 */ void ParticleSet();
-    /* 80C3AAB4 */ void BoomChk();
-    /* 80C3ADC8 */ void ObjHit();
-    /* 80C3AEC8 */ int Execute();
-    /* 80C3B754 */ void Z_BufferChk();
-    /* 80C3B8D0 */ int Delete();
-    /* 80C3B938 */ void setBaseMtx();
+    void InitCcSph();
+    void SetCcSph();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    int CreateHeap();
+    void WallWalk();
+    void MoveAction();
+    void Action();
+    void Insect_Release();
+    void checkGround();
+    void F_MoveAction();
+    void FallAction();
+    void ParticleSet();
+    void BoomChk();
+    void ObjHit();
+    int Execute();
+    void Z_BufferChk();
+    int Delete();
+    void setBaseMtx();
     int Draw() {
         if (mDraw) {
             Z_BufferChk();
@@ -52,8 +52,8 @@ public:
         }
         return 1;
     }
-    /* 80C3BAAC */ bool CreateChk();
-    /* 80C3BC58 */ int create();
+    bool CreateChk();
+    int create();
 
 private:
     /* 0x590 */ dBgS_ObjAcch mAcch;
@@ -95,8 +95,8 @@ STATIC_ASSERT(sizeof(daObjKAT_c) == 0xa74);
 
 class daObj_KatHIO_c : public JORReflexible {
 public:
-    /* 80C3996C */ daObj_KatHIO_c();
-    /* 80C3C5CC */ virtual ~daObj_KatHIO_c() {}
+    daObj_KatHIO_c();
+    virtual ~daObj_KatHIO_c() {}
 
     void genMessage(JORMContext* ctx) {
         // Golden Snail

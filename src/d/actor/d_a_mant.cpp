@@ -9,19 +9,14 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "d/actor/d_a_b_gnd.h"
 #include "d/d_com_inf_game.h"
-#include "dol2asm.h"
 
-/* 80862D40-80866D40 000020 4000+00 2/1 0/0 0/0 .data            l_Egnd_mantTEX */
 #include "assets/l_Egnd_mantTEX.h"
 
-/* 80866D40-8086AD40 004020 4000+00 3/3 0/0 0/0 .data            l_Egnd_mantTEX_U */
 #include "assets/l_Egnd_mantTEX_U.h"
 
-/* 8086AD40-8086ADA0 008020 0060+00 1/0 0/0 0/0 .data            l_Egnd_mantPAL */
 #include "assets/l_Egnd_mantPAL.h"
 #include "d/d_s_play.h"
 
-/* 8086ADA0-8086B58C 008080 07EC+00 0/0 0/0 0/0 .data            l_pos */
 static u32 l_pos[507] = {
     0x42480000, 0x3F5CFC93, 0xC365BD9C, 0x4226AAAA,
     0x3F5CFC93, 0xC365BD9C, 0x42055556, 0x3F5CFC93,
@@ -152,7 +147,6 @@ static u32 l_pos[507] = {
     0xC2480000, 0x3F5CFC93, 0x3E84C964,
 };
 
-/* 8086B5EC-8086B5F7 .data          l_normal */
 static u32 l_normal[3] = {
     0x00000000, 0x3F800000, 0x00000000,
 };
@@ -160,7 +154,6 @@ static u32 l_normal[3] = {
 // /* 8086BF70-8086BF74 000000 0004+00 3/3 0/0 0/0 .bss             None */
 // static u8 data_8086BF70[4];
 
-/* 8086B598-8086BAE0 008878 0548+00 0/0 0/0 0/0 .data            l_texCoord */
 static u32 l_texCoord[338] = {
     0x00000000, 0x3F6AAAB0, 0x3DAAAA7E, 0x3F6AAAB0,
     0x3DAAAA7E, 0x3F800000, 0x00000000, 0x3F800000,
@@ -249,13 +242,10 @@ static u32 l_texCoord[338] = {
     0x3F800000, 0x00000000,
 };
 
-/* 8086BAE0-8086BECC 008DC0 03EC+00 0/0 0/0 0/0 .data            l_Egnd_mantDL */
 #include "assets/l_Egnd_mantDL.h"
 
-/* 8086BECC-8086BED0 -00001 0004+00 0/0 0/0 0/0 .data            pal_d */
 static void* pal_d = (void*)&l_Egnd_mantPAL;
 
-/* 8086BED0-8086BED8 -00001 0008+00 0/0 0/0 0/0 .data            tex_d */
 static void* tex_d[2] = {
     (void*)&l_Egnd_mantTEX,
     (void*)&l_Egnd_mantTEX_U,
@@ -263,7 +253,6 @@ static void* tex_d[2] = {
 
 static char lbl_277_bss_0;
 
-/* 80861298-808616B8 000078 0420+00 1/0 0/0 0/0 .text            draw__15daMant_packet_cFv */
 void daMant_packet_c::draw() {
     void* image = tex_d[0];
     void* lut = pal_d;
@@ -346,7 +335,6 @@ void daMant_packet_c::draw() {
     J3DShape::resetVcdVatCache();
 }
 
-/* 808616B8-8086176C 000498 00B4+00 1/0 0/0 0/0 .text            daMant_Draw__FP10mant_class */
 static int daMant_Draw(mant_class* i_this) {
     g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
 
@@ -363,7 +351,6 @@ static int daMant_Draw(mant_class* i_this) {
     return 1;
 }
 
-/* 8086176C-80861F60 00054C 07F4+00 1/1 0/0 0/0 .text joint_control__FP10mant_classP8mant_j_siff */
 static void joint_control(mant_class* i_this, mant_j_s* param_2, int param_3, f32 param_4, f32 param_5) {
     static f32 d_p[12] = {
         1.4000001f, 0.6f, 0.35f, 0.3f, 0.3f, 0.3f, 0.25f, 0.2f, 0.2f, 0.2f, 0.15f, 0.1f
@@ -554,7 +541,6 @@ static void joint_control(mant_class* i_this, mant_j_s* param_2, int param_3, f3
     }
 }
 
-/* 80861F9C-80862424 000D7C 0488+00 1/1 0/0 0/0 .text            mant_v_calc__FP10mant_class */
 static void mant_v_calc(mant_class* i_this) {
     cXyz local_e4, cStack_f0, local_fc, local_108;
     f32 dVar16, dVar15, dVar14, uVar15;
@@ -626,7 +612,6 @@ static void mant_v_calc(mant_class* i_this) {
     }
 }
 
-/* 80862424-808624E8 001204 00C4+00 1/1 0/0 0/0 .text            mant_move__FP10mant_class */
 static void mant_move(mant_class* i_this) {
     u8 uVar1 = i_this->field_0x0570.field_0x74;
     cXyz* pcVar5 = i_this->field_0x0570.getPos();
@@ -640,10 +625,8 @@ static void mant_move(mant_class* i_this) {
     DCStoreRangeNoSync(i_this->field_0x0570.getPos(), 0x7ec);
 }
 
-/* 8086BF74-8086BF78 000004 0004+00 1/1 0/0 0/0 .bss             mant_cut_type */
 static int mant_cut_type;
 
-/* 808624E8-80862908 0012C8 0420+00 2/1 0/0 0/0 .text            daMant_Execute__FP10mant_class */
 static int daMant_Execute(mant_class* i_this) {
     f32 var_f31, var_f30;
     int iVar8;
@@ -774,17 +757,14 @@ static int daMant_Execute(mant_class* i_this) {
     return 1;
 }
 
-/* 80862908-80862910 0016E8 0008+00 1/0 0/0 0/0 .text            daMant_IsDelete__FP10mant_class */
 static bool daMant_IsDelete(mant_class* i_this) {
     return true;
 }
 
-/* 80862910-80862918 0016F0 0008+00 1/0 0/0 0/0 .text            daMant_Delete__FP10mant_class */
 static int daMant_Delete(mant_class* i_this) {
     return 1;
 }
 
-/* 80862918-80862AC0 0016F8 01A8+00 1/0 0/0 0/0 .text            daMant_Create__FP10fopAc_ac_c */
 static int daMant_Create(fopAc_ac_c* i_this) {
     mant_class* m_this = (mant_class*)i_this;
 
@@ -812,22 +792,17 @@ static int daMant_Create(fopAc_ac_c* i_this) {
     return 4;
 }
 
-/* 80862AC0-80862B3C 0018A0 007C+00 1/1 0/0 0/0 .text            __dt__8mant_j_sFv */
 mant_j_s::~mant_j_s() {}
 
-/* 80862B3C-80862BA4 00191C 0068+00 1/1 0/0 0/0 .text            __ct__8mant_j_sFv */
 mant_j_s::mant_j_s() {}
 
-/* 80862BA4-80862C40 001984 009C+00 1/0 0/0 0/0 .text            __dt__15daMant_packet_cFv */
 daMant_packet_c::~daMant_packet_c() {}
 
-/* 80862C40-80862C44 001A20 0004+00 2/2 0/0 0/0 .text            __ct__4cXyzFv */
 // cXyz::cXyz() {
 extern "C" void __ct__4cXyzFv() {
     /* empty function */
 }
 
-/* 8086BF08-8086BF28 -00001 0020+00 1/0 0/0 0/0 .data            l_daMant_Method */
 static actor_method_class l_daMant_Method = {
     (process_method_func)daMant_Create,
     (process_method_func)daMant_Delete,
@@ -836,7 +811,6 @@ static actor_method_class l_daMant_Method = {
     (process_method_func)daMant_Draw,
 };
 
-/* 8086BF28-8086BF58 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_MANT */
 extern actor_process_profile_definition g_profile_MANT = {
   fpcLy_CURRENT_e,         // mLayerID
   8,                       // mListID

@@ -13,11 +13,11 @@ public:
         /* 0x4 */ MOVE_BG_ONLY = 4
     };
 
-    /* 80078B90 */ void Set(cXyz&, f32);
-    /* 80078BB0 */ dBgS_SplGrpChk();
-    /* 80078D0C */ void Init();
+    void Set(cXyz&, f32);
+    dBgS_SplGrpChk();
+    void Init();
 
-    /* 80078C78 */ virtual ~dBgS_SplGrpChk();
+    virtual ~dBgS_SplGrpChk();
 
     void OffFind() { m_flags &= ~FIND; }
     void OffIn() { m_flags &= ~IN; }

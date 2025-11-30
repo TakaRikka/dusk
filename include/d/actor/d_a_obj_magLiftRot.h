@@ -14,20 +14,20 @@
  */
 class daMagLiftRot_c : public dBgS_MoveBgActor {
 public:
-    /* 80C8EA28 */ void setBaseMtx();
-    /* 80C8EC64 */ int create();
-    /* 80C8F02C */ void moveLift();
-    /* 80C8F264 */ void init_modeMove();
-    /* 80C8F4A0 */ void modeMove();
-    /* 80C8F538 */ void init_modeWait();
-    /* 80C8F7CC */ void modeWait();
-    /* 80C8F804 */ void init_modeMoveWait();
-    /* 80C8F810 */ void modeMoveWait();
+    void setBaseMtx();
+    int create();
+    void moveLift();
+    void init_modeMove();
+    void modeMove();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMoveWait();
+    void modeMoveWait();
 
-    /* 80C8EB1C */ virtual int CreateHeap();
-    /* 80C8EF94 */ virtual int Execute(Mtx**);
-    /* 80C8F86C */ virtual int Draw();
-    /* 80C8F970 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
@@ -63,8 +63,8 @@ STATIC_ASSERT(sizeof(daMagLiftRot_c) == 0x634);
 
 class daMagLiftRot_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C8E94C */ daMagLiftRot_HIO_c();
-    /* 80C8FA3C */ virtual ~daMagLiftRot_HIO_c() {}
+    daMagLiftRot_HIO_c();
+    virtual ~daMagLiftRot_HIO_c() {}
 
     void genMessage(JORMContext*);
 

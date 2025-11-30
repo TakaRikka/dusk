@@ -14,49 +14,49 @@ class dSelect_cursor_c;
 
 class dMenu_Letter_c : public dDlst_base_c {
 public:
-    /* 801DCDC0 */ dMenu_Letter_c(JKRExpHeap*, STControl*, CSTControl*);
-    /* 801DD36C */ void _create();
-    /* 801DD474 */ void _move();
-    /* 801DD50C */ void _draw();
-    /* 801DD934 */ bool isSync();
-    /* 801DD95C */ void letter_init_calc();
-    /* 801DDA20 */ void init();
-    /* 801DDA74 */ int _open();
-    /* 801DDC98 */ int _close();
-    /* 801DDE18 */ void wait_init();
-    /* 801DDE54 */ void wait_move();
-    /* 801DE164 */ void slide_right_init();
-    /* 801DE1E8 */ void slide_right_move();
-    /* 801DE24C */ void slide_left_init();
-    /* 801DE2D0 */ void slide_left_move();
-    /* 801DE334 */ void read_open_init();
-    /* 801DE564 */ void read_open_move();
-    /* 801DE70C */ void read_move_init();
-    /* 801DE824 */ void read_move_move();
-    /* 801DEA48 */ void read_next_fadeout_init();
-    /* 801DEA94 */ void read_next_fadeout_move();
-    /* 801DEBD8 */ void read_next_fadein_init();
-    /* 801DED04 */ void read_next_fadein_move();
-    /* 801DEE20 */ void read_close_init();
-    /* 801DEE6C */ void read_close_move();
-    /* 801DF010 */ void screenSetMenu();
-    /* 801DFA58 */ void screenSetBase();
-    /* 801E0330 */ void screenSetShadow();
-    /* 801E03D8 */ void screenSetLetter();
-    /* 801E09A8 */ void screenSetDoIcon();
-    /* 801E0B24 */ void setCursorPos();
-    /* 801E0BB0 */ void changeActiveColor();
-    /* 801E0E34 */ void changePageLight();
-    /* 801E0E84 */ void setPageText();
-    /* 801E1038 */ void setDMYPageText();
-    /* 801E11EC */ void copyDMYMenu();
-    /* 801E1518 */ void setAButtonString(u16);
-    /* 801E15C8 */ void setBButtonString(u16);
-    /* 801E1678 */ u8 getLetterNum();
-    /* 801E1748 */ void setHIO(bool);
+    dMenu_Letter_c(JKRExpHeap*, STControl*, CSTControl*);
+    void _create();
+    void _move();
+    void _draw();
+    bool isSync();
+    void letter_init_calc();
+    void init();
+    int _open();
+    int _close();
+    void wait_init();
+    void wait_move();
+    void slide_right_init();
+    void slide_right_move();
+    void slide_left_init();
+    void slide_left_move();
+    void read_open_init();
+    void read_open_move();
+    void read_move_init();
+    void read_move_move();
+    void read_next_fadeout_init();
+    void read_next_fadeout_move();
+    void read_next_fadein_init();
+    void read_next_fadein_move();
+    void read_close_init();
+    void read_close_move();
+    void screenSetMenu();
+    void screenSetBase();
+    void screenSetShadow();
+    void screenSetLetter();
+    void screenSetDoIcon();
+    void setCursorPos();
+    void changeActiveColor();
+    void changePageLight();
+    void setPageText();
+    void setDMYPageText();
+    void copyDMYMenu();
+    void setAButtonString(u16);
+    void setBButtonString(u16);
+    u8 getLetterNum();
+    void setHIO(bool);
 
-    /* 801E1D5C */ virtual void draw() { _draw(); }
-    /* 801DCF34 */ virtual ~dMenu_Letter_c();
+    virtual void draw() { _draw(); }
+    virtual ~dMenu_Letter_c();
 
     u8 getStatus() { return mStatus; }
 

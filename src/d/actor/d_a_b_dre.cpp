@@ -49,18 +49,14 @@ int daB_DRE_c::CreateHeap() {
     return 1;
 }
 
-/* 805C7B2C-805C7D6C 0000EC 0240+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return ((daB_DRE_c*)i_this)->CreateHeap();
 }
 
-/* 805C7DB4-805C7DD4 000374 0020+00 1/0 0/0 0/0 .text            daB_DRE_Create__FP10fopAc_ac_c */
 static int daB_DRE_Create(fopAc_ac_c* i_this) {
     return ((daB_DRE_c*)i_this)->create();
 }
 
-/* 805C7DD4-805C7E88 000394 00B4+00 4/4 0/0 0/0 .text SetAnm__9daB_DRE_cFP16mDoExt_McaMorfSOiiff
- */
 void daB_DRE_c::SetAnm(mDoExt_McaMorfSO* i_modelMorf, int i_anm, int i_attr, f32 i_morf,
                        f32 i_speed) {
     i_modelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("B_DR", i_anm), i_attr, i_morf,
@@ -68,13 +64,11 @@ void daB_DRE_c::SetAnm(mDoExt_McaMorfSO* i_modelMorf, int i_anm, int i_attr, f32
     mAnm = i_anm;
 }
 
-/* 805C7E88-805C7EAC 000448 0024+00 1/0 0/0 0/0 .text            daB_DRE_Delete__FP9daB_DRE_c */
 static int daB_DRE_Delete(daB_DRE_c* i_this) {
     i_this->Delete();
     return 1;
 }
 
-/* 805C7EAC-805C7FCC 00046C 0120+00 1/1 0/0 0/0 .text            CameraSet__9daB_DRE_cFv */
 bool daB_DRE_c::CameraSet() {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dCamera_c* cam_body = dCam_getBody();
@@ -97,13 +91,11 @@ bool daB_DRE_c::CameraSet() {
     return 1;
 }
 
-/* 805C8008-805C808C 0005C8 0084+00 2/2 0/0 0/0 .text            SetStopingCam__9daB_DRE_cFv */
 void daB_DRE_c::SetStopingCam() {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovy, 0);
 }
 
-/* 805C808C-805C81B8 00064C 012C+00 3/3 0/0 0/0 .text            SetStopCam__9daB_DRE_cF4cXyzffs */
 void daB_DRE_c::SetStopCam(cXyz i_center, f32 param_1, f32 i_eyeY, s16 i_offsetAngle) {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
@@ -119,7 +111,6 @@ void daB_DRE_c::SetStopCam(cXyz i_center, f32 param_1, f32 i_eyeY, s16 i_offsetA
     field_0x608 = param_1;
 }
 
-/* 805C81B8-805C8208 000778 0050+00 1/1 0/0 0/0 .text            SetCMoveCam__9daB_DRE_cF4cXyzf */
 bool daB_DRE_c::SetCMoveCam(cXyz i_target, f32 i_step) {
     mCamCenterTarget = i_target;
     if (cLib_chasePos(&mCamCenter, mCamCenterTarget, i_step)) {
@@ -129,14 +120,11 @@ bool daB_DRE_c::SetCMoveCam(cXyz i_target, f32 i_step) {
     return 0;
 }
 
-/* 805C8208-805C824C 0007C8 0044+00 2/2 0/0 0/0 .text            SetCMoveCam__9daB_DRE_cF4cXyzff */
 void daB_DRE_c::SetCMoveCam(cXyz i_target, f32 i_scale, f32 i_step) {
     mCamCenterTarget = i_target;
     cLib_addCalcPos2(&mCamCenter, mCamCenterTarget, i_scale, i_step);
 }
 
-/* 805C824C-805C8348 00080C 00FC+00 2/2 0/0 0/0 .text            SetEyeMoveCam__9daB_DRE_cF4cXyzffsf
- */
 void daB_DRE_c::SetEyeMoveCam(cXyz param_0, f32 param_1, f32 param_2, s16 i_offsetAngle,
                               f32 i_step) {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
@@ -150,7 +138,6 @@ void daB_DRE_c::SetEyeMoveCam(cXyz param_0, f32 param_1, f32 param_2, s16 i_offs
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovy, 0);
 }
 
-/* 805C8348-805C8458 000908 0110+00 1/1 0/0 0/0 .text SetEyeMoveCam__9daB_DRE_cF4cXyzffsff */
 void daB_DRE_c::SetEyeMoveCam(cXyz param_0, f32 param_1, f32 param_2, s16 i_offsetAngle,
                               f32 i_scale, f32 i_step) {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
@@ -163,7 +150,6 @@ void daB_DRE_c::SetEyeMoveCam(cXyz param_0, f32 param_1, f32 param_2, s16 i_offs
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovy, 0);
 }
 
-/* 805C8458-805C8544 000A18 00EC+00 1/1 0/0 0/0 .text            SetMoveCam__9daB_DRE_cFff */
 void daB_DRE_c::SetMoveCam(f32 i_scale, f32 i_step) {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
@@ -173,7 +159,6 @@ void daB_DRE_c::SetMoveCam(f32 i_scale, f32 i_step) {
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovy, 0);
 }
 
-/* 805C8544-805C85E8 000B04 00A4+00 1/1 0/0 0/0 .text            SetReleaseCam__9daB_DRE_cFv */
 void daB_DRE_c::SetReleaseCam() {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
@@ -184,26 +169,19 @@ void daB_DRE_c::SetReleaseCam() {
 }
 
 namespace {
-/* 805CB080-805CB084 000048 0004+00 0/1 0/0 0/0 .bss             s_dis__23@unnamed@d_a_b_dre_cpp@ */
 static f32 s_dis;
 
-/* 805CB084-805CB088 00004C 0004+00 1/2 0/0 0/0 .bss s_LinkPos__23@unnamed@d_a_b_dre_cpp@ */
 static cXyz* s_LinkPos;
 
-/* 805CB088-805CB08C 000050 0002+02 0/1 0/0 0/0 .bss s_TargetAngle__23@unnamed@d_a_b_dre_cpp@ */
 static s16 s_TargetAngle;
 
-/* 805CB098-805CB0A4 000060 000C+00 3/6 0/0 0/0 .bss s_HeadPos__23@unnamed@d_a_b_dre_cpp@ */
 static cXyz s_HeadPos;
 
-/* 805CB0B0-805CB0BC 000078 000C+00 0/3 0/0 0/0 .bss s_BodyPos__23@unnamed@d_a_b_dre_cpp@ */
 static cXyz s_BodyPos;
 
-/* 805CB0C8-805CB0D4 000090 000C+00 0/3 0/0 0/0 .bss s_TalePos__23@unnamed@d_a_b_dre_cpp@ */
 static cXyz s_TalePos;
 }  // namespace
 
-/* 805C85E8-805C8BF8 000BA8 0610+00 1/1 0/0 0/0 .text            CamAction2__9daB_DRE_cFv */
 void daB_DRE_c::CamAction2() {
     cXyz pos;
     pos = current.pos;
@@ -316,7 +294,6 @@ void daB_DRE_c::CamAction2() {
     }
 }
 
-/* 805C8BF8-805C8EDC 0011B8 02E4+00 1/1 0/0 0/0 .text            DrAction2__9daB_DRE_cFv */
 void daB_DRE_c::DrAction2() {
     cXyz eye_pos;
     cXyz sp8;
@@ -385,7 +362,6 @@ void daB_DRE_c::DrAction2() {
     }
 }
 
-/* 805C8EDC-805C9318 00149C 043C+00 2/1 0/0 0/0 .text            CamAction__9daB_DRE_cFv */
 void daB_DRE_c::CamAction() {
     cXyz pos;
     pos = current.pos;
@@ -472,7 +448,6 @@ void daB_DRE_c::CamAction() {
     }
 }
 
-/* 805C9318-805C9378 0018D8 0060+00 1/1 0/0 0/0 .text            Action__9daB_DRE_cFv */
 void daB_DRE_c::Action() {
     switch (mAction) {
     case 0:
@@ -486,7 +461,6 @@ void daB_DRE_c::Action() {
     }
 }
 
-/* 805C9378-805C9B40 001938 07C8+00 2/1 0/0 0/0 .text            DrAction__9daB_DRE_cFv */
 void daB_DRE_c::DrAction() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz sp90;
@@ -666,7 +640,6 @@ void daB_DRE_c::DrAction() {
     }
 }
 
-/* 805C9B40-805CA158 002100 0618+00 2/1 0/0 0/0 .text            SoundChk__9daB_DRE_cFv */
 void daB_DRE_c::SoundChk() {
     switch (mAnm) {
     case 0x21:
@@ -740,7 +713,6 @@ void daB_DRE_c::SoundChk() {
     }
 }
 
-/* 805CA158-805CA49C 002718 0344+00 1/1 0/0 0/0 .text            Execute__9daB_DRE_cFv */
 int daB_DRE_c::Execute() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     s_LinkPos = &fopAcM_GetPosition(player);
@@ -787,16 +759,13 @@ int daB_DRE_c::Execute() {
     return 1;
 }
 
-/* 805CA49C-805CA4FC 002A5C 0060+00 1/1 0/0 0/0 .text            SpeedSet__9daB_DRE_cFv */
 void daB_DRE_c::SpeedSet() {
     cLib_addCalc2(&speed.y, mTargetSpeedY, 0.2f, 10.0f);
     cLib_addCalc2(&speedF, mTargetSpeedF, 0.2f, 10.0f);
 }
 
-/* 805CB0D4-805CB0D8 00009C 0004+00 1/1 0/0 0/0 .bss             None */
 static u8 data_805CB0D4;
 
-/* 805CA4FC-805CA670 002ABC 0174+00 1/1 0/0 0/0 .text            BreathSet__9daB_DRE_cFv */
 void daB_DRE_c::BreathSet() {
     cXyz sp20;
     cXyz sp14;
@@ -818,7 +787,6 @@ void daB_DRE_c::BreathSet() {
     }
 }
 
-/* 805CA670-805CA6C0 002C30 0050+00 1/1 0/0 0/0 .text            Delete__9daB_DRE_cFv */
 int daB_DRE_c::Delete() {
     dComIfG_resDelete(&mPhase, "B_DR");
 
@@ -829,7 +797,6 @@ int daB_DRE_c::Delete() {
     return 1;
 }
 
-/* 805CA6C0-805CA780 002C80 00C0+00 2/2 0/0 0/0 .text            setBaseMtx__9daB_DRE_cFv */
 void daB_DRE_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -890,17 +857,14 @@ int daB_DRE_c::Draw() {
     return 1;
 }
 
-/* 805CA780-805CA924 002D40 01A4+00 1/0 0/0 0/0 .text            daB_DRE_Draw__FP9daB_DRE_c */
 static int daB_DRE_Draw(daB_DRE_c* i_this) {
     return i_this->Draw();
 }
 
-/* 805CA924-805CA944 002EE4 0020+00 2/1 0/0 0/0 .text            daB_DRE_Execute__FP9daB_DRE_c */
 static int daB_DRE_Execute(daB_DRE_c* i_this) {
     return i_this->Execute();
 }
 
-/* 805CA944-805CAC3C 002F04 02F8+00 1/1 0/0 0/0 .text            create__9daB_DRE_cFv */
 int daB_DRE_c::create() {
     fopAcM_ct(this, daB_DRE_c);
 
@@ -969,19 +933,16 @@ int daB_DRE_c::create() {
     return phase_state;
 }
 
-/* 805CACAC-805CACB4 00326C 0008+00 1/0 0/0 0/0 .text            daB_DRE_IsDelete__FP9daB_DRE_c */
 static int daB_DRE_IsDelete(daB_DRE_c* i_this) {
     return 1;
 }
 
-/* 805CAFB4-805CAFD4 -00001 0020+00 1/0 0/0 0/0 .data            l_daB_DRE_Method */
 static actor_method_class l_daB_DRE_Method = {
     (process_method_func)daB_DRE_Create,  (process_method_func)daB_DRE_Delete,
     (process_method_func)daB_DRE_Execute, (process_method_func)daB_DRE_IsDelete,
     (process_method_func)daB_DRE_Draw,
 };
 
-/* 805CAFD4-805CB004 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_B_DRE */
 extern actor_process_profile_definition g_profile_B_DRE = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

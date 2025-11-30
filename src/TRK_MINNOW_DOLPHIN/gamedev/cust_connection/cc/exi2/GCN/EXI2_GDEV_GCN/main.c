@@ -5,16 +5,12 @@
 
 #define GDEV_BUF_SIZE (0x500)
 
-/* 80450550-8045056C 07D270 001C+00 3/3 0/0 0/0 .bss             gRecvCB */
 static CircleBuffer gRecvCB;
 
-/* 80450050-80450550 07CD70 0500+00 1/1 0/0 0/0 .bss             gRecvBuf */
 static u8 gRecvBuf[GDEV_BUF_SIZE];
 
-/* 804519C8-804519D0 000EC8 0004+04 3/3 0/0 0/0 .sbss            gIsInitialized */
 static BOOL gIsInitialized;
 
-/* 80372BCC-80372C54 36D50C 0088+00 0/0 1/1 0/0 .text            gdev_cc_initialize */
 int gdev_cc_initialize(void* inputPendingPtrRef, EXICallback monitorCallback) {
     MWTRACE(1, "CALLING EXI2_Init\n");
     DBInitComm(inputPendingPtrRef, (int*)monitorCallback);
@@ -23,12 +19,10 @@ int gdev_cc_initialize(void* inputPendingPtrRef, EXICallback monitorCallback) {
     return 0;
 }
 
-/* 80372BC4-80372BCC 36D504 0008+00 0/0 1/1 0/0 .text            gdev_cc_shutdown */
 int gdev_cc_shutdown() {
     return 0;
 }
 
-/* 80372BA0-80372BC4 36D4E0 0024+00 0/0 1/1 0/0 .text            gdev_cc_open */
 int gdev_cc_open() {
     if (gIsInitialized != 0) {
         return -10005;
@@ -38,12 +32,10 @@ int gdev_cc_open() {
     return 0;
 }
 
-/* 80372B98-80372BA0 36D4D8 0008+00 0/0 1/1 0/0 .text            gdev_cc_close */
 int gdev_cc_close() {
     return 0;
 }
 
-/* 80372AA4-80372B98 36D3E4 00F4+00 0/0 1/1 0/0 .text            gdev_cc_read */
 int gdev_cc_read(u8* data, int size) {
     u8 buff[GDEV_BUF_SIZE];
     int p1;
@@ -79,7 +71,6 @@ int gdev_cc_read(u8* data, int size) {
     return retval;
 }
 
-/* 803729E4-80372AA4 36D324 00C0+00 0/0 1/1 0/0 .text            gdev_cc_write */
 int gdev_cc_write(const u8* bytes, int length) {
     int exi2Len;
     int n_copy;
@@ -108,19 +99,16 @@ int gdev_cc_write(const u8* bytes, int length) {
     return 0;
 }
 
-/* 803729C0-803729E4 36D300 0024+00 0/0 1/1 0/0 .text            gdev_cc_pre_continue */
 int gdev_cc_pre_continue() {
     DBClose();
     return 0;
 }
 
-/* 8037299C-803729C0 36D2DC 0024+00 0/0 1/1 0/0 .text            gdev_cc_post_stop */
 int gdev_cc_post_stop() {
     DBOpen();
     return 0;
 }
 
-/* 8037292C-8037299C 36D26C 0070+00 0/0 1/1 0/0 .text            gdev_cc_peek */
 int gdev_cc_peek() {
     int poll;
     u8 buff[GDEV_BUF_SIZE];
@@ -139,7 +127,6 @@ int gdev_cc_peek() {
     return poll;
 }
 
-/* 80372908-8037292C 36D248 0024+00 0/0 1/1 0/0 .text            gdev_cc_initinterrupts */
 int gdev_cc_initinterrupts() {
     DBInitInterrupts();
     return 0;

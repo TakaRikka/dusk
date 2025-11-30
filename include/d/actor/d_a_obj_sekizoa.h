@@ -56,49 +56,49 @@ public:
         ANM_YARIB_STILL_R = 32,
     };
 
-    /* 80CCE34C */ ~daObj_Sekizoa_c();
-    /* 80CCE570 */ int create();
-    /* 80CCE8B0 */ int CreateHeap();
-    /* 80CCEC54 */ int Delete();
-    /* 80CCEC88 */ int Execute();
-    /* 80CCECA8 */ int Draw();
-    /* 80CCED74 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80CCED94 */ static void* srchSekizoa(void*, void*);
-    /* 80CCEE30 */ fopAc_ac_c* getSekizoaP(int);
-    /* 80CCEFA4 */ fopAc_ac_c* getKMsgTagP();
-    /* 80CCF03C */ int isDelete();
-    /* 80CCF138 */ void reset();
-    /* 80CCF708 */ void srchActors();
-    /* 80CD04FC */ int setYariAnm(int, int, f32);
-    /* 80CD0A84 */ int selectAction();
-    /* 80CD0B08 */ int chkAction(actionFunc i_action);
-    /* 80CD0B34 */ int setAction(actionFunc i_action);
-    /* 80CD0BDC */ int checkMoveDirection();
-    /* 80CD0DE8 */ int getWaitMotionNo();
-    /* 80CD0E30 */ int getGameMotionNo();
-    /* 80CD0E78 */ int getNoJumpMotionNo();
-    /* 80CD0EAC */ int getHitMotionNo();
-    /* 80CD0EE0 */ int getStepMotionNo();
-    /* 80CD0F14 */ void jump();
-    /* 80CD14D8 */ void landing();
-    /* 80CD1688 */ int cutStart(int);
-    /* 80CD2708 */ int cutTurn(int);
-    /* 80CD2908 */ int cutJump(int);
-    /* 80CD2B64 */ int cutGoal(int);
-    /* 80CD376C */ int cutExit(int);
-    /* 80CD38F0 */ int cutFree(int);
-    /* 80CD3BD8 */ int cutExtinction(int);
-    /* 80CD3F08 */ int wait(void*);
-    /* 80CD425C */ int puzzle(void*);
-    /* 80CD45B0 */ int talk(void*);
-    /* 80CD5A40 */ daObj_Sekizoa_c(daNpcT_faceMotionAnmData_c const* param_1,
+    ~daObj_Sekizoa_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static void* srchSekizoa(void*, void*);
+    fopAc_ac_c* getSekizoaP(int);
+    fopAc_ac_c* getKMsgTagP();
+    int isDelete();
+    void reset();
+    void srchActors();
+    int setYariAnm(int, int, f32);
+    int selectAction();
+    int chkAction(actionFunc i_action);
+    int setAction(actionFunc i_action);
+    int checkMoveDirection();
+    int getWaitMotionNo();
+    int getGameMotionNo();
+    int getNoJumpMotionNo();
+    int getHitMotionNo();
+    int getStepMotionNo();
+    void jump();
+    void landing();
+    int cutStart(int);
+    int cutTurn(int);
+    int cutJump(int);
+    int cutGoal(int);
+    int cutExit(int);
+    int cutFree(int);
+    int cutExtinction(int);
+    int wait(void*);
+    int puzzle(void*);
+    int talk(void*);
+    daObj_Sekizoa_c(daNpcT_faceMotionAnmData_c const* param_1,
                                    daNpcT_motionAnmData_c const* param_2,
                                    daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3,
                                    int param_4,
                                    daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5,
                                    int param_6, daNpcT_evtData_c const* param_7, char** param_8)
         : daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8) {}
-    /* 80CD5B84 */ BOOL chkGoal() {
+    BOOL chkGoal() {
         daTag_EvtArea_c* evt_area_A = (daTag_EvtArea_c*)mActorMngrs[5].getActorP();
         if (evt_area_A->chkPointInArea(current.pos)) {
             return true;
@@ -112,22 +112,22 @@ public:
         return false;
     }
 
-    /* 80CD5B7C */ s32 getBackboneJointNo() { return 1; }
-    /* 80CD5B74 */ s32 getHeadJointNo() { return 3; }
-    /* 80CCF358 */ void afterJntAnm(int);
-    /* 80CCF3E4 */ void setParam();
-    /* 80CCF6BC */ BOOL checkChangeEvt();
-    /* 80CCF9A8 */ BOOL evtTalk();
-    /* 80CCFAA8 */ BOOL evtCutProc();
-    /* 80CCF704 */ void setAfterTalkMotion();
-    /* 80CCFBA0 */ void action();
-    /* 80CCFD08 */ void beforeMove();
-    /* 80CCFD80 */ void setAttnPos();
-    /* 80CD009C */ void setCollision();
-    /* 80CD03C0 */ int drawDbgInfo();
-    /* 80CD03C8 */ void drawOtherMdl();
-    /* 80CD05D0 */ void drawGhost();
-    /* 80CD06BC */ bool afterSetMotionAnm(int, int, f32, int);
+    s32 getBackboneJointNo() { return 1; }
+    s32 getHeadJointNo() { return 3; }
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void setAfterTalkMotion();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    void drawGhost();
+    bool afterSetMotionAnm(int, int, f32, int);
 
     void setWolfHowling() {
         if (mType != 0) {
@@ -251,7 +251,7 @@ public:
 };
 
 struct daObj_Sekizoa_Param_c {
-    /* 80CD5C30 */ virtual ~daObj_Sekizoa_Param_c() {}
+    virtual ~daObj_Sekizoa_Param_c() {}
 
     struct Data {
         /* 0x00 */ f32 field_0x00;

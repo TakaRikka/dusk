@@ -41,65 +41,53 @@ enum Type {
     /* 0x1 */ TYPE_1,
 };
 
-/* 80B74D78-80B74D80 000020 0008+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[1][2] = {
     {BMDR_ZELRO, ZELRO},
 };
 
-/* 80B74D80-80B74D90 -00001 0010+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0},
 };
 
-/* 80B74D90-80B74D98 -00001 0008+00 2/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "zelRo",
 };
 
-/* 80B74D98-80B74D9C 000040 0002+02 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[2] = {
     1, -1
 };
 
-/* 80B74D9C-80B74DA4 -00001 0008+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-/* 80B74DA4-80B74DDC 00004C 0038+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, 16, J3DFrameCtrl::EMode_LOOP, ZELRO, 1},
     {BCK_ZELRO_F_TALK_A, J3DFrameCtrl::EMode_NONE, ZELRO, 16, J3DFrameCtrl::EMode_LOOP, ZELRO, 1},
 };
 
-/* 80B74DDC-80B74DF8 000084 001C+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[1] = {
     {BCK_ZELRO_WAIT_A, J3DFrameCtrl::EMode_LOOP, ZELRO, BTK_ZELRO, J3DFrameCtrl::EMode_NONE, ZELRO, 1, 0},
 };
 
-/* 80B74DF8-80B74E18 0000A0 0020+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80B74E18-80B74E28 0000C0 0010+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80B74E28-80B74E2C -00001 0004+00 1/1 0/0 0/0 .data            mCutNameList__13daNpc_ZelRo_c */
 char* daNpc_ZelRo_c::mCutNameList = "";
 
-/* 80B74E2C-80B74E38 0000D4 000C+00 2/2 0/0 0/0 .data            mCutList__13daNpc_ZelRo_c */
 daNpc_ZelRo_c::cutFunc daNpc_ZelRo_c::mCutList[1] = {
     NULL
 };
 
-/* 80B71FAC-80B720E4 0000EC 0138+00 1/0 0/0 0/0 .text            __dt__13daNpc_ZelRo_cFv */
 daNpc_ZelRo_c::~daNpc_ZelRo_c() {
     if (heap != NULL) {
         mpMorf[0]->stopZelAnime();
@@ -108,7 +96,6 @@ daNpc_ZelRo_c::~daNpc_ZelRo_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-/* 80B74C5C-80B74CE8 000000 008C+00 6/6 0/0 0/0 .rodata          m__19daNpc_ZelRo_Param_c */
 const daNpc_ZelRo_HIOParam daNpc_ZelRo_Param_c::m = {
     190.0f,
     -3.0f,
@@ -153,7 +140,6 @@ const daNpc_ZelRo_HIOParam daNpc_ZelRo_Param_c::m = {
     0.0f,
 };
 
-/* 80B720E4-80B72378 000224 0294+00 1/1 0/0 0/0 .text            create__13daNpc_ZelRo_cFv */
 cPhs__Step daNpc_ZelRo_c::create() {
     daNpcT_ct(this, daNpc_ZelRo_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4, l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -208,7 +194,6 @@ cPhs__Step daNpc_ZelRo_c::create() {
     return phase;
 }
 
-/* 80B72378-80B72628 0004B8 02B0+00 1/1 0/0 0/0 .text            CreateHeap__13daNpc_ZelRo_cFv */
 int daNpc_ZelRo_c::CreateHeap() {
     int bmdIdx = mTwilight == true ? NONE : NONE;
     J3DModelData* mdlData_p = (J3DModelData*)dComIfG_getObjectRes(l_resNameList[l_bmdData[bmdIdx][1]], l_bmdData[bmdIdx][0]);
@@ -245,18 +230,15 @@ int daNpc_ZelRo_c::CreateHeap() {
     return 0;
 }
 
-/* 80B727E4-80B72818 000924 0034+00 1/1 0/0 0/0 .text            Delete__13daNpc_ZelRo_cFv */
 int daNpc_ZelRo_c::Delete() {
     this->~daNpc_ZelRo_c();
     return 1;
 }
 
-/* 80B72818-80B72838 000958 0020+00 2/2 0/0 0/0 .text            Execute__13daNpc_ZelRo_cFv */
 int daNpc_ZelRo_c::Execute() {
     return execute();
 }
 
-/* 80B72838-80B728FC 000978 00C4+00 1/1 0/0 0/0 .text            Draw__13daNpc_ZelRo_cFv */
 int daNpc_ZelRo_c::Draw() {
     J3DModelData* mdlData_p = mpMorf[0]->getModel()->getModelData();
     
@@ -278,12 +260,10 @@ int daNpc_ZelRo_c::Draw() {
     );
 }
 
-/* 80B728FC-80B7291C 000A3C 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__13daNpc_ZelRo_cFP10fopAc_ac_c */
 int daNpc_ZelRo_c::createHeapCallBack(fopAc_ac_c* a_this) {
     return static_cast<daNpc_ZelRo_c*>(a_this)->CreateHeap();
 }
 
-/* 80B7291C-80B72974 000A5C 0058+00 1/1 0/0 0/0 .text            ctrlJointCallBack__13daNpc_ZelRo_cFP8J3DJointi */
 int daNpc_ZelRo_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -297,7 +277,6 @@ int daNpc_ZelRo_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80B72974-80B72994 000AB4 0020+00 1/1 0/0 0/0 .text            getType__13daNpc_ZelRo_cFv */
 u8 daNpc_ZelRo_c::getType() {
     switch (fopAcM_GetParam(this) & 0xFF) {
         case 0:
@@ -308,7 +287,6 @@ u8 daNpc_ZelRo_c::getType() {
     }
 }
 
-/* 80B72994-80B729B0 000AD4 001C+00 1/1 0/0 0/0 .text            getFlowNodeNo__13daNpc_ZelRo_cFv */
 int daNpc_ZelRo_c::getFlowNodeNo() {
     u16 rv = home.angle.x;
 
@@ -319,12 +297,10 @@ int daNpc_ZelRo_c::getFlowNodeNo() {
     return rv;
 }
 
-/* 80B729B0-80B729BC 000AF0 000C+00 1/1 0/0 0/0 .text            getPath__13daNpc_ZelRo_cFv */
 u8 daNpc_ZelRo_c::getPath() {
     return (fopAcM_GetParam(this) & 0xFF00) >> 8;
 }
 
-/* 80B729BC-80B72A10 000AFC 0054+00 1/1 0/0 0/0 .text            isDelete__13daNpc_ZelRo_cFv */
 BOOL daNpc_ZelRo_c::isDelete() {
     if (mType == TYPE_1) {
         return FALSE;
@@ -340,7 +316,6 @@ BOOL daNpc_ZelRo_c::isDelete() {
     }
 }
 
-/* 80B72A10-80B72B8C 000B50 017C+00 1/1 0/0 0/0 .text            reset__13daNpc_ZelRo_cFv */
 void daNpc_ZelRo_c::reset() {
     initialize();
 
@@ -360,7 +335,6 @@ void daNpc_ZelRo_c::reset() {
     setAngle(home.angle.y);
 }
 
-/* 80B72B8C-80B72C18 000CCC 008C+00 1/0 0/0 0/0 .text            afterJntAnm__13daNpc_ZelRo_cFi */
 void daNpc_ZelRo_c::afterJntAnm(int param_1) {
     if (param_1 == 1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -371,7 +345,6 @@ void daNpc_ZelRo_c::afterJntAnm(int param_1) {
     }
 }
 
-/* 80B72C18-80B72D24 000D58 010C+00 1/0 0/0 0/0 .text            ctrlBtk__13daNpc_ZelRo_cFv */
 BOOL daNpc_ZelRo_c::ctrlBtk() {
     if (mpMatAnm[0] != NULL && mpMatAnm[1] != NULL) {
         if (field_0xe29 != 0 && mBtkAnm.getBtkAnm() != NULL) {
@@ -397,7 +370,6 @@ BOOL daNpc_ZelRo_c::ctrlBtk() {
     return FALSE;
 }
 
-/* 80B72D24-80B72E18 000E64 00F4+00 1/0 0/0 0/0 .text            setParam__13daNpc_ZelRo_cFv */
 void daNpc_ZelRo_c::setParam() {
     selectAction();
     srchActors();
@@ -423,18 +395,15 @@ void daNpc_ZelRo_c::setParam() {
     mMorfFrames = daNpc_ZelRo_Param_c::m.common.morf_frame;
 }
 
-/* 80B72E18-80B72E78 000F58 0060+00 1/0 0/0 0/0 .text setAfterTalkMotion__13daNpc_ZelRo_cFv */
 void daNpc_ZelRo_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.getNo();
     mFaceMotionSeqMngr.setNo(FACE_NONE, -1.0f, FALSE, 0);
 }
 
-/* 80B72E78-80B72E7C 000FB8 0004+00 1/1 0/0 0/0 .text            srchActors__13daNpc_ZelRo_cFv */
 void daNpc_ZelRo_c::srchActors() {
     /* empty function */
 }
 
-/* 80B72E7C-80B72F7C 000FBC 0100+00 1/0 0/0 0/0 .text            evtTalk__13daNpc_ZelRo_cFv */
 BOOL daNpc_ZelRo_c::evtTalk() {
     if (chkAction(&daNpc_ZelRo_c::talk)) {
         (this->*mAction)(NULL);
@@ -458,7 +427,6 @@ BOOL daNpc_ZelRo_c::evtTalk() {
     return TRUE;
 }
 
-/* 80B72F7C-80B73044 0010BC 00C8+00 1/0 0/0 0/0 .text            evtCutProc__13daNpc_ZelRo_cFv */
 BOOL daNpc_ZelRo_c::evtCutProc() {
     BOOL rv = FALSE;
     int staffId = dComIfGp_getEventManager().getMyStaffId("ZelRo", this, -1);
@@ -476,7 +444,6 @@ BOOL daNpc_ZelRo_c::evtCutProc() {
     return rv;
 }
 
-/* 80B73044-80B73194 001184 0150+00 1/0 0/0 0/0 .text            action__13daNpc_ZelRo_cFv */
 void daNpc_ZelRo_c::action() {
     fopAc_ac_c* actor_p = hitChk(&mCyl, 0xFFFFFFFF);
 
@@ -501,14 +468,12 @@ void daNpc_ZelRo_c::action() {
     }
 }
 
-/* 80B73194-80B7320C 0012D4 0078+00 1/0 0/0 0/0 .text            beforeMove__13daNpc_ZelRo_cFv */
 void daNpc_ZelRo_c::beforeMove() {
     if (checkHide() || mNoDraw) {
         attention_info.flags = 0;
     }
 }
 
-/* 80B7320C-80B7342C 00134C 0220+00 1/0 0/0 0/0 .text            setAttnPos__13daNpc_ZelRo_cFv */
 void daNpc_ZelRo_c::setAttnPos() {
     cXyz sp48(10.0f, -30.0f, 0.0f);
     
@@ -530,7 +495,6 @@ void daNpc_ZelRo_c::setAttnPos() {
     attention_info.position.y += daNpc_ZelRo_Param_c::m.common.attention_offset;
 }
 
-/* 80B7342C-80B7355C 00156C 0130+00 1/0 0/0 0/0 .text            setCollision__13daNpc_ZelRo_cFv */
 void daNpc_ZelRo_c::setCollision() {
     cXyz pos;
 
@@ -563,24 +527,20 @@ void daNpc_ZelRo_c::setCollision() {
     mCyl.ClrTgHit();
 }
 
-/* 80B7355C-80B73564 00169C 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__13daNpc_ZelRo_cFv */
 int daNpc_ZelRo_c::drawDbgInfo() {
     return 0;
 }
 
-/* 80B73564-80B735AC 0016A4 0048+00 1/1 0/0 0/0 .text            selectAction__13daNpc_ZelRo_cFv */
 BOOL daNpc_ZelRo_c::selectAction() {
     mNextAction = NULL;
     mNextAction = &daNpc_ZelRo_c::wait;
     return TRUE;
 }
 
-/* 80B735AC-80B735D8 0016EC 002C+00 1/1 0/0 0/0 .text            chkAction__13daNpc_ZelRo_cFM13daNpc_ZelRo_cFPCvPvPv_i */
 BOOL daNpc_ZelRo_c::chkAction(actionFunc action) {
     return mAction == action;
 }
 
-/* 80B735D8-80B73680 001718 00A8+00 2/2 0/0 0/0 .text            setAction__13daNpc_ZelRo_cFM13daNpc_ZelRo_cFPCvPvPv_i */
 BOOL daNpc_ZelRo_c::setAction(actionFunc action) {
     mMode = MODE_EXIT;
 
@@ -598,7 +558,6 @@ BOOL daNpc_ZelRo_c::setAction(actionFunc action) {
     return TRUE;
 }
 
-/* 80B73680-80B7382C 0017C0 01AC+00 1/0 0/0 0/0 .text            wait__13daNpc_ZelRo_cFPv */
 int daNpc_ZelRo_c::wait(void* param_1) {
     switch (mMode) {
         case MODE_ENTER:
@@ -631,7 +590,6 @@ int daNpc_ZelRo_c::wait(void* param_1) {
     return 1;
 }
 
-/* 80B7382C-80B73990 00196C 0164+00 2/0 0/0 0/0 .text            talk__13daNpc_ZelRo_cFPv */
 int daNpc_ZelRo_c::talk(void* param_1) {
     BOOL bVar1 = false;
 
@@ -674,35 +632,28 @@ int daNpc_ZelRo_c::test(void* param_1) {
 }
 #endif
 
-/* 80B73990-80B739B0 001AD0 0020+00 1/0 0/0 0/0 .text            daNpc_ZelRo_Create__FPv */
 static int daNpc_ZelRo_Create(void* a_this) {
     return static_cast<daNpc_ZelRo_c*>(a_this)->create();
 }
 
-/* 80B739B0-80B739D0 001AF0 0020+00 1/0 0/0 0/0 .text            daNpc_ZelRo_Delete__FPv */
 static int daNpc_ZelRo_Delete(void* a_this) {
     return static_cast<daNpc_ZelRo_c*>(a_this)->Delete();
 }
 
-/* 80B739D0-80B739F0 001B10 0020+00 1/0 0/0 0/0 .text            daNpc_ZelRo_Execute__FPv */
 static int daNpc_ZelRo_Execute(void* a_this) {
     return static_cast<daNpc_ZelRo_c*>(a_this)->Execute();
 }
 
-/* 80B739F0-80B73A10 001B30 0020+00 1/0 0/0 0/0 .text            daNpc_ZelRo_Draw__FPv */
 static int daNpc_ZelRo_Draw(void* a_this) {
     return static_cast<daNpc_ZelRo_c*>(a_this)->Draw();
 }
 
-/* 80B73A10-80B73A18 001B50 0008+00 1/0 0/0 0/0 .text            daNpc_ZelRo_IsDelete__FPv */
 static int daNpc_ZelRo_IsDelete(void* a_this) {
     return 1;
 }
 
-/* 80B7503C-80B75040 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpc_ZelRo_Param_c l_HIO;
 
-/* 80B74E5C-80B74E7C -00001 0020+00 1/0 0/0 0/0 .data            daNpc_ZelRo_MethodTable */
 static actor_method_class daNpc_ZelRo_MethodTable = {
     (process_method_func)daNpc_ZelRo_Create,
     (process_method_func)daNpc_ZelRo_Delete,
@@ -711,7 +662,6 @@ static actor_method_class daNpc_ZelRo_MethodTable = {
     (process_method_func)daNpc_ZelRo_Draw,
 };
 
-/* 80B74E7C-80B74EAC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_ZELRO */
 extern actor_process_profile_definition g_profile_NPC_ZELRO = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID

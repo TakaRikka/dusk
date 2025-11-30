@@ -18,15 +18,15 @@ private:
 public:
     daNpcF_ActorMngr_c() { initialize(); }
 
-    /* 801506B0 */ void initialize();
-    /* 801506D8 */ void entry(unsigned int);
-    /* 801506BC */ void entry(fopAc_ac_c*);
-    /* 801506E0 */ void remove();
-    /* 801506EC */ fopAc_ac_c* getActorP();
+    void initialize();
+    void entry(unsigned int);
+    void entry(fopAc_ac_c*);
+    void remove();
+    fopAc_ac_c* getActorP();
 
     fpc_ProcID getPId() { return mActorID; }
 
-    /* 80155E40 */ virtual ~daNpcF_ActorMngr_c() {}
+    virtual ~daNpcF_ActorMngr_c() {}
 };
 
 BOOL daNpcF_chkEvtBit(u32 i_idx);
@@ -188,76 +188,76 @@ public:
         FORCE_DONT_INLINE;
         initialize();
     }
-    /* 80152014 */ BOOL execute();
-    /* 801522AC */ int draw(BOOL, BOOL, f32, _GXColorS10*, BOOL);
-    /* 80152614 */ static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*,
+    BOOL execute();
+    int draw(BOOL, BOOL, f32, _GXColorS10*, BOOL);
+    static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*,
                                              dCcD_GObjInf*);
-    /* 80152654 */ static void* srchAttnActor1(void*, void*);
-    /* 801526E8 */ static void* srchActor(void*, void*);
+    static void* srchAttnActor1(void*, void*);
+    static void* srchActor(void*, void*);
 
-    /* 801528C8 */ void initialize();
-    /* 80152B2C */ J3DAnmTransformKey* getTrnsfrmKeyAnmP(char*, int);
-    /* 80152B68 */ J3DAnmTexPattern* getTexPtrnAnmP(char*, int);
-    /* 80152BA4 */ J3DAnmTextureSRTKey* getTexSRTKeyAnmP(char*, int);
-    /* 80152BE0 */ J3DAnmTevRegKey* getTevRegKeyAnmP(char*, int);
-    /* 80152C1C */ BOOL setMcaMorfAnm(J3DAnmTransformKey* i_anm, f32 i_rate, f32 i_morf, int i_attr,
+    void initialize();
+    J3DAnmTransformKey* getTrnsfrmKeyAnmP(char*, int);
+    J3DAnmTexPattern* getTexPtrnAnmP(char*, int);
+    J3DAnmTextureSRTKey* getTexSRTKeyAnmP(char*, int);
+    J3DAnmTevRegKey* getTevRegKeyAnmP(char*, int);
+    BOOL setMcaMorfAnm(J3DAnmTransformKey* i_anm, f32 i_rate, f32 i_morf, int i_attr,
                                       int i_start, int i_end);
-    /* 80152C80 */ BOOL setBckAnm(J3DAnmTransform* i_bck, f32 i_rate, int i_attr, int i_start,
+    BOOL setBckAnm(J3DAnmTransform* i_bck, f32 i_rate, int i_attr, int i_start,
                                   int i_end, bool i_modify);
-    /* 80152CC4 */ BOOL setBtpAnm(J3DAnmTexPattern* i_btp, J3DModelData* i_modelData, f32 i_rate,
+    BOOL setBtpAnm(J3DAnmTexPattern* i_btp, J3DModelData* i_modelData, f32 i_rate,
                                   int i_attr);
-    /* 80152D04 */ BOOL setBtkAnm(J3DAnmTextureSRTKey* i_btk, J3DModelData* i_modelData, f32 i_rate,
+    BOOL setBtkAnm(J3DAnmTextureSRTKey* i_btk, J3DModelData* i_modelData, f32 i_rate,
                                   int i_attr);
-    /* 80152D44 */ BOOL setBrkAnm(J3DAnmTevRegKey* i_brk, J3DModelData* i_modelData, f32 i_rate,
+    BOOL setBrkAnm(J3DAnmTevRegKey* i_brk, J3DModelData* i_modelData, f32 i_rate,
                                   int i_attr);
-    /* 80152D84 */ void setEnvTevColor();
-    /* 80152DE0 */ void setRoomNo();
-    /* 80152E24 */ BOOL chkEndAnm(f32);
-    /* 80152EC4 */ BOOL chkEndAnm(J3DFrameCtrl*, f32);
-    /* 80152F40 */ BOOL playAllAnm();
-    /* 80153150 */ void playExpressionAnm(daNpcF_c::daNpcF_anmPlayData***);
-    /* 80153264 */ void playMotionAnm(daNpcF_c::daNpcF_anmPlayData***);
-    /* 8015337C */ void setLookatMtx(int, int*, f32);
-    /* 80153578 */ BOOL hitChk2(dCcD_Cyl*, BOOL, BOOL);
-    /* 80153658 */ void setDamage(int, int, int);
-    /* 80153718 */ int ctrlMsgAnm(int&, int&, fopAc_ac_c*, BOOL);
-    /* 8015387C */ void orderEvent(int, char*, u16, u16, u8, u16);
-    /* 80153954 */ void changeEvent(char*, char*, u16, u16);
-    /* 801539F0 */ BOOL chkActorInSight(fopAc_ac_c*, f32);
-    /* 80153A78 */ BOOL chkActorInArea(fopAc_ac_c*, cXyz, cXyz, s16);
-    /* 80153BDC */ BOOL chkActorInAttnArea(fopAc_ac_c*, fopAc_ac_c*, int);
-    /* 80153D1C */ BOOL initTalk(int, fopAc_ac_c**);
-    /* 80153D84 */ BOOL talkProc(int*, BOOL, fopAc_ac_c**);
-    /* 80153EF4 */ BOOL turn(s16, f32, int);
-    /* 801540A4 */ BOOL step(s16, int, int, int);
-    /* 80154250 */ void setAngle(s16);
-    /* 80154278 */ u8 getDistTableIdx(int, int);
-    /* 801542A0 */ fopAc_ac_c* getEvtAreaTagP(int, int);
-    /* 8015436C */ fopAc_ac_c* getAttnActorP(BOOL, fpcLyIt_JudgeFunc, f32, f32, f32, f32, s16,
+    void setEnvTevColor();
+    void setRoomNo();
+    BOOL chkEndAnm(f32);
+    BOOL chkEndAnm(J3DFrameCtrl*, f32);
+    BOOL playAllAnm();
+    void playExpressionAnm(daNpcF_c::daNpcF_anmPlayData***);
+    void playMotionAnm(daNpcF_c::daNpcF_anmPlayData***);
+    void setLookatMtx(int, int*, f32);
+    BOOL hitChk2(dCcD_Cyl*, BOOL, BOOL);
+    void setDamage(int, int, int);
+    int ctrlMsgAnm(int&, int&, fopAc_ac_c*, BOOL);
+    void orderEvent(int, char*, u16, u16, u8, u16);
+    void changeEvent(char*, char*, u16, u16);
+    BOOL chkActorInSight(fopAc_ac_c*, f32);
+    BOOL chkActorInArea(fopAc_ac_c*, cXyz, cXyz, s16);
+    BOOL chkActorInAttnArea(fopAc_ac_c*, fopAc_ac_c*, int);
+    BOOL initTalk(int, fopAc_ac_c**);
+    BOOL talkProc(int*, BOOL, fopAc_ac_c**);
+    BOOL turn(s16, f32, int);
+    BOOL step(s16, int, int, int);
+    void setAngle(s16);
+    u8 getDistTableIdx(int, int);
+    fopAc_ac_c* getEvtAreaTagP(int, int);
+    fopAc_ac_c* getAttnActorP(BOOL, fpcLyIt_JudgeFunc, f32, f32, f32, f32, s16,
                                              int, BOOL);
-    /* 80154730 */ BOOL chkActorInSight2(fopAc_ac_c*, f32, s16);
-    /* 80154834 */ BOOL chkPointInArea(cXyz, cXyz, f32, f32, f32, s16);
-    /* 801548F4 */ BOOL chkPointInArea(cXyz, cXyz, cXyz, s16);
-    /* 8015496C */ cXyz getAttentionPos(fopAc_ac_c*);
-    /* 801549E0 */ BOOL chkFindPlayer2(BOOL, s16);
-    /* 80154BD8 */ void setHitodamaPrtcl();
+    BOOL chkActorInSight2(fopAc_ac_c*, f32, s16);
+    BOOL chkPointInArea(cXyz, cXyz, f32, f32, f32, s16);
+    BOOL chkPointInArea(cXyz, cXyz, cXyz, s16);
+    cXyz getAttentionPos(fopAc_ac_c*);
+    BOOL chkFindPlayer2(BOOL, s16);
+    void setHitodamaPrtcl();
 
-    /* 80155BF4 */ virtual ~daNpcF_c() {}
-    /* 80155BC8 */ virtual void setParam() {}
-    /* 80155BC0 */ virtual BOOL main() { return TRUE; }
-    /* 80155BD8 */ virtual BOOL ctrlBtk() { return FALSE; }
-    /* 80155BBC */ virtual void adjustShapeAngle() {}
-    /* 8015276C */ virtual void setMtx();
-    /* 801527FC */ virtual void setMtx2();
-    /* 80155BB8 */ virtual void setAttnPos() {}
-    /* 80155BB4 */ virtual void setCollisions() {}
-    /* 80155BE0 */ virtual bool setExpressionAnm(int i_idx, bool i_modify) { return true; }
-    /* 80155EC8 */ virtual bool setExpressionBtp(int i_idx) { return true; }
-    /* 80155BF0 */ virtual void setExpression(int i_expression, f32 i_morf) {}
-    /* 80155BE8 */ virtual void setMotionAnm(int i_idx, f32 i_morf) {}
-    /* 80155BEC */ virtual void setMotion(int i_motion, f32 i_morf, int i_restart) {}
-    /* 80155BD0 */ virtual BOOL drawDbgInfo() { return TRUE; }
-    /* 80155BCC */ virtual void drawOtherMdls() {}
+    virtual ~daNpcF_c() {}
+    virtual void setParam() {}
+    virtual BOOL main() { return TRUE; }
+    virtual BOOL ctrlBtk() { return FALSE; }
+    virtual void adjustShapeAngle() {}
+    virtual void setMtx();
+    virtual void setMtx2();
+    virtual void setAttnPos() {}
+    virtual void setCollisions() {}
+    virtual bool setExpressionAnm(int i_idx, bool i_modify) { return true; }
+    virtual bool setExpressionBtp(int i_idx) { return true; }
+    virtual void setExpression(int i_expression, f32 i_morf) {}
+    virtual void setMotionAnm(int i_idx, f32 i_morf) {}
+    virtual void setMotion(int i_motion, f32 i_morf, int i_restart) {}
+    virtual BOOL drawDbgInfo() { return TRUE; }
+    virtual void drawOtherMdls() {}
 
     BOOL chkActorInSpeakArea(fopAc_ac_c* i_actorCheck, fopAc_ac_c* i_actorArea) {
         return chkActorInAttnArea(i_actorCheck, i_actorArea, attention_info.distances[fopAc_attn_SPEAK_e]);
@@ -301,9 +301,9 @@ private:
 
 public:
     daNpcF_MatAnm_c() { initialize(); }
-    /* 80150738 */ void initialize();
-    /* 8015075C */ void calc(J3DMaterial*) const;
-    /* 80155ED0 */ ~daNpcF_MatAnm_c() {}
+    void initialize();
+    void calc(J3DMaterial*) const;
+    ~daNpcF_MatAnm_c() {}
     void setNowOffsetX(float i_nowOffsetX) { mNowOffsetX = i_nowOffsetX; }
     void setNowOffsetY(float i_nowOffsetY) { mNowOffsetY = i_nowOffsetY; }
     void onEyeMoveFlag() { mEyeMoveFlag = 1; }
@@ -319,7 +319,7 @@ private:
     /* 0x08 */ dPnt mPoints[96];
 
 public:
-    /* 80150870 */ void initialize(dPath*, int);
+    void initialize(dPath*, int);
 
     daNpcF_SPCurve_c() {
         initialize(NULL, 0);
@@ -341,18 +341,18 @@ protected:
     /* 0x20 */ daNpcF_SPCurve_c mSPCurve;
 
 public:
-    /* 80150900 */ void initialize();
-    /* 8015095C */ int setPathInfo(u8, s8, u8);
-    /* 80150A24 */ BOOL chkPassed(cXyz);
-    /* 80150A7C */ BOOL chkPassedDst(cXyz);
-    /* 80150BBC */ void reverse();
-    /* 80150BE0 */ BOOL setNextIdx();
-    /* 80150C18 */ int getNextIdx();
-    /* 80150C60 */ int getBeforeIdx();
-    /* 80150CA8 */ BOOL getBeforePos(cXyz&);
-    /* 80150D44 */ BOOL getNextPos(cXyz&);
-    /* 80150DE0 */ BOOL getDstPos(cXyz, cXyz&);
-    /* 80150EB4 */ void setNextIdxDst(cXyz);
+    void initialize();
+    int setPathInfo(u8, s8, u8);
+    BOOL chkPassed(cXyz);
+    BOOL chkPassedDst(cXyz);
+    void reverse();
+    BOOL setNextIdx();
+    int getNextIdx();
+    int getBeforeIdx();
+    BOOL getBeforePos(cXyz&);
+    BOOL getNextPos(cXyz&);
+    BOOL getDstPos(cXyz, cXyz&);
+    void setNextIdxDst(cXyz);
 
     daNpcF_Path_c() {
         initialize();
@@ -389,16 +389,16 @@ private:
     /* 0x98 vtable */
 
 public:
-    /* 80151038 */ void initialize();
-    /* 801510B8 */ void setParam(f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, s16,
+    void initialize();
+    void setParam(f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, s16,
                                  cXyz*);
-    /* 80151350 */ void calc(fopAc_ac_c*, Mtx, csXyz**, BOOL, int, BOOL);
-    /* 801515D4 */ void adjustMoveDisAngle(s16&, s16, s16, s16);
-    /* 80151648 */ void initCalc(fopAc_ac_c*, Mtx, cXyz*, csXyz*, f32*, cXyz&, BOOL);
-    /* 80151A54 */ void update(cXyz*, csXyz*, f32*);
-    /* 80151B68 */ void calcMoveDisAngle(int, cXyz*, csXyz*, cXyz, int, BOOL);
-    /* 80151F54 */ void setRotAngle();
-    /* 80151FE0 */ void clrRotAngle();
+    void calc(fopAc_ac_c*, Mtx, csXyz**, BOOL, int, BOOL);
+    void adjustMoveDisAngle(s16&, s16, s16, s16);
+    void initCalc(fopAc_ac_c*, Mtx, cXyz*, csXyz*, f32*, cXyz&, BOOL);
+    void update(cXyz*, csXyz*, f32*);
+    void calcMoveDisAngle(int, cXyz*, csXyz*, cXyz, int, BOOL);
+    void setRotAngle();
+    void clrRotAngle();
 
     daNpcF_Lookat_c() { initialize(); }
     virtual ~daNpcF_Lookat_c() {}
@@ -410,15 +410,15 @@ public:
 class daNpcF_MoveBgActor_c : public daNpcF_c {
 private:
 public:
-    /* 80155B54 */ ~daNpcF_MoveBgActor_c() {}
-    /* 80155E88 */ virtual bool CreateHeap() { return true; }
-    /* 80155E90 */ virtual bool Create() { return true; }
-    /* 80155EA0 */ virtual bool Execute(Mtx**) { return true; }
-    /* 80155EA8 */ virtual bool Draw() { return true; }
-    /* 80155E98 */ virtual bool Delete() { return true; }
-    /* 80155EB0 */ virtual bool IsDelete() { return true; }
-    /* 80155EB8 */ virtual bool ToFore() { return true; }
-    /* 80155EC0 */ virtual bool ToBack() { return true; }
+    ~daNpcF_MoveBgActor_c() {}
+    virtual bool CreateHeap() { return true; }
+    virtual bool Create() { return true; }
+    virtual bool Execute(Mtx**) { return true; }
+    virtual bool Draw() { return true; }
+    virtual bool Delete() { return true; }
+    virtual bool IsDelete() { return true; }
+    virtual bool ToFore() { return true; }
+    virtual bool ToBack() { return true; }
 };
 
 struct daNpcF_HIOParam {

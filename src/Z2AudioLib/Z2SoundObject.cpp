@@ -39,8 +39,6 @@ void Z2SoundObjBase::init(Vec* posPtr, u8 handleNum) {
     alive_ = true;
 }
 
-/* 802BDFF8-802BE038 2B8938 0040+00 1/1 8/8 61/61 .text            deleteObject__14Z2SoundObjBaseFv
- */
 void Z2SoundObjBase::deleteObject() {
     #if VERSION == VERSION_SHIELD_DEBUG
     Z2GetSoundObjMgr()->getAllList()->remove(this);
@@ -58,7 +56,6 @@ void Z2SoundObjBase::framework(u32 param_0, s8 reverb) {
     }
 }
 
-/* 802BE070-802BE104 2B89B0 0094+00 5/0 3/0 0/0 .text            dispose__14Z2SoundObjBaseFv */
 void Z2SoundObjBase::dispose() {
     JAISoundHandle* handle;
     JSULink<Z2SoundHandlePool>* i;
@@ -76,8 +73,6 @@ void Z2SoundObjBase::dispose() {
     alive_ = false;
 }
 
-/* 802BE104-802BE144 2B8A44 0040+00 5/0 3/0 0/0 .text
- * stopOK__14Z2SoundObjBaseFR17Z2SoundHandlePool                */
 bool Z2SoundObjBase::stopOK(Z2SoundHandlePool& handlePool) {
     if ((Z2GetSoundInfo()->getSwBit(handlePool->getID()) & 0x8000) != 0) {
         return false;
@@ -86,8 +81,6 @@ bool Z2SoundObjBase::stopOK(Z2SoundHandlePool& handlePool) {
     }
 }
 
-/* 802BE144-802BE2D4 2B8A84 0190+00 5/3 3/1 0/0 .text
- * startSound__14Z2SoundObjBaseF10JAISoundIDUlSc                */
 Z2SoundHandlePool* Z2SoundObjBase::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     if (!alive_) {
         return NULL;
@@ -132,8 +125,6 @@ Z2SoundHandlePool* Z2SoundObjBase::startSound(JAISoundID soundID, u32 mapinfo, s
     return handle;
 }
 
-/* 802BE2D4-802BE4A4 2B8C14 01D0+00 4/2 3/0 0/0 .text
- * startLevelSound__14Z2SoundObjBaseF10JAISoundIDUlSc           */
 Z2SoundHandlePool* Z2SoundObjBase::startLevelSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     if (!alive_) {
         return NULL;
@@ -195,8 +186,6 @@ Z2SoundHandlePool* Z2SoundObjBase::startLevelSound(JAISoundID soundID, u32 mapin
     return handle;
 }
 
-/* 802BE4A4-802BE5A0 2B8DE4 00FC+00 0/0 5/5 21/21 .text
- * startCollisionSE__14Z2SoundObjBaseFUlUlP14Z2SoundObjBase     */
 Z2SoundHandlePool* Z2SoundObjBase::startCollisionSE(u32 hitID, u32 mapinfo, Z2SoundObjBase* other) {
     if (other != NULL) {
         return other->startCollisionSE(hitID, mapinfo, NULL);
@@ -229,16 +218,13 @@ Z2SoundHandlePool* Z2SoundObjBase::startCollisionSE(u32 hitID, u32 mapinfo, Z2So
     return handle;
 }
 
-/* 802BE5A0-802BE5FC 2B8EE0 005C+00 1/1 0/0 0/0 .text            __ct__21Z2DopplerSoundObjBaseFv */
 Z2DopplerSoundObjBase::Z2DopplerSoundObjBase() : Z2SoundObjBase() {
     field_0x20 = Z2Calc::cNullVec;
     field_0x2c = Z2Calc::cNullVec;
 }
 
-/* 802BE5FC-802BE65C 2B8F3C 0060+00 0/0 0/0 1/1 .text            __dt__21Z2DopplerSoundObjBaseFv */
 Z2DopplerSoundObjBase::~Z2DopplerSoundObjBase() {}
 
-/* 802BE65C-802BE6B8 2B8F9C 005C+00 1/0 0/0 0/0 .text init__21Z2DopplerSoundObjBaseFP3VecUc */
 void Z2DopplerSoundObjBase::init(Vec* posPtr, u8 handleNum) {
     Z2SoundObjBase::init(posPtr, handleNum);
     if (pos_ != NULL) {
@@ -247,7 +233,6 @@ void Z2DopplerSoundObjBase::init(Vec* posPtr, u8 handleNum) {
     }
 }
 
-/* 802BE6B8-802BE714 2B8FF8 005C+00 2/0 0/0 0/0 .text framework__21Z2DopplerSoundObjBaseFUlSc */
 void Z2DopplerSoundObjBase::framework(u32 param_0, s8 reverb) {
     Z2SoundObjBase::framework(param_0, reverb);
     if (pos_ != NULL) {
@@ -256,8 +241,6 @@ void Z2DopplerSoundObjBase::framework(u32 param_0, s8 reverb) {
     }
 }
 
-/* 802BE714-802BE7AC 2B9054 0098+00 2/0 0/0 0/0 .text
- * startSound__21Z2DopplerSoundObjBaseF10JAISoundIDUlSc         */
 Z2SoundHandlePool* Z2DopplerSoundObjBase::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     JGeometry::TVec3<f32>* pos = pos_;
     pos_ = NULL;
@@ -273,8 +256,6 @@ Z2SoundHandlePool* Z2DopplerSoundObjBase::startSound(JAISoundID soundID, u32 map
     return handle;
 }
 
-/* 802BE7AC-802BE844 2B90EC 0098+00 2/0 0/0 0/0 .text
- * startLevelSound__21Z2DopplerSoundObjBaseF10JAISoundIDUlSc    */
 Z2SoundHandlePool* Z2DopplerSoundObjBase::startLevelSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     JGeometry::TVec3<f32>* pos = pos_;
     pos_ = NULL;
@@ -290,15 +271,12 @@ Z2SoundHandlePool* Z2DopplerSoundObjBase::startLevelSound(JAISoundID soundID, u3
     return handle;
 }
 
-/* 802BE844-802BE880 2B9184 003C+00 0/0 8/8 65/65 .text            __ct__16Z2SoundObjSimpleFv */
 Z2SoundObjSimple::Z2SoundObjSimple() : Z2SoundObjBase() {}
 
 void Z2SoundObjSimple::init(Vec* posPtr, u8 handleNum) {
     Z2SoundObjBase::init(posPtr, handleNum);
 }
 
-/* 802BE8A0-802BE9B0 2B91E0 0110+00 1/0 0/0 0/0 .text
- * startSound__16Z2SoundObjSimpleF10JAISoundIDUlSc              */
 Z2SoundHandlePool* Z2SoundObjSimple::startSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     Z2SoundHandlePool* handle = Z2SoundObjBase::startSound(soundID, mapinfo, reverb);
 
@@ -312,8 +290,6 @@ Z2SoundHandlePool* Z2SoundObjSimple::startSound(JAISoundID soundID, u32 mapinfo,
     return handle;
 }
 
-/* 802BE9B0-802BEB38 2B92F0 0188+00 1/0 0/0 0/0 .text
- * startLevelSound__16Z2SoundObjSimpleF10JAISoundIDUlSc         */
 Z2SoundHandlePool* Z2SoundObjSimple::startLevelSound(JAISoundID soundID, u32 mapinfo, s8 reverb) {
     Z2SoundHandlePool* handle = Z2SoundObjBase::startLevelSound(soundID, mapinfo, reverb);
 
@@ -343,27 +319,21 @@ Z2SoundHandlePool* Z2SoundObjSimple::startLevelSound(JAISoundID soundID, u32 map
     return handle;
 }
 
-/* 802BEB38-802BEB74 2B9478 003C+00 0/0 0/0 2/2 .text            __ct__15Z2SoundObjArrowFv */
 Z2SoundObjArrow::Z2SoundObjArrow() : Z2DopplerSoundObjBase() {}
 
-/* 802BEB74-802BEB94 2B94B4 0020+00 1/0 0/0 0/0 .text            init__15Z2SoundObjArrowFP3VecUc */
 void Z2SoundObjArrow::init(Vec* posPtr, u8 handleNum) {
     Z2SoundObjBase::init(posPtr, handleNum);
 }
 
-/* 802BEB94-802BEBDC 2B94D4 0048+00 0/0 2/2 0/0 .text            __ct__15Z2SoundObjAnimeFv */
 Z2SoundObjAnime::Z2SoundObjAnime() : Z2SoundObjBase() {
     animation_ = NULL;
     reverse_ = false;
 }
 
-/* 802BEBDC-802BEBFC 2B951C 0020+00 1/0 1/0 0/0 .text            init__15Z2SoundObjAnimeFP3VecUc */
 void Z2SoundObjAnime::init(Vec* posPtr, u8 handleNum) {
     Z2SoundObjBase::init(posPtr, handleNum);
 }
 
-/* 802BEBFC-802BED68 2B953C 016C+00 0/0 2/2 0/0 .text            initAnime__15Z2SoundObjAnimeFPvbff
- */
 void Z2SoundObjAnime::initAnime(void* animation, bool param_1, f32 startFrame, f32 param_3) {
     ageSounds_();
     animation_ = (JAUSoundAnimation*)animation;
@@ -389,7 +359,6 @@ void Z2SoundObjAnime::initAnime(void* animation, bool param_1, f32 startFrame, f
     }
 }
 
-/* 802BED68-802BEED4 2B96A8 016C+00 1/1 0/0 0/0 .text            ageSounds___15Z2SoundObjAnimeFv */
 void Z2SoundObjAnime::ageSounds_() {
     for (int i = 0; i < getNumHandles(); i++) {
         if ((*getHandle(i))) {
@@ -415,8 +384,6 @@ void Z2SoundObjAnime::ageSounds_() {
     }
 }
 
-/* 802BEED4-802BF304 2B9814 0430+00 0/0 2/2 0/0 .text            updateAnime__15Z2SoundObjAnimeFff
- */
 void Z2SoundObjAnime::updateAnime(f32 param_0, f32 param_1) {
     for (int i = 0; i < getNumHandles(); i++) {
         if ((*getHandle(i)) && (*getHandle(i))->isAnimated()) {
@@ -467,8 +434,6 @@ void Z2SoundObjAnime::updateAnime(f32 param_0, f32 param_1) {
     curSoundFrame_ = param_0;
 }
 
-/* 802BF304-802BF660 2B9C44 035C+00 1/1 0/0 0/0 .text updateSoundLifeTime___15Z2SoundObjAnimeFff
- */
 void Z2SoundObjAnime::updateSoundLifeTime_(f32 param_0, f32 param_1) {
     if (animation_ == NULL) {
         return;
@@ -511,8 +476,6 @@ void Z2SoundObjAnime::updateSoundLifeTime_(f32 param_0, f32 param_1) {
     }
 }
 
-/* 802BF660-802BF890 2B9FA0 0230+00 1/1 0/0 0/0 .text
- * startSoundInner__15Z2SoundObjAnimeFRCQ29JGeometry8TVec3<f>fP14Z2SoundStarterUlSc */
 void Z2SoundObjAnime::startSoundInner(const JGeometry::TVec3<f32>& pos, f32 param_1,
                                       Z2SoundStarter* soundStarter, u32 mapinfo, s8 reverb) {
     JUT_ASSERT(746, curSoundIndex_ >= 0);
@@ -558,15 +521,11 @@ void Z2SoundObjAnime::startSoundInner(const JGeometry::TVec3<f32>& pos, f32 para
     }
 }
 
-/* 802BF890-802BF898 2BA1D0 0008+00 1/1 0/0 0/0 .text
- * getSoundID__15Z2SoundObjAnimeFPC22JAUSoundAnimationSoundRCQ29JGeometry8TVec3<f>f */
 u32 Z2SoundObjAnime::getSoundID(const JAUSoundAnimationSound* animationSound,
                                 const JGeometry::TVec3<f32>& param_1, f32 param_2) {
     return animationSound->mSoundId;
 }
 
-/* 802BF898-802BF920 2BA1D8 0088+00 1/1 0/0 0/0 .text
- * playsSound__15Z2SoundObjAnimeFPC22JAUSoundAnimationSoundRCQ29JGeometry8TVec3<f>f */
 bool Z2SoundObjAnime::playsSound(const JAUSoundAnimationSound* animationSound,
                                  const JGeometry::TVec3<f32>& param_1, f32 param_2) {
     (void)param_1;

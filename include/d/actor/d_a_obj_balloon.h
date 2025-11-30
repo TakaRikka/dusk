@@ -23,15 +23,15 @@ public:
         SIZE_SMALL_e,
     };
 
-    /* 80BA7FF4 */ int draw();
-    /* 80BA80F4 */ void saveBestScore();
-    /* 80BA810C */ void cc_set();
-    /* 80BA81B8 */ void action();
-    /* 80BA865C */ void mtx_set();
-    /* 80BA86CC */ int execute();
-    /* 80BA8734 */ int _delete();
-    /* 80BA87CC */ int CreateHeap();
-    /* 80BA88C4 */ int create();
+    int draw();
+    void saveBestScore();
+    void cc_set();
+    void action();
+    void mtx_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    int create();
 
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ J3DModel* mModel;
@@ -53,8 +53,8 @@ public:
 
 class daObj_Balloon_HIO_c {
 public:
-    /* 80BA7FAC */ daObj_Balloon_HIO_c();
-    /* 80BA8D64 */ virtual ~daObj_Balloon_HIO_c() {}
+    daObj_Balloon_HIO_c();
+    virtual ~daObj_Balloon_HIO_c() {}
 
     /* 0x04 */ s8 field_0x04;
     /* 0x08 */ f32 mScale[3];

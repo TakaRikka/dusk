@@ -8,7 +8,6 @@
 #include "d/actor/d_a_obj_mirror_sand.h"
 #include "d/d_procname.h"
 
-/* 80C989F0-80C989F4 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "MR-Sand";
 
 int daObjMirrorSand_c::createHeap() {
@@ -50,20 +49,15 @@ int daObjMirrorSand_c::createHeap() {
     return 1;
 }
 
-/* 80C981D8-80C984C0 000078 02E8+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjMirrorSand_c*>(i_this)->createHeap();
 }
 
-/* 80C98508-80C98534 0003A8 002C+00 1/1 0/0 0/0 .text            initBaseMtx__17daObjMirrorSand_cFv
- */
 void daObjMirrorSand_c::initBaseMtx() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     setBaseMtx();
 }
 
-/* 80C98534-80C98598 0003D4 0064+00 1/1 0/0 0/0 .text            setBaseMtx__17daObjMirrorSand_cFv
- */
 void daObjMirrorSand_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -87,8 +81,6 @@ int daObjMirrorSand_c::draw() {
     return 1;
 }
 
-/* 80C98598-80C98668 000438 00D0+00 1/0 0/0 0/0 .text daObjMirrorSand_Draw__FP17daObjMirrorSand_c
- */
 static int daObjMirrorSand_Draw(daObjMirrorSand_c* i_this) {
     return i_this->draw();
 }
@@ -106,14 +98,10 @@ int daObjMirrorSand_c::execute() {
     return 1;
 }
 
-/* 80C98668-80C98700 000508 0098+00 1/0 0/0 0/0 .text
- * daObjMirrorSand_Execute__FP17daObjMirrorSand_c               */
 static int daObjMirrorSand_Execute(daObjMirrorSand_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C98700-80C98708 0005A0 0008+00 1/0 0/0 0/0 .text
- * daObjMirrorSand_IsDelete__FP17daObjMirrorSand_c              */
 static int daObjMirrorSand_IsDelete(daObjMirrorSand_c* i_this) {
     return 1;
 }
@@ -130,8 +118,6 @@ daObjMirrorSand_c::~daObjMirrorSand_c() {
     dComIfG_resDelete(&mPhase, l_arcName);
 }
 
-/* 80C98708-80C987B8 0005A8 00B0+00 1/0 0/0 0/0 .text
- * daObjMirrorSand_Delete__FP17daObjMirrorSand_c                */
 static int daObjMirrorSand_Delete(daObjMirrorSand_c* i_this) {
     i_this->~daObjMirrorSand_c();
     return 1;
@@ -173,19 +159,16 @@ int daObjMirrorSand_c::create() {
     return phase;
 }
 
-/* 80C98818-80C989D0 0006B8 01B8+00 1/0 0/0 0/0 .text daObjMirrorSand_Create__FP10fopAc_ac_c */
 static int daObjMirrorSand_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjMirrorSand_c*>(i_this)->create();
 }
 
-/* 80C989F4-80C98A14 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjMirrorSand_Method */
 static actor_method_class l_daObjMirrorSand_Method = {
     (process_method_func)daObjMirrorSand_Create,  (process_method_func)daObjMirrorSand_Delete,
     (process_method_func)daObjMirrorSand_Execute, (process_method_func)daObjMirrorSand_IsDelete,
     (process_method_func)daObjMirrorSand_Draw,
 };
 
-/* 80C98A14-80C98A44 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_MirrorSand */
 extern actor_process_profile_definition g_profile_Obj_MirrorSand = {
     fpcLy_CURRENT_e,
     3,

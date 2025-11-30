@@ -3,7 +3,6 @@
 
 extern u8 gTRKRestoreFlags[9 + 3 /* padding */];
 
-/* 803711F0-803713A8 36BB30 01B8+00 0/0 3/3 0/0 .text            TRKSaveExtended1Block */
 asm void TRKSaveExtended1Block() {
     // clang-format off
     nofralloc
@@ -122,7 +121,6 @@ lbl_80371340:
     // clang-format on
 }
 
-/* 803713A8-80371560 36BCE8 01B8+00 0/0 1/1 0/0 .text            TRKRestoreExtended1Block */
 asm void TRKRestoreExtended1Block() {
     // clang-format off
     nofralloc

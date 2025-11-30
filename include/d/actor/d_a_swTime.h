@@ -25,10 +25,10 @@ public:
         return fopAcM_GetParamBit(this,16,8);
     }
 
-    /* 80D4F638 */ int Create();
-    /* 80D4F660 */ int create();
-    /* 80D4F6C8 */ int execute();
-    /* 80D4F758 */ int _delete();
+    int Create();
+    int create();
+    int execute();
+    int _delete();
 
 private:
     /* 0x568 */ u8 mTime;

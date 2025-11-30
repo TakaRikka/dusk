@@ -7,15 +7,15 @@
 
 class daTagQs_c : public fopAc_ac_c {
 public:
-    /* 80D5DE78 */ ~daTagQs_c();
-    /* 80D5DFB0 */ int create();
-    /* 80D5E1FC */ f32 getPower();
-    /* 80D5E220 */ f32 getSafeArea();
-    /* 80D5E244 */ f32 getPower80();
-    /* 80D5E268 */ f32 getCenterPower();
-    /* 80D5E28C */ f32 calcPower(f32, f32);
-    /* 80D5E9F8 */ int execute();
-    /* 80D5EBF8 */ int draw();
+    ~daTagQs_c();
+    int create();
+    f32 getPower();
+    f32 getSafeArea();
+    f32 getPower80();
+    f32 getCenterPower();
+    f32 calcPower(f32, f32);
+    int execute();
+    int draw();
 
     u8 getType() { return fopAcM_GetParamBit(this, 0, 1); }
     int getSwNo() { return fopAcM_GetParamBit(this, 1, 8); }

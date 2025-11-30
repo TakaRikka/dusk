@@ -9,7 +9,6 @@
 #include "d/actor/d_a_obj_lv6FurikoTrap.h"
 
 
-/* 80C7248C-80C724C8 0000EC 003C+00 1/1 0/0 0/0 .text            __ct__21daLv6FurikoTrap_HIO_cFv */
 daLv6FurikoTrap_HIO_c::daLv6FurikoTrap_HIO_c() {
     mIntervalSeconds = 1.0f;
     mMaxAngle = 45.0f;
@@ -33,7 +32,6 @@ const dCcD_SrcGObjInf daLv6FurikoTrap_c::mCcDObjInfo = {
 };
 dCcD_SrcSph daLv6FurikoTrap_c::mCcDSph = {mCcDObjInfo};
 
-/* 80C72510-80C72598 000170 0088+00 2/2 0/0 0/0 .text            setBaseMtx__17daLv6FurikoTrap_cFv */
 void daLv6FurikoTrap_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -41,7 +39,6 @@ void daLv6FurikoTrap_c::setBaseMtx() {
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C72598-80C72604 0001F8 006C+00 1/0 0/0 0/0 .text            CreateHeap__17daLv6FurikoTrap_cFv */
 int daLv6FurikoTrap_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("L6Furiko", 4);
     JUT_ASSERT(236, modelData != NULL);
@@ -52,7 +49,6 @@ int daLv6FurikoTrap_c::CreateHeap() {
     return TRUE;
 }
 
-/* 80C72604-80C727D4 000264 01D0+00 1/1 0/0 0/0 .text            create__17daLv6FurikoTrap_cFv */
 int daLv6FurikoTrap_c::create() {
     fopAcM_ct(this, daLv6FurikoTrap_c);
     int phase = dComIfG_resLoad(&mPhase, "L6Furiko");
@@ -81,7 +77,6 @@ int daLv6FurikoTrap_c::create() {
     return phase;
 }
 
-/* 80C729B4-80C72CA8 000614 02F4+00 1/0 0/0 0/0 .text Execute__17daLv6FurikoTrap_cFPPA3_A4_f */
 int daLv6FurikoTrap_c::Execute(Mtx** i_pMtx) {
     move();
     *i_pMtx = &mModel->getBaseTRMtx();
@@ -119,7 +114,6 @@ int daLv6FurikoTrap_c::Execute(Mtx** i_pMtx) {
     return TRUE;
 }
 
-/* 80C72CA8-80C72D24 000908 007C+00 1/1 0/0 0/0 .text            move__17daLv6FurikoTrap_cFv */
 void daLv6FurikoTrap_c::move() {
     typedef void (daLv6FurikoTrap_c::*func_call)();
     static const func_call mode_proc[] = {
@@ -128,14 +122,12 @@ void daLv6FurikoTrap_c::move() {
     (this->*mode_proc[mMode])();
 }
 
-/* 80C72D24-80C72D38 000984 0014+00 1/1 0/0 0/0 .text init_modeMove__17daLv6FurikoTrap_cFv */
 void daLv6FurikoTrap_c::init_modeMove() {
     mAngle = 0;
     mTimer = 0;
     mMode = 0;
 }
 
-/* 80C72D38-80C72EE0 000998 01A8+00 1/0 0/0 0/0 .text            modeMove__17daLv6FurikoTrap_cFv */
 void daLv6FurikoTrap_c::modeMove() {
     int unused = shape_angle.z;
     mAngleIncrement = cM_deg2s((2.0f * l_HIO.mMaxAngle) / (30.0f * l_HIO.mIntervalSeconds));
@@ -156,7 +148,6 @@ void daLv6FurikoTrap_c::modeMove() {
     }
 }
 
-/* 80C72EE0-80C72F94 000B40 00B4+00 1/0 0/0 0/0 .text            Draw__17daLv6FurikoTrap_cFv */
 int daLv6FurikoTrap_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -167,7 +158,6 @@ int daLv6FurikoTrap_c::Draw() {
     return TRUE;
 }
 
-/* 80C72F94-80C72FC4 000BF4 0030+00 1/0 0/0 0/0 .text            Delete__17daLv6FurikoTrap_cFv */
 int daLv6FurikoTrap_c::Delete() {
     dComIfG_resDelete(&mPhase, "L6Furiko");
 #if DEBUG
@@ -176,30 +166,25 @@ int daLv6FurikoTrap_c::Delete() {
     return TRUE;
 }
 
-/* 80C72FC4-80C72FF0 000C24 002C+00 1/0 0/0 0/0 .text            daLv6FurikoTrap_Draw__FP17daLv6FurikoTrap_c */
 static int daLv6FurikoTrap_Draw(daLv6FurikoTrap_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C72FF0-80C73010 000C50 0020+00 1/0 0/0 0/0 .text            daLv6FurikoTrap_Execute__FP17daLv6FurikoTrap_c */
 static int daLv6FurikoTrap_Execute(daLv6FurikoTrap_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C73010-80C73030 000C70 0020+00 1/0 0/0 0/0 .text            daLv6FurikoTrap_Delete__FP17daLv6FurikoTrap_c */
 static int daLv6FurikoTrap_Delete(daLv6FurikoTrap_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     return i_this->MoveBGDelete();
 }
 
-/* 80C73030-80C73050 000C90 0020+00 1/0 0/0 0/0 .text            daLv6FurikoTrap_Create__FP10fopAc_ac_c */
 static int daLv6FurikoTrap_Create(fopAc_ac_c* i_this) {
     daLv6FurikoTrap_c* this_trap = (daLv6FurikoTrap_c*)i_this;
     fpc_ProcID id = fopAcM_GetID(i_this);
     return this_trap->create();
 }
 
-/* 80C73214-80C73234 -00001 0020+00 1/0 0/0 0/0 .data            l_daLv6FurikoTrap_Method */
 static actor_method_class l_daLv6FurikoTrap_Method = {
     (process_method_func)daLv6FurikoTrap_Create,
     (process_method_func)daLv6FurikoTrap_Delete,
@@ -208,7 +193,6 @@ static actor_method_class l_daLv6FurikoTrap_Method = {
     (process_method_func)daLv6FurikoTrap_Draw,
 };
 
-/* 80C73234-80C73264 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv6FuriTrap */
 extern actor_process_profile_definition g_profile_Obj_Lv6FuriTrap = {
   fpcLy_CURRENT_e,           // mLayerID
   3,                         // mListID

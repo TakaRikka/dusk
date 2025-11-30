@@ -14,10 +14,8 @@
 #include "d/d_bg_w.h"
 #include "SSystem/SComponent/c_math.h"
 
-/* 80C8FBB0-80C8FBBC -00001 000C+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[3] = {"MagLiftS", "MagLiftM", "MagLiftL"};
 
-/* 80C8E94C-80C8E9E0 0000EC 0094+00 1/1 0/0 0/0 .text            __ct__18daMagLiftRot_HIO_cFv */
 daMagLiftRot_HIO_c::daMagLiftRot_HIO_c() {
     mWaitTime = 60;
     mInitSpeed = 0.0f;
@@ -36,7 +34,6 @@ daMagLiftRot_HIO_c::daMagLiftRot_HIO_c() {
     mMinMoveDecay = 1.0f;
 }
 
-/* 80C8EA28-80C8EB1C 0001C8 00F4+00 2/2 0/0 0/0 .text            setBaseMtx__14daMagLiftRot_cFv */
 void daMagLiftRot_c::setBaseMtx() {
     scale.x = field_0x62c;
     scale.y = 1.0f;
@@ -56,20 +53,14 @@ void daMagLiftRot_c::setBaseMtx() {
 }
 
 
-/* ############################################################################################## */
-/* 80C8FB18-80C8FB24 000030 000C+00 0/1 0/0 0/0 .rodata          l_bmdIdx */
 static int const l_bmdIdx[] = {4, 4, 6};
 
-/* 80C8FB24-80C8FB30 00003C 000C+00 0/1 0/0 0/0 .rodata          l_dzbIdx */
 static int const l_dzbIdx[] = {7, 7, 15};
 
-/* 80C8FB30-80C8FB3C 000048 000C+00 2/3 0/0 0/0 .rodata          l_btkIdx */
 static int const l_btkIdx[] = {-1, -1, 12};
 
-/* 80C8FB3C-80C8FB48 000054 000C+00 2/3 0/0 0/0 .rodata          l_brkIdx */
 static int const l_brkIdx[] = {-1, -1, 9};
 
-/* 80C8EB1C-80C8EC64 0002BC 0148+00 1/0 0/0 0/0 .text            CreateHeap__14daMagLiftRot_cFv */
 int daMagLiftRot_c::CreateHeap() {
     J3DModelData* modelData =
         (J3DModelData*)dComIfG_getObjectRes(l_arcName[mType], l_bmdIdx[mType]);
@@ -93,7 +84,6 @@ int daMagLiftRot_c::CreateHeap() {
     return 1;
 }
 
-/* 80C8EC64-80C8EF4C 000404 02E8+00 1/1 0/0 0/0 .text            create__14daMagLiftRot_cFv */
 int daMagLiftRot_c::create() {
     fopAcM_ct(this, daMagLiftRot_c);
 
@@ -181,8 +171,6 @@ int daMagLiftRot_c::create() {
     return phase;
 }
 
-/* 80C8EF94-80C8F02C 000734 0098+00 1/0 0/0 0/0 .text            Execute__14daMagLiftRot_cFPPA3_A4_f
- */
 int daMagLiftRot_c::Execute(Mtx** param_0) {
     moveLift();
 
@@ -199,10 +187,8 @@ int daMagLiftRot_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80C8FCCC-80C8FD0C 000014 0040+00 4/4 0/0 0/0 .bss             l_HIO */
 static daMagLiftRot_HIO_c l_HIO;
 
-/* 80C8F02C-80C8F264 0007CC 0238+00 1/1 0/0 0/0 .text            moveLift__14daMagLiftRot_cFv */
 void daMagLiftRot_c::moveLift() {
     typedef void (daMagLiftRot_c::*modeFunc)();
     static modeFunc mode_proc[] = {&daMagLiftRot_c::modeMove, &daMagLiftRot_c::modeWait,
@@ -220,8 +206,6 @@ void daMagLiftRot_c::moveLift() {
     field_0x5f8 += 1.0f;
 }
 
-/* 80C8F264-80C8F4A0 000A04 023C+00 1/1 0/0 0/0 .text            init_modeMove__14daMagLiftRot_cFv
- */
 void daMagLiftRot_c::init_modeMove() {
     fopAcM_SetSpeedF(this, l_HIO.mInitSpeed);
 
@@ -255,7 +239,6 @@ void daMagLiftRot_c::init_modeMove() {
 }
 
 
-/* 80C8F4A0-80C8F538 000C40 0098+00 1/0 0/0 0/0 .text            modeMove__14daMagLiftRot_cFv */
 void daMagLiftRot_c::modeMove() {
     cLib_chaseF(&speedF, l_HIO.mMaxSpeed, l_HIO.mAcceleration);
 
@@ -269,8 +252,6 @@ void daMagLiftRot_c::modeMove() {
 }
 
 
-/* 80C8F538-80C8F7CC 000CD8 0294+00 3/3 0/0 0/0 .text            init_modeWait__14daMagLiftRot_cFv
- */
 void daMagLiftRot_c::init_modeWait() {
     static u32 selLabel[] = {Z2SE_OBJ_MAGNELIFT_STOP_S, Z2SE_OBJ_MAGNELIFT_STOP_M,
                                   Z2SE_OBJ_MAGNELIFT_STOP_L};
@@ -313,7 +294,6 @@ void daMagLiftRot_c::init_modeWait() {
 }
 
 
-/* 80C8F7CC-80C8F804 000F6C 0038+00 1/0 0/0 0/0 .text            modeWait__14daMagLiftRot_cFv */
 void daMagLiftRot_c::modeWait() {
     if (mTimer == 0) {
         init_modeMove();
@@ -322,12 +302,10 @@ void daMagLiftRot_c::modeWait() {
     }
 }
 
-/* 80C8F804-80C8F810 000FA4 000C+00 1/1 0/0 0/0 .text init_modeMoveWait__14daMagLiftRot_cFv */
 void daMagLiftRot_c::init_modeMoveWait() {
     mMode = 2;
 }
 
-/* 80C8F810-80C8F86C 000FB0 005C+00 1/0 0/0 0/0 .text            modeMoveWait__14daMagLiftRot_cFv */
 void daMagLiftRot_c::modeMoveWait() {
     u8 sw_on = fopAcM_isSwitch(this, (fopAcM_GetParam(this) >> 0x18) & 0xFF);
 
@@ -337,7 +315,6 @@ void daMagLiftRot_c::modeMoveWait() {
     }
 }
 
-/* 80C8F86C-80C8F970 00100C 0104+00 1/0 0/0 0/0 .text            Draw__14daMagLiftRot_cFv */
 int daMagLiftRot_c::Draw() {
     g_env_light.settingTevStruct(0x40, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -357,34 +334,27 @@ int daMagLiftRot_c::Draw() {
     return 1;
 }
 
-/* 80C8F970-80C8F9B0 001110 0040+00 1/0 0/0 0/0 .text            Delete__14daMagLiftRot_cFv */
 int daMagLiftRot_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName[mType]);
     return 1;
 }
 
-/* 80C8F9B0-80C8F9DC 001150 002C+00 1/0 0/0 0/0 .text daMagLiftRot_Draw__FP14daMagLiftRot_c */
 static int daMagLiftRot_Draw(daMagLiftRot_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C8F9DC-80C8F9FC 00117C 0020+00 1/0 0/0 0/0 .text daMagLiftRot_Execute__FP14daMagLiftRot_c */
 static int daMagLiftRot_Execute(daMagLiftRot_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C8F9FC-80C8FA1C 00119C 0020+00 1/0 0/0 0/0 .text daMagLiftRot_Delete__FP14daMagLiftRot_c */
 static int daMagLiftRot_Delete(daMagLiftRot_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C8FA1C-80C8FA3C 0011BC 0020+00 1/0 0/0 0/0 .text            daMagLiftRot_Create__FP10fopAc_ac_c
- */
 static int daMagLiftRot_Create(fopAc_ac_c* i_this) {
     return static_cast<daMagLiftRot_c*>(i_this)->create();
 }
 
-/* 80C8FC1C-80C8FC3C -00001 0020+00 1/0 0/0 0/0 .data            l_daMagLiftRot_Method */
 static actor_method_class l_daMagLiftRot_Method = {
     (process_method_func)daMagLiftRot_Create,
     (process_method_func)daMagLiftRot_Delete,
@@ -393,7 +363,6 @@ static actor_method_class l_daMagLiftRot_Method = {
     (process_method_func)daMagLiftRot_Draw,
 };
 
-/* 80C8FC3C-80C8FC6C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_MagLiftRot */
 extern actor_process_profile_definition g_profile_Obj_MagLiftRot = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

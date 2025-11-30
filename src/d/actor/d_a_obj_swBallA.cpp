@@ -10,17 +10,12 @@
 #include "d/actor/d_a_obj_carry.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
-#include "dol2asm.h"
 #include "d/d_lib.h"
 
-/* ############################################################################################## */
-/* 80CF4508-80CF4528 000000 0020+00 2/2 0/0 0/0 .bss             l_target_info */
 static daObjCarry_c* l_target_info[8];
 
-/* 80CF4528-80CF452C 000020 0004+00 2/2 0/0 0/0 .bss             l_target_info_count */
 static int l_target_info_count;
 
-/* 80CF32F8-80CF3374 000078 007C+00 1/1 0/0 0/0 .text            s_ball_sub__FPvPv */
 static void* s_ball_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_Carry &&
         ((daObjCarry_c*)param_1)->getType() == daObjCarry_c::TYPE_LV8_BALL)
@@ -33,17 +28,12 @@ static void* s_ball_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80CF3374-80CF3394 0000F4 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* param_0) {
     return ((daObjSwBallA_c*)param_0)->CreateHeap();
 }
 
-/* ############################################################################################## */
-/* 80CF43E4-80CF43E8 000000 0004+00 4/4 0/0 0/0 .rodata          l_color */
 static GXColor const l_color = {0x3,0x96,0xFF,0xFF};
 
-/* 80CF3394-80CF34E4 000114 0150+00 1/1 0/0 0/0 .text
- * checkArea_sub__14daObjSwBallA_cFP10fopAc_ac_c                */
 int daObjSwBallA_c::checkArea_sub(fopAc_ac_c* param_1) {
     if (param_1 == NULL) {
         return 0;
@@ -72,7 +62,6 @@ int daObjSwBallA_c::checkArea_sub(fopAc_ac_c* param_1) {
 }
 
 
-/* 80CF34E4-80CF3610 000264 012C+00 1/1 0/0 0/0 .text            search_ball__14daObjSwBallA_cFv */
 void daObjSwBallA_c::search_ball() {
     l_target_info_count = 0;
     for (int i = 0; i < 8; i++) {
@@ -103,19 +92,16 @@ void daObjSwBallA_c::search_ball() {
     }
 }
 
-/* 80CF3610-80CF3630 000390 0020+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjSwBallA_cFv */
 void daObjSwBallA_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80CF3630-80CF3694 0003B0 0064+00 1/1 0/0 0/0 .text            setBaseMtx__14daObjSwBallA_cFv */
 void daObjSwBallA_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CF3694-80CF37FC 000414 0168+00 1/1 0/0 0/0 .text            Create__14daObjSwBallA_cFv */
 int daObjSwBallA_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
@@ -142,10 +128,8 @@ int daObjSwBallA_c::Create() {
     return 1;
 }
 
-/* 80CF4438-80CF443C -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "P_LBswA";
 
-/* 80CF37FC-80CF3928 00057C 012C+00 1/1 0/0 0/0 .text            CreateHeap__14daObjSwBallA_cFv */
 int daObjSwBallA_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(381, modelData != NULL);
@@ -163,7 +147,6 @@ int daObjSwBallA_c::CreateHeap() {
     return 1;
 }
 
-/* 80CF3970-80CF3A90 0006F0 0120+00 1/1 0/0 0/0 .text            create__14daObjSwBallA_cFv */
 int daObjSwBallA_c::create() {
     fopAcM_ct(this, daObjSwBallA_c);
     if (field_0x5c4 == 0) {
@@ -188,7 +171,6 @@ int daObjSwBallA_c::create() {
     return res;
 }
 
-/* 80CF3A90-80CF3B40 000810 00B0+00 1/1 0/0 0/0 .text            execute__14daObjSwBallA_cFv */
 int daObjSwBallA_c::execute() {
     typedef void (daObjSwBallA_c::*ballfunc)();
     static ballfunc l_func[2] = {&daObjSwBallA_c::actionRun, &daObjSwBallA_c::actionStop};
@@ -198,7 +180,6 @@ int daObjSwBallA_c::execute() {
     return 1;
 }
 
-/* 80CF3B40-80CF3D80 0008C0 0240+00 1/0 0/0 0/0 .text            actionRun__14daObjSwBallA_cFv */
 void daObjSwBallA_c::actionRun() {
     u32 iVar4 = field_0x5c0;
     search_ball();
@@ -236,12 +217,10 @@ void daObjSwBallA_c::actionRun() {
 }
 
 
-/* 80CF3D80-80CF3D84 000B00 0004+00 1/0 0/0 0/0 .text            actionStop__14daObjSwBallA_cFv */
 void daObjSwBallA_c::actionStop() {
     /* empty function */
 }
 
-/* 80CF3D84-80CF406C 000B04 02E8+00 1/1 0/0 0/0 .text            PutCrrPos__14daObjSwBallA_cFv */
 void daObjSwBallA_c::PutCrrPos() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     s16 sVar5 = cLib_targetAngleY(&player->current.pos, &current.pos) - player->shape_angle.y;
@@ -313,7 +292,6 @@ void daObjSwBallA_c::PutCrrPos() {
     }
 }
 
-/* 80CF406C-80CF41F4 000DEC 0188+00 1/1 0/0 0/0 .text            draw__14daObjSwBallA_cFv */
 int daObjSwBallA_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -337,7 +315,6 @@ int daObjSwBallA_c::draw() {
 }
 
 
-/* 80CF41F4-80CF4274 000F74 0080+00 1/1 0/0 0/0 .text            _delete__14daObjSwBallA_cFv */
 int daObjSwBallA_c::_delete() {
     if (!fopAcM_isSwitch(this, getSwbit2())) {
         fopAcM_offSwitch(this, getSwbit());
@@ -346,28 +323,22 @@ int daObjSwBallA_c::_delete() {
     return 1;
 }
 
-/* 80CF4274-80CF4294 000FF4 0020+00 1/0 0/0 0/0 .text daObjSwBallA_Draw__FP14daObjSwBallA_c */
 static int daObjSwBallA_Draw(daObjSwBallA_c* param_0) {
     return param_0->draw();
 }
 
-/* 80CF4294-80CF42B4 001014 0020+00 1/0 0/0 0/0 .text daObjSwBallA_Execute__FP14daObjSwBallA_c */
 static int daObjSwBallA_Execute(daObjSwBallA_c* param_0) {
     return param_0->execute();
 }
 
-/* 80CF42B4-80CF42D4 001034 0020+00 1/0 0/0 0/0 .text daObjSwBallA_Delete__FP14daObjSwBallA_c */
 static int daObjSwBallA_Delete(daObjSwBallA_c* param_0) {
     return param_0->_delete();
 }
 
-/* 80CF42D4-80CF42F4 001054 0020+00 1/0 0/0 0/0 .text            daObjSwBallA_Create__FP10fopAc_ac_c
- */
 static int daObjSwBallA_Create(fopAc_ac_c* param_0) {
     return ((daObjSwBallA_c*)param_0)->create();
 }
 
-/* 80CF446C-80CF448C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjSwBallA_Method */
 static actor_method_class l_daObjSwBallA_Method = {
     (process_method_func)daObjSwBallA_Create,
     (process_method_func)daObjSwBallA_Delete,
@@ -376,7 +347,6 @@ static actor_method_class l_daObjSwBallA_Method = {
     (process_method_func)daObjSwBallA_Draw,
 };
 
-/* 80CF448C-80CF44BC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_SwBallA */
 extern actor_process_profile_definition g_profile_Obj_SwBallA = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

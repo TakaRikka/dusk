@@ -51,32 +51,32 @@ public:
         entryModelData(pModelData, mdlFlags, mtxBufferFlag);
     }
 
-    /* 80327100 */ void initialize();
-    /* 80327184 */ s32 entryModelData(J3DModelData*, u32, u32);
-    /* 80327300 */ s32 createShapePacket(J3DModelData*);
-    /* 803273CC */ s32 createMatPacket(J3DModelData*, u32);
-    /* 803275FC */ s32 newDifferedDisplayList(u32);
-    /* 8032767C */ void lock();
-    /* 803276B4 */ void unlock();
-    /* 803279A0 */ void diff();
-    /* 80327A2C */ s32 setDeformData(J3DDeformData*, u32);
-    /* 80327AA0 */ s32 setSkinDeform(J3DSkinDeform*, u32);
-    /* 80327BD4 */ void calcAnmMtx();
-    /* 80327C58 */ void calcWeightEnvelopeMtx();
-    /* 80328190 */ void calcNrmMtx();
-    /* 803281B4 */ void calcBumpMtx();
-    /* 803282B8 */ void calcBBoardMtx();
-    /* 803282EC */ void prepareShapePackets();
+    void initialize();
+    s32 entryModelData(J3DModelData*, u32, u32);
+    s32 createShapePacket(J3DModelData*);
+    s32 createMatPacket(J3DModelData*, u32);
+    s32 newDifferedDisplayList(u32);
+    void lock();
+    void unlock();
+    void diff();
+    s32 setDeformData(J3DDeformData*, u32);
+    s32 setSkinDeform(J3DSkinDeform*, u32);
+    void calcAnmMtx();
+    void calcWeightEnvelopeMtx();
+    void calcNrmMtx();
+    void calcBumpMtx();
+    void calcBBoardMtx();
+    void prepareShapePackets();
     void ptrToIndex();
     void makeDL();
 
-    /* 80327CA4 */ virtual void update();
-    /* 80327E4C */ virtual void entry();
-    /* 80327CF0 */ virtual void calc();
-    /* 803276EC */ virtual void calcMaterial();
-    /* 80327858 */ virtual void calcDiffTexMtx();
-    /* 80327F40 */ virtual void viewCalc();
-    /* 80328350 */ virtual ~J3DModel() {}
+    virtual void update();
+    virtual void entry();
+    virtual void calc();
+    virtual void calcMaterial();
+    virtual void calcDiffTexMtx();
+    virtual void viewCalc();
+    virtual ~J3DModel() {}
 
     J3DModelData* getModelData() { return mModelData; }
 

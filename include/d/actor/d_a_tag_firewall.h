@@ -6,9 +6,9 @@
 
 class daTag_FWall_c : public fopAc_ac_c {
 public:
-    /* 80D58940 */ int execute();
-    /* 80D59078 */ int _delete();
-    /* 80D590A8 */ int create();
+    int execute();
+    int _delete();
+    int create();
 
     u8 getTagNo(u8 idx) { return field_0x65c[idx]; }
     cXyz getPos(u8 idx) { return mWallPos[idx]; }

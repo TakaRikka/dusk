@@ -20,21 +20,21 @@ public:
         MODE_DEAD_e,
     };
 
-    /* 80C677F8 */ void initBaseMtx();
-    /* 80C67834 */ void setBaseMtx();
-    /* 80C67944 */ int create1st();
-    /* 80C67A30 */ void action();
-    /* 80C67AD4 */ void mode_wait();
-    /* 80C67B28 */ void mode_init_move();
-    /* 80C67B40 */ void mode_move();
-    /* 80C67BA8 */ void mode_init_dead();
-    /* 80C67BB4 */ void mode_dead();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    void action();
+    void mode_wait();
+    void mode_init_move();
+    void mode_move();
+    void mode_init_dead();
+    void mode_dead();
 
-    /* 80C678D4 */ virtual int CreateHeap();
-    /* 80C678B0 */ virtual int Create();
-    /* 80C679E4 */ virtual int Execute(Mtx**);
-    /* 80C67BD4 */ virtual int Draw();
-    /* 80C67C78 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8) & 0xFF; }
 

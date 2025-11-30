@@ -13,15 +13,15 @@
  */
 class daObjRCircle_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80CB8678 */ daObjRCircle_c();
-    /* 80CB874C */ virtual ~daObjRCircle_c();
-    /* 80CB8814 */ int createHeap();
-    /* 80CB8928 */ int create();
-    /* 80CB8A28 */ int Delete();
-    /* 80CB8A5C */ int draw();
-    /* 80CB8B28 */ int execute();
-    /* 80CB8BE4 */ void init();
-    /* 80CB8BF0 */ void setModelMtx();
+    daObjRCircle_c();
+    virtual ~daObjRCircle_c();
+    int createHeap();
+    int create();
+    int Delete();
+    int draw();
+    int execute();
+    void init();
+    void setModelMtx();
 
     int getSwBit() { return fopAcM_GetParamBit(this, 0, 8) & 0xFF; }
 

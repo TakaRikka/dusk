@@ -9,13 +9,10 @@
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_main.h"
 
-/* 803DD2D8-803DD2E8 009FF8 0010+00 2/2 6/6 0/0 .bss             m_gamePad__8mDoCPd_c */
 JUTGamePad* mDoCPd_c::m_gamePad[4];
 
-/* 803DD2E8-803DD3E8 00A008 0100+00 2/2 84/84 37/37 .bss             m_cpadInfo__8mDoCPd_c */
 interface_of_controller_pad mDoCPd_c::m_cpadInfo[4];
 
-/* 80007954-80007A94 002294 0140+00 0/0 1/1 0/0 .text            create__8mDoCPd_cFv */
 void mDoCPd_c::create() {
     #if PLATFORM_GCN || PLATFORM_SHIELD
     JUTGamePad* pad = new JUTGamePad(JUTGamePad::EPort1);
@@ -58,7 +55,6 @@ void mDoCPd_c::create() {
     }
 }
 
-/* 80007A94-80007B7C 0023D4 00E8+00 0/0 1/1 0/0 .text            read__8mDoCPd_cFv */
 void mDoCPd_c::read() {
     JUTGamePad::read();
 
@@ -86,8 +82,6 @@ void mDoCPd_c::read() {
     }
 }
 
-/* 80007B7C-80007CD0 0024BC 0154+00 1/1 0/0 0/0 .text
- * convert__8mDoCPd_cFP27interface_of_controller_padP10JUTGamePad */
 void mDoCPd_c::convert(interface_of_controller_pad* pInterface, JUTGamePad* pPad) {
     pInterface->mButtonFlags = pPad->getButton();
     pInterface->mPressedButtonFlags = pPad->getTrigger();
@@ -108,8 +102,6 @@ void mDoCPd_c::convert(interface_of_controller_pad* pInterface, JUTGamePad* pPad
     pInterface->mGamepadErrorFlags = pPad->getErrorStatus();
 }
 
-/* 80007CD0-80007D74 002610 00A4+00 1/1 0/0 0/0 .text
- * LRlockCheck__8mDoCPd_cFP27interface_of_controller_pad        */
 void mDoCPd_c::LRlockCheck(interface_of_controller_pad* interface) {
     f32 trig_left = interface->mTriggerLeft;
     interface->mTrigLockL = false;

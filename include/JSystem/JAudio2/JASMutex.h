@@ -10,7 +10,7 @@
 struct JASMutexLock {
     JASMutexLock(OSMutex* mutex) {
         mMutex = mutex;
-        OSLockMutex(mMutex);
+        OSLockMutex(mutex);
     }
     ~JASMutexLock() { OSUnlockMutex(mMutex); }
 

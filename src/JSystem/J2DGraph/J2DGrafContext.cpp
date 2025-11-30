@@ -3,7 +3,6 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "dolphin/gx.h"
 
-/* 802E8B08-802E8BB4 2E3448 00AC+00 0/0 2/2 0/0 .text            __ct__14J2DGrafContextFffff */
 J2DGrafContext::J2DGrafContext(f32 x, f32 y, f32 width, f32 height)
     : mBounds(x, y, x + width, y + height), mScissorBounds(x, y, x + width, y + height) {
     JUtility::TColor color(-1);
@@ -11,7 +10,6 @@ J2DGrafContext::J2DGrafContext(f32 x, f32 y, f32 width, f32 height)
     setLineWidth(6);
 }
 
-/* 802E8BB4-802E8C44 2E34F4 0090+00 1/0 1/1 0/0 .text            setPort__14J2DGrafContextFv */
 void J2DGrafContext::setPort() {
     setScissor();
     setup2D();
@@ -27,7 +25,6 @@ void J2DGrafContext::setPort() {
     GXSetViewport(bounds.i.x, bounds.i.y, bounds.getWidth(), bounds.getHeight(), 0.0f, 1.0f);
 }
 
-/* 802E8C44-802E8E20 2E3584 01DC+00 1/0 1/0 0/0 .text            setup2D__14J2DGrafContextFv */
 void J2DGrafContext::setup2D() {
     GXSetNumIndStages(0);
     for (int i = 0; i < GX_MAX_TEVSTAGE; i++) {
@@ -63,7 +60,6 @@ void J2DGrafContext::setup2D() {
     GXSetVtxDesc(GX_VA_TEX0, GX_NONE);
 }
 
-/* 802E8E20-802E90C0 2E3760 02A0+00 1/0 2/1 0/0 .text            setScissor__14J2DGrafContextFv */
 void J2DGrafContext::setScissor() {
     JGeometry::TBox2<f32> bounds(0, 0, 1024, 1024);
     JGeometry::TBox2<f32> curBounds(mScissorBounds);
@@ -80,14 +76,10 @@ void J2DGrafContext::setScissor() {
     }
 }
 
-/* 802E90C0-802E90E4 2E3A00 0024+00 0/0 10/10 0/0 .text
- * scissor__14J2DGrafContextFRCQ29JGeometry8TBox2<f>            */
 void J2DGrafContext::scissor(JGeometry::TBox2<f32> const& bounds) {
     mScissorBounds = bounds;
 }
 
-/* 802E90E4-802E9118 2E3A24 0034+00 1/0 1/0 0/0 .text
- * place__14J2DGrafContextFRCQ29JGeometry8TBox2<f>              */
 void J2DGrafContext::place(JGeometry::TBox2<f32> const& bounds) {
     mBounds = bounds;
     mScissorBounds = bounds;
@@ -134,15 +126,11 @@ void J2DGrafContext::setColor(JUtility::TColor colorTL, JUtility::TColor colorTR
     mBoxPart.mDstFactor = GX_BL_ZERO;
 }
 
-/* 802E9234-802E9260 2E3B74 002C+00 1/1 2/2 0/0 .text            setLineWidth__14J2DGrafContextFUc
- */
 void J2DGrafContext::setLineWidth(u8 lineWidth) {
     mLineWidth = lineWidth;
     GXSetLineWidth(mLineWidth, GX_TO_ZERO);
 }
 
-/* 802E9260-802E9368 2E3BA0 0108+00 0/0 2/2 0/0 .text
- * fillBox__14J2DGrafContextFRCQ29JGeometry8TBox2<f>            */
 void J2DGrafContext::fillBox(JGeometry::TBox2<f32> const& box) {
     GXSetBlendMode((GXBlendMode)mBoxPart.mType, (GXBlendFactor)mBoxPart.mSrcFactor,
                    (GXBlendFactor)mBoxPart.mDstFactor, GX_LO_SET);
@@ -161,8 +149,6 @@ void J2DGrafContext::fillBox(JGeometry::TBox2<f32> const& box) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
 }
 
-/* 802E9368-802E9488 2E3CA8 0120+00 0/0 1/1 0/0 .text
- * drawFrame__14J2DGrafContextFRCQ29JGeometry8TBox2<f>          */
 void J2DGrafContext::drawFrame(JGeometry::TBox2<f32> const& box) {
     GXSetBlendMode((GXBlendMode)mBoxPart.mType, (GXBlendFactor)mBoxPart.mSrcFactor,
                    (GXBlendFactor)mBoxPart.mDstFactor, GX_LO_SET);
@@ -183,8 +169,6 @@ void J2DGrafContext::drawFrame(JGeometry::TBox2<f32> const& box) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
 }
 
-/* 802E9488-802E9564 2E3DC8 00DC+00 1/1 0/0 0/0 .text
- * line__14J2DGrafContextFQ29JGeometry8TVec2<f>Q29JGeometry8TVec2<f> */
 void J2DGrafContext::line(JGeometry::TVec2<f32> start, JGeometry::TVec2<f32> end) {
     GXSetBlendMode((GXBlendMode)mLinePart.mType, (GXBlendFactor)mLinePart.mSrcFactor,
                    (GXBlendFactor)mLinePart.mDstFactor, GX_LO_SET);
@@ -199,8 +183,6 @@ void J2DGrafContext::line(JGeometry::TVec2<f32> start, JGeometry::TVec2<f32> end
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
 }
 
-/* 802E9564-802E95D4 2E3EA4 0070+00 0/0 1/1 0/0 .text
- * lineTo__14J2DGrafContextFQ29JGeometry8TVec2<f>               */
 void J2DGrafContext::lineTo(JGeometry::TVec2<f32> pos) {
     this->line(mPrevPos, pos);
     mPrevPos = pos;

@@ -10,11 +10,11 @@ struct ResTIMG;
 class daPy_sightPacket_c : public dDlst_base_c {
 public:
     daPy_sightPacket_c() {}
-    /* 8015F1A0 */ virtual void draw();
-    /* 80140CDC */ virtual ~daPy_sightPacket_c() {}
+    virtual void draw();
+    virtual ~daPy_sightPacket_c() {}
 
-    /* 8015F2FC */ void setSight();
-    /* 8015F384 */ void setSightImage(ResTIMG*);
+    void setSight();
+    void setSightImage(ResTIMG*);
 
     bool getDrawFlg() { return mDrawFlag; }
     void onDrawFlg() { mDrawFlag = true; }
@@ -32,10 +32,10 @@ public:
 
 class daPy_boomerangMove_c {
 public:
-    /* 8015E5B0 */ void initOffset(cXyz const*);
+    void initOffset(cXyz const*);
     void initOffset(cXyz const* xyz, dCcD_GObjInf const*) { initOffset(xyz); }
-    /* 8015E654 */ int posMove(cXyz*, s16*, fopAc_ac_c*, s16);
-    /* 8015E87C */ void bgCheckAfterOffset(cXyz const*);
+    int posMove(cXyz*, s16*, fopAc_ac_c*, s16);
+    void bgCheckAfterOffset(cXyz const*);
 
     static void initDropAngleY() { m_dropAngleY = 0x4000; }
     static void offEventKeepFlg() { m_eventKeepFlg = 0; }
@@ -116,8 +116,8 @@ private:
 
 class daPy_frameCtrl_c : public J3DFrameCtrl {
 public:
-    /* 80140D24 */ virtual ~daPy_frameCtrl_c() {}
-    /* 80140D80 */ daPy_frameCtrl_c() {}
+    virtual ~daPy_frameCtrl_c() {}
+    daPy_frameCtrl_c() {}
     bool checkAnmEnd();
     void updateFrame();
     void setFrameCtrl(u8, short, short, f32, f32);

@@ -13,10 +13,8 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 
-/* 80D31924-80D3192C 000000 0007+01 8/8 0/0 0/0 .rodata          l_arcName */
 static char const l_arcName[7] = "Wchain";
 
-/* 80D2FEF8-80D2FF9C 000078 00A4+00 1/1 0/0 0/0 .text            createHeap__13daObjWchain_cFv */
 int daObjWchain_c::createHeap() {
     J3DModelData* handle_model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     mpHandleModel = mDoExt_J3DModel__create(handle_model_data, 0x80000, 0x11000084);
@@ -28,12 +26,10 @@ int daObjWchain_c::createHeap() {
     return 1;
 }
 
-/* 80D2FF9C-80D2FFBC 00011C 0020+00 1/1 0/0 0/0 .text daObjWchain_createHeap__FP10fopAc_ac_c */
 static int daObjWchain_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjWchain_c*>(i_this)->createHeap();
 }
 
-/* 80D2FFBC-80D30394 00013C 03D8+00 1/1 0/0 0/0 .text            create__13daObjWchain_cFv */
 cPhs__Step daObjWchain_c::create() {
     fopAcM_ct(this, daObjWchain_c);
     mSw = fopAcM_GetParam(this) & 0xff;
@@ -86,24 +82,19 @@ cPhs__Step daObjWchain_c::create() {
     return step;
 }
 
-/* 80D30414-80D30434 000594 0020+00 1/0 0/0 0/0 .text            daObjWchain_Create__FP10fopAc_ac_c
- */
 static cPhs__Step daObjWchain_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjWchain_c*>(i_this)->create();
 }
 
-/* 80D30434-80D3050C 0005B4 00D8+00 1/1 0/0 0/0 .text            __dt__13daObjWchain_cFv */
 daObjWchain_c::~daObjWchain_c() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
 }
 
-/* 80D3050C-80D30534 00068C 0028+00 1/0 0/0 0/0 .text daObjWchain_Delete__FP13daObjWchain_c */
 static int daObjWchain_Delete(daObjWchain_c* i_this) {
     i_this->~daObjWchain_c();
     return 1;
 }
 
-/* 80D30534-80D305E4 0006B4 00B0+00 2/2 0/0 0/0 .text            setMatrix__13daObjWchain_cFv */
 void daObjWchain_c::setMatrix() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZrotM(mHandleRotation);
@@ -114,7 +105,6 @@ void daObjWchain_c::setMatrix() {
     mDoMtx_stack_c::multVec(&eyeOffset, &eyePos);
 }
 
-/* 80D305E4-80D3080C 000764 0228+00 1/1 0/0 0/0 .text getChainAngleZ__13daObjWchain_cFP4cXyzi */
 s16 daObjWchain_c::getChainAngleZ(cXyz* param_0, int param_1) {
     cXyz vec(param_0->x, 0.0f, param_0->z);
     f32 len = vec.abs();
@@ -129,7 +119,6 @@ s16 daObjWchain_c::getChainAngleZ(cXyz* param_0, int param_1) {
     }
 }
 
-/* 80D3080C-80D310AC 00098C 08A0+00 1/1 0/0 0/0 .text            setChainPos__13daObjWchain_cFv */
 void daObjWchain_c::setChainPos() {
     cXyz prev_pos, vec1;
 
@@ -256,7 +245,6 @@ void daObjWchain_c::setChainPos() {
     }
 }
 
-/* 80D310AC-80D313F8 00122C 034C+00 1/1 0/0 0/0 .text            execute__13daObjWchain_cFv */
 int daObjWchain_c::execute() {
     if (!mRidePrev && mRide) {
         fopAcM_seStartCurrent(this, Z2SE_OBJ_GNAW_CHAIN_SW, 0);
@@ -312,12 +300,10 @@ int daObjWchain_c::execute() {
 }
 
 
-/* 80D313F8-80D31418 001578 0020+00 1/0 0/0 0/0 .text daObjWchain_Execute__FP13daObjWchain_c */
 static int daObjWchain_Execute(daObjWchain_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D31418-80D31810 001598 03F8+00 1/0 0/0 0/0 .text            draw__19daObjWchain_shape_cFv */
 void daObjWchain_shape_c::draw() {
     daObjWchain_c* chain = (daObjWchain_c*)getUserArea();
     cXyz* pos = chain->getChainPos();
@@ -376,7 +362,6 @@ void daObjWchain_shape_c::draw() {
 }
 
 
-/* 80D31810-80D318A0 001990 0090+00 1/1 0/0 0/0 .text            draw__13daObjWchain_cFv */
 int daObjWchain_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpHandleModel, &tevStr);
@@ -386,13 +371,10 @@ int daObjWchain_c::draw() {
     return 1;
 }
 
-/* 80D318A0-80D318C0 001A20 0020+00 1/0 0/0 0/0 .text            daObjWchain_Draw__FP13daObjWchain_c
- */
 static int daObjWchain_Draw(daObjWchain_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D319E4-80D31A04 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjWchain_Method */
 static actor_method_class l_daObjWchain_Method = {
     (process_method_func)daObjWchain_Create,
     (process_method_func)daObjWchain_Delete,
@@ -401,7 +383,6 @@ static actor_method_class l_daObjWchain_Method = {
     (process_method_func)daObjWchain_Draw,
 };
 
-/* 80D31A04-80D31A34 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Wchain */
 extern actor_process_profile_definition g_profile_Obj_Wchain = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

@@ -11,10 +11,8 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 
-/* 80C6E9F4-80C6E9F8 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Ychandelr";
 
-/* 80C6D758-80C6D7E0 000078 0088+00 1/1 0/0 0/0 .text            create1st__14daObjYchndlr_cFv */
 int daObjYchndlr_c::create1st() {
     int phase = dComIfG_resLoad(this, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
@@ -27,16 +25,13 @@ int daObjYchndlr_c::create1st() {
     return phase;
 }
 
-/* 80C6E980-80C6E988 000000 0008+00 2/2 0/0 0/0 .rodata          l_bmdidx */
 static const int l_bmdidx[] = {4, 5};
 
-/* 80C6E988-80C6E9A0 000008 0018+00 1/1 0/0 0/0 .rodata          l_cull_box */
 static const cull_box l_cull_box = {
     {-1500.0f, -2500.0f, -500.0f},
     {1500.0f, 200.0f, 500.0f},
 };
 
-/* 80C6E9F8-80C6EA28 000004 0030+00 2/2 0/0 0/0 .data            l_shaft_vec */
 static Vec l_shaft_vec[] = {
     {-140.0f, 0.0f, 200.0f},
     {140.0f, 0.0f, 200.0f},
@@ -44,10 +39,8 @@ static Vec l_shaft_vec[] = {
     {140.0f, 0.0f, -200.0f},
 };
 
-/* 80C6EA28-80C6EA30 000034 0008+00 1/1 0/0 0/0 .data            l_shaft_roty */
 static s16 l_shaft_roty[] = {0x7FFF, 0x7FFF, 0x0000, 0x0000};
 
-/* 80C6D7E0-80C6D980 000100 01A0+00 2/2 0/0 0/0 .text            setMtx__14daObjYchndlr_cFv */
 void daObjYchndlr_c::setMtx() {
     for (int i = 0; i < 4; i++) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
@@ -72,13 +65,10 @@ void daObjYchndlr_c::setMtx() {
     MTXCopy(mDoMtx_stack_c::get(), field_0x5a8);
 }
 
-/* 80C6D980-80C6D9A8 0002A0 0028+00 1/1 0/0 0/0 .text
- * rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c              */
 static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_rideActor) {
     ((daObjYchndlr_c*)i_this)->rideActor(i_rideActor);
 }
 
-/* 80C6D9A8-80C6DA5C 0002C8 00B4+00 1/1 0/0 0/0 .text rideActor__14daObjYchndlr_cFP10fopAc_ac_c */
 void daObjYchndlr_c::rideActor(fopAc_ac_c* i_actor) {
     field_0xc8c = 1;
 
@@ -94,7 +84,6 @@ void daObjYchndlr_c::rideActor(fopAc_ac_c* i_actor) {
     }
 }
 
-/* 80C6DA5C-80C6DB5C 00037C 0100+00 1/0 0/0 0/0 .text            CreateHeap__14daObjYchndlr_cFv */
 int daObjYchndlr_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmdidx[0]);
     JUT_ASSERT(0, model_data != NULL);
@@ -117,7 +106,6 @@ int daObjYchndlr_c::CreateHeap() {
     return 1;
 }
 
-/* 80C6EA30-80C6EA74 00003C 0044+00 1/1 0/0 0/0 .data            l_cc_src_shaft_cyl */
 static dCcD_SrcCyl l_cc_src_shaft_cyl = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x11}, 0x79}},  // mObj
@@ -132,7 +120,6 @@ static dCcD_SrcCyl l_cc_src_shaft_cyl = {
     }  // mCyl
 };
 
-/* 80C6EA74-80C6EAB8 000080 0044+00 1/1 0/0 0/0 .data            l_cc_cyl_src */
 static dCcD_SrcCyl l_cc_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x408000, 0x11}, 0x0}},  // mObj
@@ -147,7 +134,6 @@ static dCcD_SrcCyl l_cc_cyl_src = {
     }  // mCyl
 };
 
-/* 80C6DB5C-80C6DC64 00047C 0108+00 1/0 0/0 0/0 .text            Create__14daObjYchndlr_cFv */
 int daObjYchndlr_c::Create() {
     fopAcM_SetMtx(this, field_0x5d8);
     setMtx();
@@ -174,8 +160,6 @@ int daObjYchndlr_c::Create() {
     return 1;
 }
 
-/* 80C6DC64-80C6E300 000584 069C+00 1/0 0/0 0/0 .text            Execute__14daObjYchndlr_cFPPA3_A4_f
- */
 int daObjYchndlr_c::Execute(Mtx** param_0) {
     s16 var_r27 = mShaftRotZ;
     if (var_r27 < 0) {
@@ -329,7 +313,6 @@ int daObjYchndlr_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80C6E300-80C6E3C8 000C20 00C8+00 1/0 0/0 0/0 .text            Draw__14daObjYchndlr_cFv */
 int daObjYchndlr_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpChandlierModel, &tevStr);
@@ -345,45 +328,34 @@ int daObjYchndlr_c::Draw() {
     return 1;
 }
 
-/* 80C6E3C8-80C6E404 000CE8 003C+00 1/0 0/0 0/0 .text            Delete__14daObjYchndlr_cFv */
 int daObjYchndlr_c::Delete() {
     dComIfG_resDelete(this, l_arcName);
     return 1;
 }
 
-/* 80C6E404-80C6E518 000D24 0114+00 1/0 0/0 0/0 .text daObjYchndlr_create1st__FP14daObjYchndlr_c
- */
 static int daObjYchndlr_create1st(daObjYchndlr_c* i_this) {
     fopAcM_ct(i_this, daObjYchndlr_c);
     return i_this->create1st();
 }
 
-/* 80C6E754-80C6E774 001074 0020+00 1/0 0/0 0/0 .text
- * daObjYchndlr_MoveBGDelete__FP14daObjYchndlr_c                */
 static int daObjYchndlr_MoveBGDelete(daObjYchndlr_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C6E774-80C6E794 001094 0020+00 1/0 0/0 0/0 .text
- * daObjYchndlr_MoveBGExecute__FP14daObjYchndlr_c               */
 static int daObjYchndlr_MoveBGExecute(daObjYchndlr_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C6E794-80C6E7C0 0010B4 002C+00 1/0 0/0 0/0 .text daObjYchndlr_MoveBGDraw__FP14daObjYchndlr_c
- */
 static int daObjYchndlr_MoveBGDraw(daObjYchndlr_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C6EAB8-80C6EAD8 -00001 0020+00 1/0 0/0 0/0 .data            daObjYchndlr_METHODS */
 static actor_method_class daObjYchndlr_METHODS = {
     (process_method_func)daObjYchndlr_create1st,     (process_method_func)daObjYchndlr_MoveBGDelete,
     (process_method_func)daObjYchndlr_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjYchndlr_MoveBGDraw,
 };
 
-/* 80C6EAD8-80C6EB08 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Ychndlr */
 extern actor_process_profile_definition g_profile_Obj_Ychndlr = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

@@ -14,11 +14,11 @@
  */
 class daObjGraWall_c : public fopAc_ac_c {
 public:
-    /* 80C10BF8 */ int Create();
-    /* 80C10DD8 */ int Execute();
-    /* 80C10E78 */ int Delete();
-    /* 80C10E80 */ void col_init();
-    /* 80C10ED4 */ void col_set();
+    int Create();
+    int Execute();
+    int Delete();
+    void col_init();
+    void col_set();
 
 private:
     /* 0x568 */ dCcD_Stts mStts;

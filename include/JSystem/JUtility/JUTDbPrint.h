@@ -25,13 +25,13 @@ struct unk_print {
 */
 class JUTDbPrint {
 public:
-    /* 802E0148 */ JUTDbPrint(JUTFont*, JKRHeap*);
-    /* 802E0190 */ static JUTDbPrint* start(JUTFont*, JKRHeap*);
-    /* 802E0204 */ JUTFont* changeFont(JUTFont*);
-    /* 802E021C */ void enter(int, int, int, char const*, int);
-    /* 802E02DC */ void flush(int, int, int, int);
-    /* 802E02A4 */ void flush();
-    /* 802E0440 */ void drawString(int, int, int, u8 const*);
+    JUTDbPrint(JUTFont*, JKRHeap*);
+    static JUTDbPrint* start(JUTFont*, JKRHeap*);
+    JUTFont* changeFont(JUTFont*);
+    void enter(int, int, int, char const*, int);
+    void flush(int, int, int, int);
+    void flush();
+    void drawString(int, int, int, u8 const*);
 
     static JUTDbPrint* getManager() { return sDebugPrint; }
 

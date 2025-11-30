@@ -23,21 +23,21 @@ public:
         MODE_BACK_RIDE,
     };
 
-    /* 80C6EBF8 */ int create1st();
-    /* 80C6EC88 */ void setMtx();
-    /* 80C6F1E8 */ void rideActor(fopAc_ac_c*);
-    /* 80C6F23C */ void sendBall(fpc_ProcID);
-    /* 80C6F440 */ void onAttention();
-    /* 80C6F450 */ void offAttention();
-    /* 80C702E0 */ void initRotTo();
+    int create1st();
+    void setMtx();
+    void rideActor(fopAc_ac_c*);
+    void sendBall(fpc_ProcID);
+    void onAttention();
+    void offAttention();
+    void initRotTo();
 
-    /* 80C6EDA8 */ virtual int CreateHeap();
-    /* 80C6EEFC */ virtual int Create();
-    /* 80C6F460 */ virtual int Execute(Mtx**);
-    /* 80C70330 */ virtual int Draw();
-    /* 80C70408 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
-    /* 80C7088C */ virtual ~daObjYIblltray_c() {}
+    virtual ~daObjYIblltray_c() {}
 
     int getType() { return fopAcM_GetParamBit(this, 0, 1); }
     int getSwNo() { return fopAcM_GetParamBit(this, 1, 8); }

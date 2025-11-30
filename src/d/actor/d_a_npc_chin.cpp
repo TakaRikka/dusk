@@ -11,10 +11,6 @@
 #include "d/d_meter2_info.h"
 #include "d/d_timer.h"
 
-//
-// Declarations:
-//
-
 enum Event {
     EVT_NONE,
     EVT_GAME_START,
@@ -26,14 +22,10 @@ enum Event {
     EVT_SPOTLIGHT_OFF,
 };
 
-/* ############################################################################################## */
-/* 809918F8-80991904 000000 000C+00 8/7 0/0 0/0 .rodata          sLoadResPat_Normal */
 static s16 const sLoadResPat_Normal[6] = {0, 1, 2, 4, 5, -1};
 
-/* 80991904-8099190C 00000C 0006+02 1/0 0/0 0/0 .rodata          sLoadResPat_Tw */
 static s16 const sLoadResPat_Tw[3] = {0, 3, -1};
 
-/* 8099190C-80991978 000014 006C+00 4/9 0/0 0/0 .rodata          m__17daNpcChin_Param_c */
 daNpcChin_HIOParam const daNpcChin_Param_c::m = {
     40.0f, -3.0f, 1.0f, 400.0f, 255.0f, 130.0f, 35.0f, 30.0f,
     0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -10.0f, 45.0f, -45.0f,
@@ -45,7 +37,6 @@ daNpcChin_HIOParam const daNpcChin_Param_c::m = {
     FALSE, FALSE,
 };
 
-/* 80991DFC-80991F88 000020 018C+00 1/2 0/0 0/0 .data            l_bckGetParamList */
 static daNpc_GetParam2 l_bckGetParamList[33] = {
     {-1, 2, 0},
     {8, 0, 0},
@@ -82,7 +73,6 @@ static daNpc_GetParam2 l_bckGetParamList[33] = {
     {29, 2, 1},
 };
 
-/* 80991F88-8099203C 0001AC 00B4+00 1/1 0/0 0/0 .data            l_btpGetParamList */
 static daNpc_GetParam2 l_btpGetParamList[15] = {
     {18, 2, 0},
     {20, 0, 0},
@@ -101,7 +91,6 @@ static daNpc_GetParam2 l_btpGetParamList[15] = {
     {50, 2, 1},
 };
 
-/* 8099203C-809920A8 000260 006C+00 1/2 0/0 0/0 .data            l_btkGetParamList */
 static daNpc_GetParam2 l_btkGetParamList[9] = {
     {13, 2, 0},
     {14, 0, 0},
@@ -114,7 +103,6 @@ static daNpc_GetParam2 l_btkGetParamList[9] = {
     {7, 2, 5},
 };
 
-/* 809920A8-809920C0 -00001 0018+00 7/11 0/0 0/0 .data            l_arcNames */
 static char* l_arcNames[6] = {
     "Chin",
     "chin1",
@@ -124,13 +112,11 @@ static char* l_arcNames[6] = {
     "SpotLight",
 };
 
-/* 809920C0-809920C8 -00001 0008+00 2/2 0/0 0/0 .data            sLoadResInfo */
 static s16* sLoadResInfo[2] = {
     (s16*)sLoadResPat_Normal,
     (s16*)sLoadResPat_Tw,
 };
 
-/* 809920C8-809920E8 -00001 0020+00 0/2 0/0 0/0 .data            l_evtNames */
 static char* l_evtNames[8] = {
     NULL,
     "GAME_START",
@@ -142,10 +128,8 @@ static char* l_evtNames[8] = {
     "SPOTLIGHT_OFF",
 };
 
-/* 80992418-80992424 000008 000C+00 1/1 0/0 0/0 .bss             @3861 */
 static u8 lit_3861[12];
 
-/* 8099213C-8099219C 000360 0060+00 1/2 0/0 0/0 .data            mEvtSeqList__11daNpcChin_c */
 daNpcChin_c::eventFunc daNpcChin_c::mEvtSeqList[8] = {
     NULL,
     &daNpcChin_c::_Evt_GameStart,
@@ -157,10 +141,8 @@ daNpcChin_c::eventFunc daNpcChin_c::mEvtSeqList[8] = {
     &daNpcChin_c::_Evt_SpotLight_Off,
 };
 
-/* 80992424-80992428 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static NPC_CHIN_HIO_CLASS l_HIO;
 
-/* 8099219C-809921A0 -00001 0004+00 1/2 0/0 0/0 .data            l_myName */
 static char* l_myName = "chin";
 
 #if DEBUG
@@ -173,8 +155,6 @@ void daNpcChin_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 8098BF0C-8098C000 0000EC 00F4+00 1/1 0/0 0/0 .text loadModel__Q211daNpcChin_c12_SpotLight_cFv
- */
 int daNpcChin_c::_SpotLight_c::loadModel() {
     void* modelData = NULL;
     void* anmTexSRTKey = NULL;
@@ -197,7 +177,6 @@ int daNpcChin_c::_SpotLight_c::loadModel() {
     return 1;
 }
 
-/* 8098C000-8098C060 0001E0 0060+00 1/1 0/0 0/0 .text setMtx__Q211daNpcChin_c12_SpotLight_cFv */
 void daNpcChin_c::_SpotLight_c::setMtx() {
     if (is_switch_on()) {
         mDoMtx_stack_c::transS(mPos);
@@ -207,8 +186,6 @@ void daNpcChin_c::_SpotLight_c::setMtx() {
     }
 }
 
-/* 8098C060-8098C104 000240 00A4+00 1/1 0/0 0/0 .text
- * draw__Q211daNpcChin_c12_SpotLight_cFP12dKy_tevstr_c          */
 void daNpcChin_c::_SpotLight_c::draw(dKy_tevstr_c* i_tevStr) {
     if (is_switch_on()) {
         g_env_light.settingTevStruct(0, &mPos, i_tevStr);
@@ -220,12 +197,10 @@ void daNpcChin_c::_SpotLight_c::draw(dKy_tevstr_c* i_tevStr) {
     }
 }
 
-/* 8098C104-8098C2D8 0002E4 01D4+00 1/1 0/0 0/0 .text            __ct__11daNpcChin_cFv */
 daNpcChin_c::daNpcChin_c() {
     mpSphMng = NULL;
 }
 
-/* 8098C2D8-8098C510 0004B8 0238+00 1/0 0/0 0/0 .text            __dt__11daNpcChin_cFv */
 daNpcChin_c::~daNpcChin_c() {
     if (!mTwilight) {
         dComIfG_TimerDeleteRequest(6);
@@ -254,7 +229,6 @@ daNpcChin_c::~daNpcChin_c() {
 #endif
 }
 
-/* 8098C510-8098C858 0006F0 0348+00 1/1 0/0 0/0 .text            Create__11daNpcChin_cFv */
 int daNpcChin_c::Create() {
     fopAcM_ct(this, daNpcChin_c);
 
@@ -345,7 +319,6 @@ int daNpcChin_c::Create() {
     return phase_state;
 }
 
-/* 8098C858-8098CB28 000A38 02D0+00 1/1 0/0 0/0 .text            CreateHeap__11daNpcChin_cFv */
 int daNpcChin_c::CreateHeap() {
     J3DModelData* mdlData_p = NULL;
     J3DModel* model = NULL;
@@ -400,7 +373,6 @@ static void dummy() {
     OS_REPORT("Delete -> NPC_CHIN(id=%d)\n");
 }
 
-/* 8098CCE4-8098CD18 000EC4 0034+00 1/1 0/0 0/0 .text            Delete__11daNpcChin_cFv */
 int daNpcChin_c::Delete() {
     fpc_ProcID unusedId = fopAcM_GetID(this);
     OS_REPORT("----------------------daNpcChin_c::Delete!!\n");
@@ -408,7 +380,6 @@ int daNpcChin_c::Delete() {
     return 1;
 }
 
-/* 8098CD18-8098CD74 000EF8 005C+00 2/2 0/0 0/0 .text            Execute__11daNpcChin_cFv */
 int daNpcChin_c::Execute() {
     execute();
 
@@ -420,7 +391,6 @@ int daNpcChin_c::Execute() {
     return 1;
 }
 
-/* 8098CD74-8098CDE8 000F54 0074+00 1/1 0/0 0/0 .text            Draw__11daNpcChin_cFv */
 int daNpcChin_c::Draw() {
     J3DModelData* modelData = mAnm_p->getModel()->getModelData();
     modelData->getMaterialNodePointer(3)->setMaterialAnm(mpMatAnm);
@@ -431,8 +401,6 @@ int daNpcChin_c::Draw() {
     return 1;
 }
 
-/* 8098CDE8-8098CFB8 000FC8 01D0+00 1/1 0/0 0/0 .text
- * ctrlJoint__11daNpcChin_cFP8J3DJointP8J3DModel                */
 int daNpcChin_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     J3DJoint* joint = i_joint;
     int jointNo = joint->getJntNo();
@@ -469,15 +437,11 @@ int daNpcChin_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 8098CFB8-8098CFD8 001198 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__11daNpcChin_cFP10fopAc_ac_c              */
 int daNpcChin_c::createHeapCallBack(fopAc_ac_c* i_this) {
     daNpcChin_c* chin = (daNpcChin_c*)i_this;
     chin->CreateHeap();
 }
 
-/* 8098CFD8-8098D024 0011B8 004C+00 1/1 0/0 0/0 .text ctrlJointCallBack__11daNpcChin_cFP8J3DJointi
- */
 int daNpcChin_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == NULL) {
         J3DModel* model = j3dSys.getModel();
@@ -490,7 +454,6 @@ int daNpcChin_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 8098D024-8098D0F8 001204 00D4+00 1/0 0/0 0/0 .text            setParam__11daNpcChin_cFv */
 void daNpcChin_c::setParam() {
     attention_info.distances[fopAc_attn_LOCK_e] =
         getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
@@ -519,7 +482,6 @@ void daNpcChin_c::setParam() {
 #endif
 }
 
-/* 8098D0F8-8098D198 0012D8 00A0+00 1/0 0/0 0/0 .text            main__11daNpcChin_cFv */
 int daNpcChin_c::main() {
     Action();
 
@@ -536,7 +498,6 @@ int daNpcChin_c::main() {
     return 1;
 }
 
-/* 8098D198-8098D26C 001378 00D4+00 1/0 0/0 0/0 .text            ctrlBtk__11daNpcChin_cFv */
 int daNpcChin_c::ctrlBtk() {
     if (mpMatAnm != NULL) {
         J3DAnmTextureSRTKey* var_r29 = 0;
@@ -553,7 +514,6 @@ int daNpcChin_c::ctrlBtk() {
     return 0;
 }
 
-/* 8098D26C-8098D58C 00144C 0320+00 1/0 0/0 0/0 .text            setAttnPos__11daNpcChin_cFv */
 void daNpcChin_c::setAttnPos() {
     if (mLookMode == 1) {
         for (int i = 0; i < 3; i++) {
@@ -596,8 +556,6 @@ void daNpcChin_c::setAttnPos() {
     dComIfG_Ccsp()->Set(&mObjInf);
 }
 
-/* 8098D58C-8098D848 00176C 02BC+00 2/0 0/0 0/0 .text            setExpressionAnm__11daNpcChin_cFib
- */
 bool daNpcChin_c::setExpressionAnm(int param_0, bool param_1) {
     mAnmFlags = mAnmFlags & ~0x1fc0;
 
@@ -676,8 +634,6 @@ bool daNpcChin_c::setExpressionAnm(int param_0, bool param_1) {
     }
 }
 
-/* 8098D848-8098D938 001A28 00F0+00 1/0 0/0 0/0 .text            setExpressionBtp__11daNpcChin_cFi
- */
 bool daNpcChin_c::setExpressionBtp(int param_0) {
     J3DAnmTexPattern* anmTexPattern = NULL;
     if (l_btpGetParamList[param_0].fileIdx >= 0) {
@@ -706,7 +662,6 @@ bool daNpcChin_c::setExpressionBtp(int param_0) {
     }
 }
 
-/* 8098D938-8098DB44 001B18 020C+00 2/0 0/0 0/0 .text            setMotionAnm__11daNpcChin_cFif */
 void daNpcChin_c::setMotionAnm(int param_0, f32 param_1) {
     int iVar5;
     switch (param_0) {
@@ -787,7 +742,6 @@ void daNpcChin_c::setMotionAnm(int param_0, f32 param_1) {
     }
 }
 
-/* 8098DB44-8098DB70 001D24 002C+00 1/0 0/0 0/0 .text            setExpression__11daNpcChin_cFif */
 void daNpcChin_c::setExpression(int i_index, f32 i_morf) {
     if (i_index >= 0 && i_index < 15) {
         mExpression = i_index;
@@ -797,7 +751,6 @@ void daNpcChin_c::setExpression(int i_index, f32 i_morf) {
     }
 }
 
-/* 8098DB70-8098DBB4 001D50 0044+00 1/0 0/0 0/0 .text            setMotion__11daNpcChin_cFifi */
 void daNpcChin_c::setMotion(int i_index, f32 i_morf, int param_2) {
     s16 param_0_copy = i_index;
     if ((param_2 != 0 || mMotion != param_0_copy) && i_index >= 0 && i_index < 18) {
@@ -808,7 +761,6 @@ void daNpcChin_c::setMotion(int i_index, f32 i_morf, int param_2) {
     }
 }
 
-/* 8098DBB4-8098DBBC 001D94 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__11daNpcChin_cFv */
 int daNpcChin_c::drawDbgInfo() {
 #if DEBUG
     if (mpHIO->m.common.debug_info_ON == 0) {
@@ -857,7 +809,6 @@ int daNpcChin_c::drawDbgInfo() {
     return 0;
 }
 
-/* 8098DBBC-8098DCD0 001D9C 0114+00 1/1 0/0 0/0 .text            reset__11daNpcChin_cFv */
 void daNpcChin_c::reset() {
     initialize();
     mpMatAnm->initialize();
@@ -890,7 +841,6 @@ void daNpcChin_c::reset() {
     setAction(&daNpcChin_c::wait);
 }
 
-/* 8098DCD0-8098E04C 001EB0 037C+00 1/1 0/0 0/0 .text            playExpression__11daNpcChin_cFv */
 void daNpcChin_c::playExpression() {
     daNpcF_anmPlayData dat0 = {1, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
@@ -946,7 +896,6 @@ void daNpcChin_c::playExpression() {
     }
 }
 
-/* 8098E04C-8098E5C4 00222C 0578+00 1/1 0/0 0/0 .text            playMotion__11daNpcChin_cFv */
 void daNpcChin_c::playMotion() {
 
     daNpcF_anmPlayData dat0a = {15, mpHIO->m.common.morf_frame, 0};
@@ -1021,8 +970,6 @@ void daNpcChin_c::playMotion() {
     }
 }
 
-/* 8098E5C4-8098E66C 0027A4 00A8+00 5/5 0/0 0/0 .text
- * setAction__11daNpcChin_cFM11daNpcChin_cFPCvPvPv_b            */
 int daNpcChin_c::setAction(actionFunc i_func) {
     mActionMode = -1;
 
@@ -1040,14 +987,12 @@ int daNpcChin_c::setAction(actionFunc i_func) {
     return 1;
 }
 
-/* 8098E66C-8098E690 00284C 0024+00 8/8 0/0 0/0 .text            setLookMode__11daNpcChin_cFi */
 void daNpcChin_c::setLookMode(int i_mode) {
     if (i_mode >= 0 && i_mode < 4 && i_mode != mLookMode) {
         mLookMode = i_mode;
     }
 }
 
-/* 8098E690-8098E870 002870 01E0+00 1/1 0/0 0/0 .text            lookat__11daNpcChin_cFv */
 void daNpcChin_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model = mAnm_p->getModel();
@@ -1101,7 +1046,6 @@ void daNpcChin_c::lookat() {
     mLookat1.calc(this, model->getBaseTRMtx(), lookatAngles, snap, angleDiff, 0);
 }
 
-/* 8098E870-8098EA00 002A50 0190+00 2/2 0/0 0/0 .text            step__11daNpcChin_cFsii */
 bool daNpcChin_c::step(s16 param_0, int param_1, int param_2) {
     if (mTurnMode == 0) {
         s16 angleDiff = param_0 - mCurAngle.y;
@@ -1138,7 +1082,6 @@ bool daNpcChin_c::step(s16 param_0, int param_1, int param_2) {
     return mTurnMode > 1;
 }
 
-/* 8098EA00-8098EACC 002BE0 00CC+00 1/1 0/0 0/0 .text            chkFindPlayer__11daNpcChin_cFv */
 BOOL daNpcChin_c::chkFindPlayer() {
     if (!chkActorInSight(daPy_getPlayerActorClass(), mpHIO->m.common.fov)) {
         mActorMngrs[0].remove();
@@ -1161,7 +1104,6 @@ BOOL daNpcChin_c::chkFindPlayer() {
     return inTalkArea;
 }
 
-/* 8098EACC-8098EBE8 002CAC 011C+00 2/1 0/0 0/0 .text setExpressionTalkAfter__11daNpcChin_cFv */
 void daNpcChin_c::setExpressionTalkAfter() {
     switch (mExpression) {
     case 1:
@@ -1188,7 +1130,6 @@ void daNpcChin_c::setExpressionTalkAfter() {
     }
 }
 
-/* 8098EBE8-8098EFE4 002DC8 03FC+00 9/0 0/0 0/0 .text            wait__11daNpcChin_cFPv */
 bool daNpcChin_c::wait(void* param_0) {
     switch (mActionMode) {
     case 0:
@@ -1302,7 +1243,6 @@ bool daNpcChin_c::wait(void* param_0) {
     return true;
 }
 
-/* 8098EFE4-8098F208 0031C4 0224+00 1/0 0/0 0/0 .text            talk__11daNpcChin_cFPv */
 bool daNpcChin_c::talk(void* param_0) {
     int unusedInt1 = 0;
     bool result = false;
@@ -1368,7 +1308,6 @@ bool daNpcChin_c::talk(void* param_0) {
     return result;
 }
 
-/* 8098F208-8098F2BC 0033E8 00B4+00 6/6 0/0 0/0 .text            _talk_motion__11daNpcChin_cFv */
 void daNpcChin_c::_talk_motion() {
     int exprIdx;
     int motionIdx;
@@ -1382,7 +1321,6 @@ void daNpcChin_c::_talk_motion() {
     }
 }
 
-/* 8098F2BC-8098F414 00349C 0158+00 2/0 0/0 0/0 .text            demo__11daNpcChin_cFPv */
 bool daNpcChin_c::demo(void* param_0) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
     int unusedInt1 = 0;
@@ -1436,7 +1374,6 @@ bool daNpcChin_c::demo(void* param_0) {
     return true;
 }
 
-/* 8098F414-8098F758 0035F4 0344+00 2/0 0/0 0/0 .text            watch_game__11daNpcChin_cFPv */
 bool daNpcChin_c::watch_game(void* param_0) {
     switch (mActionMode) {
     case 0: {
@@ -1511,7 +1448,6 @@ bool daNpcChin_c::watch_game(void* param_0) {
     return true;
 }
 
-/* 8098F758-8098FB3C 003938 03E4+00 1/1 0/0 0/0 .text            Event_DT__11daNpcChin_cFv */
 void daNpcChin_c::Event_DT() {
     int local_60 = 0;
 
@@ -1591,7 +1527,6 @@ void daNpcChin_c::Event_DT() {
     }
 }
 
-/* 8098FB3C-8098FD38 003D1C 01FC+00 1/1 0/0 0/0 .text            isGameEnd__11daNpcChin_cFRi */
 BOOL daNpcChin_c::isGameEnd(int& param_0) {
     param_0 = -1;
 
@@ -1632,17 +1567,14 @@ BOOL daNpcChin_c::isGameEnd(int& param_0) {
     return 0;
 }
 
-/* 8098FD38-8098FD5C 003F18 0024+00 1/1 0/0 0/0 .text            _chkGameClear__11daNpcChin_cFv */
 BOOL daNpcChin_c::_chkGameClear() {
     return mpSphMng->isAllGet();
 }
 
-/* 8098FD5C-8098FD80 003F3C 0024+00 1/1 0/0 0/0 .text            SphereReset__11daNpcChin_cFv */
 void daNpcChin_c::SphereReset() {
     mpSphMng->setting();
 }
 
-/* 8098FD80-8098FE28 003F60 00A8+00 1/0 0/0 0/0 .text            _Evt_GameStart__11daNpcChin_cFi */
 int daNpcChin_c::_Evt_GameStart(int param_0) {
     dEvent_manager_c* this_00 = &dComIfGp_getEventManager();
 
@@ -1666,7 +1598,6 @@ int daNpcChin_c::_Evt_GameStart(int param_0) {
     return _Evt_GameStart_CutMain(a_nowCut);
 }
 
-/* 8098FE28-8098FF30 004008 0108+00 1/1 0/0 0/0 .text _Evt_GameStart_CutInit__11daNpcChin_cFRCi */
 int daNpcChin_c::_Evt_GameStart_CutInit(const int& param_0) {
     switch (param_0) {
     case 10:
@@ -1703,7 +1634,6 @@ int daNpcChin_c::_Evt_GameStart_CutInit(const int& param_0) {
     return 1;
 }
 
-/* 8098FF30-8098FFD0 004110 00A0+00 1/1 0/0 0/0 .text _Evt_GameStart_CutMain__11daNpcChin_cFRCi */
 int daNpcChin_c::_Evt_GameStart_CutMain(const int& param_0) {
     int result = 0;
     switch (param_0) {
@@ -1728,7 +1658,6 @@ int daNpcChin_c::_Evt_GameStart_CutMain(const int& param_0) {
     return result;
 }
 
-/* 8098FFD0-80990078 0041B0 00A8+00 1/0 0/0 0/0 .text            _Evt_GameFailed__11daNpcChin_cFi */
 int daNpcChin_c::_Evt_GameFailed(int param_0) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
     int* piVar1 = NULL;
@@ -1748,8 +1677,6 @@ int daNpcChin_c::_Evt_GameFailed(int param_0) {
     return _Evt_GameFailed_CutMain(local_18);
 }
 
-/* 80990078-80990174 004258 00FC+00 1/1 0/0 0/0 .text _Evt_GameFailed_CutInit__11daNpcChin_cFRCi
- */
 int daNpcChin_c::_Evt_GameFailed_CutInit(const int& param_0) {
     switch (param_0) {
     case 10:
@@ -1775,8 +1702,6 @@ int daNpcChin_c::_Evt_GameFailed_CutInit(const int& param_0) {
     return 1;
 }
 
-/* 80990174-80990218 004354 00A4+00 1/1 0/0 0/0 .text _Evt_GameFailed_CutMain__11daNpcChin_cFRCi
- */
 int daNpcChin_c::_Evt_GameFailed_CutMain(const int& param_0) {
     int result = 0;
 
@@ -1796,8 +1721,6 @@ int daNpcChin_c::_Evt_GameFailed_CutMain(const int& param_0) {
     return result;
 }
 
-/* 80990218-809902C0 0043F8 00A8+00 1/0 0/0 0/0 .text            _Evt_GameSucceed__11daNpcChin_cFi
- */
 int daNpcChin_c::_Evt_GameSucceed(int param_0) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
 
@@ -1817,8 +1740,6 @@ int daNpcChin_c::_Evt_GameSucceed(int param_0) {
     return _Evt_GameSucceed_CutMain(cutId);
 }
 
-/* 809902C0-8099041C 0044A0 015C+00 1/1 0/0 0/0 .text _Evt_GameSucceed_CutInit__11daNpcChin_cFRCi
- */
 int daNpcChin_c::_Evt_GameSucceed_CutInit(const int& param_0) {
     switch (param_0) {
     case 10:
@@ -1861,8 +1782,6 @@ int daNpcChin_c::_Evt_GameSucceed_CutInit(const int& param_0) {
     return 1;
 }
 
-/* 8099041C-809905C4 0045FC 01A8+00 1/1 0/0 0/0 .text _Evt_GameSucceed_CutMain__11daNpcChin_cFRCi
- */
 int daNpcChin_c::_Evt_GameSucceed_CutMain(const int& param_0) {
     int itemId1;
 
@@ -1912,8 +1831,6 @@ int daNpcChin_c::_Evt_GameSucceed_CutMain(const int& param_0) {
     return result;
 }
 
-/* 809905C4-8099066C 0047A4 00A8+00 1/0 0/0 0/0 .text            _Evt_SelectGiveUp__11daNpcChin_cFi
- */
 int daNpcChin_c::_Evt_SelectGiveUp(int param_0) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
     int* cutId_p = NULL;
@@ -1933,8 +1850,6 @@ int daNpcChin_c::_Evt_SelectGiveUp(int param_0) {
     return _Evt_SelectGiveUp_CutMain(cutId);
 }
 
-/* 8099066C-8099071C 00484C 00B0+00 1/1 0/0 0/0 .text _Evt_SelectGiveUp_CutInit__11daNpcChin_cFRCi
- */
 int daNpcChin_c::_Evt_SelectGiveUp_CutInit(const int& param_0) {
     switch (param_0) {
     case 10:
@@ -1956,8 +1871,6 @@ int daNpcChin_c::_Evt_SelectGiveUp_CutInit(const int& param_0) {
     return 1;
 }
 
-/* 8099071C-809907AC 0048FC 0090+00 1/1 0/0 0/0 .text _Evt_SelectGiveUp_CutMain__11daNpcChin_cFRCi
- */
 int daNpcChin_c::_Evt_SelectGiveUp_CutMain(const int& param_0) {
     int result = 0;
 
@@ -1981,7 +1894,6 @@ int daNpcChin_c::_Evt_SelectGiveUp_CutMain(const int& param_0) {
     return result;
 }
 
-/* 809907AC-80990854 00498C 00A8+00 1/0 0/0 0/0 .text            _Evt_GameGiveUp__11daNpcChin_cFi */
 int daNpcChin_c::_Evt_GameGiveUp(int param_0) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
 
@@ -2002,8 +1914,6 @@ int daNpcChin_c::_Evt_GameGiveUp(int param_0) {
     return _Evt_GameGiveUp_CutMain(cutId);
 }
 
-/* 80990854-80990950 004A34 00FC+00 1/1 0/0 0/0 .text _Evt_GameGiveUp_CutInit__11daNpcChin_cFRCi
- */
 int daNpcChin_c::_Evt_GameGiveUp_CutInit(const int& param_0) {
     switch (param_0) {
     case 10:
@@ -2027,8 +1937,6 @@ int daNpcChin_c::_Evt_GameGiveUp_CutInit(const int& param_0) {
     return 1;
 }
 
-/* 80990950-809909F4 004B30 00A4+00 1/1 0/0 0/0 .text _Evt_GameGiveUp_CutMain__11daNpcChin_cFRCi
- */
 int daNpcChin_c::_Evt_GameGiveUp_CutMain(const int& param_0) {
     int result = 0;
 
@@ -2049,7 +1957,6 @@ int daNpcChin_c::_Evt_GameGiveUp_CutMain(const int& param_0) {
     return result;
 }
 
-/* 809909F4-80990A9C 004BD4 00A8+00 1/0 0/0 0/0 .text            _Evt_Appear__11daNpcChin_cFi */
 int daNpcChin_c::_Evt_Appear(int param_0) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
     int* cutId_p = NULL;
@@ -2069,7 +1976,6 @@ int daNpcChin_c::_Evt_Appear(int param_0) {
     return _Evt_Appear_CutMain(cutId);
 }
 
-/* 80990A9C-80990BD8 004C7C 013C+00 1/1 0/0 0/0 .text _Evt_Appear_CutInit__11daNpcChin_cFRCi */
 int daNpcChin_c::_Evt_Appear_CutInit(const int& param_0) {
     switch (param_0) {
     case 10:
@@ -2100,7 +2006,6 @@ int daNpcChin_c::_Evt_Appear_CutInit(const int& param_0) {
     return 1;
 }
 
-/* 80990BD8-80990C9C 004DB8 00C4+00 1/1 0/0 0/0 .text _Evt_Appear_CutMain__11daNpcChin_cFRCi */
 int daNpcChin_c::_Evt_Appear_CutMain(const int& param_0) {
     int result = 0;
 
@@ -2132,8 +2037,6 @@ int daNpcChin_c::_Evt_Appear_CutMain(const int& param_0) {
     return result;
 }
 
-/* 80990C9C-80990D44 004E7C 00A8+00 1/0 0/0 0/0 .text            _Evt_SpotLight_Off__11daNpcChin_cFi
- */
 int daNpcChin_c::_Evt_SpotLight_Off(int param_0) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
     int *cutId_p = NULL;
@@ -2153,8 +2056,6 @@ int daNpcChin_c::_Evt_SpotLight_Off(int param_0) {
     return _Evt_SpotLight_Off_CutMain(cutId);
 }
 
-/* 80990D44-80990DDC 004F24 0098+00 1/1 0/0 0/0 .text
- * _Evt_SpotLight_Off_CutInit__11daNpcChin_cFRCi                */
 int daNpcChin_c::_Evt_SpotLight_Off_CutInit(const int& param_0) {
     switch (param_0) {
     case 10:
@@ -2171,8 +2072,6 @@ int daNpcChin_c::_Evt_SpotLight_Off_CutInit(const int& param_0) {
     return 1;
 }
 
-/* 80990DDC-80990E14 004FBC 0038+00 1/1 0/0 0/0 .text
- * _Evt_SpotLight_Off_CutMain__11daNpcChin_cFRCi                */
 int daNpcChin_c::_Evt_SpotLight_Off_CutMain(const int& param_0) {
     int result = 0;
 
@@ -2192,32 +2091,26 @@ int daNpcChin_c::_Evt_SpotLight_Off_CutMain(const int& param_0) {
     return result;
 }
 
-/* 80990E14-80990E34 004FF4 0020+00 1/0 0/0 0/0 .text            daNpcChin_Create__FPv */
 static int daNpcChin_Create(void* i_this) {
     return ((daNpcChin_c*)i_this)->Create();
 }
 
-/* 80990E34-80990E54 005014 0020+00 1/0 0/0 0/0 .text            daNpcChin_Delete__FPv */
 static int daNpcChin_Delete(void* i_this) {
     return ((daNpcChin_c*)i_this)->Delete();
 }
 
-/* 80990E54-80990E74 005034 0020+00 1/0 0/0 0/0 .text            daNpcChin_Execute__FPv */
 static int daNpcChin_Execute(void* i_this) {
     return ((daNpcChin_c*)i_this)->Execute();
 }
 
-/* 80990E74-80990E94 005054 0020+00 1/0 0/0 0/0 .text            daNpcChin_Draw__FPv */
 static int daNpcChin_Draw(void* i_this) {
     return ((daNpcChin_c*)i_this)->Draw();
 }
 
-/* 80990E94-80990E9C 005074 0008+00 1/0 0/0 0/0 .text            daNpcChin_IsDelete__FPv */
 static int daNpcChin_IsDelete(void* param_0) {
     return TRUE;
 }
 
-/* 809922DC-809922FC -00001 0020+00 1/0 0/0 0/0 .data            daNpcChin_MethodTable */
 static actor_method_class daNpcChin_MethodTable = {
     (process_method_func)daNpcChin_Create,
     (process_method_func)daNpcChin_Delete,
@@ -2226,7 +2119,6 @@ static actor_method_class daNpcChin_MethodTable = {
     (process_method_func)daNpcChin_Draw,
 };
 
-/* 809922FC-8099232C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_CHIN */
 extern actor_process_profile_definition g_profile_NPC_CHIN = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

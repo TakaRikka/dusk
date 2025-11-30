@@ -11,7 +11,7 @@
 class J2DMaterial {
 public:
     struct J2DMaterialAnmPointer {
-        /* 802EA79C */ J2DMaterialAnmPointer();
+        J2DMaterialAnmPointer();
 
         /* 0x00 */ J2DAnmColor* mColorAnm;
         /* 0x04 */ J2DAnmTextureSRTKey* mSRTAnm;
@@ -24,18 +24,18 @@ public:
         /* 0x3A */ u16 mTevKRegIds[4];
     };  // Size: 0x44
 
-    /* 802EA1AC */ J2DMaterial();
-    /* 802EA38C */ void setGX();
-    /* 802EA410 */ static J2DTevBlock* createTevBlock(int, bool);
-    /* 802EA5C4 */ static J2DIndBlock* createIndBlock(int, bool);
-    /* 802EA84C */ void makeAnmPointer();
-    /* 802EA94C */ void setAnimation(J2DAnmTextureSRTKey*);
-    /* 802EAA2C */ void setAnimation(J2DAnmTexPattern*);
-    /* 802EAB0C */ void setAnimation(J2DAnmTevRegKey*);
-    /* 802EA89C */ void setAnimation(J2DAnmColor*);
-    /* 802EAC78 */ void animation();
+    J2DMaterial();
+    void setGX();
+    static J2DTevBlock* createTevBlock(int, bool);
+    static J2DIndBlock* createIndBlock(int, bool);
+    void makeAnmPointer();
+    void setAnimation(J2DAnmTextureSRTKey*);
+    void setAnimation(J2DAnmTexPattern*);
+    void setAnimation(J2DAnmTevRegKey*);
+    void setAnimation(J2DAnmColor*);
+    void animation();
 
-    /* 802EA2CC */ virtual ~J2DMaterial();
+    virtual ~J2DMaterial();
 
     u16 getIndex() const { return mIndex; }
     J2DColorBlock* getColorBlock() { return &mColorBlock; }

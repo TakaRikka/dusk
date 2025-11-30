@@ -144,7 +144,6 @@ enum Type {
     /* 0x4 */ TYPE_50F,
 };
 
-/* 809B92E4-809B9378 000000 0094+00 21/21 0/0 0/0 .rodata          m__19daNpc_Fairy_Param_c */
 const daNpc_Fairy_HIOParam daNpc_Fairy_Param_c::m = {
     190.0f,
     -3.0f,
@@ -226,7 +225,6 @@ void daNpc_Fairy_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 809B1B0C-809B1BC0 0000EC 00B4+00 1/1 0/0 0/0 .text            create__16_Fairy_Feather_cFv */
 BOOL _Fairy_Feather_c::create() {
     if (!loadModel()) {
         return FALSE;
@@ -252,29 +250,24 @@ BOOL _Fairy_Feather_c::create() {
     return TRUE;
 }
 
-/* 809B95F8-809B9600 -00001 0008+00 7/8 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "fairy",
 };
 
-/* 809B9600-809B9604 000028 0002+02 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[2] = {
     1, -1,
 };
 
-/* 809B9604-809B9618 -00001 0014+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[5] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
     l_loadResPtrn0, l_loadResPtrn0,
 };
 
-/* 809B9618-809B9620 000040 0008+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[1][2] = {
     {BMDV_FAIRY, FAIRY},
 };
 
-/* 809B9620-809B96AC 000048 008C+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE,BTP_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1},
     {BCK_FAIRY_F_SAD, J3DFrameCtrl::EMode_LOOP, FAIRY, BTP_FAIRY_F_SAD, J3DFrameCtrl::EMode_LOOP, FAIRY, 1},
@@ -283,7 +276,6 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
     {BCK_FAIRY_FH_SMILE, J3DFrameCtrl::EMode_LOOP, FAIRY, BTP_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1},
 };
 
-/* 809B96AC-809B97FC 0000D4 0150+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[12] = {
     {BCK_FAIRY_WAIT, J3DFrameCtrl::EMode_LOOP, FAIRY, BTK_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1, 0},
     {BCK_FAIRY_GO, J3DFrameCtrl::EMode_NONE, FAIRY, BTK_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1, 0},
@@ -299,7 +291,6 @@ static daNpcT_motionAnmData_c l_motionAnmData[12] = {
     {BCK_FAIRY_HOPPE_WAIT, J3DFrameCtrl::EMode_LOOP, FAIRY, BTK_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1, 0},
 };
 
-/* 809B97FC-809B984C 000224 0050+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -308,7 +299,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 809B984C-809B98FC 000274 00B0+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {7, -1, 1}, {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -323,7 +313,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
     {8, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 809B1BC0-809B1CE4 0001A0 0124+00 1/1 0/0 0/0 .text            loadModel__16_Fairy_Feather_cFv */
 BOOL _Fairy_Feather_c::loadModel() {
     // ----------------Loading wing model.\n
     OS_REPORT("---------------- 羽モデルを読み込みます。\n");
@@ -356,7 +345,6 @@ BOOL _Fairy_Feather_c::loadModel() {
     return 1;
 }
 
-/* 809B1CE4-809B1DEC 0002C4 0108+00 4/4 0/0 0/0 .text            setAnm__16_Fairy_Feather_cFi */
 BOOL _Fairy_Feather_c::setAnm(int i_idx) {
     if (i_idx == mPrevAnm) {
         return TRUE;
@@ -393,7 +381,6 @@ BOOL _Fairy_Feather_c::setAnm(int i_idx) {
     return TRUE;
 }
 
-/* 809B1DEC-809B1EA8 0003CC 00BC+00 1/1 0/0 0/0 .text            setBrk__16_Fairy_Feather_cFi */
 BOOL _Fairy_Feather_c::setBrk(int i_idx) {
     static daNpc_GetParam2 const sBrkPrm[1] = {
         {BRK_FAIRY_FEATHER_GT, J3DFrameCtrl::EMode_LOOP, FAIRY},
@@ -408,7 +395,6 @@ BOOL _Fairy_Feather_c::setBrk(int i_idx) {
     return mBrkAnm.init(mpMorf->getModel()->getModelData(), brk, 1, sBrkPrm[i_idx].attr, 1.0f, 0, -1);
 }
 
-/* 809B1EA8-809B1F64 000488 00BC+00 1/1 0/0 0/0 .text            setBtk__16_Fairy_Feather_cFi */
 BOOL _Fairy_Feather_c::setBtk(int i_idx) {
     static daNpc_GetParam2 const sBtkPrm[1] = {
         {BTK_FAIRY_FEATHER_GT, J3DFrameCtrl::EMode_LOOP, FAIRY},
@@ -423,12 +409,10 @@ BOOL _Fairy_Feather_c::setBtk(int i_idx) {
     return mBtkAnm.init(mpMorf->getModel()->getModelData(), btk, 1, sBtkPrm[i_idx].attr, 1.0f, 0, -1);
 }
 
-/* 809B1F64-809B1F6C 000544 0008+00 1/1 0/0 0/0 .text            ctrlJointCallBack__16_Fairy_Feather_cFP8J3DJointi */
 int _Fairy_Feather_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 809B1F6C-809B1FD4 00054C 0068+00 1/1 0/0 0/0 .text            connect__16_Fairy_Feather_cFP13daNpc_Fairy_c */
 void _Fairy_Feather_c::connect(daNpc_Fairy_c* i_this) {
     J3DModel* mdl_p = i_this->mpMorf[0]->getModel();
     mDoMtx_stack_c::copy(mdl_p->getAnmMtx(JNT_FEATHER1AL1));
@@ -436,7 +420,6 @@ void _Fairy_Feather_c::connect(daNpc_Fairy_c* i_this) {
     mpMorf->modelCalc();
 }
 
-/* 809B1FD4-809B2250 0005B4 027C+00 1/1 0/0 0/0 .text draw__16_Fairy_Feather_cFP13daNpc_Fairy_c */
 void _Fairy_Feather_c::draw(daNpc_Fairy_c* i_this) {
     cXyz pos(fopAcM_GetPosition(i_this));
     dKy_tevstr_c tevStr = i_this->tevStr;
@@ -454,7 +437,6 @@ void _Fairy_Feather_c::draw(daNpc_Fairy_c* i_this) {
     mBtkAnm.remove(mdlData_p);
 }
 
-/* 809B98FC-809B998C -00001 0090+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[18] = {
     {"", 0},
     {"APPEAR_10F_01", 1},
@@ -476,7 +458,6 @@ static daNpcT_evtData_c l_evtList[18] = {
     {"RETURN_CANCEL", 1},
 };
 
-/* 809B998C-809B99D4 -00001 0048+00 1/1 0/0 0/0 .data            mCutNameList__13daNpc_Fairy_c */
 char* daNpc_Fairy_c::mCutNameList[18] = {
     "",
     "APPEAR_10F_01",
@@ -498,7 +479,6 @@ char* daNpc_Fairy_c::mCutNameList[18] = {
     "RETURN_CANCEL",
 };
 
-/* 809B9AA0-809B9B78 0004C8 00D8+00 1/2 0/0 0/0 .data            mCutList__13daNpc_Fairy_c */
 daNpc_Fairy_c::cutFunc daNpc_Fairy_c::mCutList[18] = {
     NULL,
     &daNpc_Fairy_c::cutAppear_10F_01,
@@ -520,7 +500,6 @@ daNpc_Fairy_c::cutFunc daNpc_Fairy_c::mCutList[18] = {
     &daNpc_Fairy_c::cutReturnCancel,
 };
 
-/* 809B228C-809B2430 00086C 01A4+00 1/0 0/0 0/0 .text            __dt__13daNpc_Fairy_cFv */
 daNpc_Fairy_c::~daNpc_Fairy_c() {
     OS_REPORT("|%06d:%x|daNpc_Fairy_c -> デストラクト\n", g_Counter.mCounter0, this);
 
@@ -537,10 +516,8 @@ daNpc_Fairy_c::~daNpc_Fairy_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-/* 809BA424-809BA428 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static NPC_FAIRY_HIO_CLASS l_HIO;
 
-/* 809B2430-809B26E8 000A10 02B8+00 1/1 0/0 0/0 .text            Create__13daNpc_Fairy_cFv */
 cPhs__Step daNpc_Fairy_c::Create() {
     daNpcT_ct(this, daNpc_Fairy_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4, l_evtList, l_resNameList);
@@ -598,7 +575,6 @@ cPhs__Step daNpc_Fairy_c::Create() {
     return phase;
 }
 
-/* 809B26E8-809B2988 000CC8 02A0+00 1/1 0/0 0/0 .text            CreateHeap__13daNpc_Fairy_cFv */
 int daNpc_Fairy_c::CreateHeap() {
     int arc_idx = 0;
     int file_idx = 0;
@@ -645,7 +621,6 @@ int daNpc_Fairy_c::CreateHeap() {
     return 1;
 }
 
-/* 809B2B44-809B2C20 001124 00DC+00 1/1 0/0 0/0 .text            setAnmData__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::setAnmData() {
     J3DModelData* mdlData_p = mpMorf[0]->getModel()->getModelData();
     J3DAnmColor* bpk = getColorAnmP(l_resNameList[1], BPK_FAIRY);
@@ -666,7 +641,6 @@ void daNpc_Fairy_c::setAnmData() {
     mAnmFlags |= ANM_PLAY_BPK | ANM_PLAY_BRK | ANM_PLAY_BTK;
 }
 
-/* 809B2C20-809B2E78 001200 0258+00 1/0 0/0 0/0 .text            setMotionAnm__13daNpc_Fairy_cFifi */
 bool daNpc_Fairy_c::setMotionAnm(int i_idx, f32 i_morf, int param_3) {
     J3DAnmTransformKey* anm = NULL;
     J3DAnmTextureSRTKey* btk = NULL;
@@ -717,7 +691,6 @@ bool daNpc_Fairy_c::setMotionAnm(int i_idx, f32 i_morf, int param_3) {
     return daNpc_Fairy_c::afterSetMotionAnm(i_idx, anmData.mBckAttr, i_morf, anmData.mBtkAttr);
 }
 
-/* 809B2E78-809B2EFC 001458 0084+00 2/1 0/0 0/0 .text afterSetMotionAnm__13daNpc_Fairy_cFiifi */
 bool daNpc_Fairy_c::afterSetMotionAnm(int i_idx, int i_bck_attr, f32 i_morf, int i_btk_attr) {
     int feather_bck;
 
@@ -751,7 +724,6 @@ bool daNpc_Fairy_c::afterSetMotionAnm(int i_idx, int i_bck_attr, f32 i_morf, int
     return mFairyFeather.setAnm(feather_bck);
 }
 
-/* 809B2EFC-809B2F30 0014DC 0034+00 1/1 0/0 0/0 .text            Delete__13daNpc_Fairy_cFv */
 int daNpc_Fairy_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Fairy_c -> Delete\n", g_Counter.mCounter0, this);
     fpc_ProcID id = fopAcM_GetID(this);
@@ -759,7 +731,6 @@ int daNpc_Fairy_c::Delete() {
     return 1;
 }
 
-/* 809B2F30-809B2F8C 001510 005C+00 2/2 0/0 0/0 .text            Execute__13daNpc_Fairy_cFv */
 int daNpc_Fairy_c::Execute() {
     int rv = execute();
     mFairyFeather.playAnm();
@@ -767,7 +738,6 @@ int daNpc_Fairy_c::Execute() {
     return rv;
 }
 
-/* 809B2F8C-809B3034 00156C 00A8+00 1/1 0/0 0/0 .text            Draw__13daNpc_Fairy_cFv */
 int daNpc_Fairy_c::Draw() {
     if (mStatus == 1) {
         return 1;
@@ -785,19 +755,16 @@ int daNpc_Fairy_c::Draw() {
     #endif
 }
 
-/* 809B3034-809B3074 001614 0040+00 1/0 0/0 0/0 .text            drawOtherMdl__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::drawOtherMdl() {
     mFairyFeather.connect(this);
     mFairyFeather.draw(this);
 }
 
-/* 809B3074-809B3094 001654 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__13daNpc_Fairy_cFP10fopAc_ac_c */
 int daNpc_Fairy_c::createHeapCallBack(fopAc_ac_c* actor) {
     daNpc_Fairy_c* i_this = (daNpc_Fairy_c*)actor;
     return i_this->CreateHeap();
 }
 
-/* 809B3094-809B30EC 001674 0058+00 1/1 0/0 0/0 .text            ctrlJointCallBack__13daNpc_Fairy_cFP8J3DJointi */
 int daNpc_Fairy_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* mdl_p = j3dSys.getModel();
@@ -810,12 +777,10 @@ int daNpc_Fairy_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 809B30EC-809B30F4 0016CC 0008+00 1/1 0/0 0/0 .text            isDelete__13daNpc_Fairy_cFv */
 BOOL daNpc_Fairy_c::isDelete() {
     return FALSE;
 }
 
-/* 809B30F4-809B32C4 0016D4 01D0+00 1/1 0/0 0/0 .text            reset__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::reset() {
     initialize();
 
@@ -844,12 +809,10 @@ void daNpc_Fairy_c::reset() {
     setAction(&daNpc_Fairy_c::wait, 0);
 }
 
-/* 809B32C4-809B32D0 0018A4 000C+00 1/1 0/0 0/0 .text            initStatus__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::initStatus() {
     mStatus = 1;
 }
 
-/* 809B32D0-809B335C 0018B0 008C+00 1/0 0/0 0/0 .text            afterJntAnm__13daNpc_Fairy_cFi */
 void daNpc_Fairy_c::afterJntAnm(int i_joint) {
     if (i_joint == JNT_BACKBONE1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -860,7 +823,6 @@ void daNpc_Fairy_c::afterJntAnm(int i_joint) {
     }
 }
 
-/* 809B335C-809B349C 00193C 0140+00 1/0 0/0 0/0 .text            setParam__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::setParam() {
     srchActors();
     s16 talk_distance = mHIO->m.common.talk_distance;
@@ -898,12 +860,10 @@ void daNpc_Fairy_c::setParam() {
     mMorfFrames = mHIO->m.common.morf_frame;
 }
 
-/* 809B349C-809B34A4 001A7C 0008+00 1/0 0/0 0/0 .text            checkChangeEvt__13daNpc_Fairy_cFv */
 BOOL daNpc_Fairy_c::checkChangeEvt() {
     return FALSE;
 }
 
-/* 809B34A4-809B3520 001A84 007C+00 1/0 0/0 0/0 .text setAfterTalkMotion__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::setAfterTalkMotion() {
     int idx;
     switch (mFaceMotionSeqMngr.getNo()) {
@@ -920,12 +880,10 @@ void daNpc_Fairy_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(idx, -1.0f, FALSE, 0);
 }
 
-/* 809B3520-809B3524 001B00 0004+00 1/1 0/0 0/0 .text            srchActors__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::srchActors() {
     /* empty function */
 }
 
-/* 809B3524-809B3630 001B04 010C+00 1/0 0/0 0/0 .text            evtTalk__13daNpc_Fairy_cFv */
 BOOL daNpc_Fairy_c::evtTalk() {
     if (chkAction(&daNpc_Fairy_c::talk)) {
         (this->*mAction)(NULL);
@@ -947,7 +905,6 @@ BOOL daNpc_Fairy_c::evtTalk() {
     return TRUE;
 }
 
-/* 809B3630-809B36F8 001C10 00C8+00 1/0 0/0 0/0 .text            evtCutProc__13daNpc_Fairy_cFv */
 BOOL daNpc_Fairy_c::evtCutProc() {
     BOOL rv = FALSE;
     s32 staffId = dComIfGp_getEventManager().getMyStaffId("Fairy", this, -1);
@@ -965,7 +922,6 @@ BOOL daNpc_Fairy_c::evtCutProc() {
     return rv;
 }
 
-/* 809B36F8-809B379C 001CD8 00A4+00 1/0 0/0 0/0 .text            evtEndProc__13daNpc_Fairy_cFv */
 BOOL daNpc_Fairy_c::evtEndProc() {
     OS_REPORT("------------------evt end proc!!\n");
 
@@ -992,7 +948,6 @@ BOOL daNpc_Fairy_c::evtEndProc() {
     return TRUE;
 }
 
-/* 809B379C-809B384C 001D7C 00B0+00 1/0 0/0 0/0 .text            action__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::action() {
     if (mStagger.checkRebirth()) {
         mStagger.initialize();
@@ -1004,7 +959,6 @@ void daNpc_Fairy_c::action() {
     }
 }
 
-/* 809B384C-809B38E8 001E2C 009C+00 1/1 0/0 0/0 .text            ptcl_water__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::ptcl_water() {
     u32 uVar1 = 0x40002;
     cXyz scale(1.1f, 1.1f, 1.1f);
@@ -1019,7 +973,6 @@ void daNpc_Fairy_c::ptcl_water() {
     mPaPo.setEffectCenter(&tevStr, &current.pos, 1, uVar1, NULL, NULL, &scale, fopAcM_GetRoomNo(this), 1.0f, speedF);
 }
 
-/* 809B38E8-809B39FC 001EC8 0114+00 1/1 0/0 0/0 .text            ptcl_sprit__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::ptcl_sprit() {
     cXyz pos;
     cXyz scale(1.0f, 1.0f, 1.0f);
@@ -1040,7 +993,6 @@ void daNpc_Fairy_c::ptcl_sprit() {
     }
 }
 
-/* 809B39FC-809B3AB0 001FDC 00B4+00 1/1 0/0 0/0 .text            _to_FairyField__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::_to_FairyField() {
     int iVar1 = 4;
     if (mTempBit < 0 || mTempBit >= iVar1) {
@@ -1059,7 +1011,6 @@ void daNpc_Fairy_c::_to_FairyField() {
     dStage_changeScene(sFairyField[mTempBit], 0.0f, 0, fopAcM_GetRoomNo(this), 0, -1);
 }
 
-/* 809B3AB0-809B3B20 002090 0070+00 1/1 0/0 0/0 .text            chk_tempbit__13daNpc_Fairy_cFv */
 int daNpc_Fairy_c::chk_tempbit() {
     static u32 const sTempBit[4] = {
         121,   // dSv_event_tmp_flag_c::T_0121 - Program use - Fairy use 1
@@ -1081,14 +1032,12 @@ int daNpc_Fairy_c::chk_tempbit() {
     return -1;
 }
 
-/* 809B3B20-809B3B98 002100 0078+00 1/0 0/0 0/0 .text            beforeMove__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::beforeMove() {
     if (checkHide() || mNoDraw) {
         attention_info.flags = 0;
     }
 }
 
-/* 809B3B98-809B3C64 002178 00CC+00 1/0 0/0 0/0 .text            afterMoved__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::afterMoved() {
     ptcl_water();
 
@@ -1109,7 +1058,6 @@ void daNpc_Fairy_c::afterMoved() {
     }
 }
 
-/* 809B3C64-809B3EA0 002244 023C+00 1/0 0/0 0/0 .text            setAttnPos__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::setAttnPos() {
     cXyz pos(0.0f, -30.0f, 0.0f);
 
@@ -1134,7 +1082,6 @@ void daNpc_Fairy_c::setAttnPos() {
     attention_info.position.y += mHIO->m.common.attention_offset;
 }
 
-/* 809B3EA0-809B3FD8 002480 0138+00 1/0 0/0 0/0 .text            setCollision__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::setCollision() {
     cXyz pos;
     u32 co_s_prm = 0x79;
@@ -1172,12 +1119,10 @@ void daNpc_Fairy_c::setCollision() {
     mCyl.ClrTgHit();
 }
 
-/* 809B3FD8-809B3FE0 0025B8 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__13daNpc_Fairy_cFv */
 int daNpc_Fairy_c::drawDbgInfo() {
     return 0;
 }
 
-/* 809B3FE0-809B4090 0025C0 00B0+00 2/2 0/0 0/0 .text            setAction__13daNpc_Fairy_cFM13daNpc_Fairy_cFPCvPvi_ii */
 BOOL daNpc_Fairy_c::setAction(actionFunc action, int param_2) {
     mMode = 0xFFFF;
 
@@ -1195,7 +1140,6 @@ BOOL daNpc_Fairy_c::setAction(actionFunc action, int param_2) {
     return TRUE;
 }
 
-/* 809B4090-809B4360 002670 02D0+00 1/0 0/0 0/0 .text            wait__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::wait(int param_1) {
     switch (mMode) {
         case -1:
@@ -1256,7 +1200,6 @@ int daNpc_Fairy_c::wait(int param_1) {
     return 1;
 }
 
-/* 809B4360-809B4450 002940 00F0+00 2/0 0/0 0/0 .text            talk__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::talk(int param_1) {
     switch (mMode) {
         case -1:
@@ -1322,7 +1265,6 @@ int daNpc_Fairy_c::test(int param_1) {
 }
 #endif
 
-/* 809B4450-809B4588 002A30 0138+00 1/1 0/0 0/0 .text            AppearDemoCall__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::AppearDemoCall() {
     if (mType == TYPE_50F) {
         // dSv_event_flag_c::F_0505 - sub-dungeon - Cave of Ordeals - B50 first arrival (clear)
@@ -1379,7 +1321,6 @@ void daNpc_Fairy_c::AppearDemoCall() {
     field_0xff4 = mEvtNo;
 }
 
-/* 809B4588-809B45BC 002B68 0034+00 1/1 0/0 0/0 .text            ReturnDemoCall__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::ReturnDemoCall() {
     if (mType == TYPE_10F) {
         mEvtNo = EVT_SELECT_RETURN1;
@@ -1391,7 +1332,6 @@ void daNpc_Fairy_c::ReturnDemoCall() {
     mUnkFlag = 1;
 }
 
-/* 809B45BC-809B464C 002B9C 0090+00 3/3 0/0 0/0 .text            PresentDemoCall__13daNpc_Fairy_cFv */
 void daNpc_Fairy_c::PresentDemoCall() {
     int item_no = 0;
     if (mFlow.getEventId(&item_no) != 1) {
@@ -1404,7 +1344,6 @@ void daNpc_Fairy_c::PresentDemoCall() {
     }
 }
 
-/* 809B464C-809B46E0 002C2C 0094+00 1/0 0/0 0/0 .text            cutAppear_10F_01__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_10F_01(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1469,7 +1408,6 @@ int daNpc_Fairy_c::_cutAppear_10F_01_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B48C4-809B4A44 002EA4 0180+00 1/1 0/0 0/0 .text            _cutAppear_10F_01_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_10F_01_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -1525,7 +1463,6 @@ int daNpc_Fairy_c::_cutAppear_10F_01_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B4A44-809B4AD8 003024 0094+00 1/0 0/0 0/0 .text            cutAppear_10F_02__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_10F_02(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1542,7 +1479,6 @@ int daNpc_Fairy_c::cutAppear_10F_02(int i_staffId) {
     return _cutAppear_10F_02_Main(*cutId);
 }
 
-/* 809B4AD8-809B4BF8 0030B8 0120+00 1/1 0/0 0/0 .text            _cutAppear_10F_02_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_10F_02_Init(int const& i_cutId) {
     int rv = 0;
     
@@ -1573,7 +1509,6 @@ int daNpc_Fairy_c::_cutAppear_10F_02_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B4BF8-809B4CC0 0031D8 00C8+00 1/1 0/0 0/0 .text            _cutAppear_10F_02_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_10F_02_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -1605,7 +1540,6 @@ int daNpc_Fairy_c::_cutAppear_10F_02_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B4CC0-809B4D54 0032A0 0094+00 1/0 0/0 0/0 .text            cutAppear_20F_01__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_20F_01(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1622,7 +1556,6 @@ int daNpc_Fairy_c::cutAppear_20F_01(int i_staffId) {
     return _cutAppear_20F_01_Main(*cutId);
 }
 
-/* 809B4D54-809B4EB4 003334 0160+00 1/1 0/0 0/0 .text            _cutAppear_20F_01_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_20F_01_Init(int const& i_cutId) {
     int rv = 0;
     
@@ -1657,7 +1590,6 @@ int daNpc_Fairy_c::_cutAppear_20F_01_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B4EB4-809B5000 003494 014C+00 1/1 0/0 0/0 .text            _cutAppear_20F_01_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_20F_01_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -1696,7 +1628,6 @@ int daNpc_Fairy_c::_cutAppear_20F_01_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B5000-809B5094 0035E0 0094+00 1/0 0/0 0/0 .text            cutAppear_20F_02__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_20F_02(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1713,7 +1644,6 @@ int daNpc_Fairy_c::cutAppear_20F_02(int i_staffId) {
     return _cutAppear_20F_02_Main(*cutId);
 }
 
-/* 809B5094-809B51F4 003674 0160+00 1/1 0/0 0/0 .text            _cutAppear_20F_02_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_20F_02_Init(int const& i_cutId) {
     int rv = 0;
     
@@ -1748,7 +1678,6 @@ int daNpc_Fairy_c::_cutAppear_20F_02_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B51F4-809B5340 0037D4 014C+00 1/1 0/0 0/0 .text            _cutAppear_20F_02_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_20F_02_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -1787,7 +1716,6 @@ int daNpc_Fairy_c::_cutAppear_20F_02_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B5340-809B53D4 003920 0094+00 1/0 0/0 0/0 .text            cutAppear_30F_01__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_30F_01(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1804,7 +1732,6 @@ int daNpc_Fairy_c::cutAppear_30F_01(int i_staffId) {
     return _cutAppear_30F_01_Main(*cutId);
 }
 
-/* 809B53D4-809B54F4 0039B4 0120+00 1/1 0/0 0/0 .text            _cutAppear_30F_01_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_30F_01_Init(int const& i_cutId) {
     int rv = 0;
     
@@ -1835,7 +1762,6 @@ int daNpc_Fairy_c::_cutAppear_30F_01_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B54F4-809B55BC 003AD4 00C8+00 1/1 0/0 0/0 .text            _cutAppear_30F_01_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_30F_01_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -1867,7 +1793,6 @@ int daNpc_Fairy_c::_cutAppear_30F_01_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B55BC-809B5650 003B9C 0094+00 1/0 0/0 0/0 .text            cutAppear_30F_02__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_30F_02(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1884,7 +1809,6 @@ int daNpc_Fairy_c::cutAppear_30F_02(int i_staffId) {
     return _cutAppear_30F_02_Main(*cutId);
 }
 
-/* 809B5650-809B5770 003C30 0120+00 1/1 0/0 0/0 .text            _cutAppear_30F_02_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_30F_02_Init(int const& i_cutId) {
     int rv = 0;
     
@@ -1915,7 +1839,6 @@ int daNpc_Fairy_c::_cutAppear_30F_02_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B5770-809B5838 003D50 00C8+00 1/1 0/0 0/0 .text            _cutAppear_30F_02_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_30F_02_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -1947,7 +1870,6 @@ int daNpc_Fairy_c::_cutAppear_30F_02_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B5838-809B58CC 003E18 0094+00 1/0 0/0 0/0 .text            cutAppear_40F_01__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_40F_01(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1964,7 +1886,6 @@ int daNpc_Fairy_c::cutAppear_40F_01(int i_staffId) {
     return _cutAppear_40F_01_Main(*cutId);
 }
 
-/* 809B58CC-809B59EC 003EAC 0120+00 1/1 0/0 0/0 .text            _cutAppear_40F_01_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_40F_01_Init(int const& i_cutId) {
     int rv = 0;
     
@@ -1995,7 +1916,6 @@ int daNpc_Fairy_c::_cutAppear_40F_01_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B59EC-809B5AB4 003FCC 00C8+00 1/1 0/0 0/0 .text            _cutAppear_40F_01_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_40F_01_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -2027,7 +1947,6 @@ int daNpc_Fairy_c::_cutAppear_40F_01_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B5AB4-809B5B48 004094 0094+00 1/0 0/0 0/0 .text            cutAppear_40F_02__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_40F_02(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -2044,7 +1963,6 @@ int daNpc_Fairy_c::cutAppear_40F_02(int i_staffId) {
     return _cutAppear_40F_02_Main(*cutId);
 }
 
-/* 809B5B48-809B5C68 004128 0120+00 1/1 0/0 0/0 .text            _cutAppear_40F_02_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_40F_02_Init(int const& i_cutId) {
     int rv = 0;
     
@@ -2075,7 +1993,6 @@ int daNpc_Fairy_c::_cutAppear_40F_02_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B5C68-809B5D30 004248 00C8+00 1/1 0/0 0/0 .text            _cutAppear_40F_02_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutAppear_40F_02_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -2107,7 +2024,6 @@ int daNpc_Fairy_c::_cutAppear_40F_02_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B5D30-809B5E00 004310 00D0+00 1/0 0/0 0/0 .text            cutAppear_50F_01__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_50F_01(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -2131,7 +2047,6 @@ int daNpc_Fairy_c::cutAppear_50F_01(int i_staffId) {
     return _cutAppear_50F_01_Main(*cutId, msgNo);
 }
 
-/* 809B5E00-809B6084 0043E0 0284+00 2/1 0/0 0/0 .text            _cutAppear_50F_01_Init__13daNpc_Fairy_cFRCiRCi */
 int daNpc_Fairy_c::_cutAppear_50F_01_Init(int const& i_cutId, int const& i_msgNo) {
     int rv = 0;
     
@@ -2195,7 +2110,6 @@ int daNpc_Fairy_c::_cutAppear_50F_01_Init(int const& i_cutId, int const& i_msgNo
     return rv;
 }
 
-/* 809B6084-809B631C 004664 0298+00 2/1 0/0 0/0 .text            _cutAppear_50F_01_Main__13daNpc_Fairy_cFRCiRCi */
 int daNpc_Fairy_c::_cutAppear_50F_01_Main(int const& i_cutId, int const& i_msgNo) {
     int rv = 0;
     int msgNos[2] = {-1, -1};
@@ -2286,7 +2200,6 @@ int daNpc_Fairy_c::_cutAppear_50F_01_Main(int const& i_cutId, int const& i_msgNo
     return rv;
 }
 
-/* 809B631C-809B63EC 0048FC 00D0+00 1/0 0/0 0/0 .text            cutAppear_50F_02__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_50F_02(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -2310,7 +2223,6 @@ int daNpc_Fairy_c::cutAppear_50F_02(int i_staffId) {
     return _cutAppear_50F_02_Main(*cutId, msgNo);
 }
 
-/* 809B63EC-809B662C 0049CC 0240+00 2/1 0/0 0/0 .text           _cutAppear_50F_02_Init__13daNpc_Fairy_cFRCiRCi */
 int daNpc_Fairy_c::_cutAppear_50F_02_Init(int const& i_cutId, int const& i_msgNo) {
     int rv = 0;
     
@@ -2364,7 +2276,6 @@ int daNpc_Fairy_c::_cutAppear_50F_02_Init(int const& i_cutId, int const& i_msgNo
     return rv;
 }
 
-/* 809B662C-809B6830 004C0C 0204+00 2/1 0/0 0/0 .text            _cutAppear_50F_02_Main__13daNpc_Fairy_cFRCiRCi */
 int daNpc_Fairy_c::_cutAppear_50F_02_Main(int const& i_cutId, int const& i_msgNo) {
     int rv = 0;
     int msgNos[2] = {-1, -1};
@@ -2434,7 +2345,6 @@ int daNpc_Fairy_c::_cutAppear_50F_02_Main(int const& i_cutId, int const& i_msgNo
     return rv;
 }
 
-/* 809B6830-809B6900 004E10 00D0+00 1/0 0/0 0/0 .text            cutAppear_50F_03__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_50F_03(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -2458,7 +2368,6 @@ int daNpc_Fairy_c::cutAppear_50F_03(int i_staffId) {
     return _cutAppear_50F_03_Main(*cutId, msgNo);
 }
 
-/* 809B6900-809B6ADC 004EE0 01DC+00 2/1 0/0 0/0 .text            _cutAppear_50F_03_Init__13daNpc_Fairy_cFRCiRCi */
 int daNpc_Fairy_c::_cutAppear_50F_03_Init(int const& i_cutId, int const& i_msgNo) {
     int rv = 0;
     
@@ -2504,7 +2413,6 @@ int daNpc_Fairy_c::_cutAppear_50F_03_Init(int const& i_cutId, int const& i_msgNo
     return rv;
 }
 
-/* 809B6ADC-809B6C30 0050BC 0154+00 2/1 0/0 0/0 .text            _cutAppear_50F_03_Main__13daNpc_Fairy_cFRCiRCi */
 int daNpc_Fairy_c::_cutAppear_50F_03_Main(int const& i_cutId, int const& i_msgNo) {
     int rv = 0;
     int msgNos[2] = {-1, -1};
@@ -2559,7 +2467,6 @@ int daNpc_Fairy_c::_cutAppear_50F_03_Main(int const& i_cutId, int const& i_msgNo
     return rv;
 }
 
-/* 809B6C30-809B6D00 005210 00D0+00 1/0 0/0 0/0 .text            cutAppear_50F_04__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_50F_04(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -2583,7 +2490,6 @@ int daNpc_Fairy_c::cutAppear_50F_04(int i_staffId) {
     return _cutAppear_50F_04_Main(*cutId, msgNo);
 }
 
-/* 809B6D00-809B6F40 0052E0 0240+00 2/1 0/0 0/0 .text            _cutAppear_50F_04_Init__13daNpc_Fairy_cFRCiRCi */
 int daNpc_Fairy_c::_cutAppear_50F_04_Init(int const& i_cutId, int const& i_msgNo) {
     int rv = 0;
     
@@ -2637,7 +2543,6 @@ int daNpc_Fairy_c::_cutAppear_50F_04_Init(int const& i_cutId, int const& i_msgNo
     return rv;
 }
 
-/* 809B6F40-809B7168 005520 0228+00 2/1 0/0 0/0 .text            _cutAppear_50F_04_Main__13daNpc_Fairy_cFRCiRCi */
 int daNpc_Fairy_c::_cutAppear_50F_04_Main(int const& i_cutId, int const& i_msgNo) {
     int rv = 0;
     int msgNos[2] = {-1, -1};
@@ -2713,7 +2618,6 @@ int daNpc_Fairy_c::_cutAppear_50F_04_Main(int const& i_cutId, int const& i_msgNo
     return rv;
 }
 
-/* 809B7168-809B7238 005748 00D0+00 1/0 0/0 0/0 .text            cutAppear_50F_05__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutAppear_50F_05(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -2737,7 +2641,6 @@ int daNpc_Fairy_c::cutAppear_50F_05(int i_staffId) {
     return _cutAppear_50F_05_Main(*cutId, msgNo);
 }
 
-/* 809B7238-809B74AC 005818 0274+00 2/1 0/0 0/0 .text            _cutAppear_50F_05_Init__13daNpc_Fairy_cFRCiRCi */
 int daNpc_Fairy_c::_cutAppear_50F_05_Init(int const& i_cutId, int const& i_msgNo) {
     int rv = 0;
     
@@ -2800,7 +2703,6 @@ int daNpc_Fairy_c::_cutAppear_50F_05_Init(int const& i_cutId, int const& i_msgNo
     return rv;
 }
 
-/* 809B74AC-809B7718 005A8C 026C+00 2/1 0/0 0/0 .text            _cutAppear_50F_05_Main__13daNpc_Fairy_cFRCiRCi */
 int daNpc_Fairy_c::_cutAppear_50F_05_Main(int const& i_cutId, int const& i_msgNo) {
     int rv = 0;
     int msgNos[2] = {-1, -1};
@@ -2883,7 +2785,6 @@ int daNpc_Fairy_c::_cutAppear_50F_05_Main(int const& i_cutId, int const& i_msgNo
     return rv;
 }
 
-/* 809B7718-809B77AC 005CF8 0094+00 1/0 0/0 0/0 .text cutSelect_Return1__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutSelect_Return1(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -2900,7 +2801,6 @@ int daNpc_Fairy_c::cutSelect_Return1(int i_staffId) {
     return _cutSelect_Return1_Main(*cutId);
 }
 
-/* 809B77AC-809B78F0 005D8C 0144+00 1/1 0/0 0/0 .text            _cutSelect_Return1_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutSelect_Return1_Init(int const& i_cutId) {
     int rv = 0;
 
@@ -2933,7 +2833,6 @@ int daNpc_Fairy_c::_cutSelect_Return1_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B78F0-809B79A4 005ED0 00B4+00 1/1 0/0 0/0 .text            _cutSelect_Return1_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutSelect_Return1_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -2961,7 +2860,6 @@ int daNpc_Fairy_c::_cutSelect_Return1_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B79A4-809B7A38 005F84 0094+00 1/0 0/0 0/0 .text            cutSelect_Return2__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutSelect_Return2(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -2978,7 +2876,6 @@ int daNpc_Fairy_c::cutSelect_Return2(int i_staffId) {
     return _cutSelect_Return2_Main(*cutId);
 }
 
-/* 809B7A38-809B7A9C 006018 0064+00 1/1 0/0 0/0 .text            _cutSelect_Return2_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutSelect_Return2_Init(int const& i_cutId) {
     int rv = 0;
 
@@ -2995,7 +2892,6 @@ int daNpc_Fairy_c::_cutSelect_Return2_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B7A9C-809B7BA4 00607C 0108+00 1/1 0/0 0/0 .text            _cutSelect_Return2_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutSelect_Return2_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -3022,7 +2918,6 @@ int daNpc_Fairy_c::_cutSelect_Return2_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B7BA4-809B7C38 006184 0094+00 1/0 0/0 0/0 .text cutSelect_Return3__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutSelect_Return3(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -3039,7 +2934,6 @@ int daNpc_Fairy_c::cutSelect_Return3(int i_staffId) {
     return _cutSelect_Return3_Main(*cutId);
 }
 
-/* 809B7C38-809B7D7C 006218 0144+00 1/1 0/0 0/0 .text            _cutSelect_Return3_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutSelect_Return3_Init(int const& i_cutId) {
     int rv = 0;
 
@@ -3072,7 +2966,6 @@ int daNpc_Fairy_c::_cutSelect_Return3_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B7D7C-809B7E30 00635C 00B4+00 1/1 0/0 0/0 .text            _cutSelect_Return3_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutSelect_Return3_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -3100,7 +2993,6 @@ int daNpc_Fairy_c::_cutSelect_Return3_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B7E30-809B7EC4 006410 0094+00 1/0 0/0 0/0 .text            cutReturnCancel__13daNpc_Fairy_cFi */
 int daNpc_Fairy_c::cutReturnCancel(int i_staffId) {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -3117,7 +3009,6 @@ int daNpc_Fairy_c::cutReturnCancel(int i_staffId) {
     return _cutReturnCancel_Main(*cutId);
 }
 
-/* 809B7EC4-809B7ECC 0064A4 0008+00 1/1 0/0 0/0 .text            _cutReturnCancel_Init__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutReturnCancel_Init(int const& i_cutId) {
     int rv = 0;
 
@@ -3132,7 +3023,6 @@ int daNpc_Fairy_c::_cutReturnCancel_Init(int const& i_cutId) {
     return rv;
 }
 
-/* 809B7ECC-809B7ED4 0064AC 0008+00 1/1 0/0 0/0 .text            _cutReturnCancel_Main__13daNpc_Fairy_cFRCi */
 int daNpc_Fairy_c::_cutReturnCancel_Main(int const& i_cutId) {
     int rv = 0;
 
@@ -3147,32 +3037,26 @@ int daNpc_Fairy_c::_cutReturnCancel_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 809B7ED4-809B7EF4 0064B4 0020+00 1/0 0/0 0/0 .text            daNpc_Fairy_Create__FPv */
 static int daNpc_Fairy_Create(void* i_this) {
     return static_cast<daNpc_Fairy_c*>(i_this)->Create();
 }
 
-/* 809B7EF4-809B7F14 0064D4 0020+00 1/0 0/0 0/0 .text            daNpc_Fairy_Delete__FPv */
 static int daNpc_Fairy_Delete(void* i_this) {
     return static_cast<daNpc_Fairy_c*>(i_this)->Delete();
 }
 
-/* 809B7F14-809B7F34 0064F4 0020+00 1/0 0/0 0/0 .text            daNpc_Fairy_Execute__FPv */
 static int daNpc_Fairy_Execute(void* i_this) {
     return static_cast<daNpc_Fairy_c*>(i_this)->Execute();
 }
 
-/* 809B7F34-809B7F54 006514 0020+00 1/0 0/0 0/0 .text            daNpc_Fairy_Draw__FPv */
 static int daNpc_Fairy_Draw(void* i_this) {
     return static_cast<daNpc_Fairy_c*>(i_this)->Draw();
 }
 
-/* 809B7F54-809B7F5C 006534 0008+00 1/0 0/0 0/0 .text            daNpc_Fairy_IsDelete__FPv */
 static int daNpc_Fairy_IsDelete(void* i_this) {
     return true;
 }
 
-/* 809BA254-809BA274 -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Fairy_MethodTable */
 static actor_method_class daNpc_Fairy_MethodTable = {
     (process_method_func)daNpc_Fairy_Create,
     (process_method_func)daNpc_Fairy_Delete,
@@ -3181,7 +3065,6 @@ static actor_method_class daNpc_Fairy_MethodTable = {
     (process_method_func)daNpc_Fairy_Draw,
 };
 
-/* 809BA274-809BA2A4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_FAIRY */
 extern actor_process_profile_definition g_profile_NPC_FAIRY = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID

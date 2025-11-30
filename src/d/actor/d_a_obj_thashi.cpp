@@ -8,13 +8,7 @@
 #include "d/actor/d_a_obj_thashi.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
-//
-// Forward References:
-//
 
-//
-// Declarations:
-//
 char* l_arcName = "S_thashi";
 
 static void dataStripping() {
@@ -29,8 +23,6 @@ static void dataStripping() {
     stripFloat(getStripInt());
 }
 
-/* 80D0C238-80D0C298 000078 0060+00 1/1 0/0 0/0 .text            initCcCylinder__13daObjTHASHI_cFv
- */
 void daObjTHASHI_c::initCcCylinder() {
     #if !DEBUG
     const
@@ -94,15 +86,12 @@ static void dataStripping2() {
     stripFloat(FB_HEIGHT);
 }
 
-/* 80D0C298-80D0C2B8 0000D8 0020+00 1/0 0/0 0/0 .text            daObjTHASHI_Create__FP10fopAc_ac_c
- */
 static int daObjTHASHI_Create(fopAc_ac_c* param_0) {
     daObjTHASHI_c* i_this = (daObjTHASHI_c*)param_0;
     fpc_ProcID id = fopAcM_GetID(param_0);
     return i_this->create();
 }
 
-/* 80D0C2B8-80D0C2DC 0000F8 0024+00 1/0 0/0 0/0 .text daObjTHASHI_Delete__FP13daObjTHASHI_c */
 static int daObjTHASHI_Delete(daObjTHASHI_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     i_this->MoveBGDelete();
@@ -115,7 +104,6 @@ static void strippedFunc3(cXyz* a, csXyz* b) {
     delete[] a;
 }
 
-/* 80D0C354-80D0C608 000194 02B4+00 2/1 0/0 0/0 .text            setBaseMtx__13daObjTHASHI_cFv */
 void daObjTHASHI_c::setBaseMtx() {
     switch (unk5A4) {
     case 0:
@@ -167,18 +155,14 @@ void daObjTHASHI_c::setBaseMtx() {
     }
 }
 
-/* 80D0C608-80D0C634 000448 002C+00 1/0 0/0 0/0 .text            daObjTHASHI_Draw__FP13daObjTHASHI_c
- */
 static int daObjTHASHI_Draw(daObjTHASHI_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80D0C634-80D0C654 000474 0020+00 2/1 0/0 0/0 .text daObjTHASHI_Execute__FP13daObjTHASHI_c */
 static int daObjTHASHI_Execute(daObjTHASHI_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D0C654-80D0C8B4 000494 0260+00 1/0 0/0 0/0 .text            CreateHeap__13daObjTHASHI_cFv */
 int daObjTHASHI_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "S_thashi00.bmd");
     JUT_ASSERT(92, modelData != NULL);
@@ -220,7 +204,6 @@ int daObjTHASHI_c::CreateHeap() {
     return TRUE;
 }
 
-/* 80D0C8B4-80D0CBC8 0006F4 0314+00 1/1 0/0 0/0 .text            create__13daObjTHASHI_cFv */
 int daObjTHASHI_c::create() {
     fopAcM_ct(this, daObjTHASHI_c);
     int phase_state = dComIfG_resLoad(&unk11A8, l_arcName);
@@ -249,12 +232,10 @@ int daObjTHASHI_c::create() {
     return phase_state;
 }
 
-/* 80D0CE68-80D0CE70 000CA8 0008+00 1/0 0/0 0/0 .text daObjTHASHI_IsDelete__FP13daObjTHASHI_c */
 static int daObjTHASHI_IsDelete(daObjTHASHI_c* param_0) {
     return TRUE;
 }
 
-/* 80D0D35C-80D0D37C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjTHASHI_Method */
 static actor_method_class l_daObjTHASHI_Method = {
     (process_method_func)daObjTHASHI_Create,
     (process_method_func)daObjTHASHI_Delete,
@@ -263,7 +244,6 @@ static actor_method_class l_daObjTHASHI_Method = {
     (process_method_func)daObjTHASHI_Draw,
 };
 
-/* 80D0D37C-80D0D3AC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_THASHI */
 extern actor_process_profile_definition g_profile_Obj_THASHI = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
@@ -281,21 +261,17 @@ extern actor_process_profile_definition g_profile_Obj_THASHI = {
   fopAc_CULLBOX_CUSTOM_e, // cullType
 };
 
-/* 80D0CE70-80D0CEB4 000CB0 0044+00 1/0 0/0 0/0 .text            Create__13daObjTHASHI_cFv */
 int daObjTHASHI_c::Create() {
     fopAcM_setCullSizeBox(this, -1000.0f, -500.0f, -1000.0f, 1000.0f, 500.0f, 1000.0f);
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D0CEB4-80D0CEE0 000CF4 002C+00 1/0 0/0 0/0 .text            Execute__13daObjTHASHI_cFPPA3_A4_f
- */
 int daObjTHASHI_c::Execute(Mtx** i_pMtx) {
     *i_pMtx = &mBgMtx;
     setBaseMtx();
     return TRUE;
 }
 
-/* 80D0CEE0-80D0D140 000D20 0260+00 3/0 0/0 0/0 .text            Draw__13daObjTHASHI_cFv */
 // needs to be inline for jump tables to be at end of data
 inline int daObjTHASHI_c::Draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -357,7 +333,6 @@ inline int daObjTHASHI_c::Draw() {
     return TRUE;
 }
 
-/* 80D0D140-80D0D174 000F80 0034+00 1/0 0/0 0/0 .text            Delete__13daObjTHASHI_cFv */
 // has to be inline to maintain function order with Draw as inline
 inline int daObjTHASHI_c::Delete() {
     dComIfG_resDelete(&unk11A8, l_arcName);

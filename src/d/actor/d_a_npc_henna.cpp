@@ -29,8 +29,8 @@ class dmg_rod_class;
 
 class daNpc_Henna_HIO_c : public JORReflexible {
 public:
-    /* 80542F0C */ daNpc_Henna_HIO_c();
-    /* 80549E40 */ virtual ~daNpc_Henna_HIO_c() {}
+    daNpc_Henna_HIO_c();
+    virtual ~daNpc_Henna_HIO_c() {}
     void genMessage(JORMContext*);
 
     s8 id;
@@ -53,7 +53,6 @@ public:
     s16 mSeason3LightAngle;
 };
 
-/* 8054ACA8-8054ACB0 000020 0008+00 1/1 0/0 0/0 .data            check_kind */
 static u16 check_kind[4] = {
     0xF57F,
     0xF47F,
@@ -61,7 +60,6 @@ static u16 check_kind[4] = {
     0xF27F,
 };
 
-/* 80542F0C-80542F98 0000EC 008C+00 1/1 0/0 0/0 .text            __ct__17daNpc_Henna_HIO_cFv */
 daNpc_Henna_HIO_c::daNpc_Henna_HIO_c() {
     id = -1;
     field_0x8 = 1.0f;
@@ -83,15 +81,12 @@ daNpc_Henna_HIO_c::daNpc_Henna_HIO_c() {
     mSeason3LightAngle = -45;
 }
 
-/* 80542F98-80543048 000178 00B0+00 4/4 0/0 0/0 .text            anm_init__FP15npc_henna_classifUcf
- */
 static void anm_init(npc_henna_class* i_this, int i_resIndex, f32 i_morf, u8 i_mode, f32 i_speed) {
     i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Henna", i_resIndex), i_mode,
                            i_morf, i_speed, 0.0f, -1.0f, NULL);
     i_this->mAnmResIndex = i_resIndex;
 }
 
-/* 80543048-80543350 000228 0308+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DJoint* joint = (J3DJoint*)i_joint;  // debug match
@@ -139,7 +134,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80543350-805434C0 000530 0170+00 1/0 0/0 0/0 .text daNpc_Henna_Draw__FP15npc_henna_class */
 static int daNpc_Henna_Draw(npc_henna_class* i_this) {
     if (i_this->field_0x734 != 0) {
         return 1;
@@ -213,7 +207,6 @@ static void dummy_dt_cm3dgpla() {
     delete (cM3dGPla*)NULL;
 }
 
-/* 80543544-805436CC 000724 0188+00 1/1 0/0 0/0 .text            s_npc_sub__FPvPv */
 static void* s_npc_sub(void* param_0, void* param_1) {
     if (fopAcM_IsActor(param_0) &&
         (fopAcM_GetName(param_0) == PROC_NPC_NE || fopAcM_GetName(param_0) == PROC_NPC_DU))
@@ -227,7 +220,6 @@ static void* s_npc_sub(void* param_0, void* param_1) {
     return NULL;
 }
 
-/* 805436CC-80543718 0008AC 004C+00 1/1 0/0 0/0 .text            s_piro_sub__FPvPv */
 static void* s_piro_sub(void* param_0, void* param_1) {
     (void)param_1;  // debug match
     if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_NPC_INKO) {
@@ -236,7 +228,6 @@ static void* s_piro_sub(void* param_0, void* param_1) {
     return NULL;
 }
 
-/* 80543718-8054378C 0008F8 0074+00 1/1 0/0 0/0 .text            s_du_sub__FPvPv */
 static void* s_du_sub(void* param_0, void* param_1) {
     if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_NPC_DU &&
         ((npc_du_class*)param_0)->mPlayerDist < 300.0f)
@@ -247,7 +238,6 @@ static void* s_du_sub(void* param_0, void* param_1) {
     return NULL;
 }
 
-/* 8054378C-805437E8 00096C 005C+00 2/2 0/0 0/0 .text            s_shop_sub__FPvPv */
 static void* s_shop_sub(void* param_0, void* param_1) {
     (void)param_1;  // debug match
     if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_FSHOP &&
@@ -258,7 +248,6 @@ static void* s_shop_sub(void* param_0, void* param_1) {
     return NULL;
 }
 
-/* 805437E8-80543844 0009C8 005C+00 1/1 0/0 0/0 .text            s_koro2ball_sub__FPvPv */
 static void* s_koro2ball_sub(void* param_0, void* param_1) {
     (void)param_1;  // debug match
     if (fopAcM_IsActor(param_0)) {
@@ -269,8 +258,6 @@ static void* s_koro2ball_sub(void* param_0, void* param_1) {
     return NULL;
 }
 
-/* 80543844-8054395C 000A24 0118+00 1/1 0/0 0/0 .text            message_shop__FP15npc_henna_class
- */
 static void message_shop(npc_henna_class* i_this) {
     s16 angle = i_this->field_0x620 - dComIfGp_getPlayer(0)->shape_angle.y + 0x8000;
     if (angle > 0x1800 || angle < -0x1800 || (u16)i_this->field_0x620 < 0x2e00 ||
@@ -296,7 +283,6 @@ static void message_shop(npc_henna_class* i_this) {
     }
 }
 
-/* 8054395C-80543E68 000B3C 050C+00 2/2 0/0 0/0 .text            henna_shop__FP15npc_henna_class */
 static void henna_shop(npc_henna_class* i_this) {
     s16 unkInt1 = 0x800;
 
@@ -415,7 +401,6 @@ static void henna_shop(npc_henna_class* i_this) {
     }
 }
 
-/* 80543E68-80543EB4 001048 004C+00 1/1 0/0 0/0 .text            s_rod_sub__FPvPv */
 static void* s_rod_sub(void* param_0, void* param_1) {
     (void)param_1;  // debug match
     if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_MG_ROD) {
@@ -424,7 +409,6 @@ static void* s_rod_sub(void* param_0, void* param_1) {
     return NULL;
 }
 
-/* 80543EB4-8054403C 001094 0188+00 1/1 0/0 0/0 .text            s_fish_sub__FPvPv */
 static void* s_fish_sub(void* param_0, void* param_1) {
     if (fopAcM_IsActor(param_0) != 0) {
         fopAc_ac_c* a_param_1 = (fopAc_ac_c*)param_0;
@@ -441,16 +425,13 @@ static void* s_fish_sub(void* param_0, void* param_1) {
 
 static u8 l_HIOInit;
 
-/* 8054AFCC-8054B004 000054 0038+00 1/4 0/0 0/0 .bss             l_HIO */
 static daNpc_Henna_HIO_c l_HIO;
 
-/* 8054B004-8054B008 00008C 0004+00 3/4 0/0 0/0 .bss             lrl */
 static dmg_rod_class* lrl;
 
 static u8 lbl_82_bss_90;
 static u8 lbl_82_bss_91;
 
-/* 8054403C-80544A4C 00121C 0A10+00 2/1 0/0 0/0 .text            henna_ride__FP15npc_henna_class */
 static void henna_ride(npc_henna_class* i_this) {
     daPy_py_c* player;
     f32 stickX;
@@ -689,7 +670,6 @@ static void henna_ride(npc_henna_class* i_this) {
     }
 }
 
-/* 80544A4C-805450A8 001C2C 065C+00 1/1 0/0 0/0 .text            action__FP15npc_henna_class */
 static void action(npc_henna_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -838,8 +818,6 @@ static void action(npc_henna_class* i_this) {
     i_this->field_0x6b6 += (s16)((0.15f + TREG_F(13)) * fabsf(i_this->field_0x6ac));
 }
 
-/* 805450A8-8054518C 002288 00E4+00 1/1 0/0 0/0 .text            cam_3d_morf__FP15npc_henna_classf
- */
 static void cam_3d_morf(npc_henna_class* i_this, f32 param_1) {
     cLib_addCalc2(&i_this->field_0x76c.x, i_this->field_0x784.x, param_1,
                   i_this->field_0x79c.x * i_this->field_0x7c0);
@@ -855,7 +833,6 @@ static void cam_3d_morf(npc_henna_class* i_this, f32 param_1) {
                   i_this->field_0x790.z * i_this->field_0x7c0);
 }
 
-/* 8054518C-8054549C 00236C 0310+00 1/1 0/0 0/0 .text            demo_camera__FP15npc_henna_class */
 static void demo_camera(npc_henna_class* i_this) {
     camera_class* camera;
     daCanoe_c* boat;
@@ -930,7 +907,6 @@ static void demo_camera(npc_henna_class* i_this) {
     }
 }
 
-/* 8054549C-80545638 00267C 019C+00 1/1 0/0 0/0 .text zoom_check__FP15npc_henna_classP4cXyzs */
 static int zoom_check(npc_henna_class* i_this, cXyz* target, s16 tolerance) {
     // unused assignments are needed for debug match
     fopAc_ac_c* a_this = &i_this->actor;
@@ -980,7 +956,6 @@ static cXyz zoom_check_pos[20] = {
 
 static s32 koro2_reset;
 
-/* 80545638-805483F4 002818 2DBC+00 3/1 0/0 0/0 .text demo_camera_shop__FP15npc_henna_class */
 static void demo_camera_shop(npc_henna_class* i_this) {
     static u16 check_size[4] = {
         0x002B,
@@ -2196,8 +2171,6 @@ static void demo_camera_shop(npc_henna_class* i_this) {
 
 static u8 lbl_82_bss_289;
 
-/* 805483F4-80548640 0055D4 024C+00 1/1 0/0 0/0 .text            message_guide__FP15npc_henna_class
- */
 static void message_guide(npc_henna_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* unusedPlayer = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -2276,7 +2249,6 @@ static void message_guide(npc_henna_class* i_this) {
     }
 }
 
-/* 80548640-8054868C 005820 004C+00 1/1 0/0 0/0 .text            s_boat_sub__FPvPv */
 static void* s_boat_sub(void* param_0, void* param_1) {
     if (fopAc_IsActor(param_0)) {
         if (fopAcM_GetName(param_0) == PROC_CANOE) {
@@ -2286,7 +2258,6 @@ static void* s_boat_sub(void* param_0, void* param_1) {
     return NULL;
 }
 
-/* 8054868C-805488B8 00586C 022C+00 1/1 0/0 0/0 .text            env_control__FP15npc_henna_class */
 static void env_control(npc_henna_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     fopAc_ac_c* a_this = &i_this->actor;
@@ -2350,7 +2321,6 @@ static void env_control(npc_henna_class* i_this) {
     }
 }
 
-/* 805488B8-805492A4 005A98 09EC+00 2/1 0/0 0/0 .text daNpc_Henna_Execute__FP15npc_henna_class */
 static int daNpc_Henna_Execute(npc_henna_class* i_this) {
     fopAc_ac_c* unusedPlayer = dComIfGp_getPlayer(0);
 
@@ -2610,12 +2580,10 @@ static int daNpc_Henna_Execute(npc_henna_class* i_this) {
     return 1;
 }
 
-/* 805492A4-805492AC 006484 0008+00 1/0 0/0 0/0 .text daNpc_Henna_IsDelete__FP15npc_henna_class */
 static bool daNpc_Henna_IsDelete(npc_henna_class* param_0) {
     return true;
 }
 
-/* 805492AC-80549300 00648C 0054+00 1/0 0/0 0/0 .text daNpc_Henna_Delete__FP15npc_henna_class */
 static int daNpc_Henna_Delete(npc_henna_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "Henna");
     if (i_this->hio_init != 0) {
@@ -2624,7 +2592,6 @@ static int daNpc_Henna_Delete(npc_henna_class* i_this) {
     return 1;
 }
 
-/* 80549300-805496DC 0064E0 03DC+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     static u32 btk_d[3] = {
         0x29,
@@ -2707,8 +2674,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     }
 }
 
-/* 80549724-80549E40 006904 071C+00 1/0 0/0 0/0 .text            daNpc_Henna_Create__FP10fopAc_ac_c
- */
 static int daNpc_Henna_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, npc_henna_class);
     npc_henna_class* a_this = (npc_henna_class*)i_this;
@@ -2857,14 +2822,12 @@ static int daNpc_Henna_Create(fopAc_ac_c* i_this) {
     return loadResult;
 }
 
-/* 8054AF00-8054AF20 -00001 0020+00 1/0 0/0 0/0 .data            l_daNpc_Henna_Method */
 static actor_method_class l_daNpc_Henna_Method = {
     (process_method_func)daNpc_Henna_Create,  (process_method_func)daNpc_Henna_Delete,
     (process_method_func)daNpc_Henna_Execute, (process_method_func)daNpc_Henna_IsDelete,
     (process_method_func)daNpc_Henna_Draw,
 };
 
-/* 8054AF20-8054AF50 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_HENNA */
 extern actor_process_profile_definition g_profile_NPC_HENNA = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID

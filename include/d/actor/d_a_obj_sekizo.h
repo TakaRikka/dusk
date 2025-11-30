@@ -14,15 +14,15 @@
  */
 class daObj_Sekizo_c : public dBgS_MoveBgActor {
 public:
-    /* 80CCDC0C */ cPhs__Step create();
+    cPhs__Step create();
 
-    /* 80CCDD00 */ int CreateHeap();
-    /* 80CCDD8C */ int Create();
-    /* 80CCDDE8 */ int Delete();
-    /* 80CCDE3C */ int Execute(Mtx**);
-    /* 80CCDEF4 */ int Draw();
-    /* 80CCDFA4 */ void initBaseMtx();
-    /* 80CCDFE0 */ void setBaseMtx();
+    int CreateHeap();
+    int Create();
+    int Delete();
+    int Execute(Mtx**);
+    int Draw();
+    void initBaseMtx();
+    void setBaseMtx();
 
 private:
     /* 0x5A0 */ u32 field_0x5a0;
@@ -37,7 +37,7 @@ STATIC_ASSERT(sizeof(daObj_Sekizo_c) == 0x5B4);
 
 class daObj_Sekizo_Param_c {
 public:
-    /* 80CCE118 */ virtual ~daObj_Sekizo_Param_c() {}
+    virtual ~daObj_Sekizo_Param_c() {}
 };
 
 #endif /* D_A_OBJ_SEKIZO_H */

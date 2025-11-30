@@ -10,10 +10,8 @@ extern u32 _db_stack_addr;
 
 #define EXCEPTIONMASK_ADDR 0x80000044
 
-/* 8044F810-8044F818 07C530 0004+04 3/3 0/0 0/0 .bss             lc_base */
 static u32 lc_base;
 
-/* 803D3268-803D32A8 030388 003C+04 1/1 0/0 0/0 .data            TRK_ISR_OFFSETS */
 static u32 TRK_ISR_OFFSETS[15] = {PPC_SystemReset,
                                   PPC_MachineCheck,
                                   PPC_DataStorage,
@@ -33,12 +31,10 @@ static u32 TRK_ISR_OFFSETS[15] = {PPC_SystemReset,
 void __TRK_copy_vectors(void);
 __declspec(section ".init") void __TRK_reset(void) { OSResetSystem(FALSE, 0, FALSE); }
 
-/* 80371B7C-80371B9C 36C4BC 0020+00 0/0 1/1 0/0 .text EnableMetroTRKInterrupts */
 void EnableMetroTRKInterrupts(void) {
     EnableEXI2Interrupts();
 }
 
-/* 80371B24-80371B7C 36C464 0058+00 0/0 1/1 0/0 .text            TRKTargetTranslate */
 u32 TRKTargetTranslate(u32 param_0) {
     if (param_0 >= lc_base) {
         if ((param_0 < lc_base + 0x4000) && ((gTRKCPUState.Extended1.DBAT3U & 3) != 0)) {
@@ -59,7 +55,6 @@ void TRK_copy_vector(u32 offset) {
     TRK_flush_cache(destPtr, 0x100);
 }
 
-/* 803719F8-80371B24 36C338 012C+00 0/0 1/1 0/0 .text            __TRK_copy_vectors */
 void __TRK_copy_vectors(void) {
     u32 r3 = lc_base;
     u32* isrOffsetPtr;
@@ -85,7 +80,6 @@ void __TRK_copy_vectors(void) {
     } while (i <= 14);
 }
 
-/* 803719AC-803719F8 36C2EC 004C+00 0/0 1/1 0/0 .text TRKInitializeTarget */
 DSError TRKInitializeTarget() {
     gTRKState.isStopped = TRUE;
     gTRKState.msr = __TRK_get_MSR();
@@ -96,7 +90,6 @@ DSError TRKInitializeTarget() {
 #define __dcbi(a, b) asm { dcbi a, b }
 #define __dcbfASM(a, b) asm { dcbf a, b }
 
-/* 80371878-803719AC 36C1B8 0134+00 0/0 1/1 0/0 .text            TRK__read_aram */
 void TRK__read_aram(register int c, register u32 p2, void* p3) {
     u32 err;
     int i;
@@ -138,9 +131,8 @@ void TRK__read_aram(register int c, register u32 p2, void* p3) {
     }
 }
 
-/* 8037168C-80371878 36BFCC 01EC+00 0/0 1/1 0/0 .text            TRK__write_aram */
 void TRK__write_aram(register int c, register u32 p2, void* p3) {
-    u8 buff[32] ALIGN_DECL(32);
+    u8 buff[32] ATTRIBUTE_ALIGN(32);
     u32 err;
     register int count = c;
     register u32 bf;
@@ -217,7 +209,6 @@ void TRK__write_aram(register int c, register u32 p2, void* p3) {
     }
 }
 
-/* 80371560-803715F8 36BEA0 0098+00 0/0 1/1 0/0 .text InitMetroTRK */
 asm void InitMetroTRK() {
     // clang-format off
     nofralloc
@@ -279,7 +270,6 @@ initCommTableSuccess:
     // clang-format on
 }
 
-/* 803715F8-8037168C 36BF38 0094+00 0/0 1/1 0/0 .text            InitMetroTRK_BBA */
 asm void InitMetroTRK_BBA() {
     // clang-format off
     nofralloc

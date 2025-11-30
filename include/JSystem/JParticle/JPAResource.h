@@ -22,20 +22,20 @@ class JPAKeyBlock;
  */
 class JPAResource {
 public:
-    /* 80274010 */ JPAResource();
-    /* 80274080 */ void init(JKRHeap*);
-    /* 802755E8 */ bool calc(JPAEmitterWorkData*, JPABaseEmitter*);
-    /* 80275A94 */ void draw(JPAEmitterWorkData*, JPABaseEmitter*);
-    /* 80275B74 */ void drawP(JPAEmitterWorkData*);
-    /* 80275EB0 */ void drawC(JPAEmitterWorkData*);
-    /* 802761A8 */ void setPTev();
-    /* 8027642C */ void setCTev(JPAEmitterWorkData*);
-    /* 8027658C */ void calc_p(JPAEmitterWorkData*, JPABaseParticle*);
-    /* 80276608 */ void calc_c(JPAEmitterWorkData*, JPABaseParticle*);
-    /* 80276684 */ void calcField(JPAEmitterWorkData*, JPABaseParticle*);
-    /* 80276700 */ void calcKey(JPAEmitterWorkData*);
-    /* 80276840 */ void calcWorkData_c(JPAEmitterWorkData*);
-    /* 80276A0C */ void calcWorkData_d(JPAEmitterWorkData*);
+    JPAResource();
+    void init(JKRHeap*);
+    bool calc(JPAEmitterWorkData*, JPABaseEmitter*);
+    void draw(JPAEmitterWorkData*, JPABaseEmitter*);
+    void drawP(JPAEmitterWorkData*);
+    void drawC(JPAEmitterWorkData*);
+    void setPTev();
+    void setCTev(JPAEmitterWorkData*);
+    void calc_p(JPAEmitterWorkData*, JPABaseParticle*);
+    void calc_c(JPAEmitterWorkData*, JPABaseParticle*);
+    void calcField(JPAEmitterWorkData*, JPABaseParticle*);
+    void calcKey(JPAEmitterWorkData*);
+    void calcWorkData_c(JPAEmitterWorkData*);
+    void calcWorkData_d(JPAEmitterWorkData*);
 
     JPABaseShape* getBsp() const { return mpBaseShape; }
     JPAExtraShape* getEsp() const { return mpExtraShape; }

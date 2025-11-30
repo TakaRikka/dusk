@@ -14,21 +14,21 @@
  */
 class daObjTrnd2_c : public fopAc_ac_c {
 public:
-    /* 80D1C4D8 */ void setPntWind();
-    /* 80D1C54C */ void cutPntWind();
-    /* 80D1C570 */ void movePntWind();
-    /* 80D1C780 */ void setCpsInfo();
-    /* 80D1C924 */ void initBaseMtx();
-    /* 80D1C944 */ void setBaseMtx();
-    /* 80D1C98C */ int Create();
-    /* 80D1CC80 */ int create();
-    /* 80D1CDC0 */ int execute();
-    /* 80D1D0AC */ void setParticle();
-    /* 80D1D214 */ void endParticle();
-    /* 80D1D278 */ void startParticle();
-    /* 80D1D2AC */ void stopParticle();
-    /* 80D1D2E0 */ int draw();
-    /* 80D1D2E8 */ int _delete();
+    void setPntWind();
+    void cutPntWind();
+    void movePntWind();
+    void setCpsInfo();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int create();
+    int execute();
+    void setParticle();
+    void endParticle();
+    void startParticle();
+    void stopParticle();
+    int draw();
+    int _delete();
 
     f32 getTargetLength() { return mTargetLength; }
     f32 getNowLength() { return mNowLength; }

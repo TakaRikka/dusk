@@ -6,23 +6,18 @@
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_spinner.h"
 
-/* 8010D93C-8010D94C 10827C 0010+00 0/0 0/0 1/1 .text            getSpinnerGravity__9daAlink_cCFv */
 f32 daAlink_c::getSpinnerGravity() const {
     return daAlinkHIO_spinner_c0::m.mGravity;
 }
 
-/* 8010D94C-8010D95C 10828C 0010+00 0/0 0/0 1/1 .text getSpinnerMaxFallSpeed__9daAlink_cCFv */
 f32 daAlink_c::getSpinnerMaxFallSpeed() const {
     return daAlinkHIO_spinner_c0::m.mMaxFallSpeed;
 }
 
-/* 8010D95C-8010D96C 10829C 0010+00 0/0 0/0 1/1 .text            getSpinnerJumpRate__9daAlink_cCFv
- */
 f32 daAlink_c::getSpinnerJumpRate() const {
     return daAlinkHIO_spinner_c0::m.mJumpRate;
 }
 
-/* 8010D96C-8010D9B0 1082AC 0044+00 1/1 0/0 2/2 .text getSpinnerRideMoveTime__9daAlink_cFv */
 s16 daAlink_c::getSpinnerRideMoveTime() {
     if (checkLv4BossRoom()) {
         return daAlinkHIO_spinner_c0::m.mBossRideMoveTime;
@@ -31,8 +26,6 @@ s16 daAlink_c::getSpinnerRideMoveTime() {
     return daAlinkHIO_spinner_c0::m.mRideMoveTime;
 }
 
-/* 8010D9B0-8010D9F4 1082F0 0044+00 1/1 0/0 3/3 .text            getSpinnerRideSpeedF__9daAlink_cFv
- */
 f32 daAlink_c::getSpinnerRideSpeedF() {
     if (checkLv4BossRoom()) {
         return daAlinkHIO_spinner_c0::m.mBossRideSpeed;
@@ -41,40 +34,32 @@ f32 daAlink_c::getSpinnerRideSpeedF() {
     return daAlinkHIO_spinner_c0::m.mRideSpeed;
 }
 
-/* 8010D9F4-8010DA04 108334 0010+00 0/0 0/0 1/1 .text getSpinnerRideDecSpeedMax__9daAlink_cCFv */
 f32 daAlink_c::getSpinnerRideDecSpeedMax() const {
     return daAlinkHIO_spinner_c0::m.mDecelSpeedMax;
 }
 
-/* 8010DA04-8010DA14 108344 0010+00 0/0 0/0 1/1 .text getSpinnerRideDecSpeedMin__9daAlink_cCFv */
 f32 daAlink_c::getSpinnerRideDecSpeedMin() const {
     return daAlinkHIO_spinner_c0::m.mDecelSpeedMin;
 }
 
-/* 8010DA14-8010DA24 108354 0010+00 0/0 0/0 1/1 .text getSpinnerRideDecSpeedRate__9daAlink_cCFv */
 f32 daAlink_c::getSpinnerRideDecSpeedRate() const {
     return daAlinkHIO_spinner_c0::m.mDecelRate;
 }
 
-/* 8010DA24-8010DA34 108364 0010+00 0/0 0/0 1/1 .text getSpinnerRideRotAngleMax__9daAlink_cCFv */
 s16 daAlink_c::getSpinnerRideRotAngleMax() const {
     return daAlinkHIO_spinner_c0::m.mRideRotAngleMax;
 }
 
-/* 8010DA34-8010DA44 108374 0010+00 0/0 0/0 1/1 .text getSpinnerRideRotAngleMin__9daAlink_cCFv */
 s16 daAlink_c::getSpinnerRideRotAngleMin() const {
     return daAlinkHIO_spinner_c0::m.mRideRotAngleMin;
 }
 
-/* 8010DA44-8010DA98 108384 0054+00 1/0 0/0 0/0 .text onSpinnerPathForceRemove__9daAlink_cFv */
 void daAlink_c::onSpinnerPathForceRemove() {
     if (checkSpinnerRide() && mRideAcKeep.getActor() != NULL) {
         ((daSpinner_c*)mRideAcKeep.getActor())->onPathForceRemove();
     }
 }
 
-/* 8010DA98-8010DAFC 1083D8 0064+00 1/0 0/0 0/0 .text            checkSpinnerPathMove__9daAlink_cFv
- */
 bool daAlink_c::checkSpinnerPathMove() {
     if (checkSpinnerRide() && mRideAcKeep.getActor() != NULL) {
         if (((daSpinner_c*)mRideAcKeep.getActor())->checkPathMoveNow() != NULL) {
@@ -85,12 +70,10 @@ bool daAlink_c::checkSpinnerPathMove() {
     return false;
 }
 
-/* 8010DAFC-8010DB28 10843C 002C+00 2/2 0/0 0/0 .text            checkLv4BossRoom__9daAlink_cFv */
 bool daAlink_c::checkLv4BossRoom() {
     return checkStageName("D_MN10A");
 }
 
-/* 8010DB28-8010DBC8 108468 00A0+00 1/0 0/0 0/0 .text checkSpinnerTriggerAttack__9daAlink_cFv */
 bool daAlink_c::checkSpinnerTriggerAttack() {
     if (checkSpinnerRide() && mRideAcKeep.getActor() != NULL) {
         if (((daSpinner_c*)mRideAcKeep.getActor())->reflectAccept()) {
@@ -102,7 +85,6 @@ bool daAlink_c::checkSpinnerTriggerAttack() {
 }
 
 
-/* 8010DBC8-8010DC64 108508 009C+00 2/2 0/0 0/0 .text            setSpinnerSyncPos__9daAlink_cFv */
 void daAlink_c::setSpinnerSyncPos() {
     daSpinner_c* spinner = (daSpinner_c*)mRideAcKeep.getActor();
 
@@ -113,8 +95,6 @@ void daAlink_c::setSpinnerSyncPos() {
     field_0x37a4 = spinner->current.pos;
 }
 
-/* 8010DC64-8010DDCC 1085A4 0168+00 1/1 0/0 0/0 .text            procSpinnerReadyInit__9daAlink_cFv
- */
 int daAlink_c::procSpinnerReadyInit() {
     fopAc_ac_c* spinner = (fopAc_ac_c*)fopAcM_fastCreate(
         PROC_SPINNER, daSpinner_c::getWaitArg(), &current.pos, fopAcM_GetRoomNo(this),
@@ -148,7 +128,6 @@ int daAlink_c::procSpinnerReadyInit() {
     return 1;
 }
 
-/* 8010DDCC-8010DE64 10870C 0098+00 1/0 0/0 0/0 .text            procSpinnerReady__9daAlink_cFv */
 int daAlink_c::procSpinnerReady() {
     daSpinner_c* spinner = (daSpinner_c*)mRideAcKeep.getActor();
 
@@ -171,14 +150,10 @@ int daAlink_c::procSpinnerReady() {
     return 1;
 }
 
-/* 8010DE64-8010DE78 1087A4 0014+00 1/1 0/0 0/0 .text            setSpinnerStatus__9daAlink_cFUcUc
- */
 void daAlink_c::setSpinnerStatus(u8 status, u8 flag) {
     dComIfGp_setDoStatus(status, flag);
 }
 
-/* 8010DE78-8010DF4C 1087B8 00D4+00 2/2 0/0 0/0 .text            procSpinnerWaitInit__9daAlink_cFv
- */
 int daAlink_c::procSpinnerWaitInit() {
     if (!commonProcInitNotSameProc(PROC_SPINNER_WAIT)) {
         return 0;
@@ -203,7 +178,6 @@ int daAlink_c::procSpinnerWaitInit() {
 }
 
 
-/* 8010DF4C-8010E48C 10888C 0540+00 1/0 0/0 0/0 .text            procSpinnerWait__9daAlink_cFv */
 int daAlink_c::procSpinnerWait() {
     daSpinner_c* spinner = (daSpinner_c*)mRideAcKeep.getActor();
 

@@ -28,8 +28,8 @@ public:
         c_list() { mBalloon = NULL; }
         void set(daBalloon2D_c* i_this) { mBalloon = i_this; }
 
-        /* 806534CC */ virtual void draw();
-        /* 8065544C */ virtual ~c_list() {}
+        virtual void draw();
+        virtual ~c_list() {}
 
         daBalloon2D_c* mBalloon;
     };
@@ -38,25 +38,25 @@ public:
         initiate();
     }
 
-    /* 80653538 */ int createHeap();
-    /* 80653D24 */ int create();
-    /* 80653DB4 */ int destroy();
-    /* 80653E10 */ int draw();
-    /* 80653EC0 */ int execute();
-    /* 80653F04 */ void drawMeter();
-    /* 80653F58 */ void setComboCount(u8, u8);
-    /* 80653FC0 */ void setScoreCount(u32);
-    /* 80653FEC */ void addScoreCount(cXyz*, u32, u8);
-    /* 806540B4 */ void initiate();
-    /* 806540B8 */ void update();
-    /* 806540BC */ void setComboNum(u8);
-    /* 806541B4 */ void setBalloonSize(u8);
-    /* 80654258 */ void setScoreNum(int);
-    /* 80654440 */ void setAllAlpha();
-    /* 8065464C */ void setComboAlpha();
-    /* 80654730 */ void drawAddScore();
-    /* 80654E8C */ void setHIO(bool);
-    /* 80655494 */ 
+    int createHeap();
+    int create();
+    int destroy();
+    int draw();
+    int execute();
+    void drawMeter();
+    void setComboCount(u8, u8);
+    void setScoreCount(u32);
+    void addScoreCount(cXyz*, u32, u8);
+    void initiate();
+    void update();
+    void setComboNum(u8);
+    void setBalloonSize(u8);
+    void setScoreNum(int);
+    void setAllAlpha();
+    void setComboAlpha();
+    void drawAddScore();
+    void setHIO(bool);
+    
     virtual
     ~daBalloon2D_c() {}
 
@@ -75,8 +75,8 @@ public:
 
     class CHeadScore : public ScoreCount {
     public:
-        /* 80655304 */ ~CHeadScore();
-        /* 80655340 */ CHeadScore();
+        ~CHeadScore();
+        CHeadScore();
     };
 
     /* 0x574 */ J2DScreen* mScreen;

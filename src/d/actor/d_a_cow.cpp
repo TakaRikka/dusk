@@ -49,16 +49,13 @@ static dCcD_SrcSph cc_sph_src = {{{0, {{0, 0, {0}}, {0xfbfdfb, {0x11}}, {{0x79}}
 static s16 pen_dir = -0x4000;
 static s16 gate_dir = -0x8000;
 
-/* 80662FBC-80662FC0 000064 0004+00 0/2 0/0 0/0 .data l_CowRoomPosY__21@unnamed@d_a_cow_cpp@ */
 static f32 l_CowRoomPosY = 15000.0f;
 
-/* 80662FC0-80663010 000068 0050+00 1/3 0/0 0/0 .data l_CowRoomPosX__21@unnamed@d_a_cow_cpp@ */
 static f32 l_CowRoomPosX[20] = {-10600.0f, -10600.0f, -10800.0f, -10800.0f, -11000.0f,
                                 -11000.0f, -11200.0f, -11200.0f, -11400.0f, -11400.0f,
                                 -11600.0f, -11600.0f, -11800.0f, -11800.0f, -12000.0f,
                                 -12000.0f, -12200.0f, -12200.0f, -12400.0f, -12400.0f};
 
-/* 80663010-80663018 0000B8 0008+00 1/3 0/0 0/0 .data l_CowRoomPosZ__21@unnamed@d_a_cow_cpp@ */
 static f32 l_CowRoomPosZ[2] = {-19646.0f, -20926.0f};
 
 #define N_WOLF_BUSTERS 3
@@ -66,7 +63,6 @@ extern fpc_ProcID gWolfBustersID[N_WOLF_BUSTERS] = {-1, -1, -1};
 
 }  // namespace
 
-/* 806585CC-80658730 0000EC 0164+00 6/6 0/0 0/0 .text            calcRunAnime__7daCow_cFi */
 int daCow_c::calcRunAnime(int resetRunType) {
     if (resetRunType) {
         mRunType = daCow_c::RunType_None;
@@ -104,13 +100,11 @@ int daCow_c::calcRunAnime(int resetRunType) {
     return 1;
 }
 
-/* 80658730-806587D4 000250 00A4+00 20/20 0/0 0/0 .text            setBck__7daCow_cFiUcff */
 void daCow_c::setBck(int i_index, u8 i_attr, f32 i_morf, f32 i_rate) {
     J3DAnmTransform* animation = (J3DAnmTransform*)dComIfG_getObjectRes("Cow", i_index);
     mpMorf->setAnm(animation, i_attr, i_morf, i_rate, 0.0f, -1.0f);
 }
 
-/* 806587D4-80658830 0002F4 005C+00 1/1 0/0 0/0 .text            checkBck__7daCow_cFi */
 u8 daCow_c::checkBck(int i_index) {
     J3DAnmTransform* animation = (J3DAnmTransform*)dComIfG_getObjectRes("Cow", i_index);
     return mpMorf->getAnm() == animation;
@@ -121,12 +115,10 @@ namespace {
 static cXyz pen_pos(-10200.0f, 15000.0f, -20246.0f);
 static cXyz gate_pos(-9246.0f, 15000.0f, -22763.0f);
 
-/* 806634D0-806634D4 000078 0004+00 3/3 0/0 0/0 .bss l_CowRoomNo__21@unnamed@d_a_cow_cpp@ */
 static u32 l_CowRoomNo = 0;
 static u32 l_CowType = 0;
 }  // namespace
 
-/* 80658830-80658A68 000350 0238+00 1/1 0/0 0/0 .text            setEffect__7daCow_cFv */
 void daCow_c::setEffect() {
     if (mShouldSetEffect) {
         if (mShouldSetEffect == 1) {
@@ -174,7 +166,6 @@ void daCow_c::setEffect() {
     }
 }
 
-/* 80658AA4-80658B10 0005C4 006C+00 5/5 0/0 0/0 .text            isChaseCowGame__7daCow_cFv */
 bool daCow_c::isChaseCowGame() {
     if (!strcmp(dComIfGp_getStartStageName(), "F_SP00")) {
         if (dComIfG_play_c::getLayerNo(0) == 4 || dComIfG_play_c::getLayerNo(0) == 5) {
@@ -184,7 +175,6 @@ bool daCow_c::isChaseCowGame() {
     return false;
 }
 
-/* 80658B10-80658C18 000630 0108+00 6/6 0/0 0/0 .text            setCarryStatus__7daCow_cFv */
 void daCow_c::setCarryStatus() {
     f32 zMax = 270.0f;
     f32 xMax = 70.0f;
@@ -203,7 +193,6 @@ void daCow_c::setCarryStatus() {
     }
 }
 
-/* 80658C18-80658C78 000738 0060+00 5/5 0/0 0/0 .text            setActetcStatus__7daCow_cFv */
 void daCow_c::setActetcStatus() {
     if (!mNadeNade) {
         s32 playerAngle = fopAcM_seenPlayerAngleY(this);
@@ -215,7 +204,6 @@ void daCow_c::setActetcStatus() {
 
 // NOTE: nade nade seems to be petting the Goat
 
-/* 80658C78-80658CA4 000798 002C+00 3/3 0/0 0/0 .text            checkNadeNadeFinish__7daCow_cFv */
 bool daCow_c::checkNadeNadeFinish() {
     if (GET_FLAG(daCow_c::Flag_NaderuFinish)) {
         CLEAR_FLAG(daCow_c::Flag_NaderuFinish);
@@ -225,7 +213,6 @@ bool daCow_c::checkNadeNadeFinish() {
     return false;
 }
 
-/* 80658CA4-80658CD0 0007C4 002C+00 5/5 0/0 0/0 .text            checkNadeNade__7daCow_cFv */
 bool daCow_c::checkNadeNade() {
     if (GET_FLAG(daCow_c::Flag_Naderu)) {
         CLEAR_FLAG(daCow_c::Flag_Naderu);
@@ -235,21 +222,18 @@ bool daCow_c::checkNadeNade() {
     return 0;
 }
 
-/* 80658CD0-80658D3C 0007F0 006C+00 3/3 0/0 0/0 .text            setSeSnort__7daCow_cFv */
 void daCow_c::setSeSnort() {
     if (mpMorf->checkFrame(1.0f)) {
         mSound.startCreatureVoice(Z2SE_GOAT_V_BREATH, -1);
     }
 }
 
-/* 80658D3C-80658DB8 00085C 007C+00 2/2 0/0 0/0 .text            setRushVibration__7daCow_cFi */
 void daCow_c::setRushVibration(int i_vibmode) {
     if (mpMorf->checkFrame(1.0f)) {
         dComIfGp_getVibration().StartShock(i_vibmode, 0x1F, cXyz(0.0f, 1.0f, 0.0f));
     }
 }
 
-/* 80658DB8-80658E98 0008D8 00E0+00 6/6 0/0 0/0 .text            checkThrow__7daCow_cFv */
 bool daCow_c::checkThrow() {
     if (mFlags) {
         if (GET_FLAG(daCow_c::Flag_CrazyBeforeCatch)) {
@@ -268,7 +252,6 @@ bool daCow_c::checkThrow() {
     return false;
 }
 
-/* 80658E98-80658F94 0009B8 00FC+00 3/3 0/0 0/0 .text            setBodyAngle__7daCow_cFs */
 void daCow_c::setBodyAngle(s16 angle) {
     s16 offsetAngle = mSavedAngle.y - angle;
 
@@ -282,7 +265,6 @@ void daCow_c::setBodyAngle(s16 angle) {
     cLib_chaseS(&mJoint1Offset.y, offsetAngle * 0.3f, 0x100);
 }
 
-/* 80658F94-806590E8 000AB4 0154+00 1/1 0/0 0/0 .text            setBodyAngle2__7daCow_cFs */
 void daCow_c::setBodyAngle2(s16 angle) {
     s16 offsetAngle = mSavedAngle.y - angle;
 
@@ -308,12 +290,10 @@ void daCow_c::setBodyAngle2(s16 angle) {
     cLib_chaseS(&mJoint8Offset.y, chaseAngle, 0x100);
 }
 
-/* 806590E8-80659114 000C08 002C+00 5/5 0/0 0/0 .text checkProcess__7daCow_cFM7daCow_cFPCvPv_v */
 BOOL daCow_c::checkProcess(void (daCow_c::*process)()) {
     return mProcess == process;
 }
 
-/* 80659114-806591BC 000C34 00A8+00 16/16 0/0 0/0 .text setProcess__7daCow_cFM7daCow_cFPCvPv_vi */
 bool daCow_c::setProcess(void (daCow_c::*process)(), BOOL doAnim6) {
     mMode = daCow_c::Mode_3;
     if (mProcess) {
@@ -333,7 +313,6 @@ bool daCow_c::setProcess(void (daCow_c::*process)(), BOOL doAnim6) {
 #define COW_ATTACK_TYPES                                                                           \
     (AT_TYPE_NORMAL_SWORD | AT_TYPE_BOMB | AT_TYPE_ARROW | AT_TYPE_SPINNER | AT_TYPE_IRON_BALL)
 
-/* 806591BC-8065945C 000CDC 02A0+00 1/1 0/0 0/0 .text            damage_check__7daCow_cFv */
 void daCow_c::damage_check() {
     mCcStts.Move();
 
@@ -394,7 +373,6 @@ void daCow_c::damage_check() {
     mSph[2].ClrTgHit();
 }
 
-/* 8065945C-80659540 000F7C 00E4+00 1/1 0/0 0/0 .text            setEnterCow20__7daCow_cFv */
 void daCow_c::setEnterCow20() {
     for (int iCow = 0; iCow < 20; iCow++) {
         cXyz spawnPosition(l_CowRoomPosX[iCow], l_CowRoomPosY, l_CowRoomPosZ[iCow & 1]);
@@ -413,11 +391,8 @@ void daCow_c::setEnterCow20() {
     }
 }
 
-/* ############################################################################################## */
-/* 80663084-806630AC 00012C 0028+00 0/1 0/0 0/0 .data            cow_number$4349 */
 static u32 cow_number[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-/* 80659540-80659630 001060 00F0+00 1/1 0/0 0/0 .text            setEnterCow10__7daCow_cFv */
 void daCow_c::setEnterCow10() {
     for (int iCow = 0; iCow < 10; iCow++) {
         int cowNumber = cow_number[iCow];
@@ -437,7 +412,6 @@ void daCow_c::setEnterCow10() {
     }
 }
 
-/* 80659630-806596E4 001150 00B4+00 1/1 0/0 0/0 .text            setGroundAngle__7daCow_cFv */
 void daCow_c::setGroundAngle() {
     s16 alpha = 0;
     s16 beta = 0;
@@ -455,8 +429,6 @@ void daCow_c::setGroundAngle() {
     cLib_chaseAngleS(&mGroundTransform.y, beta, 128);
 }
 
-/* ############################################################################################## */
-/* 806634F4-806634F8 00009C 0004+00 0/3 0/0 0/0 .bss             m_near_dist */
 static f32 m_near_dist;
 
 /* 806634F8 0002+00 data_806634F8 m_view_angle_wide */
@@ -470,7 +442,6 @@ static s16 m_view_angle;
     (fopAcM_IsActor((cow_1)) && !fpcM_IsCreating(fopAcM_GetID((cow_1))) && IS_COW((cow_1)) &&      \
      (cow_1) != (actor))
 
-/* 8065972C-80659814 00124C 00E8+00 2/2 0/0 0/0 .text            s_near_cow__FPvPv */
 static void* s_near_cow(void* candidate, void* data) {
     if (IS_VALID_COW_INTERACTION(candidate, data)) {
         daCow_c* candidateCow = (daCow_c*)candidate;
@@ -490,10 +461,8 @@ static void* s_near_cow(void* candidate, void* data) {
     return NULL;
 }
 
-/* 806634FC-80663500 0000A4 0002+02 4/4 0/0 0/0 .bss             m_angry_cow */
 static s16 m_angry_cow;
 
-/* 80659814-806598D4 001334 00C0+00 1/1 0/0 0/0 .text            s_angry_cow__FPvPv */
 static void* s_angry_cow(void* candidate, void* data) {
     fopAc_ac_c* self = (fopAc_ac_c*)data;
     if (IS_VALID_COW_INTERACTION(candidate, self)) {
@@ -507,7 +476,6 @@ static void* s_angry_cow(void* candidate, void* data) {
     return NULL;
 }
 
-/* 806598D4-80659970 0013F4 009C+00 1/1 0/0 0/0 .text            s_angry_cow2__FPvPv */
 static void* s_angry_cow2(void* candidate, void* self) {
     if (IS_VALID_COW_INTERACTION(candidate, (fopAc_ac_c*)self)) {
         daCow_c* candidateCow = (daCow_c*)candidate;
@@ -519,12 +487,10 @@ static void* s_angry_cow2(void* candidate, void* self) {
     return NULL;
 }
 
-/* 80659970-806599C0 001490 0050+00 1/1 0/0 0/0 .text            checkRun__7daCow_cFv */
 bool daCow_c::checkRun() {
     return checkProcess(&daCow_c::action_run);
 }
 
-/* 806599C0-80659ADC 0014E0 011C+00 4/4 0/0 0/0 .text            checkNearCowRun__7daCow_cFv */
 bool daCow_c::checkNearCowRun() {
     if (getCowIn()) {
         return false;
@@ -563,7 +529,6 @@ bool daCow_c::checkNearCowRun() {
     return false;
 }
 
-/* 80659ADC-8065A0E8 0015FC 060C+00 15/0 0/0 0/0 .text            action_wait__7daCow_cFv */
 void daCow_c::action_wait() {
     f32 rand = cM_rnd();
 
@@ -655,7 +620,6 @@ void daCow_c::action_wait() {
     }
 }
 
-/* 8065A0E8-8065A594 001C08 04AC+00 4/0 0/0 0/0 .text            action_eat__7daCow_cFv */
 void daCow_c::action_eat() {
     switch (mMode) {
     case daCow_c::Mode_0:
@@ -721,7 +685,6 @@ void daCow_c::action_eat() {
     }
 }
 
-/* 8065A594-8065A8A4 0020B4 0310+00 9/0 0/0 0/0 .text            action_moo__7daCow_cFv */
 void daCow_c::action_moo() {
     switch (mMode) {
     case daCow_c::Mode_0:
@@ -775,7 +738,6 @@ void daCow_c::action_moo() {
     }
 }
 
-/* 8065A8A4-8065ACC8 0023C4 0424+00 5/0 0/0 0/0 .text            action_shake__7daCow_cFv */
 void daCow_c::action_shake() {
     switch (mMode) {
     case daCow_c::Mode_0:
@@ -834,7 +796,6 @@ void daCow_c::action_shake() {
     }
 }
 
-/* 8065ACC8-8065AD2C 0027E8 0064+00 4/4 0/0 0/0 .text            checkNearWolf__7daCow_cFv */
 bool daCow_c::checkNearWolf() {
     if (daPy_getPlayerActorClass()->checkNowWolf() && fopAcM_searchPlayerDistance(this) < 3000.f) {
         return true;
@@ -843,7 +804,6 @@ bool daCow_c::checkNearWolf() {
     }
 }
 
-/* 8065AD2C-8065ADB0 00284C 0084+00 5/5 0/0 0/0 .text            checkPlayerWait__7daCow_cFv */
 bool daCow_c::checkPlayerWait() {
     if ((daPy_getPlayerActorClass()->checkHorseRide() ||
          daPy_getPlayerActorClass()->checkNowWolf()) &&
@@ -855,8 +815,6 @@ bool daCow_c::checkPlayerWait() {
     }
 }
 
-/* 8065ADB0-8065AE88 0028D0 00D8+00 2/2 0/0 0/0 .text            checkPlayerSurprise__7daCow_cFv
- */
 bool daCow_c::checkPlayerSurprise() {
     if (getCowIn()) {
         return false;
@@ -877,7 +835,6 @@ bool daCow_c::checkPlayerSurprise() {
     }
 }
 
-/* 8065AE88-8065B034 0029A8 01AC+00 2/2 0/0 0/0 .text            checkPlayerPos__7daCow_cFv */
 bool daCow_c::checkPlayerPos() {
     if (getCowIn()) {
         return false;
@@ -932,7 +889,6 @@ bool daCow_c::checkPlayerPos() {
     return true;
 }
 
-/* 8065B034-8065B760 002B54 072C+00 2/2 0/0 0/0 .text            checkBeforeBg__7daCow_cFv */
 void daCow_c::checkBeforeBg() {
     s16 x[3] = {0, -0x2000, 0x2000};
     cXyz a;
@@ -1101,8 +1057,6 @@ void daCow_c::checkBeforeBg() {
     }
 }
 
-/* 8065B760-8065B8A8 003280 0148+00 6/6 0/0 0/0 .text            checkOutOfGate__7daCow_cF4cXyz
- */
 int daCow_c::checkOutOfGate(cXyz pos) {
     if (isChaseCowGame()) {
         return 0;
@@ -1123,18 +1077,15 @@ int daCow_c::checkOutOfGate(cXyz pos) {
     return x.z > 0.0f ? 2 : 0;
 }
 
-/* 8065B8A8-8065B8D8 0033C8 0030+00 3/3 0/0 0/0 .text            getCowshedAngle__7daCow_cFv */
 s16 daCow_c::getCowshedAngle() {
     return (s16)cLib_targetAngleY(&current.pos, &pen_pos);
 }
 
-/* 8065B8D8-8065BA30 0033F8 0158+00 1/1 0/0 0/0 .text            getCowshedDist__7daCow_cFv */
 double daCow_c::getCowshedDist() {
     cXyz diff = pen_pos - current.pos;
     return diff.absXZ();
 }
 
-/* 8065BA30-8065BB34 003550 0104+00 2/2 0/0 0/0 .text            checkCowIn__7daCow_cFff */
 int daCow_c::checkCowIn(f32 cowshedDist, f32 cowshedAngle) {
     if (!isChaseCowGame()) {
         return 0;
@@ -1159,7 +1110,6 @@ int daCow_c::checkCowIn(f32 cowshedDist, f32 cowshedAngle) {
     return 0;
 }
 
-/* 8065BB34-8065BC68 003654 0134+00 5/5 0/0 0/0 .text            checkCowInOwn__7daCow_cFi */
 bool daCow_c::checkCowInOwn(int angle) {
     if (!isChaseCowGame()) {
         return false;
@@ -1179,7 +1129,6 @@ bool daCow_c::checkCowInOwn(int angle) {
     return false;
 }
 
-/* 8065BC68-8065C32C 003788 06C4+00 9/0 0/0 0/0 .text            action_run__7daCow_cFv */
 void daCow_c::action_run() {
     switch (mMode) {
     case daCow_c::Mode_0:
@@ -1365,7 +1314,6 @@ void daCow_c::action_run() {
     }
 }
 
-/* 8065C32C-8065C508 003E4C 01DC+00 1/1 0/0 0/0 .text            checkCurringPen__7daCow_cFv */
 bool daCow_c::checkCurringPen() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (player->current.pos.abs(pen_pos) < 2500.0f) {
@@ -1387,7 +1335,6 @@ bool daCow_c::checkCurringPen() {
     }
 }
 
-/* 8065C508-8065C680 004028 0178+00 2/2 0/0 0/0 .text            setCowInCage__7daCow_cFv */
 void daCow_c::setCowInCage() {
     for (int iSphere = 0; iSphere < N_COW_COLLIDERS; iSphere++) {
         mSph[iSphere].OffCoSetBit();
@@ -1426,7 +1373,6 @@ void daCow_c::setCowInCage() {
     }
 }
 
-/* 8065C680-8065C70C 0041A0 008C+00 2/2 0/0 0/0 .text            setEnterCount__7daCow_cFv */
 void daCow_c::setEnterCount() {
     dTimer_createGetIn2D(2, current.pos);
     dMeter2Info_setNowCount(dMeter2Info_getNowCount() + 1);
@@ -1440,7 +1386,6 @@ void daCow_c::setEnterCount() {
     }
 }
 
-/* 8065C70C-8065CFBC 00422C 08B0+00 2/0 0/0 0/0 .text            action_enter__7daCow_cFv */
 void daCow_c::action_enter() {
     cXyz penDistance = current.pos - pen_pos;
     f32 penDistanceAbs = penDistance.absXZ();
@@ -1581,7 +1526,6 @@ void daCow_c::action_enter() {
     }
 }
 
-/* 8065CFBC-8065D03C 004ADC 0080+00 4/4 0/0 1/1 .text            isAngry__7daCow_cFv */
 bool daCow_c::isAngry() {
     if (checkProcess(&daCow_c::action_angry) &&
         (mCrazy == daCow_c::Crazy_Wait || mCrazy == daCow_c::Crazy_Dash ||
@@ -1593,7 +1537,6 @@ bool daCow_c::isAngry() {
     }
 }
 
-/* 8065D03C-8065D0B8 004B5C 007C+00 1/1 0/0 1/1 .text            isGuardFad__7daCow_cFv */
 bool daCow_c::isGuardFad() {
     if (checkProcess(&daCow_c::action_wolf)) {
         return true;
@@ -1604,7 +1547,6 @@ bool daCow_c::isGuardFad() {
     }
 }
 
-/* 8065D0B8-8065D17C 004BD8 00C4+00 0/0 0/0 1/1 .text            setAngryHit__7daCow_cFv */
 void daCow_c::setAngryHit() {
     if (isAngry()) {
         mTargetAngle = mSavedAngle.y - (s16)0x8000;
@@ -1625,8 +1567,6 @@ void daCow_c::setAngryHit() {
     }
 }
 
-/* 8065D17C-8065D230 004C9C 00B4+00 1/1 0/0 0/0 .text            checkBeforeBgAngry__7daCow_cFs
- */
 bool daCow_c::checkBeforeBgAngry(s16 angle) {
     checkBeforeBg();
 
@@ -1642,7 +1582,6 @@ bool daCow_c::checkBeforeBgAngry(s16 angle) {
     return false;
 }
 
-/* 8065D230-8065D29C 004D50 006C+00 2/2 0/0 0/0 .text            setRedTev__7daCow_cFv */
 void daCow_c::setRedTev() {
     if (mChangeRedTev < 2) {
         if (!mChangeRedTev) {
@@ -1657,14 +1596,12 @@ void daCow_c::setRedTev() {
     }
 }
 
-/* 8065D29C-8065D2F0 004DBC 0054+00 1/1 0/0 0/0 .text            setAngryTurn__7daCow_cFv */
 void daCow_c::setAngryTurn() {
     setBck(daCow_c::Animation_Jump, J3DFrameCtrl::EMode_NONE, 0.0f, 1.0f);
     speedF = mSpeed;
     mCrazy = daCow_c::Crazy_Attack;
 }
 
-/* 8065D2F0-8065DC08 004E10 0918+00 7/0 0/0 0/0 .text            action_angry__7daCow_cFv */
 void daCow_c::action_angry() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 playerDistance = fopAcM_searchPlayerDistance(this);
@@ -1913,7 +1850,6 @@ void daCow_c::action_angry() {
     }
 }
 
-/* 8065DC08-8065DE70 005728 0268+00 4/4 0/0 0/0 .text            calcCatchPos__7daCow_cFfi */
 void daCow_c::calcCatchPos(f32 distance, BOOL someBool) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     s16 offsetAngle = player->shape_angle.y - (s16)0x8000;
@@ -1939,7 +1875,6 @@ void daCow_c::calcCatchPos(f32 distance, BOOL someBool) {
     }
 }
 
-/* 8065DE70-8065DF40 005990 00D0+00 1/1 0/0 0/0 .text            executeCrazyWait__7daCow_cFv */
 void daCow_c::executeCrazyWait() {
     if (GET_FLAG(daCow_c::Flag_CrazyReady)) {
         CLEAR_FLAG(daCow_c::Flag_CrazyReady);
@@ -1961,7 +1896,6 @@ void daCow_c::executeCrazyWait() {
     }
 }
 
-/* 8065DF40-8065E6BC 005A60 077C+00 1/1 0/0 0/0 .text            executeCrazyDash__7daCow_cFv */
 void daCow_c::executeCrazyDash() {
     mShouldSetEffect = 1;
     cXyz pathPointPosition = dPath_GetPnt(mPath, mPointIndex)->m_position;
@@ -2047,7 +1981,6 @@ void daCow_c::executeCrazyDash() {
     mSavedAngle.y = shape_angle.y;
 }
 
-/* 8065E6BC-8065E6E8 0061DC 002C+00 2/2 0/0 0/0 .text initCrazyBeforeCatch__7daCow_cFi */
 void daCow_c::initCrazyBeforeCatch(int _unused) {
     mCrazy = daCow_c::Crazy_BeforeCatch;
     speedF = 0.0f;
@@ -2056,8 +1989,6 @@ void daCow_c::initCrazyBeforeCatch(int _unused) {
     gravity = 0.0f;
 }
 
-/* 8065E6E8-8065E7D0 006208 00E8+00 2/2 0/0 0/0 .text executeCrazyBeforeCatch__7daCow_cFv
- */
 void daCow_c::executeCrazyBeforeCatch() {
     calcCatchPos(-220.0f, 1);
     if (GET_FLAG(daCow_c::Flag_CrazyCatch)) {
@@ -2074,7 +2005,6 @@ void daCow_c::executeCrazyBeforeCatch() {
     }
 }
 
-/* 8065E7D0-8065E888 0062F0 00B8+00 3/3 0/0 0/0 .text            initCrazyCatch__7daCow_cFi */
 void daCow_c::initCrazyCatch(int _unused) {
     setBck(daCow_c::Animation_Shock, J3DFrameCtrl::EMode_NONE, 0.0f, 1.0f);
     mCrazy = daCow_c::Crazy_Catch;
@@ -2092,8 +2022,6 @@ void daCow_c::initCrazyCatch(int _unused) {
     gravity = 0.0f;
 }
 
-/* 8065E888-8065EAF4 0063A8 026C+00 2/2 0/0 0/0 .text            executeCrazyCatch__7daCow_cFv
- */
 void daCow_c::executeCrazyCatch() {
     f32 catchDistance = -220.0f;
 
@@ -2155,7 +2083,6 @@ void daCow_c::executeCrazyCatch() {
     }
 }
 
-/* 8065EAF4-8065EBF0 006614 00FC+00 1/1 0/0 0/0 .text            initCrazyThrow__7daCow_cFi */
 void daCow_c::initCrazyThrow(int nextAction) {
     if (nextAction != daCow_c::Action_Wait) {
         setBck(daCow_c::Animation_FallR, J3DFrameCtrl::EMode_NONE, 5.0f, 1.0f);
@@ -2182,8 +2109,6 @@ void daCow_c::initCrazyThrow(int nextAction) {
     gravity = 0.0f;
 }
 
-/* 8065EBF0-8065F088 006710 0498+00 2/2 0/0 0/0 .text            executeCrazyThrow__7daCow_cFv
- */
 void daCow_c::executeCrazyThrow() {
     dBgS_LinChk linChk;
 
@@ -2289,7 +2214,6 @@ void daCow_c::executeCrazyThrow() {
     }
 }
 
-/* 8065F088-8065F144 006BA8 00BC+00 3/3 0/0 0/0 .text            initCrazyAttack__7daCow_cFi */
 void daCow_c::initCrazyAttack(int playerMoving) {
     mJoint8Offset.z = 0;
     mCrazy = daCow_c::Crazy_Attack;
@@ -2307,8 +2231,6 @@ void daCow_c::initCrazyAttack(int playerMoving) {
     gravity = -4.0f;
 }
 
-/* 8065F144-8065F308 006C64 01C4+00 2/2 0/0 0/0 .text            executeCrazyAttack__7daCow_cFv
- */
 void daCow_c::executeCrazyAttack() {
     switch (mAction) {
     case daCow_c::Action_Wait:
@@ -2341,7 +2263,6 @@ void daCow_c::executeCrazyAttack() {
     }
 }
 
-/* 8065F308-8065F37C 006E28 0074+00 1/1 0/0 0/0 .text            initCrazyAway__7daCow_cFi */
 void daCow_c::initCrazyAway(int _unused) {
     mCrazy = daCow_c::Crazy_Away;
     if (mPrm0 == 3) {
@@ -2351,7 +2272,6 @@ void daCow_c::initCrazyAway(int _unused) {
     gravity = -4.0f;
 }
 
-/* 8065F37C-8065F6E0 006E9C 0364+00 1/1 0/0 0/0 .text            executeCrazyAway__7daCow_cFv */
 void daCow_c::executeCrazyAway() {
     setSeSnort();
 
@@ -2388,7 +2308,6 @@ void daCow_c::executeCrazyAway() {
     }
 }
 
-/* 8065F6E0-8065F744 007200 0064+00 1/1 0/0 0/0 .text            executeCrazyEnd__7daCow_cFv */
 void daCow_c::executeCrazyEnd() {
     mAcchCir.SetWall(0.0f, 0.0f);
     mDrawOff = true;
@@ -2396,7 +2315,6 @@ void daCow_c::executeCrazyEnd() {
     mPath = dPath_GetRoomPath(COW_INDEX, fopAcM_GetRoomNo(this));
 }
 
-/* 8065F744-8065F7DC 007264 0098+00 1/1 0/0 0/0 .text            initCrazyBack__7daCow_cFi */
 void daCow_c::initCrazyBack(int _unused) {
     if (mPrm0 == 3) {
         setBck(daCow_c::Animation_WalkDejected, J3DFrameCtrl::EMode_LOOP, 10.0f, 1.0f);
@@ -2413,7 +2331,6 @@ void daCow_c::initCrazyBack(int _unused) {
     mCrazy = daCow_c::Crazy_Back;
 }
 
-/* 8065F7DC-8065FE50 0072FC 0674+00 2/1 0/0 0/0 .text            executeCrazyBack__7daCow_cFv */
 void daCow_c::executeCrazyBack() {
     cXyz pointPos;
     s16 angle;
@@ -2522,7 +2439,6 @@ void daCow_c::executeCrazyBack() {
     }
 }
 
-/* 8065FE50-8066010C 007970 02BC+00 4/0 0/0 0/0 .text            action_crazy__7daCow_cFv */
 void daCow_c::action_crazy() {
     cXyz acStack_28;
     s16 angle;
@@ -2608,8 +2524,6 @@ void daCow_c::action_crazy() {
     }
 }
 
-/* 8066010C-80660544 007C2C 0438+00 1/1 0/0 0/0 .text            executeCrazyBack2__7daCow_cFv
- */
 void daCow_c::executeCrazyBack2() {
     if (checkOutOfGate(daPy_getPlayerActorClass()->current.pos) || checkOutOfGate(current.pos)) {
         setProcess(&daCow_c::action_run, false);
@@ -2669,7 +2583,6 @@ void daCow_c::executeCrazyBack2() {
     }
 }
 
-/* 80660544-806607B8 008064 0274+00 4/0 0/0 0/0 .text            action_thrown__7daCow_cFv */
 void daCow_c::action_thrown() {
     daPy_py_c* player;
 
@@ -2731,7 +2644,6 @@ void daCow_c::action_thrown() {
     }
 }
 
-/* 806607B8-806608F0 0082D8 0138+00 1/1 0/0 0/0 .text            checkWolfBusters__7daCow_cFv */
 bool daCow_c::checkWolfBusters() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (!player->checkNowWolf()) {
@@ -2762,7 +2674,6 @@ bool daCow_c::checkWolfBusters() {
     return false;
 }
 
-/* 806608F0-806612DC 008410 09EC+00 2/0 0/0 0/0 .text            action_wolf__7daCow_cFv */
 void daCow_c::action_wolf() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -2888,7 +2799,6 @@ void daCow_c::action_wolf() {
     }
 }
 
-/* 806612DC-806613EC 008DFC 0110+00 2/0 0/0 0/0 .text            action_damage__7daCow_cFv */
 void daCow_c::action_damage() {
     switch (mMode) {
     case daCow_c::Mode_0:
@@ -2914,7 +2824,6 @@ void daCow_c::action_damage() {
     }
 }
 
-/* 806613EC-80661580 008F0C 0194+00 1/1 0/0 0/0 .text            action__7daCow_cFv */
 void daCow_c::action() {
     if (fopAcM_checkCarryNow(this)) {
         fopAcM_cancelCarryNow(this);
@@ -2945,7 +2854,6 @@ void daCow_c::action() {
     dComIfGp_att_LookRequest(this, 1500.0f, 300.0f, -300.0f, 0x6000, 1);
 }
 
-/* 80661580-806615EC 0090A0 006C+00 1/1 0/0 0/0 .text            setMtx__7daCow_cFv */
 void daCow_c::setMtx() {
     if (mpMorf) {
         mDoMtx_stack_c::transS(current.pos);
@@ -2956,7 +2864,6 @@ void daCow_c::setMtx() {
     }
 }
 
-/* 806615EC-80661720 00910C 0134+00 1/1 0/0 0/0 .text            setAttnPos__7daCow_cFv */
 void daCow_c::setAttnPos() {
     cXyz arg;
     cXyz pos;
@@ -2978,10 +2885,8 @@ void daCow_c::setAttnPos() {
     }
 }
 
-/* 80663500-80663504 0000A8 0004+00 0/0 0/0 0/0 .bss             m_search_range */
 static f32 m_search_range;
 
-/* 80661720-80661940 009240 0220+00 1/1 0/0 0/0 .text            setCollisions__7daCow_cFv */
 void daCow_c::setCollisions() {
     J3DModel* pJVar1;
     Mtx* pMVar2;
@@ -3015,7 +2920,6 @@ void daCow_c::setCollisions() {
     }
 }
 
-/* 80661940-80661AD0 009460 0190+00 2/2 0/0 0/0 .text            Execute__7daCow_cFv */
 int daCow_c::Execute() {
     mCounter1++;
     mJointIndex = 0;
@@ -3056,12 +2960,10 @@ int daCow_c::Execute() {
     return 1;
 }
 
-/* 80661AD0-80661AF0 0095F0 0020+00 1/0 0/0 0/0 .text            daCow_Execute__FPv */
 static int daCow_Execute(void* actor) {
     return static_cast<daCow_c*>(actor)->Execute();
 }
 
-/* 80661AF0-80661CDC 009610 01EC+00 1/1 0/0 0/0 .text            CreateHeap__7daCow_cFv */
 int daCow_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Cow", 0x1f));
 
@@ -3098,13 +3000,10 @@ int daCow_c::CreateHeap() {
     }
 }
 
-/* 80661D24-80661D44 009844 0020+00 1/1 0/0 0/0 .text createHeapCallBack__7daCow_cFP10fopAc_ac_c
- */
 int daCow_c::createHeapCallBack(fopAc_ac_c* actor) {
     return static_cast<daCow_c*>(actor)->CreateHeap();
 }
 
-/* 80661D44-80662228 009864 04E4+00 1/1 0/0 0/0 .text            initialize__7daCow_cFv */
 u8 daCow_c::initialize() {
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     mSound.init(&current.pos, &eyePos, 3, 1);
@@ -3216,7 +3115,6 @@ u8 daCow_c::initialize() {
     return 1;
 }
 
-/* 80662228-806623D4 009D48 01AC+00 1/1 0/0 0/0 .text            create__7daCow_cFv */
 int daCow_c::create() {
     if (!fopAcM_CheckCondition(this, 8)) {
         new (this) daCow_c();
@@ -3251,13 +3149,10 @@ int daCow_c::create() {
     }
 }
 
-/* 806626F0-80662710 00A210 0020+00 1/0 0/0 0/0 .text            daCow_Create__FPv */
 static int daCow_Create(void* actor) {
     return static_cast<daCow_c*>(actor)->create();
 }
 
-/* 80662710-80662920 00A230 0210+00 1/1 0/0 0/0 .text ctrlJoint__7daCow_cFP8J3DJointP8J3DModel
- */
 int daCow_c::ctrlJoint(J3DJoint* joint, J3DModel* model) {
     int jointNo = joint->getJntNo();
 
@@ -3306,7 +3201,6 @@ int daCow_c::ctrlJoint(J3DJoint* joint, J3DModel* model) {
     return 1;
 }
 
-/* 80662920-8066296C 00A440 004C+00 1/1 0/0 0/0 .text ctrlJointCallBack__7daCow_cFP8J3DJointi */
 int daCow_c::ctrlJointCallBack(J3DJoint* joint, int skip) {
     if (!skip) {
         J3DModel* model = j3dSys.getModel();
@@ -3318,7 +3212,6 @@ int daCow_c::ctrlJointCallBack(J3DJoint* joint, int skip) {
     return 1;
 }
 
-/* 8066296C-80662BC4 00A48C 0258+00 1/1 0/0 0/0 .text            Draw__7daCow_cFv */
 int daCow_c::Draw() {
     if (mDrawOff) {
         return 1;
@@ -3361,12 +3254,10 @@ int daCow_c::Draw() {
     return 1;
 }
 
-/* 80662BC4-80662BE4 00A6E4 0020+00 1/0 0/0 0/0 .text            daCow_Draw__FPv */
 static int daCow_Draw(void* actor) {
     return static_cast<daCow_c*>(actor)->Draw();
 }
 
-/* 80662BE4-80662C40 00A704 005C+00 1/1 0/0 0/0 .text            Delete__7daCow_cFv */
 int daCow_c::Delete() {
     fopAcM_GetID(this);
     dComIfG_resDelete(&mPhase, "Cow");
@@ -3377,22 +3268,18 @@ int daCow_c::Delete() {
     return true;
 }
 
-/* 80662C40-80662C60 00A760 0020+00 1/0 0/0 0/0 .text            daCow_Delete__FPv */
 static int daCow_Delete(void* actor) {
     return static_cast<daCow_c*>(actor)->Delete();
 }
 
-/* 80662C60-80662C68 00A780 0008+00 1/0 0/0 0/0 .text            daCow_IsDelete__FPv */
 static int daCow_IsDelete(void* actor) {
     return true;
 }
 
-/* 80663390-806633B0 -00001 0020+00 1/0 0/0 0/0 .data            daCow_MethodTable */
 static actor_method_class daCow_MethodTable = {
     daCow_Create, daCow_Delete, daCow_Execute, daCow_IsDelete, daCow_Draw,
 };
 
-/* 806633B0-806633E0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_COW */
 extern actor_process_profile_definition g_profile_COW = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

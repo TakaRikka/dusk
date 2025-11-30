@@ -41,26 +41,26 @@ namespace daObjLadder {
 
         typedef void (Act_c::*modeProc)();
 
-        /* 8058D158 */ int CreateHeap();
-        /* 8058D1D8 */ int Create();
-        /* 8058D378 */ int Mthd_Create();
-        /* 8058D4F0 */ int Delete();
-        /* 8058D4F8 */ int Mthd_Delete();
-        /* 8058D544 */ void demo_end_reset();
-        /* 8058D5AC */ void mode_wait_init();
-        /* 8058D5B8 */ void mode_wait();
-        /* 8058D614 */ void mode_demoreq_init();
-        /* 8058D628 */ void mode_demoreq();
-        /* 8058D6E8 */ void mode_vib_init();
-        /* 8058D710 */ void mode_vib();
-        /* 8058D7A8 */ void mode_drop_init();
-        /* 8058D7EC */ void mode_drop();
-        /* 8058D9C0 */ void mode_fell_init();
-        /* 8058D9CC */ void mode_fell();
-        /* 8058D9D0 */ void set_mtx();
-        /* 8058DA64 */ void init_mtx();
-        /* 8058DAA0 */ int Execute(Mtx**);
-        /* 8058DBB8 */ int Draw();
+        int CreateHeap();
+        int Create();
+        int Mthd_Create();
+        int Delete();
+        int Mthd_Delete();
+        void demo_end_reset();
+        void mode_wait_init();
+        void mode_wait();
+        void mode_demoreq_init();
+        void mode_demoreq();
+        void mode_vib_init();
+        void mode_vib();
+        void mode_drop_init();
+        void mode_drop();
+        void mode_fell_init();
+        void mode_fell();
+        void set_mtx();
+        void init_mtx();
+        int Execute(Mtx**);
+        int Draw();
 
         u8 prm_get_evId() {
             return daObj::PrmAbstract(this, PRM_8, PRM_16);

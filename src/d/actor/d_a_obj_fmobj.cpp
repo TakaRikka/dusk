@@ -13,7 +13,6 @@
 #include "SSystem/SComponent/c_math.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 8057CBD8-8057CC44 000078 006C+00 1/0 0/0 0/0 .text daObj_Fmobj_Draw__FP15obj_fmobj_class */
 static int daObj_Fmobj_Draw(obj_fmobj_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     J3DModel* model_p = i_this->mpModel;
@@ -24,7 +23,6 @@ static int daObj_Fmobj_Draw(obj_fmobj_class* i_this) {
     return 1;
 }
 
-/* 8057CC44-8057CC84 0000E4 0040+00 1/0 0/0 0/0 .text daObj_Fmobj_Execute__FP15obj_fmobj_class */
 static int daObj_Fmobj_Execute(obj_fmobj_class* i_this) {
     fopAc_ac_c* actor = &i_this->mActor;
     i_this->field_0x578++;
@@ -38,12 +36,10 @@ static int daObj_Fmobj_Execute(obj_fmobj_class* i_this) {
     return 1;
 }
 
-/* 8057CC84-8057CC8C 000124 0008+00 1/0 0/0 0/0 .text daObj_Fmobj_IsDelete__FP15obj_fmobj_class */
 static int daObj_Fmobj_IsDelete(obj_fmobj_class* i_this) {
     return 1;
 }
 
-/* 8057CC8C-8057CCDC 00012C 0050+00 1/0 0/0 0/0 .text daObj_Fmobj_Delete__FP15obj_fmobj_class */
 static int daObj_Fmobj_Delete(obj_fmobj_class* i_this) {
     fopAc_ac_c* actor = &i_this->mActor;
     fopAcM_RegisterDeleteID(i_this, "Obj_Fmobj");
@@ -52,7 +48,6 @@ static int daObj_Fmobj_Delete(obj_fmobj_class* i_this) {
     return 1;
 }
 
-/* 8057CCDC-8057CDE0 00017C 0104+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_fmobj_class* a_this = (obj_fmobj_class*)i_this;
 
@@ -76,8 +71,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8057CDE0-8057CF60 000280 0180+00 1/0 0/0 0/0 .text            daObj_Fmobj_Create__FP10fopAc_ac_c
- */
 static int daObj_Fmobj_Create(fopAc_ac_c* i_this) {
     obj_fmobj_class* a_this = (obj_fmobj_class*)i_this;
     fopAcM_ct(&a_this->mActor, obj_fmobj_class);
@@ -119,15 +112,12 @@ static int daObj_Fmobj_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* ############################################################################################## */
-/* 8057CF80-8057CFA0 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Fmobj_Method */
 static actor_method_class l_daObj_Fmobj_Method = {
     (process_method_func)daObj_Fmobj_Create,  (process_method_func)daObj_Fmobj_Delete,
     (process_method_func)daObj_Fmobj_Execute, (process_method_func)daObj_Fmobj_IsDelete,
     (process_method_func)daObj_Fmobj_Draw,
 };
 
-/* 8057CFA0-8057CFD0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_FMOBJ */
 extern actor_process_profile_definition g_profile_OBJ_FMOBJ = {
     fpcLy_CURRENT_e,
     3,

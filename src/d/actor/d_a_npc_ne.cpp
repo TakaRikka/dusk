@@ -19,7 +19,6 @@
 #include "c/c_damagereaction.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* 80A925F0-80A92850 000000 0260+00 3/3 0/0 0/0 .data            home_path */
 static home_path_pnt home_path[38] = {
     {0, {561.0f, 87.0f, -1110.0f}},
     {1, {306.0f, 87.0f, -849.0f}},
@@ -61,7 +60,6 @@ static home_path_pnt home_path[38] = {
     {-1, {0.0f, 0.0f, 0.0f}},
 };
 
-/* 80A88CCC-80A88D14 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__14daNpc_Ne_HIO_cFv */
 daNpc_Ne_HIO_c::daNpc_Ne_HIO_c() :
     field_0x04(-1),
     mScale(1.0f),
@@ -73,8 +71,6 @@ daNpc_Ne_HIO_c::daNpc_Ne_HIO_c() :
     /* empty function */
 }
 
-/* 80A88D14-80A88DC0 000134 00AC+00 19/19 0/0 0/0 .text            anm_init__FP12npc_ne_classifUcf
- */
 static void anm_init(npc_ne_class* i_this, int i_resNo, f32 i_morf, u8 i_attr, f32 i_speed) {
     J3DAnmTransform* anm =
         static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(i_this->mResName, i_resNo));
@@ -83,7 +79,6 @@ static void anm_init(npc_ne_class* i_this, int i_resNo, f32 i_morf, u8 i_attr, f
 }
 
 
-/* 80A88DC0-80A88FC4 0001E0 0204+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -133,7 +128,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80A88FC4-80A89160 0003E4 019C+00 1/0 0/0 0/0 .text            daNpc_Ne_Draw__FP12npc_ne_class */
 static int daNpc_Ne_Draw(npc_ne_class* i_this) {
     if (daPy_py_c::linkGrabSubjectNoDraw(i_this)) {
         return 1;
@@ -171,8 +165,6 @@ static int daNpc_Ne_Draw(npc_ne_class* i_this) {
     return 1;
 }
 
-/* 80A8919C-80A89298 0005BC 00FC+00 3/3 0/0 0/0 .text other_bg_check__FP10fopAc_ac_cP10fopAc_ac_c
- */
 static BOOL other_bg_check(fopAc_ac_c* i_this, fopAc_ac_c* i_actor) {
     dBgS_LinChk lin_chk;
     if (i_actor != NULL) {
@@ -192,7 +184,6 @@ static BOOL other_bg_check(fopAc_ac_c* i_this, fopAc_ac_c* i_actor) {
 }
 
 
-/* 80A89298-80A892D4 0006B8 003C+00 1/1 0/0 0/0 .text            ne_carry_check__FP12npc_ne_class */
 static BOOL ne_carry_check(npc_ne_class* i_this) {
     if (i_this->mAction != npc_ne_class::ACT_CARRY && fopAcM_checkCarryNow(i_this)) {
         i_this->mAction = npc_ne_class::ACT_CARRY;
@@ -204,7 +195,6 @@ static BOOL ne_carry_check(npc_ne_class* i_this) {
     }
 }
 
-/* 80A892D4-80A895F8 0006F4 0324+00 2/2 0/0 0/0 .text            way_bg_check__FP12npc_ne_classs */
 static int way_bg_check(npc_ne_class* i_this, s16 i_angle) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     dBgS_LinChk lin_chk;
@@ -253,7 +243,6 @@ static int way_bg_check(npc_ne_class* i_this, s16 i_angle) {
     }
 }
 
-/* 80A89640-80A897C0 000A60 0180+00 1/1 0/0 0/0 .text            water_check__FP12npc_ne_classf */
 static int water_check(npc_ne_class* i_this, f32 param_1) {
     dBgS_ObjGndChk_Spl gnd_chk_spl;
     dBgS_GndChk gnd_chk;
@@ -283,8 +272,6 @@ static f32 dummy(f32 param_0) {
     return param_0 + 5.0f + 60.0f + 25.0f;
 }
 
-/* 80A897C0-80A899C0 000BE0 0200+00 1/1 0/0 0/0 .text            climb_angle_get__FP12npc_ne_class
- */
 static s16 climb_angle_get(npc_ne_class* i_this) {
     dBgS_LinChk lin_chk;
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
@@ -313,23 +300,17 @@ static s16 climb_angle_get(npc_ne_class* i_this) {
     return 0;
 }
 
-/* 80A92AC4-80A92AC8 -00001 0004+00 2/2 0/0 0/0 .bss             None */
 /* 80A92AC5 0003+00 data_80A92AC5 None */
 static bool l_hioInit;
 
-/* 80A92AD4-80A92AF0 000054 001C+00 11/11 0/0 0/0 .bss             l_HIO */
 static daNpc_Ne_HIO_c l_HIO;
 
-/* 80A92AF0-80A92B04 000070 0014+00 2/3 0/0 0/0 .bss             target_info */
 static fopAc_ac_c* target_info[5];
 
-/* 80A92B04-80A92B18 000084 0014+00 0/1 0/0 0/0 .bss             target_bgc */
 static BOOL target_bgc[5];
 
-/* 80A92B18-80A92B1C 000098 0004+00 2/3 0/0 0/0 .bss             target_info_count */
 static int target_info_count;
 
-/* 80A899C0-80A89A38 000DE0 0078+00 1/1 0/0 0/0 .text            s_bl_sub__FPvPv */
 static void* s_bl_sub(void* i_proc, void* i_this) {
     if (fopAc_IsActor(i_proc)
         && (fopAcM_GetName(i_proc) == PROC_OBJ_FOOD || fopAcM_GetName(i_proc) == PROC_BD)
@@ -341,7 +322,6 @@ static void* s_bl_sub(void* i_proc, void* i_this) {
     return NULL;
 }
 
-/* 80A89A38-80A89AB0 000E58 0078+00 1/1 0/0 0/0 .text            s_ss_sub__FPvPv */
 static void* s_ss_sub(void* i_proc, void* i_this) {
     if (fopAc_IsActor(i_proc)
         && (fopAcM_GetName(i_proc) == PROC_NI || fopAcM_GetName(i_proc) == PROC_BD)
@@ -353,7 +333,6 @@ static void* s_ss_sub(void* i_proc, void* i_this) {
     return NULL;
 }
 
-/* 80A89AB0-80A89D28 000ED0 0278+00 3/3 0/0 0/0 .text            search_bird__FP12npc_ne_class */
 static fopAc_ac_c* search_bird(npc_ne_class* i_this) {
     target_info_count = 0;
     for (int i = 0; i < 5; i++) {
@@ -410,7 +389,6 @@ static fopAc_ac_c* search_bird(npc_ne_class* i_this) {
     return NULL;
 }
 
-/* 80A89D28-80A89EF4 001148 01CC+00 2/2 0/0 0/0 .text            way_check__FP12npc_ne_classs */
 static BOOL way_check(npc_ne_class* i_this, s16 i_angleY) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     f32 fvar1 = 1000.0f;
@@ -443,7 +421,6 @@ static BOOL way_check(npc_ne_class* i_this, s16 i_angleY) {
     return false;
 }
 
-/* 80A89EF4-80A8A234 001314 0340+00 1/1 0/0 0/0 .text            npc_ne_wait__FP12npc_ne_class */
 static void npc_ne_wait(npc_ne_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
@@ -530,7 +507,6 @@ static void npc_ne_wait(npc_ne_class* i_this) {
     }
 }
 
-/* 80A8A234-80A8A8F4 001654 06C0+00 1/1 0/0 0/0 .text            npc_ne_away__FP12npc_ne_class */
 static void npc_ne_away(npc_ne_class* i_this) {
     if (!i_this->mNoFollow) {
         i_this->mAction = npc_ne_class::ACT_TAME;
@@ -673,7 +649,6 @@ static void npc_ne_away(npc_ne_class* i_this) {
     i_this->mpMorf->setPlaySpeed(i_this->mAnmSpeed);
 }
 
-/* 80A8A8F4-80A8AAE8 001D14 01F4+00 1/1 0/0 0/0 .text            ground_search__FP12npc_ne_class */
 static cXyz ground_search(npc_ne_class* i_this) {
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
     dBgS_ObjGndChk_Spl gnd_chk_spl;
@@ -713,7 +688,6 @@ static cXyz ground_search(npc_ne_class* i_this) {
 }
 
 
-/* 80A8AAE8-80A8AB70 001F08 0088+00 1/1 0/0 0/0 .text            s_fish_sub__FPvPv */
 static void* s_fish_sub(void* i_proc, void* i_this) {
     npc_ne_class* _this = static_cast<npc_ne_class*>(i_this);
     if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_MG_FISH) {
@@ -726,7 +700,6 @@ static void* s_fish_sub(void* i_proc, void* i_this) {
     return NULL;
 }
 
-/* 80A8AB70-80A8B530 001F90 09C0+00 2/1 0/0 0/0 .text            npc_ne_tame__FP12npc_ne_class */
 static void npc_ne_tame(npc_ne_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     if (i_this->mNoFollow) {
@@ -985,7 +958,6 @@ static void npc_ne_tame(npc_ne_class* i_this) {
     }
 }
 
-/* 80A8B530-80A8B61C 002950 00EC+00 1/1 0/0 0/0 .text            npc_ne_sanbasi__FP12npc_ne_class */
 static void npc_ne_sanbasi(npc_ne_class* i_this) {
     switch (i_this->mMode) {
     case 0:
@@ -1007,7 +979,6 @@ static void npc_ne_sanbasi(npc_ne_class* i_this) {
     }
 }
 
-/* 80A8B61C-80A8BAFC 002A3C 04E0+00 1/1 0/0 0/0 .text            npc_ne_bird__FP12npc_ne_class */
 static void npc_ne_bird(npc_ne_class* i_this) {
     fopAc_ac_c* bird = search_bird(i_this);
     if (bird == NULL) {
@@ -1105,7 +1076,6 @@ static void npc_ne_bird(npc_ne_class* i_this) {
     i_this->mpMorf->setPlaySpeed(i_this->mAnmSpeed);
 }
 
-/* 80A8BAFC-80A8C094 002F1C 0598+00 2/1 0/0 0/0 .text            npc_ne_ball__FP12npc_ne_class */
 static void npc_ne_ball(npc_ne_class* i_this) {
     fopAc_ac_c* ball = search_bird(i_this);
     if (ball == NULL) {
@@ -1223,8 +1193,6 @@ static void npc_ne_ball(npc_ne_class* i_this) {
     i_this->mpMorf->setPlaySpeed(i_this->mAnmSpeed);
 }
 
-/* 80A8C094-80A8C508 0034B4 0474+00 1/1 0/0 0/0 .text            npc_ne_pathwalk__FP12npc_ne_class
- */
 static void npc_ne_pathwalk(npc_ne_class* i_this) {
     switch (i_this->mMode) {
     case 0:
@@ -1299,7 +1267,6 @@ static void npc_ne_pathwalk(npc_ne_class* i_this) {
     cLib_addCalc2(&i_this->mAngleYStep, 150.0f, 1.0f, 30.0f);
 }
 
-/* 80A8C508-80A8C748 003928 0240+00 1/1 0/0 0/0 .text            npc_ne_jump__FP12npc_ne_class */
 static void npc_ne_jump(npc_ne_class* i_this) {
     int frame = i_this->mpMorf->getFrame();
     f32 target_speed = 0.0f;
@@ -1352,7 +1319,6 @@ static void npc_ne_jump(npc_ne_class* i_this) {
     cLib_addCalc2(&i_this->speedF, target_speed, 1.0f, max_speed_step);
 }
 
-/* 80A8C748-80A8C8F8 003B68 01B0+00 1/1 0/0 0/0 .text            npc_ne_s_jump__FP12npc_ne_class */
 static void npc_ne_s_jump(npc_ne_class* i_this) {
     int frame = i_this->mpMorf->getFrame();
     f32 target_speed = 0.0f;
@@ -1399,7 +1365,6 @@ static void npc_ne_s_jump(npc_ne_class* i_this) {
     cLib_addCalc2(&i_this->speedF, target_speed, 1.0f, max_speed_step);
 }
 
-/* 80A8C8F8-80A8CA20 003D18 0128+00 1/1 0/0 0/0 .text            npc_ne_roof__FP12npc_ne_class */
 static void npc_ne_roof(npc_ne_class* i_this) {
     i_this->mCcDisableTimer = 5;
     i_this->mLookMode = npc_ne_class::LOOK_PLAYER;
@@ -1428,8 +1393,6 @@ static void npc_ne_roof(npc_ne_class* i_this) {
     }
 }
 
-/* 80A8CA20-80A8CC64 003E40 0244+00 1/1 0/0 0/0 .text            home_path_search__FP12npc_ne_classi
- */
 static int home_path_search(npc_ne_class* i_this, int param_1) {
     f32 max_dist = 100.0f;
     BOOL local_1c0[100];
@@ -1463,7 +1426,6 @@ static int home_path_search(npc_ne_class* i_this, int param_1) {
     return -1;
 }
 
-/* 80A8CC64-80A8D608 004084 09A4+00 2/1 0/0 0/0 .text            npc_ne_home__FP12npc_ne_class */
 static BOOL npc_ne_home(npc_ne_class* i_this) {
     BOOL ret = true;
     i_this->mCcDisableTimer = 10;
@@ -1695,7 +1657,6 @@ static BOOL npc_ne_home(npc_ne_class* i_this) {
     return ret;
 }
 
-/* 80A8D608-80A8D7C4 004A28 01BC+00 2/2 0/0 0/0 .text            wall_angle_get__FP12npc_ne_class */
 static s16 wall_angle_get(npc_ne_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     dBgS_LinChk lin_chk;
@@ -1721,8 +1682,6 @@ static s16 wall_angle_get(npc_ne_class* i_this) {
     return cM_atan2s(vec1.x, vec1.z) + 0x4000;
 }
 
-/* 80A8D7C4-80A8DD54 004BE4 0590+00 1/1 0/0 0/0 .text            search_ground_1__FP12npc_ne_class
- */
 static void search_ground_1(npc_ne_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     dBgS_LinChk lin_chk;
@@ -1783,8 +1742,6 @@ static void search_ground_1(npc_ne_class* i_this) {
     i_this->mTargetPos = pos[i];
 }
 
-/* 80A8DD58-80A8DEE0 005178 0188+00 1/1 0/0 0/0 .text            search_ground_2__FP12npc_ne_classs
- */
 static BOOL search_ground_2(npc_ne_class* i_this, s16 i_wallAngle) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     dBgS_LinChk lin_chk;
@@ -1814,7 +1771,6 @@ static BOOL search_ground_2(npc_ne_class* i_this, s16 i_wallAngle) {
     }
 }
 
-/* 80A8DEE0-80A8E0E4 005300 0204+00 1/1 0/0 0/0 .text            npc_ne_swim__FP12npc_ne_class */
 static void npc_ne_swim(npc_ne_class* i_this) {
     s16 max_angle_step = 0;
 
@@ -1857,7 +1813,6 @@ static void npc_ne_swim(npc_ne_class* i_this) {
     }
 }
 
-/* 80A8E0E4-80A8E428 005504 0344+00 1/1 0/0 0/0 .text            npc_ne_outswim__FP12npc_ne_class */
 static void npc_ne_outswim(npc_ne_class* i_this) {
     cXyz delta;
 
@@ -1913,7 +1868,6 @@ static void npc_ne_outswim(npc_ne_class* i_this) {
     i_this->gravity = 0.0f;
 }
 
-/* 80A8E428-80A8EA78 005848 0650+00 1/1 0/0 0/0 .text            npc_ne_climb__FP12npc_ne_class */
 static BOOL npc_ne_climb(npc_ne_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     BOOL ret = false;
@@ -2019,7 +1973,6 @@ static BOOL npc_ne_climb(npc_ne_class* i_this) {
     return ret;
 }
 
-/* 80A8EA78-80A8EB60 005E98 00E8+00 1/1 0/0 0/0 .text            npc_ne_drop__FP12npc_ne_class */
 static void npc_ne_drop(npc_ne_class* i_this) {
     switch (i_this->mMode) {
     case 0:
@@ -2050,7 +2003,6 @@ static void npc_ne_drop(npc_ne_class* i_this) {
     }
 }
 
-/* 80A8EB60-80A8ED58 005F80 01F8+00 1/1 0/0 0/0 .text            npc_ne_s_drop__FP12npc_ne_class */
 static void npc_ne_s_drop(npc_ne_class* i_this) {
     int frame = i_this->mpMorf->getFrame();
     f32 target_speed = 0.0f;
@@ -2103,7 +2055,6 @@ static void npc_ne_s_drop(npc_ne_class* i_this) {
     cLib_addCalc2(&i_this->speedF, target_speed, 1.0f, max_speed_step);
 }
 
-/* 80A8ED58-80A8F0FC 006178 03A4+00 1/1 0/0 0/0 .text            npc_ne_carry__FP12npc_ne_class */
 static BOOL npc_ne_carry(npc_ne_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     BOOL ret = false;
@@ -2174,7 +2125,6 @@ static BOOL npc_ne_carry(npc_ne_class* i_this) {
     return ret;
 }
 
-/* 80A8F0FC-80A8F1B0 00651C 00B4+00 1/1 0/0 0/0 .text            npc_ne_dish__FP12npc_ne_class */
 static void npc_ne_dish(npc_ne_class* i_this) {
     i_this->mCcDisableTimer = 10;
 
@@ -2196,7 +2146,6 @@ static void npc_ne_dish(npc_ne_class* i_this) {
     }
 }
 
-/* 80A8F1B0-80A8F278 0065D0 00C8+00 1/1 0/0 0/0 .text            npc_ne_message__FP12npc_ne_class */
 static void npc_ne_message(npc_ne_class* i_this) {
     i_this->mLookMode = npc_ne_class::LOOK_PLAYER;
 
@@ -2218,7 +2167,6 @@ static void npc_ne_message(npc_ne_class* i_this) {
     }
 }
 
-/* 80A8F278-80A903E8 006698 1170+00 2/1 0/0 0/0 .text            action__FP12npc_ne_class */
 static void action(npc_ne_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
@@ -2652,7 +2600,6 @@ static void action(npc_ne_class* i_this) {
     }
 }
 
-/* 80A903E8-80A90E28 007808 0A40+00 1/1 0/0 0/0 .text            demo_camera__FP12npc_ne_class */
 static void demo_camera(npc_ne_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
@@ -2898,7 +2845,6 @@ static void demo_camera(npc_ne_class* i_this) {
     }
 }
 
-/* 80A90E28-80A91004 008248 01DC+00 1/1 0/0 0/0 .text            message__FP12npc_ne_class */
 static int message(npc_ne_class* i_this) {
     if (i_this->mResName == "Npc_net" && !dComIfGs_wolfeye_effect_check()) {
         i_this->mMessageState = 0;
@@ -2939,8 +2885,6 @@ static int message(npc_ne_class* i_this) {
     }
 }
 
-/* 80A91004-80A9172C 008424 0728+00 2/1 0/0 0/0 .text            daNpc_Ne_Execute__FP12npc_ne_class
- */
 static int daNpc_Ne_Execute(npc_ne_class* i_this) {
     if (cDmrNowMidnaTalk() && !fopAcM_checkCarryNow(i_this)) {
         return 1;
@@ -3074,14 +3018,10 @@ static int daNpc_Ne_Execute(npc_ne_class* i_this) {
     return 1;
 }
 
-/* 80A9172C-80A91734 008B4C 0008+00 1/0 0/0 0/0 .text            daNpc_Ne_IsDelete__FP12npc_ne_class
- */
 static int daNpc_Ne_IsDelete(npc_ne_class* i_this) {
     return 1;
 }
 
-/* 80A91734-80A91798 008B54 0064+00 1/0 0/0 0/0 .text            daNpc_Ne_Delete__FP12npc_ne_class
- */
 static int daNpc_Ne_Delete(npc_ne_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, i_this->mResName);
     if (i_this->mHIOInit != 0) {
@@ -3093,7 +3033,6 @@ static int daNpc_Ne_Delete(npc_ne_class* i_this) {
     return 1;
 }
 
-/* 80A91798-80A91B40 008BB8 03A8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     npc_ne_class* _this = static_cast<npc_ne_class*>(i_this);
     _this->mpMorf =
@@ -3157,7 +3096,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80A91B88-80A92118 008FA8 0590+00 1/0 0/0 0/0 .text            daNpc_Ne_Create__FP10fopAc_ac_c */
 static cPhs__Step daNpc_Ne_Create(fopAc_ac_c* i_this) {
     npc_ne_class* _this = static_cast<npc_ne_class*>(i_this);
     fopAcM_ct(i_this, npc_ne_class);
@@ -3307,12 +3245,10 @@ static cPhs__Step daNpc_Ne_Create(fopAc_ac_c* i_this) {
 }
 
 
-/* 80A92118-80A92274 009538 015C+00 1/1 0/0 0/0 .text            __ct__12npc_ne_classFv */
 npc_ne_class::npc_ne_class() {
     /* empty function */
 }
 
-/* 80A929D0-80A929F0 -00001 0020+00 1/0 0/0 0/0 .data            l_daNpc_Ne_Method */
 static actor_method_class l_daNpc_Ne_Method = {
     (process_method_func)daNpc_Ne_Create,
     (process_method_func)daNpc_Ne_Delete,
@@ -3321,7 +3257,6 @@ static actor_method_class l_daNpc_Ne_Method = {
     (process_method_func)daNpc_Ne_Draw,
 };
 
-/* 80A929F0-80A92A20 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_NE */
 extern actor_process_profile_definition g_profile_NPC_NE = {
     fpcLy_CURRENT_e,
     7,

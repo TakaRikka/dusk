@@ -37,32 +37,32 @@ public:
         EVACT_OPEN_SHORT_e,
     };
 
-    /* 80496A18 */ void initBaseMtx();
-    /* 80496A54 */ void setBaseMtx();
-    /* 80496E3C */ int create1st();
-    /* 8049724C */ int demoProc();
-    /* 80497478 */ void openInit();
-    /* 804975EC */ void mode_proc_call();
-    /* 80497678 */ void mode_exec_wait();
-    /* 80497790 */ void mode_exec();
-    /* 8049780C */ void action();
-    /* 804978C8 */ void init_actionWait();
-    /* 804978D4 */ void actionWait();
-    /* 804978D8 */ void init_actionNotOpenDemo();
-    /* 804978E4 */ void actionNotOpenDemo();
-    /* 8049794C */ void init_actionOpenDemo();
-    /* 80497958 */ void actionOpenDemo();
-    /* 80497A0C */ void init_actionOpenWait();
-    /* 80497A18 */ void actionOpenWait();
-    /* 80497BD0 */ int setGetDemoItem();
-    /* 80497C60 */ BOOL boxCheck();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    int demoProc();
+    void openInit();
+    void mode_proc_call();
+    void mode_exec_wait();
+    void mode_exec();
+    void action();
+    void init_actionWait();
+    void actionWait();
+    void init_actionNotOpenDemo();
+    void actionNotOpenDemo();
+    void init_actionOpenDemo();
+    void actionOpenDemo();
+    void init_actionOpenWait();
+    void actionOpenWait();
+    int setGetDemoItem();
+    BOOL boxCheck();
 
-    /* 80496C20 */ virtual int CreateHeap();
-    /* 80496AB8 */ virtual int Create();
-    /* 80497500 */ virtual int Execute(Mtx**);
-    /* 80497DA0 */ virtual int Draw();
-    /* 80497E6C */ virtual int Delete();
-    /* 80498140 */ virtual BOOL checkSmallTbox() { return true; }
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
+    virtual BOOL checkSmallTbox() { return true; }
 
     u8 getModelType() { return fopAcM_GetParamBit(this, 8, 4); }
     u8 getItemNo() { return fopAcM_GetParamBit(this, 0, 8); }

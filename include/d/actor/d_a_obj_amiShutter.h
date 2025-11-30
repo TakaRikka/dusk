@@ -29,29 +29,29 @@ public:
     };
 
     daAmiShutter_c(): dEvLib_callback_c(this) {}
-    /* 80BA22E8 */ ~daAmiShutter_c() {}
+    ~daAmiShutter_c() {}
 
-    /* 80BA155C */ void setBaseMtx();
-    /* 80BA15E4 */ int CreateHeap();
-    /* 80BA1650 */ cPhs__Step create();
-    /* 80BA182C */ int Execute(Mtx**);
-    /* 80BA1888 */ void moveShutter();
-    /* 80BA1974 */ BOOL playerAreaCheck();
-    /* 80BA1B4C */ void init_modeWait();
-    /* 80BA1B58 */ void modeWait();
-    /* 80BA1BCC */ void init_modeWaitEvent();
-    /* 80BA1BD8 */ void modeWaitEvent();
-    /* 80BA1C90 */ bool eventStart();
-    /* 80BA1CB4 */ void init_modeClose();
-    /* 80BA1D48 */ void modeClose();
-    /* 80BA1DCC */ void init_modeCloseEvent();
-    /* 80BA1E60 */ void modeCloseEvent();
-    /* 80BA1EEC */ void init_modeCloseEnd();
-    /* 80BA1F7C */ void modeCloseEnd();
-    /* 80BA1F80 */ void init_modeOpen();
-    /* 80BA2004 */ void modeOpen();
-    /* 80BA2080 */ int Draw();
-    /* 80BA2124 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    int Execute(Mtx**);
+    void moveShutter();
+    BOOL playerAreaCheck();
+    void init_modeWait();
+    void modeWait();
+    void init_modeWaitEvent();
+    void modeWaitEvent();
+    bool eventStart();
+    void init_modeClose();
+    void modeClose();
+    void init_modeCloseEvent();
+    void modeCloseEvent();
+    void init_modeCloseEnd();
+    void modeCloseEnd();
+    void init_modeOpen();
+    void modeOpen();
+    int Draw();
+    int Delete();
 
     
     u8 getType() { return fopAcM_GetParamBit(this, 16, 4); }

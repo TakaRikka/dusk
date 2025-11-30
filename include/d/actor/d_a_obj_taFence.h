@@ -15,22 +15,22 @@
  */
 class daTaFence_c : public dBgS_MoveBgActor {
 public:
-    /* 80D04F8C */ void setBaseMtx();
-    /* 80D050A8 */ int create();
-    /* 80D055A0 */ void fenceProc();
-    /* 80D057C4 */ void init_modeWait();
-    /* 80D057D0 */ void modeWait();
-    /* 80D05A54 */ void init_modeMoveInit();
-    /* 80D05B5C */ void modeMoveInit();
-    /* 80D05B94 */ void init_modeMove();
-    /* 80D05CAC */ void modeMove();
-    /* 80D05D2C */ void init_modeMoveEnd();
-    /* 80D05E54 */ void modeMoveEnd();
+    void setBaseMtx();
+    int create();
+    void fenceProc();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMoveInit();
+    void modeMoveInit();
+    void init_modeMove();
+    void modeMove();
+    void init_modeMoveEnd();
+    void modeMoveEnd();
 
-    /* 80D0503C */ virtual int CreateHeap();
-    /* 80D05550 */ virtual int Execute(Mtx**);
-    /* 80D05E58 */ virtual int Draw();
-    /* 80D05EFC */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     static const dCcD_SrcGObjInf mCcDObjInfo;
     static dCcD_SrcCyl mCcDCyl;

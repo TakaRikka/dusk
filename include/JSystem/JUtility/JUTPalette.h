@@ -29,9 +29,9 @@ public:
         storeTLUT(tlutNo, p_tlutRes);
     }
 
-    /* 802DE890 */ void storeTLUT(_GXTlut, ResTLUT*);
-    /* 802DE91C */ void storeTLUT(_GXTlut, _GXTlutFmt, JUTTransparency, u16, void*);
-    /* 802DE95C */ bool load();
+    void storeTLUT(_GXTlut, ResTLUT*);
+    void storeTLUT(_GXTlut, _GXTlutFmt, JUTTransparency, u16, void*);
+    bool load();
 
     u8 getTlutName() const { return mTlutName; }
     u8 getFormat() const { return mFormat; }

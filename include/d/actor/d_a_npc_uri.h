@@ -20,7 +20,7 @@ struct daNpc_Uri_HIOParam {
 
 class daNpc_Uri_Param_c {
 public:
-    /* 80B2CD94 */ virtual ~daNpc_Uri_Param_c() {}
+    virtual ~daNpc_Uri_Param_c() {}
 
     static const daNpc_Uri_HIOParam m;
 };
@@ -64,65 +64,65 @@ public:
         TYPE_6,
     };
 
-    /* 80B267AC */ ~daNpc_Uri_c();
-    /* 80B268F8 */ int create();
-    /* 80B26BE4 */ int CreateHeap();
-    /* 80B2708C */ int Delete();
-    /* 80B270C0 */ int Execute();
-    /* 80B270E0 */ int Draw();
-    /* 80B27174 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B27194 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B271EC */ u8 getType();
-    /* 80B27260 */ int isDelete();
-    /* 80B272F0 */ void reset();
-    /* 80B27750 */ void afterJntAnm(int);
-    /* 80B27820 */ void setParam();
-    /* 80B27994 */ BOOL checkChangeEvt();
-    /* 80B27B3C */ void setAfterTalkMotion();
-    /* 80B27BF0 */ void srchActors();
-    /* 80B27C8C */ BOOL evtTalk();
-    /* 80B27D2C */ BOOL evtCutProc();
-    /* 80B27DF4 */ void action();
-    /* 80B27F14 */ void beforeMove();
-    /* 80B27FD8 */ void setAttnPos();
-    /* 80B28318 */ void setCollision();
-    /* 80B284D4 */ int drawDbgInfo();
-    /* 80B284DC */ void drawOtherMdl();
-    /* 80B285B4 */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80B285EC */ void changeBck(int*, int*);
-    /* 80B28618 */ void changeBtp(int*, int*);
-    /* 80B28644 */ int selectAction();
-    /* 80B28794 */ int chkAction(int (daNpc_Uri_c::*)(void*));
-    /* 80B287C0 */ int setAction(int (daNpc_Uri_c::*)(void*));
-    /* 80B28868 */ BOOL chkPlayerCarryBasket();
-    /* 80B288DC */ BOOL chkPlayerGetWoodShield();
-    /* 80B28910 */ int getTutorialCond(cXyz);
-    /* 80B28FB8 */ int cutConversation(int);
-    /* 80B29198 */ int cutStartCarryTutorial(int);
-    /* 80B293C0 */ int cutEndCarryTutorial(int);
-    /* 80B296B8 */ int cutConversationWithMoi(int);
-    /* 80B2985C */ int cutFindWolf(int);
-    /* 80B29BA4 */ int cutMeetingAgain(int);
-    /* 80B29EA0 */ int krun(void*);
-    /* 80B2A1B4 */ int wait(void*);
-    /* 80B2AB60 */ int walk(void*);
-    /* 80B2B24C */ int sitWait(void*);
-    /* 80B2B7C0 */ int talk(void*);
-    /* 80B2CC64 */ daNpc_Uri_c(daNpcT_faceMotionAnmData_c const* param_1,
+    ~daNpc_Uri_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    bool afterSetMotionAnm(int, int, f32, int);
+    void changeBck(int*, int*);
+    void changeBtp(int*, int*);
+    int selectAction();
+    int chkAction(int (daNpc_Uri_c::*)(void*));
+    int setAction(int (daNpc_Uri_c::*)(void*));
+    BOOL chkPlayerCarryBasket();
+    BOOL chkPlayerGetWoodShield();
+    int getTutorialCond(cXyz);
+    int cutConversation(int);
+    int cutStartCarryTutorial(int);
+    int cutEndCarryTutorial(int);
+    int cutConversationWithMoi(int);
+    int cutFindWolf(int);
+    int cutMeetingAgain(int);
+    int krun(void*);
+    int wait(void*);
+    int walk(void*);
+    int sitWait(void*);
+    int talk(void*);
+    daNpc_Uri_c(daNpcT_faceMotionAnmData_c const* param_1,
                                daNpcT_motionAnmData_c const* param_2,
                                daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3,
                                int param_4,
                                daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5,
                                int param_6, daNpcT_evtData_c const* param_7, char** param_8)
         : daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8) {}
-    /* 80B2CD44 */ u16 getEyeballMaterialNo() { return 2; }
-    /* 80B2CD4C */ s32 getHeadJointNo() { return 4; }
-    /* 80B2CD54 */ s32 getNeckJointNo() { return 3; }
-    /* 80B2CD5C */ s32 getBackboneJointNo() { return 1; }
-    /* 80B2CD64 */ BOOL checkChangeJoint(int param_0) { return param_0 == 4; }
-    /* 80B2CD74 */ BOOL checkRemoveJoint(int param_0) { return param_0 == 8; }
-    /* 80B2CD84 */ s32 getFootLJointNo() { return 25; }
-    /* 80B2CD8C */ s32 getFootRJointNo() { return 28; }
+    u16 getEyeballMaterialNo() { return 2; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return 1; }
+    BOOL checkChangeJoint(int param_0) { return param_0 == 4; }
+    BOOL checkRemoveJoint(int param_0) { return param_0 == 8; }
+    s32 getFootLJointNo() { return 25; }
+    s32 getFootRJointNo() { return 28; }
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

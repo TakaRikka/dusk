@@ -91,7 +91,6 @@ enum Type {
     /* 0x4 */ TYPE_V_SHUTTER,
 };
 
-/* 80C47AB8-80C47B2C 000078 0074+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjKshtr_cFv */
 void daObjKshtr_c::initBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -100,7 +99,6 @@ void daObjKshtr_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80C47B2C-80C47C14 0000EC 00E8+00 2/2 0/0 0/0 .text            setBaseMtx__12daObjKshtr_cFv */
 void daObjKshtr_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + field_0x5fc, current.pos.z);
 
@@ -119,27 +117,22 @@ void daObjKshtr_c::setBaseMtx() {
     }
 }
 
-/* 80C49CA8-80C49CBC 000000 0014+00 8/8 0/0 0/0 .rodata          l_bmd */
 static int const l_bmd[5] = {
     BMDR_S_SHUT_ROU, BMDR_S_SHUT_ROU, BMDR_DOOR_SHUTTER_00, BMDR_K_L3BDOOR, BMDR_V_SHUTTER,
 };
 
-/* 80C49CBC-80C49CD0 000014 0014+00 1/1 0/0 0/0 .rodata          l_dzb */
 static int const l_dzb[5] = {
     DZB_S_SHUT00_S_SHUT_ROU, DZB_S_SHUT00_S_SHUT_ROU, DZB_LV3SHUT00_S_SHUT_ROU, DZB_K_L3BDOOR, DZB_V_SHUTTER,
 };
 
-/* 80C49CD0-80C49CE4 000028 0014+00 1/1 0/0 0/0 .rodata          l_heap_size */
 static u32 const l_heap_size[5] = {
     0x1300, 0x1300, 0x1300, 0x1300, 0x20D0,
 };
 
-/* 80C49CE4-80C49CFC 00003C 0018+00 0/1 0/0 0/0 .rodata          l_cull_box */
 static f32 const l_cull_box[6] = {
     -450.0f, 0.0f, -50.0f, 450.0f, 700.0f, 150.0f,
 };
 
-/* 80C49E80-80C49E94 -00001 0014+00 3/4 0/0 0/0 .data            l_arcName */
 static char* l_arcName[5] = {
     "S_shut00",
     "S_shut00",
@@ -148,7 +141,6 @@ static char* l_arcName[5] = {
     "V_Shutter",
 };
 
-/* 80C49E94-80C49EBC -00001 0028+00 1/2 0/0 0/0 .data            l_anmName */
 static char* l_anmName[10] = {
     "oj_DoorOpC.bck",
     "md_oj_DoorOpC.bck",
@@ -162,7 +154,6 @@ static char* l_anmName[10] = {
     "V_Shutter.bck",
 };
 
-/* 80C49EBC-80C49EE4 -00001 0028+00 1/1 0/0 0/0 .data            l_eventName */
 static char* l_eventName[10] = {
     "KEY_JAIL_00",
     "KEY_JAIL_WOLF_00",
@@ -176,7 +167,6 @@ static char* l_eventName[10] = {
     NULL,
 };
 
-/* 80C47C14-80C47E54 0001D4 0240+00 1/0 0/0 0/0 .text            Create__12daObjKshtr_cFv */
 int daObjKshtr_c::Create() {
     if (!fopAcM_isSwitch(this, mSwNo)) {
         field_0x5ec = false;
@@ -238,14 +228,12 @@ int daObjKshtr_c::Create() {
     return 1;
 }
 
-/* 80C47E54-80C47EA8 000414 0054+00 4/4 0/0 0/0 .text            offDzb__12daObjKshtr_cFv */
 void daObjKshtr_c::offDzb() {
     if (mpBgW != NULL && mpBgW->ChkUsed()) {
         dComIfG_Bgsp().Release(mpBgW);
     }
 }
 
-/* 80C49EE4-80C49EF8 -00001 0014+00 3/4 0/0 0/0 .data            l_anmArcName */
 static char* l_anmArcName[5] = {
     "DoorY00",
     "DoorY00",
@@ -254,7 +242,6 @@ static char* l_anmArcName[5] = {
     "V_Shutter",
 };
 
-/* 80C47EA8-80C48008 000468 0160+00 1/0 0/0 0/0 .text            CreateHeap__12daObjKshtr_cFv */
 int daObjKshtr_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName[mType], l_bmd[mType]);
 
@@ -292,7 +279,6 @@ int daObjKshtr_c::CreateHeap() {
     return 1;
 }
 
-/* 80C48050-80C48148 000610 00F8+00 1/1 0/0 0/0 .text            initKey__12daObjKshtr_cFv */
 void daObjKshtr_c::initKey() {
     if (!field_0x61e) {
         if ((int)checkKey() != 0) {
@@ -318,7 +304,6 @@ void daObjKshtr_c::initKey() {
     }
 }
 
-/* 80C48148-80C4827C 000708 0134+00 1/0 0/0 0/0 .text            phase_0__12daObjKshtr_cFv */
 cPhs__Step daObjKshtr_c::phase_0() {
     if (!field_0x619) {
         mHomeAngleZ = home.angle.z;
@@ -372,7 +357,6 @@ cPhs__Step daObjKshtr_c::phase_0() {
     }
 }
 
-/* 80C4827C-80C48320 00083C 00A4+00 1/0 0/0 0/0 .text            phase_1__12daObjKshtr_cFv */
 cPhs__Step daObjKshtr_c::phase_1() {
     if (mKeyHoleId != fpcM_ERROR_PROCESS_ID_e) {
         obj_keyhole_class* keyhole_p = (obj_keyhole_class*)fopAcM_SearchByID(mKeyHoleId);
@@ -393,12 +377,10 @@ cPhs__Step daObjKshtr_c::phase_1() {
     return cPhs_INIT_e;
 }
 
-/* 80C48320-80C48328 0008E0 0008+00 1/0 0/0 0/0 .text            phase_2__12daObjKshtr_cFv */
 cPhs__Step daObjKshtr_c::phase_2() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80C48328-80C483CC 0008E8 00A4+00 1/1 0/0 0/0 .text            create1st__12daObjKshtr_cFv */
 cPhs__Step daObjKshtr_c::create1st() {
     static daObjKshtr_c::PhaseFunc l_ct_func[3] = {
         &daObjKshtr_c::phase_0,
@@ -409,7 +391,6 @@ cPhs__Step daObjKshtr_c::create1st() {
     return (this->*l_ct_func[mPhase])();
 }
 
-/* 80C483CC-80C48470 00098C 00A4+00 1/1 0/0 0/0 .text            event_proc_call__12daObjKshtr_cFv */
 void daObjKshtr_c::event_proc_call() {
     static daObjKshtr_c::ActionFunc l_func[3] = {
         &daObjKshtr_c::actionWaitEvent,
@@ -420,7 +401,6 @@ void daObjKshtr_c::event_proc_call() {
     (this->*l_func[mAction])();
 }
 
-/* 80C48470-80C4852C 000A30 00BC+00 1/1 0/0 0/0 .text            event_proc_call2__12daObjKshtr_cFv */
 void daObjKshtr_c::event_proc_call2() {
     static daObjKshtr_c::ActionFunc l_func[4] = {
         &daObjKshtr_c::actionWaitEvent2,
@@ -432,7 +412,6 @@ void daObjKshtr_c::event_proc_call2() {
     (this->*l_func[mAction])();
 }
 
-/* 80C4852C-80C48590 000AEC 0064+00 1/0 0/0 0/0 .text            Execute__12daObjKshtr_cFPPA3_A4_f */
 int daObjKshtr_c::Execute(Mtx** param_1) {
     if (checkKey() == 1) {
         event_proc_call();
@@ -446,7 +425,6 @@ int daObjKshtr_c::Execute(Mtx** param_1) {
     return 1;
 }
 
-/* 80C48590-80C48708 000B50 0178+00 1/1 0/0 0/0 .text            checkArea__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::checkArea() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp78;
@@ -480,7 +458,6 @@ BOOL daObjKshtr_c::checkArea() {
     return FALSE;
 }
 
-/* 80C48708-80C48798 000CC8 0090+00 1/1 0/0 0/0 .text            checkOpen__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::checkOpen() {
     if (mType == TYPE_L3BOSS) {
         if (!dComIfGs_isDungeonItemBossKey()) {
@@ -497,7 +474,6 @@ BOOL daObjKshtr_c::checkOpen() {
     return true;
 }
 
-/* 80C48798-80C487E0 000D58 0048+00 1/1 0/0 0/0 .text            getDemoAction__12daObjKshtr_cFv */
 int daObjKshtr_c::getDemoAction() {
     static char* action_table[6] = {
         "WAIT",
@@ -511,7 +487,6 @@ int daObjKshtr_c::getDemoAction() {
     return dComIfGp_evmng_getMyActIdx(mStaffId, action_table, 6, 0, 0);
 }
 
-/* 80C487E0-80C489E0 000DA0 0200+00 1/1 0/0 0/0 .text            demoProc2__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::demoProc2() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     mStaffId = dComIfGp_evmng_getMyStaffId("JAIL_DOOR", NULL, 0);
@@ -586,7 +561,6 @@ BOOL daObjKshtr_c::demoProc2() {
     return FALSE;
 }
 
-/* 80C489E0-80C48AC8 000FA0 00E8+00 1/1 0/0 0/0 .text            adjustmentProc__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::adjustmentProc() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     cXyz sp18, sp24;
@@ -606,7 +580,6 @@ BOOL daObjKshtr_c::adjustmentProc() {
     return FALSE;
 }
 
-/* 80C48AC8-80C48B84 001088 00BC+00 1/1 0/0 0/0 .text            keyUnlockInit__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::keyUnlockInit() {
     obj_keyhole_class* keyhole_p = (obj_keyhole_class*)fopAcM_SearchByID(mKeyHoleId);
     if (keyhole_p != NULL) {
@@ -619,7 +592,6 @@ BOOL daObjKshtr_c::keyUnlockInit() {
     return TRUE;
 }
 
-/* 80C48B84-80C48BD8 001144 0054+00 1/1 0/0 0/0 .text            keyUnlock__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::keyUnlock() {
     obj_keyhole_class* keyhole_p = (obj_keyhole_class*)fopAcM_SearchByID(mKeyHoleId);
     if (keyhole_p != NULL && keyhole_p->checkOpenEnd()) {
@@ -629,7 +601,6 @@ BOOL daObjKshtr_c::keyUnlock() {
     return FALSE;
 }
 
-/* 80C48BD8-80C48D0C 001198 0134+00 2/2 0/0 0/0 .text            openInit__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::openInit() {
     field_0x5fc = 0.0f;
     speedF = 0.0f;
@@ -655,7 +626,6 @@ BOOL daObjKshtr_c::openInit() {
     return TRUE;
 }
 
-/* 80C48D0C-80C48D80 0012CC 0074+00 2/2 0/0 0/0 .text            openProc__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::openProc() {
     switch (mType) {
         case TYPE_0:
@@ -677,7 +647,6 @@ BOOL daObjKshtr_c::openProc() {
     }
 }
 
-/* 80C48D80-80C48F94 001340 0214+00 1/1 0/0 0/0 .text            openProc_type1__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::openProc_type1() {
     BOOL rv = mpBckAnm->play();
 
@@ -698,7 +667,6 @@ BOOL daObjKshtr_c::openProc_type1() {
     return rv;
 }
 
-/* 80C48F94-80C490F8 001554 0164+00 1/1 0/0 0/0 .text            openProc_type2__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::openProc_type2() {
     static u16 const l_eff_id[5] = {
         0x8762,
@@ -725,13 +693,11 @@ BOOL daObjKshtr_c::openProc_type2() {
     return rv;
 }
 
-/* 80C490F8-80C49158 0016B8 0060+00 1/1 0/0 0/0 .text openProc_typeL3Boss__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::openProc_typeL3Boss() {
     cLib_chaseF(&speedF, 30.0f, 4.0f);
     return cLib_chaseF(&field_0x5fc, -450.0f, speedF) != 0 ? TRUE : FALSE;
 }
 
-/* 80C49158-80C4925C 001718 0104+00 1/1 0/0 0/0 .text            demoProc__12daObjKshtr_cFv */
 void daObjKshtr_c::demoProc() {
     static daObjKshtr_c::DemoFunc l_demoProc[2] = {
         &daObjKshtr_c::demoJail1,
@@ -750,7 +716,6 @@ void daObjKshtr_c::demoProc() {
     }
 }
 
-/* 80C4925C-80C494A8 00181C 024C+00 1/0 0/0 0/0 .text            demoJail1__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::demoJail1() {
     obj_keyhole_class* keyhole_p = (obj_keyhole_class*)fopAcM_SearchByID(mKeyHoleId);
 
@@ -794,7 +759,6 @@ BOOL daObjKshtr_c::demoJail1() {
     return FALSE;
 }
 
-/* 80C494A8-80C495A4 001A68 00FC+00 1/0 0/0 0/0 .text            demoJail2__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::demoJail2() {
     obj_keyhole_class* keyhole_p = (obj_keyhole_class*)fopAcM_SearchByID(mKeyHoleId);
 
@@ -833,7 +797,6 @@ BOOL daObjKshtr_c::demoJail2() {
     return FALSE;
 }
 
-/* 80C495A4-80C496C8 001B64 0124+00 1/0 0/0 0/0 .text            demoJail11__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::demoJail11() {
     switch (mDemoMode) {
         case 0:
@@ -857,12 +820,10 @@ BOOL daObjKshtr_c::demoJail11() {
     return FALSE;
 }
 
-/* 80C496C8-80C496D0 001C88 0008+00 1/0 0/0 0/0 .text            demoJail21__12daObjKshtr_cFv */
 BOOL daObjKshtr_c::demoJail21() {
     return TRUE;
 }
 
-/* 80C496D0-80C497A0 001C90 00D0+00 4/4 0/0 0/0 .text            anmInit__12daObjKshtr_cFv */
 void daObjKshtr_c::anmInit() {
     if (mpBckAnm != NULL) {
         BOOL isWolf = FALSE;
@@ -887,7 +848,6 @@ void daObjKshtr_c::anmInit() {
     }
 }
 
-/* 80C497A0-80C49880 001D60 00E0+00 1/0 0/0 0/0 .text            actionWaitEvent__12daObjKshtr_cFv */
 void daObjKshtr_c::actionWaitEvent() {
     if (eventInfo.checkCommandDoor()) {
         setAction(1);
@@ -910,7 +870,6 @@ void daObjKshtr_c::actionWaitEvent() {
     }
 }
 
-/* 80C49880-80C49914 001E40 0094+00 1/0 0/0 0/0 .text            actionEvent__12daObjKshtr_cFv */
 void daObjKshtr_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(field_0x5f0[mIsWolf])) {
         setAction(2);
@@ -924,12 +883,10 @@ void daObjKshtr_c::actionEvent() {
     }
 }
 
-/* 80C49914-80C49918 001ED4 0004+00 1/0 0/0 0/0 .text            actionDead__12daObjKshtr_cFv */
 void daObjKshtr_c::actionDead() {
     /* empty function */
 }
 
-/* 80C49918-80C499CC 001ED8 00B4+00 1/0 0/0 0/0 .text            actionWaitEvent2__12daObjKshtr_cFv */
 void daObjKshtr_c::actionWaitEvent2() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(1);
@@ -945,14 +902,12 @@ void daObjKshtr_c::actionWaitEvent2() {
     }
 }
 
-/* 80C499CC-80C49A08 001F8C 003C+00 1/0 0/0 0/0 .text            actionOpen__12daObjKshtr_cFv */
 void daObjKshtr_c::actionOpen() {
     if (openProc()) {
         setAction(2);
     }
 }
 
-/* 80C49A08-80C49A70 001FC8 0068+00 1/0 0/0 0/0 .text            actionEvent2__12daObjKshtr_cFv */
 void daObjKshtr_c::actionEvent2() {
     if (dComIfGp_evmng_endCheck(field_0x5f0[0])) {
         setAction(2);
@@ -962,12 +917,10 @@ void daObjKshtr_c::actionEvent2() {
     }
 }
 
-/* 80C49A70-80C49A74 002030 0004+00 1/0 0/0 0/0 .text            actionDead2__12daObjKshtr_cFv */
 void daObjKshtr_c::actionDead2() {
     /* empty function */
 }
 
-/* 80C49A74-80C49B4C 002034 00D8+00 1/0 0/0 0/0 .text            Draw__12daObjKshtr_cFv */
 int daObjKshtr_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -984,7 +937,6 @@ int daObjKshtr_c::Draw() {
     return 1;
 }
 
-/* 80C49B4C-80C49BB8 00210C 006C+00 1/0 0/0 0/0 .text            Delete__12daObjKshtr_cFv */
 int daObjKshtr_c::Delete() {
     dComIfG_resDelete(&mPhase1, l_arcName[mType]);
 
@@ -995,28 +947,23 @@ int daObjKshtr_c::Delete() {
     return 1;
 }
 
-/* 80C49BB8-80C49C18 002178 0060+00 1/0 0/0 0/0 .text            daObjKshtr_create1st__FP12daObjKshtr_c */
 static int daObjKshtr_create1st(daObjKshtr_c* i_this) {
     fopAcM_ct(i_this, daObjKshtr_c);
     return i_this->create1st();
 }
 
-/* 80C49C18-80C49C38 0021D8 0020+00 1/0 0/0 0/0 .text            daObjKshtr_MoveBGDelete__FP12daObjKshtr_c */
 static int daObjKshtr_MoveBGDelete(daObjKshtr_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C49C38-80C49C58 0021F8 0020+00 1/0 0/0 0/0 .text            daObjKshtr_MoveBGExecute__FP12daObjKshtr_c */
 static int daObjKshtr_MoveBGExecute(daObjKshtr_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C49C58-80C49C84 002218 002C+00 1/0 0/0 0/0 .text            daObjKshtr_MoveBGDraw__FP12daObjKshtr_c */
 static int daObjKshtr_MoveBGDraw(daObjKshtr_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C4A060-80C4A080 -00001 0020+00 1/0 0/0 0/0 .data            daObjKshtr_METHODS */
 static actor_method_class daObjKshtr_METHODS = {
     (process_method_func)daObjKshtr_create1st,
     (process_method_func)daObjKshtr_MoveBGDelete,
@@ -1025,7 +972,6 @@ static actor_method_class daObjKshtr_METHODS = {
     (process_method_func)daObjKshtr_MoveBGDraw,
 };
 
-/* 80C4A080-80C4A0B0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Kshutter */
 extern actor_process_profile_definition g_profile_Obj_Kshutter = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

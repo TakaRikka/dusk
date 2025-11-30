@@ -11,10 +11,10 @@ class J3DUClipper {
 public:
     J3DUClipper() { init(); }
     virtual ~J3DUClipper() {}
-    /* 80273778 */ void init();
-    /* 8027378C */ void calcViewFrustum();
-    /* 802738FC */ int clip(f32 const (*)[4], Vec, f32) const;
-    /* 80273A44 */ int clip(f32 const (*)[4], Vec*, Vec*) const;
+    void init();
+    void calcViewFrustum();
+    int clip(f32 const (*)[4], Vec, f32) const;
+    int clip(f32 const (*)[4], Vec*, Vec*) const;
 
     void setFovy(f32 fovy) { mFovY = fovy; }
     void setAspect(f32 aspect) { mAspect = aspect; }

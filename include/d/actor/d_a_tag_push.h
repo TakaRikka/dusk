@@ -6,13 +6,13 @@
 
 class daTag_Push_c : public fopAc_ac_c {
 public:
-    /* 804902B8 */ static void* srchActor(void*, void*);
-    /* 80490418 */ int create();
-    /* 804904D4 */ int Delete();
-    /* 804904DC */ int Execute();
-    /* 804906BC */ int Draw();
-    /* 804906C4 */ int isDelete();
-    /* 80490724 */ int chkPointInArea(cXyz);
+    static void* srchActor(void*, void*);
+    int create();
+    int Delete();
+    int Execute();
+    int Draw();
+    int isDelete();
+    int chkPointInArea(cXyz);
 
     u32 getId() {
         u32 id = fopAcM_GetParam(this) >> 0x18;
@@ -56,7 +56,7 @@ public:
 
     /* 0x568 */ daNpcT_ActorMngr_c mActorMngr;
 
-    /* 804908CC */ virtual ~daTag_Push_c() {}
+    virtual ~daTag_Push_c() {}
 };
 
 STATIC_ASSERT(sizeof(daTag_Push_c) == 0x574);

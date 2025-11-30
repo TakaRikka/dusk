@@ -17,35 +17,27 @@ enum daCstaF_Action {
     ACTION_FALL,
 };
 
-/* 804DD958-804DD978 000078 0020+00 1/1 0/0 0/0 .text
- * daCstaF_rideCB__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c            */
 static void daCstaF_rideCB(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_rideActor) {
     if (i_rideActor == (fopAc_ac_c*)daPy_getLinkPlayerActorClass()) {
         ((daCstaF_c*)i_this)->onPlayerRide();
     }
 }
 
-/* 804DF8B8-804DF8C4 000000 000C+00 7/7 0/0 0/0 .rodata          @3765 */
 static u8 const lit_3765[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 804DF8C4-804DF8CC 00000C 0006+02 0/1 0/0 0/0 .rodata          l_arcNameF */
 static const char l_arcNameF[] = "CstaF";
 
-/* 804DF8CC-804DF8D4 000014 0007+01 0/2 0/0 0/0 .rodata          l_arcNameFB */
 static const char l_arcNameFB[] = "CstaFB";
 
-/* 804DF8D4-804DF8DC 00001C 0008+00 1/1 0/0 0/0 .rodata          l_spStageName */
 static const char l_spStageName[8] = "R_SP209";
 
-/* 804DF8DC-804DF8EC 000024 0010+00 0/2 0/0 0/0 .rodata          m_bckIdxTable__9daCstaF_c */
 const daCstaF_c::BckTbl daCstaF_c::m_bckIdxTable[] = {
     {9, 9, 8, 7},
     {9, 9, 8, 7}
 };
 
-/* 804DD978-804DDB48 000098 01D0+00 1/0 0/0 0/0 .text            CreateHeap__9daCstaF_cFv */
 int daCstaF_c::CreateHeap() {
     struct data {
         u16 bmd_idx;
@@ -86,14 +78,12 @@ int daCstaF_c::CreateHeap() {
     return 1;
 }
 
-/* 804DDB48-804DDBB4 000268 006C+00 2/2 0/0 0/0 .text            checkCoverModel__9daCstaF_cFv */
 BOOL daCstaF_c::checkCoverModel() {
             /* dSv_event_flag_c::F_0303 - Kakariko Village - Saw Shad's spell 2 */
     return !dComIfGs_isEventBit(0x2540)
            && strcmp(dComIfGp_getStartStageName(), l_spStageName) == 0;
 }
 
-/* 804DF9A0-804DF9E4 000000 0044+00 1/1 0/0 0/0 .data            l_cylSrc */
 static dCcD_SrcCyl l_cylSrc = {
     {
         {0x0, {{AT_TYPE_THROW_OBJ, 0x1, 0x12}, {0xd97afddf, 0x11}, 0x79}}, // mObj
@@ -108,7 +98,6 @@ static dCcD_SrcCyl l_cylSrc = {
     } // mCyl
 };
 
-/* 804DDBB4-804DE0C4 0002D4 0510+00 1/1 0/0 0/0 .text            create__9daCstaF_cFv */
 int daCstaF_c::create() {
     fopAcM_ct(this, daCstaF_c);
 
@@ -204,12 +193,10 @@ int daCstaF_c::create() {
     return phase_state;
 }
 
-/* 804DE2D8-804DE2F8 0009F8 0020+00 1/0 0/0 0/0 .text            daCstaF_Create__FP10fopAc_ac_c */
 static int daCstaF_Create(fopAc_ac_c* i_this) {
     return ((daCstaF_c*)i_this)->create();
 }
 
-/* 804DE2F8-804DE51C 000A18 0224+00 1/1 0/0 0/0 .text            __dt__9daCstaF_cFv */
 daCstaF_c::~daCstaF_c() {
     m_sound.deleteObject();
 
@@ -220,14 +207,12 @@ daCstaF_c::~daCstaF_c() {
     dComIfG_resDelete(&m_phase, m_arcName);
 }
 
-/* 804DE51C-804DE558 000C3C 003C+00 1/0 0/0 0/0 .text            daCstaF_Delete__FP9daCstaF_c */
 static int daCstaF_Delete(daCstaF_c* a_this) {
     a_this->MoveBGDelete();
     a_this->~daCstaF_c();
     return 1;
 }
 
-/* 804DE558-804DE5F0 000C78 0098+00 2/2 0/0 0/0 .text            setRoomInfo__9daCstaF_cFv */
 void daCstaF_c::setRoomInfo() {
     int room_no;
     if (m_acch.GetGroundH() != -G_CM3D_F_INF) {
@@ -243,7 +228,6 @@ void daCstaF_c::setRoomInfo() {
     fopAcM_SetRoomNo(this, room_no);
 }
 
-/* 804DE5F0-804DE698 000D10 00A8+00 2/2 0/0 0/0 .text            setMatrix__9daCstaF_cFv */
 void daCstaF_c::setMatrix() {
     static const Vec fieldLocalBallPos = {0.0f, 200.0f, 0.0f};
 
@@ -257,7 +241,6 @@ void daCstaF_c::setMatrix() {
     eyePos = attention_info.position;
 }
 
-/* 804DE698-804DEB18 000DB8 0480+00 1/1 0/0 0/0 .text            posMove__9daCstaF_cFv */
 void daCstaF_c::posMove() {
     BOOL pre_gnd_hit = m_acch.ChkGroundHit();
     m_acch.OffLineCheck();
@@ -336,7 +319,6 @@ void daCstaF_c::posMove() {
     }
 }
 
-/* 804DEB60-804DEC14 001280 00B4+00 1/1 0/0 0/0 .text            setCollision__9daCstaF_cFv */
 void daCstaF_c::setCollision() {
     m_cc_stts.Move();
 
@@ -355,10 +337,8 @@ void daCstaF_c::setCollision() {
     dComIfG_Ccsp()->Set(&m_cc_cyl);
 }
 
-/* 804DFAD8-804DFADC 000000 0004+00 2/2 0/0 0/0 .bss             l_cancelOffset */
 static f32 l_cancelOffset = JMAFastSqrt(73225.008f) + 100.0f;
 
-/* 804DEC14-804DF0D8 001334 04C4+00 1/1 0/0 0/0 .text            setAnime__9daCstaF_cFv */
 void daCstaF_c::setAnime() {
     daAlink_c* player = daAlink_getAlinkActorClass();
 
@@ -454,13 +434,11 @@ void daCstaF_c::setAnime() {
     m_brk.play();
 }
 
-/* 804DF0D8-804DF150 0017F8 0078+00 3/3 0/0 0/0 .text            initBrk__9daCstaF_cFUs */
 BOOL daCstaF_c::initBrk(u16 i_brkIdx) {
     void* pbrk = dComIfG_getObjectRes(m_arcName, i_brkIdx);
     m_brk.init(mp_model->getModelData(), (J3DAnmTevRegKey*)pbrk, 1, -1, 1.0f, 0, -1);
 }
 
-/* 804DF150-804DF1A4 001870 0054+00 2/2 0/0 0/0 .text            initStopBrkBtk__9daCstaF_cFv */
 void daCstaF_c::initStopBrkBtk() {
     static const u16 brkIdx[] = {16, 17};
 
@@ -469,7 +447,6 @@ void daCstaF_c::initStopBrkBtk() {
     m_isStop = TRUE;
 }
 
-/* 804DF1A4-804DF37C 0018C4 01D8+00 1/1 0/0 0/0 .text            initStartBrkBtk__9daCstaF_cFv */
 void daCstaF_c::initStartBrkBtk() {
     m_isStartBrkBtkInit = TRUE;
     m_btk.setFrame(0.0f);
@@ -490,7 +467,6 @@ void daCstaF_c::initStartBrkBtk() {
     }
 }
 
-/* 804DF37C-804DF6C4 001A9C 0348+00 1/0 0/0 0/0 .text            Execute__9daCstaF_cFPPA3_A4_f */
 int daCstaF_c::Execute(Mtx** param_0) {
     daAlink_c* player = daAlink_getAlinkActorClass();
 
@@ -567,12 +543,10 @@ int daCstaF_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 804DF6C4-804DF6E4 001DE4 0020+00 1/0 0/0 0/0 .text            daCstaF_Execute__FP9daCstaF_c */
 static int daCstaF_Execute(daCstaF_c* a_this) {
     return a_this->MoveBGExecute();
 }
 
-/* 804DF6E4-804DF800 001E04 011C+00 1/0 0/0 0/0 .text            Draw__9daCstaF_cFv */
 int daCstaF_c::Draw() {
     g_env_light.settingTevStruct(8, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mp_model, &tevStr);
@@ -590,12 +564,10 @@ int daCstaF_c::Draw() {
     return 1;
 }
 
-/* 804DF800-804DF82C 001F20 002C+00 1/0 0/0 0/0 .text            daCstaF_Draw__FP9daCstaF_c */
 static int daCstaF_Draw(daCstaF_c* a_this) {
     return a_this->MoveBGDraw();
 }
 
-/* 804DF9E4-804DFA04 -00001 0020+00 1/0 0/0 0/0 .data            l_daCstaF_Method */
 static actor_method_class l_daCstaF_Method = {
     (process_method_func)daCstaF_Create,
     (process_method_func)daCstaF_Delete,
@@ -604,7 +576,6 @@ static actor_method_class l_daCstaF_Method = {
     (process_method_func)daCstaF_Draw,
 };
 
-/* 804DFA04-804DFA34 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_CSTAF */
 extern actor_process_profile_definition g_profile_CSTAF = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID

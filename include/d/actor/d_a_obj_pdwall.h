@@ -14,15 +14,15 @@
  */
 class daObjPDwall_c : public dBgS_MoveBgActor, public request_of_phase_process_class {
 public:
-    /* 80CAC7F8 */ int create1st();
-    /* 80CAC8DC */ void setMtx();
+    int create1st();
+    void setMtx();
 
-    /* 80CACA44 */ virtual int CreateHeap();
-    /* 80CACBA8 */ virtual int Create();
-    /* 80CACCE0 */ virtual int Execute(Mtx**);
-    /* 80CACF14 */ virtual int Draw();
-    /* 80CACFD4 */ virtual int Delete();
-    /* 80CAD140 */ virtual ~daObjPDwall_c() {}
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
+    virtual ~daObjPDwall_c() {}
 
     int getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
 

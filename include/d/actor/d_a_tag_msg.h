@@ -11,24 +11,24 @@ public:
 
 class daTag_Msg_Param_c {
 public:
-    /* 80490128 */ virtual ~daTag_Msg_Param_c() {}
+    virtual ~daTag_Msg_Param_c() {}
 
     static const daTag_Msg_HIO_Param_c m;
 };
 
 class daTag_Msg_c : public fopAc_ac_c {
 public:
-    /* 8048F7F8 */ virtual ~daTag_Msg_c();
-    /* 8048F878 */ int create();
-    /* 8048F954 */ int createHeap();
-    /* 8048F9B4 */ int destroy();
-    /* 8048F9E8 */ int execute();
-    /* 8048FC68 */ int draw();
-    /* 8048FC70 */ BOOL rangeCheck();
-    /* 8048FE18 */ BOOL otherCheck();
-    /* 8048FF8C */ char* getResName();
-    /* 8048FF9C */ void getParam();
-    /* 8049004C */ BOOL cut_speak(int, BOOL);
+    virtual ~daTag_Msg_c();
+    int create();
+    int createHeap();
+    int destroy();
+    int execute();
+    int draw();
+    BOOL rangeCheck();
+    BOOL otherCheck();
+    char* getResName();
+    void getParam();
+    BOOL cut_speak(int, BOOL);
 
     static char* mEvtCutTBL[2];
 

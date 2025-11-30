@@ -10,8 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 80860638-808607F8 000078 01C0+00 1/0 0/0 0/0 .text            daKytag15_Draw__FP13kytag15_class
- */
 static int daKytag15_Draw(kytag15_class* i_this) {
     cXyz scale;
     mDoMtx_stack_c::transS(0.0f, 0.0f, 0.0f);
@@ -53,7 +51,6 @@ static int daKytag15_Draw(kytag15_class* i_this) {
     return 1;
 }
 
-/* 808607F8-808608B0 000238 00B8+00 1/0 0/0 0/0 .text daKytag15_Execute__FP13kytag15_class */
 static int daKytag15_Execute(kytag15_class* i_this) {
     if (!i_this->field_0x58c) {
         if (!dKy_daynight_check()) {
@@ -68,19 +65,15 @@ static int daKytag15_Execute(kytag15_class* i_this) {
     return 1;
 }
 
-/* 808608B0-808608B8 0002F0 0008+00 1/0 0/0 0/0 .text daKytag15_IsDelete__FP13kytag15_class */
 static int daKytag15_IsDelete(kytag15_class* i_this) {
     return 1;
 }
 
-/* 808608B8-808608E8 0002F8 0030+00 1/0 0/0 0/0 .text            daKytag15_Delete__FP13kytag15_class
- */
 static int daKytag15_Delete(kytag15_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Kytag15");
     return 1;
 }
 
-/* 808608E8-808609B4 000328 00CC+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     kytag15_class* a_this = (kytag15_class*)i_this;
 
@@ -98,7 +91,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 808609B4-80860AF0 0003F4 013C+00 1/0 0/0 0/0 .text            daKytag15_Create__FP10fopAc_ac_c */
 static int daKytag15_Create(fopAc_ac_c* i_this) {
     kytag15_class* a_this = (kytag15_class*)i_this;
 
@@ -130,14 +122,12 @@ static int daKytag15_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 80860B78-80860B98 -00001 0020+00 1/0 0/0 0/0 .data            l_daKytag15_Method */
 static actor_method_class l_daKytag15_Method = {
     (process_method_func)daKytag15_Create,  (process_method_func)daKytag15_Delete,
     (process_method_func)daKytag15_Execute, (process_method_func)daKytag15_IsDelete,
     (process_method_func)daKytag15_Draw,
 };
 
-/* 80860B98-80860BC8 -00001 0030+00 0/1 0/0 1/0 .data            g_profile_KYTAG15 */
 extern actor_process_profile_definition g_profile_KYTAG15 = {
     fpcLy_CURRENT_e,
     7,

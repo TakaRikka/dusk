@@ -7,7 +7,6 @@
 
 #include "d/actor/d_a_coach_fire.h"
 
-/* 806583E8-806583F8 000000 0010+00 3/3 0/0 0/0 .rodata          M_attr__13daCoachFire_c */
 CoachFireAttr const daCoachFire_c::M_attr = {
     50.0f,  // radius
     4.0f,   // field_0x04
@@ -18,7 +17,6 @@ CoachFireAttr const daCoachFire_c::M_attr = {
     700.0f, // pow
 };
 
-/* 80657B78-80657C48 000078 00D0+00 1/1 0/0 0/0 .text            create_init__13daCoachFire_cFv */
 void daCoachFire_c::create_init() {
     fopAcM_setStageLayer(this);
     fopAcM_setCullSizeBox(this, -100.0, -10.0, -100.0, 100.0, 200.0, 100.0);
@@ -36,7 +34,6 @@ void daCoachFire_c::create_init() {
     initCcSphere();
 }
 
-/* 80657C48-80657CA8 000148 0060+00 1/1 0/0 0/0 .text            initBaseMtx__13daCoachFire_cFv */
 void daCoachFire_c::initBaseMtx() {
     daNpcCoach_c* coach = (daNpcCoach_c*)fpcM_SearchByID(parentActorID);
     if (coach != NULL) {
@@ -46,7 +43,6 @@ void daCoachFire_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80657CA8-80657D2C 0001A8 0084+00 1/1 0/0 0/0 .text            setBaseMtx__13daCoachFire_cFv */
 void daCoachFire_c::setBaseMtx() {
     if (mpMtx != NULL) {
         mDoMtx_stack_c::copy(*mpMtx);
@@ -56,10 +52,7 @@ void daCoachFire_c::setBaseMtx() {
     }
 }
 
-/* 80658408-80658448 000020 0040+00 1/1 0/0 0/0 .rodata
- * ccSphSrc$localstatic3$initCcSphere__13daCoachFire_cFv        */
 
-/* 80657D2C-80657D9C 00022C 0070+00 1/1 0/0 0/0 .text            initCcSphere__13daCoachFire_cFv */
 void daCoachFire_c::initCcSphere() {
     static const dCcD_SrcSph ccSphSrc = {
         {
@@ -92,8 +85,6 @@ int daCoachFire_c::draw() {
     return 1;
 }
 
-/* 80657D9C-80657EA0 00029C 0104+00 1/0 0/0 0/0 .text            daCoachFire_Draw__FP13daCoachFire_c
- */
 static int daCoachFire_Draw(daCoachFire_c* i_this) {
     return i_this->draw();
 }
@@ -141,12 +132,10 @@ int daCoachFire_c::execute() {
     return 1;
 }
 
-/* 80657EA0-80658094 0003A0 01F4+00 1/0 0/0 0/0 .text daCoachFire_Execute__FP13daCoachFire_c */
 static int daCoachFire_Execute(daCoachFire_c* i_this) {
     return i_this->execute();
 }
 
-/* 80658094-8065809C 000594 0008+00 1/0 0/0 0/0 .text daCoachFire_IsDelete__FP13daCoachFire_c */
 static bool daCoachFire_IsDelete(daCoachFire_c* i_this) {
     return true;
 }
@@ -155,31 +144,25 @@ daCoachFire_c::~daCoachFire_c() {
     dKy_plight_cut(&mLightInfluence);
 }
 
-/* 8065809C-806581C0 00059C 0124+00 1/0 0/0 0/0 .text daCoachFire_Delete__FP13daCoachFire_c */
 static int daCoachFire_Delete(daCoachFire_c* i_this) {
     i_this->~daCoachFire_c();
     return 1;
 }
 
-/* 806581C0-806582AC 0006C0 00EC+00 1/0 0/0 0/0 .text            daCoachFire_Create__FP10fopAc_ac_c
- */
 static int daCoachFire_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, daCoachFire_c);
     static_cast<daCoachFire_c*>(i_this)->create_init();
     return cPhs_COMPLEATE_e;
 }
 
-/* 80658454-8065845A 00006C 0006+00 0/0 0/0 0/0 .rodata          None */
 static char* stringBase_80658454 = "Coach";
 
-/* 8065845C-8065847C -00001 0020+00 1/0 0/0 0/0 .data            l_daCoachFire_Method */
 static actor_method_class l_daCoachFire_Method = {
     (process_method_func)daCoachFire_Create,  (process_method_func)daCoachFire_Delete,
     (process_method_func)daCoachFire_Execute, (process_method_func)daCoachFire_IsDelete,
     (process_method_func)daCoachFire_Draw,
 };
 
-/* 8065847C-806584AC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_COACH_FIRE */
 extern actor_process_profile_definition g_profile_COACH_FIRE = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

@@ -72,8 +72,8 @@ STATIC_ASSERT(sizeof(obj_keyhole_class) == 0x2CB8);
 
 class daObj_Keyhole_HIO_c : public JORReflexible {
 public:
-    /* 80C4124C */ daObj_Keyhole_HIO_c();
-    /* 80C4394C */ virtual ~daObj_Keyhole_HIO_c() {}
+    daObj_Keyhole_HIO_c();
+    virtual ~daObj_Keyhole_HIO_c() {}
 
     void genMessage(JORMContext*);
 

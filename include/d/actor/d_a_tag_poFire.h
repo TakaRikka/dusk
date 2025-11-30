@@ -6,11 +6,11 @@
 
 class daTagPoFire_c : public fopAc_ac_c {
 public:
-    /* 80D5DB38 */ void setBaseMtx();
-    /* 80D5DB90 */ int create();
-    /* 80D5DBF0 */ int Execute();
-    /* 80D5DC20 */ int Draw();
-    /* 80D5DC28 */ int Delete();
+    void setBaseMtx();
+    int create();
+    int Execute();
+    int Draw();
+    int Delete();
 
     void setFireFlag(u8 flag) { field_0x569 = flag; }
 
@@ -21,8 +21,8 @@ public:
 
 class daTagPoFire_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80D5DACC */ daTagPoFire_HIO_c();
-    /* 80D5DCB0 */ virtual ~daTagPoFire_HIO_c();
+    daTagPoFire_HIO_c();
+    virtual ~daTagPoFire_HIO_c();
 
     void genMessage(JORMContext*);
 

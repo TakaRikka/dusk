@@ -26,23 +26,23 @@ public:
         LEVEL_DOWN_B,
     };
 
-    /* 80C13540 */ void setBaseMtx();
-    /* 80C13618 */ int CreateHeap();
-    /* 80C139E4 */ int create();
-    /* 80C13DB0 */ daGrdWater_c();
-    /* 80C13FEC */ int Execute(Mtx**);
-    /* 80C14194 */ void init_modeWait();
-    /* 80C141A0 */ void modeWait();
-    /* 80C141A4 */ void init_modeLevelUpA();
-    /* 80C1423C */ void modeLevelUpA();
-    /* 80C142AC */ void init_modeLevelDownA();
-    /* 80C14320 */ void modeLevelDownA();
-    /* 80C1437C */ void init_modeLevelUpB();
-    /* 80C14414 */ void modeLevelUpB();
-    /* 80C14484 */ void init_modeLevelDownB();
-    /* 80C144F8 */ void modeLevelDownB();
-    /* 80C14554 */ int Draw();
-    /* 80C147EC */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    daGrdWater_c();
+    int Execute(Mtx**);
+    void init_modeWait();
+    void modeWait();
+    void init_modeLevelUpA();
+    void modeLevelUpA();
+    void init_modeLevelDownA();
+    void modeLevelDownA();
+    void init_modeLevelUpB();
+    void modeLevelUpB();
+    void init_modeLevelDownB();
+    void modeLevelDownB();
+    int Draw();
+    int Delete();
 
     u8 getSw() { return fopAcM_GetParamBit(this, 8, 8); }
     u8 getSw2() { return fopAcM_GetParamBit(this, 16, 8); }
@@ -73,8 +73,8 @@ STATIC_ASSERT(sizeof(daGrdWater_c) == 0x6f4);
 
 class daGrdWater_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C134AC */ daGrdWater_HIO_c();
-    /* 80C148A8 */ virtual ~daGrdWater_HIO_c() {}
+    daGrdWater_HIO_c();
+    virtual ~daGrdWater_HIO_c() {}
 
     void genMessage(JORMContext*);
 

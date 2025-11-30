@@ -25,21 +25,21 @@ public:
         /* 0x4C */ u8 field_0x4c;
     };
 
-    /* 80CF8768 */ int Create();
-    /* 80CF89C0 */ int CreateHeap();
-    /* 80CF8B48 */ int create1st();
-    /* 80CF8ED0 */ int execute();
-    /* 80CF94E4 */ void getChainBasePos(cXyz*);
-    /* 80CF9500 */ void chain_control();
-    /* 80CF99C0 */ void chain_control2();
-    /* 80CFA05C */ void initChainMtx();
-    /* 80CFA124 */ void setChainMtx();
-    /* 80CFA4A8 */ void chain_count_control();
-    /* 80CFAD50 */ void setTension();
-    /* 80CFB450 */ int getTopChainNo();
-    /* 80CFB464 */ BOOL checkPlayerPull();
-    /* 80CFB53C */ int draw();
-    /* 80CFB5E8 */ int _delete();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int execute();
+    void getChainBasePos(cXyz*);
+    void chain_control();
+    void chain_control2();
+    void initChainMtx();
+    void setChainMtx();
+    void chain_count_control();
+    void setTension();
+    int getTopChainNo();
+    BOOL checkPlayerPull();
+    int draw();
+    int _delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwbit2() { return (mHookshotLength & 0xff00) >> 8; }
@@ -57,7 +57,7 @@ public:
     bool checkCarry() { return mCarry == 1; }
     void setRatioForChandelier(f32 ratio) { mRatio = ratio; }
 
-    /* 80C665A4 */ BOOL checkTight() {
+    BOOL checkTight() {
         if (mCarry != 0 && (home.roomNo == 4 || home.roomNo == 6) && mOutNum >= field_0xa69 &&
             field_0xa9c == 0)
         {

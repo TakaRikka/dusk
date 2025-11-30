@@ -11,8 +11,8 @@
 
 class daE_KG_HIO_c {
 public:
-    /* 806F7EEC */ daE_KG_HIO_c();
-    /* 806F9EE8 */ virtual ~daE_KG_HIO_c() {}
+    daE_KG_HIO_c();
+    virtual ~daE_KG_HIO_c() {}
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ f32 mSize;
@@ -20,7 +20,6 @@ public:
     /* 0x10 */ f32 mCheckRange;
 };
 
-/* 806F7EEC-806F7F24 0000EC 0038+00 1/1 0/0 0/0 .text            __ct__12daE_KG_HIO_cFv */
 daE_KG_HIO_c::daE_KG_HIO_c() {
     field_0x4 = -1;
     mSize = 1.3f;
@@ -28,14 +27,12 @@ daE_KG_HIO_c::daE_KG_HIO_c() {
     mCheckRange = 600.0f;
 }
 
-/* 806F7F24-806F7FD0 000124 00AC+00 6/6 0/0 0/0 .text            anm_init__FP10e_kg_classifUcf */
 static void anm_init(e_kg_class* i_this, int i_index, f32 i_morf, u8 i_attr, f32 i_rate) {
     J3DAnmTransform* anm = (J3DAnmTransform*) dComIfG_getObjectRes("E_kg", i_index);
     i_this->mpMorf->setAnm(anm, i_attr, i_morf, i_rate, 0.0f, -1.0f);
     i_this->mResIndex = i_index;
 }
 
-/* 806F7FD0-806F80D0 0001D0 0100+00 1/0 0/0 0/0 .text            daE_KG_Draw__FP10e_kg_class */
 static int daE_KG_Draw(e_kg_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
@@ -55,8 +52,6 @@ static int daE_KG_Draw(e_kg_class* i_this) {
     return 1;
 }
 
-/* 806F80D0-806F81A8 0002D0 00D8+00 1/1 0/0 0/0 .text other_bg_check__FP10e_kg_classP10fopAc_ac_c
- */
 static int other_bg_check(e_kg_class* i_this, fopAc_ac_c* i_player) {
     fopAc_ac_c* _this = (fopAc_ac_c*)i_this;
     dBgS_LinChk lin_chk;
@@ -75,7 +70,6 @@ static int other_bg_check(e_kg_class* i_this, fopAc_ac_c* i_player) {
     }
 }
 
-/* 806F81A8-806F8224 0003A8 007C+00 2/2 0/0 0/0 .text            pl_check__FP10e_kg_classfs */
 static int pl_check(e_kg_class* i_this, f32 i_check_range, s16 i_s16) {
     fopAc_ac_c* i_player = dComIfGp_getPlayer(0);
     if (i_this->mPlayerDist < i_check_range) {
@@ -90,7 +84,6 @@ static int pl_check(e_kg_class* i_this, f32 i_check_range, s16 i_s16) {
     return 0;
 }
 
-/* 806F8224-806F8328 000424 0104+00 1/1 0/0 0/0 .text            damage_check__FP10e_kg_class */
 static void damage_check(e_kg_class* i_this) {
     dComIfGp_getPlayer(0);
     if (i_this->field_0x69c == 0) {
@@ -130,7 +123,6 @@ static void damage_check(e_kg_class* i_this) {
     }
 }
 
-/* 806F8328-806F8434 000528 010C+00 1/1 0/0 0/0 .text            way_bg_check__FP10e_kg_classf */
 static int way_bg_check(e_kg_class* i_this, f32 i_f32) {
     fopAc_ac_c* _this = (fopAc_ac_c*)i_this;
     dBgS_LinChk lin_chk;
@@ -153,13 +145,10 @@ static int way_bg_check(e_kg_class* i_this, f32 i_f32) {
     }
 }
 
-/* 806FA5E8-806FA5EC 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 lbl_204_bss_8;
 
-/* 806FA5F8-806FA60C 000018 0014+00 5/5 0/0 0/0 .bss             l_HIO */
 static daE_KG_HIO_c l_HIO;
 
-/* 806F8434-806F8714 000634 02E0+00 1/1 0/0 0/0 .text            e_kg_move__FP10e_kg_class */
 static void e_kg_move(e_kg_class* i_this) {
     int frame = i_this->mpMorf->getFrame();
     f32 tgt_val = 0.0f;
@@ -222,7 +211,6 @@ static void e_kg_move(e_kg_class* i_this) {
     }
 }
 
-/* 806F8714-806F8A40 000914 032C+00 1/1 0/0 0/0 .text            e_kg_attack__FP10e_kg_class */
 static int e_kg_attack(e_kg_class* i_this) {
     int frame = i_this->mpMorf->getFrame();
     f32 next_speed = 0.0f;
@@ -318,7 +306,6 @@ static int e_kg_attack(e_kg_class* i_this) {
     return ret_val;
 }
 
-/* 806F8A40-806F8B50 000C40 0110+00 1/1 0/0 0/0 .text            e_kg_back__FP10e_kg_class */
 static void e_kg_back(e_kg_class* i_this) {
     switch (i_this->field_0x678) {
         case 0: {
@@ -350,7 +337,6 @@ static void e_kg_back(e_kg_class* i_this) {
     }
 }
 
-/* 806F8B50-806F8C90 000D50 0140+00 1/1 0/0 0/0 .text            e_kg_s_damage__FP10e_kg_class */
 static void e_kg_s_damage(e_kg_class* i_this) {
     switch (i_this->field_0x678) {
         case 0: {
@@ -383,7 +369,6 @@ static void e_kg_s_damage(e_kg_class* i_this) {
     }
 }
 
-/* 806F8C90-806F8F04 000E90 0274+00 1/1 0/0 0/0 .text            e_kg_damage__FP10e_kg_class */
 static void e_kg_damage(e_kg_class* i_this) {
     i_this->field_0x69c = 6;
     switch (i_this->field_0x678) {
@@ -445,7 +430,6 @@ static void e_kg_damage(e_kg_class* i_this) {
     }
 }
 
-/* 806F8F04-806F90F8 001104 01F4+00 1/1 0/0 0/0 .text            e_kg_roof__FP10e_kg_class */
 static void e_kg_roof(e_kg_class* i_this) {
     if ((i_this->field_0x674 & 0xF) == 0 && cM_rndF(1.0f) < 0.5f) {
         i_this->mSound.startCreatureVoice(Z2SE_EN_KG_V_WAIT, -1);
@@ -492,7 +476,6 @@ static void e_kg_roof(e_kg_class* i_this) {
     }
 }
 
-/* 806F90F8-806F9400 0012F8 0308+00 2/1 0/0 0/0 .text            action__FP10e_kg_class */
 static void action(e_kg_class* i_this) {
     fopAc_ac_c* actor_this = i_this;
     cXyz my_vec_0;
@@ -593,7 +576,6 @@ static void action(e_kg_class* i_this) {
     setMidnaBindEffect(i_this, &i_this->mSound, &i_this->eyePos, &eff_size);
 }
 
-/* 806F9400-806F94D0 001600 00D0+00 1/1 0/0 0/0 .text            anm_se_set__FP10e_kg_class */
 static void anm_se_set(e_kg_class* i_this) {
     if (i_this->mResIndex == 0xF && (i_this->mpMorf->checkFrame(3.0f) || i_this->mpMorf->checkFrame(9.0f)
                                   || i_this->mpMorf->checkFrame(16.0f) || i_this->mpMorf->checkFrame(23.0f))) {
@@ -601,7 +583,6 @@ static void anm_se_set(e_kg_class* i_this) {
     }
 }
 
-/* 806F94D0-806F97A8 0016D0 02D8+00 2/1 0/0 0/0 .text            daE_KG_Execute__FP10e_kg_class */
 static int daE_KG_Execute(e_kg_class* i_this) {
     cXyz my_vec_0;
     cXyz my_vec_1;
@@ -656,12 +637,10 @@ static int daE_KG_Execute(e_kg_class* i_this) {
     return 1;
 }
 
-/* 806F97A8-806F97B0 0019A8 0008+00 1/0 0/0 0/0 .text            daE_KG_IsDelete__FP10e_kg_class */
 static int daE_KG_IsDelete(e_kg_class* i_this) {
     return 1;
 }
 
-/* 806F97B0-806F9818 0019B0 0068+00 1/0 0/0 0/0 .text            daE_KG_Delete__FP10e_kg_class */
 static int daE_KG_Delete(e_kg_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_kg");
     if (i_this->field_0xa70) {
@@ -675,7 +654,6 @@ static int daE_KG_Delete(e_kg_class* i_this) {
     return 1;
 }
 
-/* 806F9818-806F99B8 001A18 01A0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_kg_class* a_this = (e_kg_class*) i_this;
     a_this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_kg", 0x12), NULL, NULL,
@@ -694,7 +672,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return (!a_this->mpBtp->init(a_this->mpMorf->getModel()->getModelData(), btk, TRUE, 0, 1.0f, 0, -1)) ? cPhs_ERROR_e : 1;
 }
 
-/* 806F9A00-806F9CD4 001C00 02D4+00 1/0 0/0 0/0 .text            daE_KG_Create__FP10fopAc_ac_c */
 static int daE_KG_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph cc_sph_src = {
         {
@@ -758,7 +735,6 @@ static int daE_KG_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 806FA518-806FA538 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_KG_Method */
 static actor_method_class l_daE_KG_Method = {
     (process_method_func)daE_KG_Create,
     (process_method_func)daE_KG_Delete,
@@ -767,7 +743,6 @@ static actor_method_class l_daE_KG_Method = {
     (process_method_func)daE_KG_Draw,
 };
 
-/* 806FA538-806FA568 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_KG */
 extern actor_process_profile_definition g_profile_E_KG = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

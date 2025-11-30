@@ -20,37 +20,37 @@ public:
         /* 3 */ PROC_MOVE_MOVE,
     };
 
-    /* 801F7224 */ dMenu_Skill_c(JKRExpHeap*, STControl*, CSTControl*);
-    /* 801F763C */ void _create();
-    /* 801F7718 */ void _move();
-    /* 801F77B0 */ void _draw();
-    /* 801F7950 */ bool isSync();
-    /* 801F7978 */ void skill_init_calc();
-    /* 801F79EC */ void init();
-    /* 801F7A40 */ int _open();
-    /* 801F7C1C */ int _close();
-    /* 801F7D58 */ void wait_init();
-    /* 801F7D94 */ void wait_move();
-    /* 801F7F24 */ void read_open_init();
-    /* 801F7FF8 */ void read_open_move();
-    /* 801F8114 */ void read_move_init();
-    /* 801F8150 */ void read_move_move();
-    /* 801F8218 */ void read_close_init();
-    /* 801F826C */ void read_close_move();
-    /* 801F8388 */ void screenSetMenu();
-    /* 801F8A18 */ void screenSetLetter();
-    /* 801F8D20 */ void screenSetDoIcon();
-    /* 801F8E9C */ void setCursorPos();
-    /* 801F8F28 */ void changeActiveColor();
-    /* 801F9144 */ void setPageText();
-    /* 801F9260 */ void setAButtonString(u16);
-    /* 801F9310 */ void setBButtonString(u16);
-    /* 801F93C0 */ void setNameString(u16);
-    /* 801F9470 */ u8 getSkillNum();
-    /* 801F9500 */ void setHIO(bool);
+    dMenu_Skill_c(JKRExpHeap*, STControl*, CSTControl*);
+    void _create();
+    void _move();
+    void _draw();
+    bool isSync();
+    void skill_init_calc();
+    void init();
+    int _open();
+    int _close();
+    void wait_init();
+    void wait_move();
+    void read_open_init();
+    void read_open_move();
+    void read_move_init();
+    void read_move_move();
+    void read_close_init();
+    void read_close_move();
+    void screenSetMenu();
+    void screenSetLetter();
+    void screenSetDoIcon();
+    void setCursorPos();
+    void changeActiveColor();
+    void setPageText();
+    void setAButtonString(u16);
+    void setBButtonString(u16);
+    void setNameString(u16);
+    u8 getSkillNum();
+    void setHIO(bool);
 
-    /* 801F9A08 */ virtual void draw() { _draw(); }
-    /* 801F7348 */ virtual ~dMenu_Skill_c();
+    virtual void draw() { _draw(); }
+    virtual ~dMenu_Skill_c();
 
     u8 getStatus() { return mStatus; }
 

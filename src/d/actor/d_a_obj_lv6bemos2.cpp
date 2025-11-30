@@ -54,7 +54,6 @@ enum Particle {
     /* 0x890C */ ZL2_SMOKE00_IA8 = 0x890C,
 };
 
-/* 80C7E1B8-80C7E30C 000078 0154+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         int jntNo = i_joint->getJntNo();
@@ -82,13 +81,10 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80C81C2C-80C81C38 000000 000C+00 9/9 0/0 0/0 .rodata          l_eye_offset */
 static f32 const l_eye_offset[3] = {0.0f, 430.0f, 80.0f};
 
-/* 80C81C38-80C81C44 00000C 000C+00 0/1 0/0 0/0 .rodata          l_beam_offsetPos */
 static f32 const l_beam_offsetPos[3] = {0.0f, 98.0f, 125.0f};
 
-/* 80C7E30C-80C7E374 0001CC 0068+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::initBaseMtx() {
     cXyz sp18(0.5f, 0.5f, 1.0f);
     mBeamosModel->setBaseScale(scale);
@@ -96,7 +92,6 @@ void daObjLv6Bm_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80C7E374-80C7E448 000234 00D4+00 2/2 0/0 0/0 .text            setBaseMtx__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -111,28 +106,20 @@ void daObjLv6Bm_c::setBaseMtx() {
     mBeamEffectModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C81D24-80C81D28 -00001 0004+00 9/10 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "E_bm6";
 
-/* 80C81D28-80C81D2C -00001 0004+00 0/1 0/0 0/0 .data            l_eye_matName */
 static char* l_eye_matName = "bm6_eye";
 
-/* 80C81D2C-80C81D30 -00001 0004+00 0/1 0/0 0/0 .data            l_head_joint */
 static char* l_head_joint = "head";
 
-/* 80C81D30-80C81D34 -00001 0004+00 0/1 0/0 0/0 .data            l_bigGear_joint */
 static char* l_bigGear_joint = "cogRed";
 
-/* 80C81D34-80C81D38 -00001 0004+00 0/1 0/0 0/0 .data            l_smallGear0_joint */
 static char* l_smallGear0_joint = "cogBlue";
 
-/* 80C81D38-80C81D3C -00001 0004+00 0/1 0/0 0/0 .data            l_smallGear1_joint */
 static char* l_smallGear1_joint = "cogGreen";
 
-/* 80C81D3C-80C81D40 -00001 0004+00 0/1 0/0 0/0 .data            l_smallGear2_joint */
 static char* l_smallGear2_joint = "cogYellow";
 
-/* 80C81D40-80C81D54 00003C 0014+00 0/2 0/0 0/0 .data            l_joint_table */
 static char* l_joint_table[5] = {
     l_head_joint,
     l_bigGear_joint,
@@ -141,13 +128,11 @@ static char* l_joint_table[5] = {
     l_smallGear2_joint,
 };
 
-/* 80C81D54-80C81D6C 000050 0018+00 0/1 0/0 0/0 .data            l_cull_box */
 static f32 l_cull_box[6] = {
     -1200.0f, -100.0f, -1200.0f,
     1200.0f, 400.0f, 1200.0f,
 };
 
-/* 80C81D6C-80C81DAC 000068 0040+00 0/1 0/0 0/0 .data            l_sph_src */
 static dCcD_SrcSph l_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x402420, 0x11}, 0x58}}, // mObj
@@ -160,7 +145,6 @@ static dCcD_SrcSph l_sph_src = {
     } // mSphAttr
 };
 
-/* 80C81DAC-80C81DF8 0000A8 004C+00 0/1 0/0 0/0 .data            l_cps_src */
 static dCcD_SrcCps l_cps_src = {
     {
         {0x0, {{0x100, 0x1, 0x1d}, {0x0, 0x0}, 0x0}}, // mObj
@@ -173,7 +157,6 @@ static dCcD_SrcCps l_cps_src = {
     } // mCpsAttr
 };
 
-/* 80C81DF8-80C81E3C 0000F4 0044+00 0/1 0/0 0/0 .data            l_cyl_src */
 static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x1e}, {0x400, 0x11}, 0x18}}, // mObj
@@ -188,7 +171,6 @@ static dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 80C7E448-80C7E764 000308 031C+00 1/0 0/0 0/0 .text            Create__12daObjLv6Bm_cFv */
 int daObjLv6Bm_c::Create() {
     fopAcM_SetMtx(this, mBeamosModel->getBaseTRMtx());
     mStts.Init(0xFF, 0xFF, this);
@@ -250,7 +232,6 @@ int daObjLv6Bm_c::Create() {
     return 1;
 }
 
-/* 80C7E764-80C7EB34 000624 03D0+00 1/0 0/0 0/0 .text            CreateHeap__12daObjLv6Bm_cFv */
 int daObjLv6Bm_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, BMDE_BM6);
     JUT_ASSERT(620, modelData != NULL);
@@ -316,7 +297,6 @@ int daObjLv6Bm_c::CreateHeap() {
     return 1;
 }
 
-/* 80C7EB7C-80C7EC6C 000A3C 00F0+00 1/1 0/0 0/0 .text            create1st__12daObjLv6Bm_cFv */
 cPhs__Step daObjLv6Bm_c::create1st() {
     if (fopAcM_isSwitch(this, (u8)getSwNo3())) {
         OS_REPORT("Lv6ビーモス：既に破壊！<%d>\n", getSwNo3()); // Lv6 Beamos: Already destroyed! <%d>
@@ -347,7 +327,6 @@ cPhs__Step daObjLv6Bm_c::create1st() {
     return phase;
 }
 
-/* 80C7EC6C-80C7EE50 000B2C 01E4+00 1/0 0/0 0/0 .text            Execute__12daObjLv6Bm_cFPPA3_A4_f */
 int daObjLv6Bm_c::Execute(f32 (**param_1)[3][4]) {
     field_0xa20++;
 
@@ -385,7 +364,6 @@ int daObjLv6Bm_c::Execute(f32 (**param_1)[3][4]) {
     return 1;
 }
 
-/* 80C7EE50-80C7F2A4 000D10 0454+00 1/1 0/0 0/0 .text            action__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::action() {
     static daObjLv6Bm_c::actionFunc l_func[6] = {
         &daObjLv6Bm_c::actionSwWait,
@@ -465,7 +443,6 @@ void daObjLv6Bm_c::action() {
     dComIfG_Ccsp()->Set(&field_0x87c);
 }
 
-/* 80C7F2A4-80C7F8BC 001164 0618+00 1/1 0/0 0/0 .text            calcBeam__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::calcBeam() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     fopAcM_searchPlayerDistanceXZ(this);
@@ -527,7 +504,6 @@ void daObjLv6Bm_c::calcBeam() {
 
 }
 
-/* 80C7F904-80C7FA54 0017C4 0150+00 1/1 0/0 0/0 .text            checkFindPlayer__12daObjLv6Bm_cFv */
 int daObjLv6Bm_c::checkFindPlayer() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 searchDistance = getSearchDistance();
@@ -559,7 +535,6 @@ int daObjLv6Bm_c::checkFindPlayer() {
     return rv;
 }
 
-/* 80C7FA54-80C7FBA4 001914 0150+00 1/1 0/0 0/0 .text            checkSearchPlayer__12daObjLv6Bm_cFv */
 s8 daObjLv6Bm_c::checkSearchPlayer() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 searchDistance = getSearchDistance();
@@ -592,7 +567,6 @@ s8 daObjLv6Bm_c::checkSearchPlayer() {
     return rv;
 }
 
-/* 80C7FBA4-80C7FBFC 001A64 0058+00 2/2 0/0 0/0 .text            getSearchDistance__12daObjLv6Bm_cFv */
 f32 daObjLv6Bm_c::getSearchDistance() {
     f32 rv = 1000.0f;
     if (getSearchDist() != 15 && getSearchDist() != 0) {
@@ -601,7 +575,6 @@ f32 daObjLv6Bm_c::getSearchDistance() {
     return rv;
 }
 
-/* 80C7FBFC-80C7FC54 001ABC 0058+00 1/1 0/0 0/0 .text getBeamSearchDistance__12daObjLv6Bm_cFv */
 f32 daObjLv6Bm_c::getBeamSearchDistance() {
     f32 rv = 1000.0f;
     if (getBeamSearchDist() != 15 && getBeamSearchDist() != 0) {
@@ -610,7 +583,6 @@ f32 daObjLv6Bm_c::getBeamSearchDistance() {
     return rv;
 }
 
-/* 80C7FC54-80C7FD8C 001B14 0138+00 1/1 0/0 0/0 .text            effect_proc__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::effect_proc() {
     static daObjLv6Bm_c::effectFunc l_eff_func[2] = {
         &daObjLv6Bm_c::effectWait,
@@ -626,12 +598,10 @@ void daObjLv6Bm_c::effect_proc() {
     }
 }
 
-/* 80C7FD8C-80C7FD90 001C4C 0004+00 1/0 0/0 0/0 .text            effectWait__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::effectWait() {
     /* empty function */
 }
 
-/* 80C7FD90-80C7FEC4 001C50 0134+00 1/1 0/0 0/0 .text            initEffectSet0__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::initEffectSet0() {
     static u16 const eff_id[2] = {
         ZL2_ICEROCK_1,
@@ -653,7 +623,6 @@ void daObjLv6Bm_c::initEffectSet0() {
     field_0xa1a = 1;
 }
 
-/* 80C7FEC4-80C7FF78 001D84 00B4+00 1/0 0/0 0/0 .text            effectSet0__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::effectSet0() {
     if (field_0xa24 != NULL) {
         if (field_0xa24->isEnableDeleteEmitter()) {
@@ -666,7 +635,6 @@ void daObjLv6Bm_c::effectSet0() {
     }
 }
 
-/* 80C7FF78-80C7FFB8 001E38 0040+00 1/1 0/0 0/0 .text            initActionSwWait__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::initActionSwWait() {
     field_0x9d6 = 0;
     field_0x9d8 = 0;
@@ -678,7 +646,6 @@ void daObjLv6Bm_c::initActionSwWait() {
     field_0xa10 = 0;
 }
 
-/* 80C7FFB8-80C802AC 001E78 02F4+00 1/0 0/0 0/0 .text            actionSwWait__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::actionSwWait() {
     cXyz i_sePos;
     switch (mMode) {
@@ -717,13 +684,11 @@ void daObjLv6Bm_c::actionSwWait() {
     }
 }
 
-/* 80C802AC-80C802C0 00216C 0014+00 3/3 0/0 0/0 .text            initActionWarning__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::initActionWarning() {
     mMode = 0;
     field_0xa10 = 1;
 }
 
-/* 80C802C0-80C803D8 002180 0118+00 1/0 0/0 0/0 .text            actionWarning__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::actionWarning() {
     field_0x9d8 = 500;
     fopAcM_searchPlayerAngleY(this);
@@ -755,7 +720,6 @@ void daObjLv6Bm_c::actionWarning() {
     field_0x9d4 = field_0x9d2 + field_0x9da;
 }
 
-/* 80C803D8-80C80538 002298 0160+00 1/1 0/0 0/0 .text initActionFindPlayer__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::initActionFindPlayer() {
     mpBrkAnm->init(mBeamosModel->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, BRK_BM6_SERCH),
                    1, 0, 1.0f, 0, -1);
@@ -769,7 +733,6 @@ void daObjLv6Bm_c::initActionFindPlayer() {
     field_0xa10 = 2;
 }
 
-/* 80C80538-80C80684 0023F8 014C+00 1/0 0/0 0/0 .text            actionFindPlayer__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::actionFindPlayer() {
     switch (mMode) {
         case 0:
@@ -805,7 +768,6 @@ void daObjLv6Bm_c::actionFindPlayer() {
     }
 }
 
-/* 80C80684-80C8082C 002544 01A8+00 1/1 0/0 0/0 .text            initActionAttack__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::initActionAttack() {
     static u16 const eff_id[4] = {
         ZL2_GLOW02_3,
@@ -840,7 +802,6 @@ void daObjLv6Bm_c::initActionAttack() {
     field_0xa10 = 3;
 }
 
-/* 80C8082C-80C80F48 0026EC 071C+00 1/0 0/0 0/0 .text            actionAttack__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::actionAttack() {
     static u16 const l_eff_id[2] = {
         ZL2_GLOW02_1,
@@ -999,7 +960,6 @@ void daObjLv6Bm_c::actionAttack() {
     }
 }
 
-/* 80C80F48-80C81154 002E08 020C+00 1/1 0/0 0/0 .text            initActionDead__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::initActionDead() {
     if (field_0x9c2 > -0x4000 && field_0x9c2 < 0x4000) {
         field_0x9c4 = 0;
@@ -1040,7 +1000,6 @@ void daObjLv6Bm_c::initActionDead() {
     field_0xa10 = 4;
 }
 
-/* 80C81154-80C81428 003014 02D4+00 2/0 0/0 0/0 .text            actionDead__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::actionDead() {
     switch (mMode) {
         case 0:
@@ -1110,7 +1069,6 @@ void daObjLv6Bm_c::actionDead() {
     field_0x9d4 = field_0x9d2 + field_0x9da;
 }
 
-/* 80C81428-80C814FC 0032E8 00D4+00 1/1 0/0 0/0 .text            initActionEnd__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::initActionEnd() {
     mpBckAnm->init((J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, BCK_BM6_DOWN), 1, 0, 0.0f, 0, -1, true);
     mpBckAnm->setFrame(mpBckAnm->getEndFrame());
@@ -1120,12 +1078,10 @@ void daObjLv6Bm_c::initActionEnd() {
     field_0xa10 = 5;
 }
 
-/* 80C814FC-80C81500 0033BC 0004+00 1/0 0/0 0/0 .text            actionEnd__12daObjLv6Bm_cFv */
 void daObjLv6Bm_c::actionEnd() {
     /* empty function */
 }
 
-/* 80C81500-80C816A8 0033C0 01A8+00 1/0 0/0 0/0 .text            Draw__12daObjLv6Bm_cFv */
 int daObjLv6Bm_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mBeamosModel, &tevStr);
@@ -1155,7 +1111,6 @@ int daObjLv6Bm_c::Draw() {
     return 1;
 }
 
-/* 80C816A8-80C81808 003568 0160+00 1/0 0/0 0/0 .text            Delete__12daObjLv6Bm_cFv */
 int daObjLv6Bm_c::Delete() {
     if (field_0xa50 != NULL) {
         field_0xa50->becomeInvalidEmitter();
@@ -1192,28 +1147,23 @@ int daObjLv6Bm_c::Delete() {
     return 1;
 }
 
-/* 80C81808-80C819C8 0036C8 01C0+00 1/0 0/0 0/0 .text daObjLv6Bm_create1st__FP12daObjLv6Bm_c */
 static int daObjLv6Bm_create1st(daObjLv6Bm_c* i_this) {
     fopAcM_ct(i_this, daObjLv6Bm_c);
     return i_this->create1st();
 }
 
-/* 80C81AFC-80C81B1C 0039BC 0020+00 1/0 0/0 0/0 .text daObjLv6Bm_MoveBGDelete__FP12daObjLv6Bm_c */
 static int daObjLv6Bm_MoveBGDelete(daObjLv6Bm_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C81B1C-80C81B3C 0039DC 0020+00 1/0 0/0 0/0 .text daObjLv6Bm_MoveBGExecute__FP12daObjLv6Bm_c */
 static int daObjLv6Bm_MoveBGExecute(daObjLv6Bm_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C81B3C-80C81B68 0039FC 002C+00 1/0 0/0 0/0 .text daObjLv6Bm_MoveBGDraw__FP12daObjLv6Bm_c */
 static int daObjLv6Bm_MoveBGDraw(daObjLv6Bm_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C81F18-80C81F38 -00001 0020+00 1/0 0/0 0/0 .data            daObjLv6Bm_METHODS */
 static actor_method_class daObjLv6Bm_METHODS = {
     (process_method_func)daObjLv6Bm_create1st,
     (process_method_func)daObjLv6Bm_MoveBGDelete,
@@ -1222,7 +1172,6 @@ static actor_method_class daObjLv6Bm_METHODS = {
     (process_method_func)daObjLv6Bm_MoveBGDraw,
 };
 
-/* 80C81F38-80C81F68 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv6bemos2 */
 extern actor_process_profile_definition g_profile_Obj_Lv6bemos2 = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

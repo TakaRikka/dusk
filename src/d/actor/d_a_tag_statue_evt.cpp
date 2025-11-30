@@ -8,13 +8,11 @@
 #include "d/actor/d_a_tag_statue_evt.h"
 #include "d/d_com_inf_game.h"
 
-/* 805A6F58-805A6F78 000078 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     daTagStatue_c* tag_statue = static_cast<daTagStatue_c*>(i_this);
     return tag_statue->CreateHeap();
 }
 
-/* 805A6F78-805A6FC4 000098 004C+00 2/2 0/0 0/0 .text            s_s_sub__FPvPv */
 // Returns ID of Owl Statue corresponding to tag
 static void* s_s_sub(void* i_proc, void* unused) {
     if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_CSTAF) {
@@ -24,14 +22,11 @@ static void* s_s_sub(void* i_proc, void* unused) {
     return NULL;
 }
 
-/* 805A6FC4-805A7000 0000E4 003C+00 1/1 0/0 0/0 .text            initBaseMtx__13daTagStatue_cFv */
 void daTagStatue_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* ############################################################################################## */
-/* 805A8104-805A8110 000000 000C+00 4/4 0/0 0/0 .rodata          l_event_bit */
 static const u16 l_event_bit[6] = {
     dSv_event_flag_c::F_0791, /* Sky character - Sky character 1 */
     dSv_event_flag_c::F_0792, /* Sky character - Sky character 2 */
@@ -41,7 +36,6 @@ static const u16 l_event_bit[6] = {
     dSv_event_flag_c::F_0812, /* N/A - N/A */
 };
 
-/* 805A7000-805A7068 000120 0068+00 2/2 0/0 0/0 .text            setBaseMtx__13daTagStatue_cFv */
 void daTagStatue_c::setBaseMtx() {
     const cXyz& current_pos = fopAcM_GetPosition(this);
     mDoMtx_stack_c::transS(current_pos.x, 1.0f + current_pos.y, current_pos.z);
@@ -51,15 +45,12 @@ void daTagStatue_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
 }
 
-/* 805A821C-805A8220 -00001 0004+00 3/4 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Obj_cs_f";
 
-/* 805A8220-805A8228 000024 0006+02 1/1 0/0 0/0 .data            l_eff_id */
 static u16 l_eff_id[3] = {
     0x8C7E, 0x8C7F, 0x8C84
 };
 
-/* 805A8228-805A8240 -00001 0018+00 0/1 0/0 0/0 .data            l_eventName */
 static char* l_eventName[6] = {
     "SKY_LETTERS_00",   // Faron Woods
     "SKY_LETTERS_01",   // Gerudo Desert
@@ -69,7 +60,6 @@ static char* l_eventName[6] = {
     "SKY_LETTERS_05"    // Ruined Theatre
 };
 
-/* 805A8240-805A8258 -00001 0018+00 2/3 0/0 0/0 .data            l_evArcName */
 static char* l_evArcName[6] = {
     NULL,               // Faron Woods
     "cs_ev_01",         // Gerudo Desert
@@ -79,13 +69,11 @@ static char* l_evArcName[6] = {
     "cs_ev_05"          // Ruined Theatre
 };
 
-/* 805A8258-805A8270 00005C 0018+00 0/1 0/0 0/0 .data            l_cull_box */
 static Vec l_cull_box[2] = {
     {-300.0f, -100.0f, -300.0f}, // Min
     {300.0f, 400.0f, 300.0f}     // Max
 };
 
-/* 805A7068-805A7230 000188 01C8+00 1/1 0/0 0/0 .text            Create__13daTagStatue_cFv */
 cPhs__Step daTagStatue_c::Create() {
     if(fopAcM_isSwitch(this, getSwbit2())) {
         // Player already obtained Sky Character from this tag
@@ -131,7 +119,6 @@ cPhs__Step daTagStatue_c::Create() {
     return cPhs_LOADING_e;
 }
 
-/* 805A7230-805A73DC 000350 01AC+00 1/1 0/0 0/0 .text            CreateHeap__13daTagStatue_cFv */
 int daTagStatue_c::CreateHeap() {
     J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, 6));
     mpModel = mDoExt_J3DModel__create(model_data, 0x00080000, 0x11000284);
@@ -154,7 +141,6 @@ int daTagStatue_c::CreateHeap() {
     return 1;
 }
 
-/* 805A7424-805A7514 000544 00F0+00 1/2 0/0 0/0 .text            create__13daTagStatue_cFv */
 cPhs__Step daTagStatue_c::create() {
     fopAcM_ct(this, daTagStatue_c);
 
@@ -180,7 +166,6 @@ cPhs__Step daTagStatue_c::create() {
     return static_cast<cPhs__Step>(phase);
 }
 
-/* 805A7514-805A759C 000634 0088+00 1/1 0/0 0/0 .text            execute__13daTagStatue_cFv */
 int daTagStatue_c::execute() {
     if(static_cast<u32>(mOwlStatueId + (1 << 16)) == 0xFFFF) {
         base_process_class* found_owl_statue = fpcEx_Search(s_s_sub, this);
@@ -199,7 +184,6 @@ int daTagStatue_c::execute() {
     return 1;
 }
 
-/* 805A759C-805A76AC 0006BC 0110+00 1/1 0/0 0/0 .text            event_proc_call__13daTagStatue_cFv */
 void daTagStatue_c::event_proc_call() {
     typedef void (daTagStatue_c::*actionFunc)(void);
     static actionFunc l_func[4] = {&daTagStatue_c::actionWait, &daTagStatue_c::actionOrderEvent,
@@ -218,7 +202,6 @@ void daTagStatue_c::event_proc_call() {
     }
 }
 
-/* 805A76AC-805A7714 0007CC 0068+00 1/0 0/0 0/0 .text            actionWait__13daTagStatue_cFv */
 void daTagStatue_c::actionWait() {
     if(checkStartDemo()) {
         // Statue is far enough away and player is close enough to the tag for the cutscene to be ordered
@@ -228,7 +211,6 @@ void daTagStatue_c::actionWait() {
     }
 }
 
-/* 805A7714-805A77A0 000834 008C+00 1/0 0/0 0/0 .text            actionOrderEvent__13daTagStatue_cFv */
 void daTagStatue_c::actionOrderEvent() {
     if(eventInfo.checkCommandDemoAccrpt()) {
         // Cutscene order accepted
@@ -243,7 +225,6 @@ void daTagStatue_c::actionOrderEvent() {
     }
 }
 
-/* 805A77A0-805A7848 0008C0 00A8+00 1/0 0/0 0/0 .text            actionEvent__13daTagStatue_cFv */
 void daTagStatue_c::actionEvent() {
     if(dComIfGp_evmng_endCheck(mEventId)) {
         setAction(ACTION_DEAD_e);
@@ -256,7 +237,6 @@ void daTagStatue_c::actionEvent() {
     }
 }
 
-/* 805A7848-805A784C 000968 0004+00 1/0 0/0 0/0 .text            actionDead__13daTagStatue_cFv */
 void daTagStatue_c::actionDead() {
     /* empty function */
 }
@@ -267,7 +247,6 @@ static char* action_table[3] = {
     "ITEM"
 };
 
-/* 805A82DC-805A8324 0000E0 0048+00 0/1 0/0 0/0 .data            l_statue_pos$3943 */
 // Saved positions of Owl Statues for cutscenes
 static Vec l_statue_pos[6] = {
     {-17312.3007812f, -349.100006104f, -20523.1992188f},    // Faron Woods
@@ -278,7 +257,6 @@ static Vec l_statue_pos[6] = {
     {-81451.296875f, -1654.09997559f, 20832.1992188}        // Ruined Theatre
 };
 
-/* 805A8324-805A8330 000128 000C+00 0/1 0/0 0/0 .data            l_statue_ang$3944 */
 // Saved y orientations of Owl Statues for cutscenes
 static s16 l_statue_ang[6] = {
     16384,  // Faron Woods
@@ -289,7 +267,6 @@ static s16 l_statue_ang[6] = {
     16384   // Ruined Theatre
 };
 
-/* 805A784C-805A7A68 00096C 021C+00 2/2 0/0 0/0 .text            demoProc__13daTagStatue_cFv */
 int daTagStatue_c::demoProc() {
     int act_id = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZEU(action_table), 0, 0);
 
@@ -358,7 +335,6 @@ int daTagStatue_c::demoProc() {
     return 0;
 }
 
-/* 805A7A68-805A7B24 000B88 00BC+00 2/2 0/0 0/0 .text            setParticle__13daTagStatue_cFv */
 void daTagStatue_c::setParticle() {
     for(int i = 0; i < 3; i++) {
         if(!mpLightRingEmitters[i]) {
@@ -367,7 +343,6 @@ void daTagStatue_c::setParticle() {
     }
 }
 
-/* 805A7B24-805A7B78 000C44 0054+00 2/2 0/0 0/0 .text            endParticle__13daTagStatue_cFv */
 void daTagStatue_c::endParticle() {
     for(int i = 0; i < 3; i++) {
         if(mpLightRingEmitters[i]) {
@@ -378,7 +353,6 @@ void daTagStatue_c::endParticle() {
     }
 }
 
-/* 805A7B78-805A7CD0 000C98 0158+00 1/1 0/0 0/0 .text            checkStartDemo__13daTagStatue_cFv */
 // Check if statue is far enough away from the Sky Character platform and if player is close enough to the tag for the cutscene
 //  of obtaining a Sky Character to be ordered
 BOOL daTagStatue_c::checkStartDemo() {
@@ -394,7 +368,6 @@ BOOL daTagStatue_c::checkStartDemo() {
     return (tag_distance_to_player < 100.0f);
 }
 
-/* 805A7CD0-805A7E94 000DF0 01C4+00 2/2 0/0 0/0 .text            checkOnEffect__13daTagStatue_cFv */
 // Return whether the owl statue has moved far enough away (in the horizontal plane) from the platform where the Sky Character is obtained 
 //  in order for its glowing effects to occur and the cutscene to be ordered
 BOOL daTagStatue_c::checkOnEffect() {
@@ -430,7 +403,6 @@ BOOL daTagStatue_c::checkOnEffect() {
     return FALSE;
 }
 
-/* 805A7E94-805A7F0C 000FB4 0078+00 1/1 0/0 0/0 .text            getLetterCount__13daTagStatue_cFv */
 s32 daTagStatue_c::getLetterCount() {
     s32 numLetters = 0;
     for(int i = 0; i < 6; i++) {
@@ -442,7 +414,6 @@ s32 daTagStatue_c::getLetterCount() {
 return numLetters;
 }
 
-/* 805A7F0C-805A7FF8 00102C 00EC+00 1/1 0/0 0/0 .text            draw__13daTagStatue_cFv */
 int daTagStatue_c::draw() {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
     env_light->settingTevStruct(0, &current.pos, &tevStr);
@@ -461,7 +432,6 @@ int daTagStatue_c::draw() {
     return 1;
 }
 
-/* 805A7FF8-805A8060 001118 0068+00 1/1 0/0 0/0 .text            _delete__13daTagStatue_cFv */
 int daTagStatue_c::_delete() {
     endParticle();
     dComIfG_resDelete(&mArcPhase, l_arcName);
@@ -472,27 +442,22 @@ int daTagStatue_c::_delete() {
     return 1;
 }
 
-/* 805A8060-805A8080 001180 0020+00 1/0 0/0 0/0 .text            daTagStatue_Draw__FP13daTagStatue_c */
  static int daTagStatue_Draw(daTagStatue_c* i_this) {
     return i_this->draw();
  }
 
-/* 805A8080-805A80A0 0011A0 0020+00 1/0 0/0 0/0 .text daTagStatue_Execute__FP13daTagStatue_c */
 static int daTagStatue_Execute(daTagStatue_c* i_this) {
     return i_this->execute();
 }
 
-/* 805A80A0-805A80C0 0011C0 0020+00 1/0 0/0 0/0 .text daTagStatue_Delete__FP13daTagStatue_c */
 static int daTagStatue_Delete(daTagStatue_c* i_this) {
     return i_this->_delete();
 }
 
-/* 805A80C0-805A80E0 0011E0 0020+00 1/0 0/0 0/0 .text daTagStatue_Create__FP13daTagStatue_c */
 static int daTagStatue_Create(daTagStatue_c* i_this) {
     return i_this->create();
 }
 
-/* 805A8330-805A8350 -00001 0020+00 1/0 0/0 0/0 .data            l_daTagStatue_Method */
 static actor_method_class l_daTagStatue_Method = {
 reinterpret_cast<process_method_func>(daTagStatue_Create),
 reinterpret_cast<process_method_func>(daTagStatue_Delete),
@@ -501,7 +466,6 @@ NULL,
 reinterpret_cast<process_method_func>(daTagStatue_Draw),
 };
 
-/* 805A8350-805A8380 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_Statue */
 extern actor_process_profile_definition g_profile_Tag_Statue = {
     fpcLy_CURRENT_e,
     7,

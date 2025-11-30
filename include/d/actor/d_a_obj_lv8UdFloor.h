@@ -14,25 +14,25 @@
  */
 class daUdFloor_c : public dBgS_MoveBgActor {
 public:
-    /* 80C8BDC8 */ void setBaseMtx();
-    /* 80C8BEE4 */ int create();
-    /* 80C8C12C */ void moveLift();
-    /* 80C8C264 */ void init_modeWait();
-    /* 80C8C270 */ void modeWait();
-    /* 80C8C274 */ void init_modeUpMoveInit();
-    /* 80C8C310 */ void modeUpMoveInit();
-    /* 80C8C354 */ u8 colorAnm(int);
-    /* 80C8C5E4 */ void init_modeUpMove();
-    /* 80C8C68C */ void modeUpMove();
-    /* 80C8C7F8 */ void init_modeDownMoveInit();
-    /* 80C8C81C */ void modeDownMoveInit();
-    /* 80C8C860 */ void init_modeDownMove();
-    /* 80C8C8E4 */ void modeDownMove();
+    void setBaseMtx();
+    int create();
+    void moveLift();
+    void init_modeWait();
+    void modeWait();
+    void init_modeUpMoveInit();
+    void modeUpMoveInit();
+    u8 colorAnm(int);
+    void init_modeUpMove();
+    void modeUpMove();
+    void init_modeDownMoveInit();
+    void modeDownMoveInit();
+    void init_modeDownMove();
+    void modeDownMove();
 
-    /* 80C8BE64 */ virtual int CreateHeap();
-    /* 80C8C0DC */ virtual int Execute(Mtx**);
-    /* 80C8C994 */ virtual int Draw();
-    /* 80C8CA78 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getModelType() { return current.angle.x & 0xFF; }
     u8 getTimer() { return (current.angle.x & 0xFF00) >> 8; }

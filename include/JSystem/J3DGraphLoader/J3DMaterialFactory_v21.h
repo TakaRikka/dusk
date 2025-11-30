@@ -50,32 +50,32 @@ struct J3DMaterialInitData_v21 {
  */
 class J3DMaterialFactory_v21 {
 public:
-    /* 80332DA4 */ J3DMaterialFactory_v21(J3DMaterialBlock_v21 const&);
-    /* 80332F84 */ u16 countUniqueMaterials();
-    /* 80332FA8 */ u32 countTexGens(int) const;
-    /* 80332FE0 */ u32 countStages(int) const;
-    /* 80333068 */ J3DMaterial* create(J3DMaterial*, int, u32) const;
-    /* 803337D8 */ J3DGXColor newMatColor(int, int) const;
-    /* 80333834 */ u8 newColorChanNum(int) const;
-    /* 8033386C */ J3DColorChan newColorChan(int, int) const;
-    /* 80333A10 */ u32 newTexGenNum(int) const;
-    /* 80333A48 */ J3DTexCoord newTexCoord(int, int) const;
-    /* 80333AA8 */ J3DTexMtx* newTexMtx(int, int) const;
-    /* 80333B30 */ u8 newCullMode(int) const;
-    /* 80333B70 */ u16 newTexNo(int, int) const;
-    /* 80333BB8 */ J3DTevOrder newTevOrder(int, int) const;
-    /* 80333C04 */ J3DGXColorS10 newTevColor(int, int) const;
-    /* 80333C74 */ J3DGXColor newTevKColor(int, int) const;
-    /* 80333CD0 */ u8 newTevStageNum(int) const;
-    /* 80333D08 */ J3DTevStage newTevStage(int, int) const;
-    /* 80333D68 */ J3DTevSwapModeTable newTevSwapModeTable(int, int) const;
-    /* 80333E04 */ J3DFog newFog(int) const;
-    /* 80333EE0 */ J3DAlphaComp newAlphaComp(int) const;
-    /* 80333F60 */ J3DBlend newBlend(int) const;
-    /* 80333FA4 */ J3DZMode newZMode(int) const;
-    /* 80334004 */ u8 newZCompLoc(int) const;
-    /* 8033403C */ u8 newDither(int) const;
-    /* 80334074 */ J3DNBTScale newNBTScale(int) const;
+    J3DMaterialFactory_v21(J3DMaterialBlock_v21 const&);
+    u16 countUniqueMaterials();
+    u32 countTexGens(int) const;
+    u32 countStages(int) const;
+    J3DMaterial* create(J3DMaterial*, int, u32) const;
+    J3DGXColor newMatColor(int, int) const;
+    u8 newColorChanNum(int) const;
+    J3DColorChan newColorChan(int, int) const;
+    u32 newTexGenNum(int) const;
+    J3DTexCoord newTexCoord(int, int) const;
+    J3DTexMtx* newTexMtx(int, int) const;
+    u8 newCullMode(int) const;
+    u16 newTexNo(int, int) const;
+    J3DTevOrder newTevOrder(int, int) const;
+    J3DGXColorS10 newTevColor(int, int) const;
+    J3DGXColor newTevKColor(int, int) const;
+    u8 newTevStageNum(int) const;
+    J3DTevStage newTevStage(int, int) const;
+    J3DTevSwapModeTable newTevSwapModeTable(int, int) const;
+    J3DFog newFog(int) const;
+    J3DAlphaComp newAlphaComp(int) const;
+    J3DBlend newBlend(int) const;
+    J3DZMode newZMode(int) const;
+    u8 newZCompLoc(int) const;
+    u8 newDither(int) const;
+    J3DNBTScale newNBTScale(int) const;
 
     u16 getMaterialID(u16 idx) { return mpMaterialID[idx]; }
     u8 getMaterialMode(int idx) const { return mpMaterialInitData[mpMaterialID[idx]].mMaterialMode; }

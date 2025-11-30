@@ -15,17 +15,17 @@
  */
 class daObjIce_s_c : public dBgS_MoveBgActor {
 public:
-    /* 80C209DC */ void RideOn_Angle(s16&, f32, s16, f32);
-    /* 80C20A44 */ bool Check_LinkRideOn(cXyz);
-    /* 80C20C98 */ bool Check_RideOn(cXyz);
-    /* 80C20EC0 */ void initBaseMtx();
-    /* 80C20EEC */ void setBaseMtx();
-    /* 80C212CC */ int create();
-    /* 80C2157C */ int CreateHeap();
-    /* 80C215F4 */ int Create();
-    /* 80C21634 */ int Execute(Mtx**);
-    /* 80C21964 */ int Draw();
-    /* 80C21A08 */ int Delete();
+    void RideOn_Angle(s16&, f32, s16, f32);
+    bool Check_LinkRideOn(cXyz);
+    bool Check_RideOn(cXyz);
+    void initBaseMtx();
+    void setBaseMtx();
+    int create();
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     /* 0x5A0 */ f32 field_0x5a0;
     /* 0x5A4 */ f32 field_0x5a4;
@@ -59,8 +59,8 @@ STATIC_ASSERT(sizeof(daObjIce_s_c) == 0x644);
 
 class daOBJ_ICE_S_HIO_c {
 public:
-    /* 80C209AC */ daOBJ_ICE_S_HIO_c();
-    /* 80C21A60 */ virtual ~daOBJ_ICE_S_HIO_c() {}
+    daOBJ_ICE_S_HIO_c();
+    virtual ~daOBJ_ICE_S_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 field_0x8;

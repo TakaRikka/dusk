@@ -41,11 +41,6 @@ public:
     u8 field_0x3c;
 };
 
-//
-// Declarations:
-//
-
-/* 80B0140C-80B01498 0000EC 008C+00 1/1 0/0 0/0 .text            __ct__14daNPC_TK_HIO_cFv */
 daNPC_TK_HIO_c::daNPC_TK_HIO_c() {
     field_0x4 = -1;
     field_0x8 = 1.0f;
@@ -64,13 +59,11 @@ daNPC_TK_HIO_c::daNPC_TK_HIO_c() {
     field_0x3c = 1;
 }
 
-/* 80B01498-80B0153C 000178 00A4+00 14/14 0/0 0/0 .text            setBck__10daNPC_TK_cFiUcff */
 void daNPC_TK_c::setBck(int param_0, u8 param_1, f32 param_2, f32 param_3) {
     mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Npc_tk", param_0), param_1, param_2,
                    param_3, 0.0f, -1.0f);
 }
 
-/* 80B0153C-80B01598 00021C 005C+00 6/6 0/0 0/0 .text            checkBck__10daNPC_TK_cFi */
 bool daNPC_TK_c::checkBck(int param_0) {
     if (mpMorf->getAnm() == dComIfG_getObjectRes("Npc_tk", param_0)) {
         return true;
@@ -79,7 +72,6 @@ bool daNPC_TK_c::checkBck(int param_0) {
     }
 }
 
-/* 80B01598-80B01678 000278 00E0+00 1/1 0/0 0/0 .text            draw__10daNPC_TK_cFv */
 int daNPC_TK_c::draw() {
     J3DModel* pJVar1 = mpMorf->getModel();
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -95,12 +87,10 @@ int daNPC_TK_c::draw() {
     return 1;
 }
 
-/* 80B016B4-80B016D4 000394 0020+00 1/0 0/0 0/0 .text            daNPC_TK_Draw__FP10daNPC_TK_c */
 static int daNPC_TK_Draw(daNPC_TK_c* i_this) {
     return i_this->draw();
 }
 
-/* 80B016D4-80B01878 0003B4 01A4+00 1/1 0/0 0/0 .text            checkBeforeBg__10daNPC_TK_cFv */
 int daNPC_TK_c::checkBeforeBg() {
     s32 rv = 0;
 
@@ -138,7 +128,6 @@ int daNPC_TK_c::checkBeforeBg() {
     return rv;
 }
 
-/* 80B01878-80B018F4 000558 007C+00 15/15 0/0 0/0 .text            setActionMode__10daNPC_TK_cFi */
 void daNPC_TK_c::setActionMode(int param_0) {
     if (mActionType != param_0) {
         mAcch.SetGroundUpY(0.0f);
@@ -151,8 +140,6 @@ void daNPC_TK_c::setActionMode(int param_0) {
     }
 }
 
-/* 80B018F4-80B01C84 0005D4 0390+00 1/1 0/0 0/0 .text
- * setAddCalcSpeedXZ__10daNPC_TK_cFR4cXyzRC4cXyzfff             */
 f32 daNPC_TK_c::setAddCalcSpeedXZ(cXyz& param_0, cXyz const& param_1, f32 param_2, f32 param_3,
                                   f32 param_4) {
     cXyz unkXyz1 = param_1 - param_0;
@@ -176,7 +163,6 @@ f32 daNPC_TK_c::setAddCalcSpeedXZ(cXyz& param_0, cXyz const& param_1, f32 param_
     return result.y;
 }
 
-/* 80B01C84-80B01D84 000964 0100+00 2/2 0/0 0/0 .text chaseTargetPos__10daNPC_TK_cF4cXyzffs */
 cXyz daNPC_TK_c::chaseTargetPos(cXyz param_0, f32 param_1, f32 param_2, s16 param_3) {
     s16 unkInt1 = 0x100;
     if (param_3 < unkInt1) {
@@ -197,7 +183,6 @@ cXyz daNPC_TK_c::chaseTargetPos(cXyz param_0, f32 param_1, f32 param_2, s16 para
     return param_0 - current.pos;
 }
 
-/* 80B01D84-80B01DA0 000A64 001C+00 3/3 0/0 0/0 .text            getMasterPointer__10daNPC_TK_cFv */
 fopAc_ac_c* daNPC_TK_c::getMasterPointer() {
     if (mpMaster != NULL) {
         return mpMaster;
@@ -206,7 +191,6 @@ fopAc_ac_c* daNPC_TK_c::getMasterPointer() {
     }
 }
 
-/* 80B01DA0-80B01E48 000A80 00A8+00 2/2 0/0 0/0 .text setMasterShoulder__10daNPC_TK_cFP4cXyz */
 void daNPC_TK_c::setMasterShoulder(cXyz* o_pos) {
     if (mpMaster != NULL) {
         mIsHanjoHand = 1;
@@ -219,7 +203,6 @@ void daNPC_TK_c::setMasterShoulder(cXyz* o_pos) {
     }
 }
 
-/* 80B01E48-80B01EF4 000B28 00AC+00 3/3 0/0 0/0 .text            setAwayAction__10daNPC_TK_cFi */
 void daNPC_TK_c::setAwayAction(int param_0) {
     if (mActionType == 3 || mActionType == 5) {
         setBck(7, 2, 3.0f, 2.0f);
@@ -238,7 +221,6 @@ void daNPC_TK_c::setAwayAction(int param_0) {
     }
 }
 
-/* 80B01EF4-80B0207C 000BD4 0188+00 1/1 0/0 0/0 .text            setFlySE__10daNPC_TK_cFv */
 void daNPC_TK_c::setFlySE() {
     if (checkBck(6) != 0) {
         if (mpMorf->checkFrame(10.0f) != 0) {
@@ -269,8 +251,6 @@ static u8 g_isHioChildInitted;
 
 static daNPC_TK_HIO_c l_HIO;
 
-/* 80B0207C-80B021A0 000D5C 0124+00 1/1 0/0 0/0 .text
- * checkRangeOfTake__FP10fopAc_ac_cP10fopAc_ac_c                */
 static s32 checkRangeOfTake(fopAc_ac_c* param_0, fopAc_ac_c* param_1) {
     csXyz local_48 = param_0->shape_angle;
     cXyz pos0 = param_0->current.pos;
@@ -294,7 +274,6 @@ static s32 checkRangeOfTake(fopAc_ac_c* param_0, fopAc_ac_c* param_1) {
     return 1;
 }
 
-/* 80B021A0-80B02208 000E80 0068+00 1/1 0/0 0/0 .text            s_obj_sub__FPvPv */
 static void* s_obj_sub(void* param_0, void* param_1) {
     if (fopAcM_IsActor(param_0) != 0 &&
         (fopAcM_GetName(param_0) == PROC_NI ||
@@ -305,7 +284,6 @@ static void* s_obj_sub(void* param_0, void* param_1) {
     return NULL;
 }
 
-/* 80B02208-80B02254 000EE8 004C+00 3/3 0/0 0/0 .text            s_hanjo__FPvPv */
 static void* s_hanjo(void* param_0, void* param_1) {
     if (fopAcM_IsActor(param_0) != 0 && fopAcM_GetName(param_0) == PROC_NPC_HANJO) {
         return param_0;
@@ -314,7 +292,6 @@ static void* s_hanjo(void* param_0, void* param_1) {
     }
 }
 
-/* 80B02254-80B026F8 000F34 04A4+00 1/1 0/0 0/0 .text            executeFly__10daNPC_TK_cFv */
 void daNPC_TK_c::executeFly() {
     field_0x6bd = 1;
 
@@ -386,7 +363,6 @@ void daNPC_TK_c::executeFly() {
     }
 }
 
-/* 80B026F8-80B02B5C 0013D8 0464+00 1/1 0/0 0/0 .text            initPerchDemo__10daNPC_TK_cFi */
 void daNPC_TK_c::initPerchDemo(int param_0) {
     s16 masterAngleY2;
     s16 masterAngleY = getMasterPointer()->shape_angle.y;
@@ -508,7 +484,6 @@ void daNPC_TK_c::initPerchDemo(int param_0) {
     }
 }
 
-/* 80B02B5C-80B03658 00183C 0AFC+00 1/1 0/0 0/0 .text            executePerchDemo__10daNPC_TK_cFi */
 bool daNPC_TK_c::executePerchDemo(int param_0) {
     cXyz targetPos;
     cXyz pathPos;
@@ -671,7 +646,6 @@ bool daNPC_TK_c::executePerchDemo(int param_0) {
     return false;
 }
 
-/* 80B03658-80B03754 002338 00FC+00 3/3 0/0 0/0 .text            executePerch__10daNPC_TK_cFv */
 void daNPC_TK_c::executePerch() {
     static char* action_table[4] = {
         "Wait",
@@ -709,7 +683,6 @@ void daNPC_TK_c::executePerch() {
     }
 }
 
-/* 80B03754-80B039A8 002434 0254+00 1/1 0/0 0/0 .text            executeHandOn__10daNPC_TK_cFv */
 void daNPC_TK_c::executeHandOn() {
     if (field_0x698 == 0) {
         field_0x694 = 0;
@@ -761,8 +734,6 @@ void daNPC_TK_c::executeHandOn() {
     setMasterShoulder(&current.pos);
 }
 
-/* 80B039A8-80B03A70 002688 00C8+00 1/1 0/0 0/0 .text            checkWaterSurface__10daNPC_TK_cFf
- */
 bool daNPC_TK_c::checkWaterSurface(f32 param_0) {
     dBgS_ObjGndChk_Spl gndChk;
     cXyz pos = current.pos;
@@ -776,7 +747,6 @@ bool daNPC_TK_c::checkWaterSurface(f32 param_0) {
     }
 }
 
-/* 80B03A70-80B048BC 002750 0E4C+00 1/1 0/0 0/0 .text            executeAttack__10daNPC_TK_cFv */
 void daNPC_TK_c::executeAttack() {
     static f32 taka_attack_dist[4] = {
         5200.0f,
@@ -1035,7 +1005,6 @@ void daNPC_TK_c::executeAttack() {
     }
 }
 
-/* 80B048BC-80B04BF8 00359C 033C+00 1/1 0/0 0/0 .text            executeAway__10daNPC_TK_cFv */
 void daNPC_TK_c::executeAway() {
     field_0x6bd = 1;
 
@@ -1130,7 +1099,6 @@ void daNPC_TK_c::executeAway() {
     }
 }
 
-/* 80B04BF8-80B04F64 0038D8 036C+00 1/1 0/0 0/0 .text            setCarryActorMtx__10daNPC_TK_cFv */
 void daNPC_TK_c::setCarryActorMtx() {
     field_0x6a8 += 0x6bc;
     field_0x6a6 = cM_ssin(field_0x6a8) * 2048.0f + 4096.0f;
@@ -1165,7 +1133,6 @@ void daNPC_TK_c::setCarryActorMtx() {
     }
 }
 
-/* 80B04F64-80B04FA8 003C44 0044+00 2/2 0/0 0/0 .text            getTakePosY__10daNPC_TK_cFv */
 f32 daNPC_TK_c::getTakePosY() {
     cXyz unusedXyz;  // debug match
 
@@ -1180,7 +1147,6 @@ f32 daNPC_TK_c::getTakePosY() {
     }
 }
 
-/* 80B04FA8-80B04FEC 003C88 0044+00 1/1 0/0 0/0 .text            getTakeOffPosY__10daNPC_TK_cFv */
 f32 daNPC_TK_c::getTakeOffPosY() {
     cXyz unusedXyz;  // debug match
 
@@ -1195,7 +1161,6 @@ f32 daNPC_TK_c::getTakeOffPosY() {
     }
 }
 
-/* 80B04FEC-80B05BD0 003CCC 0BE4+00 1/1 0/0 0/0 .text            executeBack__10daNPC_TK_cFv */
 void daNPC_TK_c::executeBack() {
     if (field_0x634 == NULL) {
         setActionMode(4);
@@ -1455,7 +1420,6 @@ void daNPC_TK_c::executeBack() {
     }
 }
 
-/* 80B05BD0-80B05C7C 0048B0 00AC+00 5/5 0/0 0/0 .text            getHanjoHandPos__10daNPC_TK_cFv */
 cXyz daNPC_TK_c::getHanjoHandPos() {
     cXyz handPos(0.0f, 0.0f, 0.0f);
     if (mpMaster != NULL) {
@@ -1466,7 +1430,6 @@ cXyz daNPC_TK_c::getHanjoHandPos() {
     return handPos;
 }
 
-/* 80B05C7C-80B05EC8 00495C 024C+00 1/1 0/0 0/0 .text            executeStayHanjo__10daNPC_TK_cFv */
 void daNPC_TK_c::executeStayHanjo() {
     if (checkAttackDemo()) {
         return;
@@ -1529,8 +1492,6 @@ void daNPC_TK_c::executeStayHanjo() {
     }
 }
 
-/* 80B05EC8-80B0686C 004BA8 09A4+00 1/1 0/0 0/0 .text            executeAttackLink__10daNPC_TK_cFv
- */
 void daNPC_TK_c::executeAttackLink() {
     cXyz playerPos = dComIfGp_getPlayer(0)->current.pos;
 
@@ -1681,7 +1642,6 @@ void daNPC_TK_c::executeAttackLink() {
     }
 }
 
-/* 80B0686C-80B07114 00554C 08A8+00 1/1 0/0 0/0 .text            executeBackHanjo__10daNPC_TK_cFv */
 void daNPC_TK_c::executeBackHanjo() {
     mpMaster = (daNpc_Hanjo_c*)fpcM_Search(s_hanjo, this);
 
@@ -1771,7 +1731,6 @@ void daNPC_TK_c::executeBackHanjo() {
     }
 }
 
-/* 80B07114-80B072CC 005DF4 01B8+00 4/4 0/0 0/0 .text            checkAttackDemo__10daNPC_TK_cFv */
 bool daNPC_TK_c::checkAttackDemo() {
     cXyz cStack_14(2500.0f, 500.0f, 1050.0f);
     if (daPy_getPlayerActorClass()->checkWolfTagLockJump()) {
@@ -1783,8 +1742,6 @@ bool daNPC_TK_c::checkAttackDemo() {
     return false;
 }
 
-/* 80B072CC-80B07610 005FAC 0344+00 1/1 0/0 0/0 .text            executeAttackDemo__10daNPC_TK_cFv
- */
 void daNPC_TK_c::executeAttackDemo() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -1838,7 +1795,6 @@ void daNPC_TK_c::executeAttackDemo() {
     }
 }
 
-/* 80B07610-80B08168 0062F0 0B58+00 1/1 0/0 0/0 .text executeBackHanjoDemo__10daNPC_TK_cFv */
 void daNPC_TK_c::executeBackHanjoDemo() {
     s16 angleY;
     s32 pitch;
@@ -1961,7 +1917,6 @@ void daNPC_TK_c::executeBackHanjoDemo() {
     }
 }
 
-/* 80B08168-80B08208 006E48 00A0+00 1/1 0/0 0/0 .text            executeWolfEvent__10daNPC_TK_cFv */
 void daNPC_TK_c::executeWolfEvent() {
     mIsExecutingAction = false;
     if (eventInfo.checkCommandDemoAccrpt() != 0) {
@@ -1974,7 +1929,6 @@ void daNPC_TK_c::executeWolfEvent() {
     return;
 }
 
-/* 80B08208-80B082A4 006EE8 009C+00 1/1 0/0 0/0 .text            calcWolfDemoCam__10daNPC_TK_cFv */
 void daNPC_TK_c::calcWolfDemoCam() {
     cXyz cStack_1c = daPy_getPlayerActorClass()->current.pos;
     s16 angleY = daPy_getPlayerActorClass()->shape_angle.y;
@@ -1987,7 +1941,6 @@ void daNPC_TK_c::calcWolfDemoCam() {
     cLib_addCalcPos2(&field_0x6fc, cStack_34, 0.1f, 3.0f);
 }
 
-/* 80B082A4-80B0839C 006F84 00F8+00 1/1 0/0 0/0 .text            calcWolfDemoCam2__10daNPC_TK_cFv */
 void daNPC_TK_c::calcWolfDemoCam2() {
     cXyz targetPos;
     cXyz curPos = dPath_GetPnt(mWolfPathData, mPathStep2)->m_position;
@@ -2001,7 +1954,6 @@ void daNPC_TK_c::calcWolfDemoCam2() {
     cLib_chaseF(&field_0x714, 10.0f + nREG_F(16), 1.5f + nREG_F(17));
 }
 
-/* 80B0839C-80B09A3C 00707C 16A0+00 2/1 0/0 0/0 .text            executeWolfPerch__10daNPC_TK_cFv */
 void daNPC_TK_c::executeWolfPerch() {
     dCamera_c* camera = dCam_getBody();
     cXyz playerPos = daPy_getPlayerActorClass()->current.pos;
@@ -2473,7 +2425,6 @@ void daNPC_TK_c::executeWolfPerch() {
     camera->Set(field_0x6fc, field_0x6f0, field_0x708, 0);
 }
 
-/* 80B09A3C-80B0A444 00871C 0A08+00 2/1 0/0 0/0 .text executeResistanceDemo__10daNPC_TK_cFv */
 void daNPC_TK_c::executeResistanceDemo() {
     daNpcMoiR_c* npcMoiR;
     if (fopAcM_SearchByName(PROC_NPC_MOIR, (fopAc_ac_c**)&npcMoiR) == NULL || npcMoiR == NULL) {
@@ -2666,7 +2617,6 @@ void daNPC_TK_c::executeResistanceDemo() {
     cLib_addCalcAngleS(&shape_angle.z, local_48, 0x10, 0x200, 0x10);
 }
 
-/* 80B0A444-80B0A500 009124 00BC+00 0/0 0/0 1/1 .text setHawkSideCamera__10daNPC_TK_cF4cXyz */
 void daNPC_TK_c::setHawkSideCamera(cXyz param_0) {
     field_0x710 = 4;
 
@@ -2681,7 +2631,6 @@ void daNPC_TK_c::setHawkSideCamera(cXyz param_0) {
     field_0x70c = 120;
 }
 
-/* 80B0A500-80B0A568 0091E0 0068+00 1/1 0/0 1/1 .text setHawkCamera__10daNPC_TK_cFP10fopAc_ac_c */
 void daNPC_TK_c::setHawkCamera(fopAc_ac_c* param_0) {
     field_0x6ec = param_0;
     field_0x70c = 300;
@@ -2689,7 +2638,6 @@ void daNPC_TK_c::setHawkCamera(fopAc_ac_c* param_0) {
     cLib_offsetPos(&field_0x604, &param_0->current.pos, 0x2000 - shape_angle.y, &acStack_28);
 }
 
-/* 80B0A568-80B0A614 009248 00AC+00 1/1 0/0 2/2 .text            endHawkCamera__10daNPC_TK_cFv */
 void daNPC_TK_c::endHawkCamera() {
     if (field_0x710 == 2 || field_0x710 == 3) {
         field_0x710 = 5;
@@ -2702,7 +2650,6 @@ void daNPC_TK_c::endHawkCamera() {
     }
 }
 
-/* 80B0A614-80B0B004 0092F4 09F0+00 1/1 0/0 0/0 .text            calcDemoCamera__10daNPC_TK_cFv */
 void daNPC_TK_c::calcDemoCamera() {
     dCamera_c* camera;
 
@@ -2863,7 +2810,6 @@ void daNPC_TK_c::calcDemoCamera() {
     }
 }
 
-/* 80B0B004-80B0B284 009CE4 0280+00 1/1 0/0 0/0 .text            checkActionSet__10daNPC_TK_cFv */
 void daNPC_TK_c::checkActionSet() {
     cXyz acStack_24;
 
@@ -2930,7 +2876,6 @@ void daNPC_TK_c::checkActionSet() {
     }
 }
 
-/* 80B0B284-80B0B5CC 009F64 0348+00 2/1 0/0 0/0 .text            action__10daNPC_TK_cFv */
 void daNPC_TK_c::action() {
     s16 origAngleY = shape_angle.y;
     field_0x680 = 0.0f;
@@ -3061,7 +3006,6 @@ void daNPC_TK_c::action() {
     mpMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
-/* 80B0B5CC-80B0B6DC 00A2AC 0110+00 1/1 0/0 0/0 .text            mtx_set__10daNPC_TK_cFv */
 void daNPC_TK_c::mtx_set() {
     if (field_0x6c1 != 0) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
@@ -3079,7 +3023,6 @@ void daNPC_TK_c::mtx_set() {
     mpMorf->modelCalc();
 }
 
-/* 80B0B6DC-80B0B7CC 00A3BC 00F0+00 1/1 0/0 0/0 .text            cc_set__10daNPC_TK_cFv */
 void daNPC_TK_c::cc_set() {
     MTXCopy(mpMorf->getModel()->getAnmMtx(0), mDoMtx_stack_c::get());
     mDoMtx_stack_c::multVecZero(&eyePos);
@@ -3099,7 +3042,6 @@ void daNPC_TK_c::cc_set() {
     field_0x6ae = 0;
 }
 
-/* 80B0B7CC-80B0B8F0 00A4AC 0124+00 1/1 0/0 0/0 .text            execute__10daNPC_TK_cFv */
 int daNPC_TK_c::execute() {
     if (field_0x6b0 != 0) {
         field_0x6b0--;
@@ -3136,18 +3078,14 @@ int daNPC_TK_c::execute() {
     return 1;
 }
 
-/* 80B0B8F0-80B0B910 00A5D0 0020+00 2/1 0/0 0/0 .text            daNPC_TK_Execute__FP10daNPC_TK_c */
 static int daNPC_TK_Execute(daNPC_TK_c* i_this) {
     return i_this->execute();
 }
 
-/* 80B0B910-80B0B918 00A5F0 0008+00 1/0 0/0 0/0 .text            daNPC_TK_IsDelete__FP10daNPC_TK_c
- */
 static int daNPC_TK_IsDelete(daNPC_TK_c* i_this) {
     return 1;
 }
 
-/* 80B0B918-80B0B98C 00A5F8 0074+00 1/1 0/0 0/0 .text            _delete__10daNPC_TK_cFv */
 int daNPC_TK_c::_delete() {
     dComIfG_resDelete(&mPhase, "Npc_tk");
     if (field_0xb40) {
@@ -3161,13 +3099,10 @@ int daNPC_TK_c::_delete() {
     return 1;
 }
 
-/* 80B0B98C-80B0B9AC 00A66C 0020+00 1/0 0/0 0/0 .text            daNPC_TK_Delete__FP10daNPC_TK_c */
 static int daNPC_TK_Delete(daNPC_TK_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80B0B9AC-80B0BB7C 00A68C 01D0+00 1/1 0/0 0/0 .text ctrlJoint__10daNPC_TK_cFP8J3DJointP8J3DModel
- */
 int daNPC_TK_c::ctrlJoint(J3DJoint* param_0, J3DModel* param_1) {
     s32 jntNo = param_0->getJntNo();
     mDoMtx_stack_c::copy(param_1->getAnmMtx(jntNo));
@@ -3218,7 +3153,6 @@ int daNPC_TK_c::ctrlJoint(J3DJoint* param_0, J3DModel* param_1) {
     return 1;
 }
 
-/* 80B0BB7C-80B0BBC8 00A85C 004C+00 1/1 0/0 0/0 .text JointCallBack__10daNPC_TK_cFP8J3DJointi */
 int daNPC_TK_c::JointCallBack(J3DJoint* param_0, int param_1) {
     J3DJoint* joint = param_0;
     if (param_1 == 0) {
@@ -3232,7 +3166,6 @@ int daNPC_TK_c::JointCallBack(J3DJoint* param_0, int param_1) {
     return 1;
 }
 
-/* 80B0BBC8-80B0BD04 00A8A8 013C+00 1/1 0/0 0/0 .text            CreateHeap__10daNPC_TK_cFv */
 int daNPC_TK_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Npc_tk", "tk.bmd");
     JUT_ASSERT_MSG(0xf4f, modelData != NULL, "  鷹匠");  // falconer
@@ -3256,12 +3189,10 @@ int daNPC_TK_c::CreateHeap() {
     return 1;
 }
 
-/* 80B0BD04-80B0BD24 00A9E4 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return ((daNPC_TK_c*)i_this)->CreateHeap();
 }
 
-/* 80B0BD24-80B0BFE0 00AA04 02BC+00 1/1 0/0 0/0 .text            create__10daNPC_TK_cFv */
 int daNPC_TK_c::create() {
     /* 80B0C4D4-80B0C514 0000E0 0040+00 1/1 0/0 0/0 .data            cc_sph_src$8096 */
     static dCcD_SrcSph cc_sph_src = {
@@ -3323,12 +3254,10 @@ int daNPC_TK_c::create() {
     return loadRes;
 }
 
-/* 80B0C0E4-80B0C104 00ADC4 0020+00 1/0 0/0 0/0 .text            daNPC_TK_Create__FP10daNPC_TK_c */
 static int daNPC_TK_Create(daNPC_TK_c* i_this) {
     return i_this->create();
 }
 
-/* 80B0C514-80B0C534 -00001 0020+00 1/0 0/0 0/0 .data            l_daNPC_TK_Method */
 static actor_method_class l_daNPC_TK_Method = {
     (process_method_func)daNPC_TK_Create,  (process_method_func)daNPC_TK_Delete,
     (process_method_func)daNPC_TK_Execute, (process_method_func)daNPC_TK_IsDelete,

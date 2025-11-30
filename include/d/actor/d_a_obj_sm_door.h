@@ -17,19 +17,19 @@
  */
 class daObjSM_DOOR_c : public dBgS_MoveBgActor {
 public:
-    /* 80CD8784 */ void ChangeModel();
-    /* 80CD8790 */ void Action();
-    /* 80CD8A40 */ int SetDzb();
-    /* 80CD8A90 */ int ReleaceDzb();
-    /* 80CD8AF8 */ void DrawChk1();
-    /* 80CD8BBC */ void DrawChk2();
-    /* 80CD8C80 */ void setBaseMtx();
-    /* 80CD8D4C */ cPhs__Step create();
-    /* 80CD90A4 */ int CreateHeap();
-    /* 80CD9258 */ int Create();
-    /* 80CD929C */ int Execute(Mtx**);
-    /* 80CD930C */ int Draw();
-    /* 80CD9544 */ int Delete();
+    void ChangeModel();
+    void Action();
+    int SetDzb();
+    int ReleaceDzb();
+    void DrawChk1();
+    void DrawChk2();
+    void setBaseMtx();
+    cPhs__Step create();
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
 private:
     /* 0x5A0 */ bool mUseAlphaModel;

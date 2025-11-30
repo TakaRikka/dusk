@@ -20,11 +20,9 @@
 #include "d/d_meter_hakusha.h"
 #include "d/d_meter_map.h"
 #include "d/d_meter_string.h"
-#include "dol2asm.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/actor/d_a_horse.h"
 
-/* 8021EA14-8021F128 219354 0714+00 1/1 0/0 0/0 .text            _create__9dMeter2_cFv */
 int dMeter2_c::_create() {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
     if (dStage_stagInfo_GetUpButton(stag_info) == 1) {
@@ -244,7 +242,6 @@ int dMeter2_c::_create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8021F128-8021F370 219A68 0248+00 1/1 0/0 0/0 .text            _execute__9dMeter2_cFv */
 int dMeter2_c::_execute() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpHeap);
 
@@ -311,7 +308,6 @@ int dMeter2_c::_execute() {
     return 1;
 }
 
-/* 8021F370-8021F49C 219CB0 012C+00 1/1 0/0 0/0 .text            _draw__9dMeter2_cFv */
 int dMeter2_c::_draw() {
     if (mpMap != NULL) {
         mpMap->_draw();
@@ -344,7 +340,6 @@ int dMeter2_c::_draw() {
     return 1;
 }
 
-/* 8021F49C-8021F6EC 219DDC 0250+00 1/1 0/0 0/0 .text            _delete__9dMeter2_cFv */
 int dMeter2_c::_delete() {
     mpHeap->getTotalFreeSize();
     JKRHeap* heap = mDoExt_setCurrentHeap(mpHeap);
@@ -397,8 +392,6 @@ int dMeter2_c::_delete() {
     return 1;
 }
 
-/* 8021F6EC-8021F780 21A02C 0094+00 1/1 5/5 0/0 .text            emphasisButtonDelete__9dMeter2_cFv
- */
 int dMeter2_c::emphasisButtonDelete() {
     if (mpEmpButton != NULL) {
         JKRExpHeap* heap = dComIfGp_getSubHeap2D(8);
@@ -415,14 +408,12 @@ int dMeter2_c::emphasisButtonDelete() {
     return 1;
 }
 
-/* 8021F780-8021F7B0 21A0C0 0030+00 0/0 0/0 1/1 .text            setLifeZero__9dMeter2_cFv */
 void dMeter2_c::setLifeZero() {
     dComIfGs_setLife(1);
     setNowLifeGauge(1);
     dComIfGp_setItemLifeCount(-1.0f, 0);
 }
 
-/* 8021F7B0-8021FD60 21A0F0 05B0+00 2/1 0/0 0/0 .text            checkStatus__9dMeter2_cFv */
 void dMeter2_c::checkStatus() {
     mStatus = 0;
     field_0x12c = field_0x128;
@@ -556,7 +547,6 @@ void dMeter2_c::checkStatus() {
     }
 }
 
-/* 8021FD60-80220180 21A6A0 0420+00 1/1 0/0 0/0 .text            moveLife__9dMeter2_cFv */
 void dMeter2_c::moveLife() {
     s16 life_count = 0;
     bool draw_life = false;
@@ -680,7 +670,6 @@ void dMeter2_c::moveLife() {
     dComIfGp_setItemNowLife((u8)mNowLifeGauge);
 }
 
-/* 80220180-8022051C 21AAC0 039C+00 1/1 0/0 0/0 .text            moveKantera__9dMeter2_cFv */
 void dMeter2_c::moveKantera() {
     s32 var_r0;
     s32 var_r7;
@@ -802,7 +791,6 @@ void dMeter2_c::moveKantera() {
     dComIfGp_setItemNowOil(mNowOil);
 }
 
-/* 8022051C-80220888 21AE5C 036C+00 1/1 0/0 0/0 .text            moveOxygen__9dMeter2_cFv */
 void dMeter2_c::moveOxygen() {
     s32 var_r0;
     s32 var_r7;
@@ -924,7 +912,6 @@ void dMeter2_c::moveOxygen() {
     dComIfGp_setNowOxygen(mNowOxygen);
 }
 
-/* 80220888-80220C30 21B1C8 03A8+00 1/1 0/0 0/0 .text            moveLightDrop__9dMeter2_cFv */
 void dMeter2_c::moveLightDrop() {
     f32 scale;
     f32 alpha;
@@ -1019,7 +1006,6 @@ void dMeter2_c::moveLightDrop() {
     alphaAnimeLightDrop();
 }
 
-/* 80220C30-802210AC 21B570 047C+00 1/1 0/0 0/0 .text            moveRupee__9dMeter2_cFv */
 void dMeter2_c::moveRupee() {
     s16 temp_r5;
     s16 var_r6;
@@ -1169,7 +1155,6 @@ void dMeter2_c::moveRupee() {
     alphaAnimeRupee();
 }
 
-/* 802210AC-80221244 21B9EC 0198+00 1/1 0/0 0/0 .text            moveKey__9dMeter2_cFv */
 void dMeter2_c::moveKey() {
     s16 var_r5;
     bool draw_key;
@@ -1234,7 +1219,6 @@ void dMeter2_c::moveKey() {
     alphaAnimeKey();
 }
 
-/* 80221244-802217F4 21BB84 05B0+00 1/1 0/0 0/0 .text            moveButtonA__9dMeter2_cFv */
 void dMeter2_c::moveButtonA() {
     f32 var_f31;
     f32 pos_x[2];
@@ -1401,7 +1385,6 @@ void dMeter2_c::moveButtonA() {
     }
 }
 
-/* 802217F4-80221EC8 21C134 06D4+00 1/1 0/0 0/0 .text            moveButtonB__9dMeter2_cFv */
 void dMeter2_c::moveButtonB() {
     f32 var_f31;
     f32 pos_x[2];
@@ -1609,7 +1592,6 @@ void dMeter2_c::moveButtonB() {
     }
 }
 
-/* 80221EC8-80222000 21C808 0138+00 1/1 0/0 0/0 .text            moveButtonR__9dMeter2_cFv */
 void dMeter2_c::moveButtonR() {
     bool var_r7;
     bool draw_buttonR;
@@ -1652,7 +1634,6 @@ void dMeter2_c::moveButtonR() {
     }
 }
 
-/* 80222000-802222A0 21C940 02A0+00 1/1 0/0 0/0 .text            moveButtonZ__9dMeter2_cFv */
 void dMeter2_c::moveButtonZ() {
     bool draw_buttonZ = false;
 
@@ -1746,7 +1727,6 @@ void dMeter2_c::moveButtonZ() {
     }
 }
 
-/* 802222A0-80222364 21CBE0 00C4+00 1/1 0/0 0/0 .text            moveButton3D__9dMeter2_cFv */
 void dMeter2_c::moveButton3D() {
     u8 var_r6;
 
@@ -1771,7 +1751,6 @@ void dMeter2_c::moveButton3D() {
     }
 }
 
-/* 80222364-80222494 21CCA4 0130+00 1/1 0/0 0/0 .text            moveButtonC__9dMeter2_cFv */
 void dMeter2_c::moveButtonC() {
     if (dComIfGp_getCStickStatusForce()) {
         u8 setFlag = dComIfGp_getCStickSetFlagForce();
@@ -1797,7 +1776,6 @@ void dMeter2_c::moveButtonC() {
     mpMeterDraw->drawButtonC(mCStickStatus, field_0x128 == 0);
 }
 
-/* 80222494-80222518 21CDD4 0084+00 1/1 0/0 0/0 .text            moveButtonS__9dMeter2_cFv */
 void dMeter2_c::moveButtonS() {
     if (dComIfGp_getSButtonStatusForce()) {
         u8 setFlag = dComIfGp_getSButtonSetFlagForce();
@@ -1814,7 +1792,6 @@ void dMeter2_c::moveButtonS() {
     }
 }
 
-/* 80222518-80222E88 21CE58 0970+00 1/1 0/0 0/0 .text            moveButtonXY__9dMeter2_cFv */
 void dMeter2_c::moveButtonXY() {
     bool sp8[2];
     bool spC[2];
@@ -2107,7 +2084,6 @@ void dMeter2_c::moveButtonXY() {
     dMeter2Info_resetDirectUseItem();
 }
 
-/* 80222E88-802230F8 21D7C8 0270+00 1/1 0/0 0/0 .text            moveButtonCross__9dMeter2_cFv */
 void dMeter2_c::moveButtonCross() {
     f32 temp_f1;
     f32 temp_f30;
@@ -2190,10 +2166,8 @@ void dMeter2_c::moveButtonCross() {
     alphaAnimeButtonCross();
 }
 
-/* 802230F8-802230FC 21DA38 0004+00 1/1 0/0 0/0 .text            moveTouchSubMenu__9dMeter2_cFv */
 void dMeter2_c::moveTouchSubMenu() {}
 
-/* 802230FC-802231C8 21DA3C 00CC+00 1/1 0/0 0/0 .text            moveSubContents__9dMeter2_cFv */
 void dMeter2_c::moveSubContents() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     checkSubContents();
@@ -2215,7 +2189,6 @@ void dMeter2_c::moveSubContents() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 802231C8-802237D4 21DB08 060C+00 1/1 0/0 0/0 .text            move2DContents__9dMeter2_cFv */
 void dMeter2_c::move2DContents() {
     bool var_r19;
     bool var_r27;
@@ -2360,7 +2333,6 @@ void dMeter2_c::move2DContents() {
     }
 }
 
-/* 802237D4-80223BC4 21E114 03F0+00 1/1 0/0 0/0 .text            checkSubContents__9dMeter2_cFv */
 void dMeter2_c::checkSubContents() {
     if (mStatus & 0x80) {
         killSubContents(4);
@@ -2456,7 +2428,6 @@ void dMeter2_c::checkSubContents() {
     }
 }
 
-/* 80223BC4-80223E00 21E504 023C+00 1/1 0/0 0/0 .text            check2DContents__9dMeter2_cFv */
 void dMeter2_c::check2DContents() {
     if (mpEmpButton == NULL) {
         if ((dComIfGp_isHeapLockFlag() == 0 || dComIfGp_isHeapLockFlag() == 5) &&
@@ -2496,7 +2467,6 @@ void dMeter2_c::check2DContents() {
     }
 }
 
-/* 80223E00-80224258 21E740 0458+00 1/1 0/0 0/0 .text            moveBombNum__9dMeter2_cFv */
 void dMeter2_c::moveBombNum() {
     u8 temp_r28;
     u8 temp_r31;
@@ -2596,7 +2566,6 @@ void dMeter2_c::moveBombNum() {
     }
 }
 
-/* 80224258-80224354 21EB98 00FC+00 1/1 0/0 0/0 .text            moveBottleNum__9dMeter2_cFv */
 void dMeter2_c::moveBottleNum() {
     for (int i = 0; i < 4; i++) {
         if (dComIfGs_getItem((u8)(i + SLOT_11), true) == fpcNm_ITEM_BEE_CHILD) {
@@ -2613,7 +2582,6 @@ void dMeter2_c::moveBottleNum() {
     }
 }
 
-/* 80224354-80224680 21EC94 032C+00 1/1 0/0 0/0 .text            moveArrowNum__9dMeter2_cFv */
 void dMeter2_c::moveArrowNum() {
     s16 var_r6;
     int var_r28;
@@ -2700,7 +2668,6 @@ void dMeter2_c::moveArrowNum() {
     }
 }
 
-/* 80224680-802248E4 21EFC0 0264+00 1/1 0/0 0/0 .text            movePachinkoNum__9dMeter2_cFv */
 void dMeter2_c::movePachinkoNum() {
     if (g_mwHIO.getPachinkoFlag()) {
         if (dComIfGs_getPachinkoNum() != dComIfGs_getPachinkoMax()) {
@@ -2763,7 +2730,6 @@ void dMeter2_c::movePachinkoNum() {
     }
 }
 
-/* 802248E4-80224A04 21F224 0120+00 1/1 0/0 0/0 .text            alphaAnimeLife__9dMeter2_cFv */
 void dMeter2_c::alphaAnimeLife() {
     if ((mStatus & 0x4000) ||
         ((mStatus & 0x40) && dComIfGp_event_checkHind(0x10) &&
@@ -2782,7 +2748,6 @@ void dMeter2_c::alphaAnimeLife() {
     mpMeterDraw->setAlphaLifeChange(false);
 }
 
-/* 80224A04-80224BAC 21F344 01A8+00 1/1 0/0 0/0 .text            alphaAnimeKantera__9dMeter2_cFv */
 void dMeter2_c::alphaAnimeKantera() {
     if (dComIfGs_getMaxOil() == 0 || dComIfGs_getItem(SLOT_1, true) != fpcNm_ITEM_KANTERA ||
         !daPy_getPlayerActorClass()->checkUseKandelaar(0) || (mStatus & 0x4000) ||
@@ -2802,7 +2767,6 @@ void dMeter2_c::alphaAnimeKantera() {
     mpMeterDraw->setAlphaKanteraChange(true);
 }
 
-/* 80224BAC-80224D6C 21F4EC 01C0+00 1/1 0/0 0/0 .text            alphaAnimeOxygen__9dMeter2_cFv */
 void dMeter2_c::alphaAnimeOxygen() {
     if (!dComIfGp_getOxygenShowFlag() || (mStatus & 0x4000) ||
         ((mStatus & 0x40) && dComIfGp_event_checkHind(0x800)) ||
@@ -2834,8 +2798,6 @@ void dMeter2_c::alphaAnimeOxygen() {
     mpMeterDraw->setAlphaOxygenChange(false);
 }
 
-/* 80224D6C-80224DC0 21F6AC 0054+00 1/1 0/0 0/0 .text            alphaAnimeLightDrop__9dMeter2_cFv
- */
 void dMeter2_c::alphaAnimeLightDrop() {
     if (!isShowLightDrop()) {
         mpMeterDraw->setAlphaLightDropAnimeMin();
@@ -2847,7 +2809,6 @@ void dMeter2_c::alphaAnimeLightDrop() {
 }
 
 
-/* 80224DC0-80224F70 21F700 01B0+00 1/1 0/0 0/0 .text            alphaAnimeRupee__9dMeter2_cFv */
 void dMeter2_c::alphaAnimeRupee() {
     if ((mStatus & 0x4000) || ((mStatus & 0x40) && dComIfGp_event_checkHind(0x80)) ||
         daPy_getPlayerActorClass()->getSumouMode() ||
@@ -2867,7 +2828,6 @@ void dMeter2_c::alphaAnimeRupee() {
     mpMeterDraw->setAlphaRupeeChange(false);
 }
 
-/* 80224F70-802250F4 21F8B0 0184+00 1/1 0/0 0/0 .text            alphaAnimeKey__9dMeter2_cFv */
 void dMeter2_c::alphaAnimeKey() {
     if ((mStatus & 0x4000) || ((mStatus & 0x40) && dComIfGp_event_checkHind(0x40)) ||
         !isKeyVisible() || (mStatus & 0x40000000) || (mStatus & 0x1000) || (mStatus & 0x100000) ||
@@ -2886,7 +2846,6 @@ void dMeter2_c::alphaAnimeKey() {
     mpMeterDraw->setAlphaKeyChange(false);
 }
 
-/* 802250F4-802254C0 21FA34 03CC+00 1/1 0/0 0/0 .text            alphaAnimeButton__9dMeter2_cFv */
 void dMeter2_c::alphaAnimeButton() {
     u8 var_31;
     var_31 = 0;
@@ -2970,8 +2929,6 @@ void dMeter2_c::alphaAnimeButton() {
     mpMeterDraw->setAlphaButtonChange(false);
 }
 
-/* 802254C0-802256DC 21FE00 021C+00 1/1 0/0 0/0 .text            alphaAnimeButtonCross__9dMeter2_cFv
- */
 void dMeter2_c::alphaAnimeButtonCross() {
     if ((mStatus & 0x4000) || ((mStatus & 0x40) && dComIfGp_event_checkHind(0x100)) ||
         ((daPy_getPlayerActorClass()->getSumouMode() != 0) || (mStatus & 0x100) ||
@@ -3008,7 +2965,6 @@ void dMeter2_c::alphaAnimeButtonCross() {
     }
 }
 
-/* 802256DC-802258A0 22001C 01C4+00 3/3 0/0 0/0 .text            isShowLightDrop__9dMeter2_cFv */
 bool dMeter2_c::isShowLightDrop() {
     if (!g_drawHIO.mLightDrop.mAnimDebug) {
         if ((mStatus & 0x4000) || !dComIfGs_isLightDropGetFlag(dComIfGp_getStartStageDarkArea()) ||
@@ -3030,7 +2986,6 @@ bool dMeter2_c::isShowLightDrop() {
     return true;
 }
 
-/* 802258A0-80225960 2201E0 00C0+00 1/1 0/0 0/0 .text            killSubContents__9dMeter2_cFUc */
 void dMeter2_c::killSubContents(u8 param_0) {
     if (mSubContentType != param_0 && mSubContentType != 0) {
         bool free = false;
@@ -3056,7 +3011,6 @@ void dMeter2_c::killSubContents(u8 param_0) {
     }
 }
 
-/* 80225960-802259F8 2202A0 0098+00 1/1 0/0 0/0 .text            isKeyVisible__9dMeter2_cFv */
 u8 dMeter2_c::isKeyVisible() {
     if (dStage_stagInfo_ChkKeyDisp(dComIfGp_getStage()->getStagInfo())) {
         if (dStage_stagInfo_GetSTType(dComIfGp_getStage()->getStagInfo()) == ST_FIELD) {
@@ -3069,7 +3023,6 @@ u8 dMeter2_c::isKeyVisible() {
     return false;
 }
 
-/* 802259F8-80225A64 220338 006C+00 2/2 0/0 0/0 .text            isArrowEquip__9dMeter2_cFv */
 int dMeter2_c::isArrowEquip() {
     for (int i = 0; i < 2; i++) {
         if (mItemStatus[i * 2] == fpcNm_ITEM_BOW || mItemStatus[i * 2] == fpcNm_ITEM_LIGHT_ARROW ||
@@ -3083,7 +3036,6 @@ int dMeter2_c::isArrowEquip() {
     return 0;
 }
 
-/* 80225A64-80225AA0 2203A4 003C+00 2/2 0/0 0/0 .text            isPachinkoEquip__9dMeter2_cFv */
 int dMeter2_c::isPachinkoEquip() {
     for (int i = 0; i < 2; i++) {
         if (mItemStatus[i * 2] == fpcNm_ITEM_PACHINKO) {
@@ -3094,27 +3046,22 @@ int dMeter2_c::isPachinkoEquip() {
     return 0;
 }
 
-/* 80225AA0-80225AC0 2203E0 0020+00 1/0 0/0 0/0 .text            dMeter2_Draw__FP9dMeter2_c */
 static int dMeter2_Draw(dMeter2_c* i_this) {
     return i_this->_draw();
 }
 
-/* 80225AC0-80225AE0 220400 0020+00 1/0 0/0 0/0 .text            dMeter2_Execute__FP9dMeter2_c */
 static int dMeter2_Execute(dMeter2_c* i_this) {
     return i_this->_execute();
 }
 
-/* 80225AE0-80225AE8 220420 0008+00 1/0 0/0 0/0 .text            dMeter2_IsDelete__FP9dMeter2_c */
 static int dMeter2_IsDelete(dMeter2_c* i_this) {
     return 1;
 }
 
-/* 80225AE8-80225B08 220428 0020+00 1/0 0/0 0/0 .text            dMeter2_Delete__FP9dMeter2_c */
 static int dMeter2_Delete(dMeter2_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80225B08-80225BB8 220448 00B0+00 1/0 0/0 0/0 .text            dMeter2_Create__FP9msg_class */
 static int dMeter2_Create(msg_class* i_this) {
     dMeter2Info_setMeterClass(static_cast<dMeter2_c*>(i_this));
     dComIfGp_2dShowOn();
@@ -3134,16 +3081,13 @@ static int dMeter2_Create(msg_class* i_this) {
     return static_cast<dMeter2_c*>(i_this)->_create();
 }
 
-/* ############################################################################################## */
-/* 803BFA54-803BFA68 -00001 0014+00 1/0 0/0 0/0 .data            l_dMeter2_Method */
-SECTION_DATA static leafdraw_method_class l_dMeter2_Method = {
+static leafdraw_method_class l_dMeter2_Method = {
     (process_method_func)dMeter2_Create,  (process_method_func)dMeter2_Delete,
     (process_method_func)dMeter2_Execute, (process_method_func)dMeter2_IsDelete,
     (process_method_func)dMeter2_Draw,
 };
 
-/* 803BFA68-803BFA90 -00001 0028+00 0/0 0/0 1/0 .data            g_profile_METER2 */
-SECTION_DATA extern msg_process_profile_definition g_profile_METER2 = {
+extern msg_process_profile_definition g_profile_METER2 = {
     -3,
     12,
     -3,

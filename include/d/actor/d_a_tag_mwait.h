@@ -6,9 +6,9 @@
 
 class daTagMwait_c : public fopAc_ac_c {
 public:
-    /* 80D5BE18 */ int create();
-    /* 80D5C01C */ ~daTagMwait_c();
-    /* 80D5C0A8 */ int execute();
+    int create();
+    ~daTagMwait_c();
+    int execute();
 
     BOOL checkEndMessage() {return fopAcM_isSwitch(this, mEnterSw); }
 

@@ -22,19 +22,19 @@ public:
         ACT_WAIT_e,
     };
 
-    /* 804D5DF8 */ u8 getEventNo();
-    /* 804D5E04 */ u8 getSwbit();
-    /* 804D5E10 */ u8 getSwbit2();
-    /* 804D5E1C */ u8 getType();
-    /* 804D5E28 */ u8 getTimer();
-    /* 804D5E34 */ u8 getNum();
-    /* 804D5E40 */ u8 getTopSw();
-    /* 804D5EB0 */ u8 getSwAns();
-    /* 804D5EBC */ BOOL chkAllSw2();
-    /* 804D5F64 */ bool chkSwStatus();
-    /* 804D6024 */ bool chkSwStatus2();
-    /* 804D60CC */ ~daAndsw2_c();
-    /* 804D6120 */ int create();
+    u8 getEventNo();
+    u8 getSwbit();
+    u8 getSwbit2();
+    u8 getType();
+    u8 getTimer();
+    u8 getNum();
+    u8 getTopSw();
+    u8 getSwAns();
+    BOOL chkAllSw2();
+    bool chkSwStatus();
+    bool chkSwStatus2();
+    ~daAndsw2_c();
+    int create();
 
     inline int execute();
 

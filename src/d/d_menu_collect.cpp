@@ -62,8 +62,6 @@ static processFunc process[] = {
     &dMenu_Collect2D_c::insect_close_proc,
 };
 
-/* 801AFD48-801AFE34 1AA688 00EC+00 1/1 0/0 0/0 .text
- * __ct__17dMenu_Collect2D_cFP10JKRExpHeapP9STControlP10CSTControl */
 dMenu_Collect2D_c::dMenu_Collect2D_c(JKRExpHeap* param_0, STControl* param_1, CSTControl* param_2) {
     mpHeap = param_0;
     mpStick = param_1;
@@ -89,7 +87,6 @@ dMenu_Collect2D_c::dMenu_Collect2D_c(JKRExpHeap* param_0, STControl* param_1, CS
 }
 
 
-/* 801AFE34-801AFEA4 1AA774 0070+00 1/0 0/0 0/0 .text            __dt__17dMenu_Collect2D_cFv */
 dMenu_Collect2D_c::~dMenu_Collect2D_c() {
     if (mpSubHeap) {
         mDoExt_destroyExpHeap(mpSubHeap);
@@ -97,7 +94,6 @@ dMenu_Collect2D_c::~dMenu_Collect2D_c() {
     }
 }
 
-/* 801AFEA4-801B0100 1AA7E4 025C+00 1/1 0/0 0/0 .text            _create__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::_create() {
     mpHeap->getTotalFreeSize();
     mpScreen = new J2DScreen();
@@ -132,7 +128,6 @@ void dMenu_Collect2D_c::_create() {
     setHIO(true);
 }
 
-/* 801B0100-801B0570 1AAA40 0470+00 1/1 0/0 0/0 .text            _delete__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::_delete() {
     mpHeap->getTotalFreeSize();
     dMeter2Info_setCollectCursorPosXY(mCursorX, mCursorY);
@@ -215,13 +210,10 @@ void dMenu_Collect2D_c::_delete() {
     dComIfGp_getCollectResArchive()->removeResourceAll();
 }
 
-/* 801B0570-801B05A8 1AAEB0 0038+00 1/1 0/0 0/0 .text            initialize__17dMenu_Collect2D_cFv
- */
 void dMenu_Collect2D_c::initialize() {
     (this->*init[mProcess])();
 }
 
-/* 801B05A8-801B061C 1AAEE8 0074+00 2/2 0/0 0/0 .text isFishIconVisible__17dMenu_Collect2D_cFv */
 bool dMenu_Collect2D_c::isFishIconVisible() {
     if (dComIfGs_getFishNum(0) || dComIfGs_getFishNum(1) || dComIfGs_getFishNum(2) ||
         dComIfGs_getFishNum(3) || dComIfGs_getFishNum(4) || dComIfGs_getFishNum(5) ||
@@ -232,7 +224,6 @@ bool dMenu_Collect2D_c::isFishIconVisible() {
     return false;
 }
 
-/* 801B061C-801B071C 1AAF5C 0100+00 2/2 0/0 0/0 .text isSkillIconVisible__17dMenu_Collect2D_cFv */
 bool dMenu_Collect2D_c::isSkillIconVisible() {
         /* dSv_event_flag_c::F_0338 - Secret techniques - Obtained 1 secret techinques - Shield attack */
     if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[338]) ||
@@ -254,8 +245,6 @@ bool dMenu_Collect2D_c::isSkillIconVisible() {
     return false;
 }
 
-/* 801B071C-801B074C 1AB05C 0030+00 2/2 0/0 0/0 .text isInsectIconVisible__17dMenu_Collect2D_cFv
- */
 bool dMenu_Collect2D_c::isInsectIconVisible() {
     return dMenu_Insect_c::getGetInsectNum();
 }
@@ -264,7 +253,6 @@ static u8 const lit_3778[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 801B074C-801B1C3C 1AB08C 14F0+00 1/1 0/0 0/0 .text            screenSet__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::screenSet() {
     static const u64 text_sv[3] = {'sav_0', 'sav_1', 'sav_2'};
     static const u64 text_op[3] = {'opt_0', 'opt_1', 'opt_2',};
@@ -692,8 +680,6 @@ void dMenu_Collect2D_c::screenSet() {
     setPohMaxNum(dComIfGs_getPohSpiritNum());
 }
 
-/* 801B1C3C-801B1CE0 1AC57C 00A4+00 1/1 0/0 0/0 .text            animationSet__17dMenu_Collect2D_cFv
- */
 void dMenu_Collect2D_c::animationSet() {
     OSInitFastCast();
     void* resource =
@@ -705,8 +691,6 @@ void dMenu_Collect2D_c::animationSet() {
     field_0x3c = 0.0f;
 }
 
-/* 801B1CE0-801B1EDC 1AC620 01FC+00 1/1 0/0 0/0 .text
- * btkAnimeLoop0__17dMenu_Collect2D_cFP19J2DAnmTextureSRTKey    */
 void dMenu_Collect2D_c::btkAnimeLoop0(J2DAnmTextureSRTKey* i_SRTKey) {
     if (i_SRTKey != NULL) {
         mFrame++;
@@ -725,8 +709,6 @@ void dMenu_Collect2D_c::btkAnimeLoop0(J2DAnmTextureSRTKey* i_SRTKey) {
     static_cast<J2DTextBox*>(mpScreen->search('modelbg5'))->setAnimation(i_SRTKey);
 }
 
-/* 801B1EDC-801B1FAC 1AC81C 00D0+00 1/1 0/0 0/0 .text            setBackAlpha__17dMenu_Collect2D_cFv
- */
 void dMenu_Collect2D_c::setBackAlpha() {
     f32 alpha = mpBlackTex->getAlpha() / 150.0f;
 
@@ -770,8 +752,6 @@ void dMenu_Collect2D_c::setBackAlpha() {
     mpBlackTex->setAlpha(alpha * 150.0f);
 }
 
-/* 801B1FAC-801B27EC 1AC8EC 0840+00 1/1 0/0 0/0 .text            cursorMove__17dMenu_Collect2D_cFv
- */
 // Not sure if this works without gotos
 void dMenu_Collect2D_c::cursorMove() {
     u8 dVar1 = mCursorX;
@@ -993,8 +973,6 @@ LAB_802bab54:
     }
 }
 
-/* 801B27EC-801B2A74 1AD12C 0288+00 2/2 0/0 0/0 .text            cursorPosSet__17dMenu_Collect2D_cFv
- */
 void dMenu_Collect2D_c::cursorPosSet() {
     for (int i = 0; i < 7; i++) {
         for (int j = 0; j < 6; j++) {
@@ -1033,8 +1011,6 @@ void dMenu_Collect2D_c::cursorPosSet() {
     }
 }
 
-/* 801B2A74-801B2D00 1AD3B4 028C+00 1/1 0/0 0/0 .text            changeSword__17dMenu_Collect2D_cFv
- */
 void dMenu_Collect2D_c::changeSword() {
     switch (mCursorX) {
     case 3:
@@ -1079,8 +1055,6 @@ void dMenu_Collect2D_c::changeSword() {
     }
 }
 
-/* 801B2D00-801B2EE4 1AD640 01E4+00 1/1 0/0 0/0 .text            changeShield__17dMenu_Collect2D_cFv
- */
 void dMenu_Collect2D_c::changeShield() {
     switch (mCursorX) {
     case 3:
@@ -1116,8 +1090,6 @@ void dMenu_Collect2D_c::changeShield() {
     }
 }
 
-/* 801B2EE4-801B30C8 1AD824 01E4+00 1/1 0/0 0/0 .text            changeClothe__17dMenu_Collect2D_cFv
- */
 void dMenu_Collect2D_c::changeClothe() {
     switch (mCursorX) {
     case 3:
@@ -1150,7 +1122,6 @@ void dMenu_Collect2D_c::changeClothe() {
     }
 }
 
-/* 801B30C8-801B3340 1ADA08 0278+00 1/1 0/0 0/0 .text setArrowMaxNum__17dMenu_Collect2D_cFUc */
 void dMenu_Collect2D_c::setArrowMaxNum(u8 param_0) {
     switch (param_0) {
     case 0:
@@ -1176,7 +1147,6 @@ void dMenu_Collect2D_c::setArrowMaxNum(u8 param_0) {
     }
 }
 
-/* 801B3340-801B3524 1ADC80 01E4+00 1/1 0/0 0/0 .text setWalletMaxNum__17dMenu_Collect2D_cFUs */
 void dMenu_Collect2D_c::setWalletMaxNum(u16 i_walletSize) {
     switch (i_walletSize) {
     case 300:
@@ -1197,8 +1167,6 @@ void dMenu_Collect2D_c::setWalletMaxNum(u16 i_walletSize) {
     }
 }
 
-/* 801B3524-801B3640 1ADE64 011C+00 1/1 0/0 0/0 .text            setSmellType__17dMenu_Collect2D_cFv
- */
 void dMenu_Collect2D_c::setSmellType() {
     static const u64 smell_tag[5] = {
         'wolf_med', 'wolf_chi', 'wolf_fis', 'wolf_iri', 'wolf_pou',
@@ -1230,7 +1198,6 @@ void dMenu_Collect2D_c::setSmellType() {
     }
 }
 
-/* 801B3640-801B370C 1ADF80 00CC+00 1/1 0/0 0/0 .text setHeartPiece__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::setHeartPiece() {
     static const u64 heart_tag[4] = {
         'heart_1n',
@@ -1248,7 +1215,6 @@ void dMenu_Collect2D_c::setHeartPiece() {
     }
 }
 
-/* 801B370C-801B39D0 1AE04C 02C4+00 1/1 0/0 0/0 .text setPohMaxNum__17dMenu_Collect2D_cFUc */
 void dMenu_Collect2D_c::setPohMaxNum(u8 i_pohNum) {
     if (i_pohNum > MAX_POH_NUM) {
         i_pohNum = MAX_POH_NUM;
@@ -1287,8 +1253,6 @@ void dMenu_Collect2D_c::setPohMaxNum(u8 i_pohNum) {
     }
 }
 
-/* 801B39D0-801B3CF4 1AE310 0324+00 2/2 0/0 0/0 .text
- * setEquipItemFrameColorSword__17dMenu_Collect2D_cFi           */
 void dMenu_Collect2D_c::setEquipItemFrameColorSword(int i_frame) {
     static const u64 tag[2] = {
         'ken_g_0',
@@ -1346,8 +1310,6 @@ void dMenu_Collect2D_c::setEquipItemFrameColorSword(int i_frame) {
     }
 }
 
-/* 801B3CF4-801B3FDC 1AE634 02E8+00 2/2 0/0 0/0 .text
- * setEquipItemFrameColorShield__17dMenu_Collect2D_cFi          */
 void dMenu_Collect2D_c::setEquipItemFrameColorShield(int i_frame) {
     static const u64 tag[2] = {
         'tate_g_0',
@@ -1396,8 +1358,6 @@ void dMenu_Collect2D_c::setEquipItemFrameColorShield(int i_frame) {
     }
 }
 
-/* 801B3FDC-801B42D8 1AE91C 02FC+00 2/2 0/0 0/0 .text
- * setEquipItemFrameColorClothes__17dMenu_Collect2D_cFi         */
 void dMenu_Collect2D_c::setEquipItemFrameColorClothes(int i_frame) {
     static const u64 tag[3] = {
         'fuku_g_0',
@@ -1450,7 +1410,6 @@ void dMenu_Collect2D_c::setEquipItemFrameColorClothes(int i_frame) {
     }
 }
 
-/* 801B42D8-801B46FC 1AEC18 0424+00 2/2 0/0 0/0 .text            setHIO__17dMenu_Collect2D_cFb */
 void dMenu_Collect2D_c::setHIO(bool i_useHIO) {
     static const u64 kaz_n[9] = {
         'uzu_00', 'uzu_01', 'uzu_02', 'uzu_03', 'uzu_04', 'uzu_05', 'uzu_06', 'uzu_07', 'hishi',
@@ -1540,8 +1499,6 @@ void dMenu_Collect2D_c::setHIO(bool i_useHIO) {
     }
 }
 
-/* 801B46FC-801B473C 1AF03C 0040+00 3/3 0/0 0/0 .text            getItemTag__17dMenu_Collect2D_cFiib
- */
 u64 dMenu_Collect2D_c::getItemTag(int i_tag1, int i_tag2, bool param_3) {
     static const u64 itemTag[6][7] = {
         {0, 0, 0, 'ken_n0', 'ken_n1', 'heart_kn', 'kamen_n'},
@@ -1575,7 +1532,6 @@ u64 dMenu_Collect2D_c::getItemTag(int i_tag1, int i_tag2, bool param_3) {
     return itemTag[i_tag2][i_tag1];
 }
 
-/* 801B473C-801B48D0 1AF07C 0194+00 1/0 0/0 0/0 .text            wait_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::wait_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
 
@@ -1620,7 +1576,6 @@ void dMenu_Collect2D_c::wait_init() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B48D0-801B4E14 1AF210 0544+00 1/0 0/0 0/0 .text            wait_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::wait_proc() {
     if (dMw_A_TRIGGER()) {
         if (mCursorX == 0 && mCursorY == 5) {
@@ -1724,7 +1679,6 @@ void dMenu_Collect2D_c::wait_proc() {
 }
 
 
-/* 801B4E14-801B4EC0 1AF754 00AC+00 1/0 0/0 0/0 .text save_open_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::save_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpSaveScrn) {
@@ -1739,7 +1693,6 @@ void dMenu_Collect2D_c::save_open_init() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B4EC0-801B4F30 1AF800 0070+00 1/0 0/0 0/0 .text save_open_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::save_open_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpSaveScrn->getSaveStatus() == 1) {
@@ -1751,13 +1704,11 @@ void dMenu_Collect2D_c::save_open_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B4F30-801B4F6C 1AF870 003C+00 1/0 0/0 0/0 .text save_move_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::save_move_init() {
     setAButtonString(0x040c);
     setBButtonString(0);
 }
 
-/* 801B4F6C-801B4FDC 1AF8AC 0070+00 1/0 0/0 0/0 .text save_move_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::save_move_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpSaveScrn->getSaveStatus() == 2) {
@@ -1769,13 +1720,11 @@ void dMenu_Collect2D_c::save_move_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B4FDC-801B5018 1AF91C 003C+00 1/0 0/0 0/0 .text save_close_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::save_close_init() {
     setAButtonString(0);
     setBButtonString(0);
 }
 
-/* 801B5018-801B5094 1AF958 007C+00 1/0 0/0 0/0 .text save_close_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::save_close_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpSaveScrn->getSaveStatus() == 3) {
@@ -1788,7 +1737,6 @@ void dMenu_Collect2D_c::save_close_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B5094-801B513C 1AF9D4 00A8+00 1/0 0/0 0/0 .text option_open_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::option_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpOptionScrn) {
@@ -1801,7 +1749,6 @@ void dMenu_Collect2D_c::option_open_init() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B513C-801B51AC 1AFA7C 0070+00 1/0 0/0 0/0 .text option_open_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::option_open_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpOptionScrn->getQuitStatus() == 1) {
@@ -1813,13 +1760,11 @@ void dMenu_Collect2D_c::option_open_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B51AC-801B51E8 1AFAEC 003C+00 1/0 0/0 0/0 .text option_move_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::option_move_init() {
     setAButtonString(0x040c);
     setBButtonString(0x03f9);
 }
 
-/* 801B51E8-801B5258 1AFB28 0070+00 1/0 0/0 0/0 .text option_move_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::option_move_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpOptionScrn->getQuitStatus() == 2) {
@@ -1831,13 +1776,11 @@ void dMenu_Collect2D_c::option_move_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B5258-801B5294 1AFB98 003C+00 1/0 0/0 0/0 .text option_close_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::option_close_init() {
     setAButtonString(0);
     setBButtonString(0);
 }
 
-/* 801B5294-801B5310 1AFBD4 007C+00 1/0 0/0 0/0 .text option_close_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::option_close_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpOptionScrn->getQuitStatus() == 3) {
@@ -1850,7 +1793,6 @@ void dMenu_Collect2D_c::option_close_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B5310-801B53AC 1AFC50 009C+00 1/0 0/0 0/0 .text letter_open_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::letter_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpLetterScrn) {
@@ -1862,7 +1804,6 @@ void dMenu_Collect2D_c::letter_open_init() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B53AC-801B541C 1AFCEC 0070+00 1/0 0/0 0/0 .text letter_open_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::letter_open_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpLetterScrn->getStatus() == 1) {
@@ -1874,13 +1815,11 @@ void dMenu_Collect2D_c::letter_open_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B541C-801B5458 1AFD5C 003C+00 1/0 0/0 0/0 .text letter_move_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::letter_move_init() {
     setAButtonString(0x040c);
     setBButtonString(0x03f9);
 }
 
-/* 801B5458-801B54C8 1AFD98 0070+00 1/0 0/0 0/0 .text letter_move_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::letter_move_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpLetterScrn->getStatus() == 2) {
@@ -1892,13 +1831,11 @@ void dMenu_Collect2D_c::letter_move_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B54C8-801B5504 1AFE08 003C+00 1/0 0/0 0/0 .text letter_close_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::letter_close_init() {
     setAButtonString(0);
     setBButtonString(0);
 }
 
-/* 801B5504-801B5580 1AFE44 007C+00 1/0 0/0 0/0 .text letter_close_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::letter_close_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpLetterScrn->getStatus() == 3) {
@@ -1911,7 +1848,6 @@ void dMenu_Collect2D_c::letter_close_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B5580-801B561C 1AFEC0 009C+00 1/0 0/0 0/0 .text fishing_open_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::fishing_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpFishingScrn) {
@@ -1923,7 +1859,6 @@ void dMenu_Collect2D_c::fishing_open_init() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B561C-801B568C 1AFF5C 0070+00 1/0 0/0 0/0 .text fishing_open_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::fishing_open_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpFishingScrn->getStatus() == 1) {
@@ -1935,13 +1870,11 @@ void dMenu_Collect2D_c::fishing_open_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B568C-801B56C8 1AFFCC 003C+00 1/0 0/0 0/0 .text fishing_move_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::fishing_move_init() {
     setAButtonString(0x040c);
     setBButtonString(0x03f9);
 }
 
-/* 801B56C8-801B5738 1B0008 0070+00 1/0 0/0 0/0 .text fishing_move_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::fishing_move_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpFishingScrn->getStatus() == 2) {
@@ -1953,13 +1886,11 @@ void dMenu_Collect2D_c::fishing_move_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B5738-801B5774 1B0078 003C+00 1/0 0/0 0/0 .text fishing_close_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::fishing_close_init() {
     setAButtonString(0);
     setBButtonString(0);
 }
 
-/* 801B5774-801B57F0 1B00B4 007C+00 1/0 0/0 0/0 .text fishing_close_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::fishing_close_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpFishingScrn->getStatus() == 3) {
@@ -1972,7 +1903,6 @@ void dMenu_Collect2D_c::fishing_close_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B57F0-801B588C 1B0130 009C+00 1/0 0/0 0/0 .text skill_open_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::skill_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpSkillScrn) {
@@ -1984,7 +1914,6 @@ void dMenu_Collect2D_c::skill_open_init() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B588C-801B58FC 1B01CC 0070+00 1/0 0/0 0/0 .text skill_open_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::skill_open_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpSkillScrn->getStatus() == 1) {
@@ -1996,13 +1925,11 @@ void dMenu_Collect2D_c::skill_open_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B58FC-801B5938 1B023C 003C+00 1/0 0/0 0/0 .text skill_move_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::skill_move_init() {
     setAButtonString(0x040c);
     setBButtonString(0x03f9);
 }
 
-/* 801B5938-801B59A8 1B0278 0070+00 1/0 0/0 0/0 .text skill_move_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::skill_move_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpSkillScrn->getStatus() == 2) {
@@ -2014,13 +1941,11 @@ void dMenu_Collect2D_c::skill_move_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B59A8-801B59E4 1B02E8 003C+00 1/0 0/0 0/0 .text skill_close_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::skill_close_init() {
     setAButtonString(0);
     setBButtonString(0);
 }
 
-/* 801B59E4-801B5A60 1B0324 007C+00 1/0 0/0 0/0 .text skill_close_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::skill_close_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpSkillScrn->getStatus() == 3) {
@@ -2033,7 +1958,6 @@ void dMenu_Collect2D_c::skill_close_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B5A60-801B5B00 1B03A0 00A0+00 1/0 0/0 0/0 .text insect_open_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::insect_open_init() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (!mpInsectScrn) {
@@ -2045,7 +1969,6 @@ void dMenu_Collect2D_c::insect_open_init() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B5B00-801B5B70 1B0440 0070+00 1/0 0/0 0/0 .text insect_open_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::insect_open_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpInsectScrn->getStatus() == 1) {
@@ -2057,13 +1980,11 @@ void dMenu_Collect2D_c::insect_open_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B5B70-801B5BAC 1B04B0 003C+00 1/0 0/0 0/0 .text insect_move_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::insect_move_init() {
     setAButtonString(0x040c);
     setBButtonString(0x03f9);
 }
 
-/* 801B5BAC-801B5C1C 1B04EC 0070+00 1/0 0/0 0/0 .text insect_move_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::insect_move_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpInsectScrn->getStatus() == 2) {
@@ -2075,13 +1996,11 @@ void dMenu_Collect2D_c::insect_move_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B5C1C-801B5C58 1B055C 003C+00 1/0 0/0 0/0 .text insect_close_init__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::insect_close_init() {
     setAButtonString(0);
     setBButtonString(0);
 }
 
-/* 801B5C58-801B5CD4 1B0598 007C+00 1/0 0/0 0/0 .text insect_close_proc__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::insect_close_proc() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpSubHeap);
     if (mpInsectScrn->getStatus() == 3) {
@@ -2094,7 +2013,6 @@ void dMenu_Collect2D_c::insect_close_proc() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801B5CD4-801B5D70 1B0614 009C+00 1/1 0/0 0/0 .text            _move__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::_move() {
     u8 last_process = mProcess;
     (this->*process[last_process])();
@@ -2108,7 +2026,6 @@ void dMenu_Collect2D_c::_move() {
 }
 
 
-/* 801B5D70-801B5F48 1B06B0 01D8+00 1/1 0/0 0/0 .text            _draw__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::_draw() {
     J2DGrafContext* grafPort = dComIfGp_getCurrentGrafPort();
     grafPort->setup2D();
@@ -2153,13 +2070,10 @@ void dMenu_Collect2D_c::_draw() {
     mpDrawCursor->draw();
 }
 
-/* 801B5F48-801B5F84 1B0888 003C+00 1/1 0/0 0/0 .text            drawTop__17dMenu_Collect2D_cFv */
 void dMenu_Collect2D_c::drawTop() {
     dComIfGd_set2DOpaTop(mpDraw2DTop);
 }
 
-/* 801B5F84-801B5FAC 1B08C4 0028+00 0/0 1/1 0/0 .text            isKeyCheck__17dMenu_Collect2D_cFv
- */
 bool dMenu_Collect2D_c::isKeyCheck() {
     if (mProcess || field_0x25f) {
         return true;
@@ -2167,14 +2081,10 @@ bool dMenu_Collect2D_c::isKeyCheck() {
     return false;
 }
 
-/* 801B5FAC-801B5FB4 1B08EC 0008+00 0/0 1/1 0/0 .text            isOutCheck__17dMenu_Collect2D_cFv
- */
 bool dMenu_Collect2D_c::isOutCheck() {
     return false;
 }
 
-/* 801B5FB4-801B60B8 1B08F4 0104+00 20/20 0/0 0/0 .text setAButtonString__17dMenu_Collect2D_cFUs
- */
 void dMenu_Collect2D_c::setAButtonString(u16 i_stringID) {
     static const u64 text_a_tag[5] = {
         'atext1_1', 'atext1_2', 'atext1_3', 'atext1_4', 'atext1_5',
@@ -2199,8 +2109,6 @@ void dMenu_Collect2D_c::setAButtonString(u16 i_stringID) {
     }
 }
 
-/* 801B60B8-801B61BC 1B09F8 0104+00 20/20 0/0 0/0 .text setBButtonString__17dMenu_Collect2D_cFUs
- */
 void dMenu_Collect2D_c::setBButtonString(u16 i_stringID) {
     static const u64 text_b_tag[5] = {
         'btext1_1', 'btext1_2', 'btext1_3', 'btext1_4', 'btext1_5',
@@ -2225,8 +2133,6 @@ void dMenu_Collect2D_c::setBButtonString(u16 i_stringID) {
     }
 }
 
-/* 801B61BC-801B6344 1B0AFC 0188+00 2/2 0/0 0/0 .text setItemNameString__17dMenu_Collect2D_cFUcUc
- */
 void dMenu_Collect2D_c::setItemNameString(u8 param_0, u8 param_1) {
     if (field_0x22d[param_0][param_1] == 0) {
         setItemNameStringNull();
@@ -2262,8 +2168,6 @@ void dMenu_Collect2D_c::setItemNameString(u8 param_0, u8 param_1) {
     }
 }
 
-/* 801B6344-801B6454 1B0C84 0110+00 1/1 0/0 0/0 .text setItemNameStringNull__17dMenu_Collect2D_cFv
- */
 void dMenu_Collect2D_c::setItemNameStringNull() {
     mItemNameString = 0;
 #if REGION_JPN
@@ -2286,8 +2190,6 @@ void dMenu_Collect2D_c::setItemNameStringNull() {
     strcpy(textBox->getStringPtr(), "");
 }
 
-/* 801B6454-801B6538 1B0D94 00E4+00 1/1 0/0 0/0 .text
- * __ct__17dMenu_Collect3D_cFP10JKRExpHeapP17dMenu_Collect2D_cP10CSTControl */
 dMenu_Collect3D_c::dMenu_Collect3D_c(JKRExpHeap* param_0, dMenu_Collect2D_c* param_1,
                                      CSTControl* param_2) {
     mIsWolf = daPy_py_c::checkNowWolf();
@@ -2308,7 +2210,6 @@ dMenu_Collect3D_c::dMenu_Collect3D_c(JKRExpHeap* param_0, dMenu_Collect2D_c* par
 }
 
 
-/* 801B6538-801B65A8 1B0E78 0070+00 1/0 0/0 0/0 .text            __dt__17dMenu_Collect3D_cFv */
 dMenu_Collect3D_c::~dMenu_Collect3D_c() {
     if (mpSolidHeap) {
         mDoExt_destroySolidHeap(mpSolidHeap);
@@ -2317,7 +2218,6 @@ dMenu_Collect3D_c::~dMenu_Collect3D_c() {
 }
 
 
-/* 801B65A8-801B6694 1B0EE8 00EC+00 1/1 0/0 0/0 .text            _create__17dMenu_Collect3D_cFv */
 void dMenu_Collect3D_c::_create() {
     mpHeap->getTotalFreeSize();
     mpSolidHeap = mDoExt_createSolidHeapToCurrent(0x25800, mpHeap, 0x20);
@@ -2345,14 +2245,12 @@ void dMenu_Collect3D_c::_create() {
     _move(mpCollect2D->getCursorX(), mpCollect2D->getCursorY());
 }
 
-/* 801B6694-801B66C8 1B0FD4 0034+00 1/1 0/0 0/0 .text            _delete__17dMenu_Collect3D_cFv */
 void dMenu_Collect3D_c::_delete() {
     if (daAlink_getAlinkActorClass()) {
         daAlink_getAlinkActorClass()->resetStatusWindow();
     }
 }
 
-/* 801B66C8-801B696C 1B1008 02A4+00 2/2 0/0 0/0 .text            _move__17dMenu_Collect3D_cFUcUc */
 void dMenu_Collect3D_c::_move(u8 param_0, u8 param_1) {
     cXyz itemPos;
     Vec linkPos = mpCollect2D->getpLink()->getGlobalVtxCenter(false, 0);
@@ -2418,7 +2316,6 @@ void dMenu_Collect3D_c::_move(u8 param_0, u8 param_1) {
     }
 }
 
-/* 801B696C-801B6A30 1B12AC 00C4+00 1/1 0/0 0/0 .text            draw__17dMenu_Collect3D_cFv */
 void dMenu_Collect3D_c::draw() {
     dComIfGd_setListItem3D();
     if (daAlink_getAlinkActorClass()) {
@@ -2433,7 +2330,6 @@ void dMenu_Collect3D_c::draw() {
     dComIfGd_setList();
 }
 
-/* 801B6A30-801B6D30 1B1370 0300+00 2/2 0/0 0/0 .text setJ3D__17dMenu_Collect3D_cFPCcPCcPCc */
 void dMenu_Collect3D_c::setJ3D(const char* param_0, const char* param_1, const char* param_2) {
     JKRArchive* resArchive = dComIfGp_getCollectResArchive();
     J3DModelData* modelData = J3DModelLoaderDataBase::load(
@@ -2464,7 +2360,6 @@ void dMenu_Collect3D_c::setJ3D(const char* param_0, const char* param_1, const c
     }
 }
 
-/* 801B6D30-801B6E70 1B1670 0140+00 2/2 0/0 0/0 .text            set_mtx__17dMenu_Collect3D_cFv */
 void dMenu_Collect3D_c::set_mtx() {
     f32 scale = 0.0f;
     if (getMaskMdlVisible() == 2) {
@@ -2496,7 +2391,6 @@ void dMenu_Collect3D_c::set_mtx() {
 }
 
 
-/* 801B6E70-801B6FB0 1B17B0 0140+00 1/1 0/0 0/0 .text            animePlay__17dMenu_Collect3D_cFv */
 void dMenu_Collect3D_c::animePlay() {
     if (mpBrkAnm != NULL) {
         mMaskMirrorAnmFrameBrk += g_drawHIO.mCollectScreen.mMaskMirrorAnimSpeed;
@@ -2517,8 +2411,6 @@ void dMenu_Collect3D_c::animePlay() {
 }
 
 
-/* 801B6FB0-801B7014 1B18F0 0064+00 1/1 0/0 0/0 .text            animeEntry__17dMenu_Collect3D_cFv
- */
 void dMenu_Collect3D_c::animeEntry() {
     if (mpBrkAnm != NULL) {
         mpBrkAnm->entry(mpModel->getModelData());
@@ -2528,7 +2420,6 @@ void dMenu_Collect3D_c::animeEntry() {
     }
 }
 
-/* 801B7014-801B71C4 1B1954 01B0+00 1/1 0/0 0/0 .text createMaskModel__17dMenu_Collect3D_cFv */
 void dMenu_Collect3D_c::createMaskModel() {
     static const f32 m_kamen_offset_x[5] = {-14.0f, -14.0f, -14.0f, 1.3f, 6.5f};
     static const f32 m_kamen_offset_y[5] = {0.0f, 0.0f, 0.0f, 22.0f, 30.0f};
@@ -2572,7 +2463,6 @@ void dMenu_Collect3D_c::createMaskModel() {
     }
 }
 
-/* 801B71C4-801B7434 1B1B04 0270+00 1/1 0/0 0/0 .text createMirrorModel__17dMenu_Collect3D_cFv */
 void dMenu_Collect3D_c::createMirrorModel() {
     static const f32 m_mirror_offset_x[5] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     static const f32 m_mirror_offset_y[5] = {4.0f, 4.0f, 4.0f, 4.0f, 4.0f};
@@ -2622,7 +2512,6 @@ void dMenu_Collect3D_c::createMirrorModel() {
     }
 }
 
-/* 801B7434-801B749C 1B1D74 0068+00 5/5 0/0 0/0 .text getCrystalNum__17dMenu_Collect3D_cFv */
 u8 dMenu_Collect3D_c::getCrystalNum() {
     u8 count = 0;
     for (int i = 0; i < 4; i++) {
@@ -2634,8 +2523,6 @@ u8 dMenu_Collect3D_c::getCrystalNum() {
     return count;
 }
 
-/* 801B749C-801B7504 1B1DDC 0068+00 5/5 0/0 0/0 .text            getMirrorNum__17dMenu_Collect3D_cFv
- */
 u8 dMenu_Collect3D_c::getMirrorNum() {
     u8 count = 0;
     for (int i = 0; i < 4; i++) {
@@ -2647,7 +2534,6 @@ u8 dMenu_Collect3D_c::getMirrorNum() {
     return count;
 }
 
-/* 801B7504-801B75E8 1B1E44 00E4+00 4/4 0/0 0/0 .text getMaskMdlVisible__17dMenu_Collect3D_cFv */
 u8 dMenu_Collect3D_c::getMaskMdlVisible() {
     if ((getCrystalNum() == 0 && getMirrorNum() == 0) ||
          /* dSv_event_flag_c::M_071 - Cutscene - [cutscene: 20] Zant appears (during Midna's desperate hour) */
@@ -2663,11 +2549,8 @@ u8 dMenu_Collect3D_c::getMaskMdlVisible() {
     return 2;
 }
 
-/* 80450720-80450728 0001A0 0004+04 1/1 0/0 1/1 .sdata           mViewOffsetY__17dMenu_Collect3D_c
- */
 f32 dMenu_Collect3D_c::mViewOffsetY = -100.0f;
 
-/* 801B75E8-801B7660 1B1F28 0078+00 0/0 1/1 0/0 .text setupItem3D__17dMenu_Collect3D_cFPA4_f */
 void dMenu_Collect3D_c::setupItem3D(Mtx param_0) {
     GXSetViewport(0.0f, mViewOffsetY, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
     mViewOffsetY = -100.0f;
@@ -2677,8 +2560,6 @@ void dMenu_Collect3D_c::setupItem3D(Mtx param_0) {
     calcViewMtx(param_0);
 }
 
-/* 801B7660-801B774C 1B1FA0 00EC+00 1/1 0/0 0/0 .text toItem3Dpos__17dMenu_Collect3D_cFfffP4cXyz
- */
 #pragma push
 #pragma optimization_level 2
 void dMenu_Collect3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* param_3) {
@@ -2697,13 +2578,11 @@ void dMenu_Collect3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz*
 }
 #pragma pop
 
-/* 801B774C-801B77A4 1B208C 0058+00 2/2 0/0 0/0 .text calcViewMtx__17dMenu_Collect3D_cFPA4_f */
 void dMenu_Collect3D_c::calcViewMtx(Mtx param_0) {
     mDoMtx_lookAt(param_0, &cXyz(0.0f, 0.0f, -1000.0f), &cXyz::Zero, &cXyz(0.0f, 1.0f, 0.0f), 0);
 }
 
 
-/* 801B77A4-801B78C0 1B20E4 011C+00 1/0 0/0 0/0 .text            draw__20dMenu_Collect2DTop_cFv */
 void dMenu_Collect2DTop_c::draw() {
     J2DGrafContext* graf_port = dComIfGp_getCurrentGrafPort();
     graf_port->setup2D();
@@ -2733,14 +2612,11 @@ void dMenu_Collect2DTop_c::draw() {
     }
 }
 
-/* 801B78C0-801B795C 1B2200 009C+00 0/0 1/1 0/0 .text
- * __ct__15dMenu_Collect_cFP10JKRExpHeapP9STControlP10CSTControl */
 dMenu_Collect_c::dMenu_Collect_c(JKRExpHeap* param_0, STControl* param_1, CSTControl* param_2) {
     mpCollect2D = new dMenu_Collect2D_c(param_0, param_1, param_2);
     mpCollect3D = new dMenu_Collect3D_c(param_0, mpCollect2D, param_2);
 }
 
-/* 801B795C-801B7A0C 1B229C 00B0+00 1/0 0/0 0/0 .text            __dt__15dMenu_Collect_cFv */
 dMenu_Collect_c::~dMenu_Collect_c() {
     if (mpCollect2D) {
         delete mpCollect2D;
@@ -2753,25 +2629,21 @@ dMenu_Collect_c::~dMenu_Collect_c() {
 }
 
 
-/* 801B7A0C-801B7A44 1B234C 0038+00 0/0 1/1 0/0 .text            _create__15dMenu_Collect_cFv */
 void dMenu_Collect_c::_create() {
     mpCollect2D->_create();
     mpCollect3D->_create();
 }
 
-/* 801B7A44-801B7A7C 1B2384 0038+00 0/0 1/1 0/0 .text            _delete__15dMenu_Collect_cFv */
 void dMenu_Collect_c::_delete() {
     mpCollect2D->_delete();
     mpCollect3D->_delete();
 }
 
-/* 801B7A7C-801B7AC0 1B23BC 0044+00 0/0 1/1 0/0 .text            _move__15dMenu_Collect_cFv */
 void dMenu_Collect_c::_move() {
     mpCollect2D->_move();
     mpCollect3D->_move(mpCollect2D->getCursorX(), mpCollect2D->getCursorY());
 }
 
-/* 801B7AC0-801B7B14 1B2400 0054+00 0/0 1/1 0/0 .text            draw__15dMenu_Collect_cFv */
 void dMenu_Collect_c::draw() {
     dComIfGd_set2DOpa(mpCollect2D);
     mpCollect3D->draw();

@@ -16,15 +16,15 @@
  */
 class daLv3Candle_c : public fopAc_ac_c {
 public:
-    /* 80C57B38 */ void setBaseMtx();
-    /* 80C57BC0 */ int CreateHeap();
-    /* 80C57C40 */ cPhs__Step create();
-    /* 80C57F6C */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80C57F8C */ void lightInit();
-    /* 80C58018 */ void pointLightProc();
-    /* 80C580A0 */ int Execute();
-    /* 80C582FC */ int Draw();
-    /* 80C583A0 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    static int createHeapCallBack(fopAc_ac_c*);
+    void lightInit();
+    void pointLightProc();
+    int Execute();
+    int Draw();
+    int Delete();
 
     u8 getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getType() { return fopAcM_GetParamBit(this, 8, 8); }
@@ -53,8 +53,8 @@ STATIC_ASSERT(sizeof(daLv3Candle_c) == 0x754);
 
 class daLv3Candle_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C57ACC */ daLv3Candle_HIO_c();
-    /* 80C58484 */ virtual ~daLv3Candle_HIO_c() {}
+    daLv3Candle_HIO_c();
+    virtual ~daLv3Candle_HIO_c() {}
 
     void genMessage(JORMContext*);
 

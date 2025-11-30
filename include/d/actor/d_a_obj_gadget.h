@@ -60,22 +60,22 @@ private:
     /* 0xA47 */ u8 field_0xa47;
 
 public:
-    /* 80BF2D2C */ virtual ~daObj_Gadget_c();
-    /* 80BF2F28 */ int create();
-    /* 80BF3478 */ int CreateHeap();
-    /* 80BF3504 */ int Delete();
-    /* 80BF3538 */ int Execute();
-    /* 80BF3FAC */ int Draw();
-    /* 80BF4130 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80BF4150 */ void setEnvTevColor();
-    /* 80BF41AC */ void setRoomNo();
-    /* 80BF41F0 */ void reset();
-    /* 80BF424C */ void setMtx();
-    /* 80BF4354 */ s16 calcRollAngle(s16, int);
-    /* 80BF43F4 */ BOOL getWallAngle(s16, s16*);
-    /* 80BF4584 */ void setSmokePrtcl();
-    /* 80BF4600 */ void setWaterPrtcl();
-    /* 80BF4728 */ void setHamonPrtcl();
+    virtual ~daObj_Gadget_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    void setEnvTevColor();
+    void setRoomNo();
+    void reset();
+    void setMtx();
+    s16 calcRollAngle(s16, int);
+    BOOL getWallAngle(s16, s16*);
+    void setSmokePrtcl();
+    void setWaterPrtcl();
+    void setHamonPrtcl();
 
     u8 getType() { return fopAcM_GetParam(this); }
     void setCoNone() { field_0xa40 = 1; }
@@ -115,7 +115,7 @@ struct daObj_Gadget_HIOParam {
 
 class daObj_Gadget_Param_c {
 public:
-    /* 80BF48D8 */ virtual ~daObj_Gadget_Param_c() {}
+    virtual ~daObj_Gadget_Param_c() {}
 
     static daObj_Gadget_HIOParam const m;
 };

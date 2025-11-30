@@ -8,10 +8,8 @@
 #include "d/actor/d_a_npc_prayer.h"
 #include "d/d_com_inf_game.h"
 
-/* 80AB5BB4-80AB5BB8 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpcPray_Param_c l_HIO;
 
-/* 80AB59A4-80AB59EC 000020 0048+00 1/1 0/0 0/0 .data            l_bckGetParamList */
 static struct {
     int resIdx;
     int anmMode;
@@ -32,31 +30,25 @@ enum daNpcPray_MOTION_e {
     MOTION_WOLF_e,
 };
 
-/* 80AB59EC-80AB59F4 -00001 0008+00 4/5 0/0 0/0 .data            l_arcNames */
 static char* l_arcNames[2] = {
     "Prayer",
     "Wgeneral",
 };
 
-/* 80AB59F4-80AB59FC -00001 0008+00 0/2 0/0 0/0 .data            l_evtNames */
 static char* l_evtNames[2] = {
     NULL,
     "GET_HEART",
 };
 
-/* 80AB59FC-80AB5A00 -00001 0004+00 0/2 0/0 0/0 .data            l_myName */
 static char* l_myName = "Prayer";
 
-/* 80AB5A0C-80AB5A24 000088 0018+00 1/2 0/0 0/0 .data            mEvtSeqList__11daNpcPray_c */
 daNpcPray_c::EvtSeq daNpcPray_c::mEvtSeqList[] = {
     NULL,
     &daNpcPray_c::_Evt_GetHeart,
 };
 
-/* 80AB2DEC-80AB2F70 0000EC 0184+00 1/1 0/0 0/0 .text            __ct__11daNpcPray_cFv */
 daNpcPray_c::daNpcPray_c() {}
 
-/* 80AB3000-80AB3204 000300 0204+00 1/0 0/0 0/0 .text            __dt__11daNpcPray_cFv */
 daNpcPray_c::~daNpcPray_c() {
     for (int i = 0; i < 2; i++) {
         dComIfG_resDelete(&mPhase[i], l_arcNames[i]);
@@ -73,7 +65,6 @@ daNpcPray_c::~daNpcPray_c() {
     }
 }
 
-/* 80AB5808-80AB5874 000000 006C+00 14/14 0/0 0/0 .rodata          m__17daNpcPray_Param_c */
 const daNpcPray_HIOParam daNpcPray_Param_c::m = {
     55.0f,
     -3.0f,
@@ -110,7 +101,6 @@ const daNpcPray_HIOParam daNpcPray_Param_c::m = {
     false,
 };
 
-/* 80AB3204-80AB348C 000504 0288+00 1/1 0/0 0/0 .text            Create__11daNpcPray_cFv */
 int daNpcPray_c::Create() {
     fopAcM_ct(this, daNpcPray_c);
 
@@ -160,7 +150,6 @@ int daNpcPray_c::Create() {
     return phase_state;
 }
 
-/* 80AB348C-80AB3610 00078C 0184+00 1/1 0/0 0/0 .text            CreateHeap__11daNpcPray_cFv */
 int daNpcPray_c::CreateHeap() {
     J3DModelData* mdlData_p = (J3DModelData*)dComIfG_getObjectRes(l_arcNames[0], 9);
     JUT_ASSERT(313, NULL != mdlData_p);
@@ -189,27 +178,22 @@ int daNpcPray_c::CreateHeap() {
     return 1;
 }
 
-/* 80AB3610-80AB3644 000910 0034+00 1/1 0/0 0/0 .text            Delete__11daNpcPray_cFv */
 int daNpcPray_c::Delete() {
     fopAcM_GetID(this);
     this->~daNpcPray_c();
     return 1;
 }
 
-/* 80AB3644-80AB3668 000944 0024+00 2/2 0/0 0/0 .text            Execute__11daNpcPray_cFv */
 int daNpcPray_c::Execute() {
     execute();
     return 1;
 }
 
-/* 80AB3668-80AB36A8 000968 0040+00 1/1 0/0 0/0 .text            Draw__11daNpcPray_cFv */
 int daNpcPray_c::Draw() {
     draw(FALSE, FALSE, daNpcPray_Param_c::m.common.real_shadow_size, NULL, FALSE);
     return 1;
 }
 
-/* 80AB36A8-80AB3834 0009A8 018C+00 1/1 0/0 0/0 .text
- * ctrlJoint__11daNpcPray_cFP8J3DJointP8J3DModel                */
 int daNpcPray_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     int jnt_no = i_joint->getJntNo();
     int spC[] = {1, 2, 3};
@@ -240,14 +224,10 @@ int daNpcPray_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 80AB3834-80AB3854 000B34 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__11daNpcPray_cFP10fopAc_ac_c              */
 int daNpcPray_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return ((daNpcPray_c*)i_this)->CreateHeap();
 }
 
-/* 80AB3854-80AB38A0 000B54 004C+00 1/1 0/0 0/0 .text ctrlJointCallBack__11daNpcPray_cFP8J3DJointi
- */
 int daNpcPray_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DModel* model_p = j3dSys.getModel();
@@ -260,7 +240,6 @@ int daNpcPray_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80AB38A0-80AB390C 000BA0 006C+00 1/0 0/0 0/0 .text            setParam__11daNpcPray_cFv */
 void daNpcPray_c::setParam() {
     attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(daNpcPray_Param_c::m.common.attention_distance, daNpcPray_Param_c::m.common.attention_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
@@ -275,7 +254,6 @@ void daNpcPray_c::setParam() {
 #endif
 }
 
-/* 80AB390C-80AB3964 000C0C 0058+00 1/0 0/0 0/0 .text            main__11daNpcPray_cFv */
 BOOL daNpcPray_c::main() {
     if (mAction != NULL) {
         (this->*mAction)(NULL);
@@ -285,7 +263,6 @@ BOOL daNpcPray_c::main() {
     return FALSE;
 }
 
-/* 80AB3964-80AB3B0C 000C64 01A8+00 1/0 0/0 0/0 .text            setAttnPos__11daNpcPray_cFv */
 void daNpcPray_c::setAttnPos() {
     if (mLookMode == LOOK_RESET) {
         for (int i = 0; i < 3; i++) {
@@ -321,7 +298,6 @@ void daNpcPray_c::setAttnPos() {
     dComIfG_Ccsp()->Set(&mCcCyl);
 }
 
-/* 80AB3B0C-80AB3BDC 000E0C 00D0+00 1/0 0/0 0/0 .text            setMotionAnm__11daNpcPray_cFif */
 void daNpcPray_c::setMotionAnm(int i_idx, f32 i_morf) {
     J3DAnmTransformKey* bck_p = getTrnsfrmKeyAnmP(l_arcNames[l_bckGetParamList[i_idx].arcnameIdx], l_bckGetParamList[i_idx].resIdx);
     int anmMode = l_bckGetParamList[i_idx].anmMode;
@@ -333,7 +309,6 @@ void daNpcPray_c::setMotionAnm(int i_idx, f32 i_morf) {
     }
 }
 
-/* 80AB3BDC-80AB3C24 000EDC 0048+00 1/0 0/0 0/0 .text            setMotion__11daNpcPray_cFifi */
 void daNpcPray_c::setMotion(int i_motion, f32 i_morf, int param_2) {
     s16 var_r31 = i_motion;
     if ((param_2 != 0 || mMotion != var_r31) && i_motion >= 0 && i_motion < 4) {
@@ -345,12 +320,10 @@ void daNpcPray_c::setMotion(int i_motion, f32 i_morf, int param_2) {
     }
 }
 
-/* 80AB3C24-80AB3C2C 000F24 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__11daNpcPray_cFv */
 BOOL daNpcPray_c::drawDbgInfo() {
     return false;
 }
 
-/* 80AB3C2C-80AB3DBC 000F2C 0190+00 1/1 0/0 0/0 .text            reset__11daNpcPray_cFv */
 void daNpcPray_c::reset() {
     initialize();
     mLookat.initialize();
@@ -383,7 +356,6 @@ void daNpcPray_c::reset() {
     mMotionMorfOverride = 0.0f;
 }
 
-/* 80AB3DBC-80AB3F54 0010BC 0198+00 1/1 0/0 0/0 .text            playMotion__11daNpcPray_cFv */
 void daNpcPray_c::playMotion() {
     daNpcF_anmPlayData wait_phase1 = {2, daNpcPray_Param_c::m.common.morf_frame, 0};
     daNpcF_anmPlayData* wait_m[] = {&wait_phase1};
@@ -407,8 +379,6 @@ void daNpcPray_c::playMotion() {
     }
 }
 
-/* 80AB3F54-80AB3FFC 001254 00A8+00 4/4 0/0 0/0 .text
- * setAction__11daNpcPray_cFM11daNpcPray_cFPCvPvPv_b            */
 int daNpcPray_c::setAction(bool (daNpcPray_c::*i_action)(void*)) {
     mActionMode = 3;
     if (mAction != NULL) {
@@ -425,14 +395,12 @@ int daNpcPray_c::setAction(bool (daNpcPray_c::*i_action)(void*)) {
     return 1;
 }
 
-/* 80AB3FFC-80AB4020 0012FC 0024+00 2/2 0/0 0/0 .text            setLookMode__11daNpcPray_cFi */
 void daNpcPray_c::setLookMode(int i_mode) {
     if (i_mode >= 0 && i_mode < 4 && i_mode != mLookMode) {
         mLookMode = i_mode;
     }
 }
 
-/* 80AB4020-80AB4200 001320 01E0+00 1/1 0/0 0/0 .text            lookat__11daNpcPray_cFv */
 void daNpcPray_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model_p = mAnm_p->getModel();
@@ -485,7 +453,6 @@ void daNpcPray_c::lookat() {
     mLookat.calc(this, model_p->getBaseTRMtx(), sp24, var_r28, temp_r26, 0);
 }
 
-/* 80AB4200-80AB42F4 001500 00F4+00 2/2 0/0 0/0 .text            step__11daNpcPray_cFsi */
 bool daNpcPray_c::step(s16 i_targetAngle, int) {
     if (mTurnMode == 0) {
         mTurnTargetAngle = i_targetAngle;
@@ -512,7 +479,6 @@ bool daNpcPray_c::step(s16 i_targetAngle, int) {
     return mTurnMode > 1;
 }
 
-/* 80AB42F4-80AB43D8 0015F4 00E4+00 1/1 0/0 0/0 .text            chkFindPlayer__11daNpcPray_cFv */
 bool daNpcPray_c::chkFindPlayer() {
     if (!chkActorInSight(daPy_getPlayerActorClass(), daNpcPray_Param_c::m.common.fov)) {
         mActorMngr[0].remove();
@@ -535,7 +501,6 @@ bool daNpcPray_c::chkFindPlayer() {
     return find_player;
 }
 
-/* 80AB43D8-80AB4674 0016D8 029C+00 3/0 0/0 0/0 .text            wait__11daNpcPray_cFPv */
 bool daNpcPray_c::wait(void*) {
     switch (mActionMode) {
     case 0:
@@ -589,7 +554,6 @@ bool daNpcPray_c::wait(void*) {
     return 1;
 }
 
-/* 80AB4674-80AB4740 001974 00CC+00 1/0 0/0 0/0 .text            fear__11daNpcPray_cFPv */
 bool daNpcPray_c::fear(void*) {
     switch (mActionMode) {
     case 0:
@@ -615,7 +579,6 @@ bool daNpcPray_c::fear(void*) {
     return 1;
 }
 
-/* 80AB4740-80AB498C 001A40 024C+00 1/0 0/0 0/0 .text            talk__11daNpcPray_cFPv */
 bool daNpcPray_c::talk(void*) {
     int sp20 = 0;
     bool var_r28 = 0;
@@ -678,7 +641,6 @@ bool daNpcPray_c::talk(void*) {
     return var_r28;
 }
 
-/* 80AB498C-80AB4B20 001C8C 0194+00 2/0 0/0 0/0 .text            demo__11daNpcPray_cFPv */
 bool daNpcPray_c::demo(void*) {
     dEvent_manager_c& evtmgr = dComIfGp_getEventManager();
     int var_r25 = 0;
@@ -728,7 +690,6 @@ bool daNpcPray_c::demo(void*) {
     return 1;
 }
 
-/* 80AB4B20-80AB4BFC 001E20 00DC+00 1/1 0/0 0/0 .text            createHeart__11daNpcPray_cFv */
 fpc_ProcID daNpcPray_c::createHeart() {
     cXyz pos(-4142.7036f, 850.0f, -569.3754f);
     csXyz rot(0, 0, 0);
@@ -741,7 +702,6 @@ fpc_ProcID daNpcPray_c::createHeart() {
     return fopAcM_createItemForBoss(&pos, fpcNm_ITEM_KAKERA_HEART, fopAcM_GetRoomNo(this), &rot, &size, 0.0f, 0.0f, 0);
 }
 
-/* 80AB4BFC-80AB4CA4 001EFC 00A8+00 1/0 0/0 0/0 .text            _Evt_GetHeart__11daNpcPray_cFi */
 BOOL daNpcPray_c::_Evt_GetHeart(int i_staffID) {
     dEvent_manager_c& evtmgr = dComIfGp_getEventManager();
     int cutId = -1;
@@ -760,7 +720,6 @@ BOOL daNpcPray_c::_Evt_GetHeart(int i_staffID) {
     return _Evt_GetHeart_CutMain(cutId);
 }
 
-/* 80AB4CA4-80AB4D34 001FA4 0090+00 1/1 0/0 0/0 .text _Evt_GetHeart_CutInit__11daNpcPray_cFRCi */
 BOOL daNpcPray_c::_Evt_GetHeart_CutInit(const int& i_cutId) {
     switch (i_cutId) {
     case 10:
@@ -784,7 +743,6 @@ BOOL daNpcPray_c::_Evt_GetHeart_CutInit(const int& i_cutId) {
     return 1;
 }
 
-/* 80AB4D34-80AB4E88 002034 0154+00 1/1 0/0 0/0 .text _Evt_GetHeart_CutMain__11daNpcPray_cFRCi */
 BOOL daNpcPray_c::_Evt_GetHeart_CutMain(int const& i_cutId) {
     BOOL var_r28 = 0;
 
@@ -838,32 +796,26 @@ BOOL daNpcPray_c::_Evt_GetHeart_CutMain(int const& i_cutId) {
     return var_r28;
 }
 
-/* 80AB4E88-80AB4EA8 002188 0020+00 1/0 0/0 0/0 .text            daNpcPray_Create__FPv */
 static int daNpcPray_Create(void* i_this) {
     return ((daNpcPray_c*)i_this)->Create();
 }
 
-/* 80AB4EA8-80AB4EC8 0021A8 0020+00 1/0 0/0 0/0 .text            daNpcPray_Delete__FPv */
 static int daNpcPray_Delete(void* i_this) {
     return ((daNpcPray_c*)i_this)->Delete();
 }
 
-/* 80AB4EC8-80AB4EE8 0021C8 0020+00 1/0 0/0 0/0 .text            daNpcPray_Execute__FPv */
 static int daNpcPray_Execute(void* i_this) {
     return ((daNpcPray_c*)i_this)->Execute();
 }
 
-/* 80AB4EE8-80AB4F08 0021E8 0020+00 1/0 0/0 0/0 .text            daNpcPray_Draw__FPv */
 static int daNpcPray_Draw(void* i_this) {
     return ((daNpcPray_c*)i_this)->Draw();
 }
 
-/* 80AB4F08-80AB4F10 002208 0008+00 1/0 0/0 0/0 .text            daNpcPray_IsDelete__FPv */
 static int daNpcPray_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80AB5A78-80AB5A98 -00001 0020+00 1/0 0/0 0/0 .data            daNpcPray_MethodTable */
 static actor_method_class daNpcPray_MethodTable = {
     (process_method_func)daNpcPray_Create,
     (process_method_func)daNpcPray_Delete,
@@ -872,7 +824,6 @@ static actor_method_class daNpcPray_MethodTable = {
     (process_method_func)daNpcPray_Draw,
 };
 
-/* 80AB5A98-80AB5AC8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_PRAYER */
 extern actor_process_profile_definition g_profile_NPC_PRAYER = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

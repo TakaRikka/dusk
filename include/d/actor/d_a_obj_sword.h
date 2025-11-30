@@ -13,17 +13,17 @@
  */
 class daObjSword_c : public daItemBase_c {
 public:
-    /* 80CFD558 */ void initBaseMtx();
-    /* 80CFD594 */ void setBaseMtx();
-    /* 80CFD600 */ int Create();
-    /* 80CFD67C */ cPhs__Step create();
-    /* 80CFDA14 */ int actionWait();
-    /* 80CFDA8C */ int initActionOrderGetDemo();
-    /* 80CFDB04 */ int actionOrderGetDemo();
-    /* 80CFDB80 */ int actionGetDemo();
-    /* 80CFDC1C */ int execute();
-    /* 80CFDD18 */ int draw();
-    /* 80CFDD6C */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    cPhs__Step create();
+    int actionWait();
+    int initActionOrderGetDemo();
+    int actionOrderGetDemo();
+    int actionGetDemo();
+    int execute();
+    int draw();
+    int _delete();
 
     u8 getItemBit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwbit() { return fopAcM_GetParamBit(this, 8, 8); }

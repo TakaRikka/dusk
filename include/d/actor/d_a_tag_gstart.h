@@ -5,9 +5,9 @@
 
 class daTagGstart_c : public fopAc_ac_c {
 public:
-    /* 805A3478 */ int create();
-    /* 805A3514 */ ~daTagGstart_c();
-    /* 805A3590 */ int execute();
+    int create();
+    ~daTagGstart_c();
+    int execute();
 
     /* 0x568 */ u8 mSwNo;
     /* 0x569 */ u8 mSwNo2;

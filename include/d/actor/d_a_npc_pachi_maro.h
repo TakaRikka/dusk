@@ -19,7 +19,7 @@ struct daNpc_Pachi_Maro_HIOParam {
 
 class daNpc_Pachi_Maro_Param_c {
 public:
-    /* 80A9B820 */ virtual ~daNpc_Pachi_Maro_Param_c() {}
+    virtual ~daNpc_Pachi_Maro_Param_c() {}
 
     static daNpc_Pachi_Maro_HIOParam const m;
 };
@@ -76,72 +76,72 @@ public:
     typedef int (daNpc_Pachi_Maro_c::*actionFunc)(void*);
     typedef int (daNpc_Pachi_Maro_c::*cutFunc)(int);
 
-    /* 80A97C8C */ ~daNpc_Pachi_Maro_c();
-    /* 80A97DC4 */ cPhs__Step create();
-    /* 80A9809C */ int CreateHeap();
-    /* 80A984DC */ int Delete();
-    /* 80A98510 */ int Execute();
-    /* 80A98530 */ int Draw();
-    /* 80A985C4 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A985E4 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80A9863C */ u8 getType();
-    /* 80A9865C */ BOOL isDelete();
-    /* 80A9867C */ void reset();
-    /* 80A987F4 */ void afterJntAnm(int);
-    /* 80A98870 */ void setParam();
-    /* 80A9896C */ BOOL checkChangeEvt();
-    /* 80A98974 */ void setAfterTalkMotion();
-    /* 80A98A10 */ void srchActors();
-    /* 80A98A98 */ BOOL evtTalk();
-    /* 80A98B9C */ BOOL evtCutProc();
-    /* 80A98C64 */ void action();
-    /* 80A98DE8 */ void beforeMove();
-    /* 80A98E60 */ void afterMoved();
-    /* 80A98FB4 */ void setAttnPos();
-    /* 80A9928C */ void setCollision();
-    /* 80A99394 */ int drawDbgInfo();
-    /* 80A9939C */ daNpcT_faceMotionAnmData_c getFaceMotionAnm(daNpcT_faceMotionAnmData_c);
-    /* 80A99428 */ daNpcT_motionAnmData_c getMotionAnm(daNpcT_motionAnmData_c);
-    /* 80A994B4 */ BOOL selectAction();
-    /* 80A99530 */ BOOL chkAction(actionFunc);
-    /* 80A9955C */ BOOL setAction(actionFunc);
-    /* 80A99604 */ int wait(void*);
-    /* 80A9986C */ int talk(void*);
+    ~daNpc_Pachi_Maro_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void afterMoved();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    daNpcT_faceMotionAnmData_c getFaceMotionAnm(daNpcT_faceMotionAnmData_c);
+    daNpcT_motionAnmData_c getMotionAnm(daNpcT_motionAnmData_c);
+    BOOL selectAction();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    int wait(void*);
+    int talk(void*);
     int test(void*);
-    /* 80A998FC */ BOOL _turn_to_link(s16);
-    /* 80A999A4 */ BOOL _turn_pos(cXyz const&);
-    /* 80A99948 */ BOOL _turn_pos(cXyz const&, s16);
-    /* 80A999E4 */ BOOL cutTutrialBegin(int);
-    /* 80A99A78 */ BOOL _cutTutrialBegin_Init(int const&);
-    /* 80A99A80 */ BOOL _cutTutrialBegin_Main(int const&);
-    /* 80A99A88 */ BOOL cutTutrialBegin_Skip(int);
-    /* 80A99B1C */ BOOL _cutTutrialBegin_Skip_Init(int const&);
-    /* 80A99B24 */ BOOL _cutTutrialBegin_Skip_Main(int const&);
-    /* 80A99B2C */ BOOL cutTutrialClear(int);
-    /* 80A99BC0 */ BOOL _cutTutrialClear_Init(int const&);
-    /* 80A99CB8 */ BOOL _cutTutrialClear_Main(int const&);
-    /* 80A99D4C */ BOOL cutTalk(int);
-    /* 80A99DE0 */ BOOL _cutTalk_Init(int const&);
-    /* 80A99DE8 */ BOOL _cutTalk_Main(int const&);
-    /* 80A99E44 */ BOOL cutTalk2(int);
-    /* 80A99ED8 */ BOOL _cutTalk2_Init(int const&);
-    /* 80A99EE0 */ BOOL _cutTalk2_Main(int const&);
-    /* 80A99F3C */ BOOL cut1stHit_KakasiBody(int);
-    /* 80A99FD0 */ BOOL _cut1stHit_KakasiBody_Init(int const&);
-    /* 80A9A05C */ BOOL _cut1stHit_KakasiBody_Main(int const&);
-    /* 80A9A0F0 */ BOOL cutTutrialSelectGiveUp(int);
-    /* 80A9A184 */ BOOL _cutTutrialSelectGiveUp_Init(int const&);
-    /* 80A9A18C */ BOOL _cutTutrialSelectGiveUp_Main(int const&);
-    /* 80A9A288 */ BOOL cutTutrialGiveUp(int);
-    /* 80A9A31C */ BOOL _cutTutrialGiveUp_Init(int const&);
-    /* 80A9A324 */ BOOL _cutTutrialGiveUp_Main(int const&);
-    /* 80A9A360 */ BOOL cutTutrialContinue(int);
-    /* 80A9A3F4 */ BOOL _cutTutrialContinue_Init(int const&);
-    /* 80A9A3FC */ BOOL _cutTutrialContinue_Main(int const&);
-    /* 80A9A438 */ BOOL cutTutrialCaution(int);
-    /* 80A9A4CC */ BOOL _cutTutrialCaution_Init(int const&);
-    /* 80A9A4D4 */ BOOL _cutTutrialCaution_Main(int const&);
-    /* 80A9B714 */ daNpc_Pachi_Maro_c(
+    BOOL _turn_to_link(s16);
+    BOOL _turn_pos(cXyz const&);
+    BOOL _turn_pos(cXyz const&, s16);
+    BOOL cutTutrialBegin(int);
+    BOOL _cutTutrialBegin_Init(int const&);
+    BOOL _cutTutrialBegin_Main(int const&);
+    BOOL cutTutrialBegin_Skip(int);
+    BOOL _cutTutrialBegin_Skip_Init(int const&);
+    BOOL _cutTutrialBegin_Skip_Main(int const&);
+    BOOL cutTutrialClear(int);
+    BOOL _cutTutrialClear_Init(int const&);
+    BOOL _cutTutrialClear_Main(int const&);
+    BOOL cutTalk(int);
+    BOOL _cutTalk_Init(int const&);
+    BOOL _cutTalk_Main(int const&);
+    BOOL cutTalk2(int);
+    BOOL _cutTalk2_Init(int const&);
+    BOOL _cutTalk2_Main(int const&);
+    BOOL cut1stHit_KakasiBody(int);
+    BOOL _cut1stHit_KakasiBody_Init(int const&);
+    BOOL _cut1stHit_KakasiBody_Main(int const&);
+    BOOL cutTutrialSelectGiveUp(int);
+    BOOL _cutTutrialSelectGiveUp_Init(int const&);
+    BOOL _cutTutrialSelectGiveUp_Main(int const&);
+    BOOL cutTutrialGiveUp(int);
+    BOOL _cutTutrialGiveUp_Init(int const&);
+    BOOL _cutTutrialGiveUp_Main(int const&);
+    BOOL cutTutrialContinue(int);
+    BOOL _cutTutrialContinue_Init(int const&);
+    BOOL _cutTutrialContinue_Main(int const&);
+    BOOL cutTutrialCaution(int);
+    BOOL _cutTutrialCaution_Init(int const&);
+    BOOL _cutTutrialCaution_Main(int const&);
+    daNpc_Pachi_Maro_c(
                         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
                         daNpcT_motionAnmData_c const* i_motionAnmData,
                         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -155,12 +155,12 @@ public:
                     i_arcNames) {
                         OS_REPORT("|%06d:%x|daNpc_Pachi_Maro_c -> コンストラクト\n", g_Counter.mCounter0, this);
                     }
-    /* 80A9B7E0 */ u16 getEyeballMaterialNo() { return MAT_MARO_EYBALL_M; }
-    /* 80A9B7E8 */ s32 getHeadJointNo() { return JNT_HEAD; }
-    /* 80A9B7F0 */ s32 getNeckJointNo() { return JNT_NECK; }
-    /* 80A9B7F8 */ s32 getBackboneJointNo() { return JNT_BACKBONE1; }
-    /* 80A9B800 */ BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
-    /* 80A9B810 */ BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_MOUTH; }
+    u16 getEyeballMaterialNo() { return MAT_MARO_EYBALL_M; }
+    s32 getHeadJointNo() { return JNT_HEAD; }
+    s32 getNeckJointNo() { return JNT_NECK; }
+    s32 getBackboneJointNo() { return JNT_BACKBONE1; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_MOUTH; }
 
     u32 getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

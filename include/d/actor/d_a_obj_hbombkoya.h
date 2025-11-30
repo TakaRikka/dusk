@@ -26,15 +26,15 @@ public:
 
     daObjHBombkoya_c() : dEvLib_callback_c(this) {}
 
-    /* 80C1B878 */ int create1st();
-    /* 80C1BB7C */ bool setParticle(u16*, int, PSetTbl*, int, int);
-    /* 80C1C474 */ virtual ~daObjHBombkoya_c() {}
+    int create1st();
+    bool setParticle(u16*, int, PSetTbl*, int, int);
+    virtual ~daObjHBombkoya_c() {}
 
-    /* 80C1B938 */ virtual int CreateHeap();
-    /* 80C1B9CC */ virtual int Create();
-    /* 80C1BCA0 */ virtual int Execute(Mtx**);
-    /* 80C1C098 */ virtual int Draw();
-    /* 80C1C16C */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
     int getSw2No() { return fopAcM_GetParamBit(this, 8, 8); }

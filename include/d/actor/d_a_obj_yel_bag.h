@@ -51,25 +51,25 @@ private:
     /* 0xA33 */ u8 field_0xa33;
     /* 0xA34 */ u8 field_0xa34;
 public:
-    /* 80D3C0EC */ daObj_YBag_c();
-    /* 80D3C408 */ virtual ~daObj_YBag_c();
-    /* 80D3C610 */ int create();
-    /* 80D3C898 */ int CreateHeap();
-    /* 80D3C93C */ int Delete();
-    /* 80D3C970 */ int Execute();
-    /* 80D3D32C */ int Draw();
-    /* 80D3D438 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80D3D458 */ int getTypeFromParam();
-    /* 80D3D460 */ int isDelete();
-    /* 80D3D468 */ void setEnvTevColor();
-    /* 80D3D4C4 */ void setRoomNo();
-    /* 80D3D508 */ void reset();
-    /* 80D3D5C8 */ void setMtx();
-    /* 80D3D69C */ s16 calcRollAngle(s16, int);
-    /* 80D3D73C */ int getWallAngle(s16, s16*);
-    /* 80D3D8CC */ void setSmokePrtcl();
-    /* 80D3D948 */ void setWaterPrtcl();
-    /* 80D3DA70 */ void setHamonPrtcl();
+    daObj_YBag_c();
+    virtual ~daObj_YBag_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    int getTypeFromParam();
+    int isDelete();
+    void setEnvTevColor();
+    void setRoomNo();
+    void reset();
+    void setMtx();
+    s16 calcRollAngle(s16, int);
+    int getWallAngle(s16, s16*);
+    void setSmokePrtcl();
+    void setWaterPrtcl();
+    void setHamonPrtcl();
 
     static dCcD_SrcGObjInf const mCcDObjInfo;
     static dCcD_SrcCyl mCcDCyl;
@@ -79,7 +79,7 @@ STATIC_ASSERT(sizeof(daObj_YBag_c) == 0xa3c);
 
 class daObj_YBag_Param_c {
 public:
-    /* 80D3DC20 */ virtual ~daObj_YBag_Param_c() {}
+    virtual ~daObj_YBag_Param_c() {}
 
     static f32 const m[11];
 };

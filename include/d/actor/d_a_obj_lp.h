@@ -14,8 +14,8 @@
  
 struct wd_ss {
 public:
-    /* 80C559C8 */ ~wd_ss() {}
-    /* 80C55A04 */ wd_ss() {}
+    ~wd_ss() {}
+    wd_ss() {}
     
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ cXyz field_0x4;

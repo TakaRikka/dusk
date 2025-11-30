@@ -6,13 +6,12 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_Turara.h"
-#include "dol2asm.h"
 #include "SSystem/SComponent/c_math.h"
 
 class daTurara_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80B9CB8C */ daTurara_HIO_c();
-    /* 80B9E5B4 */ virtual ~daTurara_HIO_c() {}
+    daTurara_HIO_c();
+    virtual ~daTurara_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -28,11 +27,6 @@ public:
 
 STATIC_ASSERT(sizeof(daTurara_HIO_c) == 0x20);
 
-//
-// Declarations:
-//
-
-/* 80B9CB8C-80B9CBF8 0000EC 006C+00 1/1 0/0 0/0 .text            __ct__14daTurara_HIO_cFv */
 daTurara_HIO_c::daTurara_HIO_c() {
     field_0x04 = 450.f;
     mGravity = 10.0f;
@@ -44,7 +38,6 @@ daTurara_HIO_c::daTurara_HIO_c() {
     field_0x1c = 5.0f;
 }
 
-/* 80B9CC9C-80B9CD74 0001FC 00D8+00 2/2 0/0 0/0 .text            setBaseMtx__10daTurara_cFv */
 void daTurara_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(0, shape_angle.y, 0);
@@ -55,11 +48,8 @@ void daTurara_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80B9EBA4-80B9EBC4 000014 0020+00 5/5 0/0 0/0 .bss             l_HIO */
 static daTurara_HIO_c l_HIO;
 
-/* ############################################################################################## */
-/* 80B9E908-80B9E938 000014 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__10daTurara_c */
 const dCcD_SrcGObjInf daTurara_c::mCcDObjInfo = {
     {0, // mFlags
         {
@@ -73,7 +63,6 @@ const dCcD_SrcGObjInf daTurara_c::mCcDObjInfo = {
     {0} // mGObjCo
 };
 
-/* 80B9E99C-80B9E9E0 000020 0044+00 2/2 0/0 0/0 .data            mCcDCyl__10daTurara_c */
 dCcD_SrcCyl daTurara_c::mCcDCyl = {
     daTurara_c::mCcDObjInfo, // mObjInf
     {
@@ -83,10 +72,8 @@ dCcD_SrcCyl daTurara_c::mCcDCyl = {
     } // mCyl
 };
 
-/* 80B9E938-80B9E940 000044 0008+00 1/1 0/0 0/0 .rodata          l_bmdIdx */
 static u32 const l_bmdIdx[2] = {5, 8};
 
-/* 80B9CD74-80B9CED8 0002D4 0164+00 1/0 0/0 0/0 .text            CreateHeap__10daTurara_cFv */
 int daTurara_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes("M_Turara", l_bmdIdx[field_0x98c]);
     JUT_ASSERT(260, modelData != NULL);
@@ -115,7 +102,6 @@ int daTurara_c::CreateHeap() {
     return 1;
 }
 
-/* 80B9CED8-80B9D29C 000438 03C4+00 1/1 0/0 0/0 .text            create__10daTurara_cFv */
 int daTurara_c::create() {
     fopAcM_ct(this, daTurara_c);
     if (fopAcM_isSwitch(this, getSwBit3())) {
@@ -184,7 +170,6 @@ int daTurara_c::create() {
     return phase;
 }
 
-/* 80B9D468-80B9D4CC 0009C8 0064+00 1/1 0/0 0/0 .text            setFallStat__10daTurara_cFv */
 void daTurara_c::setFallStat() {
     mAcch.CrrPos(dComIfG_Bgsp());
     current.pos.y = mAcch.GetGroundH();
@@ -192,7 +177,6 @@ void daTurara_c::setFallStat() {
     mMode = 3;
 }
 
-/* 80B9D4CC-80B9D548 000A2C 007C+00 1/0 0/0 0/0 .text            Execute__10daTurara_cFPPA3_A4_f */
 int daTurara_c::Execute(Mtx** i_mtx) {
     eventUpdate();
     move();
@@ -203,7 +187,6 @@ int daTurara_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80B9D548-80B9D72C 000AA8 01E4+00 1/1 0/0 0/0 .text            move__10daTurara_cFv */
 void daTurara_c::move() {
     typedef void (daTurara_c::*modeFunc)();
     static modeFunc mode_proc[] = {&daTurara_c::modeWait, &daTurara_c::modeDropInit,
@@ -226,12 +209,10 @@ void daTurara_c::move() {
     dComIfG_Ccsp()->Set(&mCylCollider);
 }
 
-/* 80B9D72C-80B9D738 000C8C 000C+00 1/1 0/0 0/0 .text            init_modeWait__10daTurara_cFv */
 void daTurara_c::init_modeWait() {
     mMode = 0;
 }
 
-/* 80B9D738-80B9D998 000C98 0260+00 1/0 0/0 0/0 .text            modeWait__10daTurara_cFv */
 void daTurara_c::modeWait() {
     if (field_0x5c9 != 0xff && fopAcM_isSwitch(this, field_0x5c9)) {
         if (getEvetID() != 0xff) {
@@ -259,14 +240,11 @@ void daTurara_c::modeWait() {
     }
 }
 
-/* 80B9D998-80B9D9BC 000EF8 0024+00 2/1 0/0 0/0 .text            eventStart__10daTurara_cFv */
 bool daTurara_c::eventStart() {
     init_modeDropInit();
     return true;
 }
 
-/* 80B9D9BC-80B9DA00 000F1C 0044+00 1/1 0/0 0/0 .text            init_modeDropInit__10daTurara_cFv
- */
 void daTurara_c::init_modeDropInit() {
     if (field_0x98c == 0) {
         mWaitTime = getWaitTime();
@@ -277,7 +255,6 @@ void daTurara_c::init_modeDropInit() {
     mMode = 1;
 }
 
-/* 80B9DA00-80B9DA44 000F60 0044+00 1/0 0/0 0/0 .text            modeDropInit__10daTurara_cFv */
 void daTurara_c::modeDropInit() {
     if (mWaitTime != 0) {
         mWaitTime -= 1;
@@ -287,7 +264,6 @@ void daTurara_c::modeDropInit() {
     }
 }
 
-/* 80B9DA44-80B9DB44 000FA4 0100+00 1/1 0/0 0/0 .text            init_modeDrop__10daTurara_cFv */
 void daTurara_c::init_modeDrop() {
     fopAcM_SetGravity(this, -l_HIO.mGravity);
     fopAcM_SetMaxFallSpeed(this, -l_HIO.mMaxGravity);
@@ -301,14 +277,12 @@ void daTurara_c::init_modeDrop() {
     mMode = 2;
 }
 
-/* 80B9DB44-80B9DB90 0010A4 004C+00 1/0 0/0 0/0 .text            modeDrop__10daTurara_cFv */
 void daTurara_c::modeDrop() {
     fopAcM_posMoveF(this, mColliderStts.GetCCMoveP());
     mAcch.CrrPos(dComIfG_Bgsp());
     bgCheck();
 }
 
-/* 80B9DB90-80B9DBD0 0010F0 0040+00 1/1 0/0 0/0 .text            bgCheck__10daTurara_cFv */
 void daTurara_c::bgCheck() {
     if (mAcch.ChkGroundHit() & 0xff) {
         if (field_0x98c == 0) {
@@ -319,7 +293,6 @@ void daTurara_c::bgCheck() {
     }
 }
 
-/* 80B9DBD0-80B9DE48 001130 0278+00 1/1 0/0 0/0 .text            init_modeDropEnd__10daTurara_cFv */
 void daTurara_c::init_modeDropEnd() {
     if (mAcch.ChkWaterIn() == 0) {
         dComIfGp_getVibration().StartShock(l_HIO.mShockStrength, 0xf, cXyz(0.0f, 1.0f, 0.0f));
@@ -343,7 +316,6 @@ void daTurara_c::init_modeDropEnd() {
     mMode = 3;
 }
 
-/* 80B9DE48-80B9E078 0013A8 0230+00 1/0 0/0 0/0 .text            modeDropEnd__10daTurara_cFv */
 void daTurara_c::modeDropEnd() {
     if (mCylCollider.ChkTgHit()) {
         dCcD_GObjInf* r29 = mCylCollider.GetTgHitGObj();
@@ -366,8 +338,6 @@ void daTurara_c::modeDropEnd() {
     }
 }
 
-/* 80B9E078-80B9E338 0015D8 02C0+00 1/1 0/0 0/0 .text            init_modeDropEnd2__10daTurara_cFv
- */
 void daTurara_c::init_modeDropEnd2() {
     if (mAcch.ChkWaterIn() == 0) {
         dComIfGp_getVibration().StartShock(l_HIO.mShockStrength, 0xf, cXyz(0.0f, 1.0f, 0.0f));
@@ -393,14 +363,12 @@ void daTurara_c::init_modeDropEnd2() {
     mMode = 4;
 }
 
-/* 80B9E338-80B9E388 001898 0050+00 1/0 0/0 0/0 .text            modeDropEnd2__10daTurara_cFv */
 void daTurara_c::modeDropEnd2() {
     if (fopAcM_SearchByID(mEmID)) {
         fopAcM_delete(this);
     }
 }
 
-/* 80B9E388-80B9E478 0018E8 00F0+00 1/0 0/0 0/0 .text            Draw__10daTurara_cFv */
 int daTurara_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel[field_0x984], &tevStr);
@@ -416,7 +384,6 @@ int daTurara_c::Draw() {
     return 1;
 }
 
-/* 80B9E478-80B9E4E0 0019D8 0068+00 1/0 0/0 0/0 .text            Delete__10daTurara_cFv */
 int daTurara_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, "M_Turara");
     if (field_0x980 && field_0x980->ChkUsed()) {
@@ -425,27 +392,22 @@ int daTurara_c::Delete() {
     return 1;
 }
 
-/* 80B9E4E0-80B9E50C 001A40 002C+00 1/0 0/0 0/0 .text            daTurara_Draw__FP10daTurara_c */
 static int daTurara_Draw(daTurara_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80B9E50C-80B9E52C 001A6C 0020+00 1/0 0/0 0/0 .text            daTurara_Execute__FP10daTurara_c */
 static int daTurara_Execute(daTurara_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80B9E52C-80B9E54C 001A8C 0020+00 1/0 0/0 0/0 .text            daTurara_Delete__FP10daTurara_c */
 static int daTurara_Delete(daTurara_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80B9E54C-80B9E56C 001AAC 0020+00 1/0 0/0 0/0 .text            daTurara_Create__FP10fopAc_ac_c */
 static int daTurara_Create(fopAc_ac_c* i_this) {
     return static_cast<daTurara_c*>(i_this)->create();
 }
 
-/* 80B9EA58-80B9EA78 -00001 0020+00 1/0 0/0 0/0 .data            l_daTurara_Method */
 static actor_method_class l_daTurara_Method = {
     (process_method_func)daTurara_Create,
     (process_method_func)daTurara_Delete,
@@ -454,7 +416,6 @@ static actor_method_class l_daTurara_Method = {
     (process_method_func)daTurara_Draw,
 };
 
-/* 80B9EA78-80B9EAA8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Turara */
 extern actor_process_profile_definition g_profile_Obj_Turara = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

@@ -29,8 +29,8 @@ enum I_Kag_RES_File_ID {
 
 class daObj_KagHIO_c : public JORReflexible {
 public:
-    /* 80C2E40C */ daObj_KagHIO_c();
-    /* 80C31060 */ virtual ~daObj_KagHIO_c() {}
+    daObj_KagHIO_c();
+    virtual ~daObj_KagHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -40,13 +40,10 @@ public:
     /* 0x0C */ f32 model_scale_male;    // モデルスケール(オス) - Model Scale (Male)
 };
 
-/* 80C31430-80C31434 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_initHIO;
 
-/* 80C31440-80C31450 000018 0010+00 2/2 0/0 0/0 .bss             l_HIO */
 static daObj_KagHIO_c l_HIO;
 
-/* 80C31290-80C312D0 000020 0040+00 0/1 0/0 0/0 .data cc_sph_src__25@unnamed@d_a_obj_kag_cpp@ */
 namespace {
     static dCcD_SrcSph cc_sph_src = {
         {
@@ -61,14 +58,12 @@ namespace {
     };
 }
 
-/* 80C2E40C-80C2E434 0000EC 0028+00 1/1 0/0 0/0 .text            __ct__14daObj_KagHIO_cFv */
 daObj_KagHIO_c::daObj_KagHIO_c() {
     id = -1;
     model_scale_male = 0.8f;
     model_scale_female = 0.8f;
 }
 
-/* 80C2E434-80C2E4D8 000114 00A4+00 8/8 0/0 0/0 .text            setAction__10daObjKAG_cFM10daObjKAG_cFPCvPv_v */
 void daObjKAG_c::setAction(actionFunc action) {
     if (mAction) {
         field_0x83c = -1;
@@ -82,12 +77,10 @@ void daObjKAG_c::setAction(actionFunc action) {
     (this->*mAction)();
 }
 
-/* 80C31150-80C31158 000004 0008+00 0/1 0/0 0/0 .rodata          l_kag_brk_index */
 static int const l_kag_brk_index[2] = {
     BRK_KAG_O, BRK_KAG_M,
 };
 
-/* 80C31158-80C31160 00000C 0008+00 0/1 0/0 0/0 .rodata          l_kag_btk_index */
 static int const l_kag_btk_index[2] = {
     BTK_KAG_O, BTK_KAG_M,
 };
@@ -125,23 +118,19 @@ int daObjKAG_c::CreateHeap() {
     return 1;
 }
 
-/* 80C2E4D8-80C2E714 0001B8 023C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     return static_cast<daObjKAG_c*>(a_this)->CreateHeap();
 }
 
-/* 80C2E75C-80C2E77C 00043C 0020+00 1/0 0/0 0/0 .text            daObjKAG_Create__FP10fopAc_ac_c */
 static int daObjKAG_Create(fopAc_ac_c* a_this) {
     return static_cast<daObjKAG_c*>(a_this)->create();
 }
 
-/* 80C2E77C-80C2E7A0 00045C 0024+00 1/0 0/0 0/0 .text            daObjKAG_Delete__FP10daObjKAG_c */
 static int daObjKAG_Delete(daObjKAG_c* i_this) {
     i_this->_delete();
     return 1;
 }
 
-/* 80C2E7A0-80C2E9F8 000480 0258+00 1/1 0/0 0/0 .text            Kag_Bgcheck__10daObjKAG_cFP4cXyzP5csXyzP4cXyz */
 bool daObjKAG_c::Kag_Bgcheck(cXyz* param_1, csXyz* param_2, cXyz* param_3) {
     dBgS_LinChk lin_chk;
     lin_chk.SetObj();
@@ -174,7 +163,6 @@ bool daObjKAG_c::Kag_Bgcheck(cXyz* param_1, csXyz* param_2, cXyz* param_3) {
     return false;
 }
 
-/* 80C2EA40-80C2F764 000720 0D24+00 6/0 0/0 0/0 .text            fly__10daObjKAG_cFv */
 void daObjKAG_c::fly() {
     if (field_0x83c == 0) {
         mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("I_Kag", BCK_KAG_FLY), 2, 5.0f, 0.5f, 0.0f, -1.0f);
@@ -297,7 +285,6 @@ void daObjKAG_c::fly() {
     }
 }
 
-/* 80C2F764-80C2F8C4 001444 0160+00 2/0 0/0 0/0 .text            wait__10daObjKAG_cFv */
 void daObjKAG_c::wait() {
     if (field_0x83c == 0) {
         mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("I_Kag", BCK_KAG_WALK), 2, 5.0f, 0.0f, 0.0f, -1.0f);
@@ -320,7 +307,6 @@ void daObjKAG_c::wait() {
     }
 }
 
-/* 80C2F8C4-80C2FD94 0015A4 04D0+00 1/0 0/0 0/0 .text            walk__10daObjKAG_cFv */
 void daObjKAG_c::walk() {
     if (field_0x83c == 0) {
         mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("I_Kag", BCK_KAG_WALK), 2, 5.0f, 1.0f, 0.0f, -1.0f);
@@ -391,7 +377,6 @@ void daObjKAG_c::walk() {
     }
 }
 
-/* 80C2FD94-80C2FF10 001A74 017C+00 1/0 0/0 0/0 .text            bin_wait__10daObjKAG_cFv */
 void daObjKAG_c::bin_wait() {
     if (field_0x83c == 0) {
         mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("I_Kag", BCK_KAG_FLY), J3DFrameCtrl::EMode_LOOP, 5.0f, 0.0f, 0.0f, -1.0f);
@@ -413,7 +398,6 @@ void daObjKAG_c::bin_wait() {
     }
 }
 
-/* 80C2FF10-80C30070 001BF0 0160+00 1/0 0/0 0/0 .text            bin_action__10daObjKAG_cFv */
 void daObjKAG_c::bin_action() {
     if (field_0x83c == 0) {
         mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("I_Kag", BCK_KAG_FLY), J3DFrameCtrl::EMode_LOOP, 5.0f, 0.5f, 0.0f, -1.0f);
@@ -447,7 +431,6 @@ void daObjKAG_c::bin_action() {
     }
 }
 
-/* 80C30070-80C30274 001D50 0204+00 1/0 0/0 0/0 .text            hook__10daObjKAG_cFv */
 void daObjKAG_c::hook() {
     if (field_0x83c == 0) {
         daPy_py_c* player = daPy_getPlayerActorClass();
@@ -489,7 +472,6 @@ void daObjKAG_c::hook() {
     }
 }
 
-/* 80C30274-80C303C4 001F54 0150+00 1/0 0/0 0/0 .text            boomerang__10daObjKAG_cFv */
 void daObjKAG_c::boomerang() {
     if (field_0x83c == 0) {
         mSph.SetTgType(0);
@@ -517,7 +499,6 @@ void daObjKAG_c::boomerang() {
     }
 }
 
-/* 80C303C4-80C30424 0020A4 0060+00 1/1 0/0 0/0 .text            action__10daObjKAG_cFv */
 void daObjKAG_c::action() {
     (this->*mAction)();
     shape_angle = current.angle;
@@ -527,13 +508,11 @@ void daObjKAG_c::action() {
     }
 }
 
-/* 80C31234-80C31238 0000E8 0002+02 0/1 0/0 0/0 .rodata          l_kag_itemno */
 static u8 const l_kag_itemno[2] = {
     0xD6,
     0xD7,
 };
 
-/* 80C30424-80C30498 002104 0074+00 1/1 0/0 0/0 .text            checkGroundPos__10daObjKAG_cFv */
 void daObjKAG_c::checkGroundPos() {
     cXyz sp28(current.pos);
     mGndChk.SetPos(&sp28);
@@ -544,7 +523,6 @@ void daObjKAG_c::checkGroundPos() {
     }
 }
 
-/* 80C30498-80C3054C 002178 00B4+00 1/1 0/0 0/0 .text            hit_check__10daObjKAG_cFv */
 void daObjKAG_c::hit_check() {
     dCcU_AtInfo atInfo;
     mStts.Move();
@@ -560,7 +538,6 @@ void daObjKAG_c::hit_check() {
     }
 }
 
-/* 80C3054C-80C306EC 00222C 01A0+00 1/1 0/0 0/0 .text            execute__10daObjKAG_cFv */
 int daObjKAG_c::execute() {
     if (ChkGetDemo()) {
         field_0x57c = field_0x578 + 10000.0f;
@@ -601,7 +578,6 @@ int daObjKAG_c::execute() {
     return 1;
 }
 
-/* 80C306EC-80C30754 0023CC 0068+00 1/1 0/0 0/0 .text            _delete__10daObjKAG_cFv */
 int daObjKAG_c::_delete() {
     dComIfG_resDelete(&mPhase, "I_Kag");
 
@@ -617,7 +593,6 @@ int daObjKAG_c::_delete() {
     return 1;
 }
 
-/* 80C30754-80C307D4 002434 0080+00 1/1 0/0 0/0 .text            setBaseMtx__10daObjKAG_cFv */
 void daObjKAG_c::setBaseMtx() {
     J3DModel* model = mpModelMorf->getModel();
     mDoMtx_stack_c::transS(current.pos);
@@ -651,23 +626,19 @@ int daObjKAG_c::draw() {
     return 1;
 }
 
-/* 80C307D4-80C308D0 0024B4 00FC+00 1/0 0/0 0/0 .text            daObjKAG_Draw__FP10daObjKAG_c */
 static int daObjKAG_Draw(daObjKAG_c* i_this) {
     return i_this->draw();
 }
 
-/* 80C308D0-80C308F0 0025B0 0020+00 2/1 0/0 0/0 .text            daObjKAG_Execute__FP10daObjKAG_c */
 static int daObjKAG_Execute(daObjKAG_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C31258-80C3125C 00010C 0004+00 0/1 0/0 0/0 .rodata          l_musiya_num */
 static u16 const l_musiya_num[2] = {
     0x01A7,
     0x01A8
 };
 
-/* 80C308F0-80C30D60 0025D0 0470+00 1/1 0/0 0/0 .text            create__10daObjKAG_cFv */
 cPhs__Step daObjKAG_c::create() {
     u8 uVar1 = (fopAcM_GetParam(this) & 0xF00) >> 8;
 
@@ -758,12 +729,10 @@ cPhs__Step daObjKAG_c::create() {
     return phase;
 }
 
-/* 80C30E4C-80C30E54 002B2C 0008+00 1/0 0/0 0/0 .text            daObjKAG_IsDelete__FP10daObjKAG_c */
 static int daObjKAG_IsDelete(daObjKAG_c* i_this) {
     return 1;
 }
 
-/* 80C30E54-80C31060 002B34 020C+00 7/7 0/0 0/0 .text            kag_setParticle__10daObjKAG_cFv */
 void daObjKAG_c::kag_setParticle() {
     if (CheckZ()) {
         cLib_chaseF(&field_0x844, 0.0f, 1.0f);
@@ -790,7 +759,6 @@ void daObjKAG_c::kag_setParticle() {
     }
 }
 
-/* 80C3136C-80C3138C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjKAG_Method */
 static actor_method_class l_daObjKAG_Method = {
     (process_method_func)daObjKAG_Create,
     (process_method_func)daObjKAG_Delete,
@@ -799,7 +767,6 @@ static actor_method_class l_daObjKAG_Method = {
     (process_method_func)daObjKAG_Draw,
 };
 
-/* 80C3138C-80C313BC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Kag */
 extern actor_process_profile_definition g_profile_Obj_Kag = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

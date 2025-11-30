@@ -81,28 +81,28 @@ public:
         } parts;
     };
 
-    /* 8029A800 */ JASChannel(Callback, void*);
-    /* 8029A918 */ ~JASChannel();
-    /* 8029A9F0 */ int play();
-    /* 8029AA60 */ int playForce();
-    /* 8029AAD0 */ void release(u16);
-    /* 8029AB64 */ void setOscInit(u32, JASOscillator::Data const*);
-    /* 8029AB98 */ void setMixConfig(u32, u16);
-    /* 8029ABA8 */ static f32 calcEffect(JASChannel::PanVector const*);
-    /* 8029ABC0 */ static f32 calcPan(JASChannel::PanVector const*);
-    /* 8029ABEC */ void effectOsc(u32, JASOscillator::EffectParams*);
-    /* 8029ACD4 */ void setKeySweepTarget(s32, u32);
-    /* 8029AD38 */ void updateEffectorParam(JASDsp::TChannel*, u16*,
+    JASChannel(Callback, void*);
+    ~JASChannel();
+    int play();
+    int playForce();
+    void release(u16);
+    void setOscInit(u32, JASOscillator::Data const*);
+    void setMixConfig(u32, u16);
+    static f32 calcEffect(JASChannel::PanVector const*);
+    static f32 calcPan(JASChannel::PanVector const*);
+    void effectOsc(u32, JASOscillator::EffectParams*);
+    void setKeySweepTarget(s32, u32);
+    void updateEffectorParam(JASDsp::TChannel*, u16*,
                                             JASOscillator::EffectParams const&);
-    /* 8029AF78 */ static s32 dspUpdateCallback(u32, JASDsp::TChannel*, void*);
-    /* 8029B004 */ s32 initialUpdateDSPChannel(JASDsp::TChannel*);
-    /* 8029B324 */ s32 updateDSPChannel(JASDsp::TChannel*);
-    /* 8029B6A0 */ void updateAutoMixer(JASDsp::TChannel*, f32, f32, f32, f32);
-    /* 8029B7D8 */ void updateMixer(f32, f32, f32, f32, u16*);
-    /* 8029BBFC */ void free();
-    /* 8029BC0C */ static void initBankDisposeMsgQueue();
-    /* 8029BC48 */ static void receiveBankDisposeMsg();
-    /* 8029BCC0 */ bool checkBankDispose() const;
+    static s32 dspUpdateCallback(u32, JASDsp::TChannel*, void*);
+    s32 initialUpdateDSPChannel(JASDsp::TChannel*);
+    s32 updateDSPChannel(JASDsp::TChannel*);
+    void updateAutoMixer(JASDsp::TChannel*, f32, f32, f32, f32);
+    void updateMixer(f32, f32, f32, f32, u16*);
+    void free();
+    static void initBankDisposeMsgQueue();
+    static void receiveBankDisposeMsg();
+    bool checkBankDispose() const;
 
     void setPauseFlag(bool param_0) { mPauseFlag = param_0; }
     void setUpdateTimer(u32 param_0) { mUpdateTimer = param_0; }

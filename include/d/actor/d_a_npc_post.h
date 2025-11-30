@@ -20,7 +20,7 @@ struct daNpc_Post_HIOParam {
 
 class daNpc_Post_Param_c {
 public:
-    /* 80AAD120 */ virtual ~daNpc_Post_Param_c() {}
+    virtual ~daNpc_Post_Param_c() {}
 
     static daNpc_Post_HIOParam const m;
 };
@@ -82,44 +82,44 @@ public:
     typedef int (daNpc_Post_c::*actionFunc)(void*);
     typedef int (daNpc_Post_c::*cutFunc)(int);
 
-    /* 80AA8C8C */ ~daNpc_Post_c();
-    /* 80AA8DE8 */ cPhs__Step create();
-    /* 80AA90B0 */ int CreateHeap();
-    /* 80AA9634 */ int Delete();
-    /* 80AA9668 */ int Execute();
-    /* 80AA9688 */ int Draw();
-    /* 80AA971C */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AA973C */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80AA9794 */ u8 getType();
-    /* 80AA97E0 */ BOOL isDelete();
-    /* 80AA9828 */ void reset();
-    /* 80AA99F0 */ void afterJntAnm(int);
-    /* 80AA9A7C */ void setParam();
-    /* 80AA9BA4 */ BOOL checkChangeEvt();
-    /* 80AA9C58 */ void setAfterTalkMotion();
-    /* 80AA9D04 */ void srchActors();
-    /* 80AA9D98 */ BOOL evtTalk();
-    /* 80AA9E98 */ BOOL evtCutProc();
-    /* 80AA9F60 */ void action();
-    /* 80AAA058 */ void beforeMove();
-    /* 80AAA124 */ void afterMoved();
-    /* 80AAA1E4 */ void setAttnPos();
-    /* 80AAA570 */ void setCollision();
-    /* 80AAA714 */ int drawDbgInfo();
-    /* 80AAA71C */ void drawOtherMdl();
-    /* 80AAA8A4 */ BOOL setFlagAnm(int, int, f32);
-    /* 80AAA968 */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80AAA99C */ BOOL selectAction();
-    /* 80AAA9E4 */ BOOL chkAction(actionFunc);
-    /* 80AAAA10 */ BOOL setAction(actionFunc);
-    /* 80AAAAB8 */ BOOL chkPullOutLetter1();
-    /* 80AAAB2C */ BOOL chkPullOutLetter2();
-    /* 80AAABA0 */ void pullOutLetter();
-    /* 80AAAC64 */ int cutDeliver(int);
-    /* 80AAB61C */ int wait(void*);
-    /* 80AABC24 */ int talk(void*);
+    ~daNpc_Post_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void afterMoved();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    BOOL setFlagAnm(int, int, f32);
+    bool afterSetMotionAnm(int, int, f32, int);
+    BOOL selectAction();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    BOOL chkPullOutLetter1();
+    BOOL chkPullOutLetter2();
+    void pullOutLetter();
+    int cutDeliver(int);
+    int wait(void*);
+    int talk(void*);
     int test(void*);
-    /* 80AACFF0 */ daNpc_Post_c(
+    daNpc_Post_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -131,14 +131,14 @@ public:
                    i_arcNames) {
         OS_REPORT("|%06d:%x|daNpc_Post_c -> コンストラクト\n", g_Counter.mCounter0, this);
     }
-    /* 80AAD0D0 */ u16 getEyeballMaterialNo() { return MAT_EYEBALL; }
-    /* 80AAD0D8 */ s32 getHeadJointNo() { return JNT_HEAD; }
-    /* 80AAD0E0 */ s32 getNeckJointNo() { return JNT_NECK; }
-    /* 80AAD0E8 */ s32 getBackboneJointNo() { return JNT_BACKBONE1; }
-    /* 80AAD0F0 */ BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
-    /* 80AAD100 */ BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_MOUTH; }
-    /* 80AAD110 */ s32 getFootLJointNo() { return JNT_FOOTL; }
-    /* 80AAD118 */ s32 getFootRJointNo() { return JNT_FOOTR; }
+    u16 getEyeballMaterialNo() { return MAT_EYEBALL; }
+    s32 getHeadJointNo() { return JNT_HEAD; }
+    s32 getNeckJointNo() { return JNT_NECK; }
+    s32 getBackboneJointNo() { return JNT_BACKBONE1; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_MOUTH; }
+    s32 getFootLJointNo() { return JNT_FOOTL; }
+    s32 getFootRJointNo() { return JNT_FOOTR; }
 
     u32 getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

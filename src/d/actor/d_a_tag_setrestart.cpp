@@ -10,7 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 80D603F8-80D6048C 000078 0094+00 1/1 0/0 0/0 .text            Create__14daTagRestart_cFv */
 int daTagRestart_c::Create() {
     field_0x56c[0].x = scale.x * -100.0f;
     field_0x56c[0].z = scale.z * -100.0f;
@@ -33,7 +32,6 @@ int daTagRestart_c::Create() {
     return 1;
 }
 
-/* 80D6048C-80D60520 00010C 0094+00 1/1 0/0 0/0 .text            create__14daTagRestart_cFv */
 int daTagRestart_c::create() {
     fopAcM_ct(this, daTagRestart_c);
 
@@ -44,7 +42,6 @@ int daTagRestart_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D60560-80D60744 0001E0 01E4+00 1/1 0/0 0/0 .text            execute__14daTagRestart_cFv */
 int daTagRestart_c::execute() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -85,29 +82,22 @@ int daTagRestart_c::execute() {
     return 1;
 }
 
-/* 80D60744-80D6074C 0003C4 0008+00 1/1 0/0 0/0 .text            _delete__14daTagRestart_cFv */
 int daTagRestart_c::_delete() {
     return 1;
 }
 
-/* 80D6074C-80D6076C 0003CC 0020+00 1/0 0/0 0/0 .text daTagRestart_Execute__FP14daTagRestart_c */
 static int daTagRestart_Execute(daTagRestart_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D6076C-80D6078C 0003EC 0020+00 1/0 0/0 0/0 .text daTagRestart_Delete__FP14daTagRestart_c */
 static int daTagRestart_Delete(daTagRestart_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80D6078C-80D607AC 00040C 0020+00 1/0 0/0 0/0 .text            daTagRestart_Create__FP10fopAc_ac_c
- */
 static int daTagRestart_Create(fopAc_ac_c* i_this) {
     return static_cast<daTagRestart_c*>(i_this)->create();
 }
 
-/* ############################################################################################## */
-/* 80D607C0-80D607E0 -00001 0020+00 1/0 0/0 0/0 .data            l_daTagRestart_Method */
 static actor_method_class l_daTagRestart_Method = {
     (process_method_func)daTagRestart_Create,
     (process_method_func)daTagRestart_Delete,
@@ -116,7 +106,6 @@ static actor_method_class l_daTagRestart_Method = {
     (process_method_func)NULL,
 };
 
-/* 80D607E0-80D60810 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_Restart */
 extern actor_process_profile_definition g_profile_Tag_Restart = {
     fpcLy_CURRENT_e,
     7,

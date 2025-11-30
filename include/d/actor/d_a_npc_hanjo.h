@@ -5,13 +5,13 @@
 
 class daNpc_HanjoStone_c {
 public:
-    /* 809FFFD4 */ ~daNpc_HanjoStone_c() {}
-    /* 80A001FC */ daNpc_HanjoStone_c() {
+    ~daNpc_HanjoStone_c() {}
+    daNpc_HanjoStone_c() {
         initialize();
     }
-    /* 80A0033C */ cXyz getPos() { return mPos; }
-    /* 80A00358 */ cXyz getOld() { return mOld; }
-    /* 80A00374 */ void posMoveF(fopAc_ac_c* param_1) {
+    cXyz getPos() { return mPos; }
+    cXyz getOld() { return mOld; }
+    void posMoveF(fopAc_ac_c* param_1) {
         cXyz cStack_48;
         mOld = mPos;
         if (mTmr != 0) {
@@ -31,12 +31,12 @@ public:
         }
     }
  
-    /* 80A004A8 */ void setPos(cXyz pos) {
+    void setPos(cXyz pos) {
         mPos = pos;
         mOld = pos;
     } 
 
-    /* 80A004E8 */ void setAngle(csXyz angle) { mAngle = angle; }
+    void setAngle(csXyz angle) { mAngle = angle; }
 
     dCcD_Sph* getSphP() { return &mSphere; }
     f32 getSpeedF() { return mSpeedF; }
@@ -108,63 +108,63 @@ public:
         TYPE_4,
     };
 
-    /* 809F908C */ ~daNpc_Hanjo_c();
-    /* 809F9278 */ int create();
-    /* 809F9578 */ int CreateHeap();
-    /* 809F9B38 */ int Delete();
-    /* 809F9B6C */ int Execute();
-    /* 809F9B8C */ int Draw();
-    /* 809F9C20 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 809F9C40 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 809F9C98 */ u8 getType();
-    /* 809F9CF0 */ int isDelete();
-    /* 809F9D9C */ void reset();
-    /* 809F9FCC */ void afterJntAnm(int);
-    /* 809FA050 */ void setParam();
-    /* 809FA1C4 */ BOOL checkChangeEvt();
-    /* 809FA3B8 */ void setAfterTalkMotion();
-    /* 809FA45C */ void srchActors();
-    /* 809FA55C */ BOOL evtTalk();
-    /* 809FA5FC */ BOOL evtCutProc();
-    /* 809FA6C4 */ void action();
-    /* 809FA88C */ void beforeMove();
-    /* 809FAABC */ void afterMoved();
-    /* 809FABB8 */ void setAttnPos();
-    /* 809FAF90 */ void setCollision();
-    /* 809FB2C4 */ int drawDbgInfo();
-    /* 809FB2CC */ void drawOtherMdl();
-    /* 809FB59C */ int selectAction();
-    /* 809FB6CC */ int chkAction(int (daNpc_Hanjo_c::*)(void*));
-    /* 809FB6F8 */ int setAction(int (daNpc_Hanjo_c::*)(void*));
-    /* 809FB7A0 */ void initShoot(int);
-    /* 809FB90C */ int shoot(int);
-    /* 809FBB94 */ void initDive();
-    /* 809FBC3C */ void dive();
-    /* 809FC06C */ int lookround(s16);
-    /* 809FC1BC */ int commandToHawk();
-    /* 809FC2E4 */ int cutConversationAboutSaru(int);
-    /* 809FC438 */ int cutConversation(int);
-    /* 809FC80C */ int cutPursuitBee(int);
-    /* 809FCDC4 */ int cutAppearHawker(int);
-    /* 809FD3C0 */ int cutDive(int);
-    /* 809FD86C */ int wait(void*);
-    /* 809FDEFC */ int throwStone(void*);
-    /* 809FE2E0 */ int takayose(void*);
-    /* 809FEAEC */ int talk(void*);
-    /* 80A000A8 */ daNpc_Hanjo_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
+    ~daNpc_Hanjo_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void afterMoved();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    int selectAction();
+    int chkAction(int (daNpc_Hanjo_c::*)(void*));
+    int setAction(int (daNpc_Hanjo_c::*)(void*));
+    void initShoot(int);
+    int shoot(int);
+    void initDive();
+    void dive();
+    int lookround(s16);
+    int commandToHawk();
+    int cutConversationAboutSaru(int);
+    int cutConversation(int);
+    int cutPursuitBee(int);
+    int cutAppearHawker(int);
+    int cutDive(int);
+    int wait(void*);
+    int throwStone(void*);
+    int takayose(void*);
+    int talk(void*);
+    daNpc_Hanjo_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
                                  daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                                  daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
                                  daNpcT_evtData_c const* param_7, char** param_8) :
                                  daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8)
                                   {}
-    /* 80A00334 */ u16 getEyeballMaterialNo() { return 2; }
-    /* 80A004D0 */ s32 getHeadJointNo() { return 4; }
-    /* 80A004D8 */ s32 getNeckJointNo() { return 3; }
-    /* 80A004E0 */ s32 getBackboneJointNo() { return 1; }
-    /* 80A00504 */ int checkChangeJoint(int param_1) { return param_1 == 4; }
-    /* 80A00514 */ int checkRemoveJoint(int param_1) { return param_1 == 8; }
-    /* 80A00524 */ s32 getFootLJointNo() { return 22; }
-    /* 80A0052C */ s32 getFootRJointNo() { return 26; }
+    u16 getEyeballMaterialNo() { return 2; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return 1; }
+    int checkChangeJoint(int param_1) { return param_1 == 4; }
+    int checkRemoveJoint(int param_1) { return param_1 == 8; }
+    s32 getFootLJointNo() { return 22; }
+    s32 getFootRJointNo() { return 26; }
     MtxP getArmLMtx() { return mpMorf[0]->getModel()->getAnmMtx(11); }
 
     int getFlowNodeNo() {
@@ -215,7 +215,7 @@ STATIC_ASSERT(sizeof(daNpc_Hanjo_c) == 0x172c);
 
 class daNpc_Hanjo_Param_c {
 public:
-    /* 80A00534 */ virtual ~daNpc_Hanjo_Param_c() {}
+    virtual ~daNpc_Hanjo_Param_c() {}
 
     struct Data {
         /* 0x00 */ f32 field_0x00;

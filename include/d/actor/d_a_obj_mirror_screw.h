@@ -35,18 +35,18 @@ public:
         /* 1 */ ACT_DOWN,
     };
 
-    /* 80C98AD8 */ void initWait();
-    /* 80C98AE4 */ void executeWait();
-    /* 80C98C00 */ void initDown();
-    /* 80C98F04 */ void executeDown();
+    void initWait();
+    void executeWait();
+    void initDown();
+    void executeDown();
     inline cPhs__Step create();
-    /* 80C992F4 */ int CreateHeap();
+    int CreateHeap();
     inline void setBaseMtx();
     inline void initBaseMtx();
-    /* 80C99364 */ int Create();
-    /* 80C99490 */ int Execute(Mtx**);
-    /* 80C99608 */ int Draw();
-    /* 80C996AC */ int Delete();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     u8 getSwitchNo() { return (fopAcM_GetParam(this) >> 8) & 0xff; }
     u8 getEventID() { return (fopAcM_GetParam(this) >> 0x10) & 0xff; }

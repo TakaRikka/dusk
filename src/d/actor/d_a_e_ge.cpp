@@ -14,8 +14,8 @@
 
 class daE_GE_HIO_c : public JORReflexible {
 public:
-    /* 806C7A4C */ daE_GE_HIO_c();
-    /* 806CCA58 */ virtual ~daE_GE_HIO_c() {}
+    daE_GE_HIO_c();
+    virtual ~daE_GE_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -46,13 +46,10 @@ enum daE_GE_Action {
     /* 9 */ ACTION_MAX
 };
 
-/* 806CD358-806CD35C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 806CD368-806CD39C 000018 0034+00 12/12 0/0 0/0 .bss             l_HIO */
 static daE_GE_HIO_c l_HIO;
 
-/* 806C7A4C-806C7AB8 0000EC 006C+00 1/1 0/0 0/0 .text            __ct__12daE_GE_HIO_cFv */
 daE_GE_HIO_c::daE_GE_HIO_c() {
     id = -1;
     player_recognition_distance = 1000.0f;
@@ -68,13 +65,11 @@ daE_GE_HIO_c::daE_GE_HIO_c() {
     next_attack_timer = 110.0f;
 }
 
-/* 806C7AB8-806C7B5C 000158 00A4+00 10/10 0/0 0/0 .text            bckSet__8daE_GE_cFifUcf */
 void daE_GE_c::bckSet(int i_index, f32 i_morf, u8 i_attr, f32 i_rate) {
     J3DAnmTransform* transform = (J3DAnmTransform*)dComIfG_getObjectRes("E_GE", i_index);
     mpMorfSO->setAnm(transform, i_attr, i_morf, i_rate, 0.0f, -1.0f);
 }
 
-/* 806C7B5C-806C7BB8 0001FC 005C+00 3/3 0/0 0/0 .text            bckCheck__8daE_GE_cFi */
 bool daE_GE_c::bckCheck(int i_index) {
     J3DAnmTransform* transform = (J3DAnmTransform*)dComIfG_getObjectRes("E_GE", i_index);
 
@@ -85,7 +80,6 @@ bool daE_GE_c::bckCheck(int i_index) {
     return false;
 }
 
-/* 806C7BB8-806C7C8C 000258 00D4+00 1/1 0/0 0/0 .text            draw__8daE_GE_cFv */
 int daE_GE_c::draw() {
     J3DModel* model = mpMorfSO->getModel();
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -99,12 +93,10 @@ int daE_GE_c::draw() {
     return 1;
 }
 
-/* 806C7C8C-806C7CAC 00032C 0020+00 1/0 0/0 0/0 .text            daE_GE_Draw__FP8daE_GE_c */
 static int daE_GE_Draw(daE_GE_c* i_this) {
     return i_this->draw();
 }
 
-/* 806C7CAC-806C7DB8 00034C 010C+00 1/1 0/0 0/0 .text            checkBeforeBg__8daE_GE_cFif */
 bool daE_GE_c::checkBeforeBg(int param_0, f32 param_1) {
     cXyz end;
     if (param_0 == 0) {
@@ -123,7 +115,6 @@ bool daE_GE_c::checkBeforeBg(int param_0, f32 param_1) {
     return false;
 }
 
-/* 806C7DB8-806C7E7C 000458 00C4+00 2/2 0/0 0/0 .text            s_arrow_sub__FPvPv */
 static void* s_arrow_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
         if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_ARROW) {
@@ -138,7 +129,6 @@ static void* s_arrow_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 806C7E7C-806C7F44 00051C 00C8+00 2/2 0/0 0/0 .text            s_ge_surprise__FPvPv */
 static void* s_ge_surprise(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
         if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_GE) {
@@ -153,7 +143,6 @@ static void* s_ge_surprise(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 806C7F44-806C7FE4 0005E4 00A0+00 2/2 0/0 0/0 .text            s_ge_caw__FPvPv */
 static void* s_ge_caw(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
         if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_GE) {
@@ -168,10 +157,8 @@ static void* s_ge_caw(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 806CD39C-806CD3A0 00004C 0004+00 4/4 0/0 0/0 .bss             target_count */
 static s32 target_count;
 
-/* 806C7FE4-806C8068 000684 0084+00 1/1 0/0 0/0 .text            s_ge_attack__FPvPv */
 static void* s_ge_attack(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
         if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_GE) {
@@ -183,7 +170,6 @@ static void* s_ge_attack(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 806C8068-806C80F8 000708 0090+00 1/1 0/0 0/0 .text            s_ge_attack2__FPvPv */
 static void* s_ge_attack2(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
         if (!fpcM_IsCreating(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_GE) {
@@ -196,7 +182,6 @@ static void* s_ge_attack2(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 806C80F8-806C8130 000798 0038+00 12/12 0/0 0/0 .text            setActionMode__8daE_GE_cFi */
 void daE_GE_c::setActionMode(int i_actionMode) {
     mPrevActionMode = mActionMode;
     mActionMode = i_actionMode;
@@ -210,7 +195,6 @@ void daE_GE_c::setActionMode(int i_actionMode) {
     attention_info.distances[fopAc_attn_BATTLE_e] = 3;
 }
 
-/* 806C8130-806C8374 0007D0 0244+00 1/1 0/0 0/0 .text            damage_check__8daE_GE_cFv */
 void daE_GE_c::damage_check() {
     if (mDamageCooldownTimer == 0) {
         mStts.Move();
@@ -267,7 +251,6 @@ void daE_GE_c::damage_check() {
     }
 }
 
-/* 806C8374-806C83F8 000A14 0084+00 1/1 0/0 0/0 .text            checkOtherAttacker__8daE_GE_cFv */
 bool daE_GE_c::checkOtherAttacker() {
     if (mActionMode != ACTION_ATTACK) {
         return false;
@@ -283,7 +266,6 @@ bool daE_GE_c::checkOtherAttacker() {
     return false;
 }
 
-/* 806C83F8-806C84A0 000A98 00A8+00 2/2 0/0 0/0 .text            searchNextAttacker__8daE_GE_cFv */
 bool daE_GE_c::searchNextAttacker() {
     if (mMoveType == 2) {
         return false;
@@ -300,8 +282,6 @@ bool daE_GE_c::searchNextAttacker() {
     return true;
 }
 
-/* 806C84A0-806C8518 000B40 0078+00 2/2 0/0 0/0 .text checkCircleSpeedAdd__8daE_GE_cFP4cXyzP4cXyz
- */
 bool daE_GE_c::checkCircleSpeedAdd(cXyz* i_src, cXyz* param_1) {
     cXyz position;
     cLib_offsetPos(&position, i_src, field_0xb8c, param_1);
@@ -310,8 +290,6 @@ bool daE_GE_c::checkCircleSpeedAdd(cXyz* i_src, cXyz* param_1) {
     return abs((s16)(field_0xb8c - targetAngleY)) < 0x2000;
 }
 
-/* 806C8518-806C88C8 000BB8 03B0+00 1/1 0/0 0/0 .text setAddCalcSpeed__8daE_GE_cFR4cXyzRC4cXyzffff
- */
 void daE_GE_c::setAddCalcSpeed(cXyz& param_0, cXyz const& param_1, f32 param_2, f32 param_3,
                                f32 param_4, f32 param_5) {
     // Can't prove that this exists in debug but it seems necessary for the logic
@@ -335,7 +313,6 @@ void daE_GE_c::setAddCalcSpeed(cXyz& param_0, cXyz const& param_1, f32 param_2, 
     cLib_chaseF(&speed.y, speed_vec.y, param_5);
 }
 
-/* 806C88C8-806C89C0 000F68 00F8+00 4/4 0/0 0/0 .text calcCircleFly__8daE_GE_cFP4cXyzP4cXyzsfsf */
 cXyz daE_GE_c::calcCircleFly(cXyz* i_src, cXyz* i_vec, s16 i_angle, f32 param_3, s16 i_scale,
                              f32 param_5) {
     cXyz position;
@@ -353,7 +330,6 @@ cXyz daE_GE_c::calcCircleFly(cXyz* i_src, cXyz* i_vec, s16 i_angle, f32 param_3,
     return current.pos - position;
 }
 
-/* 806C89C0-806C8C20 001060 0260+00 1/0 0/0 0/0 .text            executeWait__8daE_GE_cFv */
 void daE_GE_c::executeWait() {
     fpcM_Search(s_arrow_sub, this);
 
@@ -403,7 +379,6 @@ void daE_GE_c::executeWait() {
     }
 }
 
-/* 806C8C20-806C9150 0012C0 0530+00 1/0 0/0 0/0 .text            executeFly__8daE_GE_cFv */
 void daE_GE_c::executeFly() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz position;
@@ -493,8 +468,6 @@ void daE_GE_c::executeFly() {
     }
 }
 
-/* 806C9150-806C921C 0017F0 00CC+00 1/1 0/0 0/0 .text            checkAttackPossible__8daE_GE_cFsb
- */
 bool daE_GE_c::checkAttackPossible(s16 i_angle, bool param_1) {
     if (field_0xb8e[0] == 0 && (i_angle > (s16)l_HIO.attack_start_angle || param_1)) {
         if (fopAcM_searchPlayerDistanceXZ(this) < l_HIO.minimum_attack_radius) {
@@ -509,7 +482,6 @@ bool daE_GE_c::checkAttackPossible(s16 i_angle, bool param_1) {
     return false;
 }
 
-/* 806C921C-806C9F04 0018BC 0CE8+00 1/0 0/0 0/0 .text            executeAttack__8daE_GE_cFv */
 void daE_GE_c::executeAttack() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz position;
@@ -664,7 +636,6 @@ void daE_GE_c::executeAttack() {
     cLib_chaseAngleS(&shape_angle.x, cM_atan2s(speedF, speed.y) - 0x4000, 0x180);
 }
 
-/* 806C9F04-806CA024 0025A4 0120+00 1/1 0/0 0/0 .text            setBackAnime__8daE_GE_cFi */
 void daE_GE_c::setBackAnime(int param_0) {
     if (speed.y > 0.0f || mBackAnimeTimer != 0) {
         J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("E_GE", 7);
@@ -684,7 +655,6 @@ void daE_GE_c::setBackAnime(int param_0) {
     }
 }
 
-/* 806CA024-806CAA34 0026C4 0A10+00 2/0 0/0 0/0 .text            executeBack__8daE_GE_cFv */
 void daE_GE_c::executeBack() {
     cXyz position;
     cXyz position2;
@@ -814,7 +784,6 @@ void daE_GE_c::executeBack() {
     cLib_chaseAngleS(&shape_angle.x, chaseAngle, 0x180);
 }
 
-/* 806CAA34-806CADCC 0030D4 0398+00 1/0 0/0 0/0 .text            executeDown__8daE_GE_cFv */
 void daE_GE_c::executeDown() {
     mDamageCooldownTimer = 10;
 
@@ -897,14 +866,12 @@ void daE_GE_c::executeDown() {
     }
 }
 
-/* 806CADCC-806CADF4 00346C 0028+00 2/2 0/0 0/0 .text            setSurpriseTime__8daE_GE_cFs */
 void daE_GE_c::setSurpriseTime(s16 i_surpriseTime) {
     if (getMoveType() == 0 && (mActionMode == ACTION_WAIT || mActionMode == ACTION_CAW)) {
         mSurpriseTime = i_surpriseTime;
     }
 }
 
-/* 806CADF4-806CAE58 003494 0064+00 1/1 0/0 0/0 .text            setSurprise__8daE_GE_cFv */
 void daE_GE_c::setSurprise() {
     if (getMoveType() == 0 && (mActionMode == ACTION_WAIT || mActionMode == ACTION_CAW)) {
         setActionMode(ACTION_SURPRISE);
@@ -912,7 +879,6 @@ void daE_GE_c::setSurprise() {
     fpcM_Search(s_ge_surprise, this);
 }
 
-/* 806CAE58-806CB280 0034F8 0428+00 1/0 0/0 0/0 .text            executeSurprise__8daE_GE_cFv */
 void daE_GE_c::executeSurprise() {
     cXyz vec;
 
@@ -972,7 +938,6 @@ void daE_GE_c::executeSurprise() {
     }
 }
 
-/* 806CB280-806CB2F0 003920 0070+00 1/1 0/0 0/0 .text            setCaw__8daE_GE_cFv */
 void daE_GE_c::setCaw() {
     if (getMoveType() == 0 && mActionMode == ACTION_WAIT) {
         setActionMode(ACTION_CAW);
@@ -980,7 +945,6 @@ void daE_GE_c::setCaw() {
     }
 }
 
-/* 806CB2F0-806CB6FC 003990 040C+00 1/0 0/0 0/0 .text            executeCaw__8daE_GE_cFv */
 void daE_GE_c::executeCaw() {
     fpcM_Search(s_arrow_sub, this);
 
@@ -1022,7 +986,6 @@ void daE_GE_c::executeCaw() {
     }
 }
 
-/* 806CB6FC-806CBAB8 003D9C 03BC+00 1/0 0/0 0/0 .text            executeWind__8daE_GE_cFv */
 void daE_GE_c::executeWind() {
     if (daPy_py_c::getThrowBoomerangActor() == NULL && mMode != 2) {
         mMode = 2;
@@ -1083,7 +1046,6 @@ void daE_GE_c::executeWind() {
     }
 }
 
-/* 806CBAB8-806CBC38 004158 0180+00 1/0 0/0 0/0 .text            executeShield__8daE_GE_cFv */
 void daE_GE_c::executeShield() {
     switch (mMode) {
     case 0:
@@ -1119,14 +1081,12 @@ void daE_GE_c::executeShield() {
     }
 }
 
-/* 806CD1E8-806CD254 0000D0 006C+00 1/2 0/0 0/0 .data            l_actionmenu__8daE_GE_c */
 daE_GE_c::actionFunc daE_GE_c::l_actionmenu[9] = {
     (&daE_GE_c::executeWait), (&daE_GE_c::executeFly),  (&daE_GE_c::executeAttack),
     (&daE_GE_c::executeBack), (&daE_GE_c::executeDown), (&daE_GE_c::executeSurprise),
     (&daE_GE_c::executeCaw),  (&daE_GE_c::executeWind), (&daE_GE_c::executeShield),
 };
 
-/* 806CBC38-806CBE98 0042D8 0260+00 1/1 0/0 0/0 .text            action__8daE_GE_cFv */
 void daE_GE_c::action() {
     mSphere.OffAtSetBit();
     damage_check();
@@ -1190,7 +1150,6 @@ void daE_GE_c::action() {
     mpMorfSO->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
-/* 806CBE98-806CBEF0 004538 0058+00 2/2 0/0 0/0 .text            mtx_set__8daE_GE_cFv */
 void daE_GE_c::mtx_set() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -1198,7 +1157,6 @@ void daE_GE_c::mtx_set() {
     mpMorfSO->modelCalc();
 }
 
-/* 806CBEF0-806CC068 004590 0178+00 1/1 0/0 0/0 .text            cc_set__8daE_GE_cFv */
 void daE_GE_c::cc_set() {
     MTXCopy(mpMorfSO->getModel()->getAnmMtx(2), mDoMtx_stack_c::get());
 
@@ -1231,7 +1189,6 @@ void daE_GE_c::cc_set() {
     }
 }
 
-/* 806CC068-806CC1BC 004708 0154+00 1/1 0/0 0/0 .text            execute__8daE_GE_cFv */
 int daE_GE_c::execute() {
     for (int i = 0; i < 2; i++) {
         if (field_0xb8e[i] != 0) {
@@ -1272,17 +1229,14 @@ int daE_GE_c::execute() {
     return 1;
 }
 
-/* 806CC1BC-806CC1DC 00485C 0020+00 1/0 0/0 0/0 .text            daE_GE_Execute__FP8daE_GE_c */
 static int daE_GE_Execute(daE_GE_c* i_this) {
     return i_this->execute();
 }
 
-/* 806CC1DC-806CC1E4 00487C 0008+00 1/0 0/0 0/0 .text            daE_GE_IsDelete__FP8daE_GE_c */
 static int daE_GE_IsDelete(daE_GE_c* i_this) {
     return 1;
 }
 
-/* 806CC1E4-806CC258 004884 0074+00 1/1 0/0 0/0 .text            _delete__8daE_GE_cFv */
 int daE_GE_c::_delete() {
     dComIfG_resDelete(&mPhaseReq, "E_GE");
 
@@ -1298,12 +1252,10 @@ int daE_GE_c::_delete() {
     return 1;
 }
 
-/* 806CC258-806CC278 0048F8 0020+00 1/0 0/0 0/0 .text            daE_GE_Delete__FP8daE_GE_c */
 static int daE_GE_Delete(daE_GE_c* i_this) {
     return i_this->_delete();
 }
 
-/* 806CC278-806CC370 004918 00F8+00 1/1 0/0 0/0 .text            CreateHeap__8daE_GE_cFv */
 int daE_GE_c::CreateHeap() {
     mpMorfSO = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_GE", 0xF), NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("E_GE", 0xC), 0, 1.0f, 0,
@@ -1316,12 +1268,10 @@ int daE_GE_c::CreateHeap() {
     return 1;
 }
 
-/* 806CC370-806CC390 004A10 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return static_cast<daE_GE_c*>(i_this)->CreateHeap();
 }
 
-/* 806CC390-806CC824 004A30 0494+00 1/1 0/0 0/0 .text            create__8daE_GE_cFv */
 int daE_GE_c::create() {
     static dCcD_SrcSph cc_sph_src = {
         {
@@ -1416,19 +1366,16 @@ int daE_GE_c::create() {
     return phase;
 }
 
-/* 806CC9F0-806CCA10 005090 0020+00 1/0 0/0 0/0 .text            daE_GE_Create__FP8daE_GE_c */
 static int daE_GE_Create(daE_GE_c* i_this) {
     return i_this->create();
 }
 
-/* 806CD294-806CD2B4 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_GE_Method */
 static actor_method_class l_daE_GE_Method = {
     (process_method_func)daE_GE_Create,  (process_method_func)daE_GE_Delete,
     (process_method_func)daE_GE_Execute, (process_method_func)daE_GE_IsDelete,
     (process_method_func)daE_GE_Draw,
 };
 
-/* 806CD2B4-806CD2E4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_GE */
 extern actor_process_profile_definition g_profile_E_GE = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

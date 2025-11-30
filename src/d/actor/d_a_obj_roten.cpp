@@ -9,13 +9,11 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 
-/* 80CC0B58-80CC0B94 000078 003C+00 1/1 0/0 0/0 .text            initBaseMtx__13daObj_Roten_cFv */
 void daObj_Roten_c::initBaseMtx() {
     mModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80CC0B94-80CC0C20 0000B4 008C+00 2/2 0/0 0/0 .text            setBaseMtx__13daObj_Roten_cFv */
 void daObj_Roten_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -24,7 +22,6 @@ void daObj_Roten_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80CC0C20-80CC0EC4 000140 02A4+00 1/0 0/0 0/0 .text            Create__13daObj_Roten_cFv */
 int daObj_Roten_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
@@ -71,13 +68,10 @@ int daObj_Roten_c::Create() {
     return 1;
 }
 
-/* 80CC144C-80CC1450 -00001 0004+00 1/1 0/0 0/0 .data            l_resFileName */
 static char* l_resFileName = "Obj_roten";
 
-/* 80CC1450-80CC1454 000004 0004+00 1/1 0/0 0/0 .data            l_bmdFileIdx */
 static u32 l_bmdFileIdx = 4;
 
-/* 80CC0EC4-80CC0F40 0003E4 007C+00 1/0 0/0 0/0 .text            CreateHeap__13daObj_Roten_cFv */
 int daObj_Roten_c::CreateHeap() {
     J3DModelData* mdlData_p = (J3DModelData*)dComIfG_getObjectRes(getResName(), l_bmdFileIdx);
     JUT_ASSERT(156, mdlData_p != NULL);
@@ -85,11 +79,8 @@ int daObj_Roten_c::CreateHeap() {
     return mModel != NULL;
 }
 
-/* ############################################################################################## */
-/* 80CC1454-80CC1458 000008 0004+00 1/1 0/0 0/0 .data            l_dzbFileIdx */
 static u32 l_dzbFileIdx = 7;
 
-/* 80CC0F40-80CC1038 000460 00F8+00 1/1 0/0 0/0 .text            create__13daObj_Roten_cFv */
 int daObj_Roten_c::create() {
     fopAcM_ct(this, daObj_Roten_c);
          /* dSv_event_flag_c::M_031 - Goron Mines - Goron Mines clear */
@@ -108,8 +99,6 @@ int daObj_Roten_c::create() {
     return rv;
 }
 
-/* 80CC1038-80CC1138 000558 0100+00 1/0 0/0 0/0 .text            Execute__13daObj_Roten_cFPPA3_A4_f
- */
 int daObj_Roten_c::Execute(Mtx** ppMtx) {
     if (mWithinTime) {
         if (dComIfGp_roomControl_getStayNo() != 0) {
@@ -123,7 +112,6 @@ int daObj_Roten_c::Execute(Mtx** ppMtx) {
     return 1;
 }
 
-/* 80CC1138-80CC1254 000658 011C+00 1/0 0/0 0/0 .text            Draw__13daObj_Roten_cFv */
 int daObj_Roten_c::Draw() {
     if (mWithinTime) {
         cLib_addCalc(&mBossLightRefDist, 1.0f, 0.5f, 0.1f, 0.0001f);
@@ -142,7 +130,6 @@ int daObj_Roten_c::Draw() {
     return 1;
 }
 
-/* 80CC1254-80CC12E4 000774 0090+00 1/0 0/0 0/0 .text            Delete__13daObj_Roten_cFv */
 int daObj_Roten_c::Delete() {
     for (int i = 0; i < 2; i = i + 1) {
         if (mEmitters[i] != NULL) {
@@ -155,41 +142,33 @@ int daObj_Roten_c::Delete() {
     return 1;
 }
 
-/* 80CC12E4-80CC12F4 000804 0010+00 3/3 0/0 0/0 .text            getResName__13daObj_Roten_cFv */
 char* daObj_Roten_c::getResName() {
     return l_resFileName;
 }
 
-/* 80CC12F4-80CC1314 000814 0020+00 1/0 0/0 0/0 .text            daObj_Roten_Create__FPv */
 static int daObj_Roten_Create(void* i_this) {
     return static_cast<daObj_Roten_c*>(i_this)->create();
 }
 
-/* 80CC1314-80CC1334 000834 0020+00 1/0 0/0 0/0 .text            daObj_Roten_Delete__FPv */
 static int daObj_Roten_Delete(void* i_this) {
     return static_cast<daObj_Roten_c*>(i_this)->MoveBGDelete();
 }
 
-/* 80CC1334-80CC1354 000854 0020+00 1/0 0/0 0/0 .text            daObj_Roten_Execute__FPv */
 static int daObj_Roten_Execute(void* i_this) {
     return static_cast<daObj_Roten_c*>(i_this)->MoveBGExecute();
 }
 
-/* 80CC1354-80CC1380 000874 002C+00 1/0 0/0 0/0 .text            daObj_Roten_Draw__FPv */
 static int daObj_Roten_Draw(void* i_this) {
     return static_cast<daObj_Roten_c*>(i_this)->Draw();
 }
 
-/* 80CC1380-80CC1388 0008A0 0008+00 1/0 0/0 0/0 .text            daObj_Roten_IsDelete__FPv */
 static int daObj_Roten_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80CC1388-80CC13F8 0008A8 0070+00 1/0 0/0 0/0 .text            __dt__13daObj_Roten_cFv */
 daObj_Roten_c::~daObj_Roten_c() {
 }
 
-/* 80CC1458-80CC1478 -00001 0020+00 1/0 0/0 0/0 .data            daObj_Roten_MethodTable */
 static actor_method_class daObj_Roten_MethodTable = {
     (process_method_func)daObj_Roten_Create,
     (process_method_func)daObj_Roten_Delete,
@@ -198,7 +177,6 @@ static actor_method_class daObj_Roten_MethodTable = {
     (process_method_func)daObj_Roten_Draw,
 };
 
-/* 80CC1478-80CC14A8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_ROTEN */
 extern actor_process_profile_definition g_profile_OBJ_ROTEN = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID

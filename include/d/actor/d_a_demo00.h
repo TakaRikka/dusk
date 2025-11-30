@@ -14,7 +14,7 @@ public:
 
 class daDemo00_resID_c {
 public:
-    /* 804A430C */ void reset();
+    void reset();
 
     /* 0x00 */ u32 mShapeID;
     /* 0x04 */ u32 field_0x4;
@@ -42,7 +42,7 @@ struct daDemo00_shadow_c {
 
 class daDemo00_model_c {
 public:
-    /* 804A4338 */ void reset();
+    void reset();
 
     /* 0x00 */ daDemo00_resID_c mID;
     /* 0x24 */ mDoExt_McaMorfSO* mpModelMorf;
@@ -70,15 +70,15 @@ class daDemo00_c : public fopAc_ac_c {
 public:
     typedef int (daDemo00_c::*actionFunc)(dDemo_actor_c*);
 
-    /* 804A4388 */ ~daDemo00_c();
-    /* 804A45A0 */ void setBaseMtx();
-    /* 804A4948 */ void setShadowSize();
-    /* 804A4F74 */ int createHeap();
-    /* 804A5798 */ int actStandby(dDemo_actor_c*);
-    /* 804A594C */ int actPerformance(dDemo_actor_c*);
-    /* 804A604C */ int actLeaving(dDemo_actor_c*);
-    /* 804A6F94 */ int draw();
-    /* 804A7BA8 */ int execute();
+    ~daDemo00_c();
+    void setBaseMtx();
+    void setShadowSize();
+    int createHeap();
+    int actStandby(dDemo_actor_c*);
+    int actPerformance(dDemo_actor_c*);
+    int actLeaving(dDemo_actor_c*);
+    int draw();
+    int execute();
 
     int create();
 

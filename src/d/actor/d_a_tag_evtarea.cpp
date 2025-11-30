@@ -8,7 +8,6 @@
 #include "d/actor/d_a_npc.h"
 #include "d/d_procname.h"
 
-/* 8048C4F8-8048C728 000078 0230+00 2/1 0/0 0/0 .text            create__15daTag_EvtArea_cFv */
 cPhs__Step daTag_EvtArea_c::create() {
     fopAcM_ct(this, daTag_EvtArea_c);
 
@@ -94,12 +93,10 @@ cPhs__Step daTag_EvtArea_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8048C728-8048C730 0002A8 0008+00 1/1 0/0 0/0 .text            Delete__15daTag_EvtArea_cFv */
 BOOL daTag_EvtArea_c::Delete() {
     return true;
 }
 
-/* 8048C730-8048C894 0002B0 0164+00 1/1 0/0 0/0 .text            Execute__15daTag_EvtArea_cFv */
 BOOL daTag_EvtArea_c::Execute() {
     if (home.roomNo == dComIfGp_roomControl_getStayNo()) {
         if (isDelete()) {
@@ -129,12 +126,10 @@ BOOL daTag_EvtArea_c::Execute() {
     return false;
 }
 
-/* 8048C894-8048C89C 000414 0008+00 1/1 0/0 0/0 .text            Draw__15daTag_EvtArea_cFv */
 BOOL daTag_EvtArea_c::Draw() {
     return true;
 }
 
-/* 8048C89C-8048C94C 00041C 00B0+00 2/2 0/0 0/0 .text            isDelete__15daTag_EvtArea_cFv */
 BOOL daTag_EvtArea_c::isDelete() {
     bool ret;
     if (getOffEvtBit() != -1) {
@@ -153,8 +148,6 @@ BOOL daTag_EvtArea_c::isDelete() {
     return ret;
 }
 
-/* 8048C94C-8048CC80 0004CC 0334+00 1/1 0/0 16/16 .text
- * chkPointInArea__15daTag_EvtArea_cF4cXyz4cXyz                 */
 BOOL daTag_EvtArea_c::chkPointInArea(cXyz i_point, cXyz i_addSize) {
     cXyz area_vtx[4];
     cXyz size, center, player_to_home, point_to_current;
@@ -211,39 +204,32 @@ BOOL daTag_EvtArea_c::chkPointInArea(cXyz i_point, cXyz i_addSize) {
     return false;
 }
 
-/* 8048CC80-8048CCA0 000800 0020+00 1/0 0/0 0/0 .text            daTag_EvtArea_Create__FPv */
 static cPhs__Step daTag_EvtArea_Create(void* i_this) {
     return static_cast<daTag_EvtArea_c*>(i_this)->create();
 }
 
-/* 8048CCA0-8048CCC0 000820 0020+00 1/0 0/0 0/0 .text            daTag_EvtArea_Delete__FPv */
 static BOOL daTag_EvtArea_Delete(void* i_this) {
     return static_cast<daTag_EvtArea_c*>(i_this)->Delete();
 }
 
-/* 8048CCC0-8048CCE0 000840 0020+00 1/0 0/0 0/0 .text            daTag_EvtArea_Execute__FPv */
 static BOOL daTag_EvtArea_Execute(void* i_this) {
     return static_cast<daTag_EvtArea_c*>(i_this)->Execute();
 }
 
-/* 8048CCE0-8048CD00 000860 0020+00 1/0 0/0 0/0 .text            daTag_EvtArea_Draw__FPv */
 static BOOL daTag_EvtArea_Draw(void* i_this) {
     return static_cast<daTag_EvtArea_c*>(i_this)->Draw();
 }
 
-/* 8048CD00-8048CD08 000880 0008+00 1/0 0/0 0/0 .text            daTag_EvtArea_IsDelete__FPv */
 static BOOL daTag_EvtArea_IsDelete(void* i_this) {
     return true;
 }
 
-/* 8048CE48-8048CE68 -00001 0020+00 1/0 0/0 0/0 .data            daTag_EvtArea_MethodTable */
 static actor_method_class daTag_EvtArea_MethodTable = {
     (process_method_func)daTag_EvtArea_Create,  (process_method_func)daTag_EvtArea_Delete,
     (process_method_func)daTag_EvtArea_Execute, (process_method_func)daTag_EvtArea_IsDelete,
     (process_method_func)daTag_EvtArea_Draw,
 };
 
-/* 8048CE68-8048CE98 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_TAG_EVTAREA */
 extern actor_process_profile_definition g_profile_TAG_EVTAREA = {
     fpcLy_CURRENT_e,
     8,

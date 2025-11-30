@@ -5,7 +5,6 @@
 #include "JSystem/JAudio2/JASCriticalSection.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 
-/* 8028F6C4-8028F724 28A004 0060+00 0/0 1/1 0/0 .text            __ct__13JASTaskThreadFiiUl */
 JASTaskThread::JASTaskThread(int priority, int msgCount, u32 stackSize) :
     JKRThread(JASDram, stackSize, msgCount, priority)
 {
@@ -13,7 +12,6 @@ JASTaskThread::JASTaskThread(int priority, int msgCount, u32 stackSize) :
     OSInitThreadQueue(&threadQueue_);
 }
 
-/* 8028F724-8028F850 28A064 012C+00 1/0 0/0 0/0 .text            __dt__13JASTaskThreadFv */
 JASTaskThread::~JASTaskThread() {
     OSMessage msg;
     BOOL received;
@@ -26,8 +24,6 @@ JASTaskThread::~JASTaskThread() {
     }
 }
 
-/* 8028F850-8028F9EC 28A190 019C+00 1/1 0/0 0/0 .text allocCallStack__13JASTaskThreadFPFPv_vPCvUl
- */
 void* JASTaskThread::allocCallStack(JASThreadCallback callback, const void* msg, u32 msgSize) {
     ThreadMemPool* heap;
     u32 size = msgSize + 8;
@@ -42,7 +38,6 @@ void* JASTaskThread::allocCallStack(JASThreadCallback callback, const void* msg,
     return callStack;
 }
 
-/* 8028F9EC-8028FB5C 28A32C 0170+00 1/1 0/0 0/0 .text allocCallStack__13JASTaskThreadFPFPv_vPv */
 void* JASTaskThread::allocCallStack(JASThreadCallback callback, void* msg) {
     JASThreadCallStack *callStack;
     callStack = (JASThreadCallStack*)JASKernel::getCommandHeap()->alloc(12);
@@ -56,7 +51,6 @@ void* JASTaskThread::allocCallStack(JASThreadCallback callback, void* msg) {
     return callStack;
 }
 
-/* 8028FB5C-8028FC54 28A49C 00F8+00 0/0 6/6 0/0 .text sendCmdMsg__13JASTaskThreadFPFPv_vPCvUl */
 int JASTaskThread::sendCmdMsg(JASThreadCallback callback, const void* msg, u32 msgSize) {
     void* callstack;
 
@@ -72,7 +66,6 @@ int JASTaskThread::sendCmdMsg(JASThreadCallback callback, const void* msg, u32 m
     return iVar2;
 }
 
-/* 8028FC54-8028FD4C 28A594 00F8+00 0/0 3/3 0/0 .text sendCmdMsg__13JASTaskThreadFPFPv_vPv */
 int JASTaskThread::sendCmdMsg(JASThreadCallback callback, void* msg) {
     void* callstack;
 
@@ -88,7 +81,6 @@ int JASTaskThread::sendCmdMsg(JASThreadCallback callback, void* msg) {
     return iVar2;
 }
 
-/* 8028FD4C-8028FE88 28A68C 013C+00 1/0 0/0 0/0 .text            run__13JASTaskThreadFv */
 // NONMATCHING Regalloc
 void* JASTaskThread::run() {
     JASThreadCallStack* callstack;
@@ -109,7 +101,6 @@ void* JASTaskThread::run() {
     } while (true);
 }
 
-/* 8028FE88-8028FEFC 28A7C8 0074+00 0/0 1/1 0/0 .text            pause__13JASTaskThreadFb */
 void JASTaskThread::pause(bool param_0) {
     JASCriticalSection aJStack_14;
     if (param_0) {

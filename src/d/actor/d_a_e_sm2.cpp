@@ -15,8 +15,8 @@
 
 class daE_SM2_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80798B4C */ daE_SM2_HIO_c();
-    /* 8079CE94 */ virtual ~daE_SM2_HIO_c() {}
+    daE_SM2_HIO_c();
+    virtual ~daE_SM2_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -29,7 +29,6 @@ public:
     /* 0x0E */ s16 color_debug_B;
 };
 
-/* 80798B4C-80798BA4 0000EC 0058+00 1/1 0/0 0/0 .text            __ct__13daE_SM2_HIO_cFv */
 daE_SM2_HIO_c::daE_SM2_HIO_c() {
     unk_0x4 = 4;
     unk_0x7 = 0;
@@ -41,7 +40,6 @@ daE_SM2_HIO_c::daE_SM2_HIO_c() {
     color_debug_B = 91;
 }
 
-/* 80798C48-80798D90 0001E8 0148+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -66,7 +64,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80798D90-80799070 000330 02E0+00 1/0 0/0 0/0 .text            daE_SM2_Draw__FP11e_sm2_class */
 static int daE_SM2_Draw(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);
@@ -111,7 +108,6 @@ static int daE_SM2_Draw(e_sm2_class* i_this) {
     return 1;
 }
 
-/* 80799070-80799084 000610 0014+00 4/4 0/0 0/0 .text            size_get__FUc */
 static f32 size_get(u8 i_sizetype) {
     static f32 sc_d[] = {
         0.25f,
@@ -124,7 +120,6 @@ static f32 size_get(u8 i_sizetype) {
     return sc_d[i_sizetype];
 }
 
-/* 80799084-80799160 000624 00DC+00 5/5 0/0 0/0 .text            sm2_delete__FP11e_sm2_class */
 static void sm2_delete(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -148,7 +143,6 @@ static void sm2_delete(e_sm2_class* i_this) {
     }
 }
 
-/* 80799160-807991D4 000700 0074+00 2/2 0/0 0/0 .text            cc_stts_init__FP11e_sm2_class */
 static void cc_stts_init(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -181,7 +175,6 @@ static void cc_stts_init(e_sm2_class* i_this) {
     i_this->acchcir.SetWall(bg_h[i_this->sizetype], bg_r[i_this->sizetype]);
 }
 
-/* 807991D4-80799394 000774 01C0+00 1/1 0/0 0/0 .text            s_s_sub__FPvPv */
 static void* s_s_sub(void* i_actor, void* i_data) {
     cXyz sp18;
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_SM2) {
@@ -200,7 +193,6 @@ static void* s_s_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80799394-807993F4 000934 0060+00 1/1 0/0 0/0 .text            pl_check__FP11e_sm2_classf */
 static BOOL pl_check(e_sm2_class* i_this, f32 i_range) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -212,10 +204,8 @@ static BOOL pl_check(e_sm2_class* i_this, f32 i_range) {
     }
 }
 
-/* 8079DBD4-8079DBE4 000054 0010+00 3/4 0/0 0/0 .bss             l_HIO */
 static daE_SM2_HIO_c l_HIO;
 
-/* 807993F4-80799784 000994 0390+00 1/1 0/0 0/0 .text            normal_move__FP11e_sm2_class */
 static void normal_move(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -300,7 +290,6 @@ static void normal_move(e_sm2_class* i_this) {
     }
 }
 
-/* 80799784-80799A50 000D24 02CC+00 2/2 0/0 0/0 .text            attack__FP11e_sm2_class */
 static void attack(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -379,7 +368,6 @@ static void attack(e_sm2_class* i_this) {
     cLib_addCalc2(&i_this->field_0x830, 1.0f + TREG_F(17), 0.5f, 0.1f + TREG_F(18));
 }
 
-/* 80799A50-80799DAC 000FF0 035C+00 1/1 0/0 0/0 .text            combine__FP11e_sm2_class */
 static s8 combine(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -467,7 +455,6 @@ static s8 combine(e_sm2_class* i_this) {
     return cc_co_ON;
 }
 
-/* 80799DAC-8079A1CC 00134C 0420+00 1/2 0/0 0/0 .text            roof__FP11e_sm2_class */
 static s8 roof(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -571,7 +558,6 @@ static s8 roof(e_sm2_class* i_this) {
     return do_pos_crr;
 }
 
-/* 8079A1CC-8079A28C 00176C 00C0+00 1/1 0/0 0/0 .text            water__FP11e_sm2_class */
 static void water(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -590,7 +576,6 @@ static void water(e_sm2_class* i_this) {
     }
 }
 
-/* 8079A28C-8079A3AC 00182C 0120+00 2/2 0/0 0/0 .text            eff_set__FP11e_sm2_classP4cXyzf */
 static void eff_set(e_sm2_class* i_this, cXyz* i_pos, f32 i_size) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -641,7 +626,6 @@ static void eff_set(e_sm2_class* i_this, cXyz* i_pos, f32 i_size) {
     dComIfGp_particle_set(0x85BF, i_pos, &actor->tevStr, &actor->shape_angle, &effsize, 0xFF, NULL, fopAcM_GetRoomNo(actor), &e_prim_B[i_this->type], &e_env_B[i_this->type], NULL);
 }
 
-/* 8079A3AC-8079A560 00194C 01B4+00 1/1 0/0 0/0 .text            fail__FP11e_sm2_class */
 static void fail(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp14;
@@ -695,7 +679,6 @@ static void fail(e_sm2_class* i_this) {
     }
 }
 
-/* 8079A560-8079A9B4 001B00 0454+00 1/1 0/0 0/0 .text            dmcalc__FP11e_sm2_class */
 static void dmcalc(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     int i;
@@ -810,7 +793,6 @@ static void dmcalc(e_sm2_class* i_this) {
     }
 }
 
-/* 8079D888-8079D8BC 000154 0031+03 0/1 0/0 0/0 .data            new_col_d */
 // Lookup table for color combinations. Rows correspond to one chu and columns the other chu
 // Ex. RED + BLUE = [1][2] = TYPE_PURPLE
 static u8 new_col_d[] = {
@@ -823,7 +805,6 @@ static u8 new_col_d[] = {
     TYPE_RARE,   TYPE_RARE,   TYPE_RARE,   TYPE_RARE,   TYPE_RARE,   TYPE_RARE,   TYPE_BLACK,
 };
 
-/* 8079A9B4-8079AF94 001F54 05E0+00 1/1 0/0 0/0 .text            damage_check__FP11e_sm2_class */
 static void damage_check(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -963,7 +944,6 @@ static void damage_check(e_sm2_class* i_this) {
     }
 }
 
-/* 8079AF94-8079BC9C 002534 0D08+00 2/1 0/0 0/0 .text            action__FP11e_sm2_class */
 static void action(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp58;
@@ -1296,11 +1276,9 @@ static void action(e_sm2_class* i_this) {
     }
 }
 
-/* 8079DBE4-8079DBE8 000064 0004+00 0/0 0/0 0/0 .bss             boss */
 // unused, unknown type
 static void* boss;
 
-/* 8079DC3C-8079DC90 0000BC 0054+00 1/2 0/0 0/0 .bss             col_d */
 static cXyz col_d[] = {
     /* Green  */ cXyz(117, 170, 90),
     /* Red    */ cXyz(140, 50, 0),
@@ -1311,7 +1289,6 @@ static cXyz col_d[] = {
     /* Black  */ cXyz(25, 25, 25),
 };
 
-/* 8079BD14-8079BEF0 0032B4 01DC+00 2/2 0/0 0/0 .text            col_set__FP11e_sm2_classSc */
 static void col_set(e_sm2_class* i_this, s8 i_immediate) {
     if (i_immediate) {
         i_this->color_R = col_d[i_this->type].x;
@@ -1328,7 +1305,6 @@ static void col_set(e_sm2_class* i_this, s8 i_immediate) {
     }
 }
 
-/* 8079BEF0-8079C120 003490 0230+00 2/1 0/0 0/0 .text            daE_SM2_Execute__FP11e_sm2_class */
 static int daE_SM2_Execute(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -1397,13 +1373,10 @@ static int daE_SM2_Execute(e_sm2_class* i_this) {
     return 1;
 }
 
-/* 8079C120-8079C128 0036C0 0008+00 1/0 0/0 0/0 .text            daE_SM2_IsDelete__FP11e_sm2_class
- */
 static int daE_SM2_IsDelete(e_sm2_class* i_this) {
     return 1;
 }
 
-/* 8079C128-8079C184 0036C8 005C+00 1/0 0/0 0/0 .text            daE_SM2_Delete__FP11e_sm2_class */
 static int daE_SM2_Delete(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fpc_ProcID id = fopAcM_GetID(actor);
@@ -1417,7 +1390,6 @@ static int daE_SM2_Delete(e_sm2_class* i_this) {
     return 1;
 }
 
-/* 8079C184-8079C438 003724 02B4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_sm2_class* a_this = (e_sm2_class*)i_this;
 
@@ -1459,7 +1431,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8079C480-8079CB28 003A20 06A8+00 1/0 0/0 0/0 .text            daE_SM2_Create__FP10fopAc_ac_c */
 static int daE_SM2_Create(fopAc_ac_c* i_this) {
     e_sm2_class* a_this = (e_sm2_class*)i_this;
     fopAcM_ct(i_this, e_sm2_class);
@@ -1628,7 +1599,6 @@ static int daE_SM2_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 8079DA6C-8079DA8C -00001 0020+00 1/0 0/0 0/0 .data            l_daE_SM2_Method */
 static actor_method_class l_daE_SM2_Method = {
     (process_method_func)daE_SM2_Create,
     (process_method_func)daE_SM2_Delete,
@@ -1637,7 +1607,6 @@ static actor_method_class l_daE_SM2_Method = {
     (process_method_func)daE_SM2_Draw,
 };
 
-/* 8079DA8C-8079DABC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_SM2 */
 extern actor_process_profile_definition g_profile_E_SM2 = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

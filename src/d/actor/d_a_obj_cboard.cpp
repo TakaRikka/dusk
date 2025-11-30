@@ -9,12 +9,10 @@
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
 
-/* 8057B958-8057B978 000078 0020+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjBoard_cFv */
 void daObjBoard_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 8057B978-8057B9C8 000098 0050+00 1/1 0/0 0/0 .text            setBaseMtx__12daObjBoard_cFv */
 void daObjBoard_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -22,21 +20,17 @@ void daObjBoard_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 8057BE20-8057BE24 -00001 0004+00 2/2 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Obj_Board";
 
-/* 8057BE24-8057BE38 -00001 0014+00 1/1 0/0 0/0 .data            l_dzbName */
 static char* l_dzbName[5] = {
     "ClearB00.dzb", "ClearB01.dzb", "ClearB02.dzb", "ClearB03.dzb", "ClearB04.dzb",
 };
 
-/* 8057BE38-8057BE50 000018 0018+00 1/1 0/0 0/0 .data            l_cull_box */
 static Vec l_cull_box[2] = {
     {-100.0f, -10.0f, -100.0f},
     {100.0f, 10.0f, 100.0f},
 };
 
-/* 8057B9C8-8057BA70 0000E8 00A8+00 1/0 0/0 0/0 .text            Create__12daObjBoard_cFv */
 int daObjBoard_c::Create() {
     if (getNameArg() == 1) {
         scale.x *= 10.0f;
@@ -51,12 +45,10 @@ int daObjBoard_c::Create() {
     return 1;
 }
 
-/* 8057BA70-8057BA78 000190 0008+00 1/0 0/0 0/0 .text            CreateHeap__12daObjBoard_cFv */
 int daObjBoard_c::CreateHeap() {
     return 1;
 }
 
-/* 8057BA78-8057BB74 000198 00FC+00 1/1 0/0 0/0 .text            create1st__12daObjBoard_cFv */
 int daObjBoard_c::create1st() {
     int ret = dComIfG_resLoad(&mPhase, l_arcName);
     if (ret == cPhs_COMPLEATE_e) {
@@ -93,8 +85,6 @@ int daObjBoard_c::create1st() {
     return ret;
 }
 
-/* 8057BB74-8057BCC0 000294 014C+00 2/0 0/0 0/0 .text            Execute__12daObjBoard_cFPPA3_A4_f
- */
 int daObjBoard_c::Execute(Mtx** param_0) {
     switch (getArg0()) {
     case 1:
@@ -133,49 +123,39 @@ int daObjBoard_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 8057BCC0-8057BCC8 0003E0 0008+00 1/0 0/0 0/0 .text            Draw__12daObjBoard_cFv */
 int daObjBoard_c::Draw() {
     return 1;
 }
 
-/* 8057BCC8-8057BCFC 0003E8 0034+00 1/0 0/0 0/0 .text            Delete__12daObjBoard_cFv */
 int daObjBoard_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     return 1;
 }
 
-/* 8057BCFC-8057BD5C 00041C 0060+00 1/0 0/0 0/0 .text daObjBoard_create1st__FP12daObjBoard_c */
 static int daObjBoard_create1st(daObjBoard_c* i_this) {
     fopAcM_ct(i_this, daObjBoard_c);
 
     return i_this->create1st();
 }
 
-/* 8057BD5C-8057BD7C 00047C 0020+00 1/0 0/0 0/0 .text daObjBoard_MoveBGDelete__FP12daObjBoard_c */
 static int daObjBoard_MoveBGDelete(daObjBoard_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 8057BD7C-8057BD9C 00049C 0020+00 1/0 0/0 0/0 .text daObjBoard_MoveBGExecute__FP12daObjBoard_c
- */
 static int daObjBoard_MoveBGExecute(daObjBoard_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 8057BD9C-8057BDC8 0004BC 002C+00 1/0 0/0 0/0 .text daObjBoard_MoveBGDraw__FP12daObjBoard_c */
 static int daObjBoard_MoveBGDraw(daObjBoard_c* i_this) {
     return i_this->Draw();
 }
 
-/* ############################################################################################## */
-/* 8057BE90-8057BEB0 -00001 0020+00 1/0 0/0 0/0 .data            daObjBoard_METHODS */
 static actor_method_class daObjBoard_METHODS = {
     (process_method_func)daObjBoard_create1st,     (process_method_func)daObjBoard_MoveBGDelete,
     (process_method_func)daObjBoard_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjBoard_MoveBGDraw,
 };
 
-/* 8057BEB0-8057BEE0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Cboard */
 extern actor_process_profile_definition g_profile_Obj_Cboard = {
     fpcLy_CURRENT_e,
     3,

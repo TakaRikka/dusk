@@ -48,14 +48,14 @@ struct J3DShapeDrawInitData {
  * 
  */
 struct J3DShapeFactory {
-    /* 80337350 */ J3DShapeFactory(J3DShapeBlock const&);
-    /* 80337400 */ J3DShape* create(int, u32, GXVtxDescList*);
-    /* 803375BC */ J3DShapeMtx* newShapeMtx(u32, int, int) const;
-    /* 8033784C */ J3DShapeDraw* newShapeDraw(int, int) const;
-    /* 803378D8 */ void allocVcdVatCmdBuffer(u32);
-    /* 80337944 */ s32 calcSize(int, u32);
-    /* 803379D8 */ s32 calcSizeVcdVatCmdBuffer(u32);
-    /* 803379E8 */ s32 calcSizeShapeMtx(u32, int, int) const;
+    J3DShapeFactory(J3DShapeBlock const&);
+    J3DShape* create(int, u32, GXVtxDescList*);
+    J3DShapeMtx* newShapeMtx(u32, int, int) const;
+    J3DShapeDraw* newShapeDraw(int, int) const;
+    void allocVcdVatCmdBuffer(u32);
+    s32 calcSize(int, u32);
+    s32 calcSizeVcdVatCmdBuffer(u32);
+    s32 calcSizeShapeMtx(u32, int, int) const;
 
     /* 0x00 */ J3DShapeInitData* mShapeInitData;
     /* 0x04 */ u16* mIndexTable;

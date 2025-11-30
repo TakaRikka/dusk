@@ -59,22 +59,22 @@ struct daMP_THPPlayer {
  */
 class daMP_c : public fopAc_ac_c {
 public:
-    /* 80031AD0 */ static int daMP_c_THPPlayerPlay();
-    /* 80031B24 */ static void daMP_c_THPPlayerPause();
-    /* 80031A78 */ static u32 daMP_c_Get_MovieRestFrame();
-    /* 80031AA4 */ static void daMP_c_Set_PercentMovieVolume(f32);
-    /* 80878BB8 */ int daMP_c_Get_arg_demoNo();
-    /* 80878C04 */ int daMP_c_Get_arg_movieNo();
-    /* 80878C28 */ int daMP_c_Init();
-    /* 80878D64 */ int daMP_c_Finish();
-    /* 80878D94 */ int daMP_c_Main();
-    /* 80878DD8 */ int daMP_c_Draw();
-    /* 80878ED4 */ daMP_c() {}
+    static int daMP_c_THPPlayerPlay();
+    static void daMP_c_THPPlayerPause();
+    static u32 daMP_c_Get_MovieRestFrame();
+    static void daMP_c_Set_PercentMovieVolume(f32);
+    int daMP_c_Get_arg_demoNo();
+    int daMP_c_Get_arg_movieNo();
+    int daMP_c_Init();
+    int daMP_c_Finish();
+    int daMP_c_Main();
+    int daMP_c_Draw();
+    daMP_c() {}
 
-    /* 80878E60 */ static int daMP_c_Callback_Init(fopAc_ac_c*);
-    /* 80878F18 */ static int daMP_c_Callback_Finish(daMP_c*);
-    /* 80878F38 */ static int daMP_c_Callback_Main(daMP_c*);
-    /* 80878F70 */ static int daMP_c_Callback_Draw(daMP_c*);
+    static int daMP_c_Callback_Init(fopAc_ac_c*);
+    static int daMP_c_Callback_Finish(daMP_c*);
+    static int daMP_c_Callback_Main(daMP_c*);
+    static int daMP_c_Callback_Draw(daMP_c*);
 
     static daMP_c* m_myObj;
 
@@ -91,9 +91,9 @@ STATIC_ASSERT(sizeof(daMP_c) == 0x580);
 
 class daMP_Dlst_base_c : public dDlst_base_c {
 public:
-    /* 80878FD8 */ daMP_Dlst_base_c() {}
+    daMP_Dlst_base_c() {}
 
-    /* 80878DB8 */ virtual void draw();
+    virtual void draw();
 };
 
 inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {

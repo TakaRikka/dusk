@@ -21,7 +21,7 @@
 
 class daObj_GrA_Param_c {
 public:
-    /* 80C04B1C */ virtual ~daObj_GrA_Param_c() {}
+    virtual ~daObj_GrA_Param_c() {}
 
     static const daObj_GrA_HIO_Param_c m;
 };
@@ -123,7 +123,6 @@ public:
 };
 #endif
 
-/* 80C0FE88-80C0FE98 -00001 0010+00 1/1 0/0 0/0 .data            l_resFileNameList */
 static char* l_resFileNameList[4] = {
     "grA",
     "grA",
@@ -131,22 +130,18 @@ static char* l_resFileNameList[4] = {
     "grA",
 };
 
-/* 80C0FE98-80C0FEA8 000030 0010+00 1/0 0/0 0/0 .data            l_exLoadRes_GRAa */
 static int l_exLoadRes_GRAa[4] = {
     1, 2, -1, -1,
 };
 
-/* 80C0FEA8-80C0FEB8 000040 0010+00 1/0 0/0 0/0 .data            l_exLoadRes_GRA_jump */
 static int l_exLoadRes_GRA_jump[4] = {
     1, 2, 4, -1,
 };
 
-/* 80C0FEB8-80C0FEC8 000050 0010+00 1/0 0/0 0/0 .data            l_exLoadRes_GRA_demo */
 static int l_exLoadRes_GRA_demo[4] = {
     1, 2, 3, -1,
 };
 
-/* 80C0FEC8-80C0FED8 -00001 0010+00 2/2 0/0 0/0 .data            l_exloadRes_list */
 static int* l_exloadRes_list[4] = {
     l_exLoadRes_GRAa,
     l_exLoadRes_GRA_jump,
@@ -154,7 +149,6 @@ static int* l_exloadRes_list[4] = {
     l_exLoadRes_GRA_demo,
 };
 
-/* 80C0FED8-80C0FEEC -00001 0014+00 5/6 0/0 0/0 .data            l_resNames */
 static char* l_resNames[5] = {
     "grA",
     "grA_base",
@@ -163,12 +157,10 @@ static char* l_resNames[5] = {
     "grA_Look",
 };
 
-/* 80C0FEEC-80C0FEF4 000084 0008+00 0/1 0/0 0/0 .data            l_bmdGetParamList */
 static int l_bmdGetParamList[2] = {
     3, 2,
 };
 
-/* 80C0FEF4-80C1000C 00008C 0118+00 2/2 0/0 0/0 .data            l_bckGetParamList */
 static int l_bckGetParamList[35][2] = {
     {21, 1}, {18, 0},
     {22, 1}, {11, 0},
@@ -190,36 +182,30 @@ static int l_bckGetParamList[35][2] = {
     {9, 0},
 };
 
-/* 80C1000C-80C1002C 0001A4 0020+00 1/1 0/0 0/0 .data            l_btpGetParamList */
 static int l_btpGetParamList[4][2] = {
     {28, 1}, {32, 1},
     {31, 1}, {21, 0},
 };
 
-/* 80C1002C-80C10044 0001C4 0016+02 1/2 0/0 0/0 .data            l_eventMotionChangeTable */
 static u16 l_eventMotionChangeTable[11] = {
     0, 1, 0, 2,
     3, 0, 0, 0,
     0, 0, 0,
 };
 
-/* 80C10044-80C1004C 0001DC 0008+00 1/2 0/0 0/0 .data            l_eventFaceChangeTable */
 static u16 l_eventFaceChangeTable[4] = {
     1, 2, 6, 7,
 };
 
-/* 80C1004C-80C10054 -00001 0008+00 1/1 0/0 0/0 .data            l_evtNameList */
 static char* l_evtNameList[2] = {
     NULL,
     "GRA_THROWN",
 };
 
-/* 80C10054-80C1005C 0001EC 0008+00 0/1 0/0 0/0 .data            l_entryJntNoList */
 static u16 l_entryJntNoList[4] = {
     5, 6, 7, -1,
 };
 
-/* 80BFFF0C-80BFFF58 0000EC 004C+00 2/2 0/0 0/0 .text            jointCtrlCallBack__FP8J3DJointi */
 static int jointCtrlCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -232,17 +218,14 @@ static int jointCtrlCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80BFFF58-80BFFF70 000138 0018+00 1/1 0/0 0/0 .text            rideCallBack__11daObj_GrA_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObj_GrA_c::rideCallBack(dBgW* param_1, fopAc_ac_c* actor_p, fopAc_ac_c* param_3) {
     daObj_GrA_c* aActor_p = (daObj_GrA_c*) actor_p;
     JUT_ASSERT(684, NULL != aActor_p);
     aActor_p->field_0x10c4 = fopAcM_GetProfName(param_3) == PROC_ALINK;
 }
 
-/* 80BFFF70-80C0011C 000150 01AC+00 1/1 0/0 0/0 .text            __ct__11daObj_GrA_cFv */
 daObj_GrA_c::daObj_GrA_c() {}
 
-/* 80C0011C-80C003CC 0002FC 02B0+00 1/0 0/0 0/0 .text            __dt__11daObj_GrA_cFv */
 daObj_GrA_c::~daObj_GrA_c() {
     dComIfG_resDelete(&mPhase, getResName());
     for (int i = 0; l_exloadRes_list[mMode][i] >= 0; i++) {
@@ -267,7 +250,6 @@ daObj_GrA_c::~daObj_GrA_c() {
 #endif
 }
 
-/* 80C003CC-80C00614 0005AC 0248+00 1/1 0/0 0/0 .text            create__11daObj_GrA_cFv */
 cPhs__Step daObj_GrA_c::create() {
     int uVar1 = 0;
     fopAcM_ct(this, daObj_GrA_c);
@@ -321,7 +303,6 @@ cPhs__Step daObj_GrA_c::create() {
     return phase;
 }
 
-/* 80C0FA7C-80C0FB3C 000000 00C0+00 54/54 0/0 0/0 .rodata          m__17daObj_GrA_Param_c */
 daObj_GrA_HIO_Param_c const daObj_GrA_Param_c::m = {
     85.0f,
     -4.0f,
@@ -379,7 +360,6 @@ daObj_GrA_HIO_Param_c const daObj_GrA_Param_c::m = {
     30.0f,
 };
 
-/* 80C0FB3C-80C0FB8C 0000C0 0050+00 0/0 0/0 0/0 .rodata          l_bgcParam */
 static const f32 l_bgcParam[20] = {
     0.0f, 0.0f, 0.0f, 0.0f,
     -0.5f, 1.0f, -0.5f, 1.0f,
@@ -388,10 +368,8 @@ static const f32 l_bgcParam[20] = {
     -0.5f, 1.0f, 0.5f, -1.0f,
 };
 
-/* 80C0FB8C-80C0FB94 000110 0008+00 0/0 0/0 0/0 .rodata          l_dirToAngleTBL */
 const s16 l_dirToAngleTBL[4] = {0, 0x4000, 0x8000, 0xC000};
 
-/* 80C00614-80C00790 0007F4 017C+00 1/0 0/0 0/0 .text            CreateHeap__11daObj_GrA_cFv */
 int daObj_GrA_c::CreateHeap() {
     J3DModelData* aMdlData_p = NULL;
     field_0x844 = dKy_darkworld_check();
@@ -422,7 +400,6 @@ int daObj_GrA_c::CreateHeap() {
     return 1;
 }
 
-/* 80C00790-80C00804 000970 0074+00 1/0 0/0 0/0 .text            Delete__11daObj_GrA_cFv */
 int daObj_GrA_c::Delete() {
     fopAcM_RegisterDeleteID(this, "OBJ_GRA");
     if (dComIfGp_getVibration().CheckQuake()) {
@@ -432,7 +409,6 @@ int daObj_GrA_c::Delete() {
     return 1;
 }
 
-/* 80C00804-80C00A44 0009E4 0240+00 1/0 0/0 0/0 .text            Execute__11daObj_GrA_cFPPA3_A4_f */
 int daObj_GrA_c::Execute(Mtx** param_1) {
     int rv = 1;
     *param_1 = &mBgMtx;
@@ -476,7 +452,6 @@ int daObj_GrA_c::Execute(Mtx** param_1) {
     return rv;
 }
 
-/* 80C00A44-80C00ACC 000C24 0088+00 1/0 0/0 0/0 .text            Draw__11daObj_GrA_cFv */
 int daObj_GrA_c::Draw() {
     f32 fVar1 = 800.0f;
     if (mMode == 3) {
@@ -490,7 +465,6 @@ int daObj_GrA_c::Draw() {
     return 1;
 }
 
-/* 80C00ACC-80C00D5C 000CAC 0290+00 1/1 0/0 0/0 .text            jointCtrl__11daObj_GrA_cFP8J3DJointP8J3DModel */
 int daObj_GrA_c::jointCtrl(J3DJoint* i_joint, J3DModel* param_2) {
     Mtx MStack_78, MStack_a8;
     int jointNo = i_joint->getJntNo();
@@ -555,12 +529,10 @@ int daObj_GrA_c::jointCtrl(J3DJoint* i_joint, J3DModel* param_2) {
     return 1;
 }
 
-/* 80C00D5C-80C00D74 000F3C 0018+00 1/0 0/0 0/0 .text            getResName__11daObj_GrA_cFv */
 const char* daObj_GrA_c::getResName() {
     return l_resFileNameList[mMode];
 }
 
-/* 80C00D74-80C00DF8 000F54 0084+00 1/1 0/0 0/0 .text            getMode__11daObj_GrA_cFv */
 u8 daObj_GrA_c::getMode() {
     u32 uVar1 = fopAcM_GetParam(this) >> 28 & 3;
     strcpy(&field_0x744, "Obj_grA");
@@ -581,22 +553,18 @@ u8 daObj_GrA_c::getMode() {
     }
 }
 
-/* 80C00DF8-80C00E04 000FD8 000C+00 1/1 0/0 0/0 .text            getPathNo__11daObj_GrA_cFv */
 u8 daObj_GrA_c::getPathNo() {
     return fopAcM_GetParam(this) >> 20 & 0xFF;
 }
 
-/* 80C00E04-80C00E10 000FE4 000C+00 4/4 0/0 0/0 .text            getTagNo__11daObj_GrA_cFv */
 u16 daObj_GrA_c::getTagNo() {
     return fopAcM_GetParam(this) >> 7 & 0x7F;
 }
 
-/* 80C00E10-80C00E1C 000FF0 000C+00 1/1 0/0 0/0 .text            getJumpType__11daObj_GrA_cFv */
 u16 daObj_GrA_c::getJumpType() {
     return fopAcM_GetParam(this) >> 7 & 0x7F;
 }
 
-/* 80C00E1C-80C00EFC 000FFC 00E0+00 1/1 0/0 0/0 .text            isDelete__11daObj_GrA_cFv */
 BOOL daObj_GrA_c::isDelete() {
     if (mMode == 3) {
         if (!dComIfGs_isSwitch(field_0xa7f, fopAcM_GetRoomNo(this))) {
@@ -625,7 +593,6 @@ BOOL daObj_GrA_c::isDelete() {
     return TRUE;
 }
 
-/* 80C00EFC-80C010D4 0010DC 01D8+00 1/1 0/0 0/0 .text            restart__11daObj_GrA_cFv */
 void daObj_GrA_c::restart() {
     current.angle.set(0, home.angle.y, 0);
     shape_angle = current.angle;
@@ -683,13 +650,10 @@ void daObj_GrA_c::restart() {
     field_0x209c = 0;
 }
 
-/* 80C108EC-80C108F8 000054 000C+00 0/2 0/0 0/0 .bss             l_centerOfst */
 static cXyz l_centerOfst(0.0f, 67.0f, 26.0f);
 
-/* 80C10904-80C10908 00006C 0004+00 1/2 0/0 0/0 .bss             l_HIO */
 static OBJ_GRA_HIO_CLASS l_HIO;
 
-/* 80C010D4-80C013B0 0012B4 02DC+00 1/1 0/0 0/0 .text            init__11daObj_GrA_cFv */
 int daObj_GrA_c::init() {
     fopAcM_SetMtx(this, mpModelMorf->getModel()->getBaseTRMtx());
     mSound.init(&current.pos, &eyePos, 3, 1);
@@ -747,7 +711,6 @@ int daObj_GrA_c::init() {
     return MoveBGExecute();
 }
 
-/* 80C013B0-80C014F4 001590 0144+00 24/23 0/0 0/0 .text            setBaseAnm__11daObj_GrA_cFif */
 void daObj_GrA_c::setBaseAnm(int param_1, f32 i_morf) {
     J3DAnmTransformKey* transformKey = NULL;
     int i_mode = 2;
@@ -817,7 +780,6 @@ void daObj_GrA_c::setBaseAnm(int param_1, f32 i_morf) {
     }
 }
 
-/* 80C014F4-80C01698 0016D4 01A4+00 15/14 0/0 0/0 .text            setFaceAnm__11daObj_GrA_cFibf */
 void daObj_GrA_c::setFaceAnm(int param_1, bool i_modify, f32 i_morf) {
     J3DAnmTransform* transform = NULL;
     int i_mode = 0;
@@ -878,7 +840,6 @@ void daObj_GrA_c::setFaceAnm(int param_1, bool i_modify, f32 i_morf) {
     }
 }
 
-/* 80C01698-80C0178C 001878 00F4+00 2/2 0/0 0/0 .text            setFaceBtp__11daObj_GrA_cFi */
 void daObj_GrA_c::setFaceBtp(int param_1) {
     J3DAnmTexPattern* texPattern = NULL;
     int i_mode = 0;
@@ -912,7 +873,6 @@ void daObj_GrA_c::setFaceBtp(int param_1) {
     }
 }
 
-/* 80C0178C-80C017AC 00196C 0020+00 22/22 0/0 0/0 .text            setBaseMotion__11daObj_GrA_cFif */
 void daObj_GrA_c::setBaseMotion(int param_1, f32 param_2) {
     if (field_0xa90 >= 22) {
         return;
@@ -923,7 +883,6 @@ void daObj_GrA_c::setBaseMotion(int param_1, f32 param_2) {
     field_0xa8d = 1;
 }
 
-/* 80C017AC-80C017F0 00198C 0044+00 25/25 0/0 0/0 .text            setFaceMotion__11daObj_GrA_cFif */
 void daObj_GrA_c::setFaceMotion(int param_1, f32 param_2) {
     if (field_0xa92 >= 14) {
         return;
@@ -940,7 +899,6 @@ void daObj_GrA_c::setFaceMotion(int param_1, f32 param_2) {
     field_0xa98 = param_2;
 }
 
-/* 80C017F0-80C018C0 0019D0 00D0+00 7/7 0/0 0/0 .text            calcMotion__11daObj_GrA_cFv */
 void daObj_GrA_c::calcMotion() {
     if (field_0xa90 < 22 && mBaseMotionList[field_0xa90]) {
         field_0xa88 = (this->*mBaseMotionList[field_0xa90])(field_0xa8d);
@@ -954,12 +912,10 @@ void daObj_GrA_c::calcMotion() {
     field_0xa8e = 0;
 }
 
-/* 80C018C0-80C018F4 001AA0 0034+00 4/4 0/0 0/0 .text            checkProcess__11daObj_GrA_cFM11daObj_GrA_cFPCvPvPv_i */
 BOOL daObj_GrA_c::checkProcess(int (daObj_GrA_c::*process)(void*)) {
     return process == field_0xa50;
 }
 
-/* 80C018F4-80C019A4 001AD4 00B0+00 22/22 0/0 0/0 .text          setProcess__11daObj_GrA_cFM11daObj_GrA_cFPCvPvPv_i */
 int daObj_GrA_c::setProcess(int (daObj_GrA_c::*process)(void*)) {
     field_0xa7c = 2;
 
@@ -979,12 +935,10 @@ int daObj_GrA_c::setProcess(int (daObj_GrA_c::*process)(void*)) {
     return 1;
 }
 
-/* 80C019A4-80C019B8 001B84 0014+00 2/2 0/0 0/0 .text            getDistTableIdx__Fii */
 static u8 getDistTableIdx(int param_1, int param_2) {
     return param_1 + param_2 * 20 + 94;
 }
 
-/* 80C019B8-80C01C18 001B98 0260+00 1/0 0/0 0/0 .text            setParam__11daObj_GrA_cFv */
 void daObj_GrA_c::setParam() {
     if (mMode == 0) {
         if ((( checkProcess(&daObj_GrA_c::standWait)
@@ -1024,7 +978,6 @@ void daObj_GrA_c::setParam() {
     gravity = mpHIO->m.mGravity;
 }
 
-/* 80C01C18-80C01D7C 001DF8 0164+00 1/1 0/0 0/0 .text            checkEvent__11daObj_GrA_cFv */
 BOOL daObj_GrA_c::checkEvent() {
     BOOL rv = TRUE;
 #if VERSION != VERSION_SHIELD_DEBUG
@@ -1062,7 +1015,6 @@ BOOL daObj_GrA_c::checkEvent() {
     return rv;
 }
 
-/* 80C01D7C-80C01FE4 001F5C 0268+00 1/0 0/0 0/0 .text            mainProc__11daObj_GrA_cFv */
 void daObj_GrA_c::mainProc() {
     fopAcM_setCullSizeBox(this, -160.0f, -100.0f, -160.0f, 160.0f, 240.0f, 160.0f);
 
@@ -1094,12 +1046,10 @@ void daObj_GrA_c::mainProc() {
     calcMotion();
 }
 
-/* 80C01FE4-80C01FE8 0021C4 0004+00 1/0 0/0 0/0 .text            adjustShapeAngle__11daObj_GrA_cFv */
 void daObj_GrA_c::adjustShapeAngle() {
     /* empty function */
 }
 
-/* 80C01FE8-80C02614 0021C8 062C+00 1/0 0/0 0/0 .text            setMtx__11daObj_GrA_cFi */
 void daObj_GrA_c::setMtx(int param_1) {
     static cXyz aTrembleTrans[15] = {
         cXyz(0.0f, 0.0f, 0.0f),
@@ -1172,7 +1122,6 @@ void daObj_GrA_c::setMtx(int param_1) {
     }
 }
 
-/* 80C02614-80C02970 0027F4 035C+00 1/0 0/0 0/0 .text            setCollisions__11daObj_GrA_cFv */
 void daObj_GrA_c::setCollisions() {
     cXyz sp1c;
 
@@ -1249,7 +1198,6 @@ void daObj_GrA_c::setCollisions() {
     }
 }
 
-/* 80C02970-80C02A5C 002B50 00EC+00 1/0 0/0 0/0 .text            setAttnPos__11daObj_GrA_cFv */
 void daObj_GrA_c::setAttnPos() {
     lookat();
 
@@ -1274,17 +1222,14 @@ static s16 dummy_lit_124886(int sel) {
 }
 #endif
 
-/* 80C02A5C-80C02A60 002C3C 0004+00 1/0 0/0 0/0 .text            drawOtherMdls__11daObj_GrA_cFv */
 void daObj_GrA_c::drawOtherMdls() {
     /* empty function */
 }
 
-/* 80C02A60-80C02A68 002C40 0008+00 1/0 0/0 0/0 .text            dbgDraw__11daObj_GrA_cFv */
 bool daObj_GrA_c::dbgDraw() {
     return true;
 }
 
-/* 80C02A68-80C02AD4 002C48 006C+00 2/2 0/0 0/0 .text            ppMoveInit__11daObj_GrA_cFv */
 int daObj_GrA_c::ppMoveInit() {
     memset(&field_0x10ac, 0, 16);
 
@@ -1300,7 +1245,6 @@ int daObj_GrA_c::ppMoveInit() {
     return 1;
 }
 
-/* 80C02AD4-80C02AE8 002CB4 0014+00 17/17 0/0 0/0 .text            setLookMode__11daObj_GrA_cFi */
 int daObj_GrA_c::setLookMode(int iNo) {
     JUT_ASSERT(2656, 0 <= iNo && iNo < NUMLOOKMODES_e);
     mLookMode = iNo;
@@ -1322,7 +1266,6 @@ static f32 dummy_lits(int sel) {
     }
 }
 
-/* 80C02AE8-80C0308C 002CC8 05A4+00 1/1 0/0 0/0 .text            lookat__11daObj_GrA_cFv */
 int daObj_GrA_c::lookat() {
     J3DModel* model = mpModelMorf->getModel();
     s16 sVar1 = current.angle.y - old.angle.y;
@@ -1429,7 +1372,6 @@ int daObj_GrA_c::lookat() {
     return 1;
 }
 
-/* 80C0308C-80C031E4 00326C 0158+00 1/1 0/0 0/0 .text            hitChk__11daObj_GrA_cFv */
 int daObj_GrA_c::hitChk() {
     if (field_0xaa4 != 0) {
         cLib_calcTimer(&field_0xaa4);
@@ -1458,7 +1400,6 @@ int daObj_GrA_c::hitChk() {
     return 1;
 }
 
-/* 80C031E4-80C0335C 0033C4 0178+00 12/0 0/0 0/0 .text            wait__11daObj_GrA_cFPv */
 int daObj_GrA_c::wait(void* param_1) {
     switch (field_0xa7c) {
         case 0: {
@@ -1497,7 +1438,6 @@ int daObj_GrA_c::wait(void* param_1) {
     return 1;
 }
 
-/* 80C0335C-80C035B8 00353C 025C+00 2/0 0/0 0/0 .text            talk__11daObj_GrA_cFPv */
 int daObj_GrA_c::talk(void* param_1) {
     int iVar1, iVar2;
     int rv = 0;
@@ -1571,7 +1511,6 @@ int daObj_GrA_c::talk(void* param_1) {
     return rv;
 }
 
-/* 80C035B8-80C036B4 003798 00FC+00 2/2 0/0 0/0 .text ctrlMsgAnm__11daObj_GrA_cFRiRiP10fopAc_ac_c */
 int daObj_GrA_c::ctrlMsgAnm(int& param_1, int& param_2, fopAc_ac_c* param_3) {
     param_1 = -1;
     param_2 = -1;
@@ -1608,7 +1547,6 @@ int daObj_GrA_c::ctrlMsgAnm(int& param_1, int& param_2, fopAc_ac_c* param_3) {
     return field_0xaa0;
 }
 
-/* 80C036B4-80C03720 003894 006C+00 2/2 0/0 0/0 .text            s_sub__FPvPv */
 static void* s_sub(void* i_actor, void* i_data) {
     daObj_GrA_c* i_this = (daObj_GrA_c*)i_data;
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_TAG_GRA && i_this->checkTagGraSub((fopAc_ac_c*)i_actor)) {
@@ -1617,7 +1555,6 @@ static void* s_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80C03720-80C03764 003900 0044+00 1/1 0/0 0/0 .text checkTagGraSub__11daObj_GrA_cFP10fopAc_ac_c */
 bool daObj_GrA_c::checkTagGraSub(fopAc_ac_c* a_this) {
     daTagGra_c* i_this = (daTagGra_c*)a_this;
     if (getTagNo() == i_this->getGraNo()) {
@@ -1627,7 +1564,6 @@ bool daObj_GrA_c::checkTagGraSub(fopAc_ac_c* a_this) {
     }
 }
 
-/* 80C03764-80C03830 003944 00CC+00 1/1 0/0 0/0 .text            fallAbyssCheck__11daObj_GrA_cFv */
 bool daObj_GrA_c::fallAbyssCheck() {
     if (mGroundY == -G_CM3D_F_INF && field_0x1528.isPath()) {
         field_0x1fc0++;
@@ -1654,7 +1590,6 @@ static f32 dummy_lits_01(int sel) {
     }
 }
 
-/* 80C03830-80C03B14 003A10 02E4+00 1/1 0/0 0/0 .text            setPrtcl__11daObj_GrA_cFv */
 int daObj_GrA_c::setPrtcl() {
     static u16 const l_prticles_id[3] = {
         0x83B5,
@@ -1736,7 +1671,6 @@ int daObj_GrA_c::setPrtcl() {
 #include "d/actor/d_a_obj_gra2_soldier.inc"
 #include "d/actor/d_a_obj_gra2_base.inc"
 
-/* 80C03B14-80C03B48 003CF4 0034+00 1/0 0/0 0/0 .text            base000__11daObj_GrA_cFi */
 int daObj_GrA_c::base000(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(0, field_0xa94);
@@ -1745,7 +1679,6 @@ int daObj_GrA_c::base000(int param_1) {
     return 1;
 }
 
-/* 80C03B48-80C03B7C 003D28 0034+00 1/0 0/0 0/0 .text            base001__11daObj_GrA_cFi */
 int daObj_GrA_c::base001(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(2, field_0xa94);
@@ -1754,7 +1687,6 @@ int daObj_GrA_c::base001(int param_1) {
     return 1;
 }
 
-/* 80C03B7C-80C03C1C 003D5C 00A0+00 1/0 0/0 0/0 .text            base003__11daObj_GrA_cFi */
 int daObj_GrA_c::base003(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(4, field_0xa94);
@@ -1766,7 +1698,6 @@ int daObj_GrA_c::base003(int param_1) {
     return 1;
 }
 
-/* 80C03C1C-80C03CBC 003DFC 00A0+00 1/0 0/0 0/0 .text            base004__11daObj_GrA_cFi */
 int daObj_GrA_c::base004(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(5, field_0xa94);
@@ -1778,7 +1709,6 @@ int daObj_GrA_c::base004(int param_1) {
     return 1;
 }
 
-/* 80C03CBC-80C03D54 003E9C 0098+00 1/0 0/0 0/0 .text            base005__11daObj_GrA_cFi */
 int daObj_GrA_c::base005(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(6, field_0xa94);
@@ -1791,7 +1721,6 @@ int daObj_GrA_c::base005(int param_1) {
     return 1;
 }
 
-/* 80C03D54-80C03D88 003F34 0034+00 1/0 0/0 0/0 .text            base006__11daObj_GrA_cFi */
 int daObj_GrA_c::base006(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(7, field_0xa94);
@@ -1800,7 +1729,6 @@ int daObj_GrA_c::base006(int param_1) {
     return 1;
 }
 
-/* 80C03D88-80C03DF0 003F68 0068+00 1/0 0/0 0/0 .text            base007__11daObj_GrA_cFi */
 int daObj_GrA_c::base007(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(8, field_0xa94);
@@ -1810,7 +1738,6 @@ int daObj_GrA_c::base007(int param_1) {
     return 1;
 }
 
-/* 80C03DF0-80C03E74 003FD0 0084+00 1/0 0/0 0/0 .text            base008__11daObj_GrA_cFi */
 int daObj_GrA_c::base008(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(10, field_0xa94);
@@ -1823,7 +1750,6 @@ int daObj_GrA_c::base008(int param_1) {
     return 1;
 }
 
-/* 80C03E74-80C03F14 004054 00A0+00 1/0 0/0 0/0 .text            base009__11daObj_GrA_cFi */
 int daObj_GrA_c::base009(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(1, field_0xa94);
@@ -1836,7 +1762,6 @@ int daObj_GrA_c::base009(int param_1) {
     return 1;
 }
 
-/* 80C03F14-80C03FC0 0040F4 00AC+00 1/0 0/0 0/0 .text            base010__11daObj_GrA_cFi */
 int daObj_GrA_c::base010(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(3, field_0xa94);
@@ -1849,7 +1774,6 @@ int daObj_GrA_c::base010(int param_1) {
     return 1;
 }
 
-/* 80C03FC0-80C04118 0041A0 0158+00 1/0 0/0 0/0 .text            base013__11daObj_GrA_cFi */
 int daObj_GrA_c::base013(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(9, field_0xa94);
@@ -1875,7 +1799,6 @@ int daObj_GrA_c::base013(int param_1) {
     return 1;
 }
 
-/* 80C04118-80C04180 0042F8 0068+00 1/0 0/0 0/0 .text            base016__11daObj_GrA_cFi */
 int daObj_GrA_c::base016(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(11, field_0xa94);
@@ -1885,7 +1808,6 @@ int daObj_GrA_c::base016(int param_1) {
     return 1;
 }
 
-/* 80C04180-80C041E8 004360 0068+00 1/0 0/0 0/0 .text            base017__11daObj_GrA_cFi */
 int daObj_GrA_c::base017(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(12, field_0xa94);
@@ -1895,7 +1817,6 @@ int daObj_GrA_c::base017(int param_1) {
     return 1;
 }
 
-/* 80C041E8-80C04260 0043C8 0078+00 1/0 0/0 0/0 .text            base018__11daObj_GrA_cFi */
 int daObj_GrA_c::base018(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(13, field_0xa94);
@@ -1906,7 +1827,6 @@ int daObj_GrA_c::base018(int param_1) {
     return 1;
 }
 
-/* 80C04260-80C042D4 004440 0074+00 1/0 0/0 0/0 .text            base019__11daObj_GrA_cFi */
 int daObj_GrA_c::base019(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(14, field_0xa94);
@@ -1917,7 +1837,6 @@ int daObj_GrA_c::base019(int param_1) {
     return 1;
 }
 
-/* 80C042D4-80C04308 0044B4 0034+00 1/0 0/0 0/0 .text            base020__11daObj_GrA_cFi */
 int daObj_GrA_c::base020(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(15, field_0xa94);
@@ -1926,7 +1845,6 @@ int daObj_GrA_c::base020(int param_1) {
     return 1;
 }
 
-/* 80C04308-80C0433C 0044E8 0034+00 1/0 0/0 0/0 .text            base021__11daObj_GrA_cFi */
 int daObj_GrA_c::base021(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(16, field_0xa94);
@@ -1935,7 +1853,6 @@ int daObj_GrA_c::base021(int param_1) {
     return 1;
 }
 
-/* 80C0433C-80C04370 00451C 0034+00 1/0 0/0 0/0 .text            base022__11daObj_GrA_cFi */
 int daObj_GrA_c::base022(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(17, field_0xa94);
@@ -1944,7 +1861,6 @@ int daObj_GrA_c::base022(int param_1) {
     return 1;
 }
 
-/* 80C04370-80C043A4 004550 0034+00 1/0 0/0 0/0 .text            base023__11daObj_GrA_cFi */
 int daObj_GrA_c::base023(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(18, field_0xa94);
@@ -1953,7 +1869,6 @@ int daObj_GrA_c::base023(int param_1) {
     return 1;
 }
 
-/* 80C043A4-80C043D8 004584 0034+00 1/0 0/0 0/0 .text            base024__11daObj_GrA_cFi */
 int daObj_GrA_c::base024(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(19, field_0xa94);
@@ -1962,7 +1877,6 @@ int daObj_GrA_c::base024(int param_1) {
     return 1;
 }
 
-/* 80C043D8-80C0440C 0045B8 0034+00 1/0 0/0 0/0 .text            base025__11daObj_GrA_cFi */
 int daObj_GrA_c::base025(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(20, field_0xa94);
@@ -1971,7 +1885,6 @@ int daObj_GrA_c::base025(int param_1) {
     return 1;
 }
 
-/* 80C0440C-80C04440 0045EC 0034+00 1/0 0/0 0/0 .text            base026__11daObj_GrA_cFi */
 int daObj_GrA_c::base026(int param_1) {
     if (param_1 != 0) {
         setBaseAnm(21, field_0xa94);
@@ -1980,7 +1893,6 @@ int daObj_GrA_c::base026(int param_1) {
     return 1;
 }
 
-/* 80C04440-80C04478 004620 0038+00 1/0 0/0 0/0 .text            face000__11daObj_GrA_cFi */
 int daObj_GrA_c::face000(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(22, true, field_0xa98);
@@ -1989,7 +1901,6 @@ int daObj_GrA_c::face000(int param_1) {
     return 1;
 }
 
-/* 80C04478-80C04518 004658 00A0+00 1/0 0/0 0/0 .text            face003__11daObj_GrA_cFi */
 int daObj_GrA_c::face003(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(27, true, field_0xa98);
@@ -2001,7 +1912,6 @@ int daObj_GrA_c::face003(int param_1) {
     return 1;
 }
 
-/* 80C04518-80C045B8 0046F8 00A0+00 1/0 0/0 0/0 .text            face004__11daObj_GrA_cFi */
 int daObj_GrA_c::face004(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(28, true, field_0xa98);
@@ -2013,7 +1923,6 @@ int daObj_GrA_c::face004(int param_1) {
     return 1;
 }
 
-/* 80C045B8-80C045F0 004798 0038+00 1/0 0/0 0/0 .text            face005__11daObj_GrA_cFi */
 int daObj_GrA_c::face005(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(31, true, field_0xa98);
@@ -2022,7 +1931,6 @@ int daObj_GrA_c::face005(int param_1) {
     return 1;
 }
 
-/* 80C045F0-80C04628 0047D0 0038+00 1/0 0/0 0/0 .text            face006__11daObj_GrA_cFi */
 int daObj_GrA_c::face006(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(24, true, field_0xa98);
@@ -2031,7 +1939,6 @@ int daObj_GrA_c::face006(int param_1) {
     return 1;
 }
 
-/* 80C04628-80C04660 004808 0038+00 1/0 0/0 0/0 .text            face007__11daObj_GrA_cFi */
 int daObj_GrA_c::face007(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(25, true, field_0xa98);
@@ -2040,7 +1947,6 @@ int daObj_GrA_c::face007(int param_1) {
     return 1;
 }
 
-/* 80C04660-80C04700 004840 00A0+00 1/0 0/0 0/0 .text            face008__11daObj_GrA_cFi */
 int daObj_GrA_c::face008(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(29, true, field_0xa98);
@@ -2052,7 +1958,6 @@ int daObj_GrA_c::face008(int param_1) {
     return 1;
 }
 
-/* 80C04700-80C047A0 0048E0 00A0+00 1/0 0/0 0/0 .text            face009__11daObj_GrA_cFi */
 int daObj_GrA_c::face009(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(30, true, field_0xa98);
@@ -2064,7 +1969,6 @@ int daObj_GrA_c::face009(int param_1) {
     return 1;
 }
 
-/* 80C047A0-80C047D8 004980 0038+00 1/0 0/0 0/0 .text            face010__11daObj_GrA_cFi */
 int daObj_GrA_c::face010(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(23, true, field_0xa98);
@@ -2073,7 +1977,6 @@ int daObj_GrA_c::face010(int param_1) {
     return 1;
 }
 
-/* 80C047D8-80C04810 0049B8 0038+00 1/0 0/0 0/0 .text            face011__11daObj_GrA_cFi */
 int daObj_GrA_c::face011(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(26, true, field_0xa98);
@@ -2082,7 +1985,6 @@ int daObj_GrA_c::face011(int param_1) {
     return 1;
 }
 
-/* 80C04810-80C04848 0049F0 0038+00 1/0 0/0 0/0 .text            face012__11daObj_GrA_cFi */
 int daObj_GrA_c::face012(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(32, true, field_0xa98);
@@ -2091,7 +1993,6 @@ int daObj_GrA_c::face012(int param_1) {
     return 1;
 }
 
-/* 80C04848-80C04880 004A28 0038+00 1/0 0/0 0/0 .text            face016__11daObj_GrA_cFi */
 int daObj_GrA_c::face016(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(33, true, field_0xa98);
@@ -2100,7 +2001,6 @@ int daObj_GrA_c::face016(int param_1) {
     return 1;
 }
 
-/* 80C04880-80C048B8 004A60 0038+00 1/0 0/0 0/0 .text            face017__11daObj_GrA_cFi */
 int daObj_GrA_c::face017(int param_1) {
     if (param_1 != 0) {
         setFaceAnm(34, true, field_0xa98);
@@ -2109,7 +2009,6 @@ int daObj_GrA_c::face017(int param_1) {
     return 1;
 }
 
-/* 80C048B8-80C048F8 004A98 0040+00 1/0 0/0 0/0 .text            face999__11daObj_GrA_cFi */
 int daObj_GrA_c::face999(int param_1) {
     if (param_1 != 0) {
         int reg_r30 = 0x22;
@@ -2120,7 +2019,6 @@ int daObj_GrA_c::face999(int param_1) {
     return 1;
 }
 
-/* 80C048F8-80C04A0C 004AD8 0114+00 2/2 0/0 0/0 .text            evtcutTalk__11daObj_GrA_cFii */
 int daObj_GrA_c::evtcutTalk(int param_1, int param_2) {
     s32 sVar1 = field_0x848;
     if (param_2 != 0) {
@@ -2151,7 +2049,6 @@ int daObj_GrA_c::evtcutTalk(int param_1, int param_2) {
     return 0;
 }
 
-/* 80C04A0C-80C04A88 004BEC 007C+00 2/2 0/0 0/0 .text            setFaceTalkAfter__11daObj_GrA_cFv */
 void daObj_GrA_c::setFaceTalkAfter() {
     switch (field_0xa92) {
         case 6:
@@ -2167,34 +2064,28 @@ void daObj_GrA_c::setFaceTalkAfter() {
     }
 }
 
-/* 80C04A88-80C04AA8 004C68 0020+00 1/0 0/0 0/0 .text            daObj_GrA_Create__FPv */
 static int daObj_GrA_Create(void* i_this) {
     return ((daObj_GrA_c*)i_this)->create();
 }
 
-/* 80C04AA8-80C04AC8 004C88 0020+00 1/0 0/0 0/0 .text            daObj_GrA_Delete__FPv */
 static int daObj_GrA_Delete(void* i_this) {
     return ((daObj_GrA_c*)i_this)->MoveBGDelete();
 }
 
-/* 80C04AC8-80C04AE8 004CA8 0020+00 1/0 0/0 0/0 .text            daObj_GrA_Execute__FPv */
 static int daObj_GrA_Execute(void* i_this) {
     return ((daObj_GrA_c*)i_this)->MoveBGExecute();
 }
 
-/* 80C04AE8-80C04B14 004CC8 002C+00 1/0 0/0 0/0 .text            daObj_GrA_Draw__FPv */
 static int daObj_GrA_Draw(void* i_this) {
     return ((daObj_GrA_c*)i_this)->MoveBGDraw();
 }
 
-/* 80C04B14-80C04B1C 004CF4 0008+00 1/0 0/0 0/0 .text            daObj_GrA_IsDelete__FPv */
 static int daObj_GrA_IsDelete(void* i_this) {
     return 1;
 }
 
 AUDIO_INSTANCES;
 
-/* 80C104DC-80C105E4 000674 0108+00 1/2 0/0 0/0 .data            mBaseMotionList__11daObj_GrA_c */
 daObj_GrA_c::MotionFunc daObj_GrA_c::mBaseMotionList[22] = {
     &daObj_GrA_c::base000,
     &daObj_GrA_c::base001,
@@ -2220,7 +2111,6 @@ daObj_GrA_c::MotionFunc daObj_GrA_c::mBaseMotionList[22] = {
     &daObj_GrA_c::base026,
 };
 
-/* 80C1068C-80C10734 000824 00A8+00 1/2 0/0 0/0 .data            mFaceMotionList__11daObj_GrA_c */
 daObj_GrA_c::MotionFunc daObj_GrA_c::mFaceMotionList[14] = {
     &daObj_GrA_c::face000,
     &daObj_GrA_c::face003,
@@ -2238,7 +2128,6 @@ daObj_GrA_c::MotionFunc daObj_GrA_c::mFaceMotionList[14] = {
     &daObj_GrA_c::face999,
 };
 
-/* 80C10734-80C10754 -00001 0020+00 1/0 0/0 0/0 .data            daObj_GrA_MethodTable */
 static actor_method_class daObj_GrA_MethodTable = {
     (process_method_func)daObj_GrA_Create,
     (process_method_func)daObj_GrA_Delete,
@@ -2247,7 +2136,6 @@ static actor_method_class daObj_GrA_MethodTable = {
     (process_method_func)daObj_GrA_Draw,
 };
 
-/* 80C10754-80C10784 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_GRA */
 extern actor_process_profile_definition g_profile_OBJ_GRA = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

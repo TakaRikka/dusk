@@ -13,7 +13,6 @@
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* 80C54198-80C542FC 000078 0164+00 1/0 0/0 0/0 .text            daObj_Lp_Draw__FP12obj_lp_class */
 static int daObj_Lp_Draw(obj_lp_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     wd_ss* mWdSs = i_this->mWdSs;
@@ -49,19 +48,14 @@ static int daObj_Lp_Draw(obj_lp_class* i_this) {
     return 1;
 }
 
-/* 80C55B80-80C55B84 000040 0004+00 0/2 0/0 0/0 .bss             tandem */
 static int tandem;
 
-/* 80C55B84-80C55B88 000044 0004+00 0/2 0/0 0/0 .bss             demo_f */
 static int demo_f;
 
-/* 80C55B88-80C55BB0 000048 0028+00 1/3 0/0 0/0 .bss             target_info */
 static int target_info[10];
 
-/* 80C55BB0-80C55BB4 000070 0004+00 1/3 0/0 0/0 .bss             target_info_count */
 static int target_info_count;
 
-/* 80C542FC-80C54374 0001DC 0078+00 1/1 0/0 0/0 .text            s_ks_sub__FPvPv */
 static void* s_ks_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == 0x60) {
         if (target_info_count < 10) {
@@ -74,7 +68,6 @@ static void* s_ks_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80C54374-80C546D8 000254 0364+00 1/1 0/0 0/0 .text            hit_check__FP12obj_lp_classP5wd_ss */
 static int hit_check(obj_lp_class* i_this, wd_ss* WdSs) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     cXyz sp6c, sp60;
@@ -140,7 +133,6 @@ static int hit_check(obj_lp_class* i_this, wd_ss* WdSs) {
     return rv;
 }
 
-/* 80C546D8-80C54B20 0005B8 0448+00 1/1 0/0 0/0 .text hasu_action__FP12obj_lp_classP5wd_ss */
 static void hasu_action(obj_lp_class* i_this, wd_ss* WdSs) {
     if (!hit_check(i_this, WdSs)) {
         cLib_addCalc0(&WdSs->field_0x28.x, 0.1f, 0.2f);
@@ -197,7 +189,6 @@ static void hasu_action(obj_lp_class* i_this, wd_ss* WdSs) {
     }
 }
 
-/* 80C54B20-80C54D40 000A00 0220+00 1/1 0/0 0/0 .text set_out_check__FP12obj_lp_classP4cXyz */
 static int set_out_check(obj_lp_class* i_this, cXyz* param_2) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     cXyz sp3c = *param_2 - a_this->current.pos;
@@ -219,7 +210,6 @@ static int set_out_check(obj_lp_class* i_this, cXyz* param_2) {
     return 0;
 }
 
-/* 80C54D40-80C550F0 000C20 03B0+00 2/1 0/0 0/0 .text            daObj_Lp_Execute__FP12obj_lp_class */
 static int daObj_Lp_Execute(obj_lp_class* i_this) {
     i_this->field_0x574++;
     if (i_this->field_0xadb0) {
@@ -313,12 +303,10 @@ static int daObj_Lp_Execute(obj_lp_class* i_this) {
     return 1;
 }
 
-/* 80C550F0-80C550F8 000FD0 0008+00 1/0 0/0 0/0 .text            daObj_Lp_IsDelete__FP12obj_lp_class */
 static int daObj_Lp_IsDelete(obj_lp_class* i_this) {
     return 1;
 }
 
-/* 80C550F8-80C5518C 000FD8 0094+00 1/0 0/0 0/0 .text            daObj_Lp_Delete__FP12obj_lp_class */
 static int daObj_Lp_Delete(obj_lp_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     if (i_this->field_0xadb4) {
@@ -329,7 +317,6 @@ static int daObj_Lp_Delete(obj_lp_class* i_this) {
     return 1;
 }
 
-/* 80C5518C-80C552C0 00106C 0134+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_lp_class* i_this = (obj_lp_class*)a_this;
 
@@ -359,7 +346,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80C552C0-80C55488 0011A0 01C8+00 1/1 0/0 0/0 .text            set_pos_check__FP12obj_lp_classi */
 static int set_pos_check(obj_lp_class* i_this, int param_2) {
     f32 fVar1 = 35.0f;
     if (i_this->field_0x572 == 1) {
@@ -376,7 +362,6 @@ static int set_pos_check(obj_lp_class* i_this, int param_2) {
     return 1;
 }
 
-/* 80C55488-80C559C8 001368 0540+00 1/0 0/0 0/0 .text            daObj_Lp_Create__FP10fopAc_ac_c */
 static int daObj_Lp_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, obj_lp_class);
     obj_lp_class* i_this = (obj_lp_class*)a_this;
@@ -500,7 +485,6 @@ static int daObj_Lp_Create(fopAc_ac_c* a_this) {
     return phase_state;
 }
 
-/* 80C55ADC-80C55AFC -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Lp_Method */
 static actor_method_class l_daObj_Lp_Method = {
     (process_method_func)daObj_Lp_Create,
     (process_method_func)daObj_Lp_Delete,
@@ -509,7 +493,6 @@ static actor_method_class l_daObj_Lp_Method = {
     (process_method_func)daObj_Lp_Draw,
 };
 
-/* 80C55AFC-80C55B2C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_LP */
 extern actor_process_profile_definition g_profile_OBJ_LP = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

@@ -16,7 +16,6 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 
-/* 80457BF8-80457C38 000078 0040+00 1/1 0/0 0/0 .text            setArcName__6daBg_cFv */
 const char* daBg_c::setArcName() {
     static char arcName[32];
 
@@ -24,7 +23,6 @@ const char* daBg_c::setArcName() {
     return arcName;
 }
 
-/* 80457C38-80457D78 0000B8 0140+00 2/2 0/0 0/0 .text            createMatAnm__FP12J3DModelDataUs */
 static int createMatAnm(J3DModelData* i_modelData, u16 i_materialID) {
     if (i_materialID != 0xFFFF) {
         J3DMaterial* material = i_modelData->getMaterialNodePointer(i_materialID);
@@ -42,13 +40,10 @@ static int createMatAnm(J3DModelData* i_modelData, u16 i_materialID) {
     return 1;
 }
 
-/* 80459374-80459380 000000 000C+00 1/1 0/0 0/0 .rodata          @3756 */
 static u8 const lit_3756[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 80457F34-80458040 0003B4 010C+00 1/1 0/0 0/0 .text
- * create__13daBg_btkAnm_cFP12J3DModelDataP19J3DAnmTextureSRTKeyi */
 int daBg_btkAnm_c::create(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk, int i_anmPlay) {
     mpBtk = new mDoExt_btkAnm();
     if (mpBtk == NULL) {
@@ -69,19 +64,15 @@ int daBg_btkAnm_c::create(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk,
     return 1;
 }
 
-/* 80458088-804580CC 000508 0044+00 1/1 0/0 0/0 .text entry__13daBg_btkAnm_cFP12J3DModelData */
 void daBg_btkAnm_c::entry(J3DModelData* i_modelData) {
     mpBtk->entry(i_modelData, 0.0f);
     field_0x4 = 0;
 }
 
-/* 804580CC-804580F0 00054C 0024+00 1/1 0/0 0/0 .text            play__13daBg_btkAnm_cFv */
 void daBg_btkAnm_c::play() {
     mpBtk->play();
 }
 
-/* 804580F0-80458230 000570 0140+00 1/1 0/0 0/0 .text
- * create__13daBg_brkAnm_cFP12J3DModelDataP15J3DAnmTevRegKeyi   */
 int daBg_brkAnm_c::create(J3DModelData* i_modelData, J3DAnmTevRegKey* i_brk, int i_anmPlay) {
     mpBrk = new mDoExt_brkAnm();
 
@@ -109,24 +100,20 @@ int daBg_brkAnm_c::create(J3DModelData* i_modelData, J3DAnmTevRegKey* i_brk, int
     return 1;
 }
 
-/* 80458230-80458274 0006B0 0044+00 1/1 0/0 0/0 .text entry__13daBg_brkAnm_cFP12J3DModelData */
 void daBg_brkAnm_c::entry(J3DModelData* i_modelData) {
     mpBrk->entry(i_modelData, 0.0f);
     field_0x4 = 0;
 }
 
-/* 80458274-80458298 0006F4 0024+00 1/1 0/0 0/0 .text            play__13daBg_brkAnm_cFv */
 void daBg_brkAnm_c::play() {
     mpBrk->play();
 }
 
-/* 80458298-804582B8 000718 0020+00 1/1 0/0 0/0 .text            checkCreateHeap__FP10fopAc_ac_c */
 static int checkCreateHeap(fopAc_ac_c* i_this) {
     daBg_c* a_this = (daBg_c*)i_this;
     return a_this->createHeap();
 }
 
-/* 804582B8-80458750 000738 0498+00 2/2 0/0 1/1 .text            createHeap__6daBg_cFv */
 int daBg_c::createHeap() {
     static char l_modelName[6][11] = {"model.bmd", "model1.bmd", "model2.bmd", "model3.bmd", "model4.bmd", "model5.bmd"};
     static char l_modelName2[6][11] = {"model.bdl", "model1.bdl", "model2.bdl", "model3.bdl", "model4.bdl", "model5.bdl"};
@@ -254,7 +241,6 @@ int daBg_c::createHeap() {
     return 1;
 }
 
-/* 80458788-804588A4 000C08 011C+00 1/1 0/0 0/0 .text            __dt__6daBg_cFv */
 daBg_c::~daBg_c() {
     int roomNo = fopAcM_GetParam(this);
 
@@ -279,12 +265,10 @@ daBg_c::~daBg_c() {
     dComIfGp_roomControl_offStatusFlag(roomNo, 0x10);
 }
 
-/* 804588A4-804588C4 000D24 0020+00 1/0 0/0 0/0 .text            daBg_Draw__FP6daBg_c */
 static int daBg_Draw(daBg_c* i_this) {
     return i_this->draw();
 }
 
-/* 804588C4-80458F38 000D44 0674+00 1/1 0/0 0/0 .text            draw__6daBg_cFv */
 int daBg_c::draw() {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
 
@@ -499,7 +483,6 @@ int daBg_c::execute() {
     return 1;
 }
 
-/* 80458F38-8045901C 0013B8 00E4+00 1/0 0/0 0/0 .text            daBg_Execute__FP6daBg_c */
 static int daBg_Execute(daBg_c* i_this) {
     return i_this->execute();
 }
@@ -508,25 +491,21 @@ int daBg_c::isDelete() {
     return 1;
 }
 
-/* 8045901C-80459024 00149C 0008+00 1/0 0/0 0/0 .text            daBg_IsDelete__FP6daBg_c */
 static int daBg_IsDelete(daBg_c* i_this) {
     return i_this->isDelete();
 }
 
-/* 80459024-8045904C 0014A4 0028+00 1/0 0/0 0/0 .text            daBg_Delete__FP6daBg_c */
 static int daBg_Delete(daBg_c* i_this) {
     i_this->~daBg_c();
     return 1;
 }
 
-/* 8045904C-8045906C 0014CC 0020+00 1/0 0/0 0/0 .text            daBg_Create__FP10fopAc_ac_c */
 static int daBg_Create(fopAc_ac_c* i_this) {
     daBg_c* a_this = (daBg_c*)i_this;
     int rt = a_this->create();
     return rt;
 }
 
-/* 8045906C-8045933C 0014EC 02D0+00 1/1 0/0 0/0 .text            create__6daBg_cFv */
 int daBg_c::create() {
     int roomNo = fopAcM_GetParam(this);
     field_0x5f0 = 0;
@@ -636,7 +615,6 @@ int daBg_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8045954C-8045956C -00001 0020+00 1/0 0/0 0/0 .data            l_daBg_Method */
 static actor_method_class l_daBg_Method = {
     (process_method_func)daBg_Create,
     (process_method_func)daBg_Delete,
@@ -645,7 +623,6 @@ static actor_method_class l_daBg_Method = {
     (process_method_func)daBg_Draw,
 };
 
-/* 8045956C-804595A0 -00001 0034+00 0/0 0/0 1/0 .data            g_profile_BG */
 extern actor_process_profile_definition2 g_profile_BG = {
     fpcLy_CURRENT_e,       // mLayerID
     7,                     // mListID

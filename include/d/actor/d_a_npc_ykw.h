@@ -18,60 +18,60 @@ public:
     typedef int (daNpc_ykW_c::*cutFunc)(int);
     typedef int (daNpc_ykW_c::*actionFunc)(void*);
 
-    /* 80B5EF0C */ ~daNpc_ykW_c();
-    /* 80B5F084 */ int create();
-    /* 80B5F34C */ int CreateHeap();
-    /* 80B5F784 */ int Delete();
-    /* 80B5F7B8 */ int Execute();
-    /* 80B5F7D8 */ int Draw();
-    /* 80B5F8AC */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B5F8CC */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B5F924 */ static void* srchItemHeart(void*, void*);
-    /* 80B5F9D8 */ static void* srchYkw(void*, void*);
+    ~daNpc_ykW_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    static void* srchItemHeart(void*, void*);
+    static void* srchYkw(void*, void*);
     u32 getType(daNpc_ykW_c* da_npc_yk_w_c);
-    /* 80B5FA74 */ fopAc_ac_c* getOtherYkwP(int);
-    /* 80B5FB50 */ static void* srchYkm(void*, void*);
-    /* 80B5FBEC */ fopAc_ac_c* getOtherYkmP(int);
-    /* 80B5FCC8 */ u8 getType();
-    /* 80B5FD30 */ int isDelete();
-    /* 80B5FE6C */ void reset();
-    /* 80B601C8 */ void afterJntAnm(int);
-    /* 80B60290 */ void setParam();
-    /* 80B6042C */ int checkChangeEvt();
-    /* 80B60520 */ void setAfterTalkMotion();
-    /* 80B605C0 */ void srchActors();
-    /* 80B60744 */ int evtTalk();
-    /* 80B607E4 */ int evtCutProc();
-    /* 80B608AC */ void action();
-    /* 80B60AFC */ void beforeMove();
-    /* 80B60BC0 */ void afterMoved();
-    /* 80B60F08 */ void setAttnPos();
-    /* 80B614D0 */ void setCollision();
-    /* 80B61708 */ int drawDbgInfo();
-    /* 80B61710 */ int selectAction();
-    /* 80B61828 */ BOOL chkAction(actionFunc param_0);
-    /* 80B61854 */ BOOL setAction(int (daNpc_ykW_c::*)(void*));
-    /* 80B618FC */ cXyz getGoalPos();
-    /* 80B61A0C */ int orderGoIntoBossRoomEvt();
-    /* 80B61AA4 */ fopAc_ac_c* putUtuwaHeart(cXyz*, f32, f32, s16, cXyz*);
-    /* 80B61C8C */ int cutShowDoor(int);
-    /* 80B61E74 */ int cutGoIntoBossRoom(int);
-    /* 80B62AF8 */ int cutLv5DungeonClear(int);
-    /* 80B63894 */ int cutFindWolf(int);
-    /* 80B63AA0 */ int cutStartSnowboardRace(int);
-    /* 80B63EE0 */ int cutEndSnowboardRace(int);
-    /* 80B6450C */ int cutHug(int);
-    /* 80B647E4 */ void setDialogueMotion();
-    /* 80B6491C */ int dialogue();
-    /* 80B649A8 */ int wait(void*);
-    /* 80B65278 */ int sitWait(void*);
-    /* 80B654CC */ int walk(void*);
-    /* 80B6591C */ int race(void*);
-    /* 80B6640C */ int talk(void*);
+    fopAc_ac_c* getOtherYkwP(int);
+    static void* srchYkm(void*, void*);
+    fopAc_ac_c* getOtherYkmP(int);
+    u8 getType();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    int checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    int evtTalk();
+    int evtCutProc();
+    void action();
+    void beforeMove();
+    void afterMoved();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    int selectAction();
+    BOOL chkAction(actionFunc param_0);
+    BOOL setAction(int (daNpc_ykW_c::*)(void*));
+    cXyz getGoalPos();
+    int orderGoIntoBossRoomEvt();
+    fopAc_ac_c* putUtuwaHeart(cXyz*, f32, f32, s16, cXyz*);
+    int cutShowDoor(int);
+    int cutGoIntoBossRoom(int);
+    int cutLv5DungeonClear(int);
+    int cutFindWolf(int);
+    int cutStartSnowboardRace(int);
+    int cutEndSnowboardRace(int);
+    int cutHug(int);
+    void setDialogueMotion();
+    int dialogue();
+    int wait(void*);
+    int sitWait(void*);
+    int walk(void*);
+    int race(void*);
+    int talk(void*);
 #if DEBUG
     int test(void*);
 #endif
-    /* 80B67A3C */ daNpc_ykW_c(const daNpcT_faceMotionAnmData_c * param_0,
+    daNpc_ykW_c(const daNpcT_faceMotionAnmData_c * param_0,
                                const daNpcT_motionAnmData_c* param_1,
                                const daNpcT_MotionSeqMngr_c::sequenceStepData_c* param_2,
                                int param_3,
@@ -82,14 +82,14 @@ public:
         // "daNpc_ykW_c -> construct"
         OS_REPORT("|%06d:%x|daNpc_ykW_c -> コンストラクト\n", g_Counter.mCounter0, this);
     }
-    /* 80B67B1C */ u16 getEyeballMaterialNo() { return 2; }
-    /* 80B67B24 */ s32 getHeadJointNo() { return 5; }
-    /* 80B67B2C */ s32 getNeckJointNo() { return 4; }
-    /* 80B67B34 */ s32 getBackboneJointNo() { return 1; }
-    /* 80B67B3C */ int checkChangeJoint(int i_index) { return i_index == 5; }
-    /* 80B67B4C */ int checkRemoveJoint(int i_index) { return i_index == 9; }
-    /* 80B67B5C */ s32 getFootLJointNo() { return 13; }
-    /* 80B67B64 */ s32 getFootRJointNo() { return 16; }
+    u16 getEyeballMaterialNo() { return 2; }
+    s32 getHeadJointNo() { return 5; }
+    s32 getNeckJointNo() { return 4; }
+    s32 getBackboneJointNo() { return 1; }
+    int checkChangeJoint(int i_index) { return i_index == 5; }
+    int checkRemoveJoint(int i_index) { return i_index == 9; }
+    s32 getFootLJointNo() { return 13; }
+    s32 getFootRJointNo() { return 16; }
 
     s32 getFlowNodeNo() {
         u32 angleX = (u16)home.angle.x;
@@ -209,7 +209,7 @@ struct daNpc_ykW_HIOParam {
 
 class daNpc_ykW_Param_c {
 public:
-    /* 80B67B6C */ virtual ~daNpc_ykW_Param_c() {}
+    virtual ~daNpc_ykW_Param_c() {}
 
     static const daNpc_ykW_HIOParam m;
 };

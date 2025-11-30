@@ -12,18 +12,15 @@
 #include "d/d_meter_HIO.h"
 #include "d/d_pane_class.h"
 
-/* 8020AE8C-8020AEF0 2057CC 0064+00 0/0 4/4 0/0 .text            __ct__14dMeterHaihai_cFUc */
 dMeterHaihai_c::dMeterHaihai_c(u8 i_type) {
     mType = i_type;
     _create();
 }
 
-/* 8020AEF0-8020AF6C 205830 007C+00 1/0 0/0 0/0 .text            __dt__14dMeterHaihai_cFv */
 dMeterHaihai_c::~dMeterHaihai_c() {
     _delete();
 }
 
-/* 8020AF6C-8020B0F4 2058AC 0188+00 1/0 0/0 0/0 .text            _create__14dMeterHaihai_cFv */
 int dMeterHaihai_c::_create() {
     mpHaihaiScreen = new J2DScreen();
     JUT_ASSERT(0, mpHaihaiScreen != NULL);
@@ -56,7 +53,6 @@ int dMeterHaihai_c::_create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8020B0F4-8020B140 205A34 004C+00 1/0 0/0 0/0 .text            _execute__14dMeterHaihai_cFUl */
 int dMeterHaihai_c::_execute(u32 i_flags) {
     mFlags = i_flags;
     updateHaihai();
@@ -64,7 +60,6 @@ int dMeterHaihai_c::_execute(u32 i_flags) {
     return 1;
 }
 
-/* 8020B140-8020B518 205A80 03D8+00 1/0 0/0 0/0 .text            draw__14dMeterHaihai_cFv */
 void dMeterHaihai_c::draw() {
     if ((mFlags & 8) || (mFlags & 0x10) || (mFlags & 0x1000000) || (mFlags & 0x800000) ||
         (mFlags & 0x20) || (mFlags & 0x4000000))
@@ -132,7 +127,6 @@ void dMeterHaihai_c::draw() {
     }
 }
 
-/* 8020B518-8020B814 205E58 02FC+00 0/0 1/1 0/0 .text            drawHaihai__14dMeterHaihai_cFUc */
 void dMeterHaihai_c::drawHaihai(u8 i_direction) {
     f32 center_x = 304.0f;
     f32 center_y = 224.0f;
@@ -188,8 +182,6 @@ void dMeterHaihai_c::drawHaihai(u8 i_direction) {
     }
 }
 
-/* 8020B814-8020B9B0 206154 019C+00 0/0 2/2 0/0 .text            drawHaihai__14dMeterHaihai_cFUcffff
- */
 void dMeterHaihai_c::drawHaihai(u8 i_direction, f32 i_posX, f32 i_posY, f32 param_3, f32 param_4) {
     if (mType == 1) {
         i_posX += (3.0f + g_drawHIO.mScrollArrowCenterPosX);
@@ -216,8 +208,6 @@ void dMeterHaihai_c::drawHaihai(u8 i_direction, f32 i_posX, f32 i_posY, f32 para
     }
 }
 
-/* 8020B9B0-8020BA4C 2062F0 009C+00 2/2 0/0 0/0 .text            drawHaihaiLeft__14dMeterHaihai_cFff
- */
 void dMeterHaihai_c::drawHaihaiLeft(f32 i_transX, f32 i_transY) {
     mpParent->translate(i_transX, i_transY);
     mpParent->getPanePtr()->rotate(mpParent->getPanePtr()->getWidth() / 2,
@@ -225,7 +215,6 @@ void dMeterHaihai_c::drawHaihaiLeft(f32 i_transX, f32 i_transY) {
     mpHaihaiScreen->draw(0.0f, 0.0f, dComIfGp_getCurrentGrafPort());
 }
 
-/* 8020BA4C-8020BAE8 20638C 009C+00 2/2 0/0 0/0 .text drawHaihaiRight__14dMeterHaihai_cFff */
 void dMeterHaihai_c::drawHaihaiRight(f32 i_transX, f32 i_transY) {
     mpParent->translate(i_transX, i_transY);
     mpParent->getPanePtr()->rotate(mpParent->getPanePtr()->getWidth() / 2,
@@ -233,8 +222,6 @@ void dMeterHaihai_c::drawHaihaiRight(f32 i_transX, f32 i_transY) {
     mpHaihaiScreen->draw(0.0f, 0.0f, dComIfGp_getCurrentGrafPort());
 }
 
-/* 8020BAE8-8020BB84 206428 009C+00 2/2 0/0 0/0 .text            drawHaihaiTop__14dMeterHaihai_cFff
- */
 void dMeterHaihai_c::drawHaihaiTop(f32 i_transX, f32 i_transY) {
     mpParent->translate(i_transX, i_transY);
     mpParent->getPanePtr()->rotate(mpParent->getPanePtr()->getWidth() / 2,
@@ -242,7 +229,6 @@ void dMeterHaihai_c::drawHaihaiTop(f32 i_transX, f32 i_transY) {
     mpHaihaiScreen->draw(0.0f, 0.0f, dComIfGp_getCurrentGrafPort());
 }
 
-/* 8020BB84-8020BC20 2064C4 009C+00 2/2 0/0 0/0 .text drawHaihaiBottom__14dMeterHaihai_cFff */
 void dMeterHaihai_c::drawHaihaiBottom(f32 i_transX, f32 i_transY) {
     mpParent->translate(i_transX, i_transY);
     mpParent->getPanePtr()->rotate(mpParent->getPanePtr()->getWidth() / 2,
@@ -250,7 +236,6 @@ void dMeterHaihai_c::drawHaihaiBottom(f32 i_transX, f32 i_transY) {
     mpHaihaiScreen->draw(0.0f, 0.0f, dComIfGp_getCurrentGrafPort());
 }
 
-/* 8020BC20-8020BDAC 206560 018C+00 1/1 1/1 0/0 .text            setScale__14dMeterHaihai_cFf */
 void dMeterHaihai_c::setScale(f32 i_scaleFactor) {
     if (mType == 1) {
         mpParent->scale(g_drawHIO.mScrollArrowScaleX * 0.6f * 0.8f * 0.8f * i_scaleFactor,
@@ -270,7 +255,6 @@ void dMeterHaihai_c::setScale(f32 i_scaleFactor) {
     }
 }
 
-/* 8020BDAC-8020BEA0 2066EC 00F4+00 1/0 0/0 0/0 .text            _delete__14dMeterHaihai_cFv */
 int dMeterHaihai_c::_delete() {
     delete mpHaihaiScreen;
     mpHaihaiScreen = NULL;
@@ -289,10 +273,8 @@ int dMeterHaihai_c::_delete() {
     return 1;
 }
 
-/* 8020BEA0-8020BEA4 2067E0 0004+00 1/1 0/0 0/0 .text alphaAnimeHaihai__14dMeterHaihai_cFUl */
 void dMeterHaihai_c::alphaAnimeHaihai(u32 i_flags) {}
 
-/* 8020BEA4-8020BF00 2067E4 005C+00 1/1 0/0 0/0 .text            updateHaihai__14dMeterHaihai_cFv */
 void dMeterHaihai_c::updateHaihai() {
     playBckAnime(mpCursorBck);
     playBtkAnime(mpCursorBtk);
@@ -301,8 +283,6 @@ void dMeterHaihai_c::updateHaihai() {
     setScale(1.0f);
 }
 
-/* 8020BF00-8020C078 206840 0178+00 1/1 0/0 0/0 .text
- * playBckAnime__14dMeterHaihai_cFP18J2DAnmTransformKey         */
 void dMeterHaihai_c::playBckAnime(J2DAnmTransformKey* i_bck) {
     if (checkPlayAnime(1)) {
         if (i_bck != NULL) {
@@ -326,8 +306,6 @@ void dMeterHaihai_c::playBckAnime(J2DAnmTransformKey* i_bck) {
     }
 }
 
-/* 8020C078-8020C1CC 2069B8 0154+00 1/1 0/0 0/0 .text
- * playBtkAnime__14dMeterHaihai_cFP19J2DAnmTextureSRTKey        */
 void dMeterHaihai_c::playBtkAnime(J2DAnmTextureSRTKey* i_btk) {
     if (checkPlayAnime(2)) {
         if (i_btk != NULL) {
@@ -350,8 +328,6 @@ void dMeterHaihai_c::playBtkAnime(J2DAnmTextureSRTKey* i_btk) {
     }
 }
 
-/* 8020C1CC-8020C320 206B0C 0154+00 1/1 0/0 0/0 .text
- * playBpkAnime__14dMeterHaihai_cFP11J2DAnmColor                */
 void dMeterHaihai_c::playBpkAnime(J2DAnmColor* i_bpk) {
     if (checkPlayAnime(0)) {
         if (i_bpk != NULL) {

@@ -8,12 +8,12 @@
  * 
  */
 struct JASCalc {
-    /* 8028F2E8 */ static void imixcopy(const s16*, const s16*, s16*, u32);
-    /* 8028F318 */ static void bcopyfast(const void* src, void* dest, u32 size);
-    /* 8028F354 */ static void bcopy(const void* src, void* dest, u32 size);
-    /* 8028F454 */ static void bzerofast(void* dest, u32 size);
-    /* 8028F480 */ static void bzero(void* dest, u32 size);
-    /* 8028F578 */ static f32 pow2(f32);
+    static void imixcopy(const s16*, const s16*, s16*, u32);
+    static void bcopyfast(const void* src, void* dest, u32 size);
+    static void bcopy(const void* src, void* dest, u32 size);
+    static void bzerofast(void* dest, u32 size);
+    static void bzero(void* dest, u32 size);
+    static f32 pow2(f32);
 
     // Could not make it work as inline - specialization is in JASCalc.cpp
     template <typename A, typename B>

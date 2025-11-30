@@ -43,7 +43,7 @@ void* __piReg;
 GXBool __GXinBegin;
 #endif
 
-static u16 DefaultTexData[] __attribute__((aligned(32))) = {
+static u16 DefaultTexData[] ATTRIBUTE_ALIGN(32) = {
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
 };

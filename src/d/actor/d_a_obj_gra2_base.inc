@@ -2,7 +2,6 @@
 
 #include "d/actor/d_a_obj_gra2.h"
 
-/* 80C0CF2C-80C0CF98 00D10C 006C+00 1/1 0/0 0/0 .text            s_sub2__FPvPv */
 static void* s_sub2(void* i_actor, void* i_data) {
     daObj_GrA_c* i_this = (daObj_GrA_c*)i_data;
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_GRA && (u8)i_this->checkGraSub((fopAc_ac_c*)i_actor)) {
@@ -11,7 +10,6 @@ static void* s_sub2(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80C0CF98-80C0D000 00D178 0068+00 1/1 0/0 0/0 .text checkGraSub__11daObj_GrA_cFP10fopAc_ac_c */
 BOOL daObj_GrA_c::checkGraSub(fopAc_ac_c* a_this) {
     daObj_GrA_c* i_this = (daObj_GrA_c*)a_this;
 
@@ -26,7 +24,6 @@ BOOL daObj_GrA_c::checkGraSub(fopAc_ac_c* a_this) {
     return FALSE;
 }
 
-/* 80C0D000-80C0D2FC 00D1E0 02FC+00 1/0 0/0 0/0 .text            waitDemo__11daObj_GrA_cFPv */
 int daObj_GrA_c::waitDemo(void* param_1) {
     cXyz sp34;
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -91,7 +88,6 @@ int daObj_GrA_c::waitDemo(void* param_1) {
     return 1;
 }
 
-/* 80C0D2FC-80C0D3A8 00D4DC 00AC+00 1/1 0/0 0/0 .text            skipDemoGra__11daObj_GrA_cFv */
 int daObj_GrA_c::skipDemoGra() {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daObj_GrA_c* gra_p = (daObj_GrA_c*)field_0x204c.getActor();
@@ -104,7 +100,6 @@ int daObj_GrA_c::skipDemoGra() {
     return 1;
 }
 
-/* 80C0D3A8-80C0D3E0 00D588 0038+00 1/1 0/0 0/0 .text            skipCallBack__FPvi */
 static int skipCallBack(void* param_1, int param_2) {
     daObj_GrA_c* i_this = (daObj_GrA_c*)param_1;
     i_this->skipDemoGra();
@@ -112,7 +107,6 @@ static int skipCallBack(void* param_1, int param_2) {
     return 1;
 }
 
-/* 80C0D3E0-80C0EFC4 00D5C0 1BE4+00 2/0 0/0 0/0 .text            startDemo__11daObj_GrA_cFPv */
 int daObj_GrA_c::startDemo(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     daObj_GrA_c* gra_p = (daObj_GrA_c *)field_0x204c.getActor();
@@ -453,7 +447,6 @@ int daObj_GrA_c::startDemo(void* param_1) {
     return 1;
 }
 
-/* 80C0EFC4-80C0F17C 00F1A4 01B8+00 1/1 0/0 0/0 .text            turn__11daObj_GrA_cFsfi */
 BOOL daObj_GrA_c::turn(s16 param_1, f32 param_2, int param_3) {
     int o_prm_1 = param_1;
     if (field_0x1fc8 == 0) {
@@ -490,7 +483,6 @@ BOOL daObj_GrA_c::turn(s16 param_1, f32 param_2, int param_3) {
     return param_1 == current.angle.y;
 }
 
-/* 80C0F17C-80C0F330 00F35C 01B4+00 2/2 0/0 0/0 .text            turn_step__11daObj_GrA_cFsiii */
 BOOL daObj_GrA_c::turn_step(s16 param_1, int param_2, int param_3, int param_4) {
     if (field_0x1fcc == 0) {
         if ((int)fabsf(cM_sht2d((s16)(param_1 - field_0x91a.y))) > 20) {
@@ -527,7 +519,6 @@ BOOL daObj_GrA_c::turn_step(s16 param_1, int param_2, int param_3, int param_4) 
     return (field_0x1fcc > 1) ? 1 : 0;
 }
 
-/* 80C0F330-80C0F590 00F510 0260+00 1/1 0/0 0/0 .text            chkFindPlayer2__11daObj_GrA_cFis */
 BOOL daObj_GrA_c::chkFindPlayer2(int param_1, s16 param_2) {
     cXyz sp80 = getAttentionPos(daPy_getPlayerActorClass());
     s16 angle_diff = fopAcM_searchPlayerAngleY(this) - current.angle.y;
@@ -569,7 +560,6 @@ BOOL daObj_GrA_c::chkFindPlayer2(int param_1, s16 param_2) {
     return FALSE;
 }
 
-/* 80C0F5A4-80C0F668 00F784 00C4+00 1/1 0/0 0/0 .text            chkPointInArea__11daObj_GrA_cF4cXyz4cXyzfffs */
 BOOL daObj_GrA_c::chkPointInArea(cXyz param_1, cXyz param_2, f32 param_3, f32 param_4, f32 param_5, s16 param_6) {
     cXyz sp68, sp74;
     f32 var_f30 = param_4;
@@ -588,12 +578,10 @@ BOOL daObj_GrA_c::chkPointInArea(cXyz param_1, cXyz param_2, f32 param_3, f32 pa
     return chkPointInArea(param_1, sp74, sp68, param_6); 
 }
 
-/* 80C0F668-80C0F6E0 00F848 0078+00 1/1 0/0 0/0 .text            chkPointInArea__11daObj_GrA_cF4cXyz4cXyz4cXyzs */
 BOOL daObj_GrA_c::chkPointInArea(cXyz param_1, cXyz param_2, cXyz param_3, s16 param_4) {
     return daNpcF_chkPointInArea(param_1, param_2, param_3, param_4);
 }
 
-/* 80C0F6E0-80C0F7EC 00F8C0 010C+00 1/1 0/0 0/0 .text            chkActorInSight2__11daObj_GrA_cFP10fopAc_ac_cfs */
 BOOL daObj_GrA_c::chkActorInSight2(fopAc_ac_c* actor, f32 param_2, s16 param_3) {
     if (param_2 < 180.0f) {
         s16 sVar1 = cM_deg2s(param_2);
@@ -611,7 +599,6 @@ BOOL daObj_GrA_c::chkActorInSight2(fopAc_ac_c* actor, f32 param_2, s16 param_3) 
     return 1;
 }
 
-/* 80C0F7EC-80C0F860 00F9CC 0074+00 2/2 0/0 0/0 .text getAttentionPos__11daObj_GrA_cFP10fopAc_ac_c */
 cXyz daObj_GrA_c::getAttentionPos(fopAc_ac_c* i_actor_p) {
     cXyz pos = i_actor_p->attention_info.position;
 
@@ -622,7 +609,6 @@ cXyz daObj_GrA_c::getAttentionPos(fopAc_ac_c* i_actor_p) {
     return pos;
 }
 
-/* 80C0F860-80C0FA68 00FA40 0208+00 2/0 0/0 0/0 .text            standWaitJump__11daObj_GrA_cFPv */
 int daObj_GrA_c::standWaitJump(void* param_1) {
     switch (field_0xa7c) {
         case 0:

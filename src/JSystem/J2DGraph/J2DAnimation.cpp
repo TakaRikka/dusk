@@ -10,8 +10,6 @@
 f32 J2DGetKeyFrameInterpolationf(f32 param_0, J3DAnmKeyTableBase* param_1, f32* param_2);
 f32 J2DGetKeyFrameInterpolations(f32 param_0, J3DAnmKeyTableBase* param_1, s16* param_2);
 
-/* 8030A590-8030AAFC 304ED0 056C+00 1/0 0/0 0/0 .text
- * getTransform__19J2DAnmTransformFullCFUsP16J3DTransformInfo   */
 void J2DAnmTransformFull::getTransform(u16 param_0, J3DTransformInfo* transformInfo) const {
     u16 idx = (param_0 * 3);
     J3DAnmTransformFullTable* xPart = &mTableInfo[idx];
@@ -91,8 +89,6 @@ void J2DAnmTransformFull::getTransform(u16 param_0, J3DTransformInfo* transformI
     }
 }
 
-/* 8030AAFC-8030AF24 30543C 0428+00 1/0 0/0 0/0 .text
- * calcTransform__18J2DAnmTransformKeyCFfUsP16J3DTransformInfo  */
 void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
                                        J3DTransformInfo* transformInfo) const {
     u16 idx = param_1 * 3;
@@ -206,8 +202,6 @@ void J2DAnmTransformKey::calcTransform(f32 param_0, u16 param_1,
     }
 }
 
-/* 8030AF24-8030AFC8 305864 00A4+00 3/0 0/0 0/0 .text
- * searchUpdateMaterialID__11J2DAnmColorFP9J2DScreen            */
 void J2DAnmColor::searchUpdateMaterialID(J2DScreen* pScreen) {
     if (pScreen != NULL && pScreen->mNameTable != NULL) {
         for (u16 entry = 0; entry < this->getUpdateMaterialNum(); entry++) {
@@ -221,7 +215,6 @@ void J2DAnmColor::searchUpdateMaterialID(J2DScreen* pScreen) {
     }
 }
 
-/* 8030AFC8-8030B200 305908 0238+00 1/0 0/0 0/0 .text getColor__15J2DAnmColorFullCFUsP8_GXColor */
 void J2DAnmColorFull::getColor(u16 param_0, _GXColor* pColor) const {
     J3DAnmColorFullTable* info = &mInfoTable[param_0];
     u16 maxFrame = info->mRMaxFrame;
@@ -258,7 +251,6 @@ void J2DAnmColorFull::getColor(u16 param_0, _GXColor* pColor) const {
     }
 }
 
-/* 8030B200-8030B4C4 305B40 02C4+00 1/0 0/0 0/0 .text getColor__14J2DAnmColorKeyCFUsP8_GXColor */
 void J2DAnmColorKey::getColor(u16 param_0, _GXColor* pColor) const {
     J3DAnmColorKeyTable* info = &mInfoTable[param_0];
     f32 val;
@@ -336,8 +328,6 @@ void J2DAnmColorKey::getColor(u16 param_0, _GXColor* pColor) const {
     }
 }
 
-/* 8030B4C4-8030B704 305E04 0240+00 1/0 0/0 0/0 .text
- * getColor__18J2DAnmVtxColorFullCFUcUsP8_GXColor               */
 void J2DAnmVtxColorFull::getColor(u8 param_0, u16 param_1, _GXColor* pColor) const {
     J3DAnmColorFullTable* info = &mInfoTable[param_0][param_1];
     u16 maxFrame = info->mRMaxFrame;
@@ -374,8 +364,6 @@ void J2DAnmVtxColorFull::getColor(u8 param_0, u16 param_1, _GXColor* pColor) con
     }
 }
 
-/* 8030B704-8030B9F0 306044 02EC+00 1/0 0/0 0/0 .text
- * getColor__17J2DAnmVtxColorKeyCFUcUsP8_GXColor                */
 void J2DAnmVtxColorKey::getColor(u8 param_0, u16 param_1, _GXColor* pColor) const {
     J3DAnmColorKeyTable* info = &mInfoTable[param_0][param_1];
     f32 val;
@@ -453,8 +441,6 @@ void J2DAnmVtxColorKey::getColor(u8 param_0, u16 param_1, _GXColor* pColor) cons
     }
 }
 
-/* 8030B9F0-8030BC60 306330 0270+00 0/0 1/1 0/0 .text
- * calcTransform__19J2DAnmTextureSRTKeyCFfUsP17J3DTextureSRTInfo */
 void J2DAnmTextureSRTKey::calcTransform(f32 param_0, u16 param_1, J3DTextureSRTInfo* pInfo) const {
     u16 idx = param_1 * 3;
     J3DAnmTransformKeyTable* xInf = &mInfoTable[idx];
@@ -519,8 +505,6 @@ void J2DAnmTextureSRTKey::calcTransform(f32 param_0, u16 param_1, J3DTextureSRTI
     }
 }
 
-/* 8030BC60-8030BD10 3065A0 00B0+00 1/0 0/0 0/0 .text
- * searchUpdateMaterialID__19J2DAnmTextureSRTKeyFP9J2DScreen    */
 void J2DAnmTextureSRTKey::searchUpdateMaterialID(J2DScreen* pScreen) {
     if (pScreen != NULL && pScreen->mNameTable != NULL) {
         for (u16 entry = 0; entry < this->getUpdateMaterialNum(); entry++) {
@@ -534,8 +518,6 @@ void J2DAnmTextureSRTKey::searchUpdateMaterialID(J2DScreen* pScreen) {
     }
 }
 
-/* 8030BD10-8030BEE8 306650 01D8+00 1/0 0/0 0/0 .text
- * searchUpdateMaterialID__16J2DAnmTexPatternFP9J2DScreen       */
 void J2DAnmTexPattern::searchUpdateMaterialID(J2DScreen* pScreen) {
     if (pScreen != NULL && pScreen->mNameTable != NULL && pScreen->mTexRes != NULL) {
         for (u16 entry = 0; entry < this->getUpdateMaterialNum(); entry++) {
@@ -573,8 +555,6 @@ void J2DAnmTexPattern::searchUpdateMaterialID(J2DScreen* pScreen) {
     }
 }
 
-/* 8030BEE8-8030BF9C 306828 00B4+00 2/2 1/1 0/0 .text            getTexNo__16J2DAnmTexPatternCFUsPUs
- */
 void J2DAnmTexPattern::getTexNo(u16 param_0, u16* pTexNo) const {
     u16 maxFrame = mAnmTable[param_0].mMaxFrame;
     f32 frame = getFrame();
@@ -587,8 +567,6 @@ void J2DAnmTexPattern::getTexNo(u16 param_0, u16* pTexNo) const {
     }
 }
 
-/* 8030BF9C-8030BFF0 3068DC 0054+00 0/0 1/1 0/0 .text            getResTIMG__16J2DAnmTexPatternCFUs
- */
 ResTIMG* J2DAnmTexPattern::getResTIMG(u16 param_0) const {
     if (mTIMGPtrArray == NULL) {
         return NULL;
@@ -599,8 +577,6 @@ ResTIMG* J2DAnmTexPattern::getResTIMG(u16 param_0) const {
     }
 }
 
-/* 8030BFF0-8030C048 306930 0058+00 0/0 1/1 0/0 .text            getPalette__16J2DAnmTexPatternCFUs
- */
 JUTPalette* J2DAnmTexPattern::getPalette(u16 param_0) const {
     if (mTIMGPtrArray == NULL) {
         return NULL;
@@ -611,8 +587,6 @@ JUTPalette* J2DAnmTexPattern::getPalette(u16 param_0) const {
     }
 }
 
-/* 8030C048-8030C0F0 306988 00A8+00 0/0 3/3 0/0 .text getVisibility__20J2DAnmVisibilityFullCFUsPUc
- */
 void J2DAnmVisibilityFull::getVisibility(u16 param_0, u8* pOut) const {
     u16 maxFrame = mTable[param_0]._0;
     if (getFrame() < 0) {
@@ -625,8 +599,6 @@ void J2DAnmVisibilityFull::getVisibility(u16 param_0, u8* pOut) const {
     }
 }
 
-/* 8030C0F0-8030C3B4 306A30 02C4+00 0/0 1/1 0/0 .text
- * getTevColorReg__15J2DAnmTevRegKeyCFUsP11_GXColorS10          */
 void J2DAnmTevRegKey::getTevColorReg(u16 param_0, _GXColorS10* pColor) const {
     J3DAnmCRegKeyTable* info = &mAnmCRegKeyTable[param_0];
     f32 val;
@@ -704,8 +676,6 @@ void J2DAnmTevRegKey::getTevColorReg(u16 param_0, _GXColorS10* pColor) const {
     }
 }
 
-/* 8030C3B4-8030C678 306CF4 02C4+00 0/0 1/1 0/0 .text
- * getTevKonstReg__15J2DAnmTevRegKeyCFUsP8_GXColor              */
 void J2DAnmTevRegKey::getTevKonstReg(u16 param_0, _GXColor* pColor) const {
     J3DAnmKRegKeyTable* info = &mAnmKRegKeyTable[param_0];
     f32 val;
@@ -783,8 +753,6 @@ void J2DAnmTevRegKey::getTevKonstReg(u16 param_0, _GXColor* pColor) const {
     }
 }
 
-/* 8030C678-8030C77C 306FB8 0104+00 1/0 0/0 0/0 .text
- * searchUpdateMaterialID__15J2DAnmTevRegKeyFP9J2DScreen        */
 void J2DAnmTevRegKey::searchUpdateMaterialID(J2DScreen* pScreen) {
     if (pScreen != NULL && pScreen->mNameTable != NULL) {
         for (u16 i = 0; i < mCRegUpdateMaterialNum; i++) {
@@ -806,8 +774,6 @@ void J2DAnmTevRegKey::searchUpdateMaterialID(J2DScreen* pScreen) {
     }
 }
 
-/* 8030C77C-8030C9B0 3070BC 0234+00 6/6 0/0 0/0 .text
- * J2DGetKeyFrameInterpolation<s>__FfP18J3DAnmKeyTableBasePs    */
 // should be J2DGetKeyFrameInterpolation<s16>
 f32 J2DGetKeyFrameInterpolations(f32 param_0, J3DAnmKeyTableBase* param_1, s16* param_2) {
     if (param_0 < param_2[0]) {
@@ -853,8 +819,6 @@ f32 J2DGetKeyFrameInterpolations(f32 param_0, J3DAnmKeyTableBase* param_1, s16* 
     }
 }
 
-/* 8030C9B0-8030CB2C 3072F0 017C+00 2/2 0/0 0/0 .text
- * J2DGetKeyFrameInterpolation<f>__FfP18J3DAnmKeyTableBasePf    */
 // should be J2DGetKeyFrameInterpolation<s16>
 f32 J2DGetKeyFrameInterpolationf(f32 param_0, J3DAnmKeyTableBase* param_1, f32* param_2) {
     if (param_0 < param_2[0]) {

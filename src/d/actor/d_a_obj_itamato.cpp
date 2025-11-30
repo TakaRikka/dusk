@@ -20,7 +20,7 @@ struct daObj_ItaMato_HIOParam {
 
 class daObj_ItaMato_Param_c {
 public:
-    /* 80C2AB04 */ virtual ~daObj_ItaMato_Param_c() {}
+    virtual ~daObj_ItaMato_Param_c() {}
 
     static daObj_ItaMato_HIOParam const m;
 };
@@ -42,7 +42,6 @@ public:
 #define PARAM_CLASS daObj_ItaMato_Param_c
 #endif
 
-/* 80C2AB70-80C2AB84 000000 0014+00 4/4 0/0 0/0 .rodata          m__21daObj_ItaMato_Param_c */
 daObj_ItaMato_HIOParam const daObj_ItaMato_Param_c::m = {
     110.0f,
     -3.0f,
@@ -62,7 +61,7 @@ void daObj_ItaMato_HIO_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
     JORReflexible::listenPropertyEvent(i_event);
     JORFile jorFile;
 
-    switch (reinterpret_cast<u32>(i_event->id)) {
+    switch ((u32)i_event->id) {
         case 0x40000002:
             if (jorFile.open(6, "すべてのファイル(*.*)", NULL, NULL, NULL)) {
                 memset(buffer, 0, sizeof(buffer));
@@ -97,7 +96,6 @@ void daObj_ItaMato_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 80C2AB84-80C2ABB4 000014 0030+00 1/1 0/0 0/0 .rodata          l_ccDObjData */
 static dCcD_SrcGObjInf const l_ccDObjData = {
     {0x0, {{0x0, 0x0, 0x0}, {0xD8FBFDFF, 0x1F}, 0x79}}, // mObj
     {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -105,7 +103,6 @@ static dCcD_SrcGObjInf const l_ccDObjData = {
     {0x0}, // mGObjCo
 };
 
-/* 80C2AC34-80C2AC74 000000 0040+00 2/2 0/0 0/0 .data            l_ccDSph */
 static dCcD_SrcSph l_ccDSph = {
     l_ccDObjData,
     {
@@ -113,13 +110,10 @@ static dCcD_SrcSph l_ccDSph = {
     } // mSphAttr
 };
 
-/* 80C2AD64-80C2AD68 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static PARAM_CLASS l_HIO;
 
-/* 80C2AC74-80C2AC78 -00001 0004+00 1/1 0/0 0/0 .data            l_resName */
 static char* l_resName = "H_ItaMato";
 
-/* 80C294EC-80C296E0 0000EC 01F4+00 1/0 0/0 0/0 .text            __dt__15daObj_ItaMato_cFv */
 daObj_ItaMato_c::~daObj_ItaMato_c() {
     OS_REPORT("|%06d:%x|daObj_ItaMato_c -> デストラクト\n", g_Counter.mCounter0, this);
 
@@ -132,7 +126,6 @@ daObj_ItaMato_c::~daObj_ItaMato_c() {
     dComIfG_resDelete(&mPhase, getResName());
 }
 
-/* 80C2971C-80C29AC0 00031C 03A4+00 1/1 0/0 0/0 .text            create__15daObj_ItaMato_cFv */
 cPhs__Step daObj_ItaMato_c::create() {
     fopAcM_ct(this, daObj_ItaMato_c);
 
@@ -193,7 +186,6 @@ cPhs__Step daObj_ItaMato_c::create() {
     return phase;
 }
 
-/* 80C29CD8-80C29DAC 0008D8 00D4+00 1/1 0/0 0/0 .text            CreateHeap__15daObj_ItaMato_cFv */
 int daObj_ItaMato_c::CreateHeap() {
     J3DModelData* modelData = NULL;
     modelData = (J3DModelData*)dComIfG_getObjectRes(getResName(), 5);
@@ -219,14 +211,12 @@ int daObj_ItaMato_c::CreateHeap() {
     return 1;
 }
 
-/* 80C29DAC-80C29DE0 0009AC 0034+00 1/1 0/0 0/0 .text            Delete__15daObj_ItaMato_cFv */
 int daObj_ItaMato_c::Delete() {
     OS_REPORT("|%06d:%x|daObj_ItaMato_c -> Delete\n", g_Counter.mCounter0, this);
     this->~daObj_ItaMato_c();
     return 1;
 }
 
-/* 80C29DE0-80C2A44C 0009E0 066C+00 2/2 0/0 0/0 .text            Execute__15daObj_ItaMato_cFv */
 int daObj_ItaMato_c::Execute() {
     cXyz sp38, sp44, sp50;
 
@@ -358,7 +348,6 @@ int daObj_ItaMato_c::Execute() {
     return 1;
 }
 
-/* 80C2A44C-80C2A5D0 00104C 0184+00 1/1 0/0 0/0 .text            Draw__15daObj_ItaMato_cFv */
 int daObj_ItaMato_c::Draw() {
     if (field_0xa16 == 0 && (field_0xa18 == 0 || health != 0)) {
         g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -383,13 +372,11 @@ int daObj_ItaMato_c::Draw() {
     return 1;
 }
 
-/* 80C2A5D0-80C2A5F0 0011D0 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__15daObj_ItaMato_cFP10fopAc_ac_c */
 int daObj_ItaMato_c::createHeapCallBack(fopAc_ac_c* a_this) {
     daObj_ItaMato_c* i_this = (daObj_ItaMato_c*)a_this;
     return i_this->CreateHeap();
 }
 
-/* 80C2A5F0-80C2A620 0011F0 0030+00 1/1 0/0 0/0 .text            tgHitCallBack__15daObj_ItaMato_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 void daObj_ItaMato_c::tgHitCallBack(fopAc_ac_c* param_1, dCcD_GObjInf* param_2, fopAc_ac_c* param_3, dCcD_GObjInf* param_4) {
     daObj_ItaMato_c* i_this = (daObj_ItaMato_c*)param_1;
     u8 cutType = 0;
@@ -405,12 +392,10 @@ void daObj_ItaMato_c::tgHitCallBack(fopAc_ac_c* param_1, dCcD_GObjInf* param_2, 
     i_this->setCutType(cutType);
 }
 
-/* 80C2A620-80C2A630 001220 0010+00 3/3 0/0 0/0 .text            getResName__15daObj_ItaMato_cFv */
 const char* daObj_ItaMato_c::getResName() {
     return l_resName;
 }
 
-/* 80C2A630-80C2A7C4 001230 0194+00 1/1 0/0 0/0 .text            setSwayParam__15daObj_ItaMato_cFP10fopAc_ac_c */
 void daObj_ItaMato_c::setSwayParam(fopAc_ac_c* i_actor) {
     f32 fVar1 = 1.0f;
     f32 fVar2[3] = {0.0f, 0.0f, PARAM.shake_pow};
@@ -456,7 +441,6 @@ void daObj_ItaMato_c::setSwayParam(fopAc_ac_c* i_actor) {
     }
 }
 
-/* 80C2A7C4-80C2A890 0013C4 00CC+00 1/1 0/0 0/0 .text            setPrtcls__15daObj_ItaMato_cFv */
 void daObj_ItaMato_c::setPrtcls() {
     static u16 const id[3] = {
         dPa_RM(ID_ZF_S_ITAMATO_BOAD00),
@@ -470,20 +454,17 @@ void daObj_ItaMato_c::setPrtcls() {
     }
 }
 
-/* 80C2A890-80C2A8EC 001490 005C+00 2/2 0/0 0/0 .text            setEnvTevColor__15daObj_ItaMato_cFv */
 void daObj_ItaMato_c::setEnvTevColor() {
     tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(mGndChk);
     tevStr.room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
 }
 
-/* 80C2A8EC-80C2A930 0014EC 0044+00 2/2 0/0 0/0 .text            setRoomNo__15daObj_ItaMato_cFv */
 void daObj_ItaMato_c::setRoomNo() {
     s8 id = dComIfG_Bgsp().GetRoomId(mGndChk);
     fopAcM_SetRoomNo(this, id);
     mStts.SetRoomId(id);
 }
 
-/* 80C2A930-80C2A9C0 001530 0090+00 1/1 0/0 0/0 .text            setMtx__15daObj_ItaMato_cFv */
 void daObj_ItaMato_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -493,32 +474,26 @@ void daObj_ItaMato_c::setMtx() {
     mpModels[health]->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C2A9C0-80C2A9E0 0015C0 0020+00 1/0 0/0 0/0 .text            daObj_ItaMato_Create__FPv */
 static int daObj_ItaMato_Create(void* a_this) {
     return static_cast<daObj_ItaMato_c*>(a_this)->create();
 }
 
-/* 80C2A9E0-80C2AA00 0015E0 0020+00 1/0 0/0 0/0 .text            daObj_ItaMato_Delete__FPv */
 static int daObj_ItaMato_Delete(void* a_this) {
     return static_cast<daObj_ItaMato_c*>(a_this)->Delete();
 }
 
-/* 80C2AA00-80C2AA20 001600 0020+00 1/0 0/0 0/0 .text            daObj_ItaMato_Execute__FPv */
 static int daObj_ItaMato_Execute(void* a_this) {
     return static_cast<daObj_ItaMato_c*>(a_this)->Execute();
 }
 
-/* 80C2AA20-80C2AA40 001620 0020+00 1/0 0/0 0/0 .text            daObj_ItaMato_Draw__FPv */
 static int daObj_ItaMato_Draw(void* a_this) {
     return static_cast<daObj_ItaMato_c*>(a_this)->Draw();
 }
 
-/* 80C2AA40-80C2AA48 001640 0008+00 1/0 0/0 0/0 .text            daObj_ItaMato_IsDelete__FPv */
 static int daObj_ItaMato_IsDelete(void* a_this) {
     return 1;
 }
 
-/* 80C2AC78-80C2AC98 -00001 0020+00 1/0 0/0 0/0 .data            daObj_ItaMato_MethodTable */
 static actor_method_class daObj_ItaMato_MethodTable = {
     (process_method_func)daObj_ItaMato_Create,
     (process_method_func)daObj_ItaMato_Delete,
@@ -527,7 +502,6 @@ static actor_method_class daObj_ItaMato_MethodTable = {
     (process_method_func)daObj_ItaMato_Draw,
 };
 
-/* 80C2AC98-80C2ACC8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_ITAMATO */
 extern actor_process_profile_definition g_profile_OBJ_ITAMATO = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID

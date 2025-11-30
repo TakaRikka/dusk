@@ -9,19 +9,12 @@
 
 #include "d/d_com_inf_game.h"
 
-//
-// Declarations:
-//
-
 static daLv3Candle_HIO_c l_HIO;
 
-/* 80C57ACC-80C57AF0 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__17daLv3Candle_HIO_cFv */
 daLv3Candle_HIO_c::daLv3Candle_HIO_c() {
     field_0x04 = 0x1e;
 }
 
-/* ############################################################################################## */
-/* 80C58564-80C58594 000000 0030+00 5/5 0/0 0/0 .rodata          mCcDObjInfo__13daLv3Candle_c */
 dCcD_SrcGObjInf const daLv3Candle_c::mCcDObjInfo = {
     {0, {{0x200, 0, 0x13}, {0xd8fbfdff, 0x1f}, {0x79}}},
     {1, 0, 0, 0, 0},
@@ -31,10 +24,8 @@ dCcD_SrcGObjInf const daLv3Candle_c::mCcDObjInfo = {
 
 dCcD_SrcSph daLv3Candle_c::mCcDSph = {daLv3Candle_c::mCcDObjInfo, {{{0.0f, 0.0f, 0.0f}, 0.0f}}};
 
-/* 80C58630-80C58638 -00001 0008+00 3/3 0/0 0/0 .data            l_resNameIdx */
 static char* l_resNameIdx[] = {"L3candl", "L3candl2"};
 
-/* 80C57B38-80C57BC0 000158 0088+00 2/2 0/0 0/0 .text            setBaseMtx__13daLv3Candle_cFv */
 void daLv3Candle_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
@@ -42,10 +33,8 @@ void daLv3Candle_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C58594-80C5859C 000030 0008+00 1/1 0/0 0/0 .rodata          l_bmdIdx */
 static u32 const l_bmdIdx[] = {0x03, 0x03};
 
-/* 80C57BC0-80C57C40 0001E0 0080+00 1/1 0/0 0/0 .text            CreateHeap__13daLv3Candle_cFv */
 int daLv3Candle_c::CreateHeap() {
     J3DModelData* model_data =
         (J3DModelData*)dComIfG_getObjectRes(l_resNameIdx[mType], l_bmdIdx[mType]);
@@ -58,7 +47,6 @@ int daLv3Candle_c::CreateHeap() {
     return TRUE;
 }
 
-/* 80C57C40-80C57EDC 000260 029C+00 1/1 0/0 0/0 .text            create__13daLv3Candle_cFv */
 cPhs__Step daLv3Candle_c::create() {
     fopAcM_ct(this, daLv3Candle_c);
 
@@ -106,13 +94,10 @@ cPhs__Step daLv3Candle_c::create() {
     return step;
 }
 
-/* 80C57F6C-80C57F8C 00058C 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__13daLv3Candle_cFP10fopAc_ac_c            */
 int daLv3Candle_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daLv3Candle_c*>(i_this)->CreateHeap();
 }
 
-/* 80C57F8C-80C58018 0005AC 008C+00 1/1 0/0 0/0 .text            lightInit__13daLv3Candle_cFv */
 void daLv3Candle_c::lightInit() {
     mLightPos = mTorchPos;
     mLightPos.y += 10.0f;
@@ -130,8 +115,6 @@ void daLv3Candle_c::lightInit() {
     mIntensity = 0.0f;
 }
 
-/* 80C58018-80C580A0 000638 0088+00 1/1 0/0 0/0 .text            pointLightProc__13daLv3Candle_cFv
- */
 void daLv3Candle_c::pointLightProc() {
     if (!mIsLit) {
         GXColor color = {188, 102, 66, 255};
@@ -143,7 +126,6 @@ void daLv3Candle_c::pointLightProc() {
     }
 }
 
-/* 80C580A0-80C582FC 0006C0 025C+00 1/1 0/0 0/0 .text            Execute__13daLv3Candle_cFv */
 int daLv3Candle_c::Execute() {
     dComIfGp_particle_setSimple(0x100, &mTorchPos, 0xff, g_whiteColor, g_whiteColor, 0, 0.0f);
     dComIfGp_particle_setSimple(0x101, &mTorchPos, 0xff, g_whiteColor, g_whiteColor, 0, 0.0f);
@@ -193,7 +175,6 @@ int daLv3Candle_c::Execute() {
     return TRUE;
 }
 
-/* 80C582FC-80C583A0 00091C 00A4+00 1/1 0/0 0/0 .text            Draw__13daLv3Candle_cFv */
 int daLv3Candle_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -205,7 +186,6 @@ int daLv3Candle_c::Draw() {
     return TRUE;
 }
 
-/* 80C583A0-80C58404 0009C0 0064+00 1/1 0/0 0/0 .text            Delete__13daLv3Candle_cFv */
 int daLv3Candle_c::Delete() {
     mSound.deleteObject();
     dComIfG_resDelete(&mPhaseReq, l_resNameIdx[mType]);
@@ -216,36 +196,28 @@ int daLv3Candle_c::Delete() {
     return TRUE;
 }
 
-/* 80C58404-80C58424 000A24 0020+00 1/0 0/0 0/0 .text            daLv3Candle_Draw__FP13daLv3Candle_c
- */
 static int daLv3Candle_Draw(daLv3Candle_c* i_this) {
     return static_cast<daLv3Candle_c*>(i_this)->Draw();
 }
 
-/* 80C58424-80C58444 000A44 0020+00 1/0 0/0 0/0 .text daLv3Candle_Execute__FP13daLv3Candle_c */
 static int daLv3Candle_Execute(daLv3Candle_c* i_this) {
     return static_cast<daLv3Candle_c*>(i_this)->Execute();
 }
 
-/* 80C58444-80C58464 000A64 0020+00 1/0 0/0 0/0 .text daLv3Candle_Delete__FP13daLv3Candle_c */
 static int daLv3Candle_Delete(daLv3Candle_c* i_this) {
     return static_cast<daLv3Candle_c*>(i_this)->Delete();
 }
 
-/* 80C58464-80C58484 000A84 0020+00 1/0 0/0 0/0 .text            daLv3Candle_Create__FP10fopAc_ac_c
- */
 static int daLv3Candle_Create(fopAc_ac_c* i_this) {
     return static_cast<daLv3Candle_c*>(i_this)->create();
 }
 
-/* 80C58638-80C58658 -00001 0020+00 1/0 0/0 0/0 .data            l_daLv3Candle_Method */
 static actor_method_class l_daLv3Candle_Method = {
     (process_method_func)daLv3Candle_Create,  (process_method_func)daLv3Candle_Delete,
     (process_method_func)daLv3Candle_Execute, NULL,
     (process_method_func)daLv3Candle_Draw,
 };
 
-/* 80C58658-80C58688 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv3Candle */
 extern actor_process_profile_definition g_profile_Obj_Lv3Candle = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

@@ -8,23 +8,18 @@
 #include "d/actor/d_a_obj_hakai_brl.h"
 #include "d/d_com_inf_game.h"
 
-/* 80C16738-80C16758 000078 0020+00 1/1 0/0 0/0 .text daObjHBarrel_c_createHeap__FP10fopAc_ac_c */
 static int daObjHBarrel_c_createHeap(fopAc_ac_c* i_this) {
     return ((daObjHBarrel_c*)i_this)->createHeap();
 }
 
-/* 80C1737C-80C17380 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "HBarrel";
 
-/* 80C16758-80C1682C 000098 00D4+00 2/2 0/0 0/0 .text            __ct__14daObjHBarrel_cFv */
 daObjHBarrel_c::daObjHBarrel_c() {}
 
-/* 80C16758-80C1682C 000098 00D4+00 2/2 0/0 0/0 .text            __ct__14daObjHBarrel_cFv */
 daObjHBarrel_c::~daObjHBarrel_c() {
     dComIfG_resDelete(this, l_arcName);
 }
 
-/* 80C16A98-80C16B08 0003D8 0070+00 1/1 0/0 0/0 .text            createHeap__14daObjHBarrel_cFv */
 int daObjHBarrel_c::createHeap() {
     J3DModelData* a_model_data_p = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 3);
     JUT_ASSERT(0x9a, a_model_data_p != NULL);
@@ -37,7 +32,6 @@ int daObjHBarrel_c::createHeap() {
     return 1;
 }
 
-/* 80C16B08-80C16BF8 000448 00F0+00 1/1 0/0 0/0 .text            create__14daObjHBarrel_cFv */
 int daObjHBarrel_c::create() {
     fopAcM_ct(this, daObjHBarrel_c);
 
@@ -57,14 +51,12 @@ int daObjHBarrel_c::create() {
     return loadResult;
 }
 
-/* 80C16BF8-80C16C44 000538 004C+00 1/1 0/0 0/0 .text            Delete__14daObjHBarrel_cFv */
 int daObjHBarrel_c::Delete() {
     mSound.deleteObject();
     this->~daObjHBarrel_c();
     return 1;
 }
 
-/* 80C16C44-80C16CA8 000584 0064+00 1/1 0/0 0/0 .text            draw__14daObjHBarrel_cFv */
 int daObjHBarrel_c::draw() {
     g_env_light.settingTevStruct(8, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -72,7 +64,6 @@ int daObjHBarrel_c::draw() {
     return 1;
 }
 
-/* 80C16CA8-80C16D50 0005E8 00A8+00 1/1 0/0 0/0 .text            execute__14daObjHBarrel_cFv */
 int daObjHBarrel_c::execute() {
     if (dComIfGp_checkPlayerStatus0(0, 0x1000) != 0) {
         mCyl.OffTgShield();
@@ -91,8 +82,6 @@ int daObjHBarrel_c::execute() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80C172FC-80C17340 000000 0044+00 2/2 0/0 0/0 .rodata          s_CcDCyl__14daObjHBarrel_c */
 dCcD_SrcCyl const daObjHBarrel_c::s_CcDCyl = {
     {
         {0x0, {{0x0, 0x0, 0xd}, {(s32)0xd8fafdff, 0x11}, 0x79}},  // mObj
@@ -107,7 +96,6 @@ dCcD_SrcCyl const daObjHBarrel_c::s_CcDCyl = {
     }  // mCyl
 };
 
-/* 80C16D50-80C16DEC 000690 009C+00 1/1 0/0 0/0 .text            init__14daObjHBarrel_cFv */
 void daObjHBarrel_c::init() {
     mStts.Init(0xff, 0, this);
     mCyl.Set(s_CcDCyl);
@@ -118,14 +106,12 @@ void daObjHBarrel_c::init() {
     return mCyl.SetR(90.0f);
 }
 
-/* 80C16DEC-80C16E50 00072C 0064+00 2/2 0/0 0/0 .text            setModelMtx__14daObjHBarrel_cFv */
 void daObjHBarrel_c::setModelMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C16E50-80C17090 000790 0240+00 1/1 0/0 0/0 .text            hitAction__14daObjHBarrel_cFv */
 void daObjHBarrel_c::hitAction() {
     if (mCyl.ChkTgHit()) {
         cCcD_ObjHitInf* hitObj = mCyl.GetTgHitObj();
@@ -161,7 +147,6 @@ void daObjHBarrel_c::hitAction() {
     }
 }
 
-/* 80C17090-80C171F8 0009D0 0168+00 1/1 0/0 0/0 .text            callEmt__14daObjHBarrel_cFv */
 void daObjHBarrel_c::callEmt() {
     static u16 const PARTICLE_NAME[3] = {
         0x82AB,
@@ -185,28 +170,23 @@ void daObjHBarrel_c::callEmt() {
     }
 }
 
-/* 80C171F8-80C1724C 000B38 0054+00 1/0 0/0 0/0 .text daObjHBarrel_create__FP14daObjHBarrel_c */
 static int daObjHBarrel_create(daObjHBarrel_c* param_0) {
     fopAcM_ct(param_0, daObjHBarrel_c);
     return param_0->create();
 }
 
-/* 80C1724C-80C1726C 000B8C 0020+00 1/0 0/0 0/0 .text daObjHBarrel_Delete__FP14daObjHBarrel_c */
 static int daObjHBarrel_Delete(daObjHBarrel_c* param_0) {
     return param_0->Delete();
 }
 
-/* 80C1726C-80C1728C 000BAC 0020+00 1/0 0/0 0/0 .text daObjHBarrel_execute__FP14daObjHBarrel_c */
 static int daObjHBarrel_execute(daObjHBarrel_c* param_0) {
     return param_0->execute();
 }
 
-/* 80C1728C-80C172AC 000BCC 0020+00 1/0 0/0 0/0 .text daObjHBarrel_draw__FP14daObjHBarrel_c */
 static int daObjHBarrel_draw(daObjHBarrel_c* param_0) {
     return param_0->draw();
 }
 
-/* 80C17380-80C173A0 -00001 0020+00 1/0 0/0 0/0 .data            daObjHBarrel_METHODS */
 static actor_method_class daObjHBarrel_METHODS = {
     (process_method_func)daObjHBarrel_create,
     (process_method_func)daObjHBarrel_Delete,

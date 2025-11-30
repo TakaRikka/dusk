@@ -23,7 +23,6 @@
 #include "f_op/f_op_overlap_mng.h"
 
 namespace {
-/* 80854D4C-80854D8C 000000 0040+00 1/1 0/0 0/0 .data cc_sph_src__22@unnamed@d_a_kago_cpp@ */
 static dCcD_SrcSph cc_sph_src = {
     {
         {0x0, {{0x8, 0x0, 0x12}, {0x0, 0x0}, 0x0}}, // mObj
@@ -39,8 +38,8 @@ static dCcD_SrcSph cc_sph_src = {
 
 class daKago_HIO_c : public JORReflexible {
 public:
-    /* 808495AC */ daKago_HIO_c();
-    /* 80854A4C */ virtual ~daKago_HIO_c() {}
+    daKago_HIO_c();
+    virtual ~daKago_HIO_c() {}
 
     void genMessage(JORMContext* ctx);
 
@@ -68,7 +67,6 @@ public:
     /* 0x58 */ f32 mSplashGenTimeDuringDash;
 };
 
-/* 808495AC-80849660 0000EC 00B4+00 1/1 0/0 0/0 .text            __ct__12daKago_HIO_cFv */
 daKago_HIO_c::daKago_HIO_c() {
     mChild = -1;
     mRevoconUpDown = 1024.0f;
@@ -144,7 +142,6 @@ void daKago_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 80849660-808496F0 0001A0 0090+00 4/3 0/0 0/0 .text            getBckName__8daKago_cFi */
 int daKago_c::getBckName(int param_0) {
     if (field_0x6e7 == 0) {
         return param_0;
@@ -176,13 +173,11 @@ int daKago_c::getBckName(int param_0) {
     }
 }
 
-/* 808496F0-80849798 000230 00A8+00 13/13 0/0 0/0 .text            setBck__8daKago_cFiUcff */
 void daKago_c::setBck(int param_0, u8 param_1, f32 param_2, f32 param_3) {
     mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes(field_0x75c, getBckName(param_0)),
                    param_1, param_2, param_3, 0.0f, -1.0f);
 }
 
-/* 80849798-808497F8 0002D8 0060+00 6/6 0/0 0/0 .text            checkBck__8daKago_cFi */
 bool daKago_c::checkBck(int param_0) {
     if (mpMorf->getAnm() == dComIfG_getObjectRes(field_0x75c, getBckName(param_0))) {
         return true;
@@ -191,7 +186,6 @@ bool daKago_c::checkBck(int param_0) {
     }
 }
 
-/* 808497F8-80849924 000338 012C+00 1/1 0/0 0/0 .text            draw__8daKago_cFv */
 int daKago_c::draw() {
     if (field_0x6de == NULL) {
         return 1;
@@ -214,12 +208,10 @@ int daKago_c::draw() {
     return 1;
 }
 
-/* 80849960-80849980 0004A0 0020+00 1/0 0/0 0/0 .text            daKago_Draw__FP8daKago_c */
 static int daKago_Draw(daKago_c* i_this) {
     return i_this->draw();
 }
 
-/* 80849980-80849BA8 0004C0 0228+00 1/1 0/0 0/0 .text            executeBalloonMenu__8daKago_cFv */
 int daKago_c::executeBalloonMenu() {
     dCamera_c* camera = dCam_getBody();
 
@@ -281,7 +273,6 @@ int daKago_c::executeBalloonMenu() {
 static u8 l_HIOInit;
 static daKago_HIO_c l_HIO;
 
-/* 80849BA8-8084A070 0006E8 04C8+00 4/4 0/0 0/0 .text checkGroundHeight__8daKago_cF4cXyzPf */
 f32 daKago_c::checkGroundHeight(cXyz i_pos, f32* o_step) {
     f32 retVal;
 
@@ -397,7 +388,6 @@ f32 daKago_c::checkGroundHeight(cXyz i_pos, f32* o_step) {
     return retVal;
 }
 
-/* 8084A070-8084A210 000BB0 01A0+00 4/4 0/0 0/0 .text            checkRoofHeight__8daKago_cF4cXyz */
 f32 daKago_c::checkRoofHeight(cXyz param_0) {
     f32 roofChkYVal = mRoofHeight;
     BOOL unkFlag1 = FALSE;
@@ -444,7 +434,6 @@ f32 daKago_c::checkRoofHeight(cXyz param_0) {
     return roofChkYVal;
 }
 
-/* 8084A210-8084A2A8 000D50 0098+00 1/1 0/0 0/0 .text            checkMoveHeight__8daKago_cFv */
 void daKago_c::checkMoveHeight() {
     f32 step = 100.0f;
     f32 target = checkGroundHeight(current.pos, &step);
@@ -452,7 +441,6 @@ void daKago_c::checkMoveHeight() {
     cLib_chaseF(&mRoofHeight, checkRoofHeight(current.pos), 30.0f);
 }
 
-/* 8084A2A8-8084A694 000DE8 03EC+00 1/1 0/0 0/0 .text            checkSizeBg__8daKago_cFv */
 void daKago_c::checkSizeBg() {
     dBgS_LinChk linChk;
     cXyz unkXyz1;
@@ -512,13 +500,10 @@ void daKago_c::checkSizeBg() {
     }
 }
 
-/* 8084A6DC-8084A6E4 00121C 0008+00 1/1 0/0 0/0 .text            getBeforeGroundHeight__8daKago_cFUc
- */
 s16 daKago_c::getBeforeGroundHeight(u8 param_0) {
     return 0;
 }
 
-/* 8084A6E4-8084AA64 001224 0380+00 2/1 0/0 0/0 .text            demo_skip__8daKago_cFi */
 void daKago_c::demo_skip(int param_0) {
     dCamera_c* camera = dCam_getBody();
 
@@ -593,7 +578,6 @@ void daKago_c::demo_skip(int param_0) {
     }
 }
 
-/* 8084AA64-8084AA98 0015A4 0034+00 4/4 0/0 0/0 .text            DemoSkipCallBack__8daKago_cFPvi */
 int daKago_c::DemoSkipCallBack(void* param_0, int param_1) {
     if (param_0 != NULL) {
         ((daKago_c*)param_0)->demo_skip(param_1);
@@ -602,14 +586,12 @@ int daKago_c::DemoSkipCallBack(void* param_0, int param_1) {
     return 0;
 }
 
-/* 8084AA98-8084AAAC 0015D8 0014+00 17/17 0/0 0/0 .text            setActionMode__8daKago_cFii */
 void daKago_c::setActionMode(int param_0, int param_1) {
     mIsFlying = false;
     mCurrentAction = param_0;
     field_0x744 = param_1;
 }
 
-/* 8084AAAC-8084AB40 0015EC 0094+00 2/2 0/0 0/0 .text            setMidnaTagPos__8daKago_cFv */
 void daKago_c::setMidnaTagPos() {
     cXyz unkXyz1;
     daMidna_c* midna = daPy_getPlayerActorClass()->getMidnaActor();
@@ -620,7 +602,6 @@ void daKago_c::setMidnaTagPos() {
     }
 }
 
-/* 8084AB40-8084AB8C 001680 004C+00 5/5 0/0 0/0 .text            setMidnaRideOn__8daKago_cFv */
 void daKago_c::setMidnaRideOn() {
     daMidna_c* midna = daPy_getPlayerActorClass()->getMidnaActor();
     if (midna != NULL) {
@@ -629,12 +610,10 @@ void daKago_c::setMidnaRideOn() {
     }
 }
 
-/* 8084AB8C-8084ABC8 0016CC 003C+00 7/7 0/0 0/0 .text            setPlayerRideOn__8daKago_cFv */
 void daKago_c::setPlayerRideOn() {
     daPy_getPlayerActorClass()->setCargoCarry(this);
 }
 
-/* 8084ABC8-8084AC2C 001708 0064+00 5/5 0/0 0/0 .text            setRideOff__8daKago_cFv */
 void daKago_c::setRideOff() {
     daMidna_c* midna = daPy_getPlayerActorClass()->getMidnaActor();
     if (midna != NULL) {
@@ -644,7 +623,6 @@ void daKago_c::setRideOff() {
     daPy_getPlayerActorClass()->offCargoCarry();
 }
 
-/* 8084AC2C-8084AE78 00176C 024C+00 1/1 0/0 0/0 .text            searchNearPassPoint__8daKago_cFv */
 s8 daKago_c::searchNearPassPoint() {
     cXyz pointPos;
 
@@ -675,7 +653,6 @@ s8 daKago_c::searchNearPassPoint() {
     return pointIdx2;
 }
 
-/* 8084AE78-8084AF40 0019B8 00C8+00 4/4 0/0 0/0 .text            setSceneChange__8daKago_cFi */
 int daKago_c::setSceneChange(int param_0) {
     int unkInt1 = 0;
     switch (param_0) {
@@ -712,7 +689,6 @@ int daKago_c::setSceneChange(int param_0) {
     return dStage_changeScene(unkInt1, 0.0f, 10, fopAcM_GetRoomNo(this), 0, -1);
 }
 
-/* 8084AF40-8084AFB0 001A80 0070+00 1/1 0/0 0/0 .text            createBalloonScore__8daKago_cFv */
 void daKago_c::createBalloonScore() {
     if (field_0x6e7 != 0 && mBalloon2DId == fpcM_ERROR_PROCESS_ID_e) {
         mBalloon2DId = fopAcM_create(PROC_BALLOON2D, 0, 0, 0xffffffff, 0, 0, 0xffffffff);
@@ -720,7 +696,6 @@ void daKago_c::createBalloonScore() {
     }
 }
 
-/* 8084AFB0-8084B024 001AF0 0074+00 1/1 0/0 0/0 .text            startBalloonScore__8daKago_cFv */
 void daKago_c::startBalloonScore() {
     fopAc_ac_c* balloon_actor;
     if (field_0x6e7 != 0 && field_0x6e9 == 1) {
@@ -733,7 +708,6 @@ void daKago_c::startBalloonScore() {
     }
 }
 
-/* 8084B024-8084B088 001B64 0064+00 1/1 0/0 0/0 .text            endBalloonScore__8daKago_cFv */
 void daKago_c::endBalloonScore() {
     fopAc_ac_c* balloon2D;
     fopAc_ac_c *balloonObj;
@@ -751,7 +725,6 @@ void daKago_c::endBalloonScore() {
     }
 }
 
-/* 8084B088-8084B108 001BC8 0080+00 3/3 0/0 1/1 .text            checkNextPath__8daKago_cF4cXyz */
 f32 daKago_c::checkNextPath(cXyz param_0) {
     cXyz cStack_14;
     mDoMtx_stack_c::YrotS(-field_0x714);
@@ -760,7 +733,6 @@ f32 daKago_c::checkNextPath(cXyz param_0) {
     return cStack_14.z;
 }
 
-/* 8084B108-8084B134 001C48 002C+00 4/4 0/0 0/0 .text            checkHeight__8daKago_cFv */
 void daKago_c::checkHeight() {
     if (current.pos.y > mRoofHeight) {
         current.pos.y = mRoofHeight;
@@ -769,7 +741,6 @@ void daKago_c::checkHeight() {
     }
 }
 
-/* 8084B134-8084B1E0 001C74 00AC+00 2/2 0/0 0/0 .text            checkYaguraPos__8daKago_cF4cXyz */
 bool daKago_c::checkYaguraPos(cXyz param_0) {
     cXyz local_18(-22984.0f, 0.0f, 7455.0f);
     cXyz cStack_24;
@@ -784,7 +755,6 @@ bool daKago_c::checkYaguraPos(cXyz param_0) {
     }
 }
 
-/* 8084B1E0-8084B56C 001D20 038C+00 3/3 0/0 0/0 .text            checkWallHitFall__8daKago_cFi */
 bool daKago_c::checkWallHitFall(int param_0) {
     if (field_0x6e5 != 0) {
         cXyz unkXyz1;
@@ -840,7 +810,6 @@ bool daKago_c::checkWallHitFall(int param_0) {
     return false;
 }
 
-/* 8084B56C-8084B5DC 0020AC 0070+00 1/1 0/0 0/0 .text            checkAttackStart__8daKago_cFv */
 bool daKago_c::checkAttackStart() {
     if (mDashCooldownTime != 0) {
         return false;
@@ -858,7 +827,6 @@ bool daKago_c::checkAttackStart() {
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-/* 8084B5DC-8084B6F4 00211C 0118+00 1/1 0/0 0/0 .text            getValueY__8daKago_cFf */
 s16 daKago_c::getValueY(f32 param_0) {
     s16 valueY = field_0x6f4 * param_0;
     f32 var_f31;
@@ -883,17 +851,14 @@ s16 daKago_c::getValueY(f32 param_0) {
     return valueY;
 }
 
-/* 8084B6F4-8084B718 002234 0024+00 1/1 0/0 0/0 .text            getValueX__8daKago_cFf */
 s16 daKago_c::getValueX(f32 param_0) {
     return -field_0x6f0 * param_0;
 }
 
-/* 8084B718-8084B744 002258 002C+00 1/1 0/0 0/0 .text            getValueAbsX__8daKago_cFf */
 s16 daKago_c::getValueAbsX(f32 param_0) {
     return std::abs(-field_0x6f0 * param_0);
 }
 
-/* 8084B744-8084B96C 002284 0228+00 1/1 0/0 0/0 .text            flySpeedCalcLockOn__8daKago_cFv */
 void daKago_c::flySpeedCalcLockOn() {
     s16 angleX;
     s16 angleY;
@@ -921,7 +886,6 @@ void daKago_c::flySpeedCalcLockOn() {
     }
 }
 
-/* 8084B96C-8084C078 0024AC 070C+00 2/2 0/0 0/0 .text            flySpeedCalc__8daKago_cFsi */
 void daKago_c::flySpeedCalc(s16 param_0, int param_1) {
     s16 var_r29;
     s16 var_r28;
@@ -1083,7 +1047,6 @@ void daKago_c::flySpeedCalc(s16 param_0, int param_1) {
     }
 }
 
-/* 8084C078-8084C178 002BB8 0100+00 3/3 0/0 0/0 .text            checkFlySceneChange__8daKago_cFv */
 bool daKago_c::checkFlySceneChange() {
     if ((mPathIdxOffset > 0 && mPathIdx >= mpPath1->m_num - 1 ||
          mPathIdxOffset < 0 && mPathIdx < 1) &&
@@ -1108,7 +1071,6 @@ bool daKago_c::checkFlySceneChange() {
     }
 }
 
-/* 8084C178-8084C204 002CB8 008C+00 1/1 0/0 0/0 .text            setFlyAway__8daKago_cFv */
 void daKago_c::setFlyAway() {
     current.angle.y = shape_angle.y;
     setActionMode(0, 3);
@@ -1119,7 +1081,6 @@ void daKago_c::setFlyAway() {
     dComIfGp_getVibration().StopQuake(0x1f);
 }
 
-/* 8084C204-8084C2CC 002D44 00C8+00 3/3 0/0 0/0 .text            setFlyAnime__8daKago_cFv */
 void daKago_c::setFlyAnime() {
     if (cM_rnd() < 0.5) {
         if (checkBck(15) == 0) {
@@ -1136,7 +1097,6 @@ void daKago_c::setFlyAnime() {
     field_0x728 = 150;
 }
 
-/* 8084C2CC-8084C8FC 002E0C 0630+00 1/1 0/0 0/0 .text            executeFly__8daKago_cFv */
 void daKago_c::executeFly() {
     s16 unkInt1;
     s16 unkInt2;
@@ -1265,7 +1225,6 @@ void daKago_c::executeFly() {
     }
 }
 
-/* 8084C8FC-8084D108 00343C 080C+00 1/1 0/0 0/0 .text            executeStagger__8daKago_cFv */
 void daKago_c::executeStagger() {
     dCamera_c* camera = dCam_getBody();
 
@@ -1448,7 +1407,6 @@ void daKago_c::executeStagger() {
     }
 }
 
-/* 8084D108-8084D354 003C48 024C+00 1/1 0/0 0/0 .text            executeWait__8daKago_cFv */
 void daKago_c::executeWait() {
     daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass()->getMidnaActor();
     if (field_0x728 == 0) {
@@ -1530,7 +1488,6 @@ void daKago_c::executeWait() {
 #endif
 }
 
-/* 8084D354-8084D50C 003E94 01B8+00 1/1 0/0 0/0 .text            calcAttackMove__8daKago_cFi */
 bool daKago_c::calcAttackMove(int param_0) {
     cXyz acStack_20;
     cXyz cStack_2c;
@@ -1567,7 +1524,6 @@ bool daKago_c::calcAttackMove(int param_0) {
     return false;
 }
 
-/* 8084D50C-8084DA18 00404C 050C+00 1/1 0/0 0/0 .text            executeAttack__8daKago_cFv */
 void daKago_c::executeAttack() {
     field_0x6dd = 1;
 
@@ -1697,7 +1653,6 @@ void daKago_c::executeAttack() {
     }
 }
 
-/* 8084DA18-8084DBFC 004558 01E4+00 2/2 0/0 0/0 .text            calcCircleCamera__8daKago_cFi */
 void daKago_c::calcCircleCamera(int param_0) {
     cXyz cStack_20;
 
@@ -1732,7 +1687,6 @@ void daKago_c::calcCircleCamera(int param_0) {
     dCam_getBody()->Set(field_0x68c, field_0x698, field_0x6d4, 0);
 }
 
-/* 8084DBFC-8084DD18 00473C 011C+00 1/1 0/0 0/0 .text            executeEvent__8daKago_cFv */
 void daKago_c::executeEvent() {
     dCamera_c* camera = dCam_getBody();
     daPy_py_c* unusedPlayer = daPy_getPlayerActorClass();
@@ -1757,7 +1711,6 @@ void daKago_c::executeEvent() {
     }
 }
 
-/* 8084DD18-8084E2D4 004858 05BC+00 1/1 0/0 0/0 .text            initPerchDemo__8daKago_cFv */
 void daKago_c::initPerchDemo() {
     s16 angleY = daPy_getPlayerActorClass()->shape_angle.y;
     cXyz playerPos = daPy_getPlayerActorClass()->current.pos;
@@ -1904,7 +1857,6 @@ void daKago_c::initPerchDemo() {
     field_0x744 = 0;
 }
 
-/* 8084E2D4-8084F09C 004E14 0DC8+00 2/1 0/0 0/0 .text            executePerchDemo__8daKago_cFv */
 bool daKago_c::executePerchDemo() {
     cXyz playerPos = daPy_getPlayerActorClass()->current.pos;
     s16 playerYaw = daPy_getPlayerActorClass()->shape_angle.y;
@@ -2134,8 +2086,6 @@ bool daKago_c::executePerchDemo() {
     return false;
 }
 
-/* 8084F09C-8084FA58 005BDC 09BC+00 1/1 0/0 0/0 .text            PerchDemoAwayForward__8daKago_cFv
- */
 bool daKago_c::PerchDemoAwayForward() {
 
     cXyz playerPos = daPy_getPlayerActorClass()->current.pos;
@@ -2342,7 +2292,6 @@ bool daKago_c::PerchDemoAwayForward() {
     return false;
 }
 
-/* 8084FA58-8084FAA8 006598 0050+00 1/1 0/0 0/0 .text            executePerch__8daKago_cFv */
 void daKago_c::executePerch() {
     if (field_0x74c == 0) {
         initPerchDemo();
@@ -2353,7 +2302,6 @@ void daKago_c::executePerch() {
     }
 }
 
-/* 8084FAA8-8084FB50 0065E8 00A8+00 1/1 0/0 0/0 .text            executeEvent2__8daKago_cFv */
 void daKago_c::executeEvent2() {
     dCamera_c* camera = dCam_getBody();
     if (!eventInfo.checkCommandDemoAccrpt()) {
@@ -2370,7 +2318,6 @@ void daKago_c::executeEvent2() {
     }
 }
 
-/* 8084FB50-80850384 006690 0834+00 2/1 0/0 0/0 .text            initFirstDemo__8daKago_cFv */
 void daKago_c::initFirstDemo() {
     dCamera_c* camera = dCam_getBody();
     cXyz acStack_28;
@@ -2525,7 +2472,6 @@ void daKago_c::initFirstDemo() {
     field_0x744 = 0;
 }
 
-/* 80850384-808513E4 006EC4 1060+00 2/1 0/0 0/0 .text            executeFirstDemo__8daKago_cFv */
 bool daKago_c::executeFirstDemo() {
     dCamera_c* camera = dCam_getBody();
 
@@ -2836,7 +2782,6 @@ bool daKago_c::executeFirstDemo() {
     return false;
 }
 
-/* 808513E4-80851434 007F24 0050+00 1/1 0/0 0/0 .text            executePerch2__8daKago_cFv */
 void daKago_c::executePerch2() {
     if (field_0x74c == 0) {
         initFirstDemo();
@@ -2847,7 +2792,6 @@ void daKago_c::executePerch2() {
     }
 }
 
-/* 80851434-80851DEC 007F74 09B8+00 2/1 0/0 0/0 .text executeLandingLakeHairia__8daKago_cFv */
 void daKago_c::executeLandingLakeHairia() {
     dCamera_c* camera = dCam_getBody();
     cXyz unkXyz1;
@@ -3026,7 +2970,6 @@ void daKago_c::executeLandingLakeHairia() {
     camera->Set(field_0x68c, field_0x698, field_0x6d4, 0);
 }
 
-/* 80851DEC-808525B0 00892C 07C4+00 1/1 0/0 0/0 .text executeLandingBoartHouse__8daKago_cFv */
 void daKago_c::executeLandingBoartHouse() {
     dCamera_c* camera = dCam_getBody();
     cXyz unkXyz1;
@@ -3168,7 +3111,6 @@ void daKago_c::executeLandingBoartHouse() {
     camera->Set(field_0x68c, field_0x698, field_0x6d4, 0);
 }
 
-/* 808525B0-80852610 0090F0 0060+00 2/2 0/0 0/0 .text            executeLanding__8daKago_cFv */
 void daKago_c::executeLanding() {
     if (this->field_0x73c == 0) {
         executeLandingLakeHairia();
@@ -3180,7 +3122,6 @@ void daKago_c::executeLanding() {
     }
 }
 
-/* 80852610-80852D90 009150 0780+00 2/2 0/0 0/0 .text            moveDemoFly__8daKago_cFv */
 void daKago_c::moveDemoFly() {
     if (field_0x744 == 0) {
         cLib_chaseF(&field_0x6f8, l_HIO.mFlightSpeed, 2.0f);
@@ -3352,7 +3293,6 @@ void daKago_c::moveDemoFly() {
     }
 }
 
-/* 80852D90-80852F14 0098D0 0184+00 1/1 0/0 0/0 .text            setFlyEffect__8daKago_cFv */
 void daKago_c::setFlyEffect() {
     if (field_0x6e7 == 1) {
         return;
@@ -3374,7 +3314,6 @@ void daKago_c::setFlyEffect() {
     }
 }
 
-/* 80852F14-808530A4 009A54 0190+00 2/2 0/0 0/0 .text            setDashEffect__8daKago_cFv */
 void daKago_c::setDashEffect() {
     J3DModel* model = mpMorf->getModel();
     JPABaseEmitter* emitter;
@@ -3396,7 +3335,6 @@ void daKago_c::setDashEffect() {
     setDashBlurEffect(1);
 }
 
-/* 808530A4-80853228 009BE4 0184+00 1/1 0/0 0/0 .text            setDamageEffect__8daKago_cFv */
 void daKago_c::setDamageEffect() {
     J3DModel* model = mpMorf->getModel();
     JPABaseEmitter* emitter;
@@ -3416,7 +3354,6 @@ void daKago_c::setDamageEffect() {
     }
 }
 
-/* 80853228-80853460 009D68 0238+00 3/3 0/0 0/0 .text            setDashBlurEffect__8daKago_cFi */
 void daKago_c::setDashBlurEffect(int param_0) {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz cameraEye = dCam_getBody()->Eye();
@@ -3448,8 +3385,6 @@ void daKago_c::setDashBlurEffect(int param_0) {
     field_0xb40 = dComIfGp_particle_set(field_0xb40, 0x860f, &cameraEyeOffset, &tevStr, &field_0x6be, 0, 0xff, 0, 0xffffffff, 0, 0, 0);
 }
 
-/* 80853460-8085350C 009FA0 00AC+00 1/1 0/0 0/0 .text            setWallHitEffect__8daKago_cF4cXyzi
- */
 void daKago_c::setWallHitEffect(cXyz param_0, int param_1) {
     // might be a 2D array?
     static u16 kago_wall_hit_id[6] = {
@@ -3466,7 +3401,6 @@ void daKago_c::setWallHitEffect(cXyz param_0, int param_1) {
     }
 }
 
-/* 8085350C-8085366C 00A04C 0160+00 2/2 0/0 0/0 .text            setSibukiEffect__8daKago_cFv */
 void daKago_c::setSibukiEffect() {
     static u16 kago_wave_id[3] = {
         0x865A,
@@ -3489,7 +3423,6 @@ void daKago_c::setSibukiEffect() {
     }
 }
 
-/* 8085366C-80853730 00A1AC 00C4+00 1/1 0/0 0/0 .text            setDashSibukiEffect__8daKago_cFv */
 void daKago_c::setDashSibukiEffect() {
     cXyz acStack_20(current.pos.x, field_0x70c + l_HIO.mYOffsetFromWaterSurface, current.pos.z);
     csXyz cStack_28(0, shape_angle.y, 0);
@@ -3497,7 +3430,6 @@ void daKago_c::setDashSibukiEffect() {
                                         0xff, 0, 0xffffffff, 0, 0, 0);
 }
 
-/* 80853730-80853880 00A270 0150+00 1/1 0/0 0/0 .text            setWaterFallEffect__8daKago_cFv */
 void daKago_c::setWaterFallEffect() {
     static u16 kago_wave_id[2] = {
         0x865B,
@@ -3518,7 +3450,6 @@ void daKago_c::setWaterFallEffect() {
     }
 }
 
-/* 80853880-8085392C 00A3C0 00AC+00 1/1 0/0 0/0 .text            s_waterfall__FPvPv */
 static void* s_waterfall(void* param_0, void* param_1) {
     if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_Tag_WaterFall) {
         if (!fpcM_IsCreating(fopAcM_GetID(param_0))) {
@@ -3534,7 +3465,6 @@ static void* s_waterfall(void* param_0, void* param_1) {
     return NULL;
 }
 
-/* 8085392C-80853BCC 00A46C 02A0+00 1/1 0/0 0/0 .text            setFlySound__8daKago_cFv */
 void daKago_c::setFlySound() {
     if (field_0x6de != 0) {
         BOOL unkFlag1 = FALSE;
@@ -3582,7 +3512,6 @@ void daKago_c::setFlySound() {
     }
 }
 
-/* 80853BCC-80853EF0 00A70C 0324+00 2/1 0/0 0/0 .text            action__8daKago_cFv */
 void daKago_c::action() {
     checkMoveHeight();
     checkSizeBg();
@@ -3685,7 +3614,6 @@ void daKago_c::action() {
     field_0x6ca = field_0x6c4 * cM_ssin(field_0x6c8);
 }
 
-/* 80853EF0-80853FB0 00AA30 00C0+00 2/2 0/0 0/0 .text            mtx_set__8daKago_cFv */
 void daKago_c::mtx_set() {
     mDoMtx_stack_c::transS(current.pos.x,current.pos.y,current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -3700,7 +3628,6 @@ void daKago_c::mtx_set() {
     cMtx_copy(mDoMtx_stack_c::get(), mLegR3Mtx);
 }
 
-/* 80853FB0-80854058 00AAF0 00A8+00 1/1 0/0 0/0 .text            cc_set__8daKago_cFv */
 void daKago_c::cc_set() {
     if (field_0x6de != 0) {
         eyePos = current.pos;
@@ -3715,7 +3642,6 @@ void daKago_c::cc_set() {
     }
 }
 
-/* 80854058-80854168 00AB98 0110+00 1/1 0/0 0/0 .text            execute__8daKago_cFv */
 int daKago_c::execute() {
     if (executeBalloonMenu()) {
 #if VERSION != VERSION_SHIELD_DEBUG
@@ -3754,17 +3680,14 @@ int daKago_c::execute() {
     return 1;
 }
 
-/* 80854168-80854188 00ACA8 0020+00 2/1 0/0 0/0 .text            daKago_Execute__FP8daKago_c */
 static int daKago_Execute(daKago_c* i_this) {
     return i_this->execute();
 }
 
-/* 80854188-80854190 00ACC8 0008+00 1/0 0/0 0/0 .text            daKago_IsDelete__FP8daKago_c */
 static int daKago_IsDelete(daKago_c* i_this) {
     return 1;
 }
 
-/* 80854190-80854200 00ACD0 0070+00 1/1 0/0 0/0 .text            _delete__8daKago_cFv */
 int daKago_c::_delete() {
     dComIfG_resDelete(&mPhase, field_0x75c);
 
@@ -3780,13 +3703,11 @@ int daKago_c::_delete() {
     return 1;
 }
 
-/* 80854200-80854220 00AD40 0020+00 1/0 0/0 0/0 .text            daKago_Delete__FP8daKago_c */
 static int daKago_Delete(daKago_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
-/* 80854220-808542DC 00AD60 00BC+00 1/1 0/0 0/0 .text ctrlJoint__8daKago_cFP8J3DJointP8J3DModel */
 int daKago_c::ctrlJoint(J3DJoint* param_0, J3DModel* param_1) {
     J3DJoint* joint = param_0;
     int jointNo = joint->getJntNo();
@@ -3803,7 +3724,6 @@ int daKago_c::ctrlJoint(J3DJoint* param_0, J3DModel* param_1) {
     return 1;
 }
 
-/* 808542DC-80854328 00AE1C 004C+00 1/1 0/0 0/0 .text JointCallBack__8daKago_cFP8J3DJointi */
 int daKago_c::JointCallBack(J3DJoint* param_0, int param_1) {
     if (param_1 == NULL) {
         J3DModel* model = j3dSys.getModel();
@@ -3815,7 +3735,6 @@ int daKago_c::JointCallBack(J3DJoint* param_0, int param_1) {
     return 1;
 }
 
-/* 80854328-808544B8 00AE68 0190+00 1/1 0/0 0/0 .text            CreateHeap__8daKago_cFv */
 int daKago_c::CreateHeap() {
     J3DModelData* modelData;
 
@@ -3845,13 +3764,11 @@ int daKago_c::CreateHeap() {
     return 1;
 }
 
-/* 808544B8-808544D8 00AFF8 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* param_0) {
     daKago_c* kago = (daKago_c*)param_0;
     return kago->CreateHeap();
 }
 
-/* 808544D8-80854928 00B018 0450+00 1/1 0/0 0/0 .text            create__8daKago_cFv */
 int daKago_c::create() {
     fopAcM_ct(this, daKago_c);
 
@@ -3959,12 +3876,10 @@ int daKago_c::create() {
     return phase_state;
 }
 
-/* 80854A2C-80854A4C 00B56C 0020+00 1/0 0/0 0/0 .text            daKago_Create__FP8daKago_c */
 static int daKago_Create(daKago_c* param_0) {
     return param_0->create();
 }
 
-/* 80854EBC-80854EDC -00001 0020+00 1/0 0/0 0/0 .data            l_daKago_Method */
 static actor_method_class l_daKago_Method = {
     (process_method_func)daKago_Create,
     (process_method_func)daKago_Delete,
@@ -3973,7 +3888,6 @@ static actor_method_class l_daKago_Method = {
     (process_method_func)daKago_Draw,
 };
 
-/* 80854EDC-80854F0C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KAGO */
 extern actor_process_profile_definition g_profile_KAGO = {
     fpcLy_CURRENT_e,        // mLayerID
     4,                      // mListID

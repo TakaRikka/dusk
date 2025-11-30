@@ -10,13 +10,13 @@ class CPaneMgr;
 
 class dMsgScrnLight_c {
 public:
-    /* 80245934 */ dMsgScrnLight_c(u8, u8);
-    /* 80245C04 */ void draw(f32*, f32, f32, f32, f32, f32, u8);
-    /* 80245F90 */ void draw(f32*, f32, f32, f32, f32, f32, f32, JUtility::TColor,
+    dMsgScrnLight_c(u8, u8);
+    void draw(f32*, f32, f32, f32, f32, f32, u8);
+    void draw(f32*, f32, f32, f32, f32, f32, f32, JUtility::TColor,
                              JUtility::TColor);
-    /* 802460DC */ void drawCommon(f32, f32, f32, f32, f32);
+    void drawCommon(f32, f32, f32, f32, f32);
 
-    /* 80245B00 */ virtual ~dMsgScrnLight_c();
+    virtual ~dMsgScrnLight_c();
 
     /* 0x04 */ J2DScreen* mpScreen;
     /* 0x08 */ J2DAnmTransform* mpBck;

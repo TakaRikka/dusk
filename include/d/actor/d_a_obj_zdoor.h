@@ -16,15 +16,15 @@
  */
 class daZdoor_c : public dBgS_MoveBgActor {
 public:
-    /* 80D3F65C */ void init_cyl();
-    /* 80D3F740 */ void set_cyl();
-    /* 80D3F884 */ void setBaseMtx();
-    /* 80D3F8F8 */ int Create();
-    /* 80D3F970 */ int CreateHeap();
-    /* 80D3F9F0 */ int create1st();
-    /* 80D3FACC */ int Execute(Mtx**);
-    /* 80D3FCE8 */ int Draw();
-    /* 80D3FD8C */ int Delete();
+    void init_cyl();
+    void set_cyl();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     u32 getType() { return fopAcM_GetParamBit(this, 0, 4); }
 

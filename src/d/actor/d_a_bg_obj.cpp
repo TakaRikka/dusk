@@ -13,11 +13,6 @@
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_math.h"
 
-//
-// Declarations:
-//
-
-/* 80459658-804596C4 000078 006C+00 2/2 0/0 0/0 .text            getBmdName__Fii */
 static const char* getBmdName(int param_0, int param_1) {
     static char l_bmdName[16];
 
@@ -48,7 +43,6 @@ static const char* getBtkName(int param_0, int param_1) {
     return l_btkName;
 }
 
-/* 80459734-804597A4 000154 0070+00 2/2 0/0 0/0 .text            getBrkName__Fii */
 static const char* getBrkName(int param_0, int param_1) {
     static char l_brkName[16];
 
@@ -64,7 +58,6 @@ static const char* getBrkName(int param_0, int param_1) {
     return l_brkName;
 }
 
-/* 804597A4-804597E8 0001C4 0044+00 2/2 0/0 0/0 .text            getDzbName__Fi */
 static const char* getDzbName(int param_0) {
     static char l_dzbName[16];
 
@@ -76,8 +69,6 @@ static const char* dummy() {
     return "spec.dat";
 }
 
-/* 804597E8-80459814 000208 002C+00 1/1 0/0 0/0 .text
- * initParticleBlock__Q29daBgObj_c11spec_data_cFPUc             */
 u8* daBgObj_c::spec_data_c::initParticleBlock(u8* i_dataPtr) {
     mpParticleBlock = i_dataPtr;
     mParticleNum = *(u32*)mpParticleBlock >> 4 & 0xFFFFF;
@@ -85,8 +76,6 @@ u8* daBgObj_c::spec_data_c::initParticleBlock(u8* i_dataPtr) {
     return i_dataPtr + ((*(u32*)mpParticleBlock & 0xFFFFFF) + 4);
 }
 
-/* 80459814-80459840 000234 002C+00 1/1 0/0 0/0 .text
- * initSoundBlock__Q29daBgObj_c11spec_data_cFPUc                */
 u8* daBgObj_c::spec_data_c::initSoundBlock(u8* i_dataPtr) {
     mpSoundBlock = i_dataPtr;
     mSoundNum = *(u32*)mpSoundBlock >> 2 & 0x3FFFFF;
@@ -94,8 +83,6 @@ u8* daBgObj_c::spec_data_c::initSoundBlock(u8* i_dataPtr) {
     return i_dataPtr + ((*(u32*)mpSoundBlock & 0xFFFFFF) + 4);
 }
 
-/* 80459840-804598F4 000260 00B4+00 1/1 0/0 0/0 .text
- * initTexShareBlock__Q29daBgObj_c11spec_data_cFPUc             */
 u8* daBgObj_c::spec_data_c::initTexShareBlock(u8* i_dataPtr) {
     char sp48[64];
     char sp8[64];
@@ -122,15 +109,11 @@ u8* daBgObj_c::spec_data_c::initTexShareBlock(u8* i_dataPtr) {
     return dataPos;
 }
 
-/* 804598F4-80459904 000314 0010+00 1/1 0/0 0/0 .text
- * initFarInfoBlock__Q29daBgObj_c11spec_data_cFPUc              */
 u8* daBgObj_c::spec_data_c::initFarInfoBlock(u8* i_dataPtr) {
     mpFarInfoBlock = *(f32*)(i_dataPtr + 4);
     return i_dataPtr + 8;
 }
 
-/* 80459904-80459B64 000324 0260+00 1/1 0/0 1/1 .text            Set__Q29daBgObj_c11spec_data_cFPv
- */
 bool daBgObj_c::spec_data_c::Set(void* i_ptr) {
     JUT_ASSERT(496, i_ptr != NULL);
 
@@ -262,22 +245,18 @@ bool daBgObj_c::spec_data_c::Set(void* i_ptr) {
     return 1;
 }
 
-/* 80459B64-80459BB4 000584 0050+00 4/4 0/0 0/0 .text            release__9daBgObj_cFP4dBgW */
 void daBgObj_c::release(dBgW* param_0) {
     if (param_0 != NULL && param_0->ChkUsed()) {
         dComIfG_Bgsp().Release(param_0);
     }
 }
 
-/* 80459BB4-80459BEC 0005D4 0038+00 3/3 0/0 3/3 .text            regist__9daBgObj_cFP4dBgW */
 void daBgObj_c::regist(dBgW* param_0) {
     if (param_0 != NULL) {
         dComIfG_Bgsp().Regist(param_0, this);
     }
 }
 
-/* ############################################################################################## */
-/* 8045C9B8-8045C9FC 000000 0044+00 6/6 0/0 0/0 .rodata          l_cyl_src */
 static const dCcD_SrcCyl l_cyl_src = {
     {
         {0, {{0, 0, 0}, {0xD8400422, 0x11}, 0}},
@@ -292,7 +271,6 @@ static const dCcD_SrcCyl l_cyl_src = {
     },
 };
 
-/* 80459BEC-80459D0C 00060C 0120+00 1/1 0/0 0/1 .text            initAtt__9daBgObj_cFv */
 void daBgObj_c::initAtt() {
     u32 actor_params = 0;
     u32 cd3_val;
@@ -351,14 +329,11 @@ void daBgObj_c::initAtt() {
     eyePos.y += 0.5f * box->y;
 }
 
-/* 80459D0C-80459D3C 00072C 0030+00 2/2 0/0 0/0 .text setAttentionInfo__9daBgObj_cFP10fopAc_ac_c
- */
 void daBgObj_c::setAttentionInfo(fopAc_ac_c* param_0) {
     param_0->eyePos.y += 0.5f * fopAcM_getCullSizeBoxMax(this)->y;
     param_0->attention_info.position.y += fopAcM_getCullSizeBoxMax(this)->y;
 }
 
-/* 80459D3C-80459D94 00075C 0058+00 2/2 0/0 0/0 .text            initBaseMtx__9daBgObj_cFv */
 void daBgObj_c::initBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -366,7 +341,6 @@ void daBgObj_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80459D94-80459E04 0007B4 0070+00 2/2 0/0 0/0 .text            setBaseMtx__9daBgObj_cFv */
 void daBgObj_c::setBaseMtx() {
     for (int i = 0; i < 2; i++) {
         if (field_0x5a8[field_0xcc8][i] != NULL) {
@@ -375,7 +349,6 @@ void daBgObj_c::setBaseMtx() {
     }
 }
 
-/* 80459E04-80459F14 000824 0110+00 1/1 0/0 0/0 .text settingCullSizeBoxForCo__9daBgObj_cFi */
 void daBgObj_c::settingCullSizeBoxForCo(int param_0) {
     J3DModel* cur_model = field_0x5a8[param_0][0];
     if (cur_model != NULL) {
@@ -403,7 +376,6 @@ void daBgObj_c::settingCullSizeBoxForCo(int param_0) {
     }
 }
 
-/* 80459F14-8045A0EC 000934 01D8+00 3/3 0/0 0/0 .text settingCullSizeBoxForCull__9daBgObj_cFi */
 void daBgObj_c::settingCullSizeBoxForCull(int param_0) {
     cXyz max(G_CM3D_F_INF, G_CM3D_F_INF, G_CM3D_F_INF);
     cXyz min(-G_CM3D_F_INF, -G_CM3D_F_INF, -G_CM3D_F_INF);
@@ -454,7 +426,6 @@ void daBgObj_c::settingCullSizeBoxForCull(int param_0) {
     }
 }
 
-/* 8045A0EC-8045A160 000B0C 0074+00 1/0 0/0 0/0 .text            CreateInitType0__9daBgObj_cFv */
 int daBgObj_c::CreateInitType0() {
     field_0xcc8 = 0;
     initBaseMtx();
@@ -468,7 +439,6 @@ int daBgObj_c::CreateInitType0() {
     return 1;
 }
 
-/* 8045A160-8045A2B8 000B80 0158+00 3/0 0/0 0/0 .text            CreateInitType1__9daBgObj_cFv */
 int daBgObj_c::CreateInitType1() {
     if (fopAcM_isSwitch(this, daBgObj_prm::getSwBit(this))) {
         field_0xcc8 = 1;
@@ -509,7 +479,6 @@ int daBgObj_c::CreateInitType1() {
     return 1;
 }
 
-/* 8045CAE4-8045CB38 000020 0054+00 4/4 0/0 0/0 .data            l_tri_src */
 static dCcD_SrcTri l_tri_src = {
     {
         {0, {{0, 0, 0}, {0xD8400422, 0x11}, 0}},
@@ -526,10 +495,8 @@ static dCcD_SrcTri l_tri_src = {
     },
 };
 
-/* 8045CB38-8045CB3C -00001 0004+00 1/1 0/0 0/0 .data            l_specName */
 static char* l_specName = "spec.dat";
 
-/* 8045CB6C-8045CB9C 0000A8 0030+00 1/2 0/0 0/0 .data            mCreateHeapFunc__9daBgObj_c */
 createHeapFunc daBgObj_c::mCreateHeapFunc[] = {
     &daBgObj_c::CreateHeapType0,
     &daBgObj_c::CreateHeapType1,
@@ -537,7 +504,6 @@ createHeapFunc daBgObj_c::mCreateHeapFunc[] = {
     &daBgObj_c::CreateHeapType1,
 };
 
-/* 8045CBCC-8045CBFC 000108 0030+00 1/2 0/0 0/0 .data            mCreateInitFunc__9daBgObj_c */
 createInitFunc daBgObj_c::mCreateInitFunc[] = {
     &daBgObj_c::CreateInitType0,
     &daBgObj_c::CreateInitType1,
@@ -545,12 +511,10 @@ createInitFunc daBgObj_c::mCreateInitFunc[] = {
     &daBgObj_c::CreateInitType1,
 };
 
-/* 8045A2B8-8045A2F0 000CD8 0038+00 1/0 0/0 0/0 .text            Create__9daBgObj_cFv */
 int daBgObj_c::Create() {
     return (this->*mCreateInitFunc[mSpecData.mSpecType])();
 }
 
-/* 8045CC2C-8045CC5C 000168 0030+00 1/2 0/0 0/0 .data            mExecuteFunc__9daBgObj_c */
 executeFunc daBgObj_c::mExecuteFunc[] = {
     &daBgObj_c::ExecuteType0,
     &daBgObj_c::ExecuteType1,
@@ -558,13 +522,11 @@ executeFunc daBgObj_c::mExecuteFunc[] = {
     &daBgObj_c::ExecuteType1,
 };
 
-/* 8045CC98-8045CCD4 0001D4 003C+00 1/2 0/0 0/0 .data            mTgSetFunc__9daBgObj_c */
 tgSetFunc daBgObj_c::mTgSetFunc[] = {
     &daBgObj_c::set_tri_0, &daBgObj_c::set_tri_1, &daBgObj_c::set_cyl_0,
     &daBgObj_c::set_tri_2, &daBgObj_c::set_tri_3,
 };
 
-/* 8045A2F0-8045A52C 000D10 023C+00 1/0 0/0 0/0 .text            CreateHeapType0__9daBgObj_cFv */
 int daBgObj_c::CreateHeapType0() {
     for (int i = 0; i < 2; i++) {
         J3DModelData* modelData =
@@ -614,7 +576,6 @@ int daBgObj_c::CreateHeapType0() {
     return 1;
 }
 
-/* 8045A574-8045A83C 000F94 02C8+00 3/0 0/0 0/0 .text            CreateHeapType1__9daBgObj_cFv */
 int daBgObj_c::CreateHeapType1() {
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
@@ -675,7 +636,6 @@ int daBgObj_c::CreateHeapType1() {
     return 1;
 }
 
-/* 8045A83C-8045A940 00125C 0104+00 2/2 0/0 0/0 .text            doShareTexture__9daBgObj_cFv */
 void daBgObj_c::doShareTexture() {
     char res_name[64];
     char share_res_name[64];
@@ -703,7 +663,6 @@ void daBgObj_c::doShareTexture() {
     }
 }
 
-/* 8045A940-8045A9E8 001360 00A8+00 1/0 0/0 0/0 .text            CreateHeap__9daBgObj_cFv */
 int daBgObj_c::CreateHeap() {
     const char* const specName = l_specName;
     void* spec_data_p = dComIfG_getObjectRes(daSetBgObj_c::getArcName(this), specName);
@@ -717,7 +676,6 @@ int daBgObj_c::CreateHeap() {
     return (this->*mCreateHeapFunc[mSpecData.mSpecType])();
 }
 
-/* 8045A9E8-8045AAF0 001408 0108+00 1/1 0/0 0/0 .text            create1st__9daBgObj_cFv */
 int daBgObj_c::create1st() {
     if (field_0xcc9 == 0) {
         field_0xcca = home.angle.x;
@@ -748,7 +706,6 @@ int daBgObj_c::create1st() {
     return phase;
 }
 
-/* 8045AAF0-8045AB80 001510 0090+00 1/1 0/0 0/0 .text            setColCommon__9daBgObj_cFv */
 void daBgObj_c::setColCommon() {
     if (field_0xcc8 == 0) {
         (this->*mTgSetFunc[mSpecData.field_0x02])();
@@ -765,7 +722,6 @@ void daBgObj_c::setColCommon() {
     }
 }
 
-/* 8045AB80-8045ACC0 0015A0 0140+00 1/0 0/0 0/0 .text            set_tri_0__9daBgObj_cFv */
 void daBgObj_c::set_tri_0() {
     field_0xcc4 = 2;
     for (int i = 0; i < field_0xcc4; i++) {
@@ -788,7 +744,6 @@ void daBgObj_c::set_tri_0() {
     mTris[1].setPos(&cull_params[0], &cull_params[2], &cull_params[3]);
 }
 
-/* 8045ACC0-8045AE00 0016E0 0140+00 1/0 0/0 0/0 .text            set_tri_1__9daBgObj_cFv */
 void daBgObj_c::set_tri_1() {
     field_0xcc4 = 2;
     for (int i = 0; i < field_0xcc4; i++) {
@@ -811,7 +766,6 @@ void daBgObj_c::set_tri_1() {
     mTris[1].setPos(&cull_bounds[0], &cull_bounds[2], &cull_bounds[3]);
 }
 
-/* 8045AE00-8045AE98 001820 0098+00 1/0 0/0 0/0 .text            set_cyl_0__9daBgObj_cFv */
 void daBgObj_c::set_cyl_0() {
     field_0xcc4 = 0;
     mCyl.Set(l_cyl_src);
@@ -829,7 +783,6 @@ void daBgObj_c::set_cyl_0() {
     mCyl.SetR(radius);
 }
 
-/* 8045AE98-8045AFD4 0018B8 013C+00 1/0 0/0 0/0 .text            set_tri_2__9daBgObj_cFv */
 void daBgObj_c::set_tri_2() {
     field_0xcc4 = 2;
     for (int i = 0; i < field_0xcc4; i++) {
@@ -860,7 +813,6 @@ void daBgObj_c::set_tri_2() {
     mTris[1].setPos(&cull_bounds[0], &cull_bounds[2], &cull_bounds[3]);
 }
 
-/* 8045AFD4-8045B17C 0019F4 01A8+00 1/0 0/0 0/0 .text            set_tri_3__9daBgObj_cFv */
 void daBgObj_c::set_tri_3() {
     field_0xcc4 = 4;
     for (int i = 0; i < field_0xcc4; i++) {
@@ -919,7 +871,6 @@ struct blockItem {
     u8 envB;
 };
 
-/* 8045B17C-8045B3A0 001B9C 0224+00 3/3 0/0 0/0 .text            setParticle__9daBgObj_cFv */
 void daBgObj_c::setParticle() {
     u32 partNum = mSpecData.mParticleNum;
     u32* partBlockItems = (u32*)mSpecData.mpParticleBlock;
@@ -1016,7 +967,6 @@ void daBgObj_c::setParticle() {
     }
 }
 
-/* 8045B3A0-8045B44C 001DC0 00AC+00 3/3 0/0 0/0 .text            setSe__9daBgObj_cFv */
 void daBgObj_c::setSe() {
     u32 i = mSpecData.mSoundNum;
     u32* temp = (u32*)mSpecData.mpSoundBlock;
@@ -1029,7 +979,6 @@ void daBgObj_c::setSe() {
 }
 
 
-/* 8045B44C-8045B534 001E6C 00E8+00 1/1 0/0 0/0 .text            checkDestroy__9daBgObj_cFv */
 BOOL daBgObj_c::checkDestroy() {
     if (mSpecData.mSpecType != 1 && mSpecData.mSpecType != 2) {
         return false;
@@ -1049,8 +998,6 @@ BOOL daBgObj_c::checkDestroy() {
     return false;
 }
 
-/* 8045B534-8045B5E0 001F54 00AC+00 2/2 0/0 0/0 .text            checkHitAt__9daBgObj_cFP8cCcD_Obj
- */
 BOOL daBgObj_c::checkHitAt(cCcD_Obj* i_hitObj) {
     u32 hit_flags = 0;
     u32 var_r8 = 0;
@@ -1078,7 +1025,6 @@ BOOL daBgObj_c::checkHitAt(cCcD_Obj* i_hitObj) {
     return hit_flags != 0;
 }
 
-/* 8045B5E0-8045B7FC 002000 021C+00 1/1 0/0 0/0 .text            orderWait_tri__9daBgObj_cFv */
 void daBgObj_c::orderWait_tri() {
     for (int i = 0; i < field_0xcc4; i++) {
         if (mTris[i].ChkTgHit()) {
@@ -1123,7 +1069,6 @@ void daBgObj_c::orderWait_tri() {
 }
 
 
-/* 8045B7FC-8045B9C4 00221C 01C8+00 1/1 0/0 0/0 .text            orderWait_cyl__9daBgObj_cFv */
 void daBgObj_c::orderWait_cyl() {
     if (mCyl.ChkTgHit()) {
         cCcD_Obj* hitObj = mCyl.GetTgHitObj();
@@ -1163,7 +1108,6 @@ void daBgObj_c::orderWait_cyl() {
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 8045B9C4-8045BB38 0023E4 0174+00 1/1 0/0 0/0 .text            orderWait_spec__9daBgObj_cFv */
 void daBgObj_c::orderWait_spec() {
     setSe();
 
@@ -1195,7 +1139,6 @@ void daBgObj_c::orderWait_spec() {
 }
 
 
-/* 8045BB38-8045BBE0 002558 00A8+00 1/0 0/0 0/0 .text            actionOrderWait__9daBgObj_cFv */
 int daBgObj_c::actionOrderWait() {
     if (checkDestroy()) {
         switch (mSpecData.field_0x02) {
@@ -1217,7 +1160,6 @@ int daBgObj_c::actionOrderWait() {
     return 1;
 }
 
-/* 8045BBE0-8045BD50 002600 0170+00 1/0 0/0 0/0 .text            actionOrder__9daBgObj_cFv */
 int daBgObj_c::actionOrder() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(2);
@@ -1255,7 +1197,6 @@ int daBgObj_c::actionOrder() {
 }
 
 
-/* 8045BD50-8045BDB0 002770 0060+00 1/0 0/0 0/0 .text            actionEvent__9daBgObj_cFv */
 int daBgObj_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventIdx)) {
         setAction(3);
@@ -1265,12 +1206,10 @@ int daBgObj_c::actionEvent() {
     return 1;
 }
 
-/* 8045BDB0-8045BDB8 0027D0 0008+00 1/0 0/0 0/0 .text            actionWait__9daBgObj_cFv */
 int daBgObj_c::actionWait() {
     return 1;
 }
 
-/* 8045BDB8-8045BED0 0027D8 0118+00 1/0 0/0 0/0 .text            ExecuteType0__9daBgObj_cFv */
 int daBgObj_c::ExecuteType0() {
     u8 swBit = daBgObj_prm::getSwBit(this);
     u8 arg0 = daBgObj_prm::getObjArg0(this);
@@ -1302,7 +1241,6 @@ int daBgObj_c::ExecuteType0() {
     return 1;
 }
 
-/* 8045BED0-8045BFBC 0028F0 00EC+00 3/0 0/0 0/0 .text            ExecuteType1__9daBgObj_cFv */
 int daBgObj_c::ExecuteType1() {
     static actionFunc l_func[] = {&daBgObj_c::actionOrderWait, &daBgObj_c::actionOrder,
                                   &daBgObj_c::actionEvent, &daBgObj_c::actionWait};
@@ -1316,7 +1254,6 @@ int daBgObj_c::ExecuteType1() {
     return 1;
 }
 
-/* 8045BFBC-8045C078 0029DC 00BC+00 1/0 0/0 0/0 .text            Execute__9daBgObj_cFPPA3_A4_f */
 int daBgObj_c::Execute(Mtx** param_0) {
     (this->*mExecuteFunc[mSpecData.mSpecType])();
 
@@ -1335,7 +1272,6 @@ int daBgObj_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 8045C078-8045C25C 002A98 01E4+00 1/0 0/0 0/0 .text            Draw__9daBgObj_cFv */
 int daBgObj_c::Draw() {
     bool bvar = true;
     for (int i = 0; i < 2; i++) {
@@ -1379,8 +1315,6 @@ int daBgObj_c::Draw() {
     return 1;
 }
 
-/* 8045C25C-8045C2E8 002C7C 008C+00 1/1 0/0 0/0 .text            indirectProc__9daBgObj_cFP8J3DModel
- */
 void daBgObj_c::indirectProc(J3DModel* i_model) {
     if (i_model != NULL) {
         J3DModelData* modelData = i_model->getModelData();
@@ -1393,38 +1327,30 @@ void daBgObj_c::indirectProc(J3DModel* i_model) {
     }
 }
 
-/* 8045C2E8-8045C330 002D08 0048+00 1/0 0/0 0/0 .text            Delete__9daBgObj_cFv */
 int daBgObj_c::Delete() {
     release(mpBgW2);
     dComIfG_resDelete(&mPhase, daSetBgObj_c::getArcName(this));
     return 1;
 }
 
-/* 8045C330-8045C444 002D50 0114+00 1/0 0/0 0/0 .text            daBgObj_create1st__FP9daBgObj_c */
 static int daBgObj_create1st(daBgObj_c* i_this) {
     fopAcM_ct(i_this, daBgObj_c);
 
     return i_this->create1st();
 }
 
-/* 8045C744-8045C764 003164 0020+00 1/0 0/0 0/0 .text            daBgObj_MoveBGDelete__FP9daBgObj_c
- */
 static int daBgObj_MoveBGDelete(daBgObj_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 8045C764-8045C784 003184 0020+00 1/0 0/0 0/0 .text            daBgObj_MoveBGExecute__FP9daBgObj_c
- */
 static int daBgObj_MoveBGExecute(daBgObj_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 8045C784-8045C7B0 0031A4 002C+00 1/0 0/0 0/0 .text            daBgObj_MoveBGDraw__FP9daBgObj_c */
 static int daBgObj_MoveBGDraw(daBgObj_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 8045CD34-8045CD54 -00001 0020+00 1/0 0/0 0/0 .data            daBgObj_METHODS */
 static actor_method_class daBgObj_METHODS = {
     (process_method_func)daBgObj_create1st,
     (process_method_func)daBgObj_MoveBGDelete,
@@ -1433,7 +1359,6 @@ static actor_method_class daBgObj_METHODS = {
     (process_method_func)daBgObj_MoveBGDraw,
 };
 
-/* 8045CD54-8045CD84 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_BG_OBJ */
 extern actor_process_profile_definition g_profile_BG_OBJ = {
     fpcLy_CURRENT_e,
     7,

@@ -15,9 +15,9 @@ public:
 
 class dSelect_icon_c {
 public:
-    /* 80195A3C */ void animation();
-    /* 80195B40 */ void setAlpha(u8);
-    /* 80195B70 */ void setPos(J2DPane*, f32, f32);
+    void animation();
+    void setAlpha(u8);
+    void setPos(J2DPane*, f32, f32);
     virtual ~dSelect_icon_c(); // must be declared but not defined to match?
 
     void drawSelf() {

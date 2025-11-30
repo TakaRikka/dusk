@@ -11,12 +11,10 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
 
-/* 80BC4B2C-80BC4B44 0000EC 0018+00 1/1 0/0 0/0 .text            __ct__14daObj_Cb_HIO_cFv */
 daObj_Cb_HIO_c::daObj_Cb_HIO_c() {
     field_0x4 = -1;
 }
 
-/* 80BC4B44-80BC4BA8 000104 0064+00 1/0 0/0 0/0 .text            daObj_Cb_Draw__FP12obj_cb_class */
 static int daObj_Cb_Draw(obj_cb_class* i_this) {
     g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType_MAJI(i_this->mModel, &i_this->tevStr);
@@ -24,13 +22,10 @@ static int daObj_Cb_Draw(obj_cb_class* i_this) {
     return 1;
 }
 
-/* 80BC4BA8-80BC4BB4 000168 000C+00 1/1 0/0 0/0 .text
- * ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c            */
 static void ride_call_back(dBgW* param_0, fopAc_ac_c* i_this, fopAc_ac_c* param_2) {
     static_cast<obj_cb_class*>(i_this)->field_0x59c = 3;
 }
 
-/* 80BC4BB4-80BC51B8 000174 0604+00 1/1 0/0 0/0 .text            action__FP12obj_cb_class */
 static void action(obj_cb_class* i_this) {
     fopAc_ac_c* a_this = i_this;
     cXyz local_60;
@@ -137,8 +132,6 @@ static void action(obj_cb_class* i_this) {
     }
 }
 
-/* 80BC51B8-80BC5240 000778 0088+00 2/1 0/0 0/0 .text            daObj_Cb_Execute__FP12obj_cb_class
- */
 static int daObj_Cb_Execute(obj_cb_class* i_this) {
     for (int i = 0; i < 2; i++) {
         if (i_this->field_0x598[i] != 0) {
@@ -151,17 +144,12 @@ static int daObj_Cb_Execute(obj_cb_class* i_this) {
     return 1;
 }
 
-/* 80BC5240-80BC5248 000800 0008+00 1/0 0/0 0/0 .text            daObj_Cb_IsDelete__FP12obj_cb_class
- */
 static int daObj_Cb_IsDelete(obj_cb_class* param_0) {
     return 1;
 }
 
-/* 80BC58F8-80BC58FC 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 data_80BC58F8;
 
-/* 80BC5248-80BC52CC 000808 0084+00 1/0 0/0 0/0 .text            daObj_Cb_Delete__FP12obj_cb_class
- */
 static int daObj_Cb_Delete(obj_cb_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "Obj_cb");
@@ -177,7 +165,6 @@ static int daObj_Cb_Delete(obj_cb_class* i_this) {
     return 1;
 }
 
-/* 80BC52CC-80BC5408 00088C 013C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* actor) {
     obj_cb_class* i_this = (obj_cb_class*)actor;
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes("Obj_cb", 4);
@@ -202,10 +189,8 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-/* 80BC5908-80BC5910 000018 0008+00 2/2 0/0 0/0 .bss             l_HIO */
 static daObj_Cb_HIO_c l_HIO;
 
-/* 80BC5408-80BC563C 0009C8 0234+00 1/0 0/0 0/0 .text            daObj_Cb_Create__FP10fopAc_ac_c */
 static int daObj_Cb_Create(fopAc_ac_c* actor) {
     fopAcM_ct(actor, obj_cb_class);
     obj_cb_class* i_this = (obj_cb_class*)actor;
@@ -240,7 +225,6 @@ static int daObj_Cb_Create(fopAc_ac_c* actor) {
     return rv;
 }
 
-/* 80BC5854-80BC5874 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Cb_Method */
 static actor_method_class l_daObj_Cb_Method = {
     (process_method_func)daObj_Cb_Create,
     (process_method_func)daObj_Cb_Delete,
@@ -249,7 +233,6 @@ static actor_method_class l_daObj_Cb_Method = {
     (process_method_func)daObj_Cb_Draw,
 };
 
-/* 80BC5874-80BC58A4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_CB */
 extern actor_process_profile_definition g_profile_OBJ_CB = {
   fpcLy_CURRENT_e,       // mLayerID
   3,                     // mListID

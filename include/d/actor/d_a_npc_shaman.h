@@ -18,7 +18,7 @@ struct daNpc_Sha_HIOParam {
 
 class daNpc_Sha_Param_c {
 public:
-    /* 80AE6B5C */ virtual ~daNpc_Sha_Param_c() {}
+    virtual ~daNpc_Sha_Param_c() {}
 
     static daNpc_Sha_HIOParam const m;
 };
@@ -43,50 +43,50 @@ public:
     typedef int (daNpc_Sha_c::*cutFunc)(int);
     typedef BOOL (daNpc_Sha_c::*queryFunc)();
     
-    /* 80AE2DCC */ ~daNpc_Sha_c();
-    /* 80AE2EEC */ cPhs__Step create();
-    /* 80AE31A0 */ int CreateHeap();
-    /* 80AE35CC */ int Delete();
-    /* 80AE3600 */ int Execute();
-    /* 80AE3620 */ int Draw();
-    /* 80AE36B4 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AE36D4 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80AE372C */ u8 getType();
-    /* 80AE3764 */ BOOL isDelete();
-    /* 80AE3798 */ void reset();
-    /* 80AE38F0 */ void afterJntAnm(int);
-    /* 80AE3974 */ void setParam();
-    /* 80AE3A8C */ BOOL checkChangeEvt();
-    /* 80AE3B78 */ void setAfterTalkMotion();
-    /* 80AE3C24 */ void srchActors();
-    /* 80AE3C28 */ BOOL evtTalk();
-    /* 80AE3D28 */ BOOL evtCutProc();
-    /* 80AE3DF0 */ void action();
-    /* 80AE3F80 */ void beforeMove();
-    /* 80AE4044 */ void setAttnPos();
-    /* 80AE4360 */ void setCollision();
-    /* 80AE44B8 */ int drawDbgInfo();
-    /* 80AE44C0 */ BOOL selectAction();
-    /* 80AE4508 */ BOOL chkAction(actionFunc);
-    /* 80AE4534 */ BOOL setAction(actionFunc);
-    /* 80AE45DC */ int getSceneChangeNoTableIx();
-    /* 80AE48D0 */ void setTempBit(int);
-    /* 80AE4974 */ int cutPerformAugury(int);
-    /* 80AE4E24 */ int wait(void*);
-    /* 80AE50EC */ int talk(void*);
+    ~daNpc_Sha_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    BOOL selectAction();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    int getSceneChangeNoTableIx();
+    void setTempBit(int);
+    int cutPerformAugury(int);
+    int wait(void*);
+    int talk(void*);
     int test(void*);
-    /* 80AE52CC */ BOOL query265();
-    /* 80AE52F0 */ BOOL query268();
-    /* 80AE5314 */ BOOL query267();
-    /* 80AE5338 */ BOOL query078();
-    /* 80AE535C */ BOOL query264();
-    /* 80AE5380 */ BOOL query266();
-    /* 80AE53A4 */ BOOL query542();
-    /* 80AE53C8 */ BOOL query461();
-    /* 80AE53EC */ BOOL query288();
-    /* 80AE5410 */ BOOL query000();
-    /* 80AE5418 */ BOOL query999();
-    /* 80AE69E0 */ daNpc_Sha_c(
+    BOOL query265();
+    BOOL query268();
+    BOOL query267();
+    BOOL query078();
+    BOOL query264();
+    BOOL query266();
+    BOOL query542();
+    BOOL query461();
+    BOOL query288();
+    BOOL query000();
+    BOOL query999();
+    daNpc_Sha_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -98,12 +98,12 @@ public:
             : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
             i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
             i_arcNames) { OS_REPORT("|%06d:%x|daNpc_Sha_c -> コンストラクト\n", g_Counter.mCounter0, this); }
-    /* 80AE6B1C */ u16 getEyeballMaterialNo() { return 1; }
-    /* 80AE6B24 */ s32 getHeadJointNo() { return 4; }
-    /* 80AE6B2C */ s32 getNeckJointNo() { return 3; }
-    /* 80AE6B34 */ s32 getBackboneJointNo() { return 1; }
-    /* 80AE6B3C */ BOOL checkChangeJoint(int i_joint) { return i_joint == 4; }
-    /* 80AE6B4C */ BOOL checkRemoveJoint(int i_joint) { return i_joint == 8; }
+    u16 getEyeballMaterialNo() { return 1; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return 1; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == 4; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == 8; }
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

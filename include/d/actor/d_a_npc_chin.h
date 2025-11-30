@@ -10,7 +10,7 @@ struct daNpcChin_HIOParam {
 
 class daNpcChin_Param_c {
 public:
-    /* 8099188C */ virtual ~daNpcChin_Param_c() {}
+    virtual ~daNpcChin_Param_c() {}
 
     static daNpcChin_HIOParam const m;
 };
@@ -50,7 +50,7 @@ public:
         /* 0x30 */ cXyz mScale;
         /* 0x3C */ s8 mSwitch;
 
-        /* 8098BF0C */ int loadModel();
+        int loadModel();
 
         inline void switch_off() {
             setSwitch(false);
@@ -70,13 +70,13 @@ public:
             mSwitch = i_active;
         }
 
-        /* 8098C000 */ void setMtx();
+        void setMtx();
 
         inline bool is_switch_on() {
             return mSwitch == TRUE;
         }
 
-        /* 8098C060 */ void draw(dKy_tevstr_c*);
+        void draw(dKy_tevstr_c*);
 
         inline void setPos(cXyz& i_pos) {
             mPos = i_pos;
@@ -98,71 +98,71 @@ public:
     typedef bool (daNpcChin_c::*actionFunc)(void*);
     typedef int (daNpcChin_c::*eventFunc)(int);
 
-    /* 8098C104 */ daNpcChin_c();
-    /* 8098C2D8 */ virtual ~daNpcChin_c();
-    /* 8098C510 */ int Create();
-    /* 8098C858 */ int CreateHeap();
-    /* 8098CCE4 */ int Delete();
-    /* 8098CD18 */ int Execute();
-    /* 8098CD74 */ int Draw();
-    /* 8098CDE8 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 8098CFB8 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 8098CFD8 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 8098D024 */ virtual void setParam();
-    /* 8098D0F8 */ virtual int main();
-    /* 8098D198 */ virtual int ctrlBtk();
-    /* 8098D26C */ virtual void setAttnPos();
-    /* 8098D58C */ virtual bool setExpressionAnm(int, bool);
-    /* 8098D848 */ virtual bool setExpressionBtp(int);
-    /* 8098D938 */ virtual void setMotionAnm(int, f32);
-    /* 8098DB44 */ virtual void setExpression(int, f32);
-    /* 8098DB70 */ virtual void setMotion(int, f32, int);
-    /* 8098DBB4 */ virtual int drawDbgInfo();
-    /* 8098DBBC */ void reset();
-    /* 8098DCD0 */ void playExpression();
-    /* 8098E04C */ void playMotion();
-    /* 8098E5C4 */ int setAction(actionFunc i_func);
-    /* 8098E66C */ void setLookMode(int);
-    /* 8098E690 */ void lookat();
-    /* 8098E870 */ bool step(s16, int, int);
-    /* 8098EA00 */ BOOL chkFindPlayer();
-    /* 8098EACC */ void setExpressionTalkAfter();
-    /* 8098EBE8 */ bool wait(void*);
-    /* 8098EFE4 */ bool talk(void*);
-    /* 8098F208 */ void _talk_motion();
-    /* 8098F2BC */ bool demo(void*);
-    /* 8098F414 */ bool watch_game(void*);
-    /* 8098F758 */ void Event_DT();
+    daNpcChin_c();
+    virtual ~daNpcChin_c();
+    int Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    virtual void setParam();
+    virtual int main();
+    virtual int ctrlBtk();
+    virtual void setAttnPos();
+    virtual bool setExpressionAnm(int, bool);
+    virtual bool setExpressionBtp(int);
+    virtual void setMotionAnm(int, f32);
+    virtual void setExpression(int, f32);
+    virtual void setMotion(int, f32, int);
+    virtual int drawDbgInfo();
+    void reset();
+    void playExpression();
+    void playMotion();
+    int setAction(actionFunc i_func);
+    void setLookMode(int);
+    void lookat();
+    bool step(s16, int, int);
+    BOOL chkFindPlayer();
+    void setExpressionTalkAfter();
+    bool wait(void*);
+    bool talk(void*);
+    void _talk_motion();
+    bool demo(void*);
+    bool watch_game(void*);
+    void Event_DT();
     void Event_DT_Base() {
         dComIfGp_event_reset();
         mOrderEvtNo = 0;
         mEventIdx = -1;
     }
-    /* 8098FB3C */ BOOL isGameEnd(int&);
-    /* 8098FD38 */ BOOL _chkGameClear();
-    /* 8098FD5C */ void SphereReset();
-    /* 8098FD80 */ int _Evt_GameStart(int);
-    /* 8098FE28 */ int _Evt_GameStart_CutInit(int const&);
-    /* 8098FF30 */ int _Evt_GameStart_CutMain(int const&);
-    /* 8098FFD0 */ int _Evt_GameFailed(int);
-    /* 80990078 */ int _Evt_GameFailed_CutInit(int const&);
-    /* 80990174 */ int _Evt_GameFailed_CutMain(int const&);
-    /* 80990218 */ int _Evt_GameSucceed(int);
-    /* 809902C0 */ int _Evt_GameSucceed_CutInit(int const&);
-    /* 8099041C */ int _Evt_GameSucceed_CutMain(int const&);
-    /* 809905C4 */ int _Evt_SelectGiveUp(int);
-    /* 8099066C */ int _Evt_SelectGiveUp_CutInit(int const&);
-    /* 8099071C */ int _Evt_SelectGiveUp_CutMain(int const&);
-    /* 809907AC */ int _Evt_GameGiveUp(int);
-    /* 80990854 */ int _Evt_GameGiveUp_CutInit(int const&);
-    /* 80990950 */ int _Evt_GameGiveUp_CutMain(int const&);
-    /* 809909F4 */ int _Evt_Appear(int);
-    /* 80990A9C */ int _Evt_Appear_CutInit(int const&);
-    /* 80990BD8 */ int _Evt_Appear_CutMain(int const&);
-    /* 80990C9C */ int _Evt_SpotLight_Off(int);
-    /* 80990D44 */ int _Evt_SpotLight_Off_CutInit(int const&);
-    /* 80990DDC */ int _Evt_SpotLight_Off_CutMain(int const&);
-    /* 80991858 */ void setMtx() {
+    BOOL isGameEnd(int&);
+    BOOL _chkGameClear();
+    void SphereReset();
+    int _Evt_GameStart(int);
+    int _Evt_GameStart_CutInit(int const&);
+    int _Evt_GameStart_CutMain(int const&);
+    int _Evt_GameFailed(int);
+    int _Evt_GameFailed_CutInit(int const&);
+    int _Evt_GameFailed_CutMain(int const&);
+    int _Evt_GameSucceed(int);
+    int _Evt_GameSucceed_CutInit(int const&);
+    int _Evt_GameSucceed_CutMain(int const&);
+    int _Evt_SelectGiveUp(int);
+    int _Evt_SelectGiveUp_CutInit(int const&);
+    int _Evt_SelectGiveUp_CutMain(int const&);
+    int _Evt_GameGiveUp(int);
+    int _Evt_GameGiveUp_CutInit(int const&);
+    int _Evt_GameGiveUp_CutMain(int const&);
+    int _Evt_Appear(int);
+    int _Evt_Appear_CutInit(int const&);
+    int _Evt_Appear_CutMain(int const&);
+    int _Evt_SpotLight_Off(int);
+    int _Evt_SpotLight_Off_CutInit(int const&);
+    int _Evt_SpotLight_Off_CutMain(int const&);
+    void setMtx() {
         daNpcF_c::setMtx();
         mSpotLight.setMtx();
     }

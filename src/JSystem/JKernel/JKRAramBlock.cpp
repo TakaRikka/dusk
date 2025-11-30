@@ -4,7 +4,6 @@
 #include "JSystem/JKernel/JKRAramHeap.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
-/* 802D3304-802D3378 2CDC44 0074+00 2/2 1/1 0/0 .text            __ct__12JKRAramBlockFUlUlUlUcb */
 JKRAramBlock::JKRAramBlock(u32 address, u32 size, u32 freeSize, u8 groupId, bool isTempMemory)
     : mBlockLink(this) {
     mAddress = address;
@@ -14,7 +13,6 @@ JKRAramBlock::JKRAramBlock(u32 address, u32 size, u32 freeSize, u8 groupId, bool
     mIsTempMemory = isTempMemory;
 }
 
-/* 802D3378-802D3434 2CDCB8 00BC+00 1/0 0/0 0/0 .text            __dt__12JKRAramBlockFv */
 JKRAramBlock::~JKRAramBlock() {
     JSUList<JKRAramBlock>* list = mBlockLink.getSupervisor();
     JSULink<JKRAramBlock>* prev = mBlockLink.getPrev();
@@ -29,8 +27,6 @@ JKRAramBlock::~JKRAramBlock() {
     }
 }
 
-/* 802D3434-802D34D0 2CDD74 009C+00 0/0 1/1 0/0 .text allocHead__12JKRAramBlockFUlUcP11JKRAramHeap
- */
 JKRAramBlock* JKRAramBlock::allocHead(u32 size, u8 groupId, JKRAramHeap* aramHeap) {
     u32 address = mAddress;
     u32 usedSize = mSize;
@@ -48,8 +44,6 @@ JKRAramBlock* JKRAramBlock::allocHead(u32 size, u8 groupId, JKRAramHeap* aramHea
     return block;
 }
 
-/* 802D34D0-802D3574 2CDE10 00A4+00 0/0 1/1 0/0 .text allocTail__12JKRAramBlockFUlUcP11JKRAramHeap
- */
 JKRAramBlock* JKRAramBlock::allocTail(u32 size, u8 groupId, JKRAramHeap* aramHeap) {
     u32 freeSize = mFreeSize;
     u32 address = mAddress;

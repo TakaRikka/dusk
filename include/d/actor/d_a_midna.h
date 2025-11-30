@@ -54,8 +54,8 @@ public:
 
 class daMidna_McaMorfCB1_c : public mDoExt_McaMorfCallBack1_c {
 public:
-    /* 804BC36C */ int execute(u16, J3DTransformInfo*);
-    /* 804C6398 */ virtual ~daMidna_McaMorfCB1_c() {}
+    int execute(u16, J3DTransformInfo*);
+    virtual ~daMidna_McaMorfCB1_c() {}
 
     void setScale(cXyz* i_scale) { mpScale = i_scale; }
 
@@ -64,9 +64,9 @@ public:
 
 class daMidna_matAnm_c : public J3DMaterialAnm {
 public:
-    /* 804BC218 */ void init();
-    /* 804BC248 */ void calc(J3DMaterial*) const;
-    /* 804C63E0 */ inline ~daMidna_matAnm_c() {}
+    void init();
+    void calc(J3DMaterial*) const;
+    inline ~daMidna_matAnm_c() {}
 
     daMidna_matAnm_c() { init(); }
 
@@ -246,50 +246,50 @@ public:
     u32 checkForceTiredColor() const { return checkStateFlg1(FLG1_FORCE_TIRED_COL); }
     void onNoServiceWait() { onEndResetStateFlg0(ERFLG0_NO_SERVICE_WAIT); }
 
-    /* 804BC3E0 */ int modelCallBack(int);
-    /* 804BC5C4 */ int changeUpperBck();
-    /* 804BC614 */ int changeFaceBck();
-    /* 804BC670 */ int baseModelCallBack(int);
-    /* 804BC740 */ int initInvModel(u16, J3DModel**, mDoExt_invisibleModel*, u32);
-    /* 804BC7D4 */ int initDemoModel(J3DModel**, char const*, u32);
-    /* 804BC868 */ int createHeap();
-    /* 804BD274 */ cPhs__Step create();
-    /* 804BD93C */ void allAnimePlay();
-    /* 804BDE04 */ void setMatrix();
-    /* 804BE470 */ void setBodyPartMatrix();
-    /* 804BED1C */ void setRoomInfo();
-    /* 804BEDB8 */ void setBodyPartPos();
-    /* 804BEFA0 */ BOOL checkAppear();
-    /* 804BF070 */ void checkMidnaPosState();
-    /* 804BFF80 */ BOOL setUpperAnime(u16, u16);
-    /* 804C0020 */ BOOL setUpperAnimeAndSe(daMidna_ANM);
-    /* 804C0094 */ BOOL setFaceAnime(u16, u16);
-    /* 804C0134 */ void endHighModel();
-    /* 804C0238 */ BOOL setDemoAnm();
-    /* 804C0BAC */ void setFaceBtp(u16, int);
-    /* 804C0C6C */ void setFaceBtk(u16, int);
-    /* 804C0D2C */ void setLeftHandShape(u16);
-    /* 804C0E18 */ void setRightHandShape(u16);
-    /* 804C0F04 */ BOOL checkHairOnlyAnime(int) const;
-    /* 804C0F24 */ void setBckAnime(J3DAnmTransform*, int, f32);
-    /* 804C103C */ void setAnm();
-    /* 804C287C */ s16 getNeckAimAngle(cXyz const*, s16*, s16*, s16*, s16*);
-    /* 804C2A68 */ void clearEyeMove();
-    /* 804C2AB8 */ void setEyeMove(cXyz const*, s16, s16);
-    /* 804C2EBC */ void setNeckAngle();
-    /* 804C3168 */ void initHairAngle();
-    /* 804C3298 */ void setHairAngle();
-    /* 804C3F04 */ void setDemoData();
-    /* 804C4394 */ J3DAnmTevRegKey* setSimpleBrk(J3DModelData*, u16);
-    /* 804C4444 */ J3DAnmTextureSRTKey* setSimpleBtk(J3DModelData*, u16);
-    /* 804C44CC */ void initMidnaModel();
-    /* 804C49B8 */ void setMidnaNoDrawFlg();
-    /* 804C4AE8 */ int checkMetamorphoseEnableBase();
-    /* 804C4B68 */ BOOL checkNoDrawState();
-    /* 804C4BC0 */ void setSound();
-    /* 804C4FDC */ int execute();
-    /* 804C5A08 */ int draw();
-    /* 804C61A4 */ ~daMidna_c();
+    int modelCallBack(int);
+    int changeUpperBck();
+    int changeFaceBck();
+    int baseModelCallBack(int);
+    int initInvModel(u16, J3DModel**, mDoExt_invisibleModel*, u32);
+    int initDemoModel(J3DModel**, char const*, u32);
+    int createHeap();
+    cPhs__Step create();
+    void allAnimePlay();
+    void setMatrix();
+    void setBodyPartMatrix();
+    void setRoomInfo();
+    void setBodyPartPos();
+    BOOL checkAppear();
+    void checkMidnaPosState();
+    BOOL setUpperAnime(u16, u16);
+    BOOL setUpperAnimeAndSe(daMidna_ANM);
+    BOOL setFaceAnime(u16, u16);
+    void endHighModel();
+    BOOL setDemoAnm();
+    void setFaceBtp(u16, int);
+    void setFaceBtk(u16, int);
+    void setLeftHandShape(u16);
+    void setRightHandShape(u16);
+    BOOL checkHairOnlyAnime(int) const;
+    void setBckAnime(J3DAnmTransform*, int, f32);
+    void setAnm();
+    s16 getNeckAimAngle(cXyz const*, s16*, s16*, s16*, s16*);
+    void clearEyeMove();
+    void setEyeMove(cXyz const*, s16, s16);
+    void setNeckAngle();
+    void initHairAngle();
+    void setHairAngle();
+    void setDemoData();
+    J3DAnmTevRegKey* setSimpleBrk(J3DModelData*, u16);
+    J3DAnmTextureSRTKey* setSimpleBtk(J3DModelData*, u16);
+    void initMidnaModel();
+    void setMidnaNoDrawFlg();
+    int checkMetamorphoseEnableBase();
+    BOOL checkNoDrawState();
+    void setSound();
+    int execute();
+    int draw();
+    ~daMidna_c();
 
     daMidna_c() : mBtpHeap(0x400), mBtkHeap(0x400) {}
 

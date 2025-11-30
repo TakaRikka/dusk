@@ -43,7 +43,6 @@ J3DDrawBuffer::~J3DDrawBuffer() {
     mpBuffer = NULL;
 }
 
-/* 80325068-8032509C 31F9A8 0034+00 2/2 1/1 0/0 .text            frameInit__13J3DDrawBufferFv */
 void J3DDrawBuffer::frameInit() {
     u32 bufSize = mEntryTableSize;
     for (u32 i = 0; i < bufSize; i++)
@@ -52,8 +51,6 @@ void J3DDrawBuffer::frameInit() {
     mpCallBackPacket = NULL;
 }
 
-/* 8032509C-803251E4 31F9DC 0148+00 2/1 0/0 0/0 .text
- * entryMatSort__13J3DDrawBufferFP12J3DMatPacket                */
 int J3DDrawBuffer::entryMatSort(J3DMatPacket* pMatPacket) {
     J3D_ASSERT_NULLPTR(122, pMatPacket != NULL);
 
@@ -97,8 +94,6 @@ int J3DDrawBuffer::entryMatSort(J3DMatPacket* pMatPacket) {
     return 1;
 }
 
-/* 803251E4-8032529C 31FB24 00B8+00 1/0 0/0 0/0 .text
- * entryMatAnmSort__13J3DDrawBufferFP12J3DMatPacket             */
 int J3DDrawBuffer::entryMatAnmSort(J3DMatPacket* pMatPacket) {
     J3D_ASSERT_NULLPTR(199, pMatPacket != NULL);
 
@@ -131,8 +126,6 @@ int J3DDrawBuffer::entryMatAnmSort(J3DMatPacket* pMatPacket) {
     return 1;
 }
 
-/* 8032529C-803253B4 31FBDC 0118+00 1/0 0/0 0/0 .text entryZSort__13J3DDrawBufferFP12J3DMatPacket
- */
 int J3DDrawBuffer::entryZSort(J3DMatPacket* pMatPacket) {
     J3D_ASSERT_NULLPTR(257, pMatPacket != NULL);
 
@@ -163,8 +156,6 @@ int J3DDrawBuffer::entryZSort(J3DMatPacket* pMatPacket) {
     return 1;
 }
 
-/* 803253B4-80325404 31FCF4 0050+00 1/0 0/0 0/0 .text
- * entryModelSort__13J3DDrawBufferFP12J3DMatPacket              */
 int J3DDrawBuffer::entryModelSort(J3DMatPacket* pMatPacket) {
     J3D_ASSERT_NULLPTR(316, pMatPacket != NULL);
 
@@ -179,8 +170,6 @@ int J3DDrawBuffer::entryModelSort(J3DMatPacket* pMatPacket) {
     return 0;
 }
 
-/* 80325404-80325458 31FD44 0054+00 1/0 0/0 0/0 .text
- * entryInvalidSort__13J3DDrawBufferFP12J3DMatPacket            */
 int J3DDrawBuffer::entryInvalidSort(J3DMatPacket* pMatPacket) {
     J3D_ASSERT_NULLPTR(343, pMatPacket != NULL);
 
@@ -215,22 +204,18 @@ int J3DDrawBuffer::entryImm(J3DPacket* pPacket, u16 index) {
     return 1;
 }
 
-/* 803CEC30-803CEC78 02BD50 0048+00 0/1 1/1 0/0 .data            sortFuncTable__13J3DDrawBuffer */
 J3DDrawBuffer::sortFunc J3DDrawBuffer::sortFuncTable[6] = {
     &J3DDrawBuffer::entryMatSort,   &J3DDrawBuffer::entryMatAnmSort,  &J3DDrawBuffer::entryZSort,
     &J3DDrawBuffer::entryModelSort, &J3DDrawBuffer::entryInvalidSort, &J3DDrawBuffer::entryNonSort,
 };
 
-/* 803CEC90-803CECA8 02BDB0 0018+00 1/2 0/0 0/0 .data            drawFuncTable__13J3DDrawBuffer */
 J3DDrawBuffer::drawFunc J3DDrawBuffer::drawFuncTable[2] = {
     &J3DDrawBuffer::drawHead,
     &J3DDrawBuffer::drawTail,
 };
 
-/* 804515E0-804515E8 000AE0 0004+04 0/0 1/1 0/0 .sbss            entryNum__13J3DDrawBuffer */
 int J3DDrawBuffer::entryNum;
 
-/* 803254AC-80325500 31FDEC 0054+00 0/0 2/2 0/0 .text            draw__13J3DDrawBufferCFv */
 void J3DDrawBuffer::draw() const {
     J3D_ASSERT_RANGE(411, mDrawMode < J3DDrawBufDrawMode_MAX);
 
@@ -238,7 +223,6 @@ void J3DDrawBuffer::draw() const {
     (this->*func)();
 }
 
-/* 80325500-80325578 31FE40 0078+00 1/0 0/0 0/0 .text            drawHead__13J3DDrawBufferCFv */
 void J3DDrawBuffer::drawHead() const {
     u32 size = mEntryTableSize;
     J3DPacket** buf = mpBuffer;
@@ -250,7 +234,6 @@ void J3DDrawBuffer::drawHead() const {
     }
 }
 
-/* 80325578-803255F0 31FEB8 0078+00 1/0 0/0 0/0 .text            drawTail__13J3DDrawBufferCFv */
 void J3DDrawBuffer::drawTail() const {
     for (int i = mEntryTableSize - 1; i >= 0; i--) {
         for (J3DPacket* packet = mpBuffer[i]; packet != NULL; packet = packet->getNextPacket()) {

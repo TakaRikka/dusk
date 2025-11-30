@@ -76,35 +76,35 @@ public:
 
     daObjVolcBall_c() : dEvLib_callback_c(this) {}
 
-    /* 80D21B18 */ volc_param_c* getData();
-    /* 80D21BA0 */ void initBaseMtx();
-    /* 80D21BC0 */ void setBaseMtx();
-    /* 80D21C40 */ int Create();
-    /* 80D21D80 */ int CreateHeap();
-    /* 80D21E28 */ int create();
-    /* 80D22424 */ int execute();
-    /* 80D22484 */ void action();
-    /* 80D22570 */ void initActionPlayerWait();
-    /* 80D2257C */ void initActionWarning();
-    /* 80D225A4 */ void initActionSwWait();
-    /* 80D225B0 */ void actionPlayerWait();
-    /* 80D2267C */ void actionSwWait();
-    /* 80D22724 */ void actionStop();
-    /* 80D227E4 */ void actionWarning();
-    /* 80D22944 */ void actionEruption();
-    /* 80D22C6C */ void initActionEnd();
-    /* 80D22CD4 */ void actionEnd();
-    /* 80D22E24 */ void setEruptEffect(int);
-    /* 80D22ED4 */ void setFallEffect(int);
-    /* 80D22FCC */ void endFallEffect(int);
-    /* 80D23034 */ bool createSearchBall();
-    /* 80D23188 */ bool createNormalBall();
-    /* 80D23438 */ int executeBall();
-    /* 80D23868 */ void startQuake();
-    /* 80D23904 */ int draw();
-    /* 80D23A0C */ int _delete();
+    volc_param_c* getData();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    void action();
+    void initActionPlayerWait();
+    void initActionWarning();
+    void initActionSwWait();
+    void actionPlayerWait();
+    void actionSwWait();
+    void actionStop();
+    void actionWarning();
+    void actionEruption();
+    void initActionEnd();
+    void actionEnd();
+    void setEruptEffect(int);
+    void setFallEffect(int);
+    void endFallEffect(int);
+    bool createSearchBall();
+    bool createNormalBall();
+    int executeBall();
+    void startQuake();
+    int draw();
+    int _delete();
 
-    /* 80D22DDC */ virtual bool eventStart();
+    virtual bool eventStart();
 
     u8 getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwBit2() { return fopAcM_GetParamBit(this, 8, 8); }

@@ -12,8 +12,6 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 
-/* 8005B660-8005B708 055FA0 00A8+00 3/3 0/0 0/0 .text            vectle_calc__FP10DOUBLE_POSP4cXyz
- */
 static void vectle_calc(DOUBLE_POS* i_pos, cXyz* o_out) {
     double s = sqrt(i_pos->x * i_pos->x + i_pos->y * i_pos->y + i_pos->z * i_pos->z);
 
@@ -28,7 +26,6 @@ static void vectle_calc(DOUBLE_POS* i_pos, cXyz* o_out) {
     }
 }
 
-/* 8005B708-8005B760 056048 0058+00 7/7 0/0 0/0 .text get_vectle_calc__FP4cXyzP4cXyzP4cXyz */
 static void get_vectle_calc(cXyz* i_vecA, cXyz* i_vecB, cXyz* o_out) {
     DOUBLE_POS pos;
     pos.x = i_vecB->x - i_vecA->x;
@@ -38,14 +35,10 @@ static void get_vectle_calc(cXyz* i_vecA, cXyz* i_vecB, cXyz* o_out) {
     vectle_calc(&pos, o_out);
 }
 
-/* 8005B760-8005B780 0560A0 0020+00 8/8 7/7 11/11 .text dKyr_get_vectle_calc__FP4cXyzP4cXyzP4cXyz
- */
 void dKyr_get_vectle_calc(cXyz* i_vecA, cXyz* i_vecB, cXyz* o_out) {
     get_vectle_calc(i_vecA, i_vecB, o_out);
 }
 
-/* 8005B780-8005B830 0560C0 00B0+00 2/2 0/0 0/0 .text
- * dKy_set_eyevect_calc__FP12camera_classP3Vecff                */
 static void dKy_set_eyevect_calc(camera_class* i_camera, Vec* o_out, f32 param_2, f32 param_3) {
     cXyz calc;
     get_vectle_calc(&i_camera->lookat.eye, &i_camera->lookat.center, &calc);
@@ -54,8 +47,6 @@ static void dKy_set_eyevect_calc(camera_class* i_camera, Vec* o_out, f32 param_2
     o_out->z = i_camera->lookat.eye.z + calc.z * param_2;
 }
 
-/* 8005B830-8005B92C 056170 00FC+00 6/6 0/0 0/0 .text
- * dKy_set_eyevect_calc2__FP12camera_classP3Vecff               */
 void dKy_set_eyevect_calc2(camera_class* i_camera, Vec* o_out, f32 param_2, f32 param_3) {
     cXyz calc;
     DOUBLE_POS pos;
@@ -79,8 +70,6 @@ void dKy_set_eyevect_calc2(camera_class* i_camera, Vec* o_out, f32 param_2, f32 
     }
 }
 
-/* 8005B92C-8005BA24 05626C 00F8+00 5/5 0/0 0/0 .text
- * dKyr_set_btitex_common__FP9_GXTexObjP7ResTIMG11_GXTexMapID   */
 static void dKyr_set_btitex_common(GXTexObj* i_obj, ResTIMG* i_img, GXTexMapID i_mapID) {
     GXInitTexObj(i_obj, (&i_img->format + i_img->imageOffset), i_img->width, i_img->height,
                  (GXTexFmt)i_img->format, (GXTexWrapMode)i_img->wrapS, (GXTexWrapMode)i_img->wrapT,
@@ -94,12 +83,10 @@ static void dKyr_set_btitex_common(GXTexObj* i_obj, ResTIMG* i_img, GXTexMapID i
     GXLoadTexObj(i_obj, i_mapID);
 }
 
-/* 8005BA24-8005BA48 056364 0024+00 12/12 0/0 0/0 .text dKyr_set_btitex__FP9_GXTexObjP7ResTIMG */
 static void dKyr_set_btitex(GXTexObj* i_obj, ResTIMG* i_img) {
     dKyr_set_btitex_common(i_obj, i_img, GX_TEXMAP0);
 }
 
-/* 8005BA48-8005BED8 056388 0490+00 0/0 1/1 0/0 .text            dKyr_lenzflare_move__Fv */
 void dKyr_lenzflare_move() {
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
     dKankyo_sunlenz_Packet* lenz_packet = g_env_light.mpSunLenzPacket;
@@ -150,7 +137,6 @@ void dKyr_lenzflare_move() {
     }
 }
 
-/* 8005BED8-8005BF08 056818 0030+00 1/1 0/0 0/0 .text            dKyr_moon_arrival_check__Fv */
 static BOOL dKyr_moon_arrival_check() {
     BOOL rv = FALSE;
     if (g_env_light.daytime > 285.0f || g_env_light.daytime < 67.5f) {
@@ -159,7 +145,6 @@ static BOOL dKyr_moon_arrival_check() {
     return rv;
 }
 
-/* 8005BF08-8005CC5C 056848 0D54+00 0/0 1/1 0/0 .text            dKyr_sun_move__Fv */
 void dKyr_sun_move() {
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
     dKankyo_sunlenz_Packet* lenz_packet = g_env_light.mpSunLenzPacket;
@@ -429,7 +414,6 @@ void dKyr_sun_move() {
     }
 }
 
-/* 8005CC5C-8005CDA8 05759C 014C+00 0/0 1/1 0/0 .text            dKyr_rain_init__Fv */
 void dKyr_rain_init() {
     camera_class* camera = g_dComIfG_gameInfo.play.mCameraInfo[0].mCamera;
     g_env_light.mpRainPacket->mpTex = (u8*)dComIfG_getObjectRes("Always", 0x4a);
@@ -453,12 +437,10 @@ void dKyr_rain_init() {
     g_env_light.mpRainPacket->raincnt = 0;
 }
 
-/* 8005CDA8-8005CDD0 0576E8 0028+00 1/1 0/0 0/0 .text rain_bg_chk__FP19dKankyo_rain_Packeti */
 static void rain_bg_chk(dKankyo_rain_Packet* i_packet, int i_idx) {
     i_packet->mRainEff[i_idx].field_0x30 = dComIfGp_getCamera(0)->lookat.center.y + -800.0f;
 }
 
-/* 8005CDD0-8005CF78 057710 01A8+00 1/1 0/0 0/0 .text            overhead_bg_chk__Fv */
 static BOOL overhead_bg_chk() {
     camera_class* camera = dComIfGp_getCamera(0);
     BOOL chk = false;
@@ -489,8 +471,6 @@ static BOOL overhead_bg_chk() {
     return chk;
 }
 
-/* 8005CF78-8005D18C 0578B8 0214+00 1/1 0/0 0/0 .text            forward_overhead_bg_chk__FP4cXyzf
- */
 static BOOL forward_overhead_bg_chk(cXyz* ppos, f32 dist) {
     camera_class* camera = dComIfGp_getCamera(0);
     BOOL chk = FALSE;
@@ -526,7 +506,6 @@ static BOOL forward_overhead_bg_chk(cXyz* ppos, f32 dist) {
     return chk;
 }
 
-/* 8005D18C-8005E8B0 057ACC 1724+00 0/0 1/1 0/0 .text            dKyr_rain_move__Fv */
 void dKyr_rain_move() {
     dKankyo_rain_Packet* rain_packet;
     camera_class* camera;
@@ -882,7 +861,6 @@ void dKyr_rain_move() {
     }
 }
 
-/* 8005E8B0-8005E8F8 0591F0 0048+00 1/1 0/0 0/0 .text            d_krain_cut_turn_check__Fv */
 static BOOL d_krain_cut_turn_check() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     BOOL ret = FALSE;
@@ -896,7 +874,6 @@ static BOOL d_krain_cut_turn_check() {
     return ret;
 }
 
-/* 8005E8F8-8005FBDC 059238 12E4+00 0/0 1/1 0/0 .text            dKyr_housi_move__Fv */
 void dKyr_housi_move() {
     dKankyo_housi_Packet* housi_packet = g_env_light.mpHousiPacket;
     HOUSI_EFF* effect;
@@ -1246,7 +1223,6 @@ void dKyr_housi_move() {
     }
 }
 
-/* 8005FBDC-8005FD48 05A51C 016C+00 0/0 1/1 0/0 .text            dKyr_snow_init__Fv */
 void dKyr_snow_init() {
     camera_class* camera = g_dComIfG_gameInfo.play.mCameraInfo[0].mCamera;
     g_env_light.mpSnowPacket = new (32) dKankyo_snow_Packet();
@@ -1273,7 +1249,6 @@ void dKyr_snow_init() {
     g_env_light.mpSnowPacket->field_0x6d93 = 0;
 }
 
-/* 8005FD48-80061324 05A688 15DC+00 0/0 1/1 0/0 .text            dKyr_snow_move__Fv */
 void dKyr_snow_move() {
     dKankyo_snow_Packet* snow_packet = g_env_light.mpSnowPacket;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
@@ -1542,7 +1517,6 @@ void dKyr_snow_move() {
     }
 }
 
-/* 80061324-8006140C 05BC64 00E8+00 0/0 1/1 0/0 .text            dKyr_star_init__Fv */
 void dKyr_star_init() {
     camera_class* camera = g_dComIfG_gameInfo.play.mCameraInfo[0].mCamera;
     g_env_light.mpStarPacket = new (32) dKankyo_star_Packet();
@@ -1557,7 +1531,6 @@ void dKyr_star_init() {
 }
 
 
-/* 8006140C-80061438 05BD4C 002C+00 0/0 1/1 0/0 .text            dKyr_star_move__Fv */
 void dKyr_star_move() {
     dKankyo_star_Packet* packet = g_env_light.mpStarPacket;
     packet->mEffectNum = g_env_light.mStarCount;
@@ -1567,7 +1540,6 @@ void dKyr_star_move() {
     }
 }
 
-/* 80061438-800620AC 05BD78 0C74+00 0/0 1/1 0/0 .text            cloud_shadow_move__Fv */
 void cloud_shadow_move() {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_cloud_Packet* packet = g_env_light.mpCloudPacket;
@@ -1828,7 +1800,6 @@ void cloud_shadow_move() {
     }
 }
 
-/* 800620AC-80062ADC 05C9EC 0A30+00 0/0 1/1 0/0 .text            vrkumo_move__Fv */
 void vrkumo_move() {
     cXyz wind_vecpow = dKyw_get_wind_vecpow();
     dKankyo_vrkumo_Packet* vrkumo_packet = g_env_light.mpVrkumoPacket;
@@ -2047,7 +2018,6 @@ void vrkumo_move() {
     }
 }
 
-/* 80062ADC-80062B4C 05D41C 0070+00 7/7 0/0 0/0 .text            dKr_cullVtx_Set__Fv */
 static void dKr_cullVtx_Set() {
     GXSetCullMode(GX_CULL_NONE);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
@@ -2057,7 +2027,6 @@ static void dKr_cullVtx_Set() {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 }
 
-/* 80062B4C-80063670 05D48C 0B24+00 2/1 0/0 0/0 .text            dKyr_draw_rev_moon__FPA4_fPPUc */
 static void dKyr_draw_rev_moon(Mtx drawMtx, u8** tex) {
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
     dKankyo_sunlenz_Packet* lenz_packet = g_env_light.mpSunLenzPacket;
@@ -2336,7 +2305,6 @@ static void dKyr_draw_rev_moon(Mtx drawMtx, u8** tex) {
     }
 }
 
-/* 80063670-8006444C 05DFB0 0DDC+00 1/0 1/1 0/0 .text dKyr_drawSun__FPA4_fP4cXyzR8_GXColorPPUc */
 void dKyr_drawSun(Mtx drawMtx, cXyz* ppos, GXColor& unused, u8** tex) {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     cXyz pos[4];
@@ -2704,8 +2672,6 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* ppos, GXColor& unused, u8** tex) {
     }
 }
 
-/* 8006444C-8006562C 05ED8C 11E0+00 0/0 1/1 0/0 .text
- * dKyr_drawLenzflare__FPA4_fP4cXyzR8_GXColorPPUc               */
 void dKyr_drawLenzflare(Mtx drawMtx, cXyz* ppos, GXColor& param_2, u8** tex) {
     dKankyo_sunlenz_Packet* lenz_packet = g_env_light.mpSunLenzPacket;
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
@@ -3127,7 +3093,6 @@ void dKyr_drawLenzflare(Mtx drawMtx, cXyz* ppos, GXColor& param_2, u8** tex) {
     }
 }
 
-/* 8006562C-80066048 05FF6C 0A1C+00 0/0 1/1 0/0 .text            dKyr_drawRain__FPA4_fPPUc */
 void dKyr_drawRain(Mtx drawMtx, u8** tex) {
     dKankyo_rain_Packet* rain_packet = g_env_light.mpRainPacket;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
@@ -3274,7 +3239,6 @@ void dKyr_drawRain(Mtx drawMtx, u8** tex) {
     }
 }
 
-/* 80066048-8006653C 060988 04F4+00 0/0 1/1 0/0 .text            dKyr_drawSibuki__FPA4_fPPUc */
 void dKyr_drawSibuki(Mtx drawMtx, u8** tex) {
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
     dKankyo_rain_Packet* rain_packet = g_env_light.mpRainPacket;
@@ -3406,7 +3370,6 @@ void dKyr_drawSibuki(Mtx drawMtx, u8** tex) {
     J3DShape::resetVcdVatCache();
 }
 
-/* 8006653C-80067488 060E7C 0F4C+00 0/0 1/1 0/0 .text            dKyr_drawHousi__FPA4_fPPUc */
 void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
     dKankyo_housi_Packet* housi_packet = g_env_light.mpHousiPacket;
     static f32 rot = 0.0f;
@@ -3767,7 +3730,6 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
     }
 }
 
-/* 80067488-800685DC 061DC8 1154+00 0/0 1/1 0/0 .text            dKyr_drawSnow__FPA4_fPPUc */
 void dKyr_drawSnow(Mtx drawMtx, u8** tex) {
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
     dKankyo_snow_Packet* snow_packet = g_env_light.mpSnowPacket;
@@ -4064,7 +4026,6 @@ void dKyr_drawSnow(Mtx drawMtx, u8** tex) {
     }
 }
 
-/* 800685DC-8006950C 062F1C 0F30+00 0/0 1/1 0/0 .text            dKyr_drawStar__FPA4_fPPUc */
 void dKyr_drawStar(Mtx drawMtx, u8** tex) {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_star_Packet* star_packet = g_env_light.mpStarPacket;
@@ -4336,7 +4297,6 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
     }
 }
 
-/* 8006950C-8006A090 063E4C 0B84+00 0/0 1/1 0/0 .text            drawCloudShadow__FPA4_fPPUc */
 void drawCloudShadow(Mtx drawMtx, u8** tex) {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_cloud_Packet* cloud_packet = g_env_light.mpCloudPacket;
@@ -4578,7 +4538,6 @@ inline float cosf(float x) {
     return cos(x);
 }
 
-/* 8006A090-8006B190 0649D0 1100+00 0/0 1/1 0/0 .text            drawVrkumo__FPA4_fR8_GXColorPPUc */
 void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
@@ -5042,13 +5001,11 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
     J3DShape::resetVcdVatCache();
 }
 
-/* 8006B190-8006B1A8 065AD0 0018+00 0/0 1/1 0/0 .text            dKyr_thunder_init__Fv */
 void dKyr_thunder_init() {
     g_env_light.mThunderEff.mState = 0;
     g_env_light.mThunderEff.field_0x2 = 0;
 }
 
-/* 8006B1A8-8006B8DC 065AE8 0734+00 0/0 1/1 0/0 .text            dKyr_thunder_move__Fv */
 void dKyr_thunder_move() {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     EF_THUNDER* effect = &envlight->mThunderEff;
@@ -5234,13 +5191,10 @@ void dKyr_thunder_move() {
     }
 }
 
-/* 8006B8DC-8006B8E0 06621C 0004+00 0/0 1/1 0/0 .text            dKyr_shstar_init__Fv */
 void dKyr_shstar_init() {}
 
-/* 8006B8E0-8006B8E4 066220 0004+00 0/0 1/1 0/0 .text            dKyr_shstar_move__Fv */
 void dKyr_shstar_move() {}
 
-/* 8006B8E4-8006B924 066224 0040+00 0/0 1/1 0/0 .text            dKyr_odour_init__Fv */
 void dKyr_odour_init() {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_odour_Packet* odour_packet = envlight->mOdourData.mpOdourPacket;
@@ -5253,7 +5207,6 @@ void dKyr_odour_init() {
     }
 }
 
-/* 8006B924-8006BE0C 066264 04E8+00 0/0 1/1 0/0 .text            dKyr_odour_move__Fv */
 void dKyr_odour_move() {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKy_Odour_Data* pOdourData = &envlight->mOdourData;
@@ -5342,7 +5295,6 @@ void dKyr_odour_move() {
     }
 }
 
-/* 8006BE0C-8006C790 06674C 0984+00 0/0 1/1 0/0 .text            dKyr_odour_draw__FPA4_fPPUc */
 void dKyr_odour_draw(Mtx drawMtx, u8** tex) {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_odour_Packet* odour_packet = envlight->mOdourData.mpOdourPacket;
@@ -5570,7 +5522,6 @@ void dKyr_odour_draw(Mtx drawMtx, u8** tex) {
     J3DShape::resetVcdVatCache();
 }
 
-/* 8006C790-8006C85C 0670D0 00CC+00 0/0 1/1 0/0 .text            dKyr_mud_init__Fv */
 void dKyr_mud_init() {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     envlight->mpMudPacket->mpMoyaRes = (u8*)dComIfG_getObjectRes("Always", 0x53);
@@ -5588,7 +5539,6 @@ void dKyr_mud_init() {
     }
 }
 
-/* 8006C85C-8006D01C 06719C 07C0+00 0/0 1/1 0/0 .text            dKyr_mud_move__Fv */
 void dKyr_mud_move() {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_mud_Packet* mud_packet = g_env_light.mpMudPacket;
@@ -5729,7 +5679,6 @@ void dKyr_mud_move() {
     }
 }
 
-/* 8006D01C-8006D914 06795C 08F8+00 0/0 1/1 0/0 .text            dKyr_mud_draw__FPA4_fPPUc */
 void dKyr_mud_draw(Mtx drawMtx, u8** tex) {
     dKankyo_mud_Packet* mud_packet = g_env_light.mpMudPacket;
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
@@ -5924,7 +5873,6 @@ void dKyr_mud_draw(Mtx drawMtx, u8** tex) {
     }
 }
 
-/* 8006D914-8006DA04 068254 00F0+00 0/0 1/1 1/1 .text            dKyr_evil_init__Fv */
 void dKyr_evil_init() {
     if (g_env_light.mpEvilPacket != NULL) {
         g_env_light.mpEvilPacket->mpMoyaRes = (u8*)dComIfG_getObjectRes("Always", 0x53);
@@ -5942,7 +5890,6 @@ void dKyr_evil_init() {
     }
 }
 
-/* 8006DA04-8006DA7C 068344 0078+00 0/0 1/1 0/0 .text            dKyr_evil_move__Fv */
 void dKyr_evil_move() {
     dKankyo_evil_Packet* evil_packet = g_env_light.mpEvilPacket;
     cXyz vec = dKyw_get_wind_vecpow();
@@ -5951,7 +5898,6 @@ void dKyr_evil_move() {
     for (int i = 0; i < evil_packet->mEffectNum; i++) {}
 }
 
-/* 8006DA7C-8006E448 0683BC 09CC+00 1/1 0/0 0/0 .text            dKyr_evil_draw2__FPA4_fPPUc */
 static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_evil_Packet* evil_packet = envlight->mpEvilPacket;
@@ -6160,8 +6106,6 @@ static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
     }
 }
 
-/* 8006E448-8006E6B0 068D88 0268+00 1/1 0/0 0/0 .text            dKyr_near_bosslight_check__F4cXyz
- */
 static f32 dKyr_near_bosslight_check(cXyz pos) {
     f32 nearest_dist = 10000000.0f;
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
@@ -6177,7 +6121,6 @@ static f32 dKyr_near_bosslight_check(cXyz pos) {
     return nearest_dist;
 }
 
-/* 8006E6B0-8006F160 068FF0 0AB0+00 0/0 1/1 0/0 .text            dKyr_evil_draw__FPA4_fPPUc */
 void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_evil_Packet* evil_packet = envlight->mpEvilPacket;

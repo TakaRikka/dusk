@@ -15,8 +15,8 @@ class daWarpBug_c : public fopAc_ac_c {
 public:
     inline ~daWarpBug_c();
 
-    /* 80D67E38 */ void create_init();
-    /* 80D68068 */ int draw();
+    void create_init();
+    int draw();
 
     inline int createHeap();
     inline int execute();

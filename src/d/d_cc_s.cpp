@@ -10,19 +10,15 @@
 #include "d/d_jnt_col.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 80085ED4-80085F08 080814 0034+00 0/0 1/1 0/0 .text            Ct__4dCcSFv */
 void dCcS::Ct() {
     cCcS::Ct();
     mMass_Mng.Ct();
 }
 
-/* 80085F08-80085F28 080848 0020+00 0/0 1/1 0/0 .text            Dt__4dCcSFv */
 void dCcS::Dt() {
     cCcS::Dt();
 }
 
-/* 80085F28-800860F8 080868 01D0+00 1/1 0/0 0/0 .text
- * ChkShieldFrontRange__4dCcSFP8cCcD_ObjP8cCcD_ObjiPC4cXyz      */
 bool dCcS::ChkShieldFrontRange(cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj, int param_2,
                                cXyz const* i_hitPos) {
     dCcD_GObjInf* atObj = (dCcD_GObjInf*)i_atObj->GetGObjInf();
@@ -89,8 +85,6 @@ bool dCcS::ChkShieldFrontRange(cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj, int param_2
     return true;
 }
 
-/* 800860F8-800861B0 080A38 00B8+00 1/1 0/0 0/0 .text
- * ChkShield__4dCcSFP8cCcD_ObjP8cCcD_ObjP12dCcD_GObjInfP12dCcD_GObjInfPC4cXyz */
 bool dCcS::ChkShield(cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj, dCcD_GObjInf* i_atObjInf,
                      dCcD_GObjInf* i_tgObjInf, cXyz const* i_hitPos) {
     if (i_atObjInf->ChkAtNoGuard()) {
@@ -110,8 +104,6 @@ bool dCcS::ChkShield(cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj, dCcD_GObjInf* i_atObj
     return false;
 }
 
-/* 800861B0-800861B4 080AF0 0004+00 1/0 0/0 0/0 .text
- * CalcTgPlusDmg__4dCcSFP8cCcD_ObjP8cCcD_ObjP9cCcD_SttsP9cCcD_Stts */
 void dCcS::CalcTgPlusDmg(cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj, cCcD_Stts* i_atStts,
                          cCcD_Stts* i_tgStts) {}
 
@@ -194,7 +186,6 @@ void dCcS::SetCoGObjInf(bool i_co1Set, bool i_co2Set, cCcD_GObjInf* i_co1Obj, cC
     }
 }
 
-/* 80086360-80086404 080CA0 00A4+00 1/1 0/0 0/0 .text            GetRank__4dCcSFUc */
 int dCcS::GetRank(u8 weight) {
     if (weight == 255) {
         return 10;
@@ -239,12 +230,10 @@ int dCcS::GetRank(u8 weight) {
     return 0;
 }
 
-/* 80086404-8008640C 080D44 0008+00 1/0 0/0 0/0 .text ChkNoHitGCo__4dCcSFP8cCcD_ObjP8cCcD_Obj */
 bool dCcS::ChkNoHitGCo(cCcD_Obj* i_co1Obj, cCcD_Obj* i_co2Obj) {
     return false;
 }
 
-/* 803AC328-803AC3A4 009448 0079+03 1/1 0/0 0/0 .data            rank_tbl */
 static u8 rank_tbl[11][11] = {
     0x00, 0x64, 0x64, 0x64, 0x64, 0x64, 0x64, 0x64, 0x64, 0x64, 0x64, 0x00, 0x32, 0x64, 0x64, 0x64,
     0x64, 0x64, 0x64, 0x64, 0x64, 0x64, 0x00, 0x00, 0x32, 0x4B, 0x5A, 0x64, 0x64, 0x64, 0x64, 0x64,
@@ -256,8 +245,6 @@ static u8 rank_tbl[11][11] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 8008640C-80086754 080D4C 0348+00 1/0 0/0 0/0 .text
- * SetPosCorrect__4dCcSFP8cCcD_ObjP4cXyzP8cCcD_ObjP4cXyzf       */
 void dCcS::SetPosCorrect(cCcD_Obj* i_co1Obj, cXyz* i_pos1, cCcD_Obj* i_co2Obj, cXyz* i_pos2,
                          f32 i_cross_len) {
     if (i_co1Obj->ChkCoNoCrr() || i_co2Obj->ChkCoNoCrr()) {
@@ -347,8 +334,6 @@ void dCcS::SetPosCorrect(cCcD_Obj* i_co1Obj, cXyz* i_pos1, cCcD_Obj* i_co2Obj, c
     *i_pos2 += co2_move;
 }
 
-/* 80086754-8008685C 081094 0108+00 1/0 0/0 0/0 .text
- * CalcParticleAngle__4dCcSFP12dCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP5csXyz */
 void dCcS::CalcParticleAngle(dCcD_GObjInf* i_atObjInf, cCcD_Stts* i_atStts, cCcD_Stts* i_tgStts,
                              csXyz* o_angle) {
     cXyz vec(*i_atObjInf->GetAtVecP());
@@ -526,8 +511,6 @@ void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg, cCcD_Obj* i_atObj, cCcD_Ob
     }
 }
 
-/* 80086D8C-80086FBC 0816CC 0230+00 0/0 2/2 0/0 .text
- * ChkCamera__4dCcSFR4cXyzR4cXyzfP10fopAc_ac_cP10fopAc_ac_cP10fopAc_ac_c */
 bool dCcS::ChkCamera(cXyz& param_0, cXyz& param_1, f32 param_2, fopAc_ac_c* param_3,
                      fopAc_ac_c* param_4, fopAc_ac_c* param_5) {
     if (mObjCoCount == 0) {
@@ -565,8 +548,6 @@ bool dCcS::ChkCamera(cXyz& param_0, cXyz& param_1, f32 param_2, fopAc_ac_c* para
     return false;
 }
 
-/* 80086FBC-8008721C 0818FC 0260+00 0/0 1/1 0/0 .text
- * chkCameraPoint__4dCcSFRC4cXyzPQ214cCcD_ShapeAttr5ShapeP10fopAc_ac_cP10fopAc_ac_c */
 bool dCcS::chkCameraPoint(cXyz const& param_0, cCcD_ShapeAttr::Shape* param_1, fopAc_ac_c* param_2,
                           fopAc_ac_c* param_3) {
     if (mObjCoCount == 0) {
@@ -610,30 +591,24 @@ bool dCcS::chkCameraPoint(cXyz const& param_0, cCcD_ShapeAttr::Shape* param_1, f
     return false;
 }
 
-/* 800872A8-800872AC 081BE8 0004+00 1/0 0/0 0/0 .text            MoveAfterCheck__4dCcSFv */
 void dCcS::MoveAfterCheck() {}
 
-/* 800872AC-800872B0 081BEC 0004+00 1/1 0/0 0/0 .text            DrawAfter__4dCcSFv */
 void dCcS::DrawAfter() {}
 
-/* 800872B0-800872D0 081BF0 0020+00 0/0 1/1 0/0 .text            Move__4dCcSFv */
 void dCcS::Move() {
     cCcS::Move();
 }
 
-/* 800872D0-8008730C 081C10 003C+00 0/0 1/1 0/0 .text            Draw__4dCcSFv */
 void dCcS::Draw() {
     DrawAfter();
     DrawClear();
     mMass_Mng.Clear();
 }
 
-/* 8008730C-80087330 081C4C 0024+00 0/0 0/0 1/1 .text            MassClear__4dCcSFv */
 void dCcS::MassClear() {
     mMass_Mng.Clear();
 }
 
-/* 803AC3A4-803AC3E4 0094C4 0040+00 1/1 0/0 0/0 .data            m_mtrl_hit_tbl__4dCcS */
 // clang-format off
 bool dCcS::m_mtrl_hit_tbl[64] = {
     true,  true,  true,  true,  true,  true,  true,  true, 
@@ -647,13 +622,10 @@ bool dCcS::m_mtrl_hit_tbl[64] = {
 };
 // clang-format on
 
-/* 80087330-8008734C 081C70 001C+00 1/1 0/0 0/0 .text            ChkAtTgMtrlHit__4dCcSFUcUc */
 BOOL dCcS::ChkAtTgMtrlHit(u8 i_atMtrl, u8 i_tgMtrl) {
     return m_mtrl_hit_tbl[i_atMtrl + i_tgMtrl * 8];
 }
 
-/* 8008734C-800873B0 081C8C 0064+00 1/0 0/0 0/0 .text
- * ChkNoHitGAtTg__4dCcSFPC12cCcD_GObjInfPC12cCcD_GObjInfP10cCcD_GSttsP10cCcD_GStts */
 bool dCcS::ChkNoHitGAtTg(cCcD_GObjInf const* i_atObjInf, cCcD_GObjInf const* i_tgObjInf,
                          cCcD_GStts*, cCcD_GStts*) {
     dCcD_GObjInf* atObjInf = (dCcD_GObjInf*)i_atObjInf;

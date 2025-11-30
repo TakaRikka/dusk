@@ -14,21 +14,21 @@
  */
 class daSldWall_c : public dBgS_MoveBgActor {
 public:
-    /* 80C61EB0 */ void setBaseMtx();
-    /* 80C61FB8 */ int create();
-    /* 80C62134 */ void moveWall();
-    /* 80C62238 */ void init_modeWait();
-    /* 80C62244 */ void modeWait();
-    /* 80C62248 */ void init_modeMoveOpen();
-    /* 80C62254 */ void modeMoveOpen();
-    /* 80C62314 */ void init_modeMoveClose();
-    /* 80C62320 */ void modeMoveClose();
-    /* 80C623E0 */ void setSe();
+    void setBaseMtx();
+    int create();
+    void moveWall();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMoveOpen();
+    void modeMoveOpen();
+    void init_modeMoveClose();
+    void modeMoveClose();
+    void setSe();
 
-    /* 80C61F4C */ virtual int CreateHeap();
-    /* 80C620E4 */ virtual int Execute(Mtx**);
-    /* 80C6249C */ virtual int Draw();
-    /* 80C62540 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSw() { return fopAcM_GetParamBit(this, 0, 8); }
 
@@ -45,8 +45,8 @@ STATIC_ASSERT(sizeof(daSldWall_c) == 0x5b4);
 
 class daSldWall_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C61E2C */ daSldWall_HIO_c();
-    /* 80C625FC */ virtual ~daSldWall_HIO_c() {}
+    daSldWall_HIO_c();
+    virtual ~daSldWall_HIO_c() {}
 
     void genMessage(JORMContext*);
 

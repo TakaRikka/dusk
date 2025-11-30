@@ -7,7 +7,6 @@
 #include <stdint.h>
 
 #pragma dont_inline on
-/* 8036F580-8036F638 369EC0 00B8+00 0/0 1/1 0/0 .text            TRK_fill_mem */
 void TRK_fill_mem(void* dst, int val, u32 n) {
     u32 v, i, j;
     v = (u8)val;
@@ -60,7 +59,6 @@ void TRK_fill_mem(void* dst, int val, u32 n) {
 }
 #pragma dont_inline reset
 
-/* 800035C0-800035E4 0004C0 0024+00 0/0 12/12 0/0 .init            TRK_memcpy */
 __declspec(section ".init") void* TRK_memcpy(void* dst, const void* src, size_t n) {
     const unsigned char* s = (const unsigned char*)src - 1;
     unsigned char* d = (unsigned char*)dst - 1;
@@ -71,7 +69,6 @@ __declspec(section ".init") void* TRK_memcpy(void* dst, const void* src, size_t 
     return dst;
 }
 
-/* 80003590-800035C0 000490 0030+00 0/0 1/1 0/0 .init            TRK_memset */
 __declspec(section ".init") void* TRK_memset(void* dst, int val, size_t n) {
     TRK_fill_mem(dst, val, n);
 

@@ -20,16 +20,16 @@ struct jmessage_tControl;
 
 class dDemo_object_c {
 public:
-    /* 80038F54 */ dDemo_object_c();
-    /* 80038F70 */ ~dDemo_object_c();
-    /* 80038FC0 */ JStage::TObject* appendActor(fopAc_ac_c*);
-    /* 80039088 */ dDemo_actor_c* getActor(u8);
-    /* 800390AC */ JStage::TObject* createCamera();
-    /* 80039128 */ dDemo_camera_c* getActiveCamera();
-    /* 8003913C */ JStage::TObject* createAmbient();
-    /* 800391B8 */ JStage::TObject* appendLight();
-    /* 80039258 */ JStage::TObject* createFog();
-    /* 800392D4 */ void remove();
+    dDemo_object_c();
+    ~dDemo_object_c();
+    JStage::TObject* appendActor(fopAc_ac_c*);
+    dDemo_actor_c* getActor(u8);
+    JStage::TObject* createCamera();
+    dDemo_camera_c* getActiveCamera();
+    JStage::TObject* createAmbient();
+    JStage::TObject* appendLight();
+    JStage::TObject* createFog();
+    void remove();
 
     /* 0x00 */ u8 mActorNum;
     /* 0x01 */ u8 mLightNum;
@@ -77,45 +77,45 @@ public:
         ENABLE_TEX_ANM_FRAME_e = (1 << 9),
     };
 
-    /* 80038020 */ dDemo_actor_c();
-    /* 80038128 */ fopAc_ac_c* getActor();
-    /* 8003815C */ void setActor(fopAc_ac_c*);
-    /* 8003819C */ f32 getPrm_Morf();
-    /* 80038338 */ int getDemoIDData(int*, int*, int*, u16*, u8*);
+    dDemo_actor_c();
+    fopAc_ac_c* getActor();
+    void setActor(fopAc_ac_c*);
+    f32 getPrm_Morf();
+    int getDemoIDData(int*, int*, int*, u16*, u8*);
     
-    /* 80038098 */ virtual ~dDemo_actor_c();
-    /* 800387EC */ virtual void JSGSetData(u32, void const*, u32);
-    /* 8003A05C */ virtual s32 JSGFindNodeID(char const* param_0) const {
+    virtual ~dDemo_actor_c();
+    virtual void JSGSetData(u32, void const*, u32);
+    virtual s32 JSGFindNodeID(char const* param_0) const {
         JUT_ASSERT(0, mModel != NULL);
         return mModel->getModelData()->getJointName()->getIndex(param_0);
     }
-    /* 8003A088 */ virtual bool JSGGetNodeTransformation(u32 param_0, Mtx param_1) const {
+    virtual bool JSGGetNodeTransformation(u32 param_0, Mtx param_1) const {
         JUT_ASSERT(0, mModel != NULL);
         cMtx_copy(mModel->getAnmMtx((u16)param_0), param_1);
         return true;
     }
-    /* 80038920 */ virtual void JSGSetTranslation(Vec const&);
-    /* 80038980 */ virtual void JSGSetScaling(Vec const&);
-    /* 800389A8 */ virtual void JSGSetRotation(Vec const&);
-    /* 80038A0C */ virtual void JSGSetShape(u32);
-    /* 80038A20 */ virtual void JSGSetAnimation(u32);
-    /* 80038A40 */ virtual void JSGSetAnimationFrame(f32);
-    /* 8003A0C8 */ virtual f32 JSGGetAnimationFrameMax() const {
+    virtual void JSGSetTranslation(Vec const&);
+    virtual void JSGSetScaling(Vec const&);
+    virtual void JSGSetRotation(Vec const&);
+    virtual void JSGSetShape(u32);
+    virtual void JSGSetAnimation(u32);
+    virtual void JSGSetAnimationFrame(f32);
+    virtual f32 JSGGetAnimationFrameMax() const {
         return mAnmFrameMax;
     }
-    /* 80038A54 */ virtual void JSGSetAnimationTransition(f32);
-    /* 80038A68 */ virtual void JSGSetTextureAnimation(u32);
-    /* 80038A7C */ virtual void JSGSetTextureAnimationFrame(f32);
-    /* 8003A0D0 */ virtual f32 JSGGetTextureAnimationFrameMax() const {
+    virtual void JSGSetAnimationTransition(f32);
+    virtual void JSGSetTextureAnimation(u32);
+    virtual void JSGSetTextureAnimationFrame(f32);
+    virtual f32 JSGGetTextureAnimationFrameMax() const {
         return mTexAnmFrameMax;
     }
-    /* 8003A0D8 */ virtual void JSGGetTranslation(Vec* o_trans) const {
+    virtual void JSGGetTranslation(Vec* o_trans) const {
         *o_trans = mTrans;
     }
-    /* 8003A0F4 */ virtual void JSGGetScaling(Vec* o_scale) const {
+    virtual void JSGGetScaling(Vec* o_scale) const {
         *o_scale = mScale;
     }
-    /* 8003A110 */ virtual void JSGGetRotation(Vec* param_0) const {
+    virtual void JSGGetRotation(Vec* param_0) const {
         param_0->x = mRotate.x * 0.005493164f;
         param_0->y = mRotate.y * 0.005493164f;
         param_0->z = mRotate.z * 0.005493164f;
@@ -164,9 +164,9 @@ class dDemo_system_c : public JStage::TSystem {
 public:
     dDemo_system_c() { mpObject = NULL; }
 
-    /* 80039528 */ virtual int JSGFindObject(JStage::TObject**, char const*,
+    virtual int JSGFindObject(JStage::TObject**, char const*,
                                               JStage::TEObject) const;
-    /* 80039AAC */ virtual ~dDemo_system_c();
+    virtual ~dDemo_system_c();
 
     void setObject(dDemo_object_c* i_object) { mpObject = i_object; }
 
@@ -179,8 +179,8 @@ public:
     dDemo_particle_c(JPAEmitterManager* p_emitMgr, const JStage::TSystem* p_system)
         : JStudio_JParticle::TCreateObject(p_emitMgr, p_system) {}
 
-    /* 80039F9C */ virtual ~dDemo_particle_c();
-    /* 80039F1C */ virtual JPABaseEmitter* emitter_create(u32);
+    virtual ~dDemo_particle_c();
+    virtual JPABaseEmitter* emitter_create(u32);
 };
 
 class dDemo_light_c : public JStage::TLight {
@@ -198,13 +198,13 @@ public:
         mFlags = 0;
     }
 
-    /* 80038E20 */ virtual void JSGSetLightType(JStage::TELight);
-    /* 80038E34 */ virtual void JSGSetPosition(Vec const&);
-    /* 80038E5C */ virtual void JSGSetColor(GXColor);
-    /* 80038E8C */ virtual void JSGSetDistanceAttenuation(f32, f32, GXDistAttnFn);
-    /* 80038EA8 */ virtual void JSGSetAngleAttenuation(f32, GXSpotFn);
-    /* 80038EC0 */ virtual void JSGSetDirection(Vec const&);
-    /* 80039468 */ virtual ~dDemo_light_c();
+    virtual void JSGSetLightType(JStage::TELight);
+    virtual void JSGSetPosition(Vec const&);
+    virtual void JSGSetColor(GXColor);
+    virtual void JSGSetDistanceAttenuation(f32, f32, GXDistAttnFn);
+    virtual void JSGSetAngleAttenuation(f32, GXSpotFn);
+    virtual void JSGSetDirection(Vec const&);
+    virtual ~dDemo_light_c();
 
     void onEnable(u8 flag) { mFlags |= flag; }
 
@@ -234,11 +234,11 @@ public:
         mFlags = 0;
     }
 
-    /* 80038EE8 */ virtual void JSGSetFogFunction(GXFogType);
-    /* 80038EFC */ virtual void JSGSetStartZ(f32);
-    /* 80038F10 */ virtual void JSGSetEndZ(f32);
-    /* 80038F24 */ virtual void JSGSetColor(GXColor);
-    /* 80039408 */ virtual ~dDemo_fog_c();
+    virtual void JSGSetFogFunction(GXFogType);
+    virtual void JSGSetStartZ(f32);
+    virtual void JSGSetEndZ(f32);
+    virtual void JSGSetColor(GXColor);
+    virtual ~dDemo_fog_c();
 
     void onEnable(u8 flag) { mFlags |= flag; }
 
@@ -267,23 +267,23 @@ public:
         mFlags = 0;
     }
 
-    /* 80038AC4 */ virtual f32 JSGGetProjectionNear() const;
-    /* 80038AF8 */ virtual void JSGSetProjectionNear(f32);
-    /* 80038B0C */ virtual f32 JSGGetProjectionFar() const;
-    /* 80038B40 */ virtual void JSGSetProjectionFar(f32);
-    /* 80038B54 */ virtual f32 JSGGetProjectionFovy() const;
-    /* 80038B88 */ virtual void JSGSetProjectionFovy(f32);
-    /* 80038B9C */ virtual f32 JSGGetProjectionAspect() const;
-    /* 80038BD0 */ virtual void JSGSetProjectionAspect(f32);
-    /* 80038BE4 */ virtual void JSGGetViewPosition(Vec*) const;
-    /* 80038C44 */ virtual void JSGSetViewPosition(Vec const&);
-    /* 80038C6C */ virtual void JSGGetViewUpVector(Vec*) const;
-    /* 80038CD0 */ virtual void JSGSetViewUpVector(Vec const&);
-    /* 80038CF8 */ virtual void JSGGetViewTargetPosition(Vec*) const;
-    /* 80038D5C */ virtual void JSGSetViewTargetPosition(Vec const&);
-    /* 80038D84 */ virtual f32 JSGGetViewRoll() const;
-    /* 80038DDC */ virtual void JSGSetViewRoll(f32);
-    /* 80039FFC */ virtual ~dDemo_camera_c();
+    virtual f32 JSGGetProjectionNear() const;
+    virtual void JSGSetProjectionNear(f32);
+    virtual f32 JSGGetProjectionFar() const;
+    virtual void JSGSetProjectionFar(f32);
+    virtual f32 JSGGetProjectionFovy() const;
+    virtual void JSGSetProjectionFovy(f32);
+    virtual f32 JSGGetProjectionAspect() const;
+    virtual void JSGSetProjectionAspect(f32);
+    virtual void JSGGetViewPosition(Vec*) const;
+    virtual void JSGSetViewPosition(Vec const&);
+    virtual void JSGGetViewUpVector(Vec*) const;
+    virtual void JSGSetViewUpVector(Vec const&);
+    virtual void JSGGetViewTargetPosition(Vec*) const;
+    virtual void JSGSetViewTargetPosition(Vec const&);
+    virtual f32 JSGGetViewRoll() const;
+    virtual void JSGSetViewRoll(f32);
+    virtual ~dDemo_camera_c();
 
     void onEnable(u8 flag) { mFlags |= flag; }
     bool checkEnable(u8 flag) { return mFlags & flag; }
@@ -316,8 +316,8 @@ public:
         mFlags = 0;
     }
 
-    /* 80038DF0 */ virtual void JSGSetColor(GXColor);
-    /* 800394C8 */ virtual ~dDemo_ambient_c();
+    virtual void JSGSetColor(GXColor);
+    virtual ~dDemo_ambient_c();
 
     void onEnable(u8 flag) { mFlags |= flag; }
 
@@ -351,15 +351,15 @@ int dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, char const*, int, u16*, 
 
 class dDemo_c {
 public:
-    /* 80039678 */ static void create();
-    /* 80039910 */ static void remove();
-    /* 80039B6C */ static int start(u8 const*, cXyz*, f32);
-    /* 80039CF8 */ static void end();
-    /* 80039D4C */ static void branch();
-    /* 80039DA4 */ static int update();
-    /* 80039EDC */ static void setBranchType(u16);
-    /* 80039EEC */ static void setBranchId(u16, s16);
-    /* 80039F04 */ static void reset();
+    static void create();
+    static void remove();
+    static int start(u8 const*, cXyz*, f32);
+    static void end();
+    static void branch();
+    static int update();
+    static void setBranchType(u16);
+    static void setBranchId(u16, s16);
+    static void reset();
 
     static dDemo_actor_c* getActor(u8 param_0) {
         JUT_ASSERT(546, m_object != NULL);

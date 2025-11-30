@@ -17,25 +17,25 @@ class daLv4EdShutter_c : public dBgS_MoveBgActor, public request_of_phase_proces
 public:
     daLv4EdShutter_c() : dEvLib_callback_c(this) {}
 
-    /* 80C5DE38 */ void setBaseMtx();
-    /* 80C5DF34 */ int create();
-    /* 80C5E0F4 */ void move();
-    /* 80C5E1B0 */ void init_modeWait();
-    /* 80C5E1C8 */ void modeWait();
-    /* 80C5E2E0 */ void init_modeOpen();
-    /* 80C5E394 */ void modeOpen();
-    /* 80C5E464 */ void init_modeClose();
-    /* 80C5E518 */ void modeClose();
-    /* 80C5E584 */ void init_modeEnd();
-    /* 80C5E590 */ void modeEnd();
+    void setBaseMtx();
+    int create();
+    void move();
+    void init_modeWait();
+    void modeWait();
+    void init_modeOpen();
+    void modeOpen();
+    void init_modeClose();
+    void modeClose();
+    void init_modeEnd();
+    void modeEnd();
 
-    /* 80C5DEC8 */ virtual int CreateHeap();
-    /* 80C5E0A4 */ virtual int Execute(Mtx**);
-    /* 80C5E5CC */ virtual int Draw();
-    /* 80C5E670 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
-    /* 80C5E834 */ virtual ~daLv4EdShutter_c() {}
-    /* 80C5E594 */ virtual bool eventStart();
+    virtual ~daLv4EdShutter_c() {}
+    virtual bool eventStart();
 
     u8 getCloseSw() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getOpenSw() { return fopAcM_GetParamBit(this, 8, 8); }

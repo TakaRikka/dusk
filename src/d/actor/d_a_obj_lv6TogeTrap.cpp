@@ -12,8 +12,8 @@
 
 class daLv6TogeTrap_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C79E4C */ daLv6TogeTrap_HIO_c();
-    /* 80C7C504 */ virtual ~daLv6TogeTrap_HIO_c() {}
+    daLv6TogeTrap_HIO_c();
+    virtual ~daLv6TogeTrap_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -31,7 +31,6 @@ public:
     /* 0x24 */ f32 rotate_speed;
 };
 
-/* 80C79E4C-80C79EC8 0000EC 007C+00 1/1 0/0 0/0 .text            __ct__19daLv6TogeTrap_HIO_cFv */
 daLv6TogeTrap_HIO_c::daLv6TogeTrap_HIO_c() {
     field_0x4 = 60;
     field_0x5 = 1;
@@ -50,10 +49,8 @@ daLv6TogeTrap_HIO_c::daLv6TogeTrap_HIO_c() {
     return_accel = 10.0f;
 }
 
-/* 80C7CA64-80C7CA8C 000014 0028+00 9/9 0/0 0/0 .bss             l_HIO */
 static daLv6TogeTrap_HIO_c l_HIO;
 
-/* 80C7C630-80C7C660 000018 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__15daLv6TogeTrap_c */
 const dCcD_SrcGObjInf daLv6TogeTrap_c::mCcDObjInfo = {
     {0, {{0x800, 0x1, 0x1F}, {0xD8FBFDFF, 0x11}, {0x79}}},
     {dCcD_SE_SWORD, 0, 1, 0, 1},
@@ -61,7 +58,6 @@ const dCcD_SrcGObjInf daLv6TogeTrap_c::mCcDObjInfo = {
     {0},
 };
 
-/* 80C7C660-80C7C690 000048 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo2__15daLv6TogeTrap_c */
 const dCcD_SrcGObjInf daLv6TogeTrap_c::mCcDObjInfo2 = {
     {0, {{0x0, 0x0, 0}, {0xDAFBFDFF, 0x11}, {0x0}}},
     {dCcD_SE_SWORD, 0, 0, 0, 0},
@@ -69,7 +65,6 @@ const dCcD_SrcGObjInf daLv6TogeTrap_c::mCcDObjInfo2 = {
     {0},
 };
 
-/* 80C7C798-80C7C7D8 000020 0040+00 1/2 0/0 0/0 .data            mCcDSph__15daLv6TogeTrap_c */
 dCcD_SrcSph daLv6TogeTrap_c::mCcDSph = {
     daLv6TogeTrap_c::mCcDObjInfo,
     {
@@ -77,7 +72,6 @@ dCcD_SrcSph daLv6TogeTrap_c::mCcDSph = {
     }  // mSphAttr
 };
 
-/* 80C7C7D8-80C7C81C 000060 0044+00 1/2 0/0 0/0 .data            mCcDCyl__15daLv6TogeTrap_c */
 dCcD_SrcCyl daLv6TogeTrap_c::mCcDCyl = {
     daLv6TogeTrap_c::mCcDObjInfo2,
     {
@@ -87,14 +81,12 @@ dCcD_SrcCyl daLv6TogeTrap_c::mCcDCyl = {
     }  // mCyl
 };
 
-/* 80C7C81C-80C7C828 -00001 000C+00 2/3 0/0 0/0 .data            l_resNameIdx */
 static char* l_resNameIdx[3] = {
     "L6TogeTp",
     "L4TogeTp",
     "L9Toge",
 };
 
-/* 80C7C690-80C7C6D0 000078 0040+00 0/1 0/0 0/0 .rodata          mSpeed__15daLv6TogeTrap_c */
 const f32 daLv6TogeTrap_c::mSpeed[16] = {
     10.0f,
     16.666666f,
@@ -114,13 +106,10 @@ const f32 daLv6TogeTrap_c::mSpeed[16] = {
     3.3333333f,
 };
 
-/* 80C7C6D0-80C7C6DC 0000B8 000C+00 1/1 0/0 0/0 .rodata          l_bmdIdx */
 static const int l_bmdIdx[] = {4, 4, 4};
 
-/* 80C7C6DC-80C7C6E8 0000C4 000C+00 0/0 0/0 0/0 .rodata          l_dzbIdx */
 static const int l_dzbIdx[] = {7, 7, 7};
 
-/* 80C79F10-80C79FE8 0001B0 00D8+00 2/2 0/0 0/0 .text            setBaseMtx__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x * (field_0x610 + oREG_F(19)), current.pos.y, current.pos.z * (field_0x610 + oREG_F(19)));
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -133,7 +122,6 @@ void daLv6TogeTrap_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C79FE8-80C7A068 000288 0080+00 1/0 0/0 0/0 .text            CreateHeap__15daLv6TogeTrap_cFv */
 int daLv6TogeTrap_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_resNameIdx[mModelType], l_bmdIdx[mModelType]);
     JUT_ASSERT(376, modelData != NULL);
@@ -146,7 +134,6 @@ int daLv6TogeTrap_c::CreateHeap() {
     return 1;
 }
 
-/* 80C7A068-80C7A534 000308 04CC+00 1/1 0/0 0/0 .text            create__15daLv6TogeTrap_cFv */
 int daLv6TogeTrap_c::create() {
     fopAcM_ct(this, daLv6TogeTrap_c);
 
@@ -263,7 +250,6 @@ int daLv6TogeTrap_c::create() {
     return phase_state;
 }
 
-/* 80C7A6B0-80C7A700 000950 0050+00 1/1 0/0 0/0 .text searchSekizoAct__15daLv6TogeTrap_cFPvPv */
 void* daLv6TogeTrap_c::searchSekizoAct(void* i_actor, void* i_data) {
     if (i_actor != NULL && fopAcM_IsActor(i_actor) && fopAcM_GetProfName(i_actor) == PROC_CSTATUE) {
         return i_actor;
@@ -272,7 +258,6 @@ void* daLv6TogeTrap_c::searchSekizoAct(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80C7A700-80C7A97C 0009A0 027C+00 1/0 0/0 0/0 .text Execute__15daLv6TogeTrap_cFPPA3_A4_f */
 int daLv6TogeTrap_c::Execute(Mtx** param_0) {
     moveLift();
 
@@ -325,7 +310,6 @@ int daLv6TogeTrap_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80C7A97C-80C7ABC8 000C1C 024C+00 1/1 0/0 0/0 .text            moveLift__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::moveLift() {
     if (mPathNo != 0xFF) {
         static void (daLv6TogeTrap_c::*mode_proc[])() = {
@@ -368,8 +352,6 @@ void daLv6TogeTrap_c::moveLift() {
     }
 }
 
-/* 80C7ABC8-80C7ACA0 000E68 00D8+00 1/1 0/0 0/0 .text            executeType1__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::executeType1() {
     if (field_0x60b == 0 && mCcSph.ChkCoHit()) {
         fopAc_ac_c* co_hitactor = mCcSph.GetCoHitAc();
@@ -384,8 +366,6 @@ void daLv6TogeTrap_c::executeType1() {
     }
 }
 
-/* 80C7ACA0-80C7AD40 000F40 00A0+00 1/1 0/0 0/0 .text            init_modeBound__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::init_modeBound() {
     field_0x60b = 1;
     fopAcM_SetSpeedF(this, 0.0f);
@@ -400,21 +380,17 @@ void daLv6TogeTrap_c::init_modeBound() {
     mMode = 6;
 }
 
-/* 80C7AD40-80C7ADA4 000FE0 0064+00 1/0 0/0 0/0 .text            modeBound__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::modeBound() {
     if (0.0f == cLib_addCalcPos(&current.pos, field_0x5b0, 1.0f, mMoveSpeed, 5.0f)) {
         init_modeBoundWait();
     }
 }
 
-/* 80C7ADA4-80C7ADC0 001044 001C+00 1/1 0/0 0/0 .text init_modeBoundWait__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::init_modeBoundWait() {
     field_0x60a = l_HIO.return_wait;
     mMode = 7;
 }
 
-/* 80C7ADC0-80C7AE18 001060 0058+00 1/0 0/0 0/0 .text            modeBoundWait__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::modeBoundWait() {
     if (field_0x60a != 0) {
         field_0x60a--;
@@ -425,13 +401,10 @@ void daLv6TogeTrap_c::modeBoundWait() {
     }
 }
 
-/* 80C7AE18-80C7AE24 0010B8 000C+00 1/1 0/0 0/0 .text            init_modeAcc__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::init_modeAcc() {
     mMode = 0;
 }
 
-/* 80C7AE24-80C7AF10 0010C4 00EC+00 1/0 0/0 0/0 .text            modeAcc__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::modeAcc() {
     BOOL temp_r30 = cLib_chaseF(&speedF, mMoveSpeed, mMoveSpeed / l_HIO.return_accel);
     cLib_addCalcPos(&current.pos, field_0x5b0, 1.0f, fopAcM_GetSpeedF(this), 0.1f);
@@ -443,13 +416,10 @@ void daLv6TogeTrap_c::modeAcc() {
     }
 }
 
-/* 80C7AF10-80C7AF1C 0011B0 000C+00 1/1 0/0 0/0 .text            init_modeMove__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::init_modeMove() {
     mMode = 1;
 }
 
-/* 80C7AF1C-80C7B234 0011BC 0318+00 1/0 0/0 0/0 .text            modeMove__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::modeMove() {
     f32 temp_f30 = 30.0f;
     f32 temp_f29 = 300.0f;
@@ -473,13 +443,10 @@ void daLv6TogeTrap_c::modeMove() {
     }
 }
 
-/* 80C7B234-80C7B240 0014D4 000C+00 1/1 0/0 0/0 .text            init_modeBrk__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::init_modeBrk() {
     mMode = 3;
 }
 
-/* 80C7B240-80C7B43C 0014E0 01FC+00 1/0 0/0 0/0 .text            modeBrk__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::modeBrk() {
     cXyz sp14(current.pos);
     f32 temp_f31 = cLib_addCalcPos(&current.pos, field_0x5b0, 0.1f, fopAcM_GetSpeedF(this), 0.5f);
@@ -491,13 +458,10 @@ void daLv6TogeTrap_c::modeBrk() {
     }
 }
 
-/* 80C7B43C-80C7B448 0016DC 000C+00 1/1 0/0 0/0 .text            init_modeMove2__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::init_modeMove2() {
     mMode = 2;
 }
 
-/* 80C7B448-80C7B518 0016E8 00D0+00 1/0 0/0 0/0 .text            modeMove2__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::modeMove2() {
     f32 temp_f31 = cLib_addCalcPos(&current.pos, field_0x5b0, 1.0f, mMoveSpeed, mMoveSpeed);
     mDoAud_seStartLevel(Z2SE_OBJ_TOGE_SPIN, &current.pos, mMoveSpeed, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -506,14 +470,11 @@ void daLv6TogeTrap_c::modeMove2() {
     }
 }
 
-/* 80C7B518-80C7B530 0017B8 0018+00 3/3 0/0 0/0 .text init_modeWaitInit__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::init_modeWaitInit() {
     fopAcM_SetSpeedF(this, 0.0f);
     mMode = 5;
 }
 
-/* 80C7B530-80C7B600 0017D0 00D0+00 1/0 0/0 0/0 .text            modeWaitInit__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::modeWaitInit() {
     mDoAud_seStartLevel(Z2SE_OBJ_TOGE_SPIN, &current.pos, fopAcM_GetSpeedF(this), dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     setNextPoint();
@@ -529,13 +490,10 @@ void daLv6TogeTrap_c::modeWaitInit() {
     }
 }
 
-/* 80C7B600-80C7B60C 0018A0 000C+00 2/2 0/0 0/0 .text            init_modeWait__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::init_modeWait() {
     mMode = 4;
 }
 
-/* 80C7B60C-80C7B6D4 0018AC 00C8+00 1/0 0/0 0/0 .text            modeWait__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::modeWait() {
     mDoAud_seStartLevel(Z2SE_OBJ_TOGE_SPIN, &current.pos, fopAcM_GetSpeedF(this), dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
@@ -548,8 +506,6 @@ void daLv6TogeTrap_c::modeWait() {
     }
 }
 
-/* 80C7B6D4-80C7B988 001974 02B4+00 1/1 0/0 0/0 .text            executeType2__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::executeType2() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp40;
@@ -611,39 +567,30 @@ void daLv6TogeTrap_c::executeType2() {
     }
 }
 
-/* 80C7B988-80C7B9A8 001C28 0020+00 2/2 0/0 0/0 .text init_modeWaitType2__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::init_modeWaitType2() {
     fopAcM_SetSpeedF(this, 0.0f);
     field_0x5db = 0;
     mMode = 8;
 }
 
-/* 80C7B9A8-80C7BA38 001C48 0090+00 1/0 0/0 0/0 .text            modeWaitType2__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::modeWaitType2() {
     mDoAud_seStartLevel(Z2SE_OBJ_TOGE_SPIN, &current.pos, fopAcM_GetSpeedF(this), dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
-/* 80C7BA38-80C7BA50 001CD8 0018+00 1/1 0/0 0/0 .text init_modeMoveInitType2__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::init_modeMoveInitType2() {
     fopAcM_SetSpeedF(this, 0.0f);
     mMode = 9;
 }
 
-/* 80C7BA50-80C7BAE8 001CF0 0098+00 1/0 0/0 0/0 .text modeMoveInitType2__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::modeMoveInitType2() {
     mDoAud_seStartLevel(Z2SE_OBJ_TOGE_SPIN, &current.pos, fopAcM_GetSpeedF(this), dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     init_modeAccType2();
 }
 
-/* 80C7BAE8-80C7BAF4 001D88 000C+00 1/1 0/0 0/0 .text init_modeAccType2__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::init_modeAccType2() {
     mMode = 10;
 }
 
-/* 80C7BAF4-80C7BC54 001D94 0160+00 1/0 0/0 0/0 .text            modeAccType2__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::modeAccType2() {
     cLib_chaseF(&speedF, field_0x604, field_0x604 / l_HIO.search_accel);
     f32 temp_f31 = cLib_addCalcPos(&current.pos, field_0x5b0, 1.0f, fopAcM_GetSpeedF(this), 0.1f);
@@ -665,15 +612,12 @@ void daLv6TogeTrap_c::modeAccType2() {
     }
 }
 
-/* 80C7BC54-80C7BC7C 001EF4 0028+00 2/2 0/0 0/0 .text
- * init_modeWaitAttackType2__15daLv6TogeTrap_cFv                */
 void daLv6TogeTrap_c::init_modeWaitAttackType2() {
     fopAcM_SetSpeedF(this, 0.0f);
     field_0x60a = l_HIO.search_wait;
     mMode = 11;
 }
 
-/* 80C7BC7C-80C7BD64 001F1C 00E8+00 1/0 0/0 0/0 .text modeWaitAttackType2__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::modeWaitAttackType2() {
     mDoAud_seStartLevel(Z2SE_OBJ_TOGE_SPIN, &current.pos, fopAcM_GetSpeedF(this), dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
@@ -689,12 +633,10 @@ void daLv6TogeTrap_c::modeWaitAttackType2() {
     }
 }
 
-/* 80C7BD64-80C7BD70 002004 000C+00 1/1 0/0 0/0 .text init_modeRotate__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::init_modeRotate() {
     mMode = 13;
 }
 
-/* 80C7BD70-80C7BED8 002010 0168+00 1/0 0/0 0/0 .text            modeRotate__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::modeRotate() {
     if (mCcSph.ChkCoHit()) {
         fopAc_ac_c* co_hitactor = mCcSph.GetCoHitAc();
@@ -713,8 +655,6 @@ void daLv6TogeTrap_c::modeRotate() {
     mDoAud_seStartLevel(Z2SE_OBJ_TOGE_SPIN, &field_0x8c4, mMoveSpeed, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
-/* 80C7BED8-80C7BFE4 002178 010C+00 1/1 0/0 0/0 .text            init_modeBreak__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::init_modeBreak() {
     cXyz sound_pos;
     if (mType == 3 || mType == 4) {
@@ -730,7 +670,6 @@ void daLv6TogeTrap_c::init_modeBreak() {
     mMode = 12;
 }
 
-/* 80C7BFE4-80C7C1D8 002284 01F4+00 1/0 0/0 0/0 .text            modeBreak__15daLv6TogeTrap_cFv */
 void daLv6TogeTrap_c::modeBreak() {
     cXyz effpos;
     if (mType == 3 || mType == 4) {
@@ -749,8 +688,6 @@ void daLv6TogeTrap_c::modeBreak() {
     fopAcM_delete(this);
 }
 
-/* 80C7C1D8-80C7C33C 002478 0164+00 2/2 0/0 0/0 .text            setNextPoint__15daLv6TogeTrap_cFv
- */
 void daLv6TogeTrap_c::setNextPoint() {
     s16 step = field_0x5ae + mRotateDirection;
     dPath* path = dPath_GetRoomPath(mPathNo, fopAcM_GetRoomNo(this));
@@ -790,7 +727,6 @@ void daLv6TogeTrap_c::setNextPoint() {
     }
 }
 
-/* 80C7C33C-80C7C3E0 0025DC 00A4+00 1/0 0/0 0/0 .text            Draw__15daLv6TogeTrap_cFv */
 int daLv6TogeTrap_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -800,7 +736,6 @@ int daLv6TogeTrap_c::Draw() {
     return 1;
 }
 
-/* 80C7C3E0-80C7C430 002680 0050+00 1/0 0/0 0/0 .text            Delete__15daLv6TogeTrap_cFv */
 int daLv6TogeTrap_c::Delete() {
     mSound.deleteObject();
     dComIfG_resDelete(&mPhase, l_resNameIdx[mModelType]);
@@ -811,28 +746,22 @@ int daLv6TogeTrap_c::Delete() {
     return 1;
 }
 
-/* 80C7C430-80C7C45C 0026D0 002C+00 1/0 0/0 0/0 .text daLv6TogeTrap_Draw__FP15daLv6TogeTrap_c */
 static int daLv6TogeTrap_Draw(daLv6TogeTrap_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C7C45C-80C7C47C 0026FC 0020+00 1/0 0/0 0/0 .text daLv6TogeTrap_Execute__FP15daLv6TogeTrap_c
- */
 static int daLv6TogeTrap_Execute(daLv6TogeTrap_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C7C47C-80C7C49C 00271C 0020+00 1/0 0/0 0/0 .text daLv6TogeTrap_Delete__FP15daLv6TogeTrap_c */
 static int daLv6TogeTrap_Delete(daLv6TogeTrap_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C7C49C-80C7C4BC 00273C 0020+00 1/0 0/0 0/0 .text daLv6TogeTrap_Create__FP10fopAc_ac_c */
 static int daLv6TogeTrap_Create(fopAc_ac_c* i_this) {
     return ((daLv6TogeTrap_c*)i_this)->create();
 }
 
-/* 80C7C978-80C7C998 -00001 0020+00 1/0 0/0 0/0 .data            l_daLv6TogeTrap_Method */
 static actor_method_class l_daLv6TogeTrap_Method = {
     (process_method_func)daLv6TogeTrap_Create,
     (process_method_func)daLv6TogeTrap_Delete,
@@ -841,7 +770,6 @@ static actor_method_class l_daLv6TogeTrap_Method = {
     (process_method_func)daLv6TogeTrap_Draw,
 };
 
-/* 80C7C998-80C7C9C8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv6TogeTrap */
 extern actor_process_profile_definition g_profile_Obj_Lv6TogeTrap = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID

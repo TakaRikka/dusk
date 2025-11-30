@@ -13,14 +13,14 @@
  */
 class daObjTMoon_c : public fopAc_ac_c {
 public:
-    /* 80D12BB8 */ void initBaseMtx();
-    /* 80D12BF4 */ void setBaseMtx();
-    /* 80D12C48 */ int Create();
-    /* 80D12C9C */ int CreateHeap();
-    /* 80D12D0C */ int create();
-    /* 80D12DC0 */ int execute();
-    /* 80D12EB4 */ int draw();
-    /* 80D12EDC */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    int draw();
+    int _delete();
 
     u32 getEventBit1() { return fopAcM_GetParamBit(this, 0, 10); }
     u32 getEventBit2() { return fopAcM_GetParamBit(this, 10, 10); }

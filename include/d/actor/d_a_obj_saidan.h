@@ -21,19 +21,19 @@ public:
         /* 2 */ MODE_MOVE_END_e,
     };
 
-    /* 80CC3E28 */ void setBaseMtx();
-    /* 80CC3EB0 */ virtual int CreateHeap();
-    /* 80CC3F1C */ cPhs__Step create();
-    /* 80CC4054 */ virtual int Execute(Mtx**);
-    /* 80CC40A4 */ void moveProc();
-    /* 80CC4148 */ void init_modeWait();
-    /* 80CC4154 */ void modeWait();
-    /* 80CC41B0 */ void init_modeMove();
-    /* 80CC41BC */ void modeMove();
-    /* 80CC4290 */ void init_modeMoveEnd();
-    /* 80CC4314 */ void modeMoveEnd();
-    /* 80CC4318 */ virtual int Draw();
-    /* 80CC43BC */ virtual int Delete();
+    void setBaseMtx();
+    virtual int CreateHeap();
+    cPhs__Step create();
+    virtual int Execute(Mtx**);
+    void moveProc();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMove();
+    void modeMove();
+    void init_modeMoveEnd();
+    void modeMoveEnd();
+    virtual int Draw();
+    virtual int Delete();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhaseReq;
@@ -46,8 +46,8 @@ private:
 STATIC_ASSERT(sizeof(daSaidan_c) == 0x5B4);
 
 struct daSaidan_HIO_c : public mDoHIO_entry_c {
-    /* 80CC3DAC */ daSaidan_HIO_c();
-    /* 80CC4478 */ virtual ~daSaidan_HIO_c() {}
+    daSaidan_HIO_c();
+    virtual ~daSaidan_HIO_c() {}
 
     void genMessage(JORMContext*);
 

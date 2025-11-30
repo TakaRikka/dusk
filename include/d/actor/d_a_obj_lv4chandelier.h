@@ -23,19 +23,19 @@ public:
         /* 0x24 */ f32 field_0x24;
     };
 
-    /* 80C63360 */ int create1st();
-    /* 80C634CC */ void setMtxChain(daObjLv4Chan_c::ChainPos*, dMdl_obj_c*, int);
-    /* 80C636B4 */ void setMtx();
-    /* 80C639B4 */ void rideActor(fopAc_ac_c*);
-    /* 80C63CFC */ int CreateHeap();
-    /* 80C63FA8 */ int Create();
-    /* 80C6449C */ void constraintChain(daObjLv4Chan_c::ChainPos*, int);
-    /* 80C64668 */ void constraintBase();
-    /* 80C647FC */ void calcVec(daObjLv4Chan_c::ChainPos*, int);
-    /* 80C64878 */ void chkGnd();
-    /* 80C648F4 */ int Execute(Mtx**);
-    /* 80C65F04 */ int Draw();
-    /* 80C66114 */ int Delete();
+    int create1st();
+    void setMtxChain(daObjLv4Chan_c::ChainPos*, dMdl_obj_c*, int);
+    void setMtx();
+    void rideActor(fopAc_ac_c*);
+    int CreateHeap();
+    int Create();
+    void constraintChain(daObjLv4Chan_c::ChainPos*, int);
+    void constraintBase();
+    void calcVec(daObjLv4Chan_c::ChainPos*, int);
+    void chkGnd();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     int getArg0() { return fopAcM_GetParamBit(this, 0, 4); }
     int getAddChain0() { return fopAcM_GetParamBit(this, 4, 4); }

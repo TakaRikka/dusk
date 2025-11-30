@@ -5,15 +5,15 @@
 
 class dMirror_packet_c : public J3DPacket {
 public:
-    /* 80870BD8 */ dMirror_packet_c();
-    /* 80870C94 */ void reset();
-    /* 80870CA0 */ void calcMinMax();
-    /* 80870D58 */ int entryModel(J3DModel*);
-    /* 80870D88 */ void mirrorZdraw(f32*, f32*, f32, f32, f32, f32, f32, f32);
-    /* 80871268 */ void modelDraw(J3DModel*, f32 (*)[4]);
-    /* 8087146C */ void mainDraw();
-    /* 80871D84 */ virtual void draw();
-    /* 80871E84 */ virtual ~dMirror_packet_c();
+    dMirror_packet_c();
+    void reset();
+    void calcMinMax();
+    int entryModel(J3DModel*);
+    void mirrorZdraw(f32*, f32*, f32, f32, f32, f32, f32, f32);
+    void modelDraw(J3DModel*, f32 (*)[4]);
+    void mainDraw();
+    virtual void draw();
+    virtual ~dMirror_packet_c();
     cXyz& getViewScale() { return mViewScale; }
     GXTexObj& getTexObj() { return mTexObj; }
     cXyz* getQuad() { return mQuad; }
@@ -37,14 +37,14 @@ public:
  */
 class daMirror_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80871E24 */ daMirror_c();
-    /* 80871F08 */ BOOL createHeap();
-    /* 80871F78 */ void setModelMtx();
-    /* 8087206C */ inline int create();
-    /* 808723E4 */ int execute();
-    /* 80872560 */ int entryModel(J3DModel*);
-    /* 8003194C */ static int entry(J3DModel*);
-    /* 80031990 */ static bool remove();
+    daMirror_c();
+    BOOL createHeap();
+    void setModelMtx();
+    inline int create();
+    int execute();
+    int entryModel(J3DModel*);
+    static int entry(J3DModel*);
+    static bool remove();
 
     inline int Delete();
     inline int draw();

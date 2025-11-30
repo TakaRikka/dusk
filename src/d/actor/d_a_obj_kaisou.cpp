@@ -16,7 +16,6 @@ enum Joint {
     /* 0x2 */ JNT_JOINT3,
 };
 
-/* 80C34058-80C34288 000078 0230+00 1/1 0/0 0/0 .text            ctrlJoint__13daObjKaisou_cFP8J3DJointP8J3DModel */
 int daObjKaisou_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     J3DJoint* joint = i_joint;
     int jntNo = joint->getJntNo();
@@ -54,7 +53,6 @@ int daObjKaisou_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 80C34288-80C342D4 0002A8 004C+00 1/1 0/0 0/0 .text            JointCallBack__FP8J3DJointi */
 static int JointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -67,7 +65,6 @@ static int JointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80C34FC0-80C34FC4 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "M_kaisou";
 
 int daObjKaisou_c::CreateHeap() {
@@ -81,27 +78,23 @@ int daObjKaisou_c::CreateHeap() {
     return 1;
 }
 
-/* 80C342D4-80C3434C 0002F4 0078+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     daObjKaisou_c* i_this = (daObjKaisou_c*)a_this;
     return i_this->CreateHeap();
 }
 
-/* 80C3434C-80C3436C 00036C 0020+00 1/0 0/0 0/0 .text            daObjKaisou_Create__FP10fopAc_ac_c */
 static int daObjKaisou_Create(fopAc_ac_c* a_this) {
     daObjKaisou_c* i_this = (daObjKaisou_c*)a_this;
     fpc_ProcID id = fopAcM_GetID(a_this);
     return i_this->create();
 }
 
-/* 80C3436C-80C34390 00038C 0024+00 1/0 0/0 0/0 .text daObjKaisou_Delete__FP13daObjKaisou_c */
 static int daObjKaisou_Delete(daObjKaisou_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     i_this->Delete();
     return 1;
 }
 
-/* 80C34390-80C343F0 0003B0 0060+00 1/1 0/0 0/0 .text            initCcCylinder__13daObjKaisou_cFv */
 void daObjKaisou_c::initCcCylinder() {
     mStts.Init(1, 0xFF, this);
 
@@ -123,13 +116,11 @@ void daObjKaisou_c::initCcCylinder() {
     mCyl.SetC(current.pos);
 }
 
-/* 80C343F0-80C34438 000410 0048+00 1/1 0/0 0/0 .text            setCcCylinder__13daObjKaisou_cFv */
 void daObjKaisou_c::setCcCylinder() {
     mCyl.SetC(current.pos);
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 80C34438-80C34824 000458 03EC+00 2/1 0/0 0/0 .text            ObjHit__13daObjKaisou_cFv */
 void daObjKaisou_c::ObjHit() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 playerSpeedF = fopAcM_GetSpeedF(player);
@@ -200,7 +191,6 @@ void daObjKaisou_c::ObjHit() {
     }
 }
 
-/* 80C34824-80C34A98 000844 0274+00 1/1 0/0 0/0 .text            Execute__13daObjKaisou_cFv */
 int daObjKaisou_c::Execute() {
     mInvulnerabilityTimer--;
     if (mInvulnerabilityTimer <= 0) {
@@ -227,13 +217,11 @@ int daObjKaisou_c::Execute() {
     return 1;
 }
 
-/* 80C34A98-80C34ACC 000AB8 0034+00 1/1 0/0 0/0 .text            Delete__13daObjKaisou_cFv */
 int daObjKaisou_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     return 1;
 }
 
-/* 80C34ACC-80C34B34 000AEC 0068+00 1/1 0/0 0/0 .text            setBaseMtx__13daObjKaisou_cFv */
 void daObjKaisou_c::setBaseMtx() {
     cXyz scale(yREG_F(5) + 2.0f, yREG_F(5) + 2.0f, yREG_F(5) + 2.0f);
     mDoMtx_stack_c::transS(current.pos);
@@ -250,17 +238,14 @@ int daObjKaisou_c::Draw() {
     return 1;
 }
 
-/* 80C34B34-80C34BB8 000B54 0084+00 1/0 0/0 0/0 .text            daObjKaisou_Draw__FP13daObjKaisou_c */
 static int daObjKaisou_Draw(daObjKaisou_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80C34BB8-80C34BD8 000BD8 0020+00 2/1 0/0 0/0 .text daObjKaisou_Execute__FP13daObjKaisou_c */
 static int daObjKaisou_Execute(daObjKaisou_c* i_this) {
     return i_this->Execute();
 }
 
-/* 80C34BD8-80C34E4C 000BF8 0274+00 1/1 0/0 0/0 .text            create__13daObjKaisou_cFv */
 cPhs__Step daObjKaisou_c::create() {
     fopAcM_ct(this, daObjKaisou_c);
 
@@ -303,12 +288,10 @@ cPhs__Step daObjKaisou_c::create() {
     return phase;
 }
 
-/* 80C34EDC-80C34EE4 000EFC 0008+00 1/0 0/0 0/0 .text daObjKaisou_IsDelete__FP13daObjKaisou_c */
 static int daObjKaisou_IsDelete(daObjKaisou_c* i_this) {
     return 1;
 }
 
-/* 80C35038-80C35058 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjKaisou_Method */
 static actor_method_class l_daObjKaisou_Method = {
     (process_method_func)daObjKaisou_Create,
     (process_method_func)daObjKaisou_Delete,
@@ -317,7 +300,6 @@ static actor_method_class l_daObjKaisou_Method = {
     (process_method_func)daObjKaisou_Draw,
 };
 
-/* 80C35058-80C35088 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Kaisou */
 extern actor_process_profile_definition g_profile_Obj_Kaisou = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

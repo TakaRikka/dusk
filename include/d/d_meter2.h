@@ -19,12 +19,12 @@ class dMeterHaihai_c;
 
 class dMeterSub_c : public dDlst_base_c {
 public:
-    /* 8019412C */ virtual void draw() {}
-    /* 801940D4 */ virtual ~dMeterSub_c() {}
-    /* 8019411C */ virtual int _create() { return 0; }
-    /* 80194130 */ virtual int _execute(u32) { return 0; }
-    /* 80194124 */ virtual int _delete() { return 0; }
-    /* 80194138 */ virtual bool isDead() { return false; }
+    virtual void draw() {}
+    virtual ~dMeterSub_c() {}
+    virtual int _create() { return 0; }
+    virtual int _execute(u32) { return 0; }
+    virtual int _delete() { return 0; }
+    virtual bool isDead() { return false; }
 };
 
 class dMeter2_c : public msg_class {
@@ -41,50 +41,50 @@ public:
         /* 0x3 */ Y_STATUS,
     };
 
-    /* 8021EA14 */ int _create();
-    /* 8021F128 */ int _execute();
-    /* 8021F370 */ int _draw();
-    /* 8021F49C */ int _delete();
-    /* 8021F6EC */ int emphasisButtonDelete();
-    /* 8021F780 */ void setLifeZero();
-    /* 8021F7B0 */ void checkStatus();
-    /* 8021FD60 */ void moveLife();
-    /* 80220180 */ void moveKantera();
-    /* 8022051C */ void moveOxygen();
-    /* 80220888 */ void moveLightDrop();
-    /* 80220C30 */ void moveRupee();
-    /* 802210AC */ void moveKey();
-    /* 80221244 */ void moveButtonA();
-    /* 802217F4 */ void moveButtonB();
-    /* 80221EC8 */ void moveButtonR();
-    /* 80222000 */ void moveButtonZ();
-    /* 802222A0 */ void moveButton3D();
-    /* 80222364 */ void moveButtonC();
-    /* 80222494 */ void moveButtonS();
-    /* 80222518 */ void moveButtonXY();
-    /* 80222E88 */ void moveButtonCross();
-    /* 802230F8 */ void moveTouchSubMenu();
-    /* 802230FC */ void moveSubContents();
-    /* 802231C8 */ void move2DContents();
-    /* 802237D4 */ void checkSubContents();
-    /* 80223BC4 */ void check2DContents();
-    /* 80223E00 */ void moveBombNum();
-    /* 80224258 */ void moveBottleNum();
-    /* 80224354 */ void moveArrowNum();
-    /* 80224680 */ void movePachinkoNum();
-    /* 802248E4 */ void alphaAnimeLife();
-    /* 80224A04 */ void alphaAnimeKantera();
-    /* 80224BAC */ void alphaAnimeOxygen();
-    /* 80224D6C */ void alphaAnimeLightDrop();
-    /* 80224DC0 */ void alphaAnimeRupee();
-    /* 80224F70 */ void alphaAnimeKey();
-    /* 802250F4 */ void alphaAnimeButton();
-    /* 802254C0 */ void alphaAnimeButtonCross();
-    /* 802256DC */ bool isShowLightDrop();
-    /* 802258A0 */ void killSubContents(u8);
-    /* 80225960 */ u8 isKeyVisible();
-    /* 802259F8 */ int isArrowEquip();
-    /* 80225A64 */ int isPachinkoEquip();
+    int _create();
+    int _execute();
+    int _draw();
+    int _delete();
+    int emphasisButtonDelete();
+    void setLifeZero();
+    void checkStatus();
+    void moveLife();
+    void moveKantera();
+    void moveOxygen();
+    void moveLightDrop();
+    void moveRupee();
+    void moveKey();
+    void moveButtonA();
+    void moveButtonB();
+    void moveButtonR();
+    void moveButtonZ();
+    void moveButton3D();
+    void moveButtonC();
+    void moveButtonS();
+    void moveButtonXY();
+    void moveButtonCross();
+    void moveTouchSubMenu();
+    void moveSubContents();
+    void move2DContents();
+    void checkSubContents();
+    void check2DContents();
+    void moveBombNum();
+    void moveBottleNum();
+    void moveArrowNum();
+    void movePachinkoNum();
+    void alphaAnimeLife();
+    void alphaAnimeKantera();
+    void alphaAnimeOxygen();
+    void alphaAnimeLightDrop();
+    void alphaAnimeRupee();
+    void alphaAnimeKey();
+    void alphaAnimeButton();
+    void alphaAnimeButtonCross();
+    bool isShowLightDrop();
+    void killSubContents(u8);
+    u8 isKeyVisible();
+    int isArrowEquip();
+    int isPachinkoEquip();
 
     void setNowLifeGauge(s16 life) { mNowLifeGauge = life; }
     void onArrowSoundBit(int bit) { mArrowSound |= (1 << bit); }

@@ -121,7 +121,6 @@ enum Joint {
     /* 0x19 */ JNT_FOOTR
 };
 
-/* 80A838D0-80A83AA4 000020 01D4+00 3/4 0/0 0/0 .data            l_bckGetParamList */
 static daNpc_GetParam2 l_bckGetParamList[39] = {
     {-1, J3DFrameCtrl::EMode_NONE, MoiR},
     {BCK_MOIR_F_TALK_A, J3DFrameCtrl::EMode_NONE, MoiR},
@@ -164,40 +163,33 @@ static daNpc_GetParam2 l_bckGetParamList[39] = {
     {BCK_MOIR_RUN, J3DFrameCtrl::EMode_LOOP, MoiR3},
 };
 
-/* 80A83AA4-80A83ABC 0001F4 0018+00 1/1 0/0 0/0 .data            l_btpGetParamList */
 static daNpc_GetParam2 l_btpGetParamList[2] = {
     {BTP_MOIR, J3DFrameCtrl::EMode_LOOP, MoiR},
     {BTP_MOIR_FH_SERIOUS, J3DFrameCtrl::EMode_LOOP, MoiR},
 };
 
-/* 80A83ABC-80A83AC8 00020C 000C+00 1/2 0/0 0/0 .data            l_btkGetParamList */
 static daNpc_GetParam2 l_btkGetParamList[1] = {
     {BTK_MOIR, J3DFrameCtrl::EMode_LOOP, MoiR},
 };
 
-/* 80A83AC8-80A83AD4 000218 000C+00 1/0 0/0 0/0 .data            l_loadRes_MOIR0 */
 static int l_loadRes_MOIR0[3] = {
     0, 1, -1,
 };
 
-/* 80A83AD4-80A83AE0 000224 000C+00 1/0 0/0 0/0 .data            l_loadRes_MOIR1 */
 static int l_loadRes_MOIR1[3] = {
     0, 2, -1,
 };
 
-/* 80A83AE0-80A83AEC 000230 000C+00 1/0 0/0 0/0 .data            l_loadRes_MOIR2 */
 static int l_loadRes_MOIR2[3] = {
     0, 3, -1,
 };
 
-/* 80A83AEC-80A83AF8 -00001 000C+00 2/2 0/0 0/0 .data            l_loadRes_list */
 static int* l_loadRes_list[3] = {
     l_loadRes_MOIR0,
     l_loadRes_MOIR1,
     l_loadRes_MOIR2,
 };
 
-/* 80A83AF8-80A83B08 -00001 0010+00 8/13 0/0 0/0 .data            l_arcNames */
 static char* l_arcNames[4] = {
     "MoiR",
     "MoiR1",
@@ -205,7 +197,6 @@ static char* l_arcNames[4] = {
     "MoiR3",
 };
 
-/* 80A83B08-80A83B18 -00001 0010+00 0/5 0/0 0/0 .data            l_evtNames */
 static char* l_evtNames[4] = {
     "",
     "THE_INTRODUCTION",
@@ -213,10 +204,8 @@ static char* l_evtNames[4] = {
     "MOIR_APPEAR2",
 };
 
-/* 80A83B18-80A83B1C -00001 0004+00 0/3 0/0 0/0 .data            l_myName */
 static char* l_myName = "MoiR";
 
-/* 80A832AC-80A83320 000000 0074+00 17/17 0/0 0/0 .rodata          m__17daNpcMoiR_Param_c */
 daNpcMoiR_HIOParam const daNpcMoiR_Param_c::m = {
     35.0f,
     -3.0f,
@@ -269,10 +258,8 @@ void daNpcMoiR_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-/* 80A83D84-80A83D88 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static NPC_MOIR_HIO_CLASS l_HIO;
 
-/* 80A83B40-80A83B70 000290 0030+00 0/2 0/0 0/0 .data            mEvtSeqList__11daNpcMoiR_c */
 daNpcMoiR_c::EventFn daNpcMoiR_c::mEvtSeqList[4] = {
     NULL,
     &daNpcMoiR_c::EvCut_Introduction,
@@ -280,10 +267,8 @@ daNpcMoiR_c::EventFn daNpcMoiR_c::mEvtSeqList[4] = {
     &daNpcMoiR_c::EvCut_Appear2,
 };
 
-/* 80A7C16C-80A7C2F0 0000EC 0184+00 1/1 0/0 0/0 .text            __ct__11daNpcMoiR_cFv */
 daNpcMoiR_c::daNpcMoiR_c() {}
 
-/* 80A7C380-80A7C580 000300 0200+00 1/0 0/0 0/0 .text            __dt__11daNpcMoiR_cFv */
 daNpcMoiR_c::~daNpcMoiR_c() {
     for (int i = 0; l_loadRes_list[mMode][i] >= 0; i++) {
         dComIfG_resDelete(&mPhase[i], l_arcNames[l_loadRes_list[mMode][i]]);
@@ -299,7 +284,6 @@ daNpcMoiR_c::~daNpcMoiR_c() {
 #endif
 }
 
-/* 80A7C580-80A7C978 000500 03F8+00 1/1 0/0 0/0 .text            Create__11daNpcMoiR_cFv */
 cPhs__Step daNpcMoiR_c::Create() {
     fopAcM_ct(this, daNpcMoiR_c);
 
@@ -399,7 +383,6 @@ cPhs__Step daNpcMoiR_c::Create() {
     return phase;
 }
 
-/* 80A7C978-80A7CC8C 0008F8 0314+00 1/1 0/0 0/0 .text            CreateHeap__11daNpcMoiR_cFv */
 int daNpcMoiR_c::CreateHeap() {
     J3DModelData* mdlData_p = NULL;
     J3DModel* mdl_p = NULL;
@@ -460,20 +443,17 @@ int daNpcMoiR_c::CreateHeap() {
     return 1;
 }
 
-/* 80A7CE48-80A7CE7C 000DC8 0034+00 1/1 0/0 0/0 .text            Delete__11daNpcMoiR_cFv */
 int daNpcMoiR_c::Delete() {
     fopAcM_RegisterDeleteID(this, "NPC_MOIR");
     this->~daNpcMoiR_c();
     return 1;
 }
 
-/* 80A7CE7C-80A7CEA0 000DFC 0024+00 2/2 0/0 0/0 .text            Execute__11daNpcMoiR_cFv */
 int daNpcMoiR_c::Execute() {
     execute();
     return 1;
 }
 
-/* 80A7CEA0-80A7CEFC 000E20 005C+00 1/1 0/0 0/0 .text            Draw__11daNpcMoiR_cFv */
 int daNpcMoiR_c::Draw() {
     J3DModelData* model_data = mAnm_p->getModel()->getModelData();
     model_data->getMaterialNodePointer(MAT_MOIR_EYEBALL_M)->setMaterialAnm(mpMatAnm);
@@ -481,7 +461,6 @@ int daNpcMoiR_c::Draw() {
     return 1;
 }
 
-/* 80A7CEFC-80A7D0CC 000E7C 01D0+00 1/1 0/0 0/0 .text            ctrlJoint__11daNpcMoiR_cFP8J3DJointP8J3DModel */
 int daNpcMoiR_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     J3DJoint* my_joint = i_joint;
     int jntNo = my_joint->getJntNo();
@@ -521,13 +500,11 @@ int daNpcMoiR_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 80A7D0CC-80A7D0EC 00104C 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__11daNpcMoiR_cFP10fopAc_ac_c */
 int daNpcMoiR_c::createHeapCallBack(fopAc_ac_c* a_this) {
     daNpcMoiR_c* i_this = (daNpcMoiR_c*)a_this;
     return i_this->CreateHeap();
 }
 
-/* 80A7D0EC-80A7D138 00106C 004C+00 1/1 0/0 0/0 .text            ctrlJointCallBack__11daNpcMoiR_cFP8J3DJointi */
 int daNpcMoiR_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -592,7 +569,6 @@ static s16 dummy_lit_120650(int sel) {
 }
 #endif
 
-/* 80A7D138-80A7D394 0010B8 025C+00 2/0 0/0 0/0 .text            setExpressionAnm__11daNpcMoiR_cFib */
 bool daNpcMoiR_c::setExpressionAnm(int i_index, bool i_modify) {
     mAnmFlags &= 0xFFFFE03F;
 
@@ -670,7 +646,6 @@ bool daNpcMoiR_c::setExpressionAnm(int i_index, bool i_modify) {
     return false;
 }
 
-/* 80A7D394-80A7D474 001314 00E0+00 1/0 0/0 0/0 .text            setExpressionBtp__11daNpcMoiR_cFi */
 bool daNpcMoiR_c::setExpressionBtp(int i_index) {
     J3DAnmTexPattern* anmTexPattern = getTexPtrnAnmP(l_arcNames[l_btpGetParamList[i_index].arcIdx], l_btpGetParamList[i_index].fileIdx);
     int i_attr = l_btpGetParamList[i_index].attr;
@@ -695,7 +670,6 @@ bool daNpcMoiR_c::setExpressionBtp(int i_index) {
     return false;
 }
 
-/* 80A7D474-80A7D5C4 0013F4 0150+00 1/0 0/0 0/0 .text            setMotionAnm__11daNpcMoiR_cFif */
 void daNpcMoiR_c::setMotionAnm(int i_index, f32 i_morf) {
     if (i_index < 11 || i_index >= 0x27) {
         return;
@@ -721,7 +695,6 @@ void daNpcMoiR_c::setMotionAnm(int i_index, f32 i_morf) {
     }
 }
 
-/* 80A7D5C4-80A7D73C 001544 0178+00 1/1 0/0 0/0 .text            reset__11daNpcMoiR_cFv */
 void daNpcMoiR_c::reset() {
     initialize();
     mpMatAnm->initialize();
@@ -753,7 +726,6 @@ void daNpcMoiR_c::reset() {
     setWaitAction();
 }
 
-/* 80A7D73C-80A7D934 0016BC 01F8+00 1/1 0/0 0/0 .text            setWaitAction__11daNpcMoiR_cFv */
 void daNpcMoiR_c::setWaitAction() {
     switch (mMode) {
         case MODE_SIT:
@@ -826,7 +798,6 @@ void daNpcMoiR_c::playExpression() {
     }
 }
 
-/* 80A818B4-80A8210C 005834 0858+00 1/1 0/0 0/0 .text            playMotion__11daNpcMoiR_cFv */
 void daNpcMoiR_c::playMotion() {
     daNpcF_anmPlayData dat0 = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
@@ -949,7 +920,6 @@ void daNpcMoiR_c::playMotion() {
     }
 }
 
-/* 80A825A0-80A82878 006520 02D8+00 1/1 0/0 0/0 .text            lookat__11daNpcMoiR_cFv */
 void daNpcMoiR_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model = mAnm_p->getModel();
@@ -1094,7 +1064,6 @@ static daNpcMoiR_c::Action2Fn dummy_4854() {
 }
 #endif
 
-/* 80A7D934-80A7DD94 0018B4 0460+00 1/0 0/0 0/0 .text            wait_type0__11daNpcMoiR_cFPv */
 bool daNpcMoiR_c::wait_type0(void* param_1) {
     switch (field_0xe08) {
         case 0:
@@ -1151,7 +1120,6 @@ bool daNpcMoiR_c::wait_type0(void* param_1) {
     return true;
 }
 
-/* 80A7DD94-80A7DDD8 001D14 0044+00 1/0 0/0 0/0 .text            setMotion__11daNpcMoiR_cFifi */
 void daNpcMoiR_c::setMotion(int i_motion, f32 i_morf, int param_3) {
     s16 motion = i_motion;
     if ((param_3 != 0 || mMotion != motion) && i_motion >= 0 && i_motion < 0x2B) {
@@ -1162,7 +1130,6 @@ void daNpcMoiR_c::setMotion(int i_motion, f32 i_morf, int param_3) {
     }
 }
 
-/* 80A7DDD8-80A7DE04 001D58 002C+00 1/0 0/0 0/0 .text            setExpression__11daNpcMoiR_cFif */
 void daNpcMoiR_c::setExpression(int i_expression, f32 i_morf) {
     if (i_expression >= 0 && i_expression < 0x13) {
         mExpression = i_expression;
@@ -1172,7 +1139,6 @@ void daNpcMoiR_c::setExpression(int i_expression, f32 i_morf) {
     }
 }
 
-/* 80A7DE04-80A7E668 001D84 0864+00 2/0 0/0 0/0 .text            wait_type1__11daNpcMoiR_cFPv */
 bool daNpcMoiR_c::wait_type1(void* param_1) {
     f32 fVar1;
 
@@ -1271,7 +1237,6 @@ bool daNpcMoiR_c::wait_type1(void* param_1) {
     return true;
 }
 
-/* 80A7E668-80A7E8C0 0025E8 0258+00 1/0 0/0 0/0 .text            wait_type2__11daNpcMoiR_cFPv */
 bool daNpcMoiR_c::wait_type2(void* param_1) {
     switch (field_0xe08) {
         case 0:
@@ -1342,7 +1307,6 @@ void daNpcMoiR_c::setExpressionTalkAfter() {
     }
 }
 
-/* 80A7E8C0-80A7EFBC 002840 06FC+00 2/0 0/0 0/0 .text            talk__11daNpcMoiR_cFPv */
 bool daNpcMoiR_c::talk(void* param_1) {
     int sp_0x14 = 0;
     int itemNo, i_expression, i_actionID;
@@ -1416,7 +1380,6 @@ bool daNpcMoiR_c::talk(void* param_1) {
     return rv;
 }
 
-/* 80A7EFBC-80A7F40C 002F3C 0450+00 2/0 0/0 0/0 .text            multiTalk__11daNpcMoiR_cFPv */
 BOOL daNpcMoiR_c::multiTalk(void* param_1) {
     BOOL rv = FALSE;
     fopAc_ac_c* speakers[4] = {this, mActorMngr[1].getActorP(), mActorMngr[2].getActorP(), mActorMngr[3].getActorP()};
@@ -1473,7 +1436,6 @@ BOOL daNpcMoiR_c::multiTalk(void* param_1) {
     return rv;
 }
 
-/* 80A7F40C-80A7F9AC 00338C 05A0+00 2/0 0/0 0/0 .text            fight__11daNpcMoiR_cFPv */
 bool daNpcMoiR_c::fight(void* param_1) {
     f32 fVar1;
     int iVar1 = 1;
@@ -1540,7 +1502,6 @@ bool daNpcMoiR_c::fight(void* param_1) {
     return false;
 }
 
-/* 80A7F9AC-80A7FEE8 00392C 053C+00 2/0 0/0 0/0 .text            demo__11daNpcMoiR_cFPv */
 bool daNpcMoiR_c::demo(void* param_1) {
     dEvent_manager_c* evt_mng = &dComIfGp_getEventManager();
     bool rv = false;
@@ -1595,7 +1556,6 @@ bool daNpcMoiR_c::demo(void* param_1) {
     return rv;
 }
 
-/* 80A7FEE8-80A802C4 003E68 03DC+00 1/0 0/0 0/0 .text            leave__11daNpcMoiR_cFPv */
 bool daNpcMoiR_c::leave(void* param_1) {
     cXyz sp24(-6253.387, 0.0f, 6251.7603f);
     daNPC_TK_c* actor_p = NULL;
@@ -1635,7 +1595,6 @@ bool daNpcMoiR_c::leave(void* param_1) {
     return true;
 }
 
-/* 80A802C4-80A803A0 004244 00DC+00 1/0 0/0 0/0 .text            EvCut_Introduction__11daNpcMoiR_cFi */
 BOOL daNpcMoiR_c::EvCut_Introduction(int i_cutIndex) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
     int* prm = dComIfGp_evmng_getMyIntegerP(i_cutIndex, "prm");
@@ -1663,7 +1622,6 @@ BOOL daNpcMoiR_c::EvCut_Introduction(int i_cutIndex) {
     return FALSE;
 }
 
-/* 80A803A0-80A8081C 004320 047C+00 1/0 0/0 0/0 .text            EvCut_Appear__11daNpcMoiR_cFi */
 BOOL daNpcMoiR_c::EvCut_Appear(int i_cutIndex) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
     int* cutName = (int*)eventManager->getMyNowCutName(i_cutIndex);
@@ -1736,7 +1694,6 @@ BOOL daNpcMoiR_c::EvCut_Appear(int i_cutIndex) {
     return FALSE;
 }
 
-/* 80A8081C-80A81044 00479C 0828+00 1/0 0/0 0/0 .text            EvCut_Appear2__11daNpcMoiR_cFi */
 BOOL daNpcMoiR_c::EvCut_Appear2(int i_cutIndex) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
     int* cutName = (int*)eventManager->getMyNowCutName(i_cutIndex);
@@ -1851,32 +1808,26 @@ BOOL daNpcMoiR_c::EvCut_Appear2(int i_cutIndex) {
     return FALSE;
 }
 
-/* 80A81044-80A81064 004FC4 0020+00 1/0 0/0 0/0 .text            daNpcMoiR_Create__FPv */
 static int daNpcMoiR_Create(void* a_this) {
     return static_cast<daNpcMoiR_c*>(a_this)->Create();
 }
 
-/* 80A81064-80A81084 004FE4 0020+00 1/0 0/0 0/0 .text            daNpcMoiR_Delete__FPv */
 static int daNpcMoiR_Delete(void* a_this) {
     return static_cast<daNpcMoiR_c*>(a_this)->Delete();
 }
 
-/* 80A81084-80A810A4 005004 0020+00 1/0 0/0 0/0 .text            daNpcMoiR_Execute__FPv */
 static int daNpcMoiR_Execute(void* a_this) {
     return static_cast<daNpcMoiR_c*>(a_this)->Execute();
 }
 
-/* 80A810A4-80A810C4 005024 0020+00 1/0 0/0 0/0 .text            daNpcMoiR_Draw__FPv */
 static int daNpcMoiR_Draw(void* a_this) {
     return static_cast<daNpcMoiR_c*>(a_this)->Draw();
 }
 
-/* 80A810C4-80A810CC 005044 0008+00 1/0 0/0 0/0 .text            daNpcMoiR_IsDelete__FPv */
 static int daNpcMoiR_IsDelete(void* a_this) {
     return 1;
 }
 
-/* 80A810FC-80A81274 00507C 0178+00 1/0 0/0 0/0 .text            setParam__11daNpcMoiR_cFv */
 void daNpcMoiR_c::setParam() {
     searchActors();
 
@@ -1904,7 +1855,6 @@ void daNpcMoiR_c::setParam() {
     #endif
 }
 
-/* 80A81274-80A815D4 0051F4 0360+00 1/0 0/0 0/0 .text            main__11daNpcMoiR_cFv */
 BOOL daNpcMoiR_c::main() {
     if (mAction) {
         (this->*mAction)(NULL);
@@ -1922,7 +1872,6 @@ BOOL daNpcMoiR_c::main() {
     return TRUE;
 }
 
-/* 80A815D4-80A818B4 005554 02E0+00 1/1 0/0 0/0 .text            checkHeadGear__11daNpcMoiR_cFv */
 void daNpcMoiR_c::checkHeadGear() {
     J3DModelData* mdlData_p = mAnm_p->getModel()->getModelData();
     J3DAnmTransform* anm = mAnm_p->getAnm();
@@ -1962,8 +1911,13 @@ void daNpcMoiR_c::checkHeadGear() {
     }
 }
 
-/* 80A8210C-80A821E0 00608C 00D4+00 1/0 0/0 0/0 .text            ctrlBtk__11daNpcMoiR_cFv */
-// NONMATCHING inlining issues
+static void dummy() {
+    // This dummy function is needed to fix JMath::TSinCosTable::sinShort not being inlined in daNpcMoiR_c::ctrlBtk.
+    // It's unclear why that happens, or why an unused dummy function calling the inline fixes it.
+    // Seems like a compiler bug of some sort.
+    cM_ssin(0);
+}
+
 BOOL daNpcMoiR_c::ctrlBtk() {
     if (mpMatAnm != NULL) {
         J3DAnmTextureSRTKey* anm = NULL;
@@ -1982,7 +1936,6 @@ BOOL daNpcMoiR_c::ctrlBtk() {
     return FALSE;
 }
 
-/* 80A821E0-80A825A0 006160 03C0+00 1/0 0/0 0/0 .text            setAttnPos__11daNpcMoiR_cFv */
 void daNpcMoiR_c::setAttnPos() {
     if (mLookMode == LOOK_RESET) {
         for (int i = 0; i < 3; i++) {
@@ -2044,7 +1997,6 @@ void daNpcMoiR_c::setAttnPos() {
     dComIfG_Ccsp()->Set(&field_0xca0);
 }
 
-/* 80A82878-80A82900 0067F8 0088+00 1/0 0/0 0/0 .text            drawOtherMdls__11daNpcMoiR_cFv */
 void daNpcMoiR_c::drawOtherMdls() {
     if (!mWearHelmet) {
         g_env_light.setLightTevColorType_MAJI(mpHeadgearModel, &tevStr);
@@ -2054,12 +2006,10 @@ void daNpcMoiR_c::drawOtherMdls() {
     }
 }
 
-/* 80A82900-80A82908 006880 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__11daNpcMoiR_cFv */
 BOOL daNpcMoiR_c::drawDbgInfo() {
     return FALSE;
 }
 
-/* 80A83C38-80A83C58 -00001 0020+00 1/0 0/0 0/0 .data            daNpcMoiR_MethodTable */
 static actor_method_class daNpcMoiR_MethodTable = {
     (process_method_func)daNpcMoiR_Create,
     (process_method_func)daNpcMoiR_Delete,
@@ -2068,7 +2018,6 @@ static actor_method_class daNpcMoiR_MethodTable = {
     (process_method_func)daNpcMoiR_Draw,
 };
 
-/* 80A83C58-80A83C88 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_MOIR */
 extern actor_process_profile_definition g_profile_NPC_MOIR = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

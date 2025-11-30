@@ -16,14 +16,12 @@
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
 
-/* 803C0C54-803C0CA0 01DD74 0048+04 2/3 0/0 0/0 .data            process */
 typedef void (dMsgScrn3Select_c::*processFn)();
 processFn process[] = {
     &dMsgScrn3Select_c::open1Proc,  &dMsgScrn3Select_c::open2Proc,  &dMsgScrn3Select_c::waitProc,
     &dMsgScrn3Select_c::selectProc, &dMsgScrn3Select_c::changeProc, &dMsgScrn3Select_c::closeProc,
 };
 
-/* 802390B4-802398CC 2339F4 0818+00 0/0 4/4 0/0 .text            __ct__17dMsgScrn3Select_cFv */
 dMsgScrn3Select_c::dMsgScrn3Select_c() {
     static u64 const tag_name[3][12] = {
         // A
@@ -219,7 +217,6 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
     mSelMsgInactiveCol.set(0xFF, 0xFF, 0xFF, 0xFF);
 }
 
-/* 802398CC-80239BE0 23420C 0314+00 1/0 0/0 0/0 .text            __dt__17dMsgScrn3Select_cFv */
 dMsgScrn3Select_c::~dMsgScrn3Select_c() {
     delete mpScreen;
     mpScreen = NULL;
@@ -276,12 +273,10 @@ dMsgScrn3Select_c::~dMsgScrn3Select_c() {
     }
 }
 
-/* 80239C64-80239C78 2345A4 0014+00 0/0 5/5 0/0 .text            isSelect__17dMsgScrn3Select_cFv */
 bool dMsgScrn3Select_c::isSelect() {
     return mProcess == PROC_SELECT_e ? TRUE : FALSE;
 }
 
-/* 80239C78-80239D08 2345B8 0090+00 0/0 5/5 0/0 .text setString__17dMsgScrn3Select_cFPcPcPc */
 void dMsgScrn3Select_c::setString(char* mpText0, char* mpText1, char* mpText2) {
     if (mpTmSel_c[0] != NULL) {
         JUT_ASSERT(0, ((J2DTextBox*)(mpTmSel_c[0]->getPanePtr()))->getStringAllocByte() >
@@ -311,7 +306,6 @@ void dMsgScrn3Select_c::setString(char* mpText0, char* mpText1, char* mpText2) {
     }
 }
 
-/* 80239D08-80239D98 234648 0090+00 0/0 5/5 0/0 .text setRubyString__17dMsgScrn3Select_cFPcPcPc */
 void dMsgScrn3Select_c::setRubyString(char* pText0, char* pText1, char* pText2) {
     if (mpTmrSel_c[0] != NULL) {
         JUT_ASSERT(0, ((J2DTextBox*)(mpTmrSel_c[0]->getPanePtr()))->getStringAllocByte() >
@@ -341,13 +335,10 @@ void dMsgScrn3Select_c::setRubyString(char* pText0, char* pText1, char* pText2) 
     }
 }
 
-/* 80239D98-80239DD4 2346D8 003C+00 0/0 5/5 0/0 .text            translate__17dMsgScrn3Select_cFff
- */
 void dMsgScrn3Select_c::translate(f32 i_x, f32 i_y) {
     mpParent->translate(i_x, i_y);
 }
 
-/* 80239DD4-8023A094 234714 02C0+00 0/0 5/5 0/0 .text            draw__17dMsgScrn3Select_cFff */
 void dMsgScrn3Select_c::draw(f32 i_xPos, f32 i_yPos) {
     J2DGrafContext* port = dComIfGp_getCurrentGrafPort();
     port->setup2D();
@@ -394,8 +385,6 @@ void dMsgScrn3Select_c::draw(f32 i_xPos, f32 i_yPos) {
     }
 }
 
-/* 8023A094-8023A398 2349D4 0304+00 0/0 5/5 0/0 .text selAnimeInit__17dMsgScrn3Select_cFUcUcUcfUc
- */
 void dMsgScrn3Select_c::selAnimeInit(u8 i_selNum, u8 i_selNo, u8 param_2, f32 i_width, u8 param_4) {
     mSelNo = i_selNo;
     field_0x110 = i_selNo;
@@ -476,7 +465,6 @@ void dMsgScrn3Select_c::selAnimeInit(u8 i_selNum, u8 i_selNo, u8 param_2, f32 i_
     mProcess = PROC_OPEN1_e;
 }
 
-/* 8023A398-8023A680 234CD8 02E8+00 0/0 5/5 0/0 .text selAnimeMove__17dMsgScrn3Select_cFUcUcb */
 bool dMsgScrn3Select_c::selAnimeMove(u8 i_selNum, u8 param_1, bool param_2) {
     field_0x110 = param_1;
     mSelNum = i_selNum;
@@ -530,8 +518,6 @@ bool dMsgScrn3Select_c::selAnimeMove(u8 i_selNum, u8 param_1, bool param_2) {
     return mProcess == PROC_SELECT_e ? TRUE : FALSE;
 }
 
-/* 8023A680-8023A934 234FC0 02B4+00 0/0 9/9 0/0 .text            selAnimeEnd__17dMsgScrn3Select_cFv
- */
 bool dMsgScrn3Select_c::selAnimeEnd() {
     if (mProcess == PROC_MAX_e) {
         return true;
@@ -584,20 +570,16 @@ bool dMsgScrn3Select_c::selAnimeEnd() {
     return mProcess == PROC_MAX_e ? TRUE : FALSE;
 }
 
-/* 8023A934-8023A94C 235274 0018+00 0/0 5/5 0/0 .text getTextBoxWidth__17dMsgScrn3Select_cFv */
 f32 dMsgScrn3Select_c::getTextBoxWidth() {
     return mpTmSel_c[0]->getSizeX();
 }
 
-/* 8023A94C-8023A95C 23528C 0010+00 0/0 5/5 0/0 .text            getFontSize__17dMsgScrn3Select_cFv
- */
 f32 dMsgScrn3Select_c::getFontSize() {
     J2DTextBox::TFontSize font_size;
     ((J2DTextBox*)mpTmSel_c[0]->getPanePtr())->getFontSize(font_size);
     return font_size.mSizeX;
 }
 
-/* 8023A95C-8023A97C 23529C 0020+00 0/0 2/2 0/0 .text getRubyFontSize__17dMsgScrn3Select_cFv */
 f32 dMsgScrn3Select_c::getRubyFontSize() {
     if (mpTmrSel_c[0] != NULL) {
         J2DTextBox::TFontSize font_size;
@@ -608,13 +590,10 @@ f32 dMsgScrn3Select_c::getRubyFontSize() {
     return 0.0f;
 }
 
-/* 8023A97C-8023A98C 2352BC 0010+00 0/0 5/5 0/0 .text            getCharSpace__17dMsgScrn3Select_cFv
- */
 f32 dMsgScrn3Select_c::getCharSpace() {
     return ((J2DTextBox*)mpTmSel_c[0]->getPanePtr())->getCharSpace();
 }
 
-/* 8023A98C-8023A9AC 2352CC 0020+00 0/0 2/2 0/0 .text getRubyCharSpace__17dMsgScrn3Select_cFv */
 f32 dMsgScrn3Select_c::getRubyCharSpace() {
     if (mpTmrSel_c[0] != NULL) {
         return ((J2DTextBox*)mpTmrSel_c[0]->getPanePtr())->getCharSpace();
@@ -623,19 +602,14 @@ f32 dMsgScrn3Select_c::getRubyCharSpace() {
     return 0.0f;
 }
 
-/* 8023A9AC-8023A9D8 2352EC 002C+00 0/0 2/2 0/0 .text getTextBoxGlobalPosX__17dMsgScrn3Select_cFi
- */
 f32 dMsgScrn3Select_c::getTextBoxGlobalPosX(int i_sel) {
     return mpTmSel_c[i_sel]->getGlobalPosX();
 }
 
-/* 8023A9D8-8023AA04 235318 002C+00 0/0 2/2 0/0 .text getTextBoxGlobalPosY__17dMsgScrn3Select_cFi
- */
 f32 dMsgScrn3Select_c::getTextBoxGlobalPosY(int i_sel) {
     return mpTmSel_c[i_sel]->getGlobalPosY();
 }
 
-/* 8023AA04-8023AAF4 235344 00F0+00 1/0 0/0 0/0 .text            open1Proc__17dMsgScrn3Select_cFv */
 void dMsgScrn3Select_c::open1Proc() {
     f32 sel_anm_frame[3] = {204.0f, 304.0f, 404.0f};
 
@@ -654,7 +628,6 @@ void dMsgScrn3Select_c::open1Proc() {
     mProcess = PROC_OPEN2_e;
 }
 
-/* 8023AAF4-8023AC14 235434 0120+00 1/0 0/0 0/0 .text            open2Proc__17dMsgScrn3Select_cFv */
 void dMsgScrn3Select_c::open2Proc() {
     f32 sel_anm_frame[3] = {204.0f, 304.0f, 404.0f};
 
@@ -679,7 +652,6 @@ void dMsgScrn3Select_c::open2Proc() {
     }
 }
 
-/* 8023AC14-8023AC44 235554 0030+00 1/0 0/0 0/0 .text            waitProc__17dMsgScrn3Select_cFv */
 void dMsgScrn3Select_c::waitProc() {
     mSelWaitTimer++;
 
@@ -688,8 +660,6 @@ void dMsgScrn3Select_c::waitProc() {
     }
 }
 
-/* 8023AC44-8023AE68 235584 0224+00 1/0 0/0 0/0 .text            selectProc__17dMsgScrn3Select_cFv
- */
 void dMsgScrn3Select_c::selectProc() {
     if (mSelNo != field_0x110) {
         mLastSelNo = mSelNo;
@@ -765,8 +735,6 @@ void dMsgScrn3Select_c::selectProc() {
     }
 }
 
-/* 8023AE68-8023B148 2357A8 02E0+00 1/0 0/0 0/0 .text            changeProc__17dMsgScrn3Select_cFv
- */
 void dMsgScrn3Select_c::changeProc() {
     if (mSelNo == 0xFF) {
         if (mLastSelNo == 0) {
@@ -868,7 +836,6 @@ void dMsgScrn3Select_c::changeProc() {
     }
 }
 
-/* 8023B148-8023B228 235A88 00E0+00 1/0 0/0 0/0 .text            closeProc__17dMsgScrn3Select_cFv */
 void dMsgScrn3Select_c::closeProc() {
     mpSelectCursor->setAlphaRate(0.0f);
     mBckFrame--;
@@ -886,8 +853,6 @@ void dMsgScrn3Select_c::closeProc() {
     }
 }
 
-/* 8023B228-8023B4AC 235B68 0284+00 1/1 0/0 0/0 .text            selectScale__17dMsgScrn3Select_cFv
- */
 void dMsgScrn3Select_c::selectScale() {
     if (mWidth != 1.0f) {
         for (int i = 0; i < 3; i++) {
@@ -936,8 +901,6 @@ void dMsgScrn3Select_c::selectScale() {
     }
 }
 
-/* 8023B4AC-8023B870 235DEC 03C4+00 3/3 0/0 0/0 .text            selectTrans__17dMsgScrn3Select_cFv
- */
 void dMsgScrn3Select_c::selectTrans() {
     static u64 tag_n[] = {'a_t', 'b_t', 'c_t'};
 
@@ -1021,8 +984,6 @@ void dMsgScrn3Select_c::selectTrans() {
     }
 }
 
-/* 8023B870-8023B914 2361B0 00A4+00 7/7 0/0 0/0 .text selectAnimeTransform__17dMsgScrn3Select_cFi
- */
 void dMsgScrn3Select_c::selectAnimeTransform(int i_sel) {
     mpAnmBck->setFrame(mBckFrame);
     mpSel_c[i_sel]->getPanePtr()->setAnimation(mpAnmBck);

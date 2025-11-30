@@ -1,6 +1,5 @@
 #include "scanf.h"
 
-/* 8036878C-8036881C 3630CC 0090+00 0/0 2/2 0/0 .text            __StringRead */
 int __StringRead(void* pPtr, int ch, int act) {
     char ret;
     __InStrCtrl* Iscp = (__InStrCtrl*)pPtr;

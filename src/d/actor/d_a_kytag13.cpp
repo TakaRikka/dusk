@@ -11,14 +11,10 @@
 #include "d/d_kankyo_rain.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 8085F1F8-8085F200 000078 0008+00 1/0 0/0 0/0 .text            daKytag13_Draw__FP13kytag13_class
- */
 static int daKytag13_Draw(kytag13_class* i_this) {
     return 1;
 }
 
-/* 8085F200-8085F2B0 000080 00B0+00 1/1 0/0 0/0 .text            vectle_calc__FP10DOUBLE_POSP4cXyz
- */
 static void vectle_calc(DOUBLE_POS* pos, cXyz* out) {
     f64 len = sqrt(pos->x * pos->x + pos->y * pos->y + pos->z * pos->z);
     if (0.0 != len) {
@@ -32,7 +28,6 @@ static void vectle_calc(DOUBLE_POS* pos, cXyz* out) {
     }
 }
 
-/* 8085F2B0-80860148 000130 0E98+00 1/1 0/0 0/0 .text            daKytag13_Execute_standard__FP13kytag13_class */
 static int daKytag13_Execute_standard(kytag13_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     dKankyo_snow_Packet* snow_packet = g_env_light.mpSnowPacket;
@@ -301,7 +296,6 @@ static int daKytag13_Execute_standard(kytag13_class* i_this) {
     return 1;
 }
 
-/* 808601C0-80860200 001040 0040+00 1/0 0/0 0/0 .text daKytag13_Execute__FP13kytag13_class */
 static int daKytag13_Execute(kytag13_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     if (a_this->home.roomNo == dComIfGp_roomControl_getStayNo()) {
@@ -311,18 +305,14 @@ static int daKytag13_Execute(kytag13_class* i_this) {
     return 1;
 }
 
-/* 80860200-80860208 001080 0008+00 1/0 0/0 0/0 .text daKytag13_IsDelete__FP13kytag13_class */
 static int daKytag13_IsDelete(kytag13_class* i_this) {
     return 1;
 }
 
-/* 80860208-80860210 001088 0008+00 1/0 0/0 0/0 .text            daKytag13_Delete__FP13kytag13_class
- */
 static int daKytag13_Delete(kytag13_class* i_this) {
     return 1;
 }
 
-/* 80860210-80860450 001090 0240+00 1/0 0/0 0/0 .text            daKytag13_Create__FP10fopAc_ac_c */
 static int daKytag13_Create(fopAc_ac_c* i_this) {
     kytag13_class* a_this = (kytag13_class*)i_this;
     fopAcM_ct(i_this, kytag13_class);
@@ -389,7 +379,6 @@ static int daKytag13_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80860540-80860560 -00001 0020+00 1/0 0/0 0/0 .data            l_daKytag13_Method */
 static actor_method_class l_daKytag13_Method = {
     (process_method_func)daKytag13_Create,
     (process_method_func)daKytag13_Delete,
@@ -398,7 +387,6 @@ static actor_method_class l_daKytag13_Method = {
     (process_method_func)daKytag13_Draw,
 };
 
-/* 80860560-80860590 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KYTAG13 */
 extern actor_process_profile_definition g_profile_KYTAG13 = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

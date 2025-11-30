@@ -12,8 +12,8 @@
 
 class daOBJ_RW_HIO_c : public JORReflexible {
 public:
-    /* 80CC298C */ daOBJ_RW_HIO_c();
-    /* 80CC3A5C */ virtual ~daOBJ_RW_HIO_c() {}
+    daOBJ_RW_HIO_c();
+    virtual ~daOBJ_RW_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -22,13 +22,11 @@ public:
     /* 0xC */ u8 unk_0xC[0x14 - 0xC];
 };
 
-/* 80CC298C-80CC29B0 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__14daOBJ_RW_HIO_cFv */
 daOBJ_RW_HIO_c::daOBJ_RW_HIO_c() {
     id = -1;
     base_size = 1.0f;
 }
 
-/* 80CC29B0-80CC2A74 000110 00C4+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -48,7 +46,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80CC2A74-80CC2BA4 0001D4 0130+00 1/0 0/0 0/0 .text            daOBJ_RW_Draw__FP12obj_rw_class */
 static int daOBJ_RW_Draw(obj_rw_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -75,7 +72,6 @@ static int daOBJ_RW_Draw(obj_rw_class* i_this) {
     return 1;
 }
 
-/* 80CC2BA4-80CC2E60 000304 02BC+00 1/1 0/0 0/0 .text            damage_check__FP12obj_rw_class */
 static void damage_check(obj_rw_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -149,7 +145,6 @@ static void damage_check(obj_rw_class* i_this) {
     }
 }
 
-/* 80CC2E60-80CC2E78 0005C0 0018+00 1/1 0/0 0/0 .text            normal__FP12obj_rw_class */
 static void normal(obj_rw_class* i_this) {
     switch (i_this->mode) {
     case 0:
@@ -158,7 +153,6 @@ static void normal(obj_rw_class* i_this) {
     }
 }
 
-/* 80CC2E78-80CC2F1C 0005D8 00A4+00 1/1 0/0 0/0 .text            action__FP12obj_rw_class */
 static void action(obj_rw_class* i_this) {
     cXyz sp14;
     cXyz sp8;
@@ -176,14 +170,10 @@ static void action(obj_rw_class* i_this) {
     i_this->field_0x670 = i_this->field_0x66c * (20.0f + TREG_F(16)) * cM_ssin(i_this->field_0x672);
 }
 
-/* 80CC3C80-80CC3C84 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 80CC3C90-80CC3CA4 000018 0014+00 3/3 0/0 0/0 .bss             l_HIO */
 static daOBJ_RW_HIO_c l_HIO;
 
-/* 80CC2F1C-80CC32EC 00067C 03D0+00 2/1 0/0 0/0 .text            daOBJ_RW_Execute__FP12obj_rw_class
- */
 static int daOBJ_RW_Execute(obj_rw_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp1C;
@@ -267,14 +257,10 @@ static int daOBJ_RW_Execute(obj_rw_class* i_this) {
     return 1;
 }
 
-/* 80CC32EC-80CC32F4 000A4C 0008+00 1/0 0/0 0/0 .text            daOBJ_RW_IsDelete__FP12obj_rw_class
- */
 static int daOBJ_RW_IsDelete(obj_rw_class* i_this) {
     return 1;
 }
 
-/* 80CC32F4-80CC3368 000A54 0074+00 1/0 0/0 0/0 .text            daOBJ_RW_Delete__FP12obj_rw_class
- */
 static int daOBJ_RW_Delete(obj_rw_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAcM_GetID(actor);
@@ -292,7 +278,6 @@ static int daOBJ_RW_Delete(obj_rw_class* i_this) {
     return 1;
 }
 
-/* 80CC3368-80CC3400 000AC8 0098+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* actor) {
     obj_rw_class* i_this = (obj_rw_class*)actor;
 
@@ -309,7 +294,6 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-/* 80CC3400-80CC36E4 000B60 02E4+00 1/0 0/0 0/0 .text            daOBJ_RW_Create__FP10fopAc_ac_c */
 static int daOBJ_RW_Create(fopAc_ac_c* actor) {
     obj_rw_class* i_this = (obj_rw_class*)actor;
     fopAcM_ct(actor, obj_rw_class);
@@ -400,7 +384,6 @@ static int daOBJ_RW_Create(fopAc_ac_c* actor) {
     return phase_state;
 }
 
-/* 80CC3BF8-80CC3C18 -00001 0020+00 1/0 0/0 0/0 .data            l_daOBJ_RW_Method */
 static actor_method_class l_daOBJ_RW_Method = {
     (process_method_func)daOBJ_RW_Create,
     (process_method_func)daOBJ_RW_Delete,
@@ -409,7 +392,6 @@ static actor_method_class l_daOBJ_RW_Method = {
     (process_method_func)daOBJ_RW_Draw,
 };
 
-/* 80CC3C18-80CC3C48 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_RW */
 extern actor_process_profile_definition g_profile_OBJ_RW = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

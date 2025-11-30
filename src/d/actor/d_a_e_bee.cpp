@@ -15,14 +15,11 @@
 #include "SSystem/SComponent/c_math.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* 80685674-80685678 -00001 0004+00 2/2 0/0 0/0 .bss             None */
 /* 80685675 0003+00 data_80685675 None */
 static bool hioInit;
 
-/* 80685684-80685694 000054 0010+00 6/6 0/0 0/0 .bss             l_HIO */
 static daE_Bee_HIO_c l_HIO;
 
-/* 8068286C-8068289C 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__13daE_Bee_HIO_cFv */
 daE_Bee_HIO_c::daE_Bee_HIO_c() {
     field_0x4 = -1;
     mScale = 1.0f;
@@ -30,7 +27,6 @@ daE_Bee_HIO_c::daE_Bee_HIO_c() {
     mNoKill = false;
 }
 
-/* 8068289C-806829A8 00011C 010C+00 1/0 0/0 0/0 .text            daE_Bee_Draw__FP11e_bee_class */
 static int daE_Bee_Draw(e_bee_class* i_this) {
     g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
     bee_s* bee = i_this->mBees;
@@ -55,7 +51,6 @@ static int daE_Bee_Draw(e_bee_class* i_this) {
     return 1;
 }
 
-/* 806829A8-80682A70 000228 00C8+00 3/3 0/0 0/0 .text            bee_mtxset__FP5bee_s */
 static void bee_mtxset(bee_s* i_bee) {
     mDoMtx_stack_c::transS(i_bee->mPos.x, i_bee->mPos.y, i_bee->mPos.z);
     mDoMtx_stack_c::YrotM(i_bee->mAngle.y);
@@ -70,7 +65,6 @@ static void bee_mtxset(bee_s* i_bee) {
     }
 }
 
-/* 80682A70-80682D78 0002F0 0308+00 1/1 0/0 0/0 .text            bee_ground_ang_set__FP5bee_s */
 static void bee_ground_ang_set(bee_s* i_bee) {
     dBgS_LinChk lin_chk;
     cXyz vec4, vec2, vec3, vec1;
@@ -115,10 +109,8 @@ static void bee_ground_ang_set(bee_s* i_bee) {
     }
 }
 
-/* 80685694-80685698 000064 0004+00 1/2 0/0 0/0 .bss             None */
 static u8 ccCylSet;
 
-/* 80682DB4-806835FC 000634 0848+00 1/1 0/0 0/0 .text bee_fly_action__FP11e_bee_classP5bee_s */
 static int bee_fly_action(e_bee_class* i_this, bee_s* i_bee) {
     e_nest_class* nest = static_cast<e_nest_class*>(fopAcM_SearchByID(i_this->parentActorID));
     if (nest == NULL) {
@@ -246,7 +238,6 @@ static int bee_fly_action(e_bee_class* i_this, bee_s* i_bee) {
     return ret;
 }
 
-/* 806835FC-80683DDC 000E7C 07E0+00 1/1 0/0 0/0 .text bee_nest_action__FP11e_bee_classP5bee_sSc */
 static void bee_nest_action(e_bee_class* i_this, bee_s* i_bee, s8 i_nestHealth) {
     i_bee->mIsFlying = 0;
     cXyz vec1 = i_bee->mTarget - i_bee->mPos;
@@ -376,7 +367,6 @@ static void bee_nest_action(e_bee_class* i_this, bee_s* i_bee, s8 i_nestHealth) 
     }
 }
 
-/* 80683DDC-80683FF4 00165C 0218+00 1/1 0/0 0/0 .text            bee_fail__FP5bee_s */
 static void bee_fail(bee_s* i_bee) {
     if (i_bee->mMode <= 1) {
         i_bee->mPos += i_bee->mSpeed;
@@ -417,8 +407,6 @@ static void bee_fail(bee_s* i_bee) {
     bee_mtxset(i_bee);
 }
 
-/* 80683FF4-80684248 001874 0254+00 1/1 0/0 0/0 .text            bee_start__FP11e_bee_classP5bee_s
- */
 static void bee_start(e_bee_class* i_this, bee_s* i_bee) {
     cXyz vec = i_this->home.pos - i_bee->mPos;
     vec.y += 30;
@@ -456,7 +444,6 @@ static void bee_start(e_bee_class* i_this, bee_s* i_bee) {
     bee_mtxset(i_bee);
 }
 
-/* 80684248-80684A94 001AC8 084C+00 1/1 0/0 0/0 .text            bee_control__FP11e_bee_class */
 static void bee_control(e_bee_class* i_this) {
     fopAc_ac_c* a_this;
     a_this = (fopAc_ac_c*)i_this;
@@ -637,7 +624,6 @@ static void bee_control(e_bee_class* i_this) {
     }
 }
 
-/* 80684A94-80684B5C 002314 00C8+00 2/1 0/0 0/0 .text            daE_Bee_Execute__FP11e_bee_class */
 static int daE_Bee_Execute(e_bee_class* i_this) {
     if (l_HIO.mDelete) {
         fopAcM_delete(i_this);
@@ -668,13 +654,10 @@ static int daE_Bee_Execute(e_bee_class* i_this) {
 }
 
 
-/* 80684B5C-80684B64 0023DC 0008+00 1/0 0/0 0/0 .text            daE_Bee_IsDelete__FP11e_bee_class
- */
 static int daE_Bee_IsDelete(e_bee_class* param_0) {
     return 1;
 }
 
-/* 80684B64-80684C70 0023E4 010C+00 1/0 0/0 0/0 .text            daE_Bee_Delete__FP11e_bee_class */
 static int daE_Bee_Delete(e_bee_class* i_this) {
     static const u32 l_bmdidx[4] = {3, 4, 5, 6};
     if (i_this->mResLoaded) {
@@ -701,7 +684,6 @@ static int daE_Bee_Delete(e_bee_class* i_this) {
     return 1;
 }
 
-/* 80684C70-80684E24 0024F0 01B4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_bee_class* _this = static_cast<e_bee_class*>(i_this);
     
@@ -735,7 +717,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return true;
 }
 
-/* 80684E24-80685224 0026A4 0400+00 1/0 0/0 0/0 .text            daE_Bee_Create__FP10fopAc_ac_c */
 static cPhs__Step daE_Bee_Create(fopAc_ac_c* i_this) {
     e_bee_class* _this = static_cast<e_bee_class*>(i_this);
     fopAcM_ct(_this, e_bee_class);
@@ -825,7 +806,6 @@ static cPhs__Step daE_Bee_Create(fopAc_ac_c* i_this) {
     return step;
 }
 
-/* 806855B0-806855D0 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_Bee_Method */
 static actor_method_class l_daE_Bee_Method = {
     (process_method_func)daE_Bee_Create,
     (process_method_func)daE_Bee_Delete,
@@ -834,7 +814,6 @@ static actor_method_class l_daE_Bee_Method = {
     (process_method_func)daE_Bee_Draw,
 };
 
-/* 806855D0-80685600 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_BEE */
 extern actor_process_profile_definition g_profile_E_BEE = {
     fpcLy_CURRENT_e,
     7,

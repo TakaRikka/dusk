@@ -26,10 +26,10 @@ struct CoachFireAttr {
  */
 class daCoachFire_c : public fopAc_ac_c {
 public:
-    /* 80657B78 */ void create_init();
-    /* 80657C48 */ void initBaseMtx();
-    /* 80657CA8 */ void setBaseMtx();
-    /* 80657D2C */ void initCcSphere();
+    void create_init();
+    void initBaseMtx();
+    void setBaseMtx();
+    void initCcSphere();
 
     const CoachFireAttr& attr() { return M_attr; }
 

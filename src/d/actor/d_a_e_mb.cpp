@@ -38,7 +38,6 @@
 #define ANM_MI_BOMB_POSE         21
 #define ANM_MI_ROPE_WAIT         22
 
-/* 8070616C-807061B4 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__12daE_MB_HIO_cFv */
 daE_MB_HIO_c::daE_MB_HIO_c() {
     no = -1;
     base_size = 1.0f;
@@ -59,13 +58,11 @@ void daE_MB_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 807061B4-80706260 000134 00AC+00 5/5 0/0 0/0 .text            anm_init__FP10e_mb_classifUcf */
 static void anm_init(e_mb_class* i_this, int i_anmID, f32 i_morf, u8 i_attr, f32 i_speed) {
     i_this->mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_mb", i_anmID), i_attr, i_morf, i_speed, 0.0f, -1.0f);
     i_this->mAnm = i_anmID;
 }
 
-/* 80706260-807063B0 0001E0 0150+00 1/0 0/0 0/0 .text            daE_MB_Draw__FP10e_mb_class */
 static int daE_MB_Draw(e_mb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -95,31 +92,22 @@ static int daE_MB_Draw(e_mb_class* i_this) {
 /* 80708C2D 0003+00 data_80708C2D None */
 static u8 l_initHIO;
 
-/* 80708C3C-80708C58 000054 001C+00 2/5 0/0 0/0 .bss             l_HIO */
 static daE_MB_HIO_c l_HIO;
 
-/* 80708C64-80708C70 00007C 000C+00 0/2 0/0 0/0 .bss             L_pos1 */
 static cXyz L_pos1(-2575.0f, 1050.0f, 1060.0f);
 
-/* 80708C7C-80708C88 000094 000C+00 1/3 0/0 0/0 .bss             L_pos2 */
 static cXyz L_pos2(-1944.0f, 1050.0f, 1060.0f);
 
-/* 80708C94-80708CA0 0000AC 000C+00 0/2 0/0 0/0 .bss             L_Hpos */
 static cXyz L_Hpos(-1923.0f, 1432.0f, 1060.0f);
 
-/* 80708CAC-80708CB8 0000C4 000C+00 0/3 0/0 0/0 .bss             R_pos1 */
 static cXyz R_pos1(2606.0f, 1050.0f, 1070.0f);
 
-/* 80708CC4-80708CD0 0000DC 000C+00 2/4 0/0 0/0 .bss             R_pos2 */
 static cXyz R_pos2(2126.0f, 1050.0f, 1070.0f);
 
-/* 80708CDC-80708CE8 0000F4 000C+00 0/2 0/0 0/0 .bss             R_Hpos */
 static cXyz R_Hpos(2099.0f, 1432.0f, 1070.0f);
 
-/* 80708CF4-80708D00 00010C 000C+00 0/1 0/0 0/0 .bss             c_pos */
 static cXyz c_pos(0.0f, 1011.0f, 1060.0f);
 
-/* 807063B0-8070661C 000330 026C+00 2/1 0/0 0/0 .text            e_mb_standby__FP10e_mb_class */
 static void e_mb_standby(e_mb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     b_bq_class* bq_p = (b_bq_class*)fopAcM_SearchByID(a_this->parentActorID);
@@ -182,7 +170,6 @@ static void e_mb_standby(e_mb_class* i_this) {
     }
 }
 
-/* 8070661C-80706898 00059C 027C+00 1/1 0/0 0/0 .text            e_mb_walk1__FP10e_mb_class */
 static void e_mb_walk1(e_mb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -216,7 +203,6 @@ static void e_mb_walk1(e_mb_class* i_this) {
     }
 }
 
-/* 807068D4-80706F90 000854 06BC+00 1/1 0/0 0/0 .text            e_mb_move__FP10e_mb_class */
 static s8 e_mb_move(e_mb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -305,7 +291,6 @@ static s8 e_mb_move(e_mb_class* i_this) {
     return var_r28;
 }
 
-/* 80706F90-8070723C 000F10 02AC+00 1/1 0/0 0/0 .text            e_mb_walk2__FP10e_mb_class */
 static void e_mb_walk2(e_mb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -343,7 +328,6 @@ static void e_mb_walk2(e_mb_class* i_this) {
     }
 }
 
-/* 8070723C-80707560 0011BC 0324+00 1/1 0/0 0/0 .text            e_mb_firstdemo__FP10e_mb_class */
 static void e_mb_firstdemo(e_mb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     b_bq_class* bq_p = (b_bq_class*)fopAcM_SearchByID(i_this->parentActorID);
@@ -397,12 +381,10 @@ static void e_mb_firstdemo(e_mb_class* i_this) {
     }
 }
 
-/* 80707560-80707570 0014E0 0010+00 1/1 0/0 0/0 .text            e_mb_end__FP10e_mb_class */
 static void e_mb_end(e_mb_class* i_this) {
     i_this->current.pos.y = 20000.0f;
 }
 
-/* 80707570-80707680 0014F0 0110+00 1/1 0/0 0/0 .text            action__FP10e_mb_class */
 static s8 action(e_mb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -442,7 +424,6 @@ static s8 action(e_mb_class* i_this) {
     return var_r29;
 }
 
-/* 80707680-80708148 001600 0AC8+00 2/1 0/0 0/0 .text            daE_MB_Execute__FP10e_mb_class */
 static int daE_MB_Execute(e_mb_class* i_this) {
     if (cDmrNowMidnaTalk()) {
         return 1;
@@ -633,12 +614,10 @@ static int daE_MB_Execute(e_mb_class* i_this) {
     return 1;
 }
 
-/* 80708148-80708150 0020C8 0008+00 1/0 0/0 0/0 .text            daE_MB_IsDelete__FP10e_mb_class */
 static int daE_MB_IsDelete(e_mb_class* i_this) {
     return 1;
 }
 
-/* 80708150-807081B8 0020D0 0068+00 1/0 0/0 0/0 .text            daE_MB_Delete__FP10e_mb_class */
 static int daE_MB_Delete(e_mb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fpc_ProcID id = fopAcM_GetID(a_this);
@@ -657,7 +636,6 @@ static int daE_MB_Delete(e_mb_class* i_this) {
     return 1;
 }
 
-/* 807081B8-8070853C 002138 0384+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_mb_class* a_this = (e_mb_class*)i_this;
 
@@ -699,7 +677,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80708584-8070879C 002504 0218+00 1/0 0/0 0/0 .text            daE_MB_Create__FP10fopAc_ac_c */
 static int daE_MB_Create(fopAc_ac_c* i_this) {
     e_mb_class* a_this = (e_mb_class*)i_this;
     fopAcM_ct(a_this, e_mb_class);
@@ -758,7 +735,6 @@ static int daE_MB_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 80708B50-80708B70 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_MB_Method */
 static actor_method_class l_daE_MB_Method = {
     (process_method_func)daE_MB_Create,
     (process_method_func)daE_MB_Delete,
@@ -767,7 +743,6 @@ static actor_method_class l_daE_MB_Method = {
     (process_method_func)daE_MB_Draw,
 };
 
-/* 80708B70-80708BA0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_MB */
 extern actor_process_profile_definition g_profile_E_MB = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

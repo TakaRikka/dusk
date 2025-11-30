@@ -10,15 +10,12 @@
 #include "SSystem/SComponent/c_m3d_g_cyl.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 80035C8C-80035CA0 0305CC 0014+00 0/0 1/1 8/8 .text            __ct__9dJntCol_cFv */
 dJntCol_c::dJntCol_c() {
     mModel = 0;
     mData = 0;
     field_0x8 = 0;
 }
 
-/* 80035CA0-80035CC8 0305E0 0028+00 0/0 2/2 8/8 .text
- * init__9dJntCol_cFP10fopAc_ac_cPC13dJntColData_cP8J3DModeli   */
 int dJntCol_c::init(fopAc_ac_c* i_actorP, dJntColData_c const* i_jntColP, J3DModel* i_modelP,
                     int param_3) {
     mData = i_jntColP;
@@ -33,8 +30,6 @@ int dJntCol_c::init(fopAc_ac_c* i_actorP, dJntColData_c const* i_jntColP, J3DMod
     return 1;
 }
 
-/* 80035CC8-80035DC8 030608 0100+00 2/2 0/0 0/0 .text
- * setNowLine__9dJntCol_cFP8cM3dGLinPC4cXyzPC5csXyzP4cXyz       */
 void dJntCol_c::setNowLine(cM3dGLin* i_line, cXyz const* param_1, csXyz const* param_2,
                            cXyz* param_3) {
     if (param_2 != NULL) {
@@ -49,8 +44,6 @@ void dJntCol_c::setNowLine(cM3dGLin* i_line, cXyz const* param_1, csXyz const* p
     i_line->SetStartEnd(start_pos, end_pos);
 }
 
-/* 80035DC8-80036A5C 030708 0C94+00 2/2 0/0 0/0 .text
- * searchNearPos__9dJntCol_cCFPC8cM3dGLinPC4cXyzP4cXyzi         */
 int dJntCol_c::searchNearPos(cM3dGLin const* param_1, cXyz const* param_2, cXyz* param_3,
                               int param_4) const {
     const dJntColData_c* pcVar12 = mData;
@@ -215,8 +208,6 @@ int dJntCol_c::searchNearPos(cM3dGLin const* param_1, cXyz const* param_2, cXyz*
     return rv;
 }
 
-/* 80036AEC-80036C44 03142C 0158+00 0/0 0/0 1/1 .text
- * getArrowOffsetPosAndAngle__9dJntCol_cCFPC4cXyzPC5csXyzP4cXyzP4cXyz */
 int dJntCol_c::getArrowOffsetPosAndAngle(cXyz const* param_1, csXyz const* param_2,
                                               cXyz* param_3, cXyz* param_4) const {
     cM3dGLin acStack_34;
@@ -244,8 +235,6 @@ int dJntCol_c::getArrowOffsetPosAndAngle(cXyz const* param_1, csXyz const* param
     return jntColData->mJntNum;
 }
 
-/* 80036C44-80036FA8 031584 0364+00 0/0 3/3 0/0 .text
- * getHitmarkPosAndAngle__9dJntCol_cCFPC4cXyzPC5csXyzP4cXyzP5csXyzi */
 int dJntCol_c::getHitmarkPosAndAngle(cXyz const* param_1, csXyz const* param_2, cXyz* param_3,
                                          csXyz* param_4, int param_5) const {
     cM3dGLin acStack_54;
@@ -284,8 +273,6 @@ int dJntCol_c::getHitmarkPosAndAngle(cXyz const* param_1, csXyz const* param_2, 
     return iVar3;
 }
 
-/* 80036FA8-80037038 0318E8 0090+00 0/0 0/0 1/1 .text
- * setArrowPosAndAngle__9dJntCol_cFPC4cXyzPC4cXyziP4cXyzP5csXyz */
 void dJntCol_c::setArrowPosAndAngle(cXyz const* param_0, cXyz const* i_srcPos, int i_anmMtxIdx,
                                     cXyz* param_3, csXyz* i_arrowPosP) {
     cXyz dst_pos;

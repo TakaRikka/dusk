@@ -23,27 +23,27 @@ public:
         ACTION_WALK,
     };
 
-    /* 80D087F4 */ void InitCcSph();
-    /* 80D08860 */ void SetCcSph();
-    /* 80D08C10 */ void WaitAction();
-    /* 80D08D94 */ BOOL WallCheck();
-    /* 80D09008 */ void SpeedSet();
-    /* 80D09114 */ void WallWalk();
-    /* 80D09548 */ void WalkAction();
-    /* 80D09748 */ void MoveAction();
-    /* 80D09F58 */ void Action();
-    /* 80D0A01C */ void ShopAction();
-    /* 80D0A0D8 */ void checkGroundPos();
-    /* 80D0A13C */ virtual void Insect_Release();
-    /* 80D0A154 */ void ParticleSet();
-    /* 80D0A278 */ void BoomChk();
-    /* 80D0A644 */ int Execute();
-    /* 80D0A8C8 */ void ObjHit();
-    /* 80D0AA50 */ void Z_BufferChk();
-    /* 80D0ABCC */ int Delete();
-    /* 80D0AC34 */ void setBaseMtx();
-    /* 80D0AD9C */ bool CreateChk();
-    /* 80D0AF48 */ int create();
+    void InitCcSph();
+    void SetCcSph();
+    void WaitAction();
+    BOOL WallCheck();
+    void SpeedSet();
+    void WallWalk();
+    void WalkAction();
+    void MoveAction();
+    void Action();
+    void ShopAction();
+    void checkGroundPos();
+    virtual void Insect_Release();
+    void ParticleSet();
+    void BoomChk();
+    int Execute();
+    void ObjHit();
+    void Z_BufferChk();
+    int Delete();
+    void setBaseMtx();
+    bool CreateChk();
+    int create();
 
     /* 0x590 */ dBgS_GndChk mGndChk;
     /* 0x5E4 */ f32 field_0x5e4;
@@ -82,8 +82,8 @@ STATIC_ASSERT(sizeof(daObjTEN_c) == 0xa68);
 
 class daObj_TenHIO_c {
 public:
-    /* 80D087CC */ daObj_TenHIO_c();
-    /* 80D0B848 */ virtual ~daObj_TenHIO_c() {}
+    daObj_TenHIO_c();
+    virtual ~daObj_TenHIO_c() {}
 
     s8 field_0x4;
     f32 field_0x8;

@@ -13,14 +13,14 @@
  */
 class daObjVGnd_c : public fopAc_ac_c {
 public:
-    /* 80D213F8 */ void initBaseMtx();
-    /* 80D21448 */ void setBaseMtx();
-    /* 80D214AC */ int Create();
-    /* 80D21500 */ int CreateHeap();
-    /* 80D216F4 */ int create();
-    /* 80D217A8 */ int execute();
-    /* 80D21878 */ int draw();
-    /* 80D2194C */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    int draw();
+    int _delete();
 
     u32 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
 

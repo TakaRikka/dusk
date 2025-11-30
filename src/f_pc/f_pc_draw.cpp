@@ -9,7 +9,6 @@
 #include "f_pc/f_pc_node.h"
 #include "f_pc/f_pc_pause.h"
 
-/* 80023954-800239F4 00A0+00 s=0 e=1 z=0  None .text      fpcDw_Execute__FP18base_process_class */
 s32 fpcDw_Execute(base_process_class* i_proc) {
     if (!fpcPause_IsEnable(i_proc, 2)) {
         layer_class* save_layer;
@@ -32,7 +31,6 @@ s32 fpcDw_Execute(base_process_class* i_proc) {
     return 0;
 }
 
-/* 800239F4-80023A48 0054+00 s=0 e=2 z=10  None .text      fpcDw_Handler__FPFPFPvPv_i_iPFPvPv_i */
 s32 fpcDw_Handler(fpcDw_HandlerFuncFunc i_iterHandler, fpcDw_HandlerFunc i_func) {
     s32 ret;
     cAPIGph_BeforeOfDraw();

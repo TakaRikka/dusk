@@ -101,8 +101,8 @@ STATIC_ASSERT(sizeof(obj_so_class) == 0x1bd0);
 
 class daObj_So_HIO_c : public JORReflexible {
 public:
-    /* 80CE03CC */ daObj_So_HIO_c();
-    /* 80CE3928 */ virtual ~daObj_So_HIO_c() {}
+    daObj_So_HIO_c();
+    virtual ~daObj_So_HIO_c() {}
 
     void genMessage(JORMContext*);
 

@@ -6,8 +6,8 @@
 
 class dkWmark_c : public kankyo_class {
 public:
-    /* 80261640 */ ~dkWmark_c();
-    /* 802616C4 */ BOOL setMatrix();
+    ~dkWmark_c();
+    BOOL setMatrix();
 
     inline int create();
     inline int execute();

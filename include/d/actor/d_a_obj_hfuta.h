@@ -22,18 +22,18 @@ public:
 
     typedef void (daObjFuta_c::*modeFunc)();
 
-    /* 80C1DD8C */ void initBaseMtx();
-    /* 80C1DDC8 */ void setBaseMtx();
-    /* 80C1DE94 */ int Create();
-    /* 80C1DF2C */ int CreateHeap();
-    /* 80C1DF9C */ int create1st();
-    /* 80C1E020 */ int Execute(Mtx**);
-    /* 80C1EB38 */ void mode_proc_call();
-    /* 80C1EBDC */ void mode_wait();
-    /* 80C1EC44 */ void mode_move();
-    /* 80C1ECB4 */ void mode_end();
-    /* 80C1ECC4 */ int Draw();
-    /* 80C1ED68 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void mode_proc_call();
+    void mode_wait();
+    void mode_move();
+    void mode_end();
+    int Draw();
+    int Delete();
 
     void setMode(u8 mode) { mMode = mode; }
 

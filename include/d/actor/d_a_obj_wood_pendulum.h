@@ -14,14 +14,14 @@
  */
 class daObjWPndlm_c : public fopAc_ac_c {
 public:
-    /* 80D39418 */ void initBaseMtx();
-    /* 80D39454 */ void setBaseMtx();
-    /* 80D394CC */ int Create();
-    /* 80D395C8 */ int CreateHeap();
-    /* 80D39638 */ int create();
-    /* 80D39978 */ int execute();
-    /* 80D39B68 */ int draw();
-    /* 80D39BCC */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    int draw();
+    int _delete();
 
     u32 getArg0() { return fopAcM_GetParamBit(this, 0, 8); }
     u32 getArg1() { return fopAcM_GetParamBit(this, 8, 8); }

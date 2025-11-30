@@ -13,13 +13,10 @@
 #include "d/actor/d_a_player.h"
 #include <cmath.h>
 
-/* 80BB5318-80BB5380 000078 0068+00 1/1 0/0 0/0 .text RideOn_Angle__15daObjBhbridge_cFRsfsf */
 void daObjBhbridge_c::RideOn_Angle(s16& param_1, f32 param_2, s16 param_3, f32 param_4) {
     cLib_addCalcAngleS(&param_1, param_3 * (param_2 / param_4), 1, 0x100, 1);
 }
 
-/* 80BB5380-80BB558C 0000E0 020C+00 1/1 0/0 0/0 .text            Check_RideOn__15daObjBhbridge_cFv
- */
 int daObjBhbridge_c::Check_RideOn() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz& playerPos = fopAcM_GetPosition(player);
@@ -44,13 +41,11 @@ int daObjBhbridge_c::Check_RideOn() {
     return 0;
 }
 
-/* 80BB558C-80BB55B8 0002EC 002C+00 1/1 0/0 0/0 .text            initBaseMtx__15daObjBhbridge_cFv */
 void daObjBhbridge_c::initBaseMtx() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     setBaseMtx();
 }
 
-/* 80BB55B8-80BB5614 000318 005C+00 2/2 0/0 0/0 .text            setBaseMtx__15daObjBhbridge_cFv */
 void daObjBhbridge_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -58,8 +53,6 @@ void daObjBhbridge_c::setBaseMtx() {
     cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80BB5614-80BB5678 000374 0064+00 1/1 0/0 0/0 .text
- * rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c              */
 static void rideCallBack(dBgW* param_1, fopAc_ac_c* i_this, fopAc_ac_c* param_3) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (!((daObjBhbridge_c*)i_this)->field_0x5de &&
@@ -70,30 +63,23 @@ static void rideCallBack(dBgW* param_1, fopAc_ac_c* i_this, fopAc_ac_c* param_3)
     ((daObjBhbridge_c*)i_this)->Check_RideOn();
 }
 
-/* 80BB5678-80BB56A4 0003D8 002C+00 1/0 0/0 0/0 .text daObjBhbridge_Draw__FP15daObjBhbridge_c */
 static int daObjBhbridge_Draw(daObjBhbridge_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BB56A4-80BB56C4 000404 0020+00 1/0 0/0 0/0 .text daObjBhbridge_Execute__FP15daObjBhbridge_c
- */
 static int daObjBhbridge_Execute(daObjBhbridge_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BB56C4-80BB56CC 000424 0008+00 1/0 0/0 0/0 .text daObjBhbridge_IsDelete__FP15daObjBhbridge_c
- */
 static int daObjBhbridge_IsDelete(daObjBhbridge_c* i_this) {
     return 1;
 }
 
-/* 80BB56CC-80BB56F0 00042C 0024+00 1/0 0/0 0/0 .text daObjBhbridge_Delete__FP15daObjBhbridge_c */
 static int daObjBhbridge_Delete(daObjBhbridge_c* i_this) {
     i_this->MoveBGDelete();
     return 1;
 }
 
-/* 80BB5FAC-80BB5FB0 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "BHBridge";
 
 inline int daObjBhbridge_c::create() {
@@ -120,7 +106,6 @@ inline int daObjBhbridge_c::create() {
     return rv;
 }
 
-/* 80BB5934-80BB59AC 000694 0078+00 1/0 0/0 0/0 .text            CreateHeap__15daObjBhbridge_cFv */
 inline int daObjBhbridge_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "M_BHbridge.bmd");
     JUT_ASSERT(83, modelData != NULL);
@@ -128,14 +113,12 @@ inline int daObjBhbridge_c::CreateHeap() {
     return mModel != NULL ? TRUE : FALSE;
 }
 
-/* 80BB56F0-80BB58C4 000450 01D4+00 1/0 0/0 0/0 .text daObjBhbridge_Create__FP10fopAc_ac_c */
 static int daObjBhbridge_Create(fopAc_ac_c* a_this) {
     daObjBhbridge_c* i_this = static_cast<daObjBhbridge_c*>(a_this);
     fpc_ProcID id = fopAcM_GetID(a_this);
     return i_this->create();
 }
 
-/* 80BB59AC-80BB5A14 00070C 0068+00 1/0 0/0 0/0 .text            Create__15daObjBhbridge_cFv */
 inline int daObjBhbridge_c::Create() {
     fopAcM_setCullSizeBox(this, -400.0f, -800.0f, -1000.0f, 400.0f, 300.0f, 1000.0f);
     initBaseMtx();
@@ -143,7 +126,6 @@ inline int daObjBhbridge_c::Create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80BB5A14-80BB5E10 000774 03FC+00 1/0 0/0 0/0 .text Execute__15daObjBhbridge_cFPPA3_A4_f */
 inline int daObjBhbridge_c::Execute(f32 (**i_mtxP)[3][4]) {
     cXyz cStack_5c(current.pos.x, current.pos.y + HREG_F(0), current.pos.z);
     f32 dVar10 = current.pos.y;
@@ -194,7 +176,6 @@ inline int daObjBhbridge_c::Execute(f32 (**i_mtxP)[3][4]) {
     return 1;
 }
 
-/* 80BB5E10-80BB5EB4 000B70 00A4+00 1/0 0/0 0/0 .text            Draw__15daObjBhbridge_cFv */
 inline int daObjBhbridge_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -204,13 +185,11 @@ inline int daObjBhbridge_c::Draw() {
     return 1;
 }
 
-/* 80BB5EB4-80BB5EE8 000C14 0034+00 1/0 0/0 0/0 .text            Delete__15daObjBhbridge_cFv */
 inline int daObjBhbridge_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     return 1;
 }
 
-/* 80BB5FB0-80BB5FD0 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjBhbridge_Method */
 static actor_method_class l_daObjBhbridge_Method = {
     (process_method_func)daObjBhbridge_Create,
     (process_method_func)daObjBhbridge_Delete,
@@ -219,7 +198,6 @@ static actor_method_class l_daObjBhbridge_Method = {
     (process_method_func)daObjBhbridge_Draw,
 };
 
-/* 80BB5FD0-80BB6000 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Bhbridge */
 extern actor_process_profile_definition g_profile_Obj_Bhbridge = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID

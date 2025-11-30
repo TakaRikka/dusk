@@ -8,8 +8,8 @@
  * 
  */
 struct JPAKeyBlock {
-    /* 8027D730 */ JPAKeyBlock(u8 const*);
-    /* 8027D740 */ f32 calc(f32);
+    JPAKeyBlock(u8 const*);
+    f32 calc(f32);
 
     u8 getID() { return mDataStart[8]; }
 

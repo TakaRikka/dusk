@@ -14,13 +14,13 @@
  */
 class daTalk_c : public fopAc_ac_c {
 public:
-    /* 80D66378 */ ~daTalk_c();
-    /* 80D663E4 */ int create();
-    /* 80D664AC */ int execute();
-    /* 80D6665C */ int draw();
-    /* 80D66664 */ void setStatus(u16);
-    /* 80D66688 */ u16 getStatus();
-    /* 80D666A8 */ u32 messageSet();
+    ~daTalk_c();
+    int create();
+    int execute();
+    int draw();
+    void setStatus(u16);
+    u16 getStatus();
+    u32 messageSet();
 
 private:
     /* 0x568 */ dMsgFlow_c mMsgFlow;

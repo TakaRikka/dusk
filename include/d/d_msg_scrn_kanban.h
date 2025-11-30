@@ -9,13 +9,13 @@ class J2DAnmTextureSRTKey;
 class CPaneMgr;
 
 struct dMsgScrnKanban_c : public dMsgScrnBase_c {
-    /* 80244E38 */ dMsgScrnKanban_c(JKRExpHeap*);
-    /* 8024534C */ ~dMsgScrnKanban_c();
-    /* 80245528 */ void exec();
-    /* 80245618 */ void draw();
-    /* 802456A0 */ void fukiAlpha(f32);
-    /* 80245754 */ void fukiScale(f32);
-    /* 80245758 */ void fukiTrans(f32, f32);
+    dMsgScrnKanban_c(JKRExpHeap*);
+    ~dMsgScrnKanban_c();
+    void exec();
+    void draw();
+    void fukiAlpha(f32);
+    void fukiScale(f32);
+    void fukiTrans(f32, f32);
 
     /* 0xC4 */ CPaneMgr* mpBack_c;
     /* 0xC8 */ CPaneMgr* mpSpot_c;

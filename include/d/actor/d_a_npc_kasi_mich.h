@@ -32,56 +32,56 @@ public:
     typedef int (daNpcKasiMich_c::*actionFunc)(int);
     typedef BOOL (daNpcKasiMich_c::*EventFn)(int);
 
-    /* 80A261CC */ daNpcKasiMich_c();
-    /* 80A26414 */ ~daNpcKasiMich_c();
-    /* 80A26624 */ cPhs__Step Create();
-    /* 80A268A0 */ int CreateHeap();
-    /* 80A26A24 */ int Delete();
-    /* 80A26A58 */ int Execute();
-    /* 80A26A84 */ int Draw();
-    /* 80A26AD0 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80A26C5C */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A26C7C */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80A26CC8 */ void setParam();
-    /* 80A26D34 */ BOOL main();
-    /* 80A26FDC */ void setAttnPos();
-    /* 80A27184 */ void setMotionAnm(int, f32);
-    /* 80A27254 */ void setMotion(int, f32, int);
-    /* 80A2729C */ BOOL drawDbgInfo();
-    /* 80A272A4 */ void reset();
-    /* 80A274D8 */ void playMotion();
-    /* 80A2790C */ void playMotionAnmLoop(daNpcF_c::daNpcF_anmPlayData***);
-    /* 80A27A84 */ BOOL setAction(actionFunc);
-    /* 80A27B2C */ void setLookMode(int);
-    /* 80A27B50 */ void lookat();
-    /* 80A27D30 */ BOOL step(s16, int);
-    /* 80A27E24 */ BOOL chkFindPlayer();
-    /* 80A27F08 */ int wait(int);
-    /* 80A282B4 */ int fear(int);
-    /* 80A28490 */ daTagEscape_c* srchWolfTag();
-    /* 80A284F8 */ static void* _srch_escape_tag(void*, void*);
-    /* 80A285C8 */ int getWolfPathNearIdx();
-    /* 80A286FC */ int chace_st(int);
-    /* 80A287A0 */ int chace(int);
-    /* 80A28910 */ cXyz getChacePos();
-    /* 80A289CC */ int turn_link(int);
-    /* 80A28A8C */ int turn_home(int);
-    /* 80A28B70 */ int turn_center(int);
-    /* 80A28C40 */ int talk_dummy(int);
-    /* 80A28CB8 */ int kya(int);
-    /* 80A28D90 */ int kya2(int);
-    /* 80A28E28 */ int kya_stop(int);
-    /* 80A28EFC */ int iyan(int);
-    /* 80A28F74 */ int escape(int);
-    /* 80A2908C */ int iyan_look(int);
-    /* 80A29164 */ int turn_hana(int);
-    /* 80A291E8 */ int wait_dummy(int);
-    /* 80A2926C */ int cheer(int);
-    /* 80A29458 */ BOOL _turn_to_link(s16);
-    /* 80A294A4 */ BOOL _turn_pos(cXyz const&, s16);
-    /* 80A29500 */ BOOL actor_front_check(fopAc_ac_c*);
-    /* 80A295D8 */ void _getOffset(cXyz const&, cXyz&);
-    /* 80A29FDC */ void adjustShapeAngle() {}
+    daNpcKasiMich_c();
+    ~daNpcKasiMich_c();
+    cPhs__Step Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void setParam();
+    BOOL main();
+    void setAttnPos();
+    void setMotionAnm(int, f32);
+    void setMotion(int, f32, int);
+    BOOL drawDbgInfo();
+    void reset();
+    void playMotion();
+    void playMotionAnmLoop(daNpcF_c::daNpcF_anmPlayData***);
+    BOOL setAction(actionFunc);
+    void setLookMode(int);
+    void lookat();
+    BOOL step(s16, int);
+    BOOL chkFindPlayer();
+    int wait(int);
+    int fear(int);
+    daTagEscape_c* srchWolfTag();
+    static void* _srch_escape_tag(void*, void*);
+    int getWolfPathNearIdx();
+    int chace_st(int);
+    int chace(int);
+    cXyz getChacePos();
+    int turn_link(int);
+    int turn_home(int);
+    int turn_center(int);
+    int talk_dummy(int);
+    int kya(int);
+    int kya2(int);
+    int kya_stop(int);
+    int iyan(int);
+    int escape(int);
+    int iyan_look(int);
+    int turn_hana(int);
+    int wait_dummy(int);
+    int cheer(int);
+    BOOL _turn_to_link(s16);
+    BOOL _turn_pos(cXyz const&, s16);
+    BOOL actor_front_check(fopAc_ac_c*);
+    void _getOffset(cXyz const&, cXyz&);
+    void adjustShapeAngle() {}
 
     s8 getType() {
         s8 rv = fopAcM_GetParam(this) & 0xFF;
@@ -145,7 +145,7 @@ STATIC_ASSERT(sizeof(daNpcKasiMich_c) == 0x146c);
 
 class daNpcKasiMich_Param_c {
 public:
-    /* 80A29FE0 */ virtual ~daNpcKasiMich_Param_c() {}
+    virtual ~daNpcKasiMich_Param_c() {}
 
     static daNpcKasiMich_HIOParam const m;
 };

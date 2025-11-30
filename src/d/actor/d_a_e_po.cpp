@@ -13,21 +13,17 @@
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* ############################################################################################## */
 
-/* 80757ADA-80757ADC 000036 0002+00 6/7 0/0 0/0 .data            mAttackNo */
 static s16 mAttackNo = 3;
 
-/* 80757ADC-80757AE0 000038 0004+00 1/2 0/0 0/0 .data            mHaba */
 static f32 mHaba = 400.0f;
 
-/* 80757AE0-80757AE4 00003C 0002+02 2/4 0/0 0/0 .data            mRollHp */
 static s16 mRollHp = 90;
 
 class daE_PO_HIO_c {
 public:
-    /* 8074C54C */ daE_PO_HIO_c();
-    /* 80756DE8 */ virtual ~daE_PO_HIO_c() {}
+    daE_PO_HIO_c();
+    virtual ~daE_PO_HIO_c() {}
 
     /* 0x04 */ s8 field_0x04[4];
     /* 0x08 */ f32 mBaseSize;
@@ -52,7 +48,6 @@ public:
     /* 0x38 */ f32 mModelSize;
 };
 
-/* 8074C54C-8074C5EC 0000EC 00A0+00 1/1 0/0 0/0 .text            __ct__12daE_PO_HIO_cFv */
 daE_PO_HIO_c::daE_PO_HIO_c() {
     field_0x04[0] = -1;
     mBaseSize = 1.2f;
@@ -76,19 +71,15 @@ daE_PO_HIO_c::daE_PO_HIO_c() {
     mModelSize = 1.0f;
 }
 
-/* 80757E5C-80757E98 000054 003C+00 9/11 0/0 0/0 .bss             l_HIO */
 static u8 l_HIOInit;
 static daE_PO_HIO_c l_HIO;
 
-/* 80757E98-80757E9C -00001 0004+00 0/1 0/0 0/0 .bss             None */
 static s16 mRollCount;
 static s16 mRollPlus;
 
-/* 80757E9C-80757EA0 -00001 0004+00 1/3 0/0 0/0 .bss             None */
 static s16 mRollDemoFlag;
 static s16 mHollDemoFlag;
 
-/* 8074C5EC-8074C660 00018C 0074+00 13/13 0/0 0/0 .text            mArg0Check */
 static int mArg0Check(e_po_class* i_this, s16 param_1) {
     if (param_1 != 0xFF) {
         return (param_1 == i_this->mArg0 ? 1 : 0);
@@ -105,16 +96,13 @@ static int mArg0Check(e_po_class* i_this, s16 param_1) {
     return 0;
 }
 
-/* ############################################################################################## */
 
-/* 8074C660-8074C70C 000200 00AC+00 12/12 0/0 0/0 .text            anm_init__FP10e_po_classifUcf */
 static void anm_init(e_po_class* i_this, int i_index, f32 i_morf, u8 i_attr, f32 i_rate) {
     J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("E_PO", i_index);
     i_this->mpMorf->setAnm(anm, i_attr, i_morf, i_rate, 0.0f, -1.0f);
     i_this->mAnmID = i_index;
 }
 
-/* 8074C70C-8074C858 0002AC 014C+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -143,9 +131,7 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* ############################################################################################## */
 
-/* 8074C858-8074CCCC 0003F8 0474+00 1/0 0/0 0/0 .text            daE_PO_Draw__FP10e_po_class */
 static int daE_PO_Draw(e_po_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -228,9 +214,7 @@ static int daE_PO_Draw(e_po_class* i_this) {
     return 1;
 }
 
-/* ############################################################################################## */
 
-/* 8074CCCC-8074D16C 00086C 04A0+00 3/3 0/0 0/0 .text            e_po_opening__FP10e_po_class */
 static void e_po_opening(e_po_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -335,9 +319,7 @@ static void e_po_opening(e_po_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 8074D16C-8074D338 000D0C 01CC+00 1/1 0/0 0/0 .text            e_po_wait__FP10e_po_class */
 static void e_po_wait(e_po_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -380,9 +362,7 @@ static void e_po_wait(e_po_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 8074D338-8074D500 000ED8 01C8+00 1/1 0/0 0/0 .text            e_po_avoid__FP10e_po_class */
 static void e_po_avoid(e_po_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -420,9 +400,7 @@ static void e_po_avoid(e_po_class* i_this) {
     i_this->field_0x754 = 20;
 }
 
-/* ############################################################################################## */
 
-/* 8074D500-8074DC40 0010A0 0740+00 1/1 0/0 0/0 .text            e_po_search__FP10e_po_class */
 static void e_po_search(e_po_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -524,9 +502,7 @@ static void e_po_search(e_po_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 8074DC40-8074E168 0017E0 0528+00 1/1 0/0 0/0 .text            e_po_attack__FP10e_po_class */
 static void e_po_attack(e_po_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -623,9 +599,7 @@ static void e_po_attack(e_po_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 8074E168-8074E4EC 001D08 0384+00 1/1 0/0 0/0 .text            damage_check__FP10e_po_class */
 static void damage_check(e_po_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -709,9 +683,7 @@ static void damage_check(e_po_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 8074E4EC-8074E694 00208C 01A8+00 1/1 0/0 0/0 .text            e_po_damage__FP10e_po_class */
 static void e_po_damage(e_po_class* i_this) {
     i_this->field_0x754 = 10;
     switch (i_this->mType) {
@@ -750,7 +722,6 @@ static void e_po_damage(e_po_class* i_this) {
     cLib_addCalc0(&i_this->enemy.speedF, 1.0f, 2.0f);
 }
 
-/* 8074E694-8074EA6C 002234 03D8+00 1/1 0/0 0/0 .text            e_po_wolfbite__FP10e_po_class */
 static void e_po_wolfbite(e_po_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -831,9 +802,7 @@ static void e_po_wolfbite(e_po_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 8074EA6C-807501B0 00260C 1744+00 2/1 0/0 0/0 .text            e_po_dead__FP10e_po_class */
 static void e_po_dead(e_po_class* i_this) {
     static u16 particleNmaeDt[7] = {
         dPa_RM(ID_ZF_S_POFIREA01_XZSMK),
@@ -1334,9 +1303,7 @@ static void e_po_dead(e_po_class* i_this) {
     return;
 }
 
-/* ############################################################################################## */
 
-/* 807501B0-8075030C 003D50 015C+00 2/2 0/0 0/0 .text            e_rollingMove__FP10e_po_classsff */
 static f32 e_rollingMove(e_po_class* i_this, s16 param_1, f32 param_2, f32 param_3) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
@@ -1362,9 +1329,7 @@ static f32 e_rollingMove(e_po_class* i_this, s16 param_1, f32 param_2, f32 param
                            20.0f);
 }
 
-/* ############################################################################################## */
 
-/* 8075030C-80750E88 003EAC 0B7C+00 2/1 0/0 0/0 .text            e_po_limbering__FP10e_po_class */
 static void e_po_limbering(e_po_class* i_this) {
     cXyz local_48;
     cXyz local_54;
@@ -1597,9 +1562,7 @@ static void e_po_limbering(e_po_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 80750E88-80751408 004A28 0580+00 1/1 0/0 0/0 .text            e_po_roll_move__FP10e_po_class */
 static void e_po_roll_move(e_po_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     fopAc_ac_c* player_p = static_cast<fopAc_ac_c*>(dComIfGp_getPlayer(0));
@@ -1735,9 +1698,7 @@ static void e_po_roll_move(e_po_class* i_this) {
     cLib_addCalcAngleS2(&a_this->shape_angle.y, var_r4, 4, 0x800);
 }
 
-/* ############################################################################################## */
 
-/* 80751408-807549C0 004FA8 35B8+00 1/1 0/0 0/0 .text            e_po_holl_demo__FP10e_po_class */
 static void e_po_holl_demo(e_po_class* i_this) {
     static u16 holl_demo_eff_Dt[2] = {
         dPa_RM(ID_ZF_S_POFIRED00_GLOW),
@@ -2498,9 +2459,7 @@ static void e_po_holl_demo(e_po_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 80754AD8-807550EC 008678 0614+00 2/1 0/0 0/0 .text            action__FP10e_po_class */
 static void action(e_po_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -2664,9 +2623,7 @@ static void action(e_po_class* i_this) {
     }
 }
 
-/* ############################################################################################## */
 
-/* 807550EC-80755C00 008C8C 0B14+00 2/1 0/0 0/0 .text            daE_PO_Execute__FP10e_po_class */
 static int daE_PO_Execute(e_po_class* i_this) {
     static u8 po_bottleIn_dt[4] = {
         0xEF,
@@ -2868,19 +2825,15 @@ static int daE_PO_Execute(e_po_class* i_this) {
     return 1;
 }
 
-/* 80755C00-80755C04 0097A0 0004+00 1/1 0/0 0/0 .text
- * mPo_tgHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void mPo_tgHitCallback(fopAc_ac_c* param_0, dCcD_GObjInf* param_1, fopAc_ac_c* param_2,
                               dCcD_GObjInf* param_3) {
     /* empty function */
 }
 
-/* 80755C04-80755C0C 0097A4 0008+00 1/0 0/0 0/0 .text            daE_PO_IsDelete__FP10e_po_class */
 static int daE_PO_IsDelete(e_po_class* param_0) {
     return 1;
 }
 
-/* 80755C0C-80755C94 0097AC 0088+00 1/0 0/0 0/0 .text            daE_PO_Delete__FP10e_po_class */
 static int daE_PO_Delete(e_po_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
 
@@ -2895,7 +2848,6 @@ static int daE_PO_Delete(e_po_class* i_this) {
     return 1;
 }
 
-/* 80755C94-80756020 009834 038C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_po_class* a_this = (e_po_class*)i_this;
 
@@ -2950,9 +2902,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 0;
 }
 
-/* ############################################################################################## */
 
-/* 80756020-80756900 009BC0 08E0+00 1/0 0/0 0/0 .text            daE_PO_Create__FP10fopAc_ac_c */
 static int daE_PO_Create(fopAc_ac_c* i_act_this) {
     e_po_class* i_this = (e_po_class*)i_act_this;
     fopAcM_ct(i_act_this, e_po_class);
@@ -3211,7 +3161,6 @@ static int daE_PO_Create(fopAc_ac_c* i_act_this) {
     return phase_state;
 }
 
-/* 80756900-80756B00 00A4A0 0200+00 1/1 0/0 0/0 .text            __ct__10e_po_classFv */
 e_po_class::e_po_class() {
     // empty method
 }
@@ -3222,7 +3171,6 @@ static actor_method_class l_daE_PO_Method = {
     (process_method_func)daE_PO_Draw,
 };
 
-/* 80757D20-80757D50 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_PO */
 extern actor_process_profile_definition g_profile_E_PO = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

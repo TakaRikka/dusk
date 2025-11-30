@@ -17,18 +17,18 @@ class daObjL6Bm_c : public dBgS_MoveBgActor {
 public:
     typedef void (daObjL6Bm_c::*actionFunc)();
 
-    /* 80C7CE24 */ void initBaseMtx();
-    /* 80C7CE60 */ void setBaseMtx();
-    /* 80C7CED4 */ int Create();
-    /* 80C7CFD0 */ int CreateHeap();
-    /* 80C7D2F8 */ cPhs__Step create1st();
-    /* 80C7D3A4 */ int Execute(Mtx**);
-    /* 80C7D4F4 */ void action();
-    /* 80C7D598 */ void actionWait();
-    /* 80C7D6CC */ void actionFindPlayer();
-    /* 80C7D894 */ void actionAttack();
-    /* 80C7D898 */ int Draw();
-    /* 80C7DABC */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    cPhs__Step create1st();
+    int Execute(Mtx**);
+    void action();
+    void actionWait();
+    void actionFindPlayer();
+    void actionAttack();
+    int Draw();
+    int Delete();
 
     void setAction(u8 action) { mAction = action; }
 

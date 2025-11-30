@@ -48,7 +48,6 @@ void* JKRDvdRipper::loadToMainRAM(s32 entryNumber, u8* dst, JKRExpandSwitch expa
                          pCompression, param_8);
 }
 
-/* 804508C8-804508CC 000348 0004+00 3/2 0/0 0/0 .sdata           None */
 static u8 errorRetry = 0x01;
 
 /* 802D9D10-802DA1E4 2D4650 04D4+00 2/2 0/0 0/0 .text
@@ -241,66 +240,44 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
     return NULL;
 }
 
-/* ############################################################################################## */
-/* 80434378-80434384 061098 000C+00 1/1 0/0 0/0 .bss             @491 */
 static u8 lit_491[12];
 
-/* 80434384-80434390 0610A4 000C+00 1/1 0/0 0/0 .bss             sDvdAsyncList__12JKRDvdRipper */
 JSUList<JKRDMCommand> JKRDvdRipper::sDvdAsyncList;
 
-/* 80434390-804343A8 0610B0 0018+00 1/1 0/0 0/0 .bss             decompMutex */
 static OSMutex decompMutex;
 
-/* 804508CC-804508D0 00034C 0004+00 1/1 1/1 0/0 .sdata           sSZSBufferSize__12JKRDvdRipper */
 u32 JKRDvdRipper::sSZSBufferSize = 0x00000400;
 
-/* 80451428-8045142C 000928 0004+00 3/3 0/0 0/0 .sbss            szpBuf */
 static u8* szpBuf;
 
-/* 8045142C-80451430 00092C 0004+00 3/3 0/0 0/0 .sbss            szpEnd */
 static u8* szpEnd;
 
-/* 80451430-80451434 000930 0004+00 2/2 0/0 0/0 .sbss            refBuf */
 static u8* refBuf;
 
-/* 80451434-80451438 000934 0004+00 2/2 0/0 0/0 .sbss            refEnd */
 static u8* refEnd;
 
-/* 80451438-8045143C 000938 0004+00 2/2 0/0 0/0 .sbss            refCurrent */
 static u8* refCurrent;
 
-/* 8045143C-80451440 00093C 0004+00 3/3 0/0 0/0 .sbss            srcOffset */
 static u32 srcOffset;
 
-/* 80451440-80451444 000940 0004+00 4/4 0/0 0/0 .sbss            transLeft */
 static u32 transLeft;
 
-/* 80451444-80451448 000944 0004+00 3/3 0/0 0/0 .sbss            srcLimit */
 static u8* srcLimit;
 
-/* 80451448-8045144C 000948 0004+00 3/3 0/0 0/0 .sbss            srcFile */
 static JKRDvdFile* srcFile;
 
-/* 8045144C-80451450 00094C 0004+00 2/2 0/0 0/0 .sbss            fileOffset */
 static u32 fileOffset;
 
-/* 80451450-80451454 000950 0004+00 2/2 0/0 0/0 .sbss            readCount */
 static u32 readCount;
 
-/* 80451454-80451458 000954 0004+00 2/2 0/0 0/0 .sbss            maxDest */
 static u32 maxDest;
 
-/* 80451458-8045145C 000958 0004+00 1/1 0/0 0/0 .sbss            None */
 static bool data_80451458;
 
-/* 8045145C-80451460 00095C 0004+00 2/2 0/0 0/0 .sbss            tsPtr */
 static u32* tsPtr;
 
-/* 80451460-80451468 000960 0004+04 1/1 0/0 0/0 .sbss            tsArea */
 static u32 tsArea;
 
-/* 802DA1E4-802DA35C 2D4B24 0178+00 1/1 0/0 0/0 .text
- * JKRDecompressFromDVD__FP10JKRDvdFilePvUlUlUlUlPUl            */
 static int JKRDecompressFromDVD(JKRDvdFile* dvdFile, void* dst, u32 fileSize, u32 inMaxDest,
                                 u32 inFileOffset, u32 inSrcOffset, u32* inTsPtr) {
     BOOL interrupts = OSDisableInterrupts();
@@ -352,7 +329,6 @@ static int JKRDecompressFromDVD(JKRDvdFile* dvdFile, void* dst, u32 fileSize, u3
     return result;
 }
 
-/* 802DA35C-802DA60C 2D4C9C 02B0+00 1/1 0/0 0/0 .text            decompSZS_subroutine__FPUcPUc */
 int decompSZS_subroutine(u8* src, u8* dest) {
     u8 *endPtr;
     s32 validBitCount = 0;
@@ -501,7 +477,6 @@ int decompSZS_subroutine(u8* src, u8* dest) {
     return 0;
 }
 
-/* 802DA60C-802DA6D8 2D4F4C 00CC+00 1/1 0/0 0/0 .text            firstSrcData__Fv */
 static u8* firstSrcData() {
     srcLimit = szpEnd - 0x19;
     u8* buffer = szpBuf;
@@ -526,7 +501,6 @@ static u8* firstSrcData() {
     return buffer;
 }
 
-/* 802DA6D8-802DA7D4 2D5018 00FC+00 1/1 0/0 0/0 .text            nextSrcData__FPUc */
 static u8* nextSrcData(u8* src) {
     u32 limit = szpEnd - src;
     u8 *buf;
@@ -559,7 +533,6 @@ static u8* nextSrcData(u8* src) {
     return buf;
 }
 
-/* 802DA7D4-802DA7DC -00001 0008+00 0/0 0/0 0/0 .text            isErrorRetry__12JKRDvdRipperFv */
 u8 JKRDvdRipper::isErrorRetry() {
     return errorRetry;
 }

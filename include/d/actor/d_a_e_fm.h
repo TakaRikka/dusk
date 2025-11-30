@@ -45,7 +45,7 @@ struct chain_s {
  */
 class e_fm_class : public fopEn_enemy_c {
 public:
-    /* 804F9B64 */ e_fm_class();
+    e_fm_class();
 
     BOOL checkCameraFree() { return field_0x1b07c; }
 

@@ -20,23 +20,23 @@ class daObjKAG_c : public dInsect_c {
 public:
     typedef void (daObjKAG_c::*actionFunc)();
 
-    /* 80C2E434 */ void setAction(actionFunc);
-    /* 80C2E7A0 */ bool Kag_Bgcheck(cXyz*, csXyz*, cXyz*);
-    /* 80C2EA40 */ void fly();
-    /* 80C2F764 */ void wait();
-    /* 80C2F8C4 */ void walk();
-    /* 80C2FD94 */ void bin_wait();
-    /* 80C2FF10 */ void bin_action();
-    /* 80C30070 */ void hook();
-    /* 80C30274 */ void boomerang();
-    /* 80C303C4 */ void action();
-    /* 80C30424 */ void checkGroundPos();
-    /* 80C30498 */ void hit_check();
-    /* 80C3054C */ int execute();
-    /* 80C306EC */ int _delete();
-    /* 80C30754 */ void setBaseMtx();
-    /* 80C308F0 */ cPhs__Step create();
-    /* 80C30E54 */ void kag_setParticle();
+    void setAction(actionFunc);
+    bool Kag_Bgcheck(cXyz*, csXyz*, cXyz*);
+    void fly();
+    void wait();
+    void walk();
+    void bin_wait();
+    void bin_action();
+    void hook();
+    void boomerang();
+    void action();
+    void checkGroundPos();
+    void hit_check();
+    int execute();
+    int _delete();
+    void setBaseMtx();
+    cPhs__Step create();
+    void kag_setParticle();
     inline int CreateHeap();
     inline int draw();
 private:

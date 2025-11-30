@@ -5,8 +5,8 @@
 
 class daTagMyna2_c : public fopAc_ac_c {
 public:
-    /* 80D5C698 */ s32 create();
-    /* 80D5C708 */ s32 execute();
+    s32 create();
+    s32 execute();
 
     u8 getSwBit() { return fopAcM_GetParam(this) >> 8; }
     u8 getMode() { return fopAcM_GetParam(this); }

@@ -7,8 +7,8 @@ class dMsgString_c;
 
 class dDlst_BrightCheck_c : public dDlst_base_c {
 public:
-    /* 801935D0 */ virtual void draw();
-    /* 80193648 */ virtual ~dDlst_BrightCheck_c() {}
+    virtual void draw();
+    virtual ~dDlst_BrightCheck_c() {}
 
     /* 0x04 */ J2DScreen* Scr;
     /* 0x08 */ u8 field_0x8[0xC - 0x8];
@@ -22,14 +22,14 @@ public:
         MODE_MOVE_e,
     };
 
-    /* 80192F10 */ dBrightCheck_c(JKRArchive*);
-    /* 80192F98 */ virtual ~dBrightCheck_c();
+    dBrightCheck_c(JKRArchive*);
+    virtual ~dBrightCheck_c();
 
-    /* 80193030 */ void screenSet();
-    /* 801934D0 */ void _move();
-    /* 80193508 */ void modeWait();
-    /* 8019350C */ void modeMove();
-    /* 80193594 */ void _draw();
+    void screenSet();
+    void _move();
+    void modeWait();
+    void modeMove();
+    void _draw();
 
     /* 0x04 */ JKRArchive* mArchive;
     /* 0x08 */ dDlst_BrightCheck_c mBrightCheck;

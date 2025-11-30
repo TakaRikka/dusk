@@ -24,7 +24,7 @@ struct daNpc_Kolin_HIOParam {
 
 class daNpc_Kolin_Param_c {
 public:
-    /* 8055A4E8 */ virtual ~daNpc_Kolin_Param_c() {}
+    virtual ~daNpc_Kolin_Param_c() {}
 
     static daNpc_Kolin_HIOParam const m;
 };
@@ -34,43 +34,43 @@ public:
     typedef int (daNpc_Kolin_c::*cutFunc)(int);
     typedef int (daNpc_Kolin_c::*actionFunc)(void*);
 
-    /* 80553FEC */ ~daNpc_Kolin_c();
-    /* 80554138 */ cPhs__Step create();
-    /* 80554414 */ int CreateHeap();
-    /* 80554930 */ int Delete();
-    /* 80554964 */ int Execute();
-    /* 80554984 */ int Draw();
-    /* 80554A18 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80554A38 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80554A90 */ u8 getType();
-    /* 80554B30 */ BOOL isDelete();
-    /* 80554CB0 */ void reset();
-    /* 805552DC */ void srchActors();
-    /* 80555E38 */ int selectAction();
-    /* 80555F28 */ BOOL chkAction(actionFunc);
-    /* 80555F54 */ int setAction(actionFunc);
-    /* 80555FFC */ void calcFollowSpeedAndAngle(fopAc_ac_c*, int, int);
-    /* 805563BC */ void followPlayer(int);
-    /* 805567AC */ void lookup(u8);
-    /* 805568AC */ int cutNoRide(int);
-    /* 80556A04 */ int cutHail(int);
-    /* 80556DB4 */ int cutGiveMeWoodSwd(int);
-    /* 80557054 */ int cutGetWoodSwd(int);
-    /* 805576C4 */ int cutConversationAboutLoopHole(int);
-    /* 805579DC */ int cutCacaricoConversation(int);
-    /* 80557BD4 */ int cutConversationAboutDeathMt(int);
-    /* 80557C6C */ int cutConversationAboutGoron(int);
-    /* 80557D04 */ int cutClothTry(int);
-    /* 80557E38 */ int cutThankYou(int);
-    /* 80557ED8 */ int wait(void*);
-    /* 80558698 */ int timidWalk(void*);
-    /* 80558AF8 */ int follow(void*);
-    /* 80558C4C */ int clothWait(void*);
-    /* 80558E90 */ int talk(void*);
+    ~daNpc_Kolin_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void srchActors();
+    int selectAction();
+    BOOL chkAction(actionFunc);
+    int setAction(actionFunc);
+    void calcFollowSpeedAndAngle(fopAc_ac_c*, int, int);
+    void followPlayer(int);
+    void lookup(u8);
+    int cutNoRide(int);
+    int cutHail(int);
+    int cutGiveMeWoodSwd(int);
+    int cutGetWoodSwd(int);
+    int cutConversationAboutLoopHole(int);
+    int cutCacaricoConversation(int);
+    int cutConversationAboutDeathMt(int);
+    int cutConversationAboutGoron(int);
+    int cutClothTry(int);
+    int cutThankYou(int);
+    int wait(void*);
+    int timidWalk(void*);
+    int follow(void*);
+    int clothWait(void*);
+    int talk(void*);
 #if DEBUG
     int test(void*);
 #endif
-    /* 8055A3B8 */ daNpc_Kolin_c(
+    daNpc_Kolin_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -82,28 +82,28 @@ public:
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
         i_arcNames) {}
-    /* 8055A4B8 */ virtual int checkChangeJoint(int i_joint) { return i_joint == 4; }
-    /* 8055A4C8 */ virtual int checkRemoveJoint(int i_joint) { return i_joint == 8; }
-    /* 8055A4B0 */ virtual s32 getBackboneJointNo() { return 1; }
-    /* 8055A4A8 */ virtual s32 getNeckJointNo() { return 3; }
-    /* 8055A4A0 */ virtual s32 getHeadJointNo() { return 4; }
-    /* 8055A4D8 */ virtual s32 getFootLJointNo() { return 22; }
-    /* 8055A4E0 */ virtual s32 getFootRJointNo() { return 25; }
-    /* 8055A498 */ virtual u16 getEyeballMaterialNo() { return 2; }
-    /* 80554EBC */ virtual void afterJntAnm(int);
-    /* 80554F48 */ virtual void setParam();
-    /* 80555118 */ virtual BOOL checkChangeEvt();
-    /* 80555448 */ virtual BOOL evtTalk();
-    /* 805554E8 */ virtual BOOL evtCutProc();
-    /* 8055523C */ virtual void setAfterTalkMotion();
-    /* 805555B0 */ virtual void action();
-    /* 8055574C */ virtual void beforeMove();
-    /* 80555810 */ virtual void setAttnPos();
-    /* 80555B48 */ virtual void setCollision();
-    /* 80555CE4 */ virtual int drawDbgInfo();
-    /* 80555CEC */ virtual void drawOtherMdl();
-    /* 80555DC4 */ virtual void changeAnm(int*, int*);
-    /* 80555DEC */ virtual void changeBck(int*, int*);
+    virtual int checkChangeJoint(int i_joint) { return i_joint == 4; }
+    virtual int checkRemoveJoint(int i_joint) { return i_joint == 8; }
+    virtual s32 getBackboneJointNo() { return 1; }
+    virtual s32 getNeckJointNo() { return 3; }
+    virtual s32 getHeadJointNo() { return 4; }
+    virtual s32 getFootLJointNo() { return 22; }
+    virtual s32 getFootRJointNo() { return 25; }
+    virtual u16 getEyeballMaterialNo() { return 2; }
+    virtual void afterJntAnm(int);
+    virtual void setParam();
+    virtual BOOL checkChangeEvt();
+    virtual BOOL evtTalk();
+    virtual BOOL evtCutProc();
+    virtual void setAfterTalkMotion();
+    virtual void action();
+    virtual void beforeMove();
+    virtual void setAttnPos();
+    virtual void setCollision();
+    virtual int drawDbgInfo();
+    virtual void drawOtherMdl();
+    virtual void changeAnm(int*, int*);
+    virtual void changeBck(int*, int*);
 
     static char* mCutNameList[11];
     static cutFunc mCutList[11];

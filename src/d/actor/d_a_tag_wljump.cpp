@@ -6,7 +6,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_midna.h"
 
-/* 80D64EB8-80D64FE4 000078 012C+00 1/1 0/0 0/0 .text            create__13daTagWljump_cFv */
 int daTagWljump_c::create() {
     fopAcM_ct(this, daTagWljump_c);
 
@@ -42,8 +41,6 @@ int daTagWljump_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D64FE4-80D65004 0001A4 0020+00 1/0 0/0 0/0 .text            daTagWljump_Create__FP10fopAc_ac_c
- */
 static int daTagWljump_Create(fopAc_ac_c* i_this) {
     daTagWljump_c* a_this = (daTagWljump_c*)i_this;
     fpc_ProcID id = fopAcM_GetID(i_this);
@@ -51,10 +48,8 @@ static int daTagWljump_Create(fopAc_ac_c* i_this) {
     return a_this->create();
 }
 
-/* 80D65004-80D65068 0001C4 0064+00 1/1 0/0 0/0 .text            __dt__13daTagWljump_cFv */
 daTagWljump_c::~daTagWljump_c() {}
 
-/* 80D65068-80D65090 000228 0028+00 1/0 0/0 0/0 .text daTagWljump_Delete__FP13daTagWljump_c */
 static int daTagWljump_Delete(daTagWljump_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
 
@@ -62,7 +57,6 @@ static int daTagWljump_Delete(daTagWljump_c* i_this) {
     return 1;
 }
 
-/* 80D65090-80D6587C 000250 07EC+00 1/1 0/0 0/0 .text            execute__13daTagWljump_cFv */
 int daTagWljump_c::execute() {
     attention_info.flags = 0;
 
@@ -226,23 +220,18 @@ int daTagWljump_c::execute() {
     return 1;
 }
 
-/* 80D6587C-80D6589C 000A3C 0020+00 1/0 0/0 0/0 .text daTagWljump_Execute__FP13daTagWljump_c */
 static int daTagWljump_Execute(daTagWljump_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D6589C-80D658A4 000A5C 0008+00 1/1 0/0 0/0 .text            draw__13daTagWljump_cFv */
 int daTagWljump_c::draw() {
     return 1;
 }
 
-/* 80D658A4-80D658C4 000A64 0020+00 1/0 0/0 0/0 .text            daTagWljump_Draw__FP13daTagWljump_c
- */
 static int daTagWljump_Draw(daTagWljump_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D65914-80D65934 -00001 0020+00 1/0 0/0 0/0 .data            l_daTagWljump_Method */
 static actor_method_class l_daTagWljump_Method = {
     (process_method_func)daTagWljump_Create,
     (process_method_func)daTagWljump_Delete,
@@ -251,7 +240,6 @@ static actor_method_class l_daTagWljump_Method = {
     (process_method_func)daTagWljump_Draw,
 };
 
-/* 80D65934-80D65964 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_Wljump */
 extern actor_process_profile_definition g_profile_Tag_Wljump = {
     fpcLy_CURRENT_e,
     7,

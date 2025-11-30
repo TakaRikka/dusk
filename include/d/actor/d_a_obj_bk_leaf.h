@@ -13,15 +13,15 @@
  */
 class daBkLeaf_c : public fopAc_ac_c {
 public:
-    /* 80BB60F8 */ void setBokkuri();
-    /* 80BB618C */ void initBaseMtx();
-    /* 80BB61C8 */ void setBaseMtx();
-    /* 80BB621C */ int Create();
-    /* 80BB629C */ int CreateHeap();
-    /* 80BB63F4 */ int create();
-    /* 80BB64A8 */ int execute();
-    /* 80BB65C4 */ int draw();
-    /* 80BB6654 */ int _delete();
+    void setBokkuri();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    int draw();
+    int _delete();
 
     u8 getItem() { return fopAcM_GetParamBit(this, 0, 8); };
     u8 getItemBit() { return fopAcM_GetParamBit(this, 8, 8); };

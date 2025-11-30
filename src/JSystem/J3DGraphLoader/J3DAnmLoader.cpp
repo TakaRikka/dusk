@@ -8,8 +8,6 @@
 #include "JSystem/JSupport/JSupport.h"
 #include "dolphin/os.h"
 
-/* 80337B40-80338134 332480 05F4+00 0/0 7/7 1/1 .text
- * load__20J3DAnmLoaderDataBaseFPCv24J3DAnmLoaderDataBaseFlag   */
 J3DAnmBase* J3DAnmLoaderDataBase::load(const void* i_data, J3DAnmLoaderDataBaseFlag flag) {
     if (!i_data) {
         return NULL;
@@ -91,8 +89,6 @@ J3DAnmBase* J3DAnmLoaderDataBase::load(const void* i_data, J3DAnmLoaderDataBaseF
     return NULL;
 }
 
-/* 80338134-80338468 332A74 0334+00 0/0 1/1 0/0 .text
- * setResource__20J3DAnmLoaderDataBaseFP10J3DAnmBasePCv         */
 void J3DAnmLoaderDataBase::setResource(J3DAnmBase* param_1, const void* param_2) {
     const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_2;
     if (!header) {
@@ -171,19 +167,14 @@ void J3DAnmLoaderDataBase::setResource(J3DAnmBase* param_1, const void* param_2)
     }
 }
 
-/* 80338468-80338484 332DA8 001C+00 2/2 0/0 0/0 .text            __ct__20J3DAnmFullLoader_v15Fv */
 J3DAnmFullLoader_v15::J3DAnmFullLoader_v15() {}
 
-/* 80338484-803384E0 332DC4 005C+00 3/2 0/0 0/0 .text            __dt__20J3DAnmFullLoader_v15Fv */
 J3DAnmFullLoader_v15::~J3DAnmFullLoader_v15() {}
 
-/* 803384E0-803384FC 332E20 001C+00 2/2 0/0 0/0 .text            __ct__19J3DAnmKeyLoader_v15Fv */
 J3DAnmKeyLoader_v15::J3DAnmKeyLoader_v15() {}
 
-/* 803384FC-80338558 332E3C 005C+00 3/2 0/0 0/0 .text            __dt__19J3DAnmKeyLoader_v15Fv */
 J3DAnmKeyLoader_v15::~J3DAnmKeyLoader_v15() {}
 
-/* 80338558-803386A0 332E98 0148+00 2/1 0/0 0/0 .text            load__20J3DAnmFullLoader_v15FPCv */
 J3DAnmBase* J3DAnmFullLoader_v15::load(const void* param_1) {
     const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_1;
     const JUTDataBlockHeader* block = &header->mFirstBlock;
@@ -216,8 +207,6 @@ J3DAnmBase* J3DAnmFullLoader_v15::load(const void* param_1) {
     return mAnm;
 }
 
-/* 803386A0-80338800 332FE0 0160+00 2/1 0/0 0/0 .text
- * setResource__20J3DAnmFullLoader_v15FP10J3DAnmBasePCv         */
 void J3DAnmFullLoader_v15::setResource(J3DAnmBase* param_1, const void* param_2) {
     const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_2;
     const JUTDataBlockHeader* block = &header->mFirstBlock;
@@ -250,14 +239,10 @@ void J3DAnmFullLoader_v15::setResource(J3DAnmBase* param_1, const void* param_2)
     }
 }
 
-/* 80338800-80338828 333140 0028+00 1/1 0/0 0/0 .text
- * readAnmTransform__20J3DAnmFullLoader_v15FPC23J3DAnmTransformFullData */
 void J3DAnmFullLoader_v15::readAnmTransform(const J3DAnmTransformFullData* param_1) {
     setAnmTransform((J3DAnmTransformFull*)mAnm, param_1);
 }
 
-/* 80338828-803388BC 333168 0094+00 2/2 0/0 0/0 .text
- * setAnmTransform__20J3DAnmFullLoader_v15FP19J3DAnmTransformFullPC23J3DAnmTransformFullData */
 void J3DAnmFullLoader_v15::setAnmTransform(J3DAnmTransformFull* param_1,
                                            const J3DAnmTransformFullData* param_2) {
     param_1->field_0x1e = param_2->field_0xc;
@@ -272,14 +257,10 @@ void J3DAnmFullLoader_v15::setAnmTransform(J3DAnmTransformFull* param_1,
 }
 
 
-/* 803388BC-803388E4 3331FC 0028+00 1/1 0/0 0/0 .text
- * readAnmColor__20J3DAnmFullLoader_v15FPC19J3DAnmColorFullData */
 void J3DAnmFullLoader_v15::readAnmColor(const J3DAnmColorFullData* param_1) {
     setAnmColor((J3DAnmColorFull*)mAnm, param_1);
 }
 
-/* 803388E4-803389B0 333224 00CC+00 2/2 0/0 0/0 .text
- * setAnmColor__20J3DAnmFullLoader_v15FP15J3DAnmColorFullPC19J3DAnmColorFullData */
 void J3DAnmFullLoader_v15::setAnmColor(J3DAnmColorFull* param_1,
                                        const J3DAnmColorFullData* param_2) {
     param_1->mFrameMax = param_2->mFrameMax;
@@ -298,14 +279,10 @@ void J3DAnmFullLoader_v15::setAnmColor(J3DAnmColorFull* param_1,
         JSUConvertOffsetToPtr<ResNTAB>(param_2, param_2->mNameTabOffset));
 }
 
-/* 803389B0-803389D8 3332F0 0028+00 1/1 0/0 0/0 .text
- * readAnmTexPattern__20J3DAnmFullLoader_v15FPC24J3DAnmTexPatternFullData */
 void J3DAnmFullLoader_v15::readAnmTexPattern(const J3DAnmTexPatternFullData* param_1) {
     setAnmTexPattern((J3DAnmTexPattern*)mAnm, param_1);
 }
 
-/* 803389D8-80338A7C 333318 00A4+00 2/2 0/0 0/0 .text
- * setAnmTexPattern__20J3DAnmFullLoader_v15FP16J3DAnmTexPatternPC24J3DAnmTexPatternFullData */
 void J3DAnmFullLoader_v15::setAnmTexPattern(J3DAnmTexPattern* param_1,
                                             const J3DAnmTexPatternFullData* param_2) {
     param_1->mFrameMax = param_2->mFrameMax;
@@ -322,14 +299,10 @@ void J3DAnmFullLoader_v15::setAnmTexPattern(J3DAnmTexPattern* param_1,
         JSUConvertOffsetToPtr<ResNTAB>(param_2, param_2->mNameTabOffset));
 }
 
-/* 80338A7C-80338AA4 3333BC 0028+00 1/1 0/0 0/0 .text
- * readAnmVisibility__20J3DAnmFullLoader_v15FPC24J3DAnmVisibilityFullData */
 void J3DAnmFullLoader_v15::readAnmVisibility(const J3DAnmVisibilityFullData* param_1) {
     setAnmVisibility((J3DAnmVisibilityFull*)mAnm, param_1);
 }
 
-/* 80338AA4-80338B20 3333E4 007C+00 2/2 0/0 0/0 .text
- * setAnmVisibility__20J3DAnmFullLoader_v15FP20J3DAnmVisibilityFullPC24J3DAnmVisibilityFullData */
 void J3DAnmFullLoader_v15::setAnmVisibility(J3DAnmVisibilityFull* param_1,
                                             const J3DAnmVisibilityFullData* param_2) {
     param_1->mFrameMax = param_2->mFrameMax;
@@ -342,14 +315,10 @@ void J3DAnmFullLoader_v15::setAnmVisibility(J3DAnmVisibilityFull* param_1,
     param_1->mVisibility = JSUConvertOffsetToPtr<u8>(param_2, param_2->mValuesOffset);
 }
 
-/* 80338B20-80338B48 333460 0028+00 1/1 0/0 0/0 .text
- * readAnmCluster__20J3DAnmFullLoader_v15FPC21J3DAnmClusterFullData */
 void J3DAnmFullLoader_v15::readAnmCluster(const J3DAnmClusterFullData* param_1) {
     setAnmCluster((J3DAnmClusterFull*)mAnm, param_1);
 }
 
-/* 80338B48-80338BB4 333488 006C+00 2/2 0/0 0/0 .text
- * setAnmCluster__20J3DAnmFullLoader_v15FP17J3DAnmClusterFullPC21J3DAnmClusterFullData */
 void J3DAnmFullLoader_v15::setAnmCluster(J3DAnmClusterFull* param_1,
                                          const J3DAnmClusterFullData* param_2) {
     param_1->mFrameMax = param_2->mFrameMax;
@@ -360,14 +329,10 @@ void J3DAnmFullLoader_v15::setAnmCluster(J3DAnmClusterFull* param_1,
     param_1->mWeight = JSUConvertOffsetToPtr<f32>(param_2, param_2->mWeightOffset);
 }
 
-/* 80338BB4-80338BDC 3334F4 0028+00 1/1 0/0 0/0 .text
- * readAnmVtxColor__20J3DAnmFullLoader_v15FPC22J3DAnmVtxColorFullData */
 void J3DAnmFullLoader_v15::readAnmVtxColor(const J3DAnmVtxColorFullData* param_1) {
     setAnmVtxColor((J3DAnmVtxColorFull*)mAnm, param_1);
 }
 
-/* 80338BDC-80338D44 33351C 0168+00 2/2 0/0 0/0 .text
- * setAnmVtxColor__20J3DAnmFullLoader_v15FP18J3DAnmVtxColorFullPC22J3DAnmVtxColorFullData */
 void J3DAnmFullLoader_v15::setAnmVtxColor(J3DAnmVtxColorFull* dst,
                                           const J3DAnmVtxColorFullData* data) {
     dst->mFrameMax = data->mFrameMax;
@@ -401,7 +366,6 @@ void J3DAnmFullLoader_v15::setAnmVtxColor(J3DAnmVtxColorFull* dst,
     dst->mColorA = JSUConvertOffsetToPtr<u8>(data, data->mAValuesOffset);
 }
 
-/* 80338D44-80338E8C 333684 0148+00 2/1 0/0 0/0 .text            load__19J3DAnmKeyLoader_v15FPCv */
 J3DAnmBase* J3DAnmKeyLoader_v15::load(const void* param_1) {
     const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_1;
     const JUTDataBlockHeader* block = &header->mFirstBlock;
@@ -434,8 +398,6 @@ J3DAnmBase* J3DAnmKeyLoader_v15::load(const void* param_1) {
     return mAnm;
 }
 
-/* 80338E8C-80338FEC 3337CC 0160+00 2/1 0/0 0/0 .text
- * setResource__19J3DAnmKeyLoader_v15FP10J3DAnmBasePCv          */
 void J3DAnmKeyLoader_v15::setResource(J3DAnmBase* param_1, const void* param_2) {
     const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_2;
     const JUTDataBlockHeader* block = &header->mFirstBlock;
@@ -467,14 +429,10 @@ void J3DAnmKeyLoader_v15::setResource(J3DAnmBase* param_1, const void* param_2) 
     }
 }
 
-/* 80338FEC-80339014 33392C 0028+00 1/1 0/0 0/0 .text
- * readAnmTransform__19J3DAnmKeyLoader_v15FPC22J3DAnmTransformKeyData */
 void J3DAnmKeyLoader_v15::readAnmTransform(const J3DAnmTransformKeyData* param_1) {
     setAnmTransform((J3DAnmTransformKey*)mAnm, param_1);
 }
 
-/* 80339014-803390B0 333954 009C+00 2/2 0/0 0/0 .text
- * setAnmTransform__19J3DAnmKeyLoader_v15FP18J3DAnmTransformKeyPC22J3DAnmTransformKeyData */
 void J3DAnmKeyLoader_v15::setAnmTransform(J3DAnmTransformKey* param_1,
                                           const J3DAnmTransformKeyData* param_2) {
     param_1->field_0x1e = param_2->field_0xc;
@@ -490,14 +448,10 @@ void J3DAnmKeyLoader_v15::setAnmTransform(J3DAnmTransformKey* param_1,
 }
 
 
-/* 803390B0-803390D8 3339F0 0028+00 1/1 0/0 0/0 .text
- * readAnmTextureSRT__19J3DAnmKeyLoader_v15FPC23J3DAnmTextureSRTKeyData */
 void J3DAnmKeyLoader_v15::readAnmTextureSRT(const J3DAnmTextureSRTKeyData* param_1) {
     setAnmTextureSRT((J3DAnmTextureSRTKey*)mAnm, param_1);
 }
 
-/* 803390D8-803392B0 333A18 01D8+00 2/2 0/0 0/0 .text
- * setAnmTextureSRT__19J3DAnmKeyLoader_v15FP19J3DAnmTextureSRTKeyPC23J3DAnmTextureSRTKeyData */
 void J3DAnmKeyLoader_v15::setAnmTextureSRT(J3DAnmTextureSRTKey* param_1,
                                            const J3DAnmTextureSRTKeyData* param_2) {
     param_1->mTrackNum = param_2->field_0xc;
@@ -549,14 +503,10 @@ void J3DAnmKeyLoader_v15::setAnmTextureSRT(J3DAnmTextureSRTKey* param_1,
 }
 
 
-/* 803392B0-803392D8 333BF0 0028+00 1/1 0/0 0/0 .text
- * readAnmColor__19J3DAnmKeyLoader_v15FPC18J3DAnmColorKeyData   */
 void J3DAnmKeyLoader_v15::readAnmColor(const J3DAnmColorKeyData* param_1) {
     setAnmColor((J3DAnmColorKey*)mAnm, param_1);
 }
 
-/* 803392D8-803393C4 333C18 00EC+00 2/2 0/0 0/0 .text
- * setAnmColor__19J3DAnmKeyLoader_v15FP14J3DAnmColorKeyPC18J3DAnmColorKeyData */
 void J3DAnmKeyLoader_v15::setAnmColor(J3DAnmColorKey* param_1, const J3DAnmColorKeyData* param_2) {
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
@@ -579,14 +529,10 @@ void J3DAnmKeyLoader_v15::setAnmColor(J3DAnmColorKey* param_1, const J3DAnmColor
 }
 
 
-/* 803393C4-803393EC 333D04 0028+00 1/1 0/0 0/0 .text
- * readAnmCluster__19J3DAnmKeyLoader_v15FPC20J3DAnmClusterKeyData */
 void J3DAnmKeyLoader_v15::readAnmCluster(const J3DAnmClusterKeyData* param_1) {
     setAnmCluster((J3DAnmClusterKey*)mAnm, param_1);
 }
 
-/* 803393EC-80339458 333D2C 006C+00 2/2 0/0 0/0 .text
- * setAnmCluster__19J3DAnmKeyLoader_v15FP16J3DAnmClusterKeyPC20J3DAnmClusterKeyData */
 void J3DAnmKeyLoader_v15::setAnmCluster(J3DAnmClusterKey* param_1,
                                         const J3DAnmClusterKeyData* param_2) {
     param_1->mFrameMax = param_2->mFrameMax;
@@ -598,14 +544,10 @@ void J3DAnmKeyLoader_v15::setAnmCluster(J3DAnmClusterKey* param_1,
 }
 
 
-/* 80339458-80339480 333D98 0028+00 1/1 0/0 0/0 .text
- * readAnmTevReg__19J3DAnmKeyLoader_v15FPC19J3DAnmTevRegKeyData */
 void J3DAnmKeyLoader_v15::readAnmTevReg(const J3DAnmTevRegKeyData* param_1) {
     setAnmTevReg((J3DAnmTevRegKey*)mAnm, param_1);
 }
 
-/* 80339480-8033960C 333DC0 018C+00 2/2 0/0 0/0 .text
- * setAnmTevReg__19J3DAnmKeyLoader_v15FP15J3DAnmTevRegKeyPC19J3DAnmTevRegKeyData */
 void J3DAnmKeyLoader_v15::setAnmTevReg(J3DAnmTevRegKey* param_1,
                                        const J3DAnmTevRegKeyData* param_2) {
     param_1->mFrameMax = param_2->mFrameMax;
@@ -644,14 +586,10 @@ void J3DAnmKeyLoader_v15::setAnmTevReg(J3DAnmTevRegKey* param_1,
 }
 
 
-/* 8033960C-80339634 333F4C 0028+00 1/1 0/0 0/0 .text
- * readAnmVtxColor__19J3DAnmKeyLoader_v15FPC21J3DAnmVtxColorKeyData */
 void J3DAnmKeyLoader_v15::readAnmVtxColor(const J3DAnmVtxColorKeyData* param_1) {
     setAnmVtxColor((J3DAnmVtxColorKey*)mAnm, param_1);
 }
 
-/* 80339634-8033979C 333F74 0168+00 2/2 0/0 0/0 .text
- * setAnmVtxColor__19J3DAnmKeyLoader_v15FP17J3DAnmVtxColorKeyPC21J3DAnmVtxColorKeyData */
 void J3DAnmKeyLoader_v15::setAnmVtxColor(J3DAnmVtxColorKey* dst,
                                          const J3DAnmVtxColorKeyData* data) {
     dst->mFrameMax = data->mFrameMax;

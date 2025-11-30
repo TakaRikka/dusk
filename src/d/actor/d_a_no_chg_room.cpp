@@ -10,7 +10,6 @@
 #include "d/actor/d_a_horse.h"
 #include "d/actor/d_a_spinner.h"
 
-/* 801451EC-801452DC 13FB2C 00F0+00 1/1 0/0 0/0 .text            isLoadRoom__Fi */
 static bool isLoadRoom(int i_roomNo) {
     roomRead_class* room = dComIfGp_getStageRoom();
 
@@ -47,7 +46,6 @@ static bool isLoadRoom(int i_roomNo) {
     return true;
 }
 
-/* 801452DC-80145508 13FC1C 022C+00 1/1 0/0 0/0 .text            execute__9daNocrm_cFv */
 int daNocrm_c::execute() {
     daPy_py_c* player_p = daPy_getPlayerActorClass();
     cXyz cur_player_pos(player_p->current.pos);
@@ -97,7 +95,6 @@ int daNocrm_c::execute() {
     return 1;
 }
 
-/* 80145508-801455A8 13FE48 00A0+00 1/1 0/0 0/0 .text            getRoomNo__9daNocrm_cFi */
 int daNocrm_c::getRoomNo(int param_0) {
     if (mRoomNo[param_0] < 0) {
         f32 z_offset = param_0 ? -scale.z : scale.z;
@@ -136,35 +133,29 @@ int daNocrm_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 801455A8-801456A4 13FEE8 00FC+00 1/0 0/0 0/0 .text            daNocrm_create__FP9daNocrm_c */
 static int daNocrm_create(daNocrm_c* i_this) {
     fopAcM_ct(i_this, daNocrm_c);
     return i_this->create();
 }
 
-/* 801456A4-801456AC 13FFE4 0008+00 1/0 0/0 0/0 .text            daNocrm_Delete__FP9daNocrm_c */
 static int daNocrm_Delete(daNocrm_c* i_this) {
     return 1;
 }
 
-/* 801456AC-801456CC 13FFEC 0020+00 1/0 0/0 0/0 .text            daNocrm_execute__FP9daNocrm_c */
 static int daNocrm_execute(daNocrm_c* i_this) {
     return i_this->execute();
 }
 
-/* 801456CC-801456D4 14000C 0008+00 1/0 0/0 0/0 .text            daNocrm_draw__FP9daNocrm_c */
 static int daNocrm_draw(daNocrm_c* i_this) {
     return 1;
 }
 
-/* 803B3658-803B3678 -00001 0020+00 1/0 0/0 0/0 .data            daNocrm_METHODS */
 static actor_method_class daNocrm_METHODS = {
     (process_method_func)daNocrm_create,  (process_method_func)daNocrm_Delete,
     (process_method_func)daNocrm_execute, (process_method_func)NULL,
     (process_method_func)daNocrm_draw,
 };
 
-/* 803B3678-803B36A8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NO_CHG_ROOM */
 extern actor_process_profile_definition g_profile_NO_CHG_ROOM = {
     fpcLy_CURRENT_e,
     2,

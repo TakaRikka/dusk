@@ -15,30 +15,30 @@
  */
 class daObjRgate_c : public dBgS_MoveBgActor {
 public:
-    /* 80CB9DF8 */ void initBaseMtx();
-    /* 80CB9F4C */ void setBaseMtx();
-    /* 80CBA828 */ int create1st();
-    /* 80CBA8A8 */ int checkAreaL(cXyz const*, cXyz const*);
-    /* 80CBAC38 */ int checkAreaR(cXyz const*, cXyz const*);
-    /* 80CBAFC4 */ BOOL checkOpen();
-    /* 80CBB0F0 */ BOOL checkDirL(fopAc_ac_c*);
-    /* 80CBB180 */ BOOL checkDirR(fopAc_ac_c*);
-    /* 80CBB210 */ void setAtkSE();
-    /* 80CBB28C */ void setCrkSE();
-    /* 80CBB308 */ void action();
-    /* 80CBB370 */ void action_typeA();
-    /* 80CBBA10 */ void actionWaitEvent();
-    /* 80CBBAF4 */ void actionEvent();
-    /* 80CBBB5C */ void actionDead();
-    /* 80CBBB60 */ void event_proc_call();
-    /* 80CBBC04 */ void demoProc();
-    /* 80CBBD68 */ int getDemoAction();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    int checkAreaL(cXyz const*, cXyz const*);
+    int checkAreaR(cXyz const*, cXyz const*);
+    BOOL checkOpen();
+    BOOL checkDirL(fopAc_ac_c*);
+    BOOL checkDirR(fopAc_ac_c*);
+    void setAtkSE();
+    void setCrkSE();
+    void action();
+    void action_typeA();
+    void actionWaitEvent();
+    void actionEvent();
+    void actionDead();
+    void event_proc_call();
+    void demoProc();
+    int getDemoAction();
 
-    /* 80CBA654 */ virtual int CreateHeap();
-    /* 80CBA468 */ virtual int Create();
-    /* 80CBBDB0 */ virtual int Execute(Mtx**);
-    /* 80CBBE18 */ virtual int Draw();
-    /* 80CBBF34 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     void setAction(u8 i_action) { mAction = i_action; }
 

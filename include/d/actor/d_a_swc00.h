@@ -22,12 +22,12 @@ public:
         ACTION_DEAD,
     };
 
-    /* 805A15FC */ int execute();
-    /* 805A18E8 */ void event_proc_call();
-    /* 805A19A4 */ void actionWait();
-    /* 805A1A28 */ void actionOrderEvent();
-    /* 805A1A94 */ void actionEvent();
-    /* 805A1AF0 */ void actionDead();
+    int execute();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
 
     void setAction(u8 action) { mAction = action; }
 

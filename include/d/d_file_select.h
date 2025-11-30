@@ -12,8 +12,8 @@ class dFile_info_c;
 
 class dDlst_FileSel_c : public dDlst_base_c {
 public:
-    /* 8018DEBC */ void draw();
-    /* 8019135C */ virtual ~dDlst_FileSel_c() {
+    void draw();
+    virtual ~dDlst_FileSel_c() {
         delete Scr;
         delete mpMessageString;
     }
@@ -31,21 +31,21 @@ public:
 
 class dFile_select3D_c {
 public:
-    /* 801902F0 */ dFile_select3D_c();
-    /* 80190380 */ virtual ~dFile_select3D_c();
-    /* 801903DC */ void _create(u8, u8);
-    /* 8019049C */ void _delete();
-    /* 801904A0 */ void freeHeap();
-    /* 801904E4 */ void _move();
-    /* 801905A8 */ void draw();
-    /* 8019065C */ void setJ3D(char const*, char const*, char const*);
-    /* 8019095C */ void set_mtx();
-    /* 80190A14 */ void animePlay();
-    /* 80190B44 */ void animeEntry();
-    /* 80190BA8 */ void createMaskModel();
-    /* 80190D68 */ void createMirrorModel();
-    /* 80190FE8 */ void toItem3Dpos(f32, f32, f32, cXyz*);
-    /* 801910D4 */ void calcViewMtx(Mtx);
+    dFile_select3D_c();
+    virtual ~dFile_select3D_c();
+    void _create(u8, u8);
+    void _delete();
+    void freeHeap();
+    void _move();
+    void draw();
+    void setJ3D(char const*, char const*, char const*);
+    void set_mtx();
+    void animePlay();
+    void animeEntry();
+    void createMaskModel();
+    void createMirrorModel();
+    void toItem3Dpos(f32, f32, f32, cXyz*);
+    void calcViewMtx(Mtx);
 
     void drawOff() { mpModel = 0; }
     void setBasePane(CPaneMgr* paneMgr) { mPaneMgr = paneMgr; }
@@ -71,8 +71,8 @@ public:
 
 class dDlst_FileSelYn_c : public dDlst_base_c {
 public:
-    /* 8018E0C0 */ void draw();
-    /* 801911F4 */ virtual ~dDlst_FileSelYn_c() { delete ScrYn; }
+    void draw();
+    virtual ~dDlst_FileSelYn_c() { delete ScrYn; }
 
     /* 0x04 */ J2DScreen* ScrYn;
     /* 0x08 */ u8 field_0x08[4];
@@ -80,8 +80,8 @@ public:
 
 class dDlst_FileSelDt_c : public dDlst_base_c {
 public:
-    /* 8018DEF4 */ void draw();
-    /* 801912E4 */ virtual ~dDlst_FileSelDt_c() { delete ScrDt; }
+    void draw();
+    virtual ~dDlst_FileSelDt_c() { delete ScrDt; }
 
     /* 0x04 */ J2DScreen* ScrDt;
     /* 0x08 */ J2DPane* mpPane;
@@ -90,8 +90,8 @@ public:
 
 class dDlst_FileSelCp_c : public dDlst_base_c {
 public:
-    /* 8018DFFC */ void draw();
-    /* 8019126C */ virtual ~dDlst_FileSelCp_c() { delete Scr; }
+    void draw();
+    virtual ~dDlst_FileSelCp_c() { delete Scr; }
 
     /* 0x04 */ J2DScreen* Scr;
     /* 0x08 */ bool field_0x08;
@@ -101,16 +101,16 @@ public:
 
 class dDlst_FileSel3m_c : public dDlst_base_c {
 public:
-    /* 8018E0F8 */ void draw();
-    /* 8019117C */ virtual ~dDlst_FileSel3m_c() { delete Scr3m; }
+    void draw();
+    virtual ~dDlst_FileSel3m_c() { delete Scr3m; }
 
     /* 0x04 */ J2DScreen* Scr3m;
 };
 
 class dFs_HIO_c {
 public:
-    /* 801835F8 */ dFs_HIO_c();
-    /* 801913E0 */ virtual ~dFs_HIO_c() {}
+    dFs_HIO_c();
+    virtual ~dFs_HIO_c() {}
 
     /* 0x0000 */ // void* vtable;
     /* 0x0004 */ s8 field_0x0004;
@@ -145,163 +145,163 @@ class dFile_select_c {
 public:
     typedef void (dFile_select_c::*DispFunc)();
 
-    /* 8018366C */ dFile_select_c(JKRArchive*);
-    /* 8018375C */ virtual ~dFile_select_c();
-    /* 801843CC */ void _create();
-    /* 801844FC */ void _move();
-    /* 80184664 */ void selFileWakuAnm();
-    /* 801848A0 */ void bookIconAnm();
-    /* 8018499C */ void selCopyFileWakuAnm();
-    /* 80184A48 */ void copyBookIconAnm();
-    /* 80184B44 */ void dataDelEffAnm();
-    /* 80184BFC */ void dataCopyEffAnm();
-    /* 80184CB4 */ void selectDataBaseMoveAnmInitSet(int, int);
-    /* 80184D4C */ bool selectDataBaseMoveAnm();
-    /* 80184E38 */ void dataSelectInAnmSet();
-    /* 80185040 */ void dataSelectIn();
-    /* 80185230 */ void dataSelectInit();
-    /* 801853C4 */ void dataSelect();
-    /* 80185508 */ void dataSelectStart();
-    /* 80185994 */ void selectDataMoveAnmInitSet(int, int);
-    /* 80185AAC */ bool selectDataMoveAnm();
-    /* 80185C2C */ void dataSelectAnmSet();
-    /* 80185DE0 */ void dataSelectMoveAnime();
-    /* 80186088 */ void makeRecInfo(u8);
-    /* 801864DC */ void selectDataOpenMove();
-    /* 80186638 */ void selectDataNameMove();
-    /* 801866C8 */ void selectDataOpenEraseMove();
-    /* 80186774 */ void menuSelect();
-    /* 801868EC */ void menuSelectStart();
-    /* 80186A80 */ void menuSelectCansel();
-    /* 80186B48 */ void menuMoveAnmInitSet(int, int);
-    /* 80186CAC */ bool menuMoveAnm();
-    /* 80186E14 */ void menuSelectAnmSet();
-    /* 80186F98 */ void menuSelectMoveAnm();
-    /* 8018721C */ void ToNameMove();
-    /* 801872C4 */ void ToNameMove2();
-    /* 80187384 */ void nameInputWait();
-    /* 801873BC */ void nameInput();
-    /* 801874F8 */ void nameToDataSelectMove();
-    /* 8018759C */ void nameInputFade();
-    /* 801876A0 */ void nameInput2Move();
-    /* 8018774C */ void nameInput2();
-    /* 80187824 */ void backNameInputMove0();
-    /* 80187908 */ void backNameInputMove();
-    /* 801879B8 */ void ToCopyPaneMove();
-    /* 80187ADC */ void ToErasePaneMove();
-    /* 80187B44 */ void backSelectMove();
-    /* 80187BE8 */ void copySelMoveAnmInitSet(int, int);
-    /* 80187DB8 */ void setSaveDataForCopySel();
-    /* 80187ED4 */ void copyDataToSelect();
-    /* 8018801C */ void copyDataToSelectStart();
-    /* 80188234 */ void copyDataToSelectCansel();
-    /* 8018832C */ void copyDataToSelectMoveAnmSet();
-    /* 801884D0 */ void copyDataToSelectMoveAnm();
-    /* 80188834 */ void copySelectWakuAlpahAnmInit(u8, u8, u8, u8);
-    /* 80188878 */ bool copySelectWakuAlpahAnm(u8);
-    /* 80188950 */ u8 getCptoNum(u8);
-    /* 80188994 */ void copyToSelBack();
-    /* 80188B54 */ void copyToSelPaneMove();
-    /* 80188BBC */ bool yesnoMenuMoveAnmInitSet(int, int);
-    /* 80188D38 */ bool yesnoMenuMoveAnm();
-    /* 80188ED0 */ bool yesnoSelectMoveAnm();
-    /* 8018912C */ void yesnoCursorShow();
-    /* 8018929C */ void YesNoSelect();
-    /* 801893E4 */ void yesNoSelectStart();
-    /* 8018978C */ void yesnoSelectAnmSet();
-    /* 80189904 */ void yesnoCancelAnmSet();
-    /* 80189A24 */ void YesNoCancelMove();
-    /* 80189BA8 */ void yesNoCursorMoveAnm();
-    /* 80189C14 */ void CmdExecPaneMove0();
-    /* 80189E28 */ void CommandExec();
-    /* 80189F68 */ void DataEraseWait();
-    /* 80189FFC */ void DataEraseWait2();
-    /* 8018A194 */ void ErasePaneMoveOk();
-    /* 8018A2DC */ void ErasePaneMoveOk2();
-    /* 8018A3B0 */ void eraseEndBackSelectWait();
-    /* 8018A444 */ void eraseEndBackSelect();
-    /* 8018A4D0 */ void DataCopyWait();
-    /* 8018A564 */ void DataCopyWait2();
-    /* 8018A6F8 */ void copyPaneMoveOk();
-    /* 8018A868 */ void copyPaneMoveOk2();
-    /* 8018A960 */ void ErrorMsgPaneMove();
-    /* 8018AAC4 */ void backDatSelPaneMove();
-    /* 8018AC3C */ void backDatSelWait();
-    /* 8018AD38 */ void backDatSelWait2();
-    /* 8018AD9C */ void nextModeWait();
-    /* 8018ADA0 */ void screenSet();
-    /* 8018BF2C */ void screenSetCopySel();
-    /* 8018C524 */ void screenSetYesNo();
-    /* 8018C8F4 */ void screenSet3Menu();
-    /* 8018CCD0 */ void screenSetDetail();
-    /* 8018CE38 */ void setWakuAnm();
-    /* 8018CF50 */ void displayInit();
-    /* 8018D044 */ void setSaveData();
-    /* 8018D0E4 */ void headerTxtSet(u16, u8, u8);
-    /* 8018D25C */ bool headerTxtChangeAnm();
-    /* 8018D344 */ void modoruTxtChange(u8);
-    /* 8018D3A0 */ void modoruTxtDispAnmInit(u8);
-    /* 8018D41C */ bool modoruTxtDispAnm();
-    /* 8018D4F8 */ void ketteiTxtDispAnmInit(u8);
-    /* 8018D574 */ bool ketteiTxtDispAnm();
-    /* 8018D650 */ void selectWakuAlpahAnmInit(u8, u8, u8, u8);
-    /* 8018D68C */ bool selectWakuAlpahAnm(u8);
-    /* 8018D764 */ void selFileCursorShow();
-    /* 8018D884 */ void menuWakuAlpahAnmInit(u8, u8, u8, u8);
-    /* 8018D8C8 */ bool menuWakuAlpahAnm(u8);
-    /* 8018DA10 */ void menuCursorShow();
-    /* 8018DB80 */ void yesnoWakuAlpahAnmInit(u8, u8, u8, u8);
-    /* 8018DBCC */ bool yesnoWakuAlpahAnm(u8);
-    /* 8018DD38 */ void _draw();
-    /* 8018E130 */ void errorMoveAnmInitSet(int, int);
-    /* 8018E1C0 */ bool errorMoveAnm();
-    /* 8018E2B4 */ void errDispInitSet(int, int);
-    /* 8018E4CC */ void MemCardCheckMain();
-    /* 8018E504 */ void MemCardStatCheck();
-    /* 8018E7C4 */ void MemCardLoadWait();
-    /* 8018E93C */ void MemCardErrMsgWaitKey();
-    /* 8018E9B0 */ void noFileSpaceDispInit();
-    /* 8018E9D4 */ void MemCardNoFileSpaceDisp();
-    /* 8018EA3C */ void iplSelDispInit();
-    /* 8018EA90 */ void MemCardGotoIPLSelectDisp();
-    /* 8018EB10 */ void MemCardGotoIPLSelect();
-    /* 8018EBCC */ void MemCardGotoIPL();
-    /* 8018EC4C */ void noSaveSelDispInit();
-    /* 8018ECBC */ void MemCardNoSaveSelDisp();
-    /* 8018ED80 */ void MemCardErrMsgWaitNoSaveSel();
-    /* 8018EF5C */ void formatYesSelDispInitSet();
-    /* 8018EFAC */ void formatNoSelDispInitSet();
-    /* 8018EFFC */ void MemCardFormatYesSelDisp();
-    /* 8018F080 */ void MemCardFormatNoSelDisp();
-    /* 8018F128 */ void MemCardErrMsgWaitFormatSel();
-    /* 8018F17C */ void formatYesSel2DispInitSet();
-    /* 8018F1CC */ void MemCardErrMsgWaitFormatSel2();
-    /* 8018F228 */ void MemCardFormatYesSel2Disp();
-    /* 8018F2A4 */ void MemCardFormat();
-    /* 8018F304 */ void MemCardFormatWait();
-    /* 8018F374 */ void MemCardFormatCheck();
-    /* 8018F400 */ void MemCardMakeGameFileSel();
-    /* 8018F488 */ void MemCardMakeGameFileSelDisp();
-    /* 8018F580 */ void MemCardMakeGameFile();
-    /* 8018F5E0 */ void MemCardMakeGameFileWait();
-    /* 8018F650 */ void MemCardMakeGameFileCheck();
-    /* 8018F6DC */ void MemCardMsgWindowInitOpen();
-    /* 8018F8D8 */ void MemCardMsgWindowOpen();
-    /* 8018F974 */ void MemCardMsgWindowClose();
-    /* 8018FA2C */ bool errYesNoSelect();
-    /* 8018FB80 */ void errCurMove(u8);
-    /* 8018FBF8 */ void MemCardErrYesNoCursorMoveAnm();
-    /* 8018FC64 */ void errorTxtSet(u16);
-    /* 8018FD30 */ bool errorTxtChangeAnm();
-    /* 8018FE18 */ bool fileRecScaleAnm();
-    /* 8018FE64 */ void fileRecScaleAnmInitSet2(f32, f32);
-    /* 8018FEF4 */ bool fileRecScaleAnm2();
-    /* 8018FF9C */ bool fileInfoScaleAnm();
-    /* 80190074 */ void nameMoveAnmInitSet(int, int);
-    /* 80190124 */ bool nameMoveAnm();
-    /* 80190208 */ void MemCardSaveDataClear();
-    /* 80190254 */ void setInitSaveData();
-    /* 801902B8 */ void dataSave();
+    dFile_select_c(JKRArchive*);
+    virtual ~dFile_select_c();
+    void _create();
+    void _move();
+    void selFileWakuAnm();
+    void bookIconAnm();
+    void selCopyFileWakuAnm();
+    void copyBookIconAnm();
+    void dataDelEffAnm();
+    void dataCopyEffAnm();
+    void selectDataBaseMoveAnmInitSet(int, int);
+    bool selectDataBaseMoveAnm();
+    void dataSelectInAnmSet();
+    void dataSelectIn();
+    void dataSelectInit();
+    void dataSelect();
+    void dataSelectStart();
+    void selectDataMoveAnmInitSet(int, int);
+    bool selectDataMoveAnm();
+    void dataSelectAnmSet();
+    void dataSelectMoveAnime();
+    void makeRecInfo(u8);
+    void selectDataOpenMove();
+    void selectDataNameMove();
+    void selectDataOpenEraseMove();
+    void menuSelect();
+    void menuSelectStart();
+    void menuSelectCansel();
+    void menuMoveAnmInitSet(int, int);
+    bool menuMoveAnm();
+    void menuSelectAnmSet();
+    void menuSelectMoveAnm();
+    void ToNameMove();
+    void ToNameMove2();
+    void nameInputWait();
+    void nameInput();
+    void nameToDataSelectMove();
+    void nameInputFade();
+    void nameInput2Move();
+    void nameInput2();
+    void backNameInputMove0();
+    void backNameInputMove();
+    void ToCopyPaneMove();
+    void ToErasePaneMove();
+    void backSelectMove();
+    void copySelMoveAnmInitSet(int, int);
+    void setSaveDataForCopySel();
+    void copyDataToSelect();
+    void copyDataToSelectStart();
+    void copyDataToSelectCansel();
+    void copyDataToSelectMoveAnmSet();
+    void copyDataToSelectMoveAnm();
+    void copySelectWakuAlpahAnmInit(u8, u8, u8, u8);
+    bool copySelectWakuAlpahAnm(u8);
+    u8 getCptoNum(u8);
+    void copyToSelBack();
+    void copyToSelPaneMove();
+    bool yesnoMenuMoveAnmInitSet(int, int);
+    bool yesnoMenuMoveAnm();
+    bool yesnoSelectMoveAnm();
+    void yesnoCursorShow();
+    void YesNoSelect();
+    void yesNoSelectStart();
+    void yesnoSelectAnmSet();
+    void yesnoCancelAnmSet();
+    void YesNoCancelMove();
+    void yesNoCursorMoveAnm();
+    void CmdExecPaneMove0();
+    void CommandExec();
+    void DataEraseWait();
+    void DataEraseWait2();
+    void ErasePaneMoveOk();
+    void ErasePaneMoveOk2();
+    void eraseEndBackSelectWait();
+    void eraseEndBackSelect();
+    void DataCopyWait();
+    void DataCopyWait2();
+    void copyPaneMoveOk();
+    void copyPaneMoveOk2();
+    void ErrorMsgPaneMove();
+    void backDatSelPaneMove();
+    void backDatSelWait();
+    void backDatSelWait2();
+    void nextModeWait();
+    void screenSet();
+    void screenSetCopySel();
+    void screenSetYesNo();
+    void screenSet3Menu();
+    void screenSetDetail();
+    void setWakuAnm();
+    void displayInit();
+    void setSaveData();
+    void headerTxtSet(u16, u8, u8);
+    bool headerTxtChangeAnm();
+    void modoruTxtChange(u8);
+    void modoruTxtDispAnmInit(u8);
+    bool modoruTxtDispAnm();
+    void ketteiTxtDispAnmInit(u8);
+    bool ketteiTxtDispAnm();
+    void selectWakuAlpahAnmInit(u8, u8, u8, u8);
+    bool selectWakuAlpahAnm(u8);
+    void selFileCursorShow();
+    void menuWakuAlpahAnmInit(u8, u8, u8, u8);
+    bool menuWakuAlpahAnm(u8);
+    void menuCursorShow();
+    void yesnoWakuAlpahAnmInit(u8, u8, u8, u8);
+    bool yesnoWakuAlpahAnm(u8);
+    void _draw();
+    void errorMoveAnmInitSet(int, int);
+    bool errorMoveAnm();
+    void errDispInitSet(int, int);
+    void MemCardCheckMain();
+    void MemCardStatCheck();
+    void MemCardLoadWait();
+    void MemCardErrMsgWaitKey();
+    void noFileSpaceDispInit();
+    void MemCardNoFileSpaceDisp();
+    void iplSelDispInit();
+    void MemCardGotoIPLSelectDisp();
+    void MemCardGotoIPLSelect();
+    void MemCardGotoIPL();
+    void noSaveSelDispInit();
+    void MemCardNoSaveSelDisp();
+    void MemCardErrMsgWaitNoSaveSel();
+    void formatYesSelDispInitSet();
+    void formatNoSelDispInitSet();
+    void MemCardFormatYesSelDisp();
+    void MemCardFormatNoSelDisp();
+    void MemCardErrMsgWaitFormatSel();
+    void formatYesSel2DispInitSet();
+    void MemCardErrMsgWaitFormatSel2();
+    void MemCardFormatYesSel2Disp();
+    void MemCardFormat();
+    void MemCardFormatWait();
+    void MemCardFormatCheck();
+    void MemCardMakeGameFileSel();
+    void MemCardMakeGameFileSelDisp();
+    void MemCardMakeGameFile();
+    void MemCardMakeGameFileWait();
+    void MemCardMakeGameFileCheck();
+    void MemCardMsgWindowInitOpen();
+    void MemCardMsgWindowOpen();
+    void MemCardMsgWindowClose();
+    bool errYesNoSelect();
+    void errCurMove(u8);
+    void MemCardErrYesNoCursorMoveAnm();
+    void errorTxtSet(u16);
+    bool errorTxtChangeAnm();
+    bool fileRecScaleAnm();
+    void fileRecScaleAnmInitSet2(f32, f32);
+    bool fileRecScaleAnm2();
+    bool fileInfoScaleAnm();
+    void nameMoveAnmInitSet(int, int);
+    bool nameMoveAnm();
+    void MemCardSaveDataClear();
+    void setInitSaveData();
+    void dataSave();
 
     bool getFadeFlag() { return mFadeFlag; }
     int isDataNew(u8 i) { return mDataNew[i]; }

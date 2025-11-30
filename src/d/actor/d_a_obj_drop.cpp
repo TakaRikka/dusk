@@ -23,7 +23,6 @@
 daObjDrop_HIO_c l_HIO;
 #endif
 
-/* 80BDFCD8-80BDFD8C 000078 00B4+00 2/2 0/0 0/0 .text            searchParentSub__FPvPv */
 static void* searchParentSub(void* pproc, void* pdata) {
     daObjDrop_c* pdrop = (daObjDrop_c*)pdata;
     fopAc_ac_c* pym = (fopAc_ac_c*)pproc;
@@ -47,13 +46,10 @@ static void* searchParentSub(void* pproc, void* pdata) {
     return NULL;
 }
 
-/* 80BE1F88-80BE1F94 000000 000C+00 4/4 0/0 0/0 .rodata          l_sizuku_body_effect_list */
 static const u16 l_sizuku_body_effect_list[6] = {0x838B, 0x838C, 0x838D, 0x838E, 0x838F, 0x842B};
 
-/* 80BE1F94-80BE1F98 00000C 0004+00 0/1 0/0 0/0 .rodata          l_sizuku_app_effect_list */
 static const u16 l_sizuku_app_effect_list[] = {0x8388, 0x8389};
 
-/* 80BE1F98-80BE1FD8 000010 0040+00 1/1 0/0 0/0 .rodata          l_sph_src */
 const static dCcD_SrcSph l_sph_src = {
     {
         {0x0, {{AT_TYPE_0, 0x0, 0x0}, {0x0, 0x0}, 0x79}},  // mObj
@@ -66,7 +62,6 @@ const static dCcD_SrcSph l_sph_src = {
     }  // mSphAttr
 };
 
-/* 80BDFD8C-80BDFE58 00012C 00CC+00 1/1 0/0 0/0 .text            Create__11daObjDrop_cFv */
 int daObjDrop_c::Create() {
     mAcchCir.SetWall(50.0f, 50.0f);
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
@@ -80,7 +75,6 @@ int daObjDrop_c::Create() {
     return 1;
 }
 
-/* 80BDFE58-80BE005C 0001F8 0204+00 1/1 0/0 0/0 .text            create__11daObjDrop_cFv */
 int daObjDrop_c::create() {
     fopAcM_ct(this, daObjDrop_c);
 
@@ -98,7 +92,6 @@ int daObjDrop_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80BE0358-80BE0430 0006F8 00D8+00 2/2 0/0 0/0 .text            dropGet__11daObjDrop_cFv */
 void daObjDrop_c::dropGet() {
     if (mSetCollectDrop) {
         dComIfGs_onTbox(getSave());
@@ -127,7 +120,6 @@ static f32 dummy() {
     return temp;
 }
 
-/* 80BE0430-80BE05DC 0007D0 01AC+00 1/1 0/0 0/0 .text            checkGetArea__11daObjDrop_cFv */
 BOOL daObjDrop_c::checkGetArea() {
     f32 dist_to_player = current.pos.abs(daPy_getPlayerActorClass()->current.pos);
 
@@ -141,8 +133,6 @@ BOOL daObjDrop_c::checkGetArea() {
     return false;
 }
 
-/* 80BE05DC-80BE0658 00097C 007C+00 1/1 0/0 0/0 .text            checkCompleteDemo__11daObjDrop_cFv
- */
 void daObjDrop_c::checkCompleteDemo() {
     u8 need_num = dComIfGp_getNeedLightDropNum();
     u8 num = dComIfGs_getLightDropNum(dComIfGp_getStartStageDarkArea());
@@ -156,8 +146,6 @@ void daObjDrop_c::checkCompleteDemo() {
     }
 }
 
-/* 80BE0658-80BE071C 0009F8 00C4+00 1/1 0/0 0/0 .text            createLineEffect__11daObjDrop_cFv
- */
 void daObjDrop_c::createLineEffect() {
     for (int i = 0; i < 3; i++) {
         mpLineEffEmtrs[i] = dComIfGp_particle_set(0x838A, &mLinePos[i], NULL, &scale, 0xFF,
@@ -169,16 +157,12 @@ void daObjDrop_c::createLineEffect() {
     }
 }
 
-/* 80BE071C-80BE077C 000ABC 0060+00 2/2 0/0 0/0 .text            removeLineEffect__11daObjDrop_cFv
- */
 void daObjDrop_c::removeLineEffect() {
     for (int i = 0; i < 3; i++) {
         mLineEffCallbacks[i].remove();
     }
 }
 
-/* 80BE077C-80BE0840 000B1C 00C4+00 2/2 0/0 0/0 .text            createBodyEffect__11daObjDrop_cFv
- */
 void daObjDrop_c::createBodyEffect() {
     for (int i = 0; i < 6; i++) {
         mpBodyEffEmtrs[i] =
@@ -191,15 +175,12 @@ void daObjDrop_c::createBodyEffect() {
     }
 }
 
-/* 80BE0840-80BE08A0 000BE0 0060+00 2/2 0/0 0/0 .text            removeBodyEffect__11daObjDrop_cFv
- */
 void daObjDrop_c::removeBodyEffect() {
     for (int i = 0; i < 6; i++) {
         mBodyEffCallbacks[i].remove();
     }
 }
 
-/* 80BE08A0-80BE0994 000C40 00F4+00 2/1 0/0 0/0 .text            modeInit__11daObjDrop_cFv */
 int daObjDrop_c::modeInit() {
     u8 ym_swbit = getYmSwbit();
 
@@ -228,7 +209,6 @@ int daObjDrop_c::modeInit() {
     return 1;
 }
 
-/* 80BE0994-80BE09F4 000D34 0060+00 1/0 0/0 0/0 .text            modeNoParent__11daObjDrop_cFv */
 int daObjDrop_c::modeNoParent() {
     fopAc_ac_c* pparent = (fopAc_ac_c*)fpcM_Search(searchParentSub, this);
     if (pparent != NULL) {
@@ -247,7 +227,6 @@ int daObjDrop_c::modeNoParent() {
     return 1;
 }
 
-/* 80BE09F4-80BE0C08 000D94 0214+00 1/0 0/0 0/0 .text            modeParentWait__11daObjDrop_cFv */
 int daObjDrop_c::modeParentWait() {
     fopAc_ac_c* pparent = fopAcM_SearchByID(parentActorID);
     if (pparent != NULL) {
@@ -301,7 +280,6 @@ int daObjDrop_c::modeParentWait() {
     return 1;
 }
 
-/* 80BE0C08-80BE18E0 000FA8 0CD8+00 1/0 0/0 0/0 .text            modeWait__11daObjDrop_cFv */
 int daObjDrop_c::modeWait() {
     daPy_py_c* pplayer = daPy_getPlayerActorClass();
 
@@ -479,13 +457,10 @@ int daObjDrop_c::modeWait() {
     return 1;
 }
 
-/* 80BE1928-80BE1930 001CC8 0008+00 1/0 0/0 0/0 .text            actionCompleteWait__11daObjDrop_cFv
- */
 int daObjDrop_c::actionCompleteWait() {
     return 1;
 }
 
-/* 80BE1930-80BE19D0 001CD0 00A0+00 1/0 0/0 0/0 .text actionOrderCompleteDemo__11daObjDrop_cFv */
 int daObjDrop_c::actionOrderCompleteDemo() {
     camera_class* pcamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
@@ -503,7 +478,6 @@ int daObjDrop_c::actionOrderCompleteDemo() {
     return 1;
 }
 
-/* 80BE19D0-80BE1ACC 001D70 00FC+00 1/0 0/0 0/0 .text actionCompleateDemo__11daObjDrop_cFv */
 int daObjDrop_c::actionCompleateDemo() {
     camera_class* pcamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     pcamera->mCamera.SetTrimTypeForce(1);
@@ -529,8 +503,6 @@ int daObjDrop_c::actionCompleateDemo() {
     return 1;
 }
 
-/* 80BE1ACC-80BE1B5C 001E6C 0090+00 1/0 0/0 0/0 .text actionWaitCompleteGetDemo__11daObjDrop_cFv
- */
 int daObjDrop_c::actionWaitCompleteGetDemo() {
     if (eventInfo.checkCommandItem()) {
         setDemoMode(DEMOMODE_COMPLETE_GET_DEMO_e);
@@ -548,7 +520,6 @@ int daObjDrop_c::actionWaitCompleteGetDemo() {
     return 1;
 }
 
-/* 80BE1B5C-80BE1BC4 001EFC 0068+00 1/0 0/0 0/0 .text actionCompleteGetDemo__11daObjDrop_cFv */
 int daObjDrop_c::actionCompleteGetDemo() {
     if (dComIfGp_evmng_endCheck("DEFAULT_GETITEM")) {
         dComIfGp_event_reset();
@@ -558,7 +529,6 @@ int daObjDrop_c::actionCompleteGetDemo() {
     return 1;
 }
 
-/* 80BE1BC4-80BE1DCC 001F64 0208+00 1/1 0/0 0/0 .text            execute__11daObjDrop_cFv */
 int daObjDrop_c::execute() {
     typedef int (daObjDrop_c::*exeFunc)();
     static exeFunc l_exeFunc[] = {
@@ -586,7 +556,6 @@ int daObjDrop_c::execute() {
     return 1;
 }
 
-/* 80BE1DCC-80BE1E0C 00216C 0040+00 1/1 0/0 0/0 .text            _delete__11daObjDrop_cFv */
 int daObjDrop_c::_delete() {
     removeLineEffect();
     removeBodyEffect();
@@ -594,24 +563,18 @@ int daObjDrop_c::_delete() {
     return 1;
 }
 
-/* 80BE1E0C-80BE1E2C 0021AC 0020+00 1/0 0/0 0/0 .text            daObjDrop_Execute__FP11daObjDrop_c
- */
 static int daObjDrop_Execute(daObjDrop_c* i_this) {
     return i_this->execute();
 }
 
-/* 80BE1E2C-80BE1E4C 0021CC 0020+00 1/0 0/0 0/0 .text            daObjDrop_Delete__FP11daObjDrop_c
- */
 static int daObjDrop_Delete(daObjDrop_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80BE1E4C-80BE1E6C 0021EC 0020+00 1/0 0/0 0/0 .text            daObjDrop_Create__FP10fopAc_ac_c */
 static int daObjDrop_Create(fopAc_ac_c* i_this) {
     return ((daObjDrop_c*)i_this)->create();
 }
 
-/* 80BE2158-80BE2178 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjDrop_Method */
 static actor_method_class l_daObjDrop_Method = {
     (process_method_func)daObjDrop_Create,
     (process_method_func)daObjDrop_Delete,
@@ -620,7 +583,6 @@ static actor_method_class l_daObjDrop_Method = {
     (process_method_func)NULL,
 };
 
-/* 80BE2178-80BE21A8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Drop */
 extern actor_process_profile_definition g_profile_Obj_Drop = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

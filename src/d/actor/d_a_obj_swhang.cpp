@@ -12,32 +12,26 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-/* 80CFD1DC-80CFD1F0 000000 0014+00 4/4 0/0 0/0 .rodata          l_bmdIdx */
 static u32 const l_bmdIdx[5] = {
     4, 4, 4, 4, 4,
 };
 
-/* 80CFD1F0-80CFD204 000014 0014+00 1/1 0/0 0/0 .rodata          l_dzbIdx */
 static u32 const l_dzbIdx[5] = {
     7, 7, 7, 7, 7,
 };
 
-/* 80CFD204-80CFD218 000028 0014+00 1/1 0/0 0/0 .rodata          l_dzbIdx2 */
 static u32 const l_dzbIdx2[5] = {
     8, 8, 8, 8, 8,
 };
 
-/* 80CFD218-80CFD22C 00003C 0014+00 1/3 0/0 0/0 .rodata          l_pull_length */
 static f32 const l_pull_length[5] = {
     100.0f, 100.0f, 130.0f, 100.0f, 200.0f,
 };
 
-/* 80CFD22C-80CFD240 000050 0014+00 1/1 0/0 0/0 .rodata          l_heap_size */
 static u32 const l_heap_size[5] = {
     0x1980, 0x1980, 0x1980, 0x2030, 0x2030,
 };
 
-/* 80CFB938-80CFB9D8 000078 00A0+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* pJoint, int param_2) {
     if (param_2 == 0) {
         J3DJoint* my_joint = pJoint;
@@ -53,7 +47,6 @@ static int nodeCallBack(J3DJoint* pJoint, int param_2) {
     return 1;
 }
 
-/* 80CFB9D8-80CFBA60 000118 0088+00 1/1 0/0 0/0 .text            initBaseMtx__13daObjSwHang_cFv */
 void daObjSwHang_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
@@ -63,7 +56,6 @@ void daObjSwHang_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80CFBA60-80CFBAC8 0001A0 0068+00 2/2 0/0 0/0 .text            setBaseMtx__13daObjSwHang_cFv */
 void daObjSwHang_c::setBaseMtx() {
     f32 hang_length = mHangLength + KREG_F(10);
     mDoMtx_stack_c::transS(current.pos.x,
@@ -73,7 +65,6 @@ void daObjSwHang_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80CFD2D8-80CFD2EC -00001 0014+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[5] = {
     "S_bura_A",
     "S_bura_B",
@@ -82,7 +73,6 @@ static char* l_arcName[5] = {
     "S_bura_7c",
 };
 
-/* 80CFD2EC-80CFD300 -00001 0014+00 0/1 0/0 0/0 .data            l_pull_jnt */
 static char* l_pull_jnt[5] = {
     "totte",
     "hook",
@@ -91,13 +81,11 @@ static char* l_pull_jnt[5] = {
     "tottel",
 };
 
-/* 80CFD300-80CFD33C 000048 003C+00 3/3 0/0 0/0 .data            l_hang_offset */
 static Vec l_hang_offset[5] = {
     {0.0f, -470.0f, 10.0f}, {0.0f, -183.0f, 10.0f},   {0.0f, -200.0f, 10.0f},
     {0.0f, -520.0f, 10.0f}, {0.0f, -1010.0f, 10.0f},
 };
 
-/* 80CFD33C-80CFD37C 000084 0040+00 0/1 0/0 0/0 .data            l_sph_src */
 static dCcD_SrcSph l_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x10}, 0x19}}, // mObj
@@ -110,7 +98,6 @@ static dCcD_SrcSph l_sph_src = {
     } // mSphAttr
 };
 
-/* 80CFD37C-80CFD3BC 0000C4 0040+00 0/1 0/0 0/0 .data            l_sph_src2 */
 static dCcD_SrcSph l_sph_src2 = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x4000, 0x11}, 0x18}}, // mObj
@@ -123,7 +110,6 @@ static dCcD_SrcSph l_sph_src2 = {
     } // mSphAttr
 };
 
-/* 80CFBAC8-80CFBCB8 000208 01F0+00 1/0 0/0 0/0 .text            Create__13daObjSwHang_cFv */
 int daObjSwHang_c::Create() {
     if (checkDown()) {
         mHangLength = l_pull_length[mType];
@@ -166,7 +152,6 @@ int daObjSwHang_c::Create() {
     return 1;
 }
 
-/* 80CFBCB8-80CFBDD0 0003F8 0118+00 1/0 0/0 0/0 .text            CreateHeap__13daObjSwHang_cFv */
 int daObjSwHang_c::CreateHeap() {
    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(
         l_arcName[mType],
@@ -187,7 +172,6 @@ int daObjSwHang_c::CreateHeap() {
     return 1;
 }
 
-/* 80CFBDD0-80CFBF60 000510 0190+00 1/1 0/0 0/0 .text            create1st__13daObjSwHang_cFv */
 int daObjSwHang_c::create1st() {
     fopAcM_ct(this, daObjSwHang_c);
     mType = getType_private();
@@ -203,7 +187,6 @@ int daObjSwHang_c::create1st() {
     return rv;
 }
 
-/* 80CFC04C-80CFC114 00078C 00C8+00 1/1 0/0 0/0 .text            calcHangPos__13daObjSwHang_cFv */
 void daObjSwHang_c::calcHangPos() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     mHangPos = l_hang_offset[mType];
@@ -217,7 +200,6 @@ void daObjSwHang_c::calcHangPos() {
     mDoMtx_stack_c::multVec(&mHangPos, &mHangPos);
 }
 
-/* 80CFC114-80CFC194 000854 0080+00 4/4 0/0 0/0 .text            checkDown__13daObjSwHang_cFv */
 BOOL daObjSwHang_c::checkDown() {
     if (!checkType()) {
         if (fopAcM_isSwitch(this, getSwNo())) {
@@ -231,8 +213,6 @@ BOOL daObjSwHang_c::checkDown() {
     return 0;
 }
 
-/* 80CFC194-80CFC1F4 0008D4 0060+00 2/2 0/0 0/0 .text            changeOnStatus__13daObjSwHang_cFv
- */
 void daObjSwHang_c::changeOnStatus() {
     if (!checkType()) {
         fopAcM_onSwitch(this, getSwNo());
@@ -241,8 +221,6 @@ void daObjSwHang_c::changeOnStatus() {
     }
 }
 
-/* 80CFC1F4-80CFC254 000934 0060+00 1/1 0/0 0/0 .text            changeOffStatus__13daObjSwHang_cFv
- */
 void daObjSwHang_c::changeOffStatus() {
     if (!checkType()) {
         fopAcM_offSwitch(this, getSwNo());
@@ -251,8 +229,6 @@ void daObjSwHang_c::changeOffStatus() {
     }
 }
 
-/* 80CFC254-80CFC4C4 000994 0270+00 1/0 0/0 0/0 .text            Execute__13daObjSwHang_cFPPA3_A4_f
- */
 int daObjSwHang_c::Execute(Mtx** ppMtx) {
     eventUpdate();
     action();
@@ -297,7 +273,6 @@ int daObjSwHang_c::Execute(Mtx** ppMtx) {
     return 1;
 }
 
-/* 80CFC4C4-80CFC550 000C04 008C+00 1/1 0/0 0/0 .text            action__13daObjSwHang_cFv */
 void daObjSwHang_c::action() {
     static daObjSwHang_c::modeFunc l_func[2] = {
         &daObjSwHang_c::modeOffWait,
@@ -306,7 +281,6 @@ void daObjSwHang_c::action() {
     (this->*(l_func[mMode]))();
 }
 
-/* 80CFC550-80CFC698 000C90 0148+00 1/1 0/0 0/0 .text            checkDownSw__13daObjSwHang_cFv */
 void daObjSwHang_c::checkDownSw() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     clrFlag();
@@ -348,14 +322,11 @@ void daObjSwHang_c::checkDownSw() {
     }
 }
 
-/* 80CFC698-80CFC6AC 000DD8 0014+00 2/2 0/0 0/0 .text            init_modeOffWait__13daObjSwHang_cFv
- */
 void daObjSwHang_c::init_modeOffWait() {
     field_0x77e = 10;
     mMode = MODE_OFF_WAIT;
 }
 
-/* 80CFC6AC-80CFCA34 000DEC 0388+00 1/0 0/0 0/0 .text            modeOffWait__13daObjSwHang_cFv */
 void daObjSwHang_c::modeOffWait() {
     daPy_getPlayerActorClass();
     u16 flags = mFlags;
@@ -419,13 +390,10 @@ void daObjSwHang_c::modeOffWait() {
     }
 }
 
-/* 80CFCA34-80CFCA40 001174 000C+00 2/2 0/0 0/0 .text            init_modeOnWait__13daObjSwHang_cFv
- */
 void daObjSwHang_c::init_modeOnWait() {
     mMode = MODE_ON_WAIT;
 }
 
-/* 80CFCA40-80CFCCE0 001180 02A0+00 1/0 0/0 0/0 .text            modeOnWait__13daObjSwHang_cFv */
 void daObjSwHang_c::modeOnWait() {
     daPy_getPlayerActorClass();
     bool isUp = !checkDown();
@@ -474,13 +442,11 @@ void daObjSwHang_c::modeOnWait() {
     }
 }
 
-/* 80CFCCE0-80CFCD04 001420 0024+00 2/1 0/0 0/0 .text            eventStart__13daObjSwHang_cFv */
 bool daObjSwHang_c::eventStart() {
     changeOnStatus();
     return true;
 }
 
-/* 80CFCD04-80CFCD98 001444 0094+00 1/0 0/0 0/0 .text            Draw__13daObjSwHang_cFv */
 int daObjSwHang_c::Draw() {
     if (mType == TYPE_0 || mType == TYPE_1) {
         g_env_light.settingTevStruct( 0,
@@ -496,7 +462,6 @@ int daObjSwHang_c::Draw() {
     return 1;
 }
 
-/* 80CFCD98-80CFCE0C 0014D8 0074+00 1/0 0/0 0/0 .text            Delete__13daObjSwHang_cFv */
 int daObjSwHang_c::Delete() {
     if (mpBgW != NULL && mpBgW->ChkUsed()) {
         bool unused_r29 = dComIfG_Bgsp().Release(mpBgW);
@@ -505,25 +470,19 @@ int daObjSwHang_c::Delete() {
     return 1;
 }
 
-/* 80CFCE0C-80CFCF20 00154C 0114+00 1/0 0/0 0/0 .text daObjSwHang_create1st__FP13daObjSwHang_c */
 static int daObjSwHang_create1st(daObjSwHang_c* i_this) {
     fopAcM_ct(i_this, daObjSwHang_c);
     return i_this->create1st();
 }
 
-/* 80CFCF20-80CFCF40 001660 0020+00 1/0 0/0 0/0 .text daObjSwHang_MoveBGDelete__FP13daObjSwHang_c
- */
 static int daObjSwHang_MoveBGDelete(daObjSwHang_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80CFCF40-80CFCF60 001680 0020+00 1/0 0/0 0/0 .text daObjSwHang_MoveBGExecute__FP13daObjSwHang_c
- */
 static int daObjSwHang_MoveBGExecute(daObjSwHang_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80CFCF60-80CFCF8C 0016A0 002C+00 1/0 0/0 0/0 .text daObjSwHang_MoveBGDraw__FP13daObjSwHang_c */
 static int daObjSwHang_MoveBGDraw(daObjSwHang_c* i_this) {
     return i_this->MoveBGDraw();
 }
@@ -533,7 +492,6 @@ static void dummy() {
     delete (cCcD_GStts*)NULL;
 }
 
-/* 80CFD3EC-80CFD40C -00001 0020+00 1/0 0/0 0/0 .data            daObjSwHang_METHODS */
 static actor_method_class daObjSwHang_METHODS = {
     (process_method_func)daObjSwHang_create1st,
     (process_method_func)daObjSwHang_MoveBGDelete,
@@ -542,7 +500,6 @@ static actor_method_class daObjSwHang_METHODS = {
     (process_method_func)daObjSwHang_MoveBGDraw,
 };
 
-/* 80CFD40C-80CFD43C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_SwHang */
 extern actor_process_profile_definition g_profile_Obj_SwHang = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

@@ -14,7 +14,6 @@
 #include "d/d_debug_viewer.h"
 #endif
 
-/* 806B64AC-806B6520 0000EC 0074+00 1/1 0/0 0/0 .text            __ct__12daE_FB_HIO_cFv */
 daE_FB_HIO_c::daE_FB_HIO_c() {
     mId = -1;
     model_size = 1.5f;
@@ -87,7 +86,6 @@ namespace {
     };
 }
 
-/* 806B6520-806B65C0 000160 00A0+00 1/1 0/0 0/0 .text ctrlJoint__8daE_FB_cFP8J3DJointP8J3DModel */
 int daE_FB_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     J3DJoint* my_joint = i_joint;
     int jnt_no = my_joint->getJntNo();
@@ -110,7 +108,6 @@ int daE_FB_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 806B65C0-806B660C 000200 004C+00 1/1 0/0 0/0 .text JointCallBack__8daE_FB_cFP8J3DJointi */
 int daE_FB_c::JointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -132,10 +129,8 @@ static f32 dummy_117095() {
 
 bool l_HIOInit;
 
-/* 806B91FC-806B9220 000054 0024+00 6/7 0/0 0/0 .bss             l_HIO */
 static daE_FB_HIO_c l_HIO;
 
-/* 806B660C-806B67C0 00024C 01B4+00 1/1 0/0 0/0 .text            draw__8daE_FB_cFv */
 int daE_FB_c::draw() {
     if (mType == 10 || mType == 11) {
         return 1;
@@ -179,24 +174,20 @@ int daE_FB_c::draw() {
     return 1;
 }
 
-/* 806B67C0-806B67E0 000400 0020+00 1/0 0/0 0/0 .text            daE_FB_Draw__FP8daE_FB_c */
 static int daE_FB_Draw(daE_FB_c* i_this) {
     return static_cast<daE_FB_c*>(i_this)->draw();
 }
 
-/* 806B67E0-806B688C 000420 00AC+00 3/3 0/0 0/0 .text            setBck__8daE_FB_cFiUcff */
 void daE_FB_c::setBck(int i_index, u8 i_attr, f32 i_morf, f32 i_rate) {
     mpMorf->setAnm((J3DAnmTransform *) dComIfG_getObjectRes("E_FL", i_index), i_attr, i_morf, i_rate, 0.0f, -1.0f);
     field_0x670 = i_index;
 }
 
-/* 806B688C-806B6898 0004CC 000C+00 5/5 0/0 0/0 .text            setActionMode__8daE_FB_cFii */
 void daE_FB_c::setActionMode(int i_action, int i_mode) {
     mActionMode = i_action;
     mMoveMode = i_mode;
 }
 
-/* 806B6898-806B6D20 0004D8 0488+00 1/1 0/0 0/0 .text            damage_check__8daE_FB_cFv */
 void daE_FB_c::damage_check() {
     if (mType == 10 || mType == 11) {
         return;
@@ -283,7 +274,6 @@ void daE_FB_c::damage_check() {
     }
 }
 
-/* 806B6D20-806B6DF4 000960 00D4+00 3/3 0/0 0/0 .text            mBgLineCheck__8daE_FB_cFv */
 bool daE_FB_c::mBgLineCheck() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     dBgS_LinChk linchk;
@@ -298,7 +288,6 @@ bool daE_FB_c::mBgLineCheck() {
     return false;
 }
 
-/* 806B6DF4-806B6F40 000A34 014C+00 2/2 0/0 0/0 .text            search_check__8daE_FB_cFv */
 bool daE_FB_c::search_check() {
     bool retval = false;
     if (fopAcM_searchPlayerDistance(this) <= l_HIO.player_detection_range) {
@@ -325,7 +314,6 @@ bool daE_FB_c::search_check() {
     return retval;
 }
 
-/* 806B6F40-806B70FC 000B80 01BC+00 1/1 0/0 0/0 .text            executeWait__8daE_FB_cFv */
 void daE_FB_c::executeWait() {
     if (field_0x680) {
         --field_0x680;
@@ -388,10 +376,8 @@ void daE_FB_c::executeWait() {
     current.angle.y = shape_angle.y;
 }
 
-/* 806B9220-806B9224 000078 0004+00 2/2 0/0 0/0 .bss             mFireTimer */
 static int mFireTimer;
 
-/* 806B70FC-806B78A0 000D3C 07A4+00 1/1 0/0 0/0 .text            executeAttack__8daE_FB_cFv */
 void daE_FB_c::executeAttack() {
     // NONMATCHING - regalloc purgatory
     static u16 a_eff_id[3] = {
@@ -571,7 +557,6 @@ void daE_FB_c::executeAttack() {
     current.angle.y = shape_angle.y;
 }
 
-/* 806B78A0-806B7B88 0014E0 02E8+00 1/1 0/0 0/0 .text            executeDamage__8daE_FB_cFv */
 void daE_FB_c::executeDamage() {
     static u16 d_eff_id[2] = {
         dPa_RM(ID_ZI_S_FL_HIT_A),
@@ -632,10 +617,8 @@ void daE_FB_c::executeDamage() {
     current.angle.y = shape_angle.y;
 }
 
-/* 806B9224-806B9228 00007C 0004+00 2/3 0/0 0/0 .bss             None */
 static u8 lbl_188_bss_7C;
 
-/* 806B7B88-806B7DDC 0017C8 0254+00 1/1 0/0 0/0 .text            executeBullet__8daE_FB_cFv */
 void daE_FB_c::executeBullet() {
     cXyz sp_0x20;
     cXyz sp_0x14;
@@ -690,7 +673,6 @@ void daE_FB_c::executeBullet() {
     }
 }
 
-/* 806B7DDC-806B80A4 001A1C 02C8+00 1/1 0/0 0/0 .text            action__8daE_FB_cFv */
 void daE_FB_c::action() {
     mModelSize = l_HIO.model_size;
     if (mType == 1) {
@@ -759,7 +741,6 @@ void daE_FB_c::action() {
     mpMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
-/* 806B80A4-806B811C 001CE4 0078+00 1/1 0/0 0/0 .text            mtx_set__8daE_FB_cFv */
 void daE_FB_c::mtx_set() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -769,7 +750,6 @@ void daE_FB_c::mtx_set() {
     mpMorf->modelCalc();
 }
 
-/* 806B811C-806B82B4 001D5C 0198+00 1/1 0/0 0/0 .text            cc_set__8daE_FB_cFv */
 void daE_FB_c::cc_set() {
     cXyz sp8;
     mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(2));
@@ -793,7 +773,6 @@ void daE_FB_c::cc_set() {
     eyePos = sp8;
 }
 
-/* 806B82B4-806B83F0 001EF4 013C+00 1/1 0/0 0/0 .text            normal_eff_set__8daE_FB_cFv */
 void daE_FB_c::normal_eff_set() {
     static u16 n_eff_id[5] = {
         dPa_RM(ID_ZI_S_FL_REIKI_A),
@@ -817,7 +796,6 @@ void daE_FB_c::normal_eff_set() {
     }
 }
 
-/* 806B83F0-806B8518 002030 0128+00 1/1 0/0 0/0 .text            dead_eff_set__8daE_FB_cFv */
 void daE_FB_c::dead_eff_set() {
     static u16 d_eff_id[5] = {
         dPa_RM(ID_ZI_S_FL_DEAD_A),
@@ -846,7 +824,6 @@ static char* dummy_117771() {
 }
 #endif
 
-/* 806B8518-806B85A0 002158 0088+00 1/1 0/0 0/0 .text            execute__8daE_FB_cFv */
 int daE_FB_c::execute() {
     if (field_0x69c != 0) {
         --field_0x69c;
@@ -866,17 +843,14 @@ int daE_FB_c::execute() {
     return 1;
 }
 
-/* 806B85A0-806B85C0 0021E0 0020+00 2/1 0/0 0/0 .text            daE_FB_Execute__FP8daE_FB_c */
 static int daE_FB_Execute(daE_FB_c* i_this) {
     return i_this->execute();
 }
 
-/* 806B85C0-806B85C8 002200 0008+00 1/0 0/0 0/0 .text            daE_FB_IsDelete__FP8daE_FB_c */
 static int daE_FB_IsDelete(daE_FB_c*) {
     return 1;
 }
 
-/* 806B85C8-806B8658 002208 0090+00 1/1 0/0 0/0 .text            _delete__8daE_FB_cFv */
 int daE_FB_c::_delete() {
     dComIfG_resDelete(&mPhaseReq, "E_FL");
     if (mType == 10 || mType == 11) {
@@ -895,13 +869,11 @@ int daE_FB_c::_delete() {
     return 1;
 }
 
-/* 806B8658-806B8678 002298 0020+00 1/0 0/0 0/0 .text            daE_FB_Delete__FP8daE_FB_c */
 static int daE_FB_Delete(daE_FB_c* i_this) {
     int id = fopAcM_GetID(i_this);
     return static_cast<daE_FB_c*>(i_this)->_delete();
 }
 
-/* 806B8678-806B8878 0022B8 0200+00 1/1 0/0 0/0 .text            CreateHeap__8daE_FB_cFv */
 int daE_FB_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes("E_FL", 0xB);
     JUT_ASSERT(1516, modelData != NULL);
@@ -937,13 +909,11 @@ int daE_FB_c::CreateHeap() {
     return 1;
 }
 
-/* 806B88C0-806B88E0 002500 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     daE_FB_c* a_this = static_cast<daE_FB_c*>(i_this);
     return a_this->CreateHeap();
 }
 
-/* 806B88E0-806B8C1C 002520 033C+00 1/1 0/0 0/0 .text            create__8daE_FB_cFv */
 cPhs__Step daE_FB_c::create() {
     fopAcM_ct(this, daE_FB_c);
     mType = fopAcM_GetParam(this);
@@ -1022,17 +992,14 @@ cPhs__Step daE_FB_c::create() {
     return phase;
 }
 
-/* 806B8C1C-806B8DC4 00285C 01A8+00 1/1 0/0 0/0 .text            __ct__8daE_FB_cFv */
 daE_FB_c::daE_FB_c() {
     // Empty function.
 }
 
-/* 806B8EC4-806B8EE4 002B04 0020+00 1/0 0/0 0/0 .text            daE_FB_Create__FP8daE_FB_c */
 static int daE_FB_Create(daE_FB_c* i_this) {
     return i_this->create();
 }
 
-/* 806B9100-806B9120 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_FB_Method */
 static actor_method_class l_daE_FB_Method = {
     (process_method_func)daE_FB_Create,
     (process_method_func)daE_FB_Delete,
@@ -1041,7 +1008,6 @@ static actor_method_class l_daE_FB_Method = {
     (process_method_func)daE_FB_Draw,
 };
 
-/* 806B9120-806B9150 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_FB */
 extern actor_process_profile_definition g_profile_E_FB = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

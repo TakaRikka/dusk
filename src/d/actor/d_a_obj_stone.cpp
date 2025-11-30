@@ -16,10 +16,8 @@
 #include "SSystem/SComponent/c_math.h"
 #include "cmath.h"
 
-/* 80CECAB4-80CECABC 000000 0008+00 14/14 0/0 0/0 .rodata          l_bmdIdx */
 const static int l_bmdIdx[2] = {3, 3};
 
-/* 80CECABC-80CECAFC 000008 0040+00 0/1 0/0 0/0 .rodata          l_sph_src */
 const static dCcD_SrcSph l_sph_src = {
     {
         {0, {{AT_TYPE_THROW_OBJ, 0x03, 0x13}, {0xD8FAFDFF, 0x11}, 0x79}},
@@ -34,116 +32,93 @@ const static dCcD_SrcSph l_sph_src = {
         },
     }};
 
-/* 80CECAFC-80CECB04 000048 0008+00 0/3 0/0 0/0 .rodata          l_r */
 // radius
 const static f32 l_r[2] = {
     30.0f,
     50.0f,
 };
 
-/* 80CECB04-80CECB0C 000050 0008+00 0/1 0/0 0/0 .rodata          l_rolling_speedF */
 const static f32 l_rolling_speedF[2] = {9.0f, 9.0f};
 
-/* 80CECB0C-80CECB14 000058 0008+00 0/0 0/0 0/0 .rodata          l_rolling_time */
 const static u32 l_rolling_time[2] = {
     30,
     23,
 };
 
-/* 80CECB14-80CECB1C 000060 0008+00 1/2 0/0 0/0 .rodata          l_initial_offsetY */
 const static f32 l_initial_offsetY[2] = {10.0f, 20.0f};
 
-/* 80CECB1C-80CECB24 000068 0008+00 0/3 0/0 0/0 .rodata          l_put_offsetY */
 const static f32 l_put_offsetY[2] = {20.0f, 30.0f};
 
-/* 80CECB24-80CECB28 000070 0002+02 1/2 0/0 0/0 .rodata          l_weight */
 const static u8 l_weight[2] = {120, 200};
 
-/* 80CECB28-80CECB30 000074 0008+00 0/1 0/0 0/0 .rodata          l_speedH */
 const static f32 l_speedH[2] = {
     36.0f,
     43.0f,
 };
 
-/* 80CECB30-80CECB38 00007C 0008+00 0/1 0/0 0/0 .rodata          l_speedV */
 const static f32 l_speedV[2] = {
     27.0f,
     22.0f,
 };
 
-/* 80CECB38-80CECB40 000084 0008+00 0/1 0/0 0/0 .rodata          l_water_speedH */
 const static f32 l_water_speedH[2] = {
     5.0f,
     5.0f,
 };
 
-/* 80CECB40-80CECB48 00008C 0008+00 0/1 0/0 0/0 .rodata          l_water_speedV */
 const static f32 l_water_speedV[2] = {
     5.0f,
     5.0f,
 };
 
-/* 80CECB48-80CECB50 000094 0008+00 0/1 0/0 0/0 .rodata          l_water_resist */
 const static f32 l_water_resist[2] = {
     0.02f,
     0.02f,
 };
 
-/* 80CECB50-80CECB58 00009C 0008+00 0/1 0/0 0/0 .rodata          l_water_walk_resist */
 const static f32 l_water_walk_resist[2] = {
     0.15f,
     0.15f,
 };
 
-/* 80CECB58-80CECB60 0000A4 0008+00 0/2 0/0 0/0 .rodata          l_buoyancy */
 const static f32 l_buoyancy[2] = {
     5.9f,
     5.9f,
 };
 
-/* 80CECB60-80CECB68 0000AC 0008+00 1/1 0/0 0/0 .rodata          l_shadow_size */
 const static f32 l_shadow_size[2] = {40.0f, 65.0f};
 
-/* 80CECB68-80CECB70 0000B4 0008+00 0/1 0/0 0/0 .rodata          l_wpillar_scl */
 const static f32 l_wpillar_scl[2] = {
     0.65f,
     1.1f,
 };
 
-/* 80CECB70-80CECB78 0000BC 0008+00 0/1 0/0 0/0 .rodata          l_hamon_scl */
 const static f32 l_hamon_scl[2] = {
     0.7f,
     1.2f,
 };
 
-/* 80CECB78-80CECB80 0000C4 0008+00 0/1 0/0 0/0 .rodata          l_yogan_eff_scl */
 const static f32 l_yogan_eff_scl[2] = {
     0.6f,
     1.1f,
 };
 
-/* 80CECB80-80CECB88 0000CC 0008+00 0/1 0/0 0/0 .rodata          l_wall_h */
 const static f32 l_wall_h[2] = {
     30.0f,
     50.0f,
 };
 
-/* 80CECB88-80CECB90 0000D4 0008+00 0/1 0/0 0/0 .rodata          l_wall_r */
 const static f32 l_wall_r[2] = {30.0f, 50.0f};
 
-/* 80CECB90-80CECB94 0000DC 0004+00 0/1 0/0 0/0 .rodata          l_rot_angle */
 const static s16 l_rot_angle[2] = {35, 18};
 
-/* 80CECB94-80CECB98 0000E0 0004+00 0/1 0/0 0/0 .rodata          l_walk_rot_angle */
 const static s16 l_walk_rot_angle[2] = {40, 40};
 
-/* 80CECC74-80CECC7C -00001 0008+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[2] = {
     "D_Srock",  // small rock
     "D_Brock",  // big rock
 };
 
-/* 80CE9078-80CE935C 000078 02E4+00 1/1 0/0 0/0 .text            bound__FP4cXyzRC13cBgS_PolyInfof */
 static f32 bound(cXyz* param_0, cBgS_PolyInfo const& param_1, f32 param_2) {
     cM3dGPla plane;
     f32 ret;
@@ -160,12 +135,10 @@ static f32 bound(cXyz* param_0, cBgS_PolyInfo const& param_1, f32 param_2) {
     }
 }
 
-/* 80CE93A4-80CE93C4 0003A4 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static bool CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjStone_c*>(i_this)->CreateHeap();
 }
 
-/* 80CE93C4-80CE9468 0003C4 00A4+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjStone_cFv */
 void daObjStone_c::initBaseMtx() {
     field_0x0910 = cXyz::Zero;
     field_0x091c = 0;
@@ -175,7 +148,6 @@ void daObjStone_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80CE9468-80CE9540 000468 00D8+00 2/2 0/0 0/0 .text            setBaseMtx__12daObjStone_cFv */
 void daObjStone_c::setBaseMtx() {
     mDoMtx_quatMultiply(&field_0x0920, &field_0x0930, &field_0x0920);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + mInitialOffsetY, current.pos.z);
@@ -187,7 +159,6 @@ void daObjStone_c::setBaseMtx() {
     field_0x0920 = ZeroQuat;
 }
 
-/* 80CE9540-80CE97C0 000540 0280+00 1/1 0/0 0/0 .text            Create__12daObjStone_cFv */
 int daObjStone_c::Create() {
     mShapeAngle = shape_angle;
     shape_angle.setall(0);
@@ -251,7 +222,6 @@ int daObjStone_c::Create() {
 }
 
 
-/* 80CE97C0-80CE9840 0007C0 0080+00 1/1 0/0 0/0 .text            CreateHeap__12daObjStone_cFv */
 bool daObjStone_c::CreateHeap() {
     mpModel = mDoExt_J3DModel__create(
         (J3DModelData*)dComIfG_getObjectRes(l_arcName[mStoneType], l_bmdIdx[mStoneType]), 0x80000,
@@ -259,7 +229,6 @@ bool daObjStone_c::CreateHeap() {
     return mpModel != NULL;
 }
 
-/* 80CE9840-80CE99D4 000840 0194+00 1/1 0/0 0/0 .text            create__12daObjStone_cFv */
 int daObjStone_c::create() {
     fopAcM_ct(this, daObjStone_c);
 
@@ -282,7 +251,6 @@ int daObjStone_c::create() {
     return phase;
 }
 
-/* 80CE9BA0-80CE9CF8 000BA0 0158+00 1/1 0/0 0/0 .text            execute__12daObjStone_cFv */
 int daObjStone_c::execute() {
     cXyz pos;
 
@@ -310,7 +278,6 @@ int daObjStone_c::execute() {
     return 1;
 }
 
-/* 80CE9CF8-80CEAF10 000CF8 1218+00 1/1 0/0 0/0 .text            mode_proc_call__12daObjStone_cFv */
 void daObjStone_c::mode_proc_call() {
     static daObjStone_c::modeFunc l_func[7] = {
         &daObjStone_c::modeWait,
@@ -525,8 +492,6 @@ void daObjStone_c::mode_proc_call() {
     field_0x0951 = isWallhit != 0;
 }
 
-/* 80CEAF88-80CEAFD8 001F88 0050+00 1/1 0/0 0/0 .text            init_modePutWait__12daObjStone_cFv
- */
 void daObjStone_c::init_modePutWait() {
     mCollider.OffAtSPrmBit(1);
     mCollider.OnCoSPrmBit(1);
@@ -536,12 +501,10 @@ void daObjStone_c::init_modePutWait() {
     field_0x0907 = 3;
 }
 
-/* 80CEAFD8-80CEAFE8 001FD8 0010+00 1/0 0/0 0/0 .text            modePutWait__12daObjStone_cFv */
 void daObjStone_c::modePutWait() {
     mMode++;
 }
 
-/* 80CEAFE8-80CEB01C 001FE8 0034+00 2/2 0/0 0/0 .text            init_modeWait__12daObjStone_cFv */
 void daObjStone_c::init_modeWait() {
     mCollider.OffAtSPrmBit(1);
     mCollider.OnCoSPrmBit(1);
@@ -550,7 +513,6 @@ void daObjStone_c::init_modeWait() {
     field_0x0907 = 0;
 }
 
-/* 80CEB01C-80CEB0B8 00201C 009C+00 1/0 0/0 0/0 .text            modeWait__12daObjStone_cFv */
 void daObjStone_c::modeWait() {
     mMode++;
     speedF *= 0.95f;
@@ -563,7 +525,6 @@ void daObjStone_c::modeWait() {
     }
 }
 
-/* 80CEB0B8-80CEB0F8 0020B8 0040+00 1/1 0/0 0/0 .text            init_modeDrop__12daObjStone_cFv */
 void daObjStone_c::init_modeDrop() {
     mCollider.OnAtSPrmBit(1);
     mCollider.OnCoSPrmBit(1);
@@ -573,7 +534,6 @@ void daObjStone_c::init_modeDrop() {
     field_0x0907 = 1;
 }
 
-/* 80CEB0F8-80CEB35C 0020F8 0264+00 1/0 0/0 0/0 .text            modeDrop__12daObjStone_cFv */
 void daObjStone_c::modeDrop() {
     cXyz pos2, pos;
     mMode++;
@@ -606,7 +566,6 @@ void daObjStone_c::modeDrop() {
 }
 
 
-/* 80CEB35C-80CEB480 00235C 0124+00 1/1 0/0 0/0 .text            init_modeCarry__12daObjStone_cFv */
 void daObjStone_c::init_modeCarry() {
     mCollider.OffCoSPrmBit(1);
     mCollider.OffAtSPrmBit(1);
@@ -624,7 +583,6 @@ void daObjStone_c::init_modeCarry() {
     field_0x0907 = 2;
 }
 
-/* 80CEB480-80CEB6E8 002480 0268+00 1/0 0/0 0/0 .text            modeCarry__12daObjStone_cFv */
 void daObjStone_c::modeCarry() {
     mMode++;
 
@@ -689,7 +647,6 @@ void daObjStone_c::modeCarry() {
     }
 }
 
-/* 80CEB6E8-80CEB720 0026E8 0038+00 2/2 0/0 0/0 .text            init_modeWalk__12daObjStone_cFv */
 void daObjStone_c::init_modeWalk() {
     mCollider.OffAtSPrmBit(1);
     mCollider.OnCoSPrmBit(1);
@@ -698,7 +655,6 @@ void daObjStone_c::init_modeWalk() {
     field_0x0907 = 4;
 }
 
-/* 80CEB720-80CEBCDC 002720 05BC+00 1/0 0/0 0/0 .text            modeWalk__12daObjStone_cFv */
 void daObjStone_c::modeWalk() {
     mMode++;
     if (field_0x0908 == 0) {
@@ -778,8 +734,6 @@ void daObjStone_c::modeWalk() {
     }
 }
 
-/* 80CEBCDC-80CEBE24 002CDC 0148+00 1/1 0/0 0/0 .text init_modePushWolfNonBreak__12daObjStone_cFv
- */
 void daObjStone_c::init_modePushWolfNonBreak() {
     mCollider.OffAtSPrmBit(1);
     mCollider.OnCoSPrmBit(1);
@@ -800,7 +754,6 @@ void daObjStone_c::init_modePushWolfNonBreak() {
     field_0x0907 = 4;
 }
 
-/* 80CEBE24-80CEBE84 002E24 0060+00 1/1 0/0 0/0 .text            init_modeYogan__12daObjStone_cFv */
 void daObjStone_c::init_modeYogan() {
     mCollider.OffAtSPrmBit(1);
     mCollider.OnCoSPrmBit(1);
@@ -812,7 +765,6 @@ void daObjStone_c::init_modeYogan() {
     field_0x0907 = 6;
 }
 
-/* 80CEBE84-80CEBF1C 002E84 0098+00 1/0 0/0 0/0 .text            modeYogan__12daObjStone_cFv */
 void daObjStone_c::modeYogan() {
     f32 height = mChkObj.m_wtr.GetHeight();
     f32 pos_y = 200.0f + current.pos.y;
@@ -830,12 +782,10 @@ void daObjStone_c::modeYogan() {
     mMode++;
 }
 
-/* 80CECC20-80CECC2C 00016C 0006+06 0/1 0/0 0/0 .rodata          l_eff_id$5089 */
 const static u16 l_eff_id[3] = {
     0x859B, 0x859C, 0x859D,
 };
 
-/* 80CEBF1C-80CEC180 002F1C 0264+00 1/1 0/0 0/0 .text            init_modeBreak__12daObjStone_cFv */
 void daObjStone_c::init_modeBreak() {
     if (field_0x0907 != 5) {
         fopAcM_cancelCarryNow(this);
@@ -873,13 +823,11 @@ void daObjStone_c::init_modeBreak() {
     }
 }
 
-/* 80CEC180-80CEC1AC 003180 002C+00 1/0 0/0 0/0 .text            modeBreak__12daObjStone_cFv */
 void daObjStone_c::modeBreak() {
     mMode++;
     fopAcM_delete(this);
 }
 
-/* 80CEC1AC-80CEC264 0031AC 00B8+00 1/1 0/0 0/0 .text            CrrPos__12daObjStone_cFv */
 void daObjStone_c::CrrPos() {
     bool check1 = false;
     bool check2 = false;
@@ -905,7 +853,6 @@ void daObjStone_c::CrrPos() {
     }
 }
 
-/* 80CEC264-80CEC33C 003264 00D8+00 3/3 0/0 0/0 .text            createItem__12daObjStone_cFv */
 void daObjStone_c::createItem() {
     int item_no = getItemNo();
     int item_bit = getItemBit();
@@ -922,8 +869,6 @@ void daObjStone_c::createItem() {
     }
 }
 
-/* 80CEC33C-80CEC5BC 00333C 0280+00 2/2 0/0 0/0 .text            calcRotBaseMtx__12daObjStone_cFPs
- */
 void daObjStone_c::calcRotBaseMtx(s16* param_1) {
     cXyz local_5c = current.pos - old.pos;
     cXyz cStack_68(local_5c.x, 0.0f, local_5c.z);
@@ -966,7 +911,6 @@ void daObjStone_c::calcRotBaseMtx(s16* param_1) {
     }
 }
 
-/* 80CEC5BC-80CEC6D8 0035BC 011C+00 1/1 0/0 0/0 .text            checkRollAngle__12daObjStone_cFv */
 int daObjStone_c::checkRollAngle() {
     f32 dVar11 = 89.0f;
     cXyz pos = current.pos;
@@ -989,10 +933,8 @@ int daObjStone_c::checkRollAngle() {
     return 0;
 }
 
-/* 80CECC34-80CECC3C 000180 0006+02 0/1 0/0 0/0 .rodata          l_carry_eff_id$5307 */
 const static u16 l_carry_eff_id[3] = {0x859E, 0x859F, 0x85A0};
 
-/* 80CEC6D8-80CEC7DC 0036D8 0104+00 1/1 0/0 0/0 .text            set_carry_eff__12daObjStone_cFv */
 void daObjStone_c::set_carry_eff() {
     cXyz pos;
 
@@ -1014,7 +956,6 @@ void daObjStone_c::set_carry_eff() {
     }
 }
 
-/* 80CEC7DC-80CEC888 0037DC 00AC+00 2/2 0/0 0/0 .text            effect_delete__12daObjStone_cFb */
 void daObjStone_c::effect_delete(bool param_1) {
     for (int i = 0; i < 3; i = i + 1) {
         if (field_0x0964[i] != NULL) {
@@ -1032,7 +973,6 @@ void daObjStone_c::effect_delete(bool param_1) {
     }
 }
 
-/* 80CEC888-80CEC948 003888 00C0+00 1/1 0/0 0/0 .text            draw__12daObjStone_cFv */
 int daObjStone_c::draw() {
     g_env_light.settingTevStruct(8, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -1049,7 +989,6 @@ int daObjStone_c::draw() {
     return 1;
 }
 
-/* 80CEC948-80CEC9BC 003948 0074+00 1/1 0/0 0/0 .text            _delete__12daObjStone_cFv */
 int daObjStone_c::_delete() {
     mSound.deleteObject();
     u16 setid = fopAcM_GetSetId(this);
@@ -1059,30 +998,22 @@ int daObjStone_c::_delete() {
     return 1;
 }
 
-/* 80CEC9BC-80CEC9DC 0039BC 0020+00 1/0 0/0 0/0 .text            daObjStone_Draw__FP12daObjStone_c
- */
 static int daObjStone_Draw(daObjStone_c* i_this) {
     return i_this->draw();
 }
 
-/* 80CEC9DC-80CEC9FC 0039DC 0020+00 1/0 0/0 0/0 .text daObjStone_Execute__FP12daObjStone_c */
 static int daObjStone_Execute(daObjStone_c* i_this) {
     return i_this->execute();
 }
 
-/* 80CEC9FC-80CECA1C 0039FC 0020+00 1/0 0/0 0/0 .text            daObjStone_Delete__FP12daObjStone_c
- */
 static int daObjStone_Delete(daObjStone_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80CECA1C-80CECA3C 003A1C 0020+00 1/0 0/0 0/0 .text            daObjStone_Create__FP10fopAc_ac_c
- */
 static int daObjStone_Create(fopAc_ac_c* param_0) {
     return static_cast<daObjStone_c*>(param_0)->create();
 }
 
-/* 80CECD24-80CECD44 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjStone_Method */
 static actor_method_class l_daObjStone_Method = {
     (process_method_func)daObjStone_Create,
     (process_method_func)daObjStone_Delete,
@@ -1091,7 +1022,6 @@ static actor_method_class l_daObjStone_Method = {
     (process_method_func)daObjStone_Draw,
 };
 
-/* 80CECD44-80CECD74 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Stone */
 extern actor_process_profile_definition g_profile_Obj_Stone = {
     fpcLy_CURRENT_e,        // mLayerID
     8,                      // mListID

@@ -11,12 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-//
-// Declarations:
-//
-
-/* 80CBDC98-80CBDD20 000078 0088+00 1/0 0/0 0/0 .text            daObj_Rock_Draw__FP14obj_rock_class
- */
 static int daObj_Rock_Draw(obj_rock_class* i_this) {
     int room = fopAcM_GetRoomNo(i_this);
     rock_ss* rock = i_this->mRocks;
@@ -30,7 +24,6 @@ static int daObj_Rock_Draw(obj_rock_class* i_this) {
     return TRUE;
 }
 
-/* 80CBDD20-80CBDE48 000100 0128+00 2/1 0/0 0/0 .text daObj_Rock_Execute__FP14obj_rock_class */
 static int daObj_Rock_Execute(obj_rock_class* i_this) {
     if (i_this->mPatchInitialized == FALSE) {
         rock_ss* rock = i_this->mRocks;
@@ -57,12 +50,10 @@ static int daObj_Rock_Execute(obj_rock_class* i_this) {
     return TRUE;
 }
 
-/* 80CBDE48-80CBDE50 000228 0008+00 1/0 0/0 0/0 .text daObj_Rock_IsDelete__FP14obj_rock_class */
 static bool daObj_Rock_IsDelete(obj_rock_class* i_this) {
     return true;
 }
 
-/* 80CBDE50-80CBDED8 000230 0088+00 1/0 0/0 0/0 .text daObj_Rock_Delete__FP14obj_rock_class */
 static int daObj_Rock_Delete(obj_rock_class* i_this) {
     if (i_this->mInitialized) {
         J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("Obj_rock", 3);
@@ -72,7 +63,6 @@ static int daObj_Rock_Delete(obj_rock_class* i_this) {
     return TRUE;
 }
 
-/* 80CBDED8-80CBDF84 0002B8 00AC+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_rock_class* a_this = static_cast<obj_rock_class*>(i_this);
 
@@ -88,8 +78,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return TRUE;
 }
 
-/* 80CBDF84-80CBE138 000364 01B4+00 1/1 0/0 0/0 .text            set_pos_check__FP14obj_rock_classi
- */
 static int set_pos_check(obj_rock_class* i_this, int target_index) {
     for (int i = 0; i < target_index; i++) {
         cXyz dir = i_this->mRocks[i].mPos - i_this->mRocks[target_index].mPos;
@@ -101,7 +89,6 @@ static int set_pos_check(obj_rock_class* i_this, int target_index) {
     return TRUE;
 }
 
-/* 80CBE7F0-80CBE830 000000 0040+00 1/1 0/0 0/0 .data            cc_sph_src$3926 */
 static dCcD_SrcSph cc_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x11}, 0x79}},  // mObj
@@ -114,8 +101,6 @@ static dCcD_SrcSph cc_sph_src = {
     }                                // mSphAttr
 };
 
-/* 80CBE138-80CBE5A4 000518 046C+00 1/0 0/0 0/0 .text            daObj_Rock_Create__FP10fopAc_ac_c
- */
 static int daObj_Rock_Create(fopAc_ac_c* i_this) {
     obj_rock_class* a_this = static_cast<obj_rock_class*>(i_this);
     fopAcM_ct(a_this, obj_rock_class);
@@ -206,13 +191,10 @@ static int daObj_Rock_Create(fopAc_ac_c* i_this) {
     return step;
 }
 
-/* 80CBE5A4-80CBE678 000984 00D4+00 1/1 0/0 0/0 .text            __dt__7rock_ssFv */
 rock_ss::~rock_ss() {}
 
-/* 80CBE678-80CBE70C 000A58 0094+00 1/1 0/0 0/0 .text            __ct__7rock_ssFv */
 rock_ss::rock_ss() {}
 
-/* 80CBE830-80CBE850 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Rock_Method */
 static actor_method_class l_daObj_Rock_Method = {
     (process_method_func)daObj_Rock_Create, (process_method_func)daObj_Rock_Delete,
     (process_method_func)daObj_Rock_Execute, (process_method_func)daObj_Rock_IsDelete,

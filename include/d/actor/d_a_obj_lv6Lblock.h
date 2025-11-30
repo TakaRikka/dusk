@@ -14,21 +14,21 @@
  */
 class daLv6Lblock_c : public dBgS_MoveBgActor {
 public:
-    /* 80C73464 */ void setBaseMtx();
-    /* 80C73558 */ int create();
-    /* 80C736C0 */ u8 isSwitch();
-    /* 80C7375C */ void moveBlock();
-    /* 80C73850 */ void init_modeWait();
-    /* 80C7385C */ void modeWait();
-    /* 80C73860 */ void init_modeLiftUp();
-    /* 80C7386C */ void modeLiftUp();
-    /* 80C7398C */ void init_modeLiftDown();
-    /* 80C73998 */ void modeLiftDown();
+    void setBaseMtx();
+    int create();
+    u8 isSwitch();
+    void moveBlock();
+    void init_modeWait();
+    void modeWait();
+    void init_modeLiftUp();
+    void modeLiftUp();
+    void init_modeLiftDown();
+    void modeLiftDown();
 
-    /* 80C734EC */ virtual int CreateHeap();
-    /* 80C7370C */ virtual int Execute(Mtx**);
-    /* 80C73AB0 */ virtual int Draw();
-    /* 80C73B54 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSwState() { return fopAcM_GetParamBit(this, 12, 4); }
     int getUpMax() { return fopAcM_GetParamBit(this, 8, 4); }
@@ -49,8 +49,8 @@ STATIC_ASSERT(sizeof(daLv6Lblock_c) == 0x5b8);
 
 class daLv6Lblock_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C733EC */ daLv6Lblock_HIO_c();
-    /* 80C73C10 */ virtual ~daLv6Lblock_HIO_c() {}
+    daLv6Lblock_HIO_c();
+    virtual ~daLv6Lblock_HIO_c() {}
 
     void genMessage(JORMContext*);
 

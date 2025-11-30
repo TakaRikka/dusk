@@ -6,10 +6,8 @@
 #include "Z2AudioLib/Z2FxLineMgr.h"
 #include "m_Do/m_Do_ext.h"
 
-/* 802A9A34-802A9A70 2A4374 003C+00 0/0 1/1 0/0 .text __ct__16Z2AudioArcLoaderFP10JAUSection */
 Z2AudioArcLoader::Z2AudioArcLoader(JAUSection* section) : JAUAudioArcLoader(section) {}
 
-/* 802A9A70-802A9AC8 2A43B0 0058+00 1/0 0/0 0/0 .text readCommandMore__16Z2AudioArcLoaderFUl */
 bool Z2AudioArcLoader::readCommandMore(u32 command) {
     bool rv = false;
     u32 read = 0;
@@ -25,7 +23,6 @@ bool Z2AudioArcLoader::readCommandMore(u32 command) {
     return rv;
 }
 
-/* 802A9AC8-802A9B54 2A4408 008C+00 1/1 0/0 0/0 .text            readBFCA__16Z2AudioArcLoaderFPCv */
 void Z2AudioArcLoader::readBFCA(const void* addr) {
     JUT_ASSERT(76, addr);
 
@@ -38,8 +35,6 @@ void Z2AudioArcLoader::readBFCA(const void* addr) {
     JKRUnmountArchive(archive);
 }
 
-/* 802A9B54-802A9B58 2A4494 0004+00 1/0 0/0 0/0 .text            readBSTN__16Z2AudioArcLoaderFPCvUl
- */
 void Z2AudioArcLoader::readBSTN(const void* addr, u32 param_1) {
 #if VERSION == VERSION_SHIELD_DEBUG
     JAUSectionHeap* sectionHeap = JASGlobalInstance<JAUSectionHeap>::getInstance();

@@ -8,8 +8,6 @@
 #include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JGadget/pointer.h"
 
-/* 8028E3A0-8028E400 288CE0 0060+00 1/0 1/1 0/0 .text __dt__Q217JStudio_JParticle13TCreateObjectFv
- */
 JStudio_JParticle::TCreateObject::~TCreateObject() {}
 
 /* 8028E400-8028E474 288D40 0074+00 1/0 1/0 0/0 .text
@@ -31,8 +29,6 @@ JStudio_JParticle::TCreateObject::create(JStudio::TObject** ppObject,
     return true;
 }
 
-/* 8028E474-8028E4E4 288DB4 0070+00 1/0 0/0 0/0 .text
- * emitter_create__Q217JStudio_JParticle13TCreateObjectFUl      */
 JPABaseEmitter* JStudio_JParticle::TCreateObject::emitter_create(u32 param_1) {
     JGeometry::TVec3<f32> local_08;
     Vec local_1c = {0.0f, 0.0f, 0.0f};
@@ -41,8 +37,6 @@ JPABaseEmitter* JStudio_JParticle::TCreateObject::emitter_create(u32 param_1) {
         local_08, param_1 & 0xffff, (param_1 >> 24) & 0xff, (param_1 >> 16) & 0xff, NULL, NULL);
 }
 
-/* 8028E4E4-8028E508 288E24 0024+00 1/0 1/0 0/0 .text
- * emitter_destroy__Q217JStudio_JParticle13TCreateObjectFP14JPABaseEmitter */
 void JStudio_JParticle::TCreateObject::emitter_destroy(JPABaseEmitter* pEmitter) {
     pJPAEmitterManager_->forceDeleteEmitter(pEmitter);
 }

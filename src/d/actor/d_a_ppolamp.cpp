@@ -10,20 +10,16 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 80D4C938-80D4C958 000078 0020+00 1/1 0/0 0/0 .text daPPolamp_c_createHeap__FP10fopAc_ac_c */
 static int daPPolamp_c_createHeap(fopAc_ac_c* i_this) {
     return ((daPPolamp_c*)i_this)->createHeap();
 }
 
-/* 80D4D2D0-80D4D2D4 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "PPolamp";
 
-/* 80D4C958-80D4C9FC 000098 00A4+00 1/0 0/0 0/0 .text            __dt__11daPPolamp_cFv */
 daPPolamp_c::~daPPolamp_c() {
     dComIfG_resDelete(this, l_arcName);
 }
 
-/* 80D4C9FC-80D4CB24 00013C 0128+00 1/1 0/0 0/0 .text            create__11daPPolamp_cFv */
 int daPPolamp_c::create() {
     int rv = dComIfG_resLoad(this, l_arcName);
     if (rv == cPhs_COMPLEATE_e) {
@@ -45,7 +41,6 @@ int daPPolamp_c::create() {
     return rv;
 }
 
-/* 80D4CB24-80D4CB84 000264 0060+00 1/1 0/0 0/0 .text            execute__11daPPolamp_cFv */
 int daPPolamp_c::execute() {
     if (mSwingTimer != 0) {
         mSwingTimer--;
@@ -58,7 +53,6 @@ int daPPolamp_c::execute() {
     return 1;
 }
 
-/* 80D4CB84-80D4CCF0 0002C4 016C+00 1/1 0/0 0/0 .text            draw__11daPPolamp_cFv */
 int daPPolamp_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel1, &tevStr);
@@ -80,13 +74,11 @@ int daPPolamp_c::draw() {
     return 1;
 }
 
-/* 80D4CCF0-80D4CD24 000430 0034+00 1/1 0/0 0/0 .text            Delete__11daPPolamp_cFv */
 int daPPolamp_c::Delete() {
     this->~daPPolamp_c();
     return 1;
 }
 
-/* 80D4CD24-80D4CDA8 000464 0084+00 2/2 0/0 0/0 .text            setModelMtx__11daPPolamp_cFv */
 void daPPolamp_c::setModelMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -95,7 +87,6 @@ void daPPolamp_c::setModelMtx() {
     mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80D4CDA8-80D4CE9C 0004E8 00F4+00 1/1 0/0 0/0 .text            setPclModelMtx__11daPPolamp_cFv */
 void daPPolamp_c::setPclModelMtx() {
     Vec local_20;
     Vec local_2c = {0.0f, -45.0f, 0.0f};
@@ -110,7 +101,6 @@ void daPPolamp_c::setPclModelMtx() {
     mModel2->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80D4CE9C-80D4CFB0 0005DC 0114+00 1/1 0/0 0/0 .text            createHeap__11daPPolamp_cFv */
 int daPPolamp_c::createHeap() {
     J3DModelData* a_model_data_p = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 8);
     JUT_ASSERT(347, a_model_data_p != NULL);
@@ -135,7 +125,6 @@ int daPPolamp_c::createHeap() {
     return 1;
 }
 
-/* 80D4CFB0-80D4D10C 0006F0 015C+00 1/1 0/0 0/0 .text            moveSwing__11daPPolamp_cFv */
 void daPPolamp_c::moveSwing() {
     s16 sVar1 = field_0x598 * 65 - 500;
     shape_angle.z += (s16)(field_0x5a4 * (field_0x59c * sVar1));
@@ -154,7 +143,6 @@ void daPPolamp_c::moveSwing() {
     field_0x598++;
 }
 
-/* 80D4D10C-80D4D140 00084C 0034+00 1/1 0/0 0/0 .text            initParam__11daPPolamp_cFv */
 void daPPolamp_c::initParam() {
     field_0x598 = 0;
     field_0x59c = 1;
@@ -164,31 +152,23 @@ void daPPolamp_c::initParam() {
     field_0x5a8 = 1.0f;
 }
 
-/* 80D4D140-80D4D1CC 000880 008C+00 1/0 0/0 0/0 .text            daPPolamp_create__FP11daPPolamp_c
- */
 static int daPPolamp_create(daPPolamp_c* i_this) {
     fopAcM_ct(i_this, daPPolamp_c);
     return i_this->create();
 }
 
-/* 80D4D214-80D4D234 000954 0020+00 1/0 0/0 0/0 .text            daPPolamp_Delete__FP11daPPolamp_c
- */
 static int daPPolamp_Delete(daPPolamp_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80D4D234-80D4D254 000974 0020+00 1/0 0/0 0/0 .text            daPPolamp_execute__FP11daPPolamp_c
- */
 static int daPPolamp_execute(daPPolamp_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D4D254-80D4D274 000994 0020+00 1/0 0/0 0/0 .text            daPPolamp_draw__FP11daPPolamp_c */
 static int daPPolamp_draw(daPPolamp_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D4D2D4-80D4D2F4 -00001 0020+00 1/0 0/0 0/0 .data            daPPolamp_METHODS */
 static actor_method_class daPPolamp_METHODS = {
     (process_method_func)daPPolamp_create,
     (process_method_func)daPPolamp_Delete,
@@ -197,7 +177,6 @@ static actor_method_class daPPolamp_METHODS = {
     (process_method_func)daPPolamp_draw,
 };
 
-/* 80D4D2F4-80D4D324 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_PPolamp */
 extern actor_process_profile_definition g_profile_PPolamp = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

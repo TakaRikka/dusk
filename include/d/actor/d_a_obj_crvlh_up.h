@@ -14,17 +14,17 @@
  */
 class daObjCRVLH_UP_c : public dBgS_MoveBgActor {
 public:
-    /* 80BD4F1C */ void HakaiSet();
-    /* 80BD4FB0 */ void UpMotion();
-    /* 80BD4FD8 */ void Hakai();
-    /* 80BD5254 */ void setBaseMtx();
-    /* 80BD53F0 */ int create();
+    void HakaiSet();
+    void UpMotion();
+    void Hakai();
+    void setBaseMtx();
+    int create();
 
-    /* 80BD5378 */ virtual int CreateHeap();
-    /* 80BD56EC */ virtual int Create();
-    /* 80BD5730 */ virtual int Execute(Mtx**);
-    /* 80BD593C */ virtual int Draw();
-    /* 80BD59C0 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
 private:
     /* 0x568 */ u8 field_0x568[0x5a4 - 0x5a0];

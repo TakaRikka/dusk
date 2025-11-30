@@ -10,14 +10,12 @@
 #include "d/d_s_play.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* 8054EDBC-8054EDD4 000020 0018+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[3][2] = {
     {10, 1},
     {8, 1},
     {9, 1},
 };
 
-/* 8054EDD4-8054EE7C -00001 00A8+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[21] = {
     {"", 0},
     {"NO_RESPONSE", 0},
@@ -42,32 +40,26 @@ static daNpcT_evtData_c l_evtList[21] = {
     {"SWDTUTORIAL_JUMPGIRI_CLEAR2", 1},
 };
 
-/* 8054EE7C-8054EE84 -00001 0008+00 2/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "Kakashi",
 };
 
-/* 8054EE84-8054EE88 0000E8 0002+02 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[] = {1, -1};
 
-/* 8054EE88-8054EEA0 -00001 0018+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[6] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
     l_loadResPtrn0, l_loadResPtrn0, NULL,
 };
 
-/* 8054EEA0-8054EEBC 000104 001C+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
     {-1, 0, 0, -1, 0, 0, 0},
 };
 
-/* 8054EEBC-8054EED8 000120 001C+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[1] = {
     {-1, 0, 0, -1, 0, 0, 0, 0},
 };
 
-/* 8054EED8-8054EEE8 00013C 0010+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {-1, 0, 0},
     {-1, 0, 0},
@@ -75,7 +67,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = 
     {-1, 0, 0},
 };
 
-/* 8054EEE8-8054EEF8 00014C 0010+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {-1, 0, 0},
     {-1, 0, 0},
@@ -83,7 +74,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {-1, 0, 0},
 };
 
-/* 8054EEF8-8054EF08 -00001 0010+00 1/1 0/0 0/0 .data            mCutNameList__15daNpc_Kakashi_c */
 char* daNpc_Kakashi_c::mCutNameList[4] = {
     "",
     "SWDTUTORIAL",
@@ -91,7 +81,6 @@ char* daNpc_Kakashi_c::mCutNameList[4] = {
     "MAROS_WHISPER",
 };
 
-/* 8054EF2C-8054EF5C 000190 0030+00 1/2 0/0 0/0 .data            mCutList__15daNpc_Kakashi_c */
 int (daNpc_Kakashi_c::*daNpc_Kakashi_c::mCutList[])(int) = {
     NULL,
     &daNpc_Kakashi_c::cutSwdTutorial,
@@ -99,7 +88,6 @@ int (daNpc_Kakashi_c::*daNpc_Kakashi_c::mCutList[])(int) = {
     &daNpc_Kakashi_c::cutMarosWhisper,
 };
 
-/* 8054B36C-8054B4E8 0000EC 017C+00 1/0 0/0 0/0 .text            __dt__15daNpc_Kakashi_cFv */
 daNpc_Kakashi_c::~daNpc_Kakashi_c() {
     OS_REPORT("|%06d:%x|daNpc_Kakashi_c -> デストラクト\n", g_Counter.mCounter0, this);
 
@@ -111,7 +99,6 @@ daNpc_Kakashi_c::~daNpc_Kakashi_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-/* 8054EAC4-8054EB5C 000000 0098+00 7/7 0/0 0/0 .rodata          m__21daNpc_Kakashi_Param_c */
 const daNpc_Kakashi_HIOParam daNpc_Kakashi_Param_c::m = {
     190.0f,
     -6.0f,
@@ -159,7 +146,6 @@ const daNpc_Kakashi_HIOParam daNpc_Kakashi_Param_c::m = {
     27.0f,
 };
 
-/* 8054B4E8-8054B7D8 000268 02F0+00 1/1 0/0 0/0 .text            create__15daNpc_Kakashi_cFv */
 int daNpc_Kakashi_c::create() {
     daNpcT_ct(this, daNpc_Kakashi_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
@@ -231,7 +217,6 @@ static f32 dummyFloat(int _) {
     }
 }
 
-/* 8054B7D8-8054B908 000558 0130+00 1/1 0/0 0/0 .text            CreateHeap__15daNpc_Kakashi_cFv */
 int daNpc_Kakashi_c::CreateHeap() {
     void* mdlData_p = NULL;
     J3DModel* mdl_p = NULL;
@@ -259,7 +244,6 @@ int daNpc_Kakashi_c::CreateHeap() {
     return 1;
 }
 
-/* 8054B908-8054B93C 000688 0034+00 1/1 0/0 0/0 .text            Delete__15daNpc_Kakashi_cFv */
 int daNpc_Kakashi_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Kakashi_c -> Delete\n", g_Counter.mCounter0, this);
     fopAcM_GetID(this);
@@ -267,20 +251,16 @@ int daNpc_Kakashi_c::Delete() {
     return 1;
 }
 
-/* 8054B93C-8054B994 0006BC 0058+00 2/2 0/0 0/0 .text            Execute__15daNpc_Kakashi_cFv */
 int daNpc_Kakashi_c::Execute() {
     execute();
     mSound.framework(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
     return 1;
 }
 
-/* 8054B994-8054B9D8 000714 0044+00 1/1 0/0 0/0 .text            Draw__15daNpc_Kakashi_cFv */
 int daNpc_Kakashi_c::Draw() {
     return draw(FALSE, FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
-/* 8054B9D8-8054BB34 000758 015C+00 2/0 0/0 0/0 .text
- * ctrlJoint__15daNpc_Kakashi_cFP8J3DJointP8J3DModel            */
 int daNpc_Kakashi_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     u16 jnt_no = i_joint->getJntNo();
     mDoMtx_stack_c::copy(i_model->getAnmMtx(jnt_no));
@@ -316,14 +296,10 @@ int daNpc_Kakashi_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 8054BB34-8054BB54 0008B4 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__15daNpc_Kakashi_cFP10fopAc_ac_c          */
 int daNpc_Kakashi_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return ((daNpc_Kakashi_c*)i_this)->CreateHeap();
 }
 
-/* 8054BB54-8054BBAC 0008D4 0058+00 1/1 0/0 0/0 .text
- * ctrlJointCallBack__15daNpc_Kakashi_cFP8J3DJointi             */
 int daNpc_Kakashi_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DModel* mdl_p = j3dSys.getModel();
@@ -336,7 +312,6 @@ int daNpc_Kakashi_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 8054BBAC-8054BC10 00092C 0064+00 1/1 0/0 0/0 .text            getType__15daNpc_Kakashi_cFv */
 int daNpc_Kakashi_c::getType() {
     switch (fopAcM_GetParam(this) & 0xFF) {
     case 0:
@@ -354,7 +329,6 @@ int daNpc_Kakashi_c::getType() {
     }
 }
 
-/* 8054BC10-8054BC98 000990 0088+00 1/1 0/0 0/0 .text            isDelete__15daNpc_Kakashi_cFv */
 int daNpc_Kakashi_c::isDelete() {
     switch (mType) {
     case 0:
@@ -372,7 +346,6 @@ int daNpc_Kakashi_c::isDelete() {
     }
 }
 
-/* 8054BC98-8054BEA8 000A18 0210+00 1/1 0/0 0/0 .text            reset__15daNpc_Kakashi_cFv */
 void daNpc_Kakashi_c::reset() {
     csXyz angle;
     u32 var_r30 = (uintptr_t)&field_0x1394 - (uintptr_t)&mSelectAction;
@@ -418,7 +391,6 @@ void daNpc_Kakashi_c::reset() {
     setAngle(angle);
 }
 
-/* 8054BEA8-8054BF88 000C28 00E0+00 1/0 0/0 0/0 .text            setParam__15daNpc_Kakashi_cFv */
 void daNpc_Kakashi_c::setParam() {
     selectAction();
     srchActors();
@@ -446,11 +418,8 @@ void daNpc_Kakashi_c::setParam() {
     gravity = daNpc_Kakashi_Param_c::m.common.gravity;
 }
 
-/* 8054BF88-8054BF8C 000D08 0004+00 1/1 0/0 0/0 .text            srchActors__15daNpc_Kakashi_cFv */
 void daNpc_Kakashi_c::srchActors() {}
 
-/* 8054BF8C-8054C034 000D0C 00A8+00 1/0 0/0 0/0 .text            checkChangeEvt__15daNpc_Kakashi_cFv
- */
 BOOL daNpc_Kakashi_c::checkChangeEvt() {
     if (!chkAction(&daNpc_Kakashi_c::talk)) {
         switch (mType) {
@@ -472,7 +441,6 @@ BOOL daNpc_Kakashi_c::checkChangeEvt() {
     return 0;
 }
 
-/* 8054C034-8054C0D4 000DB4 00A0+00 1/0 0/0 0/0 .text            evtTalk__15daNpc_Kakashi_cFv */
 BOOL daNpc_Kakashi_c::evtTalk() {
     if (chkAction(&daNpc_Kakashi_c::talk)) {
         (this->*mAction)(NULL);
@@ -483,14 +451,12 @@ BOOL daNpc_Kakashi_c::evtTalk() {
     return TRUE;
 }
 
-/* 8054C0D4-8054C0E8 000E54 0014+00 1/0 0/0 0/0 .text            evtEndProc__15daNpc_Kakashi_cFv */
 BOOL daNpc_Kakashi_c::evtEndProc() {
     field_0x138e = 0;
     field_0x138f = 0;
     return TRUE;
 }
 
-/* 8054C0E8-8054C1B0 000E68 00C8+00 1/0 0/0 0/0 .text            evtCutProc__15daNpc_Kakashi_cFv */
 BOOL daNpc_Kakashi_c::evtCutProc() {
     int staffId = dComIfGp_getEventManager().getMyStaffId("Kakashi", this, -1);
     if (staffId != -1) {
@@ -507,7 +473,6 @@ BOOL daNpc_Kakashi_c::evtCutProc() {
     return FALSE;
 }
 
-/* 8054C1B0-8054C268 000F30 00B8+00 1/0 0/0 0/0 .text            action__15daNpc_Kakashi_cFv */
 void daNpc_Kakashi_c::action() {
     fopAc_ac_c* hit_actor = hitChk();
     if (hit_actor != NULL) {
@@ -525,14 +490,12 @@ void daNpc_Kakashi_c::action() {
     }
 }
 
-/* 8054C268-8054C2E0 000FE8 0078+00 1/0 0/0 0/0 .text            beforeMove__15daNpc_Kakashi_cFv */
 void daNpc_Kakashi_c::beforeMove() {
     if (checkHide() || mNoDraw) {
         attention_info.flags = 0;
     }
 }
 
-/* 8054C2E0-8054C584 001060 02A4+00 1/0 0/0 0/0 .text            setAttnPos__15daNpc_Kakashi_cFv */
 void daNpc_Kakashi_c::setAttnPos() {
     cXyz sp20(0.0f, 0.0f, 0.0f);
     cXyz sp14;
@@ -591,11 +554,8 @@ void daNpc_Kakashi_c::setAttnPos() {
     }
 }
 
-/* 8054F1EC-8054F1F0 000054 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpc_Kakashi_Param_c l_HIO;
 
-/* 8054C584-8054C924 001304 03A0+00 1/0 0/0 0/0 .text            setCollision__15daNpc_Kakashi_cFv
- */
 void daNpc_Kakashi_c::setCollision() {
     if (!mHide) {
         static cXyz armROfst(80.0f, 0.0f, 0.0f);
@@ -665,13 +625,10 @@ void daNpc_Kakashi_c::setCollision() {
     mCcCyl.ClrTgHit();
 }
 
-/* 8054C924-8054C92C 0016A4 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__15daNpc_Kakashi_cFv */
 int daNpc_Kakashi_c::drawDbgInfo() {
     return 0;
 }
 
-/* 8054C92C-8054CA1C 0016AC 00F0+00 1/1 0/0 0/0 .text            selectAction__15daNpc_Kakashi_cFv
- */
 int daNpc_Kakashi_c::selectAction() {
     mSelectAction = NULL;
 
@@ -697,14 +654,10 @@ int daNpc_Kakashi_c::selectAction() {
     return 1;
 }
 
-/* 8054CA1C-8054CA48 00179C 002C+00 2/2 0/0 0/0 .text
- * chkAction__15daNpc_Kakashi_cFM15daNpc_Kakashi_cFPCvPvPv_i    */
 int daNpc_Kakashi_c::chkAction(int (daNpc_Kakashi_c::*i_action)(void*)) {
     return mAction == i_action;
 }
 
-/* 8054CA48-8054CAF0 0017C8 00A8+00 2/2 0/0 0/0 .text
- * setAction__15daNpc_Kakashi_cFM15daNpc_Kakashi_cFPCvPvPv_i    */
 int daNpc_Kakashi_c::setAction(int (daNpc_Kakashi_c::*i_action)(void*)) {
     mMode = 3;
     if (mAction != NULL) {
@@ -720,7 +673,6 @@ int daNpc_Kakashi_c::setAction(int (daNpc_Kakashi_c::*i_action)(void*)) {
     return 1;
 }
 
-/* 8054CAF0-8054CEA0 001870 03B0+00 1/1 0/0 0/0 .text            hitChk__15daNpc_Kakashi_cFv */
 fopAc_ac_c* daNpc_Kakashi_c::hitChk() {
     dCcD_GObjInf* hit_obj = NULL;
     fopAc_ac_c* hit_actor = NULL;
@@ -822,8 +774,6 @@ fopAc_ac_c* daNpc_Kakashi_c::hitChk() {
     return hit_actor;
 }
 
-/* 8054CEA0-8054D26C 001C20 03CC+00 1/1 0/0 0/0 .text
- * setStaggerParam__15daNpc_Kakashi_cFP10fopAc_ac_c             */
 void daNpc_Kakashi_c::setStaggerParam(fopAc_ac_c* i_hitActor) {
     csXyz sp14;
     f32 var_f31 = 1.0f;
@@ -909,7 +859,6 @@ void daNpc_Kakashi_c::setStaggerParam(fopAc_ac_c* i_hitActor) {
     mSound.startSound(Z2SE_OBJ_KAKASHI_SHAKE, 0, -1);
 }
 
-/* 8054D26C-8054D374 001FEC 0108+00 1/1 0/0 0/0 .text            setPrtcls__15daNpc_Kakashi_cFi */
 void daNpc_Kakashi_c::setPrtcls(int i_type) {
     cXyz pos;
     if (i_type == 0 || i_type == 1) {
@@ -928,7 +877,6 @@ void daNpc_Kakashi_c::setPrtcls(int i_type) {
     }
 }
 
-/* 8054D374-8054D490 0020F4 011C+00 1/1 0/0 0/0 .text judgeSwdTutorial__15daNpc_Kakashi_cFv */
 int daNpc_Kakashi_c::judgeSwdTutorial() {
     switch (daNpcKakashi_getSwdTutorialStep()) {
     case 2:
@@ -975,8 +923,6 @@ int daNpc_Kakashi_c::judgeSwdTutorial() {
     return FALSE;
 }
 
-/* 8054D490-8054D57C 002210 00EC+00 1/0 0/0 0/0 .text            cutSwdTutorial__15daNpc_Kakashi_cFi
- */
 int daNpc_Kakashi_c::cutSwdTutorial(int i_staffId) {
     int rt = 0;
     int prm = -1;
@@ -1007,8 +953,6 @@ int daNpc_Kakashi_c::cutSwdTutorial(int i_staffId) {
     return rt;
 }
 
-/* 8054D57C-8054D604 0022FC 0088+00 1/0 0/0 0/0 .text            cutGetWoodSwd__15daNpc_Kakashi_cFi
- */
 int daNpc_Kakashi_c::cutGetWoodSwd(int i_staffId) {
     int rt = 0;
     int prm = -1;
@@ -1030,7 +974,6 @@ int daNpc_Kakashi_c::cutGetWoodSwd(int i_staffId) {
     return rt;
 }
 
-/* 8054D604-8054D668 002384 0064+00 1/0 0/0 0/0 .text cutMarosWhisper__15daNpc_Kakashi_cFi */
 int daNpc_Kakashi_c::cutMarosWhisper(int i_staffId) {
     int rt = 0;
     int prm = -1;
@@ -1047,7 +990,6 @@ int daNpc_Kakashi_c::cutMarosWhisper(int i_staffId) {
     return rt;
 }
 
-/* 8054D668-8054D694 0023E8 002C+00 3/0 0/0 0/0 .text            wait__15daNpc_Kakashi_cFPv */
 int daNpc_Kakashi_c::wait(void*) {
     switch (mMode) {
     case 0:
@@ -1062,8 +1004,6 @@ int daNpc_Kakashi_c::wait(void*) {
     return 1;
 }
 
-/* 8054D694-8054D8BC 002414 0228+00 2/0 0/0 0/0 .text            swdTutorial__15daNpc_Kakashi_cFPv
- */
 int daNpc_Kakashi_c::swdTutorial(void*) {
     switch (mMode) {
     case 0:
@@ -1156,7 +1096,6 @@ int daNpc_Kakashi_c::swdTutorial(void*) {
     return 1;
 }
 
-/* 8054D8BC-8054D978 00263C 00BC+00 3/0 0/0 0/0 .text            talk__15daNpc_Kakashi_cFPv */
 int daNpc_Kakashi_c::talk(void*) {
     switch (mMode) {
     case 0:
@@ -1178,32 +1117,26 @@ int daNpc_Kakashi_c::talk(void*) {
     return 0;
 }
 
-/* 8054D978-8054D998 0026F8 0020+00 1/0 0/0 0/0 .text            daNpc_Kakashi_Create__FPv */
 static int daNpc_Kakashi_Create(void* i_this) {
     return ((daNpc_Kakashi_c*)i_this)->create();
 }
 
-/* 8054D998-8054D9B8 002718 0020+00 1/0 0/0 0/0 .text            daNpc_Kakashi_Delete__FPv */
 static int daNpc_Kakashi_Delete(void* i_this) {
     return ((daNpc_Kakashi_c*)i_this)->Delete();
 }
 
-/* 8054D9B8-8054D9D8 002738 0020+00 1/0 0/0 0/0 .text            daNpc_Kakashi_Execute__FPv */
 static int daNpc_Kakashi_Execute(void* i_this) {
     return ((daNpc_Kakashi_c*)i_this)->Execute();
 }
 
-/* 8054D9D8-8054D9F8 002758 0020+00 1/0 0/0 0/0 .text            daNpc_Kakashi_Draw__FPv */
 static int daNpc_Kakashi_Draw(void* i_this) {
     return ((daNpc_Kakashi_c*)i_this)->Draw();
 }
 
-/* 8054D9F8-8054DA00 002778 0008+00 1/0 0/0 0/0 .text            daNpc_Kakashi_IsDelete__FPv */
 static int daNpc_Kakashi_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 8054EFDC-8054EFFC -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Kakashi_MethodTable */
 static actor_method_class daNpc_Kakashi_MethodTable = {
     (process_method_func)daNpc_Kakashi_Create,
     (process_method_func)daNpc_Kakashi_Delete,
@@ -1212,7 +1145,6 @@ static actor_method_class daNpc_Kakashi_MethodTable = {
     (process_method_func)daNpc_Kakashi_Draw,
 };
 
-/* 8054EFFC-8054F02C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_KAKASHI */
 extern actor_process_profile_definition g_profile_NPC_KAKASHI = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID

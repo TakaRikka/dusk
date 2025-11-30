@@ -30,8 +30,8 @@ public:
 
 class ClothJoint_c {
 public:
-    /* 80595B9C */ ~ClothJoint_c();
-    /* 80595CA8 */ ClothJoint_c();
+    ~ClothJoint_c();
+    ClothJoint_c();
 
     /* 0x00 */ cXyz field_0x0;
     /* 0x0C */ cXyz field_0xc;
@@ -44,12 +44,12 @@ public:
 
 class daObjOnCloth_c : public fopAc_ac_c {
 public:
-    /* 80595038 */ void create_init();
-    /* 80595158 */ void initBaseMtx();
-    /* 80595178 */ void setBaseMtx();
-    /* 805951DC */ void setNormalClothPos();
-    /* 805954B0 */ void calcJointAngle();
-    /* 80595638 */ void checkPlayerMove();
+    void create_init();
+    void initBaseMtx();
+    void setBaseMtx();
+    void setNormalClothPos();
+    void calcJointAngle();
+    void checkPlayerMove();
 
     f32 getColorType() { return fopAcM_GetParam(this) & 0xFF; }
     inline void getJointAngle(csXyz& jointAngle, int param_2) { jointAngle = mClothJoints[param_2].field_0x30; }

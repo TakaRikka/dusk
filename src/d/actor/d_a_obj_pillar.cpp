@@ -22,19 +22,14 @@
 #define SHAKE_MODE_QUAKE       102
 #define SHAKE_MODE_END         103
 
-/* 80CB09D4-80CB09DC 000000 0008+00 7/7 0/0 0/0 .rodata          l_bmd */
 static const int l_bmd[] = {5, 5};
 
-/* 80CB09DC-80CB09E4 000008 0008+00 1/1 0/0 0/0 .rodata          l_dzb */
 static const int l_dzb[] = {8, 8};
 
-/* 80CB09E4-80CB09EC 000010 0008+00 1/1 0/0 0/0 .rodata          l_shadowBmd */
 static const int l_shadowBmd[] = {4, 4};
 
-/* 80CB09EC-80CB09F4 000018 0008+00 1/1 0/0 0/0 .rodata          l_heap_size */
 static const u32 l_heap_size[] = {0x1830, 0xC00};
 
-/* 80CB09F4-80CB0A38 000020 0044+00 1/1 0/0 0/0 .rodata          l_cyl_src */
 const static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x400000, 0x11}, 0x0}}, // mObj
@@ -54,7 +49,6 @@ const static dCcD_SrcCyl l_cyl_src = {
 #define SHAKE_DATA_WEAK        2
 #define SHAKE_DATA_CRASH       3
 
-/* 80CB0A38-80CB0A68 000064 0030+00 2/4 0/0 0/0 .rodata          l_shake_data */
 static const daPillar_c::sdata_t l_shake_data[] = {
     /* CRASH FIRST */ {5, 0, 800, 20, 7000, 400, 65},
     /* STRONG      */ {255, 0, 600, 20, 6000, 300, 40},
@@ -62,13 +56,11 @@ static const daPillar_c::sdata_t l_shake_data[] = {
     /* CRASH       */ {5, 0, 800, 120, 7000, 30, 15},
 };
 
-/* 80CB0B08-80CB0B10 -00001 0008+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[] = {
     "K_mbhasi0",
     "K_mbhasi1",
 };
 
-/* 80CAF32C-80CAF3B0 0000EC 0084+00 1/1 0/0 0/0 .text            __ct__14daPillar_HIO_cFv */
 daPillar_HIO_c::daPillar_HIO_c() {
     mShakeData = l_shake_data[SHAKE_DATA_CRASH_FIRST];
     field_0x1c = 0.0f;
@@ -79,8 +71,6 @@ daPillar_HIO_c::daPillar_HIO_c() {
     mIsAdjust = false;
 }
 
-/* 80CAF3F8-80CAF4B4 0001B8 00BC+00 1/1 0/0 0/0 .text
- * rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c              */
 static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_rideActor) {
     daPy_py_c* player = dComIfGp_getLinkPlayer();
     if (((daPillar_c*)i_this)->mIsRollAttack && fopAcM_GetName(i_rideActor) == PROC_Obj_Carry) {
@@ -96,7 +86,6 @@ static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_rideActo
     }
 }
 
-/* 80CAF4B4-80CAF5EC 000274 0138+00 2/2 0/0 0/0 .text            setBaseMtx__10daPillar_cFv */
 void daPillar_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, mRotY, shape_angle.z);
@@ -111,7 +100,6 @@ void daPillar_c::setBaseMtx() {
     }
 }
 
-/* 80CAF5EC-80CAF7A8 0003AC 01BC+00 1/0 0/0 0/0 .text            Create__10daPillar_cFv */
 int daPillar_c::Create() {
     setBaseMtx();
 
@@ -174,7 +162,6 @@ int daPillar_c::Create() {
     return 1;
 }
 
-/* 80CAF7A8-80CAF8A4 000568 00FC+00 1/0 0/0 0/0 .text            CreateHeap__10daPillar_cFv */
 int daPillar_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName[mMdlType], l_bmd[mMdlType]);
     JUT_ASSERT(0, modelData != NULL);
@@ -195,7 +182,6 @@ int daPillar_c::CreateHeap() {
     return 1;
 }
 
-/* 80CAF8A4-80CAFA58 000664 01B4+00 1/1 0/0 0/0 .text            create1st__10daPillar_cFv */
 int daPillar_c::create1st() {
     fopAcM_ct(this, daPillar_c);
 
@@ -224,7 +210,6 @@ int daPillar_c::create1st() {
     return phase_state;
 }
 
-/* 80CAFB44-80CAFC08 000904 00C4+00 2/2 0/0 0/0 .text            checkAttacked__10daPillar_cFv */
 bool daPillar_c::checkAttacked() {
     u8 swbit = getSwbit();
     if (swbit != 0xFF) {
@@ -247,7 +232,6 @@ bool daPillar_c::checkAttacked() {
     return false;
 }
 
-/* 80CAFC08-80CAFD64 0009C8 015C+00 1/1 0/0 0/0 .text            on_switch__10daPillar_cFv */
 void daPillar_c::on_switch() {
     u8 swbit = getSwbit();
     if (swbit != 0xFF) {
@@ -281,7 +265,6 @@ void daPillar_c::on_switch() {
     }
 }
 
-/* 80CAFD64-80CAFF60 000B24 01FC+00 1/1 0/0 0/0 .text            checkShake__10daPillar_cFv */
 int daPillar_c::checkShake() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 player_dist = player->current.pos.abs(current.pos);
@@ -313,7 +296,6 @@ int daPillar_c::checkShake() {
     return SHAKE_NONE;
 }
 
-/* 80CAFF60-80CB01E0 000D20 0280+00 1/1 0/0 0/0 .text            setShake_rcrash__10daPillar_cFv */
 void daPillar_c::setShake_rcrash() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     u8 swbit = getSwbit();
@@ -342,22 +324,18 @@ void daPillar_c::setShake_rcrash() {
     }
 }
 
-/* 80CB01E0-80CB022C 000FA0 004C+00 1/1 0/0 0/0 .text            setShake_strong__10daPillar_cFv */
 void daPillar_c::setShake_strong() {
     mShakeData = l_shake_data[SHAKE_DATA_STRONG];
     shape_angle.x = mShakeData.mInitAngleX;
 }
 
-/* 80CB022C-80CB0278 000FEC 004C+00 1/1 0/0 0/0 .text            setShake_weak__10daPillar_cFv */
 void daPillar_c::setShake_weak() {
     mShakeData = l_shake_data[SHAKE_DATA_WEAK];
     shape_angle.x = mShakeData.mInitAngleX;
 }
 
-/* 80CB0C2C-80CB0C54 000014 0028+00 2/2 0/0 0/0 .bss             l_HIO */
 static daPillar_HIO_c l_HIO;
 
-/* 80CB0278-80CB031C 001038 00A4+00 1/1 0/0 0/0 .text            switch_proc_call__10daPillar_cFv */
 void daPillar_c::switch_proc_call() {
     typedef void (daPillar_c::*actionFunc)();
     static actionFunc l_func[] = {
@@ -369,7 +347,6 @@ void daPillar_c::switch_proc_call() {
     (this->*l_func[mAction])();
 }
 
-/* 80CB031C-80CB0378 0010DC 005C+00 1/0 0/0 0/0 .text            actionSwOnWait__10daPillar_cFv */
 void daPillar_c::actionSwOnWait() {
     if (mIsRollAttack) {
         if (checkAttacked()) {
@@ -383,7 +360,6 @@ void daPillar_c::actionSwOnWait() {
     }
 }
 
-/* 80CB0378-80CB03CC 001138 0054+00 2/1 0/0 0/0 .text            actionSwOn__10daPillar_cFv */
 void daPillar_c::actionSwOn() {
     OS_REPORT("swon:mTimer<%d>\n", mTimer);
     if (mTimer > 0) {
@@ -394,10 +370,8 @@ void daPillar_c::actionSwOn() {
     }
 }
 
-/* 80CB03CC-80CB03D0 00118C 0004+00 1/0 0/0 0/0 .text            actionEnd__10daPillar_cFv */
 void daPillar_c::actionEnd() {}
 
-/* 80CB03D0-80CB0658 001190 0288+00 1/0 0/0 0/0 .text            Execute__10daPillar_cFPPA3_A4_f */
 int daPillar_c::Execute(Mtx** param_0) {
     fopAcM_rollPlayerCrash(this, l_HIO.field_0x1c + 85.0f, 0xD, 200.0f, -100.0f, TRUE, l_HIO.field_0x20);
     mIsRollAttack = false;
@@ -464,7 +438,6 @@ int daPillar_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80CB0658-80CB0740 001418 00E8+00 1/0 0/0 0/0 .text            Draw__10daPillar_cFv */
 int daPillar_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -481,36 +454,28 @@ int daPillar_c::Draw() {
     return 1;
 }
 
-/* 80CB0740-80CB0780 001500 0040+00 1/0 0/0 0/0 .text            Delete__10daPillar_cFv */
 int daPillar_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName[mMdlType]);
     return 1;
 }
 
-/* 80CB0780-80CB0874 001540 00F4+00 1/0 0/0 0/0 .text            daPillar_create1st__FP10daPillar_c
- */
 static int daPillar_create1st(daPillar_c* i_this) {
     fopAcM_ct(i_this, daPillar_c);
     return i_this->create1st();
 }
 
-/* 80CB0874-80CB0894 001634 0020+00 1/0 0/0 0/0 .text daPillar_MoveBGDelete__FP10daPillar_c */
 static int daPillar_MoveBGDelete(daPillar_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80CB0894-80CB08B4 001654 0020+00 1/0 0/0 0/0 .text daPillar_MoveBGExecute__FP10daPillar_c */
 static int daPillar_MoveBGExecute(daPillar_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80CB08B4-80CB08E0 001674 002C+00 1/0 0/0 0/0 .text            daPillar_MoveBGDraw__FP10daPillar_c
- */
 static int daPillar_MoveBGDraw(daPillar_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80CB0B58-80CB0B78 -00001 0020+00 1/0 0/0 0/0 .data            daPillar_METHODS */
 static actor_method_class daPillar_METHODS = {
     (process_method_func)daPillar_create1st,
     (process_method_func)daPillar_MoveBGDelete,
@@ -519,7 +484,6 @@ static actor_method_class daPillar_METHODS = {
     (process_method_func)daPillar_MoveBGDraw,
 };
 
-/* 80CB0B78-80CB0BA8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Pillar */
 extern actor_process_profile_definition g_profile_Obj_Pillar = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

@@ -8,7 +8,6 @@
 #include "d/d_particle_copoly.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-/* 80050C9C-80050CC4 04B5DC 0028+00 0/0 2/2 27/27 .text            init__7dPaPo_cFP9dBgS_Acchff */
 void dPaPo_c::init(dBgS_Acch* param_0, f32 i_waterOffset, f32 i_rippleOffset) {
     field_0x28 = param_0;
     mWaterOffset = i_waterOffset;
@@ -18,8 +17,6 @@ void dPaPo_c::init(dBgS_Acch* param_0, f32 i_waterOffset, f32 i_rippleOffset) {
     field_0x37 = 1;
 }
 
-/* 80050CC4-80050E7C 04B604 01B8+00 1/1 0/0 0/0 .text
- * checkWaterIn__7dPaPo_cFP4cXyzPC4cXyzPC12dKy_tevstr_cUlScff   */
 int dPaPo_c::checkWaterIn(cXyz* param_0, cXyz const* param_1, dKy_tevstr_c const* param_2,
                           u32 param_3, s8 param_4, f32 param_5, f32 param_6) {
     if (field_0x28->ChkWaterHit() && dComIfG_Bgsp().ChkPolySafe(field_0x28->m_wtr) &&
@@ -61,8 +58,6 @@ int dPaPo_c::checkWaterIn(cXyz* param_0, cXyz const* param_1, dKy_tevstr_c const
     return 0;
 }
 
-/* 80050E7C-80051008 04B7BC 018C+00 3/3 0/0 0/0 .text
- * setEffect__7dPaPo_cFPUliPC12dKy_tevstr_cPC4cXyzUlUlPC4cXyzPC5csXyzScPUcPUc */
 void dPaPo_c::setEffect(u32* param_0, int param_1, dKy_tevstr_c const* param_2, cXyz const* param_3,
                         u32 param_4, u32 param_5, cXyz const* param_6, csXyz const* param_7,
                         s8 param_8, u8* param_9, u8* param_10) {
@@ -112,8 +107,6 @@ void dPaPo_c::setEffect(u32* param_0, int param_1, dKy_tevstr_c const* param_2, 
     }
 }
 
-/* 80051008-8005113C 04B948 0134+00 1/1 1/1 12/12 .text
- * setEffectCenter__7dPaPo_cFPC12dKy_tevstr_cPC4cXyzUlUlPC4cXyzPC5csXyzPC4cXyzScff */
 int dPaPo_c::setEffectCenter(dKy_tevstr_c const* param_0, cXyz const* param_1, u32 param_2,
                              u32 param_3, cXyz const* param_4, csXyz const* param_5,
                              cXyz const* param_6, s8 param_7, f32 param_8, f32 param_9) {
@@ -141,7 +134,6 @@ int dPaPo_c::setEffectCenter(dKy_tevstr_c const* param_0, cXyz const* param_1, u
     return rt;
 }
 
-/* 8005113C-8005115C 04BA7C 0020+00 2/2 0/0 0/0 .text            clearID__7dPaPo_cFPUlPUc */
 void dPaPo_c::clearID(u32* param_0, u8* param_1) {
     *param_1 = 0;
 
@@ -151,8 +143,6 @@ void dPaPo_c::clearID(u32* param_0, u8* param_1) {
     }
 }
 
-/* 8005115C-80051294 04BA9C 0138+00 1/1 1/1 2/2 .text
- * setEffectTwo__8dPaPoT_cFPC12dKy_tevstr_cPC4cXyzUlUlPC4cXyzPC4cXyzPC4cXyzPC5csXyzPC4cXyzScff */
 int dPaPoT_c::setEffectTwo(dKy_tevstr_c const* param_0, cXyz const* param_1, u32 param_2,
                            u32 param_3, cXyz const* param_4, cXyz const* param_5,
                            cXyz const* param_6, csXyz const* param_7, cXyz const* param_8,
@@ -182,7 +172,6 @@ int dPaPoT_c::setEffectTwo(dKy_tevstr_c const* param_0, cXyz const* param_1, u32
     return rt;
 }
 
-/* 80051294-800512E8 04BBD4 0054+00 1/1 0/0 0/0 .text            clearTwoAllID__8dPaPoT_cFv */
 void dPaPoT_c::clearTwoAllID() {
     clearLeftID();
     clearRightID();
@@ -222,34 +211,29 @@ int dPaPoF_c::setEffectFour(dKy_tevstr_c const* param_0, cXyz const* param_1, u3
     return rt;
 }
 
-/* 80051424-80051470 04BD64 004C+00 0/0 1/1 0/0 .text            clearFourAllID__8dPaPoF_cFv */
 void dPaPoF_c::clearFourAllID() {
     clearBLeftID();
     clearBRightID();
     clearTwoAllID();
 }
 
-/* 803A8628-803A864C 005748 0024+00 0/1 0/0 0/0 .data            m_typeTwoData__8dPaPoT_c */
 dPaPoT_c::effTypeFunc dPaPoT_c::m_typeTwoData[] = {
     &dPaPoT_c::getCenterEffType,
     &dPaPoT_c::getLeftEffType,
     &dPaPoT_c::getRightEffType,
 };
 
-/* 803A8670-803A8694 005790 0024+00 0/1 0/0 1/1 .data            m_emitterTwoData__8dPaPoT_c */
 dPaPoT_c::emitterFunc dPaPoT_c::m_emitterTwoData[] = {
     &dPaPoT_c::getCenterEmitter,
     &dPaPoT_c::getLeftEmitter,
     &dPaPoT_c::getRightEmitter,
 };
 
-/* 803A86D0-803A870C 0057F0 003C+00 0/1 5/5 1/1 .data            m_typeFourData__8dPaPoF_c */
 dPaPoF_c::effTypeFunc dPaPoF_c::m_typeFourData[] = {
     &dPaPoF_c::getCenterEffType,   &dPaPoF_c::getLeftEffType,      &dPaPoF_c::getRightEffType,
     &dPaPoF_c::getBackLeftEffType, &dPaPoF_c::getBackRightEffType,
 };
 
-/* 803A8748-803A87A0 005868 003C+1C 0/1 5/5 1/1 .data            m_emitterFourData__8dPaPoF_c */
 dPaPoF_c::emitterFunc dPaPoF_c::m_emitterFourData[] = {
     &dPaPoF_c::getCenterEmitter,   &dPaPoF_c::getLeftEmitter,      &dPaPoF_c::getRightEmitter,
     &dPaPoF_c::getBackLeftEmitter, &dPaPoF_c::getBackRightEmitter,

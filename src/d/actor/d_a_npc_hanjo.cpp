@@ -13,21 +13,13 @@
 #include "d/actor/d_a_tag_evtarea.h"
 #include "d/d_cc_uty.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include "dol2asm.h"
 
-
-//
-// Declarations:
-//
-
-/* 80A00960-80A00980 000020 0020+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[4][2] = {
     {14, 1}, {26, 2},
     {25, 2}, {3, 4},
 };
 
-/* 80A00980-80A009D8 -00001 0058+00 1/2 0/0 0/0 .data            l_evtList */
-SECTION_DATA static daNpcT_evtData_c l_evtList[11] = {
+static daNpcT_evtData_c l_evtList[11] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"CONVERSATION_ABOUT_SARU01", 5},
@@ -43,7 +35,6 @@ SECTION_DATA static daNpcT_evtData_c l_evtList[11] = {
 
 
 
-/* 80A009D8-80A009F0 -00001 0018+00 3/4 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[6] = {
     "",
     "Hanjo",
@@ -53,14 +44,12 @@ static char* l_resNameList[6] = {
     "Sera",
 };
 
-/* 80A009F0-80A009F4 0000B0 0003+01 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[3] = {
     1,
     2,
     -1,
 };
 
-/* 80A009F4-80A009FC 0000B4 0005+03 1/0 0/0 0/0 .data            l_loadResPtrn1 */
 static s8 l_loadResPtrn1[5] = {
     1,
     2,
@@ -69,12 +58,10 @@ static s8 l_loadResPtrn1[5] = {
     -1,
 };
 
-/* 80A009FC-80A00A00 0000BC 0002+02 1/0 0/0 0/0 .data            l_loadResPtrn2 */
 static s8 l_loadResPtrn2[2] = {
     1, -1
 };
 
-/* 80A00A00-80A00A08 0000C0 0005+03 1/0 0/0 0/0 .data            l_loadResPtrn9 */
 static s8 l_loadResPtrn9[5] = {
     1,
     2,
@@ -83,14 +70,12 @@ static s8 l_loadResPtrn9[5] = {
     -1,
 };
 
-/* 80A00A08-80A00A1C -00001 0014+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[5] = {
     l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn1,
     l_loadResPtrn2, l_loadResPtrn9,
 };
 
-/* 80A00A1C-80A00B34 0000DC 0118+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
-SECTION_DATA static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
+static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {-1, 0, 0, 20, 2, 1, 1}, 
     {7, 0, 1, 20, 2, 1, 1}, 
     {7, 0, 2, 34, 0, 2, 0},
@@ -103,8 +88,7 @@ SECTION_DATA static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
      { 11, 2, 2, 38, 2, 2, 0},
 };
 
-/* 80A00B34-80A00DB8 0001F4 0284+00 1/2 0/0 0/0 .data            l_motionAnmData */
-    SECTION_DATA static int l_motionAnmData[161] = {
+static int l_motionAnmData[161] = {
     11, 2, 1, 17, 0, 1, 65536, 22, 2, 2, 17, 0, 1, 65536, 16, 2, 2, 17, 0, 1, 65536,
     13, 2, 2, 17, 0, 1, 65536, 21, 2, 2, 31, 2, 2, 0,     20, 0, 2, 30, 0, 2, 0,
     14, 0, 2, 29, 0, 2, 0,     8,  2, 1, 17, 0, 1, 65536, 6,  0, 1, 17, 0, 1, 65536,
@@ -114,14 +98,12 @@ SECTION_DATA static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     10, 0, 3, 17, 0, 1, 65536, 9,  0, 1, 17, 0, 1, 65536, 11, 0, 3, 17, 0, 1, 65536,
     10, 0, 1, 17, 0, 1, 65536, -1, 0, 0, 17, 0, 1, 65536};
 
-/* 80A00DB8-80A00E38 000478 0080+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[32] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {4, 0, 0},  {-1, 0, 0}, {-1, 0, 0},
     {8, -1, 1}, {9, 0, 0},  {-1, 0, 0}, {-1, 0, 0}, {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {6, -1, 1}, {7, 0, 0},  {-1, 0, 0}, {-1, 0, 0}, {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}};
 
-/* 80A00E38-80A00F78 0004F8 0140+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
     {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {21, -1, 1}, {0, 0, 0},   {-1, 0, 0},
     {-1, 0, 0},  {4, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {11, -1, 1}, {9, 0, 0},
@@ -136,8 +118,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
     {-1, 0, 0},  {-1, 0, 0},  {8, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {9, -1, 0},
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}};
 
-/* 80A00F78-80A00F90 -00001 0018+00 1/1 0/0 0/0 .data            mCutNameList__13daNpc_Hanjo_c */
-SECTION_DATA char* daNpc_Hanjo_c::mCutNameList[6] = {
+char* daNpc_Hanjo_c::mCutNameList[6] = {
     "",
     "CONVERSATION_ABOUT_SARU",
     "CONVERSATION",
@@ -146,7 +127,6 @@ SECTION_DATA char* daNpc_Hanjo_c::mCutNameList[6] = {
     "DIVE",
 };
 
-/* 80A00FCC-80A01014 00068C 0048+00 1/2 0/0 0/0 .data            mCutList__13daNpc_Hanjo_c */
 daNpc_Hanjo_c::cutFunc daNpc_Hanjo_c::mCutList[6] = {
     NULL,
     &daNpc_Hanjo_c::cutConversationAboutSaru,
@@ -156,13 +136,11 @@ daNpc_Hanjo_c::cutFunc daNpc_Hanjo_c::mCutList[6] = {
     &daNpc_Hanjo_c::cutDive,
 };
 
-/* 80A01014-80A01054 0006D4 0040+00 0/1 0/0 0/0 .data            mStoneCcDSph__13daNpc_Hanjo_c */
 dCcD_SrcSph daNpc_Hanjo_c::mStoneCcDSph = {
     daNpc_Hanjo_c::mStoneCcDObjInfo, {}
 };
 
 
-/* 809F908C-809F9278 0000EC 01EC+00 1/0 0/0 0/0 .text            __dt__13daNpc_Hanjo_cFv */
 daNpc_Hanjo_c::~daNpc_Hanjo_c() {
     OS_REPORT("|%06d:%x|daNpc_Hanjo_c -> デストラクト\n", g_Counter.mCounter0, this);
     if (mpMorf[0] != 0) {
@@ -171,8 +149,6 @@ daNpc_Hanjo_c::~daNpc_Hanjo_c() {
     deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
 }
 
-/* ############################################################################################## */
-/* 80A00600-80A006B4 000000 00B4+00 19/19 0/0 0/0 .rodata          m__19daNpc_Hanjo_Param_c */
 daNpc_Hanjo_Param_c::Data const daNpc_Hanjo_Param_c::m = {
     160.0f, -3.0f, 1.0f, 400.0f, 
     255.0f, 160.0f, 35.0f, 30.0f, 0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -10.0f, 45.0f,
@@ -182,8 +158,6 @@ daNpc_Hanjo_Param_c::Data const daNpc_Hanjo_Param_c::m = {
      80.0f, 65.0f, 4.0f, 600.0f, 136.0f, 0x500, 90, 90, 2,
 };
 
-/* 80A006B4-80A006E4 0000B4 0030+00 1/1 0/0 0/0 .rodata          mStoneCcDObjInfo__13daNpc_Hanjo_c
- */
 dCcD_SrcGObjInf const daNpc_Hanjo_c::mStoneCcDObjInfo = {
     {0, {{0, 0, 0}, {0, 0}, {0x79}}},
     {0, 0, 0, 0, {0}},
@@ -191,7 +165,6 @@ dCcD_SrcGObjInf const daNpc_Hanjo_c::mStoneCcDObjInfo = {
     {{0}},
 };
 
-/* 809F9278-809F9578 0002D8 0300+00 1/1 0/0 0/0 .text            create__13daNpc_Hanjo_cFv */
 int daNpc_Hanjo_c::create() {
     static int const heapSize[5] = {0x61B0, 0x41D0, 0x39D0, 0x39C0, 0};
     daNpcT_ct(this, daNpc_Hanjo_c, l_faceMotionAnmData,
@@ -246,7 +219,6 @@ int daNpc_Hanjo_c::create() {
     return rv;
 }
 
-/* 809F9578-809F997C 0005D8 0404+00 1/1 0/0 0/0 .text            CreateHeap__13daNpc_Hanjo_cFv */
 int daNpc_Hanjo_c::CreateHeap() {
     static int const bmdTypeList[2] = {2, 3};
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(
@@ -321,7 +293,6 @@ int daNpc_Hanjo_c::CreateHeap() {
     return 0;
 }
 
-/* 809F9B38-809F9B6C 000B98 0034+00 1/1 0/0 0/0 .text            Delete__13daNpc_Hanjo_cFv */
 int daNpc_Hanjo_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Hanjo_c -> Delete\n", g_Counter.mCounter0, this);
     fopAcM_GetID(this);
@@ -329,12 +300,10 @@ int daNpc_Hanjo_c::Delete() {
     return 1;
 }
 
-/* 809F9B6C-809F9B8C 000BCC 0020+00 2/2 0/0 0/0 .text            Execute__13daNpc_Hanjo_cFv */
 int daNpc_Hanjo_c::Execute() {
     return daNpcT_c::execute();
 }
 
-/* 809F9B8C-809F9C20 000BEC 0094+00 1/1 0/0 0/0 .text            Draw__13daNpc_Hanjo_cFv */
 int daNpc_Hanjo_c::Draw() {
     if (mpMatAnm[0] != NULL) {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
@@ -343,14 +312,10 @@ int daNpc_Hanjo_c::Draw() {
     return daNpcT_c::draw(0, 0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
-/* 809F9C20-809F9C40 000C80 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__13daNpc_Hanjo_cFP10fopAc_ac_c            */
 int daNpc_Hanjo_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Hanjo_c*>(i_this)->CreateHeap();
 }
 
-/* 809F9C40-809F9C98 000CA0 0058+00 1/1 0/0 0/0 .text
- * ctrlJointCallBack__13daNpc_Hanjo_cFP8J3DJointi               */
 int daNpc_Hanjo_c::ctrlJointCallBack(J3DJoint* param_1, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -362,7 +327,6 @@ int daNpc_Hanjo_c::ctrlJointCallBack(J3DJoint* param_1, int param_2) {
     return 1;
 }
 
-/* 809F9C98-809F9CF0 000CF8 0058+00 1/1 0/0 2/2 .text            getType__13daNpc_Hanjo_cFv */
 u8 daNpc_Hanjo_c::getType() {
     switch ((u8)fopAcM_GetParam(this)) {
     case 0:
@@ -378,7 +342,6 @@ u8 daNpc_Hanjo_c::getType() {
     }
 }
 
-/* 809F9CF0-809F9D9C 000D50 00AC+00 1/1 0/0 0/0 .text            isDelete__13daNpc_Hanjo_cFv */
 int daNpc_Hanjo_c::isDelete() {
     switch (mType) {
     case TYPE_0:
@@ -399,7 +362,6 @@ int daNpc_Hanjo_c::isDelete() {
     }
 }
 
-/* 809F9D9C-809F9FCC 000DFC 0230+00 1/1 0/0 0/0 .text            reset__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::reset() {
     csXyz acStack_20;
     int iVar1 = (u8*)&field_0x1728 - (u8*)&field_0x16e0;
@@ -439,7 +401,6 @@ void daNpc_Hanjo_c::reset() {
     setAngle(acStack_20);
 }
 
-/* 809F9FCC-809FA050 00102C 0084+00 1/0 0/0 0/0 .text            afterJntAnm__13daNpc_Hanjo_cFi */
 void daNpc_Hanjo_c::afterJntAnm(int param_1) {
     if (param_1 == 1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -450,7 +411,6 @@ void daNpc_Hanjo_c::afterJntAnm(int param_1) {
     }
 }
 
-/* 809FA050-809FA1C4 0010B0 0174+00 1/0 0/0 0/0 .text            setParam__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::setParam() {
     selectAction();
     srchActors();
@@ -492,8 +452,6 @@ void daNpc_Hanjo_c::setParam() {
     gravity = daNpc_Hanjo_Param_c::m.field_0x04;
 }
 
-/* 809FA1C4-809FA3B8 001224 01F4+00 1/0 0/0 0/0 .text            checkChangeEvt__13daNpc_Hanjo_cFv
- */
 BOOL daNpc_Hanjo_c::checkChangeEvt() {
     if (!chkAction(&daNpc_Hanjo_c::talk)) {
         mPreItemNo = 0;
@@ -552,7 +510,6 @@ BOOL daNpc_Hanjo_c::checkChangeEvt() {
 }
 
 
-/* 809FA3B8-809FA45C 001418 00A4+00 1/0 0/0 0/0 .text setAfterTalkMotion__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::setAfterTalkMotion() {
     int iVar2 = 7;
     switch(mFaceMotionSeqMngr.getNo()) {
@@ -571,7 +528,6 @@ void daNpc_Hanjo_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(iVar2, -1.0f, 0, 0);
 }
 
-/* 809FA45C-809FA55C 0014BC 0100+00 1/1 0/0 0/0 .text            srchActors__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::srchActors() {
     switch(mType) {
     case TYPE_0:
@@ -597,7 +553,6 @@ void daNpc_Hanjo_c::srchActors() {
     }
 }
 
-/* 809FA55C-809FA5FC 0015BC 00A0+00 1/0 0/0 0/0 .text            evtTalk__13daNpc_Hanjo_cFv */
 BOOL daNpc_Hanjo_c::evtTalk() {
     if (chkAction(&daNpc_Hanjo_c::talk)) {
         (this->*field_0x16ec)(NULL);
@@ -607,7 +562,6 @@ BOOL daNpc_Hanjo_c::evtTalk() {
     return 1;
 }
 
-/* 809FA5FC-809FA6C4 00165C 00C8+00 1/0 0/0 0/0 .text            evtCutProc__13daNpc_Hanjo_cFv */
 BOOL daNpc_Hanjo_c::evtCutProc() {
     int staffId = dComIfGp_getEventManager().getMyStaffId("Hanjo", this, -1);
     if (staffId != -1) {
@@ -622,7 +576,6 @@ BOOL daNpc_Hanjo_c::evtCutProc() {
     return false;
 }
 
-/* 809FA6C4-809FA88C 001724 01C8+00 1/0 0/0 0/0 .text            action__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::action() {
     fopAc_ac_c* hitActor = hitChk(&mCyl1, 0xffffffff);
     if (hitActor != NULL) {
@@ -652,7 +605,6 @@ void daNpc_Hanjo_c::action() {
     }
 }
 
-/* 809FA88C-809FAABC 0018EC 0230+00 1/0 0/0 0/0 .text            beforeMove__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::beforeMove() {
     cXyz oldPos;
     cXyz pos;
@@ -684,7 +636,6 @@ void daNpc_Hanjo_c::beforeMove() {
     }
 }
 
-/* 809FAABC-809FABB8 001B1C 00FC+00 1/0 0/0 0/0 .text            afterMoved__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::afterMoved() {
     cXyz cStack_1c;
     for (int i = 0; i < 4; i++) {
@@ -700,10 +651,8 @@ void daNpc_Hanjo_c::afterMoved() {
     }
 }
 
-/* 80A012D4-80A012D8 000054 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpc_Hanjo_Param_c l_HIO;
 
-/* 809FABB8-809FAF90 001C18 03D8+00 1/0 0/0 0/0 .text            setAttnPos__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::setAttnPos() {
     cXyz cStack_38(-10.0f, 10.0f, 0.0f);
     cXyz cStack_44;
@@ -746,7 +695,6 @@ void daNpc_Hanjo_c::setAttnPos() {
     }
 }
 
-/* 809FAF90-809FB2C4 001FF0 0334+00 1/0 0/0 0/0 .text            setCollision__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::setCollision() {
     cXyz cStack_4c;
     if (mHide == 0) {
@@ -816,12 +764,10 @@ void daNpc_Hanjo_c::setCollision() {
     mCyl1.ClrTgHit();
 }
 
-/* 809FB2C4-809FB2CC 002324 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__13daNpc_Hanjo_cFv */
 int daNpc_Hanjo_c::drawDbgInfo() {
     return 0;
 }
 
-/* 809FB2CC-809FB59C 00232C 02D0+00 1/0 0/0 0/0 .text            drawOtherMdl__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::drawOtherMdl() {
     Mtx mtx;
     J3DModel* model = mpMorf[0]->getModel();
@@ -860,7 +806,6 @@ void daNpc_Hanjo_c::drawOtherMdl() {
     }
 }
 
-/* 809FB59C-809FB6CC 0025FC 0130+00 1/1 0/0 0/0 .text            selectAction__13daNpc_Hanjo_cFv */
 int daNpc_Hanjo_c::selectAction() {
     field_0x16e0 = NULL;
     switch(mType) {
@@ -883,14 +828,10 @@ int daNpc_Hanjo_c::selectAction() {
     return 1;
 }
 
-/* 809FB6CC-809FB6F8 00272C 002C+00 2/2 0/0 0/0 .text
- * chkAction__13daNpc_Hanjo_cFM13daNpc_Hanjo_cFPCvPvPv_i        */
 int daNpc_Hanjo_c::chkAction(int (daNpc_Hanjo_c::*action)(void*)) {
     return field_0x16ec == action;
 }
 
-/* 809FB6F8-809FB7A0 002758 00A8+00 2/2 0/0 0/0 .text
- * setAction__13daNpc_Hanjo_cFM13daNpc_Hanjo_cFPCvPvPv_i        */
 int daNpc_Hanjo_c::setAction(int (daNpc_Hanjo_c::*action)(void*)) {
     mMode = 3;
     if (field_0x16ec != NULL) {
@@ -904,7 +845,6 @@ int daNpc_Hanjo_c::setAction(int (daNpc_Hanjo_c::*action)(void*)) {
     return 1;
 }
 
-/* 809FB7A0-809FB90C 002800 016C+00 2/2 0/0 0/0 .text            initShoot__13daNpc_Hanjo_cFi */
 void daNpc_Hanjo_c::initShoot(int param_1) {
     if (param_1 != 0) {
         mFaceMotionSeqMngr.setNo( 7, -1.0f, 0, 0);
@@ -917,7 +857,6 @@ void daNpc_Hanjo_c::initShoot(int param_1) {
     }
 }
 
-/* 809FB90C-809FBB94 00296C 0288+00 2/2 0/0 0/0 .text            shoot__13daNpc_Hanjo_cFi */
 int daNpc_Hanjo_c::shoot(int param_1) {
     csXyz cStack_60;
     f32 dVar13 = daNpc_Hanjo_Param_c::m.field_0x98;
@@ -965,7 +904,6 @@ int daNpc_Hanjo_c::shoot(int param_1) {
     return 0;
 }
 
-/* 809FBB94-809FBC3C 002BF4 00A8+00 2/2 0/0 0/0 .text            initDive__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::initDive() {
     mFaceMotionSeqMngr.setNo(6, -1.0f, 0, 0);
     mMotionSeqMngr.setNo(18, -1.0f, 0, 0);
@@ -973,7 +911,6 @@ void daNpc_Hanjo_c::initDive() {
     field_0x1721 = 1;
 }
 
-/* 809FBC3C-809FC06C 002C9C 0430+00 1/1 0/0 0/0 .text            dive__13daNpc_Hanjo_cFv */
 void daNpc_Hanjo_c::dive() {
     f32 local_34;
     if (fopAcM_getWaterY(&current.pos, &local_34) != 0) {
@@ -1036,7 +973,6 @@ void daNpc_Hanjo_c::dive() {
     }
 }
 
-/* 809FC06C-809FC1BC 0030CC 0150+00 1/1 0/0 0/0 .text            lookround__13daNpc_Hanjo_cFs */
 int daNpc_Hanjo_c::lookround(s16 param_1) {
     if (field_0x171e != 0) {
         cLib_addCalcAngleS2(&current.angle.y, param_1, 4, 0x800);
@@ -1066,7 +1002,6 @@ int daNpc_Hanjo_c::lookround(s16 param_1) {
     return 1;
 }
 
-/* 809FC1BC-809FC2E4 00321C 0128+00 1/1 0/0 0/0 .text            commandToHawk__13daNpc_Hanjo_cFv */
 int daNpc_Hanjo_c::commandToHawk() {
     daNPC_TK_c* pTkNpc = (daNPC_TK_c*)field_0x10c8[2].getActorP();
     int rv = 0;
@@ -1098,8 +1033,6 @@ int daNpc_Hanjo_c::commandToHawk() {
     return rv == 1;
 }
 
-/* 809FC2E4-809FC438 003344 0154+00 1/0 0/0 0/0 .text cutConversationAboutSaru__13daNpc_Hanjo_cFi
- */
 int daNpc_Hanjo_c::cutConversationAboutSaru(int staffIdx) {
     int rv = 0;
     int iVar4 = -1;
@@ -1135,8 +1068,6 @@ int daNpc_Hanjo_c::cutConversationAboutSaru(int staffIdx) {
     return rv;
 }
 
-/* 809FC438-809FC80C 003498 03D4+00 1/0 0/0 0/0 .text            cutConversation__13daNpc_Hanjo_cFi
- */
 int daNpc_Hanjo_c::cutConversation(int param_1) {
     int rv = 0;
     int iVar9 = -1;
@@ -1216,7 +1147,6 @@ int daNpc_Hanjo_c::cutConversation(int param_1) {
     return rv;
 }
 
-/* 809FC80C-809FCDC4 00386C 05B8+00 1/0 0/0 0/0 .text            cutPursuitBee__13daNpc_Hanjo_cFi */
 int daNpc_Hanjo_c::cutPursuitBee(int param_1) {
     cXyz cStack_6c;
     int rv = 0;
@@ -1352,8 +1282,6 @@ int daNpc_Hanjo_c::cutPursuitBee(int param_1) {
     return rv;
 }
 
-/* 809FCDC4-809FD3C0 003E24 05FC+00 1/0 0/0 0/0 .text            cutAppearHawker__13daNpc_Hanjo_cFi
- */
 int daNpc_Hanjo_c::cutAppearHawker(int param_1) {
     cXyz cStack_a4;
     int rv = 0;
@@ -1491,7 +1419,6 @@ int daNpc_Hanjo_c::cutAppearHawker(int param_1) {
     return rv;
 }
 
-/* 809FD3C0-809FD86C 004420 04AC+00 1/0 0/0 0/0 .text            cutDive__13daNpc_Hanjo_cFi */
 int daNpc_Hanjo_c::cutDive(int param_1) {
     cXyz cStack_2c;
     csXyz cStack_34;
@@ -1595,7 +1522,6 @@ int daNpc_Hanjo_c::cutDive(int param_1) {
     return rv;
 }
 
-/* 809FD86C-809FDEFC 0048CC 0690+00 2/0 0/0 0/0 .text            wait__13daNpc_Hanjo_cFPv */
 int daNpc_Hanjo_c::wait(void* param_0) {
     switch(mMode) {
     case 0:
@@ -1719,7 +1645,6 @@ int daNpc_Hanjo_c::wait(void* param_0) {
     return 1;
 }
 
-/* 809FDEFC-809FE2E0 004F5C 03E4+00 1/0 0/0 0/0 .text            throwStone__13daNpc_Hanjo_cFPv */
 int daNpc_Hanjo_c::throwStone(void* param_0) {
     int sVar4 = daNpc_Hanjo_Param_c::m.field_0xae;
     switch(mMode) {
@@ -1791,7 +1716,6 @@ int daNpc_Hanjo_c::throwStone(void* param_0) {
     return 1;
 }
 
-/* 809FE2E0-809FEAEC 005340 080C+00 1/0 0/0 0/0 .text            takayose__13daNpc_Hanjo_cFPv */
 int daNpc_Hanjo_c::takayose(void* param_0) {
     f32 dVar8 = daNpc_Hanjo_Param_c::m.field_0xae;
     cXyz cStack_50;
@@ -1933,7 +1857,6 @@ int daNpc_Hanjo_c::takayose(void* param_0) {
     return 1;
 }
 
-/* 809FEAEC-809FED58 005B4C 026C+00 3/0 0/0 0/0 .text            talk__13daNpc_Hanjo_cFPv */
 int daNpc_Hanjo_c::talk(void* param_0) {
     switch(mMode) {
     case 0:
@@ -1979,34 +1902,28 @@ int daNpc_Hanjo_c::talk(void* param_0) {
     return 0;
 }
 
-/* 809FED58-809FED78 005DB8 0020+00 1/0 0/0 0/0 .text            daNpc_Hanjo_Create__FPv */
 static int daNpc_Hanjo_Create(void* i_this) {
     return static_cast<daNpc_Hanjo_c*>(i_this)->create();
 }
 
-/* 809FED78-809FED98 005DD8 0020+00 1/0 0/0 0/0 .text            daNpc_Hanjo_Delete__FPv */
 static int daNpc_Hanjo_Delete(void* i_this) {
     return static_cast<daNpc_Hanjo_c*>(i_this)->Delete();
 }
 
-/* 809FED98-809FEDB8 005DF8 0020+00 1/0 0/0 0/0 .text            daNpc_Hanjo_Execute__FPv */
 static int daNpc_Hanjo_Execute(void* i_this) {
     return static_cast<daNpc_Hanjo_c*>(i_this)->Execute();
 }
 
-/* 809FEDB8-809FEDD8 005E18 0020+00 1/0 0/0 0/0 .text            daNpc_Hanjo_Draw__FPv */
 static int daNpc_Hanjo_Draw(void* i_this) {
     return static_cast<daNpc_Hanjo_c*>(i_this)->Draw();
 }
 
-/* 809FEDD8-809FEDE0 005E38 0008+00 1/0 0/0 0/0 .text            daNpc_Hanjo_IsDelete__FPv */
 static int daNpc_Hanjo_IsDelete(void* i_this) {
     return 1;
 }
 
 AUDIO_INSTANCES;
 
-/* 80A010A8-80A010C8 -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Hanjo_MethodTable */
 static actor_method_class daNpc_Hanjo_MethodTable = {
     (process_method_func)daNpc_Hanjo_Create,
     (process_method_func)daNpc_Hanjo_Delete,
@@ -2015,7 +1932,6 @@ static actor_method_class daNpc_Hanjo_MethodTable = {
     (process_method_func)daNpc_Hanjo_Draw,
 };
 
-/* 80A010C8-80A010F8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_HANJO */
 extern actor_process_profile_definition g_profile_NPC_HANJO = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID

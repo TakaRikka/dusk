@@ -34,24 +34,24 @@ public:
         /* 0xA */ s16 mMinChangeX;
     };
 
-    /* 80CAF4B4 */ void setBaseMtx();
-    /* 80CAF8A4 */ int create1st();
-    /* 80CAFB44 */ bool checkAttacked();
-    /* 80CAFC08 */ void on_switch();
-    /* 80CAFD64 */ int checkShake();
-    /* 80CAFF60 */ void setShake_rcrash();
-    /* 80CB01E0 */ void setShake_strong();
-    /* 80CB022C */ void setShake_weak();
-    /* 80CB0278 */ void switch_proc_call();
-    /* 80CB031C */ void actionSwOnWait();
-    /* 80CB0378 */ void actionSwOn();
-    /* 80CB03CC */ void actionEnd();
+    void setBaseMtx();
+    int create1st();
+    bool checkAttacked();
+    void on_switch();
+    int checkShake();
+    void setShake_rcrash();
+    void setShake_strong();
+    void setShake_weak();
+    void switch_proc_call();
+    void actionSwOnWait();
+    void actionSwOn();
+    void actionEnd();
     
-    /* 80CAF7A8 */ virtual int CreateHeap();
-    /* 80CAF5EC */ virtual int Create();
-    /* 80CB03D0 */ virtual int Execute(Mtx**);
-    /* 80CB0658 */ virtual int Draw();
-    /* 80CB0740 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u16 getTimer() { return fopAcM_GetParamBit(this, 0x18, 8); }
     u8 checkShadow() { return fopAcM_GetParamBit(this, 8, 8); }
@@ -90,8 +90,8 @@ STATIC_ASSERT(sizeof(daPillar_c) == 0x750);
 
 class daPillar_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80CAF32C */ daPillar_HIO_c();
-    /* 80CB0928 */ virtual ~daPillar_HIO_c() {}
+    daPillar_HIO_c();
+    virtual ~daPillar_HIO_c() {}
 
     void genMessage(JORMContext*);
 

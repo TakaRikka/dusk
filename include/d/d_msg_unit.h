@@ -5,10 +5,10 @@
 
 class dMsgUnit_c {
 public:
-    /* 80238C94 */ dMsgUnit_c();
-    /* 80238CEC */ void setTag(int, int, char*, bool);
+    dMsgUnit_c();
+    void setTag(int, int, char*, bool);
 
-    /* 80238CA4 */ virtual ~dMsgUnit_c();
+    virtual ~dMsgUnit_c();
 };
 
 extern dMsgUnit_c g_msg_unit;

@@ -16,12 +16,12 @@
  */
 class daObjSMark_c : public fopAc_ac_c {
 public:
-    /* 8059A018 */ void initBaseMtx();
-    /* 8059A038 */ void setBaseMtx();
-    /* 8059A080 */ int Create();
-    /* 8059A168 */ int create();
-    /* 8059A2CC */ int draw();
-    /* 8059A33C */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int create();
+    int draw();
+    int _delete();
 
 private:
     /* 0x0568 */ request_of_phase_process_class mpPhase;

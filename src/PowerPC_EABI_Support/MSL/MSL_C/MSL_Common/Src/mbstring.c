@@ -36,7 +36,6 @@ inline static int unicode_to_UTF8(char* s, wchar_t wchar) {
 
 inline int wctomb(char* s, wchar_t wchar) { return (unicode_to_UTF8(s, wchar)); }
 
-/* 80365F74-8036608C 3608B4 0118+00 0/0 1/1 0/0 .text            wcstombs */
 size_t wcstombs(char* s, const wchar_t* pwcs, size_t n) {
 	int chars_written = 0;
 	int result;

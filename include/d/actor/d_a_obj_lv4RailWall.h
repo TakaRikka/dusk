@@ -27,26 +27,26 @@ public:
 
     daObjLv4Wall_c() : dEvLib_callback_c(this) {}
 
-    /* 80C60AC4 */ void initBaseMtx();
-    /* 80C60B00 */ void setBaseMtx();
-    /* 80C60D40 */ int create1st();
-    /* 80C60E90 */ void action();
-    /* 80C60F4C */ void mode_init_wait();
-    /* 80C60F58 */ void mode_wait();
-    /* 80C61004 */ void mode_init_move();
-    /* 80C61068 */ void mode_move();
-    /* 80C613C0 */ void mode_init_dead();
-    /* 80C613CC */ void mode_dead();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    void action();
+    void mode_init_wait();
+    void mode_wait();
+    void mode_init_move();
+    void mode_move();
+    void mode_init_dead();
+    void mode_dead();
 
-    /* 80C61940 */ virtual ~daObjLv4Wall_c() {}
+    virtual ~daObjLv4Wall_c() {}
 
-    /* 80C60CD0 */ virtual int CreateHeap();
-    /* 80C60B7C */ virtual int Create();
-    /* 80C60DC4 */ virtual int Execute(Mtx**);
-    /* 80C6143C */ virtual int Draw();
-    /* 80C614E0 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
-    /* 80C613D0 */ virtual bool eventStart();
+    virtual bool eventStart();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
 

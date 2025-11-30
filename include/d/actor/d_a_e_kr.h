@@ -16,7 +16,7 @@
  */
 class e_kr_class {
 public:
-    /* 80705004 */ e_kr_class();
+    e_kr_class();
 
     s32 getId() { return field_0xf00; }
     s32 checkBombDrop() { return field_0xf04; }

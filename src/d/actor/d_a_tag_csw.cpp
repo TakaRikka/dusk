@@ -10,10 +10,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
 
-/* 80D58648-80D5864C -00001 0004+00 2/3 0/0 0/0 .data            l_arcName */
 static const char* l_arcName = "Lv6Warp";
 
-/* 80D5864C-80D58690 000024 0044+00 0/1 0/0 0/0 .data            l_cyl_src */
 #pragma push
 #pragma force_active on
 static dCcD_SrcCyl l_cyl_src = {
@@ -31,7 +29,6 @@ static dCcD_SrcCyl l_cyl_src = {
 };
 #pragma pop
 
-/* 80D58690-80D586D4 000068 0044+00 0/1 0/0 0/0 .data            l_tg_src */
 #pragma push
 #pragma force_active on
 static dCcD_SrcCyl l_tg_src = {
@@ -49,26 +46,20 @@ static dCcD_SrcCyl l_tg_src = {
 };
 #pragma pop
 
-/* 80D56BD8-80D56D98 000078 01C0+00 1/1 0/0 0/0 .text            __dt__10daTagCsw_cFv */
 daTagCsw_c::~daTagCsw_c() {}
 
-/* ############################################################################################## */
-/* 80D585B8-80D585C0 000000 0008+00 2/2 0/0 0/0 .rodata          l_bmd_idx */
 static u8 const l_bmd_idx[8] = {
     0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x06,
 };
 
-/* 80D585C0-80D585C8 000008 0008+00 0/0 0/0 0/0 .rodata          l_brk_idx */
 static u8 const l_brk_idx[8] = {
     0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0A,
 };
 
-/* 80D585C8-80D585D0 000010 0008+00 0/0 0/0 0/0 .rodata          l_dbz_idx */
 static u8 const l_dbz_idx[8] = {
     0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0E,
 };
 
-/* 80D56D98-80D56EF8 000238 0160+00 2/2 0/0 0/0 .text            setMtx__10daTagCsw_cFv */
 void daTagCsw_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -90,7 +81,6 @@ void daTagCsw_c::setMtx() {
     MTXCopy(mDoMtx_stack_c::get(), field_0x5bc);
 }
 
-/* 80D56EF8-80D572B8 000398 03C0+00 1/1 0/0 0/0 .text            createHeap__10daTagCsw_cFv */
 int daTagCsw_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 5);
     JUT_ASSERT(303, modelData != NULL);
@@ -164,12 +154,10 @@ int daTagCsw_c::createHeap() {
     return 1;
 }
 
-/* 80D57300-80D57320 0007A0 0020+00 1/1 0/0 0/0 .text daTagCsw_c_createHeap__FP10fopAc_ac_c */
 static int daTagCsw_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daTagCsw_c*>(i_this)->createHeap();
 }
 
-/* 80D57320-80D573C0 0007C0 00A0+00 1/1 0/0 0/0 .text chkInsideStatueStart__10daTagCsw_cFv */
 int daTagCsw_c::chkInsideStatueStart() {
     bool rv = false;
     if (fopAcM_isSwitch(this, getSw())) {
@@ -186,7 +174,6 @@ int daTagCsw_c::chkInsideStatueStart() {
     return rv;
 }
 
-/* 80D573C0-80D576D4 000860 0314+00 1/1 0/0 0/0 .text            create__10daTagCsw_cFv */
 int daTagCsw_c::create() {
     fopAcM_ct(this, daTagCsw_c);
     field_0x570 = getType();
@@ -234,7 +221,6 @@ int daTagCsw_c::create() {
     return rv;
 }
 
-/* 80D577C0-80D57840 000C60 0080+00 1/1 0/0 0/0 .text            searchTagCswOut__FPvPv */
 static void* searchTagCswOut(void* param_1, void* param_2) {
     if (param_1 != NULL && fopAcM_IsActor(param_1) && fopAcM_GetProfName(param_1) == PROC_TAG_CSW &&
         static_cast<daTagCsw_c*>(param_1)->getType() == 1)
@@ -248,7 +234,6 @@ static void* searchTagCswOut(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80D57840-80D5789C 000CE0 005C+00 1/1 0/0 0/0 .text            searchCStatue__FPvPv */
 static void* searchCStatue(void* param_1, void* param_2) {
     if (param_1 != NULL && fopAcM_IsActor(param_1) && fopAcM_GetProfName(param_1) == PROC_CSTATUE &&
         static_cast<daCstatue_c*>(param_1)->checkNormalType())
@@ -258,7 +243,6 @@ static void* searchCStatue(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80D5789C-80D57968 000D3C 00CC+00 1/1 0/0 0/0 .text            Delete__10daTagCsw_cFv */
 int daTagCsw_c::Delete() {
     if (field_0x584 != NULL && field_0x584->ChkUsed()) {
         dComIfG_Bgsp().Release(field_0x584);
@@ -272,7 +256,6 @@ int daTagCsw_c::Delete() {
     return dComIfG_resDelete(this, l_arcName);
 }
 
-/* 80D57968-80D579A8 000E08 0040+00 2/2 0/0 0/0 .text            onLight__10daTagCsw_cFv */
 void daTagCsw_c::onLight() {
     field_0x57c->setPlayMode(0);
     field_0x57c->setPlaySpeed(1.0f);
@@ -283,7 +266,6 @@ void daTagCsw_c::onLight() {
     mLightOn = true;
 }
 
-/* 80D579A8-80D579E8 000E48 0040+00 2/2 0/0 0/0 .text            offLight__10daTagCsw_cFv */
 void daTagCsw_c::offLight() {
     field_0x57c->setPlayMode(1);
     field_0x57c->setPlaySpeed(-1.0f);
@@ -294,7 +276,6 @@ void daTagCsw_c::offLight() {
     mLightOn = false;
 }
 
-/* 80D579E8-80D583B8 000E88 09D0+00 1/1 0/0 0/0 .text            execute__10daTagCsw_cFv */
 int daTagCsw_c::execute() {
     bool bVar3 = false;
     daCstatue_c* statue = (daCstatue_c*)fopAcM_Search(searchCStatue, this);
@@ -475,7 +456,6 @@ int daTagCsw_c::execute() {
     return 1;
 }
 
-/* 80D583B8-80D584C4 001858 010C+00 1/1 0/0 0/0 .text            draw__10daTagCsw_cFv */
 int daTagCsw_c::draw() {
     field_0x57c->entry(field_0x574->getModelData());
     if (field_0x578 != NULL) {
@@ -495,35 +475,28 @@ int daTagCsw_c::draw() {
     return 1;
 }
 
-/* 80D584C4-80D584E4 001964 0020+00 1/0 0/0 0/0 .text            daTagCsw_Draw__FP10daTagCsw_c */
 static int daTagCsw_Draw(daTagCsw_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D584E4-80D58504 001984 0020+00 1/0 0/0 0/0 .text            daTagCsw_Execute__FP10daTagCsw_c */
 static int daTagCsw_Execute(daTagCsw_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D58504-80D5850C 0019A4 0008+00 1/0 0/0 0/0 .text            daTagCsw_IsDelete__FP10daTagCsw_c
- */
 static int daTagCsw_IsDelete(daTagCsw_c* i_this) {
     return 1;
 }
 
-/* 80D5850C-80D58548 0019AC 003C+00 1/0 0/0 0/0 .text            daTagCsw_Delete__FP10daTagCsw_c */
 static int daTagCsw_Delete(daTagCsw_c* i_this) {
     i_this->Delete();
     i_this->~daTagCsw_c();
     return 1;
 }
 
-/* 80D58548-80D58568 0019E8 0020+00 1/0 0/0 0/0 .text            daTagCsw_Create__FP10fopAc_ac_c */
 static int daTagCsw_Create(fopAc_ac_c* i_this) {
     return static_cast<daTagCsw_c*>(i_this)->create();
 }
 
-/* 80D586D4-80D586F4 -00001 0020+00 1/0 0/0 0/0 .data            l_daTagCsw_Method */
 static actor_method_class l_daTagCsw_Method = {
     (process_method_func)daTagCsw_Create,
     (process_method_func)daTagCsw_Delete,
@@ -532,7 +505,6 @@ static actor_method_class l_daTagCsw_Method = {
     (process_method_func)daTagCsw_Draw,
 };
 
-/* 80D586F4-80D58724 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_TAG_CSW */
 extern actor_process_profile_definition g_profile_TAG_CSW = {
     fpcLy_CURRENT_e,
     7,

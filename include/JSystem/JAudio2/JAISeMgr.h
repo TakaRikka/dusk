@@ -42,24 +42,24 @@ class JAISeMgr;
  */
 class JAISeCategoryMgr : public JAISeqDataUser, public JASNonCopyable {
 public:
-    /* 8029F9C4 */ void JAISeMgr_calc_();
-    /* 8029FB30 */ void JAISeMgr_freeDeadSe_();
-    /* 8029FC88 */ bool JAISeMgr_acceptsNewSe_(u32 priority) const;
-    /* 8029FD40 */ void sortByPriority_();
-    /* 8029FDE0 */ void stop(u32 fadeTime);
-    /* 8029FE34 */ void stop();
-    /* 8029FE78 */ void stopSoundID(JAISoundID id);
-    /* 8029FEEC */ void pause(bool);
-    /* 8029FF18 */ void JAISeMgr_mixOut_(const JAISoundParamsMove& params, JAISoundActivity activity);
-    /* 802A0994 */ JAISeCategoryMgr() {
+    void JAISeMgr_calc_();
+    void JAISeMgr_freeDeadSe_();
+    bool JAISeMgr_acceptsNewSe_(u32 priority) const;
+    void sortByPriority_();
+    void stop(u32 fadeTime);
+    void stop();
+    void stopSoundID(JAISoundID id);
+    void pause(bool);
+    void JAISeMgr_mixOut_(const JAISoundParamsMove& params, JAISoundActivity activity);
+    JAISeCategoryMgr() {
         mParams.init();
         mMaxActiveSe = 0;
         mMaxInactiveSe = 0;
         field_0x0 = 0;
     }
 
-    /* 8029F8B0 */ virtual bool isUsingSeqData(const JAISeqDataRegion& seqDataRegion);
-    /* 8029F91C */ virtual int releaseSeqData(const JAISeqDataRegion& seqDataRegion);
+    virtual bool isUsingSeqData(const JAISeqDataRegion& seqDataRegion);
+    virtual int releaseSeqData(const JAISeqDataRegion& seqDataRegion);
 
     JAISoundParamsMove* getParams() { return &mParams; }
     int getMaxSe() const {
@@ -91,22 +91,22 @@ class JAISeMgr : public JASGlobalInstance<JAISeMgr>,
                  public JAISeqDataUser,
                  public JAISoundActivity {
 public:
-    /* 802A0074 */ JAISeMgr(bool setInstance);
-    /* 802A0268 */ void setCategoryArrangement(const JAISeCategoryArrangement& arrangement);
-    /* 802A02A0 */ void stop();
-    /* 802A02F4 */ void stopSoundID(JAISoundID id);
-    /* 802A0358 */ void initParams();
-    /* 802A03D8 */ void setAudience(JAIAudience* audience);
-    /* 802A03E0 */ void setSeqDataMgr(JAISeqDataMgr* seqDataMgr);
-    /* 802A0434 */ void resetSeqDataMgr();
-    /* 802A0484 */ JAISe* newSe_(int category, u32 priority);
-    /* 802A0574 */ void calc();
-    /* 802A0704 */ void mixOut();
-    /* 802A0768 */ bool startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr);
-    /* 802A08D0 */ int getNumActiveSe() const;
+    JAISeMgr(bool setInstance);
+    void setCategoryArrangement(const JAISeCategoryArrangement& arrangement);
+    void stop();
+    void stopSoundID(JAISoundID id);
+    void initParams();
+    void setAudience(JAIAudience* audience);
+    void setSeqDataMgr(JAISeqDataMgr* seqDataMgr);
+    void resetSeqDataMgr();
+    JAISe* newSe_(int category, u32 priority);
+    void calc();
+    void mixOut();
+    bool startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr);
+    int getNumActiveSe() const;
 
-    /* 802A0168 */ virtual bool isUsingSeqData(const JAISeqDataRegion& seqDataRegion);
-    /* 802A01D8 */ virtual int releaseSeqData(const JAISeqDataRegion& seqDataRegion);
+    virtual bool isUsingSeqData(const JAISeqDataRegion& seqDataRegion);
+    virtual int releaseSeqData(const JAISeqDataRegion& seqDataRegion);
 
     JAISeCategoryMgr* getCategory(int index) { return &mCategoryMgrs[index]; }
     JAIAudience* getAudience() { return mAudience; }

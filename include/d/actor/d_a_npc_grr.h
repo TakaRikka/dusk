@@ -26,7 +26,7 @@ class daNpc_grR_HIO_c
 
 class daNpc_grR_Param_c {
 public:
-    /* 809E386C */ virtual ~daNpc_grR_Param_c() {}
+    virtual ~daNpc_grR_Param_c() {}
 
     static daNpc_grR_HIOParam const m;
 };
@@ -35,45 +35,45 @@ class daNpc_grR_c : public daNpcF_c {
 public:
     typedef int (daNpc_grR_c::*cutFunc)(int);
     typedef int (daNpc_grR_c::*actionFunc)(void*);
-    /* 809DF8CC */ daNpc_grR_c();
-    /* 809DFAE0 */ ~daNpc_grR_c();
-    /* 809DFCE0 */ cPhs__Step create();
-    /* 809DFFB8 */ int CreateHeap();
-    /* 809E03FC */ int Delete();
-    /* 809E0430 */ int Execute();
-    /* 809E0450 */ int Draw();
-    /* 809E04E0 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 809E0714 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 809E0734 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 809E0780 */ void setParam();
-    /* 809E08FC */ BOOL main();
-    /* 809E0A7C */ BOOL ctrlBtk();
-    /* 809E0B5C */ void setAttnPos();
-    /* 809E105C */ bool setExpressionAnm(int, bool);
-    /* 809E1260 */ bool setExpressionBtp(int);
-    /* 809E138C */ void setExpression(int, f32);
-    /* 809E13B8 */ void setMotionAnm(int, f32);
-    /* 809E1548 */ void setMotion(int, f32, int);
-    /* 809E158C */ BOOL drawDbgInfo();
-    /* 809E1594 */ void drawOtherMdls();
-    /* 809E1598 */ u8 getTypeFromParam();
-    /* 809E15E4 */ BOOL isDelete();
-    /* 809E16CC */ void reset();
-    /* 809E18A4 */ void playExpression();
-    /* 809E1B28 */ void playMotion();
-    /* 809E1F10 */ BOOL chkAction(actionFunc);
-    /* 809E1F3C */ BOOL setAction(actionFunc);
-    /* 809E1FE4 */ BOOL selectAction();
-    /* 809E2088 */ void doNormalAction(int);
-    /* 809E219C */ BOOL doEvent();
-    /* 809E2480 */ void setLookMode(int);
-    /* 809E24A4 */ void lookat();
-    /* 809E272C */ void setExpressionTalkAfter();
-    /* 809E27CC */ int wait(void*);
-    /* 809E29B8 */ int waitMaro(void*);
-    /* 809E2B48 */ int talk(void*);
-    /* 809E2E84 */ int test(void*);
-    /* 809E3868 */ void adjustShapeAngle() {}
+    daNpc_grR_c();
+    ~daNpc_grR_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void setParam();
+    BOOL main();
+    BOOL ctrlBtk();
+    void setAttnPos();
+    bool setExpressionAnm(int, bool);
+    bool setExpressionBtp(int);
+    void setExpression(int, f32);
+    void setMotionAnm(int, f32);
+    void setMotion(int, f32, int);
+    BOOL drawDbgInfo();
+    void drawOtherMdls();
+    u8 getTypeFromParam();
+    BOOL isDelete();
+    void reset();
+    void playExpression();
+    void playMotion();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    BOOL selectAction();
+    void doNormalAction(int);
+    BOOL doEvent();
+    void setLookMode(int);
+    void lookat();
+    void setExpressionTalkAfter();
+    int wait(void*);
+    int waitMaro(void*);
+    int talk(void*);
+    int test(void*);
+    void adjustShapeAngle() {}
 
     static char* mEvtCutNameList;
     static cutFunc mEvtCutList[1];

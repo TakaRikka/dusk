@@ -19,8 +19,6 @@
 static BOOL l_debugMode; 
 #endif
 
-/* 804DA54C-804DA5B8 0000EC 006C+00 1/1 0/0 0/0 .text daCanoe_searchTagWaterFall__FP10fopAc_ac_cPv
- */
 static BOOL daCanoe_searchTagWaterFall(fopAc_ac_c* i_actor, void* i_data) {
     if (fopAcM_GetName(i_actor) == PROC_Tag_WaterFall) {
         if (((daTagWaterFall_c*)i_actor)->checkHitWaterFall(*(cXyz*)i_data)) {
@@ -31,7 +29,6 @@ static BOOL daCanoe_searchTagWaterFall(fopAc_ac_c* i_actor, void* i_data) {
     return TRUE;
 }
 
-/* 804DA5F4-804DA720 000194 012C+00 1/1 0/0 0/0 .text            createHeap__9daCanoe_cFv */
 int daCanoe_c::createHeap() {
     void* modelData = dComIfG_getObjectRes(mArcName, 4);
     void* paddleModelData = dComIfG_getObjectRes(mArcName, 3);
@@ -59,30 +56,22 @@ int daCanoe_c::createHeap() {
     return 1;
 }
 
-/* 804DA720-804DA740 0002C0 0020+00 1/1 0/0 0/0 .text            daCanoe_createHeap__FP10fopAc_ac_c
- */
 static int daCanoe_createHeap(fopAc_ac_c* i_this) {
     return ((daCanoe_c*)i_this)->createHeap();
 }
 
-/* 804DD5DC-804DD5E8 000000 000C+00 8/8 0/0 0/0 .rodata          @3766 */
 static u8 const lit_3766[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 804DD5E8-804DD5F0 00000C 0006+02 0/1 0/0 0/0 .rodata          l_arcName */
 static const char l_arcName[] = "Canoe";
 
-/* 804DD5F0-804DD5F8 000014 0007+01 0/1 0/0 0/0 .rodata          l_arcName2 */
 static const char l_arcName2[] = "CanoeB";
 
-/* 804DD5F8-804DD600 00001C 0008+00 0/1 0/0 0/0 .rodata          l_arcName3 */
 static const char l_arcName3[] = "CanoeE3";
 
-/* 804DD600-804DD614 000024 0014+00 2/3 0/0 0/0 .rodata          l_cylOffsetZ */
 static const f32 l_cylOffsetZ[5] = {200.0f, 110.0f, 20.0f, -70.0f, -160.0f};
 
-/* 804DD6F0-804DD734 000000 0044+00 1/1 0/0 0/0 .data            l_cylSrc */
 static dCcD_SrcCyl l_cylSrc = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x10}, 0x79}}, // mObj
@@ -97,7 +86,6 @@ static dCcD_SrcCyl l_cylSrc = {
     } // mCyl
 };
 
-/* 804DA740-804DAB18 0002E0 03D8+00 1/1 0/0 0/0 .text            create__9daCanoe_cFv */
 int daCanoe_c::create() {
     fopAcM_ct(this, daCanoe_c);
 
@@ -176,27 +164,23 @@ int daCanoe_c::create() {
     return phase_state;
 }
 
-/* 804DAE88-804DAEA8 000A28 0020+00 1/0 0/0 0/0 .text            daCanoe_Create__FP10fopAc_ac_c */
 static int daCanoe_Create(fopAc_ac_c* i_this) {
     daCanoe_c* a_this = (daCanoe_c*)i_this;
     fpc_ProcID id = fopAcM_GetID(i_this);
     return a_this->create();
 }
 
-/* 804DAEA8-804DAFE0 000A48 0138+00 1/1 0/0 0/0 .text            __dt__9daCanoe_cFv */
 daCanoe_c::~daCanoe_c() {
     dComIfG_resDelete(&mPhaseReq, mArcName);
     mSound.deleteObject();
 }
 
-/* 804DAFE0-804DB008 000B80 0028+00 1/0 0/0 0/0 .text            daCanoe_Delete__FP9daCanoe_c */
 static int daCanoe_Delete(daCanoe_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     i_this->~daCanoe_c();
     return 1;
 }
 
-/* 804DB008-804DB0B0 000BA8 00A8+00 1/1 0/0 0/0 .text            setRoomInfo__9daCanoe_cFv */
 void daCanoe_c::setRoomInfo() {
     int room_no;
     if (mAcch[0].GetGroundH() != -G_CM3D_F_INF) {
@@ -214,7 +198,6 @@ void daCanoe_c::setRoomInfo() {
     }
 }
 
-/* 804DB0B0-804DB3F4 000C50 0344+00 2/2 0/0 0/0 .text            setMatrix__9daCanoe_cFv */
 void daCanoe_c::setMatrix() {
     f32 var_f29;
     if (mShapeOffsetY > 5.0f) {
@@ -280,7 +263,6 @@ void daCanoe_c::setMatrix() {
     eyePos = attention_info.position;
 }
 
-/* 804DB3F4-804DB578 000F94 0184+00 1/1 0/0 0/0 .text            setCollision__9daCanoe_cFv */
 void daCanoe_c::setCollision() {
     mCcStts.Move();
 
@@ -313,7 +295,6 @@ void daCanoe_c::setCollision() {
     }
 }
 
-/* 804DB578-804DB754 001118 01DC+00 1/1 0/0 0/0 .text            posMove__9daCanoe_cFv */
 void daCanoe_c::posMove() {
     f32 move_speed = speedF * cM_scos(field_0x1448);
     current.pos.x += move_speed * cM_ssin(current.angle.y);
@@ -343,15 +324,12 @@ void daCanoe_c::posMove() {
     current.pos.z += mWaterSpeed.z;
 }
 
-/* 804DB754-804DB7AC 0012F4 0058+00 2/2 0/0 0/0 .text checkGomikabe__9daCanoe_cFR13cBgS_PolyInfo
- */
 void daCanoe_c::checkGomikabe(cBgS_PolyInfo& i_polyinfo) {
     if (daAlink_c::getMoveBGActorName(i_polyinfo, 1) == PROC_Obj_GOMIKABE) {
         ((daObjGOMIKABE_c*)dComIfG_Bgsp().GetActorPointer(i_polyinfo))->BreakSet();
     }
 }
 
-/* 804DB7AC-804DB828 00134C 007C+00 3/3 0/0 0/0 .text            setFrontBackPos__9daCanoe_cFv */
 void daCanoe_c::setFrontBackPos() {
     f32 temp_f31 = cM_ssin(shape_angle.y);
     f32 temp_f1 = cM_scos(shape_angle.y);
@@ -359,7 +337,6 @@ void daCanoe_c::setFrontBackPos() {
     mBackPos.set(current.pos.x + (l_cylOffsetZ[4] * temp_f31), current.pos.y, current.pos.z + (l_cylOffsetZ[4] * temp_f1));
 }
 
-/* 804DB828-804DC2E8 0013C8 0AC0+00 1/1 0/0 0/0 .text            frontBackBgCheck__9daCanoe_cFv */
 void daCanoe_c::frontBackBgCheck() {
     setFrontBackPos();
     mAcch[1].CrrPos(dComIfG_Bgsp());
@@ -553,7 +530,6 @@ void daCanoe_c::frontBackBgCheck() {
     }
 }
 
-/* 804DC330-804DC554 001ED0 0224+00 1/1 0/0 0/0 .text            setPaddleEffect__9daCanoe_cFv */
 void daCanoe_c::setPaddleEffect() {
     static cXyz paddleRippleScale(0.7f, 0.7f, 0.7f);
 
@@ -605,8 +581,6 @@ void daCanoe_c::setPaddleEffect() {
     }
 }
 
-/* 804DC554-804DC7B4 0020F4 0260+00 1/1 0/0 0/0 .text            setCanoeSliderEffect__9daCanoe_cFv
- */
 void daCanoe_c::setCanoeSliderEffect() {
     if (daAlink_getAlinkActorClass()->checkCanoeSlider()) {
         if (mWaterSpeed.abs2XZ() > 25.0f || fabsf(speedF) > 5.0f) {
@@ -637,7 +611,6 @@ void daCanoe_c::setCanoeSliderEffect() {
     }
 }
 
-/* 804DC7B4-804DD33C 002354 0B88+00 1/1 0/0 0/0 .text            execute__9daCanoe_cFv */
 int daCanoe_c::execute() {
     daAlink_c* player = daAlink_getAlinkActorClass();
     mOldFrontPos = mFrontPos;
@@ -888,12 +861,10 @@ int daCanoe_c::execute() {
     return 1;
 }
 
-/* 804DD33C-804DD35C 002EDC 0020+00 1/0 0/0 0/0 .text            daCanoe_Execute__FP9daCanoe_c */
 static int daCanoe_Execute(daCanoe_c* i_this) {
     return i_this->execute();
 }
 
-/* 804DD35C-804DD554 002EFC 01F8+00 1/1 0/0 0/0 .text            draw__9daCanoe_cFv */
 int daCanoe_c::draw() {
     field_0x1444 = 1;
 
@@ -931,12 +902,10 @@ int daCanoe_c::draw() {
     return 1;
 }
 
-/* 804DD554-804DD574 0030F4 0020+00 1/0 0/0 0/0 .text            daCanoe_Draw__FP9daCanoe_c */
 static int daCanoe_Draw(daCanoe_c* i_this) {
     return i_this->draw();
 }
 
-/* 804DD734-804DD754 -00001 0020+00 1/0 0/0 0/0 .data            l_daCanoe_Method */
 static actor_method_class l_daCanoe_Method = {
     (process_method_func)daCanoe_Create,
     (process_method_func)daCanoe_Delete,
@@ -945,7 +914,6 @@ static actor_method_class l_daCanoe_Method = {
     (process_method_func)daCanoe_Draw,
 };
 
-/* 804DD754-804DD784 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_CANOE */
 extern actor_process_profile_definition g_profile_CANOE = {
   fpcLy_CURRENT_e,         // mLayerID
   4,                       // mListID

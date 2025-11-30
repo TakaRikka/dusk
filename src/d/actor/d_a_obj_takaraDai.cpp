@@ -9,7 +9,6 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 
-/* 80D06D8C-80D06E1C 0000EC 0090+00 1/1 0/0 0/0 .text            __ct__15daTkraDai_HIO_cFv */
 daTkraDai_HIO_c::daTkraDai_HIO_c() {
     field_0x04 = 12.0f;
     field_0x10 = 4.0f;
@@ -27,7 +26,6 @@ daTkraDai_HIO_c::daTkraDai_HIO_c() {
     field_0x38 = 15;
 }
 
-/* 80D06E64-80D06FFC 0001C4 0198+00 2/2 0/0 0/0 .text            setBaseMtx__11daTkraDai_cFv */
 void daTkraDai_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
@@ -48,7 +46,6 @@ void daTkraDai_c::setBaseMtx() {
     cMtx_copy(mDoMtx_stack_c::get(), field_0x62c);
 }
 
-/* 80D06FFC-80D07140 00035C 0144+00 1/0 0/0 0/0 .text            CreateHeap__11daTkraDai_cFv */
 int daTkraDai_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("M_TakaraD", 4);
     mpBaseModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
@@ -75,7 +72,6 @@ int daTkraDai_c::CreateHeap() {
     return 1;
 }
 
-/* 80D07140-80D07344 0004A0 0204+00 1/1 0/0 0/0 .text            create__11daTkraDai_cFv */
 int daTkraDai_c::create() {
     fopAcM_ct(this, daTkraDai_c);
 
@@ -123,7 +119,6 @@ int daTkraDai_c::create() {
     return phase;
 }
 
-/* 80D07344-80D073A4 0006A4 0060+00 1/0 0/0 0/0 .text            Execute__11daTkraDai_cFPPA3_A4_f */
 int daTkraDai_c::Execute(Mtx** param_0) {
     procMain();
     setBaseMtx();
@@ -134,10 +129,8 @@ int daTkraDai_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80D0791C-80D07958 000014 003C+00 3/3 0/0 0/0 .bss             l_HIO */
 static daTkraDai_HIO_c l_HIO;
 
-/* 80D073A4-80D074D0 000704 012C+00 1/1 0/0 0/0 .text            procMain__11daTkraDai_cFv */
 void daTkraDai_c::procMain() {
     typedef void (daTkraDai_c::*daTkraDai_modeFunc)();
     static daTkraDai_modeFunc mode_proc[] = {
@@ -150,14 +143,12 @@ void daTkraDai_c::procMain() {
     field_0x5d0++;
 }
 
-/* 80D074D0-80D07528 000830 0058+00 1/1 0/0 0/0 .text            init_modeWait__11daTkraDai_cFv */
 void daTkraDai_c::init_modeWait() {
     field_0x5dc = l_HIO.field_0x08;
     field_0x61a = cM_deg2s(360.0f / (l_HIO.field_0x04 * 30.0f));
     mMode = 0;
 }
 
-/* 80D07528-80D075A4 000888 007C+00 1/0 0/0 0/0 .text            modeWait__11daTkraDai_cFv */
 void daTkraDai_c::modeWait() {
     field_0x5dc = l_HIO.field_0x08;
     field_0x5e4 = l_HIO.field_0x0c;
@@ -169,7 +160,6 @@ void daTkraDai_c::modeWait() {
     }
 }
 
-/* 80D075A4-80D07668 000904 00C4+00 1/0 0/0 0/0 .text            Draw__11daTkraDai_cFv */
 int daTkraDai_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpBaseModel, &tevStr);
@@ -181,7 +171,6 @@ int daTkraDai_c::Draw() {
     return 1;
 }
 
-/* 80D07668-80D076D0 0009C8 0068+00 1/0 0/0 0/0 .text            Delete__11daTkraDai_cFv */
 int daTkraDai_c::Delete() {
     dComIfG_resDelete(&mPhase, "M_TakaraD");
     if (mpBgW != NULL && mpBgW->ChkUsed()) {
@@ -190,37 +179,29 @@ int daTkraDai_c::Delete() {
     return 1;
 }
 
-/* 80D076D0-80D076FC 000A30 002C+00 1/0 0/0 0/0 .text            daTkraDai_Draw__FP11daTkraDai_c */
 static int daTkraDai_Draw(daTkraDai_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80D076FC-80D0771C 000A5C 0020+00 1/0 0/0 0/0 .text            daTkraDai_Execute__FP11daTkraDai_c
- */
 static int daTkraDai_Execute(daTkraDai_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D0771C-80D0773C 000A7C 0020+00 1/0 0/0 0/0 .text            daTkraDai_Delete__FP11daTkraDai_c
- */
 static int daTkraDai_Delete(daTkraDai_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D0773C-80D0775C 000A9C 0020+00 1/0 0/0 0/0 .text            daTkraDai_Create__FP10fopAc_ac_c */
 static int daTkraDai_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return static_cast<daTkraDai_c*>(i_this)->create();
 }
 
-/* 80D07878-80D07898 -00001 0020+00 1/0 0/0 0/0 .data            l_daTkraDai_Method */
 static actor_method_class l_daTkraDai_Method = {
     (process_method_func)daTkraDai_Create,  (process_method_func)daTkraDai_Delete,
     (process_method_func)daTkraDai_Execute, 0,
     (process_method_func)daTkraDai_Draw,
 };
 
-/* 80D07898-80D078C8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_TakaraDai */
 extern actor_process_profile_definition g_profile_Obj_TakaraDai = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

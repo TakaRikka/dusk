@@ -9,28 +9,23 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_kankyo_rain.h"
 
-/* 80BF6F18-80BF6F38 000078 0020+00 1/1 0/0 0/0 .text            initBaseMtx__13daObjGeyser_cFv */
 void daObjGeyser_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80BF6F38-80BF6F80 000098 0048+00 1/1 0/0 0/0 .text            setBaseMtx__13daObjGeyser_cFv */
 void daObjGeyser_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
-/* 80BF9088-80BF908C -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "H_knktsn";
 
-/* 80BF908C-80BF90A4 000024 0018+00 1/1 0/0 0/0 .data            l_cull_box */
 static cull_box l_cull_box = {
     {-100.0f, -10.0f, -100.0f},
     {100.0f, 550.0f, 100.0f},
 };
 
-/* 80BF90A4-80BF90F0 00003C 004C+00 1/1 0/0 0/0 .data            l_cps_src */
 static dCcD_SrcCps l_cps_src = {
     {
         {0x0, {{0x100, 0x0, 0x1d}, {0x0, 0x0}, 0x0}}, // mObj
@@ -43,7 +38,6 @@ static dCcD_SrcCps l_cps_src = {
     } // mCpsAttr
 };
 
-/* 80BF6F80-80BF70E0 0000E0 0160+00 1/0 0/0 0/0 .text            Create__13daObjGeyser_cFv */
 int daObjGeyser_c::Create() {
     if (getType() == 1) {
         shape_angle.x = 0x4000;
@@ -95,7 +89,6 @@ int daObjGeyser_c::Create() {
     return 1;
 }
 
-/* 80BF70E0-80BF7174 000240 0094+00 1/0 0/0 0/0 .text            CreateHeap__13daObjGeyser_cFv */
 int daObjGeyser_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(345, modelData != NULL);
@@ -109,10 +102,8 @@ int daObjGeyser_c::CreateHeap() {
     return 1;
 }
 
-/* 80BF8FE8-80BF8FF0 000000 0008+00 8/8 0/0 0/0 .rodata          l_dzb */
 static const int l_dzb[] = {7, 8};
 
-/* 80BF7174-80BF7288 0002D4 0114+00 1/1 0/0 0/0 .text            create1st__13daObjGeyser_cFv */
 int daObjGeyser_c::create1st() {
     int phase_state = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase_state != cPhs_COMPLEATE_e) {
@@ -141,14 +132,11 @@ int daObjGeyser_c::create1st() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80BF8FF0-80BF9008 000008 0018+00 0/1 0/0 0/0 .rodata          l_scale */
 static const Vec l_scale[] = {
     {0.7f, 1.0f, 1.0f},
     {0.3f, 0.8f, 1.0f},
 };
 
-/* 80BF7288-80BF744C 0003E8 01C4+00 1/0 0/0 0/0 .text            Execute__13daObjGeyser_cFPPA3_A4_f
- */
 int daObjGeyser_c::Execute(Mtx** param_0) {
     if (dComIfGp_event_runCheck() == 0) {
         f32 range = 5000.0f;
@@ -191,7 +179,6 @@ int daObjGeyser_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80BF744C-80BF75B8 0005AC 016C+00 1/1 0/0 0/0 .text            action__13daObjGeyser_cFv */
 void daObjGeyser_c::action() {
     static void (daObjGeyser_c::*l_func[])() = {
         &daObjGeyser_c::actionOff,
@@ -220,13 +207,10 @@ void daObjGeyser_c::action() {
     }
 }
 
-/* 80BF75B8-80BF75C4 000718 000C+00 3/3 0/0 0/0 .text            actionOff2Init__13daObjGeyser_cFv
- */
 void daObjGeyser_c::actionOff2Init() {
     mAction = 0;
 }
 
-/* 80BF75C4-80BF77F0 000724 022C+00 1/0 0/0 0/0 .text            actionOff2__13daObjGeyser_cFv */
 void daObjGeyser_c::actionOff2() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     
@@ -260,7 +244,6 @@ void daObjGeyser_c::actionOff2() {
     cLib_chaseF(&field_0x730, 0.0f, 0.1f * scale.y);
 }
 
-/* 80BF7838-80BF787C 000998 0044+00 2/2 0/0 0/0 .text actionOnWait2Init__13daObjGeyser_cFv */
 void daObjGeyser_c::actionOnWait2Init() {
     setEmitterPre00();
     setEmitterSrc00Sand();
@@ -268,7 +251,6 @@ void daObjGeyser_c::actionOnWait2Init() {
     mAction = 1;
 }
 
-/* 80BF787C-80BF7C54 0009DC 03D8+00 1/0 0/0 0/0 .text            actionOnWait2__13daObjGeyser_cFv */
 void daObjGeyser_c::actionOnWait2() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (getType() == 0) {
@@ -318,7 +300,6 @@ void daObjGeyser_c::actionOnWait2() {
     fopAcM_seStartLevel(this, Z2SE_OBJ_GEYSER_LOW, 0);
 }
 
-/* 80BF7C54-80BF7CA0 000DB4 004C+00 1/1 0/0 0/0 .text            actionOn2Init__13daObjGeyser_cFv */
 void daObjGeyser_c::actionOn2Init() {
     setEmitterClm00();
     setEmitterSmk01();
@@ -327,7 +308,6 @@ void daObjGeyser_c::actionOn2Init() {
     mAction = 2;
 }
 
-/* 80BF7CA0-80BF8158 000E00 04B8+00 1/0 0/0 0/0 .text            actionOn2__13daObjGeyser_cFv */
 void daObjGeyser_c::actionOn2() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (getType() == 0) {
@@ -373,7 +353,6 @@ void daObjGeyser_c::actionOn2() {
     fopAcM_seStartLevel(this, Z2SE_OBJ_GEYSER_HIGH, 0);
 }
 
-/* 80BF8158-80BF8178 0012B8 0020+00 1/1 0/0 0/0 .text actionDisappearInit__13daObjGeyser_cFUc */
 void daObjGeyser_c::actionDisappearInit(u8 param_0) {
     field_0x784 = 0xFF;
     field_0x760 = 10;
@@ -381,8 +360,6 @@ void daObjGeyser_c::actionDisappearInit(u8 param_0) {
     mAction = 3;
 }
 
-/* 80BF8178-80BF823C 0012D8 00C4+00 1/0 0/0 0/0 .text            actionDisappear__13daObjGeyser_cFv
- */
 void daObjGeyser_c::actionDisappear() {
     if (field_0x760 == 0) {
         stopEmitterClm00();
@@ -412,7 +389,6 @@ void daObjGeyser_c::actionDisappear() {
     }
 }
 
-/* 80BF823C-80BF8268 00139C 002C+00 2/2 0/0 0/0 .text            actionOffInit__13daObjGeyser_cFv */
 void daObjGeyser_c::actionOffInit() {
     u8 var_r31 = getArg1();
     if (var_r31 == 0xFF) {
@@ -423,7 +399,6 @@ void daObjGeyser_c::actionOffInit() {
     mAction = 0;
 }
 
-/* 80BF8268-80BF82D0 0013C8 0068+00 1/0 0/0 0/0 .text            actionOff__13daObjGeyser_cFv */
 void daObjGeyser_c::actionOff() {
     cLib_chaseF(&field_0x730, 0.0f, 0.1f * scale.y);
 
@@ -441,8 +416,6 @@ void daObjGeyser_c::actionOff() {
     }
 }
 
-/* 80BF82D0-80BF8344 001430 0074+00 1/1 0/0 0/0 .text            actionOnWaitInit__13daObjGeyser_cFv
- */
 void daObjGeyser_c::actionOnWaitInit() {
     u8 var_r30 = getArg2();
     if (var_r30 == 0xFF) {
@@ -456,7 +429,6 @@ void daObjGeyser_c::actionOnWaitInit() {
     mAction = 1;
 }
 
-/* 80BF8344-80BF83E4 0014A4 00A0+00 1/0 0/0 0/0 .text            actionOnWait__13daObjGeyser_cFv */
 void daObjGeyser_c::actionOnWait() {
     if (field_0x760 == 0) {
         stopEmitterPre00();
@@ -477,7 +449,6 @@ void daObjGeyser_c::actionOnWait() {
     fopAcM_seStartLevel(this, Z2SE_OBJ_GEYSER_LOW, 0);
 }
 
-/* 80BF83E4-80BF846C 001544 0088+00 1/1 0/0 0/0 .text            actionOnInit__13daObjGeyser_cFv */
 void daObjGeyser_c::actionOnInit() {
     u8 var_r30 = getArg3();
     if (var_r30 == 0xFF) {
@@ -496,7 +467,6 @@ void daObjGeyser_c::actionOnInit() {
     mAction = 2;
 }
 
-/* 80BF846C-80BF8584 0015CC 0118+00 1/0 0/0 0/0 .text            actionOn__13daObjGeyser_cFv */
 void daObjGeyser_c::actionOn() {
     if (field_0x760 == 0) {
         cutPntWind();
@@ -531,7 +501,6 @@ void daObjGeyser_c::actionOn() {
     fopAcM_seStartLevel(this, Z2SE_OBJ_GEYSER_HIGH, 0);
 }
 
-/* 80BF8584-80BF863C 0016E4 00B8+00 2/2 0/0 0/0 .text            setPntWind__13daObjGeyser_cFv */
 void daObjGeyser_c::setPntWind() {
     cXyz direction(0.0f, 1.0f, 0.0f);
     mDoMtx_stack_c::ZXYrotS(current.angle);
@@ -548,12 +517,10 @@ void daObjGeyser_c::setPntWind() {
     dKyw_pntwind_set(&mWind);
 }
 
-/* 80BF863C-80BF8660 00179C 0024+00 3/3 0/0 0/0 .text            cutPntWind__13daObjGeyser_cFv */
 void daObjGeyser_c::cutPntWind() {
     dKyw_pntwind_cut(&mWind);
 }
 
-/* 80BF8660-80BF8870 0017C0 0210+00 1/1 0/0 0/0 .text            movePntWind__13daObjGeyser_cFv */
 void daObjGeyser_c::movePntWind() {
     cXyz start;
     cXyz end;
@@ -576,7 +543,6 @@ void daObjGeyser_c::movePntWind() {
     }
 }
 
-/* 80BF8870-80BF8914 0019D0 00A4+00 1/0 0/0 0/0 .text            Draw__13daObjGeyser_cFv */
 int daObjGeyser_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -588,8 +554,6 @@ int daObjGeyser_c::Draw() {
     return 1;
 }
 
-/* 80BF8914-80BF89AC 001A74 0098+00 2/2 0/0 0/0 .text            setEmitterPre00__13daObjGeyser_cFv
- */
 void daObjGeyser_c::setEmitterPre00() {
     mParticleScale.set(scale.x, scale.y, scale.z);
 
@@ -600,10 +564,8 @@ void daObjGeyser_c::setEmitterPre00() {
     }
 }
 
-/* 80BF89AC-80BF89B0 001B0C 0004+00 2/2 0/0 0/0 .text setEmitterSrc00Sand__13daObjGeyser_cFv */
 void daObjGeyser_c::setEmitterSrc00Sand() {}
 
-/* 80BF89B0-80BF8A54 001B10 00A4+00 2/2 0/0 0/0 .text setEmitterSrc01Smk__13daObjGeyser_cFv */
 void daObjGeyser_c::setEmitterSrc01Smk() {
     mParticleScale.set(scale.x, scale.y, scale.z);
 
@@ -617,8 +579,6 @@ void daObjGeyser_c::setEmitterSrc01Smk() {
     }
 }
 
-/* 80BF8A54-80BF8A80 001BB4 002C+00 4/4 0/0 0/0 .text            stopEmitterPre00__13daObjGeyser_cFv
- */
 void daObjGeyser_c::stopEmitterPre00() {
     if (mpEmitterPre00 != NULL) {
         mpEmitterPre00->becomeInvalidEmitter();
@@ -626,7 +586,6 @@ void daObjGeyser_c::stopEmitterPre00() {
     }
 }
 
-/* 80BF8A80-80BF8AAC 001BE0 002C+00 5/5 0/0 0/0 .text stopEmitterSrc00Sand__13daObjGeyser_cFv */
 void daObjGeyser_c::stopEmitterSrc00Sand() {
     if (mpEmitterSrc00Sand != NULL) {
         mpEmitterSrc00Sand->becomeInvalidEmitter();
@@ -634,7 +593,6 @@ void daObjGeyser_c::stopEmitterSrc00Sand() {
     }
 }
 
-/* 80BF8AAC-80BF8AD8 001C0C 002C+00 5/5 0/0 0/0 .text stopEmitterSrc01Smk__13daObjGeyser_cFv */
 void daObjGeyser_c::stopEmitterSrc01Smk() {
     if (mpEmitterSrc01Smk != NULL) {
         mpEmitterSrc01Smk->becomeInvalidEmitter();
@@ -642,8 +600,6 @@ void daObjGeyser_c::stopEmitterSrc01Smk() {
     }
 }
 
-/* 80BF8AD8-80BF8B70 001C38 0098+00 2/2 0/0 0/0 .text            setEmitterClm00__13daObjGeyser_cFv
- */
 void daObjGeyser_c::setEmitterClm00() {
     mParticleScale.set(scale.x, scale.y, scale.z);
 
@@ -654,8 +610,6 @@ void daObjGeyser_c::setEmitterClm00() {
     }
 }
 
-/* 80BF8B70-80BF8C08 001CD0 0098+00 2/2 0/0 0/0 .text            setEmitterSmk01__13daObjGeyser_cFv
- */
 void daObjGeyser_c::setEmitterSmk01() {
     mParticleScale.set(scale.x, scale.y, scale.z);
 
@@ -666,8 +620,6 @@ void daObjGeyser_c::setEmitterSmk01() {
     }
 }
 
-/* 80BF8C08-80BF8CA0 001D68 0098+00 2/2 0/0 0/0 .text            setEmitterSmk02__13daObjGeyser_cFv
- */
 void daObjGeyser_c::setEmitterSmk02() {
     mParticleScale.set(scale.x, scale.y, scale.z);
 
@@ -678,8 +630,6 @@ void daObjGeyser_c::setEmitterSmk02() {
     }
 }
 
-/* 80BF8CA0-80BF8CCC 001E00 002C+00 4/4 0/0 0/0 .text            stopEmitterClm00__13daObjGeyser_cFv
- */
 void daObjGeyser_c::stopEmitterClm00() {
     if (mpEmitterClm00 != NULL) {
         mpEmitterClm00->becomeInvalidEmitter();
@@ -687,8 +637,6 @@ void daObjGeyser_c::stopEmitterClm00() {
     }
 }
 
-/* 80BF8CCC-80BF8CF8 001E2C 002C+00 4/4 0/0 0/0 .text            stopEmitterSmk01__13daObjGeyser_cFv
- */
 void daObjGeyser_c::stopEmitterSmk01() {
     if (mpEmitterSmk01 != NULL) {
         mpEmitterSmk01->becomeInvalidEmitter();
@@ -696,8 +644,6 @@ void daObjGeyser_c::stopEmitterSmk01() {
     }
 }
 
-/* 80BF8CF8-80BF8D24 001E58 002C+00 4/4 0/0 0/0 .text            stopEmitterSmk02__13daObjGeyser_cFv
- */
 void daObjGeyser_c::stopEmitterSmk02() {
     if (mpEmitterSmk02 != NULL) {
         mpEmitterSmk02->becomeInvalidEmitter();
@@ -705,7 +651,6 @@ void daObjGeyser_c::stopEmitterSmk02() {
     }
 }
 
-/* 80BF8D24-80BF8D98 001E84 0074+00 1/0 0/0 0/0 .text            Delete__13daObjGeyser_cFv */
 int daObjGeyser_c::Delete() {
     stopEmitterPre00();
     stopEmitterSrc00Sand();
@@ -719,30 +664,23 @@ int daObjGeyser_c::Delete() {
     return 1;
 }
 
-/* 80BF8D98-80BF8E88 001EF8 00F0+00 1/0 0/0 0/0 .text daObjGeyser_create1st__FP13daObjGeyser_c */
 static int daObjGeyser_create1st(daObjGeyser_c* i_this) {
     fopAcM_ct(i_this, daObjGeyser_c);
     return i_this->create1st();
 }
 
-/* 80BF8F2C-80BF8F4C 00208C 0020+00 1/0 0/0 0/0 .text daObjGeyser_MoveBGDelete__FP13daObjGeyser_c
- */
 static int daObjGeyser_MoveBGDelete(daObjGeyser_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80BF8F4C-80BF8F6C 0020AC 0020+00 1/0 0/0 0/0 .text daObjGeyser_MoveBGExecute__FP13daObjGeyser_c
- */
 static int daObjGeyser_MoveBGExecute(daObjGeyser_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BF8F6C-80BF8F98 0020CC 002C+00 1/0 0/0 0/0 .text daObjGeyser_MoveBGDraw__FP13daObjGeyser_c */
 static int daObjGeyser_MoveBGDraw(daObjGeyser_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BF9198-80BF91B8 -00001 0020+00 1/0 0/0 0/0 .data            daObjGeyser_METHODS */
 static actor_method_class daObjGeyser_METHODS = {
     (process_method_func)daObjGeyser_create1st,
     (process_method_func)daObjGeyser_MoveBGDelete,
@@ -751,7 +689,6 @@ static actor_method_class daObjGeyser_METHODS = {
     (process_method_func)daObjGeyser_MoveBGDraw,
 };
 
-/* 80BF91B8-80BF91E8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Geyser */
 extern actor_process_profile_definition g_profile_Obj_Geyser = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

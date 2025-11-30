@@ -19,8 +19,8 @@ public:
     /* 0x0C */ bool mIsDone;
     /* 0x10  vtable*/
 public:
-    /* 800158FC */ virtual ~mDoDvdThd_command_c();
-    /* 80015B74 */ mDoDvdThd_command_c();
+    virtual ~mDoDvdThd_command_c();
+    mDoDvdThd_command_c();
     inline s32 sync() { return mIsDone; }
     inline void destroy() { delete this; }
     virtual s32 execute() = 0;
@@ -28,10 +28,10 @@ public:
 
 class mDoDvdThd_toMainRam_c : public mDoDvdThd_command_c {
 public:
-    /* 80016338 */ mDoDvdThd_toMainRam_c(u8);
-    /* 80016394 */ static mDoDvdThd_toMainRam_c* create(char const*, u8, JKRHeap*);
-    /* 8001645C */ virtual ~mDoDvdThd_toMainRam_c();
-    /* 800164BC */ virtual s32 execute();
+    mDoDvdThd_toMainRam_c(u8);
+    static mDoDvdThd_toMainRam_c* create(char const*, u8, JKRHeap*);
+    virtual ~mDoDvdThd_toMainRam_c();
+    virtual s32 execute();
 
     void* getMemAddress() const { return mData; }
 
@@ -45,13 +45,13 @@ private:
 
 class mDoDvdThd_param_c {
 public:
-    /* 80015944 */ mDoDvdThd_param_c();
-    /* 8001598C */ void kick();
-    /* 800159B4 */ s32 waitForKick();
-    /* 800159DC */ mDoDvdThd_command_c* getFirstCommand();
-    /* 800159E4 */ void addition(mDoDvdThd_command_c*);
-    /* 80015A3C */ void cut(mDoDvdThd_command_c*);
-    /* 80015AD8 */ void mainLoop();
+    mDoDvdThd_param_c();
+    void kick();
+    s32 waitForKick();
+    mDoDvdThd_command_c* getFirstCommand();
+    void addition(mDoDvdThd_command_c*);
+    void cut(mDoDvdThd_command_c*);
+    void mainLoop();
 
 private:
     /* 0x00 */ OSMessageQueue mMessageQueue;
@@ -62,11 +62,11 @@ private:
 
 class mDoDvdThd_mountXArchive_c : public mDoDvdThd_command_c {
 public:
-    /* 80016108 */ virtual ~mDoDvdThd_mountXArchive_c();
-    /* 80016168 */ mDoDvdThd_mountXArchive_c(u8 mountDirection, JKRArchive::EMountMode mountMode);
-    /* 800161E0 */ static mDoDvdThd_mountXArchive_c* create(char const*, u8, JKRArchive::EMountMode,
+    virtual ~mDoDvdThd_mountXArchive_c();
+    mDoDvdThd_mountXArchive_c(u8 mountDirection, JKRArchive::EMountMode mountMode);
+    static mDoDvdThd_mountXArchive_c* create(char const*, u8, JKRArchive::EMountMode,
                                                             JKRHeap*);
-    /* 800162B0 */ virtual s32 execute();
+    virtual s32 execute();
 
     JKRArchive* getArchive() const { return mArchive; }
 
@@ -80,10 +80,10 @@ private:
 
 class mDoDvdThd_mountArchive_c : public mDoDvdThd_command_c {
 public:
-    /* 80015D44 */ virtual ~mDoDvdThd_mountArchive_c();
-    /* 80015DA4 */ mDoDvdThd_mountArchive_c(u8);
-    /* 80015E14 */ static mDoDvdThd_mountArchive_c* create(char const*, u8, JKRHeap*);
-    /* 80015EDC */ virtual s32 execute();
+    virtual ~mDoDvdThd_mountArchive_c();
+    mDoDvdThd_mountArchive_c(u8);
+    static mDoDvdThd_mountArchive_c* create(char const*, u8, JKRHeap*);
+    virtual s32 execute();
 
     JKRMemArchive* getArchive() const { return mArchive; }
     JKRHeap* getHeap() const { return mHeap; }
@@ -97,10 +97,10 @@ private:
 
 class mDoDvdThd_callback_c : public mDoDvdThd_command_c {
 public:
-    /* 80015BB8 */ virtual ~mDoDvdThd_callback_c();
-    /* 80015C18 */ mDoDvdThd_callback_c(mDoDvdThd_callback_func, void*);
-    /* 80015C74 */ static mDoDvdThd_callback_c* create(mDoDvdThd_callback_func, void*);
-    /* 80015CF0 */ virtual s32 execute();
+    virtual ~mDoDvdThd_callback_c();
+    mDoDvdThd_callback_c(mDoDvdThd_callback_func, void*);
+    static mDoDvdThd_callback_c* create(mDoDvdThd_callback_func, void*);
+    virtual s32 execute();
 
 private:
     /* 0x14 */ mDoDvdThd_callback_func mFunction;
@@ -110,12 +110,12 @@ private:
 
 struct mDoDvdThdStack {
     u8 stack[4096];
-} __attribute__((aligned(16)));
+} ATTRIBUTE_ALIGN(16);
 
 struct mDoDvdThd {
-    /* 800157FC */ static s32 main(void*);
-    /* 80015858 */ static void create(s32);
-    /* 800158B4 */ static void suspend();
+    static s32 main(void*);
+    static void create(s32);
+    static void suspend();
 
     static OSThread l_thread;
     static mDoDvdThdStack l_threadStack;

@@ -19,7 +19,6 @@ enum scan_states {
 #define fetch() (count++, (*ReadProc)(ReadProcArg, 0, __GetAChar))
 #define unfetch(c) (*ReadProc)(ReadProcArg, c, __UngetAChar)
 
-/* 80368D9C-80369114 3636DC 0378+00 3/2 0/0 0/0 .text            __strtoul */
 unsigned long __strtoul(int base, int max_width, int (*ReadProc)(void*, int, int),
                         void* ReadProcArg, int* chars_scanned, int* negative, int* overflow) {
     int scan_state = start;
@@ -151,7 +150,6 @@ unsigned long __strtoul(int base, int max_width, int (*ReadProc)(void*, int, int
     return value;
 }
 
-/* 80368CF0-80368D9C 363630 00AC+00 0/0 2/2 0/0 .text            strtoul */
 unsigned long strtoul(const char* str, char** end, int base) {
     unsigned long value;
     int count, negative, overflow;
@@ -176,7 +174,6 @@ unsigned long strtoul(const char* str, char** end, int base) {
     return value;
 }
 
-/* 80368C00-80368CF0 363540 00F0+00 0/0 3/3 0/0 .text            strtol */
 long strtol(const char* str, char** end, int base) {
     unsigned long uvalue;
     long svalue;

@@ -29,7 +29,7 @@ public:
 
 class daNpc_Aru_Param_c {
 public:
-    /* 80957604 */ virtual ~daNpc_Aru_Param_c() {}
+    virtual ~daNpc_Aru_Param_c() {}
 
     static daNpc_Aru_HIOParam const m;
 };
@@ -83,58 +83,58 @@ public:
     typedef int (daNpc_Aru_c::*actionFunc)(void*);
     typedef int (daNpc_Aru_c::*cutFunc)(int);
 
-    /* 8095178C */ ~daNpc_Aru_c();
-    /* 809518C4 */ cPhs__Step create();
-    /* 80951BB0 */ int CreateHeap();
-    /* 80951FDC */ int Delete();
-    /* 80952010 */ int Execute();
-    /* 80952030 */ int Draw();
-    /* 809520C4 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 809520E4 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 8095213C */ static void* srchCow(void*, void*);
-    /* 809521E4 */ static void* srchUDoor(void*, void*);
-    /* 80952280 */ BOOL chkThrust(fopAc_ac_c*);
-    /* 80952400 */ fopAc_ac_c* getCowP(int);
-    /* 8095253C */ fopAc_ac_c* getUDoor_l_P();
-    /* 8095260C */ fopAc_ac_c* getUDoor_r_P();
-    /* 809526DC */ u8 getType();
-    /* 80952740 */ BOOL isDelete();
-    /* 809527CC */ void reset();
-    /* 80952B00 */ void afterJntAnm(int);
-    /* 80952B84 */ void setParam();
-    /* 80952CE8 */ BOOL checkChangeEvt();
-    /* 80952D9C */ void setAfterTalkMotion();
-    /* 80952E64 */ void srchActors();
-    /* 809530DC */ BOOL evtTalk();
-    /* 8095317C */ BOOL evtCutProc();
-    /* 80953244 */ void action();
-    /* 809533D8 */ void beforeMove();
-    /* 8095349C */ void setAttnPos();
-    /* 80953798 */ void setCollision();
-    /* 809538F0 */ int drawDbgInfo();
-    /* 809538F8 */ BOOL selectAction();
-    /* 80953AB8 */ BOOL chkAction(actionFunc);
-    /* 80953AE4 */ BOOL setAction(actionFunc);
-    /* 80953B8C */ BOOL chkBullRunningStage();
-    /* 80953C08 */ BOOL chkSkipFenceStage();
-    /* 80953C84 */ s16 srchActorDirection(fopAc_ac_c*);
-    /* 80953D58 */ void adjustMoveDir();
-    /* 809543F8 */ int duck(int);
-    /* 80954744 */ int lookround(s16);
-    /* 80954894 */ int cutRideOnHorse(int);
-    /* 80954A5C */ int cutGotoBullRunningStage(int);
-    /* 80954C0C */ int cutEndBullRunning(int);
-    /* 80954F4C */ int cutGotoSkipFenceStage(int);
-    /* 80955080 */ int cutSpeakTo(int);
-    /* 8095533C */ int cutNoEntrance(int);
-    /* 80955608 */ int wait(void*);
-    /* 80955B48 */ int bullRunning(void*);
-    /* 80955DE8 */ int skipFence(void*);
-    /* 80955F98 */ int talk(void*);
+    ~daNpc_Aru_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    static void* srchCow(void*, void*);
+    static void* srchUDoor(void*, void*);
+    BOOL chkThrust(fopAc_ac_c*);
+    fopAc_ac_c* getCowP(int);
+    fopAc_ac_c* getUDoor_l_P();
+    fopAc_ac_c* getUDoor_r_P();
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    BOOL selectAction();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    BOOL chkBullRunningStage();
+    BOOL chkSkipFenceStage();
+    s16 srchActorDirection(fopAc_ac_c*);
+    void adjustMoveDir();
+    int duck(int);
+    int lookround(s16);
+    int cutRideOnHorse(int);
+    int cutGotoBullRunningStage(int);
+    int cutEndBullRunning(int);
+    int cutGotoSkipFenceStage(int);
+    int cutSpeakTo(int);
+    int cutNoEntrance(int);
+    int wait(void*);
+    int bullRunning(void*);
+    int skipFence(void*);
+    int talk(void*);
     #ifdef DEBUG
     int test(void*);
     #endif
-    /* 809574E8 */ daNpc_Aru_c(
+    daNpc_Aru_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -146,14 +146,14 @@ public:
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
         i_arcNames) {}
-    /* 809575B4 */ u16 getEyeballMaterialNo() { return ARU_EYEBALL_M; }
-    /* 809575BC */ s32 getHeadJointNo() { return JNT_HEAD; }
-    /* 809575C4 */ s32 getNeckJointNo() { return JNT_NECK; }
-    /* 809575CC */ s32 getBackboneJointNo() { return JNT_BACKBONE1; }
-    /* 809575D4 */ BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
-    /* 809575E4 */ BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_MOUTH; }
-    /* 809575F4 */ s32 getFootLJointNo() { return JNT_FOOTL; }
-    /* 809575FC */ s32 getFootRJointNo() { return JNT_FOOTR; }
+    u16 getEyeballMaterialNo() { return ARU_EYEBALL_M; }
+    s32 getHeadJointNo() { return JNT_HEAD; }
+    s32 getNeckJointNo() { return JNT_NECK; }
+    s32 getBackboneJointNo() { return JNT_BACKBONE1; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_MOUTH; }
+    s32 getFootLJointNo() { return JNT_FOOTL; }
+    s32 getFootRJointNo() { return JNT_FOOTR; }
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

@@ -15,16 +15,16 @@
 
 class daObjGrzRock_c : public dBgS_MoveBgActor {
 public:
-    /* 80C14BD8 */ void setBaseMtx();
-    /* 80C14C54 */ void setEnvTevColor();
-    /* 80C14CB0 */ void setRoomNo();
-    /* 80C14CF0 */ void setPrtcl();
-    /* 80C14DA0 */ int Create();
-    /* 80C14EE0 */ int CreateHeap();
-    /* 80C14F50 */ cPhs__Step create();
-    /* 80C1514C */ int Execute(Mtx**);
-    /* 80C151A4 */ int Draw();
-    /* 80C15248 */ int Delete();
+    void setBaseMtx();
+    void setEnvTevColor();
+    void setRoomNo();
+    void setPrtcl();
+    int Create();
+    int CreateHeap();
+    cPhs__Step create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     void setSmashFlag(u8 i_smashFlag) { mSmashFlag = i_smashFlag; }
 

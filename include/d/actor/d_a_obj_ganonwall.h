@@ -13,15 +13,15 @@
  */
 class daObjGWall_c : public fopAc_ac_c {
 public:
-    /* 80BF4D18 */ void initBaseMtx();
-    /* 80BF4D54 */ void setBaseMtx();
-    /* 80BF4DA8 */ int Create();
-    /* 80BF4E8C */ int CreateHeap();
-    /* 80BF4FF0 */ int create();
-    /* 80BF50A4 */ int execute();
-    /* 80BF50CC */ int checkDraw();
-    /* 80BF5168 */ int draw();
-    /* 80BF5530 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    int checkDraw();
+    int draw();
+    int _delete();
 
     u32 getEventBit1() { return fopAcM_GetParamBit(this, 0, 10); }
     u32 getEventBit2() { return fopAcM_GetParamBit(this, 10, 10); }

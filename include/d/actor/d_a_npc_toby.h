@@ -14,7 +14,7 @@ struct daNpc_Toby_HIOParam {
 
 class daNpc_Toby_Param_c {
 public:
-    /* 80B24978 */ virtual ~daNpc_Toby_Param_c() {}
+    virtual ~daNpc_Toby_Param_c() {}
 
     static const daNpc_Toby_HIOParam m;
 };
@@ -48,52 +48,52 @@ public:
     typedef int (daNpc_Toby_c::*cutFunc)(int);
     typedef int (daNpc_Toby_c::*actionFunc)(void*);
 
-    /* 80B1E64C */ ~daNpc_Toby_c();
-    /* 80B1E798 */ int create();
-    /* 80B1EA60 */ int CreateHeap();
-    /* 80B1EF28 */ int Delete();
-    /* 80B1EF5C */ int Execute();
-    /* 80B1EF7C */ int Draw();
-    /* 80B1F010 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B1F030 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B1F088 */ static void* srchToby(void*, void*);
-    /* 80B1F124 */ fopAc_ac_c* getOtherTobyP(int);
-    /* 80B1F200 */ u8 getType();
-    /* 80B1F274 */ int isDelete();
-    /* 80B1F384 */ void reset();
-    /* 80B1F5AC */ void afterJntAnm(int);
-    /* 80B1F638 */ void setParam();
-    /* 80B1F784 */ BOOL checkChangeEvt();
-    /* 80B1F950 */ void setAfterTalkMotion();
-    /* 80B1FA08 */ void srchActors();
-    /* 80B1FB34 */ BOOL evtTalk();
-    /* 80B1FBD4 */ BOOL evtCutProc();
-    /* 80B1FC9C */ void action();
-    /* 80B1FE68 */ void beforeMove();
-    /* 80B1FF2C */ void setAttnPos();
-    /* 80B20278 */ void setCollision();
-    /* 80B2042C */ int drawDbgInfo();
-    /* 80B20434 */ void drawOtherMdl();
-    /* 80B2050C */ bool afterSetFaceMotionAnm(int, int, f32, int);
-    /* 80B20568 */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80B205F4 */ int selectAction();
-    /* 80B20710 */ int chkAction(actionFunc);
-    /* 80B2073C */ int setAction(actionFunc);
-    /* 80B207E4 */ int cutTobyHouseFire(int);
-    /* 80B20AB0 */ int cutTalkToOneself(int);
-    /* 80B20FC0 */ int cutRepairSCannon(int);
-    /* 80B215B4 */ int cutSCannon(int);
-    /* 80B219F4 */ int cutConversationAboutSCannon(int);
-    /* 80B22434 */ int cutConversationAboutZra(int);
-    /* 80B22614 */ int chkAttnZra();
-    /* 80B226B0 */ int wait(void*);
-    /* 80B22D98 */ int walk(void*);
-    /* 80B22FAC */ int play(void*);
-    /* 80B23344 */ int talk(void*);
+    ~daNpc_Toby_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    static void* srchToby(void*, void*);
+    fopAc_ac_c* getOtherTobyP(int);
+    u8 getType();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    bool afterSetFaceMotionAnm(int, int, f32, int);
+    bool afterSetMotionAnm(int, int, f32, int);
+    int selectAction();
+    int chkAction(actionFunc);
+    int setAction(actionFunc);
+    int cutTobyHouseFire(int);
+    int cutTalkToOneself(int);
+    int cutRepairSCannon(int);
+    int cutSCannon(int);
+    int cutConversationAboutSCannon(int);
+    int cutConversationAboutZra(int);
+    int chkAttnZra();
+    int wait(void*);
+    int walk(void*);
+    int play(void*);
+    int talk(void*);
 #if DEBUG
     int test(void*);
 #endif
-    /* 80B24840 */ daNpc_Toby_c(
+    daNpc_Toby_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -106,15 +106,15 @@ public:
         // "|%06d:%x|daNpc_Toby_c -> Construct\n"
         OS_REPORT("|%06d:%x|daNpc_Toby_c -> コンストラクト\n", g_Counter.mCounter0, this);
     }
-    /* 80B24920 */ u16 getEyeballMaterialNo() { return 2; }
-    /* 80B24928 */ s32 getHeadJointNo() { return 4; }
-    /* 80B24930 */ s32 getNeckJointNo() { return 3; }
-    /* 80B24938 */ s32 getBackboneJointNo() { return 1; }
-    /* 80B24940 */ BOOL checkChangeJoint(int arg0) { return arg0 == 4; }
-    /* 80B24950 */ BOOL checkRemoveJoint(int arg0) { return arg0 == 8; }
-    /* 80B24960 */ s32 getFootLJointNo() { return 24; }
-    /* 80B24968 */ s32 getFootRJointNo() { return 27; }
-    /* 80B24970 */ BOOL chkXYItems() { return TRUE; }
+    u16 getEyeballMaterialNo() { return 2; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return 1; }
+    BOOL checkChangeJoint(int arg0) { return arg0 == 4; }
+    BOOL checkRemoveJoint(int arg0) { return arg0 == 8; }
+    s32 getFootLJointNo() { return 24; }
+    s32 getFootRJointNo() { return 27; }
+    BOOL chkXYItems() { return TRUE; }
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

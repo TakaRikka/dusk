@@ -12,10 +12,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_carry.h"
 
-/* 80C70A38-80C70A3C -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "YIblltray";
 
-/* 80C6EBF8-80C6EC88 000078 0090+00 1/1 0/0 0/0 .text            create1st__16daObjYIblltray_cFv */
 int daObjYIblltray_c::create1st() {
     int phase = dComIfG_resLoad(this, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
@@ -30,19 +28,15 @@ int daObjYIblltray_c::create1st() {
     return phase;
 }
 
-/* 80C709A0-80C709B8 000000 0018+00 3/3 0/0 0/0 .rodata          l_cull_box */
 static const cull_box l_cull_box = {
     {-238.95999f, -200.0f, -134.22f},
     {238.95999f, 200.0f, 218.67f},
 };
 
-/* 80C70A3C-80C70A48 000004 000C+00 1/1 0/0 0/0 .data            l_in_ball */
 static Vec l_in_ball = {0.0f, 0.0f, 87.0f};
 
-/* 80C70A48-80C70A54 000010 000C+00 1/1 0/0 0/0 .data            l_base */
 static Vec l_base = {0.0f, 0.0f, -60.0f};
 
-/* 80C6EC88-80C6EDA8 000108 0120+00 3/3 0/0 0/0 .text            setMtx__16daObjYIblltray_cFv */
 void daObjYIblltray_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -65,7 +59,6 @@ void daObjYIblltray_c::setMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mHandleMtx);
 }
 
-/* 80C6EDA8-80C6EED4 000228 012C+00 1/0 0/0 0/0 .text            CreateHeap__16daObjYIblltray_cFv */
 int daObjYIblltray_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 9);
     JUT_ASSERT(0, model_data != NULL);
@@ -92,16 +85,12 @@ int daObjYIblltray_c::CreateHeap() {
     return 1;
 }
 
-/* 80C6EED4-80C6EEFC 000354 0028+00 1/1 0/0 0/0 .text
- * rideCallback__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c              */
 static void rideCallback(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_rideActor) {
     ((daObjYIblltray_c*)i_this)->rideActor(i_rideActor);
 }
 
-/* 80C70A54-80C70A60 00001C 000C+00 1/1 0/0 0/0 .data            l_back_pos */
 static Vec l_back_pos = {0.0f, -52.0f, -369.0f};
 
-/* 80C70A60-80C70AA4 000028 0044+00 1/1 0/0 0/0 .data            l_cc_cyl_src */
 static dCcD_SrcCyl l_cc_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x0}, 0x39}},  // mObj
@@ -116,7 +105,6 @@ static dCcD_SrcCyl l_cc_cyl_src = {
     }  // mCyl
 };
 
-/* 80C6EEFC-80C6F1E8 00037C 02EC+00 1/0 0/0 0/0 .text            Create__16daObjYIblltray_cFv */
 int daObjYIblltray_c::Create() {
     mpTrayModel->setBaseTRMtx(mTrayMtx);
     fopAcM_SetMtx(this, mTrayMtx);
@@ -188,8 +176,6 @@ int daObjYIblltray_c::Create() {
     return 1;
 }
 
-/* 80C6F1E8-80C6F23C 000668 0054+00 2/2 0/0 0/0 .text rideActor__16daObjYIblltray_cFP10fopAc_ac_c
- */
 void daObjYIblltray_c::rideActor(fopAc_ac_c* i_actor) {
     if (mBallID == fpcM_ERROR_PROCESS_ID_e && fopAcM_GetProfName(i_actor) == PROC_Obj_Carry &&
         ((daObjCarry_c*)i_actor)->getType() == daObjCarry_c::TYPE_IRON_BALL)
@@ -200,7 +186,6 @@ void daObjYIblltray_c::rideActor(fopAc_ac_c* i_actor) {
     }
 }
 
-/* 80C6F23C-80C6F2BC 0006BC 0080+00 1/1 0/0 0/0 .text            sendBall__16daObjYIblltray_cFUi */
 void daObjYIblltray_c::sendBall(fpc_ProcID i_ID) {
     mBallID = i_ID;
     mMode = MODE_SEND_BALL;
@@ -212,7 +197,6 @@ void daObjYIblltray_c::sendBall(fpc_ProcID i_ID) {
     fopAcM_SetRoomNo(ball, fopAcM_GetHomeRoomNo(this));
 }
 
-/* 80C6F2BC-80C6F338 00073C 007C+00 1/1 0/0 0/0 .text            searchObjYIblltray__FPvPv */
 static fopAc_ac_c* searchObjYIblltray(void* i_trayB, void* i_trayA) {
     if (i_trayB != NULL && fopAcM_IsActor(i_trayB) &&
         fopAcM_GetProfName(i_trayB) == PROC_Obj_YIblltray && i_trayB != i_trayA)
@@ -225,7 +209,6 @@ static fopAc_ac_c* searchObjYIblltray(void* i_trayB, void* i_trayA) {
     return NULL;
 }
 
-/* 80C6F338-80C6F3BC 0007B8 0084+00 1/1 0/0 0/0 .text            searchNearIronball__FPvPv */
 static fopAc_ac_c* searchNearIronball(void* i_ball, void* i_tray) {
     if (i_ball != NULL && fopAcM_IsActor(i_ball) && fopAcM_GetProfName(i_ball) == PROC_Obj_Carry &&
         ((daObjCarry_c*)i_ball)->getType() == daObjCarry_c::TYPE_IRON_BALL &&
@@ -238,8 +221,6 @@ static fopAc_ac_c* searchNearIronball(void* i_ball, void* i_tray) {
     return NULL;
 }
 
-/* 80C6F3BC-80C6F440 00083C 0084+00 1/1 0/0 0/0 .text            searchNearBackTrayIronball__FPvPv
- */
 static fopAc_ac_c* searchNearBackTrayIronball(void* i_ball, void* i_tray) {
     if (i_ball != NULL && fopAcM_IsActor(i_ball) && fopAcM_GetProfName(i_ball) == PROC_Obj_Carry &&
         ((daObjCarry_c*)i_ball)->getType() == daObjCarry_c::TYPE_IRON_BALL &&
@@ -252,19 +233,14 @@ static fopAc_ac_c* searchNearBackTrayIronball(void* i_ball, void* i_tray) {
     return NULL;
 }
 
-/* 80C6F440-80C6F450 0008C0 0010+00 1/1 0/0 0/0 .text            onAttention__16daObjYIblltray_cFv
- */
 void daObjYIblltray_c::onAttention() {
     attention_info.flags |= fopAc_AttnFlag_ETC_e;
 }
 
-/* 80C6F450-80C6F460 0008D0 0010+00 1/1 0/0 0/0 .text            offAttention__16daObjYIblltray_cFv
- */
 void daObjYIblltray_c::offAttention() {
     attention_info.flags &= ~fopAc_AttnFlag_ETC_e;
 }
 
-/* 80C6F460-80C702E0 0008E0 0E80+00 1/0 0/0 0/0 .text Execute__16daObjYIblltray_cFPPA3_A4_f */
 int daObjYIblltray_c::Execute(Mtx** param_0) {
     if (!getNoSameRoom() && mTrayID == fpcM_ERROR_PROCESS_ID_e) {
         daObjYIblltray_c* ptray =
@@ -545,7 +521,6 @@ int daObjYIblltray_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80C702E0-80C70330 001760 0050+00 1/1 0/0 0/0 .text            initRotTo__16daObjYIblltray_cFv */
 void daObjYIblltray_c::initRotTo() {
     mMode = MODE_INIT_ROT;
     field_0x63c = 0.0f;
@@ -554,7 +529,6 @@ void daObjYIblltray_c::initRotTo() {
     ball->startCtrl();
 }
 
-/* 80C70330-80C70408 0017B0 00D8+00 1/0 0/0 0/0 .text            Draw__16daObjYIblltray_cFv */
 int daObjYIblltray_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpTrayModel, &tevStr);
@@ -569,7 +543,6 @@ int daObjYIblltray_c::Draw() {
     return 1;
 }
 
-/* 80C70408-80C70480 001888 0078+00 1/0 0/0 0/0 .text            Delete__16daObjYIblltray_cFv */
 int daObjYIblltray_c::Delete() {
     if (mBallID != fpcM_ERROR_PROCESS_ID_e) {
         daObjCarry_c* ball = (daObjCarry_c*)fopAcM_SearchByID(mBallID);
@@ -580,32 +553,23 @@ int daObjYIblltray_c::Delete() {
     return 1;
 }
 
-/* 80C70480-80C70554 001900 00D4+00 1/0 0/0 0/0 .text
- * daObjYIblltray_create1st__FP16daObjYIblltray_c               */
 static int daObjYIblltray_create1st(daObjYIblltray_c* i_this) {
     fopAcM_ct(i_this, daObjYIblltray_c);
     return i_this->create1st();
 }
 
-/* 80C707D8-80C707F8 001C58 0020+00 1/0 0/0 0/0 .text
- * daObjYIblltray_MoveBGDelete__FP16daObjYIblltray_c            */
 static int daObjYIblltray_MoveBGDelete(daObjYIblltray_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C707F8-80C70818 001C78 0020+00 1/0 0/0 0/0 .text
- * daObjYIblltray_MoveBGExecute__FP16daObjYIblltray_c           */
 static int daObjYIblltray_MoveBGExecute(daObjYIblltray_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C70818-80C70844 001C98 002C+00 1/0 0/0 0/0 .text
- * daObjYIblltray_MoveBGDraw__FP16daObjYIblltray_c              */
 static int daObjYIblltray_MoveBGDraw(daObjYIblltray_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C70AA4-80C70AC4 -00001 0020+00 1/0 0/0 0/0 .data            daObjYIblltray_METHODS */
 static actor_method_class daObjYIblltray_METHODS = {
     (process_method_func)daObjYIblltray_create1st,
     (process_method_func)daObjYIblltray_MoveBGDelete,
@@ -614,7 +578,6 @@ static actor_method_class daObjYIblltray_METHODS = {
     (process_method_func)daObjYIblltray_MoveBGDraw,
 };
 
-/* 80C70AC4-80C70AF4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_YIblltray */
 extern actor_process_profile_definition g_profile_Obj_YIblltray = {
     fpcLy_CURRENT_e,           // mLayerID
     3,                         // mListID

@@ -13,36 +13,28 @@
 #include "d/d_bg_w.h"
 #include "cmath.h"
 
-/* 80D0206C-80D02074 000000 0008+00 5/5 0/0 0/0 .rodata          l_bmd */
 static u32 const l_bmd[2] = {
     4, 4,
 };
 
-/* 80D02074-80D0207C 000008 0008+00 1/1 0/0 0/0 .rodata          l_dzb */
 static u32 const l_dzb[2] = {
     7, 7,
 };
 
-/* 80D0207C-80D02084 000010 0008+00 1/1 0/0 0/0 .rodata          l_heap_size */
 static u32 const l_heap_size[2] = {
     0x4530, 0x2BE0,
 };
 
-/* 80D02084-80D02088 000018 0004+00 0/3 0/0 0/0 .rodata          l_rot_time */
 static s16 const l_rot_time[2] = {0x5A, 0x1E};
 
-/* 80D02088-80D0208C 00001C 0002+02 0/1 0/0 0/0 .rodata          l_tame_time_1st */
 static u8 const l_tame_time_1st[2] = {
     0x2F, 0x2F,
 };
 
-/* 80D0208C-80D02090 000020 0002+02 0/1 0/0 0/0 .rodata          l_tame_time_cnt */
 static u8 const l_tame_time_cnt[2] = {
     0x23, 0x23,
 };
 
-/* 80D00BD8-80D00CD8 000078 0100+00 1/1 0/0 0/0 .text
- * PPCallBack__FP10fopAc_ac_cP10fopAc_ac_csQ29dBgW_Base13PushPullLabel */
 static fopAc_ac_c* PPCallBack(fopAc_ac_c* i_this, fopAc_ac_c* param_2, s16 param_3,
                               dBgW_Base::PushPullLabel param_4) {
     int pushBits = cLib_checkBit((int)param_4, dBgW_Base::PPLABEL_PUSH | dBgW_Base::PPLABEL_PULL);
@@ -70,13 +62,11 @@ static fopAc_ac_c* PPCallBack(fopAc_ac_c* i_this, fopAc_ac_c* param_2, s16 param
     return i_this;
 }
 
-/* 80D00CD8-80D00D14 000178 003C+00 1/1 0/0 0/0 .text            initBaseMtx__13daObjSwTurn_cFv */
 void daObjSwTurn_c::initBaseMtx() {
     mModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80D00D14-80D00D78 0001B4 0064+00 3/3 0/0 0/0 .text            setBaseMtx__13daObjSwTurn_cFv */
 void daObjSwTurn_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -84,7 +74,6 @@ void daObjSwTurn_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80D00D78-80D00EE4 000218 016C+00 1/0 0/0 0/0 .text            Create__13daObjSwTurn_cFv */
 int daObjSwTurn_c::Create() {
     if (mKind == KIND_0) {
         if (fopAcM_isSwitch(this, getSwNo())) {
@@ -124,13 +113,11 @@ int daObjSwTurn_c::Create() {
     return 1;
 }
 
-/* 80D020EC-80D020F4 -00001 0008+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[2] = {
     "P_Lv4tsw",
     "P_Lv4tswD",
 };
 
-/* 80D00EE4-80D00F64 000384 0080+00 1/0 0/0 0/0 .text            CreateHeap__13daObjSwTurn_cFv */
 int daObjSwTurn_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName[mModelType], l_bmd[mModelType]);
     JUT_ASSERT(347, modelData != NULL);
@@ -138,7 +125,6 @@ int daObjSwTurn_c::CreateHeap() {
     return mModel != 0 ? TRUE : FALSE;
 }
 
-/* 80D00F64-80D01074 000404 0110+00 1/1 0/0 0/0 .text            create1st__13daObjSwTurn_cFv */
 int daObjSwTurn_c::create1st() {
     mKind = getKind();
     mModelType = getModelType();
@@ -167,8 +153,6 @@ int daObjSwTurn_c::create1st() {
     return rv;
 }
 
-/* 80D01074-80D010D4 000514 0060+00 1/0 0/0 0/0 .text            Execute__13daObjSwTurn_cFPPA3_A4_f
- */
 int daObjSwTurn_c::Execute(Mtx** ppMtx) {
     field_0x5c8++;
     mode_proc_call();
@@ -178,8 +162,6 @@ int daObjSwTurn_c::Execute(Mtx** ppMtx) {
     return 1;
 }
 
-/* 80D010D4-80D01160 000574 008C+00 1/1 0/0 0/0 .text            mode_proc_call__13daObjSwTurn_cFv
- */
 void daObjSwTurn_c::mode_proc_call() {
     static daObjSwTurn_c::modeFunc l_func[2] = {
         &daObjSwTurn_c::modeWait,
@@ -188,7 +170,6 @@ void daObjSwTurn_c::mode_proc_call() {
     (this->*(l_func[mMode]))();
 }
 
-/* 80D01160-80D01198 000600 0038+00 3/3 0/0 0/0 .text            init_modeWait__13daObjSwTurn_cFv */
 void daObjSwTurn_c::init_modeWait() {
     field_0x5ba = 0;
     field_0x5c0 = -1;
@@ -198,7 +179,6 @@ void daObjSwTurn_c::init_modeWait() {
     mMode = MODE_WAIT;
 }
 
-/* 80D01198-80D01770 000638 05D8+00 1/0 0/0 0/0 .text            modeWait__13daObjSwTurn_cFv */
 void daObjSwTurn_c::modeWait() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     bool bVar4 = true;
@@ -326,8 +306,6 @@ void daObjSwTurn_c::modeWait() {
     field_0x5dc = field_0x5ba;
 }
 
-/* 80D01770-80D018B4 000C10 0144+00 1/1 0/0 0/0 .text            init_modeRotate__13daObjSwTurn_cFv
- */
 void daObjSwTurn_c::init_modeRotate() {
     field_0x5bc = 0;
     field_0x5c6 = 0;
@@ -344,7 +322,6 @@ void daObjSwTurn_c::init_modeRotate() {
     mMode = MODE_ROTATE;
 }
 
-/* 80D018B4-80D01958 000D54 00A4+00 1/0 0/0 0/0 .text            modeRotate__13daObjSwTurn_cFv */
 void daObjSwTurn_c::modeRotate() {
     switch(mKind) {
     case KIND_0:
@@ -357,7 +334,6 @@ void daObjSwTurn_c::modeRotate() {
     }
 }
 
-/* 80D01958-80D01B60 000DF8 0208+00 1/1 0/0 0/0 .text            rotate_sub_0__13daObjSwTurn_cFv */
 void daObjSwTurn_c::rotate_sub_0() {
     field_0x5b8++;
     shape_angle.y = home.angle.y + (field_0x5c4 << 14);
@@ -384,7 +360,6 @@ void daObjSwTurn_c::rotate_sub_0() {
     }
 }
 
-/* 80D01B60-80D01EB0 001000 0350+00 1/1 0/0 0/0 .text            rotate_sub_1__13daObjSwTurn_cFv */
 void daObjSwTurn_c::rotate_sub_1() {
     daPy_getPlayerActorClass();
     field_0x5b8++;
@@ -421,7 +396,6 @@ void daObjSwTurn_c::rotate_sub_1() {
     }
 }
 
-/* 80D01EB0-80D01F58 001350 00A8+00 1/0 0/0 0/0 .text            Draw__13daObjSwTurn_cFv */
 int daObjSwTurn_c::Draw() {
     setBaseMtx();
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
@@ -432,36 +406,28 @@ int daObjSwTurn_c::Draw() {
     return 1;
 }
 
-/* 80D01F58-80D01F98 0013F8 0040+00 1/0 0/0 0/0 .text            Delete__13daObjSwTurn_cFv */
 int daObjSwTurn_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName[mModelType]);
     return 1;
 }
 
-/* 80D01F98-80D01FF8 001438 0060+00 1/0 0/0 0/0 .text daObjSwTurn_create1st__FP13daObjSwTurn_c */
 static int daObjSwTurn_create1st(daObjSwTurn_c* i_this) {
     fopAcM_ct(i_this, daObjSwTurn_c);
     return i_this->create1st();
 }
 
-/* 80D01FF8-80D02018 001498 0020+00 1/0 0/0 0/0 .text daObjSwTurn_MoveBGDelete__FP13daObjSwTurn_c
- */
 static int daObjSwTurn_MoveBGDelete(daObjSwTurn_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D02018-80D02038 0014B8 0020+00 1/0 0/0 0/0 .text daObjSwTurn_MoveBGExecute__FP13daObjSwTurn_c
- */
 static int daObjSwTurn_MoveBGExecute(daObjSwTurn_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D02038-80D02064 0014D8 002C+00 1/0 0/0 0/0 .text daObjSwTurn_MoveBGDraw__FP13daObjSwTurn_c */
 static int daObjSwTurn_MoveBGDraw(daObjSwTurn_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80D02124-80D02144 -00001 0020+00 1/0 0/0 0/0 .data            daObjSwTurn_METHODS */
 static actor_method_class daObjSwTurn_METHODS = {
     (process_method_func)daObjSwTurn_create1st,
     (process_method_func)daObjSwTurn_MoveBGDelete,
@@ -470,7 +436,6 @@ static actor_method_class daObjSwTurn_METHODS = {
     (process_method_func)daObjSwTurn_MoveBGDraw,
 };
 
-/* 80D02144-80D02174 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_SwTurn */
 extern actor_process_profile_definition g_profile_Obj_SwTurn = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

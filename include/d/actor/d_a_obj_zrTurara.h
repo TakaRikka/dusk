@@ -16,18 +16,18 @@
  */
 class daZrTurara_c : public dBgS_MoveBgActor {
 public:
-    /* 80D405E4 */ void setBaseMtx();
-    /* 80D40714 */ int CreateHeap();
-    /* 80D40844 */ cPhs__Step create();
-    /* 80D40C08 */ int Execute(Mtx**);
-    /* 80D40C68 */ void move();
-    /* 80D40D88 */ void modeWait();
-    /* 80D40E0C */ void init_modeBreak();
-    /* 80D410E0 */ void modeBreak();
-    /* 80D412A0 */ void init_modeEnd();
-    /* 80D412AC */ void modeEnd();
-    /* 80D412B0 */ int Draw();
-    /* 80D41380 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    int Execute(Mtx**);
+    void move();
+    void modeWait();
+    void init_modeBreak();
+    void modeBreak();
+    void init_modeEnd();
+    void modeEnd();
+    int Draw();
+    int Delete();
 
 private:
     /* 0x5A0 */ dCcD_Stts mCcStatus;
@@ -58,8 +58,8 @@ STATIC_ASSERT(sizeof(daZrTurara_c) == 0x76C);
 
 class daZrTurara_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80D4056C */ daZrTurara_HIO_c();
-    /* 80D414BC */ ~daZrTurara_HIO_c() {}
+    daZrTurara_HIO_c();
+    ~daZrTurara_HIO_c() {}
 
     void genMessage(JORMContext*);
 

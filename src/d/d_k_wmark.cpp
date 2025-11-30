@@ -13,7 +13,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-/* 80451130-80451134 000630 0004+00 2/2 0/0 0/0 .sbss            m_nowID__9dkWmark_c */
 int dkWmark_c::m_nowID;
 
 int dkWmark_c::create() {
@@ -70,25 +69,21 @@ int dkWmark_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8026141C-80261640 25BD5C 0224+00 1/0 0/0 0/0 .text            dkWmark_Create__FP12kankyo_class */
 static int dkWmark_Create(kankyo_class* i_this) {
     return static_cast<dkWmark_c*>(i_this)->create();
 }
 
-/* 80261640-8026169C 25BF80 005C+00 1/1 0/0 0/0 .text            __dt__9dkWmark_cFv */
 dkWmark_c::~dkWmark_c() {
     if (mpHeap != NULL) {
         mDoExt_destroySolidHeap(mpHeap);
     }
 }
 
-/* 8026169C-802616C4 25BFDC 0028+00 1/0 0/0 0/0 .text            dkWmark_Delete__FP9dkWmark_c */
 static int dkWmark_Delete(dkWmark_c* i_this) {
     i_this->~dkWmark_c();
     return 1;
 }
 
-/* 802616C4-80261964 25C004 02A0+00 2/2 0/0 0/0 .text            setMatrix__9dkWmark_cFv */
 BOOL dkWmark_c::setMatrix() {
     cXyz chk_pos(pos.x, pos.y + 100.0f, pos.z);
 
@@ -135,7 +130,6 @@ int dkWmark_c::execute() {
     return 1;
 }
 
-/* 80261964-80261A18 25C2A4 00B4+00 1/0 0/0 0/0 .text            dkWmark_Execute__FP9dkWmark_c */
 static int dkWmark_Execute(dkWmark_c* i_this) {
     return i_this->execute();
 }
@@ -164,19 +158,16 @@ int dkWmark_c::draw() {
     return 1;
 }
 
-/* 80261A18-80261B54 25C358 013C+00 1/0 0/0 0/0 .text            dkWmark_Draw__FP9dkWmark_c */
 static int dkWmark_Draw(dkWmark_c* i_this) {
     return i_this->draw();
 }
 
-/* 803C3430-803C3444 -00001 0014+00 1/0 0/0 0/0 .data            l_dkWmark_Method */
 static leafdraw_method_class l_dkWmark_Method = {
     (process_method_func)dkWmark_Create,  (process_method_func)dkWmark_Delete,
     (process_method_func)dkWmark_Execute, (process_method_func)NULL,
     (process_method_func)dkWmark_Draw,
 };
 
-/* 803C3444-803C3470 -00001 0028+04 0/0 0/0 1/0 .data            g_profile_WMARK */
 extern kankyo_process_profile_definition g_profile_WMARK = {
     fpcLy_CURRENT_e,
     9,

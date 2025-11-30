@@ -75,12 +75,12 @@ struct JPAEmitterWorkData {
 class JPAEmitterCallBack {
 public:
     virtual ~JPAEmitterCallBack() = 0;
-    /* 80050368 */ virtual void execute(JPABaseEmitter*) {}
-    /* 80050374 */ virtual void executeAfter(JPABaseEmitter*) {}
-    /* 8005036C */ virtual void draw(JPABaseEmitter*) {}
-    /* 80050370 */ virtual void drawAfter(JPABaseEmitter*) {}
+    virtual void execute(JPABaseEmitter*) {}
+    virtual void executeAfter(JPABaseEmitter*) {}
+    virtual void draw(JPABaseEmitter*) {}
+    virtual void drawAfter(JPABaseEmitter*) {}
     
-    /* 8027E6A4 */ //~JPAEmitterCallBack();
+    //~JPAEmitterCallBack();
 };
 
 enum {
@@ -100,18 +100,18 @@ enum {
  */
 class JPABaseEmitter {
 public:
-    /* 8027E5EC */ ~JPABaseEmitter() {}
-    /* 8027E64C */ JPABaseEmitter() : mLink(this), mRndm(0) {}
-    /* 8027E6EC */ void init(JPAEmitterManager*, JPAResource*);
-    /* 8027EDD4 */ bool processTillStartFrame();
-    /* 8027EE14 */ bool processTermination();
-    /* 8027EEB0 */ void calcEmitterGlobalPosition(JGeometry::TVec3<f32>*) const;
-    /* 8027EC60 */ void deleteAllParticle();
-    /* 8027EB60 */ JPABaseParticle* createChild(JPABaseParticle*);
-    /* 8027EA40 */ JPABaseParticle* createParticle();
-    /* 8027EF30 */ u32 getCurrentCreateNumber() const;
-    /* 8027EF40 */ u8 getDrawCount() const;
-    /* 8027EF50 */ bool loadTexture(u8, GXTexMapID);
+    ~JPABaseEmitter() {}
+    JPABaseEmitter() : mLink(this), mRndm(0) {}
+    void init(JPAEmitterManager*, JPAResource*);
+    bool processTillStartFrame();
+    bool processTermination();
+    void calcEmitterGlobalPosition(JGeometry::TVec3<f32>*) const;
+    void deleteAllParticle();
+    JPABaseParticle* createChild(JPABaseParticle*);
+    JPABaseParticle* createParticle();
+    u32 getCurrentCreateNumber() const;
+    u8 getDrawCount() const;
+    bool loadTexture(u8, GXTexMapID);
 
     void initStatus(u32 status) { mStatus = status; }
     void setStatus(u32 status) { mStatus |= status; }

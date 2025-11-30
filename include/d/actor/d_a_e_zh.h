@@ -19,41 +19,41 @@ class daObjCarry_c;
 
 class daE_ZH_c : public fopEn_enemy_c {
 public:
-    /* 8082907C */ int draw();
-    /* 808293A8 */ void setBck(int, u8, f32, f32);
-    /* 80829454 */ void setActionMode(int, int);
-    /* 80829570 */ bool startDemoCheck();
-    /* 80829658 */ void mBallBGCheck();
-    /* 808298BC */ void mGateOpen();
-    /* 808299F8 */ bool mColorSet(bool, f32, f32);
-    /* 80829AD8 */ bool mReturnLineMove();
-    /* 80829E44 */ bool mBallBgLineCheck();
-    /* 8082A01C */ bool mSearchMove(u8);
-    /* 8082A390 */ void mStartParticleSet();
-    /* 8082A4C8 */ bool mCutTypeCheck();
-    /* 8082A534 */ void damage_check();
-    /* 8082A88C */ void executeStartDemo();
-    /* 8082ABDC */ void executeWait();
-    /* 8082ACA8 */ void executeBallWait();
-    /* 8082B284 */ void executeOpenStart();
-    /* 8082B820 */ void executeSearchMove();
-    /* 8082BA18 */ void executeBgHitSHMove();
-    /* 8082BE20 */ void executeCatchMove();
-    /* 8082C670 */ void executeCatchFlyMove();
-    /* 8082CD34 */ void executeReturnDemo();
-    /* 8082D154 */ void executeFlyDelete();
-    /* 8082D2F0 */ void executeDamage();
-    /* 8082D97C */ void executeDeadStop();
-    /* 8082D9B0 */ void executeEntryCheck();
-    /* 8082DB64 */ void tagAction();
-    /* 8082DB84 */ void action();
-    /* 8082DE18 */ void mtx_set();
-    /* 8082DF44 */ void cc_set();
-    /* 8082E2FC */ int execute();
-    /* 8082E3E8 */ int _delete();
-    /* 8082E4E4 */ int CreateHeap();
-    /* 8082E730 */ cPhs__Step create();
-    /* 8082ECEC */ daE_ZH_c();
+    int draw();
+    void setBck(int, u8, f32, f32);
+    void setActionMode(int, int);
+    bool startDemoCheck();
+    void mBallBGCheck();
+    void mGateOpen();
+    bool mColorSet(bool, f32, f32);
+    bool mReturnLineMove();
+    bool mBallBgLineCheck();
+    bool mSearchMove(u8);
+    void mStartParticleSet();
+    bool mCutTypeCheck();
+    void damage_check();
+    void executeStartDemo();
+    void executeWait();
+    void executeBallWait();
+    void executeOpenStart();
+    void executeSearchMove();
+    void executeBgHitSHMove();
+    void executeCatchMove();
+    void executeCatchFlyMove();
+    void executeReturnDemo();
+    void executeFlyDelete();
+    void executeDamage();
+    void executeDeadStop();
+    void executeEntryCheck();
+    void tagAction();
+    void action();
+    void mtx_set();
+    void cc_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    cPhs__Step create();
+    daE_ZH_c();
 
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpModelMorf;
@@ -115,8 +115,8 @@ STATIC_ASSERT(sizeof(daE_ZH_c) == 0xe08);
 
 class daE_ZH_HIO_c: public JORReflexible {
 public:
-    /* 8082902C */ daE_ZH_HIO_c();
-    /* 8082F160 */ virtual ~daE_ZH_HIO_c() {}
+    daE_ZH_HIO_c();
+    virtual ~daE_ZH_HIO_c() {}
 
     void genMessage(JORMContext* ctx);
 

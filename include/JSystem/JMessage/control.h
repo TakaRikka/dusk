@@ -10,15 +10,15 @@ namespace JMessage {
  * 
  */
 struct TControl {
-    /* 802A7548 */ TControl();
-    /* 802A758C */ virtual ~TControl();
+    TControl();
+    virtual ~TControl();
 
-    /* 802A75D4 */ void reset();
-    /* 802A7634 */ int update();
-    /* 802A76BC */ void render();
-    /* 802A77E8 */ int setMessageCode(u16 u16GroupID, u16 u16Index);
-    /* 802A78F4 */ int setMessageID(u32 uMsgID, u32 param_1, bool* pbValid);
-    /* 802A7A20 */ bool setMessageCode_inSequence_(const TProcessor* pProcessor, u16 u16GroupID, u16 u16Index);
+    void reset();
+    int update();
+    void render();
+    int setMessageCode(u16 u16GroupID, u16 u16Index);
+    int setMessageID(u32 uMsgID, u32 param_1, bool* pbValid);
+    bool setMessageCode_inSequence_(const TProcessor* pProcessor, u16 u16GroupID, u16 u16Index);
 
     bool isReady_update_() const { return pMessageText_begin_ != 0 && pSequenceProcessor_ != NULL; }
     bool isReady_render_() const { return pMessageText_current_ != 0 && pRenderingProcessor_ != NULL; }

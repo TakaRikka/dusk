@@ -17,8 +17,8 @@
 
 class daE_S1_HIO_c {
 public:
-    /* 8077AB8C */ daE_S1_HIO_c();
-    /* 80780840 */ virtual ~daE_S1_HIO_c() {}
+    daE_S1_HIO_c();
+    virtual ~daE_S1_HIO_c() {}
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ f32 mBaseSize;
@@ -78,7 +78,6 @@ enum daE_S1_ACTION {
     ACT_WARP_APPEAR = 20,
 };
 
-/* 8077AB8C-8077ABF8 0000EC 006C+00 1/1 0/0 0/0 .text            __ct__12daE_S1_HIO_cFv */
 daE_S1_HIO_c::daE_S1_HIO_c() {
     field_0x4 = -1;
     mBaseSize = 1.3f;
@@ -93,14 +92,12 @@ daE_S1_HIO_c::daE_S1_HIO_c() {
     mInvincible = 0;
 }
 
-/* 8077ABF8-8077ACA4 000158 00AC+00 12/12 0/0 0/0 .text            anm_init__FP10e_s1_classifUcf */
 static void anm_init(e_s1_class* i_this, int i_resNo, f32 i_morf, u8 i_attr, f32 i_speed) {
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes("E_S2", i_resNo);
     i_this->mpMorf->setAnm(pbck, i_attr, i_morf, i_speed, 0.0f, -1.0f);
     i_this->mAnm = i_resNo;
 }
 
-/* 8077ACA4-8077AE38 000204 0194+00 1/0 0/0 0/0 .text            daE_S1_Draw__FP10e_s1_class */
 static int daE_S1_Draw(e_s1_class* i_this) {
     if (i_this->field_0x306c != 0) {
         return 1;
@@ -138,7 +135,6 @@ static int daE_S1_Draw(e_s1_class* i_this) {
     return 1;
 }
 
-/* 8077AE38-8077AEFC 000398 00C4+00 3/3 0/0 0/0 .text            pl_check__FP10e_s1_classf */
 static BOOL pl_check(e_s1_class* i_this, f32 i_check_range) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 x_dist = player->current.pos.x - i_this->home.pos.x;
@@ -156,7 +152,6 @@ static BOOL pl_check(e_s1_class* i_this, f32 i_check_range) {
     return false;
 }
 
-/* 8077AEFC-8077AF40 00045C 0044+00 4/4 0/0 0/0 .text            pl_at_check__FP10e_s1_classf */
 static BOOL pl_at_check(e_s1_class* i_this, f32 i_check_range) {
     return fopAcM_searchPlayerDistance(i_this) < i_check_range;
 }
@@ -164,10 +159,8 @@ static BOOL pl_at_check(e_s1_class* i_this, f32 i_check_range) {
 static u8 l_no_fail;  // when enabled, enemy will never revive after defeated
 static u8 l_initHIO;
 
-/* 8078138C-807813B8 000054 002C+00 8/11 0/0 0/0 .bss             l_HIO */
 static daE_S1_HIO_c l_HIO;
 
-/* 8077AF40-8077B1A8 0004A0 0268+00 1/1 0/0 0/0 .text            path_check__FP10e_s1_class */
 static BOOL path_check(e_s1_class* i_this) {
     static u8 check_index[255];
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
@@ -246,7 +239,6 @@ static BOOL path_check(e_s1_class* i_this) {
     return true;
 }
 
-/* 8077B1A8-8077B274 000708 00CC+00 1/1 0/0 0/0 .text            path_check2__FP10e_s1_class */
 static void path_check2(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -267,13 +259,10 @@ static void path_check2(e_s1_class* i_this) {
     }
 }
 
-/* 807814B8-807814BC 000180 0004+00 1/2 0/0 0/0 .bss             same_id */
 static int same_id;
 
-/* 807814BC-807814C0 000184 0004+00 1/2 0/0 0/0 .bss             fail_id */
 static int fail_id;
 
-/* 8077B274-8077B318 0007D4 00A4+00 1/1 0/0 0/0 .text            s_last_sub__FPvPv */
 static void* s_last_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
@@ -294,7 +283,6 @@ static void* s_last_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8077B318-8077B928 000878 0610+00 1/1 0/0 0/0 .text            damage_check__FP10e_s1_class */
 static void damage_check(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -445,7 +433,6 @@ static void damage_check(e_s1_class* i_this) {
     }
 }
 
-/* 8077B928-8077BC8C 000E88 0364+00 1/1 0/0 0/0 .text            e_s1_wait__FP10e_s1_class */
 static void e_s1_wait(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz dist_from_home;
@@ -524,7 +511,6 @@ static void e_s1_wait(e_s1_class* i_this) {
     }
 }
 
-/* 8077BC8C-8077BEAC 0011EC 0220+00 1/1 0/0 0/0 .text            e_s1_roof__FP10e_s1_class */
 static void e_s1_roof(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -577,7 +563,6 @@ static void e_s1_roof(e_s1_class* i_this) {
     }
 }
 
-/* 8077BEAC-8077BFFC 00140C 0150+00 1/1 0/0 0/0 .text            e_s1_fight_run__FP10e_s1_class */
 static void e_s1_fight_run(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz sp14;
@@ -604,7 +589,6 @@ static void e_s1_fight_run(e_s1_class* i_this) {
     }
 }
 
-/* 8077BFFC-8077C2F8 00155C 02FC+00 1/1 0/0 0/0 .text            e_s1_fight__FP10e_s1_class */
 static void e_s1_fight(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz sp28;
@@ -667,7 +651,6 @@ static void e_s1_fight(e_s1_class* i_this) {
     cLib_addCalc2(&a_this->speedF, target_speed, 1.0f, 10.0f);
 }
 
-/* 8077C2F8-8077C52C 001858 0234+00 1/1 0/0 0/0 .text            e_s1_bibiri__FP10e_s1_class */
 static void e_s1_bibiri(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -702,7 +685,6 @@ static void e_s1_bibiri(e_s1_class* i_this) {
     cLib_addCalcAngleS2(&a_this->current.angle.y, fopAcM_searchPlayerAngleY(a_this), 4, 0x1000);
 }
 
-/* 8077C52C-8077C5FC 001A8C 00D0+00 1/1 0/0 0/0 .text            e_s1_damage__FP10e_s1_class */
 static void e_s1_damage(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz sp14;
@@ -727,7 +709,6 @@ static void e_s1_damage(e_s1_class* i_this) {
     }
 }
 
-/* 8077C5FC-8077C894 001B5C 0298+00 1/1 0/0 0/0 .text            e_s1_path__FP10e_s1_class */
 static void e_s1_path(e_s1_class* i_this) {
     cXyz sp14;
     cXyz sp8;
@@ -795,7 +776,6 @@ static void e_s1_path(e_s1_class* i_this) {
     }
 }
 
-/* 8077C894-8077C938 001DF4 00A4+00 1/1 0/0 0/0 .text            s_down_sub__FPvPv */
 static void* s_down_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
@@ -820,7 +800,6 @@ static void* s_down_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8077C938-8077C9D8 001E98 00A0+00 1/1 0/0 0/0 .text            s_fail_sub__FPvPv */
 static void* s_fail_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
@@ -847,12 +826,10 @@ static void* s_fail_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8077C9D8-8077CA0C 001F38 0034+00 2/2 0/0 0/0 .text            all_fail_check__FP10e_s1_class */
 static BOOL all_fail_check(e_s1_class* i_this) {
     return fpcM_Search(s_fail_sub, i_this) == NULL ? TRUE : FALSE;
 }
 
-/* 8077CA0C-8077CAA4 001F6C 0098+00 1/1 0/0 0/0 .text            s_allfail_sub__FPvPv */
 static void* s_allfail_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
@@ -871,12 +848,10 @@ static void* s_allfail_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8077CAA4-8077CAD0 002004 002C+00 1/1 0/0 0/0 .text            all_fail__FP10e_s1_class */
 static void all_fail(e_s1_class* i_this) {
     fpcM_Search(s_allfail_sub, i_this);
 }
 
-/* 8077CAD0-8077CB68 002030 0098+00 1/1 0/0 0/0 .text            s_allwakeup_sub__FPvPv */
 static void* s_allwakeup_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
@@ -899,19 +874,15 @@ static void* s_allwakeup_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 807814C0-807814C4 000188 0004+00 2/2 0/0 0/0 .bss             s_check */
 static int s_check;
 
-/* 807814DC-807814F4 0001A4 0018+00 1/2 0/0 0/0 .bss             s_p */
 static cXyz s_p[2] = {
     cXyz(-16500.0f, 0.0f, -100.0f),
     cXyz(-16300.0f, 0.0f, -400.0f),
 };
 
-/* 80780FE0-80780FE4 000038 0004+00 1/1 0/0 0/0 .data            s_ya */
 static s16 s_ya[2] = {0, 0};
 
-/* 8077CB68-8077CC54 0020C8 00EC+00 1/1 0/0 0/0 .text            s_posrevise_sub__FPvPv */
 static void* s_posrevise_sub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_data = (fopAc_ac_c*)i_data;
@@ -933,7 +904,6 @@ static void* s_posrevise_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8077CC54-8077CF30 0021B4 02DC+00 1/1 0/0 0/0 .text            e_s1_failwait__FP10e_s1_class */
 static void e_s1_failwait(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     i_this->mHitInvincibilityTimer = 20;
@@ -1002,7 +972,6 @@ static void e_s1_failwait(e_s1_class* i_this) {
     }
 }
 
-/* 8077CF30-8077D448 002490 0518+00 2/1 0/0 0/0 .text            e_s1_fail__FP10e_s1_class */
 static void e_s1_fail(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -1129,7 +1098,6 @@ static void e_s1_fail(e_s1_class* i_this) {
     }
 }
 
-/* 8077D448-8077D6A0 0029A8 0258+00 1/1 0/0 0/0 .text            e_s1_shout__FP10e_s1_class */
 static void e_s1_shout(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     i_this->mHitInvincibilityTimer = 10;
@@ -1189,7 +1157,6 @@ static void e_s1_shout(e_s1_class* i_this) {
     cLib_addCalc0(&i_this->speedF, 1.0f, 3.0f);
 }
 
-/* 8077D6A0-8077D8A8 002C00 0208+00 2/1 0/0 0/0 .text            e_s1_warpappear__FP10e_s1_class */
 static void e_s1_warpappear(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     i_this->mHitInvincibilityTimer = 20;
@@ -1240,7 +1207,6 @@ static void e_s1_warpappear(e_s1_class* i_this) {
     }
 }
 
-/* 8077D8A8-8077DBB8 002E08 0310+00 1/1 0/0 0/0 .text ke_control__FP10e_s1_classP7s1_ke_sif */
 static void ke_control(e_s1_class* i_this, s1_ke_s* i_ke, int i_no, f32 i_posZ) {
     cXyz sp4C;
     cXyz sp40;
@@ -1301,8 +1267,6 @@ static void ke_control(e_s1_class* i_this, s1_ke_s* i_ke, int i_no, f32 i_posZ) 
     }
 }
 
-/* 8077DBB8-8077DC90 003118 00D8+00 1/1 0/0 0/0 .text
- * ke_move__FP10e_s1_classP19mDoExt_3DlineMat0_cP7s1_ke_sif     */
 static void ke_move(e_s1_class* i_this, mDoExt_3DlineMat0_c* i_line, s1_ke_s* i_ke, int i_no,
                     f32 i_posZ) {
     ke_control(i_this, i_ke, i_no, i_posZ);
@@ -1323,7 +1287,6 @@ static void ke_move(e_s1_class* i_this, mDoExt_3DlineMat0_c* i_line, s1_ke_s* i_
     }
 }
 
-/* 8077DC90-8077E070 0031F0 03E0+00 1/1 0/0 0/0 .text            e_s1_wolfbite__FP10e_s1_class */
 static void e_s1_wolfbite(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -1399,7 +1362,6 @@ static void e_s1_wolfbite(e_s1_class* i_this) {
     }
 }
 
-/* 8077E070-8077E618 0035D0 05A8+00 2/1 0/0 0/0 .text            action__FP10e_s1_class */
 static void action(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz mae;
@@ -1577,7 +1539,6 @@ static void action(e_s1_class* i_this) {
     }
 }
 
-/* 8077E618-8077E870 003B78 0258+00 1/1 0/0 0/0 .text            ke_set__FP10e_s1_class */
 static void ke_set(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz mae;
@@ -1629,7 +1590,6 @@ static void ke_set(e_s1_class* i_this) {
     }
 }
 
-/* 8077E870-8077EE10 003DD0 05A0+00 2/1 0/0 0/0 .text            demo_camera__FP10e_s1_class */
 static void demo_camera(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -1780,7 +1740,6 @@ static void demo_camera(e_s1_class* i_this) {
     }
 }
 
-/* 8077EE10-8077F250 004370 0440+00 1/1 0/0 0/0 .text            anm_se_set__FP10e_s1_class */
 static void anm_se_set(e_s1_class* i_this) {
     if (i_this->mAnm == ANM_WALK) {
         if (i_this->mpMorf->checkFrame(27.0f)) {
@@ -1823,7 +1782,6 @@ static void anm_se_set(e_s1_class* i_this) {
     }
 }
 
-/* 8077F250-8077F314 0047B0 00C4+00 1/1 0/0 0/0 .text            body_eff_set__FP10e_s1_class */
 static void body_eff_set(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     J3DModel* model = i_this->mpMorf->getModel();
@@ -1836,7 +1794,6 @@ static void body_eff_set(e_s1_class* i_this) {
     }
 }
 
-/* 8077F314-8077FC88 004874 0974+00 2/1 0/0 0/0 .text            daE_S1_Execute__FP10e_s1_class */
 static int daE_S1_Execute(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -2068,12 +2025,10 @@ static int daE_S1_Execute(e_s1_class* i_this) {
     return 1;
 }
 
-/* 8077FC88-8077FC90 0051E8 0008+00 1/0 0/0 0/0 .text            daE_S1_IsDelete__FP10e_s1_class */
 static int daE_S1_IsDelete(e_s1_class* i_this) {
     return 1;
 }
 
-/* 8077FC90-8077FCF8 0051F0 0068+00 1/0 0/0 0/0 .text            daE_S1_Delete__FP10e_s1_class */
 static int daE_S1_Delete(e_s1_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     dComIfG_resDelete(&i_this->mPhase, "E_S2");
@@ -2089,10 +2044,8 @@ static int daE_S1_Delete(e_s1_class* i_this) {
     return 1;
 }
 
-/* 8078116C-80781178 0001C4 000C+00 1/0 0/0 0/0 .data            jv_offset */
 static Vec jv_offset = {0.0f, 0.0f, 0.0f};
 
-/* 80781178-807811E4 -00001 006C+00 1/1 0/0 0/0 .data            jc_data */
 static dJntColData_c jc_data[] = {
     {0, 1, 1, 30.0f, &jv_offset},
     {0, 1, 2, 30.0f, &jv_offset},
@@ -2105,7 +2058,6 @@ static dJntColData_c jc_data[] = {
     {0, 1, 24, 10.0f, &jv_offset},
 };
 
-/* 8077FCF8-8077FE38 005258 0140+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_s1_class* a_this = (e_s1_class*)i_this;
 
@@ -2125,7 +2077,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8077FE38-807803F4 005398 05BC+00 1/0 0/0 0/0 .text            daE_S1_Create__FP10fopAc_ac_c */
 static int daE_S1_Create(fopAc_ac_c* i_this) {
     e_s1_class* a_this = (e_s1_class*)i_this;
     fopAcM_ct(a_this, e_s1_class);
@@ -2289,14 +2240,12 @@ static int daE_S1_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 80781264-80781284 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_S1_Method */
 static actor_method_class l_daE_S1_Method = {
     (process_method_func)daE_S1_Create,  (process_method_func)daE_S1_Delete,
     (process_method_func)daE_S1_Execute, (process_method_func)daE_S1_IsDelete,
     (process_method_func)daE_S1_Draw,
 };
 
-/* 80781284-807812B4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_S1 */
 extern actor_process_profile_definition g_profile_E_S1 = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

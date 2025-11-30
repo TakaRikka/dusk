@@ -5,10 +5,10 @@
 #include <dolphin/os.h>
 
 namespace JASResArcLoader {
-    /* 80290BD0 */ size_t getResSize(JKRArchive const*, u16);
-    /* 80290C04 */ size_t getResMaxSize(JKRArchive const*);
-    /* 80290C7C */ static void loadResourceCallback(void*);
-    /* 80290D18 */ int loadResourceAsync(JKRArchive*, u16, u8*, u32, void (*)(u32, u32), u32);
+    size_t getResSize(JKRArchive const*, u16);
+    size_t getResMaxSize(JKRArchive const*);
+    static void loadResourceCallback(void*);
+    int loadResourceAsync(JKRArchive*, u16, u8*, u32, void (*)(u32, u32), u32);
 };
 
 class JKRArchive;

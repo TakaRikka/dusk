@@ -35,7 +35,6 @@ void J3DShape::initialize() {
     mHasPNMTXIdx = false;
 }
 
-/* 80314BB8-80314CBC 30F4F8 0104+00 0/0 1/1 0/0 .text addTexMtxIndexInDL__8J3DShapeF7_GXAttrUl */
 void J3DShape::addTexMtxIndexInDL(GXAttr attr, u32 valueBase) {
     u32 kSize[] = {0, 1, 1, 2};
 
@@ -63,7 +62,6 @@ void J3DShape::addTexMtxIndexInDL(GXAttr attr, u32 valueBase) {
         getShapeDraw(i)->addTexMtxIndexInDL(stride, attrOffs, (s32)valueBase);
 }
 
-/* 80314CBC-80314DA8 30F5FC 00EC+00 0/0 1/1 0/0 .text addTexMtxIndexInVcd__8J3DShapeF7_GXAttr */
 void J3DShape::addTexMtxIndexInVcd(GXAttr attr) {
     u32 kSize[] = {0, 1, 1, 2};  // stripped data
 
@@ -108,14 +106,11 @@ void J3DShape::addTexMtxIndexInVcd(GXAttr attr) {
     makeVcdVatCmd();
 }
 
-/* 80314DA8-80314E28 30F6E8 0080+00 0/0 1/1 0/0 .text
- * calcNBTScale__8J3DShapeFRC3VecPA3_A3_fPA3_A3_f               */
 void J3DShape::calcNBTScale(const Vec& param_0, f32 (*param_1)[3][3], f32 (*param_2)[3][3]) {
     for (u16 i = 0; i < mMtxGroupNum; i++)
         mShapeMtx[i]->calcNBTScale(param_0, param_1, param_2);
 }
 
-/* 80314E28-80314E98 30F768 0070+00 0/0 1/1 0/0 .text            countBumpMtxNum__8J3DShapeCFv */
 u16 J3DShape::countBumpMtxNum() const {
     u16 num = 0;
     for (u16 i = 0; i < mMtxGroupNum; i++)
@@ -124,20 +119,17 @@ u16 J3DShape::countBumpMtxNum() const {
     return num;
 }
 
-/* 80314E98-80314EB0 30F7D8 0018+00 1/1 0/0 0/0 .text            J3DLoadCPCmd__FUcUl */
 void J3DLoadCPCmd(u8 addr, u32 val) {
     GXCmd1u8(GX_LOAD_CP_REG);
     GXCmd1u8(addr);
     GXCmd1u32(val);
 }
 
-/* 80314EB0-80314EEC 30F7F0 003C+00 1/1 0/0 0/0 .text            J3DLoadArrayBasePtr__F7_GXAttrPv */
 static void J3DLoadArrayBasePtr(GXAttr attr, void* data) {
     u32 idx = (attr == GX_VA_NBT) ? 1 : (attr - GX_VA_POS);
     J3DLoadCPCmd(0xA0 + idx, ((uintptr_t)data & 0x7FFFFFFF));
 }
 
-/* 80314EEC-80314F5C 30F82C 0070+00 3/3 0/0 0/0 .text            loadVtxArray__8J3DShapeCFv */
 void J3DShape::loadVtxArray() const {
     J3DLoadArrayBasePtr(GX_VA_POS, j3dSys.getVtxPos());
 
@@ -148,7 +140,6 @@ void J3DShape::loadVtxArray() const {
     J3DLoadArrayBasePtr(GX_VA_CLR0, j3dSys.getVtxCol());
 }
 
-/* 80314F5C-80314F98 30F89C 003C+00 0/0 1/1 0/0 .text isSameVcdVatCmd__8J3DShapeFP8J3DShape */
 bool J3DShape::isSameVcdVatCmd(J3DShape* other) {
     u8* a = (u8*)other->getVcdVatCmd();
     u8* b = mVcdVatCmd;
@@ -159,7 +150,6 @@ bool J3DShape::isSameVcdVatCmd(J3DShape* other) {
     return true;
 }
 
-/* 80314F98-80315260 30F8D8 02C8+00 1/1 0/0 0/0 .text            makeVtxArrayCmd__8J3DShapeFv */
 void J3DShape::makeVtxArrayCmd() {
     GXVtxAttrFmtList* vtxAttr = mVertexData->getVtxAttrFmtList();
 
@@ -237,7 +227,6 @@ void J3DShape::makeVtxArrayCmd() {
     }
 }
 
-/* 80315260-80315300 30FBA0 00A0+00 1/1 2/2 0/0 .text            makeVcdVatCmd__8J3DShapeFv */
 void J3DShape::makeVcdVatCmd() {
     static BOOL sInterruptFlag = OSDisableInterrupts();
     OSDisableScheduler();
@@ -255,14 +244,12 @@ void J3DShape::makeVcdVatCmd() {
     OSRestoreInterrupts(sInterruptFlag);
 }
 
-/* 804515D0-804515D4 000AD0 0004+00 5/5 25/25 9/9 .sbss            sOldVcdVatCmd__8J3DShape */
 void* J3DShape::sOldVcdVatCmd;
 
 void J3DShape::loadCurrentMtx() const {
     mCurrentMtx.load();
 }
 
-/* 80315300-80315398 30FC40 0098+00 2/2 6/6 3/3 .text            loadPreDrawSetting__8J3DShapeCFv */
 void J3DShape::loadPreDrawSetting() const {
     if (sOldVcdVatCmd != mVcdVatCmd) {
         GXCallDisplayList(mVcdVatCmd, kVcdVatDLSize);
@@ -272,10 +259,8 @@ void J3DShape::loadPreDrawSetting() const {
     mCurrentMtx.load();
 }
 
-/* 804515D4-804515D8 000AD4 0004+00 3/3 0/0 0/0 .sbss            None */
 bool J3DShape::sEnvelopeFlag;
 
-/* 80315398-8031544C 30FCD8 00B4+00 1/1 0/0 0/0 .text setArrayAndBindPipeline__8J3DShapeCFv */
 void J3DShape::setArrayAndBindPipeline() const {
     J3DShapeMtx::setCurrentPipeline((mFlags & 0x1C) >> 2);
     loadVtxArray();
@@ -287,7 +272,6 @@ void J3DShape::setArrayAndBindPipeline() const {
     J3DShapeMtx::sTexMtxLoadType = getTexMtxLoadType();
 }
 
-/* 8031544C-803155E0 30FD8C 0194+00 1/0 0/0 0/0 .text            drawFast__8J3DShapeCFv */
 void J3DShape::drawFast() const {
     if (sOldVcdVatCmd != mVcdVatCmd) {
         GXCallDisplayList(mVcdVatCmd, kVcdVatDLSize);
@@ -317,14 +301,12 @@ void J3DShape::drawFast() const {
     }
 }
 
-/* 803155E0-80315628 30FF20 0048+00 1/0 0/0 0/0 .text            draw__8J3DShapeCFv */
 void J3DShape::draw() const {
     resetVcdVatCache();
     loadPreDrawSetting();
     drawFast();
 }
 
-/* 80315628-803156AC 30FF68 0084+00 1/0 0/0 0/0 .text            simpleDraw__8J3DShapeCFv */
 void J3DShape::simpleDraw() const {
     resetVcdVatCache();
     loadPreDrawSetting();
@@ -337,7 +319,6 @@ void J3DShape::simpleDraw() const {
     }
 }
 
-/* 803156AC-803157A0 30FFEC 00F4+00 1/0 0/0 0/0 .text            simpleDrawCache__8J3DShapeCFv */
 void J3DShape::simpleDrawCache() const {
     if (sOldVcdVatCmd != mVcdVatCmd) {
         GXCallDisplayList(mVcdVatCmd, kVcdVatDLSize);

@@ -47,26 +47,26 @@ struct ResourceData {
 
 class daShopItem_c : public daItemBase_c {
 public:
-    /* 80037C14 */ csXyz* getRotateP();
-    /* 80037C1C */ cXyz* getPosP();
-    /* 8059E9B8 */ const char* getShopArcname();
-    /* 8059EC04 */ u16 getHeapSize();
-    /* 8059EC1C */ void CreateInit();
-    /* 8059ED58 */ void set_mtx();
-    /* 8059EEF4 */ bool _execute();
-    /* 8059EF48 */ bool _draw();
+    csXyz* getRotateP();
+    cXyz* getPosP();
+    const char* getShopArcname();
+    u16 getHeapSize();
+    void CreateInit();
+    void set_mtx();
+    bool _execute();
+    bool _draw();
 
     inline int _create();
     inline int _delete();
     
-    /* 8059EF9C */ virtual void setListStart();
-    /* 8059EFA0 */ virtual void setShadow();
-    /* 8059F024 */ virtual BOOL chkFlag(int);
-    /* 8059F044 */ virtual s8 getTevFrm();
-    /* 8059F064 */ virtual s8 getBtpFrm();
-    /* 8059F084 */ virtual u8 getShadowSize();
-    /* 8059F0A0 */ virtual u8 getCollisionH();
-    /* 8059F0BC */ virtual u8 getCollisionR();
+    virtual void setListStart();
+    virtual void setShadow();
+    virtual BOOL chkFlag(int);
+    virtual s8 getTevFrm();
+    virtual s8 getBtpFrm();
+    virtual u8 getShadowSize();
+    virtual u8 getCollisionH();
+    virtual u8 getCollisionR();
 
     u8 getShopItemID() const { return mShopItemID; }
     s16 getAngleX() const { return mAngleX; }

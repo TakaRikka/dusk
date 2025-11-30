@@ -5,10 +5,10 @@
 
 class dSvBit_childTransformHIO_c {
 public:
-    /* 8025C0A0 */ dSvBit_childTransformHIO_c();
-    /* 8025C0D4 */ void init();
+    dSvBit_childTransformHIO_c();
+    void init();
 
-    /* 8025C2E4 */ virtual ~dSvBit_childTransformHIO_c() {}
+    virtual ~dSvBit_childTransformHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -18,10 +18,10 @@ private:
 
 class dSvBit_childDarknessHIO_c {
 public:
-    /* 8025C004 */ dSvBit_childDarknessHIO_c();
-    /* 8025C038 */ void init();
+    dSvBit_childDarknessHIO_c();
+    void init();
 
-    /* 8025C32C */ virtual ~dSvBit_childDarknessHIO_c() {}
+    virtual ~dSvBit_childDarknessHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -31,10 +31,10 @@ private:
 
 class dSvBit_childOtherHIO_c {
 public:
-    /* 8025C13C */ dSvBit_childOtherHIO_c();
-    /* 8025C178 */ void init();
+    dSvBit_childOtherHIO_c();
+    void init();
 
-    /* 8025C29C */ virtual ~dSvBit_childOtherHIO_c() {}
+    virtual ~dSvBit_childOtherHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -46,10 +46,10 @@ private:
 
 class dSvBit_childTbPerfectionHIO_c {
 public:
-    /* 8025BF68 */ dSvBit_childTbPerfectionHIO_c();
-    /* 8025BF9C */ void init();
+    dSvBit_childTbPerfectionHIO_c();
+    void init();
 
-    /* 8025C374 */ virtual ~dSvBit_childTbPerfectionHIO_c() {}
+    virtual ~dSvBit_childTbPerfectionHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -59,7 +59,7 @@ private:
 
 class dSvBit_childTreasureHIO_c {
 public:
-    /* 8025C874 */ virtual ~dSvBit_childTreasureHIO_c() {}
+    virtual ~dSvBit_childTreasureHIO_c() {}
     void init() {
         mPerfectSave.init();
     }
@@ -71,10 +71,10 @@ private:
 
 class dSvBit_childSwZoneHIO_c {
 public:
-    /* 8025BCB0 */ dSvBit_childSwZoneHIO_c();
-    /* 8025BCE4 */ void init();
+    dSvBit_childSwZoneHIO_c();
+    void init();
 
-    /* 8025C524 */ virtual ~dSvBit_childSwZoneHIO_c() {}
+    virtual ~dSvBit_childSwZoneHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -84,10 +84,10 @@ private:
 
 class dSvBit_childSwPerfectionHIO_c {
 public:
-    /* 8025BB78 */ dSvBit_childSwPerfectionHIO_c();
-    /* 8025BBAC */ void init();
+    dSvBit_childSwPerfectionHIO_c();
+    void init();
 
-    /* 8025C5B4 */ virtual ~dSvBit_childSwPerfectionHIO_c() {}
+    virtual ~dSvBit_childSwPerfectionHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -97,10 +97,10 @@ private:
 
 class dSvBit_childSwOneZoneHIO_c {
 public:
-    /* 8025BD10 */ dSvBit_childSwOneZoneHIO_c();
-    /* 8025BD44 */ void init();
+    dSvBit_childSwOneZoneHIO_c();
+    void init();
 
-    /* 8025C4DC */ virtual ~dSvBit_childSwOneZoneHIO_c() {}
+    virtual ~dSvBit_childSwOneZoneHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -110,10 +110,10 @@ private:
 
 class dSvBit_childSwDungeonHIO_c {
 public:
-    /* 8025BC14 */ dSvBit_childSwDungeonHIO_c();
-    /* 8025BC48 */ void init();
+    dSvBit_childSwDungeonHIO_c();
+    void init();
 
-    /* 8025C56C */ virtual ~dSvBit_childSwDungeonHIO_c() {}
+    virtual ~dSvBit_childSwDungeonHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -123,7 +123,7 @@ private:
 
 class dSvBit_childSwitchHIO_c {
 public:
-    /* 8025C970 */ virtual ~dSvBit_childSwitchHIO_c() {}
+    virtual ~dSvBit_childSwitchHIO_c() {}
     void init() {
         field_0x8.init();
         field_0x110.init();
@@ -141,10 +141,10 @@ private:
 
 class dSvBit_childItZoneHIO_c {
 public:
-    /* 8025BEA8 */ dSvBit_childItZoneHIO_c();
-    /* 8025BEDC */ void init();
+    dSvBit_childItZoneHIO_c();
+    void init();
 
-    /* 8025C404 */ virtual ~dSvBit_childItZoneHIO_c() {}
+    virtual ~dSvBit_childItZoneHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -154,10 +154,10 @@ private:
 
 class dSvBit_childItPerfectionHIO_c {
 public:
-    /* 8025BD70 */ dSvBit_childItPerfectionHIO_c();
-    /* 8025BDA4 */ void init();
+    dSvBit_childItPerfectionHIO_c();
+    void init();
 
-    /* 8025C494 */ virtual ~dSvBit_childItPerfectionHIO_c() {}
+    virtual ~dSvBit_childItPerfectionHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -167,10 +167,10 @@ private:
 
 class dSvBit_childItOneZoneHIO_c {
 public:
-    /* 8025BF08 */ dSvBit_childItOneZoneHIO_c();
-    /* 8025BF3C */ void init();
+    dSvBit_childItOneZoneHIO_c();
+    void init();
 
-    /* 8025C3BC */ virtual ~dSvBit_childItOneZoneHIO_c() {}
+    virtual ~dSvBit_childItOneZoneHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -180,10 +180,10 @@ private:
 
 class dSvBit_childItDungeonHIO_c {
 public:
-    /* 8025BE0C */ dSvBit_childItDungeonHIO_c();
-    /* 8025BE40 */ void init();
+    dSvBit_childItDungeonHIO_c();
+    void init();
 
-    /* 8025C44C */ virtual ~dSvBit_childItDungeonHIO_c() {}
+    virtual ~dSvBit_childItDungeonHIO_c() {}
 
 private:
     /* 0x04 */ u8 field_0x4;
@@ -193,7 +193,7 @@ private:
 
 class dSvBit_childItemHIO_c {
 public:
-    /* 8025C8D4 */ virtual ~dSvBit_childItemHIO_c() {}
+    virtual ~dSvBit_childItemHIO_c() {}
     void init() {
         mFullSave.init();
         mDungeonSave.init();
@@ -211,9 +211,9 @@ private:
 
 class dSvBit_HIO_c {
 public:
-    /* 8025C1F8 */ void init();
+    void init();
 
-    /* 8025C6FC */ virtual ~dSvBit_HIO_c() {}
+    virtual ~dSvBit_HIO_c() {}
 
     /* 0x004 */ s8 field_0x4;
     /* 0x008 */ dSvBit_childSwitchHIO_c mSwitch;

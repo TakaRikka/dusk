@@ -27,22 +27,22 @@ public:
         MODE_MOVE_DOWN_END,
     };
 
-    /* 805982A4 */ void setBaseMtx();
-    /* 805983C4 */ int create();
-    /* 805985B4 */ void moveMain();
-    /* 8059873C */ void init_modeWait();
-    /* 80598748 */ void modeWait();
-    /* 8059879C */ void init_modeMoveDownInit();
-    /* 805989D0 */ void modeMoveDownInit();
-    /* 80598A04 */ void init_modeMoveDown();
-    /* 80598AFC */ void modeMoveDown();
-    /* 80598D4C */ void init_modeMoveDownEnd();
-    /* 80598D58 */ void modeMoveDownEnd();
+    void setBaseMtx();
+    int create();
+    void moveMain();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMoveDownInit();
+    void modeMoveDownInit();
+    void init_modeMoveDown();
+    void modeMoveDown();
+    void init_modeMoveDownEnd();
+    void modeMoveDownEnd();
     
-    /* 80598344 */ virtual int CreateHeap();
-    /* 80598564 */ virtual int Execute(Mtx**);
-    /* 80598D5C */ virtual int Draw();
-    /* 80598E00 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
     int getModelType() { return fopAcM_GetParamBit(this, 8, 4); }
@@ -70,8 +70,8 @@ STATIC_ASSERT(sizeof(daSwShutter_c) == 0x5e8);
 
 class daSwShutter_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 805981EC */ daSwShutter_HIO_c();
-    /* 80598ECC */ virtual ~daSwShutter_HIO_c() {}
+    daSwShutter_HIO_c();
+    virtual ~daSwShutter_HIO_c() {}
 
     void genMessage(JORMContext*);
 

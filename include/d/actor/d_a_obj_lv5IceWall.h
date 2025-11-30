@@ -20,18 +20,18 @@ public:
         MODE_BREAK,
     };
 
-    /* 80C6B51C */ void setBaseMtx();
-    /* 80C6B69C */ int create();
-    /* 80C6BBC4 */ void procMain();
-    /* 80C6BC50 */ void init_modeWait();
-    /* 80C6BC6C */ void modeWait();
-    /* 80C6C170 */ void init_modeBreak();
-    /* 80C6C1C0 */ void modeBreak();
+    void setBaseMtx();
+    int create();
+    void procMain();
+    void init_modeWait();
+    void modeWait();
+    void init_modeBreak();
+    void modeBreak();
 
-    /* 80C6B5E4 */ virtual int CreateHeap();
-    /* 80C6BB60 */ virtual int Execute(Mtx**);
-    /* 80C6C374 */ virtual int Draw();
-    /* 80C6C44C */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSwBit1() { return fopAcM_GetParamBit(this, 0, 8); }
 
@@ -62,8 +62,8 @@ STATIC_ASSERT(sizeof(daIceWall_c) == 0x884);
 
 class daIceWall_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80C6B42C */ daIceWall_HIO_c();
-    /* 80C6C550 */ virtual ~daIceWall_HIO_c() {}
+    daIceWall_HIO_c();
+    virtual ~daIceWall_HIO_c() {}
 
     void genMessage(JORMContext*);
 

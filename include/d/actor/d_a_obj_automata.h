@@ -33,19 +33,19 @@ private:
     /* 0xB31 */ u8 mCoNone;
 
 public:
-    /* 80BA56EC */ virtual ~daObj_AutoMata_c();
-    /* 80BA5990 */ int create();
-    /* 80BA5F88 */ int CreateHeap();
-    /* 80BA60A0 */ int Delete();
-    /* 80BA60D4 */ int Execute();
-    /* 80BA639C */ int Draw();
-    /* 80BA6480 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80BA64A0 */ static void* srchTHouse(fopAc_ac_c*, void*);
-    /* 80BA6500 */ int setAnm(int, bool);
-    /* 80BA6634 */ void setEnvTevColor();
-    /* 80BA6690 */ void setRoomNo();
-    /* 80BA66D4 */ void setMtx();
-    /* 80BA674C */ void setSe();
+    virtual ~daObj_AutoMata_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static void* srchTHouse(fopAc_ac_c*, void*);
+    int setAnm(int, bool);
+    void setEnvTevColor();
+    void setRoomNo();
+    void setMtx();
+    void setSe();
 
     void setAnmPlaySpeed(f32 i_playspeed) {
         mAnmPlaySpeed = i_playspeed;
@@ -60,7 +60,7 @@ STATIC_ASSERT(sizeof(daObj_AutoMata_c) == 0xb38);
 
 class daObj_AutoMata_Param_c {
 public:
-    /* 80BA6BA4 */ virtual ~daObj_AutoMata_Param_c() {}
+    virtual ~daObj_AutoMata_Param_c() {}
 
     static f32 const m[3];
 };

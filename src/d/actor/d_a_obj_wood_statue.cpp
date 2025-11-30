@@ -11,7 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "d/d_s_play.h"
-#include "dol2asm.h"
 
 #ifdef DEBUG
 
@@ -38,7 +37,6 @@ daObjWStatue_HIO_c l_HIO;
 #endif
 
 
-/* 80D3B638-80D3B67C 000000 0044+00 5/5 0/0 0/0 .rodata          l_cyl_src */
 const static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xffffffff, 0x11}, 0x59}}, // mObj
@@ -53,14 +51,10 @@ const static dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 80D3B73C-80D3B740 -00001 0004+00 1/1 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "O_wood";
 
-/* 80D3B740-80D3B744 -00001 0004+00 1/1 0/0 0/0 .data            l_eventName */
 static char* l_eventName = "GET_WOOD_STATUE";
 
-/* 80D39E38-80D3A134 000078 02FC+00 1/1 0/0 0/0 .text            Reflect__FP4cXyzRC13cBgS_PolyInfof
- */
 static f32 Reflect(cXyz* param_1, cBgS_PolyInfo const& param_2, f32 param_3) {
     cM3dGPla acStack_3c;
     bool isTriPla = dComIfG_Bgsp().GetTriPla(param_2, &acStack_3c);
@@ -75,8 +69,6 @@ static f32 Reflect(cXyz* param_1, cBgS_PolyInfo const& param_2, f32 param_3) {
     }
 }
 
-/* 80D3A17C-80D3A1D8 0003BC 005C+00 1/1 0/0 0/0 .text
- * lifeGetTgCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void lifeGetTgCallBack(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc_ac_c* param_3,
                               dCcD_GObjInf* param_4) {
     if (i_this != NULL &&
@@ -89,8 +81,6 @@ static void lifeGetTgCallBack(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc_a
     return;
 }
 
-/* 80D3A1D8-80D3A21C 000418 0044+00 1/1 0/0 0/0 .text
- * lifeGetCoCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void lifeGetCoCallBack(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc_ac_c* param_3,
                               dCcD_GObjInf* param_4) {
     if (i_this != NULL && param_3 != NULL && param_3 == dComIfGp_getLinkPlayer()) {
@@ -98,7 +88,6 @@ static void lifeGetCoCallBack(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc_a
     }
 }
 
-/* 80D3A21C-80D3A268 00045C 004C+00 1/1 0/0 0/0 .text            s_sh_sub__FPvPv */
 static void* s_sh_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_E_SH) {
         return param_1;
@@ -106,20 +95,17 @@ static void* s_sh_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80D3A268-80D3A2A4 0004A8 003C+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjWStatue_cFv */
 void daObjWStatue_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80D3A2A4-80D3A2F0 0004E4 004C+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjWStatue_cFv */
 void daObjWStatue_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80D3A2F0-80D3A474 000530 0184+00 1/1 0/0 0/0 .text            Create__14daObjWStatue_cFv */
 int daObjWStatue_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -152,12 +138,10 @@ int daObjWStatue_c::Create() {
     #endif
 }
 
-/* 80D3A474-80D3A47C 0006B4 0008+00 1/0 0/0 0/0 .text            __CreateHeap__14daObjWStatue_cFv */
 int daObjWStatue_c::__CreateHeap() {
     return 1;
 }
 
-/* 80D3A47C-80D3A66C 0006BC 01F0+00 1/1 0/0 0/0 .text            create__14daObjWStatue_cFv */
 int daObjWStatue_c::create() {
     fopAcM_ct(this, daObjWStatue_c);
     m_itemNo = fpcNm_ITEM_WOOD_STATUE;
@@ -183,7 +167,6 @@ int daObjWStatue_c::create() {
     return rv;
 }
 
-/* 80D3A8E8-80D3AA3C 000B28 0154+00 1/1 0/0 0/0 .text            bg_check__14daObjWStatue_cFv */
 void daObjWStatue_c::bg_check() {
     f32 dVar6 = 0.7f;
     if (mAcch.ChkWallHit()) {
@@ -214,8 +197,6 @@ void daObjWStatue_c::bg_check() {
     }
 }
 
-/* 80D3AA3C-80D3AA80 000C7C 0044+00 1/1 0/0 0/0 .text            actionWaitInit__14daObjWStatue_cFv
- */
 int daObjWStatue_c::actionWaitInit() {
     mCcCyl.OnTgSPrmBit(1);
     mCcCyl.OnCoSPrmBit(1);
@@ -225,7 +206,6 @@ int daObjWStatue_c::actionWaitInit() {
     return 1;
 }
 
-/* 80D3AA80-80D3AB9C 000CC0 011C+00 1/0 0/0 0/0 .text            actionWait__14daObjWStatue_cFv */
 int daObjWStatue_c::actionWait() {
     mBoundSETimer++;
     if (dComIfGp_evmng_endCheck(mEventIdx)) {
@@ -254,8 +234,6 @@ int daObjWStatue_c::actionWait() {
     return 1;
 }
 
-/* 80D3AB9C-80D3AC64 000DDC 00C8+00 2/2 0/0 0/0 .text initActionOrderGetDemo__14daObjWStatue_cFv
- */
 int daObjWStatue_c::initActionOrderGetDemo() {
     mCcCyl.OffTgSPrmBit(1);
     mCcCyl.OffCoSPrmBit(1);
@@ -270,7 +248,6 @@ int daObjWStatue_c::initActionOrderGetDemo() {
     return 1;
 }
 
-/* 80D3AC64-80D3ACAC 000EA4 0048+00 1/0 0/0 0/0 .text actionOrderGetDemo__14daObjWStatue_cFv */
 int daObjWStatue_c::actionOrderGetDemo() {
     setStatus(STATUS_GET_DEMO);
     if (mItemId != fpcM_ERROR_PROCESS_ID_e) {
@@ -279,8 +256,6 @@ int daObjWStatue_c::actionOrderGetDemo() {
     return 1;
 }
 
-/* 80D3ACAC-80D3AD30 000EEC 0084+00 1/0 0/0 0/0 .text            actionGetDemo__14daObjWStatue_cFv
- */
 int daObjWStatue_c::actionGetDemo() {
     if (dComIfGp_evmng_endCheck("DEFAULT_GETITEM")) {
         fopAcM_onSwitch(this, getSwbit2());
@@ -290,7 +265,6 @@ int daObjWStatue_c::actionGetDemo() {
     return 1;
 }
 
-/* 80D3AD30-80D3AD88 000F70 0058+00 1/1 0/0 0/0 .text actionInitSwOnWait__14daObjWStatue_cFv */
 int daObjWStatue_c::actionInitSwOnWait() {
     mCcCyl.OffTgSPrmBit(1);
     mCcCyl.OffCoSPrmBit(1);
@@ -300,8 +274,6 @@ int daObjWStatue_c::actionInitSwOnWait() {
     return 1;
 }
 
-/* 80D3AD88-80D3AE7C 000FC8 00F4+00 1/0 0/0 0/0 .text            actionSwOnWait__14daObjWStatue_cFv
- */
 int daObjWStatue_c::actionSwOnWait() {
     base_process_class* iVar2 = fpcM_Search(s_sh_sub, this);
     switch (field_0x93a) {
@@ -339,8 +311,6 @@ int daObjWStatue_c::actionSwOnWait() {
     return 1;
 }
 
-/* 80D3AE7C-80D3AF5C 0010BC 00E0+00 1/1 0/0 0/0 .text actionInitBoomerangCarry__14daObjWStatue_cFv
- */
 int daObjWStatue_c::actionInitBoomerangCarry() {
     mCcCyl.OnTgSPrmBit(1);
     mCcCyl.OnCoSPrmBit(1);
@@ -353,7 +323,6 @@ int daObjWStatue_c::actionInitBoomerangCarry() {
     return 1;
 }
 
-/* 80D3AF5C-80D3AFC0 00119C 0064+00 1/0 0/0 0/0 .text actionBoomerangCarry__14daObjWStatue_cFv */
 int daObjWStatue_c::actionBoomerangCarry() {
     fopAc_ac_c* boomerang = fopAcM_SearchByName(PROC_BOOMERANG);
     if (boomerang != NULL) {
@@ -367,7 +336,6 @@ int daObjWStatue_c::actionBoomerangCarry() {
     return 1;
 }
 
-/* 80D3AFC0-80D3B164 001200 01A4+00 1/1 0/0 0/0 .text            demoProc__14daObjWStatue_cFv */
 void daObjWStatue_c::demoProc() {
     static char* action_table[4] = {
         "WAIT",
@@ -425,7 +393,6 @@ void daObjWStatue_c::demoProc() {
     }
 }
 
-/* 80D3B164-80D3B250 0013A4 00EC+00 1/1 0/0 0/0 .text            effectSet__14daObjWStatue_cFv */
 void daObjWStatue_c::effectSet() {
     if (mCallbacks[0].getEmitter() == NULL) {
         dComIfGp_particle_set(0x827a, &current.pos, &shape_angle, &scale, 0xff, &mCallbacks[0],
@@ -435,13 +402,11 @@ void daObjWStatue_c::effectSet() {
     }
 }
 
-/* 80D3B250-80D3B2A0 001490 0050+00 1/1 0/0 0/0 .text            effectStop__14daObjWStatue_cFv */
 void daObjWStatue_c::effectStop() {
     mCallbacks[0].remove();
     mCallbacks[1].remove();
 }
 
-/* 80D3B2A0-80D3B428 0014E0 0188+00 1/1 0/0 0/0 .text            execute__14daObjWStatue_cFv */
 int daObjWStatue_c::execute() {
     static daObjWStatue_c::demoFunc l_demoFunc[5] = {
         &daObjWStatue_c::actionWait,           &daObjWStatue_c::actionOrderGetDemo,
@@ -460,7 +425,6 @@ int daObjWStatue_c::execute() {
     return 1;
 }
 
-/* 80D3B428-80D3B47C 001668 0054+00 1/1 0/0 0/0 .text            draw__14daObjWStatue_cFv */
 int daObjWStatue_c::draw() {
     if (!chkDraw()) {
         return 1;
@@ -469,10 +433,8 @@ int daObjWStatue_c::draw() {
     return 1;
 }
 
-/* 80D3B47C-80D3B480 0016BC 0004+00 1/0 0/0 0/0 .text            setListStart__14daObjWStatue_cFv */
 void daObjWStatue_c::setListStart() {}
 
-/* 80D3B480-80D3B4B8 0016C0 0038+00 1/1 0/0 0/0 .text            _delete__14daObjWStatue_cFv */
 int daObjWStatue_c::_delete() {
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
 
@@ -483,38 +445,30 @@ int daObjWStatue_c::_delete() {
     return 1;
 }
 
-/* 80D3B4B8-80D3B4D8 0016F8 0020+00 1/0 0/0 0/0 .text daObjWStatue_Draw__FP14daObjWStatue_c */
 static int daObjWStatue_Draw(daObjWStatue_c * i_this) {
     return i_this->draw();
 }
 
-/* 80D3B4D8-80D3B4F8 001718 0020+00 1/0 0/0 0/0 .text daObjWStatue_Execute__FP14daObjWStatue_c
-    */
 static int daObjWStatue_Execute(daObjWStatue_c * i_this) {
     return i_this->execute();
 }
 
-/* 80D3B4F8-80D3B518 001738 0020+00 1/0 0/0 0/0 .text daObjWStatue_Delete__FP14daObjWStatue_c */
 static int daObjWStatue_Delete(daObjWStatue_c * i_this) {
     fopAcM_RegisterDeleteID(i_this, "ObjLife");
     return i_this->_delete();
 }
 
-/* 80D3B518-80D3B538 001758 0020+00 1/0 0/0 0/0 .text daObjWStatue_Create__FP10fopAc_ac_c
-    */
 static int daObjWStatue_Create(fopAc_ac_c * i_this) {
     fopAcM_RegisterCreateID(daObjWStatue_c, i_this, "ObjLife");
     return a_this->create();
 }
 
-/* 80D3B7CC-80D3B7EC -00001 0020+00 1/0 0/0 0/0 .data            l_daObjWStatue_Method */
 static actor_method_class l_daObjWStatue_Method = {
     (process_method_func)daObjWStatue_Create,  (process_method_func)daObjWStatue_Delete,
     (process_method_func)daObjWStatue_Execute, NULL,
     (process_method_func)daObjWStatue_Draw,
 };
 
-/* 80D3B7EC-80D3B81C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_WoodStatue */
 extern actor_process_profile_definition g_profile_Obj_WoodStatue = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

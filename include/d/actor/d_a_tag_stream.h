@@ -29,9 +29,9 @@ public:
         return mPower;
     }
 
-    /* 80D638F8 */ int create();
-    /* 80D63A98 */ ~daTagStream_c();
-    /* 80D63B58 */ int execute();
+    int create();
+    ~daTagStream_c();
+    int execute();
     int checkArea(cXyz const*);
 
     /* 0x568 */ u8 mPriority;

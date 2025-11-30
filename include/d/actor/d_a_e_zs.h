@@ -22,22 +22,22 @@ public:
         /* 3 */ ACT_DRIVE
     };
 
-    /* 808330DC */ int draw();
-    /* 808331E4 */ void setBck(int, u8, f32, f32);
-    /* 80833290 */ void setActionMode(int, int);
-    /* 8083329C */ void damage_check();
-    /* 80833698 */ u8 mBossHandCheck();
-    /* 80833964 */ void executeAppear();
-    /* 80833D30 */ void executeWait();
-    /* 80833F1C */ void executeDamage();
-    /* 80834108 */ void executeDrive();
-    /* 808342C8 */ void action();
-    /* 80834478 */ void mtx_set();
-    /* 80834518 */ void cc_set();
-    /* 80834650 */ int execute();
-    /* 808346E4 */ int _delete();
-    /* 80834778 */ int CreateHeap();
-    /* 80834884 */ int create();
+    int draw();
+    void setBck(int, u8, f32, f32);
+    void setActionMode(int, int);
+    void damage_check();
+    u8 mBossHandCheck();
+    void executeAppear();
+    void executeWait();
+    void executeDamage();
+    void executeDrive();
+    void action();
+    void mtx_set();
+    void cc_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    int create();
 
 private:
     /* 0x5ac */ request_of_phase_process_class mPhase;

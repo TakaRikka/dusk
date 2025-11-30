@@ -87,7 +87,6 @@ static const char* sSpotName[] = {
     "D_SB10",
 };
 
-/* 802B5F1C-802B5F70 2B085C 0054+00 0/0 1/1 0/0 .text            __ct__11Z2StatusMgrFv */
 Z2StatusMgr::Z2StatusMgr() : JASGlobalInstance(true) {
     mHour = 0;
     mMinute = 0;
@@ -109,12 +108,10 @@ Z2StatusMgr::Z2StatusMgr() : JASGlobalInstance(true) {
     mHeartGaugeOn = 0;
 }
 
-/* 802B5F70-802B5F7C 2B08B0 000C+00 0/0 1/1 0/0 .text            heartGaugeOn__11Z2StatusMgrFv */
 void Z2StatusMgr::heartGaugeOn() {
     mHeartGaugeOn = 2;
 }
 
-/* 802B5F7C-802B60CC 2B08BC 0150+00 0/0 1/1 0/0 .text processHeartGaugeSound__11Z2StatusMgrFv */
 void Z2StatusMgr::processHeartGaugeSound() {
     if (!dComIfGp_event_runCheck() && mHeartGaugeOn != 0) {
         if (dScnPly_c::isPause()) {
@@ -144,7 +141,6 @@ void Z2StatusMgr::processHeartGaugeSound() {
     }
 }
 
-/* 802B60CC-802B6104 2B0A0C 0038+00 0/0 1/1 0/0 .text            talkIn__11Z2StatusMgrFv */
 void Z2StatusMgr::talkIn() {
     if (!isMovieDemo()) {
         Z2GetSeqMgr()->talkInBgm();
@@ -152,7 +148,6 @@ void Z2StatusMgr::talkIn() {
     }
 }
 
-/* 802B6104-802B613C 2B0A44 0038+00 0/0 1/1 0/0 .text            talkOut__11Z2StatusMgrFv */
 void Z2StatusMgr::talkOut() {
     if (!isMovieDemo()) {
         Z2GetSeqMgr()->talkOutBgm();
@@ -160,7 +155,6 @@ void Z2StatusMgr::talkOut() {
     }
 }
 
-/* 802B613C-802B617C 2B0A7C 0040+00 0/0 1/1 0/0 .text            menuIn__11Z2StatusMgrFv */
 void Z2StatusMgr::menuIn() {
     Z2GetSeqMgr()->menuInBgm();
     Z2GetSeMgr()->menuInSe();
@@ -168,7 +162,6 @@ void Z2StatusMgr::menuIn() {
     mPauseFlag = true;
 }
 
-/* 802B617C-802B61BC 2B0ABC 0040+00 0/0 3/3 0/0 .text            menuOut__11Z2StatusMgrFv */
 void Z2StatusMgr::menuOut() {
     Z2GetSeqMgr()->menuOutBgm();
     Z2GetSeMgr()->talkOutSe();
@@ -176,12 +169,10 @@ void Z2StatusMgr::menuOut() {
     mPauseFlag = false;
 }
 
-/* 802B61BC-802B61E8 2B0AFC 002C+00 2/2 1/1 0/0 .text            isMovieDemo__11Z2StatusMgrFv */
 bool Z2StatusMgr::isMovieDemo() {
     return mDemoStatus == 2 || mDemoStatus == 8 || mDemoStatus == 9;
 }
 
-/* 802B61E8-802B671C 2B0B28 0534+00 1/0 7/7 11/11 .text            setDemoName__11Z2StatusMgrFPc */
 void Z2StatusMgr::setDemoName(char* demoName) {
     if (mDemoStatus == 11) {
         mDemoStatus = 0;
@@ -290,13 +281,11 @@ void Z2StatusMgr::setDemoName(char* demoName) {
     }
 }
 
-/* 802B671C-802B6734 2B105C 0018+00 0/0 1/1 0/0 .text            processTime__11Z2StatusMgrFv */
 void Z2StatusMgr::processTime() {
     u16 processed_hour = mHour * 256;
     mTime = processed_hour + mMinute;
 }
 
-/* 802B6734-802B6758 2B1074 0024+00 0/0 5/5 0/0 .text            checkDayTime__11Z2StatusMgrFv */
 bool Z2StatusMgr::checkDayTime() {
     if (mHour >= 6 && mHour < 19) {
         return true;
@@ -305,22 +294,18 @@ bool Z2StatusMgr::checkDayTime() {
     return false;
 }
 
-/* 802B6758-802B6760 -00001 0008+00 0/0 0/0 0/0 .text            setEventBit__11Z2StatusMgrFPv */
 void Z2StatusMgr::setEventBit(void* eventBit) {
     mEventBit = eventBit;
 }
 
-/* 802B6760-802B6784 2B10A0 0024+00 0/0 1/1 0/0 .text setCameraPolygonPos__11Z2StatusMgrFP3Vec */
 void Z2StatusMgr::setCameraPolygonPos(Vec* polygonPos) {
     if (polygonPos != NULL) {
         mPolygonPosition = *polygonPos;
     }
 }
 
-/* 802B6784-802B6788 2B10C4 0004+00 0/0 1/1 0/0 .text setCameraGroupInfo__11Z2StatusMgrFUc */
 void Z2StatusMgr::setCameraGroupInfo(u8) {}
 
-/* 802B6788-802B6840 2B10C8 00B8+00 0/0 2/2 0/0 .text setCameraInWaterDepth__11Z2StatusMgrFf */
 void Z2StatusMgr::setCameraInWaterDepth(f32 depth) {
     if (0.0f == depth) {
         mCameraInWaterDepthRatio = 0.0f;

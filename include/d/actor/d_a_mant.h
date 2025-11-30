@@ -12,8 +12,8 @@
 
 class daMant_packet_c : public J3DPacket {
 public:
-    /* 80861298 */ void draw();
-    /* 80862BA4 */ ~daMant_packet_c();
+    void draw();
+    ~daMant_packet_c();
 
     /* 0x0010 */ Mtx mMtx;
     /* 0x0040 */ Mtx mMtx2;
@@ -50,8 +50,8 @@ public:
 };
 struct mant_j_s {
     public:
-        /* 80862AC0 */ ~mant_j_s();
-        /* 80862B3C */ mant_j_s();
+        ~mant_j_s();
+        mant_j_s();
     
         /* 0x0000 */ cXyz field_0x0[13];
         /* 0x009C */ cXyz field_0x9c[13];

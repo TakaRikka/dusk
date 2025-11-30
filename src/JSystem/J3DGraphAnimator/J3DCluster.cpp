@@ -6,7 +6,6 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "dolphin/base/PPCArch.h"
 
-/* 8032E1F8-8032E230 328B38 0038+00 0/0 1/1 0/0 .text            __ct__13J3DDeformDataFv */
 J3DDeformData::J3DDeformData() {
     mClusterNum = 0;
     mClusterKeyNum = 0;
@@ -22,23 +21,18 @@ J3DDeformData::J3DDeformData() {
     mClusterKeyName = NULL;
 }
 
-/* 8032E230-8032E274 328B70 0044+00 0/0 1/1 0/0 .text            offAllFlag__13J3DDeformDataFUl */
 void J3DDeformData::offAllFlag(u32 i_flag) {
     for (u16 i = 0; i < mClusterNum; i++) {
         mClusterPointer[i].getDeformer()->offFlag(i_flag);
     }
 }
 
-/* 8032E274-8032E298 328BB4 0024+00 0/0 1/1 0/0 .text            deform__13J3DDeformDataFP8J3DModel
- */
 void J3DDeformData::deform(J3DModel* model) {
     J3D_ASSERT_NULLPTR(110, model);
 
     deform(model->getVertexBuffer());
 }
 
-/* 8032E298-8032E364 328BD8 00CC+00 1/1 0/0 0/0 .text deform__13J3DDeformDataFP15J3DVertexBuffer
- */
 void J3DDeformData::deform(J3DVertexBuffer* buffer) {
     J3D_ASSERT_NULLPTR(141, buffer);
 
@@ -59,14 +53,12 @@ void J3DDeformData::deform(J3DVertexBuffer* buffer) {
     buffer->setCurrentVtxNrm(buffer->getVtxNrmArrayPointer(0));
 }
 
-/* 8032E364-8032E39C 328CA4 0038+00 0/0 1/1 0/0 .text setAnm__13J3DDeformDataFP13J3DAnmCluster */
 void J3DDeformData::setAnm(J3DAnmCluster* anm) {
     for (u16 i = 0; i < mClusterNum; i++) {
         mClusterPointer[i].getDeformer()->setAnmCluster(anm);
     }
 }
 
-/* 8032E39C-8032E3BC 328CDC 0020+00 0/0 1/1 0/0 .text __ct__11J3DDeformerFP13J3DDeformData */
 J3DDeformer::J3DDeformer(J3DDeformData* data) {
     mDeformData = data;
     mAnmCluster = NULL;
@@ -75,8 +67,6 @@ J3DDeformer::J3DDeformer(J3DDeformData* data) {
     mFlags = 3;
 }
 
-/* 8032E3BC-8032E4A4 328CFC 00E8+00 1/1 0/0 0/0 .text deform__11J3DDeformerFP15J3DVertexBufferUs
- */
 void J3DDeformer::deform(J3DVertexBuffer* buffer, u16 param_1) {
     J3D_ASSERT_NULLPTR(222, buffer);
 
@@ -95,8 +85,6 @@ void J3DDeformer::deform(J3DVertexBuffer* buffer, u16 param_1) {
     }
 }
 
-/* 8032E4A4-8032E60C 328DE4 0168+00 1/1 0/0 0/0 .text
- * deform_VtxPosF32__11J3DDeformerFP15J3DVertexBufferP10J3DClusterP13J3DClusterKeyPf */
 void J3DDeformer::deform_VtxPosF32(J3DVertexBuffer* i_buffer, J3DCluster* i_cluster,
                                    J3DClusterKey* i_key, f32* i_weights) {
     J3DClusterKey* key;
@@ -137,8 +125,6 @@ void J3DDeformer::deform_VtxPosF32(J3DVertexBuffer* i_buffer, J3DCluster* i_clus
     }
 }
 
-/* 8032E60C-8032EAB4 328F4C 04A8+00 1/1 0/0 0/0 .text
- * deform_VtxNrmF32__11J3DDeformerFP15J3DVertexBufferP10J3DClusterP13J3DClusterKeyPf */
 // NONMATCHING one missing mr
 void J3DDeformer::deform_VtxNrmF32(J3DVertexBuffer* i_buffer, J3DCluster* i_cluster,
                                    J3DClusterKey* i_key, f32* i_weights) {
@@ -238,8 +224,6 @@ void J3DDeformer::deform_VtxNrmF32(J3DVertexBuffer* i_buffer, J3DCluster* i_clus
     }
 }
 
-/* 8032EAB4-8032EBCC 3293F4 0118+00 1/1 0/0 0/0 .text deform__11J3DDeformerFP15J3DVertexBufferUsPf
- */
 void J3DDeformer::deform(J3DVertexBuffer* i_buffer, u16 param_1, f32* i_weights) {
     J3D_ASSERT_NULLPTR(505, i_buffer != NULL);
 
@@ -268,8 +252,6 @@ void J3DDeformer::deform(J3DVertexBuffer* i_buffer, u16 param_1, f32* i_weights)
     }
 }
 
-/* 8032EBCC-8032EC28 32950C 005C+00 1/1 0/0 0/0 .text            normalizeWeight__11J3DDeformerFiPf
- */
 void J3DDeformer::normalizeWeight(int i_keyNum, f32* i_weights) {
     f32 totalWeight = 0.0f;
     for (u16 i = 0; i < i_keyNum; i++) {

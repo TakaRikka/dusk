@@ -8,12 +8,6 @@
 #include "d/actor/d_a_obj_inobone.h"
 #include "d/actor/d_a_player.h"
 
-//
-// Declarations:
-//
-
-/* 80C276B8-80C27714 000078 005C+00 1/1 0/0 0/0 .text
- * bornTgCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void bornTgCallBack(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
                            fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf) {
     daObjIBone_c* a_tgActor = (daObjIBone_c*)i_tgActor;
@@ -33,8 +27,6 @@ static void bornTgCallBack(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
     }
 }
 
-/* 80C27714-80C27780 0000D4 006C+00 1/1 0/0 0/0 .text
- * bornCoCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void bornCoCallBack(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
                            fopAc_ac_c* i_coActorB, dCcD_GObjInf* i_coObjInfB) {
     daObjIBone_c* a_coActorA = (daObjIBone_c*)i_coActorA;
@@ -47,7 +39,6 @@ static void bornCoCallBack(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
     }
 }
 
-/* 80C28120-80C28164 000000 0044+00 3/3 0/0 0/0 .rodata          l_cyl_src */
 static const dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x1f}, {0xd8fafdff, 0x11}, 0x79}}, // mObj
@@ -62,7 +53,6 @@ static const dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 80C28164-80C281A8 000044 0044+00 0/1 0/0 0/0 .rodata          l_cyl_src2 */
 static const dCcD_SrcCyl l_cyl_src2 = {
     {
         {0x0, {{0x0, 0x0, 0x1f}, {0x2000, 0x11}, 0x78}}, // mObj
@@ -77,7 +67,6 @@ static const dCcD_SrcCyl l_cyl_src2 = {
     } // mCyl
 };
 
-/* 80C27780-80C27810 000140 0090+00 1/1 0/0 0/0 .text            s_boar_sub__FPvPv */
 static void* s_boar_sub(void* i_actor, void* i_data) {
     if (fopAc_IsActor(i_actor)) {
         fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
@@ -96,18 +85,15 @@ static void* s_boar_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80C27810-80C27830 0001D0 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static void CheckCreateHeap(fopAc_ac_c* i_this) {
     static_cast<daObjIBone_c*>(i_this)->CreateHeap();
 }
 
-/* 80C27830-80C2786C 0001F0 003C+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjIBone_cFv */
 void daObjIBone_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80C2786C-80C278CC 00022C 0060+00 1/1 0/0 0/0 .text            setBaseMtx__12daObjIBone_cFv */
 void daObjIBone_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(csXyz(shape_angle.x, 0, 0));
@@ -115,7 +101,6 @@ void daObjIBone_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C278CC-80C279A8 00028C 00DC+00 1/1 0/0 0/0 .text            Create__12daObjIBone_cFv */
 int daObjIBone_c::Create() {
     scale.setall(1.35f);
 
@@ -139,13 +124,10 @@ int daObjIBone_c::Create() {
     return 1;
 }
 
-/* 80C281F8-80C281FC -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static const char* l_arcName = "Obj_Ibone";
 
-/* 80C281FC-80C28200 -00001 0004+00 1/1 0/0 0/0 .data            l_bmdName */
 static const char* l_bmdName = "A_InoBone.bmd";
 
-/* 80C279A8-80C27A20 000368 0078+00 1/1 0/0 0/0 .text            CreateHeap__12daObjIBone_cFv */
 int daObjIBone_c::CreateHeap() {
     J3DModelData* modelData =
         (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmdName);
@@ -158,7 +140,6 @@ int daObjIBone_c::CreateHeap() {
     return mpModel != NULL ? 1 : 0;
 }
 
-/* 80C27A20-80C27BBC 0003E0 019C+00 1/1 0/0 0/0 .text            create__12daObjIBone_cFv */
 int daObjIBone_c::create() {
     fopAcM_ct(this, daObjIBone_c)
 
@@ -175,7 +156,6 @@ int daObjIBone_c::create() {
     return result;
 }
 
-/* 80C27C4C-80C27E48 00060C 01FC+00 1/1 0/0 0/0 .text            execute__12daObjIBone_cFv */
 int daObjIBone_c::execute() {
     f32 xz_distance = fopAcM_searchPlayerDistanceXZ(this);
     f32 y_distance = fopAcM_searchPlayerDistanceY(this);
@@ -233,7 +213,6 @@ int daObjIBone_c::execute() {
 
 static const char* l_effbmdName = "BreakBoarBone.bmd";  // unused
 
-/* 80C27E48-80C27FEC 000808 01A4+00 1/1 0/0 0/0 .text            setBreakEffect__12daObjIBone_cFv */
 void daObjIBone_c::setBreakEffect() {
     static const u16 particle_id[] = { dPa_RM(ID_ZM_S_BOARBONEBREAK00) };
     
@@ -263,7 +242,6 @@ void daObjIBone_c::setBreakEffect() {
     mDoAud_seStart(Z2SE_OBJ_BONES_BREAK_L, &current.pos, 0, 0);
 }
 
-/* 80C27FEC-80C28050 0009AC 0064+00 1/1 0/0 0/0 .text            draw__12daObjIBone_cFv */
 int daObjIBone_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -272,7 +250,6 @@ int daObjIBone_c::draw() {
     return 1;
 }
 
-/* 80C28050-80C28098 000A10 0048+00 1/1 0/0 0/0 .text            _delete__12daObjIBone_cFv */
 int daObjIBone_c::_delete() {
     mSound.deleteObject();
     dComIfG_resDelete(&mPhase, l_arcName);
@@ -280,31 +257,22 @@ int daObjIBone_c::_delete() {
     return 1;
 }
 
-/* 80C28098-80C280B8 000A58 0020+00 1/0 0/0 0/0 .text            daObjIBone_Draw__FP12daObjIBone_c
- */
 static int daObjIBone_Draw(daObjIBone_c* i_this) {
     return i_this->draw();
 }
 
-/* 80C280B8-80C280D8 000A78 0020+00 1/0 0/0 0/0 .text daObjIBone_Execute__FP12daObjIBone_c */
 static int daObjIBone_Execute(daObjIBone_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C280D8-80C280F8 000A98 0020+00 1/0 0/0 0/0 .text            daObjIBone_Delete__FP12daObjIBone_c
- */
 static int daObjIBone_Delete(daObjIBone_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80C280F8-80C28118 000AB8 0020+00 1/0 0/0 0/0 .text            daObjIBone_Create__FP10fopAc_ac_c
- */
 static int daObjIBone_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjIBone_c*>(i_this)->create();
 }
 
-/* ############################################################################################## */
-/* 80C28200-80C28220 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjIBone_Method */
 static actor_method_class l_daObjIBone_Method = {
     (process_method_func)daObjIBone_Create,
     (process_method_func)daObjIBone_Delete,
@@ -313,7 +281,6 @@ static actor_method_class l_daObjIBone_Method = {
     (process_method_func)daObjIBone_Draw,
 };
 
-/* 80C28220-80C28250 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_InoBone */
 extern actor_process_profile_definition g_profile_Obj_InoBone = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

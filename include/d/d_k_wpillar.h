@@ -6,10 +6,10 @@
 
 class dkWpillar_c : public kankyo_class {
 public:
-    /* 80261B54 */ int create();
-    /* 80261F24 */ ~dkWpillar_c();
-    /* 80262014 */ int execute();
-    /* 802620C8 */ int draw();
+    int create();
+    ~dkWpillar_c();
+    int execute();
+    int draw();
 
     /* 0x0F8 */ J3DModel* mpModel;
     /* 0x0FC */ mDoExt_bckAnm mBck;

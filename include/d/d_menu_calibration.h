@@ -19,29 +19,29 @@ public:
         /* 5 */ PROC_STEP3_MOVE,
     };
 
-    /* 801AEDAC */ void _move();
-    /* 801AEE2C */ void _draw();
-    /* 801AEE30 */ void step1_wait_init();
-    /* 801AEF60 */ void step1_wait_move();
-    /* 801AF084 */ void step1_move_init();
-    /* 801AF0C0 */ void step1_move_move();
-    /* 801AF188 */ void step2_wait_init();
-    /* 801AF1F4 */ void step2_wait_move();
-    /* 801AF380 */ void step2_move_init();
-    /* 801AF3BC */ void step2_move_move();
-    /* 801AF488 */ void step3_wait_init();
-    /* 801AF4F8 */ void step3_wait_move();
-    /* 801AF5F4 */ void step3_move_init();
-    /* 801AF630 */ void step3_move_move();
-    /* 801AF710 */ void setCalibrationValue();
-    /* 801AF738 */ void setAButtonString(u16);
-    /* 801AF7E8 */ void setBButtonString(u16);
-    /* 801AF898 */ void setStepString(u16);
-    /* 801AF948 */ void setExplainString(u16);
-    /* 801AFA00 */ void setHIO(bool);
+    void _move();
+    void _draw();
+    void step1_wait_init();
+    void step1_wait_move();
+    void step1_move_init();
+    void step1_move_move();
+    void step2_wait_init();
+    void step2_wait_move();
+    void step2_move_init();
+    void step2_move_move();
+    void step3_wait_init();
+    void step3_wait_move();
+    void step3_move_init();
+    void step3_move_move();
+    void setCalibrationValue();
+    void setAButtonString(u16);
+    void setBButtonString(u16);
+    void setStepString(u16);
+    void setExplainString(u16);
+    void setHIO(bool);
 
-    /* 801AFBF4 */ virtual void draw();
-    /* 801AED64 */ virtual ~dMenu_Calibration_c();
+    virtual void draw();
+    virtual ~dMenu_Calibration_c();
 
     /* 0x004 */ JKRExpHeap* mpHeap;
     /* 0x008 */ JKRArchive* mpArchive;

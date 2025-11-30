@@ -9,11 +9,8 @@
 #include "JSystem/JAudio2/JASResArcLoader.h"
 #include "dolphin/types.h"
 
-/* 802A68F4-802A6928 2A1234 0034+00 0/0 2/2 0/0 .text            __ct__15JAUSeqDataBlockFv */
 JAUSeqDataBlock::JAUSeqDataBlock() : field_0x0(this) {}
 
-/* 802A6928-802A6974 2A1268 004C+00 1/1 0/0 0/0 .text getSeqData__16JAUSeqDataBlocksF10JAISoundID
- */
 u8* JAUSeqDataBlocks::getSeqData(JAISoundID param_0) {
     if (param_0.isAnonymous()) {
         return NULL;
@@ -29,7 +26,6 @@ u8* JAUSeqDataBlocks::getSeqData(JAISoundID param_0) {
     return NULL;
 }
 
-/* 802A6974-802A69D8 2A12B4 0064+00 1/1 0/0 0/0 .text seekFreeBlock__16JAUSeqDataBlocksFUl */
 JSULink<JAUSeqDataBlock>* JAUSeqDataBlocks::seekFreeBlock(u32 size) {
     u32 currentBlockSize = 0xffffffff;
     JSULink<JAUSeqDataBlock>* rv = NULL;
@@ -49,20 +45,14 @@ JSULink<JAUSeqDataBlock>* JAUSeqDataBlocks::seekFreeBlock(u32 size) {
     return NULL;
 }
 
-/* 802A69D8-802A69F8 2A1318 0020+00 5/5 0/0 0/0 .text
- * append__16JAUSeqDataBlocksFP26JSULink<15JAUSeqDataBlock>     */
 bool JAUSeqDataBlocks::append(JSULink<JAUSeqDataBlock>* param_0) {
     return JSUList::append(param_0);
 }
 
-/* 802A69F8-802A6A18 2A1338 0020+00 4/4 0/0 0/0 .text
- * remove__16JAUSeqDataBlocksFP26JSULink<15JAUSeqDataBlock>     */
 bool JAUSeqDataBlocks::remove(JSULink<JAUSeqDataBlock>* param_0) {
     return JSUList::remove(param_0);
 }
 
-/* 802A6A18-802A6A58 2A1358 0040+00 1/1 0/0 0/0 .text
- * hasFailedBlock__16JAUSeqDataBlocksF10JAISoundID              */
 bool JAUSeqDataBlocks::hasFailedBlock(JAISoundID param_0) {
     JSULink<JAUSeqDataBlock>* rv = NULL;
     for (JSULink<JAUSeqDataBlock>* link = getFirst(); link != NULL; link = link->getNext())
@@ -75,20 +65,14 @@ bool JAUSeqDataBlocks::hasFailedBlock(JAISoundID param_0) {
     return false;
 }
 
-/* 802A6A58-802A6AA0 2A1398 0048+00 0/0 2/2 0/0 .text            __ct__23JAUDynamicSeqDataBlocksFv
- */
 JAUDynamicSeqDataBlocks::JAUDynamicSeqDataBlocks() {
     seqDataArchive_ = NULL;
 }
 
-/* 802A6AA0-802A6AA8 -00001 0008+00 0/0 0/0 0/0 .text
- * setSeqDataArchive__23JAUDynamicSeqDataBlocksFP10JKRArchive   */
 void JAUDynamicSeqDataBlocks::setSeqDataArchive(JKRArchive* param_0) {
     seqDataArchive_ = param_0;
 }
 
-/* 802A6AA8-802A6B8C 2A13E8 00E4+00 0/0 1/1 0/0 .text
- * getSeqData__23JAUDynamicSeqDataBlocksF10JAISoundIDP14JAISeqDataUserP10JAISeqDatab */
 s32 JAUDynamicSeqDataBlocks::getSeqData(JAISoundID param_0, JAISeqDataUser* param_1,
                                         JAISeqData* param_2, bool param_3) {
     rearrangeLoadingSeqs_();
@@ -113,8 +97,6 @@ s32 JAUDynamicSeqDataBlocks::getSeqData(JAISoundID param_0, JAISeqDataUser* para
     return 0;
 }
 
-/* 802A6B8C-802A6BF4 2A14CC 0068+00 0/0 2/2 0/0 .text
- * appendDynamicSeqDataBlock__23JAUDynamicSeqDataBlocksFP15JAUSeqDataBlock */
 bool JAUDynamicSeqDataBlocks::appendDynamicSeqDataBlock(JAUSeqDataBlock* seqDataBlock) {
     rearrangeLoadingSeqs_();
     if (seqDataBlock->field_0x10.isAnonymous()) {
@@ -125,8 +107,6 @@ bool JAUDynamicSeqDataBlocks::appendDynamicSeqDataBlock(JAUSeqDataBlock* seqData
     return 1;
 }
 
-/* 802A6BF4-802A6C18 2A1534 0024+00 1/1 0/0 0/0 .text
- * JAUDynamicSeqDataBlocks_receiveLoaded___FUlUl                */
 static void JAUDynamicSeqDataBlocks_receiveLoaded_(u32 param_0, u32 param_1) {
     JAUSeqDataBlock* seqDataBlock = ((JSULink<JAUSeqDataBlock>*)param_1)->getObject();
     if (param_0 != NULL) {
@@ -136,8 +116,6 @@ static void JAUDynamicSeqDataBlocks_receiveLoaded_(u32 param_0, u32 param_1) {
     }
 }
 
-/* 802A6C18-802A6D48 2A1558 0130+00 1/1 2/2 0/0 .text
- * loadDynamicSeq__23JAUDynamicSeqDataBlocksF10JAISoundIDbP14JAISeqDataUser */
 bool JAUDynamicSeqDataBlocks::loadDynamicSeq(JAISoundID param_0, bool param_1,
                                              JAISeqDataUser* param_2) {
     if (seqDataArchive_ == NULL) {
@@ -172,8 +150,6 @@ bool JAUDynamicSeqDataBlocks::loadDynamicSeq(JAISoundID param_0, bool param_1,
     return true;
 }
 
-/* 802A6D48-802A6E00 2A1688 00B8+00 0/0 1/1 0/0 .text
- * releaseIdleDynamicSeqDataBlock__23JAUDynamicSeqDataBlocksFP14JAISeqDataUser */
 u32 JAUDynamicSeqDataBlocks::releaseIdleDynamicSeqDataBlock(JAISeqDataUser* param_0) {
     rearrangeLoadingSeqs_();
     u32 size = 0;
@@ -195,8 +171,6 @@ u32 JAUDynamicSeqDataBlocks::releaseIdleDynamicSeqDataBlock(JAISeqDataUser* para
     return size;
 }
 
-/* 802A6E00-802A6EDC 2A1740 00DC+00 1/1 0/0 0/0 .text
- * releaseIdleDynamicSeqDataBlock___23JAUDynamicSeqDataBlocksFP14JAISeqDataUserUl */
 JAUSeqDataBlock*
 JAUDynamicSeqDataBlocks::releaseIdleDynamicSeqDataBlock_(JAISeqDataUser* param_0, u32 param_1) {
     rearrangeLoadingSeqs_();
@@ -226,8 +200,6 @@ JAUDynamicSeqDataBlocks::releaseIdleDynamicSeqDataBlock_(JAISeqDataUser* param_0
     return NULL;
 }
 
-/* 802A6EDC-802A6F70 2A181C 0094+00 4/4 0/0 0/0 .text
- * rearrangeLoadingSeqs___23JAUDynamicSeqDataBlocksFv           */
 void JAUDynamicSeqDataBlocks::rearrangeLoadingSeqs_() {
     JSULink<JAUSeqDataBlock>* link = field_0xc.getFirst();
     JSULink<JAUSeqDataBlock>* nextLink;

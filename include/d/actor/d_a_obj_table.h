@@ -15,11 +15,11 @@
  */
 class daObjTable_c : public dBgS_MoveBgActor {
 public:
-    /* 80D06560 */ int CreateHeap();
-    /* 80D065D0 */ int Create();
-    /* 80D0695C */ int Execute(Mtx**);
-    /* 80D06AD8 */ int Draw();
-    /* 80D06BC8 */ int Delete();
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     inline void initBaseMtx();
     inline void setBaseMtx();

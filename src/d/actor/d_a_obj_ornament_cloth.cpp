@@ -71,7 +71,6 @@ public:
 };
 #endif
 
-/* 80595CB4-80595CE4 000000 0030+00 4/4 0/0 0/0 .rodata          M_attr__14daObjOnCloth_c */
 daObjOnCloth_Attr_c const daObjOnCloth_c::M_attr = {
     8.0f,
     -40.0f,
@@ -89,7 +88,6 @@ daObjOnCloth_Attr_c const daObjOnCloth_c::M_attr = {
     0
 };
 
-/* 80595038-80595158 000078 0120+00 1/1 0/0 0/0 .text            create_init__14daObjOnCloth_cFv */
 void daObjOnCloth_c::create_init() {
     fopAcM_setCullSizeBox(this, -50.0f, -170.0f, -50.0f, 50.0f, 20.0f, 50.0f);
     ClothJoint_c* clothJoints_p = mClothJoints;
@@ -105,12 +103,10 @@ void daObjOnCloth_c::create_init() {
     initBaseMtx();
 }
 
-/* 80595158-80595178 000198 0020+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjOnCloth_cFv */
 void daObjOnCloth_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80595178-805951DC 0001B8 0064+00 1/1 0/0 0/0 .text            setBaseMtx__14daObjOnCloth_cFv */
 void daObjOnCloth_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -118,7 +114,6 @@ void daObjOnCloth_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
-/* 805951DC-805954B0 00021C 02D4+00 1/1 0/0 0/0 .text setNormalClothPos__14daObjOnCloth_cFv */
 void daObjOnCloth_c::setNormalClothPos() {
     cXyz sp4c = dKyw_get_AllWind_vecpow(&current.pos);
     sp4c *= attr().offset * attr().windRate;
@@ -144,7 +139,6 @@ void daObjOnCloth_c::setNormalClothPos() {
     }
 }
 
-/* 805954B0-80595638 0004F0 0188+00 1/1 0/0 0/0 .text            calcJointAngle__14daObjOnCloth_cFv */
 void daObjOnCloth_c::calcJointAngle() {
     cXyz sp24;
     ClothJoint_c* clothJoints_p = mClothJoints;
@@ -176,7 +170,6 @@ void daObjOnCloth_c::calcJointAngle() {
     }
 }
 
-/* 80595638-80595784 000678 014C+00 1/1 0/0 0/0 .text            checkPlayerMove__14daObjOnCloth_cFv */
 void daObjOnCloth_c::checkPlayerMove() {
     f32 fVar1 = field_0x650[0];
     ClothJoint_c* clothJoints_p = mClothJoints + 1;
@@ -206,7 +199,6 @@ void daObjOnCloth_c::checkPlayerMove() {
     }
 }
 
-/* 80595784-80595850 0007C4 00CC+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 != 0) {
         return 1;
@@ -226,7 +218,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80595D60-80595D64 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "J_Necktie";
 
 int daObjOnCloth_c::createHeap() {
@@ -265,7 +256,6 @@ int daObjOnCloth_c::createHeap() {
     return 1;
 }
 
-/* 80595850-805959E8 000890 0198+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* a_this) {
     return static_cast<daObjOnCloth_c*>(a_this)->createHeap();
 }
@@ -280,7 +270,6 @@ int daObjOnCloth_c::draw() {
     return 1;
 }
 
-/* 80595A30-80595AEC 000A70 00BC+00 1/0 0/0 0/0 .text daObjOnCloth_Draw__FP14daObjOnCloth_c */
 static int daObjOnCloth_Draw(daObjOnCloth_c* i_this) {
     return i_this->draw();
 }
@@ -292,12 +281,10 @@ int daObjOnCloth_c::execute() {
     return 1;
 }
 
-/* 80595AEC-80595B2C 000B2C 0040+00 1/0 0/0 0/0 .text daObjOnCloth_Execute__FP14daObjOnCloth_c */
 static int daObjOnCloth_Execute(daObjOnCloth_c* i_this) {
     return i_this->execute();
 }
 
-/* 80595B2C-80595B34 000B6C 0008+00 1/0 0/0 0/0 .text daObjOnCloth_IsDelete__FP14daObjOnCloth_c */
 static int daObjOnCloth_IsDelete(daObjOnCloth_c* i_this) {
     return 1;
 }
@@ -306,13 +293,11 @@ daObjOnCloth_c::~daObjOnCloth_c() {
     dComIfG_resDelete(&mPhase, l_arcName);
 }
 
-/* 80595B34-80595B9C 000B74 0068+00 1/0 0/0 0/0 .text daObjOnCloth_Delete__FP14daObjOnCloth_c */
 static int daObjOnCloth_Delete(daObjOnCloth_c* i_this) {
     i_this->~daObjOnCloth_c();
     return 1;
 }
 
-/* 80595B9C-80595BD8 000BDC 003C+00 2/2 0/0 0/0 .text            __dt__12ClothJoint_cFv */
 ClothJoint_c::~ClothJoint_c() {}
 
 cPhs__Step daObjOnCloth_c::create() {
@@ -331,17 +316,14 @@ cPhs__Step daObjOnCloth_c::create() {
     return phase;
 }
 
-/* 80595BD8-80595CA8 000C18 00D0+00 1/0 0/0 0/0 .text            daObjOnCloth_Create__FP10fopAc_ac_c */
 static cPhs__Step daObjOnCloth_Create(fopAc_ac_c* a_this) {
     return static_cast<daObjOnCloth_c*>(a_this)->create();
 }
 
-/* 80595CA8-80595CAC 000CE8 0004+00 1/1 0/0 0/0 .text            __ct__12ClothJoint_cFv */
 ClothJoint_c::ClothJoint_c() {
     /* empty function */
 }
 
-/* 80595D64-80595D84 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjOnCloth_Method */
 static actor_method_class l_daObjOnCloth_Method = {
     (process_method_func)daObjOnCloth_Create,
     (process_method_func)daObjOnCloth_Delete,
@@ -350,7 +332,6 @@ static actor_method_class l_daObjOnCloth_Method = {
     (process_method_func)daObjOnCloth_Draw,
 };
 
-/* 80595D84-80595DB4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_OnCloth */
 extern actor_process_profile_definition g_profile_Obj_OnCloth = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

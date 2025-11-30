@@ -7,36 +7,27 @@
 #include "Z2AudioLib/Z2Audience.h"
 #include "d/d_demo.h"
 
-/* 80450880-80450884 000300 0004+00 2/2 0/0 0/0 .sdata           cPitchDown */
 static f32 cPitchDown = 0.8909f;
 
-/* 80450884-80450888 000304 0004+00 4/4 0/0 0/0 .sdata           cPitchCenter */
 static f32 cPitchCenter = 1.0f;
 
-/* 80450888-8045088C 000308 0004+00 2/2 0/0 0/0 .sdata           cPitchUp */
 static f32 cPitchUp = 1.1892f;
 
 static u8 struct_8045088C = 7;
 static u8 struct_8045088D = 7;
 
-/* 8045088E-80450890 00030E 0002+00 4/4 0/0 0/0 .sdata           None */
 static u8 cBeginHowlTime = 30;
 static u8 data_8045088F = 0;
 
-/* 80450890-80450894 000310 0004+00 1/1 0/0 0/0 .sdata           cR_FlatWidth */
 static f32 cR_FlatWidth = 0.94387f;  // 1.0f / 12th root of 2
 
-/* 80450894-80450898 -00001 0004+00 3/3 0/0 0/0 .sdata           None */
 static u8 struct_80450894 = 5;
 static u8 struct_80450895 = 30;
 
-/* 80450898-8045089C 000318 0004+00 1/1 0/0 0/0 .sdata           sStickHigh */
 static f32 sStickHigh = 0.5f;
 
-/* 8045089C-804508A0 00031C 0004+00 1/1 0/0 0/0 .sdata           sStickCenter */
 static f32 sStickCenter = 1.0f / 5.0f;
 
-/* 804508A0-804508A8 000320 0008+00 1/0 0/0 0/0 .sdata           sHowlTobikusa */
 static Z2WolfHowlLine sHowlTobikusa[4] = {
     {HOWL_LINE_HIGH, 30},
     {HOWL_LINE_LOW, 30},
@@ -44,7 +35,6 @@ static Z2WolfHowlLine sHowlTobikusa[4] = {
     {HOWL_LINE_LOW, 30},
 };
 
-/* 803CBC50-803CBC5C 028D70 000C+00 1/0 0/0 0/0 .data            sHowlUmakusa */
 static Z2WolfHowlLine sHowlUmakusa[6] = {
     {HOWL_LINE_HIGH, 15},
     {HOWL_LINE_MID, 15},
@@ -54,7 +44,6 @@ static Z2WolfHowlLine sHowlUmakusa[6] = {
     {HOWL_LINE_LOW, 60},
 };
 
-/* 803CBC5C-803CBC68 028D7C 000C+00 1/0 0/0 0/0 .data            sHowlZeldaSong */
 static Z2WolfHowlLine sHowlZeldaSong[6] = {
     {HOWL_LINE_MID, 30},
     {HOWL_LINE_HIGH, 15},
@@ -64,7 +53,6 @@ static Z2WolfHowlLine sHowlZeldaSong[6] = {
     {HOWL_LINE_LOW, 45},
 };
 
-/* 803CBC68-803CBC74 028D88 000C+00 1/0 0/0 0/0 .data            sHowlLightPrelude */
 static Z2WolfHowlLine sHowlLightPrelude[6] = {
     {HOWL_LINE_HIGH, 20},
     {HOWL_LINE_LOW, 40},
@@ -74,7 +62,6 @@ static Z2WolfHowlLine sHowlLightPrelude[6] = {
     {HOWL_LINE_HIGH, 30},
 };
 
-/* 803CBC74-803CBC80 028D94 000C+00 1/0 0/0 0/0 .data            sHowlSoulRequiem */
 static Z2WolfHowlLine sHowlSoulRequiem[6] = {
     {HOWL_LINE_LOW, 30},
     {HOWL_LINE_MID, 15},
@@ -84,7 +71,6 @@ static Z2WolfHowlLine sHowlSoulRequiem[6] = {
     {HOWL_LINE_LOW, 30},
 };
 
-/* 803CBC80-803CBC8C 028DA0 000C+00 1/0 0/0 0/0 .data            sHealingSong */
 static Z2WolfHowlLine sHealingSong[6] = {
     {HOWL_LINE_HIGH, 30},
     {HOWL_LINE_MID, 30},
@@ -94,7 +80,6 @@ static Z2WolfHowlLine sHealingSong[6] = {
     {HOWL_LINE_LOW, 30},
 };
 
-/* 803CBC8C-803CBC9C 028DAC 000E+02 1/0 0/0 0/0 .data            sNewSong1 */
 static Z2WolfHowlLine sNewSong1[7] = {
     {HOWL_LINE_LOW, 30},
     {HOWL_LINE_MID, 30},
@@ -105,7 +90,6 @@ static Z2WolfHowlLine sNewSong1[7] = {
     {HOWL_LINE_HIGH, 30},
 };
 
-/* 803CBC9C-803CBCAC 028DBC 0010+00 1/0 0/0 0/0 .data            sNewSong2 */
 static Z2WolfHowlLine sNewSong2[8] = {
     {HOWL_LINE_HIGH, 20},
     {HOWL_LINE_MID, 20},
@@ -117,7 +101,6 @@ static Z2WolfHowlLine sNewSong2[8] = {
     {HOWL_LINE_LOW, 30},
 };
 
-/* 803CBCAC-803CBCC0 028DCC 0012+02 1/0 0/0 0/0 .data            sNewSong3 */
 static Z2WolfHowlLine sNewSong3[9] = {
     {HOWL_LINE_MID, 30},
     {HOWL_LINE_LOW, 60},
@@ -130,7 +113,6 @@ static Z2WolfHowlLine sNewSong3[9] = {
     {HOWL_LINE_MID, 45},
 };
 
-/* 803CBCC0-803CBD08 -00001 0048+00 1/1 0/0 0/0 .data            sGuideData */
 static Z2WolfHowlData sGuideData[9] = {
     {ARRAY_SIZE(sHowlTobikusa), sHowlTobikusa},
     {ARRAY_SIZE(sHowlUmakusa), sHowlUmakusa},
@@ -143,7 +125,6 @@ static Z2WolfHowlData sGuideData[9] = {
     {ARRAY_SIZE(sNewSong3), sNewSong3},
 };
 
-/* 802CAAC0-802CAB8C 2C5400 00CC+00 0/0 1/1 0/0 .text            __ct__13Z2WolfHowlMgrFv */
 Z2WolfHowlMgr::Z2WolfHowlMgr() : JASGlobalInstance(true) {
     mNowHowlData = NULL;
     mNowInputValue = 0.0f;
@@ -174,7 +155,6 @@ Z2WolfHowlMgr::Z2WolfHowlMgr() : JASGlobalInstance(true) {
     mGuideData = (Z2WolfHowlData*)&sGuideData;
 }
 
-/* 802CAB8C-802CABEC 2C54CC 0060+00 1/1 0/0 0/0 .text            resetState__13Z2WolfHowlMgrFv */
 void Z2WolfHowlMgr::resetState() {
     mWolfHowlVolume = 1.0f;
     mNowPitch = cPitchCenter;
@@ -192,7 +172,6 @@ void Z2WolfHowlMgr::resetState() {
     field_0x30 = 0.0f;
 }
 
-/* 802CABEC-802CACB0 2C552C 00C4+00 1/1 0/0 0/0 .text            calcVolumeMod__13Z2WolfHowlMgrFf */
 void Z2WolfHowlMgr::calcVolumeMod(f32) {
     f32 volume;
 
@@ -214,7 +193,6 @@ void Z2WolfHowlMgr::calcVolumeMod(f32) {
     }
 }
 
-/* 802CACB0-802CACCC 2C55F0 001C+00 1/1 0/0 0/0 .text            getNowPitch__13Z2WolfHowlMgrFv */
 f32 Z2WolfHowlMgr::getNowPitch() {
     if (mWolfHowlHandle) {
         return mWolfHowlHandle->getAuxiliary().params_.mPitch;
@@ -223,13 +201,10 @@ f32 Z2WolfHowlMgr::getNowPitch() {
     return 1.0f;
 }
 
-/* 802CACCC-802CACD4 2C560C 0008+00 0/0 2/2 0/0 .text            getNowInputValue__13Z2WolfHowlMgrFv
- */
 f32 Z2WolfHowlMgr::getNowInputValue() {
     return mNowInputValue;
 }
 
-/* 802CACD4-802CAED4 2C5614 0200+00 1/1 0/0 0/0 .text            calcPitchMod__13Z2WolfHowlMgrFff */
 void Z2WolfHowlMgr::calcPitchMod(f32 param_0, f32 param_1) {
     (void)param_0;
 
@@ -278,7 +253,6 @@ void Z2WolfHowlMgr::calcPitchMod(f32 param_0, f32 param_1) {
     }
 }
 
-/* 802CAED4-802CB100 2C5814 022C+00 0/0 1/1 0/0 .text startWolfHowlSound__13Z2WolfHowlMgrFffbf */
 s8 Z2WolfHowlMgr::startWolfHowlSound(f32 param_0, f32 stickValue, bool isHowl, f32 param_3) {
     if (mCorrectCurveID > Z2WOLFHOWL_UMAKUSA) {
         Z2GetSeqMgr()->setWindStoneVol(0.0f, 0);
@@ -328,8 +302,6 @@ s8 Z2WolfHowlMgr::startWolfHowlSound(f32 param_0, f32 stickValue, bool isHowl, f
     return checkLine();
 }
 
-/* 802CB100-802CB320 2C5A40 0220+00 0/0 1/1 0/0 .text
- * setCorrectData__13Z2WolfHowlMgrFScP14Z2WolfHowlData          */
 void Z2WolfHowlMgr::setCorrectData(s8 curveID, Z2WolfHowlData* data) {
     if (curveID == mCorrectCurveID) {
         return;
@@ -405,8 +377,6 @@ void Z2WolfHowlMgr::setCorrectData(s8 curveID, Z2WolfHowlData* data) {
     mFullScore -= FAST_DIV(length, 4);
 }
 
-/* 802CB320-802CB370 2C5C60 0050+00 3/3 2/2 0/0 .text            getCorrectLine__13Z2WolfHowlMgrFUc
- */
 Z2WolfHowlLine Z2WolfHowlMgr::getCorrectLine(u8 lineIndex) {
     u16 local_18;
 
@@ -420,7 +390,6 @@ Z2WolfHowlLine Z2WolfHowlMgr::getCorrectLine(u8 lineIndex) {
     return mNowHowlData->lineData[lineIndex];
 }
 
-/* 802CB370-802CB38C 2C5CB0 001C+00 2/2 1/1 0/0 .text getCorrectLineNum__13Z2WolfHowlMgrFv */
 u8 Z2WolfHowlMgr::getCorrectLineNum() {
     if (mNowHowlData != NULL) {
         return mNowHowlData->lineNum;
@@ -429,7 +398,6 @@ u8 Z2WolfHowlMgr::getCorrectLineNum() {
     return 0;
 }
 
-/* 804341F8-8043421C 060F18 0024+00 2/2 0/0 0/0 .bss             sCorrectPhrase */
 static JAISoundID sCorrectPhrase[9] = {
     Z2BGM_HOWL_TOBIKUSA,
     Z2BGM_HOWL_UMAKUSA,
@@ -442,7 +410,6 @@ static JAISoundID sCorrectPhrase[9] = {
     Z2BGM_NEW_03_HOWL,
 };
 
-/* 8043421C-80434240 060F3C 0024+00 2/3 0/0 0/0 .bss             sWindStoneSound */
 static JAISoundID sWindStoneSound[9] = {
     0xFFFFFFFF,
     0xFFFFFFFF,
@@ -455,7 +422,6 @@ static JAISoundID sWindStoneSound[9] = {
     Z2BGM_NEW_03_STONE,
 };
 
-/* 80434240-80434268 060F60 0024+04 1/2 0/0 0/0 .bss             sCorrectDuo */
 static JAISoundID sCorrectDuo[9] = {
     0xFFFFFFFF,
     0xFFFFFFFF,
@@ -468,7 +434,6 @@ static JAISoundID sCorrectDuo[9] = {
     Z2BGM_NEW_03_DUO,
 };
 
-/* 802CB38C-802CB650 2C5CCC 02C4+00 1/1 0/0 0/0 .text            checkLine__13Z2WolfHowlMgrFv */
 s8 Z2WolfHowlMgr::checkLine() {
     if (mCorrectCurveID == Z2WOLFHOWL_NONE || mNowHowlData == NULL) {
         return -1;
@@ -540,7 +505,6 @@ s8 Z2WolfHowlMgr::checkLine() {
     return -1;
 }
 
-/* 802CB650-802CB6EC 2C5F90 009C+00 1/1 1/1 0/0 .text            getOnLineNum__13Z2WolfHowlMgrFv */
 s8 Z2WolfHowlMgr::getOnLineNum() {
     Z2WolfHowlLine line = getCorrectLine(mNowLineIndex);
     u8 type = line.type;
@@ -555,8 +519,6 @@ s8 Z2WolfHowlMgr::getOnLineNum() {
     return -1;
 }
 
-/* 802CB6EC-802CBA88 2C602C 039C+00 0/0 0/0 2/2 .text startWindStoneSound__13Z2WolfHowlMgrFScP3Vec
- */
 void Z2WolfHowlMgr::startWindStoneSound(s8 curveID, Vec* pos) {
     if (pos == NULL || Z2GetLink() == NULL || Z2GetLink()->getCurrentPos() == NULL) {
         return; 
@@ -592,8 +554,6 @@ void Z2WolfHowlMgr::startWindStoneSound(s8 curveID, Vec* pos) {
     }
 }
 
-/* 802CBA88-802CBB58 2C63C8 00D0+00 0/0 1/1 0/0 .text            startGuideMelody__13Z2WolfHowlMgrFb
- */
 int Z2WolfHowlMgr::startGuideMelody(bool startSound) {
     Z2GetSeqMgr()->setWindStoneVol(0.0f, 0);
 
@@ -610,8 +570,6 @@ int Z2WolfHowlMgr::startGuideMelody(bool startSound) {
     return 0;
 }
 
-/* 802CBB58-802CBB7C 2C6498 0024+00 0/0 1/1 0/0 .text            skipCorrectDemo__13Z2WolfHowlMgrFv
- */
 void Z2WolfHowlMgr::skipCorrectDemo() {
     Z2GetSeqMgr()->stopWolfHowlSong();
 }

@@ -10,9 +10,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
-#include "dol2asm.h"
 
-/* 80D079D8-80D07A60 000078 0088+00 1/0 0/0 0/0 .text daObj_Tatigi_Draw__FP16obj_tatigi_class */
 static int daObj_Tatigi_Draw(obj_tatigi_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mBase;
     int roomNo = fopAcM_GetRoomNo(a_this);
@@ -25,8 +23,6 @@ static int daObj_Tatigi_Draw(obj_tatigi_class* i_this) {
     return 1;
 }
 
-/* 80D07A60-80D07CE8 000100 0288+00 2/1 0/0 0/0 .text daObj_Tatigi_Execute__FP16obj_tatigi_class
- */
 static int daObj_Tatigi_Execute(obj_tatigi_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mBase;
     i_this->field_0x574++;
@@ -73,13 +69,10 @@ static int daObj_Tatigi_Execute(obj_tatigi_class* i_this) {
     return 1;
 }
 
-/* 80D07CE8-80D07CF0 000388 0008+00 1/0 0/0 0/0 .text daObj_Tatigi_IsDelete__FP16obj_tatigi_class
- */
 static int daObj_Tatigi_IsDelete(obj_tatigi_class* param_0) {
     return 1;
 }
 
-/* 80D07CF0-80D07D78 000390 0088+00 1/0 0/0 0/0 .text daObj_Tatigi_Delete__FP16obj_tatigi_class */
 static int daObj_Tatigi_Delete(obj_tatigi_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mBase;
     fopAcM_RegisterDeleteID(i_this, "Obj_Tatigi");
@@ -91,7 +84,6 @@ static int daObj_Tatigi_Delete(obj_tatigi_class* i_this) {
     return 1;
 }
 
-/* 80D07D78-80D07E24 000418 00AC+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_tatigi_class* i_this = (obj_tatigi_class*)a_this;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Obj_tg", 3);
@@ -105,7 +97,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80D07E24-80D07FD8 0004C4 01B4+00 1/1 0/0 0/0 .text set_pos_check__FP16obj_tatigi_classi */
 static BOOL set_pos_check(obj_tatigi_class* i_this, int param_2) {
     cXyz cStack_2c;
     f32 dVar7 = KREG_F(7) + 150.0f;
@@ -118,8 +109,6 @@ static BOOL set_pos_check(obj_tatigi_class* i_this, int param_2) {
     return TRUE;
 }
 
-/* 80D07FD8-80D083C0 000678 03E8+00 1/0 0/0 0/0 .text            daObj_Tatigi_Create__FP10fopAc_ac_c
- */
 static int daObj_Tatigi_Create(fopAc_ac_c* a_this) {
     static dCcD_SrcCyl cc_cyl_src = {
         {
@@ -215,8 +204,6 @@ static int daObj_Tatigi_Create(fopAc_ac_c* a_this) {
     return rv;
 }
 
-/* ############################################################################################## */
-/* 80D0866C-80D0868C -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Tatigi_Method */
 static actor_method_class l_daObj_Tatigi_Method = {
     (process_method_func)daObj_Tatigi_Create,
     (process_method_func)daObj_Tatigi_Delete,
@@ -225,7 +212,6 @@ static actor_method_class l_daObj_Tatigi_Method = {
     (process_method_func)daObj_Tatigi_Draw,
 };
 
-/* 80D0868C-80D086BC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_TATIGI */
 extern actor_process_profile_definition g_profile_OBJ_TATIGI = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID

@@ -24,10 +24,10 @@ class daObjCatDoor_c : public fopAc_ac_c {
 public:
     inline ~daObjCatDoor_c();
 
-    /* 80BC42B8 */ const s16* attr() const;
-    /* 80BC43F4 */ void initBaseMtx();
-    /* 80BC4454 */ void setBaseMtx();
-    /* 80BC4560 */ void calcOpen();
+    const s16* attr() const;
+    void initBaseMtx();
+    void setBaseMtx();
+    void calcOpen();
 
     u8 getSwitchNo() { return fopAcM_GetParam(this); }
 

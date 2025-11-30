@@ -1,8 +1,8 @@
 #include <dolphin.h>
 
 // prototypes
-__declspec(weak) int Hu_IsStub();
+DECL_WEAK int Hu_IsStub();
 
-__declspec(weak) int Hu_IsStub() {
+DECL_WEAK int Hu_IsStub() {
     return 0;
 }

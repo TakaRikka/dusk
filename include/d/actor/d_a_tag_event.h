@@ -15,29 +15,29 @@ public:
         ACTION_EVENT,
     };
 
-    /* 8048AD68 */ u8 getEventNo();
-    /* 8048AD74 */ u8 getSwbit();
-    /* 8048AD80 */ u8 getSwbit2();
-    /* 8048AD8C */ u8 getType();
-    /* 8048AD98 */ u16 getInvalidEventFlag();
-    /* 8048ADA4 */ u16 getAreaType();
-    /* 8048ADB0 */ u16 getValidEventFlag();
-    /* 8048ADBC */ BOOL horseRodeo();
-    /* 8048ADEC */ BOOL arrivalTerms();
-    /* 8048AEEC */ void demoInitProc();
-    /* 8048AEF8 */ void demoEndProc();
-    /* 8048AEFC */ void demoProc();
-    /* 8048AF00 */ int create();
-    /* 8048B0E4 */ int actionNext();
-    /* 8048B1B0 */ int actionEvent();
-    /* 8048B268 */ int actionReady();
-    /* 8048B378 */ BOOL checkArea();
-    /* 8048B514 */ int actionHunt();
-    /* 8048B5C8 */ int actionArrival();
-    /* 8048B5F4 */ int actionWait();
-    /* 8048B5FC */ int actionHunt2();
-    /* 8048B6D4 */ int execute();
-    /* 8048B784 */ int draw();
+    u8 getEventNo();
+    u8 getSwbit();
+    u8 getSwbit2();
+    u8 getType();
+    u16 getInvalidEventFlag();
+    u16 getAreaType();
+    u16 getValidEventFlag();
+    BOOL horseRodeo();
+    BOOL arrivalTerms();
+    void demoInitProc();
+    void demoEndProc();
+    void demoProc();
+    int create();
+    int actionNext();
+    int actionEvent();
+    int actionReady();
+    BOOL checkArea();
+    int actionHunt();
+    int actionArrival();
+    int actionWait();
+    int actionHunt2();
+    int execute();
+    int draw();
 
     void setActio(u8 i_action) { mAction = i_action; }
 

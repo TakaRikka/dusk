@@ -14,14 +14,14 @@
  */
 class daObjToaruMaki_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80D13098 */ daObjToaruMaki_c();
-    /* 80D130E0 */ virtual ~daObjToaruMaki_c();
-    /* 80D1316C */ int createHeap();
-    /* 80D132B4 */ int create();
-    /* 80D133C0 */ int Delete();
-    /* 80D1343C */ void setModelMtx();
-    /* 80D134A0 */ int draw();
-    /* 80D13524 */ int execute();
+    daObjToaruMaki_c();
+    virtual ~daObjToaruMaki_c();
+    int createHeap();
+    int create();
+    int Delete();
+    void setModelMtx();
+    int draw();
+    int execute();
 
     u32 getNameArg_0() { return fopAcM_GetParamBit(this, 0, 4); }
 

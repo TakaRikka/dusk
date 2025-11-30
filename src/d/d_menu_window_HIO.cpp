@@ -8,12 +8,10 @@
 #include "d/d_menu_window_HIO.h"
 #include "d/d_com_inf_game.h"
 
-/* 801F9AFC-801F9B38 1F443C 003C+00 1/1 0/0 0/0 .text            __ct__9dMw_HIO_cFv */
 dMw_HIO_c::dMw_HIO_c() {
     init();
 }
 
-/* 801F9B38-801F9E14 1F4478 02DC+00 1/1 0/0 0/0 .text            init__9dMw_HIO_cFv */
 void dMw_HIO_c::init() {
     static u8 m_cloth_item[3] = {fpcNm_ITEM_WEAR_KOKIRI, fpcNm_ITEM_ARMOR, fpcNm_ITEM_WEAR_ZORA};
     static u8 m_sword_item[4] = {fpcNm_ITEM_SWORD, fpcNm_ITEM_MASTER_SWORD, fpcNm_ITEM_LIGHT_SWORD, fpcNm_ITEM_WOOD_STICK};
@@ -132,22 +130,18 @@ void dMw_HIO_c::init() {
     }
 }
 
-/* 801F9E14-801F9E1C 1F4754 0008+00 0/0 1/1 0/0 .text            getBombFlag__9dMw_HIO_cFv */
 bool dMw_HIO_c::getBombFlag() {
     return false;
 }
 
-/* 801F9E1C-801F9E24 1F475C 0008+00 0/0 1/1 0/0 .text            getArrowFlag__9dMw_HIO_cFv */
 bool dMw_HIO_c::getArrowFlag() {
     return false;
 }
 
-/* 801F9E24-801F9E2C 1F4764 0008+00 0/0 1/1 0/0 .text            getPachinkoFlag__9dMw_HIO_cFv */
 bool dMw_HIO_c::getPachinkoFlag() {
     return false;
 }
 
-/* 801F9E2C-801F9E98 1F476C 006C+00 1/1 0/0 0/0 .text            __ct__10dMw_DHIO_cFv */
 dMw_DHIO_c::dMw_DHIO_c() {
     for (int i = 0; i < 32; i++) {
         mMap[i] = false;
@@ -169,8 +163,6 @@ dMw_DHIO_c::dMw_DHIO_c() {
     }
 }
 
-/* 8042E86C-8042E99C 05B58C 0130+00 0/1 4/4 0/0 .bss             g_mwHIO */
 dMw_HIO_c g_mwHIO;
 
-/* 8042E9A8-8042EBB0 05B6C8 0208+00 0/1 1/1 0/0 .bss             g_mwDHIO */
 dMw_DHIO_c g_mwDHIO;

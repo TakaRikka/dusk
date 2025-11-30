@@ -18,7 +18,6 @@
 #define EF_THUNDER02_BMD 0x1F
 #define EF_THUNDER_BRK 0x2F
 
-/* 801ADF58-801ADFB4 1A8898 005C+00 1/1 0/0 0/0 .text            createHeap__10dThunder_cFv */
 int dThunder_c::createHeap() {
     if (mpHeap == NULL) {
         mpHeap = mDoExt_createSolidHeapFromGameToCurrent(0, 0x20);
@@ -31,7 +30,6 @@ int dThunder_c::createHeap() {
     return 1;
 }
 
-/* 801ADFB4-801AE000 1A88F4 004C+00 1/1 0/0 0/0 .text            adjustHeap__10dThunder_cFv */
 void dThunder_c::adjustHeap() {
     mDoExt_restoreCurrentHeap();
 
@@ -64,7 +62,6 @@ int dThunder_c::draw() {
     return 1;
 }
 
-/* 801AE000-801AE19C 1A8940 019C+00 1/0 0/0 0/0 .text            dThunder_Draw__FP10dThunder_c */
 static int dThunder_Draw(dThunder_c* i_this) {
     return i_this->draw();
 }
@@ -111,13 +108,10 @@ int dThunder_c::execute(dThunder_c* i_thunder) {
     return 1;
 }
 
-/* 801AE19C-801AE374 1A8ADC 01D8+00 1/0 0/0 0/0 .text            dThunder_Execute__FP10dThunder_c */
 static int dThunder_Execute(dThunder_c* i_this) {
     return i_this->execute(i_this);
 }
 
-/* 801AE374-801AE37C 1A8CB4 0008+00 1/0 0/0 0/0 .text            dThunder_IsDelete__FP10dThunder_c
- */
 static int dThunder_IsDelete(dThunder_c* i_this) {
     return 1;
 }
@@ -127,13 +121,10 @@ int dThunder_c::thunder_delete(dThunder_c* i_thunder) {
     return 1;
 }
 
-/* 801AE37C-801AE3FC 1A8CBC 0080+00 1/0 0/0 0/0 .text            dThunder_Delete__FP10dThunder_c */
 static int dThunder_Delete(dThunder_c* i_this) {
     return i_this->thunder_delete(i_this);
 }
 
-/* 801AE3FC-801AE458 1A8D3C 005C+00 1/0 0/0 0/0 .text            dThunder_Create__FP12kankyo_class
- */
 static int dThunder_Create(kankyo_class* i_this) {
     dThunder_c* this_ = (dThunder_c*)i_this;
 
@@ -147,7 +138,6 @@ static int dThunder_Create(kankyo_class* i_this) {
     return ret;
 }
 
-/* 801AE458-801AE938 1A8D98 04E0+00 1/1 0/0 0/0 .text            create__10dThunder_cFv */
 int dThunder_c::create() {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
     camera_class* camera_p = dComIfGp_getCamera(0);
@@ -233,8 +223,11 @@ int dThunder_c::create() {
 
     var_f29_2 = spB8.x * spB8.x + spB8.z * spB8.z;
     if (var_f29_2 > 0.0f) {
+        // fakematch?
+        #ifdef __MWERKS__
         f32 tmp = __frsqrtes(var_f29_2);
         var_f29_2 = tmp * var_f29_2;
+        #endif
     }
 
     s16 temp_r28 = cM_atan2s(spB8.x, spB8.z);
@@ -270,15 +263,12 @@ int dThunder_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* ############################################################################################## */
-/* 803BC1D8-803BC1EC -00001 0014+00 1/0 0/0 0/0 .data            l_dThunder_Method */
 static leafdraw_method_class l_dThunder_Method = {
     (process_method_func)dThunder_Create,  (process_method_func)dThunder_Delete,
     (process_method_func)dThunder_Execute, (process_method_func)dThunder_IsDelete,
     (process_method_func)dThunder_Draw,
 };
 
-/* 803BC1EC-803BC218 -00001 0028+04 0/0 0/0 1/0 .data            g_profile_KY_THUNDER */
 extern kankyo_process_profile_definition g_profile_KY_THUNDER = {
     fpcLy_CURRENT_e,
     7,

@@ -5,8 +5,8 @@
 
 class daNocrm_c : public fopAc_ac_c {
 public:
-    /* 801452DC */ int execute();
-    /* 80145508 */ int getRoomNo(int);
+    int execute();
+    int getRoomNo(int);
     inline int create();
 
     s8 getReadRoomId() { return fopAcM_GetParamBit(this, 0, 8); }

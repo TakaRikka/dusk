@@ -28,24 +28,24 @@ public:
         /* 0x27c */ JAITempoMgr mTempoMgr;
     };
 
-    /* 8029F6D8 */ virtual s32 getNumChild() const;
-    /* 8029F6E0 */ virtual JAISoundChild* getChild(int);
-    /* 8029F6E8 */ virtual void releaseChild(int);
-    /* 8029F84C */ virtual JASTrack* getTrack();
-    /* 8029F854 */ virtual JASTrack* getChildTrack(int);
-    /* 8029F864 */ virtual JAISe* asSe();
-    /* 8029F868 */ virtual JAITempoMgr* getTempoMgr();
-    /* 8029F5C8 */ virtual bool JAISound_tryDie_();
+    virtual s32 getNumChild() const;
+    virtual JAISoundChild* getChild(int);
+    virtual void releaseChild(int);
+    virtual JASTrack* getTrack();
+    virtual JASTrack* getChildTrack(int);
+    virtual JAISe* asSe();
+    virtual JAITempoMgr* getTempoMgr();
+    virtual bool JAISound_tryDie_();
 
-    /* 8029F03C */ JAISe(JAISeMgr* seMgr, JAISoundStrategyMgr<JAISe>* soundStrategyMgr, u32 priority);
-    /* 8029F0F8 */ void mixOut_(const JASSoundParams& params);
-    /* 8029F214 */ void stopTrack_();
-    /* 8029F250 */ void startTrack_(const JASSoundParams& params);
-    /* 8029F304 */ void JAISeCategoryMgr_mixOut_(bool, const JASSoundParams& params, JAISoundActivity activity);
-    /* 8029F4CC */ void JAISeCategoryMgr_calc_();
-    /* 8029F650 */ void JAISeMgr_startID_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience);
-    /* 8029F6EC */ bool prepare_getSeqData_();
-    /* 8029F78C */ void prepare_();
+    JAISe(JAISeMgr* seMgr, JAISoundStrategyMgr<JAISe>* soundStrategyMgr, u32 priority);
+    void mixOut_(const JASSoundParams& params);
+    void stopTrack_();
+    void startTrack_(const JASSoundParams& params);
+    void JAISeCategoryMgr_mixOut_(bool, const JASSoundParams& params, JAISoundActivity activity);
+    void JAISeCategoryMgr_calc_();
+    void JAISeMgr_startID_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience);
+    bool prepare_getSeqData_();
+    void prepare_();
 
     const JAISeqData* getSeqData() const { return &inner_.mSeqData; }
     u32 JAISeCategoryMgr_getProperPriority_() const { return inner_.mProperPriority; }

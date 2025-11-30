@@ -5,16 +5,16 @@
 
 class daTag_MynaLight_c : public fopAc_ac_c {
 public:
-    /* 80D5CB38 */ int create();
-    /* 80D5CB9C */ int Delete();
-    /* 80D5CBF4 */ int Execute();
-    /* 80D5CD94 */ int Draw();
-    /* 80D5CE40 */ bool setTurnOnOffChange();
-    /* 80D5D148 */ u32 getTurnOnTime();
-    /* 80D5D154 */ u32 getTurnOffTime();
-    /* 80D5D160 */ void initialize();
+    int create();
+    int Delete();
+    int Execute();
+    int Draw();
+    bool setTurnOnOffChange();
+    u32 getTurnOnTime();
+    u32 getTurnOffTime();
+    void initialize();
 
-    /* 80D5D298 */ virtual ~daTag_MynaLight_c();
+    virtual ~daTag_MynaLight_c();
 
     bool checkTurnOnOffChange() {
         return (field_0x578 != mTurnOnFlag) ? true : false;

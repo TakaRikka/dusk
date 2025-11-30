@@ -27,7 +27,7 @@ public:
         PRM_8 = 8,
     };
 
-    /* 8057C9D8 */ int _create();
+    int _create();
 
     static void make_land_smoke(cXyz* i_pos, f32 i_scale) {
         cXyz scale(i_scale, i_scale, i_scale);

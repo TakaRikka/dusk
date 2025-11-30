@@ -14,17 +14,17 @@ struct daObjFlag2_Attr_c {
 
 class FlagCloth_c : public J3DPacket {
 public:
-    /* 80BEC658 */ void initFlagPos(cXyz*, fopAc_ac_c*);
-    /* 80BEC7CC */ cXyz calcFlagFactor(cXyz*, cXyz*, cXyz*, int);
-    /* 80BEC928 */ void calcFlagFactorSub(cXyz*, cXyz*, cXyz*, f32);
-    /* 80BECAE0 */ void calcFlagNormal(cXyz*, int);
-    /* 80BECC34 */ inline void calcFlagNormalBack();
-    /* 80BECC78 */ void initCcSphere(fopAc_ac_c*);
-    /* 80BECCE4 */ void setCcSphere();
-    /* 80BECD98 */ void execute();
-    /* 80BEE0B8 */ cXyz getTargetPos() { return mPositions[4]; }
+    void initFlagPos(cXyz*, fopAc_ac_c*);
+    cXyz calcFlagFactor(cXyz*, cXyz*, cXyz*, int);
+    void calcFlagFactorSub(cXyz*, cXyz*, cXyz*, f32);
+    void calcFlagNormal(cXyz*, int);
+    inline void calcFlagNormalBack();
+    void initCcSphere(fopAc_ac_c*);
+    void setCcSphere();
+    void execute();
+    cXyz getTargetPos() { return mPositions[4]; }
 
-    /* 80BECF30 */ void draw();
+    void draw();
 
     cXyz* getPos() { return mPositions; }
     cXyz* getNormal() { return mNormals; }
@@ -69,14 +69,14 @@ public:
  */
 class daObjFlag2_c : public fopAc_ac_c {
 public:
-    /* 80BED22C */ void create_init();
-    /* 80BED368 */ void initBaseMtx();
-    /* 80BED3B8 */ void initCollision();
-    /* 80BED44C */ void setCollision();
-    /* 80BED480 */ int createHeap();
-    /* 80BED6A0 */ int create();
-    /* 80BEDCE0 */ int draw();
-    /* 80BEDEE0 */ ~daObjFlag2_c();
+    void create_init();
+    void initBaseMtx();
+    void initCollision();
+    void setCollision();
+    int createHeap();
+    int create();
+    int draw();
+    ~daObjFlag2_c();
     inline int execute();
 
     const daObjFlag2_Attr_c& attr() const { return M_attr; }

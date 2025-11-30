@@ -29,41 +29,41 @@ public:
         /* 0xC */ JUtility::TColor field_0xc;
     };  // Size: 0x10
 
-    /* 802F9C10 */ J2DWindow(J2DPane*, JSURandomInputStream*, J2DMaterial*);
-    /* 802F9B74 */ J2DWindow(J2DPane*, JSURandomInputStream*, JKRArchive*);
-    /* 802F9A7C */ J2DWindow();
-    /* 802FA118 */ void private_readStream(J2DPane*, JSURandomInputStream*, JKRArchive*);
-    /* 802FA604 */ void initinfo2();
-    /* 802FAA5C */ void draw_private(JGeometry::TBox2<f32> const&, JGeometry::TBox2<f32> const&);
-    /* 802FB12C */ void setContentsColor(JUtility::TColor, JUtility::TColor, JUtility::TColor,
+    J2DWindow(J2DPane*, JSURandomInputStream*, J2DMaterial*);
+    J2DWindow(J2DPane*, JSURandomInputStream*, JKRArchive*);
+    J2DWindow();
+    void private_readStream(J2DPane*, JSURandomInputStream*, JKRArchive*);
+    void initinfo2();
+    void draw_private(JGeometry::TBox2<f32> const&, JGeometry::TBox2<f32> const&);
+    void setContentsColor(JUtility::TColor, JUtility::TColor, JUtility::TColor,
                                          JUtility::TColor);
-    /* 802FB634 */ void drawFrameTexture(JUTTexture*, f32, f32, f32, f32, u16, u16, u16, u16, bool);
-    /* 802FB7C8 */ void drawFrameTexture(JUTTexture*, f32, f32, bool, bool, bool);
-    /* 802FB868 */ void drawContentsTexture(f32, f32, f32, f32);
-    /* 802FBB90 */ void setTevMode(JUTTexture*, JUtility::TColor, JUtility::TColor);
+    void drawFrameTexture(JUTTexture*, f32, f32, f32, f32, u16, u16, u16, u16, bool);
+    void drawFrameTexture(JUTTexture*, f32, f32, bool, bool, bool);
+    void drawContentsTexture(f32, f32, f32, f32);
+    void setTevMode(JUTTexture*, JUtility::TColor, JUtility::TColor);
 
-    /* 802FA880 */ virtual ~J2DWindow();
-    /* 802FBF98 */ virtual u16 getTypeID() const;
-    /* 802FB000 */ virtual void resize(f32, f32);
-    /* 802FB1D8 */ virtual void drawSelf(f32, f32);
-    /* 802FB240 */ virtual void drawSelf(f32, f32, Mtx*);
-    /* 802FBEDC */ virtual bool isUsed(ResTIMG const*);
-    /* 802FC02C */ virtual bool isUsed(ResFONT const*);
-    /* 802FC04C */ virtual void rewriteAlpha();
-    /* 802FA928 */ virtual void draw(JGeometry::TBox2<f32> const&);
-    /* 802FAED0 */ virtual void draw(JGeometry::TBox2<f32> const&, JGeometry::TBox2<f32> const&);
-    /* 802FBFA0 */ virtual void draw(f32, f32, f32, f32);
-    /* 80254430 */ virtual bool setBlack(JUtility::TColor);
-    /* 802543E0 */ virtual bool setWhite(JUtility::TColor);
-    /* 80254568 */ virtual bool setBlackWhite(JUtility::TColor, JUtility::TColor);
-    /* 80254000 */ virtual JUtility::TColor getBlack() const;
-    /* 8025400C */ virtual JUtility::TColor getWhite() const;
-    /* 802FBE60 */ virtual JUTTexture* getFrameTexture(u8, u8) const;
-    /* 802FBFE8 */ virtual JUTTexture* getContentsTexture(u8) const;
-    /* 802FC000 */ virtual void getMaterial(J2DWindow::TMaterial&) const;
-    /* 802FC01C */ virtual J2DMaterial* getFrameMaterial(u8) const;
-    /* 802FC024 */ virtual J2DMaterial* getContentsMaterial() const;
-    /* 802FB338 */ virtual void drawContents(JGeometry::TBox2<f32> const&);
+    virtual ~J2DWindow();
+    virtual u16 getTypeID() const;
+    virtual void resize(f32, f32);
+    virtual void drawSelf(f32, f32);
+    virtual void drawSelf(f32, f32, Mtx*);
+    virtual bool isUsed(ResTIMG const*);
+    virtual bool isUsed(ResFONT const*);
+    virtual void rewriteAlpha();
+    virtual void draw(JGeometry::TBox2<f32> const&);
+    virtual void draw(JGeometry::TBox2<f32> const&, JGeometry::TBox2<f32> const&);
+    virtual void draw(f32, f32, f32, f32);
+    virtual bool setBlack(JUtility::TColor);
+    virtual bool setWhite(JUtility::TColor);
+    virtual bool setBlackWhite(JUtility::TColor, JUtility::TColor);
+    virtual JUtility::TColor getBlack() const;
+    virtual JUtility::TColor getWhite() const;
+    virtual JUTTexture* getFrameTexture(u8, u8) const;
+    virtual JUTTexture* getContentsTexture(u8) const;
+    virtual void getMaterial(J2DWindow::TMaterial&) const;
+    virtual J2DMaterial* getFrameMaterial(u8) const;
+    virtual J2DMaterial* getContentsMaterial() const;
+    virtual void drawContents(JGeometry::TBox2<f32> const&);
 
     bool isField0x145Set(u8 flag) { return field_0x145 & flag; }
 

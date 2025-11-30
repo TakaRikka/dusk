@@ -16,8 +16,8 @@ struct TResourceContainer;
 struct TReference {
     TReference() { pcResource_ = NULL; }
 
-    /* 802A7AF8 */ virtual ~TReference();
-    /* 802A7B40 */ virtual const char* do_word(u32) const;
+    virtual ~TReference();
+    virtual const char* do_word(u32) const;
 
     int on_parseCharacter(const char** ppszText) const {
         JUT_ASSERT(97, pcResource_!=NULL);
@@ -109,37 +109,37 @@ struct TProcessor {
         /* 0x4 */ rData;
     };  // Size: 0x14
 
-    /* 802A7B90 */ void reset();
-    /* 802A7BF8 */ void stack_pushCurrent(char const* pszText);
-    /* 802A7C30 */ void stack_popCurrent();
-    /* 802A7C54 */ const TResource* getResource_groupID(u16 u16GroupID) const;
-    /* 802A7CD4 */ u32 toMessageCode_messageID(u32 uMsgID, u32, bool* pbValid) const;
-    /* 802A7E38 */ void on_select_begin(char const* (*pfn)(JMessage::TProcessor*), void const* pOffset,
+    void reset();
+    void stack_pushCurrent(char const* pszText);
+    void stack_popCurrent();
+    const TResource* getResource_groupID(u16 u16GroupID) const;
+    u32 toMessageCode_messageID(u32 uMsgID, u32, bool* pbValid) const;
+    void on_select_begin(char const* (*pfn)(JMessage::TProcessor*), void const* pOffset,
                                         char const* pcBase, u32 uNumber);
-    /* 802A7EDC */ void on_select_end();
-    /* 802A7F34 */ void on_select_separate();
-    /* 802A7FE4 */ void on_tag_();
-    /* 802A81EC */ bool process_character_();
-    /* 802A828C */ static bool process_onCharacterEnd_normal_(JMessage::TProcessor* pThis);
-    /* 802A82F4 */ static bool process_onCharacterEnd_select_(JMessage::TProcessor* pThis);
-    /* 802A833C */ static const char* process_onSelect_limited_(JMessage::TProcessor* pThis);
-    /* 802A8358 */ static const char* process_onSelect_(JMessage::TProcessor* pThis);
-    /* 802A8C24 */ const char* on_message(u32 uCode) const { return getMessageText_messageCode(uCode); }
-    /* 802A8C44 */ const char* getMessageText_messageCode(u32 uCode) const {
+    void on_select_end();
+    void on_select_separate();
+    void on_tag_();
+    bool process_character_();
+    static bool process_onCharacterEnd_normal_(JMessage::TProcessor* pThis);
+    static bool process_onCharacterEnd_select_(JMessage::TProcessor* pThis);
+    static const char* process_onSelect_limited_(JMessage::TProcessor* pThis);
+    static const char* process_onSelect_(JMessage::TProcessor* pThis);
+    const char* on_message(u32 uCode) const { return getMessageText_messageCode(uCode); }
+    const char* getMessageText_messageCode(u32 uCode) const {
         return getMessageText_messageCode(uCode >> 16, uCode & 0xFFFF);
     }
 
-    /* 802A7B48 */ virtual ~TProcessor();
-    /* 802A7FC0 */ virtual void do_reset();
-    /* 802A7FC4 */ virtual void do_begin(void const* pEntry, char const* pszText);
-    /* 802A7FC8 */ virtual void do_end();
-    /* 802A7FCC */ virtual void do_character(int iCharacter);
-    /* 802A7FD0 */ virtual bool do_tag(u32 uTag, void const* pData, u32 uSize);
-    /* 802A7FD8 */ virtual void do_select_begin(u32 uNumber);
-    /* 802A7FDC */ virtual void do_select_end();
-    /* 802A7FE0 */ virtual void do_select_separate();
-    /* 802A8084 */ virtual void do_resetStatus_(char const* pszText);
-    /* 802A8088 */ virtual bool do_setBegin_isReady_() const;
+    virtual ~TProcessor();
+    virtual void do_reset();
+    virtual void do_begin(void const* pEntry, char const* pszText);
+    virtual void do_end();
+    virtual void do_character(int iCharacter);
+    virtual bool do_tag(u32 uTag, void const* pData, u32 uSize);
+    virtual void do_select_begin(u32 uNumber);
+    virtual void do_select_end();
+    virtual void do_select_separate();
+    virtual void do_resetStatus_(char const* pszText);
+    virtual bool do_setBegin_isReady_() const;
     virtual void do_begin_(void const* pEntry, char const* pszText) = 0;
     virtual void do_end_() = 0;
     virtual void do_tag_(u32 uTag, void const* pData, u32 uSize) = 0;
@@ -290,35 +290,35 @@ struct TSequenceProcessor : public TProcessor {
         STATUS_BRANCH,
     };
 
-    /* 802A8374 */ TSequenceProcessor(JMessage::TReference const* pReference, JMessage::TControl* pControl);
-    /* 802A8418 */ const char* process(char const* pszText);
-    /* 802A85A4 */ bool on_isReady();
-    /* 802A85D0 */ void on_jump_register(jumpPfn pfn, u32 u32Target);
-    /* 802A85E4 */ bool on_jump_isReady();
-    /* 802A8610 */ void on_jump(void const* pEntry, char const* pszText);
-    /* 802A8690 */ void on_branch_register(branchPfn pfn, void const* pTarget, u32 uTarget);
-    /* 802A86A0 */ void on_branch_query(u32 uCode);
-    /* 802A86D4 */ u32 on_branch_queryResult();
-    /* 802A8700 */ void on_branch(void const* pEntry, char const* pszText);
-    /* 802A892C */ static void process_setMessageIndex_reserved_(u16 u16Index);
-    /* 802A8944 */ static void* process_setMessageCode_(TSequenceProcessor const* pProcessor, u16 u16GroupID, u16 u16Index);
-    /* 802A89B8 */ static const void* process_onJump_limited_(TSequenceProcessor const* pProcessor);
-    /* 802A89EC */ static const void* process_onJump_(TSequenceProcessor const* pProcessor);
-    /* 802A8A18 */ static const void* process_onBranch_limited_(TSequenceProcessor const* pProcessor, u32 uTargetIndex);
-    /* 802A8A50 */ static const void* process_onBranch_(TSequenceProcessor const* pProcessor, u32 uTargetIndex);
+    TSequenceProcessor(JMessage::TReference const* pReference, JMessage::TControl* pControl);
+    const char* process(char const* pszText);
+    bool on_isReady();
+    void on_jump_register(jumpPfn pfn, u32 u32Target);
+    bool on_jump_isReady();
+    void on_jump(void const* pEntry, char const* pszText);
+    void on_branch_register(branchPfn pfn, void const* pTarget, u32 uTarget);
+    void on_branch_query(u32 uCode);
+    u32 on_branch_queryResult();
+    void on_branch(void const* pEntry, char const* pszText);
+    static void process_setMessageIndex_reserved_(u16 u16Index);
+    static void* process_setMessageCode_(TSequenceProcessor const* pProcessor, u16 u16GroupID, u16 u16Index);
+    static const void* process_onJump_limited_(TSequenceProcessor const* pProcessor);
+    static const void* process_onJump_(TSequenceProcessor const* pProcessor);
+    static const void* process_onBranch_limited_(TSequenceProcessor const* pProcessor, u32 uTargetIndex);
+    static const void* process_onBranch_(TSequenceProcessor const* pProcessor, u32 uTargetIndex);
 
-    /* 802A83B8 */ virtual ~TSequenceProcessor();
-    /* 802A87A4 */ virtual void do_resetStatus_(char const* pszText);
-    /* 802A87C0 */ virtual bool do_setBegin_isReady_() const;
-    /* 802A87D0 */ virtual void do_begin_(void const* pEntry, char const* pszText);
-    /* 802A87D4 */ virtual void do_end_();
-    /* 802A87E0 */ virtual void do_tag_(u32 uTag, void const* pData, u32 uSize);
-    /* 802A8780 */ virtual bool do_isReady();
-    /* 802A8788 */ virtual bool do_jump_isReady();
-    /* 802A8790 */ virtual void do_jump(void const* pEntry, char const* pszText);
-    /* 802A8794 */ virtual void do_branch_query(u32 uCode);
-    /* 802A8798 */ virtual s32 do_branch_queryResult();
-    /* 802A87A0 */ virtual void do_branch(void const* pEntry, char const* pszText);
+    virtual ~TSequenceProcessor();
+    virtual void do_resetStatus_(char const* pszText);
+    virtual bool do_setBegin_isReady_() const;
+    virtual void do_begin_(void const* pEntry, char const* pszText);
+    virtual void do_end_();
+    virtual void do_tag_(u32 uTag, void const* pData, u32 uSize);
+    virtual bool do_isReady();
+    virtual bool do_jump_isReady();
+    virtual void do_jump(void const* pEntry, char const* pszText);
+    virtual void do_branch_query(u32 uCode);
+    virtual s32 do_branch_queryResult();
+    virtual void do_branch(void const* pEntry, char const* pszText);
 
     TControl* getControl() const { return pControl_; }
 
@@ -341,13 +341,13 @@ struct TSequenceProcessor : public TProcessor {
  * 
  */
 struct TRenderingProcessor : public TProcessor {
-    /* 802A8A84 */ TRenderingProcessor(JMessage::TReference const* pReference);
-    /* 802A8B20 */ int process(char const* pszText);
+    TRenderingProcessor(JMessage::TReference const* pReference);
+    int process(char const* pszText);
 
-    /* 802A8AC0 */ virtual ~TRenderingProcessor();
-    /* 802A8BA4 */ virtual void do_begin_(void const* pEntry, char const* pszText);
-    /* 802A8BA8 */ virtual void do_end_();
-    /* 802A8BAC */ virtual void do_tag_(u32 uTag, void const* pData, u32 uSize);
+    virtual ~TRenderingProcessor();
+    virtual void do_begin_(void const* pEntry, char const* pszText);
+    virtual void do_end_();
+    virtual void do_tag_(u32 uTag, void const* pData, u32 uSize);
 
     bool process_messageEntryText(const TProcessor* pProcessor, void const* pEntry, const char* pszText) {
         if (!TProcessor::setBegin_messageEntryText(pProcessor, pEntry, pszText)) {

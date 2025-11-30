@@ -28,22 +28,22 @@ public:
         TYPE_1,
     };
 
-    /* 80D15F0C */ void initBaseMtx();
-    /* 80D15F48 */ void setBaseMtx();
-    /* 80D15FE0 */ int Create();
-    /* 80D161A4 */ int CreateHeap();
-    /* 80D163F0 */ int create1st();
-    /* 80D164C0 */ int Execute(Mtx**);
-    /* 80D16560 */ void action();
-    /* 80D1661C */ void actionWait();
-    /* 80D166E0 */ void actionOrderEvent();
-    /* 80D167BC */ void actionEvent();
-    /* 80D16860 */ void actionDead();
-    /* 80D16864 */ void demoProc();
-    /* 80D171C0 */ void sceneChange();
-    /* 80D17230 */ int Draw();
-    /* 80D17374 */ BOOL checkLODModel();
-    /* 80D174F8 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void action();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    void demoProc();
+    void sceneChange();
+    int Draw();
+    BOOL checkLODModel();
+    int Delete();
 
     bool checkWater() { return fopAcM_GetParamBit(this, 31, 1); }
     void setAction(u8 action) { mAction = action; }

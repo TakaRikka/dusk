@@ -22,52 +22,44 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 
-/* 803BA854-803BA860 017974 000C+00 3/3 0/0 0/0 .data            SelStartFrameTbl */
 static s32 SelStartFrameTbl[3] = {
     0x0000003B, 
     0x00000063, 
     0x0000008B,
 };
 
-/* 803BA860-803BA86C 017980 000C+00 3/3 0/0 0/0 .data            SelEndFrameTbl */
 static s32 SelEndFrameTbl[3] = {
     0x00000045,
     0x0000006D,
     0x00000095,
 };
 
-/* 803BA86C-803BA878 01798C 000C+00 7/7 0/0 0/0 .data            SelOpenStartFrameTbl */
 static s32 SelOpenStartFrameTbl[3] = {
     0x000000F8,
     0x000001C0, 
     0x00000288,
 };
 
-/* 803BA878-803BA884 017998 000C+00 7/7 0/0 0/0 .data            SelOpenEndFrameTbl */
 static s32 SelOpenEndFrameTbl[3] = {
     0x00000103,
     0x000001CC, 
     0x00000293,
 };
 
-/* 803BA884-803BA890 0179A4 000C+00 5/5 0/0 0/0 .data            MenuSelStartFrameTbl */
 static s32 MenuSelStartFrameTbl[3] = {
     0x000007CD, 
     0x00000382, 
     0x00000390,
 };
 
-/* 803BA890-803BA8A0 0179B0 000C+04 3/3 0/0 0/0 .data            MenuSelEndFrameTbl */
 static s32 MenuSelEndFrameTbl[3] = {
     0x000007DB,
     0x0000038E,
     0x00000382,
 };
 
-/* 803BA8A0-803BA8B8 0179C0 0018+00 0/2 0/0 0/0 .data            l_tagName13 */
 static u64 l_tagName13[3] = {'w_dat_i0', 'w_dat_i1', 'w_dat_i2'};
 
-/* 801835F8-8018366C 17DF38 0074+00 1/1 0/0 0/0 .text            __ct__9dFs_HIO_cFv */
 dFs_HIO_c::dFs_HIO_c() {
     field_0x0006 = 5;
     field_0x0007 = 5;
@@ -90,13 +82,11 @@ dFs_HIO_c::dFs_HIO_c() {
     field_0x0022 = 0;
 }
 
-/* 8018366C-8018375C 17DFAC 00F0+00 0/0 1/1 0/0 .text __ct__14dFile_select_cFP10JKRArchive */
 dFile_select_c::dFile_select_c(JKRArchive* i_archiveP) {
     mpArchive = i_archiveP;
     mpFileSelect3d = new dFile_select3D_c();
 }
 
-/* 8018375C-801841EC 17E09C 0A90+00 1/0 0/0 0/0 .text            __dt__14dFile_select_cFv */
 dFile_select_c::~dFile_select_c() {
     for (int i = 0; i < 3; i = i + 1) {
         delete field_0x0164[i];
@@ -180,10 +170,8 @@ dFile_select_c::~dFile_select_c() {
     dComIfGp_getCollectResArchive()->removeResourceAll();
 }
 
-/* 8042C9EC-8042CA10 05970C 0024+00 35/35 0/0 0/0 .bss             g_fsHIO */
 static dFs_HIO_c g_fsHIO;
 
-/* 801843CC-801844FC 17ED0C 0130+00 0/0 1/1 0/0 .text            _create__14dFile_select_cFv */
 void dFile_select_c::_create() {
     mDoGph_gInf_c::setFadeColor(static_cast<JUtility::TColor&>(g_blackColor));
     mStick = new STControl(2, 2, 1, 1, 0.9f, 0.5f, 0, 0x2000);
@@ -210,7 +198,6 @@ void dFile_select_c::_create() {
     displayInit();
 }
 
-/* 803BAAEC-803BAD20 017C0C 0234+00 1/2 0/0 0/0 .data            DataSelProc */
 typedef void (dFile_select_c::*DataSelProcFunc)(void);
 static DataSelProcFunc DataSelProc[47] = {
     &dFile_select_c::MemCardCheckMain,
@@ -262,7 +249,6 @@ static DataSelProcFunc DataSelProc[47] = {
     &dFile_select_c::nextModeWait,
 };
 
-/* 801844FC-80184664 17EE3C 0168+00 0/0 1/1 0/0 .text            _move__14dFile_select_cFv */
 void dFile_select_c::_move() {
     dMeter2Info_decMsgKeyWaitTimer();
 
@@ -306,8 +292,6 @@ void dFile_select_c::_move() {
     mDoMemCd_clearProbeStat();
 }
 
-/* 80184664-801848A0 17EFA4 023C+00 1/1 0/0 0/0 .text            selFileWakuAnm__14dFile_select_cFv
- */
 void dFile_select_c::selFileWakuAnm() {
     field_0x01cc += 2;
 
@@ -353,7 +337,6 @@ void dFile_select_c::selFileWakuAnm() {
     field_0x03a0->setFrame(field_0x03a4);
 }
 
-/* 801848A0-8018499C 17F1E0 00FC+00 1/1 0/0 0/0 .text            bookIconAnm__14dFile_select_cFv */
 void dFile_select_c::bookIconAnm() {
     field_0x01dc += 2;
 
@@ -375,7 +358,6 @@ void dFile_select_c::bookIconAnm() {
     field_0x01e8->setFrame(field_0x01ec);
 }
 
-/* 8018499C-80184A48 17F2DC 00AC+00 1/1 0/0 0/0 .text selCopyFileWakuAnm__14dFile_select_cFv */
 void dFile_select_c::selCopyFileWakuAnm() {
     field_0x02ec += 2;
 
@@ -391,8 +373,6 @@ void dFile_select_c::selCopyFileWakuAnm() {
     field_0x02f0->setFrame(field_0x02f4);
 }
 
-/* 80184A48-80184B44 17F388 00FC+00 1/1 0/0 0/0 .text            copyBookIconAnm__14dFile_select_cFv
- */
 void dFile_select_c::copyBookIconAnm() {
     field_0x02fc += 2;
 
@@ -414,8 +394,6 @@ void dFile_select_c::copyBookIconAnm() {
     field_0x0308->setFrame(field_0x030c);
 }
 
-/* 80184B44-80184BFC 17F484 00B8+00 1/1 0/0 0/0 .text            dataDelEffAnm__14dFile_select_cFv
- */
 void dFile_select_c::dataDelEffAnm() {
     if (field_0x0208 != 0) {
         field_0x0204 += 2;
@@ -433,8 +411,6 @@ void dFile_select_c::dataDelEffAnm() {
     }
 }
 
-/* 80184BFC-80184CB4 17F53C 00B8+00 1/1 0/0 0/0 .text            dataCopyEffAnm__14dFile_select_cFv
- */
 void dFile_select_c::dataCopyEffAnm() {
     if (field_0x0209 != 0) {
         field_0x0204 += 2;
@@ -452,8 +428,6 @@ void dFile_select_c::dataCopyEffAnm() {
     }
 }
 
-/* 80184CB4-80184D4C 17F5F4 0098+00 2/2 0/0 0/0 .text
- * selectDataBaseMoveAnmInitSet__14dFile_select_cFii            */
 void dFile_select_c::selectDataBaseMoveAnmInitSet(int param_0, int param_1) {
     field_0x00a4->getPanePtr()->setAnimation((J2DAnmTransform*)field_0x0084);
     field_0x00b0 = param_0;
@@ -463,7 +437,6 @@ void dFile_select_c::selectDataBaseMoveAnmInitSet(int param_0, int param_1) {
     field_0x00b9 = 1;
 }
 
-/* 80184D4C-80184E38 17F68C 00EC+00 2/2 0/0 0/0 .text selectDataBaseMoveAnm__14dFile_select_cFv */
 bool dFile_select_c::selectDataBaseMoveAnm() {
     if (field_0x00b0 != field_0x00b4) {
         if (field_0x00b0 < field_0x00b4) {
@@ -492,7 +465,6 @@ bool dFile_select_c::selectDataBaseMoveAnm() {
     }
 }
 
-/* 80184E38-80185040 17F778 0208+00 1/1 0/0 0/0 .text dataSelectInAnmSet__14dFile_select_cFv */
 void dFile_select_c::dataSelectInAnmSet() {
     setSaveData();
     dSv_save_c* pSave = (dSv_save_c*)mSave;
@@ -530,7 +502,6 @@ void dFile_select_c::dataSelectInAnmSet() {
     mDoAud_seStart(Z2SE_SY_FILE_MENU_SLIDE_IN,0,0,0);
 }
 
-/* 80185040-80185230 17F980 01F0+00 1/0 0/0 0/0 .text            dataSelectIn__14dFile_select_cFv */
 void dFile_select_c::dataSelectIn() {
     bool headerTxtChange = headerTxtChangeAnm();
     bool selectDataBaseMove = selectDataBaseMoveAnm();
@@ -575,8 +546,6 @@ void dFile_select_c::dataSelectIn() {
     }
 }
 
-/* 80185230-801853C4 17FB70 0194+00 1/0 0/0 0/0 .text            dataSelectInit__14dFile_select_cFv
- */
 void dFile_select_c::dataSelectInit() {
     bool headerTxtChange = headerTxtChangeAnm();
     bool alphaAnime = true;
@@ -609,7 +578,6 @@ void dFile_select_c::dataSelectInit() {
     }
 }
 
-/* 801853C4-80185508 17FD04 0144+00 1/0 0/0 0/0 .text            dataSelect__14dFile_select_cFv */
 // handles switching between quest logs
 void dFile_select_c::dataSelect() {
     mStick->checkTrigger();
@@ -640,27 +608,22 @@ void dFile_select_c::dataSelect() {
     }
 }
 
-/* 804506B0-804506B8 000130 0008+00 2/2 0/0 0/0 .sdata           YnSelStartFrameTbl */
 static s32 YnSelStartFrameTbl[2] = {
     0x000004E3, 
     0x000004D4,
 };
 
-/* 804506B8-804506C0 000138 0008+00 2/2 0/0 0/0 .sdata           YnSelEndFrameTbl */
 static s32 YnSelEndFrameTbl[2] = {
     0x000004D4, 
     0x000004E3,
 };
 
-/* 804506C0-804506C8 000140 0006+02 4/4 0/0 0/0 .sdata           msgTbl */
 static u16 msgTbl[3] = {
     0x0040,
     0x0041,
     0x0042,
 };
 
-/* 80185508-80185994 17FE48 048C+00 1/1 0/0 0/0 .text            dataSelectStart__14dFile_select_cFv
- */
 void dFile_select_c::dataSelectStart() {
     mSelIcon->setAlphaRate(0.0f);
     if (field_0x025b[mSelectNum] != 0) {
@@ -713,8 +676,6 @@ void dFile_select_c::dataSelectStart() {
     modoruTxtDispAnmInit(1);
 }
 
-/* 80185994-80185AAC 1802D4 0118+00 7/7 0/0 0/0 .text
- * selectDataMoveAnmInitSet__14dFile_select_cFii                */
 void dFile_select_c::selectDataMoveAnmInitSet(int param_0, int param_1) {
     field_0x00bc[0]->getPanePtr()->setAnimation((J2DAnmTransform*)field_0x0084);
     field_0x00bc[1]->getPanePtr()->setAnimation((J2DAnmTransform*)field_0x0084);
@@ -729,7 +690,6 @@ void dFile_select_c::selectDataMoveAnmInitSet(int param_0, int param_1) {
     mpPane->animationTransform();
 }
 
-/* 80185AAC-80185C2C 1803EC 0180+00 8/8 0/0 0/0 .text selectDataMoveAnm__14dFile_select_cFv */
 bool dFile_select_c::selectDataMoveAnm() {
     if (field_0x00e0[mSelectNum] != field_0x00ec) {
         if (field_0x00e0[mSelectNum] < field_0x00ec) {
@@ -764,7 +724,6 @@ bool dFile_select_c::selectDataMoveAnm() {
     }
 }
 
-/* 80185C2C-80185DE0 18056C 01B4+00 1/1 0/0 0/0 .text dataSelectAnmSet__14dFile_select_cFv */
 void dFile_select_c::dataSelectAnmSet() {
     if (mSelectNum != 0xff) {
         field_0x00bc[mSelectNum]->getPanePtr()->setAnimation((J2DAnmTransform*)field_0x0084);
@@ -785,7 +744,6 @@ void dFile_select_c::dataSelectAnmSet() {
     }
 }
 
-/* 80185DE0-80186088 180720 02A8+00 1/0 0/0 0/0 .text dataSelectMoveAnime__14dFile_select_cFv */
 void dFile_select_c::dataSelectMoveAnime() {
     bool iVar7 = true;
     bool iVar6 = true;
@@ -838,7 +796,6 @@ void dFile_select_c::dataSelectMoveAnime() {
     }
 }
 
-/* 80186088-801864DC 1809C8 0454+00 2/2 0/0 0/0 .text            makeRecInfo__14dFile_select_cFUc */
 void dFile_select_c::makeRecInfo(u8 param_1) {
     dSv_save_c* pSave = (dSv_save_c*)&mSave[param_1];
     J2DPane* ken0 = mSelDt.ScrDt->search('ken_00');
@@ -930,7 +887,6 @@ void dFile_select_c::makeRecInfo(u8 param_1) {
     }
 }
 
-/* 801864DC-80186638 180E1C 015C+00 1/0 0/0 0/0 .text selectDataOpenMove__14dFile_select_cFv */
 void dFile_select_c::selectDataOpenMove() {
     bool headerTxtChange = headerTxtChangeAnm();
     bool selectDataMove = selectDataMoveAnm();
@@ -950,7 +906,6 @@ void dFile_select_c::selectDataOpenMove() {
     }
 }
 
-/* 80186638-801866C8 180F78 0090+00 1/0 0/0 0/0 .text selectDataNameMove__14dFile_select_cFv */
 void dFile_select_c::selectDataNameMove() {
     bool headerTxtChange = headerTxtChangeAnm();
     bool fileRecScale = fileRecScaleAnm2();
@@ -962,8 +917,6 @@ void dFile_select_c::selectDataNameMove() {
     }
 }
 
-/* 801866C8-80186774 181008 00AC+00 1/0 0/0 0/0 .text selectDataOpenEraseMove__14dFile_select_cFv
- */
 void dFile_select_c::selectDataOpenEraseMove() {
     bool headerTxtChange = headerTxtChangeAnm();
     bool selectDataMove = selectDataMoveAnm();
@@ -978,7 +931,6 @@ void dFile_select_c::selectDataOpenEraseMove() {
     }
 }
 
-/* 80186774-801868EC 1810B4 0178+00 1/0 0/0 0/0 .text            menuSelect__14dFile_select_cFv */
 // Handles selecting between copy / start / delete menus in quest log
 void dFile_select_c::menuSelect() {
     mStick->checkTrigger();
@@ -1012,8 +964,6 @@ void dFile_select_c::menuSelect() {
     }
 }
 
-/* 801868EC-80186A80 18122C 0194+00 1/1 0/0 0/0 .text            menuSelectStart__14dFile_select_cFv
- */
 // Handles copy / start / delete actions depending on which menu is selected from menuSelect
 void dFile_select_c::menuSelectStart() {
     mDoAud_seStart(Z2SE_SY_CURSOR_OK,0,0,0);
@@ -1044,7 +994,6 @@ void dFile_select_c::menuSelectStart() {
     }
 }
 
-/* 80186A80-80186B48 1813C0 00C8+00 1/1 0/0 0/0 .text menuSelectCansel__14dFile_select_cFv */
 void dFile_select_c::menuSelectCansel() {
     mDoAud_seStart(Z2SE_SY_CURSOR_CANCEL,0,0,0);
     int idx = mSelectNum;
@@ -1056,7 +1005,6 @@ void dFile_select_c::menuSelectCansel() {
     field_0x026f = 0xd;
 }
 
-/* 80186B48-80186C84 181488 013C+00 8/8 0/0 0/0 .text menuMoveAnmInitSet__14dFile_select_cFii */
 void dFile_select_c::menuMoveAnmInitSet(int param_0, int param_1) {
     if (param_0 == 799) {
         field_0x0283 = true;
@@ -1077,7 +1025,6 @@ void dFile_select_c::menuMoveAnmInitSet(int param_0, int param_1) {
     field_0x0118->animationTransform();
 }
 
-/* 80186CAC-80186E14 1815EC 0168+00 9/9 0/0 0/0 .text            menuMoveAnm__14dFile_select_cFv */
 bool dFile_select_c::menuMoveAnm() {
     if (field_0x0358 != field_0x035c) {
         if (field_0x0358 < field_0x035c){
@@ -1114,7 +1061,6 @@ bool dFile_select_c::menuMoveAnm() {
     }
 }
 
-/* 80186E14-80186F98 181754 0184+00 1/1 0/0 0/0 .text menuSelectAnmSet__14dFile_select_cFv */
 void dFile_select_c::menuSelectAnmSet() {
     if (mSelectMenuNum != 0xFF) {
         field_0x0340[mSelectMenuNum]->getPanePtr()->setAnimation(field_0x0328);
@@ -1133,7 +1079,6 @@ void dFile_select_c::menuSelectAnmSet() {
     }
 }
 
-/* 80186F98-8018721C 1818D8 0284+00 1/0 0/0 0/0 .text menuSelectMoveAnm__14dFile_select_cFv */
 void dFile_select_c::menuSelectMoveAnm() {
     bool tmp1 = true;
     if (mSelectMenuNum != 0xFF && field_0x034c[mSelectMenuNum] != MenuSelStartFrameTbl[mSelectMenuNum]) {
@@ -1193,7 +1138,6 @@ void dFile_select_c::menuSelectMoveAnm() {
   }
 }
 
-/* 8018721C-801872C4 181B5C 00A8+00 1/0 0/0 0/0 .text            ToNameMove__14dFile_select_cFv */
 void dFile_select_c::ToNameMove() {
     bool headerTxtChange = headerTxtChangeAnm();
     bool nameMove = nameMoveAnm();
@@ -1207,7 +1151,6 @@ void dFile_select_c::ToNameMove() {
     }
 }
 
-/* 801872C4-80187384 181C04 00C0+00 1/0 0/0 0/0 .text            ToNameMove2__14dFile_select_cFv */
 void dFile_select_c::ToNameMove2() {
     bool headerTxtChange = headerTxtChangeAnm();
     bool nameMove = nameMoveAnm();
@@ -1222,14 +1165,11 @@ void dFile_select_c::ToNameMove2() {
     }
 }
 
-/* 80187384-801873BC 181CC4 0038+00 1/0 0/0 0/0 .text            nameInputWait__14dFile_select_cFv
- */
 void dFile_select_c::nameInputWait() {
     mpName->showIcon();
     field_0x026f = 16;
 }
 
-/* 801873BC-801874F8 181CFC 013C+00 1/0 0/0 0/0 .text            nameInput__14dFile_select_cFv */
 void dFile_select_c::nameInput() {
     mpName->_move();
     if (mpName->getCurPos() == 0) {
@@ -1265,7 +1205,6 @@ void dFile_select_c::nameInput() {
     }
 }
 
-/* 801874F8-8018759C 181E38 00A4+00 1/0 0/0 0/0 .text nameToDataSelectMove__14dFile_select_cFv */
 void dFile_select_c::nameToDataSelectMove() {
     bool headerTxtChange =  headerTxtChangeAnm();
     bool fileResScal = fileRecScaleAnm2();
@@ -1279,8 +1218,6 @@ void dFile_select_c::nameToDataSelectMove() {
     }
 }
 
-/* 8018759C-801876A0 181EDC 0104+00 1/0 0/0 0/0 .text            nameInputFade__14dFile_select_cFv
- */
 void dFile_select_c::nameInputFade() {
     char name[32];
     field_0x020a--;
@@ -1298,8 +1235,6 @@ void dFile_select_c::nameInputFade() {
     }
 }
 
-/* 801876A0-8018774C 181FE0 00AC+00 1/0 0/0 0/0 .text            nameInput2Move__14dFile_select_cFv
- */
 void dFile_select_c::nameInput2Move() {
     if (mDoRst::isReset() == 0) {
         field_0x020a--;
@@ -1314,7 +1249,6 @@ void dFile_select_c::nameInput2Move() {
     }
 }
 
-/* 8018774C-80187824 18208C 00D8+00 1/0 0/0 0/0 .text            nameInput2__14dFile_select_cFv */
 void dFile_select_c::nameInput2() {
     mpName->_move();
     if (mpName->getCurPos() == 0) {
@@ -1338,7 +1272,6 @@ void dFile_select_c::nameInput2() {
     }
 }
 
-/* 80187824-80187908 182164 00E4+00 1/0 0/0 0/0 .text backNameInputMove0__14dFile_select_cFv */
 void dFile_select_c::backNameInputMove0() {
     field_0x020a--;
     u8 alpha = (1.0f - (field_0x020a / 15.0f)) * 255.0f;
@@ -1354,7 +1287,6 @@ void dFile_select_c::backNameInputMove0() {
     }
 }
 
-/* 80187908-801879B8 182248 00B0+00 1/0 0/0 0/0 .text backNameInputMove__14dFile_select_cFv */
 void dFile_select_c::backNameInputMove() {
     if (mDoRst::isReset() == 0) {
         field_0x020a--;
@@ -1369,8 +1301,6 @@ void dFile_select_c::backNameInputMove() {
     }
 }
 
-/* 801879B8-80187ADC 1822F8 0124+00 1/0 0/0 0/0 .text            ToCopyPaneMove__14dFile_select_cFv
- */
 void dFile_select_c::ToCopyPaneMove() {
     bool headerTxtChange = headerTxtChangeAnm();
     bool menuMove = menuMoveAnm();
@@ -1389,8 +1319,6 @@ void dFile_select_c::ToCopyPaneMove() {
     }
 }
 
-/* 80187ADC-80187B44 18241C 0068+00 1/0 0/0 0/0 .text            ToErasePaneMove__14dFile_select_cFv
- */
 void dFile_select_c::ToErasePaneMove() {
     bool headerTxtChange = headerTxtChangeAnm();
     bool yesnoMenuMove = yesnoMenuMoveAnm();
@@ -1401,8 +1329,6 @@ void dFile_select_c::ToErasePaneMove() {
     }
 }
 
-/* 80187B44-80187BE8 182484 00A4+00 1/0 0/0 0/0 .text            backSelectMove__14dFile_select_cFv
- */
 void dFile_select_c::backSelectMove() {
     bool headerTxtChange = headerTxtChangeAnm();
     bool selectDataMove = selectDataMoveAnm();
@@ -1416,8 +1342,6 @@ void dFile_select_c::backSelectMove() {
     }
 }
 
-/* 80187BE8-80187DB8 182528 01D0+00 6/6 0/0 0/0 .text copySelMoveAnmInitSet__14dFile_select_cFii
- */
 void dFile_select_c::copySelMoveAnmInitSet(int param_0, int param_1) {
     if (param_0 == 0xd1f) {
         field_0x02c0[0]->setAlpha(0xff);
@@ -1448,7 +1372,6 @@ void dFile_select_c::copySelMoveAnmInitSet(int param_0, int param_1) {
     field_0x011c->animationTransform();
 }
 
-/* 80187DB8-80187ED4 1826F8 011C+00 1/1 0/0 0/0 .text setSaveDataForCopySel__14dFile_select_cFv */
 void dFile_select_c::setSaveDataForCopySel() {
     static u64 l_tagName101[2] = {'w_nun01', 'w_nun02'};
     static char* l_numTex[3] = {
@@ -1479,7 +1402,6 @@ void dFile_select_c::setSaveDataForCopySel() {
     }
 }
 
-/* 80187ED4-8018801C 182814 0148+00 1/0 0/0 0/0 .text copyDataToSelect__14dFile_select_cFv */
 void dFile_select_c::copyDataToSelect() {
     mStick->checkTrigger();
     if (mDoCPd_c::getTrigA(0) != 0) {
@@ -1507,7 +1429,6 @@ void dFile_select_c::copyDataToSelect() {
     }
 }
 
-/* 8018801C-80188234 18295C 0218+00 1/1 0/0 0/0 .text copyDataToSelectStart__14dFile_select_cFv */
 void dFile_select_c::copyDataToSelectStart() {
     mDoAud_seStart(Z2SE_SY_CURSOR_OK, 0, 0, 0);
     field_0x026d = getCptoNum(field_0x026b);
@@ -1537,8 +1458,6 @@ void dFile_select_c::copyDataToSelectStart() {
     }
 }
 
-/* 80188234-8018832C 182B74 00F8+00 1/1 0/0 0/0 .text copyDataToSelectCansel__14dFile_select_cFv
- */
 void dFile_select_c::copyDataToSelectCansel() {
     mDoAud_seStart(Z2SE_SY_CURSOR_CANCEL, 0, 0, 0);
     selectDataMoveAnmInitSet(SelOpenStartFrameTbl[mSelectNum], SelOpenEndFrameTbl[mSelectNum]);
@@ -1550,8 +1469,6 @@ void dFile_select_c::copyDataToSelectCansel() {
     field_0x026f = 24;
 }
 
-/* 8018832C-801884D0 182C6C 01A4+00 1/1 0/0 0/0 .text
- * copyDataToSelectMoveAnmSet__14dFile_select_cFv               */
 void dFile_select_c::copyDataToSelectMoveAnmSet() {
     if (field_0x026b != 0xff) {
         field_0x02d8[field_0x026b]->alphaAnimeStart(0);
@@ -1571,8 +1488,6 @@ void dFile_select_c::copyDataToSelectMoveAnmSet() {
     }
 }
 
-/* 801884D0-80188834 182E10 0364+00 1/0 0/0 0/0 .text copyDataToSelectMoveAnm__14dFile_select_cFv
- */
 void dFile_select_c::copyDataToSelectMoveAnm() {
     bool iVar7 = true;
     bool iVar6 = true;
@@ -1623,8 +1538,6 @@ void dFile_select_c::copyDataToSelectMoveAnm() {
     }
 }
 
-/* 80188834-80188878 183174 0044+00 1/1 0/0 0/0 .text
- * copySelectWakuAlpahAnmInit__14dFile_select_cFUcUcUcUc        */
 void dFile_select_c::copySelectWakuAlpahAnmInit(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     if (param_1 != 0xff) {
         field_0x02c0[param_1]->alphaAnimeStart(0);
@@ -1636,8 +1549,6 @@ void dFile_select_c::copySelectWakuAlpahAnmInit(u8 param_1, u8 param_2, u8 param
     }
 }
 
-/* 80188878-80188950 1831B8 00D8+00 1/1 0/0 0/0 .text copySelectWakuAlpahAnm__14dFile_select_cFUc
- */
 bool dFile_select_c::copySelectWakuAlpahAnm(u8 param_1) {
     if (param_1 == 0xff) {
         return true;
@@ -1652,7 +1563,6 @@ bool dFile_select_c::copySelectWakuAlpahAnm(u8 param_1) {
     return rv;
 }
 
-/* 80188950-80188994 183290 0044+00 1/1 0/0 0/0 .text            getCptoNum__14dFile_select_cFUc */
 u8 dFile_select_c::getCptoNum(u8 param_0) {
     u8 cptoNum;
     switch (field_0x026a) {
@@ -1669,8 +1579,6 @@ u8 dFile_select_c::getCptoNum(u8 param_0) {
     return cptoNum;
 }
 
-/* 80188994-80188B54 1832D4 01C0+00 1/0 0/0 0/0 .text            copyToSelBack__14dFile_select_cFv
- */
 void dFile_select_c::copyToSelBack() {
     bool txtChanged = headerTxtChangeAnm();
     bool selectDataMoved = selectDataMoveAnm();
@@ -1696,7 +1604,6 @@ void dFile_select_c::copyToSelBack() {
     }
 }
 
-/* 80188B54-80188BBC 183494 0068+00 1/0 0/0 0/0 .text copyToSelPaneMove__14dFile_select_cFv */
 void dFile_select_c::copyToSelPaneMove() {
     bool txtChanged = headerTxtChangeAnm();
     bool menuMoved = yesnoMenuMoveAnm();
@@ -1706,8 +1613,6 @@ void dFile_select_c::copyToSelPaneMove() {
     }
 }
 
-/* 80188BBC-80188D38 1834FC 017C+00 14/14 0/0 0/0 .text
- * yesnoMenuMoveAnmInitSet__14dFile_select_cFii                 */
 bool dFile_select_c::yesnoMenuMoveAnmInitSet(int param_1, int param_2) {
     if (!field_0x0108) {
         field_0x0268 = false;
@@ -1728,7 +1633,6 @@ bool dFile_select_c::yesnoMenuMoveAnmInitSet(int param_1, int param_2) {
     field_0x00f0[1]->getPanePtr()->animationTransform();
 }
 
-/* 80188D38-80188ED0 183678 0198+00 15/15 0/0 0/0 .text yesnoMenuMoveAnm__14dFile_select_cFv */
 bool dFile_select_c::yesnoMenuMoveAnm() {
     bool rv;
     if (field_0x0100 != field_0x0104) {
@@ -1766,7 +1670,6 @@ bool dFile_select_c::yesnoMenuMoveAnm() {
     return rv;
 }
 
-/* 80188ED0-8018912C 183810 025C+00 3/3 0/0 0/0 .text yesnoSelectMoveAnm__14dFile_select_cFv */
 bool dFile_select_c::yesnoSelectMoveAnm() {
     bool rv = false;
     bool bVar1 = true;
@@ -1816,8 +1719,6 @@ bool dFile_select_c::yesnoSelectMoveAnm() {
     return rv;
 }
 
-/* 8018912C-8018929C 183A6C 0170+00 9/9 0/0 0/0 .text            yesnoCursorShow__14dFile_select_cFv
- */
 void dFile_select_c::yesnoCursorShow() {
     if (field_0x0268 == 0xff) {
         return;
@@ -1832,7 +1733,6 @@ void dFile_select_c::yesnoCursorShow() {
     mSelIcon->setParam(0.96f, 0.84f, 0.06f, 0.5f, 0.5f);
 }
 
-/* 8018929C-801893E4 183BDC 0148+00 1/0 0/0 0/0 .text            YesNoSelect__14dFile_select_cFv */
 void dFile_select_c::YesNoSelect() {
     mStick->checkTrigger();
     if (mDoCPd_c::getTrigA(0) != 0) {
@@ -1862,7 +1762,6 @@ void dFile_select_c::YesNoSelect() {
     }
 }
 
-/* 801893E4-8018978C 183D24 03A8+00 1/1 0/0 0/0 .text yesNoSelectStart__14dFile_select_cFv */
 void dFile_select_c::yesNoSelectStart() {
     if (field_0x0268 != 0) {
         mDoAud_seStart(Z2SE_SY_CURSOR_OK, 0, 0, 0);
@@ -1920,7 +1819,6 @@ void dFile_select_c::yesNoSelectStart() {
     }
 }
 
-/* 8018978C-80189904 1840CC 0178+00 3/3 0/0 0/0 .text yesnoSelectAnmSet__14dFile_select_cFv */
 void dFile_select_c::yesnoSelectAnmSet() {
     if (field_0x0269 != 0xff) {
         yesnoWakuAlpahAnmInit(field_0x0269, 0xff, 0, g_fsHIO.field_0x0008);
@@ -1938,7 +1836,6 @@ void dFile_select_c::yesnoSelectAnmSet() {
     }
 }
 
-/* 80189904-80189A24 184244 0120+00 2/2 0/0 0/0 .text yesnoCancelAnmSet__14dFile_select_cFv */
 void dFile_select_c::yesnoCancelAnmSet() {
     mDoAud_seStart(Z2SE_SY_CURSOR_CANCEL, 0, 0, 0);
     mSelIcon->setAlphaRate(0.0f);
@@ -1958,8 +1855,6 @@ void dFile_select_c::yesnoCancelAnmSet() {
     field_0x026f = 27;
 }
 
-/* 80189A24-80189BA8 184364 0184+00 1/0 0/0 0/0 .text            YesNoCancelMove__14dFile_select_cFv
- */
 void dFile_select_c::YesNoCancelMove() {
     bool txtChanged = headerTxtChangeAnm();
     bool moveAnimated = yesnoMenuMoveAnm();
@@ -2000,7 +1895,6 @@ void dFile_select_c::YesNoCancelMove() {
     }
 }
 
-/* 80189BA8-80189C14 1844E8 006C+00 1/0 0/0 0/0 .text yesNoCursorMoveAnm__14dFile_select_cFv */
 void dFile_select_c::yesNoCursorMoveAnm() {
     bool moveAnimated = yesnoSelectMoveAnm();
     bool wakuAnimated = yesnoWakuAlpahAnm(field_0x0269);
@@ -2010,7 +1904,6 @@ void dFile_select_c::yesNoCursorMoveAnm() {
     }
 }
 
-/* 80189C14-80189E28 184554 0214+00 1/0 0/0 0/0 .text CmdExecPaneMove0__14dFile_select_cFv */
 void dFile_select_c::CmdExecPaneMove0() {
     int txtChanged = headerTxtChangeAnm();
     int unaff_r29;
@@ -2055,7 +1948,6 @@ void dFile_select_c::CmdExecPaneMove0() {
     }
 }
 
-/* 80189E28-80189F68 184768 0140+00 1/0 0/0 0/0 .text            CommandExec__14dFile_select_cFv */
 void dFile_select_c::CommandExec() {
     switch (field_0x026e) {
     case 1:
@@ -2078,8 +1970,6 @@ void dFile_select_c::CommandExec() {
     field_0x03ac = g_fsHIO.field_0x000c;
 }
 
-/* 80189F68-80189FFC 1848A8 0094+00 1/0 0/0 0/0 .text            DataEraseWait__14dFile_select_cFv
- */
 void dFile_select_c::DataEraseWait() {
     if (field_0x03ac != 0) {
         field_0x03ac--;
@@ -2091,8 +1981,6 @@ void dFile_select_c::DataEraseWait() {
     }
 }
 
-/* 80189FFC-8018A194 18493C 0198+00 1/0 0/0 0/0 .text            DataEraseWait2__14dFile_select_cFv
- */
 void dFile_select_c::DataEraseWait2() {
     if (field_0x03ac != 0) {
         mDoAud_seStartLevel(Z2SE_SY_FILE_DELETE_LEVEL, 0, 0, 0);
@@ -2115,8 +2003,6 @@ void dFile_select_c::DataEraseWait2() {
     }
 }
 
-/* 8018A194-8018A2DC 184AD4 0148+00 1/0 0/0 0/0 .text            ErasePaneMoveOk__14dFile_select_cFv
- */
 void dFile_select_c::ErasePaneMoveOk() {
     int iVar1 = field_0x014c[mSelectNum]->alphaAnime(g_fsHIO.field_0x0009, 0xff, 0, 0);
     int iVar2;
@@ -2137,7 +2023,6 @@ void dFile_select_c::ErasePaneMoveOk() {
     }
 }
 
-/* 8018A2DC-8018A3B0 184C1C 00D4+00 1/0 0/0 0/0 .text ErasePaneMoveOk2__14dFile_select_cFv */
 void dFile_select_c::ErasePaneMoveOk2() {
     bool txtChanged = headerTxtChangeAnm();
     bool iVar2 =
@@ -2152,8 +2037,6 @@ void dFile_select_c::ErasePaneMoveOk2() {
     }
 }
 
-/* 8018A3B0-8018A444 184CF0 0094+00 1/0 0/0 0/0 .text eraseEndBackSelectWait__14dFile_select_cFv
- */
 void dFile_select_c::eraseEndBackSelectWait() {
     if (field_0x03ac != 0) {
         field_0x03ac--;
@@ -2165,7 +2048,6 @@ void dFile_select_c::eraseEndBackSelectWait() {
     }
 }
 
-/* 8018A444-8018A4D0 184D84 008C+00 1/0 0/0 0/0 .text eraseEndBackSelect__14dFile_select_cFv */
 void dFile_select_c::eraseEndBackSelect() {
     bool txtChanged = headerTxtChangeAnm();
     bool dataMoved = selectDataMoveAnm();
@@ -2177,7 +2059,6 @@ void dFile_select_c::eraseEndBackSelect() {
     }
 }
 
-/* 8018A4D0-8018A564 184E10 0094+00 1/0 0/0 0/0 .text            DataCopyWait__14dFile_select_cFv */
 void dFile_select_c::DataCopyWait() {
     if (field_0x03ac != 0) {
         field_0x03ac--;
@@ -2189,8 +2070,6 @@ void dFile_select_c::DataCopyWait() {
     }
 }
 
-/* 8018A564-8018A6F8 184EA4 0194+00 1/0 0/0 0/0 .text            DataCopyWait2__14dFile_select_cFv
- */
 void dFile_select_c::DataCopyWait2() {
     if (field_0x03ac != 0) {
         mDoAud_seStartLevel(Z2SE_SY_FILE_COPY_LEVEL, 0, 0, 0);
@@ -2216,8 +2095,6 @@ void dFile_select_c::DataCopyWait2() {
     }
 }
 
-/* 8018A6F8-8018A868 185038 0170+00 1/0 0/0 0/0 .text            copyPaneMoveOk__14dFile_select_cFv
- */
 void dFile_select_c::copyPaneMoveOk() {
     bool iVar1 = field_0x0158[field_0x026d]->alphaAnime(g_fsHIO.field_0x0009, 0xff, 0, 0);
     bool iVar2 = field_0x0158[mSelectNum]->alphaAnime(g_fsHIO.field_0x0009, 0xff, 0, 0);
@@ -2238,8 +2115,6 @@ void dFile_select_c::copyPaneMoveOk() {
     }
 }
 
-/* 8018A868-8018A960 1851A8 00F8+00 1/0 0/0 0/0 .text            copyPaneMoveOk2__14dFile_select_cFv
- */
 void dFile_select_c::copyPaneMoveOk2() {
     bool iVar1 = headerTxtChangeAnm();
     bool iVar2;
@@ -2255,7 +2130,6 @@ void dFile_select_c::copyPaneMoveOk2() {
     }
 }
 
-/* 8018A960-8018AAC4 1852A0 0164+00 1/0 0/0 0/0 .text ErrorMsgPaneMove__14dFile_select_cFv */
 void dFile_select_c::ErrorMsgPaneMove() {
     int txtChanged = headerTxtChangeAnm();
     int unaff_r30;
@@ -2286,7 +2160,6 @@ void dFile_select_c::ErrorMsgPaneMove() {
     }
 }
 
-/* 8018AAC4-8018AC3C 185404 0178+00 1/0 0/0 0/0 .text backDatSelPaneMove__14dFile_select_cFv */
 void dFile_select_c::backDatSelPaneMove() {
     int headerTxtAnm = headerTxtChangeAnm();
     int menuMoved = menuMoveAnm();
@@ -2309,8 +2182,6 @@ void dFile_select_c::backDatSelPaneMove() {
     }
 }
 
-/* 8018AC3C-8018AD38 18557C 00FC+00 1/0 0/0 0/0 .text            backDatSelWait__14dFile_select_cFv
- */
 void dFile_select_c::backDatSelWait() {
     if (field_0x03ac != 0) {
         field_0x03ac--;
@@ -2326,8 +2197,6 @@ void dFile_select_c::backDatSelWait() {
     }
 }
 
-/* 8018AD38-8018AD9C 185678 0064+00 1/0 0/0 0/0 .text            backDatSelWait2__14dFile_select_cFv
- */
 void dFile_select_c::backDatSelWait2() {
     if (field_0x03ac != 0) {
         field_0x03ac--;
@@ -2338,12 +2207,10 @@ void dFile_select_c::backDatSelWait2() {
     }
 }
 
-/* 8018AD9C-8018ADA0 1856DC 0004+00 1/0 0/0 0/0 .text            nextModeWait__14dFile_select_cFv */
 void dFile_select_c::nextModeWait() {
     /* empty function */
 }
 
-/* 8018ADA0-8018BEE0 1856E0 1140+00 1/1 0/0 0/0 .text            screenSet__14dFile_select_cFv */
 void dFile_select_c::screenSet() {
     static u64 l_tagName0[3] = {'w_sel_00', 'w_sel_01', 'w_sel_02'};
     static u64 l_tagName3[3] = {'w_moyo00', 'w_moyo01', 'w_moyo02'};
@@ -2590,7 +2457,6 @@ void dFile_select_c::screenSet() {
     field_0x2378->setAlpha(0);
 }
 
-/* 8018BF2C-8018C524 18686C 05F8+00 1/1 0/0 0/0 .text screenSetCopySel__14dFile_select_cFv */
 void dFile_select_c::screenSetCopySel() {
     static u64 l_tagName000[2] = {'w_sel_01', 'w_sel_02'};
     static u64 l_tagName001[2] = {'w_moyo01', 'w_moyo02'};
@@ -2670,8 +2536,6 @@ void dFile_select_c::screenSetCopySel() {
     mCpSel.field_0x08 = false;
 }
 
-/* 8018C524-8018C8F4 186E64 03D0+00 1/1 0/0 0/0 .text            screenSetYesNo__14dFile_select_cFv
- */
 void dFile_select_c::screenSetYesNo() {
     static u64 l_tagName012[2] = {'w_no_n', 'w_yes_n'};
     static u64 l_tagName013[2] = {'w_no_t', 'w_yes_t'};
@@ -2729,8 +2593,6 @@ void dFile_select_c::screenSetYesNo() {
     }
 }
 
-/* 8018C8F4-8018CCD0 187234 03DC+00 1/1 0/0 0/0 .text            screenSet3Menu__14dFile_select_cFv
- */
 void dFile_select_c::screenSet3Menu() {
     static u64 l_tagName6[3] = {'w_sat_mo', 'w_del_mo', 'w_cop_mo'};
     static u64 l_tagName7[3] = {'w_sat_g', 'w_del_g', 'w_cop_g'};
@@ -2790,8 +2652,6 @@ void dFile_select_c::screenSet3Menu() {
     }
 }
 
-/* 8018CCD0-8018CE38 187610 0168+00 1/1 0/0 0/0 .text            screenSetDetail__14dFile_select_cFv
- */
 void dFile_select_c::screenSetDetail() {
     mSelDt.ScrDt = new J2DScreen();
     JUT_ASSERT(5622, mSelDt.ScrDt != NULL);
@@ -2808,7 +2668,6 @@ void dFile_select_c::screenSetDetail() {
     mSelDt.ScrDt->search('d_win_n')->setUserInfo('n_43');
 }
 
-/* 8018CE38-8018CF50 187778 0118+00 2/2 0/0 0/0 .text            setWakuAnm__14dFile_select_cFv */
 void dFile_select_c::setWakuAnm() {
     field_0x0098->setFrame(3000.0f);
     for (int i = 0; i < 3; i++) {
@@ -2824,7 +2683,6 @@ void dFile_select_c::setWakuAnm() {
     }
 }
 
-/* 8018CF50-8018D044 187890 00F4+00 1/1 0/0 0/0 .text            displayInit__14dFile_select_cFv */
 void dFile_select_c::displayInit() {
     field_0x03b1 = 0;
     mSelectEnd = false;
@@ -2851,7 +2709,6 @@ void dFile_select_c::displayInit() {
     field_0x0271 = 0;
 }
 
-/* 8018D044-8018D0E4 187984 00A0+00 3/3 0/0 0/0 .text            setSaveData__14dFile_select_cFv */
 void dFile_select_c::setSaveData() {
     dSv_save_c* pSave = (dSv_save_c*)mSave;
     for (int i = 0; i < 3; i++) {
@@ -2867,7 +2724,6 @@ void dFile_select_c::setSaveData() {
     }
 }
 
-/* 8018D0E4-8018D25C 187A24 0178+00 20/20 0/0 0/0 .text headerTxtSet__14dFile_select_cFUsUcUc */
 void dFile_select_c::headerTxtSet(u16 param_1, u8 param_2, u8 param_3) {
     static f32 fontsize[2] = {21.0f, 27.0f};
 #if VERSION == VERSION_GCN_JPN
@@ -2898,7 +2754,6 @@ void dFile_select_c::headerTxtSet(u16 param_1, u8 param_2, u8 param_3) {
     }
 }
 
-/* 8018D25C-8018D344 187B9C 00E8+00 21/21 0/0 0/0 .text headerTxtChangeAnm__14dFile_select_cFv */
 bool dFile_select_c::headerTxtChangeAnm() {
     if (field_0x021d != 0) {
         return true;
@@ -2920,7 +2775,6 @@ bool dFile_select_c::headerTxtChangeAnm() {
     }
 }
 
-/* 8018D344-8018D3A0 187C84 005C+00 7/7 0/0 0/0 .text modoruTxtChange__14dFile_select_cFUc */
 void dFile_select_c::modoruTxtChange(u8 param_1) {
     if (param_1 != 0) {
         fopMsgM_messageGet(field_0x0250, 981);
@@ -2931,8 +2785,6 @@ void dFile_select_c::modoruTxtChange(u8 param_1) {
     }
 }
 
-/* 8018D3A0-8018D41C 187CE0 007C+00 11/11 0/0 0/0 .text modoruTxtDispAnmInit__14dFile_select_cFUc
- */
 void dFile_select_c::modoruTxtDispAnmInit(u8 param_1) {
     field_0x024a = param_1;
     if ((param_1 != 0 || field_0x0240->getAlpha() != 0) &&
@@ -2946,7 +2798,6 @@ void dFile_select_c::modoruTxtDispAnmInit(u8 param_1) {
     }
 }
 
-/* 8018D41C-8018D4F8 187D5C 00DC+00 11/11 0/0 0/0 .text modoruTxtDispAnm__14dFile_select_cFv */
 bool dFile_select_c::modoruTxtDispAnm() {
     bool iVar1;
     bool iVar2;
@@ -2964,8 +2815,6 @@ bool dFile_select_c::modoruTxtDispAnm() {
     return false;
 }
 
-/* 8018D4F8-8018D574 187E38 007C+00 13/13 0/0 0/0 .text ketteiTxtDispAnmInit__14dFile_select_cFUc
- */
 void dFile_select_c::ketteiTxtDispAnmInit(u8 param_1) {
     field_0x024b = param_1;
     if ((param_1 != 0 || field_0x0244->getAlpha() != 0) &&
@@ -2979,7 +2828,6 @@ void dFile_select_c::ketteiTxtDispAnmInit(u8 param_1) {
     }
 }
 
-/* 8018D574-8018D650 187EB4 00DC+00 12/12 0/0 0/0 .text ketteiTxtDispAnm__14dFile_select_cFv */
 bool dFile_select_c::ketteiTxtDispAnm() {
     bool iVar1;
     bool iVar2;
@@ -2997,8 +2845,6 @@ bool dFile_select_c::ketteiTxtDispAnm() {
     return false;
 }
 
-/* 8018D650-8018D68C 187F90 003C+00 8/8 0/0 0/0 .text
- * selectWakuAlpahAnmInit__14dFile_select_cFUcUcUcUc            */
 void dFile_select_c::selectWakuAlpahAnmInit(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     field_0x0164[param_1]->alphaAnimeStart(0);
     field_0x0170[param_1]->alphaAnimeStart(0);
@@ -3008,7 +2854,6 @@ void dFile_select_c::selectWakuAlpahAnmInit(u8 param_1, u8 param_2, u8 param_3, 
     field_0x019a[param_1] = param_4;
 }
 
-/* 8018D68C-8018D764 187FCC 00D8+00 8/8 0/0 0/0 .text selectWakuAlpahAnm__14dFile_select_cFUc */
 bool dFile_select_c::selectWakuAlpahAnm(u8 param_1) {
     if (param_1 == 0xff) {
         return true;
@@ -3023,7 +2868,6 @@ bool dFile_select_c::selectWakuAlpahAnm(u8 param_1) {
     return rv;
 }
 
-/* 8018D764-8018D884 1880A4 0120+00 6/6 0/0 0/0 .text selFileCursorShow__14dFile_select_cFv */
 void dFile_select_c::selFileCursorShow() {
     field_0x0164[mSelectNum]->setAlpha(0xff);
     field_0x0170[mSelectNum]->setAlpha(0xff);
@@ -3035,8 +2879,6 @@ void dFile_select_c::selFileCursorShow() {
     mSelIcon->setParam(0.96f, 0.94f, 0.03f, 0.7f, 0.7f);
 }
 
-/* 8018D884-8018D8C8 1881C4 0044+00 1/1 0/0 0/0 .text
- * menuWakuAlpahAnmInit__14dFile_select_cFUcUcUcUc              */
 void dFile_select_c::menuWakuAlpahAnmInit(u8 i_idx, u8 param_1, u8 param_2, u8 param_3) {
     mpPaneAlpha1[i_idx]->alphaAnimeStart(0);
     mpPaneAlpha2[i_idx]->alphaAnimeStart(0);
@@ -3047,7 +2889,6 @@ void dFile_select_c::menuWakuAlpahAnmInit(u8 i_idx, u8 param_1, u8 param_2, u8 p
     mpPaneMgr2[i_idx]->colorAnimeStart(0);
 }
 
-/* 8018D8C8-8018DA10 188208 0148+00 1/1 0/0 0/0 .text menuWakuAlpahAnm__14dFile_select_cFUc */
 bool dFile_select_c::menuWakuAlpahAnm(u8 param_1) {
     bool rv = false;
     bool iVar1 = mpPaneAlpha1[param_1]->alphaAnime(field_0x038e[param_1], field_0x0388[param_1],
@@ -3066,8 +2907,6 @@ bool dFile_select_c::menuWakuAlpahAnm(u8 param_1) {
     return rv;
 }
 
-/* 8018DA10-8018DB80 188350 0170+00 4/4 0/0 0/0 .text            menuCursorShow__14dFile_select_cFv
- */
 void dFile_select_c::menuCursorShow() {
     if (mSelectMenuNum == 0xff) {
         return;
@@ -3084,8 +2923,6 @@ void dFile_select_c::menuCursorShow() {
 }
 
 
-/* 8018DB80-8018DBCC 1884C0 004C+00 2/2 0/0 0/0 .text
- * yesnoWakuAlpahAnmInit__14dFile_select_cFUcUcUcUc             */
 void dFile_select_c::yesnoWakuAlpahAnmInit(u8 param_1, u8 param_2, u8 param_3, u8 param_4) {
     if (param_1 != 0xff) {
         field_0x01a0[param_1]->alphaAnimeStart(0);
@@ -3098,7 +2935,6 @@ void dFile_select_c::yesnoWakuAlpahAnmInit(u8 param_1, u8 param_2, u8 param_3, u
     }
 }
 
-/* 8018DBCC-8018DD38 18850C 016C+00 4/4 0/0 0/0 .text yesnoWakuAlpahAnm__14dFile_select_cFUc */
 bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
     bool rv = false;
     bool iVar5 = true;
@@ -3123,7 +2959,6 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
     return rv;
 }
 
-/* 8018DD38-8018DEBC 188678 0184+00 0/0 1/1 0/0 .text            _draw__14dFile_select_cFv */
 void dFile_select_c::_draw() {
     if (!mHasDrawn) {
         dComIfGd_set2DOpa(&fileSel);
@@ -3158,13 +2993,11 @@ void dFile_select_c::_draw() {
     }
 }
 
-/* 8018DEBC-8018DEF4 1887FC 0038+00 1/0 0/0 0/0 .text            draw__15dDlst_FileSel_cFv */
 void dDlst_FileSel_c::draw() {
     J2DGrafContext* graf = dComIfGp_getCurrentGrafPort();
     Scr->draw(0.0f, 0.0f, graf);
 }
 
-/* 8018DEF4-8018DFFC 188834 0108+00 1/0 0/0 0/0 .text            draw__17dDlst_FileSelDt_cFv */
 void dDlst_FileSelDt_c::draw() {
     J2DGrafContext* grafContext = dComIfGp_getCurrentGrafPort();
     MtxP local_98 = (MtxP)&mpPane->getGlbMtx()[0][0];
@@ -3179,7 +3012,6 @@ void dDlst_FileSelDt_c::draw() {
     ScrDt->draw(0.0f, 0.0f, grafContext);
 }
 
-/* 8018DFFC-8018E0C0 18893C 00C4+00 1/0 0/0 0/0 .text            draw__17dDlst_FileSelCp_cFv */
 void dDlst_FileSelCp_c::draw() {
     J2DGrafContext* grafContext = dComIfGp_getCurrentGrafPort();
     MtxP local_98 = (MtxP)&mpPane1->getGlbMtx()[0][0];
@@ -3190,19 +3022,16 @@ void dDlst_FileSelCp_c::draw() {
     Scr->draw(0.0f, 0.0f, grafContext);
 }
 
-/* 8018E0C0-8018E0F8 188A00 0038+00 1/0 0/0 0/0 .text            draw__17dDlst_FileSelYn_cFv */
 void dDlst_FileSelYn_c::draw() {
     J2DGrafContext* graf = dComIfGp_getCurrentGrafPort();
     ScrYn->draw(0.0f, 0.0f, graf);
 }
 
-/* 8018E0F8-8018E130 188A38 0038+00 1/0 0/0 0/0 .text            draw__17dDlst_FileSel3m_cFv */
 void dDlst_FileSel3m_c::draw() {
     J2DGrafContext* graf = dComIfGp_getCurrentGrafPort();
     Scr3m->draw(0.0f, 0.0f, graf);
 }
 
-/* 8018E130-8018E1C0 188A70 0090+00 4/4 0/0 0/0 .text errorMoveAnmInitSet__14dFile_select_cFii */
 void dFile_select_c::errorMoveAnmInitSet(int param_1, int param_2) {
     field_0x012c->setAnimation(field_0x0090);
     field_0x0130 = param_1;
@@ -3212,7 +3041,6 @@ void dFile_select_c::errorMoveAnmInitSet(int param_1, int param_2) {
     field_0x014b = true;
 }
 
-/* 8018E1C0-8018E2B4 188B00 00F4+00 5/5 0/0 0/0 .text            errorMoveAnm__14dFile_select_cFv */
 bool dFile_select_c::errorMoveAnm() {
     if (field_0x0130 != field_0x0134) {
         if (field_0x0130 < field_0x0134) {
@@ -3238,8 +3066,6 @@ bool dFile_select_c::errorMoveAnm() {
     }
 }
 
-/* 8018E2B4-8018E4CC 188BF4 0218+00 1/1 0/0 0/0 .text            errDispInitSet__14dFile_select_cFii
- */
 void dFile_select_c::errDispInitSet(int param_1, int param_2) {
     if (param_2 != 0) {
         headerTxtSet(0xffff, 0, 0);
@@ -3278,7 +3104,6 @@ void dFile_select_c::errDispInitSet(int param_1, int param_2) {
     field_0x0271 = 22;
 }
 
-/* 803BB12C-803BB270 01824C 0144+00 1/2 0/0 0/0 .data            MemCardCheckProc */
 typedef void (dFile_select_c::*MemCardCheckFuncT)();
 static MemCardCheckFuncT MemCardCheckProc[27] = {
     &dFile_select_c::MemCardStatCheck,
@@ -3310,12 +3135,10 @@ static MemCardCheckFuncT MemCardCheckProc[27] = {
     &dFile_select_c::MemCardSaveDataClear,
 };
 
-/* 8018E4CC-8018E504 188E0C 0038+00 1/0 0/0 0/0 .text MemCardCheckMain__14dFile_select_cFv */
 void dFile_select_c::MemCardCheckMain() {
     (this->*MemCardCheckProc[field_0x0271])();
 }
 
-/* 8018E504-8018E7C4 188E44 02C0+00 2/0 0/0 0/0 .text MemCardStatCheck__14dFile_select_cFv */
 void dFile_select_c::MemCardStatCheck() {
     u32 status = mDoMemCd_getStatus(0);
     if (status == 14) {
@@ -3381,8 +3204,6 @@ void dFile_select_c::MemCardStatCheck() {
     }
 }
 
-/* 8018E7C4-8018E93C 189104 0178+00 1/0 0/0 0/0 .text            MemCardLoadWait__14dFile_select_cFv
- */
 void dFile_select_c::MemCardLoadWait() {
     int loadRes = mDoMemCd_LoadSync(mSave, sizeof(mSave), 0);
     if (loadRes == 0) {
@@ -3419,7 +3240,6 @@ void dFile_select_c::MemCardLoadWait() {
     }
 }
 
-/* 8018E93C-8018E9B0 18927C 0074+00 1/0 0/0 0/0 .text MemCardErrMsgWaitKey__14dFile_select_cFv */
 void dFile_select_c::MemCardErrMsgWaitKey() {
     if (cAPICPad_ANY_BUTTON(0) != 0 && dMeter2Info_getMsgKeyWaitTimer() == 0) {
         if (field_0x0290 != NULL) {
@@ -3429,13 +3249,10 @@ void dFile_select_c::MemCardErrMsgWaitKey() {
     }
 }
 
-/* 8018E9B0-8018E9D4 1892F0 0024+00 1/0 0/0 0/0 .text noFileSpaceDispInit__14dFile_select_cFv */
 void dFile_select_c::noFileSpaceDispInit() {
     errorTxtSet(10);
 }
 
-/* 8018E9D4-8018EA3C 189314 0068+00 1/0 0/0 0/0 .text MemCardNoFileSpaceDisp__14dFile_select_cFv
- */
 void dFile_select_c::MemCardNoFileSpaceDisp() {
     if (errorTxtChangeAnm() == true) {
         field_0x0290 = &dFile_select_c::iplSelDispInit;
@@ -3444,8 +3261,6 @@ void dFile_select_c::MemCardNoFileSpaceDisp() {
     }
 }
 
-/* 8018EA3C-8018EA90 18937C 0054+00 1/0 0/0 0/0 .text            iplSelDispInit__14dFile_select_cFv
- */
 void dFile_select_c::iplSelDispInit() {
     errorTxtSet(18);
     ketteiTxtDispAnmInit(1);
@@ -3453,8 +3268,6 @@ void dFile_select_c::iplSelDispInit() {
     yesnoMenuMoveAnmInitSet(0x473, 0x47d);
 }
 
-/* 8018EA90-8018EB10 1893D0 0080+00 1/0 0/0 0/0 .text MemCardGotoIPLSelectDisp__14dFile_select_cFv
- */
 void dFile_select_c::MemCardGotoIPLSelectDisp() {
     bool txhChanged = errorTxtChangeAnm();
     bool yesNoMenuMoved = yesnoMenuMoveAnm();
@@ -3465,7 +3278,6 @@ void dFile_select_c::MemCardGotoIPLSelectDisp() {
     }
 }
 
-/* 8018EB10-8018EBCC 189450 00BC+00 1/0 0/0 0/0 .text MemCardGotoIPLSelect__14dFile_select_cFv */
 void dFile_select_c::MemCardGotoIPLSelect() {
     if (errYesNoSelect()) {
         if (field_0x0268) {
@@ -3482,8 +3294,6 @@ void dFile_select_c::MemCardGotoIPLSelect() {
     }
 }
 
-/* 8018EBCC-8018EC4C 18950C 0080+00 1/0 0/0 0/0 .text            MemCardGotoIPL__14dFile_select_cFv
- */
 void dFile_select_c::MemCardGotoIPL() {
     if (field_0x03ac != 0) {
         field_0x03ac--;
@@ -3495,7 +3305,6 @@ void dFile_select_c::MemCardGotoIPL() {
     }
 }
 
-/* 8018EC4C-8018ECBC 18958C 0070+00 7/1 0/0 0/0 .text noSaveSelDispInit__14dFile_select_cFv */
 void dFile_select_c::noSaveSelDispInit() {
     errorTxtSet(19);
     field_0x0282 = false;
@@ -3507,7 +3316,6 @@ void dFile_select_c::noSaveSelDispInit() {
     }
 }
 
-/* 8018ECBC-8018ED80 1895FC 00C4+00 1/0 0/0 0/0 .text MemCardNoSaveSelDisp__14dFile_select_cFv */
 void dFile_select_c::MemCardNoSaveSelDisp() {
     bool iVar1 = errorTxtChangeAnm();
     bool iVar3 = true;
@@ -3528,8 +3336,6 @@ void dFile_select_c::MemCardNoSaveSelDisp() {
     }
 }
 
-/* 8018ED80-8018EF5C 1896C0 01DC+00 1/0 0/0 0/0 .text
- * MemCardErrMsgWaitNoSaveSel__14dFile_select_cFv               */
 void dFile_select_c::MemCardErrMsgWaitNoSaveSel() {
     if (!errYesNoSelect()) {
         return;
@@ -3569,8 +3375,6 @@ void dFile_select_c::MemCardErrMsgWaitNoSaveSel() {
     }
 }
 
-/* 8018EF5C-8018EFAC 18989C 0050+00 1/1 0/0 0/0 .text formatYesSelDispInitSet__14dFile_select_cFv
- */
 void dFile_select_c::formatYesSelDispInitSet() {
     errorTxtSet(14);
     field_0x0268 = 0;
@@ -3579,8 +3383,6 @@ void dFile_select_c::formatYesSelDispInitSet() {
     field_0x0271 = 6;
 }
 
-/* 8018EFAC-8018EFFC 1898EC 0050+00 2/2 0/0 0/0 .text formatNoSelDispInitSet__14dFile_select_cFv
- */
 void dFile_select_c::formatNoSelDispInitSet() {
     errorTxtSet(17);
     field_0x0280 = false;
@@ -3588,8 +3390,6 @@ void dFile_select_c::formatNoSelDispInitSet() {
     field_0x0271 = 7;
 }
 
-/* 8018EFFC-8018F080 18993C 0084+00 1/0 0/0 0/0 .text MemCardFormatYesSelDisp__14dFile_select_cFv
- */
 void dFile_select_c::MemCardFormatYesSelDisp() {
     bool iVar1 = errorTxtChangeAnm();
     bool iVar2 = yesnoSelectMoveAnm();
@@ -3600,8 +3400,6 @@ void dFile_select_c::MemCardFormatYesSelDisp() {
     }
 }
 
-/* 8018F080-8018F128 1899C0 00A8+00 1/0 0/0 0/0 .text MemCardFormatNoSelDisp__14dFile_select_cFv
- */
 void dFile_select_c::MemCardFormatNoSelDisp() {
     bool iVar1 = errorTxtChangeAnm();
     bool iVar2 = yesnoMenuMoveAnm();
@@ -3613,8 +3411,6 @@ void dFile_select_c::MemCardFormatNoSelDisp() {
     }
 }
 
-/* 8018F128-8018F17C 189A68 0054+00 1/0 0/0 0/0 .text
- * MemCardErrMsgWaitFormatSel__14dFile_select_cFv               */
 void dFile_select_c::MemCardErrMsgWaitFormatSel() {
     if (errYesNoSelect()) {
         if (field_0x0268) {
@@ -3625,8 +3421,6 @@ void dFile_select_c::MemCardErrMsgWaitFormatSel() {
     }
 }
 
-/* 8018F17C-8018F1CC 189ABC 0050+00 1/1 0/0 0/0 .text formatYesSel2DispInitSet__14dFile_select_cFv
- */
 void dFile_select_c::formatYesSel2DispInitSet() {
     errorTxtSet(13);
     field_0x0280 = false;
@@ -3634,8 +3428,6 @@ void dFile_select_c::formatYesSel2DispInitSet() {
     field_0x0271 = 9;
 }
 
-/* 8018F1CC-8018F228 189B0C 005C+00 1/0 0/0 0/0 .text
- * MemCardErrMsgWaitFormatSel2__14dFile_select_cFv              */
 void dFile_select_c::MemCardErrMsgWaitFormatSel2() {
     if (errYesNoSelect()) {
         if (field_0x0268) {
@@ -3647,8 +3439,6 @@ void dFile_select_c::MemCardErrMsgWaitFormatSel2() {
     }
 }
 
-/* 8018F228-8018F2A4 189B68 007C+00 1/0 0/0 0/0 .text MemCardFormatYesSel2Disp__14dFile_select_cFv
- */
 void dFile_select_c::MemCardFormatYesSel2Disp() {
     bool iVar1 = errorTxtChangeAnm();
     bool iVar2 = yesnoMenuMoveAnm();
@@ -3659,8 +3449,6 @@ void dFile_select_c::MemCardFormatYesSel2Disp() {
     }
 }
 
-/* 8018F2A4-8018F304 189BE4 0060+00 1/0 0/0 0/0 .text            MemCardFormat__14dFile_select_cFv
- */
 void dFile_select_c::MemCardFormat() {
     if (field_0x03ac != 0) {
         field_0x03ac--;
@@ -3671,7 +3459,6 @@ void dFile_select_c::MemCardFormat() {
     }
 }
 
-/* 8018F304-8018F374 189C44 0070+00 1/0 0/0 0/0 .text MemCardFormatWait__14dFile_select_cFv */
 void dFile_select_c::MemCardFormatWait() {
     if (field_0x03ac != 0) {
         field_0x03ac--;
@@ -3685,7 +3472,6 @@ void dFile_select_c::MemCardFormatWait() {
     }
 }
 
-/* 8018F374-8018F400 189CB4 008C+00 1/0 0/0 0/0 .text MemCardFormatCheck__14dFile_select_cFv */
 void dFile_select_c::MemCardFormatCheck() {
     if (errorTxtChangeAnm() == true) {
         field_0x0284 = NULL;
@@ -3697,8 +3483,6 @@ void dFile_select_c::MemCardFormatCheck() {
     }
 }
 
-/* 8018F400-8018F488 189D40 0088+00 1/0 0/0 0/0 .text MemCardMakeGameFileSel__14dFile_select_cFv
- */
 void dFile_select_c::MemCardMakeGameFileSel() {
     if (errYesNoSelect()) {
         if (field_0x0268 != 0) {
@@ -3713,8 +3497,6 @@ void dFile_select_c::MemCardMakeGameFileSel() {
     }
 }
 
-/* 8018F488-8018F580 189DC8 00F8+00 1/0 0/0 0/0 .text
- * MemCardMakeGameFileSelDisp__14dFile_select_cFv               */
 void dFile_select_c::MemCardMakeGameFileSelDisp() {
     bool iVar1 = errorTxtChangeAnm();
     bool iVar2 = yesnoMenuMoveAnm();
@@ -3734,7 +3516,6 @@ void dFile_select_c::MemCardMakeGameFileSelDisp() {
     }
 }
 
-/* 8018F580-8018F5E0 189EC0 0060+00 1/0 0/0 0/0 .text MemCardMakeGameFile__14dFile_select_cFv */
 void dFile_select_c::MemCardMakeGameFile() {
     if (field_0x03ac != 0) {
         field_0x03ac--;
@@ -3745,8 +3526,6 @@ void dFile_select_c::MemCardMakeGameFile() {
     }
 }
 
-/* 8018F5E0-8018F650 189F20 0070+00 1/0 0/0 0/0 .text MemCardMakeGameFileWait__14dFile_select_cFv
- */
 void dFile_select_c::MemCardMakeGameFileWait() {
     if (field_0x03ac != 0) {
         field_0x03ac--;
@@ -3760,8 +3539,6 @@ void dFile_select_c::MemCardMakeGameFileWait() {
     }
 }
 
-/* 8018F650-8018F6DC 189F90 008C+00 1/0 0/0 0/0 .text MemCardMakeGameFileCheck__14dFile_select_cFv
- */
 void dFile_select_c::MemCardMakeGameFileCheck() {
     if (errorTxtChangeAnm() == 1) {
         field_0x0284 = NULL;
@@ -3773,8 +3550,6 @@ void dFile_select_c::MemCardMakeGameFileCheck() {
     }
 }
 
-/* 8018F6DC-8018F8D8 18A01C 01FC+00 1/0 0/0 0/0 .text MemCardMsgWindowInitOpen__14dFile_select_cFv
- */
 void dFile_select_c::MemCardMsgWindowInitOpen() {
     bool iVar1;
     if (field_0x021e == 0x0) {
@@ -3821,7 +3596,6 @@ void dFile_select_c::MemCardMsgWindowInitOpen() {
     }
 }
 
-/* 8018F8D8-8018F974 18A218 009C+00 1/0 0/0 0/0 .text MemCardMsgWindowOpen__14dFile_select_cFv */
 void dFile_select_c::MemCardMsgWindowOpen() {
     bool iVar1 = errorMoveAnm();
     bool iVar3 = true;
@@ -3837,7 +3611,6 @@ void dFile_select_c::MemCardMsgWindowOpen() {
     }
 }
 
-/* 8018F974-8018FA2C 18A2B4 00B8+00 1/0 0/0 0/0 .text MemCardMsgWindowClose__14dFile_select_cFv */
 void dFile_select_c::MemCardMsgWindowClose() {
     bool errorRes = errorMoveAnm();
     bool menuMoveRes = true;
@@ -3856,8 +3629,6 @@ void dFile_select_c::MemCardMsgWindowClose() {
     }
 }
 
-/* 8018FA2C-8018FB80 18A36C 0154+00 5/5 0/0 0/0 .text            errYesNoSelect__14dFile_select_cFv
- */
 bool dFile_select_c::errYesNoSelect() {
     bool rv = false;
     mStick->checkTrigger();
@@ -3885,7 +3656,6 @@ bool dFile_select_c::errYesNoSelect() {
     return rv;
 }
 
-/* 8018FB80-8018FBF8 18A4C0 0078+00 1/1 0/0 0/0 .text            errCurMove__14dFile_select_cFUc */
 void dFile_select_c::errCurMove(u8 param_1) {
     mDoAud_seStart(Z2SE_SY_MENU_CURSOR_COMMON, 0, param_1, 0);
     yesnoSelectAnmSet();
@@ -3893,8 +3663,6 @@ void dFile_select_c::errCurMove(u8 param_1) {
     field_0x0271 = 25;
 }
 
-/* 8018FBF8-8018FC64 18A538 006C+00 1/0 0/0 0/0 .text
- * MemCardErrYesNoCursorMoveAnm__14dFile_select_cFv             */
 void dFile_select_c::MemCardErrYesNoCursorMoveAnm() {
     bool moveRes = yesnoSelectMoveAnm();
     bool anmRes = yesnoWakuAlpahAnm(field_0x0269);
@@ -3904,7 +3672,6 @@ void dFile_select_c::MemCardErrYesNoCursorMoveAnm() {
     }
 }
 
-/* 8018FC64-8018FD30 18A5A4 00CC+00 9/9 0/0 0/0 .text            errorTxtSet__14dFile_select_cFUs */
 void dFile_select_c::errorTxtSet(u16 param_1) {
     if (param_1 == 0xffff) {
         strcpy(field_0x0140[field_0x0148 ^ 1], "");
@@ -3918,7 +3685,6 @@ void dFile_select_c::errorTxtSet(u16 param_1) {
     field_0x0149 = 0;
 }
 
-/* 8018FD30-8018FE18 18A670 00E8+00 9/9 0/0 0/0 .text errorTxtChangeAnm__14dFile_select_cFv */
 bool dFile_select_c::errorTxtChangeAnm() {
     if (field_0x0149) {
         return true;
@@ -3936,15 +3702,11 @@ bool dFile_select_c::errorTxtChangeAnm() {
     return rv;
 }
 
-/* 8018FE18-8018FE64 18A758 004C+00 1/1 0/0 0/0 .text            fileRecScaleAnm__14dFile_select_cFv
- */
 bool dFile_select_c::fileRecScaleAnm() {
     return field_0x00bc[mSelectNum]->scaleAnime(g_fsHIO.field_0x0005, field_0x00c8[0],
                                                 field_0x00d4[0], 0);
 }
 
-/* 8018FE64-8018FEF4 18A7A4 0090+00 2/2 0/0 0/0 .text fileRecScaleAnmInitSet2__14dFile_select_cFff
- */
 void dFile_select_c::fileRecScaleAnmInitSet2(f32 param_1, f32 param_2) {
     for (int i = 0; (int)i < 3; i++) {
         field_0x00c8[i] = param_1;
@@ -3961,7 +3723,6 @@ void dFile_select_c::fileRecScaleAnmInitSet2(f32 param_1, f32 param_2) {
     }
 }
 
-/* 8018FEF4-8018FF9C 18A834 00A8+00 2/2 0/0 0/0 .text fileRecScaleAnm2__14dFile_select_cFv */
 bool dFile_select_c::fileRecScaleAnm2() {
     bool scaleRes[3];
     for (int i = 0; i < 3; i++) {
@@ -3974,7 +3735,6 @@ bool dFile_select_c::fileRecScaleAnm2() {
     return false;
 }
 
-/* 8018FF9C-80190074 18A8DC 00D8+00 1/1 0/0 0/0 .text fileInfoScaleAnm__14dFile_select_cFv */
 bool dFile_select_c::fileInfoScaleAnm() {
     bool ret;
 
@@ -4004,7 +3764,6 @@ bool dFile_select_c::fileInfoScaleAnm() {
     return ret;
 }
 
-/* 80190074-80190124 18A9B4 00B0+00 5/5 0/0 0/0 .text nameMoveAnmInitSet__14dFile_select_cFii */
 void dFile_select_c::nameMoveAnmInitSet(int param_1, int param_2) {
     if (param_1 == 3359) {
         field_0x0128 = true;
@@ -4019,7 +3778,6 @@ void dFile_select_c::nameMoveAnmInitSet(int param_1, int param_2) {
     field_0x011c->animationTransform();
 }
 
-/* 80190124-80190208 18AA64 00E4+00 9/9 0/0 0/0 .text            nameMoveAnm__14dFile_select_cFv */
 bool dFile_select_c::nameMoveAnm() {
     if (field_0x0120 != field_0x0124) {
         if (field_0x0120 < field_0x0124) {
@@ -4049,7 +3807,6 @@ bool dFile_select_c::nameMoveAnm() {
     }
 }
 
-/* 80190208-80190254 18AB48 004C+00 1/0 0/0 0/0 .text MemCardSaveDataClear__14dFile_select_cFv */
 void dFile_select_c::MemCardSaveDataClear() {
     field_0x03b4 = mDoMemCd_SaveSync();
     if (field_0x03b4 != 0) {
@@ -4057,8 +3814,6 @@ void dFile_select_c::MemCardSaveDataClear() {
     }
 }
 
-/* 80190254-801902B8 18AB94 0064+00 2/2 0/0 0/0 .text            setInitSaveData__14dFile_select_cFv
- */
 void dFile_select_c::setInitSaveData() {
     for (int i = 0; i < 3; i++) {
         dComIfGs_setInitDataToCard((u8*)mSave, i);
@@ -4066,12 +3821,10 @@ void dFile_select_c::setInitSaveData() {
     }
 }
 
-/* 801902B8-801902F0 18ABF8 0038+00 2/2 0/0 0/0 .text            dataSave__14dFile_select_cFv */
 void dFile_select_c::dataSave() {
     mDoMemCd_save(mSave, sizeof(mSave), 0);
 }
 
-/* 801902F0-80190380 18AC30 0090+00 1/1 0/0 0/0 .text            __ct__16dFile_select3D_cFv */
 dFile_select3D_c::dFile_select3D_c() {
     mpHeap = NULL;
     mpModel = NULL;
@@ -4080,12 +3833,10 @@ dFile_select3D_c::dFile_select3D_c() {
     field_0x03b8.z = 1.0f;
 }
 
-/* 80190380-801903DC 18ACC0 005C+00 1/0 0/0 0/0 .text            __dt__16dFile_select3D_cFv */
 dFile_select3D_c::~dFile_select3D_c() {
     freeHeap();
 }
 
-/* 801903DC-8019049C 18AD1C 00C0+00 1/1 0/0 0/0 .text            _create__16dFile_select3D_cFUcUc */
 void dFile_select3D_c::_create(u8 i_mirrorIdx, u8 i_maskIdx) {
     JKRHeap* ppHeap;
 
@@ -4111,12 +3862,10 @@ void dFile_select3D_c::_create(u8 i_mirrorIdx, u8 i_maskIdx) {
     }
 }
 
-/* 8019049C-801904A0 18ADDC 0004+00 1/1 0/0 0/0 .text            _delete__16dFile_select3D_cFv */
 void dFile_select3D_c::_delete() {
     /* empty function */
 }
 
-/* 801904A0-801904E4 18ADE0 0044+00 2/2 0/0 0/0 .text            freeHeap__16dFile_select3D_cFv */
 void dFile_select3D_c::freeHeap() {
     if (mpHeap) {
         mDoExt_destroySolidHeap(mpHeap);
@@ -4125,7 +3874,6 @@ void dFile_select3D_c::freeHeap() {
     }
 }
 
-/* 801904E4-801905A8 18AE24 00C4+00 1/1 0/0 0/0 .text            _move__16dFile_select3D_cFv */
 void dFile_select3D_c::_move() {
     if (mpModel) {
         cXyz stack_20;
@@ -4138,7 +3886,6 @@ void dFile_select3D_c::_move() {
     }
 }
 
-/* 801905A8-8019065C 18AEE8 00B4+00 1/1 0/0 0/0 .text            draw__16dFile_select3D_cFv */
 void dFile_select3D_c::draw() {
     if (mpModel) {
         dComIfGd_setListItem3D();
@@ -4150,7 +3897,6 @@ void dFile_select3D_c::draw() {
     }
 }
 
-/* 8019065C-8019095C 18AF9C 0300+00 2/2 0/0 0/0 .text setJ3D__16dFile_select3D_cFPCcPCcPCc */
 void dFile_select3D_c::setJ3D(char const* param_0, char const* param_1, char const* param_2) {
     JKRArchive* archive;
     J3DAnmBase* anmBase;
@@ -4199,7 +3945,6 @@ void dFile_select3D_c::setJ3D(char const* param_0, char const* param_1, char con
     }
 }
 
-/* 8019095C-80190A14 18B29C 00B8+00 2/2 0/0 0/0 .text            set_mtx__16dFile_select3D_cFv */
 void dFile_select3D_c::set_mtx() {
     cXyz stack_8;
     f32 tmp = mPane->getScaleX();
@@ -4213,7 +3958,6 @@ void dFile_select3D_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80190A14-80190B44 18B354 0130+00 1/1 0/0 0/0 .text            animePlay__16dFile_select3D_cFv */
 void dFile_select3D_c::animePlay() {
     if (mBrkAnm) {
         field_0x03c4 += 1.0f;
@@ -4233,7 +3977,6 @@ void dFile_select3D_c::animePlay() {
     }
 }
 
-/* 80190B44-80190BA8 18B484 0064+00 1/1 0/0 0/0 .text            animeEntry__16dFile_select3D_cFv */
 void dFile_select3D_c::animeEntry() {
     if (mBrkAnm) {
         mBrkAnm->entry(mpModel->getModelData());
@@ -4244,7 +3987,6 @@ void dFile_select3D_c::animeEntry() {
     }
 }
 
-/* 80190BA8-80190D68 18B4E8 01C0+00 1/1 0/0 0/0 .text createMaskModel__16dFile_select3D_cFv */
 void dFile_select3D_c::createMaskModel() {
     const static f32 m_kamen_offset_x[5] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     const static f32 m_kamen_offset_y[5] = {0.0f, 0.0f, 0.0f, 5.0f, 5.0f};
@@ -4287,7 +4029,6 @@ void dFile_select3D_c::createMaskModel() {
     }
 }
 
-/* 80190D68-80190FE8 18B6A8 0280+00 1/1 0/0 0/0 .text createMirrorModel__16dFile_select3D_cFv */
 void dFile_select3D_c::createMirrorModel() {
     const static f32 m_mirror_offset_x[5] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     const static f32 m_mirror_offset_y[5] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
@@ -4336,7 +4077,6 @@ void dFile_select3D_c::createMirrorModel() {
     }
 }
 
-/* 80190FE8-801910D4 18B928 00EC+00 1/1 0/0 0/0 .text toItem3Dpos__16dFile_select3D_cFfffP4cXyz */
 #pragma push
 #pragma optimization_level 2
 void dFile_select3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* param_3) {
@@ -4355,7 +4095,6 @@ void dFile_select3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* 
 }
 #pragma pop
 
-/* 801910D4-80191130 18BA14 005C+00 1/1 0/0 0/0 .text calcViewMtx__16dFile_select3D_cFPA4_f */
 void dFile_select3D_c::calcViewMtx(Mtx param_0) {
     cMtx_lookAt(param_0, &cXyz(0.0f, 0.0f, -1000.0f), &cXyz::Zero, &cXyz(0.0f, 1.0f, 0.0f), 0);
 }

@@ -25,7 +25,6 @@ enum Type {
     /* 0xFF */ TYPE_TK_BALL_UNK = 0xFF,
 };
 
-/* 807BBFF8-807BC070 000078 0078+00 1/0 0/0 0/0 .text daE_TK_BALL_Draw__FP15e_tk_ball_class */
 static int daE_TK_BALL_Draw(e_tk_ball_class* i_this) {
     if (i_this->mSuspended) {
         return 1;
@@ -37,7 +36,6 @@ static int daE_TK_BALL_Draw(e_tk_ball_class* i_this) {
     return 1;
 }
 
-/* 807BC070-807BC1CC 0000F0 015C+00 3/3 0/0 0/0 .text simple_bg_check__FP15e_tk_ball_class */
 static int simple_bg_check(e_tk_ball_class* i_this) {
     fopAc_ac_c* actor = i_this;
 
@@ -67,8 +65,6 @@ static int simple_bg_check(e_tk_ball_class* i_this) {
     }
 }
 
-/* 807BC1CC-807BC3F8 00024C 022C+00 3/3 0/0 0/0 .text            impact_eff_set__FP15e_tk_ball_class
- */
 static void impact_eff_set(e_tk_ball_class* i_this) {
     cXyz pos = i_this->current.pos;
     pos.y += i_this->mArcHeight;
@@ -89,8 +85,6 @@ static void impact_eff_set(e_tk_ball_class* i_this) {
     }
 }
 
-/* 807BC3F8-807BCA18 000478 0620+00 1/1 0/0 0/0 .text            e_tk_ball_move__FP15e_tk_ball_class
- */
 static void e_tk_ball_move(e_tk_ball_class* i_this) {
     fopAc_ac_c* actor = i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -192,7 +186,6 @@ static void e_tk_ball_move(e_tk_ball_class* i_this) {
     }
 }
 
-/* 807BCA18-807BCAF4 000A98 00DC+00 1/1 0/0 0/0 .text e_tk_ball_return__FP15e_tk_ball_class */
 static void e_tk_ball_return(e_tk_ball_class* i_this) {
     switch (i_this->mMode) {
     case MODE_TK_BALL_INIT:
@@ -214,8 +207,6 @@ static void e_tk_ball_return(e_tk_ball_class* i_this) {
     }
 }
 
-/* 807BCAF4-807BCB94 000B74 00A0+00 1/1 0/0 0/0 .text            e_tk_ball_drop__FP15e_tk_ball_class
- */
 static void e_tk_ball_drop(e_tk_ball_class* i_this) {
     switch (i_this->mMode) {
     case MODE_TK_BALL_INIT:
@@ -233,7 +224,6 @@ static void e_tk_ball_drop(e_tk_ball_class* i_this) {
     }
 }
 
-/* 807BCB94-807BCF84 000C14 03F0+00 1/1 0/0 0/0 .text            action__FP15e_tk_ball_class */
 static void action(e_tk_ball_class* i_this) {
     fopAc_ac_c* actor = i_this;
 
@@ -299,7 +289,6 @@ static void action(e_tk_ball_class* i_this) {
     }
 }
 
-/* 807BCF84-807BD0C0 001004 013C+00 2/1 0/0 0/0 .text daE_TK_BALL_Execute__FP15e_tk_ball_class */
 static int daE_TK_BALL_Execute(e_tk_ball_class* i_this) {
     if (i_this->mSuspended) {
         return 1;
@@ -331,12 +320,10 @@ static int daE_TK_BALL_Execute(e_tk_ball_class* i_this) {
     return 1;
 }
 
-/* 807BD0C0-807BD0C8 001140 0008+00 1/0 0/0 0/0 .text daE_TK_BALL_IsDelete__FP15e_tk_ball_class */
 static int daE_TK_BALL_IsDelete(e_tk_ball_class* i_this) {
     return 1;
 }
 
-/* 807BD0C8-807BD13C 001148 0074+00 1/0 0/0 0/0 .text daE_TK_BALL_Delete__FP15e_tk_ball_class */
 static int daE_TK_BALL_Delete(e_tk_ball_class* i_this) {
     if (i_this->mType == TYPE_TK_BALL_WATER) {
         dComIfG_resDelete(&i_this->mPhaseReq, "E_tk");
@@ -349,7 +336,6 @@ static int daE_TK_BALL_Delete(e_tk_ball_class* i_this) {
     return 1;
 }
 
-/* 807BD13C-807BD1EC 0011BC 00B0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_tk_ball_class* a_this = static_cast<e_tk_ball_class*>(i_this);
     J3DModelData* ball_model;
@@ -368,8 +354,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     }
 }
 
-/* 807BD1EC-807BD4D4 00126C 02E8+00 1/0 0/0 0/0 .text            daE_TK_BALL_Create__FP10fopAc_ac_c
- */
 static int daE_TK_BALL_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph at_sph_src = {
         {
@@ -446,14 +430,12 @@ static int daE_TK_BALL_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 807BD658-807BD678 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_TK_BALL_Method */
 static actor_method_class l_daE_TK_BALL_Method = {
     (process_method_func)daE_TK_BALL_Create,  (process_method_func)daE_TK_BALL_Delete,
     (process_method_func)daE_TK_BALL_Execute, (process_method_func)daE_TK_BALL_IsDelete,
     (process_method_func)daE_TK_BALL_Draw,
 };
 
-/* 807BD678-807BD6A8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_TK_BALL */
 extern actor_process_profile_definition g_profile_E_TK_BALL = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID

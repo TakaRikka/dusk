@@ -45,9 +45,9 @@ struct TVector {
 };
 
 struct TVector_pointer_void : TVector<void*, TAllocator> {
-    /* 802DCCD0 */ TVector_pointer_void(JGadget::TAllocator<void*> const&);
-    /* 802DCCFC */ ~TVector_pointer_void();
-    /* 802DCDC4 */ void erase(void**, void**);
+    TVector_pointer_void(JGadget::TAllocator<void*> const&);
+    ~TVector_pointer_void();
+    void erase(void**, void**);
     void insert(void**, void* const&);
 
     void clear() { erase(begin(), end()); }

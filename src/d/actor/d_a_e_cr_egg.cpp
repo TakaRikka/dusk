@@ -10,8 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-/* 80699F38-80699FC8 000078 0090+00 1/0 0/0 0/0 .text            daE_CR_EGG_Draw__FP14e_cr_egg_class
- */
 static int daE_CR_EGG_Draw(e_cr_egg_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
@@ -23,8 +21,6 @@ static int daE_CR_EGG_Draw(e_cr_egg_class* a_this) {
     return 1;
 }
 
-/* 80699FC8-8069A258 000108 0290+00 1/1 0/0 0/0 .text            e_cr_egg_move__FP14e_cr_egg_class
- */
 static void e_cr_egg_move(e_cr_egg_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
@@ -72,7 +68,6 @@ static void e_cr_egg_move(e_cr_egg_class* a_this) {
     }
 }
 
-/* 8069A258-8069A378 000398 0120+00 1/1 0/0 0/0 .text            action__FP14e_cr_egg_class */
 static void action(e_cr_egg_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
     cXyz mae;
@@ -103,7 +98,6 @@ static void action(e_cr_egg_class* a_this) {
     actor->old.pos.y += 20.0f;
 }
 
-/* 8069A378-8069A4C4 0004B8 014C+00 2/1 0/0 0/0 .text daE_CR_EGG_Execute__FP14e_cr_egg_class */
 static int daE_CR_EGG_Execute(e_cr_egg_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
     cXyz sp2C;
@@ -139,12 +133,10 @@ static int daE_CR_EGG_Execute(e_cr_egg_class* a_this) {
     return 1;
 }
 
-/* 8069A4C4-8069A4CC 000604 0008+00 1/0 0/0 0/0 .text daE_CR_EGG_IsDelete__FP14e_cr_egg_class */
 static int daE_CR_EGG_IsDelete(e_cr_egg_class* a_this) {
     return 1;
 }
 
-/* 8069A4CC-8069A510 00060C 0044+00 1/0 0/0 0/0 .text daE_CR_EGG_Delete__FP14e_cr_egg_class */
 static int daE_CR_EGG_Delete(e_cr_egg_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
@@ -154,7 +146,6 @@ static int daE_CR_EGG_Delete(e_cr_egg_class* a_this) {
     return 1;
 }
 
-/* 8069A510-8069A57C 000650 006C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_cr_egg_class* a_this = (e_cr_egg_class*)i_this;
 
@@ -169,8 +160,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8069A57C-8069A7B4 0006BC 0238+00 1/0 0/0 0/0 .text            daE_CR_EGG_Create__FP10fopAc_ac_c
- */
 static int daE_CR_EGG_Create(fopAc_ac_c* i_this) {
     e_cr_egg_class* a_this = (e_cr_egg_class*)i_this;
     fopAcM_ct(i_this, e_cr_egg_class);
@@ -226,7 +215,6 @@ static int daE_CR_EGG_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 8069A960-8069A980 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_CR_EGG_Method */
 static actor_method_class l_daE_CR_EGG_Method = {
     (process_method_func)daE_CR_EGG_Create,
     (process_method_func)daE_CR_EGG_Delete,
@@ -235,7 +223,6 @@ static actor_method_class l_daE_CR_EGG_Method = {
     (process_method_func)daE_CR_EGG_Draw,
 };
 
-/* 8069A980-8069A9B0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_CR_EGG */
 extern actor_process_profile_definition g_profile_E_CR_EGG = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

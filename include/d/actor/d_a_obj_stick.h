@@ -27,18 +27,18 @@ private:
     /* 0x944 */ u32 mShadowKey;
     /* 0x948 */ u8 mType;
 public:
-    /* 8059922C */ virtual ~daObj_Stick_c();
-    /* 805993E8 */ int create();
-    /* 80599888 */ int CreateHeap();
-    /* 80599900 */ int Delete();
-    /* 80599934 */ int Execute();
-    /* 80599A78 */ int Draw();
-    /* 80599B3C */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80599B5C */ const char* getResName();
-    /* 80599B6C */ int isDelete();
-    /* 80599B8C */ void setEnvTevColor();
-    /* 80599BE8 */ void setRoomNo();
-    /* 80599C28 */ void setMtx();
+    virtual ~daObj_Stick_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    const char* getResName();
+    int isDelete();
+    void setEnvTevColor();
+    void setRoomNo();
+    void setMtx();
 
     u32 getType() { return 0; }
 
@@ -49,7 +49,7 @@ STATIC_ASSERT(sizeof(daObj_Stick_c) == 0x950);
 
 class daObj_Stick_Param_c {
 public:
-    /* 80599DD0 */ virtual ~daObj_Stick_Param_c() {};
+    virtual ~daObj_Stick_Param_c() {};
 
     struct daObj_Stick_HIOParam {
         f32 attention_offset;

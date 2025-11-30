@@ -57,76 +57,76 @@ public:
         MODE_EXEC = 1,
     };
 
-    /* 80490E50 */ daTbox_ModelInfo* getModelInfo();
-    /* 80490E6C */ cPhs__Step commonShapeSet();
-    /* 804911B8 */ cPhs__Step effectShapeSet();
-    /* 804911C0 */ cPhs__Step envShapeSet();
-    /* 804911C8 */ cPhs__Step bgCheckSet();
-    /* 8049129C */ void lightReady();
-    /* 804912EC */ void setLightPos();
-    /* 8049135C */ int checkEnv();
-    /* 80491364 */ int checkAppear();
-    /* 8049139C */ int checkOpen();
-    /* 804913D0 */ void clrDzb();
-    /* 8049141C */ void setDzb();
-    /* 80491484 */ void surfaceProc();
-    /* 80491544 */ int checkNormal();
-    /* 804915BC */ int checkEnvEffectTbox();
-    /* 80491624 */ u32 calcHeapSize();
-    /* 804916A4 */ int CreateHeap();
-    /* 80491744 */ void CreateInit();
-    /* 804919B0 */ void initPos();
-    /* 80491BB0 */ void initAnm();
-    /* 80491F68 */ int boxCheck();
-    /* 804920A8 */ void demoProcOpen();
-    /* 8049216C */ void lightColorProc();
-    /* 8049233C */ void environmentProc();
-    /* 80492398 */ void lightUpProc();
-    /* 804923D4 */ void lightDownProc();
-    /* 80492408 */ void dropProcInitCall();
-    /* 80492450 */ void dropProcInit();
-    /* 804928DC */ int calcJumpGoalAndAngle(cXyz*, s16*);
-    /* 80492B10 */ bool getDropSAngle(s16*);
-    /* 80492BC8 */ int getDir();
-    /* 80492C84 */ void setRotAxis(cXyz const*, cXyz const*);
-    /* 80492D08 */ void dropProcInit2();
-    /* 80492F50 */ void dropProc();
-    /* 80493338 */ void demoInitAppear();
-    /* 80493484 */ void demoProcAppear();
-    /* 80493518 */ int demoProc();
-    /* 80493838 */ void OpenInit_com();
-    /* 804939A4 */ void OpenInit();
-    /* 804939F4 */ int actionWait();
-    /* 804939FC */ int actionDemo();
-    /* 80493CC8 */ int actionDemo2();
-    /* 80493D90 */ int actionDropDemo();
-    /* 80493ED8 */ u8 getBombItemNo(u8, u8);
-    /* 80493FE8 */ u8 getBombItemNo2(u8, u8, u8);
-    /* 80494144 */ u8 getBombItemNo3(u8, u8, u8, u8);
-    /* 804942CC */ u8 getBombItemNoMain(u8);
-    /* 804945C8 */ int setGetDemoItem();
-    /* 804946A4 */ int actionOpenWait();
-    /* 804948CC */ int actionNotOpenDemo();
-    /* 80494950 */ int checkDrop();
-    /* 80494A0C */ void settingDropDemoCamera();
-    /* 80494D88 */ int actionSwOnWait();
-    /* 80494E98 */ int actionSwOnWait2();
-    /* 80494F44 */ int actionDropWait();
-    /* 80495058 */ int actionGenocide();
-    /* 8049518C */ int actionDropWaitForWeb();
-    /* 80495250 */ int actionDropForWeb();
-    /* 804953D4 */ void initBaseMtx();
-    /* 80495490 */ void setBaseMtx();
-    /* 80495660 */ void mode_proc_call();
-    /* 804956EC */ void mode_exec_wait();
-    /* 80495818 */ void mode_exec();
-    /* 80495910 */ cPhs__Step create1st();
-    /* 804959EC */ int Execute(Mtx**);
-    /* 80495AF0 */ int Draw();
-    /* 80495C9C */ int Delete();
-    /* 804961B0 */ int Create() { return true; }
+    daTbox_ModelInfo* getModelInfo();
+    cPhs__Step commonShapeSet();
+    cPhs__Step effectShapeSet();
+    cPhs__Step envShapeSet();
+    cPhs__Step bgCheckSet();
+    void lightReady();
+    void setLightPos();
+    int checkEnv();
+    int checkAppear();
+    int checkOpen();
+    void clrDzb();
+    void setDzb();
+    void surfaceProc();
+    int checkNormal();
+    int checkEnvEffectTbox();
+    u32 calcHeapSize();
+    int CreateHeap();
+    void CreateInit();
+    void initPos();
+    void initAnm();
+    int boxCheck();
+    void demoProcOpen();
+    void lightColorProc();
+    void environmentProc();
+    void lightUpProc();
+    void lightDownProc();
+    void dropProcInitCall();
+    void dropProcInit();
+    int calcJumpGoalAndAngle(cXyz*, s16*);
+    bool getDropSAngle(s16*);
+    int getDir();
+    void setRotAxis(cXyz const*, cXyz const*);
+    void dropProcInit2();
+    void dropProc();
+    void demoInitAppear();
+    void demoProcAppear();
+    int demoProc();
+    void OpenInit_com();
+    void OpenInit();
+    int actionWait();
+    int actionDemo();
+    int actionDemo2();
+    int actionDropDemo();
+    u8 getBombItemNo(u8, u8);
+    u8 getBombItemNo2(u8, u8, u8);
+    u8 getBombItemNo3(u8, u8, u8, u8);
+    u8 getBombItemNoMain(u8);
+    int setGetDemoItem();
+    int actionOpenWait();
+    int actionNotOpenDemo();
+    int checkDrop();
+    void settingDropDemoCamera();
+    int actionSwOnWait();
+    int actionSwOnWait2();
+    int actionDropWait();
+    int actionGenocide();
+    int actionDropWaitForWeb();
+    int actionDropForWeb();
+    void initBaseMtx();
+    void setBaseMtx();
+    void mode_proc_call();
+    void mode_exec_wait();
+    void mode_exec();
+    cPhs__Step create1st();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
+    int Create() { return true; }
 
-    /* 804961B8 */ virtual BOOL checkSmallTbox() { return TRUE; }
+    virtual BOOL checkSmallTbox() { return TRUE; }
 
     u32 getEvent() { return fopAcM_GetParam(this) >> 24; }
     int getShapeType() { return (fopAcM_GetParam(this) >> 20) & 0xf; }
@@ -199,8 +199,8 @@ STATIC_ASSERT(sizeof(daTbox_c) == 0xA30);
 
 class daTbox_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80490D2C */ daTbox_HIO_c();
-    /* 804960B8 */ virtual ~daTbox_HIO_c() {}
+    daTbox_HIO_c();
+    virtual ~daTbox_HIO_c() {}
 
     void genMessage(JORMContext*);
 

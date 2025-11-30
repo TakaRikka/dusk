@@ -65,17 +65,17 @@ public:
         : mUseMtxIndex(useMtxIndex)
     {}
 
-    /* 803130E4 */ void loadMtxIndx_PNGP(int, u16) const;
-    /* 80313128 */ void loadMtxIndx_PCPU(int, u16) const;
-    /* 80313188 */ void loadMtxIndx_NCPU(int, u16) const;
-    /* 803131D4 */ void loadMtxIndx_PNCPU(int, u16) const;
+    void loadMtxIndx_PNGP(int, u16) const;
+    void loadMtxIndx_PCPU(int, u16) const;
+    void loadMtxIndx_NCPU(int, u16) const;
+    void loadMtxIndx_PNCPU(int, u16) const;
 
-    /* 80314798 */ virtual ~J3DShapeMtx() {}
-    /* 803147E0 */ virtual u32 getType() const { return 'SMTX'; }
-    /* 80273E08 */ virtual u16 getUseMtxNum() const { return 1; }
-    /* 8031459C */ virtual u16 getUseMtxIndex(u16) const { return mUseMtxIndex; }
-    /* 80313B94 */ virtual void load() const;
-    /* 80313BF0 */ virtual void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
+    virtual ~J3DShapeMtx() {}
+    virtual u32 getType() const { return 'SMTX'; }
+    virtual u16 getUseMtxNum() const { return 1; }
+    virtual u16 getUseMtxIndex(u16) const { return mUseMtxIndex; }
+    virtual void load() const;
+    virtual void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
 
     static J3DShapeMtx_LoadFunc sMtxLoadPipeline[4];
     static u16 sMtxLoadCache[10];
@@ -123,22 +123,22 @@ public:
 
     static const int kVcdVatDLSize = 0xC0;
 
-    /* 80314B48 */ void initialize();
-    /* 80314BB8 */ void addTexMtxIndexInDL(_GXAttr, u32);
-    /* 80314CBC */ void addTexMtxIndexInVcd(_GXAttr);
-    /* 80314DA8 */ void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
-    /* 80314E28 */ u16 countBumpMtxNum() const;
-    /* 80314EEC */ void loadVtxArray() const;
-    /* 80314F5C */ bool isSameVcdVatCmd(J3DShape*);
-    /* 80314F98 */ void makeVtxArrayCmd();
-    /* 80315260 */ void makeVcdVatCmd();
-    /* 80315300 */ void loadPreDrawSetting() const;
-    /* 80315398 */ void setArrayAndBindPipeline() const;
+    void initialize();
+    void addTexMtxIndexInDL(_GXAttr, u32);
+    void addTexMtxIndexInVcd(_GXAttr);
+    void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
+    u16 countBumpMtxNum() const;
+    void loadVtxArray() const;
+    bool isSameVcdVatCmd(J3DShape*);
+    void makeVtxArrayCmd();
+    void makeVcdVatCmd();
+    void loadPreDrawSetting() const;
+    void setArrayAndBindPipeline() const;
 
-    /* 803155E0 */ virtual void draw() const;
-    /* 8031544C */ virtual void drawFast() const;
-    /* 80315628 */ virtual void simpleDraw() const;
-    /* 803156AC */ virtual void simpleDrawCache() const;
+    virtual void draw() const;
+    virtual void drawFast() const;
+    virtual void simpleDraw() const;
+    virtual void simpleDrawCache() const;
 
     void loadCurrentMtx() const;
 

@@ -6,8 +6,6 @@
 #include "JSystem/JAudio2/JAIStreamDataMgr.h"
 #include "JSystem/JAudio2/JAIAudience.h"
 
-/* 802A30D4-802A3104 29DA14 0030+00 1/1 0/0 0/0 .text
- * JAIStream_JASAramStreamCallback___FUlP13JASAramStreamPv      */
 static void JAIStream_JASAramStreamCallback_(u32 type, JASAramStream* aramStream, void* userData) {
     JAIStream* stream = (JAIStream*)userData;
 
@@ -21,8 +19,6 @@ static void JAIStream_JASAramStreamCallback_(u32 type, JASAramStream* aramStream
     }
 }
 
-/* 802A3104-802A319C 29DA44 0098+00 0/0 1/1 0/0 .text
- * __ct__9JAIStreamFP12JAIStreamMgrP31JAISoundStrategyMgr<9JAIStream> */
 JAIStream::JAIStream(JAIStreamMgr* streamMgr, JAISoundStrategyMgr<JAIStream>* soundStrategyMgr) : JSULink<JAIStream>(this) {
     field_0x290 = 0;
     field_0x2c0 = soundStrategyMgr;
@@ -36,8 +32,6 @@ JAIStream::JAIStream(JAIStreamMgr* streamMgr, JAISoundStrategyMgr<JAIStream>* so
     }
 }
 
-/* 802A319C-802A3230 29DADC 0094+00 0/0 1/1 0/0 .text
- * JAIStreamMgr_startID___9JAIStreamF10JAISoundIDlPCQ29JGeometry8TVec3<f>P11JAIAudiencei */
 void JAIStream::JAIStreamMgr_startID_(JAISoundID id, s32 streamFileEntry,
                                       const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience,
                                       int category) {
@@ -53,7 +47,6 @@ void JAIStream::JAIStreamMgr_startID_(JAISoundID id, s32 streamFileEntry,
     }
 }
 
-/* 802A3230-802A33F4 29DB70 01C4+00 1/1 0/0 0/0 .text prepare_prepareStream___9JAIStreamFv */
 bool JAIStream::prepare_prepareStream_() {
     u32 local_28;
     JAIStreamAramMgr* streamAramMgr;
@@ -106,7 +99,6 @@ bool JAIStream::prepare_prepareStream_() {
     return false;
 }
 
-/* 802A33F4-802A3498 29DD34 00A4+00 1/1 0/0 0/0 .text            prepare___9JAIStreamFv */
 void JAIStream::prepare_() {
     if (field_0x2c6 != 0) {
         return;
@@ -136,8 +128,6 @@ void JAIStream::prepare_() {
     }
 }
 
-/* 802A3498-802A34E4 29DDD8 004C+00 1/1 0/0 0/0 .text            prepare_startStream___9JAIStreamFv
- */
 void JAIStream::prepare_startStream_() {
     if (inner_.aramStream_.start()) {
         field_0x2c6 = 0;
@@ -146,8 +136,6 @@ void JAIStream::prepare_startStream_() {
     }
 }
 
-/* 802A34E4-802A3720 29DE24 023C+00 0/0 1/1 0/0 .text
- * JAIStreamMgr_mixOut___9JAIStreamFRC14JASSoundParams16JAISoundActivity */
 void JAIStream::JAIStreamMgr_mixOut_(const JASSoundParams& inParams, JAISoundActivity activity) {
     bool local_54;
     JASSoundParams outParams;
@@ -195,7 +183,6 @@ void JAIStream::JAIStreamMgr_mixOut_(const JASSoundParams& inParams, JAISoundAct
     }
 }
 
-/* 802A3720-802A37FC 29E060 00DC+00 1/1 0/0 0/0 .text            die_JAIStream___9JAIStreamFv */
 void JAIStream::die_JAIStream_() {
     die_JAISound_();
 
@@ -212,7 +199,6 @@ void JAIStream::die_JAIStream_() {
     }
 }
 
-/* 802A37FC-802A388C 29E13C 0090+00 1/0 0/0 0/0 .text            JAISound_tryDie___9JAIStreamFv */
 bool JAIStream::JAISound_tryDie_() {
     if (field_0x2c6) {
         die_JAIStream_();
@@ -238,7 +224,6 @@ bool JAIStream::JAISound_tryDie_() {
     return false;
 }
 
-/* 802A388C-802A3948 29E1CC 00BC+00 0/0 1/1 0/0 .text            JAIStreamMgr_calc___9JAIStreamFv */
 void JAIStream::JAIStreamMgr_calc_() {
     if (field_0x2c6 != 0) {
         field_0x290 = 0;
@@ -258,12 +243,10 @@ void JAIStream::JAIStreamMgr_calc_() {
     }
 }
 
-/* 802A3948-802A3950 29E288 0008+00 1/0 0/0 0/0 .text            getNumChild__9JAIStreamCFv */
 s32 JAIStream::getNumChild() const {
     return NUM_CHILDREN;
 }
 
-/* 802A3950-802A3A24 29E290 00D4+00 1/0 0/0 0/0 .text            getChild__9JAIStreamFi */
 JAISoundChild* JAIStream::getChild(int index) {
     if (children_[index] == NULL) {
          children_[index] = new JAISoundChild();
@@ -274,7 +257,6 @@ JAISoundChild* JAIStream::getChild(int index) {
     return children_[index];
 }
 
-/* 802A3A24-802A3ABC 29E364 0098+00 1/0 0/0 0/0 .text            releaseChild__9JAIStreamFi */
 void JAIStream::releaseChild(int index) {
     if (children_[index] != NULL) {
         delete children_[index];
@@ -282,22 +264,18 @@ void JAIStream::releaseChild(int index) {
     }
 }
 
-/* 802A3ABC-802A3AC4 29E3FC 0008+00 1/0 0/0 0/0 .text            getTrack__9JAIStreamFv */
 JASTrack* JAIStream::getTrack() {
     return NULL;
 }
 
-/* 802A3AC4-802A3ACC 29E404 0008+00 1/0 0/0 0/0 .text            getChildTrack__9JAIStreamFi */
 JASTrack* JAIStream::getChildTrack(int param_0) {
     return NULL;
 }
 
-/* 802A3ACC-802A3AD0 29E40C 0004+00 1/0 0/0 0/0 .text            asStream__9JAIStreamFv */
 JAIStream* JAIStream::asStream() {
     return this;
 }
 
-/* 802A3AD0-802A3AD8 29E410 0008+00 1/0 0/0 0/0 .text            getTempoMgr__9JAIStreamFv */
 JAITempoMgr* JAIStream::getTempoMgr() {
     return NULL;
 }

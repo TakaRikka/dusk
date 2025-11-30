@@ -88,8 +88,6 @@ bool JStudio_JStage::transform_toLocalFromGlobal(
     return true;
 }
 
-/* 8028A470-8028A4BC 284DB0 004C+00 0/0 5/5 0/0 .text
- * adaptor_object_data___Q214JStudio_JStage16TAdaptor_object_FPCvUlPCvUl */
 void JStudio_JStage::TAdaptor_object_::adaptor_object_data_(void const* param_1, u32 param_2,
                                                             void const* param_3, u32 param_4) {
     int uVar3;
@@ -101,8 +99,6 @@ void JStudio_JStage::TAdaptor_object_::adaptor_object_data_(void const* param_1,
     pJSGObject_->JSGSetData(uVar3, param_3, param_4);
 }
 
-/* 8028A4BC-8028A50C 284DFC 0050+00 0/0 4/4 0/0 .text
- * adaptor_object_findJSGObject___Q214JStudio_JStage16TAdaptor_object_FPCc */
 JStage::TObject*
 JStudio_JStage::TAdaptor_object_::adaptor_object_findJSGObject_(char const* param_1) {
     JStage::TObject* pJSGObject;
@@ -114,8 +110,6 @@ JStudio_JStage::TAdaptor_object_::adaptor_object_findJSGObject_(char const* para
     return pJSGObject;
 }
 
-/* 8028A50C-8028A550 284E4C 0044+00 0/0 4/4 0/0 .text
- * adaptor_object_findJSGObjectNode___Q214JStudio_JStage16TAdaptor_object_FPCQ26JStage7TObjectPCc */
 s32 JStudio_JStage::TAdaptor_object_::adaptor_object_findJSGObjectNode_(
     JStage::TObject const* param_1, char const* param_2) {
     if (param_1 == NULL) {

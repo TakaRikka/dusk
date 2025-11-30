@@ -23,24 +23,24 @@ public:
 
     typedef void (daRfHole_c::*ModeFunc)();
 
-    /* 80CB8F04 */ void setBaseMtx();
-    /* 80CB8F8C */ int CreateHeap();
-    /* 80CB8FF8 */ int create();
-    /* 80CB9148 */ static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-    /* 80CB9194 */ int playerAreaCheck();
-    /* 80CB940C */ int Execute(Mtx**);
-    /* 80CB9464 */ void holeProc();
-    /* 80CB9520 */ void init_modeWait();
-    /* 80CB952C */ void modeWait();
-    /* 80CB9558 */ void init_modeBreak();
-    /* 80CB96AC */ void modeBreak();
-    /* 80CB96CC */ void init_modeBreakEff();
-    /* 80CB971C */ void modeBreakEff();
-    /* 80CB973C */ void init_modeEnd();
-    /* 80CB9748 */ void modeEnd();
-    /* 80CB9768 */ void setBreakEffect();
-    /* 80CB9878 */ int Draw();
-    /* 80CB991C */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+    int playerAreaCheck();
+    int Execute(Mtx**);
+    void holeProc();
+    void init_modeWait();
+    void modeWait();
+    void init_modeBreak();
+    void modeBreak();
+    void init_modeBreakEff();
+    void modeBreakEff();
+    void init_modeEnd();
+    void modeEnd();
+    void setBreakEffect();
+    int Draw();
+    int Delete();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
@@ -56,8 +56,8 @@ STATIC_ASSERT(sizeof(daRfHole_c) == 0x5b4);
 
 class daRfHole_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80CB8E6C */ daRfHole_HIO_c();
-    /* 80CB99D8 */ virtual ~daRfHole_HIO_c() {}
+    daRfHole_HIO_c();
+    virtual ~daRfHole_HIO_c() {}
 
     void genMessage(JORMContext*);
 

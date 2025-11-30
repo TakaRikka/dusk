@@ -41,8 +41,8 @@ STATIC_ASSERT(sizeof(obj_cb_class) == 0x97c);
 
 class daObj_Cb_HIO_c {
 public:
-    /* 80BC4B2C */ daObj_Cb_HIO_c();
-    /* 80BC573C */ virtual ~daObj_Cb_HIO_c() {}
+    daObj_Cb_HIO_c();
+    virtual ~daObj_Cb_HIO_c() {}
 
     s8 field_0x4;
 };

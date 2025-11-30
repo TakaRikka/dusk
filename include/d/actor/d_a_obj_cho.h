@@ -23,27 +23,27 @@ public:
         /* 1 */ ACT_MOVE,
     };
 
-    /* 80BCA334 */ void InitCcSph();
-    /* 80BCA3A0 */ void SetCcSph();
-    /* 80BCA418 */ int CreateHeap();
-    /* 80BCA78C */ void SpeedSet();
-    /* 80BCA88C */ void WallCheck();
-    /* 80BCA924 */ void SearchLink();
-    /* 80BCAB50 */ void WaitAction();
-    /* 80BCAEDC */ void MoveAction();
-    /* 80BCB210 */ void Action();
-    /* 80BCB268 */ void ShopAction();
-    /* 80BCB2AC */ void checkGroundPos();
-    /* 80BCB310 */ void Insect_Release();
-    /* 80BCB320 */ void Z_BufferChk();
-    /* 80BCB49C */ void ParticleSet();
-    /* 80BCB5C0 */ void BoomChk();
-    /* 80BCB87C */ int Execute();
-    /* 80BCBB40 */ void ObjHit();
-    /* 80BCBCA8 */ int Delete();
-    /* 80BCBD10 */ void setBaseMtx();
-    /* 80BCBE70 */ bool CreateChk();
-    /* 80BCC01C */ cPhs__Step create();
+    void InitCcSph();
+    void SetCcSph();
+    int CreateHeap();
+    void SpeedSet();
+    void WallCheck();
+    void SearchLink();
+    void WaitAction();
+    void MoveAction();
+    void Action();
+    void ShopAction();
+    void checkGroundPos();
+    void Insect_Release();
+    void Z_BufferChk();
+    void ParticleSet();
+    void BoomChk();
+    int Execute();
+    void ObjHit();
+    int Delete();
+    void setBaseMtx();
+    bool CreateChk();
+    cPhs__Step create();
     inline int Draw();
 
 private:
@@ -82,8 +82,8 @@ STATIC_ASSERT(sizeof(daObjCHO_c) == 0xA70);
 
 class daObj_ChoHIO_c {
 public:
-    /* 80BCA30C */ daObj_ChoHIO_c();
-    /* 80BCC4D0 */ virtual ~daObj_ChoHIO_c() {}
+    daObj_ChoHIO_c();
+    virtual ~daObj_ChoHIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mScaleFemale;

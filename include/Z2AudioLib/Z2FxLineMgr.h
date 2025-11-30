@@ -26,13 +26,13 @@ struct Z2FxLineConfig {
 };  // Size: 0x30
 
 struct Z2FxLineMgr : public JASGlobalInstance<Z2FxLineMgr> {
-    /* 802BA7DC */ Z2FxLineMgr();
-    /* 802BA7FC */ void initDataArc(JKRArchive* arc, JKRHeap* heap);
-    /* 802BAC28 */ void setLineID(s8 fxID, bool, bool);
-    /* 802BAC74 */ void setLine(Z2FxLineConfig* config, bool, bool);
-    /* 802BAE1C */ void setFxForceOff(bool);
-    /* 802BAE48 */ void setUnderWaterFx(bool isUnderWaterFx);
-    /* 802BAEB8 */ void setSceneFx(s32 sceneNo);
+    Z2FxLineMgr();
+    void initDataArc(JKRArchive* arc, JKRHeap* heap);
+    void setLineID(s8 fxID, bool, bool);
+    void setLine(Z2FxLineConfig* config, bool, bool);
+    void setFxForceOff(bool);
+    void setUnderWaterFx(bool isUnderWaterFx);
+    void setSceneFx(s32 sceneNo);
 
     /* 0x00 */ Z2FxLineConfig* mConfig;
     /* 0x04 */ void* mFxLineBuffer[4];

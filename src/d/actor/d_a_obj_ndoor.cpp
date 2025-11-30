@@ -9,9 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
-#include "dol2asm.h"
 
-/* 80CA3538-80CA359C 000078 0064+00 1/0 0/0 0/0 .text daObj_Ndoor_Draw__FP15obj_ndoor_class */
 static int daObj_Ndoor_Draw(obj_ndoor_class* i_this) {
     g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType_MAJI(i_this->mpModel, &i_this->tevStr);
@@ -19,7 +17,6 @@ static int daObj_Ndoor_Draw(obj_ndoor_class* i_this) {
     return 1;
 }
 
-/* 80CA359C-80CA37A4 0000DC 0208+00 2/1 0/0 0/0 .text daObj_Ndoor_Execute__FP15obj_ndoor_class */
 static int daObj_Ndoor_Execute(obj_ndoor_class* i_this) {
     cXyz cStack_28;
 
@@ -69,19 +66,16 @@ static int daObj_Ndoor_Execute(obj_ndoor_class* i_this) {
     return 1;
 }
 
-/* 80CA37A4-80CA37AC 0002E4 0008+00 1/0 0/0 0/0 .text daObj_Ndoor_IsDelete__FP15obj_ndoor_class */
 static int daObj_Ndoor_IsDelete(obj_ndoor_class* i_this) {
     return 1;
 }
 
-/* 80CA37AC-80CA37DC 0002EC 0030+00 1/0 0/0 0/0 .text daObj_Ndoor_Delete__FP15obj_ndoor_class */
 static int daObj_Ndoor_Delete(obj_ndoor_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "Obj_ndoor");
     return 1;
 }
 
-/* 80CA37DC-80CA3848 00031C 006C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_ndoor_class* a_this = (obj_ndoor_class*)i_this;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Obj_ndoor", 3);
@@ -94,8 +88,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return a_this->mpModel != NULL ? 1 : 0;
 }
 
-/* 80CA3848-80CA39AC 000388 0164+00 1/0 0/0 0/0 .text            daObj_Ndoor_Create__FP10fopAc_ac_c
- */
 static int daObj_Ndoor_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph cc_sph_src = {
         {
@@ -133,14 +125,12 @@ static int daObj_Ndoor_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 80CA3AB8-80CA3AD8 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Ndoor_Method */
 static actor_method_class l_daObj_Ndoor_Method = {
     (process_method_func)daObj_Ndoor_Create,  (process_method_func)daObj_Ndoor_Delete,
     (process_method_func)daObj_Ndoor_Execute, (process_method_func)daObj_Ndoor_IsDelete,
     (process_method_func)daObj_Ndoor_Draw,
 };
 
-/* 80CA3AD8-80CA3B08 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_NDOOR */
 extern actor_process_profile_definition g_profile_OBJ_NDOOR = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID

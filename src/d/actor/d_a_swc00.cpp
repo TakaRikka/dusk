@@ -10,11 +10,9 @@
 #include "d/actor/d_a_horse.h"
 #include "d/d_debug_viewer.h"
 #include "d/d_s_play.h"
-#include "dol2asm.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 805A13F8-805A15DC 000078 01E4+00 1/1 0/0 0/0 .text            hitCheck__FP9daSwc00_c */
 static BOOL hitCheck(daSwc00_c* i_swc) {
     fopAc_ac_c* a_this = i_swc;
     fopAc_ac_c* playerAc = daPy_getPlayerActorClass();
@@ -83,7 +81,6 @@ int daSwc00_Draw(daSwc00_c* i_this) {
 
 #endif
 
-/* 805A15DC-805A15FC 00025C 0020+00 1/0 0/0 0/0 .text            daSwc00_Execute__FP9daSwc00_c */
 static int daSwc00_Execute(daSwc00_c* i_this) {
     return i_this->execute();
 }
@@ -100,7 +97,6 @@ inline static int daSwc00_getSw2No(daSwc00_c* i_this) {
     return (fopAcM_GetParam(i_this) >> 8) & 0xff; 
 }
 
-/* 805A15FC-805A18E8 00027C 02EC+00 2/1 0/0 0/0 .text            execute__9daSwc00_cFv */
 int daSwc00_c::execute() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     u8 condition = daSwc00_getCondition(this);
@@ -196,7 +192,6 @@ int daSwc00_c::execute() {
     return 1;
 }
 
-/* 805A18E8-805A19A4 000568 00BC+00 1/1 0/0 0/0 .text            event_proc_call__9daSwc00_cFv */
 void daSwc00_c::event_proc_call() {
     static daSwc00_c::actionFunc l_func[4] = {
         &daSwc00_c::actionWait,
@@ -211,7 +206,6 @@ static inline u8 daSwc00_getEvID(daSwc00_c* i_this) {
     return fopAcM_GetParam(i_this) >> 24;
 }
 
-/* 805A19A4-805A1A28 000624 0084+00 1/0 0/0 0/0 .text            actionWait__9daSwc00_cFv */
 void daSwc00_c::actionWait() {
     if (field_0x584 != 0) {
         if (daSwc00_getEvID(this) != 0xff) {
@@ -225,7 +219,6 @@ void daSwc00_c::actionWait() {
     }
 }
 
-/* 805A1A28-805A1A94 0006A8 006C+00 1/0 0/0 0/0 .text            actionOrderEvent__9daSwc00_cFv */
 void daSwc00_c::actionOrderEvent() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(ACTION_EVENT);
@@ -235,7 +228,6 @@ void daSwc00_c::actionOrderEvent() {
     }
 }
 
-/* 805A1A94-805A1AF0 000714 005C+00 1/0 0/0 0/0 .text            actionEvent__9daSwc00_cFv */
 void daSwc00_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventID)) {
         setAction(ACTION_DEAD);
@@ -243,19 +235,16 @@ void daSwc00_c::actionEvent() {
     }
 }
 
-/* 805A1AF0-805A1B1C 000770 002C+00 1/0 0/0 0/0 .text            actionDead__9daSwc00_cFv */
 void daSwc00_c::actionDead() {
     if (field_0x583 != 0) {
         fopAcM_delete(this);
     }
 }
 
-/* 805A1B1C-805A1B24 00079C 0008+00 1/0 0/0 0/0 .text            daSwc00_IsDelete__FP9daSwc00_c */
 static int daSwc00_IsDelete(daSwc00_c* i_this) {
     return 1;
 }
 
-/* 805A1B24-805A1B2C 0007A4 0008+00 1/0 0/0 0/0 .text            daSwc00_Delete__FP9daSwc00_c */
 static int daSwc00_Delete(daSwc00_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     return 1;
@@ -265,7 +254,6 @@ static inline int daSwc00_getScale(daSwc00_c* i_this) {
     return (fopAcM_GetParam(i_this) >> 20) & 0xf;
 }
 
-/* 805A1B2C-805A1D8C 0007AC 0260+00 2/0 0/0 0/0 .text            daSwc00_Create__FP10fopAc_ac_c */
 static int daSwc00_Create(fopAc_ac_c* a_this) {
     daSwc00_c* i_this = (daSwc00_c*)a_this;
     fopAcM_ct(i_this, daSwc00_c);
@@ -336,7 +324,6 @@ static int daSwc00_Create(fopAc_ac_c* a_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 805A1ED4-805A1EF4 -00001 0020+00 1/0 0/0 0/0 .data            l_daSwc00_Method */
 static actor_method_class l_daSwc00_Method = {
     (process_method_func)daSwc00_Create,
     (process_method_func)daSwc00_Delete,
@@ -349,7 +336,6 @@ static actor_method_class l_daSwc00_Method = {
     #endif
 };
 
-/* 805A1EF4-805A1F24 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_SWC00 */
 extern actor_process_profile_definition g_profile_SWC00 = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

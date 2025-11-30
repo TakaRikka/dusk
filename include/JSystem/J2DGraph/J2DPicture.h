@@ -54,67 +54,67 @@ struct J2DScrnBlockPictureParameter {
  */
 class J2DPicture : public J2DPane {
 public:
-    /* 802FCFF0 */ virtual ~J2DPicture();
-    /* 802FF2E8 */ virtual u16 getTypeID() const { return 18; }
-    /* 802FDB28 */ virtual void drawSelf(f32, f32);
-    /* 802FDB90 */ virtual void drawSelf(f32, f32, Mtx*);
-    /* 802FCCDC */ virtual void initiate(ResTIMG const*, ResTLUT const*);
-    /* 802FD098 */ virtual bool prepareTexture(u8);
-    /* 801BDD40 */ virtual bool append(ResTIMG const* param_0, f32 param_1) {
+    virtual ~J2DPicture();
+    virtual u16 getTypeID() const { return 18; }
+    virtual void drawSelf(f32, f32);
+    virtual void drawSelf(f32, f32, Mtx*);
+    virtual void initiate(ResTIMG const*, ResTLUT const*);
+    virtual bool prepareTexture(u8);
+    virtual bool append(ResTIMG const* param_0, f32 param_1) {
         return insert(param_0, mTextureNum, param_1);
     }
-    /* 802FF238 */ virtual bool append(ResTIMG const* param_0, JUTPalette* param_1, f32 param_2) {
+    virtual bool append(ResTIMG const* param_0, JUTPalette* param_1, f32 param_2) {
         return insert(param_0, param_1, mTextureNum, param_2);
     }
-    /* 80020338 */ virtual bool append(char const* param_0, f32 param_1) {
+    virtual bool append(char const* param_0, f32 param_1) {
         return insert(param_0, mTextureNum, param_1);
     }
-    /* 802FF2F0 */ virtual bool append(char const* param_0, JUTPalette* param_1, f32 param_2) {
+    virtual bool append(char const* param_0, JUTPalette* param_1, f32 param_2) {
         return insert(param_0, param_1, mTextureNum, param_2);
     }
-    /* 802FF208 */ virtual bool append(JUTTexture* param_0, f32 param_1) {
+    virtual bool append(JUTTexture* param_0, f32 param_1) {
         return insert(param_0, mTextureNum, param_1);
     }
-    /* 802FF3E0 */ virtual void prepend(ResTIMG const* param_0, f32 param_1) {
+    virtual void prepend(ResTIMG const* param_0, f32 param_1) {
         insert(param_0, 0, param_1);
     }
-    /* 802FF3B0 */ virtual void prepend(ResTIMG const* param_0, JUTPalette* param_1, f32 param_2) {
+    virtual void prepend(ResTIMG const* param_0, JUTPalette* param_1, f32 param_2) {
         insert(param_0, param_1, 0, param_2);
     }
-    /* 802FF380 */ virtual void prepend(char const* param_0, f32 param_1) {
+    virtual void prepend(char const* param_0, f32 param_1) {
         insert(param_0, 0, param_1);
     }
-    /* 802FF350 */ virtual void prepend(char const* param_0, JUTPalette* param_1, f32 param_2) {
+    virtual void prepend(char const* param_0, JUTPalette* param_1, f32 param_2) {
         insert(param_0, param_1, 0, param_2);
     }
-    /* 802FF320 */ virtual void prepend(JUTTexture* param_0, f32 param_1) {
+    virtual void prepend(JUTTexture* param_0, f32 param_1) {
         insert(param_0, 0, param_1);
     }
-    /* 801BDD70 */ virtual bool insert(ResTIMG const* param_0, u8 param_1, f32 param_2) {
+    virtual bool insert(ResTIMG const* param_0, u8 param_1, f32 param_2) {
         return insert(param_0, NULL, param_1, param_2);
     }
-    /* 802FD168 */ virtual bool insert(ResTIMG const*, JUTPalette*, u8, f32);
-    /* 80020368 */ virtual bool insert(char const* param_0, u8 param_1, f32 param_2) {
+    virtual bool insert(ResTIMG const*, JUTPalette*, u8, f32);
+    virtual bool insert(char const* param_0, u8 param_1, f32 param_2) {
         return insert(param_0, NULL, param_1, param_2);
     }
-    /* 802FD4B4 */ virtual bool insert(char const*, JUTPalette*, u8, f32);
-    /* 802FD524 */ virtual bool insert(JUTTexture*, u8, f32);
-    /* 802FD6F4 */ virtual bool remove(u8);
-    /* 802FF410 */ virtual bool remove() { return remove(mTextureNum - 1); }
-    /* 802FD814 */ virtual bool remove(JUTTexture*);
-    /* 802FF4E0 */ virtual void draw(f32 param_0, f32 param_1, bool param_2, bool param_3,
+    virtual bool insert(char const*, JUTPalette*, u8, f32);
+    virtual bool insert(JUTTexture*, u8, f32);
+    virtual bool remove(u8);
+    virtual bool remove() { return remove(mTextureNum - 1); }
+    virtual bool remove(JUTTexture*);
+    virtual void draw(f32 param_0, f32 param_1, bool param_2, bool param_3,
                                      bool param_4) {
         draw(param_0, param_1, 0, param_2, param_3, param_4);
     }
-    /* 802FF448 */ virtual void draw(f32 param_0, f32 param_1, u8 param_2, bool param_3,
+    virtual void draw(f32 param_0, f32 param_1, u8 param_2, bool param_3,
                                      bool param_4, bool param_5) {
         if (param_2 < mTextureNum && mTexture[param_2] != NULL) {
             draw(param_0, param_1, mTexture[param_2]->getWidth(), mTexture[param_2]->getHeight(),
                 param_3, param_4, param_5);
         }
     }
-    /* 802FDC70 */ virtual void draw(f32, f32, f32, f32, bool, bool, bool);
-    /* 802FF588 */ virtual void drawOut(f32 param_0, f32 param_1, f32 param_2, f32 param_3,
+    virtual void draw(f32, f32, f32, f32, bool, bool, bool);
+    virtual void drawOut(f32 param_0, f32 param_1, f32 param_2, f32 param_3,
                                         f32 param_4, f32 param_5) {
         if (mTexture[0] != NULL) {
             drawOut(JGeometry::TBox2<f32>(param_0, param_1, param_0 + param_2, param_1 + param_3),
@@ -122,80 +122,80 @@ public:
                                         param_5 + mTexture[0]->getHeight()));
         }
     }
-    /* 802FF524 */ virtual void drawOut(f32 param_0, f32 param_1, f32 param_2, f32 param_3,
+    virtual void drawOut(f32 param_0, f32 param_1, f32 param_2, f32 param_3,
                                         f32 param_4, f32 param_5, f32 param_6, f32 param_7) {
         drawOut(JGeometry::TBox2<f32>(param_0, param_1, param_0 + param_2, param_1 + param_3),
                 JGeometry::TBox2<f32>(param_4, param_5, param_4 + param_6, param_5 + param_7));
     }
-    /* 802FDF88 */ virtual void drawOut(JGeometry::TBox2<f32> const&, JGeometry::TBox2<f32> const&);
-    /* 802FF29C */ virtual void load(_GXTexMapID param_0, u8 param_1) {
+    virtual void drawOut(JGeometry::TBox2<f32> const&, JGeometry::TBox2<f32> const&);
+    virtual void load(_GXTexMapID param_0, u8 param_1) {
         if (param_1 < mTextureNum && param_1 < 2 && mTexture[param_1] != NULL) {
             mTexture[param_1]->load(param_0);
         }
     }
-    /* 802FF268 */ virtual void load(u8 param_0) { load((_GXTexMapID)param_0, param_0); }
-    /* 800202CC */ virtual void setBlendRatio(f32 param_0, f32 param_1) {
+    virtual void load(u8 param_0) { load((_GXTexMapID)param_0, param_0); }
+    virtual void setBlendRatio(f32 param_0, f32 param_1) {
         setBlendColorRatio(param_0, param_1);
         setBlendAlphaRatio(param_0, param_1);
     }
-    /* 802FEA74 */ virtual void setBlendColorRatio(f32, f32);
-    /* 802FEA9C */ virtual void setBlendAlphaRatio(f32, f32);
-    /* 802FD874 */ virtual const ResTIMG* changeTexture(ResTIMG const*, u8);
-    /* 802FD964 */ virtual const ResTIMG* changeTexture(char const*, u8);
-    /* 802FD9BC */ virtual const ResTIMG* changeTexture(ResTIMG const*, u8, JUTPalette*);
-    /* 802FDAC8 */ virtual const ResTIMG* changeTexture(char const*, u8, JUTPalette*);
-    /* 800539DC */ virtual JUTTexture* getTexture(u8 param_0) const {
+    virtual void setBlendColorRatio(f32, f32);
+    virtual void setBlendAlphaRatio(f32, f32);
+    virtual const ResTIMG* changeTexture(ResTIMG const*, u8);
+    virtual const ResTIMG* changeTexture(char const*, u8);
+    virtual const ResTIMG* changeTexture(ResTIMG const*, u8, JUTPalette*);
+    virtual const ResTIMG* changeTexture(char const*, u8, JUTPalette*);
+    virtual JUTTexture* getTexture(u8 param_0) const {
         if (param_0 < 2) {
             return mTexture[param_0];
         }
         return NULL;
     }
-    /* 802FF634 */ virtual u8 getTextureCount() const { return mTextureNum; }
-    /* 80053C6C */ virtual bool setBlack(JUtility::TColor i_black) {
+    virtual u8 getTextureCount() const { return mTextureNum; }
+    virtual bool setBlack(JUtility::TColor i_black) {
         mBlack = i_black;
         return true;
     }
-    /* 80053C44 */ virtual bool setWhite(JUtility::TColor i_white) {
+    virtual bool setWhite(JUtility::TColor i_white) {
         mWhite = i_white;
         return true;
     }
-    /* 8018BEE0 */ virtual bool setBlackWhite(JUtility::TColor i_black, JUtility::TColor i_white) {
+    virtual bool setBlackWhite(JUtility::TColor i_black, JUtility::TColor i_white) {
         mBlack = i_black;
         mWhite = i_white;
         return true;
     }
-    /* 801DFA4C */ virtual JUtility::TColor getBlack() const {
+    virtual JUtility::TColor getBlack() const {
         return mBlack;
     }
-    /* 801DFA40 */ virtual JUtility::TColor getWhite() const {
+    virtual JUtility::TColor getWhite() const {
         return mWhite;
     }
-    /* 8025603C */ virtual J2DMaterial* getMaterial() const { return NULL; }
-    /* 802FDBFC */ virtual void drawFullSet(f32, f32, f32, f32, Mtx*);
-    /* 802FE380 */ virtual void drawTexCoord(f32, f32, f32, f32, s16, s16, s16, s16, s16, s16, s16,
+    virtual J2DMaterial* getMaterial() const { return NULL; }
+    virtual void drawFullSet(f32, f32, f32, f32, Mtx*);
+    virtual void drawTexCoord(f32, f32, f32, f32, s16, s16, s16, s16, s16, s16, s16,
                                              s16, Mtx*);
-    /* 802FF100 */ virtual u8 getUsableTlut(u8);
-    /* 802FF09C */ virtual bool isUsed(ResTIMG const*);
-    /* 802FF63C */ virtual bool isUsed(ResFONT const* param_0) { return J2DPane::isUsed(param_0); }
-    /* 802FF65C */ virtual void rewriteAlpha() {}
+    virtual u8 getUsableTlut(u8);
+    virtual bool isUsed(ResTIMG const*);
+    virtual bool isUsed(ResFONT const* param_0) { return J2DPane::isUsed(param_0); }
+    virtual void rewriteAlpha() {}
 
-    /* 802FC800 */ J2DPicture(u64, JGeometry::TBox2<f32> const&, ResTIMG const*, ResTLUT const*);
-    /* 802FC708 */ J2DPicture(ResTIMG const*);
-    /* 802FC118 */ J2DPicture(J2DPane*, JSURandomInputStream*, JKRArchive*);
-    /* 802FC050 */ J2DPicture();
-    /* 802FC1D4 */ J2DPicture(J2DPane*, JSURandomInputStream*, J2DMaterial*);
-    /* 802FC8E8 */ void private_readStream(J2DPane*, JSURandomInputStream*, JKRArchive*);
-    /* 802FCD70 */ void private_initiate(ResTIMG const*, ResTLUT const*);
-    /* 802FCE9C */ void initinfo();
-    /* 802FE5D0 */ void setTevMode();
-    /* 802FEA60 */ static void swap(f32&, f32&);
-    /* 802FEAC4 */ void setBlendKonstColor();
-    /* 802FEB94 */ void setBlendKonstAlpha();
-    /* 802FEC64 */ void getNewColor(JUtility::TColor*);
-    /* 802FED84 */ void setTexCoord(JGeometry::TVec2<s16>*, JUTTexture const*, J2DBinding,
+    J2DPicture(u64, JGeometry::TBox2<f32> const&, ResTIMG const*, ResTLUT const*);
+    J2DPicture(ResTIMG const*);
+    J2DPicture(J2DPane*, JSURandomInputStream*, JKRArchive*);
+    J2DPicture();
+    J2DPicture(J2DPane*, JSURandomInputStream*, J2DMaterial*);
+    void private_readStream(J2DPane*, JSURandomInputStream*, JKRArchive*);
+    void private_initiate(ResTIMG const*, ResTLUT const*);
+    void initinfo();
+    void setTevMode();
+    static void swap(f32&, f32&);
+    void setBlendKonstColor();
+    void setBlendKonstAlpha();
+    void getNewColor(JUtility::TColor*);
+    void setTexCoord(JGeometry::TVec2<s16>*, JUTTexture const*, J2DBinding,
                                     J2DMirror, bool);
-    /* 802FED44 */ void setTexCoord(JUTTexture const*, J2DBinding, J2DMirror, bool);
-    /* 802FF1D0 */ GXTlut getTlutID(ResTIMG const*, u8);
+    void setTexCoord(JUTTexture const*, J2DBinding, J2DMirror, bool);
+    GXTlut getTlutID(ResTIMG const*, u8);
 
     void setCornerColor(JUtility::TColor c0, JUtility::TColor c1, JUtility::TColor c2,
                         JUtility::TColor c3) {

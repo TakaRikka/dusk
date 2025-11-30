@@ -10,10 +10,8 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 80D64D94-80D64D98 000000 0004+00 2/2 0/0 0/0 .data            m_master_id */
 static u32 m_master_id = static_cast<u32>(0xFFFFFFFF);
 
-/* 80D6462C-80D64680 0000EC 0054+00 1/1 0/0 0/0 .text            __ct__20daTagWaterFall_HIO_cFv */
 daTagWaterFall_HIO_c::daTagWaterFall_HIO_c() {
     field_0x04 = -1;
     mBaseFogNear = 0.0f;
@@ -27,17 +25,14 @@ daTagWaterFall_HIO_c::daTagWaterFall_HIO_c() {
     field_0x20 = 0.0f;
 }
 
-/* 80D64680-80D64688 000140 0008+00 1/1 0/0 0/0 .text            draw__16daTagWaterFall_cFv */
 int daTagWaterFall_c::draw() {
     return 1;
 }
 
-/* 80D64688-80D646A8 000148 0020+00 1/0 0/0 0/0 .text daTagWaterFall_Draw__FP16daTagWaterFall_c */
 static int daTagWaterFall_Draw(daTagWaterFall_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D646A8-80D64724 000168 007C+00 1/1 0/0 0/0 .text            s_waterfall__FPvPv */
 void* s_waterfall(void* pProc, void* unused) {
     if (fopAc_IsActor(pProc)) {
         if (fopAcM_GetName(pProc) == PROC_Tag_WaterFall) {
@@ -55,8 +50,6 @@ void* s_waterfall(void* pProc, void* unused) {
     return NULL;
 }
 
-/* 80D64724-80D64768 0001E4 0044+00 1/1 0/0 0/0 .text            getEllipseY__16daTagWaterFall_cFf
- */
 f32 daTagWaterFall_c::getEllipseY(f32 x) {
     // Ellipse is in standard form;
     // x,y-plane of ellipse is the horizontal world plane
@@ -72,8 +65,6 @@ f32 daTagWaterFall_c::getEllipseY(f32 x) {
     return JMAFastSqrt(ellipseYSquared);
 }
 
-/* 80D64768-80D6486C 000228 0104+00 1/1 0/0 2/2 .text checkHitWaterFall__16daTagWaterFall_cF4cXyz
- */
 bool daTagWaterFall_c::checkHitWaterFall(cXyz objPos) {
     Vec dst;
 
@@ -101,21 +92,15 @@ bool daTagWaterFall_c::checkHitWaterFall(cXyz objPos) {
     return false;
 }
 
-/* 80D6486C-80D648B4 00032C 0048+00 1/1 0/0 0/0 .text
- * checkHitWaterFallCamera__16daTagWaterFall_cFv                */
 bool daTagWaterFall_c::checkHitWaterFallCamera() {
     const camera_class* camera = dComIfGp_getCamera(0);
     return checkHitWaterFall(camera->lookat.eye);
 }
 
-/* ############################################################################################## */
-/* 80D64E00-80D64E04 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool masterWaterfallTagExists;
 
-/* 80D64E10-80D64E34 000018 0024+00 3/3 0/0 0/0 .bss             l_HIO */
 static daTagWaterFall_HIO_c l_HIO;
 
-/* 80D648B4-80D64AB8 000374 0204+00 1/1 0/0 0/0 .text            execute__16daTagWaterFall_cFv */
 int daTagWaterFall_c::execute() {
     u32 masterId = m_master_id;
     u32 waterfallId = fpcM_GetID(this);
@@ -180,20 +165,15 @@ int daTagWaterFall_c::execute() {
     return 1;
 }
 
-/* 80D64AB8-80D64AD8 000578 0020+00 1/0 0/0 0/0 .text daTagWaterFall_Execute__FP16daTagWaterFall_c
- */
 
 static int daTagWaterFall_Execute(daTagWaterFall_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D64AD8-80D64AE0 000598 0008+00 1/0 0/0 0/0 .text
- * daTagWaterFall_IsDelete__FP16daTagWaterFall_c                */
 static int daTagWaterFall_IsDelete(daTagWaterFall_c* i_this) {
     return 1;
 }
 
-/* 80D64AE0-80D64B00 0005A0 0020+00 1/1 0/0 0/0 .text            _delete__16daTagWaterFall_cFv */
 int daTagWaterFall_c::_delete() {
     if (mIsMasterWaterfallTag) {
         masterWaterfallTagExists = false;
@@ -201,13 +181,10 @@ int daTagWaterFall_c::_delete() {
     return 1;
 }
 
-/* 80D64B00-80D64B20 0005C0 0020+00 1/0 0/0 0/0 .text daTagWaterFall_Delete__FP16daTagWaterFall_c
- */
 static int daTagWaterFall_Delete(daTagWaterFall_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80D64B20-80D64CBC 0005E0 019C+00 1/1 0/0 0/0 .text            create__16daTagWaterFall_cFv */
 cPhs__Step daTagWaterFall_c::create() {
     fopAcM_ct(this, daTagWaterFall_c);
 
@@ -250,23 +227,18 @@ cPhs__Step daTagWaterFall_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D64CBC-80D64CDC 00077C 0020+00 1/0 0/0 0/0 .text daTagWaterFall_Create__FP16daTagWaterFall_c
- */
 static int daTagWaterFall_Create(daTagWaterFall_c* i_this) {
     return i_this->create();
 }
 
-/* 80D64CDC-80D64D24 00079C 0048+00 2/1 0/0 0/0 .text            __dt__20daTagWaterFall_HIO_cFv */
 daTagWaterFall_HIO_c::~daTagWaterFall_HIO_c() {}
 
-/* 80D64D98-80D64DB8 -00001 0020+00 1/0 0/0 0/0 .data            l_daTagWaterFall_Method */
 static actor_method_class l_daTagWaterFall_Method = {
     (process_method_func)daTagWaterFall_Create,  (process_method_func)daTagWaterFall_Delete,
     (process_method_func)daTagWaterFall_Execute, (process_method_func)daTagWaterFall_IsDelete,
     (process_method_func)daTagWaterFall_Draw,
 };
 
-/* 80D64DB8-80D64DE8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_WaterFall */
 extern actor_process_profile_definition g_profile_Tag_WaterFall = {
     fpcLy_CURRENT_e,
     7,

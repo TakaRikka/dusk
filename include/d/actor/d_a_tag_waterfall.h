@@ -14,13 +14,13 @@ class daTagWaterFall_c : public fopAc_ac_c {
 public:
     daTagWaterFall_c() {}
 
-    /* 80D64680 */ int draw();
-    /* 80D64724 */ f32 getEllipseY(f32);
-    /* 80D64768 */ bool checkHitWaterFall(cXyz);
-    /* 80D6486C */ bool checkHitWaterFallCamera();
-    /* 80D648B4 */ int execute();
-    /* 80D64AE0 */ int _delete();
-    /* 80D64B20 */ cPhs__Step create();
+    int draw();
+    f32 getEllipseY(f32);
+    bool checkHitWaterFall(cXyz);
+    bool checkHitWaterFallCamera();
+    int execute();
+    int _delete();
+    cPhs__Step create();
 
 private:
     /* 0x568 */ f32 mCylinderRadiusA;
@@ -37,8 +37,8 @@ private:
 
 struct daTagWaterFall_HIO_c {
 public:
-    /* 80D6462C */ daTagWaterFall_HIO_c();
-    /* 80D64CDC */ virtual ~daTagWaterFall_HIO_c();
+    daTagWaterFall_HIO_c();
+    virtual ~daTagWaterFall_HIO_c();
 
     /* 0x00 */ /* vtable */
 

@@ -8,16 +8,16 @@
 class dBgW;
 
 struct daTagCsw_c : public fopAc_ac_c, public request_of_phase_process_class {
-    /* 80D56BD8 */ ~daTagCsw_c();
-    /* 80D56D98 */ void setMtx();
-    /* 80D56EF8 */ int createHeap();
-    /* 80D57320 */ int chkInsideStatueStart();
-    /* 80D573C0 */ int create();
-    /* 80D5789C */ int Delete();
-    /* 80D57968 */ void onLight();
-    /* 80D579A8 */ void offLight();
-    /* 80D579E8 */ int execute();
-    /* 80D583B8 */ int draw();
+    ~daTagCsw_c();
+    void setMtx();
+    int createHeap();
+    int chkInsideStatueStart();
+    int create();
+    int Delete();
+    void onLight();
+    void offLight();
+    int execute();
+    int draw();
 
     int getSw() { return fopAcM_GetParamBit(this, 1, 8); }
     int getSw2() { return fopAcM_GetParamBit(this, 9, 8); }

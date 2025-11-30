@@ -22,15 +22,15 @@ public:
         /* 0x5 */ ACT_EVENT,
     };
 
-    /* 804D5818 */ u8 getEventNo();
-    /* 804D5824 */ u8 getSwbit();
-    /* 804D5830 */ int actionWait();
-    /* 804D5838 */ int actionCheck();
-    /* 804D5888 */ int actionTimer();
-    /* 804D5938 */ int actionOrder();
-    /* 804D59A0 */ int actionEvent();
-    /* 804D5A44 */ int actionNext();
-    /* 804D5B10 */ int execute();
+    u8 getEventNo();
+    u8 getSwbit();
+    int actionWait();
+    int actionCheck();
+    int actionTimer();
+    int actionOrder();
+    int actionEvent();
+    int actionNext();
+    int execute();
 
     inline int create();
 

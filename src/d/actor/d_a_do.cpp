@@ -16,15 +16,12 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* 8066F2B4-8066F2B8 -00001 0004+00 1/2 0/0 0/0 .bss             None */
 /* 8066F2B6 0002+00 data_8066F2B6 None */
 static bool noFallCheck;
 static bool hioInit;
 
-/* 8066F2C4-8066F2E4 000054 0020+00 11/12 0/0 0/0 .bss             l_HIO */
 static daDo_HIO_c l_HIO;
 
-/* 80667D4C-80667DA8 0000EC 005C+00 1/1 0/0 0/0 .text            __ct__10daDo_HIO_cFv */
 daDo_HIO_c::daDo_HIO_c() {
     field_0x04 = -1;
     mBaseSize = 1.0f;
@@ -37,7 +34,6 @@ daDo_HIO_c::daDo_HIO_c() {
     mWaterHuntAnimType = 0;
 }
 
-/* 80667DA8-80667E68 000148 00C0+00 16/16 0/0 0/0 .text            anm_init__FP8do_classifUcf */
 static void anm_init(do_class* i_this, int i_resIdx, f32 i_morf, u8 i_mode, f32 i_speed) {
     if (!(i_this->field_0x608 > 1.0f)) {
         i_this->mpMorf->setAnm(static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Do", i_resIdx)),
@@ -46,7 +42,6 @@ static void anm_init(do_class* i_this, int i_resIdx, f32 i_morf, u8 i_mode, f32 
     }
 }
 
-/* 80667E68-80667FE4 000208 017C+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_jntP, int param_1) {
     if (param_1 == 0) {
         int joint_num = i_jntP->getJntNo();
@@ -75,7 +70,6 @@ static int nodeCallBack(J3DJoint* i_jntP, int param_1) {
     return 1;
 }
 
-/* 80667FE4-80668134 000384 0150+00 1/0 0/0 0/0 .text            daDo_Draw__FP8do_class */
 static int daDo_Draw(do_class* i_this) {
     if (i_this->mNoDraw != 0) {
         i_this->mNoDraw = 0;
@@ -106,8 +100,6 @@ static int daDo_Draw(do_class* i_this) {
     return 1;
 }
 
-/* 80668170-80668264 000510 00F4+00 1/1 0/0 0/0 .text
- * daDo_other_bg_check__FP8do_classP10fopAc_ac_c                */
 static BOOL daDo_other_bg_check(do_class* i_this, fopAc_ac_c* i_actor) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     cXyz dog_pos;
@@ -132,7 +124,6 @@ static BOOL daDo_other_bg_check(do_class* i_this, fopAc_ac_c* i_actor) {
     }
 }
 
-/* 80668264-8066833C 000604 00D8+00 1/1 0/0 0/0 .text daDo_other_bg_check2__FP8do_classP4cXyz */
 static BOOL daDo_other_bg_check2(do_class* i_this, cXyz* i_pos) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     cXyz dog_pos;
@@ -153,16 +144,12 @@ static BOOL daDo_other_bg_check2(do_class* i_this, cXyz* i_pos) {
     }
 }
 
-/* 8066F2E4-8066F2F8 000074 0014+00 1/2 0/0 0/0 .bss             target_info */
 static fopAc_ac_c* target_info[5];
 
-/* 8066F2F8-8066F2FC 000088 0004+00 1/2 0/0 0/0 .bss             target_info_count */
 static int target_info_count;
 
-/* 8066F2FC-8066F310 00008C 0014+00 0/1 0/0 0/0 .bss             target_bgc */
 static BOOL target_bgc[5];
 
-/* 8066833C-806683C0 0006DC 0084+00 1/1 0/0 0/0 .text            s_w_sub__FPvPv */
 static void* s_w_sub(void* i_proc, void* i_this) {
     if (fopAcM_IsActor(i_proc) &&
         (fopAcM_GetName(i_proc) == PROC_OBJ_FOOD || fopAcM_GetName(i_proc) == PROC_OBJ_KANBAN2) &&
@@ -174,7 +161,6 @@ static void* s_w_sub(void* i_proc, void* i_this) {
     return NULL;
 }
 
-/* 806683C0-8066858C 000760 01CC+00 1/1 0/0 0/0 .text            search_food__FP8do_class */
 static u32 search_food(do_class* i_this) {
     target_info_count = 0;
 
@@ -220,7 +206,6 @@ static u32 search_food(do_class* i_this) {
     return -1;
 }
 
-/* 8066858C-806685EC 00092C 0060+00 1/1 0/0 0/0 .text            food_check__FP8do_class */
 static void food_check(do_class* i_this) {
     i_this->mFoodActorID = search_food(i_this);
 
@@ -230,7 +215,6 @@ static void food_check(do_class* i_this) {
     }
 }
 
-/* 806685EC-80668624 00098C 0038+00 1/1 0/0 0/0 .text            do_carry_check__FP8do_class */
 static BOOL do_carry_check(do_class* i_this) {
     if (i_this->mAction != ACT_CARRY && fopAcM_checkCarryNow(i_this)) {
         i_this->mAction = ACT_CARRY;
@@ -241,7 +225,6 @@ static BOOL do_carry_check(do_class* i_this) {
     return false;
 }
 
-/* 80668624-80668754 0009C4 0130+00 1/1 0/0 0/0 .text            depth_check__FP8do_class4cXyzf */
 static BOOL depth_check(do_class* i_this, cXyz i_pos, f32 param_2) {
     dBgS_GndChk gnd_chk;
     Vec pos;
@@ -266,7 +249,6 @@ static BOOL depth_check(do_class* i_this, cXyz i_pos, f32 param_2) {
     }
 }
 
-/* 80668754-8066886C 000AF4 0118+00 1/1 0/0 0/0 .text            water_check__FP8do_class */
 static bool water_check(do_class* i_this) {
     dBgS_GndChk gnd_chk;
     Vec pos;
@@ -288,7 +270,6 @@ static bool water_check(do_class* i_this) {
     }
 }
 
-/* 8066886C-80668A30 000C0C 01C4+00 4/4 0/0 0/0 .text            dansa_check__FP8do_class4cXyzf */
 static int dansa_check(do_class* i_this, cXyz i_pos, f32 param_2) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     i_pos.y += 25.0f;
@@ -323,7 +304,6 @@ static int dansa_check(do_class* i_this, cXyz i_pos, f32 param_2) {
     }
 }
 
-/* 80668A30-80668B18 000DD0 00E8+00 3/3 0/0 0/0 .text            dansa_check2__FP8do_classf */
 static BOOL dansa_check2(do_class* i_this, f32 param_1) {
     cXyz pos, pos2;
 
@@ -338,7 +318,6 @@ static BOOL dansa_check2(do_class* i_this, f32 param_1) {
     return dansa_check(i_this, pos2, 100.0f) != 0 ? TRUE : FALSE;
 }
 
-/* 80668B18-80668BA0 000EB8 0088+00 4/4 0/0 0/0 .text            move_dansa_check__FP8do_classf */
 static BOOL move_dansa_check(do_class* i_this, f32 i_speed) {
     if (dansa_check2(i_this, 130.0f)) {
         i_this->mAction = ACT_WAIT_1;
@@ -355,7 +334,6 @@ static BOOL move_dansa_check(do_class* i_this, f32 i_speed) {
     }
 }
 
-/* 80668BA0-80668D5C 000F40 01BC+00 5/5 0/0 0/0 .text            area_check__FP8do_class */
 static void area_check(do_class* i_this) {
     cXyz pos_delta = i_this->home.pos - i_this->current.pos;
 
@@ -368,7 +346,6 @@ static void area_check(do_class* i_this) {
     }
 }
 
-/* 80668D5C-80669050 0010FC 02F4+00 2/1 0/0 0/0 .text            do_stay__FP8do_class */
 static void do_stay(do_class* i_this) {
     switch (i_this->mMode) {
     case 0:
@@ -460,7 +437,6 @@ static void do_stay(do_class* i_this) {
     cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
 }
 
-/* 80669050-8066973C 0013F0 06EC+00 2/1 0/0 0/0 .text            do_walk__FP8do_class */
 static void do_walk(do_class* i_this) {
     cXyz local_5c;
     s16 angle_diff;
@@ -597,7 +573,6 @@ static void do_walk(do_class* i_this) {
     move_dansa_check(i_this, i_this->speedF);
 }
 
-/* 8066973C-806698D0 001ADC 0194+00 1/1 0/0 0/0 .text            do_walk_run__FP8do_class */
 static void do_walk_run(do_class* i_this) {
     i_this->field_0x616 = 1;
     i_this->mTailWagTarget = 3000.0f;
@@ -640,7 +615,6 @@ static void do_walk_run(do_class* i_this) {
     }
 }
 
-/* 806698D0-80669A1C 001C70 014C+00 1/1 0/0 0/0 .text            do_run__FP8do_class */
 static void do_run(do_class* i_this) {
     i_this->field_0x616 = 1;
     i_this->mTailWagTarget = 4000.0f;
@@ -673,7 +647,6 @@ static void do_run(do_class* i_this) {
     }
 }
 
-/* 80669A1C-80669B80 001DBC 0164+00 1/1 0/0 0/0 .text            do_run_walk__FP8do_class */
 static void do_run_walk(do_class* i_this) {
     i_this->field_0x616 = 1;
     i_this->mTailWagTarget = 3000.0f;
@@ -713,7 +686,6 @@ static void do_run_walk(do_class* i_this) {
     }
 }
 
-/* 80669B80-8066A1C4 001F20 0644+00 2/1 0/0 0/0 .text            do_wait_1__FP8do_class */
 static void do_wait_1(do_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     i_this->field_0x616 = 1;
@@ -883,7 +855,6 @@ case1:
     }
 }
 
-/* 8066A1C4-8066A3D0 002564 020C+00 1/1 0/0 0/0 .text            do_wait_2__FP8do_class */
 static void do_wait_2(do_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -937,7 +908,6 @@ static void do_wait_2(do_class* i_this) {
     area_check(i_this);
 }
 
-/* 8066A3D0-8066A5DC 002770 020C+00 1/1 0/0 0/0 .text            do_sit__FP8do_class */
 static void do_sit(do_class* i_this) {
     i_this->field_0x616 = 1;
     i_this->mTailWagTarget = 1000.0f;
@@ -1002,7 +972,6 @@ static void do_sit(do_class* i_this) {
     area_check(i_this);
 }
 
-/* 8066A5DC-8066A80C 00297C 0230+00 1/1 0/0 0/0 .text            hang_set__FP8do_class */
 static s16 hang_set(do_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     dBgS_LinChk lin_chk;
@@ -1040,7 +1009,6 @@ static s16 hang_set(do_class* i_this) {
     return cM_atan2s(vec1.x, vec1.z) + 0x4000;
 }
 
-/* 8066A80C-8066AB78 002BAC 036C+00 1/1 0/0 0/0 .text            do_hang__FP8do_class */
 static void do_hang(do_class* i_this) {
     i_this->mTailWagTarget = 3000.0f;
     i_this->field_0x616 = 2;
@@ -1121,7 +1089,6 @@ static void do_hang(do_class* i_this) {
     }
 }
 
-/* 8066AB78-8066B650 002F18 0AD8+00 2/1 0/0 0/0 .text            do_food__FP8do_class */
 static void do_food(do_class* i_this) {
     fopAc_ac_c* food = fopAcM_SearchByID(i_this->mFoodActorID);
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -1345,7 +1312,6 @@ case1and2:
     }
 }
 
-/* 8066B650-8066B774 0039F0 0124+00 1/1 0/0 0/0 .text            do_swim__FP8do_class */
 static void do_swim(do_class* i_this) {
     cXyz pos;
     i_this->field_0x616 = 1;
@@ -1375,7 +1341,6 @@ static void do_swim(do_class* i_this) {
     fopAcM_effHamonSet(&i_this->mRippleKey, &pos, 0.7f, 0.1f);
 }
 
-/* 8066B774-8066B7C0 003B14 004C+00 2/2 0/0 0/0 .text            s_c_sub__FPvPv */
 static void* s_c_sub(void* param_0, void* param_1) {
     if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_CANOE) {
         return param_0;
@@ -1383,7 +1348,6 @@ static void* s_c_sub(void* param_0, void* param_1) {
     return 0;
 }
 
-/* 8066B7C0-8066BD3C 003B60 057C+00 1/1 0/0 0/0 .text            do_help__FP8do_class */
 static void do_help(do_class* i_this) {
     f32 target_speed = 0.0f;
     i_this->field_0x616 = 1;
@@ -1463,7 +1427,6 @@ static void do_help(do_class* i_this) {
     }
 }
 
-/* 8066BD3C-8066C894 0040DC 0B58+00 2/1 0/0 0/0 .text            do_boat__FP8do_class */
 static s8 do_boat(do_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     s8 ret = 1;
@@ -1679,7 +1642,6 @@ static s8 do_boat(do_class* i_this) {
     return ret;
 }
 
-/* 8066C894-8066CAA8 004C34 0214+00 1/1 0/0 0/0 .text            do_a_swim__FP8do_class */
 static void do_a_swim(do_class* i_this) {
     i_this->mTailWagTarget = 2000.0f;
     cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
@@ -1731,7 +1693,6 @@ static void do_a_swim(do_class* i_this) {
     }
 }
 
-/* 8066CAA8-8066CDEC 004E48 0344+00 1/1 0/0 0/0 .text            do_carry__FP8do_class */
 static s8 do_carry(do_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     s8 ret = 0;
@@ -1798,7 +1759,6 @@ static s8 do_carry(do_class* i_this) {
     return ret;
 }
 
-/* 8066CDEC-8066CEC4 00518C 00D8+00 1/1 0/0 0/0 .text            do_message__FP8do_class */
 static void do_message(do_class* i_this) {
     i_this->mTailWagTarget = 2000.0f;
 
@@ -1822,7 +1782,6 @@ static void do_message(do_class* i_this) {
     }
 }
 
-/* 8066CEC4-8066DD48 005264 0E84+00 2/1 0/0 0/0 .text            action__FP8do_class */
 static void action(do_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     cXyz vec1, vec2;
@@ -2221,7 +2180,6 @@ static void action(do_class* i_this) {
     }
 }
 
-/* 8066DD48-8066DE64 0060E8 011C+00 1/1 0/0 0/0 .text            message__FP8do_class */
 static void message(do_class* i_this) {
     if (i_this->mIsTalking) {
         i_this->mCcDisableTimer = 10;
@@ -2248,7 +2206,6 @@ static void message(do_class* i_this) {
     }
 }
 
-/* 8066DE64-8066E494 006204 0630+00 2/1 0/0 0/0 .text            daDo_Execute__FP8do_class */
 static int daDo_Execute(do_class* i_this) {
     if (cDmrNowMidnaTalk() && !fopAcM_checkCarryNow(i_this)) {
         return 1;
@@ -2381,12 +2338,10 @@ static int daDo_Execute(do_class* i_this) {
     return 1;
 }
 
-/* 8066E494-8066E49C 006834 0008+00 1/0 0/0 0/0 .text            daDo_IsDelete__FP8do_class */
 static int daDo_IsDelete(do_class* i_this) {
     return 1;
 }
 
-/* 8066E49C-8066E504 00683C 0068+00 1/0 0/0 0/0 .text            daDo_Delete__FP8do_class */
 static int daDo_Delete(do_class* i_this) {
     u32 actor_id = fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "Do");
@@ -2399,7 +2354,6 @@ static int daDo_Delete(do_class* i_this) {
     return 1;
 }
 
-/* 8066E504-8066E7D4 0068A4 02D0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     do_class* _this = (do_class*)i_this;
 
@@ -2449,7 +2403,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8066E81C-8066EAE4 006BBC 02C8+00 1/0 0/0 0/0 .text            daDo_Create__FP10fopAc_ac_c */
 static cPhs__Step daDo_Create(fopAc_ac_c* i_this) {
     do_class* _this = static_cast<do_class*>(i_this);
     fopAcM_ct(i_this, do_class);
@@ -2539,7 +2492,6 @@ static cPhs__Step daDo_Create(fopAc_ac_c* i_this) {
 
 AUDIO_INSTANCES;
 
-/* 8066F1CC-8066F1EC -00001 0020+00 1/0 0/0 0/0 .data            l_daDo_Method */
 static actor_method_class l_daDo_Method = {
     (process_method_func)daDo_Create,
     (process_method_func)daDo_Delete,
@@ -2548,7 +2500,6 @@ static actor_method_class l_daDo_Method = {
     (process_method_func)daDo_Draw,
 };
 
-/* 8066F1EC-8066F21C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_DO */
 extern actor_process_profile_definition g_profile_DO = {
     fpcLy_CURRENT_e,
     7,

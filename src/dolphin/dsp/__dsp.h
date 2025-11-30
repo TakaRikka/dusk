@@ -12,7 +12,7 @@ extern DSPTaskInfo* __DSP_last_task;
 extern DSPTaskInfo* __DSP_curr_task;
 extern DSPTaskInfo* __DSP_tmp_task;
 
-__declspec(weak) void __DSPHandler(__OSInterrupt, OSContext*);
+DECL_WEAK void __DSPHandler(__OSInterrupt, OSContext*);
 void __DSP_exec_task(DSPTaskInfo*, DSPTaskInfo*);
 void __DSP_boot_task(DSPTaskInfo*);
 void __DSP_insert_task(DSPTaskInfo*);

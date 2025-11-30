@@ -47,19 +47,19 @@ public:
         /* 0x15 */ u8 _15;
     };
 
-    /* 801C2718 */ dMenuMapCommon_c();
-    /* 801C27B4 */ virtual ~dMenuMapCommon_c();
-    /* 801C28D8 */ void initiate(JKRArchive*);
-    /* 801C38E4 */ void drawIcon(f32, f32, f32, f32);
-    /* 801C3EC4 */ void iconScale(int, f32, f32, f32);
-    /* 801C43A8 */ bool setIconInfo(u8, f32, f32, f32, f32, f32, u8);
-    /* 801C443C */ void clearIconInfo();
-    /* 801C4494 */ void setBlendRatio(u8, f32, f32);
-    /* 801C452C */ void blinkMove(s16);
-    /* 801C4600 */ void moveLightDropAnime();
-    /* 801C4738 */ f32 getIconSizeX(u8 index);
-    /* 801C4778 */ f32 getIconSizeY(u8 index);
-    /* 801C47C4 */ void debugIcon();
+    dMenuMapCommon_c();
+    virtual ~dMenuMapCommon_c();
+    void initiate(JKRArchive*);
+    void drawIcon(f32, f32, f32, f32);
+    void iconScale(int, f32, f32, f32);
+    bool setIconInfo(u8, f32, f32, f32, f32, f32, u8);
+    void clearIconInfo();
+    void setBlendRatio(u8, f32, f32);
+    void blinkMove(s16);
+    void moveLightDropAnime();
+    f32 getIconSizeX(u8 index);
+    f32 getIconSizeY(u8 index);
+    void debugIcon();
 
     void setCenterPosX(f32 center_pos, u8 param_2) {
         mCenterPosX = center_pos;

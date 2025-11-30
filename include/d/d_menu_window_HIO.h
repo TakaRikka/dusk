@@ -5,9 +5,9 @@
 
 class dMw_DHIO_c {
 public:
-    /* 801F9E2C */ dMw_DHIO_c();
+    dMw_DHIO_c();
 
-    /* 801F9E98 */ virtual ~dMw_DHIO_c() {}
+    virtual ~dMw_DHIO_c() {}
 
     /* 0x004 */ s8 field_0x4;
     /* 0x005 */ bool mMap[32];
@@ -32,18 +32,18 @@ extern dMw_DHIO_c g_mwDHIO;
 
 class dMw_HIO_c {
 public:
-    /* 801F9AFC */ dMw_HIO_c();
-    /* 801F9B38 */ void init();
-    /* 801F9E14 */ bool getBombFlag();
-    /* 801F9E1C */ bool getArrowFlag();
-    /* 801F9E24 */ bool getPachinkoFlag();
+    dMw_HIO_c();
+    void init();
+    bool getBombFlag();
+    bool getArrowFlag();
+    bool getPachinkoFlag();
     void update();
 
     void setArrowFlag(u8 i_flag) { mArrowFlag = i_flag; }
     void setPachinkoFlag(u8 i_flag) { mPachinkoFlag = i_flag; }
     void setBombFlag(u8 i_flag) { mBombFlag = i_flag; }
 
-    /* 801F9EE0 */ virtual ~dMw_HIO_c() {}
+    virtual ~dMw_HIO_c() {}
 
     /* 0x004 */ s8 field_0x4;
     /* 0x006 */ u16 mLife;

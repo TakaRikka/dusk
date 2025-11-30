@@ -22,17 +22,14 @@ struct daTagTWGate_zevParam {
     /* 0x1B */ s8 mLayer;
 };
 
-/* 80D525F8-80D52604 000078 000C+00 1/0 0/0 0/0 .text            initWait__13daTagTWGate_cFv */
 void daTagTWGate_c::initWait() {
     mEventID = -1;
 }
 
-/* 80D557AC-80D557B0 000000 0001+03 5/5 0/0 0/0 .rodata          mAttr__13daTagTWGate_c */
 u8 const daTagTWGate_c::mAttr[1] = {
     0x00,
 };
 
-/* 80D557B0-80D55820 -00001 0070+00 14/18 0/0 0/0 .rodata          l_zevParamTbl */
 static daTagTWGate_zevParam const l_zevParamTbl[4] = {
     {
         "TWGate_FL",
@@ -80,10 +77,8 @@ static daTagTWGate_zevParam const l_zevParamTbl[4] = {
     },
 };
 
-/* 80D55994-80D55998 -00001 0004+00 12/12 0/0 0/0 .data            l_myName */
 static const char* l_myName = "Gate";
 
-/* 80D55AD0-80D55C08 00015C 0138+00 14/15 0/0 0/0 .data            ActionTable__13daTagTWGate_c */
 actionFunc daTagTWGate_c::ActionTable[13][2] = {
     {&daTagTWGate_c::initWait, &daTagTWGate_c::executeWait},
     {&daTagTWGate_c::initDemoFilone1, &daTagTWGate_c::executeDemoFilone1},
@@ -100,7 +95,6 @@ actionFunc daTagTWGate_c::ActionTable[13][2] = {
     {&daTagTWGate_c::initDemoHyral3, &daTagTWGate_c::executeDemoHyral3},
 };
 
-/* 80D52604-80D528F0 000084 02EC+00 1/0 0/0 0/0 .text            executeWait__13daTagTWGate_cFv */
 void daTagTWGate_c::executeWait() {
     f32 radius = pow(scale.x * 100.0f, 2.0f);
     f32 distance = fopAcM_searchActorDistanceXZ2(this, (fopAc_ac_c*)dComIfGp_getPlayer(0));
@@ -161,15 +155,12 @@ void daTagTWGate_c::executeWait() {
     }
 }
 
-/* 80D528F0-80D5297C 000370 008C+00 1/0 0/0 0/0 .text            initDemoFilone1__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoFilone1() {
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
     mEventID = dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mEventName, -1);
     fopAcM_orderOtherEventId(this, mEventID, -1, -1, 4, 1);
 }
 
-/* 80D5297C-80D52AF4 0003FC 0178+00 1/0 0/0 0/0 .text executeDemoFilone1__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoFilone1() {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int staffId = event_manager.getMyStaffId(l_myName, NULL, 0);
@@ -206,8 +197,6 @@ void daTagTWGate_c::executeDemoFilone1() {
     }
 }
 
-/* 80D52AF4-80D52BF0 000574 00FC+00 1/0 0/0 0/0 .text            initDemoFilone2__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoFilone2() {
     fopAcM_onSwitch(this, getSwitch());
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
@@ -225,7 +214,6 @@ void daTagTWGate_c::initDemoFilone2() {
     }
 }
 
-/* 80D52BF0-80D52DB4 000670 01C4+00 1/0 0/0 0/0 .text executeDemoFilone2__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoFilone2() {
     s32 staffId = dComIfGp_evmng_getMyStaffId(l_myName, NULL, 0);
 
@@ -271,8 +259,6 @@ void daTagTWGate_c::executeDemoFilone2() {
     }
 }
 
-/* 80D52DB4-80D52E7C 000834 00C8+00 1/0 0/0 0/0 .text            initDemoFilone3__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoFilone3() {
     field_0x5de = 1;
     mIsWolf = (dComIfGp_getLinkPlayer()->mNoResetFlg1 >> 25) & 1;  // checking if wolf?
@@ -284,7 +270,6 @@ void daTagTWGate_c::initDemoFilone3() {
     fopAcM_orderChangeEventId(this, mEventID, 1, -1);
 }
 
-/* 80D52E7C-80D53250 0008FC 03D4+00 1/0 0/0 0/0 .text executeDemoFilone3__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoFilone3() {
     s32 staffId = dComIfGp_evmng_getMyStaffId(l_myName, NULL, 0);
 
@@ -374,15 +359,12 @@ void daTagTWGate_c::executeDemoFilone3() {
     }
 }
 
-/* 80D53250-80D532DC 000CD0 008C+00 1/0 0/0 0/0 .text            initDemoOrdin1__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoOrdin1() {
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
     mEventID = dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mEventName, -1);
     fopAcM_orderOtherEventId(this, mEventID, -1, -1, 4, 1);
 }
 
-/* 80D532DC-80D53454 000D5C 0178+00 1/0 0/0 0/0 .text executeDemoOrdin1__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoOrdin1() {
     dEvent_manager_c& evtMng = dComIfGp_getEventManager();
     int staffId = evtMng.getMyStaffId(l_myName, NULL, 0);
@@ -410,8 +392,6 @@ void daTagTWGate_c::executeDemoOrdin1() {
     }
 }
 
-/* 80D53454-80D53550 000ED4 00FC+00 1/0 0/0 0/0 .text            initDemoOrdin2__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoOrdin2() {
     fopAcM_onSwitch(this, getSwitch());
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
@@ -427,7 +407,6 @@ void daTagTWGate_c::initDemoOrdin2() {
     }
 }
 
-/* 80D53550-80D53714 000FD0 01C4+00 1/0 0/0 0/0 .text executeDemoOrdin2__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoOrdin2() {
     dEvent_manager_c& evtMng = dComIfGp_getEventManager();
     int staffId = evtMng.getMyStaffId(l_myName, NULL, 0);
@@ -472,8 +451,6 @@ void daTagTWGate_c::executeDemoOrdin2() {
     }
 }
 
-/* 80D53714-80D537DC 001194 00C8+00 1/0 0/0 0/0 .text            initDemoOrdin3__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoOrdin3() {
     field_0x5de = 1;
     mIsWolf = (dComIfGp_getLinkPlayer()->mNoResetFlg1 >> 25) & 1;  // checking if wolf?
@@ -485,7 +462,6 @@ void daTagTWGate_c::initDemoOrdin3() {
     fopAcM_orderChangeEventId(this, mEventID, 1, -1);
 }
 
-/* 80D537DC-80D53BD0 00125C 03F4+00 1/0 0/0 0/0 .text executeDemoOrdin3__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoOrdin3() {
     dEvent_manager_c& evtMng = dComIfGp_getEventManager();
     int staffId = evtMng.getMyStaffId(l_myName, NULL, 0);
@@ -567,15 +543,12 @@ void daTagTWGate_c::executeDemoOrdin3() {
     }
 }
 
-/* 80D53BD0-80D53C5C 001650 008C+00 1/0 0/0 0/0 .text            initDemoRanail1__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoRanail1() {
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
     mEventID = dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mEventName, -1);
     fopAcM_orderOtherEventId(this, mEventID, -1, -1, 4, 1);
 }
 
-/* 80D53C5C-80D53DD4 0016DC 0178+00 1/0 0/0 0/0 .text executeDemoRanail1__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoRanail1() {
     dEvent_manager_c& evtMng = dComIfGp_getEventManager();
     int staffId = evtMng.getMyStaffId(l_myName, NULL, 0);
@@ -603,8 +576,6 @@ void daTagTWGate_c::executeDemoRanail1() {
     }
 }
 
-/* 80D53DD4-80D53ED0 001854 00FC+00 1/0 0/0 0/0 .text            initDemoRanail2__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoRanail2() {
     fopAcM_onSwitch(this, getSwitch());
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
@@ -620,7 +591,6 @@ void daTagTWGate_c::initDemoRanail2() {
     }
 }
 
-/* 80D53ED0-80D54094 001950 01C4+00 1/0 0/0 0/0 .text executeDemoRanail2__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoRanail2() {
     dEvent_manager_c& evtMng = dComIfGp_getEventManager();
     int staffId = evtMng.getMyStaffId(l_myName, NULL, 0);
@@ -665,8 +635,6 @@ void daTagTWGate_c::executeDemoRanail2() {
     }
 }
 
-/* 80D54094-80D54178 001B14 00E4+00 1/0 0/0 0/0 .text            initDemoRanail3__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoRanail3() {
     field_0x5de = 1;
     mIsWolf = (dComIfGp_getLinkPlayer()->mNoResetFlg1 >> 25) & 1;  // checking if wolf?
@@ -680,7 +648,6 @@ void daTagTWGate_c::initDemoRanail3() {
     dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[170]);
 }
 
-/* 80D54178-80D5456C 001BF8 03F4+00 1/0 0/0 0/0 .text executeDemoRanail3__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoRanail3() {
     dEvent_manager_c& evtMng = dComIfGp_getEventManager();
     int staffId = evtMng.getMyStaffId(l_myName, NULL, 0);
@@ -762,15 +729,12 @@ void daTagTWGate_c::executeDemoRanail3() {
     }
 }
 
-/* 80D5456C-80D545F8 001FEC 008C+00 1/0 0/0 0/0 .text            initDemoHyral1__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoHyral1() {
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
     mEventID = dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mEventName, -1);
     fopAcM_orderOtherEventId(this, mEventID, -1, -1, 4, 1);
 }
 
-/* 80D545F8-80D54770 002078 0178+00 1/0 0/0 0/0 .text executeDemoHyral1__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoHyral1() {
     dEvent_manager_c& evtMng = dComIfGp_getEventManager();
     int staffId = evtMng.getMyStaffId(l_myName, NULL, 0);
@@ -798,8 +762,6 @@ void daTagTWGate_c::executeDemoHyral1() {
     }
 }
 
-/* 80D54770-80D5486C 0021F0 00FC+00 1/0 0/0 0/0 .text            initDemoHyral2__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoHyral2() {
     fopAcM_onSwitch(this, getSwitch());
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
@@ -815,7 +777,6 @@ void daTagTWGate_c::initDemoHyral2() {
     }
 }
 
-/* 80D5486C-80D54A30 0022EC 01C4+00 1/0 0/0 0/0 .text executeDemoHyral2__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoHyral2() {
     dEvent_manager_c& eventMgr = dComIfGp_getEventManager();
     int staffId = eventMgr.getMyStaffId(l_myName, NULL, 0);
@@ -858,8 +819,6 @@ void daTagTWGate_c::executeDemoHyral2() {
     }
 }
 
-/* 80D54A30-80D54AF8 0024B0 00C8+00 1/0 0/0 0/0 .text            initDemoHyral3__13daTagTWGate_cFv
- */
 void daTagTWGate_c::initDemoHyral3() {
     field_0x5de = 1;
     mIsWolf = (dComIfGp_getLinkPlayer()->mNoResetFlg1 >> 25) & 1;  // checking if wolf?
@@ -871,7 +830,6 @@ void daTagTWGate_c::initDemoHyral3() {
     fopAcM_orderChangeEventId(this, mEventID, 1, -1);
 }
 
-/* 80D54AF8-80D54ECC 002578 03D4+00 1/0 0/0 0/0 .text executeDemoHyral3__13daTagTWGate_cFv */
 void daTagTWGate_c::executeDemoHyral3() {
     dEvent_manager_c& eventMgr = dComIfGp_getEventManager();
     int staffId = eventMgr.getMyStaffId(l_myName, NULL, 0);
@@ -943,7 +901,6 @@ void daTagTWGate_c::executeDemoHyral3() {
     }
 }
 
-/* 80D54ECC-80D54F88 00294C 00BC+00 4/4 0/0 0/0 .text            initBaseMtx__13daTagTWGate_cFv */
 void daTagTWGate_c::initBaseMtx() {
     cullMtx = mpMorf->getModel()->getBaseTRMtx();
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -960,8 +917,6 @@ void daTagTWGate_c::initBaseMtx() {
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80D54F88-80D5502C 002A08 00A4+00 4/4 0/0 0/0 .text            downloadModels__13daTagTWGate_cFv
- */
 int daTagTWGate_c::downloadModels() {
     int phase_state = dComIfG_resLoad(&mPhaseMdRes, "TWGate_Md");
 
@@ -980,13 +935,10 @@ int daTagTWGate_c::downloadModels() {
     return phase_state == cPhs_ERROR_e ? -1 : 0;
 }
 
-/* 80D5502C-80D55068 002AAC 003C+00 4/4 0/0 0/0 .text initTalk__13daTagTWGate_cFiPP10fopAc_ac_c */
 void daTagTWGate_c::initTalk(int param_0, fopAc_ac_c** param_1) {
     mMsgFlow.init(this, param_0, 0, param_1);
 }
 
-/* 80D55068-80D55160 002AE8 00F8+00 4/4 0/0 0/0 .text talkProc__13daTagTWGate_cFPiiPP10fopAc_ac_c
- */
 bool daTagTWGate_c::talkProc(int* param_1, int param_2, fopAc_ac_c** param_3) {
     bool rv = false;
     if (dMsgObject_isMsgSendControl()) {
@@ -1012,13 +964,10 @@ bool daTagTWGate_c::talkProc(int* param_1, int param_2, fopAc_ac_c** param_3) {
     return rv;
 }
 
-/* 80D55160-80D55180 002BE0 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__13daTagTWGate_cFP10fopAc_ac_c            */
 int daTagTWGate_c::createHeapCallBack(fopAc_ac_c* i_actor) {
     return ((daTagTWGate_c*)i_actor)->CreateHeap();
 }
 
-/* 80D55180-80D55288 002C00 0108+00 1/1 0/0 0/0 .text            CreateHeap__13daTagTWGate_cFv */
 int daTagTWGate_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("TWGate_Md", 7));
     mpMorf =
@@ -1056,8 +1005,6 @@ int daTagTWGate_c::create() {
     return phase_state;
 }
 
-/* 80D55288-80D55388 002D08 0100+00 1/0 0/0 0/0 .text            daTagTWGate_Create__FP10fopAc_ac_c
- */
 static int daTagTWGate_Create(fopAc_ac_c* i_actor) {
     return ((daTagTWGate_c*)i_actor)->create();
 }
@@ -1074,37 +1021,29 @@ inline daTagTWGate_c::~daTagTWGate_c() {
     }
 }
 
-/* 80D55388-80D5543C 002E08 00B4+00 1/0 0/0 0/0 .text daTagTWGate_Delete__FP13daTagTWGate_c */
 static int daTagTWGate_Delete(daTagTWGate_c* i_gate) {
     i_gate->~daTagTWGate_c();
     return 1;
 }
 
-/* 80D5543C-80D554E4 002EBC 00A8+00 1/0 0/0 0/0 .text daTagTWGate_Execute__FP13daTagTWGate_c */
 static int daTagTWGate_Execute(daTagTWGate_c* i_gate) {
     return i_gate->execute();
 }
 
-/* 80D554E4-80D55518 002F64 0034+00 1/0 0/0 0/0 .text            daTagTWGate_Draw__FP13daTagTWGate_c
- */
 static int daTagTWGate_Draw(daTagTWGate_c* i_gate) {
     return i_gate->draw();
 }
 
-/* 80D55518-80D55520 002F98 0008+00 1/0 0/0 0/0 .text daTagTWGate_IsDelete__FP13daTagTWGate_c */
 static int daTagTWGate_IsDelete(daTagTWGate_c*) {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80D55C08-80D55C28 -00001 0020+00 1/0 0/0 0/0 .data            l_daTagTWGate_Method */
 static actor_method_class l_daTagTWGate_Method = {
     (process_method_func)daTagTWGate_Create,  (process_method_func)daTagTWGate_Delete,
     (process_method_func)daTagTWGate_Execute, (process_method_func)daTagTWGate_IsDelete,
     (process_method_func)daTagTWGate_Draw,
 };
 
-/* 80D55C28-80D55C58 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_TWGate */
 extern actor_process_profile_definition g_profile_Tag_TWGate = {
     fpcLy_CURRENT_e,
     7,

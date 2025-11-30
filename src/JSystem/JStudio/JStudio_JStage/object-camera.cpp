@@ -6,8 +6,6 @@
 
 #include "JSystem/JStudio/JStudio_JStage/object-camera.h"
 
-/* 8028B8A0-8028B960 2861E0 00C0+00 0/0 1/1 0/0 .text
- * __ct__Q214JStudio_JStage15TAdaptor_cameraFPCQ26JStage7TSystemPQ26JStage7TCamera */
 JStudio_JStage::TAdaptor_camera::TAdaptor_camera(JStage::TSystem const* param_1,
                                                  JStage::TCamera* param_2)
     : TAdaptor_object_(param_1, param_2) {
@@ -20,14 +18,10 @@ JStudio_JStage::TAdaptor_camera::TAdaptor_camera(JStage::TSystem const* param_1,
     field_0x120 = 0;
 }
 
-/* 8028B960-8028B9D4 2862A0 0074+00 1/0 0/0 0/0 .text __dt__Q214JStudio_JStage15TAdaptor_cameraFv
- */
 JStudio_JStage::TAdaptor_camera::~TAdaptor_camera() {
     adaptor_do_end();
 }
 
-/* 804312D4-80431378 05DFF4 00A0+04 2/3 0/0 0/0 .bss
- * saoVVOutput___Q214JStudio_JStage15TAdaptor_camera            */
 JStudio_JStage::TAdaptor_camera::TVVOutput JStudio_JStage::TAdaptor_camera::saoVVOutput_[5] = {
     TVVOutput(JStudio_JStage::TAdaptor_camera::TECAMERA_7, &JStage::TCamera::JSGSetViewRoll,
               &JStage::TCamera::JSGGetViewRoll),
@@ -40,8 +34,6 @@ JStudio_JStage::TAdaptor_camera::TVVOutput JStudio_JStage::TAdaptor_camera::saoV
     TVVOutput(),
 };
 
-/* 8028B9D4-8028BA1C 286314 0048+00 1/0 0/0 0/0 .text
- * adaptor_do_prepare__Q214JStudio_JStage15TAdaptor_cameraFv    */
 void JStudio_JStage::TAdaptor_camera::adaptor_do_prepare() {
     TVVOutput* pOutput = saoVVOutput_;
     while (!pOutput->isEnd_()) {
@@ -50,8 +42,6 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_prepare() {
     }
 }
 
-/* 8028BA1C-8028BAF8 28635C 00DC+00 1/0 0/0 0/0 .text
- * adaptor_do_begin__Q214JStudio_JStage15TAdaptor_cameraFv      */
 void JStudio_JStage::TAdaptor_camera::adaptor_do_begin() {
     adaptor_object_begin_();
     JStage::TCamera* pCamera = get_pJSG_();
@@ -68,14 +58,10 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_begin() {
     }
 }
 
-/* 8028BAF8-8028BB4C 286438 0054+00 1/0 0/0 0/0 .text
- * adaptor_do_end__Q214JStudio_JStage15TAdaptor_cameraFv        */
 void JStudio_JStage::TAdaptor_camera::adaptor_do_end() {
     adaptor_object_end_();
 }
 
-/* 8028BB4C-8028BBAC 28648C 0060+00 1/0 0/0 0/0 .text
- * adaptor_do_update__Q214JStudio_JStage15TAdaptor_cameraFUl    */
 void JStudio_JStage::TAdaptor_camera::adaptor_do_update(u32 param_1) {
     const JStudio::TObject* pObject = adaptor_getObject();
     JUT_ASSERT(98, pObject != NULL);
@@ -86,15 +72,11 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_update(u32 param_1) {
     pJSGObject_->JSGUpdate();
 }
 
-/* 8028BBAC-8028BBD0 2864EC 0024+00 1/0 0/0 0/0 .text
- * adaptor_do_data__Q214JStudio_JStage15TAdaptor_cameraFPCvUlPCvUl */
 void JStudio_JStage::TAdaptor_camera::adaptor_do_data(void const* param_1, u32 param_2,
                                                       void const* param_3, u32 param_4) {
     adaptor_object_data_(param_1, param_2, param_3, param_4);
 }
 
-/* 8028BBD0-8028BC14 286510 0044+00 1/0 0/0 0/0 .text
- * adaptor_do_PARENT__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT(JStudio::data::TEOperationData param_1,
                                                         void const* pContent, u32 uSize) {
     switch(param_1) {
@@ -215,8 +197,6 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_TARGET_PARENT_ENABLE(
     }
 }
 
-/* 8028BDBC-8028BEB8 2866FC 00FC+00 1/1 0/0 0/0 .text
- * setJSG_position___Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio8TControl */
 void JStudio_JStage::TAdaptor_camera::setJSG_position_(JStudio::TControl const* param_1) {
     JStudio::TControl::TTransform_position VStack_138;
     JStudio::TControl::TTransform_position VStack_144;
@@ -242,8 +222,6 @@ void JStudio_JStage::TAdaptor_camera::setJSG_position_(JStudio::TControl const* 
     get_pJSG_()->JSGSetViewPosition(*pViewPosition);
 }
 
-/* 8028BEB8-8028BFBC 2867F8 0104+00 1/1 0/0 0/0 .text
- * getJSG_position___Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio8TControl */
 void JStudio_JStage::TAdaptor_camera::getJSG_position_(JStudio::TControl const* param_1) {
     Mtx mtx;
     JStudio::TControl::TTransform_position transform;
@@ -281,8 +259,6 @@ void JStudio_JStage::TAdaptor_camera::getJSG_position_(JStudio::TControl const* 
     adaptor_setVariableValue_Vec(sauVariableValue_3_POSITION_XYZ, *outTransform);
 }
 
-/* 8028BFBC-8028C09C 2868FC 00E0+00 1/1 0/0 0/0 .text
- * setJSG_targetPosition___Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio8TControl */
 void JStudio_JStage::TAdaptor_camera::setJSG_targetPosition_(JStudio::TControl const* param_1) {
 	JStudio::TControl::TTransform_position transform;
 	JStudio::TControl::TTransform_position tempTransform;
@@ -301,8 +277,6 @@ void JStudio_JStage::TAdaptor_camera::setJSG_targetPosition_(JStudio::TControl c
     get_pJSG_()->JSGSetViewTargetPosition(*outTransform);
 }
 
-/* 8028C09C-8028C180 2869DC 00E4+00 1/1 0/0 0/0 .text
- * getJSG_targetPosition___Q214JStudio_JStage15TAdaptor_cameraFPCQ27JStudio8TControl */
 void JStudio_JStage::TAdaptor_camera::getJSG_targetPosition_(JStudio::TControl const* param_1) {
     Mtx mtx;
     JStudio::TControl::TTransform_position transform;

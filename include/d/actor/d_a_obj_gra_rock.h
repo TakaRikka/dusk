@@ -16,20 +16,20 @@
  */
 class daObjGraRock_c : public dBgS_MoveBgActor {
 public:
-    /* 80C110F8 */ void setAttnPos();
-    /* 80C11444 */ void setBaseMtx();
-    /* 80C114C0 */ void setPrtcl();
-    /* 80C1157C */ void bombParticleSet();
-    /* 80C11730 */ void setEnvTevColor();
-    /* 80C1178C */ void setRoomNo();
-    /* 80C117D0 */ void col_set();
-    /* 80C11964 */ int checkHitAt(cCcD_Obj*);
-    /* 80C11970 */ int Create();
-    /* 80C11B68 */ int CreateHeap();
-    /* 80C11C64 */ int create();
-    /* 80C11FF0 */ int Execute(Mtx**);
-    /* 80C120FC */ int Draw();
-    /* 80C121C4 */ int Delete();
+    void setAttnPos();
+    void setBaseMtx();
+    void setPrtcl();
+    void bombParticleSet();
+    void setEnvTevColor();
+    void setRoomNo();
+    void col_set();
+    int checkHitAt(cCcD_Obj*);
+    int Create();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     static dCcD_SrcCyl const mCcDCyl;
 

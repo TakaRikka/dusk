@@ -6,7 +6,6 @@
 #include "d/d_select_cursor.h"
 #include "global.h"
 
-/* 803BCF18-803BD02C 01A038 0114+00 2/2 0/0 0/0 .data            map_icon_size */
 struct map_icon_size_t {
     f32 size_x;
     f32 size_y;
@@ -39,7 +38,6 @@ static map_icon_size_t map_icon_size[] = {
     /* LV8 Warp       */ {40.0f, 40.0f, 22},
 };
 
-/* 801C2718-801C27B4 1BD058 009C+00 0/0 2/2 0/0 .text            __ct__16dMenuMapCommon_cFv */
 dMenuMapCommon_c::dMenuMapCommon_c() {
     for (int i = 0; i < ICON_MAX_e; i++) {
         mPictures[i] = NULL;
@@ -62,7 +60,6 @@ dMenuMapCommon_c::dMenuMapCommon_c() {
     clearIconInfo();
 }
 
-/* 801C27B4-801C28D8 1BD0F4 0124+00 1/0 2/2 0/0 .text            __dt__16dMenuMapCommon_cFv */
 dMenuMapCommon_c::~dMenuMapCommon_c() {
     for (int i = 0; i < ICON_MAX_e; i++) {
         if (mPictures[i] != NULL) {
@@ -87,8 +84,6 @@ dMenuMapCommon_c::~dMenuMapCommon_c() {
     }
 }
 
-/* 801C28D8-801C38E4 1BD218 100C+00 0/0 2/2 0/0 .text initiate__16dMenuMapCommon_cFP10JKRArchive
- */
 void dMenuMapCommon_c::initiate(JKRArchive* i_archive) {
     ResTIMG* mp_image;
 
@@ -301,8 +296,6 @@ void dMenuMapCommon_c::initiate(JKRArchive* i_archive) {
     }
 }
 
-/* 801C38E4-801C3EC4 1BE224 05E0+00 0/0 2/2 0/0 .text            drawIcon__16dMenuMapCommon_cFffff
- */
 void dMenuMapCommon_c::drawIcon(f32 i_posX, f32 i_posY, f32 param_3, f32 param_4) {
     s16 icon_draw_list[128];
     if (g_fmapHIO.mMapIconHIO.mIconDebug) {
@@ -419,8 +412,6 @@ void dMenuMapCommon_c::drawIcon(f32 i_posX, f32 i_posY, f32 param_3, f32 param_4
     }
 }
 
-/* 801C3EC4-801C43A8 1BE804 04E4+00 0/0 4/4 0/0 .text            iconScale__16dMenuMapCommon_cFifff
- */
 void dMenuMapCommon_c::iconScale(int param_1, f32 param_2, f32 param_3, f32 param_4) {
     _c88 = 1.0f + param_4;
 
@@ -528,7 +519,6 @@ void dMenuMapCommon_c::iconScale(int param_1, f32 param_2, f32 param_3, f32 para
     setBlendRatio(ICON_DESTINATION_e, param_3, param_4);
 }
 
-/* 801C43A8-801C443C 1BECE8 0094+00 1/1 3/3 0/0 .text setIconInfo__16dMenuMapCommon_cFUcfffffUc */
 bool dMenuMapCommon_c::setIconInfo(u8 i_iconNo, f32 i_posX, f32 i_posY, f32 i_alpharate, f32 i_rotation,
                                    f32 i_scale, u8 param_7) {
     if (mIconNum >= 128) {
@@ -546,8 +536,6 @@ bool dMenuMapCommon_c::setIconInfo(u8 i_iconNo, f32 i_posX, f32 i_posY, f32 i_al
     return true;
 }
 
-/* 801C443C-801C4494 1BED7C 0058+00 1/1 2/2 0/0 .text            clearIconInfo__16dMenuMapCommon_cFv
- */
 void dMenuMapCommon_c::clearIconInfo() {
     mIconNum = 0;
     for (int i = 0; i < 128; i++) {
@@ -563,7 +551,6 @@ void dMenuMapCommon_c::clearIconInfo() {
     }
 }
 
-/* 801C4494-801C452C 1BEDD4 0098+00 1/1 0/0 0/0 .text setBlendRatio__16dMenuMapCommon_cFUcff */
 void dMenuMapCommon_c::setBlendRatio(u8 i_iconNo, f32 param_2, f32 param_3) {
     if (mPictures[i_iconNo] != NULL) {
         mPictures[i_iconNo]->setBlendRatio(param_2, param_3);
@@ -574,7 +561,6 @@ void dMenuMapCommon_c::setBlendRatio(u8 i_iconNo, f32 param_2, f32 param_3) {
     }
 }
 
-/* 801C452C-801C4600 1BEE6C 00D4+00 0/0 1/1 0/0 .text            blinkMove__16dMenuMapCommon_cFs */
 void dMenuMapCommon_c::blinkMove(s16 param_1) {
     mBlinkTimer++;
     if (mBlinkTimer >= param_1) {
@@ -590,7 +576,6 @@ void dMenuMapCommon_c::blinkMove(s16 param_1) {
     }
 }
 
-/* 801C4600-801C4738 1BEF40 0138+00 0/0 1/1 0/0 .text moveLightDropAnime__16dMenuMapCommon_cFv */
 void dMenuMapCommon_c::moveLightDropAnime() {
     int bVar6 = 0;
     if (_c88 > 1.0f) {
@@ -619,8 +604,6 @@ void dMenuMapCommon_c::moveLightDropAnime() {
     _c7c = flash_start_scale + fVar7 * (flash_end_scale - flash_start_scale);
 }
 
-/* 801C4738-801C4778 1BF078 0040+00 1/1 0/0 0/0 .text            getIconSizeX__16dMenuMapCommon_cFUc
- */
 f32 dMenuMapCommon_c::getIconSizeX(u8 i_iconNo) {
     for (int i = 0; i < ARRAY_SIZEU(map_icon_size); i++) {
         if (map_icon_size[i].icon_no == i_iconNo) {
@@ -631,8 +614,6 @@ f32 dMenuMapCommon_c::getIconSizeX(u8 i_iconNo) {
     return 0.0f;
 }
 
-/* 801C4778-801C47C4 1BF0B8 004C+00 1/1 0/0 0/0 .text            getIconSizeY__16dMenuMapCommon_cFUc
- */
 f32 dMenuMapCommon_c::getIconSizeY(u8 i_iconNo) {
     for (int i = 0; i < ARRAY_SIZEU(map_icon_size); i++) {
         if (map_icon_size[i].icon_no == i_iconNo) {
@@ -643,7 +624,6 @@ f32 dMenuMapCommon_c::getIconSizeY(u8 i_iconNo) {
     return 0.0f;
 }
 
-/* 801C47C4-801C4D54 1BF104 0590+00 1/1 0/0 0/0 .text            debugIcon__16dMenuMapCommon_cFv */
 void dMenuMapCommon_c::debugIcon() {
     int link_icon_idx = -1;
     for (int i = 0; i < 128; i++) {

@@ -16,20 +16,20 @@
  */
 class daCanoe_c : public fopAc_ac_c {
 public:
-    /* 804DA5F4 */ int createHeap();
-    /* 804DA740 */ int create();
-    /* 804DAEA8 */ ~daCanoe_c();
-    /* 804DB008 */ void setRoomInfo();
-    /* 804DB0B0 */ void setMatrix();
-    /* 804DB3F4 */ void setCollision();
-    /* 804DB578 */ void posMove();
-    /* 804DB754 */ void checkGomikabe(cBgS_PolyInfo&);
-    /* 804DB7AC */ void setFrontBackPos();
-    /* 804DB828 */ void frontBackBgCheck();
-    /* 804DC330 */ void setPaddleEffect();
-    /* 804DC554 */ void setCanoeSliderEffect();
-    /* 804DC7B4 */ int execute();
-    /* 804DD35C */ int draw();
+    int createHeap();
+    int create();
+    ~daCanoe_c();
+    void setRoomInfo();
+    void setMatrix();
+    void setCollision();
+    void posMove();
+    void checkGomikabe(cBgS_PolyInfo&);
+    void setFrontBackPos();
+    void frontBackBgCheck();
+    void setPaddleEffect();
+    void setCanoeSliderEffect();
+    int execute();
+    int draw();
 
     J3DModel* getModel() { return mpModel; }
     MtxP getModelMtx() { return mpModel->getBaseTRMtx(); }

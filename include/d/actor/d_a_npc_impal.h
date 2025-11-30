@@ -10,7 +10,7 @@ struct daNpcImpal_HIOParam {
 
 class daNpcImpal_Param_c {
 public:
-    /* 80A0C204 */ virtual ~daNpcImpal_Param_c() {}
+    virtual ~daNpcImpal_Param_c() {}
 
     static const daNpcImpal_HIOParam m;
 };
@@ -81,35 +81,35 @@ public:
         /* 0x06 */ MOT_6,
     };
 
-    /* 80A079EC */ daNpcImpal_c();
-    /* 80A07C00 */ ~daNpcImpal_c();
-    /* 80A07DC4 */ int Create();
-    /* 80A080F8 */ BOOL CreateHeap();
-    /* 80A08524 */ int Delete();
-    /* 80A08558 */ int Execute();
-    /* 80A0857C */ int Draw();
-    /* 80A085EC */ bool ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80A087BC */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A087DC */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80A08828 */ inline bool setExpressionAnm(int, bool);
-    /* 80A08A68 */ inline bool setExpressionBtp(int);
-    /* 80A08B48 */ void setMotionAnm(int, f32);
-    /* 80A08CBC */ inline void reset();
-    /* 80A08EB8 */ inline bool setAction(daNpcImpal_c::actionFunc);
-    /* 80A090E8 */ bool wait(void*);
-    /* 80A099B4 */ void setMotion(int, f32, BOOL);
-    /* 80A099F8 */ void setExpression(int, f32);
-    /* 80A09A24 */ bool talk(void*);
-    /* 80A09F4C */ bool demo(void*);
-    /* 80A0A1E0 */ BOOL EvCut_ImpalAppear1(int);
-    /* 80A0A680 */ BOOL EvCut_ImpalAppear2(int);
-    /* 80A0A950 */ BOOL EvCut_CopyRod(int);
-    /* 80A0ADF8 */ inline void setParam();
-    /* 80A0AEA8 */ inline BOOL main();
-    /* 80A0B380 */ inline BOOL ctrlBtk();
-    /* 80A0B45C */ inline void setAttnPos();
-    /* 80A0B76C */ inline void lookat();
-    /* 80A0B94C */ inline BOOL drawDbgInfo();
+    daNpcImpal_c();
+    ~daNpcImpal_c();
+    int Create();
+    BOOL CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    bool ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    inline bool setExpressionAnm(int, bool);
+    inline bool setExpressionBtp(int);
+    void setMotionAnm(int, f32);
+    inline void reset();
+    inline bool setAction(daNpcImpal_c::actionFunc);
+    bool wait(void*);
+    void setMotion(int, f32, BOOL);
+    void setExpression(int, f32);
+    bool talk(void*);
+    bool demo(void*);
+    BOOL EvCut_ImpalAppear1(int);
+    BOOL EvCut_ImpalAppear2(int);
+    BOOL EvCut_CopyRod(int);
+    inline void setParam();
+    inline BOOL main();
+    inline BOOL ctrlBtk();
+    inline void setAttnPos();
+    inline void lookat();
+    inline BOOL drawDbgInfo();
 
     s16 getMessageNo() { return s16(shape_angle.x); }
     int getSwitchNo() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }

@@ -8,7 +8,6 @@
 #include "d/actor/d_a_obj_ihasi.h"
 #include "d/d_com_inf_game.h"
 
-/* 80C26018-80C2611C 000078 0104+00 1/0 0/0 0/0 .text daObj_Ihasi_Draw__FP15obj_ihasi_class */
 static int daObj_Ihasi_Draw(obj_ihasi_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -30,18 +29,14 @@ static int daObj_Ihasi_Draw(obj_ihasi_class* i_this) {
     return 1;
 }
 
-/* 80C2611C-80C26120 00017C 0004+00 1/1 0/0 0/0 .text            ih_normal__FP15obj_ihasi_class */
 static void ih_normal(obj_ihasi_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 }
 
-/* 80C26120-80C26124 000180 0004+00 1/1 0/0 0/0 .text            ih_disappear__FP15obj_ihasi_class
- */
 static void ih_disappear(obj_ihasi_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 }
 
-/* 80C26124-80C26204 000184 00E0+00 1/1 0/0 0/0 .text            action__FP15obj_ihasi_class */
 static void action(obj_ihasi_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -70,7 +65,6 @@ static void action(obj_ihasi_class* i_this) {
     }
 }
 
-/* 80C26204-80C262C4 000264 00C0+00 2/1 0/0 0/0 .text daObj_Ihasi_Execute__FP15obj_ihasi_class */
 static int daObj_Ihasi_Execute(obj_ihasi_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -96,12 +90,10 @@ static int daObj_Ihasi_Execute(obj_ihasi_class* i_this) {
     return 1;
 }
 
-/* 80C262C4-80C262CC 000324 0008+00 1/0 0/0 0/0 .text daObj_Ihasi_IsDelete__FP15obj_ihasi_class */
 static int daObj_Ihasi_IsDelete(obj_ihasi_class* param_0) {
     return 1;
 }
 
-/* 80C262CC-80C26324 00032C 0058+00 1/0 0/0 0/0 .text daObj_Ihasi_Delete__FP15obj_ihasi_class */
 static int daObj_Ihasi_Delete(obj_ihasi_class* _this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)_this;
     fopAcM_RegisterDeleteID(_this, "Obj_Ihasi");
@@ -114,7 +106,6 @@ static int daObj_Ihasi_Delete(obj_ihasi_class* _this) {
     return 1;
 }
 
-/* 80C26324-80C264F8 000384 01D4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_actor) {
     obj_ihasi_class* i_this = (obj_ihasi_class*)i_actor;
 
@@ -157,8 +148,6 @@ static int useHeapInit(fopAc_ac_c* i_actor) {
     return 1;
 }
 
-/* 80C26540-80C26880 0005A0 0340+00 1/0 0/0 0/0 .text            daObj_Ihasi_Create__FP10fopAc_ac_c
- */
 static int daObj_Ihasi_Create(fopAc_ac_c* i_actor) {
     obj_ihasi_class* i_this = static_cast<obj_ihasi_class*>(i_actor);
     fopAcM_ct(i_this, obj_ihasi_class);
@@ -226,14 +215,12 @@ static int daObj_Ihasi_Create(fopAc_ac_c* i_actor) {
     return step;
 }
 
-/* 80C268D8-80C268F8 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Ihasi_Method */
 static actor_method_class l_daObj_Ihasi_Method = {
     (process_method_func)daObj_Ihasi_Create,  (process_method_func)daObj_Ihasi_Delete,
     (process_method_func)daObj_Ihasi_Execute, (process_method_func)daObj_Ihasi_IsDelete,
     (process_method_func)daObj_Ihasi_Draw,
 };
 
-/* 80C268F8-80C26928 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_IHASI */
 extern actor_process_profile_definition g_profile_OBJ_IHASI = {
     fpcLy_CURRENT_e,          // mLayerID
     3,                        // mListID

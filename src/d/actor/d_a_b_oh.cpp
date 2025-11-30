@@ -67,22 +67,20 @@ enum B_oh_RES_File_ID {
 
 class daB_OH_HIO_c {
 public:
-    /* 8061B72C */ daB_OH_HIO_c();
-    /* 8061D93C */ virtual ~daB_OH_HIO_c() {}
+    daB_OH_HIO_c();
+    virtual ~daB_OH_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mModelSize;
     /* 0xC */ f32 mLength;
 };
 
-/* 8061B72C-8061B75C 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__12daB_OH_HIO_cFv */
 daB_OH_HIO_c::daB_OH_HIO_c() {
     field_0x4 = -1;
     mModelSize = 1.0f;
     mLength = 70.0f;
 }
 
-/* 8061B75C-8061B8B0 00011C 0154+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -104,7 +102,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 8061B8B0-8061B960 000270 00B0+00 1/0 0/0 0/0 .text            daB_OH_Draw__FP10b_oh_class */
 static int daB_OH_Draw(b_oh_class* i_this) {
     if (i_this->mAction == OH_ACTION_NON) {
         return 1;
@@ -121,20 +118,15 @@ static int daB_OH_Draw(b_oh_class* i_this) {
     return 1;
 }
 
-/* 8061DBB4-8061DBB8 -00001 0004+00 1/2 0/0 0/0 .bss             None */
 /* 8061DBB5 0003+00 data_8061DBB5 None */
 static u8 data_8061DBB5;
 
-/* 8061DBC4-8061DBD4 000054 0010+00 2/3 0/0 0/0 .bss             l_HIO */
 static daB_OH_HIO_c l_HIO;
 
-/* 8061DBD4-8061DBD8 000064 0004+00 6/7 0/0 0/0 .bss             boss */
 static b_ob_class* boss;
 
-/* 8061DBD8-8061DBDC 000068 0004+00 0/1 0/0 0/0 .bss             Cinit */
 static int Cinit;
 
-/* 8061B960-8061BB18 000320 01B8+00 1/1 0/0 0/0 .text            start__FP10b_oh_class */
 static void start(b_oh_class* i_this) {
     cXyz sp28;
 
@@ -171,7 +163,6 @@ static void start(b_oh_class* i_this) {
     }
 }
 
-/* 8061BB54-8061BC6C 000514 0118+00 1/1 0/0 0/0 .text            wait__FP10b_oh_class */
 static void wait(b_oh_class* i_this) {
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
 
@@ -196,7 +187,6 @@ static void wait(b_oh_class* i_this) {
     }
 }
 
-/* 8061BC6C-8061C070 00062C 0404+00 1/1 0/0 0/0 .text            attack__FP10b_oh_class */
 static void attack(b_oh_class* i_this) {
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
     i_this->field_0xca0++;
@@ -314,7 +304,6 @@ static void attack(b_oh_class* i_this) {
     }
 }
 
-/* 8061C070-8061C1F8 000A30 0188+00 1/1 0/0 0/0 .text            caught__FP10b_oh_class */
 static void caught(b_oh_class* i_this) {
     i_this->field_0x5f4 = 6;
 
@@ -352,7 +341,6 @@ static void caught(b_oh_class* i_this) {
     }
 }
 
-/* 8061C1F8-8061C298 000BB8 00A0+00 1/1 0/0 0/0 .text            end__FP10b_oh_class */
 static void end(b_oh_class* i_this) {
     i_this->field_0x5f4 = 6;
 
@@ -371,7 +359,6 @@ static void end(b_oh_class* i_this) {
     }
 }
 
-/* 8061C298-8061C2C4 000C58 002C+00 1/1 0/0 0/0 .text            non__FP10b_oh_class */
 static void non(b_oh_class* i_this) {
     i_this->field_0x5f4 = 6;
 
@@ -384,7 +371,6 @@ static void non(b_oh_class* i_this) {
     }
 }
 
-/* 8061C2C4-8061CB4C 000C84 0888+00 2/1 0/0 0/0 .text            action__FP10b_oh_class */
 static void action(b_oh_class* i_this) {
     b_oh_class* a_this = (b_oh_class*)i_this;
     int var_r28;
@@ -578,7 +564,6 @@ static void action(b_oh_class* i_this) {
     Cinit = 0;
 }
 
-/* 8061CB4C-8061CD98 00150C 024C+00 1/1 0/0 0/0 .text            damage_check__FP10b_oh_class */
 static void damage_check(b_oh_class* i_this) {
     i_this->mCcStts.Move();
 
@@ -630,7 +615,6 @@ static void damage_check(b_oh_class* i_this) {
     }
 }
 
-/* 8061CD98-8061D05C 001758 02C4+00 2/1 0/0 0/0 .text            daB_OH_Execute__FP10b_oh_class */
 static int daB_OH_Execute(b_oh_class* i_this) {
     if (cDmrNowMidnaTalk()) {
         return 1;
@@ -706,12 +690,10 @@ static int daB_OH_Execute(b_oh_class* i_this) {
     return 1;
 }
 
-/* 8061D05C-8061D064 001A1C 0008+00 1/0 0/0 0/0 .text            daB_OH_IsDelete__FP10b_oh_class */
 static int daB_OH_IsDelete(b_oh_class* i_this) {
     return 1;
 }
 
-/* 8061D064-8061D0B8 001A24 0054+00 1/0 0/0 0/0 .text            daB_OH_Delete__FP10b_oh_class */
 static int daB_OH_Delete(b_oh_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "B_oh");
     if (i_this->field_0x1f86) {
@@ -721,7 +703,6 @@ static int daB_OH_Delete(b_oh_class* i_this) {
     return 1;
 }
 
-/* 8061D0B8-8061D39C 001A78 02E4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     b_oh_class* this_ = (b_oh_class*)i_this;
 
@@ -771,7 +752,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8061D3E4-8061D718 001DA4 0334+00 1/0 0/0 0/0 .text            daB_OH_Create__FP10fopAc_ac_c */
 static int daB_OH_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, b_oh_class);
     b_oh_class* this_ = (b_oh_class*)i_this;
@@ -843,7 +823,6 @@ static int daB_OH_Create(fopAc_ac_c* i_this) {
 
 AUDIO_INSTANCES;
 
-/* 8061DAEC-8061DB0C -00001 0020+00 1/0 0/0 0/0 .data            l_daB_OH_Method */
 static actor_method_class l_daB_OH_Method = {
     (process_method_func)daB_OH_Create,
     (process_method_func)daB_OH_Delete,
@@ -852,7 +831,6 @@ static actor_method_class l_daB_OH_Method = {
     (process_method_func)daB_OH_Draw,
 };
 
-/* 8061DB0C-8061DB3C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_B_OH */
 extern actor_process_profile_definition g_profile_B_OH = {
     fpcLy_CURRENT_e,
     3,

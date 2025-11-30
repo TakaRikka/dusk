@@ -8,10 +8,6 @@
 #include "d/actor/d_a_obj_catdoor.h"
 #include "d/d_com_inf_game.h"
 
-//
-// Declarations:
-//
-
 static const char* l_arcName = "CatDoor";
 
 u32 const daObjCatDoor_c::M_attr = 0x001E0578;
@@ -74,12 +70,10 @@ int daObjCatDoor_c::execute() {
     return 1;
 }
 
-/* 80BC42B8-80BC42C4 000078 000C+00 1/1 0/0 1/1 .text            attr__14daObjCatDoor_cCFv */
 const s16* daObjCatDoor_c::attr() const {
     return (const s16*)&daObjCatDoor_c::M_attr;
 }
 
-/* 80BC42C4-80BC43F4 000084 0130+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjCatDoor_c*>(i_this)->createHeap();
 }
@@ -115,7 +109,6 @@ void daObjCatDoor_c::create_init() {
     initBaseMtx();
 }
 
-/* 80BC43F4-80BC4454 0001B4 0060+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjCatDoor_cFv */
 void daObjCatDoor_c::initBaseMtx() {
     cullMtx = mMtx;
     mDoMtx_stack_c::transS(current.pos);
@@ -124,7 +117,6 @@ void daObjCatDoor_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80BC4454-80BC4560 000214 010C+00 2/2 0/0 1/1 .text            setBaseMtx__14daObjCatDoor_cFv */
 void daObjCatDoor_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
@@ -142,7 +134,6 @@ void daObjCatDoor_c::setBaseMtx() {
     }
 }
 
-/* 80BC4560-80BC4628 000320 00C8+00 1/1 0/0 0/0 .text            calcOpen__14daObjCatDoor_cFv */
 void daObjCatDoor_c::calcOpen() {
     s16 prev = mRotSpeed;
     int res = cLib_chaseS(&mRotSpeed, 0, *attr());
@@ -160,45 +151,36 @@ void daObjCatDoor_c::calcOpen() {
     }
 }
 
-/* 80BC4628-80BC46EC 0003E8 00C4+00 1/0 0/0 0/0 .text daObjCatDoor_Draw__FP14daObjCatDoor_c */
 static int daObjCatDoor_Draw(daObjCatDoor_c* i_this) {
     return static_cast<daObjCatDoor_c*>(i_this)->draw();
 }
 
-/* 80BC46EC-80BC4760 0004AC 0074+00 1/0 0/0 0/0 .text daObjCatDoor_Execute__FP14daObjCatDoor_c */
 static int daObjCatDoor_Execute(daObjCatDoor_c* i_this) {
     return static_cast<daObjCatDoor_c*>(i_this)->execute();
 }
 
-/* 80BC4760-80BC4768 000520 0008+00 1/0 0/0 0/0 .text daObjCatDoor_IsDelete__FP14daObjCatDoor_c */
 static bool daObjCatDoor_IsDelete(daObjCatDoor_c* i_this) {
     return true;
 }
 
-/* 80BC4768-80BC4848 000528 00E0+00 1/0 0/0 0/0 .text daObjCatDoor_Delete__FP14daObjCatDoor_c */
 static int daObjCatDoor_Delete(daObjCatDoor_c* i_this) {
     fopAcM_GetID(i_this);
     i_this->~daObjCatDoor_c();
     return 1;
 }
 
-/* 80BC4848-80BC49AC 000608 0164+00 1/0 0/0 0/0 .text            daObjCatDoor_Create__FP10fopAc_ac_c
- */
 static int daObjCatDoor_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     daObjCatDoor_c* a_this = static_cast<daObjCatDoor_c*>(i_this);
     return a_this->create();
 }
 
-/* ############################################################################################## */
-/* 80BC49E4-80BC4A04 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjCatDoor_Method */
 static actor_method_class l_daObjCatDoor_Method = {
     (process_method_func)daObjCatDoor_Create,  (process_method_func)daObjCatDoor_Delete,
     (process_method_func)daObjCatDoor_Execute, (process_method_func)daObjCatDoor_IsDelete,
     (process_method_func)daObjCatDoor_Draw,
 };
 
-/* 80BC4A04-80BC4A34 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_CatDoor */
 extern actor_process_profile_definition g_profile_Obj_CatDoor = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

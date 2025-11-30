@@ -10,8 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "dolphin/types.h"
 
-/* 8001513C-8001528C 00FA7C 0150+00 0/0 3/3 2/2 .text
- * mDoLib_setResTimgObj__FPC7ResTIMGP9_GXTexObjUlP10_GXTlutObj  */
 u32 mDoLib_setResTimgObj(ResTIMG const* i_img, GXTexObj* o_texObj, u32 tlut_name,
                         GXTlutObj* o_tlutObj) {
     if (i_img->indexTexture) {
@@ -34,16 +32,12 @@ u32 mDoLib_setResTimgObj(ResTIMG const* i_img, GXTexObj* o_texObj, u32 tlut_name
     return i_img->indexTexture;
 }
 
-/* 803DD8E4-803DD940 00A604 005C+00 2/2 5/5 5/5 .bss             mClipper__14mDoLib_clipper */
 J3DUClipper mDoLib_clipper::mClipper;
 
-/* 80450C70-80450C74 000170 0004+00 1/1 2/2 4/4 .sbss            mSystemFar__14mDoLib_clipper */
 f32 mDoLib_clipper::mSystemFar;
 
-/* 80450C74-80450C78 000174 0004+00 1/1 1/1 0/0 .sbss            mFovyRate__14mDoLib_clipper */
 f32 mDoLib_clipper::mFovyRate;
 
-/* 8001528C-80015310 00FBCC 0084+00 0/0 1/1 0/0 .text            setup__14mDoLib_clipperFffff */
 void mDoLib_clipper::setup(f32 fovy, f32 aspect, f32 near, f32 far) {
     mClipper.setFovy(fovy);
     mClipper.setAspect(aspect);
@@ -57,7 +51,6 @@ void mDoLib_clipper::setup(f32 fovy, f32 aspect, f32 near, f32 far) {
     mFovyRate = cM_scos(tmp) / cM_ssin(tmp);
 }
 
-/* 80015310-800154EC 00FC50 01DC+00 0/0 21/21 23/23 .text            mDoLib_project__FP3VecP3Vec */
 void mDoLib_project(Vec* src, Vec* dst) {
     if (dComIfGd_getView() == NULL) {
         dst->x = 0.0f;
@@ -115,7 +108,6 @@ void mDoLib_project(Vec* src, Vec* dst) {
     dst->y = ((0.5f + (multVec.y * (-calcFloat))) * ySize) + yOffset;
 }
 
-/* 800154EC-80015544 00FE2C 0058+00 0/0 2/2 9/9 .text            mDoLib_pos2camera__FP3VecP3Vec */
 void mDoLib_pos2camera(Vec* src, Vec* dst) {
     if (dComIfGd_getView() == NULL) {
         dst->x = 0.0f;

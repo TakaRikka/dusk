@@ -11,13 +11,11 @@
 #include "d/actor/d_a_player.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* 80C4124C-80C41270 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__19daObj_Keyhole_HIO_cFv */
 daObj_Keyhole_HIO_c::daObj_Keyhole_HIO_c() {
     id = -1;
     obj_size = 1.0f;
 }
 
-/* 80C41270-80C4134C 000110 00DC+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -38,7 +36,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80C4134C-80C41454 0001EC 0108+00 1/0 0/0 0/0 .text daObj_Keyhole_Draw__FP17obj_keyhole_class */
 static int daObj_Keyhole_Draw(obj_keyhole_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     g_env_light.settingTevStruct(16, &actor->current.pos, &actor->tevStr);
@@ -63,8 +60,6 @@ static int daObj_Keyhole_Draw(obj_keyhole_class* i_this) {
     return 1;
 }
 
-/* 80C41454-80C41654 0002F4 0200+00 1/1 0/0 0/0 .text
- * chain_control1__FP17obj_keyhole_classP10kh_chain_si          */
 static void chain_control1(obj_keyhole_class* i_this, kh_chain_s* i_chain_s, int unused) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz sp24;
@@ -120,8 +115,6 @@ static void chain_control1(obj_keyhole_class* i_this, kh_chain_s* i_chain_s, int
     }
 }
 
-/* 80C41690-80C419C4 000530 0334+00 1/1 0/0 0/0 .text
- * chain_control1_2__FP17obj_keyhole_classP10kh_chain_si        */
 static void chain_control1_2(obj_keyhole_class* i_this, kh_chain_s* i_chain_s, int unused) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz sp48;
@@ -197,8 +190,6 @@ static void chain_control1_2(obj_keyhole_class* i_this, kh_chain_s* i_chain_s, i
     }
 }
 
-/* 80C419C4-80C41C84 000864 02C0+00 1/1 0/0 0/0 .text
- * chain_control2__FP17obj_keyhole_classP10kh_chain_si          */
 static void chain_control2(obj_keyhole_class* i_this, kh_chain_s* i_chain_s, int unused) {
     cXyz sp30;
     cXyz sp24;
@@ -250,8 +241,6 @@ static void chain_control2(obj_keyhole_class* i_this, kh_chain_s* i_chain_s, int
     }
 }
 
-/* 80C41C84-80C41D6C 000B24 00E8+00 1/1 0/0 0/0 .text
- * chain_control3__FP17obj_keyhole_classP10kh_chain_si          */
 static void chain_control3(obj_keyhole_class* i_this, kh_chain_s* i_chain_s, int unused) {
     cXyz sp30;
     cXyz sp24;
@@ -267,11 +256,8 @@ static void chain_control3(obj_keyhole_class* i_this, kh_chain_s* i_chain_s, int
 /* 80C43CE5 0003+00 data_80C43CE5 None */
 static u8 l_HIOInit;
 
-/* 80C43CF4-80C43D00 000054 000C+00 4/4 0/0 0/0 .bss             l_HIO */
 static daObj_Keyhole_HIO_c l_HIO;
 
-/* 80C41D6C-80C42380 000C0C 0614+00 1/1 0/0 0/0 .text            chain_move__FP17obj_keyhole_class
- */
 static void chain_move(obj_keyhole_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -387,7 +373,6 @@ static void chain_move(obj_keyhole_class* i_this) {
     }
 }
 
-/* 80C42380-80C42518 001220 0198+00 1/1 0/0 0/0 .text            open__FP17obj_keyhole_class */
 static void open(obj_keyhole_class* i_this) {
     switch (i_this->mode) {
     case 0:
@@ -420,7 +405,6 @@ static void open(obj_keyhole_class* i_this) {
     }
 }
 
-/* 80C42518-80C427D0 0013B8 02B8+00 1/1 0/0 0/0 .text            drop__FP17obj_keyhole_class */
 static void drop(obj_keyhole_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz sp18;
@@ -499,8 +483,6 @@ static void drop(obj_keyhole_class* i_this) {
     }
 }
 
-/* 80C427D0-80C42D0C 001670 053C+00 2/1 0/0 0/0 .text daObj_Keyhole_Execute__FP17obj_keyhole_class
- */
 static int daObj_Keyhole_Execute(obj_keyhole_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz sp34;
@@ -635,14 +617,10 @@ static int daObj_Keyhole_Execute(obj_keyhole_class* i_this) {
     return 1;
 }
 
-/* 80C42D0C-80C42D14 001BAC 0008+00 1/0 0/0 0/0 .text
- * daObj_Keyhole_IsDelete__FP17obj_keyhole_class                */
 static int daObj_Keyhole_IsDelete(obj_keyhole_class* i_this) {
     return 1;
 }
 
-/* 80C42D14-80C42DC8 001BB4 00B4+00 1/0 0/0 0/0 .text daObj_Keyhole_Delete__FP17obj_keyhole_class
- */
 static int daObj_Keyhole_Delete(obj_keyhole_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fpc_ProcID id = fopAcM_GetID(actor);
@@ -667,7 +645,6 @@ static int daObj_Keyhole_Delete(obj_keyhole_class* i_this) {
     return 1;
 }
 
-/* 80C42DC8-80C4307C 001C68 02B4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_keyhole_class* a_this = (obj_keyhole_class*)i_this;
     void* modelData;
@@ -729,7 +706,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80C4307C-80C434AC 001F1C 0430+00 1/0 0/0 0/0 .text daObj_Keyhole_Create__FP10fopAc_ac_c */
 static int daObj_Keyhole_Create(fopAc_ac_c* a_this) {
     obj_keyhole_class* i_this = (obj_keyhole_class*)a_this;
     fopAcM_ct(a_this, obj_keyhole_class);
@@ -858,7 +834,6 @@ static int daObj_Keyhole_Create(fopAc_ac_c* a_this) {
     return phase_state;
 }
 
-/* 80C43C14-80C43C34 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Keyhole_Method */
 static actor_method_class l_daObj_Keyhole_Method = {
     (process_method_func)daObj_Keyhole_Create,
     (process_method_func)daObj_Keyhole_Delete,
@@ -867,7 +842,6 @@ static actor_method_class l_daObj_Keyhole_Method = {
     (process_method_func)daObj_Keyhole_Draw,
 };
 
-/* 80C43C34-80C43C64 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_KEYHOLE */
 extern actor_process_profile_definition g_profile_OBJ_KEYHOLE = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

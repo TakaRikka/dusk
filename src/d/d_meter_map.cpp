@@ -15,7 +15,6 @@
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-/* 8020D49C-8020D528 207DDC 008C+00 1/1 0/0 0/0 .text            isEnableDispMap__11dMeterMap_cFv */
 bool dMeterMap_c::isEnableDispMap() {
     bool minimapEnable = false;
     stage_stag_info_class* pstag = dComIfGp_getStage()->getStagInfo();
@@ -31,7 +30,6 @@ bool dMeterMap_c::isEnableDispMap() {
     return enableMap;
 }
 
-/* 8020D528-8020D650 207E68 0128+00 3/3 0/0 0/0 .text getMapDispSizeTypeNo__11dMeterMap_cFv */
 int dMeterMap_c::getMapDispSizeTypeNo() {
     int uvar6 = 7;
 
@@ -78,8 +76,6 @@ int dMeterMap_c::getMapDispSizeTypeNo() {
     return mapDispSizeType;
 }
 
-/* 8020D650-8020D690 207F90 0040+00 5/5 3/3 0/0 .text
- * isEnableDispMapAndMapDispSizeTypeNo__11dMeterMap_cFv         */
 bool dMeterMap_c::isEnableDispMapAndMapDispSizeTypeNo() {
     if (isEnableDispMap() && getMapDispSizeTypeNo()) {
         return true;
@@ -88,13 +84,10 @@ bool dMeterMap_c::isEnableDispMapAndMapDispSizeTypeNo() {
     return false;
 }
 
-/* 8020D690-8020D698 207FD0 0008+00 2/2 0/0 0/0 .text
- * getMapDispEdgeBottomY_Layout__11dMeterMap_cFv                */
 f32 dMeterMap_c::getMapDispEdgeBottomY_Layout() {
     return 421.0f;
 }
 
-/* 8020D698-8020D72C 207FD8 0094+00 2/2 0/0 0/0 .text            isEventRunCheck__11dMeterMap_cFv */
 bool dMeterMap_c::isEventRunCheck() {
     if (dComIfGp_event_runCheck()) {
         return true;
@@ -105,14 +98,10 @@ bool dMeterMap_c::isEventRunCheck() {
     return dComIfGp_event_runCheck() != field_0x30 ? 1 : 0;
 }
 
-/* 8020D72C-8020D75C 20806C 0030+00 2/2 0/0 0/0 .text getMapDispEdgeLeftX_Layout__11dMeterMap_cFv
- */
 f32 dMeterMap_c::getMapDispEdgeLeftX_Layout() {
     return field_0x28 + 35;
 }
 
-/* 8020D75C-8020D7E4 20809C 0088+00 0/0 1/1 0/0 .text            getMapDispEdgeTop__11dMeterMap_cFv
- */
 f32 dMeterMap_c::getMapDispEdgeTop() {
     f32 tmp = 0.0f;
     if (mMap != NULL) {
@@ -123,13 +112,10 @@ f32 dMeterMap_c::getMapDispEdgeTop() {
     return getMapDispEdgeBottomY_Layout() - tmp;
 }
 
-/* 8020D7E4-8020D7EC 208124 0008+00 2/2 0/0 0/0 .text getDispPosInside_OffsetX__11dMeterMap_cFv */
 s16 dMeterMap_c::getDispPosInside_OffsetX() {
     return 0;
 }
 
-/* 8020D7EC-8020D874 20812C 0088+00 2/2 0/0 0/0 .text getDispPosOutSide_OffsetX__11dMeterMap_cFv
- */
 s16 dMeterMap_c::getDispPosOutSide_OffsetX() {
     f32 dvar3 = -36.0f - mSizeW;
     f32 offset = 0.0f;
@@ -141,8 +127,6 @@ s16 dMeterMap_c::getDispPosOutSide_OffsetX() {
     return dvar3 - getMapDispEdgeLeftX_Layout();
 }
 
-/* 8020D874-8020D8BC 2081B4 0048+00 2/2 2/2 0/0 .text setDispPosInsideFlg_SE_On__11dMeterMap_cFv
- */
 void dMeterMap_c::setDispPosInsideFlg_SE_On() {
     if (isEnableDispMapAndMapDispSizeTypeNo()) {
         dComIfGp_mapShow();
@@ -151,36 +135,28 @@ void dMeterMap_c::setDispPosInsideFlg_SE_On() {
     }
 }
 
-/* 8020D8BC-8020D8F8 2081FC 003C+00 1/1 2/2 0/0 .text setDispPosOutsideFlg_SE_On__11dMeterMap_cFv
- */
 void dMeterMap_c::setDispPosOutsideFlg_SE_On() {
     dComIfGp_mapHide();
     field_0x2d = 0;
     field_0x2e = 7;
 }
 
-/* 8020D8F8-8020D900 -00001 0008+00 0/0 0/0 0/0 .text            setMapAlpha__11dMeterMap_cFUc */
 void dMeterMap_c::setMapAlpha(u8 i_alpha) {
     mMapAlpha = i_alpha;
 }
 
-/* 8020D900-8020D948 208240 0048+00 3/3 1/1 0/0 .text            isMapOpenCheck__11dMeterMap_cFv */
 bool dMeterMap_c::isMapOpenCheck() {
     return dStage_stagInfo_GetUpButton(dComIfGp_getStage()->getStagInfo()) == 7 ? false : true;
 }
 
-/* 8020D948-8020D990 208288 0048+00 0/0 1/1 0/0 .text            __ct__11dMeterMap_cFP9J2DScreen */
 dMeterMap_c::dMeterMap_c(J2DScreen* i_scrn) {
     _create(i_scrn);
 }
 
-/* 8020D990-8020D9EC 2082D0 005C+00 1/0 0/0 0/0 .text            __dt__11dMeterMap_cFv */
 dMeterMap_c::~dMeterMap_c() {
     _delete();
 }
 
-/* 8020D9EC-8020DC50 20832C 0264+00 1/1 0/0 0/0 .text            _create__11dMeterMap_cFP9J2DScreen
- */
 void dMeterMap_c::_create(J2DScreen* unused) {
     s32 sizeX;
     s32 sizeY;
@@ -264,7 +240,6 @@ void dMeterMap_c::_create(J2DScreen* unused) {
     field_0x2b = dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[118]);
 }
 
-/* 8020DC50-8020DCE4 208590 0094+00 1/1 0/0 0/0 .text            _delete__11dMeterMap_cFv */
 void dMeterMap_c::_delete() {
     if (mMapJ2DPicture != NULL) {
         delete mMapJ2DPicture;
@@ -283,7 +258,6 @@ void dMeterMap_c::_delete() {
     }
 }
 
-/* 8020DCE4-8020DF1C 208624 0238+00 0/0 1/1 0/0 .text            _move__11dMeterMap_cFUl */
 void dMeterMap_c::_move(u32 param_0) {
                        /* dSv_event_flag_c::M_085 - Twilight Hyrule Field - Midna dialogue right before Boss Bug's Tear of Light appears */
     if (!field_0x2b && dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[118])) {
@@ -326,13 +300,11 @@ void dMeterMap_c::_move(u32 param_0) {
     field_0x30 = dComIfGp_event_runCheck();
 }
 
-/* 8020DF1C-8020DF68 20885C 004C+00 0/0 1/1 0/0 .text            _draw__11dMeterMap_cFv */
 void dMeterMap_c::_draw() {
     mMap->_draw();
     dComIfGd_set2DOpa(this);
 }
 
-/* 8020DF68-8020E070 2088A8 0108+00 1/0 0/0 0/0 .text            draw__11dMeterMap_cFv */
 void dMeterMap_c::draw() {
     if (mMap != NULL && mMap->isDraw()) {
         dComIfGp_getCurrentGrafPort()->setup2D();
@@ -347,7 +319,6 @@ void dMeterMap_c::draw() {
     }
 }
 
-/* 8020E070-8020E45C 2089B0 03EC+00 2/1 0/0 0/0 .text            ctrlShowMap__11dMeterMap_cFv */
 void dMeterMap_c::ctrlShowMap() {
     if (!dMeter2Info_isGameStatus(1)) {
         if (!isMapOpenCheck() && !isEventRunCheck()) {
@@ -439,7 +410,6 @@ void dMeterMap_c::ctrlShowMap() {
     }
 }
 
-/* 8020E45C-8020E4C8 208D9C 006C+00 1/1 0/0 0/0 .text            checkMoveStatus__11dMeterMap_cFv */
 u8 dMeterMap_c::checkMoveStatus() {
     u8 rv;
     if (isShow(field_0x14)) {
@@ -458,7 +428,6 @@ u8 dMeterMap_c::checkMoveStatus() {
     return rv;
 }
 
-/* 8020E4C8-8020E620 208E08 0158+00 2/2 0/0 0/0 .text            isShow__11dMeterMap_cFUl */
 bool dMeterMap_c::isShow(u32 param_0) {
     if ((param_0 & 0x4000) || fopOvlpM_IsDoingReq() ||
         ((param_0 & 0x40) && dComIfGp_event_checkHind(0x100) &&
@@ -475,7 +444,6 @@ bool dMeterMap_c::isShow(u32 param_0) {
     return true;
 }
 
-/* 8020E620-8020E70C 208F60 00EC+00 3/3 0/0 0/0 .text            isFmapScreen__11dMeterMap_cFv */
 bool dMeterMap_c::isFmapScreen() {
     if (dStage_stagInfo_GetUpButton(dComIfGp_getStage()->getStagInfo()) == 0 ||
         dStage_stagInfo_GetUpButton(dComIfGp_getStage()->getStagInfo()) == 5 ||
@@ -488,12 +456,10 @@ bool dMeterMap_c::isFmapScreen() {
     return false;
 }
 
-/* 8020E70C-8020E754 20904C 0048+00 3/3 0/0 0/0 .text            isDmapScreen__11dMeterMap_cFv */
 bool dMeterMap_c::isDmapScreen() {
     return dStage_stagInfo_GetUpButton(dComIfGp_getStage()->getStagInfo()) == 1 ? 1 : 0;
 }
 
-/* 8020E754-8020E9CC 209094 0278+00 0/0 1/1 0/0 .text            meter_map_move__11dMeterMap_cFUl */
 void dMeterMap_c::meter_map_move(u32 param_0) {
     if (isShow(param_0) && isMapOpenCheck()) {
         if (dMeter2Info_getPauseStatus() == 6) {
@@ -537,7 +503,6 @@ void dMeterMap_c::meter_map_move(u32 param_0) {
     }
 }
 
-/* 8020E9CC-8020ED60 20930C 0394+00 1/1 0/0 0/0 .text            keyCheck__11dMeterMap_cFv */
 void dMeterMap_c::keyCheck() {
     if (dMw_LEFT_TRIGGER() && !isEventRunCheck() &&
         (dMeter2Info_getMapStatus() == 0 || dMeter2Info_getMapStatus() == 1))

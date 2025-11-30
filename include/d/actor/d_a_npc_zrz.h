@@ -19,64 +19,64 @@ public:
     typedef BOOL (daNpc_zrZ_c::*ActionFn)(void*);
     typedef BOOL (daNpc_zrZ_c::*EventFn)(int);
 
-    /* 80B93DCC */ daNpc_zrZ_c();
-    /* 80B94014 */ ~daNpc_zrZ_c();
-    /* 80B9423C */ cPhs__Step create();
-    /* 80B9453C */ int CreateHeap();
-    /* 80B949F4 */ int Delete();
-    /* 80B94A28 */ int Execute();
-    /* 80B94A48 */ int Draw();
-    /* 80B94B34 */ int draw(BOOL, BOOL, f32, _GXColorS10*, BOOL);
-    /* 80B94E18 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80B950F4 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B95114 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B95244 */ void setParam();
-    /* 80B953CC */ BOOL main();
-    /* 80B95598 */ BOOL ctrlBtk();
-    /* 80B956B4 */ void setAttnPos();
-    /* 80B95BB8 */ void setMtx();
-    /* 80B95C6C */ bool setExpressionAnm(int, bool);
-    /* 80B95DD0 */ bool setExpressionBtp(int);
-    /* 80B95F10 */ void setExpression(int, f32);
-    /* 80B95F3C */ void setMotionAnm(int, f32);
-    /* 80B9612C */ void setMotion(int, f32, int);
-    /* 80B96170 */ BOOL drawDbgInfo();
-    /* 80B96178 */ void drawOtherMdls();
-    /* 80B9617C */ u8 getTypeFromParam();
+    daNpc_zrZ_c();
+    ~daNpc_zrZ_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int draw(BOOL, BOOL, f32, _GXColorS10*, BOOL);
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void setParam();
+    BOOL main();
+    BOOL ctrlBtk();
+    void setAttnPos();
+    void setMtx();
+    bool setExpressionAnm(int, bool);
+    bool setExpressionBtp(int);
+    void setExpression(int, f32);
+    void setMotionAnm(int, f32);
+    void setMotion(int, f32, int);
+    BOOL drawDbgInfo();
+    void drawOtherMdls();
+    u8 getTypeFromParam();
     /*  inline  */ u8 getPathNoFromParam() { return (fopAcM_GetParam(this) >> 8) & 0xff; }
     /*  inline  */ u8 getDemoMode() { return (fopAcM_GetParam(this) >> 0x10) & 0xf; }
-    /* 80B961B4 */ BOOL isDelete();
-    /* 80B96268 */ void reset();
-    /* 80B9652C */ void playExpression();
-    /* 80B96618 */ void playMotion();
-    /* 80B96740 */ BOOL chkAction(ActionFn);
-    /* 80B9676C */ BOOL setAction(ActionFn);
-    /* 80B96814 */ BOOL selectAction();
-    /* 80B968E0 */ void doNormalAction(BOOL);
-    /* 80B969F4 */ BOOL doEvent();
-    /* 80B96DF0 */ BOOL setSkipZev(int, int);
-    /* 80B96E7C */ void setLookMode(int);
-    /* 80B96EA0 */ void lookat();
-    /* 80B97128 */ void setExpressionTalkAfter();
-    /* 80B97160 */ void lightReady();
-    /* 80B971BC */ void setLightPos();
-    /* 80B9723C */ void lightPowerCalc(int);
-    /* 80B972EC */ void lightColorProc();
-    /* 80B974BC */ BOOL ECut_helpPrince(int);
-    /* 80B97B78 */ BOOL ECut_comeHere(int);
-    /* 80B97D7C */ BOOL ECut_restoreLink(int);
-    /* 80B97EB4 */ BOOL ECut_clothesGet(int);
-    /* 80B98540 */ BOOL ECut_getAfter(int);
-    /* 80B9877C */ BOOL ECut_sealRelease(int);
-    /* 80B98ACC */ BOOL ECut_srSkip(int);
-    /* 80B98C34 */ void pullbackPlayer(f32);
-    /* 80B98D04 */ BOOL wait(void*);
-    /* 80B98F84 */ BOOL comeHere(void*);
-    /* 80B998BC */ BOOL comeHere2(void*);
-    /* 80B9A0EC */ BOOL talk(void*);
-    /* 80B9A29C */ BOOL test(void*);
-    /* 80B9A380 */ void himoCalc();
-    /* 80B9AF7C */ void adjustShapeAngle() {}
+    BOOL isDelete();
+    void reset();
+    void playExpression();
+    void playMotion();
+    BOOL chkAction(ActionFn);
+    BOOL setAction(ActionFn);
+    BOOL selectAction();
+    void doNormalAction(BOOL);
+    BOOL doEvent();
+    BOOL setSkipZev(int, int);
+    void setLookMode(int);
+    void lookat();
+    void setExpressionTalkAfter();
+    void lightReady();
+    void setLightPos();
+    void lightPowerCalc(int);
+    void lightColorProc();
+    BOOL ECut_helpPrince(int);
+    BOOL ECut_comeHere(int);
+    BOOL ECut_restoreLink(int);
+    BOOL ECut_clothesGet(int);
+    BOOL ECut_getAfter(int);
+    BOOL ECut_sealRelease(int);
+    BOOL ECut_srSkip(int);
+    void pullbackPlayer(f32);
+    BOOL wait(void*);
+    BOOL comeHere(void*);
+    BOOL comeHere2(void*);
+    BOOL talk(void*);
+    BOOL test(void*);
+    void himoCalc();
+    void adjustShapeAngle() {}
 
 private:
     /* 0x0B48 */ Z2Creature mCreatureSound;
@@ -209,7 +209,7 @@ public:
         /* 0x80 */ f32 field_0x80;
     };
 
-    /* 80B9AF80 */ virtual ~daNpc_zrZ_Param_c() {}
+    virtual ~daNpc_zrZ_Param_c() {}
 
     static param const m;
 };

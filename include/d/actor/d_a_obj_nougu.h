@@ -27,18 +27,18 @@ public:
     /* 0xE24 */ u32 mShadowId;
     /* 0xE28 */ u8 mType;
 
-    /* 80CA3C0C */ virtual ~daObj_Nougu_c();
-    /* 80CA3E24 */ int create();
-    /* 80CA4328 */ int CreateHeap();
-    /* 80CA43A0 */ int Delete();
-    /* 80CA43D4 */ int Execute();
-    /* 80CA45F4 */ int Draw();
-    /* 80CA46B8 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80CA46D8 */ const char* getResName();
-    /* 80CA46E8 */ int isDelete();
-    /* 80CA4708 */ void setEnvTevColor();
-    /* 80CA4764 */ void setRoomNo();
-    /* 80CA47A4 */ void setMtx();
+    virtual ~daObj_Nougu_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    const char* getResName();
+    int isDelete();
+    void setEnvTevColor();
+    void setRoomNo();
+    void setMtx();
 
     int getType() { return 0; }
 
@@ -56,7 +56,7 @@ struct daObj_Nougu_HIOParam {
 
 class daObj_Nougu_Param_c {
 public:
-    /* 80CA494C */ virtual ~daObj_Nougu_Param_c() {}
+    virtual ~daObj_Nougu_Param_c() {}
 
     static const daObj_Nougu_HIOParam m;
 };

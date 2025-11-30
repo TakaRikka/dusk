@@ -15,14 +15,14 @@
  */
 class daObjSwSpinner_c : public dBgS_MoveBgActor {
 public:
-    /* 80D00174 */ void initBaseMtx();
-    /* 80D001CC */ void setBaseMtx();
-    /* 80D00284 */ int Create();
-    /* 80D0035C */ int CreateHeap();
-    /* 80D00498 */ int create1st();
-    /* 80D00518 */ int Execute(Mtx**);
-    /* 80D00890 */ int Draw();
-    /* 80D00954 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwbit2() { return fopAcM_GetParamBit(this, 8, 8); }

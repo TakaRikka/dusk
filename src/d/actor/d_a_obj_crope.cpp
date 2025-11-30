@@ -12,22 +12,18 @@
 #include "d/d_path.h"
 #include "SSystem/SComponent/c_math.h"
 
-/* 80BCEACC-80BCEAD4 000000 0006+02 6/6 0/0 0/0 .rodata          l_arcName */
 static char const l_arcName[] = "Crope";
 
-/* 80BCCCD8-80BCCD44 000078 006C+00 1/1 0/0 0/0 .text            createHeap__12daObjCrope_cFv */
 int daObjCrope_c::createHeap() {
     ResTIMG* texImg = (ResTIMG*) dComIfG_getObjectRes(l_arcName, 3);
     JUT_ASSERT(80, texImg != NULL);
     return mLineMat.init(1, 100, texImg, 0) != 0 ? 1 : 0;
 }
 
-/* 80BCCD44-80BCCD64 0000E4 0020+00 1/1 0/0 0/0 .text daObjCrope_createHeap__FP10fopAc_ac_c */
 static int daObjCrope_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjCrope_c*>(i_this)->createHeap();
 }
 
-/* 80BCEB3C-80BCEB7C 000000 0040+00 1/1 0/0 0/0 .data            l_sphSrc */
 static dCcD_SrcSph l_sphSrc = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x0}, 0x79}}, // mObj
@@ -40,7 +36,6 @@ static dCcD_SrcSph l_sphSrc = {
     } // mSphAttr
 };
 
-/* 80BCEB7C-80BCEB80 000040 0004+00 1/1 0/0 0/0 .data            color$4550 */
 static GXColor color = {
     0x00,
     0x00,
@@ -48,7 +43,6 @@ static GXColor color = {
     0xFF,
 };
 
-/* 80BCCD64-80BCD3D8 000104 0674+00 1/1 0/0 0/0 .text            create__12daObjCrope_cFv */
 int daObjCrope_c::create() {
     fopAcM_ct(this, daObjCrope_c);
     int rv = dComIfG_resLoad(&mPhase, l_arcName);
@@ -115,28 +109,21 @@ int daObjCrope_c::create() {
     return rv;
 }
 
-/* 80BCD504-80BCD524 0008A4 0020+00 1/0 0/0 0/0 .text            daObjCrope_Create__FP10fopAc_ac_c
- */
 static int daObjCrope_Create(fopAc_ac_c* i_this) {
     fopAcM_RegisterCreateID(daObjCrope_c, i_this, "Obj_Crope");
     return static_cast<daObjCrope_c*>(i_this)->create();
 }
 
-/* 80BCD524-80BCD69C 0008C4 0178+00 1/1 0/0 0/0 .text            __dt__12daObjCrope_cFv */
 daObjCrope_c::~daObjCrope_c() {
     dComIfG_resDelete(&mPhase, l_arcName);
 }
 
-/* 80BCD69C-80BCD6C4 000A3C 0028+00 1/0 0/0 0/0 .text            daObjCrope_Delete__FP12daObjCrope_c
- */
 static int daObjCrope_Delete(daObjCrope_c* i_this) {
     fopAcM_RegisterDeleteID(i_this, "Obj_Crope");
     i_this->~daObjCrope_c();
     return 1;
 }
 
-/* 80BCD6C4-80BCD9EC 000A64 0328+00 3/3 0/0 0/0 .text            setNormalRopePos__12daObjCrope_cFv
- */
 void daObjCrope_c::setNormalRopePos() {
     int i;
     cXyz* pVVar3;
@@ -193,7 +180,6 @@ void daObjCrope_c::setNormalRopePos() {
     }
 }
 
-/* 80BCD9EC-80BCE4FC 000D8C 0B10+00 1/1 0/0 0/0 .text            setRideRopePos__12daObjCrope_cFv */
 void daObjCrope_c::setRideRopePos() {
     daPy_py_c* player = daPy_getLinkPlayerActorClass();
     cXyz* pcVar13;
@@ -325,7 +311,6 @@ void daObjCrope_c::setRideRopePos() {
     }
 }
 
-/* 80BCE4FC-80BCE954 00189C 0458+00 1/1 0/0 0/0 .text            execute__12daObjCrope_cFv */
 int daObjCrope_c::execute() {
     int i;
     cXyz* this_00;
@@ -370,12 +355,10 @@ int daObjCrope_c::execute() {
     return 1;
 }
 
-/* 80BCE99C-80BCE9BC 001D3C 0020+00 1/0 0/0 0/0 .text daObjCrope_Execute__FP12daObjCrope_c */
 static int daObjCrope_Execute(daObjCrope_c* i_this) {
     return i_this->execute();
 }
 
-/* 80BCE9BC-80BCEA5C 001D5C 00A0+00 1/1 0/0 0/0 .text            draw__12daObjCrope_cFv */
 int daObjCrope_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     mLineMat.update(100, 5.0f, color, 0, &tevStr);
@@ -383,13 +366,10 @@ int daObjCrope_c::draw() {
     return 1;
 }
 
-/* 80BCEA5C-80BCEA7C 001DFC 0020+00 1/0 0/0 0/0 .text            daObjCrope_Draw__FP12daObjCrope_c
- */
 static int daObjCrope_Draw(daObjCrope_c* i_this) {
     return i_this->draw();
 }
 
-/* 80BCEB80-80BCEBA0 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjCrope_Method */
 static actor_method_class l_daObjCrope_Method = {
     (process_method_func)daObjCrope_Create,
     (process_method_func)daObjCrope_Delete,
@@ -398,7 +378,6 @@ static actor_method_class l_daObjCrope_Method = {
     (process_method_func)daObjCrope_Draw,
 };
 
-/* 80BCEBA0-80BCEBD0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Crope */
 extern actor_process_profile_definition g_profile_Obj_Crope = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

@@ -5,10 +5,10 @@
 
 class daTagRestart_c : public fopAc_ac_c {
 public:
-    /* 80D603F8 */ int Create();
-    /* 80D6048C */ int create();
-    /* 80D60560 */ int execute();
-    /* 80D60744 */ int _delete();
+    int Create();
+    int create();
+    int execute();
+    int _delete();
 
     /* 0x568 */ s8 mPlayerRoomNo;
     /* 0x56C */ cXyz field_0x56c[4];

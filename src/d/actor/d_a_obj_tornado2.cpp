@@ -10,25 +10,18 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
 
-/* 80D1D3D4-80D1D3DC 000000 0006+02 6/6 0/0 0/0 .rodata          l_R02_eff_id */
 static const u16 l_R02_eff_id[3] = {0x8B5E, 0x8B5F, 0xFFFF};
 
-/* 80D1D3DC-80D1D3E4 000008 0006+02 0/1 0/0 0/0 .rodata          l_R04_eff_id */
 static const u16 l_R04_eff_id[3] = {0x8B60, 0x8B61, 0xFFFF};
 
-/* 80D1D3E4-80D1D3EC 000010 0006+02 0/1 0/0 0/0 .rodata          l_R05_eff_id */
 static const u16 l_R05_eff_id[3] = {0x8B6B, 0x8B6C, 0xFFFF};
 
-/* 80D1D3EC-80D1D3F4 000018 0006+02 0/1 0/0 0/0 .rodata          l_R07_eff_id */
 static const u16 l_R07_eff_id[3] = {0x8B6D, 0x8B6E, 0xFFFF};
 
-/* 80D1D3F4-80D1D3FC 000020 0006+02 0/1 0/0 0/0 .rodata          l_R14_eff_id */
 static const u16 l_R14_eff_id[3] = {0x8B66, 0x8B67, 0x8B68};
 
-/* 80D1D3FC-80D1D404 000028 0006+02 0/1 0/0 0/0 .rodata          l_R51_eff_id */
 static const u16 l_R51_eff_id[3] = {0x8B69, 0x8B6A, 0xFFFF};
 
-/* 80D1C4D8-80D1C54C 000078 0074+00 1/1 0/0 0/0 .text            setPntWind__12daObjTrnd2_cFv */
 void daObjTrnd2_c::setPntWind() {
     mWindInfluence.position = current.pos;
     mWindInfluence.mDirection.x = 0.0f;
@@ -40,12 +33,10 @@ void daObjTrnd2_c::setPntWind() {
     dKyw_pntwind_set(&mWindInfluence);
 }
 
-/* 80D1C54C-80D1C570 0000EC 0024+00 1/1 0/0 0/0 .text            cutPntWind__12daObjTrnd2_cFv */
 void daObjTrnd2_c::cutPntWind() {
     dKyw_pntwind_cut(&mWindInfluence);
 }
 
-/* 80D1C570-80D1C780 000110 0210+00 1/1 0/0 0/0 .text            movePntWind__12daObjTrnd2_cFv */
 void daObjTrnd2_c::movePntWind() {
     cXyz start;
     cXyz end;
@@ -74,7 +65,6 @@ void daObjTrnd2_c::movePntWind() {
     }
 }
 
-/* 80D1C780-80D1C924 000320 01A4+00 1/1 0/0 0/0 .text            setCpsInfo__12daObjTrnd2_cFv */
 void daObjTrnd2_c::setCpsInfo() {
     cLib_chaseF(&mNowLength, mTargetLength, mDefaultLength * scale.y * 0.05f);
     mWindCps.mEnd.x = 0;
@@ -109,19 +99,16 @@ void daObjTrnd2_c::setCpsInfo() {
     movePntWind();
 }
 
-/* 80D1C924-80D1C944 0004C4 0020+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjTrnd2_cFv */
 void daObjTrnd2_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80D1C944-80D1C98C 0004E4 0048+00 2/2 0/0 0/0 .text            setBaseMtx__12daObjTrnd2_cFv */
 void daObjTrnd2_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
-/* 80D1D458-80D1D4A4 000000 004C+00 1/1 0/0 0/0 .data            l_cps_src */
 static dCcD_SrcCps l_cps_src = {
     {
         {0x0, {{AT_TYPE_LANTERN_SWING, 0x0, 0x1d}, {0x0, 0x0}, 0x0}},  // mObj
@@ -134,7 +121,6 @@ static dCcD_SrcCps l_cps_src = {
     }  // mCpsAttr
 };
 
-/* 80D1C98C-80D1CC80 00052C 02F4+00 1/1 0/0 0/0 .text            Create__12daObjTrnd2_cFv */
 int daObjTrnd2_c::Create() {
     mDefaultRadius = 150.0f;
     mDefaultLength = 1000.0f;
@@ -216,7 +202,6 @@ int daObjTrnd2_c::Create() {
     return 1;
 }
 
-/* 80D1CC80-80D1CD78 000820 00F8+00 1/1 0/0 0/0 .text            create__12daObjTrnd2_cFv */
 int daObjTrnd2_c::create() {
     fopAcM_ct(this, daObjTrnd2_c);
     if (!Create()) {
@@ -226,7 +211,6 @@ int daObjTrnd2_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D1CDC0-80D1D0AC 000960 02EC+00 1/1 0/0 0/0 .text            execute__12daObjTrnd2_cFv */
 int daObjTrnd2_c::execute() {
     bool set_column;
     u32 swBit;
@@ -311,7 +295,6 @@ int daObjTrnd2_c::execute() {
     return 1;
 }
 
-/* 80D1D0AC-80D1D214 000C4C 0168+00 1/1 0/0 0/0 .text            setParticle__12daObjTrnd2_cFv */
 void daObjTrnd2_c::setParticle() {
     const u16* efflist_p = NULL;
     switch (fopAcM_GetRoomNo(this)) {
@@ -355,7 +338,6 @@ void daObjTrnd2_c::setParticle() {
     stopParticle();
 }
 
-/* 80D1D214-80D1D278 000DB4 0064+00 1/1 0/0 0/0 .text            endParticle__12daObjTrnd2_cFv */
 void daObjTrnd2_c::endParticle() {
     for (int i = 0; i < 3; i++) {
         if (mParticles[i] != NULL) {
@@ -367,7 +349,6 @@ void daObjTrnd2_c::endParticle() {
     }
 }
 
-/* 80D1D278-80D1D2AC 000E18 0034+00 2/2 0/0 0/0 .text            startParticle__12daObjTrnd2_cFv */
 void daObjTrnd2_c::startParticle() {
     for (int i = 0; i < 3; i++) {
         if (mParticles[i] != NULL) {
@@ -376,7 +357,6 @@ void daObjTrnd2_c::startParticle() {
     }
 }
 
-/* 80D1D2AC-80D1D2E0 000E4C 0034+00 2/2 0/0 0/0 .text            stopParticle__12daObjTrnd2_cFv */
 void daObjTrnd2_c::stopParticle() {
     for (int i = 0; i < 3; i++) {
         if (mParticles[i] != NULL) {
@@ -385,12 +365,10 @@ void daObjTrnd2_c::stopParticle() {
     }
 }
 
-/* 80D1D2E0-80D1D2E8 000E80 0008+00 1/1 0/0 0/0 .text            draw__12daObjTrnd2_cFv */
 int daObjTrnd2_c::draw() {
     return 1;
 }
 
-/* 80D1D2E8-80D1D330 000E88 0048+00 1/1 0/0 0/0 .text            _delete__12daObjTrnd2_cFv */
 int daObjTrnd2_c::_delete() {
     dKy_getEnvlight()->evt_wind_go = 0;
     cutPntWind();
@@ -398,30 +376,22 @@ int daObjTrnd2_c::_delete() {
     return 1;
 }
 
-/* 80D1D330-80D1D350 000ED0 0020+00 1/0 0/0 0/0 .text            daObjTrnd2_Draw__FP12daObjTrnd2_c
- */
 static int daObjTrnd2_Draw(daObjTrnd2_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D1D350-80D1D370 000EF0 0020+00 1/0 0/0 0/0 .text daObjTrnd2_Execute__FP12daObjTrnd2_c */
 static int daObjTrnd2_Execute(daObjTrnd2_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D1D370-80D1D390 000F10 0020+00 1/0 0/0 0/0 .text            daObjTrnd2_Delete__FP12daObjTrnd2_c
- */
 static int daObjTrnd2_Delete(daObjTrnd2_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80D1D390-80D1D3B0 000F30 0020+00 1/0 0/0 0/0 .text            daObjTrnd2_Create__FP12daObjTrnd2_c
- */
 static int daObjTrnd2_Create(daObjTrnd2_c* i_this) {
     return i_this->create();
 }
 
-/* 80D1D4A4-80D1D4C4 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjTrnd2_Method */
 static actor_method_class l_daObjTrnd2_Method = {
     (process_method_func)daObjTrnd2_Create,  (process_method_func)daObjTrnd2_Delete,
     (process_method_func)daObjTrnd2_Execute, (process_method_func)NULL,

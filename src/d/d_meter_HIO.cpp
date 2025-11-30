@@ -5,7 +5,6 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "m_Do/m_Do_ext.h"
 
-/* 801FE330-801FE348 1F8C70 0018+00 1/1 0/0 0/0 .text            __ct__16dMeter_menuHIO_cFv */
 dMeter_menuHIO_c::dMeter_menuHIO_c() {
     mGameover = 70;
 }
@@ -16,8 +15,6 @@ void dMeter_menuHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FE348-801FE4EC 1F8C88 01A4+00 1/1 0/0 0/0 .text            __ct__23dMeter_drawCollectHIO_cFv
- */
 dMeter_drawCollectHIO_c::dMeter_drawCollectHIO_c() {
     mUnselectItemScale = 1.0f;
     mSelectItemScale = 1.5f;
@@ -64,7 +61,6 @@ void dMeter_drawCollectHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FE4EC-801FE5CC 1F8E2C 00E0+00 1/1 0/0 0/0 .text            __ct__22dMeter_drawOptionHIO_cFv */
 dMeter_drawOptionHIO_c::dMeter_drawOptionHIO_c() {
     mBarScale[0] = 1.02f;
     mBarScale[1] = 0.98f;
@@ -100,7 +96,6 @@ void dMeter_drawOptionHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FE5CC-801FE730 1F8F0C 0164+00 1/1 0/0 0/0 .text            __ct__22dMeter_drawLetterHIO_cFv */
 dMeter_drawLetterHIO_c::dMeter_drawLetterHIO_c() {
     for (int i = 0; i < 2; i++) {
         mOpenFrame[i] = 10;
@@ -144,8 +139,6 @@ void dMeter_drawLetterHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FE730-801FE8DC 1F9070 01AC+00 1/1 0/0 0/0 .text            __ct__23dMeter_drawFishingHIO_cFv
- */
 dMeter_drawFishingHIO_c::dMeter_drawFishingHIO_c() {
     static f32 const fipaScale[6] = {0.98f, 1.0f, 1.0f, 1.0f, 0.95f, 1.1f};
     static f32 const fipaPosX[6] = {1.3f, 6.6f, 0.0f, 3.96f, 4.0f, 27.5f};
@@ -243,7 +236,6 @@ void dMeter_drawFishingHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FE8DC-801FE954 1F921C 0078+00 1/1 0/0 0/0 .text            __ct__22dMeter_drawInsectHIO_cFv */
 dMeter_drawInsectHIO_c::dMeter_drawInsectHIO_c() {
     mOpenFrame = 10;
     mCloseFrame = 10;
@@ -276,7 +268,6 @@ void dMeter_drawInsectHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FE954-801FE990 1F9294 003C+00 1/1 0/0 0/0 .text __ct__27dMeter_drawCalibrationHIO_cFv */
 dMeter_drawCalibrationHIO_c::dMeter_drawCalibrationHIO_c() {
     mOpenFrames = 10;
     mCloseFrames = 10;
@@ -292,7 +283,6 @@ void dMeter_drawCalibrationHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FE990-801FEAF0 1F92D0 0160+00 1/1 0/0 0/0 .text            __ct__21dMeter_drawSkillHIO_cFv */
 dMeter_drawSkillHIO_c::dMeter_drawSkillHIO_c() {
     for (int i = 0; i < 2; i++) {
         mOpenFrame[i] = 10;
@@ -334,8 +324,6 @@ void dMeter_drawSkillHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FEAF0-801FEFF0 1F9430 0500+00 1/1 0/0 0/0 .text            __ct__25dMeter_drawEmpButtonHIO_cFv
- */
 dMeter_drawEmpButtonHIO_c::dMeter_drawEmpButtonHIO_c() {
     mPikariScale = 2.5f;
 
@@ -562,8 +550,6 @@ void dMeter_drawEmpButtonHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FEFF0-801FF31C 1F9930 032C+00 1/1 0/0 0/0 .text            __ct__24dMeter_drawMiniGameHIO_cFv
- */
 dMeter_drawMiniGameHIO_c::dMeter_drawMiniGameHIO_c() {
     field_0x8[0] = 1.0f;
     field_0x14[0] = 0.0f;
@@ -741,8 +727,6 @@ void dMeter_drawMiniGameHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FF31C-801FF5B8 1F9C5C 029C+00 1/1 0/0 0/0 .text            __ct__25dMeter_drawLightDropHIO_cFv
- */
 dMeter_drawLightDropHIO_c::dMeter_drawLightDropHIO_c() {
     mVesselScale = 0.76f;
     mVesselPosX = -18.0f;
@@ -816,7 +800,6 @@ void dMeter_drawLightDropHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 801FF5B8-802001AC 1F9EF8 0BF4+00 1/1 0/0 0/0 .text            __ct__16dMeter_drawHIO_cFv */
 dMeter_drawHIO_c::dMeter_drawHIO_c() {
     #ifdef DEBUG
     field_0x8_debug = 0;
@@ -1478,7 +1461,6 @@ void dMeter_drawHIO_c::updateFMsgDebug() {
 }
 #endif
 
-/* 802001AC-802004B4 1FAAEC 0308+00 1/1 0/0 0/0 .text            __ct__16dMeter_ringHIO_cFv */
 dMeter_ringHIO_c::dMeter_ringHIO_c() {
     mRingRadiusH = 175.0f;
     mRingRadiusV = 160.0f;
@@ -1602,7 +1584,6 @@ void dMeter_ringHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 802004B4-802006C8 1FADF4 0214+00 1/1 0/0 0/0 .text            __ct__19dMeter_mapIconHIO_cFv */
 dMeter_mapIconHIO_c::dMeter_mapIconHIO_c() {
     mPortalCursorScale = 0.5f;
     mPortalIconScale = 0.65f;
@@ -1716,7 +1697,6 @@ void dMeter_mapIconHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 802006C8-80200BCC 1FB008 0504+00 1/1 0/0 0/0 .text            __ct__16dMeter_fmapHIO_cFv */
 dMeter_fmapHIO_c::dMeter_fmapHIO_c() {
     mpArcFile = NULL;
     mpDecompBuf = NULL;
@@ -1900,7 +1880,6 @@ dMeter_fmapHIO_c::dMeter_fmapHIO_c() {
     }
 }
 
-/* 80200BCC-80200CD4 1FB50C 0108+00 2/1 0/0 0/0 .text            __dt__16dMeter_fmapHIO_cFv */
 dMeter_fmapHIO_c::~dMeter_fmapHIO_c() {
     if (mpArcFile != NULL) {
         mDoExt_getGameHeap()->free(mpArcFile);
@@ -1948,7 +1927,6 @@ void dMeter_fmapHIO_c::update() {
 }
 #endif
 
-/* 80200CD4-80200D58 1FB614 0084+00 1/1 0/0 0/0 .text            __ct__18dMeter_cursorHIO_cFv */
 dMeter_cursorHIO_c::dMeter_cursorHIO_c() {
     mShopCursorScale = 1.05f;
     mShopCursorOffsetY = -30.0f;
@@ -1968,17 +1946,12 @@ void dMeter_cursorHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 804510B0-804510B8 0005B0 0008+00 1/1 1/1 0/0 .sbss            g_menuHIO */
 dMeter_menuHIO_c g_menuHIO;
 
-/* 8042EBC8-8042FAF0 05B8E8 0F28+00 0/1 157/157 0/0 .bss             g_drawHIO */
 dMeter_drawHIO_c g_drawHIO;
 
-/* 8042FAFC-8042FC54 05C81C 0158+00 0/1 19/19 0/0 .bss             g_ringHIO */
 dMeter_ringHIO_c g_ringHIO;
 
-/* 8042FC60-80430104 05C980 04A4+00 0/1 54/54 0/0 .bss             g_fmapHIO */
 dMeter_fmapHIO_c g_fmapHIO;
 
-/* 80430110-80430158 05CE30 0044+04 0/1 6/6 1/1 .bss             g_cursorHIO */
 dMeter_cursorHIO_c g_cursorHIO;

@@ -3,7 +3,6 @@
 #include "d/d_att_dist.h"
 #include "d/d_attention.h"
 
-/* 803A9C70-803AB608 006D90 1998+00 0/0 5/5 13/13 .data            dist_table__12dAttention_c */
 dist_entry dAttention_c::dist_table[234] = {
     {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.01f, 0},
     {250.0f, 375.0f, 500.0f, 400.0f, -400.0f, 0.5f, 0},

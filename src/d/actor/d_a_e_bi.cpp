@@ -14,8 +14,8 @@
 
 class daE_BI_HIO_c : public JORReflexible {
 public:
-    /* 8068A5EC */ daE_BI_HIO_c();
-    /* 8068D2DC */ virtual ~daE_BI_HIO_c() {}
+    daE_BI_HIO_c();
+    virtual ~daE_BI_HIO_c() {}
 
 #if DEBUG
     void genMessage(JORMContext*);
@@ -55,7 +55,6 @@ enum Action {
     /* 0x7 */ ACTION_DISAP,
 };
 
-/* 8068A5EC-8068A634 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__12daE_BI_HIO_cFv */
 daE_BI_HIO_c::daE_BI_HIO_c() {
     field_0x4 = -1;
     basic_size = 1.0f;
@@ -65,13 +64,11 @@ daE_BI_HIO_c::daE_BI_HIO_c() {
     movement_spd = 10.0f;
 }
 
-/* 8068A634-8068A6E0 000134 00AC+00 6/6 0/0 0/0 .text            anm_init__FP10e_bi_classifUcf */
 static void anm_init(e_bi_class* i_this, int i_index, f32 i_morf, u8 i_attr, f32 i_rate) {
     i_this->mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_BI", i_index), i_attr, i_morf, i_rate, 0.0f, -1.0f);
     i_this->mAnm = i_index;
 }
 
-/* 8068A6E0-8068A90C 0001E0 022C+00 1/0 0/0 0/0 .text            daE_BI_Draw__FP10e_bi_class */
 static int daE_BI_Draw(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -111,7 +108,6 @@ static int daE_BI_Draw(e_bi_class* i_this) {
     return 1;
 }
 
-/* 8068A90C-8068A96C 00040C 0060+00 3/3 0/0 0/0 .text            pl_check__FP10e_bi_classf */
 static BOOL pl_check(e_bi_class* i_this, f32 param_2) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -127,7 +123,6 @@ static BOOL pl_check(e_bi_class* i_this, f32 param_2) {
     return FALSE;
 }
 
-/* 8068A96C-8068ABD8 00046C 026C+00 1/1 0/0 0/0 .text            damage_check__FP10e_bi_class */
 static void damage_check(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     fopAc_ac_c* actor_p = dComIfGp_getPlayer(0);
@@ -186,15 +181,12 @@ static void damage_check(e_bi_class* i_this) {
     }
 }
 
-/* 8068DB1C-8068DB20 -00001 0004+00 2/2 0/0 0/0 .bss             None */
 /* 8068DB1C 0001+00 data_8068DB1C @1009 */
 /* 8068DB1D 0003+00 data_8068DB1D None */
 static u8 l_initHIO;
 
-/* 8068DB2C-8068DB48 000054 001C+00 6/6 0/0 0/0 .bss             l_HIO */
 static daE_BI_HIO_c l_HIO;
 
-/* 8068ABD8-8068AED0 0006D8 02F8+00 1/1 0/0 0/0 .text            e_bi_wait__FP10e_bi_class */
 static void e_bi_wait(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp28;
@@ -241,7 +233,6 @@ static void e_bi_wait(e_bi_class* i_this) {
     }
 }
 
-/* 8068AED0-8068B068 0009D0 0198+00 1/1 0/0 0/0 .text            e_bi_up__FP10e_bi_class */
 static void e_bi_up(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -279,7 +270,6 @@ static void e_bi_up(e_bi_class* i_this) {
     }
 }
 
-/* 8068B068-8068B428 000B68 03C0+00 1/1 0/0 0/0 .text            e_bi_move__FP10e_bi_class */
 static void e_bi_move(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp40, sp4c;
@@ -345,7 +335,6 @@ static void e_bi_move(e_bi_class* i_this) {
     cLib_addCalcAngleS2(&a_this->shape_angle.y, a_this->current.angle.y, 4, 0x2000);
 }
 
-/* 8068B428-8068B764 000F28 033C+00 1/1 0/0 0/0 .text            e_bi_ex__FP10e_bi_class */
 static void e_bi_ex(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp48, sp54;
@@ -425,7 +414,6 @@ static void e_bi_ex(e_bi_class* i_this) {
     cLib_addCalcAngleS2(&a_this->shape_angle.y, a_this->current.angle.y, 4, 0x2000);
 }
 
-/* 8068B764-8068B938 001264 01D4+00 1/1 0/0 0/0 .text            e_bi_water__FP10e_bi_class */
 static void e_bi_water(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp34, sp40;
@@ -473,7 +461,6 @@ static void e_bi_water(e_bi_class* i_this) {
     }
 }
 
-/* 8068B938-8068BA28 001438 00F0+00 1/1 0/0 0/0 .text            e_bi_disap__FP10e_bi_class */
 static void e_bi_disap(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -500,7 +487,6 @@ static void e_bi_disap(e_bi_class* i_this) {
     i_this->mpModelMorf->setFrame(i_this->field_0x660);
 }
 
-/* 8068BA28-8068BAE0 001528 00B8+00 1/1 0/0 0/0 .text            water_check__FP10e_bi_class */
 static BOOL water_check(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     Vec i_pos;
@@ -519,7 +505,6 @@ static BOOL water_check(e_bi_class* i_this) {
     return FALSE;
 }
 
-/* 8068BAE0-8068C068 0015E0 0588+00 2/1 0/0 0/0 .text            action__FP10e_bi_class */
 static void action(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -660,7 +645,6 @@ static void action(e_bi_class* i_this) {
     setMidnaBindEffect(&i_this->actor, &i_this->mSound, &a_this->eyePos, &i_effSize);
 }
 
-/* 8068C068-8068C1E8 001B68 0180+00 1/1 0/0 0/0 .text            s_fw_sub__FPvPv */
 static void* s_fw_sub(void* i_actor, void* i_data) {
     if (fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_FW) {
         cXyz sp28 = ((fopAc_ac_c*)i_actor)->current.pos - ((fopAc_ac_c*)i_data)->current.pos;
@@ -672,7 +656,6 @@ static void* s_fw_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8068C1E8-8068C350 001CE8 0168+00 1/1 0/0 0/0 .text            ride_movebg_init__FP10e_bi_class */
 static void ride_movebg_init(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp74, sp80;
@@ -697,7 +680,6 @@ static void ride_movebg_init(e_bi_class* i_this) {
     }
 }
 
-/* 8068C3C8-8068CA98 001EC8 06D0+00 2/1 0/0 0/0 .text            daE_BI_Execute__FP10e_bi_class */
 static int daE_BI_Execute(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -850,12 +832,10 @@ static int daE_BI_Execute(e_bi_class* i_this) {
     return 1;
 }
 
-/* 8068CA98-8068CAA0 002598 0008+00 1/0 0/0 0/0 .text            daE_BI_IsDelete__FP10e_bi_class */
 static int daE_BI_IsDelete(e_bi_class* i_this) {
     return 1;
 }
 
-/* 8068CAA0-8068CB08 0025A0 0068+00 1/0 0/0 0/0 .text            daE_BI_Delete__FP10e_bi_class */
 static int daE_BI_Delete(e_bi_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     
@@ -872,7 +852,6 @@ static int daE_BI_Delete(e_bi_class* i_this) {
     return 1;
 }
 
-/* 8068CB08-8068CC00 002608 00F8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_bi_class* i_this = (e_bi_class*)a_this;
 
@@ -886,7 +865,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 8068CC00-8068D080 002700 0480+00 1/0 0/0 0/0 .text            daE_BI_Create__FP10fopAc_ac_c */
 static cPhs__Step daE_BI_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, e_bi_class);
     e_bi_class* i_this = (e_bi_class*)a_this;
@@ -1007,7 +985,6 @@ static cPhs__Step daE_BI_Create(fopAc_ac_c* a_this) {
 
 AUDIO_INSTANCES;
 
-/* 8068D9DC-8068D9FC -00001 0020+00 1/0 0/0 0/0 .data            l_daE_BI_Method */
 static actor_method_class l_daE_BI_Method = {
     (process_method_func)daE_BI_Create,
     (process_method_func)daE_BI_Delete,
@@ -1016,7 +993,6 @@ static actor_method_class l_daE_BI_Method = {
     (process_method_func)daE_BI_Draw,
 };
 
-/* 8068D9FC-8068DA2C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_BI */
 extern actor_process_profile_definition g_profile_E_BI = {
   fpcLy_CURRENT_e,        // mLayerID
   9,                      // mListID

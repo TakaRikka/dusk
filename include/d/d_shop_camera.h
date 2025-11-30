@@ -27,18 +27,18 @@ public:
         setCamAction(NULL);
     }
 
-    /* 80195C9C */ int shop_cam_action_init();
-    /* 80195E18 */ int shop_cam_action();
-    /* 8019630C */ void Save();
-    /* 8019635C */ void EventRecoverNotime();
-    /* 801963B4 */ void Reset();
-    /* 801964C8 */ void move();
-    /* 80196544 */ void setCamDataIdx(fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*, cXyz*,
+    int shop_cam_action_init();
+    int shop_cam_action();
+    void Save();
+    void EventRecoverNotime();
+    void Reset();
+    void move();
+    void setCamDataIdx(fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*, cXyz*,
                                       cXyz*);
-    /* 80196608 */ void setCamDataIdx2(fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*,
+    void setCamDataIdx2(fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*,
                                        fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*, cXyz*, cXyz*);
-    /* 801966D4 */ void _debugSetCamera();
-    /* 801968B8 */ void setMasterCamCtrPos(cXyz*);
+    void _debugSetCamera();
+    void setMasterCamCtrPos(cXyz*);
 
     void setCamAction(ShopCamFunc func) {
         mCamAction = func;

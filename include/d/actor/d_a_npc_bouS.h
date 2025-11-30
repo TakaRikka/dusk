@@ -27,7 +27,7 @@ struct daNpcBouS_HIOParam {
 
 class daNpcBouS_Param_c {
 public:
-    /* 809783A4 */ virtual ~daNpcBouS_Param_c() {}
+    virtual ~daNpcBouS_Param_c() {}
 
     static daNpcBouS_HIOParam const m;
 };
@@ -51,44 +51,44 @@ public:
     typedef bool (daNpcBouS_c::*actionFunc)(void*);
     typedef int (daNpcBouS_c::*eventFunc)(int);
 
-    /* 8097354C */ daNpcBouS_c();
-    /* 80973760 */ ~daNpcBouS_c();
-    /* 80973948 */ cPhs__Step Create();
-    /* 80973B9C */ int CreateHeap();
-    /* 80973FC8 */ int Delete();
-    /* 80973FFC */ int Execute();
-    /* 80974020 */ int Draw();
-    /* 80974090 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 809742BC */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 809742DC */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80974328 */ bool setExpressionAnm(int, bool);
-    /* 80974514 */ bool setExpressionBtp(int);
-    /* 809745F4 */ void setMotionAnm(int, f32);
-    /* 80974730 */ void reset();
-    /* 809748F0 */ inline BOOL setAction(actionFunc);
-    /* 80974A04 */ bool checkInstructionTag(fopAc_ac_c*);
-    /* 80974A28 */ bool wait(void*);
-    /* 809750BC */ void setMotion(int, f32, int);
-    /* 80975104 */ void setExpression(int, f32);
-    /* 80975130 */ bool talk(void*);
-    /* 80975748 */ bool demo(void*);
+    daNpcBouS_c();
+    ~daNpcBouS_c();
+    cPhs__Step Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    bool setExpressionAnm(int, bool);
+    bool setExpressionBtp(int);
+    void setMotionAnm(int, f32);
+    void reset();
+    inline BOOL setAction(actionFunc);
+    bool checkInstructionTag(fopAc_ac_c*);
+    bool wait(void*);
+    void setMotion(int, f32, int);
+    void setExpression(int, f32);
+    bool talk(void*);
+    bool demo(void*);
                    inline fopAc_ac_c* searchInstructionTag();
-    /* 80975930 */ bool instruction(void*);
-    /* 80975ED8 */ bool checkIntroDemoStart();
-    /* 80975FDC */ int EvCut_BousIntroSumo1(int);
-    /* 80976284 */ int EvCut_BousIntroSumo2(int);
-    /* 80976654 */ int EvCut_BousIntroSumo3(int);
-    /* 80976C00 */ inline void setParam();
-    /* 80976C9C */ inline BOOL main();
+    bool instruction(void*);
+    bool checkIntroDemoStart();
+    int EvCut_BousIntroSumo1(int);
+    int EvCut_BousIntroSumo2(int);
+    int EvCut_BousIntroSumo3(int);
+    inline void setParam();
+    inline BOOL main();
                    inline void playExpression();
-    /* 80976EEC */ inline void playMotion();
-    /* 80977368 */ inline BOOL ctrlBtk();
-    /* 80977444 */ inline void setAttnPos();
-    /* 809778D8 */ inline void lookat();
+    inline void playMotion();
+    inline BOOL ctrlBtk();
+    inline void setAttnPos();
+    inline void lookat();
                    inline BOOL step(s16, int);
-    /* 80977AB8 */ inline int drawDbgInfo();
-    /* 80977AC0 */ inline void drawOtherMdls();
-    /* 809783A0 */ void adjustShapeAngle() {}
+    inline int drawDbgInfo();
+    inline void drawOtherMdls();
+    void adjustShapeAngle() {}
 
     s16 getMessageNo() { return (fopAcM_GetParam(this) >> 8) & 0xFFFF; }
     s8 getArenaNo() { return fopAcM_GetParam(this) & 0xFF; }

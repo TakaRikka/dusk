@@ -7,13 +7,13 @@ class JUTFont;
 class JKRExpHeap;
 
 struct dMsgScrnTree_c : public dMsgScrnBase_c {
-    /* 80248954 */ dMsgScrnTree_c(JUTFont*, JKRExpHeap*);
-    /* 80248F14 */ virtual ~dMsgScrnTree_c();
-    /* 80249118 */ void exec();
-    /* 80249270 */ void draw();
-    /* 802492F8 */ void fukiAlpha(f32);
-    /* 802493AC */ void fukiScale(f32);
-    /* 802493B0 */ void fukiTrans(f32, f32);
+    dMsgScrnTree_c(JUTFont*, JKRExpHeap*);
+    virtual ~dMsgScrnTree_c();
+    void exec();
+    void draw();
+    void fukiAlpha(f32);
+    void fukiScale(f32);
+    void fukiTrans(f32, f32);
 
     /* 0xC4 */ CPaneMgr* field_0xc4;
     /* 0xC8 */ CPaneMgr* field_0xc8;

@@ -89,8 +89,8 @@ STATIC_ASSERT(sizeof(bd_class) == 0x9ec);
 
 class daBd_HIO_c : public JORReflexible {
 public:
-    /* 804D6C4C */ daBd_HIO_c();
-    /* 804D9CB8 */ virtual ~daBd_HIO_c() {}
+    daBd_HIO_c();
+    virtual ~daBd_HIO_c() {}
 
     void genMessage(JORMContext*);
 

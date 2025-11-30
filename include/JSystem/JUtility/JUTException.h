@@ -18,7 +18,7 @@ class JUTDirectPrint;
 */
 class JUTExternalFB {
 public:
-    /* 802E40CC */ JUTExternalFB(_GXRenderModeObj*, GXGamma, void*, u32);
+    JUTExternalFB(_GXRenderModeObj*, GXGamma, void*, u32);
 
 private:
     /* 0x00 */ _GXRenderModeObj* mRenderMode;
@@ -65,39 +65,39 @@ public:
         /* 0x14 */
     };
 
-    /* 802E1D5C */ JUTException(JUTDirectPrint*);
-    /* 802E40EC */ virtual ~JUTException();
+    JUTException(JUTDirectPrint*);
+    virtual ~JUTException();
 
-    /* 802E22C4 */ void showFloatSub(int, f32);
-    /* 802E2454 */ void showFloat(OSContext*);
-    /* 802E26B0 */ void showStack(OSContext*);
-    /* 802E27B0 */ void showMainInfo(u16, OSContext*, u32, u32);
-    /* 802E2A84 */ void showGPR(OSContext*);
-    /* 802E2B44 */ bool showMapInfo_subroutine(u32, bool);
-    /* 802E2CA0 */ void showGPRMap(OSContext*);
-    /* 802E2DAC */ void showSRR0Map(OSContext*);
-    /* 802E2E70 */ void printDebugInfo(JUTException::EInfoPage, OSError, OSContext*, u32, u32);
-    /* 802E2F18 */ bool isEnablePad() const;
-    /* 802E2F54 */ bool readPad(u32*, u32*);
-    /* 802E34C0 */ void printContext(u16, OSContext*, u32, u32);
-    /* 802E3A08 */ void createFB();
+    void showFloatSub(int, f32);
+    void showFloat(OSContext*);
+    void showStack(OSContext*);
+    void showMainInfo(u16, OSContext*, u32, u32);
+    void showGPR(OSContext*);
+    bool showMapInfo_subroutine(u32, bool);
+    void showGPRMap(OSContext*);
+    void showSRR0Map(OSContext*);
+    void printDebugInfo(JUTException::EInfoPage, OSError, OSContext*, u32, u32);
+    bool isEnablePad() const;
+    bool readPad(u32*, u32*);
+    void printContext(u16, OSContext*, u32, u32);
+    void createFB();
 
-    /* 802E1EA8 */ /* vt[03] */ virtual void* run();
+    virtual void* run();
 
-    /* 802E1E40 */ static JUTException* create(JUTDirectPrint*);
-    /* 802E1FCC */ static void errorHandler(OSError, OSContext*, u32, u32);
-    /* 802E20C0 */ static void panic_f_va(char const*, int, char const*, va_list);
-    /* 802E21FC */ static void panic_f(char const*, int, char const*, ...);
-    /* 802E227C */ static void setFPException(u32);
-    /* 802E2578 */ static bool searchPartialModule(u32, u32*, u32*, u32*, u32*);
-    /* 802E3AEC */ static JUTExceptionUserCallback setPreUserCallback(JUTExceptionUserCallback);
-    /* 802E3AFC */ static JUTExceptionUserCallback setPostUserCallback(JUTExceptionUserCallback);
-    /* 802E3B0C */ static void appendMapFile(char const*);
-    /* 802E3BA0 */ static bool queryMapAddress(char*, u32, s32, u32*, u32*, char*, u32, bool, bool);
-    /* 802E3C90 */ static bool queryMapAddress_single(char*, u32, s32, u32*, u32*, char*, u32, bool,
+    static JUTException* create(JUTDirectPrint*);
+    static void errorHandler(OSError, OSContext*, u32, u32);
+    static void panic_f_va(char const*, int, char const*, va_list);
+    static void panic_f(char const*, int, char const*, ...);
+    static void setFPException(u32);
+    static bool searchPartialModule(u32, u32*, u32*, u32*, u32*);
+    static JUTExceptionUserCallback setPreUserCallback(JUTExceptionUserCallback);
+    static JUTExceptionUserCallback setPostUserCallback(JUTExceptionUserCallback);
+    static void appendMapFile(char const*);
+    static bool queryMapAddress(char*, u32, s32, u32*, u32*, char*, u32, bool, bool);
+    static bool queryMapAddress_single(char*, u32, s32, u32*, u32*, char*, u32, bool,
                                                       bool);
-    /* 802E3FEC */ static void createConsole(void*, u32);
-    /* 802E3980 */ static void waitTime(s32);
+    static void createConsole(void*, u32);
+    static void waitTime(s32);
 
     static JUTException* getManager() { return sErrorManager; }
     static JUTConsole* getConsole() { return sConsole; }

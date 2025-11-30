@@ -12,26 +12,26 @@ bool dPaneClass_setPriority(void**, JKRHeap*, J2DScreen*, char const*, u32, JKRA
 
 class CPaneMgr : public CPaneMgrAlpha {
 public:
-    /* 80253A18 */ virtual ~CPaneMgr();
-    /* 80253AB4 */ virtual void setAlpha(u8);
+    virtual ~CPaneMgr();
+    virtual void setAlpha(u8);
 
-    /* 80253984 */ CPaneMgr(J2DScreen* i_scrn, u64 i_tag, u8 i_flags, JKRExpHeap* i_heap);
-    /* 80253930 */ CPaneMgr();
-    /* 80253B2C */ void reinit();
-    /* 80253C08 */ void initiate(J2DPane*, JKRExpHeap*);
-    /* 80254018 */ void childPaneGetSize(J2DPane*);
-    /* 80254134 */ void childPaneSetSize(J2DPane*, f32, f32);
-    /* 802542E8 */ f32 getGlobalPosX();
-    /* 80254364 */ f32 getGlobalPosY();
-    /* 80254458 */ void setBlackWhite(JUtility::TColor, JUtility::TColor);
-    /* 802545B0 */ void paneTrans(f32, f32);
-    /* 80254638 */ void paneScale(f32, f32);
-    /* 802547CC */ bool scaleAnime(s16, f32, f32, u8);
-    /* 802548BC */ bool colorAnime(s16, JUtility::TColor, JUtility::TColor, JUtility::TColor,
+    CPaneMgr(J2DScreen* i_scrn, u64 i_tag, u8 i_flags, JKRExpHeap* i_heap);
+    CPaneMgr();
+    void reinit();
+    void initiate(J2DPane*, JKRExpHeap*);
+    void childPaneGetSize(J2DPane*);
+    void childPaneSetSize(J2DPane*, f32, f32);
+    f32 getGlobalPosX();
+    f32 getGlobalPosY();
+    void setBlackWhite(JUtility::TColor, JUtility::TColor);
+    void paneTrans(f32, f32);
+    void paneScale(f32, f32);
+    bool scaleAnime(s16, f32, f32, u8);
+    bool colorAnime(s16, JUtility::TColor, JUtility::TColor, JUtility::TColor,
                                    JUtility::TColor, u8);
-    /* 80254C90 */ Vec getGlobalVtx(J2DPane*, f32 (*)[3][4], u8, bool, s16);
-    /* 80254EBC */ Vec getGlobalVtxCenter(J2DPane*, bool, s16);
-    /* 80254FB8 */ JGeometry::TBox2<f32>* getBounds(J2DPane*);
+    Vec getGlobalVtx(J2DPane*, f32 (*)[3][4], u8, bool, s16);
+    Vec getGlobalVtxCenter(J2DPane*, bool, s16);
+    JGeometry::TBox2<f32>* getBounds(J2DPane*);
 
     Vec getGlobalVtx(Mtx* param_0, u8 param_1, bool param_2, s16 param_3) {
         return getGlobalVtx(getPanePtr(), param_0, param_1, param_2, param_3);

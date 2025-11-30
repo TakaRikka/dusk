@@ -14,14 +14,14 @@
  */
 class daKtOnFire_c : public fopAc_ac_c {
 public:
-    /* 8058C678 */ void setBaseMtx();
-    /* 8058C6D0 */ int create();
-    /* 8058C960 */ void lightInit();
-    /* 8058C9D4 */ void setLight();
-    /* 8058C9F8 */ void cutLight();
-    /* 8058CA1C */ int Execute();
-    /* 8058CDF8 */ int Draw();
-    /* 8058CE00 */ int Delete();
+    void setBaseMtx();
+    int create();
+    void lightInit();
+    void setLight();
+    void cutLight();
+    int Execute();
+    int Draw();
+    int Delete();
 
     static const dCcD_SrcGObjInf mCcDObjInfo;
     static dCcD_SrcCyl mCcDCyl;

@@ -9,10 +9,8 @@
 
 static const int l_dzbidx = 7;
 
-/* 80CAD1FC-80CAD200 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "P_Dwall";
 
-/* 80CAC7F8-80CAC8DC 000078 00E4+00 1/1 0/0 0/0 .text            create1st__13daObjPDwall_cFv */
 int daObjPDwall_c::create1st() {
     int phase_state = dComIfG_resLoad(this, l_arcName);
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -33,13 +31,11 @@ int daObjPDwall_c::create1st() {
     return phase_state;
 }
 
-/* 80CAD1B8-80CAD1D0 000000 0018+00 2/2 0/0 0/0 .rodata          l_cull_box */
 static const cull_box l_cull_box = {
     {-100.0f, -800.0f, -300.0f},
     {750.0f, 500.0f, 300.0f},
 };
 
-/* 80CAC8DC-80CACA44 00015C 0168+00 2/2 0/0 0/0 .text            setMtx__13daObjPDwall_cFv */
 void daObjPDwall_c::setMtx() {
     for (int i = 0; i < 10; i++) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y + field_0x808[i], current.pos.z);
@@ -57,7 +53,6 @@ void daObjPDwall_c::setMtx() {
     }
 }
 
-/* 80CACA44-80CACBA8 0002C4 0164+00 1/0 0/0 0/0 .text            CreateHeap__13daObjPDwall_cFv */
 int daObjPDwall_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(175, model_data != NULL);
@@ -86,7 +81,6 @@ int daObjPDwall_c::CreateHeap() {
     return 1;
 }
 
-/* 80CACBA8-80CACCE0 000428 0138+00 1/0 0/0 0/0 .text            Create__13daObjPDwall_cFv */
 int daObjPDwall_c::Create() {
     field_0xa14 = 0;
 
@@ -113,8 +107,6 @@ int daObjPDwall_c::Create() {
     return 1;
 }
 
-/* 80CACCE0-80CACF14 000560 0234+00 1/0 0/0 0/0 .text            Execute__13daObjPDwall_cFPPA3_A4_f
- */
 int daObjPDwall_c::Execute(Mtx** param_0) {
     if (field_0xa10 == 0 && fopAcM_isSwitch(this, getSwNo())) {
         field_0xa14++;
@@ -157,7 +149,6 @@ int daObjPDwall_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80CACF14-80CACFD4 000794 00C0+00 1/0 0/0 0/0 .text            Draw__13daObjPDwall_cFv */
 int daObjPDwall_c::Draw() {
     dComIfGd_setListBG();
 
@@ -171,7 +162,6 @@ int daObjPDwall_c::Draw() {
     return 1;
 }
 
-/* 80CACFD4-80CAD074 000854 00A0+00 1/0 0/0 0/0 .text            Delete__13daObjPDwall_cFv */
 int daObjPDwall_c::Delete() {
     for (int i = 0; i < 9; i++) {
         if (mpBgw[i] != NULL && mpBgw[i]->ChkUsed()) {
@@ -183,30 +173,23 @@ int daObjPDwall_c::Delete() {
     return 1;
 }
 
-/* 80CAD074-80CAD0D4 0008F4 0060+00 1/0 0/0 0/0 .text daObjPDwall_create1st__FP13daObjPDwall_c */
 static int daObjPDwall_create1st(daObjPDwall_c* i_this) {
     fopAcM_ct(i_this, daObjPDwall_c);
     return i_this->create1st();
 }
 
-/* 80CAD0D4-80CAD0F4 000954 0020+00 1/0 0/0 0/0 .text daObjPDwall_MoveBGDelete__FP13daObjPDwall_c
- */
 static int daObjPDwall_MoveBGDelete(daObjPDwall_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80CAD0F4-80CAD114 000974 0020+00 1/0 0/0 0/0 .text daObjPDwall_MoveBGExecute__FP13daObjPDwall_c
- */
 static int daObjPDwall_MoveBGExecute(daObjPDwall_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80CAD114-80CAD140 000994 002C+00 1/0 0/0 0/0 .text daObjPDwall_MoveBGDraw__FP13daObjPDwall_c */
 static int daObjPDwall_MoveBGDraw(daObjPDwall_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80CAD200-80CAD220 -00001 0020+00 1/0 0/0 0/0 .data            daObjPDwall_METHODS */
 static actor_method_class daObjPDwall_METHODS = {
     (process_method_func)daObjPDwall_create1st,
     (process_method_func)daObjPDwall_MoveBGDelete,
@@ -215,7 +198,6 @@ static actor_method_class daObjPDwall_METHODS = {
     (process_method_func)daObjPDwall_MoveBGDraw,
 };
 
-/* 80CAD220-80CAD250 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_PDwall */
 extern actor_process_profile_definition g_profile_Obj_PDwall = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

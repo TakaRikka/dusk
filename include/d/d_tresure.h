@@ -50,21 +50,21 @@ public:
         /* 0x8 */ u8 mNumber;
     };
 
-    /* 8009BBD8 */ static int createWork();
-    /* 8009BC18 */ static void create();
-    /* 8009BC60 */ static void remove();
-    /* 8009BC6C */ static void reset();
-    /* 8009BCB4 */ static void addData(dTres_c::list_class*, s8);
-    /* 8009BE28 */ static void checkTreasureBox(dTres_c::data_s*);
-    /* 8009C168 */ static void onStatus(u8, int, int);
-    /* 8009C1F0 */ static void offStatus(u8, int, int);
-    /* 8009C27C */ static bool getBossIconFloorNo(int*);
-    /* 8009C360 */ static typeGroupData_c* getFirstData(u8);
-    /* 8009C39C */ static typeGroupData_c* getNextData(dTres_c::typeGroupData_c*);
-    /* 8009C3B4 */ static typeGroupData_c* getNextData(dTres_c::typeGroupData_c const*);
-    /* 8009C3CC */ static void setPosition(int, u8, Vec const*, int);
-    /* 8009C49C */ static int getTypeGroupNoToType(u8);
-    /* 8009C4B0 */ static u8 getTypeToTypeGroupNo(u8);
+    static int createWork();
+    static void create();
+    static void remove();
+    static void reset();
+    static void addData(dTres_c::list_class*, s8);
+    static void checkTreasureBox(dTres_c::data_s*);
+    static void onStatus(u8, int, int);
+    static void offStatus(u8, int, int);
+    static bool getBossIconFloorNo(int*);
+    static typeGroupData_c* getFirstData(u8);
+    static typeGroupData_c* getNextData(dTres_c::typeGroupData_c*);
+    static typeGroupData_c* getNextData(dTres_c::typeGroupData_c const*);
+    static void setPosition(int, u8, Vec const*, int);
+    static int getTypeGroupNoToType(u8);
+    static u8 getTypeToTypeGroupNo(u8);
 
     static int getTypeGroupNumber(int index) {
         return mTypeGroupListAll[index].mNumber;

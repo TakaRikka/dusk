@@ -25,24 +25,24 @@ public:
         MODE_HOOK_SWG = 4,
     };
 
-    /* 80BC7F38 */ daObjChandelier_c();
-    /* 80BC8008 */ int CreateHeap();
-    /* 80BC8160 */ int Delete();
-    /* 80BC8194 */ int Draw();
-    /* 80BC8238 */ int Execute(Mtx**);
-    /* 80BC82C0 */ void exeModeWait();
-    /* 80BC834C */ void exeModeStartSwg();
-    /* 80BC83E4 */ void exeModeDown();
-    /* 80BC84C0 */ void exeModeEndSwg();
-    /* 80BC851C */ void exeModeHookSwg();
-    /* 80BC85E4 */ void init();
-    /* 80BC86FC */ void setModelMtx();
-    /* 80BC8780 */ void moveSwing(f32, f32, f32, f32);
-    /* 80BC89B0 */ void moveSwingFall();
-    /* 80BC8B20 */ void hookSwingInitParm();
+    daObjChandelier_c();
+    int CreateHeap();
+    int Delete();
+    int Draw();
+    int Execute(Mtx**);
+    void exeModeWait();
+    void exeModeStartSwg();
+    void exeModeDown();
+    void exeModeEndSwg();
+    void exeModeHookSwg();
+    void init();
+    void setModelMtx();
+    void moveSwing(f32, f32, f32, f32);
+    void moveSwingFall();
+    void hookSwingInitParm();
 
-    /* 80BC8078 */ virtual cPhs__Step create1st();
-    /* 80BC7F74 */ virtual ~daObjChandelier_c();
+    virtual cPhs__Step create1st();
+    virtual ~daObjChandelier_c();
 
     u8 getSW_0() { return fopAcM_GetParamBit(this, 4, 8); }
     s32 getArg_0() { return fopAcM_GetParamBit(this, 0, 4); }

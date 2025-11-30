@@ -11,26 +11,20 @@
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_math.h"
 
-/* 80BA6ED8-80BA6F14 000078 003C+00 1/1 0/0 0/0 .text            initBaseMtx__16daObjAvalanche_cFv
- */
 void daObjAvalanche_c::initBaseMtx() {
     mModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* ############################################################################################## */
-/* 80BA7CFC-80BA7D04 000000 0008+00 1/1 0/0 0/0 .rodata          l_dzb */
 static u32 const l_dzb[2] = {
     13, 12,
 };
 
-/* 80BA7D04-80BA7D1C 000008 0018+00 1/1 0/0 0/0 .rodata          l_check_pos */
 static Vec const l_check_pos[2] = {
     {-300.0f, 0.0f, 0.0f},
     {300.0f, 0.0f, 300.0f},
 };
 
-/* 80BA6F14-80BA6FC8 0000B4 00B4+00 3/3 0/0 0/0 .text            setBaseMtx__16daObjAvalanche_cFv */
 void daObjAvalanche_c::setBaseMtx() {
     mDoMtx_stack_c::transS(0.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::YrotM(0);
@@ -41,22 +35,17 @@ void daObjAvalanche_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mMtx2);
 }
 
-/* 80BA7D90-80BA7D94 -00001 0004+00 3/4 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "V_Yuki";
 
-/* 80BA7D94-80BA7D98 -00001 0004+00 0/1 0/0 0/0 .data            l_evName */
 static char* l_evName = "SNOW_COLLAPSE";
 
-/* 80BA7D98-80BA7D9C -00001 0004+00 1/1 0/0 0/0 .data            l_staffName */
 static char* l_staffName = "Obj_ava";
 
-/* 80BA7D9C-80BA7DB4 00002C 0018+00 0/1 0/0 0/0 .data            l_cull_box */
 static f32 l_cull_box[6] = {
     -500.0f, -500.0f, -700.0f,
     500.0f, 1000.0f, 700.0f,
 };
 
-/* 80BA6FC8-80BA7178 000168 01B0+00 1/0 0/0 0/0 .text            Create__16daObjAvalanche_cFv */
 int daObjAvalanche_c::Create() {
     if (fopAcM_isSwitch(this, getSwbit())) {
         field_0x5e4 = 0.0f;
@@ -89,7 +78,6 @@ int daObjAvalanche_c::Create() {
     return 1;
 }
 
-/* 80BA7178-80BA7328 000318 01B0+00 1/0 0/0 0/0 .text            CreateHeap__16daObjAvalanche_cFv */
 int daObjAvalanche_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 9);
     JUT_ASSERT(233, modelData != NULL);
@@ -115,7 +103,6 @@ int daObjAvalanche_c::CreateHeap() {
     return 1;
 }
 
-/* 80BA7370-80BA73F4 000510 0084+00 1/1 0/0 0/0 .text            create1st__16daObjAvalanche_cFv */
 int daObjAvalanche_c::create1st() {
     int rv = dComIfG_resLoad(&mPhase, l_arcName);
     if (rv == cPhs_COMPLEATE_e) {
@@ -127,7 +114,6 @@ int daObjAvalanche_c::create1st() {
     return rv;
 }
 
-/* 80BA73F4-80BA7440 000594 004C+00 1/0 0/0 0/0 .text Execute__16daObjAvalanche_cFPPA3_A4_f */
 int daObjAvalanche_c::Execute(Mtx** param_1) {
     event_proc_call();
     *param_1 = &mBgMtx;
@@ -135,8 +121,6 @@ int daObjAvalanche_c::Execute(Mtx** param_1) {
     return 1;
 }
 
-/* 80BA7440-80BA75A4 0005E0 0164+00 1/1 0/0 0/0 .text            checkCollapse__16daObjAvalanche_cFv
- */
 int daObjAvalanche_c::checkCollapse() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if (!daPy_py_c::checkNowWolf()) {
@@ -162,7 +146,6 @@ int daObjAvalanche_c::checkCollapse() {
     }
 }
 
-/* 80BA75A4-80BA7618 000744 0074+00 1/1 0/0 0/0 .text            move__16daObjAvalanche_cFv */
 int daObjAvalanche_c::move() {
     int rv = 0;
     if (cLib_chaseF(&field_0x5e4, 0.0f, 40.0f)) {
@@ -175,7 +158,6 @@ int daObjAvalanche_c::move() {
     return rv;
 }
 
-/* 80BA7618-80BA76D4 0007B8 00BC+00 1/1 0/0 0/0 .text event_proc_call__16daObjAvalanche_cFv */
 void daObjAvalanche_c::event_proc_call() {
     typedef void (daObjAvalanche_c::*actionFunc)();
     static actionFunc l_func[4] = {
@@ -187,7 +169,6 @@ void daObjAvalanche_c::event_proc_call() {
     (this->*l_func[mAction])();
 }
 
-/* 80BA76D4-80BA773C 000874 0068+00 1/0 0/0 0/0 .text            actionWait__16daObjAvalanche_cFv */
 void daObjAvalanche_c::actionWait() {
     if (checkCollapse()) {
         setAction(ACTION_ORDER_EVENT);
@@ -196,7 +177,6 @@ void daObjAvalanche_c::actionWait() {
     }
 }
 
-/* 80BA773C-80BA7804 0008DC 00C8+00 1/0 0/0 0/0 .text actionOrderEvent__16daObjAvalanche_cFv */
 void daObjAvalanche_c::actionOrderEvent() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(ACTION_EVENT);
@@ -211,8 +191,6 @@ void daObjAvalanche_c::actionOrderEvent() {
     }
 }
 
-/* 80BA7804-80BA7888 0009A4 0084+00 1/0 0/0 0/0 .text            actionEvent__16daObjAvalanche_cFv
- */
 void daObjAvalanche_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventIdx)) {
         setAction(ACTION_DEAD);
@@ -223,17 +201,14 @@ void daObjAvalanche_c::actionEvent() {
     }
 }
 
-/* 80BA7888-80BA788C 000A28 0004+00 1/0 0/0 0/0 .text            actionDead__16daObjAvalanche_cFv */
 void daObjAvalanche_c::actionDead() {
 }
 
-/* 80BA7E14-80BA7E1C -00001 0008+00 1/1 0/0 0/0 .data            action_table$3910 */
 static char* action_table[2] = {
     "WAIT",
     "COLLAPSE",
 };
 
-/* 80BA788C-80BA7A50 000A2C 01C4+00 2/2 0/0 0/0 .text            demoProc__16daObjAvalanche_cFv */
 int daObjAvalanche_c::demoProc() {
     daPy_getPlayerActorClass();
     int actIdx = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, 2, 0, 0);
@@ -273,7 +248,6 @@ int daObjAvalanche_c::demoProc() {
     return 0;
 }
 
-/* 80BA7A50-80BA7AE8 000BF0 0098+00 1/1 0/0 0/0 .text            setEffect__16daObjAvalanche_cFv */
 void daObjAvalanche_c::setEffect() {
     cXyz acStack_18(0.0f, 0.0f, 0.0f);
     csXyz cStack_20(0, 0, 0);
@@ -281,7 +255,6 @@ void daObjAvalanche_c::setEffect() {
                           NULL);
 }
 
-/* 80BA7AE8-80BA7BA0 000C88 00B8+00 1/0 0/0 0/0 .text            Draw__16daObjAvalanche_cFv */
 int daObjAvalanche_c::Draw() {
     g_env_light.settingTevStruct(32, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -292,7 +265,6 @@ int daObjAvalanche_c::Draw() {
     return 1;
 }
 
-/* 80BA7BA0-80BA7C0C 000D40 006C+00 1/0 0/0 0/0 .text            Delete__16daObjAvalanche_cFv */
 int daObjAvalanche_c::Delete() {
     if (mpBgW2 != NULL && mpBgW2->ChkUsed()) {
         dComIfG_Bgsp().Release(mpBgW2);
@@ -301,39 +273,29 @@ int daObjAvalanche_c::Delete() {
     return 1;
 }
 
-/* 80BA7C0C-80BA7C6C 000DAC 0060+00 1/0 0/0 0/0 .text
- * daObjAvalanche_create1st__FP16daObjAvalanche_c               */
 static int daObjAvalanche_create1st(daObjAvalanche_c* i_this) {
     fopAcM_ct(i_this, daObjAvalanche_c);
     return i_this->create1st();
 }
 
-/* 80BA7C6C-80BA7C8C 000E0C 0020+00 1/0 0/0 0/0 .text
- * daObjAvalanche_MoveBGDelete__FP16daObjAvalanche_c            */
 static int daObjAvalanche_MoveBGDelete(daObjAvalanche_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80BA7C8C-80BA7CAC 000E2C 0020+00 1/0 0/0 0/0 .text
- * daObjAvalanche_MoveBGExecute__FP16daObjAvalanche_c           */
 static int daObjAvalanche_MoveBGExecute(daObjAvalanche_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BA7CAC-80BA7CD8 000E4C 002C+00 1/0 0/0 0/0 .text
- * daObjAvalanche_MoveBGDraw__FP16daObjAvalanche_c              */
 static int daObjAvalanche_MoveBGDraw(daObjAvalanche_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BA7E1C-80BA7E3C -00001 0020+00 1/0 0/0 0/0 .data            daObjAvalanche_METHODS */
 static actor_method_class daObjAvalanche_METHODS = {
     (process_method_func)daObjAvalanche_create1st,  (process_method_func)daObjAvalanche_MoveBGDelete,
     (process_method_func)daObjAvalanche_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjAvalanche_MoveBGDraw,
 };
 
-/* 80BA7E3C-80BA7E6C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Avalanche */
 extern actor_process_profile_definition g_profile_Obj_Avalanche = {
     fpcLy_CURRENT_e,          // mLayerID
     3,                        // mListID

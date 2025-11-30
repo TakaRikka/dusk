@@ -71,15 +71,14 @@ enum Action_Mode {
 
 class daNpc_Du_HIO_c : public JORReflexible {
 public:
-    /* 809AFD4C */ daNpc_Du_HIO_c();
-    /* 809B17A0 */ virtual ~daNpc_Du_HIO_c() {}
+    daNpc_Du_HIO_c();
+    virtual ~daNpc_Du_HIO_c() {}
     void genMessage(JORMContext*);
 
     /* 0x4 */ s8 id;
     /* 0x8 */ f32 base_size;
 };
 
-/* 809AFD4C-809AFD70 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__14daNpc_Du_HIO_cFv */
 daNpc_Du_HIO_c::daNpc_Du_HIO_c() {
     id = -1;
     base_size = 1.0f;
@@ -92,13 +91,11 @@ void daNpc_Du_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 809AFD70-809AFE20 000110 00B0+00 4/4 0/0 0/0 .text            anm_init__FP12npc_du_classifUcf */
 static void anm_init(npc_du_class* i_this, int i_index, f32 i_morf, u8 i_mode, f32 i_speed) {
     i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Npc_du", i_index), i_mode, i_morf, i_speed, 0.0f, -1.0f, NULL);
     i_this->mAnm = i_index;
 }
 
-/* 809AFE20-809B0014 0001C0 01F4+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         int jntNo = i_joint->getJntNo();
@@ -141,7 +138,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 809B0014-809B0114 0003B4 0100+00 1/0 0/0 0/0 .text            daNpc_Du_Draw__FP12npc_du_class */
 static int daNpc_Du_Draw(npc_du_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     J3DModel* model = i_this->mpMorf->getModel();
@@ -162,7 +158,6 @@ static int daNpc_Du_Draw(npc_du_class* i_this) {
     return 1;
 }
 
-/* 809B0114-809B0360 0004B4 024C+00 1/1 0/0 0/0 .text            npc_du_normal__FP12npc_du_class */
 static void npc_du_normal(npc_du_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -212,7 +207,6 @@ static void npc_du_normal(npc_du_class* i_this) {
     }
 }
 
-/* 809B0360-809B04E0 000700 0180+00 1/1 0/0 0/0 .text            npc_du_away__FP12npc_du_class */
 static void npc_du_away(npc_du_class* i_this) {
     // Fakematch???
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
@@ -259,7 +253,6 @@ static void npc_du_away(npc_du_class* i_this) {
     cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mCurrentAngleYTarget, 2, maxStepS);
 }
 
-/* 809B04E0-809B0774 000880 0294+00 1/1 0/0 0/0 .text            npc_du_swim__FP12npc_du_class */
 static void npc_du_swim(npc_du_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -319,7 +312,6 @@ static void npc_du_swim(npc_du_class* i_this) {
     }
 }
 
-/* 809B0774-809B08E0 000B14 016C+00 1/1 0/0 0/0 .text            npc_du_message__FP12npc_du_class */
 static void npc_du_message(npc_du_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
@@ -366,7 +358,6 @@ static void npc_du_message(npc_du_class* i_this) {
     }
 }
 
-/* 809B08E0-809B0CBC 000C80 03DC+00 1/1 0/0 0/0 .text            action__FP12npc_du_class */
 static void action(npc_du_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz sp9c, spa8;
@@ -467,7 +458,6 @@ static void action(npc_du_class* i_this) {
     cLib_addCalcAngleS2(&i_this->mNeck2XRot, i_this->mNeck2XRotTarget, 2, 0x1000);
 }
 
-/* 809B0CBC-809B0DE0 00105C 0124+00 1/1 0/0 0/0 .text            message__FP12npc_du_class */
 static BOOL message(npc_du_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
@@ -512,16 +502,12 @@ static BOOL message(npc_du_class* i_this) {
     return FALSE;
 }
 
-/* 809B19E8-809B19EC 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool l_initHIO;
 
-/* 809B19EC-809B19F8 00000C 000C+00 1/1 0/0 0/0 .bss             @3757 */
 static u8 lit_3757[12];
 
-/* 809B19F8-809B1A04 000018 000C+00 3/3 0/0 0/0 .bss             l_HIO */
 static daNpc_Du_HIO_c l_HIO;
 
-/* 809B0DE0-809B116C 001180 038C+00 2/1 0/0 0/0 .text            daNpc_Du_Execute__FP12npc_du_class */
 static int daNpc_Du_Execute(npc_du_class* i_this) {
     if (cDmrNowMidnaTalk()) {
         return 1;
@@ -594,12 +580,10 @@ static int daNpc_Du_Execute(npc_du_class* i_this) {
     return 1;
 }
 
-/* 809B116C-809B1174 00150C 0008+00 1/0 0/0 0/0 .text            daNpc_Du_IsDelete__FP12npc_du_class */
 static int daNpc_Du_IsDelete(npc_du_class* i_this) {
     return 1;
 }
 
-/* 809B1174-809B11E0 001514 006C+00 1/0 0/0 0/0 .text            daNpc_Du_Delete__FP12npc_du_class */
 static int daNpc_Du_Delete(npc_du_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fpc_ProcID id = fopAcM_GetID(i_this);
@@ -618,7 +602,6 @@ static int daNpc_Du_Delete(npc_du_class* i_this) {
     return 1;
 }
 
-/* 809B11E0-809B13C8 001580 01E8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* actor) {
     npc_du_class* i_this = (npc_du_class*)actor;
 
@@ -651,7 +634,6 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-/* 809B1410-809B16A0 0017B0 0290+00 1/0 0/0 0/0 .text            daNpc_Du_Create__FP10fopAc_ac_c */
 static cPhs__Step daNpc_Du_Create(fopAc_ac_c* a_this) {
     npc_du_class* i_this = (npc_du_class*)a_this;
     fopAcM_ct(a_this, npc_du_class);
@@ -714,7 +696,6 @@ static cPhs__Step daNpc_Du_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-/* 809B193C-809B195C -00001 0020+00 1/0 0/0 0/0 .data            l_daNpc_Du_Method */
 static actor_method_class l_daNpc_Du_Method = {
     (process_method_func)daNpc_Du_Create,
     (process_method_func)daNpc_Du_Delete,
@@ -723,7 +704,6 @@ static actor_method_class l_daNpc_Du_Method = {
     (process_method_func)daNpc_Du_Draw,
 };
 
-/* 809B195C-809B198C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_DU */
 extern actor_process_profile_definition g_profile_NPC_DU = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

@@ -24,23 +24,23 @@ public:
         ACTION_DEAD,
     };
 
-    /* 80BA6ED8 */ void initBaseMtx();
-    /* 80BA6F14 */ void setBaseMtx();
-    /* 80BA6FC8 */ int Create();
-    /* 80BA7178 */ int CreateHeap();
-    /* 80BA7370 */ int create1st();
-    /* 80BA73F4 */ int Execute(Mtx**);
-    /* 80BA7440 */ int checkCollapse();
-    /* 80BA75A4 */ int move();
-    /* 80BA7618 */ void event_proc_call();
-    /* 80BA76D4 */ void actionWait();
-    /* 80BA773C */ void actionOrderEvent();
-    /* 80BA7804 */ void actionEvent();
-    /* 80BA7888 */ void actionDead();
-    /* 80BA788C */ int demoProc();
-    /* 80BA7A50 */ void setEffect();
-    /* 80BA7AE8 */ int Draw();
-    /* 80BA7BA0 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    int checkCollapse();
+    int move();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    int demoProc();
+    void setEffect();
+    int Draw();
+    int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getEvId() { return fopAcM_GetParamBit(this, 8, 8); }

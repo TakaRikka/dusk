@@ -8,10 +8,10 @@
  * 
  */
 struct JASLfo {
-    /* 8029BD14 */ JASLfo();
-    /* 8029BD44 */ f32 getValue() const;
-    /* 8029BDD8 */ void incCounter(f32);
-    /* 8029BE2C */ void resetCounter();
+    JASLfo();
+    f32 getValue() const;
+    void incCounter(f32);
+    void resetCounter();
 
     void setDepth(f32 param_0) { mDepth = param_0; }
     void setPitch(f32 param_0) { mPitch = param_0; }

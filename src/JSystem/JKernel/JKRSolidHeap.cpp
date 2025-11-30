@@ -6,8 +6,6 @@
 #include "global.h"
 #include <stdint.h>
 
-/* 802D0A24-802D0AD0 2CB364 00AC+00 0/0 4/4 1/1 .text            create__12JKRSolidHeapFUlP7JKRHeapb
- */
 JKRSolidHeap* JKRSolidHeap::create(u32 size, JKRHeap* heap, bool useErrorHandler) {
     if (!heap) {
         heap = getRootHeap();
@@ -32,7 +30,6 @@ JKRSolidHeap* JKRSolidHeap::create(u32 size, JKRHeap* heap, bool useErrorHandler
     return solidHeap;
 }
 
-/* 802D0AD0-802D0B30 2CB410 0060+00 1/0 0/0 0/0 .text            do_destroy__12JKRSolidHeapFv */
 void JKRSolidHeap::do_destroy(void) {
     JKRHeap* parent = getParent();
     if (parent) {
@@ -41,8 +38,6 @@ void JKRSolidHeap::do_destroy(void) {
     }
 }
 
-/* 802D0B30-802D0B8C 2CB470 005C+00 1/1 0/0 0/0 .text            __ct__12JKRSolidHeapFPvUlP7JKRHeapb
- */
 JKRSolidHeap::JKRSolidHeap(void* start, u32 size, JKRHeap* parent, bool useErrorHandler)
     : JKRHeap(start, size, parent, useErrorHandler) {
     mFreeSize = mSize;
@@ -51,12 +46,10 @@ JKRSolidHeap::JKRSolidHeap(void* start, u32 size, JKRHeap* parent, bool useError
     field_0x78 = NULL;
 }
 
-/* 802D0B8C-802D0BF4 2CB4CC 0068+00 1/0 0/0 0/0 .text            __dt__12JKRSolidHeapFv */
 JKRSolidHeap::~JKRSolidHeap(void) {
     dispose();
 }
 
-/* 802D0BF4-802D0CB0 2CB534 00BC+00 0/0 5/5 1/1 .text            adjustSize__12JKRSolidHeapFv */
 s32 JKRSolidHeap::adjustSize(void) {
     JKRHeap* parent = getParent();
     if (parent) {
@@ -79,7 +72,6 @@ s32 JKRSolidHeap::adjustSize(void) {
     return -1;
 }
 
-/* 802D0CB0-802D0D58 2CB5F0 00A8+00 1/0 0/0 0/0 .text            do_alloc__12JKRSolidHeapFUli */
 void* JKRSolidHeap::do_alloc(u32 size, int alignment) {
 #ifdef DEBUG
     // TODO(Julgodis): JUTAssertion::setConfirmMessage
@@ -113,8 +105,6 @@ void* JKRSolidHeap::do_alloc(u32 size, int alignment) {
     return ptr;
 }
 
-/* 802D0D58-802D0E20 2CB698 00C8+00 1/1 0/0 0/0 .text            allocFromHead__12JKRSolidHeapFUli
- */
 void* JKRSolidHeap::allocFromHead(u32 size, int alignment) {
     size = ALIGN_NEXT(size, 0x4);
     void* ptr = NULL;
@@ -135,8 +125,6 @@ void* JKRSolidHeap::allocFromHead(u32 size, int alignment) {
     return ptr;
 }
 
-/* 802D0E20-802D0EE4 2CB760 00C4+00 1/1 0/0 0/0 .text            allocFromTail__12JKRSolidHeapFUli
- */
 void* JKRSolidHeap::allocFromTail(u32 size, int alignment) {
     size = ALIGN_NEXT(size, 4);
     void* ptr = NULL;
@@ -155,12 +143,10 @@ void* JKRSolidHeap::allocFromTail(u32 size, int alignment) {
     return ptr;
 }
 
-/* 802D0EE4-802D0F14 2CB824 0030+00 1/0 0/0 0/0 .text            do_free__12JKRSolidHeapFPv */
 void JKRSolidHeap::do_free(void* ptr) {
     JUTWarningConsole_f("free: cannot free memory block (%08x)\n", ptr);
 }
 
-/* 802D0F14-802D0F74 2CB854 0060+00 1/0 0/0 0/0 .text            do_freeAll__12JKRSolidHeapFv */
 void JKRSolidHeap::do_freeAll(void) {
     lock();
 
@@ -173,7 +159,6 @@ void JKRSolidHeap::do_freeAll(void) {
     unlock();
 }
 
-/* 802D0F74-802D1000 2CB8B4 008C+00 1/0 0/0 0/0 .text            do_freeTail__12JKRSolidHeapFv */
 void JKRSolidHeap::do_freeTail(void) {
     lock();
 
@@ -193,27 +178,22 @@ void JKRSolidHeap::do_freeTail(void) {
     unlock();
 }
 
-/* 802D1000-802D1004 2CB940 0004+00 1/0 0/0 0/0 .text            do_fillFreeArea__12JKRSolidHeapFv
- */
 void JKRSolidHeap::do_fillFreeArea() {
 #ifdef DEBUG
     // fillMemory(mSolidHead, mEnd - mSolidHead, (uint)DAT_8074a8ba);
 #endif
 }
 
-/* 802D1004-802D1038 2CB944 0034+00 1/0 0/0 0/0 .text            do_resize__12JKRSolidHeapFPvUl */
 s32 JKRSolidHeap::do_resize(void* ptr, u32 newSize) {
     JUTWarningConsole_f("resize: cannot resize memory block (%08x: %d)\n", ptr, newSize);
     return -1;
 }
 
-/* 802D1038-802D106C 2CB978 0034+00 1/0 0/0 0/0 .text            do_getSize__12JKRSolidHeapFPv */
 s32 JKRSolidHeap::do_getSize(void* ptr) {
     JUTWarningConsole_f("getSize: cannot get memory block size (%08x)\n", ptr);
     return -1;
 }
 
-/* 802D106C-802D10FC 2CB9AC 0090+00 1/0 0/0 0/0 .text            check__12JKRSolidHeapFv */
 bool JKRSolidHeap::check(void) {
     lock();
 
@@ -231,7 +211,6 @@ bool JKRSolidHeap::check(void) {
     return result;
 }
 
-/* 802D10FC-802D11FC 2CBA3C 0100+00 1/0 0/0 0/0 .text            dump__12JKRSolidHeapFv */
 bool JKRSolidHeap::dump(void) {
     bool result = check();
 
@@ -249,8 +228,6 @@ bool JKRSolidHeap::dump(void) {
 
     return result;
 }
-/* 802D11FC-802D1258 2CBB3C 005C+00 1/0 0/0 0/0 .text
- * state_register__12JKRSolidHeapCFPQ27JKRHeap6TStateUl         */
 void JKRSolidHeap::state_register(JKRHeap::TState* p, u32 id) const {
     JUT_ASSERT(604, p != NULL);
     JUT_ASSERT(605, p->getHeap() == this);
@@ -263,8 +240,6 @@ void JKRSolidHeap::state_register(JKRHeap::TState* p, u32 id) const {
     setState_u32CheckCode_(p, r29);
 }
 
-/* 802D1258-802D1288 2CBB98 0030+00 1/0 0/0 0/0 .text
- * state_compare__12JKRSolidHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
 bool JKRSolidHeap::state_compare(JKRHeap::TState const& r1, JKRHeap::TState const& r2) const {
     JUT_ASSERT(632, r1.getHeap() == r2.getHeap());
 
@@ -280,22 +255,18 @@ bool JKRSolidHeap::state_compare(JKRHeap::TState const& r1, JKRHeap::TState cons
     return result;
 }
 
-/* 802D1288-802D1294 2CBBC8 000C+00 1/0 0/0 0/0 .text            getHeapType__12JKRSolidHeapFv */
 u32 JKRSolidHeap::getHeapType(void) {
     return 'SLID';
 }
 
-/* 802D1294-802D129C 2CBBD4 0008+00 1/0 0/0 0/0 .text            do_getFreeSize__12JKRSolidHeapFv */
 s32 JKRSolidHeap::do_getFreeSize(void) {
     return mFreeSize;
 }
 
-/* 802D129C-802D12A4 2CBBDC 0008+00 1/0 0/0 0/0 .text do_getMaxFreeBlock__12JKRSolidHeapFv */
 void* JKRSolidHeap::do_getMaxFreeBlock(void) {
     return mSolidHead;
 }
 
-/* 802D12A4-802D12C4 2CBBE4 0020+00 1/0 0/0 0/0 .text do_getTotalFreeSize__12JKRSolidHeapFv */
 s32 JKRSolidHeap::do_getTotalFreeSize(void) {
     return getFreeSize();
 }

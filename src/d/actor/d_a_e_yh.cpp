@@ -14,8 +14,8 @@
 
 class daE_YH_HIO_c : public JORReflexible {
 public:
-    /* 807FD4CC */ daE_YH_HIO_c();
-    /* 80803D48 */ virtual ~daE_YH_HIO_c() {}
+    daE_YH_HIO_c();
+    virtual ~daE_YH_HIO_c() {}
 
     void genMessage(JORMContext* ctx);
 
@@ -27,7 +27,6 @@ public:
     /* 0x16 */ s16 mAttackFreq;
 };
 
-/* 807FD4CC-807FD514 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__12daE_YH_HIO_cFv */
 daE_YH_HIO_c::daE_YH_HIO_c() {
     mId = -1;
     mBasicSize = 1.0f;
@@ -53,7 +52,6 @@ void daE_YH_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 807FD514-807FD6BC 000134 01A8+00 2/2 0/0 0/0 .text            yh_disappear__FP10e_yh_class */
 static void yh_disappear(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz acStack_30;
@@ -75,14 +73,12 @@ static void yh_disappear(e_yh_class* i_this) {
     }
 }
 
-/* 807FD6BC-807FD768 0002DC 00AC+00 12/12 0/0 0/0 .text            anm_init__FP10e_yh_classifUcf */
 static void anm_init(e_yh_class* i_this, int param_2, f32 param_3, u8 param_4, f32 param_5) {
     i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_yd", param_2), param_4,
                            param_3, param_5, 0.0f, -1.0f);
     i_this->field_0x664 = param_2;
 }
 
-/* 807FD768-807FD840 000388 00D8+00 11/11 0/0 0/0 .text leaf_anm_init__FP10e_yh_classifUcf */
 static BOOL leaf_anm_init(e_yh_class* i_this, int param_2, f32 param_3, u8 param_4, f32 param_5) {
     e_yd_leaf_class* leaf = (e_yd_leaf_class*)fopAcM_SearchByID(i_this->mChildID);
     if (leaf != NULL) {
@@ -94,7 +90,6 @@ static BOOL leaf_anm_init(e_yh_class* i_this, int param_2, f32 param_3, u8 param
     return FALSE;
 }
 
-/* 807FD840-807FD9D8 000460 0198+00 1/0 0/0 0/0 .text            daE_YH_Draw__FP10e_yh_class */
 static int daE_YH_Draw(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -135,7 +130,6 @@ static int daE_YH_Draw(e_yh_class* i_this) {
     return 1;
 }
 
-/* 807FD9D8-807FDA24 0005F8 004C+00 2/2 0/0 0/0 .text            pl_check__FP10e_yh_classf */
 static BOOL pl_check(e_yh_class* i_this, f32 param_2) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -145,7 +139,6 @@ static BOOL pl_check(e_yh_class* i_this, f32 param_2) {
     return 0;
 }
 
-/* 807FDA24-807FDE6C 000644 0448+00 1/1 0/0 0/0 .text            damage_check__FP10e_yh_class */
 static void damage_check(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -284,13 +277,10 @@ static void damage_check(e_yh_class* i_this) {
     }
 }
 
-/* 80804718-8080471C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool l_HIOInit;
 
-/* 80804728-80804740 000018 0018+00 11/11 0/0 0/0 .bss             l_HIO */
 static daE_YH_HIO_c l_HIO;
 
-/* 807FDE6C-807FE1C4 000A8C 0358+00 1/1 0/0 0/0 .text            e_yh_stay__FP10e_yh_class */
 static void e_yh_stay(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz cStack_1c;
@@ -350,7 +340,6 @@ static void e_yh_stay(e_yh_class* i_this) {
     }
 }
 
-/* 807FE1C4-807FE484 000DE4 02C0+00 1/1 0/0 0/0 .text            e_yh_appear__FP10e_yh_class */
 static void e_yh_appear(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     f32 frame = i_this->mpMorf->getFrame();
@@ -405,7 +394,6 @@ static void e_yh_appear(e_yh_class* i_this) {
     cLib_addCalc2(&i_this->field_0x694, l_HIO.mDisplaySize, 1.0f, 0.1f);
 }
 
-/* 807FE484-807FE650 0010A4 01CC+00 1/1 0/0 0/0 .text            e_yh_appear_v__FP10e_yh_class */
 static void e_yh_appear_v(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -446,7 +434,6 @@ static void e_yh_appear_v(e_yh_class* i_this) {
     i_this->field_0xb18 = 1;
 }
 
-/* 807FE650-807FEBB0 001270 0560+00 1/1 0/0 0/0 .text            e_yh_wait__FP10e_yh_class */
 static void e_yh_wait(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz local_48;
@@ -541,7 +528,6 @@ static void e_yh_wait(e_yh_class* i_this) {
     }
 }
 
-/* 807FEBB0-807FEE0C 0017D0 025C+00 1/1 0/0 0/0 .text            e_yh_mk_roof__FP10e_yh_class */
 static void e_yh_mk_roof(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz local_34;
@@ -590,7 +576,6 @@ static void e_yh_mk_roof(e_yh_class* i_this) {
     a_this->shape_angle.z = 0;
 }
 
-/* 807FEE0C-807FF8DC 001A2C 0AD0+00 1/1 0/0 0/0 .text            e_yh_attack__FP10e_yh_class */
 static void e_yh_attack(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -811,7 +796,6 @@ static void e_yh_attack(e_yh_class* i_this) {
     }
 }
 
-/* 807FF8DC-807FFC38 0024FC 035C+00 1/1 0/0 0/0 .text            e_yh_attack_s__FP10e_yh_class */
 static void e_yh_attack_s(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -853,7 +837,6 @@ static void e_yh_attack_s(e_yh_class* i_this) {
     i_this->field_0xb18 = 1;
 }
 
-/* 807FFC38-807FFF38 002858 0300+00 1/1 0/0 0/0 .text            e_yh_chance__FP10e_yh_class */
 static void e_yh_chance(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -919,7 +902,6 @@ static void e_yh_chance(e_yh_class* i_this) {
     cLib_addCalc2(&i_this->field_0x848, 0.5f, 1.0f, 0.05f);
 }
 
-/* 807FFF38-80800174 002B58 023C+00 1/1 0/0 0/0 .text            e_yh_s_damage__FP10e_yh_class */
 static void e_yh_s_damage(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz local_20;
@@ -973,7 +955,6 @@ static void e_yh_s_damage(e_yh_class* i_this) {
     }
 }
 
-/* 80800174-8080056C 002D94 03F8+00 1/1 0/0 0/0 .text            e_yh_damage__FP10e_yh_class */
 static void e_yh_damage(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz local_34;
@@ -1050,7 +1031,6 @@ static void e_yh_damage(e_yh_class* i_this) {
     }
 }
 
-/* 8080056C-808008C8 00318C 035C+00 1/1 0/0 0/0 .text            kuki_control1__FP10e_yh_class */
 static void kuki_control1(e_yh_class* i_this) {
     static s16 pow_xa[11] = {
         0x0000,
@@ -1147,7 +1127,6 @@ static void kuki_control1(e_yh_class* i_this) {
     }
 }
 
-/* 808008C8-80800A3C 0034E8 0174+00 1/1 0/0 0/0 .text            kuki_control2__FP10e_yh_class */
 static void kuki_control2(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz local_58;
@@ -1190,7 +1169,6 @@ static void kuki_control2(e_yh_class* i_this) {
     }
 }
 
-/* 80800A3C-80800B18 00365C 00DC+00 1/1 0/0 0/0 .text            kuki_control3__FP10e_yh_class */
 static void kuki_control3(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz cStack_40;
@@ -1205,7 +1183,6 @@ static void kuki_control3(e_yh_class* i_this) {
     }
 }
 
-/* 80800B18-80800C40 003738 0128+00 1/1 0/0 0/0 .text            kuki_ha_set__FP10e_yh_class */
 static void kuki_ha_set(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz* pPos = i_this->field_0x6a0;
@@ -1229,7 +1206,6 @@ static void kuki_ha_set(e_yh_class* i_this) {
     }
 }
 
-/* 80800C40-80800F44 003860 0304+00 1/1 0/0 0/0 .text            kuki_control1_e__FP10e_yh_class */
 static void kuki_control1_e(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz local_c8;
@@ -1306,7 +1282,6 @@ static void kuki_control1_e(e_yh_class* i_this) {
     }
 }
 
-/* 80800F44-80801D10 003B64 0DCC+00 2/1 0/0 0/0 .text            e_yh_escape__FP10e_yh_class */
 static s8 e_yh_escape(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -1596,7 +1571,6 @@ static s8 e_yh_escape(e_yh_class* i_this) {
     return local_115;
 }
 
-/* 80801D10-808021D8 004930 04C8+00 1/1 0/0 0/0 .text            e_yh_e_dead__FP10e_yh_class */
 static void e_yh_e_dead(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz local_a0;
@@ -1712,7 +1686,6 @@ static void e_yh_e_dead(e_yh_class* i_this) {
     }
 }
 
-/* 808021D8-8080285C 004DF8 0684+00 2/1 0/0 0/0 .text            action__FP10e_yh_class */
 static void action(e_yh_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -1886,7 +1859,6 @@ static void action(e_yh_class* i_this) {
     setMidnaBindEffect(a_this, &i_this->mSound, &a_this->eyePos, &scale);
 }
 
-/* 8080285C-80802C30 00547C 03D4+00 1/1 0/0 0/0 .text            eff_set__FP10e_yh_class */
 static void eff_set(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     
@@ -1971,7 +1943,6 @@ static void eff_set(e_yh_class* i_this) {
     }
 }
 
-/* 80802C30-80802D98 005850 0168+00 1/1 0/0 0/0 .text            anm_se_set__FP10e_yh_class */
 static void anm_se_set(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     
@@ -1994,7 +1965,6 @@ static void anm_se_set(e_yh_class* i_this) {
     }
 }
 
-/* 80802D98-80803178 0059B8 03E0+00 2/1 0/0 0/0 .text            daE_YH_Execute__FP10e_yh_class */
 static int daE_YH_Execute(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz cStack_34;
@@ -2081,12 +2051,10 @@ static int daE_YH_Execute(e_yh_class* i_this) {
     return 1;
 }
 
-/* 80803178-80803180 005D98 0008+00 1/0 0/0 0/0 .text            daE_YH_IsDelete__FP10e_yh_class */
 static int daE_YH_IsDelete(e_yh_class* i_this) {
     return 1;
 }
 
-/* 80803180-808031E8 005DA0 0068+00 1/0 0/0 0/0 .text            daE_YH_Delete__FP10e_yh_class */
 static int daE_YH_Delete(e_yh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAcM_RegisterDeleteID(a_this, "E_YH");
@@ -2103,7 +2071,6 @@ static int daE_YH_Delete(e_yh_class* i_this) {
     return 1;
 }
 
-/* 808031E8-80803474 005E08 028C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_yh_class* i_this = (e_yh_class*)a_this;
     i_this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_yd", 0x18), NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_yd", 0x13), 2, 1.0, 0, -1, &i_this->mSound,
@@ -2148,7 +2115,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 808034BC-808039DC 0060DC 0520+00 1/0 0/0 0/0 .text            daE_YH_Create__FP10fopAc_ac_c */
 static int daE_YH_Create(fopAc_ac_c* a_this) {
     e_yh_class* i_this = (e_yh_class*)a_this;
     fopAcM_ct(a_this, e_yh_class);
@@ -2279,7 +2245,6 @@ static int daE_YH_Create(fopAc_ac_c* a_this) {
     return rv;
 }
 
-/* 80804634-80804654 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_YH_Method */
 static actor_method_class l_daE_YH_Method = {
     (process_method_func)daE_YH_Create,
     (process_method_func)daE_YH_Delete,
@@ -2288,7 +2253,6 @@ static actor_method_class l_daE_YH_Method = {
     (process_method_func)daE_YH_Draw,
 };
 
-/* 80804654-80804684 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_YH */
 extern actor_process_profile_definition g_profile_E_YH = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

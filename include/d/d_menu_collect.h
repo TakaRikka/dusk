@@ -20,90 +20,90 @@ class dMenu_Collect2D_c;
 class dMenu_Collect2DTop_c : public dDlst_base_c {
 public:
     dMenu_Collect2DTop_c(dMenu_Collect2D_c* param_0) { mpCollect2D = param_0; }
-    /* 801B77A4 */ virtual void draw();
-    /* 801B7EB8 */ virtual ~dMenu_Collect2DTop_c() {}
+    virtual void draw();
+    virtual ~dMenu_Collect2DTop_c() {}
 
     /* 0x4 */ dMenu_Collect2D_c* mpCollect2D;
 };
 
 class dMenu_Collect2D_c : public dDlst_base_c {
 public:
-    /* 801AFD48 */ dMenu_Collect2D_c(JKRExpHeap*, STControl*, CSTControl*);
-    /* 801AFEA4 */ void _create();
-    /* 801B0100 */ void _delete();
-    /* 801B0570 */ void initialize();
-    /* 801B05A8 */ bool isFishIconVisible();
-    /* 801B061C */ bool isSkillIconVisible();
-    /* 801B071C */ bool isInsectIconVisible();
-    /* 801B074C */ void screenSet();
-    /* 801B1C3C */ void animationSet();
-    /* 801B1CE0 */ void btkAnimeLoop0(J2DAnmTextureSRTKey*);
-    /* 801B1EDC */ void setBackAlpha();
-    /* 801B1FAC */ void cursorMove();
-    /* 801B27EC */ void cursorPosSet();
-    /* 801B2A74 */ void changeSword();
-    /* 801B2D00 */ void changeShield();
-    /* 801B2EE4 */ void changeClothe();
-    /* 801B30C8 */ void setArrowMaxNum(u8);
-    /* 801B3340 */ void setWalletMaxNum(u16);
-    /* 801B3524 */ void setSmellType();
-    /* 801B3640 */ void setHeartPiece();
-    /* 801B370C */ void setPohMaxNum(u8);
-    /* 801B39D0 */ void setEquipItemFrameColorSword(int);
-    /* 801B3CF4 */ void setEquipItemFrameColorShield(int);
-    /* 801B3FDC */ void setEquipItemFrameColorClothes(int);
-    /* 801B42D8 */ void setHIO(bool);
-    /* 801B46FC */ u64 getItemTag(int, int, bool);
-    /* 801B473C */ void wait_init();
-    /* 801B48D0 */ void wait_proc();
-    /* 801B4E14 */ void save_open_init();
-    /* 801B4EC0 */ void save_open_proc();
-    /* 801B4F30 */ void save_move_init();
-    /* 801B4F6C */ void save_move_proc();
-    /* 801B4FDC */ void save_close_init();
-    /* 801B5018 */ void save_close_proc();
-    /* 801B5094 */ void option_open_init();
-    /* 801B513C */ void option_open_proc();
-    /* 801B51AC */ void option_move_init();
-    /* 801B51E8 */ void option_move_proc();
-    /* 801B5258 */ void option_close_init();
-    /* 801B5294 */ void option_close_proc();
-    /* 801B5310 */ void letter_open_init();
-    /* 801B53AC */ void letter_open_proc();
-    /* 801B541C */ void letter_move_init();
-    /* 801B5458 */ void letter_move_proc();
-    /* 801B54C8 */ void letter_close_init();
-    /* 801B5504 */ void letter_close_proc();
-    /* 801B5580 */ void fishing_open_init();
-    /* 801B561C */ void fishing_open_proc();
-    /* 801B568C */ void fishing_move_init();
-    /* 801B56C8 */ void fishing_move_proc();
-    /* 801B5738 */ void fishing_close_init();
-    /* 801B5774 */ void fishing_close_proc();
-    /* 801B57F0 */ void skill_open_init();
-    /* 801B588C */ void skill_open_proc();
-    /* 801B58FC */ void skill_move_init();
-    /* 801B5938 */ void skill_move_proc();
-    /* 801B59A8 */ void skill_close_init();
-    /* 801B59E4 */ void skill_close_proc();
-    /* 801B5A60 */ void insect_open_init();
-    /* 801B5B00 */ void insect_open_proc();
-    /* 801B5B70 */ void insect_move_init();
-    /* 801B5BAC */ void insect_move_proc();
-    /* 801B5C1C */ void insect_close_init();
-    /* 801B5C58 */ void insect_close_proc();
-    /* 801B5CD4 */ void _move();
-    /* 801B5D70 */ void _draw();
-    /* 801B5F48 */ void drawTop();
-    /* 801B5F84 */ bool isKeyCheck();
-    /* 801B5FAC */ bool isOutCheck();
-    /* 801B5FB4 */ void setAButtonString(u16);
-    /* 801B60B8 */ void setBButtonString(u16);
-    /* 801B61BC */ void setItemNameString(u8, u8);
-    /* 801B6344 */ void setItemNameStringNull();
+    dMenu_Collect2D_c(JKRExpHeap*, STControl*, CSTControl*);
+    void _create();
+    void _delete();
+    void initialize();
+    bool isFishIconVisible();
+    bool isSkillIconVisible();
+    bool isInsectIconVisible();
+    void screenSet();
+    void animationSet();
+    void btkAnimeLoop0(J2DAnmTextureSRTKey*);
+    void setBackAlpha();
+    void cursorMove();
+    void cursorPosSet();
+    void changeSword();
+    void changeShield();
+    void changeClothe();
+    void setArrowMaxNum(u8);
+    void setWalletMaxNum(u16);
+    void setSmellType();
+    void setHeartPiece();
+    void setPohMaxNum(u8);
+    void setEquipItemFrameColorSword(int);
+    void setEquipItemFrameColorShield(int);
+    void setEquipItemFrameColorClothes(int);
+    void setHIO(bool);
+    u64 getItemTag(int, int, bool);
+    void wait_init();
+    void wait_proc();
+    void save_open_init();
+    void save_open_proc();
+    void save_move_init();
+    void save_move_proc();
+    void save_close_init();
+    void save_close_proc();
+    void option_open_init();
+    void option_open_proc();
+    void option_move_init();
+    void option_move_proc();
+    void option_close_init();
+    void option_close_proc();
+    void letter_open_init();
+    void letter_open_proc();
+    void letter_move_init();
+    void letter_move_proc();
+    void letter_close_init();
+    void letter_close_proc();
+    void fishing_open_init();
+    void fishing_open_proc();
+    void fishing_move_init();
+    void fishing_move_proc();
+    void fishing_close_init();
+    void fishing_close_proc();
+    void skill_open_init();
+    void skill_open_proc();
+    void skill_move_init();
+    void skill_move_proc();
+    void skill_close_init();
+    void skill_close_proc();
+    void insect_open_init();
+    void insect_open_proc();
+    void insect_move_init();
+    void insect_move_proc();
+    void insect_close_init();
+    void insect_close_proc();
+    void _move();
+    void _draw();
+    void drawTop();
+    bool isKeyCheck();
+    bool isOutCheck();
+    void setAButtonString(u16);
+    void setBButtonString(u16);
+    void setItemNameString(u8, u8);
+    void setItemNameStringNull();
 
-    /* 801B7F00 */ virtual void draw() { _draw(); }
-    /* 801AFE34 */ virtual ~dMenu_Collect2D_c();
+    virtual void draw() { _draw(); }
+    virtual ~dMenu_Collect2D_c();
 
     u8 getCursorX() { return mCursorX; }
     u8 getCursorY() { return mCursorY; }
@@ -189,25 +189,25 @@ private:
 
 class dMenu_Collect3D_c {
 public:
-    /* 801B6454 */ dMenu_Collect3D_c(JKRExpHeap*, dMenu_Collect2D_c*, CSTControl*);
-    /* 801B65A8 */ void _create();
-    /* 801B6694 */ void _delete();
-    /* 801B66C8 */ void _move(u8, u8);
-    /* 801B696C */ void draw();
-    /* 801B6A30 */ void setJ3D(const char*, const char*, const char*);
-    /* 801B6D30 */ void set_mtx();
-    /* 801B6E70 */ void animePlay();
-    /* 801B6FB0 */ void animeEntry();
-    /* 801B7014 */ void createMaskModel();
-    /* 801B71C4 */ void createMirrorModel();
-    /* 801B7434 */ static u8 getCrystalNum();
-    /* 801B749C */ static u8 getMirrorNum();
-    /* 801B7504 */ static u8 getMaskMdlVisible();
-    /* 801B75E8 */ static void setupItem3D(Mtx);
-    /* 801B7660 */ static void toItem3Dpos(f32, f32, f32, cXyz*);
-    /* 801B774C */ static void calcViewMtx(Mtx);
+    dMenu_Collect3D_c(JKRExpHeap*, dMenu_Collect2D_c*, CSTControl*);
+    void _create();
+    void _delete();
+    void _move(u8, u8);
+    void draw();
+    void setJ3D(const char*, const char*, const char*);
+    void set_mtx();
+    void animePlay();
+    void animeEntry();
+    void createMaskModel();
+    void createMirrorModel();
+    static u8 getCrystalNum();
+    static u8 getMirrorNum();
+    static u8 getMaskMdlVisible();
+    static void setupItem3D(Mtx);
+    static void toItem3Dpos(f32, f32, f32, cXyz*);
+    static void calcViewMtx(Mtx);
 
-    /* 801B6538 */ virtual ~dMenu_Collect3D_c();
+    virtual ~dMenu_Collect3D_c();
 
     static f32 mViewOffsetY;
 
@@ -234,13 +234,13 @@ private:
 
 class dMenu_Collect_c {
 public:
-    /* 801B78C0 */ dMenu_Collect_c(JKRExpHeap*, STControl*, CSTControl*);
-    /* 801B7A0C */ void _create();
-    /* 801B7A44 */ void _delete();
-    /* 801B7A7C */ void _move();
-    /* 801B7AC0 */ void draw();
+    dMenu_Collect_c(JKRExpHeap*, STControl*, CSTControl*);
+    void _create();
+    void _delete();
+    void _move();
+    void draw();
 
-    /* 801B795C */ virtual ~dMenu_Collect_c();
+    virtual ~dMenu_Collect_c();
 
     u8 getSubWindowOpenCheck() { return mpCollect2D->getSubWindowOpenCheck(); }
     bool isKeyCheck() { return mpCollect2D->isKeyCheck(); }

@@ -9,22 +9,22 @@ u16 seqCallback(JASTrack* track, u16 command);
 
 class Z2SoundMgr : public JASGlobalInstance<Z2SoundMgr> {
 public:
-    /* 802A9E80 */ Z2SoundMgr();
-    /* 802AA1B0 */ void calc();
-    /* 802AA270 */ void setIIR(JAISound* sound, const s16* iir);
-    /* 802AA33C */ void setFilterOff(JAISound* sound);
-    /* 802AA430 */ void resetFilterAll();
-    /* 802AA528 */ void mixOut();
-    /* 802AA67C */ void framework();
-    /* 802AA6B0 */ void pauseAllGameSound(bool paused);
-    /* 802AA7DC */ void stopSoundID(JAISoundID soundID);
-    /* 802AA84C */ void stopSync();
-    /* 802AA8C8 */ void stop();
-    /* 802AA908 */ void initParams();
-    /* 802AA9E8 */ void multiVolumeSoundID(JAISoundID soundID, f32 volume);
-    /* 802AAAC4 */ bool isPlayingSoundID(JAISoundID soundID);
+    Z2SoundMgr();
+    void calc();
+    void setIIR(JAISound* sound, const s16* iir);
+    void setFilterOff(JAISound* sound);
+    void resetFilterAll();
+    void mixOut();
+    void framework();
+    void pauseAllGameSound(bool paused);
+    void stopSoundID(JAISoundID soundID);
+    void stopSync();
+    void stop();
+    void initParams();
+    void multiVolumeSoundID(JAISoundID soundID, f32 volume);
+    bool isPlayingSoundID(JAISoundID soundID);
 
-    /* 802A9EE8 */ virtual bool startSound(JAISoundID soundID, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr);
+    virtual bool startSound(JAISoundID soundID, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr);
 
     JAISeMgr* getSeMgr() { return &seMgr_; }
     const JAISeMgr* getSeMgr() const { return &seMgr_; }

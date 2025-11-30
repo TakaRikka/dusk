@@ -15,31 +15,31 @@
  */
 class daObjKGate_c : public dBgS_MoveBgActor {
 public:
-    /* 805880C8 */ void initBaseMtx();
-    /* 8058827C */ void setBaseMtx();
-    /* 80588BF8 */ int create1st();
-    /* 80588D00 */ int checkAreaL(cXyz const*, cXyz const*);
-    /* 805890D4 */ int checkAreaR(cXyz const*, cXyz const*);
-    /* 805894A4 */ BOOL checkOpen();
-    /* 805895D0 */ BOOL checkDirL(fopAc_ac_c*);
-    /* 80589664 */ BOOL checkDirR(fopAc_ac_c*);
-    /* 805896F8 */ void setAtkSE();
-    /* 80589774 */ void setCrkSE();
-    /* 805897F0 */ void action();
-    /* 805898A0 */ void action_typeA();
-    /* 80589F40 */ void action_typeB();
-    /* 8058A1B0 */ void actionWaitEvent();
-    /* 8058A294 */ void actionEvent();
-    /* 8058A2FC */ void actionDead();
-    /* 8058A300 */ void event_proc_call();
-    /* 8058A3A4 */ void demoProc();
-    /* 8058A508 */ int getDemoAction();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    int checkAreaL(cXyz const*, cXyz const*);
+    int checkAreaR(cXyz const*, cXyz const*);
+    BOOL checkOpen();
+    BOOL checkDirL(fopAc_ac_c*);
+    BOOL checkDirR(fopAc_ac_c*);
+    void setAtkSE();
+    void setCrkSE();
+    void action();
+    void action_typeA();
+    void action_typeB();
+    void actionWaitEvent();
+    void actionEvent();
+    void actionDead();
+    void event_proc_call();
+    void demoProc();
+    int getDemoAction();
     
-    /* 805889A4 */ virtual int CreateHeap();
-    /* 805887A0 */ virtual int Create();
-    /* 8058A550 */ virtual int Execute(Mtx**);
-    /* 8058A5B8 */ virtual int Draw();
-    /* 8058A6F4 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     void setAction(u8 i_action) { mAction = i_action; }
     u8 getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }

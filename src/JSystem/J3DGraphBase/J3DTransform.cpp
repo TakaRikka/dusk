@@ -5,23 +5,22 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JMath/JMath.h"
 
-/* 80311630-80311638 -00001 0008+00 0/0 0/0 0/0 .text            __MTGQR7__FUl */
 void __MTGQR7(register u32 v) {
+#ifdef __MWERKS__
     // clang-format off
 	asm {
 	    mtspr GQR7, v
     }
     // clang-format on
+#endif
 }
 
-/* 80311638-80311670 30BF78 0038+00 0/0 2/2 0/0 .text            J3DGQRSetup7__FUlUlUlUl */
 void J3DGQRSetup7(u32 r0, u32 r1, u32 r2, u32 r3) {
     u32 v = ((r0 << 8) + r1) << 16;
 	v |= (r2 << 8) + r3;
     __MTGQR7(v);
 }
 
-/* 80311670-80311760 30BFB0 00F0+00 0/0 2/2 0/0 .text            J3DCalcBBoardMtx__FPA4_f */
 // this uses a non-standard sqrtf, not sure why or how its supposed to be setup
 #if !PLATFORM_SHIELD
 inline f32 J3D_sqrtf(register f32 x) {
@@ -71,18 +70,14 @@ void J3DCalcBBoardMtx(register Mtx mtx) {
 	mtx[2][2] = z;
 }
 
-/* 803A1E30-803A1E50 02E490 0020+00 0/0 1/1 0/0 .rodata          j3dDefaultTransformInfo */
 extern J3DTransformInfo const j3dDefaultTransformInfo = {
     {1.0f, 1.0f, 1.0f}, {0, 0, 0}, {0.0f, 0.0f, 0.0f}};
 
-/* 803A1E50-803A1E5C 02E4B0 000C+00 0/0 1/1 0/0 .rodata          j3dDefaultScale */
 extern Vec const j3dDefaultScale = {1.0f, 1.0f, 1.0f};
 
-/* 803A1E5C-803A1E8C 02E4BC 0030+00 0/0 8/8 7/7 .rodata          j3dDefaultMtx */
 extern Mtx const j3dDefaultMtx = {
     {1.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 0.0f}};
 
-/* 80311760-8031189C 30C0A0 013C+00 0/0 2/2 0/0 .text            J3DCalcYBBoardMtx__FPA4_f */
 void J3DCalcYBBoardMtx(Mtx mtx) {
     f32 x = (mtx[0][0] * mtx[0][0]) + (mtx[1][0] * mtx[1][0]) + (mtx[2][0] * mtx[2][0]);
     f32 z = (mtx[0][2] * mtx[0][2]) + (mtx[1][2] * mtx[1][2]) + (mtx[2][2] * mtx[2][2]);
@@ -106,7 +101,6 @@ void J3DCalcYBBoardMtx(Mtx mtx) {
 	mtx[2][2] = vec.z * z;
 }
 
-/* 8031189C-80311964 30C1DC 00C8+00 0/0 6/6 0/0 .text J3DPSCalcInverseTranspose__FPA4_fPA3_f */
 asm void J3DPSCalcInverseTranspose(register Mtx src, register Mtx33 dst) {
 #ifdef __MWERKS__ // clang-format off
 	psq_l    f0, 0(src), 1, 0
@@ -164,8 +158,6 @@ lbl_8005F118:
 #endif // clang-format on
 }
 
-/* 80311964-80311A24 30C2A4 00C0+00 0/0 2/2 2/2 .text
- * J3DGetTranslateRotateMtx__FRC16J3DTransformInfoPA4_f         */
 void J3DGetTranslateRotateMtx(const J3DTransformInfo& tx, Mtx dst) {
 	f32 cxsz;
 	f32 sxcz;
@@ -195,7 +187,6 @@ void J3DGetTranslateRotateMtx(const J3DTransformInfo& tx, Mtx dst) {
     dst[2][3] = tx.mTranslate.z;
 }
 
-/* 80311A24-80311ACC 30C364 00A8+00 0/0 1/1 0/0 .text J3DGetTranslateRotateMtx__FsssfffPA4_f */
 void J3DGetTranslateRotateMtx(s16 rx, s16 ry, s16 rz, f32 tx, f32 ty, f32 tz, Mtx dst) {
 	f32 cxsz;
 	f32 sxcz;
@@ -225,8 +216,6 @@ void J3DGetTranslateRotateMtx(s16 rx, s16 ry, s16 rz, f32 tx, f32 ty, f32 tz, Mt
     dst[2][3] = tz;
 }
 
-/* 80311ACC-80311B80 30C40C 00B4+00 0/0 3/3 0/0 .text
- * J3DGetTextureMtx__FRC17J3DTextureSRTInfoRC3VecPA4_f          */
 void J3DGetTextureMtx(const J3DTextureSRTInfo& srt, const Vec& center, Mtx dst) {
     f32 sr = JMASSin(srt.mRotation), cr = JMASCos(srt.mRotation);
 
@@ -247,8 +236,6 @@ void J3DGetTextureMtx(const J3DTextureSRTInfo& srt, const Vec& center, Mtx dst) 
 	dst[2][2] = 1.0f;
 }
 
-/* 80311B80-80311C34 30C4C0 00B4+00 0/0 3/3 0/0 .text
- * J3DGetTextureMtxOld__FRC17J3DTextureSRTInfoRC3VecPA4_f       */
 void J3DGetTextureMtxOld(const J3DTextureSRTInfo& srt, const Vec& center, Mtx dst) {
     f32 sr = JMASSin(srt.mRotation), cr = JMASCos(srt.mRotation);
 
@@ -269,8 +256,6 @@ void J3DGetTextureMtxOld(const J3DTextureSRTInfo& srt, const Vec& center, Mtx ds
 	dst[2][2] = 1.0f;
 }
 
-/* 80311C34-80311CE4 30C574 00B0+00 0/0 3/3 0/0 .text
- * J3DGetTextureMtxMaya__FRC17J3DTextureSRTInfoPA4_f            */
 void J3DGetTextureMtxMaya(const J3DTextureSRTInfo& srt, Mtx dst) {
     f32 sr = JMASSin(srt.mRotation), cr = JMASCos(srt.mRotation);
     f32 tx = srt.mTranslationX - 0.5f;
@@ -288,8 +273,6 @@ void J3DGetTextureMtxMaya(const J3DTextureSRTInfo& srt, Mtx dst) {
 	dst[2][2] = 1.0f;
 }
 
-/* 80311CE4-80311D94 30C624 00B0+00 0/0 3/3 0/0 .text
- * J3DGetTextureMtxMayaOld__FRC17J3DTextureSRTInfoPA4_f         */
 void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo& srt, Mtx dst) {
     f32 sr = JMASSin(srt.mRotation), cr = JMASCos(srt.mRotation);
     f32 tx = srt.mTranslationX - 0.5f;
@@ -307,7 +290,6 @@ void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo& srt, Mtx dst) {
 	dst[2][2] = 1.0f;
 }
 
-/* 80311D94-80311DF8 30C6D4 0064+00 0/0 2/2 0/0 .text            J3DScaleNrmMtx__FPA4_fRC3Vec */
 asm void J3DScaleNrmMtx(register Mtx mtx, const register Vec& scl) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc;
@@ -344,7 +326,6 @@ asm void J3DScaleNrmMtx(register Mtx mtx, const register Vec& scl) {
 #endif // clang-format on
 }
 
-/* 80311DF8-80311E4C 30C738 0054+00 0/0 5/5 0/0 .text            J3DScaleNrmMtx33__FPA3_fRC3Vec */
 asm void J3DScaleNrmMtx33(register Mtx33 mtx, const register Vec& scale) {
 #ifdef __MWERKS__ // clang-format off
 	psq_l    f0, 0(mtx), 0, 0
@@ -371,8 +352,6 @@ asm void J3DScaleNrmMtx33(register Mtx33 mtx, const register Vec& scale) {
 #endif // clang-format on
 }
 
-/* 80311E4C-80311F70 30C78C 0124+00 0/0 3/3 0/0 .text            J3DMtxProjConcat__FPA4_fPA4_fPA4_f
- */
 asm void J3DMtxProjConcat(register Mtx mtx1, register Mtx mtx2, register Mtx dst) {
 #ifdef __MWERKS__ // clang-format off
 	psq_l    f2, 0(mtx1), 0, 0
@@ -451,12 +430,10 @@ asm void J3DMtxProjConcat(register Mtx mtx1, register Mtx mtx2, register Mtx dst
 #endif // clang-format on
 }
 
-/* 80450958-80450960 0003D8 0008+00 1/1 0/0 0/0 .sdata           Unit01 */
 static f32 Unit01[2] = {
     0.0f, 1.0f
 };
 
-/* 80311F70-8031204C 30C8B0 00DC+00 0/0 1/1 0/0 .text J3DPSMtxArrayConcat__FPA4_fPA4_fPA4_fUl */
 #ifdef __MWERKS__ // clang-format off
 asm void J3DPSMtxArrayConcat(register Mtx mA, register Mtx mB, register Mtx mAB, register u32 count) {
 #define FP0 fp0
@@ -564,7 +541,6 @@ loop:
 }
 #endif // clang-format on
 
-/* 803CD8F8-803CD900 02AA18 0008+00 0/0 2/2 0/0 .data            PSMulUnit01 */
 extern f32 PSMulUnit01[] = {
     0.0f,
     -1.0f,

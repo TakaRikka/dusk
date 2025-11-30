@@ -24,23 +24,23 @@ public:
         MODE_BREAK,
     };
 
-    /* 80D17C74 */ void setBaseMtx();
-    /* 80D17D5C */ int CreateHeap();
-    /* 80D17E14 */ int create();
-    /* 80D18244 */ static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-    /* 80D1825C */ int Execute(Mtx**);
-    /* 80D182C8 */ void moveMain();
-    /* 80D185DC */ BOOL playerAreaCheck();
-    /* 80D186B0 */ void init_modeWait();
-    /* 80D186BC */ void modeWait();
-    /* 80D186C0 */ void init_modeMoveUp();
-    /* 80D18784 */ void modeMoveUp();
-    /* 80D188C0 */ void init_modeMoveDown();
-    /* 80D188DC */ void modeMoveDown();
-    /* 80D18994 */ void init_modeBreak();
-    /* 80D18A5C */ void modeBreak();
-    /* 80D18BEC */ int Draw();
-    /* 80D18CA4 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+    int Execute(Mtx**);
+    void moveMain();
+    BOOL playerAreaCheck();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMoveUp();
+    void modeMoveUp();
+    void init_modeMoveDown();
+    void modeMoveDown();
+    void init_modeBreak();
+    void modeBreak();
+    int Draw();
+    int Delete();
 
     u8 getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
 
@@ -65,8 +65,8 @@ STATIC_ASSERT(sizeof(daTogeTrap_c) == 0xae4);
 
 class daTogeTrap_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80D17B6C */ daTogeTrap_HIO_c();
-    /* 80D18DA8 */ ~daTogeTrap_HIO_c() {}
+    daTogeTrap_HIO_c();
+    ~daTogeTrap_HIO_c() {}
 
     #ifdef DEBUG
     void genMessage(JORMContext* ctx) {

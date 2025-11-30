@@ -24,43 +24,30 @@ static f32 dummy_lit_3777(int idx, u8 foo) {
     }
 }
 
-/* 804C64D4-804C64DC 00000C 0006+02 5/6 0/0 0/0 .rodata          l_arcName */
 static char const l_arcName[6] = "Midna";
 
-/* 804C64DC-804C64E8 000014 000C+00 0/1 0/0 0/0 .rodata          l_eyeOffset */
 static Vec const l_eyeOffset = { 16.0f, -10.400001f, 0.0f };
 
-/* 804C64E8-804C64F4 000020 000C+00 0/1 0/0 0/0 .rodata          l_headCenterOffset */
 static Vec const l_headCenterOffset = { 0.0f, -10.400001f, 0.0f };
 
-/* 804C64F4-804C64FC 00002C 0008+00 0/2 0/0 0/0 .rodata          l_normalColor */
 static GXColorS10 const l_normalColor = { 0x50, 0x00, 0x00, 0x00 };
 
-/* 804C64FC-804C6500 000034 0004+00 0/3 0/0 0/0 .rodata          l_normalKColor */
 static GXColor const l_normalKColor = { 0xB4, 0x87, 0x00, 0x00 };
 
-/* 804C6500-804C6504 000038 0004+00 0/3 0/0 0/0 .rodata          l_normalKColor2 */
 static GXColor const l_normalKColor2 = { 0x00, 0xC3, 0xC3, 0x00 };
 
-/* 804C6504-804C650C 00003C 0008+00 0/1 0/0 0/0 .rodata          l_bigColor */
 static GXColorS10 const l_bigColor = { 0xFF, 0x64, 0x78, 0x00 };
 
-/* 804C650C-804C6510 000044 0004+00 0/1 0/0 0/0 .rodata          l_bigKColor */
 static GXColor const l_bigKColor = { 0x1E, 0x00, 0x00, 0x00 };
 
-/* 804C6510-804C6514 000048 0004+00 0/3 0/0 0/0 .rodata          l_lNormalKColor */
 static GXColor const l_lNormalKColor = { 0xFF, 0xDC, 0x00, 0x00 };
 
-/* 804C6514-804C6518 00004C 0004+00 0/3 0/0 0/0 .rodata          l_lNormalKColor2 */
 static GXColor const l_lNormalKColor2 = { 0x00, 0xC3, 0xEB, 0x00 };
 
-/* 804C6518-804C6520 000050 0008+00 0/1 0/0 0/0 .rodata          l_lBigColor */
 static GXColorS10 const l_lBigColor = { 0xFF, 0x78, 0x00, 0x00 };
 
-/* 804C6520-804C6524 000058 0004+00 0/1 0/0 0/0 .rodata          l_lBigKColor2 */
 static GXColor const l_lBigKColor2 = { 0xAA, 0xFF, 0xC3, 0x00 };
 
-/* 804C6524-804C6560 00005C 003C+00 0/2 0/0 0/0 .rodata          l_hairScale */
 static Vec const l_hairScale[5] = {
     {0.3f, 0.8f, 0.7f},
     {0.2f, 0.8f, 0.4f},
@@ -121,7 +108,6 @@ void daMidna_hio_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 804C6560-804C6580 000098 0020+00 1/3 0/0 0/0 .rodata          m__14daMidna_hio_c0 */
 daMidna_hio_c1 const daMidna_hio_c0::m = {
     0,
     0,
@@ -144,7 +130,6 @@ bool daMidna_matAnm_c::sEyeMoveFlg;
 u8 daMidna_matAnm_c::sMorfFrame;
 #endif
 
-/* 804BC218-804BC248 000078 0030+00 2/2 0/0 0/0 .text            init__16daMidna_matAnm_cFv */
 void daMidna_matAnm_c::init() {
     mOldTransX = 0.0f;
     mOldTransY = 0.0f;
@@ -154,7 +139,6 @@ void daMidna_matAnm_c::init() {
     sMorfFrame = 0;
 }
 
-/* 804BC248-804BC36C 0000A8 0124+00 1/0 0/0 0/0 .text calc__16daMidna_matAnm_cCFP11J3DMaterial */
 void daMidna_matAnm_c::calc(J3DMaterial* i_material) const {
     J3DMaterialAnm::calc(i_material);
     for (u32 i = 0; i < 8; i++) {
@@ -177,7 +161,6 @@ void daMidna_matAnm_c::calc(J3DMaterial* i_material) const {
     }
 }
 
-/* 804BC36C-804BC3E0 0001CC 0074+00 1/0 0/0 0/0 .text            execute__20daMidna_McaMorfCB1_cFUsP16J3DTransformInfo */
 int daMidna_McaMorfCB1_c::execute(u16 i_jointNo, J3DTransformInfo* transform) {
     if (!daPy_py_c::getMidnaActor()->checkNoHairScale()) {
         if (i_jointNo >= JNT_HAIR_1 && i_jointNo <= JNT_HAIR_5) {
@@ -191,7 +174,6 @@ int daMidna_McaMorfCB1_c::execute(u16 i_jointNo, J3DTransformInfo* transform) {
     return 1;
 }
 
-/* 804C6590-804C65E4 0000C8 0054+00 0/1 0/0 0/0 .rodata          m_texDataTable__9daMidna_c */
 daMidna_texData_s const daMidna_c::m_texDataTable[21] = {
     0x0405, 0x03A4,
     0x03F5, 0x0399,
@@ -216,7 +198,6 @@ daMidna_texData_s const daMidna_c::m_texDataTable[21] = {
     0x03FD, 0x0399,
 };
 
-/* 804C65E4-804C6860 00011C 027C+00 3/12 0/0 0/0 .rodata          m_anmDataTable__9daMidna_c */
 daMidna_anmData_s const daMidna_c::m_anmDataTable[53] = {
     0x01DC, 0x00, -1.0f, 0,
     0x01B7, 0x01, -1.0f, 0,
@@ -273,7 +254,6 @@ daMidna_anmData_s const daMidna_c::m_anmDataTable[53] = {
     0x01C4, 0x00, -1.0f, 0,
 };
 
-/* 804BC3E0-804BC5C4 000240 01E4+00 1/1 0/0 0/0 .text            modelCallBack__9daMidna_cFi */
 int daMidna_c::modelCallBack(int i_jointNo) {
     mDoMtx_stack_c::copy(J3DSys::mCurrentMtx);
     if ((i_jointNo == JNT_BACKBONE1 || i_jointNo == JNT_WAIST) && mDemoMode == 0x200) {
@@ -310,7 +290,6 @@ int daMidna_c::modelCallBack(int i_jointNo) {
     return 1;
 }
 
-/* 804BC5C4-804BC614 000424 0050+00 1/1 0/0 0/0 .text            changeUpperBck__9daMidna_cFv */
 int daMidna_c::changeUpperBck() {
     J3DAnmTransform* anm = mUpperBck.getBckAnm();
     mUpperBck.changeBckOnly(mpMorf->getAnm());
@@ -318,7 +297,6 @@ int daMidna_c::changeUpperBck() {
     return 1;
 }
 
-/* 804BC614-804BC670 000474 005C+00 1/1 0/0 0/0 .text            changeFaceBck__9daMidna_cFv */
 int daMidna_c::changeFaceBck() {
     if (checkStateFlg0(FLG0_UNK_800000)) {
         J3DAnmTransform* anm = mFaceBck.getBckAnm();
@@ -329,7 +307,6 @@ int daMidna_c::changeFaceBck() {
     return 1;
 }
 
-/* 804BC670-804BC6FC 0004D0 008C+00 1/1 0/0 0/0 .text            baseModelCallBack__9daMidna_cFi */
 int daMidna_c::baseModelCallBack(int i_jointNo) {
     if (i_jointNo == mJntNo) {
         changeFaceBck();
@@ -346,7 +323,6 @@ int daMidna_c::baseModelCallBack(int i_jointNo) {
     return 1;
 }
 
-/* 804BC6FC-804BC740 00055C 0044+00 1/1 0/0 0/0 .text            daMidna_modelCallBack__FP8J3DJointi */
 static int daMidna_modelCallBack(J3DJoint* i_joint, int param_2) {
     int jnt_no = i_joint->getJntNo();
     daMidna_c* _this = (daMidna_c*)j3dSys.getModel()->getUserArea();
@@ -356,7 +332,6 @@ static int daMidna_modelCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 804BC740-804BC7D4 0005A0 0094+00 1/1 0/0 0/0 .text            initInvModel__9daMidna_cFUsPP8J3DModelP21mDoExt_invisibleModelUl */
 int daMidna_c::initInvModel(u16 i_resNo, J3DModel** i_modelP, mDoExt_invisibleModel* i_invModel, u32 flag) {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, i_resNo);
     JUT_ASSERT(664, modelData);
@@ -372,7 +347,6 @@ int daMidna_c::initInvModel(u16 i_resNo, J3DModel** i_modelP, mDoExt_invisibleMo
     return 1;
 }
 
-/* 804BC7D4-804BC868 000634 0094+00 1/1 0/0 0/0 .text            initDemoModel__9daMidna_cFPP8J3DModelPCcUl */
 int daMidna_c::initDemoModel(J3DModel** i_modelP, char const* i_bmdName, u32 flag) {
     *i_modelP = NULL;
     J3DModelData* model_data =
@@ -386,7 +360,6 @@ int daMidna_c::initDemoModel(J3DModel** i_modelP, char const* i_bmdName, u32 fla
     return 1;
 }
 
-/* 804BC868-804BD050 0006C8 07E8+00 1/1 0/0 0/0 .text            createHeap__9daMidna_cFv */
 int daMidna_c::createHeap() {
     J3DModelData* modelData;
     
@@ -560,7 +533,6 @@ int daMidna_c::createHeap() {
     return 1;
 }
 
-/* 804BD254-804BD274 0010B4 0020+00 1/1 0/0 0/0 .text            daMidna_createHeap__FP10fopAc_ac_c */
 static int daMidna_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daMidna_c*>(i_this)->createHeap();
 }
@@ -571,7 +543,6 @@ daMidna_hio_c::daMidna_hio_c() {
 }
 #endif
 
-/* 804BD274-804BD8B8 0010D4 0644+00 1/1 0/0 0/0 .text            create__9daMidna_cFv */
 cPhs__Step daMidna_c::create() {
     fopAcM_ct(this, daMidna_c);
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
@@ -694,14 +665,12 @@ cPhs__Step daMidna_c::create() {
     return step;
 }
 
-/* 804BD91C-804BD93C 00177C 0020+00 1/0 0/0 0/0 .text            daMidna_Create__FP10fopAc_ac_c */
 static cPhs__Step daMidna_Create(fopAc_ac_c* i_this) {
     daMidna_c* actor = (daMidna_c*)i_this;
     fpc_ProcID id = fopAcM_GetID(i_this);
     return actor->create();
 }
 
-/* 804BD93C-804BDE04 00179C 04C8+00 2/2 0/0 0/0 .text            allAnimePlay__9daMidna_cFv */
 void daMidna_c::allAnimePlay() {
     daAlink_c::simpleAnmPlay(mpMoyaBtk);
     daAlink_c::simpleAnmPlay(mpHandsMoyaBtk);
@@ -825,7 +794,6 @@ void daMidna_c::allAnimePlay() {
     }
 }
 
-/* 804BDE04-804BE470 001C64 066C+00 2/2 0/0 0/0 .text            setMatrix__9daMidna_cFv */
 void daMidna_c::setMatrix() {
     Vec vec1 = {0.0f, mpHIO->m.y_pos, mpHIO->m.z_pos};
     Vec scale = {mpHIO->m.scale, mpHIO->m.scale, mpHIO->m.scale};
@@ -949,7 +917,6 @@ void daMidna_c::setMatrix() {
     }
 }
 
-/* 804BE470-804BED1C 0022D0 08AC+00 2/2 0/0 0/0 .text            setBodyPartMatrix__9daMidna_cFv */
 void daMidna_c::setBodyPartMatrix() {
     if (mpHandsBmd != NULL) {
         mpHandsBmd->setBaseTRMtx(mpShadowModel->getBaseTRMtx());
@@ -1143,7 +1110,6 @@ void daMidna_c::setBodyPartMatrix() {
     }
 }
 
-/* 804BED1C-804BEDB8 002B7C 009C+00 2/2 0/0 0/0 .text            setRoomInfo__9daMidna_cFv */
 void daMidna_c::setRoomInfo() {
     int room_no;
     if (fopAcM_gc_c::gndCheck(&current.pos)) {
@@ -1157,7 +1123,6 @@ void daMidna_c::setRoomInfo() {
     fopAcM_SetRoomNo(this, room_no);
 }
 
-/* 804BEDB8-804BEFA0 002C18 01E8+00 1/1 0/0 0/0 .text            setBodyPartPos__9daMidna_cFv */
 void daMidna_c::setBodyPartPos() {
     if (!(checkSetAnime(0, ANM_S_RETURN) && mpMorf->getFrame() > 14.0f)) {
         mDoMtx_multVec(mpShadowModel->getAnmMtx(JNT_HEAD), &l_eyeOffset, &eyePos);
@@ -1187,7 +1152,6 @@ void daMidna_c::setBodyPartPos() {
     }
 }
 
-/* 804BEFA0-804BF070 002E00 00D0+00 1/1 0/0 0/0 .text            checkAppear__9daMidna_cFv */
 BOOL daMidna_c::checkAppear() {
     if (
         daPy_py_c::checkNowWolf() && daPy_py_c::checkFirstMidnaDemo() &&
@@ -1202,7 +1166,6 @@ BOOL daMidna_c::checkAppear() {
     return FALSE;
 }
 
-/* 804BF070-804BFF80 002ED0 0F10+00 1/1 0/0 0/0 .text            checkMidnaPosState__9daMidna_cFv */
 void daMidna_c::checkMidnaPosState() {
     daAlink_c* link = daAlink_getAlinkActorClass();
 
@@ -1457,7 +1420,6 @@ void daMidna_c::checkMidnaPosState() {
     }
 }
 
-/* 804BFF80-804C0020 003DE0 00A0+00 3/3 0/0 0/0 .text            setUpperAnime__9daMidna_cFUsUs */
 BOOL daMidna_c::setUpperAnime(u16 i_resID, u16 param_1) {
     J3DAnmTransform* bck;
     if (param_1 == 0xffff) {
@@ -1476,7 +1438,6 @@ BOOL daMidna_c::setUpperAnime(u16 i_resID, u16 param_1) {
     return TRUE;
 }
 
-/* 804C0020-804C0094 003E80 0074+00 1/1 0/0 0/0 .text            setUpperAnimeAndSe__9daMidna_cFQ29daMidna_c11daMidna_ANM */
 BOOL daMidna_c::setUpperAnimeAndSe(daMidna_c::daMidna_ANM i_anm) {
     const daMidna_anmData_s* anm_data = &m_anmDataTable[i_anm];
     if (setUpperAnime(anm_data->mResID, 0xffff)) {
@@ -1488,7 +1449,6 @@ BOOL daMidna_c::setUpperAnimeAndSe(daMidna_c::daMidna_ANM i_anm) {
     return FALSE;
 }
 
-/* 804C0094-804C0134 003EF4 00A0+00 1/1 0/0 0/0 .text            setFaceAnime__9daMidna_cFUsUs */
 BOOL daMidna_c::setFaceAnime(u16 i_resID, u16 param_1) {
     J3DAnmTransform* bck;
     if (param_1 == 0xFFFF) {
@@ -1508,7 +1468,6 @@ BOOL daMidna_c::setFaceAnime(u16 i_resID, u16 param_1) {
     return TRUE;
 }
 
-/* 804C0134-804C0238 003F94 0104+00 2/2 0/0 0/0 .text            endHighModel__9daMidna_cFv */
 void daMidna_c::endHighModel() {
     if (mpDemoFCTongueBtk != NULL) {
         mpDemoFCTongueBmd->getModelData()->removeTexMtxAnimator(mpDemoFCTongueBtk);
@@ -1527,7 +1486,6 @@ void daMidna_c::endHighModel() {
     }
 }
 
-/* 804C0238-804C0BAC 004098 0974+00 1/1 0/0 0/0 .text            setDemoAnm__9daMidna_cFv */
 BOOL daMidna_c::setDemoAnm() {
     dDemo_actor_c* demo_actor = dDemo_c::getActor(demoActorID);
     if (demo_actor == NULL) {
@@ -1775,7 +1733,6 @@ BOOL daMidna_c::setDemoAnm() {
     return ret;
 }
 
-/* 804C0BAC-804C0C6C 004A0C 00C0+00 2/2 0/0 0/0 .text            setFaceBtp__9daMidna_cFUsi */
 void daMidna_c::setFaceBtp(u16 i_index, BOOL i_isDemo) {
     J3DAnmTexPattern* btp;
     if (i_isDemo) {
@@ -1794,7 +1751,6 @@ void daMidna_c::setFaceBtp(u16 i_index, BOOL i_isDemo) {
     }
 }
 
-/* 804C0C6C-804C0D2C 004ACC 00C0+00 2/2 0/0 0/0 .text            setFaceBtk__9daMidna_cFUsi */
 void daMidna_c::setFaceBtk(u16 i_index, BOOL i_isDemo) {
     J3DAnmTextureSRTKey* btk;
     if (i_isDemo) {
@@ -1813,7 +1769,6 @@ void daMidna_c::setFaceBtk(u16 i_index, BOOL i_isDemo) {
     }
 }
 
-/* 804C0D2C-804C0E18 004B8C 00EC+00 2/2 0/0 0/0 .text            setLeftHandShape__9daMidna_cFUs */
 void daMidna_c::setLeftHandShape(u16 i_idx) {
     mLeftHandShapeIdx = i_idx;
     if (mpLeftHandShape != NULL) {
@@ -1839,7 +1794,6 @@ void daMidna_c::setLeftHandShape(u16 i_idx) {
     }
 }
 
-/* 804C0E18-804C0F04 004C78 00EC+00 3/3 0/0 0/0 .text            setRightHandShape__9daMidna_cFUs */
 void daMidna_c::setRightHandShape(u16 i_idx) {
     mRightHandShapeIdx = i_idx;
     if (mpRightHandShape != NULL) {
@@ -1865,12 +1819,10 @@ void daMidna_c::setRightHandShape(u16 i_idx) {
     }
 }
 
-/* 804C0F04-804C0F24 004D64 0020+00 1/1 0/0 0/0 .text            checkHairOnlyAnime__9daMidna_cCFi */
 BOOL daMidna_c::checkHairOnlyAnime(int i_anm) const {
     return i_anm >= ANM_HAIR && i_anm < ANM_MAX;
 }
 
-/* 804C0F24-804C103C 004D84 0118+00 2/2 0/0 0/0 .text setBckAnime__9daMidna_cFP15J3DAnmTransformif */
 void daMidna_c::setBckAnime(J3DAnmTransform* i_bck, int i_attr, f32 i_morf) {
     mpMorf->setAnm(i_bck, i_attr, i_morf, 1.0f, 0.0f, -1.0f);
     void* bas;
@@ -1898,7 +1850,6 @@ void daMidna_c::setBckAnime(J3DAnmTransform* i_bck, int i_attr, f32 i_morf) {
     }
 }
 
-/* 804C103C-804C287C 004E9C 1840+00 2/2 0/0 0/0 .text            setAnm__9daMidna_cFv */
 void daMidna_c::setAnm() {
     u16 sVar4, res_id;
     offStateFlg0((daMidna_FLG0)(FLG0_NO_HAIR_SCALE | FLG0_UNK_200000));
@@ -2448,7 +2399,6 @@ void daMidna_c::setAnm() {
     }
 }
 
-/* 804C287C-804C2A68 0066DC 01EC+00 1/1 0/0 0/0 .text            getNeckAimAngle__9daMidna_cFPC4cXyzPsPsPsPs */
 s16 daMidna_c::getNeckAimAngle(cXyz const* i_atnPos, s16* o_neckX, s16* o_neckY, s16* o_eyeX, s16* o_eyeY) {
     cXyz eye_vec;
     s16 offset_y = mPrevShapeAngleY;
@@ -2481,7 +2431,6 @@ s16 daMidna_c::getNeckAimAngle(cXyz const* i_atnPos, s16* o_neckX, s16* o_neckY,
     return sVar2;
 }
 
-/* 804C2A68-804C2AB8 0068C8 0050+00 2/2 0/0 0/0 .text            clearEyeMove__9daMidna_cFv */
 void daMidna_c::clearEyeMove() {
     mpEyeMatAnm[0]->setNowOffsetX(0.0f);
     mpEyeMatAnm[1]->setNowOffsetX(0.0f);
@@ -2494,7 +2443,6 @@ void daMidna_c::clearEyeMove() {
     }
 }
 
-/* 804C2AB8-804C2EBC 006918 0404+00 1/1 0/0 0/0 .text            setEyeMove__9daMidna_cFPC4cXyzss */
 void daMidna_c::setEyeMove(cXyz const* i_atnPos, s16 i_angleX, s16 i_angleY) {
     daAlink_c* link = daAlink_getAlinkActorClass();
     u8 timer = mEyeMoveTimer;
@@ -2590,7 +2538,6 @@ void daMidna_c::setEyeMove(cXyz const* i_atnPos, s16 i_angleX, s16 i_angleY) {
     }
 }
 
-/* 804C2EBC-804C3168 006D1C 02AC+00 1/1 0/0 0/0 .text            setNeckAngle__9daMidna_cFv */
 void daMidna_c::setNeckAngle() {
     daAlink_c* link = daAlink_getAlinkActorClass();
     BOOL clear_eye_move = mBtkHeap.getIdx() != 0x3A4 && !mBtkHeap.checkNoSetIdx() && mBtkHeap.getIdx() != 0x399;
@@ -2641,7 +2588,6 @@ void daMidna_c::setNeckAngle() {
     }
 }
 
-/* 804C3168-804C3298 006FC8 0130+00 1/1 0/0 0/0 .text            initHairAngle__9daMidna_cFv */
 void daMidna_c::initHairAngle() {
     static Vec const localOffset = {0.0f, 136.0f, -2.4f};
     MTXMultVec(mpShadowModel->getBaseTRMtx(), &localOffset, &mHairPos[0]);
@@ -2661,7 +2607,6 @@ void daMidna_c::initHairAngle() {
     onStateFlg0(FLG0_UNK_8);
 }
 
-/* 804C3298-804C3F04 0070F8 0C6C+00 2/2 0/0 0/0 .text            setHairAngle__9daMidna_cFv */
 void daMidna_c::setHairAngle() {
     if (!checkStateFlg0(FLG0_UNK_8)) {
         initHairAngle();
@@ -2828,7 +2773,6 @@ void daMidna_c::setHairAngle() {
     }
 }
 
-/* 804C3F04-804C4394 007D64 0490+00 1/1 0/0 0/0 .text            setDemoData__9daMidna_cFv */
 void daMidna_c::setDemoData() {
     if (!dComIfGp_event_runCheck()) {
         mStaffID = -1;
@@ -2953,7 +2897,6 @@ void daMidna_c::setDemoData() {
     }
 }
 
-/* 804C4394-804C4444 0081F4 00B0+00 1/1 0/0 0/0 .text            setSimpleBrk__9daMidna_cFP12J3DModelDataUs */
 J3DAnmTevRegKey* daMidna_c::setSimpleBrk(J3DModelData* i_modelData, u16 i_idx) {
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, i_idx));
     if (brk == NULL) {
@@ -2966,7 +2909,6 @@ J3DAnmTevRegKey* daMidna_c::setSimpleBrk(J3DModelData* i_modelData, u16 i_idx) {
     return brk;
 }
 
-/* 804C4444-804C44CC 0082A4 0088+00 1/1 0/0 0/0 .text            setSimpleBtk__9daMidna_cFP12J3DModelDataUs */
 J3DAnmTextureSRTKey* daMidna_c::setSimpleBtk(J3DModelData* i_modelData, u16 i_idx) {
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcName, i_idx));
     if (btk == NULL) {
@@ -2979,7 +2921,6 @@ J3DAnmTextureSRTKey* daMidna_c::setSimpleBtk(J3DModelData* i_modelData, u16 i_id
     return btk;
 }
 
-/* 804C44CC-804C4750 00832C 0284+00 1/1 0/0 0/0 .text            initMidnaModel__9daMidna_cFv */
 void daMidna_c::initMidnaModel() {
     daAlink_c* link = daAlink_getAlinkActorClass();
     if (checkStateFlg1(FLG1_UNK_1)) {
@@ -3052,7 +2993,6 @@ void daMidna_c::initMidnaModel() {
     }
 }
 
-/* 804C4750-804C49B8 0085B0 0268+00 2/2 0/0 0/0 .text            daMidna_searchNpc__FP10fopAc_ac_cPv */
 static void* daMidna_searchNpc(fopAc_ac_c* i_actor, void* o_far) {
     daAlink_c* link = daAlink_getAlinkActorClass();
     cXyz link_pos = link->current.pos;
@@ -3081,7 +3021,6 @@ static void* daMidna_searchNpc(fopAc_ac_c* i_actor, void* o_far) {
     return NULL;
 }
 
-/* 804C49B8-804C4AE8 008818 0130+00 2/2 0/0 0/0 .text            setMidnaNoDrawFlg__9daMidna_cFv */
 void daMidna_c::setMidnaNoDrawFlg() {
     if (
         (!checkStateFlg1((daMidna_FLG1)(FLG1_SHADOW_MODEL_DRAW_DEMO_FORCE | FLG1_UNK_1)) &&
@@ -3107,7 +3046,6 @@ void daMidna_c::setMidnaNoDrawFlg() {
     }
 }
 
-/* 804C4AE8-804C4B68 008948 0080+00 1/0 0/0 0/0 .text checkMetamorphoseEnableBase__9daMidna_cFv */
 BOOL daMidna_c::checkMetamorphoseEnableBase() {
     BOOL tmp;
     if (
@@ -3121,13 +3059,11 @@ BOOL daMidna_c::checkMetamorphoseEnableBase() {
     return TRUE;
 }
 
-/* 804C4B68-804C4BC0 0089C8 0058+00 1/1 0/0 0/0 .text            checkNoDrawState__9daMidna_cFv */
 BOOL daMidna_c::checkNoDrawState() {
     return mDemoMode == 0xB || checkStateFlg0(FLG0_UNK_400000) ||
            checkStateFlg1(FLG1_UNK_20) || (checkStateFlg0(FLG0_NO_DRAW) && !checkShadowModelDrawSmode());
 }
 
-/* 804C4BC0-804C4FDC 008A20 041C+00 1/1 0/0 0/0 .text            setSound__9daMidna_cFv */
 void daMidna_c::setSound() {
     static u32 const anmSoundLabel[4][2] = {
         Z2SE_MDN_HIP, Z2SE_MDN_HIP_WTR,
@@ -3203,7 +3139,6 @@ void daMidna_c::setSound() {
     }
 }
 
-/* 804C4FDC-804C59E8 008E3C 0A0C+00 1/1 0/0 0/0 .text            execute__9daMidna_cFv */
 int daMidna_c::execute() {
     daAlink_c* link = daAlink_getAlinkActorClass();
     if (!link->checkMetamorphose()) {
@@ -3409,12 +3344,10 @@ int daMidna_c::execute() {
     return 1;
 }
 
-/* 804C59E8-804C5A08 009848 0020+00 1/0 0/0 0/0 .text            daMidna_Execute__FP9daMidna_c */
 static int daMidna_Execute(daMidna_c* i_this) {
     return i_this->execute();
 }
 
-/* 804C5A08-804C6184 009868 077C+00 1/1 0/0 0/0 .text            draw__9daMidna_cFv */
 int daMidna_c::draw() {
     daAlink_c* link = daAlink_getAlinkActorClass();
 
@@ -3630,12 +3563,10 @@ int daMidna_c::draw() {
     return 1;
 }
 
-/* 804C6184-804C61A4 009FE4 0020+00 1/0 0/0 0/0 .text            daMidna_Draw__FP9daMidna_c */
 static int daMidna_Draw(daMidna_c* i_this) {
     return i_this->draw();
 }
 
-/* 804C61A4-804C6324 00A004 0180+00 1/1 0/0 0/0 .text            __dt__9daMidna_cFv */
 daMidna_c::~daMidna_c() {
     #if DEBUG
     if (mpHIO != NULL) {
@@ -3648,7 +3579,6 @@ daMidna_c::~daMidna_c() {
     mSound.deleteObject();
 }
 
-/* 804C6324-804C634C 00A184 0028+00 1/0 0/0 0/0 .text            daMidna_Delete__FP9daMidna_c */
 static int daMidna_Delete(daMidna_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     i_this->~daMidna_c();
@@ -3661,7 +3591,6 @@ static void dummy() {
 }
 template unsigned char cLib_calcTimer<unsigned char>(unsigned char*);
 
-/* 804C6C40-804C6C60 -00001 0020+00 1/0 0/0 0/0 .data            l_daMidna_Method */
 static actor_method_class l_daMidna_Method = {
     (process_method_func)daMidna_Create,
     (process_method_func)daMidna_Delete,
@@ -3670,7 +3599,6 @@ static actor_method_class l_daMidna_Method = {
     (process_method_func)daMidna_Draw,
 };
 
-/* 804C6C60-804C6C90 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_MIDNA */
 extern actor_process_profile_definition g_profile_MIDNA = {
     fpcLy_CURRENT_e,
     6,

@@ -13,15 +13,15 @@
  */
 class daTimeFire_c : public fopAc_ac_c {
 public:
-    /* 80D0E958 */ void setBaseMtx();
-    /* 80D0E9B0 */ int create();
-    /* 80D0EACC */ void lightInit();
-    /* 80D0EB40 */ void setLight();
-    /* 80D0EB64 */ void cutLight();
-    /* 80D0EB88 */ int Execute();
-    /* 80D0ED68 */ bool fireCheck(u8);
-    /* 80D0EF88 */ int Draw();
-    /* 80D0EF90 */ int Delete();
+    void setBaseMtx();
+    int create();
+    void lightInit();
+    void setLight();
+    void cutLight();
+    int Execute();
+    bool fireCheck(u8);
+    int Draw();
+    int Delete();
 
     int getSw() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getStartTime() { return fopAcM_GetParamBit(this, 8, 8); }
@@ -48,8 +48,8 @@ STATIC_ASSERT(sizeof(daTimeFire_c) == 0x5c0);
 
 class daTimeFire_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80D0E8EC */ daTimeFire_HIO_c();
-    /* 80D0F038 */ virtual ~daTimeFire_HIO_c() {}
+    daTimeFire_HIO_c();
+    virtual ~daTimeFire_HIO_c() {}
 
     void genMessage(JORMContext*);
 

@@ -30,10 +30,10 @@ struct daObjLndRope_Hio_c {
  */
 class daObjLndRope_c : public fopAc_ac_c {
 public:
-    /* 80C521F8 */ void create_init();
-    /* 80C5285C */ void initBaseMtx();
-    /* 80C52890 */ void setBaseMtx();
-    /* 80C528E0 */ void setNormalRopePos();
+    void create_init();
+    void initBaseMtx();
+    void setBaseMtx();
+    void setNormalRopePos();
 
     inline ~daObjLndRope_c();
     inline int create();

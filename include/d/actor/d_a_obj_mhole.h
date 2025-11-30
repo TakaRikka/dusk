@@ -19,17 +19,17 @@ public:
         EFF_SMALL_e
     };
 
-    /* 80C92FD8 */ void initBaseMtx();
-    /* 80C93014 */ void setBaseMtx();
-    /* 80C9307C */ int Create();
-    /* 80C93198 */ int checkParent();
-    /* 80C93204 */ int CreateHeap();
-    /* 80C934E0 */ int create();
-    /* 80C936A8 */ int execute();
-    /* 80C93928 */ void effectSet();
-    /* 80C93A88 */ void effectEnd();
-    /* 80C93ADC */ int draw();
-    /* 80C93CAC */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int checkParent();
+    int CreateHeap();
+    int create();
+    int execute();
+    void effectSet();
+    void effectEnd();
+    int draw();
+    int _delete();
 
     void setOn() { mIsOn = TRUE; }
     u8 getType() { return fopAcM_GetParamBit(this, 8, 4); }
@@ -55,8 +55,8 @@ STATIC_ASSERT(sizeof(daObjMHole_c) == 0x734);
 
 class daObjMHole_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C55D0C */ daObjMHole_HIO_c();
-    /* 80C56970 */ ~daObjMHole_HIO_c() {}
+    daObjMHole_HIO_c();
+    ~daObjMHole_HIO_c() {}
 
     void genMessage(JORMContext*);
 

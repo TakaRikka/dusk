@@ -11,7 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "global.h"
 
-/* 80075EAC-80075F14 0707EC 0068+00 0/0 4/4 336/336 .text            __ct__12dBgS_AcchCirFv */
 dBgS_AcchCir::dBgS_AcchCir() {
     m_flags = 0;
     m_wall_rr = 0.0f;
@@ -22,38 +21,31 @@ dBgS_AcchCir::dBgS_AcchCir() {
     m_wall_h_direct = 0.0f;
 }
 
-/* 80075F14-80075F40 070854 002C+00 1/1 0/0 0/0 .text            ClrWallHit__12dBgS_AcchCirFv */
 void dBgS_AcchCir::ClrWallHit() {
     m_flags &= ~WALL_HIT;
     ClearPi();
 }
 
-/* 80075F40-80075F48 070880 0008+00 1/1 2/2 109/109 .text            SetWallR__12dBgS_AcchCirFf */
 void dBgS_AcchCir::SetWallR(f32 i_wall_r) {
     m_wall_r = i_wall_r;
 }
 
-/* 80075F48-80075F58 070888 0010+00 1/1 0/0 0/0 .text            CalcWallRR__12dBgS_AcchCirFv */
 void dBgS_AcchCir::CalcWallRR() {
     m_wall_rr = m_wall_r * m_wall_r;
 }
 
-/* 80075F58-80075F80 070898 0028+00 0/0 3/3 272/272 .text            SetWall__12dBgS_AcchCirFff */
 void dBgS_AcchCir::SetWall(f32 i_wall_h, f32 i_wall_r) {
     SetWallH(i_wall_h);
     SetWallR(i_wall_r);
 }
 
-/* 80075F80-80075F94 0708C0 0014+00 1/1 0/0 1/1 .text            SetWallHDirect__12dBgS_AcchCirFf */
 void dBgS_AcchCir::SetWallHDirect(f32 i_h_direct) {
     m_flags |= WALL_H_DIRECT;
     m_wall_h_direct = i_h_direct;
 }
 
-/* 80075F94-800760A0 0708D4 010C+00 3/2 6/6 468/468 .text            __dt__9dBgS_AcchFv */
 dBgS_Acch::~dBgS_Acch() {}
 
-/* 800760A0-800761CC 0709E0 012C+00 0/0 4/4 338/338 .text            __ct__9dBgS_AcchFv */
 dBgS_Acch::dBgS_Acch() {
     SetPolyPassChk(GetPolyPassChkInfo());
     SetGrpPassChk(GetGrpPassChkInfo());
@@ -89,7 +81,6 @@ dBgS_Acch::dBgS_Acch() {
     field_0xd8 = -G_CM3D_F_INF;
 }
 
-/* 800761CC-80076248 070B0C 007C+00 1/1 0/0 0/0 .text            Init__9dBgS_AcchFv */
 void dBgS_Acch::Init() {
     ClrWallHit();
     for (int i = 0; i < m_tbl_size; i++) {
@@ -98,8 +89,6 @@ void dBgS_Acch::Init() {
     }
 }
 
-/* 80076248-80076288 070B88 0040+00 0/0 2/2 314/314 .text
- * Set__9dBgS_AcchFP4cXyzP4cXyzP10fopAc_ac_ciP12dBgS_AcchCirP4cXyzP5csXyzP5csXyz */
 void dBgS_Acch::Set(cXyz* i_pos, cXyz* i_old_pos, fopAc_ac_c* i_actor, int i_tbl_size,
                     dBgS_AcchCir* i_acchcir, cXyz* i_speed, csXyz* i_angle, csXyz* i_shape_angle) {
     pm_pos = i_pos;
@@ -118,8 +107,6 @@ void dBgS_Acch::Set(cXyz* i_pos, cXyz* i_old_pos, fopAc_ac_c* i_actor, int i_tbl
     pm_shape_angle = i_shape_angle;
 }
 
-/* 80076288-800762D8 070BC8 0050+00 0/0 1/1 7/7 .text
- * Set__9dBgS_AcchFP10fopAc_ac_ciP12dBgS_AcchCir                */
 void dBgS_Acch::Set(fopAc_ac_c* i_actor, int i_tbl_size, dBgS_AcchCir* i_acchcir) {
     m_tbl_size = i_tbl_size;
     pm_acch_cir = i_acchcir;
@@ -133,8 +120,6 @@ void dBgS_Acch::Set(fopAc_ac_c* i_actor, int i_tbl_size, dBgS_AcchCir* i_acchcir
     pm_shape_angle = fopAcM_GetShapeAngle_p(i_actor);
 }
 
-/* 800762D8-80076350 070C18 0078+00 1/1 0/0 0/0 .text            GroundCheckInit__9dBgS_AcchFR4dBgS
- */
 void dBgS_Acch::GroundCheckInit(dBgS& i_bgs) {
     if (!(m_flags & 2)) {
         i_bgs; // necessary to match
@@ -148,7 +133,6 @@ void dBgS_Acch::GroundCheckInit(dBgS& i_bgs) {
     }
 }
 
-/* 80076350-8007654C 070C90 01FC+00 2/2 0/0 0/0 .text            GroundCheck__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
     if (!(m_flags & GRND_NONE)) {
         cXyz grnd_pos;
@@ -200,8 +184,6 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
     }
 }
 
-/* 8007654C-80076624 070E8C 00D8+00 1/1 0/0 0/0 .text            GroundRoofProc__9dBgS_AcchFR4dBgS
- */
 void dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
     if (m_ground_h != -G_CM3D_F_INF) {
         if (field_0xbc < field_0xcc && field_0xcc < pm_pos->y) {
@@ -218,7 +200,6 @@ void dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
     }
 }
 
-/* 80076624-80076AAC 070F64 0488+00 1/1 0/0 0/0 .text            LineCheck__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::LineCheck(dBgS& i_bgs) {
     dBgS_RoofChk roof_chk;
     roof_chk.SetActorPid(m_gnd.GetActorPid());
@@ -321,7 +302,6 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
     }
 }
 
-/* 80076AAC-80076F84 0713EC 04D8+00 0/0 15/15 414/414 .text            CrrPos__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     bool bvar9;
     if (!(m_flags & 1)) {
@@ -480,7 +460,6 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     }
 }
 
-/* 80076F84-80076FC0 0718C4 003C+00 1/1 0/0 0/0 .text            GetWallAllR__9dBgS_AcchFv */
 f32 dBgS_Acch::GetWallAllR() {
     f32 ret = 0.0f;
 
@@ -493,14 +472,12 @@ f32 dBgS_Acch::GetWallAllR() {
     return ret;
 }
 
-/* 80076FC0-8007703C 071900 007C+00 1/1 0/0 0/0 .text            SetWallCir__9dBgS_AcchFv */
 void dBgS_Acch::SetWallCir() {
     for (int i = 0; i < m_tbl_size; i++) {
         pm_acch_cir[i].SetCir(*pm_pos);
     }
 }
 
-/* 8007703C-80077114 07197C 00D8+00 1/1 0/0 0/0 .text            CalcWallBmdCyl__9dBgS_AcchFv */
 void dBgS_Acch::CalcWallBmdCyl() {
     if (m_tbl_size <= 0) {
         m_wall_cyl.Set(*pm_pos, 0.0f, 0.0f);
@@ -533,13 +510,11 @@ void dBgS_Acch::CalcWallBmdCyl() {
     }
 }
 
-/* 80077114-80077128 071A54 0014+00 0/0 0/0 24/24 .text            SetGroundUpY__9dBgS_AcchFf */
 void dBgS_Acch::SetGroundUpY(f32 param_0) {
     field_0x94 = param_0 - field_0x90;
     field_0x90 = param_0;
 }
 
-/* 80077128-80077178 071A68 0050+00 1/1 0/0 0/0 .text            GetWallAllLowH__9dBgS_AcchFv */
 f32 dBgS_Acch::GetWallAllLowH() {
     if (m_tbl_size <= 0) {
         return 0.0f;
@@ -556,7 +531,6 @@ f32 dBgS_Acch::GetWallAllLowH() {
     return tmp;
 }
 
-/* 80077178-800771E4 071AB8 006C+00 1/1 0/0 0/0 .text            GetWallAllLowH_R__9dBgS_AcchFv */
 f32 dBgS_Acch::GetWallAllLowH_R() {
     if (m_tbl_size <= 0) {
         return 0.0f;
@@ -575,7 +549,6 @@ f32 dBgS_Acch::GetWallAllLowH_R() {
     return pm_acch_cir[index].GetWallR();
 }
 
-/* 800771E4-80077200 071B24 001C+00 1/1 4/4 0/0 .text            GetSpeedY__9dBgS_AcchFv */
 f32 dBgS_Acch::GetSpeedY() {
     if (pm_speed != NULL) {
         return pm_speed->y;
@@ -584,7 +557,6 @@ f32 dBgS_Acch::GetSpeedY() {
     return 0.0f;
 }
 
-/* 80077200-80077278 071B40 0078+00 0/0 4/4 0/0 .text            GetWallAddY__9dBgS_AcchFR3Vec */
 f32 dBgS_Acch::GetWallAddY(Vec& param_0) {
     if (!ChkGroundFind() || field_0xa0.mNormal.y < 0.5f) {
         return 0.0f;
@@ -601,75 +573,59 @@ f32 dBgS_Acch::GetWallAddY(Vec& param_0) {
     return 0.0f;
 }
 
-/* 80077278-80077288 071BB8 0010+00 0/0 2/2 0/0 .text            SetNowActorInfo__9dBgS_AcchFiPvUi
- */
 void dBgS_Acch::SetNowActorInfo(int bg_index, void* param_1, fpc_ProcID param_2) {
     m_bg_index = bg_index;
     field_0x7c = param_1;
     field_0x80 = param_2;
 }
 
-/* 80077288-800772E8 071BC8 0060+00 0/0 4/4 0/0 .text            SetWallPolyIndex__9dBgS_AcchFii */
 void dBgS_Acch::SetWallPolyIndex(int index, int poly_index) {
     pm_acch_cir[index].SetActorInfo(m_bg_index, field_0x7c, field_0x80);
     pm_acch_cir[index].SetPolyIndex(poly_index);
 }
 
-/* 800772E8-8007732C 071C28 0044+00 0/0 6/6 0/0 .text            CalcMovePosWork__9dBgS_AcchFv */
 void dBgS_Acch::CalcMovePosWork() {
     SetWallCir();
     SetLin();
     CalcWallBmdCyl();
 }
 
-/* 8007732C-80077388 071C6C 005C+00 0/0 2/2 0/0 .text            CalcWallRR__9dBgS_AcchFv */
 void dBgS_Acch::CalcWallRR() {
     for (int i = 0; i < m_tbl_size; i++) {
         pm_acch_cir[i].CalcWallRR();
     }
 }
 
-/* 80077388-800773A4 071CC8 001C+00 0/0 1/1 0/0 .text            SetMoveBGOnly__9dBgS_AcchFv */
 void dBgS_Acch::SetMoveBGOnly() {
     m_flags |= MOVE_BG_ONLY;
     m_wtr.OnMoveBGOnly();
 }
 
-/* 800773A4-800773C0 071CE4 001C+00 0/0 4/4 17/17 .text            ClrMoveBGOnly__9dBgS_AcchFv */
 void dBgS_Acch::ClrMoveBGOnly() {
     m_flags &= ~MOVE_BG_ONLY;
     m_wtr.OffMoveBGOnly();
 }
 
-/* 800773C0-800773D0 071D00 0010+00 0/0 1/1 2/2 .text            SetGndThinCellingOff__9dBgS_AcchFv
- */
 void dBgS_Acch::SetGndThinCellingOff() {
     m_flags |= GND_THIN_CELLING_OFF;
 }
 
-/* 800773D0-800773E0 071D10 0010+00 0/0 1/1 0/0 .text            ClrGndThinCellingOff__9dBgS_AcchFv
- */
 void dBgS_Acch::ClrGndThinCellingOff() {
     m_flags &= ~GND_THIN_CELLING_OFF;
 }
 
-/* 800773E0-800773EC 071D20 000C+00 1/1 0/0 0/0 .text            ChkGndThinCellingOff__9dBgS_AcchFv
- */
 bool dBgS_Acch::ChkGndThinCellingOff() {
     return m_flags & GND_THIN_CELLING_OFF;
 }
 
-/* 800773EC-800773FC 071D2C 0010+00 0/0 1/1 1/1 .text            OnWallSort__9dBgS_AcchFv */
 void dBgS_Acch::OnWallSort() {
     m_flags |= WALL_SORT;
 }
 
-/* 800773FC-80077408 071D3C 000C+00 1/1 0/0 0/0 .text            ChkWallSort__9dBgS_AcchFv */
 bool dBgS_Acch::ChkWallSort() {
     return m_flags & WALL_SORT;
 }
 
-/* 80077408-80077414 071D48 000C+00 1/1 0/0 0/0 .text            ChkLineDown__9dBgS_AcchFv */
 bool dBgS_Acch::ChkLineDown() {
     return m_flags & LINE_DOWN;
 }

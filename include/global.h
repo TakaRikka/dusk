@@ -27,8 +27,6 @@
 #define REGION_KOR (VERSION == VERSION_WII_KOR)
 #define REGION_CHN (VERSION == VERSION_SHIELD || VERSION == VERSION_SHIELD_PROD || VERSION == VERSION_SHIELD_DEBUG)
 
-#define ALIGN_DECL(ALIGNMENT) __attribute__((aligned(ALIGNMENT)))
-
 #define ARRAY_SIZE(o) (s32)(sizeof(o) / sizeof(o[0]))
 #define ARRAY_SIZEU(o) (sizeof(o) / sizeof(o[0]))
 
@@ -60,12 +58,14 @@
 #define STATIC_ASSERT(...)
 #endif
 
+#ifdef __MWERKS__
 // Intrinsics
 extern int __cntlzw(unsigned int);
 extern int __rlwimi(int, int, int, int, int);
 extern void __dcbz(void*, int);
 extern void __sync();
 extern int __abs(int);
+#endif
 
 #ifndef __MWERKS__
 void* __memcpy(void*, const void*, int);

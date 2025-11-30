@@ -11,7 +11,6 @@
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "d/d_cc_uty.h"
-#include "dol2asm.h"
 
 #ifdef DEBUG
 class daObjLv4Chan_HIO_c : public mDoHIO_entry_c {
@@ -29,16 +28,12 @@ void daObjLv4Chan_HIO_c::genMessage(JORMContext* ctx) {
 static daObjLv4Chan_HIO_c l_HIO;
 #endif
 
-/* 80C63338-80C63360 000078 0028+00 1/1 0/0 0/0 .text
- * rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c              */
 static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* param_2, fopAc_ac_c* param_3) {
     ((daObjLv4Chan_c*)param_2)->rideActor(param_3);
 }
 
-/* 80C66990-80C66994 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "P_Lv4Chan";
 
-/* 80C63360-80C634CC 0000A0 016C+00 1/1 0/0 0/0 .text            create1st__14daObjLv4Chan_cFv */
 int daObjLv4Chan_c::create1st() {
     int rv = dComIfG_resLoad(this, l_arcName);
     if (rv == cPhs_COMPLEATE_e) {
@@ -83,13 +78,10 @@ int daObjLv4Chan_c::create1st() {
     return rv;
 }
 
-/* 80C66860-80C66868 000000 0008+00 10/10 0/0 0/0 .rodata          l_bmdidx */
 static u32 const l_bmdidx[2] = {
     4, 5,
 };
 
-/* 80C634CC-80C636B4 00020C 01E8+00 1/1 0/0 0/0 .text
- * setMtxChain__14daObjLv4Chan_cFPQ214daObjLv4Chan_c8ChainPosP10dMdl_obj_ci */
 void daObjLv4Chan_c::setMtxChain(daObjLv4Chan_c::ChainPos* i_chains, dMdl_obj_c* i_mdls,
                                      int param_3) {
     s16 sVar8 = 0;
@@ -120,7 +112,6 @@ void daObjLv4Chan_c::setMtxChain(daObjLv4Chan_c::ChainPos* i_chains, dMdl_obj_c*
     }
 }
 
-/* 80C636B4-80C639B4 0003F4 0300+00 2/2 0/0 0/0 .text            setMtx__14daObjLv4Chan_cFv */
 void daObjLv4Chan_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -168,7 +159,6 @@ void daObjLv4Chan_c::setMtx() {
     MTXCopy(mDoMtx_stack_c::get(), field_0x5a8);
 }
 
-/* 80C639B4-80C63CFC 0006F4 0348+00 1/1 0/0 0/0 .text rideActor__14daObjLv4Chan_cFP10fopAc_ac_c */
 void daObjLv4Chan_c::rideActor(fopAc_ac_c* param_1) {
     field_0x2498 = 1;
     f32 dVar8 = 1.0f;
@@ -211,7 +201,6 @@ void daObjLv4Chan_c::rideActor(fopAc_ac_c* param_1) {
     mChains[2][mChainLengths[2] - 1].field_0x0.z -= dVar8 * (local_54.z * 0.0075f * (cM_rndFX(0.025f) + 1.0f));
 }
 
-/* 80C63CFC-80C63F34 000A3C 0238+00 1/0 0/0 0/0 .text            CreateHeap__14daObjLv4Chan_cFv */
 int daObjLv4Chan_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmdidx[0]);
     JUT_ASSERT(478, model_data != NULL);
@@ -256,7 +245,6 @@ int daObjLv4Chan_c::CreateHeap() {
     return 1;
 }
 
-/* 80C63F34-80C63FA8 000C74 0074+00 1/1 0/0 0/0 .text            searchSwChain__FPvPv */
 static void* searchSwChain(void* i_actor, void* i_this) {
     if (i_actor != NULL && fopAcM_IsActor(i_actor) &&
         fopAcM_GetProfName(i_actor) == PROC_Obj_SwChain)
@@ -268,7 +256,6 @@ static void* searchSwChain(void* i_actor, void* i_this) {
     return NULL;
 }
 
-/* 80C66994-80C669D4 000004 0040+00 1/1 0/0 0/0 .data            cc_sph_src */
 static dCcD_SrcSph cc_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x11}, 0x79}}, // mObj
@@ -281,7 +268,6 @@ static dCcD_SrcSph cc_sph_src = {
     } // mSphAttr
 };
 
-/* 80C63FA8-80C6449C 000CE8 04F4+00 1/0 0/0 0/0 .text            Create__14daObjLv4Chan_cFv */
 int daObjLv4Chan_c::Create() {
     mModel->setBaseScale(scale);
     field_0x23d4 = 0;
@@ -366,8 +352,6 @@ int daObjLv4Chan_c::Create() {
     return 1;
 }
 
-/* 80C6449C-80C64668 0011DC 01CC+00 1/1 0/0 0/0 .text
- * constraintChain__14daObjLv4Chan_cFPQ214daObjLv4Chan_c8ChainPosi */
 void daObjLv4Chan_c::constraintChain(daObjLv4Chan_c::ChainPos* i_chains, int param_2) {
     bool iVar4 = field_0x2418 == field_0x2484;
     for (int i = field_0x2418; i < param_2; i++) {
@@ -408,23 +392,18 @@ void daObjLv4Chan_c::constraintChain(daObjLv4Chan_c::ChainPos* i_chains, int par
     }
 }
 
-/* 80C668D0-80C668DC 000070 000C+00 0/1 0/0 0/0 .rodata          l_pos0 */
 static Vec const l_pos0 = {
     -163.12f, 150.0f, -282.54f,
 };
 
-/* 80C668DC-80C668E8 00007C 000C+00 0/1 0/0 0/0 .rodata          l_pos1 */
 static Vec const l_pos1 = {
     -163.12f, 150.0f, 282.54f,
 };
 
-/* 80C668E8-80C668F4 000088 000C+00 0/1 0/0 0/0 .rodata          l_pos2 */
 static Vec const l_pos2 = {
     326.25f, 150.0f, 0.0f,
 };
 
-/* 80C64668-80C647FC 0013A8 0194+00 1/1 0/0 0/0 .text            constraintBase__14daObjLv4Chan_cFv
- */
 void daObjLv4Chan_c::constraintBase() {
     cXyz acStack_20;
     MTXMultVec(field_0x5a8, &l_pos0, &acStack_20);
@@ -435,15 +414,12 @@ void daObjLv4Chan_c::constraintBase() {
     mChains[2][mChainLengths[2] - 1].field_0xc = (acStack_20 + mChains[2][mChainLengths[2] - 1].field_0xc) * 0.5f;
 }
 
-/* 80C647FC-80C64878 00153C 007C+00 1/1 0/0 0/0 .text
- * calcVec__14daObjLv4Chan_cFPQ214daObjLv4Chan_c8ChainPosi      */
 void daObjLv4Chan_c::calcVec(daObjLv4Chan_c::ChainPos* i_chains, int param_2) {
     for (int i = 0; i < param_2; i++) {
         i_chains[i].field_0x0 = i_chains[i].field_0xc - i_chains[i].field_0x18;
     }
 }
 
-/* 80C64878-80C648F4 0015B8 007C+00 2/2 0/0 0/0 .text            chkGnd__14daObjLv4Chan_cFv */
 void daObjLv4Chan_c::chkGnd() {
     cXyz cStack_18;
     cStack_18 = field_0x23bc;
@@ -453,14 +429,11 @@ void daObjLv4Chan_c::chkGnd() {
     field_0x247c = dComIfG_Bgsp().GroundCross(&mGndChk);
 }
 
-/* 80C668FC-80C66924 00009C 0028+00 0/1 0/0 0/0 .rodata          l_curve */
 static int const l_curve[10] = {
     0, 0, 0, 0, 0, 1, 1,
     2, 2, 4,
 };
 
-/* 80C648F4-80C65F04 001634 1610+00 1/0 0/0 0/0 .text            Execute__14daObjLv4Chan_cFPPA3_A4_f
- */
 int daObjLv4Chan_c::Execute(Mtx** i_mtx) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     int local_1f0 = 0;
@@ -822,7 +795,6 @@ int daObjLv4Chan_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80C65F04-80C66114 002C44 0210+00 1/0 0/0 0/0 .text            Draw__14daObjLv4Chan_cFv */
 int daObjLv4Chan_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel,
@@ -866,7 +838,6 @@ int daObjLv4Chan_c::Draw() {
     return 1;
 }
 
-/* 80C66114-80C66150 002E54 003C+00 1/0 0/0 0/0 .text            Delete__14daObjLv4Chan_cFv */
 int daObjLv4Chan_c::Delete() {
     dComIfG_resDelete(this, l_arcName);
 
@@ -877,32 +848,23 @@ int daObjLv4Chan_c::Delete() {
     return 1;
 }
 
-/* 80C66150-80C6627C 002E90 012C+00 1/0 0/0 0/0 .text daObjLv4Chan_create1st__FP14daObjLv4Chan_c
- */
 static int daObjLv4Chan_create1st(daObjLv4Chan_c* i_this) {
     fopAcM_ct(i_this, daObjLv4Chan_c);
     return i_this->create1st();
 }
 
-/* 80C664D4-80C664F4 003214 0020+00 1/0 0/0 0/0 .text
- * daObjLv4Chan_MoveBGDelete__FP14daObjLv4Chan_c                */
 static int daObjLv4Chan_MoveBGDelete(daObjLv4Chan_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C664F4-80C66514 003234 0020+00 1/0 0/0 0/0 .text
- * daObjLv4Chan_MoveBGExecute__FP14daObjLv4Chan_c               */
 static int daObjLv4Chan_MoveBGExecute(daObjLv4Chan_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C66514-80C66540 003254 002C+00 1/0 0/0 0/0 .text daObjLv4Chan_MoveBGDraw__FP14daObjLv4Chan_c
- */
 static int daObjLv4Chan_MoveBGDraw(daObjLv4Chan_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C669D4-80C669F4 -00001 0020+00 1/0 0/0 0/0 .data            daObjLv4Chan_METHODS */
 static actor_method_class daObjLv4Chan_METHODS = {
     (process_method_func)daObjLv4Chan_create1st,
     (process_method_func)daObjLv4Chan_MoveBGDelete,
@@ -911,7 +873,6 @@ static actor_method_class daObjLv4Chan_METHODS = {
     (process_method_func)daObjLv4Chan_MoveBGDraw,
 };
 
-/* 80C669F4-80C66A24 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv4Chan */
 extern actor_process_profile_definition g_profile_Obj_Lv4Chan = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

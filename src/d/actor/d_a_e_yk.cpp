@@ -22,8 +22,8 @@
  */
 class daE_YK_HIO_c : public JORReflexible {
 public:
-    /* 8080482C */ daE_YK_HIO_c();
-    /* 808077E0 */ virtual ~daE_YK_HIO_c() {}
+    daE_YK_HIO_c();
+    virtual ~daE_YK_HIO_c() {}
     void genMessage(JORMContext*);
 
     /* 0x00 */ // vtable
@@ -44,7 +44,6 @@ public:
  * - Attack range threshold
  * 
  */
-/* 8080482C-80804870 0000EC 0044+00 1/1 0/0 0/0 .text            __ct__12daE_YK_HIO_cFv */
 daE_YK_HIO_c::daE_YK_HIO_c() {
     field_0x04 = -1;
     mModelScale = 1.0f;
@@ -54,10 +53,8 @@ daE_YK_HIO_c::daE_YK_HIO_c() {
     mChargeSpeed = 40.0f;   
 }
 
-/* 80807EF8-80807EFC 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 data_80807EF8;
 
-/* 80807F08-80807F24 000018 001C+00 9/9 0/0 0/0 .bss             l_HIO */
 static daE_YK_HIO_c l_HIO;
 
 #ifdef DEBUG
@@ -80,7 +77,6 @@ void daE_YK_HIO_c::genMessage(JORMContext* ctx) {
  * Plays particle effects and sound when the Shadow Keese disappears.
  * Creates an item drop and handles switch activation if specified in parameters.
  */
-/* 80804870-808049E4 000130 0174+00 2/2 0/0 0/0 .text            yk_disappear__FP10e_yk_class */
 static void yk_disappear(e_yk_class* i_this) {
     cXyz pos(0.65f,0.65f,0.65f);
 
@@ -109,7 +105,6 @@ static void yk_disappear(e_yk_class* i_this) {
  * Sets up a new animation on the Shadow Keese's morph model using the specified parameters.
  * Updates the current resource index to track which animation is playing.
  */
-/* 808049E4-80804A90 0002A4 00AC+00 10/10 0/0 0/0 .text            anm_init__FP10e_yk_classifUcf */
 static void anm_init(e_yk_class* i_this, int i_resIdx, f32 i_morf, u8 i_attr, f32 i_rate) {
     i_this->mpMorfSO->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_YK",i_resIdx), i_attr, i_morf, i_rate, 0.0f,-1.0f);
     i_this->mResIdx = i_resIdx;
@@ -133,7 +128,6 @@ static void anm_init(e_yk_class* i_this, int i_resIdx, f32 i_morf, u8 i_attr, f3
  * 4. Renders the model
  * 5. Restores normal rendering state
  */
-/* 80804A90-80804B38 000350 00A8+00 1/0 0/0 0/0 .text            daE_YK_Draw__FP10e_yk_class */
 static int daE_YK_Draw(e_yk_class* i_this) {
     J3DModel* model = i_this->mpMorfSO->getModel();
 
@@ -192,7 +186,6 @@ static void* shot_b_sub(void* i_actor, void* param_1) {
  * the Shadow Keese's view of potential targets. This affects targeting and
  * behavior decisions.
  */
-/* 80804BB0-80804C88 000470 00D8+00 1/1 0/0 0/0 .text other_bg_check__FP10e_yk_classP10fopAc_ac_c */
 static int other_bg_check(e_yk_class* i_this, fopAc_ac_c* i_actorP) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     dBgS_LinChk lin_chk;
@@ -230,7 +223,6 @@ static int other_bg_check(e_yk_class* i_this, fopAc_ac_c* i_actorP) {
  * 
  * Used by various states to determine when to transition to combat behaviors.
  */
-/* 80804C88-80804D38 000548 00B0+00 5/5 0/0 0/0 .text            pl_check__FP10e_yk_classfs */
 static int pl_check(e_yk_class* i_this, f32 i_distance, s16 i_angle) {
     if (i_distance >= 50000.0f) {
         return 1;
@@ -267,7 +259,6 @@ static int pl_check(e_yk_class* i_this, f32 i_distance, s16 i_angle) {
  * - Handles death state when health reaches 0
  * - Manages collision flags and status
  */
-/* 80804D38-80804F68 0005F8 0230+00 1/1 0/0 0/0 .text            damage_check__FP10e_yk_class */
 static void damage_check(e_yk_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -336,7 +327,6 @@ static void damage_check(e_yk_class* i_this) {
     }
 }
 
-/* 80807F24-80808023 000034 00FF+00 1/1 0/0 0/0 .bss             check_index$4191 */
 static u8 check_index[255];
 
 /**
@@ -358,7 +348,6 @@ static u8 check_index[255];
  * Used for path-following behavior to ensure keese can navigate around obstacles
  * and maintain valid flight paths.
  */
-/* 80804F68-808051D0 000828 0268+00 2/3 0/0 0/0 .text            path_check__FP10e_yk_class */
 static int path_check(e_yk_class* i_this) {
     if (i_this->mpPath) {
         dBgS_LinChk lin_chk;
@@ -446,7 +435,6 @@ static int path_check(e_yk_class* i_this) {
  * - Movement speed controlled by speedF member
  * - Uses matrix transformations for final velocity calculation
  */
-/* 808051D0-80805360 000A90 0190+00 5/5 0/0 0/0 .text            fly_move__FP10e_yk_class */
 static void fly_move(e_yk_class* i_this) {
     cXyz pos;
 
@@ -494,7 +482,6 @@ static void fly_move(e_yk_class* i_this) {
  * Will transition to FIGHT_FLY state if player comes within trigger range.
  * Uses smooth interpolation to maintain position and prevent jittering.
  */
-/* 80805360-808054A8 000C20 0148+00 1/1 0/0 0/0 .text            e_yk_roof__FP10e_yk_class */
 static void e_yk_roof(e_yk_class* i_this) {
     switch (i_this->mActionPhase) {
     case 0:
@@ -534,7 +521,6 @@ static void e_yk_roof(e_yk_class* i_this) {
  * - Phase 0: Initializes flying animation
  * - Phase 1: Maintains flight and plays random vocalizations
  */
-/* 808054A8-80805660 000D68 01B8+00 1/1 0/0 0/0 .text            e_yk_fight_fly__FP10e_yk_class */
 static void e_yk_fight_fly(e_yk_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -596,7 +582,6 @@ static void e_yk_fight_fly(e_yk_class* i_this) {
  * Movement is smoothly interpolated using cLib_addCalc2 for position and angle updates.
  * Random factors are used to create unpredictable but controlled movement patterns.
  */
-/* 80805660-808059BC 000F20 035C+00 1/1 0/0 0/0 .text            e_yk_fight__FP10e_yk_class */
 static void e_yk_fight(e_yk_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     s16 player_shape_angle_y = player->shape_angle.y;
@@ -688,7 +673,6 @@ static void e_yk_fight(e_yk_class* i_this) {
  * 
  * Uses HIO-configured charge speed and interpolated movement.
  */
-/* 808059BC-80805BB4 00127C 01F8+00 1/1 0/0 0/0 .text            e_yk_attack__FP10e_yk_class */
 static void e_yk_attack(e_yk_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     
@@ -759,7 +743,6 @@ static void e_yk_attack(e_yk_class* i_this) {
  * Transitions to FIGHT_FLY if player comes within trigger range.
  * Uses HIO-configured fly speed and cruise speed.
  */
-/* 80805BB4-80805DE0 001474 022C+00 1/1 0/0 0/0 .text            e_yk_fly__FP10e_yk_class */
 static void e_yk_fly(e_yk_class* i_this) {
     switch (i_this->mActionPhase) {
     case 0:
@@ -817,7 +800,6 @@ static void e_yk_fly(e_yk_class* i_this) {
  * 
  * Uses HIO-configured fly speed and smooth movement interpolation.
  */
-/* 80805DE0-80805FF0 0016A0 0210+00 1/1 0/0 0/0 .text            e_yk_return__FP10e_yk_class */
 static void e_yk_return(e_yk_class* i_this) {
     switch (i_this->mActionPhase) {
     case 0:
@@ -868,7 +850,6 @@ static void e_yk_return(e_yk_class* i_this) {
  * 
  * Uses HIO-configured fly speed and handles multi-room paths.
  */
-/* 80805FF0-80806308 0018B0 0318+00 1/1 0/0 0/0 .text            e_yk_path_fly__FP10e_yk_class */
 static void e_yk_path_fly(e_yk_class* i_this) {
     switch (i_this->mActionPhase) {
     case 0:
@@ -948,7 +929,6 @@ static void e_yk_path_fly(e_yk_class* i_this) {
  * 
  * Applies gravity and smooth rotation interpolation while stunned.
  */
-/* 80806308-80806500 001BC8 01F8+00 1/1 0/0 0/0 .text            e_yk_chance__FP10e_yk_class */
 static void e_yk_chance(e_yk_class* i_this) {
     switch (i_this->mActionPhase) {
     case 0:
@@ -1022,7 +1002,6 @@ static void e_yk_chance(e_yk_class* i_this) {
  * 
  * Maintains constant forward speed when bouncing on ground.
  */
-/* 80806500-80806740 001DC0 0240+00 1/1 0/0 0/0 .text            e_yk_wolfbite__FP10e_yk_class */
 static void e_yk_wolfbite(e_yk_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     switch(i_this->mActionPhase) {
@@ -1103,7 +1082,6 @@ static void e_yk_wolfbite(e_yk_class* i_this) {
  * 
  * Continuously applies rotation around Y axis while in wind state.
  */
-/* 80806740-808068E4 002000 01A4+00 1/1 0/0 0/0 .text            e_yk_wind__FP10e_yk_class */
 static void e_yk_wind(e_yk_class* i_this) {
     e_yk_class* yk = (e_yk_class*)fpcM_Search(shot_b_sub,i_this);
     i_this->speedF = 0.0f;
@@ -1167,7 +1145,6 @@ static void e_yk_wind(e_yk_class* i_this) {
  * - Smooth angle interpolation
  * - Ground collision offset adjustments
  */
-/* 808068E4-80806B78 0021A4 0294+00 2/1 0/0 0/0 .text            action__FP10e_yk_class */
 static void action(e_yk_class* i_this) {
     cXyz pos;
     cXyz pos2;
@@ -1278,7 +1255,6 @@ static void action(e_yk_class* i_this) {
  * - Manages shadow and wing particle effects
  * - Updates collision sphere position and radius
  */
-/* 80806B78-8080708C 002438 0514+00 2/1 0/0 0/0 .text            daE_YK_Execute__FP10e_yk_class */
 static int daE_YK_Execute(e_yk_class* i_this) {
     fopEn_enemy_c* _this = static_cast<fopEn_enemy_c*>(i_this);
     cXyz pos, pos2;
@@ -1392,7 +1368,6 @@ static int daE_YK_Execute(e_yk_class* i_this) {
  * @param param_0 Pointer to the Shadow Keese actor instance
  * @return Always returns 1 to indicate deletion is allowed
  */
-/* 8080708C-80807094 00294C 0008+00 1/0 0/0 0/0 .text            daE_YK_IsDelete__FP10e_yk_class */
 static int daE_YK_IsDelete(e_yk_class* param_0) {
     return 1;
 }
@@ -1408,7 +1383,6 @@ static int daE_YK_IsDelete(e_yk_class* param_0) {
  * - Resets first spawn flag if this was the first instance
  * - Stops animation if heap exists
  */
-/* 80807094-808070FC 002954 0068+00 1/0 0/0 0/0 .text            daE_YK_Delete__FP10e_yk_class */
 static int daE_YK_Delete(e_yk_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase,"E_YK");
 
@@ -1434,7 +1408,6 @@ static int daE_YK_Delete(e_yk_class* i_this) {
  * - Sets up transform animations
  * - Configures creature parameters
  */
-/* 808070FC-808071F4 0029BC 00F8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_yk_class* yk = (e_yk_class*)i_this;
 
@@ -1473,7 +1446,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
  * - Adjusts trigger distance for Phantom Zant fights
  * - Handles first spawn initialization
  */
-/* 808071F4-808075CC 002AB4 03D8+00 1/0 0/0 0/0 .text            daE_YK_Create__FP10fopAc_ac_c */
 static int daE_YK_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, e_yk_class);
     e_yk_class* yk = (e_yk_class*)i_this;
@@ -1577,7 +1549,6 @@ static int daE_YK_Create(fopAc_ac_c* i_this) {
     return phase_step;
 }
 
-/* 80807E30-80807E50 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_YK_Method */
 static actor_method_class l_daE_YK_Method = {
     (process_method_func)daE_YK_Create,
     (process_method_func)daE_YK_Delete,
@@ -1586,7 +1557,6 @@ static actor_method_class l_daE_YK_Method = {
     (process_method_func)daE_YK_Draw,
 };
 
-/* 80807E50-80807E80 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_YK */
 extern actor_process_profile_definition g_profile_E_YK = {
     fpcLy_CURRENT_e,         // mLayerID  
     7,                       // mListID

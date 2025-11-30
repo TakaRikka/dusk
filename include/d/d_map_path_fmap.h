@@ -12,7 +12,7 @@ public:
         mpNext = NULL;
     }
 
-    /* 8003EB70 */ ~fmpTresTypeGroupData_c() {
+    ~fmpTresTypeGroupData_c() {
         if (mpNext != NULL) {
             delete mpNext;
         }
@@ -31,13 +31,13 @@ public:
 
 class fmpTresTypeGroupDataList_c {
 public:
-    /* 8003D790 */ void addTypeGroupData(u8, dTres_c::data_s const*);
-    /* 8003EB10 */ ~fmpTresTypeGroupDataList_c() {
+    void addTypeGroupData(u8, dTres_c::data_s const*);
+    ~fmpTresTypeGroupDataList_c() {
         if (mpTypeGroupDataHead != NULL) {
             delete mpTypeGroupDataHead;
         }
     }
-    /* 8003EC90 */ fmpTresTypeGroupDataList_c() {
+    fmpTresTypeGroupDataList_c() {
         mpTypeGroupDataHead = NULL;
         mpNextData = NULL;
     }
@@ -91,9 +91,9 @@ public:
 class dMenu_Fmap_stage_data_c;
 class dMenu_Fmap_room_data_c {
 public:
-    /* 8003D818 */ bool isArrival();
-    /* 8003D868 */ void buildTresTypeGroup(int, int, int);
-    /* 8003D92C */ void buildFmapRoomData(int, int, f32, f32, f32, f32);
+    bool isArrival();
+    void buildTresTypeGroup(int, int, int);
+    void buildFmapRoomData(int, int, f32, f32, f32, f32);
 
     dMenu_Fmap_room_data_c(u8 i_roomNo, dMenu_Fmap_stage_data_c* i_stageData,
                            dMenu_Fmap_data_c* i_data) {
@@ -141,8 +141,8 @@ public:
 
 class dMenu_Fmap_stage_data_c {
 public:
-    /* 8003D95C */ bool isArrival();
-    /* 8003D9D8 */ int buildFmapStageData(int, f32, f32);
+    bool isArrival();
+    int buildFmapStageData(int, f32, f32);
 
     dMenu_Fmap_stage_data_c() {
         mpStageArc = NULL;
@@ -201,9 +201,9 @@ public:
 
 class dMenu_Fmap_region_data_c {
 public:
-    /* 8003DB48 */ dMenu_Fmap_stage_data_c* getMenuFmapStageData(int);
-    /* 8003DB70 */ int getPointStagePathInnerNo(f32, f32, int, int*, int*);
-    /* 8003DEE0 */ int buildFmapRegionData(int);
+    dMenu_Fmap_stage_data_c* getMenuFmapStageData(int);
+    int getPointStagePathInnerNo(f32, f32, int, int*, int*);
+    int buildFmapRegionData(int);
 
     dMenu_Fmap_region_data_c(int i_no, dMenu_Fmap_stage_data_c* i_stageData,
                              f32 i_offsetX, f32 i_offsetZ) {
@@ -251,8 +251,8 @@ public:
 
 class dMenu_Fmap_world_data_c {
 public:
-    /* 8003E028 */ void create(dMenu_Fmap_region_data_c*);
-    /* 8003E04C */ int buildFmapWorldData();
+    void create(dMenu_Fmap_region_data_c*);
+    int buildFmapWorldData();
 
     dMenu_Fmap_world_data_c(dMenu_Fmap_region_data_c* i_regionData) { create(i_regionData); }
     dMenu_Fmap_region_data_c* getMenuFmapRegionTop() { return mp_fmapRegionData; }
@@ -270,15 +270,15 @@ public:
 
 class dMenuFmapIconPointer_c {
 public:
-    /* 8003E114 */ bool init(dMenu_Fmap_region_data_c*, dMenu_Fmap_stage_data_c*, u8, int, int);
-    /* 8003E1C0 */ bool getFirstData();
-    /* 8003E2BC */ bool getData();
-    /* 8003E350 */ void getFirstRoomData();
-    /* 8003E37C */ bool getNextRoomData();
-    /* 8003E3A4 */ bool getNextStageData();
-    /* 8003E3D8 */ bool getNextData();
-    /* 8003E490 */ bool nextData();
-    /* 8003E510 */ bool getValidData();
+    bool init(dMenu_Fmap_region_data_c*, dMenu_Fmap_stage_data_c*, u8, int, int);
+    bool getFirstData();
+    bool getData();
+    void getFirstRoomData();
+    bool getNextRoomData();
+    bool getNextStageData();
+    bool getNextData();
+    bool nextData();
+    bool getValidData();
 
     /* 0x00 */ int mStageNo;
     /* 0x04 */ int mStayStageNo;
@@ -298,8 +298,8 @@ public:
 
 class dMenuFmapIconDisp_c : public dMenuFmapIconPointer_c {
 public:
-    /* 8003E578 */ bool getPosition(int*, int*, f32*, f32*, dTres_c::data_s const**);
-    /* 8003E6E8 */ virtual bool isDrawDisp();
+    bool getPosition(int*, int*, f32*, f32*, dTres_c::data_s const**);
+    virtual bool isDrawDisp();
 };
 
 #endif /* D_MAP_D_MAP_PATH_FMAP_H */

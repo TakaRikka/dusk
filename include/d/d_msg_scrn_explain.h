@@ -11,29 +11,29 @@ class dMsgString_c;
 
 class dMsgScrnExplain_c {
 public:
-    /* 8023CC88 */ dMsgScrnExplain_c(STControl*, u8, bool, u8);
-    /* 8023D7D8 */ void move();
-    /* 8023D918 */ void draw(J2DOrthoGraph*);
-    /* 8023DAD0 */ void wait_init();
-    /* 8023DAD4 */ void wait_proc();
-    /* 8023DAD8 */ void open_request_init();
-    /* 8023DADC */ void open_request_proc();
-    /* 8023DBE4 */ void open_init();
-    /* 8023DC7C */ void open_proc();
-    /* 8023DD90 */ void move_init();
-    /* 8023DDB4 */ void move_proc();
-    /* 8023DE8C */ void move_select_init();
-    /* 8023E0F4 */ void move_select_proc();
-    /* 8023E43C */ void close_init();
-    /* 8023E448 */ void close_proc();
-    /* 8023E558 */ bool openExplain(u32, u8, u8, u8, bool);
-    /* 8023E5CC */ f32 getAlphaRatio();
-    /* 8023E640 */ bool checkTriggerA();
-    /* 8023E654 */ bool checkTriggerB();
+    dMsgScrnExplain_c(STControl*, u8, bool, u8);
+    void move();
+    void draw(J2DOrthoGraph*);
+    void wait_init();
+    void wait_proc();
+    void open_request_init();
+    void open_request_proc();
+    void open_init();
+    void open_proc();
+    void move_init();
+    void move_proc();
+    void move_select_init();
+    void move_select_proc();
+    void close_init();
+    void close_proc();
+    bool openExplain(u32, u8, u8, u8, bool);
+    f32 getAlphaRatio();
+    bool checkTriggerA();
+    bool checkTriggerB();
 
     typedef void (dMsgScrnExplain_c::*ProcFunc)(); 
 
-    /* 8023D538 */ virtual ~dMsgScrnExplain_c();
+    virtual ~dMsgScrnExplain_c();
 
     u8 getStatus() { return mStatus; }
     u8 getSelectCursor() { return mSelCursor; }

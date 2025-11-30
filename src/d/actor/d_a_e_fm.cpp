@@ -18,10 +18,10 @@
 
 class daE_FM_HIO_c : public JORReflexible {
 public:
-    /* 804EF0EC */ daE_FM_HIO_c();
+    daE_FM_HIO_c();
 
     void genMessage(JORMContext*);
-    /* 804FA3D8 */ virtual ~daE_FM_HIO_c() {}
+    virtual ~daE_FM_HIO_c() {}
 
     /* 0x04 */ s8 no;
     /* 0x08 */ f32 base_size;
@@ -171,7 +171,6 @@ enum daE_FM_TexAnm {
     TEXANM_DEMO_END02,
 };
 
-/* 804EF0EC-804EF250 0000EC 0164+00 1/1 0/0 0/0 .text            __ct__12daE_FM_HIO_cFv */
 daE_FM_HIO_c::daE_FM_HIO_c() {
     no = -1;
 
@@ -227,7 +226,6 @@ daE_FM_HIO_c::daE_FM_HIO_c() {
     field_0xa8 = 1200.0f;
 }
 
-/* 804EF250-804EF29C 000250 004C+00 2/2 0/0 0/0 .text            s_fmobj_del__FPvPv */
 static void* s_fmobj_del(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_FMOBJ) {
         fopAcM_delete((fopAc_ac_c*)i_actor);
@@ -239,21 +237,16 @@ static void* s_fmobj_del(void* i_actor, void* i_data) {
 /* 804FAE95 0003+00 data_804FAE95 None */
 static u8 l_initHIO;
 
-/* 804FAEA4-804FAF54 000054 00B0+00 14/16 0/0 0/0 .bss             l_HIO */
 static daE_FM_HIO_c l_HIO;
 
-/* 804FAF60-804FAF6C 000110 000C+00 0/3 0/0 0/0 .bss             h_pos */
 static cXyz h_pos;
 
-/* 804FAF6C-804FAF70 00011C 0004+00 0/2 0/0 0/0 .bss             h_range */
 static f32 h_range;
 
-/* 804FAF70-804FAF78 000120 0004+04 0/2 0/0 0/0 .bss             h_power */
 static f32 h_power;
 
 static s8 h_unk;
 
-/* 804EF29C-804EF308 00029C 006C+00 1/1 0/0 0/0 .text            s_hasira_sub__FPvPv */
 static void* s_hasira_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_HHASHI) {
         ((daObjHHASHI_c*)i_actor)->Rolling(&h_pos, h_range, h_power, h_unk);
@@ -262,7 +255,6 @@ static void* s_hasira_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 804EF308-804EF3CC 000308 00C4+00 1/1 0/0 0/0 .text            s_hasira_poscheck__FPvPv */
 static void* s_hasira_poscheck(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_HHASHI) {
         f32 x = ((fopAc_ac_c*)i_actor)->current.pos.x - ((fopAc_ac_c*)i_data)->current.pos.x;
@@ -278,10 +270,8 @@ static void* s_hasira_poscheck(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 804FAF78-804FAF7C 000128 0004+00 2/2 0/0 0/0 .bss             fire_range */
 static f32 fire_range;
 
-/* 804EF3CC-804EF63C 0003CC 0270+00 1/1 0/0 0/0 .text            s_hasira_eff_sub__FPvPv */
 static void* s_hasira_eff_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_HHASHI) {
         daObjHHASHI_c* a_actor = (daObjHHASHI_c*)i_actor;
@@ -317,7 +307,6 @@ static void* s_hasira_eff_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 804EF6B4-804EF710 0006B4 005C+00 6/6 0/0 0/0 .text            hasira_hahen_hit__FP4cXyzffSc */
 static void hasira_hahen_hit(cXyz* i_pos, f32 i_range, f32 i_power, s8 param_3) {
     h_pos = *i_pos;
     h_range = i_range;
@@ -326,7 +315,6 @@ static void hasira_hahen_hit(cXyz* i_pos, f32 i_range, f32 i_power, s8 param_3) 
     fpcM_Search(s_hasira_sub, NULL);
 }
 
-/* 804EF710-804EF808 000710 00F8+00 5/5 0/0 0/0 .text            carry_off__FP10e_fm_classi */
 static void carry_off(e_fm_class* i_this, int i_chainNo) {
     if (i_this->mChain[i_chainNo].field_0x617e != 0) {
         i_this->mChain[i_chainNo].field_0x617e = 0;
@@ -341,13 +329,11 @@ static void carry_off(e_fm_class* i_this, int i_chainNo) {
     }
 }
 
-/* 804EF808-804EF8B8 000808 00B0+00 13/13 0/0 0/0 .text            anm_init__FP10e_fm_classifUcf */
 static void anm_init(e_fm_class* i_this, int i_anm, f32 i_morf, u8 i_mode, f32 i_speed) {
     i_this->mpFmModelMorf->setAnm((J3DAnmTransform *)dComIfG_getObjectRes("E_fm", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f, NULL);
     i_this->mAnm = i_anm;
 }
 
-/* 804EF8B8-804EF99C 0008B8 00E4+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -397,7 +383,6 @@ static f32 chain_z[25] = {
     2300.0f,
 };
 
-/* 804EF99C-804EFC3C 00099C 02A0+00 1/1 0/0 0/0 .text chain_draw__FP10e_fm_classP7chain_si */
 static void chain_draw(e_fm_class* i_this, chain_s* i_chain_s, int i_chainNo) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     cXyz sp1C;
@@ -455,7 +440,6 @@ static void chain_draw(e_fm_class* i_this, chain_s* i_chain_s, int i_chainNo) {
     }
 }
 
-/* 804EFC3C-804EFF68 000C3C 032C+00 1/0 0/0 0/0 .text            daE_FM_Draw__FP10e_fm_class */
 static int daE_FM_Draw(e_fm_class* i_this) {
     J3DModel* model = i_this->mpFmModelMorf->getModel();
     g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
@@ -516,8 +500,6 @@ static int daE_FM_Draw(e_fm_class* i_this) {
     return 1;
 }
 
-/* 804EFF68-804F005C 000F68 00F4+00 1/1 0/0 0/0 .text other_bg_check__FP10e_fm_classP10fopAc_ac_c
- */
 static BOOL other_bg_check(e_fm_class* i_this, fopAc_ac_c* i_other) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     dBgS_LinChk linchk;
@@ -541,7 +523,6 @@ static BOOL other_bg_check(e_fm_class* i_this, fopAc_ac_c* i_other) {
     return TRUE;
 }
 
-/* 804F005C-804F00E4 00105C 0088+00 2/2 0/0 0/0 .text            pl_check__FP10e_fm_classfs */
 static BOOL pl_check(e_fm_class* i_this, f32 i_range, s16 i_sightRange) {
     if (i_sightRange != 0) {
         s16 angle_diff = i_this->shape_angle.y - i_this->mAngleToPlayer;
@@ -559,7 +540,6 @@ static BOOL pl_check(e_fm_class* i_this, f32 i_range, s16 i_sightRange) {
     return FALSE;
 }
 
-/* 804F00E4-804F0530 0010E4 044C+00 1/1 0/0 0/0 .text            e_fm_normal__FP10e_fm_class */
 static void e_fm_normal(e_fm_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (i_this->mMode >= 0 && !fopAcM_otherBgCheck(i_this, player)) {
@@ -650,7 +630,6 @@ static void e_fm_normal(e_fm_class* i_this) {
     i_this->speedF = move_speed;
 }
 
-/* 804F0530-804F0A78 001530 0548+00 1/1 0/0 0/0 .text            e_fm_fight_run__FP10e_fm_class */
 static void e_fm_fight_run(e_fm_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp4C;
@@ -754,7 +733,6 @@ static void e_fm_fight_run(e_fm_class* i_this) {
     }
 }
 
-/* 804F0A78-804F0D3C 001A78 02C4+00 1/1 0/0 0/0 .text            e_fm_n_fight__FP10e_fm_class */
 static void e_fm_n_fight(e_fm_class* i_this) {
     int anm_frame = i_this->mpFmModelMorf->getFrame();
     cXyz sp28;
@@ -822,7 +800,6 @@ static void e_fm_n_fight(e_fm_class* i_this) {
     }
 }
 
-/* 804F0D3C-804F0F80 001D3C 0244+00 1/1 0/0 0/0 .text            tame_eff_set__FP10e_fm_class */
 static void tame_eff_set(e_fm_class* i_this) {
     J3DModel* model = i_this->mpFmModelMorf->getModel();
     cXyz mae(0.0f, 0.0f, 0.0f);
@@ -848,7 +825,6 @@ static void tame_eff_set(e_fm_class* i_this) {
     }
 }
 
-/* 804F0F80-804F11D8 001F80 0258+00 1/1 0/0 0/0 .text            e_fm_f_fight__FP10e_fm_class */
 static void e_fm_f_fight(e_fm_class* i_this) {
     cXyz sp30;
     cXyz sp24;
@@ -899,7 +875,6 @@ static void e_fm_f_fight(e_fm_class* i_this) {
     cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
 }
 
-/* 804F11D8-804F13FC 0021D8 0224+00 2/2 0/0 0/0 .text            animal_eff_set__FP10e_fm_classs */
 static void animal_eff_set(e_fm_class* i_this, s16 param_1) {
     J3DModel* model = i_this->mpFmModelMorf->getModel();
 
@@ -927,7 +902,6 @@ static void animal_eff_set(e_fm_class* i_this, s16 param_1) {
     }
 }
 
-/* 804F13FC-804F14C8 0023FC 00CC+00 1/1 0/0 0/0 .text            e_fm_animal__FP10e_fm_class */
 static void e_fm_animal(e_fm_class* i_this) {
     switch (i_this->mMode) {
     case 0:
@@ -946,7 +920,6 @@ static void e_fm_animal(e_fm_class* i_this) {
     cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
 }
 
-/* 804F14C8-804F16C4 0024C8 01FC+00 1/1 0/0 0/0 .text            e_fm_fire__FP10e_fm_class */
 static void e_fm_fire(e_fm_class* i_this) {
     i_this->field_0x7c0 = 1;
 
@@ -990,7 +963,6 @@ static void e_fm_fire(e_fm_class* i_this) {
     cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
 }
 
-/* 804F16C4-804F1918 0026C4 0254+00 1/1 0/0 0/0 .text            e_fm_stop__FP10e_fm_class */
 static void e_fm_stop(e_fm_class* i_this) {
     i_this->mDamageInvulnerabilityTimer = 6;
 
@@ -1045,7 +1017,6 @@ static void e_fm_stop(e_fm_class* i_this) {
     cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
 }
 
-/* 804F1918-804F20F4 002918 07DC+00 1/1 0/0 0/0 .text            e_fm_damage_run__FP10e_fm_class */
 static void e_fm_damage_run(e_fm_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp78;
@@ -1168,7 +1139,6 @@ static void e_fm_damage_run(e_fm_class* i_this) {
     }
 }
 
-/* 804F20F4-804F21F0 0030F4 00FC+00 1/1 0/0 0/0 .text            cam_3d_morf__FP10e_fm_classf */
 static void cam_3d_morf(e_fm_class* i_this, f32 param_1) {
     cLib_addCalc2(&i_this->mDemoCamCenter.x, i_this->mDemoCamCenterTarget.x, param_1, i_this->mDemoCamCenterSpd.x * i_this->field_0x1b050);
     cLib_addCalc2(&i_this->mDemoCamCenter.y, i_this->mDemoCamCenterTarget.y, param_1, i_this->mDemoCamCenterSpd.y * i_this->field_0x1b050);
@@ -1178,10 +1148,8 @@ static void cam_3d_morf(e_fm_class* i_this, f32 param_1) {
     cLib_addCalc2(&i_this->mDemoCamEye.z, i_this->mDemoCamEyeTarget.z, param_1, i_this->mDemoCamEyeSpd.z * i_this->field_0x1b050);
 }
 
-/* 804FAF7C-804FAF80 00012C 0004+00 2/3 0/0 0/0 .bss             demo_stop */
 static int demo_stop;
 
-/* 804F21F0-804F3E74 0031F0 1C84+00 1/1 0/0 0/0 .text            demo_camera__FP10e_fm_class */
 static void demo_camera(e_fm_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -1811,7 +1779,6 @@ static void demo_camera(e_fm_class* i_this) {
     }
 }
 
-/* 804F3E74-804F448C 004E74 0618+00 1/1 0/0 0/0 .text            e_fm_down__FP10e_fm_class */
 static s8 e_fm_down(e_fm_class* i_this) {
     fopEn_enemy_c* enemy = (fopEn_enemy_c*)i_this;
     s8 sp8 = 1;
@@ -1949,7 +1916,6 @@ static s8 e_fm_down(e_fm_class* i_this) {
     return sp8;
 }
 
-/* 804F448C-804F4740 00548C 02B4+00 1/1 0/0 0/0 .text            e_fm_a_down__FP10e_fm_class */
 static s8 e_fm_a_down(e_fm_class* i_this) {
     int anm_frame = i_this->mpFmModelMorf->getFrame();
     i_this->mDamageInvulnerabilityTimer = 10;
@@ -2000,7 +1966,6 @@ static s8 e_fm_a_down(e_fm_class* i_this) {
     return 1;
 }
 
-/* 804F4740-804F4BDC 005740 049C+00 1/1 0/0 0/0 .text            e_fm_start__FP10e_fm_class */
 static s8 e_fm_start(e_fm_class* i_this) {
     cXyz sp50;
     cXyz sp44;
@@ -2108,7 +2073,6 @@ static s8 e_fm_start(e_fm_class* i_this) {
     return var_r25;
 }
 
-/* 804F4BDC-804F4D74 005BDC 0198+00 1/1 0/0 0/0 .text            e_fm_end__FP10e_fm_class */
 static s8 e_fm_end(e_fm_class* i_this) {
     int anm_frame = i_this->mpFmModelMorf->getFrame();
     i_this->mDamageInvulnerabilityTimer = 5;
@@ -2152,7 +2116,6 @@ static s8 e_fm_end(e_fm_class* i_this) {
     return var_r30;
 }
 
-/* 804F4D74-804F5148 005D74 03D4+00 1/1 0/0 0/0 .text            damage_check__FP10e_fm_class */
 static void damage_check(e_fm_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp30;
@@ -2240,7 +2203,6 @@ static void damage_check(e_fm_class* i_this) {
     }
 }
 
-/* 804F5148-804F5990 006148 0848+00 1/1 0/0 0/0 .text chain_control1__FP10e_fm_classP7chain_si */
 static void chain_control1(e_fm_class* i_this, chain_s* i_chain_s, int param_2) {
     fopAc_ac_c* actor = i_this;
     cXyz sp80;
@@ -2381,7 +2343,6 @@ static void chain_control1(e_fm_class* i_this, chain_s* i_chain_s, int param_2) 
     }
 }
 
-/* 804F5990-804F5EF4 006990 0564+00 1/1 0/0 0/0 .text chain_control2__FP10e_fm_classP7chain_si */
 static void chain_control2(e_fm_class* i_this, chain_s* i_chain_s, int param_2) {
     if ((i_chain_s->field_0x617c != 0) || (i_chain_s->field_0x619c != 0) || (i_chain_s->field_0x617e != 0)) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -2488,7 +2449,6 @@ static void chain_control2(e_fm_class* i_this, chain_s* i_chain_s, int param_2) 
     }
 }
 
-/* 804F5EF4-804F64A8 006EF4 05B4+00 1/1 0/0 0/0 .text chain_control3__FP10e_fm_classP7chain_si */
 static void chain_control3(e_fm_class* i_this, chain_s* i_chain_s, int param_2) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -2603,10 +2563,8 @@ static void chain_control3(e_fm_class* i_this, chain_s* i_chain_s, int param_2) 
     }
 }
 
-/* 804FAF80-804FAF84 000130 0004+00 2/2 0/0 0/0 .bss             ba_count */
 static int ba_count;
 
-/* 804F64A8-804F6500 0074A8 0058+00 1/1 0/0 0/0 .text            s_ba_sub__FPvPv */
 static void* s_ba_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_E_BA) {
         ba_count++;
@@ -2615,7 +2573,6 @@ static void* s_ba_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 804F6500-804F6BD0 007500 06D0+00 2/1 0/0 0/0 .text            action__FP10e_fm_class */
 static void action(e_fm_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -2811,7 +2768,6 @@ static void action(e_fm_class* i_this) {
     }
 }
 
-/* 804F6BD0-804F72D0 007BD0 0700+00 1/1 0/0 0/0 .text            effect_set__FP10e_fm_class */
 static void effect_set(e_fm_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     cXyz sp4C(l_HIO.field_0x2c, l_HIO.field_0x2c, l_HIO.field_0x2c);
@@ -2986,7 +2942,6 @@ static void effect_set(e_fm_class* i_this) {
     MtxPosition(&sp34, &i_this->mFootPos[1]);
 }
 
-/* 804F72D0-804F8C60 0082D0 1990+00 2/1 0/0 0/0 .text            daE_FM_Execute__FP10e_fm_class */
 static int daE_FM_Execute(e_fm_class* i_this) {
     if (cDmrNowMidnaTalk()) {
         return 1;
@@ -3494,12 +3449,10 @@ static int daE_FM_Execute(e_fm_class* i_this) {
     return 1;
 }
 
-/* 804F8C60-804F8C68 009C60 0008+00 1/0 0/0 0/0 .text            daE_FM_IsDelete__FP10e_fm_class */
 static int daE_FM_IsDelete(e_fm_class* i_this) {
     return 1;
 }
 
-/* 804F8C68-804F8CE8 009C68 0080+00 1/0 0/0 0/0 .text            daE_FM_Delete__FP10e_fm_class */
 static int daE_FM_Delete(e_fm_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "E_fm");
@@ -3518,7 +3471,6 @@ static int daE_FM_Delete(e_fm_class* i_this) {
     return 1;
 }
 
-/* 804F8CE8-804F95CC 009CE8 08E4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     J3DModelData* modelData;
     e_fm_class* a_this = (e_fm_class*)i_this;
@@ -3688,7 +3640,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 804F9614-804F9B64 00A614 0550+00 1/0 0/0 0/0 .text            daE_FM_Create__FP10fopAc_ac_c */
 static int daE_FM_Create(fopAc_ac_c* i_this) {
     e_fm_class* a_this = (e_fm_class*)i_this;
     fopAcM_ct(a_this, e_fm_class);
@@ -3919,10 +3870,8 @@ static int daE_FM_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 804F9B64-804F9E14 00AB64 02B0+00 1/1 0/0 0/0 .text            __ct__10e_fm_classFv */
 e_fm_class::e_fm_class() {}
 
-/* 804FAD88-804FADA8 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_FM_Method */
 static actor_method_class l_daE_FM_Method = {
     (process_method_func)daE_FM_Create,
     (process_method_func)daE_FM_Delete,
@@ -3931,7 +3880,6 @@ static actor_method_class l_daE_FM_Method = {
     (process_method_func)daE_FM_Draw,
 };
 
-/* 804FADA8-804FADD8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_FM */
 extern actor_process_profile_definition g_profile_E_FM = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

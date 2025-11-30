@@ -7,10 +7,10 @@
 
 class dBgS_RoofChk : public cBgS_PolyInfo, public cBgS_Chk, public dBgS_Chk {
 public:
-    /* 80078FF4 */ dBgS_RoofChk();
-    /* 80079124 */ void Init();
+    dBgS_RoofChk();
+    void Init();
 
-    /* 80079090 */ virtual ~dBgS_RoofChk();
+    virtual ~dBgS_RoofChk();
 
     void SetNowY(f32 y) { mNowY = y; }
     void SetPos(cXyz const& pos) { m_pos = pos; }
@@ -26,7 +26,7 @@ private:
 class dBgS_LinkRoofChk : public dBgS_RoofChk {
 public:
     dBgS_LinkRoofChk() { SetLink(); }
-    /* 80140E40 */ virtual ~dBgS_LinkRoofChk() {}
+    virtual ~dBgS_LinkRoofChk() {}
 };
 
 class dBgS_ObjRoofChk : public dBgS_RoofChk {

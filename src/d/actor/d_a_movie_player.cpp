@@ -25,7 +25,6 @@
 extern "C" {
 #endif
 
-/* 80872758-80872BF0 000078 0498+00 1/1 0/0 0/0 .text            THPAudioDecode */
 // NONMATCHING
 static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag) {
     THPAudioRecordHeader* header;
@@ -166,7 +165,6 @@ static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag) {
     return header->sampleSize;
 }
 
-/* 80872BF0-80872C80 000510 0090+00 1/1 0/0 0/0 .text            __THPAudioGetNewSample */
 static s32 __THPAudioGetNewSample(THPAudioDecodeInfo* info) {
     s32 sample;
 
@@ -188,7 +186,6 @@ static s32 __THPAudioGetNewSample(THPAudioDecodeInfo* info) {
     return sample;
 }
 
-/* 80872C80-80872CBC 0005A0 003C+00 1/1 0/0 0/0 .text            __THPAudioInitialize */
 static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr) {
     info->encodeData = ptr;
     info->offsetNibbles = 2;
@@ -197,73 +194,50 @@ static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr) {
     info->encodeData++;
 }
 
-/* 808795E0-80879A40 000040 0460+00 0/0 0/0 0/0 .bss             THPStatistics */
-static u8 THPStatistics[1120] ALIGN_DECL(32);
+static u8 THPStatistics[1120] ATTRIBUTE_ALIGN(32);
 
-/* 80879A40-80879A44 0004A0 0004+00 1/2 0/0 0/0 .bss             Ydchuff */
-static THPHuffmanTab* Ydchuff ALIGN_DECL(32);
+static THPHuffmanTab* Ydchuff ATTRIBUTE_ALIGN(32);
 
-/* 80879A44-80879A48 0004A4 0004+00 1/2 0/0 0/0 .bss             Udchuff */
-static THPHuffmanTab* Udchuff ALIGN_DECL(32);
+static THPHuffmanTab* Udchuff ATTRIBUTE_ALIGN(32);
 
-/* 80879A48-80879A4C 0004A8 0004+00 1/2 0/0 0/0 .bss             Vdchuff */
-static THPHuffmanTab* Vdchuff ALIGN_DECL(32);
+static THPHuffmanTab* Vdchuff ATTRIBUTE_ALIGN(32);
 
-/* 80879A4C-80879A50 0004AC 0004+00 1/2 0/0 0/0 .bss             Yachuff */
-static THPHuffmanTab* Yachuff ALIGN_DECL(32);
+static THPHuffmanTab* Yachuff ATTRIBUTE_ALIGN(32);
 
-/* 80879A50-80879A54 0004B0 0004+00 1/2 0/0 0/0 .bss             Uachuff */
-static THPHuffmanTab* Uachuff ALIGN_DECL(32);
+static THPHuffmanTab* Uachuff ATTRIBUTE_ALIGN(32);
 
-/* 80879A54-80879A60 0004B4 0004+08 1/2 0/0 0/0 .bss             Vachuff */
-static THPHuffmanTab* Vachuff ALIGN_DECL(32);
+static THPHuffmanTab* Vachuff ATTRIBUTE_ALIGN(32);
 
-/* 80879A60-80879B60 0004C0 0100+00 0/2 0/0 0/0 .bss             __THPIDCTWorkspace */
-static f32 __THPIDCTWorkspace[64] ALIGN_DECL(32);
+static f32 __THPIDCTWorkspace[64] ATTRIBUTE_ALIGN(32);
 
-/* 80879B60-80879B64 0005C0 0004+00 1/3 0/0 0/0 .bss             __THPHuffmanBits */
 static u8* __THPHuffmanBits;
 
-/* 80879B64-80879B68 0005C4 0004+00 2/3 0/0 0/0 .bss             __THPHuffmanSizeTab */
 static u8* __THPHuffmanSizeTab;
 
-/* 80879B68-80879B6C 0005C8 0004+00 1/3 0/0 0/0 .bss             __THPHuffmanCodeTab */
 static u16* __THPHuffmanCodeTab;
 
-/* 80879B6C-80879B80 0005CC 0004+10 0/5 0/0 0/0 .bss             Gbase */
-static THPSample* Gbase ALIGN_DECL(32);
+static THPSample* Gbase ATTRIBUTE_ALIGN(32);
 
-/* 80879B80-80879B84 0005E0 0004+00 0/5 0/0 0/0 .bss             Gwid */
-static u32 Gwid ALIGN_DECL(32);
+static u32 Gwid ATTRIBUTE_ALIGN(32);
 
-/* 80879B84-80879B88 0005E4 0004+00 0/5 0/0 0/0 .bss             Gq */
-static f32* Gq ALIGN_DECL(32);
+static f32* Gq ATTRIBUTE_ALIGN(32);
 
-/* 80879B88-80879B94 0005E8 000C+00 0/2 0/0 0/0 .bss             __THPLCWork512 */
 static u8* __THPLCWork512[3];
 
-/* 80879B94-80879BA0 0005F4 000C+00 0/3 0/0 0/0 .bss             __THPLCWork640 */
 static u8* __THPLCWork640[3];
 
-/* 80879BA0-80879BA4 000600 0004+00 2/2 0/0 0/0 .bss             __THPOldGQR5 */
 static u32 __THPOldGQR5;
 
-/* 80879BA4-80879BA8 000604 0004+00 2/2 0/0 0/0 .bss             __THPOldGQR6 */
 static u32 __THPOldGQR6;
 
-/* 80879BA8-80879BAC 000608 0004+00 1/3 0/0 0/0 .bss             __THPWorkArea */
 static u8* __THPWorkArea;
 
-/* 80879BAC-80879BC4 00060C 0018+00 1/4 0/0 0/0 .bss             __THPMCUBuffer */
 static THPCoeff* __THPMCUBuffer[6];
 
-/* 80879BC4-80879BC8 000624 0004+00 5/12 0/0 0/0 .bss             __THPInfo */
 static THPFileInfo* __THPInfo;
 
-/* 80879BC8-80879BD0 000628 0004+04 0/2 0/0 0/0 .bss             __THPInitFlag */
 static BOOL __THPInitFlag;
 
-/* 80872CBC-80872F00 0005DC 0244+00 1/1 0/0 0/0 .text            THPVideoDecode */
 static s32 THPVideoDecode(void* file, void* tileY, void* tileU, void* tileV, void* work) {
     u8 all_done, status;
     s32 errorCode;
@@ -415,7 +389,6 @@ _err_exit:
     return errorCode;
 }
 
-/* 80872F00-80872F48 000820 0048+00 1/1 0/0 0/0 .text            __THPSetupBuffers */
 static void __THPSetupBuffers() {
     u8 i;
     THPCoeff* buffer;
@@ -427,7 +400,6 @@ static void __THPSetupBuffers() {
     }
 }
 
-/* 80872F48-80873088 000868 0140+00 1/1 0/0 0/0 .text            __THPReadFrameHeader */
 static u8 __THPReadFrameHeader() {
     u8 i, utmp8;
 
@@ -464,7 +436,6 @@ static u8 __THPReadFrameHeader() {
 
 #define THPROUNDUP(a, b) ((((s32)(a)) + ((s32)(b)-1L)) / ((s32)(b)))
 
-/* 80873088-808731B4 0009A8 012C+00 1/1 0/0 0/0 .text            __THPReadScaneHeader */
 static u8 __THPReadScaneHeader() {
     u8 i, utmp8;
     __THPInfo->c += 2;
@@ -499,7 +470,6 @@ static u8 __THPReadScaneHeader() {
     return 0;
 }
 
-/* 80879034-80879084 000000 0050+00 8/8 0/0 0/0 .rodata          __THPJpegNaturalOrder */
 static const u8 __THPJpegNaturalOrder[80] = {
     0,  1,  8,  16, 9,  2,  3,  10, 17, 24, 32, 25, 18, 11, 4,  5,  12, 19, 26, 33,
     40, 48, 41, 34, 27, 20, 13, 6,  7,  14, 21, 28, 35, 42, 49, 56, 57, 50, 43, 36,
@@ -507,12 +477,10 @@ static const u8 __THPJpegNaturalOrder[80] = {
     47, 55, 62, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63,
 };
 
-/* 80879084-808790C4 000050 0040+00 1/1 0/0 0/0 .rodata          __THPAANScaleFactor */
 static const f64 __THPAANScaleFactor[8] = {
     1.0f, 1.387039845f, 1.306562965f, 1.175875602f, 1.0f, 0.785694958f, 0.541196100f, 0.275899379f,
 };
 
-/* 808731B4-80873574 000AD4 03C0+00 1/1 0/0 0/0 .text            __THPReadQuantizationTable */
 static u8 __THPReadQuantizationTable() {
     int length;
     u16 id, i, row, col;
@@ -548,8 +516,6 @@ static u8 __THPReadQuantizationTable() {
 	return 0;
 }
 
-/* 80873574-8087375C 000E94 01E8+00 1/1 0/0 0/0 .text            __THPReadHuffmanTableSpecification
- */
 static u8 __THPReadHuffmanTableSpecification() {
     u8 t_class, id, i, tab_index;
     u16 length, num_Vij;
@@ -588,7 +554,6 @@ static u8 __THPReadHuffmanTableSpecification() {
     return 0;
 }
 
-/* 8087375C-8087383C 00107C 00E0+00 1/1 0/0 0/0 .text            __THPHuffGenerateSizeTable */
 static void __THPHuffGenerateSizeTable() {
     s32 p, l, i;
     p = 0;
@@ -603,7 +568,6 @@ static void __THPHuffGenerateSizeTable() {
     __THPHuffmanSizeTab[p] = 0;
 }
 
-/* 8087383C-808738B0 00115C 0074+00 1/1 0/0 0/0 .text            __THPHuffGenerateCodeTable */
 static void __THPHuffGenerateCodeTable() {
     u8 si;
     u16 p, code;
@@ -623,7 +587,6 @@ static void __THPHuffGenerateCodeTable() {
     }
 }
 
-/* 808738B0-808739A8 0011D0 00F8+00 1/1 0/0 0/0 .text            __THPHuffGenerateDecoderTables */
 static void __THPHuffGenerateDecoderTables(u8 tabIndex) {
     s32 p, l;
     THPHuffmanTab* h;
@@ -644,7 +607,6 @@ static void __THPHuffGenerateDecoderTables(u8 tabIndex) {
     h->maxCode[17] = 0xfffffL;
 }
 
-/* 808739A8-80873A04 0012C8 005C+00 1/1 0/0 0/0 .text            __THPRestartDefinition */
 static void __THPRestartDefinition() {
     __THPInfo->RST = TRUE;
     __THPInfo->c += 2;
@@ -653,7 +615,6 @@ static void __THPRestartDefinition() {
     __THPInfo->currMCU = __THPInfo->nMCU;
 }
 
-/* 80873A04-80873C44 001324 0240+00 1/1 0/0 0/0 .text            __THPPrepBitStream */
 static void __THPPrepBitStream() {
     u32* ptr;
     u32 offset, i, j, k;
@@ -714,7 +675,6 @@ static void __THPPrepBitStream() {
     }
 }
 
-/* 80873C44-80873D28 001564 00E4+00 1/1 0/0 0/0 .text            __THPDecompressYUV */
 static void __THPDecompressYUV(void* tileY, void* tileU, void* tileV) {
     u16 currentY, targetY;
     __THPInfo->dLC[0] = (u8*)tileY;
@@ -747,14 +707,13 @@ static void __THPDecompressYUV(void* tileY, void* tileU, void* tileV) {
     __THPGQRRestore();
 }
 
-/* 80873D28-80873D48 001648 0020+00 1/1 0/0 0/0 .text            __THPGQRRestore */
 static void __THPGQRRestore() {
+#ifdef __MWERKS__
     register u32 tmp1, tmp2;
     tmp1 = __THPOldGQR5;
     tmp2 = __THPOldGQR6;
 
     // clang-format off
-#ifdef __MWERKS__
     asm {
         mtspr   GQR5, tmp1;
         mtspr   GQR6, tmp2;
@@ -763,24 +722,19 @@ static void __THPGQRRestore() {
     // clang-format on
 }
 
-/* 80873D48-80873D7C 001668 0034+00 1/1 0/0 0/0 .text            __THPGQRSetup */
 static void __THPGQRSetup() {
+#ifdef __MWERKS__
     register u32 tmp1, tmp2;
 
     // clang-format off
-#ifdef __MWERKS__
     asm {
         mfspr   tmp1, GQR5;
         mfspr   tmp2, GQR6;
     }
-#endif
-    // clang-format on
 
     __THPOldGQR5 = tmp1;
     __THPOldGQR6 = tmp2;
 
-    // clang-format off
-#ifdef __MWERKS__
     asm {
         li      r3, 0x0007
         oris    r3, r3, 0x0007
@@ -793,7 +747,6 @@ static void __THPGQRSetup() {
     // clang-format on
 }
 
-/* 80873D7C-80873FBC 00169C 0240+00 1/1 0/0 0/0 .text            __THPDecompressiMCURow512x448 */
 static void __THPDecompressiMCURow512x448() {
     u8 cl_num;
     u32 x_pos;
@@ -855,8 +808,8 @@ static void __THPDecompressiMCURow512x448() {
     __THPInfo->dLC[2] += 0x800;
 }
 
-/* 80873FBC-8087445C 0018DC 04A0+00 3/3 0/0 0/0 .text            __THPInverseDCTY8 */
 static void __THPInverseDCTY8(register THPCoeff* in, register u32 xPos) {
+#ifdef __MWERKS__
     register f32 *q, *ws;
     register f32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8, tmp9;
     register f32 tmp10, tmp11, tmp12, tmp13;
@@ -874,7 +827,6 @@ static void __THPInverseDCTY8(register THPCoeff* in, register u32 xPos) {
         register u32 itmp0, itmp1, itmp2, itmp3;
 
         // clang-format off
-#ifdef __MWERKS__
         asm {
             li          itmp2, 8
             mtctr       itmp2
@@ -1033,7 +985,6 @@ static void __THPInverseDCTY8(register THPCoeff* in, register u32 xPos) {
         _loopEnd:
 
         }
-#endif
         // clang-format on
     }
 
@@ -1047,7 +998,6 @@ static void __THPInverseDCTY8(register THPCoeff* in, register u32 xPos) {
         register THPSample *out0, *out1;
 
         // clang-format off
-#ifdef __MWERKS__
         asm {
             psq_l       tmp10, 8*0*sizeof(f32)(ws), 0, 0
             slwi off0, wid, 3;
@@ -1165,13 +1115,13 @@ static void __THPInverseDCTY8(register THPCoeff* in, register u32 xPos) {
             psq_st      tmp21, 8(out1), 0, 6
 
         }
-#endif
         // clang-format on
     }
+#endif
 }
 
-/* 8087445C-808748F4 001D7C 0498+00 3/3 0/0 0/0 .text            __THPInverseDCTNoYPos */
 static void __THPInverseDCTNoYPos(register THPCoeff* in, register u32 xPos) {
+#ifdef __MWERKS__
     register f32 *q, *ws;
     register f32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8, tmp9;
     register f32 tmp10, tmp11, tmp12, tmp13;
@@ -1187,7 +1137,6 @@ static void __THPInverseDCTNoYPos(register THPCoeff* in, register u32 xPos) {
     {
         register u32 itmp0, itmp1, itmp2, itmp3;
         // clang-format off
-#ifdef __MWERKS__
         asm {
             li          itmp2, 8
             mtctr       itmp2
@@ -1346,7 +1295,6 @@ static void __THPInverseDCTNoYPos(register THPCoeff* in, register u32 xPos) {
         _loopEnd:
 
         }
-#endif
         // clang-format on
     }
 
@@ -1360,7 +1308,6 @@ static void __THPInverseDCTNoYPos(register THPCoeff* in, register u32 xPos) {
         register THPSample *out0, *out1;
 
         // clang-format off
-#ifdef __MWERKS__
         asm {
             psq_l       tmp10, 8*0*sizeof(f32)(ws), 0, 0
             slwi        xPos, xPos, 2
@@ -1475,12 +1422,11 @@ static void __THPInverseDCTNoYPos(register THPCoeff* in, register u32 xPos) {
             psq_st      tmp20, 0(out1), 0, 6
             psq_st      tmp21, 8(out1), 0, 6
         }
-#endif
         // clang-format on
     }
+#endif
 }
 
-/* 808748F4-80874B38 002214 0244+00 1/1 0/0 0/0 .text            __THPDecompressiMCURow640x480 */
 static void __THPDecompressiMCURow640x480() {
     u8 cl_num;
     u32 x_pos;
@@ -1548,7 +1494,6 @@ static void __THPDecompressiMCURow640x480() {
     __THPInfo->dLC[2] += 0xA00;
 }
 
-/* 80874B38-80874D8C 002458 0254+00 1/1 0/0 0/0 .text            __THPDecompressiMCURowNxN */
 static void __THPDecompressiMCURowNxN() {
     u8 cl_num;
     u32 x_pos, x;
@@ -1613,7 +1558,6 @@ static void __THPDecompressiMCURowNxN() {
     __THPInfo->dLC[2] += ((sizeof(u8) * 64) * (x / 16));
 }
 
-/* 80874D8C-80875198 0026AC 040C+00 3/3 0/0 0/0 .text            __THPHuffDecodeDCTCompY */
 static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block) {
     {
         register s32 t;
@@ -2048,7 +1992,6 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
     }
 }
 
-/* 80875198-80875410 002AB8 0278+00 3/3 0/0 0/0 .text            __THPHuffDecodeTab */
 static s32 __THPHuffDecodeTab(register THPFileInfo* info, register THPHuffmanTab* h) {
     register s32 code;
     register u32 cnt;
@@ -2319,7 +2262,6 @@ _FailedCheckNoBits1:
     return (h->Vij[(s32)(code + h->valPtr[cnt])]);
 }
 
-/* 80875410-808755F8 002D30 01E8+00 3/3 0/0 0/0 .text            __THPHuffDecodeDCTCompU */
 static void __THPHuffDecodeDCTCompU(register THPFileInfo* info, THPCoeff* block) {
     register s32 t;
     register THPCoeff diff;
@@ -2464,7 +2406,6 @@ static void __THPHuffDecodeDCTCompU(register THPFileInfo* info, THPCoeff* block)
     }
 }
 
-/* 808755F8-808757E0 002F18 01E8+00 3/3 0/0 0/0 .text            __THPHuffDecodeDCTCompV */
 static void __THPHuffDecodeDCTCompV(register THPFileInfo* info, THPCoeff* block) {
     register s32 t;
     register THPCoeff diff;
@@ -2612,7 +2553,6 @@ static void __THPHuffDecodeDCTCompV(register THPFileInfo* info, THPCoeff* block)
     }
 }
 
-/* 808757E0-8087584C 003100 006C+00 1/1 0/0 0/0 .text            THPInit */
 static BOOL THPInit() {
     u8* base;
     base = (u8*)(0xE000 << 16);
@@ -2642,77 +2582,60 @@ static BOOL THPInit() {
 }
 #endif
 
-/* 80879BD0-80879DA0 000630 01D0+00 28/29 0/0 0/0 .bss             daMP_ActivePlayer */
 static daMP_THPPlayer daMP_ActivePlayer;
 
-/* 80879DA0-80879DA4 000800 0004+00 2/3 0/0 0/0 .bss             daMP_ReadThreadCreated */
 static BOOL daMP_ReadThreadCreated;
 
-/* 80879DA4-80879DC4 000804 0020+00 2/3 0/0 0/0 .bss             daMP_FreeReadBufferQueue */
 static OSMessageQueue daMP_FreeReadBufferQueue;
 
-/* 80879DC4-80879DE4 000824 0020+00 2/3 0/0 0/0 .bss             daMP_ReadedBufferQueue */
 static OSMessageQueue daMP_ReadedBufferQueue;
 
-/* 80875880-808758B4 0031A0 0034+00 2/2 0/0 0/0 .text            daMP_PopReadedBuffer__Fv */
 void* daMP_PopReadedBuffer() {
     OSMessage buffer;
     OSReceiveMessage(&daMP_ReadedBufferQueue, &buffer, 1);
     return buffer;
 }
 
-/* 808758B4-808758E4 0031D4 0030+00 1/1 0/0 0/0 .text            daMP_PushReadedBuffer__FPv */
 void daMP_PushReadedBuffer(void* buffer) {
     OSSendMessage(&daMP_ReadedBufferQueue, buffer, 1);
 }
 
-/* 808758E4-80875918 003204 0034+00 1/1 0/0 0/0 .text            daMP_PopFreeReadBuffer__Fv */
 void* daMP_PopFreeReadBuffer() {
     OSMessage buffer;
     OSReceiveMessage(&daMP_FreeReadBufferQueue, &buffer, 1);
     return buffer;
 }
 
-/* 80875918-80875948 003238 0030+00 2/2 0/0 0/0 .text            daMP_PushFreeReadBuffer__FPv */
 void daMP_PushFreeReadBuffer(void* buffer) {
     OSSendMessage(&daMP_FreeReadBufferQueue, buffer, 1);
 }
 
-/* 80879DE4-80879E04 000844 0020+00 2/3 0/0 0/0 .bss             daMP_ReadedBufferQueue2 */
 static OSMessageQueue daMP_ReadedBufferQueue2;
 
-/* 80875948-8087597C 003268 0034+00 1/1 0/0 0/0 .text            daMP_PopReadedBuffer2__Fv */
 void* daMP_PopReadedBuffer2() {
     OSMessage buffer;
     OSReceiveMessage(&daMP_ReadedBufferQueue2, &buffer, 1);
     return buffer;
 }
 
-/* 8087597C-808759AC 00329C 0030+00 1/1 0/0 0/0 .text            daMP_PushReadedBuffer2__FPv */
 void daMP_PushReadedBuffer2(void* buffer) {
     OSSendMessage(&daMP_ReadedBufferQueue2, buffer, 1);
 }
 
-/* 80879E04-80879E2C 000864 0028+00 0/1 0/0 0/0 .bss             daMP_FreeReadBufferMessage */
 static OSMessage daMP_FreeReadBufferMessage[10];
 
-/* 80879E2C-80879E54 00088C 0028+00 0/1 0/0 0/0 .bss             daMP_ReadedBufferMessage */
 static OSMessage daMP_ReadedBufferMessage[10];
 
-/* 80879E54-80879E80 0008B4 0028+04 0/1 0/0 0/0 .bss             daMP_ReadedBufferMessage2 */
 static OSMessage daMP_ReadedBufferMessage2[10];
 
-/* 80879E80-8087A198 0008E0 0318+00 3/4 0/0 0/0 .bss             daMP_ReadThread */
 static OSThread daMP_ReadThread;
 
-/* 808759AC-808759E4 0032CC 0038+00 1/1 0/0 0/0 .text            daMP_ReadThreadStart__Fv */
 void daMP_ReadThreadStart() {
     if (daMP_ReadThreadCreated) {
         OSResumeThread(&daMP_ReadThread);
     }
 }
 
-/* 808759E4-80875A28 003304 0044+00 1/1 0/0 0/0 .text            daMP_ReadThreadCancel__Fv */
 void daMP_ReadThreadCancel() {
     if (daMP_ReadThreadCreated) {
         OSCancelThread(&daMP_ReadThread);
@@ -2720,7 +2643,6 @@ void daMP_ReadThreadCancel() {
     }
 }
 
-/* 80875A28-80875B0C 003348 00E4+00 1/1 0/0 0/0 .text            daMP_Reader__FPv */
 void* daMP_Reader(void*) {
     daMP_THPReadBuffer* buf;
 	s32 curFrame;
@@ -2762,13 +2684,10 @@ void* daMP_Reader(void*) {
 	}
 }
 
-/* 8087A198-8087C198 000BF8 2000+00 0/1 0/0 0/0 .bss             daMP_ReadThreadStack */
 static u8 daMP_ReadThreadStack[0x2000];
 
-/* 8087C198-8087C1A0 002BF8 0004+04 2/4 0/0 0/0 .bss             daMP_VideoDecodeThreadCreated */
 static BOOL daMP_VideoDecodeThreadCreated;
 
-/* 80875B18-80875BC8 003438 00B0+00 1/1 0/0 0/0 .text            daMP_CreateReadThread__Fl */
 static BOOL daMP_CreateReadThread(s32 param_0) {
     if (!OSCreateThread(&daMP_ReadThread, daMP_Reader, 0, daMP_ReadThreadStack + sizeof(daMP_ReadThreadStack), sizeof(daMP_ReadThreadStack), param_0, 1)) {
         OSReport("Can't create read thread\n");
@@ -2782,31 +2701,24 @@ static BOOL daMP_CreateReadThread(s32 param_0) {
     return TRUE;
 }
 
-/* 8087C1A0-8087C4B8 002C00 0318+00 4/5 0/0 0/0 .bss             daMP_VideoDecodeThread */
 static OSThread daMP_VideoDecodeThread;
 
-/* 8087C4B8-808E04B8 002F18 64000+00 1/1 0/0 0/0 .bss             daMP_VideoDecodeThreadStack */
 static u8 daMP_VideoDecodeThreadStack[0x64000];
 
-/* 808E04B8-808E04D8 066F18 0020+00 2/2 0/0 0/0 .bss             daMP_FreeTextureSetQueue */
 static OSMessageQueue daMP_FreeTextureSetQueue;
 
-/* 80875BC8-80875BFC 0034E8 0034+00 1/1 0/0 0/0 .text            daMP_PopFreeTextureSet__Fv */
 void* daMP_PopFreeTextureSet() {
     OSMessage tex;
     OSReceiveMessage(&daMP_FreeTextureSetQueue, &tex, 1);
     return tex;
 }
 
-/* 80875BFC-80875C2C 00351C 0030+00 2/2 0/0 0/0 .text            daMP_PushFreeTextureSet__FPv */
 void daMP_PushFreeTextureSet(void* tex) {
     OSSendMessage(&daMP_FreeTextureSetQueue, tex, 0);
 }
 
-/* 808E04D8-808E04F8 066F38 0020+00 2/2 0/0 0/0 .bss             daMP_DecodedTextureSetQueue */
 static OSMessageQueue daMP_DecodedTextureSetQueue;
 
-/* 80875C2C-80875C70 00354C 0044+00 1/1 0/0 0/0 .text            daMP_PopDecodedTextureSet__Fl */
 void* daMP_PopDecodedTextureSet(s32 flags) {
     OSMessage tex;
     if (OSReceiveMessage(&daMP_DecodedTextureSetQueue, &tex, flags) == TRUE) {
@@ -2816,21 +2728,16 @@ void* daMP_PopDecodedTextureSet(s32 flags) {
     }
 }
 
-/* 80875C70-80875CA0 003590 0030+00 1/1 0/0 0/0 .text            daMP_PushDecodedTextureSet__FPv */
 void daMP_PushDecodedTextureSet(void* tex) {
     OSSendMessage(&daMP_DecodedTextureSetQueue, tex, 1);
 }
 
-/* 808E04F8-808E0504 066F58 000C+00 0/0 0/0 0/0 .bss             daMP_FreeTextureSetMessage */
 static OSMessage daMP_FreeTextureSetMessage[3];
 
-/* 808E0504-808E0510 066F64 000C+00 0/0 0/0 0/0 .bss             daMP_DecodedTextureSetMessage */
 static OSMessage daMP_DecodedTextureSetMessage[3];
 
-/* 808E0510-808E0514 066F70 0004+00 1/1 0/0 0/0 .bss             daMP_First */
 static BOOL daMP_First;
 
-/* 80875CA0-80875DD8 0035C0 0138+00 2/2 0/0 0/0 .text daMP_VideoDecode__FP18daMP_THPReadBuffer */
 static void daMP_VideoDecode(daMP_THPReadBuffer* readBuffer) {
     THPTextureSet* textureSet;
 	s32 i;
@@ -2871,7 +2778,6 @@ static void daMP_VideoDecode(daMP_THPReadBuffer* readBuffer) {
     }
 }
 
-/* 80875DD8-80875EA0 0036F8 00C8+00 1/1 0/0 0/0 .text            daMP_VideoDecoder__FPv */
 static void* daMP_VideoDecoder(void* param_0) {
     daMP_THPReadBuffer* thpBuffer;
 
@@ -2903,8 +2809,6 @@ static void* daMP_VideoDecoder(void* param_0) {
 	}
 }
 
-/* 80875EA0-80875FD4 0037C0 0134+00 1/1 0/0 0/0 .text            daMP_VideoDecoderForOnMemory__FPv
- */
 static void* daMP_VideoDecoderForOnMemory(void* param_0) {
     daMP_THPReadBuffer readBuffer;
 	s32 readSize;
@@ -2961,8 +2865,6 @@ static void* daMP_VideoDecoderForOnMemory(void* param_0) {
 	}
 }
 
-/* 80875FD4-808760EC 0038F4 0118+00 1/1 0/0 0/0 .text            daMP_CreateVideoDecodeThread__FlPUc
- */
 static BOOL daMP_CreateVideoDecodeThread(OSPriority prio, u8* param_1) {
     if (param_1 != NULL) {
         if (!OSCreateThread(&daMP_VideoDecodeThread, daMP_VideoDecoderForOnMemory, param_1, daMP_VideoDecodeThreadStack + sizeof(daMP_VideoDecodeThreadStack), sizeof(daMP_VideoDecodeThreadStack), prio, 1)) {
@@ -2983,14 +2885,12 @@ static BOOL daMP_CreateVideoDecodeThread(OSPriority prio, u8* param_1) {
     return TRUE;
 }
 
-/* 808760EC-80876124 003A0C 0038+00 1/1 0/0 0/0 .text            daMP_VideoDecodeThreadStart__Fv */
 static void daMP_VideoDecodeThreadStart() {
     if (daMP_VideoDecodeThreadCreated) {
         OSResumeThread(&daMP_VideoDecodeThread);
     }
 }
 
-/* 80876124-80876168 003A44 0044+00 1/1 0/0 0/0 .text            daMP_VideoDecodeThreadCancel__Fv */
 void daMP_VideoDecodeThreadCancel() {
     if (daMP_VideoDecodeThreadCreated) {
         OSCancelThread(&daMP_VideoDecodeThread);
@@ -2998,34 +2898,26 @@ void daMP_VideoDecodeThreadCancel() {
     }
 }
 
-/* 808E0514-808E0518 066F74 0004+00 2/2 0/0 0/0 .bss             daMP_AudioDecodeThreadCreated */
 static BOOL daMP_AudioDecodeThreadCreated;
 
-/* 808E0518-808E0830 066F78 0318+00 3/3 0/0 0/0 .bss             daMP_AudioDecodeThread */
 static OSThread daMP_AudioDecodeThread;
 
-/* 808E0830-80944830 067290 64000+00 0/0 0/0 0/0 .bss             daMP_AudioDecodeThreadStack */
 static u8 daMP_AudioDecodeThreadStack[0x64000];
 
-/* 80944830-80944850 0CB290 0020+00 2/2 0/0 0/0 .bss             daMP_FreeAudioBufferQueue */
 static OSMessageQueue daMP_FreeAudioBufferQueue;
 
-/* 80876168-8087619C 003A88 0034+00 1/1 0/0 0/0 .text            daMP_PopFreeAudioBuffer__Fv */
 static void* daMP_PopFreeAudioBuffer() {
     OSMessage buffer;
     OSReceiveMessage(&daMP_FreeAudioBufferQueue, &buffer, OS_MESSAGE_BLOCK);
     return buffer;
 }
 
-/* 8087619C-808761CC 003ABC 0030+00 2/2 0/0 0/0 .text            daMP_PushFreeAudioBuffer__FPv */
 static void daMP_PushFreeAudioBuffer(void* buffer) {
     OSSendMessage(&daMP_FreeAudioBufferQueue, buffer, OS_MESSAGE_NOBLOCK);
 }
 
-/* 80944850-80944870 0CB2B0 0020+00 2/2 0/0 0/0 .bss             daMP_DecodedAudioBufferQueue */
 static OSMessageQueue daMP_DecodedAudioBufferQueue;
 
-/* 808761CC-80876210 003AEC 0044+00 1/1 0/0 0/0 .text            daMP_PopDecodedAudioBuffer__Fl */
 static void* daMP_PopDecodedAudioBuffer(s32 flags) {
     OSMessage buffer;
     if (OSReceiveMessage(&daMP_DecodedAudioBufferQueue, &buffer, flags) == 1) {
@@ -3035,12 +2927,10 @@ static void* daMP_PopDecodedAudioBuffer(s32 flags) {
     return NULL;
 }
 
-/* 80876210-80876240 003B30 0030+00 1/1 0/0 0/0 .text            daMP_PushDecodedAudioBuffer__FPv */
 static void daMP_PushDecodedAudioBuffer(void* buffer) {
     OSSendMessage(&daMP_DecodedAudioBufferQueue, buffer, OS_MESSAGE_BLOCK);
 }
 
-/* 80876240-8087631C 003B60 00DC+00 2/2 0/0 0/0 .text daMP_AudioDecode__FP18daMP_THPReadBuffer */
 static void daMP_AudioDecode(daMP_THPReadBuffer* readBuffer) {
     THPAudioBuffer* audioBuf;
 	s32 i;
@@ -3068,7 +2958,6 @@ static void daMP_AudioDecode(daMP_THPReadBuffer* readBuffer) {
 	}
 }
 
-/* 8087631C-80876344 003C3C 0028+00 1/1 0/0 0/0 .text            daMP_AudioDecoder__FPv */
 static void* daMP_AudioDecoder(void* param_0) {
     daMP_THPReadBuffer* buf;
 
@@ -3079,8 +2968,6 @@ static void* daMP_AudioDecoder(void* param_0) {
     }
 }
 
-/* 80876344-808763EC 003C64 00A8+00 1/1 0/0 0/0 .text            daMP_AudioDecoderForOnMemory__FPv
- */
 static void* daMP_AudioDecoderForOnMemory(void* param_0) {
     s32 size;
 	s32 readSize;
@@ -3113,14 +3000,10 @@ static void* daMP_AudioDecoderForOnMemory(void* param_0) {
 	}
 }
 
-/* 80944870-8094487C 0CB2D0 000C+00 0/0 0/0 0/0 .bss             daMP_FreeAudioBufferMessage */
 static OSMessage daMP_FreeAudioBufferMessage[3];
 
-/* 8094487C-80944888 0CB2DC 000C+00 0/0 0/0 0/0 .bss             daMP_DecodedAudioBufferMessage */
 static OSMessage daMP_DecodedAudioBufferMessage[3];
 
-/* 808763EC-808764E8 003D0C 00FC+00 1/1 0/0 0/0 .text            daMP_CreateAudioDecodeThread__FlPUc
- */
 static BOOL daMP_CreateAudioDecodeThread(OSPriority prio, u8* param_1) {
     if (param_1 != NULL) {
         if (!OSCreateThread(&daMP_AudioDecodeThread, daMP_AudioDecoderForOnMemory, param_1, daMP_AudioDecodeThreadStack + sizeof(daMP_AudioDecodeThreadStack), sizeof(daMP_AudioDecodeThreadStack), prio, 1)) {
@@ -3141,14 +3024,12 @@ static BOOL daMP_CreateAudioDecodeThread(OSPriority prio, u8* param_1) {
     return TRUE;
 }
 
-/* 808764E8-80876520 003E08 0038+00 1/1 0/0 0/0 .text            daMP_AudioDecodeThreadStart__Fv */
 void daMP_AudioDecodeThreadStart() {
     if (daMP_AudioDecodeThreadCreated) {
         OSResumeThread(&daMP_AudioDecodeThread);
     }
 }
 
-/* 80876520-80876564 003E40 0044+00 1/1 0/0 0/0 .text            daMP_AudioDecodeThreadCancel__Fv */
 void daMP_AudioDecodeThreadCancel() {
     if (daMP_AudioDecodeThreadCreated) {
         OSCancelThread(&daMP_AudioDecodeThread);
@@ -3156,7 +3037,6 @@ void daMP_AudioDecodeThreadCancel() {
     }
 }
 
-/* 80876564-8087667C 003E84 0118+00 1/1 0/0 0/0 .text            daMP_THPGXRestore__Fv */
 static void daMP_THPGXRestore() {
     GXSetZMode(GX_ENABLE, GX_ALWAYS, GX_DISABLE);
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_SET);
@@ -3181,8 +3061,6 @@ static f32 dummyLiteral() {
     return temp;
 }
 
-/* 8087667C-80876BA8 003F9C 052C+00 1/1 0/0 0/0 .text
- * daMP_THPGXYuv2RgbSetup__FPC16_GXRenderModeObj                */
 static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
     s32 w, h;
     f32 var_f31;
@@ -3274,7 +3152,6 @@ static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }
 
-/* 80876BD0-80876DE4 0044F0 0214+00 1/1 0/0 0/0 .text daMP_THPGXYuv2RgbDraw__FPUcPUcPUcssssss */
 static void daMP_THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x,
                                   s16 y, s16 textureWidth, s16 textureHeight, s16 polygonWidth,
                                   s16 polygonHeight) {
@@ -3306,7 +3183,6 @@ static void daMP_THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x,
     GXEnd();
 }
 
-/* 80879434-80879534 000000 0100+00 1/1 0/0 0/0 .data            daMP_VolumeTable */
 static u16 daMP_VolumeTable[] = {
     0x0000, 0x0002, 0x0008, 0x0012, 0x0020, 0x0032, 0x0049, 0x0063,
     0x0082, 0x00A4, 0x00CB, 0x00F5, 0x0124, 0x0157, 0x018E, 0x01C9,
@@ -3326,7 +3202,6 @@ static u16 daMP_VolumeTable[] = {
     0x7247, 0x7430, 0x761E, 0x7810, 0x7A06, 0x7C00, 0x7DFE, 0x8000,
 };
 
-/* 80876E0C-80877074 00472C 0268+00 1/1 0/0 0/0 .text            daMP_MixAudio__FPsPsUl */
 // NONMATCHING - missing extsh
 #pragma push
 #pragma optimization_level 3
@@ -3414,46 +3289,32 @@ static void daMP_MixAudio(s16* destination, s16*, u32 sample) {
 }
 #pragma pop
 
-/* 80944888-809448A0 0CB2E8 0004+14 3/3 0/0 0/0 .bss             daMP_Initialized */
 static BOOL daMP_Initialized;
 
-/* 809448A0-809448E0 0CB300 0040+00 2/2 0/0 0/0 .bss             daMP_WorkBuffer */
-static u32 daMP_WorkBuffer[16] ALIGN_DECL(32);
+static u32 daMP_WorkBuffer[16] ATTRIBUTE_ALIGN(32);
 
-/* 809448E0-80944900 0CB340 0020+00 3/3 0/0 0/0 .bss             daMP_PrepareReadyQueue */
 static OSMessageQueue daMP_PrepareReadyQueue;
 
-/* 80944900-80944920 0CB360 0020+00 2/2 0/0 0/0 .bss             daMP_UsedTextureSetQueue */
 static OSMessageQueue daMP_UsedTextureSetQueue;
 
-/* 80944920-80944924 0CB380 0004+00 1/1 0/0 0/0 .bss             daMP_PrepareReadyMessage */
 static OSMessage daMP_PrepareReadyMessage;
 
-/* 80944924-80944930 0CB384 000C+00 0/0 0/0 0/0 .bss             daMP_UsedTextureSetMessage */
 static OSMessage daMP_UsedTextureSetMessage[3];
 
-/* 80944930-80944934 0CB390 0004+00 3/3 0/0 0/0 .bss             daMP_OldVIPostCallback */
 static VIRetraceCallback daMP_OldVIPostCallback;
 
-/* 80944934-80944938 0CB394 0004+00 1/1 0/0 0/0 .bss             daMP_SoundBufferIndex */
 static u32 daMP_SoundBufferIndex;
 
-/* 80944938-8094493C 0CB398 0004+00 0/0 0/0 0/0 .bss             daMP_OldAIDCallback */
 static u32 daMP_OldAIDCallback;
 
-/* 8094493C-80944940 0CB39C 0004+00 0/0 0/0 0/0 .bss             daMP_LastAudioBuffer */
 static void* daMP_LastAudioBuffer;
 
-/* 80944940-80944944 0CB3A0 0004+00 0/0 0/0 0/0 .bss             daMP_CurAudioBuffer */
 static void* daMP_CurAudioBuffer;
 
-/* 80944944-80944960 0CB3A4 0004+18 0/0 0/0 0/0 .bss             daMP_AudioSystem */
 static s32 daMP_AudioSystem;
 
-/* 80944960-80945AE0 0CB3C0 1180+00 1/1 0/0 0/0 .bss             daMP_SoundBuffer */
-static u8 daMP_SoundBuffer[2][0x8C0] ALIGN_DECL(32);
+static u8 daMP_SoundBuffer[2][0x8C0] ATTRIBUTE_ALIGN(32);
 
-/* 80877074-8087712C 004994 00B8+00 1/1 0/0 0/0 .text            daMP_audioCallbackWithMSound__Fl */
 static s16* daMP_audioCallbackWithMSound(s32 sample) {
     if (daMP_ActivePlayer.open == 0 || daMP_ActivePlayer.internalState != 2 || daMP_ActivePlayer.audioExist == 0) {
         return NULL;
@@ -3466,22 +3327,18 @@ static s16* daMP_audioCallbackWithMSound(s32 sample) {
     return (s16*)daMP_SoundBuffer[daMP_SoundBufferIndex];
 }
 
-/* 8087712C-80877158 004A4C 002C+00 1/1 0/0 0/0 .text            daMP_audioInitWithMSound__Fv */
 static void daMP_audioInitWithMSound() {
     JASDriver::registerMixCallback(daMP_audioCallbackWithMSound, MIX_MODE_INTERLEAVE);
 }
 
-/* 80877158-80877180 004A78 0028+00 2/2 0/0 0/0 .text            daMP_audioQuitWithMSound__Fv */
 static void daMP_audioQuitWithMSound() {
     JASDriver::registerMixCallback(NULL, MIX_MODE_MONO);
 }
 
-/* 80877180-808771B0 004AA0 0030+00 1/1 0/0 0/0 .text            daMP_PushUsedTextureSet__FPv */
 static void daMP_PushUsedTextureSet(void* tex) {
     OSSendMessage(&daMP_UsedTextureSetQueue, tex, OS_MESSAGE_NOBLOCK);
 }
 
-/* 808771B0-808771F4 004AD0 0044+00 2/2 0/0 0/0 .text            daMP_PopUsedTextureSet__Fv */
 static void* daMP_PopUsedTextureSet() {
     OSMessage tex;
     if (OSReceiveMessage(&daMP_UsedTextureSetQueue, &tex, OS_MESSAGE_NOBLOCK) == 1) {
@@ -3491,7 +3348,6 @@ static void* daMP_PopUsedTextureSet() {
     return NULL;
 }
 
-/* 808771F4-808772CC 004B14 00D8+00 1/1 0/0 0/0 .text            daMP_THPPlayerInit__Fl */
 static int daMP_THPPlayerInit(s32 param_0) {
     BOOL enable;
 
@@ -3523,7 +3379,6 @@ static int daMP_THPPlayerInit(s32 param_0) {
     return 1;
 }
 
-/* 808772CC-8087730C 004BEC 0040+00 1/1 0/0 0/0 .text            daMP_THPPlayerQuit__Fv */
 static void daMP_THPPlayerQuit() {
     LCDisable();
     daMP_audioQuitWithMSound();
@@ -3532,7 +3387,6 @@ static void daMP_THPPlayerQuit() {
     daMP_ActivePlayer.videoError = 0;
 }
 
-/* 8087730C-808776EC 004C2C 03E0+00 1/1 0/0 0/0 .text            daMP_THPPlayerOpen__FPCci */
 static BOOL daMP_THPPlayerOpen(char const* filename, BOOL onMemory) {
     s32 offset;
 	s32 i;
@@ -3628,7 +3482,6 @@ static BOOL daMP_THPPlayerOpen(char const* filename, BOOL onMemory) {
     return 1;
 }
 
-/* 808776EC-80877740 00500C 0054+00 2/2 0/0 0/0 .text            daMP_THPPlayerClose__Fv */
 static BOOL daMP_THPPlayerClose() {
     if (daMP_ActivePlayer.open && daMP_ActivePlayer.state == 0) {
         daMP_ActivePlayer.open = 0;
@@ -3639,7 +3492,6 @@ static BOOL daMP_THPPlayerClose() {
     return FALSE;
 }
 
-/* 80877740-808777F0 005060 00B0+00 1/1 0/0 0/0 .text            daMP_THPPlayerCalcNeedMemory__Fv */
 static u32 daMP_THPPlayerCalcNeedMemory() {
     if (daMP_ActivePlayer.open) {
 		u32 size = daMP_ActivePlayer.onMemory
@@ -3660,7 +3512,6 @@ static u32 daMP_THPPlayerCalcNeedMemory() {
 	return 0;
 }
 
-/* 808777F0-80877A08 005110 0218+00 1/1 0/0 0/0 .text            daMP_THPPlayerSetBuffer__FPUc */
 static BOOL daMP_THPPlayerSetBuffer(u8* buffer) {
     u32 i;
 	u8* ptr;
@@ -3715,7 +3566,6 @@ static BOOL daMP_THPPlayerSetBuffer(u8* buffer) {
 	return FALSE;
 }
 
-/* 80877A08-80877ADC 005328 00D4+00 1/1 0/0 0/0 .text            daMP_InitAllMessageQueue__Fv */
 static void daMP_InitAllMessageQueue() {
     int i;
 	if (daMP_ActivePlayer.onMemory == FALSE) {
@@ -3737,7 +3587,6 @@ static void daMP_InitAllMessageQueue() {
 	OSInitMessageQueue(&daMP_PrepareReadyQueue, &daMP_PrepareReadyMessage, 1);
 }
 
-/* 80877ADC-80877B48 0053FC 006C+00 1/1 0/0 0/0 .text            daMP_ProperTimingForStart__Fv */
 static BOOL daMP_ProperTimingForStart() {
     if (daMP_ActivePlayer.videoInfo.videoType & 1) {
 		if (VIGetNextField() == 0)
@@ -3751,7 +3600,6 @@ static BOOL daMP_ProperTimingForStart() {
 	return FALSE;
 }
 
-/* 80877B48-80877C8C 005468 0144+00 1/1 0/0 0/0 .text daMP_ProperTimingForGettingNextFrame__Fv */
 static BOOL daMP_ProperTimingForGettingNextFrame() {
     if ((daMP_ActivePlayer.videoInfo.videoType & 1)) {
 		if (VIGetNextField() == 0) {
@@ -3778,7 +3626,6 @@ static BOOL daMP_ProperTimingForGettingNextFrame() {
 	return FALSE;
 }
 
-/* 80877C8C-80877F48 0055AC 02BC+00 1/1 0/0 0/0 .text            daMP_PlayControl__FUl */
 static void daMP_PlayControl(u32 retraceCnt) {
     THPTextureSet* decodedTexture;
 
@@ -3858,7 +3705,6 @@ static void daMP_PlayControl(u32 retraceCnt) {
 	}
 }
 
-/* 80877F48-80877F88 005868 0040+00 1/1 0/0 0/0 .text            daMP_WaitUntilPrepare__Fv */
 BOOL daMP_WaitUntilPrepare() {
     OSMessage msg;
     OSReceiveMessage(&daMP_PrepareReadyQueue, &msg, 1);
@@ -3870,12 +3716,10 @@ BOOL daMP_WaitUntilPrepare() {
 	}
 }
 
-/* 80877F88-80877FB8 0058A8 0030+00 2/2 0/0 0/0 .text            daMP_PrepareReady__Fi */
 void daMP_PrepareReady(BOOL msg) {
     OSSendMessage(&daMP_PrepareReadyQueue, (OSMessage)msg, 1);
 }
 
-/* 80877FB8-808782A0 0058D8 02E8+00 1/1 0/0 0/0 .text            daMP_THPPlayerPrepare__Flll */
 static BOOL daMP_THPPlayerPrepare(s32 frame, s32 flag, s32 audioTrack) {
     u8* threadData;
 	if (daMP_ActivePlayer.open && daMP_ActivePlayer.state == 0) {
@@ -3961,7 +3805,6 @@ static BOOL daMP_THPPlayerPrepare(s32 frame, s32 flag, s32 audioTrack) {
 	return FALSE;
 }
 
-/* 808782A0-808782E4 005BC0 0044+00 1/1 0/0 0/0 .text            daMP_THPPlayerDrawDone__Fv */
 static void daMP_THPPlayerDrawDone() {
     GXDrawDone();
 
@@ -3976,7 +3819,6 @@ static void daMP_THPPlayerDrawDone() {
     }
 }
 
-/* 808782E4-80878344 005C04 0060+00 1/1 0/0 0/0 .text            daMP_THPPlayerPlay__Fv */
 static BOOL daMP_THPPlayerPlay() {
     if (daMP_ActivePlayer.open != 0 && (daMP_ActivePlayer.state == 1 || daMP_ActivePlayer.state == 4)) {
         daMP_ActivePlayer.state = 2;
@@ -3989,7 +3831,6 @@ static BOOL daMP_THPPlayerPlay() {
     return FALSE;
 }
 
-/* 80878344-808783FC 005C64 00B8+00 3/3 0/0 0/0 .text            daMP_THPPlayerStop__Fv */
 static void daMP_THPPlayerStop() {
     if (daMP_ActivePlayer.open != 0 && daMP_ActivePlayer.state != 0) {
         daMP_ActivePlayer.internalState = 0;
@@ -4016,7 +3857,6 @@ static void daMP_THPPlayerStop() {
     }
 }
 
-/* 808783FC-80878438 005D1C 003C+00 1/1 0/0 0/0 .text            daMP_THPPlayerPause__Fv */
 static int daMP_THPPlayerPause() {
     if (daMP_ActivePlayer.open != 0 && daMP_ActivePlayer.state == 2) {
         daMP_ActivePlayer.internalState = 4;
@@ -4027,8 +3867,6 @@ static int daMP_THPPlayerPause() {
     return 0;
 }
 
-/* 80878438-80878534 005D58 00FC+00 1/1 0/0 0/0 .text
- * daMP_THPPlayerDrawCurrentFrame__FPC16_GXRenderModeObjUlUlUlUl */
 static int daMP_THPPlayerDrawCurrentFrame(const GXRenderModeObj* rmode, u32 x,
                                           u32 y, u32 polygonW, u32 polygonH) {
     s32 frame;
@@ -4052,8 +3890,6 @@ static int daMP_THPPlayerDrawCurrentFrame(const GXRenderModeObj* rmode, u32 x,
 	return -1;
 }
 
-/* 80878568-808785B0 005E88 0048+00 1/1 0/0 0/0 .text daMP_THPPlayerGetVideoInfo__FP12THPVideoInfo
- */
 static int daMP_THPPlayerGetVideoInfo(THPVideoInfo* info) {
     if (daMP_ActivePlayer.open != 0) {
         memcpy(info, &daMP_ActivePlayer.videoInfo, sizeof(THPVideoInfo));
@@ -4063,8 +3899,6 @@ static int daMP_THPPlayerGetVideoInfo(THPVideoInfo* info) {
     return 0;
 }
 
-/* 808785B0-808785F8 005ED0 0048+00 1/1 0/0 0/0 .text daMP_THPPlayerGetAudioInfo__FP12THPAudioInfo
- */
 static int daMP_THPPlayerGetAudioInfo(THPAudioInfo* info) {
     if (daMP_ActivePlayer.open != 0) {
         memcpy(info, &daMP_ActivePlayer.audioInfo, sizeof(THPAudioInfo));
@@ -4074,7 +3908,6 @@ static int daMP_THPPlayerGetAudioInfo(THPAudioInfo* info) {
     return 0;
 }
 
-/* 808785F8-8087861C 005F18 0024+00 2/2 0/0 0/0 .text            daMP_THPPlayerGetTotalFrame__Fv */
 static u32 daMP_THPPlayerGetTotalFrame() {
     if (daMP_ActivePlayer.open != 0) {
         return daMP_ActivePlayer.header.numFrames;
@@ -4083,12 +3916,10 @@ static u32 daMP_THPPlayerGetTotalFrame() {
     return 0;
 }
 
-/* 8087861C-8087862C 005F3C 0010+00 2/2 0/0 0/0 .text            daMP_THPPlayerGetState__Fv */
 static int daMP_THPPlayerGetState() {
     return daMP_ActivePlayer.state;
 }
 
-/* 8087862C-80878758 005F4C 012C+00 1/1 0/0 0/0 .text            daMP_THPPlayerSetVolume__Fll */
 static BOOL daMP_THPPlayerSetVolume(s32 vol, s32 duration) {
     u32 numSamples;
 	BOOL interrupt;
@@ -4126,22 +3957,16 @@ static BOOL daMP_THPPlayerSetVolume(s32 vol, s32 duration) {
 	return FALSE;
 }
 
-/* 80945AE0-80945AEC 0CC540 000C+00 1/1 0/0 0/0 .bss             daMP_videoInfo */
 static THPVideoInfo daMP_videoInfo;
 
-/* 80945AEC-80945AFC 0CC54C 0010+00 0/0 0/0 0/0 .bss             daMP_audioInfo */
 static THPAudioInfo daMP_audioInfo;
 
-/* 80945AFC-80945B00 0CC55C 0004+00 1/1 0/0 0/0 .bss             daMP_DrawPosX */
 static u32 daMP_DrawPosX;
 
-/* 80945B00-80945B04 0CC560 0004+00 1/1 0/0 0/0 .bss             daMP_DrawPosY */
 static u32 daMP_DrawPosY;
 
-/* 80945B04-80945B08 0CC564 0004+00 2/2 0/0 0/0 .bss             daMP_buffer */
 static void* daMP_buffer;
 
-/* 80878758-808788BC 006078 0164+00 1/1 0/0 0/0 .text            daMP_ActivePlayer_Init__FPCc */
 static BOOL daMP_ActivePlayer_Init(char const* moviePath) {
     daMP_THPPlayerInit(0);
     
@@ -4190,7 +4015,6 @@ static BOOL daMP_ActivePlayer_Init(char const* moviePath) {
     return 1;
 }
 
-/* 808788D4-80878914 0061F4 0040+00 1/1 0/0 0/0 .text            daMP_ActivePlayer_Finish__Fv */
 static void daMP_ActivePlayer_Finish() {
     daMP_THPPlayerStop();
     daMP_THPPlayerClose();
@@ -4201,7 +4025,6 @@ static void daMP_ActivePlayer_Finish() {
     }
 }
 
-/* 80878938-80878994 006258 005C+00 1/1 0/0 0/0 .text            daMP_ActivePlayer_Main__Fv */
 static void daMP_ActivePlayer_Main() {
     if (daMP_THPPlayerGetState() == 5) {
         daMP_THPPlayerStop();
@@ -4215,7 +4038,6 @@ static void daMP_ActivePlayer_Main() {
     }
 }
 
-/* 80878994-80878A34 0062B4 00A0+00 1/1 0/0 0/0 .text            daMP_ActivePlayer_Draw__Fv */
 static void daMP_ActivePlayer_Draw() {
     int frame = daMP_THPPlayerDrawCurrentFrame(JUTVideo::getManager()->getRenderMode(), daMP_DrawPosX, daMP_DrawPosY, daMP_videoInfo.xSize, daMP_videoInfo.ySize);
     daMP_THPPlayerDrawDone();
@@ -4226,10 +4048,8 @@ static void daMP_ActivePlayer_Draw() {
     }
 }
 
-/* 80945B08-80945B0C 0CC568 0004+00 5/5 0/0 0/0 .bss             daMP_Fail_alloc */
 static BOOL daMP_Fail_alloc;
 
-/* 80878A6C-80878B38 00638C 00CC+00 1/1 0/0 0/0 .text            daMP_Get_MovieRestFrame__Fv */
 static u32 daMP_Get_MovieRestFrame() {
     int temp_r31;
     if (daMP_Fail_alloc != 0 || daMP_THPPlayerGetState() == 5) {
@@ -4258,7 +4078,6 @@ static u32 daMP_Get_MovieRestFrame() {
     return (temp_r3 - 1) - temp_r31;
 }
 
-/* 80878B38-80878BB8 006458 0080+00 1/1 0/0 0/0 .text            daMP_Set_PercentMovieVolume__Ff */
 static void daMP_Set_PercentMovieVolume(f32 volume) {
     if (!daMP_Fail_alloc) {
         s32 player_vol;
@@ -4274,18 +4093,14 @@ static void daMP_Set_PercentMovieVolume(f32 volume) {
     }
 }
 
-/* 80878BB8-80878BDC 0064D8 0024+00 1/1 0/0 0/0 .text            daMP_c_Get_arg_demoNo__6daMP_cFv */
 int daMP_c::daMP_c_Get_arg_demoNo() {
     return ((u32)(fopAcM_GetParam(this) >> 7)) & 0x7F;
 }
 
-/* 80878C04-80878C28 006524 0024+00 1/1 0/0 0/0 .text            daMP_c_Get_arg_movieNo__6daMP_cFv
- */
 int daMP_c::daMP_c_Get_arg_movieNo() {
     return fopAcM_GetParam(this) & 0x7F;
 }
 
-/* 80878C28-80878D10 006548 00E8+00 1/1 0/0 0/0 .text            daMP_c_Init__6daMP_cFv */
 int daMP_c::daMP_c_Init() {
     JUT_ASSERT(9469, m_myObj == NULL);
 
@@ -4316,46 +4131,37 @@ int daMP_c::daMP_c_Init() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80878D64-80878D94 006684 0030+00 1/1 0/0 0/0 .text            daMP_c_Finish__6daMP_cFv */
 int daMP_c::daMP_c_Finish() {
     daMP_ActivePlayer_Finish();
     m_myObj = NULL;
     return 1;
 }
 
-/* 80878D94-80878DB8 0066B4 0024+00 1/1 0/0 0/0 .text            daMP_c_Main__6daMP_cFv */
 int daMP_c::daMP_c_Main() {
     daMP_ActivePlayer_Main();
     return 1;
 }
 
-/* 80878DB8-80878DD8 0066D8 0020+00 1/0 0/0 0/0 .text            draw__16daMP_Dlst_base_cFv */
 void daMP_Dlst_base_c::draw() {
     daMP_ActivePlayer_Draw();
 }
 
-/* 80945B0C-80945B10 0CC56C 0004+00 2/2 0/0 0/0 .bss             daMP_c_Dlst_base */
 static daMP_Dlst_base_c daMP_c_Dlst_base;
 
-/* 80878DD8-80878E04 0066F8 002C+00 1/1 0/0 0/0 .text            daMP_c_Draw__6daMP_cFv */
 int daMP_c::daMP_c_Draw() {
     dComIfGd_set2DOpa(&daMP_c_Dlst_base);
     return 1;
 }
 
-/* 80878E60-80878EC4 006780 0064+00 1/0 0/0 0/0 .text daMP_c_Callback_Init__6daMP_cFP10fopAc_ac_c
- */
 int daMP_c::daMP_c_Callback_Init(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, daMP_c);
     return ((daMP_c*)i_this)->daMP_c_Init();
 }
 
-/* 80878F18-80878F38 006838 0020+00 1/0 0/0 0/0 .text daMP_c_Callback_Finish__6daMP_cFP6daMP_c */
 int daMP_c::daMP_c_Callback_Finish(daMP_c* i_this) {
     return i_this->daMP_c_Finish();
 }
 
-/* 80878F38-80878F70 006858 0038+00 1/0 0/0 0/0 .text daMP_c_Callback_Main__6daMP_cFP6daMP_c */
 int daMP_c::daMP_c_Callback_Main(daMP_c* i_this) {
     #if PLATFORM_WII || PLATFORM_SHIELD
     mDoGph_gInf_c::resetDimming();
@@ -4368,7 +4174,6 @@ int daMP_c::daMP_c_Callback_Main(daMP_c* i_this) {
     return i_this->daMP_c_Main();
 }
 
-/* 80878F70-80878FA8 006890 0038+00 1/0 0/0 0/0 .text daMP_c_Callback_Draw__6daMP_cFP6daMP_c */
 int daMP_c::daMP_c_Callback_Draw(daMP_c* i_this) {
     if (daMP_Fail_alloc) {
         return 1;
@@ -4377,12 +4182,10 @@ int daMP_c::daMP_c_Callback_Draw(daMP_c* i_this) {
     return i_this->daMP_c_Draw();
 }
 
-/* 80878FA8-80878FB0 0068C8 0008+00 1/0 0/0 0/0 .text            daMP_Callback_Dummy__FP6daMP_c */
 static int daMP_Callback_Dummy(daMP_c* i_this) {
     return 1;
 }
 
-/* 80879534-80879554 -00001 0020+00 1/0 0/0 0/0 .data            daMP_METHODS */
 static actor_method_class daMP_METHODS = {
     (process_method_func)daMP_c::daMP_c_Callback_Init,
     (process_method_func)daMP_c::daMP_c_Callback_Finish,
@@ -4391,7 +4194,6 @@ static actor_method_class daMP_METHODS = {
     (process_method_func)daMP_c::daMP_c_Callback_Draw,
 };
 
-/* 80879554-80879584 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_MOVIE_PLAYER */
 extern actor_process_profile_definition g_profile_MOVIE_PLAYER = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

@@ -13,11 +13,11 @@
  */
 class daTboxSw_c : public fopAc_ac_c {
 public:
-    /* 80D66858 */ int Create();
-    /* 80D66860 */ int create();
-    /* 80D668C8 */ int execute();
-    /* 80D66938 */ int draw();
-    /* 80D66940 */ int _delete();
+    int Create();
+    int create();
+    int execute();
+    int draw();
+    int _delete();
 };
 
 STATIC_ASSERT(sizeof(daTboxSw_c) == 0x568);

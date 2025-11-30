@@ -49,22 +49,16 @@ static int phase_5(dScnPly_c*);
 static int phase_6(dScnPly_c*);
 static int phase_compleate(void*);
 
-/* 804510F8-80451100 0005F8 0008+00 2/2 0/0 0/0 .sbss            resPhase */
 static request_of_phase_process_class resPhase[1];
 
-/* 80451100-80451108 000600 0008+00 2/2 0/0 0/0 .sbss            dylPhase */
 static request_of_phase_process_class dylPhase[1];
 
-/* 80451108-8045110C 000608 0004+00 1/1 0/0 0/0 .sbss            dylPreLoadTime1 */
 static OSTime dylPreLoadTime1;
 
-/* 80451110-80451114 000610 0004+00 1/1 0/0 0/0 .sbss            resPreLoadTime0 */
 static OSTime resPreLoadTime0;
 
-/* 80451118-8045111C 000618 0004+00 1/1 0/0 0/0 .sbss            resPreLoadTime1 */
 static OSTime resPreLoadTime1;
 
-/* 80451120-80451124 000620 0004+00 1/1 0/0 0/0 .sbss            g_preLoadHIO */
 static dScnPly_preLoad_HIO_c g_preLoadHIO;
 
 /* 80451124 0001+00 data_80451124 None */
@@ -73,7 +67,6 @@ s8 dScnPly_c::pauseTimer;
 /* 80451125 0003+00 nextPauseTimer__9dScnPly_c None */
 s8 dScnPly_c::nextPauseTimer;
 
-/* 80259400-80259440 253D40 0040+00 1/1 0/0 0/0 .text            calcPauseTimer__9dScnPly_cFv */
 s8 dScnPly_c::calcPauseTimer() {
     if (nextPauseTimer != 0) {
         pauseTimer = nextPauseTimer;
@@ -84,12 +77,10 @@ s8 dScnPly_c::calcPauseTimer() {
     }
 }
 
-/* 80454F18-80454F1C 003518 0002+02 1/0 0/0 0/0 .sdata2          T_JOINT_dylKeyTbl */
 static const s16 T_JOINT_dylKeyTbl[1] = {
     0x0106,
 };
 
-/* 80259440-80259468 253D80 0028+00 1/1 0/0 0/0 .text            __ct__22dScnPly_env_otherHIO_cFv */
 dScnPly_env_otherHIO_c::dScnPly_env_otherHIO_c() {
     mShadowDensity = 255.0f;
     mAdjustLODBias = 1;
@@ -99,7 +90,6 @@ dScnPly_env_otherHIO_c::dScnPly_env_otherHIO_c() {
 void dScnPly_env_otherHIO_c::genMessage(JORMContext* ctx) {
 }
 
-/* 80259468-802594AC 253DA8 0044+00 1/1 0/0 0/0 .text            __ct__22dScnPly_env_debugHIO_cFv */
 dScnPly_env_debugHIO_c::dScnPly_env_debugHIO_c() {
     mBoxCullMinSize.set(-100.0f, -100.0f, -100.0f);
     mBoxCullMaxSize.set(100.0f, 100.0f, 100.0f);
@@ -110,7 +100,6 @@ dScnPly_env_debugHIO_c::dScnPly_env_debugHIO_c() {
 void dScnPly_env_debugHIO_c::genMessage(JORMContext* ctx) {
 }
 
-/* 802594AC-802597B8 253DEC 030C+00 1/0 0/0 0/0 .text            dScnPly_Draw__FP9dScnPly_c */
 static int dScnPly_Draw(dScnPly_c* i_this) {
     static s16 l_wipeType[] = {
         0x0000, 0x0000, 0x0011, 0x0002, 0x0002, 0x0001, 0x0003, 0x0001, 0x0004, 0x0004, 0x0005, 0x0005,
@@ -182,7 +171,6 @@ static int dScnPly_Draw(dScnPly_c* i_this) {
     return 1;
 }
 
-/* 802597B8-8025987C 2540F8 00C4+00 1/0 0/0 0/0 .text            dScnPly_Execute__FP9dScnPly_c */
 static int dScnPly_Execute(dScnPly_c* i_this) {
     i_this->offReset();
     dStage_roomControl_c::offNoChangeRoom();
@@ -209,7 +197,6 @@ static int dScnPly_Execute(dScnPly_c* i_this) {
     return 1;
 }
 
-/* 8025987C-802598AC 2541BC 0030+00 1/0 0/0 0/0 .text            dScnPly_IsDelete__F9dScnPly_c */
 static int dScnPly_IsDelete(dScnPly_c i_this) {
     dComIfGp_particle_cleanup();
     return 1;
@@ -223,10 +210,8 @@ struct PreLoadInfo {
     u8 resNameNum;
 };
 
-/* 80450760-80450764 -00001 0004+00 1/0 0/0 0/0 .sdata           T_JOINT_resName */
 static const char* T_JOINT_resName[1] = {"Always"};
 
-/* 8039A2C8-8039A2D8 -00001 0010+00 4/4 0/0 0/0 .rodata          PreLoadInfoT */
 static PreLoadInfo const PreLoadInfoT[1] = {
     {
         "T_JOINT",
@@ -237,12 +222,10 @@ static PreLoadInfo const PreLoadInfoT[1] = {
     },
 };
 
-/* 80450764-80450768 -00001 0004+00 4/4 0/0 0/0 .sdata           None */
 static s8 preLoadNo = -1;
 
 static u8 doPreLoad = 1;
 
-/* 802598AC-80259AC4 2541EC 0218+00 1/0 0/0 0/0 .text            dScnPly_Delete__FP9dScnPly_c */
 static int dScnPly_Delete(dScnPly_c* i_this) {
     daSus_c::reset();
     dMpath_c::remove();
@@ -306,7 +289,6 @@ static int dScnPly_Delete(dScnPly_c* i_this) {
     return 1;
 }
 
-/* 80259AC4-80259BFC 254404 0138+00 1/1 0/0 0/0 .text            resetGame__9dScnPly_cFv */
 bool dScnPly_c::resetGame() {
     if (fpcM_GetName(this) == PROC_OPENING_SCENE) {
         if (!dStage_roomControl_c::resetArchiveBank(0)) {
@@ -338,7 +320,6 @@ bool dScnPly_c::resetGame() {
     return true;
 }
 
-/* 80259BFC-80259C70 25453C 0074+00 1/1 0/0 0/0 .text            offReset__9dScnPly_cFv */
 void dScnPly_c::offReset() {
     if (field_0x1d4 != 0 && !fopOvlpM_IsPeek()) {
         mDoRst::offReset();
@@ -349,7 +330,6 @@ void dScnPly_c::offReset() {
     }
 }
 
-/* 80259C70-80259CAC 2545B0 003C+00 1/0 0/0 0/0 .text            phase_00__FP9dScnPly_c */
 static int phase_00(dScnPly_c* i_this) {
     if (!i_this->resetGame()) {
         return cPhs_INIT_e;
@@ -363,7 +343,6 @@ static int phase_00(dScnPly_c* i_this) {
     }
 }
 
-/* 80259CAC-80259D7C 2545EC 00D0+00 1/0 0/0 0/0 .text            phase_01__FP9dScnPly_c */
 static int phase_01(dScnPly_c* i_this) {
     mDoAud_setHour(dKy_getdaytime_hour());
     mDoAud_setMinute(dKy_getdaytime_minute());
@@ -387,12 +366,10 @@ static int phase_01(dScnPly_c* i_this) {
     }
 }
 
-/* 80259D7C-80259D84 2546BC 0008+00 1/0 0/0 0/0 .text            phase_0__FP9dScnPly_c */
 static int phase_0(dScnPly_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-/* 80259D84-8025A438 2546C4 06B4+00 1/0 0/0 0/0 .text            phase_1__FP9dScnPly_c */
 static int phase_1(dScnPly_c* i_this) {
     u32 id = fopScnM_GetID(i_this);
     dStage_roomControl_c::setProcID(id);
@@ -542,7 +519,6 @@ static int phase_1(dScnPly_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-/* 8025A438-8025A4F8 254D78 00C0+00 1/0 0/0 0/0 .text            phase_1_0__FP9dScnPly_c */
 static int phase_1_0(dScnPly_c* i_this) {
     static char camparamarc[10] = "CamParam";
 
@@ -557,7 +533,6 @@ static int phase_1_0(dScnPly_c* i_this) {
     }
 }
 
-/* 8025A4F8-8025A5D4 254E38 00DC+00 1/0 0/0 0/0 .text            phase_2__FP9dScnPly_c */
 static int phase_2(dScnPly_c* i_this) {
     int tmp = dComIfG_syncAllObjectRes();
     if (tmp >= 0 && tmp != 0) {
@@ -575,7 +550,6 @@ static int phase_2(dScnPly_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-/* 8025A5D4-8025A654 254F14 0080+00 1/0 0/0 0/0 .text            phase_3__FP9dScnPly_c */
 static int phase_3(dScnPly_c* i_this) {
     if ((i_this->sceneCommand != NULL && !i_this->sceneCommand->sync()) || mDoAud_check1stDynamicWave()) {
         return cPhs_INIT_e;
@@ -588,17 +562,14 @@ static int phase_3(dScnPly_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-/* 80451128-80451130 000628 0004+04 1/1 0/0 0/0 .sbss            g_regHIO */
 dScnPly_reg_HIO_c g_regHIO;
 
-/* 8043079C-804307E0 05D4BC 0044+00 1/2 3/3 0/0 .bss             g_envHIO */
 dScnPly_env_HIO_c g_envHIO;
 
 #ifdef DEBUG
 dScnPly_preset_HIO_c g_presetHIO;
 #endif
 
-/* 8025A654-8025A9F4 254F94 03A0+00 1/0 0/0 0/0 .text            phase_4__FP9dScnPly_c */
 static int phase_4(dScnPly_c* i_this) {
     if (i_this->sceneCommand) {
         dComIfGp_particle_createScene(i_this->sceneCommand->getMemAddress());
@@ -684,7 +655,6 @@ static int phase_4(dScnPly_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-/* 8025A9F4-8025AAC0 255334 00CC+00 1/0 0/0 0/0 .text            phase_5__FP9dScnPly_c */
 static int phase_5(dScnPly_c* i_this) {
     if (preLoadNo >= 0) {
         int phase_state = cPhs_NEXT_e;
@@ -715,7 +685,6 @@ static int phase_5(dScnPly_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-/* 8025AAC0-8025AB8C 255400 00CC+00 1/0 0/0 0/0 .text            phase_6__FP9dScnPly_c */
 static int phase_6(dScnPly_c* i_this) {
     if (preLoadNo >= 0) {
         int phase_state = cPhs_NEXT_e;
@@ -746,12 +715,10 @@ static int phase_6(dScnPly_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-/* 8025AB8C-8025AB94 2554CC 0008+00 1/0 0/0 0/0 .text            phase_compleate__FPv */
 static int phase_compleate(void* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8025AB94-8025ABC4 2554D4 0030+00 1/0 0/0 0/0 .text            dScnPly_Create__FP11scene_class */
 static void dScnPly_Create(scene_class* i_this) {
     static request_of_phase_process_fn l_method[] = {
         (request_of_phase_process_fn)phase_00,        (request_of_phase_process_fn)phase_1,
@@ -765,14 +732,12 @@ static void dScnPly_Create(scene_class* i_this) {
     dComLbG_PhaseHandler(&static_cast<dScnPly_c*>(i_this)->field_0x1c4, l_method, i_this);
 }
 
-/* 803C31C0-803C31D4 -00001 0014+00 2/0 0/0 0/0 .data            l_dScnPly_Method */
 static leafdraw_method_class l_dScnPly_Method = {
     (process_method_func)dScnPly_Create,  (process_method_func)dScnPly_Delete,
     (process_method_func)dScnPly_Execute, (process_method_func)dScnPly_IsDelete,
     (process_method_func)dScnPly_Draw,
 };
 
-/* 803C31D4-803C31FC -00001 0028+00 0/0 0/0 1/0 .data            g_profile_PLAY_SCENE */
 scene_process_profile_definition g_profile_PLAY_SCENE = {
     fpcLy_ROOT_e,                              // mLayerID
     1,                                         // mListID
@@ -786,7 +751,6 @@ scene_process_profile_definition g_profile_PLAY_SCENE = {
     (process_method_class*)&l_dScnPly_Method,  // mpMtd
 };
 
-/* 803C31FC-803C3224 -00001 0028+00 0/0 0/0 1/0 .data            g_profile_OPENING_SCENE */
 scene_process_profile_definition g_profile_OPENING_SCENE = {
     fpcLy_ROOT_e,                              // mLayerID
     1,                                         // mListID

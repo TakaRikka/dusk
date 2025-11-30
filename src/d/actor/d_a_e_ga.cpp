@@ -9,13 +9,11 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-/* 804FB0EC-804FB110 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__12daE_Ga_HIO_cFv */
 daE_Ga_HIO_c::daE_Ga_HIO_c() {
     id = -1;
     base_size = 1.0f;
 }
 
-/* 804FB110-804FB1B0 000110 00A0+00 1/0 0/0 0/0 .text            daE_Ga_Draw__FP10e_ga_class */
 static int daE_Ga_Draw(e_ga_class* a_this) {
     fopAc_ac_c* actor = &a_this->actor;
 
@@ -33,7 +31,6 @@ static int daE_Ga_Draw(e_ga_class* a_this) {
     return 1;
 }
 
-/* 804FB1B0-804FB3A8 0001B0 01F8+00 1/1 0/0 0/0 .text            ga_fly__FP10e_ga_classP4ga_s */
 static void ga_fly(e_ga_class* a_this, ga_s* ga_s) {
     fopAc_ac_c* actor = &a_this->actor;
 
@@ -72,7 +69,6 @@ static void ga_fly(e_ga_class* a_this, ga_s* ga_s) {
     ga_s->field_0x44 += 0x3E00;
 }
 
-/* 804FB3A8-804FB5C0 0003A8 0218+00 1/1 0/0 0/0 .text            bt_fly__FP10e_ga_classP4ga_s */
 static void bt_fly(e_ga_class* a_this, ga_s* ga_s) {
     fopAc_ac_c* actor = &a_this->actor;
 
@@ -113,7 +109,6 @@ static void bt_fly(e_ga_class* a_this, ga_s* ga_s) {
     ga_s->field_0x3c = cM_ssin(ga_s->field_0x44);
 }
 
-/* 804FB5C0-804FB6F8 0005C0 0138+00 1/1 0/0 0/0 .text            ga_control__FP10e_ga_class */
 static void ga_control(e_ga_class* a_this) {
     cXyz sp10;
     ga_s* ga_s = a_this->ga_s;
@@ -147,21 +142,17 @@ static void ga_control(e_ga_class* a_this) {
     }
 }
 
-/* 804FB6F8-804FB71C 0006F8 0024+00 2/1 0/0 0/0 .text            daE_Ga_Execute__FP10e_ga_class */
 static int daE_Ga_Execute(e_ga_class* a_this) {
     ga_control(a_this);
     return 1;
 }
 
-/* 804FB71C-804FB724 00071C 0008+00 1/0 0/0 0/0 .text            daE_Ga_IsDelete__FP10e_ga_class */
 static int daE_Ga_IsDelete(e_ga_class* a_this) {
     return 1;
 }
 
-/* 804FBC48-804FBC4C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 804FB724-804FB7C4 000724 00A0+00 1/0 0/0 0/0 .text            daE_Ga_Delete__FP10e_ga_class */
 static int daE_Ga_Delete(e_ga_class* a_this) {
     fopAc_ac_c* actor = &a_this->actor;
     fpc_ProcID id = fopAcM_GetID(actor);
@@ -180,7 +171,6 @@ static int daE_Ga_Delete(e_ga_class* a_this) {
     return 1;
 }
 
-/* 804FB7C4-804FB874 0007C4 00B0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_ga_class* a_this = (e_ga_class*)i_this;
 
@@ -197,10 +187,8 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 804FBC58-804FBC64 000018 000C+00 2/2 0/0 0/0 .bss             l_HIO */
 static daE_Ga_HIO_c l_HIO;
 
-/* 804FB874-804FBAB8 000874 0244+00 1/0 0/0 0/0 .text            daE_Ga_Create__FP10fopAc_ac_c */
 static int daE_Ga_Create(fopAc_ac_c* i_this) {
     static const int l_bmdidx[] = {3};
 
@@ -268,7 +256,6 @@ static int daE_Ga_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 804FBBE0-804FBC00 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_Ga_Method */
 static actor_method_class l_daE_Ga_Method = {
     (process_method_func)daE_Ga_Create,
     (process_method_func)daE_Ga_Delete,
@@ -277,7 +264,6 @@ static actor_method_class l_daE_Ga_Method = {
     (process_method_func)daE_Ga_Draw,
 };
 
-/* 804FBC00-804FBC30 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_GA */
 extern actor_process_profile_definition g_profile_E_GA = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

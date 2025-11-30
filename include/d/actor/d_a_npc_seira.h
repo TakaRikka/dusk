@@ -17,56 +17,56 @@ public:
     typedef int (daNpc_Seira_c::*cutFunc)(int);
     typedef int (daNpc_Seira_c::*actionFunc)(void*);
 
-    /* 80ACB7CC */ ~daNpc_Seira_c();
-    /* 80ACB918 */ int create();
-    /* 80ACBBD4 */ int CreateHeap();
-    /* 80ACC0FC */ int Delete();
-    /* 80ACC130 */ int Execute();
-    /* 80ACC21C */ int Draw();
-    /* 80ACC2B0 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80ACC2D0 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80ACC328 */ u8 getType();
-    /* 80ACC424 */ int getFlowNodeNo();
-    /* 80ACC440 */ u8 checkBottle();
-    /* 80ACC4A8 */ u8 getNpcType();
-    /* 80ACC4C8 */ int isDelete();
-    /* 80ACC4D0 */ void reset();
-    /* 80ACC618 */ void afterJntAnm(int);
-    /* 80ACC69C */ void setParam();
-    /* 80ACC818 */ BOOL checkChangeEvt();
-    /* 80ACC8C0 */ void setAfterTalkMotion();
-    /* 80ACC980 */ void srchActors();
-    /* 80ACCA48 */ BOOL evtTalk();
-    /* 80ACCBEC */ BOOL evtCutProc();
-    /* 80ACCCBC */ void action();
-    /* 80ACCE58 */ void beforeMove();
-    /* 80ACCED0 */ void setAttnPos();
-    /* 80ACD1D0 */ void setCollision();
-    /* 80ACD378 */ BOOL drawDbgInfo();
-    /* 80ACD380 */ void drawOtherMdl();
-    /* 80ACD458 */ bool setBottleAnm(int, int, f32, bool);
-    /* 80ACD538 */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80ACD570 */ void changeAnm(int*, int*);
-    /* 80ACD600 */ void changeBck(int*, int*);
-    /* 80ACD6AC */ void changeBtp(int*, int*);
-    /* 80ACD744 */ void changeBtk(int*, int*);
-    /* 80ACD770 */ int selectAction();
-    /* 80ACD900 */ int chkAction(actionFunc);
-    /* 80ACD92C */ int setAction(actionFunc);
-    /* 80ACD9D4 */ int cutConversationAboutSaru(int);
-    /* 80ACDC6C */ BOOL checkStageIsSeirasShop();
-    /* 80ACDCE4 */ int getShopItemType();
-    /* 80ACDD24 */ int wait(void*);
-    /* 80ACDE74 */ int sit(void*);
-    /* 80ACE098 */ int happy(void*);
-    /* 80ACE220 */ int worry(void*);
-    /* 80ACE4FC */ int sad(void*);
-    /* 80ACE608 */ int lookaround(void*);
-    /* 80ACE714 */ int lookaround_wait(void*);
-    /* 80ACE828 */ int smile(void*);
-    /* 80ACE934 */ int talk(void*);
-    /* 80ACEAC4 */ int shop(void*);
-    /* 80ACFB48 */ daNpc_Seira_c(
+    ~daNpc_Seira_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    int getFlowNodeNo();
+    u8 checkBottle();
+    u8 getNpcType();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    BOOL drawDbgInfo();
+    void drawOtherMdl();
+    bool setBottleAnm(int, int, f32, bool);
+    bool afterSetMotionAnm(int, int, f32, int);
+    void changeAnm(int*, int*);
+    void changeBck(int*, int*);
+    void changeBtp(int*, int*);
+    void changeBtk(int*, int*);
+    int selectAction();
+    int chkAction(actionFunc);
+    int setAction(actionFunc);
+    int cutConversationAboutSaru(int);
+    BOOL checkStageIsSeirasShop();
+    int getShopItemType();
+    int wait(void*);
+    int sit(void*);
+    int happy(void*);
+    int worry(void*);
+    int sad(void*);
+    int lookaround(void*);
+    int lookaround_wait(void*);
+    int smile(void*);
+    int talk(void*);
+    int shop(void*);
+    daNpc_Seira_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -79,12 +79,12 @@ public:
         // "|%06d:%x|daNpc_Seira_c -> Construct\n"
         OS_REPORT("|%06d:%x|daNpc_Seira_c -> コンストラクト\n", g_Counter.mCounter0, this);
     }
-    /* 80ACFC14 */ u16 getEyeballMaterialNo() { return 2; }
-    /* 80ACFC1C */ s32 getHeadJointNo() { return 4; }
-    /* 80ACFC24 */ s32 getNeckJointNo() { return 3; }
-    /* 80ACFC2C */ s32 getBackboneJointNo() { return true; }
-    /* 80ACFC34 */ BOOL checkChangeJoint(int val) { return val == 4; }
-    /* 80ACFC44 */ BOOL checkRemoveJoint(int val) { return val == 8; }
+    u16 getEyeballMaterialNo() { return 2; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return true; }
+    BOOL checkChangeJoint(int val) { return val == 4; }
+    BOOL checkRemoveJoint(int val) { return val == 8; }
 
     static char* mCutNameList[2];
     static cutFunc mCutList[2];
@@ -117,7 +117,7 @@ struct daNpc_Seira_HIOParam {
 
 class daNpc_Seira_Param_c {
 public:
-    /* 80ACFC54 */ virtual ~daNpc_Seira_Param_c() {}
+    virtual ~daNpc_Seira_Param_c() {}
 
     static const daNpc_Seira_HIOParam m;
 };

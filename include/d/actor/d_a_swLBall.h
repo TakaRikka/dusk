@@ -21,17 +21,17 @@ public:
 
     typedef void (daSwLBall_c::*actionFunc)();
 
-    /* 80D4EB8C */ int checkArea_sub(fopAc_ac_c*);
-    /* 80D4ECCC */ int checkArea();
-    /* 80D4ED80 */ void search_lb();
-    /* 80D4EEAC */ int Create();
-    /* 80D4EEF8 */ int create();
-    /* 80D4EF60 */ int execute();
-    /* 80D4F008 */ void actionInit();
-    /* 80D4F080 */ void actionRun();
-    /* 80D4F220 */ void actionStop();
-    /* 80D4F224 */ void PutCrrPos();
-    /* 80D4F444 */ int _delete();
+    int checkArea_sub(fopAc_ac_c*);
+    int checkArea();
+    void search_lb();
+    int Create();
+    int create();
+    int execute();
+    void actionInit();
+    void actionRun();
+    void actionStop();
+    void PutCrrPos();
+    int _delete();
 
     u8 getType() { return fopAcM_GetParamBit(this, 24, 4); }
     u8 getArg0() { return fopAcM_GetParamBit(this, 0, 8); }

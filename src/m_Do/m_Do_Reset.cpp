@@ -24,10 +24,8 @@ static void destroyVideo() {
     return;
 }
 
-/* 80450C78-80450C80 000178 0004+04 3/2 42/42 2/2 .sbss            mResetData__6mDoRst */
 mDoRstData* mDoRst::mResetData;
 
-/* 80015614-8001574C 00FF54 0138+00 0/0 3/3 0/0 .text            mDoRst_reset__FiUli */
 void mDoRst_reset(int param_0, u32 param_1, int param_2) {
     JUTXfb::getManager()->clearIndex();
     mDoDvdErr_ThdCleanup();
@@ -86,7 +84,6 @@ void mDoRst_reset(int param_0, u32 param_1, int param_2) {
     } while (true);
 }
 
-/* 8001574C-800157F4 01008C 00A8+00 0/0 3/3 0/0 .text            mDoRst_resetCallBack__FiPv */
 void mDoRst_resetCallBack(int port, void*) {
     if (!mDoRst::isReset()) {
         if (port == -1) {

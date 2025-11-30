@@ -29,31 +29,31 @@ public:
         MODE_LOWER_e,
     };
 
-    /* 80C9D098 */ void initBaseMtx();
-    /* 80C9D0D4 */ void setBaseMtx();
-    /* 80C9D338 */ int create1st();
-    /* 80C9D41C */ void event_proc_call();
-    /* 80C9D4D8 */ void mode_proc_call();
-    /* 80C9D82C */ int actionWait();
-    /* 80C9D8EC */ int actionOrderEvent();
-    /* 80C9D95C */ int actionEvent();
-    /* 80C9D9BC */ int actionEnd();
-    /* 80C9D9C4 */ int modeWaitUpperInit();
-    /* 80C9D9F4 */ int modeWaitUpper();
-    /* 80C9DA98 */ int modeUpperInit();
-    /* 80C9DADC */ int modeUpper();
-    /* 80C9DF18 */ int modeWaitLowerInit();
-    /* 80C9DF60 */ int modeWaitLower();
-    /* 80C9E004 */ int modeLowerInit();
-    /* 80C9E034 */ int modeLower();
-    /* 80C9E3D8 */ void setParticle();
-    /* 80C9E5A0 */ void removeParticle();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    void event_proc_call();
+    void mode_proc_call();
+    int actionWait();
+    int actionOrderEvent();
+    int actionEvent();
+    int actionEnd();
+    int modeWaitUpperInit();
+    int modeWaitUpper();
+    int modeUpperInit();
+    int modeUpper();
+    int modeWaitLowerInit();
+    int modeWaitLower();
+    int modeLowerInit();
+    int modeLower();
+    void setParticle();
+    void removeParticle();
 
-    /* 80C9D2B8 */ virtual int CreateHeap();
-    /* 80C9D148 */ virtual int Create();
-    /* 80C9D594 */ virtual int Execute(Mtx**);
-    /* 80C9D710 */ virtual int Draw();
-    /* 80C9D7B4 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwbit2() { return fopAcM_GetParamBit(this, 8, 8); }

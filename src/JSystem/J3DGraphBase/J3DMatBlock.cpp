@@ -31,7 +31,6 @@ inline void loadTevKColor(u32 reg, const J3DGXColor& color) {
     J3DGDSetTevKColor(GXTevKColorID(reg), color);
 }
 
-/* 8031747C-803174DC 311DBC 0060+00 0/0 1/1 0/0 .text initialize__21J3DColorBlockLightOffFv */
 void J3DColorBlockLightOff::initialize() {
     mColorChanNum = 0;
     for (int i = 0; i < ARRAY_SIZE(mMatColor); i++) {
@@ -41,7 +40,6 @@ void J3DColorBlockLightOff::initialize() {
     mColorChanOffset = 0;
 }
 
-/* 803174DC-80317580 311E1C 00A4+00 0/0 1/1 0/0 .text initialize__22J3DColorBlockAmbientOnFv */
 void J3DColorBlockAmbientOn::initialize() {
     mColorChanNum = 0;
     for (int i = 0; i < ARRAY_SIZE(mMatColor); i++) {
@@ -54,7 +52,6 @@ void J3DColorBlockAmbientOn::initialize() {
     mColorChanOffset = 0;
 }
 
-/* 80317580-80317644 311EC0 00C4+00 0/0 1/1 0/0 .text initialize__20J3DColorBlockLightOnFv */
 void J3DColorBlockLightOn::initialize() {
     mColorChanNum = 0;
     for (int i = 0; i < ARRAY_SIZE(mMatColor); i++) {
@@ -70,7 +67,6 @@ void J3DColorBlockLightOn::initialize() {
     mColorChanOffset = 0;
 }
 
-/* 80317644-80317674 311F84 0030+00 0/0 2/2 0/0 .text initialize__21J3DTexGenBlockPatchedFv */
 void J3DTexGenBlockPatched::initialize() {
     mTexGenNum = 0;
     for (int i = 0; i < 8; i++)
@@ -78,7 +74,6 @@ void J3DTexGenBlockPatched::initialize() {
     mTexMtxOffset = 0;
 }
 
-/* 80317674-803176A4 311FB4 0030+00 0/0 1/1 0/0 .text            initialize__15J3DTexGenBlock4Fv */
 void J3DTexGenBlock4::initialize() {
     mTexGenNum = 0;
     for (int i = 0; i < 4; i++)
@@ -86,8 +81,6 @@ void J3DTexGenBlock4::initialize() {
     mTexMtxOffset = 0;
 }
 
-/* 803176A4-803176D4 311FE4 0030+00 0/0 1/1 0/0 .text            initialize__19J3DTexGenBlockBasicFv
- */
 void J3DTexGenBlockBasic::initialize() {
     mTexGenNum = 0;
     for (int i = 0; i < 8; i++)
@@ -95,13 +88,10 @@ void J3DTexGenBlockBasic::initialize() {
     mTexMtxOffset = 0;
 }
 
-/* 803176D4-803176E0 312014 000C+00 0/0 1/1 0/0 .text            initialize__15J3DTevBlockNullFv */
 void J3DTevBlockNull::initialize() {
     mTexNoOffset = 0;
 }
 
-/* 803176E0-803177E8 312020 0108+00 0/0 1/1 0/0 .text            initialize__18J3DTevBlockPatchedFv
- */
 void J3DTevBlockPatched::initialize() {
     for (int i = 0; i < ARRAY_SIZE(mTexNo); i++) {
         mTexNo[i] = 0xFFFF;
@@ -124,14 +114,12 @@ void J3DTevBlockPatched::initialize() {
     mTevRegOffset = 0;
 }
 
-/* 803177E8-80317810 312128 0028+00 0/0 1/1 0/0 .text            initialize__12J3DTevBlock1Fv */
 void J3DTevBlock1::initialize() {
     mTexNo[0] = 0xFFFF;
     mTevStage[0].setStageNo(0);
     mTexNoOffset = 0;
 }
 
-/* 80317810-803178EC 312150 00DC+00 0/0 1/1 0/0 .text            initialize__12J3DTevBlock2Fv */
 void J3DTevBlock2::initialize() {
     mTexNo[0] = 0xFFFF;
     mTexNo[1] = 0xFFFF;
@@ -155,7 +143,6 @@ void J3DTevBlock2::initialize() {
     mTevRegOffset = 0;
 }
 
-/* 803178EC-80317A00 31222C 0114+00 0/0 1/1 0/0 .text            initialize__12J3DTevBlock4Fv */
 void J3DTevBlock4::initialize() {
     mTexNo[0] = 0xFFFF;
     mTexNo[1] = 0xFFFF;
@@ -188,7 +175,6 @@ void J3DTevBlock4::initialize() {
     mTevRegOffset = 0;
 }
 
-/* 80317A00-80317B28 312340 0128+00 0/0 1/1 0/0 .text            initialize__13J3DTevBlock16Fv */
 void J3DTevBlock16::initialize() {
     for (int i = 0; i < ARRAY_SIZE(mTexNo); i++) {
         mTexNo[i] = 0xFFFF;
@@ -216,12 +202,10 @@ void J3DTevBlock16::initialize() {
     mTevRegOffset = 0;
 }
 
-/* 80317B28-80317B34 312468 000C+00 0/0 1/1 0/0 .text            initialize__15J3DIndBlockFullFv */
 void J3DIndBlockFull::initialize() {
     mIndTexStageNum = 0;
 }
 
-/* 80317B34-80317B58 312474 0024+00 0/0 1/1 0/0 .text            initialize__16J3DPEBlockFogOffFv */
 void J3DPEBlockFogOff::initialize() {
     mAlphaComp = 0xFFFF;
     mZMode = 0xFFFF;
@@ -229,7 +213,6 @@ void J3DPEBlockFogOff::initialize() {
     mDither = 1;
 }
 
-/* 80317B58-80317B84 312498 002C+00 0/0 1/1 0/0 .text            initialize__14J3DPEBlockFullFv */
 void J3DPEBlockFull::initialize() {
     mAlphaComp = 0xFFFF;
     mZMode = 0xFFFF;
@@ -238,109 +221,84 @@ void J3DPEBlockFull::initialize() {
     mFogOffset = 0;
 }
 
-/* 80317B84-80317B8C 3124C4 0008+00 1/0 0/0 0/0 .text countDLSize__21J3DColorBlockLightOffFv */
 s32 J3DColorBlockLightOff::countDLSize() {
     return 34;
 }
 
-/* 80317B8C-80317B94 3124CC 0008+00 1/0 0/0 0/0 .text countDLSize__22J3DColorBlockAmbientOnFv */
 s32 J3DColorBlockAmbientOn::countDLSize() {
     return 47;
 }
 
-/* 80317B94-80317B9C 3124D4 0008+00 1/0 0/0 0/0 .text countDLSize__20J3DColorBlockLightOnFv */
 s32 J3DColorBlockLightOn::countDLSize() {
     return 623;
 }
 
-/* 80317B9C-80317BA4 3124DC 0008+00 1/0 0/0 0/0 .text countDLSize__21J3DTexGenBlockPatchedFv */
 s32 J3DTexGenBlockPatched::countDLSize() {
     return 424;
 }
 
-/* 80317BA4-80317BAC 3124E4 0008+00 1/0 0/0 0/0 .text            countDLSize__15J3DTexGenBlock4Fv */
 s32 J3DTexGenBlock4::countDLSize() {
     return 254;
 }
 
-/* 80317BAC-80317BB4 3124EC 0008+00 1/0 0/0 0/0 .text countDLSize__19J3DTexGenBlockBasicFv */
 s32 J3DTexGenBlockBasic::countDLSize() {
     return 498;
 }
 
-/* 80317BB4-80317BBC 3124F4 0008+00 1/0 0/0 0/0 .text            countDLSize__18J3DTevBlockPatchedFv
- */
 s32 J3DTevBlockPatched::countDLSize() {
     return 560;
 }
 
-/* 80317BBC-80317BC4 3124FC 0008+00 1/0 0/0 0/0 .text            countDLSize__12J3DTevBlock1Fv */
 s32 J3DTevBlock1::countDLSize() {
     return 105;
 }
 
-/* 80317BC4-80317BCC 312504 0008+00 1/0 0/0 0/0 .text            countDLSize__12J3DTevBlock2Fv */
 s32 J3DTevBlock2::countDLSize() {
     return 335;
 }
 
-/* 80317BCC-80317BD4 31250C 0008+00 1/0 0/0 0/0 .text            countDLSize__12J3DTevBlock4Fv */
 s32 J3DTevBlock4::countDLSize() {
     return 580;
 }
 
-/* 80317BD4-80317BDC 312514 0008+00 1/0 0/0 0/0 .text            countDLSize__13J3DTevBlock16Fv */
 s32 J3DTevBlock16::countDLSize() {
     return 1000;
 }
 
-/* 80317BDC-80317BE4 31251C 0008+00 1/0 0/0 0/0 .text            countDLSize__15J3DIndBlockFullFv */
 s32 J3DIndBlockFull::countDLSize() {
     return 140;
 }
 
-/* 80317BE4-80317BEC 312524 0008+00 1/0 0/0 0/0 .text            countDLSize__13J3DPEBlockOpaFv */
 s32 J3DPEBlockOpa::countDLSize() {
     return 30;
 }
 
-/* 80317BEC-80317BF4 31252C 0008+00 1/0 0/0 0/0 .text            countDLSize__17J3DPEBlockTexEdgeFv
- */
 s32 J3DPEBlockTexEdge::countDLSize() {
     return 30;
 }
 
-/* 80317BF4-80317BFC 312534 0008+00 1/0 0/0 0/0 .text            countDLSize__13J3DPEBlockXluFv */
 s32 J3DPEBlockXlu::countDLSize() {
     return 30;
 }
 
-/* 80317BFC-80317C04 31253C 0008+00 1/0 0/0 0/0 .text            countDLSize__16J3DPEBlockFogOffFv
- */
 s32 J3DPEBlockFogOff::countDLSize() {
     return 30;
 }
 
-/* 80317C04-80317C0C 312544 0008+00 1/0 0/0 0/0 .text            countDLSize__14J3DPEBlockFullFv */
 s32 J3DPEBlockFull::countDLSize() {
     return 85;
 }
 
-/* 80450960-80450964 0003E0 0004+00 5/5 0/0 0/0 .sdata           SizeOfLoadMatColors */
 static u32 SizeOfLoadMatColors = 13;
 
-/* 80450964-80450968 0003E4 0004+00 2/2 0/0 0/0 .sdata           SizeOfLoadAmbColors */
 static u32 SizeOfLoadAmbColors = 13;
 
-/* 80450968-80450970 0003E8 0004+04 5/5 0/0 0/0 .sdata           SizeOfLoadColorChans */
 static u32 SizeOfLoadColorChans = 21;
 
 static u8 sdata_padding[4] = {};
 
-/* 804515D8-804515DC 000AD8 0004+00 2/2 0/0 0/0 .sbss            SizeOfJ3DColorBlockLightOffLoad */
 static u32 SizeOfJ3DColorBlockLightOffLoad = SizeOfLoadMatColors + SizeOfLoadColorChans;
 
-/* 80317C0C-8031816C 31254C 0560+00 1/0 0/0 0/0 .text            load__21J3DColorBlockLightOffFv */
 void J3DColorBlockLightOff::load() {
     GDOverflowCheck(SizeOfJ3DColorBlockLightOffLoad);
     mMatColorOffset = GDGetCurrOffset();
@@ -354,10 +312,8 @@ void J3DColorBlockLightOff::load() {
     mColorChan[3].load();
 }
 
-/* 804515DC-804515E0 000ADC 0004+00 3/3 0/0 0/0 .sbss            SizeOfJ3DColorBlockAmbientOnLoad */
 static u32 SizeOfJ3DColorBlockAmbientOnLoad = SizeOfLoadMatColors + SizeOfLoadAmbColors + SizeOfLoadColorChans;
 
-/* 8031816C-803187F4 312AAC 0688+00 1/0 0/0 0/0 .text            load__22J3DColorBlockAmbientOnFv */
 void J3DColorBlockAmbientOn::load() {
     GDOverflowCheck(SizeOfJ3DColorBlockAmbientOnLoad);
     mMatColorOffset = GDGetCurrOffset();
@@ -372,7 +328,6 @@ void J3DColorBlockAmbientOn::load() {
     mColorChan[3].load();
 }
 
-/* 803187F4-80318EB4 313134 06C0+00 1/0 0/0 0/0 .text            load__20J3DColorBlockLightOnFv */
 void J3DColorBlockLightOn::load() {
     GDOverflowCheck(SizeOfJ3DColorBlockAmbientOnLoad);
     mMatColorOffset = GDGetCurrOffset();
@@ -393,13 +348,11 @@ void J3DColorBlockLightOn::load() {
     }
 }
 
-/* 80318EB4-80318F00 3137F4 004C+00 2/0 0/0 0/0 .text            patch__21J3DColorBlockLightOffFv */
 void J3DColorBlockLightOff::patch() {
     patchMatColor();
     patchLight();
 }
 
-/* 80318F00-803190AC 313840 01AC+00 2/0 0/0 0/0 .text patchMatColor__21J3DColorBlockLightOffFv */
 void J3DColorBlockLightOff::patchMatColor() {
     GDSetCurrOffset(mMatColorOffset);
     void* start = GDGetCurrPointer();
@@ -409,7 +362,6 @@ void J3DColorBlockLightOff::patchMatColor() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 803190AC-803194E8 3139EC 043C+00 2/0 0/0 0/0 .text patchLight__21J3DColorBlockLightOffFv */
 void J3DColorBlockLightOff::patchLight() {
     GDSetCurrOffset(mColorChanOffset);
     void* start = GDGetCurrPointer();
@@ -425,13 +377,11 @@ void J3DColorBlockLightOff::patchLight() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 803194E8-80319534 313E28 004C+00 1/0 0/0 0/0 .text            patch__20J3DColorBlockLightOnFv */
 void J3DColorBlockLightOn::patch() {
     patchMatColor();
     patchLight();
 }
 
-/* 80319534-803196E0 313E74 01AC+00 1/0 0/0 0/0 .text patchMatColor__20J3DColorBlockLightOnFv */
 void J3DColorBlockLightOn::patchMatColor() {
     GDSetCurrOffset(mMatColorOffset);
     void* start = GDGetCurrPointer();
@@ -441,7 +391,6 @@ void J3DColorBlockLightOn::patchMatColor() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 803196E0-80319B4C 314020 046C+00 1/0 0/0 0/0 .text patchLight__20J3DColorBlockLightOnFv */
 void J3DColorBlockLightOn::patchLight() {
     GDSetCurrOffset(mColorChanOffset);
     void* start = GDGetCurrPointer();
@@ -463,7 +412,6 @@ void J3DColorBlockLightOn::patchLight() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 80319B4C-80319BB4 31448C 0068+00 2/0 0/0 0/0 .text            diff__21J3DColorBlockLightOffFUl */
 void J3DColorBlockLightOff::diff(u32 diffFlags) {
     if (diffFlags & J3DDiffFlag_MatColor)
         diffMatColor();
@@ -472,13 +420,11 @@ void J3DColorBlockLightOff::diff(u32 diffFlags) {
         diffColorChan();
 }
 
-/* 80319BB4-80319D30 3144F4 017C+00 2/0 0/0 0/0 .text diffMatColor__21J3DColorBlockLightOffFv */
 void J3DColorBlockLightOff::diffMatColor() {
     GDOverflowCheck(SizeOfLoadMatColors);
     loadMatColors(mMatColor);
 }
 
-/* 80319D30-8031A13C 314670 040C+00 2/0 0/0 0/0 .text diffColorChan__21J3DColorBlockLightOffFv */
 void J3DColorBlockLightOff::diffColorChan() {
     GDOverflowCheck(SizeOfLoadColorChans);
     J3DGDWriteXFCmdHdr(XF_REG_COLOR0CNTRL_ID, 4);
@@ -488,7 +434,6 @@ void J3DColorBlockLightOff::diffColorChan() {
     mColorChan[3].load();
 }
 
-/* 8031A13C-8031A1DC 314A7C 00A0+00 1/0 0/0 0/0 .text            diff__20J3DColorBlockLightOnFUl */
 void J3DColorBlockLightOn::diff(u32 diffFlags) {
     if (diffFlags & J3DDiffFlag_AmbColor)
         diffAmbColor();
@@ -504,19 +449,16 @@ void J3DColorBlockLightOn::diff(u32 diffFlags) {
         diffLightObj(lightObjNum);
 }
 
-/* 8031A1DC-8031A358 314B1C 017C+00 1/0 0/0 0/0 .text diffAmbColor__20J3DColorBlockLightOnFv */
 void J3DColorBlockLightOn::diffAmbColor() {
     GDOverflowCheck(SizeOfLoadAmbColors);
     loadAmbColors(mAmbColor);
 }
 
-/* 8031A358-8031A4D4 314C98 017C+00 1/0 0/0 0/0 .text diffMatColor__20J3DColorBlockLightOnFv */
 void J3DColorBlockLightOn::diffMatColor() {
     GDOverflowCheck(SizeOfLoadMatColors);
     loadMatColors(mMatColor);
 }
 
-/* 8031A4D4-8031A8E0 314E14 040C+00 1/0 0/0 0/0 .text diffColorChan__20J3DColorBlockLightOnFv */
 void J3DColorBlockLightOn::diffColorChan() {
     GDOverflowCheck(SizeOfLoadColorChans);
     J3DGDWriteXFCmdHdr(XF_REG_COLOR0CNTRL_ID, 4);
@@ -526,7 +468,6 @@ void J3DColorBlockLightOn::diffColorChan() {
     mColorChan[3].load();
 }
 
-/* 8031A8E0-8031A948 315220 0068+00 1/0 0/0 0/0 .text diffLightObj__20J3DColorBlockLightOnFUl */
 void J3DColorBlockLightOn::diffLightObj(u32 lightObjNum) {
     for (u32 i = 0; i < lightObjNum; i ++) {
         if (mLight[i] != NULL) {
@@ -535,7 +476,6 @@ void J3DColorBlockLightOn::diffLightObj(u32 lightObjNum) {
     }
 }
 
-/* 8031A948-8031A9E8 315288 00A0+00 1/0 0/0 0/0 .text            load__15J3DTexGenBlock4Fv */
 void J3DTexGenBlock4::load() {
     mTexMtxOffset = GDGetCurrOffset();
     for (u32 i = 0; i < 4; i++) {
@@ -549,7 +489,6 @@ void J3DTexGenBlock4::load() {
     }
 }
 
-/* 8031A9E8-8031AA88 315328 00A0+00 1/0 0/0 0/0 .text            load__19J3DTexGenBlockBasicFv */
 void J3DTexGenBlockBasic::load() {
     mTexMtxOffset = GDGetCurrOffset();
     for (u32 i = 0; i < 8; i++) {
@@ -563,7 +502,6 @@ void J3DTexGenBlockBasic::load() {
     }
 }
 
-/* 8031AA88-8031AB18 3153C8 0090+00 1/0 0/0 0/0 .text            patch__21J3DTexGenBlockPatchedFv */
 void J3DTexGenBlockPatched::patch() {
     GDSetCurrOffset(mTexMtxOffset);
     void* start = GDGetCurrPointer();
@@ -578,7 +516,6 @@ void J3DTexGenBlockPatched::patch() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031AB18-8031ABC0 315458 00A8+00 1/0 0/0 0/0 .text            patch__15J3DTexGenBlock4Fv */
 void J3DTexGenBlock4::patch() {
     GDSetCurrOffset(mTexMtxOffset);
     void* start = GDGetCurrPointer();
@@ -593,7 +530,6 @@ void J3DTexGenBlock4::patch() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031ABC0-8031AC68 315500 00A8+00 1/0 0/0 0/0 .text            patch__19J3DTexGenBlockBasicFv */
 void J3DTexGenBlockBasic::patch() {
     GDSetCurrOffset(mTexMtxOffset);
     void* start = GDGetCurrPointer();
@@ -608,7 +544,6 @@ void J3DTexGenBlockBasic::patch() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031AC68-8031ACD0 3155A8 0068+00 3/0 0/0 0/0 .text            diff__21J3DTexGenBlockPatchedFUl */
 void J3DTexGenBlockPatched::diff(u32 diffFlags) {
     if (getDiffFlag_TexGenNum(diffFlags)) {
         diffTexMtx();
@@ -619,7 +554,6 @@ void J3DTexGenBlockPatched::diff(u32 diffFlags) {
     }
 }
 
-/* 8031ACD0-8031AD30 315610 0060+00 3/0 0/0 0/0 .text diffTexMtx__21J3DTexGenBlockPatchedFv */
 void J3DTexGenBlockPatched::diffTexMtx() {
     for (u32 i = 0; i < ARRAY_SIZEU(mTexMtx); ++i) {
         if (mTexMtx[i] != NULL) {
@@ -628,14 +562,12 @@ void J3DTexGenBlockPatched::diffTexMtx() {
     }
 }
 
-/* 8031AD30-8031AD64 315670 0034+00 3/0 0/0 0/0 .text diffTexGen__21J3DTexGenBlockPatchedFv */
 void J3DTexGenBlockPatched::diffTexGen() {
     if (mTexGenNum > 0) {
         loadTexCoordGens(mTexGenNum, mTexCoord);
     }
 }
 
-/* 8031AD64-8031AFA4 3156A4 0240+00 1/0 0/0 0/0 .text            load__12J3DTevBlock1Fv */
 void J3DTevBlock1::load() {
     mTexNoOffset = GDGetCurrOffset();
     GDOverflowCheck(0x69);
@@ -663,7 +595,6 @@ void J3DTevBlock1::load() {
     mIndTevStage[0].load(0);
 }
 
-/* 8031AFA4-8031B4C0 3158E4 051C+00 1/0 0/0 0/0 .text            load__12J3DTevBlock2Fv */
 void J3DTevBlock2::load() {
     u32 tevStageNum = mTevStageNum;
     mTexNoOffset = GDGetCurrOffset();
@@ -730,7 +661,6 @@ void J3DTevBlock2::load() {
     }
 }
 
-/* 8031B4C0-8031BA04 315E00 0544+00 1/0 0/0 0/0 .text            load__12J3DTevBlock4Fv */
 void J3DTevBlock4::load() {
     u32 tevStageNum = mTevStageNum;
     mTexNoOffset = GDGetCurrOffset();
@@ -799,7 +729,6 @@ void J3DTevBlock4::load() {
     }
 }
 
-/* 8031BA04-8031BF4C 316344 0548+00 1/0 0/0 0/0 .text            load__13J3DTevBlock16Fv */
 void J3DTevBlock16::load() {
     u32 tevStageNum = mTevStageNum;
     mTexNoOffset = GDGetCurrOffset();
@@ -869,8 +798,6 @@ void J3DTevBlock16::load() {
 }
 
 
-/* 8031BF4C-8031BFE0 31688C 0094+00 1/0 0/0 0/0 .text            patchTexNo__18J3DTevBlockPatchedFv
- */
 void J3DTevBlockPatched::patchTexNo() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -885,8 +812,6 @@ void J3DTevBlockPatched::patchTexNo() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031BFE0-8031C0AC 316920 00CC+00 1/0 0/0 0/0 .text            patchTevReg__18J3DTevBlockPatchedFv
- */
 void J3DTevBlockPatched::patchTevReg() {
     GDSetCurrOffset(mTevRegOffset);
     void* start = GDGetCurrPointer();
@@ -902,8 +827,6 @@ void J3DTevBlockPatched::patchTevReg() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031C0AC-8031C228 3169EC 017C+00 1/0 0/0 0/0 .text
- * patchTexNoAndTexCoordScale__18J3DTevBlockPatchedFv           */
 void J3DTevBlockPatched::patchTexNoAndTexCoordScale() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -941,13 +864,11 @@ void J3DTevBlockPatched::patchTexNoAndTexCoordScale() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031C228-8031C274 316B68 004C+00 1/0 0/0 0/0 .text            patch__18J3DTevBlockPatchedFv */
 void J3DTevBlockPatched::patch() {
     patchTexNo();
     patchTevReg();
 }
 
-/* 8031C274-8031C2E4 316BB4 0070+00 1/0 0/0 0/0 .text            patchTexNo__12J3DTevBlock1Fv */
 void J3DTevBlock1::patchTexNo() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -960,11 +881,8 @@ void J3DTevBlock1::patchTexNo() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031C2E4-8031C2E8 316C24 0004+00 1/0 0/0 0/0 .text            patchTevReg__12J3DTevBlock1Fv */
 void J3DTevBlock1::patchTevReg() {}
 
-/* 8031C2E8-8031C3CC 316C28 00E4+00 1/0 0/0 0/0 .text patchTexNoAndTexCoordScale__12J3DTevBlock1Fv
- */
 void J3DTevBlock1::patchTexNoAndTexCoordScale() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -992,12 +910,10 @@ void J3DTevBlock1::patchTexNoAndTexCoordScale() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031C3CC-8031C3F8 316D0C 002C+00 1/0 0/0 0/0 .text            patch__12J3DTevBlock1Fv */
 void J3DTevBlock1::patch() {
     patchTexNo();
 }
 
-/* 8031C3F8-8031C48C 316D38 0094+00 1/0 0/0 0/0 .text            patchTexNo__12J3DTevBlock2Fv */
 void J3DTevBlock2::patchTexNo() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -1012,7 +928,6 @@ void J3DTevBlock2::patchTexNo() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031C48C-8031C558 316DCC 00CC+00 1/0 0/0 0/0 .text            patchTevReg__12J3DTevBlock2Fv */
 void J3DTevBlock2::patchTevReg() {
     GDSetCurrOffset(mTevRegOffset);
     void* start = GDGetCurrPointer();
@@ -1028,8 +943,6 @@ void J3DTevBlock2::patchTevReg() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031C558-8031C6A8 316E98 0150+00 1/0 0/0 0/0 .text patchTexNoAndTexCoordScale__12J3DTevBlock2Fv
- */
 void J3DTevBlock2::patchTexNoAndTexCoordScale() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -1064,13 +977,11 @@ void J3DTevBlock2::patchTexNoAndTexCoordScale() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031C6A8-8031C6F4 316FE8 004C+00 1/0 0/0 0/0 .text            patch__12J3DTevBlock2Fv */
 void J3DTevBlock2::patch() {
     patchTexNo();
     patchTevReg();
 }
 
-/* 8031C6F4-8031C788 317034 0094+00 1/0 0/0 0/0 .text            patchTexNo__12J3DTevBlock4Fv */
 void J3DTevBlock4::patchTexNo() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -1085,7 +996,6 @@ void J3DTevBlock4::patchTexNo() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031C788-8031C854 3170C8 00CC+00 1/0 0/0 0/0 .text            patchTevReg__12J3DTevBlock4Fv */
 void J3DTevBlock4::patchTevReg() {
     GDSetCurrOffset(mTevRegOffset);
     void* start = GDGetCurrPointer();
@@ -1101,8 +1011,6 @@ void J3DTevBlock4::patchTevReg() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031C854-8031C9D0 317194 017C+00 1/0 0/0 0/0 .text patchTexNoAndTexCoordScale__12J3DTevBlock4Fv
- */
 void J3DTevBlock4::patchTexNoAndTexCoordScale() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -1139,13 +1047,11 @@ void J3DTevBlock4::patchTexNoAndTexCoordScale() {
     void* end = GDGetCurrPointer();
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
-/* 8031C9D0-8031CA1C 317310 004C+00 1/0 0/0 0/0 .text            patch__12J3DTevBlock4Fv */
 void J3DTevBlock4::patch() {
     patchTexNo();
     patchTevReg();
 }
 
-/* 8031CA1C-8031CAB0 31735C 0094+00 1/0 0/0 0/0 .text            patchTexNo__13J3DTevBlock16Fv */
 void J3DTevBlock16::patchTexNo() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -1160,7 +1066,6 @@ void J3DTevBlock16::patchTexNo() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031CAB0-8031CB7C 3173F0 00CC+00 1/0 0/0 0/0 .text            patchTevReg__13J3DTevBlock16Fv */
 void J3DTevBlock16::patchTevReg() {
     GDSetCurrOffset(mTevRegOffset);
     void* start = GDGetCurrPointer();
@@ -1176,8 +1081,6 @@ void J3DTevBlock16::patchTevReg() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031CB7C-8031CCF8 3174BC 017C+00 1/0 0/0 0/0 .text
- * patchTexNoAndTexCoordScale__13J3DTevBlock16Fv                */
 void J3DTevBlock16::patchTexNoAndTexCoordScale() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -1215,13 +1118,11 @@ void J3DTevBlock16::patchTexNoAndTexCoordScale() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031CCF8-8031CD44 317638 004C+00 1/0 0/0 0/0 .text            patch__13J3DTevBlock16Fv */
 void J3DTevBlock16::patch() {
     patchTexNo();
     patchTevReg();
 }
 
-/* 8031CD44-8031CE00 317684 00BC+00 6/0 1/0 0/0 .text            diff__11J3DTevBlockFUl */
 void J3DTevBlock::diff(u32 diffFlags) {
     if (getDiffFlag_TexNoNum(diffFlags)) {
         diffTexNo();
@@ -1244,8 +1145,6 @@ void J3DTevBlock::diff(u32 diffFlags) {
     }
 }
 
-/* 8031CE00-8031CE64 317740 0064+00 1/0 0/0 0/0 .text            diffTexNo__18J3DTevBlockPatchedFv
- */
 void J3DTevBlockPatched::diffTexNo() {
     for (u32 i = 0; i < ARRAY_SIZEU(mTexNo); i++) {
         if (mTexNo[i] != 0xFFFF) {
@@ -1254,7 +1153,6 @@ void J3DTevBlockPatched::diffTexNo() {
     }
 }
 
-/* 8031CE64-8031CF78 3177A4 0114+00 1/0 0/0 0/0 .text diffTevStage__18J3DTevBlockPatchedFv */
 void J3DTevBlockPatched::diffTevStage() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i++) {
@@ -1262,8 +1160,6 @@ void J3DTevBlockPatched::diffTevStage() {
     }
 }
 
-/* 8031CF78-8031D028 3178B8 00B0+00 1/0 0/0 0/0 .text diffTevStageIndirect__18J3DTevBlockPatchedFv
- */
 void J3DTevBlockPatched::diffTevStageIndirect() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i++) {
@@ -1271,8 +1167,6 @@ void J3DTevBlockPatched::diffTevStageIndirect() {
     }
 }
 
-/* 8031D028-8031D0C4 317968 009C+00 1/0 0/0 0/0 .text            diffTevReg__18J3DTevBlockPatchedFv
- */
 void J3DTevBlockPatched::diffTevReg() {
     for (u32 i = 0; i < ARRAY_SIZEU(mTevColor) - 1; i++) {
         loadTevColor(i, mTevColor[i]);
@@ -1282,7 +1176,6 @@ void J3DTevBlockPatched::diffTevReg() {
     }
 }
 
-/* 8031D0C4-8031D1BC 317A04 00F8+00 1/0 0/0 0/0 .text diffTexCoordScale__18J3DTevBlockPatchedFv */
 void J3DTevBlockPatched::diffTexCoordScale() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i += 2) {
@@ -1297,28 +1190,22 @@ void J3DTevBlockPatched::diffTexCoordScale() {
     }
 }
 
-/* 8031D1BC-8031D1F4 317AFC 0038+00 1/0 0/0 0/0 .text            diffTexNo__12J3DTevBlock1Fv */
 void J3DTevBlock1::diffTexNo() {
     if (mTexNo[0] != 0xFFFF) {
         loadTexNo(0, mTexNo[0]);
     }
 }
 
-/* 8031D1F4-8031D1F8 317B34 0004+00 1/0 0/0 0/0 .text            diffTevReg__12J3DTevBlock1Fv */
 void J3DTevBlock1::diffTevReg() {}
 
-/* 8031D1F8-8031D2E8 317B38 00F0+00 1/0 0/0 0/0 .text            diffTevStage__12J3DTevBlock1Fv */
 void J3DTevBlock1::diffTevStage() {
     mTevStage[0].load(0);
 }
 
-/* 8031D2E8-8031D368 317C28 0080+00 1/0 0/0 0/0 .text diffTevStageIndirect__12J3DTevBlock1Fv */
 void J3DTevBlock1::diffTevStageIndirect() {
     mIndTevStage[0].load(0);
 }
 
-/* 8031D368-8031D3D0 317CA8 0068+00 1/0 0/0 0/0 .text            diffTexCoordScale__12J3DTevBlock1Fv
- */
 void J3DTevBlock1::diffTexCoordScale() {
     loadTexCoordScale(
         GXTexCoordID(mTevOrder[0].getTevOrderInfo().mTexCoord),
@@ -1326,7 +1213,6 @@ void J3DTevBlock1::diffTexCoordScale() {
     );
 }
 
-/* 8031D3D0-8031D434 317D10 0064+00 1/0 0/0 0/0 .text            diffTexNo__12J3DTevBlock2Fv */
 void J3DTevBlock2::diffTexNo() {
     for (u32 i = 0; i < ARRAY_SIZEU(mTexNo); i++) {
         if (mTexNo[i] != 0xFFFF) {
@@ -1335,7 +1221,6 @@ void J3DTevBlock2::diffTexNo() {
     }
 }
 
-/* 8031D434-8031D4D0 317D74 009C+00 1/0 0/0 0/0 .text            diffTevReg__12J3DTevBlock2Fv */
 void J3DTevBlock2::diffTevReg() {
     for (u32 i = 0; i < ARRAY_SIZEU(mTevColor) - 1; i++) {
         loadTevColor(i, mTevColor[i]);
@@ -1345,7 +1230,6 @@ void J3DTevBlock2::diffTevReg() {
     }
 }
 
-/* 8031D4D0-8031D5E4 317E10 0114+00 1/0 0/0 0/0 .text            diffTevStage__12J3DTevBlock2Fv */
 void J3DTevBlock2::diffTevStage() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i++) {
@@ -1353,7 +1237,6 @@ void J3DTevBlock2::diffTevStage() {
     }
 }
 
-/* 8031D5E4-8031D694 317F24 00B0+00 1/0 0/0 0/0 .text diffTevStageIndirect__12J3DTevBlock2Fv */
 void J3DTevBlock2::diffTevStageIndirect() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i++) {
@@ -1361,8 +1244,6 @@ void J3DTevBlock2::diffTevStageIndirect() {
     }
 }
 
-/* 8031D694-8031D758 317FD4 00C4+00 1/0 0/0 0/0 .text            diffTexCoordScale__12J3DTevBlock2Fv
- */
 void J3DTevBlock2::diffTexCoordScale() {
     loadTexCoordScale(
         GXTexCoordID(mTevOrder[0].getTevOrderInfo().mTexCoord),
@@ -1374,7 +1255,6 @@ void J3DTevBlock2::diffTexCoordScale() {
     );
 }
 
-/* 8031D758-8031D7BC 318098 0064+00 1/0 0/0 0/0 .text            diffTexNo__12J3DTevBlock4Fv */
 void J3DTevBlock4::diffTexNo() {
     for (u32 i = 0; i < ARRAY_SIZEU(mTexNo); i++) {
         if (mTexNo[i] != 0xFFFF) {
@@ -1383,7 +1263,6 @@ void J3DTevBlock4::diffTexNo() {
     }
 }
 
-/* 8031D7BC-8031D858 3180FC 009C+00 1/0 0/0 0/0 .text            diffTevReg__12J3DTevBlock4Fv */
 void J3DTevBlock4::diffTevReg() {
     for (u32 i = 0; i < ARRAY_SIZEU(mTevColor) - 1; i++) {
         loadTevColor(i, mTevColor[i]);
@@ -1393,7 +1272,6 @@ void J3DTevBlock4::diffTevReg() {
     }
 }
 
-/* 8031D858-8031D96C 318198 0114+00 1/0 0/0 0/0 .text            diffTevStage__12J3DTevBlock4Fv */
 void J3DTevBlock4::diffTevStage() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i++) {
@@ -1401,7 +1279,6 @@ void J3DTevBlock4::diffTevStage() {
     }
 }
 
-/* 8031D96C-8031DA1C 3182AC 00B0+00 1/0 0/0 0/0 .text diffTevStageIndirect__12J3DTevBlock4Fv */
 void J3DTevBlock4::diffTevStageIndirect() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i++) {
@@ -1409,8 +1286,6 @@ void J3DTevBlock4::diffTevStageIndirect() {
     }
 }
 
-/* 8031DA1C-8031DB14 31835C 00F8+00 1/0 0/0 0/0 .text            diffTexCoordScale__12J3DTevBlock4Fv
- */
 void J3DTevBlock4::diffTexCoordScale() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i += 2) {
@@ -1424,7 +1299,6 @@ void J3DTevBlock4::diffTexCoordScale() {
         );
     }
 }
-/* 8031DB14-8031DB78 318454 0064+00 1/0 0/0 0/0 .text            diffTexNo__13J3DTevBlock16Fv */
 void J3DTevBlock16::diffTexNo() {
     for (u32 i = 0; i < ARRAY_SIZEU(mTexNo); i++) {
         if (mTexNo[i] != 0xFFFF) {
@@ -1433,7 +1307,6 @@ void J3DTevBlock16::diffTexNo() {
     }
 }
 
-/* 8031DB78-8031DC14 3184B8 009C+00 1/0 0/0 0/0 .text            diffTevReg__13J3DTevBlock16Fv */
 void J3DTevBlock16::diffTevReg() {
     for (u32 i = 0; i < ARRAY_SIZEU(mTevColor) - 1; i++) {
         loadTevColor(i, mTevColor[i]);
@@ -1443,7 +1316,6 @@ void J3DTevBlock16::diffTevReg() {
     }
 }
 
-/* 8031DC14-8031DD28 318554 0114+00 1/0 0/0 0/0 .text            diffTevStage__13J3DTevBlock16Fv */
 void J3DTevBlock16::diffTevStage() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i++) {
@@ -1451,7 +1323,6 @@ void J3DTevBlock16::diffTevStage() {
     }
 }
 
-/* 8031DD28-8031DDD8 318668 00B0+00 1/0 0/0 0/0 .text diffTevStageIndirect__13J3DTevBlock16Fv */
 void J3DTevBlock16::diffTevStageIndirect() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i++) {
@@ -1459,7 +1330,6 @@ void J3DTevBlock16::diffTevStageIndirect() {
     }
 }
 
-/* 8031DDD8-8031DED0 318718 00F8+00 1/0 0/0 0/0 .text diffTexCoordScale__13J3DTevBlock16Fv */
 void J3DTevBlock16::diffTexCoordScale() {
     u32 tevStageNum = mTevStageNum;
     for (u32 i = 0; i < tevStageNum; i += 2) {
@@ -1474,7 +1344,6 @@ void J3DTevBlock16::diffTexCoordScale() {
     }
 }
 
-/* 8031DED0-8031DFB4 318810 00E4+00 1/0 0/0 0/0 .text            ptrToIndex__13J3DTevBlock16Fv */
 void J3DTevBlock16::ptrToIndex() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -1499,8 +1368,6 @@ void J3DTevBlock16::ptrToIndex() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031DFB4-8031E098 3188F4 00E4+00 1/0 0/0 0/0 .text            ptrToIndex__18J3DTevBlockPatchedFv
- */
 void J3DTevBlockPatched::ptrToIndex() {
     GDSetCurrOffset(mTexNoOffset);
     void* start = GDGetCurrPointer();
@@ -1525,7 +1392,6 @@ void J3DTevBlockPatched::ptrToIndex() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031E098-8031E12C 3189D8 0094+00 5/5 1/1 0/0 .text indexToPtr_private__11J3DTevBlockFUl */
 void J3DTevBlock::indexToPtr_private(u32 offs) {
     GDSetCurrOffset(offs);
     void* start = GDGetCurrPointer();
@@ -1544,7 +1410,6 @@ void J3DTevBlock::indexToPtr_private(u32 offs) {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031E12C-8031E328 318A6C 01FC+00 1/0 0/0 0/0 .text            load__15J3DIndBlockFullFv */
 void J3DIndBlockFull::load() {
     int indTexStageNum = mIndTexStageNum;
     for (u32 i = 0; i < indTexStageNum; i++) {
@@ -1579,7 +1444,6 @@ void J3DIndBlockFull::load() {
     );
 }
 
-/* 8031E328-8031E408 318C68 00E0+00 1/0 0/0 0/0 .text            diff__15J3DIndBlockFullFUl */
 void J3DIndBlockFull::diff(u32 diffFlags) {
     if (diffFlags & J3DDiffFlag_TevStageIndirect) {
         u32 indTexStageNum = mIndTexStageNum;
@@ -1609,7 +1473,6 @@ void J3DIndBlockFull::diff(u32 diffFlags) {
     }
 }
 
-/* 8031E408-8031E6C8 318D48 02C0+00 1/0 0/0 0/0 .text            load__13J3DPEBlockOpaFv */
 void J3DPEBlockOpa::load() {
     GDOverflowCheck(0x1e);
     J3DGDSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -1618,7 +1481,6 @@ void J3DPEBlockOpa::load() {
     J3DGDSetZCompLoc(1);
 }
 
-/* 8031E6C8-8031E98C 319008 02C4+00 1/0 0/0 0/0 .text            load__17J3DPEBlockTexEdgeFv */
 void J3DPEBlockTexEdge::load() {
     GDOverflowCheck(0x1e);
     J3DGDSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_AND, GX_LEQUAL, 0xff);
@@ -1627,7 +1489,6 @@ void J3DPEBlockTexEdge::load() {
     J3DGDSetZCompLoc(0);
 }
 
-/* 8031E98C-8031EC50 3192CC 02C4+00 1/0 0/0 0/0 .text            load__13J3DPEBlockXluFv */
 void J3DPEBlockXlu::load() {
     GDOverflowCheck(0x1e);
     J3DGDSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND,GX_ALWAYS, 0);
@@ -1640,7 +1501,6 @@ inline void loadZCompLoc(u8 compLoc) {
     J3DGDSetZCompLoc(compLoc);
 }
 
-/* 8031EC50-8031F0D8 319590 0488+00 1/0 0/0 0/0 .text            load__16J3DPEBlockFogOffFv */
 void J3DPEBlockFogOff::load() {
     GDOverflowCheck(0x1e);
     mAlphaComp.load();
@@ -1649,14 +1509,12 @@ void J3DPEBlockFogOff::load() {
     loadZCompLoc(mZCompLoc);
 }
 
-/* 8031F0D8-8031F3C0 319A18 02E8+00 1/0 0/0 0/0 .text            diffBlend__16J3DPEBlockFogOffFv */
 void J3DPEBlockFogOff::diffBlend() {
     GDOverflowCheck(0xf);
     mBlend.load(mDither);
     mZMode.load();
 }
 
-/* 8031F3C0-8031F890 319D00 04D0+00 1/0 0/0 0/0 .text            load__14J3DPEBlockFullFv */
 void J3DPEBlockFull::load() {
     mFogOffset = GDGetCurrOffset();
     GDOverflowCheck(0x55);
@@ -1667,7 +1525,6 @@ void J3DPEBlockFull::load() {
     loadZCompLoc(mZCompLoc);
 }
 
-/* 8031F890-8031F940 31A1D0 00B0+00 1/0 0/0 0/0 .text            patch__14J3DPEBlockFullFv */
 void J3DPEBlockFull::patch() {
     GDSetCurrOffset(mFogOffset);
     GDOverflowCheck(0x37);
@@ -1677,20 +1534,17 @@ void J3DPEBlockFull::patch() {
     DCStoreRange(start, (uintptr_t)end - (uintptr_t)start);
 }
 
-/* 8031F940-8031F9B8 31A280 0078+00 1/0 0/0 0/0 .text            diffFog__14J3DPEBlockFullFv */
 void J3DPEBlockFull::diffFog() {
     GDOverflowCheck(0x37);
     mFog.load();
 }
 
-/* 8031F9B8-8031FCA0 31A2F8 02E8+00 1/0 0/0 0/0 .text            diffBlend__14J3DPEBlockFullFv */
 void J3DPEBlockFull::diffBlend() {
     GDOverflowCheck(0xf);
     mBlend.load(mDither);
     mZMode.load();
 }
 
-/* 8031FCA0-8031FD08 31A5E0 0068+00 1/0 0/0 0/0 .text            diff__14J3DPEBlockFullFUl */
 void J3DPEBlockFull::diff(u32 diffFlags) {
     if ((diffFlags & J3DDiffFlag_Fog)) {
         diffFog();
@@ -1701,8 +1555,6 @@ void J3DPEBlockFull::diff(u32 diffFlags) {
     }
 }
 
-/* 8031FD08-8031FDE4 31A648 00DC+00 1/0 0/0 0/0 .text
- * reset__21J3DColorBlockLightOffFP13J3DColorBlock              */
 void J3DColorBlockLightOff::reset(J3DColorBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2434, pBlock != NULL);
     mColorChanNum = pBlock->getColorChanNum();
@@ -1715,8 +1567,6 @@ void J3DColorBlockLightOff::reset(J3DColorBlock* pBlock) {
     }
 }
 
-/* 8031FDE4-8031FF34 31A724 0150+00 1/0 0/0 0/0 .text
- * reset__22J3DColorBlockAmbientOnFP13J3DColorBlock             */
 void J3DColorBlockAmbientOn::reset(J3DColorBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2451, pBlock != NULL);
     mColorChanNum = pBlock->getColorChanNum();
@@ -1734,8 +1584,6 @@ void J3DColorBlockAmbientOn::reset(J3DColorBlock* pBlock) {
     }
 }
 
-/* 8031FF34-80320084 31A874 0150+00 1/0 0/0 0/0 .text
- * reset__20J3DColorBlockLightOnFP13J3DColorBlock               */
 void J3DColorBlockLightOn::reset(J3DColorBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2476, pBlock != NULL);
     mColorChanNum = pBlock->getColorChanNum();
@@ -1753,8 +1601,6 @@ void J3DColorBlockLightOn::reset(J3DColorBlock* pBlock) {
     }
 }
 
-/* 80320084-803201A0 31A9C4 011C+00 1/0 0/0 0/0 .text
- * reset__21J3DTexGenBlockPatchedFP14J3DTexGenBlock             */
 void J3DTexGenBlockPatched::reset(J3DTexGenBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2504, pBlock != NULL);
 
@@ -1775,8 +1621,6 @@ void J3DTexGenBlockPatched::reset(J3DTexGenBlock* pBlock) {
     }
 }
 
-/* 803201A0-803202DC 31AAE0 013C+00 1/0 0/0 0/0 .text reset__15J3DTexGenBlock4FP14J3DTexGenBlock
- */
 void J3DTexGenBlock4::reset(J3DTexGenBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2537, pBlock != NULL);
 
@@ -1799,8 +1643,6 @@ void J3DTexGenBlock4::reset(J3DTexGenBlock* pBlock) {
     mNBTScale = *pBlock->getNBTScale();
 }
 
-/* 803202DC-80320418 31AC1C 013C+00 1/0 0/0 0/0 .text
- * reset__19J3DTexGenBlockBasicFP14J3DTexGenBlock               */
 void J3DTexGenBlockBasic::reset(J3DTexGenBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2572, pBlock != NULL);
 
@@ -1823,8 +1665,6 @@ void J3DTexGenBlockBasic::reset(J3DTexGenBlock* pBlock) {
     mNBTScale = *pBlock->getNBTScale();
 }
 
-/* 80320418-803205D4 31AD58 01BC+00 1/0 0/0 0/0 .text reset__18J3DTevBlockPatchedFP11J3DTevBlock
- */
 void J3DTevBlockPatched::reset(J3DTevBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2608, pBlock != NULL);
 
@@ -1844,7 +1684,6 @@ void J3DTevBlockPatched::reset(J3DTevBlock* pBlock) {
     }
 }
 
-/* 803205D4-803206AC 31AF14 00D8+00 1/0 0/0 0/0 .text reset__12J3DTevBlock1FP11J3DTevBlock */
 void J3DTevBlock1::reset(J3DTevBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2633, pBlock != NULL);
 
@@ -1854,7 +1693,6 @@ void J3DTevBlock1::reset(J3DTevBlock* pBlock) {
     mIndTevStage[0] = *pBlock->getIndTevStage(0);
 }
 
-/* 803206AC-8032098C 31AFEC 02E0+00 1/0 0/0 0/0 .text reset__12J3DTevBlock2FP11J3DTevBlock */
 void J3DTevBlock2::reset(J3DTevBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2649, pBlock != NULL);
 
@@ -1883,7 +1721,6 @@ void J3DTevBlock2::reset(J3DTevBlock* pBlock) {
     }
 }
 
-/* 8032098C-80320E24 31B2CC 0498+00 1/0 0/0 0/0 .text reset__12J3DTevBlock4FP11J3DTevBlock */
 void J3DTevBlock4::reset(J3DTevBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2682, pBlock != NULL);
 
@@ -1921,7 +1758,6 @@ void J3DTevBlock4::reset(J3DTevBlock* pBlock) {
         mTevSwapModeTable[i] = *pBlock->getTevSwapModeTable(i);
 }
 
-/* 80320E24-803210B0 31B764 028C+00 1/0 0/0 0/0 .text reset__13J3DTevBlock16FP11J3DTevBlock */
 void J3DTevBlock16::reset(J3DTevBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2728, pBlock != NULL);
 
@@ -1953,7 +1789,6 @@ void J3DTevBlock16::reset(J3DTevBlock* pBlock) {
     }
 }
 
-/* 803210B0-803211B4 31B9F0 0104+00 1/0 0/0 0/0 .text reset__15J3DIndBlockFullFP11J3DIndBlock */
 void J3DIndBlockFull::reset(J3DIndBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2762, pBlock != NULL);
 
@@ -1969,7 +1804,6 @@ void J3DIndBlockFull::reset(J3DIndBlock* pBlock) {
     }
 }
 
-/* 803211B4-8032129C 31BAF4 00E8+00 1/0 0/0 0/0 .text reset__16J3DPEBlockFogOffFP10J3DPEBlock */
 void J3DPEBlockFogOff::reset(J3DPEBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2783, pBlock != NULL);
 
@@ -1984,7 +1818,6 @@ void J3DPEBlockFogOff::reset(J3DPEBlock* pBlock) {
     }
 }
 
-/* 8032129C-803213C0 31BBDC 0124+00 1/0 0/0 0/0 .text reset__14J3DPEBlockFullFP10J3DPEBlock */
 void J3DPEBlockFull::reset(J3DPEBlock* pBlock) {
     J3D_ASSERT_NULLPTR(2807, pBlock != NULL);
 
@@ -2003,7 +1836,6 @@ void J3DPEBlockFull::reset(J3DPEBlock* pBlock) {
     }
 }
 
-/* 803213C0-80321584 31BD00 01C4+00 4/0 0/0 0/0 .text calc__21J3DTexGenBlockPatchedFPA4_Cf */
 void J3DTexGenBlockPatched::calc(const Mtx modelMtx) {
     Mtx viewMtx;
     for (int i = 0; i < 8; i++) {
@@ -2063,8 +1895,6 @@ void J3DTexGenBlockPatched::calc(const Mtx modelMtx) {
     }
 }
 
-/* 80321584-803216D8 31BEC4 0154+00 4/0 0/0 0/0 .text
- * calcWithoutViewMtx__21J3DTexGenBlockPatchedFPA4_Cf           */
 void J3DTexGenBlockPatched::calcWithoutViewMtx(const Mtx modelMtx) {
     Mtx mtx;
     for (int i = 0; i < 8; i++) {
@@ -2110,8 +1940,6 @@ void J3DTexGenBlockPatched::calcWithoutViewMtx(const Mtx modelMtx) {
     }
 }
 
-/* 803216D8-8032181C 31C018 0144+00 4/0 0/0 0/0 .text
- * calcPostTexMtx__21J3DTexGenBlockPatchedFPA4_Cf               */
 void J3DTexGenBlockPatched::calcPostTexMtx(const Mtx modelMtx) {
     Mtx mtx1, mtx2;
     for (int i = 0; i < 8; i++) {
@@ -2155,8 +1983,6 @@ void J3DTexGenBlockPatched::calcPostTexMtx(const Mtx modelMtx) {
     }
 }
 
-/* 8032181C-80321938 31C15C 011C+00 4/0 0/0 0/0 .text
- * calcPostTexMtxWithoutViewMtx__21J3DTexGenBlockPatchedFPA4_Cf */
 void J3DTexGenBlockPatched::calcPostTexMtxWithoutViewMtx(f32 const (*param_0)[4]) {
     for (int i = 0; i < 8; i++) {
         if (mTexMtx[i] != NULL) {

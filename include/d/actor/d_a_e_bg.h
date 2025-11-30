@@ -17,30 +17,30 @@
  */
 class daE_BG_c : public fopEn_enemy_c {
 public:
-    /* 8068585C */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80685948 */ static int JointCallBack(J3DJoint*, int);
-    /* 80685994 */ int draw();
-    /* 80685B70 */ void setBck(int, u8, f32, f32);
-    /* 80685C14 */ void setActionMode(int, int);
-    /* 80685C2C */ void damage_check();
-    /* 80685DBC */ void setSparkEffect();
-    /* 80685F04 */ fopAc_ac_c* search_esa();
-    /* 80685F88 */ void executeBorn();
-    /* 80686210 */ void executeSwim();
-    /* 80686C90 */ void executeAttack();
-    /* 80687B38 */ void executeDamage();
-    /* 80687CD8 */ bool setBombCarry(int);
-    /* 80687DEC */ void executeBomb();
-    /* 80687FC4 */ void executeBirth();
-    /* 8068838C */ void executeHook();
-    /* 806883D0 */ void executeEat();
-    /* 80689168 */ void action();
-    /* 80689544 */ void mtx_set();
-    /* 8068966C */ void cc_set();
-    /* 806897EC */ int execute();
-    /* 80689978 */ int _delete();
-    /* 80689A0C */ int CreateHeap();
-    /* 80689C38 */ int create();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int JointCallBack(J3DJoint*, int);
+    int draw();
+    void setBck(int, u8, f32, f32);
+    void setActionMode(int, int);
+    void damage_check();
+    void setSparkEffect();
+    fopAc_ac_c* search_esa();
+    void executeBorn();
+    void executeSwim();
+    void executeAttack();
+    void executeDamage();
+    bool setBombCarry(int);
+    void executeBomb();
+    void executeBirth();
+    void executeHook();
+    void executeEat();
+    void action();
+    void mtx_set();
+    void cc_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    int create();
 
     void setBgId(u32 i_bgId) { mBgId = i_bgId; }
     bool isBomb() { return mIsBomb; }
@@ -94,8 +94,8 @@ STATIC_ASSERT(sizeof(daE_BG_c) == 0xbbc);
 
 class daE_BG_HIO_c : public JORReflexible {
 public:
-    /* 8068580C */ daE_BG_HIO_c();
-    /* 8068A19C */ virtual ~daE_BG_HIO_c() {}
+    daE_BG_HIO_c();
+    virtual ~daE_BG_HIO_c() {}
 
     void genMessage(JORMContext*);
 

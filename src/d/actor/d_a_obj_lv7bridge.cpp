@@ -32,7 +32,6 @@ void daObjLv7Brg_HIO_c::genMessage(JORMContext* ctx) {
 static daObjLv7Brg_HIO_c l_HIO;
 #endif
 
-/* 80C86378-80C863EC 000078 0074+00 1/1 0/0 0/0 .text            searchSwSpinner__FPvPv */
 static void* searchSwSpinner(void* i_actor, void* i_data) {
     fopAc_ac_c* swspinner = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* brg = (fopAc_ac_c*)i_data;
@@ -46,8 +45,6 @@ static void* searchSwSpinner(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80C863EC-80C86454 0000EC 0068+00 1/1 0/0 0/0 .text            search_swspinner__13daObjLv7Brg_cFv
- */
 daObjSwSpinner_c* daObjLv7Brg_c::search_swspinner() {
     daObjSwSpinner_c* swspinner = NULL;
     if (parentActorID == fpcM_ERROR_PROCESS_ID_e) {
@@ -60,7 +57,6 @@ daObjSwSpinner_c* daObjLv7Brg_c::search_swspinner() {
     return swspinner;
 }
 
-/* 80C86454-80C864B4 000154 0060+00 1/1 0/0 0/0 .text            initBaseMtx__13daObjLv7Brg_cFv */
 void daObjLv7Brg_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
 
@@ -71,13 +67,10 @@ void daObjLv7Brg_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80C879A0-80C879A8 000000 0008+00 4/4 0/0 0/0 .rodata          l_bmd */
 static const int l_bmd[] = {4, 10};
 
-/* 80C879A8-80C879B0 000008 0008+00 1/1 0/0 0/0 .rodata          l_dzb */
 static const int l_dzb[] = {7, 13};
 
-/* 80C879B0-80C879C4 000010 0012+02 0/1 0/0 0/0 .rodata          l_eff_id */
 static const u16 l_eff_id[] = {
     dPa_RM(ID_ZI_S_LV7BRDG_BREAK_A),
     dPa_RM(ID_ZI_S_LV7BRDG_BREAK_B),
@@ -90,10 +83,8 @@ static const u16 l_eff_id[] = {
     dPa_RM(ID_ZI_S_LV7BRDG_BREAK_I),
 };
 
-/* 80C879C4-80C879CC 000024 0008+00 1/1 0/0 0/0 .rodata          l_heap_size */
 static const u32 l_heap_size[] = {0x6000, 0x20000};
 
-/* 80C864B4-80C865B8 0001B4 0104+00 2/2 0/0 0/0 .text            setBaseMtx__13daObjLv7Brg_cFv */
 void daObjLv7Brg_c::setBaseMtx() {
     cXyz sp8(field_0xa78, 0.0f, 0.0f);
     if (mKind == 1) {
@@ -116,13 +107,11 @@ void daObjLv7Brg_c::setBaseMtx() {
     }
 }
 
-/* 80C87A54-80C87A5C -00001 0008+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[2] = {
     "Obj_l7brg",
     "K_bridge",
 };
 
-/* 80C87A5C-80C87AA0 000028 0044+00 1/1 0/0 0/0 .data            l_cyl_src */
 static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{AT_TYPE_CSTATUE_SWING, 0x0, 0xd}, {0x0, 0x0}, 0x19}}, // mObj
@@ -137,7 +126,6 @@ static dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 80C865B8-80C867CC 0002B8 0214+00 1/0 0/0 0/0 .text            Create__13daObjLv7Brg_cFv */
 int daObjLv7Brg_c::Create() {
     field_0xa94 = -1;
     field_0xa95 = field_0xa94;
@@ -184,7 +172,6 @@ int daObjLv7Brg_c::Create() {
     return 1;
 }
 
-/* 80C867CC-80C869FC 0004CC 0230+00 1/0 0/0 0/0 .text            CreateHeap__13daObjLv7Brg_cFv */
 int daObjLv7Brg_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName[mKind], l_bmd[mKind]);
     JUT_ASSERT(374, modelData != NULL);
@@ -225,7 +212,6 @@ int daObjLv7Brg_c::CreateHeap() {
     return 1;
 }
 
-/* 80C86A44-80C86B40 000744 00FC+00 1/1 0/0 0/0 .text            create1st__13daObjLv7Brg_cFv */
 int daObjLv7Brg_c::create1st() {
     if (!mInitParams) {
         mInitParams = TRUE;
@@ -253,8 +239,6 @@ int daObjLv7Brg_c::create1st() {
     return phase_state;
 }
 
-/* 80C86B40-80C86E68 000840 0328+00 1/0 0/0 0/0 .text            Execute__13daObjLv7Brg_cFPPA3_A4_f
- */
 int daObjLv7Brg_c::Execute(Mtx** param_0) {
     search_swspinner();
     action();
@@ -326,7 +310,6 @@ int daObjLv7Brg_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80C86E68-80C86F44 000B68 00DC+00 1/1 0/0 0/0 .text            action__13daObjLv7Brg_cFv */
 void daObjLv7Brg_c::action() {
     static void (daObjLv7Brg_c::*mode_proc[])() = {
         &daObjLv7Brg_c::mode_action,
@@ -341,7 +324,6 @@ void daObjLv7Brg_c::action() {
     }
 }
 
-/* 80C86F44-80C87210 000C44 02CC+00 1/0 0/0 0/0 .text            mode_action__13daObjLv7Brg_cFv */
 // NONMATCHING - small regalloc
 void daObjLv7Brg_c::mode_action() {
     f32 var_f31;
@@ -408,10 +390,8 @@ void daObjLv7Brg_c::mode_action() {
     }
 }
 
-/* 80C87210-80C87214 000F10 0004+00 1/0 0/0 0/0 .text            mode_end__13daObjLv7Brg_cFv */
 void daObjLv7Brg_c::mode_end() {}
 
-/* 80C87214-80C87304 000F14 00F0+00 1/1 0/0 0/0 .text            calcCoPos__13daObjLv7Brg_cFv */
 void daObjLv7Brg_c::calcCoPos() {
     cXyz sp8[2];
     sp8[0].set(2700.0f, -80.0f, 450.0f);
@@ -433,7 +413,6 @@ void daObjLv7Brg_c::calcCoPos() {
     mCcCyl[1].SetC(sp8[1]);
 }
 
-/* 80C87304-80C87458 001004 0154+00 1/0 0/0 0/0 .text            Draw__13daObjLv7Brg_cFv */
 int daObjLv7Brg_c::Draw() {
     if (0.0f == field_0xa78) {
         return 1;
@@ -459,7 +438,6 @@ int daObjLv7Brg_c::Draw() {
     return 1;
 }
 
-/* 80C87458-80C874CC 001158 0074+00 1/0 0/0 0/0 .text            Delete__13daObjLv7Brg_cFv */
 int daObjLv7Brg_c::Delete() {
     if (mpBgw2 != NULL && mpBgw2->ChkUsed()) {
         dComIfG_Bgsp().Release(mpBgw2);
@@ -469,30 +447,23 @@ int daObjLv7Brg_c::Delete() {
     return 1;
 }
 
-/* 80C874CC-80C875B8 0011CC 00EC+00 1/0 0/0 0/0 .text daObjLv7Brg_create1st__FP13daObjLv7Brg_c */
 static int daObjLv7Brg_create1st(daObjLv7Brg_c* i_this) {
     fopAcM_ct(i_this, daObjLv7Brg_c);
     return i_this->create1st();
 }
 
-/* 80C878D4-80C878F4 0015D4 0020+00 1/0 0/0 0/0 .text daObjLv7Brg_MoveBGDelete__FP13daObjLv7Brg_c
- */
 static int daObjLv7Brg_MoveBGDelete(daObjLv7Brg_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C878F4-80C87914 0015F4 0020+00 1/0 0/0 0/0 .text daObjLv7Brg_MoveBGExecute__FP13daObjLv7Brg_c
- */
 static int daObjLv7Brg_MoveBGExecute(daObjLv7Brg_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C87914-80C87940 001614 002C+00 1/0 0/0 0/0 .text daObjLv7Brg_MoveBGDraw__FP13daObjLv7Brg_c */
 static int daObjLv7Brg_MoveBGDraw(daObjLv7Brg_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C87AD0-80C87AF0 -00001 0020+00 1/0 0/0 0/0 .data            daObjLv7Brg_METHODS */
 static actor_method_class daObjLv7Brg_METHODS = {
     (process_method_func)daObjLv7Brg_create1st,
     (process_method_func)daObjLv7Brg_MoveBGDelete,
@@ -501,7 +472,6 @@ static actor_method_class daObjLv7Brg_METHODS = {
     (process_method_func)daObjLv7Brg_MoveBGDraw,
 };
 
-/* 80C87AF0-80C87B20 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv7Bridge */
 extern actor_process_profile_definition g_profile_Obj_Lv7Bridge = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

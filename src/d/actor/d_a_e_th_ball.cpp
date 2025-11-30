@@ -19,10 +19,8 @@ enum daE_TH_ACTION {
     ACTION_END = 10,
 };
 
-/* 807B80E0-807B80E4 000000 0004+00 12/12 0/0 0/0 .bss             master */
 static e_th_class* master;
 
-/* 807B4918-807B4C40 000078 0328+00 1/1 0/0 0/0 .text            chain_draw__FP15e_th_ball_class */
 static void chain_draw(e_th_ball_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     f32 size = 1.0f + XREG_F(0);
@@ -95,7 +93,6 @@ static void chain_draw(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B4C40-807B4CEC 0003A0 00AC+00 1/0 0/0 0/0 .text daE_TH_BALL_Draw__FP15e_th_ball_class */
 static int daE_TH_BALL_Draw(e_th_ball_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     if (i_this->mPlayerGet) {
@@ -110,7 +107,6 @@ static int daE_TH_BALL_Draw(e_th_ball_class* i_this) {
     return 1;
 }
 
-/* 807B4CEC-807B5074 00044C 0388+00 1/1 0/0 0/0 .text chain_control_01__FP15e_th_ball_class */
 static void chain_control_01(e_th_ball_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz mae;
@@ -179,7 +175,6 @@ static void chain_control_01(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B50B0-807B54B4 000810 0404+00 1/1 0/0 0/0 .text chain_control_02__FP15e_th_ball_class */
 static void chain_control_02(e_th_ball_class* i_this) {
     cXyz sp6C;
     cXyz sp60;
@@ -249,7 +244,6 @@ static void chain_control_02(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B54B4-807B56A4 000C14 01F0+00 1/1 0/0 0/0 .text chain_control_03__FP15e_th_ball_class */
 static void chain_control_03(e_th_ball_class* i_this) {
     th_chain_s* chain_s = &i_this->field_0x65c;
     cXyz sp2C;
@@ -265,7 +259,6 @@ static void chain_control_03(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B56A4-807B5980 000E04 02DC+00 1/1 0/0 0/0 .text chain_control_11__FP15e_th_ball_class */
 static void chain_control_11(e_th_ball_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz sp48;
@@ -332,7 +325,6 @@ static void chain_control_11(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B5980-807B5B38 0010E0 01B8+00 1/1 0/0 0/0 .text chain_control_12__FP15e_th_ball_class */
 static void chain_control_12(e_th_ball_class* i_this) {
     cXyz sp20;
     cXyz sp14;
@@ -372,7 +364,6 @@ static void chain_control_12(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B5B38-807B5C34 001298 00FC+00 1/1 0/0 0/0 .text chain_control_13__FP15e_th_ball_class */
 static void chain_control_13(e_th_ball_class* i_this) {
     th_chain_2s* chain_s = &i_this->field_0xdec;
     cXyz sp2C;
@@ -387,7 +378,6 @@ static void chain_control_13(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B5C34-807B5F2C 001394 02F8+00 1/1 0/0 0/0 .text chain_control_21__FP15e_th_ball_class */
 static void chain_control_21(e_th_ball_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     int i;
@@ -457,8 +447,6 @@ static void chain_control_21(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B5F2C-807B60CC 00168C 01A0+00 4/4 0/0 0/0 .text            normal_move__FP15e_th_ball_classSc
- */
 static void normal_move(e_th_ball_class* i_this, s8 param_1) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -501,8 +489,6 @@ static void normal_move(e_th_ball_class* i_this, s8 param_1) {
     }
 }
 
-/* 807B60CC-807B615C 00182C 0090+00 1/1 0/0 0/0 .text            e_th_ball_stop__FP15e_th_ball_class
- */
 static void e_th_ball_stop(e_th_ball_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz sp14;
@@ -524,8 +510,6 @@ static void e_th_ball_stop(e_th_ball_class* i_this) {
     normal_move(i_this, 1);
 }
 
-/* 807B615C-807B6594 0018BC 0438+00 1/1 0/0 0/0 .text            e_th_ball_spin__FP15e_th_ball_class
- */
 static void e_th_ball_spin(e_th_ball_class* i_this) {
     cXyz sp34;
     cXyz sp28;
@@ -613,8 +597,6 @@ static void e_th_ball_spin(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B6594-807B6734 001CF4 01A0+00 1/1 0/0 0/0 .text            wall_angle_get__FP15e_th_ball_class
- */
 static s16 wall_angle_get(e_th_ball_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     dBgS_LinChk linchk;
@@ -650,8 +632,6 @@ static s16 wall_angle_get(e_th_ball_class* i_this) {
     return cM_atan2s(sp28.x, sp28.z) + 0x4000;
 }
 
-/* 807B6734-807B69A4 001E94 0270+00 1/1 0/0 0/0 .text            e_th_ball_shot__FP15e_th_ball_class
- */
 static void e_th_ball_shot(e_th_ball_class* i_this) {
     cXyz sp28;
     cXyz sp1C;
@@ -711,7 +691,6 @@ static void e_th_ball_shot(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B69A4-807B6D00 002104 035C+00 1/1 0/0 0/0 .text e_th_ball_return__FP15e_th_ball_class */
 static void e_th_ball_return(e_th_ball_class* i_this) {
     cXyz sp18;
     cXyz spC;
@@ -775,8 +754,6 @@ static void e_th_ball_return(e_th_ball_class* i_this) {
     normal_move(i_this, sp8);
 }
 
-/* 807B6D00-807B6DC8 002460 00C8+00 1/1 0/0 0/0 .text            e_th_ball_end__FP15e_th_ball_class
- */
 static void e_th_ball_end(e_th_ball_class* i_this) {
     cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f + TREG_F(17));
     normal_move(i_this, 1);
@@ -791,7 +768,6 @@ static void e_th_ball_end(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B6DC8-807B7454 002528 068C+00 1/1 0/0 0/0 .text            action__FP15e_th_ball_class */
 static void action(e_th_ball_class* i_this) {
     f32 var_f31 = 0.0f;
     f32 var_f30 = 1.0f;
@@ -945,10 +921,8 @@ static void action(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B80E4-807B80E8 000004 0004+00 1/1 0/0 0/0 .bss             demo_id */
 static fpc_ProcID demo_id;
 
-/* 807B7454-807B753C 002BB4 00E8+00 1/1 0/0 0/0 .text            get_demo__FP15e_th_ball_class */
 static void get_demo(e_th_ball_class* i_this) {
     cXyz sp14;
     cXyz sp8;
@@ -976,7 +950,6 @@ static void get_demo(e_th_ball_class* i_this) {
     }
 }
 
-/* 807B753C-807B7744 002C9C 0208+00 2/1 0/0 0/0 .text daE_TH_BALL_Execute__FP15e_th_ball_class */
 static int daE_TH_BALL_Execute(e_th_ball_class* i_this) {
     cXyz sp14;
     cXyz sp8;
@@ -1029,12 +1002,10 @@ static int daE_TH_BALL_Execute(e_th_ball_class* i_this) {
     return 1;
 }
 
-/* 807B7744-807B774C 002EA4 0008+00 1/0 0/0 0/0 .text daE_TH_BALL_IsDelete__FP15e_th_ball_class */
 static int daE_TH_BALL_IsDelete(e_th_ball_class* i_this) {
     return 1;
 }
 
-/* 807B774C-807B77AC 002EAC 0060+00 1/0 0/0 0/0 .text daE_TH_BALL_Delete__FP15e_th_ball_class */
 static int daE_TH_BALL_Delete(e_th_ball_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "E_th_ball");
@@ -1046,7 +1017,6 @@ static int daE_TH_BALL_Delete(e_th_ball_class* i_this) {
     return 1;
 }
 
-/* 807B77AC-807B792C 002F0C 0180+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_th_ball_class* i_this = (e_th_ball_class*)a_this;
 
@@ -1083,8 +1053,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 807B792C-807B7AA8 00308C 017C+00 1/0 0/0 0/0 .text            daE_TH_BALL_Create__FP10fopAc_ac_c
- */
 static int daE_TH_BALL_Create(fopAc_ac_c* a_this) {
     e_th_ball_class* i_this = (e_th_ball_class*)a_this;
     fopAcM_ct(i_this, e_th_ball_class);
@@ -1147,7 +1115,6 @@ static int daE_TH_BALL_Create(fopAc_ac_c* a_this) {
     return phase_state;
 }
 
-/* 807B8050-807B8070 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_TH_BALL_Method */
 static actor_method_class l_daE_TH_BALL_Method = {
     (process_method_func)daE_TH_BALL_Create,
     (process_method_func)daE_TH_BALL_Delete,
@@ -1156,7 +1123,6 @@ static actor_method_class l_daE_TH_BALL_Method = {
     (process_method_func)daE_TH_BALL_Draw,
 };
 
-/* 807B8070-807B80A0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_TH_BALL */
 extern actor_process_profile_definition g_profile_E_TH_BALL = {
   fpcLy_CURRENT_e,         // mLayerID
   8,                       // mListID

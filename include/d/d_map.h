@@ -39,38 +39,38 @@ struct dMap_HIO_prm_res_dst_s {
 
 class renderingAmap_c : public renderingPlusDoorAndCursor_c {
 public:
-    /* 800288C4 */ int getDispType() const;
-    /* 80028BB4 */ bool isDrawOutSideTrim();
-    /* 80028C4C */ int getOutSideBlackLineNumber();
-    /* 80028C60 */ bool isOutSideBlackLine();
-    /* 80028C90 */ int getLineWidthSub(int);
-    /* 80029160 */ int getStayType() const;
-    /* 8002AE6C */ renderingAmap_c() {}
+    int getDispType() const;
+    bool isDrawOutSideTrim();
+    int getOutSideBlackLineNumber();
+    bool isOutSideBlackLine();
+    int getLineWidthSub(int);
+    int getStayType() const;
+    renderingAmap_c() {}
 
-    /* 800284D0 */ virtual void draw();
-    /* 8002ADB0 */ virtual ~renderingAmap_c() {}
-    /* 80028EE4 */ virtual GXColor* getLineColor(int, int);
-    /* 80028DD4 */ virtual int getLineWidth(int);
-    /* 80028A10 */ virtual void drawPath();
-    /* 80028A30 */ virtual void rendering(dDrawPath_c::line_class const*);
-    /* 80028B3C */ virtual void rendering(dDrawPath_c::poly_class const*);
-    /* 800289F0 */ virtual void rendering(dDrawPath_c::room_class const*);
-    /* 80028960 */ virtual void beforeDrawPath();
-    /* 800289D0 */ virtual void afterDrawPath();
-    /* 80028FB4 */ virtual const GXColor* getDecoLineColor(int, int);
-    /* 80028CF4 */ virtual s32 getDecorationLineWidth(int);
-    /* 80029058 */ virtual int getIconGroupNumber(u8) const;
-    /* 80029078 */ virtual bool hasMap() const;
-    /* 8002911C */ virtual bool isRendAllRoom() const;
-    /* 800290C0 */ virtual bool isRendDoor() const;
-    /* 80029104 */ virtual bool isCheckFloor() const;
-    /* 80029190 */ virtual bool isDrawIconSingle2(dTres_c::data_s const*, bool, bool, int) const;
-    /* 8002910C */ virtual bool isRendRestart() const;
-    /* 80029114 */ virtual bool isRendCursor() const;
-    /* 8002B000 */ virtual bool isRendIcon() const { return true; }
-    /* 800284BC */ virtual f32 getIconSize(u8) const;
-    /* 80028B04 */ virtual f32 getPlayerCursorSize();
-    /* 80028B10 */ virtual f32 getRestartCursorSize();
+    virtual void draw();
+    virtual ~renderingAmap_c() {}
+    virtual GXColor* getLineColor(int, int);
+    virtual int getLineWidth(int);
+    virtual void drawPath();
+    virtual void rendering(dDrawPath_c::line_class const*);
+    virtual void rendering(dDrawPath_c::poly_class const*);
+    virtual void rendering(dDrawPath_c::room_class const*);
+    virtual void beforeDrawPath();
+    virtual void afterDrawPath();
+    virtual const GXColor* getDecoLineColor(int, int);
+    virtual s32 getDecorationLineWidth(int);
+    virtual int getIconGroupNumber(u8) const;
+    virtual bool hasMap() const;
+    virtual bool isRendAllRoom() const;
+    virtual bool isRendDoor() const;
+    virtual bool isCheckFloor() const;
+    virtual bool isDrawIconSingle2(dTres_c::data_s const*, bool, bool, int) const;
+    virtual bool isRendRestart() const;
+    virtual bool isRendCursor() const;
+    virtual bool isRendIcon() const { return true; }
+    virtual f32 getIconSize(u8) const;
+    virtual f32 getPlayerCursorSize();
+    virtual f32 getRestartCursorSize();
     virtual void setAmapPaletteColor(int, u8, u8, u8, u8) = 0;
     virtual bool isSpecialOutline() = 0;
 
@@ -84,33 +84,33 @@ private:
 
 class dMap_c : public renderingAmap_c {
 public:
-    /* 8002974C */ void copyPalette();
-    /* 8002A064 */ void copyPalette(int, int, f32);
-    /* 80029F84 */ void setMapPaletteColorAlphaPer(int, f32);
-    /* 800297A8 */ void setMapPaletteColorAlphaPer(int, int, f32);
-    /* 80029818 */ void resCopy();
-    /* 80029874 */ dMap_c(int, int, int, int);
-    /* 80029A1C */ void _remove();
-    /* 80029A8C */ void getMapMinMaxXZ(int, f32*, f32*, f32*, f32*);
-    /* 80029C10 */ void getPack(int, f32*, f32*);
-    /* 80029D78 */ void calcMapCenterXZ(int, f32*, f32*);
-    /* 80029E1C */ void calcMapCmPerTexel(int, f32*);
-    /* 8002A1BC */ int getDispType() const;
-    /* 8002A32C */ void _move(f32, f32, int, f32);
-    /* 8002AB54 */ void _draw();
+    void copyPalette();
+    void copyPalette(int, int, f32);
+    void setMapPaletteColorAlphaPer(int, f32);
+    void setMapPaletteColorAlphaPer(int, int, f32);
+    void resCopy();
+    dMap_c(int, int, int, int);
+    void _remove();
+    void getMapMinMaxXZ(int, f32*, f32*, f32*, f32*);
+    void getPack(int, f32*, f32*);
+    void calcMapCenterXZ(int, f32*, f32*);
+    void calcMapCmPerTexel(int, f32*);
+    int getDispType() const;
+    void _move(f32, f32, int, f32);
+    void _draw();
 
-    /* 8002AF20 */ virtual ~dMap_c() { _remove(); }
-    /* 800296EC */ virtual bool isDrawType(int);
-    /* 80028DF4 */ virtual const GXColor* getColor(int);
-    /* 800296F8 */ virtual bool isRendAllRoom() const;
-    /* 8002A254 */ virtual int getRoomNoSingle();
-    /* 8002A1DC */ virtual bool isDrawRoom(int, int) const;
-    /* 8002A294 */ virtual bool isDrawRoomIcon(int, int) const;
-    /* 80029038 */ virtual const Vec* getIconPosition(dTres_c::typeGroupData_c*) const;
-    /* 8002ABAC */ virtual dTres_c::typeGroupData_c* getFirstData(u8);
-    /* 8002ABCC */ virtual dTres_c::typeGroupData_c* getNextData(dTres_c::typeGroupData_c*);
-    /* 8002A148 */ virtual void setAmapPaletteColor(int, u8, u8, u8, u8);
-    /* 80029744 */ virtual bool isSpecialOutline();
+    virtual ~dMap_c() { _remove(); }
+    virtual bool isDrawType(int);
+    virtual const GXColor* getColor(int);
+    virtual bool isRendAllRoom() const;
+    virtual int getRoomNoSingle();
+    virtual bool isDrawRoom(int, int) const;
+    virtual bool isDrawRoomIcon(int, int) const;
+    virtual const Vec* getIconPosition(dTres_c::typeGroupData_c*) const;
+    virtual dTres_c::typeGroupData_c* getFirstData(u8);
+    virtual dTres_c::typeGroupData_c* getNextData(dTres_c::typeGroupData_c*);
+    virtual void setAmapPaletteColor(int, u8, u8, u8, u8);
+    virtual bool isSpecialOutline();
 
     bool isDraw() const { return renderingDAmap_c::isDraw(); }
 

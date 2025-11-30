@@ -10,7 +10,6 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
 
-/* 80C1CAEC-80C1CB80 0000EC 0094+00 1/1 0/0 0/0 .text            __ct__15daHeavySw_HIO_cFv */
 daHeavySw_HIO_c::daHeavySw_HIO_c() {
     field_0x04 = 150.0f;
     field_0x08 = 450.0f;
@@ -30,7 +29,6 @@ daHeavySw_HIO_c::daHeavySw_HIO_c() {
     field_0x34 = 4;
 }
 
-/* 80C1CBC8-80C1CC70 0001C8 00A8+00 2/2 0/0 0/0 .text            setBaseMtx__11daHeavySw_cFv */
 void daHeavySw_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y - field_0x5bc, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -39,7 +37,6 @@ void daHeavySw_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C1CC70-80C1CCDC 000270 006C+00 1/0 0/0 0/0 .text            CreateHeap__11daHeavySw_cFv */
 int daHeavySw_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("Hswitch", 4);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
@@ -49,7 +46,6 @@ int daHeavySw_c::CreateHeap() {
     return 0;
 }
 
-/* 80C1CCDC-80C1CEB0 0002DC 01D4+00 1/1 0/0 0/0 .text            create__11daHeavySw_cFv */
 int daHeavySw_c::create() {
     fopAcM_ct(this, daHeavySw_c);
 
@@ -84,8 +80,6 @@ int daHeavySw_c::create() {
     return phase;
 }
 
-/* 80C1CF90-80C1CFC0 000590 0030+00 1/1 0/0 0/0 .text
- * rideCallBack__11daHeavySw_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daHeavySw_c::rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2) {
     if (fopAcM_GetName(param_2) == PROC_ALINK) {
         daHeavySw_c* heavySw = static_cast<daHeavySw_c*>(param_1);
@@ -95,7 +89,6 @@ void daHeavySw_c::rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* p
     }
 }
 
-/* 80C1CFC0-80C1D02C 0005C0 006C+00 1/0 0/0 0/0 .text            Execute__11daHeavySw_cFPPA3_A4_f */
 int daHeavySw_c::Execute(Mtx** i_mtx) {
     moveSwitch();
     mObjAcch.CrrPos(dComIfG_Bgsp());
@@ -105,10 +98,8 @@ int daHeavySw_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80C1DC54-80C1DC8C 000014 0038+00 7/7 0/0 0/0 .bss             l_HIO */
 static daHeavySw_HIO_c l_HIO;
 
-/* 80C1D02C-80C1D274 00062C 0248+00 1/1 0/0 0/0 .text            moveSwitch__11daHeavySw_cFv */
 void daHeavySw_c::moveSwitch() {
     typedef void (daHeavySw_c::*modeProcessFunc)();
     static modeProcessFunc mode_proc[] = {
@@ -141,19 +132,16 @@ void daHeavySw_c::moveSwitch() {
     field_0x5c8++;
 }
 
-/* 80C1D274-80C1D280 000874 000C+00 2/2 0/0 0/0 .text            init_modeWait__11daHeavySw_cFv */
 void daHeavySw_c::init_modeWait() {
     mMode = MODE_WAIT;
 }
 
-/* 80C1D280-80C1D2AC 000880 002C+00 1/0 0/0 0/0 .text            modeWait__11daHeavySw_cFv */
 void daHeavySw_c::modeWait() {
     if (field_0x5d8 != 0) {
         init_modeRide();
     }
 }
 
-/* 80C1D2AC-80C1D2D8 0008AC 002C+00 3/3 0/0 0/0 .text            init_modeRide__11daHeavySw_cFv */
 void daHeavySw_c::init_modeRide() {
     field_0x5c4 = l_HIO.field_0x33;
     fopAcM_SetSpeedF(this, l_HIO.field_0x18);
@@ -161,7 +149,6 @@ void daHeavySw_c::init_modeRide() {
     mMode = MODE_RIDE;
 }
 
-/* 80C1D2D8-80C1D408 0008D8 0130+00 1/0 0/0 0/0 .text            modeRide__11daHeavySw_cFv */
 void daHeavySw_c::modeRide() {
     if (field_0x5c4 != 0) {
         field_0x5c4--;
@@ -182,8 +169,6 @@ void daHeavySw_c::modeRide() {
     }
 }
 
-/* 80C1D408-80C1D434 000A08 002C+00 1/1 0/0 0/0 .text            init_modeMoveInit__11daHeavySw_cFv
- */
 void daHeavySw_c::init_modeMoveInit() {
     fopAcM_SetSpeedF(this, l_HIO.field_0x20);
     field_0x5d4 = l_HIO.field_0x24;
@@ -191,7 +176,6 @@ void daHeavySw_c::init_modeMoveInit() {
     mMode = MODE_MOVE_INIT;
 }
 
-/* 80C1D434-80C1D54C 000A34 0118+00 1/0 0/0 0/0 .text            modeMoveInit__11daHeavySw_cFv */
 void daHeavySw_c::modeMoveInit() {
     if (field_0x5dc == 0) {
         init_modeRide();
@@ -213,7 +197,6 @@ void daHeavySw_c::modeMoveInit() {
     }
 }
 
-/* 80C1D54C-80C1D588 000B4C 003C+00 1/1 0/0 0/0 .text            init_modeMove__11daHeavySw_cFv */
 void daHeavySw_c::init_modeMove() {
     field_0x5b0 = l_HIO.field_0x0c;
     field_0x5c4 = l_HIO.field_0x30;
@@ -223,7 +206,6 @@ void daHeavySw_c::init_modeMove() {
     mMode = MODE_MOVE;
 }
 
-/* 80C1D588-80C1D688 000B88 0100+00 1/0 0/0 0/0 .text            modeMove__11daHeavySw_cFv */
 void daHeavySw_c::modeMove() {
     if (field_0x5dc == 0) {
         init_modeRide();
@@ -244,8 +226,6 @@ void daHeavySw_c::modeMove() {
     }
 }
 
-/* 80C1D688-80C1D788 000C88 0100+00 2/2 0/0 0/0 .text            init_modeMoveEnd__11daHeavySw_cFv
- */
 void daHeavySw_c::init_modeMoveEnd() {
     field_0x5c5 = 1;
     u8 param = fopAcM_GetParam(this);
@@ -258,7 +238,6 @@ void daHeavySw_c::init_modeMoveEnd() {
     mMode = MODE_MOVE_END;
 }
 
-/* 80C1D788-80C1D808 000D88 0080+00 1/0 0/0 0/0 .text            modeMoveEnd__11daHeavySw_cFv */
 void daHeavySw_c::modeMoveEnd() {
     if (field_0x5c4 != 0) {
         field_0x5c4--;
@@ -270,7 +249,6 @@ void daHeavySw_c::modeMoveEnd() {
     }
 }
 
-/* 80C1D808-80C1D91C 000E08 0114+00 1/0 0/0 0/0 .text            Draw__11daHeavySw_cFv */
 int daHeavySw_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -284,42 +262,33 @@ int daHeavySw_c::Draw() {
     return 1;
 }
 
-/* 80C1D91C-80C1D94C 000F1C 0030+00 1/0 0/0 0/0 .text            Delete__11daHeavySw_cFv */
 int daHeavySw_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, "Hswitch");
     return 1;
 }
 
-/* 80C1D94C-80C1D978 000F4C 002C+00 1/0 0/0 0/0 .text            daHeavySw_Draw__FP11daHeavySw_c */
 static int daHeavySw_Draw(daHeavySw_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C1D978-80C1D998 000F78 0020+00 1/0 0/0 0/0 .text            daHeavySw_Execute__FP11daHeavySw_c
- */
 static int daHeavySw_Execute(daHeavySw_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C1D998-80C1D9B8 000F98 0020+00 1/0 0/0 0/0 .text            daHeavySw_Delete__FP11daHeavySw_c
- */
 static int daHeavySw_Delete(daHeavySw_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C1D9B8-80C1D9D8 000FB8 0020+00 1/0 0/0 0/0 .text            daHeavySw_Create__FP10fopAc_ac_c */
 static int daHeavySw_Create(fopAc_ac_c* i_this) {
     return static_cast<daHeavySw_c*>(i_this)->create();
 }
 
-/* 80C1DB80-80C1DBA0 -00001 0020+00 1/0 0/0 0/0 .data            l_daHeavySw_Method */
 static actor_method_class l_daHeavySw_Method = {
     (process_method_func)daHeavySw_Create,  (process_method_func)daHeavySw_Delete,
     (process_method_func)daHeavySw_Execute, (process_method_func)NULL,
     (process_method_func)daHeavySw_Draw,
 };
 
-/* 80C1DBA0-80C1DBD0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_HeavySw */
 extern actor_process_profile_definition g_profile_Obj_HeavySw = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

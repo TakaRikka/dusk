@@ -19,8 +19,8 @@ class JKRAramArchive;
 
 class dMeter_menuHIO_c : public JORReflexible {
 public:
-    /* 801FE330 */ dMeter_menuHIO_c();
-    /* 8020123C */ virtual ~dMeter_menuHIO_c() {}
+    dMeter_menuHIO_c();
+    virtual ~dMeter_menuHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -84,8 +84,8 @@ public:
 
 class dMeter_drawOptionHIO_c : public JORReflexible {
 public:
-    /* 801FE4EC */ dMeter_drawOptionHIO_c();
-    /* 80200F98 */ virtual ~dMeter_drawOptionHIO_c() {}
+    dMeter_drawOptionHIO_c();
+    virtual ~dMeter_drawOptionHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -122,8 +122,8 @@ public:
 
 class dMeter_drawLetterHIO_c : public JORReflexible {
 public:
-    /* 801FE5CC */ dMeter_drawLetterHIO_c();
-    /* 80200F50 */ virtual ~dMeter_drawLetterHIO_c() {}
+    dMeter_drawLetterHIO_c();
+    virtual ~dMeter_drawLetterHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -164,8 +164,8 @@ public:
 
 class dMeter_drawFishingHIO_c : public JORReflexible {
 public:
-    /* 801FE730 */ dMeter_drawFishingHIO_c();
-    /* 80200F08 */ virtual ~dMeter_drawFishingHIO_c() {}
+    dMeter_drawFishingHIO_c();
+    virtual ~dMeter_drawFishingHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -216,8 +216,8 @@ public:
 
 class dMeter_drawInsectHIO_c : public JORReflexible {
 public:
-    /* 801FE8DC */ dMeter_drawInsectHIO_c();
-    /* 80200EC0 */ virtual ~dMeter_drawInsectHIO_c() {}
+    dMeter_drawInsectHIO_c();
+    virtual ~dMeter_drawInsectHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -249,8 +249,8 @@ public:
 
 class dMeter_drawCalibrationHIO_c : public JORReflexible {
 public:
-    /* 801FE954 */ dMeter_drawCalibrationHIO_c();
-    /* 80200E78 */ virtual ~dMeter_drawCalibrationHIO_c() {}
+    dMeter_drawCalibrationHIO_c();
+    virtual ~dMeter_drawCalibrationHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -266,8 +266,8 @@ public:
 
 class dMeter_drawSkillHIO_c : public JORReflexible {
 public:
-    /* 801FE990 */ dMeter_drawSkillHIO_c();
-    /* 80200E30 */ virtual ~dMeter_drawSkillHIO_c() {}
+    dMeter_drawSkillHIO_c();
+    virtual ~dMeter_drawSkillHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -306,8 +306,8 @@ public:
 
 class dMeter_drawEmpButtonHIO_c : public JORReflexible {
 public:
-    /* 801FEAF0 */ dMeter_drawEmpButtonHIO_c();
-    /* 80200DA0 */ virtual ~dMeter_drawEmpButtonHIO_c() {}
+    dMeter_drawEmpButtonHIO_c();
+    virtual ~dMeter_drawEmpButtonHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -456,8 +456,8 @@ public:
 
 class dMeter_drawMiniGameHIO_c : public JORReflexible {
 public:
-    /* 801FEFF0 */ dMeter_drawMiniGameHIO_c();
-    /* 80200DE8 */ virtual ~dMeter_drawMiniGameHIO_c() {}
+    dMeter_drawMiniGameHIO_c();
+    virtual ~dMeter_drawMiniGameHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -532,8 +532,8 @@ public:
 
 class dMeter_drawLightDropHIO_c : public JORReflexible {
 public:
-    /* 801FF31C */ dMeter_drawLightDropHIO_c();
-    /* 80200D58 */ virtual ~dMeter_drawLightDropHIO_c() {}
+    dMeter_drawLightDropHIO_c();
+    virtual ~dMeter_drawLightDropHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -580,8 +580,8 @@ public:
 
 class dMeter_drawHIO_c : public JORReflexible {
 public:
-    /* 801FF5B8 */ dMeter_drawHIO_c();
-    /* 80201128 */ virtual ~dMeter_drawHIO_c() {
+    dMeter_drawHIO_c();
+    virtual ~dMeter_drawHIO_c() {
         #if DEBUG
         field_0x8_debug = 0;
         #endif
@@ -955,8 +955,8 @@ STATIC_ASSERT(sizeof(dMeter_drawHIO_c) == 3880);
 
 class dMeter_ringHIO_c : public JORReflexible {
 public:
-    /* 802001AC */ dMeter_ringHIO_c();
-    /* 802010E0 */ virtual ~dMeter_ringHIO_c() {}
+    dMeter_ringHIO_c();
+    virtual ~dMeter_ringHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -1053,8 +1053,8 @@ STATIC_ASSERT(sizeof(dMeter_ringHIO_c) == 344);
 
 class dMeter_mapIconHIO_c : public JORReflexible {
 public:
-    /* 802004B4 */ dMeter_mapIconHIO_c();
-    /* 80201028 */ virtual ~dMeter_mapIconHIO_c() {}
+    dMeter_mapIconHIO_c();
+    virtual ~dMeter_mapIconHIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -1184,7 +1184,7 @@ public:
         /* 0x24 */ JUtility::TColor field_0x24;
     };  // Size: 0x28
 
-    /* 802006C8 */ dMeter_fmapHIO_c();
+    dMeter_fmapHIO_c();
 #ifdef DEBUG
     void update();
     void createEvtCallBackObject();
@@ -1193,7 +1193,7 @@ public:
     virtual void listenPropertyEvent(const JORPropertyEvent*);
     virtual void genMessage(JORMContext*);
 #endif
-    /* 80200BCC */ virtual ~dMeter_fmapHIO_c();
+    virtual ~dMeter_fmapHIO_c();
 
     /* 0x004 */ s8 field_0x4;
     #if DEBUG
@@ -1311,8 +1311,8 @@ STATIC_ASSERT(sizeof(dMeter_fmapHIO_c) == 1188);
 
 class dMeter_cursorHIO_c : public JORReflexible {
 public:
-    /* 80200CD4 */ dMeter_cursorHIO_c();
-    /* 80201098 */ virtual ~dMeter_cursorHIO_c() {}
+    dMeter_cursorHIO_c();
+    virtual ~dMeter_cursorHIO_c() {}
 
     void genMessage(JORMContext*);
 

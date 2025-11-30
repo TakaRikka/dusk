@@ -12,13 +12,10 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 80D353AC-80D353C4 0000EC 0018+00 1/1 0/0 0/0 .text            __ct__16daObj_Web1_HIO_cFv */
 daObj_Web1_HIO_c::daObj_Web1_HIO_c() {
     field_0x4 = -1;
 }
 
-/* 80D353C4-80D35440 000104 007C+00 1/0 0/0 0/0 .text            daObj_Web1_Draw__FP14obj_web1_class
- */
 static int daObj_Web1_Draw(obj_web1_class* i_this) {
     g_env_light.settingTevStruct(16, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType_MAJI(i_this->mpModel, &i_this->tevStr);
@@ -28,8 +25,6 @@ static int daObj_Web1_Draw(obj_web1_class* i_this) {
     return 1;
 }
 
-/* 80D35440-80D35508 000180 00C8+00 1/1 0/0 0/0 .text
- * ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c            */
 static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_actor) {
     obj_web1_class* _this = static_cast<obj_web1_class*>(i_this);
 
@@ -56,7 +51,6 @@ static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_this, fopAc_ac_c* i_actor)
     }
 }
 
-/* 80D35508-80D35774 000248 026C+00 1/1 0/0 0/0 .text            action__FP14obj_web1_class */
 static void action(obj_web1_class* i_this) {
     if (i_this->mReboundTimer != 0) {
         if (i_this->mReboundTimer == 60 || i_this->mReboundTimer == 40 ||
@@ -124,7 +118,6 @@ static void action(obj_web1_class* i_this) {
     cLib_addCalc2(&i_this->field_0x5b0, target, 0.5f, 0.5f);
 }
 
-/* 80D35774-80D35A3C 0004B4 02C8+00 2/1 0/0 0/0 .text daObj_Web1_Execute__FP14obj_web1_class */
 static int daObj_Web1_Execute(obj_web1_class* i_this) {
     i_this->field_0x59c++;
 
@@ -184,15 +177,12 @@ static int daObj_Web1_Execute(obj_web1_class* i_this) {
     return 1;
 }
 
-/* 80D35A3C-80D35A44 00077C 0008+00 1/0 0/0 0/0 .text daObj_Web1_IsDelete__FP14obj_web1_class */
 static int daObj_Web1_IsDelete(obj_web1_class* i_this) {
     return 1;
 }
 
-/* 80D361F8-80D361FC 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 data_80D361F8;
 
-/* 80D35A44-80D35AC0 000784 007C+00 1/0 0/0 0/0 .text daObj_Web1_Delete__FP14obj_web1_class */
 static int daObj_Web1_Delete(obj_web1_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Obj_web1");
 
@@ -208,7 +198,6 @@ static int daObj_Web1_Delete(obj_web1_class* i_this) {
     return 1;
 }
 
-/* 80D35AC0-80D35C9C 000800 01DC+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_web1_class* _this = static_cast<obj_web1_class*>(i_this);
 
@@ -247,11 +236,8 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80D36208-80D36210 000018 0008+00 2/2 0/0 0/0 .bss             l_HIO */
 static daObj_Web1_HIO_c l_HIO;
 
-/* 80D35CE4-80D35F98 000A24 02B4+00 1/0 0/0 0/0 .text            daObj_Web1_Create__FP10fopAc_ac_c
- */
 static int daObj_Web1_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_web1_class);
     obj_web1_class* _this = static_cast<obj_web1_class*>(i_this);
@@ -321,14 +307,12 @@ static int daObj_Web1_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 80D36170-80D36190 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Web1_Method */
 static actor_method_class l_daObj_Web1_Method = {
     (process_method_func)daObj_Web1_Create,  (process_method_func)daObj_Web1_Delete,
     (process_method_func)daObj_Web1_Execute, (process_method_func)daObj_Web1_IsDelete,
     (process_method_func)daObj_Web1_Draw,
 };
 
-/* 80D36190-80D361C0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_WEB1 */
 extern actor_process_profile_definition g_profile_OBJ_WEB1 = {
     fpcLy_CURRENT_e,
     3,

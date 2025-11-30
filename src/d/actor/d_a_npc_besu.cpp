@@ -283,7 +283,6 @@ enum Event {
 #endif
 
 
-/* 8053EB7C-8053EBAC 000020 0030+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[6][2] = {
     {3, 1},
     {11, 2},
@@ -293,7 +292,6 @@ static int l_bmdData[6][2] = {
     {38, 5},
 };
 
-/* 8053EBAC-8053EC14 -00001 0068+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[13] = {
     {"", 0},
     {"NO_RESPONSE", 0},
@@ -310,7 +308,6 @@ static daNpcT_evtData_c l_evtList[13] = {
     {"CONVERSATION_ABOUT_ZORA", 5},
 };
 
-/* 8053EC14-8053EC44 -00001 0030+00 3/4 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[12] = {
     "",
     "Besu",
@@ -326,40 +323,32 @@ static char* l_resNameList[12] = {
     "Sera",
 };
 
-/* 8053EC44-8053EC48 0000E8 0004+00 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[4] = {
     1, 3, 4, -1
 };
 
-/* 8053EC48-8053EC4C 0000EC 0003+01 1/0 0/0 0/0 .data            l_loadResPtrn1 */
 static s8 l_loadResPtrn1[3] = {
     3, 2, -1,
 };
 
-/* 8053EC4C-8053EC50 0000F0 0003+01 1/0 0/0 0/0 .data            l_loadResPtrn2 */
 static s8 l_loadResPtrn2[3] = {
     3, 5, -1,
 };
 
-/* 8053EC50-8053EC54 0000F4 0003+01 1/0 0/0 0/0 .data            l_loadResPtrn3 */
 static s8 l_loadResPtrn3[3] = {
     3, 6, -1,
 };
 
-/* 8053EC54-8053EC58 0000F8 0004+00 1/0 0/0 0/0 .data            l_loadResPtrn4 */
 static s8 l_loadResPtrn4[4] = {3, 4, 6, -1};
 
-/* 8053EC58-8053EC5C 0000FC 0003+01 1/0 0/0 0/0 .data            l_loadResPtrn5 */
 static s8 l_loadResPtrn5[3] = {
     1, 7, -1,
 };
 
-/* 8053EC5C-8053EC64 000100 0007+01 1/0 0/0 0/0 .data            l_loadResPtrn9 */
 static s8 l_loadResPtrn9[7] = {
     1, 2, 3, 4, 5, 6, -1,
 };
 
-/* 8053EC64-8053ECB0 -00001 004C+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[19] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn4,
     l_loadResPtrn0, l_loadResPtrn3, l_loadResPtrn2, l_loadResPtrn2,
@@ -368,7 +357,6 @@ static s8* l_loadResPtrnList[19] = {
     l_loadResPtrn0, l_loadResPtrn5, l_loadResPtrn9,
 };
 
-/* 8053ECB0-8053EFF8 000154 0348+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0, BTP_BESU, J3DFrameCtrl::EMode_LOOP, BESU0, 1},
     {BCK_BESU_F_TALK_A, J3DFrameCtrl::EMode_NONE, BESU1, BTP_BESU_F_TALK_A, J3DFrameCtrl::EMode_NONE, BESU1, 0},
@@ -402,7 +390,6 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
     {BCK_BESU_FH_BIKKURI, J3DFrameCtrl::EMode_LOOP, BESU0, BTP_BESU_FH_BIKKURI, J3DFrameCtrl::EMode_LOOP, BESU0, 0},
 };
 
-/* 8053EFF8-8053F394 00049C 039C+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[33] = {
     {BCK_BESU_WAIT_A, J3DFrameCtrl::EMode_LOOP, BESU0, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
     {BCK_BESU_WAIT_B, J3DFrameCtrl::EMode_LOOP, BESU1, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
@@ -439,7 +426,6 @@ static daNpcT_motionAnmData_c l_motionAnmData[33] = {
     {BCK_BESU_BODY_WAIT, J3DFrameCtrl::EMode_LOOP, BESU0, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
 };
 
-/* 8053F394-8053F564 000838 01D0+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[116] = {
     {3, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, 
     {1, -1, 1}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -472,7 +458,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[116] 
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 8053F564-8053F744 000A08 01E0+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[120] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -506,7 +491,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[120] = {
     {9, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 8053F744-8053F780 -00001 003C+00 1/1 0/0 0/0 .data            mCutNameList__12daNpc_Besu_c */
 char* daNpc_Besu_c::mCutNameList[15] = {
     "",
     "CONVERSATION_ABOUT_SARU",
@@ -525,7 +509,6 @@ char* daNpc_Besu_c::mCutNameList[15] = {
     "THANK_YOU",
 };
 
-/* 8053F828-8053F8DC 000CCC 00B4+00 1/2 0/0 0/0 .data            mCutList__12daNpc_Besu_c */
 daNpc_Besu_c::cutFunc daNpc_Besu_c::mCutList[15] = {
     NULL,
     &daNpc_Besu_c::cutConversationAboutSaru,
@@ -544,7 +527,6 @@ daNpc_Besu_c::cutFunc daNpc_Besu_c::mCutList[15] = {
     &daNpc_Besu_c::cutThankYou,
 };
 
-/* 80536E4C-8053701C 0000EC 01D0+00 1/0 0/0 0/0 .text            __dt__12daNpc_Besu_cFv */
 daNpc_Besu_c::~daNpc_Besu_c() {
     // "Destruct":
     OS_REPORT("|%06d:%x|daNpc_Besu_c -> デストラクト\n", g_Counter.mCounter0, this);
@@ -565,7 +547,6 @@ daNpc_Besu_c::~daNpc_Besu_c() {
     deleteRes((l_loadResPtrnList)[mType], (const char**)l_resNameList);
 }
 
-/* 8053E754-8053E7E4 000000 0090+00 13/13 0/0 0/0 .rodata          m__18daNpc_Besu_Param_c */
 const daNpc_Besu_HIOParam daNpc_Besu_Param_c::m = {
     160.0f,
     -3.0f,
@@ -611,7 +592,6 @@ const daNpc_Besu_HIOParam daNpc_Besu_Param_c::m = {
     1.0f,
 };
 
-/* 8053701C-805372FC 0002BC 02E0+00 1/1 0/0 0/0 .text            create__12daNpc_Besu_cFv */
 int daNpc_Besu_c::create() {
     static int const heapSize[19] = {
         0x35C0, 0x35C0, 0x3510, 0x35D0,
@@ -681,7 +661,6 @@ int daNpc_Besu_c::create() {
     return rv;
 }
 
-/* 805372FC-80537758 00059C 045C+00 1/1 0/0 0/0 .text            CreateHeap__12daNpc_Besu_cFv */
 int daNpc_Besu_c::CreateHeap() {
     J3DModelData* modelData = NULL;
     J3DModel* model = NULL;
@@ -772,7 +751,6 @@ int daNpc_Besu_c::CreateHeap() {
     }
 }
 
-/* 80537914-80537948 000BB4 0034+00 1/1 0/0 0/0 .text            Delete__12daNpc_Besu_cFv */
 int daNpc_Besu_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Besu_c -> Delete\n", g_Counter, this);
     fopAcM_GetID(this);
@@ -780,12 +758,10 @@ int daNpc_Besu_c::Delete() {
     return 1;
 }
 
-/* 80537948-80537968 000BE8 0020+00 2/2 0/0 0/0 .text            Execute__12daNpc_Besu_cFv */
 int daNpc_Besu_c::Execute() {
     return execute();
 }
 
-/* 80537968-805379FC 000C08 0094+00 1/1 0/0 0/0 .text            Draw__12daNpc_Besu_cFv */
 int daNpc_Besu_c::Draw() {
     daNpcT_MatAnm_c* matAnm = mpMatAnm[0];
     if (matAnm != NULL) {
@@ -797,12 +773,10 @@ int daNpc_Besu_c::Draw() {
     return draw(FALSE, 0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
-/* 805379FC-80537A1C 000C9C 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__12daNpc_Besu_cFP10fopAc_ac_c */
 int daNpc_Besu_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Besu_c*>(i_this)->CreateHeap();
 }
 
-/* 80537A1C-80537A74 000CBC 0058+00 1/1 0/0 0/0 .text            ctrlJointCallBack__12daNpc_Besu_cFP8J3DJointi */
 int daNpc_Besu_c::ctrlJointCallBack(J3DJoint* param_0, int param_1) {
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -815,7 +789,6 @@ int daNpc_Besu_c::ctrlJointCallBack(J3DJoint* param_0, int param_1) {
     return 1;
 }
 
-/* 80537A74-80537B34 000D14 00C0+00 2/1 0/0 0/0 .text            getType__12daNpc_Besu_cFv */
 u8 daNpc_Besu_c::getType() {
     switch (fopAcM_GetParam(this) & 0xFF) {
         case 0:
@@ -859,7 +832,6 @@ u8 daNpc_Besu_c::getType() {
     }
 }
 
-/* 80537B34-80537DE4 000DD4 02B0+00 2/1 0/0 0/0 .text            isDelete__12daNpc_Besu_cFv */
 BOOL daNpc_Besu_c::isDelete() {
     switch (mType) {
         case 0:
@@ -957,7 +929,6 @@ BOOL daNpc_Besu_c::isDelete() {
     }
 }
 
-/* 80537DE4-80537FD0 001084 01EC+00 2/1 0/0 0/0 .text            reset__12daNpc_Besu_cFv */
 void daNpc_Besu_c::reset() {
     csXyz acStack_20;
     int size = (u8*)&field_0x1134 - (u8*)&mNextAction;
@@ -999,17 +970,14 @@ void daNpc_Besu_c::reset() {
     setAngle(acStack_20);
 }
 
-/* 80537FD0-80537FFC 001270 002C+00 6/6 0/0 0/0 .text            chkNurse__12daNpc_Besu_cFv */
 BOOL daNpc_Besu_c::chkNurse() {
     return mType == 6 || mType == 7 || mType == 8;
 }
 
-/* 80537FFC-80538028 00129C 002C+00 7/7 0/0 0/0 .text            chkBesu3__12daNpc_Besu_cFv */
 BOOL daNpc_Besu_c::chkBesu3() {
     return mType == 3 || mType == 5 || mType == 15;
 }
 
-/* 80538028-805380A4 0012C8 007C+00 1/0 0/0 0/0 .text            afterJntAnm__12daNpc_Besu_cFi */
 void daNpc_Besu_c::afterJntAnm(int param_1) {
     if (param_1 == 1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleX(1));
@@ -1020,7 +988,6 @@ void daNpc_Besu_c::afterJntAnm(int param_1) {
     }
 }
 
-/* 805380A4-805382D0 001344 022C+00 1/0 0/0 0/0 .text            setParam__12daNpc_Besu_cFv */
 void daNpc_Besu_c::setParam() {
     selectAction();
     srchActors();
@@ -1100,7 +1067,6 @@ void daNpc_Besu_c::setParam() {
     gravity = daNpc_Besu_Param_c::m.common.gravity;
 }
 
-/* 805382D0-80538490 001570 01C0+00 2/0 0/0 0/0 .text            checkChangeEvt__12daNpc_Besu_cFv */
 BOOL daNpc_Besu_c::checkChangeEvt() {
     if (chkAction(&daNpc_Besu_c::talk) == 0) {
         mPreItemNo = 0;
@@ -1159,7 +1125,6 @@ BOOL daNpc_Besu_c::checkChangeEvt() {
     return 0;
 }
 
-/* 80538490-8053853C 001730 00AC+00 2/0 0/0 0/0 .text setAfterTalkMotion__12daNpc_Besu_cFv */
 void daNpc_Besu_c::setAfterTalkMotion() {
     int idx = FACE_NONE;
     switch (mFaceMotionSeqMngr.getNo()) {
@@ -1183,7 +1148,6 @@ void daNpc_Besu_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(idx, -1.0f, 0, 0);
 }
 
-/* 8053853C-805387D0 0017DC 0294+00 2/1 0/0 0/0 .text            srchActors__12daNpc_Besu_cFv */
 void daNpc_Besu_c::srchActors() {
     switch (mType) {
         case 0:
@@ -1252,7 +1216,6 @@ void daNpc_Besu_c::srchActors() {
     }
 }
 
-/* 805387D0-80538870 001A70 00A0+00 1/0 0/0 0/0 .text            evtTalk__12daNpc_Besu_cFv */
 BOOL daNpc_Besu_c::evtTalk() {
     if (chkAction(&daNpc_Besu_c::talk)) {
         (this->*(mAction))(NULL);
@@ -1263,7 +1226,6 @@ BOOL daNpc_Besu_c::evtTalk() {
     return 1;
 }
 
-/* 80538870-80538938 001B10 00C8+00 1/0 0/0 0/0 .text            evtCutProc__12daNpc_Besu_cFv */
 BOOL daNpc_Besu_c::evtCutProc() {
     int staff_id = dComIfGp_getEventManager().getMyStaffId("Besu", this, -1);
     if (staff_id != -1) {
@@ -1279,7 +1241,6 @@ BOOL daNpc_Besu_c::evtCutProc() {
     return 0;
 }
 
-/* 80538938-80538B54 001BD8 021C+00 1/0 0/0 0/0 .text            action__12daNpc_Besu_cFv */
 void daNpc_Besu_c::action() {
     fopAc_ac_c* actor_p = NULL;
     if (mTwilight == 0) {
@@ -1342,7 +1303,6 @@ void daNpc_Besu_c::action() {
     cLib_calcTimer(&field_0x1124);
 }
 
-/* 80538B54-80538C18 001DF4 00C4+00 1/0 0/0 0/0 .text            beforeMove__12daNpc_Besu_cFv */
 void daNpc_Besu_c::beforeMove() {
     fopAcM_OffStatus(this, 0x08000000U);
     if (checkHide()) {
@@ -1354,7 +1314,6 @@ void daNpc_Besu_c::beforeMove() {
     }
 }
 
-/* 80538C18-805391B8 001EB8 05A0+00 1/0 0/0 0/0 .text            setAttnPos__12daNpc_Besu_cFv */
 void daNpc_Besu_c::setAttnPos() {
     cXyz eyeOffset(10.0f, 30.0f, 0.0f);
     if (field_0x112f) {
@@ -1427,7 +1386,6 @@ void daNpc_Besu_c::setAttnPos() {
     }
 }
 
-/* 805391B8-80539494 002458 02DC+00 1/0 0/0 0/0 .text            setCollision__12daNpc_Besu_cFv */
 void daNpc_Besu_c::setCollision() {
     cXyz cStack_48;
     if (!mHide) {
@@ -1496,12 +1454,10 @@ void daNpc_Besu_c::setCollision() {
     mCyl1.ClrTgHit();
 }
 
-/* 80539494-8053949C 002734 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__12daNpc_Besu_cFv */
 int daNpc_Besu_c::drawDbgInfo() {
     return false;
 }
 
-/* 8053949C-805395F4 00273C 0158+00 1/0 0/0 0/0 .text            drawOtherMdl__12daNpc_Besu_cFv */
 void daNpc_Besu_c::drawOtherMdl() {
     J3DModel* model_p = mpMorf[0]->getModel();
     if (mpCupModelMorf != NULL) {
@@ -1532,7 +1488,6 @@ void daNpc_Besu_c::drawOtherMdl() {
     }
 }
 
-/* 805395F4-805396C4 002894 00D0+00 1/1 0/0 0/0 .text            setCupAnm__12daNpc_Besu_cFiif */
 int daNpc_Besu_c::setCupAnm(int arg0, int i_attr, f32 i_morf) {
     static int cupAnmData[33][2] = {
         {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0},
@@ -1556,14 +1511,11 @@ int daNpc_Besu_c::setCupAnm(int arg0, int i_attr, f32 i_morf) {
     return 1;
 }
 
-/* 805396C4-805396F8 002964 0034+00 1/0 0/0 0/0 .text afterSetMotionAnm__12daNpc_Besu_cFiifi */
 bool daNpc_Besu_c::afterSetMotionAnm(int arg0, int arg1, f32 arg2, int param_3) {
     f32 var_f30 = (mCreating == 1) ? 0.0f : arg2;
     setCupAnm(arg0, arg1, var_f30);
 }
 
-/* 805396F8-805397B0 002998 00B8+00 1/0 0/0 0/0 .text
- * getFaceMotionAnm__12daNpc_Besu_cF26daNpcT_faceMotionAnmData_c */
 daNpcT_faceMotionAnmData_c daNpc_Besu_c::getFaceMotionAnm(daNpcT_faceMotionAnmData_c arg0) {
     daNpcT_faceMotionAnmData_c rv = arg0;
     if (chkBesu3() && rv.mBtpFileIdx == 25 && rv.mBtpArcIdx == 3) {
@@ -1574,7 +1526,6 @@ daNpcT_faceMotionAnmData_c daNpc_Besu_c::getFaceMotionAnm(daNpcT_faceMotionAnmDa
     return rv;
 }
 
-/* 805397B0-80539840 002A50 0090+00 1/0 0/0 0/0 .text            changeAnm__12daNpc_Besu_cFPiPi */
 void daNpc_Besu_c::changeAnm(int* arg0, int* arg1) {
     if (mType == 0x11) {
         switch (*arg0) {
@@ -1598,7 +1549,6 @@ void daNpc_Besu_c::changeAnm(int* arg0, int* arg1) {
     }
 }
 
-/* 80539840-805398DC 002AE0 009C+00 1/0 0/0 0/0 .text            changeBck__12daNpc_Besu_cFPiPi */
 void daNpc_Besu_c::changeBck(int* arg0, int* arg1) {
     if (mType == 0x11) {
         switch (*arg0) {
@@ -1626,7 +1576,6 @@ void daNpc_Besu_c::changeBck(int* arg0, int* arg1) {
     }
 }
 
-/* 805398DC-80539968 002B7C 008C+00 1/0 0/0 0/0 .text            changeBtp__12daNpc_Besu_cFPiPi */
 void daNpc_Besu_c::changeBtp(int* arg0, int* arg1) {
     if (mType == 0x11) {
         switch (*arg0) {
@@ -1650,7 +1599,6 @@ void daNpc_Besu_c::changeBtp(int* arg0, int* arg1) {
     }
 }
 
-/* 80539968-80539994 002C08 002C+00 1/0 0/0 0/0 .text            changeBtk__12daNpc_Besu_cFPiPi */
 void daNpc_Besu_c::changeBtk(int* arg0, int* arg1) {
     if (mType == 0x11) {
         if (*arg0 != 0x16) {
@@ -1662,7 +1610,6 @@ void daNpc_Besu_c::changeBtk(int* arg0, int* arg1) {
     }
 }
 
-/* 80539994-80539ACC 002C34 0138+00 1/1 0/0 0/0 .text            selectAction__12daNpc_Besu_cFv */
 int daNpc_Besu_c::selectAction() {
     mNextAction = NULL;
     switch (mType) {
@@ -1691,14 +1638,10 @@ int daNpc_Besu_c::selectAction() {
     return 1;
 }
 
-/* 80539ACC-80539AF8 002D6C 002C+00 2/2 0/0 0/0 .text
- * chkAction__12daNpc_Besu_cFM12daNpc_Besu_cFPCvPvPv_i          */
 int daNpc_Besu_c::chkAction(actionFunc arg0) {
     return mAction == arg0;
 }
 
-/* 80539AF8-80539BA0 002D98 00A8+00 2/2 0/0 0/0 .text
- * setAction__12daNpc_Besu_cFM12daNpc_Besu_cFPCvPvPv_i          */
 int daNpc_Besu_c::setAction(actionFunc arg0) {
     mMode = MODE_EXIT;
     if (mAction != NULL) {
@@ -1714,7 +1657,6 @@ int daNpc_Besu_c::setAction(actionFunc arg0) {
     return 1;
 }
 
-/* 80539BA0-80539CF4 002E40 0154+00 1/1 0/0 0/0 .text            mop__12daNpc_Besu_cFii */
 void daNpc_Besu_c::mop(int arg0, int arg1) {
     if (field_0x1120) {
         action();
@@ -1733,8 +1675,6 @@ void daNpc_Besu_c::mop(int arg0, int arg1) {
     }
 }
 
-/* 80539CF4-80539E48 002F94 0154+00 1/0 0/0 0/0 .text cutConversationAboutSaru__12daNpc_Besu_cFi
- */
 int daNpc_Besu_c::cutConversationAboutSaru(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -1780,8 +1720,6 @@ int daNpc_Besu_c::cutConversationAboutSaru(int arg0) {
     return retval;
 }
 
-/* 80539E48-8053A45C 0030E8 0614+00 3/0 0/0 0/0 .text
- * cutConversationAboutPachinko__12daNpc_Besu_cFi               */
 int daNpc_Besu_c::cutConversationAboutPachinko(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -1943,8 +1881,6 @@ int daNpc_Besu_c::cutConversationAboutPachinko(int arg0) {
     return retval;
 }
 
-/* 8053A45C-8053A7A0 0036FC 0344+00 1/0 0/0 0/0 .text
- * cutConversationAboutWoodSwd__12daNpc_Besu_cFi                */
 int daNpc_Besu_c::cutConversationAboutWoodSwd(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -2026,7 +1962,6 @@ int daNpc_Besu_c::cutConversationAboutWoodSwd(int arg0) {
     return retval;
 }
 
-/* 8053A7A0-8053AA6C 003A40 02CC+00 1/0 0/0 0/0 .text            cutSwdTutorial__12daNpc_Besu_cFi */
 int daNpc_Besu_c::cutSwdTutorial(int arg0) {
     fopAc_ac_c* actor_p = NULL;
     cXyz my_vec_0;
@@ -2091,7 +2026,6 @@ int daNpc_Besu_c::cutSwdTutorial(int arg0) {
     return retval;
 }
 
-/* 8053AA6C-8053AF5C 003D0C 04F0+00 1/0 0/0 0/0 .text            cutFindMonkey__12daNpc_Besu_cFi */
 int daNpc_Besu_c::cutFindMonkey(int arg0) {
     fopAc_ac_c* actor_p = NULL;
     cXyz my_vec_0;
@@ -2193,7 +2127,6 @@ int daNpc_Besu_c::cutFindMonkey(int arg0) {
     return retval;
 }
 
-/* 8053AF5C-8053B058 0041FC 00FC+00 1/0 0/0 0/0 .text            cutGetWoodSwd__12daNpc_Besu_cFi */
 int daNpc_Besu_c::cutGetWoodSwd(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -2238,7 +2171,6 @@ int daNpc_Besu_c::cutGetWoodSwd(int arg0) {
     return retval;
 }
 
-/* 8053B058-8053B250 0042F8 01F8+00 1/0 0/0 0/0 .text cutCacaricoConversation__12daNpc_Besu_cFi */
 int daNpc_Besu_c::cutCacaricoConversation(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -2292,7 +2224,6 @@ int daNpc_Besu_c::cutCacaricoConversation(int arg0) {
     return retval;
 }
 
-/* 8053B250-8053B530 0044F0 02E0+00 1/0 0/0 0/0 .text            cutSurprise__12daNpc_Besu_cFi */
 int daNpc_Besu_c::cutSurprise(int arg0) {
     daTag_Push_c* tagpush_p = (daTag_Push_c*) field_0xba0.getActorP();
     int retval = 0;
@@ -2336,7 +2267,6 @@ int daNpc_Besu_c::cutSurprise(int arg0) {
     return retval;
 }
 
-/* 8053B530-8053B820 0047D0 02F0+00 1/0 0/0 0/0 .text cutConversationInHotel__12daNpc_Besu_cFi */
 int daNpc_Besu_c::cutConversationInHotel(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -2413,8 +2343,6 @@ int daNpc_Besu_c::cutConversationInHotel(int arg0) {
     return retval;
 }
 
-/* 8053B820-8053BA60 004AC0 0240+00 1/0 0/0 0/0 .text
- * cutConversationAboutDeathMt__12daNpc_Besu_cFi                */
 int daNpc_Besu_c::cutConversationAboutDeathMt(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -2464,8 +2392,6 @@ int daNpc_Besu_c::cutConversationAboutDeathMt(int arg0) {
     return retval;
 }
 
-/* 8053BA60-8053BD18 004D00 02B8+00 1/0 0/0 0/0 .text cutConversationAboutGoron__12daNpc_Besu_cFi
- */
 int daNpc_Besu_c::cutConversationAboutGoron(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -2522,7 +2448,6 @@ int daNpc_Besu_c::cutConversationAboutGoron(int arg0) {
     return retval;
 }
 
-/* 8053BD18-8053BE84 004FB8 016C+00 1/0 0/0 0/0 .text            cutNurse__12daNpc_Besu_cFi */
 int daNpc_Besu_c::cutNurse(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -2560,7 +2485,6 @@ int daNpc_Besu_c::cutNurse(int arg0) {
     return retval;
 }
 
-/* 8053BE84-8053BF60 005124 00DC+00 1/0 0/0 0/0 .text            cutClothTry__12daNpc_Besu_cFi */
 int daNpc_Besu_c::cutClothTry(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -2593,7 +2517,6 @@ int daNpc_Besu_c::cutClothTry(int arg0) {
     return retval;
 }
 
-/* 8053BF60-8053C08C 005200 012C+00 1/0 0/0 0/0 .text            cutThankYou__12daNpc_Besu_cFi */
 int daNpc_Besu_c::cutThankYou(int arg0) {
     int retval = 0;
     int* param_p = NULL;
@@ -2630,7 +2553,6 @@ int daNpc_Besu_c::cutThankYou(int arg0) {
     return retval;
 }
 
-/* 8053C08C-8053CAA0 00532C 0A14+00 2/0 0/0 0/0 .text            wait__12daNpc_Besu_cFPv */
 int daNpc_Besu_c::wait(void* param_0) {
     fopAc_ac_c* actor_p = NULL;
     switch (mMode) {
@@ -2880,7 +2802,6 @@ int daNpc_Besu_c::wait(void* param_0) {
     return 1;
 }
 
-/* 8053CAA0-8053CBB8 005D40 0118+00 1/0 0/0 0/0 .text            swdTutorial__12daNpc_Besu_cFPv */
 int daNpc_Besu_c::swdTutorial(void* param_0) {
     switch (mMode) {
         case 0:
@@ -2909,7 +2830,6 @@ int daNpc_Besu_c::swdTutorial(void* param_0) {
     return 1;
 }
 
-/* 8053CBB8-8053CF78 005E58 03C0+00 3/0 0/0 0/0 .text            nurse__12daNpc_Besu_cFPv */
 int daNpc_Besu_c::nurse(void* param_0) {
     switch (mMode) {
         case 0:
@@ -2988,7 +2908,6 @@ int daNpc_Besu_c::nurse(void* param_0) {
     return 1;
 }
 
-/* 8053CF78-8053D078 006218 0100+00 2/0 0/0 0/0 .text            giveHotWater__12daNpc_Besu_cFPv */
 int daNpc_Besu_c::giveHotWater(void* param_0) {
     switch (mMode) {
         case 0:
@@ -3012,7 +2931,6 @@ int daNpc_Besu_c::giveHotWater(void* param_0) {
     return 1;
 }
 
-/* 8053D078-8053D29C 006318 0224+00 3/0 0/0 0/0 .text            talk__12daNpc_Besu_cFPv */
 int daNpc_Besu_c::talk(void* param_0) {
     switch (mMode) {
         case 0:
@@ -3057,36 +2975,29 @@ int daNpc_Besu_c::talk(void* param_0) {
     return 0;
 }
 
-/* 8053D29C-8053D2BC 00653C 0020+00 1/0 0/0 0/0 .text            daNpc_Besu_Create__FPv */
 static int daNpc_Besu_Create(void* i_this) {
     return static_cast<daNpc_Besu_c*>(i_this)->create();
 }
 
-/* 8053D2BC-8053D2DC 00655C 0020+00 1/0 0/0 0/0 .text            daNpc_Besu_Delete__FPv */
 static int daNpc_Besu_Delete(void* i_this) {
     return static_cast<daNpc_Besu_c*>(i_this)->Delete();
 }
 
-/* 8053D2DC-8053D2FC 00657C 0020+00 1/0 0/0 0/0 .text            daNpc_Besu_Execute__FPv */
 static int daNpc_Besu_Execute(void* i_this) {
     return static_cast<daNpc_Besu_c*>(i_this)->Execute();
 }
 
-/* 8053D2FC-8053D31C 00659C 0020+00 1/0 0/0 0/0 .text            daNpc_Besu_Draw__FPv */
 static int daNpc_Besu_Draw(void* i_this) {
     return static_cast<daNpc_Besu_c*>(i_this)->Draw();
 }
 
-/* 8053D31C-8053D324 0065BC 0008+00 1/0 0/0 0/0 .text            daNpc_Besu_IsDelete__FPv */
 static int daNpc_Besu_IsDelete(void*) {
     return true;
 }
 
-/* 8053FE7C-8053FE80 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpc_Besu_Param_c l_HIO;
 
 
-/* 8053FCAC-8053FCCC -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Besu_MethodTable */
 static actor_method_class daNpc_Besu_MethodTable = {
     (process_method_func)daNpc_Besu_Create,
     (process_method_func)daNpc_Besu_Delete,
@@ -3095,7 +3006,6 @@ static actor_method_class daNpc_Besu_MethodTable = {
     (process_method_func)daNpc_Besu_Draw,
 };
 
-/* 8053FCCC-8053FCFC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_BESU */
 extern actor_process_profile_definition g_profile_NPC_BESU = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

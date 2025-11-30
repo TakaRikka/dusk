@@ -7,9 +7,9 @@ class daTagMmsg_c : public fopAc_ac_c {
 public:
     daTagMmsg_c() {}
 
-    /* 80D5B918 */ int create();
-    /* 80D5BAB4 */ ~daTagMmsg_c();
-    /* 80D5BB30 */ int execute();
+    int create();
+    ~daTagMmsg_c();
+    int execute();
 
     void onUseFlg() { mUseFlg = true; }
     bool checkNoAttention() { return mAttention == 0xFF; }

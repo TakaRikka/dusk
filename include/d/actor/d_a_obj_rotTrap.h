@@ -16,21 +16,21 @@
  */
 class daRotTrap_c : public dBgS_MoveBgActor {
 public:
-    /* 80CBF940 */ void setBaseMtx();
-    /* 80CBFAC8 */ int create();
-    /* 80CBFF1C */ void procMain();
-    /* 80CC00AC */ void init_modeWait();
-    /* 80CC0120 */ void modeWait();
-    /* 80CC0180 */ void init_modeAcc();
-    /* 80CC027C */ void modeAcc();
-    /* 80CC034C */ void init_modeMove();
-    /* 80CC0360 */ void modeMove();
-    /* 80CC0440 */ void seSet();
+    void setBaseMtx();
+    int create();
+    void procMain();
+    void init_modeWait();
+    void modeWait();
+    void init_modeAcc();
+    void modeAcc();
+    void init_modeMove();
+    void modeMove();
+    void seSet();
 
-    /* 80CBF9D8 */ virtual int CreateHeap();
-    /* 80CBFEC4 */ virtual int Execute(Mtx**);
-    /* 80CC0548 */ virtual int Draw();
-    /* 80CC05EC */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSw() { return fopAcM_GetParamBit(this, 0, 8); }
 
@@ -54,8 +54,8 @@ STATIC_ASSERT(sizeof(daRotTrap_c) == 0x173c);
 
 class daRotTrap_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80CBF8AC */ daRotTrap_HIO_c();
-    /* 80CC0728 */ virtual ~daRotTrap_HIO_c() {}
+    daRotTrap_HIO_c();
+    virtual ~daRotTrap_HIO_c() {}
 
     void genMessage(JORMContext*);
 

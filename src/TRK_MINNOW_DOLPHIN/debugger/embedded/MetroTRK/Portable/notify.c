@@ -1,7 +1,6 @@
 #include "TRK_MINNOW_DOLPHIN/MetroTRK/Portable/notify.h"
 #include "trk.h"
 
-/* 8036F4B0-8036F548 369DF0 0098+00 0/0 1/1 0/0 .text            TRKDoNotifyStopped */
 DSError TRKDoNotifyStopped(MessageCommandID cmd) {
     int reqIdx;
     int bufIdx;

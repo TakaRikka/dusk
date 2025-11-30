@@ -32,8 +32,8 @@ struct JFWSystem {
         static u32 exConsoleBufferSize;
     };
 
-    /* 80271CD0 */ static void firstInit();
-    /* 80271D18 */ static void init();
+    static void firstInit();
+    static void init();
 
     static JUTConsole* getSystemConsole() { return systemConsole; }
     static JKRExpHeap* getSystemHeap() { return systemHeap; }

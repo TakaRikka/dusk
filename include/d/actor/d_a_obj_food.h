@@ -47,8 +47,8 @@ public:
 STATIC_ASSERT(sizeof(obj_food_class) == 0xA90);
 
 struct daObj_Food_HIO_c {
-    /* 80BF070C */ daObj_Food_HIO_c();
-    /* 80BF1CE8 */ virtual ~daObj_Food_HIO_c() {}
+    daObj_Food_HIO_c();
+    virtual ~daObj_Food_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mBoneScale;

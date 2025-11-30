@@ -17,7 +17,7 @@ public:
 
 class dScnPly_reg_HIO_c : public JORReflexible {
 public:
-    /* 8025AD78 */ virtual ~dScnPly_reg_HIO_c() {}
+    virtual ~dScnPly_reg_HIO_c() {}
 
 #ifdef DEBUG
     void genMessage(JORMContext*);
@@ -31,14 +31,14 @@ public:
 
 class dScnPly_preLoad_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 8025ADC0 */ virtual ~dScnPly_preLoad_HIO_c() {}
+    virtual ~dScnPly_preLoad_HIO_c() {}
 
     void genMessage(JORMContext*);
 };
 
 class dScnPly_env_HIO_c {
 public:
-    /* 8025AD04 */ virtual ~dScnPly_env_HIO_c() {}
+    virtual ~dScnPly_env_HIO_c() {}
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ dScnPly_env_otherHIO_c mOther;
@@ -64,9 +64,9 @@ public:
 
 class dScnPly_c : public scene_class {
 public:
-    /* 80259400 */ s8 calcPauseTimer();
-    /* 80259AC4 */ bool resetGame();
-    /* 80259BFC */ void offReset();
+    s8 calcPauseTimer();
+    bool resetGame();
+    void offReset();
 
     static bool isPause() { return pauseTimer == 0; }
     static void setPauseTimer(s8 time) { nextPauseTimer = time; }

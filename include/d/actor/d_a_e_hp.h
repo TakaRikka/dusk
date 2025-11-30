@@ -16,30 +16,30 @@
  */
 class daE_HP_c : public fopEn_enemy_c {
 public:
-    /* 806E5E30 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 806E5ED0 */ static int JointCallBack(J3DJoint*, int);
-    /* 806E5F1C */ int LampCtrlJoint(J3DJoint*, J3DModel*);
-    /* 806E5FCC */ static int LampJointCallBack(J3DJoint*, int);
-    /* 806E6018 */ int draw();
-    /* 806E6514 */ void setBck(int, u8, f32, f32);
-    /* 806E65C0 */ void setActionMode(int, int);
-    /* 806E65CC */ bool mChkDistance(f32);
-    /* 806E673C */ void damage_check();
-    /* 806E6948 */ void executeWait();
-    /* 806E6C74 */ void executeMove();
-    /* 806E6ED8 */ void executeRetMove();
-    /* 806E7228 */ void executeAttack();
-    /* 806E7574 */ void executeDamage();
-    /* 806E77C0 */ void executeDown();
-    /* 806E7E94 */ void executeDead();
-    /* 806E814C */ void action();
-    /* 806E89C0 */ void mtx_set();
-    /* 806E8DE0 */ void cc_set();
-    /* 806E8FEC */ int execute();
-    /* 806E9198 */ int _delete();
-    /* 806E9240 */ int CreateHeap();
-    /* 806E951C */ int create();
-    /* 806E9900 */ daE_HP_c();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int JointCallBack(J3DJoint*, int);
+    int LampCtrlJoint(J3DJoint*, J3DModel*);
+    static int LampJointCallBack(J3DJoint*, int);
+    int draw();
+    void setBck(int, u8, f32, f32);
+    void setActionMode(int, int);
+    bool mChkDistance(f32);
+    void damage_check();
+    void executeWait();
+    void executeMove();
+    void executeRetMove();
+    void executeAttack();
+    void executeDamage();
+    void executeDown();
+    void executeDead();
+    void action();
+    void mtx_set();
+    void cc_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    int create();
+    daE_HP_c();
 
     /* 0x5AC */ request_of_phase_process_class mPhaseReq;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpMorfSO;

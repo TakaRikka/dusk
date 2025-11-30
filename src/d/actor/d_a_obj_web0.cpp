@@ -13,13 +13,10 @@
 #include "f_op/f_op_actor_mng.h"
 #include "global.h"
 
-/* 80D3452C-80D34544 0000EC 0018+00 1/1 0/0 0/0 .text            __ct__16daObj_Web0_HIO_cFv */
 daObj_Web0_HIO_c::daObj_Web0_HIO_c() {
     field_0x4 = -1;
 }
 
-/* 80D34544-80D345C0 000104 007C+00 1/0 0/0 0/0 .text            daObj_Web0_Draw__FP14obj_web0_class
- */
 static int daObj_Web0_Draw(obj_web0_class* i_this) {
     g_env_light.settingTevStruct(16, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType_MAJI(i_this->mpModel, &i_this->tevStr);
@@ -29,7 +26,6 @@ static int daObj_Web0_Draw(obj_web0_class* i_this) {
     return 1;
 }
 
-/* 80D345C0-80D34794 000180 01D4+00 1/1 0/0 0/0 .text            damage_check__FP14obj_web0_class */
 static void damage_check(obj_web0_class* i_this) {
     i_this->mStts.Move();
 
@@ -71,7 +67,6 @@ static void damage_check(obj_web0_class* i_this) {
     }
 }
 
-/* 80D34794-80D34B24 000354 0390+00 2/1 0/0 0/0 .text daObj_Web0_Execute__FP14obj_web0_class */
 static int daObj_Web0_Execute(obj_web0_class* i_this) {
     fopAc_ac_c* base_p = i_this;
     fopAc_ac_c* player = (fopAc_ac_c*) dComIfGp_getPlayer(0);
@@ -158,15 +153,12 @@ static int daObj_Web0_Execute(obj_web0_class* i_this) {
     return 1;
 }
 
-/* 80D34B24-80D34B2C 0006E4 0008+00 1/0 0/0 0/0 .text daObj_Web0_IsDelete__FP14obj_web0_class */
 static int daObj_Web0_IsDelete(obj_web0_class* i_this) {
     return 1;
 }
 
-/* 80D35290-80D35294 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 data_80D35290;
 
-/* 80D34B2C-80D34B94 0006EC 0068+00 1/0 0/0 0/0 .text daObj_Web0_Delete__FP14obj_web0_class */
 static int daObj_Web0_Delete(obj_web0_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Obj_web0");
 
@@ -178,7 +170,6 @@ static int daObj_Web0_Delete(obj_web0_class* i_this) {
     return 1;
 }
 
-/* 80D34B94-80D34D44 000754 01B0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_web0_class* _this = static_cast<obj_web0_class*>(i_this);
 
@@ -216,11 +207,8 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80D352A0-80D352A8 000018 0008+00 2/2 0/0 0/0 .bss             l_HIO */
 static daObj_Web0_HIO_c l_HIO;
 
-/* 80D34D8C-80D35054 00094C 02C8+00 1/0 0/0 0/0 .text            daObj_Web0_Create__FP10fopAc_ac_c
- */
 static int daObj_Web0_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_web0_class);
     obj_web0_class* _this = static_cast<obj_web0_class*>(i_this);
@@ -292,14 +280,12 @@ static int daObj_Web0_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 80D35208-80D35228 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Web0_Method */
 static actor_method_class l_daObj_Web0_Method = {
     (process_method_func)daObj_Web0_Create,  (process_method_func)daObj_Web0_Delete,
     (process_method_func)daObj_Web0_Execute, (process_method_func)daObj_Web0_IsDelete,
     (process_method_func)daObj_Web0_Draw,
 };
 
-/* 80D35228-80D35258 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_WEB0 */
 extern actor_process_profile_definition g_profile_OBJ_WEB0 = {
     fpcLy_CURRENT_e,
     3,

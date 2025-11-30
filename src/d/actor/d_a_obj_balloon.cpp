@@ -18,7 +18,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_balloon_2D.h"
 
-/* 80BA7FAC-80BA7FF4 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__19daObj_Balloon_HIO_cFv */
 daObj_Balloon_HIO_c::daObj_Balloon_HIO_c() {
     field_0x04 = -1;
 
@@ -31,7 +30,6 @@ daObj_Balloon_HIO_c::daObj_Balloon_HIO_c() {
     mScore[daObj_Balloon_c::SIZE_SMALL_e] = 10.0f;
 }
 
-/* 80BA7FF4-80BA80D4 000134 00E0+00 1/1 0/0 0/0 .text            draw__15daObj_Balloon_cFv */
 int daObj_Balloon_c::draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -46,42 +44,28 @@ int daObj_Balloon_c::draw() {
     return 1;
 }
 
-/* 80BA80D4-80BA80F4 000214 0020+00 1/0 0/0 0/0 .text daObj_Balloon_Draw__FP15daObj_Balloon_c */
 static int daObj_Balloon_Draw(daObj_Balloon_c* i_this) {
     return i_this->draw();
 }
 
 namespace {
-/* 80BA8E7C-80BA8E80 000020 0004+00 0/1 0/0 0/0 .data
- * m_combo_type__29@unnamed@d_a_obj_balloon_cpp@                */
 static int m_combo_type = 0xFFFFFFFF;
 
-/* 80BA8FF0-80BA8FF4 000048 0004+00 0/1 0/0 0/0 .bss
- * m_combo_count__29@unnamed@d_a_obj_balloon_cpp@               */
 static int m_combo_count;
 
-/* 80BA8FF4-80BA8FF8 00004C 0004+00 0/1 0/0 0/0 .bss
- * m_combo_next_score__29@unnamed@d_a_obj_balloon_cpp@          */
 static int m_combo_next_score;
 
-/* 80BA8FF8-80BA8FFC 000050 0004+00 1/2 0/0 0/0 .bss
- * m_balloon_score__29@unnamed@d_a_obj_balloon_cpp@             */
 static u32 m_balloon_score;
 }  // namespace
 
-/* 80BA80F4-80BA810C 000234 0018+00 0/0 0/0 1/1 .text            saveBestScore__15daObj_Balloon_cFv
- */
 void daObj_Balloon_c::saveBestScore() {
     dComIfGp_setMessageCountNumber(m_balloon_score);
 }
 
-/* 80BA8FFC-80BA9000 000054 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_initHIO;
 
-/* 80BA900C-80BA902C 000064 0020+00 4/5 0/0 0/0 .bss             l_HIO */
 static daObj_Balloon_HIO_c l_HIO;
 
-/* 80BA810C-80BA81B8 00024C 00AC+00 1/1 0/0 0/0 .text            cc_set__15daObj_Balloon_cFv */
 void daObj_Balloon_c::cc_set() {
     cXyz cc_center;
     mDoMtx_stack_c::copy(mModel->getBaseTRMtx());
@@ -94,7 +78,6 @@ void daObj_Balloon_c::cc_set() {
     dComIfG_Ccsp()->Set(&mSph);
 }
 
-/* 80BA81B8-80BA865C 0002F8 04A4+00 1/1 0/0 0/0 .text            action__15daObj_Balloon_cFv */
 void daObj_Balloon_c::action() {
     static u16 kago_wall_hit_id[2] = {0x8A12, 0x8A13};
     static f32 kago_effect_scale[3] = {4.0f, 1.5f, 0.8f};
@@ -195,7 +178,6 @@ void daObj_Balloon_c::action() {
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
 }
 
-/* 80BA865C-80BA86CC 00079C 0070+00 1/1 0/0 0/0 .text            mtx_set__15daObj_Balloon_cFv */
 void daObj_Balloon_c::mtx_set() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -203,7 +185,6 @@ void daObj_Balloon_c::mtx_set() {
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80BA86CC-80BA870C 00080C 0040+00 1/1 0/0 0/0 .text            execute__15daObj_Balloon_cFv */
 int daObj_Balloon_c::execute() {
     action();
     cc_set();
@@ -211,19 +192,14 @@ int daObj_Balloon_c::execute() {
     return 1;
 }
 
-/* 80BA870C-80BA872C 00084C 0020+00 2/1 0/0 0/0 .text daObj_Balloon_Execute__FP15daObj_Balloon_c
- */
 static int daObj_Balloon_Execute(daObj_Balloon_c* i_this) {
     return i_this->execute();
 }
 
-/* 80BA872C-80BA8734 00086C 0008+00 1/0 0/0 0/0 .text daObj_Balloon_IsDelete__FP15daObj_Balloon_c
- */
 static int daObj_Balloon_IsDelete(daObj_Balloon_c* i_this) {
     return 1;
 }
 
-/* 80BA8734-80BA87AC 000874 0078+00 1/1 0/0 0/0 .text            _delete__15daObj_Balloon_cFv */
 int daObj_Balloon_c::_delete() {
     dComIfG_resDelete(&mPhase, "Obj_bal");
     Z2GetAudioMgr()->seStop(Z2SE_OBJ_WATERMILL_ROUND, 0);
@@ -233,12 +209,10 @@ int daObj_Balloon_c::_delete() {
     return 1;
 }
 
-/* 80BA87AC-80BA87CC 0008EC 0020+00 1/0 0/0 0/0 .text daObj_Balloon_Delete__FP15daObj_Balloon_c */
 static int daObj_Balloon_Delete(daObj_Balloon_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80BA87CC-80BA88A4 00090C 00D8+00 1/1 0/0 0/0 .text            CreateHeap__15daObj_Balloon_cFv */
 int daObj_Balloon_c::CreateHeap() {
     J3DModelData* modelData;
     if (mType == SIZE_LARGE_e) {
@@ -253,12 +227,10 @@ int daObj_Balloon_c::CreateHeap() {
     return mModel != NULL ? TRUE : FALSE;
 }
 
-/* 80BA88A4-80BA88C4 0009E4 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return static_cast<daObj_Balloon_c*>(i_this)->CreateHeap();
 }
 
-/* 80BA88C4-80BA8B30 000A04 026C+00 1/1 0/0 0/0 .text            create__15daObj_Balloon_cFv */
 int daObj_Balloon_c::create() {
     fopAcM_ct(this, daObj_Balloon_c);
     mType = fopAcM_GetParam(this);
@@ -313,19 +285,16 @@ int daObj_Balloon_c::create() {
     return phase_state;
 }
 
-/* 80BA8CFC-80BA8D1C 000E3C 0020+00 1/0 0/0 0/0 .text daObj_Balloon_Create__FP15daObj_Balloon_c */
 static int daObj_Balloon_Create(daObj_Balloon_c* i_this) {
     return i_this->create();
 }
 
-/* 80BA8EE8-80BA8F08 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Balloon_Method */
 static actor_method_class l_daObj_Balloon_Method = {
     (process_method_func)daObj_Balloon_Create,  (process_method_func)daObj_Balloon_Delete,
     (process_method_func)daObj_Balloon_Execute, (process_method_func)daObj_Balloon_IsDelete,
     (process_method_func)daObj_Balloon_Draw,
 };
 
-/* 80BA8F08-80BA8F38 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_BALLOON */
 extern actor_process_profile_definition g_profile_OBJ_BALLOON = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID

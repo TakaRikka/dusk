@@ -7,12 +7,10 @@
 #include "TRK_MINNOW_DOLPHIN/MetroTRK/Portable/msgbuf.h"
 #include "TRK_MINNOW_DOLPHIN/utils/common/MWTrace.h"
 
-/* 8036DD0C-8036DD14 36864C 0008+00 0/0 1/1 0/0 .text            TRKInitializeDispatcher */
 DSError TRKInitializeDispatcher() {
     return DS_NoError;
 }
 
-/* 8036DB9C-8036DD0C 3684DC 0170+00 1/0 1/1 0/0 .text            TRKDispatchMessage */
 BOOL TRKDispatchMessage(TRKBuffer* msg) {
     u32 err;
 

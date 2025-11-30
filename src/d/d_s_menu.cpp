@@ -2005,7 +2005,6 @@ static leafdraw_method_class l_dScnMenu_Method = {
     (process_method_func)dScnMenu_Draw,
 };
 
-/* 803C3018-803C3040 -00001 0028+00 0/0 0/0 1/0 .data            g_profile_MENU_SCENE */
 extern scene_process_profile_definition g_profile_MENU_SCENE = {
     fpcLy_ROOT_e,                               // mLayerID
     1,                                          // mListID
@@ -2019,7 +2018,6 @@ extern scene_process_profile_definition g_profile_MENU_SCENE = {
     (process_method_class*)&l_dScnMenu_Method,  // mpMtd
 };
 #else
-/* 803C3018-803C3040 -00001 0028+00 0/0 0/0 1/0 .data            g_profile_MENU_SCENE */
 extern scene_process_profile_definition g_profile_MENU_SCENE = {
     fpcLy_ROOT_e,           // mLayerID
     1,                      // mListID

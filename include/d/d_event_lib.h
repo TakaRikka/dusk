@@ -28,16 +28,16 @@ public:
         mAction = NULL;
     }
 
-    /* 8004886C */ bool eventUpdate();
-    /* 800488A4 */ bool setEvent(int, int, int);
-    /* 80048940 */ void orderEvent(int, int, int);
-    /* 80048970 */ bool setAction(action_class<dEvLib_callback_c>*);
-    /* 800489A8 */ bool initAction();
-    /* 800489F8 */ bool executeAction();
-    /* 80048A50 */ bool initStart();
-    /* 80048A70 */ bool executeStart();
-    /* 80048B1C */ bool initRun();
-    /* 80048B48 */ bool executeRun();
+    bool eventUpdate();
+    bool setEvent(int, int, int);
+    void orderEvent(int, int, int);
+    bool setAction(action_class<dEvLib_callback_c>*);
+    bool initAction();
+    bool executeAction();
+    bool initStart();
+    bool executeStart();
+    bool initRun();
+    bool executeRun();
 
     virtual ~dEvLib_callback_c() {}
     virtual bool eventStart() { return true; }

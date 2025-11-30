@@ -9,7 +9,6 @@
 #include "d/actor/d_a_npc.h"
 #include "d/d_debug_viewer.h"
 
-/* 80ABFEA0-80ABFFFC 000020 015C+00 1/2 0/0 0/0 .data            l_bckGetParamList */
 static daNpc_GetParam2 l_bckGetParamList[29] = {
     {-1, 2, 0},
     {9, 0, 0},
@@ -42,14 +41,12 @@ static daNpc_GetParam2 l_bckGetParamList[29] = {
     {5, 2, 3},
 };
 
-/* 80ABFFFC-80AC002C 00017C 0030+00 1/1 0/0 0/0 .data            l_btpGetParamList */
 static daNpc_GetParam2 l_btpGetParamList[4] = {
     {23, 2, 0},
     {24, 0, 0},
     {25, 2, 0},
     {30, 2, 0},
 };
-/* 80AC002C-80AC0068 0001AC 003C+00 1/2 0/0 0/0 .data            l_btkGetParamList */
 static daNpc_GetParam2 l_btkGetParamList[5] = {
     {20, 2, 0},
     {24, 0, 1},
@@ -58,35 +55,30 @@ static daNpc_GetParam2 l_btkGetParamList[5] = {
     {27, 2, 1},
 };
 
-/* 80AC0068-80AC0074 0001E8 000C+00 1/0 0/0 0/0 .data            l_loadRes_RAFREL0 */
 static int l_loadRes_RAFREL0[] = {
     0,
     2,
     -1,
 };
 
-/* 80AC0074-80AC0080 0001F4 000C+00 1/0 0/0 0/0 .data            l_loadRes_RAFREL1 */
 static int l_loadRes_RAFREL1[] = {
     0,
     1, 
     -1,
 };
 
-/* 80AC0080-80AC008C 000200 000C+00 1/0 0/0 0/0 .data            l_loadRes_RAFREL2 */
 static int l_loadRes_RAFREL2[] = {
     0,
     3,
     -1,
 };
 
-/* 80AC008C-80AC0098 -00001 000C+00 2/2 0/0 0/0 .data            l_loadRes_list */
 static int* l_loadRes_list[3] = {
     l_loadRes_RAFREL0,
     l_loadRes_RAFREL1,
     l_loadRes_RAFREL2,
 };
 
-/* 80AC0098-80AC00A8 -00001 0010+00 6/8 0/0 0/0 .data            l_arcNames */
 static char* l_arcNames[4] = {
     "Rafrel",
     "Rafrel1",
@@ -94,7 +86,6 @@ static char* l_arcNames[4] = {
     "Rafrel3",
 };
 
-/* 80AC00A8-80AC00C4 -00001 001C+00 0/2 0/0 0/0 .data            l_evtNames */
 static char* l_evtNames[7] = {
     "",
     "THE_INTRODUCTION",
@@ -105,7 +96,6 @@ static char* l_evtNames[7] = {
     "RESIST_WIRETAP_RAFREL",
 };
 
-/* 80ABF9E0-80ABFA54 000000 0074+00 13/13 0/0 0/0 .rodata          m__19daNpcRafrel_Param_c */
 const daNpcRafrel_HIOParam daNpcRafrel_Param_c::m = {
     35.0f,
     -3.0f,
@@ -144,7 +134,6 @@ const daNpcRafrel_HIOParam daNpcRafrel_Param_c::m = {
     0,
 };
 
-/* 80AC00C4-80AC00C8 -00001 0004+00 0/2 0/0 0/0 .data            l_myName */
 static char* l_myName = "Rafrel";
 
 #if DEBUG
@@ -162,10 +151,8 @@ void daNpcRafrel_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 80AC0324-80AC0328 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static NPC_RAFREL_HIO_CLASS l_HIO;
 
-/* 80AC0110-80AC0164 000290 0054+00 0/2 0/0 0/0 .data            mEvtSeqList__13daNpcRafrel_c */
 typedef BOOL (daNpcRafrel_c::*EventFn)(int);
 EventFn daNpcRafrel_c::mEvtSeqList[] = {
     NULL,
@@ -177,10 +164,8 @@ EventFn daNpcRafrel_c::mEvtSeqList[] = {
     &daNpcRafrel_c::EvCut_WiretapSponsor,
 };
 
-/* 80AB962C-80AB97B0 0000EC 0184+00 1/1 0/0 0/0 .text            __ct__13daNpcRafrel_cFv */
 daNpcRafrel_c::daNpcRafrel_c() {}
 
-/* 80AB9840-80AB9A40 000300 0200+00 1/0 0/0 0/0 .text            __dt__13daNpcRafrel_cFv */
 daNpcRafrel_c::~daNpcRafrel_c() {
     for (int i = 0; l_loadRes_list[mType][i] >= 0; i++) {
         dComIfG_resDelete(&mPhase[i], l_arcNames[l_loadRes_list[mType][i]]);
@@ -197,7 +182,6 @@ daNpcRafrel_c::~daNpcRafrel_c() {
     #endif
 }
 
-/* 80AB9A40-80AB9E3C 000500 03FC+00 1/1 0/0 0/0 .text            Create__13daNpcRafrel_cFv */
 int daNpcRafrel_c::Create() {
     fopAcM_ct(this, daNpcRafrel_c);
 
@@ -294,7 +278,6 @@ int daNpcRafrel_c::Create() {
     return phase_state;
 }
 
-/* 80AB9E3C-80ABA1C4 0008FC 0388+00 1/1 0/0 0/0 .text            CreateHeap__13daNpcRafrel_cFv */
 int daNpcRafrel_c::CreateHeap() {
     void* mdlData_p = NULL;
     J3DModel* mdl_p = NULL;
@@ -368,7 +351,6 @@ int daNpcRafrel_c::CreateHeap() {
     return 1;
 }
 
-/* 80ABA380-80ABA3B4 000E40 0034+00 1/1 0/0 0/0 .text            Delete__13daNpcRafrel_cFv */
 int daNpcRafrel_c::Delete() {
     "Delete -> NPC_RAFREL(id=%d)\n";
     
@@ -377,13 +359,11 @@ int daNpcRafrel_c::Delete() {
     return 1;
 }
 
-/* 80ABA3B4-80ABA3D8 000E74 0024+00 2/2 0/0 0/0 .text            Execute__13daNpcRafrel_cFv */
 int daNpcRafrel_c::Execute() {
     execute();
     return 1;
 }
 
-/* 80ABA3D8-80ABA4A8 000E98 00D0+00 1/1 0/0 0/0 .text            Draw__13daNpcRafrel_cFv */
 int daNpcRafrel_c::Draw() {
     J3DModelData* modelData = mAnm_p->getModel()->getModelData();
     modelData->getMaterialNodePointer(1)->setMaterialAnm(mpMatAnm);
@@ -401,7 +381,6 @@ int daNpcRafrel_c::Draw() {
     return 1;
 }
 
-/* 80ABA4A8-80ABA678 000F68 01D0+00 1/1 0/0 0/0 .text            ctrlJoint__13daNpcRafrel_cFP8J3DJointP8J3DModel              */
 int daNpcRafrel_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     int jnt_no = i_joint->getJntNo();
     u16 jointNo = jnt_no;
@@ -440,13 +419,11 @@ int daNpcRafrel_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 80ABA678-80ABA698 001138 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__13daNpcRafrel_cFP10fopAc_ac_c */
 int daNpcRafrel_c::createHeapCallBack(fopAc_ac_c* i_this) {
     daNpcRafrel_c* actor = (daNpcRafrel_c*)i_this;
     return actor->CreateHeap();
 }
 
-/* 80ABA698-80ABA6E4 001158 004C+00 1/1 0/0 0/0 .text            ctrlJointCallBack__13daNpcRafrel_cFP8J3DJointi */
 int daNpcRafrel_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == NULL) {
         J3DModel* mdl_p = j3dSys.getModel();
@@ -460,7 +437,6 @@ int daNpcRafrel_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80ABE1D0-80ABE470 004C90 02A0+00 1/0 0/0 0/0 .text            main__13daNpcRafrel_cFv */
 BOOL daNpcRafrel_c::main() {
     if (field_0xde0 != NULL) {
         (this->*field_0xde0)(NULL);
@@ -478,7 +454,6 @@ BOOL daNpcRafrel_c::main() {
     return 1;
 }
 
-/* 80ABA6E4-80ABA8EC 0011A4 0208+00 2/0 0/0 0/0 .text setExpressionAnm__13daNpcRafrel_cFib */
 bool daNpcRafrel_c::setExpressionAnm(int i_idx, bool i_modify) {
     mAnmFlags &= ~ANM_EXPRESSION_FLAGS;
 
@@ -535,7 +510,6 @@ bool daNpcRafrel_c::setExpressionAnm(int i_idx, bool i_modify) {
     return false;
 }
 
-/* 80ABA8EC-80ABA9CC 0013AC 00E0+00 1/0 0/0 0/0 .text            setExpressionBtp__13daNpcRafrel_cFi */
 bool daNpcRafrel_c::setExpressionBtp(int i_idx) {
     J3DAnmTexPattern* btpAnm = getTexPtrnAnmP(l_arcNames[l_btpGetParamList[i_idx].arcIdx],
                                               l_btpGetParamList[i_idx].fileIdx);
@@ -557,7 +531,6 @@ bool daNpcRafrel_c::setExpressionBtp(int i_idx) {
     return false;
 }
 
-/* 80ABA9CC-80ABAB88 00148C 01BC+00 1/0 0/0 0/0 .text            setMotionAnm__13daNpcRafrel_cFif */
 void daNpcRafrel_c::setMotionAnm(int i_idx, f32 i_morf) {
     int var_r30 = 0;
     switch (i_idx) {
@@ -602,7 +575,6 @@ void daNpcRafrel_c::setMotionAnm(int i_idx, f32 i_morf) {
     }
 }
 
-/* 80ABAB88-80ABADC4 001648 023C+00 1/1 0/0 0/0 .text            reset__13daNpcRafrel_cFv */
 void daNpcRafrel_c::reset() {
     initialize();
     mpMatAnm->initialize();
@@ -655,7 +627,6 @@ void daNpcRafrel_c::reset() {
     setWaitAction();
 }
 
-/* 80ABDE9C-80ABE1D0 00495C 0334+00 1/0 0/0 0/0 .text            setParam__13daNpcRafrel_cFv */
 void daNpcRafrel_c::setParam() {
     searchActors();
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
@@ -689,7 +660,6 @@ void daNpcRafrel_c::setParam() {
     #endif
 }
 
-/* 80ABE9FC-80ABEAD8 0054BC 00DC+00 1/0 0/0 0/0 .text            ctrlBtk__13daNpcRafrel_cFv */
 BOOL daNpcRafrel_c::ctrlBtk() {
     if (mpMatAnm != NULL) {
         J3DAnmTextureSRTKey* temp_r29 = NULL;
@@ -707,7 +677,6 @@ BOOL daNpcRafrel_c::ctrlBtk() {
     return FALSE;
 }
 
-/* 80ABF074-80ABF07C 005B34 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__13daNpcRafrel_cFv */
 BOOL daNpcRafrel_c::drawDbgInfo() {
 #if DEBUG
     if (!mpHIO->m.common.debug_info_ON) {
@@ -801,7 +770,6 @@ void daNpcRafrel_c::playExpression() {
     }
 }
 
-/* 80ABE470-80ABE9FC 004F30 058C+00 1/1 0/0 0/0 .text            playMotion__13daNpcRafrel_cFv */
 void daNpcRafrel_c::playMotion() {
     daNpcF_anmPlayData anm0_phase1 = {8, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* anm0[] = {&anm0_phase1};
@@ -881,7 +849,6 @@ void daNpcRafrel_c::playMotion() {
     }
 }
 
-/* 80ABEAD8-80ABEE98 005598 03C0+00 1/0 0/0 0/0 .text            setAttnPos__13daNpcRafrel_cFv */
 void daNpcRafrel_c::setAttnPos() {
     if (field_0xe0e == LOOK_RESET) {
         for (int i = 0; i < 3; i++) {
@@ -944,7 +911,6 @@ void daNpcRafrel_c::setAttnPos() {
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 80ABEE98-80ABF074 005958 01DC+00 1/1 0/0 0/0 .text            lookat__13daNpcRafrel_cFv */
 void daNpcRafrel_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model_p = mAnm_p->getModel();
@@ -995,7 +961,6 @@ void daNpcRafrel_c::lookat() {
     mLookat.calc(this, model_p->getBaseTRMtx(), sp24, var_r28, temp_r26, 0);
 }
 
-/* 80ABADC4-80ABAFBC 001884 01F8+00 1/1 0/0 0/0 .text            setWaitAction__13daNpcRafrel_cFv */
 void daNpcRafrel_c::setWaitAction() {
     switch (mType) {
     case 0:
@@ -1013,7 +978,6 @@ void daNpcRafrel_c::setWaitAction() {
     }
 }
 
-/* 80ABAFBC-80ABB014 001A7C 0058+00 1/1 0/0 0/0 .text            isSneaking__13daNpcRafrel_cFv */
 bool daNpcRafrel_c::isSneaking() {
     if (mType == 0) {
         if (dComIfGp_getStartStageRoomNo() == 5 && dComIfG_play_c::getLayerNo(0) == 2) {
@@ -1104,7 +1068,6 @@ BOOL daNpcRafrel_c::chkFindPlayer() {
     return ret;
 }
 
-/* 80ABB014-80ABBB10 001AD4 0AFC+00 2/0 0/0 0/0 .text            wait_type01__13daNpcRafrel_cFPv */
 // NONMATCHING - gameinfo event load stuff
 bool daNpcRafrel_c::wait_type01(void* param_0) {
     switch (field_0xe10) {
@@ -1239,7 +1202,6 @@ bool daNpcRafrel_c::wait_type01(void* param_0) {
     return 1;
 }
 
-/* 80ABBB10-80ABBBB0 0025D0 00A0+00 1/0 0/0 0/0 .text            setMotion__13daNpcRafrel_cFifi */
 void daNpcRafrel_c::setMotion(int param_0, f32 param_1, int param_2) {
     s16 var_r31 = param_0;
     switch (var_r31) {
@@ -1267,7 +1229,6 @@ void daNpcRafrel_c::setMotion(int param_0, f32 param_1, int param_2) {
     }
 }
 
-/* 80ABBBB0-80ABBBDC 002670 002C+00 1/0 0/0 0/0 .text            setExpression__13daNpcRafrel_cFif */
 void daNpcRafrel_c::setExpression(int i_expression, f32 i_morf) {
     if (i_expression >= 0 && i_expression < 8) {
         mExpression = i_expression;
@@ -1277,7 +1238,6 @@ void daNpcRafrel_c::setExpression(int i_expression, f32 i_morf) {
     }
 }
 
-/* 80ABBBDC-80ABBE84 00269C 02A8+00 1/0 0/0 0/0 .text            wait_type2__13daNpcRafrel_cFPv */
 bool daNpcRafrel_c::wait_type2(void* param_0) {
     switch (field_0xe10) {
     case 0:
@@ -1347,7 +1307,6 @@ void daNpcRafrel_c::setExpressionTalkAfter() {
     }
 }
 
-/* 80ABBE84-80ABC50C 002944 0688+00 2/0 0/0 0/0 .text            talk__13daNpcRafrel_cFPv */
 bool daNpcRafrel_c::talk(void* param_0) {
     int sp14 = 0;
     bool var_r27 = 0;
@@ -1415,7 +1374,6 @@ bool daNpcRafrel_c::talk(void* param_0) {
     return var_r27;
 }
 
-/* 80ABC50C-80ABCA40 002FCC 0534+00 1/0 0/0 0/0 .text            demo__13daNpcRafrel_cFPv */
 bool daNpcRafrel_c::demo(void* param_0) {
     dEvent_manager_c* evtmgr = &dComIfGp_getEventManager();
     int unused = 0;
@@ -1477,7 +1435,6 @@ bool daNpcRafrel_c::demo(void* param_0) {
     return 1;
 }
 
-/* 80ABCA40-80ABCD74 003500 0334+00 1/0 0/0 0/0 .text            leave__13daNpcRafrel_cFPv */
 bool daNpcRafrel_c::leave(void* param_0) {
     cXyz sp8(-6253.387f, 0.0f, 6251.7603f);
 
@@ -1512,7 +1469,6 @@ bool daNpcRafrel_c::leave(void* param_0) {
     return 1;
 }
 
-/* 80ABCD74-80ABCE74 003834 0100+00 1/0 0/0 0/0 .text EvCut_Introduction__13daNpcRafrel_cFi */
 int daNpcRafrel_c::EvCut_Introduction(int i_staffId) {
     dEvent_manager_c* evtmgr = &dComIfGp_getEventManager();
     
@@ -1539,7 +1495,6 @@ int daNpcRafrel_c::EvCut_Introduction(int i_staffId) {
     return 0;
 }
 
-/* 80ABCE74-80ABD124 003934 02B0+00 1/0 0/0 0/0 .text            EvCut_Meeting__13daNpcRafrel_cFi */
 int daNpcRafrel_c::EvCut_Meeting(int i_staffId) {
     dEvent_manager_c* evtmgr = &dComIfGp_getEventManager();
     
@@ -1591,7 +1546,6 @@ int daNpcRafrel_c::EvCut_Meeting(int i_staffId) {
     return 0;
 }
 
-/* 80ABD124-80ABD8A0 003BE4 077C+00 1/0 0/0 0/0 .text            EvCut_Appear__13daNpcRafrel_cFi */
 int daNpcRafrel_c::EvCut_Appear(int i_staffId) {
     char* cutname;
     dEvent_manager_c& evtmgr = dComIfGp_getEventManager();
@@ -1700,7 +1654,6 @@ int daNpcRafrel_c::EvCut_Appear(int i_staffId) {
     return 0;
 }
 
-/* 80ABD8A0-80ABDB7C 004360 02DC+00 1/0 0/0 0/0 .text EvCut_WiretapSponsor__13daNpcRafrel_cFi */
 int daNpcRafrel_c::EvCut_WiretapSponsor(int i_staffId) {
     int* cutname;
     dEvent_manager_c& evtmgr = dComIfGp_getEventManager();
@@ -1753,7 +1706,6 @@ int daNpcRafrel_c::EvCut_WiretapSponsor(int i_staffId) {
     return 0;
 }
 
-/* 80ABDB7C-80ABDDE4 00463C 0268+00 2/0 0/0 0/0 .text EvCut_WiretapEntrant__13daNpcRafrel_cFi */
 int daNpcRafrel_c::EvCut_WiretapEntrant(int i_staffId) {
     dEvent_manager_c& evtmgr = dComIfGp_getEventManager();
     
@@ -1799,32 +1751,26 @@ int daNpcRafrel_c::EvCut_WiretapEntrant(int i_staffId) {
     return 0;
 }
 
-/* 80ABDDE4-80ABDE04 0048A4 0020+00 1/0 0/0 0/0 .text            daNpcRafrel_Create__FPv */
 static int daNpcRafrel_Create(void* i_this) {
     return ((daNpcRafrel_c*)i_this)->Create();
 }
 
-/* 80ABDE04-80ABDE24 0048C4 0020+00 1/0 0/0 0/0 .text            daNpcRafrel_Delete__FPv */
 static int daNpcRafrel_Delete(void* i_this) {
     return ((daNpcRafrel_c*)i_this)->Delete();
 }
 
-/* 80ABDE24-80ABDE44 0048E4 0020+00 1/0 0/0 0/0 .text            daNpcRafrel_Execute__FPv */
 static int daNpcRafrel_Execute(void* i_this) {
     return ((daNpcRafrel_c*)i_this)->Execute();
 }
 
-/* 80ABDE44-80ABDE64 004904 0020+00 1/0 0/0 0/0 .text            daNpcRafrel_Draw__FPv */
 static int daNpcRafrel_Draw(void* i_this) {
     return ((daNpcRafrel_c*)i_this)->Draw();
 }
 
-/* 80ABDE64-80ABDE6C 004924 0008+00 1/0 0/0 0/0 .text            daNpcRafrel_IsDelete__FPv */
 static int daNpcRafrel_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80AC01D8-80AC01F8 -00001 0020+00 1/0 0/0 0/0 .data            daNpcRafrel_MethodTable */
 static actor_method_class daNpcRafrel_MethodTable = {
     (process_method_func)daNpcRafrel_Create,
     (process_method_func)daNpcRafrel_Delete,
@@ -1833,7 +1779,6 @@ static actor_method_class daNpcRafrel_MethodTable = {
     (process_method_func)daNpcRafrel_Draw,
 };
 
-/* 80AC01F8-80AC0228 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_RAFREL */
 extern actor_process_profile_definition g_profile_NPC_RAFREL = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID

@@ -14,12 +14,12 @@
  */
 class daObjBombf_c : public fopAc_ac_c {
 public:
-    /* 80BBA9F8 */ bool createHeap();
-    /* 80BBAA84 */ int create();
-    /* 80BBABBC */ ~daObjBombf_c();
-    /* 80BBAC4C */ void setMatrix();
-    /* 80BBACC0 */ int execute();
-    /* 80BBADF8 */ int draw();
+    bool createHeap();
+    int create();
+    ~daObjBombf_c();
+    void setMatrix();
+    int execute();
+    int draw();
 
 private:
     /* 0x568 */ request_of_phase_process_class field_0x568;

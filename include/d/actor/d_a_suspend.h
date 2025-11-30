@@ -15,14 +15,14 @@ class daSus_c : public fopAc_ac_c {
 public:
     class data_c {
     public:
-        /* 80030F14 */ void set(s8, cXyz const&, cXyz const&, u8, u8, u8);
-        /* 80030FBC */ data_c* reset();
-        /* 80030FCC */ u8 isSwitch();
-        /* 800310C8 */ u8 check(fopAc_ac_c*);
-        /* 80031038 */ bool check(cXyz const&);
-        /* 80031150 */ void execute();
-        /* 80031F28 */ ~data_c() {}
-        /* 80031F64 */ data_c() { reset(); }
+        void set(s8, cXyz const&, cXyz const&, u8, u8, u8);
+        data_c* reset();
+        u8 isSwitch();
+        u8 check(fopAc_ac_c*);
+        bool check(cXyz const&);
+        void execute();
+        ~data_c() {}
+        data_c() { reset(); }
 
         void setNext(data_c* i_next) { mpNext = i_next; }
         data_c* getNext() { return mpNext; }
@@ -42,20 +42,20 @@ public:
 
     class room_c {
     public:
-        /* 80031190 */ void add(daSus_c::data_c*);
-        /* 800311FC */ void reset();
-        /* 80031EE4 */ room_c() { init(); }
+        void add(daSus_c::data_c*);
+        void reset();
+        room_c() { init(); }
         void init() { mpData = NULL; }
 
         /* 0x0 */ data_c* mpData;
     };  // Size: 0x4
 
-    /* 80031248 */ static int newData(s8, cXyz const&, cXyz const&, u8, u8, u8);
-    /* 800313BC */ static void reset();
-    /* 800314D4 */ static void check(fopAc_ac_c*);
-    /* 80031434 */ static bool check(s8 i_roomNo, cXyz const& i_pos);
-    /* 800315A4 */ static void execute();
-    /* 804D5118 */ int create();
+    static int newData(s8, cXyz const&, cXyz const&, u8, u8, u8);
+    static void reset();
+    static void check(fopAc_ac_c*);
+    static bool check(s8 i_roomNo, cXyz const& i_pos);
+    static void execute();
+    int create();
 
     static void reset(int roomNo) {
         mRoom[roomNo].reset();

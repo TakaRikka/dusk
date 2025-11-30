@@ -15,15 +15,15 @@ class daL7lowDr_c : public fopAc_ac_c {
 public:
     typedef void (daL7lowDr_c::*actionFn)();
 
-    /* 805AA5F8 */ void setAction(actionFn);
-    /* 805AA69C */ void action();
-    /* 805AA748 */ int _delete();
-    /* 805AA7B8 */ void mtx_set();
-    /* 805AA828 */ void fly();
-    /* 805AABF8 */ int execute();
-    /* 805AAC5C */ int CreateHeap();
-    /* 805AAD58 */ int create();
-    /* 805AAEA8 */ int draw();
+    void setAction(actionFn);
+    void action();
+    int _delete();
+    void mtx_set();
+    void fly();
+    int execute();
+    int CreateHeap();
+    int create();
+    int draw();
 
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ mDoExt_McaMorfSO* mpModelMorf;

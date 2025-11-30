@@ -40,27 +40,22 @@ void daObjTobyHouse_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 80D1774C-80D17754 000000 0008+00 4/4 0/0 0/0 .rodata          l_bmd */
 static int const l_bmd[2] = {
     11, 5,
 };
 
-/* 80D17754-80D1775C 000008 0008+00 1/1 0/0 0/0 .rodata          l_dzb */
 static int const l_dzb[2] = {
     15, 8,
 };
 
-/* 80D1775C-80D17764 000010 0008+00 0/1 0/0 0/0 .rodata          l_LodBmd */
 static int const l_LodBmd[2] = {
     12, 4,
 };
 
-/* 80D17764-80D17770 000018 000C+00 0/1 0/0 0/0 .rodata          l_bck */
 static int const l_bck[3] = {
     6, 7, 8,
 };
 
-/* 80D15AAC-80D15DA8 0000EC 02FC+00 1/1 0/0 0/0 .text            s_b_sub__FPvPv */
 static void* s_b_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor)) {
         fopAc_ac_c* data = (fopAc_ac_c*)i_data;
@@ -85,7 +80,6 @@ static void* s_b_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80D15DA8-80D15E98 0003E8 00F0+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int i_jointNo) {
     if (i_jointNo == 0) {
         int jnt = i_joint->getJntNo();
@@ -106,7 +100,6 @@ static int nodeCallBack(J3DJoint* i_joint, int i_jointNo) {
     return 1;
 }
 
-/* 80D15E98-80D15F0C 0004D8 0074+00 1/1 0/0 0/0 .text            eventCallBack__FPvi */
 static int eventCallBack(void* param_1, int param_2) {
     if (param_1 != NULL) {
         ((daObjTobyHouse_c*)param_1)->sceneChange();
@@ -119,14 +112,11 @@ static int eventCallBack(void* param_1, int param_2) {
     return 1;
 }
 
-/* 80D15F0C-80D15F48 00054C 003C+00 1/1 0/0 0/0 .text            initBaseMtx__16daObjTobyHouse_cFv
- */
 void daObjTobyHouse_c::initBaseMtx() {
     mModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80D15F48-80D15FE0 000588 0098+00 2/2 0/0 0/0 .text            setBaseMtx__16daObjTobyHouse_cFv */
 void daObjTobyHouse_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x,
                            current.pos.y + mHeightOffset,
@@ -138,21 +128,17 @@ void daObjTobyHouse_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80D17878-80D17880 -00001 0008+00 4/4 0/0 0/0 .data            l_arcName */
 static char* l_arcName[2] = {
     "M_THouse",
     "U_THouse",
 };
-/* 80D17880-80D17884 -00001 0004+00 1/1 0/0 0/0 .data            l_staff_name */
 static char* l_staff_name = "thouse";
 
-/* 80D17884-80D1788C -00001 0008+00 1/1 0/0 0/0 .data            l_event_name */
 static char* l_event_name[2] = {
     "TOBY_HOUSE_FIRE_TO_RAKKA",
     "TOBY_HOUSE_FIRE_TO_DESERT",
 };
 
-/* 80D15FE0-80D161A4 000620 01C4+00 1/0 0/0 0/0 .text            Create__16daObjTobyHouse_cFv */
 int daObjTobyHouse_c::Create() {
     fopAcM_setCullSizeFar(this, 10.0f);
     cXyz cStack_24(current.pos);
@@ -198,7 +184,6 @@ int daObjTobyHouse_c::Create() {
     return 1;
 }
 
-/* 80D161A4-80D163A8 0007E4 0204+00 1/0 0/0 0/0 .text            CreateHeap__16daObjTobyHouse_cFv */
 int daObjTobyHouse_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName[mType], l_bmd[mType]);
     JUT_ASSERT(430, modelData != NULL);
@@ -231,7 +216,6 @@ int daObjTobyHouse_c::CreateHeap() {
     return 1;
 }
 
-/* 80D163F0-80D164C0 000A30 00D0+00 1/1 0/0 0/0 .text            create1st__16daObjTobyHouse_cFv */
 int daObjTobyHouse_c::create1st() {
     if (dComIfG_play_c::getLayerNo(0) == 13) {
         mType = TYPE_1;
@@ -260,7 +244,6 @@ int daObjTobyHouse_c::create1st() {
     return rv;
 }
 
-/* 80D164C0-80D16560 000B00 00A0+00 1/0 0/0 0/0 .text Execute__16daObjTobyHouse_cFPPA3_A4_f */
 int daObjTobyHouse_c::Execute(Mtx** i_mtx) {
     field_0x5c8++;
     action();
@@ -273,7 +256,6 @@ int daObjTobyHouse_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80D16560-80D1661C 000BA0 00BC+00 1/1 0/0 0/0 .text            action__16daObjTobyHouse_cFv */
 void daObjTobyHouse_c::action() {
     static daObjTobyHouse_c::actionFunc l_func[4] = {
         &daObjTobyHouse_c::actionWait,
@@ -285,7 +267,6 @@ void daObjTobyHouse_c::action() {
     (this->*l_func[mAction])();
 }
 
-/* 80D1661C-80D166E0 000C5C 00C4+00 1/0 0/0 0/0 .text            actionWait__16daObjTobyHouse_cFv */
 void daObjTobyHouse_c::actionWait() {
     if (dComIfGs_isOneZoneSwitch(5, 0xffffffff)) {
         field_0x5e2 = 1;
@@ -305,7 +286,6 @@ void daObjTobyHouse_c::actionWait() {
     }
 }
 
-/* 80D166E0-80D167BC 000D20 00DC+00 1/0 0/0 0/0 .text actionOrderEvent__16daObjTobyHouse_cFv */
 void daObjTobyHouse_c::actionOrderEvent() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         fpcM_Search(s_b_sub, this);
@@ -319,8 +299,6 @@ void daObjTobyHouse_c::actionOrderEvent() {
     }
 }
 
-/* 80D167BC-80D16860 000DFC 00A4+00 1/0 0/0 0/0 .text            actionEvent__16daObjTobyHouse_cFv
- */
 void daObjTobyHouse_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventIds[mEventIdIdx])) {
         dComIfGp_event_reset();
@@ -333,10 +311,8 @@ void daObjTobyHouse_c::actionEvent() {
     }
 }
 
-/* 80D16860-80D16864 000EA0 0004+00 1/0 0/0 0/0 .text            actionDead__16daObjTobyHouse_cFv */
 void daObjTobyHouse_c::actionDead() {}
 
-/* 80D16864-80D171C0 000EA4 095C+00 2/1 0/0 0/0 .text            demoProc__16daObjTobyHouse_cFv */
 void daObjTobyHouse_c::demoProc() {
     static const char* action_table[7] = {
         "WAIT",
@@ -509,8 +485,6 @@ void daObjTobyHouse_c::demoProc() {
     }
 }
 
-/* 80D171C0-80D17230 001800 0070+00 2/2 0/0 0/0 .text            sceneChange__16daObjTobyHouse_cFv
- */
 void daObjTobyHouse_c::sceneChange() {
     u8 exitId = 3;
     switch (field_0x5e2) {
@@ -527,7 +501,6 @@ void daObjTobyHouse_c::sceneChange() {
     dStage_changeScene(exitId, 0.0f, 0, fopAcM_GetRoomNo(this), 0, -1);
 }
 
-/* 80D17230-80D17374 001870 0144+00 1/0 0/0 0/0 .text            Draw__16daObjTobyHouse_cFv */
 int daObjTobyHouse_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     if (checkLODModel()) {
@@ -555,8 +528,6 @@ int daObjTobyHouse_c::Draw() {
     return 1;
 }
 
-/* 80D17374-80D174F8 0019B4 0184+00 1/1 0/0 0/0 .text            checkLODModel__16daObjTobyHouse_cFv
- */
 BOOL daObjTobyHouse_c::checkLODModel() {
     if (dComIfGp_event_runCheck()) {
         return FALSE;
@@ -574,7 +545,6 @@ BOOL daObjTobyHouse_c::checkLODModel() {
     return FALSE;
 }
 
-/* 80D174F8-80D17618 001B38 0120+00 1/0 0/0 0/0 .text            Delete__16daObjTobyHouse_cFv */
 int daObjTobyHouse_c::Delete() {
     if (field_0x5f0 != NULL) {
         field_0x5f0->becomeInvalidEmitter();
@@ -608,32 +578,23 @@ int daObjTobyHouse_c::Delete() {
     return 1;
 }
 
-/* 80D17618-80D17678 001C58 0060+00 1/0 0/0 0/0 .text
- * daObjTobyHouse_create1st__FP16daObjTobyHouse_c               */
 static int daObjTobyHouse_create1st(daObjTobyHouse_c* i_this) {
     fopAcM_ct(i_this, daObjTobyHouse_c);
     return i_this->create1st();
 }
 
-/* 80D17678-80D17698 001CB8 0020+00 1/0 0/0 0/0 .text
- * daObjTobyHouse_MoveBGDelete__FP16daObjTobyHouse_c            */
 static int daObjTobyHouse_MoveBGDelete(daObjTobyHouse_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D17698-80D176B8 001CD8 0020+00 1/0 0/0 0/0 .text
- * daObjTobyHouse_MoveBGExecute__FP16daObjTobyHouse_c           */
 static int daObjTobyHouse_MoveBGExecute(daObjTobyHouse_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D176B8-80D176E4 001CF8 002C+00 1/0 0/0 0/0 .text
- * daObjTobyHouse_MoveBGDraw__FP16daObjTobyHouse_c              */
 static int daObjTobyHouse_MoveBGDraw(daObjTobyHouse_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80D17930-80D17950 -00001 0020+00 1/0 0/0 0/0 .data            daObjTobyHouse_METHODS */
 static actor_method_class daObjTobyHouse_METHODS = {
     (process_method_func)daObjTobyHouse_create1st,
     (process_method_func)daObjTobyHouse_MoveBGDelete,
@@ -642,7 +603,6 @@ static actor_method_class daObjTobyHouse_METHODS = {
     (process_method_func)daObjTobyHouse_MoveBGDraw,
 };
 
-/* 80D17950-80D17980 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_TobyHouse */
 extern actor_process_profile_definition g_profile_Obj_TobyHouse = {
   fpcLy_CURRENT_e,          // mLayerID
   3,                        // mListID

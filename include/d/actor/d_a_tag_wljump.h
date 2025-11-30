@@ -8,10 +8,10 @@ struct dPath;
 
 class daTagWljump_c : public fopAc_ac_c {
 public:
-    /* 80D64EB8 */ int create();
-    /* 80D65004 */ ~daTagWljump_c();
-    /* 80D65090 */ int execute();
-    /* 80D6589C */ int draw();
+    int create();
+    ~daTagWljump_c();
+    int execute();
+    int draw();
 
     const cXyz* getLockPos() const {
         if (field_0x568 < 0) {

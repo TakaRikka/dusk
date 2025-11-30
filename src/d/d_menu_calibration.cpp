@@ -28,7 +28,6 @@ static dummy_child_class dummy() {
     return temp;
 }
 
-/* 803BC28C-803BC2D4 0193AC 0048+00 1/2 0/0 0/0 .data            map_init_process */
 typedef void (dMenu_Calibration_c::*initFunc)();
 static initFunc map_init_process[] = {
     &dMenu_Calibration_c::step1_wait_init, &dMenu_Calibration_c::step1_move_init,
@@ -36,7 +35,6 @@ static initFunc map_init_process[] = {
     &dMenu_Calibration_c::step3_wait_init, &dMenu_Calibration_c::step3_move_init,
 };
 
-/* 803BC31C-803BC364 01943C 0048+00 1/2 0/0 0/0 .data            map_move_process */
 typedef void (dMenu_Calibration_c::*moveFunc)();
 static moveFunc map_move_process[] = {
     &dMenu_Calibration_c::step1_wait_move, &dMenu_Calibration_c::step1_move_move,
@@ -44,10 +42,8 @@ static moveFunc map_move_process[] = {
     &dMenu_Calibration_c::step3_wait_move, &dMenu_Calibration_c::step3_move_move,
 };
 
-/* 801AED64-801AEDAC 1A96A4 0048+00 1/0 0/0 0/0 .text            __dt__19dMenu_Calibration_cFv */
 dMenu_Calibration_c::~dMenu_Calibration_c() {}
 
-/* 801AEDAC-801AEE2C 1A96EC 0080+00 0/0 1/1 0/0 .text            _move__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::_move() {
     u8 last_process = mProcess;
     (this->*map_move_process[mProcess])();
@@ -59,10 +55,8 @@ void dMenu_Calibration_c::_move() {
     setHIO(false);
 }
 
-/* 801AEE2C-801AEE30 1A976C 0004+00 1/1 0/0 0/0 .text            _draw__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::_draw() {}
 
-/* 801AEE30-801AEF60 1A9770 0130+00 1/0 0/0 0/0 .text step1_wait_init__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step1_wait_init() {
     field_0xfa = 0;
     setAButtonString(0);
@@ -80,7 +74,6 @@ void dMenu_Calibration_c::step1_wait_init() {
     field_0x7c->setAlphaRate(0.0f);
 }
 
-/* 801AEF60-801AF084 1A98A0 0124+00 1/0 0/0 0/0 .text step1_wait_move__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step1_wait_move() {
     s16 open_frames = g_drawHIO.mCalibration.mOpenFrames;
     field_0xfa++;
@@ -105,13 +98,11 @@ void dMenu_Calibration_c::step1_wait_move() {
     }
 }
 
-/* 801AF084-801AF0C0 1A99C4 003C+00 1/0 0/0 0/0 .text step1_move_init__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step1_move_init() {
     setAButtonString(1032);  // "Next"
     setBButtonString(1377);  // "Cancel"
 }
 
-/* 801AF0C0-801AF188 1A9A00 00C8+00 1/0 0/0 0/0 .text step1_move_move__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step1_move_move() {
     if (mDoCPd_c::getTrigA(PAD_1)) {
         mProcess = PROC_STEP2_WAIT;
@@ -126,7 +117,6 @@ void dMenu_Calibration_c::step1_move_move() {
     }
 }
 
-/* 801AF188-801AF1F4 1A9AC8 006C+00 1/0 0/0 0/0 .text step2_wait_init__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step2_wait_init() {
     field_0xfa = 0;
     setAButtonString(0);
@@ -137,7 +127,6 @@ void dMenu_Calibration_c::step2_wait_init() {
     mpSelectCursor->offPlayAnime(0);
 }
 
-/* 801AF1F4-801AF380 1A9B34 018C+00 1/0 0/0 0/0 .text step2_wait_move__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step2_wait_move() {
     s16 open_frames = g_drawHIO.mCalibration.mOpenFrames;
     field_0xfa++;
@@ -175,13 +164,11 @@ void dMenu_Calibration_c::step2_wait_move() {
     }
 }
 
-/* 801AF380-801AF3BC 1A9CC0 003C+00 1/0 0/0 0/0 .text step2_move_init__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step2_move_init() {
     setAButtonString(1032);  // "Next"
     setBButtonString(1017);  // "Back"
 }
 
-/* 801AF3BC-801AF488 1A9CFC 00CC+00 1/0 0/0 0/0 .text step2_move_move__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step2_move_move() {
     if (mDoCPd_c::getTrigA(PAD_1)) {
         mProcess = PROC_STEP3_WAIT;
@@ -196,7 +183,6 @@ void dMenu_Calibration_c::step2_move_move() {
     }
 }
 
-/* 801AF488-801AF4F8 1A9DC8 0070+00 1/0 0/0 0/0 .text step3_wait_init__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step3_wait_init() {
     field_0xfa = 0;
     setAButtonString(0);
@@ -209,7 +195,6 @@ void dMenu_Calibration_c::step3_wait_init() {
     field_0x90->setAlphaRate(0.0f);
 }
 
-/* 801AF4F8-801AF5F4 1A9E38 00FC+00 1/0 0/0 0/0 .text step3_wait_move__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step3_wait_move() {
     s16 open_frames = g_drawHIO.mCalibration.mOpenFrames;
     field_0xfa++;
@@ -232,13 +217,11 @@ void dMenu_Calibration_c::step3_wait_move() {
     }
 }
 
-/* 801AF5F4-801AF630 1A9F34 003C+00 1/0 0/0 0/0 .text step3_move_init__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step3_move_init() {
     setAButtonString(1378);  // "End"
     setBButtonString(1017);  // "Back"
 }
 
-/* 801AF630-801AF710 1A9F70 00E0+00 1/0 0/0 0/0 .text step3_move_move__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::step3_move_move() {
     if (mDoCPd_c::getTrigA(PAD_1)) {
         mStatus = 0;
@@ -254,8 +237,6 @@ void dMenu_Calibration_c::step3_move_move() {
     }
 }
 
-/* 801AF710-801AF738 1AA050 0028+00 1/1 0/0 0/0 .text setCalibrationValue__19dMenu_Calibration_cFv
- */
 void dMenu_Calibration_c::setCalibrationValue() {
     dComIfGs_setOptCalValue(mCalibrationValue);
     dComIfGs_setOptCalibrateDist(mCalibrateDist);
@@ -263,8 +244,6 @@ void dMenu_Calibration_c::setCalibrationValue() {
     field_0xf6 = mCalibrateDist;
 }
 
-/* 801AF738-801AF7E8 1AA078 00B0+00 6/6 0/0 0/0 .text setAButtonString__19dMenu_Calibration_cFUs
- */
 void dMenu_Calibration_c::setAButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
@@ -277,8 +256,6 @@ void dMenu_Calibration_c::setAButtonString(u16 i_stringID) {
     }
 }
 
-/* 801AF7E8-801AF898 1AA128 00B0+00 6/6 0/0 0/0 .text setBButtonString__19dMenu_Calibration_cFUs
- */
 void dMenu_Calibration_c::setBButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
@@ -291,7 +268,6 @@ void dMenu_Calibration_c::setBButtonString(u16 i_stringID) {
     }
 }
 
-/* 801AF898-801AF948 1AA1D8 00B0+00 3/3 0/0 0/0 .text setStepString__19dMenu_Calibration_cFUs */
 void dMenu_Calibration_c::setStepString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 3; i++) {
@@ -304,8 +280,6 @@ void dMenu_Calibration_c::setStepString(u16 i_stringID) {
     }
 }
 
-/* 801AF948-801AFA00 1AA288 00B8+00 3/3 0/0 0/0 .text setExplainString__19dMenu_Calibration_cFUs
- */
 void dMenu_Calibration_c::setExplainString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 3; i++) {
@@ -318,7 +292,6 @@ void dMenu_Calibration_c::setExplainString(u16 i_stringID) {
     }
 }
 
-/* 801AFA00-801AFBF4 1AA340 01F4+00 1/1 0/0 0/0 .text            setHIO__19dMenu_Calibration_cFb */
 void dMenu_Calibration_c::setHIO(bool i_useHIO) {
     if (i_useHIO || g_drawHIO.mCalibration.mDebug) {
         field_0x7c->scale(g_drawHIO.mCalibration.mCircleScale, g_drawHIO.mCalibration.mCircleScale);
@@ -357,7 +330,6 @@ void dMenu_Calibration_c::setHIO(bool i_useHIO) {
     }
 }
 
-/* 801AFBF4-801AFC14 1AA534 0020+00 1/0 0/0 0/0 .text            draw__19dMenu_Calibration_cFv */
 void dMenu_Calibration_c::draw() {
     _draw();
 }

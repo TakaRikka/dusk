@@ -9,7 +9,7 @@ struct daNpcAsh_HIOParam {
 
 class daNpcAsh_Param_c {
 public:
-    /* 8095D5D4 */ virtual ~daNpcAsh_Param_c() {}
+    virtual ~daNpcAsh_Param_c() {}
 
     static const daNpcAsh_HIOParam m;
 };
@@ -93,40 +93,40 @@ public:
     };
 
 public:
-    /* 809582EC */ daNpcAsh_c();
-    /* 80958610 */ ~daNpcAsh_c();
-    /* 809587A0 */ cPhs__Step Create();
-    /* 80958B68 */ BOOL CreateHeap();
-    /* 809590C4 */ int Delete();
-    /* 809590F8 */ int Execute();
-    /* 8095911C */ int Draw();
-    /* 80959238 */ bool ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80959458 */ static BOOL createHeapCallBack(fopAc_ac_c*);
-    /* 80959478 */ static BOOL ctrlJointCallBack(J3DJoint*, int);
-    /* 809594C4 */ bool setExpressionAnm(int, bool);
-    /* 809596E0 */ bool setExpressionBtp(int);
-    /* 809597C0 */ void setMotionAnm(int i_idx, f32 i_morf);
-    /* 80959910 */ void reset();
-    /* 80959B28 */ inline bool setAction(ActionFn);
-    /* 80959BD0 */ inline bool isSneaking();
-    /* 80959C40 */ bool wait_type0(void*);
-    /* 8095A67C */ void setMotion(int, f32, int);
-    /* 8095A6C0 */ void setExpression(int, f32);
-    /* 8095A6EC */ bool wait_type1(void*);
-    /* 8095A8EC */ bool talk(void*);
-    /* 8095AD28 */ bool demo(void*);
-    /* 8095B164 */ bool leave(void*);
-    /* 8095B48C */ BOOL EvCut_Introduction(int);
-    /* 8095B58C */ BOOL EvCut_Meeting(int);
-    /* 8095B83C */ BOOL EvCut_WiretapSponsor(int);
-    /* 8095BA80 */ BOOL EvCut_WiretapEntrant(int);
-    /* 8095BCF0 */ inline void setParam();
-    /* 8095BF6C */ inline BOOL main();
-    /* 8095C200 */ inline void playMotion();
-    /* 8095C520 */ inline BOOL ctrlBtk();
-    /* 8095C5C4 */ inline void setAttnPos();
-    /* 8095C9BC */ inline void lookat();
-    /* 8095CC8C */ inline BOOL drawDbgInfo();
+    daNpcAsh_c();
+    ~daNpcAsh_c();
+    cPhs__Step Create();
+    BOOL CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    bool ctrlJoint(J3DJoint*, J3DModel*);
+    static BOOL createHeapCallBack(fopAc_ac_c*);
+    static BOOL ctrlJointCallBack(J3DJoint*, int);
+    bool setExpressionAnm(int, bool);
+    bool setExpressionBtp(int);
+    void setMotionAnm(int i_idx, f32 i_morf);
+    void reset();
+    inline bool setAction(ActionFn);
+    inline bool isSneaking();
+    bool wait_type0(void*);
+    void setMotion(int, f32, int);
+    void setExpression(int, f32);
+    bool wait_type1(void*);
+    bool talk(void*);
+    bool demo(void*);
+    bool leave(void*);
+    BOOL EvCut_Introduction(int);
+    BOOL EvCut_Meeting(int);
+    BOOL EvCut_WiretapSponsor(int);
+    BOOL EvCut_WiretapEntrant(int);
+    inline void setParam();
+    inline BOOL main();
+    inline void playMotion();
+    inline BOOL ctrlBtk();
+    inline void setAttnPos();
+    inline void lookat();
+    inline BOOL drawDbgInfo();
 
     s16 getMessageNo() { return shape_angle.x; }
     /* dSv_event_flag_c::F_0268 - City in the Sky - City in the Sky clear */

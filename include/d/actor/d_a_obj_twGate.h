@@ -14,12 +14,12 @@
  */
 class daTwGate_c : public dBgS_MoveBgActor {
 public:
-    /* 80D1FB84 */ void setBaseMtx();
-    /* 80D1FC0C */ int CreateHeap();
-    /* 80D1FD44 */ int create();
-    /* 80D1FFA4 */ int Execute(Mtx**);
-    /* 80D200B4 */ int Draw();
-    /* 80D20180 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     int getGateType() { return fopAcM_GetParamBit(this, 4, 8); }
 
@@ -36,8 +36,8 @@ STATIC_ASSERT(sizeof(daTwGate_c) == 0x5fc);
 
 class daTwGate_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80D1FAAC */ daTwGate_HIO_c();
-    /* 80D2024C */ ~daTwGate_HIO_c() {}
+    daTwGate_HIO_c();
+    ~daTwGate_HIO_c() {}
 
     void genMessage(JORMContext* ctx);
 

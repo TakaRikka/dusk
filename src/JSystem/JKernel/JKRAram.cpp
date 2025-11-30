@@ -16,10 +16,8 @@ static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32
                                           u32 offset, u32* resourceSize);
 int decompSZS_subroutine(u8* src, u8* dest);
 
-/* 804513C8-804513CC 0008C8 0004+00 3/3 9/9 0/0 .sbss            sAramObject__7JKRAram */
 JKRAram* JKRAram::sAramObject;
 
-/* 802D1FA4-802D2040 2CC8E4 009C+00 0/0 1/1 0/0 .text            create__7JKRAramFUlUllll */
 JKRAram* JKRAram::create(u32 aram_audio_buffer_size, u32 aram_audio_graph_size, s32 stream_priority,
                          s32 decomp_priority, s32 piece_priority) {
     if (!sAramObject) {
@@ -33,8 +31,6 @@ JKRAram* JKRAram::create(u32 aram_audio_buffer_size, u32 aram_audio_graph_size, 
     return sAramObject;
 }
 
-/* ############################################################################################## */
-/* 803CC128-803CC138 029248 0010+00 1/1 0/0 0/0 .data            sMessageBuffer__7JKRAram */
 OSMessage JKRAram::sMessageBuffer[4] = {
     NULL,
     NULL,
@@ -42,10 +38,8 @@ OSMessage JKRAram::sMessageBuffer[4] = {
     NULL,
 };
 
-/* 803CC138-803CC158 029258 0020+00 1/1 1/1 0/0 .data            sMessageQueue__7JKRAram */
 OSMessageQueue JKRAram::sMessageQueue = {0};
 
-/* 802D2040-802D214C 2CC980 010C+00 1/1 0/0 0/0 .text            __ct__7JKRAramFUlUll */
 JKRAram::JKRAram(u32 audio_buffer_size, u32 audio_graph_size, s32 priority)
     : JKRThread(0xC00, 0x10, priority) {
     u32 aramBase = ARInit(mStackArray, ARRAY_SIZEU(mStackArray));
@@ -74,14 +68,12 @@ JKRAram::JKRAram(u32 audio_buffer_size, u32 audio_graph_size, s32 priority)
     mAramHeap = new (JKRHeap::getSystemHeap(), 0) JKRAramHeap(mGraphMemoryPtr, mGraphMemorySize);
 }
 
-/* 802D214C-802D21DC 2CCA8C 0090+00 1/0 0/0 0/0 .text            __dt__7JKRAramFv */
 JKRAram::~JKRAram() {
     sAramObject = NULL;
     if (mAramHeap)
         delete mAramHeap;
 }
 
-/* 802D21DC-802D2248 2CCB1C 006C+00 1/0 0/0 0/0 .text            run__7JKRAramFv */
 void* JKRAram::run(void) {
     int result;
     JKRAMCommand* command;
@@ -101,8 +93,6 @@ void* JKRAram::run(void) {
     } while (true);
 }
 
-/* 802D2248-802D22DC 2CCB88 0094+00 2/2 0/0 0/0 .text
- * checkOkAddress__7JKRAramFPUcUlP12JKRAramBlockUl              */
 void JKRAram::checkOkAddress(u8* addr, u32 size, JKRAramBlock* block, u32 param_4) {
     if (!IS_ALIGNED((uintptr_t)addr, 0x20) && !IS_ALIGNED(size, 0x20)) {
         JUTException::panic(__FILE__, 219, ":::address not 32Byte aligned.");
@@ -113,8 +103,6 @@ void JKRAram::checkOkAddress(u8* addr, u32 size, JKRAramBlock* block, u32 param_
     }
 }
 
-/* 802D22DC-802D233C 2CCC1C 0060+00 1/1 0/0 0/0 .text            changeGroupIdIfNeed__7JKRAramFPUci
- */
 void JKRAram::changeGroupIdIfNeed(u8* data, int groupId) {
     JKRHeap* currentHeap = JKRHeap::getCurrentHeap();
     if (currentHeap->getHeapType() == 'EXPH' && groupId >= 0) {
@@ -123,8 +111,6 @@ void JKRAram::changeGroupIdIfNeed(u8* data, int groupId) {
     }
 }
 
-/* 802D233C-802D25B4 2CCC7C 0278+00 0/0 3/3 0/0 .text
- * mainRamToAram__7JKRAramFPUcUlUl15JKRExpandSwitchUlP7JKRHeapiPUl */
 JKRAramBlock* JKRAram::mainRamToAram(u8* buf, u32 bufSize, u32 alignedSize,
                                      JKRExpandSwitch expandSwitch, u32 fileSize, JKRHeap* heap,
                                      int id, u32* pSize) {
@@ -193,8 +179,6 @@ JKRAramBlock* JKRAram::mainRamToAram(u8* buf, u32 bufSize, u32 alignedSize,
     return block;
 }
 
-/* 802D25B4-802D2830 2CCEF4 027C+00 0/0 6/6 0/0 .text
- * aramToMainRam__7JKRAramFUlPUcUl15JKRExpandSwitchUlP7JKRHeapiPUl */
 u8* JKRAram::aramToMainRam(u32 address, u8* buf, u32 p3, JKRExpandSwitch expandSwitch, u32 p5,
                            JKRHeap* heap, int id, u32* pSize) {
     JKRCompression compression = COMPRESSION_NONE;
@@ -271,62 +255,42 @@ u8* JKRAram::aramToMainRam(u32 address, u8* buf, u32 p3, JKRExpandSwitch expandS
     }
 }
 
-/* 804342DC-804342E8 060FFC 000C+00 1/1 0/0 0/0 .bss             sAramCommandList__7JKRAram */
 JSUList<JKRAMCommand> JKRAram::sAramCommandList;
 
-/* 804342E8-80434300 061008 0018+00 1/1 0/0 0/0 .bss             decompMutex */
 static OSMutex decompMutex;
 
-/* 804508B8-804508C0 000338 0004+04 1/1 1/1 0/0 .sdata           sSZSBufferSize__7JKRAram */
 u32 JKRAram::sSZSBufferSize = 0x00000400;
 
-/* 804513CC-804513D0 0008CC 0004+00 3/3 0/0 0/0 .sbss            szpBuf */
 static u8* szpBuf;
 
-/* 804513D0-804513D4 0008D0 0004+00 3/3 0/0 0/0 .sbss            szpEnd */
 static u8* szpEnd;
 
-/* 804513D4-804513D8 0008D4 0004+00 2/2 0/0 0/0 .sbss            refBuf */
 static u8* refBuf;
 
-/* 804513D8-804513DC 0008D8 0004+00 2/2 0/0 0/0 .sbss            refEnd */
 static u8* refEnd;
 
-/* 804513DC-804513E0 0008DC 0004+00 2/2 0/0 0/0 .sbss            refCurrent */
 static u8* refCurrent;
 
-/* 804513E0-804513E4 0008E0 0004+00 3/3 0/0 0/0 .sbss            srcOffset */
 static u32 srcOffset;
 
-/* 804513E4-804513E8 0008E4 0004+00 4/4 0/0 0/0 .sbss            transLeft */
 static u32 transLeft;
 
-/* 804513E8-804513EC 0008E8 0004+00 3/3 0/0 0/0 .sbss            srcLimit */
 static u8* srcLimit;
 
-/* 804513EC-804513F0 0008EC 0004+00 3/3 0/0 0/0 .sbss            srcAddress */
 static u32 srcAddress;
 
-/* 804513F0-804513F4 0008F0 0004+00 2/2 0/0 0/0 .sbss            fileOffset */
 static u32 fileOffset;
 
-/* 804513F4-804513F8 0008F4 0004+00 2/2 0/0 0/0 .sbss            readCount */
 static u32 readCount;
 
-/* 804513F8-804513FC 0008F8 0004+00 2/2 0/0 0/0 .sbss            maxDest */
 static u32 maxDest;
 
-/* 804513FC-80451400 0008FC 0004+00 1/1 0/0 0/0 .sbss            None */
 static bool s_is_decompress_mutex_initialized;
 
-/* 80451400-80451404 000900 0004+00 2/2 0/0 0/0 .sbss            tsPtr */
 static u32* tsPtr;
 
-/* 80451404-80451408 000904 0004+00 1/1 0/0 0/0 .sbss            tsArea */
 static u32 tsArea;
 
-/* 802D2830-802D29A0 2CD170 0170+00 1/1 0/0 0/0 .text
- * JKRDecompressFromAramToMainRam__FUlPvUlUlUlPUl               */
 static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32 dstLength,
                                           u32 offset, u32* resourceSize) {
     BOOL interrupts = OSDisableInterrupts();
@@ -369,7 +333,6 @@ static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32
     return 0;
 }
 
-/* 802D29A0-802D2C40 2CD2E0 02A0+00 1/1 0/0 0/0 .text            decompSZS_subroutine__FPUcPUc */
 int decompSZS_subroutine(u8* src, u8* dest) {
     u8* endPtr;
     s32 validBitCount = 0;
@@ -482,7 +445,6 @@ int decompSZS_subroutine(u8* src, u8* dest) {
     return 0;
 }
 
-/* 802D2C40-802D2CE4 2CD580 00A4+00 1/1 0/0 0/0 .text            firstSrcData__Fv */
 static u8* firstSrcData() {
     srcLimit = szpEnd - 0x19;
     u8* buffer = szpBuf;
@@ -509,7 +471,6 @@ static u8* firstSrcData() {
     return buffer;
 }
 
-/* 802D2CE4-802D2DAC 2CD624 00C8+00 1/1 0/0 0/0 .text            nextSrcData__FPUc */
 static u8* nextSrcData(u8* current) {
     u8* dest;
     u32 left = (uintptr_t)(szpEnd - current);
@@ -534,6 +495,4 @@ static u8* nextSrcData(u8* current) {
     return dest;
 }
 
-/* ############################################################################################## */
-/* 8039D0A6-8039D0B8 029706 000E+04 0/0 0/0 0/0 .rodata          None */
 static const char* stringBase_8039D0A6 = "bad aramSync\n";

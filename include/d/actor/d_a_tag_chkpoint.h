@@ -6,7 +6,7 @@
 
 class daTag_Chk_c : public fopAc_ac_c {
 public:
-    /* 8048A6F8 */ int execute();
+    int execute();
 
     u16 getAreaType() { return home.angle.z & 0x100; }
     u16 getHeight() { return fopAcM_GetParam(this) & 0xff; }

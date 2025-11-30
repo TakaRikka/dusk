@@ -66,8 +66,8 @@ STATIC_ASSERT(sizeof(npc_tkj2_class) == 0xaa0);
 
 class daNpc_Tkj2_HIO_c {
 public:
-    /* 80B10DEC */ daNpc_Tkj2_HIO_c();
-    /* 80B1421C */ virtual ~daNpc_Tkj2_HIO_c() {}
+    daNpc_Tkj2_HIO_c();
+    virtual ~daNpc_Tkj2_HIO_c() {}
 
     /* 天空人（アクション用）- Sky People (For Action) */
     /* 0x04 */ s8 field_0x4;

@@ -19,8 +19,8 @@
 
 class daE_Fs_HIO_c {
 public:
-    /* 806BBACC */ daE_Fs_HIO_c();
-    /* 806BDF94 */ virtual ~daE_Fs_HIO_c() {}
+    daE_Fs_HIO_c();
+    virtual ~daE_Fs_HIO_c() {}
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ f32 mScale;
@@ -67,19 +67,15 @@ enum Joint {
 
 namespace {
 
-/* 806BE79C-806BE7A0 -00001 0004+00 1/1 0/0 0/0 .bss             None */
 /* 806BE79E 0002+00 data_806BE79E s_AtCount__22@unnamed@d_a_e_fs_cpp@ */
 static s16 s_AtCount;
 
 }  // namespace
 
-/* 806BE7A0-806BE7A4 000048 0004+00 2/2 0/0 0/0 .bss             None */
 static bool hioInit;
 
-/* 806BE7B0-806BE7CC 000058 001C+00 6/6 0/0 0/0 .bss             l_HIO */
 static daE_Fs_HIO_c l_HIO;
 
-/* 806BBACC-806BBB10 0000EC 0044+00 1/1 0/0 0/0 .text            __ct__12daE_Fs_HIO_cFv */
 daE_Fs_HIO_c::daE_Fs_HIO_c() {
     field_0x4 = -1;
     mScale = 1.0f;
@@ -89,14 +85,12 @@ daE_Fs_HIO_c::daE_Fs_HIO_c() {
     mDeleteRange = 2000.0f;
 }
 
-/* 806BBB10-806BBBBC 000130 00AC+00 7/7 0/0 0/0 .text            anm_init__FP10e_fs_classifUcf */
 static void anm_init(e_fs_class* i_this, int i_anm, f32 i_morf, u8 i_attr, f32 i_rate) {
     i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_FS", i_anm),
                            i_attr, i_morf, i_rate, 0.0f, -1.0f);
     i_this->mAnm = i_anm;
 }
 
-/* 806BBBBC-806BBCDC 0001DC 0120+00 1/0 0/0 0/0 .text            daE_Fs_Draw__FP10e_fs_class */
 static int daE_Fs_Draw(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     J3DModel* model = i_this->mpMorf->getModel();
@@ -115,7 +109,6 @@ static int daE_Fs_Draw(e_fs_class* i_this) {
     return 1;
 }
 
-/* 806BBCDC-806BBDF4 0002FC 0118+00 1/1 0/0 0/0 .text            way_bg_check__FP10e_fs_classfs */
 static BOOL way_bg_check(e_fs_class* i_this, f32 i_offset, s16 i_angle) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     dBgS_LinChk lin_chk;
@@ -134,7 +127,6 @@ static BOOL way_bg_check(e_fs_class* i_this, f32 i_offset, s16 i_angle) {
     }
 }
 
-/* 806BBDF4-806BC0A8 000414 02B4+00 1/1 0/0 0/0 .text            e_fs_appear__FP10e_fs_class */
 static void e_fs_appear(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     daE_PM_c* skullkid;
@@ -204,7 +196,6 @@ static void e_fs_appear(e_fs_class* i_this) {
     }
 }
 
-/* 806BC0A8-806BC264 0006C8 01BC+00 1/1 0/0 0/0 .text            e_fs_wait__FP10e_fs_class */
 static void e_fs_wait(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     daE_PM_c* skullkid;
@@ -248,7 +239,6 @@ static void e_fs_wait(e_fs_class* i_this) {
     }
 }
 
-/* 806BC264-806BC444 000884 01E0+00 1/1 0/0 0/0 .text            e_fs_move__FP10e_fs_class */
 static void e_fs_move(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     switch (i_this->mMode) {
@@ -292,7 +282,6 @@ static void e_fs_move(e_fs_class* i_this) {
     cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mTargetAngleY, 0x10, 0x400);
 }
 
-/* 806BC444-806BC750 000A64 030C+00 1/1 0/0 0/0 .text            e_fs_attack__FP10e_fs_class */
 static void e_fs_attack(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -338,7 +327,6 @@ static void e_fs_attack(e_fs_class* i_this) {
     cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mPlayerAngleY, 5, 0x400);
 }
 
-/* 806BC750-806BC818 000D70 00C8+00 1/1 0/0 0/0 .text            e_fs_damage__FP10e_fs_class */
 static void e_fs_damage(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     switch (i_this->mMode) {
@@ -358,7 +346,6 @@ static void e_fs_damage(e_fs_class* i_this) {
     cLib_addCalc0(&a_this->speedF, 1.0f, 2.0f);
 }
 
-/* 806BC818-806BCC30 000E38 0418+00 1/1 0/0 0/0 .text            e_fs_end__FP10e_fs_class */
 static void e_fs_end(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     i_this->mIFrameTimer = 10;
@@ -429,7 +416,6 @@ static void e_fs_end(e_fs_class* i_this) {
     a_this->shape_angle.y += i_this->mTargetAngleY;
 }
 
-/* 806BCC30-806BCDDC 001250 01AC+00 1/1 0/0 0/0 .text            damage_check__FP10e_fs_class */
 static void damage_check(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     if (i_this->mAction != e_fs_class::ACT_END && a_this->health < 0) {
@@ -475,7 +461,6 @@ static void damage_check(e_fs_class* i_this) {
     }
 }
 
-/* 806BCDDC-806BCE5C 0013FC 0080+00 1/1 0/0 0/0 .text            checkViewArea__FP4cXyz */
 static bool checkViewArea(cXyz* i_pos) {
     Vec proj;
     mDoLib_project(i_pos, &proj);
@@ -486,7 +471,6 @@ static bool checkViewArea(cXyz* i_pos) {
     return ret;
 }
 
-/* 806BCE5C-806BD0A8 00147C 024C+00 2/1 0/0 0/0 .text            e_fs_demowait__FP10e_fs_class */
 static void e_fs_demowait(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     cXyz delta;
@@ -543,7 +527,6 @@ static void e_fs_demowait(e_fs_class* i_this) {
     cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->mTargetAngleY, 2, 0x1000);
 }
 
-/* 806BD0A8-806BD3E0 0016C8 0338+00 2/1 0/0 0/0 .text            action__FP10e_fs_class */
 static void action(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     cXyz vec1, vec2;
@@ -636,7 +619,6 @@ static void action(e_fs_class* i_this) {
     }
 }
 
-/* 806BD3E0-806BD6D0 001A00 02F0+00 2/1 0/0 0/0 .text            daE_Fs_Execute__FP10e_fs_class */
 static int daE_Fs_Execute(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     cXyz zero, center;
@@ -705,12 +687,10 @@ static int daE_Fs_Execute(e_fs_class* i_this) {
     return 1;
 }
 
-/* 806BD6D0-806BD6D8 001CF0 0008+00 1/0 0/0 0/0 .text            daE_Fs_IsDelete__FP10e_fs_class */
 static int daE_Fs_IsDelete(e_fs_class* i_this) {
     return 1;
 }
 
-/* 806BD6D8-806BD740 001CF8 0068+00 1/0 0/0 0/0 .text            daE_Fs_Delete__FP10e_fs_class */
 static int daE_Fs_Delete(e_fs_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->mEnemy;
     dComIfG_resDelete(&i_this->mPhase, "E_FS");
@@ -726,7 +706,6 @@ static int daE_Fs_Delete(e_fs_class* i_this) {
     return 1;
 }
 
-/* 806BD740-806BD838 001D60 00F8+00 1/1 0/0 0/0 .text            useHeapIe_fst__FP10fopAc_ac_c */
 static int useHeapIe_fst(fopAc_ac_c* i_this) {
     e_fs_class* _this = (e_fs_class*)i_this;
     _this->mpMorf = new mDoExt_McaMorfSO((J3DModelData*)dComIfG_getObjectRes("E_FS", 0xc), NULL,
@@ -740,7 +719,6 @@ static int useHeapIe_fst(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 806BD838-806BDD38 001E58 0500+00 1/0 0/0 0/0 .text            daE_Fs_Create__FP10fopAc_ac_c */
 static cPhs__Step daE_Fs_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, e_fs_class);
     e_fs_class* _this = (e_fs_class*)(i_this);
@@ -864,7 +842,6 @@ static cPhs__Step daE_Fs_Create(fopAc_ac_c* i_this) {
 
 AUDIO_INSTANCES;
 
-/* 806BE68C-806BE6AC -00001 0020+00 1/0 0/0 0/0 .data            l_daE_Fs_Method */
 static actor_method_class l_daE_Fs_Method = {
     (process_method_func)daE_Fs_Create,
     (process_method_func)daE_Fs_Delete,
@@ -873,7 +850,6 @@ static actor_method_class l_daE_Fs_Method = {
     (process_method_func)daE_Fs_Draw,
 };
 
-/* 806BE6AC-806BE6DC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_FS */
 extern actor_process_profile_definition g_profile_E_FS = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

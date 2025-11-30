@@ -13,17 +13,17 @@ class J3DMtxBuffer {
 public:
     J3DMtxBuffer() { initialize(); }
 
-    /* 80326214 */ void initialize();
-    /* 80326258 */ s32 create(J3DModelData*, u32);
-    /* 80326364 */ J3DError createAnmMtx(J3DModelData*);
-    /* 803263F0 */ s32 createWeightEnvelopeMtx(J3DModelData*);
-    /* 8032648C */ s32 setNoUseDrawMtx();
-    /* 803264B8 */ s32 createDoubleDrawMtx(J3DModelData*, u32);
-    /* 80326664 */ s32 createBumpMtxArray(J3DModelData*, u32);
-    /* 803268D4 */ void calcWeightEnvelopeMtx();
-    /* 80326ACC */ void calcDrawMtx(u32, Vec const&, f32 const (&)[3][4]);
-    /* 80326D3C */ void calcNrmMtx();
-    /* 80326EF0 */ void calcBBoardMtx();
+    void initialize();
+    s32 create(J3DModelData*, u32);
+    J3DError createAnmMtx(J3DModelData*);
+    s32 createWeightEnvelopeMtx(J3DModelData*);
+    s32 setNoUseDrawMtx();
+    s32 createDoubleDrawMtx(J3DModelData*, u32);
+    s32 createBumpMtxArray(J3DModelData*, u32);
+    void calcWeightEnvelopeMtx();
+    void calcDrawMtx(u32, Vec const&, f32 const (&)[3][4]);
+    void calcNrmMtx();
+    void calcBBoardMtx();
 
     MtxP getAnmMtx(int idx) { return mpAnmMtx[idx]; }
     void setAnmMtx(int i, Mtx m) { MTXCopy(m, (MtxP)mpAnmMtx[i]); }
@@ -79,7 +79,7 @@ public:
     /* 0x34 */ Mtx* mpUserAnmMtx;
 
 public:
-    /* 803283B4 */ virtual ~J3DMtxBuffer() {}
+    virtual ~J3DMtxBuffer() {}
 };
 
 void J3DCalcViewBaseMtx(f32 (*param_0)[4], Vec const& param_1, f32 const (&param_2)[3][4],

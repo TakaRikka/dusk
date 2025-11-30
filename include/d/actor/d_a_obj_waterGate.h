@@ -17,21 +17,21 @@
 
 class daWtGate_c : public dBgS_MoveBgActor {
 public:
-    /* 80D2BC0C */ void setBaseMtx();
-    /* 80D2BC94 */ int CreateHeap();
-    /* 80D2BD00 */ cPhs__Step create();
-    /* 80D2BE7C */ int Execute(Mtx**);
-    /* 80D2BECC */ void move();
-    /* 80D2BF88 */ void init_modeWait();
-    /* 80D2BF94 */ void modeWait();
-    /* 80D2C010 */ void init_modeOpen();
-    /* 80D2C02C */ void modeOpen();
-    /* 80D2C134 */ void init_modeClose();
-    /* 80D2C150 */ void modeClose();
-    /* 80D2C250 */ void init_modeEnd();
-    /* 80D2C25C */ void modeEnd();
-    /* 80D2C260 */ int Draw();
-    /* 80D2C304 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    int Execute(Mtx**);
+    void move();
+    void init_modeWait();
+    void modeWait();
+    void init_modeOpen();
+    void modeOpen();
+    void init_modeClose();
+    void modeClose();
+    void init_modeEnd();
+    void modeEnd();
+    int Draw();
+    int Delete();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
@@ -55,8 +55,8 @@ private:
 STATIC_ASSERT(sizeof(daWtGate_c) == 0x5bc);
 
 struct daWtGate_HIO_c : public mDoHIO_entry_c {
-    /* 80D2BB8C */ daWtGate_HIO_c();
-    /* 80D2C3C0 */ ~daWtGate_HIO_c() {}
+    daWtGate_HIO_c();
+    ~daWtGate_HIO_c() {}
 
     void genMessage(JORMContext*);
 

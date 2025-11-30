@@ -14,12 +14,12 @@
  */
 class daSnowEffTag_c : public fopAc_ac_c {
 public:
-    /* 80CDF12C */ void setBaseMtx();
-    /* 80CDF184 */ int create();
-    /* 80CDF2B8 */ bool playerAreaCheck();
-    /* 80CDF498 */ int Execute();
-    /* 80CDF5E4 */ int Draw();
-    /* 80CDF5EC */ int Delete();
+    void setBaseMtx();
+    int create();
+    bool playerAreaCheck();
+    int Execute();
+    int Draw();
+    int Delete();
 
     int getArg0() { return fopAcM_GetParamBit(this, 0, 8); }
 
@@ -36,8 +36,8 @@ STATIC_ASSERT(sizeof(daSnowEffTag_c) == 0x57C);
 
 class daSnowEffTag_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80CDF0AC */ daSnowEffTag_HIO_c();
-    /* 80CDF674 */ virtual ~daSnowEffTag_HIO_c();
+    daSnowEffTag_HIO_c();
+    virtual ~daSnowEffTag_HIO_c();
 
     void genMessage(JORMContext*);
 

@@ -14,13 +14,13 @@
  */
 class daIzumiGate_c : public dBgS_MoveBgActor {
 public:
-    /* 80849098 */ void initBaseMtx();
-    /* 808490B8 */ void setBaseMtx();
-    /* 80849260 */ int CreateHeap();
-    /* 808492D8 */ int Create();
-    /* 808492FC */ int Execute(Mtx**);
-    /* 80849328 */ int Draw();
-    /* 808493CC */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     inline int create();
 

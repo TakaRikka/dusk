@@ -9,7 +9,6 @@ struct dKyd_l_vr_box_data_struct {
     u8 data[21];
 };
 
-/* 803A8E98-803A9198 005FB8 0300+00 1/1 0/0 0/0 .data            l_kydata_BloomInf_tbl */
 static dKydata_BloomInfo_c l_kydata_BloomInf_tbl[BLOOMINFO_MAX] = {
     {BLOOM_SOFT, 0xFF, 0x40, 0x80, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00},
     {BLOOM_CLEAR, 0x28, 0x46, 0x87, 0xCF, 0xB1, 0x38, 0xD2, 0xFF, 0xFF, 0xFF, 0x60},  // Twilight
@@ -103,7 +102,6 @@ static dKydata_BloomInfo_c l_kydata_BloomInf_tbl[BLOOMINFO_MAX] = {
     {BLOOM_CLEAR, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},  // Empty
 };
 
-/* 803A9198-803A92A8 -00001 0110+00 1/1 0/0 0/0 .data            l_darkworld_tbl */
 static dKydata_darkworldInfo_c l_darkworld_tbl[34] = {
     {"R_SP30", KY_DARKLV_UNCLEARABLE},   // UNUSED - Unknown Room
     {"T_SP05", KY_DARKLV_TEST},          // UNUSED - E3 2005 Warp Test (Old)
@@ -141,7 +139,6 @@ static dKydata_darkworldInfo_c l_darkworld_tbl[34] = {
     {"D_SB10", KY_DARKLV_FARON},         // Faron Woods Cave
 };
 
-/* 803A92A8-803A93C8 -00001 0120+00 1/1 0/0 0/0 .data            l_light_size_tbl */
 static dKydata_lightsizeInfo_c l_light_size_tbl[36] = {
     {"R_SP01", 0},   // Ordon Interiors
     {"R_SP108", 0},  // Coro's Lantern Shop
@@ -181,7 +178,6 @@ static dKydata_lightsizeInfo_c l_light_size_tbl[36] = {
     {"D_SB10", 0},   // Faron Woods Cave
 };
 
-/* 803A93C8-803A9410 -00001 0048+00 1/1 0/0 0/0 .data            l_light_size_tbl_tw */
 static dKydata_lightsizeInfo_c l_light_size_tbl_tw[9] = {
     {"F_SP109", 2},  // Kakariko Village
     {"F_SP110", 2},  // Death Mountain
@@ -195,7 +191,6 @@ static dKydata_lightsizeInfo_c l_light_size_tbl_tw[9] = {
 };
 
 // Maple color. Used in Fishing Hole. Values are RGB. TODO: struct here?
-/* 803A9410-803A9434 006530 0024+00 1/1 0/0 0/0 .data            l_maple_col */
 static color_RGB_class l_maple_col[] = {
     // leaf color blend major
     {0x56, 0x4B, 0x39},  // spring
@@ -214,21 +209,18 @@ static color_RGB_class l_maple_col[] = {
     {0x5A, 0x5A, 0x6E},  // winter
 };
 
-/* 803A9434-803A94B8 006554 0084+00 1/1 0/0 0/0 .data            l_time_attribute */
 static dKyd_lightSchejule l_time_attribute[11] = {
     {0.0f, 75.0f, 5, 5},    {75.0f, 90.0f, 5, 0},   {90.0f, 105.0f, 0, 1},  {105.0f, 105.0f, 1, 1},
     {105.0f, 135.0f, 1, 2}, {135.0f, 240.0f, 2, 2}, {240.0f, 255.0f, 2, 3}, {255.0f, 270.0f, 3, 3},
     {270.0f, 285.0f, 3, 4}, {285.0f, 300.0f, 4, 5}, {300.0f, 360.0f, 5, 5},
 };
 
-/* 803A94B8-803A953C 0065D8 0084+00 1/1 0/0 0/0 .data            l_time_attribute_boss */
 static dKyd_lightSchejule l_time_attribute_boss[11] = {
     {0.0f, 45.0f, 0, 1},    {45.0f, 90.0f, 1, 2},   {90.0f, 180.0f, 2, 3},  {180.0f, 225.0f, 3, 4},
     {225.0f, 270.0f, 4, 5}, {270.0f, 360.0f, 5, 0}, {360.0f, 360.0f, 5, 5}, {360.0f, 360.0f, 5, 5},
     {360.0f, 360.0f, 5, 5}, {360.0f, 360.0f, 5, 5}, {360.0f, 360.0f, 5, 5},
 };
 
-/* 803A953C-803A987C 00665C 0340+00 1/1 0/0 0/0 .data            l_field_data */
 static stage_palette_info_class l_field_data[16] = {
     {
         {0x40, 0x40, 0x40},
@@ -680,12 +672,10 @@ static stage_palette_info_class l_field_data[16] = {
     },
 };
 
-/* 800569DC-800569E8 05131C 000C+00 0/0 1/1 0/0 .text            dKyd_dmpalet_getp__Fv */
 void* dKyd_dmpalet_getp() {
     return l_field_data;
 }
 
-/* 803A987C-803A9894 00699C 0018+00 1/1 0/0 0/0 .data            l_pselect_default */
 static stage_pselect_info_class l_pselect_default[2] = {
     {
         {0x00, 0x00, 0x01, 0x02, 0x02, 0x03, 0x00, 0x00},
@@ -697,12 +687,10 @@ static stage_pselect_info_class l_pselect_default[2] = {
     },
 };
 
-/* 800569E8-800569F4 051328 000C+00 0/0 1/1 0/0 .text            dKyd_dmpselect_getp__Fv */
 void* dKyd_dmpselect_getp() {
     return l_pselect_default;
 }
 
-/* 803A9894-803A9918 0069B4 0082+02 1/1 0/0 0/0 .data            l_envr_default */
 static stage_envr_info_class l_envr_default[2] = {
     {
         {0x00, 0x01, 0x02, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -720,12 +708,10 @@ static stage_envr_info_class l_envr_default[2] = {
     },
 };
 
-/* 800569F4-80056A00 051334 000C+00 0/0 1/1 0/0 .text            dKyd_dmenvr_getp__Fv */
 void* dKyd_dmenvr_getp() {
     return l_envr_default;
 }
 
-/* 803A9918-803A9A94 006A38 017A+02 1/1 0/0 0/0 .data            l_vr_box_data */
 static dKyd_l_vr_box_data_struct l_vr_box_data[18] = {
     {{0x2F, 0x1A, 0x07, 0x44, 0x1E, 0x10, 0xF5, 0xA5, 0x6C, 0x9A, 0x5C,
       0x3B, 0xFF, 0x44, 0x1E, 0x10, 0xA3, 0xFF, 0x5B, 0x49, 0x72}},
@@ -765,22 +751,18 @@ static dKyd_l_vr_box_data_struct l_vr_box_data[18] = {
       0x50, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x61, 0x72, 0x9D, 0x78}},
 };
 
-/* 80056A00-80056A0C 051340 000C+00 0/0 1/1 0/0 .text            dKyd_dmvrbox_getp__Fv */
 void* dKyd_dmvrbox_getp() {
     return l_vr_box_data;
 }
 
-/* 80056A0C-80056A18 05134C 000C+00 0/0 1/1 0/0 .text            dKyd_schejule_getp__Fv */
 dKyd_lightSchejule* dKyd_schejule_getp() {
     return l_time_attribute;
 }
 
-/* 80056A18-80056A24 051358 000C+00 0/0 1/1 0/0 .text            dKyd_schejule_boss_getp__Fv */
 dKyd_lightSchejule* dKyd_schejule_boss_getp() {
     return l_time_attribute_boss;
 }
 
-/* 803A9A94-803A9AC0 006BB4 0028+04 1/1 0/0 0/0 .data            S_xfog_table_data */
 static GXFogAdjTable S_xfog_table_data[2] = {
     {
         {260, 260, 270, 280, 290, 300, 310, 320, 330, 340},
@@ -790,7 +772,6 @@ static GXFogAdjTable S_xfog_table_data[2] = {
     },
 };
 
-/* 80056A24-80056A64 051364 0040+00 0/0 2/2 0/0 .text            dKyd_xfog_table_set__FUc */
 void dKyd_xfog_table_set(u8 tblIdx) {
     #if DEBUG
     if (g_kankyoHIO.light.field_0x5 != 1) 
@@ -802,27 +783,22 @@ void dKyd_xfog_table_set(u8 tblIdx) {
     }
 }
 
-/* 80056A64-80056A70 0513A4 000C+00 0/0 1/1 0/0 .text            dKyd_maple_col_getp__Fv */
 color_RGB_class* dKyd_maple_col_getp() {
     return l_maple_col;
 }
 
-/* 80056A70-80056A7C 0513B0 000C+00 0/0 4/4 0/0 .text            dKyd_darkworld_tbl_getp__Fv */
 dKydata_darkworldInfo_c* dKyd_darkworld_tbl_getp() {
     return l_darkworld_tbl;
 }
 
-/* 80056A7C-80056A88 0513BC 000C+00 0/0 1/1 0/0 .text            dKyd_light_size_tbl_getp__Fv */
 dKydata_lightsizeInfo_c* dKyd_light_size_tbl_getp() {
     return l_light_size_tbl;
 }
 
-/* 80056A88-80056A94 0513C8 000C+00 0/0 1/1 0/0 .text            dKyd_light_tw_size_tbl_getp__Fv */
 dKydata_lightsizeInfo_c* dKyd_light_tw_size_tbl_getp() {
     return l_light_size_tbl_tw;
 }
 
-/* 80056A94-80056AA8 0513D4 0014+00 0/0 1/1 0/0 .text            dKyd_BloomInf_tbl_getp__Fi */
 dKydata_BloomInfo_c* dKyd_BloomInf_tbl_getp(int tblIdx) {
     #if DEBUG
     if (g_kankyoHIO.bloom.field_0x4) {

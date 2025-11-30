@@ -12,46 +12,38 @@ enum RES_Name {
     /* 0x1 */ ZELRF,
 };
 
-/* 80B71BF8-80B71C00 000020 0008+00 1/1 0/0 0/0 .data            l_bmdData */
 static daNpc_GetParam1 l_bmdData[1] = {
     {10, 1}
 };
 
-/* 80B71C00-80B71C10 -00001 0010+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0}
 };
 
-/* 80B71C10-80B71C18 -00001 0008+00 2/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "zelRf"
 };
 
-/* 80B71C18-80B71C1C 000040 0002+02 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[2] = {
     1, 0xFF
 };
 
-/* 80B71C1C-80B71C24 -00001 0008+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-/* 80B71C24-80B71C5C 00004C 0038+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
     {-1, 0, 0, 16, 2, 1, 1},
     {6, 0, 1, 16, 2, 1, 1}
 };
 
-/* 80B71C5C-80B71C78 000084 001C+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData = {
     7, 2, 1, 13, 0, 1, 1, 0
 };
 
-/* 80B71C78-80B71C98 0000A0 0020+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
     {1, -1, 1}, {-1, 0, 0}, 
     {-1, 0, 0}, {-1, 0, 0}, 
@@ -59,16 +51,13 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = 
     {-1, 0, 0}, {-1, 0, 0}
 };
 
-/* 80B71C98-80B71CA8 0000C0 0010+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {0, -1, 0}, {-1, 0, 0}, 
     {-1, 0, 0}, {-1, 0, 0}
 };
 
-/* 80B71CA8-80B71CAC -00001 0004+00 1/1 0/0 0/0 .data            mCutNameList__12daNpc_ZelR_c */
 char* daNpc_ZelR_c::mCutNameList = "";
 
-/* 80B71CAC-80B71CB8 0000D4 000C+00 2/2 0/0 0/0 .data            mCutList__12daNpc_ZelR_c */
 daNpc_ZelR_c::EventFn daNpc_ZelR_c::mCutList[1] = {
     NULL
 };
@@ -81,10 +70,8 @@ daNpc_ZelR_c::~daNpc_ZelR_c() {
     deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
 }
 
-/* 80B71EBC-80B71EC0 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpc_ZelR_Param_c l_HIO;
 
-/* 80B71AE0-80B71B6C 000000 008C+00 6/6 0/0 0/0 .rodata          m__18daNpc_ZelR_Param_c */
 daNpc_ZelR_HIOParam const daNpc_ZelR_Param_c::m = {
     190.0f,
     -3.0f,
@@ -129,7 +116,6 @@ daNpc_ZelR_HIOParam const daNpc_ZelR_Param_c::m = {
     0.0f,
 };
 
-/* 80B6EF64-80B6F1F8 000224 0294+00 1/1 0/0 0/0 .text            create__12daNpc_ZelR_cFv */
 int daNpc_ZelR_c::create() {
     daNpcT_ct(this, daNpc_ZelR_c, l_faceMotionAnmData,
         &l_motionAnmData, l_faceMotionSequenceData, 4,
@@ -181,7 +167,6 @@ int daNpc_ZelR_c::create() {
     return phaseState;
 }
 
-/* 80B6F1F8-80B6F4A8 0004B8 02B0+00 1/1 0/0 0/0 .text            CreateHeap__12daNpc_ZelR_cFv */
 int daNpc_ZelR_c::CreateHeap() {
     int bmdIdx = mTwilight == true ? NONE : NONE;
     J3DModelData* mdlData_p = (J3DModelData*)(dComIfG_getObjectRes(
@@ -222,19 +207,16 @@ int daNpc_ZelR_c::CreateHeap() {
     return 0;
 }
 
-/* 80B6F664-80B6F698 000924 0034+00 1/1 0/0 0/0 .text            Delete__12daNpc_ZelR_cFv */
 int daNpc_ZelR_c::Delete() {
     fopAcM_GetID(this);
     this->~daNpc_ZelR_c();
     return 1;
 }
 
-/* 80B6F698-80B6F6B8 000958 0020+00 2/2 0/0 0/0 .text            Execute__12daNpc_ZelR_cFv */
 int daNpc_ZelR_c::Execute() {
     return execute();
 }
 
-/* 80B6F6B8-80B6F77C 000978 00C4+00 1/1 0/0 0/0 .text            Draw__12daNpc_ZelR_cFv */
 int daNpc_ZelR_c::Draw() {
     J3DModel* model = mpMorf[0]->getModel();
     J3DModelData* modelData = model->getModelData();
@@ -250,14 +232,12 @@ int daNpc_ZelR_c::Draw() {
     return daNpcT_c::draw(0, 1, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
-/* 80B6F77C-80B6F79C 000A3C 0020+00 1/1 0/0 0/0 .text       createHeapCallBack__12daNpc_ZelR_cFP10fopAc_ac_c */
 int daNpc_ZelR_c::createHeapCallBack(fopAc_ac_c* a_this) {
     daNpc_ZelR_c* i_this = (daNpc_ZelR_c*)a_this;
     return i_this->CreateHeap();
 
 }
 
-/* 80B6F79C-80B6F7F4 000A5C 0058+00 1/1 0/0 0/0 .text       ctrlJointCallBack__12daNpc_ZelR_cFP8J3DJointi */
 int daNpc_ZelR_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (!param_2) {
         daNpc_ZelR_c* i_this = (daNpc_ZelR_c*)j3dSys.getModel()->getUserArea();
@@ -269,7 +249,6 @@ int daNpc_ZelR_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80B6F7F4-80B6F814 000AB4 0020+00 1/1 0/0 0/0 .text            getType__12daNpc_ZelR_cFv */
 u8 daNpc_ZelR_c::getType() {
     switch (fopAcM_GetParam(this) & 0xff) {
         case 0:
@@ -279,7 +258,6 @@ u8 daNpc_ZelR_c::getType() {
     }
 }
 
-/* 80B6F814-80B6F830 000AD4 001C+00 1/1 0/0 0/0 .text            getFlowNodeNo__12daNpc_ZelR_cFv */
 u32 daNpc_ZelR_c::getFlowNodeNo() {
     u16 nodeNo = home.angle.x;
     if (nodeNo == 0xffff) {
@@ -288,12 +266,10 @@ u32 daNpc_ZelR_c::getFlowNodeNo() {
     return nodeNo;
 }
 
-/* 80B6F830-80B6F83C 000AF0 000C+00 1/1 0/0 0/0 .text            getPath__12daNpc_ZelR_cFv */
 u8 daNpc_ZelR_c::getPath() {
     return (fopAcM_GetParam(this) & 0xff00) >> 8;
 }
 
-/* 80B6F83C-80B6F894 000AFC 0058+00 1/1 0/0 0/0 .text            isDelete__12daNpc_ZelR_cFv */
 int daNpc_ZelR_c::isDelete() {
     if (mType == TYPE_1) {
         return 0;
@@ -307,7 +283,6 @@ int daNpc_ZelR_c::isDelete() {
     }
 }
 
-/* 80B6F894-80B6FA10 000B54 017C+00 1/1 0/0 0/0 .text            reset__12daNpc_ZelR_cFv */
 void daNpc_ZelR_c::reset() {
     initialize();
     memset(&field_0xf84, 0, ((u8*)&field_0xfc4 - (u8*)&field_0xf84));
@@ -325,7 +300,6 @@ void daNpc_ZelR_c::reset() {
     setAngle(home.angle.y);
 }
 
-/* 80B6FA10-80B6FA9C 000CD0 008C+00 1/0 0/0 0/0 .text            afterJntAnm__12daNpc_ZelR_cFi */
 void daNpc_ZelR_c::afterJntAnm(int param_1) {
     if (param_1 == 1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -336,7 +310,6 @@ void daNpc_ZelR_c::afterJntAnm(int param_1) {
     }
 }
 
-/* 80B6FA9C-80B6FBA8 000D5C 010C+00 1/0 0/0 0/0 .text            ctrlBtk__12daNpc_ZelR_cFv */
 BOOL daNpc_ZelR_c::ctrlBtk() {
     if (mpMatAnm[0] && mpMatAnm[1]) {
         if (field_0xe29 && mBtkAnm.getBtkAnm()) {
@@ -365,7 +338,6 @@ BOOL daNpc_ZelR_c::ctrlBtk() {
     return FALSE;
 }
 
-/* 80B6FBA8-80B6FC9C 000E68 00F4+00 1/0 0/0 0/0 .text            setParam__12daNpc_ZelR_cFv */
 void daNpc_ZelR_c::setParam() {
     selectAction();
     srchActors();
@@ -389,17 +361,14 @@ void daNpc_ZelR_c::setParam() {
     mMorfFrames = l_HIO.m.common.morf_frame;
 }
 
-/* 80B6FC9C-80B6FCFC 000F5C 0060+00 1/0 0/0 0/0 .text setAfterTalkMotion__12daNpc_ZelR_cFv */
 void daNpc_ZelR_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(1, -1.0f, 0, 0);
 }
 
-/* 80B6FCFC-80B6FD00 000FBC 0004+00 1/1 0/0 0/0 .text            srchActors__12daNpc_ZelR_cFv */
 void daNpc_ZelR_c::srchActors() {
     /* empty function */
 }
 
-/* 80B6FD00-80B6FE00 000FC0 0100+00 1/0 0/0 0/0 .text            __12daNpc_ZelR_cFv */
 BOOL daNpc_ZelR_c::evtTalk() {
     if (chkAction(&daNpc_ZelR_c::talk)) {
         (this->*field_0xf90)(NULL);
@@ -421,7 +390,6 @@ BOOL daNpc_ZelR_c::evtTalk() {
     return TRUE;
 }
 
-/* 80B6FE00-80B6FEC8 0010C0 00C8+00 1/0 0/0 0/0 .text            evtCutProc__12daNpc_ZelR_cFv */
 BOOL daNpc_ZelR_c::evtCutProc() {
     BOOL rv = FALSE;
     int staffId = dComIfGp_getEventManager().getMyStaffId("ZelR", this, -1);
@@ -437,7 +405,6 @@ BOOL daNpc_ZelR_c::evtCutProc() {
     return rv;
 }
 
-/* 80B6FEC8-80B70018 001188 0150+00 1/0 0/0 0/0 .text            action__12daNpc_ZelR_cFv */
 void daNpc_ZelR_c::action() {
     fopAc_ac_c* hitActor = hitChk(&mCyl, 0xffffffff);
     if (hitActor) {
@@ -461,14 +428,12 @@ void daNpc_ZelR_c::action() {
     }
 }
 
-/* 80B70018-80B70090 0012D8 0078+00 1/0 0/0 0/0 .text            beforeMove__12daNpc_ZelR_cFv */
 void daNpc_ZelR_c::beforeMove() {
     if (checkHide() || mNoDraw) {
         attention_info.flags = 0;
     }
 }
 
-/* 80B70090-80B702B0 001350 0220+00 1/0 0/0 0/0 .text            setAttnPos__12daNpc_ZelR_cFv */
 void daNpc_ZelR_c::setAttnPos() {
     cXyz sp38(10.0f, -30.0f, 0.0f);
 
@@ -493,7 +458,6 @@ void daNpc_ZelR_c::setAttnPos() {
     attention_info.position.y += l_HIO.m.common.attention_offset;
 }
 
-/* 80B702B0-80B703E0 001570 0130+00 1/0 0/0 0/0 .text            setCollision__12daNpc_ZelR_cFv */
 void daNpc_ZelR_c::setCollision() {
     if (!mHide) {
         if (mTwilight == 1 && !dComIfGp_event_runCheck()) {
@@ -524,24 +488,20 @@ void daNpc_ZelR_c::setCollision() {
     mCyl.ClrTgHit();
 }
 
-/* 80B703E0-80B703E8 0016A0 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__12daNpc_ZelR_cFv */
 int daNpc_ZelR_c::drawDbgInfo() {
     return 0;
 }
 
-/* 80B703E8-80B70430 0016A8 0048+00 1/1 0/0 0/0 .text            selectAction__12daNpc_ZelR_cFv */
 int daNpc_ZelR_c::selectAction() {
     field_0xf84 = NULL;
     field_0xf84 = &daNpc_ZelR_c::wait;
     return 1;
 }
 
-/* 80B70430-80B7045C 0016F0 002C+00 1/1 0/0 0/0 .text       chkAction__12daNpc_ZelR_cFM12daNpc_ZelR_cFPCvPvPv_i */
 int daNpc_ZelR_c::chkAction(int (daNpc_ZelR_c::*param_1)(void*)) {
     return field_0xf90 == param_1;
 }
 
-/* 80B7045C-80B70504 00171C 00A8+00 2/2 0/0 0/0 .text       setAction__12daNpc_ZelR_cFM12daNpc_ZelR_cFPCvPvPv_i */
 int daNpc_ZelR_c::setAction(int (daNpc_ZelR_c::*param_1)(void*)) {
     mMode = 3;
     if (field_0xf90) {
@@ -557,7 +517,6 @@ int daNpc_ZelR_c::setAction(int (daNpc_ZelR_c::*param_1)(void*)) {
     return 1;
 }
 
-/* 80B70504-80B706B0 0017C4 01AC+00 1/0 0/0 0/0 .text            wait__12daNpc_ZelR_cFPv */
 int daNpc_ZelR_c::wait(void* param_1) {
     switch (mMode) {
         case 0:
@@ -586,7 +545,6 @@ int daNpc_ZelR_c::wait(void* param_1) {
     }
 }
 
-/* 80B706B0-80B70814 001970 0164+00 2/0 0/0 0/0 .text            talk__12daNpc_ZelR_cFPv */
 BOOL daNpc_ZelR_c::talk(void* param_1) {
     BOOL bVar2 = FALSE;
     switch (mMode) {
@@ -617,32 +575,26 @@ BOOL daNpc_ZelR_c::talk(void* param_1) {
     }
 }
 
-/* 80B70814-80B70834 001AD4 0020+00 1/0 0/0 0/0 .text            daNpc_ZelR_Create__FPv */
 static int daNpc_ZelR_Create(void* a_this) {
     return static_cast<daNpc_ZelR_c*>(a_this)->create();
 }
 
-/* 80B70834-80B70854 001AF4 0020+00 1/0 0/0 0/0 .text            daNpc_ZelR_Delete__FPv */
 static int daNpc_ZelR_Delete(void* a_this) {
     return static_cast<daNpc_ZelR_c*>(a_this)->Delete();
 }
 
-/* 80B70854-80B70874 001B14 0020+00 1/0 0/0 0/0 .text            daNpc_ZelR_Execute__FPv */
 static int daNpc_ZelR_Execute(void* a_this) {
     return static_cast<daNpc_ZelR_c*>(a_this)->Execute();
 }
 
-/* 80B70874-80B70894 001B34 0020+00 1/0 0/0 0/0 .text            daNpc_ZelR_Draw__FPv */
 static int daNpc_ZelR_Draw(void* a_this) {
     return static_cast<daNpc_ZelR_c*>(a_this)->Draw();
 }
 
-/* 80B70894-80B7089C 001B54 0008+00 1/0 0/0 0/0 .text            daNpc_ZelR_IsDelete__FPv */
 static int daNpc_ZelR_IsDelete(void* a_this) {
     return 1;
 }
 
-/* 80B71CDC-80B71CFC -00001 0020+00 1/0 0/0 0/0 .data            daNpc_ZelR_MethodTable */
 static actor_method_class daNpc_ZelR_MethodTable = {
     (process_method_func)daNpc_ZelR_Create,
     (process_method_func)daNpc_ZelR_Delete,
@@ -651,7 +603,6 @@ static actor_method_class daNpc_ZelR_MethodTable = {
     (process_method_func)daNpc_ZelR_Draw,
 };
 
-/* 80B71CFC-80B71D2C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_ZELR */
 extern actor_process_profile_definition g_profile_NPC_ZELR = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

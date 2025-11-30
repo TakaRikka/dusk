@@ -16,22 +16,22 @@ class daL7ODR_c : public fopAc_ac_c {
 public:
     typedef void (daL7ODR_c::*actionFn)();
 
-    /* 805AB098 */ void setAction(actionFn);
-    /* 805AB13C */ void action();
-    /* 805AB164 */ void setDrAction(actionFn);
-    /* 805AB208 */ void dr_action();
-    /* 805AB230 */ void mtx_set();
-    /* 805AB2E8 */ int draw();
-    /* 805AB3F0 */ void wait();
-    /* 805AB520 */ void pl_walk();
-    /* 805ABC2C */ void setZoomOutCamPos(cXyz&, cXyz&, f32);
-    /* 805ABCF8 */ void dr_wait();
-    /* 805ABE0C */ void dr_fly();
-    /* 805AD7B4 */ int execute();
-    /* 805AD87C */ int _delete();
-    /* 805AD90C */ int CreateHeap();
-    /* 805ADA2C */ BOOL check_start();
-    /* 805ADAC0 */ int create();
+    void setAction(actionFn);
+    void action();
+    void setDrAction(actionFn);
+    void dr_action();
+    void mtx_set();
+    int draw();
+    void wait();
+    void pl_walk();
+    void setZoomOutCamPos(cXyz&, cXyz&, f32);
+    void dr_wait();
+    void dr_fly();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    BOOL check_start();
+    int create();
 
     /* 0x568 */ dBgS_AcchCir mAcchCir;
     /* 0x5A8 */ dBgS_ObjAcch mAcch;

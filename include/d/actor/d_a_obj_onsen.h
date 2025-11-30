@@ -14,14 +14,14 @@
  */
 class daObjOnsen_c : public dBgS_MoveBgActor {
 public:
-    /* 80CA7B58 */ void initBaseMtx();
-    /* 80CA7BB0 */ void setBaseMtx();
-    /* 80CA7C28 */ int Create();
-    /* 80CA7C74 */ int CreateHeap();
-    /* 80CA7E44 */ int create1st();
-    /* 80CA7EEC */ int Execute(Mtx**);
-    /* 80CA7F1C */ int Draw();
-    /* 80CA8008 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     u32 getType() { return fopAcM_GetParamBit(this, 0, 8); }
 

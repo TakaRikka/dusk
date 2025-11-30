@@ -14,7 +14,7 @@
 
 class daNpc_Shop0_Param_c {
 public:
-    /* 80AEBB14 */ virtual ~daNpc_Shop0_Param_c() {};
+    virtual ~daNpc_Shop0_Param_c() {};
     
     struct param {
         /* 0x0 */ u32 mParam1;
@@ -28,29 +28,29 @@ public:
 
 class daNpc_Shop0_c : public fopAc_ac_c {
 public:
-    /* 80AEA7F8 */ virtual ~daNpc_Shop0_c();
-    /* 80AEAA10 */ int create();
-    /* 80AEAE9C */ int createHeap();
-    /* 80AEAF8C */ int destroy();
-    /* 80AEAFC0 */ int execute();
-    /* 80AEB078 */ int draw();
-    /* 80AEB190 */ char* getResName();
-    /* 80AEB1A0 */ void getParam();
-    /* 80AEB1C8 */ int getFlowNodeNum();
-    /* 80AEB1D0 */ int isDelete();
-    /* 80AEB22C */ int init();
-    /* 80AEB32C */ J3DAnmTransform* getTrnsfrmAnmP(int, char**);
-    /* 80AEB3A8 */ int setBckAnm(J3DAnmTransform*, f32, int, int, int, bool);
-    /* 80AEB45C */ int setCollision();
-    /* 80AEB4C8 */ int checkEvent();
-    /* 80AEB5E8 */ void orderEvent();
-    /* 80AEB634 */ void setMtx();
-    /* 80AEB6DC */ void setRoomInf();
-    /* 80AEB780 */ int cut_alert(int, int);
-    /* 80AEB7F0 */ int chkProcess(int (daNpc_Shop0_c::*)(void*));
-    /* 80AEB824 */ int setProcess(int (daNpc_Shop0_c::*)(void*), void*, int);
-    /* 80AEB920 */ int wait(void*);
-    /* 80AEB9BC */ int talk(void*);
+    virtual ~daNpc_Shop0_c();
+    int create();
+    int createHeap();
+    int destroy();
+    int execute();
+    int draw();
+    char* getResName();
+    void getParam();
+    int getFlowNodeNum();
+    int isDelete();
+    int init();
+    J3DAnmTransform* getTrnsfrmAnmP(int, char**);
+    int setBckAnm(J3DAnmTransform*, f32, int, int, int, bool);
+    int setCollision();
+    int checkEvent();
+    void orderEvent();
+    void setMtx();
+    void setRoomInf();
+    int cut_alert(int, int);
+    int chkProcess(int (daNpc_Shop0_c::*)(void*));
+    int setProcess(int (daNpc_Shop0_c::*)(void*), void*, int);
+    int wait(void*);
+    int talk(void*);
 
     static dCcD_SrcCyl const mCylDat;
 

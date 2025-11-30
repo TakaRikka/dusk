@@ -13,11 +13,6 @@
 #include "d/d_lib.h"
 #include "f_op/f_op_actor_mng.h"
 
-//
-// Declarations:
-//
-
-/* 80578D18-80578D4C 000078 0034+00 1/1 0/0 0/0 .text            search_door__FPvPv */
 static void* search_door(void* i_actor, void* i_this) {
     if (i_actor != NULL && fopAcM_GetProfName(i_actor) == PROC_Obj_BkDoor &&
         fopAcM_GetParamBit(i_this, 0, 1) != fopAcM_GetParamBit(i_actor, 0, 1))
@@ -27,13 +22,11 @@ static void* search_door(void* i_actor, void* i_this) {
     return NULL;
 }
 
-/* 80578D4C-80578D88 0000AC 003C+00 1/1 0/0 0/0 .text            initBaseMtx__13daObjBkDoor_cFv */
 void daObjBkDoor_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80578D88-80578E14 0000E8 008C+00 2/2 0/0 0/0 .text            setBaseMtx__13daObjBkDoor_cFv */
 void daObjBkDoor_c::setBaseMtx() {
     mDoMtx_trans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
@@ -67,7 +60,6 @@ static Vec const l_roll_crash_check_areaR[] = {
     {0.0f, 0.0f, 140.0f},
 };
 
-/* 80578E14-80578EA0 000174 008C+00 1/0 0/0 0/0 .text            Create__13daObjBkDoor_cFv */
 int daObjBkDoor_c::Create() {
         /* dSv_event_flag_c::F_0011 - Ordon Ranch - Fence jumping complete */
     if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[15])) {
@@ -82,8 +74,6 @@ int daObjBkDoor_c::Create() {
     return TRUE;
 }
 
-/* ############################################################################################## */
-/* 80578EA0-80578F20 000200 0080+00 1/0 0/0 0/0 .text            CreateHeap__13daObjBkDoor_cFv */
 int daObjBkDoor_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmd[mOrientation]);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
@@ -94,7 +84,6 @@ int daObjBkDoor_c::CreateHeap() {
     return true;
 }
 
-/* 80578F20-80578FC0 000280 00A0+00 1/1 0/0 0/0 .text            create1st__13daObjBkDoor_cFv */
 int daObjBkDoor_c::create1st() {
     mOrientation = fopAcM_GetParamBit(this, 0, 1);
 
@@ -110,7 +99,6 @@ int daObjBkDoor_c::create1st() {
     return step;
 }
 
-/* 80578FC0-8057902C 000320 006C+00 1/1 0/0 0/0 .text            openCheck__13daObjBkDoor_cFv */
 void daObjBkDoor_c::openCheck() {
     if (!mOpenCheckDone) {
         fopAc_ac_c* actor = fopAcM_Search((fopAcIt_JudgeFunc)search_door, this);
@@ -121,7 +109,6 @@ void daObjBkDoor_c::openCheck() {
     }
 }
 
-/* 8057902C-805792E4 00038C 02B8+00 1/0 0/0 0/0 .text            Execute__13daObjBkDoor_cFPPA3_A4_f */
 int daObjBkDoor_c::Execute(Mtx** i_mtxP) {
     daPy_py_c* player = dComIfGp_getLinkPlayer();
                                   /* dSv_event_flag_c::F_0011 - Ordon Ranch - Fence jumping complete */
@@ -178,7 +165,6 @@ int daObjBkDoor_c::Execute(Mtx** i_mtxP) {
     return TRUE;
 }
 
-/* 805792E4-80579388 000644 00A4+00 1/0 0/0 0/0 .text            Draw__13daObjBkDoor_cFv */
 int daObjBkDoor_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -190,44 +176,34 @@ int daObjBkDoor_c::Draw() {
     return TRUE;
 }
 
-/* 80579388-805793BC 0006E8 0034+00 1/0 0/0 0/0 .text            Delete__13daObjBkDoor_cFv */
 int daObjBkDoor_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
     return TRUE;
 }
 
-/* 805793BC-8057941C 00071C 0060+00 1/0 0/0 0/0 .text daObjBkDoor_create1st__FP13daObjBkDoor_c */
 static int daObjBkDoor_create1st(daObjBkDoor_c* i_this) {
     fopAcM_ct(i_this, daObjBkDoor_c);
     return i_this->create1st();
 }
 
-/* 8057941C-8057943C 00077C 0020+00 1/0 0/0 0/0 .text daObjBkDoor_MoveBGDelete__FP13daObjBkDoor_c
- */
 static int daObjBkDoor_MoveBGDelete(daObjBkDoor_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 8057943C-8057945C 00079C 0020+00 1/0 0/0 0/0 .text daObjBkDoor_MoveBGExecute__FP13daObjBkDoor_c
- */
 static int daObjBkDoor_MoveBGExecute(daObjBkDoor_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 8057945C-80579488 0007BC 002C+00 1/0 0/0 0/0 .text daObjBkDoor_MoveBGDraw__FP13daObjBkDoor_c */
 static int daObjBkDoor_MoveBGDraw(daObjBkDoor_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* ############################################################################################## */
-/* 80579548-80579568 -00001 0020+00 1/0 0/0 0/0 .data            daObjBkDoor_METHODS */
 static actor_method_class daObjBkDoor_METHODS = {
     (process_method_func)daObjBkDoor_create1st,     (process_method_func)daObjBkDoor_MoveBGDelete,
     (process_method_func)daObjBkDoor_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjBkDoor_MoveBGDraw,
 };
 
-/* 80579568-80579598 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_BkDoor */
 extern actor_process_profile_definition g_profile_Obj_BkDoor = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

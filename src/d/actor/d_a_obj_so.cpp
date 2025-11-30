@@ -16,13 +16,11 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 80CE03CC-80CE03F0 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__14daObj_So_HIO_cFv */
 daObj_So_HIO_c::daObj_So_HIO_c() {
     field_0x4 = -1;
     mScale = 0.8f;
 }
 
-/* 80CE03F0-80CE04FC 000110 010C+00 1/0 0/0 0/0 .text            daObj_So_Draw__FP12obj_so_class */
 static int daObj_So_Draw(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -50,7 +48,6 @@ static int daObj_So_Draw(obj_so_class* i_this) {
     return 1;
 }
 
-/* 80CE04FC-80CE0510 00021C 0014+00 1/1 0/0 0/0 .text            ride_call_back_0__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 static void ride_call_back_0(dBgW* i_BgW, fopAc_ac_c* a_this, fopAc_ac_c* param_3) {
     obj_so_class* i_this = (obj_so_class*)a_this;
 
@@ -58,7 +55,6 @@ static void ride_call_back_0(dBgW* i_BgW, fopAc_ac_c* a_this, fopAc_ac_c* param_
     i_this->field_0xc30[0] = 3;
 }
 
-/* 80CE0510-80CE0524 000230 0014+00 1/1 0/0 0/0 .text            ride_call_back_1__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 static void ride_call_back_1(dBgW* i_BgW, fopAc_ac_c* a_this, fopAc_ac_c* param_3) {
     obj_so_class* i_this = (obj_so_class*)a_this;
 
@@ -66,7 +62,6 @@ static void ride_call_back_1(dBgW* i_BgW, fopAc_ac_c* a_this, fopAc_ac_c* param_
     i_this->field_0xc30[1] = 3;
 }
 
-/* 80CE0524-80CE0744 000244 0220+00 1/1 0/0 0/0 .text            so_hasira__FP12obj_so_class */
 static void so_hasira(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     daPillar_c* pillar_p = (daPillar_c*)fopAcM_SearchByName(PROC_Obj_Pillar);
@@ -114,7 +109,6 @@ static void so_hasira(obj_so_class* i_this) {
     }
 }
 
-/* 80CE0744-80CE0C54 000464 0510+00 4/4 0/0 0/0 .text            part_set__FP12obj_so_classSc */
 static void part_set(obj_so_class* i_this, s8 param_2) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp48, sp54;
@@ -229,7 +223,6 @@ static void part_set(obj_so_class* i_this, s8 param_2) {
     }
 }
 
-/* 80CE0C90-80CE0F58 0009B0 02C8+00 1/1 0/0 0/0 .text            so_drop__FP12obj_so_class */
 static void so_drop(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp30, sp3c;
@@ -296,7 +289,6 @@ static void so_drop(obj_so_class* i_this) {
     }
 }
 
-/* 80CE0F94-80CE1084 000CB4 00F0+00 1/1 0/0 0/0 .text            so_break__FP12obj_so_class */
 static void so_break(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp2c, sp38;
@@ -316,7 +308,6 @@ static void so_break(obj_so_class* i_this) {
     }
 }
 
-/* 80CE1084-80CE12D8 000DA4 0254+00 1/1 0/0 0/0 .text            so_hang__FP12obj_so_class */
 static void so_hang(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     fopAc_ac_c* actor = fopAcM_SearchByID(i_this->field_0x1b94);
@@ -364,7 +355,6 @@ static void so_hang(obj_so_class* i_this) {
     }
 }
 
-/* 80CE12D8-80CE14DC 000FF8 0204+00 1/1 0/0 0/0 .text            action__FP12obj_so_class */
 static void action(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp38;
@@ -415,7 +405,6 @@ static void action(obj_so_class* i_this) {
     }
 }
 
-/* 80CE14DC-80CE2A64 0011FC 1588+00 1/1 0/0 0/0 .text            part_move__FP12obj_so_class */
 static void part_move(obj_so_class* i_this) {
     static u16 e_id[3] = {
         0x82AB,
@@ -813,7 +802,6 @@ static void part_move(obj_so_class* i_this) {
     }
 }
 
-/* 80CE2ADC-80CE2EAC 0027FC 03D0+00 1/1 0/0 0/0 .text            demo_camera__FP12obj_so_class */
 static void demo_camera(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
@@ -889,13 +877,10 @@ static void demo_camera(obj_so_class* i_this) {
     }
 }
 
-/* 80CE3C90-80CE3C94 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 data_80CE3C90;
 
-/* 80CE3CA0-80CE3CAC 000018 000C+00 3/3 0/0 0/0 .bss             l_HIO */
 static daObj_So_HIO_c l_HIO;
 
-/* 80CE2EAC-80CE2F60 002BCC 00B4+00 2/1 0/0 0/0 .text            daObj_So_Execute__FP12obj_so_class */
 static int daObj_So_Execute(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -915,12 +900,10 @@ static int daObj_So_Execute(obj_so_class* i_this) {
     return 1;
 }
 
-/* 80CE2F60-80CE2F68 002C80 0008+00 1/0 0/0 0/0 .text            daObj_So_IsDelete__FP12obj_so_class */
 static int daObj_So_IsDelete(obj_so_class* i_this) {
     return 1;
 }
 
-/* 80CE2F68-80CE3018 002C88 00B0+00 1/0 0/0 0/0 .text            daObj_So_Delete__FP12obj_so_class */
 static int daObj_So_Delete(obj_so_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -943,7 +926,6 @@ static int daObj_So_Delete(obj_so_class* i_this) {
     return 1;
 }
 
-/* 80CE3018-80CE327C 002D38 0264+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_so_class* i_this = (obj_so_class*)a_this;
 
@@ -996,7 +978,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80CE327C-80CE36D0 002F9C 0454+00 1/0 0/0 0/0 .text            daObj_So_Create__FP10fopAc_ac_c */
 static int daObj_So_Create(fopAc_ac_c* a_this) {
     static dCcD_SrcCyl cc_cyl_src = {
         {
@@ -1096,7 +1077,6 @@ static int daObj_So_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-/* 80CE3BBC-80CE3BDC -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_So_Method */
 static actor_method_class l_daObj_So_Method = {
     (process_method_func)daObj_So_Create,
     (process_method_func)daObj_So_Delete,
@@ -1105,7 +1085,6 @@ static actor_method_class l_daObj_So_Method = {
     (process_method_func)daObj_So_Draw,
 };
 
-/* 80CE3BDC-80CE3C0C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_SO */
 extern actor_process_profile_definition g_profile_OBJ_SO = {
   fpcLy_CURRENT_e,        // mLayerID
   2,                      // mListID

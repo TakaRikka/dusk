@@ -12,19 +12,16 @@
 #include "SSystem/SComponent/c_math.h"
 #include <cmath.h>
 
-/* 8064F778-8064F7B4 000078 003C+00 1/1 0/0 0/0 .text            draw__11daB_ZANTM_cFv */
 int daB_ZANTM_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     return 1;
 }
 
-/* 8064F7B4-8064F7D4 0000B4 0020+00 1/0 0/0 0/0 .text            daB_ZANTM_Draw__FP11daB_ZANTM_c */
 static int daB_ZANTM_Draw(daB_ZANTM_c* i_this) {
     return i_this->draw();
 }
 
 namespace {
-/* 80650508-80650554 000020 004C+00 0/1 0/0 0/0 .data            cc_zant_src__30@unnamed@d_a_b_zant_magic_cpp@ */
 dCcD_SrcCps cc_zant_src = {
     {
         {0, {{AT_TYPE_CSTATUE_SWING, 2, 0x1D}, {0xD8FBFDFF, 0}, 0}},
@@ -39,7 +36,6 @@ dCcD_SrcCps cc_zant_src = {
     }},
 };
 
-/* 80650554-80650594 00006C 0040+00 0/1 0/0 0/0 .data            cc_zant_src2__30@unnamed@d_a_b_zant_magic_cpp@ */
 dCcD_SrcSph cc_zant_src2 = {
     {
         {0x0, {{0x400, 0x2, 0x0}, {0x6000, 0x3}, 0x0}}, // mObj
@@ -52,7 +48,6 @@ dCcD_SrcSph cc_zant_src2 = {
     } // mSphAttr
 };
 
-/* 80650594-806505D4 0000AC 0040+00 0/1 0/0 0/0 .data            cc_zant_src3__30@unnamed@d_a_b_zant_magic_cpp@ */
 dCcD_SrcSph cc_zant_src3 = {
     {
         {0x0, {{0x400, 0x2, 0x0}, {0x2, 0x3}, 0x0}}, // mObj
@@ -66,7 +61,6 @@ dCcD_SrcSph cc_zant_src3 = {
 };
 }
 
-/* 8064F7D4-8064F938 0000D4 0164+00 1/1 0/0 0/0 .text            setMagicEffect__11daB_ZANTM_cFv */
 void daB_ZANTM_c::setMagicEffect() {
     static u16 magic_effect_id[] = {
         0x890D, 0x890E, 0x890F, 0x8910,
@@ -88,8 +82,6 @@ void daB_ZANTM_c::setMagicEffect() {
     }
 }
 
-/* 8064F938-8064FA50 000238 0118+00 1/1 0/0 0/0 .text            setMagicHitEffect__11daB_ZANTM_cFv
- */
 void daB_ZANTM_c::setMagicHitEffect() {
     static u16 magic_effect_id[] = {
         0x8862, 0x8863, 0x8864, 0x8865,
@@ -106,7 +98,6 @@ void daB_ZANTM_c::setMagicHitEffect() {
     }
 }
 
-/* 8064FA50-8064FD6C 000350 031C+00 1/1 0/0 0/0 .text            executeSmall__11daB_ZANTM_cFv */
 void daB_ZANTM_c::executeSmall() {
     cXyz target_pos;
     daPy_getPlayerActorClass();
@@ -185,7 +176,6 @@ void daB_ZANTM_c::executeSmall() {
     }
 }
 
-/* 8064FD6C-8064FE6C 00066C 0100+00 1/1 0/0 0/0 .text            cc_set__11daB_ZANTM_cFv */
 void daB_ZANTM_c::cc_set() {
     eyePos = current.pos;
     eyePos.y += 30.0f;
@@ -206,7 +196,6 @@ void daB_ZANTM_c::cc_set() {
     dComIfG_Ccsp()->Set(&mTgCollider);
 }
 
-/* 8064FE6C-8064FF04 00076C 0098+00 1/1 0/0 0/0 .text            execute__11daB_ZANTM_cFv */
 int daB_ZANTM_c::execute() {
     if (mAliveTimer != 0) {
         mAliveTimer--;
@@ -226,30 +215,22 @@ int daB_ZANTM_c::execute() {
     return 1;
 }
 
-/* 8064FF04-8064FF24 000804 0020+00 1/0 0/0 0/0 .text            daB_ZANTM_Execute__FP11daB_ZANTM_c
- */
 static int daB_ZANTM_Execute(daB_ZANTM_c* i_this) {
     return i_this->execute();
 }
 
-/* 8064FF24-8064FF2C 000824 0008+00 1/0 0/0 0/0 .text            daB_ZANTM_IsDelete__FP11daB_ZANTM_c
- */
 static int daB_ZANTM_IsDelete(daB_ZANTM_c* i_this) {
     return 1;
 }
 
-/* 8064FF2C-8064FF34 00082C 0008+00 1/1 0/0 0/0 .text            _delete__11daB_ZANTM_cFv */
 int daB_ZANTM_c::_delete() {
     return 1;
 }
 
-/* 8064FF34-8064FF54 000834 0020+00 1/0 0/0 0/0 .text            daB_ZANTM_Delete__FP11daB_ZANTM_c
- */
 static int daB_ZANTM_Delete(daB_ZANTM_c* i_this) {
     return i_this->_delete();
 }
 
-/* 8064FF54-806500A8 000854 0154+00 1/1 0/0 0/0 .text            create__11daB_ZANTM_cFv */
 int daB_ZANTM_c::create() {
     fopAcM_ct(this, daB_ZANTM_c);
     OS_REPORT("B_ZANTM PARAM %x\n", fopAcM_GetParam(this));
@@ -287,7 +268,6 @@ static int daB_ZANTM_Create(daB_ZANTM_c* i_this) {
     return i_this->create();
 }
 
-/* 806505E4-80650604 -00001 0020+00 1/0 0/0 0/0 .data            l_daB_ZANTM_Method */
 static actor_method_class l_daB_ZANTM_Method = {
     (process_method_func)daB_ZANTM_Create,
     (process_method_func)daB_ZANTM_Delete,
@@ -296,7 +276,6 @@ static actor_method_class l_daB_ZANTM_Method = {
     (process_method_func)daB_ZANTM_Draw,
 };
 
-/* 80650604-80650634 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_B_ZANTM */
 extern actor_process_profile_definition g_profile_B_ZANTM = {
   fpcLy_CURRENT_e,        // mLayerID
   4,                      // mListID

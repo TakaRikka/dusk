@@ -11,10 +11,10 @@ namespace JStage {
     * 
     */
     struct TAmbientLight : public TObject {
-        /* 80280B20 */ virtual ~TAmbientLight() = 0;
-        /* 80280B80 */ virtual s32 JSGFGetType() const;
-        /* 80280B88 */ virtual GXColor JSGGetColor() const;
-        /* 80280B9C */ virtual void JSGSetColor(GXColor);
+        virtual ~TAmbientLight() = 0;
+        virtual s32 JSGFGetType() const;
+        virtual GXColor JSGGetColor() const;
+        virtual void JSGSetColor(GXColor);
     };
 };
 

@@ -11,12 +11,10 @@
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
 
-/* 803C1340-803C1370 01E460 0030+00 1/1 0/0 0/0 .data            t_tag$3752 */
 static u64 t_tag[6] = {
     'right_s', 'right', 'center_s', 'center', 'left_s', 'left',
 };
 
-/* 80246B34-80246DD8 241474 02A4+00 0/0 1/1 0/0 .text            __ct__15dMsgScrnStaff_cFUc */
 dMsgScrnStaff_c::dMsgScrnStaff_c(u8 unused) {
     init();
 
@@ -53,7 +51,6 @@ dMsgScrnStaff_c::dMsgScrnStaff_c(u8 unused) {
     mTextBoxPosY = mpTm_c[0]->getGlobalPosY();
 }
 
-/* 80246DD8-80246EE8 241718 0110+00 1/0 0/0 0/0 .text            __dt__15dMsgScrnStaff_cFv */
 dMsgScrnStaff_c::~dMsgScrnStaff_c() {
     delete mpScreen;
     mpScreen = NULL;
@@ -69,7 +66,6 @@ dMsgScrnStaff_c::~dMsgScrnStaff_c() {
     dComIfGp_getMsgArchive(6)->removeResourceAll();
 }
 
-/* 80246EE8-80246F68 241828 0080+00 1/0 0/0 0/0 .text            exec__15dMsgScrnStaff_cFv */
 void dMsgScrnStaff_c::exec() {
     mpPmP_c->scale(g_MsgObject_HIO_c.mStageTitleScaleX, g_MsgObject_HIO_c.mStageTitleScaleY);
     if (isTalkNow()) {
@@ -77,23 +73,18 @@ void dMsgScrnStaff_c::exec() {
     }
 }
 
-/* 80246F68-80246FC0 2418A8 0058+00 1/0 0/0 0/0 .text            drawSelf__15dMsgScrnStaff_cFv */
 void dMsgScrnStaff_c::drawSelf() {
     J2DGrafContext* grafContext = dComIfGp_getCurrentGrafPort();
     grafContext->setup2D();
     drawOutFont(0.0f, 0.0f, 1.0f);
 }
 
-/* 80246FC0-80246FE4 241900 0024+00 1/0 0/0 0/0 .text            fukiAlpha__15dMsgScrnStaff_cFf */
 void dMsgScrnStaff_c::fukiAlpha(f32 i_rate) {
     mpPmP_c->setAlphaRate(i_rate);
 }
 
-/* 80246FE4-80246FE8 241924 0004+00 1/0 0/0 0/0 .text            fukiScale__15dMsgScrnStaff_cFf */
 void dMsgScrnStaff_c::fukiScale(f32 param_0) {}
 
-/* 80246FE8-80246FEC 241928 0004+00 1/0 0/0 0/0 .text            fukiTrans__15dMsgScrnStaff_cFff */
 void dMsgScrnStaff_c::fukiTrans(f32 param_0, f32 param_1) {}
 
-/* 80246FEC-80246FF0 24192C 0004+00 1/0 0/0 0/0 .text            fontAlpha__15dMsgScrnStaff_cFf */
 void dMsgScrnStaff_c::fontAlpha(f32 param_0) {}

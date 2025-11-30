@@ -297,8 +297,6 @@ TControl::~TControl() {
     JUT_EXPECT(ocObject_.empty());
 }
 
-/* 80289228-80289278 283B68 0050+00 1/1 0/0 0/0 .text
- * appendObject__Q37JStudio3stb8TControlFPQ37JStudio3stb7TObject */
 void TControl::appendObject(TObject* p) {
     p->setControl_(this);
     mObjectContainer.Push_back(p);
@@ -317,15 +315,12 @@ void TControl::destroyObject(TObject* p) {
     pFactory->destroy(p);
 }
 
-/* 80289300-80289364 283C40 0064+00 0/0 2/2 0/0 .text destroyObject_all__Q37JStudio3stb8TControlFv
- */
 void TControl::destroyObject_all() {
     while (!mObjectContainer.empty()) {
         destroyObject(&mObjectContainer.back());
     }
 }
 
-/* 80289364-80289404 283CA4 00A0+00 1/1 0/0 0/0 .text getObject__Q37JStudio3stb8TControlFPCvUl */
 // NONMATCHING - TPRObject_ID_equal copy issue
 TObject* TControl::getObject(void const* param_0, u32 param_1) {
     JGadget::TLinkList<TObject, -12>::iterator begin = mObjectContainer.begin();
@@ -337,7 +332,6 @@ TObject* TControl::getObject(void const* param_0, u32 param_1) {
     return NULL;
 }
 
-/* 80289404-802894B4 283D44 00B0+00 0/0 1/1 0/0 .text            reset__Q37JStudio3stb8TControlFv */
 void TControl::reset() {
     resetStatus_();
     mObject_control.reset(NULL);
@@ -347,8 +341,6 @@ void TControl::reset() {
     }
 }
 
-/* 802894B4-802895B4 283DF4 0100+00 0/0 2/2 0/0 .text            forward__Q37JStudio3stb8TControlFUl
- */
 bool TControl::forward(u32 param_0) {
     _54 = mObject_control.getSuspend();
     bool rv = mObject_control.forward(param_0);

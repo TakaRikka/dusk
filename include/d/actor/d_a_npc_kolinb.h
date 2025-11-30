@@ -19,7 +19,7 @@ struct daNpc_Kolinb_HIOParam {
 
 class daNpc_Kolinb_Param_c {
 public:
-    /* 80A486A4 */ virtual ~daNpc_Kolinb_Param_c() {}
+    virtual ~daNpc_Kolinb_Param_c() {}
 
     static daNpc_Kolinb_HIOParam const m;
 };
@@ -82,43 +82,43 @@ public:
     typedef int (daNpc_Kolinb_c::*cutFunc)(int);
     typedef int (daNpc_Kolinb_c::*actionFunc)(void*);
 
-    /* 80A4598C */ ~daNpc_Kolinb_c();
-    /* 80A45ADC */ cPhs__Step create();
-    /* 80A45DC4 */ int CreateHeap();
-    /* 80A4603C */ int Delete();
-    /* 80A46070 */ int Execute();
-    /* 80A46090 */ int Draw();
-    /* 80A46124 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A46144 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80A4619C */ u8 getType();
-    /* 80A461E8 */ BOOL isDelete();
-    /* 80A462C8 */ void reset();
-    /* 80A46420 */ void setParam();
-    /* 80A4651C */ BOOL checkChangeEvt();
-    /* 80A465D0 */ void setAfterTalkMotion();
-    /* 80A46630 */ void srchActors();
-    /* 80A46634 */ BOOL evtTalk();
-    /* 80A466D4 */ BOOL evtCutProc();
-    /* 80A4679C */ void action();
-    /* 80A46824 */ void beforeMove();
-    /* 80A468E8 */ void setAttnPos();
-    /* 80A46A4C */ void setCollision();
-    /* 80A46A9C */ int drawDbgInfo();
-    /* 80A46AA4 */ int selectAction();
-    /* 80A46AEC */ BOOL chkAction(actionFunc);
-    /* 80A46B18 */ int setAction(actionFunc);
-    /* 80A46BC0 */ int cutConversationInHotel(int);
-    /* 80A46C48 */ int cutConversationAboutDeathMt(int);
-    /* 80A46EE4 */ int cutConversationAboutGoron(int);
-    /* 80A47180 */ int cutNurse(int);
-    /* 80A472EC */ int cutClothTry(int);
-    /* 80A4738C */ int cutThankYou(int);
-    /* 80A4742C */ int wait(void*);
-    /* 80A475D4 */ int talk(void*);
+    ~daNpc_Kolinb_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    int selectAction();
+    BOOL chkAction(actionFunc);
+    int setAction(actionFunc);
+    int cutConversationInHotel(int);
+    int cutConversationAboutDeathMt(int);
+    int cutConversationAboutGoron(int);
+    int cutNurse(int);
+    int cutClothTry(int);
+    int cutThankYou(int);
+    int wait(void*);
+    int talk(void*);
 #if DEBUG
     int test(void*);
 #endif
-    /* 80A4854C */ daNpc_Kolinb_c(
+    daNpc_Kolinb_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -130,11 +130,11 @@ public:
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
         i_arcNames) {}
-    /* 80A4860C */ s32 getHeadJointNo() { return mType == 2 ? ZRCB_JNT_HEAD : KOLINB_JNT_HEAD; }
-    /* 80A48624 */ BOOL checkChangeJoint(int i_joint) { return i_joint == ((mType == 2 ? ZRCB_JNT_H_TAIL1 : KOLINB_JNT_CHIN) - 1); }
-    /* 80A4864C */ BOOL checkRemoveJoint(int i_joint) { return i_joint == ((mType == 2 ? ZRCB_JNT_MOUTH : KOLINB_JNT_MOUTH) - 1); }
-    /* 80A48674 */ s32 getBackboneJointNo() { return mType == 2 ? ZRCB_JNT_BACKBONE1 : KOLINB_JNT_BACKBONE1; }
-    /* 80A4868C */ s32 getNeckJointNo() { return mType == 2 ? ZRCB_JNT_NECK : KOLINB_JNT_NECK; }
+    s32 getHeadJointNo() { return mType == 2 ? ZRCB_JNT_HEAD : KOLINB_JNT_HEAD; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == ((mType == 2 ? ZRCB_JNT_H_TAIL1 : KOLINB_JNT_CHIN) - 1); }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == ((mType == 2 ? ZRCB_JNT_MOUTH : KOLINB_JNT_MOUTH) - 1); }
+    s32 getBackboneJointNo() { return mType == 2 ? ZRCB_JNT_BACKBONE1 : KOLINB_JNT_BACKBONE1; }
+    s32 getNeckJointNo() { return mType == 2 ? ZRCB_JNT_NECK : KOLINB_JNT_NECK; }
 
     static char* mCutNameList[7];
     static cutFunc mCutList[7];

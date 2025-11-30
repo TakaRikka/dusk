@@ -14,10 +14,10 @@ struct BinaryStreamFileTable {
  * 
  */
 struct JAUStreamFileTable {
-    /* 802A7420 */ JAUStreamFileTable();
-    /* 802A742C */ void init(void const*);
-    /* 802A7478 */ int getNumFiles() const;
-    /* 802A7484 */ const char* getFilePath(int) const;
+    JAUStreamFileTable();
+    void init(void const*);
+    int getNumFiles() const;
+    const char* getFilePath(int) const;
 
     bool isValid() { return mData; }
 
@@ -29,8 +29,8 @@ struct JAUStreamFileTable {
  * 
  */
 struct JAUStreamDataMgr_StreamFileTable : public JAIStreamDataMgr, JAUStreamFileTable {
-    /* 802A74AC */ virtual s32 getStreamFileEntry(JAISoundID);
-    /* 802A74E8 */ virtual ~JAUStreamDataMgr_StreamFileTable() {}
+    virtual s32 getStreamFileEntry(JAISoundID);
+    virtual ~JAUStreamDataMgr_StreamFileTable() {}
 };
 
 #endif /* JAUSTREAMFILETABLE_H */

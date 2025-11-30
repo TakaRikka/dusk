@@ -14,7 +14,7 @@
 
 struct daYkgr_HIO_c : public mDoHIO_entry_c {
     daYkgr_HIO_c();
-    /* 805A8D98 */ virtual ~daYkgr_HIO_c() {}
+    virtual ~daYkgr_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -66,14 +66,11 @@ inline dPa_YkgrPcallBack::dPa_YkgrPcallBack() {
     field_0x1c = 1;
 }
 
-/* 805A848C-805A84D4 0000EC 0048+00 1/0 0/0 0/0 .text
- * draw__17dPa_YkgrPcallBackFP14JPABaseEmitterP15JPABaseParticle */
 void dPa_YkgrPcallBack::draw(JPABaseEmitter* param_0, JPABaseParticle* param_1) {
     GXSetIndTexMtx(GX_ITM_0, field_0x4, field_0x1c);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
 }
 
-/* 805A84D4-805A85D4 000134 0100+00 2/2 0/0 0/0 .text            setParam__17dPa_YkgrPcallBackFf */
 void dPa_YkgrPcallBack::setParam(f32 param_1) {
     if (param_1 <= -17.0f || param_1 >= 47.0f) return; {
         if (param_1 >= 0.0f) {
@@ -91,10 +88,8 @@ void dPa_YkgrPcallBack::setParam(f32 param_1) {
     }
 }
 
-/* 805A9104-805A912C 000054 0028+00 2/3 0/0 0/0 .bss             l_HIO */
 static daYkgr_HIO_c l_HIO;
 
-/* 805A85D4-805A882C 000234 0258+00 1/1 0/0 0/0 .text            getPosRate__8daYkgr_cFv */
 f32 daYkgr_c::getPosRate() {
     if (m_path == NULL) {
         return 0.0f;
@@ -121,10 +116,8 @@ f32 daYkgr_c::getPosRate() {
     return rate;
 }
 
-/* 805A9138-805A9158 000088 0020+00 2/3 0/0 0/0 .bss             YkgrCB */
 static dPa_YkgrPcallBack YkgrCB;
 
-/* 805A882C-805A8A48 00048C 021C+00 1/0 0/0 0/0 .text            daYkgrCreate__FPv */
 inline int daYkgr_c::_create() {
     int uVar1 = u8((fopAcM_GetParam(this) & 0x00F00000) >> 0x14);
     fopAcM_ct(this, daYkgr_c);
@@ -190,12 +183,10 @@ inline int daYkgr_c::_delete() {
     return 1;
 }
 
-/* 805A8A48-805A8A50 0006A8 0008+00 1/0 0/0 0/0 .text            daYkgrDelete__FPv */
 static int daYkgrDelete(void* i_this) {
     return static_cast<daYkgr_c*>(i_this)->_delete();
 }
 
-/* 805A8A50-805A8BBC 0006B0 016C+00 1/0 0/0 0/0 .text            daYkgrExecute__FPv */
 inline int daYkgr_c::_execute() {
     cLib_addCalc2(&field_0x5a4, m_aim_rate, 0.25f, 0.05f);
     cLib_addCalc2(&m_aim_rate, l_HIO.field_0x1c, 0.25f, 0.05f);
@@ -243,7 +234,6 @@ void daYkgr_c::set_mtx() {
     MTXCopy(mDoMtx_stack_c::get(), field_0x570);
 }
 
-/* 805A8BBC-805A8D90 00081C 01D4+00 1/0 0/0 0/0 .text            daYkgrDraw__FPv */
 inline int daYkgr_c::_draw() {
     bool rv;
     f32 alpha = 255.0f;
@@ -279,12 +269,10 @@ static int daYkgrDraw(void* i_this) {
     return static_cast<daYkgr_c*>(i_this)->_draw();
 }
 
-/* 805A8D90-805A8D98 0009F0 0008+00 1/0 0/0 0/0 .text            daYkgrIsDelete__FPv */
 static int daYkgrIsDelete(void* param_0) {
     return 1;
 }
 
-/* 805A9020-805A9040 -00001 0020+00 1/0 0/0 0/0 .data            daYkgrMethodTable */
 static actor_method_class daYkgrMethodTable = {
     daYkgrCreate,
     daYkgrDelete,

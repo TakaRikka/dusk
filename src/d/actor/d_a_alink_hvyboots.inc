@@ -6,30 +6,24 @@
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_tag_magne.h"
 
-/* 800E23FC-800E243C 0DCD3C 0040+00 6/6 0/0 0/0 .text            concatMagneBootMtx__9daAlink_cFv */
 void daAlink_c::concatMagneBootMtx() {
     if (checkMagneBootsOn()) {
         mDoMtx_stack_c::concat(mMagneBootMtx);
     }
 }
 
-/* 800E243C-800E247C 0DCD7C 0040+00 1/1 0/0 0/0 .text            concatMagneBootInvMtx__9daAlink_cFv
- */
 void daAlink_c::concatMagneBootInvMtx() {
     if (checkMagneBootsOn()) {
         mDoMtx_stack_c::concat(mMagneBootInvMtx);
     }
 }
 
-/* 800E247C-800E24B0 0DCDBC 0034+00 8/8 0/0 0/0 .text multVecMagneBootInvMtx__9daAlink_cFP4cXyz */
 void daAlink_c::multVecMagneBootInvMtx(cXyz* vec) {
     if (checkMagneBootsOn()) {
         mDoMtx_multVecSR(mMagneBootInvMtx, vec, vec);
     }
 }
 
-/* 800E24B0-800E251C 0DCDF0 006C+00 2/2 0/0 0/0 .text
- * commonMagneLineCheck__9daAlink_cFP4cXyzP4cXyz                */
 bool daAlink_c::commonMagneLineCheck(cXyz* i_start, cXyz* i_end) {
     mMagneLineChk.Set(i_start, i_end, this);
 
@@ -40,14 +34,11 @@ bool daAlink_c::commonMagneLineCheck(cXyz* i_start, cXyz* i_end) {
     return false;
 }
 
-/* 800E251C-800E2580 0DCE5C 0064+00 2/2 0/0 0/0 .text            checkBootsMoveAnime__9daAlink_cFi
- */
 BOOL daAlink_c::checkBootsMoveAnime(int param_0) {
     return (checkHeavyStateOn(param_0, 1) && !checkNoResetFlg0(FLG0_UNDERWATER)) ||
            checkDkCaught2Anime();
 }
 
-/* 800E2580-800E2738 0DCEC0 01B8+00 17/17 0/0 0/0 .text            setHeavyBoots__9daAlink_cFi */
 int daAlink_c::setHeavyBoots(int param_0) {
     if (checkEquipHeavyBoots()) {
         offNoResetFlg0(FLG0_EQUIP_HVY_BOOTS);
@@ -102,7 +93,6 @@ int daAlink_c::setHeavyBoots(int param_0) {
 }
 
 
-/* 800E2738-800E2808 0DD078 00D0+00 2/2 0/0 0/0 .text getMagneBootsLocalAngleY__9daAlink_cFsi */
 s16 daAlink_c::getMagneBootsLocalAngleY(s16 param_0, int param_1) {
     if (param_1 == 1 || (param_1 != 2 && field_0x3114 <= 0x4000 && field_0x3114 != -0x8000)) {
         return param_0;
@@ -118,8 +108,6 @@ s16 daAlink_c::getMagneBootsLocalAngleY(s16 param_0, int param_1) {
 }
 
 
-/* 800E2808-800E2DC4 0DD148 05BC+00 3/3 0/0 0/0 .text
- * setMagneBootsMtx__9daAlink_cFP13cBgS_PolyInfoi               */
 void daAlink_c::setMagneBootsMtx(cBgS_PolyInfo* i_polyinfo, int param_1) {
     cM3dGPla poly;
     dComIfG_Bgsp().GetTriPla(*i_polyinfo, &poly);
@@ -214,7 +202,6 @@ void daAlink_c::setMagneBootsMtx(cBgS_PolyInfo* i_polyinfo, int param_1) {
 }
 
 
-/* 800E2DC4-800E2F88 0DD704 01C4+00 7/7 0/0 0/0 .text            cancelMagneBootsOn__9daAlink_cFv */
 int daAlink_c::cancelMagneBootsOn() {
     offNoResetFlg0(FLG0_MAGNE_BOOTS_ON);
     mZ2Link.setMagnetized(false);
@@ -256,7 +243,6 @@ int daAlink_c::cancelMagneBootsOn() {
 }
 
 
-/* 800E2F88-800E3048 0DD8C8 00C0+00 1/1 0/0 0/0 .text            checkMagneBootsFly__9daAlink_cFv */
 int daAlink_c::checkMagneBootsFly() {
     if (field_0x2fb8 != 0 && checkEquipHeavyBoots() && !checkDeadHP() &&
         mProcID != PROC_MAGNE_BOOTS_FLY && !checkEventRun())
@@ -272,7 +258,6 @@ int daAlink_c::checkMagneBootsFly() {
     return 0;
 }
 
-/* 800E3048-800E30DC 0DD988 0094+00 2/2 0/0 0/0 .text            procBootsEquipInit__9daAlink_cFv */
 int daAlink_c::procBootsEquipInit() {
     commonProcInit(PROC_BOOTS_EQUIP);
     setSingleAnimeParam(ANM_HVY_BOOTS_PUT_ON, &daAlinkHIO_magneBoots_c0::m.mEquipAnm);
@@ -288,7 +273,6 @@ int daAlink_c::procBootsEquipInit() {
     return 1;
 }
 
-/* 800E30DC-800E3218 0DDA1C 013C+00 1/0 0/0 0/0 .text            procBootsEquip__9daAlink_cFv */
 int daAlink_c::procBootsEquip() {
     daPy_frameCtrl_c* frameCtrl_p = mUnderFrameCtrl;
     onEndResetFlg0(ERFLG0_UNK_8000000);
@@ -315,8 +299,6 @@ int daAlink_c::procBootsEquip() {
 }
 
 
-/* 800E3218-800E3454 0DDB58 023C+00 1/1 0/0 0/0 .text            procMagneBootsFlyInit__9daAlink_cFv
- */
 int daAlink_c::procMagneBootsFlyInit() {
     cXyz sp44 = field_0x369c.normZP();
     cM3dGPla sp50(&sp44, -sp44.inprod(field_0x3834));
@@ -363,7 +345,6 @@ int daAlink_c::procMagneBootsFlyInit() {
 }
 
 
-/* 800E3454-800E3760 0DDD94 030C+00 1/0 0/0 0/0 .text            procMagneBootsFly__9daAlink_cFv */
 int daAlink_c::procMagneBootsFly() {
     field_0x3478 += daAlinkHIO_magneBoots_c0::m.mMagneFlyAccelRate;
     if (field_0x3478 > field_0x594) {

@@ -15,8 +15,8 @@
 
 class daObj_BattaHIO_c : public JORReflexible {
 public:
-    /* 80BA9E2C */ daObj_BattaHIO_c();
-    /* 80BAC874 */ virtual ~daObj_BattaHIO_c() {}
+    daObj_BattaHIO_c();
+    virtual ~daObj_BattaHIO_c() {}
 
     void genMessage(JORMContext* ctx);
 
@@ -25,7 +25,6 @@ public:
     /* 0xC */ f32 mModelScaleMale;
 };
 
-/* 80BACA90-80BACAD0 000020 0040+00 0/1 0/0 0/0 .data cc_sph_src__27@unnamed@d_a_obj_batta_cpp@ */
 namespace {
 
 static dCcD_SrcSph cc_sph_src = {
@@ -42,17 +41,14 @@ static dCcD_SrcSph cc_sph_src = {
 
 };
 
-/* 80BA9E2C-80BA9E5C 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__16daObj_BattaHIO_cFv */
 daObj_BattaHIO_c::daObj_BattaHIO_c() {
     mId = -1;
     mModelScaleMale = 1.0f;
     mModelScaleFemale = 1.4f;
 }
 
-/* 80BACC88-80BACC8C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool l_HIOInit;
 
-/* 80BACC98-80BACCA8 000018 0010+00 2/2 0/0 0/0 .bss             l_HIO */
 static daObj_BattaHIO_c l_HIO;
 
 #ifdef DEBUG
@@ -70,8 +66,6 @@ void daObj_BattaHIO_c::genMessage(JORMContext* ctx) {
 
 #endif
 
-/* 80BA9E5C-80BA9F00 00011C 00A4+00 10/10 0/0 0/0 .text
- * setAction__12daObjBATTA_cFM12daObjBATTA_cFPCvPv_v            */
 void daObjBATTA_c::setAction(actionFunc i_func) {
     if (mActionFunc != NULL) {
         field_0x9e8 = -1;
@@ -84,13 +78,11 @@ void daObjBATTA_c::setAction(actionFunc i_func) {
     (this->*mActionFunc)();
 }
 
-/* 80BAC978-80BAC980 000008 0008+00 0/1 0/0 0/0 .rodata          l_batta_brk_index */
 static u32 const l_batta_brk_index[2] = {
     15,
     14,
 };
 
-/* 80BAC980-80BAC988 000010 0008+00 0/1 0/0 0/0 .rodata          l_batta_btk_index */
 static u32 const l_batta_btk_index[2] = {
     19, 18,
 };
@@ -128,25 +120,19 @@ inline int daObjBATTA_c::CreateHeap() {
     return 1;
 }
 
-/* 80BA9F00-80BAA13C 0001C0 023C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return ((daObjBATTA_c*)i_this)->CreateHeap();
 }
 
-/* 80BAA184-80BAA1A4 000444 0020+00 1/0 0/0 0/0 .text            daObjBATTA_Create__FP10fopAc_ac_c
- */
 static int daObjBATTA_Create(fopAc_ac_c* i_this) {
     return ((daObjBATTA_c*)i_this)->create();
 }
 
-/* 80BAA1A4-80BAA1C8 000464 0024+00 1/0 0/0 0/0 .text            daObjBATTA_Delete__FP12daObjBATTA_c
- */
 static int daObjBATTA_Delete(daObjBATTA_c* i_this) {
     i_this->_delete();
     return 1;
 }
 
-/* 80BAA1C8-80BAA47C 000488 02B4+00 6/0 0/0 0/0 .text            wait__12daObjBATTA_cFv */
 void daObjBATTA_c::wait() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (field_0x9e8 == 0) {
@@ -178,7 +164,6 @@ void daObjBATTA_c::wait() {
     }
 }
 
-/* 80BAA47C-80BAAA18 00073C 059C+00 1/0 0/0 0/0 .text            turn__12daObjBATTA_cFv */
 void daObjBATTA_c::turn() {
     daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
     cXyz* flamePos = player->getKandelaarFlamePos();
@@ -214,7 +199,6 @@ void daObjBATTA_c::turn() {
     }
 }
 
-/* 80BAAA18-80BAAD30 000CD8 0318+00 3/0 0/0 0/0 .text            jump__12daObjBATTA_cFv */
 void daObjBATTA_c::jump() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz* flamePos = player->getKandelaarFlamePos();
@@ -246,7 +230,6 @@ void daObjBATTA_c::jump() {
     }
 }
 
-/* 80BAAD30-80BAB234 000FF0 0504+00 1/0 0/0 0/0 .text            fly_up__12daObjBATTA_cFv */
 void daObjBATTA_c::fly_up() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz* flamePos = player->getKandelaarFlamePos();
@@ -300,7 +283,6 @@ void daObjBATTA_c::fly_up() {
     }
 }
 
-/* 80BAB234-80BAB500 0014F4 02CC+00 1/0 0/0 0/0 .text            fly_down__12daObjBATTA_cFv */
 void daObjBATTA_c::fly_down() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz* flamePos = player->getKandelaarFlamePos();
@@ -331,7 +313,6 @@ void daObjBATTA_c::fly_down() {
     }
 }
 
-/* 80BAB500-80BAB6C8 0017C0 01C8+00 1/0 0/0 0/0 .text            bin_wait__12daObjBATTA_cFv */
 void daObjBATTA_c::bin_wait() {
     if (field_0x9e8 == 0) {
         J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("Bat", 8);
@@ -361,7 +342,6 @@ void daObjBATTA_c::bin_wait() {
     }
 }
 
-/* 80BAB6C8-80BAB820 001988 0158+00 1/0 0/0 0/0 .text            bin_action__12daObjBATTA_cFv */
 void daObjBATTA_c::bin_action() {
     if (field_0x9e8 == 0) {
         J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("Bat", 6);
@@ -391,7 +371,6 @@ void daObjBATTA_c::bin_action() {
     }
 }
 
-/* 80BAB820-80BAB934 001AE0 0114+00 1/0 0/0 0/0 .text            hook__12daObjBATTA_cFv */
 void daObjBATTA_c::hook() {
     if (field_0x9e8 == 0) {
         daPy_py_c* player = daPy_getPlayerActorClass();
@@ -414,7 +393,6 @@ void daObjBATTA_c::hook() {
     }
 }
 
-/* 80BAB934-80BABA98 001BF4 0164+00 2/0 0/0 0/0 .text            boomerang__12daObjBATTA_cFv */
 void daObjBATTA_c::boomerang() {
     if (field_0x9e8 == 0) {
         mSph.SetTgType(0);
@@ -444,8 +422,6 @@ void daObjBATTA_c::boomerang() {
     }
 }
 
-/* 80BABA98-80BABCA4 001D58 020C+00 9/9 0/0 0/0 .text            batta_setParticle__12daObjBATTA_cFv
- */
 void daObjBATTA_c::batta_setParticle() {
     if (CheckZ()) {
         cLib_chaseF(&mParticleScale, 0.0f, 1.0f);
@@ -481,7 +457,6 @@ void daObjBATTA_c::batta_setParticle() {
     }
 }
 
-/* 80BABCA4-80BABD6C 001F64 00C8+00 1/1 0/0 0/0 .text            action__12daObjBATTA_cFv */
 void daObjBATTA_c::action() {
     fopAcM_posMoveF(this, 0);
 
@@ -499,7 +474,6 @@ void daObjBATTA_c::action() {
     }
 }
 
-/* 80BABD6C-80BABE20 00202C 00B4+00 1/1 0/0 0/0 .text            hit_check__12daObjBATTA_cFv */
 void daObjBATTA_c::hit_check() {
     dCcU_AtInfo info;
     mStts.Move();
@@ -514,10 +488,8 @@ void daObjBATTA_c::hit_check() {
     }
 }
 
-/* 80BACA40-80BACA44 0000D0 0002+02 0/1 0/0 0/0 .rodata          l_batta_sex */
 static u8 const l_batta_sex[2] = {fpcNm_ITEM_M_GRASSHOPPER, fpcNm_ITEM_F_GRASSHOPPER};
 
-/* 80BABE20-80BABFA4 0020E0 0184+00 1/1 0/0 0/0 .text            execute__12daObjBATTA_cFv */
 int daObjBATTA_c::execute() {
     if ( ChkGetDemo()) {
         field_0x57c = field_0x578 + 10000.0f;
@@ -551,7 +523,6 @@ int daObjBATTA_c::execute() {
     return 1;
 }
 
-/* 80BABFA4-80BAC00C 002264 0068+00 1/1 0/0 0/0 .text            _delete__12daObjBATTA_cFv */
 int daObjBATTA_c::_delete() {
     dComIfG_resDelete(&mPhase, "Bat");
 
@@ -567,7 +538,6 @@ int daObjBATTA_c::_delete() {
     return 1;
 }
 
-/* 80BAC00C-80BAC084 0022CC 0078+00 1/1 0/0 0/0 .text            mtx_set__12daObjBATTA_cFv */
 void daObjBATTA_c::mtx_set() {
     J3DModel* model = mpMorf->getModel();
     mDoMtx_stack_c::transS(current.pos);
@@ -599,25 +569,19 @@ inline int daObjBATTA_c::draw() {
     return 1;
 }
 
-/* 80BAC084-80BAC174 002344 00F0+00 1/0 0/0 0/0 .text            daObjBATTA_Draw__FP12daObjBATTA_c
- */
 static int daObjBATTA_Draw(daObjBATTA_c* i_this) {
     return i_this->draw();
 }
 
-/* 80BAC174-80BAC194 002434 0020+00 2/1 0/0 0/0 .text daObjBATTA_Execute__FP12daObjBATTA_c */
 static int daObjBATTA_Execute(daObjBATTA_c* i_this) {
     return i_this->execute();
 }
 
-/* ############################################################################################## */
-/* 80BACA5C-80BACA60 0000EC 0004+00 0/1 0/0 0/0 .rodata          l_musiya_num */
 static u16 const l_musiya_num[2] = {
     0x197, /* dSv_event_flag_c::F_0407 - Misc. - Grasshopper (M) */
     0x198, /* dSv_event_flag_c::F_0408 - Misc. - Grasshopper (F) */
 };
 
-/* 80BAC194-80BAC6A0 002454 050C+00 1/1 0/0 0/0 .text            create__12daObjBATTA_cFv */
 int daObjBATTA_c::create() {
     u8 uVar9 = (fopAcM_GetParam(this) & 0xf00) >> 8;
 
@@ -719,12 +683,10 @@ int daObjBATTA_c::create() {
     return rv;
 }
 
-/* 80BAC86C-80BAC874 002B2C 0008+00 1/0 0/0 0/0 .text daObjBATTA_IsDelete__FP12daObjBATTA_c */
 static int daObjBATTA_IsDelete(daObjBATTA_c* i_this) {
     return 1;
 }
 
-/* 80BACB9C-80BACBBC -00001 0020+00 1/0 0/0 0/0 .data            l_daObjBATTA_Method */
 static actor_method_class l_daObjBATTA_Method = {
     (process_method_func)daObjBATTA_Create,
     (process_method_func)daObjBATTA_Delete,
@@ -733,7 +695,6 @@ static actor_method_class l_daObjBATTA_Method = {
     (process_method_func)daObjBATTA_Draw,
 };
 
-/* 80BACBBC-80BACBEC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Batta */
 extern actor_process_profile_definition g_profile_Obj_Batta = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

@@ -19,7 +19,6 @@
 #include "lingcod/lingcod.h"
 #endif
 
-/* 80032918-80032958 02D258 0040+00 4/4 0/0 0/0 .text            dSv_item_rename__FUc */
 static u8 dSv_item_rename(u8 i_itemNo) {
     switch (i_itemNo) {
     case fpcNm_ITEM_OIL_BOTTLE_2:
@@ -33,7 +32,6 @@ static u8 dSv_item_rename(u8 i_itemNo) {
     }
 }
 
-/* 80032958-80032A48 02D298 00F0+00 1/1 0/0 0/0 .text            init__21dSv_player_status_a_cFv */
 void dSv_player_status_a_c::init() {
     mMaxLife = 15;
     mLife = 12;
@@ -69,8 +67,6 @@ void dSv_player_status_a_c::init() {
     }
 }
 
-/* 80032A48-80032A5C 02D388 0014+00 0/0 1/1 0/0 .text
- * setSelectItemIndex__21dSv_player_status_a_cFiUc              */
 void dSv_player_status_a_c::setSelectItemIndex(int i_no, u8 i_slotNo) {
     JUT_ASSERT(107, (i_no >= 0) && (i_no < ITEM_XY_MAX_DUMMY/2));
 
@@ -79,8 +75,6 @@ void dSv_player_status_a_c::setSelectItemIndex(int i_no, u8 i_slotNo) {
     }
 }
 
-/* 80032A5C-80032A78 02D39C 001C+00 7/7 20/20 0/0 .text
- * getSelectItemIndex__21dSv_player_status_a_cCFi               */
 u8 dSv_player_status_a_c::getSelectItemIndex(int i_no) const {
     JUT_ASSERT(124, (i_no >= 0) && (i_no < ITEM_XY_MAX_DUMMY/2));
 
@@ -90,8 +84,6 @@ u8 dSv_player_status_a_c::getSelectItemIndex(int i_no) const {
     return 0;
 }
 
-/* 80032A78-80032A8C 02D3B8 0014+00 0/0 1/1 0/0 .text setMixItemIndex__21dSv_player_status_a_cFiUc
- */
 void dSv_player_status_a_c::setMixItemIndex(int i_no, u8 i_slotNo) {
     JUT_ASSERT(143, (i_no >= 0) && (i_no < ITEM_XY_MAX_DUMMY/2));
 
@@ -100,8 +92,6 @@ void dSv_player_status_a_c::setMixItemIndex(int i_no, u8 i_slotNo) {
     }
 }
 
-/* 80032A8C-80032AA8 02D3CC 001C+00 0/0 1/1 0/0 .text getMixItemIndex__21dSv_player_status_a_cCFi
- */
 u8 dSv_player_status_a_c::getMixItemIndex(int i_no) const {
     JUT_ASSERT(160, (i_no >= 0) && (i_no < ITEM_XY_MAX_DUMMY/2));
 
@@ -111,7 +101,6 @@ u8 dSv_player_status_a_c::getMixItemIndex(int i_no) const {
     return 0;
 }
 
-/* 80032AA8-80032AF8 02D3E8 0050+00 0/0 4/4 0/0 .text getRupeeMax__21dSv_player_status_a_cCFv */
 u16 dSv_player_status_a_c::getRupeeMax() const {
     if (mWalletSize < 3) {  // if you make this a default, it wont match. Compiler, pls.
         switch (mWalletSize) {
@@ -147,7 +136,6 @@ void dSv_player_status_a_c::offMagicFlag(u8 i_magic) {
     mMagicFlag &= (u8)~(u8)(1 << i_magic);
 }
 
-/* 80032AF8-80032B50 02D438 0058+00 0/0 1/1 0/0 .text isMagicFlag__21dSv_player_status_a_cCFUc */
 BOOL dSv_player_status_a_c::isMagicFlag(u8 i_magic) const {
     JUT_ASSERT(241, 0 <= i_magic && i_magic < 8);
     if (i_magic == 0) {
@@ -158,7 +146,6 @@ BOOL dSv_player_status_a_c::isMagicFlag(u8 i_magic) const {
     return (mMagicFlag & (u8)(1 << i_magic)) ? TRUE : FALSE;
 }
 
-/* 80032B50-80032B94 02D490 0044+00 1/1 0/0 0/0 .text            init__21dSv_player_status_b_cFv */
 void dSv_player_status_b_c::init() {
     mDateIpl = 0;
     mTransformLevelFlag = 0;
@@ -172,7 +159,6 @@ void dSv_player_status_b_c::init() {
     }
 }
 
-/* 80032B94-80032BB0 02D4D4 001C+00 0/0 1/1 0/0 .text onDarkClearLV__21dSv_player_status_b_cFi */
 void dSv_player_status_b_c::onDarkClearLV(int i_no) {
     JUT_ASSERT(281, (i_no >= 0) && (i_no < 8));
     mDarkClearLevelFlag |= (u8)(1 << i_no);
@@ -183,13 +169,11 @@ void dSv_player_status_b_c::offDarkClearLV(int i_no) {
     mDarkClearLevelFlag &= (u8)~(u8)(1 << i_no);
 }
 
-/* 80032BB0-80032BD0 02D4F0 0020+00 0/0 4/4 8/8 .text isDarkClearLV__21dSv_player_status_b_cCFi */
 BOOL dSv_player_status_b_c::isDarkClearLV(int i_no) const {
     JUT_ASSERT(311, (i_no >= 0) && (i_no < 8));
     return mDarkClearLevelFlag & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
-/* 80032BD0-80032BEC 02D510 001C+00 0/0 1/1 0/0 .text onTransformLV__21dSv_player_status_b_cFi */
 void dSv_player_status_b_c::onTransformLV(int i_no) {
     JUT_ASSERT(326, (i_no >= 0) && (i_no < 8));
     mTransformLevelFlag |= (u8)(1 << i_no);
@@ -200,13 +184,11 @@ void dSv_player_status_b_c::offTransformLV(int i_no) {
     mTransformLevelFlag &= (u8)~(u8)(1 << i_no);
 }
 
-/* 80032BEC-80032C0C 02D52C 0020+00 0/0 8/8 9/9 .text isTransformLV__21dSv_player_status_b_cCFi */
 BOOL dSv_player_status_b_c::isTransformLV(int i_no) const {
     JUT_ASSERT(356, (i_no >= 0) && (i_no < 8));
     return mTransformLevelFlag & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
-/* 80032C0C-80032C64 02D54C 0058+00 1/1 0/0 0/0 .text            init__17dSv_horse_place_cFv */
 void dSv_horse_place_c::init() {
     strcpy(mName, "");
     mPos.set(0.0f, 0.0f, 0.0f);
@@ -215,7 +197,6 @@ void dSv_horse_place_c::init() {
     mRoomNo = 0;
 }
 
-/* 80032C64-80032CC8 02D5A4 0064+00 0/0 0/0 1/1 .text set__17dSv_horse_place_cFPCcRC4cXyzsSc */
 void dSv_horse_place_c::set(const char* i_name, const cXyz& i_pos, s16 i_angle, s8 i_roomNo) {
     JUT_ASSERT(391, strlen(i_name) <= 7);
     strcpy(mName, i_name);
@@ -224,8 +205,6 @@ void dSv_horse_place_c::set(const char* i_name, const cXyz& i_pos, s16 i_angle, 
     mRoomNo = i_roomNo;
 }
 
-/* 80032CC8-80032D1C 02D608 0054+00 1/1 0/0 0/0 .text            init__25dSv_player_return_place_cFv
- */
 void dSv_player_return_place_c::init() {
     strcpy(mName, "F_SP108");
     mRoomNo = 1;
@@ -234,7 +213,6 @@ void dSv_player_return_place_c::init() {
     unk11 = 0;
 }
 
-/* 80032D1C-80032D60 02D65C 0044+00 0/0 0/0 1/1 .text set__25dSv_player_return_place_cFPCcScUc */
 void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status) {
     JUT_ASSERT(426, strlen(i_name) <= 7);
     strcpy(mName, i_name);
@@ -242,8 +220,6 @@ void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status
     mPlayerStatus = i_status;
 }
 
-/* 80032D60-80032DE0 02D6A0 0080+00 1/1 0/0 0/0 .text init__33dSv_player_field_last_stay_info_cFv
- */
 void dSv_player_field_last_stay_info_c::init() {
     strcpy(mName, "");
     mPos.set(0.0f, 0.0f, 0.0f);
@@ -258,7 +234,6 @@ void dSv_player_field_last_stay_info_c::init() {
     }
 }
 
-/* 80032DE0-80032E4C 02D720 006C+00 0/0 2/2 0/0 .text           set__33dSv_player_field_last_stay_info_cFPCcRC4cXyzsScUc */
 void dSv_player_field_last_stay_info_c::set(const char* i_name, const cXyz& i_pos, s16 i_angle,
                                             s8 i_spawn, u8 i_regionNo) {
     JUT_ASSERT(468, strlen(i_name) <= 7);
@@ -269,7 +244,6 @@ void dSv_player_field_last_stay_info_c::set(const char* i_name, const cXyz& i_po
     mRegionNo = i_regionNo;
 }
 
-/* 80032E4C-80032E78 02D78C 002C+00 0/0 1/1 0/0 .text            onRegionBit__33dSv_player_field_last_stay_info_cFi */
 void dSv_player_field_last_stay_info_c::onRegionBit(int i_region) {
     if (i_region >= 0 && i_region < 8) {
         mRegion |= (u8)(1 << i_region);
@@ -278,7 +252,6 @@ void dSv_player_field_last_stay_info_c::onRegionBit(int i_region) {
     }
 }
 
-/* 80032E78-80032EB0 02D7B8 0038+00 0/0 2/2 0/0 .text           isRegionBit__33dSv_player_field_last_stay_info_cCFi */
 BOOL dSv_player_field_last_stay_info_c::isRegionBit(int i_region) const {
     if (i_region >= 0 && i_region < 8) {
         return (mRegion & (u8)(1 << i_region)) ? TRUE : FALSE;
@@ -288,7 +261,6 @@ BOOL dSv_player_field_last_stay_info_c::isRegionBit(int i_region) const {
     }
 }
 
-/* 80032EB0-80032F2C 02D7F0 007C+00 1/1 0/0 0/0 .text init__27dSv_player_last_mark_info_cFv */
 void dSv_player_last_mark_info_c::init() {
     strcpy(mName, "");
     mPos.set(0.0f, 0.0f, 0.0f);
@@ -302,8 +274,6 @@ void dSv_player_last_mark_info_c::init() {
     }
 }
 
-/* 80032F2C-80032F90 02D86C 0064+00 0/0 1/1 0/0 .text
- * setWarpItemData__27dSv_player_last_mark_info_cFPCcRC4cXyzsScUcUc */
 void dSv_player_last_mark_info_c::setWarpItemData(const char* i_name, const cXyz& i_pos,
                                                   s16 i_angle, s8 i_roomNo, u8 unk_4, u8 unk_5) {
     strcpy(mName, i_name);
@@ -315,7 +285,6 @@ void dSv_player_last_mark_info_c::setWarpItemData(const char* i_name, const cXyz
     (void)unk_5;
 }
 
-/* 80032F90-80032FB8 02D8D0 0028+00 1/1 0/0 0/0 .text            init__17dSv_player_item_cFv */
 void dSv_player_item_c::init() {
     for (int i = 0; i < MAX_ITEM_SLOTS; i++) {
         mItems[i] = fpcNm_ITEM_NONE;
@@ -323,7 +292,6 @@ void dSv_player_item_c::init() {
     }
 }
 
-/* 80032FB8-80033030 02D8F8 0078+00 11/11 45/45 2/2 .text setItem__17dSv_player_item_cFiUc */
 void dSv_player_item_c::setItem(int i_slotNo, u8 i_itemNo) {
     if (i_slotNo < MAX_ITEM_SLOTS) {
         mItems[i_slotNo] = i_itemNo;
@@ -337,8 +305,6 @@ void dSv_player_item_c::setItem(int i_slotNo, u8 i_itemNo) {
     }
 }
 
-/* 80033030-800332F8 02D970 02C8+00 7/7 70/70 2/2 .text            getItem__17dSv_player_item_cCFib
- */
 u8 dSv_player_item_c::getItem(int i_slotNo, bool i_checkCombo) const {
     if (i_slotNo < MAX_ITEM_SLOTS) {
         if (i_checkCombo) {
@@ -415,7 +381,6 @@ u8 dSv_player_item_c::getItem(int i_slotNo, bool i_checkCombo) const {
     return fpcNm_ITEM_NONE;
 }
 
-/* 800332F8-80033354 02DC38 005C+00 2/2 0/0 0/0 .text setLineUpItem__17dSv_player_item_cFv */
 void dSv_player_item_c::setLineUpItem() {
     static u8 i_item_lst[23] = {
         10, 8,  6,  2,  9,  4,  3,
@@ -439,7 +404,6 @@ void dSv_player_item_c::setLineUpItem() {
     }
 }
 
-/* 80033354-80033370 02DC94 001C+00 0/0 2/2 0/0 .text getLineUpItem__17dSv_player_item_cCFi */
 u8 dSv_player_item_c::getLineUpItem(int i_slotNo) const {
     if (i_slotNo < MAX_ITEM_SLOTS) {
         return mItemSlots[i_slotNo];
@@ -448,7 +412,6 @@ u8 dSv_player_item_c::getLineUpItem(int i_slotNo) const {
     return fpcNm_ITEM_NONE;
 }
 
-/* 80033370-80033450 02DCB0 00E0+00 1/1 2/2 0/0 .text setBottleItemIn__17dSv_player_item_cFUcUc */
 void dSv_player_item_c::setBottleItemIn(u8 curItemIn, u8 newItemIn) {
     curItemIn = dSv_item_rename(curItemIn);
     newItemIn = dSv_item_rename(newItemIn);
@@ -470,14 +433,11 @@ void dSv_player_item_c::setBottleItemIn(u8 curItemIn, u8 newItemIn) {
     }
 }
 
-/* 80033450-80033494 02DD90 0044+00 0/0 26/26 0/0 .text
- * setEmptyBottleItemIn__17dSv_player_item_cFUc                 */
 void dSv_player_item_c::setEmptyBottleItemIn(u8 i_itemNo) {
     i_itemNo = dSv_item_rename(i_itemNo);
     setBottleItemIn(fpcNm_ITEM_EMPTY_BOTTLE, i_itemNo);
 }
 
-/* 80033494-80033514 02DDD4 0080+00 0/0 1/1 1/1 .text setEmptyBottle__17dSv_player_item_cFv */
 void dSv_player_item_c::setEmptyBottle() {
     for (int i = 0; i < 4; i++) {
         if (dComIfGs_getItem((u8)(i + SLOT_11), true) == fpcNm_ITEM_NONE) {
@@ -487,7 +447,6 @@ void dSv_player_item_c::setEmptyBottle() {
     }
 }
 
-/* 80033514-80033598 02DE54 0084+00 0/0 3/3 0/0 .text setEmptyBottle__17dSv_player_item_cFUc */
 void dSv_player_item_c::setEmptyBottle(u8 i_itemNo) {
     for (int i = 0; i < 4; i++) {
         if (dComIfGs_getItem((u8)(i + SLOT_11), true) == fpcNm_ITEM_NONE) {
@@ -497,8 +456,6 @@ void dSv_player_item_c::setEmptyBottle(u8 i_itemNo) {
     }
 }
 
-/* 80033598-800336BC 02DED8 0124+00 1/1 3/3 0/0 .text
- * setEquipBottleItemIn__17dSv_player_item_cFUcUc               */
 void dSv_player_item_c::setEquipBottleItemIn(u8 curItemIn, u8 newItemIn) {
     newItemIn = dSv_item_rename(newItemIn);
 
@@ -515,13 +472,10 @@ void dSv_player_item_c::setEquipBottleItemIn(u8 curItemIn, u8 newItemIn) {
     }
 }
 
-/* 800336BC-800336E0 02DFFC 0024+00 0/0 4/4 0/0 .text
- * setEquipBottleItemEmpty__17dSv_player_item_cFUc              */
 void dSv_player_item_c::setEquipBottleItemEmpty(u8 curItemIn) {
     setEquipBottleItemIn(curItemIn, fpcNm_ITEM_EMPTY_BOTTLE);
 }
 
-/* 800336E0-80033754 02E020 0074+00 0/0 30/30 0/0 .text checkBottle__17dSv_player_item_cFUc */
 u8 dSv_player_item_c::checkBottle(u8 i_itemNo) {
     u8 num_bottles = 0;
     i_itemNo = dSv_item_rename(i_itemNo);
@@ -534,7 +488,6 @@ u8 dSv_player_item_c::checkBottle(u8 i_itemNo) {
     return num_bottles;
 }
 
-/* 80033754-800337EC 02E094 0098+00 0/0 1/1 0/0 .text checkInsectBottle__17dSv_player_item_cFv */
 BOOL dSv_player_item_c::checkInsectBottle() {
     for (int i = 0; i < 24; i++) {
         if (dComIfGs_isItemFirstBit(fpcNm_ITEM_M_BEETLE + i) &&
@@ -545,7 +498,6 @@ BOOL dSv_player_item_c::checkInsectBottle() {
     return FALSE;
 }
 
-/* 800337EC-80033828 02E12C 003C+00 0/0 1/1 1/1 .text checkEmptyBottle__17dSv_player_item_cFv */
 u8 dSv_player_item_c::checkEmptyBottle() {
     u8 bottleNum = 0;
 
@@ -557,8 +509,6 @@ u8 dSv_player_item_c::checkEmptyBottle() {
     return bottleNum;
 }
 
-/* 80033828-80033910 02E168 00E8+00 1/1 0/0 0/0 .text setBombBagItemIn__17dSv_player_item_cFUcUcb
- */
 void dSv_player_item_c::setBombBagItemIn(u8 i_curBomb, u8 i_newBomb, bool i_setNum) {
     for (int i = 0; i < 3; i++) {
         if (i_curBomb == mItems[i + SLOT_15]) {
@@ -578,8 +528,6 @@ void dSv_player_item_c::setBombBagItemIn(u8 i_curBomb, u8 i_newBomb, bool i_setN
     }
 }
 
-/* 80033910-80033A20 02E250 0110+00 1/1 0/0 0/0 .text
- * setBombBagItemIn__17dSv_player_item_cFUcUcUcb                */
 void dSv_player_item_c::setBombBagItemIn(u8 i_curBomb, u8 i_newBomb, u8 i_bombNum, bool i_setNum) {
     for (int i = 0; i < 3; i++) {
         if (i_curBomb == mItems[i + SLOT_15]) {
@@ -602,19 +550,14 @@ void dSv_player_item_c::setBombBagItemIn(u8 i_curBomb, u8 i_newBomb, u8 i_bombNu
     }
 }
 
-/* 80033A20-80033A50 02E360 0030+00 0/0 2/2 0/0 .text
- * setEmptyBombBagItemIn__17dSv_player_item_cFUcb               */
 void dSv_player_item_c::setEmptyBombBagItemIn(u8 i_newBomb, bool i_setNum) {
     setBombBagItemIn(fpcNm_ITEM_BOMB_BAG_LV1, i_newBomb, i_setNum);
 }
 
-/* 80033A50-80033A88 02E390 0038+00 0/0 1/1 1/1 .text
- * setEmptyBombBagItemIn__17dSv_player_item_cFUcUcb             */
 void dSv_player_item_c::setEmptyBombBagItemIn(u8 i_newBomb, u8 i_bombNum, bool i_setNum) {
     setBombBagItemIn(fpcNm_ITEM_BOMB_BAG_LV1, i_newBomb, i_bombNum, i_setNum);
 }
 
-/* 80033A88-80033B08 02E3C8 0080+00 0/0 2/2 0/0 .text setEmptyBombBag__17dSv_player_item_cFv */
 void dSv_player_item_c::setEmptyBombBag() {
     for (int i = 0; i < 3; i++) {
         if (dComIfGs_getItem((u8)(i + SLOT_15), true) == fpcNm_ITEM_NONE) {
@@ -624,7 +567,6 @@ void dSv_player_item_c::setEmptyBombBag() {
     }
 }
 
-/* 80033B08-80033BEC 02E448 00E4+00 0/0 3/3 0/0 .text setEmptyBombBag__17dSv_player_item_cFUcUc */
 void dSv_player_item_c::setEmptyBombBag(u8 i_newBomb, u8 i_bombNum) {
     for (int i = 0; i < 3; i++) {
         if (dComIfGs_getItem((u8)(i + SLOT_15), true) == fpcNm_ITEM_NONE) {
@@ -642,7 +584,6 @@ void dSv_player_item_c::setEmptyBombBag(u8 i_newBomb, u8 i_bombNum) {
     }
 }
 
-/* 80033BEC-80033C2C 02E52C 0040+00 0/0 1/1 0/0 .text checkBombBag__17dSv_player_item_cFUc */
 u8 dSv_player_item_c::checkBombBag(u8 i_itemNo) {
     u8 bombBags = 0;
 
@@ -654,7 +595,6 @@ u8 dSv_player_item_c::checkBombBag(u8 i_itemNo) {
     return bombBags;
 }
 
-/* 80033C2C-80033CBC 02E56C 0090+00 0/0 2/2 1/1 .text setWarashibeItem__17dSv_player_item_cFUc */
 void dSv_player_item_c::setWarashibeItem(u8 i_itemNo) {
     dComIfGs_setItem(SLOT_21, i_itemNo);
     dComIfGp_setItem(SLOT_21, i_itemNo);
@@ -666,7 +606,6 @@ void dSv_player_item_c::setWarashibeItem(u8 i_itemNo) {
     }
 }
 
-/* 80033CBC-80033D40 02E5FC 0084+00 0/0 1/1 0/0 .text setRodTypeLevelUp__17dSv_player_item_cFv */
 void dSv_player_item_c::setRodTypeLevelUp() {
     switch (mItems[SLOT_20]) {
     case fpcNm_ITEM_BEE_ROD: {
@@ -688,7 +627,6 @@ void dSv_player_item_c::setRodTypeLevelUp() {
     }
 }
 
-/* 80033D40-80033E40 02E680 0100+00 0/0 2/2 0/0 .text            setBaitItem__17dSv_player_item_cFUc */
 void dSv_player_item_c::setBaitItem(u8 i_itemNo) {
     switch (i_itemNo) {
     case fpcNm_ITEM_BEE_CHILD: {
@@ -722,14 +660,12 @@ void dSv_player_item_c::setBaitItem(u8 i_itemNo) {
     }
 }
 
-/* 80033E40-80033E60 02E780 0020+00 1/1 0/0 0/0 .text            init__21dSv_player_get_item_cFv */
 void dSv_player_get_item_c::init() {
     for (int i = 0; i < 8; i++) {
         mItemFlags[i] = 0;
     }
 }
 
-/* 80033E60-80033E94 02E7A0 0034+00 0/0 3/3 1/1 .text onFirstBit__21dSv_player_get_item_cFUc */
 void dSv_player_get_item_c::onFirstBit(u8 i_itemno) {
     JUT_ASSERT(1563, 0 <= i_itemno && i_itemno < ITEM_BIT_MAX);
 
@@ -738,7 +674,6 @@ void dSv_player_get_item_c::onFirstBit(u8 i_itemno) {
     mItemFlags[index] |= (1 << bit);
 }
 
-/* 80033E94-80033EC8 02E7D4 0034+00 0/0 7/7 1/1 .text offFirstBit__21dSv_player_get_item_cFUc */
 void dSv_player_get_item_c::offFirstBit(u8 i_itemno) {
     JUT_ASSERT(1581, 0 <= i_itemno && i_itemno < ITEM_BIT_MAX);
 
@@ -747,7 +682,6 @@ void dSv_player_get_item_c::offFirstBit(u8 i_itemno) {
     mItemFlags[index] &= ~(1 << bit);
 }
 
-/* 80033EC8-80033F00 02E808 0038+00 4/4 87/87 2/2 .text isFirstBit__21dSv_player_get_item_cCFUc */
 BOOL dSv_player_get_item_c::isFirstBit(u8 i_itemno) const {
     JUT_ASSERT(1599, 0 <= i_itemno && i_itemno < ITEM_BIT_MAX);
 
@@ -756,7 +690,6 @@ BOOL dSv_player_get_item_c::isFirstBit(u8 i_itemno) const {
     return mItemFlags[index] & (1 << bit) ? TRUE : FALSE;
 }
 
-/* 80033F00-80033F6C 02E840 006C+00 1/1 0/0 0/0 .text            init__24dSv_player_item_record_cFv */
 void dSv_player_item_record_c::init() {
     mArrowNum = 0;
 
@@ -775,8 +708,6 @@ void dSv_player_item_record_c::init() {
     }
 }
 
-/* 80033F6C-80033F7C 02E8AC 0010+00 3/3 5/5 0/0 .text setBombNum__24dSv_player_item_record_cFUcUc
- */
 void dSv_player_item_record_c::setBombNum(u8 i_bagIdx, u8 i_bombNum) {
 #if VERSION == VERSION_SHIELD_DEBUG
     if (i_bagIdx == 8) {
@@ -788,22 +719,16 @@ void dSv_player_item_record_c::setBombNum(u8 i_bagIdx, u8 i_bombNum) {
     mBombNum[i_bagIdx] = i_bombNum;
 }
 
-/* 80033F7C-80033F8C 02E8BC 0010+00 0/0 13/13 2/2 .text getBombNum__24dSv_player_item_record_cCFUc
- */
 u8 dSv_player_item_record_c::getBombNum(u8 i_bagIdx) const {
     JUT_ASSERT(1718, 0 <= i_bagIdx && i_bagIdx < dSv_player_item_c::BOMB_BAG_MAX);
     return mBombNum[i_bagIdx];
 }
 
-/* 80033F8C-80033F9C 02E8CC 0010+00 0/0 2/2 0/0 .text
- * setBottleNum__24dSv_player_item_record_cFUcUc                */
 void dSv_player_item_record_c::setBottleNum(u8 i_bottleIdx, u8 i_bottleNum) {
     JUT_ASSERT(1733, 0 <= i_bottleIdx && i_bottleIdx < dSv_player_item_c::BOTTLE_MAX);
     mBottleNum[i_bottleIdx] = i_bottleNum;
 }
 
-/* 80033F9C-80034030 02E8DC 0094+00 0/0 1/1 0/0 .text addBottleNum__24dSv_player_item_record_cFUcs
- */
 u8 dSv_player_item_record_c::addBottleNum(u8 i_bottleIdx, s16 i_no) {
     JUT_ASSERT(1748, 0 <= i_bottleIdx && i_bottleIdx < dSv_player_item_c::BOTTLE_MAX);
     int bottleNum = mBottleNum[i_bottleIdx] + i_no;
@@ -821,14 +746,11 @@ u8 dSv_player_item_record_c::addBottleNum(u8 i_bottleIdx, s16 i_no) {
     return mBottleNum[i_bottleIdx];
 }
 
-/* 80034030-80034040 02E970 0010+00 0/0 4/4 0/0 .text getBottleNum__24dSv_player_item_record_cCFUc
- */
 u8 dSv_player_item_record_c::getBottleNum(u8 i_bottleIdx) const {
     JUT_ASSERT(1776, 0 <= i_bottleIdx && i_bottleIdx < dSv_player_item_c::BOTTLE_MAX);
     return mBottleNum[i_bottleIdx];
 }
 
-/* 80034040-800340B8 02E980 0078+00 1/1 0/0 0/0 .text            init__21dSv_player_item_max_cFv */
 void dSv_player_item_max_c::init() {
     for (int i = 0; i < 7; i++) {
         mItemMax[i] = 30;
@@ -839,7 +761,6 @@ void dSv_player_item_max_c::init() {
     mItemMax[7] = 0;
 }
 
-/* 800340B8-800340F8 02E9F8 0040+00 1/1 0/0 0/0 .text setBombNum__21dSv_player_item_max_cFUcUc */
 void dSv_player_item_max_c::setBombNum(u8 i_bombType, u8 i_maxNum) {
     switch (i_bombType) {
     case fpcNm_ITEM_NORMAL_BOMB:
@@ -853,7 +774,6 @@ void dSv_player_item_max_c::setBombNum(u8 i_bombType, u8 i_maxNum) {
     }
 }
 
-/* 800340F8-800341AC 02EA38 00B4+00 3/3 14/14 2/2 .text getBombNum__21dSv_player_item_max_cCFUc */
 u8 dSv_player_item_max_c::getBombNum(u8 i_bombType) const {
     u8 lv_multiplier = 1;
     if (dComIfGs_isItemFirstBit(fpcNm_ITEM_BOMB_BAG_LV2)) {
@@ -872,7 +792,6 @@ u8 dSv_player_item_max_c::getBombNum(u8 i_bombType) const {
     }
 }
 
-/* 800341AC-800341E8 02EAEC 003C+00 1/1 0/0 0/0 .text            init__20dSv_player_collect_cFv */
 void dSv_player_collect_c::init() {
     for (int i = 0; i < 8; i++) {
         mItem[i] = 0;
@@ -885,7 +804,6 @@ void dSv_player_collect_c::init() {
     mPohNum = 0;
 }
 
-/* 800341E8-80034208 02EB28 0020+00 0/0 8/8 0/0 .text setCollect__20dSv_player_collect_cFiUc */
 void dSv_player_collect_c::setCollect(int i_item_type, u8 i_item) {
     JUT_ASSERT(1894, 0 <= i_item && i_item < 8);
     mItem[i_item_type] |= (u8)(1 << i_item);
@@ -896,14 +814,11 @@ void dSv_player_collect_c::offCollect(int i_item_type, u8 i_item) {
     mItem[i_item_type] &= (u8)~(u8)(1 << i_item);
 }
 
-/* 80034208-8003422C 02EB48 0024+00 0/0 4/4 4/4 .text isCollect__20dSv_player_collect_cCFiUc */
 BOOL dSv_player_collect_c::isCollect(int i_item_type, u8 i_item) const {
     JUT_ASSERT(1924, 0 <= i_item && i_item < 8);
     return mItem[i_item_type] & (u8)(1 << i_item) ? TRUE : FALSE;
 }
 
-/* 8003422C-8003424C 02EB6C 0020+00 0/0 1/1 1/1 .text onCollectCrystal__20dSv_player_collect_cFUc
- */
 void dSv_player_collect_c::onCollectCrystal(u8 i_item) {
     JUT_ASSERT(1956, 0 <= i_item && i_item < 8);
     mCrystal |= (u8)(1 << i_item);
@@ -914,15 +829,11 @@ void dSv_player_collect_c::offCollectCrystal(u8 i_item) {
     mCrystal &= (u8)~(u8)(1 << i_item);
 }
 
-/* 8003424C-80034270 02EB8C 0024+00 0/0 4/4 0/0 .text isCollectCrystal__20dSv_player_collect_cCFUc
- */
 BOOL dSv_player_collect_c::isCollectCrystal(u8 i_item) const {
     JUT_ASSERT(1986, 0 <= i_item && i_item < 8);
     return mCrystal & (u8)(1 << i_item) ? TRUE : FALSE;
 }
 
-/* 80034270-80034290 02EBB0 0020+00 0/0 1/1 1/1 .text onCollectMirror__20dSv_player_collect_cFUc
- */
 void dSv_player_collect_c::onCollectMirror(u8 i_item) {
     JUT_ASSERT(2001, 0 <= i_item && i_item < 8);
     mMirror |= (u8)(1 << i_item);
@@ -933,14 +844,11 @@ void dSv_player_collect_c::offCollectMirror(u8 i_item) {
     mMirror &= (u8)~(u8)(1 << i_item);
 }
 
-/* 80034290-800342B4 02EBD0 0024+00 0/0 4/4 0/0 .text isCollectMirror__20dSv_player_collect_cCFUc
- */
 BOOL dSv_player_collect_c::isCollectMirror(u8 i_item) const {
     JUT_ASSERT(2031, 0 <= i_item && i_item < 8);
     return mMirror & (u8)(1 << i_item) ? TRUE : FALSE;
 }
 
-/* 800342B4-800342DC 02EBF4 0028+00 1/1 0/0 0/0 .text            init__17dSv_player_wolf_cFv */
 void dSv_player_wolf_c::init() {
     for (int i = 0; i < 3; i++) {
         unk0[i] = 0;
@@ -949,7 +857,6 @@ void dSv_player_wolf_c::init() {
     unk3 = 0;
 }
 
-/* 800342DC-80034320 02EC1C 0044+00 1/1 0/0 0/0 .text            init__16dSv_light_drop_cFv */
 void dSv_light_drop_c::init() {
     for (int i = 0; i < 4; i++) {
         mLightDropNum[i] = 0;
@@ -962,7 +869,6 @@ void dSv_light_drop_c::init() {
     }
 }
 
-/* 80034320-80034340 02EC60 0020+00 0/0 0/0 1/1 .text setLightDropNum__16dSv_light_drop_cFUcUc */
 void dSv_light_drop_c::setLightDropNum(u8 i_nowLevel, u8 i_dropNum) {
     if (i_nowLevel < LIGHT_DROP_STAGE || i_nowLevel > 6) {
         JUT_ASSERT(2089, (i_nowLevel >= 0) && (i_nowLevel < LIGHT_DROP_STAGE));
@@ -970,7 +876,6 @@ void dSv_light_drop_c::setLightDropNum(u8 i_nowLevel, u8 i_dropNum) {
     }
 }
 
-/* 80034340-80034368 02EC80 0028+00 0/0 11/11 4/4 .text getLightDropNum__16dSv_light_drop_cCFUc */
 u8 dSv_light_drop_c::getLightDropNum(u8 i_nowLevel) const {
     if (i_nowLevel >= LIGHT_DROP_STAGE && i_nowLevel <= 6) {
         return 0;
@@ -980,7 +885,6 @@ u8 dSv_light_drop_c::getLightDropNum(u8 i_nowLevel) const {
     return mLightDropNum[i_nowLevel];
 }
 
-/* 80034368-8003439C 02ECA8 0034+00 0/0 4/4 0/0 .text onLightDropGetFlag__16dSv_light_drop_cFUc */
 void dSv_light_drop_c::onLightDropGetFlag(u8 i_nowLevel) {
     if (i_nowLevel < LIGHT_DROP_STAGE || i_nowLevel > 6) {
         JUT_ASSERT(2208, (i_nowLevel >= 0) && (i_nowLevel < LIGHT_DROP_STAGE));
@@ -995,8 +899,6 @@ void dSv_light_drop_c::offLightDropGetFlag(u8 i_nowLevel) {
     }
 }
 
-/* 8003439C-800343DC 02ECDC 0040+00 0/0 8/8 2/2 .text isLightDropGetFlag__16dSv_light_drop_cCFUc
- */
 BOOL dSv_light_drop_c::isLightDropGetFlag(u8 i_nowLevel) const {
     if (i_nowLevel >= LIGHT_DROP_STAGE && i_nowLevel <= 6) {
         return 0;
@@ -1006,7 +908,6 @@ BOOL dSv_light_drop_c::isLightDropGetFlag(u8 i_nowLevel) const {
     return mLightDropGetFlag & (u8)(1 << i_nowLevel) ? TRUE : FALSE;
 }
 
-/* 800343DC-80034428 02ED1C 004C+00 1/1 0/0 0/0 .text            init__17dSv_letter_info_cFv */
 void dSv_letter_info_c::init() {
     for (int i = 0; i < 2; i++) {
         mLetterGetFlags[i] = 0;
@@ -1018,31 +919,26 @@ void dSv_letter_info_c::init() {
     }
 }
 
-/* 80034428-8003444C 02ED68 0024+00 0/0 2/2 0/0 .text onLetterGetFlag__17dSv_letter_info_cFi */
 void dSv_letter_info_c::onLetterGetFlag(int i_no) {
     JUT_ASSERT(2281, (i_no >= 0) && (i_no < LETTER_INFO_BIT));
     mLetterGetFlags[i_no >> 5] |= 1 << (i_no & 0x1F);
 }
 
-/* 8003444C-80034474 02ED8C 0028+00 0/0 4/4 0/0 .text isLetterGetFlag__17dSv_letter_info_cCFi */
 BOOL dSv_letter_info_c::isLetterGetFlag(int i_no) const {
     JUT_ASSERT(2311, (i_no >= 0) && (i_no < LETTER_INFO_BIT));
     return mLetterGetFlags[i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
-/* 80034474-8003449C 02EDB4 0028+00 0/0 1/1 0/0 .text onLetterReadFlag__17dSv_letter_info_cFi */
 void dSv_letter_info_c::onLetterReadFlag(int i_no) {
     JUT_ASSERT(2326, (i_no >= 0) && (i_no < LETTER_INFO_BIT));
     mLetterReadFlags[i_no >> 5] |= 1 << (i_no & 0x1F);
 }
 
-/* 8003449C-800344C8 02EDDC 002C+00 0/0 3/3 0/0 .text isLetterReadFlag__17dSv_letter_info_cCFi */
 BOOL dSv_letter_info_c::isLetterReadFlag(int i_no) const {
     JUT_ASSERT(2356, (i_no >= 0) && (i_no < LETTER_INFO_BIT));
     return mLetterReadFlags[i_no >> 5] & 1 << (i_no & 0x1F) ? TRUE : FALSE;
 }
 
-/* 800344C8-800344FC 02EE08 0034+00 1/1 0/0 0/0 .text            init__18dSv_fishing_info_cFv */
 void dSv_fishing_info_c::init() {
     for (int i = 0; i < 16; i++) {
         mFishCount[i] = 0;
@@ -1050,14 +946,12 @@ void dSv_fishing_info_c::init() {
     }
 }
 
-/* 800344FC-80034518 02EE3C 001C+00 0/0 0/0 1/1 .text addFishCount__18dSv_fishing_info_cFUc */
 void dSv_fishing_info_c::addFishCount(u8 i_fishIdx) {
     if (mFishCount[i_fishIdx] < 999) {
         mFishCount[i_fishIdx]++;
     }
 }
 
-/* 80034518-800345AC 02EE58 0094+00 1/1 0/0 0/0 .text            init__17dSv_player_info_cFv */
 void dSv_player_info_c::init() {
     dMeter2Info_getString(0x382, mPlayerName, NULL);  // Link
     dMeter2Info_getString(0x383, mHorseName, NULL);   // Epona
@@ -1075,7 +969,6 @@ void dSv_player_info_c::init() {
 
 extern "C" u8 SCGetLanguage();
 
-/* 800345AC-80034644 02EEEC 0098+00 1/1 0/0 0/0 .text            init__19dSv_player_config_cFv */
 void dSv_player_config_c::init() {
 #if VERSION == VERSION_GCN_JPN
     unk0 = 0;
@@ -1112,7 +1005,6 @@ void dSv_player_config_c::init() {
     mPointer = 1;
 }
 
-/* 80034644-80034684 02EF84 0040+00 0/0 4/4 0/0 .text checkVibration__19dSv_player_config_cCFv */
 u32 dSv_player_config_c::checkVibration() const {
 #if PLATFORM_GCN
     return JUTGamePad::sRumbleSupported & 0x80000000 ? dComIfGp_getNowVibration() : 0;
@@ -1121,24 +1013,18 @@ u32 dSv_player_config_c::checkVibration() const {
 #endif
 }
 
-/* 80034684-8003468C 02EFC4 0008+00 1/1 2/2 0/0 .text            getSound__19dSv_player_config_cFv
- */
 u8 dSv_player_config_c::getSound() {
     return mSoundMode;
 }
 
-/* 8003468C-80034694 -00001 0008+00 0/0 0/0 0/0 .text            setSound__19dSv_player_config_cFUc
- */
 void dSv_player_config_c::setSound(u8 i_mode) {
     mSoundMode = i_mode;
 }
 
-/* 80034694-8003469C 02EFD4 0008+00 1/1 1/1 0/0 .text getVibration__19dSv_player_config_cFv */
 u8 dSv_player_config_c::getVibration() {
     return mVibration;
 }
 
-/* 8003469C-800346A4 -00001 0008+00 0/0 0/0 0/0 .text setVibration__19dSv_player_config_cFUc */
 void dSv_player_config_c::setVibration(u8 i_status) {
     mVibration = i_status;
 }
@@ -1171,7 +1057,6 @@ u8 dSv_player_config_c::getPalLanguage() const {
     return 0;
 }
 
-/* 800346A4-80034750 02EFE4 00AC+00 1/1 0/0 0/0 .text            init__12dSv_player_cFv */
 void dSv_player_c::init() {
     mPlayerStatusA.init();
     mPlayerStatusB.init();
@@ -1192,7 +1077,6 @@ void dSv_player_c::init() {
     mConfig.init();
 }
 
-/* 80034750-800347A0 02F090 0050+00 1/1 0/0 0/0 .text            init__12dSv_memBit_cFv */
 void dSv_memBit_c::init() {
     for (int i = 0; i < 2; i++) {
         mTbox[i] = 0;
@@ -1210,43 +1094,36 @@ void dSv_memBit_c::init() {
     mDungeonItem = 0;
 }
 
-/* 800347A0-800347C4 02F0E0 0024+00 0/0 0/0 15/15 .text            onTbox__12dSv_memBit_cFi */
 void dSv_memBit_c::onTbox(int i_no) {
     JUT_ASSERT(2726, 0 <= i_no && i_no < TBOX_MAX);
     mTbox[i_no >> 5] |= 1 << (i_no & 0x1F);
 }
 
-/* 800347C4-800347E8 02F104 0024+00 0/0 0/0 5/5 .text            offTbox__12dSv_memBit_cFi */
 void dSv_memBit_c::offTbox(int i_no) {
     JUT_ASSERT(2740, 0 <= i_no && i_no < TBOX_MAX);
     mTbox[i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
-/* 800347E8-80034810 02F128 0028+00 0/0 6/6 7/7 .text            isTbox__12dSv_memBit_cCFi */
 BOOL dSv_memBit_c::isTbox(int i_no) const {
     JUT_ASSERT(2754, 0 <= i_no && i_no < TBOX_MAX);
     return 1 << (i_no & 0x1f) & mTbox[i_no >> 5] ? TRUE : FALSE;
 }
 
-/* 80034810-80034838 02F150 0028+00 1/1 5/5 18/18 .text            onSwitch__12dSv_memBit_cFi */
 void dSv_memBit_c::onSwitch(int i_no) {
     JUT_ASSERT(2786, 0 <= i_no && i_no < 128);
     mSwitch[i_no >> 5] |= 1 << (i_no & 0x1F);
 }
 
-/* 80034838-80034860 02F178 0028+00 1/1 3/3 3/3 .text            offSwitch__12dSv_memBit_cFi */
 void dSv_memBit_c::offSwitch(int i_no) {
     JUT_ASSERT(2800, 0 <= i_no && i_no < 128);
     mSwitch[i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
-/* 80034860-8003488C 02F1A0 002C+00 1/1 11/11 23/23 .text            isSwitch__12dSv_memBit_cCFi */
 BOOL dSv_memBit_c::isSwitch(int i_no) const {
     JUT_ASSERT(2814, 0 <= i_no && i_no < 128);
     return (mSwitch[i_no >> 5] & 1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
-/* 8003488C-800348C4 02F1CC 0038+00 1/1 0/0 0/0 .text            revSwitch__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::revSwitch(int i_no) {
     JUT_ASSERT(2828, 0 <= i_no && i_no < 128);
 
@@ -1256,7 +1133,6 @@ BOOL dSv_memBit_c::revSwitch(int i_no) {
     return mSwitch[switchInd] & tmp ? TRUE : FALSE;
 }
 
-/* 800348C4-800348EC 02F204 0028+00 1/1 0/0 0/0 .text            onItem__12dSv_memBit_cFi */
 void dSv_memBit_c::onItem(int i_no) {
     JUT_ASSERT(2847, 0 <= i_no && i_no < 64);
     mItem[i_no >> 5] |= 1 << (i_no & 0x1F);
@@ -1267,14 +1143,11 @@ void dSv_memBit_c::offItem(int i_no) {
     mItem[i_no >> 5] |= ~(1 << (i_no & 0x1F));
 }
 
-/* 800348EC-80034918 02F22C 002C+00 1/1 2/2 1/1 .text            isItem__12dSv_memBit_cCFi */
 BOOL dSv_memBit_c::isItem(int i_no) const {
     JUT_ASSERT(2875, 0 <= i_no && i_no < 64);
     return (mItem[i_no >> 5] & 1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
-/* 80034918-80034934 02F258 001C+00 0/0 8/8 18/18 .text            onDungeonItem__12dSv_memBit_cFi
- */
 void dSv_memBit_c::onDungeonItem(int i_no) {
     JUT_ASSERT(2969, 0 <= i_no && i_no < DSV_MEMBIT_ENUM_MAX);
     mDungeonItem |= (u8)(1 << i_no);
@@ -1285,13 +1158,11 @@ void dSv_memBit_c::offDungeonItem(int i_no) {
     mDungeonItem &= (u8)~(u8)(1 << i_no);
 }
 
-/* 80034934-80034954 02F274 0020+00 0/0 27/27 47/47 .text isDungeonItem__12dSv_memBit_cCFi */
 s32 dSv_memBit_c::isDungeonItem(int i_no) const {
     JUT_ASSERT(2998, 0 <= i_no && i_no < DSV_MEMBIT_ENUM_MAX);
     return mDungeonItem & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
-/* 80034954-8003498C 02F294 0038+00 2/2 0/0 0/0 .text            init__11dSv_event_cFv */
 void dSv_event_c::init() {
     int i;
     for (i = 0; i < MAX_EVENTS; i++) {
@@ -1301,33 +1172,27 @@ void dSv_event_c::init() {
     setInitEventBit();
 }
 
-/* 8003498C-800349A4 02F2CC 0018+00 1/1 27/27 58/58 .text            onEventBit__11dSv_event_cFUs */
 void dSv_event_c::onEventBit(u16 i_no) {
     mEvent[i_no >> 8] |= (u8)i_no;
 }
 
-/* 800349A4-800349BC 02F2E4 0018+00 1/1 14/14 23/23 .text            offEventBit__11dSv_event_cFUs */
 void dSv_event_c::offEventBit(u16 i_no) {
     mEvent[i_no >> 8] &= ~(u8)i_no;
 }
 
-/* 800349BC-800349E0 02F2FC 0024+00 3/3 77/77 153/153 .text            isEventBit__11dSv_event_cCFUs */
 BOOL dSv_event_c::isEventBit(const u16 i_no) const {
     return mEvent[i_no >> 8] & (i_no & 0xFF) ? TRUE : FALSE;
 }
 
-/* 800349E0-80034A04 02F320 0024+00 0/0 12/12 17/17 .text            setEventReg__11dSv_event_cFUsUc */
 void dSv_event_c::setEventReg(u16 i_reg, u8 i_no) {
     mEvent[i_reg >> 8] &= ~(u8)i_reg;
     mEvent[i_reg >> 8] |= i_no;
 }
 
-/* 80034A04-80034A1C 02F344 0018+00 0/0 19/19 20/20 .text            getEventReg__11dSv_event_cCFUs */
 u8 dSv_event_c::getEventReg(u16 i_reg) const {
     return (u8)i_reg & mEvent[i_reg >> 8];
 }
 
-/* 80034A1C-80034A64 02F35C 0048+00 1/1 0/0 0/0 .text            init__14dSv_MiniGame_cFv */
 void dSv_MiniGame_c::init() {
     for (int i = 0; i < 1; i++) {
         unk0[i][0] = 0;
@@ -1343,38 +1208,31 @@ void dSv_MiniGame_c::init() {
     unk20 = 0;
 }
 
-/* 80034A64-80034A84 02F3A4 0020+00 2/2 2/2 0/0 .text            init__12dSv_memory_cFv */
 void dSv_memory_c::init() {
     mBit.init();
 }
 
-/* 80034A84-80034AA4 02F3C4 0020+00 1/1 1/1 0/0 .text            init__13dSv_memory2_cFv */
 void dSv_memory2_c::init() {
     for (int i = 0; i < 2; i++) {
         mVisitedRoom[i] = 0;
     }
 }
 
-/* 80034AA4-80034AC8 02F3E4 0024+00 0/0 1/1 1/1 .text            onVisitedRoom__13dSv_memory2_cFi */
 void dSv_memory2_c::onVisitedRoom(int i_no) {
     JUT_ASSERT(3279, 0 <= i_no && i_no < 64);
     mVisitedRoom[i_no >> 5] |= 1 << (i_no & 0x1F);
 }
 
-/* 80034AC8-80034AEC 02F408 0024+00 0/0 1/1 1/1 .text            offVisitedRoom__13dSv_memory2_cFi
- */
 void dSv_memory2_c::offVisitedRoom(int i_no) {
     JUT_ASSERT(3293, 0 <= i_no && i_no < 64);
     mVisitedRoom[i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
-/* 80034AEC-80034B14 02F42C 0028+00 0/0 4/4 0/0 .text            isVisitedRoom__13dSv_memory2_cFi */
 BOOL dSv_memory2_c::isVisitedRoom(int i_no) {
     JUT_ASSERT(3307, 0 <= i_no && i_no < 64);
     return (1 << (i_no & 0x1F) & mVisitedRoom[i_no >> 5]) ? TRUE : FALSE;
 }
 
-/* 80034B14-80034B98 02F454 0084+00 1/1 1/1 0/0 .text            init__12dSv_danBit_cFSc */
 bool dSv_danBit_c::init(s8 i_stageNo) {
     OS_REPORT("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     OS_REPORT("\n!!! dSv_danBit_c::init i_stage=[%d] mStageNo=[%d]", i_stageNo, mStageNo);
@@ -1402,25 +1260,21 @@ bool dSv_danBit_c::init(s8 i_stageNo) {
     }
 }
 
-/* 80034B98-80034BC0 02F4D8 0028+00 1/1 2/2 26/26 .text            onSwitch__12dSv_danBit_cFi */
 void dSv_danBit_c::onSwitch(int i_no) {
     JUT_ASSERT(3384, 0 <= i_no && i_no < 64);
     mSwitch[i_no >> 5] |= 1 << (i_no & 0x1F);
 }
 
-/* 80034BC0-80034BE8 02F500 0028+00 1/1 1/1 10/10 .text            offSwitch__12dSv_danBit_cFi */
 void dSv_danBit_c::offSwitch(int i_no) {
     JUT_ASSERT(3398, 0 <= i_no && i_no < 64);
     mSwitch[i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
-/* 80034BE8-80034C14 02F528 002C+00 1/1 6/6 14/14 .text            isSwitch__12dSv_danBit_cCFi */
 BOOL dSv_danBit_c::isSwitch(int i_no) const {
     JUT_ASSERT(3412, 0 <= i_no && i_no < 64);
     return mSwitch[i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
-/* 80034C14-80034C4C 02F554 0038+00 1/1 0/0 0/0 .text            revSwitch__12dSv_danBit_cFi */
 BOOL dSv_danBit_c::revSwitch(int i_no) {
     JUT_ASSERT(3426, 0 <= i_no && i_no < 64);
 
@@ -1429,7 +1283,6 @@ BOOL dSv_danBit_c::revSwitch(int i_no) {
     return mSwitch[i_no >> 5] & uVar1 ? TRUE : FALSE;
 }
 
-/* 80034C4C-80034C74 02F58C 0028+00 1/1 0/0 0/0 .text            onItem__12dSv_danBit_cFi */
 void dSv_danBit_c::onItem(int i_no) {
     JUT_ASSERT(3444, 0 <= i_no && i_no < ITEM_MAX_DAN);
     mItem[i_no >> 5] |= 1 << (i_no & 0x1F);
@@ -1440,7 +1293,6 @@ void dSv_danBit_c::offItem(int i_no) {
     mItem[i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
-/* 80034C74-80034CA0 02F5B4 002C+00 1/1 2/2 0/0 .text            isItem__12dSv_danBit_cCFi */
 BOOL dSv_danBit_c::isItem(int i_no) const {
     JUT_ASSERT(3472, 0 <= i_no && i_no < ITEM_MAX_DAN);
     return mItem[i_no >> 5] & 1 << (i_no & 0x1F) ? TRUE : FALSE;
@@ -1452,7 +1304,6 @@ static void dummyString() {
 }
 #endif
 
-/* 80034CA0-80034CEC 02F5E0 004C+00 1/1 0/0 0/0 .text            init__13dSv_zoneBit_cFv */
 void dSv_zoneBit_c::init() {
     for (int i = 0; i < 2; i++) {
         mSwitch[i] = 0;
@@ -1466,36 +1317,29 @@ void dSv_zoneBit_c::init() {
     mRoomItem = 0;
 }
 
-/* 80034CEC-80034CF8 02F62C 000C+00 0/0 3/3 0/0 .text            clearRoomSwitch__13dSv_zoneBit_cFv
- */
 void dSv_zoneBit_c::clearRoomSwitch() {
     mRoomSwitch = 0;
 }
 
-/* 80034CF8-80034D04 02F638 000C+00 0/0 3/3 0/0 .text            clearRoomItem__13dSv_zoneBit_cFv */
 void dSv_zoneBit_c::clearRoomItem() {
     mRoomItem = 0;
 }
 
-/* 80034D04-80034D2C 02F644 0028+00 1/1 1/1 0/0 .text            onSwitch__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::onSwitch(int i_no) {
     JUT_ASSERT(3587, 0 <= i_no && i_no < SWITCH_ZONE_MAX);
     mSwitch[i_no >> 4] |= (u16)(1 << (i_no & 0xF));
 }
 
-/* 80034D2C-80034D50 02F66C 0024+00 1/1 1/1 0/0 .text            offSwitch__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::offSwitch(int i_no) {
     JUT_ASSERT(3601, 0 <= i_no && i_no < SWITCH_ZONE_MAX);
     mSwitch[i_no >> 4] &= ~(1 << (i_no & 0xF));
 }
 
-/* 80034D50-80034D78 02F690 0028+00 1/1 1/1 0/0 .text            isSwitch__13dSv_zoneBit_cCFi */
 BOOL dSv_zoneBit_c::isSwitch(int i_no) const {
     JUT_ASSERT(3615, 0 <= i_no && i_no < SWITCH_ZONE_MAX);
     return mSwitch[i_no >> 4] & 1 << (i_no & 0xF) ? TRUE : FALSE;
 }
 
-/* 80034D78-80034DAC 02F6B8 0034+00 1/1 0/0 0/0 .text            revSwitch__13dSv_zoneBit_cFi */
 BOOL dSv_zoneBit_c::revSwitch(int i_no) {
     JUT_ASSERT(3629, 0 <= i_no && i_no < SWITCH_ZONE_MAX);
 
@@ -1505,25 +1349,21 @@ BOOL dSv_zoneBit_c::revSwitch(int i_no) {
     return mSwitch[switchInd] & uVar1 ? TRUE : FALSE;
 }
 
-/* 80034DAC-80034DC8 02F6EC 001C+00 1/1 1/1 0/0 .text            onOneSwitch__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::onOneSwitch(int i_no) {
     JUT_ASSERT(3649, 0 <= i_no && i_no < SWITCH_ONE_ZONE_MAX);
     mRoomSwitch |= (u16)(1 << i_no);
 }
 
-/* 80034DC8-80034DE0 02F708 0018+00 1/1 1/1 0/0 .text            offOneSwitch__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::offOneSwitch(int i_no) {
     JUT_ASSERT(3663, 0 <= i_no && i_no < SWITCH_ONE_ZONE_MAX);
     mRoomSwitch &= ~(1 << i_no);
 }
 
-/* 80034DE0-80034DFC 02F720 001C+00 1/1 1/1 0/0 .text            isOneSwitch__13dSv_zoneBit_cCFi */
 BOOL dSv_zoneBit_c::isOneSwitch(int i_no) const {
     JUT_ASSERT(3677, 0 <= i_no && i_no < SWITCH_ONE_ZONE_MAX);
     return mRoomSwitch & 1 << i_no ? TRUE : FALSE;
 }
 
-/* 80034DFC-80034E24 02F73C 0028+00 1/1 0/0 0/0 .text            revOneSwitch__13dSv_zoneBit_cFi */
 BOOL dSv_zoneBit_c::revOneSwitch(int i_no) {
     JUT_ASSERT(3691, 0 <= i_no && i_no < SWITCH_ONE_ZONE_MAX);
 
@@ -1532,7 +1372,6 @@ BOOL dSv_zoneBit_c::revOneSwitch(int i_no) {
     return mRoomSwitch & iVar1 ? TRUE : FALSE;
 }
 
-/* 80034E24-80034E50 02F764 002C+00 1/1 0/0 0/0 .text            onItem__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::onItem(int i_no) {
     JUT_ASSERT(3711, 0 <= i_no && i_no < ITEM_ZONE_MAX);
     mItem[i_no >> 4] |= (u16)(1 << (i_no & 0xF));
@@ -1543,13 +1382,11 @@ void dSv_zoneBit_c::offItem(int i_no) {
     mItem[i_no >> 4] &= (u16)~(1 << (i_no & 0xF));
 }
 
-/* 80034E50-80034E7C 02F790 002C+00 1/1 1/1 0/0 .text            isItem__13dSv_zoneBit_cCFi */
 BOOL dSv_zoneBit_c::isItem(int i_no) const {
     JUT_ASSERT(3745, 0 <= i_no && i_no < ITEM_ZONE_MAX);
     return mItem[i_no >> 4] & 1 << (i_no & 0xF) ? TRUE : FALSE;
 }
 
-/* 80034E7C-80034E98 02F7BC 001C+00 1/1 0/0 0/0 .text            onOneItem__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::onOneItem(int i_no) {
     JUT_ASSERT(3783, 0 <= i_no && i_no < ITEM_ONE_ZONE_MAX);
     mRoomItem |= (u16)(1 << i_no);
@@ -1560,52 +1397,44 @@ void dSv_zoneBit_c::offOneItem(int i_no) {
     mRoomItem &= (u16)~(1 << i_no);
 }
 
-/* 80034E98-80034EB4 02F7D8 001C+00 1/1 1/1 0/0 .text            isOneItem__13dSv_zoneBit_cCFi */
 BOOL dSv_zoneBit_c::isOneItem(int i_no) const {
     JUT_ASSERT(3811, 0 <= i_no && i_no < ITEM_ONE_ZONE_MAX);
     return mRoomItem & 1 << i_no ? TRUE : FALSE;
 }
 
-/* 80034EB4-80034ED4 02F7F4 0020+00 1/1 0/0 0/0 .text            init__15dSv_zoneActor_cFv */
 void dSv_zoneActor_c::init() {
     for (int i = 0; i < 4; i++) {
         mActorFlags[i] = 0;
     }
 }
 
-/* 80034ED4-80034EF8 02F814 0024+00 1/1 0/0 0/0 .text            on__15dSv_zoneActor_cFi */
 void dSv_zoneActor_c::on(int i_id) {
     JUT_ASSERT(3856, 0 <= i_id && i_id < ACTOR_MAX);
     mActorFlags[i_id >> 5] |= 1 << (i_id & 0x1F);
 }
 
-/* 80034EF8-80034F1C 02F838 0024+00 1/1 0/0 0/0 .text            off__15dSv_zoneActor_cFi */
 void dSv_zoneActor_c::off(int i_id) {
     JUT_ASSERT(3870, 0 <= i_id && i_id < ACTOR_MAX);
     mActorFlags[i_id >> 5] &= ~(1 << (i_id & 0x1F));
 }
 
-/* 80034F1C-80034F44 02F85C 0028+00 1/1 0/0 0/0 .text            is__15dSv_zoneActor_cCFi */
 BOOL dSv_zoneActor_c::is(int i_id) const {
     JUT_ASSERT(3884, 0 <= i_id && i_id < ACTOR_MAX);
     return mActorFlags[i_id >> 5] & 1 << (i_id & 0x1F) ? TRUE : FALSE;
 }
 
-/* 80034F44-80034F80 02F884 003C+00 2/2 0/0 0/0 .text            init__10dSv_zone_cFi */
 void dSv_zone_c::init(int i_roomNo) {
     mRoomNo = i_roomNo;
     mBit.init();
     mActor.init();
 }
 
-/* 80034F80-80034FA4 02F8C0 0024+00 0/0 3/3 14/14 .text setRoom__13dSv_restart_cFRC4cXyzsSc */
 void dSv_restart_c::setRoom(const cXyz& i_position, s16 i_angleY, s8 i_roomNo) {
     mRoomNo = i_roomNo;
     mRoomPos = i_position;
     mRoomAngleY = i_angleY;
 }
 
-/* 80034FA4-80034FCC 02F8E4 0028+00 0/0 2/2 0/0 .text set__17dSv_turnRestart_cFRC4cXyzsScUl */
 void dSv_turnRestart_c::set(const cXyz& i_position, s16 i_angleY, s8 param_3, u32 i_param) {
     mPosition = i_position;
     mAngleY = i_angleY;
@@ -1613,7 +1442,6 @@ void dSv_turnRestart_c::set(const cXyz& i_position, s16 i_angleY, s8 param_3, u3
     mParam = i_param;
 }
 
-/* 80034FCC-8003501C 02F90C 0050+00 0/0 2/2 0/0 .text            init__10dSv_info_cFv */
 void dSv_info_c::init() {
     mSavedata.init();
     mMemory.init();
@@ -1627,7 +1455,6 @@ void dSv_info_c::init() {
 #endif
 }
 
-/* 8003501C-800350A8 02F95C 008C+00 2/2 0/0 0/0 .text            init__10dSv_save_cFv */
 void dSv_save_c::init() {
     mPlayer.init();
     for (int i = 0; i < STAGE_MAX; i++) {
@@ -1642,32 +1469,27 @@ void dSv_save_c::init() {
     mMiniGame.init();
 }
 
-/* 800350A8-800350BC 02F9E8 0014+00 0/0 6/6 1/1 .text            getSave2__10dSv_save_cFi */
 dSv_memory2_c* dSv_save_c::getSave2(int i_stage2No) {
     JUT_ASSERT(4117, 0 <= i_stage2No && i_stage2No < STAGE2_MAX);
     return &mSave2[i_stage2No];
 }
 
-/* 800350BC-800350F0 02F9FC 0034+00 0/0 1/1 0/0 .text            getSave__10dSv_info_cFi */
 void dSv_info_c::getSave(int i_stageNo) {
     JUT_ASSERT(4133, 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
     mMemory = mSavedata.getSave(i_stageNo);
 }
 
-/* 800350F0-8003514C 02FA30 005C+00 0/0 2/2 0/0 .text            putSave__10dSv_info_cFi */
 void dSv_info_c::putSave(int i_stageNo) {
     JUT_ASSERT(4149, 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
     mSavedata.putSave(i_stageNo, mMemory);
 }
 
-/* 8003514C-800351A4 02FA8C 0058+00 1/1 1/1 0/0 .text            initZone__10dSv_info_cFv */
 void dSv_info_c::initZone() {
     for (int i = 0; i < 0x20; i++) {
         mZone[i].init(-1);
     }
 }
 
-/* 800351A4-80035200 02FAE4 005C+00 0/0 1/1 0/0 .text            createZone__10dSv_info_cFi */
 u32 dSv_info_c::createZone(int i_roomNo) {
     dSv_zone_c* zone = mZone;
     for (int i = 0; i < 0x20; zone++, i++) {
@@ -1679,7 +1501,6 @@ u32 dSv_info_c::createZone(int i_roomNo) {
     return -1;
 }
 
-/* 80035200-800352B0 02FB40 00B0+00 0/0 8/8 352/352 .text            onSwitch__10dSv_info_cFii */
 void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
     JUT_ASSERT(4210, (0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH+ ONEZONE_SWITCH)) || i_no == -1 || i_no == 255);
 
@@ -1704,7 +1525,6 @@ void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
     }
 }
 
-/* 800352B0-80035360 02FBF0 00B0+00 0/0 2/2 93/93 .text            offSwitch__10dSv_info_cFii */
 void dSv_info_c::offSwitch(int i_no, int i_roomNo) {
     JUT_ASSERT(4256, (0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH+ ONEZONE_SWITCH)) || i_no == -1 || i_no == 255);
 
@@ -1729,7 +1549,6 @@ void dSv_info_c::offSwitch(int i_no, int i_roomNo) {
     }
 }
 
-/* 80035360-8003542C 02FCA0 00CC+00 0/0 27/27 734/734 .text            isSwitch__10dSv_info_cCFii */
 BOOL dSv_info_c::isSwitch(int i_no, int i_roomNo) const {
     if (!((0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH+ ONEZONE_SWITCH)) || i_no == -1 || i_no == 255)) {
         OS_REPORT("i_no = %d\n", i_no);
@@ -1761,7 +1580,6 @@ BOOL dSv_info_c::isSwitch(int i_no, int i_roomNo) const {
     }
 }
 
-/* 8003542C-800354E0 02FD6C 00B4+00 0/0 0/0 2/2 .text            revSwitch__10dSv_info_cFii */
 BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
     JUT_ASSERT(4356, (0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH+ ONEZONE_SWITCH)) || i_no == -1 || i_no == 255);
 
@@ -1787,7 +1605,6 @@ BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
     }
 }
 
-/* 800354E0-80035590 02FE20 00B0+00 0/0 1/1 3/3 .text            onItem__10dSv_info_cFii */
 void dSv_info_c::onItem(int i_no, int i_roomNo) {
     JUT_ASSERT(4398, (0 <= i_no && i_no < (MEMORY_ITEM+ DAN_ITEM+ ZONE_ITEM+ ONEZONE_ITEM)) || i_no == -1 || i_no == 255);
 
@@ -1812,7 +1629,6 @@ void dSv_info_c::onItem(int i_no, int i_roomNo) {
     }
 }
 
-/* 80035590-80035644 02FED0 00B4+00 0/0 1/1 3/3 .text            isItem__10dSv_info_cCFii */
 BOOL dSv_info_c::isItem(int i_no, int i_roomNo) const {
     JUT_ASSERT(4488, (0 <= i_no && i_no < (MEMORY_ITEM+ DAN_ITEM+ ZONE_ITEM+ ONEZONE_ITEM)) || i_no == -1 || i_no == 255);
 
@@ -1837,7 +1653,6 @@ BOOL dSv_info_c::isItem(int i_no, int i_roomNo) const {
     }
 }
 
-/* 80035644-800356B4 02FF84 0070+00 0/0 1/1 4/4 .text            onActor__10dSv_info_cFii */
 void dSv_info_c::onActor(int i_id, int i_roomNo) {
     if (i_id == -1 || i_id == 0xFFFF || i_roomNo == -1) {
         return;
@@ -1849,7 +1664,6 @@ void dSv_info_c::onActor(int i_id, int i_roomNo) {
     mZone[zoneNo].getActor().on(i_id);
 }
 
-/* 800356B4-80035724 02FFF4 0070+00 0/0 0/0 2/2 .text            offActor__10dSv_info_cFii */
 void dSv_info_c::offActor(int i_id, int i_roomNo) {
     if (i_id == -1 || i_id == 0xFFFF || i_roomNo == -1) {
         return;
@@ -1861,7 +1675,6 @@ void dSv_info_c::offActor(int i_id, int i_roomNo) {
     mZone[zoneNo].getActor().off(i_id);
 }
 
-/* 80035724-80035798 030064 0074+00 0/0 3/3 0/0 .text            isActor__10dSv_info_cCFii */
 BOOL dSv_info_c::isActor(int i_id, int i_roomNo) const {
     if (i_id == -1 || i_id == 0xFFFF || i_roomNo == -1) {
         return FALSE;
@@ -1878,7 +1691,6 @@ BOOL dSv_info_c::isActor(int i_id, int i_roomNo) const {
     return mZone[zoneNo].getActor().is(i_id);
 }
 
-/* 80035798-80035A04 0300D8 026C+00 0/0 1/1 0/0 .text            memory_to_card__10dSv_info_cFPci */
 int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
     BOOL lantern_stolen;
     BOOL lantern_dropped;
@@ -1975,7 +1787,6 @@ int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
     return 0;
 }
 
-/* 80035A04-80035BD0 030344 01CC+00 0/0 2/2 0/0 .text            card_to_memory__10dSv_info_cFPci */
 int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
     i_cardPtr = i_cardPtr + i_dataNum * QUEST_LOG_SIZE;
     char* var_r30 = i_cardPtr;
@@ -2025,8 +1836,6 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
     return 0;
 }
 
-/* 80035BD0-80035C88 030510 00B8+00 0/0 3/3 0/0 .text            initdata_to_card__10dSv_info_cFPci
- */
 int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
     i_cardPtr = i_cardPtr + (i_dataNum * QUEST_LOG_SIZE);
     char* var_r30 = i_cardPtr;
@@ -2202,7 +2011,6 @@ BOOL flagFile_c::check_flag(u16 i_flag) {
 }
 #endif
 
-/* 803A7288-803A78F8 0043A8 066C+04 2/2 45/45 148/148 .data saveBitLabels__16dSv_event_flag_c */
 #if VERSION > VERSION_GCN_JPN
 const
 #endif
@@ -2281,7 +2089,6 @@ u16 dSv_event_flag_c::saveBitLabels[822] = {
     F_0816, F_0817, F_0818, F_0819, F_0820, KORO2_ALLCLEAR,
 };
 
-/* 803790C0-80379234 005720 0172+02 0/0 17/17 7/7 .rodata tempBitLabels__20dSv_event_tmp_flag_c */
 u16 const dSv_event_tmp_flag_c::tempBitLabels[185] = {
     UNUSED, UNUSED, T_0002, T_0003, T_0004, T_0005, T_0006, T_0007, T_0001, T_0008, T_0009, T_0010,
     T_0011, T_0012, T_0013, T_0014, T_0015, T_0016, T_0017, T_0018, T_0019, T_0020, T_0021, T_0022,

@@ -10,7 +10,6 @@
 #include "Z2AudioLib/Z2SeqMgr.h"
 #include "JSystem/J3DU/J3DUD.h"
 
-/* 802AB64C-802AB710 2A5F8C 00C4+00 0/0 1/1 0/0 .text            __ct__7Z2SeMgrFv */
 Z2SeMgr::Z2SeMgr() : JASGlobalInstance(true), mSoundHandles(mSoundHandle, 24) {
     field_0x3c0 = 0;
     field_0x3c1 = 0;
@@ -30,7 +29,6 @@ Z2MultiSeObj::Z2MultiSeObj() {
     reverb_ = 0;
 }
 
-/* 802AB750-802AB80C 2A6090 00BC+00 0/0 1/1 0/0 .text            initSe__7Z2SeMgrFv */
 void Z2SeMgr::initSe() {
     #if VERSION == VERSION_SHIELD_DEBUG
     dbg_field_0x68.releaseSound();
@@ -64,8 +62,6 @@ void Z2SeMgr::resetModY() {
     }
 }
 
-/* 802AB830-802AB93C 2A6170 010C+00 1/1 0/0 0/0 .text            modHeightAtCamera__7Z2SeMgrFPPC3Vec
- */
 void Z2SeMgr::modHeightAtCamera(const Vec** param_0) {
     if (*param_0 != NULL) {
         int idx = 9999;
@@ -118,8 +114,6 @@ void Z2SeMgr::decrCrowdSize() {
         mCrowdSize = 0;
 }
 
-/* 802AB984-802AC50C 2A62C4 0B88+00 1/1 196/196 549/549 .text
- * seStart__7Z2SeMgrF10JAISoundIDPC3VecUlScffffUc               */
 bool Z2SeMgr::seStart(JAISoundID soundID, const Vec* posPtr, u32 param_2, s8 reverb,
                       f32 pitch, f32 volume, f32 pan, f32 dolby, u8 param_8) {
     if (soundID == 0xFFFFFFFF) {
@@ -353,8 +347,6 @@ bool Z2SeMgr::seStart(JAISoundID soundID, const Vec* posPtr, u32 param_2, s8 rev
                                            pitch, volume, pan, dolby, 0);
 }
 
-/* 802AC50C-802AD8B0 2A6E4C 13A4+00 3/2 19/19 199/199 .text
- * seStartLevel__7Z2SeMgrF10JAISoundIDPC3VecUlScffffUc          */
 bool Z2SeMgr::seStartLevel(JAISoundID soundID, const Vec* posPtr, u32 param_2, s8 reverb,
                            f32 pitch, f32 volume, f32 pan, f32 dolby, u8 param_8) {
     if (param_8 != 1) {
@@ -710,7 +702,6 @@ bool Z2SeMgr::seStartLevel(JAISoundID soundID, const Vec* posPtr, u32 param_2, s
     return ret;
 }
 
-/* 802AD8B0-802AD94C 2A81F0 009C+00 1/1 0/0 4/4 .text            seStop__7Z2SeMgrF10JAISoundIDUl */
 void Z2SeMgr::seStop(JAISoundID soundID, u32 fadeTime) {
     if (soundID != -1) {
         for (u8 i = 0; i < 24; i++) {
@@ -722,7 +713,6 @@ void Z2SeMgr::seStop(JAISoundID soundID, u32 fadeTime) {
     }
 }
 
-/* 802AD94C-802AD9F4 2A828C 00A8+00 0/0 1/1 0/0 .text            seStopAll__7Z2SeMgrFUl */
 void Z2SeMgr::seStopAll(u32 fadeTime) {
     JAISeMgr* seMgr = Z2GetSoundMgr()->getSeMgr();
     seMgr->getCategory(0)->stop(fadeTime);
@@ -737,7 +727,6 @@ void Z2SeMgr::seStopAll(u32 fadeTime) {
     seMgr->getCategory(9)->stop(fadeTime);
 }
 
-/* 802AD9F4-802ADB14 2A8334 0120+00 3/3 5/5 1/1 .text            seMoveVolumeAll__7Z2SeMgrFfUl */
 void Z2SeMgr::seMoveVolumeAll(f32 volume, u32 moveTime) {
     if (Z2GetStatusMgr()->getDemoStatus() == 13) {
         volume = 0.0f;
@@ -758,13 +747,10 @@ void Z2SeMgr::seMoveVolumeAll(f32 volume, u32 moveTime) {
     }
 }
 
-/* 802ADB14-802ADB50 2A8454 003C+00 0/0 1/1 0/0 .text            messageSePlay__7Z2SeMgrFUsP3VecSc
- */
 void Z2SeMgr::messageSePlay(u16 param_0, Vec* param_1, s8 param_2) {
     Z2GetSpeechMgr2()->playOneShotVoice(0, param_0, param_1, param_2);
 }
 
-/* 802ADB50-802ADC54 2A8490 0104+00 0/0 1/1 0/0 .text            talkInSe__7Z2SeMgrFv */
 void Z2SeMgr::talkInSe() {
     if (Z2GetSceneMgr()->isInGame()) {
         if (Z2GetStatusMgr()->getDemoStatus() == 13) {
@@ -788,7 +774,6 @@ void Z2SeMgr::talkInSe() {
     }
 }
 
-/* 802ADC54-802ADD58 2A8594 0104+00 0/0 2/2 0/0 .text            talkOutSe__7Z2SeMgrFv */
 void Z2SeMgr::talkOutSe() {
     if (Z2GetSceneMgr()->isInGame()) {
         if (Z2GetStatusMgr()->getDemoStatus() == 13) {
@@ -812,7 +797,6 @@ void Z2SeMgr::talkOutSe() {
     }
 }
 
-/* 802ADD58-802ADE5C 2A8698 0104+00 0/0 1/1 0/0 .text            menuInSe__7Z2SeMgrFv */
 void Z2SeMgr::menuInSe() {
     if (Z2GetSceneMgr()->isInGame()) {
         if (Z2GetStatusMgr()->getDemoStatus() == 13) {
@@ -836,7 +820,6 @@ void Z2SeMgr::menuInSe() {
     }
 }
 
-/* 802ADE5C-802ADFF4 2A879C 0198+00 1/1 0/0 0/0 .text            setLevObjSE__7Z2SeMgrFUlP3VecSc */
 void Z2SeMgr::setLevObjSE(u32 soundID, Vec* posPtr, s8 reverb) {
     u8 i = 0;
     for (; i < mLevelObjectSeCount; i++) {
@@ -880,7 +863,6 @@ void Z2SeMgr::setLevObjSE(u32 soundID, Vec* posPtr, s8 reverb) {
     }
 }
 
-/* 802ADFF4-802AE184 2A8934 0190+00 1/1 0/0 0/0 .text setMultiTriggerSE__7Z2SeMgrFUlP3VecSc */
 void Z2SeMgr::setMultiTriggerSE(u32 soundID, Vec* posPtr, s8 reverb) {
     u8 i = 0;
     for (; i < mMultiTriggerSeCount; i++) {
@@ -926,7 +908,6 @@ void Z2SeMgr::setMultiTriggerSE(u32 soundID, Vec* posPtr, s8 reverb) {
     }
 }
 
-/* 802AE184-802AE524 2A8AC4 03A0+00 0/0 1/1 0/0 .text            processSeFramework__7Z2SeMgrFv */
 void Z2SeMgr::processSeFramework() {
     if (Z2GetSceneMgr()->isSceneExist() && mCrowdSize != 0) {
         seStartLevel(Z2SE_ENV_PEOPLE_CROWD, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -1019,7 +1000,6 @@ void Z2SeMgr::processSeFramework() {
 }
 
 
-/* 802AE524-802AE5B0 2A8E64 008C+00 1/1 0/0 0/0 .text            isLevelSe__7Z2SeMgrF10JAISoundID */
 bool Z2SeMgr::isLevelSe(JAISoundID soundID) {
     switch (soundID) {
     case JA_SE_LK_MOVE_ROCK:
@@ -1036,7 +1016,6 @@ bool Z2SeMgr::isLevelSe(JAISoundID soundID) {
     }
 }
 
-/* 802AE5B0-802AEB04 2A8EF0 0554+00 2/2 3/3 0/0 .text isSoundCulling__7Z2SeMgrF10JAISoundID */
 bool Z2SeMgr::isSoundCulling(JAISoundID soundID) {
     if (Z2GetSeqMgr()->isItemGetDemo()) {
         switch (soundID) {
@@ -1192,7 +1171,6 @@ Z2MultiSeMgr::Z2MultiSeMgr() {
 
 Z2MultiSeMgr::~Z2MultiSeMgr() {}
 
-/* 802AEB70-802AECBC 2A94B0 014C+00 2/2 6/6 0/0 .text registMultiSePos__12Z2MultiSeMgrFP3Vec */
 s8 Z2MultiSeMgr::registMultiSePos(Vec* posPtr) {
     if (posPtr == NULL) {
         return 0;
@@ -1246,7 +1224,6 @@ void Z2MultiSeMgr::resetMultiSePos() {
     maxVolume_ = 0.0f;
 }
 
-/* 802AECE0-802AEDC0 2A9620 00E0+00 1/1 8/8 0/0 .text            getPanPower__12Z2MultiSeMgrFv */
 f32 Z2MultiSeMgr::getPanPower() {
     f32 pow_r = getMaxPowR();
     f32 pow_l = getMaxPowL();
@@ -1259,7 +1236,6 @@ f32 Z2MultiSeMgr::getPanPower() {
     }
 }
 
-/* 802AEDC0-802AEEA0 2A9700 00E0+00 1/1 8/8 0/0 .text            getDolbyPower__12Z2MultiSeMgrFv */
 f32 Z2MultiSeMgr::getDolbyPower() {
     f32 pow_b = getMaxPowB();
     f32 pow_f = getMaxPowF();

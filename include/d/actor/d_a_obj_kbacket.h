@@ -36,7 +36,7 @@ public:
 
 class daObj_KBacket_Param_c {
 public:
-    /* 80587D18 */ virtual ~daObj_KBacket_Param_c() {}
+    virtual ~daObj_KBacket_Param_c() {}
 
     static const daObj_KBacket_HIOParam m;
 };
@@ -94,8 +94,8 @@ public:
     /* 0xA4B */ u8 field_0xa4b;
     /* 0xA4C */ u8 field_0xa4c[0xa50 - 0xa4c];
 
-    /* 80585E4C */ virtual ~daObj_KBacket_c();
-    /* 80586048 */ int create();
+    virtual ~daObj_KBacket_c();
+    int create();
     int setLaunchParam(float param_0, float param_1, short param_2) {
         float fVar2;
 
@@ -125,20 +125,20 @@ public:
             return 0;
         }
     }
-    /* 80586604 */ int CreateHeap();
-    /* 80586704 */ int Delete();
-    /* 80586738 */ int Execute();
-    /* 8058742C */ int Draw();
-    /* 805875A0 */ static void createHeapCallBack(fopAc_ac_c*);
-    /* 805875C0 */ void setEnvTevColor();
-    /* 8058761C */ void setRoomNo();
-    /* 80587660 */ void reset();
-    /* 80587694 */ void setMtx();
-    /* 805877C4 */ s16 calcRollAngle(s16, int);
-    /* 80587864 */ int getWallAngle(s16, s16*);
-    /* 805879F4 */ void setSmokePrtcl();
-    /* 80587A70 */ void setWaterPrtcl();
-    /* 80587B68 */ void setHamonPrtcl();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static void createHeapCallBack(fopAc_ac_c*);
+    void setEnvTevColor();
+    void setRoomNo();
+    void reset();
+    void setMtx();
+    s16 calcRollAngle(s16, int);
+    int getWallAngle(s16, s16*);
+    void setSmokePrtcl();
+    void setWaterPrtcl();
+    void setHamonPrtcl();
 };
 
 STATIC_ASSERT(sizeof(daObj_KBacket_c) == 0xa54);

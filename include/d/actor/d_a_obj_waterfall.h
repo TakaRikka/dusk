@@ -14,16 +14,16 @@
  */
 class daObjWaterFall_c : public fopAc_ac_c {
 public:
-    /* 80D2ED14 */ void search_bomb();
-    /* 80D2F034 */ void search_arrow();
-    /* 80D2F324 */ void initBaseMtx();
-    /* 80D2F344 */ void setBaseMtx();
-    /* 80D2F39C */ cPhs__Step Create();
-    /* 80D2F5A0 */ cPhs__Step create();
-    /* 80D2F984 */ int execute();
-    /* 80D2FA6C */ void push_player();
-    /* 80D2FC94 */ int draw();
-    /* 80D2FC9C */ int _delete();
+    void search_bomb();
+    void search_arrow();
+    void initBaseMtx();
+    void setBaseMtx();
+    cPhs__Step Create();
+    cPhs__Step create();
+    int execute();
+    void push_player();
+    int draw();
+    int _delete();
 private:
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ u8 pad[4];

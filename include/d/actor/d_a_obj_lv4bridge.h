@@ -17,24 +17,24 @@ class daObjLv4Brg_c : public dBgS_MoveBgActor, public dEvLib_callback_c {
 public:
     daObjLv4Brg_c() : dEvLib_callback_c(this) {}
 
-    /* 80C62878 */ void initBaseMtx();
-    /* 80C628B4 */ void setBaseMtx();
-    /* 80C62A9C */ int create1st();
-    /* 80C62B6C */ void action();
-    /* 80C62C28 */ void mode_init_wait();
-    /* 80C62C34 */ void mode_wait();
-    /* 80C62CE4 */ void mode_init_move();
-    /* 80C62CFC */ void mode_move();
-    /* 80C62E24 */ void mode_init_dead();
-    /* 80C62E30 */ void mode_dead();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    void action();
+    void mode_init_wait();
+    void mode_wait();
+    void mode_init_move();
+    void mode_move();
+    void mode_init_dead();
+    void mode_dead();
 
-    /* 80C630C4 */ virtual ~daObjLv4Brg_c() {}
-    /* 80C62E34 */ virtual bool eventStart();
-    /* 80C62A2C */ virtual int CreateHeap();
-    /* 80C62994 */ virtual int Create();
-    /* 80C62B20 */ virtual int Execute(Mtx**);
-    /* 80C62EA0 */ virtual int Draw();
-    /* 80C62F44 */ virtual int Delete();
+    virtual ~daObjLv4Brg_c() {}
+    virtual bool eventStart();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getEvID() { return fopAcM_GetParamBit(this, 8, 8); }

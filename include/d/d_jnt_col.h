@@ -18,13 +18,13 @@ public:
 
 class dJntCol_c {
 public:
-    /* 80035C8C */ dJntCol_c();
-    /* 80035CA0 */ int init(fopAc_ac_c*, dJntColData_c const*, J3DModel*, int);
-    /* 80035CC8 */ static void setNowLine(cM3dGLin*, cXyz const*, csXyz const*, cXyz*);
-    /* 80035DC8 */ int searchNearPos(cM3dGLin const*, cXyz const*, cXyz*, int) const;
-    /* 80036AEC */ int getArrowOffsetPosAndAngle(cXyz const*, csXyz const*, cXyz*, cXyz*) const;
-    /* 80036C44 */ int getHitmarkPosAndAngle(cXyz const*, csXyz const*, cXyz*, csXyz*, int) const;
-    /* 80036FA8 */ void setArrowPosAndAngle(cXyz const*, cXyz const*, int, cXyz*, csXyz*);
+    dJntCol_c();
+    int init(fopAc_ac_c*, dJntColData_c const*, J3DModel*, int);
+    static void setNowLine(cM3dGLin*, cXyz const*, csXyz const*, cXyz*);
+    int searchNearPos(cM3dGLin const*, cXyz const*, cXyz*, int) const;
+    int getArrowOffsetPosAndAngle(cXyz const*, csXyz const*, cXyz*, cXyz*) const;
+    int getHitmarkPosAndAngle(cXyz const*, csXyz const*, cXyz*, csXyz*, int) const;
+    void setArrowPosAndAngle(cXyz const*, cXyz const*, int, cXyz*, csXyz*);
 
     bool checkPassNum(int bit) { return field_0xc & (1 << bit); }
     void onPassNum(int num) { field_0xc |= (1 << num); }

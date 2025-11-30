@@ -14,7 +14,6 @@ static int daKytag02_Draw(kytag02_class* i_this) {
     return 1;
 }
 
-/* 80855AC0-80855CC4 000080 0204+00 1/0 0/0 0/0 .text daKytag02_Execute__FP13kytag02_class */
 static int daKytag02_Execute(kytag02_class* i_this) {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
     cXyz* wind_vec = dKyw_get_wind_vec();
@@ -83,13 +82,10 @@ static int daKytag02_Execute(kytag02_class* i_this) {
     return 1;
 }
 
-/* 80855CC4-80855CCC 000284 0008+00 1/0 0/0 0/0 .text daKytag02_IsDelete__FP13kytag02_class */
 static int daKytag02_IsDelete(kytag02_class* i_this) {
     return 1;
 }
 
-/* 80855CCC-80855CEC 00028C 0020+00 1/0 0/0 0/0 .text            daKytag02_Delete__FP13kytag02_class
- */
 static int daKytag02_Delete(kytag02_class* i_this) {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
 
@@ -99,7 +95,6 @@ static int daKytag02_Delete(kytag02_class* i_this) {
     return 1;
 }
 
-/* 80855CEC-80855DF4 0002AC 0108+00 1/0 0/0 0/0 .text            daKytag02_Create__FP10fopAc_ac_c */
 static int daKytag02_Create(fopAc_ac_c* i_this) {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
     dKyw_get_wind_vec();
@@ -135,14 +130,12 @@ static int daKytag02_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80855E0C-80855E2C -00001 0020+00 1/0 0/0 0/0 .data            l_daKytag02_Method */
 static actor_method_class l_daKytag02_Method = {
     (process_method_func)daKytag02_Create,  (process_method_func)daKytag02_Delete,
     (process_method_func)daKytag02_Execute, (process_method_func)daKytag02_IsDelete,
     (process_method_func)daKytag02_Draw,
 };
 
-/* 80855E2C-80855E5C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KYTAG02 */
 extern actor_process_profile_definition g_profile_KYTAG02 = {
     fpcLy_CURRENT_e,
     7,

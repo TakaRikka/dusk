@@ -18,7 +18,6 @@ enum Action {
     /* 0x3 */ ACTION_CARRY,
 };
 
-/* 80C195B8-80C19688 000078 00D0+00 1/0 0/0 0/0 .text            daOBJ_HB_Draw__FP12obj_hb_class */
 static int daOBJ_HB_Draw(obj_hb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     
@@ -32,7 +31,6 @@ static int daOBJ_HB_Draw(obj_hb_class* i_this) {
     return 1;
 }
 
-/* 80C19688-80C1988C 000148 0204+00 1/1 0/0 0/0 .text            obj_hb_carry__FP12obj_hb_class */
 static void obj_hb_carry(obj_hb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -82,7 +80,6 @@ static void obj_hb_carry(obj_hb_class* i_this) {
     cLib_addCalcAngleS2(&i_this->field_0x67c, 0x2000, 1, 0x100);
 }
 
-/* 80C1988C-80C19A2C 00034C 01A0+00 1/1 0/0 0/0 .text            wall_angle_get__FP12obj_hb_class */
 static s16 wall_angle_get(obj_hb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     dBgS_LinChk lin_chk;
@@ -116,7 +113,6 @@ static s16 wall_angle_get(obj_hb_class* i_this) {
     return cM_atan2s(spa8.x, spa8.z) + 0x4000;
 }
 
-/* 80C19A2C-80C19AD8 0004EC 00AC+00 1/1 0/0 0/0 .text            water_check__FP12obj_hb_class */
 static BOOL water_check(obj_hb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     dBgS_ObjGndChk_Spl gnd_chk_spl;
@@ -135,7 +131,6 @@ static BOOL water_check(obj_hb_class* i_this) {
     return FALSE;
 }
 
-/* 80C19AD8-80C19BEC 000598 0114+00 1/1 0/0 0/0 .text            obj_hb_set__FP12obj_hb_class */
 static void obj_hb_set(obj_hb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -166,7 +161,6 @@ static void obj_hb_set(obj_hb_class* i_this) {
     }
 }
 
-/* 80C19BEC-80C19DA8 0006AC 01BC+00 1/1 0/0 0/0 .text getGroundAngle__FP10fopAc_ac_cP5csXyz */
 static BOOL getGroundAngle(fopAc_ac_c* a_this, csXyz* param_2) {
     Vec spa8;
     cXyz spb4;
@@ -217,7 +211,6 @@ static BOOL getGroundAngle(fopAc_ac_c* a_this, csXyz* param_2) {
     return rv;
 }
 
-/* 80C19DA8-80C1A490 000868 06E8+00 1/1 0/0 0/0 .text            obj_hb_drop__FP12obj_hb_class */
 static void obj_hb_drop(obj_hb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp3c, sp48;
@@ -351,7 +344,6 @@ static void obj_hb_drop(obj_hb_class* i_this) {
     }
 }
 
-/* 80C1A490-80C1A748 000F50 02B8+00 1/1 0/0 0/0 .text            obj_hb_float__FP12obj_hb_class */
 static void obj_hb_float(obj_hb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -397,7 +389,6 @@ static void obj_hb_float(obj_hb_class* i_this) {
     }
 }
 
-/* 80C1A748-80C1AF80 001208 0838+00 1/1 0/0 0/0 .text            action__FP12obj_hb_class */
 static void action(obj_hb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     cXyz sp5c, sp68;
@@ -576,7 +567,6 @@ static void action(obj_hb_class* i_this) {
     }
 }
 
-/* 80C1AF80-80C1B124 001A40 01A4+00 2/1 0/0 0/0 .text            daOBJ_HB_Execute__FP12obj_hb_class */
 static int daOBJ_HB_Execute(obj_hb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
 
@@ -618,14 +608,12 @@ static int daOBJ_HB_Execute(obj_hb_class* i_this) {
     return 1;
 }
 
-/* 80C1B124-80C1B12C 001BE4 0008+00 1/0 0/0 0/0 .text            daOBJ_HB_IsDelete__FP12obj_hb_class */
 static int daOBJ_HB_IsDelete(obj_hb_class* i_this) {
     return 1;
 }
 
 static s8 lbl_474_bss_0;
 
-/* 80C1B12C-80C1B188 001BEC 005C+00 1/0 0/0 0/0 .text            daOBJ_HB_Delete__FP12obj_hb_class */
 static int daOBJ_HB_Delete(obj_hb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
     fpc_ProcID id = fopAcM_GetID(a_this);
@@ -639,7 +627,6 @@ static int daOBJ_HB_Delete(obj_hb_class* i_this) {
     return 1;
 }
 
-/* 80C1B188-80C1B1F4 001C48 006C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_hb_class* i_this = (obj_hb_class*)a_this;
 
@@ -653,7 +640,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80C1B1F4-80C1B4E8 001CB4 02F4+00 1/0 0/0 0/0 .text            daOBJ_HB_Create__FP10fopAc_ac_c */
 static cPhs__Step daOBJ_HB_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, obj_hb_class);
     obj_hb_class* i_this = (obj_hb_class*)a_this;
@@ -722,7 +708,6 @@ static cPhs__Step daOBJ_HB_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-/* 80C1B750-80C1B770 -00001 0020+00 1/0 0/0 0/0 .data            l_daOBJ_HB_Method */
 static actor_method_class l_daOBJ_HB_Method = {
     (process_method_func)daOBJ_HB_Create,
     (process_method_func)daOBJ_HB_Delete,
@@ -731,7 +716,6 @@ static actor_method_class l_daOBJ_HB_Method = {
     (process_method_func)daOBJ_HB_Draw,
 };
 
-/* 80C1B770-80C1B7A0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_HB */
 extern actor_process_profile_definition g_profile_OBJ_HB = {
   fpcLy_CURRENT_e,       // mLayerID
   8,                     // mListID

@@ -92,11 +92,11 @@ struct JAISoundParamsMove {
 
     void calc() { transition_.apply(&params_); }
 
-    /* 802A2DB4 */ void moveVolume(f32 newValue, u32 maxSteps);
-    /* 802A2E0C */ void movePitch(f32 newValue, u32 maxSteps);
-    /* 802A2E64 */ void moveFxMix(f32 newValue, u32 maxSteps);
-    /* 802A2EBC */ void movePan(f32 newValue, u32 maxSteps);
-    /* 802A2F14 */ void moveDolby(f32 newValue, u32 maxSteps);
+    void moveVolume(f32 newValue, u32 maxSteps);
+    void movePitch(f32 newValue, u32 maxSteps);
+    void moveFxMix(f32 newValue, u32 maxSteps);
+    void movePan(f32 newValue, u32 maxSteps);
+    void moveDolby(f32 newValue, u32 maxSteps);
 
     /* 0x00 */ JASSoundParams params_;
     /* 0x14 */ JAISoundParamsTransition transition_;

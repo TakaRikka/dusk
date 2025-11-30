@@ -14,11 +14,11 @@
  */
 class daObj_Suisya_c : public fopAc_ac_c {
 public:
-    /* 80CF0078 */ int draw();
-    /* 80CF0168 */ int execute();
-    /* 80CF0234 */ int _delete();
-    /* 80CF0284 */ int CreateHeap();
-    /* 80CF0310 */ int create();
+    int draw();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    int create();
 
 private:
     /* 0x568 */ request_of_phase_process_class mPhase;

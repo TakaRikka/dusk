@@ -4,8 +4,8 @@
 #include "f_op/f_op_actor_mng.h"
 
 struct wf_tail_s {
-    /* 80D37720 */ ~wf_tail_s() {}
-    /* 80D377F0 */ wf_tail_s() {}
+    ~wf_tail_s() {}
+    wf_tail_s() {}
 
     /* 0x000 */ s16 field_0x000;
     /* 0x000 */ u16 field_0x002;

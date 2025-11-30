@@ -19,26 +19,26 @@ class daObjSwLight_c : public dBgS_MoveBgActor, public dEvLib_callback_c {
 public:
     typedef void (daObjSwLight_c::*modeFunc)();
 
-    /* 80CF6F98 */ void initBaseMtx();
-    /* 80CF6FD4 */ void setBaseMtx();
-    /* 80CF7260 */ int create1st();
-    /* 80CF73E0 */ void action();
-    /* 80CF761C */ void init_modeSwOnWait();
-    /* 80CF766C */ void modeSwOnWait();
-    /* 80CF777C */ void init_modeOnLight();
-    /* 80CF7788 */ void modeOnLight();
-    /* 80CF77D8 */ void init_modeSwOffWait();
-    /* 80CF7838 */ void modeSwOffWait();
-    /* 80CF7974 */ void modeDead();
-    /* 80CF7978 */ int checkHit();
-    /* 80CF7A6C */ void setOnTimer();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    void action();
+    void init_modeSwOnWait();
+    void modeSwOnWait();
+    void init_modeOnLight();
+    void modeOnLight();
+    void init_modeSwOffWait();
+    void modeSwOffWait();
+    void modeDead();
+    int checkHit();
+    void setOnTimer();
 
-    /* 80CF7038 */ virtual int Create();
-    /* 80CF71F0 */ virtual int CreateHeap();
-    /* 80CF7320 */ virtual int Execute(Mtx**);
-    /* 80CF7A98 */ virtual int Draw();
-    /* 80CF7BA8 */ virtual int Delete();
-    /* 80CF8124 */ virtual ~daObjSwLight_c() {};
+    virtual int Create();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
+    virtual ~daObjSwLight_c() {};
 
     daObjSwLight_c() : dEvLib_callback_c(this) {};
 

@@ -16,15 +16,15 @@ class J3DModel;
  */
 class daObjBkDoor_c : public dBgS_MoveBgActor {
 public:
-    /* 80578D4C */ void initBaseMtx();
-    /* 80578D88 */ void setBaseMtx();
-    /* 80578E14 */ virtual int Create();
-    /* 80578EA0 */ virtual int CreateHeap();
-    /* 80578F20 */ int create1st();
-    /* 80578FC0 */ void openCheck();
-    /* 8057902C */ virtual int Execute(Mtx**);
-    /* 805792E4 */ virtual int Draw();
-    /* 80579388 */ virtual int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    virtual int Create();
+    virtual int CreateHeap();
+    int create1st();
+    void openCheck();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhaseReq;

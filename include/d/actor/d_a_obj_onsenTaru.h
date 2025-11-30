@@ -23,29 +23,29 @@ public:
         MODE_SINK_e,
     };
 
-    /* 80CA86C0 */ void setBaseMtx();
-    /* 80CA87B4 */ int create();
-    /* 80CA8C20 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80CA8C4C */ BOOL chkSinkAll();
-    /* 80CA8C70 */ BOOL chkWaterLineIn();
-    /* 80CA8C94 */ void bgCheck();
-    /* 80CA9184 */ void mode_proc_call();
-    /* 80CA929C */ void mode_init_wait();
-    /* 80CA92CC */ void mode_proc_wait();
-    /* 80CA92F0 */ void mode_init_carry();
-    /* 80CA9320 */ void mode_proc_carry();
-    /* 80CA93C0 */ void mode_init_drop();
-    /* 80CA9400 */ void mode_proc_drop();
-    /* 80CA9424 */ void mode_init_break();
-    /* 80CA9514 */ void mode_proc_break();
-    /* 80CA9518 */ void mode_init_sink();
-    /* 80CA9530 */ void mode_proc_sink();
-    /* 80CA9620 */ void breakEffSet();
+    void setBaseMtx();
+    int create();
+    static int createHeapCallBack(fopAc_ac_c*);
+    BOOL chkSinkAll();
+    BOOL chkWaterLineIn();
+    void bgCheck();
+    void mode_proc_call();
+    void mode_init_wait();
+    void mode_proc_wait();
+    void mode_init_carry();
+    void mode_proc_carry();
+    void mode_init_drop();
+    void mode_proc_drop();
+    void mode_init_break();
+    void mode_proc_break();
+    void mode_init_sink();
+    void mode_proc_sink();
+    void breakEffSet();
 
-    /* 80CA8748 */ virtual int CreateHeap();
-    /* 80CA8F38 */ virtual int Execute();
-    /* 80CA98B8 */ virtual int Draw();
-    /* 80CA995C */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute();
+    virtual int Draw();
+    virtual int Delete();
 
     int getSw() { return fopAcM_GetParamBit(this, 0, 8); }
     int getSw2() { return fopAcM_GetParamBit(this, 8, 8); }
@@ -81,8 +81,8 @@ STATIC_ASSERT(sizeof(daOnsTaru_c) == 0x948);
 
 class daOnsTaru_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80CA85CC */ daOnsTaru_HIO_c();
-    /* 80CA9A78 */ virtual ~daOnsTaru_HIO_c() {}
+    daOnsTaru_HIO_c();
+    virtual ~daOnsTaru_HIO_c() {}
 
     void genMessage(JORMContext*);
 

@@ -16,28 +16,28 @@ struct DynamicModuleControlBase {
     /* 0x08 */ DynamicModuleControlBase* mNext;
 
     /* 0x0C */ /*vtable*/
-    /* 802621CC */ virtual ~DynamicModuleControlBase();
-    /* 800188DC */ virtual const char* getModuleName() const { return NULL; };
-    /* 80263210 */ virtual int getModuleSize() const { return 0; };
-    /* 80263200 */ virtual const char* getModuleTypeString() const {return "Base";};
+    virtual ~DynamicModuleControlBase();
+    virtual const char* getModuleName() const { return NULL; };
+    virtual int getModuleSize() const { return 0; };
+    virtual const char* getModuleTypeString() const {return "Base";};
 #if __MWERKS__ && __MWERKS__ < 0x4200
     // This is illegal function overloading, but MWCC for GC allows it. MWCC for Wii does not.
     virtual void dump();
 #endif
-    /* 80262470 */ static void dump();
+    static void dump();
     static void dump(char*);
 
-    /* 802631FC */ virtual void dump2() {};
-    /* 802631DC */ virtual bool do_load() {return true;};
-    /* 802631F4 */ virtual BOOL do_load_async() {return true;};
-    /* 802631E4 */ virtual bool do_unload() {return true;};
-    /* 802631D4 */ virtual BOOL do_link() {return TRUE;};
-    /* 802631EC */ virtual bool do_unlink() {return true; };
-    /* 80262284 */ DynamicModuleControlBase();
-    /* 802622D0 */ BOOL link();
-    /* 80262364 */ BOOL unlink();
-    /* 802623EC */ BOOL load_async();
-    /* 8026242C */ bool force_unlink();
+    virtual void dump2() {};
+    virtual bool do_load() {return true;};
+    virtual BOOL do_load_async() {return true;};
+    virtual bool do_unload() {return true;};
+    virtual BOOL do_link() {return TRUE;};
+    virtual bool do_unlink() {return true; };
+    DynamicModuleControlBase();
+    BOOL link();
+    BOOL unlink();
+    BOOL load_async();
+    bool force_unlink();
     static JKRHeap* createHeap(u32, JKRHeap*);
 
     static inline DynamicModuleControlBase* getFirstClass() { return mFirst; }
@@ -64,21 +64,21 @@ struct DynamicModuleControlBase {
 };
 
 struct DynamicModuleControl : DynamicModuleControlBase {
-    /* 80263218 */ virtual const char* getModuleName() const { return mName; };
-    /* 800188E4 */ virtual ~DynamicModuleControl() {}
-    /* 80263000 */ virtual int getModuleSize() const;
-    /* 80263070 */ virtual const char* getModuleTypeString() const;
+    virtual const char* getModuleName() const { return mName; };
+    virtual ~DynamicModuleControl() {}
+    virtual int getModuleSize() const;
+    virtual const char* getModuleTypeString() const;
     // virtual void dump();
-    /* 80262C0C */ virtual void dump2();
-    /* 802627E8 */ virtual bool do_load();
-    /* 80262AFC */ virtual BOOL do_load_async();
-    /* 80262BC4 */ virtual bool do_unload();
-    /* 80262C5C */ virtual BOOL do_link();
-    /* 80262F28 */ virtual bool do_unlink();
-    /* 80262660 */ DynamicModuleControl(char const*);
-    /* 802626D0 */ static JKRArchive* mountCallback(void*);
-    /* 8026275C */ static bool initialize();
-    /* 80262794 */ static bool callback(void*);
+    virtual void dump2();
+    virtual bool do_load();
+    virtual BOOL do_load_async();
+    virtual bool do_unload();
+    virtual BOOL do_link();
+    virtual bool do_unlink();
+    DynamicModuleControl(char const*);
+    static JKRArchive* mountCallback(void*);
+    static bool initialize();
+    static bool callback(void*);
 
     /* 0x10 */ OSModuleHeader* mModule;
     /* 0x14 */ void* mBss;

@@ -10,22 +10,17 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_Reset.h"
 
-/* 80450C88-80450C90 000188 0008+00 0/0 2/2 0/0 .sbss            None */
 bool mDoDvdErr_initialized;
 
-/* 803DECC0-803DEFE0 00B9E0 0318+08 4/4 0/0 0/0 .bss             DvdErr_thread */
 static OSThread DvdErr_thread;
 
-/* 803DEFE0-803DFBE0 00BD00 0C00+00 0/1 0/0 0/0 .bss             DvdErr_stack */
 #pragma push
 #pragma force_active on
-static u8 DvdErr_stack[3072] ALIGN_DECL(16);
+static u8 DvdErr_stack[3072] ATTRIBUTE_ALIGN(16);
 #pragma pop
 
-/* 803DFBE0-803DFC20 00C900 0028+18 1/2 0/0 0/0 .bss             Alarm */
 static OSAlarm Alarm;
 
-/* 8001659C-8001665C 010EDC 00C0+00 0/0 1/1 0/0 .text            mDoDvdErr_ThdInit__Fv */
 void mDoDvdErr_ThdInit() {
     if (!mDoDvdErr_initialized) {
         OSTime time = OSGetTime();
@@ -42,7 +37,6 @@ void mDoDvdErr_ThdInit() {
     }
 }
 
-/* 8001665C-800166A4 010F9C 0048+00 0/0 1/1 0/0 .text            mDoDvdErr_ThdCleanup__Fv */
 void mDoDvdErr_ThdCleanup() {
     if (mDoDvdErr_initialized) {
         OSCancelThread(&DvdErr_thread);
@@ -51,7 +45,6 @@ void mDoDvdErr_ThdCleanup() {
     }
 }
 
-/* 800166A4-80016704 010FE4 0060+00 1/1 0/0 0/0 .text            mDoDvdErr_Watch__FPv */
 static void mDoDvdErr_Watch(void*) {
     OSDisableInterrupts();
     { JKRThread thread(OSGetCurrentThread(), 0); }
@@ -66,8 +59,6 @@ static void mDoDvdErr_Watch(void*) {
     } while (true);
 }
 
-/* 80016704-8001672C 011044 0028+00 1/1 0/0 0/0 .text            AlarmHandler__FP7OSAlarmP9OSContext
- */
 static void AlarmHandler(OSAlarm*, OSContext*) {
     OSResumeThread(&DvdErr_thread);
 }

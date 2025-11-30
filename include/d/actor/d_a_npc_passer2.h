@@ -21,16 +21,16 @@ public:
         /* 0x0 */ MODE_MAX_e,
     };
 
-    /* 80AA755C */ void setAction(daNpcPasser2_c::Mode_e);
-    /* 80AA75A0 */ void callInit();
-    /* 80AA75C8 */ void callExecute();
-    /* 80AA75F4 */ void initPath();
-    /* 80AA774C */ void executePath();
-    /* 80AA790C */ void setAngle();
-    /* 80AA7918 */ void pathMoveF();
-    /* 80AA7CD8 */ cPhs__Step create();
-    /* 80AA7F78 */ void create_init();
-    /* 80AA8270 */ inline ~daNpcPasser2_c();
+    void setAction(daNpcPasser2_c::Mode_e);
+    void callInit();
+    void callExecute();
+    void initPath();
+    void executePath();
+    void setAngle();
+    void pathMoveF();
+    cPhs__Step create();
+    void create_init();
+    inline ~daNpcPasser2_c();
 
     inline int createHeap();
     inline void setSpeed(f32, f32, f32*, int);

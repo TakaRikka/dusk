@@ -17,24 +17,24 @@ public:
         JASAramStream aramStream_;
     };
 
-    /* 802A3104 */ JAIStream(JAIStreamMgr* streamMgr, JAISoundStrategyMgr<JAIStream>* soundStrategyMgr);
-    /* 802A319C */ void JAIStreamMgr_startID_(JAISoundID id, s32 streamFileEntry,
+    JAIStream(JAIStreamMgr* streamMgr, JAISoundStrategyMgr<JAIStream>* soundStrategyMgr);
+    void JAIStreamMgr_startID_(JAISoundID id, s32 streamFileEntry,
                                               const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience,
                                               int category);
-    /* 802A3230 */ bool prepare_prepareStream_();
-    /* 802A33F4 */ void prepare_();
-    /* 802A3498 */ void prepare_startStream_();
-    /* 802A34E4 */ void JAIStreamMgr_mixOut_(const JASSoundParams& inParams, JAISoundActivity activity);
-    /* 802A3720 */ void die_JAIStream_();
-    /* 802A37FC */ bool JAISound_tryDie_();
-    /* 802A388C */ void JAIStreamMgr_calc_();
-    /* 802A3948 */ s32 getNumChild() const;
-    /* 802A3950 */ JAISoundChild* getChild(int index);
-    /* 802A3A24 */ void releaseChild(int index);
-    /* 802A3ABC */ JASTrack* getTrack();
-    /* 802A3AC4 */ JASTrack* getChildTrack(int);
-    /* 802A3ACC */ JAIStream* asStream();
-    /* 802A3AD0 */ JAITempoMgr* getTempoMgr();
+    bool prepare_prepareStream_();
+    void prepare_();
+    void prepare_startStream_();
+    void JAIStreamMgr_mixOut_(const JASSoundParams& inParams, JAISoundActivity activity);
+    void die_JAIStream_();
+    bool JAISound_tryDie_();
+    void JAIStreamMgr_calc_();
+    s32 getNumChild() const;
+    JAISoundChild* getChild(int index);
+    void releaseChild(int index);
+    JASTrack* getTrack();
+    JASTrack* getChildTrack(int);
+    JAIStream* asStream();
+    JAITempoMgr* getTempoMgr();
 
     void* JAIStreamMgr_getAramAddr_() const { return streamAramAddr_; }
 

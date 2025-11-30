@@ -16,7 +16,7 @@
  */
 class e_mf_class {
 public:
-    /* 80712F20 */ e_mf_class();
+    e_mf_class();
 
     /* 0x0000 */ fopEn_enemy_c actor;
     /* 0x05AC */ request_of_phase_process_class mPhase;

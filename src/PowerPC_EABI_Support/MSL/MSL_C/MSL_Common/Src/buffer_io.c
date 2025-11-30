@@ -4,7 +4,6 @@ void __convert_from_newlines(unsigned char* buf, size_t* n) {}
 
 void __convert_to_newlines(unsigned char* buf, size_t* n) {}
 
-/* 803651A4-803651D8 35FAE4 0034+00 0/0 2/2 0/0 .text            __prep_buffer */
 void __prep_buffer(FILE* file) {
     file->buffer_ptr = file->buffer;
     file->buffer_length = file->buffer_size;
@@ -12,7 +11,6 @@ void __prep_buffer(FILE* file) {
     file->buffer_position = file->position;
 }
 
-/* 803650E0-803651A4 35FA20 00C4+00 0/0 5/5 0/0 .text            __flush_buffer */
 int __flush_buffer(FILE* file, size_t* bytes_flushed) {
     size_t buffer_len;
     int ioresult;

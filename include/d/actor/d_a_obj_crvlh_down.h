@@ -14,19 +14,19 @@
  */
 class daObjCRVLH_DW_c : public dBgS_MoveBgActor {
 public:
-    /* 80BD4138 */ void initCcCylinder();
-    /* 80BD41A4 */ void SetCcSyl();
-    /* 80BD4268 */ void BgRelease();
-    /* 80BD42D8 */ void Break();
-    /* 80BD45A4 */ void Obj_Hit();
-    /* 80BD4644 */ void setBaseMtx();
-    /* 80BD4764 */ int create();
+    void initCcCylinder();
+    void SetCcSyl();
+    void BgRelease();
+    void Break();
+    void Obj_Hit();
+    void setBaseMtx();
+    int create();
 
-    /* 80BD46EC */ virtual int CreateHeap();
-    /* 80BD4A84 */ virtual int Create();
-    /* 80BD4AC8 */ virtual int Execute(Mtx**);
-    /* 80BD4C44 */ virtual int Draw();
-    /* 80BD4CC8 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
 private:
     /* 0x5A0 */ fpc_ProcID field_0x5a0;

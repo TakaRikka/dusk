@@ -15,48 +15,48 @@
  */
 class daE_SB_c : public fopEn_enemy_c {
 public:
-    /* 807816D8 */ int CreateHeap();
-    /* 807817F0 */ void initCcCylinder();
-    /* 80781850 */ void setCcCylinder();
-    /* 80781898 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 807819DC */ void Particle_Set(u16);
-    /* 80781A4C */ void SetAnm(int, int, f32, f32);
-    /* 80781AF8 */ void MemberClear();
-    /* 80781DD4 */ void Shield_Motion();
-    /* 80781F30 */ void AttackStop();
-    /* 80781F80 */ void AttackSetSP();
-    /* 80782180 */ void AttackAngle();
-    /* 80782264 */ void AttackSpeedMotion();
-    /* 807822B8 */ void Attack_Motion();
-    /* 80782650 */ void Bomb_Death_Motion();
-    /* 80782714 */ void BombJumpSet();
-    /* 8078273C */ void GetHomeSet();
-    /* 8078294C */ void HomeJumpMotion();
-    /* 807829E8 */ void Jump_Normal_Set();
-    /* 80782B7C */ void Jump_Set();
-    /* 80782BD4 */ void JumpMiddleMotion();
-    /* 80782CC8 */ void Jump_Motion();
-    /* 80782E90 */ void Death_Motion();
-    /* 80782ED4 */ void Hanekaeri();
-    /* 80782EF4 */ void Hit();
-    /* 80782F10 */ void ActionCheck();
-    /* 80783010 */ void Search();
-    /* 80783404 */ void Wait_Motion();
-    /* 807834FC */ void Attack();
-    /* 807835A0 */ void Shield();
-    /* 80783678 */ void Anm_Motion();
-    /* 80783854 */ void Search_Bomb();
-    /* 80783914 */ void ChanceMotion();
-    /* 80783A9C */ void NoChanceMotion();
-    /* 80783B4C */ void Obj_Damage();
-    /* 80783FBC */ void HashiraVib();
-    /* 80784144 */ void Yazirushi();
-    /* 807841CC */ void setGroundAngle();
-    /* 80784390 */ int Execute();
-    /* 807844BC */ int Draw();
-    /* 807845D8 */ int Delete();
-    /* 80784640 */ void setBaseMtx();
-    /* 80784720 */ cPhs__Step Create();
+    int CreateHeap();
+    void initCcCylinder();
+    void setCcCylinder();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    void Particle_Set(u16);
+    void SetAnm(int, int, f32, f32);
+    void MemberClear();
+    void Shield_Motion();
+    void AttackStop();
+    void AttackSetSP();
+    void AttackAngle();
+    void AttackSpeedMotion();
+    void Attack_Motion();
+    void Bomb_Death_Motion();
+    void BombJumpSet();
+    void GetHomeSet();
+    void HomeJumpMotion();
+    void Jump_Normal_Set();
+    void Jump_Set();
+    void JumpMiddleMotion();
+    void Jump_Motion();
+    void Death_Motion();
+    void Hanekaeri();
+    void Hit();
+    void ActionCheck();
+    void Search();
+    void Wait_Motion();
+    void Attack();
+    void Shield();
+    void Anm_Motion();
+    void Search_Bomb();
+    void ChanceMotion();
+    void NoChanceMotion();
+    void Obj_Damage();
+    void HashiraVib();
+    void Yazirushi();
+    void setGroundAngle();
+    int Execute();
+    int Draw();
+    int Delete();
+    void setBaseMtx();
+    cPhs__Step Create();
 private:
     /* 0x5AC */ int field_0x5ac;
     /* 0x5B0 */ int field_0x5b0;
@@ -107,8 +107,8 @@ STATIC_ASSERT(sizeof(daE_SB_c) == 0xBC0);
 
 class daE_SB_HIO_c : public JORReflexible {
 public:
-    /* 8078164C */ daE_SB_HIO_c();
-    /* 80784CC0 */ virtual ~daE_SB_HIO_c() {}
+    daE_SB_HIO_c();
+    virtual ~daE_SB_HIO_c() {}
 
 #if DEBUG
     void genMessage(JORMContext*);

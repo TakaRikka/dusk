@@ -15,13 +15,13 @@
  */
 class daLv4HsTarget_c : public dBgS_MoveBgActor {
 public:
-    /* 80C5F690 */ void setBaseMtx();
-    /* 80C5F784 */ int create();
+    void setBaseMtx();
+    int create();
 
-    /* 80C5F718 */ virtual int CreateHeap();
-    /* 80C5F85C */ virtual int Execute(Mtx**);
-    /* 80C5F870 */ virtual int Draw();
-    /* 80C5F8D4 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
@@ -32,8 +32,8 @@ STATIC_ASSERT(sizeof(daLv4HsTarget_c) == 0x5AC);
 
 class daLv4HsTarget_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C5F62C */ daLv4HsTarget_HIO_c();
-    /* 80C5F990 */ virtual ~daLv4HsTarget_HIO_c() {}
+    daLv4HsTarget_HIO_c();
+    virtual ~daLv4HsTarget_HIO_c() {}
 
     void genMessage(JORMContext*);
 };

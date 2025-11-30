@@ -31,17 +31,17 @@ private:
     /* 0xB2A */ u8 field_0xb2a;
     /* 0xB2B */ u8 field_0xb2b;
 public:
-    /* 80CDD2AC */ virtual ~daObj_SMTile_c();
-    /* 80CDD3E8 */ int create();
-    /* 80CDD5CC */ int CreateHeap();
-    /* 80CDD6E8 */ int Delete();
-    /* 80CDD71C */ int Execute();
-    /* 80CDDA98 */ int Draw();
-    /* 80CDDB28 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80CDDB48 */ void setDstPos();
-    /* 80CDDD28 */ void setPrtcls(int, int);
-    /* 80CDDEFC */ void touchPrtcls(f32);
-    /* 80CDE1A8 */ void setMtx();
+    virtual ~daObj_SMTile_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    void setDstPos();
+    void setPrtcls(int, int);
+    void touchPrtcls(f32);
+    void setMtx();
 
     u8 getType() { return 0; }
     u8 getBitSW() { return (fopAcM_GetParam(this) & 0xff00) >> 8; }
@@ -54,7 +54,7 @@ STATIC_ASSERT(sizeof(daObj_SMTile_c) == 0xb30);
 
 class daObj_SMTile_Param_c {
 public:
-    /* 80CDE300 */ virtual ~daObj_SMTile_Param_c() {}
+    virtual ~daObj_SMTile_Param_c() {}
 
     static f32 const m[2];
 };

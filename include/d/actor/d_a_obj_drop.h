@@ -31,26 +31,26 @@ public:
         DEMOMODE_COMPLETE_GET_DEMO_e,
     };
 
-    /* 80BDFD8C */ int Create();
-    /* 80BDFE58 */ int create();
-    /* 80BE0358 */ void dropGet();
-    /* 80BE0430 */ BOOL checkGetArea();
-    /* 80BE05DC */ void checkCompleteDemo();
-    /* 80BE0658 */ void createLineEffect();
-    /* 80BE071C */ void removeLineEffect();
-    /* 80BE077C */ void createBodyEffect();
-    /* 80BE0840 */ void removeBodyEffect();
-    /* 80BE08A0 */ int modeInit();
-    /* 80BE0994 */ int modeNoParent();
-    /* 80BE09F4 */ int modeParentWait();
-    /* 80BE0C08 */ int modeWait();
-    /* 80BE1928 */ int actionCompleteWait();
-    /* 80BE1930 */ int actionOrderCompleteDemo();
-    /* 80BE19D0 */ int actionCompleateDemo();
-    /* 80BE1ACC */ int actionWaitCompleteGetDemo();
-    /* 80BE1B5C */ int actionCompleteGetDemo();
-    /* 80BE1BC4 */ int execute();
-    /* 80BE1DCC */ int _delete();
+    int Create();
+    int create();
+    void dropGet();
+    BOOL checkGetArea();
+    void checkCompleteDemo();
+    void createLineEffect();
+    void removeLineEffect();
+    void createBodyEffect();
+    void removeBodyEffect();
+    int modeInit();
+    int modeNoParent();
+    int modeParentWait();
+    int modeWait();
+    int actionCompleteWait();
+    int actionOrderCompleteDemo();
+    int actionCompleateDemo();
+    int actionWaitCompleteGetDemo();
+    int actionCompleteGetDemo();
+    int execute();
+    int _delete();
 
     u8 getYmSwbit() { return fopAcM_GetParamBit(this, 8, 8); }
     u8 getSave() { return fopAcM_GetParamBit(this, 0, 6); }

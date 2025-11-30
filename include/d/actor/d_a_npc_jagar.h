@@ -23,7 +23,7 @@ struct daNpc_Jagar_HIOParam {
 
 class daNpc_Jagar_Param_c {
 public:
-    /* 80A1A2C4 */ virtual ~daNpc_Jagar_Param_c() {}
+    virtual ~daNpc_Jagar_Param_c() {}
 
     static const daNpc_Jagar_HIOParam m;
 };
@@ -95,60 +95,60 @@ public:
         /* 0x3 */ MAT_JAGA_M,
     };
 
-    /* 80A1470C */ ~daNpc_Jagar_c();
-    /* 80A14858 */ int create();
-    /* 80A14B20 */ int CreateHeap();
-    /* 80A14F4C */ int Delete();
-    /* 80A14F80 */ int Execute();
-    /* 80A14FA0 */ int Draw();
-    /* 80A15034 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A15054 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80A150AC */ u8 getType();
-    /* 80A150F8 */ int isDelete();
-    /* 80A15198 */ void reset();
-    /* 80A15364 */ void afterJntAnm(int);
-    /* 80A153E8 */ void setParam();
-    /* 80A155E4 */ BOOL checkChangeEvt();
-    /* 80A15714 */ void setAfterTalkMotion();
-    /* 80A157B4 */ void srchActors();
-    /* 80A158A0 */ BOOL evtTalk();
-    /* 80A15940 */ BOOL evtCutProc();
-    /* 80A15A08 */ void action();
-    /* 80A15CA4 */ void beforeMove();
-    /* 80A15D68 */ void setAttnPos();
-    /* 80A1607C */ void setCollision();
-    /* 80A161EC */ int drawDbgInfo();
-    /* 80A161F4 */ void changeBtp(int*, int*);
-    /* 80A16234 */ int selectAction();
-    /* 80A162B0 */ int chkAction(int (daNpc_Jagar_c::*)(void*));
-    /* 80A162DC */ int setAction(int (daNpc_Jagar_c::*)(void*));
-    /* 80A16384 */ int cutClimbUp(int);
-    /* 80A16544 */ int cutNeedYourHelp(int);
-    /* 80A16CD8 */ int cutAnger(int);
-    /* 80A16EFC */ int cutConversationWithBou(int);
-    /* 80A1705C */ int cutConfidentialConversation(int);
-    /* 80A173D8 */ int cutFindWolf(int);
-    /* 80A17898 */ int chkSitMotion();
-    /* 80A17924 */ int chkSitMotion2();
-    /* 80A17984 */ int chkChuMotion();
-    /* 80A179F8 */ int chkToMotion();
-    /* 80A17A2C */ int wait(void*);
-    /* 80A1856C */ int talkwithBou(void*);
-    /* 80A18B74 */ int talk(void*);
-    /* 80A1A194 */ daNpc_Jagar_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
+    ~daNpc_Jagar_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void changeBtp(int*, int*);
+    int selectAction();
+    int chkAction(int (daNpc_Jagar_c::*)(void*));
+    int setAction(int (daNpc_Jagar_c::*)(void*));
+    int cutClimbUp(int);
+    int cutNeedYourHelp(int);
+    int cutAnger(int);
+    int cutConversationWithBou(int);
+    int cutConfidentialConversation(int);
+    int cutFindWolf(int);
+    int chkSitMotion();
+    int chkSitMotion2();
+    int chkChuMotion();
+    int chkToMotion();
+    int wait(void*);
+    int talkwithBou(void*);
+    int talk(void*);
+    daNpc_Jagar_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
                                 daNpcT_evtData_c const* param_7, char** param_8) :
                                 daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8)
                                  {}
-    /* 80A1A274 */ u16 getEyeballMaterialNo() { return MAT_JAGA_EYEBALL; }
-    /* 80A1A27C */ s32 getHeadJointNo() { return JNT_HEAD; }
-    /* 80A1A284 */ s32 getNeckJointNo() { return JNT_NECK; }
-    /* 80A1A28C */ s32 getBackboneJointNo() { return JNT_BACKBONE1; }
-    /* 80A1A294 */ BOOL checkChangeJoint(int param_1) { return param_1 == JNT_HEAD; }
-    /* 80A1A2A4 */ BOOL checkRemoveJoint(int param_1) { return param_1 == JNT_MOUTH; }
-    /* 80A1A2B4 */ s32 getFootLJointNo() { return JNT_FOOTL; }
-    /* 80A1A2BC */ s32 getFootRJointNo() { return JNT_FOOTR; }
+    u16 getEyeballMaterialNo() { return MAT_JAGA_EYEBALL; }
+    s32 getHeadJointNo() { return JNT_HEAD; }
+    s32 getNeckJointNo() { return JNT_NECK; }
+    s32 getBackboneJointNo() { return JNT_BACKBONE1; }
+    BOOL checkChangeJoint(int param_1) { return param_1 == JNT_HEAD; }
+    BOOL checkRemoveJoint(int param_1) { return param_1 == JNT_MOUTH; }
+    s32 getFootLJointNo() { return JNT_FOOTL; }
+    s32 getFootRJointNo() { return JNT_FOOTR; }
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

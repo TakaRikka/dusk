@@ -10,7 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 80D20F58-80D20FBC 000078 0064+00 1/0 0/0 0/0 .text daObj_Usaku_Draw__FP15obj_usaku_class */
 static int daObj_Usaku_Draw(obj_usaku_class* i_this) {
     g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType_MAJI(i_this->mpModel, &i_this->tevStr);
@@ -19,7 +18,6 @@ static int daObj_Usaku_Draw(obj_usaku_class* i_this) {
     return 1;
 }
 
-/* 80D20FBC-80D21048 0000DC 008C+00 2/1 0/0 0/0 .text daObj_Usaku_Execute__FP15obj_usaku_class */
 static int daObj_Usaku_Execute(obj_usaku_class* i_this) {
     mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z);
     mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
@@ -33,12 +31,10 @@ static int daObj_Usaku_Execute(obj_usaku_class* i_this) {
     return 1;
 }
 
-/* 80D21048-80D21050 000168 0008+00 1/0 0/0 0/0 .text daObj_Usaku_IsDelete__FP15obj_usaku_class */
 static int daObj_Usaku_IsDelete(obj_usaku_class* i_this) {
     return 1;
 }
 
-/* 80D21050-80D210A8 000170 0058+00 1/0 0/0 0/0 .text daObj_Usaku_Delete__FP15obj_usaku_class */
 static int daObj_Usaku_Delete(obj_usaku_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Obj_usaku");
 
@@ -48,7 +44,6 @@ static int daObj_Usaku_Delete(obj_usaku_class* i_this) {
     return 1;
 }
 
-/* 80D210A8-80D211AC 0001C8 0104+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_usaku_class* a_this = (obj_usaku_class*)i_this;
 
@@ -72,8 +67,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80D211AC-80D212D4 0002CC 0128+00 1/0 0/0 0/0 .text            daObj_Usaku_Create__FP10fopAc_ac_c
- */
 static int daObj_Usaku_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_usaku_class);
     obj_usaku_class* a_this = (obj_usaku_class*)i_this;
@@ -102,15 +95,12 @@ static int daObj_Usaku_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* ############################################################################################## */
-/* 80D212F8-80D21318 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Usaku_Method */
 static actor_method_class l_daObj_Usaku_Method = {
     (process_method_func)daObj_Usaku_Create,  (process_method_func)daObj_Usaku_Delete,
     (process_method_func)daObj_Usaku_Execute, (process_method_func)daObj_Usaku_IsDelete,
     (process_method_func)daObj_Usaku_Draw,
 };
 
-/* 80D21318-80D21348 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_USAKU */
 extern actor_process_profile_definition g_profile_OBJ_USAKU = {
     fpcLy_CURRENT_e,
     7,

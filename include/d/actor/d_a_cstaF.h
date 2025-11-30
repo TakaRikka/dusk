@@ -15,21 +15,21 @@
  */
 class daCstaF_c : public dBgS_MoveBgActor {
 public:
-    /* 804DDB48 */ BOOL checkCoverModel();
-    /* 804DDBB4 */ int create();
-    /* 804DE2F8 */ ~daCstaF_c();
-    /* 804DE558 */ void setRoomInfo();
-    /* 804DE5F0 */ void setMatrix();
-    /* 804DE698 */ void posMove();
-    /* 804DEB60 */ void setCollision();
-    /* 804DEC14 */ void setAnime();
-    /* 804DF0D8 */ BOOL initBrk(u16);
-    /* 804DF150 */ void initStopBrkBtk();
-    /* 804DF1A4 */ void initStartBrkBtk();
+    BOOL checkCoverModel();
+    int create();
+    ~daCstaF_c();
+    void setRoomInfo();
+    void setMatrix();
+    void posMove();
+    void setCollision();
+    void setAnime();
+    BOOL initBrk(u16);
+    void initStopBrkBtk();
+    void initStartBrkBtk();
 
-    /* 804DD978 */ virtual int CreateHeap();
-    /* 804DF37C */ virtual int Execute(Mtx**);
-    /* 804DF6E4 */ virtual int Draw();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
 
     cXyz& getBallPos() { return m_ballPos; }
     void onPlayerRide() { m_isPlayerRide = true; }

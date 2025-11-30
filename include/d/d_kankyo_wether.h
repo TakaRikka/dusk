@@ -84,8 +84,8 @@ public:
 };  // Size: 0xA0
 
 struct RAIN_EFF {
-    /* 80056CD0 */ ~RAIN_EFF();
-    /* 80056D0C */ RAIN_EFF();
+    ~RAIN_EFF();
+    RAIN_EFF();
 
     /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPosition;
@@ -124,8 +124,8 @@ public:
 };  // Size: 0x3718
 
 struct SNOW_EFF {
-    /* 80056D58 */ ~SNOW_EFF();
-    /* 80056D94 */ SNOW_EFF();
+    ~SNOW_EFF();
+    SNOW_EFF();
 
     /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPosition;
@@ -159,8 +159,8 @@ public:
 };
 
 struct STAR_EFF {
-    /* 80056DC8 */ ~STAR_EFF();
-    /* 80056E04 */ STAR_EFF();
+    ~STAR_EFF();
+    STAR_EFF();
 
     /* 0x00 */ u8 field_0x0[4];
     /* 0x04 */ cXyz field_0x04;
@@ -181,8 +181,8 @@ public:
 };
 
 struct HOUSI_EFF {
-    /* 80056EA8 */ ~HOUSI_EFF();
-    /* 80056EE4 */ HOUSI_EFF();
+    ~HOUSI_EFF();
+    HOUSI_EFF();
 
     /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPosition;
@@ -212,8 +212,8 @@ public:
 };  // Size: 0x5DF0
 
 struct CLOUD_EFF {
-    /* 80056E38 */ ~CLOUD_EFF();
-    /* 80056E74 */ CLOUD_EFF();
+    ~CLOUD_EFF();
+    CLOUD_EFF();
 
     /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPosition;
@@ -236,8 +236,8 @@ public:
 };  // Size: 0xB08
 
 struct VRKUMO_EFF {
-    /* 80056F18 */ ~VRKUMO_EFF();
-    /* 80056F54 */ VRKUMO_EFF();
+    ~VRKUMO_EFF();
+    VRKUMO_EFF();
 
     /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPosition;
@@ -266,8 +266,8 @@ public:
 class dKankyo_shstar_Packet : public J3DPacket {};
 
 struct EF_ODOUR_EFF {
-    /* 80056F8C */ ~EF_ODOUR_EFF();
-    /* 80056FC8 */ EF_ODOUR_EFF();
+    ~EF_ODOUR_EFF();
+    EF_ODOUR_EFF();
 
     /* 0x00 */ u8 mStatus;
     /* 0x04 */ cXyz mPosition;
@@ -294,8 +294,8 @@ public:
 };  // Size: 0x17728
 
 struct EF_MUD_EFF {
-    /* 80056FFC */ ~EF_MUD_EFF();
-    /* 80057038 */ EF_MUD_EFF();
+    ~EF_MUD_EFF();
+    EF_MUD_EFF();
 
     /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPosition;
@@ -325,8 +325,8 @@ public:
 };
 
 struct EF_EVIL_EFF {
-    /* 8005706C */ ~EF_EVIL_EFF();
-    /* 800570A8 */ EF_EVIL_EFF();
+    ~EF_EVIL_EFF();
+    EF_EVIL_EFF();
 
     /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPosition;

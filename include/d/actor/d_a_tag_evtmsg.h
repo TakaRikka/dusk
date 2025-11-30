@@ -16,21 +16,21 @@ public:
     /* 0x574 */ dMsgFlow_c mMsgFlow;
 
 public:
-    /* 8048CF38 */ int create();
-    /* 8048D014 */ int Delete();
-    /* 8048D01C */ int Execute();
-    /* 8048D31C */ int Draw();
-    /* 8048D324 */ u32 getOnEvtBit();
-    /* 8048D340 */ u32 getOffEvtBit();
-    /* 8048D35C */ u8 getOnSwBit();
-    /* 8048D368 */ u8 getOffSwBit();
-    /* 8048D374 */ u8 getProcType();
-    /* 8048D384 */ BOOL isDelete();
-    /* 8048D428 */ BOOL chkPointInArea(cXyz);
-    /* 8048D54C */ BOOL ECut_talk(int);
-    /* 8048D5CC */ BOOL ECut_wait(int);
+    int create();
+    int Delete();
+    int Execute();
+    int Draw();
+    u32 getOnEvtBit();
+    u32 getOffEvtBit();
+    u8 getOnSwBit();
+    u8 getOffSwBit();
+    u8 getProcType();
+    BOOL isDelete();
+    BOOL chkPointInArea(cXyz);
+    BOOL ECut_talk(int);
+    BOOL ECut_wait(int);
 
-    /* 8048D6F0 */ virtual ~daTag_EvtMsg_c();
+    virtual ~daTag_EvtMsg_c();
 
     static char* mEvtCutNameList[];
     static EvtCutFunc mEvtCutList[];

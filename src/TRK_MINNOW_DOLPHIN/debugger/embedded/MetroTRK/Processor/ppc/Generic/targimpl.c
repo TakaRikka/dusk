@@ -81,7 +81,6 @@ void TRK_ppc_memcpy(register void* dest, register const void* src, register int 
 void TRKRestoreExtended1Block();
 void TRKUARTInterruptHandler();
 
-/* 80370F20-803711C4 36B860 02A4+00 1/1 0/0 0/0 .text            TRKValidMemory32 */
 DSError TRKValidMemory32(const void* addr, size_t length, ValidMemoryOptions readWriteable) {
     DSError err = DS_InvalidMemory; /* assume range is invalid */
 
@@ -162,7 +161,6 @@ DSError TRKValidMemory32(const void* addr, size_t length, ValidMemoryOptions rea
     return err;
 }
 
-/* 80370DD4-80370F20 36B714 014C+00 1/1 2/2 0/0 .text            TRKTargetAccessMemory */
 DSError TRKTargetAccessMemory(void* data, u32 start, size_t* length,
                               MemoryAccessOptions accessOptions, BOOL read) {
     DSError error;
@@ -201,7 +199,6 @@ DSError TRKTargetAccessMemory(void* data, u32 start, size_t* length,
     return error;
 }
 
-/* 80370D88-80370DD4 36B6C8 004C+00 3/3 0/0 0/0 .text            TRKTargetReadInstruction */
 DSError TRKTargetReadInstruction(void* data, u32 start) {
     DSError error;
     size_t registersLength = 4;
@@ -215,7 +212,6 @@ DSError TRKTargetReadInstruction(void* data, u32 start) {
     return error;
 }
 
-/* 80370C94-80370D88 36B5D4 00F4+00 0/0 2/2 0/0 .text            TRKTargetAccessDefault */
 DSError TRKTargetAccessDefault(u32 firstRegister, u32 lastRegister, TRKBuffer* b,
                                size_t* registersLengthPtr, BOOL read) {
     DSError error;
@@ -249,7 +245,6 @@ DSError TRKTargetAccessDefault(u32 firstRegister, u32 lastRegister, TRKBuffer* b
     return error;
 }
 
-/* 80370788-80370C94 36B0C8 050C+00 0/0 2/2 0/0 .text            TRKTargetAccessFP */
 DSError TRKTargetAccessFP(u32 firstRegister, u32 lastRegister, TRKBuffer* b,
                           size_t* registersLengthPtr, BOOL read) {
     u64 temp;
@@ -290,7 +285,6 @@ DSError TRKTargetAccessFP(u32 firstRegister, u32 lastRegister, TRKBuffer* b,
     return error;
 }
 
-/* 80370618-80370788 36AF58 0170+00 0/0 2/2 0/0 .text            TRKTargetAccessExtended1 */
 DSError TRKTargetAccessExtended1(u32 firstRegister, u32 lastRegister, TRKBuffer* b,
                                  size_t* registersLengthPtr, BOOL read) {
     TRKExceptionStatus tempExceptionStatus;
@@ -338,7 +332,6 @@ DSError TRKTargetAccessExtended1(u32 firstRegister, u32 lastRegister, TRKBuffer*
     return error;
 }
 
-/* 803701E0-80370618 36AB20 0438+00 0/0 2/2 0/0 .text            TRKTargetAccessExtended2 */
 DSError TRKTargetAccessExtended2(u32 firstRegister, u32 lastRegister, TRKBuffer* b,
                                  size_t* registerStorageSize, BOOL read) {
     TRKExceptionStatus savedException;
@@ -393,7 +386,6 @@ DSError TRKTargetAccessExtended2(u32 firstRegister, u32 lastRegister, TRKBuffer*
     return err;
 }
 
-/* 80370134-803701E0 36AA74 00AC+00 2/2 0/0 0/0 .text            TRKPostInterruptEvent */
 void TRKPostInterruptEvent(void) {
     int eventType;
     int local_14;
@@ -425,7 +417,6 @@ void TRKPostInterruptEvent(void) {
     }
 }
 
-/* 8036FFA4-80370134 36A8E4 0190+00 0/0 1/1 0/0 .text            TRKTargetInterrupt */
 DSError TRKTargetInterrupt(TRKEvent* event) {
     DSError error = DS_NoError;
     switch (event->eventType) {
@@ -443,7 +434,6 @@ DSError TRKTargetInterrupt(TRKEvent* event) {
     return error;
 }
 
-/* 8036FF18-8036FFA4 36A858 008C+00 0/0 1/1 0/0 .text            TRKTargetAddStopInfo */
 u32* ConvertAddress(u32 addr) {
     return (u32*)(addr | 0x80000000);
 }
@@ -464,7 +454,6 @@ DSError TRKTargetAddStopInfo(TRKBuffer* b) {
     return error;
 }
 
-/* 8036FE94-8036FF18 36A7D4 0084+00 0/0 1/1 0/0 .text            TRKTargetAddExceptionInfo */
 void TRKTargetAddExceptionInfo(TRKBuffer* b) {
     size_t local_58;
     u32 local_54;
@@ -545,7 +534,6 @@ static BOOL TRKTargetCheckStep() {
     return gTRKStepStatus.active;
 }
 
-/* 8036FDE8-8036FE94 36A728 00AC+00 0/0 1/1 0/0 .text            TRKTargetSingleStep */
 DSError TRKTargetSingleStep(u32 count, BOOL stepOver) {
     DSError error = DS_NoError;
 
@@ -560,7 +548,6 @@ DSError TRKTargetSingleStep(u32 count, BOOL stepOver) {
     return error;
 }
 
-/* 8036FD30-8036FDE8 36A670 00B8+00 0/0 1/1 0/0 .text            TRKTargetStepOutOfRange */
 DSError TRKTargetStepOutOfRange(u32 rangeStart, u32 rangeEnd, BOOL stepOver) {
     DSError error = DS_NoError;
 
@@ -578,12 +565,10 @@ DSError TRKTargetStepOutOfRange(u32 rangeStart, u32 rangeEnd, BOOL stepOver) {
     return error;
 }
 
-/* 8036FD20-8036FD30 36A660 0010+00 0/0 1/1 0/0 .text            TRKTargetGetPC */
 u32 TRKTargetGetPC() {
     return gTRKCPUState.Default.PC;
 }
 
-/* 8036FB20-8036FD20 36A460 0200+00 0/0 1/1 0/0 .text            TRKTargetSupportRequest */
 DSError TRKTargetSupportRequest() {
     DSIOResult ioResult;
     size_t* length;
@@ -649,17 +634,14 @@ DSError TRKTargetSupportRequest() {
     return error;
 }
 
-/* 8036FB10-8036FB20 36A450 0010+00 0/0 3/3 0/0 .text            TRKTargetStopped */
 BOOL TRKTargetStopped() {
     return gTRKState.isStopped;
 }
 
-/* 8036FB00-8036FB10 36A440 0010+00 0/0 1/1 0/0 .text            TRKTargetSetStopped */
 void TRKTargetSetStopped(unsigned int stopped) {
     gTRKState.isStopped = stopped;
 }
 
-/* 8036FAE8-8036FB00 36A428 0018+00 0/0 1/1 0/0 .text            TRKTargetStop */
 u32 TRKTargetStop() {
     gTRKState.isStopped = TRUE;
     return 0;
@@ -810,12 +792,10 @@ DSError TRKPPCAccessSpecialReg(void* value, u32* access_func, BOOL read) {
     return DS_NoError;
 }
 
-/* 8036FAD8-8036FAE8 36A418 0010+00 0/0 1/1 0/0 .text            TRKTargetSetInputPendingPtr */
 void TRKTargetSetInputPendingPtr(void* ptr) {
     gTRKState.inputPendingPtr = ptr;
 }
 
-/* 8036FA14-8036FAD8 36A354 00C4+00 0/0 2/2 0/0 .text            TRKTargetAccessARAM */
 DSError TRKTargetAccessARAM(u32 p1, u32 p2, u32* p3, BOOL read) {
     DSError err;
     TRKExceptionStatus status;
@@ -839,7 +819,6 @@ DSError TRKTargetAccessARAM(u32 p1, u32 p2, u32* p3, BOOL read) {
     return err;
 }
 
-/* 8036F638-8036F640 -00001 0008+00 0/0 0/0 0/0 .text            __TRK_get_MSR */
 asm u32 __TRK_get_MSR() {
     // clang-format off
 	nofralloc
@@ -848,7 +827,6 @@ asm u32 __TRK_get_MSR() {
     // clang-format on
 }
 
-/* 8036F640-8036F648 -00001 0008+00 0/0 0/0 0/0 .text            __TRK_set_MSR */
 asm void __TRK_set_MSR(register u32) {
     // clang-format off
 	nofralloc
@@ -857,7 +835,6 @@ asm void __TRK_set_MSR(register u32) {
     // clang-format on
 }
 
-/* 8036F648-8036F684 369F88 003C+00 1/1 0/0 0/0 .text            TRK_ppc_memcpy */
 static asm void TRK_ppc_memcpy(register void* dest, register const void* src, register int n,
                                register u32 param_4, register u32 param_5) {
     // clang-format off
@@ -897,7 +874,6 @@ static asm void TRK_ppc_memcpy(register void* dest, register const void* src, re
     // clang-format on
 }
 
-/* 8036F684-8036F818 369FC4 0194+00 0/0 1/1 0/0 .text            TRKInterruptHandler */
 asm void TRKInterruptHandler() {
     // clang-format off
 	nofralloc
@@ -1007,7 +983,6 @@ L_802CF694:
     // clang-format on
 }
 
-/* 8036F818-8036F8B4 36A158 009C+00 1/1 0/0 0/0 .text            TRKExceptionHandler */
 static asm void TRKExceptionHandler(u16) {
     // clang-format off
 	nofralloc
@@ -1055,7 +1030,6 @@ LAB_00010bb0:
     // clang-format on
 }
 
-/* 8036F8B4-8036F978 36A1F4 00C4+00 0/0 1/1 0/0 .text            TRKSwapAndGo */
 asm void TRKSwapAndGo() {
     // clang-format off
 	nofralloc
@@ -1112,8 +1086,6 @@ L_802CF930:
     // clang-format on
 }
 
-/* 8036F978-8036F9CC 36A2B8 0054+00 1/1 0/0 0/0 .text            TRKInterruptHandlerEnableInterrupts
- */
 asm void TRKInterruptHandlerEnableInterrupts(void) {
     // clang-format off
 	nofralloc;
@@ -1141,7 +1113,6 @@ asm void TRKInterruptHandlerEnableInterrupts(void) {
     // clang-format on
 }
 
-/* 8036F9CC-8036F9F0 36A30C 0024+00 1/1 0/0 0/0 .text            ReadFPSCR */
 asm void ReadFPSCR(register f64*) {
     // clang-format off
 	nofralloc
@@ -1157,7 +1128,6 @@ asm void ReadFPSCR(register f64*) {
     // clang-format on
 }
 
-/* 8036F9F0-8036FA14 36A330 0024+00 1/1 0/0 0/0 .text            WriteFPSCR */
 asm void WriteFPSCR(register f64*) {
     // clang-format off
 	nofralloc

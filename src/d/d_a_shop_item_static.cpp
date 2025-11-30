@@ -7,17 +7,14 @@
 
 #include "d/d_a_shop_item_static.h"
 
-/* 80037C14-80037C1C 032554 0008+00 0/0 1/1 0/0 .text            getRotateP__12daShopItem_cFv */
 csXyz* daShopItem_c::getRotateP() {
     return &current.angle;
 }
 
-/* 80037C1C-80037C24 03255C 0008+00 0/0 2/2 0/0 .text            getPosP__12daShopItem_cFv */
 cXyz* daShopItem_c::getPosP() {
     return &current.pos;
 }
 
-/* 803792E8-80379738 -00001 0450+00 1/1 0/0 9/9 .rodata          mData__12daShopItem_c */
 ResourceData const daShopItem_c::mData[23] = {
     {"B_mD_sold", 3, -1, -1, -1, -1, -1, -1, 0.0f, 1.0f, 0, {0, 0x8000, 0}, 0, 0, 0, 0, -1, -1},
     {"B_mD_oil", 3, -1, -1, -1, -1, -1, -1, 0.0f, 1.0f, 0, {0, 0, 0}, 0, 0, 0, 0, -1, -1},
@@ -44,7 +41,6 @@ ResourceData const daShopItem_c::mData[23] = {
     {"O_mD_bott", 6, 12, -1, -1, -1, 9, 15, 0.0f, 1.0f, 0, {0, 0, 0}, 4, 0, 0, 0, 12, 0},
 };
 
-/* 80037C24-80037C7C 032564 0058+00 0/0 0/0 1/1 .text CheckShopItemCreateHeap__FP10fopAc_ac_c */
 int CheckShopItemCreateHeap(fopAc_ac_c* i_this) {
     daShopItem_c* a_this = static_cast<daShopItem_c*>(i_this);
 

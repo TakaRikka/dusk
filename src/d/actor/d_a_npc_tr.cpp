@@ -10,11 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 
-//
-// Declarations:
-//
-
-/* 80B25A0C-80B25A54 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__14daNPC_TR_HIO_cFv */
 daNPC_TR_HIO_c::daNPC_TR_HIO_c() {
     field_0x4 = -1;
     field_0x8 = 0.8f;
@@ -24,7 +19,6 @@ daNPC_TR_HIO_c::daNPC_TR_HIO_c() {
     field_0x18 = 250.0f;
 }
 
-/* 80B25A54-80B25B78 000134 0124+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* p_joint, int param_1) {
     if (param_1 == 0) {
         int jointNo = p_joint->getJntNo();
@@ -45,7 +39,6 @@ static int nodeCallBack(J3DJoint* p_joint, int param_1) {
     return 1;
 }
 
-/* 80B25B78-80B25BDC 000258 0064+00 1/0 0/0 0/0 .text            daNPC_TR_Draw__FP12npc_tr_class */
 static int daNPC_TR_Draw(npc_tr_class* npc_tr) {
     g_env_light.settingTevStruct(0, &npc_tr->current.pos, &npc_tr->tevStr);
     g_env_light.setLightTevColorType_MAJI(npc_tr->field_0x5b8, &npc_tr->tevStr);
@@ -62,13 +55,10 @@ static f32 dummyLiterals() {
     return dummy;
 }
 
-/* 80B26678-80B2667C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 data_80B26678;
 
-/* 80B26688-80B266A4 000018 001C+00 5/5 0/0 0/0 .bss             l_HIO */
 static daNPC_TR_HIO_c l_HIO;
 
-/* 80B25BDC-80B25FE0 0002BC 0404+00 1/1 0/0 0/0 .text            npc_tr_move__FP12npc_tr_class */
 static void npc_tr_move(npc_tr_class* npc_tr) {
     cXyz distance;
     f32 var_f31;
@@ -138,7 +128,6 @@ static void npc_tr_move(npc_tr_class* npc_tr) {
     cLib_addCalc2(&npc_tr->speedF, npc_tr->field_0x5e4 * l_HIO.field_0xc, 1.0f, var_f31);
 }
 
-/* 80B25FE0-80B261D8 0006C0 01F8+00 1/1 0/0 0/0 .text            action__FP12npc_tr_class */
 static void action(npc_tr_class* i_this) {
     switch (i_this->field_0x5be) {
     case 0:
@@ -175,8 +164,6 @@ static void action(npc_tr_class* i_this) {
     i_this->field_0x5f0 = cM_ssin(i_this->field_0x5ec + -7000) * i_this->field_0x5fc * -0.3f;
 }
 
-/* 80B261D8-80B262D0 0008B8 00F8+00 2/1 0/0 0/0 .text            daNPC_TR_Execute__FP12npc_tr_class
- */
 static int daNPC_TR_Execute(npc_tr_class* npc_tr) {
     npc_tr->field_0x5bc++;
     npc_tr->field_0x5d8 = fopAcM_searchActorDistance(npc_tr, (fopAc_ac_c*)dComIfGp_getPlayer(0));
@@ -199,14 +186,10 @@ static int daNPC_TR_Execute(npc_tr_class* npc_tr) {
     return 1;
 }
 
-/* 80B262D0-80B262D8 0009B0 0008+00 1/0 0/0 0/0 .text            daNPC_TR_IsDelete__FP12npc_tr_class
- */
 static bool daNPC_TR_IsDelete(npc_tr_class* param_0) {
     return true;
 }
 
-/* 80B262D8-80B2632C 0009B8 0054+00 1/0 0/0 0/0 .text            daNPC_TR_Delete__FP12npc_tr_class
- */
 static int daNPC_TR_Delete(npc_tr_class* npc_tr) {
     dComIfG_resDelete(&npc_tr->mPhaseReq, "NPC_TR");
 
@@ -217,7 +200,6 @@ static int daNPC_TR_Delete(npc_tr_class* npc_tr) {
     return 1;
 }
 
-/* 80B2632C-80B263E4 000A0C 00B8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* actor) {
     npc_tr_class* npc_tr = (npc_tr_class*)actor;
 
@@ -237,7 +219,6 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-/* 80B263E4-80B264E4 000AC4 0100+00 1/0 0/0 0/0 .text            daNPC_TR_Create__FP10fopAc_ac_c */
 static int daNPC_TR_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, npc_tr_class);
     npc_tr_class* npc_tr = (npc_tr_class*)i_this;
@@ -264,17 +245,14 @@ static int daNPC_TR_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 80B264E4-80B2652C 000BC4 0048+00 2/1 0/0 0/0 .text            __dt__14daNPC_TR_HIO_cFv */
 daNPC_TR_HIO_c::~daNPC_TR_HIO_c() {}
 
-/* 80B26610-80B26630 -00001 0020+00 1/0 0/0 0/0 .data            l_daNPC_TR_Method */
 static actor_method_class l_daNPC_TR_Method = {
     (process_method_func)daNPC_TR_Create,  (process_method_func)daNPC_TR_Delete,
     (process_method_func)daNPC_TR_Execute, (process_method_func)daNPC_TR_IsDelete,
     (process_method_func)daNPC_TR_Draw,
 };
 
-/* 80B26630-80B26660 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_TR */
 extern actor_process_profile_definition g_profile_NPC_TR = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

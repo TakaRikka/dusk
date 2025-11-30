@@ -15,10 +15,8 @@
 
 static u8 const unused[12] = {};
 
-/* 806676A4-806676AC 00000C 0008+00 0/1 0/0 0/0 .rodata          l_arcName */
 static char const l_arcName[8] = "Cstatue";
 
-/* 806676AC-806676B4 000014 0007+01 0/1 0/0 0/0 .rodata          l_arcNameBS */
 static char const l_arcNameBS[7] = "CstaBS";
 
 enum CStatueAnim {
@@ -121,21 +119,17 @@ static dCcD_SrcSph l_sphSrc = {
     }  // mSphAttr
 };
 
-/* 806636AC-806636C8 0000EC 001C+00 1/1 0/0 0/0 .text atHitCallback__11daCstatue_cFP10fopAc_ac_c */
 void daCstatue_c::atHitCallback(fopAc_ac_c* actor) {
     if (fopAcM_GetName(actor) == PROC_B_GM) {
         onStateFlg0(daCstatue_FLG0_100);
     }
 }
 
-/* 806636C8-806636EC 000108 0024+00 1/1 0/0 0/0 .text
- * daCstatue_atHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void daCstatue_atHitCallback(fopAc_ac_c* statue, dCcD_GObjInf* _objInfA, fopAc_ac_c* actor,
                                     dCcD_GObjInf* _objInfB) {
     static_cast<daCstatue_c*>(statue)->atHitCallback(actor);
 }
 
-/* 806636EC-80663AA4 00012C 03B8+00 1/1 0/0 0/0 .text            createHeap__11daCstatue_cFv */
 int daCstatue_c::createHeap() {
     static struct CStatueTblData const dataTbl[daCstatueType_N] = {
         // daCstatueType_NORMAL
@@ -207,12 +201,10 @@ int daCstatue_c::createHeap() {
     return cPhs_LOADING_e;
 }
 
-/* 80663D08-80663D28 000748 0020+00 1/1 0/0 0/0 .text daCstatue_createHeap__FP10fopAc_ac_c */
 static int daCstatue_createHeap(fopAc_ac_c* actor) {
     return static_cast<daCstatue_c*>(actor)->createHeap();
 }
 
-/* 80663D28-8066469C 000768 0974+00 1/1 0/0 0/0 .text            create__11daCstatue_cFv */
 int daCstatue_c::create() {
     static f32 const bossSphR[9] = {450.0f, 200.0f, 250.0f, 220.0f, 280.0f,
                                     200.0f, 250.0f, 220.0f, 280.0f};
@@ -405,12 +397,10 @@ int daCstatue_c::create() {
     return result;
 }
 
-/* 80664820-80664840 001260 0020+00 1/0 0/0 0/0 .text            daCstatue_Create__FP10fopAc_ac_c */
 static int daCstatue_Create(void* actor) {
     return static_cast<daCstatue_c*>(actor)->create();
 }
 
-/* 80664840-80664A78 001280 0238+00 1/1 0/0 0/0 .text            __dt__11daCstatue_cFv */
 daCstatue_c::~daCstatue_c() {
     mSound.deleteObject();
     if (mpMorf) {
@@ -423,14 +413,11 @@ daCstatue_c::~daCstatue_c() {
     dComIfG_resDelete(&mPhaseReq, mResName);
 }
 
-/* 80664A78-80664AA0 0014B8 0028+00 1/0 0/0 0/0 .text            daCstatue_Delete__FP11daCstatue_c
- */
 static int daCstatue_Delete(void* actor) {
     static_cast<daCstatue_c*>(actor)->~daCstatue_c();
     return cPhs_LOADING_e;
 }
 
-/* 80664AA0-80664B38 0014E0 0098+00 2/2 0/0 0/0 .text            setRoomInfo__11daCstatue_cFv */
 void daCstatue_c::setRoomInfo() {
     int roomId;
     if (mStatueAcch.GetGroundH() != -G_CM3D_F_INF) {
@@ -445,7 +432,6 @@ void daCstatue_c::setRoomInfo() {
     fopAcM_SetRoomNo(this, roomId);
 }
 
-/* 80664B38-80664C9C 001578 0164+00 2/2 0/0 0/0 .text            setMatrix__11daCstatue_cFv */
 void daCstatue_c::setMatrix() {
     static Vec const normalLocalBallPos = {70.0f, 0.0f, 0.0f};
     static Vec const smallLocalBallPos = {0.0f, 35.0f, 0.0f};
@@ -471,7 +457,6 @@ void daCstatue_c::setMatrix() {
     eyePos = attention_info.position;
 }
 
-/* 80664C9C-80665514 0016DC 0878+00 1/1 0/0 0/0 .text            posMove__11daCstatue_cFv */
 void daCstatue_c::posMove() {
     if (checkStateFlg0(daCstatue_FLG0_8)) {
         mStatueAcch.CrrPos(dComIfG_Bgsp());
@@ -634,7 +619,6 @@ void daCstatue_c::posMove() {
     }
 }
 
-/* 8066555C-80665E14 001F9C 08B8+00 1/1 0/0 0/0 .text            setCollision__11daCstatue_cFv */
 void daCstatue_c::setCollision() {
     static Vec const localTop = {0.0f, 90.0f, 0.0f};
     static Vec const localRoot = {0.0f, -30.0f, 0.0f};
@@ -783,8 +767,6 @@ void daCstatue_c::setCollision() {
     }
 }
 
-/* 80665E14-80665F80 002854 016C+00 1/1 0/0 0/0 .text            checkHammerReverse__11daCstatue_cFv
- */
 BOOL daCstatue_c::checkHammerReverse() {
     if (!checkStateFlg0(daCstatue_FLG0_10)) {
         return false;
@@ -803,7 +785,6 @@ BOOL daCstatue_c::checkHammerReverse() {
     return false;
 }
 
-/* 80665F80-80666390 0029C0 0410+00 1/1 0/0 0/0 .text            setDemo__11daCstatue_cFv */
 void daCstatue_c::setDemo() {
     static Vec const hitEffectCenter = {-2.031f, 120.438995f, 320.46704f};
     static Vec const hitEffectEye = {-2.031f, -80.761f, 642.828f};
@@ -878,7 +859,6 @@ void daCstatue_c::setDemo() {
     }
 }
 
-/* 80666390-80666B80 002DD0 07F0+00 1/1 0/0 0/0 .text            setAnime__11daCstatue_cFv */
 void daCstatue_c::setAnime() {
     daAlink_c* link = daAlink_getAlinkActorClass();
     daCstatue_c* controlledActor = static_cast<daCstatue_c*>(link->getCopyRodControllActor());
@@ -1035,14 +1015,12 @@ void daCstatue_c::setAnime() {
     mAnim2.play();
 }
 
-/* 80666B80-80666BF8 0035C0 0078+00 3/3 0/0 0/0 .text            initBrk__11daCstatue_cFUs */
 int daCstatue_c::initBrk(u16 i_index) {
     J3DAnmTevRegKey* key = (J3DAnmTevRegKey*)::dComIfG_getObjectRes(mResName, i_index);
     J3DModelData* ctx = mModel->getModelData();
     return mAnim2.init(ctx, key, 1, -1, 1.0f, 0, -1);
 }
 
-/* 80666BF8-80666C38 003638 0040+00 2/2 0/0 0/0 .text            initStopBrkBtk__11daCstatue_cFv */
 void daCstatue_c::initStopBrkBtk() {
     static const u16 brkIdx[daCstatueType_N] = {0x1F, 0x1C, 0x1D, 0x12, 0x12};
 
@@ -1050,7 +1028,6 @@ void daCstatue_c::initStopBrkBtk() {
     initBrk(brkIdx[mType]);
 }
 
-/* 80666C38-80666DE8 003678 01B0+00 2/2 0/0 0/0 .text            initStartBrkBtk__11daCstatue_cFv */
 void daCstatue_c::initStartBrkBtk() {
     static const u16 brkIdx[daCstatueType_N] = {0x1E, 0x1B, 0x1D, 0x11, 0x11};
 
@@ -1068,7 +1045,6 @@ void daCstatue_c::initStartBrkBtk() {
     }
 }
 
-/* 80666DE8-80667418 003828 0630+00 1/1 0/0 0/0 .text            execute__11daCstatue_cFv */
 int daCstatue_c::execute() {
     daAlink_c* link = daAlink_getAlinkActorClass();
     mBossAtGndHit = 0;
@@ -1190,13 +1166,10 @@ int daCstatue_c::execute() {
     return 1;
 }
 
-/* 80667418-80667438 003E58 0020+00 1/0 0/0 0/0 .text            daCstatue_Execute__FP11daCstatue_c
- */
 static int daCstatue_Execute(void* actor) {
     return static_cast<daCstatue_c*>(actor)->execute();
 }
 
-/* 80667438-80667610 003E78 01D8+00 1/1 0/0 0/0 .text            draw__11daCstatue_cFv */
 int daCstatue_c::draw() {
     int tevstrType = checkBossType() ? 0x10 : 8;
     g_env_light.settingTevStruct(tevstrType, &current.pos, &tevStr);
@@ -1227,17 +1200,14 @@ int daCstatue_c::draw() {
     return 1;
 }
 
-/* 80667610-80667630 004050 0020+00 1/0 0/0 0/0 .text            daCstatue_Draw__FP11daCstatue_c */
 static int daCstatue_Draw(void* actor) {
     return static_cast<daCstatue_c*>(actor)->draw();
 }
 
-/* 80667AA0-80667AC0 -00001 0020+00 1/0 0/0 0/0 .data            l_daCstatue_Method */
 static actor_method_class l_daCstatue_Method = {
     daCstatue_Create, daCstatue_Delete, daCstatue_Execute, NULL, daCstatue_Draw,
 };
 
-/* 80667AC0-80667AF0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_CSTATUE */
 extern actor_process_profile_definition g_profile_CSTATUE = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

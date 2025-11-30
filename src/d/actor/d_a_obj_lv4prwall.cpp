@@ -8,28 +8,24 @@
 #include "d/actor/d_a_obj_lv4prwall.h"
 #include "d/actor/d_a_obj_swturn.h"
 
-/* 80C698E8-80C698F4 000000 000C+00 2/2 0/0 0/0 .rodata          l_dzbidx */
 static const int l_dzbidx[] = {
     7,
     7,
     7,
 };
 
-/* 80C698F4-80C69900 00000C 000C+00 1/1 0/0 0/0 .rodata          l_bmdidx */
 static const int l_bmdidx[] = {
     4,
     4,
     4,
 };
 
-/* 80C69990-80C6999C -00001 000C+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[3] = {
     "PRWallR09",
     "P_Rwall",
     "PRWallR04",
 };
 
-/* 80C68C98-80C68DD8 000078 0140+00 1/1 0/0 0/1 .text            create1st__16daObjLv4PRwall_cFv */
 int daObjLv4PRwall_c::create1st() {
     mType = getType();
 
@@ -55,7 +51,6 @@ int daObjLv4PRwall_c::create1st() {
     return phase_state;
 }
 
-/* 80C69900-80C69948 000018 0048+00 1/1 0/0 0/0 .rodata          l_cull_box */
 static const Vec l_cull_box[] = {
     {-1600.0f, -100.0f, -1600.0f},
     {1600.0f, 1437.7f, 1600.0f},
@@ -65,7 +60,6 @@ static const Vec l_cull_box[] = {
     {1100.23f, 1000.7f, 1100.23f},
 };
 
-/* 80C68DD8-80C68F20 0001B8 0148+00 3/3 0/0 0/0 .text            setMtx__16daObjLv4PRwall_cFv */
 void daObjLv4PRwall_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + field_0x620, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y + field_0x60e);
@@ -87,7 +81,6 @@ void daObjLv4PRwall_c::setMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mModelMtx);
 }
 
-/* 80C68F20-80C68FA0 000300 0080+00 1/0 0/0 0/0 .text            CreateHeap__16daObjLv4PRwall_cFv */
 int daObjLv4PRwall_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName[mType], l_bmdidx[mType]);
     JUT_ASSERT(226, model_data != NULL);
@@ -100,7 +93,6 @@ int daObjLv4PRwall_c::CreateHeap() {
     return 1;
 }
 
-/* 80C68FA0-80C69064 000380 00C4+00 1/0 0/0 0/0 .text            Create__16daObjLv4PRwall_cFv */
 int daObjLv4PRwall_c::Create() {
     fopAcM_SetMtx(this, mModelMtx);
     mpModel->setBaseTRMtx(mModelMtx);
@@ -124,7 +116,6 @@ int daObjLv4PRwall_c::Create() {
     return 1;
 }
 
-/* 80C69064-80C690D8 000444 0074+00 1/1 0/0 0/0 .text            searchObjSwTurn__FPvPv */
 static void* searchObjSwTurn(void* i_actor, void* i_data) {
     daObjSwTurn_c* swturn = (daObjSwTurn_c*)i_actor;
     daObjLv4PRwall_c* prwall = (daObjLv4PRwall_c*)i_data;
@@ -137,7 +128,6 @@ static void* searchObjSwTurn(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80C690D8-80C696BC 0004B8 05E4+00 1/0 0/0 0/0 .text Execute__16daObjLv4PRwall_cFPPA3_A4_f */
 int daObjLv4PRwall_c::Execute(Mtx** param_0) {
     daObjSwTurn_c* swturn = (daObjSwTurn_c*)fopAcM_Search(searchObjSwTurn, this);
     if (swturn != NULL) {
@@ -272,7 +262,6 @@ int daObjLv4PRwall_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80C696BC-80C69760 000A9C 00A4+00 1/0 0/0 0/0 .text            Draw__16daObjLv4PRwall_cFv */
 int daObjLv4PRwall_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -283,38 +272,28 @@ int daObjLv4PRwall_c::Draw() {
     return 1;
 }
 
-/* 80C69760-80C697A4 000B40 0044+00 1/0 0/0 0/0 .text            Delete__16daObjLv4PRwall_cFv */
 int daObjLv4PRwall_c::Delete() {
     dComIfG_resDelete(this, l_arcName[mType]);
     return 1;
 }
 
-/* 80C697A4-80C69804 000B84 0060+00 1/0 0/0 0/0 .text
- * daObjLv4PRwall_create1st__FP16daObjLv4PRwall_c               */
 static int daObjLv4PRwall_create1st(daObjLv4PRwall_c* i_this) {
     fopAcM_ct(i_this, daObjLv4PRwall_c);
     return i_this->create1st();
 }
 
-/* 80C69804-80C69824 000BE4 0020+00 1/0 0/0 0/0 .text
- * daObjLv4PRwall_MoveBGDelete__FP16daObjLv4PRwall_c            */
 static int daObjLv4PRwall_MoveBGDelete(daObjLv4PRwall_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C69824-80C69844 000C04 0020+00 1/0 0/0 0/0 .text
- * daObjLv4PRwall_MoveBGExecute__FP16daObjLv4PRwall_c           */
 static int daObjLv4PRwall_MoveBGExecute(daObjLv4PRwall_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C69844-80C69870 000C24 002C+00 1/0 0/0 0/0 .text
- * daObjLv4PRwall_MoveBGDraw__FP16daObjLv4PRwall_c              */
 static int daObjLv4PRwall_MoveBGDraw(daObjLv4PRwall_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C6999C-80C699BC -00001 0020+00 1/0 0/0 0/0 .data            daObjLv4PRwall_METHODS */
 static actor_method_class daObjLv4PRwall_METHODS = {
     (process_method_func)daObjLv4PRwall_create1st,
     (process_method_func)daObjLv4PRwall_MoveBGDelete,
@@ -323,7 +302,6 @@ static actor_method_class daObjLv4PRwall_METHODS = {
     (process_method_func)daObjLv4PRwall_MoveBGDraw,
 };
 
-/* 80C699BC-80C699EC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv4PRwall */
 extern actor_process_profile_definition g_profile_Obj_Lv4PRwall = {
   fpcLy_CURRENT_e,          // mLayerID
   3,                        // mListID

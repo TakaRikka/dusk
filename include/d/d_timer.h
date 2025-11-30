@@ -29,36 +29,36 @@ public:
         /* 0xD */ u8 field_0xd;
     };  // Size: 0x10
 
-    /* 8025DB38 */ dDlst_TimerScrnDraw_c();
-    /* 8025DBE0 */ void setHIO();
-    /* 8025DFBC */ void setScreen(s32, JKRArchive*);
-    /* 8025E240 */ void setScreenBase();
-    /* 8025E66C */ void setScreenBoatRace();
-    /* 8025E8B8 */ void setScreenRider();
-    /* 8025EB20 */ void hideDenominator();
-    /* 8025EC5C */ void deleteScreen();
-    /* 8025EE24 */ void changeNumberTexture(J2DPane*, int);
-    /* 8025EECC */ const char* getNumber(int);
-    /* 8025EEF0 */ void setTimer(int);
-    /* 8025F180 */ void setCounter(u8, u8);
-    /* 8025FA00 */ void setParentPos(f32, f32);
-    /* 8025FA2C */ void setTimerPos(f32, f32);
-    /* 8025FA6C */ void setCounterPos(f32, f32);
-    /* 8025FA98 */ void setImagePos(f32, f32);
-    /* 8025FAC4 */ void setShowType(u8);
-    /* 8025FB74 */ void anime();
-    /* 8025FF98 */ BOOL closeAnime();
-    /* 802601E4 */ int createGetIn(cXyz);
-    /* 80260574 */ s32 createStart(u16);
-    /* 80260AA8 */ bool checkStartAnimeEnd();
-    /* 80260AD4 */ void playBckAnimation(f32);
+    dDlst_TimerScrnDraw_c();
+    void setHIO();
+    void setScreen(s32, JKRArchive*);
+    void setScreenBase();
+    void setScreenBoatRace();
+    void setScreenRider();
+    void hideDenominator();
+    void deleteScreen();
+    void changeNumberTexture(J2DPane*, int);
+    const char* getNumber(int);
+    void setTimer(int);
+    void setCounter(u8, u8);
+    void setParentPos(f32, f32);
+    void setTimerPos(f32, f32);
+    void setCounterPos(f32, f32);
+    void setImagePos(f32, f32);
+    void setShowType(u8);
+    void anime();
+    BOOL closeAnime();
+    int createGetIn(cXyz);
+    s32 createStart(u16);
+    bool checkStartAnimeEnd();
+    void playBckAnimation(f32);
 #if VERSION == VERSION_GCN_JPN
     bool isLeadByte(int);
 #endif
-    /* 80260B54 */ void drawPikari(int);
+    void drawPikari(int);
 
-    /* 80260690 */ virtual void draw();
-    /* 80261394 */ virtual ~dDlst_TimerScrnDraw_c();
+    virtual void draw();
+    virtual ~dDlst_TimerScrnDraw_c();
 
     void show() { mTimerVisible = 1; }
     void hide() { mTimerVisible = 0; }
@@ -116,24 +116,24 @@ private:
 
 class dTimer_c : public msg_class {
 public:
-    /* 8025CA0C */ int _create();
-    /* 8025CF04 */ int _execute();
-    /* 8025D33C */ int _draw();
-    /* 8025D3BC */ int _delete();
-    /* 8025D524 */ int deleteCheck();
-    /* 8025D618 */ int start(int, s16);
-    /* 8025D538 */ int start(int);
-    /* 8025D7C0 */ int stock_start(s16);
-    /* 8025D708 */ bool stock_start();
-    /* 8025D7E8 */ int stop(u8);
-    /* 8025D86C */ int restart(u8);
-    /* 8025D920 */ int end(int);
-    /* 8025D9E0 */ int deleteRequest();
-    /* 8025D9F0 */ int getTimeMs();
-    /* 8025DA54 */ int getLimitTimeMs();
-    /* 8025DA9C */ int getRestTimeMs();
-    /* 8025DB10 */ bool isStart();
-    /* 802613DC */ int createGetIn(cXyz);
+    int _create();
+    int _execute();
+    int _draw();
+    int _delete();
+    int deleteCheck();
+    int start(int, s16);
+    int start(int);
+    int stock_start(s16);
+    bool stock_start();
+    int stop(u8);
+    int restart(u8);
+    int end(int);
+    int deleteRequest();
+    int getTimeMs();
+    int getLimitTimeMs();
+    int getRestTimeMs();
+    bool isStart();
+    int createGetIn(cXyz);
 
     s32 createStart(u16 param_0) { return mp_tm_scrn->createStart(param_0); }
     void show() { mp_tm_scrn->show(); }

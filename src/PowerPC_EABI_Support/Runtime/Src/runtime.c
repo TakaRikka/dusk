@@ -106,7 +106,6 @@ static const u32 __constants[] = {
 	0x00000000, 0x00000000, 0x41F00000, 0x00000000, 0x41E00000, 0x00000000,
 };
 
-/* 803620AC-80362108 35C9EC 005C+00 0/0 42/42 89/89 .text            __cvt_fp2unsigned */
 asm u32 __cvt_fp2unsigned(register f64 d)
 {
 #ifdef __MWERKS__ // clang-format off
@@ -138,7 +137,6 @@ asm u32 __cvt_fp2unsigned(register f64 d)
 #endif // clang-format on
 }
 
-/* 80362108-80362134 35CA48 002C+00 0/0 0/0 0/0 .text            __save_fpr */
 asm static void __save_fpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -182,7 +180,6 @@ asm static void __save_fpr(void) {
 #endif // clang-format on
 }
 
-/* 80362154-80362180 35CA94 002C+00 0/0 0/0 0/0 .text            __restore_fpr */
 asm static void __restore_fpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -226,7 +223,6 @@ asm static void __restore_fpr(void) {
 #endif // clang-format on
 }
 
-/* 803621A0-803621A4 35CAE0 0004+00 0/0 22/22 13/13 .text            _savegpr_14 */
 asm static void __save_gpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -270,7 +266,6 @@ asm static void __save_gpr(void) {
 #endif // clang-format on
 }
 
-/* 803621EC-803621F0 35CB2C 0004+00 0/0 22/22 13/13 .text            _restgpr_14 */
 asm static void __restore_gpr(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -314,7 +309,6 @@ asm static void __restore_gpr(void) {
 #endif // clang-format on
 }
 
-/* 80362238-80362324 35CB78 00EC+00 0/0 2/2 0/0 .text            __div2u */
 asm void __div2u(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -389,7 +383,6 @@ lab9:
 #endif // clang-format on
 }
 
-/* 80362324-8036245C 35CC64 0138+00 0/0 16/16 1/1 .text            __div2i */
 asm void __div2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -489,7 +482,6 @@ func_end:
 #endif // clang-format on
 }
 
-/* 8036245C-80362540 35CD9C 00E4+00 0/0 2/2 0/0 .text            __mod2u */
 asm void __mod2u(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -562,7 +554,6 @@ lab9:
 #endif // clang-format on
 }
 
-/* 80362540-8036264C 35CE80 010C+00 0/0 2/2 0/0 .text            __mod2i */
 asm void __mod2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -649,7 +640,6 @@ no_adjust:
 #endif // clang-format on
 }
 
-/* 8036264C-80362670 35CF8C 0024+00 0/0 2/2 0/0 .text            __shl2i */
 asm void __shl2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -665,7 +655,6 @@ asm void __shl2i(void) {
 #endif // clang-format on
 }
 
-/* 80362670-80362694 35CFB0 0024+00 0/0 2/2 0/0 .text            __shr2u */
 asm void __shr2u(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -681,7 +670,6 @@ asm void __shr2u(void) {
 #endif // clang-format on
 }
 
-/* 80362694-803626BC 35CFD4 0028+00 0/0 3/3 0/0 .text            __shr2i */
 asm void __shr2i(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -699,7 +687,6 @@ around:
 #endif // clang-format on
 }
 
-/* 803626BC-80362770 35CFFC 00B4+00 0/0 1/1 0/0 .text            __cvt_sll_flt */
 asm void __cvt_sll_flt(void)
 {
 #ifdef __MWERKS__ // clang-format off
@@ -756,7 +743,6 @@ lbl_80362758:
 #endif // clang-format on
 }
 
-/* 80362770-8036283C 35D0B0 00CC+00 0/0 2/2 0/0 .text            __cvt_dbl_usll */
 asm void __cvt_dbl_usll(void)
 {
 #ifdef __MWERKS__ // clang-format off

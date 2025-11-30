@@ -10,11 +10,8 @@
 #include "d/d_s_play.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* 8059C6A4-8059C6AC 000000 0008+00 7/7 0/0 0/0 .rodata          l_dzbIdx */
 static const int l_dzbIdx[] = {7, 8};
 
-/* 8059B4EC-8059B754 0000EC 0268+00 1/1 0/0 0/0 .text
- * rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c              */
 static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideActor) {
     daObjSw5_c* i_this = (daObjSw5_c*)i_bgActor;
     daPy_py_c* player_p = daPy_getPlayerActorClass();
@@ -50,7 +47,6 @@ static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideA
     }
 }
 
-/* 8059B754-8059B804 000354 00B0+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -70,7 +66,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 8059B804-8059B88C 000404 0088+00 1/1 0/0 0/0 .text            initBaseMtx__10daObjSw5_cFv */
 void daObjSw5_c::initBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -80,7 +75,6 @@ void daObjSw5_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 8059B88C-8059B920 00048C 0094+00 2/2 0/0 0/0 .text            setBaseMtx__10daObjSw5_cFv */
 void daObjSw5_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -91,7 +85,6 @@ void daObjSw5_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 8059B920-8059BA1C 000520 00FC+00 1/0 0/0 0/0 .text            Create__10daObjSw5_cFv */
 int daObjSw5_c::Create() {
     if (dComIfG_Bgsp().Regist(mpBgW2, this)) {
         return 0;
@@ -119,10 +112,8 @@ int daObjSw5_c::Create() {
     return 1;
 }
 
-/* 8059C6FC-8059C700 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "D_Hfsw00";
 
-/* 8059BA1C-8059BB1C 00061C 0100+00 1/0 0/0 0/0 .text            CreateHeap__10daObjSw5_cFv */
 int daObjSw5_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(308, modelData != NULL);
@@ -141,7 +132,6 @@ int daObjSw5_c::CreateHeap() {
     return 1;
 }
 
-/* 8059BB1C-8059BBD4 00071C 00B8+00 1/1 0/0 0/0 .text            create__10daObjSw5_cFv */
 int daObjSw5_c::create() {
     fopAcM_ct(this, daObjSw5_c);
 
@@ -156,7 +146,6 @@ int daObjSw5_c::create() {
     return phase_state;
 }
 
-/* 8059BBD4-8059BC70 0007D4 009C+00 1/0 0/0 0/0 .text            Execute__10daObjSw5_cFPPA3_A4_f */
 int daObjSw5_c::Execute(Mtx** param_0) {
     setting_ride_flag();
     mCounter++;
@@ -178,8 +167,6 @@ int daObjSw5_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 8059BC70-8059BD24 000870 00B4+00 1/1 0/0 0/0 .text            setting_ride_flag__10daObjSw5_cFv
- */
 void daObjSw5_c::setting_ride_flag() {
     if (mUnkRideTimer != 0) {
         mUnkRideTimer--;
@@ -209,7 +196,6 @@ void daObjSw5_c::setting_ride_flag() {
     }
 }
 
-/* 8059BD24-8059BD2C 000924 0008+00 1/1 0/0 0/0 .text            checkPushable__10daObjSw5_cFv */
 // getSwNo2 always returns 0xFF, so this function always returns true
 BOOL daObjSw5_c::checkPushable() {
     u8 swbit2 = getSwNo2();
@@ -224,7 +210,6 @@ BOOL daObjSw5_c::checkPushable() {
     return false;
 }
 
-/* 8059BD2C-8059BE18 00092C 00EC+00 1/1 0/0 0/0 .text            event_proc_call__10daObjSw5_cFv */
 void daObjSw5_c::event_proc_call() {
     static void (daObjSw5_c::*l_func[])() = {
         &daObjSw5_c::actionPauseNone,
@@ -238,16 +223,12 @@ void daObjSw5_c::event_proc_call() {
     (this->*l_func[mAction])();
 }
 
-/* 8059BE18-8059BE24 000A18 000C+00 2/2 0/0 0/0 .text            actionPauseNoneInit__10daObjSw5_cFv
- */
 void daObjSw5_c::actionPauseNoneInit() {
     mAction = 0;
 }
 
-/* 8059BE24-8059BE28 000A24 0004+00 1/0 0/0 0/0 .text            actionPauseNone__10daObjSw5_cFv */
 void daObjSw5_c::actionPauseNone() {}
 
-/* 8059BE28-8059BE80 000A28 0058+00 1/1 0/0 0/0 .text actionPauseOrderInit__10daObjSw5_cFv */
 void daObjSw5_c::actionPauseOrderInit() {
     if (mAction != 1) {
         mAction = 1;
@@ -256,7 +237,6 @@ void daObjSw5_c::actionPauseOrderInit() {
     }
 }
 
-/* 8059BE80-8059BEB4 000A80 0034+00 1/0 0/0 0/0 .text            actionPauseOrder__10daObjSw5_cFv */
 void daObjSw5_c::actionPauseOrder() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         actionPauseInit();
@@ -265,14 +245,12 @@ void daObjSw5_c::actionPauseOrder() {
     }
 }
 
-/* 8059BEB4-8059BEE0 000AB4 002C+00 1/1 0/0 0/0 .text            actionPauseInit__10daObjSw5_cFv */
 void daObjSw5_c::actionPauseInit() {
     daPy_getPlayerActorClass()->onWolfEyeKeep();
     mPauseTimer = 10;
     mAction = 2;
 }
 
-/* 8059BEE0-8059BF48 000AE0 0068+00 1/0 0/0 0/0 .text            actionPause__10daObjSw5_cFv */
 void daObjSw5_c::actionPause() {
     daPy_getPlayerActorClass()->onWolfEyeKeep();
 
@@ -283,16 +261,12 @@ void daObjSw5_c::actionPause() {
     }
 }
 
-/* 8059BF48-8059BF4C 000B48 0004+00 1/0 0/0 0/0 .text            actionWait__10daObjSw5_cFv */
 void daObjSw5_c::actionWait() {}
 
-/* 8059BF4C-8059BF50 000B4C 0004+00 1/0 0/0 0/0 .text            actionOrder__10daObjSw5_cFv */
 void daObjSw5_c::actionOrder() {}
 
-/* 8059BF50-8059BF54 000B50 0004+00 1/0 0/0 0/0 .text            actionEvent__10daObjSw5_cFv */
 void daObjSw5_c::actionEvent() {}
 
-/* 8059BF54-8059BFE4 000B54 0090+00 1/1 0/0 0/0 .text            calc_top_pos__10daObjSw5_cFv */
 void daObjSw5_c::calc_top_pos() {
     speed.y -= (field_0x5f8 - field_0x5fc) * (0.9f + KREG_F(1));
     speed.y -= speed.y * (0.5f + KREG_F(0));
@@ -302,7 +276,6 @@ void daObjSw5_c::calc_top_pos() {
     mTopPos = cLib_minMaxLimit<f32>(mTopPos, -25.0f, 0.0f);
 }
 
-/* 8059BFE4-8059C0A0 000BE4 00BC+00 1/1 0/0 0/0 .text            mode_proc_call__10daObjSw5_cFv */
 void daObjSw5_c::mode_proc_call() {
     static void (daObjSw5_c::*l_mode_func[])() = {
         &daObjSw5_c::modeWaitLower,
@@ -314,8 +287,6 @@ void daObjSw5_c::mode_proc_call() {
     (this->*l_mode_func[mMode])();
 }
 
-/* 8059C0A0-8059C0C8 000CA0 0028+00 1/1 0/0 0/0 .text            modeWaitLowerInit__10daObjSw5_cFv
- */
 void daObjSw5_c::modeWaitLowerInit() {
     speed.y = 0.0f;
     field_0x5f8 = 1.0f;
@@ -323,7 +294,6 @@ void daObjSw5_c::modeWaitLowerInit() {
     mMode = 0;
 }
 
-/* 8059C0C8-8059C23C 000CC8 0174+00 1/0 0/0 0/0 .text            modeWaitLower__10daObjSw5_cFv */
 void daObjSw5_c::modeWaitLower() {
     bool var_r30 = false;
     bool do_pause = false;
@@ -359,14 +329,12 @@ void daObjSw5_c::modeWaitLower() {
     }
 }
 
-/* 8059C23C-8059C2D0 000E3C 0094+00 1/1 0/0 0/0 .text            modeLowerInit__10daObjSw5_cFv */
 void daObjSw5_c::modeLowerInit() {
     fopAcM_seStart(this, Z2SE_OBJ_HEAVY_FUMISW_ON, 0);
     field_0x5fc = 0.0f;
     mMode = 1;
 }
 
-/* 8059C2D0-8059C364 000ED0 0094+00 1/0 0/0 0/0 .text            modeLower__10daObjSw5_cFv */
 void daObjSw5_c::modeLower() {
     daPy_getPlayerActorClass();
     if (-25.0f == mTopPos) {
@@ -378,27 +346,22 @@ void daObjSw5_c::modeLower() {
     }
 }
 
-/* 8059C364-8059C370 000F64 000C+00 2/2 0/0 0/0 .text            modeWaitUpperInit__10daObjSw5_cFv
- */
 void daObjSw5_c::modeWaitUpperInit() {
     mMode = 2;
 }
 
-/* 8059C370-8059C3C4 000F70 0054+00 1/0 0/0 0/0 .text            modeWaitUpper__10daObjSw5_cFv */
 void daObjSw5_c::modeWaitUpper() {
     if (!fopAcM_isSwitch(this, getSwNo())) {
         modeUpperInit();
     }
 }
 
-/* 8059C3C4-8059C454 000FC4 0090+00 1/1 0/0 0/0 .text            modeUpperInit__10daObjSw5_cFv */
 void daObjSw5_c::modeUpperInit() {
     fopAcM_seStart(this, Z2SE_OBJ_HEAVY_FUMISW_OFF, 0);
     field_0x5fc = 1.0f;
     mMode = 3;
 }
 
-/* 8059C454-8059C4BC 001054 0068+00 1/0 0/0 0/0 .text            modeUpper__10daObjSw5_cFv */
 void daObjSw5_c::modeUpper() {
     if (mTopPos == 0.0f) {
         modeWaitLowerInit();
@@ -411,7 +374,6 @@ void daObjSw5_c::modeUpper() {
     }
 }
 
-/* 8059C4BC-8059C560 0010BC 00A4+00 1/0 0/0 0/0 .text            Draw__10daObjSw5_cFv */
 int daObjSw5_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -422,7 +384,6 @@ int daObjSw5_c::Draw() {
     return 1;
 }
 
-/* 8059C560-8059C5CC 001160 006C+00 1/0 0/0 0/0 .text            Delete__10daObjSw5_cFv */
 int daObjSw5_c::Delete() {
     if (mpBgW2 != NULL && mpBgW2->ChkUsed()) {
         dComIfG_Bgsp().Release(mpBgW2);
@@ -432,27 +393,22 @@ int daObjSw5_c::Delete() {
     return 1;
 }
 
-/* 8059C5CC-8059C5F8 0011CC 002C+00 1/0 0/0 0/0 .text            daObjSw5_Draw__FP10daObjSw5_c */
 static int daObjSw5_Draw(daObjSw5_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 8059C5F8-8059C618 0011F8 0020+00 1/0 0/0 0/0 .text            daObjSw5_Execute__FP10daObjSw5_c */
 static int daObjSw5_Execute(daObjSw5_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 8059C618-8059C638 001218 0020+00 1/0 0/0 0/0 .text            daObjSw5_Delete__FP10daObjSw5_c */
 static int daObjSw5_Delete(daObjSw5_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 8059C638-8059C658 001238 0020+00 1/0 0/0 0/0 .text            daObjSw5_Create__FP10fopAc_ac_c */
 static int daObjSw5_Create(fopAc_ac_c* i_this) {
     return ((daObjSw5_c*)i_this)->create();
 }
 
-/* 8059C7F0-8059C810 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjSw5_Method */
 static actor_method_class l_daObjSw5_Method = {
     (process_method_func)daObjSw5_Create,
     (process_method_func)daObjSw5_Delete,
@@ -461,7 +417,6 @@ static actor_method_class l_daObjSw5_Method = {
     (process_method_func)daObjSw5_Draw,
 };
 
-/* 8059C810-8059C840 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Swpush5 */
 extern actor_process_profile_definition g_profile_Obj_Swpush5 = {
   fpcLy_CURRENT_e,        // mLayerID
   2,                      // mListID

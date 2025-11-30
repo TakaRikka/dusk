@@ -10,7 +10,7 @@ struct daNpcAshB_HIOParam {
 
 class daNpcAshB_Param_c {
 public:
-    /* 80962078 */ virtual ~daNpcAshB_Param_c() {}
+    virtual ~daNpcAshB_Param_c() {}
 
     static const daNpcAshB_HIOParam m;
 };
@@ -98,35 +98,35 @@ public:
     };
 
 public:
-    /* 8095DE4C */ daNpcAshB_c();
-    /* 8095E060 */ ~daNpcAshB_c();
-    /* 8095E224 */ cPhs__Step Create();
-    /* 8095E4A0 */ BOOL CreateHeap();
-    /* 8095E914 */ int Delete();
-    /* 8095E948 */ int Execute();
-    /* 8095E96C */ int Draw();
-    /* 8095E9C8 */ bool ctrlJoint(J3DJoint*, J3DModel*);
-    /* 8095EB94 */ static BOOL createHeapCallBack(fopAc_ac_c*);
-    /* 8095EBB4 */ static BOOL ctrlJointCallBack(J3DJoint*, int);
-    /* 8095EC00 */ inline bool setExpressionAnm(int, bool);
-    /* 8095EE00 */ inline bool setExpressionBtp(int);
-    /* 8095EEE0 */ void setMotionAnm(int, f32);
-    /* 8095F0A4 */ void reset();
-    /* 8095F21C */ inline bool setAction(ActionFn i_actionFn);
-    /* 8095F2C4 */ bool wait(void*);
-    /* 8095FC70 */ void setMotion(int, f32, int);
-    /* 8095FD34 */ void setExpression(int, f32);
-    /* 8095FD9C */ bool talk(void*);
-    /* 809602E0 */ bool demo(void*);
-    /* 809604C8 */ BOOL EvCut_Appear(int);
-    /* 80960A60 */ inline void setParam();
-    /* 80960AE8 */ inline BOOL main();
-    /* 80960D64 */ inline void playMotion();
-    /* 80961188 */ inline BOOL ctrlBtk();
-    /* 80961264 */ inline void setAttnPos();
-    /* 80961574 */ inline void lookat();
-    /* 80961770 */ inline void drawOtherMdls();
-    /* 809617F8 */ inline BOOL drawDbgInfo();
+    daNpcAshB_c();
+    ~daNpcAshB_c();
+    cPhs__Step Create();
+    BOOL CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    bool ctrlJoint(J3DJoint*, J3DModel*);
+    static BOOL createHeapCallBack(fopAc_ac_c*);
+    static BOOL ctrlJointCallBack(J3DJoint*, int);
+    inline bool setExpressionAnm(int, bool);
+    inline bool setExpressionBtp(int);
+    void setMotionAnm(int, f32);
+    void reset();
+    inline bool setAction(ActionFn i_actionFn);
+    bool wait(void*);
+    void setMotion(int, f32, int);
+    void setExpression(int, f32);
+    bool talk(void*);
+    bool demo(void*);
+    BOOL EvCut_Appear(int);
+    inline void setParam();
+    inline BOOL main();
+    inline void playMotion();
+    inline BOOL ctrlBtk();
+    inline void setAttnPos();
+    inline void lookat();
+    inline void drawOtherMdls();
+    inline BOOL drawDbgInfo();
 
     s16 getMessageNo() { return (fopAcM_GetParam(this) >> 8) & 0xFFFF; }
     inline void setExpressionTalkAfter() { setExpression(6, -1.0f); }

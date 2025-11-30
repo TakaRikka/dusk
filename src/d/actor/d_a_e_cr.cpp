@@ -11,8 +11,8 @@
 
 class daE_CR_HIO_c : public JORReflexible {
 public:
-    /* 8069800C */ daE_CR_HIO_c();
-    /* 806997F4 */ virtual ~daE_CR_HIO_c() {}
+    daE_CR_HIO_c();
+    virtual ~daE_CR_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -28,7 +28,6 @@ enum daE_CR_ACTION {
     ACTION_DAMAGE,
 };
 
-/* 8069800C-80698044 0000EC 0038+00 1/1 0/0 0/0 .text            __ct__12daE_CR_HIO_cFv */
 daE_CR_HIO_c::daE_CR_HIO_c() {
     id = -1;
     base_size = 3.0f;
@@ -36,13 +35,11 @@ daE_CR_HIO_c::daE_CR_HIO_c() {
     pl_search_range = 400.0f;
 }
 
-/* 80698044-806980F0 000124 00AC+00 3/3 0/0 0/0 .text            anm_init__FP10e_cr_classifUcf */
 static void anm_init(e_cr_class* a_this, int i_anm, f32 i_morf, u8 i_mode, f32 i_speed) {
     a_this->modelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_CR", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f);
     a_this->anm = i_anm;
 }
 
-/* 806980F0-806981B4 0001D0 00C4+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -61,7 +58,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 806981B4-80698250 000294 009C+00 1/0 0/0 0/0 .text            daE_CR_Draw__FP10e_cr_class */
 static int daE_CR_Draw(e_cr_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
@@ -74,8 +70,6 @@ static int daE_CR_Draw(e_cr_class* a_this) {
     return 1;
 }
 
-/* 80698250-80698328 000330 00D8+00 1/1 0/0 0/0 .text other_bg_check__FP10e_cr_classP10fopAc_ac_c
- */
 static BOOL other_bg_check(e_cr_class* a_this, fopAc_ac_c* i_other) {
     fopAc_ac_c* actor = &a_this->enemy;
     dBgS_LinChk linchk;
@@ -96,7 +90,6 @@ static BOOL other_bg_check(e_cr_class* a_this, fopAc_ac_c* i_other) {
     return FALSE;
 }
 
-/* 80698328-806983A4 000408 007C+00 1/1 0/0 0/0 .text            pl_check__FP10e_cr_classfs */
 static BOOL pl_check(e_cr_class* a_this, f32 i_range, s16 i_angle) {
     fopAc_ac_c* actor = &a_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -111,7 +104,6 @@ static BOOL pl_check(e_cr_class* a_this, f32 i_range, s16 i_angle) {
     return FALSE;
 }
 
-/* 806983A4-80698498 000484 00F4+00 1/1 0/0 0/0 .text            damage_check__FP10e_cr_class */
 static void damage_check(e_cr_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -146,7 +138,6 @@ static void damage_check(e_cr_class* a_this) {
     }
 }
 
-/* 80698498-806985A4 000578 010C+00 1/1 0/0 0/0 .text            way_bg_check__FP10e_cr_classf */
 static BOOL way_bg_check(e_cr_class* a_this, f32 param_1) {
     fopAc_ac_c* actor = &a_this->enemy;
     dBgS_LinChk linchk;
@@ -171,13 +162,10 @@ static BOOL way_bg_check(e_cr_class* a_this, f32 param_1) {
     return FALSE;
 }
 
-/* 80699E88-80699E8C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 80699E98-80699EAC 000018 0014+00 4/4 0/0 0/0 .bss             l_HIO */
 static daE_CR_HIO_c l_HIO;
 
-/* 806985A4-80698A5C 000684 04B8+00 1/1 0/0 0/0 .text            e_cr_move__FP10e_cr_class */
 static void e_cr_move(e_cr_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
     int anm_frame = a_this->modelMorf->getFrame();
@@ -258,7 +246,6 @@ static void e_cr_move(e_cr_class* a_this) {
     }
 }
 
-/* 80698A5C-80698B80 000B3C 0124+00 1/1 0/0 0/0 .text            e_cr_s_damage__FP10e_cr_class */
 static void e_cr_s_damage(e_cr_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
@@ -286,7 +273,6 @@ static void e_cr_s_damage(e_cr_class* a_this) {
     cLib_addCalc0(&actor->speedF, 1.0f, 4.0f);
 }
 
-/* 80698B80-80698D6C 000C60 01EC+00 1/1 0/0 0/0 .text            e_cr_damage__FP10e_cr_class */
 static void e_cr_damage(e_cr_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
@@ -333,7 +319,6 @@ static void e_cr_damage(e_cr_class* a_this) {
     actor->shape_angle.y += a_this->field_0x68e;
 }
 
-/* 80698D6C-80698F88 000E4C 021C+00 1/1 0/0 0/0 .text            action__FP10e_cr_class */
 static void action(e_cr_class* a_this) {
     fopEn_enemy_c* actor = &a_this->enemy;
     cXyz mae;
@@ -403,7 +388,6 @@ static void action(e_cr_class* a_this) {
     setMidnaBindEffect(actor, &a_this->sound, &actor->eyePos, &effsize);
 }
 
-/* 80698F88-806991BC 001068 0234+00 2/1 0/0 0/0 .text            daE_CR_Execute__FP10e_cr_class */
 static int daE_CR_Execute(e_cr_class* a_this) {
     fopEn_enemy_c* actor = &a_this->enemy;
     cXyz sp18;
@@ -453,12 +437,10 @@ static int daE_CR_Execute(e_cr_class* a_this) {
     return 1;
 }
 
-/* 806991BC-806991C4 00129C 0008+00 1/0 0/0 0/0 .text            daE_CR_IsDelete__FP10e_cr_class */
 static int daE_CR_IsDelete(e_cr_class* a_this) {
     return 1;
 }
 
-/* 806991C4-8069922C 0012A4 0068+00 1/0 0/0 0/0 .text            daE_CR_Delete__FP10e_cr_class */
 static int daE_CR_Delete(e_cr_class* a_this) {
     fopEn_enemy_c* actor = &a_this->enemy;
     fpc_ProcID id = fopAcM_GetID(a_this);
@@ -476,7 +458,6 @@ static int daE_CR_Delete(e_cr_class* a_this) {
     return 1;
 }
 
-/* 8069922C-8069936C 00130C 0140+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_cr_class* a_this = (e_cr_class*)i_this;
 
@@ -497,7 +478,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8069936C-806995E0 00144C 0274+00 1/0 0/0 0/0 .text            daE_CR_Create__FP10fopAc_ac_c */
 static int daE_CR_Create(fopAc_ac_c* i_this) {
     e_cr_class* a_this = (e_cr_class*)i_this;
     fopAcM_ct(i_this, e_cr_class);
@@ -557,7 +537,6 @@ static int daE_CR_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 80699DC4-80699DE4 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_CR_Method */
 static actor_method_class l_daE_CR_Method = {
     (process_method_func)daE_CR_Create,
     (process_method_func)daE_CR_Delete,
@@ -566,7 +545,6 @@ static actor_method_class l_daE_CR_Method = {
     (process_method_func)daE_CR_Draw,
 };
 
-/* 80699DE4-80699E14 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_CR */
 extern actor_process_profile_definition g_profile_E_CR = {
     fpcLy_CURRENT_e,       // mLayerID
     7,                     // mListID

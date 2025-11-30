@@ -13,7 +13,7 @@ class JKRArchive;
  * 
  */
 struct JAUSeqDataBlock {
-    /* 802A68F4 */ JAUSeqDataBlock();
+    JAUSeqDataBlock();
 
     /* 0x00 */ JSULink<JAUSeqDataBlock> field_0x0;
     /* 0x10 */ JAISoundID field_0x10;
@@ -27,11 +27,11 @@ struct JAUSeqDataBlock {
  */
 class JAUSeqDataBlocks : public JSUList<JAUSeqDataBlock> {
 public:
-    /* 802A6928 */ u8* getSeqData(JAISoundID);
-    /* 802A6974 */ JSULink<JAUSeqDataBlock>* seekFreeBlock(u32);
-    /* 802A69D8 */ bool append(JSULink<JAUSeqDataBlock>*);
-    /* 802A69F8 */ bool remove(JSULink<JAUSeqDataBlock>*);
-    /* 802A6A18 */ bool hasFailedBlock(JAISoundID);
+    u8* getSeqData(JAISoundID);
+    JSULink<JAUSeqDataBlock>* seekFreeBlock(u32);
+    bool append(JSULink<JAUSeqDataBlock>*);
+    bool remove(JSULink<JAUSeqDataBlock>*);
+    bool hasFailedBlock(JAISoundID);
 };
 
 /**
@@ -40,14 +40,14 @@ public:
  */
 class JAUDynamicSeqDataBlocks {
 public:
-    /* 802A6A58 */ JAUDynamicSeqDataBlocks();
-    /* 802A6AA0 */ void setSeqDataArchive(JKRArchive*);
-    /* 802A6AA8 */ s32 getSeqData(JAISoundID, JAISeqDataUser*, JAISeqData*, bool);
-    /* 802A6B8C */ bool appendDynamicSeqDataBlock(JAUSeqDataBlock*);
-    /* 802A6C18 */ bool loadDynamicSeq(JAISoundID, bool, JAISeqDataUser*);
-    /* 802A6D48 */ u32 releaseIdleDynamicSeqDataBlock(JAISeqDataUser*);
-    /* 802A6E00 */ JAUSeqDataBlock* releaseIdleDynamicSeqDataBlock_(JAISeqDataUser*, u32);
-    /* 802A6EDC */ void rearrangeLoadingSeqs_();
+    JAUDynamicSeqDataBlocks();
+    void setSeqDataArchive(JKRArchive*);
+    s32 getSeqData(JAISoundID, JAISeqDataUser*, JAISeqData*, bool);
+    bool appendDynamicSeqDataBlock(JAUSeqDataBlock*);
+    bool loadDynamicSeq(JAISoundID, bool, JAISeqDataUser*);
+    u32 releaseIdleDynamicSeqDataBlock(JAISeqDataUser*);
+    JAUSeqDataBlock* releaseIdleDynamicSeqDataBlock_(JAISeqDataUser*, u32);
+    void rearrangeLoadingSeqs_();
 
     JAUSeqDataBlocks const& getFreeBlocks() const { return mFreeBlocks; }
     JAUSeqDataBlocks const& getLoadedBlocks() const { return mLoadedBlocks; }

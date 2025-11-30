@@ -11,20 +11,20 @@ public:
         u8 flags;
     };
 
-    /* 8020C320 */ dMeterHakusha_c(void*);
-    /* 8020CC58 */ void alphaAnimeHakusha(u32);
-    /* 8020CD6C */ void updateHakusha();
-    /* 8020D258 */ void setAlphaHakushaAnimeMin();
-    /* 8020D308 */ void setAlphaHakushaAnimeMax();
-    /* 8020D3B8 */ void setAlphaButtonAnimeMin();
-    /* 8020D41C */ void setAlphaButtonAnimeMax();
-    /* 8020D480 */ int getHakushaNum();
+    dMeterHakusha_c(void*);
+    void alphaAnimeHakusha(u32);
+    void updateHakusha();
+    void setAlphaHakushaAnimeMin();
+    void setAlphaHakushaAnimeMax();
+    void setAlphaButtonAnimeMin();
+    void setAlphaButtonAnimeMax();
+    int getHakushaNum();
 
-    /* 8020C850 */ virtual void draw();
-    /* 8020C384 */ virtual ~dMeterHakusha_c();
-    /* 8020C400 */ virtual int _create();
-    /* 8020C808 */ virtual int _execute(u32);
-    /* 8020CABC */ virtual int _delete();
+    virtual void draw();
+    virtual ~dMeterHakusha_c();
+    virtual int _create();
+    virtual int _execute(u32);
+    virtual int _delete();
 
     /* 0x004 */ J2DScreen* field_0x004;
     /* 0x008 */ J2DScreen* mpHakushaScreen;

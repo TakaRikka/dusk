@@ -16,19 +16,19 @@
  */
 class daLv2Candle_c : public fopAc_ac_c {
 public:
-    /* 8058E13C */ void setBaseMtx();
-    /* 8058E1C4 */ int CreateHeap();
-    /* 8058E244 */ cPhs__Step create();
-    /* 8058E5BC */ u8 isSwitch();
-    /* 8058E608 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 8058E628 */ static void* searchDemoTagAct(void*, void*);
-    /* 8058E678 */ void lightInit();
-    /* 8058E720 */ void setLight();
-    /* 8058E750 */ void cutLight();
-    /* 8058E780 */ void pointLightProc();
-    /* 8058E99C */ int Execute();
-    /* 8058EEC8 */ int Draw();
-    /* 8058EF6C */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    u8 isSwitch();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static void* searchDemoTagAct(void*, void*);
+    void lightInit();
+    void setLight();
+    void cutLight();
+    void pointLightProc();
+    int Execute();
+    int Draw();
+    int Delete();
 
     int getOffType() { return fopAcM_GetParamBit(this, 0x18, 4); }
     u8 getModelType() { return fopAcM_GetParamBit(this, 0x14, 4); }
@@ -68,8 +68,8 @@ STATIC_ASSERT(sizeof(daLv2Candle_c) == 0x75C);
 
 class daLv2Candle_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 8058E04C */ daLv2Candle_HIO_c();
-    /* 8058F050 */ ~daLv2Candle_HIO_c() {}
+    daLv2Candle_HIO_c();
+    ~daLv2Candle_HIO_c() {}
 
     void genMessage(JORMContext*);
 

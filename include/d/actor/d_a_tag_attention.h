@@ -6,11 +6,11 @@
 
 class daAttp_c : public fopAc_ac_c {
 public:
-    /* 804D5318 */ int Create();
-    /* 804D5354 */ int create();
-    /* 804D53AC */ int execute();
-    /* 804D568C */ int draw();
-    /* 804D5694 */ int _delete();
+    int Create();
+    int create();
+    int execute();
+    int draw();
+    int _delete();
 };  // Size: 0x568
 
 namespace daAttp_prm {

@@ -5,25 +5,25 @@
 
 class daTagStatue_c : public fopAc_ac_c {
 public:
-    /* 805A6FC4 */ void initBaseMtx();
-    /* 805A7000 */ void setBaseMtx();
-    /* 805A7068 */ cPhs__Step Create();
-    /* 805A7230 */ int CreateHeap();
-    /* 805A7424 */ cPhs__Step create();
-    /* 805A7514 */ int execute();
-    /* 805A759C */ void event_proc_call();
-    /* 805A76AC */ void actionWait();
-    /* 805A7714 */ void actionOrderEvent();
-    /* 805A77A0 */ void actionEvent();
-    /* 805A7848 */ void actionDead();
-    /* 805A784C */ int demoProc();
-    /* 805A7A68 */ void setParticle();
-    /* 805A7B24 */ void endParticle();
-    /* 805A7B78 */ BOOL checkStartDemo();
-    /* 805A7CD0 */ BOOL checkOnEffect();
-    /* 805A7E94 */ s32 getLetterCount();
-    /* 805A7F0C */ int draw();
-    /* 805A7FF8 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    cPhs__Step Create();
+    int CreateHeap();
+    cPhs__Step create();
+    int execute();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    int demoProc();
+    void setParticle();
+    void endParticle();
+    BOOL checkStartDemo();
+    BOOL checkOnEffect();
+    s32 getLetterCount();
+    int draw();
+    int _delete();
 
 private:
     /* 0x568 */ request_of_phase_process_class mArcPhase;

@@ -17,8 +17,8 @@
 
 class daE_RDB_HIO_c : public JORReflexible {
 public:
-    /* 807650CC */ daE_RDB_HIO_c();
-    /* 8076AF64 */ virtual ~daE_RDB_HIO_c() {};
+    daE_RDB_HIO_c();
+    virtual ~daE_RDB_HIO_c() {};
 
     void genMessage(JORMContext*);
     /* 0x04 */ s8 mID;
@@ -36,20 +36,17 @@ enum Action {
     /* 0x07 */ ACTION_END,
 };
 
-/* 807650CC-807650F0 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__13daE_RDB_HIO_cFv */
 daE_RDB_HIO_c::daE_RDB_HIO_c() {
     mID = -1;
     field_0x8 = 1.55f;
 }
 
-/* 807650F0-8076519C 000110 00AC+00 9/9 0/0 0/0 .text            anm_init__FP11e_rdb_classifUcf */
 static void anm_init(e_rdb_class* i_this, int i_index, f32 i_morf, u8 i_attr, f32 i_rate) {
     i_this->mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_rdb", i_index), i_attr,
                                 i_morf, i_rate, 0.0f, -1.0f);
     i_this->mAnm = i_index;
 }
 
-/* 8076519C-80765314 0001BC 0178+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     s16 sVar1;
     if (param_2 == 0) {
@@ -79,7 +76,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80765314-80765600 000334 02EC+00 1/0 0/0 0/0 .text            daE_RDB_Draw__FP11e_rdb_class */
 static int daE_RDB_Draw(e_rdb_class* i_this) {
     J3DMaterial* material;
     if (i_this->field_0xfe6 != 0) {
@@ -141,14 +137,11 @@ static int daE_RDB_Draw(e_rdb_class* i_this) {
     return 1;
 }
 
-/* 80765600-8076563C 000620 003C+00 1/1 0/0 0/0 .text mtx_to_posAngle__FPA4_fP4cXyzP5csXyz */
 static void mtx_to_posAngle(Mtx param_1, cXyz* param_2, csXyz* param_3) {
     mDoMtx_multVecZero(param_1, param_2);
     mDoMtx_MtxToRot(param_1, param_3);
 }
 
-/* 8076563C-80765678 00065C 003C+00 1/1 0/0 0/0 .text            player_way_check__FP11e_rdb_class
- */
 static int player_way_check(e_rdb_class* i_this) {
     s16 sVar1 = i_this->enemy.shape_angle.y - dComIfGp_getPlayer(0)->shape_angle.y;
     if (sVar1 < 0x4000 && sVar1 > -0x4000) {
@@ -158,7 +151,6 @@ static int player_way_check(e_rdb_class* i_this) {
     return 1;
 }
 
-/* 80765678-807658E0 000698 0268+00 1/1 0/0 0/0 .text            e_rdb_wait__FP11e_rdb_class */
 static void e_rdb_wait(e_rdb_class* i_this) {
     s16 sVar1 = i_this->enemy.shape_angle.y - i_this->mAngleToPlayer;
     f32 fVar1 = 0.0f;
@@ -215,7 +207,6 @@ static void e_rdb_wait(e_rdb_class* i_this) {
     }
 }
 
-/* 807658E0-80765A98 000900 01B8+00 1/1 0/0 0/0 .text            e_rdb_fight__FP11e_rdb_class */
 static void e_rdb_fight(e_rdb_class* i_this) {
     f32 fVar1 = 0.0f;
 
@@ -260,8 +251,6 @@ static void e_rdb_fight(e_rdb_class* i_this) {
     i_this->field_0x6c8 = 1;
 }
 
-/* 80765A98-80765B70 000AB8 00D8+00 2/2 0/0 0/0 .text
- * getPolyColor__FR13cBgS_PolyInfoiP8_GXColorP8_GXColorPUcPf */
 static int getPolyColor(cBgS_PolyInfo& i_polyInfo, int param_2, _GXColor* p_effPrim,
                         _GXColor* p_effEnv, u8* p_alpha, f32* p_ratio) {
     if (dComIfG_Bgsp().ChkPolySafe(i_polyInfo) == 0) {
@@ -283,7 +272,6 @@ static int getPolyColor(cBgS_PolyInfo& i_polyInfo, int param_2, _GXColor* p_effP
     return 1;
 }
 
-/* 80765B70-80765E70 000B90 0300+00 1/1 0/0 0/0 .text            e_rdb_attack__FP11e_rdb_class */
 static void e_rdb_attack(e_rdb_class* i_this) {
     static u16 ap_name[3] = {
         0x8A5C,
@@ -356,8 +344,6 @@ static void e_rdb_attack(e_rdb_class* i_this) {
     i_this->field_0x6c8 = 1;
 }
 
-/* 80765E70-80766188 000E90 0318+00 1/1 0/0 0/0 .text            e_rdb_spin_attack__FP11e_rdb_class
- */
 static void e_rdb_spin_attack(e_rdb_class* i_this) {
     static u16 ap_name[2] = {
         0x8A5F,
@@ -428,7 +414,6 @@ static void e_rdb_spin_attack(e_rdb_class* i_this) {
     }
 }
 
-/* 80766188-80766294 0011A8 010C+00 1/1 0/0 0/0 .text            e_rdb_defence__FP11e_rdb_class */
 static int e_rdb_defence(e_rdb_class* i_this) {
     i_this->field_0x6c6 = 1;
     i_this->field_0x6c0 = 3;
@@ -460,7 +445,6 @@ static int e_rdb_defence(e_rdb_class* i_this) {
     return 1;
 }
 
-/* 80766294-807665B4 0012B4 0320+00 1/1 0/0 0/0 .text            e_rdb_damage__FP11e_rdb_class */
 static void e_rdb_damage(e_rdb_class* i_this) {
     int frame = i_this->mpModelMorf->getFrame();
     int iVar1;
@@ -534,7 +518,6 @@ static void e_rdb_damage(e_rdb_class* i_this) {
     cLib_addCalc0(&i_this->enemy.speedF, 1.0f, 3.0f);
 }
 
-/* 807665B4-80766A1C 0015D4 0468+00 2/1 0/0 0/0 .text            e_rdb_end__FP11e_rdb_class */
 static void e_rdb_end(e_rdb_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     e_wb_class* actor = (e_wb_class*)fopAcM_SearchByName(PROC_E_WB);
@@ -641,7 +624,6 @@ static void e_rdb_end(e_rdb_class* i_this) {
     cLib_addCalc2(&i_this->enemy.speedF, fVar1, 1.0f, 3.0f);
 }
 
-/* 80766A1C-80766DB4 001A3C 0398+00 2/1 0/0 0/0 .text            e_rdb_start__FP11e_rdb_class */
 static void e_rdb_start(e_rdb_class* i_this) {
     int frame = i_this->mpModelMorf->getFrame();
     f32 fVar1 = 0.0f;
@@ -728,7 +710,6 @@ static void e_rdb_start(e_rdb_class* i_this) {
     i_this->enemy.speedF = fVar1;
 }
 
-/* 80766DB4-80767294 001DD4 04E0+00 1/1 0/0 0/0 .text            damage_check__FP11e_rdb_class */
 static void damage_check(e_rdb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -881,7 +862,6 @@ static void damage_check(e_rdb_class* i_this) {
     }
 }
 
-/* 80767294-80767428 0022B4 0194+00 1/1 0/0 0/0 .text            shot_s_sub__FPvPv */
 static void* shot_s_sub(void* i_actor, void* i_data) {
     if ((fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_ARROW) &&
         (fopAcM_GetParam(i_actor) == 1 || fopAcM_GetParam(i_actor) == 2))
@@ -896,13 +876,10 @@ static void* shot_s_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8076BA04-8076BA08 -00001 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 s_HIOinit;
 
-/* 8076BA14-8076BA20 000054 000C+00 3/4 0/0 0/0 .bss             l_HIO */
 static daE_RDB_HIO_c l_HIO;
 
-/* 80767428-80767CD0 002448 08A8+00 2/1 0/0 0/0 .text            action__FP11e_rdb_class */
 static void action(e_rdb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -1082,7 +1059,6 @@ static void action(e_rdb_class* i_this) {
     setMidnaBindEffect(a_this, &i_this->mSound, &a_this->eyePos, &sp68);
 }
 
-/* 80767CD0-80767DB4 002CF0 00E4+00 1/1 0/0 0/0 .text            cam_3d_morf__FP11e_rdb_classf */
 static void cam_3d_morf(e_rdb_class* i_this, f32 i_scale) {
     cLib_addCalc2(&i_this->mDemoCamCenter.x, i_this->field_0x10d0.x, i_scale,
                   i_this->field_0x10e8.x * i_this->field_0x10f8);
@@ -1098,7 +1074,6 @@ static void cam_3d_morf(e_rdb_class* i_this, f32 i_scale) {
                   i_this->field_0x10dc.z * i_this->field_0x10f8);
 }
 
-/* 80767DB4-80767E54 002DD4 00A0+00 1/1 0/0 0/0 .text            cam_spd_set__FP11e_rdb_class */
 static void cam_spd_set(e_rdb_class* i_this) {
     i_this->field_0x10dc.x = fabsf(i_this->field_0x10c4.x - i_this->mDemoCamEye.x);
     i_this->field_0x10dc.y = fabsf(i_this->field_0x10c4.y - i_this->mDemoCamEye.y);
@@ -1109,7 +1084,6 @@ static void cam_spd_set(e_rdb_class* i_this) {
     i_this->field_0x10f8 = 0.0f;
 }
 
-/* 80767E54-80768B90 002E74 0D3C+00 2/1 0/0 0/0 .text            demo_camera__FP11e_rdb_class */
 static void demo_camera(e_rdb_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->enemy;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -1407,7 +1381,6 @@ static void demo_camera(e_rdb_class* i_this) {
     }
 }
 
-/* 80768B90-80769324 003BB0 0794+00 1/1 0/0 0/0 .text            anm_se_set__FP11e_rdb_class */
 static void anm_se_set(e_rdb_class* i_this) {
     if (i_this->mAnm == e_rdb_class::BCK_RB_WALK) {
         if (i_this->mpModelMorf->checkFrame(29.0f) || i_this->mpModelMorf->checkFrame(59.0f)) {
@@ -1487,7 +1460,6 @@ static void anm_se_set(e_rdb_class* i_this) {
     }
 }
 
-/* 80769324-8076A418 004344 10F4+00 2/1 0/0 0/0 .text            daE_RDB_Execute__FP11e_rdb_class */
 static int daE_RDB_Execute(e_rdb_class* i_this) {
     if (i_this->field_0xfe6 != 0) {
         demo_camera(i_this);
@@ -1757,13 +1729,10 @@ static int daE_RDB_Execute(e_rdb_class* i_this) {
     return 1;
 }
 
-/* 8076A418-8076A420 005438 0008+00 1/0 0/0 0/0 .text            daE_RDB_IsDelete__FP11e_rdb_class
- */
 static int daE_RDB_IsDelete(e_rdb_class* i_this) {
     return 1;
 }
 
-/* 8076A420-8076A488 005440 0068+00 1/0 0/0 0/0 .text            daE_RDB_Delete__FP11e_rdb_class */
 static int daE_RDB_Delete(e_rdb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAcM_GetID(i_this);
@@ -1780,7 +1749,6 @@ static int daE_RDB_Delete(e_rdb_class* i_this) {
     return 1;
 }
 
-/* 8076A488-8076A5FC 0054A8 0174+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* actor) {
     e_rdb_class* i_this = (e_rdb_class*)actor;
     i_this->mpModelMorf =
@@ -1807,7 +1775,6 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 0;
 }
 
-/* 8076A5FC-8076AA0C 00561C 0410+00 1/0 0/0 0/0 .text            daE_RDB_Create__FP10fopAc_ac_c */
 static int daE_RDB_Create(fopAc_ac_c* actor) {
     static dCcD_SrcSph cc_sph_src = {
         {
@@ -1944,14 +1911,12 @@ static s32 unused_bss_29c = 0;
 
 AUDIO_INSTANCES
 
-/* 8076B8F4-8076B914 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_RDB_Method */
 static actor_method_class l_daE_RDB_Method = {
     (process_method_func)daE_RDB_Create,  (process_method_func)daE_RDB_Delete,
     (process_method_func)daE_RDB_Execute, (process_method_func)daE_RDB_IsDelete,
     (process_method_func)daE_RDB_Draw,
 };
 
-/* 8076B914-8076B944 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_RDB */
 extern actor_process_profile_definition g_profile_E_RDB = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

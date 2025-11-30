@@ -16,44 +16,44 @@ public:
     typedef BOOL (daNpc_myna2_c::*ActionFn)(void*);
     typedef BOOL (daNpc_myna2_c::*EventFn)(int);
 
-    /* 80A83E8C */ daNpc_myna2_c();
-    /* 80A840A0 */ virtual ~daNpc_myna2_c();
-    /* 80A842C8 */ int create();
-    /* 80A845AC */ int CreateHeap();
-    /* 80A846E0 */ int Delete();
-    /* 80A84714 */ int Execute();
-    /* 80A84734 */ int Draw();
-    /* 80A847A8 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A8503C */ u8 getTypeFromParam();
-    /* 80A85094 */ int isDelete();
-    /* 80A85160 */ void reset();
-    /* 80A85358 */ void playMotion();
-    /* 80A855E8 */ int chkAction(int (daNpc_myna2_c::*)(void*));
-    /* 80A85614 */ int setAction(int (daNpc_myna2_c::*)(void*));
-    /* 80A856BC */ int selectAction();
-    /* 80A857B0 */ void doNormalAction(int);
-    /* 80A85894 */ BOOL doEvent();
-    /* 80A85BA4 */ void setLookMode(int);
-    /* 80A85BC8 */ int wait(void*);
-    /* 80A85C60 */ int waitHovering(void*);
-    /* 80A86194 */ int waitFailure(void*);
-    /* 80A862BC */ int waitGoal(void*);
-    /* 80A86400 */ int talk(void*);
-    /* 80A865FC */ int test(void*);
-    /* 80A866B0 */ int ECut_firstTalk(int);
-    /* 80A8684C */ int ECut_gameFailure(int);
-    /* 80A86A0C */ int ECut_gameGoal(int);
-    /* 80A86BEC */ int ECut_gameGoalSuccess(int);
-    /* 80A86E8C */ void calcHovering(int, int);
+    daNpc_myna2_c();
+    virtual ~daNpc_myna2_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    u8 getTypeFromParam();
+    int isDelete();
+    void reset();
+    void playMotion();
+    int chkAction(int (daNpc_myna2_c::*)(void*));
+    int setAction(int (daNpc_myna2_c::*)(void*));
+    int selectAction();
+    void doNormalAction(int);
+    BOOL doEvent();
+    void setLookMode(int);
+    int wait(void*);
+    int waitHovering(void*);
+    int waitFailure(void*);
+    int waitGoal(void*);
+    int talk(void*);
+    int test(void*);
+    int ECut_firstTalk(int);
+    int ECut_gameFailure(int);
+    int ECut_gameGoal(int);
+    int ECut_gameGoalSuccess(int);
+    void calcHovering(int, int);
 
-    /* 80A847C8 */ virtual void setParam();
-    /* 80A848B4 */ virtual BOOL main();
-    /* 80A84B64 */ virtual void setAttnPos();
-    /* 80A84DAC */ virtual bool setExpressionBtp(int);
-    /* 80A84EAC */ virtual void setMotionAnm(int, f32);
-    /* 80A84FEC */ virtual void setMotion(int, f32, int);
-    /* 80A85030 */ virtual BOOL drawDbgInfo();
-    /* 80A85038 */ virtual void drawOtherMdls();
+    virtual void setParam();
+    virtual BOOL main();
+    virtual void setAttnPos();
+    virtual bool setExpressionBtp(int);
+    virtual void setMotionAnm(int, f32);
+    virtual void setMotion(int, f32, int);
+    virtual BOOL drawDbgInfo();
+    virtual void drawOtherMdls();
 
     int getType() { return mType; }
 
@@ -96,7 +96,7 @@ struct daNpc_myna2_HIOParam {
 
 class daNpc_myna2_Param_c {
 public:
-    /* 80A883C8 */ virtual ~daNpc_myna2_Param_c() {}
+    virtual ~daNpc_myna2_Param_c() {}
 
     static const daNpc_myna2_HIOParam m;
 };

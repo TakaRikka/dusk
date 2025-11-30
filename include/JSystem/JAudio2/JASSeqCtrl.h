@@ -22,17 +22,17 @@ public:
         INTRTYPE_VALUE_6,
     };
 
-    /* 802938BC */ JASSeqCtrl();
-    /* 80293924 */ void init();
-    /* 80293980 */ void start(void*, u32);
-    /* 802939C4 */ int tickProc(JASTrack*);
-    /* 80293ABC */ void interrupt(JASSeqCtrl::IntrType);
-    /* 80293AE0 */ void setIntrMask(u32);
-    /* 80293AF0 */ void clrIntrMask(u32);
-    /* 80293B00 */ int retIntr();
-    /* 80293B28 */ int findIntr();
-    /* 80293B78 */ void checkIntr();
-    /* 80293BE8 */ void timerProcess();
+    JASSeqCtrl();
+    void init();
+    void start(void*, u32);
+    int tickProc(JASTrack*);
+    void interrupt(JASSeqCtrl::IntrType);
+    void setIntrMask(u32);
+    void clrIntrMask(u32);
+    int retIntr();
+    int findIntr();
+    void checkIntr();
+    void timerProcess();
 
     const JASSeqReader* getSeqReader() const { return &mReader; }
     void* getBase() { return mReader.getBase(); }

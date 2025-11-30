@@ -14,21 +14,21 @@
  */
 class daPoTbox_c : public dBgS_MoveBgActor {
 public:
-    /* 80CB42C8 */ void setBaseMtx();
-    /* 80CB46C4 */ int create();
-    /* 80CB4AA8 */ void init_modeWait();
-    /* 80CB4AB4 */ void modeWait();
-    /* 80CB4B10 */ void init_modeOpen();
-    /* 80CB4BF8 */ void modeOpen();
-    /* 80CB4C54 */ void init_modeOpenEnd();
-    /* 80CB4C60 */ void modeOpenEnd();
-    /* 80CB4C84 */ void init_modeEnd();
-    /* 80CB4C90 */ void modeEnd();
+    void setBaseMtx();
+    int create();
+    void init_modeWait();
+    void modeWait();
+    void init_modeOpen();
+    void modeOpen();
+    void init_modeOpenEnd();
+    void modeOpenEnd();
+    void init_modeEnd();
+    void modeEnd();
 
-    /* 80CB43D0 */ virtual int CreateHeap();
-    /* 80CB499C */ virtual int Execute(Mtx**);
-    /* 80CB4C94 */ virtual int Draw();
-    /* 80CB4E14 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSw() { return fopAcM_GetParamBit(this, 0, 8); }
     int getStat() { return fopAcM_GetParamBit(this, 8, 4); }

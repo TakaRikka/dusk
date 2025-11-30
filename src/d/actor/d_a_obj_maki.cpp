@@ -21,13 +21,10 @@
 #include "m_Do/m_Do_mtx.h"
 #include "types.h"
 
-/* 80C8FE0C-80C8FE24 0000EC 0018+00 1/1 0/0 0/0 .text            __ct__16daObj_Maki_HIO_cFv */
 daObj_Maki_HIO_c::daObj_Maki_HIO_c() {
     field_0x4 = -1;
 }
 
-/* 80C8FE24-80C8FEDC 000104 00B8+00 1/0 0/0 0/0 .text            daObj_Maki_Draw__FP14obj_maki_class
- */
 int daObj_Maki_Draw(obj_maki_class* i_this) {
     g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);
 
@@ -42,7 +39,6 @@ int daObj_Maki_Draw(obj_maki_class* i_this) {
     return 1;
 }
 
-/* 80C8FEDC-80C90378 0001BC 049C+00 2/1 0/0 0/0 .text daObj_Maki_Execute__FP14obj_maki_class */
 int daObj_Maki_Execute(obj_maki_class* i_this) {
     for (int i = 0; i < 2; i++) {
         if (i_this->field_0x580[i] != 0) {
@@ -131,14 +127,12 @@ int daObj_Maki_Execute(obj_maki_class* i_this) {
     return 1;
 }
 
-/* 80C90378-80C90380 000658 0008+00 1/0 0/0 0/0 .text daObj_Maki_IsDelete__FP14obj_maki_class */
 int daObj_Maki_IsDelete(obj_maki_class* i_this) {
     return true;
 }
 
 u8 lbl_567_bss_8;
 
-/* 80C90380-80C903F0 000660 0070+00 1/0 0/0 0/0 .text daObj_Maki_Delete__FP14obj_maki_class */
 int daObj_Maki_Delete(obj_maki_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Obj_maki");
     if (i_this->field_0x72c != 0) {
@@ -152,7 +146,6 @@ int daObj_Maki_Delete(obj_maki_class* i_this) {
     return 1;
 }
 
-/* 80C903F0-80C90544 0006D0 0154+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 int useHeapInit(fopAc_ac_c* i_this) {
     obj_maki_class* a_this = (obj_maki_class*)i_this;
 
@@ -183,11 +176,8 @@ int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80C90A60-80C90A68 000018 0008+00 2/2 0/0 0/0 .bss             l_HIO */
 daObj_Maki_HIO_c l_HIO;
 
-/* 80C9058C-80C9080C 00086C 0280+00 1/0 0/0 0/0 .text            daObj_Maki_Create__FP10fopAc_ac_c
- */
 cPhs__Step daObj_Maki_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_maki_class);
     obj_maki_class* a_this = (obj_maki_class*)i_this;
@@ -246,14 +236,12 @@ cPhs__Step daObj_Maki_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 80C909C4-80C909E4 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Maki_Method */
 actor_method_class l_daObj_Maki_Method = {
     (process_method_func)daObj_Maki_Create,  (process_method_func)daObj_Maki_Delete,
     (process_method_func)daObj_Maki_Execute, (process_method_func)daObj_Maki_IsDelete,
     (process_method_func)daObj_Maki_Draw,
 };
 
-/* 80C909E4-80C90A14 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_MAKI */
 extern actor_process_profile_definition g_profile_OBJ_MAKI = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

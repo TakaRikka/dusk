@@ -15,7 +15,6 @@
 
 static int daVrbox2_color_set(vrbox2_class* param_0);
 
-/* 80498A78-80498ACC 000078 0054+00 1/1 0/0 0/0 .text            texScrollCheck__FRf */
 static void texScrollCheck(f32& param_0) {
     while (param_0 < 0.0f)
         param_0 += 1.0f;
@@ -24,7 +23,6 @@ static void texScrollCheck(f32& param_0) {
         param_0 -= 1.0f;
 }
 
-/* 80498ACC-804990DC 0000CC 0610+00 1/0 0/0 0/0 .text            daVrbox2_Draw__FP12vrbox2_class */
 // NONMATCHING - reg alloc
 static int daVrbox2_Draw(vrbox2_class* i_this) {
     camera_class* camera_p;
@@ -212,7 +210,6 @@ static int daVrbox2_Draw(vrbox2_class* i_this) {
     return 1;
 }
 
-/* 804990DC-804997E8 0006DC 070C+00 1/1 0/0 0/0 .text daVrbox2_color_set__FP12vrbox2_class */
 static int daVrbox2_color_set(vrbox2_class* i_this) {
     fopAc_ac_c* actor = i_this;
     J3DMaterial* material_0;
@@ -389,8 +386,6 @@ static int daVrbox2_color_set(vrbox2_class* i_this) {
     return 1;
 }
 
-/* 804997E8-8049982C 000DE8 0044+00 1/0 0/0 0/0 .text            daVrbox2_Execute__FP12vrbox2_class
- */
 static int daVrbox2_Execute(vrbox2_class* i_this) {
     i_this = i_this; // ?? fakematch? only needed for debug
 
@@ -401,20 +396,15 @@ static int daVrbox2_Execute(vrbox2_class* i_this) {
     return 1;
 }
 
-/* 8049982C-80499834 000E2C 0008+00 1/0 0/0 0/0 .text            daVrbox2_IsDelete__FP12vrbox2_class
- */
 static int daVrbox2_IsDelete(vrbox2_class* i_this) {
     return 1;
 }
 
-/* 80499834-8049983C 000E34 0008+00 1/0 0/0 0/0 .text            daVrbox2_Delete__FP12vrbox2_class
- */
 static int daVrbox2_Delete(vrbox2_class* i_this) {
     fopAcM_RegisterDeleteID(i_this, "Vrbox2");
     return 1;
 }
 
-/* 8049983C-80499978 000E3C 013C+00 1/1 0/0 0/0 .text daVrbox2_solidHeapCB__FP10fopAc_ac_c */
 static int daVrbox2_solidHeapCB(fopAc_ac_c* i_this) {
     vrbox2_class* a_this = (vrbox2_class*)i_this;
 
@@ -447,7 +437,6 @@ static int daVrbox2_solidHeapCB(fopAc_ac_c* i_this) {
     return a_this->mpKumoModel != NULL && a_this->model2 != NULL && a_this->model2_und != NULL;
 }
 
-/* 80499978-80499A1C 000F78 00A4+00 1/0 0/0 0/0 .text            daVrbox2_Create__FP10fopAc_ac_c */
 static int daVrbox2_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, vrbox2_class);
 
@@ -459,15 +448,12 @@ static int daVrbox2_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* ############################################################################################## */
-/* 80499B18-80499B38 -00001 0020+00 1/0 0/0 0/0 .data            l_daVrbox2_Method */
 static actor_method_class l_daVrbox2_Method = {
     (process_method_func)daVrbox2_Create,  (process_method_func)daVrbox2_Delete,
     (process_method_func)daVrbox2_Execute, (process_method_func)daVrbox2_IsDelete,
     (process_method_func)daVrbox2_Draw,
 };
 
-/* 80499B38-80499B68 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_VRBOX2 */
 extern actor_process_profile_definition g_profile_VRBOX2 = {
     fpcLy_CURRENT_e,
     7,

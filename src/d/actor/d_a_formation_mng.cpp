@@ -9,13 +9,11 @@
 #include "d/d_save.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 808378A8-808378C0 000000 0018+00 12/12 0/0 0/0 .rodata          M_attr__10daFmtMng_c */
 FmtMngAttributes const daFmtMng_c::M_attr = {
     0x14, 6.0f, 0.5f,
     120.0f, 150.0f, 10, 0x4000,
 };
 
-/* 80835558-80835624 000078 00CC+00 1/0 0/0 0/0 .text            initWait__10daFmtMng_cFv */
 void daFmtMng_c::initWait() {
     FmtMember_c* member = mMember;
     fopAc_ac_c* npcFgd = NULL;
@@ -28,7 +26,6 @@ void daFmtMng_c::initWait() {
     initMemberPos();
 }
 
-/* 80835624-80835B24 000144 0500+00 2/2 0/0 0/0 .text            initMemberPos__10daFmtMng_cFv */
 void daFmtMng_c::initMemberPos() {
     int i;
     int j;
@@ -65,7 +62,6 @@ void daFmtMng_c::initMemberPos() {
     }
 }
 
-/* 808379C4-80837A3C 000098 0078+00 6/7 0/0 0/0 .data            ActionTable__10daFmtMng_c */
 daFmtMng_c::ActionFunc daFmtMng_c::ActionTable[10] = {
     &daFmtMng_c::initWait, &daFmtMng_c::executeWait,
     &daFmtMng_c::initWalk, &daFmtMng_c::executeWalk,
@@ -75,7 +71,6 @@ daFmtMng_c::ActionFunc daFmtMng_c::ActionTable[10] = {
 
 };
 
-/* 80835B24-80835D28 000644 0204+00 1/0 0/0 0/0 .text            executeWait__10daFmtMng_cFv */
 void daFmtMng_c::executeWait() {
     int time = getTime();
     if (time >= mStartTime && time < mEndTime) {
@@ -105,7 +100,6 @@ void daFmtMng_c::executeWait() {
     }
 }
 
-/* 80835D28-80835DEC 000848 00C4+00 1/0 0/0 0/0 .text            initWalk__10daFmtMng_cFv */
 void daFmtMng_c::initWalk() {
     FmtMember_c* member = mMember;
     fopAc_ac_c* npcFgd = NULL;
@@ -117,7 +111,6 @@ void daFmtMng_c::initWalk() {
     }
 }
 
-/* 80835DEC-8083622C 00090C 0440+00 1/0 0/0 0/0 .text            executeWalk__10daFmtMng_cFv */
 void daFmtMng_c::executeWalk() {
     setMoveSpeed();
     FmtPos_c* member = mPos;
@@ -131,7 +124,6 @@ void daFmtMng_c::executeWalk() {
     setMemberPos();
 }
 
-/* 8083622C-808365B0 000D4C 0384+00 1/1 0/0 0/0 .text setMovePath__10daFmtMng_cFP8FmtPos_ci */
 void daFmtMng_c::setMovePath(FmtPos_c* i_pos, int param_2) {
     if (i_pos->checkPoint(i_pos->field_0x10, speedF)) {
         if (param_2 == 0) {
@@ -157,7 +149,6 @@ void daFmtMng_c::setMovePath(FmtPos_c* i_pos, int param_2) {
     }
 }
 
-/* 808365B0-8083665C 0010D0 00AC+00 1/1 0/0 0/0 .text checkPathEnd__15daFmtMng_Path_cF4cXyzf */
 bool daFmtMng_Path_c::checkPathEnd(cXyz param_1, f32 param_2) {
     if (isPathClose()) {
         return false;
@@ -174,7 +165,6 @@ bool daFmtMng_Path_c::checkPathEnd(cXyz param_1, f32 param_2) {
     return false;
 }
 
-/* 8083665C-80836810 00117C 01B4+00 2/2 0/0 0/0 .text checkPoint__15daFmtMng_Path_cF4cXyzf */
 bool daFmtMng_Path_c::checkPoint(cXyz i_point, f32 param_2) {
     f32 dVar8 = i_point.absXZ(dPath_GetPnt(mPath, field_0x4)->m_position);
     field_0x8 -= param_2;
@@ -184,7 +174,6 @@ bool daFmtMng_Path_c::checkPoint(cXyz i_point, f32 param_2) {
     return false;
 }
 
-/* 80836810-808368A4 001330 0094+00 1/0 0/0 0/0 .text            initReverse__10daFmtMng_cFv */
 void daFmtMng_c::initReverse() {
     speedF = 0.0f;
     FmtMember_c* member = mMember;
@@ -197,7 +186,6 @@ void daFmtMng_c::initReverse() {
     }
 }
 
-/* 808368A4-80836C24 0013C4 0380+00 1/0 0/0 0/0 .text            executeReverse__10daFmtMng_cFv */
 void daFmtMng_c::executeReverse() {
     FmtMember_c* member;
     bool bVar1;
@@ -243,7 +231,6 @@ void daFmtMng_c::executeReverse() {
     }
 }
 
-/* 80836C64-80836E20 001784 01BC+00 1/0 0/0 0/0 .text            initMotion__10daFmtMng_cFv */
 void daFmtMng_c::initMotion() {
     speedF = 0.0f;
     u32 arg0 = mPos->getArg0();
@@ -279,7 +266,6 @@ void daFmtMng_c::initMotion() {
     }
 }
 
-/* 80836E20-80836F78 001940 0158+00 1/0 0/0 0/0 .text            executeMotion__10daFmtMng_cFv */
 void daFmtMng_c::executeMotion() {
     if (mDayOfWeek == dKy_get_dayofweek() && field_0x59c < getTime()) {
         FmtMember_c* member = mMember;
@@ -297,7 +283,6 @@ void daFmtMng_c::executeMotion() {
     }
 }
 
-/* 80836F78-80837078 001A98 0100+00 1/0 0/0 0/0 .text            initFight__10daFmtMng_cFv */
 void daFmtMng_c::initFight() {
     speedF = 0.0f;
     FmtMember_c* member = mMember;
@@ -313,7 +298,6 @@ void daFmtMng_c::initFight() {
     dComIfGs_onSaveDunSwitch(60);
 }
 
-/* 80837078-80837250 001B98 01D8+00 1/0 0/0 0/0 .text            executeFight__10daFmtMng_cFv */
 void daFmtMng_c::executeFight() {
     FmtMember_c* member = mMember;
     fopAc_ac_c* npcFgd = NULL;
@@ -336,41 +320,33 @@ void daFmtMng_c::executeFight() {
     }
 }
 
-/* 80837250-80837258 001D70 0008+00 1/0 0/0 0/0 .text            daFmtMng_Draw__FP10daFmtMng_c */
 static bool daFmtMng_Draw(daFmtMng_c* param_0) {
     return true;
 }
 
-/* 80837258-808373BC 001D78 0164+00 1/0 0/0 0/0 .text            daFmtMng_Execute__FP10daFmtMng_c */
 static int daFmtMng_Execute(daFmtMng_c* param_0) {
     return param_0->execute();
 }
 
-/* 808373BC-808373C4 001EDC 0008+00 1/0 0/0 0/0 .text            daFmtMng_IsDelete__FP10daFmtMng_c
- */
 static int daFmtMng_IsDelete(daFmtMng_c* param_0) {
     return 1;
 }
 
-/* 808373C4-80837458 001EE4 0094+00 1/0 0/0 0/0 .text            daFmtMng_Delete__FP10daFmtMng_c */
 static int daFmtMng_Delete(daFmtMng_c* param_1) {
     param_1->~daFmtMng_c();
     return 1;
 }
 
-/* 80837494-808374B4 001FB4 0020+00 1/0 0/0 0/0 .text            daFmtMng_Create__FP10fopAc_ac_c */
 static int daFmtMng_Create(fopAc_ac_c* param_0) {
     return static_cast<daFmtMng_c*>(param_0)->create();
 }
 
-/* 808374B4-8083750C 001FD4 0058+00 1/1 0/0 0/0 .text            create__10daFmtMng_cFv */
 int daFmtMng_c::create() {
     fopAcM_ct(this, daFmtMng_c);
     create_init();
     return 4;
 }
 
-/* 8083750C-80837798 00202C 028C+00 1/1 0/0 0/0 .text            create_init__10daFmtMng_cFv */
 void daFmtMng_c::create_init() {
     fopAcM_setCullSizeBox(this, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f);
     mRoomPath = dPath_GetRoomPath(getPathID(), fopAcM_GetRoomNo(this));
@@ -410,8 +386,6 @@ void daFmtMng_c::create_init() {
     }
 }
 
-/* ############################################################################################## */
-/* 80837A3C-80837A5C -00001 0020+00 1/0 0/0 0/0 .data            l_daFmtMng_Method */
 static actor_method_class l_daFmtMng_Method = {
     (process_method_func)daFmtMng_Create,
     (process_method_func)daFmtMng_Delete,
@@ -420,7 +394,6 @@ static actor_method_class l_daFmtMng_Method = {
     (process_method_func)daFmtMng_Draw,
 };
 
-/* 80837A5C-80837A8C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_FORMATION_MNG */
 extern actor_process_profile_definition g_profile_FORMATION_MNG = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

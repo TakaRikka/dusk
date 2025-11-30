@@ -20,8 +20,8 @@ public:
     public:
         c_list() { mpCoach2D = NULL; }
 
-        /* 806569CC */ virtual void draw();
-        /* 806577DC */ virtual ~c_list() {}
+        virtual void draw();
+        virtual ~c_list() {}
 
         void set(daCoach2D_c* i_coach2D) {
             mpCoach2D = i_coach2D;
@@ -30,18 +30,18 @@ public:
         /* 0x4 */ daCoach2D_c* mpCoach2D;
     };
 
-    /* 80656A38 */ int createHeap();
-    /* 80656D18 */ int create();
-    /* 80656D94 */ int destroy();
-    /* 80656DE4 */ int draw();
-    /* 80656E94 */ int execute();
-    /* 80656ED0 */ void drawMeter();
-    /* 8065722C */ void initiate();
-    /* 80657260 */ void update();
-    /* 80657490 */ void setBrkAnime(bool);
+    int createHeap();
+    int create();
+    int destroy();
+    int draw();
+    int execute();
+    void drawMeter();
+    void initiate();
+    void update();
+    void setBrkAnime(bool);
 
     daCoach2D_c() { initiate(); }
-    /* 80657824 */ virtual ~daCoach2D_c() {}
+    virtual ~daCoach2D_c() {}
 
     void show() { mIsVisible = true; }
     void hide() { mIsVisible = false; }

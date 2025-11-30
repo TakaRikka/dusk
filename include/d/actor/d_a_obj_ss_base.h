@@ -5,11 +5,11 @@
 
 class daObj_SSBase_c : public fopAc_ac_c {
 public:
-    /* 8015E3F8 */ daObj_SSBase_c();
+    daObj_SSBase_c();
 
-    /* 8015E450 */ virtual ~daObj_SSBase_c();
-    /* 8015E4C8 */ virtual void setSoldOut();
-    /* 8015E4B0 */ virtual u32 getProcessID();
+    virtual ~daObj_SSBase_c();
+    virtual void setSoldOut();
+    virtual u32 getProcessID();
 
     void* getParentPtr() { return mpParentPtr; }
     void setParentPtr(void* parentPtr) { mpParentPtr = parentPtr; }

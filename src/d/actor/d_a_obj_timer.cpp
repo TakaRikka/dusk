@@ -9,7 +9,6 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 80485198-8048526C 000078 00D4+00 1/1 0/0 0/0 .text            _create__Q210daObjTimer5Act_cFv */
 int daObjTimer::Act_c::_create() {
     fopAcM_ct(this, Act_c);
     fopAcM_offDraw(this);
@@ -26,31 +25,26 @@ int daObjTimer::Act_c::_create() {
     }
 }
 
-/* 8048526C-80485274 00014C 0008+00 1/1 0/0 0/0 .text            _delete__Q210daObjTimer5Act_cFv */
 bool daObjTimer::Act_c::_delete() {
     return true;
 }
 
-/* 80485274-80485284 000154 0010+00 2/2 0/0 0/0 .text mode_wait_init__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_wait_init() {
     field_0x56c = 0;
     field_0x568 = 0;
 }
 
-/* 80485284-804852E0 000164 005C+00 1/0 0/0 0/0 .text            mode_wait__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_wait() {
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
         mode_count_init();
     }
 }
 
-/* 804852E0-80485324 0001C0 0044+00 2/2 0/0 0/0 .text mode_count_init__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_count_init() {
     field_0x56c = prm_get_time() * 15;
     field_0x568 = 1;
 }
 
-/* 80485324-804854BC 000204 0198+00 1/0 0/0 0/0 .text            mode_count__Q210daObjTimer5Act_cFv */
 void daObjTimer::Act_c::mode_count() {
     Z2SoundID soundID;
     
@@ -88,7 +82,6 @@ void daObjTimer::Act_c::mode_count() {
     }
 }
 
-/* 804854BC-804855A4 00039C 00E8+00 1/1 0/0 0/0 .text            _execute__Q210daObjTimer5Act_cFv */
 bool daObjTimer::Act_c::_execute() {
     static daObjTimer::Act_c::modeProc const mode_proc[2] = {
         &daObjTimer::Act_c::mode_wait,
@@ -144,7 +137,6 @@ namespace {
 
 };  // namespace daObjTimer
 
-/* 804856B8-804856E8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Timer */
 extern actor_process_profile_definition g_profile_Obj_Timer = {
   fpcLy_CURRENT_e,          // mLayerID
   10,                       // mListID

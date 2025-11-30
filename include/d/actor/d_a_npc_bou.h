@@ -13,7 +13,7 @@
  */
  class daNpc_Bou_Param_c {
     public:
-        /* 809727F4 */ virtual ~daNpc_Bou_Param_c() {}
+        virtual ~daNpc_Bou_Param_c() {}
 
         struct Data {
             /* 0x00 */ f32 field_0x00; // 255.0f
@@ -77,60 +77,60 @@ public:
     TYPE_5,
     };
 
-    /* 8096CF8C */ ~daNpc_Bou_c();
-    /* 8096D0D8 */ int create();
-    /* 8096D38C */ int CreateHeap();
-    /* 8096D7B8 */ int Delete();
-    /* 8096D7EC */ int Execute();
-    /* 8096D80C */ int Draw();
-    /* 8096D8A0 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 8096D8C0 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 8096D918 */ static void* srchCow(void*, void*);
-    /* 8096D9B4 */ fopAc_ac_c* getCowP();
-    /* 8096DA78 */ u8 getType();
-    /* 8096DADC */ int isDelete();
-    /* 8096DBBC */ void reset();
-    /* 8096E18C */ void srchActors();
-    /* 8096ECC0 */ int selectAction();
-    /* 8096ED3C */ int chkAction(int (daNpc_Bou_c::*)(void*));
-    /* 8096ED68 */ int setAction(int (daNpc_Bou_c::*)(void*));
-    /* 8096EE10 */ int cutWildGoat(int);
-    /* 8096F2E4 */ int cutWildGoatSuccess(int);
-    /* 8096F510 */ int cutWildGoatFailure(int);
-    /* 8096F758 */ int cutSpeakTo(int);
-    /* 8096F9A4 */ int cutConversationWithBou(int);
-    /* 8096FB78 */ int cutConfidentialConversation(int);
-    /* 8096FE40 */ int cutFindWolf(int);
-    /* 80970278 */ int cutMeetingAgain(int);
-    /* 809709EC */ int wait(void*);
-    /* 80970DFC */ int talkwithJagar(void*);
-    /* 80970F9C */ int talk(void*);
-    /* 809726D4 */ daNpc_Bou_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
+    ~daNpc_Bou_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    static void* srchCow(void*, void*);
+    fopAc_ac_c* getCowP();
+    u8 getType();
+    int isDelete();
+    void reset();
+    void srchActors();
+    int selectAction();
+    int chkAction(int (daNpc_Bou_c::*)(void*));
+    int setAction(int (daNpc_Bou_c::*)(void*));
+    int cutWildGoat(int);
+    int cutWildGoatSuccess(int);
+    int cutWildGoatFailure(int);
+    int cutSpeakTo(int);
+    int cutConversationWithBou(int);
+    int cutConfidentialConversation(int);
+    int cutFindWolf(int);
+    int cutMeetingAgain(int);
+    int wait(void*);
+    int talkwithJagar(void*);
+    int talk(void*);
+    daNpc_Bou_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
                                daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                                daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
                                daNpcT_evtData_c const* param_7, char** param_8) :
                                daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8)
                                 {}
 
-    /* 809727D4 */ virtual int checkChangeJoint(int param_0) { return param_0 == 4; }
-    /* 809727E4 */ virtual int checkRemoveJoint(int param_0) { return param_0 == 8; }
-    /* 809727CC */ virtual s32 getBackboneJointNo() { return 1; }
-    /* 809727C4 */ virtual s32 getNeckJointNo() { return 3; }
-    /* 809727BC */ virtual s32 getHeadJointNo() { return 4; }
-    /* 809727B4 */ virtual u16 getEyeballMaterialNo() { return 1; }
-    /* 8096DD44 */ virtual void afterJntAnm(int);
-    /* 8096DDC8 */ virtual void setParam();
-    /* 8096DF9C */ virtual BOOL checkChangeEvt();
-    /* 8096E27C */ virtual BOOL evtTalk();
-    /* 8096E31C */ virtual BOOL evtEndProc();
-    /* 8096E324 */ virtual BOOL evtCutProc();
-    /* 8096E0EC */ virtual void setAfterTalkMotion();
-    /* 8096E3EC */ virtual void action();
-    /* 8096E7E0 */ virtual void beforeMove();
-    /* 8096E8A4 */ virtual void setAttnPos();
-    /* 8096EB14 */ virtual void setCollision();
-    /* 8096EC6C */ virtual int drawDbgInfo();
-    /* 8096EC74 */ virtual void changeAnm(int*, int*);
+    virtual int checkChangeJoint(int param_0) { return param_0 == 4; }
+    virtual int checkRemoveJoint(int param_0) { return param_0 == 8; }
+    virtual s32 getBackboneJointNo() { return 1; }
+    virtual s32 getNeckJointNo() { return 3; }
+    virtual s32 getHeadJointNo() { return 4; }
+    virtual u16 getEyeballMaterialNo() { return 1; }
+    virtual void afterJntAnm(int);
+    virtual void setParam();
+    virtual BOOL checkChangeEvt();
+    virtual BOOL evtTalk();
+    virtual BOOL evtEndProc();
+    virtual BOOL evtCutProc();
+    virtual void setAfterTalkMotion();
+    virtual void action();
+    virtual void beforeMove();
+    virtual void setAttnPos();
+    virtual void setCollision();
+    virtual int drawDbgInfo();
+    virtual void changeAnm(int*, int*);
 
     static char* mCutNameList[9];
     static cutFunc mCutList[9];

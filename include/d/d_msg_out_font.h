@@ -8,11 +8,11 @@ class J2DTextBox;
 
 class COutFontSet_c {
 public:
-    /* 80225BB8 */ COutFontSet_c();
-    /* 80225C3C */ void initialize();
-    /* 80225C70 */ void drawFont(J2DTextBox*, u8, f32, f32, f32, f32, u32, u8);
+    COutFontSet_c();
+    void initialize();
+    void drawFont(J2DTextBox*, u8, f32, f32, f32, f32, u32, u8);
 
-    /* 80225BF4 */ virtual ~COutFontSet_c();
+    virtual ~COutFontSet_c();
 
     u8 getType() { return mType; }
     u32 getColor() { return mColor; }
@@ -38,18 +38,18 @@ private:
 
 class COutFont_c {
 public:
-    /* 80225C94 */ COutFont_c(u8);
-    /* 80226CF8 */ void initialize();
-    /* 80228490 */ void setBlendAnime(J2DPicture*, s16);
-    /* 80228530 */ const char* getBtiName(int);
+    COutFont_c(u8);
+    void initialize();
+    void setBlendAnime(J2DPicture*, s16);
+    const char* getBtiName(int);
 
-    /* 80225D60 */ virtual ~COutFont_c();
-    /* 80225E7C */ virtual void setPane(J2DPicture*);
-    /* 80225EA8 */ virtual void createPane();
-    /* 80226DB0 */ virtual void draw(J2DTextBox*, f32, f32, f32);
-    /* 80228448 */ virtual void reset(J2DTextBox*);
-    /* 80226D4C */ virtual void drawFont(J2DTextBox*, u8, f32, f32, f32, f32, u32, u8);
-    /* 80226DA8 */ virtual void setAlphaRatio(f32);
+    virtual ~COutFont_c();
+    virtual void setPane(J2DPicture*);
+    virtual void createPane();
+    virtual void draw(J2DTextBox*, f32, f32, f32);
+    virtual void reset(J2DTextBox*);
+    virtual void drawFont(J2DTextBox*, u8, f32, f32, f32, f32, u32, u8);
+    virtual void setAlphaRatio(f32);
 
     void setRupeeColor(u8 color) { mRupeeColor = color; }
 

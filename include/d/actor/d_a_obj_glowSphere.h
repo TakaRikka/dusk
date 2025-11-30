@@ -45,15 +45,15 @@ public:
         reset();
     }
 
-    /* 80BFA4B8 */ void _clrLstBuf();
-    /* 80BFA4DC */ int entry(daGlwSph_c*);
-    /* 80BFA528 */ void remove(daGlwSph_c*);
-    /* 80BFA55C */ int _setting_main();
-    /* 80BFA5C4 */ BOOL _chkAllGet_main();
-    /* 80BFA60C */ void SphSeProc();
-    /* 80BFA6D8 */ static void clrSphSe();
-    /* 80BFA6E8 */ static u16 getSphSe();
-    /* 80BFA6F8 */ static void incSphSe();
+    void _clrLstBuf();
+    int entry(daGlwSph_c*);
+    void remove(daGlwSph_c*);
+    int _setting_main();
+    BOOL _chkAllGet_main();
+    void SphSeProc();
+    static void clrSphSe();
+    static u16 getSphSe();
+    static void incSphSe();
 
     void setting() {
         _setting_main();
@@ -100,24 +100,24 @@ public:
         ACTION_MOVE_e,
     };
 
-    /* 80BF9430 */ static _GlSph_Mng_c& getSphMng();
-    /* 80BF943C */ void setBaseMtx();
-    /* 80BF94AC */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80BF94CC */ int CreateHeap();
-    /* 80BF95D4 */ int create();
-    /* 80BF9B1C */ int execute();
-    /* 80BF9BC0 */ void actionMain();
-    /* 80BF9DF0 */ void effectSet();
-    /* 80BF9F30 */ void getSE();
-    /* 80BFA010 */ void getVibe();
-    /* 80BFA064 */ void actionWaitInit();
-    /* 80BFA070 */ void actionWait();
-    /* 80BFA074 */ void actionGetInit();
-    /* 80BFA130 */ void actionGet();
-    /* 80BFA1E0 */ void actionMoveInit();
-    /* 80BFA204 */ void actionMove();
-    /* 80BFA2A4 */ int draw();
-    /* 80BFA3EC */ int _delete();
+    static _GlSph_Mng_c& getSphMng();
+    void setBaseMtx();
+    static int createHeapCallBack(fopAc_ac_c*);
+    int CreateHeap();
+    int create();
+    int execute();
+    void actionMain();
+    void effectSet();
+    void getSE();
+    void getVibe();
+    void actionWaitInit();
+    void actionWait();
+    void actionGetInit();
+    void actionGet();
+    void actionMoveInit();
+    void actionMove();
+    int draw();
+    int _delete();
 
     int getSw() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getArg0() { return fopAcM_GetParamBit(this, 8, 8); }
@@ -166,8 +166,8 @@ STATIC_ASSERT(sizeof(daGlwSph_c) == 0x98C);
 
 class daGlwSph_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80BF934C */ daGlwSph_HIO_c();
-    /* 80BFA76C */ virtual ~daGlwSph_HIO_c() {}
+    daGlwSph_HIO_c();
+    virtual ~daGlwSph_HIO_c() {}
 
     void genMessage(JORMContext*);
 

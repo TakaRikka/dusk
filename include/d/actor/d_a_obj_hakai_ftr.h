@@ -14,20 +14,20 @@
  */
 class daObjHFtr_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80C174B8 */ daObjHFtr_c();
-    /* 80C17778 */ virtual ~daObjHFtr_c();
+    daObjHFtr_c();
+    virtual ~daObjHFtr_c();
     inline u8 getNameId() {
         return fopAcM_GetParamBit(this, 0, 4);
     }
-    /* 80C17874 */ int createHeap();
-    /* 80C179B0 */ int create();
-    /* 80C17AC0 */ int Delete();
-    /* 80C17B30 */ int draw();
-    /* 80C17BD4 */ int execute();
-    /* 80C17CD0 */ void init();
-    /* 80C17E10 */ void setModelMtx();
-    /* 80C17E74 */ bool chkHit();
-    /* 80C17EDC */ void callEmt();
+    int createHeap();
+    int create();
+    int Delete();
+    int draw();
+    int execute();
+    void init();
+    void setModelMtx();
+    bool chkHit();
+    void callEmt();
 
     static dCcD_SrcCyl const s_CcDCyl;
 

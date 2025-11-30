@@ -16,16 +16,16 @@
 
 class daObjHata_c : public fopAc_ac_c, request_of_phase_process_class {
 public:
-    /* 80C18D08 */ daObjHata_c();
-    /* 80C18D68 */ virtual ~daObjHata_c();
-    /* 80C18E00 */ int createHeap();
-    /* 80C18E70 */ cPhs__Step create();
-    /* 80C18F88 */ int Delete();
-    /* 80C18FBC */ int draw();
-    /* 80C19060 */ int execute();
-    /* 80C19098 */ void setModelMtx();
-    /* 80C190FC */ void init();
-    /* 80C1919C */ void moveSwing();
+    daObjHata_c();
+    virtual ~daObjHata_c();
+    int createHeap();
+    cPhs__Step create();
+    int Delete();
+    int draw();
+    int execute();
+    void setModelMtx();
+    void init();
+    void moveSwing();
 
     void getJntAngle(csXyz* angle, int idx) { *angle = jnt_angle[idx]; }
     

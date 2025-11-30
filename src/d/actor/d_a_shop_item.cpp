@@ -10,7 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
 
-/* 8059E9B8-8059EC04 000078 024C+00 2/2 0/0 0/0 .text            getShopArcname__12daShopItem_cFv */
 const char* daShopItem_c::getShopArcname() {
     switch (m_itemNo) {
     case fpcNm_ITEM_NONE:
@@ -91,10 +90,8 @@ const char* daShopItem_c::getShopArcname() {
     return mData[mShopItemID].get_arcName();
 }
 
-/* 8059F438-8059F43C 000000 0004+00 2/2 0/0 0/0 .rodata          m_cullfar_max__12daShopItem_c */
 const f32 daShopItem_c::m_cullfar_max = 5000.0f;
 
-/* 8059EC04-8059EC1C 0002C4 0018+00 1/1 0/0 0/0 .text            getHeapSize__12daShopItem_cFv */
 u16 daShopItem_c::getHeapSize() {
     static const u16 HeapSizeTbl[] = {
         0x0810, 0x0810, 0x0810, 0x0810, 0x0810, 0x0810, 0x0810, 0x0810,
@@ -109,7 +106,6 @@ u16 daShopItem_c::getHeapSize() {
     return HeapSizeTbl[a_ShopItemID];
 }
 
-/* 8059EC1C-8059ED58 0002DC 013C+00 1/1 0/0 0/0 .text            CreateInit__12daShopItem_cFv */
 void daShopItem_c::CreateInit() {
     fopAcM_SetMtx(this, mMtx);
     fopAcM_setCullSizeBox(this, -100.0f, 0.0f, -100.0f, 100.0f, 200.0f, 100.0f);
@@ -134,7 +130,6 @@ void daShopItem_c::CreateInit() {
     mpModel->setUserArea(NULL);
 }
 
-/* 8059ED58-8059EEF4 000418 019C+00 2/2 0/0 0/0 .text            set_mtx__12daShopItem_cFv */
 void daShopItem_c::set_mtx() {
     mpModel->setBaseScale(scale);
 
@@ -166,14 +161,12 @@ void daShopItem_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 8059EEF4-8059EF48 0005B4 0054+00 1/1 0/0 0/0 .text            _execute__12daShopItem_cFv */
 bool daShopItem_c::_execute() {
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     set_mtx();
     return true;
 }
 
-/* 8059EF48-8059EF9C 000608 0054+00 1/1 0/0 0/0 .text            _draw__12daShopItem_cFv */
 bool daShopItem_c::_draw() {
     if (!chkDraw()) {
         return true;
@@ -183,10 +176,8 @@ bool daShopItem_c::_draw() {
     return true;
 }
 
-/* 8059EF9C-8059EFA0 00065C 0004+00 1/0 0/0 0/0 .text            setListStart__12daShopItem_cFv */
 void daShopItem_c::setListStart() {}
 
-/* 8059EFA0-8059F024 000660 0084+00 1/0 0/0 0/0 .text            setShadow__12daShopItem_cFv */
 void daShopItem_c::setShadow() {
     if (m_itemNo != fpcNm_ITEM_NONE) {
         daItemBase_c::setShadow();
@@ -197,32 +188,26 @@ void daShopItem_c::setShadow() {
     }
 }
 
-/* 8059F024-8059F044 0006E4 0020+00 1/0 0/0 0/0 .text            chkFlag__12daShopItem_cFi */
 BOOL daShopItem_c::chkFlag(int i_flag) {
     return mData[mShopItemID].get_flag() & i_flag;
 }
 
-/* 8059F044-8059F064 000704 0020+00 1/0 0/0 0/0 .text            getTevFrm__12daShopItem_cFv */
 s8 daShopItem_c::getTevFrm() {
     return mData[mShopItemID].get_tevfrm();
 }
 
-/* 8059F064-8059F084 000724 0020+00 1/0 0/0 0/0 .text            getBtpFrm__12daShopItem_cFv */
 s8 daShopItem_c::getBtpFrm() {
     return mData[mShopItemID].get_btpfrm();
 }
 
-/* 8059F084-8059F0A0 000744 001C+00 1/0 0/0 0/0 .text            getShadowSize__12daShopItem_cFv */
 u8 daShopItem_c::getShadowSize() {
     return mData[mShopItemID].get_shadowSize();
 }
 
-/* 8059F0A0-8059F0BC 000760 001C+00 1/0 0/0 0/0 .text            getCollisionH__12daShopItem_cFv */
 u8 daShopItem_c::getCollisionH() {
     return mData[mShopItemID].get_collisionH();
 }
 
-/* 8059F0BC-8059F0D8 00077C 001C+00 1/0 0/0 0/0 .text            getCollisionR__12daShopItem_cFv */
 u8 daShopItem_c::getCollisionR() {
     return mData[mShopItemID].get_collisionR();
 }
@@ -258,7 +243,6 @@ int daShopItem_c::_create() {
     return phase_state;
 }
 
-/* 8059F0D8-8059F294 000798 01BC+00 1/0 0/0 0/0 .text            daShopItem_Create__FPv */
 static int daShopItem_Create(void* i_this) {
     return static_cast<daShopItem_c*>(i_this)->_create();
 }
@@ -268,34 +252,28 @@ int daShopItem_c::_delete() {
     return 1;
 }
 
-/* 8059F394-8059F3D0 000A54 003C+00 1/0 0/0 0/0 .text            daShopItem_Delete__FPv */
 static int daShopItem_Delete(void* i_this) {
     return static_cast<daShopItem_c*>(i_this)->_delete();
 }
 
-/* 8059F3D0-8059F3F4 000A90 0024+00 1/0 0/0 0/0 .text            daShopItem_Draw__FPv */
 static int daShopItem_Draw(void* i_this) {
     return static_cast<daShopItem_c*>(i_this)->_draw();
 }
 
-/* 8059F3F4-8059F418 000AB4 0024+00 1/0 0/0 0/0 .text            daShopItem_Execute__FPv */
 static int daShopItem_Execute(void* i_this) {
     return static_cast<daShopItem_c*>(i_this)->_execute();
 }
 
-/* 8059F418-8059F420 000AD8 0008+00 1/0 0/0 0/0 .text            daShopItem_IsDelete__FPv */
 static int daShopItem_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 8059F49C-8059F4BC -00001 0020+00 1/0 0/0 0/0 .data            daShopItemMethodTable */
 static actor_method_class daShopItemMethodTable = {
     (process_method_func)daShopItem_Create,  (process_method_func)daShopItem_Delete,
     (process_method_func)daShopItem_Execute, (process_method_func)daShopItem_IsDelete,
     (process_method_func)daShopItem_Draw,
 };
 
-/* 8059F4BC-8059F4EC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_ShopItem */
 extern actor_process_profile_definition g_profile_ShopItem = {
     fpcLy_CURRENT_e,
     7,

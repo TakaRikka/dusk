@@ -5,12 +5,10 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "SSystem/SComponent/c_counter.h"
 
-/* 80524BD8-805253D8 001A00 0800+00 0/1 0/0 0/0 .data            l_J_Ohana00_64TEX */
 const u16 l_J_Ohana00_64TEX__width = 63;
 const u16 l_J_Ohana00_64TEX__height = 63;
 #include "assets/l_J_Ohana00_64TEX.h"
 
-/* 805253D8-8052569C 002200 02C4+00 0/1 0/0 0/0 .data            l_flowerPos */
 static u8 l_flowerPos[708] = {
     0xC0, 0x8C, 0x2C, 0xF7, 0x42, 0x05, 0xBC, 0xDF, 0xC1, 0xA1, 0x00, 0x70, 0xBF, 0x50, 0x51, 0xB9,
     0x42, 0x12, 0x58, 0xAD, 0xC0, 0xDE, 0xCE, 0x40, 0xC1, 0x04, 0x67, 0x23, 0x41, 0xE5, 0x87, 0x25,
@@ -59,7 +57,6 @@ static u8 l_flowerPos[708] = {
     0xC0, 0xE9, 0x27, 0x8D,
 };
 
-/* 8052569C-80525750 0024C4 00B4+00 0/1 0/0 0/0 .data            l_flowerNormal */
 static u8 l_flowerNormal[180] = {
     0x3C, 0x8D, 0x2C, 0x38, 0x3F, 0x7F, 0xF5, 0xF9, 0x3B, 0x46, 0xF7, 0xA1, 0x3C, 0x76, 0x83,
     0x7F, 0x3F, 0x7F, 0xF5, 0xF9, 0x3C, 0x12, 0x5F, 0xE9, 0xBB, 0xE5, 0xA3, 0x5D, 0x3F, 0x7F,
@@ -75,12 +72,10 @@ static u8 l_flowerNormal[180] = {
     0x46, 0x54, 0x0D, 0x3C, 0x4B, 0xEE, 0x80, 0x3F, 0x7F, 0xF5, 0xF9, 0x3C, 0x49, 0x81, 0xBF,
 };
 
-/* 80525750-80525758 002578 0008+00 0/1 0/0 0/0 .data            l_flowerColor */
 static u8 l_flowerColor[8] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xB2, 0xB2, 0xB2, 0xFF,
 };
 
-/* 80525758-80525898 002580 0138+08 0/1 0/0 0/0 .data            l_flowerTexCoord */
 static u8 l_flowerTexCoord[] = {
     0x40, 0x40, 0xD0, 0xEA, 0x3D, 0x69, 0x70, 0x72, 0x40, 0x7D, 0xD8, 0x30, 0x3F, 0x81, 0x3D, 0xC9,
     0x40, 0x40, 0xCE, 0x85, 0x3F, 0x81, 0x3D, 0xC9, 0x40, 0x01, 0xDD, 0x33, 0x3F, 0x81, 0x3D, 0xC9,
@@ -103,26 +98,20 @@ static u8 l_flowerTexCoord[] = {
     0x3E, 0xA7, 0x67, 0x4D, 0x3C, 0x14, 0x46, 0x74, 0x3E, 0xA7, 0x73, 0xE2, 0xBC, 0x2F, 0x46, 0xAA,
     0x3E, 0xA7, 0x72, 0xD6, 0xBD, 0x2F, 0x46, 0xAA};
 
-/* 80525898-805259F8 0026C0 0150+10 0/1 0/0 0/0 .data            l_J_hana00DL */
 #include "assets/l_J_hana00DL.h"
 
-/* 805259F8-80525AD8 002820 00DE+02 0/1 0/0 0/0 .data            l_J_hana00_cDL */
 #include "assets/l_J_hana00_cDL.h"
 
-/* 80525AD8-80525B78 002900 0099+07 0/2 0/0 0/0 .data            l_matDL */
 #include "assets/l_matDL__d_a_grass.h"
 l_matDL__d_a_grass(l_J_Ohana00_64TEX)
 
-/* 80525B78-80525C18 0029A0 0099+07 0/2 0/0 0/0 .data            l_matLight4DL */
 #include "assets/l_matLight4DL.h"
 l_matLight4DL(l_J_Ohana00_64TEX)
 
-/* 80525C18-80526C18 002A40 1000+00 0/1 0/0 0/0 .data            l_J_Ohana01_64128_0419TEX */
 const u16 l_J_Ohana01_64128_0419TEX__width = 63;
 const u16 l_J_Ohana01_64128_0419TEX__height = 127;
 #include "assets/l_J_Ohana01_64128_0419TEX.h"
 
-/* 80526C18-805270E0 003A40 04C8+00 0/1 0/0 0/0 .data            l_flowerPos2 */
 static u8 l_flowerPos2[1224] = {
     0x40, 0x25, 0x9F, 0x34, 0x42, 0xC2, 0x95, 0x72, 0xC1, 0x22, 0x34, 0x78, 0x41, 0x4D, 0xF9, 0x63,
     0x43, 0x09, 0x35, 0x0D, 0x40, 0x97, 0xD7, 0x54, 0x41, 0x76, 0x80, 0x55, 0x42, 0xBA, 0x1C, 0xB4,
@@ -203,7 +192,6 @@ static u8 l_flowerPos2[1224] = {
     0xC1, 0x1E, 0x5D, 0x2D, 0xBF, 0xA4, 0x4D, 0x4D,
 };
 
-/* 805270E0-80527200 003F08 0120+00 0/1 0/0 0/0 .data            l_flowerNormal2 */
 static u8 l_flowerNormal2[288] = {
     0xBB, 0xC4, 0x93, 0x42, 0x3F, 0x7F, 0xF6, 0x6F, 0xBC, 0x83, 0x0E, 0x3D, 0x3C, 0x83, 0x0C, 0x24,
     0x3F, 0x7F, 0xF5, 0x84, 0x3C, 0x03, 0x0E, 0x3D, 0xB8, 0x51, 0xB7, 0x17, 0x3F, 0x7F, 0xF5, 0xF9,
@@ -225,12 +213,10 @@ static u8 l_flowerNormal2[288] = {
     0x3B, 0x76, 0x7B, 0x1C, 0x3B, 0x99, 0x6B, 0x76, 0x3F, 0x7F, 0xF5, 0xF9, 0xBC, 0x8A, 0x1D, 0xFC,
 };
 
-/* 80527200-80527208 004028 0008+00 0/1 0/0 0/0 .data            l_flowerColor2 */
 static u8 l_flowerColor2[8] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xB2, 0xFF,
 };
 
-/* 80527208-80527338 004030 0120+10 0/1 0/0 0/0 .data            l_flowerTexCoord2 */
 static u8 l_flowerTexCoord2[] = {
     0x3F, 0xF3, 0x6D, 0x11, 0x3F, 0x72, 0x0B, 0xA2, 0x3F, 0x80, 0x00, 0x00, 0x3C, 0xAB, 0xDC, 0x27,
     0x3D, 0xC9, 0x2E, 0xE8, 0x3F, 0x72, 0x0B, 0xA2, 0x40, 0x2B, 0x93, 0x9A, 0x3F, 0x81, 0x7B, 0x96,
@@ -251,24 +237,18 @@ static u8 l_flowerTexCoord2[] = {
     0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x97, 0xF6, 0xBA, 0x40, 0x04, 0x26, 0x74, 0x3F, 0x80, 0x3F, 0x79,
     0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x80, 0x3F, 0x79, 0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x51, 0x10, 0x6F};
 
-/* 80527338-80527478 004160 0138+08 0/1 0/0 0/0 .data            l_J_hana01DL */
 #include "assets/l_J_hana01DL.h"
 
-/* 80527478-80527558 0042A0 00DE+02 0/0 0/0 0/0 .data            l_J_hana01_c_00DL */
 #include "assets/l_J_hana01_c_00DL.h"
 
-/* 80527558-80527698 004380 0128+18 0/1 0/0 0/0 .data            l_J_hana01_c_01DL */
 #include "assets/l_J_hana01_c_01DL.h"
 
-/* 80527698-80527738 0044C0 0099+07 0/2 0/0 0/0 .data            l_mat2DL */
 #include "assets/l_mat2DL__d_a_grass.h"
 l_mat2DL__d_a_grass(l_J_Ohana01_64128_0419TEX)
 
-/* 80527738-805277D4 004560 0099+03 0/2 0/0 0/0 .data            l_mat2Light4DL */
 #include "assets/l_mat2Light4DL.h"
 l_mat2Light4DL(l_J_Ohana01_64128_0419TEX)
 
-/* 80520988-80520AD8 004D28 0150+00 1/1 0/0 0/0 .text WorkCo__14dFlower_data_cFP10fopAc_ac_cUli */
 void dFlower_data_c::WorkCo(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo) {
     cXyz sp8;
     sp8.x = m_pos.x - i_hitActor->current.pos.x;
@@ -299,7 +279,6 @@ void dFlower_data_c::WorkCo(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo)
     }
 }
 
-/* 80520AD8-80520B34 004E78 005C+00 4/4 0/0 0/0 .text            deleteAnm__14dFlower_data_cFv */
 void dFlower_data_c::deleteAnm() {
     if (field_0x01 >= 8) {
         daGrass_c::getFlower()->deleteAnm(field_0x01);
@@ -308,8 +287,6 @@ void dFlower_data_c::deleteAnm() {
     }
 }
 
-/* 80520B34-80520CFC 004ED4 01C8+00 1/1 0/0 0/0 .text
- * WorkAt_NoCutAnim__14dFlower_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInfP8cCcD_Obj */
 void dFlower_data_c::WorkAt_NoCutAnim(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo,
                                       dCcMassS_HitInf* i_hitinf, cCcD_Obj* i_hitobj) {
     dCcD_GObjInf* var_r26 = dCcD_GetGObjInf(i_hitobj);
@@ -344,11 +321,8 @@ void dFlower_data_c::WorkAt_NoCutAnim(fopAc_ac_c* i_hitActor, u32 i_massFlg, int
     var_r29->m_angX = cM_atan2s(temp_f31, 220.0f);
 }
 
-/* 805284E8-805284EC 000C20 0004+00 1/2 0/0 0/0 .bss             None */
 static bool data_805284E8;
 
-/* 80520CFC-80521A3C 00509C 0D40+00 1/1 0/0 0/0 .text
- * WorkAt__14dFlower_data_cFP10fopAc_ac_cUliP15dCcMassS_HitInf  */
 void dFlower_data_c::WorkAt(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo, dCcMassS_HitInf* i_hitinf) {
     cCcD_Obj* hitobj_p = i_hitinf->GetAtHitObj();
 
@@ -467,7 +441,6 @@ void dFlower_data_c::WorkAt(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo,
     }
 }
 
-/* 80521A3C-80521BF8 005DDC 01BC+00 1/1 0/0 0/0 .text hitCheck__14dFlower_data_cFP10fopAc_ac_ci */
 void dFlower_data_c::hitCheck(fopAc_ac_c* i_hitActor, int i_roomNo) {
     dCcMassS_HitInf hitinf;
 
@@ -504,14 +477,11 @@ void dFlower_data_c::hitCheck(fopAc_ac_c* i_hitActor, int i_roomNo) {
     }
 }
 
-/* 80521BF8-80521C08 005F98 0010+00 1/1 0/0 0/0 .text newData__14dFlower_room_cFP14dFlower_data_c
- */
 void dFlower_room_c::newData(dFlower_data_c* i_data) {
     i_data->mp_next = mp_data;
     mp_data = i_data;
 }
 
-/* 80521C08-80521C64 005FA8 005C+00 1/1 0/0 0/0 .text            deleteData__14dFlower_room_cFv */
 void dFlower_room_c::deleteData() {
     while (mp_data != NULL) {
         mp_data->deleteAnm();
@@ -520,7 +490,6 @@ void dFlower_room_c::deleteData() {
     }
 }
 
-/* 80521C64-80521DAC 006004 0148+00 1/1 0/0 0/0 .text            __ct__16dFlower_packet_cFv */
 dFlower_packet_c::dFlower_packet_c() {
     dFlower_data_c* data_p = m_data;
     for (int i = 0; i < 1000; i++) {
@@ -543,7 +512,6 @@ dFlower_packet_c::dFlower_packet_c() {
     m_deleteRoom = &dFlower_packet_c::deleteRoom;
 }
 
-/* 80521DAC-80522774 00614C 09C8+00 2/0 0/0 0/0 .text            draw__16dFlower_packet_cFv */
 void dFlower_packet_c::draw() {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     j3dSys.reinitGX();
@@ -809,7 +777,6 @@ void dFlower_packet_c::draw() {
     J3DShape::resetVcdVatCache();
 }
 
-/* 80522774-8052299C 006B14 0228+00 1/1 0/0 0/0 .text            calc__16dFlower_packet_cFv */
 void dFlower_packet_c::calc() {
     dFlower_anm_c* anm_p = getAnm();
 
@@ -854,7 +821,6 @@ void dFlower_packet_c::calc() {
     }
 }
 
-/* 8052299C-80522A64 006D3C 00C8+00 2/2 0/0 0/0 .text            flowerCheckGroundY__FR4cXyz */
 static f32 flowerCheckGroundY(cXyz& param_0) {
     dBgS_GndChk sp8;
     param_0.y += 50.0f;
@@ -871,7 +837,6 @@ static f32 flowerCheckGroundY(cXyz& param_0) {
     }
 }
 
-/* 80522A64-80522CBC 006E04 0258+00 1/1 0/0 0/0 .text            update__16dFlower_packet_cFv */
 void dFlower_packet_c::update() {
     dFlower_anm_c* var_r29 = getAnm();
 
@@ -926,8 +891,6 @@ void dFlower_packet_c::update() {
     dComIfGd_getListPacket()->entryImm(this, 0);
 }
 
-/* 80522CBC-80522E28 00705C 016C+00 1/1 0/0 0/0 .text
- * setData__16dFlower_packet_cFP14dFlower_data_ciScR4cXyziScs   */
 void dFlower_packet_c::setData(dFlower_data_c* i_data, int i_dataNo, s8 param_2, cXyz& i_pos,
                                int i_roomNo, s8 i_tableNo, s16 i_addCol) {
     f32 y_pos;
@@ -967,7 +930,6 @@ void dFlower_packet_c::setData(dFlower_data_c* i_data, int i_dataNo, s8 param_2,
     m_dataNum = i_dataNo;
 }
 
-/* 80522E28-80522F0C 0071C8 00E4+00 1/1 0/0 0/0 .text newData__16dFlower_packet_cFScR4cXyziScs */
 dFlower_data_c* dFlower_packet_c::newData(s8 param_0, cXyz& i_pos, int i_roomNo, s8 i_tableNo,
                                           s16 i_addCol) {
     dFlower_data_c* data_p = m_data + m_dataNum;
@@ -992,12 +954,10 @@ dFlower_data_c* dFlower_packet_c::newData(s8 param_0, cXyz& i_pos, int i_roomNo,
     return NULL;
 }
 
-/* 80522F0C-80522F40 0072AC 0034+00 1/0 0/0 0/0 .text            deleteRoom__16dFlower_packet_cFi */
 void dFlower_packet_c::deleteRoom(int i_roomNo) {
     m_room[i_roomNo].deleteData();
 }
 
-/* 80522F40-80522F8C 0072E0 004C+00 2/2 0/0 0/0 .text            newAnm__16dFlower_packet_cFv */
 int dFlower_packet_c::newAnm() {
     dFlower_anm_c* anm_p = m_anm + 8;
     for (int i = 8; i < 72; i++) {
@@ -1014,7 +974,6 @@ int dFlower_packet_c::newAnm() {
     return -1;
 }
 
-/* 80522F8C-80522FB4 00732C 0028+00 1/1 0/0 0/0 .text            setAnm__16dFlower_packet_cFis */
 void dFlower_packet_c::setAnm(int i_idx, s16 i_angY) {
     dFlower_anm_c* anm_p = m_anm + i_idx;
 
@@ -1023,20 +982,16 @@ void dFlower_packet_c::setAnm(int i_idx, s16 i_angY) {
     anm_p->m_angX = 0;
 }
 
-/* 80522FB4-80522FC0 007354 000C+00 1/1 0/0 0/0 .text            __ct__14dFlower_room_cFv */
 dFlower_room_c::dFlower_room_c() {
     mp_data = NULL;
 }
 
-/* 80522FC0-80522FCC 007360 000C+00 1/1 0/0 0/0 .text            __ct__13dFlower_anm_cFv */
 dFlower_anm_c::dFlower_anm_c() {
     m_state = 0;
 }
 
-/* 80522FCC-80523008 00736C 003C+00 2/2 0/0 0/0 .text            __dt__14dFlower_data_cFv */
 dFlower_data_c::~dFlower_data_c() {}
 
-/* 80523008-80523014 0073A8 000C+00 1/1 0/0 0/0 .text            __ct__14dFlower_data_cFv */
 dFlower_data_c::dFlower_data_c() {
     m_state = 0;
 }

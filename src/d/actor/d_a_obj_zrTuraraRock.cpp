@@ -10,10 +10,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 80D425AC-80D425CC 000014 0020+00 2/2 0/0 0/0 .bss             l_HIO */
 static daZrTuraRc_HIO_c l_HIO;
 
-/* 80D4188C-80D418EC 0000EC 0060+00 1/1 0/0 0/0 .text            __ct__16daZrTuraRc_HIO_cFv */
 daZrTuraRc_HIO_c::daZrTuraRc_HIO_c() {
     field_0x04 = 450.0f;
     mGravity = 10.0f;
@@ -25,7 +23,6 @@ daZrTuraRc_HIO_c::daZrTuraRc_HIO_c() {
     field_0x1c = 5.0f;
 }
 
-/* 80D423D4-80D42404 000014 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__12daZrTuraRc_c */
 dCcD_SrcGObjInf const daZrTuraRc_c::mCcDObjInfo = {
     {0, {
         {0x20, 1, 0x1F},
@@ -37,13 +34,11 @@ dCcD_SrcGObjInf const daZrTuraRc_c::mCcDObjInfo = {
     {0}
 };
 
-/* 80D42460-80D424A0 000020 0040+00 2/2 0/0 0/0 .data            mCcDSph__12daZrTuraRc_c */
 dCcD_SrcSph daZrTuraRc_c::mCcDSph = {
     mCcDObjInfo,
     {{{0.0f, 0.0f, 0.0f}, 0.0f}}
 };
 
-/* 80D41934-80D419D4 000194 00A0+00 2/2 0/0 0/0 .text            setBaseMtx__12daZrTuraRc_cFv */
 void daZrTuraRc_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -52,7 +47,6 @@ void daZrTuraRc_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80D419D4-80D41A40 000234 006C+00 1/1 0/0 0/0 .text            CreateHeap__12daZrTuraRc_cFv */
 int daZrTuraRc_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes("M_DRockHn", 3);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
@@ -62,7 +56,6 @@ int daZrTuraRc_c::CreateHeap() {
     return 1;
 }
 
-/* 80D41A40-80D41D24 0002A0 02E4+00 1/1 0/0 0/0 .text            create__12daZrTuraRc_cFv */
 cPhs__Step daZrTuraRc_c::create() {
     fopAcM_ct(this, daZrTuraRc_c);
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, "M_DRockHn");
@@ -93,13 +86,10 @@ cPhs__Step daZrTuraRc_c::create() {
     return step;
 }
 
-/* 80D41EF0-80D41F10 000750 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__12daZrTuraRc_cFP10fopAc_ac_c             */
 int daZrTuraRc_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daZrTuraRc_c*>(i_this)->CreateHeap();
 }
 
-/* 80D41F10-80D41F78 000770 0068+00 1/1 0/0 0/0 .text            Execute__12daZrTuraRc_cFv */
 int daZrTuraRc_c::Execute() {
     move();
     setBaseMtx();
@@ -108,7 +98,6 @@ int daZrTuraRc_c::Execute() {
     return 1;
 }
 
-/* 80D41F78-80D4204C 0007D8 00D4+00 1/1 0/0 0/0 .text            move__12daZrTuraRc_cFv */
 void daZrTuraRc_c::move() {
     typedef void (daZrTuraRc_c::*daZrTuraRc_modeFunc)();
     static daZrTuraRc_modeFunc mode_proc[2] = {
@@ -121,7 +110,6 @@ void daZrTuraRc_c::move() {
     dComIfG_Ccsp()->Set(&mCcSph);
 }
 
-/* 80D4204C-80D42084 0008AC 0038+00 1/1 0/0 0/0 .text            init_modeDrop__12daZrTuraRc_cFv */
 void daZrTuraRc_c::init_modeDrop() {
     fopAcM_SetGravity(this, -l_HIO.mGravity);
     fopAcM_SetMaxFallSpeed(this, -l_HIO.mMaxFallSpeed);
@@ -129,7 +117,6 @@ void daZrTuraRc_c::init_modeDrop() {
     mMode = 0;
 }
 
-/* 80D42084-80D420FC 0008E4 0078+00 1/0 0/0 0/0 .text            modeDrop__12daZrTuraRc_cFv */
 void daZrTuraRc_c::modeDrop() {
     fopAcM_posMoveF(this, mCcStatus.GetCCMoveP());
     mSound.startLevelSound(Z2SE_OBJ_RG_ROCK_FALL, 0, -1);
@@ -137,7 +124,6 @@ void daZrTuraRc_c::modeDrop() {
     bgCheck();
 }
 
-/* 80D420FC-80D42128 00095C 002C+00 1/1 0/0 0/0 .text            bgCheck__12daZrTuraRc_cFv */
 void daZrTuraRc_c::bgCheck() {
     // this should be ChkGroundHit but that doesn't match
     if (mAcch.m_flags >> 5 & 1) {
@@ -145,19 +131,15 @@ void daZrTuraRc_c::bgCheck() {
     }
 }
 
-/* 80D42128-80D4215C 000988 0034+00 1/1 0/0 0/0 .text            init_modeDropEnd__12daZrTuraRc_cFv
- */
 void daZrTuraRc_c::init_modeDropEnd() {
     fopAcM_delete(this);
     mMode = 1;
 }
 
-/* 80D4215C-80D42160 0009BC 0004+00 1/0 0/0 0/0 .text            modeDropEnd__12daZrTuraRc_cFv */
 void daZrTuraRc_c::modeDropEnd() {
     /* empty function */
 }
 
-/* 80D42160-80D421C4 0009C0 0064+00 1/1 0/0 0/0 .text            Draw__12daZrTuraRc_cFv */
 int daZrTuraRc_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -165,37 +147,28 @@ int daZrTuraRc_c::Draw() {
     return 1;
 }
 
-/* 80D421C4-80D42208 000A24 0044+00 1/1 0/0 0/0 .text            Delete__12daZrTuraRc_cFv */
 int daZrTuraRc_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, "M_DRockHn");
     mSound.deleteObject();
     return 1;
 }
 
-/* 80D42208-80D42228 000A68 0020+00 1/0 0/0 0/0 .text            daZrTuraRc_Draw__FP12daZrTuraRc_c
- */
 static int daZrTuraRc_Draw(daZrTuraRc_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80D42228-80D42248 000A88 0020+00 1/0 0/0 0/0 .text daZrTuraRc_Execute__FP12daZrTuraRc_c */
 static int daZrTuraRc_Execute(daZrTuraRc_c* i_this) {
     return i_this->Execute();
 }
 
-/* 80D42248-80D42268 000AA8 0020+00 1/0 0/0 0/0 .text            daZrTuraRc_Delete__FP12daZrTuraRc_c
- */
 static int daZrTuraRc_Delete(daZrTuraRc_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80D42268-80D42288 000AC8 0020+00 1/0 0/0 0/0 .text            daZrTuraRc_Create__FP10fopAc_ac_c
- */
 static cPhs__Step daZrTuraRc_Create(fopAc_ac_c* i_this) {
     return static_cast<daZrTuraRc_c*>(i_this)->create();
 }
 
-/* 80D424D0-80D424F0 -00001 0020+00 1/0 0/0 0/0 .data            l_daZrTuraRc_Method */
 static actor_method_class l_daZrTuraRc_Method = {
     (process_method_func)daZrTuraRc_Create,
     (process_method_func)daZrTuraRc_Delete,
@@ -204,7 +177,6 @@ static actor_method_class l_daZrTuraRc_Method = {
     (process_method_func)daZrTuraRc_Draw,
 };
 
-/* 80D424F0-80D42520 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_zrTuraraRc */
 extern actor_process_profile_definition g_profile_Obj_zrTuraraRc = {
     fpcLy_CURRENT_e,
     7,

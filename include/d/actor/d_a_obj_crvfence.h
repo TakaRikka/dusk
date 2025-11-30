@@ -17,22 +17,22 @@
 
 class daObjCRVFENCE_c : public dBgS_MoveBgActor {
 public:
-    /* 80BCEC98 */ BOOL CheckVec();
-    /* 80BCED60 */ BOOL Wall_Check(cXyz, cXyz);
-    /* 80BCEE60 */ void BgRelease();
-    /* 80BCEED0 */ void PosSet(cXyz*);
-    /* 80BCEF30 */ void FenceMove(u8&, cXyz*, csXyz*, cXyz*, s16&);
-    /* 80BCF0B0 */ void BrokenAction();
-    /* 80BCF404 */ void NormalAction();
-    /* 80BCF7DC */ bool checkViewArea(cXyz*);
-    /* 80BCF860 */ void Action();
-    /* 80BCF8A4 */ void setBaseMtx();
-    /* 80BCF9E4 */ int CreateHeap();
-    /* 80BCFAE4 */ cPhs__Step create();
-    /* 80BCFFC8 */ int Create();
-    /* 80BD000C */ int Execute(Mtx**);
-    /* 80BD0058 */ int Draw();
-    /* 80BD013C */ int Delete();
+    BOOL CheckVec();
+    BOOL Wall_Check(cXyz, cXyz);
+    void BgRelease();
+    void PosSet(cXyz*);
+    void FenceMove(u8&, cXyz*, csXyz*, cXyz*, s16&);
+    void BrokenAction();
+    void NormalAction();
+    bool checkViewArea(cXyz*);
+    void Action();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
 private:
     /* 0x05A0 */ int field_0x5a0;

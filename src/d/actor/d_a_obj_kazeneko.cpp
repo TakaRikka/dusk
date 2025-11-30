@@ -18,7 +18,6 @@ KazoNekoAttr const daObjKazeNeko_c::M_attr = {
     1, 0x70, 0x6400, 0x190000,
 };
 
-/* 80C3C8D8-80C3C968 000078 0090+00 1/1 0/0 0/0 .text            create_init__15daObjKazeNeko_cFv */
 void daObjKazeNeko_c::create_init() {
     fopAcM_setCullSizeBox(this, -100.0f, -10.0f, -100.0f, 100.0f, 200.0f, 100.0f);
     field_0x72c.set(current.pos.x, current.pos.y + attr().field_0x1c, current.pos.z);
@@ -27,12 +26,10 @@ void daObjKazeNeko_c::create_init() {
     initCcCylinder();
 }
 
-/* 80C3C968-80C3C988 000108 0020+00 1/1 0/0 0/0 .text            initBaseMtx__15daObjKazeNeko_cFv */
 void daObjKazeNeko_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80C3C988-80C3CA8C 000128 0104+00 2/2 0/0 0/0 .text            setBaseMtx__15daObjKazeNeko_cFv */
 void daObjKazeNeko_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::XrotM(shape_angle.x);
@@ -50,8 +47,6 @@ void daObjKazeNeko_c::setBaseMtx() {
     }
 }
 
-/* ############################################################################################## */
-/* 80C3D41C-80C3D460 000040 0044+00 1/1 0/0 0/0 .rodata          ccCylSrc$3894 */
 const static dCcD_SrcCyl ccCylSrc = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x2048, 0x11}, 0x0}}, // mObj
@@ -66,8 +61,6 @@ const static dCcD_SrcCyl ccCylSrc = {
     } // mCyl
 };
 
-/* 80C3CA8C-80C3CB10 00022C 0084+00 1/1 0/0 0/0 .text            initCcCylinder__15daObjKazeNeko_cFv
- */
 void daObjKazeNeko_c::initCcCylinder() {
     mStts.Init(0xff, 0xff, this);
     mCyl.Set(ccCylSrc);
@@ -77,8 +70,6 @@ void daObjKazeNeko_c::initCcCylinder() {
     mCyl.SetH(attr().mCylHeight);
 }
 
-/* 80C3CB10-80C3CB7C 0002B0 006C+00 1/1 0/0 0/0 .text            setCcCylinder__15daObjKazeNeko_cFv
- */
 void daObjKazeNeko_c::setCcCylinder() {
     mCyl.SetC(current.pos);
     mCyl.SetR(attr().mCylRadius);
@@ -86,7 +77,6 @@ void daObjKazeNeko_c::setCcCylinder() {
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 80C3CB7C-80C3CC40 00031C 00C4+00 1/1 0/0 0/0 .text            swingHead__15daObjKazeNeko_cFv */
 void daObjKazeNeko_c::swingHead() {
     if (field_0x744 != 0.0f) {
         f32 dVar5 = field_0x744 * cM_ssin(field_0x74c);
@@ -106,13 +96,11 @@ static f32 dummyFloat2() {
     return -1.0f;
 }
 
-/* 80C3CC40-80C3CC90 0003E0 0050+00 0/0 0/0 1/1 .text getFirstVec__15daObjKazeNeko_cFP4cXyzi */
 void daObjKazeNeko_c::getFirstVec(cXyz* param_1, int param_2) {
     s16 sVar4 = field_0x748 + (param_2 << 14);
     param_1->set((attr().field_0x20 * cM_ssin(sVar4)), 30.0f, attr().field_0x20 * cM_scos(sVar4));
 }
 
-/* 80C3D490-80C3D494 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "J_Kazami";
 
 inline int daObjKazeNeko_c::createHeap() {
@@ -134,7 +122,6 @@ inline int daObjKazeNeko_c::createHeap() {
 }
 
 
-/* 80C3CC90-80C3CD90 000430 0100+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjKazeNeko_c*>(i_this)->createHeap();
 }
@@ -159,7 +146,6 @@ inline int daObjKazeNeko_c::draw() {
     return 1;
 }
 
-/* 80C3CD90-80C3CEA8 000530 0118+00 1/0 0/0 0/0 .text daObjKazeNeko_Draw__FP15daObjKazeNeko_c */
 static int daObjKazeNeko_Draw(daObjKazeNeko_c* i_this) {
     return i_this->draw();
 }
@@ -194,14 +180,10 @@ inline int daObjKazeNeko_c::execute() {
     return 1;
 }
 
-/* 80C3CEA8-80C3D030 000648 0188+00 1/0 0/0 0/0 .text daObjKazeNeko_Execute__FP15daObjKazeNeko_c
- */
 static int daObjKazeNeko_Execute(daObjKazeNeko_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C3D030-80C3D038 0007D0 0008+00 1/0 0/0 0/0 .text daObjKazeNeko_IsDelete__FP15daObjKazeNeko_c
- */
 static int daObjKazeNeko_IsDelete(daObjKazeNeko_c* i_this) {
     return 1;
 }
@@ -210,7 +192,6 @@ inline daObjKazeNeko_c::~daObjKazeNeko_c() {
     dComIfG_resDelete(&mPhase, l_arcName);
 }
 
-/* 80C3D038-80C3D168 0007D8 0130+00 1/0 0/0 0/0 .text daObjKazeNeko_Delete__FP15daObjKazeNeko_c */
 static int daObjKazeNeko_Delete(daObjKazeNeko_c* i_this) {
     fopAcM_GetID(i_this);
     i_this->~daObjKazeNeko_c();
@@ -230,15 +211,12 @@ inline int daObjKazeNeko_c::create() {
     return rv;
 }
 
-/* 80C3D168-80C3D2A0 000908 0138+00 1/0 0/0 0/0 .text daObjKazeNeko_Create__FP10fopAc_ac_c */
 static int daObjKazeNeko_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return static_cast<daObjKazeNeko_c*>(i_this)->create();
 }
 
 
-/* ############################################################################################## */
-/* 80C3D494-80C3D4B4 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjKazeNeko_Method */
 static actor_method_class l_daObjKazeNeko_Method = {
     (process_method_func)daObjKazeNeko_Create,
     (process_method_func)daObjKazeNeko_Delete,
@@ -247,7 +225,6 @@ static actor_method_class l_daObjKazeNeko_Method = {
     (process_method_func)daObjKazeNeko_Draw,
 };
 
-/* 80C3D4B4-80C3D4E4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_KazeNeko */
 extern actor_process_profile_definition g_profile_Obj_KazeNeko = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

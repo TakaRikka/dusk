@@ -9,12 +9,10 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/d_com_inf_game.h"
 
-/* 80CECF0C-80CECF34 0000EC 0028+00 1/1 0/0 0/0 .text            getStopModelData__Fv */
 static J3DModelData* getStopModelData() {
     return (J3DModelData*)dComIfG_getStageRes("door-stop.bmd");
 }
 
-/* 80CECF34-80CECFE8 000114 00B4+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjStopper_cFv */
 void daObjStopper_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     static cXyz l_offset(0.0f, 0.0f, 100.f);
@@ -22,7 +20,6 @@ void daObjStopper_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80CED024-80CED0B8 000204 0094+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjStopper_cFv */
 void daObjStopper_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + field_0x950, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -31,7 +28,6 @@ void daObjStopper_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80CED0B8-80CED20C 000298 0154+00 1/0 0/0 0/0 .text            Create__14daObjStopper_cFv */
 int daObjStopper_c::Create() {
     if (fopAcM_isSwitch(this, getSwNo2())) {
         field_0x950 = 300.0f;
@@ -61,7 +57,6 @@ int daObjStopper_c::Create() {
     return 1;
 }
 
-/* 80CED20C-80CED258 0003EC 004C+00 1/0 0/0 0/0 .text            CreateHeap__14daObjStopper_cFv */
 int daObjStopper_c::CreateHeap() {
     mpModel = mDoExt_J3DModel__create(getStopModelData(), 0x80000, 0x11000084);
     if (mpModel == NULL) {
@@ -70,7 +65,6 @@ int daObjStopper_c::CreateHeap() {
     return 1;
 }
 
-/* 80CED258-80CED440 000438 01E8+00 1/1 0/0 0/0 .text            create__14daObjStopper_cFv */
 int daObjStopper_c::create() {
     fopAcM_ct(this, daObjStopper_c);
     if (!field_0x9fc) {
@@ -90,8 +84,6 @@ int daObjStopper_c::create() {
     }
 }
 
-/* 80CED6BC-80CED708 00089C 004C+00 1/0 0/0 0/0 .text            Execute__14daObjStopper_cFPPA3_A4_f
- */
 int daObjStopper_c::Execute(Mtx** param_0) {
     action();
     *param_0 = &mBgMtx;
@@ -99,7 +91,6 @@ int daObjStopper_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80CED708-80CED824 0008E8 011C+00 1/1 0/0 0/0 .text            action__14daObjStopper_cFv */
 void daObjStopper_c::action() {
     static void (daObjStopper_c::* l_func[])() = {
         &daObjStopper_c::actionWait,       &daObjStopper_c::actionWaitOrderEvent,
@@ -109,7 +100,6 @@ void daObjStopper_c::action() {
     (this->*l_func[mAction])();
 }
 
-/* 80CED824-80CEDA24 000A04 0200+00 1/0 0/0 0/0 .text            actionWait__14daObjStopper_cFv */
 void daObjStopper_c::actionWait() {
     BOOL isSwitch = fopAcM_isSwitch(this, getSwNo());
     if (isSwitch != field_0x94e && field_0x94e == 0) {
@@ -172,7 +162,6 @@ void daObjStopper_c::actionWait() {
     field_0x94e = isSwitch;
 }
 
-/* 80CEDA24-80CEDAAC 000C04 0088+00 1/0 0/0 0/0 .text actionWaitOrderEvent__14daObjStopper_cFv */
 void daObjStopper_c::actionWaitOrderEvent() {
     if (cLib_calcTimer(&field_0x95f) == 0) {
         setAction(ACTION_ORDER_EVENT);
@@ -183,7 +172,6 @@ void daObjStopper_c::actionWaitOrderEvent() {
     }
 }
 
-/* 80CEDAAC-80CEDB2C 000C8C 0080+00 1/0 0/0 0/0 .text actionOrderEvent__14daObjStopper_cFv */
 void daObjStopper_c::actionOrderEvent() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(ACTION_EVENT);
@@ -195,7 +183,6 @@ void daObjStopper_c::actionOrderEvent() {
     }
 }
 
-/* 80CEDB2C-80CEE048 000D0C 051C+00 1/0 0/0 0/0 .text            actionEvent__14daObjStopper_cFv */
 void daObjStopper_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventIDs[field_0x94d])) {
         dComIfGp_event_reset();
@@ -277,25 +264,19 @@ void daObjStopper_c::actionEvent() {
     field_0x97c++;
 }
 
-/* 80CEE048-80CEE04C 001228 0004+00 1/0 0/0 0/0 .text            actionDead__14daObjStopper_cFv */
 void daObjStopper_c::actionDead() {
     /* empty function */
 }
 
-/* 80CEE04C-80CEE05C 00122C 0010+00 1/0 0/0 0/0 .text            actionWaitClose__14daObjStopper_cFv
- */
 void daObjStopper_c::actionWaitClose() {
     field_0x950 = 300.0f;
 }
 
-/* 80CEE05C-80CEE0E0 00123C 0084+00 1/0 0/0 0/0 .text            actionCloseInit__14daObjStopper_cFv
- */
 void daObjStopper_c::actionCloseInit() {
     setAction(ACTION_CLOSE);
     fopAcM_seStart(this, Z2SE_OBJ_BOOMSHTR2_CLOSE, 0);
 }
 
-/* 80CEE0E0-80CEE148 0012C0 0068+00 1/0 0/0 0/0 .text            actionClose__14daObjStopper_cFv */
 void daObjStopper_c::actionClose() {
     cLib_chaseF(&speedF, 60.0f, 6.0f);
     if (cLib_chaseF(&field_0x950, 0.0f, speedF)) {
@@ -303,7 +284,6 @@ void daObjStopper_c::actionClose() {
     }
 }
 
-/* 80CEE148-80CEE5D0 001328 0488+00 1/1 0/0 0/0 .text            hint_action1__14daObjStopper_cFv */
 void daObjStopper_c::hint_action1() {
     switch (field_0x95c) {
     case 0:
@@ -378,7 +358,6 @@ void daObjStopper_c::hint_action1() {
     }
 }
 
-/* 80CEE5D0-80CEEA28 0017B0 0458+00 1/1 0/0 0/0 .text            hint_action2__14daObjStopper_cFv */
 void daObjStopper_c::hint_action2() {
     switch (field_0x95c) {
     case 0:
@@ -452,7 +431,6 @@ void daObjStopper_c::hint_action2() {
     }
 }
 
-/* 80CEEA28-80CEECFC 001C08 02D4+00 1/1 0/0 0/0 .text            hint_action3__14daObjStopper_cFv */
 void daObjStopper_c::hint_action3() {
     cLib_calcTimer(&field_0x956);
     switch (field_0x95c) {
@@ -498,7 +476,6 @@ void daObjStopper_c::hint_action3() {
     }
 }
 
-/* 80CEECFC-80CEED60 001EDC 0064+00 1/0 0/0 0/0 .text            Draw__14daObjStopper_cFv */
 int daObjStopper_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -506,7 +483,6 @@ int daObjStopper_c::Draw() {
     return 1;
 }
 
-/* 80CEED60-80CEEDF0 001F40 0090+00 1/0 0/0 0/0 .text            Delete__14daObjStopper_cFv */
 int daObjStopper_c::Delete() {
     field_0x984[0].remove();
     field_0x984[1].remove();
@@ -516,35 +492,28 @@ int daObjStopper_c::Delete() {
     return 1;
 }
 
-/* 80CEEDF0-80CEEE1C 001FD0 002C+00 1/0 0/0 0/0 .text daObjStopper_Draw__FP14daObjStopper_c */
 static int daObjStopper_Draw(daObjStopper_c* param_0) {
     return param_0->MoveBGDraw();
 }
 
-/* 80CEEE1C-80CEEE3C 001FFC 0020+00 1/0 0/0 0/0 .text daObjStopper_Execute__FP14daObjStopper_c */
 static int daObjStopper_Execute(daObjStopper_c* param_0) {
     return param_0->MoveBGExecute();
 }
 
-/* 80CEEE3C-80CEEE5C 00201C 0020+00 1/0 0/0 0/0 .text daObjStopper_Delete__FP14daObjStopper_c */
 static int daObjStopper_Delete(daObjStopper_c* param_0) {
     return param_0->MoveBGDelete();
 }
 
-/* 80CEEE5C-80CEEE7C 00203C 0020+00 1/0 0/0 0/0 .text            daObjStopper_Create__FP10fopAc_ac_c
- */
 static int daObjStopper_Create(fopAc_ac_c* param_0) {
     return static_cast<daObjStopper_c*>(param_0)->create();
 }
 
-/* 80CEF0E0-80CEF100 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjStopper_Method */
 static actor_method_class l_daObjStopper_Method = {
     (process_method_func)daObjStopper_Create,  (process_method_func)daObjStopper_Delete,
     (process_method_func)daObjStopper_Execute, 0,
     (process_method_func)daObjStopper_Draw,
 };
 
-/* 80CEF100-80CEF130 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Stopper */
 extern actor_process_profile_definition g_profile_Obj_Stopper = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

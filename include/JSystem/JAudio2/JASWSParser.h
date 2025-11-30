@@ -79,10 +79,10 @@ public:
         /* 0x14 */ TOffset<TCtrlGroup> mCtrlGroupOffset;
     };
 
-    /* 80298FB0 */ static u32 getGroupCount(void const*);
-    /* 80298FD8 */ static JASWaveBank* createWaveBank(void const*, JKRHeap*);
-    /* 80299034 */ static JASBasicWaveBank* createBasicWaveBank(void const*, JKRHeap*);
-    /* 80299264 */ static JASSimpleWaveBank* createSimpleWaveBank(void const*, JKRHeap*);
+    static u32 getGroupCount(void const*);
+    static JASWaveBank* createWaveBank(void const*, JKRHeap*);
+    static JASBasicWaveBank* createBasicWaveBank(void const*, JKRHeap*);
+    static JASSimpleWaveBank* createSimpleWaveBank(void const*, JKRHeap*);
 
     static u32 sUsedHeapSize;
 };

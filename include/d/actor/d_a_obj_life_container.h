@@ -23,31 +23,31 @@ public:
         STATUS_WAIT_2_e,
     };
 
-    /* 804CCBE4 */ void initBaseMtx();
-    /* 804CCC04 */ void setBaseMtx();
-    /* 804CCC6C */ int Create();
-    /* 804CCE00 */ void setEffect();
-    /* 804CCF5C */ void endEffect00();
-    /* 804CCFAC */ void endEffect02();
-    /* 804CCFE0 */ int create();
-    /* 804CD428 */ void bg_check();
-    /* 804CD5B8 */ int actionWaitInit();
-    /* 804CD660 */ int actionWait();
-    /* 804CD8C0 */ int initActionOrderGetDemo();
-    /* 804CD98C */ int actionOrderGetDemo();
-    /* 804CDA08 */ int actionGetDemo();
-    /* 804CDBC8 */ int actionSwOnWait();
-    /* 804CDC2C */ int actionInitBoomerangCarry();
-    /* 804CDD0C */ int actionBoomerangCarry();
-    /* 804CDD7C */ int actionInitWait2();
-    /* 804CDD8C */ int actionWait2();
-    /* 804CDDAC */ void calcScale();
-    /* 804CDE70 */ int execute();
-    /* 804CE19C */ int draw();
-    /* 804CE214 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    void setEffect();
+    void endEffect00();
+    void endEffect02();
+    int create();
+    void bg_check();
+    int actionWaitInit();
+    int actionWait();
+    int initActionOrderGetDemo();
+    int actionOrderGetDemo();
+    int actionGetDemo();
+    int actionSwOnWait();
+    int actionInitBoomerangCarry();
+    int actionBoomerangCarry();
+    int actionInitWait2();
+    int actionWait2();
+    void calcScale();
+    int execute();
+    int draw();
+    int _delete();
 
-    /* 804CCFD8 */ virtual int __CreateHeap();
-    /* 804CE1F0 */ virtual void setListStart();
+    virtual int __CreateHeap();
+    virtual void setListStart();
 
     bool chkStatus(u8 i_status) { return mStatus == i_status; }
     void setStatus(u8 i_status) { mStatus = i_status; }

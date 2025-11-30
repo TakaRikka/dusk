@@ -9,7 +9,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-/* 80C6B42C-80C6B478 0000EC 004C+00 1/1 0/0 0/0 .text            __ct__15daIceWall_HIO_cFv */
 daIceWall_HIO_c::daIceWall_HIO_c() {
     hitcount = 3;
     hitcount2 = 2;
@@ -19,7 +18,6 @@ daIceWall_HIO_c::daIceWall_HIO_c() {
     xyz.z = 1.0f;
 }
 
-/* 80C6B51C-80C6B5E4 0001DC 00C8+00 2/2 0/0 0/0 .text            setBaseMtx__11daIceWall_cFv */
 void daIceWall_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -30,7 +28,6 @@ void daIceWall_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80C6B5E4-80C6B69C 0002A4 00B8+00 1/0 0/0 0/0 .text            CreateHeap__11daIceWall_cFv */
 int daIceWall_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("l5IceWall", 4);
     JUT_ASSERT(0, modelData != NULL);
@@ -51,10 +48,8 @@ int daIceWall_c::CreateHeap() {
     return 1;
 }
 
-/* 80C6C83C-80C6C850 000014 0014+00 3/3 0/0 0/0 .bss             l_HIO */
 static daIceWall_HIO_c l_HIO;
 
-/* 80C6C644-80C6C674 000004 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__11daIceWall_c */
 const dCcD_SrcGObjInf daIceWall_c::mCcDObjInfo = {
     {0, {{0x100, 1, 0}, {0x400000, 0x11}, {0}}},
     {dCcD_SE_SWORD, 0, 0, 2, 1},
@@ -62,7 +57,6 @@ const dCcD_SrcGObjInf daIceWall_c::mCcDObjInfo = {
     {0},
 };
 
-/* 80C6C6E8-80C6C72C 000020 0044+00 2/2 0/0 0/0 .data            mCcDCyl__11daIceWall_c */
 dCcD_SrcCyl daIceWall_c::mCcDCyl = {
     daIceWall_c::mCcDObjInfo,
     {
@@ -72,10 +66,8 @@ dCcD_SrcCyl daIceWall_c::mCcDCyl = {
     }  // mCyl
 };
 
-/* 80C6C674-80C6C67C 000034 0008+00 0/0 0/0 0/0 .rodata          l_bmdIdx */
 static const int l_bmdIdx[] = {4, 5};
 
-/* 80C6B69C-80C6B924 00035C 0288+00 1/1 0/0 0/0 .text            create__11daIceWall_cFv */
 int daIceWall_c::create() {
     fopAcM_ct(this, daIceWall_c);
 
@@ -121,7 +113,6 @@ int daIceWall_c::create() {
     return phase;
 }
 
-/* 80C6BB60-80C6BBC4 000820 0064+00 1/0 0/0 0/0 .text            Execute__11daIceWall_cFPPA3_A4_f */
 int daIceWall_c::Execute(Mtx** param_0) {
     procMain();
     *param_0 = &mpModel[mIsBreaking]->getBaseTRMtx();
@@ -130,7 +121,6 @@ int daIceWall_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80C6BBC4-80C6BC50 000884 008C+00 1/1 0/0 0/0 .text            procMain__11daIceWall_cFv */
 void daIceWall_c::procMain() {
     typedef void (daIceWall_c::*procFunc)();
     static procFunc mode_proc[] = {
@@ -141,13 +131,11 @@ void daIceWall_c::procMain() {
     (this->*mode_proc[mMode])();
 }
 
-/* 80C6BC50-80C6BC6C 000910 001C+00 1/1 0/0 0/0 .text            init_modeWait__11daIceWall_cFv */
 void daIceWall_c::init_modeWait() {
     mHitcount = l_HIO.hitcount;
     mMode = MODE_WAIT;
 }
 
-/* 80C6BC6C-80C6C170 00092C 0504+00 1/0 0/0 0/0 .text            modeWait__11daIceWall_cFv */
 void daIceWall_c::modeWait() {
     for (int i = 0; i < 2; i++) {
         if (mCcCyl[i].ChkTgHit()) {
@@ -235,7 +223,6 @@ void daIceWall_c::modeWait() {
     }
 }
 
-/* 80C6C170-80C6C1C0 000E30 0050+00 1/1 0/0 0/0 .text            init_modeBreak__11daIceWall_cFv */
 void daIceWall_c::init_modeBreak() {
     if (mIsBreakSwBit != 0xFF) {
         fopAcM_onSwitch(this, mIsBreakSwBit);
@@ -244,7 +231,6 @@ void daIceWall_c::init_modeBreak() {
     mMode = MODE_BREAK;
 }
 
-/* 80C6C1C0-80C6C374 000E80 01B4+00 1/0 0/0 0/0 .text            modeBreak__11daIceWall_cFv */
 void daIceWall_c::modeBreak() {
     cXyz ptcl_scale(1.0f, 1.0f, 1.0f);
     mEmitter0ID = dComIfGp_particle_set(mEmitter0ID, 0x867B, &current.pos, &shape_angle,
@@ -268,7 +254,6 @@ void daIceWall_c::modeBreak() {
     fopAcM_delete(this);
 }
 
-/* 80C6C374-80C6C44C 001034 00D8+00 1/0 0/0 0/0 .text            Draw__11daIceWall_cFv */
 int daIceWall_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel[mIsBreaking], &tevStr);
@@ -281,42 +266,33 @@ int daIceWall_c::Draw() {
     return 1;
 }
 
-/* 80C6C44C-80C6C47C 00110C 0030+00 1/0 0/0 0/0 .text            Delete__11daIceWall_cFv */
 int daIceWall_c::Delete() {
     dComIfG_resDelete(&mPhase, "l5IceWall");
     return 1;
 }
 
-/* 80C6C47C-80C6C4A8 00113C 002C+00 1/0 0/0 0/0 .text            daIceWall_Draw__FP11daIceWall_c */
 static int daIceWall_Draw(daIceWall_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C6C4A8-80C6C4C8 001168 0020+00 1/0 0/0 0/0 .text            daIceWall_Execute__FP11daIceWall_c
- */
 static int daIceWall_Execute(daIceWall_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C6C4C8-80C6C4E8 001188 0020+00 1/0 0/0 0/0 .text            daIceWall_Delete__FP11daIceWall_c
- */
 static int daIceWall_Delete(daIceWall_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C6C4E8-80C6C508 0011A8 0020+00 1/0 0/0 0/0 .text            daIceWall_Create__FP10fopAc_ac_c */
 static int daIceWall_Create(fopAc_ac_c* i_this) {
     return ((daIceWall_c*)i_this)->create();
 }
 
-/* 80C6C75C-80C6C77C -00001 0020+00 1/0 0/0 0/0 .data            l_daIceWall_Method */
 static actor_method_class l_daIceWall_Method = {
     (process_method_func)daIceWall_Create,  (process_method_func)daIceWall_Delete,
     (process_method_func)daIceWall_Execute, (process_method_func)NULL,
     (process_method_func)daIceWall_Draw,
 };
 
-/* 80C6C77C-80C6C7AC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_IceWall */
 extern actor_process_profile_definition g_profile_Obj_IceWall = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID

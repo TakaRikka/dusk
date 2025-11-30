@@ -11,7 +11,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_horse.h"
 
-/* 805A43EC-805A45D8 0000EC 01EC+00 1/1 0/0 0/0 .text            create__12daTagHstop_cFv */
 int daTagHstop_c::create() {
     fopAcM_ct(this, daTagHstop_c);
 
@@ -64,13 +63,10 @@ int daTagHstop_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 805A45D8-805A45F8 0002D8 0020+00 1/0 0/0 0/0 .text            daTagHstop_Create__FP10fopAc_ac_c
- */
 static int daTagHstop_Create(fopAc_ac_c* i_this) {
     return static_cast<daTagHstop_c*>(i_this)->create();
 }
 
-/* 805A45F8-805A4690 0002F8 0098+00 1/1 0/0 0/0 .text            __dt__12daTagHstop_cFv */
 daTagHstop_c::~daTagHstop_c() {
     if (mPrev != NULL) {
         mPrev->mNext = mNext;
@@ -85,14 +81,11 @@ daTagHstop_c::~daTagHstop_c() {
     }
 }
 
-/* 805A4690-805A46B8 000390 0028+00 1/0 0/0 0/0 .text            daTagHstop_Delete__FP12daTagHstop_c
- */
 static int daTagHstop_Delete(daTagHstop_c* i_this) {
     static_cast<daTagHstop_c*>(i_this)->~daTagHstop_c();
     return 1;
 }
 
-/* 805A46B8-805A475C 0003B8 00A4+00 2/2 0/0 0/0 .text            setActive__12daTagHstop_cFv */
 void daTagHstop_c::setActive() {
     if (mPrm0 == 0xFF || mPrm1 == 2 ||
         (mPrm1 == 0 && dComIfGs_isSwitch(mPrm0, fopAcM_GetHomeRoomNo(this))) ||
@@ -104,10 +97,8 @@ void daTagHstop_c::setActive() {
     }
 }
 
-/* 805A4B8C-805A4BD8 000014 004C+00 2/2 0/0 0/0 .bss             m_msgFlow__12daTagHstop_c */
 dMsgFlow_c daTagHstop_c::m_msgFlow;
 
-/* 805A475C-805A4AA8 00045C 034C+00 1/1 0/0 0/0 .text            execute__12daTagHstop_cFv */
 int daTagHstop_c::execute() {
     if (eventInfo.checkCommandTalk()) {
         if (field_0x573 == 2) {
@@ -172,26 +163,20 @@ int daTagHstop_c::execute() {
     return 1;
 }
 
-/* 805A4AA8-805A4AC8 0007A8 0020+00 1/0 0/0 0/0 .text daTagHstop_Execute__FP12daTagHstop_c */
 static int daTagHstop_Execute(daTagHstop_c* i_this) {
     return i_this->execute();
 }
 
-/* 805A4AC8-805A4AD0 0007C8 0008+00 1/0 0/0 0/0 .text            daTagHstop_Draw__FP12daTagHstop_c
- */
 static int daTagHstop_Draw(daTagHstop_c*) {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 805A4B24-805A4B44 -00001 0020+00 1/0 0/0 0/0 .data            l_daTagHstop_Method */
 static actor_method_class l_daTagHstop_Method = {
     (process_method_func)daTagHstop_Create,  (process_method_func)daTagHstop_Delete,
     (process_method_func)daTagHstop_Execute, (process_method_func)NULL,
     (process_method_func)daTagHstop_Draw,
 };
 
-/* 805A4B44-805A4B74 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_Hstop */
 extern actor_process_profile_definition g_profile_Tag_Hstop = {
     fpcLy_CURRENT_e,
     3,

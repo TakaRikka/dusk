@@ -11,29 +11,20 @@
 #include "d/d_debug_viewer.h"
 #include "m_Do/m_Do_graphic.h"
 
-/* ############################################################################################## */
-/* 80C93D88-80C93D90 000000 0008+00 5/5 0/0 0/0 .rodata          l_bmd */
 static u32 const l_bmd[2] = {5, 5};
 
-/* 80C93D90-80C93D98 000008 0008+00 0/1 0/0 0/0 .rodata          l_brk */
 static u32 const l_brk[2] = {8, 8};
 
-/* 80C93D98-80C93DA0 000010 0008+00 0/1 0/0 0/0 .rodata          l_btk1 */
 static u32 const l_btk1[2] = {11, 11};
 
-/* 80C93DA0-80C93DA8 000018 0008+00 0/1 0/0 0/0 .rodata          l_btk2 */
 static u32 const l_btk2[2] = {12, 12};
 
-/* 80C93DA8-80C93DB0 000020 0008+00 0/1 0/0 0/0 .rodata          l_length */
 static f32 const l_length[2] = {2000.0f, 1000.0f};
 
-/* 80C93DB0-80C93DB8 000028 0008+00 0/1 0/0 0/0 .rodata          l_size */
 static f32 const l_size[2] = {150.0f, 370.0f};
 
-/* 80C93E14-80C93E1C -00001 0008+00 3/3 0/0 0/0 .data            l_arcName */
 static char const* l_arcName[2] = {"ef_MgnF_L", "ef_MgnF_S"};
 
-/* 80C93E1C-80C93E68 000008 004C+00 1/1 0/0 0/0 .data            l_cps_src */
 dCcD_SrcCps l_cps_src = {
     {
         {0x0, {{AT_TYPE_40000, 0x0, 0x1d}, {0x0, 0x0}, 0x0}},  // mObj
@@ -71,7 +62,6 @@ void daObjMHole_HIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 80C92E58-80C92FB8 000078 0160+00 1/1 0/0 0/0 .text            searchParentSub__FPvPv */
 static void* searchParentSub(void* i_magLift, void* i_mhole) {
     daObjMHole_c* mhole = (daObjMHole_c*)i_mhole;
     fopAc_ac_c* mag_lift = (fopAc_ac_c*)i_magLift;
@@ -86,18 +76,15 @@ static void* searchParentSub(void* i_magLift, void* i_mhole) {
     return NULL;
 }
 
-/* 80C92FB8-80C92FD8 0001D8 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* p_actor) {
     return static_cast<daObjMHole_c*>(p_actor)->CreateHeap();
 }
 
-/* 80C92FD8-80C93014 0001F8 003C+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjMHole_cFv */
 void daObjMHole_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80C93014-80C9307C 000234 0068+00 2/2 0/0 0/0 .text            setBaseMtx__12daObjMHole_cFv */
 void daObjMHole_c::setBaseMtx() {
 #ifdef DEBUG
     if (l_HIO.scale_adjust_on != 0) {
@@ -115,7 +102,6 @@ void daObjMHole_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C9307C-80C93198 00029C 011C+00 1/1 0/0 0/0 .text            Create__12daObjMHole_cFv */
 int daObjMHole_c::Create() {
     if (getType() != 0x2) {
         u8 sw_bit = getSwbit();
@@ -141,7 +127,6 @@ int daObjMHole_c::Create() {
     return 1;
 }
 
-/* 80C93198-80C93204 0003B8 006C+00 1/1 0/0 0/0 .text            checkParent__12daObjMHole_cFv */
 int daObjMHole_c::checkParent() {
     parentActorID = fopAcM_GetID(fpcM_Search(searchParentSub, this));
     if (parentActorID == fpcM_ERROR_PROCESS_ID_e) {
@@ -150,8 +135,6 @@ int daObjMHole_c::checkParent() {
     return TRUE;
 }
 
-/* ############################################################################################## */
-/* 80C93204-80C93498 000424 0294+00 1/1 0/0 0/0 .text            CreateHeap__12daObjMHole_cFv */
 int daObjMHole_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName[mKind], l_bmd[mKind]);
     JUT_ASSERT(336, modelData != NULL);
@@ -198,7 +181,6 @@ int daObjMHole_c::CreateHeap() {
     return TRUE;
 }
 
-/* 80C934E0-80C93660 000700 0180+00 1/1 0/0 0/0 .text            create__12daObjMHole_cFv */
 int daObjMHole_c::create() {
     fopAcM_ct(this, daObjMHole_c);
 
@@ -225,7 +207,6 @@ int daObjMHole_c::create() {
     return phase;
 }
 
-/* 80C936A8-80C93928 0008C8 0280+00 1/1 0/0 0/0 .text            execute__12daObjMHole_cFv */
 int daObjMHole_c::execute() {
     if (getType() == 0x1 && parentActorID != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* actor = fopAcM_SearchByID(parentActorID);
@@ -281,8 +262,6 @@ int daObjMHole_c::execute() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80C93928-80C93A88 000B48 0160+00 1/1 0/0 0/0 .text            effectSet__12daObjMHole_cFv */
 void daObjMHole_c::effectSet() {
     static u16 const l_eff_id_L[4] = {0x86EF, 0x86F0, 0x86F1, 0x86F2};
     static u16 const l_eff_id_S[4] = {0x86F3, 0x86F4, 0x86F5, 0x86F6};
@@ -307,7 +286,6 @@ void daObjMHole_c::effectSet() {
     }
 }
 
-/* 80C93A88-80C93ADC 000CA8 0054+00 1/1 0/0 0/0 .text            effectEnd__12daObjMHole_cFv */
 void daObjMHole_c::effectEnd() {
     for (int i = 0; i < 4; i++) {
         if (mpEmitter[i] != NULL) {
@@ -318,8 +296,6 @@ void daObjMHole_c::effectEnd() {
     }
 }
 
-/* ############################################################################################## */
-/* 80C93ADC-80C93CAC 000CFC 01D0+00 1/1 0/0 0/0 .text            draw__12daObjMHole_cFv */
 int daObjMHole_c::draw() {
     g_env_light.settingTevStruct(0x0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -369,7 +345,6 @@ int daObjMHole_c::draw() {
     return 1;
 }
 
-/* 80C93CAC-80C93D00 000ECC 0054+00 1/1 0/0 0/0 .text            _delete__12daObjMHole_cFv */
 int daObjMHole_c::_delete() {
     effectEnd();
     mSound.deleteObject();
@@ -381,29 +356,24 @@ int daObjMHole_c::_delete() {
     return 1;
 }
 
-/* 80C93D00-80C93D20 000F20 0020+00 1/0 0/0 0/0 .text            daObjMHole_Draw__FP12daObjMHole_c */
 static int daObjMHole_Draw(daObjMHole_c* i_this) {
     return i_this->draw();
 }
 
-/* 80C93D20-80C93D40 000F40 0020+00 1/0 0/0 0/0 .text daObjMHole_Execute__FP12daObjMHole_c */
 static int daObjMHole_Execute(daObjMHole_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C93D40-80C93D60 000F60 0020+00 1/0 0/0 0/0 .text            daObjMHole_Delete__FP12daObjMHole_c */
 static int daObjMHole_Delete(daObjMHole_c* i_this) {
     fopAcM_RegisterDeleteID(i_this, "Hasu");
     return i_this->_delete();
 }
 
-/* 80C93D60-80C93D80 000F80 0020+00 1/0 0/0 0/0 .text            daObjMHole_Create__FP10fopAc_ac_c */
 static int daObjMHole_Create(fopAc_ac_c* i_this) {
     fopAcM_RegisterCreateID(daObjMHole_c,i_this, "MHole");
     return static_cast<daObjMHole_c*>(i_this)->create();
 }
 
-/* 80C93E68-80C93E88 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjMHole_Method */
 static actor_method_class l_daObjMHole_Method = {
     (process_method_func)daObjMHole_Create,  
     (process_method_func)daObjMHole_Delete,
@@ -412,7 +382,6 @@ static actor_method_class l_daObjMHole_Method = {
     (process_method_func)daObjMHole_Draw,
 };
 
-/* 80C93E88-80C93EB8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_MHole */
 extern actor_process_profile_definition g_profile_Obj_MHole = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

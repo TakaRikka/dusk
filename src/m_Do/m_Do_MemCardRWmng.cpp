@@ -25,10 +25,8 @@ struct data_s {
     u32 checksum;
 };
 
-/* 803ECF40-803F0F40 019C60 4000+00 2/2 0/0 0/0 .bss             sTmpBuf */
 static u8 sTmpBuf[SECTOR_SIZE * 2];
 
-/* 80017498-8001769C 011DD8 0204+00 0/0 1/1 0/0 .text mDoMemCdRWm_Store__FP12CARDFileInfoPvUl */
 s32 mDoMemCdRWm_Store(CARDFileInfo* file, void* data, u32 length) {
     mDoMemCdRWm_BuildHeader((mDoMemCdRWm_HeaderData*)sTmpBuf);
 
@@ -93,7 +91,6 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* file, void* data, u32 length) {
     return ret;
 }
 
-/* 8001769C-8001787C 011FDC 01E0+00 0/0 1/1 0/0 .text mDoMemCdRWm_Restore__FP12CARDFileInfoPvUl */
 s32 mDoMemCdRWm_Restore(CARDFileInfo* file, void* data, u32 length) {
     BOOL rewrite = FALSE;
 
@@ -156,8 +153,6 @@ s32 mDoMemCdRWm_Restore(CARDFileInfo* file, void* data, u32 length) {
     return CARD_RESULT_READY;
 }
 
-/* 8001787C-800179E4 0121BC 0168+00 1/1 0/0 0/0 .text
- * mDoMemCdRWm_BuildHeader__FP22mDoMemCdRWm_HeaderData          */
 static void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
     snprintf(header->mTitle, sizeof(header->mTitle), HEADER_TITLE);
 
@@ -199,7 +194,6 @@ static void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
     dComIfGp_getCardIconResArchive()->removeResourceAll();
 }
 
-/* 800179E4-80017B4C 012324 0168+00 1/1 0/0 0/0 .text mDoMemCdRWm_SetCardStat__FP12CARDFileInfo */
 static void mDoMemCdRWm_SetCardStat(CARDFileInfo* file) {
     CARDStat stat;
     mDoMemCd_getCardStatus(file->fileNo, &stat);
@@ -228,8 +222,6 @@ static void mDoMemCdRWm_SetCardStat(CARDFileInfo* file) {
     mDoMemCd_setCardStatus(file->fileNo, &stat);
 }
 
-/* 80017B4C-80017C74 01248C 0128+00 2/2 0/0 0/0 .text mDoMemCdRWm_CheckCardStat__FP12CARDFileInfo
- */
 static BOOL mDoMemCdRWm_CheckCardStat(CARDFileInfo* file) {
     CARDStat stat;
     mDoMemCd_getCardStatus(file->fileNo, &stat);
@@ -260,7 +252,6 @@ static BOOL mDoMemCdRWm_CheckCardStat(CARDFileInfo* file) {
     return TRUE;
 }
 
-/* 80017C74-80017CB4 0125B4 0040+00 1/1 0/0 0/0 .text            mDoMemCdRWm_CalcCheckSum__FPvUl */
 static u32 mDoMemCdRWm_CalcCheckSum(void* data, u32 size) {
     u16 high;
     u16 low;
@@ -278,7 +269,6 @@ static u32 mDoMemCdRWm_CalcCheckSum(void* data, u32 size) {
     return high << 16 | low;
 }
 
-/* 80017CB4-80017CEC 0125F4 0038+00 2/2 0/0 0/0 .text mDoMemCdRWm_CalcCheckSumGameData__FPvUl */
 static u64 mDoMemCdRWm_CalcCheckSumGameData(void* data, u32 size) {
     u32 high;
     u32 low;
@@ -296,13 +286,11 @@ static u64 mDoMemCdRWm_CalcCheckSumGameData(void* data, u32 size) {
     return (u64)high << 32 | low;
 }
 
-/* 80017CEC-80017D38 01262C 004C+00 1/1 4/4 0/0 .text mDoMemCdRWm_TestCheckSumGameData__FPv */
 BOOL mDoMemCdRWm_TestCheckSumGameData(void* data) {
     u64 checksum = mDoMemCdRWm_CalcCheckSumGameData(data, (SAVEDATA_SIZE - sizeof(u64)));
     return checksum == *(u64*)((u8*)data + (SAVEDATA_SIZE - sizeof(u64)));
 }
 
-/* 80017D38-80017D7C 012678 0044+00 0/0 4/4 0/0 .text mDoMemCdRWm_SetCheckSumGameData__FPUcUc */
 void mDoMemCdRWm_SetCheckSumGameData(u8* data, u8 dataNum) {
     u8* file_ptr = data + (dataNum * SAVEDATA_SIZE);
     *(u64*)(file_ptr + (SAVEDATA_SIZE - sizeof(u64))) = mDoMemCdRWm_CalcCheckSumGameData(file_ptr, (SAVEDATA_SIZE - sizeof(u64)));

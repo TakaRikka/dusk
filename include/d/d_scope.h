@@ -12,18 +12,18 @@ public:
         /* 2 */ PROC_CLOSE,
     };
 
-    /* 80193690 */ dScope_c(u8);
-    /* 80193FB4 */ void open_init();
-    /* 80193FD0 */ void open_proc();
-    /* 80194048 */ void move_init();
-    /* 8019404C */ void move_proc();
-    /* 80194050 */ void close_init();
-    /* 80194054 */ void close_proc();
+    dScope_c(u8);
+    void open_init();
+    void open_proc();
+    void move_init();
+    void move_proc();
+    void close_init();
+    void close_proc();
 
-    /* 80193C68 */ virtual void draw();
-    /* 8019396C */ virtual ~dScope_c();
-    /* 80193B90 */ virtual int _execute(u32);
-    /* 80193FA0 */ virtual bool isDead();
+    virtual void draw();
+    virtual ~dScope_c();
+    virtual int _execute(u32);
+    virtual bool isDead();
 
     /* 0x04 */ J2DScreen* mHawkEyeScrn;
     /* 0x08 */ J2DScreen* mZoomInOutScrn;

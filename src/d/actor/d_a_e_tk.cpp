@@ -40,13 +40,10 @@ enum Mode {  // Not sure if these are correct...
     /* 0xC */ MODE_TK_WAIT01,
 };
 
-/* 807BA438-807BA43C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool hioInit;
 
-/* 807BA448-807BA464 000018 001C+00 7/7 0/0 0/0 .bss             l_HIO */
 static daE_TK_HIO_c l_HIO;
 
-/* 807B81EC-807B8234 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__12daE_TK_HIO_cFv */
 daE_TK_HIO_c::daE_TK_HIO_c() {
     field_0x04 = -1;
     mRadiusScale = 1.9f;
@@ -56,7 +53,6 @@ daE_TK_HIO_c::daE_TK_HIO_c() {
     mSpeedModifier2 = 25.0f;
 }
 
-/* 807B8234-807B82E0 000134 00AC+00 6/6 0/0 0/0 .text            anm_init__FP10e_tk_classifUcf */
 static void anm_init(e_tk_class* i_this, int i_index, f32 i_morf, u8 i_attr, f32 i_rate) {
     J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("E_tk", i_index);
 
@@ -64,7 +60,6 @@ static void anm_init(e_tk_class* i_this, int i_index, f32 i_morf, u8 i_attr, f32
     i_this->mAnim = i_index;
 }
 
-/* 807B82E0-807B8350 0001E0 0070+00 1/0 0/0 0/0 .text            daE_TK_Draw__FP10e_tk_class */
 static int daE_TK_Draw(e_tk_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
 
@@ -74,8 +69,6 @@ static int daE_TK_Draw(e_tk_class* i_this) {
     return 1;
 }
 
-/* 807B8350-807B8428 000250 00D8+00 1/1 0/0 0/0 .text other_bg_check__FP10e_tk_classP10fopAc_ac_c
- */
 static int other_bg_check(e_tk_class* i_this, fopAc_ac_c* i_ac) {
     fopAc_ac_c* actor = i_this;
     dBgS_LinChk line_check;
@@ -96,7 +89,6 @@ static int other_bg_check(e_tk_class* i_this, fopAc_ac_c* i_ac) {
     }
 }
 
-/* 807B8428-807B8460 000328 0038+00 3/3 0/0 0/0 .text            pl_y_check__FP10e_tk_class */
 static int pl_y_check(e_tk_class* i_this) {
     if (i_this->current.pos.y - dComIfGp_getPlayer(0)->current.pos.y > 130.0f) {
         return 0;
@@ -105,7 +97,6 @@ static int pl_y_check(e_tk_class* i_this) {
     }
 }
 
-/* 807B8460-807B84DC 000360 007C+00 4/4 0/0 0/0 .text            pl_check__FP10e_tk_classfs */
 static int pl_check(e_tk_class* i_this, f32 i_limit, s16 i_max_diff) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -119,7 +110,6 @@ static int pl_check(e_tk_class* i_this, f32 i_limit, s16 i_max_diff) {
     return 0;
 }
 
-/* 807B84DC-807B85DC 0003DC 0100+00 1/1 0/0 0/0 .text            damage_check__FP10e_tk_class */
 static void damage_check(e_tk_class* i_this) {
     if (i_this->mInvincibilityTimer == 0) {
         i_this->mStts.Move();
@@ -156,7 +146,6 @@ static void damage_check(e_tk_class* i_this) {
     }
 }
 
-/* 807B85DC-807B86EC 0004DC 0110+00 1/1 0/0 0/0 .text            way_bg_check__FP10e_tk_classf */
 static int way_bg_check(e_tk_class* i_this, f32 i_limit) {
     fopAc_ac_c* actor = i_this;
     dBgS_LinChk line_check;
@@ -184,7 +173,6 @@ static int way_bg_check(e_tk_class* i_this, f32 i_limit) {
     }
 }
 
-/* 807B86EC-807B8980 0005EC 0294+00 1/1 0/0 0/0 .text            e_tk_wait_0__FP10e_tk_class */
 static void e_tk_wait_0(e_tk_class* i_this) {
     cXyz src_pos;
     f32 speed_mul = 1.0f;
@@ -236,7 +224,6 @@ static void e_tk_wait_0(e_tk_class* i_this) {
     i_this->current.pos += i_this->speed;
 }
 
-/* 807B8980-807B8D78 000880 03F8+00 2/1 0/0 0/0 .text            e_tk_find__FP10e_tk_class */
 static void e_tk_find(e_tk_class* i_this) {
     f32 speed_target = 0.0f;
     f32 speed_step = 3.0f;
@@ -338,7 +325,6 @@ static void e_tk_find(e_tk_class* i_this) {
     cLib_addCalcAngleS2(&i_this->shape_angle.x, 0, 4, 0x400);
 }
 
-/* 807B8D78-807B8F68 000C78 01F0+00 1/1 0/0 0/0 .text            e_tk_attack__FP10e_tk_class */
 static void e_tk_attack(e_tk_class* i_this) {
     switch (i_this->mMode) {
     case MODE_TK_NONE:
@@ -379,7 +365,6 @@ static void e_tk_attack(e_tk_class* i_this) {
     cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->mPlayerAngleY, 4, 0x800);
 }
 
-/* 807B8F68-807B92C4 000E68 035C+00 1/1 0/0 0/0 .text            e_tk_pathswim__FP10e_tk_class */
 static void e_tk_pathswim(e_tk_class* i_this) {
     cXyz local_50;
 
@@ -458,7 +443,6 @@ static void e_tk_pathswim(e_tk_class* i_this) {
     i_this->current.pos += i_this->speed;
 }
 
-/* 807B92C4-807B9354 0011C4 0090+00 1/1 0/0 0/0 .text            e_tk_s_damage__FP10e_tk_class */
 static void e_tk_s_damage(e_tk_class* i_this) {
     switch (i_this->mMode) {
     case MODE_TK_NONE:
@@ -475,7 +459,6 @@ static void e_tk_s_damage(e_tk_class* i_this) {
     }
 }
 
-/* 807B9354-807B941C 001254 00C8+00 1/1 0/0 0/0 .text            e_tk_damage__FP10e_tk_class */
 static void e_tk_damage(e_tk_class* i_this) {
     i_this->mInvincibilityTimer = 6;
     i_this->mAttentionOFF = true;
@@ -495,7 +478,6 @@ static void e_tk_damage(e_tk_class* i_this) {
     }
 }
 
-/* 807B941C-807B9554 00131C 0138+00 2/1 0/0 0/0 .text            action__FP10e_tk_class */
 static void action(e_tk_class* i_this) {
     i_this->mPlayerAngleY = fopAcM_searchPlayerAngleY(i_this);
     i_this->mPlayerDistanceLimit = fopAcM_searchPlayerDistance(i_this);
@@ -537,7 +519,6 @@ static void action(e_tk_class* i_this) {
     }
 }
 
-/* 807B9554-807B9C50 001454 06FC+00 2/1 0/0 0/0 .text            daE_TK_Execute__FP10e_tk_class */
 static int daE_TK_Execute(e_tk_class* i_this) {
     cXyz cStack_94;
     cXyz cStack_a0;
@@ -662,12 +643,10 @@ static int daE_TK_Execute(e_tk_class* i_this) {
     return 1;
 }
 
-/* 807B9C50-807B9C58 001B50 0008+00 1/0 0/0 0/0 .text            daE_TK_IsDelete__FP10e_tk_class */
 static int daE_TK_IsDelete(e_tk_class* i_this) {
     return 1;
 }
 
-/* 807B9C58-807B9CC0 001B58 0068+00 1/0 0/0 0/0 .text            daE_TK_Delete__FP10e_tk_class */
 static int daE_TK_Delete(e_tk_class* i_this) {
     dComIfG_resDelete(&i_this->mPhaseReq, "E_tk");
     if (i_this->mInitHIO) {
@@ -679,7 +658,6 @@ static int daE_TK_Delete(e_tk_class* i_this) {
     return 1;
 }
 
-/* 807B9CC0-807B9DB8 001BC0 00F8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_tk_class* i_this = static_cast<e_tk_class*>(a_this);
 
@@ -695,7 +673,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 807BA358-807BA398 000060 0040+00 1/1 0/0 0/0 .data            cc_sph_src$4408 */
 static dCcD_SrcSph cc_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0xd}, {0xd8fbfdff, 0x3}, 0x75}},  // mObj
@@ -708,7 +685,6 @@ static dCcD_SrcSph cc_sph_src = {
     }  // mSphAttr
 };
 
-/* 807B9DB8-807BA0C4 001CB8 030C+00 1/0 0/0 0/0 .text            daE_TK_Create__FP10fopAc_ac_c */
 static int daE_TK_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, e_tk_class);
     e_tk_class* const a_this = static_cast<e_tk_class*>(i_this);
@@ -765,14 +741,12 @@ static int daE_TK_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 807BA398-807BA3B8 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_TK_Method */
 static actor_method_class l_daE_TK_Method = {
     (process_method_func)daE_TK_Create,  (process_method_func)daE_TK_Delete,
     (process_method_func)daE_TK_Execute, (process_method_func)daE_TK_IsDelete,
     (process_method_func)daE_TK_Draw,
 };
 
-/* 807BA3B8-807BA3E8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_TK */
 extern actor_process_profile_definition g_profile_E_TK = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

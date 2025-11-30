@@ -17,25 +17,25 @@
 
 class daE_ZM_c : public fopEn_enemy_c {
 public:
-    /* 8082F9A0 */ int draw();
-    /* 8082FBD4 */ void setBck(int, u8, f32, f32);
-    /* 8082FC80 */ void setActionMode(int, int);
-    /* 8082FC8C */ void damage_check();
-    /* 808301E0 */ bool mCutTypeCheck();
-    /* 8083033C */ void executeSearchPoint();
-    /* 80830398 */ void executeWait();
-    /* 808309DC */ void executeMove();
-    /* 80830AB8 */ void executeAttack();
-    /* 80830E28 */ void executeDamage();
-    /* 808310C4 */ void executeDead();
-    /* 80831474 */ void executeBullet();
-    /* 80831930 */ void action();
-    /* 80831B08 */ void mtx_set();
-    /* 80831B9C */ void cc_set();
-    /* 80831D64 */ int execute();
-    /* 80831E9C */ int _delete();
-    /* 80831F4C */ int CreateHeap();
-    /* 80832064 */ cPhs__Step create();
+    int draw();
+    void setBck(int, u8, f32, f32);
+    void setActionMode(int, int);
+    void damage_check();
+    bool mCutTypeCheck();
+    void executeSearchPoint();
+    void executeWait();
+    void executeMove();
+    void executeAttack();
+    void executeDamage();
+    void executeDead();
+    void executeBullet();
+    void action();
+    void mtx_set();
+    void cc_set();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    cPhs__Step create();
 
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpModelMorf;

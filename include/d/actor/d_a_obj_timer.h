@@ -26,13 +26,13 @@ class Act_c : public fopAc_ac_c {
             PRM_26 = 26,
         };
 
-        /* 80485198 */ int _create();
-        /* 8048526C */ bool _delete();
-        /* 80485274 */ void mode_wait_init();
-        /* 80485284 */ void mode_wait();
-        /* 804852E0 */ void mode_count_init();
-        /* 80485324 */ void mode_count();
-        /* 804854BC */ bool _execute();
+        int _create();
+        bool _delete();
+        void mode_wait_init();
+        void mode_wait();
+        void mode_count_init();
+        void mode_count();
+        bool _execute();
 
         int prm_get_swSave() {
             return daObj::PrmAbstract(this,PRM_8, PRM_16);

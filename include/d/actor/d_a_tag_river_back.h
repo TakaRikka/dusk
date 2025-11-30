@@ -18,16 +18,16 @@ public:
         ACTION_DEAD_e,
     };
 
-    /* 80D5F2F8 */ int Create();
-    /* 80D5F360 */ int create();
-    /* 80D5F3F0 */ int execute();
-    /* 80D5F48C */ void event_proc_call();
-    /* 80D5F548 */ void actionWait();
-    /* 80D5F5BC */ void actionOrderEvent();
-    /* 80D5F66C */ void actionEvent();
-    /* 80D5F70C */ void actionDead();
-    /* 80D5F710 */ int demoProc();
-    /* 80D5F88C */ int _delete();
+    int Create();
+    int create();
+    int execute();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    int demoProc();
+    int _delete();
 
     void setAction(u8 i_action) { mAction = i_action; }
 

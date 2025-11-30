@@ -16,16 +16,16 @@
  */
 class daObj_SekiDoor_c : public dBgS_MoveBgActor {
 public:
-    /* 80CCD02C */ int create();
-    /* 80CCD154 */ virtual int CreateHeap();
-    /* 80CCD1F0 */ virtual int Create();
-    /* 80CCD23C */ virtual int Delete();
-    /* 80CCD290 */ virtual int Execute(Mtx**);
-    /* 80CCD538 */ virtual int Draw();
-    /* 80CCD5DC */ void evtSkip();
-    /* 80CCD64C */ void setPrtcls();
-    /* 80CCD810 */ void initBaseMtx();
-    /* 80CCD84C */ void setBaseMtx();
+    int create();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Delete();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    void evtSkip();
+    void setPrtcls();
+    void initBaseMtx();
+    void setBaseMtx();
 
     u16 getBitSW() { return (fopAcM_GetParam(this) & 0xff); }
     void open() { mOpening = true; }
@@ -49,7 +49,7 @@ STATIC_ASSERT(sizeof(daObj_SekiDoor_c) == 0x5d8);
 
 class daObj_SekiDoor_Param_c {
 public:
-    /* 80CCD9AC */ virtual ~daObj_SekiDoor_Param_c() {};
+    virtual ~daObj_SekiDoor_Param_c() {};
 
     static u8 const m;
 };

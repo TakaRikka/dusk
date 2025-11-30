@@ -11,13 +11,10 @@
 #include "f_op/f_op_camera_mng.h"
 #include "string.h"
 
-/* 80182DD4-80182DDC 17D714 0008+00 1/0 0/0 0/0 .text            dEnvSe_Draw__FP8dEnvSe_c */
 static int dEnvSe_Draw(dEnvSe_c* i_this) {
     return 1;
 }
 
-/* 80182DDC-80182FD8 17D71C 01FC+00 1/1 0/0 0/0 .text dEnvSe_getNearPathPos__FP4cXyzP4cXyzP5dPath
- */
 static void dEnvSe_getNearPathPos(cXyz* param_0, cXyz* param_1, dPath* i_path) {
     int var_r31 = 0;
     BOOL sp10[2] = {0, 0};
@@ -69,8 +66,6 @@ static void dEnvSe_getNearPathPos(cXyz* param_0, cXyz* param_1, dPath* i_path) {
     }
 }
 
-/* 80182FD8-80183480 17D918 04A8+00 1/1 0/0 0/0 .text
- * execute_common__8dEnvSe_cFP18dStage_SoundInfo_cPScUc         */
 int dEnvSe_c::execute_common(dStage_SoundInfo_c* i_soundInf, s8* param_1, u8 param_2) {
     int roomNo = dComIfGp_roomControl_getStayNo();
     int path_roomNo = dComIfGp_roomControl_getStayNo();
@@ -190,7 +185,6 @@ int dEnvSe_c::execute_common(dStage_SoundInfo_c* i_soundInf, s8* param_1, u8 par
     return 1;
 }
 
-/* 80183480-801835A0 17DDC0 0120+00 1/1 0/0 0/0 .text            execute__8dEnvSe_cFv */
 int dEnvSe_c::execute() {
     int roomNo = dComIfGp_roomControl_getStayNo();
     dStage_roomDt_c* roomDt_p = dComIfGp_roomControl_getStatusRoomDt(roomNo);
@@ -213,22 +207,18 @@ int dEnvSe_c::execute() {
     return execute_common(dComIfGp_getStage()->getSoundInf(), &field_0xff, 0);
 }
 
-/* 801835A0-801835C0 17DEE0 0020+00 1/0 0/0 0/0 .text            dEnvSe_Execute__FP8dEnvSe_c */
 static int dEnvSe_Execute(dEnvSe_c* i_this) {
     return i_this->execute();
 }
 
-/* 801835C0-801835C8 17DF00 0008+00 1/0 0/0 0/0 .text            dEnvSe_IsDelete__FP8dEnvSe_c */
 static int dEnvSe_IsDelete(dEnvSe_c* i_this) {
     return 1;
 }
 
-/* 801835C8-801835D0 17DF08 0008+00 1/0 0/0 0/0 .text            dEnvSe_Delete__FP8dEnvSe_c */
 static int dEnvSe_Delete(dEnvSe_c* i_this) {
     return 1;
 }
 
-/* 801835D0-801835F8 17DF10 0028+00 1/0 0/0 0/0 .text            dEnvSe_Create__FP8dEnvSe_c */
 static int dEnvSe_Create(dEnvSe_c* i_this) {
     i_this->field_0xfc = 0;
     i_this->field_0xfd = 0;
@@ -240,14 +230,12 @@ static int dEnvSe_Create(dEnvSe_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 803BA808-803BA81C -00001 0014+00 1/0 0/0 0/0 .data            l_dEnvSe_Method */
 static leafdraw_method_class l_dEnvSe_Method = {
     (process_method_func)dEnvSe_Create,  (process_method_func)dEnvSe_Delete,
     (process_method_func)dEnvSe_Execute, (process_method_func)dEnvSe_IsDelete,
     (process_method_func)dEnvSe_Draw,
 };
 
-/* 803BA81C-803BA848 -00001 0028+04 0/0 0/0 1/0 .data            g_profile_ENVSE */
 extern kankyo_process_profile_definition g_profile_ENVSE = {
     fpcLy_CURRENT_e,
     2,

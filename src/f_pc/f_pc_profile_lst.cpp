@@ -5,7 +5,6 @@
 
 #include "f_pc/f_pc_profile_lst.h"
 
-/* 80456C84-804578E8 -00001 0C64+00 1/1 0/0 0/0 .data            g_fpcPfLst_ProfileList */
 process_profile_definition* g_fpcPfLst_ProfileList[] = {
     &g_profile_OVERLAP0,
     &g_profile_OVERLAP1,
@@ -802,12 +801,10 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     NULL,
 };
 
-/* 80456C58-80456C6C 000078 0014+00 0/0 1/1 0/0 .text            ModuleProlog */
 extern "C" void ModuleProlog() {
     g_fpcPf_ProfileList_p = g_fpcPfLst_ProfileList;
 }
 
-/* 80456C6C-80456C7C 00008C 0010+00 0/0 1/1 0/0 .text            ModuleEpilog */
 extern "C" void ModuleEpilog() {
     g_fpcPf_ProfileList_p = NULL;
 }

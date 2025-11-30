@@ -1,14 +1,11 @@
 #include "ptmf.h"
 
-/* ############################################################################################## */
-/* 803A2180-803A2190 02E7E0 000C+04 0/0 23/23 249/249 .rodata          __ptmf_null */
 __ptmf const __ptmf_null = {
     0,
     0,
     0,
 };
 
-/* 80362018-80362048 35C958 0030+00 0/0 10/10 345/345 .text            __ptmf_test */
 asm long __ptmf_test(register __ptmf* ptmf) {
     // clang-format off
     nofralloc
@@ -28,7 +25,6 @@ asm long __ptmf_test(register __ptmf* ptmf) {
     // clang-format on
 }
 
-/* 80362048-80362084 35C988 003C+00 0/0 0/0 217/217 .text            __ptmf_cmpr */
 asm long __ptmf_cmpr(void) {
     // clang-format off
     nofralloc
@@ -51,7 +47,6 @@ asm long __ptmf_cmpr(void) {
     // clang-format on
 }
 
-/* 80362084-803620AC 35C9C4 0028+00 0/0 125/125 741/741 .text            __ptmf_scall */
 asm void __ptmf_scall(...) {
     // clang-format off
     nofralloc

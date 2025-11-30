@@ -6,12 +6,8 @@
 #include "JSystem/JUtility/JUTException.h"
 #include <stdint.h>
 
-/* ############################################################################################## */
-/* 80451408-8045140C 000908 0004+00 1/1 0/0 0/0 .sbss            sAramStreamObject__13JKRAramStream
- */
 JKRAramStream* JKRAramStream::sAramStreamObject;
 
-/* 802D3B48-802D3BB8 2CE488 0070+00 0/0 1/1 0/0 .text            create__13JKRAramStreamFl */
 JKRAramStream* JKRAramStream::create(s32 priority) {
     if (!sAramStreamObject) {
         sAramStreamObject = new (JKRGetSystemHeap(), 0) JKRAramStream(priority);
@@ -21,8 +17,6 @@ JKRAramStream* JKRAramStream::create(s32 priority) {
     return sAramStreamObject;
 }
 
-/* ############################################################################################## */
-/* 803CC188-803CC198 0292A8 0010+00 1/1 0/0 0/0 .data            sMessageBuffer__13JKRAramStream */
 void* JKRAramStream::sMessageBuffer[4] = {
     NULL,
     NULL,
@@ -30,18 +24,14 @@ void* JKRAramStream::sMessageBuffer[4] = {
     NULL,
 };
 
-/* 803CC198-803CC1B8 0292B8 0020+00 2/2 0/0 0/0 .data            sMessageQueue__13JKRAramStream */
 OSMessageQueue JKRAramStream::sMessageQueue = {0};
 
-/* 802D3BB8-802D3C08 2CE4F8 0050+00 1/1 0/0 0/0 .text            __ct__13JKRAramStreamFl */
 JKRAramStream::JKRAramStream(s32 priority) : JKRThread(0xc00, 0x10, priority) {
     resume();
 }
 
-/* 802D3C08-802D3C68 2CE548 0060+00 1/0 0/0 0/0 .text            __dt__13JKRAramStreamFv */
 JKRAramStream::~JKRAramStream() {}
 
-/* 802D3C68-802D3CD8 2CE5A8 0070+00 1/0 0/0 0/0 .text            run__13JKRAramStreamFv */
 void* JKRAramStream::run() {
     OSInitMessageQueue(&sMessageQueue, sMessageBuffer, ARRAY_SIZEU(sMessageBuffer));
 
@@ -61,12 +51,10 @@ void* JKRAramStream::run() {
     }
 }
 
-/* 802D3CD8-802D3CE0 2CE618 0008+00 1/1 0/0 0/0 .text            readFromAram__13JKRAramStreamFv */
 s32 JKRAramStream::readFromAram() {
     return 1;
 }
 
-/* ############################################################################################## */
 s32 JKRAramStream::writeToAram(JKRAramStreamCommand* command) {
     u32 dstSize = command->mSize;
     u32 offset = command->mOffset;
@@ -137,18 +125,12 @@ s32 JKRAramStream::writeToAram(JKRAramStreamCommand* command) {
     return writtenLength;
 }
 
-/* ############################################################################################## */
-/* 8045140C-80451410 00090C 0004+00 2/2 0/0 0/0 .sbss            transBuffer__13JKRAramStream */
 u8* JKRAramStream::transBuffer;
 
-/* 80451410-80451414 000910 0004+00 2/2 0/0 0/0 .sbss            transSize__13JKRAramStream */
 u32 JKRAramStream::transSize;
 
-/* 80451414-80451418 000914 0004+00 2/2 0/0 0/0 .sbss            transHeap__13JKRAramStream */
 JKRHeap* JKRAramStream::transHeap;
 
-/* 802D3ED0-802D3FA0 2CE810 00D0+00 0/0 1/1 0/0 .text
- * write_StreamToAram_Async__13JKRAramStreamFP18JSUFileInputStreamUlUlUlPUl */
 JKRAramStreamCommand* JKRAramStream::write_StreamToAram_Async(JSUFileInputStream* stream, u32 addr,
                                                               u32 size, u32 offset,
                                                               u32* returnSize) {
@@ -172,8 +154,6 @@ JKRAramStreamCommand* JKRAramStream::write_StreamToAram_Async(JSUFileInputStream
     return command;
 }
 
-/* 802D3FA0-802D4034 2CE8E0 0094+00 0/0 1/1 0/0 .text
- * sync__13JKRAramStreamFP20JKRAramStreamCommandi               */
 JKRAramStreamCommand* JKRAramStream::sync(JKRAramStreamCommand* command, BOOL isNonBlocking) {
     OSMessage message;
     if (isNonBlocking == 0) {
@@ -199,8 +179,6 @@ JKRAramStreamCommand* JKRAramStream::sync(JKRAramStreamCommand* command, BOOL is
     }
 }
 
-/* 802D4034-802D4088 2CE974 0054+00 1/1 1/1 0/0 .text
- * setTransBuffer__13JKRAramStreamFPUcUlP7JKRHeap               */
 void JKRAramStream::setTransBuffer(u8* buffer, u32 bufferSize, JKRHeap* heap) {
     transBuffer = NULL;
     transSize = 0x8000;
@@ -219,7 +197,6 @@ void JKRAramStream::setTransBuffer(u8* buffer, u32 bufferSize, JKRHeap* heap) {
     }
 }
 
-/* 802D4088-802D4094 2CE9C8 000C+00 1/1 0/0 0/0 .text            __ct__20JKRAramStreamCommandFv */
 JKRAramStreamCommand::JKRAramStreamCommand() {
     mAllocatedTransferBuffer = false;
 }

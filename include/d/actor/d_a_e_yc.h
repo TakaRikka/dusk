@@ -89,8 +89,8 @@ public:
 STATIC_ASSERT(sizeof(e_yc_class) == 0xBA8);
 
 struct daE_YC_HIO_c {
-    /* 807EFECC */ daE_YC_HIO_c();
-    /* 807F27BC */ virtual ~daE_YC_HIO_c() {}
+    daE_YC_HIO_c();
+    virtual ~daE_YC_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mScale;

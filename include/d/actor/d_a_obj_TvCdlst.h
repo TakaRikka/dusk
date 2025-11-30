@@ -14,17 +14,17 @@
  */
 class daTvCdlst_c : public fopAc_ac_c {
 public:
-    /* 80B9ED40 */ void setBaseMtx();
-    /* 80B9EDC8 */ int CreateHeap();
-    /* 80B9EE34 */ int create();
-    /* 80B9F144 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B9F164 */ void lightInit();
-    /* 80B9F1F0 */ void setLight();
-    /* 80B9F220 */ void cutLight();
-    /* 80B9F250 */ void pointLightProc();
-    /* 80B9F300 */ int Execute();
-    /* 80B9F634 */ int Draw();
-    /* 80B9F6D8 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    static int createHeapCallBack(fopAc_ac_c*);
+    void lightInit();
+    void setLight();
+    void cutLight();
+    void pointLightProc();
+    int Execute();
+    int Draw();
+    int Delete();
 
     static dCcD_SrcGObjInf const mCcDObjInfo;
     static dCcD_SrcCyl mCcDCyl;
@@ -56,8 +56,8 @@ STATIC_ASSERT(sizeof(daTvCdlst_c) == 0x754);
 
 class daTvCdlst_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80B9ECCC */ daTvCdlst_HIO_c();
-    /* 80B9F7B0 */ virtual ~daTvCdlst_HIO_c() {}
+    daTvCdlst_HIO_c();
+    virtual ~daTvCdlst_HIO_c() {}
 
     void genMessage(JORMContext*);
 

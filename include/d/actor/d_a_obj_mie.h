@@ -36,7 +36,7 @@ public:
     }
 
     void genMessage(JORMContext*);
-    /* 80C95A40 */ virtual ~daObj_Mie_HIO_c() {}
+    virtual ~daObj_Mie_HIO_c() {}
 
     daObj_Mie_HIOParam mParams;
 };
@@ -97,22 +97,22 @@ public:
         TYPE_0,
     };
 
-    /* 80C93FCC */ virtual ~daObj_Mie_c();
-    /* 80C941C8 */ int create();
-    /* 80C945E8 */ int CreateHeap();
-    /* 80C94674 */ int Delete();
-    /* 80C946A8 */ int Execute();
-    /* 80C95140 */ int Draw();
-    /* 80C952D8 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80C952F8 */ static void* srchPouyaa(void*, void*);
-    /* 80C9536C */ void setEnvTevColor();
-    /* 80C953C8 */ void setRoomNo();
-    /* 80C9540C */ void setMtx();
-    /* 80C954BC */ s16 calcRollAngle(s16, int);
-    /* 80C9555C */ int getWallAngle(s16, s16*);
-    /* 80C956EC */ void setSmokePrtcl();
-    /* 80C95768 */ void setWaterPrtcl();
-    /* 80C95890 */ void setHamonPrtcl();
+    virtual ~daObj_Mie_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static void* srchPouyaa(void*, void*);
+    void setEnvTevColor();
+    void setRoomNo();
+    void setMtx();
+    s16 calcRollAngle(s16, int);
+    int getWallAngle(s16, s16*);
+    void setSmokePrtcl();
+    void setWaterPrtcl();
+    void setHamonPrtcl();
 
     u8 getType() { return TYPE_0; }
     void popup(f32 param_1, f32 param_2, cXyz* param_3) {

@@ -17,29 +17,24 @@ enum E_bug_RES_File_ID {
     /* 0x4 */ BMDG_MU05,
 };
 
-/* 80694B8C-80694BBC 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__13daE_Bug_HIO_cFv */
 daE_Bug_HIO_c::daE_Bug_HIO_c() {
     field_0x4 = -1;
     field_0x8 = 1.5f;
     field_0xc = 1.0f;
 }
 
-/* 80697E6C-80697E70 -00001 0004+00 1/2 0/0 0/0 .bss             None */
 /* 80697E6C 0001+00 data_80697E6C @1009 */
 /* 80697E6D 0003+00 data_80697E6D None */
 static u8 l_initHIO;
 
-/* 80697E7C-80697E8C 000054 0010+00 4/6 0/0 0/0 .bss             l_HIO */
 static daE_Bug_HIO_c l_HIO;
 
-/* 80697E8C-80697E90 -00001 0004+00 4/8 0/0 0/0 .bss             None */
 /* 80697E8C 0001+00 data_80697E8C None */
 static s8 l_roomNo;
 
 /* 80697E8D 0003+00 data_80697E8D None */
 static s8 data_80697E8D;
 
-/* 80694BBC-80694CC8 00011C 010C+00 1/0 0/0 0/0 .text            daE_Bug_Draw__FP11e_bug_class */
 static int daE_Bug_Draw(e_bug_class* i_this) {
     bug_s* bugs = i_this->Bug_s;
 
@@ -62,7 +57,6 @@ static int daE_Bug_Draw(e_bug_class* i_this) {
     return 1;
 }
 
-/* 80694CC8-80694F58 000228 0290+00 3/3 0/0 0/0 .text            simple_bg_check__FP5bug_si */
 static int simple_bg_check(bug_s* i_this, int param_2) {
     dBgS_LinChk lin_chk;
     cXyz start, end, spc0, spcc;
@@ -93,7 +87,6 @@ static int simple_bg_check(bug_s* i_this, int param_2) {
     return iVar1;
 }
 
-/* 80694F94-8069506C 0004F4 00D8+00 1/1 0/0 0/0 .text            bug_mtxset__FP5bug_s */
 static void bug_mtxset(bug_s* i_this) {
     mDoMtx_stack_c::transS(i_this->field_0x18.x, i_this->field_0x18.y, i_this->field_0x18.z);
     mDoMtx_stack_c::XrotM(i_this->field_0x44);
@@ -109,7 +102,6 @@ static void bug_mtxset(bug_s* i_this) {
     }
 }
 
-/* 8069506C-806951C8 0005CC 015C+00 1/1 0/0 0/0 .text            bug_mtxset_stick__FP5bug_s */
 static void bug_mtxset_stick(bug_s* i_this) {
     cXyz sp2c;
     mDoMtx_stack_c::transS(i_this->field_0x18.x, i_this->field_0x18.y, i_this->field_0x18.z);
@@ -134,7 +126,6 @@ static void bug_mtxset_stick(bug_s* i_this) {
     }
 }
 
-/* 806951C8-806953E4 000728 021C+00 1/1 0/0 0/0 .text            bug_mtxset_stickW__FP5bug_s */
 static void bug_mtxset_stickW(bug_s* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp38, sp44, sp50;
@@ -167,7 +158,6 @@ static void bug_mtxset_stickW(bug_s* i_this) {
     }
 }
 
-/* 806953E4-806954D4 000944 00F0+00 1/1 0/0 0/0 .text            bug_mtxset_fail__FP5bug_s */
 static void bug_mtxset_fail(bug_s* i_this) {
     mDoMtx_stack_c::transS(i_this->field_0x18.x, i_this->field_0x18.y, i_this->field_0x18.z);
     mDoMtx_stack_c::XrotM(i_this->field_0x44);
@@ -184,7 +174,6 @@ static void bug_mtxset_fail(bug_s* i_this) {
     }
 }
 
-/* 806954D4-806957DC 000A34 0308+00 1/1 0/0 0/0 .text            bug_ground_ang_set__FP5bug_s */
 static void bug_ground_ang_set(bug_s* i_this) {
     dBgS_LinChk lin_chk;
     cXyz sp8c, end, cross;
@@ -239,7 +228,6 @@ static void bug_ground_ang_set(bug_s* i_this) {
     }
 }
 
-/* 806957DC-806958E8 000D3C 010C+00 2/2 0/0 0/0 .text            bug_action__FP11e_bug_classP5bug_s */
 static int bug_action(e_bug_class* a_this, bug_s* i_this) {
     int rv = 0;
     i_this->field_0x18.x += i_this->field_0x30.x;
@@ -269,16 +257,12 @@ static int bug_action(e_bug_class* a_this, bug_s* i_this) {
     return rv;
 }
 
-/* 80697E9C-80697EA8 000074 000C+00 1/5 0/0 0/0 .bss             at_pos */
 static cXyz at_pos;
 
-/* 80697EA8-80697EAC 000080 0004+00 0/3 0/0 0/0 .bss             at_size */
 static f32 at_size;
 
-/* 80697EAC-80697EB0 000084 0004+00 2/3 0/0 0/0 .bss             None */
 static s8 data_80697EAC;
 
-/* 806958E8-80695BE4 000E48 02FC+00 1/1 0/0 0/0 .text            bug_stick__FP5bug_s */
 static void bug_stick(bug_s* i_this) {
     cXyz sp30, sp3c, sp48;
     daPy_py_c* player = daPy_getLinkPlayerActorClass();
@@ -327,7 +311,6 @@ static void bug_stick(bug_s* i_this) {
     }
 }
 
-/* 80695BE4-80695DE8 001144 0204+00 1/1 0/0 0/0 .text            bug_stickW__FP5bug_s */
 static void bug_stickW(bug_s* i_this) {
     cXyz sp34, sp40, sp4c;
 
@@ -359,7 +342,6 @@ static void bug_stickW(bug_s* i_this) {
     i_this->field_0x3c.y = i_this->field_0x48 + 0x8000;
 }
 
-/* 80695DE8-80695ECC 001348 00E4+00 1/1 0/0 0/0 .text            wind_move__FP5bug_s */
 static void wind_move(bug_s* i_this) {
     s16 sVar1 = i_this->field_0x52 * -0x1700;
     i_this->field_0x3c.x -= 0xD00;
@@ -376,7 +358,6 @@ static void wind_move(bug_s* i_this) {
     }
 }
 
-/* 80695ECC-80695FCC 00142C 0100+00 1/1 0/0 0/0 .text            bug_fail__FP11e_bug_classP5bug_s */
 static void bug_fail(e_bug_class* a_this, bug_s* i_this) {
     i_this->field_0x53 = bug_action(a_this, i_this);
 
@@ -403,7 +384,6 @@ static void bug_fail(e_bug_class* a_this, bug_s* i_this) {
     }
 }
 
-/* 80695FCC-806965B4 00152C 05E8+00 1/1 0/0 0/0 .text damage_check__FP11e_bug_classP5bug_s */
 static void damage_check(e_bug_class* a_this, bug_s* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&a_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -484,7 +464,6 @@ static void damage_check(e_bug_class* a_this, bug_s* i_this) {
     }
 }
 
-/* 806965B4-80696828 001B14 0274+00 1/1 0/0 0/0 .text            set_wait__FP11e_bug_classP5bug_s */
 static void set_wait(e_bug_class* a_this, bug_s* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp40;
@@ -520,7 +499,6 @@ static void set_wait(e_bug_class* a_this, bug_s* i_this) {
     }
 }
 
-/* 80696828-80696E84 001D88 065C+00 1/1 0/0 0/0 .text            normal_move__FP11e_bug_classP5bug_s */
 static void normal_move(e_bug_class* a_this, bug_s* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp68, sp74;
@@ -627,7 +605,6 @@ static void normal_move(e_bug_class* a_this, bug_s* i_this) {
     }
 }
 
-/* 80696E84-80697160 0023E4 02DC+00 1/1 0/0 0/0 .text            bug_control__FP11e_bug_class */
 static void bug_control(e_bug_class* a_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&a_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -711,7 +688,6 @@ static void bug_control(e_bug_class* a_this) {
     }
 }
 
-/* 80697160-806971EC 0026C0 008C+00 1/1 0/0 0/0 .text            s_boom_sub__FPvPv */
 static void* s_boom_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_BOOMERANG && daPy_py_c::checkBoomerangCharge() && fopAcM_GetParam(i_actor) == 1) {
         data_80697E8D = 1;
@@ -722,7 +698,6 @@ static void* s_boom_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 806971EC-80697294 00274C 00A8+00 1/1 0/0 0/0 .text            s_bomb_sub__FPvPv */
 static void* s_bomb_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && dBomb_c::checkBombActor((fopAc_ac_c*)i_actor) && ((daNbomb_c*)i_actor)->checkExplodeNow()) {
         data_80697E8D = 2;
@@ -734,7 +709,6 @@ static void* s_bomb_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80697294-806975A0 0027F4 030C+00 2/1 0/0 0/0 .text            daE_Bug_Execute__FP11e_bug_class */
 static int daE_Bug_Execute(e_bug_class* i_this) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -776,12 +750,10 @@ static int daE_Bug_Execute(e_bug_class* i_this) {
     return 1;
 }
 
-/* 806975A0-806975A8 002B00 0008+00 1/0 0/0 0/0 .text            daE_Bug_IsDelete__FP11e_bug_class */
 static int daE_Bug_IsDelete(e_bug_class* i_this) {
     return 1;
 }
 
-/* 806975A8-806976B4 002B08 010C+00 1/0 0/0 0/0 .text            daE_Bug_Delete__FP11e_bug_class */
 static int daE_Bug_Delete(e_bug_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -809,7 +781,6 @@ static int daE_Bug_Delete(e_bug_class* i_this) {
     return 1;
 }
 
-/* 806976B4-806977A8 002C14 00F4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_bug_class* i_this = (e_bug_class*)a_this;
     
@@ -834,7 +805,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 806977A8-80697B4C 002D08 03A4+00 1/0 0/0 0/0 .text            daE_Bug_Create__FP10fopAc_ac_c */
 static cPhs__Step daE_Bug_Create(fopAc_ac_c* a_this) {
     e_bug_class* i_this = (e_bug_class*)a_this;
 
@@ -926,7 +896,6 @@ static cPhs__Step daE_Bug_Create(fopAc_ac_c* a_this) {
 
 AUDIO_INSTANCES;
 
-/* 80697DC8-80697DE8 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_Bug_Method */
 static actor_method_class l_daE_Bug_Method = {
     (process_method_func)daE_Bug_Create,
     (process_method_func)daE_Bug_Delete,
@@ -935,7 +904,6 @@ static actor_method_class l_daE_Bug_Method = {
     (process_method_func)daE_Bug_Draw,
 };
 
-/* 80697DE8-80697E18 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_BUG */
 extern actor_process_profile_definition g_profile_E_BUG = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

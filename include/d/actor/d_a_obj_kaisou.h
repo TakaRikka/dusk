@@ -17,14 +17,14 @@
 
 class daObjKaisou_c : public fopAc_ac_c {
 public:
-    /* 80C34058 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80C34390 */ void initCcCylinder();
-    /* 80C343F0 */ void setCcCylinder();
-    /* 80C34438 */ void ObjHit();
-    /* 80C34824 */ int Execute();
-    /* 80C34A98 */ int Delete();
-    /* 80C34ACC */ void setBaseMtx();
-    /* 80C34BD8 */ cPhs__Step create();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    void initCcCylinder();
+    void setCcCylinder();
+    void ObjHit();
+    int Execute();
+    int Delete();
+    void setBaseMtx();
+    cPhs__Step create();
     inline int CreateHeap();
     inline int Draw();
 

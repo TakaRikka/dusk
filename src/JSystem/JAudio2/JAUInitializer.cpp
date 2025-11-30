@@ -15,7 +15,6 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JKernel/JKRThread.h"
 
-/* 802A4AD0-802A4B28 29F410 0058+00 0/0 1/1 0/0 .text            __ct__18JAU_JASInitializerFv */
 JAU_JASInitializer::JAU_JASInitializer() {
     audioMemory_ = 0;
     audioMemSize_ = 0;
@@ -32,8 +31,6 @@ JAU_JASInitializer::JAU_JASInitializer() {
     waveArcDir_ = NULL;
 }
 
-/* 802A4B28-802A4D3C 29F468 0214+00 0/0 1/1 0/0 .text
- * initJASystem__18JAU_JASInitializerFP12JKRSolidHeap           */
 // NONMATCHING JASPoolAllocObject_MultiThreaded<_> locations
 void JAU_JASInitializer::initJASystem(JKRSolidHeap* heap) {
     if (JASAudioThread::getThreadPointer()) {
@@ -92,7 +89,6 @@ void JAU_JASInitializer::initJASystem(JKRSolidHeap* heap) {
     #endif
 }
 
-/* 802A4D3C-802A4D60 29F67C 0024+00 0/0 1/1 0/0 .text            __ct__18JAU_JAIInitializerFv */
 JAU_JAIInitializer::JAU_JAIInitializer() {
     field_0x0 = 100;
     field_0x4 = 4;
@@ -100,7 +96,6 @@ JAU_JAIInitializer::JAU_JAIInitializer() {
     field_0xc = 16;
 }
 
-/* 802A4D60-802A4EE8 29F6A0 0188+00 0/0 1/1 0/0 .text initJAInterface__18JAU_JAIInitializerFv */
 // NONMATCHING JASPoolAllocObject<_> locations
 void JAU_JAIInitializer::initJAInterface() {
     s32 r30 = JASDram->getFreeSize();

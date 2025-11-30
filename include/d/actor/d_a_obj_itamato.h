@@ -47,20 +47,20 @@ private:
 
 public:
     daObj_ItaMato_c() {}
-    /* 80C294EC */ virtual ~daObj_ItaMato_c();
-    /* 80C2971C */ cPhs__Step create();
-    /* 80C29CD8 */ int CreateHeap();
-    /* 80C29DAC */ int Delete();
-    /* 80C29DE0 */ int Execute();
-    /* 80C2A44C */ int Draw();
-    /* 80C2A5D0 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80C2A5F0 */ static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
-    /* 80C2A620 */ const char* getResName();
-    /* 80C2A630 */ void setSwayParam(fopAc_ac_c*);
-    /* 80C2A7C4 */ void setPrtcls();
-    /* 80C2A890 */ void setEnvTevColor();
-    /* 80C2A8EC */ void setRoomNo();
-    /* 80C2A930 */ void setMtx();
+    virtual ~daObj_ItaMato_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
+    const char* getResName();
+    void setSwayParam(fopAc_ac_c*);
+    void setPrtcls();
+    void setEnvTevColor();
+    void setRoomNo();
+    void setMtx();
 
     u8 getBitSW2() { return (fopAcM_GetParam(this) & 0xFF0000) >> 16; }
 

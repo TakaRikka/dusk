@@ -17,20 +17,20 @@ class daObjSwBallA_c : public fopAc_ac_c , public dEvLib_callback_c {
 public:
     daObjSwBallA_c() : dEvLib_callback_c(this) {}
 
-    /* 80CF3394 */ int checkArea_sub(fopAc_ac_c*);
-    /* 80CF34E4 */ void search_ball();
-    /* 80CF3610 */ void initBaseMtx();
-    /* 80CF3630 */ void setBaseMtx();
-    /* 80CF3694 */ int Create();
-    /* 80CF37FC */ int CreateHeap();
-    /* 80CF3970 */ int create();
-    /* 80CF3A90 */ int execute();
-    /* 80CF3B40 */ void actionRun();
-    /* 80CF3D80 */ void actionStop();
-    /* 80CF3D84 */ void PutCrrPos();
-    /* 80CF406C */ int draw();
-    /* 80CF41F4 */ int _delete();
-    /* 80CF4354 */ virtual ~daObjSwBallA_c() {}
+    int checkArea_sub(fopAc_ac_c*);
+    void search_ball();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    void actionRun();
+    void actionStop();
+    void PutCrrPos();
+    int draw();
+    int _delete();
+    virtual ~daObjSwBallA_c() {}
 
     u32 getArg0() { return fopAcM_GetParamBit(this, 0, 8); }
     u32 getSwbit2() { return fopAcM_GetParamBit(this, 8, 8); }

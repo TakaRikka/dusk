@@ -199,32 +199,32 @@ struct dKy_flush_info {
 
 class dScnKy_env_light_c {
 public:
-    /* 8019F2E8 */ dScnKy_env_light_c();
-    /* 8019F4FC */ void setDaytime();
-    /* 8019F788 */ void setSunpos();
-    /* 8019FA08 */ f32 getDaytime();
-    /* 8019FBCC */ f32 getDarkDaytime();
-    /* 8019FBD4 */ void setLight_palno_get(u8*, u8*, u8*, u8*, u8*, u8*, u8*, u8*, f32*, int*, int*,
+    dScnKy_env_light_c();
+    void setDaytime();
+    void setSunpos();
+    f32 getDaytime();
+    f32 getDarkDaytime();
+    void setLight_palno_get(u8*, u8*, u8*, u8*, u8*, u8*, u8*, u8*, f32*, int*, int*,
                                            f32*, u8*);
-    /* 801A040C */ void setLight();
-    /* 801A133C */ void setLight_bg(dKy_tevstr_c*, GXColorS10*, GXColorS10*, f32*, f32*);
-    /* 801A16C0 */ void setLight_actor(dKy_tevstr_c*, GXColorS10*, f32*, f32*);
-    /* 801A1D64 */ void settingTevStruct_colget_actor(cXyz*, dKy_tevstr_c*, GXColorS10*,
+    void setLight();
+    void setLight_bg(dKy_tevstr_c*, GXColorS10*, GXColorS10*, f32*, f32*);
+    void setLight_actor(dKy_tevstr_c*, GXColorS10*, f32*, f32*);
+    void settingTevStruct_colget_actor(cXyz*, dKy_tevstr_c*, GXColorS10*,
                                                       GXColorS10*, f32*, f32*);
-    /* 801A1F58 */ void settingTevStruct_colget_player(dKy_tevstr_c*);
-    /* 801A2128 */ void settingTevStruct_plightcol_plus(cXyz*, dKy_tevstr_c*, GXColorS10,
+    void settingTevStruct_colget_player(dKy_tevstr_c*);
+    void settingTevStruct_plightcol_plus(cXyz*, dKy_tevstr_c*, GXColorS10,
                                                         GXColorS10, u8);
-    /* 801A37C4 */ void settingTevStruct(int, cXyz*, dKy_tevstr_c*);
-    /* 801A441C */ void setLightTevColorType(J3DModelData*, dKy_tevstr_c*);
-    /* 801A4DA0 */ void setLightTevColorType_MAJI(J3DModelData*, dKy_tevstr_c*);
-    /* 801A4E90 */ void CalcTevColor();
-    /* 801A4F24 */ void Sndpos();
-    /* 801A4F64 */ void Eflight_flush_proc();
-    /* 801A516C */ void SetBaseLight();
-    /* 801A5288 */ void exeKankyo();
-    /* 801A56DC */ void drawKankyo();
+    void settingTevStruct(int, cXyz*, dKy_tevstr_c*);
+    void setLightTevColorType(J3DModelData*, dKy_tevstr_c*);
+    void setLightTevColorType_MAJI(J3DModelData*, dKy_tevstr_c*);
+    void CalcTevColor();
+    void Sndpos();
+    void Eflight_flush_proc();
+    void SetBaseLight();
+    void exeKankyo();
+    void drawKankyo();
 
-    /* 801ADBBC */ virtual ~dScnKy_env_light_c() {}
+    virtual ~dScnKy_env_light_c() {}
 
     void setLightTevColorType(J3DModel* model_p, dKy_tevstr_c* tevstr_p) {
         setLightTevColorType(model_p->getModelData(), tevstr_p);

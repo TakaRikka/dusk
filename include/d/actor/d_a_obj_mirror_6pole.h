@@ -22,15 +22,15 @@ public:
         MODE_MAX_e,
     };
 
-    /* 80C95E18 */ void initWait();
-    /* 80C95E2C */ void executeWait();
-    /* 80C95E88 */ void initDemo();
-    /* 80C95E8C */ void executeDemo();
-    /* 80C95EFC */ inline void setBaseMtx();
+    void initWait();
+    void executeWait();
+    void initDemo();
+    void executeDemo();
+    inline void setBaseMtx();
     inline void initBaseMtx();
     inline void create_init();
-    /* 80C95F50 */ static int createHeapCallBack(fopAc_ac_c* i_this);
-    /* 80C95F70 */ int CreateHeap();
+    static int createHeapCallBack(fopAc_ac_c* i_this);
+    int CreateHeap();
 
     inline ~daObjMirror6Pole_c();
 

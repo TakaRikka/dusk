@@ -12,11 +12,11 @@ class JKRFile;
 class JSUFileInputStream : public JSURandomInputStream {
 public:
     // TODO: fix return values
-    /* 802DC638 */ JSUFileInputStream(JKRFile*);
-    /* 802DC67C */ u32 readData(void*, s32);
-    /* 802DC74C */ s32 seekPos(s32, JSUStreamSeekFrom);
-    /* 802DC82C */ s32 getLength() const;
-    /* 802DC85C */ s32 getPosition() const;
+    JSUFileInputStream(JKRFile*);
+    u32 readData(void*, s32);
+    s32 seekPos(s32, JSUStreamSeekFrom);
+    s32 getLength() const;
+    s32 getPosition() const;
 
 private:
     /* 0x08 */ JKRFile* mFile;

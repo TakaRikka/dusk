@@ -42,7 +42,7 @@ struct JPAChildShapeData {
  */
 class JPAChildShape {
 public:
-    /* 8027B038 */ JPAChildShape(u8 const*);
+    JPAChildShape(u8 const*);
 
     f32 getPosRndm() const { return mpData->mPosRndm; }
     f32 getBaseVel() const { return mpData->mBaseVel; }

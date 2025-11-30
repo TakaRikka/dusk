@@ -7,8 +7,6 @@
 #include "f_op/f_op_scene.h"
 #include "f_pc/f_pc_manager.h"
 
-/* 80020548-80020594 01AE88 004C+00 0/0 2/2 0/0 .text            fopScnPause_Enable__FP11scene_class
- */
 int fopScnPause_Enable(scene_class* i_scene) {
     if (i_scene != NULL) {
         fpcM_PauseEnable(i_scene, 1);
@@ -19,7 +17,6 @@ int fopScnPause_Enable(scene_class* i_scene) {
     return 0;
 }
 
-/* 80020594-8002064C 01AED4 00B8+00 0/0 2/2 0/0 .text fopScnPause_Disable__FP11scene_class */
 int fopScnPause_Disable(scene_class* i_scene) {
     if (i_scene != NULL) {
         process_node_class* process_node = i_scene->base.base.layer_tag.layer->process_node;

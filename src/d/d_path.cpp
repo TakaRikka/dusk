@@ -8,7 +8,6 @@
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
 
-/* 800517B0-800517EC 04C0F0 003C+00 0/0 7/7 63/63 .text            dPath_GetPnt__FPC5dPathi */
 dPnt* dPath_GetPnt(dPath const* path, int pnt_index) {
     if (path == NULL || path->m_points == NULL || pnt_index < 0 || pnt_index >= path->m_num) {
         return NULL;
@@ -17,7 +16,6 @@ dPnt* dPath_GetPnt(dPath const* path, int pnt_index) {
     return &path->m_points[pnt_index];
 }
 
-/* 800517EC-80051898 04C12C 00AC+00 1/1 12/12 82/82 .text            dPath_GetRoomPath__Fii */
 dPath* dPath_GetRoomPath(int path_index, int room_no) {
     dStage_dPath_c* path;
 
@@ -39,8 +37,6 @@ dPath* dPath_GetRoomPath(int path_index, int room_no) {
     return &path->m_path[path_index];
 }
 
-/* 80051898-8005195C 04C1D8 00C4+00 0/0 1/1 3/3 .text            dPath_GetNextRoomPath__FPC5dPathi
- */
 dPath* dPath_GetNextRoomPath(dPath const* p_path, int room_no) {
     dStage_dPath_c* path;
 
@@ -67,8 +63,6 @@ dPath* dPath_GetNextRoomPath(dPath const* p_path, int room_no) {
     return &path->m_path[next_id];
 }
 
-/* 8005195C-80051AC0 04C29C 0164+00 0/0 1/1 4/4 .text
- * dPath_GetPolyRoomPathVec__FRC13cBgS_PolyInfoP4cXyzPi         */
 u8 dPath_GetPolyRoomPathVec(cBgS_PolyInfo const& poly, cXyz* p_pathVec, int* param_2) {
     int roomId = dComIfG_Bgsp().GetRoomId(poly);
     int roomPathId = dComIfG_Bgsp().GetRoomPathId(poly);

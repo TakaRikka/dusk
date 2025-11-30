@@ -16,22 +16,22 @@
  */
 class daObjL4DigSand_c : public dBgS_MoveBgActor {
 public:
-    /* 80C66B18 */ void initBaseMtx();
-    /* 80C66B54 */ void setBaseMtx();
-    /* 80C66C94 */ int create1st();
-    /* 80C66DD0 */ void action();
-    /* 80C66E74 */ void mode_init_wait();
-    /* 80C66E80 */ void mode_wait();
-    /* 80C66EAC */ void mode_init_dig();
-    /* 80C66FFC */ void mode_dig();
-    /* 80C670AC */ void mode_init_end();
-    /* 80C67100 */ void mode_end();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    void action();
+    void mode_init_wait();
+    void mode_wait();
+    void mode_init_dig();
+    void mode_dig();
+    void mode_init_end();
+    void mode_end();
 
-    /* 80C66C24 */ virtual int CreateHeap();
-    /* 80C66BC8 */ virtual int Create();
-    /* 80C66D40 */ virtual int Execute(Mtx**);
-    /* 80C67104 */ virtual int Draw();
-    /* 80C671A8 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
     void startDig() { field_0x941 = 1; }

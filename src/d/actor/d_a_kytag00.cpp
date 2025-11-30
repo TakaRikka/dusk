@@ -9,7 +9,6 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 8046B718-8046B9DC 000078 02C4+00 2/2 0/0 0/0 .text            get_check_pos__FP13kytag00_class */
 static cXyz get_check_pos(kytag00_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     camera_class* camera_p = (camera_class*)dComIfGp_getCamera(0);
@@ -31,8 +30,6 @@ static cXyz get_check_pos(kytag00_class* i_this) {
     return pos;
 }
 
-/* 8046B9DC-8046BA10 00033C 0034+00 2/2 0/0 0/0 .text            wether_tag_reset__FP13kytag00_class
- */
 static void wether_tag_reset(kytag00_class* i_this) {
     i_this->field_0x56d = 0;
 
@@ -42,8 +39,6 @@ static void wether_tag_reset(kytag00_class* i_this) {
     g_env_light.mColPatModeGather = 1;
 }
 
-/* 8046BA10-8046BD60 000370 0350+00 1/1 0/0 0/0 .text            wether_tag_move__FP13kytag00_class
- */
 static void wether_tag_move(kytag00_class* i_this) {
     cXyz spC;
     cXyz check_pos = get_check_pos(i_this);
@@ -140,7 +135,6 @@ static void wether_tag_move(kytag00_class* i_this) {
     }
 }
 
-/* 8046BD60-8046BDA4 0006C0 0044+00 1/1 0/0 0/0 .text            raincnt_set__Ff */
 static void raincnt_set(f32 param_0) {
     int cnt = param_0 * param_0 * param_0 * 250.0f;
     if (cnt > g_env_light.base_raincnt) {
@@ -148,12 +142,10 @@ static void raincnt_set(f32 param_0) {
     }
 }
 
-/* 8046BDA4-8046BDB8 000704 0014+00 1/1 0/0 0/0 .text            raincnt_cut__Fv */
 static void raincnt_cut() {
     g_env_light.raincnt = g_env_light.base_raincnt;
 }
 
-/* 8046BDB8-8046BEB8 000718 0100+00 3/2 0/0 0/0 .text wether_tag_efect_reset__FP13kytag00_class */
 static void wether_tag_efect_reset(kytag00_class* i_this) {
     i_this->field_0x56c = 0;
 
@@ -203,7 +195,6 @@ static void wether_tag_efect_reset(kytag00_class* i_this) {
     }
 }
 
-/* 8046BEB8-8046C660 000818 07A8+00 3/2 0/0 0/0 .text wether_tag_efect_move__FP13kytag00_class */
 static void wether_tag_efect_move(kytag00_class* i_this) {
     cXyz spC;
     cXyz check_pos = get_check_pos(i_this);
@@ -389,14 +380,11 @@ static void wether_tag_efect_move(kytag00_class* i_this) {
     }
 }
 
-/* 8046C660-8046C684 000FC0 0024+00 1/0 0/0 0/0 .text            daKytag00_Draw__FP13kytag00_class
- */
 static int daKytag00_Draw(kytag00_class* i_this) {
     wether_tag_efect_move(i_this);
     return 1;
 }
 
-/* 8046C684-8046C76C 000FE4 00E8+00 1/0 0/0 0/0 .text daKytag00_Execute__FP13kytag00_class */
 static int daKytag00_Execute(kytag00_class* i_this) {
     BOOL var_r30 = TRUE;
 
@@ -416,13 +404,10 @@ static int daKytag00_Execute(kytag00_class* i_this) {
     return 1;
 }
 
-/* 8046C76C-8046C774 0010CC 0008+00 1/0 0/0 0/0 .text daKytag00_IsDelete__FP13kytag00_class */
 static int daKytag00_IsDelete(kytag00_class* i_this) {
     return 1;
 }
 
-/* 8046C774-8046C7BC 0010D4 0048+00 1/0 0/0 0/0 .text            daKytag00_Delete__FP13kytag00_class
- */
 static int daKytag00_Delete(kytag00_class* i_this) {
     wether_tag_reset(i_this);
     wether_tag_efect_reset(i_this);
@@ -430,7 +415,6 @@ static int daKytag00_Delete(kytag00_class* i_this) {
     return 1;
 }
 
-/* 8046C7BC-8046C978 00111C 01BC+00 1/0 0/0 0/0 .text            daKytag00_Create__FP10fopAc_ac_c */
 static int daKytag00_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, kytag00_class);
     kytag00_class* a_this = (kytag00_class*)i_this;
@@ -475,14 +459,12 @@ static int daKytag00_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8046CA78-8046CA98 -00001 0020+00 1/0 0/0 0/0 .data            l_daKytag00_Method */
 static actor_method_class l_daKytag00_Method = {
     (process_method_func)daKytag00_Create,  (process_method_func)daKytag00_Delete,
     (process_method_func)daKytag00_Execute, (process_method_func)daKytag00_IsDelete,
     (process_method_func)daKytag00_Draw,
 };
 
-/* 8046CA98-8046CAC8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KYTAG00 */
 extern actor_process_profile_definition g_profile_KYTAG00 = {
     fpcLy_CURRENT_e,
     7,

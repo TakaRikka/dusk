@@ -15,14 +15,14 @@
  */
 class daObjPRElvtr_c : public dBgS_MoveBgActor, public request_of_phase_process_class {
 public:
-    /* 80C685F8 */ int create1st();
-    /* 80C68688 */ void setMtx();
-    /* 80C686F8 */ int CreateHeap();
-    /* 80C68768 */ int Create();
-    /* 80C68844 */ int Execute(Mtx**);
-    /* 80C68944 */ int Draw();
-    /* 80C689E8 */ int Delete();
-    /* 80C68AF0 */ virtual ~daObjPRElvtr_c() {}
+    int create1st();
+    void setMtx();
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
+    virtual ~daObjPRElvtr_c() {}
 
     int getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
 

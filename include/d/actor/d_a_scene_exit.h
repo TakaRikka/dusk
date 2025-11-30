@@ -14,8 +14,8 @@
 class daScex_c : public fopAc_ac_c {
 public:
     daScex_c() {}
-    /* 80485838 */ int checkWork();
-    /* 80485A50 */ int execute();
+    int checkWork();
+    int execute();
     inline int create();
 
     u8 getArg1() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }

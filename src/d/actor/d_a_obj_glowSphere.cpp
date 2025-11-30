@@ -10,22 +10,18 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 
-/* 80BF934C-80BF938C 0000EC 0040+00 1/1 0/0 0/0 .text            __ct__14daGlwSph_HIO_cFv */
 daGlwSph_HIO_c::daGlwSph_HIO_c() {
     speed = 50.0f;
     speed2 = 4.0f;
 }
 
-/* 80BFABF4-80BFAC00 000054 000C+00 2/3 0/0 0/0 .bss             l_HIO */
 static daGlwSph_HIO_c l_HIO;
 
-/* 80BFA9F0-80BFAA08 000020 0018+00 1/1 0/0 0/0 .data            l_cull_box */
 static cull_box l_cull_box = {
     {-30.0f, -10.0f, -30.0f},
     {30.0f, 60.0f, 30.0f}
 };
 
-/* 80BFA978-80BFA9A8 000008 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__10daGlwSph_c */
 const dCcD_SrcGObjInf daGlwSph_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0x10000, 0x11}, {0x19}}},
     {dCcD_SE_SWORD, 0, 0, 0, 0x0},
@@ -33,7 +29,6 @@ const dCcD_SrcGObjInf daGlwSph_c::mCcDObjInfo = {
     {0},
 };
 
-/* 80BFAA08-80BFAA48 000038 0040+00 2/2 0/0 0/0 .data            mCcDSph__10daGlwSph_c */
 dCcD_SrcSph daGlwSph_c::mCcDSph = {
     daGlwSph_c::mCcDObjInfo,
     {
@@ -41,10 +36,8 @@ dCcD_SrcSph daGlwSph_c::mCcDSph = {
     }  // mSphAttr
 };
 
-/* 80BFAA48-80BFAA4C 000078 0004+00 1/2 0/0 0/0 .data            l_prmColor */
 static GXColor l_prmColor = {0xFF, 0xFF, 0xFF, 0xFF};
 
-/* 80BFAA4C-80BFAA5C 00007C 0010+00 1/3 0/0 0/0 .data            l_envColor */
 static GXColor l_envColor[] = {
     /* Gray   */ {0x3C, 0x1E, 0x3C, 0xFF},
     /* Red    */ {0xFF, 0x00, 0x32, 0xFF},
@@ -52,28 +45,22 @@ static GXColor l_envColor[] = {
     /* Blue   */ {0x00, 0x32, 0xFF, 0xFF},
 };
 
-/* 80BFAC0C-80BFAFD0 00006C 03C4+00 3/4 0/0 0/0 .bss             mSphMng__10daGlwSph_c */
 _GlSph_Mng_c daGlwSph_c::mSphMng;
 
-/* 80BF9430-80BF943C 0001D0 000C+00 0/0 0/0 1/1 .text            getSphMng__10daGlwSph_cFv */
 _GlSph_Mng_c& daGlwSph_c::getSphMng() {
     return mSphMng;
 }
 
-/* 80BF943C-80BF94AC 0001DC 0070+00 2/2 0/0 0/0 .text            setBaseMtx__10daGlwSph_cFv */
 void daGlwSph_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mpModel->setBaseScale(scale);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80BF94AC-80BF94CC 00024C 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__10daGlwSph_cFP10fopAc_ac_c               */
 int daGlwSph_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return ((daGlwSph_c*)i_this)->CreateHeap();
 }
 
-/* 80BF94CC-80BF95D4 00026C 0108+00 1/1 0/0 0/0 .text            CreateHeap__10daGlwSph_cFv */
 int daGlwSph_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("glwSphere", 5);
     JUT_ASSERT(0xF4, modelData != NULL);
@@ -93,7 +80,6 @@ int daGlwSph_c::CreateHeap() {
     return 1;
 }
 
-/* 80BF95D4-80BF9908 000374 0334+00 1/1 0/0 0/0 .text            create__10daGlwSph_cFv */
 int daGlwSph_c::create() {
     fopAcM_ct(this, daGlwSph_c);
 
@@ -149,7 +135,6 @@ int daGlwSph_c::create() {
     return phase_state;
 }
 
-/* 80BF9B1C-80BF9BC0 0008BC 00A4+00 1/1 0/0 0/0 .text            execute__10daGlwSph_cFv */
 int daGlwSph_c::execute() {
     if (is_getted()) {
         saveGetFlag();
@@ -171,7 +156,6 @@ int daGlwSph_c::execute() {
     return 1;
 }
 
-/* 80BF9BC0-80BF9DF0 000960 0230+00 1/1 0/0 0/0 .text            actionMain__10daGlwSph_cFv */
 void daGlwSph_c::actionMain() {
     static void (daGlwSph_c::*l_func[])() = {
         &daGlwSph_c::actionWait,
@@ -215,7 +199,6 @@ void daGlwSph_c::actionMain() {
     (this->*l_func[mAction])();
 }
 
-/* 80BF9DF0-80BF9F30 000B90 0140+00 1/1 0/0 0/0 .text            effectSet__10daGlwSph_cFv */
 void daGlwSph_c::effectSet() {
     field_0x974 = current.pos - field_0x968;
 
@@ -233,7 +216,6 @@ void daGlwSph_c::effectSet() {
     field_0x968 = current.pos;
 }
 
-/* 80BF9F30-80BFA010 000CD0 00E0+00 1/1 0/0 0/0 .text            getSE__10daGlwSph_cFv */
 void daGlwSph_c::getSE() {
     static JAISoundID sSeId[] = {
         Z2SE_OBJ_STAR_GAME_HIT_1,
@@ -250,20 +232,16 @@ void daGlwSph_c::getSE() {
     Z2GetAudioMgr()->seStart(sSeId[sph_seid], &pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
-/* 80BFA010-80BFA064 000DB0 0054+00 1/1 0/0 0/0 .text            getVibe__10daGlwSph_cFv */
 void daGlwSph_c::getVibe() {
     dComIfGp_getVibration().StartShock(VIBMODE_S_POWER4, 1, cXyz(0.0f, 1.0f, 0.0f));
 }
 
-/* 80BFA064-80BFA070 000E04 000C+00 2/2 0/0 0/0 .text            actionWaitInit__10daGlwSph_cFv */
 void daGlwSph_c::actionWaitInit() {
     mAction = ACTION_WAIT_e;
 }
 
-/* 80BFA070-80BFA074 000E10 0004+00 1/0 0/0 0/0 .text            actionWait__10daGlwSph_cFv */
 void daGlwSph_c::actionWait() {}
 
-/* 80BFA074-80BFA130 000E14 00BC+00 1/1 0/0 0/0 .text            actionGetInit__10daGlwSph_cFv */
 void daGlwSph_c::actionGetInit() {
     field_0x980 = 1;
     dComIfGp_particle_setColor(0x8751, &current.pos, &tevStr, &l_prmColor, &l_envColor[mColor], 0.0f, 0xFF);
@@ -274,7 +252,6 @@ void daGlwSph_c::actionGetInit() {
     mAction = ACTION_GET_e;
 }
 
-/* 80BFA130-80BFA1E0 000ED0 00B0+00 1/0 0/0 0/0 .text            actionGet__10daGlwSph_cFv */
 void daGlwSph_c::actionGet() {
     if (field_0x980 > 0) {
         field_0x980--;
@@ -293,14 +270,12 @@ void daGlwSph_c::actionGet() {
     }
 }
 
-/* 80BFA1E0-80BFA204 000F80 0024+00 1/1 0/0 0/0 .text            actionMoveInit__10daGlwSph_cFv */
 void daGlwSph_c::actionMoveInit() {
     mIsNoMoveHome = true;
     mMoveSpeed = l_HIO.speed;
     mAction = ACTION_MOVE_e;
 }
 
-/* 80BFA204-80BFA2A4 000FA4 00A0+00 1/0 0/0 0/0 .text            actionMove__10daGlwSph_cFv */
 void daGlwSph_c::actionMove() {
     f32 dist_to_target = cLib_addCalc(&mMoveSpeed, 0.0f, 0.5f, 10.0f, 1.0f);
     current.pos += mMoveVec * mMoveSpeed;
@@ -311,7 +286,6 @@ void daGlwSph_c::actionMove() {
     }
 }
 
-/* 80BFA2A4-80BFA3EC 001044 0148+00 1/1 0/0 0/0 .text            draw__10daGlwSph_cFv */
 int daGlwSph_c::draw() {
     if (is_getted()) {
         return 1;
@@ -348,34 +322,28 @@ int daGlwSph_c::draw() {
     return 1;
 }
 
-/* 80BFA3EC-80BFA438 00118C 004C+00 1/1 0/0 0/0 .text            _delete__10daGlwSph_cFv */
 int daGlwSph_c::_delete() {
     dComIfG_resDelete(&mPhase, "glwSphere");
     mSphMng.remove(this);
     return 1;
 }
 
-/* 80BFA438-80BFA458 0011D8 0020+00 1/0 0/0 0/0 .text            daGlwSph_Draw__FP10daGlwSph_c */
 static int daGlwSph_Draw(daGlwSph_c* i_this) {
     return i_this->draw();
 }
 
-/* 80BFA458-80BFA478 0011F8 0020+00 1/0 0/0 0/0 .text            daGlwSph_Execute__FP10daGlwSph_c */
 static int daGlwSph_Execute(daGlwSph_c* i_this) {
     return i_this->execute();
 }
 
-/* 80BFA478-80BFA498 001218 0020+00 1/0 0/0 0/0 .text            daGlwSph_Delete__FP10daGlwSph_c */
 static int daGlwSph_Delete(daGlwSph_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80BFA498-80BFA4B8 001238 0020+00 1/0 0/0 0/0 .text            daGlwSph_Create__FP10fopAc_ac_c */
 static int daGlwSph_Create(fopAc_ac_c* i_this) {
     return ((daGlwSph_c*)i_this)->create();
 }
 
-/* 80BFA4B8-80BFA4DC 001258 0024+00 1/1 0/0 0/0 .text            _clrLstBuf__12_GlSph_Mng_cFv */
 void _GlSph_Mng_c::_clrLstBuf() {
     _GlSph_LstInfo_c* info = mListBuf;
 
@@ -385,8 +353,6 @@ void _GlSph_Mng_c::_clrLstBuf() {
     }
 }
 
-/* 80BFA4DC-80BFA528 00127C 004C+00 1/1 0/0 0/0 .text            entry__12_GlSph_Mng_cFP10daGlwSph_c
- */
 int _GlSph_Mng_c::entry(daGlwSph_c* i_sph) {
     _GlSph_LstInfo_c* info = mListBuf;
 
@@ -402,7 +368,6 @@ int _GlSph_Mng_c::entry(daGlwSph_c* i_sph) {
     return 0;
 }
 
-/* 80BFA528-80BFA55C 0012C8 0034+00 1/1 0/0 0/0 .text remove__12_GlSph_Mng_cFP10daGlwSph_c */
 void _GlSph_Mng_c::remove(daGlwSph_c* i_sph) {
     _GlSph_LstInfo_c* info = mListBuf;
 
@@ -416,7 +381,6 @@ void _GlSph_Mng_c::remove(daGlwSph_c* i_sph) {
     }
 }
 
-/* 80BFA55C-80BFA5C4 0012FC 0068+00 0/0 0/0 1/1 .text            _setting_main__12_GlSph_Mng_cFv */
 int _GlSph_Mng_c::_setting_main() {
     _GlSph_LstInfo_c* info = mListBuf;
 
@@ -434,8 +398,6 @@ int _GlSph_Mng_c::_setting_main() {
     return 1;
 }
 
-/* 80BFA5C4-80BFA60C 001364 0048+00 0/0 0/0 1/1 .text            _chkAllGet_main__12_GlSph_Mng_cFv
- */
 BOOL _GlSph_Mng_c::_chkAllGet_main() {
     _GlSph_LstInfo_c* info = mListBuf;
 
@@ -459,7 +421,6 @@ u16 _GlSph_Mng_c::mSphSe;
 /* 80BFAFEA 0002+00 data_80BFAFEA mSeClrTmr__12_GlSph_Mng_c */
 s16 _GlSph_Mng_c::mSeClrTmr;
 
-/* 80BFA60C-80BFA6D8 0013AC 00CC+00 0/0 0/0 1/1 .text            SphSeProc__12_GlSph_Mng_cFv */
 void _GlSph_Mng_c::SphSeProc() {
     if (mSeClrTmr > 0) {
         mSeClrTmr--;
@@ -482,17 +443,14 @@ void _GlSph_Mng_c::SphSeProc() {
     }
 }
 
-/* 80BFA6D8-80BFA6E8 001478 0010+00 1/1 0/0 0/0 .text            clrSphSe__12_GlSph_Mng_cFv */
 void _GlSph_Mng_c::clrSphSe() {
     mSphSe = 0;
 }
 
-/* 80BFA6E8-80BFA6F8 001488 0010+00 1/1 0/0 0/0 .text            getSphSe__12_GlSph_Mng_cFv */
 u16 _GlSph_Mng_c::getSphSe() {
     return mSphSe;
 }
 
-/* 80BFA6F8-80BFA724 001498 002C+00 1/1 0/0 0/0 .text            incSphSe__12_GlSph_Mng_cFv */
 void _GlSph_Mng_c::incSphSe() {
     mSphSe++;
     if (mSphSe > 4) {
@@ -500,14 +458,12 @@ void _GlSph_Mng_c::incSphSe() {
     }
 }
 
-/* 80BFAAC0-80BFAAE0 -00001 0020+00 1/0 0/0 0/0 .data            l_daGlwSph_Method */
 static actor_method_class l_daGlwSph_Method = {
     (process_method_func)daGlwSph_Create,  (process_method_func)daGlwSph_Delete,
     (process_method_func)daGlwSph_Execute, (process_method_func)NULL,
     (process_method_func)daGlwSph_Draw,
 };
 
-/* 80BFAAE0-80BFAB10 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_glowSphere */
 extern actor_process_profile_definition g_profile_Obj_glowSphere = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

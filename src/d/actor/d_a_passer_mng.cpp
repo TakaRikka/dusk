@@ -10,12 +10,10 @@
 #include "d/d_path.h"
 #include "d/d_stage.h"
 
-/* 80D45718-80D45738 000078 0020+00 1/0 0/0 0/0 .text daPasserMng_Execute__FP13daPasserMng_c */
 static int daPasserMng_Execute(daPasserMng_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D45738-80D4597C 000098 0244+00 1/1 0/0 0/0 .text            execute__13daPasserMng_cFv */
 int daPasserMng_c::execute() {
     int time = getTime();
     if ((field_0x596 != 0 || (time >= startTime && time < endTime)) &&
@@ -40,33 +38,28 @@ int daPasserMng_c::execute() {
     return 1;
 }
 
-/* 80D46C20-80D46C40 000000 0020+00 1/0 0/0 0/0 .rodata          groupA */
 static u8 const groupA[32] = {
     0x07, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x04, 0x50, 0x00, 0x00, 0x06, 0x01, 0x00, 0x00, 0x07,
     0x01, 0x00, 0x00, 0x05, 0x01, 0x00, 0x00, 0x1B, 0x01, 0x00, 0x00, 0x1C, 0x00, 0x00, 0x00, 0x1D,
 };
 
-/* 80D46C40-80D46C64 000020 0024+00 1/0 0/0 0/0 .rodata          groupB */
 static u8 const groupB[36] = {
     0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x10, 0x10, 0x00, 0x00, 0x11,
     0x11, 0x00, 0x00, 0x12, 0x10, 0x00, 0x00, 0x13, 0x40, 0x00, 0x00, 0x09,
     0x40, 0x00, 0x00, 0x08, 0x50, 0x00, 0x00, 0x0A, 0x01, 0x00, 0x00, 0x0B,
 };
 
-/* 80D46C64-80D46C88 000044 0024+00 1/0 0/0 0/0 .rodata          groupC */
 static u8 const groupC[36] = {
     0x08, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x01,
     0x50, 0x00, 0x00, 0x02, 0x01, 0x00, 0x00, 0x03, 0x21, 0x00, 0x00, 0x17,
     0x10, 0x00, 0x00, 0x18, 0x01, 0x00, 0x00, 0x19, 0x10, 0x00, 0x00, 0x1A,
 };
 
-/* 80D46C88-80D46CA8 000068 0020+00 1/0 0/0 0/0 .rodata          groupD */
 static u8 const groupD[32] = {
     0x07, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x14, 0x21, 0x00, 0x00, 0x15, 0x00, 0x00, 0x00, 0x16,
     0x11, 0x00, 0x00, 0x0C, 0x50, 0x00, 0x00, 0x0E, 0x40, 0x00, 0x00, 0x0F, 0x01, 0x00, 0x00, 0x0D,
 };
 
-/* 80D46CB0-80D46CC0 -00001 0010+00 1/1 0/0 0/0 .data            mGroupTbl__13daPasserMng_c */
 daPasserMng_c::Group* daPasserMng_c::mGroupTbl[4] = {
     (Group*)groupA,
     (Group*)groupB,
@@ -74,8 +67,6 @@ daPasserMng_c::Group* daPasserMng_c::mGroupTbl[4] = {
     (Group*)groupD,
 };
 
-/* 80D4597C-80D45E14 0002DC 0498+00 3/2 0/0 0/0 .text            getPasserParam__13daPasserMng_cFv
- */
 int daPasserMng_c::getPasserParam() {
     u32 param = (getPathID() & 0xff) << 16;
     u8 groupNo = getGroupNo();
@@ -120,7 +111,6 @@ int daPasserMng_c::getPasserParam() {
     return param;
 }
 
-/* 80D45E14-80D466FC 000774 08E8+00 2/1 0/0 0/0 .text getLuggageParamHigh__13daPasserMng_cFUl */
 int daPasserMng_c::getLuggageParamHigh(u32 param_1) {
     int paramLow;
 
@@ -506,33 +496,27 @@ int daPasserMng_c::getLuggageParamHigh(u32 param_1) {
     return paramLow << 8;
 }
 
-/* 80D466FC-80D46704 00105C 0008+00 1/0 0/0 0/0 .text daPasserMng_IsDelete__FP13daPasserMng_c */
 static int daPasserMng_IsDelete(daPasserMng_c* i_this) {
     return 1;
 }
 
-/* 80D46704-80D46748 001064 0044+00 1/0 0/0 0/0 .text daPasserMng_Delete__FP13daPasserMng_c */
 static int daPasserMng_Delete(daPasserMng_c* i_this) {
     fopAcM_GetID(i_this);
     i_this->~daPasserMng_c();
     return 1;
 }
 
-/* 80D46748-80D46768 0010A8 0020+00 1/0 0/0 0/0 .text            daPasserMng_Create__FP10fopAc_ac_c
- */
 static int daPasserMng_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return static_cast<daPasserMng_c*>(i_this)->create();
 }
 
-/* 80D46768-80D467C0 0010C8 0058+00 1/1 0/0 0/0 .text            create__13daPasserMng_cFv */
 int daPasserMng_c::create() {
     fopAcM_ct(this, daPasserMng_c);
     create_init();
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D467C0-80D46B9C 001120 03DC+00 1/1 0/0 0/0 .text            create_init__13daPasserMng_cFv */
 void daPasserMng_c::create_init() {
     npcId = getDetailLevel() == 0 ? PROC_NPC_PASSER : PROC_NPC_PASSER2;
     mPath = dPath_GetRoomPath(getPathID(), fopAcM_GetHomeRoomNo(this));
@@ -610,8 +594,6 @@ void daPasserMng_c::create_init() {
     }
 }
 
-/* ############################################################################################## */
-/* 80D46DB0-80D46DD0 -00001 0020+00 1/0 0/0 0/0 .data            l_daPasserMng_Method */
 static actor_method_class l_daPasserMng_Method = {
     (process_method_func)daPasserMng_Create,
     (process_method_func)daPasserMng_Delete,
@@ -619,7 +601,6 @@ static actor_method_class l_daPasserMng_Method = {
     (process_method_func)daPasserMng_IsDelete,
 };
 
-/* 80D46DD0-80D46E00 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_PASSER_MNG */
 extern actor_process_profile_definition g_profile_PASSER_MNG = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

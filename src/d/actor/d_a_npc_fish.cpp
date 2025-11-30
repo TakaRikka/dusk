@@ -5,29 +5,23 @@
 #include "d/actor/d_a_npc_fish.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
-#include "dol2asm.h"
 
-/* 80542178-80542180 000078 0008+00 1/0 0/0 0/0 .text daNpc_Fish_Draw__FP14npc_fish_class */
 static int daNpc_Fish_Draw(npc_fish_class* i_this) {
     return 1;
 }
 
-/* 80542180-80542188 000080 0008+00 1/0 0/0 0/0 .text daNpc_Fish_Execute__FP14npc_fish_class */
 static int daNpc_Fish_Execute(npc_fish_class* i_this) {
     return 1;
 }
 
-/* 80542188-80542190 000088 0008+00 1/0 0/0 0/0 .text daNpc_Fish_IsDelete__FP14npc_fish_class */
 static int daNpc_Fish_IsDelete(npc_fish_class* i_this) {
     return 1;
 }
 
-/* 80542190-80542198 000090 0008+00 1/0 0/0 0/0 .text daNpc_Fish_Delete__FP14npc_fish_class */
 static int daNpc_Fish_Delete(npc_fish_class* i_this) {
     return 1;
 }
 
-/* 80542198-80542254 000098 00BC+00 1/1 0/0 0/0 .text fish_set__FP10fopAc_ac_cP11fish_data_s */
 static void fish_set(fopAc_ac_c* i_this, fish_data_s* data) {
     dScnKy_env_light_c* envLight = dKy_getEnvlight();
     cXyz pos;
@@ -45,7 +39,6 @@ static void fish_set(fopAc_ac_c* i_this, fish_data_s* data) {
     }
 }
 
-/* 80542504-805428D8 000020 03D4+00 0/1 0/0 0/0 .data            fish_d127_S */
 static fish_data_s fish_d127_S[49] = {
     {20, {0.f, 0.f, 0.f}, 0},         {22, {0.f, 0.f, 0.f}, 0},
     {21, {0.f, 0.f, 0.f}, 0},         {24, {0.f, 0.f, 0.f}, 0},
@@ -74,7 +67,6 @@ static fish_data_s fish_d127_S[49] = {
     {-1, {0.f, 0.f, 0.f}, 0},
 };
 
-/* 805428D8-80542D38 0003F4 0460+00 0/1 0/0 0/0 .data            fish_d127 */
 static fish_data_s fish_d127[56] = {
     {0, {-4605.0f, -80.f, 3526.f}, 45},     {0, {-5300.0f, -80.0f, 2875.0f}, 46},
     {0, {-7163.0f, -80.0f, 4140.0f}, 47},   {0, {-8161.0f, -80.0f, 4235.0f}, 44},
@@ -106,14 +98,12 @@ static fish_data_s fish_d127[56] = {
     {0, {-2689.0f, -901.0f, -126.0f}, 53},  {-1, {0.0f, 0.0f, 0.0f}, 0}};
 
 
-/* 80542D38-80542DC8 000854 0090+00 0/1 0/0 0/0 .data            lf_pos */
 static fish_pos lf_pos[12] = {
     {10, -2602.f, 5000.f}, {10, -863.f, 5095.f},   {10, 566.f, 5015.f},   {10, 3594.f, 4732.f},
     {10, 6020.f, 426.f},   {10, 2825.f, 77.f},     {10, 3396.f, 5024.f},  {10, 1962.f, -5789.f},
     {16, -1500.f, 665.f},  {16, -5952.f, -2760.f}, {16, -7265.f, -700.f}, {16, -8929.f, -630.f},
 };
 
-/* 80542254-805424B8 000154 0264+00 1/0 0/0 0/0 .text daNpc_Fish_Create__FP10fopAc_ac_c */
 static int daNpc_Fish_Create(fopAc_ac_c* i_this) {
     cXyz pos;
     fopAcM_ct(i_this, npc_fish_class);
@@ -155,15 +145,12 @@ static int daNpc_Fish_Create(fopAc_ac_c* i_this) {
     return 5;
 }
 
-/* ############################################################################################## */
-/* 80542DC8-80542DE8 -00001 0020+00 1/0 0/0 0/0 .data            l_daNpc_Fish_Method */
 static actor_method_class l_daNpc_Fish_Method = {
     (process_method_func)daNpc_Fish_Create,  (process_method_func)daNpc_Fish_Delete,
     (process_method_func)daNpc_Fish_Execute, (process_method_func)daNpc_Fish_IsDelete,
     (process_method_func)daNpc_Fish_Draw,
 };
 
-/* 80542DE8-80542E18 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_FISH */
 extern actor_process_profile_definition g_profile_NPC_FISH = {
     fpcLy_CURRENT_e,
     7,

@@ -14,8 +14,8 @@
 
 class daSyRock_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80D022AC */ daSyRock_HIO_c();
-    /* 80D03C44 */ ~daSyRock_HIO_c() {}
+    daSyRock_HIO_c();
+    ~daSyRock_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -44,13 +44,10 @@ public:
 
 typedef void (daSyRock_c::*actionFunc)();
 
-/* 80D0426C-80D042A0 000014 0034+00 8/8 0/0 0/0 .bss             l_HIO */
 static daSyRock_HIO_c l_HIO;
 
-/* 80D0405C-80D040A0 000020 0044+00 2/2 0/0 0/0 .data            mCcDCyl__10daSyRock_c */
 dCcD_SrcCyl daSyRock_c::mCcDCyl = {mCcDObjInfo};
 
-/* 80D022AC-80D02334 0000EC 0088+00 1/1 0/0 0/0 .text            __ct__14daSyRock_HIO_cFv */
 daSyRock_HIO_c::daSyRock_HIO_c() {
     mShakeAmplitude = 450.0f;
     mShakeXOscillationAngle = 90.0f;
@@ -67,7 +64,6 @@ daSyRock_HIO_c::daSyRock_HIO_c() {
     mMaxWaterPillarRange = 5.0f;
 }
 
-/* 80D0237C-80D02454 0001BC 00D8+00 2/2 0/0 0/0 .text            setBaseMtx__10daSyRock_cFv */
 void daSyRock_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(0, shape_angle.y, shape_angle.z);
@@ -81,7 +77,6 @@ void daSyRock_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80D02454-80D02584 000294 0130+00 1/0 0/0 0/0 .text            CreateHeap__10daSyRock_cFv */
 int daSyRock_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("syourock", 4));
     JUT_ASSERT(271, modelData != NULL);
@@ -114,7 +109,6 @@ dCcD_SrcGObjInf const daSyRock_c::mCcDObjInfo = {
     {},  // mGObjCo
 };
 
-/* 80D02584-80D02930 0003C4 03AC+00 1/1 0/0 0/0 .text            create__10daSyRock_cFv */
 cPhs__Step daSyRock_c::create() {
     fopAcM_ct(this, daSyRock_c);
 
@@ -183,7 +177,6 @@ cPhs__Step daSyRock_c::create() {
     return requestedPhaseProcess;
 }
 
-/* 80D02AFC-80D02BE0 00093C 00E4+00 1/1 0/0 0/0 .text            setFallStat__10daSyRock_cFv */
 void daSyRock_c::setFallStat() {
     mpWaterPillar = static_cast<daWtPillar_c*>(fopAcIt_Judge(searchWaterPillar, this));
     if(mpWaterPillar) {
@@ -209,7 +202,6 @@ void daSyRock_c::setFallStat() {
     }
 }
 
-/* 80D02BE0-80D02C54 000A20 0074+00 1/0 0/0 0/0 .text            Execute__10daSyRock_cFPPA3_A4_f */
 int daSyRock_c::Execute(Mtx** i_mtx) {
     eventUpdate();
     move();
@@ -222,7 +214,6 @@ int daSyRock_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80D02C54-80D02E70 000A94 021C+00 1/1 0/0 0/0 .text            move__10daSyRock_cFv */
 void daSyRock_c::move() {
     static actionFunc mode_proc[] = {
     &daSyRock_c::modeWait, &daSyRock_c::modeDropInit,
@@ -250,12 +241,10 @@ void daSyRock_c::move() {
     dComIfG_Ccsp()->Set(&mUnbrokenCylinderCollider);
 }
 
-/* 80D02E70-80D02E7C 000CB0 000C+00 1/1 0/0 0/0 .text            init_modeWait__10daSyRock_cFv */
 void daSyRock_c::init_modeWait() {
     mMode = MODE_WAIT;
 }
 
-/* 80D02E7C-80D02F88 000CBC 010C+00 1/0 0/0 0/0 .text            modeWait__10daSyRock_cFv */
 void daSyRock_c::modeWait() {
     if(mDropAutomaticallySwitchNo != 0xFF && dComIfGs_isSwitch(mDropAutomaticallySwitchNo, fopAcM_GetHomeRoomNo(this))) {
         field_0x779 = 0;
@@ -278,7 +267,6 @@ void daSyRock_c::modeWait() {
     }
 }
 
-/* 80D02F88-80D02FB8 000DC8 0030+00 2/1 0/0 0/0 .text            eventStart__10daSyRock_cFv */
 bool daSyRock_c::eventStart() {
     // field_0x779 is always 0 when eventStart() is called (see modeWait())
     if(!field_0x779)
@@ -287,8 +275,6 @@ bool daSyRock_c::eventStart() {
     return true;
 }
 
-/* 80D02FB8-80D03070 000DF8 00B8+00 1/1 0/0 0/0 .text            init_modeDropInit__10daSyRock_cFv
- */
 void daSyRock_c::init_modeDropInit() {
     fopAcM_seStartCurrent(this, Z2SE_OBJ_STALAC_BREAK, 0);
 
@@ -302,7 +288,6 @@ void daSyRock_c::init_modeDropInit() {
     mMode = MODE_DROP_INIT;
 }
 
-/* 80D03070-80D030A8 000EB0 0038+00 1/0 0/0 0/0 .text            modeDropInit__10daSyRock_cFv */
 void daSyRock_c::modeDropInit() {
     if(mWaitFrames)
         mWaitFrames--;
@@ -310,7 +295,6 @@ void daSyRock_c::modeDropInit() {
         init_modeDrop();
 }
 
-/* 80D030A8-80D03250 000EE8 01A8+00 3/3 0/0 0/0 .text searchWaterPillar__10daSyRock_cFPvPv */
 void* daSyRock_c::searchWaterPillar(void* i_proc, void* i_this) {
     daSyRock_c* const syRock = static_cast<daSyRock_c*>(i_this);
     daWtPillar_c* const wtPillar = static_cast<daWtPillar_c*>(i_proc);
@@ -327,7 +311,6 @@ void* daSyRock_c::searchWaterPillar(void* i_proc, void* i_this) {
     return NULL;
 }
 
-/* 80D03250-80D03384 001090 0134+00 1/1 0/0 0/0 .text            init_modeDrop__10daSyRock_cFv */
 void daSyRock_c::init_modeDrop() {
     gravity = -l_HIO.mFallAcceleration;
     maxFallSpeed = -l_HIO.mMaxFallSpeed;
@@ -348,14 +331,12 @@ void daSyRock_c::init_modeDrop() {
     mMode = MODE_DROP;
 }
 
-/* 80D03384-80D033D0 0011C4 004C+00 1/0 0/0 0/0 .text            modeDrop__10daSyRock_cFv */
 void daSyRock_c::modeDrop() {
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     mAcch.CrrPos(dComIfG_Bgsp());
     bgCheck();
 }
 
-/* 80D033D0-80D03440 001210 0070+00 1/1 0/0 0/0 .text            init_modeSink__10daSyRock_cFv */
 void daSyRock_c::init_modeSink() {
     gravity = -l_HIO.mFallAcceleration + l_HIO.mFallWaterBouyancy;
     speed.y = cLib_minMaxLimit(speed.y, -15.0f, 13.0f);
@@ -366,7 +347,6 @@ void daSyRock_c::init_modeSink() {
     mMode = MODE_SINK;
 }
 
-/* 80D03440-80D034E8 001280 00A8+00 1/0 0/0 0/0 .text            modeSink__10daSyRock_cFv */
 void daSyRock_c::modeSink() {
     if(!mpWaterPillar)
         cLib_addCalcAngleS(&shape_angle.z, 0x4000, 1, 0x444, 1);
@@ -379,7 +359,6 @@ void daSyRock_c::modeSink() {
     bgCheck();
 }
 
-/* 80D034E8-80D035F8 001328 0110+00 1/1 0/0 0/0 .text            init_modeMove__10daSyRock_cFv */
 void daSyRock_c::init_modeMove() {
     fopAcM_seStartCurrent(this, Z2SE_OBJ_STALAC_LAND_WATER, 0);
 
@@ -403,7 +382,6 @@ void daSyRock_c::init_modeMove() {
     mMode = MODE_MOVE;
 }
 
-/* 80D035F8-80D036B8 001438 00C0+00 1/0 0/0 0/0 .text            modeMove__10daSyRock_cFv */
 void daSyRock_c::modeMove() {
     mpWaterPillar->onRockFlag();
 
@@ -422,12 +400,10 @@ void daSyRock_c::modeMove() {
     }
 }
 
-/* 80D036B8-80D036DC 0014F8 0024+00 1/1 0/0 0/0 .text            chkWaterLineIn__10daSyRock_cFv */
 BOOL daSyRock_c::chkWaterLineIn() {
     return mAcch.m_wtr.GetHeight() > current.pos.y + 150.0f;
 }
 
-/* 80D036DC-80D03984 00151C 02A8+00 2/2 0/0 0/0 .text            bgCheck__10daSyRock_cFv */
 void daSyRock_c::bgCheck() {
     // Note stack ordering issues arise if fopAcM_seStartCurrent() is used instead of mDoAud_seStart()
     const u32 hitGround = mAcch.ChkGroundHit() ? TRUE : FALSE;
@@ -479,7 +455,6 @@ void daSyRock_c::bgCheck() {
     }
 }
 
-/* 80D03984-80D03A48 0017C4 00C4+00 1/1 0/0 0/0 .text            init_modeDropEnd__10daSyRock_cFv */
 void daSyRock_c::init_modeDropEnd() {
     if(!mAcch.ChkWaterIn()) {
         dComIfGp_getVibration().StartShock(l_HIO.mShockStrength, 0xF, cXyz(0.0f, 1.0f, 0.0f));
@@ -496,12 +471,10 @@ void daSyRock_c::init_modeDropEnd() {
     mMode = MODE_DROP_END;
 }
 
-/* 80D03A48-80D03A4C 001888 0004+00 1/0 0/0 0/0 .text            modeDropEnd__10daSyRock_cFv */
 void daSyRock_c::modeDropEnd() {
     /* empty function */
 }
 
-/* 80D03A4C-80D03B08 00188C 00BC+00 1/0 0/0 0/0 .text            Draw__10daSyRock_cFv */
 int daSyRock_c::Draw() {
     g_env_light.settingTevStruct(0x10, fopAcM_GetPosition_p(this), &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModels[mIsUnbroken], &tevStr);
@@ -513,7 +486,6 @@ int daSyRock_c::Draw() {
     return 1;
 }
 
-/* 80D03B08-80D03B70 001948 0068+00 1/0 0/0 0/0 .text            Delete__10daSyRock_cFv */
 int daSyRock_c::Delete() {
     dComIfG_resDelete(&mPhase, "syourock");
 
@@ -523,28 +495,23 @@ int daSyRock_c::Delete() {
     return 1;
 }
 
-/* 80D03B70-80D03B9C 0019B0 002C+00 1/0 0/0 0/0 .text            daSyRock_Draw__FP10daSyRock_c */
 static int daSyRock_Draw(daSyRock_c* i_this) {
     return i_this->Draw();
     return 1;
 }
 
-/* 80D03B9C-80D03BBC 0019DC 0020+00 1/0 0/0 0/0 .text            daSyRock_Execute__FP10daSyRock_c */
 static int daSyRock_Execute(daSyRock_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D03BBC-80D03BDC 0019FC 0020+00 1/0 0/0 0/0 .text            daSyRock_Delete__FP10daSyRock_c */
 static int daSyRock_Delete(daSyRock_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D03BDC-80D03BFC 001A1C 0020+00 1/0 0/0 0/0 .text            daSyRock_Create__FP10fopAc_ac_c */
 static int daSyRock_Create(fopAc_ac_c* i_this) {
     return static_cast<daSyRock_c*>(i_this)->create();
 }
 
-/* 80D04130-80D04150 -00001 0020+00 1/0 0/0 0/0 .data            l_daSyRock_Method */
 static actor_method_class l_daSyRock_Method = {
     (process_method_func)daSyRock_Create,
     (process_method_func)daSyRock_Delete,
@@ -553,7 +520,6 @@ static actor_method_class l_daSyRock_Method = {
     (process_method_func)daSyRock_Draw,
 };
 
-/* 80D04150-80D04180 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_SyRock */
 extern actor_process_profile_definition g_profile_Obj_SyRock = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

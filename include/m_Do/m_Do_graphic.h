@@ -23,9 +23,9 @@ public:
     class bloom_c {
     public:
         bloom_c() { m_buffer = NULL; }
-        /* 80009544 */ void create();
-        /* 800095F8 */ void remove();
-        /* 80009650 */ void draw();
+        void create();
+        void remove();
+        void draw();
 
         u8 getEnable() { return mEnable; }
         void setEnable(u8 i_enable) { mEnable = i_enable; }
@@ -66,17 +66,17 @@ public:
     static void entryBaseCsr(csr_c*);
     #endif
 
-    /* 80007E44 */ static void create();
-    /* 80007F90 */ static void beginRender();
-    /* 800080D0 */ static void fadeOut(f32);
-    /* 80007FD8 */ static void fadeOut(f32, _GXColor&);
-    /* 807DFAB4 */ static void fadeIn(f32 fadeSpeed, _GXColor& fadeColor) {
+    static void create();
+    static void beginRender();
+    static void fadeOut(f32);
+    static void fadeOut(f32, _GXColor&);
+    static void fadeIn(f32 fadeSpeed, _GXColor& fadeColor) {
         fadeOut(-fadeSpeed, fadeColor);
     }
-    /* 80008028 */ static void fadeOut_f(f32, _GXColor&);
-    /* 800080A0 */ static void onBlure(const Mtx);
-    /* 80008078 */ static void onBlure();
-    /* 80008330 */ static void calcFade();
+    static void fadeOut_f(f32, _GXColor&);
+    static void onBlure(const Mtx);
+    static void onBlure();
+    static void calcFade();
 
     static void fadeIn(f32 fadeSpeed) {
         fadeOut(-fadeSpeed);

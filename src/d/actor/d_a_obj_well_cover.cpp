@@ -9,13 +9,11 @@
 #include "d/d_procname.h"
 #include "d/actor/d_a_player.h"
 
-/* 80D36298-80D362D4 000078 003C+00 1/1 0/0 0/0 .text            initBaseMtx__13daObjWCover_cFv */
 void daObjWCover_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80D362D4-80D36348 0000B4 0074+00 2/2 0/0 0/0 .text            setBaseMtx__13daObjWCover_cFv */
 void daObjWCover_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -23,7 +21,6 @@ void daObjWCover_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80D36348-80D36394 000128 004C+00 1/0 0/0 0/0 .text            Create__13daObjWCover_cFv */
 int daObjWCover_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -31,10 +28,8 @@ int daObjWCover_c::Create() {
     return 1;
 }
 
-/* 80D36A6C-80D36A70 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "H_Idohuta";
 
-/* 80D36394-80D36404 000174 0070+00 1/0 0/0 0/0 .text            CreateHeap__13daObjWCover_cFv */
 int daObjWCover_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, 4));
     JUT_ASSERT(194, modelData != NULL);
@@ -42,7 +37,6 @@ int daObjWCover_c::CreateHeap() {
     return mpModel != NULL ? 1 : 0;
 }
 
-/* 80D36404-80D364E0 0001E4 00DC+00 1/1 0/0 0/0 .text            create__13daObjWCover_cFv */
 int daObjWCover_c::create() {
     fopAcM_ct(this, daObjWCover_c);
     if (fopAcM_isSwitch(this, getSwNo())) {
@@ -60,8 +54,6 @@ int daObjWCover_c::create() {
     return rv;
 }
 
-/* 80D364E0-80D3652C 0002C0 004C+00 1/0 0/0 0/0 .text            Execute__13daObjWCover_cFPPA3_A4_f
- */
 int daObjWCover_c::Execute(Mtx** i_mtx) {
     action();
     *i_mtx = &mBgMtx;
@@ -71,7 +63,6 @@ int daObjWCover_c::Execute(Mtx** i_mtx) {
 
 typedef void (daObjWCover_c::*modeFunc)();
 
-/* 80D3652C-80D365B8 00030C 008C+00 1/1 0/0 0/0 .text            action__13daObjWCover_cFv */
 void daObjWCover_c::action() {
     static modeFunc l_func[] = {
         &daObjWCover_c::modeWait,
@@ -81,7 +72,6 @@ void daObjWCover_c::action() {
     (this->*l_func[field_0x5b0])();
 }
 
-/* 80D365B8-80D36790 000398 01D8+00 1/0 0/0 0/0 .text            modeWait__13daObjWCover_cFv */
 void daObjWCover_c::modeWait() {
     cXyz acStack_48(150.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::transS(current.pos);
@@ -95,15 +85,12 @@ void daObjWCover_c::modeWait() {
     }
 }
 
-/* 80D36A34-80D36A3C 000028 0006+02 0/1 0/0 0/0 .rodata          particle_id$3806 */
 static u16 const particle_id[3] = {
     0x82AB,
     0x82AC,
     0x82AD,
 };
 
-/* 80D36790-80D3689C 000570 010C+00 1/1 0/0 0/0 .text            init_modeBreak__13daObjWCover_cFv
- */
 void daObjWCover_c::init_modeBreak() {
     fopAcM_onSwitch(this, getSwNo());
     cXyz acStack_28(150.0f, 0.0f, 0.0f);
@@ -117,12 +104,10 @@ void daObjWCover_c::init_modeBreak() {
     field_0x5b0 = 1;
 }
 
-/* 80D3689C-80D368A0 00067C 0004+00 1/0 0/0 0/0 .text            modeBreak__13daObjWCover_cFv */
 void daObjWCover_c::modeBreak() {
     /* empty function */
 }
 
-/* 80D368A0-80D36944 000680 00A4+00 1/0 0/0 0/0 .text            Draw__13daObjWCover_cFv */
 int daObjWCover_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -132,35 +117,27 @@ int daObjWCover_c::Draw() {
     return 1;
 }
 
-/* 80D36944-80D36978 000724 0034+00 1/0 0/0 0/0 .text            Delete__13daObjWCover_cFv */
 int daObjWCover_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
     return 1;
 }
 
-/* 80D36978-80D369A4 000758 002C+00 1/0 0/0 0/0 .text            daObjWCover_Draw__FP13daObjWCover_c
- */
 static int daObjWCover_Draw(daObjWCover_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80D369A4-80D369C4 000784 0020+00 1/0 0/0 0/0 .text daObjWCover_Execute__FP13daObjWCover_c */
 static int daObjWCover_Execute(daObjWCover_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D369C4-80D369E4 0007A4 0020+00 1/0 0/0 0/0 .text daObjWCover_Delete__FP13daObjWCover_c */
 static int daObjWCover_Delete(daObjWCover_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D369E4-80D36A04 0007C4 0020+00 1/0 0/0 0/0 .text            daObjWCover_Create__FP10fopAc_ac_c
- */
 static int daObjWCover_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjWCover_c*>(i_this)->create();
 }
 
-/* 80D36AA0-80D36AC0 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjWCover_Method */
 static actor_method_class l_daObjWCover_Method = {
     (process_method_func)daObjWCover_Create,
     (process_method_func)daObjWCover_Delete,

@@ -54,7 +54,7 @@
 
 class daNpc_seiD_Param_c {
     public:
-        /* 80AC91B0 */ virtual ~daNpc_seiD_Param_c() {};
+        virtual ~daNpc_seiD_Param_c() {};
 
         static const daNpc_seiD_HIOParam m;
 };
@@ -84,33 +84,33 @@ public:
         TYPE_1,
     };
 
-    /* 80AC968C */ ~daNpc_seiD_c();
-    /* 80AC9728 */ int create();
-    /* 80AC9968 */ int CreateHeap();
-    /* 80AC9AC0 */ int Delete();
-    /* 80AC9AF4 */ int Execute();
-    /* 80AC9B14 */ int Draw();
-    /* 80AC9BA8 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AC9BC8 */ u8 getType();
-    /* 80AC9BE8 */ u32 getFlowNodeNo();
-    /* 80AC9C04 */ int isDelete();
-    /* 80AC9C0C */ void reset();
-    /* 80AC9D5C */ void setParam();
-    /* 80AC9E88 */ void srchActors();
-    /* 80AC9E8C */ BOOL evtTalk();
-    /* 80AC9F8C */ BOOL evtCutProc();
-    /* 80ACA054 */ void action();
-    /* 80ACA0DC */ void beforeMove();
-    /* 80ACA15C */ void setAttnPos();
-    /* 80ACA1B8 */ int drawDbgInfo();
-    /* 80ACA1C0 */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80ACA358 */ int selectAction();
-    /* 80ACA3A0 */ int chkAction(int (daNpc_seiD_c::*)(void*));
-    /* 80ACA3CC */ int setAction(int (daNpc_seiD_c::*)(void*));
-    /* 80ACA474 */ void ctrlWaitAnm();
-    /* 80ACA478 */ int wait(void*);
-    /* 80ACA4A4 */ int talk(void*);
-    /* 80ACB2AC */ daNpc_seiD_c(daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData, daNpcT_motionAnmData_c const* i_motionAnmData,
+    ~daNpc_seiD_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    u8 getType();
+    u32 getFlowNodeNo();
+    int isDelete();
+    void reset();
+    void setParam();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    int drawDbgInfo();
+    bool afterSetMotionAnm(int, int, f32, int);
+    int selectAction();
+    int chkAction(int (daNpc_seiD_c::*)(void*));
+    int setAction(int (daNpc_seiD_c::*)(void*));
+    void ctrlWaitAnm();
+    int wait(void*);
+    int talk(void*);
+    daNpc_seiD_c(daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData, daNpcT_motionAnmData_c const* i_motionAnmData,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData, int i_faceMotionStepNum,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData, int i_motionStepNum,
                                 daNpcT_evtData_c const* i_evtData, char** i_arcNames)         

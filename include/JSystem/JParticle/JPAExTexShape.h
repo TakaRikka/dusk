@@ -27,7 +27,7 @@ struct JPAExTexShapeData {
  */
 class JPAExTexShape {
 public:
-    /* 8027B13C */ JPAExTexShape(u8 const*);
+    JPAExTexShape(u8 const*);
 
     const f32* getIndTexMtx() const { return &mpData->mIndTexMtx[0][0]; }
     s8 getExpScale() const { return mpData->mExpScale; }

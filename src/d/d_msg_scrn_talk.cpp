@@ -19,7 +19,6 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 
-/* 80246FF0-80247A90 241930 0AA0+00 0/0 1/1 0/0 .text __ct__14dMsgScrnTalk_cFUcUcP10JKRExpHeap */
 dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     if (param_3 != NULL) {
         field_0xe4 = param_3;
@@ -244,7 +243,6 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     }
 }
 
-/* 80247A90-80247D34 2423D0 02A4+00 1/0 0/0 0/0 .text            __dt__14dMsgScrnTalk_cFv */
 dMsgScrnTalk_c::~dMsgScrnTalk_c() {
     delete mpScreen;
     mpScreen = NULL;
@@ -285,7 +283,6 @@ dMsgScrnTalk_c::~dMsgScrnTalk_c() {
     dComIfGp_getMsgCommonArchive()->removeResourceAll();
 }
 
-/* 80247D34-80247E4C 242674 0118+00 1/0 0/0 0/0 .text            exec__14dMsgScrnTalk_cFv */
 void dMsgScrnTalk_c::exec() {
     if (isTalkNow()) {
         fukiAlpha(1.0f);
@@ -304,7 +301,6 @@ void dMsgScrnTalk_c::exec() {
     }
 }
 
-/* 80247E4C-802480F0 24278C 02A4+00 1/0 0/0 0/0 .text            drawSelf__14dMsgScrnTalk_cFv */
 void dMsgScrnTalk_c::drawSelf() {
     J2DGrafContext* grafContext[1];
     grafContext[0] = dComIfGp_getCurrentGrafPort();
@@ -361,42 +357,34 @@ void dMsgScrnTalk_c::drawSelf() {
     mpArrow_c->draw();
 }
 
-/* 802480F0-80248114 242A30 0024+00 1/0 0/0 0/0 .text            arwAnimeInit__14dMsgScrnTalk_cFv */
 void dMsgScrnTalk_c::arwAnimeInit() {
     mpArrow_c->arwAnimeInit();
 }
 
-/* 80248114-80248138 242A54 0024+00 1/0 0/0 0/0 .text            arwAnimeMove__14dMsgScrnTalk_cFv */
 void dMsgScrnTalk_c::arwAnimeMove() {
     mpArrow_c->arwAnimeMove();
 }
 
-/* 80248138-8024815C 242A78 0024+00 1/0 0/0 0/0 .text            dotAnimeInit__14dMsgScrnTalk_cFv */
 void dMsgScrnTalk_c::dotAnimeInit() {
     mpArrow_c->dotAnimeInit();
 }
 
-/* 8024815C-80248180 242A9C 0024+00 1/0 0/0 0/0 .text            dotAnimeMove__14dMsgScrnTalk_cFv */
 void dMsgScrnTalk_c::dotAnimeMove() {
     mpArrow_c->dotAnimeMove();
 }
 
-/* 80248180-802481AC 242AC0 002C+00 1/0 0/0 0/0 .text setSelectString__14dMsgScrnTalk_cFPcPcPc */
 void dMsgScrnTalk_c::setSelectString(char* param_0, char* param_1, char* param_2) {
     if (mpSelect_c != NULL) {
         mpSelect_c->setString(param_0, param_1, param_2);
     }
 }
 
-/* 802481AC-802481D8 242AEC 002C+00 1/0 0/0 0/0 .text setSelectRubyString__14dMsgScrnTalk_cFPcPcPc
- */
 void dMsgScrnTalk_c::setSelectRubyString(char* param_0, char* param_1, char* param_2) {
     if (mpSelect_c != NULL) {
         mpSelect_c->setRubyString(param_0, param_1, param_2);
     }
 }
 
-/* 802481D8-8024820C 242B18 0034+00 1/0 0/0 0/0 .text            isSelect__14dMsgScrnTalk_cFv */
 bool dMsgScrnTalk_c::isSelect() {
     if (mpSelect_c != NULL) {
         return mpSelect_c->isSelect();
@@ -404,14 +392,12 @@ bool dMsgScrnTalk_c::isSelect() {
     return false;
 }
 
-/* 8024820C-80248244 242B4C 0038+00 1/0 0/0 0/0 .text selectAnimeInit__14dMsgScrnTalk_cFUcUcfUc */
 void dMsgScrnTalk_c::selectAnimeInit(u8 param_0, u8 param_1, f32 param_2, u8 param_3) {
     if (mpSelect_c != NULL) {
         mpSelect_c->selAnimeInit(param_0, param_1, field_0x488, param_2, param_3);
     }
 }
 
-/* 80248244-80248278 242B84 0034+00 1/0 0/0 0/0 .text selectAnimeMove__14dMsgScrnTalk_cFUcUcb */
 bool dMsgScrnTalk_c::selectAnimeMove(u8 param_0, u8 param_1, bool param_2) {
     if (mpSelect_c != NULL) {
         return mpSelect_c->selAnimeMove(param_0, param_1, param_2);
@@ -419,8 +405,6 @@ bool dMsgScrnTalk_c::selectAnimeMove(u8 param_0, u8 param_1, bool param_2) {
     return false;
 }
 
-/* 80248278-802482AC 242BB8 0034+00 1/0 0/0 0/0 .text            selectAnimeEnd__14dMsgScrnTalk_cFv
- */
 bool dMsgScrnTalk_c::selectAnimeEnd() {
     if (mpSelect_c != NULL) {
         return mpSelect_c->selAnimeEnd();
@@ -428,15 +412,12 @@ bool dMsgScrnTalk_c::selectAnimeEnd() {
     return false;
 }
 
-/* 802482AC-802482B0 242BEC 0004+00 1/0 0/0 0/0 .text            fukiScale__14dMsgScrnTalk_cFf */
 void dMsgScrnTalk_c::fukiScale(f32 param_0) {
 }
 
-/* 802482B0-802482B4 242BF0 0004+00 1/0 0/0 0/0 .text            fukiTrans__14dMsgScrnTalk_cFff */
 void dMsgScrnTalk_c::fukiTrans(f32 param_0, f32 param_1) {
 }
 
-/* 802482B4-8024835C 242BF4 00A8+00 1/0 0/0 0/0 .text            fukiAlpha__14dMsgScrnTalk_cFf */
 void dMsgScrnTalk_c::fukiAlpha(f32 param_1) {
     mpPmP_c->setAlphaRate(param_1 * g_MsgObject_HIO_c.mBoxTalkAlphaP);
     for (int i = 0; i < 6; i = i + 1) {
@@ -449,7 +430,6 @@ void dMsgScrnTalk_c::fukiAlpha(f32 param_1) {
     }
 }
 
-/* 8024835C-80248954 242C9C 05F8+00 1/0 0/0 0/0 .text            fukiPosCalc__14dMsgScrnTalk_cFUc */
 void dMsgScrnTalk_c::fukiPosCalc(u8 param_1) {
     msg_class* msgActor = dMsgObject_c::getActor();
     if (mpPmP_c != 0) {

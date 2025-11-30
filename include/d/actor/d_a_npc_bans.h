@@ -20,7 +20,7 @@ struct daNpc_Bans_HIOParam {
 
 class daNpc_Bans_Param_c {
 public:
-    /* 80967C24 */ virtual ~daNpc_Bans_Param_c() {}
+    virtual ~daNpc_Bans_Param_c() {}
 
     static daNpc_Bans_HIOParam const m;
 };
@@ -44,47 +44,47 @@ public:
     typedef int (daNpc_Bans_c::*actionFunc)(void*);
     typedef int (daNpc_Bans_c::*cutFunc)(int);
 
-    /* 809628CC */ ~daNpc_Bans_c();
-    /* 80962AA0 */ cPhs__Step create();
-    /* 80962D6C */ int CreateHeap();
-    /* 80963338 */ int Delete();
-    /* 8096336C */ int Execute();
-    /* 80963444 */ int Draw();
-    /* 809634E0 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80963500 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80963558 */ u8 getType();
-    /* 809635BC */ BOOL isDelete();
-    /* 809636C0 */ void reset();
-    /* 80963840 */ void afterJntAnm(int);
-    /* 809638CC */ void setParam();
-    /* 80963A7C */ BOOL checkChangeEvt();
-    /* 80963B30 */ void setAfterTalkMotion();
-    /* 80963BA8 */ void srchActors();
-    /* 80963DB0 */ BOOL evtTalk();
-    /* 80963EDC */ BOOL evtCutProc();
-    /* 80963FA4 */ void action();
-    /* 80964148 */ void beforeMove();
-    /* 80964228 */ void setAttnPos();
-    /* 809646E0 */ void setCollision();
-    /* 80964994 */ int drawDbgInfo();
-    /* 8096499C */ void drawOtherMdl();
-    /* 80964AD8 */ bool setScoopAnm(int, int, f32);
-    /* 80964B9C */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80964BD0 */ BOOL selectAction();
-    /* 80964C4C */ BOOL chkAction(actionFunc);
-    /* 80964C78 */ BOOL setAction(actionFunc);
-    /* 80964D20 */ BOOL checkPlayerIn2ndFloorOfBombShop();
-    /* 80964DD0 */ void orderAngerEvt();
-    /* 80964EB0 */ fopAc_ac_c* getKMsgTagP();
-    /* 80964F48 */ void setPrtcls();
-    /* 80964FEC */ int cutAnger(int);
-    /* 809658F8 */ int cutPurchase(int);
-    /* 80965CCC */ int wait(void*);
-    /* 809661F0 */ int tend(void*);
-    /* 80966888 */ int talk(void*);
-    /* 80966B24 */ int shop(void*);
-    /* 80DA60D0 */ int test(void*);
-    /* 80967AC4 */ daNpc_Bans_c(
+    ~daNpc_Bans_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    bool setScoopAnm(int, int, f32);
+    bool afterSetMotionAnm(int, int, f32, int);
+    BOOL selectAction();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    BOOL checkPlayerIn2ndFloorOfBombShop();
+    void orderAngerEvt();
+    fopAc_ac_c* getKMsgTagP();
+    void setPrtcls();
+    int cutAnger(int);
+    int cutPurchase(int);
+    int wait(void*);
+    int tend(void*);
+    int talk(void*);
+    int shop(void*);
+    int test(void*);
+    daNpc_Bans_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -96,12 +96,12 @@ public:
                 i_arcNames) {
             OS_REPORT("|%06d:%x|daNpc_Bans_c -> コンストラクト\n", g_Counter.mCounter0, this);
         }
-    /* 80967BE4 */ u16 getEyeballMaterialNo() { return 2; }
-    /* 80967BEC */ s32 getHeadJointNo() { return 6; }
-    /* 80967BF4 */ s32 getNeckJointNo() { return 5; }
-    /* 80967BFC */ s32 getBackboneJointNo() { return 1; }
-    /* 80967C04 */ BOOL checkChangeJoint(int i_joint) { return i_joint == 6; }
-    /* 80967C14 */ BOOL checkRemoveJoint(int i_joint) { return i_joint == 0xB; }
+    u16 getEyeballMaterialNo() { return 2; }
+    s32 getHeadJointNo() { return 6; }
+    s32 getNeckJointNo() { return 5; }
+    s32 getBackboneJointNo() { return 1; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == 6; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == 0xB; }
 
     u8 getGroupId() { return (fopAcM_GetParam(this) & ~0xFFFFFFF) >> 28; }
     u8 getMaxNumItem() { return (fopAcM_GetParam(this) & 0xF000000) >> 24; }

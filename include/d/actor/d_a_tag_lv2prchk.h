@@ -20,14 +20,14 @@ public:
         MODE_CHECK_WRONG_ORDER = 100,
     };
 
-    /* 805A4C58 */ int Create();
-    /* 805A4CDC */ int create();
-    /* 805A4D44 */ int execute();
-    /* 805A4D68 */ void action();
-    /* 805A4DF4 */ void actionCheck();
-    /* 805A5290 */ void actionEnd();
-    /* 805A5294 */ void seStartWrong();
-    /* 805A52F4 */ int _delete();
+    int Create();
+    int create();
+    int execute();
+    void action();
+    void actionCheck();
+    void actionEnd();
+    void seStartWrong();
+    int _delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwbit2() { return fopAcM_GetParamBit(this, 8, 8); }

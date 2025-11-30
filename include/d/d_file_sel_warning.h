@@ -12,8 +12,8 @@ class dMsgString_c;
 
 class dDlst_FileWarn_c : public dDlst_base_c {
 public:
-    /* 80192354 */ virtual void draw();
-    /* 801923CC */ virtual ~dDlst_FileWarn_c() {}
+    virtual void draw();
+    virtual ~dDlst_FileWarn_c() {}
 
     /* 0x04 */ J2DScreen* Scr;
     /* 0x08 */ JUTFont* mFont;
@@ -22,21 +22,21 @@ public:
 
 class dFile_warning_c {
 public:
-    /* 80191BAC */ dFile_warning_c(JKRArchive*, u8);
-    /* 80191CF4 */ void screenSet();
-    /* 80191F18 */ void _move();
-    /* 80191F90 */ void modeWait();
-    /* 80191F94 */ void modeMove();
-    /* 80191FD4 */ bool baseMoveAnm();
-    /* 801920B8 */ void openInit();
-    /* 8019210C */ void closeInit();
-    /* 80192160 */ void init();
-    /* 80192190 */ void _draw();
-    /* 801921CC */ void drawSelf();
-    /* 801921F8 */ void setText(u32);
-    /* 80192240 */ void setFontColor(JUtility::TColor, JUtility::TColor);
+    dFile_warning_c(JKRArchive*, u8);
+    void screenSet();
+    void _move();
+    void modeWait();
+    void modeMove();
+    bool baseMoveAnm();
+    void openInit();
+    void closeInit();
+    void init();
+    void _draw();
+    void drawSelf();
+    void setText(u32);
+    void setFontColor(JUtility::TColor, JUtility::TColor);
 
-    /* 80191C18 */ virtual ~dFile_warning_c();
+    virtual ~dFile_warning_c();
 
     u8 getStatus() { return mStatus; }
     void draw() { _draw(); }

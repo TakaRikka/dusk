@@ -15,16 +15,16 @@
  */
 class daObjZraRock_c : public dBgS_MoveBgActor {
 public:
-    /* 80D44CB8 */ void setAttnPos();
-    /* 80D44D3C */ void setBaseMtx();
-    /* 80D44DCC */ void setEnvTevColor();
-    /* 80D44E28 */ void setRoomNo();
-    /* 80D44E68 */ int Create();
-    /* 80D44FB0 */ int CreateHeap();
-    /* 80D450E0 */ cPhs__Step create();
-    /* 80D4531C */ int Execute(Mtx**);
-    /* 80D45374 */ int Draw();
-    /* 80D454AC */ int Delete();
+    void setAttnPos();
+    void setBaseMtx();
+    void setEnvTevColor();
+    void setRoomNo();
+    int Create();
+    int CreateHeap();
+    cPhs__Step create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     void setDemoStart() { mDemoStart = 1; }
 

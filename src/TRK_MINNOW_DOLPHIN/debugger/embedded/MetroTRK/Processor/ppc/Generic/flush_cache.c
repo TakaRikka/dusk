@@ -5,7 +5,6 @@
 
 #include "dolphin/types.h"
 
-/* 8036F548-8036F580 369E88 0038+00 0/0 5/5 0/0 .text            TRK_flush_cache */
 asm void TRK_flush_cache(u32, int) {
     // clang-format off
     nofralloc

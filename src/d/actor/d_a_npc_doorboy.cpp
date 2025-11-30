@@ -93,7 +93,6 @@ enum Motion {
     /* 0xB */ MOT_SIT_TO_WOLF_A,
 };
 
-/* 809ADB48-809ADB90 000020 0048+00 1/1 0/0 0/0 .data            l_bckGetParamList */
 static daNpc_GetParam2 l_bckGetParamList[6] = {
     {BCK_M_WAIT_A, J3DFrameCtrl::EMode_LOOP, MGENERAL},
     {BCK_M_TALK_A, J3DFrameCtrl::EMode_LOOP, MGENERAL},
@@ -103,35 +102,27 @@ static daNpc_GetParam2 l_bckGetParamList[6] = {
     {BCK_M_SIT_TO_WOLF_A, J3DFrameCtrl::EMode_LOOP, MGENERAL},
 };
 
-/* 809ADB90-809ADB9C 000068 000C+00 0/0 0/0 0/0 .data            l_btpGetParamList */
 static daNpc_GetParam2 l_btpGetParamList[1] = {
     {BTP_DOORBOY, J3DFrameCtrl::EMode_LOOP, DOORBOY},
 };
 
-/* 809ADB9C-809ADBA4 -00001 0008+00 5/6 0/0 0/0 .data            l_arcNames */
 static char* l_arcNames[2] = {
     "DoorBoy",
     "Mgeneral",
 };
 
-/* 809ADBA4-809ADBA8 00007C 0004+00 0/1 0/0 0/0 .data            l_evtNames */
 static char* l_evtNames[1] = {NULL};
 
-/* 809ADBA8-809ADBAC -00001 0004+00 0/2 0/0 0/0 .data            l_myName */
 static char* l_myName = "DoorBoy";
 
-/* 809ADD64-809ADD68 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpcDoorBoy_Param_c l_HIO;
 
-/* 809ADBAC-809ADBB8 000084 000C+00 1/2 0/0 0/0 .data            mEvtSeqList__14daNpcDoorBoy_c */
 daNpcDoorBoy_c::EventFn daNpcDoorBoy_c::mEvtSeqList[1] = {
     NULL
 };
 
-/* 809AAC8C-809AAE10 0000EC 0184+00 1/1 0/0 0/0 .text            __ct__14daNpcDoorBoy_cFv */
 daNpcDoorBoy_c::daNpcDoorBoy_c() {}
 
-/* 809AAEA0-809AB088 000300 01E8+00 1/0 0/0 0/0 .text            __dt__14daNpcDoorBoy_cFv */
 daNpcDoorBoy_c::~daNpcDoorBoy_c() {
     for (int i = 0; i < 2; i++) {
         dComIfG_resDelete(&mPhases[i], l_arcNames[i]);
@@ -142,7 +133,6 @@ daNpcDoorBoy_c::~daNpcDoorBoy_c() {
     }
 }
 
-/* 809AD9A8-809ADA14 000000 006C+00 10/10 0/0 0/0 .rodata          m__20daNpcDoorBoy_Param_c */
 daNpcDoorBoy_HIOParam const daNpcDoorBoy_Param_c::m = {
     55.0f,
     0.0f,
@@ -179,7 +169,6 @@ daNpcDoorBoy_HIOParam const daNpcDoorBoy_Param_c::m = {
     false,
 };
 
-/* 809AB088-809AB320 0004E8 0298+00 1/1 0/0 0/0 .text            Create__14daNpcDoorBoy_cFv */
 cPhs__Step daNpcDoorBoy_c::Create() {
     fopAcM_ct(this, daNpcDoorBoy_c);
 
@@ -228,7 +217,6 @@ cPhs__Step daNpcDoorBoy_c::Create() {
     return phase;
 }
 
-/* 809AB320-809AB4A4 000780 0184+00 1/1 0/0 0/0 .text            CreateHeap__14daNpcDoorBoy_cFv */
 int daNpcDoorBoy_c::CreateHeap() {
     J3DModelData* mdlData_p = (J3DModelData*)dComIfG_getObjectRes(l_arcNames[0], BMDR_DOORBOY);
 
@@ -258,26 +246,22 @@ int daNpcDoorBoy_c::CreateHeap() {
     return 1;
 }
 
-/* 809AB4A4-809AB4D8 000904 0034+00 1/1 0/0 0/0 .text            Delete__14daNpcDoorBoy_cFv */
 int daNpcDoorBoy_c::Delete() {
     this->~daNpcDoorBoy_c();
     return 1;
 }
 
-/* 809AB4D8-809AB4FC 000938 0024+00 2/2 0/0 0/0 .text            Execute__14daNpcDoorBoy_cFv */
 int daNpcDoorBoy_c::Execute() {
     execute();
     return 1;
 }
 
-/* 809AB4FC-809AB578 00095C 007C+00 1/1 0/0 0/0 .text            Draw__14daNpcDoorBoy_cFv */
 int daNpcDoorBoy_c::Draw() {
     draw(FALSE, FALSE, daNpcDoorBoy_Param_c::m.common.real_shadow_size, NULL, FALSE);
     dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 50.0f, mAcch.m_gnd, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
     return 1;
 }
 
-/* 809AB578-809AB704 0009D8 018C+00 1/1 0/0 0/0 .text            ctrlJoint__14daNpcDoorBoy_cFP8J3DJointP8J3DModel */
 int daNpcDoorBoy_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     int jointNo = i_joint->getJntNo();
     int i_jointList[3] = {JNT_BACKBONE, JNT_NECK, JNT_HEAD};
@@ -306,13 +290,11 @@ int daNpcDoorBoy_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 809AB704-809AB724 000B64 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__14daNpcDoorBoy_cFP10fopAc_ac_c */
 int daNpcDoorBoy_c::createHeapCallBack(fopAc_ac_c* a_this) {
     daNpcDoorBoy_c* i_this = (daNpcDoorBoy_c*)a_this;
     return i_this->CreateHeap();
 }
 
-/* 809AB724-809AB770 000B84 004C+00 1/1 0/0 0/0 .text            ctrlJointCallBack__14daNpcDoorBoy_cFP8J3DJointi */
 int daNpcDoorBoy_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -326,7 +308,6 @@ int daNpcDoorBoy_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 809AB770-809AB7B8 000BD0 0048+00 1/0 0/0 0/0 .text            setMotion__14daNpcDoorBoy_cFifi */
 void daNpcDoorBoy_c::setMotion(int i_motion, f32 i_morf, int param_3) {
     s16 motion = i_motion;
 
@@ -339,7 +320,6 @@ void daNpcDoorBoy_c::setMotion(int i_motion, f32 i_morf, int param_3) {
     }
 }
 
-/* 809AB7B8-809AB984 000C18 01CC+00 1/1 0/0 0/0 .text            reset__14daNpcDoorBoy_cFv */
 void daNpcDoorBoy_c::reset() {
     initialize();
     mLookat.initialize();
@@ -376,7 +356,6 @@ void daNpcDoorBoy_c::reset() {
     mMotionMorfOverride = 0.0f;
 }
 
-/* 809AB984-809ABA2C 000DE4 00A8+00 1/1 0/0 0/0 .text            setAction__14daNpcDoorBoy_cFM14daNpcDoorBoy_cFPCvPvPv_b */
 BOOL daNpcDoorBoy_c::setAction(actionFunc action) {
     mMode = 3;
 
@@ -428,7 +407,6 @@ inline void daNpcDoorBoy_c::playMotion() {
     }
 }
 
-/* 809ACE18-809ACFF8 002278 01E0+00 1/1 0/0 0/0 .text            lookat__14daNpcDoorBoy_cFv */
 inline void daNpcDoorBoy_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model_p = mAnm_p->getModel();
@@ -561,7 +539,6 @@ inline bool daNpcDoorBoy_c::isDummyTalk() {
     return true;
 }
 
-/* 809ABA2C-809AC064 000E8C 0638+00 5/0 0/0 0/0 .text            wait__14daNpcDoorBoy_cFPv */
 bool daNpcDoorBoy_c::wait(void* param_1) {
     switch (mMode) {
         case 0:
@@ -630,7 +607,6 @@ bool daNpcDoorBoy_c::wait(void* param_1) {
     return true;
 }
 
-/* 809AC064-809AC114 0014C4 00B0+00 1/0 0/0 0/0 .text            fear__14daNpcDoorBoy_cFPv */
 bool daNpcDoorBoy_c::fear(void* param_1) {
     switch (mMode) {
         case 0:
@@ -656,7 +632,6 @@ bool daNpcDoorBoy_c::fear(void* param_1) {
     return true;
 }
 
-/* 809AC114-809AC528 001574 0414+00 1/0 0/0 0/0 .text            talk__14daNpcDoorBoy_cFPv */
 bool daNpcDoorBoy_c::talk(void* param_1) {
     int itemNo;
     int iVar1, i_motion;
@@ -716,7 +691,6 @@ bool daNpcDoorBoy_c::talk(void* param_1) {
     return rv;
 }
 
-/* 809AC528-809AC6F4 001988 01CC+00 1/0 0/0 0/0 .text            demo__14daNpcDoorBoy_cFPv */
 bool daNpcDoorBoy_c::demo(void* param_1) {
     switch (mMode) {
         case 0:
@@ -758,7 +732,6 @@ bool daNpcDoorBoy_c::demo(void* param_1) {
     return true;
 }
 
-/* 809AC6F4-809AC90C 001B54 0218+00 1/0 0/0 0/0 .text            dummyTalk__14daNpcDoorBoy_cFPv */
 bool daNpcDoorBoy_c::dummyTalk(void* param_1) {
     switch (mMode) {
         case 0:
@@ -788,36 +761,30 @@ bool daNpcDoorBoy_c::dummyTalk(void* param_1) {
     return true;
 }
 
-/* 809AC90C-809AC92C 001D6C 0020+00 1/0 0/0 0/0 .text            daNpcDoorBoy_Create__FPv */
 static int daNpcDoorBoy_Create(void* a_this) {
     daNpcDoorBoy_c* i_this = (daNpcDoorBoy_c*)a_this;
     return i_this->Create();
 }
 
-/* 809AC92C-809AC94C 001D8C 0020+00 1/0 0/0 0/0 .text            daNpcDoorBoy_Delete__FPv */
 static int daNpcDoorBoy_Delete(void* a_this) {
     daNpcDoorBoy_c* i_this = (daNpcDoorBoy_c*)a_this;
     return i_this->Delete();
 }
 
-/* 809AC94C-809AC96C 001DAC 0020+00 1/0 0/0 0/0 .text            daNpcDoorBoy_Execute__FPv */
 static int daNpcDoorBoy_Execute(void* a_this) {
     daNpcDoorBoy_c* i_this = (daNpcDoorBoy_c*)a_this;
     return i_this->Execute();
 }
 
-/* 809AC96C-809AC98C 001DCC 0020+00 1/0 0/0 0/0 .text            daNpcDoorBoy_Draw__FPv */
 static int daNpcDoorBoy_Draw(void* a_this) {
     daNpcDoorBoy_c* i_this = (daNpcDoorBoy_c*)a_this;
     return i_this->Draw();
 }
 
-/* 809AC98C-809AC994 001DEC 0008+00 1/0 0/0 0/0 .text            daNpcDoorBoy_IsDelete__FPv */
 static int daNpcDoorBoy_IsDelete(void* a_this) {
     return 1;
 }
 
-/* 809AC994-809ACA58 001DF4 00C4+00 1/0 0/0 0/0 .text            setParam__14daNpcDoorBoy_cFv */
 void daNpcDoorBoy_c::setParam() {
     attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(daNpcDoorBoy_Param_c::m.common.attention_distance,
                                                                   daNpcDoorBoy_Param_c::m.common.attention_angle);
@@ -831,7 +798,6 @@ void daNpcDoorBoy_c::setParam() {
     gravity = daNpcDoorBoy_Param_c::m.common.gravity;
 }
 
-/* 809ACA58-809ACC5C 001EB8 0204+00 1/0 0/0 0/0 .text            main__14daNpcDoorBoy_cFv */
 BOOL daNpcDoorBoy_c::main() {
     if (mAction) {
         (this->*mAction)(NULL);
@@ -841,7 +807,6 @@ BOOL daNpcDoorBoy_c::main() {
     return FALSE;
 }
 
-/* 809ACC5C-809ACE18 0020BC 01BC+00 1/0 0/0 0/0 .text            setAttnPos__14daNpcDoorBoy_cFv */
 void daNpcDoorBoy_c::setAttnPos() {
     if (mLookMode == 1) {
         for (int i = 0; i < 3; i++) {
@@ -876,7 +841,6 @@ void daNpcDoorBoy_c::setAttnPos() {
     dComIfG_Ccsp()->Set(&field_0xc98);
 }
 
-/* 809ACFF8-809AD0C8 002458 00D0+00 1/0 0/0 0/0 .text            setMotionAnm__14daNpcDoorBoy_cFif */
 void daNpcDoorBoy_c::setMotionAnm(int i_index, f32 i_morf) {
     J3DAnmTransformKey* anm = getTrnsfrmKeyAnmP(l_arcNames[l_bckGetParamList[i_index].arcIdx], l_bckGetParamList[i_index].fileIdx);
     int i_attr = l_bckGetParamList[i_index].attr;
@@ -888,12 +852,10 @@ void daNpcDoorBoy_c::setMotionAnm(int i_index, f32 i_morf) {
     }
 }
 
-/* 809AD0C8-809AD0D0 002528 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__14daNpcDoorBoy_cFv */
 BOOL daNpcDoorBoy_c::drawDbgInfo() {
     return FALSE;
 }
 
-/* 809ADC24-809ADC44 -00001 0020+00 1/0 0/0 0/0 .data            daNpcDoorBoy_MethodTable */
 static actor_method_class daNpcDoorBoy_MethodTable = {
     (process_method_func)daNpcDoorBoy_Create,
     (process_method_func)daNpcDoorBoy_Delete,
@@ -902,7 +864,6 @@ static actor_method_class daNpcDoorBoy_MethodTable = {
     (process_method_func)daNpcDoorBoy_Draw,
 };
 
-/* 809ADC44-809ADC74 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_DOORBOY */
 extern actor_process_profile_definition g_profile_NPC_DOORBOY = {
   fpcLy_CURRENT_e,           // mLayerID
   7,                         // mListID

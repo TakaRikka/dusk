@@ -90,10 +90,10 @@ struct OSRel {
     u32 addend;
 };
 
-#define R_REVOLUTION_NOP 201     //  C9h current offset += OSRel.offset
-#define R_REVOLUTION_SECTION 202 //  CAh current section = OSRel.section
-#define R_REVOLUTION_END 203     //  CBh
-#define R_REVOLUTION_MRKREF 204  //  CCh
+#define R_DOLPHIN_NOP 201     //  C9h current offset += OSRel.offset
+#define R_DOLPHIN_SECTION 202 //  CAh current section = OSRel.section
+#define R_DOLPHIN_END 203     //  CBh
+#define R_DOLPHIN_MRKREF 204  //  CCh
 
 void OSSetStringTable(void* stringTable);
 BOOL OSLink(OSModuleInfo* newModule, void* bss);

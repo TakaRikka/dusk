@@ -60,29 +60,24 @@ enum Material {
     /* 0x2 */ MAT_SARU_FACE_M,
 };
 
-/* 80AC46C4-80AC46E4 000020 0020+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[4][2] = {
     { npc_ks_class::BMDR_SARU, 1 }, { BMDR_SARU_TW, 2 }, { npc_ks_class::BMDR_SARU_BARA, 1 }, { BMDR_SARU_BARA_TW, 2 },
 };
 
-/* 80AC46E4-80AC46FC -00001 0018+00 1/2 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[3] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"YM_LOOK", 2},
 };
 
-/* 80AC46FC-80AC470C -00001 0010+00 3/4 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[4] = {
     "", "Npc_ks", "saru_TW", "saru"
 };
 
-/* 80AC470C-80AC4710 000068 0004+00 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[4] = {
     NPC_KS, SARU_TW, SARU, -1,
 };
 
-/* 80AC4710-80AC4720 -00001 0010+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[4] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
@@ -90,13 +85,11 @@ static s8* l_loadResPtrnList[4] = {
     l_loadResPtrn0
 };
 
-/* 80AC4720-80AC473C 00007C 001C+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0,
         npc_ks_class::BTP_SARU, J3DFrameCtrl::EMode_LOOP, NPC_KS, 1},
 };
 
-/* 80AC473C-80AC4CD0 000098 0594+00 1/2 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[51] = {
     {npc_ks_class::BCK_SARU_WAIT_A, J3DFrameCtrl::EMode_LOOP, NPC_KS, 
         -1, J3DFrameCtrl::EMode_NONE, 0, 0, 0},
@@ -202,12 +195,10 @@ static daNpcT_motionAnmData_c l_motionAnmData[51] = {
         -1, J3DFrameCtrl::EMode_NONE, 0, 0, 0},
 };
 
-/* 80AC4CD0-80AC4CE0 00062C 0010+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80AC4CE0-80AC4D90 00063C 00B0+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -222,7 +213,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80AC4D90-80AC4DA0 -00001 0010+00 1/1 0/0 0/0 .data            mCutNameList__12daNpc_Saru_c */
 char* daNpc_Saru_c::mCutNameList[4] = {
     "",
     "FIND_MONKEY",
@@ -230,7 +220,6 @@ char* daNpc_Saru_c::mCutNameList[4] = {
     "YM_LOOK",
 };
 
-/* 80AC4DC4-80AC4DF4 000720 0030+00 1/2 0/0 0/0 .data            mCutList__12daNpc_Saru_c */
 daNpc_Saru_c::cutFunc daNpc_Saru_c::mCutList[4] = {
     NULL,
     &daNpc_Saru_c::cutFindMonkey,
@@ -238,7 +227,6 @@ daNpc_Saru_c::cutFunc daNpc_Saru_c::mCutList[4] = {
     &daNpc_Saru_c::cutYmLook,
 };
 
-/* 80AC042C-80AC0578 0000EC 014C+00 1/0 0/0 0/0 .text            __dt__12daNpc_Saru_cFv */
 daNpc_Saru_c::~daNpc_Saru_c() {
     if (mpMorf[0] != NULL) {
         mpMorf[0]->stopZelAnime();
@@ -247,7 +235,6 @@ daNpc_Saru_c::~daNpc_Saru_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-/* 80AC44F8-80AC4588 000000 0090+00 9/9 0/0 0/0 .rodata          m__18daNpc_Saru_Param_c */
 daNpc_Saru_HIOParam const daNpc_Saru_Param_c::m = {
     140.0f,
     -3.0f,
@@ -294,7 +281,6 @@ daNpc_Saru_HIOParam const daNpc_Saru_Param_c::m = {
     0,
 };
 
-/* 80AC0578-80AC082C 000238 02B4+00 1/1 0/0 0/0 .text            create__12daNpc_Saru_cFv */
 int daNpc_Saru_c::create() {
     static int const heapSize[4] = {
         14480, 14480, 14464, 0,
@@ -353,7 +339,6 @@ int daNpc_Saru_c::create() {
     return phase;
 }
 
-/* 80AC082C-80AC0A54 0004EC 0228+00 1/1 0/0 0/0 .text            CreateHeap__12daNpc_Saru_cFv */
 int daNpc_Saru_c::CreateHeap() {
     static int const bmdTypeList[2] = {
         2, 3,
@@ -398,29 +383,24 @@ int daNpc_Saru_c::CreateHeap() {
     return 0;
 }
 
-/* 80AC0A54-80AC0A88 000714 0034+00 1/1 0/0 0/0 .text            Delete__12daNpc_Saru_cFv */
 int daNpc_Saru_c::Delete() {
     this->~daNpc_Saru_c();
     return 1;
 }
 
-/* 80AC0A88-80AC0AA8 000748 0020+00 2/2 0/0 0/0 .text            Execute__12daNpc_Saru_cFv */
 int daNpc_Saru_c::Execute() {
     return execute();
 }
 
-/* 80AC0AA8-80AC0AEC 000768 0044+00 1/1 0/0 0/0 .text            Draw__12daNpc_Saru_cFv */
 int daNpc_Saru_c::Draw() {
     return draw(FALSE, FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
-/* 80AC0AEC-80AC0B0C 0007AC 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__12daNpc_Saru_cFP10fopAc_ac_c */
 int daNpc_Saru_c::createHeapCallBack(fopAc_ac_c* a_this) {
     daNpc_Saru_c* i_this = (daNpc_Saru_c*)a_this;
     return i_this->CreateHeap();
 }
 
-/* 80AC0B0C-80AC0B64 0007CC 0058+00 1/1 0/0 0/0 .text            ctrlJointCallBack__12daNpc_Saru_cFP8J3DJointi */
 int daNpc_Saru_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         daNpc_Saru_c* _this = (daNpc_Saru_c*)j3dSys.getModel()->getUserArea();
@@ -431,7 +411,6 @@ int daNpc_Saru_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80AC0B64-80AC0C0C 000824 00A8+00 2/2 0/0 0/0 .text            srchYm__12daNpc_Saru_cFPvPv */
 void* daNpc_Saru_c::srchYm(void* i_actor, void* i_data) {
     if (mFindCount < 50 && i_actor != NULL && i_actor != i_data) {
         if (fopAcM_IsExecuting(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_E_YM && ((daE_YM_c*)i_actor)->isHide() == 0) {
@@ -442,7 +421,6 @@ void* daNpc_Saru_c::srchYm(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80AC0C0C-80AC0C58 0008CC 004C+00 1/1 0/0 0/0 .text            getType__12daNpc_Saru_cFv */
 u8 daNpc_Saru_c::getType() {
     switch (fopAcM_GetParam(this) & 0xFF) {
         case 0:
@@ -459,7 +437,6 @@ u8 daNpc_Saru_c::getType() {
     }
 }
 
-/* 80AC0C58-80AC0CE8 000918 0090+00 1/1 0/0 0/0 .text            isDelete__12daNpc_Saru_cFv */
 int daNpc_Saru_c::isDelete() {
     u8 rv;
     switch (mType) {
@@ -483,7 +460,6 @@ int daNpc_Saru_c::isDelete() {
     }
 }
 
-/* 80AC0CE8-80AC0EA4 0009A8 01BC+00 1/1 0/0 0/0 .text            reset__12daNpc_Saru_cFv */
 void daNpc_Saru_c::reset() {
     csXyz acStack_20;
     int iVar1 = (u8*)&field_0xfdc - (u8*)&field_0xfbc;
@@ -511,7 +487,6 @@ void daNpc_Saru_c::reset() {
     setAngle(acStack_20);
 }
 
-/* 80AC0EA4-80AC0F28 000B64 0084+00 1/0 0/0 0/0 .text            afterJntAnm__12daNpc_Saru_cFi */
 void daNpc_Saru_c::afterJntAnm(int param_1) {
     if (param_1 == 1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -522,7 +497,6 @@ void daNpc_Saru_c::afterJntAnm(int param_1) {
     }
 }
 
-/* 80AC0F28-80AC0FDC 000BE8 00B4+00 1/0 0/0 0/0 .text            checkChangeEvt__12daNpc_Saru_cFv */
 BOOL daNpc_Saru_c::checkChangeEvt() {
     if (!chkAction(&daNpc_Saru_c::talk)) {
         mPreItemNo = 0;
@@ -539,7 +513,6 @@ BOOL daNpc_Saru_c::checkChangeEvt() {
     return FALSE;
 }
 
-/* 80AC0FDC-80AC1110 000C9C 0134+00 1/0 0/0 0/0 .text            setParam__12daNpc_Saru_cFv */
 void daNpc_Saru_c::setParam() {
     selectAction();
     srchActors();
@@ -578,7 +551,6 @@ void daNpc_Saru_c::setParam() {
     gravity = daNpc_Saru_Param_c::m.common.gravity;
 }
 
-/* 80AC1110-80AC1170 000DD0 0060+00 1/0 0/0 0/0 .text setAfterTalkMotion__12daNpc_Saru_cFv */
 void daNpc_Saru_c::setAfterTalkMotion() {
     #ifdef DEBUG
     mFaceMotionSeqMngr.getNo();
@@ -586,7 +558,6 @@ void daNpc_Saru_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(FACE_NONE, -1.0f, 0, 0);
 }
 
-/* 80AC1170-80AC11D4 000E30 0064+00 1/1 0/0 0/0 .text            srchActors__12daNpc_Saru_cFv */
 void daNpc_Saru_c::srchActors() {
     switch (mType) {
         case 2:
@@ -600,7 +571,6 @@ void daNpc_Saru_c::srchActors() {
     }
 }
 
-/* 80AC11D4-80AC1274 000E94 00A0+00 1/0 0/0 0/0 .text            evtTalk__12daNpc_Saru_cFv */
 BOOL daNpc_Saru_c::evtTalk() {
     if (chkAction(&daNpc_Saru_c::talk)) {
         (this->*field_0xfc8)(NULL);
@@ -611,7 +581,6 @@ BOOL daNpc_Saru_c::evtTalk() {
     return TRUE;
 }
 
-/* 80AC1274-80AC133C 000F34 00C8+00 1/0 0/0 0/0 .text            evtCutProc__12daNpc_Saru_cFv */
 BOOL daNpc_Saru_c::evtCutProc() {
     int staffId = dComIfGp_getEventManager().getMyStaffId("Saru", this, -1);
     if (staffId != -1) {
@@ -626,7 +595,6 @@ BOOL daNpc_Saru_c::evtCutProc() {
     return false;
 }
 
-/* 80AC133C-80AC14E4 000FFC 01A8+00 1/0 0/0 0/0 .text            action__12daNpc_Saru_cFv */
 void daNpc_Saru_c::action() {
     fopAc_ac_c* actor_p = NULL;
     if (mTwilight == false) {
@@ -655,7 +623,6 @@ void daNpc_Saru_c::action() {
     }
 }
 
-/* 80AC14E4-80AC15B4 0011A4 00D0+00 1/0 0/0 0/0 .text            beforeMove__12daNpc_Saru_cFv */
 void daNpc_Saru_c::beforeMove() {
     fopAcM_OffStatus(this, 0x8000000);
 
@@ -668,7 +635,6 @@ void daNpc_Saru_c::beforeMove() {
     }
 }
 
-/* 80AC15B4-80AC18A0 001274 02EC+00 1/0 0/0 0/0 .text            setAttnPos__12daNpc_Saru_cFv */
 void daNpc_Saru_c::setAttnPos() {
     cXyz sp3c(30.0f, 0.0f, 0.0f);
 
@@ -704,7 +670,6 @@ void daNpc_Saru_c::setAttnPos() {
     setSe();
 }
 
-/* 80AC18A0-80AC1A20 001560 0180+00 1/0 0/0 0/0 .text            setCollision__12daNpc_Saru_cFv */
 void daNpc_Saru_c::setCollision() {
     cXyz sp48;
     if (mHide == false) {
@@ -743,12 +708,10 @@ void daNpc_Saru_c::setCollision() {
     field_0xe4c.ClrTgHit();
 }
 
-/* 80AC1A20-80AC1A28 0016E0 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__12daNpc_Saru_cFv */
 int daNpc_Saru_c::drawDbgInfo() {
     return 0;
 }
 
-/* 80AC1A28-80AC1B30 0016E8 0108+00 1/0 0/0 0/0 .text            drawOtherMdl__12daNpc_Saru_cFv */
 void daNpc_Saru_c::drawOtherMdl() {
     static int const jointNo[2] = {
         4, 4,
@@ -768,19 +731,16 @@ void daNpc_Saru_c::drawOtherMdl() {
     }
 }
 
-/* 80AC1B30-80AC1B78 0017F0 0048+00 1/1 0/0 0/0 .text            selectAction__12daNpc_Saru_cFv */
 int daNpc_Saru_c::selectAction() {
     field_0xfbc = NULL;
     field_0xfbc = &daNpc_Saru_c::wait;
     return 1;
 }
 
-/* 80AC1B78-80AC1BA4 001838 002C+00 2/2 0/0 0/0 .text            chkAction__12daNpc_Saru_cFM12daNpc_Saru_cFPCvPvPv_i */
 BOOL daNpc_Saru_c::chkAction(int (daNpc_Saru_c::*action)(void*)) {
     return field_0xfc8 == action;
 }
 
-/* 80AC1BA4-80AC1C4C 001864 00A8+00 2/2 0/0 0/0 .text            setAction__12daNpc_Saru_cFM12daNpc_Saru_cFPCvPvPv_i */
 int daNpc_Saru_c::setAction(int (daNpc_Saru_c::*action)(void*)) {
     mMode = 3;
     if (field_0xfc8) {
@@ -796,7 +756,6 @@ int daNpc_Saru_c::setAction(int (daNpc_Saru_c::*action)(void*)) {
     return 1;
 }
 
-/* 80AC1C4C-80AC216C 00190C 0520+00 1/1 0/0 0/0 .text            setSe__12daNpc_Saru_cFv */
 void daNpc_Saru_c::setSe() {
     if (cM3d_IsZero(mpMorf[0]->getPlaySpeed()) <= 0) {
         if ((J3DAnmTransform*)dComIfG_getObjectRes(l_resNameList[l_motionAnmData[25].mBckArcIdx], l_motionAnmData[25].mBckFileIdx) == mpMorf[0]->getAnm()) {
@@ -853,7 +812,6 @@ void daNpc_Saru_c::setSe() {
     }
 }
 
-/* 80AC216C-80AC2368 001E2C 01FC+00 1/0 0/0 0/0 .text            cutFindMonkey__12daNpc_Saru_cFi */
 int daNpc_Saru_c::cutFindMonkey(int param_1) {
     cXyz sp2c;
     int rv = 0;
@@ -914,7 +872,6 @@ int daNpc_Saru_c::cutFindMonkey(int param_1) {
     return rv;
 }
 
-/* 80AC2368-80AC2598 002028 0230+00 1/0 0/0 0/0 .text            cutHelpMe__12daNpc_Saru_cFi */
 int daNpc_Saru_c::cutHelpMe(int param_1) {
     int rv = 0;
     int iVar1 = -1;
@@ -957,7 +914,6 @@ int daNpc_Saru_c::cutHelpMe(int param_1) {
     return rv;
 }
 
-/* 80AC2598-80AC28A4 002258 030C+00 1/0 0/0 0/0 .text            cutYmLook__12daNpc_Saru_cFi */
 int daNpc_Saru_c::cutYmLook(int param_1) {
     char acStack_88[104];
     int rv = 0;
@@ -1055,7 +1011,6 @@ int daNpc_Saru_c::cutYmLook(int param_1) {
     return rv;
 }
 
-/* 80AC28A4-80AC2FD8 002564 0734+00 1/0 0/0 0/0 .text            wait__12daNpc_Saru_cFPv */
 int daNpc_Saru_c::wait(void* param_1) {
     obj_so_class* cage_p;
     switch (mMode) {
@@ -1185,7 +1140,6 @@ int daNpc_Saru_c::wait(void* param_1) {
     return 1;
 }
 
-/* 80AC2FD8-80AC31B4 002C98 01DC+00 3/0 0/0 0/0 .text            talk__12daNpc_Saru_cFPv */
 int daNpc_Saru_c::talk(void* param_1) {
     switch (mMode) {
         case 0:
@@ -1222,39 +1176,32 @@ int daNpc_Saru_c::talk(void* param_1) {
     return 0;
 }
 
-/* 80AC31B4-80AC31D4 002E74 0020+00 1/0 0/0 0/0 .text            daNpc_Saru_Create__FPv */
 static int daNpc_Saru_Create(void* param_1) {
     daNpc_Saru_c* i_this = (daNpc_Saru_c*)param_1;
     return i_this->create();
 }
 
-/* 80AC31D4-80AC31F4 002E94 0020+00 1/0 0/0 0/0 .text            daNpc_Saru_Delete__FPv */
 static int daNpc_Saru_Delete(void* param_1) {
     daNpc_Saru_c* i_this = (daNpc_Saru_c*)param_1;
     return i_this->Delete();
 }
 
-/* 80AC31F4-80AC3214 002EB4 0020+00 1/0 0/0 0/0 .text            daNpc_Saru_Execute__FPv */
 static int daNpc_Saru_Execute(void* param_1) {
     daNpc_Saru_c* i_this = (daNpc_Saru_c*)param_1;
     return i_this->Execute();
 }
 
-/* 80AC3214-80AC3234 002ED4 0020+00 1/0 0/0 0/0 .text            daNpc_Saru_Draw__FPv */
 static int daNpc_Saru_Draw(void* param_1) {
     daNpc_Saru_c* i_this = (daNpc_Saru_c*)param_1;
     return i_this->Draw();
 }
 
-/* 80AC3234-80AC323C 002EF4 0008+00 1/0 0/0 0/0 .text            daNpc_Saru_IsDelete__FPv */
 static int daNpc_Saru_IsDelete(void* param_1) {
     return 1;
 }
 
-/* 80AC4FF4-80AC4FF8 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpc_Saru_Param_c l_HIO;
 
-/* 80AC4E24-80AC4E44 -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Saru_MethodTable */
 static actor_method_class daNpc_Saru_MethodTable = {
     (process_method_func)daNpc_Saru_Create,
     (process_method_func)daNpc_Saru_Delete,
@@ -1263,7 +1210,6 @@ static actor_method_class daNpc_Saru_MethodTable = {
     (process_method_func)daNpc_Saru_Draw,
 };
 
-/* 80AC4E44-80AC4E74 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_SARU */
 extern actor_process_profile_definition g_profile_NPC_SARU = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

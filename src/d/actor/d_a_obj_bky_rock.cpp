@@ -10,36 +10,29 @@
 #include "d/d_bg_w.h"
 #include "d/d_model.h"
 #include "d/d_com_inf_game.h"
-#include "dol2asm.h"
 
-/* 80BB6838-80BB6858 000078 0020+00 1/1 0/0 0/0 .text daBkyRock_c_createHeap__FP10fopAc_ac_c */
 static int daBkyRock_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daBkyRock_c*>(i_this)->createHeap();
 }
 
-/* 80BB803C-80BB8040 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "BYRock";
 
-/* 80BB8064-80BB8088 000048 0024+00 1/2 0/0 0/0 .data            s_exeProc__11daBkyRock_c */
 daBkyRock_c::exeProc daBkyRock_c::s_exeProc[3] = {
     &daBkyRock_c::exeModeNoDamage,
     &daBkyRock_c::exeModeDamage,
     &daBkyRock_c::exeModePiece,
 };
 
-/* 80BB6858-80BB6914 000098 00BC+00 2/2 0/0 0/0 .text            __ct__11daBkyRock_cFv */
 daBkyRock_c::daBkyRock_c() {
     mBgW = NULL;
     mMode = MODE_0;
     memset(mModels, 0, sizeof(mModels));
 }
 
-/* 80BB6B5C-80BB6C4C 00039C 00F0+00 1/0 0/0 0/0 .text            __dt__11daBkyRock_cFv */
 daBkyRock_c::~daBkyRock_c() {
     dComIfG_resDelete(this, l_arcName);
 }
 
-/* 80BB6C4C-80BB6D60 00048C 0114+00 1/1 0/0 0/0 .text            create__11daBkyRock_cFv */
 int daBkyRock_c::create() {
     fopAcM_ct(this, daBkyRock_c);
     u8 swBit0 = getSwBit0();
@@ -62,13 +55,11 @@ int daBkyRock_c::create() {
     return rv;
 }
 
-/* 80BB6D60-80BB6D84 0005A0 0024+00 1/1 0/0 0/0 .text            execute__11daBkyRock_cFv */
 int daBkyRock_c::execute() {
     middleExe();
     return 1;
 }
 
-/* 80BB6D84-80BB6EB8 0005C4 0134+00 1/1 0/0 0/0 .text            draw__11daBkyRock_cFv */
 int daBkyRock_c::draw() {
     g_env_light.settingTevStruct( 0,
                                          &current.pos, &tevStr);
@@ -95,7 +86,6 @@ int daBkyRock_c::draw() {
     return 1;
 }
 
-/* 80BB6EB8-80BB6F64 0006F8 00AC+00 1/1 0/0 0/0 .text            Delete__11daBkyRock_cFv */
 int daBkyRock_c::Delete() {
     if (dComIfGp_getVibration().CheckQuake()) {
         dComIfGp_getVibration().StopQuake(0x1f);
@@ -107,39 +97,32 @@ int daBkyRock_c::Delete() {
     return 1;
 }
 
-/* 80BB6F64-80BB6FD4 0007A4 0070+00 3/3 0/0 0/0 .text            setModelMtx__11daBkyRock_cFv */
 void daBkyRock_c::setModelMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mModels[mMode]->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80BB7EB0-80BB7EBC 000000 000C+00 8/8 0/0 0/0 .rodata          VIBMODE_POWER */
 static int const VIBMODE_POWER[3] = {
     2, 3, 3,
 };
 
-/* 80BB7EBC-80BB7EC4 00000C 0008+00 0/1 0/0 0/0 .rodata          PARTICLE_SCALE */
 static int const PARTICLE_SCALE[2] = {
     0x6D6, 0x8E3,
 };
 
-/* 80BB7EC4-80BB7ECC 000014 0008+00 0/1 0/0 0/0 .rodata          PARTICLE_OFFSET_POS_Y */
 static int const PARTICLE_OFFSET_POS_Y[2] = {
     0x168, 0x12C,
 };
 
-/* 80BB7ECC-80BB7ED4 00001C 0008+00 0/1 0/0 0/0 .rodata          FIRST_PARTICLE_NAME */
 static u16 const FIRST_PARTICLE_NAME[4] = {
     0x89C4, 0x89C5, 0x89C6, 0x89C7,
 };
 
-/* 80BB7ED4-80BB7EE0 000024 000C+00 0/1 0/0 0/0 .rodata          SECOND_PARTICLE_NAME */
 static u16 const SECOND_PARTICLE_NAME[6] = {
     0x89C2, 0x89C3, 0x89C4, 0x89C5, 0x89C6, 0x89C7,
 };
 
-/* 80BB7EE0-80BB7F24 000030 0044+00 0/1 0/0 0/0 .rodata          s_CcDCyl__11daBkyRock_c */
 dCcD_SrcCyl const daBkyRock_c::s_CcDCyl = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x20a0, 0x11}, 0x0}}, // mObj
@@ -154,13 +137,11 @@ dCcD_SrcCyl const daBkyRock_c::s_CcDCyl = {
     } // mCyl
 };
 
-/* 80BB7F24-80BB7F3C 000074 0018+00 1/1 0/0 0/0 .rodata          BMD_IDX$3845 */
 static int const BMD_IDX[2][3] = {
     {4, 5, 8},
     {6, 7, 8},
 };
 
-/* 80BB6FD4-80BB7144 000814 0170+00 1/1 0/0 0/0 .text            createHeap__11daBkyRock_cFv */
 int daBkyRock_c::createHeap() {
     int nameNo = getNameNo();
     for (int i = 0; i < 3; i++) {
@@ -188,24 +169,19 @@ int daBkyRock_c::createHeap() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80BB7F3C-80BB7F6C 00008C 0030+00 0/1 0/0 0/0 .rodata          COL_OFFSET_POS$3888 */
 static Vec const COL_OFFSET_POS[2][2] = {
     {{-100.0f, -250.0f, -100.0f}, {100.0f, -250.0f, 0.0f}},
     {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
 };
 
-/* 80BB7F6C-80BB7F7C 0000BC 0010+00 0/1 0/0 0/0 .rodata          COL_INIT_HEIGHT$3889 */
 static int const COL_INIT_HEIGHT[2][2] = {
     {0x190, 0x28A}, {0x384, 0x384},
 };
 
-/* 80BB7F7C-80BB7F8C 0000CC 0010+00 0/1 0/0 0/0 .rodata          COL_INIT_RADIUS$3890 */
 static int const COL_INIT_RADIUS[2][2] = {
     0xFA, 0x226, 0x28A, 0x320,
 };
 
-/* 80BB7144-80BB72FC 000984 01B8+00 1/1 0/0 0/0 .text            init__11daBkyRock_cFv */
 void daBkyRock_c::init() {
     mMode = MODE_0;
     field_0x57a = false;
@@ -230,14 +206,12 @@ void daBkyRock_c::init() {
     fopAcM_setCullSizeBox(this, -800.0f, -500.0f, -800.0f, 800.0f, 1000.0f, 800.0f);
 }
 
-/* 80BB72FC-80BB7364 000B3C 0068+00 1/1 0/0 0/0 .text            middleExe__11daBkyRock_cFv */
 void daBkyRock_c::middleExe() {
     if (s_exeProc[mMode] != NULL) {
         (this->*(s_exeProc[mMode]))();
     }
 }
 
-/* 80BB7364-80BB7458 000BA4 00F4+00 1/0 0/0 0/0 .text            exeModeNoDamage__11daBkyRock_cFv */
 void daBkyRock_c::exeModeNoDamage() {
     if (chkHitBombArrow()) {
         initChangeModeBefore();
@@ -252,7 +226,6 @@ void daBkyRock_c::exeModeNoDamage() {
     }
 }
 
-/* 80BB7458-80BB75D8 000C98 0180+00 1/0 0/0 0/0 .text            exeModeDamage__11daBkyRock_cFv */
 void daBkyRock_c::exeModeDamage() {
     if (mVibrationTimer != 0) {
         mVibrationTimer--;
@@ -282,7 +255,6 @@ void daBkyRock_c::exeModeDamage() {
     }
 }
 
-/* 80BB75D8-80BB7690 000E18 00B8+00 1/0 0/0 0/0 .text            exeModePiece__11daBkyRock_cFv */
 void daBkyRock_c::exeModePiece() {
     pieceMove();
     if (mVibrationTimer != 0) {
@@ -297,7 +269,6 @@ void daBkyRock_c::exeModePiece() {
     }
 }
 
-/* 80BB7690-80BB776C 000ED0 00DC+00 2/2 0/0 0/0 .text            chkHitBombArrow__11daBkyRock_cFv */
 bool daBkyRock_c::chkHitBombArrow() {
     if (getNameNo() == 1) {
         u8 swBit1 = getSwBit1();
@@ -317,25 +288,20 @@ bool daBkyRock_c::chkHitBombArrow() {
     return 0;
 }
 
-/* ############################################################################################## */
-/* 80BB7FB4-80BB7FBC 000104 0008+00 0/1 0/0 0/0 .rodata          VIBMODE_TIMER$4051 */
 static int const VIBMODE_TIMER[2] = {
     30, 40,
 };
 
-/* 80BB776C-80BB77FC 000FAC 0090+00 2/2 0/0 0/0 .text initChangeModeBefore__11daBkyRock_cFv */
 void daBkyRock_c::initChangeModeBefore() {
     dComIfGp_getVibration().StartQuake(VIBMODE_POWER[mMode], 0x1f, cXyz(0.0f, 1.0f, 0.0f));
     mVibrationTimer = VIBMODE_TIMER[mMode];
     pieceMoveInit();
 }
 
-/* 80BB77FC-80BB7818 00103C 001C+00 2/2 0/0 0/0 .text initChangeModeAfter__11daBkyRock_cFv */
 void daBkyRock_c::initChangeModeAfter() {
     fopAcM_SetMtx(this, mModels[mMode]->getBaseTRMtx());
 }
 
-/* 80BB7818-80BB7988 001058 0170+00 2/2 0/0 0/0 .text            pieceMove__11daBkyRock_cFv */
 void daBkyRock_c::pieceMove() {
     if (field_0x57a) {
         f32 dVar5 = current.pos.y;
@@ -365,33 +331,26 @@ void daBkyRock_c::pieceMove() {
     }
 }
 
-/* ############################################################################################## */
-/* 80BB7FD8-80BB7FE0 000128 0008+00 0/1 0/0 0/0 .rodata          DROP_OFFSET_POS$4096 */
 static int const DROP_OFFSET_POS[2] = {
     0x015E, 0x0DAC,
 };
 
-/* 80BB7FE0-80BB7FE8 000130 0008+00 0/1 0/0 0/0 .rodata          INIT_SPEED_Y_BASE$4097 */
 static int const INIT_SPEED_Y_BASE[2] = {
     20, 40,
 };
 
-/* 80BB7FE8-80BB7FF0 000138 0008+00 0/1 0/0 0/0 .rodata          INIT_SPEED_Y_RANGE$4098 */
 static int const INIT_SPEED_Y_RANGE[2] = {
     60, 120,
 };
 
-/* 80BB7FF0-80BB7FF8 000140 0008+00 0/1 0/0 0/0 .rodata          PIECE_SCALE_RANGE$4099 */
 static int const PIECE_SCALE_RANGE[2] = {
     25, 35,
 };
 
-/* 80BB7FF8-80BB8000 000148 0008+00 0/1 0/0 0/0 .rodata          PIECE_SCALE_BASE$4100 */
 static int const PIECE_SCALE_BASE[2] = {
     8, 20,
 };
 
-/* 80BB7988-80BB7C18 0011C8 0290+00 1/1 0/0 0/0 .text            pieceMoveInit__11daBkyRock_cFv */
 void daBkyRock_c::pieceMoveInit() {
     int nameNo = getNameNo();
     field_0x57a = true;
@@ -426,7 +385,6 @@ void daBkyRock_c::pieceMoveInit() {
     }
 }
 
-/* 80BB7C18-80BB7D50 001458 0138+00 2/2 0/0 0/0 .text            callBombEmt__11daBkyRock_cFiPCUs */
 void daBkyRock_c::callBombEmt(int particleNum, u16 const* particleIds) {
     int nameNo = getNameNo();
     cXyz pos(current.pos.x, current.pos.y - PARTICLE_OFFSET_POS_Y[nameNo], current.pos.z);
@@ -438,31 +396,23 @@ void daBkyRock_c::callBombEmt(int particleNum, u16 const* particleIds) {
     }
 }
 
-/* 80BB7D50-80BB7DA4 001590 0054+00 1/0 0/0 0/0 .text            daBkyRock_create__FP11daBkyRock_c
- */
 static int daBkyRock_create(daBkyRock_c* i_this) {
     fopAcM_ct(i_this, daBkyRock_c);
     return i_this->create();
 }
 
-/* 80BB7DA4-80BB7DC4 0015E4 0020+00 1/0 0/0 0/0 .text            daBkyRock_Delete__FP11daBkyRock_c
- */
 static int daBkyRock_Delete(daBkyRock_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80BB7DC4-80BB7DE4 001604 0020+00 1/0 0/0 0/0 .text            daBkyRock_execute__FP11daBkyRock_c
- */
 static int daBkyRock_execute(daBkyRock_c* i_this) {
     return i_this->execute();
 }
 
-/* 80BB7DE4-80BB7E04 001624 0020+00 1/0 0/0 0/0 .text            daBkyRock_draw__FP11daBkyRock_c */
 static int daBkyRock_draw(daBkyRock_c* i_this) {
     return i_this->draw();
 }
 
-/* 80BB8088-80BB80A8 -00001 0020+00 1/0 0/0 0/0 .data            daBkyRock_METHODS */
 static actor_method_class daBkyRock_METHODS = {
     (process_method_func)daBkyRock_create,
     (process_method_func)daBkyRock_Delete,
@@ -471,7 +421,6 @@ static actor_method_class daBkyRock_METHODS = {
     (process_method_func)daBkyRock_draw,
 };
 
-/* 80BB80A8-80BB80D8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_BkyRock */
 extern actor_process_profile_definition g_profile_BkyRock = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

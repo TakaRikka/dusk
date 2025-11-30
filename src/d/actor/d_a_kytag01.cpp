@@ -12,7 +12,6 @@
 #include "d/d_kankyo_rain.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 80855058-80855320 000078 02C8+00 1/1 0/0 0/0 .text            get_check_pos__FP13kytag01_class */
 static cXyz get_check_pos(kytag01_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
@@ -35,7 +34,6 @@ static cXyz get_check_pos(kytag01_class* i_this) {
     return pos;
 }
 
-/* 80855320-80855638 000340 0318+00 1/1 0/0 0/0 .text            mist_tag_move__FP13kytag01_class */
 static void mist_tag_move(kytag01_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
@@ -107,13 +105,10 @@ static void mist_tag_move(kytag01_class* i_this) {
     }
 }
 
-/* 80855638-80855640 000658 0008+00 1/0 0/0 0/0 .text            daKytag01_Draw__FP13kytag01_class
- */
 static int daKytag01_Draw(kytag01_class* i_this) {
     return 1;
 }
 
-/* 80855640-808557DC 000660 019C+00 1/0 0/0 0/0 .text daKytag01_Execute__FP13kytag01_class */
 static int daKytag01_Execute(kytag01_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     camera_class* camera = dComIfGp_getCamera(0);
@@ -162,18 +157,14 @@ static int daKytag01_Execute(kytag01_class* i_this) {
     return 1;
 }
 
-/* 808557DC-808557E4 0007FC 0008+00 1/0 0/0 0/0 .text daKytag01_IsDelete__FP13kytag01_class */
 static int daKytag01_IsDelete(kytag01_class* i_this) {
     return 1;
 }
 
-/* 808557E4-808557EC 000804 0008+00 1/0 0/0 0/0 .text            daKytag01_Delete__FP13kytag01_class
- */
 static int daKytag01_Delete(kytag01_class* i_this) {
     return 1;
 }
 
-/* 808557EC-80855984 00080C 0198+00 1/0 0/0 0/0 .text            daKytag01_Create__FP10fopAc_ac_c */
 static int daKytag01_Create(fopAc_ac_c* i_this) {
     kytag01_class* a_this = (kytag01_class*)i_this;
     fopAcM_ct(i_this, kytag01_class);
@@ -224,14 +215,12 @@ static int daKytag01_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 808559E8-80855A08 -00001 0020+00 1/0 0/0 0/0 .data            l_daKytag01_Method */
 static actor_method_class l_daKytag01_Method = {
     (process_method_func)daKytag01_Create,  (process_method_func)daKytag01_Delete,
     (process_method_func)daKytag01_Execute, (process_method_func)daKytag01_IsDelete,
     (process_method_func)daKytag01_Draw,
 };
 
-/* 80855A08-80855A38 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KYTAG01 */
 extern actor_process_profile_definition g_profile_KYTAG01 = {
     fpcLy_CURRENT_e,
     7,

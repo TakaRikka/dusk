@@ -16,32 +16,32 @@
 class daSyRock_c : public dBgS_MoveBgActor, public request_of_phase_process_class, public dEvLib_callback_c {
 public:
     daSyRock_c() : dEvLib_callback_c(this) {}
-    /* 80D03DAC */ ~daSyRock_c() {}
+    ~daSyRock_c() {}
 
-    /* 80D0237C */ void setBaseMtx();
-    /* 80D02454 */ int CreateHeap();
-    /* 80D02584 */ cPhs__Step create();
-    /* 80D02AFC */ void setFallStat();
-    /* 80D02BE0 */ int Execute(Mtx**);
-    /* 80D02C54 */ void move();
-    /* 80D02E70 */ void init_modeWait();
-    /* 80D02E7C */ void modeWait();
-    /* 80D02F88 */ bool eventStart();
-    /* 80D02FB8 */ void init_modeDropInit();
-    /* 80D03070 */ void modeDropInit();
-    /* 80D030A8 */ static void* searchWaterPillar(void*, void*);
-    /* 80D03250 */ void init_modeDrop();
-    /* 80D03384 */ void modeDrop();
-    /* 80D033D0 */ void init_modeSink();
-    /* 80D03440 */ void modeSink();
-    /* 80D034E8 */ void init_modeMove();
-    /* 80D035F8 */ void modeMove();
-    /* 80D036B8 */ BOOL chkWaterLineIn();
-    /* 80D036DC */ void bgCheck();
-    /* 80D03984 */ void init_modeDropEnd();
-    /* 80D03A48 */ void modeDropEnd();
-    /* 80D03A4C */ int Draw();
-    /* 80D03B08 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    void setFallStat();
+    int Execute(Mtx**);
+    void move();
+    void init_modeWait();
+    void modeWait();
+    bool eventStart();
+    void init_modeDropInit();
+    void modeDropInit();
+    static void* searchWaterPillar(void*, void*);
+    void init_modeDrop();
+    void modeDrop();
+    void init_modeSink();
+    void modeSink();
+    void init_modeMove();
+    void modeMove();
+    BOOL chkWaterLineIn();
+    void bgCheck();
+    void init_modeDropEnd();
+    void modeDropEnd();
+    int Draw();
+    int Delete();
 
     static dCcD_SrcGObjInf const mCcDObjInfo;
     static dCcD_SrcCyl mCcDCyl;

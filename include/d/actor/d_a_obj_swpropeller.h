@@ -14,18 +14,18 @@
  */
 class daObjSwPr_c : public fopAc_ac_c {
 public:
-    /* 8059A5E8 */ void initBaseMtx();
-    /* 8059A624 */ void setBaseMtx();
-    /* 8059A670 */ int Create();
-    /* 8059A808 */ int CreateHeap();
-    /* 8059A888 */ int create();
-    /* 8059AB04 */ int setRotateTime();
-    /* 8059AB14 */ void switchCtrl();
-    /* 8059AB9C */ void execute_type_boomerang();
-    /* 8059ADCC */ void execute_type_wind();
-    /* 8059B014 */ int execute();
-    /* 8059B148 */ int draw();
-    /* 8059B1AC */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int setRotateTime();
+    void switchCtrl();
+    void execute_type_boomerang();
+    void execute_type_wind();
+    int execute();
+    int draw();
+    int _delete();
 
     u8 getNameArg() { return fopAcM_GetParamBit(this, 8, 8); }
     u8 getMdlType() { return fopAcM_GetParamBit(this, 0x10, 4); }

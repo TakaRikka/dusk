@@ -13,8 +13,8 @@
  */
 class daObjOnsenFire_c : public fopAc_ac_c {
 public:    
-    /* 80CA8278 */ int create();
-    /* 80CA82F4 */ int execute();
+    int create();
+    int execute();
 };
 
 #endif /* D_A_OBJ_ONSENFIRE_H */

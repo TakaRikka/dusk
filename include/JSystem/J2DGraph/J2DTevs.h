@@ -55,10 +55,10 @@ public:
     J2DTexMtx() { mInfo = j2dDefaultTexMtxInfo; }
     ~J2DTexMtx() {}
     J2DTexMtx(const J2DTexMtxInfo& info) { mInfo = info; }
-    /* 802E9C90 */ void load(u32);
-    /* 802E9CC4 */ void calc();
-    /* 802E9D2C */ void getTextureMtx(J2DTextureSRTInfo const&, Vec, Mtx);
-    /* 802E9EBC */ void getTextureMtxMaya(J2DTextureSRTInfo const&, Mtx);
+    void load(u32);
+    void calc();
+    void getTextureMtx(J2DTextureSRTInfo const&, Vec, Mtx);
+    void getTextureMtxMaya(J2DTextureSRTInfo const&, Mtx);
     J2DTexMtxInfo& getTexMtxInfo() { return mInfo; }
     void setTexMtxInfo(J2DTexMtxInfo info) { mInfo = info; }
 
@@ -92,7 +92,7 @@ extern const J2DIndTexOrderInfo j2dDefaultIndTexOrderNull;
  */
 class J2DIndTexOrder {
 public:
-    /* 802EB378 */ J2DIndTexOrder() {
+    J2DIndTexOrder() {
         mInfo = j2dDefaultIndTexOrderNull;
     }
     J2DIndTexOrder(const J2DIndTexOrderInfo& info) {
@@ -102,7 +102,7 @@ public:
         mInfo = info;
         return *this;
     }
-    /* 802EA0FC */ void load(u8);
+    void load(u8);
 
 private:
     /* 0x0 */ J2DIndTexOrderInfo mInfo;
@@ -135,8 +135,8 @@ extern J2DIndTexMtxInfo const j2dDefaultIndTexMtxInfo;
  */
 class J2DIndTexMtx {
 public:
-    /* 802EB2E4 */ ~J2DIndTexMtx() {}
-    /* 802EB320 */ J2DIndTexMtx() {
+    ~J2DIndTexMtx() {}
+    J2DIndTexMtx() {
         mIndTexMtxInfo = j2dDefaultIndTexMtxInfo;
     }
     J2DIndTexMtx(const J2DIndTexMtxInfo& info) {
@@ -146,9 +146,9 @@ public:
         mIndTexMtxInfo = info;
         return *this;
     }
-    /* 802EA098 */ void load(u8);
-    /* 802E9C90 */ void load(u32);
-    /* 802E9CC4 */ void calc();
+    void load(u8);
+    void load(u32);
+    void calc();
 
 private:
     /* 0x0 */ J2DIndTexMtxInfo mIndTexMtxInfo;
@@ -179,8 +179,8 @@ extern const J2DIndTexCoordScaleInfo j2dDefaultIndTexCoordScaleInfo;
  */
 class J2DIndTexCoordScale {
 public:
-    /* 802EB290 */ ~J2DIndTexCoordScale() {}
-    /* 802EB2CC */ J2DIndTexCoordScale() {
+    ~J2DIndTexCoordScale() {}
+    J2DIndTexCoordScale() {
         mInfo = j2dDefaultIndTexCoordScaleInfo;
     }
     J2DIndTexCoordScale(const J2DIndTexCoordScaleInfo& info) {
@@ -190,7 +190,7 @@ public:
         mInfo = info;
         return *this;
     }
-    /* 802EA0CC */ void load(u8);
+    void load(u8);
 
 private:
     /* 0x0 */ J2DIndTexCoordScaleInfo mInfo;
@@ -229,8 +229,8 @@ extern const J2DIndTevStageInfo j2dDefaultIndTevStageInfo;
  */
 class J2DIndTevStage {
 public:
-    /* 802EA044 */ void load(u8);
-    /* 802F18A0 */ J2DIndTevStage() {
+    void load(u8);
+    J2DIndTevStage() {
         mFlags = J2DCalcIndTevStage(j2dDefaultIndTevStageInfo);
     }
     J2DIndTevStage(const J2DIndTevStageInfo& info) {
@@ -279,7 +279,7 @@ extern J2DTexCoordInfo const j2dDefaultTexCoordInfo[8];
  */
 class J2DTexCoord {
 public:
-    /* 802EB260 */ inline J2DTexCoord() {
+    inline J2DTexCoord() {
         mTexCoordInfo = j2dDefaultTexCoordInfo[0];
     }
 
@@ -322,7 +322,7 @@ extern const J2DTevOrderInfo j2dDefaultTevOrderInfoNull;
  */
 class J2DTevOrder {
 public:
-    /* 802F1B70 */ J2DTevOrder() {
+    J2DTevOrder() {
         mTevOrderInfo = j2dDefaultTevOrderInfoNull;
     }
 
@@ -386,9 +386,9 @@ extern const J2DTevSwapModeInfo j2dDefaultTevSwapMode;
  */
 class J2DTevStage {
 public:
-    /* 802F4110 */ J2DTevStage(J2DTevStageInfo const&);
-    /* 802F1940 */ J2DTevStage();
-    /* 802F19A8 */ void setTevStageInfo(J2DTevStageInfo const&);
+    J2DTevStage(J2DTevStageInfo const&);
+    J2DTevStage();
+    void setTevStageInfo(J2DTevStageInfo const&);
 
     void setStageNo(u32 param_0) {
         field_0x0 = (param_0 << 1) + 0xc0;
@@ -538,7 +538,7 @@ extern const u8 data_804561AC;
 
 class J2DTevSwapModeTable {
 public:
-    /* 802F1934 */ J2DTevSwapModeTable() { field_0x0 = data_804561AC; }
+    J2DTevSwapModeTable() { field_0x0 = data_804561AC; }
     J2DTevSwapModeTable(const J2DTevSwapModeTableInfo& info) {
         field_0x0 = J2DCalcTevSwapTable(info.field_0x0, info.field_0x1, info.field_0x2, info.field_0x3);
     }
@@ -575,7 +575,7 @@ extern const J2DColorChanInfo j2dDefaultColorChanInfo;
  */
 class J2DColorChan {
 public:
-    /* 802EB280 */ J2DColorChan() {
+    J2DColorChan() {
         setColorChanInfo(j2dDefaultColorChanInfo);
     }
     J2DColorChan(const J2DColorChanInfo& info) {

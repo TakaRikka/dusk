@@ -7,7 +7,6 @@
 #include "d/actor/d_a_arrow.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 804897BC-804897FC -00001 0040+00 2/2 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[8] = {
     {"", 0},
     {"FOCUS_BOUMATO", 2},
@@ -28,14 +27,12 @@ static daNpcT_evtData_c l_evtList[8] = {
 #define EVT_HIT_BOUMATO3          6
 #define EVT_NEARPIN_BOUMATO       7
 
-/* 804897FC-80489808 -00001 000C+00 2/2 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[3] = {
     "",
     "Taro1",
     "Taro2",
 };
 
-/* 80487538-80487670 000078 0138+00 1/1 0/0 0/0 .text            create__15daTag_AllMato_cFv */
 int daTag_AllMato_c::create() {
     int var_r29 = 0;
     fopAcM_ct(this, daTag_AllMato_c);
@@ -62,12 +59,10 @@ int daTag_AllMato_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 804876B0-804876B8 0001F0 0008+00 1/1 0/0 0/0 .text            Delete__15daTag_AllMato_cFv */
 int daTag_AllMato_c::Delete() {
     return 1;
 }
 
-/* 804876B8-80487C5C 0001F8 05A4+00 1/1 0/0 0/0 .text            Execute__15daTag_AllMato_cFv */
 int daTag_AllMato_c::Execute() {
     camera_class* camera_p = NULL;
 
@@ -275,19 +270,14 @@ int daTag_AllMato_c::Execute() {
     return 0;
 }
 
-/* 80487C5C-80487C64 00079C 0008+00 1/1 0/0 0/0 .text            Draw__15daTag_AllMato_cFv */
 int daTag_AllMato_c::Draw() {
     return 1;
 }
 
-/* 80489880-80489A10 000000 0190+00 9/9 0/0 0/0 .bss             l_findActorPtrs */
 static fopAc_ac_c* l_findActorPtrs[100];
 
-/* 80489A10-80489A14 000190 0004+00 9/9 0/0 0/0 .bss             l_findCount */
 static u32 l_findCount;
 
-/* 80487C64-80487D00 0007A4 009C+00 1/1 0/0 0/0 .text            srchBouMato__15daTag_AllMato_cFPvPv
- */
 void* daTag_AllMato_c::srchBouMato(void* i_actor, void* i_data) {
     if (l_findCount < 100 && i_actor != NULL && i_actor != i_data) {
         if (fopAcM_IsExecuting(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_OBJ_BOUMATO) {
@@ -299,8 +289,6 @@ void* daTag_AllMato_c::srchBouMato(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80487D00-80487D9C 000840 009C+00 1/1 0/0 0/0 .text            srchItaMato__15daTag_AllMato_cFPvPv
- */
 void* daTag_AllMato_c::srchItaMato(void* i_actor, void* i_data) {
     if (l_findCount < 100 && i_actor != NULL && i_actor != i_data) {
         if (fopAcM_IsExecuting(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_OBJ_ITAMATO) {
@@ -312,7 +300,6 @@ void* daTag_AllMato_c::srchItaMato(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80487D9C-80487E38 0008DC 009C+00 1/1 0/0 0/0 .text            srchTaro__15daTag_AllMato_cFPvPv */
 void* daTag_AllMato_c::srchTaro(void* i_actor, void* i_data) {
     if (l_findCount < 100 && i_actor != NULL && i_actor != i_data) {
         if (fopAcM_IsExecuting(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_NPC_TARO) {
@@ -324,8 +311,6 @@ void* daTag_AllMato_c::srchTaro(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80487E38-80487ED4 000978 009C+00 1/1 0/0 0/0 .text            srchArrow__15daTag_AllMato_cFPvPv
- */
 void* daTag_AllMato_c::srchArrow(void* i_actor, void* i_data) {
     if (l_findCount < 100 && i_actor != NULL && i_actor != i_data) {
         if (fopAcM_IsExecuting(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_ARROW) {
@@ -337,7 +322,6 @@ void* daTag_AllMato_c::srchArrow(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80487ED4-80487F80 000A14 00AC+00 2/2 0/0 0/0 .text            isDelete__15daTag_AllMato_cFv */
 int daTag_AllMato_c::isDelete() {
     BOOL rt = FALSE;
     
@@ -356,7 +340,6 @@ int daTag_AllMato_c::isDelete() {
     return rt;
 }
 
-/* 80487F80-80488034 000AC0 00B4+00 1/1 0/0 0/0 .text entryBouMatoActors__15daTag_AllMato_cFv */
 void daTag_AllMato_c::entryBouMatoActors() {
     for (int i = 0; i < 1; i++) {
         mItaMatoActorMngr[i].remove();
@@ -373,7 +356,6 @@ void daTag_AllMato_c::entryBouMatoActors() {
     }
 }
 
-/* 80488034-80488104 000B74 00D0+00 1/1 0/0 0/0 .text entryItaMatoActors__15daTag_AllMato_cFv */
 void daTag_AllMato_c::entryItaMatoActors() {
     for (int i = 0; i < 2; i++) {
         mItaMatoActorMngr[i].remove();
@@ -390,8 +372,6 @@ void daTag_AllMato_c::entryItaMatoActors() {
     }
 }
 
-/* 80488104-804881C0 000C44 00BC+00 1/1 0/0 0/0 .text            getTaroActorP__15daTag_AllMato_cFv
- */
 fopAc_ac_c* daTag_AllMato_c::getTaroActorP() {
     int var_r28 = 0;
     l_findCount = 0;
@@ -407,8 +387,6 @@ fopAc_ac_c* daTag_AllMato_c::getTaroActorP() {
     return NULL;
 }
 
-/* 804881C0-80488238 000D00 0078+00 2/2 0/0 0/0 .text            getArrowActorP__15daTag_AllMato_cFv
- */
  fopAc_ac_c* daTag_AllMato_c::getArrowActorP() {
     int var_r28 = 0;
     l_findCount = 0;
@@ -424,8 +402,6 @@ fopAc_ac_c* daTag_AllMato_c::getTaroActorP() {
     return NULL;
 }
 
-/* 80488238-80488994 000D78 075C+00 1/1 0/0 0/0 .text            checkCrsMato__15daTag_AllMato_cFv
- */
  int daTag_AllMato_c::checkCrsMato() {
     fopAc_ac_c* sp24 = NULL;
     if (mArrowActorMngr.getActorP() == NULL) {
@@ -500,8 +476,6 @@ fopAc_ac_c* daTag_AllMato_c::getTaroActorP() {
     return 0;
 }
 
-/* 80488994-80488F40 0014D4 05AC+00 1/1 0/0 0/0 .text            checkCrsMato2__15daTag_AllMato_cFv
- */
 int daTag_AllMato_c::checkCrsMato2() {
     fopAc_ac_c* sp28;
     getArrowActorP();
@@ -556,8 +530,6 @@ int daTag_AllMato_c::checkCrsMato2() {
     return 0;
 }
 
-/* 80488F40-80488FD8 001A80 0098+00 1/1 0/0 0/0 .text            checkBrkMato__15daTag_AllMato_cFv
- */
 int daTag_AllMato_c::checkBrkMato() {
     int rt = 0;
 
@@ -573,7 +545,6 @@ int daTag_AllMato_c::checkBrkMato() {
     return 0;
 }
 
-/* 80488FD8-804890B0 001B18 00D8+00 1/1 0/0 0/0 .text            evtChange__15daTag_AllMato_cFUs */
 void daTag_AllMato_c::evtChange(u16 i_action) {
     if (strlen(l_resNameList[l_evtList[i_action].num]) != 0) {
         eventInfo.setArchiveName(l_resNameList[l_evtList[i_action].num]);
@@ -585,32 +556,26 @@ void daTag_AllMato_c::evtChange(u16 i_action) {
     fopAcM_orderChangeEventId(this, mEventIdx, 1, 0xFFFF);
 }
 
-/* 804890B0-804890D0 001BF0 0020+00 1/0 0/0 0/0 .text            daTag_AllMato_Create__FPv */
 static int daTag_AllMato_Create(void* i_this) {
     return ((daTag_AllMato_c*)i_this)->create();
 }
 
-/* 804890D0-804890F0 001C10 0020+00 1/0 0/0 0/0 .text            daTag_AllMato_Delete__FPv */
 static int daTag_AllMato_Delete(void* i_this) {
     return ((daTag_AllMato_c*)i_this)->Delete();
 }
 
-/* 804890F0-80489110 001C30 0020+00 1/0 0/0 0/0 .text            daTag_AllMato_Execute__FPv */
 static int daTag_AllMato_Execute(void* i_this) {
     return ((daTag_AllMato_c*)i_this)->Execute();
 }
 
-/* 80489110-80489130 001C50 0020+00 1/0 0/0 0/0 .text            daTag_AllMato_Draw__FPv */
 static int daTag_AllMato_Draw(void* i_this) {
     return ((daTag_AllMato_c*)i_this)->Draw();
 }
 
-/* 80489130-80489138 001C70 0008+00 1/0 0/0 0/0 .text            daTag_AllMato_IsDelete__FPv */
 static int daTag_AllMato_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80489808-80489828 -00001 0020+00 1/0 0/0 0/0 .data            daTag_AllMato_MethodTable */
 static actor_method_class daTag_AllMato_MethodTable = {
     (process_method_func)daTag_AllMato_Create,
     (process_method_func)daTag_AllMato_Delete,
@@ -619,7 +584,6 @@ static actor_method_class daTag_AllMato_MethodTable = {
     (process_method_func)daTag_AllMato_Draw
 };
 
-/* 80489828-80489858 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_TAG_ALLMATO */
 extern actor_process_profile_definition g_profile_TAG_ALLMATO = {
     fpcLy_CURRENT_e,                // mLayerID
     10,                              // mListID

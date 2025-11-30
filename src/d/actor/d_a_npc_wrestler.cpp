@@ -243,10 +243,8 @@ enum Bou3_Joint {
     /* 0x24 */ JNT_OBIR,
 };
 
-/* 80B41E18-80B41E1C -00001 0004+00 1/2 0/0 0/0 .data            l_resALink */
 static char* l_resALink = "alSumou";
 
-/* 80B41E1C-80B41E30 -00001 0014+00 9/13 0/0 0/0 .data            l_resName */
 static char* l_resName[5] = {
     "Bou3",
     "grDS",
@@ -255,12 +253,10 @@ static char* l_resName[5] = {
     NULL,
 };
 
-/* 80B41E30-80B41E44 000038 0014+00 1/1 0/0 0/0 .data            l_bmdGetParamList */
 static int l_bmdGetParamList[5] = {
     BMDR_BOUS, BMDR_GRD, 0, 0, 0,
 };
 
-/* 80B41E44-80B4203C 00004C 01F8+00 1/0 0/0 0/0 .data            l_BouBckParamList */
 static daNpc_GetParam1 l_BouBckParamList[63] = {
     {-1, 2}, {BCK_BOUS_F_DOWN, 2}, {BCK_BOUS_F_HEAD_UP, 0}, 
     {BCK_BOUS_F_LOSE, 0}, {BCK_BOUS_F_LOSE2, 0}, {BCK_BOUS_F_PULLBACK, 0}, 
@@ -285,7 +281,6 @@ static daNpc_GetParam1 l_BouBckParamList[63] = {
     {-1, 2}, {-1, 2}, {-1, 2},
 };
 
-/* 80B4203C-80B42150 000244 0114+00 1/0 0/0 0/0 .data            l_BouFaceParamList */
 static daNpc_GetParam2 l_BouFaceParamList[23] = {
     {-1, 0x44, 2}, {7, 0x45, 2}, {8, 0x46, 0},
     {9, 0x47, 0}, {10, 0x48, 0}, {11, 0x49, 0}, 
@@ -297,7 +292,6 @@ static daNpc_GetParam2 l_BouFaceParamList[23] = {
     {27, 0x58, 0}, {28, 0x59, 0},
 };
 
-/* 80B42150-80B42208 000358 00B8+00 1/0 0/0 0/0 .data            l_BouBtpParamList */
 static daNpc_GetParam1 l_BouBtpParamList[23] = {
     {BTP_BOUS, 2}, {BTP_BOUS_F_DOWN, 0}, 
     {BTP_BOUS_F_HEAD_UP, 0}, {BTP_BOUS_F_LOSE, 0}, 
@@ -313,12 +307,10 @@ static daNpc_GetParam1 l_BouBtpParamList[23] = {
     {BTP_BOUS_F_WIN_POSE, 0},
 };
 
-/* 80B42208-80B42210 000410 0008+00 1/0 0/0 0/0 .data            l_BouBtkParamList */
 static daNpc_GetParam1 l_BouBtkParamList[1] = {
     {BTK_BOUS, 2},
 };
 
-/* 80B42210-80B42220 -00001 0010+00 1/0 0/0 0/0 .data            l_BouAnmParamList */
 static WrestlerParamList l_BouAnmParamList = {
     l_BouBckParamList,
     l_BouFaceParamList,
@@ -326,7 +318,6 @@ static WrestlerParamList l_BouAnmParamList = {
     l_BouBtkParamList,
 };
 
-/* 80B42220-80B42418 000428 01F8+00 1/0 0/0 0/0 .data            l_GrdBckParamList */
 static daNpc_GetParam1 l_GrdBckParamList[63] = {
     {-1, 2}, {8, 2}, {9, 0}, {10, 0},
     {0x0B, 0}, {0x0D, 0}, {0x0E, 0}, {0x0F, 0},
@@ -346,7 +337,6 @@ static daNpc_GetParam1 l_GrdBckParamList[63] = {
     {0x3C, 0}, {0x3D, 0}, {0x42, 2},
 };
 
-/* 80B42418-80B4252C 000620 0114+00 1/0 0/0 0/0 .data            l_GrdFaceParamList */
 static daNpc_GetParam2 l_GrdFaceParamList[23] = {
     {-1, 0x4D, 2}, {8, 0x4E, 2}, {9, 0x4F, 0},
     {0x0A, 0x50, 0}, {0x0B, 0x51, 0}, {0x0D, 0x52, 0}, 
@@ -358,7 +348,6 @@ static daNpc_GetParam2 l_GrdFaceParamList[23] = {
     {0x1E, 0x5F, 0}, {0x1F, -1, 0},
 };
 
-/* 80B4252C-80B425E4 000734 00B8+00 1/0 0/0 0/0 .data            l_GrdBtpParamList */
 static daNpc_GetParam1 l_GrdBtpParamList[23] = {
     {0x4D, 2}, {0x4E, 2}, {0x4F, 0}, {0x50, 0},
     {0x51, 0}, {0x52, 0}, {-1, 0}, {0x53, 0},
@@ -368,12 +357,10 @@ static daNpc_GetParam1 l_GrdBtpParamList[23] = {
     {0x5E, 2}, {0x5F, 0}, {-1, 0},
 };
 
-/* 80B425E4-80B425EC 0007EC 0008+00 1/0 0/0 0/0 .data            l_GrdBtkParamList */
 static daNpc_GetParam1 l_GrdBtkParamList[1] = {
     {0x4A, 2},
 };
 
-/* 80B425EC-80B425FC -00001 0010+00 1/0 0/0 0/0 .data            l_GrdAnmParamList */
 static WrestlerParamList l_GrdAnmParamList = {
     l_GrdBckParamList,
     l_GrdFaceParamList,
@@ -381,13 +368,11 @@ static WrestlerParamList l_GrdAnmParamList = {
     l_GrdBtkParamList,
 };
 
-/* 80B425FC-80B42604 -00001 0008+00 0/1 0/0 0/0 .data            l_anmList */
 static WrestlerParamList* l_anmList[2] = {
     &l_BouAnmParamList,
     &l_GrdAnmParamList,
 };
 
-/* 80B42604-80B42620 -00001 001C+00 2/5 0/0 0/0 .data            l_evtNames */
 static char* l_evtNames[7] = {
     NULL,
     "GRDS_ENTRY",
@@ -398,13 +383,10 @@ static char* l_evtNames[7] = {
     "GRDS_LOSE",
 };
 
-/* 80B42620-80B42624 -00001 0004+00 0/2 0/0 0/0 .data            l_myName */
 static char* l_myName = "Wrestler";
 
-/* 80B42E24-80B42E28 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static NPC_WRESTLER_HIO_CLASS l_HIO;
 
-/* 80B416DC-80B41870 000000 0194+00 35/35 0/0 0/0 .rodata          m__21daNpcWrestler_Param_c */
 const daNpcWrestler_HIOParam daNpcWrestler_Param_c::m = {
     220.0f,
     -3.0f,
@@ -596,7 +578,7 @@ void daNpcWrestler_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
     JORFile aJStack_910;
     int len;
-    switch (reinterpret_cast<u32>(event->id)) {
+    switch ((u32)event->id) {
     case 0x40000002:
         if (aJStack_910.open(6, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL) != 0) {
             memset(msg_buffer, 0, 2000);
@@ -663,7 +645,6 @@ void daNpcWrestler_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-/* 80B4266C-80B426C0 000874 0054+00 0/2 0/0 0/0 .data            mEvtSeqList__15daNpcWrestler_c */
 daNpcWrestler_c::EventFn daNpcWrestler_c::mEvtSeqList[7] = {
     NULL,
     &daNpcWrestler_c::EvCut_grDSEntry,
@@ -691,7 +672,6 @@ daNpcWrestler_c::~daNpcWrestler_c() {
 #endif
 }
 
-/* 80B2F688-80B2F974 0004E8 02EC+00 1/1 0/0 0/0 .text            Create__15daNpcWrestler_cFv */
 cPhs__Step daNpcWrestler_c::Create() {
     fopAcM_ct(this, daNpcWrestler_c);
 
@@ -745,7 +725,6 @@ cPhs__Step daNpcWrestler_c::Create() {
     return phase;
 }
 
-/* 80B2F974-80B2FBF4 0007D4 0280+00 1/1 0/0 0/0 .text            CreateHeap__15daNpcWrestler_cFv */
 int daNpcWrestler_c::CreateHeap() {
     J3DModelData* mdlData_p = NULL;
     J3DModel* model = NULL;
@@ -781,21 +760,18 @@ int daNpcWrestler_c::CreateHeap() {
     return 1;
 }
 
-/* 80B2FDB0-80B2FDE4 000C10 0034+00 1/1 0/0 0/0 .text            Delete__15daNpcWrestler_cFv */
 int daNpcWrestler_c::Delete() {
     fopAcM_RegisterDeleteID(this, "NPC_WRESTLER");
     this->~daNpcWrestler_c();
     return 1;
 }
 
-/* 80B2FDE4-80B2FE1C 000C44 0038+00 2/2 0/0 0/0 .text            Execute__15daNpcWrestler_cFv */
 int daNpcWrestler_c::Execute() {
     checkArenaInfo();
     execute();
     return 1;
 }
 
-/* 80B2FE1C-80B2FE84 000C7C 0068+00 1/1 0/0 0/0 .text            Draw__15daNpcWrestler_cFv */
 int daNpcWrestler_c::Draw() {
     if (mWrestlerNoDraw != 0) {
         return 0;
@@ -806,7 +782,6 @@ int daNpcWrestler_c::Draw() {
     return draw(FALSE, FALSE, field_0xbdc->real_shadow_size, NULL, FALSE);
 }
 
-/* 80B2FE84-80B30150 000CE4 02CC+00 1/1 0/0 0/0 .text            ctrlJoint__15daNpcWrestler_cFP8J3DJointP8J3DModel */
 int daNpcWrestler_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     J3DJoint* my_joint = i_joint;
     int jnt_no = my_joint->getJntNo();
@@ -872,13 +847,11 @@ int daNpcWrestler_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 80B30150-80B30170 000FB0 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__15daNpcWrestler_cFP10fopAc_ac_c */
 int daNpcWrestler_c::createHeapCallBack(fopAc_ac_c* a_this) {
     daNpcWrestler_c* i_this = (daNpcWrestler_c*)a_this;
     return i_this->CreateHeap();
 }
 
-/* 80B30170-80B301BC 000FD0 004C+00 1/1 0/0 0/0 .text            ctrlJointCallBack__15daNpcWrestler_cFP8J3DJointi */
 int daNpcWrestler_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -890,12 +863,10 @@ int daNpcWrestler_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80B301BC-80B3023C 00101C 0080+00 0/0 0/0 1/1 .text            checkStartUp__15daNpcWrestler_cFv */
 bool daNpcWrestler_c::checkStartUp() {
     return chkAction(&daNpcWrestler_c::gotoArena) && field_0xe96 == 2;
 }
 
-/* 80B405E8-80B40B3C 011448 0554+00 1/1 0/0 0/0 .text            setAttnPos__15daNpcWrestler_cFv */
 void daNpcWrestler_c::setAttnPos() {
     static cXyz eyeOffset(-10.0f, 10.0f, 0.0f);
     cXyz* attnPos = NULL;
@@ -967,7 +938,6 @@ void daNpcWrestler_c::setAttnPos() {
     }
 }
 
-/* 80B3023C-80B30654 00109C 0418+00 2/0 0/0 0/0 .text setExpressionAnm__15daNpcWrestler_cFib */
 bool daNpcWrestler_c::setExpressionAnm(int param_1, bool param_2) {
     mAnmFlags &= 0xFFFFE03F;
 
@@ -1109,7 +1079,6 @@ bool daNpcWrestler_c::setExpressionAnm(int param_1, bool param_2) {
     return false;
 }
 
-/* 80B30654-80B3074C 0014B4 00F8+00 1/0 0/0 0/0 .text setExpressionBtp__15daNpcWrestler_cFi */
 bool daNpcWrestler_c::setExpressionBtp(int param_1) {
     J3DAnmTexPattern* anmTexPattern = (field_0xe04->btp_list[param_1].fileIdx >= 0) ?
                     getTexPtrnAnmP(l_resName[mType], field_0xe04->btp_list[param_1].fileIdx) : NULL;
@@ -1169,7 +1138,6 @@ void daNpcWrestler_c::setBackToLiving() {
     field_0xe99 = 1;
 }
 
-/* 80B3074C-80B308B0 0015AC 0164+00 1/0 0/0 0/0 .text            setMotionAnm__15daNpcWrestler_cFif */
 void daNpcWrestler_c::setMotionAnm(int param_1, f32 param_2) {
 #if DEBUG
     const static int btkType = 0;
@@ -1237,7 +1205,6 @@ static s16 dummy_lit_123964(int sel) {
 }
 #endif
 
-/* 80B308B0-80B30AD8 001710 0228+00 1/1 0/0 0/0 .text            reset__15daNpcWrestler_cFv */
 void daNpcWrestler_c::reset() {
     initialize();
     mpMatAnm->initialize();
@@ -1315,7 +1282,6 @@ void daNpcWrestler_c::setNextSumouEvent(int i_sumouEventNo) {
     }
 }
 
-/* 80B30AD8-80B30B80 001938 00A8+00 1/1 0/0 0/0 .text            setAction__15daNpcWrestler_cFM15daNpcWrestler_cFPCvPvPv_b */
 int daNpcWrestler_c::setAction(actionFunc action) {
     field_0xe96 = 3;
     if (field_0xdcc != NULL) {
@@ -1331,7 +1297,6 @@ int daNpcWrestler_c::setAction(actionFunc action) {
     return 1;
 }
 
-/* 80B30B80-80B30BEC 0019E0 006C+00 1/1 0/0 0/0 .text            s_sub1__FPvPv */
 static void* s_sub1(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Tag_Arena
         && ((daNpcWrestler_c*)i_data)->checkArenaSub((daNpcWrestler_c*)i_actor)) {
@@ -1341,7 +1306,6 @@ static void* s_sub1(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80B30BEC-80B30CA4 001A4C 00B8+00 2/2 0/0 0/0 .text            checkArenaInfo__15daNpcWrestler_cFv */
 void daNpcWrestler_c::checkArenaInfo() {
     if (mArenaInfo.chkFlag == 0) {
         base_process_class* bpc_p = fpcM_Search(s_sub1, this);
@@ -1357,7 +1321,6 @@ void daNpcWrestler_c::checkArenaInfo() {
     }
 }
 
-/* 80B30CA4-80B30CC8 001B04 0024+00 1/1 0/0 0/0 .text            checkArenaSub__15daNpcWrestler_cFP10fopAc_ac_c */
 bool daNpcWrestler_c::checkArenaSub(fopAc_ac_c* actor) {
     daTagArena_c* arena = (daTagArena_c*)actor;
     if (getArenaNo() == arena->getArenaNo()) {
@@ -1367,7 +1330,6 @@ bool daNpcWrestler_c::checkArenaSub(fopAc_ac_c* actor) {
     return false;
 }
 
-/* 80B30CC8-80B30D48 001B28 0080+00 1/1 0/0 0/0 .text            s_sub2__FPvPv */
 static void* s_sub2(void* i_actor, void* i_data) {
     (void) i_data;
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_GRA) {
@@ -1382,7 +1344,6 @@ static void* s_sub2(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80B30D48-80B30F00 001BA8 01B8+00 2/2 0/0 0/0 .text            setOnToArena__15daNpcWrestler_cFf */
 void daNpcWrestler_c::setOnToArena(f32 param_1) {
     if (mType == 0) {
         daNpcBouS_c* bou = (daNpcBouS_c*)fpcM_SearchByID(parentActorID);
@@ -1499,7 +1460,6 @@ void daNpcWrestler_c::playExpression() {
     }
 }
 
-/* 80B3FCE8-80B404FC 010B48 0814+00 1/2 0/0 0/0 .text            playMotion__15daNpcWrestler_cFv */
 void daNpcWrestler_c::playMotion() {
     daNpcF_anmPlayData playData0 = {0x39, field_0xbd8->common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&playData0};
@@ -1609,7 +1569,6 @@ void daNpcWrestler_c::playMotion() {
     }
 }
 
-/* 80B40B3C-80B40D1C 01199C 01E0+00 1/1 0/0 0/0 .text            lookat__15daNpcWrestler_cFv */
 void daNpcWrestler_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model = mAnm_p->getModel();
@@ -1661,7 +1620,6 @@ void daNpcWrestler_c::lookat() {
     mLookAt.calc(this, model->getBaseTRMtx(), lookat_angle, snap, angle_delta, FALSE);
 }
 
-/* 80B33B3C-80B34654 00499C 0B18+00 1/1 0/0 0/0 .text            setNextAction__15daNpcWrestler_cFv */
 bool daNpcWrestler_c::setNextAction() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -1769,7 +1727,6 @@ bool daNpcWrestler_c::setNextAction() {
     return false;
 }
 
-/* 80B30F00-80B31680 001D60 0780+00 13/1 0/0 0/0 .text            wait__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::wait(void* param_1) {
     switch (field_0xe96) {
         case 0: {
@@ -1855,7 +1812,6 @@ bool daNpcWrestler_c::wait(void* param_1) {
     return true;
 }
 
-/* 80B31680-80B316C8 0024E0 0048+00 1/0 0/0 0/0 .text            setMotion__15daNpcWrestler_cFifi */
 void daNpcWrestler_c::setMotion(int i_motion, f32 i_motionMorfOverride, int param_3) {
     s16 motion = i_motion;
     if (param_3 || mMotion != motion) {
@@ -1869,7 +1825,6 @@ void daNpcWrestler_c::setMotion(int i_motion, f32 i_motionMorfOverride, int para
     }
 }
 
-/* 80B316C8-80B316F4 002528 002C+00 1/0 0/0 0/0 .text            setExpression__15daNpcWrestler_cFif */
 void daNpcWrestler_c::setExpression(int i_expression, f32 i_expressionMorfOvveride) {
     if (i_expression >= 0 && i_expression < 6) {
         mExpression = i_expression;
@@ -1915,7 +1870,6 @@ void daNpcWrestler_c::setExpressionTalkAfter() {
     }
 }
 
-/* 80B316F4-80B31EB0 002554 07BC+00 3/0 0/0 0/0 .text            talk__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::talk(void* param_1) {
     bool rv = false;
     int i_expression, i_motion, iVar3;
@@ -2010,7 +1964,6 @@ bool daNpcWrestler_c::talk(void* param_1) {
     return rv;
 }
 
-/* 80B31EB0-80B32058 002D10 01A8+00 4/0 0/0 0/0 .text            demo__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::demo(void* param_1) {
     dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
 
@@ -2053,7 +2006,6 @@ bool daNpcWrestler_c::demo(void* param_1) {
     return true;
 }
 
-/* 80B32058-80B32444 002EB8 03EC+00 7/0 0/0 0/0 .text            gotoArena__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::gotoArena(void* param_1) {
     dCamera_c* camBody = dCam_getBody();
 
@@ -2120,7 +2072,6 @@ bool daNpcWrestler_c::gotoArena(void* param_1) {
     return true;
 }
 
-/* 80B32444-80B32850 0032A4 040C+00 1/0 0/0 0/0 .text            gotoLiving__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::gotoLiving(void* param_1) {
     dCamera_c* camBody = dCam_getBody();
     int iVar1;
@@ -2202,7 +2153,6 @@ void daNpcWrestler_c::initDemoCamera_ArenaSide() {
     mDoMtx_stack_c::multVecZero(&mDemoCam.mDemoCamEye);
 }
 
-/* 80B32850-80B331CC 0036B0 097C+00 2/0 0/0 0/0 .text            sumouReady__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouReady(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     dCamera_c* camBody = dCam_getBody();
@@ -2402,7 +2352,6 @@ void daNpcWrestler_c::correctGraspPosAngle(bool param_1) {
     }
 }
 
-/* 80B339EC-80B33B3C 00484C 0150+00 13/13 0/0 0/0 .text          checkOutOfArenaP__15daNpcWrestler_cFv */
 bool daNpcWrestler_c::checkOutOfArenaP() {
     if (mArenaInfo.chkFlag == 0) {
         return false;
@@ -2415,7 +2364,6 @@ bool daNpcWrestler_c::checkOutOfArenaP() {
     return (left_foot_pos.abs2XZ(mArenaPos) > fVar1) || (right_foot_pos.abs2XZ(mArenaPos) > fVar1);
 }
 
-/* 80B331CC-80B339EC 00402C 0820+00 14/0 0/0 0/0 .text           sumouWait__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouWait(void* param_1) {
     switch (field_0xe96) {
         case 0:
@@ -2495,7 +2443,6 @@ bool daNpcWrestler_c::sumouWait(void* param_1) {
     return true;
 }
 
-/* 80B34654-80B34CD0 0054B4 067C+00 2/0 0/0 0/0 .text            sumouPunchHit__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouPunchHit(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     int jointNo = mType == 0 ? 0x12 : 0x11;
@@ -2602,7 +2549,6 @@ bool daNpcWrestler_c::sumouPunchHit(void* param_1) {
     return true;
 }
 
-/* 80B34CD0-80B35364 005B30 0694+00 2/0 0/0 0/0 .text            sumouPunchChaseHit__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouPunchChaseHit(void* param_1) {
     int jointNo = mType == 0 ? 0x12 : 0x11;
     cXyz sp38;
@@ -2707,7 +2653,6 @@ bool daNpcWrestler_c::sumouPunchChaseHit(void* param_1) {
     return true;
 }
 
-/* 80B35780-80B358F0 0065E0 0170+00 8/8 0/0 0/0 .text            checkOutOfArenaW__15daNpcWrestler_cFv */
 bool daNpcWrestler_c::checkOutOfArenaW() {
     if (mArenaInfo.chkFlag == 0) {
         return false;
@@ -2722,7 +2667,6 @@ bool daNpcWrestler_c::checkOutOfArenaW() {
     return field_0x89c.abs2XZ(mArenaPos) > fVar1 || field_0x8a8.abs2XZ(mArenaPos) > fVar1;
 }
 
-/* 80B35364-80B35780 0061C4 041C+00 1/0 0/0 0/0 .text            sumouPunchMiss__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouPunchMiss(void* param_1) {
     // NONMATCHING - regalloc
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -2786,7 +2730,6 @@ bool daNpcWrestler_c::sumouPunchMiss(void* param_1) {
     return true;
 }
 
-/* 80B358F0-80B35968 006750 0078+00 4/4 0/0 0/0 .text            getJointPos__15daNpcWrestler_cFi */
 cXyz daNpcWrestler_c::getJointPos(int i_jointNo) {
     cXyz jointPos;
     mDoMtx_stack_c::copy(mAnm_p->getModel()->getAnmMtx(i_jointNo));
@@ -2794,7 +2737,6 @@ cXyz daNpcWrestler_c::getJointPos(int i_jointNo) {
     return jointPos;
 }
 
-/* 80B35968-80B3606C 0067C8 0704+00 2/0 0/0 0/0 .text            sumouPunchDraw__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouPunchDraw(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     int jointNo = mType == 0 ? 0x12 : 0x11;
@@ -2897,7 +2839,6 @@ bool daNpcWrestler_c::sumouPunchDraw(void* param_1) {
     return true;
 }
 
-/* 80B3606C-80B36908 006ECC 089C+00 5/0 0/0 0/0 .text            sumouTackleHit__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouTackleHit(void* param_1) {
     daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
     int jointNo = mType == 0 ? 0 : 0;
@@ -3039,7 +2980,6 @@ bool daNpcWrestler_c::sumouTackleHit(void* param_1) {
     return true;
 }
 
-/* 80B36908-80B36C8C 007768 0384+00 2/0 0/0 0/0 .text            sumouTackleMiss__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouTackleMiss(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -3077,7 +3017,6 @@ bool daNpcWrestler_c::sumouTackleMiss(void* param_1) {
     return true;
 }
 
-/* 80B36C8C-80B37270 007AEC 05E4+00 2/0 0/0 0/0 .text            sumouTackleDraw__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouTackleDraw(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     int jointNo = mType == 0 ? 0 : 0;
@@ -3195,7 +3134,6 @@ void daNpcWrestler_c::setStepAngle() {
     mStepAngle = stepAngle;
 }
 
-/* 80B37270-80B378F4 0080D0 0684+00 4/0 0/0 0/0 .text            sumouSideStep__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouSideStep(void* param_1) {
     // NONMATCHING - g_dComIfG_gameInfo weirdness
     switch (field_0xe96) {
@@ -3269,7 +3207,6 @@ bool daNpcWrestler_c::sumouSideStep(void* param_1) {
     return true;
 }
 
-/* 80B378F4-80B37C30 008754 033C+00 1/0 0/0 0/0 .text            sumouLostBalance__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouLostBalance(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -3307,7 +3244,6 @@ bool daNpcWrestler_c::sumouLostBalance(void* param_1) {
     return true;
 }
 
-/* 80B37C30-80B37FB8 008A90 0388+00 4/0 0/0 0/0 .text            sumouPunchShock__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouPunchShock(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -3348,7 +3284,6 @@ bool daNpcWrestler_c::sumouPunchShock(void* param_1) {
     return true;
 }
 
-/* 80B37FB8-80B38518 008E18 0560+00 2/0 0/0 0/0 .text            sumouPunchChaseShock__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouPunchChaseShock(void* param_1) {
     // NONMATCHING - regalloc
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -3401,7 +3336,6 @@ bool daNpcWrestler_c::sumouPunchChaseShock(void* param_1) {
     return true;
 }
 
-/* 80B38518-80B389A4 009378 048C+00 2/0 0/0 0/0 .text            sumouPunchStagger__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouPunchStagger(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -3443,7 +3377,6 @@ bool daNpcWrestler_c::sumouPunchStagger(void* param_1) {
     return true;
 }
 
-/* 80B389A4-80B38C90 009804 02EC+00 4/0 0/0 0/0 .text            sumouTackleShock__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouTackleShock(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -3478,7 +3411,6 @@ bool daNpcWrestler_c::sumouTackleShock(void* param_1) {
     return true;
 }
 
-/* 80B38C90-80B39334 009AF0 06A4+00 2/0 0/0 0/0 .text            sumouTackleStagger__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouTackleStagger(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     int jointNo = mType == 0 ? 0x1A : 0x18;
@@ -3542,7 +3474,6 @@ bool daNpcWrestler_c::sumouTackleStagger(void* param_1) {
     return true;
 }
 
-/* 80B39334-80B39554 00A194 0220+00 1/0 0/0 0/0 .text            sumouTackleStaggerRelease__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouTackleStaggerRelease(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -3575,7 +3506,6 @@ bool daNpcWrestler_c::sumouTackleStaggerRelease(void* param_1) {
     return true;
 }
 
-/* 80B39554-80B39C18 00A3B4 06C4+00 1/0 0/0 0/0 .text            sumouTacklePush__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouTacklePush(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     int jointNo, jointNo2;
@@ -3644,7 +3574,6 @@ bool daNpcWrestler_c::sumouTacklePush(void* param_1) {
     return true;
 }
 
-/* 80B39C18-80B39F88 00AA78 0370+00 1/0 0/0 0/0 .text sumouTackleRelease__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::sumouTackleRelease(void* param_1) {
     switch (field_0xe96) {
         case 0:
@@ -3725,7 +3654,6 @@ void daNpcWrestler_c::initDemoCamera_ReadyWrestler() {
     mDoMtx_stack_c::multVec(&mDemoCam.mDemoCamCenter, &mDemoCam.mDemoCamCenter);
 }
 
-/* 80B39F88-80B3AE24 00ADE8 0E9C+00 2/0 0/0 0/0 .text demoSumouReady__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::demoSumouReady(void* param_1) {
     dCamera_c* camBody = dCam_getBody();
 
@@ -3998,7 +3926,6 @@ bool daNpcWrestler_c::demoSumouReady(void* param_1) {
     return true;
 }
 
-/* 80B3AE24-80B3B4B4 00BC84 0690+00 2/0 0/0 0/0 .text            demoSumouWin__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::demoSumouWin(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     dCamera_c* camBody = dCam_getBody();
@@ -4122,7 +4049,6 @@ bool daNpcWrestler_c::demoSumouWin(void* param_1) {
     return true;
 }
 
-/* 80B3B4B4-80B3BC84 00C314 07D0+00 3/0 0/0 0/0 .text            demoSumouLose__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::demoSumouLose(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     dCamera_c* camBody = dCam_getBody();
@@ -4259,7 +4185,6 @@ bool daNpcWrestler_c::demoSumouLose(void* param_1) {
     return true;
 }
 
-/* 80B3BC84-80B3C278 00CAE4 05F4+00 11/0 0/0 0/0 .text demoSumouWin2__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::demoSumouWin2(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     dCamera_c* camBody = dCam_getBody();
@@ -4368,7 +4293,6 @@ bool daNpcWrestler_c::demoSumouWin2(void* param_1) {
     return true;
 }
 
-/* 80B3C278-80B3CA2C 00D0D8 07B4+00 5/0 0/0 0/0 .text demoSumouLose2__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::demoSumouLose2(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     dCamera_c* camBody = dCam_getBody();
@@ -4508,7 +4432,6 @@ bool daNpcWrestler_c::demoSumouLose2(void* param_1) {
     return true;
 }
 
-/* 80B3CA2C-80B3D0C0 00D88C 0694+00 4/0 0/0 0/0 .text demoSumouUnilateralWin__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::demoSumouUnilateralWin(void* param_1) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     dCamera_c* camBody = dCam_getBody();
@@ -4630,7 +4553,6 @@ bool daNpcWrestler_c::demoSumouUnilateralWin(void* param_1) {
     return true;
 }
 
-/* 80B3D0C0-80B3D584 00DF20 04C4+00 2/0 0/0 0/0 .text demoTalkAfterLose__15daNpcWrestler_cFPv */
 bool daNpcWrestler_c::demoTalkAfterLose(void* param_1) {
     bool retval = false;
     switch (field_0xe96) {
@@ -4717,7 +4639,6 @@ bool daNpcWrestler_c::demoTalkAfterLose(void* param_1) {
     return retval;
 }
 
-/* 80B3D584-80B3DB50 00E3E4 05CC+00 3/0 0/0 0/0 .text EvCut_grDSEntry__15daNpcWrestler_cFi */
 BOOL daNpcWrestler_c::EvCut_grDSEntry(int i_cutIndex) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutName = (int*)eventManager.getMyNowCutName(i_cutIndex);
@@ -4832,7 +4753,6 @@ BOOL daNpcWrestler_c::EvCut_grDSEntry(int i_cutIndex) {
     return FALSE;
 }
 
-/* 80B3DB50-80B3DCE8 00E9B0 0198+00 1/0 0/0 0/0 .text EvCut_grDSEntry2__15daNpcWrestler_cFi */
 BOOL daNpcWrestler_c::EvCut_grDSEntry2(int i_cutIndex) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutName = (int*)eventManager.getMyNowCutName(i_cutIndex);
@@ -4871,7 +4791,6 @@ BOOL daNpcWrestler_c::EvCut_grDSEntry2(int i_cutIndex) {
     return FALSE;
 }
 
-/* 80B3DCE8-80B3E0FC 00EB48 0414+00 2/0 0/0 0/0 .text EvCut_grDSEntry3_4__15daNpcWrestler_cFi */
 BOOL daNpcWrestler_c::EvCut_grDSEntry3_4(int i_cutIndex) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutName = (int*)eventManager.getMyNowCutName(i_cutIndex);
@@ -4935,7 +4854,6 @@ BOOL daNpcWrestler_c::EvCut_grDSEntry3_4(int i_cutIndex) {
     return FALSE;
 }
 
-/* 80B3E0FC-80B3E584 00EF5C 0488+00 1/0 0/0 0/0 .text EvCut_grDSEntry5__15daNpcWrestler_cFi */
 BOOL daNpcWrestler_c::EvCut_grDSEntry5(int i_cutIndex) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutName = (int*)eventManager.getMyNowCutName(i_cutIndex);
@@ -4990,7 +4908,6 @@ BOOL daNpcWrestler_c::EvCut_grDSEntry5(int i_cutIndex) {
     return FALSE;
 }
 
-/* 80B3E584-80B3EA2C 00F3E4 04A8+00 1/0 0/0 0/0 .text            EvCut_grDSLose__15daNpcWrestler_cFi */
 BOOL daNpcWrestler_c::EvCut_grDSLose(int i_cutIndex) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutName = (int*)eventManager.getMyNowCutName(i_cutIndex);
@@ -5062,33 +4979,27 @@ BOOL daNpcWrestler_c::EvCut_grDSLose(int i_cutIndex) {
     return FALSE;
 }
 
-/* 80B3EA2C-80B3EA4C 00F88C 0020+00 1/0 0/0 0/0 .text            daNpcWrestler_Create__FPv */
 static int daNpcWrestler_Create(void* a_this) {
     return ((daNpcWrestler_c*)a_this)->Create();
 
 }
 
-/* 80B3EA4C-80B3EA6C 00F8AC 0020+00 1/0 0/0 0/0 .text            daNpcWrestler_Delete__FPv */
 static int daNpcWrestler_Delete(void* a_this) {
     return ((daNpcWrestler_c*)a_this)->Delete();
 }
 
-/* 80B3EA6C-80B3EA8C 00F8CC 0020+00 1/0 0/0 0/0 .text            daNpcWrestler_Execute__FPv */
 static int daNpcWrestler_Execute(void* a_this) {
     return ((daNpcWrestler_c*)a_this)->Execute();
 }
 
-/* 80B3EA8C-80B3EAAC 00F8EC 0020+00 1/0 0/0 0/0 .text            daNpcWrestler_Draw__FPv */
 static int daNpcWrestler_Draw(void* a_this) {
     return ((daNpcWrestler_c*)a_this)->Draw();
 }
 
-/* 80B3EAAC-80B3EAB4 00F90C 0008+00 1/0 0/0 0/0 .text            daNpcWrestler_IsDelete__FPv */
 static int daNpcWrestler_IsDelete(void* a_this) {
     return 1;
 }
 
-/* 80B3EAE4-80B3EB94 00F944 00B0+00 1/0 0/0 0/0 .text            setParam__15daNpcWrestler_cFv */
 void daNpcWrestler_c::setParam() {
     s16 reg_r30 = 5;
     s16 reg_r29 = 6;
@@ -5118,7 +5029,6 @@ bool daNpcWrestler_c::selectAction() {
     return false;
 }
 
-/* 80B3EF10-80B3FCE8 00FD70 0DD8+00 1/1 0/0 0/0 .text setWrestlerVoice__15daNpcWrestler_cFv */
 void daNpcWrestler_c::setWrestlerVoice() {
     J3DAnmTransform* anmTransform = mAnm_p->getAnm();
 
@@ -5261,7 +5171,6 @@ void daNpcWrestler_c::setWrestlerVoice() {
     }
 }
 
-/* 80B3EB94-80B3EF10 00F9F4 037C+00 1/0 0/0 0/0 .text            main__15daNpcWrestler_cFv */
 BOOL daNpcWrestler_c::main() {
     if (!selectAction() && field_0xdcc != NULL) {
         (this->*field_0xdcc)(NULL);
@@ -5278,7 +5187,6 @@ BOOL daNpcWrestler_c::main() {
     return TRUE;
 }
 
-/* 80B404FC-80B405E8 01135C 00EC+00 1/0 0/0 0/0 .text            ctrlBtk__15daNpcWrestler_cFv */
 BOOL daNpcWrestler_c::ctrlBtk() {
     if (mpMatAnm != NULL) {
         J3DAnmTextureSRTKey* btkAnm = (field_0xe04->btk_list->fileIdx >= 0)
@@ -5298,17 +5206,14 @@ BOOL daNpcWrestler_c::ctrlBtk() {
     return FALSE;
 }
 
-/* 80B40D1C-80B40D24 011B7C 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__15daNpcWrestler_cFv */
 BOOL daNpcWrestler_c::drawDbgInfo() {
     return FALSE;
 }
 
-/* 80B40D24-80B40D28 011B84 0004+00 1/0 0/0 0/0 .text            drawOtherMdls__15daNpcWrestler_cFv */
 void daNpcWrestler_c::drawOtherMdls() {
     /* empty function */
 }
 
-/* 80B42CD8-80B42CF8 -00001 0020+00 1/0 0/0 0/0 .data            daNpcWrestler_MethodTable */
 static actor_method_class daNpcWrestler_MethodTable = {
     (process_method_func)daNpcWrestler_Create,
     (process_method_func)daNpcWrestler_Delete,
@@ -5317,7 +5222,6 @@ static actor_method_class daNpcWrestler_MethodTable = {
     (process_method_func)daNpcWrestler_Draw,
 };
 
-/* 80B42CF8-80B42D28 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_WRESTLER */
 extern actor_process_profile_definition g_profile_NPC_WRESTLER = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID

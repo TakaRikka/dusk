@@ -2,7 +2,6 @@
 
 #include "d/d_particle_name.h"
 
-/* 803A85D0-803A85DC 0056F0 000A+02 0/0 1/1 0/0 .data            j_o_id__8dPa_name */
 u16 dPa_name::j_o_id[5] = {
     ID_ZI_J_O_DIGTGA_A,
     ID_ZI_J_O_DIGTGA_B,
@@ -11,7 +10,6 @@ u16 dPa_name::j_o_id[5] = {
     ID_ZI_J_O_KAGEROU,
 };
 
-/* 803A85DC-803A85F8 0056FC 001C+00 0/0 1/1 0/0 .data            s_o_id__8dPa_name */
 u16 dPa_name::s_o_id[14] = {
     dPa_RM(ID_ZI_S_O_FIRE2_A),
     dPa_RM(ID_ZI_S_O_FIRE2_B),

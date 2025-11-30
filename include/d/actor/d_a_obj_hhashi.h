@@ -15,24 +15,24 @@
  */
 class daObjHHASHI_c : public dBgS_MoveBgActor {
 public:
-    /* 8057F9B8 */ void initCcCylinder();
-    /* 8057FA18 */ void setCcCylinder();
-    /* 8057FA90 */ void Set_Hahen(cXyz*);
-    /* 8057FDA8 */ void Set_Speed(s16, s16, f32, f32, f32, f32);
-    /* 805801B0 */ void Obj_Damage();
-    /* 80580358 */ void Wall_Check(s16);
-    /* 8058043C */ void Hahen_Motion(s16);
-    /* 805805F4 */ void CheckCull();
-    /* 805807C4 */ bool checkViewArea(int);
-    /* 80580854 */ void Rolling(cXyz*, f32, f32, s8);
-    /* 80580A48 */ void Roll_Set(cXyz*, f32, s16);
-    /* 80580C80 */ void setBaseMtx();
-    /* 80580DA4 */ int CreateHeap();
-    /* 80580EA0 */ int create();
-    /* 805811CC */ int Create();
-    /* 80581210 */ int Execute(Mtx**);
-    /* 805812BC */ int Draw();
-    /* 8058140C */ int Delete();
+    void initCcCylinder();
+    void setCcCylinder();
+    void Set_Hahen(cXyz*);
+    void Set_Speed(s16, s16, f32, f32, f32, f32);
+    void Obj_Damage();
+    void Wall_Check(s16);
+    void Hahen_Motion(s16);
+    void CheckCull();
+    bool checkViewArea(int);
+    void Rolling(cXyz*, f32, f32, s8);
+    void Roll_Set(cXyz*, f32, s16);
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     /* 0x05A0 */ int field_0x5a0;
     /* 0x05A4 */ int field_0x5a4;

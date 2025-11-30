@@ -18,7 +18,7 @@
  */
 class e_rd_class {
 public:
-    /* 80517AE0 */ e_rd_class();
+    e_rd_class();
 
     /* 0x0000 */ fopEn_enemy_c actor;
     /* 0x05AC */ request_of_phase_process_class mPhase;

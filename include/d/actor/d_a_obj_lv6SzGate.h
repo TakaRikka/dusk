@@ -23,24 +23,24 @@ public:
         MODE_END = 5,
     };
 
-    /* 80C75900 */ void setBaseMtx();
-    /* 80C75A54 */ int CreateHeap();
-    /* 80C75C0C */ cPhs__Step create();
-    /* 80C75E18 */ int Execute(Mtx**);
-    /* 80C75E78 */ void moveGate();
-    /* 80C75F64 */ void init_modeWait();
-    /* 80C75F70 */ void modeWait();
-    /* 80C75FC0 */ void init_modeOpenWait0();
-    /* 80C75FD8 */ void modeOpenWait0();
-    /* 80C76010 */ void init_modeOpenWait();
-    /* 80C76094 */ void modeOpenWait();
-    /* 80C760F0 */ void init_modeOpen();
-    /* 80C760FC */ void modeOpen();
-    /* 80C7624C */ void modeClose();
-    /* 80C76328 */ void init_modeEnd();
-    /* 80C76344 */ void modeEnd();
-    /* 80C7637C */ int Draw();
-    /* 80C76490 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    int Execute(Mtx**);
+    void moveGate();
+    void init_modeWait();
+    void modeWait();
+    void init_modeOpenWait0();
+    void modeOpenWait0();
+    void init_modeOpenWait();
+    void modeOpenWait();
+    void init_modeOpen();
+    void modeOpen();
+    void modeClose();
+    void init_modeEnd();
+    void modeEnd();
+    int Draw();
+    int Delete();
 
     u32 getWaitTime() { return fopAcM_GetParamBit(this, 8, 8); }
     u32 getSw() { return fopAcM_GetParamBit(this, 0, 8); }
@@ -64,8 +64,8 @@ STATIC_ASSERT(sizeof(daLv6SzGate_c) == 0x61c);
 
 class daLv6SzGate_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C7586C */ daLv6SzGate_HIO_c();
-    /* 80C76584 */ virtual ~daLv6SzGate_HIO_c() {};
+    daLv6SzGate_HIO_c();
+    virtual ~daLv6SzGate_HIO_c() {};
 
     void genMessage(JORMContext*);
 

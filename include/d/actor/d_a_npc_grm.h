@@ -54,40 +54,40 @@ public:
         /* 0x3 */ MAT_GRA_M,
     };
 
-    /* 809D406C */ ~daNpc_grM_c();
-    /* 809D4194 */ cPhs__Step create();
-    /* 809D441C */ int CreateHeap();
-    /* 809D45C4 */ int Delete();
-    /* 809D45F8 */ int Execute();
-    /* 809D46D4 */ int Draw();
-    /* 809D4768 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 809D4788 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 809D47E0 */ bool getType();
-    /* 809D47E8 */ int getFlowNodeNo();
-    /* 809D4804 */ u8 getMaxNumItem();
-    /* 809D4810 */ BOOL isDelete();
-    /* 809D4820 */ void reset();
-    /* 809D4944 */ void afterJntAnm(int);
-    /* 809D49D0 */ void setParam();
-    /* 809D4B24 */ void setAfterTalkMotion();
-    /* 809D4BB8 */ void srchActors();
-    /* 809D4BBC */ BOOL evtProc();
-    /* 809D4E2C */ BOOL evtTalk();
-    /* 809D4FD0 */ BOOL evtCutProc();
-    /* 809D5098 */ void action();
-    /* 809D51F4 */ void beforeMove();
-    /* 809D526C */ void setAttnPos();
-    /* 809D54C8 */ void setCollision();
-    /* 809D55F8 */ int drawDbgInfo();
-    /* 809D5600 */ void drawOtherMdl();
-    /* 809D5660 */ BOOL selectAction();
-    /* 809D56A8 */ BOOL chkAction(actionFunc);
-    /* 809D56D4 */ BOOL setAction(actionFunc);
-    /* 809D577C */ int cutTalkSpa(int);
-    /* 809D58F4 */ int tend(void*);
-    /* 809D5AAC */ int talk(void*);
-    /* 809D5C30 */ int shop(void*);
-    /* 809D5E20 */ daNpc_grM_c(
+    ~daNpc_grM_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    bool getType();
+    int getFlowNodeNo();
+    u8 getMaxNumItem();
+    BOOL isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtProc();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    BOOL selectAction();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    int cutTalkSpa(int);
+    int tend(void*);
+    int talk(void*);
+    int shop(void*);
+    daNpc_grM_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -97,12 +97,12 @@ public:
         : dShopSystem_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
                         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
                         i_arcNames) {}
-    /* 809D5F98 */ u16 getEyeballMaterialNo() { return MAT_GRA_A_EYEBALL; }
-    /* 809D5FA0 */ s32 getHeadJointNo() { return JNT_HEAD; }
-    /* 809D5FA8 */ s32 getNeckJointNo() { return JNT_NECK; }
-    /* 809D5FB0 */ s32 getBackboneJointNo() { return JNT_BACKBONE1; }
-    /* 809D5FB8 */ BOOL checkChangeJoint(int param_0) { return param_0 == JNT_HEAD; }
-    /* 809D5FC8 */ BOOL checkRemoveJoint(int param_0) { return param_0 == JNT_MOUTH; }
+    u16 getEyeballMaterialNo() { return MAT_GRA_A_EYEBALL; }
+    s32 getHeadJointNo() { return JNT_HEAD; }
+    s32 getNeckJointNo() { return JNT_NECK; }
+    s32 getBackboneJointNo() { return JNT_BACKBONE1; }
+    BOOL checkChangeJoint(int param_0) { return param_0 == JNT_HEAD; }
+    BOOL checkRemoveJoint(int param_0) { return param_0 == JNT_MOUTH; }
 
     static char* mCutNameList[2];
     static cutFunc mCutList[2];
@@ -133,7 +133,7 @@ public:
 
 class daNpc_grM_Param_c {
 public:
-    /* 809D5FD8 */ virtual ~daNpc_grM_Param_c() {}
+    virtual ~daNpc_grM_Param_c() {}
 
     static daNpc_grM_HIOParam const m;
 };

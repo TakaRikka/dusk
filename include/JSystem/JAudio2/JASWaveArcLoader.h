@@ -2,7 +2,6 @@
 #define JASWAVEARCLOADER_H
 
 #include "JSystem/JAudio2/JASHeapCtrl.h"
-#include "dol2asm.h"
 #include <dolphin/os.h>
 
 class JKRHeap;
@@ -14,8 +13,8 @@ class JKRSolidHeap;
  */
 struct JASDisposer {
     JASDisposer() {}
-    /* 8029A7B8 */ virtual ~JASDisposer() {}
-    /* 80290BCC */ virtual void onDispose() {}
+    virtual ~JASDisposer() {}
+    virtual void onDispose() {}
 };
 
 #define DIR_MAX 64
@@ -25,9 +24,9 @@ struct JASDisposer {
  * 
  */
 struct JASWaveArcLoader {
-    /* 8029A0A0 */ static JASHeap* getRootHeap();
-    /* 8029A0D0 */ static void setCurrentDir(char const*);
-    /* 8029A130 */ static char* getCurrentDir();
+    static JASHeap* getRootHeap();
+    static void setCurrentDir(char const*);
+    static char* getCurrentDir();
 
     static char sCurrentDir[DIR_MAX];
     static JASHeap* sAramHeap;
@@ -38,21 +37,21 @@ struct JASWaveArcLoader {
  * 
  */
 struct JASWaveArc : JASDisposer {
-    /* 8029A13C */ JASWaveArc();
-    /* 8029A258 */ bool loadSetup(u32);
-    /* 8029A2EC */ bool eraseSetup();
-    /* 8029A378 */ static void loadToAramCallback(void*);
-    /* 8029A404 */ bool sendLoadCmd();
-    /* 8029A4C0 */ bool load(JASHeap*);
-    /* 8029A580 */ bool loadTail(JASHeap*);
-    /* 8029A640 */ bool erase();
-    /* 8029A6AC */ void setEntryNum(s32);
-    /* 8029A70C */ void setFileName(char const*);
+    JASWaveArc();
+    bool loadSetup(u32);
+    bool eraseSetup();
+    static void loadToAramCallback(void*);
+    bool sendLoadCmd();
+    bool load(JASHeap*);
+    bool loadTail(JASHeap*);
+    bool erase();
+    void setEntryNum(s32);
+    void setFileName(char const*);
 
-    /* 8029A1B4 */ virtual ~JASWaveArc();
-    /* 8029A664 */ virtual void onDispose();
-    /* 80298FA0 */ virtual void onLoadDone() {}
-    /* 80298FA4 */ virtual void onEraseDone() {}
+    virtual ~JASWaveArc();
+    virtual void onDispose();
+    virtual void onLoadDone() {}
+    virtual void onEraseDone() {}
 
     s32 getStatus() const { return mStatus; }
 

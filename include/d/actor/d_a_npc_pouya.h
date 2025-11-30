@@ -9,7 +9,7 @@ struct daNpc_Pouya_HIOParam {
 
 class daNpc_Pouya_Param_c {
 public:
-    /* 80B24978 */ virtual ~daNpc_Pouya_Param_c() {}
+    virtual ~daNpc_Pouya_Param_c() {}
 
     static const daNpc_Pouya_HIOParam m;
 };
@@ -82,40 +82,40 @@ public:
         /* 0x0F */ MOT_UNK_15 = 15,
     };
 
-    /* 80AADDAC */ ~daNpc_Pouya_c();
-    /* 80AADEE0 */ int create();
-    /* 80AAE1AC */ int CreateHeap();
-    /* 80AAE788 */ int Delete();
-    /* 80AAE7BC */ int Execute();
-    /* 80AAE7DC */ int Draw();
-    /* 80AAE870 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AAE890 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80AAE8E8 */ u8 getType();
-    /* 80AAE94C */ BOOL isDelete();
-    /* 80AAE9D8 */ void reset();
-    /* 80AAEBCC */ void ctrlSubFaceMotion(int);
-    /* 80AAEDB8 */ void afterJntAnm(int);
-    /* 80AAEE44 */ void setParam();
-    /* 80AAEFB4 */ BOOL checkChangeEvt();
-    /* 80AAF148 */ void setAfterTalkMotion();
-    /* 80AAF1F0 */ void srchActors();
-    /* 80AAF1F4 */ BOOL evtTalk();
-    /* 80AAF294 */ BOOL evtCutProc();
-    /* 80AAF35C */ void action();
-    /* 80AAF4F8 */ void beforeMove();
-    /* 80AAF5BC */ void setAttnPos();
-    /* 80AAF8E4 */ void setCollision();
-    /* 80AAFA5C */ int drawDbgInfo();
-    /* 80AAFA64 */ void drawOtherMdl();
-    /* 80AAFB4C */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80AAFBDC */ int selectAction();
-    /* 80AAFC24 */ BOOL chkAction(int (daNpc_Pouya_c::*)(void*));
-    /* 80AAFC50 */ int setAction(int (daNpc_Pouya_c::*)(void*));
-    /* 80AAFCF8 */ void setPrtcls();
-    /* 80AAFE08 */ int cutHaveFavorToAsk(int);
-    /* 80AB04A8 */ int wait(void*);
-    /* 80AB0A7C */ int talk(void*);
-    /* 80AB1E94 */ daNpc_Pouya_c(
+    ~daNpc_Pouya_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void ctrlSubFaceMotion(int);
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    bool afterSetMotionAnm(int, int, f32, int);
+    int selectAction();
+    BOOL chkAction(int (daNpc_Pouya_c::*)(void*));
+    int setAction(int (daNpc_Pouya_c::*)(void*));
+    void setPrtcls();
+    int cutHaveFavorToAsk(int);
+    int wait(void*);
+    int talk(void*);
+    daNpc_Pouya_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -125,12 +125,12 @@ public:
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
                    i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
                    i_arcNames) {}
-    /* 80AB1F54 */ u16 getEyeballMaterialNo() { return 1; }
-    /* 80AB1F5C */ s32 getHeadJointNo() { return 4; }
-    /* 80AB1F64 */ s32 getNeckJointNo() { return 3; }
-    /* 80AB1F6C */ s32 getBackboneJointNo() { return 1; }
-    /* 80AB1F74 */ BOOL checkChangeJoint(int i_joint) { return i_joint == 4; }
-    /* 80AB1F84 */ BOOL checkRemoveJoint(int i_joint) { return i_joint == 8; }
+    u16 getEyeballMaterialNo() { return 1; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return 1; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == 4; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == 8; }
 
     u8 getBitSW() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
 

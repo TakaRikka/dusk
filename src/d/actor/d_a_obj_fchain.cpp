@@ -11,27 +11,21 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 
-/* 80BE7438-80BE7440 000000 0007+01 6/6 0/0 0/0 .rodata          l_arcName */
 static char const l_arcName[] = "Fchain";
 
-/* 80BE5FF8-80BE6054 000078 005C+00 1/1 0/0 0/0 .text            createHeap__13daObjFchain_cFv */
 int daObjFchain_c::createHeap() {
     mModelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 3);
     return mModelData != NULL ? 1 : 0;
 }
 
-/* 80BE6054-80BE6074 0000D4 0020+00 1/1 0/0 0/0 .text daObjFchain_createHeap__FP10fopAc_ac_c */
 static int daObjFchain_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjFchain_c*>(i_this)->createHeap();
 }
 
-/* ############################################################################################## */
-/* 80BE7440-80BE744C 000008 000C+00 0/1 0/0 0/0 .rodata          localVec$3662 */
 static Vec const localVec = {
     0.0f, 0.0f, -9.0f,
 };
 
-/* 80BE6074-80BE6328 0000F4 02B4+00 1/1 0/0 0/0 .text            create__13daObjFchain_cFv */
 int daObjFchain_c::create() {
     fopAcM_ct(this, daObjFchain_c);
     int rv = dComIfG_resLoad(&mPhase, l_arcName);
@@ -75,25 +69,19 @@ int daObjFchain_c::create() {
     return rv;
 }
 
-/* 80BE63A8-80BE63C8 000428 0020+00 1/0 0/0 0/0 .text            daObjFchain_Create__FP10fopAc_ac_c
- */
 static int daObjFchain_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjFchain_c*>(i_this)->create();
 }
 
-/* 80BE63C8-80BE64B8 000448 00F0+00 1/1 0/0 0/0 .text            __dt__13daObjFchain_cFv */
 daObjFchain_c::~daObjFchain_c() {
     dComIfG_resDelete(&mPhase,l_arcName);
 }
 
-/* 80BE64B8-80BE64E0 000538 0028+00 1/0 0/0 0/0 .text daObjFchain_Delete__FP13daObjFchain_c */
 static int daObjFchain_Delete(daObjFchain_c* i_this) {
     i_this->~daObjFchain_c();
     return 1;
 }
 
-/* 80BE64E0-80BE66B4 000560 01D4+00 1/1 0/0 0/0 .text
- * checkPlayerFoot__13daObjFchain_cFPC4cXyzPC4cXyzP4cXyz        */
 void daObjFchain_c::checkPlayerFoot(cXyz const* param_1, cXyz const* param_2, cXyz* param_3) {
     cXyz local_24 = *param_1 - *param_2;
     f32 dVar4 = local_24.absXZ();
@@ -106,7 +94,6 @@ void daObjFchain_c::checkPlayerFoot(cXyz const* param_1, cXyz const* param_2, cX
     }
 }
 
-/* 80BE66B4-80BE6868 000734 01B4+00 1/1 0/0 0/0 .text setGroundVec__13daObjFchain_cFP4cXyzf */
 void daObjFchain_c::setGroundVec(cXyz* param_1, f32 param_2) {
     f32 dVar6 = param_1->absXZ();
     param_1->y += param_2;
@@ -120,12 +107,10 @@ void daObjFchain_c::setGroundVec(cXyz* param_1, f32 param_2) {
     param_1->normalizeZP();
 }
 
-/* 80BE74A4-80BE74B0 00006C 000C+00 0/1 0/0 0/0 .rodata          wolfChainBaseOffset$3862 */
 static Vec const wolfChainBaseOffset = {
     22.0f, 0.0f, -12.0f,
 };
 
-/* 80BE6868-80BE7174 0008E8 090C+00 1/1 0/0 0/0 .text            execute__13daObjFchain_cFv */
 int daObjFchain_c::execute() {
     if (dComIfGp_event_runCheck()) {
         if (dComIfGp_getEventManager().getRunEventName() != NULL) {
@@ -256,12 +241,10 @@ int daObjFchain_c::execute() {
     return 1;
 }
 
-/* 80BE7174-80BE7194 0011F4 0020+00 1/0 0/0 0/0 .text daObjFchain_Execute__FP13daObjFchain_c */
 static int daObjFchain_Execute(daObjFchain_c* i_this) {
     return static_cast<daObjFchain_c*>(i_this)->execute();
 }
 
-/* 80BE7194-80BE7324 001214 0190+00 1/0 0/0 0/0 .text            draw__19daObjFchain_shape_cFv */
 void daObjFchain_shape_c::draw() {
     daObjFchain_c* i_this = (daObjFchain_c*)getUserArea();
     cXyz* pPos = i_this->getPos();
@@ -302,7 +285,6 @@ void daObjFchain_shape_c::draw() {
     }
 }
 
-/* 80BE7324-80BE73B4 0013A4 0090+00 1/1 0/0 0/0 .text            draw__13daObjFchain_cFv */
 int daObjFchain_c::draw() {
     if (field_0x584 != 0) {
         g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -315,13 +297,10 @@ int daObjFchain_c::draw() {
     return 1;
 }
 
-/* 80BE73B4-80BE73D4 001434 0020+00 1/0 0/0 0/0 .text            daObjFchain_Draw__FP13daObjFchain_c
- */
 static int daObjFchain_Draw(daObjFchain_c* i_this) {
     return static_cast<daObjFchain_c*>(i_this)->draw();
 }
 
-/* 80BE74D8-80BE74F8 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjFchain_Method */
 static actor_method_class l_daObjFchain_Method = {
     (process_method_func)daObjFchain_Create,
     (process_method_func)daObjFchain_Delete,
@@ -330,7 +309,6 @@ static actor_method_class l_daObjFchain_Method = {
     (process_method_func)daObjFchain_Draw,
 };
 
-/* 80BE74F8-80BE7528 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Fchain */
 extern actor_process_profile_definition g_profile_Obj_Fchain = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

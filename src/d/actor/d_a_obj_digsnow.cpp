@@ -10,13 +10,11 @@
 #include "d/d_com_inf_game.h"
 #include <cmath.h>
 
-/* 80BDCC58-80BDCC94 000078 003C+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjDigSnow_cFv */
 void daObjDigSnow_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80BDCC94-80BDCD08 0000B4 0074+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjDigSnow_cFv */
 void daObjDigSnow_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -24,7 +22,6 @@ void daObjDigSnow_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80BDCD08-80BDCD64 000128 005C+00 1/0 0/0 0/0 .text            Create__14daObjDigSnow_cFv */
 int daObjDigSnow_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -37,10 +34,8 @@ int daObjDigSnow_c::Create() {
     return TRUE;
 }
 
-/* 80BDD708-80BDD70C -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Y_horiyuk";
 
-/* 80BDCD64-80BDCDD4 000184 0070+00 1/0 0/0 0/0 .text            CreateHeap__14daObjDigSnow_cFv */
 int daObjDigSnow_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(0x9F, modelData != NULL);
@@ -53,7 +48,6 @@ int daObjDigSnow_c::CreateHeap() {
     return TRUE;
 }
 
-/* 80BDCDD4-80BDCE84 0001F4 00B0+00 1/1 0/0 0/0 .text            create1st__14daObjDigSnow_cFv */
 int daObjDigSnow_c::create1st() {
     if (dComIfGs_isSwitch(getSwNo(), fopAcM_GetHomeRoomNo(this))) {
         return cPhs_ERROR_e;
@@ -70,8 +64,6 @@ int daObjDigSnow_c::create1st() {
     return phase_state;
 }
 
-/* 80BDCE84-80BDCF00 0002A4 007C+00 1/0 0/0 0/0 .text            Execute__14daObjDigSnow_cFPPA3_A4_f
- */
 int daObjDigSnow_c::Execute(Mtx** i_mtx) {
     if (daPy_py_c::checkNowWolf()) {
         attention_info.flags = fopAc_AttnFlag_ETC_e;
@@ -87,7 +79,6 @@ int daObjDigSnow_c::Execute(Mtx** i_mtx) {
     return TRUE;
 }
 
-/* 80BDCF00-80BDCFA4 000320 00A4+00 1/1 0/0 0/0 .text            action__14daObjDigSnow_cFv */
 void daObjDigSnow_c::action() {
     typedef void (daObjDigSnow_c::*action_func)();
     static action_func l_func[] = {
@@ -99,21 +90,16 @@ void daObjDigSnow_c::action() {
     (this->*l_func[mAction])();
 }
 
-/* 80BDCFA4-80BDCFB0 0003C4 000C+00 1/1 0/0 0/0 .text            mode_init_wait__14daObjDigSnow_cFv
- */
 void daObjDigSnow_c::mode_init_wait() {
     mAction = ACTION_WAIT_e;
 }
 
-/* 80BDCFB0-80BDCFDC 0003D0 002C+00 1/0 0/0 0/0 .text            mode_wait__14daObjDigSnow_cFv */
 void daObjDigSnow_c::mode_wait() {
     if (mMode == MODE_DIG_e) {
         mode_init_dig();
     }
 }
 
-/* 80BDCFDC-80BDD0AC 0003FC 00D0+00 1/1 0/0 0/0 .text            mode_init_dig__14daObjDigSnow_cFv
- */
 void daObjDigSnow_c::mode_init_dig() {
     dBgS_ObjGndChk obj_gnd_chk;
 
@@ -134,7 +120,6 @@ void daObjDigSnow_c::mode_init_dig() {
     mAction = 1;
 }
 
-/* 80BDD124-80BDD1BC 000544 0098+00 1/0 0/0 0/0 .text            mode_dig__14daObjDigSnow_cFv */
 void daObjDigSnow_c::mode_dig() {
     f32 step = std::fabs(((current.pos.y - mGroundHeight) + 10.0f) / 35.0f);
     if (step < 1.0f) {
@@ -146,8 +131,6 @@ void daObjDigSnow_c::mode_dig() {
     }
 }
 
-/* 80BDD1BC-80BDD210 0005DC 0054+00 1/1 0/0 0/0 .text            mode_init_end__14daObjDigSnow_cFv
- */
 void daObjDigSnow_c::mode_init_end() {
     dComIfGs_onSwitch(getSwNo(), fopAcM_GetHomeRoomNo(this));
     fopAcM_delete(this);
@@ -155,10 +138,8 @@ void daObjDigSnow_c::mode_init_end() {
     mAction = 2;
 }
 
-/* 80BDD210-80BDD214 000630 0004+00 1/0 0/0 0/0 .text            mode_end__14daObjDigSnow_cFv */
 void daObjDigSnow_c::mode_end() {}
 
-/* 80BDD214-80BDD2B8 000634 00A4+00 1/0 0/0 0/0 .text            Draw__14daObjDigSnow_cFv */
 int daObjDigSnow_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -170,38 +151,28 @@ int daObjDigSnow_c::Draw() {
     return TRUE;
 }
 
-/* 80BDD2B8-80BDD2EC 0006D8 0034+00 1/0 0/0 0/0 .text            Delete__14daObjDigSnow_cFv */
 int daObjDigSnow_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
     return TRUE;
 }
 
-/* 80BDD2EC-80BDD418 00070C 012C+00 1/0 0/0 0/0 .text daObjDigSnow_create1st__FP14daObjDigSnow_c
- */
 static int daObjDigSnow_create1st(daObjDigSnow_c* i_this) {
     fopAcM_ct(i_this, daObjDigSnow_c);
     return i_this->create1st();
 }
 
-/* 80BDD5E4-80BDD604 000A04 0020+00 1/0 0/0 0/0 .text
- * daObjDigSnow_MoveBGDelete__FP14daObjDigSnow_c                */
 static int daObjDigSnow_MoveBGDelete(daObjDigSnow_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80BDD604-80BDD624 000A24 0020+00 1/0 0/0 0/0 .text
- * daObjDigSnow_MoveBGExecute__FP14daObjDigSnow_c               */
 static int daObjDigSnow_MoveBGExecute(daObjDigSnow_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BDD624-80BDD650 000A44 002C+00 1/0 0/0 0/0 .text daObjDigSnow_MoveBGDraw__FP14daObjDigSnow_c
- */
 static int daObjDigSnow_MoveBGDraw(daObjDigSnow_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BDD754-80BDD774 -00001 0020+00 1/0 0/0 0/0 .data            daObjDigSnow_METHODS */
 static actor_method_class daObjDigSnow_METHODS = {
     (process_method_func)daObjDigSnow_create1st,     (process_method_func)daObjDigSnow_MoveBGDelete,
     (process_method_func)daObjDigSnow_MoveBGExecute, NULL,

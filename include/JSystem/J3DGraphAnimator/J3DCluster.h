@@ -73,11 +73,11 @@ public:
  */
 class J3DDeformData {
 public:
-    /* 8032E1F8 */ J3DDeformData();
-    /* 8032E230 */ void offAllFlag(u32);
-    /* 8032E298 */ void deform(J3DVertexBuffer*);
-    /* 8032E274 */ void deform(J3DModel*);
-    /* 8032E364 */ void setAnm(J3DAnmCluster*);
+    J3DDeformData();
+    void offAllFlag(u32);
+    void deform(J3DVertexBuffer*);
+    void deform(J3DModel*);
+    void setAnm(J3DAnmCluster*);
 
     J3DCluster* getClusterPointer(u16 index) {
         J3D_ASSERT_RANGE(186, (index < mClusterNum));

@@ -19,10 +19,10 @@ private:
 public:
     J3DTexture(u16 num, ResTIMG* res) : mNum(num), unk_0x2(0), mpRes(res) {}
 
-    /* 8031204C */ void loadGX(u16, GXTexMapID) const;
-    /* 803121A4 */ void entryNum(u16);
-    /* 8031221C */ void addResTIMG(u16, ResTIMG const*);
-    /* 803366A4 */ virtual ~J3DTexture() {}
+    void loadGX(u16, GXTexMapID) const;
+    void entryNum(u16);
+    void addResTIMG(u16, ResTIMG const*);
+    virtual ~J3DTexture() {}
 
     u16 getNum() const { return mNum; }
 
@@ -54,12 +54,12 @@ public:
         mTexMtxInfo = info;
     }
 
-    /* 803238C4 */ void load(u32) const;
-    /* 80323900 */ void calc(const Mtx);
-    /* 80323920 */ void calcTexMtx(const Mtx);
-    /* 80323C0C */ void calcPostTexMtx(const Mtx);
-    /* 80324358 */ void loadTexMtx(u32) const;
-    /* 803243BC */ void loadPostTexMtx(u32) const;
+    void load(u32) const;
+    void calc(const Mtx);
+    void calcTexMtx(const Mtx);
+    void calcPostTexMtx(const Mtx);
+    void loadTexMtx(u32) const;
+    void loadPostTexMtx(u32) const;
 
     J3DTexMtxInfo& getTexMtxInfo() { return mTexMtxInfo; }
     Mtx& getMtx() { return mMtx; }
@@ -88,7 +88,7 @@ extern J3DTexCoordInfo const j3dDefaultTexCoordInfo[8];
  * 
  */
 struct J3DTexCoord : public J3DTexCoordInfo {
-    /* 8000E464 */ J3DTexCoord() {
+    J3DTexCoord() {
         setTexCoordInfo(j3dDefaultTexCoordInfo[0]);
         resetTexMtxReg();
     }

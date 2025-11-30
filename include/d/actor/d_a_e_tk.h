@@ -62,8 +62,8 @@ STATIC_ASSERT(sizeof(e_tk_class) == 0xA64);
 
 class daE_TK_HIO_c {
 public:
-    /* 807B81EC */ daE_TK_HIO_c();
-    /* 807BA1C4 */ virtual ~daE_TK_HIO_c() {}
+    daE_TK_HIO_c();
+    virtual ~daE_TK_HIO_c() {}
 
     /* 0x04 */ s8 field_0x04;
     /* 0x08 */ f32 mRadiusScale;

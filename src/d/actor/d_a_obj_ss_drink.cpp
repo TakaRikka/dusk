@@ -10,16 +10,11 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_msg_object.h"
 #include "d/d_s_play.h"
-#include "dol2asm.h"
 
-/* 80CE69E4-80CE69E8 -00001 0004+00 2/2 0/0 0/0 .data            l_resFileName */
 static char* l_resFileName = "Obj_btl";
 
-/* 80CE69E8-80CE69EC -00001 0004+00 1/2 0/0 0/0 .data            l_bmdName */
 static char* l_bmdName = "al_bottle.bmd";
 
-/* ############################################################################################## */
-/* 80CE6930-80CE6960 000000 0030+00 5/5 0/0 0/0 .rodata          mCcDObjInfo__15daObj_SSDrink_c */
 dCcD_SrcGObjInf const daObj_SSDrink_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0, 0}, {0x79}}},
     {0, 0, 0, 0, {0}},
@@ -27,15 +22,12 @@ dCcD_SrcGObjInf const daObj_SSDrink_c::mCcDObjInfo = {
     {{0}},
 };
 
-/* 80CE69EC-80CE6A30 000028 0044+00 2/2 0/0 0/0 .data            mCcDCyl__15daObj_SSDrink_c */
 dCcD_SrcCyl daObj_SSDrink_c::mCcDCyl = {mCcDObjInfo, {}};
 
-/* 80CE4F78-80CE51C8 000078 0250+00 1/0 0/0 0/0 .text            __dt__15daObj_SSDrink_cFv */
 daObj_SSDrink_c::~daObj_SSDrink_c() {
     dComIfG_resDelete(&mPhase, getResName());
 }
 
-/* 80CE51C8-80CE53EC 0002C8 0224+00 1/1 0/0 0/0 .text            create__15daObj_SSDrink_cFv */
 int daObj_SSDrink_c::create() {
     fopAcM_ct(this, daObj_SSDrink_c);
     field_0xb0b = getTypeFromParam();
@@ -56,7 +48,6 @@ int daObj_SSDrink_c::create() {
     return phase;
 }
 
-/* 80CE53EC-80CE55A8 0004EC 01BC+00 1/1 0/0 0/0 .text            CreateHeap__15daObj_SSDrink_cFv */
 int daObj_SSDrink_c::CreateHeap() {
     J3DModelData* mdlData_p = NULL;
     J3DAnmTevRegKey* pbrk;
@@ -88,13 +79,11 @@ int daObj_SSDrink_c::CreateHeap() {
     return 1;
 }
 
-/* 80CE55F0-80CE5624 0006F0 0034+00 1/1 0/0 0/0 .text            Delete__15daObj_SSDrink_cFv */
 int daObj_SSDrink_c::Delete() {
     this->~daObj_SSDrink_c();
     return 1;
 }
 
-/* 80CE5624-80CE5858 000724 0234+00 2/2 0/0 0/0 .text            Execute__15daObj_SSDrink_cFv */
 int daObj_SSDrink_c::Execute() {
     setParam();
     mStts.Move();
@@ -146,7 +135,6 @@ int daObj_SSDrink_c::Execute() {
     return 1;
 }
 
-/* 80CE5858-80CE5994 000958 013C+00 1/1 0/0 0/0 .text            Draw__15daObj_SSDrink_cFv */
 int daObj_SSDrink_c::Draw() {
     if (checkProcess(&daObj_SSDrink_c::drink)) {
         return 1;
@@ -170,14 +158,11 @@ int daObj_SSDrink_c::Draw() {
     return 1;
 }
 
-/* 80CE59DC-80CE59FC 000ADC 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__15daObj_SSDrink_cFP10fopAc_ac_c          */
 int daObj_SSDrink_c::createHeapCallBack(fopAc_ac_c* a_this) {
     daObj_SSDrink_c* i_this = (daObj_SSDrink_c*)a_this;
     return i_this->CreateHeap();
 }
 
-/* 80CE59FC-80CE5A50 000AFC 0054+00 1/0 0/0 0/0 .text            setSoldOut__15daObj_SSDrink_cFv */
 void daObj_SSDrink_c::setSoldOut() {
     if (getParentPtr() != NULL) {
         ((daMyna_c*)getParentPtr())->onEventFlag(0);
@@ -185,12 +170,10 @@ void daObj_SSDrink_c::setSoldOut() {
     }
 }
 
-/* 80CE5A50-80CE5A60 000B50 0010+00 4/4 0/0 0/0 .text            getResName__15daObj_SSDrink_cFv */
 char* daObj_SSDrink_c::getResName() {
     return l_resFileName;
 }
 
-/* 80CE5A60-80CE5B0C 000B60 00AC+00 1/1 0/0 0/0 .text getTypeFromParam__15daObj_SSDrink_cFv */
 u8 daObj_SSDrink_c::getTypeFromParam() {
     u8 x = fopAcM_GetParam((this)) & 0xf;
 
@@ -220,13 +203,11 @@ u8 daObj_SSDrink_c::getTypeFromParam() {
     return 6;
 }
 
-/* 80CE5B0C-80CE5B18 000C0C 000C+00 1/1 0/0 0/0 .text getSwitchFromParam__15daObj_SSDrink_cFv */
 u8 daObj_SSDrink_c::getSwitchFromParam() {
     u8 switch_from_prm = (fopAcM_GetParam(this) & 0xff0) >> 4;
     return switch_from_prm;
 }
 
-/* 80CE5B18-80CE5B3C 000C18 0024+00 1/1 0/0 0/0 .text getCapacityFromParam__15daObj_SSDrink_cFv */
 u8 daObj_SSDrink_c::getCapacityFromParam() {
     if (field_0xb0b == 6) {
         return 2;
@@ -239,27 +220,22 @@ u8 daObj_SSDrink_c::getCapacityFromParam() {
     return 0;
 }
 
-/* 80CE5B3C-80CE5B74 000C3C 0038+00 2/2 0/0 0/0 .text            getFlowNodeNum__15daObj_SSDrink_cFv
- */
 u16 daObj_SSDrink_c::getFlowNodeNum() {
     u16 var_r31 = home.angle.x;
     return var_r31 == 0xFFFF || var_r31 == 0 ? -1 : var_r31;
 }
 
-/* 80CE5B74-80CE5B80 000C74 000C+00 1/1 0/0 0/0 .text            getValue__15daObj_SSDrink_cFv */
 u16 daObj_SSDrink_c::getValue() {
     u16 value = (fopAcM_GetParam(this) & 0xffff000) >> 12;
     return value;
 }
 
-/* 80CE5B80-80CE5BF0 000C80 0070+00 1/1 0/0 0/0 .text            restart__15daObj_SSDrink_cFv */
 void daObj_SSDrink_c::restart() {
     current.angle.set(0, home.angle.y, 0);
     shape_angle = current.angle;
     setProcess(&daObj_SSDrink_c::wait);
 }
 
-/* 80CE5BF0-80CE5DB0 000CF0 01C0+00 1/1 0/0 0/0 .text            initialize__15daObj_SSDrink_cFv */
 void daObj_SSDrink_c::initialize() {
     J3DModelData* modelData = mpModel->getModelData();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -290,14 +266,10 @@ void daObj_SSDrink_c::initialize() {
     Execute();
 }
 
-/* 80CE5DB0-80CE5DDC 000EB0 002C+00 6/6 0/0 0/0 .text
- * checkProcess__15daObj_SSDrink_cFM15daObj_SSDrink_cFPCvPvPv_i */
 int daObj_SSDrink_c::checkProcess(ProcessFunc param_0) {
     return field_0xaf0 == param_0;
 }
 
-/* 80CE5DDC-80CE5EC8 000EDC 00EC+00 4/4 0/0 0/0 .text
- * setProcess__15daObj_SSDrink_cFM15daObj_SSDrink_cFPCvPvPv_i   */
 int daObj_SSDrink_c::setProcess(ProcessFunc param_0) {
     int ret = 0;
 
@@ -322,7 +294,6 @@ int daObj_SSDrink_c::setProcess(ProcessFunc param_0) {
     return ret;
 }
 
-/* 80CE5EC8-80CE5FE4 000FC8 011C+00 1/1 0/0 0/0 .text            setParam__15daObj_SSDrink_cFv */
 void daObj_SSDrink_c::setParam() {
     f32 some_float = 1.0f;
     scale.set(some_float, some_float, some_float);
@@ -351,21 +322,17 @@ void daObj_SSDrink_c::setParam() {
     fopAcM_onSwitch(this, getSwitchFromParam());
 }
 
-/* 80CE5FE4-80CE6040 0010E4 005C+00 2/2 0/0 0/0 .text            setEnvTevColor__15daObj_SSDrink_cFv
- */
 void daObj_SSDrink_c::setEnvTevColor() {
     tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(mGndChk);
     tevStr.room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
 }
 
-/* 80CE6040-80CE6084 001140 0044+00 2/2 0/0 0/0 .text            setRoomNo__15daObj_SSDrink_cFv */
 void daObj_SSDrink_c::setRoomNo() {
     s8 room_id = dComIfG_Bgsp().GetRoomId(mGndChk);
     fopAcM_SetRoomNo(this, room_id);
     mStts.SetRoomId(room_id);
 }
 
-/* 80CE6084-80CE60E8 001184 0064+00 1/1 0/0 0/0 .text            setMtx__15daObj_SSDrink_cFv */
 void daObj_SSDrink_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -373,7 +340,6 @@ void daObj_SSDrink_c::setMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CE60E8-80CE6170 0011E8 0088+00 1/1 0/0 0/0 .text            setAttnPos__15daObj_SSDrink_cFv */
 void daObj_SSDrink_c::setAttnPos() {
     if (!checkProcess(&daObj_SSDrink_c::talk)) {
         attention_info.position = current.pos;
@@ -382,13 +348,11 @@ void daObj_SSDrink_c::setAttnPos() {
     eyePos = current.pos;
 }
 
-/* 80CE6170-80CE61E4 001270 0074+00 1/1 0/0 0/0 .text            animeEntry__15daObj_SSDrink_cFv */
 void daObj_SSDrink_c::animeEntry() {
     mpBtpAnm->entry(mpModel->getModelData(), field_0xb0a);
     mpBrkAnm->entry(mpModel->getModelData(), field_0xb0b);
 }
 
-/* 80CE61E4-80CE622C 0012E4 0048+00 1/1 0/0 0/0 .text            animePlay__15daObj_SSDrink_cFv */
 void daObj_SSDrink_c::animePlay() {
     if (mpBtpAnm != NULL) {
         mpBtpAnm->play();
@@ -399,7 +363,6 @@ void daObj_SSDrink_c::animePlay() {
     }
 }
 
-/* 80CE622C-80CE63AC 00132C 0180+00 1/1 0/0 0/0 .text            chkEvent__15daObj_SSDrink_cFv */
 int daObj_SSDrink_c::chkEvent() {
     int ret = 1;
 
@@ -429,7 +392,6 @@ int daObj_SSDrink_c::chkEvent() {
     return ret;
 }
 
-/* 80CE63AC-80CE644C 0014AC 00A0+00 1/1 0/0 0/0 .text            orderEvent__15daObj_SSDrink_cFv */
 int daObj_SSDrink_c::orderEvent() {
     if (!daPy_py_c::checkNowWolf() && field_0xb0c != 0x60 && getFlowNodeNum() != -1) {
         attention_info.flags = fopAc_AttnFlag_TALKREAD_e | fopAc_AttnFlag_SPEAK_e;
@@ -446,7 +408,6 @@ int daObj_SSDrink_c::orderEvent() {
     return 1;
 }
 
-/* 80CE644C-80CE6454 00154C 0008+00 2/0 0/0 0/0 .text            wait__15daObj_SSDrink_cFPv */
 int daObj_SSDrink_c::wait(void* param_0) {
 #ifdef DEBUG
     switch (field_0xb08) {
@@ -459,7 +420,6 @@ int daObj_SSDrink_c::wait(void* param_0) {
     return 1;
 }
 
-/* 80CE6454-80CE6514 001554 00C0+00 3/0 0/0 0/0 .text            talk__15daObj_SSDrink_cFPv */
 int daObj_SSDrink_c::talk(void* param_0) {
     int ret = 0;
 
@@ -479,7 +439,6 @@ int daObj_SSDrink_c::talk(void* param_0) {
     return ret;
 }
 
-/* 80CE6514-80CE6624 001614 0110+00 5/0 0/0 0/0 .text            drink__15daObj_SSDrink_cFPv */
 int daObj_SSDrink_c::drink(void* param_0) {
     int ret = 0;
 
@@ -508,39 +467,32 @@ int daObj_SSDrink_c::drink(void* param_0) {
     return ret;
 }
 
-/* 80CE6624-80CE6644 001724 0020+00 1/0 0/0 0/0 .text            daObj_SSDrink_Create__FPv */
 static int daObj_SSDrink_Create(void* i_this) {
     return ((daObj_SSDrink_c*)i_this)->create();
 }
 
-/* 80CE6644-80CE6664 001744 0020+00 1/0 0/0 0/0 .text            daObj_SSDrink_Delete__FPv */
 static int daObj_SSDrink_Delete(void* i_this) {
     return ((daObj_SSDrink_c*)i_this)->Delete();
 }
 
-/* 80CE6664-80CE6684 001764 0020+00 1/0 0/0 0/0 .text            daObj_SSDrink_Execute__FPv */
 static int daObj_SSDrink_Execute(void* i_this) {
     return ((daObj_SSDrink_c*)i_this)->Execute();
 }
 
-/* 80CE6684-80CE66A4 001784 0020+00 1/0 0/0 0/0 .text            daObj_SSDrink_Draw__FPv */
 static int daObj_SSDrink_Draw(void* i_this) {
     return ((daObj_SSDrink_c*)i_this)->Draw();
 }
 
-/* 80CE66A4-80CE66AC 0017A4 0008+00 1/0 0/0 0/0 .text            daObj_SSDrink_IsDelete__FPv */
 static int daObj_SSDrink_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80CE6AA8-80CE6AC8 -00001 0020+00 1/0 0/0 0/0 .data            daObj_SSDrink_MethodTable */
 static actor_method_class daObj_SSDrink_MethodTable = {
     (process_method_func)daObj_SSDrink_Create,  (process_method_func)daObj_SSDrink_Delete,
     (process_method_func)daObj_SSDrink_Execute, (process_method_func)daObj_SSDrink_IsDelete,
     (process_method_func)daObj_SSDrink_Draw,
 };
 
-/* 80CE6AC8-80CE6AF8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_SSDRINK */
 extern actor_process_profile_definition g_profile_OBJ_SSDRINK = {
     fpcLy_CURRENT_e,             // mLayerID
     7,                           // mListID

@@ -23,21 +23,21 @@ public:
         BREAK_EFF,
     };
 
-    /* 80BB8350 */ void setBaseMtx();
-    /* 80BB8400 */ int CreateHeap();
-    /* 80BB846C */ int create();
-    /* 80BB88D8 */ int Execute(Mtx**);
-    /* 80BB8930 */ void windowProc();
-    /* 80BB8B3C */ void init_modeWait();
-    /* 80BB8B48 */ void modeWait();
-    /* 80BB8FDC */ int checkActorInRectangle(fopAc_ac_c*, cXyz const*, cXyz const*);
-    /* 80BB90E0 */ void init_modeBreak();
-    /* 80BB920C */ void modeBreak();
-    /* 80BB922C */ void init_modeBreakEff();
-    /* 80BB9304 */ void modeBreakEff();
-    /* 80BB9324 */ void setBreakEffect(int);
-    /* 80BB9494 */ int Draw();
-    /* 80BB9548 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    void windowProc();
+    void init_modeWait();
+    void modeWait();
+    int checkActorInRectangle(fopAc_ac_c*, cXyz const*, cXyz const*);
+    void init_modeBreak();
+    void modeBreak();
+    void init_modeBreakEff();
+    void modeBreakEff();
+    void setBreakEffect(int);
+    int Draw();
+    int Delete();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
@@ -74,8 +74,8 @@ STATIC_ASSERT(sizeof(daBmWindow_c) == 0xEE0);
 
 class daBmWindow_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80BB820C */ daBmWindow_HIO_c();
-    /* 80BB964C */ virtual ~daBmWindow_HIO_c() {}
+    daBmWindow_HIO_c();
+    virtual ~daBmWindow_HIO_c() {}
 
     void genMessage(JORMContext*);
 

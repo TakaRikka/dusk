@@ -6,8 +6,8 @@
 struct dPath;
 
 struct dPathCurve {
-    /* 80097C5C */ void Init(dPath*);
-    /* 80097C74 */ cXyz bSpline2(f32);
+    void Init(dPath*);
+    cXyz bSpline2(f32);
 
     /* 0x00 */ int field_0x00;
     /* 0x00 */ int field_0x04;
@@ -26,12 +26,12 @@ public:
     /* 0x2C */ int field_0x2c;
 
     d2DBSplinePath() { Init(0, 0); }
-    /* 80097878 */ void Init(s32, s32);
-    /* 80097904 */ bool Step();
-    /* 80097B20 */ f32 Calc(f32*);
-    /* 80097A6C */ cXyz Calc(cXyz*);
-    /* 80097B68 */ f32 Spot(f32*, f32);
-    /* 801828D4 */ virtual ~d2DBSplinePath() {}
+    void Init(s32, s32);
+    bool Step();
+    f32 Calc(f32*);
+    cXyz Calc(cXyz*);
+    f32 Spot(f32*, f32);
+    virtual ~d2DBSplinePath() {}
 
     bool Last() { return field_0x08 == 3; }
 };

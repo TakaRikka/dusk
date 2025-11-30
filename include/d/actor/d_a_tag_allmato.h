@@ -18,25 +18,25 @@ public:
     /* 0x1D0F */ u8 field_0x1d0f;
     /* 0x1D10 */ u8 field_0x1d10;
 
-    /* 80487538 */ int create();
-    /* 804876B0 */ int Delete();
-    /* 804876B8 */ int Execute();
-    /* 80487C5C */ int Draw();
-    /* 80487C64 */ static void* srchBouMato(void*, void*);
-    /* 80487D00 */ static void* srchItaMato(void*, void*);
-    /* 80487D9C */ static void* srchTaro(void*, void*);
-    /* 80487E38 */ static void* srchArrow(void*, void*);
-    /* 80487ED4 */ int isDelete();
-    /* 80487F80 */ void entryBouMatoActors();
-    /* 80488034 */ void entryItaMatoActors();
-    /* 80488104 */ fopAc_ac_c* getTaroActorP();
-    /* 804881C0 */ fopAc_ac_c* getArrowActorP();
-    /* 80488238 */ int checkCrsMato();
-    /* 80488994 */ int checkCrsMato2();
-    /* 80488F40 */ int checkBrkMato();
-    /* 80488FD8 */ void evtChange(u16);
+    int create();
+    int Delete();
+    int Execute();
+    int Draw();
+    static void* srchBouMato(void*, void*);
+    static void* srchItaMato(void*, void*);
+    static void* srchTaro(void*, void*);
+    static void* srchArrow(void*, void*);
+    int isDelete();
+    void entryBouMatoActors();
+    void entryItaMatoActors();
+    fopAc_ac_c* getTaroActorP();
+    fopAc_ac_c* getArrowActorP();
+    int checkCrsMato();
+    int checkCrsMato2();
+    int checkBrkMato();
+    void evtChange(u16);
 
-    /* 80489608 */ virtual ~daTag_AllMato_c() {}
+    virtual ~daTag_AllMato_c() {}
 
     int getType() { return 0; }
 

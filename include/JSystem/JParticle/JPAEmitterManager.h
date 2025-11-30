@@ -21,17 +21,17 @@ struct JPAEmitterWorkData;
  */
 class JPAEmitterManager {
 public:
-    /* 8027DCA0 */ JPAEmitterManager(u32, u32, JKRHeap*, u8, u8);
-    /* 8027DEBC */ JPABaseEmitter* createSimpleEmitterID(JGeometry::TVec3<f32> const&, u16, u8, u8,
+    JPAEmitterManager(u32, u32, JKRHeap*, u8, u8);
+    JPABaseEmitter* createSimpleEmitterID(JGeometry::TVec3<f32> const&, u16, u8, u8,
                                                          JPAEmitterCallBack*, JPAParticleCallBack*);
-    /* 8027DFA0 */ void calc(u8);
-    /* 8027E028 */ void draw(JPADrawInfo const*, u8);
-    /* 8027E220 */ void forceDeleteAllEmitter();
-    /* 8027E278 */ void forceDeleteGroupEmitter(u8);
-    /* 8027E2D8 */ void forceDeleteEmitter(JPABaseEmitter*);
-    /* 8027E344 */ void entryResourceManager(JPAResourceManager*, u8);
-    /* 8027E354 */ void clearResourceManager(u8);
-    /* 8027E3F4 */ void calcYBBCam();
+    void calc(u8);
+    void draw(JPADrawInfo const*, u8);
+    void forceDeleteAllEmitter();
+    void forceDeleteGroupEmitter(u8);
+    void forceDeleteEmitter(JPABaseEmitter*);
+    void entryResourceManager(JPAResourceManager*, u8);
+    void clearResourceManager(u8);
+    void calcYBBCam();
     JPAResourceManager* getResourceManager(u16 idx) { return pResMgrAry[idx]; }
 
 public:

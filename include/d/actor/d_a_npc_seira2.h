@@ -17,48 +17,48 @@ public:
     typedef int (daNpc_Seira2_c::*cutFunc)(int);
     typedef int (daNpc_Seira2_c::*actionFunc)(void*);
 
-    /* 80AD0C0C */ ~daNpc_Seira2_c();
-    /* 80AD0D58 */ int create();
-    /* 80AD0FF8 */ int CreateHeap();
-    /* 80AD1508 */ int Delete();
-    /* 80AD153C */ int Execute();
-    /* 80AD1610 */ int Draw();
-    /* 80AD16A4 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AD16C4 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80AD171C */ u8 getType();
-    /* 80AD179C */ int getFlowNodeNo();
-    /* 80AD17B8 */ u8 getMaxNumItem();
-    /* 80AD17C4 */ u8 checkBottle();
-    /* 80AD182C */ int isDelete();
-    /* 80AD1834 */ void reset();
-    /* 80AD1968 */ void afterJntAnm(int);
-    /* 80AD19EC */ void setParam();
-    /* 80AD1B38 */ void setAfterTalkMotion();
-    /* 80AD1BF8 */ void srchActors();
-    /* 80AD1C60 */ BOOL evtTalk();
-    /* 80AD1E04 */ BOOL evtCutProc();
-    /* 80AD1ED4 */ void action();
-    /* 80AD2030 */ void beforeMove();
-    /* 80AD20A8 */ void setAttnPos();
-    /* 80AD23A8 */ void setCollision();
-    /* 80AD2550 */ BOOL drawDbgInfo();
-    /* 80AD2558 */ void drawOtherMdl();
-    /* 80AD2630 */ bool setBottleAnm(int, int, f32, bool);
-    /* 80AD2710 */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80AD2748 */ int selectAction();
-    /* 80AD2870 */ int chkAction(actionFunc);
-    /* 80AD289C */ int setAction(actionFunc);
-    /* 80AD2944 */ BOOL checkStageIsSeira2sShop();
-    /* 80AD29BC */ int wait(void*);
-    /* 80AD2B68 */ int sit(void*);
-    /* 80AD2D8C */ int happy(void*);
-    /* 80AD2F14 */ int worry(void*);
-    /* 80AD31F0 */ int sad(void*);
-    /* 80AD3508 */ int lookaround(void*);
-    /* 80AD3614 */ int smile(void*);
-    /* 80AD3720 */ int talk(void*);
-    /* 80AD3890 */ int shop(void*);
-    /* 80AD47B8 */ daNpc_Seira2_c(
+    ~daNpc_Seira2_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    int getFlowNodeNo();
+    u8 getMaxNumItem();
+    u8 checkBottle();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    BOOL drawDbgInfo();
+    void drawOtherMdl();
+    bool setBottleAnm(int, int, f32, bool);
+    bool afterSetMotionAnm(int, int, f32, int);
+    int selectAction();
+    int chkAction(actionFunc);
+    int setAction(actionFunc);
+    BOOL checkStageIsSeira2sShop();
+    int wait(void*);
+    int sit(void*);
+    int happy(void*);
+    int worry(void*);
+    int sad(void*);
+    int lookaround(void*);
+    int smile(void*);
+    int talk(void*);
+    int shop(void*);
+    daNpc_Seira2_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -71,12 +71,12 @@ public:
         // "|%06d:%x|daNpc_Seira2_c -> Construct\n"
         OS_REPORT("|%06d:%x|daNpc_Seira2_c -> コンストラクト\n", g_Counter.mCounter0, this);
     }
-    /* 80AD4884 */ u16 getEyeballMaterialNo() { return 2; }
-    /* 80AD488C */ s32 getHeadJointNo() { return 4; }
-    /* 80AD4894 */ s32 getNeckJointNo() { return 3; }
-    /* 80AD489C */ s32 getBackboneJointNo() { return true; }
-    /* 80AD48A4 */ BOOL checkChangeJoint(int val) { return val == 4; }
-    /* 80AD48B4 */ BOOL checkRemoveJoint(int val) { return val == 8; }
+    u16 getEyeballMaterialNo() { return 2; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return true; }
+    BOOL checkChangeJoint(int val) { return val == 4; }
+    BOOL checkRemoveJoint(int val) { return val == 8; }
 
     static char* mCutNameList[1];
     static cutFunc mCutList[1];
@@ -107,7 +107,7 @@ struct daNpc_Seira2_HIOParam {
 
 class daNpc_Seira2_Param_c {
 public:
-    /* 80AD48C4 */ virtual ~daNpc_Seira2_Param_c() {}
+    virtual ~daNpc_Seira2_Param_c() {}
 
     static const daNpc_Seira2_HIOParam m;
 };

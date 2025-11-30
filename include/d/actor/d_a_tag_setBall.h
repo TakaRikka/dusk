@@ -7,12 +7,12 @@ class daTagSetBall_c : public fopAc_ac_c {
 public:
     daTagSetBall_c() {}
 
-    /* 80D601F8 */ void initBaseMtx();
-    /* 80D60218 */ void setBaseMtx();
-    /* 80D6021C */ int Create();
-    /* 80D6024C */ int create();
-    /* 80D602B4 */ int execute();
-    /* 80D602BC */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int create();
+    int execute();
+    int _delete();
 
     s32 getType() { return mType; }
 

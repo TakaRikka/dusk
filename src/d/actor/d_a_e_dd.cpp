@@ -13,8 +13,8 @@
 
 class daE_DD_HIO_c : public JORReflexible {
 public:
-    /* 806A226C */ daE_DD_HIO_c();
-    /* 806A6D08 */ virtual ~daE_DD_HIO_c() {}
+    daE_DD_HIO_c();
+    virtual ~daE_DD_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -100,7 +100,6 @@ enum Action {
     /* 0xA */ ACTION_FALL,
 };
 
-/* 806A226C-806A22CC 0000EC 0060+00 1/1 0/0 0/0 .text            __ct__12daE_DD_HIO_cFv */
 daE_DD_HIO_c::daE_DD_HIO_c() {
     field_0x4 = -1;
     basic_size = 1.0f;
@@ -113,13 +112,11 @@ daE_DD_HIO_c::daE_DD_HIO_c() {
     flame_mot_speed = 1.5f;
 }
 
-/* 806A22CC-806A2378 00014C 00AC+00 10/10 0/0 0/0 .text            anm_init__FP10e_dd_classifUcf */
 static void anm_init(e_dd_class* i_this, int i_index, f32 i_morf, u8 i_attr, f32 i_rate) {
     i_this->mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_DD", i_index), i_attr, i_morf, i_rate, 0.0f, -1.0f);
     i_this->mAnm = i_index;
 }
 
-/* 806A2378-806A254C 0001F8 01D4+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         int jntNo = i_joint->getJntNo();
@@ -148,7 +145,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 806A254C-806A264C 0003CC 0100+00 1/0 0/0 0/0 .text            daE_DD_Draw__FP10e_dd_class */
 static int daE_DD_Draw(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     J3DModel* model = i_this->mpModelMorf->getModel();
@@ -168,7 +164,6 @@ static int daE_DD_Draw(e_dd_class* i_this) {
     return 1;
 }
 
-/* 806A264C-806A272C 0004CC 00E0+00 1/1 0/0 0/0 .text otherBgCheckS__FP10fopAc_ac_cP10fopAc_ac_c */
 static BOOL otherBgCheckS(fopAc_ac_c* param_1, fopAc_ac_c* param_2) {
     dBgS_LinChk lin_chk;
     cXyz start, end;
@@ -186,7 +181,6 @@ static BOOL otherBgCheckS(fopAc_ac_c* param_1, fopAc_ac_c* param_2) {
     return FALSE;
 }
 
-/* 806A272C-806A27A8 0005AC 007C+00 4/4 0/0 0/0 .text            pl_check__FP10e_dd_classfs */
 static BOOL pl_check(e_dd_class* i_this, f32 param_2, s16 param_3) {
     fopAc_ac_c* a_this = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -202,7 +196,6 @@ static BOOL pl_check(e_dd_class* i_this, f32 param_2, s16 param_3) {
     return FALSE;
 }
 
-/* 806A27A8-806A28A8 000628 0100+00 1/1 0/0 0/0 .text            way_gake_check__FP10e_dd_classf */
 static BOOL way_gake_check(e_dd_class* i_this, f32 param_1) {
     fopAc_ac_c* a_this = &i_this->actor;
     dBgS_GndChk gnd_chk;
@@ -225,7 +218,6 @@ static BOOL way_gake_check(e_dd_class* i_this, f32 param_1) {
     return FALSE;
 }
 
-/* 806A28A8-806A2BDC 000728 0334+00 1/1 0/0 0/0 .text            damage_check__FP10e_dd_class */
 static void damage_check(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -322,7 +314,6 @@ static void damage_check(e_dd_class* i_this) {
     }
 }
 
-/* 806A2BDC-806A2CE8 000A5C 010C+00 1/1 0/0 0/0 .text            way_bg_check__FP10e_dd_classf */
 static BOOL way_bg_check(e_dd_class* i_this, f32 param_2) {
     fopAc_ac_c* a_this = &i_this->actor;
     dBgS_LinChk lin_chk;
@@ -345,13 +336,10 @@ static BOOL way_bg_check(e_dd_class* i_this, f32 param_2) {
     return FALSE;
 }
 
-/* 806A74B8-806A74BC 000008 0004+00 2/2 0/0 0/0 .bss             None */
 u8 l_initHIO;
 
-/* 806A74C8-806A74F0 000018 0028+00 9/9 0/0 0/0 .bss             l_HIO */
 static daE_DD_HIO_c l_HIO;
 
-/* 806A2CE8-806A2F14 000B68 022C+00 2/2 0/0 0/0 .text            path_check__FP10e_dd_class */
 static BOOL path_check(e_dd_class* i_this) {
     static u8 check_index[255];
     fopAc_ac_c* a_this = &i_this->actor;
@@ -414,7 +402,6 @@ static BOOL path_check(e_dd_class* i_this) {
     return TRUE;
 }
 
-/* 806A2F14-806A34DC 000D94 05C8+00 1/1 0/0 0/0 .text            e_dd_wall__FP10e_dd_class */
 static void e_dd_wall(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     int frame = i_this->mpModelMorf->getFrame();
@@ -529,7 +516,6 @@ static void e_dd_wall(e_dd_class* i_this) {
     }
 }
 
-/* 806A34DC-806A3AE8 00135C 060C+00 1/1 0/0 0/0 .text            e_dd_normal__FP10e_dd_class */
 static void e_dd_normal(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     if (i_this->field_0x6d4 != 0) {
@@ -653,7 +639,6 @@ static void e_dd_normal(e_dd_class* i_this) {
     }
 }
 
-/* 806A3AE8-806A3D64 001968 027C+00 1/1 0/0 0/0 .text            e_dd_run__FP10e_dd_class */
 static void e_dd_run(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -728,7 +713,6 @@ static void e_dd_run(e_dd_class* i_this) {
     }
 }
 
-/* 806A3D64-806A3F98 001BE4 0234+00 1/1 0/0 0/0 .text            s_b_sub__FPvPv */
 static void* s_b_sub(void* i_actor, void* i_data) {
     if (fopAc_IsActor(i_actor) && dBomb_c::checkBombActor((fopAc_ac_c*)i_actor) && !((dBomb_c*)i_actor)->checkStateExplode()) {
         cXyz sp2c(((e_dd_class*)i_data)->field_0xe40);
@@ -754,7 +738,6 @@ static void* s_b_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 806A3F98-806A42F0 001E18 0358+00 1/1 0/0 0/0 .text            e_dd_attack__FP10e_dd_class */
 static void e_dd_attack(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     i_this->field_0x6c0 = 0x100;
@@ -843,7 +826,6 @@ static void e_dd_attack(e_dd_class* i_this) {
     }
 }
 
-/* 806A42F0-806A43C0 002170 00D0+00 1/1 0/0 0/0 .text            e_dd_guard__FP10e_dd_class */
 static void e_dd_guard(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -865,7 +847,6 @@ static void e_dd_guard(e_dd_class* i_this) {
     }
 }
 
-/* 806A43C0-806A460C 002240 024C+00 1/1 0/0 0/0 .text            e_dd_bombdamage__FP10e_dd_class */
 static void e_dd_bombdamage(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp2c;
@@ -922,7 +903,6 @@ static void e_dd_bombdamage(e_dd_class* i_this) {
     }
 }
 
-/* 806A460C-806A48DC 00248C 02D0+00 1/1 0/0 0/0 .text            e_dd_taildamage__FP10e_dd_class */
 static void e_dd_taildamage(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp24;
@@ -996,7 +976,6 @@ static void e_dd_taildamage(e_dd_class* i_this) {
     }
 }
 
-/* 806A48DC-806A4A58 00275C 017C+00 1/1 0/0 0/0 .text            e_dd_fall__FP10e_dd_class */
 static void e_dd_fall(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     i_this->field_0x6b2 = 100;
@@ -1033,7 +1012,6 @@ static void e_dd_fall(e_dd_class* i_this) {
     a_this->current.pos.z += i_this->field_0x6dc.z;
 }
 
-/* 806A4A58-806A4B60 0028D8 0108+00 1/1 0/0 0/0 .text            e_dd_dead__FP10e_dd_class */
 static void e_dd_dead(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -1063,7 +1041,6 @@ static void e_dd_dead(e_dd_class* i_this) {
     }
 }
 
-/* 806A4B60-806A4D98 0029E0 0238+00 1/1 0/0 0/0 .text            e_dd_arrowdamage__FP10e_dd_class */
 static void e_dd_arrowdamage(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp24;
@@ -1116,7 +1093,6 @@ static void e_dd_arrowdamage(e_dd_class* i_this) {
     }
 }
 
-/* 806A4D98-806A52CC 002C18 0534+00 2/1 0/0 0/0 .text            action__FP10e_dd_class */
 static void action(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz spa4, spb0;
@@ -1288,7 +1264,6 @@ static void action(e_dd_class* i_this) {
     setMidnaBindEffect(&i_this->actor, &i_this->mSound, &a_this->eyePos, &i_effSize);
 }
 
-/* 806A52CC-806A5A6C 00314C 07A0+00 1/1 0/0 0/0 .text            anm_se_set__FP10e_dd_class */
 static void anm_se_set(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     if (i_this->mAnm == BCK_DD_FIRE_B) {
@@ -1405,7 +1380,6 @@ static void anm_se_set(e_dd_class* i_this) {
     }
 }
 
-/* 806A5A6C-806A60E0 0038EC 0674+00 2/1 0/0 0/0 .text            daE_DD_Execute__FP10e_dd_class */
 static int daE_DD_Execute(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp1c, sp28;
@@ -1577,12 +1551,10 @@ static int daE_DD_Execute(e_dd_class* i_this) {
     return 1;
 }
 
-/* 806A60E0-806A60E8 003F60 0008+00 1/0 0/0 0/0 .text            daE_DD_IsDelete__FP10e_dd_class */
 static int daE_DD_IsDelete(e_dd_class* i_this) {
     return 1;
 }
 
-/* 806A60E8-806A6154 003F68 006C+00 1/0 0/0 0/0 .text            daE_DD_Delete__FP10e_dd_class */
 static int daE_DD_Delete(e_dd_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     dComIfG_resDelete(&i_this->mPhase, "E_dd");
@@ -1598,7 +1570,6 @@ static int daE_DD_Delete(e_dd_class* i_this) {
     return 1;
 }
 
-/* 806A6154-806A63B8 003FD4 0264+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_dd_class* i_this = (e_dd_class*)a_this;
 
@@ -1649,7 +1620,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 806A6400-806A65C4 004280 01C4+00 1/1 0/0 0/0 .text kabe_initial_pos_set__FP10e_dd_class */
 static int kabe_initial_pos_set(e_dd_class* i_this) {
     static s16 ya[5] = {
         -0x4000, 0x4000, 0x0000, 0x8000, 0x0000,
@@ -1691,7 +1661,6 @@ static int kabe_initial_pos_set(e_dd_class* i_this) {
     return 0;
 }
 
-/* 806A65C4-806A69A4 004444 03E0+00 1/0 0/0 0/0 .text            daE_DD_Create__FP10fopAc_ac_c */
 static cPhs__Step daE_DD_Create(fopAc_ac_c* a_this) {
     e_dd_class* i_this = (e_dd_class*)a_this;
     fopAcM_ct(a_this, e_dd_class);
@@ -1806,7 +1775,6 @@ static cPhs__Step daE_DD_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-/* 806A73E4-806A7404 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_DD_Method */
 extern actor_method_class l_daE_DD_Method = {
     (process_method_func)daE_DD_Create,
     (process_method_func)daE_DD_Delete,
@@ -1815,7 +1783,6 @@ extern actor_method_class l_daE_DD_Method = {
     (process_method_func)daE_DD_Draw,
 };
 
-/* 806A7404-806A7434 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_DD */
 extern actor_process_profile_definition g_profile_E_DD = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

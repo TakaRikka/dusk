@@ -27,25 +27,25 @@ public:
         /* 3 */ ACT_DEAD,
     };
 
-    /* 80BC729C */ virtual ~daObjCdoor_c();
-    /* 80BC6DB8 */ int CreateHeap();
-    /* 80BC6F30 */ cPhs__Step create();
-    /* 80BC73C0 */ void setMatrix();
-    /* 80BC7424 */ int Execute(Mtx**);
-    /* 80BC7478 */ void execCdoor();
-    /* 80BC7630 */ void execWgate();
-    /* 80BC775C */ void init_modeWait();
-    /* 80BC7768 */ void modeWait();
-    /* 80BC776C */ void init_modeOpen();
-    /* 80BC77BC */ void modeOpen();
-    /* 80BC78B0 */ void init_modeClose();
-    /* 80BC7900 */ void modeClose();
-    /* 80BC7A14 */ void event_proc_call();
-    /* 80BC7AD0 */ void actionWait();
-    /* 80BC7B34 */ void actionOrderEvent();
-    /* 80BC7B9C */ void actionEvent();
-    /* 80BC7BF8 */ void actionDead();
-    /* 80BC7C04 */ int Draw();
+    virtual ~daObjCdoor_c();
+    int CreateHeap();
+    cPhs__Step create();
+    void setMatrix();
+    int Execute(Mtx**);
+    void execCdoor();
+    void execWgate();
+    void init_modeWait();
+    void modeWait();
+    void init_modeOpen();
+    void modeOpen();
+    void init_modeClose();
+    void modeClose();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    int Draw();
 
     void setAction(u8 i_action) { mAction = i_action; }
     int getSwitchNum() { return mSw; }

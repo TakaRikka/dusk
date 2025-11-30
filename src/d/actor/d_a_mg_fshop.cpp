@@ -32,8 +32,6 @@ enum koro2_parts {
     KORO2_PART_SLOPE_R,
 };
 
-/* 8086C06C-8086C08C 0000EC 0020+00 1/1 0/0 0/0 .text
- * ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c            */
 static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideActor) {
     if (i_rideActor->field_0x567 == 0) {
         i_rideActor->field_0x567 = 1;
@@ -41,7 +39,6 @@ static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rid
     }
 }
 
-/* 8086C08C-8086C140 00010C 00B4+00 1/1 0/0 0/0 .text            Reel_CallBack__FP8J3DJointi */
 static int Reel_CallBack(J3DJoint* i_joint, int param_1) {
     J3DJoint* var_r27;
 
@@ -59,7 +56,6 @@ static int Reel_CallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 8086C140-8086C214 0001C0 00D4+00 1/1 0/0 0/0 .text            frog_CallBack__FP8J3DJointi */
 static int frog_CallBack(J3DJoint* i_joint, int param_1) {
     fs_lure_s* lure;
     J3DJoint* var_r27;
@@ -82,16 +78,12 @@ static int frog_CallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 808709A4-808709B0 000054 000C+00 2/3 0/0 0/0 .bss             BallStartPos */
 static cXyz BallStartPos;
 
-/* 808709BC-808709C8 00006C 000C+00 2/3 0/0 0/0 .bss             BallEndPos */
 static cXyz BallEndPos;
 
-/* 808709C8-808709CC 000078 0004+00 2/3 0/0 0/0 .bss             ArcIX_A_crwaku_model */
 static J3DModel* ArcIX_A_crwaku_model[1];
 
-/* 8086C214-8086C310 000294 00FC+00 1/1 0/0 0/0 .text            koro2_draw__FP11fshop_class */
 static void koro2_draw(fshop_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
@@ -126,7 +118,6 @@ static void koro2_draw(fshop_class* i_this) {
  * Slope: 8
  */
 
-/* 808702A4-8087032C 000020 0087+01 1/1 0/0 0/0 .data            koro2_map_LV1 */
 static s8 koro2_map_LV1[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x00,
@@ -145,7 +136,6 @@ static s8 koro2_map_LV1[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 8087032C-808703B4 0000A8 0087+01 1/0 0/0 0/0 .data            koro2_map_LV2 */
 static s8 koro2_map_LV2[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x00,
@@ -164,7 +154,6 @@ static s8 koro2_map_LV2[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 808703B4-8087043C 000130 0087+01 1/0 0/0 0/0 .data            koro2_map_LV3 */
 static s8 koro2_map_LV3[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x00,
@@ -183,7 +172,6 @@ static s8 koro2_map_LV3[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 8087043C-808704C4 0001B8 0087+01 1/0 0/0 0/0 .data            koro2_map_LV4 */
 static s8 koro2_map_LV4[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -202,7 +190,6 @@ static s8 koro2_map_LV4[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 808704C4-8087054C 000240 0087+01 1/0 0/0 0/0 .data            koro2_map_LV5 */
 static s8 koro2_map_LV5[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -221,7 +208,6 @@ static s8 koro2_map_LV5[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 8087054C-808705D4 0002C8 0087+01 1/0 0/0 0/0 .data            koro2_map_LV7 */
 static s8 koro2_map_LV7[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -240,7 +226,6 @@ static s8 koro2_map_LV7[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 808705D4-8087065C 000350 0087+01 1/0 0/0 0/0 .data            koro2_map_LV6 */
 static s8 koro2_map_LV6[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x00,
@@ -259,7 +244,6 @@ static s8 koro2_map_LV6[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 8087065C-808706E4 0003D8 0087+01 1/0 0/0 0/0 .data            koro2_map_LV8 */
 static s8 koro2_map_LV8[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -278,37 +262,28 @@ static s8 koro2_map_LV8[135] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 808706E4-80870704 -00001 0020+00 0/1 0/0 0/0 .data            koro2_map_d */
 static s8* koro2_map_d[8] = {
     koro2_map_LV1, koro2_map_LV2, koro2_map_LV3, koro2_map_LV4,
     koro2_map_LV5, koro2_map_LV6, koro2_map_LV7, koro2_map_LV8,
 };
 
-/* 808709CC-808709D0 00007C 0004+00 1/1 0/0 0/0 .bss             ArcIX_A_crstart_model */
 static J3DModel* ArcIX_A_crstart_model[1];
 
-/* 808709D0-808709D4 000080 0004+00 1/1 0/0 0/0 .bss             ArcIX_A_crgoal_model */
 static J3DModel* ArcIX_A_crgoal_model[1];
 
-/* 808709D4-80870A50 000084 007C+00 1/1 0/0 0/0 .bss             ArcIX_A_crbox_model */
 static J3DModel* ArcIX_A_crbox_model[31];
 
-/* 80870A50-80870A90 000100 0040+00 1/1 0/0 0/0 .bss             ArcIX_A_crcurve_a_model */
 static J3DModel* ArcIX_A_crcurve_a_model[16];
 
-/* 80870A90-80870AA0 000140 0010+00 1/1 0/0 0/0 .bss             ArcIX_A_crcurve_b_model */
 static J3DModel* ArcIX_A_crcurve_b_model[4];
 
-/* 80870AA0-80870AC0 000150 0020+00 1/1 0/0 0/0 .bss             ArcIX_A_crsaka_model */
 static J3DModel* ArcIX_A_crsaka_model[8];
 
-/* 80870704-8087071C -00001 0018+00 0/1 0/0 0/0 .data            koro2_union_model */
 static J3DModel** koro2_union_model[6] = {
     ArcIX_A_crstart_model,   ArcIX_A_crgoal_model,    ArcIX_A_crbox_model,
     ArcIX_A_crcurve_a_model, ArcIX_A_crcurve_b_model, ArcIX_A_crsaka_model,
 };
 
-/* 8086C310-8086C6E4 000390 03D4+00 1/0 0/0 0/0 .text            daFshop_Draw__FP11fshop_class */
 static int daFshop_Draw(fshop_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     g_env_light.settingTevStruct(0x10, &actor->current.pos, &actor->tevStr);
@@ -394,32 +369,26 @@ static int daFshop_Draw(fshop_class* i_this) {
     return 1;
 }
 
-/* 8087072C-80870738 0004A8 000C+00 0/0 0/0 0/0 .data            lure_scale */
 static f32 lure_scale[3] = {
     0.75f, 0.75f, 0.6f,
 };
 
-/* 80870738-80870744 0004B4 000C+00 0/0 0/0 0/0 .data            lure_eye_off */
 static f32 lure_eye_off[3] = {
     17.0f, 11.0f, 16.5f,
 };
 
-/* 80870744-80870750 0004C0 000C+00 0/1 0/0 0/0 .data            hook_1_offy */
 static f32 hook_1_offy[3] = {
     -3.5f, -3.5f, -5.0f,
 };
 
-/* 80870750-8087075C 0004CC 000C+00 0/1 0/0 0/0 .data            hook_2_offz */
 static f32 hook_2_offz[3] = {
     -19.0f, -16.0f, -21.0f,
 };
 
-/* 8087075C-80870768 0004D8 000C+00 0/1 0/0 0/0 .data            hook_2_offy */
 static f32 hook_2_offy[3] = {
     -1.0f, 0.0f, 0.0f,
 };
 
-/* 8086C6E4-8086C9D0 000764 02EC+00 1/1 0/0 0/0 .text            lure_set__FP11fshop_class */
 static void lure_set(fshop_class* i_this) {
     static f32 lure_ofy[3] = {-12.0f, -10.0f, -14.0f};
     fs_lure_s* pLure = i_this->mLure;
@@ -478,7 +447,6 @@ static void lure_set(fshop_class* i_this) {
     }
 }
 
-/* 8086C9D0-8086CC30 000A50 0260+00 1/1 0/0 0/0 .text            rod_set__FP11fshop_class */
 static void rod_set(fshop_class* i_this) {
     fs_rod_s* pRod = i_this->mRod;
 
@@ -529,7 +497,6 @@ static void rod_set(fshop_class* i_this) {
     }
 }
 
-/* 8086CC6C-8086CD70 000CEC 0104+00 1/1 0/0 0/0 .text            s_fish_sub__FPvPv */
 static void* s_fish_sub(void* i_actor, void* i_data) {
     mg_fish_class* fish = (mg_fish_class*)i_actor;
     fs_weed_s* weed = (fs_weed_s*)i_data;
@@ -553,7 +520,6 @@ static void* s_fish_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8086CD70-8086CF8C 000DF0 021C+00 1/1 0/0 0/0 .text            tsubo_set__FP11fshop_class */
 static void tsubo_set(fshop_class* i_this) {
     fopAc_ac_c* pfVar5 = dComIfGp_getPlayer(0);
     fs_tsubo_s* pTsubo = i_this->mTsubo;
@@ -597,7 +563,6 @@ static void tsubo_set(fshop_class* i_this) {
     }
 }
 
-/* 8086CF8C-8086D1A0 00100C 0214+00 1/1 0/0 0/0 .text weed_control__FP11fshop_classP9fs_weed_s */
 static void weed_control(fshop_class* i_this, fs_weed_s* i_weed) {
     int i;
     cXyz local_84;
@@ -628,14 +593,12 @@ static void weed_control(fshop_class* i_this, fs_weed_s* i_weed) {
     }
 }
 
-/* 8086D1A0-8086D1EC 001220 004C+00 1/1 0/0 0/0 .text stage_copy__FP11fshop_classP11fshop_class */
 static void stage_copy(fshop_class* i_dst, fshop_class* i_src) {
     i_dst->field_0x4014 = i_src->field_0x4014;
     i_dst->field_0x4020 = i_src->field_0x4020;
     i_dst->actor.scale = i_src->actor.scale;
 }
 
-/* 8086D1EC-8086D48C 00126C 02A0+00 1/1 0/0 0/0 .text            koro2_mtx_set__FP11fshop_class */
 static void koro2_mtx_set(fshop_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
@@ -702,7 +665,6 @@ static void koro2_mtx_set(fshop_class* i_this) {
     }
 }
 
-/* 8086D48C-8086D500 00150C 0074+00 1/1 0/0 0/0 .text            s_sel_sub__FPvPv */
 static void* s_sel_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_FSHOP) {
         if (((fshop_class*)i_actor)->field_0x400e == (u8)((((fshop_class*)i_data)->field_0x400c & 7) + 1)) {
@@ -713,7 +675,6 @@ static void* s_sel_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8086D500-8086D55C 001580 005C+00 1/1 0/0 0/0 .text            s_ball_sub__FPvPv */
 static void* s_ball_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_FSHOP && (fopAcM_GetParam(i_actor) & 0xFF) == 0x23) {
         return i_actor;
@@ -722,7 +683,6 @@ static void* s_ball_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8086D55C-8086D854 0015DC 02F8+00 1/1 0/0 0/0 .text            koro2_game__FP11fshop_class */
 static void koro2_game(fshop_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
@@ -808,7 +768,6 @@ static void koro2_game(fshop_class* i_this) {
     }
 }
 
-/* 8086D854-8086DA00 0018D4 01AC+00 1/1 0/0 0/0 .text            ball_wall_check__FP11fshop_class */
 static int ball_wall_check(fshop_class* i_this) {
     if (!i_this->ballAcch.ChkWallHit()) {
         return 0;
@@ -850,7 +809,6 @@ static int ball_wall_check(fshop_class* i_this) {
     return 0;
 }
 
-/* 8086DA00-8086E6C4 001A80 0CC4+00 2/1 0/0 0/0 .text            daFshop_Execute__FP11fshop_class */
 static int daFshop_Execute(fshop_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
@@ -1123,13 +1081,10 @@ static int daFshop_Execute(fshop_class* i_this) {
     return 1;
 }
 
-/* 8086E6C4-8086E6CC 002744 0008+00 1/0 0/0 0/0 .text            daFshop_IsDelete__FP11fshop_class
- */
 static int daFshop_IsDelete(fshop_class* i_this) {
     return 1;
 }
 
-/* 8086E6CC-8086E7F0 00274C 0124+00 1/0 0/0 0/0 .text            daFshop_Delete__FP11fshop_class */
 static int daFshop_Delete(fshop_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAcM_GetID(i_this);
@@ -1156,7 +1111,6 @@ static int daFshop_Delete(fshop_class* i_this) {
     return 1;
 }
 
-/* 8086E7F0-8086ECC8 002870 04D8+00 1/1 0/0 0/0 .text            koro2_heapinit__FP10fopAc_ac_c */
 static int koro2_heapinit(fopAc_ac_c* actor) {
     static int koro2_bmd[15] = {
         0x0A, 0x0B, 0x0B, 0x0B, 0x0B, 0x0F, 0x0D, 0x0C,
@@ -1295,7 +1249,6 @@ static int koro2_heapinit(fopAc_ac_c* actor) {
     return 1;
 }
 
-/* 8086ECC8-8086F5C8 002D48 0900+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* actor) {
     fshop_class* i_this = (fshop_class*)actor;
     cM_initRnd2(JREG_S(8) + 37, 123, 70);
@@ -1539,7 +1492,6 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-/* 8086F5C8-8086F634 003648 006C+00 1/1 0/0 0/0 .text            BalluseHeapInit__FP10fopAc_ac_c */
 static int BalluseHeapInit(fopAc_ac_c* actor) {
     fshop_class* i_this = (fshop_class*)actor;
 
@@ -1553,7 +1505,6 @@ static int BalluseHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-/* 8086F634-8086FD78 0036B4 0744+00 1/0 0/0 0/0 .text            daFshop_Create__FP10fopAc_ac_c */
 static int daFshop_Create(fopAc_ac_c* actor) {
     fshop_class* i_this = (fshop_class*)actor;
     fopAcM_ct(actor, fshop_class);
@@ -1721,7 +1672,6 @@ static int daFshop_Create(fopAc_ac_c* actor) {
     return phase_state;
 }
 
-/* 808708BC-808708DC -00001 0020+00 1/0 0/0 0/0 .data            l_daFshop_Method */
 static actor_method_class l_daFshop_Method = {
     (process_method_func)daFshop_Create,
     (process_method_func)daFshop_Delete,
@@ -1730,7 +1680,6 @@ static actor_method_class l_daFshop_Method = {
     (process_method_func)daFshop_Draw,
 };
 
-/* 808708DC-8087090C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_FSHOP */
 extern actor_process_profile_definition g_profile_FSHOP = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

@@ -8,8 +8,6 @@
 #include "d/actor/d_a_L7low_dr.h"
 #include "d/d_com_inf_game.h"
 
-/* 805AA5F8-805AA69C 000078 00A4+00 1/1 0/0 0/0 .text
- * setAction__11daL7lowDr_cFM11daL7lowDr_cFPCvPv_v              */
 void daL7lowDr_c::setAction(daL7lowDr_c::actionFn i_action) {
     if (mAction != NULL) {
         field_0x63c = -1;
@@ -22,7 +20,6 @@ void daL7lowDr_c::setAction(daL7lowDr_c::actionFn i_action) {
     (this->*mAction)();
 }
 
-/* 805AA69C-805AA748 00011C 00AC+00 1/1 0/0 0/0 .text            action__11daL7lowDr_cFv */
 void daL7lowDr_c::action() {
     if (field_0x640 != 0) {
         field_0x640--;
@@ -38,7 +35,6 @@ void daL7lowDr_c::action() {
     eyePos = current.pos;
 }
 
-/* 805AA748-805AA798 0001C8 0050+00 1/1 0/0 0/0 .text            _delete__11daL7lowDr_cFv */
 int daL7lowDr_c::_delete() {
     dComIfG_resDelete(&mPhase, "L7lowDr");
 
@@ -49,13 +45,10 @@ int daL7lowDr_c::_delete() {
     return 1;
 }
 
-/* 805AA798-805AA7B8 000218 0020+00 1/0 0/0 0/0 .text            daL7lowDr_Delete__FP11daL7lowDr_c
- */
 static int daL7lowDr_Delete(daL7lowDr_c* i_this) {
     return i_this->_delete();
 }
 
-/* 805AA7B8-805AA828 000238 0070+00 1/1 0/0 0/0 .text            mtx_set__11daL7lowDr_cFv */
 void daL7lowDr_c::mtx_set() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -67,7 +60,6 @@ void daL7lowDr_c::mtx_set() {
     mpModelMorf->modelCalc();
 }
 
-/* 805AA828-805AABF8 0002A8 03D0+00 1/0 0/0 0/0 .text            fly__11daL7lowDr_cFv */
 void daL7lowDr_c::fly() {
     if (field_0x63c == 0) {
         s16 var_r28 = cM_rndFX(32768.0f);
@@ -115,25 +107,20 @@ void daL7lowDr_c::fly() {
     }
 }
 
-/* 805AABF8-805AAC1C 000678 0024+00 1/1 0/0 0/0 .text            execute__11daL7lowDr_cFv */
 int daL7lowDr_c::execute() {
     action();
     return 1;
 }
 
-/* 805AAC1C-805AAC3C 00069C 0020+00 2/1 0/0 0/0 .text            daL7lowDr_Execute__FP11daL7lowDr_c
- */
 static int daL7lowDr_Execute(daL7lowDr_c* i_this) {
     return i_this->execute();
 }
 
-/* 805AAC3C-805AAC5C 0006BC 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     daL7lowDr_c* a_this = (daL7lowDr_c*)i_this;
     return a_this->CreateHeap();
 }
 
-/* 805AAC5C-805AAD58 0006DC 00FC+00 1/1 0/0 0/0 .text            CreateHeap__11daL7lowDr_cFv */
 int daL7lowDr_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("L7lowDr", 10);
     JUT_ASSERT(244, modelData != NULL);
@@ -147,7 +134,6 @@ int daL7lowDr_c::CreateHeap() {
     return 1;
 }
 
-/* 805AAD58-805AAE88 0007D8 0130+00 1/1 0/0 0/0 .text            create__11daL7lowDr_cFv */
 int daL7lowDr_c::create() {
     fopAcM_ct(this, daL7lowDr_c);
 
@@ -177,13 +163,10 @@ int daL7lowDr_c::create() {
     return phase_state;
 }
 
-/* 805AAE88-805AAEA8 000908 0020+00 1/0 0/0 0/0 .text            daL7lowDr_Create__FP11daL7lowDr_c
- */
 static int daL7lowDr_Create(daL7lowDr_c* i_this) {
     return i_this->create();
 }
 
-/* 805AAEA8-805AAF44 000928 009C+00 1/1 0/0 0/0 .text            draw__11daL7lowDr_cFv */
 int daL7lowDr_c::draw() {
          /* dSv_event_flag_c::F_0510 - City in the Sky - Watched City in the Sky start cutscene */
     if (!dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[510])) {
@@ -198,18 +181,14 @@ int daL7lowDr_c::draw() {
     return 1;
 }
 
-/* 805AAF44-805AAF64 0009C4 0020+00 1/0 0/0 0/0 .text            daL7lowDr_Draw__FP11daL7lowDr_c */
 static int daL7lowDr_Draw(daL7lowDr_c* i_this) {
     return i_this->draw();
 }
 
-/* 805AAF64-805AAF6C 0009E4 0008+00 1/0 0/0 0/0 .text            daL7lowDr_IsDelete__FP11daL7lowDr_c
- */
 static int daL7lowDr_IsDelete(daL7lowDr_c* i_this) {
     return 1;
 }
 
-/* 805AAFC4-805AAFE4 -00001 0020+00 1/0 0/0 0/0 .data            l_daL7lowDr_Method */
 static actor_method_class l_daL7lowDr_Method = {
     (process_method_func)daL7lowDr_Create,
     (process_method_func)daL7lowDr_Delete,
@@ -218,7 +197,6 @@ static actor_method_class l_daL7lowDr_Method = {
     (process_method_func)daL7lowDr_Draw,
 };
 
-/* 805AAFE4-805AB014 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_L7lowDr */
 extern actor_process_profile_definition g_profile_L7lowDr = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

@@ -45,7 +45,6 @@ static UnknownLightData l_lightData = {
 static const u8 lit_3727[0xC] = {};
 #endif
 
-/* 804A430C-804A4338 0000EC 002C+00 3/3 0/0 0/0 .text            reset__16daDemo00_resID_cFv */
 void daDemo00_resID_c::reset() {
     mShapeID = -1;
     field_0x4 = -1;
@@ -58,7 +57,6 @@ void daDemo00_resID_c::reset() {
     field_0x20 = -1;
 }
 
-/* 804A4338-804A4388 000118 0050+00 1/1 0/0 0/0 .text            reset__16daDemo00_model_cFv */
 void daDemo00_model_c::reset() {
     mID.reset();
     field_0x5d4 = NULL;
@@ -71,7 +69,6 @@ void daDemo00_model_c::reset() {
     mpBlkAnm = NULL;
 }
 
-/* 804A4388-804A4420 000168 0098+00 1/1 0/0 0/0 .text            __dt__10daDemo00_cFv */
 daDemo00_c::~daDemo00_c() {
     if (heap != NULL) {
         if (mModel.mpModelMorf != NULL) {
@@ -96,7 +93,6 @@ inline int daDemo00_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 804A4520-804A45A0 000300 0080+00 1/1 0/0 0/0 .text            get_foward_angle__FP4cXyzP4cXyzPsPs */
 static void get_foward_angle(cXyz* param_1, cXyz* param_2, s16* param_3, s16* param_4) {
     cXyz sp38;
     if (param_1 == NULL || param_2 == NULL || param_3 == NULL || param_4 == NULL) {
@@ -109,7 +105,6 @@ static void get_foward_angle(cXyz* param_1, cXyz* param_2, s16* param_3, s16* pa
     *param_4 = sp38.atan2sX_Z();
 }
 
-/* 804A45A0-804A4948 000380 03A8+00 2/2 0/0 0/0 .text            setBaseMtx__10daDemo00_cFv */
 void daDemo00_c::setBaseMtx() {
     s16 sVar1, sVar2;
     cXyz sp38;
@@ -169,7 +164,6 @@ void daDemo00_c::setBaseMtx() {
     mModel.field_0x5d4->setBaseScale(scale);
 }
 
-/* 804A4948-804A4D48 000728 0400+00 1/1 0/0 0/0 .text            setShadowSize__10daDemo00_cFv */
 void daDemo00_c::setShadowSize() {
     J3DModelData* modelData = mModel.field_0x5d4->getModelData();
     cXyz min(100000000.0f, 100000000.0f, 100000000.0f);
@@ -200,7 +194,6 @@ void daDemo00_c::setShadowSize() {
     mModel.mShadow->field_0x20 = spc8.absXZ() * 0.25f;
 }
 
-/* 804A4D48-804A4F54 000B28 020C+00 1/1 0/0 0/0 .text            awaCheck__FP8J3DModel */
 static BOOL awaCheck(J3DModel* i_model) {
     J3DModelData* modelData = i_model->getModelData();
     J3DTexture* texture = modelData->getTexture();
@@ -232,13 +225,11 @@ static BOOL awaCheck(J3DModel* i_model) {
     return TRUE;
 }
 
-/* 804A4F54-804A4F74 000D34 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__FP10fopAc_ac_c */
 static int createHeapCallBack(fopAc_ac_c* a_this) {
     daDemo00_c* i_this = (daDemo00_c*)a_this;
     return i_this->createHeap();
 }
 
-/* 804A4F74-804A5750 000D54 07DC+00 1/1 0/0 0/0 .text            createHeap__10daDemo00_cFv */
 int daDemo00_c::createHeap() {
     if (mModel.mID.mShapeID != -1) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes(dStage_roomControl_c::getDemoArcName(), (u16)mModel.mID.mShapeID);
@@ -460,7 +451,6 @@ int daDemo00_c::createHeap() {
     return 1;
 }
 
-/* 804A5798-804A594C 001578 01B4+00 2/0 0/0 0/0 .text actStandby__10daDemo00_cFP13dDemo_actor_c */
 int daDemo00_c::actStandby(dDemo_actor_c* actor) {
     if (field_0x588.mShapeID != -1) {
         mModel.mID = field_0x588;
@@ -493,7 +483,6 @@ int daDemo00_c::actStandby(dDemo_actor_c* actor) {
     return 1;
 }
 
-/* 804A594C-804A604C 00172C 0700+00 1/0 0/0 0/0 .text            actPerformance__10daDemo00_cFP13dDemo_actor_c */
 int daDemo00_c::actPerformance(dDemo_actor_c* actor) {
     f32 fVar1;
     if (mModel.mID.mShapeID != field_0x588.mShapeID) {
@@ -727,7 +716,6 @@ int daDemo00_c::actPerformance(dDemo_actor_c* actor) {
     return 1;
 }
 
-/* 804A604C-804A60B0 001E2C 0064+00 1/0 0/0 0/0 .text            actLeaving__10daDemo00_cFP13dDemo_actor_c */
 int daDemo00_c::actLeaving(dDemo_actor_c* actor) {
     if (mModel.mpModelMorf != NULL) {
         mModel.mpModelMorf->stopZelAnime();
@@ -738,7 +726,6 @@ int daDemo00_c::actLeaving(dDemo_actor_c* actor) {
     return 1;
 }
 
-/* 804A7BA8-804A84AC 003988 0904+00 7/1 0/0 0/0 .text            execute__10daDemo00_cFv */
 inline int daDemo00_c::execute() {
     field_0x6a1 = 0;
     dDemo_actor_c* actor = dDemo_c::getActor(demoActorID);
@@ -1206,7 +1193,6 @@ inline int daDemo00_c::execute() {
     return 1;
 }
 
-/* 804A60B0-804A61F0 001E90 0140+00 1/1 0/0 0/0 .text            mDad00_changeXluMaterial__FP11J3DMateriali */
 static void mDad00_changeXluMaterial(J3DMaterial* i_material, int param_2) {
     static J3DBlendInfo l_blendInfoOPA = {
         0,
@@ -1252,7 +1238,6 @@ static void mDad00_changeXluMaterial(J3DMaterial* i_material, int param_2) {
     }
 }
 
-/* 804A61F0-804A6428 001FD0 0238+00 1/1 0/0 0/0 .text            teduna_calc__FP4cXyzP4cXyzP4cXyzsi */
 static void teduna_calc(cXyz* param_1, cXyz* param_2, cXyz* param_3, s16 param_4, int param_5) {
     cXyz sp70(*param_1 - *param_2);
     f32 f31;
@@ -1281,19 +1266,14 @@ static void teduna_calc(cXyz* param_1, cXyz* param_2, cXyz* param_3, s16 param_4
     }
 }
 
-/* 804A8C64-804A8D24 000054 00C0+00 1/3 0/0 0/0 .bss             teduna_posL */
 static cXyz teduna_posL[16];
 
-/* 804A8D30-804A8DF0 000120 00C0+00 1/3 0/0 0/0 .bss             teduna_posR */
 static cXyz teduna_posR[16];
 
-/* 804A8DFC-804A8E08 0001EC 000C+00 2/4 0/0 0/0 .bss             S_ganon_left_hand_pos */
 static cXyz S_ganon_left_hand_pos;
 
-/* 804A8E14-804A8E20 000204 000C+00 2/4 0/0 0/0 .bss             S_ganon_right_hand_pos */
 static cXyz S_ganon_right_hand_pos;
 
-/* 804A6428-804A6868 002208 0440+00 1/1 0/0 0/0 .text            teduna_draw__FP8J3DModelP19mDoExt_3DlineMat1_cP12dKy_tevstr_ciiii */
 static void teduna_draw(J3DModel* i_model, mDoExt_3DlineMat1_c* param_2, dKy_tevstr_c* param_3, int param_4, int param_5, int param_6, int param_7) {
     static GXColor l_color = {
         0x14, 0x0F, 0x00, 0xFF,
@@ -1380,7 +1360,6 @@ static void teduna_draw(J3DModel* i_model, mDoExt_3DlineMat1_c* param_2, dKy_tev
     dComIfGd_set3DlineMat(param_2);
 }
 
-/* 804A6868-804A692C 002648 00C4+00 1/1 0/0 0/0 .text teduna_ganon_hand_set__FP8J3DModelii */
 static void teduna_ganon_hand_set(J3DModel* i_model, int param_2, int param_3) {
     cXyz sp20;
 
@@ -1393,7 +1372,6 @@ static void teduna_ganon_hand_set(J3DModel* i_model, int param_2, int param_3) {
     mDoMtx_stack_c::multVec(&sp20, &S_ganon_right_hand_pos);
 }
 
-/* 804A692C-804A6C48 00270C 031C+00 1/1 0/0 0/0 .text ke_control__FP10daDemo00_cP12demo_s1_ke_sif */
 static void ke_control(daDemo00_c* i_this, demo_s1_ke_s* param_2, int param_3, f32 param_4) {
     param_3;
     fopAc_ac_c* actor = i_this;
@@ -1468,7 +1446,6 @@ static void ke_control(daDemo00_c* i_this, demo_s1_ke_s* param_2, int param_3, f
     }
 }
 
-/* 804A6C48-804A6D20 002A28 00D8+00 1/1 0/0 0/0 .text            ke_move__FP10daDemo00_cP19mDoExt_3DlineMat0_cP12demo_s1_ke_sif */
 static void ke_move(daDemo00_c* i_this, mDoExt_3DlineMat0_c* param_2, demo_s1_ke_s* param_3, int param_4, f32 param_5) {
     ke_control(i_this, param_3, param_4, param_5);
     cXyz* pcVar1 = param_2->getPos(param_4);
@@ -1486,7 +1463,6 @@ static void ke_move(daDemo00_c* i_this, mDoExt_3DlineMat0_c* param_2, demo_s1_ke
     }
 }
 
-/* 804A6D20-804A6F74 002B00 0254+00 1/1 0/0 0/0 .text            ke_set__FP10daDemo00_c */
 static void ke_set(daDemo00_c* i_this) {
     static s16 ke_za[22] = {
         0xFCE0, 0xFE70, 0, 0x0190, 0x0320, 0xFCE0, 0xFE70, 0, 0x0190, 0x0320, 
@@ -1529,12 +1505,10 @@ static void ke_set(daDemo00_c* i_this) {
     }
 }
 
-/* 804A6F74-804A6F94 002D54 0020+00 1/0 0/0 0/0 .text            daDemo00_Draw__FP10daDemo00_c */
 static int daDemo00_Draw(daDemo00_c* i_this) {
     return i_this->draw();
 }
 
-/* 804A6F94-804A7B88 002D74 0BF4+00 1/1 0/0 0/0 .text            draw__10daDemo00_cFv */
 int daDemo00_c::draw() {
     f32 f31 = 15.0f;
     if (mModel.field_0x5d4 != NULL) {
@@ -1847,24 +1821,20 @@ int daDemo00_c::draw() {
     return 1;
 }
 
-/* 804A7B88-804A7BA8 003968 0020+00 1/0 0/0 0/0 .text            daDemo00_Execute__FP10daDemo00_c */
 static int daDemo00_Execute(daDemo00_c* i_this) {
     return i_this->execute();
 }
 
-/* 804A84AC-804A84B4 00428C 0008+00 1/0 0/0 0/0 .text            daDemo00_IsDelete__FP10daDemo00_c */
 static int daDemo00_IsDelete(daDemo00_c* i_this) {
     return 1;
 }
 
-/* 804A84B4-804A84DC 004294 0028+00 1/0 0/0 0/0 .text            daDemo00_Delete__FP10daDemo00_c */
 static int daDemo00_Delete(daDemo00_c* i_this) {
     fopAcM_RegisterDeleteID(i_this, "Demo00");
     i_this->~daDemo00_c();
     return 1;
 }
 
-/* 804A84DC-804A86B4 0042BC 01D8+00 1/0 0/0 0/0 .text            daDemo00_Create__FP10fopAc_ac_c */
 static int daDemo00_Create(fopAc_ac_c* i_this) {
     fopAcM_RegisterCreateID(daDemo00_c, i_this, "Demo00");
     fopAcM_ct(a_this, daDemo00_c);
@@ -1914,7 +1884,6 @@ class JAUSectionHeap;
 template<>
 JAUSectionHeap* JASGlobalInstance<JAUSectionHeap>::sInstance;
 
-/* 804A8B94-804A8BB4 -00001 0020+00 1/0 0/0 0/0 .data            l_daDemo00_Method */
 static actor_method_class l_daDemo00_Method = {
     (process_method_func)daDemo00_Create,
     (process_method_func)daDemo00_Delete,
@@ -1923,7 +1892,6 @@ static actor_method_class l_daDemo00_Method = {
     (process_method_func)daDemo00_Draw,
 };
 
-/* 804A8BB4-804A8BE4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_DEMO00 */
 extern actor_process_profile_definition g_profile_DEMO00 = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

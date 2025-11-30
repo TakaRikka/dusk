@@ -7,7 +7,6 @@
 
 #include "d/actor/d_a_obj_crvhahen.h"
 
-/* 80BD4064-80BD4068 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static const char* l_arcName = "CrvFence";
 
 inline int daObjCRVHAHEN_c::CreateHeap() {
@@ -23,24 +22,19 @@ inline int daObjCRVHAHEN_c::CreateHeap() {
     return 1;
 }
 
-/* 80BD3338-80BD33E8 000078 00B0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return ((daObjCRVHAHEN_c*)i_this)->CreateHeap();
 }
 
-/* 80BD33E8-80BD3408 000128 0020+00 1/0 0/0 0/0 .text daObjCRVHAHEN_Create__FP10fopAc_ac_c */
 static int daObjCRVHAHEN_Create(fopAc_ac_c* i_this) {
     static_cast<daObjCRVHAHEN_c*>(i_this)->create();
 }
 
-/* 80BD3408-80BD342C 000148 0024+00 1/0 0/0 0/0 .text daObjCRVHAHEN_Delete__FP15daObjCRVHAHEN_c */
 static int daObjCRVHAHEN_Delete(daObjCRVHAHEN_c* i_this) {
     i_this->Delete();
     return 1;
 }
 
-/* 80BD342C-80BD3628 00016C 01FC+00 0/0 0/0 2/2 .text
- * HahenSet__15daObjCRVHAHEN_cF4cXyz4cXyz4cXyz4cXyzf            */
 int daObjCRVHAHEN_c::HahenSet(cXyz i_param_1, cXyz i_param_2, cXyz i_param_3, cXyz i_param_4,
                               f32 duration) {
     mDrawHahen = true;
@@ -68,7 +62,6 @@ int daObjCRVHAHEN_c::HahenSet(cXyz i_param_1, cXyz i_param_2, cXyz i_param_3, cX
     return 1;
 }
 
-/* 80BD3628-80BD36E4 000368 00BC+00 1/1 0/0 0/0 .text Wall_Check__15daObjCRVHAHEN_cF4cXyz4cXyz */
 bool daObjCRVHAHEN_c::Wall_Check(cXyz i_origin, cXyz i_target) {
     dBgS_LinChk line_check;
 
@@ -86,8 +79,6 @@ bool daObjCRVHAHEN_c::Wall_Check(cXyz i_origin, cXyz i_target) {
     return did_line_cross;
 }
 
-/* 80BD3720-80BD38DC 000460 01BC+00 1/1 0/0 0/0 .text            Hahen_Hakai__15daObjCRVHAHEN_cFii
- */
 void daObjCRVHAHEN_c::Hahen_Hakai(int i_start, int i_end) {
     for (int i = i_start; i < i_end; ++i) {
         if (mStatus[i] > 3) {
@@ -128,7 +119,6 @@ void daObjCRVHAHEN_c::Hahen_Hakai(int i_start, int i_end) {
     }
 }
 
-/* 80BD38DC-80BD3A9C 00061C 01C0+00 1/1 0/0 0/0 .text            CheckCull__15daObjCRVHAHEN_cFv */
 void daObjCRVHAHEN_c::CheckCull() {
     daPy_py_c* player_actor = daPy_getPlayerActorClass();
     cXyz& player_pos = fopAcM_GetPosition((fopAc_ac_c*)player_actor);
@@ -144,7 +134,6 @@ void daObjCRVHAHEN_c::CheckCull() {
     }
 }
 
-/* 80BD3A9C-80BD3B20 0007DC 0084+00 1/1 0/0 0/0 .text checkViewArea__15daObjCRVHAHEN_cFP4cXyz */
 bool daObjCRVHAHEN_c::checkViewArea(cXyz* i_this) {
     Vec proj;
     mDoLib_project(i_this, &proj);
@@ -158,7 +147,6 @@ bool daObjCRVHAHEN_c::checkViewArea(cXyz* i_this) {
     return ret;
 }
 
-/* 80BD3B20-80BD3B74 000860 0054+00 1/1 0/0 0/0 .text            Execute__15daObjCRVHAHEN_cFv */
 int daObjCRVHAHEN_c::Execute() {
     if (mDrawHahen) {
         daObjCRVHAHEN_c::Hahen_Hakai(0, 10);
@@ -170,7 +158,6 @@ int daObjCRVHAHEN_c::Execute() {
     return 1;
 }
 
-/* 80BD3B74-80BD3C0C 0008B4 0098+00 1/1 0/0 0/0 .text            Delete__15daObjCRVHAHEN_cFv */
 int daObjCRVHAHEN_c::Delete() {
     if (mInitialized) {
         J3DModelData* model_data = (J3DModelData*)dRes_control_c::getRes(
@@ -183,7 +170,6 @@ int daObjCRVHAHEN_c::Delete() {
     return 1;
 }
 
-/* 80BD3C0C-80BD3CA0 00094C 0094+00 1/1 0/0 0/0 .text            setBaseMtx__15daObjCRVHAHEN_cFv */
 void daObjCRVHAHEN_c::setBaseMtx() {
     for (int i = 0; i < 10; i++) {
         mDoMtx_stack_c::transS(mPos[i]);
@@ -214,17 +200,14 @@ inline int daObjCRVHAHEN_c::Draw() {
     return 1;
 }
 
-/* 80BD3CA0-80BD3D9C 0009E0 00FC+00 1/0 0/0 0/0 .text daObjCRVHAHEN_Draw__FP15daObjCRVHAHEN_c */
 static int daObjCRVHAHEN_Draw(daObjCRVHAHEN_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80BD3D9C-80BD3DBC 000ADC 0020+00 2/1 0/0 0/0 .text daObjCRVHAHEN_Execute__FP15daObjCRVHAHEN_c */
 static int daObjCRVHAHEN_Execute(daObjCRVHAHEN_c* i_this) {
     i_this->Execute();
 }
 
-/* 80BD3DBC-80BD3F9C 000AFC 01E0+00 1/1 0/0 0/0 .text            create__15daObjCRVHAHEN_cFv */
 int daObjCRVHAHEN_c::create() {
     fopAcM_ct(this, daObjCRVHAHEN_c);
 
@@ -249,20 +232,16 @@ int daObjCRVHAHEN_c::create() {
     return phase_state;
 }
 
-/* 80BD3FE0-80BD3FE8 000D20 0008+00 1/0 0/0 0/0 .text daObjCRVHAHEN_IsDelete__FP15daObjCRVHAHEN_c */
 static int daObjCRVHAHEN_IsDelete(daObjCRVHAHEN_c* i_this) {
     return true;
 }
 
-/* ############################################################################################## */
-/* 80BD4068-80BD4088 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjCRVHAHEN_Method */
 static actor_method_class l_daObjCRVHAHEN_Method = {
     (process_method_func)daObjCRVHAHEN_Create,  (process_method_func)daObjCRVHAHEN_Delete,
     (process_method_func)daObjCRVHAHEN_Execute, (process_method_func)daObjCRVHAHEN_IsDelete,
     (process_method_func)daObjCRVHAHEN_Draw,
 };
 
-/* 80BD4088-80BD40B8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_CRVHAHEN */
 extern actor_process_profile_definition g_profile_Obj_CRVHAHEN = {
     fpcLy_CURRENT_e,          // mLayerID
     3,                        // mListID

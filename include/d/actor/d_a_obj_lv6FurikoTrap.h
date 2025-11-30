@@ -15,15 +15,15 @@
  */
 class daLv6FurikoTrap_c : public dBgS_MoveBgActor {
 public:
-    /* 80C72510 */ void setBaseMtx();
-    /* 80C72598 */ int CreateHeap();
-    /* 80C72604 */ int create();
-    /* 80C729B4 */ int Execute(Mtx**);
-    /* 80C72CA8 */ void move();
-    /* 80C72D24 */ void init_modeMove();
-    /* 80C72D38 */ void modeMove();
-    /* 80C72EE0 */ int Draw();
-    /* 80C72F94 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    void move();
+    void init_modeMove();
+    void modeMove();
+    int Draw();
+    int Delete();
 
     static const dCcD_SrcGObjInf mCcDObjInfo;
     static dCcD_SrcSph mCcDSph;
@@ -44,7 +44,7 @@ STATIC_ASSERT(sizeof(daLv6FurikoTrap_c) == 0x1d18);
 
 class daLv6FurikoTrap_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C7248C */ daLv6FurikoTrap_HIO_c();
+    daLv6FurikoTrap_HIO_c();
 #if DEBUG
     void genMessage(JORMContext*);
 #endif

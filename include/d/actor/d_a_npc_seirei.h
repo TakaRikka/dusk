@@ -24,7 +24,7 @@ class daNpc_Seirei_HIO_c : public mDoHIO_entry_c {
 
 class daNpc_Seirei_Param_c {
 public:
-    /* 80AD7C3C */ virtual ~daNpc_Seirei_Param_c() {}
+    virtual ~daNpc_Seirei_Param_c() {}
 
     static daNpc_Seirei_HIOParam const m;
 };
@@ -34,36 +34,36 @@ public:
     typedef int (daNpc_Seirei_c::*actionFunc)(void*);
     typedef BOOL (daNpc_Seirei_c::*cutFunc)(int);
 
-    /* 80AD572C */ ~daNpc_Seirei_c();
-    /* 80AD57C4 */ cPhs__Step create();
-    /* 80AD5A7C */ int CreateHeap();
-    /* 80AD5BC4 */ int Delete();
-    /* 80AD5BF8 */ int Execute();
-    /* 80AD5C18 */ int Draw();
-    /* 80AD5CC0 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AD5CE0 */ u8 getType();
-    /* 80AD5D2C */ BOOL isDelete();
-    /* 80AD5D34 */ void reset();
-    /* 80AD5EEC */ void setParam();
-    /* 80AD6048 */ BOOL checkChangeEvt();
-    /* 80AD6050 */ void srchActors();
-    /* 80AD6054 */ BOOL evtTalk();
-    /* 80AD6154 */ BOOL evtCutProc();
-    /* 80AD621C */ void action();
-    /* 80AD62A4 */ void beforeMove();
-    /* 80AD6330 */ void setAttnPos();
-    /* 80AD6464 */ int drawDbgInfo();
-    /* 80AD646C */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80AD6604 */ BOOL selectAction();
-    /* 80AD664C */ BOOL chkAction(actionFunc);
-    /* 80AD6678 */ BOOL setAction(actionFunc);
-    /* 80AD6720 */ void ctrlWaitAnm();
-    /* 80AD6808 */ void setPrtcls();
-    /* 80AD6A38 */ BOOL chkFirstMeeting();
-    /* 80AD6ABC */ BOOL cutConversation(int);
-    /* 80AD6C58 */ int wait(void*);
-    /* 80AD6D30 */ int talk(void*);
-    /* 80AD7BF8 */ daNpc_Seirei_c(
+    ~daNpc_Seirei_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void setParam();
+    BOOL checkChangeEvt();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    int drawDbgInfo();
+    bool afterSetMotionAnm(int, int, f32, int);
+    BOOL selectAction();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    void ctrlWaitAnm();
+    void setPrtcls();
+    BOOL chkFirstMeeting();
+    BOOL cutConversation(int);
+    int wait(void*);
+    int talk(void*);
+    daNpc_Seirei_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,

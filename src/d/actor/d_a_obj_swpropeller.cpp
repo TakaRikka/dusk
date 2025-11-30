@@ -15,7 +15,6 @@
 #define TYPE_BOOMERANG 0  // only turns when hit with boomerang
 #define TYPE_WIND 1       // automatically turns
 
-/* 8059A518-8059A5C8 000078 00B0+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -33,31 +32,25 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 8059A5C8-8059A5E8 000128 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjSwPr_c*>(i_this)->CreateHeap();
 }
 
-/* 8059A5E8-8059A624 000148 003C+00 1/1 0/0 0/0 .text            initBaseMtx__11daObjSwPr_cFv */
 void daObjSwPr_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 8059A624-8059A670 000184 004C+00 3/3 0/0 0/0 .text            setBaseMtx__11daObjSwPr_cFv */
 void daObjSwPr_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 8059B2C8-8059B2D0 000000 0008+00 3/3 0/0 0/0 .rodata          l_bmdName */
 static int const l_bmdName[] = {3, 3};
 
-/* 8059B2D0-8059B2D8 000008 0008+00 1/1 0/0 0/0 .rodata          l_heap_size */
 static u32 const l_heap_size[] = {0xF20, 0x36C0};
 
-/* 8059B2D8-8059B31C 000010 0044+00 0/1 0/0 0/0 .rodata          l_cyl_src */
 static const dCcD_SrcCyl l_cyl_src = {
     {
         {0, {{0, 0, 0}, {0x10040, 0x11}, 0x58}},
@@ -72,20 +65,15 @@ static const dCcD_SrcCyl l_cyl_src = {
     },
 };
 
-/* 8059B31C-8059B334 000054 0018+00 0/1 0/0 0/0 .rodata          l_cull_size */
 static f32 const l_cull_size[] = {-150.0f, 0.0f, -150.0f, 150.0f, 150.0f, 150.0f};
 
-/* 8059B334-8059B33C 00006C 0006+02 0/0 0/0 0/0 .rodata          l_r00_rot_time */
 // This was used for this object's HIO, which was removed in retail
 static s16 const l_r00_rot_time[] = {190, 148, 100};
 
-/* 8059B380-8059B388 -00001 0008+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[] = {"K_prop00", "Lv9_puro"};
 
-/* 8059B388-8059B38C -00001 0004+00 1/1 0/0 0/0 .data            l_joint_name */
 static char* l_joint_name = "kaiten";
 
-/* 8059A670-8059A808 0001D0 0198+00 1/1 0/0 0/0 .text            Create__11daObjSwPr_cFv */
 int daObjSwPr_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -127,7 +115,6 @@ int daObjSwPr_c::Create() {
     return 1;
 }
 
-/* 8059A808-8059A888 000368 0080+00 1/1 0/0 0/0 .text            CreateHeap__11daObjSwPr_cFv */
 int daObjSwPr_c::CreateHeap() {
     J3DModelData* modelData =
         (J3DModelData*)dComIfG_getObjectRes(l_arcName[mModelType], l_bmdName[mModelType]);
@@ -140,7 +127,6 @@ int daObjSwPr_c::CreateHeap() {
     return 1;
 }
 
-/* 8059A888-8059AA74 0003E8 01EC+00 1/1 0/0 0/0 .text            create__11daObjSwPr_cFv */
 int daObjSwPr_c::create() {
     fopAcM_ct(this, daObjSwPr_c);
 
@@ -166,13 +152,11 @@ int daObjSwPr_c::create() {
     return phase;
 }
 
-/* 8059AB04-8059AB14 000664 0010+00 1/1 0/0 0/0 .text            setRotateTime__11daObjSwPr_cFv */
 int daObjSwPr_c::setRotateTime() {
     field_0x83a = 0;
     return 100;
 }
 
-/* 8059AB14-8059AB9C 000674 0088+00 1/1 0/0 0/0 .text            switchCtrl__11daObjSwPr_cFv */
 void daObjSwPr_c::switchCtrl() {
     int sw = getSwbit();
 
@@ -183,7 +167,6 @@ void daObjSwPr_c::switchCtrl() {
     }
 }
 
-/* 8059AB9C-8059ADCC 0006FC 0230+00 1/1 0/0 0/0 .text execute_type_boomerang__11daObjSwPr_cFv */
 void daObjSwPr_c::execute_type_boomerang() {
     bool tg_hit = mCyl1.ChkTgHit();
 
@@ -233,8 +216,6 @@ void daObjSwPr_c::execute_type_boomerang() {
     field_0x838 = tg_hit;
 }
 
-/* 8059ADCC-8059B014 00092C 0248+00 1/1 0/0 0/0 .text            execute_type_wind__11daObjSwPr_cFv
- */
 void daObjSwPr_c::execute_type_wind() {
     s16 target_speed = 0;
     int sw = getSwbit();
@@ -293,7 +274,6 @@ void daObjSwPr_c::execute_type_wind() {
     field_0x83d = var_r29;
 }
 
-/* 8059B014-8059B148 000B74 0134+00 1/1 0/0 0/0 .text            execute__11daObjSwPr_cFv */
 int daObjSwPr_c::execute() {
     switch (mNameArg) {
     case TYPE_BOOMERANG:
@@ -313,7 +293,6 @@ int daObjSwPr_c::execute() {
     return 1;
 }
 
-/* 8059B148-8059B1AC 000CA8 0064+00 1/1 0/0 0/0 .text            draw__11daObjSwPr_cFv */
 int daObjSwPr_c::draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -322,42 +301,33 @@ int daObjSwPr_c::draw() {
     return 1;
 }
 
-/* 8059B1AC-8059B1EC 000D0C 0040+00 1/1 0/0 0/0 .text            _delete__11daObjSwPr_cFv */
 int daObjSwPr_c::_delete() {
     dComIfG_resDelete(&mPhase, l_arcName[mModelType]);
     return 1;
 }
 
-/* 8059B1EC-8059B20C 000D4C 0020+00 1/0 0/0 0/0 .text            daObjSwPr_Draw__FP11daObjSwPr_c */
 static int daObjSwPr_Draw(daObjSwPr_c* i_this) {
     return i_this->draw();
 }
 
-/* 8059B20C-8059B22C 000D6C 0020+00 1/0 0/0 0/0 .text            daObjSwPr_Execute__FP11daObjSwPr_c
- */
 static int daObjSwPr_Execute(daObjSwPr_c* i_this) {
     return i_this->execute();
 }
 
-/* 8059B22C-8059B24C 000D8C 0020+00 1/0 0/0 0/0 .text            daObjSwPr_Delete__FP11daObjSwPr_c
- */
 static int daObjSwPr_Delete(daObjSwPr_c* i_this) {
     return i_this->_delete();
 }
 
-/* 8059B24C-8059B26C 000DAC 0020+00 1/0 0/0 0/0 .text            daObjSwPr_Create__FP10fopAc_ac_c */
 static int daObjSwPr_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjSwPr_c*>(i_this)->create();
 }
 
-/* 8059B38C-8059B3AC -00001 0020+00 1/0 0/0 0/0 .data            l_daObjSwPr_Method */
 static actor_method_class l_daObjSwPr_Method = {
     (process_method_func)daObjSwPr_Create,  (process_method_func)daObjSwPr_Delete,
     (process_method_func)daObjSwPr_Execute, (process_method_func)NULL,
     (process_method_func)daObjSwPr_Draw,
 };
 
-/* 8059B3AC-8059B3DC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Swpropeller */
 extern actor_process_profile_definition g_profile_Obj_Swpropeller = {
     fpcLy_CURRENT_e,
     3,

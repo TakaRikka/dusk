@@ -61,8 +61,8 @@ public:
         return cPhs_COMPLEATE_e;
     }
 
-    /* 80837B9C */ u8 checkMerchantNum();
-    /* 80837BEC */ void checkAppearTag(daTagGuard_c*);
+    u8 checkMerchantNum();
+    void checkAppearTag(daTagGuard_c*);
 
     /* 0x568 */ daTagGuard_c* mpTagGuard;
     /* 0x56C */ f32 field_0x56c;

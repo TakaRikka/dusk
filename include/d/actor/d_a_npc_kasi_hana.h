@@ -23,7 +23,7 @@ struct daNpcKasiHana_HIOParam {
 
 class daNpcKasiHana_Param_c {
 public:
-    /* 80A2067C */ virtual ~daNpcKasiHana_Param_c() {}
+    virtual ~daNpcKasiHana_Param_c() {}
 
     static daNpcKasiHana_HIOParam const m;
 };
@@ -50,28 +50,28 @@ public:
         mSygnal = 0;
     }
     ~daNpcKasi_Mng_c() {}
-    /* 80A1AFAC */ void calcEscapeForm();
-    /* 80A1B0D8 */ BOOL calcCenterPos();
-    /* 80A1B1C8 */ f32 getDistFromCenter();
-    /* 80A1B35C */ void getOffsetFromLeader(cXyz const&, cXyz&);
-    /* 80A1B410 */ void initPath(u8, u16);
-    /* 80A1B48C */ int getPlNearPoint();
-    /* 80A1B5F0 */ int getSygnalInfo();
-    /* 80A1B628 */ void sendInfo();
-    /* 80A1B6F8 */ void offTalk();
-    /* 80A1B774 */ BOOL chkTalk();
-    /* 80A1B810 */ BOOL chkFear();
-    /* 80A1B884 */ BOOL chkEscape();
-    /* 80A1B920 */ BOOL createHearts();
-    /* 80A1BAAC */ void allDemoMove();
-    /* 80A1BB24 */ void allDemoNotMove();
-    /* 80A1BB9C */ BOOL isMiniGamePlaying();
-    /* 80A1BBE0 */ void schMemberActor();
-    /* 80A1BC88 */ void schDanchoActor();
-    /* 80A1BCF0 */ void deleteAllMember();
-    /* 80A1BD6C */ void chgWeightHeavy();
-    /* 80A1BDD8 */ void chgWeightLight();
-    /* 80A2065C */ cXyz getCenterPos() { return mCenterPos; }
+    void calcEscapeForm();
+    BOOL calcCenterPos();
+    f32 getDistFromCenter();
+    void getOffsetFromLeader(cXyz const&, cXyz&);
+    void initPath(u8, u16);
+    int getPlNearPoint();
+    int getSygnalInfo();
+    void sendInfo();
+    void offTalk();
+    BOOL chkTalk();
+    BOOL chkFear();
+    BOOL chkEscape();
+    BOOL createHearts();
+    void allDemoMove();
+    void allDemoNotMove();
+    BOOL isMiniGamePlaying();
+    void schMemberActor();
+    void schDanchoActor();
+    void deleteAllMember();
+    void chgWeightHeavy();
+    void chgWeightLight();
+    cXyz getCenterPos() { return mCenterPos; }
 
     void setKyuPos(const cXyz& i_pos) { mKyuPos = i_pos; }
     void setMichPos(const cXyz& i_pos) { mMichPos = i_pos; }
@@ -121,63 +121,63 @@ public:
     typedef BOOL (daNpcKasiHana_c::*cutFunc)(int);
     typedef BOOL (daNpcKasiHana_c::*EventFn)(int);
 
-    /* 80A1BE44 */ daNpcKasiHana_c();
-    /* 80A1C0A4 */ ~daNpcKasiHana_c();
-    /* 80A1C334 */ cPhs__Step Create();
-    /* 80A1C5B0 */ int CreateHeap();
-    /* 80A1C734 */ int Delete();
-    /* 80A1C768 */ int Execute();
-    /* 80A1C78C */ int Draw();
-    /* 80A1C7D8 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80A1C964 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A1C984 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80A1C9D0 */ void setParam();
-    /* 80A1CA60 */ BOOL main();
-    /* 80A1CD28 */ void setAttnPos();
-    /* 80A1CED0 */ void setMotionAnm(int, f32);
-    /* 80A1CFA0 */ void setMotion(int, f32, int);
-    /* 80A1CFE8 */ int drawDbgInfo();
-    /* 80A1CFF0 */ void reset();
-    /* 80A1D238 */ void playMotion();
-    /* 80A1D604 */ void playMotionAnmLoop(daNpcF_c::daNpcF_anmPlayData***);
-    /* 80A1D77C */ BOOL setAction(actionFunc);
-    /* 80A1D824 */ void setLookMode(int);
-    /* 80A1D848 */ void lookat();
-    /* 80A1DA28 */ BOOL step(s16, int);
-    /* 80A1DB1C */ BOOL chkFindPlayer();
-    /* 80A1DC00 */ int wait(int);
-    /* 80A1E184 */ int chace_st(int);
-    /* 80A1E228 */ int chace(int);
-    /* 80A1E3AC */ cXyz getChacePos();
-    /* 80A1E4AC */ int turn(int);
-    /* 80A1E578 */ int fear(int);
-    /* 80A1E78C */ daTagEscape_c* srchWolfTag();
-    /* 80A1E7F4 */ static void* _srch_escape_tag(void*, void*);
-    /* 80A1E8C4 */ int getWolfPathNearIdx();
-    /* 80A1E9F8 */ int talk(int);
-    /* 80A1EB5C */ int demo(int);
-    /* 80A1EE38 */ int escape(int);
-    /* 80A1EF90 */ int cheer(int);
-    /* 80A1F198 */ BOOL _turn_to_link(s16);
-    /* 80A1F1E4 */ BOOL _turn_pos(cXyz const&, s16);
-    /* 80A1F240 */ BOOL actor_front_check(fopAc_ac_c*);
-    /* 80A1F318 */ void _getOffset(cXyz const&, cXyz&);
-    /* 80A1F384 */ BOOL _Evt_Kasi_Appear(int);
-    /* 80A1F42C */ BOOL _Evt_Kasi_Appear_CutInit(int const&);
-    /* 80A1F50C */ BOOL _Evt_Kasi_Appear_CutMain(int const&);
-    /* 80A1F638 */ BOOL _Evt_Kasi_Talk(int);
-    /* 80A1F740 */ BOOL _Evt_Kasi_Talk_CutInit(int const&);
-    /* 80A1F860 */ BOOL _Evt_Kasi_Talk_CutMain(int const&, int);
-    /* 80A1F9F4 */ BOOL _Evt_Kasi(int);
-    /* 80A1FA9C */ BOOL _Evt_Kasi_CutInit(int const&);
-    /* 80A1FBC4 */ BOOL _Evt_Kasi_CutMain(int const&);
-    /* 80A1FD64 */ BOOL _Evt_Kasi_Cheer(int);
-    /* 80A1FE6C */ BOOL _Evt_Kasi_Cheer_CutInit(int const&);
-    /* 80A1FF78 */ BOOL _Evt_Kasi_Cheer_CutMain(int const&, int);
-    /* 80A2016C */ BOOL _Evt_Kasi_Cheer2(int);
-    /* 80A20244 */ BOOL _Evt_Kasi_Cheer2_CutInit(int const&);
-    /* 80A20350 */ BOOL _Evt_Kasi_Cheer2_CutMain(int const&, int);
-    /* 80A20678 */ void adjustShapeAngle() {}
+    daNpcKasiHana_c();
+    ~daNpcKasiHana_c();
+    cPhs__Step Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void setParam();
+    BOOL main();
+    void setAttnPos();
+    void setMotionAnm(int, f32);
+    void setMotion(int, f32, int);
+    int drawDbgInfo();
+    void reset();
+    void playMotion();
+    void playMotionAnmLoop(daNpcF_c::daNpcF_anmPlayData***);
+    BOOL setAction(actionFunc);
+    void setLookMode(int);
+    void lookat();
+    BOOL step(s16, int);
+    BOOL chkFindPlayer();
+    int wait(int);
+    int chace_st(int);
+    int chace(int);
+    cXyz getChacePos();
+    int turn(int);
+    int fear(int);
+    daTagEscape_c* srchWolfTag();
+    static void* _srch_escape_tag(void*, void*);
+    int getWolfPathNearIdx();
+    int talk(int);
+    int demo(int);
+    int escape(int);
+    int cheer(int);
+    BOOL _turn_to_link(s16);
+    BOOL _turn_pos(cXyz const&, s16);
+    BOOL actor_front_check(fopAc_ac_c*);
+    void _getOffset(cXyz const&, cXyz&);
+    BOOL _Evt_Kasi_Appear(int);
+    BOOL _Evt_Kasi_Appear_CutInit(int const&);
+    BOOL _Evt_Kasi_Appear_CutMain(int const&);
+    BOOL _Evt_Kasi_Talk(int);
+    BOOL _Evt_Kasi_Talk_CutInit(int const&);
+    BOOL _Evt_Kasi_Talk_CutMain(int const&, int);
+    BOOL _Evt_Kasi(int);
+    BOOL _Evt_Kasi_CutInit(int const&);
+    BOOL _Evt_Kasi_CutMain(int const&);
+    BOOL _Evt_Kasi_Cheer(int);
+    BOOL _Evt_Kasi_Cheer_CutInit(int const&);
+    BOOL _Evt_Kasi_Cheer_CutMain(int const&, int);
+    BOOL _Evt_Kasi_Cheer2(int);
+    BOOL _Evt_Kasi_Cheer2_CutInit(int const&);
+    BOOL _Evt_Kasi_Cheer2_CutMain(int const&, int);
+    void adjustShapeAngle() {}
 
     s16 getMessageNo() { return s16(home.angle.x); }
     s8 getType() {

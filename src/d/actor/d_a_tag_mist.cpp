@@ -9,7 +9,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 8048F258-8048F2C4 000078 006C+00 1/1 0/0 0/0 .text            offSw__11daTagMist_cFv */
 void daTagMist_c::offSw() {
     u8 sw_no_num;
     u8 top_sw_no;
@@ -22,7 +21,6 @@ void daTagMist_c::offSw() {
     }
 }
 
-/* 8048F2C4-8048F310 0000E4 004C+00 1/1 0/0 0/0 .text            onMySw__11daTagMist_cFv */
 void daTagMist_c::onMySw() {
     u32 my_sw_no;
     u32 top_sw_no;
@@ -35,7 +33,6 @@ void daTagMist_c::onMySw() {
     }
 }
 
-/* 8048F310-8048F370 000130 0060+00 1/1 0/0 0/0 .text            isMySw__11daTagMist_cFv */
 BOOL daTagMist_c::isMySw() {
     u32 my_sw_no;
     u32 top_sw_no;
@@ -50,7 +47,6 @@ BOOL daTagMist_c::isMySw() {
     }
 }
 
-/* 8048F370-8048F444 000190 00D4+00 1/1 0/0 0/0 .text            Create__11daTagMist_cFv */
 int daTagMist_c::Create() {
     mVertices[0].x = scale.x * -50.0f;
     mVertices[0].z = scale.z * -50.0f;
@@ -77,7 +73,6 @@ int daTagMist_c::Create() {
     return 1;
 }
 
-/* 8048F444-8048F518 000264 00D4+00 1/1 0/0 0/0 .text            create__11daTagMist_cFv */
 int daTagMist_c::create() {
     fopAcM_ct(this, daTagMist_c);
 
@@ -102,7 +97,6 @@ int daTagMist_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8048F558-8048F690 000378 0138+00 1/1 0/0 0/0 .text            execute__11daTagMist_cFv */
 int daTagMist_c::execute() {
     if (fopAcM_isSwitch(this, daTagMist_prm::getSwNo2(this))) {
         return 1;
@@ -128,30 +122,22 @@ int daTagMist_c::execute() {
     return 1;
 }
 
-/* 8048F690-8048F698 0004B0 0008+00 1/1 0/0 0/0 .text            _delete__11daTagMist_cFv */
 int daTagMist_c::_delete() {
     return 1;
 }
 
-/* 8048F698-8048F6B8 0004B8 0020+00 1/0 0/0 0/0 .text            daTagMist_Execute__FP11daTagMist_c
- */
 static int daTagMist_Execute(daTagMist_c* i_this) {
     return i_this->execute();
 }
 
-/* 8048F6B8-8048F6D8 0004D8 0020+00 1/0 0/0 0/0 .text            daTagMist_Delete__FP11daTagMist_c
- */
 static int daTagMist_Delete(daTagMist_c* i_this) {
     return i_this->_delete();
 }
 
-/* 8048F6D8-8048F6F8 0004F8 0020+00 1/0 0/0 0/0 .text            daTagMist_Create__FP10fopAc_ac_c */
 static int daTagMist_Create(fopAc_ac_c* i_this) {
     return static_cast<daTagMist_c*>(i_this)->create();
 }
 
-/* ############################################################################################## */
-/* 8048F70C-8048F72C -00001 0020+00 1/0 0/0 0/0 .data            l_daTagMist_Method */
 static actor_method_class l_daTagMist_Method = {
     (process_method_func)daTagMist_Create,
     (process_method_func)daTagMist_Delete,
@@ -160,7 +146,6 @@ static actor_method_class l_daTagMist_Method = {
     (process_method_func)NULL,
 };
 
-/* 8048F72C-8048F75C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_Mist */
 extern actor_process_profile_definition g_profile_Tag_Mist = {
     fpcLy_CURRENT_e,
     7,

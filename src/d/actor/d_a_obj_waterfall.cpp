@@ -17,14 +17,10 @@ static int daObjWaterFall_Execute(daObjWaterFall_c* i_this);
 static int daObjWaterFall_Delete(daObjWaterFall_c* i_this);
 static int daObjWaterFall_Create(fopAc_ac_c* i_this);
 
-/* ############################################################################################## */
-/* 80D2FE50-80D2FE78 000000 0028+00 4/4 0/0 0/0 .bss             target_info */
 static fopAc_ac_c* target_info[MAX_TARGET_INFO_COUNT];
 
-/* 80D2FE78-80D2FE7C 000028 0004+00 4/4 0/0 0/0 .bss             target_info_count */
 static s32 target_info_count;
 
-/* 80D2EC18-80D2ECA4 000078 008C+00 1/1 0/0 0/0 .text            s_b_sub__FPvPv */
 static void* s_b_sub(void* param_0, void* unused) {
     if(fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_NBOMB) {
         dBomb_c* foundBomb = static_cast<dBomb_c*>(param_0);
@@ -40,7 +36,6 @@ static void* s_b_sub(void* param_0, void* unused) {
     return NULL;
 }
 
-/* 80D2ECA4-80D2ED14 000104 0070+00 1/1 0/0 0/0 .text            s_a_sub__FPvPv */
 static void* s_a_sub(void* param_0, void* unused) {
     if(fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_ARROW) {
         const u32 idx = target_info_count;  //  Regalloc issues if this isn't done
@@ -54,8 +49,6 @@ static void* s_a_sub(void* param_0, void* unused) {
     return NULL;
 }
 
-/* 80D2ED14-80D2EFF8 000174 02E4+00 1/1 0/0 0/0 .text            search_bomb__16daObjWaterFall_cFv
- */
 void daObjWaterFall_c::search_bomb() {
     if(checkFallOut() != TRUE) {
         //  Get rid of previously found arrow or bomb processes populating target_info
@@ -103,8 +96,6 @@ void daObjWaterFall_c::search_bomb() {
     }
 }
 
-/* 80D2F034-80D2F324 000494 02F0+00 1/1 0/0 0/0 .text            search_arrow__16daObjWaterFall_cFv
- */
 void daObjWaterFall_c::search_arrow() {
     //  Some waterfalls (e.g. in the Lakebed Temple) allow arrows to fly through them
     if(getType() == ALLOW_ARROWS_e || checkFallOut() == TRUE)
@@ -154,13 +145,10 @@ void daObjWaterFall_c::search_arrow() {
     }
 }
 
-/* 80D2F324-80D2F344 000784 0020+00 1/1 0/0 0/0 .text            initBaseMtx__16daObjWaterFall_cFv
- */
 void daObjWaterFall_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80D2F344-80D2F39C 0007A4 0058+00 1/1 0/0 0/0 .text            setBaseMtx__16daObjWaterFall_cFv */
 void daObjWaterFall_c::setBaseMtx() {
     cXyz* pos = fopAcM_GetPosition_p(this);
     PSMTXTrans(mDoMtx_stack_c::get(), pos->x, pos->y, pos->z);
@@ -169,10 +157,8 @@ void daObjWaterFall_c::setBaseMtx() {
     mDoMtx_stack_c::ZXYrotM(shapeAngle->x, shapeAngle->y, shapeAngle->z);
 }
 
-/* 80D2FD84-80D2FD88 -00001 0004+00 1/1 0/0 0/0 .data            l_arcName */
 static const char* l_arcName = "sample";
 
-/* 80D2FD88-80D2FDCC 000004 0044+00 1/1 0/0 0/0 .data            l_cyl_src */
 static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x2, 0x10}, 0x119}}, // mObj
@@ -187,7 +173,6 @@ static dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 80D2F39C-80D2F5A0 0007FC 0204+00 1/1 0/0 0/0 .text            Create__16daObjWaterFall_cFv */
 cPhs__Step daObjWaterFall_c::Create() {
     initBaseMtx();
 
@@ -232,8 +217,6 @@ cPhs__Step daObjWaterFall_c::Create() {
     return cPhs_LOADING_e;
 }
 
-/* ############################################################################################## */
-/* 80D2FDCC-80D2FDEC -00001 0020+00 1/0 0/0 0/0 .data            l_daObjWaterFall_Method */
 static actor_method_class l_daObjWaterFall_Method = {
     (process_method_func)daObjWaterFall_Create,
     (process_method_func)daObjWaterFall_Delete,
@@ -242,7 +225,6 @@ static actor_method_class l_daObjWaterFall_Method = {
     (process_method_func)daObjWaterFall_Draw,
 };
 
-/* 80D2FDEC-80D2FE1C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_WaterFall */
 extern actor_process_profile_definition g_profile_Obj_WaterFall = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
@@ -260,7 +242,6 @@ extern actor_process_profile_definition g_profile_Obj_WaterFall = {
   fopAc_CULLBOX_CUSTOM_e,   // cullType
 };
 
-/* 80D2F5A0-80D2F6DC 000A00 013C+00 1/1 0/0 0/0 .text            create__16daObjWaterFall_cFv */
 cPhs__Step daObjWaterFall_c::create() {
     fopAcM_ct(this, daObjWaterFall_c);
 
@@ -271,7 +252,6 @@ cPhs__Step daObjWaterFall_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D2F984-80D2FA6C 000DE4 00E8+00 1/1 0/0 0/0 .text            execute__16daObjWaterFall_cFv */
 int daObjWaterFall_c::execute() {
     if(getSwbit() != 0xFF && !fopAcM_isSwitch(this, getSwbit()))
         return 1;
@@ -294,8 +274,6 @@ int daObjWaterFall_c::execute() {
     return 1;
 }
 
-/* 80D2FA6C-80D2FC94 000ECC 0228+00 1/1 0/0 0/0 .text            push_player__16daObjWaterFall_cFv
- */
 void daObjWaterFall_c::push_player() {
     daPy_py_c* const player = daPy_getPlayerActorClass();
     
@@ -332,35 +310,27 @@ void daObjWaterFall_c::push_player() {
     }
 }
 
-/* 80D2FC94-80D2FC9C 0010F4 0008+00 1/1 0/0 0/0 .text            draw__16daObjWaterFall_cFv */
 int daObjWaterFall_c::draw() {
     return 1;
 }
 
-/* 80D2FC9C-80D2FCD0 0010FC 0034+00 1/1 0/0 0/0 .text            _delete__16daObjWaterFall_cFv */
 int daObjWaterFall_c::_delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     return 1;
 }
 
-/* 80D2FCD0-80D2FCF0 001130 0020+00 1/0 0/0 0/0 .text daObjWaterFall_Draw__FP16daObjWaterFall_c */
 static int daObjWaterFall_Draw(daObjWaterFall_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D2FCF0-80D2FD10 001150 0020+00 1/0 0/0 0/0 .text daObjWaterFall_Execute__FP16daObjWaterFall_c
- */
 static int daObjWaterFall_Execute(daObjWaterFall_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D2FD10-80D2FD30 001170 0020+00 1/0 0/0 0/0 .text daObjWaterFall_Delete__FP16daObjWaterFall_c
- */
 static int daObjWaterFall_Delete(daObjWaterFall_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80D2FD30-80D2FD50 001190 0020+00 1/0 0/0 0/0 .text daObjWaterFall_Create__FP10fopAc_ac_c */
 static int daObjWaterFall_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjWaterFall_c*>(i_this)->create();
 }

@@ -15,14 +15,14 @@
  */
 class daB_ZANTM_c : public fopEn_enemy_c {
 public:
-    /* 8064F778 */ int draw();
-    /* 8064F7D4 */ void setMagicEffect();
-    /* 8064F938 */ void setMagicHitEffect();
-    /* 8064FA50 */ void executeSmall();
-    /* 8064FD6C */ void cc_set();
-    /* 8064FE6C */ int execute();
-    /* 8064FF2C */ int _delete();
-    /* 8064FF54 */ int create();
+    int draw();
+    void setMagicEffect();
+    void setMagicHitEffect();
+    void executeSmall();
+    void cc_set();
+    int execute();
+    int _delete();
+    int create();
 
 private:
     /* 0x5AC */ Mtx field_0x5ac;

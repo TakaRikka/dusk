@@ -363,19 +363,16 @@ void daNpc_Pachi_Maro_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 80A9BA98-80A9BAA8 000020 0010+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[2][2] = {
     {11, 1},
     {5, 2},
 };
 
-/* 80A9BAA8-80A9BAB8 -00001 0010+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"TUTRIAL_TALK", 10},
 };
 
-/* 80A9BAB8-80A9BAE4 -00001 002C+00 2/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[11] = {
     "",
     "Maro",
@@ -390,33 +387,27 @@ static char* l_resNameList[11] = {
     "evt_pachi",
 };
 
-/* 80A9BAE4-80A9BAE8 00006C 0003+01 0/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[3] = {
     MARO, MARO1, -1,
 };
 
-/* 80A9BAE8-80A9BAEC 000070 0003+01 0/0 0/0 0/0 .data            l_loadResPtrn1 */
 static s8 l_loadResPtrn1[3] = {
     MARO, MARO_TW, -1,
 };
 
-/* 80A9BAEC-80A9BAF4 000074 0006+02 1/0 0/0 0/0 .data            l_loadResPtrn2 */
 static s8 l_loadResPtrn2[6] = {
     MARO, MARO1, MARO2, MARO3, EVT_PACHI, -1,
 };
 
-/* 80A9BAF4-80A9BAFC 00007C 0005+03 1/0 0/0 0/0 .data            l_loadResPtrn3 */
 static s8 l_loadResPtrn3[5] = {
     MARO, MARO_TW, MARO1, MARO2, -1,
 };
 
-/* 80A9BAFC-80A9BB04 -00001 0008+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[2] = {
     l_loadResPtrn2,
     l_loadResPtrn3,
 };
 
-/* 80A9BB04-80A9BC1C 00008C 0118+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, BTP_MARO, J3DFrameCtrl::EMode_LOOP, MARO, 1},
     {BCK_MARO_F_TALK_A, J3DFrameCtrl::EMode_NONE, MARO, BTP_MARO_F_TALK_A, J3DFrameCtrl::EMode_NONE, MARO, 0},
@@ -430,7 +421,6 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {BCK_MARO_FH_BESUTALK, J3DFrameCtrl::EMode_LOOP, MARO3, BTP_MARO_FH_BESUTALK, J3DFrameCtrl::EMode_LOOP, MARO3, 0},
 };
 
-/* 80A9BC1C-80A9BD34 0001A4 0118+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[10] = {
     {BCK_MARO_WAIT_A, J3DFrameCtrl::EMode_LOOP, MARO, BTK_MARO, J3DFrameCtrl::EMode_NONE, MARO, 1, 0},
     {BCK_MARO_CROUCH, J3DFrameCtrl::EMode_LOOP, MARO2, BTK_MARO, J3DFrameCtrl::EMode_NONE, MARO, 1, 0},
@@ -444,7 +434,6 @@ static daNpcT_motionAnmData_c l_motionAnmData[10] = {
     {BCK_MARO_RUN, J3DFrameCtrl::EMode_LOOP, MARO1, BTK_MARO, J3DFrameCtrl::EMode_NONE, MARO, 1, 0},
 };
 
-/* 80A9BD34-80A9BDD4 0002BC 00A0+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] = {
     {FACE_MOT_ANM_TALK_A, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {FACE_MOT_ANM_SURPRISE, -1, 1}, {FACE_MOT_ANM_H_SURPRISE, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -458,7 +447,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] =
     {FACE_MOT_ANM_NONE, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80A9BDD4-80A9BE64 00035C 0090+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {MOT_ANM_WAIT_A, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {MOT_ANM_TALK_A, -1, 1}, {MOT_ANM_WAIT_A, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -471,7 +459,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {MOT_ANM_RUN, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80A9BE64-80A9BE90 -00001 002C+00 1/1 0/0 0/0 .data            mCutNameList__18daNpc_Pachi_Maro_c */
 char* daNpc_Pachi_Maro_c::mCutNameList[11] = {
     "",
     "TUTRIAL_BEGIN",
@@ -486,7 +473,6 @@ char* daNpc_Pachi_Maro_c::mCutNameList[11] = {
     "TUTRIAL_CAUTION",
 };
 
-/* 80A9BF08-80A9BF8C 000490 0084+00 1/2 0/0 0/0 .data            mCutList__18daNpc_Pachi_Maro_c */
 daNpc_Pachi_Maro_c::cutFunc daNpc_Pachi_Maro_c::mCutList[11] = {
     NULL,
     &daNpc_Pachi_Maro_c::cutTutrialBegin,
@@ -501,10 +487,8 @@ daNpc_Pachi_Maro_c::cutFunc daNpc_Pachi_Maro_c::mCutList[11] = {
     &daNpc_Pachi_Maro_c::cutTutrialCaution,
 };
 
-/* 80A9C18C-80A9C190 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static NPC_PACHI_MARO_HIO_CLASS l_HIO;
 
-/* 80A97C8C-80A97DC4 0000EC 0138+00 1/0 0/0 0/0 .text            __dt__18daNpc_Pachi_Maro_cFv */
 daNpc_Pachi_Maro_c::~daNpc_Pachi_Maro_c() {
     OS_REPORT("|%06d:%x|daNpc_Pachi_Maro_c -> デストラクト\n", g_Counter.mCounter0, this);
 
@@ -521,7 +505,6 @@ daNpc_Pachi_Maro_c::~daNpc_Pachi_Maro_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-/* 80A9B88C-80A9B91C 000000 0090+00 8/8 0/0 0/0 .rodata          m__24daNpc_Pachi_Maro_Param_c */
 daNpc_Pachi_Maro_HIOParam const daNpc_Pachi_Maro_Param_c::m = {
     100.0f,
     -3.0f,
@@ -567,7 +550,6 @@ daNpc_Pachi_Maro_HIOParam const daNpc_Pachi_Maro_Param_c::m = {
     0,
 };
 
-/* 80A97DC4-80A9809C 000224 02D8+00 1/1 0/0 0/0 .text            create__18daNpc_Pachi_Maro_cFv */
 cPhs__Step daNpc_Pachi_Maro_c::create() {
     daNpcT_ct(this, daNpc_Pachi_Maro_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
@@ -630,7 +612,6 @@ cPhs__Step daNpc_Pachi_Maro_c::create() {
     return phase;
 }
 
-/* 80A9809C-80A98320 0004FC 0284+00 1/1 0/0 0/0 .text            CreateHeap__18daNpc_Pachi_Maro_cFv */
 int daNpc_Pachi_Maro_c::CreateHeap() {
     J3DModelData* modelData = NULL;
     J3DModel* model = NULL;
@@ -668,7 +649,6 @@ int daNpc_Pachi_Maro_c::CreateHeap() {
     return 0;
 }
 
-/* 80A984DC-80A98510 00093C 0034+00 1/1 0/0 0/0 .text            Delete__18daNpc_Pachi_Maro_cFv */
 int daNpc_Pachi_Maro_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Pachi_Maro_c -> Delete\n", g_Counter.mCounter0, this);
     fpc_ProcID id = fopAcM_GetID(this);
@@ -676,12 +656,10 @@ int daNpc_Pachi_Maro_c::Delete() {
     return 1;
 }
 
-/* 80A98510-80A98530 000970 0020+00 2/2 0/0 0/0 .text            Execute__18daNpc_Pachi_Maro_cFv */
 int daNpc_Pachi_Maro_c::Execute() {
     return execute();
 }
 
-/* 80A98530-80A985C4 000990 0094+00 1/1 0/0 0/0 .text            Draw__18daNpc_Pachi_Maro_cFv */
 int daNpc_Pachi_Maro_c::Draw() {
     if (mpMatAnm[0] != NULL) {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
@@ -699,13 +677,11 @@ int daNpc_Pachi_Maro_c::Draw() {
     );
 }
 
-/* 80A985C4-80A985E4 000A24 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__18daNpc_Pachi_Maro_cFP10fopAc_ac_c */
 int daNpc_Pachi_Maro_c::createHeapCallBack(fopAc_ac_c* i_this) {
     daNpc_Pachi_Maro_c* actor = (daNpc_Pachi_Maro_c*)i_this;
     return actor->CreateHeap();
 }
 
-/* 80A985E4-80A9863C 000A44 0058+00 1/1 0/0 0/0 .text            ctrlJointCallBack__18daNpc_Pachi_Maro_cFP8J3DJointi */
 int daNpc_Pachi_Maro_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -718,7 +694,6 @@ int daNpc_Pachi_Maro_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80A9863C-80A9865C 000A9C 0020+00 1/1 0/0 0/0 .text            getType__18daNpc_Pachi_Maro_cFv */
 u8 daNpc_Pachi_Maro_c::getType() {
     u8 param = fopAcM_GetParam(this) & 0xFF;
 
@@ -731,7 +706,6 @@ u8 daNpc_Pachi_Maro_c::getType() {
     }
 }
 
-/* 80A9865C-80A9867C 000ABC 0020+00 1/1 0/0 0/0 .text            isDelete__18daNpc_Pachi_Maro_cFv */
 BOOL daNpc_Pachi_Maro_c::isDelete() {
     switch (mType) {
         case TYPE_0:
@@ -742,7 +716,6 @@ BOOL daNpc_Pachi_Maro_c::isDelete() {
     }
 }
 
-/* 80A9867C-80A987F4 000ADC 0178+00 1/1 0/0 0/0 .text            reset__18daNpc_Pachi_Maro_cFv */
 void daNpc_Pachi_Maro_c::reset() {
     int size = (u8*)&field_0xfc8 - (u8*)&mNextAction;
 
@@ -769,7 +742,6 @@ void daNpc_Pachi_Maro_c::reset() {
     setAngle(home.angle.y);
 }
 
-/* 80A987F4-80A98870 000C54 007C+00 1/0 0/0 0/0 .text            afterJntAnm__18daNpc_Pachi_Maro_cFi */
 void daNpc_Pachi_Maro_c::afterJntAnm(int i_joint) {
     if (i_joint == JNT_BACKBONE1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleX(1));
@@ -780,7 +752,6 @@ void daNpc_Pachi_Maro_c::afterJntAnm(int i_joint) {
     }
 }
 
-/* 80A98870-80A9896C 000CD0 00FC+00 1/0 0/0 0/0 .text            setParam__18daNpc_Pachi_Maro_cFv */
 void daNpc_Pachi_Maro_c::setParam() {
     selectAction();
     srchActors();
@@ -807,7 +778,6 @@ void daNpc_Pachi_Maro_c::setParam() {
     gravity = mpHIO->m.common.gravity;
 }
 
-/* 80A9896C-80A98974 000DCC 0008+00 1/0 0/0 0/0 .text checkChangeEvt__18daNpc_Pachi_Maro_cFv */
 BOOL daNpc_Pachi_Maro_c::checkChangeEvt() {
     #if DEBUG
     BOOL rv = FALSE;
@@ -820,7 +790,6 @@ BOOL daNpc_Pachi_Maro_c::checkChangeEvt() {
     return FALSE;
 }
 
-/* 80A98974-80A98A10 000DD4 009C+00 1/0 0/0 0/0 .text            setAfterTalkMotion__18daNpc_Pachi_Maro_cFv */
 void daNpc_Pachi_Maro_c::setAfterTalkMotion() {
     int idx = FACE_MOT_NONE;
 
@@ -840,7 +809,6 @@ void daNpc_Pachi_Maro_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(idx, -1.0f, FALSE, 0);
 }
 
-/* 80A98A10-80A98A98 000E70 0088+00 1/1 0/0 0/0 .text            srchActors__18daNpc_Pachi_Maro_cFv */
 void daNpc_Pachi_Maro_c::srchActors() {
     switch (mType) {
         case TYPE_0:
@@ -855,7 +823,6 @@ void daNpc_Pachi_Maro_c::srchActors() {
     }
 }
 
-/* 80A98A98-80A98B9C 000EF8 0104+00 1/0 0/0 0/0 .text            evtTalk__18daNpc_Pachi_Maro_cFv */
 BOOL daNpc_Pachi_Maro_c::evtTalk() {
     if (chkAction(&daNpc_Pachi_Maro_c::talk)) {
         (this->*mAction)(NULL);
@@ -877,7 +844,6 @@ BOOL daNpc_Pachi_Maro_c::evtTalk() {
     return TRUE;
 }
 
-/* 80A98B9C-80A98C64 000FFC 00C8+00 1/0 0/0 0/0 .text            evtCutProc__18daNpc_Pachi_Maro_cFv */
 BOOL daNpc_Pachi_Maro_c::evtCutProc() {
     int staffId = dComIfGp_getEventManager().getMyStaffId("PA_Maro", this, -1);
 
@@ -894,7 +860,6 @@ BOOL daNpc_Pachi_Maro_c::evtCutProc() {
     return FALSE;
 }
 
-/* 80A98C64-80A98DE8 0010C4 0184+00 1/0 0/0 0/0 .text            action__18daNpc_Pachi_Maro_cFv */
 void daNpc_Pachi_Maro_c::action() {
     fopAc_ac_c* actor_p = NULL;
 
@@ -923,14 +888,12 @@ void daNpc_Pachi_Maro_c::action() {
     }
 }
 
-/* 80A98DE8-80A98E60 001248 0078+00 1/0 0/0 0/0 .text            beforeMove__18daNpc_Pachi_Maro_cFv */
 void daNpc_Pachi_Maro_c::beforeMove() {
     if (checkHide() || mNoDraw) {
         attention_info.flags = 0;
     }
 }
 
-/* 80A98E60-80A98FB4 0012C0 0154+00 1/0 0/0 0/0 .text            afterMoved__18daNpc_Pachi_Maro_cFv */
 void daNpc_Pachi_Maro_c::afterMoved() {
     fopAc_ac_c* besu_p = mActorMngrs[1].getActorP();
     fopAc_ac_c* taro_p = mActorMngrs[0].getActorP();
@@ -953,7 +916,6 @@ void daNpc_Pachi_Maro_c::afterMoved() {
     }
 }
 
-/* 80A98FB4-80A9928C 001414 02D8+00 1/0 0/0 0/0 .text            setAttnPos__18daNpc_Pachi_Maro_cFv */
 void daNpc_Pachi_Maro_c::setAttnPos() {
     cXyz sp38(0.0f, 0.0f, -30.0f);
     
@@ -984,7 +946,6 @@ void daNpc_Pachi_Maro_c::setAttnPos() {
     attention_info.position.y += mpHIO->m.common.attention_offset;
 }
 
-/* 80A9928C-80A99394 0016EC 0108+00 1/0 0/0 0/0 .text setCollision__18daNpc_Pachi_Maro_cFv */
 void daNpc_Pachi_Maro_c::setCollision() {
     if (!mHide) {
         u32 coSPrm = 0x79;
@@ -1016,7 +977,6 @@ void daNpc_Pachi_Maro_c::setCollision() {
     mCyl.ClrTgHit();
 }
 
-/* 80A99394-80A9939C 0017F4 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__18daNpc_Pachi_Maro_cFv */
 int daNpc_Pachi_Maro_c::drawDbgInfo() {
     #if DEBUG
     if (mpHIO->m.common.debug_info_ON) {
@@ -1032,7 +992,6 @@ int daNpc_Pachi_Maro_c::drawDbgInfo() {
     return 0;
 }
 
-/* 80A9939C-80A99428 0017FC 008C+00 1/0 0/0 0/0 .text            getFaceMotionAnm__18daNpc_Pachi_Maro_cF26daNpcT_faceMotionAnmData_c */
 daNpcT_faceMotionAnmData_c daNpc_Pachi_Maro_c::getFaceMotionAnm(daNpcT_faceMotionAnmData_c param_1) {
     daNpcT_faceMotionAnmData_c rv = param_1;
     if (mTwilight != 0 && rv.mBtpFileIdx == 17) {
@@ -1042,7 +1001,6 @@ daNpcT_faceMotionAnmData_c daNpc_Pachi_Maro_c::getFaceMotionAnm(daNpcT_faceMotio
     return rv;
 }
 
-/* 80A99428-80A994B4 001888 008C+00 1/0 0/0 0/0 .text            getMotionAnm__18daNpc_Pachi_Maro_cF22daNpcT_motionAnmData_c */
 daNpcT_motionAnmData_c daNpc_Pachi_Maro_c::getMotionAnm(daNpcT_motionAnmData_c param_1) {
     daNpcT_motionAnmData_c rv = param_1;
     if (mTwilight && rv.mBtkFileIdx == 14) {
@@ -1052,7 +1010,6 @@ daNpcT_motionAnmData_c daNpc_Pachi_Maro_c::getMotionAnm(daNpcT_motionAnmData_c p
     return rv;
 }
 
-/* 80A994B4-80A99530 001914 007C+00 1/1 0/0 0/0 .text            selectAction__18daNpc_Pachi_Maro_cFv */
 BOOL daNpc_Pachi_Maro_c::selectAction() {
     mNextAction = NULL;
 
@@ -1076,12 +1033,10 @@ BOOL daNpc_Pachi_Maro_c::selectAction() {
     return TRUE;
 }
 
-/* 80A99530-80A9955C 001990 002C+00 1/1 0/0 0/0 .text            chkAction__18daNpc_Pachi_Maro_cFM18daNpc_Pachi_Maro_cFPCvPvPv_i */
 BOOL daNpc_Pachi_Maro_c::chkAction(actionFunc action) {
     return mAction == action;
 }
 
-/* 80A9955C-80A99604 0019BC 00A8+00 2/2 0/0 0/0 .text            setAction__18daNpc_Pachi_Maro_cFM18daNpc_Pachi_Maro_cFPCvPvPv_i */
 BOOL daNpc_Pachi_Maro_c::setAction(actionFunc action) {
     mMode = MODE_EXIT;
 
@@ -1099,7 +1054,6 @@ BOOL daNpc_Pachi_Maro_c::setAction(actionFunc action) {
     return TRUE;
 }
 
-/* 80A99604-80A9986C 001A64 0268+00 2/0 0/0 0/0 .text            wait__18daNpc_Pachi_Maro_cFPv */
 int daNpc_Pachi_Maro_c::wait(void* param_1) {
     int unused = 0;
     
@@ -1162,7 +1116,6 @@ int daNpc_Pachi_Maro_c::wait(void* param_1) {
     return 1;
 }
 
-/* 80A9986C-80A998FC 001CCC 0090+00 2/0 0/0 0/0 .text            talk__18daNpc_Pachi_Maro_cFPv */
 int daNpc_Pachi_Maro_c::talk(void* param_1) {
     switch (mMode) {
         case MODE_ENTER:
@@ -1211,14 +1164,12 @@ int daNpc_Pachi_Maro_c::test(void* param_1) {
     return 1;
 }
 
-/* 80A998FC-80A99948 001D5C 004C+00 3/3 0/0 0/0 .text _turn_to_link__18daNpc_Pachi_Maro_cFs */
 BOOL daNpc_Pachi_Maro_c::_turn_to_link(s16 i_step) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz pos(*fopAcM_GetPosition_p(player));
     return _turn_pos(pos, i_step);
 }
 
-/* 80A99948-80A999A4 001DA8 005C+00 4/4 0/0 0/0 .text _turn_pos__18daNpc_Pachi_Maro_cFRC4cXyzs */
 BOOL daNpc_Pachi_Maro_c::_turn_pos(cXyz const& i_pos, s16 i_step) {
     s16 target = cLib_targetAngleY(&current.pos, &i_pos);
     BOOL rv = cLib_chaseAngleS(&mCurAngle.y, target, i_step);
@@ -1227,7 +1178,6 @@ BOOL daNpc_Pachi_Maro_c::_turn_pos(cXyz const& i_pos, s16 i_step) {
     return rv;
 }
 
-/* 80A999A4-80A999E4 001E04 0040+00 1/1 0/0 0/0 .text _turn_pos__18daNpc_Pachi_Maro_cFRC4cXyz */
 BOOL daNpc_Pachi_Maro_c::_turn_pos(cXyz const& i_pos) {
     s16 angleY = cLib_targetAngleY(&current.pos, &i_pos);
     mCurAngle.y = angleY;
@@ -1237,7 +1187,6 @@ BOOL daNpc_Pachi_Maro_c::_turn_pos(cXyz const& i_pos) {
     return TRUE;
 }
 
-/* 80A999E4-80A99A78 001E44 0094+00 1/0 0/0 0/0 .text cutTutrialBegin__18daNpc_Pachi_Maro_cFi */
 BOOL daNpc_Pachi_Maro_c::cutTutrialBegin(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1254,7 +1203,6 @@ BOOL daNpc_Pachi_Maro_c::cutTutrialBegin(int i_staffId) {
     return _cutTutrialBegin_Main(*cutId);
 }
 
-/* 80A99A78-80A99A80 001ED8 0008+00 1/1 0/0 0/0 .text            _cutTutrialBegin_Init__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialBegin_Init(int const& i_cutId) {
     switch (i_cutId) {
         default:
@@ -1262,7 +1210,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialBegin_Init(int const& i_cutId) {
     }
 }
 
-/* 80A99A80-80A99A88 001EE0 0008+00 1/1 0/0 0/0 .text            _cutTutrialBegin_Main__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialBegin_Main(int const& i_cutId) {
     BOOL rv = FALSE;
 
@@ -1272,7 +1219,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialBegin_Main(int const& i_cutId) {
     }
 }
 
-/* 80A99A88-80A99B1C 001EE8 0094+00 1/0 0/0 0/0 .text            cutTutrialBegin_Skip__18daNpc_Pachi_Maro_cFi */
 BOOL daNpc_Pachi_Maro_c::cutTutrialBegin_Skip(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1289,7 +1235,6 @@ BOOL daNpc_Pachi_Maro_c::cutTutrialBegin_Skip(int i_staffId) {
     return _cutTutrialBegin_Skip_Main(*cutId);
 }
 
-/* 80A99B1C-80A99B24 001F7C 0008+00 1/1 0/0 0/0 .text            _cutTutrialBegin_Skip_Init__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialBegin_Skip_Init(int const& i_cutId) {
     switch (i_cutId) {
         default:
@@ -1297,7 +1242,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialBegin_Skip_Init(int const& i_cutId) {
     }
 }
 
-/* 80A99B24-80A99B2C 001F84 0008+00 1/1 0/0 0/0 .text            _cutTutrialBegin_Skip_Main__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialBegin_Skip_Main(int const& i_cutId) {
     BOOL rv = FALSE;
 
@@ -1307,7 +1251,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialBegin_Skip_Main(int const& i_cutId) {
     }
 }
 
-/* 80A99B2C-80A99BC0 001F8C 0094+00 1/0 0/0 0/0 .text cutTutrialClear__18daNpc_Pachi_Maro_cFi */
 BOOL daNpc_Pachi_Maro_c::cutTutrialClear(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1324,7 +1267,6 @@ BOOL daNpc_Pachi_Maro_c::cutTutrialClear(int i_staffId) {
     return _cutTutrialClear_Main(*cutId);
 }
 
-/* 80A99BC0-80A99CB8 002020 00F8+00 1/1 0/0 0/0 .text            _cutTutrialClear_Init__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialClear_Init(int const& i_cutId) {
     switch (i_cutId) {
         case 5:
@@ -1343,7 +1285,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialClear_Init(int const& i_cutId) {
     return TRUE;
 }
 
-/* 80A99CB8-80A99D4C 002118 0094+00 1/1 0/0 0/0 .text            _cutTutrialClear_Main__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialClear_Main(int const& i_cutId) {
     BOOL rv = FALSE;
     
@@ -1367,7 +1308,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialClear_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 80A99D4C-80A99DE0 0021AC 0094+00 1/0 0/0 0/0 .text            cutTalk__18daNpc_Pachi_Maro_cFi */
 BOOL daNpc_Pachi_Maro_c::cutTalk(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1384,7 +1324,6 @@ BOOL daNpc_Pachi_Maro_c::cutTalk(int i_staffId) {
     return _cutTalk_Main(*cutId);
 }
 
-/* 80A99DE0-80A99DE8 002240 0008+00 1/1 0/0 0/0 .text            _cutTalk_Init__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTalk_Init(int const& i_cutId) {
     switch (i_cutId) {
         case 5:
@@ -1397,7 +1336,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTalk_Init(int const& i_cutId) {
     return TRUE;
 }
 
-/* 80A99DE8-80A99E44 002248 005C+00 1/1 0/0 0/0 .text            _cutTalk_Main__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTalk_Main(int const& i_cutId) {
     BOOL rv = FALSE;
 
@@ -1415,7 +1353,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTalk_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 80A99E44-80A99ED8 0022A4 0094+00 1/0 0/0 0/0 .text            cutTalk2__18daNpc_Pachi_Maro_cFi */
 BOOL daNpc_Pachi_Maro_c::cutTalk2(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1432,7 +1369,6 @@ BOOL daNpc_Pachi_Maro_c::cutTalk2(int i_staffId) {
     return _cutTalk2_Main(*cutId);
 }
 
-/* 80A99ED8-80A99EE0 002338 0008+00 1/1 0/0 0/0 .text            _cutTalk2_Init__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTalk2_Init(int const& i_cutId) {
     switch (i_cutId) {
         case 5:
@@ -1445,7 +1381,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTalk2_Init(int const& i_cutId) {
     return TRUE;
 }
 
-/* 80A99EE0-80A99F3C 002340 005C+00 1/1 0/0 0/0 .text            _cutTalk2_Main__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTalk2_Main(int const& i_cutId) {
     BOOL rv = FALSE;
 
@@ -1463,7 +1398,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTalk2_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 80A99F3C-80A99FD0 00239C 0094+00 1/0 0/0 0/0 .text            cut1stHit_KakasiBody__18daNpc_Pachi_Maro_cFi */
 BOOL daNpc_Pachi_Maro_c::cut1stHit_KakasiBody(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1480,7 +1414,6 @@ BOOL daNpc_Pachi_Maro_c::cut1stHit_KakasiBody(int i_staffId) {
     return _cut1stHit_KakasiBody_Main(*cutId);
 }
 
-/* 80A99FD0-80A9A05C 002430 008C+00 1/1 0/0 0/0 .text            _cut1stHit_KakasiBody_Init__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cut1stHit_KakasiBody_Init(int const& i_cutId) {
     switch (i_cutId) {
         case 5:
@@ -1497,7 +1430,6 @@ BOOL daNpc_Pachi_Maro_c::_cut1stHit_KakasiBody_Init(int const& i_cutId) {
     return TRUE;
 }
 
-/* 80A9A05C-80A9A0F0 0024BC 0094+00 1/1 0/0 0/0 .text            _cut1stHit_KakasiBody_Main__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cut1stHit_KakasiBody_Main(int const& i_cutId) {
     BOOL rv = FALSE;
     
@@ -1521,7 +1453,6 @@ BOOL daNpc_Pachi_Maro_c::_cut1stHit_KakasiBody_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 80A9A0F0-80A9A184 002550 0094+00 1/0 0/0 0/0 .text            cutTutrialSelectGiveUp__18daNpc_Pachi_Maro_cFi */
 BOOL daNpc_Pachi_Maro_c::cutTutrialSelectGiveUp(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1538,7 +1469,6 @@ BOOL daNpc_Pachi_Maro_c::cutTutrialSelectGiveUp(int i_staffId) {
     return _cutTutrialSelectGiveUp_Main(*cutId);
 }
 
-/* 80A9A184-80A9A18C 0025E4 0008+00 1/1 0/0 0/0 .text            _cutTutrialSelectGiveUp_Init__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialSelectGiveUp_Init(int const& i_cutId) {
     switch (i_cutId) {
         case 10:
@@ -1552,7 +1482,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialSelectGiveUp_Init(int const& i_cutId) {
     return TRUE;
 }
 
-/* 80A9A18C-80A9A288 0025EC 00FC+00 1/1 0/0 0/0 .text            _cutTutrialSelectGiveUp_Main__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialSelectGiveUp_Main(int const& i_cutId) {
     BOOL rv = FALSE;
 
@@ -1575,7 +1504,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialSelectGiveUp_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 80A9A288-80A9A31C 0026E8 0094+00 1/0 0/0 0/0 .text            cutTutrialGiveUp__18daNpc_Pachi_Maro_cFi */
 BOOL daNpc_Pachi_Maro_c::cutTutrialGiveUp(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1592,7 +1520,6 @@ BOOL daNpc_Pachi_Maro_c::cutTutrialGiveUp(int i_staffId) {
     return _cutTutrialGiveUp_Main(*cutId);
 }
 
-/* 80A9A31C-80A9A324 00277C 0008+00 1/1 0/0 0/0 .text            _cutTutrialGiveUp_Init__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialGiveUp_Init(int const& i_cutId) {
     switch (i_cutId) {
         case 5:
@@ -1608,7 +1535,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialGiveUp_Init(int const& i_cutId) {
     return TRUE;
 }
 
-/* 80A9A324-80A9A360 002784 003C+00 1/1 0/0 0/0 .text            _cutTutrialGiveUp_Main__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialGiveUp_Main(int const& i_cutId) {
     BOOL rv = FALSE;
 
@@ -1628,7 +1554,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialGiveUp_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 80A9A360-80A9A3F4 0027C0 0094+00 1/0 0/0 0/0 .text            cutTutrialContinue__18daNpc_Pachi_Maro_cFi */
 BOOL daNpc_Pachi_Maro_c::cutTutrialContinue(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1645,7 +1570,6 @@ BOOL daNpc_Pachi_Maro_c::cutTutrialContinue(int i_staffId) {
     return _cutTutrialContinue_Main(*cutId);
 }
 
-/* 80A9A3F4-80A9A3FC 002854 0008+00 1/1 0/0 0/0 .text            _cutTutrialContinue_Init__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialContinue_Init(int const& i_cutId) {
     switch (i_cutId) {
         default:
@@ -1653,7 +1577,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialContinue_Init(int const& i_cutId) {
     }
 }
 
-/* 80A9A3FC-80A9A438 00285C 003C+00 1/1 0/0 0/0 .text            _cutTutrialContinue_Main__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialContinue_Main(int const& i_cutId) {
     BOOL rv = FALSE;
 
@@ -1666,7 +1589,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialContinue_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 80A9A438-80A9A4CC 002898 0094+00 1/0 0/0 0/0 .text            cutTutrialCaution__18daNpc_Pachi_Maro_cFi */
 BOOL daNpc_Pachi_Maro_c::cutTutrialCaution(int i_staffId) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
@@ -1683,7 +1605,6 @@ BOOL daNpc_Pachi_Maro_c::cutTutrialCaution(int i_staffId) {
     return _cutTutrialCaution_Main(*cutId);
 }
 
-/* 80A9A4CC-80A9A4D4 00292C 0008+00 1/1 0/0 0/0 .text            _cutTutrialCaution_Init__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialCaution_Init(int const& i_cutId) {
     switch (i_cutId) {
         case 5:
@@ -1696,7 +1617,6 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialCaution_Init(int const& i_cutId) {
     return TRUE;
 }
 
-/* 80A9A4D4-80A9A538 002934 0064+00 1/1 0/0 0/0 .text            _cutTutrialCaution_Main__18daNpc_Pachi_Maro_cFRCi */
 BOOL daNpc_Pachi_Maro_c::_cutTutrialCaution_Main(int const& i_cutId) {
     BOOL rv = FALSE;
 
@@ -1715,32 +1635,26 @@ BOOL daNpc_Pachi_Maro_c::_cutTutrialCaution_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 80A9A538-80A9A558 002998 0020+00 1/0 0/0 0/0 .text            daNpc_Pachi_Maro_Create__FPv */
 static int daNpc_Pachi_Maro_Create(void* i_this) {
     return static_cast<daNpc_Pachi_Maro_c*>(i_this)->create();
 }
 
-/* 80A9A558-80A9A578 0029B8 0020+00 1/0 0/0 0/0 .text            daNpc_Pachi_Maro_Delete__FPv */
 static int daNpc_Pachi_Maro_Delete(void* i_this) {
     return static_cast<daNpc_Pachi_Maro_c*>(i_this)->Delete();
 }
 
-/* 80A9A578-80A9A598 0029D8 0020+00 1/0 0/0 0/0 .text            daNpc_Pachi_Maro_Execute__FPv */
 static int daNpc_Pachi_Maro_Execute(void* i_this) {
     return static_cast<daNpc_Pachi_Maro_c*>(i_this)->Execute();
 }
 
-/* 80A9A598-80A9A5B8 0029F8 0020+00 1/0 0/0 0/0 .text            daNpc_Pachi_Maro_Draw__FPv */
 static int daNpc_Pachi_Maro_Draw(void* i_this) {
     return static_cast<daNpc_Pachi_Maro_c*>(i_this)->Draw();
 }
 
-/* 80A9A5B8-80A9A5C0 002A18 0008+00 1/0 0/0 0/0 .text            daNpc_Pachi_Maro_IsDelete__FPv */
 static int daNpc_Pachi_Maro_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80A9BFBC-80A9BFDC -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Pachi_Maro_MethodTable */
 static actor_method_class daNpc_Pachi_Maro_MethodTable = {
     (process_method_func)daNpc_Pachi_Maro_Create,
     (process_method_func)daNpc_Pachi_Maro_Delete,
@@ -1749,7 +1663,6 @@ static actor_method_class daNpc_Pachi_Maro_MethodTable = {
     (process_method_func)daNpc_Pachi_Maro_Draw,
 };
 
-/* 80A9BFDC-80A9C00C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_PACHI_MARO */
 extern actor_process_profile_definition g_profile_NPC_PACHI_MARO = {
   fpcLy_CURRENT_e,               // mLayerID
   7,                             // mListID

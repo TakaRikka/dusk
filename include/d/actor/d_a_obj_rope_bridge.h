@@ -15,30 +15,30 @@
  */
 class daObjRBridge_c : public dBgS_MoveBgActor {
 public:
-    /* 80595E38 */ void initBaseMtx();
-    /* 80595ED8 */ void setBaseMtx();
-    /* 80595F84 */ BOOL checkE3Special();
-    /* 80595FE0 */ void setStPos();
-    /* 8059616C */ void initLinePos();
-    /* 805963C4 */ void setLinePos();
-    /* 80596768 */ void getLinePosSt(cXyz*);
-    /* 805967E4 */ void getLinePosBrg(int, cXyz*);
-    /* 8059689C */ BOOL checkTight();
-    /* 80596DEC */ int create1st();
-    /* 80596FA8 */ void action();
-    /* 8059715C */ void init_wait();
-    /* 80597170 */ void mode_wait();
-    /* 805973BC */ void init_cut();
-    /* 805973E4 */ void mode_cut();
-    /* 805975E8 */ void init_end();
-    /* 805975F4 */ void mode_end();
-    /* 805977D0 */ BOOL checkHimoCulling();
+    void initBaseMtx();
+    void setBaseMtx();
+    BOOL checkE3Special();
+    void setStPos();
+    void initLinePos();
+    void setLinePos();
+    void getLinePosSt(cXyz*);
+    void getLinePosBrg(int, cXyz*);
+    BOOL checkTight();
+    int create1st();
+    void action();
+    void init_wait();
+    void mode_wait();
+    void init_cut();
+    void mode_cut();
+    void init_end();
+    void mode_end();
+    BOOL checkHimoCulling();
 
-    /* 80596B88 */ virtual int CreateHeap();
-    /* 805969FC */ virtual int Create();
-    /* 80596EBC */ virtual int Execute(Mtx**);
-    /* 805975F8 */ virtual int Draw();
-    /* 805978BC */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwbit2() { return fopAcM_GetParamBit(this, 24, 8); }

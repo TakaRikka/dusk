@@ -133,7 +133,6 @@ void __ull2dec(decimal* result, unsigned long long val) {
     result->exp = result->sig.length - 1;
 }
 
-/* 80364E00-80365078 35F740 0278+00 2/2 0/0 0/0 .text            __timesdec */
 void __timesdec(decimal* result, const decimal* x, const decimal* y) {
     unsigned long accumulator = 0;
     unsigned char mantissa[SIGDIGLEN * 2];
@@ -235,7 +234,6 @@ void __str2dec(decimal* d, const char* s, short exp) {
 
 static const char* const unused = "179769313486231580793729011405303420";
 
-/* 8036367C-80364E00 35DFBC 1784+00 2/1 0/0 0/0 .text            __two_exp */
 void __two_exp(decimal* result, long exp) {
     switch (exp) {
     case -64:
@@ -506,7 +504,6 @@ done:
     z->sig.length = (unsigned char)(i - ib + 1);
 }
 
-/* 803632C8-8036367C 35DC08 03B4+00 1/1 0/0 0/0 .text            __num2dec_internal */
 void __num2dec_internal(decimal* d, double x) {
     signed char sign = (signed char)(signbit(x) != 0);
 
@@ -545,7 +542,6 @@ void __num2dec_internal(decimal* d, double x) {
     }
 }
 
-/* 80363124-803632C8 35DA64 01A4+00 0/0 2/2 0/0 .text            __num2dec */
 void __num2dec(const decform* form, double x, decimal* d) {
     short digits = form->digits;
     int i;

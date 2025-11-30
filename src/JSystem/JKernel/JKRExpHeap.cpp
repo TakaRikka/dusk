@@ -9,7 +9,6 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTException.h"
 
-/* 802CEDB4-802CEE2C 2C96F4 0078+00 0/0 1/1 0/0 .text            createRoot__10JKRExpHeapFib */
 JKRExpHeap* JKRExpHeap::createRoot(int maxHeaps, bool errorFlag) {
     JKRExpHeap* heap = NULL;
     if (!sRootHeap) {
@@ -25,8 +24,6 @@ JKRExpHeap* JKRExpHeap::createRoot(int maxHeaps, bool errorFlag) {
     return heap;
 }
 
-/* 802CEE2C-802CEF00 2C976C 00D4+00 0/0 19/19 1/1 .text            create__10JKRExpHeapFUlP7JKRHeapb
- */
 JKRExpHeap* JKRExpHeap::create(u32 size, JKRHeap* parent, bool errorFlag) {
     if (!parent) {
         parent = sRootHeap;
@@ -59,8 +56,6 @@ JKRExpHeap* JKRExpHeap::create(u32 size, JKRHeap* parent, bool errorFlag) {
     return newHeap;
 }
 
-/* 802CEF00-802CEFAC 2C9840 00AC+00 0/0 1/1 0/0 .text            create__10JKRExpHeapFPvUlP7JKRHeapb
- */
 JKRExpHeap* JKRExpHeap::create(void* ptr, u32 size, JKRHeap* parent, bool errorFlag) {
     JKRHeap* parent2;
     if (parent == NULL) {
@@ -88,7 +83,6 @@ JKRExpHeap* JKRExpHeap::create(void* ptr, u32 size, JKRHeap* parent, bool errorF
     return newHeap;
 }
 
-/* 802CEFAC-802CF030 2C98EC 0084+00 1/0 0/0 0/0 .text            do_destroy__10JKRExpHeapFv */
 void JKRExpHeap::do_destroy() {
     if (!field_0x6e) {
         JKRHeap* heap = mChildTree.getParent()->getObject();
@@ -101,8 +95,6 @@ void JKRExpHeap::do_destroy() {
     }
 }
 
-/* 802CF030-802CF0C0 2C9970 0090+00 3/3 0/0 0/0 .text            __ct__10JKRExpHeapFPvUlP7JKRHeapb
- */
 JKRExpHeap::JKRExpHeap(void* data, u32 size, JKRHeap* parent, bool errorFlag)
     : JKRHeap(data, size, parent, errorFlag) {
     mAllocMode = 0;
@@ -114,12 +106,10 @@ JKRExpHeap::JKRExpHeap(void* data, u32 size, JKRHeap* parent, bool errorFlag)
     mTailUsedList = NULL;
 }
 
-/* 802CF0C0-802CF128 2C9A00 0068+00 1/0 0/0 0/0 .text            __dt__10JKRExpHeapFv */
 JKRExpHeap::~JKRExpHeap() {
     dispose();
 }
 
-/* 802CF128-802CF234 2C9A68 010C+00 1/0 0/0 0/0 .text            do_alloc__10JKRExpHeapFUli */
 void* JKRExpHeap::do_alloc(u32 size, int alignment) {
     void* ptr;
 
@@ -153,23 +143,16 @@ void* JKRExpHeap::do_alloc(u32 size, int alignment) {
     return ptr;
 }
 
-/* ############################################################################################## */
-/* 80451398-8045139C 000898 0004+00 1/1 0/0 0/0 .sbss            DBfoundSize */
 static u32 DBfoundSize;
 
-/* 8045139C-804513A0 00089C 0004+00 1/1 0/0 0/0 .sbss            DBfoundOffset */
 static u32 DBfoundOffset;
 
-/* 804513A0-804513A4 0008A0 0004+00 1/1 0/0 0/0 .sbss            DBfoundBlock */
 static JKRExpHeap::CMemBlock* DBfoundBlock;
 
-/* 804513A4-804513A8 0008A4 0004+00 1/1 0/0 0/0 .sbss            DBnewFreeBlock */
 static JKRExpHeap::CMemBlock* DBnewFreeBlock;
 
-/* 804513A8-804513B0 0008A8 0004+04 1/1 0/0 0/0 .sbss            DBnewUsedBlock */
 static JKRExpHeap::CMemBlock* DBnewUsedBlock;
 
-/* 802CF234-802CF490 2C9B74 025C+00 1/1 0/0 0/0 .text            allocFromHead__10JKRExpHeapFUli */
 void* JKRExpHeap::allocFromHead(u32 size, int align) {
     u32 foundOffset;
     int foundSize;
@@ -273,7 +256,6 @@ void* JKRExpHeap::allocFromHead(u32 size, int align) {
     return NULL;
 }
 
-/* 802CF490-802CF574 2C9DD0 00E4+00 1/1 0/0 0/0 .text            allocFromHead__10JKRExpHeapFUl */
 void* JKRExpHeap::allocFromHead(u32 size) {
     size = ALIGN_NEXT(size, 4);
     s32 foundSize = -1;
@@ -311,7 +293,6 @@ void* JKRExpHeap::allocFromHead(u32 size) {
     return NULL;
 }
 
-/* 802CF574-802CF6D4 2C9EB4 0160+00 1/1 0/0 0/0 .text            allocFromTail__10JKRExpHeapFUli */
 void* JKRExpHeap::allocFromTail(u32 size, int align) {
     u32 offset = 0;
     CMemBlock* foundBlock = NULL;
@@ -354,7 +335,6 @@ void* JKRExpHeap::allocFromTail(u32 size, int align) {
     return NULL;
 }
 
-/* 802CF6D4-802CF7AC 2CA014 00D8+00 1/1 0/0 0/0 .text            allocFromTail__10JKRExpHeapFUl */
 void* JKRExpHeap::allocFromTail(u32 size) {
     u32 size2 = ALIGN_NEXT(size, 4);
     CMemBlock* foundBlock = NULL;
@@ -385,7 +365,6 @@ void* JKRExpHeap::allocFromTail(u32 size) {
     return NULL;
 }
 
-/* 802CF7AC-802CF820 2CA0EC 0074+00 1/0 0/0 0/0 .text            do_free__10JKRExpHeapFPv */
 void JKRExpHeap::do_free(void* ptr) {
     lock();
     if (getStartAddr() <= ptr && ptr <= getEndAddr()) {
@@ -397,7 +376,6 @@ void JKRExpHeap::do_free(void* ptr) {
     unlock();
 }
 
-/* 802CF820-802CF89C 2CA160 007C+00 1/0 0/0 0/0 .text            do_freeAll__10JKRExpHeapFv */
 void JKRExpHeap::do_freeAll() {
     lock();
     JKRHeap::callAllDisposer();
@@ -409,7 +387,6 @@ void JKRExpHeap::do_freeAll() {
     unlock();
 }
 
-/* 802CF89C-802CF924 2CA1DC 0088+00 1/0 0/0 0/0 .text            do_freeTail__10JKRExpHeapFv */
 void JKRExpHeap::do_freeTail() {
     lock();
     for (CMemBlock* block = mHeadUsedList; block != NULL;) {
@@ -425,11 +402,8 @@ void JKRExpHeap::do_freeTail() {
     unlock();
 }
 
-/* 802CF924-802CF928 2CA264 0004+00 1/0 0/0 0/0 .text            do_fillFreeArea__10JKRExpHeapFv */
 void JKRExpHeap::do_fillFreeArea() {}
 
-/* 802CF928-802CF978 2CA268 0050+00 1/0 0/0 0/0 .text            do_changeGroupID__10JKRExpHeapFUc
- */
 s32 JKRExpHeap::do_changeGroupID(u8 param_0) {
     lock();
     u8 prev = mCurrentGroupId;
@@ -438,7 +412,6 @@ s32 JKRExpHeap::do_changeGroupID(u8 param_0) {
     return prev;
 }
 
-/* 802CF978-802CFB24 2CA2B8 01AC+00 1/0 0/0 0/0 .text            do_resize__10JKRExpHeapFPvUl */
 s32 JKRExpHeap::do_resize(void* ptr, u32 size) {
     lock();
     CMemBlock* block = CMemBlock::getHeapBlock(ptr);
@@ -493,7 +466,6 @@ s32 JKRExpHeap::do_resize(void* ptr, u32 size) {
     return block->size;
 }
 
-/* 802CFB24-802CFBA4 2CA464 0080+00 1/0 0/0 0/0 .text            do_getSize__10JKRExpHeapFPv */
 s32 JKRExpHeap::do_getSize(void* ptr) {
     lock();
     CMemBlock* block = CMemBlock::getHeapBlock(ptr);
@@ -505,7 +477,6 @@ s32 JKRExpHeap::do_getSize(void* ptr) {
     return block->getSize();
 }
 
-/* 802CFBA4-802CFC10 2CA4E4 006C+00 1/0 0/0 0/0 .text            do_getFreeSize__10JKRExpHeapFv */
 s32 JKRExpHeap::do_getFreeSize() {
     lock();
     s32 size = 0;
@@ -518,8 +489,6 @@ s32 JKRExpHeap::do_getFreeSize() {
     return size;
 }
 
-/* 802CFC10-802CFC84 2CA550 0074+00 1/0 0/0 0/0 .text            do_getMaxFreeBlock__10JKRExpHeapFv
- */
 void* JKRExpHeap::do_getMaxFreeBlock() {
     lock();
     s32 size = 0;
@@ -534,8 +503,6 @@ void* JKRExpHeap::do_getMaxFreeBlock() {
     return res;
 }
 
-/* 802CFC84-802CFCE8 2CA5C4 0064+00 1/0 0/0 0/0 .text            do_getTotalFreeSize__10JKRExpHeapFv
- */
 s32 JKRExpHeap::do_getTotalFreeSize() {
     u32 size = 0;
     lock();
@@ -546,7 +513,6 @@ s32 JKRExpHeap::do_getTotalFreeSize() {
     return size;
 }
 
-/* 802CFCE8-802CFD64 2CA628 007C+00 1/1 0/0 0/0 .text            getUsedSize__10JKRExpHeapCFUc */
 s32 JKRExpHeap::getUsedSize(u8 groupId) const {
     JKRExpHeap* this2 = const_cast<JKRExpHeap*>(this);
     this2->lock();
@@ -563,8 +529,6 @@ s32 JKRExpHeap::getUsedSize(u8 groupId) const {
     return size;
 }
 
-/* 802CFD64-802CFDCC 2CA6A4 0068+00 0/0 5/5 0/0 .text            getTotalUsedSize__10JKRExpHeapCFv
- */
 s32 JKRExpHeap::getTotalUsedSize() const {
     JKRExpHeap* this2 = const_cast<JKRExpHeap*>(this);
     this2->lock();
@@ -578,8 +542,6 @@ s32 JKRExpHeap::getTotalUsedSize() const {
     return size;
 }
 
-/* 802CFDCC-802CFE68 2CA70C 009C+00 4/4 0/0 0/0 .text
- * appendUsedList__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock       */
 void JKRExpHeap::appendUsedList(JKRExpHeap::CMemBlock* newblock) {
     if (!newblock) {
         JUTException::panic(__FILE__, 1568, "bad appendUsedList\n");
@@ -625,8 +587,6 @@ void JKRExpHeap::setFreeBlock(CMemBlock* block, CMemBlock* prev, CMemBlock* next
     block->mMagic = 0;
 }
 
-/* 802CFEB4-802CFEE8 2CA7F4 0034+00 5/5 0/0 0/0 .text
- * removeFreeBlock__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock      */
 void JKRExpHeap::removeFreeBlock(CMemBlock* block) {
     CMemBlock* prev = block->mPrev;
     CMemBlock* next = block->mNext;
@@ -644,8 +604,6 @@ void JKRExpHeap::removeFreeBlock(CMemBlock* block) {
     }
 }
 
-/* 802CFEE8-802CFF1C 2CA828 0034+00 1/1 0/0 0/0 .text
- * removeUsedBlock__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock      */
 void JKRExpHeap::removeUsedBlock(JKRExpHeap::CMemBlock* block) {
     CMemBlock* prev = block->mPrev;
     CMemBlock* next = block->mNext;
@@ -663,8 +621,6 @@ void JKRExpHeap::removeUsedBlock(JKRExpHeap::CMemBlock* block) {
     }
 }
 
-/* 802CFF1C-802D00B4 2CA85C 0198+00 2/2 0/0 0/0 .text
- * recycleFreeBlock__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock     */
 void JKRExpHeap::recycleFreeBlock(JKRExpHeap::CMemBlock* block) {
     JKRExpHeap::CMemBlock* newBlock = block;
     int size = block->size;
@@ -717,8 +673,6 @@ void JKRExpHeap::recycleFreeBlock(JKRExpHeap::CMemBlock* block) {
     }
 }
 
-/* 802D00B4-802D0190 2CA9F4 00DC+00 1/1 0/0 0/0 .text
- * joinTwoBlocks__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock        */
 void JKRExpHeap::joinTwoBlocks(CMemBlock* block) {
     u32 endAddr = (uintptr_t)(block + 1) + block->size;
     CMemBlock* next = block->mNext;
@@ -735,7 +689,6 @@ void JKRExpHeap::joinTwoBlocks(CMemBlock* block) {
     }
 }
 
-/* 802D0190-802D03B8 2CAAD0 0228+00 1/0 0/0 0/0 .text            check__10JKRExpHeapFv */
 bool JKRExpHeap::check() {
     lock();
     int totalBytes = 0;
@@ -804,7 +757,6 @@ bool JKRExpHeap::check() {
     return ok;
 }
 
-/* 802D03B8-802D05CC 2CACF8 0214+00 1/0 0/0 0/0 .text            dump__10JKRExpHeapFv */
 bool JKRExpHeap::dump() {
     lock();
     bool result = check();
@@ -852,7 +804,6 @@ bool JKRExpHeap::dump() {
     return result;
 }
 
-/* 802D05CC-802D0810 2CAF0C 0244+00 1/0 0/0 0/0 .text            dump_sort__10JKRExpHeapFv */
 bool JKRExpHeap::dump_sort() {
     lock();
     bool result = check();
@@ -914,8 +865,6 @@ bool JKRExpHeap::dump_sort() {
     return result;
 }
 
-/* 802D0810-802D0830 2CB150 0020+00 4/4 0/0 0/0 .text
- * initiate__Q210JKRExpHeap9CMemBlockFPQ210JKRExpHeap9CMemBlockPQ210JKRExpHeap9CMemBlockUlUcUc */
 void JKRExpHeap::CMemBlock::initiate(JKRExpHeap::CMemBlock* prev, JKRExpHeap::CMemBlock* next,
                                      u32 size, u8 groupId, u8 alignment) {
     mMagic = 'HM';
@@ -926,8 +875,6 @@ void JKRExpHeap::CMemBlock::initiate(JKRExpHeap::CMemBlock* prev, JKRExpHeap::CM
     mNext = next;
 }
 
-/* 802D0830-802D0874 2CB170 0044+00 3/3 0/0 0/0 .text
- * allocFore__Q210JKRExpHeap9CMemBlockFUlUcUcUcUc               */
 JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::allocFore(u32 size, u8 groupId1, u8 alignment1,
                                                         u8 groupId2, u8 alignment2) {
     CMemBlock* block = NULL;
@@ -944,8 +891,6 @@ JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::allocFore(u32 size, u8 groupId1, u
     return block;
 }
 
-/* 802D0874-802D08CC 2CB1B4 0058+00 1/1 0/0 0/0 .text
- * allocBack__Q210JKRExpHeap9CMemBlockFUlUcUcUcUc               */
 JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::allocBack(u32 size, u8 groupId1, u8 alignment1,
                                                         u8 groupId2, u8 alignment2) {
     CMemBlock* newblock = NULL;
@@ -964,15 +909,12 @@ JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::allocBack(u32 size, u8 groupId1, u
     return newblock;
 }
 
-/* 802D08CC-802D091C 2CB20C 0050+00 2/2 0/0 0/0 .text free__Q210JKRExpHeap9CMemBlockFP10JKRExpHeap
- */
 int JKRExpHeap::CMemBlock::free(JKRExpHeap* heap) {
     heap->removeUsedBlock(this);
     heap->recycleFreeBlock(this);
     return 0;
 }
 
-/* 802D091C-802D0938 2CB25C 001C+00 3/3 0/0 0/0 .text getHeapBlock__Q210JKRExpHeap9CMemBlockFPv */
 JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::getHeapBlock(void* ptr) {
     if (ptr) {
         CMemBlock* block = (CMemBlock*)ptr - 1;
@@ -983,8 +925,6 @@ JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::getHeapBlock(void* ptr) {
     return NULL;
 }
 
-/* 802D0938-802D09E0 2CB278 00A8+00 1/0 0/0 0/0 .text
- * state_register__10JKRExpHeapCFPQ27JKRHeap6TStateUl           */
 void JKRExpHeap::state_register(JKRHeap::TState* p, u32 param_1) const {
     p->mId = param_1;
     if (param_1 <= 0xff) {
@@ -1008,8 +948,6 @@ void JKRExpHeap::state_register(JKRHeap::TState* p, u32 param_1) const {
     p->mCheckCode = checkCode;
 }
 
-/* 802D09E0-802D0A10 2CB320 0030+00 1/0 0/0 0/0 .text
- * state_compare__10JKRExpHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
 bool JKRExpHeap::state_compare(JKRHeap::TState const& r1, JKRHeap::TState const& r2) const {
     bool result = true;
     if (r1.mCheckCode != r2.mCheckCode) {
@@ -1023,12 +961,10 @@ bool JKRExpHeap::state_compare(JKRHeap::TState const& r1, JKRHeap::TState const&
     return result;
 }
 
-/* 802D0A10-802D0A1C 2CB350 000C+00 1/0 0/0 0/0 .text            getHeapType__10JKRExpHeapFv */
 u32 JKRExpHeap::getHeapType() {
     return 'EXPH';
 }
 
-/* 802D0A1C-802D0A24 2CB35C 0008+00 1/0 0/0 0/0 .text do_getCurrentGroupId__10JKRExpHeapFv */
 u8 JKRExpHeap::do_getCurrentGroupId() {
     return mCurrentGroupId;
 }

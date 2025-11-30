@@ -79,35 +79,29 @@ enum Type {
     /* 0x1 */ TYPE_1,
 };
 
-/* 80AB8FDC-80AB8FE4 000020 0008+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[1][2] = {
     {BMDR_RACA, RACA},
 };
 
-/* 80AB8FE4-80AB8FF4 -00001 0010+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0},
 };
 
-/* 80AB8FF4-80AB8FFC -00001 0008+00 2/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "Raca",
 };
 
-/* 80AB8FFC-80AB9000 000040 0002+02 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[2] = {
     1, -1,
 };
 
-/* 80AB9000-80AB9008 -00001 0008+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-/* 80AB9008-80AB90E8 00004C 00E0+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[8] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, 32, J3DFrameCtrl::EMode_LOOP, RACA, 1},
     {BCK_RACA_F_TALK_A, J3DFrameCtrl::EMode_NONE, RACA, BTP_RACA, J3DFrameCtrl::EMode_LOOP, RACA, 1},
@@ -119,7 +113,6 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[8] = {
     {BCK_RACA_FH_BITTERSMILE, J3DFrameCtrl::EMode_LOOP, RACA, BTP_RACA_FH_BITTERSMILE, J3DFrameCtrl::EMode_LOOP, RACA, 0},
 };
 
-/* 80AB90E8-80AB9200 00012C 0118+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[10] = {
     {BCK_RACA_WAIT_A, J3DFrameCtrl::EMode_LOOP, RACA, BTK_RACA, J3DFrameCtrl::EMode_NONE, RACA, 1, 0},
     {BCK_RACA_GIVEME, J3DFrameCtrl::EMode_LOOP, RACA, BTK_RACA, J3DFrameCtrl::EMode_NONE, RACA, 1, 0},
@@ -133,7 +126,6 @@ static daNpcT_motionAnmData_c l_motionAnmData[10] = {
     {BCK_RACA_STEP, J3DFrameCtrl::EMode_NONE, RACA,BTK_RACA, J3DFrameCtrl::EMode_NONE, RACA, 1, 0},
 };
 
-/* 80AB9200-80AB9280 000244 0080+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[32] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {5, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -145,7 +137,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[32] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80AB9280-80AB9310 0002C4 0090+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -158,15 +149,12 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {9, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80AB9310-80AB9314 -00001 0004+00 1/1 0/0 0/0 .data            mCutNameList__12daNpc_Raca_c */
 char* daNpc_Raca_c::mCutNameList = "";
 
-/* 80AB9314-80AB9320 000358 000C+00 2/2 0/0 0/0 .data            mCutList__12daNpc_Raca_c */
 daNpc_Raca_c::cutFunc daNpc_Raca_c::mCutList[1] = {
     NULL,
 };
 
-/* 80AB5CAC-80AB5DFC 0000EC 0150+00 1/0 0/0 0/0 .text            __dt__12daNpc_Raca_cFv */
 daNpc_Raca_c::~daNpc_Raca_c() {
     if (heap != NULL) {
         mpMorf[0]->stopZelAnime();
@@ -175,7 +163,6 @@ daNpc_Raca_c::~daNpc_Raca_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-/* 80AB8EC8-80AB8F54 000000 008C+00 6/6 0/0 0/0 .rodata          m__18daNpc_Raca_Param_c */
 daNpc_Raca_HIOParam const daNpc_Raca_Param_c::m = {
     230.0f,
     -3.0f,
@@ -220,7 +207,6 @@ daNpc_Raca_HIOParam const daNpc_Raca_Param_c::m = {
     0.0f,
 };
 
-/* 80AB5DFC-80AB60B8 00023C 02BC+00 1/1 0/0 0/0 .text            create__12daNpc_Raca_cFv */
 cPhs__Step daNpc_Raca_c::create() {
     daNpcT_ct(this, daNpc_Raca_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
                        l_motionSequenceData, 4, l_evtList, l_resNameList);
@@ -274,7 +260,6 @@ cPhs__Step daNpc_Raca_c::create() {
     return phase;
 }
 
-/* 80AB60B8-80AB6358 0004F8 02A0+00 1/1 0/0 0/0 .text            CreateHeap__12daNpc_Raca_cFv */
 int daNpc_Raca_c::CreateHeap() {
     int bmdIdx = mTwilight == true ? NONE : NONE;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_resNameList[l_bmdData[bmdIdx][1]], l_bmdData[bmdIdx][0]);
@@ -310,18 +295,15 @@ int daNpc_Raca_c::CreateHeap() {
     return 0;
 }
 
-/* 80AB6514-80AB6548 000954 0034+00 1/1 0/0 0/0 .text            Delete__12daNpc_Raca_cFv */
 int daNpc_Raca_c::Delete() {
     this->~daNpc_Raca_c();
     return 1;
 }
 
-/* 80AB6548-80AB6568 000988 0020+00 2/2 0/0 0/0 .text            Execute__12daNpc_Raca_cFv */
 int daNpc_Raca_c::Execute() {
     return execute();
 }
 
-/* 80AB6568-80AB65FC 0009A8 0094+00 1/1 0/0 0/0 .text            Draw__12daNpc_Raca_cFv */
 int daNpc_Raca_c::Draw() {
     if (mpMatAnm[0] != NULL) {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
@@ -338,12 +320,10 @@ int daNpc_Raca_c::Draw() {
     );
 }
 
-/* 80AB65FC-80AB661C 000A3C 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__12daNpc_Raca_cFP10fopAc_ac_c */
 int daNpc_Raca_c::createHeapCallBack(fopAc_ac_c* a_this) {
     return static_cast<daNpc_Raca_c*>(a_this)->CreateHeap();
 }
 
-/* 80AB661C-80AB6674 000A5C 0058+00 1/1 0/0 0/0 .text            ctrlJointCallBack__12daNpc_Raca_cFP8J3DJointi */
 int daNpc_Raca_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -356,7 +336,6 @@ int daNpc_Raca_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80AB6674-80AB6700 000AB4 008C+00 1/1 0/0 0/0 .text            srchNi__12daNpc_Raca_cFPvPv */
 void* daNpc_Raca_c::srchNi(void* i_actor, void* i_data) {
     if (mFindCount < 50 && fopAcM_IsActor(i_actor) && i_actor != (daNpc_Raca_c*)i_data && fopAcM_GetName(i_actor) == PROC_NI) {
         mFindActorPtrs[mFindCount] = (fopAc_ac_c*)i_actor;
@@ -366,7 +345,6 @@ void* daNpc_Raca_c::srchNi(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80AB6700-80AB67CC 000B40 00CC+00 1/1 0/0 0/0 .text            getNiP__12daNpc_Raca_cFv */
 fopAc_ac_c* daNpc_Raca_c::getNiP() {
     fopAc_ac_c* actor_p = mActorMngr[0].getActorP();
     mFindCount = 0;
@@ -383,7 +361,6 @@ fopAc_ac_c* daNpc_Raca_c::getNiP() {
     return NULL;
 }
 
-/* 80AB67CC-80AB67EC 000C0C 0020+00 1/1 0/0 0/0 .text            getType__12daNpc_Raca_cFv */
 u8 daNpc_Raca_c::getType() {
     switch (fopAcM_GetParam(this) & 0xFF) {
         case 0:
@@ -394,7 +371,6 @@ u8 daNpc_Raca_c::getType() {
     }
 }
 
-/* 80AB67EC-80AB681C 000C2C 0030+00 1/1 0/0 0/0 .text            isDelete__12daNpc_Raca_cFv */
 BOOL daNpc_Raca_c::isDelete() {
     if (mType == TYPE_1) {
         return FALSE;
@@ -409,7 +385,6 @@ BOOL daNpc_Raca_c::isDelete() {
     }
 }
 
-/* 80AB681C-80AB6984 000C5C 0168+00 1/1 0/0 0/0 .text            reset__12daNpc_Raca_cFv */
 void daNpc_Raca_c::reset() {
     initialize();
 
@@ -431,7 +406,6 @@ void daNpc_Raca_c::reset() {
     setAngle(home.angle.y);
 }
 
-/* 80AB6984-80AB6A10 000DC4 008C+00 1/0 0/0 0/0 .text            afterJntAnm__12daNpc_Raca_cFi */
 void daNpc_Raca_c::afterJntAnm(int param_1) {
     if (param_1 == 1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -442,7 +416,6 @@ void daNpc_Raca_c::afterJntAnm(int param_1) {
     }
 }
 
-/* 80AB6A10-80AB6B0C 000E50 00FC+00 1/0 0/0 0/0 .text            setParam__12daNpc_Raca_cFv */
 void daNpc_Raca_c::setParam() {
     selectAction();
     srchActors();
@@ -468,7 +441,6 @@ void daNpc_Raca_c::setParam() {
     mMorfFrames = daNpc_Raca_Param_c::m.common.morf_frame;
 }
 
-/* 80AB6B0C-80AB6BB0 000F4C 00A4+00 1/0 0/0 0/0 .text setAfterTalkMotion__12daNpc_Raca_cFv */
 void daNpc_Raca_c::setAfterTalkMotion() {
     int i_index;
 
@@ -493,7 +465,6 @@ void daNpc_Raca_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(i_index, -1.0f, FALSE, 0);
 }
 
-/* 80AB6BB0-80AB6C14 000FF0 0064+00 1/1 0/0 0/0 .text            srchActors__12daNpc_Raca_cFv */
 void daNpc_Raca_c::srchActors() {
     switch (mType) {
         case TYPE_0:
@@ -505,7 +476,6 @@ void daNpc_Raca_c::srchActors() {
     }
 }
 
-/* 80AB6C14-80AB6D14 001054 0100+00 1/0 0/0 0/0 .text            evtTalk__12daNpc_Raca_cFv */
 BOOL daNpc_Raca_c::evtTalk() {
     if (chkAction(&daNpc_Raca_c::talk)) {
         (this->*mAction)(NULL);
@@ -528,7 +498,6 @@ BOOL daNpc_Raca_c::evtTalk() {
     return 1;
 }
 
-/* 80AB6D14-80AB6DDC 001154 00C8+00 1/0 0/0 0/0 .text            evtCutProc__12daNpc_Raca_cFv */
 BOOL daNpc_Raca_c::evtCutProc() {
     BOOL rv = FALSE;
     int staffId = dComIfGp_getEventManager().getMyStaffId("Raca", this, -1);
@@ -546,7 +515,6 @@ BOOL daNpc_Raca_c::evtCutProc() {
     return rv;
 }
 
-/* 80AB6DDC-80AB6EC8 00121C 00EC+00 1/0 0/0 0/0 .text            action__12daNpc_Raca_cFv */
 void daNpc_Raca_c::action() {
     if (mStagger.checkRebirth()) {
         mStagger.initialize();
@@ -562,14 +530,12 @@ void daNpc_Raca_c::action() {
     }
 }
 
-/* 80AB6EC8-80AB6F40 001308 0078+00 1/0 0/0 0/0 .text            beforeMove__12daNpc_Raca_cFv */
 void daNpc_Raca_c::beforeMove() {
     if (checkHide() || mNoDraw) {
         attention_info.flags = 0;
     }
 }
 
-/* 80AB6F40-80AB7180 001380 0240+00 1/0 0/0 0/0 .text            setAttnPos__12daNpc_Raca_cFv */
 void daNpc_Raca_c::setAttnPos() {
     cXyz sp38(0.0f, 30.0f, 0.0f);
     
@@ -596,7 +562,6 @@ void daNpc_Raca_c::setAttnPos() {
     setFootPos();
 }
 
-/* 80AB7180-80AB72B4 0015C0 0134+00 1/0 0/0 0/0 .text            setCollision__12daNpc_Raca_cFv */
 void daNpc_Raca_c::setCollision() {
     cXyz sp48;
     u32 tgType = 0xD8FBFDFF;
@@ -631,12 +596,10 @@ void daNpc_Raca_c::setCollision() {
     mCyl.ClrTgHit();
 }
 
-/* 80AB72B4-80AB72BC 0016F4 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__12daNpc_Raca_cFv */
 int daNpc_Raca_c::drawDbgInfo() {
     return 0;
 }
 
-/* 80AB72BC-80AB73B0 0016FC 00F4+00 1/1 0/0 0/0 .text            selectAction__12daNpc_Raca_cFv */
 BOOL daNpc_Raca_c::selectAction() {
     mPrevAction = NULL;
 
@@ -657,12 +620,10 @@ BOOL daNpc_Raca_c::selectAction() {
     return TRUE;
 }
 
-/* 80AB73B0-80AB73DC 0017F0 002C+00 1/1 0/0 0/0 .text            chkAction__12daNpc_Raca_cFM12daNpc_Raca_cFPCvPvPv_i */
 BOOL daNpc_Raca_c::chkAction(actionFunc action) {
     return mAction == action;
 }
 
-/* 80AB73DC-80AB7484 00181C 00A8+00 2/2 0/0 0/0 .text            setAction__12daNpc_Raca_cFM12daNpc_Raca_cFPCvPvPv_i */
 BOOL daNpc_Raca_c::setAction(actionFunc action) {
     mMode = MODE_EXIT;
     if (mAction != NULL) {
@@ -679,7 +640,6 @@ BOOL daNpc_Raca_c::setAction(actionFunc action) {
 
 }
 
-/* 80AB7484-80AB7710 0018C4 028C+00 2/0 0/0 0/0 .text            wait__12daNpc_Raca_cFPv */
 int daNpc_Raca_c::wait(void* param_1) {
     switch (mMode) {
         case MODE_ENTER:
@@ -736,7 +696,6 @@ int daNpc_Raca_c::wait(void* param_1) {
     return 1;
 }
 
-/* 80AB7710-80AB7918 001B50 0208+00 1/0 0/0 0/0 .text            walk__12daNpc_Raca_cFPv */
 int daNpc_Raca_c::walk(void* param_1) {
     switch (mMode) {
         case MODE_ENTER:
@@ -784,7 +743,6 @@ int daNpc_Raca_c::walk(void* param_1) {
     return 1;
 }
 
-/* 80AB7918-80AB7B40 001D58 0228+00 2/0 0/0 0/0 .text            talk__12daNpc_Raca_cFPv */
 int daNpc_Raca_c::talk(void* param_1) {
     switch (mMode) {
         case MODE_ENTER:
@@ -837,35 +795,28 @@ int daNpc_Raca_c::talk(void* param_1) {
     return 0;
 }
 
-/* 80AB7B40-80AB7B60 001F80 0020+00 1/0 0/0 0/0 .text            daNpc_Raca_Create__FPv */
 static int daNpc_Raca_Create(void* a_this) {
     static_cast<daNpc_Raca_c*>(a_this)->create();
 }
 
-/* 80AB7B60-80AB7B80 001FA0 0020+00 1/0 0/0 0/0 .text            daNpc_Raca_Delete__FPv */
 static int daNpc_Raca_Delete(void* a_this) {
     static_cast<daNpc_Raca_c*>(a_this)->Delete();
 }
 
-/* 80AB7B80-80AB7BA0 001FC0 0020+00 1/0 0/0 0/0 .text            daNpc_Raca_Execute__FPv */
 static int daNpc_Raca_Execute(void* a_this) {
     static_cast<daNpc_Raca_c*>(a_this)->Execute();
 }
 
-/* 80AB7BA0-80AB7BC0 001FE0 0020+00 1/0 0/0 0/0 .text            daNpc_Raca_Draw__FPv */
 static int daNpc_Raca_Draw(void* a_this) {
     static_cast<daNpc_Raca_c*>(a_this)->Draw();
 }
 
-/* 80AB7BC0-80AB7BC8 002000 0008+00 1/0 0/0 0/0 .text            daNpc_Raca_IsDelete__FPv */
 static int daNpc_Raca_IsDelete(void* a_this) {
     return 1;
 }
 
-/* 80AB953C-80AB9540 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpc_Raca_Param_c l_HIO;
 
-/* 80AB935C-80AB937C -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Raca_MethodTable */
 static actor_method_class daNpc_Raca_MethodTable = {
     (process_method_func)daNpc_Raca_Create,
     (process_method_func)daNpc_Raca_Delete,
@@ -874,7 +825,6 @@ static actor_method_class daNpc_Raca_MethodTable = {
     (process_method_func)daNpc_Raca_Draw,
 };
 
-/* 80AB937C-80AB93AC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_RACA */
 extern actor_process_profile_definition g_profile_NPC_RACA = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

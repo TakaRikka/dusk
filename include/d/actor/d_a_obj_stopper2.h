@@ -14,22 +14,22 @@
  */
 class daObjStopper2_c : public fopAc_ac_c {
 public:
-    /* 80CEF368 */ J3DModelData* getStopModelData();
-    /* 80CEF38C */ void initBaseMtx();
-    /* 80CEF3C8 */ void setBaseMtx();
-    /* 80CEF434 */ f32 getMaxOffsetY();
-    /* 80CEF44C */ int Create();
-    /* 80CEF57C */ int CreateHeap();
-    /* 80CEF5C8 */ int create();
-    /* 80CEF66C */ int execute();
-    /* 80CEF6A4 */ void event_proc_call();
-    /* 80CEF760 */ void actionWait();
-    /* 80CEF98C */ void actionOrderEvent();
-    /* 80CEFA60 */ void actionEvent();
-    /* 80CEFAD4 */ void actionDead();
-    /* 80CEFAD8 */ int demoProc();
-    /* 80CEFD40 */ int draw();
-    /* 80CEFDB8 */ int _delete();
+    J3DModelData* getStopModelData();
+    void initBaseMtx();
+    void setBaseMtx();
+    f32 getMaxOffsetY();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    int demoProc();
+    int draw();
+    int _delete();
 
     u32 getEvId() { return fopAcM_GetParamBit(this, 8, 8); }
     u32 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }

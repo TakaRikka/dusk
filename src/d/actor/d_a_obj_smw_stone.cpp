@@ -10,31 +10,25 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 
-/* 80CDEF1C-80CDEF20 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "WStoneF";
 
-/* 80CDE518-80CDE538 000078 0020+00 1/1 0/0 0/0 .text daSmWStone_c_createHeap__FP10fopAc_ac_c */
 static int daSmWStone_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daSmWStone_c*>(i_this)->createHeap();
 }
 
-/* 80CDE538-80CDE588 000098 0050+00 2/2 0/0 0/0 .text            __ct__12daSmWStone_cFv */
 daSmWStone_c::daSmWStone_c() {
     mpBgW = NULL;
     mMode = 0;
 }
 
-/* 80CDE588-80CDE614 0000E8 008C+00 1/0 0/0 0/0 .text            __dt__12daSmWStone_cFv */
 daSmWStone_c::~daSmWStone_c() {
     dComIfG_resDelete(this, l_arcName);
 }
 
-/* 80CDEEF4-80CDEF00 000000 000C+00 1/1 0/0 0/0 .rodata          @3776 */
 static u8 const lit_3776[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 80CDE614-80CDE7F8 000174 01E4+00 1/1 0/0 0/0 .text            create__12daSmWStone_cFv */
 cPhs__Step daSmWStone_c::create() {
     fopAcM_ct(this, daSmWStone_c);
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(this, l_arcName);
@@ -65,7 +59,6 @@ cPhs__Step daSmWStone_c::create() {
     return step;
 }
 
-/* 80CDE8D8-80CDE92C 000438 0054+00 1/1 0/0 0/0 .text            execute__12daSmWStone_cFv */
 int daSmWStone_c::execute() {
     switch (mMode) {
     case 0:
@@ -80,7 +73,6 @@ int daSmWStone_c::execute() {
     return 1;
 }
 
-/* 80CDE92C-80CDEA2C 00048C 0100+00 1/1 0/0 0/0 .text            draw__12daSmWStone_cFv */
 int daSmWStone_c::draw() {
     g_env_light.settingTevStruct(8, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -94,7 +86,6 @@ int daSmWStone_c::draw() {
     return 1;
 }
 
-/* 80CDEA2C-80CDEAA4 00058C 0078+00 1/1 0/0 0/0 .text            Delete__12daSmWStone_cFv */
 int daSmWStone_c::Delete() {
     attention_info.flags = 0;
     if (mpBgW != NULL && mpBgW->ChkUsed()) {
@@ -104,7 +95,6 @@ int daSmWStone_c::Delete() {
     return 1;
 }
 
-/* 80CDEAA4-80CDEBA0 000604 00FC+00 1/1 0/0 0/0 .text            exeModeHowl__12daSmWStone_cFv */
 void daSmWStone_c::exeModeHowl() {
     u8 swbit;
     if (mDelete || (swbit = getSwBit0(), fopAcM_isSwitch(this, swbit))) {
@@ -127,14 +117,12 @@ void daSmWStone_c::exeModeHowl() {
     }
 }
 
-/* 80CDEBA0-80CDEC04 000700 0064+00 2/2 0/0 0/0 .text            setModelMtx__12daSmWStone_cFv */
 void daSmWStone_c::setModelMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CDEC04-80CDED30 000764 012C+00 1/1 0/0 0/0 .text            createHeap__12daSmWStone_cFv */
 int daSmWStone_c::createHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
@@ -157,7 +145,6 @@ int daSmWStone_c::createHeap() {
     return 1;
 }
 
-/* 80CDED30-80CDED9C 000890 006C+00 1/1 0/0 0/0 .text            init__12daSmWStone_cFv */
 void daSmWStone_c::init() {
     u8 swbit = getSwBit0();
     if (fopAcM_isSwitch(this, swbit)) {
@@ -169,7 +156,6 @@ void daSmWStone_c::init() {
     mShadowKey = 0;
 }
 
-/* 80CDED9C-80CDEE28 0008FC 008C+00 1/1 0/0 0/0 .text            chkWlfInRange__12daSmWStone_cFv */
 bool daSmWStone_c::chkWlfInRange() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (player == NULL) {
@@ -184,31 +170,23 @@ bool daSmWStone_c::chkWlfInRange() {
     return false;
 }
 
-/* 80CDEE28-80CDEE7C 000988 0054+00 1/0 0/0 0/0 .text            daSmWStone_create__FP12daSmWStone_c
- */
 static cPhs__Step daSmWStone_create(daSmWStone_c* i_this) {
     fopAcM_ct(i_this, daSmWStone_c);
     return i_this->create();
 }
 
-/* 80CDEE7C-80CDEE9C 0009DC 0020+00 1/0 0/0 0/0 .text            daSmWStone_Delete__FP12daSmWStone_c
- */
 static int daSmWStone_Delete(daSmWStone_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80CDEE9C-80CDEEBC 0009FC 0020+00 1/0 0/0 0/0 .text daSmWStone_execute__FP12daSmWStone_c */
 static int daSmWStone_execute(daSmWStone_c* i_this) {
     return i_this->execute();
 }
 
-/* 80CDEEBC-80CDEEDC 000A1C 0020+00 1/0 0/0 0/0 .text            daSmWStone_draw__FP12daSmWStone_c
- */
 static int daSmWStone_draw(daSmWStone_c* i_this) {
     return i_this->draw();
 }
 
-/* 80CDEF20-80CDEF40 -00001 0020+00 1/0 0/0 0/0 .data            daSmWStone_METHODS */
 static actor_method_class daSmWStone_METHODS = {
     (process_method_func)daSmWStone_create,
     (process_method_func)daSmWStone_Delete,
@@ -217,7 +195,6 @@ static actor_method_class daSmWStone_METHODS = {
     (process_method_func)daSmWStone_draw,
 };
 
-/* 80CDEF40-80CDEF70 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_SmWStone */
 extern actor_process_profile_definition g_profile_Obj_SmWStone = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

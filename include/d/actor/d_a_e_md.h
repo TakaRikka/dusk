@@ -16,21 +16,21 @@
  */
 class daE_MD_c : public fopEn_enemy_c {
 public:
-    /* 80708DF8 */ void initCcCylinder();
-    /* 80708E70 */ void setCcCylinder(f32);
-    /* 807091F0 */ void SetAnm(mDoExt_McaMorfSO*, int, int, f32, f32);
-    /* 807092C8 */ void At_Check();
-    /* 80709378 */ void CheckHit();
-    /* 8070992C */ void WaitAction();
-    /* 8070994C */ void HalfBreakAction();
-    /* 80709A04 */ bool VibAction();
-    /* 80709ABC */ void DummyAction();
-    /* 80709BB4 */ void RealAction();
-    /* 80709C3C */ void Action();
-    /* 80709CFC */ int Execute();
-    /* 80709D58 */ int Delete();
-    /* 80709DA8 */ void setBaseMtx();
-    /* 8070A044 */ int create();
+    void initCcCylinder();
+    void setCcCylinder(f32);
+    void SetAnm(mDoExt_McaMorfSO*, int, int, f32, f32);
+    void At_Check();
+    void CheckHit();
+    void WaitAction();
+    void HalfBreakAction();
+    bool VibAction();
+    void DummyAction();
+    void RealAction();
+    void Action();
+    int Execute();
+    int Delete();
+    void setBaseMtx();
+    int create();
 
     inline int CreateHeap();
     inline int Draw();

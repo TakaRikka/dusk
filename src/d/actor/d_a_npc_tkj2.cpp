@@ -60,7 +60,6 @@ enum Action {
     /* 0x6 */ ACTION_DROP_2 = 0x6,
 };
 
-/* 80B10DEC-80B10E20 0000EC 0034+00 1/1 0/0 0/0 .text            __ct__16daNpc_Tkj2_HIO_cFv */
 daNpc_Tkj2_HIO_c::daNpc_Tkj2_HIO_c() {
     field_0x4 = -1;
     basic_size = 1.0f;
@@ -68,13 +67,11 @@ daNpc_Tkj2_HIO_c::daNpc_Tkj2_HIO_c() {
     boots_struggle_sp = 2.0f;
 }
 
-/* 80B10E20-80B10ECC 000120 00AC+00 6/6 0/0 0/0 .text            anm_init__FP14npc_tkj2_classifUcf */
 static void anm_init(npc_tkj2_class* i_this, int i_index, f32 i_morf, u8 i_attr, f32 i_rate) {
     i_this->mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Tkj2", i_index), i_attr, i_morf, i_rate, 0.0f, -1.0f);
     i_this->field_0x5f4 = i_index;
 }
 
-/* 80B10ECC-80B1101C 0001CC 0150+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         int jntNo = i_joint->getJntNo();
@@ -101,7 +98,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80B1101C-80B11130 00031C 0114+00 1/0 0/0 0/0 .text            daNpc_Tkj2_Draw__FP14npc_tkj2_class */
 static int daNpc_Tkj2_Draw(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     J3DModel* model = i_this->mpModelMorf->getModel();
@@ -123,7 +119,6 @@ static int daNpc_Tkj2_Draw(npc_tkj2_class* i_this) {
     return 1;
 }
 
-/* 80B11130-80B1119C 000430 006C+00 1/1 0/0 0/0 .text npc_tkj2_carry_check__FP14npc_tkj2_class */
 static void npc_tkj2_carry_check(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -138,7 +133,6 @@ static void npc_tkj2_carry_check(npc_tkj2_class* i_this) {
     }
 }
 
-/* 80B1119C-80B111F4 00049C 0058+00 1/1 0/0 0/0 .text mode_init_boomCarry__FP14npc_tkj2_class */
 static void mode_init_boomCarry(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -148,7 +142,6 @@ static void mode_init_boomCarry(npc_tkj2_class* i_this) {
     i_this->field_0x5f2 = 1;
 }
 
-/* 80B111F4-80B1142C 0004F4 0238+00 1/1 0/0 0/0 .text            Wind_effect__FP14npc_tkj2_class */
 static void Wind_effect(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -204,7 +197,6 @@ static void Wind_effect(npc_tkj2_class* i_this) {
     a_this->current.pos += i_this->field_0x5fc;
 }
 
-/* 80B1142C-80B1169C 00072C 0270+00 1/1 0/0 0/0 .text            CheckRoof__FP14npc_tkj2_class */
 static void CheckRoof(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz end;
@@ -233,7 +225,6 @@ static void CheckRoof(npc_tkj2_class* i_this) {
     }
 }
 
-/* 80B116E4-80B11AB0 0009E4 03CC+00 1/1 0/0 0/0 .text            CheckWall__FP14npc_tkj2_classs */
 static bool CheckWall(npc_tkj2_class* i_this, s16 param_2) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp1b0(0.0f, -100.0f, a_this->speedF);
@@ -280,7 +271,6 @@ static bool CheckWall(npc_tkj2_class* i_this, s16 param_2) {
     return false;
 }
 
-/* 80B11AB0-80B11BD0 000DB0 0120+00 3/3 0/0 0/0 .text            GndCheck2__FP14npc_tkj2_class */
 static bool GndCheck2(npc_tkj2_class* i_this) {
     dBgS_ObjGndChk obj_gnd_chk;
     cXyz sp78(i_this->field_0x5b8.x, i_this->field_0x5b8.y + 100.0f, i_this->field_0x5b8.z);
@@ -294,7 +284,6 @@ static bool GndCheck2(npc_tkj2_class* i_this) {
     return false;
 }
 
-/* 80B11C48-80B11CCC 000F48 0084+00 2/2 0/0 0/0 .text            GndCheck__FP14npc_tkj2_class4cXyz */
 static bool GndCheck(npc_tkj2_class* i_this, cXyz param_2) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp14;
@@ -310,7 +299,6 @@ static bool GndCheck(npc_tkj2_class* i_this, cXyz param_2) {
     return false;
 }
 
-/* 80B11CCC-80B120DC 000FCC 0410+00 1/1 0/0 0/0 .text            npc_tkj2_normal__FP14npc_tkj2_class */
 static void npc_tkj2_normal(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp38, sp44;
@@ -402,7 +390,6 @@ static void npc_tkj2_normal(npc_tkj2_class* i_this) {
     cLib_addCalc2(&a_this->speedF, fVar1, 1.0f, 5.0f);
 }
 
-/* 80B120DC-80B122AC 0013DC 01D0+00 1/1 0/0 0/0 .text            return_pos_get__FP14npc_tkj2_class */
 static cXyz return_pos_get(npc_tkj2_class* i_this) {
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     dBgS_GndChk gnd_chk;
@@ -433,13 +420,10 @@ static cXyz return_pos_get(npc_tkj2_class* i_this) {
     return player->current.pos;
 }
 
-/* 80B14500-80B14504 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_initHIO;
 
-/* 80B14510-80B14524 000018 0014+00 4/4 0/0 0/0 .bss             l_HIO */
 static daNpc_Tkj2_HIO_c l_HIO;
 
-/* 80B122AC-80B125D0 0015AC 0324+00 1/1 0/0 0/0 .text            npc_tkj2_carry__FP14npc_tkj2_class */
 static s8 npc_tkj2_carry(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp30, sp3c, sp48;
@@ -515,7 +499,6 @@ static s8 npc_tkj2_carry(npc_tkj2_class* i_this) {
     return rv;
 }
 
-/* 80B125D0-80B12750 0018D0 0180+00 1/1 0/0 0/0 .text            npc_tkj2_fly__FP14npc_tkj2_class */
 static void npc_tkj2_fly(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -563,7 +546,6 @@ static void npc_tkj2_fly(npc_tkj2_class* i_this) {
     }
 }
 
-/* 80B12750-80B12810 001A50 00C0+00 1/1 0/0 0/0 .text            npc_tkj2_drop__FP14npc_tkj2_class */
 static void npc_tkj2_drop(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -587,7 +569,6 @@ static void npc_tkj2_drop(npc_tkj2_class* i_this) {
     
     cLib_addCalc2(&a_this->speedF, 20.0f, 0.5f, 10.0f);
 }
-/* 80B12810-80B12D20 001B10 0510+00 1/1 0/0 0/0 .text            npc_tkj2_return__FP14npc_tkj2_class */
 static void npc_tkj2_return(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -660,7 +641,6 @@ static void npc_tkj2_return(npc_tkj2_class* i_this) {
     }
 }
 
-/* 80B12D20-80B12E88 002020 0168+00 1/1 0/0 0/0 .text            ObjHit__FP14npc_tkj2_class */
 static void ObjHit(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     
@@ -695,7 +675,6 @@ static void ObjHit(npc_tkj2_class* i_this) {
     }
 }
 
-/* 80B12E88-80B1376C 002188 08E4+00 2/1 0/0 0/0 .text            action__FP14npc_tkj2_class */
 static void action(npc_tkj2_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
@@ -977,7 +956,6 @@ static void action(npc_tkj2_class* i_this) {
     }
 }
 
-/* 80B1376C-80B13B38 002A6C 03CC+00 2/1 0/0 0/0 .text daNpc_Tkj2_Execute__FP14npc_tkj2_class */
 static int daNpc_Tkj2_Execute(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp28(0.0f, 0.0f, 0.0f);
@@ -1041,12 +1019,10 @@ static int daNpc_Tkj2_Execute(npc_tkj2_class* i_this) {
     return 1;
 }
 
-/* 80B13B38-80B13B40 002E38 0008+00 1/0 0/0 0/0 .text daNpc_Tkj2_IsDelete__FP14npc_tkj2_class */
 static int daNpc_Tkj2_IsDelete(npc_tkj2_class* i_this) {
     return 1;
 }
 
-/* 80B13B40-80B13BA8 002E40 0068+00 1/0 0/0 0/0 .text daNpc_Tkj2_Delete__FP14npc_tkj2_class */
 static int daNpc_Tkj2_Delete(npc_tkj2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
 
@@ -1063,7 +1039,6 @@ static int daNpc_Tkj2_Delete(npc_tkj2_class* i_this) {
     return 1;
 }
 
-/* 80B13BA8-80B13E20 002EA8 0278+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     npc_tkj2_class* i_this = (npc_tkj2_class*)a_this;
 
@@ -1101,7 +1076,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80B13E68-80B1411C 003168 02B4+00 1/0 0/0 0/0 .text            daNpc_Tkj2_Create__FP10fopAc_ac_c */
 static cPhs__Step daNpc_Tkj2_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, npc_tkj2_class);
     npc_tkj2_class* i_this = (npc_tkj2_class*)a_this;
@@ -1174,7 +1148,6 @@ static cPhs__Step daNpc_Tkj2_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-/* 80B14414-80B14434 -00001 0020+00 1/0 0/0 0/0 .data            l_daNpc_Tkj2_Method */
 static actor_method_class l_daNpc_Tkj2_Method = {
     (process_method_func)daNpc_Tkj2_Create,
     (process_method_func)daNpc_Tkj2_Delete,
@@ -1183,7 +1156,6 @@ static actor_method_class l_daNpc_Tkj2_Method = {
     (process_method_func)daNpc_Tkj2_Draw,
 };
 
-/* 80B14434-80B14464 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_TKJ2 */
 extern actor_process_profile_definition g_profile_NPC_TKJ2 = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

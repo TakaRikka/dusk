@@ -15,8 +15,6 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 80BBC90C-80BBCCFC 0000EC 03F0+00 1/1 0/0 0/0 .text
- * ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c            */
 static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideActor) {
     obj_brg_class* a_this = (obj_brg_class*)i_bgActor;
 
@@ -96,8 +94,6 @@ static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rid
     }
 }
 
-/* 80BBCD38-80BBD740 000518 0A08+00 1/0 0/0 0/0 .text            daObj_Brg_Draw__FP13obj_brg_class
- */
 static int daObj_Brg_Draw(obj_brg_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     g_env_light.settingTevStruct(0x10, &a_this->current.pos, &a_this->tevStr);
@@ -360,8 +356,6 @@ static int daObj_Brg_Draw(obj_brg_class* i_this) {
 /* 80BC2526 0002+00 data_80BC2526 wy */
 static s16 wy;
 
-/* 80BBD740-80BBDA64 000F20 0324+00 1/1 0/0 0/0 .text            control1__FP13obj_brg_classP4br_s
- */
 static void control1(obj_brg_class* i_this, br_s* i_part) {
     cXyz sp84;
     cXyz sp90;
@@ -426,8 +420,6 @@ static void control1(obj_brg_class* i_this, br_s* i_part) {
     }
 }
 
-/* 80BBDA64-80BBDC28 001244 01C4+00 1/1 0/0 0/0 .text            control2__FP13obj_brg_classP4br_s
- */
 static void control2(obj_brg_class* i_this, br_s* i_part) {
     cXyz sp68;
     cXyz sp74;
@@ -462,8 +454,6 @@ static void control2(obj_brg_class* i_this, br_s* i_part) {
     }
 }
 
-/* 80BBDC28-80BBDCE8 001408 00C0+00 1/1 0/0 0/0 .text            control3__FP13obj_brg_classP4br_s
- */
 static void control3(obj_brg_class* i_this, br_s* i_part) {
     f32 var_f31 = i_part->field_0x0b0.x - i_part[1].field_0x0b0.x;
     f32 var_f29 = i_part->field_0x0b0.y - i_part[1].field_0x0b0.y;
@@ -473,7 +463,6 @@ static void control3(obj_brg_class* i_this, br_s* i_part) {
     i_part->field_0x0d4.x = -cM_atan2s(var_f29, JMAFastSqrt(var_f31 * var_f31 + var_f30 * var_f30));
 }
 
-/* 80BBDCE8-80BBE008 0014C8 0320+00 1/1 0/0 0/0 .text cut_control1__FP13obj_brg_classP4br_s */
 static void cut_control1(obj_brg_class* i_this, br_s* i_part) {
     fopAc_ac_c* a_this = i_this;
     cXyz sp7C;
@@ -537,7 +526,6 @@ static void cut_control1(obj_brg_class* i_this, br_s* i_part) {
     }
 }
 
-/* 80BBE008-80BBE338 0017E8 0330+00 1/1 0/0 0/0 .text cut_control2__FP13obj_brg_classP4br_s */
 static void cut_control2(obj_brg_class* i_this, br_s* i_part) {
     cXyz sp7C;
     cXyz sp88;
@@ -598,8 +586,6 @@ static void cut_control2(obj_brg_class* i_this, br_s* i_part) {
     }
 }
 
-/* 80BBE338-80BBE578 001B18 0240+00 1/1 0/0 0/0 .text himo_cut_control1__FP13obj_brg_classP4cXyzf
- */
 static void himo_cut_control1(obj_brg_class* i_this, cXyz* param_1, f32 param_2) {
     cXyz sp74;
     cXyz sp80;
@@ -641,7 +627,6 @@ static void himo_cut_control1(obj_brg_class* i_this, cXyz* param_1, f32 param_2)
     }
 }
 
-/* 80BC23AC-80BC23D8 000008 002C+00 1/1 0/0 0/0 .data            ita_z_p */
 static f32 ita_z_p[] = {
     0.1f,
     0.3f,
@@ -656,7 +641,6 @@ static f32 ita_z_p[] = {
     0.1f,
 };
 
-/* 80BBE578-80BBF21C 001D58 0CA4+00 1/1 0/0 0/0 .text            obj_brg_move__FP13obj_brg_class */
 static void obj_brg_move(obj_brg_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -926,7 +910,6 @@ static void obj_brg_move(obj_brg_class* i_this) {
     }
 }
 
-/* 80BBF21C-80BC0834 0029FC 1618+00 2/1 0/0 0/0 .text daObj_Brg_Execute__FP13obj_brg_class */
 static int daObj_Brg_Execute(obj_brg_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* ply = dComIfGp_getPlayer(0);
@@ -1414,7 +1397,6 @@ static int daObj_Brg_Execute(obj_brg_class* i_this) {
     return 1;
 }
 
-/* 80BC0834-80BC0854 004014 0020+00 1/0 0/0 0/0 .text daObj_Brg_IsDelete__FP13obj_brg_class */
 static int daObj_Brg_IsDelete(obj_brg_class* i_this) {
     br_s* part = i_this->mBr;
 
@@ -1425,8 +1407,6 @@ static int daObj_Brg_IsDelete(obj_brg_class* i_this) {
     return 1;
 }
 
-/* 80BC0854-80BC08B0 004034 005C+00 1/0 0/0 0/0 .text            daObj_Brg_Delete__FP13obj_brg_class
- */
 static int daObj_Brg_Delete(obj_brg_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Obj_brg");
 
@@ -1437,7 +1417,6 @@ static int daObj_Brg_Delete(obj_brg_class* i_this) {
     return 1;
 }
 
-/* 80BC08B0-80BC0A40 004090 0190+00 1/1 0/0 0/0 .text            CreateInit__FP10fopAc_ac_c */
 static void CreateInit(fopAc_ac_c* i_this) {
     obj_brg_class* a_this = (obj_brg_class*)i_this;
 
@@ -1505,8 +1484,6 @@ static void CreateInit(fopAc_ac_c* i_this) {
     }
 }
 
-/* 80BC0A40-80BC1050 004220 0610+00 1/1 0/0 0/0 .text            CallbackCreateHeap__FP10fopAc_ac_c
- */
 static int CallbackCreateHeap(fopAc_ac_c* i_this) {
     obj_brg_class* a_this = (obj_brg_class*)i_this;
 
@@ -1650,7 +1627,6 @@ static int CallbackCreateHeap(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80BC1050-80BC1D74 004830 0D24+00 1/0 0/0 0/0 .text            daObj_Brg_Create__FP10fopAc_ac_c */
 static int daObj_Brg_Create(fopAc_ac_c* i_this) {
     obj_brg_class* a_this = (obj_brg_class*)i_this;
     int phase_state;
@@ -1841,7 +1817,6 @@ static int daObj_Brg_Create(fopAc_ac_c* i_this) {
 
 AUDIO_INSTANCES;
 
-/* 80BC2460-80BC2480 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Brg_Method */
 static actor_method_class l_daObj_Brg_Method = {
     (process_method_func)daObj_Brg_Create,
     (process_method_func)daObj_Brg_Delete,
@@ -1850,7 +1825,6 @@ static actor_method_class l_daObj_Brg_Method = {
     (process_method_func)daObj_Brg_Draw,
 };
 
-/* 80BC2480-80BC24B0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_BRG */
 extern actor_process_profile_definition g_profile_OBJ_BRG = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

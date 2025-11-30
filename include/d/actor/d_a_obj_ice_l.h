@@ -15,17 +15,17 @@
  */
 class daObjIce_l_c : public dBgS_MoveBgActor {
 public:
-    /* 80C1F9F8 */ void RideOn_Angle(s16&, f32, s16, f32);
-    /* 80C1FA60 */ int Check_RideOn(cXyz);
-    /* 80C1FCCC */ void initBaseMtx();
-    /* 80C1FCF8 */ void setBaseMtx();
-    /* 80C200CC */ int create();
+    void RideOn_Angle(s16&, f32, s16, f32);
+    int Check_RideOn(cXyz);
+    void initBaseMtx();
+    void setBaseMtx();
+    int create();
     
-    /* 80C2030C */ virtual int CreateHeap();
-    /* 80C20384 */ virtual int Create();
-    /* 80C203C4 */ virtual int Execute(Mtx**);
-    /* 80C206AC */ virtual int Draw();
-    /* 80C20750 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     /* 0x5A0 */ f32 field_0x5a0;
     /* 0x5A4 */ f32 field_0x5a4;

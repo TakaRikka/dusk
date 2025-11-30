@@ -6,8 +6,8 @@
 
 class dOvlpFd3_dlst_c : public dDlst_base_c {
 public:
-    /* 80252F28 */ virtual void draw();
-    /* 802538E8 */ virtual ~dOvlpFd3_dlst_c() {}
+    virtual void draw();
+    virtual ~dOvlpFd3_dlst_c() {}
 
     MtxP getMtx() { return mMtx; }
     void entry() { dComIfGd_set2DXlu(this); }
@@ -17,11 +17,11 @@ public:
 
 class dOvlpFd3_c : public overlap_task_class {
 public:
-    /* 8025343C */ dOvlpFd3_c();
-    /* 80253518 */ void execFirstSnap();
-    /* 802535AC */ void execFadeOut();
-    /* 8025368C */ void execNextSnap();
-    /* 80253730 */ void execFadeIn();
+    dOvlpFd3_c();
+    void execFirstSnap();
+    void execFadeOut();
+    void execNextSnap();
+    void execFadeIn();
 
     inline void draw();
     inline void execute();

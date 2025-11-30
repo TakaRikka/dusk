@@ -23,15 +23,15 @@ public:
         TYPE_4,
     };
 
-    /* 80CAACE0 */ int create1st();
-    /* 80CAAE80 */ void setMtx();
-    /* 80CAAF90 */ void rideActor(fopAc_ac_c*);
-    /* 80CAB1F0 */ int CreateHeap();
-    /* 80CAB258 */ int Create();
-    /* 80CAB374 */ int Execute(Mtx**);
-    /* 80CABF50 */ int Draw();
-    /* 80CAC094 */ int Delete();
-    /* 80CAC374 */ virtual ~daObjPDtile_c() {}
+    int create1st();
+    void setMtx();
+    void rideActor(fopAc_ac_c*);
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
+    virtual ~daObjPDtile_c() {}
 
     u8 getType() { return fopAcM_GetParamBit(this, 0, 4); }
 

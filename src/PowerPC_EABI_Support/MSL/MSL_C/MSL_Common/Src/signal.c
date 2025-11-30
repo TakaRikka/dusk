@@ -3,10 +3,8 @@
 
 #define __std(ref) ref
 
-/* 8044D878-8044D890 07A598 0018+00 1/1 0/0 0/0 .bss             signal_funcs */
 __signal_func_ptr signal_funcs[6];
 
-/* 8036881C-803688DC 36315C 00C0+00 0/0 1/1 0/0 .text            raise */
 int raise(int sig) {
     __signal_func_ptr signal_func;
 

@@ -14,14 +14,14 @@ struct daObjFlag3_Attr_c {
 
 class FlagCloth2_c : public J3DPacket {
 public:
-    /* 80BEEDE4 */ void execute();
-    /* 80BEEF74 */ inline void calcFlagNormal(cXyz*, int);
+    void execute();
+    inline void calcFlagNormal(cXyz*, int);
     inline static void initCcSphere(fopAc_ac_c*);
-    /* 80BEF278 */ inline cXyz calcFlagFactor(cXyz*, cXyz*, cXyz*, int);
-    /* 80BEF790 */ virtual ~FlagCloth2_c();
-    /* 80BEFD08 */ inline void initFlagPos(cXyz*, fopAc_ac_c*);
-    /* 80BF00A0 */ virtual void draw();
-    /* 80BF0434 */ cXyz getTargetPos() { return mPositions[4]; }
+    inline cXyz calcFlagFactor(cXyz*, cXyz*, cXyz*, int);
+    virtual ~FlagCloth2_c();
+    inline void initFlagPos(cXyz*, fopAc_ac_c*);
+    virtual void draw();
+    cXyz getTargetPos() { return mPositions[4]; }
 
     void calcFlagNormalBack() {
         cXyz* pNormal = getNormal();
@@ -85,11 +85,11 @@ public:
  */
 class daObjFlag3_c : public fopAc_ac_c {
 public:
-    /* 80BEEA78 */ int createHeap();
-    /* 80BEED3C */ int execute();
-    /* 80BEF700 */ ~daObjFlag3_c();
-    /* 80BEF95C */ int create();
-    /* 80BEFBC4 */ inline void create_init();
+    int createHeap();
+    int execute();
+    ~daObjFlag3_c();
+    int create();
+    inline void create_init();
     inline int draw();
     inline void initBaseMtx();
 

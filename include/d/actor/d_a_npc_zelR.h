@@ -22,7 +22,7 @@ class daNpc_ZelR_HIO_c : public mDoHIO_entry_c {
 
 class daNpc_ZelR_Param_c {
 public:
-    /* 80B71A74 */ virtual ~daNpc_ZelR_Param_c() {};
+    virtual ~daNpc_ZelR_Param_c() {};
 
     static const daNpc_ZelR_HIOParam m;
 };
@@ -37,48 +37,48 @@ public:
         TYPE_1,
     };
 
-    /* 80B6EE2C */ ~daNpc_ZelR_c();
-    /* 80B6EF64 */ int create();
-    /* 80B6F1F8 */ int CreateHeap();
-    /* 80B6F664 */ int Delete();
-    /* 80B6F698 */ int Execute();
-    /* 80B6F6B8 */ int Draw();
-    /* 80B6F77C */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B6F79C */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B6F7F4 */ u8 getType();
-    /* 80B6F814 */ u32 getFlowNodeNo();
-    /* 80B6F830 */ u8 getPath();
-    /* 80B6F83C */ int isDelete();
-    /* 80B6F894 */ void reset();
-    /* 80B6FA10 */ void afterJntAnm(int);
-    /* 80B6FA9C */ BOOL ctrlBtk();
-    /* 80B6FBA8 */ void setParam();
-    /* 80B6FC9C */ void setAfterTalkMotion();
-    /* 80B6FCFC */ void srchActors();
-    /* 80B6FD00 */ BOOL evtTalk();
-    /* 80B6FE00 */ BOOL evtCutProc();
-    /* 80B6FEC8 */ void action();
-    /* 80B70018 */ void beforeMove();
-    /* 80B70090 */ void setAttnPos();
-    /* 80B702B0 */ void setCollision();
-    /* 80B703E0 */ int drawDbgInfo();
-    /* 80B703E8 */ int selectAction();
-    /* 80B70430 */ int chkAction(int (daNpc_ZelR_c::*)(void*));
-    /* 80B7045C */ int setAction(int (daNpc_ZelR_c::*)(void*));
-    /* 80B70504 */ int wait(void*);
-    /* 80B706B0 */ BOOL talk(void*);
-    /* 80B71974 */ daNpc_ZelR_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
+    ~daNpc_ZelR_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    u32 getFlowNodeNo();
+    u8 getPath();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    BOOL ctrlBtk();
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    int selectAction();
+    int chkAction(int (daNpc_ZelR_c::*)(void*));
+    int setAction(int (daNpc_ZelR_c::*)(void*));
+    int wait(void*);
+    BOOL talk(void*);
+    daNpc_ZelR_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
                                 daNpcT_evtData_c const* param_7, char** param_8) :
                                 daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8)
                                  {}
-    /* 80B71A34 */ u16 getEyeballRMaterialNo() { return 3; }
-    /* 80B71A3C */ u16 getEyeballLMaterialNo() { return 2; }
-    /* 80B71A44 */ s32 getHeadJointNo() { return 3; }
-    /* 80B71A4C */ s32 getBackboneJointNo() { return 1; }
-    /* 80B71A54 */ BOOL checkChangeJoint(int param_1) { return param_1 == 3; };
-    /* 80B71A64 */ BOOL checkRemoveJoint(int param_1) { return param_1 == 13; };
+    u16 getEyeballRMaterialNo() { return 3; }
+    u16 getEyeballLMaterialNo() { return 2; }
+    s32 getHeadJointNo() { return 3; }
+    s32 getBackboneJointNo() { return 1; }
+    BOOL checkChangeJoint(int param_1) { return param_1 == 3; };
+    BOOL checkRemoveJoint(int param_1) { return param_1 == 13; };
 
     static char* mCutNameList;
     static EventFn mCutList[1];

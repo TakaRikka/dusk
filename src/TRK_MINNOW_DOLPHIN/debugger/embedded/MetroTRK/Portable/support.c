@@ -3,7 +3,6 @@
 #include "TRK_MINNOW_DOLPHIN/MetroTRK/Portable/msgbuf.h"
 #include <string.h>
 
-/* 8036F278-8036F498 369BB8 0220+00 0/0 1/1 0/0 .text            TRKSuppAccessFile */
 DSError TRKSuppAccessFile(u32 file_handle, u8* data, size_t* count, DSIOResult* io_result,
                           BOOL need_reply, BOOL read) {
     DSError error;
@@ -91,7 +90,6 @@ DSError TRKSuppAccessFile(u32 file_handle, u8* data, size_t* count, DSIOResult* 
     return error;
 }
 
-/* 8036F098-8036F278 3699D8 01E0+00 4/4 1/1 0/0 .text            TRKRequestSend */
 DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 p1, u32 p2, int p3) {
     int error = DS_NoError;
     TRKBuffer* buffer;
@@ -169,7 +167,6 @@ DSError TRKRequestSend(TRKBuffer* msgBuf, int* bufferId, u32 p1, u32 p2, int p3)
     return error;
 }
 
-/* 8036EF7C-8036F098 3698BC 011C+00 0/0 1/1 0/0 .text            HandleOpenFileSupportRequest */
 DSError HandleOpenFileSupportRequest(const char* path, u8 replyError, u32* param_3,
                                      DSIOResult* ioResult) {
     DSError error;
@@ -208,7 +205,6 @@ DSError HandleOpenFileSupportRequest(const char* path, u8 replyError, u32* param
     return error;
 }
 
-/* 8036EE94-8036EF7C 3697D4 00E8+00 0/0 1/1 0/0 .text            HandleCloseFileSupportRequest */
 DSError HandleCloseFileSupportRequest(int replyError, DSIOResult* ioResult) {
     DSError error;
     int replyBufferId;
@@ -246,7 +242,6 @@ DSError HandleCloseFileSupportRequest(int replyError, DSIOResult* ioResult) {
     return error;
 }
 
-/* 8036ED84-8036EE94 3696C4 0110+00 0/0 1/1 0/0 .text            HandlePositionFileSupportRequest */
 DSError HandlePositionFileSupportRequest(DSReplyError replyErr, u32* param_2, u8 param_3,
                                          DSIOResult* ioResult) {
     DSError error;

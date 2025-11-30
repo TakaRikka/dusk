@@ -29,40 +29,40 @@ public:
         ACTION_DEAD2_e,
     };
 
-    /* 80D26FA8 */ void initBaseMtx();
-    /* 80D27008 */ void setBaseMtx();
-    /* 80D276B4 */ int create1st();
-    /* 80D27890 */ void event_proc_call();
-    /* 80D27A38 */ void orderZHintEvent();
-    /* 80D27B2C */ void actionWait();
-    /* 80D27C6C */ void actionOrderEvent();
-    /* 80D27E08 */ void actionWaitWarpEvent();
-    /* 80D27ED0 */ void actionOrderATalkEvent();
-    /* 80D28040 */ void actionTalkEvent();
-    /* 80D280CC */ void actionWarpEvent();
-    /* 80D28144 */ void actionDead();
-    /* 80D28148 */ void actionWait2();
-    /* 80D2814C */ void actionOrderEvent2();
-    /* 80D281E4 */ void actionWarpEvent2();
-    /* 80D28248 */ void actionDead2();
-    /* 80D2824C */ void demoProc();
-    /* 80D28A50 */ void calcObjPos();
-    /* 80D28AE0 */ bool checkTalkDistance();
-    /* 80D28B7C */ void calcMidnaWaitPos();
-    /* 80D28C10 */ void setBindEffect();
-    /* 80D28CDC */ void followBindEffect();
-    /* 80D28D4C */ void setSrcEffect();
-    /* 80D28E9C */ void setDstEffect();
-    /* 80D28FEC */ void followSrcEffect();
-    /* 80D290A8 */ void followDstEffect();
-    /* 80D29158 */ void endSrcEffect();
-    /* 80D291FC */ void endDstEffect();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
+    void event_proc_call();
+    void orderZHintEvent();
+    void actionWait();
+    void actionOrderEvent();
+    void actionWaitWarpEvent();
+    void actionOrderATalkEvent();
+    void actionTalkEvent();
+    void actionWarpEvent();
+    void actionDead();
+    void actionWait2();
+    void actionOrderEvent2();
+    void actionWarpEvent2();
+    void actionDead2();
+    void demoProc();
+    void calcObjPos();
+    bool checkTalkDistance();
+    void calcMidnaWaitPos();
+    void setBindEffect();
+    void followBindEffect();
+    void setSrcEffect();
+    void setDstEffect();
+    void followSrcEffect();
+    void followDstEffect();
+    void endSrcEffect();
+    void endDstEffect();
 
-    /* 80D27300 */ virtual int CreateHeap();
-    /* 80D270C4 */ virtual int Create();
-    /* 80D2781C */ virtual int Execute(Mtx**);
-    /* 80D292A0 */ virtual int Draw();
-    /* 80D29448 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getNameArg() { return fopAcM_GetParamBit(this, 31, 2); }
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }

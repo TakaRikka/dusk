@@ -18,7 +18,6 @@
 #include "d/d_debug_viewer.h"
 #endif
 
-/* 80D156D4-80D15794 000000 00C0+00 1/1 0/0 0/0 .data            r05yuka_image */
 static s8 r05yuka_image[192] = {
     0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -34,7 +33,6 @@ static s8 r05yuka_image[192] = {
     0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 80D15794-80D15854 0000C0 00C0+00 1/1 0/0 0/0 .data            r11yuka_image */
 static s8 r11yuka_image[192] = {
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -52,8 +50,8 @@ static s8 r11yuka_image[192] = {
 
 class daObj_Toby_HIO_c : public JORReflexible{
 public:
-    /* 80D1378C */ daObj_Toby_HIO_c();
-    /* 80D15534 */ virtual ~daObj_Toby_HIO_c() {}
+    daObj_Toby_HIO_c();
+    virtual ~daObj_Toby_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -61,14 +59,11 @@ public:
     /* 0x8 */ f32 field_0x8;
 };
 
-/* 80D1378C-80D137B0 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__16daObj_Toby_HIO_cFv */
 daObj_Toby_HIO_c::daObj_Toby_HIO_c() {
     field_0x4 = -1;
     field_0x8 = 1.0f;
 }
 
-/* 80D137B0-80D13870 000110 00C0+00 1/0 0/0 0/0 .text            daObj_Toby_Draw__FP14obj_toby_class
- */
 static int daObj_Toby_Draw(obj_toby_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mBase;
     g_env_light.settingTevStruct(0x10, &a_this->current.pos, &a_this->tevStr);
@@ -111,7 +106,6 @@ static int daObj_Toby_Draw(obj_toby_class* i_this) {
     return 1;
 }
 
-/* 80D13870-80D139FC 0001D0 018C+00 1/1 0/0 0/0 .text            s_bomb_sub__FPvPv */
 static void* s_bomb_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1)) {
         fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
@@ -128,7 +122,6 @@ static void* s_bomb_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80D13A38-80D13ABC 000398 0084+00 1/1 0/0 0/0 .text            shot_b_sub__FPvPv */
 static void* shot_b_sub(void* param_1, void* param_2) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (fopAcM_IsActor(param_1)) {
@@ -145,21 +138,16 @@ static void* shot_b_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80D158F4-80D158F8 -00001 0004+00 2/2 0/0 0/0 .bss             None */
 /* 80D158F4 0001+00 data_80D158F4 @1009 */
 /* 80D158F5 0003+00 data_80D158F5 None */
 static u8 l_HIOInit;
 
-/* 80D15904-80D15910 000054 000C+00 2/2 0/0 0/0 .bss             l_HIO */
 static daObj_Toby_HIO_c l_HIO;
 
-/* 80D15910-80D15914 000060 0004+00 1/2 0/0 0/0 .bss             hz_check_pos_x */
 static f32 hz_check_pos_x;
 
-/* 80D15914-80D15918 000064 0004+00 1/2 0/0 0/0 .bss             hz_check_pos_z */
 static f32 hz_check_pos_z;
 
-/* 80D13ABC-80D13B58 00041C 009C+00 1/1 0/0 0/0 .text            s_hz_sub__FPvPv */
 static void* s_hz_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1)) {
         if (fopAcM_GetName(param_1) == PROC_E_HZ) {
@@ -177,7 +165,6 @@ static void* s_hz_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80D13B58-80D1417C 0004B8 0624+00 1/1 0/0 0/0 .text yuka_ground__FP14obj_toby_classP6yuka_s */
 static void yuka_ground(obj_toby_class* i_this, yuka_s* pYuka) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mBase;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -275,7 +262,6 @@ static void yuka_ground(obj_toby_class* i_this, yuka_s* pYuka) {
     }
 }
 
-/* 80D1417C-80D14264 000ADC 00E8+00 1/1 0/0 0/0 .text yuka_fly__FP14obj_toby_classP6yuka_s */
 static void yuka_fly(obj_toby_class* i_this, yuka_s* pYuka) {
     pYuka->mAngle += pYuka->mAngleSpeed;
     pYuka->mPos += pYuka->mSpeed;
@@ -289,7 +275,6 @@ static void yuka_fly(obj_toby_class* i_this, yuka_s* pYuka) {
     pYuka->mParticle = dComIfGp_particle_set(pYuka->mParticle, 0x8343, &pYuka->mPos, 0, 0);
 }
 
-/* 80D14264-80D14384 000BC4 0120+00 1/1 0/0 0/0 .text yuka_mtxset__FP14obj_toby_classP6yuka_s */
 static void yuka_mtxset(obj_toby_class* i_this, yuka_s* pYuka) {
     mDoMtx_stack_c::transS(pYuka->mPos.x, pYuka->mPos.y, pYuka->mPos.z);
     mDoMtx_stack_c::YrotM(pYuka->mAngle.y);
@@ -306,7 +291,6 @@ static void yuka_mtxset(obj_toby_class* i_this, yuka_s* pYuka) {
     }
 }
 
-/* 80D14384-80D14584 000CE4 0200+00 1/1 0/0 0/0 .text            yuka_control__FP14obj_toby_class */
 static void yuka_control(obj_toby_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     yuka_s* pYuka = i_this->mYukas;
@@ -340,7 +324,6 @@ static void yuka_control(obj_toby_class* i_this) {
     }
 }
 
-/* 80D14584-80D14810 000EE4 028C+00 1/1 0/0 0/0 .text            demo_camera__FP14obj_toby_class */
 static void demo_camera(obj_toby_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
@@ -393,7 +376,6 @@ static void demo_camera(obj_toby_class* i_this) {
     }
 }
 
-/* 80D14810-80D14884 001170 0074+00 2/1 0/0 0/0 .text daObj_Toby_Execute__FP14obj_toby_class */
 static int daObj_Toby_Execute(obj_toby_class* i_this) {
     i_this->field_0x580++;
     for (int i = 0; i < 2; i++) {
@@ -406,12 +388,10 @@ static int daObj_Toby_Execute(obj_toby_class* i_this) {
     return 1;
 }
 
-/* 80D14884-80D1488C 0011E4 0008+00 1/0 0/0 0/0 .text daObj_Toby_IsDelete__FP14obj_toby_class */
 static int daObj_Toby_IsDelete(obj_toby_class* param_0) {
     return 1;
 }
 
-/* 80D1488C-80D149DC 0011EC 0150+00 1/0 0/0 0/0 .text daObj_Toby_Delete__FP14obj_toby_class */
 static int daObj_Toby_Delete(obj_toby_class* i_this) {
     static int const l_bmdidx[2] = {4, 5};
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
@@ -442,7 +422,6 @@ static int daObj_Toby_Delete(obj_toby_class* i_this) {
     return 1;
 }
 
-/* 80D149DC-80D14BD4 00133C 01F8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_toby_class* i_this = (obj_toby_class*)a_this;
     void* modelData;
@@ -491,8 +470,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80D14BD4-80D14CFC 001534 0128+00 1/1 0/0 0/0 .text            set_pos_check__FP14obj_toby_classi
- */
 static int set_pos_check(obj_toby_class* i_this, int param_2) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     for (int i = 0; i < param_2; i++) {
@@ -514,8 +491,6 @@ static int set_pos_check(obj_toby_class* i_this, int param_2) {
     return 1;
 }
 
-/* 80D14CFC-80D154F4 00165C 07F8+00 1/0 0/0 0/0 .text            daObj_Toby_Create__FP10fopAc_ac_c
- */
 static int daObj_Toby_Create(fopAc_ac_c* a_this) {
     static u32 const l_bmdidx[2] = {4, 5};
 
@@ -722,7 +697,6 @@ static int daObj_Toby_Create(fopAc_ac_c* a_this) {
 
 AUDIO_INSTANCES;
 
-/* 80D15854-80D15874 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Toby_Method */
 static actor_method_class l_daObj_Toby_Method = {
     (process_method_func)daObj_Toby_Create,
     (process_method_func)daObj_Toby_Delete,
@@ -731,7 +705,6 @@ static actor_method_class l_daObj_Toby_Method = {
     (process_method_func)daObj_Toby_Draw,
 };
 
-/* 80D15874-80D158A4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_TOBY */
 extern actor_process_profile_definition g_profile_OBJ_TOBY = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

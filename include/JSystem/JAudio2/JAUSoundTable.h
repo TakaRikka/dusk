@@ -145,9 +145,9 @@ struct JAUSoundTable : public JASGlobalInstance<JAUSoundTable> {
     }
     ~JAUSoundTable() {}
     
-    /* 802A7114 */ void init(void const*);
-    /* 802A7160 */ u8 getTypeID(JAISoundID) const;
-    /* 802A728C */ JAUSoundTableItem* getData(JAISoundID) const;
+    void init(void const*);
+    u8 getTypeID(JAISoundID) const;
+    JAUSoundTableItem* getData(JAISoundID) const;
 
     JAUSoundTableItem* getItem(JAUSoundTableGroup* group, int index) const {
         u32 offset = group->getItemOffset(index);
@@ -192,7 +192,7 @@ struct JAUSoundNameTable : public JASGlobalInstance<JAUSoundNameTable> {
     JAUSoundNameTable(bool param_0) : JASGlobalInstance<JAUSoundNameTable>(param_0) {
     }
     ~JAUSoundNameTable() {}
-    /* 802A73D4 */ void init(void const*);
+    void init(void const*);
 
     JAUSoundTable_<JAUSoundNameTableRoot,JAUSoundNameTableSection,JAUSoundNameTableGroup,void> field_0x0;
 };

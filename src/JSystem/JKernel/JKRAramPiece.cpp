@@ -6,8 +6,6 @@
 #include "JSystem/JUtility/JUTException.h"
 #include "dolphin/os.h"
 
-/* 802D3574-802D35F4 2CDEB4 0080+00 1/1 0/0 0/0 .text
- * prepareCommand__12JKRAramPieceFiUlUlUlP12JKRAramBlockPFUl_v  */
 JKRAMCommand* JKRAramPiece::prepareCommand(int direction, u32 src, u32 dst, u32 length,
                                            JKRAramBlock* block,
                                            JKRAMCommand::AsyncCallback callback) {
@@ -21,21 +19,15 @@ JKRAMCommand* JKRAramPiece::prepareCommand(int direction, u32 src, u32 dst, u32 
     return command;
 }
 
-/* 802D35F4-802D3614 2CDF34 0020+00 0/0 1/1 0/0 .text sendCommand__12JKRAramPieceFP12JKRAMCommand
- */
 void JKRAramPiece::sendCommand(JKRAMCommand* command) {
     startDMA(command);
 }
 
-/* 80434324-80434330 061044 000C+00 3/3 0/0 0/0 .bss sAramPieceCommandList__12JKRAramPiece */
 // JSUList<JKRAMCommand> JKRAramPiece::sAramPieceCommandList;
 JSUList<JKRAMCommand> JKRAramPiece::sAramPieceCommandList;
 
-/* 80434330-80434348 061050 0018+00 3/3 0/0 0/0 .bss             mMutex__12JKRAramPiece */
 OSMutex JKRAramPiece::mMutex;
 
-/* 802D3614-802D3770 2CDF54 015C+00 1/1 0/0 0/0 .text
- * orderAsync__12JKRAramPieceFiUlUlUlP12JKRAramBlockPFUl_v      */
 JKRAMCommand* JKRAramPiece::orderAsync(int direction, u32 source, u32 destination, u32 length,
                                        JKRAramBlock* block, JKRAMCommand::AsyncCallback callback) {
     lock();
@@ -62,7 +54,6 @@ JKRAMCommand* JKRAramPiece::orderAsync(int direction, u32 source, u32 destinatio
     return command;
 }
 
-/* 802D3770-802D3838 2CE0B0 00C8+00 1/1 0/0 0/0 .text sync__12JKRAramPieceFP12JKRAMCommandi */
 BOOL JKRAramPiece::sync(JKRAMCommand* command, int is_non_blocking) {
     OSMessage message;
 
@@ -85,8 +76,6 @@ BOOL JKRAramPiece::sync(JKRAMCommand* command, int is_non_blocking) {
     return TRUE;
 }
 
-/* 802D3838-802D38CC 2CE178 0094+00 0/0 6/6 0/0 .text
- * orderSync__12JKRAramPieceFiUlUlUlP12JKRAramBlock             */
 BOOL JKRAramPiece::orderSync(int direction, u32 source, u32 destination, u32 length,
                              JKRAramBlock* block) {
     lock();
@@ -100,7 +89,6 @@ BOOL JKRAramPiece::orderSync(int direction, u32 source, u32 destination, u32 len
     return result;
 }
 
-/* 802D38CC-802D3944 2CE20C 0078+00 1/1 1/1 0/0 .text startDMA__12JKRAramPieceFP12JKRAMCommand */
 void JKRAramPiece::startDMA(JKRAMCommand* command) {
     if (command->mTransferDirection == 1) {
         DCInvalidateRange((void*)command->mDst, command->mDataLength);
@@ -112,7 +100,6 @@ void JKRAramPiece::startDMA(JKRAMCommand* command) {
                    command->mDst, command->mDataLength, JKRAramPiece::doneDMA);
 }
 
-/* 802D3944-802D39EC 2CE284 00A8+00 1/1 0/0 0/0 .text            doneDMA__12JKRAramPieceFUl */
 void JKRAramPiece::doneDMA(u32 requestAddress) {
     JKRAMCommand* command = (JKRAMCommand*)requestAddress;
 
@@ -136,7 +123,6 @@ void JKRAramPiece::doneDMA(u32 requestAddress) {
     }
 }
 
-/* 802D39EC-802D3A5C 2CE32C 0070+00 1/1 0/0 0/0 .text            __ct__12JKRAMCommandFv */
 JKRAMCommand::JKRAMCommand() : mPieceLink(this), field_0x30(this) {
     OSInitMessageQueue(&mMessageQueue, &mMessage, 1);
     mCallback = NULL;
@@ -147,7 +133,6 @@ JKRAMCommand::JKRAMCommand() : mPieceLink(this), field_0x30(this) {
     field_0x94 = NULL;
 }
 
-/* 802D3A5C-802D3B04 2CE39C 00A8+00 1/1 0/0 0/0 .text            __dt__12JKRAMCommandFv */
 JKRAMCommand::~JKRAMCommand() {
     if (field_0x8C)
         delete field_0x8C;

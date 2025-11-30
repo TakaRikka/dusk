@@ -4,31 +4,31 @@
 #include "SSystem/SComponent/c_angle.h"
 
 struct dCamMath {
-    /* 8008813C */ static f32 rationalBezierRatio(f32, f32);
-    /* 80088284 */ static f32 zoomFovy(f32, f32);
-    /* 8008831C */ static cXyz xyzRotateX(cXyz&, cSAngle);
-    /* 80088384 */ static cXyz xyzRotateY(cXyz&, cSAngle);
-    /* 800883EC */ static f32 xyzHorizontalDistance(cXyz&, cXyz&);
+    static f32 rationalBezierRatio(f32, f32);
+    static f32 zoomFovy(f32, f32);
+    static cXyz xyzRotateX(cXyz&, cSAngle);
+    static cXyz xyzRotateY(cXyz&, cSAngle);
+    static f32 xyzHorizontalDistance(cXyz&, cXyz&);
 };
 
 class dCstick_c {
 public:
-    /* 80088434 */ dCstick_c();
-    /* 8008845C */ bool Shift(u32);
+    dCstick_c();
+    bool Shift(u32);
 
     /* 0x0 */ f32 mThresholdLow;
     /* 0x4 */ f32 mThresholdHigh;
     /* 0x8 */ int mInputSpeed;
     /* 0xC */ u8 field_0xc[4];
 
-    /* 800889B0 */ virtual ~dCstick_c() {}
+    virtual ~dCstick_c() {}
 
     f32 SwTHH() { return mThresholdHigh; }
 };
 
 class dCamBGChk_c {
 public:
-    /* 80088464 */ dCamBGChk_c();
+    dCamBGChk_c();
 
     f32 WallUpDistance() { return mWallUpDistance; }
     f32 FwdDistance(s32 param_0) { return mChkInfo[param_0].mDistance; }
@@ -80,20 +80,20 @@ struct dCamStyleData {
 
 class dCamParam_c {
 public:
-    /* 800884F0 */ dCamParam_c(s32);
-    /* 800885D4 */ int Change(s32);
-    /* 80088620 */ int SearchStyle(u32);
+    dCamParam_c(s32);
+    int Change(s32);
+    int SearchStyle(u32);
 
-    /* 80182C60 */ void Arg2(s16 val) { mMapToolArg2 = val; }
-    /* 80182C3C */ s16 Arg2() { return mMapToolArg2; }
-    /* 80182C48 */ u8 Arg1() { return mMapToolArg1; }
-    /* 80182C6C */ void Arg1(u8 val) { mMapToolArg1 = val; }
-    /* 80182C50 */ u8 Arg0() { return mMapToolArg0; }
-    /* 80182C74 */ void Arg0(u8 val) { mMapToolArg0 = val; }
-    /* 80182C7C */ void Fovy(u8 val) { mMapToolFovy = val; }
-    /* 80182C58 */ u8 Fovy() { return mMapToolFovy; }
-    /* 80182CB4 */ bool CheckFlag(u16 flag) { return (flag & mCurrentStyle->field_0x6) != 0; }
-    /* 80182CD0 */ f32 Val(s32 param_0, int param_1) {
+    void Arg2(s16 val) { mMapToolArg2 = val; }
+    s16 Arg2() { return mMapToolArg2; }
+    u8 Arg1() { return mMapToolArg1; }
+    void Arg1(u8 val) { mMapToolArg1 = val; }
+    u8 Arg0() { return mMapToolArg0; }
+    void Arg0(u8 val) { mMapToolArg0 = val; }
+    void Fovy(u8 val) { mMapToolFovy = val; }
+    u8 Fovy() { return mMapToolFovy; }
+    bool CheckFlag(u16 flag) { return (flag & mCurrentStyle->field_0x6) != 0; }
+    f32 Val(s32 param_0, int param_1) {
         return mCamStyleData[param_0].field_0x8[param_1];
     }
     void SetVal(s32 param_0, int param_1, f32 i_value) {
@@ -116,25 +116,25 @@ public:
     u16 Flag(s32 param_0, u16 param_1) { return mCamStyleData[param_0].field_0x6 & param_1; }
     void SetFlag(u16 i_flag) { mCurrentStyle->field_0x6 |= i_flag; }
 
-    /* 8008858C */ virtual ~dCamParam_c();
+    virtual ~dCamParam_c();
 };
 
 class dCamSetup_c {
 public:
-    /* 80088668 */ dCamSetup_c();
-    /* 80088918 */ bool CheckLatitudeRange(s16*);
-    /* 80088988 */ f32 PlayerHideDist();
+    dCamSetup_c();
+    bool CheckLatitudeRange(s16*);
+    f32 PlayerHideDist();
 
-    /* 80182BB8 */ bool CheckFlag2(u16 i_flag) { return (i_flag & mFlags2) != 0; }
-    /* 80182BE8 */ f32 WaitRollSpeed() { return mWaitRollSpeed; }
-    /* 80182BF0 */ int WaitRollTimer() { return mWaitRollTimer; }
-    /* 80182C1C */ int ThrowTimer() { return mThrowTimer; }
-    /* 80182C24 */ f32 ThrowCushion() { return mThrowCushion; }
-    /* 80182C2C */ f32 ThrowVAngle() { return mThrowVAngle; }
-    /* 80182C34 */ f32 ThrowCtrAdjust() { return mThrowCtrOffset; }
-    /* 80182CEC */ f32 ChargeBRatio() { return mChargeBRatio; }
-    /* 80182CF4 */ int ChargeTimer() { return mChargeTimer; }
-    /* 80182CFC */ f32 ChargeLatitude() { return mChargeLatitude; }
+    bool CheckFlag2(u16 i_flag) { return (i_flag & mFlags2) != 0; }
+    f32 WaitRollSpeed() { return mWaitRollSpeed; }
+    int WaitRollTimer() { return mWaitRollTimer; }
+    int ThrowTimer() { return mThrowTimer; }
+    f32 ThrowCushion() { return mThrowCushion; }
+    f32 ThrowVAngle() { return mThrowVAngle; }
+    f32 ThrowCtrAdjust() { return mThrowCtrOffset; }
+    f32 ChargeBRatio() { return mChargeBRatio; }
+    int ChargeTimer() { return mChargeTimer; }
+    f32 ChargeLatitude() { return mChargeLatitude; }
 
     bool CheckFlag(u16 i_flag) { return (i_flag & mDebugFlags) != 0; }
     f32 ManualEndVal() { return mManualEndVal; }
@@ -223,7 +223,7 @@ public:
     /* 0x0F8 */ f32 field_0xf8;
     /* 0x0FC vtable */
 
-    /* 800888B8 */ virtual ~dCamSetup_c();
+    virtual ~dCamSetup_c();
 
     /* 0x100 */ dCstick_c mCStick;
     /* 0x114 */ dCamBGChk_c mBGChk;

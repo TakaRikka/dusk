@@ -14,15 +14,15 @@
  */
 class daTkraDai_c : public dBgS_MoveBgActor {
 public:
-    /* 80D06E64 */ void setBaseMtx();
-    /* 80D06FFC */ int CreateHeap();
-    /* 80D07140 */ int create();
-    /* 80D07344 */ int Execute(Mtx**);
-    /* 80D073A4 */ void procMain();
-    /* 80D074D0 */ void init_modeWait();
-    /* 80D07528 */ void modeWait();
-    /* 80D075A4 */ int Draw();
-    /* 80D07668 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    void procMain();
+    void init_modeWait();
+    void modeWait();
+    int Draw();
+    int Delete();
 
     u32 getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
 
@@ -62,8 +62,8 @@ STATIC_ASSERT(sizeof(daTkraDai_c) == 0x65c);
 
 class daTkraDai_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80D06D8C */ daTkraDai_HIO_c();
-    /* 80D0775C */ virtual ~daTkraDai_HIO_c() {}
+    daTkraDai_HIO_c();
+    virtual ~daTkraDai_HIO_c() {}
     void genMessage(JORMContext *);
 
     /* 0x04 */ f32 field_0x04;

@@ -103,10 +103,8 @@ enum Motion {
     /* 0xC */ MOT_W_2NORMALTALK_B
 };
 
-/* 80A2A7EC-80A2A7F0 000054 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpcKasiMich_Param_c l_HIO;
 
-/* 80A2A2D4-80A2A394 000020 00C0+00 1/1 0/0 0/0 .data            l_bckGetParamList */
 static daNpc_GetParam2 l_bckGetParamList[16] = {
     {BCK_MICH_IYAN_WAIT, J3DFrameCtrl::EMode_LOOP, GIRLS},
     {BCK_MICH_KYA_TALK, J3DFrameCtrl::EMode_LOOP, GIRLS},
@@ -126,35 +124,28 @@ static daNpc_GetParam2 l_bckGetParamList[16] = {
     {BCK_W_2NORMALTALK_B, J3DFrameCtrl::EMode_NONE, WGENERAL},
 };
 
-/* 80A2A394-80A2A3A0 0000E0 000C+00 0/0 0/0 0/0 .data            l_btpGetParamList */
 static daNpc_GetParam2 l_btpGetParamList[1] = {
     {BTP_MICH, J3DFrameCtrl::EMode_LOOP, KASI_MICH},
 };
 
-/* 80A2A3A0-80A2A3AC -00001 000C+00 5/6 0/0 0/0 .data            l_arcNames */
 static char* l_arcNames[3] = {
     "kasi_mich",
     "girls",
     "Wgeneral",
 };
 
-/* 80A2A3AC-80A2A3B0 0000F8 0004+00 1/2 0/0 0/0 .data            l_evtNames */
 static char* l_evtNames[1] = {
     NULL
 };
 
-/* 80A2A3B0-80A2A3B4 -00001 0004+00 0/0 0/0 0/0 .data            l_myName */
 static char* l_myName = "kasi_mich";
 
-/* 80A2A3B4-80A2A3C0 000100 000C+00 1/1 0/0 0/0 .data            mEvtSeqList__15daNpcKasiMich_c */
 daNpcKasiMich_c::EventFn daNpcKasiMich_c::mEvtSeqList[1] = {
     NULL
 };
 
-/* 80A261CC-80A26384 0000EC 01B8+00 1/1 0/0 0/0 .text            __ct__15daNpcKasiMich_cFv */
 daNpcKasiMich_c::daNpcKasiMich_c() {}
 
-/* 80A26414-80A26624 000334 0210+00 1/0 0/0 0/0 .text            __dt__15daNpcKasiMich_cFv */
 daNpcKasiMich_c::~daNpcKasiMich_c() {
     for (int i = 0; i < 3; i ++) {
         dComIfG_resDelete(&mPhases[i], l_arcNames[i]);
@@ -165,7 +156,6 @@ daNpcKasiMich_c::~daNpcKasiMich_c() {
     }
 }
 
-/* 80A2A04C-80A2A0C0 000000 0074+00 17/17 0/0 0/0 .rodata          m__21daNpcKasiMich_Param_c */
 daNpcKasiMich_HIOParam const daNpcKasiMich_Param_c::m = {
     55.0f,
     -3.0f,
@@ -204,7 +194,6 @@ daNpcKasiMich_HIOParam const daNpcKasiMich_Param_c::m = {
     16.0f,
 };
 
-/* 80A26624-80A268A0 000544 027C+00 1/1 0/0 0/0 .text            Create__15daNpcKasiMich_cFv */
 cPhs__Step daNpcKasiMich_c::Create() {
     fopAcM_ct(this, daNpcKasiMich_c);
 
@@ -253,7 +242,6 @@ cPhs__Step daNpcKasiMich_c::Create() {
     return phase;
 }
 
-/* 80A268A0-80A26A24 0007C0 0184+00 1/1 0/0 0/0 .text            CreateHeap__15daNpcKasiMich_cFv */
 int daNpcKasiMich_c::CreateHeap() {
     J3DModelData* mdlData_p = (J3DModelData*)dComIfG_getObjectRes(l_arcNames[0], BMDR_MICH);
 
@@ -284,20 +272,17 @@ int daNpcKasiMich_c::CreateHeap() {
     return 1;
 }
 
-/* 80A26A24-80A26A58 000944 0034+00 1/1 0/0 0/0 .text            Delete__15daNpcKasiMich_cFv */
 int daNpcKasiMich_c::Delete() {
     this->~daNpcKasiMich_c();
     return 1;
 }
 
-/* 80A26A58-80A26A84 000978 002C+00 2/2 0/0 0/0 .text            Execute__15daNpcKasiMich_cFv */
 int daNpcKasiMich_c::Execute() {
     mFear = false;
     execute();
     return 1;
 }
 
-/* 80A26A84-80A26AD0 0009A4 004C+00 1/1 0/0 0/0 .text            Draw__15daNpcKasiMich_cFv */
 int daNpcKasiMich_c::Draw() {
     if (!mEscape) {
         draw(FALSE, FALSE, daNpcKasiMich_Param_c::m.common.real_shadow_size, NULL, FALSE);
@@ -306,7 +291,6 @@ int daNpcKasiMich_c::Draw() {
     return 1;
 }
 
-/* 80A26AD0-80A26C5C 0009F0 018C+00 1/1 0/0 0/0 .text            ctrlJoint__15daNpcKasiMich_cFP8J3DJointP8J3DModel */
 int daNpcKasiMich_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     int jntNo = i_joint->getJntNo();
     int i_jointList[3] = {1, 2, 3};
@@ -336,13 +320,11 @@ int daNpcKasiMich_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 80A26C5C-80A26C7C 000B7C 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__15daNpcKasiMich_cFP10fopAc_ac_c */
 int daNpcKasiMich_c::createHeapCallBack(fopAc_ac_c* a_this) {
     daNpcKasiMich_c* i_this = (daNpcKasiMich_c*)a_this;
     return i_this->CreateHeap();
 }
 
-/* 80A26C7C-80A26CC8 000B9C 004C+00 1/1 0/0 0/0 .text            ctrlJointCallBack__15daNpcKasiMich_cFP8J3DJointi */
 int daNpcKasiMich_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -356,7 +338,6 @@ int daNpcKasiMich_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80A26CC8-80A26D34 000BE8 006C+00 1/0 0/0 0/0 .text            setParam__15daNpcKasiMich_cFv */
 void daNpcKasiMich_c::setParam() {
     attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(daNpcKasiMich_Param_c::m.common.attention_distance, daNpcKasiMich_Param_c::m.common.attention_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
@@ -364,18 +345,14 @@ void daNpcKasiMich_c::setParam() {
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
 }
 
-/* 80A2A7F0-80A2A7F4 000058 0004+00 1/2 0/0 0/0 .bss             mTargetTag__15daNpcKasiMich_c */
 daTagEscape_c* daNpcKasiMich_c::mTargetTag;
 
-/* 80A2A7F4-80A2A7F8 00005C 0004+00 0/1 0/0 0/0 .bss             mTargetTagDist__15daNpcKasiMich_c */
 f32 daNpcKasiMich_c::mTargetTagDist;
 
-/* 80A2A7F8-80A2A7FC -00001 0004+00 2/3 0/0 0/0 .bss             None */
 /* 80A2A7F8 0002+00 data_80A2A7F8 mWolfAngle__15daNpcKasiMich_c */
 /* 80A2A7FA 0002+00 data_80A2A7FA None */
 s16 daNpcKasiMich_c::mWolfAngle;
 
-/* 80A26D34-80A26FDC 000C54 02A8+00 1/0 0/0 0/0 .text            main__15daNpcKasiMich_cFv */
 BOOL daNpcKasiMich_c::main() {
     if (mSygnal >= 0) {
         static daNpcKasiMich_c::actionFunc sSygnalAct[20] = {
@@ -412,7 +389,6 @@ BOOL daNpcKasiMich_c::main() {
     return TRUE;
 }
 
-/* 80A26FDC-80A27184 000EFC 01A8+00 1/0 0/0 0/0 .text            setAttnPos__15daNpcKasiMich_cFv */
 void daNpcKasiMich_c::setAttnPos() {
     if (mLookMode == LOOK_RESET) {
         for (int i = 0; i < 3; i++) {
@@ -448,7 +424,6 @@ void daNpcKasiMich_c::setAttnPos() {
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 80A27184-80A27254 0010A4 00D0+00 1/0 0/0 0/0 .text            setMotionAnm__15daNpcKasiMich_cFif */
 void daNpcKasiMich_c::setMotionAnm(int i_index, f32 i_morf) {
     J3DAnmTransformKey* i_anm = getTrnsfrmKeyAnmP(l_arcNames[l_bckGetParamList[i_index].arcIdx], l_bckGetParamList[i_index].fileIdx);
     int i_attr = l_bckGetParamList[i_index].attr;
@@ -460,7 +435,6 @@ void daNpcKasiMich_c::setMotionAnm(int i_index, f32 i_morf) {
     }
 }
 
-/* 80A27254-80A2729C 001174 0048+00 1/0 0/0 0/0 .text            setMotion__15daNpcKasiMich_cFifi */
 void daNpcKasiMich_c::setMotion(int i_motion, f32 i_morf, int param_3) {
     s16 motion = i_motion;
     if ((param_3 != 0 || mMotion != motion) && i_motion >= 0 && i_motion < 0xD) {
@@ -472,12 +446,10 @@ void daNpcKasiMich_c::setMotion(int i_motion, f32 i_morf, int param_3) {
     }
 }
 
-/* 80A2729C-80A272A4 0011BC 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__15daNpcKasiMich_cFv */
 BOOL daNpcKasiMich_c::drawDbgInfo() {
     return FALSE;
 }
 
-/* 80A272A4-80A274D8 0011C4 0234+00 1/1 0/0 0/0 .text            reset__15daNpcKasiMich_cFv */
 void daNpcKasiMich_c::reset() {
     initialize();
     mLookat.initialize();
@@ -527,7 +499,6 @@ void daNpcKasiMich_c::reset() {
     mMotionMorfOverride = 0.0f;
 }
 
-/* 80A274D8-80A2790C 0013F8 0434+00 1/1 0/0 0/0 .text            playMotion__15daNpcKasiMich_cFv */
 void daNpcKasiMich_c::playMotion() {
     daNpcF_anmPlayData dat0 = {ANM_MICH_KYA_TALK, daNpcKasiMich_Param_c::m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
@@ -589,7 +560,6 @@ void daNpcKasiMich_c::playMotion() {
     }
 }
 
-/* 80A2790C-80A27A84 00182C 0178+00 1/1 0/0 0/0 .text            playMotionAnmLoop__15daNpcKasiMich_cFPPPQ28daNpcF_c18daNpcF_anmPlayData */
 void daNpcKasiMich_c::playMotionAnmLoop(daNpcF_c::daNpcF_anmPlayData*** i_data) {
     daNpcF_anmPlayData* playData = NULL;
 
@@ -628,7 +598,6 @@ void daNpcKasiMich_c::playMotionAnmLoop(daNpcF_c::daNpcF_anmPlayData*** i_data) 
     mMotionPrevPhase = mMotionPhase;
 }
 
-/* 80A27A84-80A27B2C 0019A4 00A8+00 10/10 0/0 0/0 .text          setAction__15daNpcKasiMich_cFM15daNpcKasiMich_cFPCvPvi_i */
 BOOL daNpcKasiMich_c::setAction(actionFunc action) {
     mMode = -1;
 
@@ -646,14 +615,12 @@ BOOL daNpcKasiMich_c::setAction(actionFunc action) {
     return TRUE;
 }
 
-/* 80A27B2C-80A27B50 001A4C 0024+00 8/8 0/0 0/0 .text            setLookMode__15daNpcKasiMich_cFi */
 void daNpcKasiMich_c::setLookMode(int i_lookMode) {
     if (i_lookMode >= 0 && i_lookMode < 4 && i_lookMode != mLookMode) {
         mLookMode = i_lookMode;
     }
 }
 
-/* 80A27B50-80A27D30 001A70 01E0+00 1/1 0/0 0/0 .text            lookat__15daNpcKasiMich_cFv */
 void daNpcKasiMich_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model = mAnm_p->getModel();
@@ -709,7 +676,6 @@ void daNpcKasiMich_c::lookat() {
     mLookat.calc(this, model->getBaseTRMtx(), lookatAngle, i_snap, angle_delta, FALSE);
 }
 
-/* 80A27D30-80A27E24 001C50 00F4+00 1/1 0/0 0/0 .text            step__15daNpcKasiMich_cFsi */
 BOOL daNpcKasiMich_c::step(s16 i_targetAngle, int param_2) {
     if (mTurnMode == 0) {
         mTurnTargetAngle = i_targetAngle;
@@ -737,7 +703,6 @@ BOOL daNpcKasiMich_c::step(s16 i_targetAngle, int param_2) {
     return mTurnMode > 1;
 }
 
-/* 80A27E24-80A27F08 001D44 00E4+00 1/1 0/0 0/0 .text            chkFindPlayer__15daNpcKasiMich_cFv */
 BOOL daNpcKasiMich_c::chkFindPlayer() {
     if (!chkActorInSight(daPy_getPlayerActorClass(), daNpcKasiMich_Param_c::m.common.fov)) {
         mActorMngr[0].remove();
@@ -760,7 +725,6 @@ BOOL daNpcKasiMich_c::chkFindPlayer() {
     return rv;
 }
 
-/* 80A27F08-80A282B4 001E28 03AC+00 8/0 0/0 0/0 .text            wait__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::wait(int param_1) {
     switch (mMode) {
         case -1:
@@ -855,7 +819,6 @@ int daNpcKasiMich_c::wait(int param_1) {
     return 1;
 }
 
-/* 80A282B4-80A28490 0021D4 01DC+00 1/0 0/0 0/0 .text            fear__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::fear(int param_1) {
     switch (mMode) {
         case -1:
@@ -905,7 +868,6 @@ int daNpcKasiMich_c::fear(int param_1) {
     return 1;
 }
 
-/* 80A28490-80A284F8 0023B0 0068+00 1/1 0/0 0/0 .text            srchWolfTag__15daNpcKasiMich_cFv */
 daTagEscape_c* daNpcKasiMich_c::srchWolfTag() {
     mTargetTag = NULL;
     mWolfAngle = fopAcM_searchPlayerAngleY(this);
@@ -913,7 +875,6 @@ daTagEscape_c* daNpcKasiMich_c::srchWolfTag() {
     return mTargetTag;
 }
 
-/* 80A284F8-80A285C8 002418 00D0+00 1/1 0/0 0/0 .text _srch_escape_tag__15daNpcKasiMich_cFPvPv */
 void* daNpcKasiMich_c::_srch_escape_tag(void* i_actor, void* i_data) {
     if (!fopAcM_IsActor(i_actor)) {
         return NULL;
@@ -942,7 +903,6 @@ void* daNpcKasiMich_c::_srch_escape_tag(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80A285C8-80A286FC 0024E8 0134+00 1/1 0/0 0/0 .text getWolfPathNearIdx__15daNpcKasiMich_cFv */
 int daNpcKasiMich_c::getWolfPathNearIdx() {
     int iVar1 = 0;
     f32 fVar1 = 0.0f;
@@ -980,7 +940,6 @@ void dummy() {
     temp = &daNpcKasiMich_c::wait;
 }
 
-/* 80A286FC-80A287A0 00261C 00A4+00 2/0 0/0 0/0 .text            chace_st__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::chace_st(int param_1) {
     switch (mMode) {
         case -1:
@@ -1002,7 +961,6 @@ int daNpcKasiMich_c::chace_st(int param_1) {
     return 1;
 }
 
-/* 80A287A0-80A28910 0026C0 0170+00 4/0 0/0 0/0 .text            chace__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::chace(int param_1) {
     switch (mMode) {
         case -1:
@@ -1039,7 +997,6 @@ void dummy2() {
     temp = &daNpcKasiMich_c::chace;
 }
 
-/* 80A28910-80A289CC 002830 00BC+00 1/1 0/0 0/0 .text            getChacePos__15daNpcKasiMich_cFv */
 cXyz daNpcKasiMich_c::getChacePos() {
     int plPoint = mPlPoint;
     int idx = mPath.getIdx();
@@ -1060,7 +1017,6 @@ cXyz daNpcKasiMich_c::getChacePos() {
     return chacePos;
 }
 
-/* 80A289CC-80A28A8C 0028EC 00C0+00 2/0 0/0 0/0 .text            turn_link__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::turn_link(int param_1) {
     switch (mMode) {
         case -1:
@@ -1082,7 +1038,6 @@ int daNpcKasiMich_c::turn_link(int param_1) {
     return 1;
 }
 
-/* 80A28A8C-80A28B70 0029AC 00E4+00 1/0 0/0 0/0 .text            turn_home__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::turn_home(int param_1) {
     switch (mMode) {
         case -1:
@@ -1109,7 +1064,6 @@ int daNpcKasiMich_c::turn_home(int param_1) {
     return 1;
 }
 
-/* 80A28B70-80A28C40 002A90 00D0+00 1/0 0/0 0/0 .text            turn_center__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::turn_center(int param_1) {
     switch (mMode) {
         case -1:
@@ -1132,7 +1086,6 @@ int daNpcKasiMich_c::turn_center(int param_1) {
     return 1;
 }
 
-/* 80A28C40-80A28CB8 002B60 0078+00 1/0 0/0 0/0 .text            talk_dummy__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::talk_dummy(int param_1) {
     switch (mMode) {
         case -1:
@@ -1151,7 +1104,6 @@ int daNpcKasiMich_c::talk_dummy(int param_1) {
     return 1;
 }
 
-/* 80A28CB8-80A28D90 002BD8 00D8+00 1/0 0/0 0/0 .text            kya__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::kya(int param_1) {
     switch (mMode) {
         case -1:
@@ -1181,7 +1133,6 @@ int daNpcKasiMich_c::kya(int param_1) {
     return 1;
 }
 
-/* 80A28D90-80A28E28 002CB0 0098+00 1/0 0/0 0/0 .text            kya2__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::kya2(int param_1) {
     switch (mMode) {
         case -1:
@@ -1202,7 +1153,6 @@ int daNpcKasiMich_c::kya2(int param_1) {
     return 1;
 }
 
-/* 80A28E28-80A28EFC 002D48 00D4+00 1/0 0/0 0/0 .text            kya_stop__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::kya_stop(int param_1) {
     switch (mMode) {
         case -1:
@@ -1226,7 +1176,6 @@ int daNpcKasiMich_c::kya_stop(int param_1) {
     return 1;
 }
 
-/* 80A28EFC-80A28F74 002E1C 0078+00 1/0 0/0 0/0 .text            iyan__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::iyan(int param_1) {
     switch (mMode) {
         case -1:
@@ -1245,7 +1194,6 @@ int daNpcKasiMich_c::iyan(int param_1) {
     return 1;
 }
 
-/* 80A28F74-80A2908C 002E94 0118+00 1/0 0/0 0/0 .text            escape__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::escape(int param_1) {
     switch (mMode) {
         case -1:
@@ -1276,7 +1224,6 @@ int daNpcKasiMich_c::escape(int param_1) {
     return 1;
 }
 
-/* 80A2908C-80A29164 002FAC 00D8+00 1/0 0/0 0/0 .text            iyan_look__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::iyan_look(int param_1) {
     switch (mMode) {
         case -1:
@@ -1301,7 +1248,6 @@ int daNpcKasiMich_c::iyan_look(int param_1) {
     return 1;
 }
 
-/* 80A29164-80A291E8 003084 0084+00 1/0 0/0 0/0 .text            turn_hana__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::turn_hana(int param_1) {
     switch (mMode) {
         case -1:
@@ -1321,7 +1267,6 @@ int daNpcKasiMich_c::turn_hana(int param_1) {
     return 1;
 }
 
-/* 80A291E8-80A2926C 003108 0084+00 7/0 0/0 0/0 .text            wait_dummy__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::wait_dummy(int param_1) {
     switch (mMode) {
         case -1:
@@ -1341,7 +1286,6 @@ int daNpcKasiMich_c::wait_dummy(int param_1) {
     return 1;
 }
 
-/* 80A2926C-80A29458 00318C 01EC+00 1/0 0/0 0/0 .text            cheer__15daNpcKasiMich_cFi */
 int daNpcKasiMich_c::cheer(int param_1) {
     switch (mMode) {
         case -1:
@@ -1406,14 +1350,12 @@ int daNpcKasiMich_c::cheer(int param_1) {
     return 1;
 }
 
-/* 80A29458-80A294A4 003378 004C+00 3/3 0/0 0/0 .text            _turn_to_link__15daNpcKasiMich_cFs */
 BOOL daNpcKasiMich_c::_turn_to_link(s16 param_1) {
     cXyz pos(*fopAcM_GetPosition_p(daPy_getPlayerActorClass()));
     return _turn_pos(pos, param_1);
     
 }
 
-/* 80A294A4-80A29500 0033C4 005C+00 5/5 0/0 0/0 .text            _turn_pos__15daNpcKasiMich_cFRC4cXyzs */
 BOOL daNpcKasiMich_c::_turn_pos(cXyz const& param_1, s16 param_2) {
     BOOL rv = cLib_chaseAngleS(&mCurAngle.y, cLib_targetAngleY(&current.pos, &param_1), param_2);
     current.angle.y = mCurAngle.y;
@@ -1421,7 +1363,6 @@ BOOL daNpcKasiMich_c::_turn_pos(cXyz const& param_1, s16 param_2) {
     return rv;
 }
 
-/* 80A29500-80A295D8 003420 00D8+00 2/2 0/0 0/0 .text            actor_front_check__15daNpcKasiMich_cFP10fopAc_ac_c */
 BOOL daNpcKasiMich_c::actor_front_check(fopAc_ac_c* actor_p) {
     if (actor_p == NULL) {
         return TRUE;
@@ -1436,7 +1377,6 @@ BOOL daNpcKasiMich_c::actor_front_check(fopAc_ac_c* actor_p) {
     return (sp30.x * sp48.x + sp30.z * sp48.z) >= 0.0f;
 }
 
-/* 80A295D8-80A29644 0034F8 006C+00 1/1 0/0 0/0 .text            _getOffset__15daNpcKasiMich_cFRC4cXyzR4cXyz */
 void daNpcKasiMich_c::_getOffset(cXyz const& param_1, cXyz& param_2) {
     param_2 = param_1;
     csXyz angle(*fopAcM_GetShapeAngle_p(this));
@@ -1444,34 +1384,28 @@ void daNpcKasiMich_c::_getOffset(cXyz const& param_1, cXyz& param_2) {
     mDoMtx_stack_c::multVec(&param_2, &param_2);
 }
 
-/* 80A29644-80A29664 003564 0020+00 1/0 0/0 0/0 .text            daNpcKasiMich_Create__FPv */
 static int daNpcKasiMich_Create(void* a_this) {
     return static_cast<daNpcKasiMich_c*>(a_this)->Create();
 }
 
-/* 80A29664-80A29684 003584 0020+00 1/0 0/0 0/0 .text            daNpcKasiMich_Delete__FPv */
 static int daNpcKasiMich_Delete(void* a_this) {
     return static_cast<daNpcKasiMich_c*>(a_this)->Delete();
 }
 
-/* 80A29684-80A296A4 0035A4 0020+00 1/0 0/0 0/0 .text            daNpcKasiMich_Execute__FPv */
 static int daNpcKasiMich_Execute(void* a_this) {
     return static_cast<daNpcKasiMich_c*>(a_this)->Execute();
 }
 
-/* 80A296A4-80A296C4 0035C4 0020+00 1/0 0/0 0/0 .text            daNpcKasiMich_Draw__FPv */
 static int daNpcKasiMich_Draw(void* a_this) {
     return static_cast<daNpcKasiMich_c*>(a_this)->Draw();
 }
 
-/* 80A296C4-80A296CC 0035E4 0008+00 1/0 0/0 0/0 .text            daNpcKasiMich_IsDelete__FPv */
 static int daNpcKasiMich_IsDelete(void* a_this) {
     return 1;
 }
 
 AUDIO_INSTANCES;
 
-/* 80A2A654-80A2A674 -00001 0020+00 1/0 0/0 0/0 .data            daNpcKasiMich_MethodTable */
 static actor_method_class daNpcKasiMich_MethodTable = {
     (process_method_func)daNpcKasiMich_Create,
     (process_method_func)daNpcKasiMich_Delete,
@@ -1480,7 +1414,6 @@ static actor_method_class daNpcKasiMich_MethodTable = {
     (process_method_func)daNpcKasiMich_Draw,
 };
 
-/* 80A2A674-80A2A6A4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_KASIMICH */
 extern actor_process_profile_definition g_profile_NPC_KASIMICH = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID

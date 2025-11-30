@@ -7,14 +7,13 @@
 
 #include "d/actor/d_a_e_sh.h"
 #include "d/d_cc_d.h"
-#include "dol2asm.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
 
 class daE_SH_HIO_c : public JORReflexible {
 public:
-    /* 8078E34C */ daE_SH_HIO_c();
-    /* 807918B4 */ virtual ~daE_SH_HIO_c() {}
+    daE_SH_HIO_c();
+    virtual ~daE_SH_HIO_c() {}
 #if DEBUG
     void genMessage(JORMContext*);
 #endif
@@ -31,7 +30,6 @@ public:
     /* 0x28 */ u8 mIgnoreTime;
 };
 
-/* 8078E34C-8078E3B4 0000EC 0068+00 1/1 0/0 0/0 .text            __ct__12daE_SH_HIO_cFv */
 daE_SH_HIO_c::daE_SH_HIO_c() {
     mChild = -1;
     mBaseSize = 1.15f;
@@ -61,14 +59,12 @@ void daE_SH_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 8078E3B4-8078E460 000154 00AC+00 6/6 0/0 0/0 .text            anm_init__FP10e_sh_classifUcf */
 static void anm_init(e_sh_class* i_this, int i_resIndex, f32 i_morf, u8 i_attr, f32 i_rate) {
     i_this->mAnm_p->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_sh", i_resIndex), i_attr,
                            i_morf, i_rate, 0.0f, -1.0f);
     i_this->mCurAnm = i_resIndex;
 }
 
-/* 8078E460-8078E6B8 000200 0258+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DJoint* joint = i_joint;
@@ -117,7 +113,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 8078E6B8-8078E868 000458 01B0+00 1/0 0/0 0/0 .text            daE_SH_Draw__FP10e_sh_class */
 static int daE_SH_Draw(e_sh_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
     J3DModel* model = i_this->mAnm_p->getModel();
@@ -154,7 +149,6 @@ static int daE_SH_Draw(e_sh_class* i_this) {
     return 1;
 }
 
-/* 8078E868-8078EA58 000608 01F0+00 1/1 0/0 0/0 .text            damage_check__FP10e_sh_class */
 static void damage_check(e_sh_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
     fopAc_ac_c* unusedPlayer = dComIfGp_getPlayer(0);
@@ -208,13 +202,10 @@ static void damage_check(e_sh_class* i_this) {
     }
 }
 
-/* 807920F8-807920FC 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool l_HIOInit;
 
-/* 80792108-80792134 000018 002C+00 8/8 0/0 0/0 .bss             l_HIO */
 static daE_SH_HIO_c l_HIO;
 
-/* 8078EA58-8078EC04 0007F8 01AC+00 1/1 0/0 0/0 .text            e_sh_stop__FP10e_sh_class */
 static void e_sh_stop(e_sh_class* i_this) {
     static u16 ap_name[3] = {
         dPa_RM(ID_ZI_S_SH_APPEAR_A),
@@ -258,7 +249,6 @@ static void e_sh_stop(e_sh_class* i_this) {
     }
 }
 
-/* 8078EC04-8078ECCC 0009A4 00C8+00 1/1 0/0 0/0 .text            e_sh_appear__FP10e_sh_class */
 static void e_sh_appear(e_sh_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
 
@@ -279,7 +269,6 @@ static void e_sh_appear(e_sh_class* i_this) {
     }
 }
 
-/* 8078ECCC-8078F728 000A6C 0A5C+00 1/1 0/0 0/0 .text            e_sh_move__FP10e_sh_class */
 static void e_sh_move(e_sh_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
 
@@ -529,7 +518,6 @@ lbl_4a8:
     }
 }
 
-/* 8078F728-8078FA38 0014C8 0310+00 1/1 0/0 0/0 .text            e_sh_attack__FP10e_sh_class */
 static void e_sh_attack(e_sh_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
 
@@ -615,7 +603,6 @@ static void e_sh_attack(e_sh_class* i_this) {
     }
 }
 
-/* 8078FA38-8078FBC8 0017D8 0190+00 1/1 0/0 0/0 .text            e_sh_disappear__FP10e_sh_class */
 static void e_sh_disappear(e_sh_class* i_this) {
     static u16 dp_name[3] = {
         dPa_RM(ID_ZI_S_SH_DISAPPEAR_A),
@@ -654,7 +641,6 @@ static void e_sh_disappear(e_sh_class* i_this) {
     cLib_addCalc0(&actor->speedF, 1.0f, TREG_F(10) + 4.0f);
 }
 
-/* 8078FBC8-8078FCC0 001968 00F8+00 1/1 0/0 0/0 .text            e_sh_damage__FP10e_sh_class */
 static void e_sh_damage(e_sh_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
 
@@ -684,7 +670,6 @@ static void e_sh_damage(e_sh_class* i_this) {
     }
 }
 
-/* 8078FCC0-8078FDB0 001A60 00F0+00 1/1 0/0 0/0 .text            e_sh_dead__FP10e_sh_class */
 static void e_sh_dead(e_sh_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
 
@@ -715,7 +700,6 @@ static void e_sh_dead(e_sh_class* i_this) {
     }
 }
 
-/* 8078FDB0-80790278 001B50 04C8+00 2/1 0/0 0/0 .text            action__FP10e_sh_class */
 static void action(e_sh_class* i_this) {
     fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
@@ -863,7 +847,6 @@ static void action(e_sh_class* i_this) {
     setMidnaBindEffect(enemy, &i_this->mSound, &enemy->eyePos, &effSize);
 }
 
-/* 80790278-80790498 002018 0220+00 1/1 0/0 0/0 .text            eff_set__FP10e_sh_class */
 static void eff_set(e_sh_class* i_this) {
     static u16 p_name[2] = {
         dPa_RM(ID_ZI_S_SH_YODAPOTA_A),
@@ -910,7 +893,6 @@ static void eff_set(e_sh_class* i_this) {
     }
 }
 
-/* 80790498-80790950 002238 04B8+00 1/1 0/0 0/0 .text            anm_se_set__FP10e_sh_class */
 static void anm_se_set(e_sh_class* i_this) {
     s8 playSound = FALSE;
     if (i_this->mCurAnm == 4) {
@@ -977,7 +959,6 @@ static void anm_se_set(e_sh_class* i_this) {
     }
 }
 
-/* 80790950-80790FC0 0026F0 0670+00 2/1 0/0 0/0 .text            daE_SH_Execute__FP10e_sh_class */
 static int daE_SH_Execute(e_sh_class* i_this) {
     static f32 time_scale[25] = {
         1.0f, 1.0f, 1.0f, 1.0f, 0.8f, 0.6f, 0.4f, 0.2f,
@@ -1122,12 +1103,10 @@ static int daE_SH_Execute(e_sh_class* i_this) {
     return 1;
 }
 
-/* 80790FC0-80790FC8 002D60 0008+00 1/0 0/0 0/0 .text            daE_SH_IsDelete__FP10e_sh_class */
 static int daE_SH_IsDelete(e_sh_class* i_this) {
     return TRUE;
 }
 
-/* 80790FC8-80791030 002D68 0068+00 1/0 0/0 0/0 .text            daE_SH_Delete__FP10e_sh_class */
 static int daE_SH_Delete(e_sh_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
     fpc_ProcID unusedId = fopAcM_GetID(i_this);
@@ -1146,7 +1125,6 @@ static int daE_SH_Delete(e_sh_class* i_this) {
     return 1;
 }
 
-/* 80791030-807911D8 002DD0 01A8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     u16 i1, i2;
 
@@ -1179,7 +1157,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 807911D8-80791550 002F78 0378+00 1/0 0/0 0/0 .text            daE_SH_Create__FP10fopAc_ac_c */
 static int daE_SH_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph cc_sph_src = {
         {
@@ -1277,7 +1254,6 @@ static int daE_SH_Create(fopAc_ac_c* i_this) {
     return resLoadResult;
 }
 
-/* 80792030-80792050 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_SH_Method */
 static actor_method_class l_daE_SH_Method = {
     (process_method_func)daE_SH_Create,
     (process_method_func)daE_SH_Delete,
@@ -1286,7 +1262,6 @@ static actor_method_class l_daE_SH_Method = {
     (process_method_func)daE_SH_Draw,
 };
 
-/* 80792050-80792080 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_SH */
 extern actor_process_profile_definition g_profile_E_SH = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

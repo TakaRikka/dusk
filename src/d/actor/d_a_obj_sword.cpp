@@ -10,23 +10,19 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 
-/* 80CFDEB4-80CFDECC 000020 0018+00 1/1 0/0 0/0 .data            l_cull_box */
 static Vec l_cull_box[2] = {{-200.0f, 0.0f, -200.0f}, {200.0f, 100.0f, 200.0f}};
 
-/* 80CFD558-80CFD594 000078 003C+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjSword_cFv */
 void daObjSword_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80CFD594-80CFD600 0000B4 006C+00 2/2 0/0 0/0 .text            setBaseMtx__12daObjSword_cFv */
 void daObjSword_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CFD600-80CFD67C 000120 007C+00 1/1 0/0 0/0 .text            Create__12daObjSword_cFv */
 int daObjSword_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -38,7 +34,6 @@ int daObjSword_c::Create() {
     return 1;
 }
 
-/* 80CFD67C-80CFD848 00019C 01CC+00 1/1 0/0 0/0 .text            create__12daObjSword_cFv */
 cPhs__Step daObjSword_c::create() {
     fopAcM_ct(this, daObjSword_c);
     m_itemNo = 0x28;
@@ -58,7 +53,6 @@ cPhs__Step daObjSword_c::create() {
     return phase;
 }
 
-/* 80CFDA14-80CFDA8C 000534 0078+00 1/0 0/0 0/0 .text            actionWait__12daObjSword_cFv */
 int daObjSword_c::actionWait() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (fopAcM_checkCarryNow(this)) {
@@ -73,7 +67,6 @@ int daObjSword_c::actionWait() {
     return 1;
 }
 
-/* 80CFDA8C-80CFDB04 0005AC 0078+00 1/1 0/0 0/0 .text initActionOrderGetDemo__12daObjSword_cFv */
 int daObjSword_c::initActionOrderGetDemo() {
     hide();
     fopAcM_orderItemEvent(this, 0, 0);
@@ -84,7 +77,6 @@ int daObjSword_c::initActionOrderGetDemo() {
     return 1;
 }
 
-/* 80CFDB04-80CFDB80 000624 007C+00 1/0 0/0 0/0 .text actionOrderGetDemo__12daObjSword_cFv */
 int daObjSword_c::actionOrderGetDemo() {
     if (eventInfo.checkCommandItem()) {
         setStatus(2);
@@ -98,7 +90,6 @@ int daObjSword_c::actionOrderGetDemo() {
     return 1;
 }
 
-/* 80CFDB80-80CFDC1C 0006A0 009C+00 1/0 0/0 0/0 .text            actionGetDemo__12daObjSword_cFv */
 int daObjSword_c::actionGetDemo() {
     if (dComIfGp_evmng_endCheck("DEFAULT_GETITEM")) {
         fopAcM_onItem(this, getItemBit());
@@ -109,7 +100,6 @@ int daObjSword_c::actionGetDemo() {
     return 1;
 }
 
-/* 80CFDC1C-80CFDD18 00073C 00FC+00 2/2 0/0 0/0 .text            execute__12daObjSword_cFv */
 int daObjSword_c::execute() {
     static int (daObjSword_c::* l_demoFunc[])() = {
         &daObjSword_c::actionWait, &daObjSword_c::actionOrderGetDemo, &daObjSword_c::actionGetDemo};
@@ -121,7 +111,6 @@ int daObjSword_c::execute() {
     return 1;
 }
 
-/* 80CFDD18-80CFDD6C 000838 0054+00 1/1 0/0 0/0 .text            draw__12daObjSword_cFv */
 int daObjSword_c::draw() {
     if (!chkDraw()) {
         return 1;
@@ -130,43 +119,33 @@ int daObjSword_c::draw() {
     return 1;
 }
 
-/* 80CFDD6C-80CFDDA4 00088C 0038+00 1/1 0/0 0/0 .text            _delete__12daObjSword_cFv */
 int daObjSword_c::_delete() {
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
     return 1;
 }
 
-/* 80CFDDA4-80CFDDC4 0008C4 0020+00 1/0 0/0 0/0 .text            daObjSword_Draw__FP12daObjSword_c
- */
 static int daObjSword_Draw(daObjSword_c* param_0) {
     return param_0->draw();
 }
 
-/* 80CFDDC4-80CFDDE4 0008E4 0020+00 1/0 0/0 0/0 .text daObjSword_Execute__FP12daObjSword_c */
 static int daObjSword_Execute(daObjSword_c* param_0) {
     return param_0->execute();
 }
 
-/* 80CFDDE4-80CFDE04 000904 0020+00 1/0 0/0 0/0 .text            daObjSword_Delete__FP12daObjSword_c
- */
 static int daObjSword_Delete(daObjSword_c* param_0) {
     return param_0->_delete();
 }
 
-/* 80CFDE04-80CFDE24 000924 0020+00 1/0 0/0 0/0 .text            daObjSword_Create__FP12daObjSword_c
- */
 static int daObjSword_Create(daObjSword_c* param_0) {
     return param_0->create();
 }
 
-/* 80CFDF14-80CFDF34 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjSword_Method */
 static actor_method_class l_daObjSword_Method = {
     (process_method_func)daObjSword_Create,  (process_method_func)daObjSword_Delete,
     (process_method_func)daObjSword_Execute, 0,
     (process_method_func)daObjSword_Draw,
 };
 
-/* 80CFDF34-80CFDF64 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Sword */
 extern actor_process_profile_definition g_profile_Obj_Sword = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

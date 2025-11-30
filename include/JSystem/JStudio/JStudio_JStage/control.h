@@ -20,8 +20,8 @@ struct TCreateObject : public JStudio::TCreateObject {
         JUT_ASSERT(42, pJSGSystem_!=NULL);
     }
 
-    /* 80289B00 */ virtual ~TCreateObject();
-    /* 80289B60 */ virtual bool create(JStudio::TObject**,
+    virtual ~TCreateObject();
+    virtual bool create(JStudio::TObject**,
                                        JStudio::stb::data::TParse_TBlock_object const&);
 
     /* 0x0C */ const JStage::TSystem* pJSGSystem_;
@@ -30,10 +30,10 @@ struct TCreateObject : public JStudio::TCreateObject {
 struct TAdaptor_object_ {
     TAdaptor_object_(JStage::TSystem const*param_2, JStage::TObject *param_3) :
         pJSGSystem_(param_2), pJSGObject_(param_3) {}
-    /* 8028A470 */ void adaptor_object_data_(void const*, u32, void const*, u32);
-    /* 8028A4BC */ JStage::TObject* adaptor_object_findJSGObject_(char const*);
-    /* 8028A50C */ s32 adaptor_object_findJSGObjectNode_(JStage::TObject const*, char const*);
-    /* 8028A550 */ void adaptor_object_ENABLE_(JStudio::data::TEOperationData, void const*, u32);
+    void adaptor_object_data_(void const*, u32, void const*, u32);
+    JStage::TObject* adaptor_object_findJSGObject_(char const*);
+    s32 adaptor_object_findJSGObjectNode_(JStage::TObject const*, char const*);
+    void adaptor_object_ENABLE_(JStudio::data::TEOperationData, void const*, u32);
 
     void adaptor_object_begin_() { pJSGObject_->JSGFEnableFlag(1); }
     void adaptor_object_end_() { pJSGObject_->JSGFDisableFlag(1); }
@@ -71,8 +71,8 @@ struct TAdaptor_actor : public JStudio::TAdaptor_actor, public JStudio_JStage::T
             mMaxGetter = param_5;
         }
 
-        /* 8028B064 */ virtual void operator()(f32, JStudio::TAdaptor*) const;
-        /* 8028B138 */ inline virtual ~TVVOutput_ANIMATION_FRAME_();
+        virtual void operator()(f32, JStudio::TAdaptor*) const;
+        inline virtual ~TVVOutput_ANIMATION_FRAME_();
         
         void adaptor_setOutput_(TAdaptor* adaptor) const {
             adaptor->adaptor_referVariableValue(mValueIndex)->setOutput(this);
@@ -92,39 +92,39 @@ struct TAdaptor_actor : public JStudio::TAdaptor_actor, public JStudio_JStage::T
         /* 0x24 */ MaxGetter mMaxGetter;
     };
 
-    /* 8028A5F0 */ TAdaptor_actor(JStage::TSystem const*, JStage::TActor*);
+    TAdaptor_actor(JStage::TSystem const*, JStage::TActor*);
 
-    /* 8028A6B4 */ virtual ~TAdaptor_actor();
-    /* 8028A728 */ virtual void adaptor_do_prepare();
-    /* 8028A7B4 */ virtual void adaptor_do_begin();
-    /* 8028A8D8 */ virtual void adaptor_do_end();
-    /* 8028A92C */ virtual void adaptor_do_update(u32);
-    /* 8028A974 */ virtual void adaptor_do_data(void const*, u32, void const*, u32);
-    /* 8028AAC8 */ virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028AB0C */ virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*,
+    virtual ~TAdaptor_actor();
+    virtual void adaptor_do_prepare();
+    virtual void adaptor_do_begin();
+    virtual void adaptor_do_end();
+    virtual void adaptor_do_update(u32);
+    virtual void adaptor_do_data(void const*, u32, void const*, u32);
+    virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*,
                                                 u32);
-    /* 8028AB68 */ virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*,
                                                     u32);
-    /* 8028ABF0 */ virtual void adaptor_do_PARENT_FUNCTION(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_PARENT_FUNCTION(JStudio::data::TEOperationData, void const*,
                                                     u32);
-    /* 8028AC04 */ virtual void adaptor_do_RELATION(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028AC48 */ virtual void adaptor_do_RELATION_NODE(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_RELATION(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_RELATION_NODE(JStudio::data::TEOperationData, void const*,
                                                     u32);
-    /* 8028ACA4 */ virtual void adaptor_do_RELATION_ENABLE(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_RELATION_ENABLE(JStudio::data::TEOperationData, void const*,
                                                     u32);
-    /* 8028A998 */ virtual void adaptor_do_SHAPE(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028A9F0 */ virtual void adaptor_do_ANIMATION(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028AA48 */ virtual void adaptor_do_ANIMATION_MODE(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_SHAPE(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_ANIMATION(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_ANIMATION_MODE(JStudio::data::TEOperationData, void const*,
                                                     u32);
-    /* 8028AA5C */ virtual void adaptor_do_TEXTURE_ANIMATION(JStudio::data::TEOperationData,
+    virtual void adaptor_do_TEXTURE_ANIMATION(JStudio::data::TEOperationData,
                                                         void const*, u32);
-    /* 8028AAB4 */ virtual void adaptor_do_TEXTURE_ANIMATION_MODE(JStudio::data::TEOperationData,
+    virtual void adaptor_do_TEXTURE_ANIMATION_MODE(JStudio::data::TEOperationData,
                                                             void const*, u32);
     
-    /* 8028ACFC */ void setJSG_ID_(void (JStage::TActor::*)(u32),
+    void setJSG_ID_(void (JStage::TActor::*)(u32),
                                     JStudio::data::TEOperationData, void const*, u32);
-    /* 8028AD38 */ void setJSG_SRT_(JStudio::TControl const*);
-    /* 8028AECC */ void getJSG_SRT_(JStudio::TControl const*);
+    void setJSG_SRT_(JStudio::TControl const*);
+    void getJSG_SRT_(JStudio::TControl const*);
 
     JStage::TActor* get_pJSG_() { return (JStage::TActor*) pJSGObject_; }
 
@@ -143,14 +143,14 @@ struct TAdaptor_actor : public JStudio::TAdaptor_actor, public JStudio_JStage::T
 
 struct TAdaptor_ambientLight : public JStudio::TAdaptor_ambientLight, public TAdaptor_object_ {
     typedef JStudio::TObject_ambientLight ObjectType;
-    /* 8028B610 */ TAdaptor_ambientLight(JStage::TSystem const*, JStage::TAmbientLight*);
+    TAdaptor_ambientLight(JStage::TSystem const*, JStage::TAmbientLight*);
 
-    /* 8028B6AC */ virtual ~TAdaptor_ambientLight();
-    /* 8028B720 */ virtual void adaptor_do_prepare();
-    /* 8028B724 */ virtual void adaptor_do_begin();
-    /* 8028B7B0 */ virtual void adaptor_do_end();
-    /* 8028B804 */ virtual void adaptor_do_update(u32);
-    /* 8028B87C */ virtual void adaptor_do_data(void const*, u32, void const*, u32);
+    virtual ~TAdaptor_ambientLight();
+    virtual void adaptor_do_prepare();
+    virtual void adaptor_do_begin();
+    virtual void adaptor_do_end();
+    virtual void adaptor_do_update(u32);
+    virtual void adaptor_do_data(void const*, u32, void const*, u32);
 
     JStage::TAmbientLight* get_pJSG_() { return (JStage::TAmbientLight*)pJSGObject_; }
 };
@@ -159,28 +159,28 @@ struct TAdaptor_camera : public JStudio::TAdaptor_camera, public TAdaptor_object
     typedef JStudio::TObject_camera ObjectType;
     typedef TVariableValueOutput_object_<TAdaptor_camera, JStage::TCamera> TVVOutput;
 
-    /* 8028B8A0 */ TAdaptor_camera(JStage::TSystem const*, JStage::TCamera*);
-    /* 8028B960 */ virtual ~TAdaptor_camera();
-    /* 8028B9D4 */ virtual void adaptor_do_prepare();
-    /* 8028BA1C */ virtual void adaptor_do_begin();
-    /* 8028BAF8 */ virtual void adaptor_do_end();
-    /* 8028BB4C */ virtual void adaptor_do_update(u32);
-    /* 8028BBAC */ virtual void adaptor_do_data(void const*, u32, void const*, u32);
-    /* 8028BBD0 */ virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028BC14 */ virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028BC70 */ virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028BCEC */ virtual void adaptor_do_PARENT_FUNCTION(JStudio::data::TEOperationData, void const*,
+    TAdaptor_camera(JStage::TSystem const*, JStage::TCamera*);
+    virtual ~TAdaptor_camera();
+    virtual void adaptor_do_prepare();
+    virtual void adaptor_do_begin();
+    virtual void adaptor_do_end();
+    virtual void adaptor_do_update(u32);
+    virtual void adaptor_do_data(void const*, u32, void const*, u32);
+    virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_PARENT_FUNCTION(JStudio::data::TEOperationData, void const*,
                                                    u32);
-    /* 8028BD00 */ virtual void adaptor_do_TARGET_PARENT(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028BD44 */ virtual void adaptor_do_TARGET_PARENT_NODE(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_TARGET_PARENT(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_TARGET_PARENT_NODE(JStudio::data::TEOperationData, void const*,
                                                       u32);
-    /* 8028BDA0 */ virtual void adaptor_do_TARGET_PARENT_ENABLE(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_TARGET_PARENT_ENABLE(JStudio::data::TEOperationData, void const*,
                                                         u32);
 
-    /* 8028BDBC */ void setJSG_position_(JStudio::TControl const*);
-    /* 8028BEB8 */ void getJSG_position_(JStudio::TControl const*);
-    /* 8028BFBC */ void setJSG_targetPosition_(JStudio::TControl const*);
-    /* 8028C09C */ void getJSG_targetPosition_(JStudio::TControl const*);
+    void setJSG_position_(JStudio::TControl const*);
+    void getJSG_position_(JStudio::TControl const*);
+    void setJSG_targetPosition_(JStudio::TControl const*);
+    void getJSG_targetPosition_(JStudio::TControl const*);
 
     JStage::TCamera* get_pJSG_() { return (JStage::TCamera*)pJSGObject_; }
 
@@ -198,13 +198,13 @@ struct TAdaptor_camera : public JStudio::TAdaptor_camera, public TAdaptor_object
 struct TAdaptor_fog : public JStudio::TAdaptor_fog, public TAdaptor_object_ {
     typedef JStudio::TObject_fog ObjectType;
 
-    /* 8028C574 */ TAdaptor_fog(JStage::TSystem const*, JStage::TFog*);
-    /* 8028C610 */ virtual ~TAdaptor_fog();
-    /* 8028C684 */ virtual void adaptor_do_prepare();
-    /* 8028C6CC */ virtual void adaptor_do_begin();
-    /* 8028C7B4 */ virtual void adaptor_do_end();
-    /* 8028C808 */ virtual void adaptor_do_update(u32);
-    /* 8028C880 */ virtual void adaptor_do_data(void const*, u32, void const*, u32);
+    TAdaptor_fog(JStage::TSystem const*, JStage::TFog*);
+    virtual ~TAdaptor_fog();
+    virtual void adaptor_do_prepare();
+    virtual void adaptor_do_begin();
+    virtual void adaptor_do_end();
+    virtual void adaptor_do_update(u32);
+    virtual void adaptor_do_data(void const*, u32, void const*, u32);
 
     JStage::TFog* get_pJSG_() { return (JStage::TFog*)pJSGObject_; }
 
@@ -255,8 +255,8 @@ struct TAdaptor_light : public JStudio::TAdaptor_light, public TAdaptor_object_ 
             field_0x8 = param_2;
         }
 
-        /* 8028D24C */ virtual void operator()(f32, JStudio::TAdaptor*) const;
-        /* 8028D258 */ virtual ~TVVOutput_direction_() {}
+        virtual void operator()(f32, JStudio::TAdaptor*) const;
+        virtual ~TVVOutput_direction_() {}
 
         void adaptor_setOutput_(TAdaptor* adaptor) {
             adaptor->adaptor_referVariableValue(field_0x4)->setOutput(this);
@@ -268,15 +268,15 @@ struct TAdaptor_light : public JStudio::TAdaptor_light, public TAdaptor_object_ 
         TEDirection_ field_0x8;
     };
 
-    /* 8028CB50 */ TAdaptor_light(JStage::TSystem const*, JStage::TLight*);
-    /* 8028CBF4 */ virtual ~TAdaptor_light();
-    /* 8028CC68 */ virtual void adaptor_do_prepare();
-    /* 8028CCB0 */ virtual void adaptor_do_begin();
-    /* 8028CF68 */ virtual void adaptor_do_end();
-    /* 8028CFBC */ virtual void adaptor_do_update(u32);
-    /* 8028D18C */ virtual void adaptor_do_data(void const*, u32, void const*, u32);
-    /* 8028D228 */ virtual void adaptor_do_ENABLE(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028D1B0 */ virtual void adaptor_do_FACULTY(JStudio::data::TEOperationData, void const*, u32);
+    TAdaptor_light(JStage::TSystem const*, JStage::TLight*);
+    virtual ~TAdaptor_light();
+    virtual void adaptor_do_prepare();
+    virtual void adaptor_do_begin();
+    virtual void adaptor_do_end();
+    virtual void adaptor_do_update(u32);
+    virtual void adaptor_do_data(void const*, u32, void const*, u32);
+    virtual void adaptor_do_ENABLE(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_FACULTY(JStudio::data::TEOperationData, void const*, u32);
 
     JStage::TLight* get_pJSG_() { return (JStage::TLight*)pJSGObject_; }
 
@@ -285,11 +285,11 @@ struct TAdaptor_light : public JStudio::TAdaptor_light, public TAdaptor_object_ 
     static TVVOutput_direction_ saoVVOutput_direction_[6];
 };
 
-/* 8028A1F8 */ bool
+bool
     transform_toGlobalFromLocal(f32 (*)[4],
                                 JStudio::TControl::TTransform_translation_rotation_scaling const&,
                                 JStage::TObject const*, u32);
-/* 8028A290 */ bool transform_toGlobalFromLocal(f32 (*)[4],
+bool transform_toGlobalFromLocal(f32 (*)[4],
                                                 JStudio::TControl::TTransform_position const&,
                                                 JStage::TObject const*, u32);
 
@@ -304,11 +304,11 @@ inline bool transform_toGlobalFromLocal(JStudio::TControl::TTransform_position* 
     JStudio::math::getFromTransformation_T(param_1, afStack_38);
     return true;
 }
-/* 8028A328 */ bool
+bool
     transform_toLocalFromGlobal(f32 (*)[4],
                                 JStudio::TControl::TTransform_translation_rotation_scaling const&,
                                 JStage::TObject const*, u32);
-/* 8028A3CC */ bool transform_toLocalFromGlobal(f32 (*)[4],
+bool transform_toLocalFromGlobal(f32 (*)[4],
                                                 JStudio::TControl::TTransform_position const&,
                                                 JStage::TObject const*, u32);
 

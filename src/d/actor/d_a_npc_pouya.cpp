@@ -7,7 +7,6 @@
 
 #include "d/actor/d_a_npc_pouya.h"
 
-/* 80AB2000-80AB208C 000000 008C+00 8/8 0/0 0/0 .rodata          m__19daNpc_Pouya_Param_c */
 const daNpc_Pouya_HIOParam daNpc_Pouya_Param_c::m = {
     120.0f,  // attention_offset
     -3.0f,   // gravity
@@ -66,14 +65,12 @@ void daNpc_Pouya_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-/* 80AB2210-80AB2228 000020 0018+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[3][2] = {
     {26, 1},
     {23, 1},
     {34, 2},
 };
 
-/* 80AB2228-80AB2270 -00001 0048+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[9] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
@@ -86,25 +83,20 @@ static daNpcT_evtData_c l_evtList[9] = {
     {"RETURN_FAVOR_2_02", 2},
 };
 
-/* 80AB2270-80AB227C -00001 000C+00 3/4 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[3] = {
     "",
     "pouyaA",
     "pouyaB",
 };
 
-/* 80AB227C-80AB2280 00008C 0002+02 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[2] = {1, -1};
 
-/* 80AB2280-80AB2284 000090 0002+02 1/0 0/0 0/0 .data            l_loadResPtrn1 */
 static s8 l_loadResPtrn1[2] = {2, -1};
 
-/* 80AB2284-80AB229C -00001 0018+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[6] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn1, l_loadResPtrn1, l_loadResPtrn0,
 };
 
-/* 80AB229C-80AB245C 0000AC 01C0+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[16] = {
     {-1, 0, 0, -1, 0, 0, 0}, {11, 0, 1, -1, 0, 0, 0}, {8, 2, 1, -1, 0, 0, 0},
     {9, 0, 1, -1, 0, 0, 0},  {10, 0, 1, -1, 0, 0, 0}, {12, 2, 1, -1, 0, 0, 0},
@@ -114,7 +106,6 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[16] = {
     {18, 2, 2, 51, 2, 2, 0},
 };
 
-/* 80AB245C-80AB2734 00026C 02D8+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[26] = {
     {18, 2, 1, 36, 2, 1, 0, 0}, {19, 2, 1, 36, 2, 1, 0, 0}, {20, 2, 1, 36, 2, 1, 0, 0},
     {13, 0, 1, 36, 2, 1, 0, 0}, {16, 0, 1, 36, 2, 1, 0, 0}, {17, 2, 1, 36, 2, 1, 0, 0},
@@ -127,7 +118,6 @@ static daNpcT_motionAnmData_c l_motionAnmData[26] = {
     {26, 0, 2, 37, 0, 2, 1, 0}, {23, 0, 2, 37, 0, 2, 1, 0},
 };
 
-/* 80AB2734-80AB2854 000544 0120+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[72] = {
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}, {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}, {-1, 0, 0},  {1, -1, 1},  {-1, 0, 0},
@@ -142,7 +132,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[72] =
     {-1, 0, 0},  {-1, 0, 0},
 };
 
-/* 80AB2854-80AB2984 000664 0130+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[76] = {
     {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {1, -1, 0},  {-1, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {3, -1, 1},  {1, 0, 0},   {-1, 0, 0},  {-1, 0, 0},  {4, -1, 1},  {5, 0, 0},
@@ -157,21 +146,18 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[76] = {
     {-1, 0, 0},  {-1, 0, 0},  {25, -1, 1}, {10, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
 };
 
-/* 80AB2984-80AB2990 -00001 000C+00 1/1 0/0 0/0 .data            mCutNameList__13daNpc_Pouya_c */
 char* daNpc_Pouya_c::mCutNameList[3] = {
     "",
     "HAVE_FAVORTO_ASK",
     "RETURN_FAVOR",
 };
 
-/* 80AB29A8-80AB29CC 0007B8 0024+00 1/2 0/0 0/0 .data            mCutList__13daNpc_Pouya_c */
 daNpc_Pouya_c::cutFunc daNpc_Pouya_c::mCutList[3] = {
     NULL,
     &daNpc_Pouya_c::cutHaveFavorToAsk,
     &daNpc_Pouya_c::cutHaveFavorToAsk,
 };
 
-/* 80AADDAC-80AADEE0 0000EC 0134+00 1/0 0/0 0/0 .text            __dt__13daNpc_Pouya_cFv */
 daNpc_Pouya_c::~daNpc_Pouya_c() {
     if (mpMorf[0] != NULL) {
         mpMorf[0]->stopZelAnime();
@@ -180,7 +166,6 @@ daNpc_Pouya_c::~daNpc_Pouya_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-/* 80AADEE0-80AAE1AC 000220 02CC+00 1/1 0/0 0/0 .text            create__13daNpc_Pouya_cFv */
 int daNpc_Pouya_c::create() {
     static int const heapSize[6] = {
         0x8000, 0x5440, 0x3680, 0x3680, 0x8000, 0x8000,
@@ -229,7 +214,6 @@ int daNpc_Pouya_c::create() {
     return phase;
 }
 
-/* 80AAE1AC-80AAE5CC 0004EC 0420+00 1/1 0/0 0/0 .text            CreateHeap__13daNpc_Pouya_cFv */
 int daNpc_Pouya_c::CreateHeap() {
     static int const bmdTypeList[1] = {1};
 
@@ -296,19 +280,16 @@ int daNpc_Pouya_c::CreateHeap() {
     return 0;
 }
 
-/* 80AAE788-80AAE7BC 000AC8 0034+00 1/1 0/0 0/0 .text            Delete__13daNpc_Pouya_cFv */
 int daNpc_Pouya_c::Delete() {
     fopAcM_GetID(this);
     this->~daNpc_Pouya_c();
     return 1;
 }
 
-/* 80AAE7BC-80AAE7DC 000AFC 0020+00 2/2 0/0 0/0 .text            Execute__13daNpc_Pouya_cFv */
 int daNpc_Pouya_c::Execute() {
     return daNpcT_c::execute();
 }
 
-/* 80AAE7DC-80AAE870 000B1C 0094+00 1/1 0/0 0/0 .text            Draw__13daNpc_Pouya_cFv */
 int daNpc_Pouya_c::Draw() {
     if (mpMatAnm[0] != NULL) {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
@@ -317,14 +298,10 @@ int daNpc_Pouya_c::Draw() {
     return daNpcT_c::draw(0, 1, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
-/* 80AAE870-80AAE890 000BB0 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__13daNpc_Pouya_cFP10fopAc_ac_c            */
 int daNpc_Pouya_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Pouya_c*>(i_this)->CreateHeap();
 }
 
-/* 80AAE890-80AAE8E8 000BD0 0058+00 1/1 0/0 0/0 .text
- * ctrlJointCallBack__13daNpc_Pouya_cFP8J3DJointi               */
 int daNpc_Pouya_c::ctrlJointCallBack(J3DJoint* param_0, int param_1) {
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -338,7 +315,6 @@ int daNpc_Pouya_c::ctrlJointCallBack(J3DJoint* param_0, int param_1) {
     return 1;
 }
 
-/* 80AAE8E8-80AAE94C 000C28 0064+00 1/1 0/0 1/1 .text            getType__13daNpc_Pouya_cFv */
 u8 daNpc_Pouya_c::getType() {
     switch (fopAcM_GetParam(this) & 0xFF) {
     case 0:
@@ -355,7 +331,6 @@ u8 daNpc_Pouya_c::getType() {
     return TYPE_5;
 }
 
-/* 80AAE94C-80AAE9D8 000C8C 008C+00 1/1 0/0 0/0 .text            isDelete__13daNpc_Pouya_cFv */
 BOOL daNpc_Pouya_c::isDelete() {
     switch (mType) {
     case TYPE_0:
@@ -375,7 +350,6 @@ BOOL daNpc_Pouya_c::isDelete() {
     return FALSE;
 }
 
-/* 80AAE9D8-80AAEBCC 000D18 01F4+00 1/1 0/0 0/0 .text            reset__13daNpc_Pouya_cFv */
 void daNpc_Pouya_c::reset() {
     csXyz cStack_10;
     int size = (u8*)&field_0xfd0 - (u8*)&field_0xfb0;
@@ -415,7 +389,6 @@ void daNpc_Pouya_c::reset() {
     setAngle(cStack_10);
 }
 
-/* 80AAEBCC-80AAEDB8 000F0C 01EC+00 2/0 0/0 0/0 .text ctrlSubFaceMotion__13daNpc_Pouya_cFi */
 void daNpc_Pouya_c::ctrlSubFaceMotion(int param_1) {
     static int normal[3] = {31, 2, 1};
 
@@ -498,7 +471,6 @@ void daNpc_Pouya_c::ctrlSubFaceMotion(int param_1) {
     }
 }
 
-/* 80AAEDB8-80AAEE44 0010F8 008C+00 1/0 0/0 0/0 .text            afterJntAnm__13daNpc_Pouya_cFi */
 void daNpc_Pouya_c::afterJntAnm(int param_1) {
     if (param_1 == 1) {
         mDoMtx_stack_c::YrotM(-mStagger.getAngleZ(1));
@@ -509,7 +481,6 @@ void daNpc_Pouya_c::afterJntAnm(int param_1) {
     }
 }
 
-/* 80AAEE44-80AAEFB4 001184 0170+00 1/0 0/0 0/0 .text            setParam__13daNpc_Pouya_cFv */
 void daNpc_Pouya_c::setParam() {
     selectAction();
     srchActors();
@@ -559,8 +530,6 @@ void daNpc_Pouya_c::setParam() {
     gravity = 0.0f;
 }
 
-/* 80AAEFB4-80AAF148 0012F4 0194+00 1/0 0/0 0/0 .text            checkChangeEvt__13daNpc_Pouya_cFv
- */
 BOOL daNpc_Pouya_c::checkChangeEvt() {
     if (!chkAction(&daNpc_Pouya_c::talk)) {
         mPreItemNo = 0;
@@ -616,7 +585,6 @@ BOOL daNpc_Pouya_c::checkChangeEvt() {
     return FALSE;
 }
 
-/* 80AAF148-80AAF1F0 001488 00A8+00 2/0 0/0 0/0 .text setAfterTalkMotion__13daNpc_Pouya_cFv */
 void daNpc_Pouya_c::setAfterTalkMotion() {
     int iVar2 = FACE_MOT_UNK_17;
 
@@ -646,10 +614,8 @@ void daNpc_Pouya_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(iVar2, -1.0f, 0, 0);
 }
 
-/* 80AAF1F0-80AAF1F4 001530 0004+00 1/1 0/0 0/0 .text            srchActors__13daNpc_Pouya_cFv */
 void daNpc_Pouya_c::srchActors() {}
 
-/* 80AAF1F4-80AAF294 001534 00A0+00 1/0 0/0 0/0 .text            evtTalk__13daNpc_Pouya_cFv */
 BOOL daNpc_Pouya_c::evtTalk() {
     if (chkAction(&daNpc_Pouya_c::talk)) {
         (this->*mAction)(NULL);
@@ -659,7 +625,6 @@ BOOL daNpc_Pouya_c::evtTalk() {
     return TRUE;
 }
 
-/* 80AAF294-80AAF35C 0015D4 00C8+00 1/0 0/0 0/0 .text            evtCutProc__13daNpc_Pouya_cFv */
 BOOL daNpc_Pouya_c::evtCutProc() {
     int staffId = dComIfGp_getEventManager().getMyStaffId("Pouya", this, -1);
     if (staffId != -1) {
@@ -674,7 +639,6 @@ BOOL daNpc_Pouya_c::evtCutProc() {
     return false;
 }
 
-/* 80AAF35C-80AAF4F8 00169C 019C+00 1/0 0/0 0/0 .text            action__13daNpc_Pouya_cFv */
 void daNpc_Pouya_c::action() {
     fopAc_ac_c* hit_actor = hitChk(&mCyl, 0xFFFFFFFF);
 
@@ -702,7 +666,6 @@ void daNpc_Pouya_c::action() {
     }
 }
 
-/* 80AAF4F8-80AAF5BC 001838 00C4+00 1/0 0/0 0/0 .text            beforeMove__13daNpc_Pouya_cFv */
 void daNpc_Pouya_c::beforeMove() {
     fopAcM_OffStatus(this, 0x8000000);
     if (checkHide()) {
@@ -713,7 +676,6 @@ void daNpc_Pouya_c::beforeMove() {
     }
 }
 
-/* 80AAF5BC-80AAF8E4 0018FC 0328+00 1/0 0/0 0/0 .text            setAttnPos__13daNpc_Pouya_cFv */
 void daNpc_Pouya_c::setAttnPos() {
     cXyz acStack_40(20.0f, 30.0f, 0.0f);
     cXyz cStack_4c(20.0f, 0.0f, 0.0f);
@@ -758,7 +720,6 @@ void daNpc_Pouya_c::setAttnPos() {
     }
 }
 
-/* 80AAF8E4-80AAFA5C 001C24 0178+00 1/0 0/0 0/0 .text            setCollision__13daNpc_Pouya_cFv */
 void daNpc_Pouya_c::setCollision() {
     cXyz cStack_48;
 
@@ -802,12 +763,10 @@ void daNpc_Pouya_c::setCollision() {
     mCyl.ClrTgHit();
 }
 
-/* 80AAFA5C-80AAFA64 001D9C 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__13daNpc_Pouya_cFv */
 int daNpc_Pouya_c::drawDbgInfo() {
     return 0;
 }
 
-/* 80AAFA64-80AAFB4C 001DA4 00E8+00 1/0 0/0 0/0 .text            drawOtherMdl__13daNpc_Pouya_cFv */
 void daNpc_Pouya_c::drawOtherMdl() {
     static int const jointNo[1] = {4};
 
@@ -828,7 +787,6 @@ void daNpc_Pouya_c::drawOtherMdl() {
     }
 }
 
-/* 80AAFB4C-80AAFBDC 001E8C 0090+00 1/0 0/0 0/0 .text afterSetMotionAnm__13daNpc_Pouya_cFiifi */
 bool daNpc_Pouya_c::afterSetMotionAnm(int param_0, int param_1, f32 param_2, int param_3) {
     switch (param_0) {
     case 8:
@@ -841,7 +799,6 @@ bool daNpc_Pouya_c::afterSetMotionAnm(int param_0, int param_1, f32 param_2, int
     return true;
 }
 
-/* 80AAFBDC-80AAFC24 001F1C 0048+00 1/1 0/0 0/0 .text            selectAction__13daNpc_Pouya_cFv */
 int daNpc_Pouya_c::selectAction() {
     field_0xfb0 = NULL;
 
@@ -853,14 +810,10 @@ int daNpc_Pouya_c::selectAction() {
     return 1;
 }
 
-/* 80AAFC24-80AAFC50 001F64 002C+00 2/2 0/0 0/0 .text
- * chkAction__13daNpc_Pouya_cFM13daNpc_Pouya_cFPCvPvPv_i        */
 BOOL daNpc_Pouya_c::chkAction(actionFunc param_0) {
     return mAction == param_0;
 }
 
-/* 80AAFC50-80AAFCF8 001F90 00A8+00 2/2 0/0 0/0 .text
- * setAction__13daNpc_Pouya_cFM13daNpc_Pouya_cFPCvPvPv_i        */
 int daNpc_Pouya_c::setAction(actionFunc param_0) {
     mMode = MODE_EXIT;
     if (mAction != NULL) {
@@ -876,7 +829,6 @@ int daNpc_Pouya_c::setAction(actionFunc param_0) {
     return 1;
 }
 
-/* 80AAFCF8-80AAFE08 002038 0110+00 1/1 0/0 0/0 .text            setPrtcls__13daNpc_Pouya_cFv */
 void daNpc_Pouya_c::setPrtcls() {
     JGeometry::TVec3<s16> emitter_rot;
     cXyz cStack_14;
@@ -896,7 +848,6 @@ void daNpc_Pouya_c::setPrtcls() {
     }
 }
 
-/* 80AAFE08-80AB04A8 002148 06A0+00 4/0 0/0 0/0 .text cutHaveFavorToAsk__13daNpc_Pouya_cFi */
 int daNpc_Pouya_c::cutHaveFavorToAsk(int param_0) {
     cXyz acStack_48;
     csXyz cStack_50;
@@ -1065,7 +1016,6 @@ int daNpc_Pouya_c::cutHaveFavorToAsk(int param_0) {
     return rv;
 }
 
-/* 80AB04A8-80AB0A7C 0027E8 05D4+00 1/0 0/0 0/0 .text            wait__13daNpc_Pouya_cFPv */
 int daNpc_Pouya_c::wait(void* param_0) {
     switch (mMode) {
     case 0:
@@ -1163,7 +1113,6 @@ int daNpc_Pouya_c::wait(void* param_0) {
     return 1;
 }
 
-/* 80AB0A7C-80AB0CFC 002DBC 0280+00 3/0 0/0 0/0 .text            talk__13daNpc_Pouya_cFPv */
 int daNpc_Pouya_c::talk(void* param_0) {
     switch (mMode) {
     case 0:
@@ -1220,42 +1169,34 @@ int daNpc_Pouya_c::talk(void* param_0) {
     return 0;
 }
 
-/* 80AB0CFC-80AB0D1C 00303C 0020+00 1/0 0/0 0/0 .text            daNpc_Pouya_Create__FPv */
 static int daNpc_Pouya_Create(void* i_this) {
     return static_cast<daNpc_Pouya_c*>(i_this)->create();
 }
 
-/* 80AB0D1C-80AB0D3C 00305C 0020+00 1/0 0/0 0/0 .text            daNpc_Pouya_Delete__FPv */
 static int daNpc_Pouya_Delete(void* i_this) {
     return static_cast<daNpc_Pouya_c*>(i_this)->Delete();
 }
 
-/* 80AB0D3C-80AB0D5C 00307C 0020+00 1/0 0/0 0/0 .text            daNpc_Pouya_Execute__FPv */
 static int daNpc_Pouya_Execute(void* i_this) {
     return static_cast<daNpc_Pouya_c*>(i_this)->Execute();
 }
 
-/* 80AB0D5C-80AB0D7C 00309C 0020+00 1/0 0/0 0/0 .text            daNpc_Pouya_Draw__FPv */
 static int daNpc_Pouya_Draw(void* i_this) {
     return static_cast<daNpc_Pouya_c*>(i_this)->Draw();
 }
 
-/* 80AB0D7C-80AB0D84 0030BC 0008+00 1/0 0/0 0/0 .text            daNpc_Pouya_IsDelete__FPv */
 static bool daNpc_Pouya_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80AB2CFC-80AB2D00 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 NPC_POUYA_HIO_CLASS l_HIO;
 
-/* 80AB2B1C-80AB2B3C -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Pouya_MethodTable */
 static actor_method_class daNpc_Pouya_MethodTable = {
     (process_method_func)daNpc_Pouya_Create,  (process_method_func)daNpc_Pouya_Delete,
     (process_method_func)daNpc_Pouya_Execute, (process_method_func)daNpc_Pouya_IsDelete,
     (process_method_func)daNpc_Pouya_Draw,
 };
 
-/* 80AB2B3C-80AB2B6C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_POUYA */
 extern actor_process_profile_definition g_profile_NPC_POUYA = {
     fpcLy_CURRENT_e,           // mLayerID
     7,                         // mListID

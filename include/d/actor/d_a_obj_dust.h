@@ -23,19 +23,19 @@
  */
 class daObjDust_c : public dBgS_MoveBgActor {
 public:
-    /* 80BE22B8 */ void Search_Ymb();
-    /* 80BE2490 */ void RideOn_Angle(s16&, f32, s16, f32);
-    /* 80BE24F8 */ int Check_RideOn();
-    /* 80BE2708 */ void initBaseMtx();
-    /* 80BE2734 */ void setBaseMtx();
+    void Search_Ymb();
+    void RideOn_Angle(s16&, f32, s16, f32);
+    int Check_RideOn();
+    void initBaseMtx();
+    void setBaseMtx();
 
     inline int create();
-    /* 80BE2A70 */ inline int CreateHeap();
+    inline int CreateHeap();
 
-    /* 80BE2AE8 */ inline int Create();
-    /* 80BE2B30 */ inline int Execute(Mtx**);
-    /* 80BE2E9C */ inline int Draw();
-    /* 80BE2F40 */ inline int Delete();
+    inline int Create();
+    inline int Execute(Mtx**);
+    inline int Draw();
+    inline int Delete();
 
     /* 0x5A0 */ f32 mRideOscillationSpeed;
     /* 0x5A4 */ f32 mRideIntensity; 

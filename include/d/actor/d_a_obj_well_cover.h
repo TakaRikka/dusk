@@ -14,18 +14,18 @@
  */
 class daObjWCover_c : public dBgS_MoveBgActor {
 public:
-    /* 80D36298 */ void initBaseMtx();
-    /* 80D362D4 */ void setBaseMtx();
-    /* 80D36348 */ int Create();
-    /* 80D36394 */ int CreateHeap();
-    /* 80D36404 */ int create();
-    /* 80D364E0 */ int Execute(Mtx**);
-    /* 80D3652C */ void action();
-    /* 80D365B8 */ void modeWait();
-    /* 80D36790 */ void init_modeBreak();
-    /* 80D3689C */ void modeBreak();
-    /* 80D368A0 */ int Draw();
-    /* 80D36944 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    void action();
+    void modeWait();
+    void init_modeBreak();
+    void modeBreak();
+    int Draw();
+    int Delete();
 
     u8 getSwNo() { return fopAcM_GetParam(this); }
 

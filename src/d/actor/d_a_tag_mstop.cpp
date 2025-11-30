@@ -11,7 +11,6 @@
 #include "d/actor/d_a_npc4.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 805A6138-805A6318 000078 01E0+00 1/1 0/0 0/0 .text            create__12daTagMstop_cFv */
 int daTagMstop_c::create() {
     fopAcM_ct(this, daTagMstop_c);
 
@@ -68,29 +67,22 @@ int daTagMstop_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 805A6318-805A6338 000258 0020+00 1/0 0/0 0/0 .text            daTagMstop_Create__FP10fopAc_ac_c
- */
 static int daTagMstop_Create(fopAc_ac_c* i_this) {
     return static_cast<daTagMstop_c*>(i_this)->create();
 }
 
-/* 805A6338-805A639C 000278 0064+00 1/1 0/0 0/0 .text            __dt__12daTagMstop_cFv */
 daTagMstop_c::~daTagMstop_c() {}
 
-/* 805A639C-805A63C4 0002DC 0028+00 1/0 0/0 0/0 .text            daTagMstop_Delete__FP12daTagMstop_c
- */
 static int daTagMstop_Delete(daTagMstop_c* i_this) {
     i_this->~daTagMstop_c();
     return 1;
 }
 
-/* 805A63C4-805A63F8 000304 0034+00 1/1 0/0 0/0 .text            eventOrder__12daTagMstop_cFv */
 void daTagMstop_c::eventOrder() {
     eventInfo.onCondition(dEvtCnd_CANTALK_e);
     fopAcM_orderSpeakEvent(this, 0, 0);
 }
 
-/* 805A63F8-805A693C 000338 0544+00 1/1 0/0 0/0 .text            execute__12daTagMstop_cFv */
 int daTagMstop_c::execute() {
     if (field_0x56c) {
         fopAcM_seStartCurrentLevel(this, Z2SE_OBJ_DARK_GATE, 0);
@@ -172,24 +164,18 @@ int daTagMstop_c::execute() {
     return 1;
 }
 
-/* 805A693C-805A695C 00087C 0020+00 1/0 0/0 0/0 .text daTagMstop_Execute__FP12daTagMstop_c */
 static int daTagMstop_Execute(daTagMstop_c* i_this) {
     return i_this->execute();
 }
 
-/* 805A695C-805A6964 00089C 0008+00 1/0 0/0 0/0 .text            daTagMstop_Draw__FP12daTagMstop_c
- */
 static int daTagMstop_Draw(daTagMstop_c* i_this) {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 805A6984-805A69A4 -00001 0020+00 1/0 0/0 0/0 .data            l_daTagMstop_Method */
 static actor_method_class l_daTagMstop_Method = {
     (process_method_func)daTagMstop_Create, (process_method_func)daTagMstop_Delete,
     (process_method_func)daTagMstop_Execute, NULL, (process_method_func)daTagMstop_Draw};
 
-/* 805A69A4-805A69D4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_Mstop */
 extern actor_process_profile_definition g_profile_Tag_Mstop = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

@@ -8,10 +8,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 80C56B9C-80C56BA4 000014 0008+00 1/1 0/0 0/0 .bss             l_HIO */
 static daLv1Cdl00_HIO_c l_HIO;
 
-/* 80C56A50-80C56A80 000000 0030+00 4/4 0/0 0/0 .rodata          mCcDObjInfo__12daLv1Cdl00_c */
 dCcD_SrcGObjInf const daLv1Cdl00_c::mCcDObjInfo = {
     {
         0, {
@@ -25,19 +23,16 @@ dCcD_SrcGObjInf const daLv1Cdl00_c::mCcDObjInfo = {
     {0},
 };
 
-/* 80C56AC0-80C56B04 000000 0044+00 2/2 0/0 0/0 .data            mCcDCyl__12daLv1Cdl00_c */
 dCcD_SrcCyl daLv1Cdl00_c::mCcDCyl = {
     daLv1Cdl00_c::mCcDObjInfo,
     { {0.0f, 0.0f, 0.0f}, 0, 0}
 };
 
-/* 80C55D0C-80C55D38 0000EC 002C+00 1/1 0/0 0/0 .text            __ct__16daLv1Cdl00_HIO_cFv */
 daLv1Cdl00_HIO_c::daLv1Cdl00_HIO_c() :
     field_0x4(60),
     field_0x5(1)
     {}
 
-/* 80C55D80-80C55E08 000160 0088+00 2/2 0/0 0/0 .text            setBaseMtx__12daLv1Cdl00_cFv */
 void daLv1Cdl00_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
@@ -45,7 +40,6 @@ void daLv1Cdl00_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C55E08-80C55E74 0001E8 006C+00 1/1 0/0 0/0 .text            CreateHeap__12daLv1Cdl00_cFv */
 int daLv1Cdl00_c::CreateHeap() {
     J3DModelData* bmd = (J3DModelData*)dComIfG_getObjectRes("lv1cdl00", 4);
     mpModel = mDoExt_J3DModel__create(bmd, 0x80000, 0x11000084);
@@ -55,7 +49,6 @@ int daLv1Cdl00_c::CreateHeap() {
     return true;
 }
 
-/* 80C55E74-80C56110 000254 029C+00 1/1 0/0 0/0 .text            create__12daLv1Cdl00_cFv */
 cPhs__Step daLv1Cdl00_c::create() {
     fopAcM_ct(this, daLv1Cdl00_c);
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, "lv1cdl00");
@@ -103,13 +96,10 @@ cPhs__Step daLv1Cdl00_c::create() {
     return step;
 }
 
-/* 80C561A0-80C561C0 000580 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__12daLv1Cdl00_cFP10fopAc_ac_c             */
 int daLv1Cdl00_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daLv1Cdl00_c*>(i_this)->CreateHeap();
 }
 
-/* 80C561C0-80C56268 0005A0 00A8+00 1/1 0/0 0/0 .text            lightInit__12daLv1Cdl00_cFv */
 void daLv1Cdl00_c::lightInit() {
     mLightPos = mTorchPos;
     mLightPos.y += 10.0f;
@@ -128,21 +118,18 @@ void daLv1Cdl00_c::lightInit() {
     }
 }
 
-/* 80C56268-80C562A0 000648 0038+00 2/2 0/0 0/0 .text            setLight__12daLv1Cdl00_cFv */
 void daLv1Cdl00_c::setLight() {
     if (mLightType == 1 || mLightType == 2) {
         dKy_plight_set(&mLight);
     }
 }
 
-/* 80C562A0-80C562D8 000680 0038+00 1/1 0/0 0/0 .text            cutLight__12daLv1Cdl00_cFv */
 void daLv1Cdl00_c::cutLight() {
     if (mLightType == 1 || mLightType == 2) {
         dKy_plight_cut(&mLight);
     }
 }
 
-/* 80C562D8-80C56388 0006B8 00B0+00 1/1 0/0 0/0 .text            pointLightProc__12daLv1Cdl00_cFv */
 void daLv1Cdl00_c::pointLightProc() {
     if (mLightType != 1) {
         GXColor color = { 0xbc, 0x66, 0x42, 0xff };
@@ -157,7 +144,6 @@ void daLv1Cdl00_c::pointLightProc() {
     }
 }
 
-/* 80C56388-80C567EC 000768 0464+00 1/1 0/0 0/0 .text            Execute__12daLv1Cdl00_cFv */
 int daLv1Cdl00_c::Execute() {
     u8 sw = fopAcM_isSwitch(this, fopAcM_GetParam(this) & 0xff);
     if (mIsSwitch != sw) {
@@ -245,7 +231,6 @@ int daLv1Cdl00_c::Execute() {
     return true;
 }
 
-/* 80C567EC-80C56890 000BCC 00A4+00 1/1 0/0 0/0 .text            Draw__12daLv1Cdl00_cFv */
 int daLv1Cdl00_c::Draw() {
     g_env_light.settingTevStruct(0x40, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -255,7 +240,6 @@ int daLv1Cdl00_c::Draw() {
     return true;
 }
 
-/* 80C56890-80C568F0 000C70 0060+00 1/1 0/0 0/0 .text            Delete__12daLv1Cdl00_cFv */
 int daLv1Cdl00_c::Delete() {
     mSound.deleteObject();
     dComIfG_resDelete(&mPhase, "lv1cdl00");
@@ -265,30 +249,22 @@ int daLv1Cdl00_c::Delete() {
     return true;
 }
 
-/* 80C568F0-80C56910 000CD0 0020+00 1/0 0/0 0/0 .text            daLv1Cdl00_Draw__FP12daLv1Cdl00_c
- */
 static int daLv1Cdl00_Draw(daLv1Cdl00_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80C56910-80C56930 000CF0 0020+00 1/0 0/0 0/0 .text daLv1Cdl00_Execute__FP12daLv1Cdl00_c */
 static int daLv1Cdl00_Execute(daLv1Cdl00_c* i_this) {
     return i_this->Execute();
 }
 
-/* 80C56930-80C56950 000D10 0020+00 1/0 0/0 0/0 .text            daLv1Cdl00_Delete__FP12daLv1Cdl00_c
- */
 static int daLv1Cdl00_Delete(daLv1Cdl00_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80C56950-80C56970 000D30 0020+00 1/0 0/0 0/0 .text            daLv1Cdl00_Create__FP10fopAc_ac_c
- */
 static cPhs__Step daLv1Cdl00_Create(fopAc_ac_c* i_this) {
     return static_cast<daLv1Cdl00_c*>(i_this)->create();
 }
 
-/* 80C56B04-80C56B24 -00001 0020+00 1/0 0/0 0/0 .data            l_daLv1Cdl00_Method */
 static actor_method_class l_daLv1Cdl00_Method = {
     (process_method_func)daLv1Cdl00_Create,
     (process_method_func)daLv1Cdl00_Delete,
@@ -297,7 +273,6 @@ static actor_method_class l_daLv1Cdl00_Method = {
     (process_method_func)daLv1Cdl00_Draw,
 };
 
-/* 80C56B24-80C56B54 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv1Cdl00 */
 extern actor_process_profile_definition g_profile_Obj_Lv1Cdl00 = {
     fpcLy_CURRENT_e,
     3,

@@ -31,13 +31,10 @@ int daNpcGuard_c::createHeap() {
     return rv;
 }
 
-/* 809EFD58-809EFE20 000078 00C8+00 1/1 0/0 0/0 .text            createHeapCallBack__FP10fopAc_ac_c
- */
 static int createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpcGuard_c*>(i_this)->createHeap();
 }
 
-/* 809F2E18-809F2EC0 0000C8 00A8+00 1/2 0/0 0/0 .data            ActionTable__12daNpcGuard_c */
 daNpcGuard_c::actionFunc daNpcGuard_c::ActionTable[7][2] = {
     {&daNpcGuard_c::initPath, &daNpcGuard_c::executePath},
     {&daNpcGuard_c::initRun, &daNpcGuard_c::executeRun},
@@ -48,8 +45,6 @@ daNpcGuard_c::actionFunc daNpcGuard_c::ActionTable[7][2] = {
     {&daNpcGuard_c::initEscape, &daNpcGuard_c::executeEscape},
 };
 
-/* 809EFE20-809EFE64 000140 0044+00 8/8 0/0 0/0 .text
- * setAction__12daNpcGuard_cFQ212daNpcGuard_c6Mode_e            */
 void daNpcGuard_c::setAction(daNpcGuard_c::Mode_e i_action) {
     JUT_ASSERT(286, i_action < MODE_MAX_e);
 
@@ -59,25 +54,21 @@ void daNpcGuard_c::setAction(daNpcGuard_c::Mode_e i_action) {
     callInit();
 }
 
-/* 809EFE64-809EFE8C 000184 0028+00 1/1 0/0 0/0 .text            callInit__12daNpcGuard_cFv */
 void daNpcGuard_c::callInit() {
     JUT_ASSERT(328, mAction != NULL);
     (this->*mAction[0])();
 }
 
-/* 809EFE8C-809EFEB8 0001AC 002C+00 1/1 0/0 0/0 .text            callExecute__12daNpcGuard_cFv */
 void daNpcGuard_c::callExecute() {
     JUT_ASSERT(341, mAction != NULL);
     (this->*mAction[1])();
 }
 
-/* 809EFEB8-809EFF1C 0001D8 0064+00 1/0 0/0 0/0 .text            initPath__12daNpcGuard_cFv */
 void daNpcGuard_c::initPath() {
     setAnm((J3DAnmTransformKey*)getAnmP(4, mObjNum), 1.0f, 12.0f, 2, 0, -1);
     field_0xd9c = 1;
 }
 
-/* 809EFF1C-809F0100 00023C 01E4+00 1/0 0/0 0/0 .text            executePath__12daNpcGuard_cFv */
 void daNpcGuard_c::executePath() {
     if (m_path.isPath()) {
         if (m_path.checkPoint(current.pos, speedF)) {
@@ -116,13 +107,11 @@ void daNpcGuard_c::executePath() {
     }
 }
 
-/* 809F0184-809F01E8 0004A4 0064+00 1/0 0/0 0/0 .text            initRun__12daNpcGuard_cFv */
 void daNpcGuard_c::initRun() {
     setAnm((J3DAnmTransformKey*)getAnmP(4, mObjNum), 1.0f, 12.0f, 2, 0, -1);
     field_0xd9c = 1;
 }
 
-/* 809F01E8-809F03FC 000508 0214+00 1/0 0/0 0/0 .text            executeRun__12daNpcGuard_cFv */
 void daNpcGuard_c::executeRun() {
     field_0xda0 = fopAcM_searchPlayerAngleY(this);
     cLib_addCalcAngleS2(&shape_angle.y, field_0xda0, 0xD, 0x600);
@@ -160,7 +149,6 @@ void daNpcGuard_c::executeRun() {
     }
 }
 
-/* 809F03FC-809F04B4 00071C 00B8+00 1/0 0/0 0/0 .text            initFightWait__12daNpcGuard_cFv */
 void daNpcGuard_c::initFightWait() {
     setAnm((J3DAnmTransformKey*)getAnmP(42, mObjNum), 1.0f, 12.0f, 2, 0, -1);
     speedF = 0.0f;
@@ -171,8 +159,6 @@ void daNpcGuard_c::initFightWait() {
     field_0xd9c = 0;
 }
 
-/* 809F04B4-809F06F4 0007D4 0240+00 1/0 0/0 0/0 .text            executeFightWait__12daNpcGuard_cFv
- */
 void daNpcGuard_c::executeFightWait() {
     f32 playerDist = fopAcM_searchPlayerDistanceXZ(this);
     f32 dist = playerDist - field_0xd98;
@@ -210,21 +196,16 @@ void daNpcGuard_c::executeFightWait() {
     }
 }
 
-/* 809F06F4-809F0700 000A14 000C+00 1/0 0/0 0/0 .text            initFightStep__12daNpcGuard_cFv */
 void daNpcGuard_c::initFightStep() {
     field_0xd9c = 0;
 }
 
-/* 809F0700-809F0778 000A20 0078+00 1/0 0/0 0/0 .text            executeFightStep__12daNpcGuard_cFv
- */
 void daNpcGuard_c::executeFightStep() {
     if (fopAcM_searchPlayerDistanceXZ2(this) > std::pow(500.0f, 2.0f)) {
         setAction(MODE_RUN_e);
     }
 }
 
-/* 809F0778-809F07F8 000A98 0080+00 1/0 0/0 0/0 .text            initFightMenace__12daNpcGuard_cFv
- */
 void daNpcGuard_c::initFightMenace() {
     setAnm((J3DAnmTransformKey*)getAnmP(43, mObjNum), 1.0f, 12.0f, 0, 0, -1);
     mCitizen.playVoice(2);
@@ -232,7 +213,6 @@ void daNpcGuard_c::initFightMenace() {
     field_0xd9c = 0;
 }
 
-/* 809F07F8-809F08DC 000B18 00E4+00 1/0 0/0 0/0 .text executeFightMenace__12daNpcGuard_cFv */
 void daNpcGuard_c::executeFightMenace() {
     field_0xda0 = fopAcM_searchPlayerAngleY(this);
     cLib_addCalcAngleS2(&shape_angle.y, field_0xda0, 0x3, 0x600);
@@ -245,7 +225,6 @@ void daNpcGuard_c::executeFightMenace() {
     }
 }
 
-/* 809F08DC-809F0960 000BFC 0084+00 1/0 0/0 0/0 .text            initFear__12daNpcGuard_cFv */
 void daNpcGuard_c::initFear() {
     setAnm((J3DAnmTransformKey*)getAnmP(46, 0), 1.0f, 4.0f, 2, 0, -1);
     field_0xd88 = cLib_getRndValue(0x96, 0x3C);
@@ -253,7 +232,6 @@ void daNpcGuard_c::initFear() {
     field_0xd9c = 0;
 }
 
-/* 809F0960-809F0A50 000C80 00F0+00 1/0 0/0 0/0 .text            executeFear__12daNpcGuard_cFv */
 void daNpcGuard_c::executeFear() {
     if (mpMorf->checkFrame(1.0f)) {
         mCitizen.playVoice(2);
@@ -279,7 +257,6 @@ void daNpcGuard_c::executeFear() {
     }
 }
 
-/* 809F0A50-809F0B20 000D70 00D0+00 1/0 0/0 0/0 .text            initEscape__12daNpcGuard_cFv */
 void daNpcGuard_c::initEscape() {
     setAnm((J3DAnmTransformKey*)getAnmP(4, 3), 2.0f, 8.0f, 2, 0, -1);
     mCitizen.playVoice(0);
@@ -289,7 +266,6 @@ void daNpcGuard_c::initEscape() {
     field_0xd9c = 1;
 }
 
-/* 809F0B20-809F0DD4 000E40 02B4+00 1/0 0/0 0/0 .text            executeEscape__12daNpcGuard_cFv */
 void daNpcGuard_c::executeEscape() {
     if (field_0xd9c != 0) {
         speedF = 20.0f;
@@ -330,12 +306,10 @@ void daNpcGuard_c::executeEscape() {
     }
 }
 
-/* 809F0DD4-809F0DE0 0010F4 000C+00 5/5 0/0 0/0 .text            setAngle__12daNpcGuard_cFv */
 void daNpcGuard_c::setAngle() {
     current.angle.y = shape_angle.y;
 }
 
-/* 809F0DE0-809F0ED4 001100 00F4+00 1/1 0/0 0/0 .text            setSpeed__12daNpcGuard_cFffPfi */
 void daNpcGuard_c::setSpeed(f32 param_1, f32 param_2, f32* i_speed, int param_4) {
     f32 target = field_0xd8c * (param_2 * field_0xd8c);
     f32 step = field_0xd8c * (param_1 * field_0xd8c);
@@ -354,7 +328,6 @@ void daNpcGuard_c::setSpeed(f32 param_1, f32 param_2, f32* i_speed, int param_4)
     cLib_chaseF(i_speed, target, step);
 }
 
-/* 809F0ED4-809F12D0 0011F4 03FC+00 1/1 0/0 0/0 .text            pathMoveF__12daNpcGuard_cFv */
 void daNpcGuard_c::pathMoveF() {
     f32 walkSpeed = 0.0f;
     f32 anmSpeed = 0.0f;
@@ -405,7 +378,6 @@ void daNpcGuard_c::pathMoveF() {
     }
 }
 
-/* 809F12D0-809F12F0 0015F0 0020+00 1/0 0/0 0/0 .text            daNpcGuard_Create__FPv */
 static int daNpcGuard_Create(void* i_this) {
     return static_cast<daNpcGuard_c*>(i_this)->create();
 }
@@ -444,7 +416,6 @@ void daNpcGuard_c::initCollision() {
     }
 }
 
-/* 809F14CC-809F17D0 0017EC 0304+00 1/1 0/0 0/0 .text            create_init__12daNpcGuard_cFv */
 void daNpcGuard_c::create_init() {
     gravity = -3.0f;
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
@@ -473,7 +444,6 @@ void daNpcGuard_c::create_init() {
     setMtx();
 }
 
-/* 809F17D0-809F1878 001AF0 00A8+00 2/2 0/0 0/0 .text            setMtx__12daNpcGuard_cFv */
 void daNpcGuard_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, field_0xd94, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -487,7 +457,6 @@ void daNpcGuard_c::setMtx() {
     setAttention(m_type);
 }
 
-/* 809F1878-809F1D6C 001B98 04F4+00 1/1 0/0 0/0 .text            lookat__12daNpcGuard_cFv */
 void daNpcGuard_c::lookat() {
     csXyz vecs1[3] = {
         csXyz(Cd2_HIO_maxLmtX_BACKBONE(m_type), Cd2_HIO_maxLmtY_BACKBONE(m_type), 0),
@@ -524,7 +493,6 @@ void daNpcGuard_c::lookat() {
     mLookat.action(cStack_80, eyePos, this, afStack_38, NULL != mActorMngr.getActorP());
 }
 
-/* 809F12F0-809F14CC 001610 01DC+00 1/1 0/0 0/0 .text            create__12daNpcGuard_cFv */
 int daNpcGuard_c::create() {
     fopAcM_ct(this, daNpcGuard_c);
 
@@ -543,13 +511,11 @@ int daNpcGuard_c::create() {
     return phase;
 }
 
-/* 809F1F40-809F1F74 002260 0034+00 1/0 0/0 0/0 .text            daNpcGuard_Delete__FPv */
 static int daNpcGuard_Delete(void* i_this) {
     static_cast<daNpcGuard_c*>(i_this)->~daNpcGuard_c();
     return 1;
 }
 
-/* 809F1F74-809F2024 002294 00B0+00 1/0 0/0 0/0 .text            __dt__12daNpcGuard_cFv */
 daNpcGuard_c::~daNpcGuard_c() {
     removeResrc(m_type, mObjNum);
     if (heap != NULL) {
@@ -557,7 +523,6 @@ daNpcGuard_c::~daNpcGuard_c() {
     }
 }
 
-/* 809F2024-809F2044 002344 0020+00 1/0 0/0 0/0 .text            daNpcGuard_Execute__FPv */
 static int daNpcGuard_Execute(void* i_this) {
     return static_cast<daNpcGuard_c*>(i_this)->execute();
 }
@@ -588,7 +553,6 @@ void daNpcGuard_c::setCollision() {
     }
 }
 
-/* 809F2044-809F2374 002364 0330+00 1/1 0/0 0/0 .text            execute__12daNpcGuard_cFv */
 int daNpcGuard_c::execute() {
     mAcchCir.SetWallH(Cd2_HIO_chkWallH(m_type));
     mAcchCir.SetWallR(m_type != 0 ? 90.0f : 45.0f);
@@ -631,24 +595,20 @@ int daNpcGuard_c::draw() {
     return 1;
 }
 
-/* 809F2374-809F2464 002694 00F0+00 1/0 0/0 0/0 .text            daNpcGuard_Draw__FPv */
 static int daNpcGuard_Draw(void* i_this) {
     return static_cast<daNpcGuard_c*>(i_this)->draw();
 }
 
-/* 809F2464-809F246C 002784 0008+00 1/0 0/0 0/0 .text            daNpcGuard_IsDelete__FPv */
 static int daNpcGuard_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 809F2EC0-809F2EE0 -00001 0020+00 1/0 0/0 0/0 .data            daNpcGuard_METHODS */
 static actor_method_class daNpcGuard_METHODS = {
     (process_method_func)daNpcGuard_Create,  (process_method_func)daNpcGuard_Delete,
     (process_method_func)daNpcGuard_Execute, (process_method_func)daNpcGuard_IsDelete,
     (process_method_func)daNpcGuard_Draw,
 };
 
-/* 809F2EE0-809F2F10 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_GUARD */
 extern actor_process_profile_definition g_profile_NPC_GUARD = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

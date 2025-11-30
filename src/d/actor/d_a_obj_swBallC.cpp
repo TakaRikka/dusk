@@ -15,12 +15,10 @@
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_msg.h"
 
-/* 80CF5B98-80CF5BB8 000078 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* param_0) {
     return ((daObjSwBallC_c*)param_0)->CreateHeap();
 }
 
-/* 80CF5BB8-80CF5C24 000098 006C+00 2/2 0/0 0/0 .text            s_swb_sub__FPvPv */
 static void* s_swb_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_SwBallB &&
         (u32)((daObjSwBallB_c*)param_1)->getID() == ((daObjSwBallC_c*)param_2)->field_0x582)
@@ -30,7 +28,6 @@ static void* s_swb_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80CF5C24-80CF5C7C 000104 0058+00 2/2 0/0 0/0 .text            s_ballA_sub__FPvPv */
 static void* s_ballA_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_Carry &&
         ((daObjCarry_c*)param_1)->getType() == daObjCarry_c::TYPE_BALL_S)
@@ -40,7 +37,6 @@ static void* s_ballA_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80CF5C7C-80CF5CD4 00015C 0058+00 2/2 0/0 0/0 .text            s_ballB_sub__FPvPv */
 static void* s_ballB_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_Obj_Carry &&
         ((daObjCarry_c*)param_1)->getType() == daObjCarry_c::TYPE_BALL_S_2)
@@ -50,33 +46,26 @@ static void* s_ballB_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80CF5CD4-80CF5CF4 0001B4 0020+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjSwBallC_cFv */
 void daObjSwBallC_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80CF5CF4-80CF5D58 0001D4 0064+00 1/1 0/0 0/0 .text            setBaseMtx__14daObjSwBallC_cFv */
 void daObjSwBallC_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* ############################################################################################## */
-/* 80CF6CD4-80CF6CD8 000000 0004+00 3/3 0/0 0/0 .rodata          l_color */
 static GXColor const l_color = {0x03, 0x96, 0xFF, 0xFF};
 
-/* 80CF6DB0-80CF6DB4 -00001 0004+00 4/4 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "P_LBswBC";
 
-/* 80CF6DB4-80CF6DB8 -00001 0004+00 1/1 0/0 0/0 .data            l_evName */
 static char* l_evName = "REVIVE_MASTER_SWORD";
 
 static f32 dummyFloat() {
     return -1.0f;
 }
 
-/* 80CF5D58-80CF5EF8 000238 01A0+00 1/1 0/0 0/0 .text            Create__14daObjSwBallC_cFv */
 int daObjSwBallC_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
@@ -104,10 +93,8 @@ int daObjSwBallC_c::Create() {
     return 1;
 }
 
-/* 80CF6DB8-80CF6DBC -00001 0004+00 1/1 0/0 0/0 .data            l_staffName */
 static char* l_staffName = "lbsw";
 
-/* 80CF5EF8-80CF6024 0003D8 012C+00 1/1 0/0 0/0 .text            CreateHeap__14daObjSwBallC_cFv */
 int daObjSwBallC_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 6);
     JUT_ASSERT(427, modelData != NULL);
@@ -125,7 +112,6 @@ int daObjSwBallC_c::CreateHeap() {
     return 1;
 }
 
-/* 80CF606C-80CF6120 00054C 00B4+00 1/1 0/0 0/0 .text            create__14daObjSwBallC_cFv */
 int daObjSwBallC_c::create() {
     fopAcM_ct(this, daObjSwBallC_c);
     int res = dComIfG_resLoad(&field_0x568, l_arcName);
@@ -139,27 +125,22 @@ int daObjSwBallC_c::create() {
     return res;
 }
 
-/* 80CF6120-80CF6144 000600 0024+00 2/2 0/0 0/0 .text            execute__14daObjSwBallC_cFv */
 int daObjSwBallC_c::execute() {
     event_proc_call();
     return 1;    
 }
 
-/* 80CF6144-80CF6200 000624 00BC+00 1/2 0/0 0/0 .text            event_proc_call__14daObjSwBallC_cFv
- */
 void daObjSwBallC_c::event_proc_call() {
     typedef void (daObjSwBallC_c::*ballfunc)();
     static ballfunc l_func[4] = {&daObjSwBallC_c::actionWait, &daObjSwBallC_c::actionOrderEvent, &daObjSwBallC_c::actionEvent, &daObjSwBallC_c::actionDead};
     (this->*l_func[field_0x57f])(); 
 }
 
-/* 80CF6E1C-80CF6E50 -00001 0034+00 1/1 0/0 0/0 .data            action_table$3966 */
 static char* action_table[13] = {
     "WAIT",    "ON",   "OFF",     "ON_ALL_B", "OFF_ALL_B", "DEL_BALL",  "SOUND",
     "SCALING", "INIT", "MESSAGE", "ST_CUT2",  "LINK_INIT", "EQUIP_SWD",
 };
 
-/* 80CF6200-80CF629C 0006E0 009C+00 1/0 0/0 0/0 .text            actionWait__14daObjSwBallC_cFv */
 void daObjSwBallC_c::actionWait() {
     if (fopAcM_isSwitch(this, 0x3d) && fopAcM_isSwitch(this, 0x3e)) {
         setAction(1);
@@ -168,7 +149,6 @@ void daObjSwBallC_c::actionWait() {
     }
 }
 
-/* 80CF629C-80CF6344 00077C 00A8+00 1/0 0/0 0/0 .text actionOrderEvent__14daObjSwBallC_cFv */
 void daObjSwBallC_c::actionOrderEvent() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(2);
@@ -182,7 +162,6 @@ void daObjSwBallC_c::actionOrderEvent() {
     }
 }
 
-/* 80CF6344-80CF63F0 000824 00AC+00 1/0 0/0 0/0 .text            actionEvent__14daObjSwBallC_cFv */
 void daObjSwBallC_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(field_0x57c)) {
         setAction(3);
@@ -196,12 +175,10 @@ void daObjSwBallC_c::actionEvent() {
     }
 }
 
-/* 80CF63F0-80CF63F4 0008D0 0004+00 1/0 0/0 0/0 .text            actionDead__14daObjSwBallC_cFv */
 void daObjSwBallC_c::actionDead() {
     /* empty function */
 }
 
-/* 80CF63F4-80CF6818 0008D4 0424+00 4/2 0/0 0/0 .text            demoProc__14daObjSwBallC_cFv */
 int daObjSwBallC_c::demoProc() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz acStack_38;
@@ -323,8 +300,6 @@ int daObjSwBallC_c::demoProc() {
     return 0;
 }
 
-/* 80CF6818-80CF6888 000CF8 0070+00 2/2 0/0 0/0 .text            setLightOnSwB__14daObjSwBallC_cFv
- */
 void daObjSwBallC_c::setLightOnSwB() {
     for (u8 i = 0; i < 6; i++) {
         field_0x582 = i;
@@ -335,8 +310,6 @@ void daObjSwBallC_c::setLightOnSwB() {
     }
 }
 
-/* 80CF6888-80CF68F8 000D68 0070+00 1/1 0/0 0/0 .text            setLightOffSwB__14daObjSwBallC_cFv
- */
 void daObjSwBallC_c::setLightOffSwB() {
     for (u8 i = 0; i < 6; i++) {
         field_0x582 = i;
@@ -347,14 +320,11 @@ void daObjSwBallC_c::setLightOffSwB() {
     }
 }
 
-/* 80CF68F8-80CF692C 000DD8 0034+00 1/1 0/0 0/0 .text            deleteLightBall__14daObjSwBallC_cFv
- */
 void daObjSwBallC_c::deleteLightBall() {
     deleteLightBallA();
     deleteLightBallB();
 }
 
-/* 80CF692C-80CF6964 000E0C 0038+00 1/1 0/0 0/0 .text deleteLightBallA__14daObjSwBallC_cFv */
 void daObjSwBallC_c::deleteLightBallA() {
     fopAc_ac_c* ball = (fopAc_ac_c*)fpcM_Search(s_ballA_sub, this);
     if (ball != NULL) {
@@ -362,7 +332,6 @@ void daObjSwBallC_c::deleteLightBallA() {
     }
 }
 
-/* 80CF6964-80CF699C 000E44 0038+00 1/1 0/0 0/0 .text deleteLightBallB__14daObjSwBallC_cFv */
 void daObjSwBallC_c::deleteLightBallB() {
     fopAc_ac_c* ball = (fopAc_ac_c*)fpcM_Search(s_ballB_sub, this);
     if (ball != NULL) {
@@ -370,7 +339,6 @@ void daObjSwBallC_c::deleteLightBallB() {
     }
 }
 
-/* 80CF699C-80CF6A74 000E7C 00D8+00 1/1 0/0 0/0 .text calcLightBallScale__14daObjSwBallC_cFv */
 int daObjSwBallC_c::calcLightBallScale() {
     int uVar3 = 0;
     fopAc_ac_c* ball = (fopAc_ac_c*)fpcM_Search(s_ballA_sub, this);
@@ -390,7 +358,6 @@ int daObjSwBallC_c::calcLightBallScale() {
     return uVar3;
 }
 
-/* 80CF6A74-80CF6BFC 000F54 0188+00 1/1 0/0 0/0 .text            draw__14daObjSwBallC_cFv */
 int daObjSwBallC_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -413,33 +380,27 @@ int daObjSwBallC_c::draw() {
     return 1;
 }
 
-/* 80CF6BFC-80CF6C30 0010DC 0034+00 1/1 0/0 0/0 .text            _delete__14daObjSwBallC_cFv */
 int daObjSwBallC_c::_delete() {
     dComIfG_resDelete(&field_0x568, l_arcName);
     return 1;
 }
 
-/* 80CF6C30-80CF6C50 001110 0020+00 1/0 0/0 0/0 .text daObjSwBallC_Draw__FP14daObjSwBallC_c */
 static int daObjSwBallC_Draw(daObjSwBallC_c* param_0) {
     return param_0->draw();
 }
 
-/* 80CF6C50-80CF6C70 001130 0020+00 1/0 0/0 0/0 .text daObjSwBallC_Execute__FP14daObjSwBallC_c */
 static int daObjSwBallC_Execute(daObjSwBallC_c* param_0) {
     return param_0->execute();
 }
 
-/* 80CF6C70-80CF6C90 001150 0020+00 1/0 0/0 0/0 .text daObjSwBallC_Delete__FP14daObjSwBallC_c */
 static int daObjSwBallC_Delete(daObjSwBallC_c* param_0) {
     return param_0->_delete();
 }
 
-/* 80CF6C90-80CF6CB0 001170 0020+00 1/0 0/0 0/0 .text daObjSwBallC_Create__FP14daObjSwBallC_c */
 static int daObjSwBallC_Create(daObjSwBallC_c* param_0) {
     return param_0->create();
 }
 
-/* 80CF6EB8-80CF6ED8 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjSwBallC_Method */
 static actor_method_class l_daObjSwBallC_Method = {
     (process_method_func)daObjSwBallC_Create,
     (process_method_func)daObjSwBallC_Delete,
@@ -448,7 +409,6 @@ static actor_method_class l_daObjSwBallC_Method = {
     (process_method_func)daObjSwBallC_Draw,
 };
 
-/* 80CF6ED8-80CF6F08 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_SwBallC */
 extern actor_process_profile_definition g_profile_Obj_SwBallC = {
     fpcLy_CURRENT_e,
     7,

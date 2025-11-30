@@ -16,30 +16,30 @@ class J2DOrthoGraph;
 
 class dMenu_ItemExplain_c {
 public:
-    /* 801DA754 */ dMenu_ItemExplain_c(JKRExpHeap*, JKRArchive*, STControl*, bool);
-    /* 801DAFF0 */ virtual ~dMenu_ItemExplain_c();
-    /* 801DB470 */ void move();
-    /* 801DB514 */ void draw(J2DOrthoGraph*);
-    /* 801DB744 */ void drawKantera();
-    /* 801DB818 */ void wait_init();
-    /* 801DB81C */ void wait_proc();
-    /* 801DB820 */ void open_init();
-    /* 801DBAB4 */ void open_proc();
-    /* 801DBB50 */ void move_init();
-    /* 801DBB7C */ void move_proc();
-    /* 801DBCB4 */ void move_select_init();
-    /* 801DBF44 */ void move_select_proc();
-    /* 801DC1E0 */ void move_next_init();
-    /* 801DC214 */ void move_next_proc();
-    /* 801DC2E4 */ void close_init();
-    /* 801DC2F0 */ void close_proc();
-    /* 801DC340 */ u8 openExplain(u8, u8, u8, bool);
-    /* 801DC3C8 */ u8 openExplainDmap(u8, u8, u8, bool, u8);
-    /* 801DC738 */ u8 openExplainTx(u32, u32);
-    /* 801DC7AC */ f32 getAlphaRatio();
-    /* 801DC7FC */ void setNumber();
-    /* 801DCB54 */ bool getWarpMarkFlag();
-    /* 801DCBBC */ void setScale();
+    dMenu_ItemExplain_c(JKRExpHeap*, JKRArchive*, STControl*, bool);
+    virtual ~dMenu_ItemExplain_c();
+    void move();
+    void draw(J2DOrthoGraph*);
+    void drawKantera();
+    void wait_init();
+    void wait_proc();
+    void open_init();
+    void open_proc();
+    void move_init();
+    void move_proc();
+    void move_select_init();
+    void move_select_proc();
+    void move_next_init();
+    void move_next_proc();
+    void close_init();
+    void close_proc();
+    u8 openExplain(u8, u8, u8, bool);
+    u8 openExplainDmap(u8, u8, u8, bool, u8);
+    u8 openExplainTx(u32, u32);
+    f32 getAlphaRatio();
+    void setNumber();
+    bool getWarpMarkFlag();
+    void setScale();
 
     u8 getStatus() { return mStatus; }
     void offForceButton() { mForceButton = 0; }

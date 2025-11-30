@@ -25,21 +25,21 @@ public:
     dalv4CandleTag_c() : dEvLib_callback_c(this) {}
     ~dalv4CandleTag_c() {}
 
-    /* 80C5D4B8 */ void setBaseMtx();
-    /* 80C5D4F0 */ int create();
-    /* 80C5D5D4 */ int Execute();
-    /* 80C5D618 */ void procMain();
-    /* 80C5D6D4 */ void init_modeWatch();
-    /* 80C5D6E0 */ void modeWatch();
-    /* 80C5D78C */ void init_modeNG();
-    /* 80C5D814 */ void modeNG();
-    /* 80C5D8A0 */ void init_modeNGWait();
-    /* 80C5D8AC */ void modeNGWait();
-    /* 80C5D8FC */ void init_modeEnd();
-    /* 80C5D908 */ void modeEnd();
-    /* 80C5D90C */ bool eventStart();
-    /* 80C5D930 */ int Draw();
-    /* 80C5D938 */ int Delete();
+    void setBaseMtx();
+    int create();
+    int Execute();
+    void procMain();
+    void init_modeWatch();
+    void modeWatch();
+    void init_modeNG();
+    void modeNG();
+    void init_modeNGWait();
+    void modeNGWait();
+    void init_modeEnd();
+    void modeEnd();
+    bool eventStart();
+    int Draw();
+    int Delete();
 
     u8 getSwTop() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwOK() { return fopAcM_GetParamBit(this, 8, 8); }

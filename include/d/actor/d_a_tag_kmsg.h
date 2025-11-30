@@ -26,12 +26,12 @@ public:
     /* 0x5C3 */ u8 field_0x5c3;
     /* 0x5C4 */ bool field_0x5c4;
 
-    /* 8048DE78 */ int create();
-    /* 8048DFDC */ int Delete();
-    /* 8048E010 */ int Execute();
-    /* 8048E8B8 */ int Draw();
-    /* 8048E8C0 */ int isDelete();
-    /* 8048EA30 */ virtual ~daTag_KMsg_c() {
+    int create();
+    int Delete();
+    int Execute();
+    int Draw();
+    int isDelete();
+    virtual ~daTag_KMsg_c() {
         if (getType() == KMSG_TYPE_3) {
             dComIfG_resDelete(&mPhase, "Lv6Gate");
         }

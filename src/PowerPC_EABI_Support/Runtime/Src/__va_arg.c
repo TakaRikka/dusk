@@ -3,7 +3,6 @@
 
 #undef __va_arg
 
-/* 80361B14-80361BDC 35C454 00C8+00 0/0 3/3 0/0 .text            __va_arg */
 void* __va_arg(_va_list_struct* list, int type) {
     char* addr;
     char* reg = &(list->gpr);

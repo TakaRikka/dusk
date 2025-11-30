@@ -70,17 +70,17 @@ public:
         MODE_RUN,
     };
 
-    /* 8006F268 */ int Run();
-    /* 8006FA24 */ bool StartShock(int i_vibmode, int i_flags, cXyz i_pos);
-    /* 8006FC0C */ bool StartQuake(const u8* i_pattern, int i_rounds, int i_flags, cXyz i_pos);
-    /* 8006FB10 */ bool StartQuake(int i_vibmode, int i_flags, cXyz i_pos);
-    /* 8006FD94 */ int StopQuake(int i_flags);
-    /* 8006FE00 */ void Kill();
-    /* 8006FE5C */ bool CheckQuake();
-    /* 8006FE84 */ void setDefault();
-    /* 8006FF04 */ void Init();
-    /* 8006FF38 */ void Pause();
-    /* 8006FFF8 */ void Remove();
+    int Run();
+    bool StartShock(int i_vibmode, int i_flags, cXyz i_pos);
+    bool StartQuake(const u8* i_pattern, int i_rounds, int i_flags, cXyz i_pos);
+    bool StartQuake(int i_vibmode, int i_flags, cXyz i_pos);
+    int StopQuake(int i_flags);
+    void Kill();
+    bool CheckQuake();
+    void setDefault();
+    void Init();
+    void Pause();
+    void Remove();
 
     static const vib_pattern MS_patt[VIBMODE_S_MAX];
     static const vib_pattern CS_patt[VIBMODE_S_MAX];

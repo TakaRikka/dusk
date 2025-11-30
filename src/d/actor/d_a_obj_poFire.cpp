@@ -9,8 +9,8 @@
 
 class daPoFire_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80CB294C */ daPoFire_HIO_c();
-    /* 80CB3D24 */ virtual ~daPoFire_HIO_c() {}
+    daPoFire_HIO_c();
+    virtual ~daPoFire_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -28,12 +28,9 @@ public:
     /* 0x30 */ u8 mFireWaitTime;      // Fire wait
 };
 
-/* ############################################################################################## */
 
-/* 80CB4114-80CB4148 000014 0034+00 5/5 0/0 0/0 .bss             l_HIO */
 static daPoFire_HIO_c l_HIO;
 
-/* 80CB294C-80CB29C4 0000EC 0078+00 1/1 0/0 0/0 .text            __ct__14daPoFire_HIO_cFv */
 daPoFire_HIO_c::daPoFire_HIO_c() {
     unk6 = 0x3C;
     mWaitPeriod = 1.0f;
@@ -71,20 +68,16 @@ void daPoFire_HIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-/* 80CB2A0C-80CB2A74 0001AC 0068+00 2/2 0/0 0/0 .text            setBaseMtx__10daPoFire_cFv */
 void daPoFire_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     mDoMtx_stack_c::transM(unk5F8.x, unk5F8.y, unk5F8.z);
 }
 
-/* ############################################################################################## */
 
-/* 80CB3F08-80CB3F0C 00001C 0004+00 1/2 0/0 0/0 .rodata          itemNo */
 static u8 const itemNo[4] = {fpcNm_ITEM_POU_FIRE1, fpcNm_ITEM_POU_FIRE2, fpcNm_ITEM_POU_FIRE3,
                              fpcNm_ITEM_POU_FIRE4};
 
-/* 80CB2A74-80CB2BB8 000214 0144+00 1/1 0/0 0/0 .text            create__10daPoFire_cFv */
 int daPoFire_c::create() {
     fopAcM_ct(this, daPoFire_c);
 
@@ -120,7 +113,6 @@ int daPoFire_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80CB2BB8-80CB2BFC 000358 0044+00 1/1 0/0 0/0 .text            Execute__10daPoFire_cFv */
 int daPoFire_c::Execute() {
     eventUpdate();
     procMain();
@@ -128,8 +120,6 @@ int daPoFire_c::Execute() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80CB2BFC-80CB2D84 00039C 0188+00 1/1 0/0 0/0 .text            procMain__10daPoFire_cFv */
 void daPoFire_c::procMain() {
     static const daPoFire_c::modeProc mode_proc[9] = {
         &daPoFire_c::modeInitMove, &daPoFire_c::modeWait,   &daPoFire_c::modeWaitSetEffect,
@@ -145,9 +135,7 @@ void daPoFire_c::procMain() {
     attention_info.position.y += 20.0f;
 }
 
-/* ############################################################################################## */
 
-/* 80CB2D84-80CB2F68 000524 01E4+00 1/1 0/0 0/0 .text            setFire__10daPoFire_cFv */
 void daPoFire_c::setFire() {
     cXyz temp_r1(0.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::transS(unk5F8.x, unk5F8.y, unk5F8.z);
@@ -167,7 +155,6 @@ void daPoFire_c::setFire() {
     unk5AC = temp_r2;
 }
 
-/* 80CB2F68-80CB2FD4 000708 006C+00 1/1 0/0 0/0 .text            searchCandle__10daPoFire_cFPvPv */
 void* daPoFire_c::searchCandle(void* i_actor, void* i_this) {
     daPoFire_c* _this = static_cast<daPoFire_c*>(i_this);
     daPoCandle_c* _actor = static_cast<daPoCandle_c*>(i_actor);
@@ -180,7 +167,6 @@ void* daPoFire_c::searchCandle(void* i_actor, void* i_this) {
     return NULL;
 }
 
-/* 80CB2FD4-80CB3024 000774 0050+00 1/1 0/0 0/0 .text            searchFireTag__10daPoFire_cFPvPv */
 void* daPoFire_c::searchFireTag(void* i_actor, void* i_this) {
     daPoFire_c* _this = static_cast<daPoFire_c*>(i_this);
     daTagPoFire_c* _actor = static_cast<daTagPoFire_c*>(i_actor);
@@ -190,8 +176,6 @@ void* daPoFire_c::searchFireTag(void* i_actor, void* i_this) {
     return NULL;
 }
 
-/* 80CB3024-80CB30FC 0007C4 00D8+00 1/1 0/0 0/0 .text            init_modeInitMove__10daPoFire_cFv
- */
 void daPoFire_c::init_modeInitMove() {
     dBgS_GndChk gndchk;
     gndchk.SetPos(&current.pos);
@@ -204,9 +188,7 @@ void daPoFire_c::init_modeInitMove() {
     mMode = MODE_INIT_MOVE;
 }
 
-/* ############################################################################################## */
 
-/* 80CB30FC-80CB31FC 00089C 0100+00 1/0 0/0 0/0 .text            modeInitMove__10daPoFire_cFv */
 void daPoFire_c::modeInitMove() {
     f32 calc_res = cLib_addCalc(&current.pos.y, mGroundY + 70.0f, 0.5f, 2.0f, 0.5f);
     if (calc_res == 0.0f) {
@@ -236,9 +218,7 @@ static f32 dummy1() {
     return -1.0f;
 }
 
-/* ############################################################################################## */
 
-/* 80CB31FC-80CB32EC 00099C 00F0+00 1/0 0/0 0/0 .text            modeWait__10daPoFire_cFv */
 void daPoFire_c::modeWait() {
     if (eventInfo.checkCommandCatch()) {
         init_modeWaitSetEffect();
@@ -251,7 +231,6 @@ void daPoFire_c::modeWait() {
     unk5D8 += l_HIO.mWaitVertSpeed;
 }
 
-/* 80CB32EC-80CB3380 000A8C 0094+00 1/1 0/0 0/0 .text init_modeWaitSetEffect__10daPoFire_cFv */
 void daPoFire_c::init_modeWaitSetEffect() {
     for (int i = 0; i < 2; i++) {
         JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(mParticleKeys[i]);
@@ -264,8 +243,6 @@ void daPoFire_c::init_modeWaitSetEffect() {
     mMode = MODE_WAIT_SET_EFFECT;
 }
 
-/* 80CB3380-80CB3540 000B20 01C0+00 1/0 0/0 0/0 .text            modeWaitSetEffect__10daPoFire_cFv
- */
 void daPoFire_c::modeWaitSetEffect() {
     JPABaseEmitter* emitter;
     if (!daPy_getLinkPlayerActorClass()->getBottleMtx()) {
@@ -291,16 +268,13 @@ void daPoFire_c::modeWaitSetEffect() {
     }
 }
 
-/* 80CB3540-80CB355C 000CE0 001C+00 1/1 0/0 0/0 .text            init_modeMoveOut__10daPoFire_cFv */
 void daPoFire_c::init_modeMoveOut() {
     unk5EC = 0.0f;
     unk5F0 = 0.0f;
     mMode = MODE_MOVE_OUT;
 }
 
-/* ############################################################################################## */
 
-/* 80CB355C-80CB3714 000CFC 01B8+00 1/0 0/0 0/0 .text            modeMoveOut__10daPoFire_cFv */
 void daPoFire_c::modeMoveOut() {
     unk5E8 = 1.0f + cM_ssin(cM_deg2s(unk5EC * l_HIO.mMovePeriod1));
     f32 temp_f31 = cLib_addCalcPos(&current.pos, mpTagPoFire->current.pos, 1.0f,
@@ -322,14 +296,12 @@ void daPoFire_c::modeMoveOut() {
     }
 }
 
-/* 80CB3714-80CB3730 000EB4 001C+00 2/2 0/0 0/0 .text            init_modeMove__10daPoFire_cFv */
 void daPoFire_c::init_modeMove() {
     unk5EC = 0.0f;
     unk5F0 = 0.0f;
     mMode = MODE_MOVE;
 }
 
-/* 80CB3730-80CB38EC 000ED0 01BC+00 1/0 0/0 0/0 .text            modeMove__10daPoFire_cFv */
 void daPoFire_c::modeMove() {
     unk5E8 = 1.0f + cM_ssin(cM_deg2s(unk5EC * l_HIO.mMovePeriod1));
     f32 temp_f31 = cLib_addCalcPos(&current.pos, mpPoCandle->getFirePos(), 1.0f,
@@ -350,8 +322,6 @@ void daPoFire_c::modeMove() {
     }
 }
 
-/* 80CB38EC-80CB3918 00108C 002C+00 1/1 0/0 0/0 .text            init_modeMoveWait__10daPoFire_cFv
- */
 void daPoFire_c::init_modeMoveWait() {
     mWaitTimer = l_HIO.mFireWaitTime;
     mMoveEnd = true;
@@ -359,7 +329,6 @@ void daPoFire_c::init_modeMoveWait() {
     mMode = MODE_MOVE_WAIT;
 }
 
-/* 80CB3918-80CB3958 0010B8 0040+00 1/0 0/0 0/0 .text            modeMoveWait__10daPoFire_cFv */
 void daPoFire_c::modeMoveWait() {
     if (mWaitTimer != 0) {
         mWaitTimer--;
@@ -369,9 +338,7 @@ void daPoFire_c::modeMoveWait() {
     init_modeFireEnd();
 }
 
-/* ############################################################################################## */
 
-/* 80CB3958-80CB39CC 0010F8 0074+00 1/0 0/0 0/0 .text            modeNoMove__10daPoFire_cFv */
 void daPoFire_c::modeNoMove() {
     f32 calc_res = cLib_addCalc(&current.pos.y, mGroundY + 300.0f, 0.5f, 2.0f, 0.5f);
     if (calc_res == 0.0f) {
@@ -380,27 +347,22 @@ void daPoFire_c::modeNoMove() {
     }
 }
 
-/* 80CB39CC-80CB39E0 00116C 0014+00 1/1 0/0 0/0 .text            init_modeOnFire__10daPoFire_cFv */
 void daPoFire_c::init_modeOnFire() {
     unk5C4 = 0;
     mMode = MODE_ON_FIRE;
 }
 
-/* ############################################################################################## */
 
-/* 80CB39E0-80CB3ADC 001180 00FC+00 1/0 0/0 0/0 .text            modeOnFire__10daPoFire_cFv */
 void daPoFire_c::modeOnFire() {
     cXyz sp8(3.5f, 3.5f, 3.5f);
     mParticleKeys[0] = dComIfGp_particle_set(mParticleKeys[0], 0x8670, &current.pos, NULL, &sp8);
     mParticleKeys[1] = dComIfGp_particle_set(mParticleKeys[1], 0x8671, &current.pos, NULL, &sp8);
 }
 
-/* 80CB3ADC-80CB3AE8 00127C 000C+00 3/3 0/0 0/0 .text            init_modeFireEnd__10daPoFire_cFv */
 void daPoFire_c::init_modeFireEnd() {
     mMode = MODE_FIRE_END;
 }
 
-/* 80CB3AE8-80CB3B70 001288 0088+00 1/0 0/0 0/0 .text            modeFireEnd__10daPoFire_cFv */
 void daPoFire_c::modeFireEnd() {
     for (int i = 0; i < 2; i++) {
         JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(mParticleKeys[i]);
@@ -412,7 +374,6 @@ void daPoFire_c::modeFireEnd() {
     fopAcM_delete(this);
 }
 
-/* 80CB3B70-80CB3BE0 001310 0070+00 2/1 0/0 0/0 .text            eventStart__10daPoFire_cFv */
 bool daPoFire_c::eventStart() {
     mStaffID = dComIfGp_evmng_getMyStaffId("pofire", NULL, 0);
     dComIfGp_event_setTalkPartner(mpPoCandle);
@@ -420,7 +381,6 @@ bool daPoFire_c::eventStart() {
     return true;
 }
 
-/* 80CB3BE0-80CB3C64 001380 0084+00 2/1 0/0 0/0 .text            eventRun__10daPoFire_cFv */
 bool daPoFire_c::eventRun() {
     static char* action_table[1] = {
         "MOVE_END",
@@ -436,17 +396,14 @@ bool daPoFire_c::eventRun() {
     return true;
 }
 
-/* 80CB3C64-80CB3C6C 001404 0008+00 2/1 0/0 0/0 .text            eventEnd__10daPoFire_cFv */
 bool daPoFire_c::eventEnd() {
     return true;
 }
 
-/* 80CB3C6C-80CB3C74 00140C 0008+00 1/1 0/0 0/0 .text            Draw__10daPoFire_cFv */
 int daPoFire_c::Draw() {
     return 1;
 }
 
-/* 80CB3C74-80CB3CA4 001414 0030+00 1/1 0/0 0/0 .text            Delete__10daPoFire_cFv */
 int daPoFire_c::Delete() {
     dComIfG_resDelete(&mPhase, "poFire");
 
@@ -457,36 +414,30 @@ int daPoFire_c::Delete() {
     return 1;
 }
 
-/* 80CB3CA4-80CB3CC4 001444 0020+00 1/0 0/0 0/0 .text            daPoFire_Draw__FP10daPoFire_c */
 static int daPoFire_Draw(daPoFire_c* i_this) {
     return static_cast<daPoFire_c*>(i_this)->Draw();
 }
 
-/* 80CB3CC4-80CB3CE4 001464 0020+00 1/0 0/0 0/0 .text            daPoFire_Execute__FP10daPoFire_c */
 static int daPoFire_Execute(daPoFire_c* i_this) {
     return static_cast<daPoFire_c*>(i_this)->Execute();
 }
 
-/* 80CB3CE4-80CB3D04 001484 0020+00 1/0 0/0 0/0 .text            daPoFire_Delete__FP10daPoFire_c */
 static int daPoFire_Delete(daPoFire_c* i_this) {
     fopAcM_RegisterDeleteID(i_this, "daPoFire");
     return static_cast<daPoFire_c*>(i_this)->Delete();
 }
 
-/* 80CB3D04-80CB3D24 0014A4 0020+00 1/0 0/0 0/0 .text            daPoFire_Create__FP10fopAc_ac_c */
 static int daPoFire_Create(fopAc_ac_c* i_this) {
     fopAcM_RegisterCreateID(daPoFire_c, i_this, "daPoFire");
     return a_this->create();
 }
 
-/* 80CB4050-80CB4070 -00001 0020+00 1/0 0/0 0/0 .data            l_daPoFire_Method */
 static actor_method_class l_daPoFire_Method = {
     (process_method_func)daPoFire_Create,  (process_method_func)daPoFire_Delete,
     (process_method_func)daPoFire_Execute, NULL,
     (process_method_func)daPoFire_Draw,
 };
 
-/* 80CB4070-80CB40A0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_poFire */
 extern actor_process_profile_definition g_profile_Obj_poFire = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

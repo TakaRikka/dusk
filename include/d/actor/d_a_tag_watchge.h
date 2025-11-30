@@ -10,9 +10,9 @@ public:
         return mGroupNo;
     }
 
-    /* 80D642D8 */ int draw();
-    /* 80D64338 */ int execute();
-    /* 80D643F8 */ int create();
+    int draw();
+    int execute();
+    int create();
 
     /* 0x568 */ u8 field_0x568;
     /* 0x569 */ u8 mGroupNo;

@@ -16,13 +16,13 @@
  */
 class daFireWood_c : public fopAc_ac_c {
 public:
-    /* 80BE76B0 */ void setBaseMtx();
-    /* 80BE7708 */ int create();
-    /* 80BE79A0 */ void lightInit();
-    /* 80BE7A14 */ void setLight();
-    /* 80BE7A38 */ int Execute();
-    /* 80BE7E74 */ int Draw();
-    /* 80BE7E7C */ int Delete();
+    void setBaseMtx();
+    int create();
+    void lightInit();
+    void setLight();
+    int Execute();
+    int Draw();
+    int Delete();
 
     static const dCcD_SrcGObjInf mCcDObjInfo;
     static dCcD_SrcCyl mCcDCyl;
@@ -45,8 +45,8 @@ STATIC_ASSERT(sizeof(daFireWood_c) == 0x740);
 
 class daFireWood_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80BE762C */ daFireWood_HIO_c();
-    /* 80BE7F24 */ virtual ~daFireWood_HIO_c() {}
+    daFireWood_HIO_c();
+    virtual ~daFireWood_HIO_c() {}
 
     void genMessage(JORMContext*);
 

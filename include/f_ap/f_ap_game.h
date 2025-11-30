@@ -14,13 +14,13 @@ void fapGm_Execute();
 
 class fapGm_HIO_c : public JORReflexible {
 public:
-    /* 80018944 */ fapGm_HIO_c();
+    fapGm_HIO_c();
 
     #if DEBUG
     virtual void listenPropertyEvent(const JORPropertyEvent*);
     virtual void genMessage(JORMContext*);
     #endif
-    /* 80018AE0 */ virtual ~fapGm_HIO_c();
+    virtual ~fapGm_HIO_c();
 
     #if DEBUG
     static void startCpuTimer();

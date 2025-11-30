@@ -49,7 +49,7 @@ public:
         field_0x6e = 20000;
         field_0x78 = -40.0f;
     }
-    /* 80705574 */ virtual ~e_krHIO_c() {}
+    virtual ~e_krHIO_c() {}
     void genMessage(JORMContext*);
 
     /* 0x04 */ u8 field_0x4;
@@ -91,10 +91,8 @@ public:
 
 STATIC_ASSERT(sizeof(e_krHIO_c) == 0x7c);
 
-/* 80705FF4-80706070 000014 007C+00 9/9 0/0 0/0 .bss             l_e_krHIO */
 static e_krHIO_c l_e_krHIO;
 
-/* 806FF9AC-806FFCD8 0000EC 032C+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DJoint* joint = i_joint;
@@ -156,14 +154,12 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 806FFCD8-806FFD84 000418 00AC+00 8/8 0/0 0/0 .text            anm_init__FP10e_kr_classifUcf */
 static void anm_init(e_kr_class* i_this, int i_resIndex, f32 i_morf, u8 i_attr, f32 i_rate) {
     i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_kr", i_resIndex), i_attr,
                            i_morf, i_rate, 0.0f, -1.0f);
     i_this->field_0x5b8 = i_resIndex;
 }
 
-/* 806FFD84-806FFDB0 0004C4 002C+00 3/3 0/0 0/0 .text            kuti_open__FP10e_kr_classsUl */
 static void kuti_open(e_kr_class* i_this, s16 param_1, u32 param_2) {
     if (i_this->field_0xe82 == 0) {
         i_this->field_0xe82 = param_1;
@@ -172,7 +168,6 @@ static void kuti_open(e_kr_class* i_this, s16 param_1, u32 param_2) {
     }
 }
 
-/* 806FFDB0-806FFE90 0004F0 00E0+00 2/2 0/0 0/0 .text e_kr_player_bg_check__FP10e_kr_class */
 static BOOL e_kr_player_bg_check(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -194,7 +189,6 @@ static BOOL e_kr_player_bg_check(e_kr_class* i_this) {
     }
 }
 
-/* 806FFE90-806FFF54 0005D0 00C4+00 1/1 0/0 0/0 .text e_kr_setpos_bg_check__FP10e_kr_class */
 static BOOL e_kr_setpos_bg_check(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -215,7 +209,6 @@ static BOOL e_kr_setpos_bg_check(e_kr_class* i_this) {
     }
 }
 
-/* 806FFF54-80700108 000694 01B4+00 3/3 0/0 0/0 .text e_kr_player_view_check__FP10e_kr_class */
 static BOOL e_kr_player_view_check(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -264,7 +257,6 @@ static BOOL e_kr_player_view_check(e_kr_class* i_this) {
     return false;
 }
 
-/* 80700108-80700174 000848 006C+00 2/2 0/0 0/0 .text            pl_horse_check__FP10e_kr_class */
 static BOOL pl_horse_check(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     if (daPy_getPlayerActorClass()->checkHorseRide() && dComIfGp_getHorseActor()->speedF > 20.0f) {
@@ -274,8 +266,6 @@ static BOOL pl_horse_check(e_kr_class* i_this) {
     }
 }
 
-/* 80700174-80700204 0008B4 0090+00 1/1 0/0 0/0 .text            daE_Kr_shadowDraw__FP10e_kr_class
- */
 static void daE_Kr_shadowDraw(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     J3DModel* model = i_this->mpMorf->getModel();
@@ -288,7 +278,6 @@ static void daE_Kr_shadowDraw(e_kr_class* i_this) {
         1.0f, dDlst_shadowControl_c::getSimpleTex());
 }
 
-/* 80700204-8070034C 000944 0148+00 1/0 0/0 0/0 .text            daE_Kr_Draw__FP10e_kr_class */
 static int daE_Kr_Draw(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -318,7 +307,6 @@ static int daE_Kr_Draw(e_kr_class* i_this) {
     return 1;
 }
 
-/* 8070034C-80700588 000A8C 023C+00 6/6 0/0 0/0 .text            e_kr_pos_move__FP10e_kr_class */
 static void e_kr_pos_move(e_kr_class* i_this) {
     cXyz unkXyz1;
 
@@ -404,7 +392,6 @@ static void e_kr_ground_pos_move(e_kr_class* i_this) {
     }
 }
 
-/* 80700588-80700638 000CC8 00B0+00 1/1 0/0 0/0 .text            coach_path_check__FP10e_kr_class */
 static BOOL coach_path_check(e_kr_class* i_this) {
     fopAc_ac_c* coach = fopAcM_SearchByName(PROC_NPC_COACH);
     if (coach == NULL) {
@@ -421,7 +408,6 @@ static BOOL coach_path_check(e_kr_class* i_this) {
     }
 }
 
-/* 80700638-80700AF8 000D78 04C0+00 1/1 0/0 0/0 .text            e_kr_path_move__FP10e_kr_class */
 static s8 e_kr_path_move(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* playerActor = dComIfGp_getPlayer(0);
@@ -576,7 +562,6 @@ static s8 e_kr_path_move(e_kr_class* i_this) {
     return retVal;
 }
 
-/* 80700AF8-80700E3C 001238 0344+00 1/1 0/0 0/0 .text            e_kr_auto_move__FP10e_kr_class */
 static void e_kr_auto_move(e_kr_class* i_this) {
     fopAc_ac_c* playerActor = dComIfGp_getPlayer(0);
     fopAc_ac_c* player = (daPy_py_c*)playerActor;
@@ -679,7 +664,6 @@ static void e_kr_auto_move(e_kr_class* i_this) {
     }
 }
 
-/* 80700E3C-80701CF4 00157C 0EB8+00 2/1 0/0 0/0 .text            e_kr_atack_move__FP10e_kr_class */
 static void e_kr_atack_move(e_kr_class* i_this) {
     fopAc_ac_c* playerActor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)playerActor;
@@ -1009,7 +993,6 @@ static void e_kr_atack_move(e_kr_class* i_this) {
     }
 }
 
-/* 80701CF4-807025B8 002434 08C4+00 1/1 0/0 0/0 .text            e_kr_horse_move__FP10e_kr_class */
 static void e_kr_horse_move(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -1185,7 +1168,6 @@ static void e_kr_horse_move(e_kr_class* i_this) {
     }
 }
 
-/* 807025B8-80702C08 002CF8 0650+00 2/1 0/0 0/0 .text            e_kr_wait_move__FP10e_kr_class */
 static void e_kr_wait_move(e_kr_class* i_this) {
     fopAc_ac_c* playerActor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)playerActor;
@@ -1369,8 +1351,6 @@ static void e_kr_wait_move(e_kr_class* i_this) {
     }
 }
 
-/* 80702C08-8070320C 003348 0604+00 2/1 0/0 0/0 .text            e_kr_su_wait_move__FP10e_kr_class
- */
 static void e_kr_su_wait_move(e_kr_class* i_this) {
     fopAc_ac_c* playerActor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)playerActor;
@@ -1560,7 +1540,6 @@ static void e_kr_su_wait_move(e_kr_class* i_this) {
     }
 }
 
-/* 8070320C-8070329C 00394C 0090+00 1/1 0/0 0/0 .text            body_smoke_set__FP10e_kr_class */
 static void body_smoke_set(e_kr_class* i_this) {
     cXyz unkXyz1;
     cXyz unkXyz2;
@@ -1573,7 +1552,6 @@ static void body_smoke_set(e_kr_class* i_this) {
                         1.2f + XREG_F(4), &i_this->enemy.tevStr, 1);
 }
 
-/* 8070329C-8070338C 0039DC 00F0+00 1/1 0/0 0/0 .text            wing_smoke_set__FP10e_kr_class */
 static void wing_smoke_set(e_kr_class* i_this) {
     static int wing_j[4] = {0x0C, 0x0D, 0x11, 0x12};
 
@@ -1594,7 +1572,6 @@ static void wing_smoke_set(e_kr_class* i_this) {
     }
 }
 
-/* 8070338C-80703990 003ACC 0604+00 1/1 0/0 0/0 .text            e_kr_damage__FP10e_kr_class */
 static s8 e_kr_damage(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopEn_enemy_c* enemy = (fopEn_enemy_c*)actor;
@@ -1756,7 +1733,6 @@ static s8 e_kr_damage(e_kr_class* i_this) {
     return retVal;
 }
 
-/* 80703990-80703D74 0040D0 03E4+00 1/1 0/0 0/0 .text            damage_check__FP10e_kr_class */
 static void damage_check(e_kr_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     fopAc_ac_c* actor = &i_this->enemy;
@@ -1850,7 +1826,6 @@ static void damage_check(e_kr_class* i_this) {
     }
 }
 
-/* 80703D74-807040B0 0044B4 033C+00 1/1 0/0 0/0 .text            ground_angle_set__FP10e_kr_class */
 static void ground_angle_set(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -1942,7 +1917,6 @@ static void ground_angle_set(e_kr_class* i_this) {
     cLib_addCalcAngleS2(&i_this->field_0x6f0.z, unkShort1, 1, 0x400);
 }
 
-/* 807040B0-80704208 0047F0 0158+00 2/1 0/0 0/0 .text            action__FP10e_kr_class */
 static void action(e_kr_class* i_this) {
     fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
 
@@ -2010,7 +1984,6 @@ static void action(e_kr_class* i_this) {
     setMidnaBindEffect(enemy, &i_this->mSound, &enemy->eyePos, &unkXyz3);
 }
 
-/* 80704208-80704B5C 004948 0954+00 2/1 0/0 0/0 .text            daE_Kr_Execute__FP10e_kr_class */
 static int daE_Kr_Execute(e_kr_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -2232,12 +2205,10 @@ static int daE_Kr_Execute(e_kr_class* i_this) {
     return 1;
 }
 
-/* 80704B5C-80704B64 00529C 0008+00 1/0 0/0 0/0 .text            daE_Kr_IsDelete__FP10e_kr_class */
 static int daE_Kr_IsDelete(e_kr_class* i_this) {
     return 1;
 }
 
-/* 80704B64-80704BB4 0052A4 0050+00 1/0 0/0 0/0 .text            daE_Kr_Delete__FP10e_kr_class */
 static int daE_Kr_Delete(e_kr_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_kr");
     fopEn_enemy_c* enemy = &i_this->enemy;
@@ -2250,7 +2221,6 @@ static int daE_Kr_Delete(e_kr_class* i_this) {
     return 1;
 }
 
-/* 80704BB4-80704CF0 0052F4 013C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_kr_class* kr = (e_kr_class*)i_this;
 
@@ -2273,7 +2243,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80704CF0-80705004 005430 0314+00 1/0 0/0 0/0 .text            daE_Kr_Create__FP10fopAc_ac_c */
 static int daE_Kr_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph at_sph_src = {
         {
@@ -2414,15 +2383,12 @@ static int daE_Kr_Create(fopAc_ac_c* i_this) {
 e_kr_class::e_kr_class() {
 }
 
-/* ############################################################################################## */
-/* 80705F08-80705F28 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_Kr_Method */
 static actor_method_class l_daE_Kr_Method = {
     (process_method_func)daE_Kr_Create,  (process_method_func)daE_Kr_Delete,
     (process_method_func)daE_Kr_Execute, (process_method_func)daE_Kr_IsDelete,
     (process_method_func)daE_Kr_Draw,
 };
 
-/* 80705F28-80705F58 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_KR */
 extern actor_process_profile_definition g_profile_E_KR = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

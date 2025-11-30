@@ -30,23 +30,23 @@ public:
         /* 0xC */ actionFunc mExecuteFunc;
     };
 
-    /* 80467498 */ ~daDsh_c();
-    /* 80467694 */ void setMtx();
-    /* 80467708 */ void setAction(daDsh_c::action_c*);
-    /* 8046772C */ int callInit();
-    /* 8046777C */ int callExecute();
-    /* 804677D4 */ int initOpenWait();
-    /* 804677E4 */ int executeOpenWait();
-    /* 80467840 */ int initOpen();
-    /* 80467988 */ int executeOpen();
-    /* 80467A64 */ int initCloseWait();
-    /* 80467A80 */ int executeCloseWait();
-    /* 80467ADC */ int initClose();
-    /* 80467B04 */ int executeClose();
+    ~daDsh_c();
+    void setMtx();
+    void setAction(daDsh_c::action_c*);
+    int callInit();
+    int callExecute();
+    int initOpenWait();
+    int executeOpenWait();
+    int initOpen();
+    int executeOpen();
+    int initCloseWait();
+    int executeCloseWait();
+    int initClose();
+    int executeClose();
 
-    /* 8046751C */ virtual int CreateHeap();
-    /* 80467640 */ virtual int Execute(Mtx**);
-    /* 8046759C */ virtual int Draw();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
 
     inline int create();
 

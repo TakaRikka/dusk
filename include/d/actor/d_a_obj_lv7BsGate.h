@@ -14,20 +14,20 @@
  */
 class daLv7BsGate_c : public dBgS_MoveBgActor {
 public:
-    /* 80C84930 */ void setBaseMtx();
-    /* 80C84A4C */ int create();
-    /* 80C84C1C */ void moveGate();
-    /* 80C84D24 */ void init_modeWait();
-    /* 80C84D30 */ void modeWait();
-    /* 80C84D34 */ void init_modeOpen();
-    /* 80C84D40 */ void modeOpen();
-    /* 80C84E94 */ void init_modeClose();
-    /* 80C84EA0 */ void modeClose();
+    void setBaseMtx();
+    int create();
+    void moveGate();
+    void init_modeWait();
+    void modeWait();
+    void init_modeOpen();
+    void modeOpen();
+    void init_modeClose();
+    void modeClose();
 
-    /* 80C849CC */ virtual int CreateHeap();
-    /* 80C84BCC */ virtual int Execute(Mtx**);
-    /* 80C84FF4 */ virtual int Draw();
-    /* 80C85098 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getType() { return fopAcM_GetParamBit(this, 0, 4); }
     int getSw() { return fopAcM_GetParamBit(this, 4, 8); }

@@ -59,9 +59,9 @@ enum {
  */
 class JPADynamicsBlock {
 public:
-    /* 8027BB18 */ JPADynamicsBlock(u8 const*);
-    /* 8027BB4C */ void init();
-    /* 8027BBE8 */ void create(JPAEmitterWorkData*);
+    JPADynamicsBlock(u8 const*);
+    void init();
+    void create(JPAEmitterWorkData*);
 
     void calc(JPAEmitterWorkData* work) { mpCalcVolumeFunc(work); }
 

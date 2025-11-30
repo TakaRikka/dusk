@@ -14,21 +14,21 @@
  */
 class daWindStone_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80D37A18 */ daWindStone_c();
-    /* 80D37A68 */ virtual ~daWindStone_c();
-    /* 80D37AF4 */ int createHeap();
-    /* 80D37C20 */ int create();
-    /* 80D37F0C */ int execute();
-    /* 80D37F6C */ int draw();
-    /* 80D3806C */ int Delete();
-    /* 80D3811C */ void setModelMtx();
-    /* 80D38180 */ void init();
-    /* 80D381EC */ bool chkWlfInRange();
-    /* 80D38278 */ bool chkEveOccur();
-    /* 80D382C4 */ void exeModeHowl();
-    /* 80D3835C */ void exeModeMapDisp();
-    /* 80D383FC */ bool chkMapDispMode();
-    /* 80D384C4 */ u8 getGoldWolfIdx();
+    daWindStone_c();
+    virtual ~daWindStone_c();
+    int createHeap();
+    int create();
+    int execute();
+    int draw();
+    int Delete();
+    void setModelMtx();
+    void init();
+    bool chkWlfInRange();
+    bool chkEveOccur();
+    void exeModeHowl();
+    void exeModeMapDisp();
+    bool chkMapDispMode();
+    u8 getGoldWolfIdx();
 
     s8 getTuneId() { return fopAcM_GetParamBit(this, 4, 4); }
     int getNextSceneId() { return fopAcM_GetParamBit(this, 0, 4); }

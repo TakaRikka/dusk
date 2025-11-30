@@ -1076,21 +1076,21 @@ public:
     dStage_roomControl_c() {}
     void init(void);
     static int getZoneNo(int i_roomNo) { return mStatus[i_roomNo].getZoneNo(); }
-    /* 80024338 */ void initZone();
-    /* 80024384 */ dStage_roomDt_c* getStatusRoomDt(int);
-    /* 800243B0 */ static JKRExpHeap* getMemoryBlock(int);
-    /* 800243E8 */ static void setStayNo(int);
-    /* 80024424 */ static void setNextStayNo(int);
-    /* 800244E8 */ BOOL checkRoomDisp(int) const;
-    /* 8002451C */ int loadRoom(int, u8*, bool);
-    /* 8002471C */ void zoneCountCheck(int) const;
-    /* 80024844 */ static JKRExpHeap* createMemoryBlock(int, u32);
-    /* 800248A8 */ static void destroyMemoryBlock();
-    /* 8002490C */ static void setArcBank(int, char const*);
-    /* 80024940 */ static char* getArcBank(int);
-    /* 80024954 */ static bool resetArchiveBank(int);
-    /* 80024DB0 */ static void SetTimePass(int i_TimePass) { m_time_pass = i_TimePass; }
-    /* 8025BAAC */ static void setZoneNo(int, int);
+    void initZone();
+    dStage_roomDt_c* getStatusRoomDt(int);
+    static JKRExpHeap* getMemoryBlock(int);
+    static void setStayNo(int);
+    static void setNextStayNo(int);
+    BOOL checkRoomDisp(int) const;
+    int loadRoom(int, u8*, bool);
+    void zoneCountCheck(int) const;
+    static JKRExpHeap* createMemoryBlock(int, u32);
+    static void destroyMemoryBlock();
+    static void setArcBank(int, char const*);
+    static char* getArcBank(int);
+    static bool resetArchiveBank(int);
+    static void SetTimePass(int i_TimePass) { m_time_pass = i_TimePass; }
+    static void setZoneNo(int, int);
     static dBgp_c* getBgp(int i_roomNo) {
 #ifdef DEBUG
         // NONMATCHING

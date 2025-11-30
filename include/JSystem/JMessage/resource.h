@@ -20,7 +20,7 @@ struct TResource {
           oParse_TBlock_messageID_(NULL)
           {}
 
-    /* 802A8CDC */ u16 toMessageIndex_messageID(u32 uMsgID, u32, bool* pbValid) const;
+    u16 toMessageIndex_messageID(u32 uMsgID, u32, bool* pbValid) const;
 
     bool isContained_messageIndex(u16 uMessageIndex) const {
         return uMessageIndex < getMessageEntryNumber();
@@ -111,17 +111,17 @@ struct TResource_color {
  */
 struct TResourceContainer {
     struct TCResource : public JGadget::TLinkList_factory<TResource, 0> {
-        /* 802A8EC0 */ TCResource();
-        /* 802A8F6C */ TResource* Get_groupID(u16 u16GroupID);
+        TCResource();
+        TResource* Get_groupID(u16 u16GroupID);
 
-        /* 802A8EF8 */ virtual ~TCResource();
-        /* 802A8FFC */ virtual JMessage::TResource* Do_create();
-        /* 802A9048 */ virtual void Do_destroy(JMessage::TResource* pResource);
+        virtual ~TCResource();
+        virtual JMessage::TResource* Do_create();
+        virtual void Do_destroy(JMessage::TResource* pResource);
     };
 
-    /* 802A906C */ TResourceContainer();
-    /* 802A90B8 */ void setEncoding(u8 e);
-    /* 802A90F0 */ void setEncoding_(u8 e);
+    TResourceContainer();
+    void setEncoding(u8 e);
+    void setEncoding_(u8 e);
 
     int parseCharacter(const char** ppszText) const {
         JUT_ASSERT(330, pfnParseCharacter_!=NULL);
@@ -157,11 +157,11 @@ struct TResourceContainer {
  * 
  */
 struct TParse : public JGadget::binary::TParse_header_block {
-    /* 802A9130 */ TParse(JMessage::TResourceContainer* pContainer);
+    TParse(JMessage::TResourceContainer* pContainer);
 
-    /* 802A9158 */ virtual ~TParse();
-    /* 802A91B8 */ virtual bool parseHeader_next(const void** ppData_inout, u32* puBlock_out, u32);
-    /* 802A92F4 */ virtual bool parseBlock_next(const void** ppData_inout, u32* puData_out, u32);
+    virtual ~TParse();
+    virtual bool parseHeader_next(const void** ppData_inout, u32* puBlock_out, u32);
+    virtual bool parseBlock_next(const void** ppData_inout, u32* puData_out, u32);
 
     /* 0x4 */ TResourceContainer* pContainer_;
     /* 0x8 */ TResource* pResource_;

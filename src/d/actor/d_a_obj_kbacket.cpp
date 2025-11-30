@@ -12,10 +12,6 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 
-//
-// Declarations:
-//
-
 static s32 l_bmdData[4] = { 8, 0, 9, 0 };
 
 static char* l_resNameList[1] = { "Kakashi" };
@@ -40,7 +36,6 @@ static dCcD_SrcCyl l_ccDCyl = {
     } // mCyl
 };
 
-/* 80587FEC-80587FF0 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daObj_KBacket_Param_c l_HIO;
 
 static inline const daObj_KBacket_HIOParam* get_params(daObj_KBacket_c* i_this) {
@@ -62,7 +57,6 @@ daObj_KBacket_c::~daObj_KBacket_c() {
 }
 
 
-/* 80586048-805863F0 0002E8 03A8+00 1/1 0/0 0/0 .text            create__15daObj_KBacket_cFv */
 int daObj_KBacket_c::create() {
     fopAcM_ct(this, daObj_KBacket_c);
 
@@ -111,7 +105,6 @@ int daObj_KBacket_c::create() {
     return res;
 }
 
-/* 80586604-80586704 0008A4 0100+00 1/1 0/0 0/0 .text            CreateHeap__15daObj_KBacket_cFv */
 int daObj_KBacket_c::CreateHeap() {
     J3DModelData* modelData;
 
@@ -140,14 +133,12 @@ int daObj_KBacket_c::CreateHeap() {
     return 1;
 }
 
-/* 80586704-80586738 0009A4 0034+00 1/1 0/0 0/0 .text            Delete__15daObj_KBacket_cFv */
 int daObj_KBacket_c::Delete() {
     OS_REPORT("|%06d:%x|daObj_KBacket_c -> Delete\n", g_Counter.mCounter0, this);
     this->~daObj_KBacket_c();
     return 1;
 }
 
-/* 80586738-8058742C 0009D8 0CF4+00 2/2 0/0 0/0 .text            Execute__15daObj_KBacket_cFv */
 int daObj_KBacket_c::Execute() {
 
     f32 movePMag = get_params(this)->field_0x28;
@@ -519,7 +510,6 @@ int daObj_KBacket_c::Execute() {
     return 1;
 }
 
-/* 8058742C-80587558 0016CC 012C+00 1/1 0/0 0/0 .text            Draw__15daObj_KBacket_cFv */
 int daObj_KBacket_c::Draw() {
     if (this->field_0xa48 == 0x0) {
         g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -542,32 +532,25 @@ int daObj_KBacket_c::Draw() {
     return 1;
 }
 
-/* 805875A0-805875C0 001840 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__15daObj_KBacket_cFP10fopAc_ac_c          */
 void daObj_KBacket_c::createHeapCallBack(fopAc_ac_c* param_0) {
     ((daObj_KBacket_c*)param_0)->CreateHeap();
 }
 
-/* 805875C0-8058761C 001860 005C+00 2/2 0/0 0/0 .text            setEnvTevColor__15daObj_KBacket_cFv
- */
 void daObj_KBacket_c::setEnvTevColor() {
     tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(mGndChk);
     tevStr.room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
 }
 
-/* 8058761C-80587660 0018BC 0044+00 2/2 0/0 0/0 .text            setRoomNo__15daObj_KBacket_cFv */
 void daObj_KBacket_c::setRoomNo() {
     s8 roomNo = dComIfG_Bgsp().GetRoomId(mGndChk);
     fopAcM_SetRoomNo(this, roomNo);
     mStts.SetRoomId(roomNo);
 }
 
-/* 80587660-80587694 001900 0034+00 1/1 0/0 0/0 .text            reset__15daObj_KBacket_cFv */
 void daObj_KBacket_c::reset() {
     memset(&field_0x9d4, 0, (size_t)&field_0xa4c - (size_t)&field_0x9d4);
 }
 
-/* 80587694-805877C4 001934 0130+00 1/1 0/0 0/0 .text            setMtx__15daObj_KBacket_cFv */
 void daObj_KBacket_c::setMtx() {
     s16 angleDiff = current.angle.y - shape_angle.y;
     s16 cos = cM_scos(angleDiff) * field_0xa18;
@@ -590,8 +573,6 @@ void daObj_KBacket_c::setMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 805877C4-80587864 001A64 00A0+00 1/1 0/0 0/0 .text            calcRollAngle__15daObj_KBacket_cFsi
- */
 s16 daObj_KBacket_c::calcRollAngle(s16 param_0, int param_1) {
     // this matches in release but the debug match is pretty horrible
 
@@ -615,8 +596,6 @@ s16 daObj_KBacket_c::calcRollAngle(s16 param_0, int param_1) {
     return 0;
 }
 
-/* 80587864-805879F4 001B04 0190+00 1/1 0/0 0/0 .text            getWallAngle__15daObj_KBacket_cFsPs
- */
 int daObj_KBacket_c::getWallAngle(s16 param_0, s16* param_1) {
     cXyz unkXyz1;
     cXyz unkXyzArr[2];
@@ -649,16 +628,12 @@ int daObj_KBacket_c::getWallAngle(s16 param_0, s16* param_1) {
     return 1;
 }
 
-/* 805879F4-80587A70 001C94 007C+00 1/1 0/0 0/0 .text            setSmokePrtcl__15daObj_KBacket_cFv
- */
 void daObj_KBacket_c::setSmokePrtcl() {
     fopAcM_effSmokeSet1(&field_0xa3c, &field_0xa40, &current.pos, NULL, 0.6f, &tevStr, 1);
     dComIfGp_particle_levelEmitterOnEventMove(field_0xa3c);
     dComIfGp_particle_levelEmitterOnEventMove(field_0xa40);
 }
 
-/* 80587A70-80587B68 001D10 00F8+00 1/1 0/0 0/0 .text            setWaterPrtcl__15daObj_KBacket_cFv
- */
 void daObj_KBacket_c::setWaterPrtcl() {
     /* 80587EF0-80587EF8 000078 0008+00 1/1 0/0 0/0 .data            emttrId$4670 */
     static u16 emttrId[4] = {
@@ -678,39 +653,31 @@ void daObj_KBacket_c::setWaterPrtcl() {
     }
 }
 
-/* 80587B68-80587BB8 001E08 0050+00 1/1 0/0 0/0 .text            setHamonPrtcl__15daObj_KBacket_cFv
- */
 void daObj_KBacket_c::setHamonPrtcl() {
     cXyz translation(current.pos.x, field_0xa04, current.pos.z);
     fopAcM_effHamonSet(&field_0xa34, &translation, 0.7f, 0.05f);
 }
 
-/* 80587BB8-80587BD8 001E58 0020+00 1/0 0/0 0/0 .text            daObj_KBacket_Create__FPv */
 static int daObj_KBacket_Create(void* i_this) {
     return ((daObj_KBacket_c*)i_this)->create();
 }
 
-/* 80587BD8-80587BF8 001E78 0020+00 1/0 0/0 0/0 .text            daObj_KBacket_Delete__FPv */
 static int daObj_KBacket_Delete(void* i_this) {
     return ((daObj_KBacket_c*)i_this)->Delete();
 }
 
-/* 80587BF8-80587C18 001E98 0020+00 1/0 0/0 0/0 .text            daObj_KBacket_Execute__FPv */
 static int daObj_KBacket_Execute(void* i_this) {
     return ((daObj_KBacket_c*)i_this)->Execute();
 }
 
-/* 80587C18-80587C38 001EB8 0020+00 1/0 0/0 0/0 .text            daObj_KBacket_Draw__FPv */
 static int daObj_KBacket_Draw(void* i_this) {
     return ((daObj_KBacket_c*)i_this)->Draw();
 }
 
-/* 80587C38-80587C40 001ED8 0008+00 1/0 0/0 0/0 .text            daObj_KBacket_IsDelete__FPv */
 static int daObj_KBacket_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80587EF8-80587F18 -00001 0020+00 1/0 0/0 0/0 .data            daObj_KBacket_MethodTable */
 static actor_method_class daObj_KBacket_MethodTable = {
     (process_method_func)daObj_KBacket_Create,
     (process_method_func)daObj_KBacket_Delete,
@@ -719,7 +686,6 @@ static actor_method_class daObj_KBacket_MethodTable = {
     (process_method_func)daObj_KBacket_Draw,
 };
 
-/* 80587F18-80587F48 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_KBACKET */
 extern actor_process_profile_definition g_profile_OBJ_KBACKET = {
     fpcLy_CURRENT_e,            // mLayerID
     8,                          // mListID

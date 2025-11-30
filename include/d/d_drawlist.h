@@ -17,11 +17,11 @@ class cM_rnd_c {
 public:
     cM_rnd_c() { init(100, 100, 100); }
 
-    /* 80053CDC */ void init(int, int, int);
-    /* 80053CEC */ f32 get();
-    /* 80053DE0 */ f32 getF(f32);
-    /* 80053E18 */ f32 getFX(f32);
-    /* 80053E60 */ f32 getValue(f32, f32);
+    void init(int, int, int);
+    f32 get();
+    f32 getF(f32);
+    f32 getFX(f32);
+    f32 getValue(f32, f32);
 
     /* 0x0 */ int seed0;
     /* 0x4 */ int seed1;
@@ -37,13 +37,13 @@ public:
 
 class dDlst_snapShot_c : public dDlst_base_c {
 public:
-    /* 80252ED4 */ virtual void draw();
+    virtual void draw();
 };
 
 class dDlst_effectLine_c : public dDlst_base_c {
 public:
-    /* 80053E9C */ virtual void draw();
-    /* 800541F4 */ void update(cXyz&, _GXColor&, u16, u16, u16, u16, f32, f32, f32, f32);
+    virtual void draw();
+    void update(cXyz&, _GXColor&, u16, u16, u16, u16, f32, f32, f32, f32);
 
     f32 getRndValue(f32 param_0, f32 param_1) { return mRnd.getValue(param_0, param_1); }
     f32 getRndFX(f32 param_0) { return mRnd.getFX(param_0); }
@@ -68,8 +68,8 @@ private:
 
 class dDlst_2D_c : public dDlst_base_c {
 public:
-    /* 80053A00 */ dDlst_2D_c(ResTIMG* image, s16 posX, s16 posY, s16 width, s16 height, u8 alpha);
-    /* 80053A9C */ virtual void draw();
+    dDlst_2D_c(ResTIMG* image, s16 posX, s16 posY, s16 width, s16 height, u8 alpha);
+    virtual void draw();
 
     void setAlpha(u8 alpha) { mAlpha = alpha; }
     J2DPicture* getPicture() { return &mpPicture; }
@@ -87,7 +87,7 @@ private:
 class dDlst_2DQuad_c : public dDlst_base_c {
 public:
     dDlst_2DQuad_c() {}
-    /* 80051CF0 */ virtual void draw();
+    virtual void draw();
 
     void init(s16 posX, s16 posY, s16 width, s16 height, GXColor& color) {
         mPosX = posX;
@@ -106,9 +106,9 @@ public:
 
 class dDlst_2DT2_c : public dDlst_base_c {
 public:
-    /* 80052354 */ virtual void draw();
-    /* 80052B00 */ dDlst_2DT2_c();
-    /* 80052B4C */ void init(ResTIMG*, f32, f32, f32, f32, u8, u8, u8, f32, f32);
+    virtual void draw();
+    dDlst_2DT2_c();
+    void init(ResTIMG*, f32, f32, f32, f32, u8, u8, u8, f32, f32);
 
     f32 getScaleX() { return mScaleX; }
     void setScaleX(f32 scale) { mScaleX = scale; }
@@ -137,8 +137,8 @@ public:
     };
 
     dDlst_peekZ_c() { mCount = 0; }
-    /* 80056018 */ int newData(s16, s16, u32*);
-    /* 80056080 */ void peekData();
+    int newData(s16, s16, u32*);
+    void peekData();
 
     /* 0x0 */ u8 mCount;
     /* 0x4 */ dDlst_peekZ_entry mEntries[0x40];
@@ -146,9 +146,9 @@ public:
 
 class dDlst_shadowSimple_c {
 public:
-    /* 8005520C */ void draw();
-    /* 800553EC */ void set(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*);
-    /* 8005638C */ dDlst_shadowSimple_c();
+    void draw();
+    void set(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*);
+    dDlst_shadowSimple_c();
 
     /* 0x00 */ u8 mAlpha;
     /* 0x04 */ _GXTexObj* mpTexObj;
@@ -160,8 +160,8 @@ struct cBgD_Vtx_t;
 
 class dDlst_shadowTri_c {
 public:
-    /* 80056270 */ ~dDlst_shadowTri_c() {}
-    /* 80056344 */ dDlst_shadowTri_c() {}
+    ~dDlst_shadowTri_c() {}
+    dDlst_shadowTri_c() {}
 
     /* 0x0 */ cXyz mPos[3];
 };
@@ -174,8 +174,8 @@ public:
 
     void reset() { mCount = 0; }
 
-    /* 80054288 */ int set(cBgD_Vtx_t*, u16, u16, u16, cM3dGPla*);
-    /* 800543B4 */ void draw();
+    int set(cBgD_Vtx_t*, u16, u16, u16, cM3dGPla*);
+    void draw();
 
     virtual dDlst_shadowTri_c* getTri() = 0;
     virtual s32 getTriMax() = 0;
@@ -186,22 +186,22 @@ public:
 
 class dDlst_shadowRealPoly_c : public dDlst_shadowPoly_c {
 public:
-    /* 800569A0 */ virtual dDlst_shadowTri_c* getTri() { return mShadowTri; }
-    /* 800569A8 */ virtual s32 getTriMax() { return ARRAY_SIZEU(mShadowTri); }
+    virtual dDlst_shadowTri_c* getTri() { return mShadowTri; }
+    virtual s32 getTriMax() { return ARRAY_SIZEU(mShadowTri); }
 
     /* 0x8 */ dDlst_shadowTri_c mShadowTri[256];
 };
 
 class dDlst_shadowReal_c {
 public:
-    /* 800544F0 */ void reset();
-    /* 80054500 */ void imageDraw(f32 (*)[4]);
-    /* 800545D4 */ void draw();
-    /* 80054BD0 */ u8 setShadowRealMtx(cXyz*, cXyz*, f32, f32, f32, dKy_tevstr_c*);
-    /* 80055028 */ u32 set(u32, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*, f32, f32);
-    /* 800551D4 */ bool add(J3DModel*);
-    /* 800561F8 */ ~dDlst_shadowReal_c() {}
-    /* 800562D0 */ dDlst_shadowReal_c() { mState = 0; }
+    void reset();
+    void imageDraw(f32 (*)[4]);
+    void draw();
+    u8 setShadowRealMtx(cXyz*, cXyz*, f32, f32, f32, dKy_tevstr_c*);
+    u32 set(u32, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*, f32, f32);
+    bool add(J3DModel*);
+    ~dDlst_shadowReal_c() {}
+    dDlst_shadowReal_c() { mState = 0; }
 
     dDlst_shadowReal_c* getZsortNext() { return mZsortNext; }
     dDlst_shadowReal_c* getZsortPre() { return mZsortPre; }
@@ -231,14 +231,14 @@ private:
 class dDlst_shadowControl_c {
 public:
     dDlst_shadowControl_c() { field_0x0 = 0; }
-    /* 80055684 */ void init();
-    /* 80055768 */ void reset();
-    /* 800557C8 */ void imageDraw(f32 (*)[4]);
-    /* 80055A14 */ void draw(f32 (*)[4]);
-    /* 80055C74 */ int setReal(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
-    /* 80055F1C */ bool addReal(u32, J3DModel*);
-    /* 80055F84 */ int setSimple(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*);
-    /* 80055FE8 */ static void setSimpleTex(ResTIMG const*);
+    void init();
+    void reset();
+    void imageDraw(f32 (*)[4]);
+    void draw(f32 (*)[4]);
+    int setReal(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
+    bool addReal(u32, J3DModel*);
+    int setSimple(cXyz*, f32, f32, cXyz*, s16, f32, _GXTexObj*);
+    static void setSimpleTex(ResTIMG const*);
 
     static GXTexObj* getSimpleTex() { return &mSimpleTexObj; }
 
@@ -261,8 +261,8 @@ class dDlst_window_c {
 public:
     dDlst_window_c() {}
     ~dDlst_window_c() {}
-    /* 80051AC0 */ void setViewPort(f32, f32, f32, f32, f32, f32);
-    /* 80051ADC */ void setScissor(f32, f32, f32, f32);
+    void setViewPort(f32, f32, f32, f32, f32, f32);
+    void setScissor(f32, f32, f32, f32);
 
     void setCameraID(int id) { mCameraID = id; }
     int getCameraID() { return mCameraID; }
@@ -283,20 +283,20 @@ struct view_class;
 
 class dDlst_list_c {
 public:
-    /* 800560F0 */ dDlst_list_c();
-    /* 80056390 */ void init();
-    /* 8005648C */ ~dDlst_list_c();
-    /* 80056538 */ void reset();
-    /* 800565EC */ void entryZSortXluDrawList(J3DDrawBuffer*, J3DPacket*, cXyz&);
-    /* 800566D4 */ void drawOpaDrawList(J3DDrawBuffer*);
-    /* 80056710 */ void drawXluDrawList(J3DDrawBuffer*);
-    /* 8005674C */ void drawOpaListItem3d();
-    /* 80056770 */ void drawXluListItem3d();
-    /* 80056794 */ int set(dDlst_base_c**&, dDlst_base_c**&, dDlst_base_c*);
-    /* 800567C4 */ void draw(dDlst_base_c**, dDlst_base_c**);
-    /* 8005681C */ static void wipeIn(f32 i_wipeSpeed, GXColor& i_wipeColor);
-    /* 800568D8 */ static void wipeIn(f32 i_wipeSpeed);
-    /* 80056900 */ static void calcWipe();
+    dDlst_list_c();
+    void init();
+    ~dDlst_list_c();
+    void reset();
+    void entryZSortXluDrawList(J3DDrawBuffer*, J3DPacket*, cXyz&);
+    void drawOpaDrawList(J3DDrawBuffer*);
+    void drawXluDrawList(J3DDrawBuffer*);
+    void drawOpaListItem3d();
+    void drawXluListItem3d();
+    int set(dDlst_base_c**&, dDlst_base_c**&, dDlst_base_c*);
+    void draw(dDlst_base_c**, dDlst_base_c**);
+    static void wipeIn(f32 i_wipeSpeed, GXColor& i_wipeColor);
+    static void wipeIn(f32 i_wipeSpeed);
+    static void calcWipe();
 
     enum DrawBuffer {
         /* 0x00 */ DB_OPA_LIST_SKY,

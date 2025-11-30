@@ -12,7 +12,6 @@
 //
 // Declarations:
 //
-/* 80C83854-80C83858 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Lv6ElevtA";
 static const int l_dzbidx = {7};
 static const int l_bmdidx = {4};
@@ -31,7 +30,6 @@ void daObjLv6ElevtA_HIO_c::genMessage(JORMContext* context) {
 static daObjLv6ElevtA_HIO_c l_HIO;
 #endif
 
-/* 80C82D38-80C82DC8 000078 0090+00 1/1 0/0 0/0 .text            create1st__16daObjLv6ElevtA_cFv */
 int daObjLv6ElevtA_c::create1st() {
     int phase = dComIfG_resLoad(this, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
@@ -47,7 +45,6 @@ int daObjLv6ElevtA_c::create1st() {
     return phase;
 }
 
-/* 80C82DC8-80C82E38 000108 0070+00 2/2 0/0 0/0 .text            setMtx__16daObjLv6ElevtA_cFv */
 void daObjLv6ElevtA_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -55,7 +52,6 @@ void daObjLv6ElevtA_c::setMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mMtx1);
 }
 
-/* 80C82E38-80C82EA8 000178 0070+00 1/0 0/0 0/0 .text            CreateHeap__16daObjLv6ElevtA_cFv */
 int daObjLv6ElevtA_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmdidx);
     JUT_ASSERT(145, model_data != NULL);
@@ -66,14 +62,11 @@ int daObjLv6ElevtA_c::CreateHeap() {
     return TRUE;
 }
 
-/* ############################################################################################## */
-/* 80C83810-80C83828 000000 0018+00 2/2 0/0 0/0 .rodata          l_cull_box */
 static const cull_box l_cull_box = {
     -393.13f, -3000.0f, -750.0f,
     393.13f, 150.0f, 393.13f
 };
 
-/* 80C82EA8-80C82FA4 0001E8 00FC+00 1/0 0/0 0/0 .text            Create__16daObjLv6ElevtA_cFv */
 int daObjLv6ElevtA_c::Create() {
     mModel->setBaseTRMtx(mMtx2);
     fopAcM_SetMtx(this, mMtx2);
@@ -93,7 +86,6 @@ int daObjLv6ElevtA_c::Create() {
     return TRUE;
 }
 
-/* 80C82FA4-80C83028 0002E4 0084+00 1/1 0/0 0/0 .text            searchObjLv6SwTurn__FPvPv */
 static void* searchObjLv6SwTurn(void* i_turn, void* i_elevta) {
     if (i_turn != NULL && fopAcM_IsActor(i_turn) &&
         fopAcM_GetProfName(i_turn) == PROC_Obj_Lv6SwTurn)
@@ -109,7 +101,6 @@ static void* searchObjLv6SwTurn(void* i_turn, void* i_elevta) {
     return NULL;
 }
 
-/* 80C83028-80C830BC 000368 0094+00 2/1 0/0 0/0 .text            eventStart__16daObjLv6ElevtA_cFv */
 bool daObjLv6ElevtA_c::eventStart() {
     if (fopAcM_isSwitch(this, getSwNo())) {
         mMode = 2;
@@ -121,7 +112,6 @@ bool daObjLv6ElevtA_c::eventStart() {
     return true;
 }
 
-/* 80C830BC-80C8321C 0003FC 0160+00 1/1 0/0 0/0 .text            moveAngle__16daObjLv6ElevtA_cFPv */
 void daObjLv6ElevtA_c::moveAngle(void* i_FoundActor) {
     fopAc_ac_c* found = (fopAc_ac_c*)i_FoundActor;
     if (mAngle > 0) {
@@ -143,7 +133,6 @@ void daObjLv6ElevtA_c::moveAngle(void* i_FoundActor) {
                                   -1.0f, 0);
 }
 
-/* 80C8321C-80C83538 00055C 031C+00 1/0 0/0 0/0 .text Execute__16daObjLv6ElevtA_cFPPA3_A4_f */
 int daObjLv6ElevtA_c::Execute(Mtx** i_pMtx) {
     fopAc_ac_c* found = fopAcM_Search(searchObjLv6SwTurn, this);
     if (found == NULL || getSwNo() == 0xff || getSw2No() == 0xff) {
@@ -241,7 +230,6 @@ int daObjLv6ElevtA_c::Execute(Mtx** i_pMtx) {
     return TRUE;
 }
 
-/* 80C83538-80C835DC 000878 00A4+00 1/0 0/0 0/0 .text            Draw__16daObjLv6ElevtA_cFv */
 int daObjLv6ElevtA_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -251,7 +239,6 @@ int daObjLv6ElevtA_c::Draw() {
     return TRUE;
 }
 
-/* 80C835DC-80C83618 00091C 003C+00 1/0 0/0 0/0 .text            Delete__16daObjLv6ElevtA_cFv */
 int daObjLv6ElevtA_c::Delete() {
     dComIfG_resDelete(this, l_arcName);
 #if DEBUG
@@ -260,33 +247,23 @@ int daObjLv6ElevtA_c::Delete() {
     return TRUE;
 }
 
-/* 80C83618-80C83698 000958 0080+00 1/0 0/0 0/0 .text
- * daObjLv6ElevtA_create1st__FP16daObjLv6ElevtA_c               */
 static int daObjLv6ElevtA_create1st(daObjLv6ElevtA_c* i_this) {
     fopAcM_ct(i_this, daObjLv6ElevtA_c);
     return i_this->create1st();
 }
 
-/* 80C83698-80C836B8 0009D8 0020+00 1/0 0/0 0/0 .text
- * daObjLv6ElevtA_MoveBGDelete__FP16daObjLv6ElevtA_c            */
 static int daObjLv6ElevtA_MoveBGDelete(daObjLv6ElevtA_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C836B8-80C836D8 0009F8 0020+00 1/0 0/0 0/0 .text
- * daObjLv6ElevtA_MoveBGExecute__FP16daObjLv6ElevtA_c           */
 static int daObjLv6ElevtA_MoveBGExecute(daObjLv6ElevtA_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C836D8-80C83704 000A18 002C+00 1/0 0/0 0/0 .text
- * daObjLv6ElevtA_MoveBGDraw__FP16daObjLv6ElevtA_c              */
 static int daObjLv6ElevtA_MoveBGDraw(daObjLv6ElevtA_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* ############################################################################################## */
-/* 80C83858-80C83878 -00001 0020+00 1/0 0/0 0/0 .data            daObjLv6ElevtA_METHODS */
 static actor_method_class daObjLv6ElevtA_METHODS = {
     (process_method_func)daObjLv6ElevtA_create1st,
     (process_method_func)daObjLv6ElevtA_MoveBGDelete,
@@ -295,7 +272,6 @@ static actor_method_class daObjLv6ElevtA_METHODS = {
     (process_method_func)daObjLv6ElevtA_MoveBGDraw,
 };
 
-/* 80C83878-80C838A8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv6ElevtA */
 extern actor_process_profile_definition g_profile_Obj_Lv6ElevtA = {
     fpcLy_CURRENT_e,           // mLayerID
     2,                         // mListID

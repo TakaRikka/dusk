@@ -5,7 +5,6 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-/* 8032F5A8-8032F5D0 329EE8 0028+00 0/0 1/1 0/0 .text            clear__16J3DMaterialTableFv */
 void J3DMaterialTable::clear() {
     mMaterialNum = 0;
     mUniqueMatNum = 0;
@@ -17,7 +16,6 @@ void J3DMaterialTable::clear() {
     field_0x1c = 0;
 }
 
-/* 8032F5D0-8032F604 329F10 0034+00 0/0 2/2 0/0 .text            __ct__16J3DMaterialTableFv */
 J3DMaterialTable::J3DMaterialTable() {
     mMaterialNum = 0;
     mUniqueMatNum = 0;
@@ -29,11 +27,8 @@ J3DMaterialTable::J3DMaterialTable() {
     field_0x1c = 0;
 }
 
-/* 8032F604-8032F64C 329F44 0048+00 1/0 1/1 0/0 .text            __dt__16J3DMaterialTableFv */
 J3DMaterialTable::~J3DMaterialTable() {}
 
-/* 8032F64C-8032F6F8 329F8C 00AC+00 0/0 1/1 5/5 .text
- * removeMatColorAnimator__16J3DMaterialTableFP11J3DAnmColor    */
 int J3DMaterialTable::removeMatColorAnimator(J3DAnmColor* pAnmColor) {
     J3D_ASSERT_NULLPTR(208, pAnmColor != NULL);
     int ret = false;
@@ -54,8 +49,6 @@ int J3DMaterialTable::removeMatColorAnimator(J3DAnmColor* pAnmColor) {
     return ret;
 }
 
-/* 8032F6F8-8032F7B4 32A038 00BC+00 0/0 5/5 10/10 .text
- * removeTexNoAnimator__16J3DMaterialTableFP16J3DAnmTexPattern  */
 int J3DMaterialTable::removeTexNoAnimator(J3DAnmTexPattern* pAnmTexPattern) {
     J3D_ASSERT_NULLPTR(242, pAnmTexPattern != NULL);
     int ret = 0;
@@ -78,8 +71,6 @@ int J3DMaterialTable::removeTexNoAnimator(J3DAnmTexPattern* pAnmTexPattern) {
     return ret;
 }
 
-/* 8032F7B4-8032F880 32A0F4 00CC+00 0/0 4/4 26/26 .text
- * removeTexMtxAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKey */
 int J3DMaterialTable::removeTexMtxAnimator(J3DAnmTextureSRTKey* pAnmTexSRTKey) {
     J3D_ASSERT_NULLPTR(278, pAnmTexSRTKey != NULL);
     s32 ret = 0;
@@ -105,8 +96,6 @@ int J3DMaterialTable::removeTexMtxAnimator(J3DAnmTextureSRTKey* pAnmTexSRTKey) {
     return ret;
 }
 
-/* 8032F880-8032F9C0 32A1C0 0140+00 0/0 7/7 24/24 .text
- * removeTevRegAnimator__16J3DMaterialTableFP15J3DAnmTevRegKey  */
 int J3DMaterialTable::removeTevRegAnimator(J3DAnmTevRegKey* pAnmTevRegKey) {
     J3D_ASSERT_NULLPTR(320, pAnmTevRegKey != NULL);
     s32 ret = 0;
@@ -144,8 +133,6 @@ int J3DMaterialTable::removeTevRegAnimator(J3DAnmTevRegKey* pAnmTevRegKey) {
     return ret;
 }
 
-/* 8032F9C0-8032FAF4 32A300 0134+00 1/1 0/0 0/0 .text
- * createTexMtxForAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKey */
 int J3DMaterialTable::createTexMtxForAnimator(J3DAnmTextureSRTKey* pTexSRTKey) {
     J3D_ASSERT_NULLPTR(382, pTexSRTKey != NULL);
     int rv = 0;
@@ -178,8 +165,6 @@ int J3DMaterialTable::createTexMtxForAnimator(J3DAnmTextureSRTKey* pTexSRTKey) {
     return rv;
 }
 
-/* 8032FAF4-8032FBC8 32A434 00D4+00 0/0 1/1 0/0 .text
- * entryMatColorAnimator__16J3DMaterialTableFP11J3DAnmColor     */
 int J3DMaterialTable::entryMatColorAnimator(J3DAnmColor* pAnmColor) {
     J3D_ASSERT_NULLPTR(450, pAnmColor != NULL);
     int rv = 0;
@@ -205,8 +190,6 @@ int J3DMaterialTable::entryMatColorAnimator(J3DAnmColor* pAnmColor) {
     return rv;
 }
 
-/* 8032FBC8-8032FCC4 32A508 00FC+00 0/0 7/7 1/1 .text
- * entryTexNoAnimator__16J3DMaterialTableFP16J3DAnmTexPattern   */
 int J3DMaterialTable::entryTexNoAnimator(J3DAnmTexPattern* pAnmTexPattern) {
     J3D_ASSERT_NULLPTR(489, pAnmTexPattern != NULL);
     int rv = 0;
@@ -234,8 +217,6 @@ int J3DMaterialTable::entryTexNoAnimator(J3DAnmTexPattern* pAnmTexPattern) {
     return rv;
 }
 
-/* 8032FCC4-8032FE70 32A604 01AC+00 0/0 14/14 6/6 .text
- * entryTexMtxAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKey */
 int J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey* pAnmTexSRTKey) {
     J3D_ASSERT_NULLPTR(532, pAnmTexSRTKey != NULL);
     int rv = 0;
@@ -278,8 +259,6 @@ int J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey* pAnmTexSRTKey) {
     return rv;
 }
 
-/* 8032FE70-8032FFEC 32A7B0 017C+00 0/0 10/10 4/4 .text
- * entryTevRegAnimator__16J3DMaterialTableFP15J3DAnmTevRegKey   */
 int J3DMaterialTable::entryTevRegAnimator(J3DAnmTevRegKey* pAnmTevRegKey) {
     J3D_ASSERT_NULLPTR(599, pAnmTevRegKey != NULL);
     int rv = 0;

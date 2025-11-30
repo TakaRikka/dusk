@@ -9,7 +9,6 @@
 #include "string.h"
 #include "global.h"
 
-/* 802D49B4-802D4AB4 2CF2F4 0100+00 0/0 2/2 0/0 .text mount__12JKRFileCacheFPCcP7JKRHeapPCc */
 JKRFileCache* JKRFileCache::mount(const char* path, JKRHeap* heap, const char* param_3) {
     if (!path || *path != '/') {
         return NULL;
@@ -37,7 +36,6 @@ JKRFileCache* JKRFileCache::mount(const char* path, JKRHeap* heap, const char* p
     return new (heap, 0) JKRFileCache(path, param_3);
 }
 
-/* 802D4AB4-802D4C70 2CF3F4 01BC+00 1/1 0/0 0/0 .text            __ct__12JKRFileCacheFPCcPCc */
 JKRFileCache::JKRFileCache(const char* path, const char* volume) {
     mParentHeap = JKRHeap::findFromRoot(this);
     mMountCount = 1;
@@ -82,7 +80,6 @@ JKRFileCache::JKRFileCache(const char* path, const char* volume) {
     mIsMounted = true;
 }
 
-/* 802D4C70-802D4D44 2CF5B0 00D4+00 1/0 0/0 0/0 .text            __dt__12JKRFileCacheFv */
 JKRFileCache::~JKRFileCache() {
     removeResourceAll();
     if (mRootPath)
@@ -95,8 +92,6 @@ JKRFileCache::~JKRFileCache() {
     getVolumeList().remove(&mFileLoaderLink);
 }
 
-/* 802D4D44-802D4DD8 2CF684 0094+00 1/0 0/0 0/0 .text            becomeCurrent__12JKRFileCacheFPCc
- */
 bool JKRFileCache::becomeCurrent(const char* path) {
     char* dvdPathName = getDvdPathName(path);
 
@@ -115,7 +110,6 @@ bool JKRFileCache::becomeCurrent(const char* path) {
     return result;
 }
 
-/* 802D4DD8-802D4EDC 2CF718 0104+00 1/0 0/0 0/0 .text            getResource__12JKRFileCacheFPCc */
 void* JKRFileCache::getResource(const char* path) {
     JUT_ASSERT(237, isMounted());
 
@@ -146,8 +140,6 @@ void* JKRFileCache::getResource(const char* path) {
     return buffer;
 }
 
-/* 802D4EDC-802D4F64 2CF81C 0088+00 1/0 0/0 0/0 .text            getResource__12JKRFileCacheFUlPCc
- */
 void* JKRFileCache::getResource(u32, const char* path) {
     JUT_ASSERT(303, isMounted());
 
@@ -163,7 +155,6 @@ void* JKRFileCache::getResource(u32, const char* path) {
     return getResource(filePath);
 }
 
-/* 802D4F64-802D503C 2CF8A4 00D8+00 1/0 0/0 0/0 .text readResource__12JKRFileCacheFPvUlPCc */
 u32 JKRFileCache::readResource(void* dst, u32 dstLength, const char* path) {
     JUT_ASSERT(412, isMounted());
 
@@ -197,7 +188,6 @@ u32 JKRFileCache::readResource(void* dst, u32 dstLength, const char* path) {
     return resourceSize;
 }
 
-/* 802D503C-802D50D4 2CF97C 0098+00 1/0 0/0 0/0 .text readResource__12JKRFileCacheFPvUlUlPCc */
 u32 JKRFileCache::readResource(void* dst, u32 dstLength, u32, const char* path) {
     JUT_ASSERT(344, isMounted());
 
@@ -213,8 +203,6 @@ u32 JKRFileCache::readResource(void* dst, u32 dstLength, u32, const char* path) 
     return readResource(dst, dstLength, filePath);
 }
 
-/* 802D50D4-802D5164 2CFA14 0090+00 1/0 0/0 0/0 .text            removeResourceAll__12JKRFileCacheFv
- */
 void JKRFileCache::removeResourceAll(void) {
     JUT_ASSERT(412, isMounted());
 
@@ -228,8 +216,6 @@ void JKRFileCache::removeResourceAll(void) {
     }
 }
 
-/* 802D5164-802D51F8 2CFAA4 0094+00 1/0 0/0 0/0 .text            removeResource__12JKRFileCacheFPv
- */
 bool JKRFileCache::removeResource(void* resource) {
     JUT_ASSERT(463, isMounted());
 
@@ -248,8 +234,6 @@ bool JKRFileCache::removeResource(void* resource) {
     return true;
 }
 
-/* 802D51F8-802D526C 2CFB38 0074+00 1/0 0/0 0/0 .text            detachResource__12JKRFileCacheFPv
- */
 bool JKRFileCache::detachResource(void* resource) {
     JUT_ASSERT(490, isMounted());
 
@@ -262,7 +246,6 @@ bool JKRFileCache::detachResource(void* resource) {
     return true;
 }
 
-/* 802D526C-802D52A0 2CFBAC 0034+00 1/0 0/0 0/0 .text            getResSize__12JKRFileCacheCFPCv */
 u32 JKRFileCache::getResSize(const void* resource) const {
     CCacheBlock* cacheBlock = findCacheBlock(resource);
     if (cacheBlock == NULL) {
@@ -272,7 +255,6 @@ u32 JKRFileCache::getResSize(const void* resource) const {
     }
 }
 
-/* 802D52A0-802D531C 2CFBE0 007C+00 1/0 0/0 0/0 .text            countFile__12JKRFileCacheCFPCc */
 u32 JKRFileCache::countFile(const char* path) const {
     DVDDir dir;
     DVDDirEntry dirEntry;
@@ -292,8 +274,6 @@ u32 JKRFileCache::countFile(const char* path) const {
     return count;
 }
 
-/* 802D531C-802D53B8 2CFC5C 009C+00 1/0 0/0 0/0 .text            getFirstFile__12JKRFileCacheCFPCc
- */
 JKRFileFinder* JKRFileCache::getFirstFile(const char* path) const {
     char* name = getDvdPathName(path);
     JKRHeap* systemHeap = JKRHeap::getSystemHeap();
@@ -308,8 +288,6 @@ JKRFileFinder* JKRFileCache::getFirstFile(const char* path) const {
     return finder;
 }
 
-/* 802D53B8-802D53E4 2CFCF8 002C+00 3/3 0/0 0/0 .text            findCacheBlock__12JKRFileCacheCFPCv
- */
 JKRFileCache::CCacheBlock* JKRFileCache::findCacheBlock(const void* resource) const {
     JSUListIterator<CCacheBlock> iterator;
     for (iterator = mCacheBlockList.getFirst(); iterator != mCacheBlockList.getEnd(); ++iterator) {
@@ -321,8 +299,6 @@ JKRFileCache::CCacheBlock* JKRFileCache::findCacheBlock(const void* resource) co
     return NULL;
 }
 
-/* 802D53E4-802D5410 2CFD24 002C+00 2/2 0/0 0/0 .text            findCacheBlock__12JKRFileCacheCFUl
- */
 JKRFileCache::CCacheBlock* JKRFileCache::findCacheBlock(u32 fileID) const {
     JSUListIterator<CCacheBlock> iterator;
     for (iterator = mCacheBlockList.getFirst(); iterator != mCacheBlockList.getEnd(); ++iterator) {
@@ -334,7 +310,6 @@ JKRFileCache::CCacheBlock* JKRFileCache::findCacheBlock(u32 fileID) const {
     return NULL;
 }
 
-/* 802D5410-802D551C 2CFD50 010C+00 2/2 0/0 0/0 .text            findFile__12JKRFileCacheCFPcPCc */
 bool JKRFileCache::findFile(char* path, const char* fileName) const {
     DVDDir dir;
     DVDDirEntry dirEntry;
@@ -367,8 +342,6 @@ bool JKRFileCache::findFile(char* path, const char* fileName) const {
     return result;
 }
 
-/* 802D551C-802D5624 2CFE5C 0108+00 5/5 0/0 0/0 .text            getDvdPathName__12JKRFileCacheCFPCc
- */
 char* JKRFileCache::getDvdPathName(const char* path) const {
     char* newPath;
     if (path[0] == '/') {
@@ -393,15 +366,12 @@ char* JKRFileCache::getDvdPathName(const char* path) const {
     return newPath;
 }
 
-/* 802D5624-802D566C 2CFF64 0048+00 2/2 0/0 0/0 .text            convStrLower__12JKRFileCacheCFPc */
 void JKRFileCache::convStrLower(char* buffer) const {
     while (*buffer) {
         *buffer++ = tolower(*buffer);
     }
 }
 
-/* 802D566C-802D56C8 2CFFAC 005C+00 1/1 0/0 0/0 .text __ct__Q212JKRFileCache11CCacheBlockFUlUlPCv
- */
 JKRFileCache::CCacheBlock::CCacheBlock(u32 fileId, u32 fileSize, const void* resource)
     : mCacheBlockLink(this) {
     mReferenceCount = 1;
@@ -410,24 +380,18 @@ JKRFileCache::CCacheBlock::CCacheBlock(u32 fileId, u32 fileSize, const void* res
     mMemoryPtr = (void*)resource;  // todo: don't cast away const
 }
 
-/* 802D56C8-802D56F4 2D0008 002C+00 1/0 0/0 0/0 .text            getFsResource__12JKRFileCacheFPCc
- */
 void* JKRFileCache::getFsResource(const char* path) {
     return getResource(path);
 }
 
-/* 802D56F4-802D5720 2D0034 002C+00 1/0 0/0 0/0 .text getNameResource__12JKRFileCacheFUlPCc */
 void* JKRFileCache::getNameResource(u32 type, const char* path) {
     return getResource(type, path);
 }
 
-/* 802D5720-802D574C 2D0060 002C+00 1/0 0/0 0/0 .text readFsResource__12JKRFileCacheFPvUlPCc */
 u32 JKRFileCache::readFsResource(void* dst, u32 dstLength, const char* path) {
     return readResource(dst, dstLength, path);
 }
 
-/* 802D574C-802D5778 2D008C 002C+00 1/0 0/0 0/0 .text readNameResource__12JKRFileCacheFPvUlUlPCc
- */
 u32 JKRFileCache::readNameResource(void* dst, u32 dstLength, u32 type, const char* path) {
     return readResource(dst, dstLength, type, path);
 }

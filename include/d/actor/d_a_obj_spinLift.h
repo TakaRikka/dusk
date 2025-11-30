@@ -16,22 +16,22 @@ class daSpinLift_c : public dBgS_MoveBgActor {
 public:
     typedef void (daSpinLift_c::*modeFunc)();
 
-    /* 80CE3E2C */ void setBaseMtx();
-    /* 80CE3F1C */ int create();
-    /* 80CE414C */ void moveLift();
-    /* 80CE4290 */ void init_modeWait();
-    /* 80CE429C */ void modeWait();
-    /* 80CE42A0 */ void init_modeUpMove();
-    /* 80CE42C4 */ void modeUpMove();
-    /* 80CE468C */ void init_modeDownMove();
-    /* 80CE4698 */ void modeDownMove();
-    /* 80CE4790 */ void init_modeMoveEnd();
-    /* 80CE4A9C */ void modeMoveEnd();
+    void setBaseMtx();
+    int create();
+    void moveLift();
+    void init_modeWait();
+    void modeWait();
+    void init_modeUpMove();
+    void modeUpMove();
+    void init_modeDownMove();
+    void modeDownMove();
+    void init_modeMoveEnd();
+    void modeMoveEnd();
 
-    /* 80CE3E9C */ virtual int CreateHeap();
-    /* 80CE40FC */ virtual int Execute(Mtx**);
-    /* 80CE4AA0 */ virtual int Draw();
-    /* 80CE4B44 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getModelType() { return current.angle.x; }
     int getMoveHeight() { return fopAcM_GetParamBit(this, 16, 8); }

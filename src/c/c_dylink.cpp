@@ -15,7 +15,6 @@
 #include "m_Do/m_Do_ext2.h"
 #endif
 
-/* 80374640-80375DE8 -00001 17A8+00 1/1 0/0 0/0 .rodata          DynamicNameTable */
 static DynamicNameTableEntry const DynamicNameTable[] = {
     {PROC_ALLDIE, "d_a_alldie"},
     {PROC_Obj_Swpush, "d_a_obj_swpush"},
@@ -799,16 +798,12 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     {0xFFFF, NULL},
 };
 
-/* 803F0F50-803F1BB0 01DC70 0C60+00 4/4 0/0 0/0 .bss             DMC */
 static DynamicModuleControlBase* DMC[PROC_MAX_NUM];
 
-/* 80450CA8-80450CAC 0001A8 0004+00 1/1 0/0 0/0 .sbss            None */
 static bool DMC_initialized;
 
-/* 80450CAC-80450CB0 0001AC 0004+00 2/2 0/0 0/0 .sbss            cDyl_Initialized */
 static BOOL cDyl_Initialized;
 
-/* 800183DC-80018544 012D1C 0168+00 1/1 0/0 0/0 .text            cCc_Init__Fv */
 int cCc_Init() {
     JUT_ASSERT(37, !DMC_initialized);
 
@@ -878,7 +873,6 @@ BOOL cDyl_IsInitialized() {
     return cDyl_Initialized;
 }
 
-/* 80018544-8001857C 012E84 0038+00 0/0 1/1 0/0 .text            cDyl_IsLinked__Fs */
 BOOL cDyl_IsLinked(s16 i_ProfName) {
     JUT_ASSERT(183, cDyl_Initialized);
     
@@ -894,7 +888,6 @@ BOOL cDyl_IsLinked(s16 i_ProfName) {
     return rt;
 }
 
-/* 8001857C-800185C0 012EBC 0044+00 1/1 1/1 0/0 .text            cDyl_Unlink__Fs */
 BOOL cDyl_Unlink(s16 i_ProfName) {
     #if DEBUG
     cCc_Check();
@@ -911,7 +904,6 @@ BOOL cDyl_Unlink(s16 i_ProfName) {
     return FALSE;
 }
 
-/* 800185C0-80018688 012F00 00C8+00 1/1 1/1 0/0 .text            cDyl_LinkASync__Fs */
 int cDyl_LinkASync(s16 i_ProfName) {
     #if DEBUG
     cCc_Check();
@@ -951,7 +943,6 @@ int cDyl_LinkASync(s16 i_ProfName) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80018688-80018764 012FC8 00DC+00 1/1 0/0 0/0 .text            cDyl_InitCallback__FPv */
 static int cDyl_InitCallback(void* param_0) {
     JUT_ASSERT(335, !cDyl_Initialized);
 
@@ -984,17 +975,14 @@ static int cDyl_InitCallback(void* param_0) {
     return 1;
 }
 
-/* 80450CB0-80450CB8 0001B0 0004+04 2/2 0/0 0/0 .sbss            cDyl_DVD */
 static mDoDvdThd_callback_c* cDyl_DVD;
 
-/* 80018764-80018798 0130A4 0034+00 0/0 1/1 0/0 .text            cDyl_InitAsync__Fv */
 void cDyl_InitAsync() {
     cCc_Init();
     JUT_ASSERT(367, cDyl_DVD == NULL);
     cDyl_DVD = mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)cDyl_InitCallback, NULL);
 }
 
-/* 80018798-80018804 0130D8 006C+00 0/0 2/1 0/0 .text            cDyl_InitAsyncIsDone__Fv */
 BOOL cDyl_InitAsyncIsDone() {
     if (cDyl_DVD == NULL) {
         return TRUE;
@@ -1009,12 +997,10 @@ BOOL cDyl_InitAsyncIsDone() {
     return FALSE;
 }
 
-/* 80018804-8001880C 013144 0008+00 1/0 0/0 0/0 .text            phase_01__7cDylPhsFPv */
 int cDylPhs::phase_01(void* param_0) {
     return cPhs_NEXT_e;
 }
 
-/* 8001880C-80018844 01314C 0038+00 1/0 0/0 0/0 .text            phase_02__7cDylPhsFPs */
 int cDylPhs::phase_02(s16* p_profName) {
     int ret = cDyl_LinkASync(*p_profName);
     if (ret == cPhs_COMPLEATE_e) {
@@ -1024,13 +1010,10 @@ int cDylPhs::phase_02(s16* p_profName) {
     return ret;
 }
 
-/* 80018844-8001884C 013184 0008+00 1/0 0/0 0/0 .text            phase_03__7cDylPhsFPv */
 int cDylPhs::phase_03(void* param_0) {
     return cPhs_INIT_e;
 }
 
-/* 8001884C-80018890 01318C 0044+00 0/0 2/2 0/0 .text
- * Link__7cDylPhsFP30request_of_phase_process_classs            */
 int cDylPhs::Link(request_of_phase_process_class* i_phase, s16 i_ProfName) {
     static request_of_phase_process_fn l_method[3] = {
         (request_of_phase_process_fn)cDylPhs::phase_01, 
@@ -1045,8 +1028,6 @@ int cDylPhs::Link(request_of_phase_process_class* i_phase, s16 i_ProfName) {
     return dComLbG_PhaseHandler(i_phase, l_method, &i_ProfName);
 }
 
-/* 80018890-800188DC 0131D0 004C+00 0/0 1/1 0/0 .text
- * Unlink__7cDylPhsFP30request_of_phase_process_classs          */
 int cDylPhs::Unlink(request_of_phase_process_class* i_phase, s16 i_ProfName) {
     JUT_ASSERT(460, i_phase->id != cPhs_LOADING_e);
 

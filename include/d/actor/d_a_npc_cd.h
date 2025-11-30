@@ -6,24 +6,24 @@
 
 class daNpcCd_c : public fopAc_ac_c {
 public:
-    /* 8015605C */ int NpcCreate(int);
-    /* 801561E8 */ J3DModel* ObjCreate(int);
-    /* 80156228 */ BOOL isM_();
-    /* 80156248 */ J3DAnmTransform* getAnmP(int, int);
-    /* 801563C8 */ int setAttention(int);
-    /* 80156B4C */ int loadResrc(int, int);
-    /* 80156C50 */ int removeResrc(int, int);
-    /* 80156D1C */ void setEnvTevCol();
-    /* 80156D78 */ void setRoomNo();
-    /* 80156DBC */ void animation();
-    /* 80156E20 */ void setAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
-    /* 80156E8C */ int drawObj(int, J3DModel*, f32);
-    /* 80156F74 */ int drawNpc();
-    /* 80157084 */ int jntNodeCB(J3DJoint*, J3DModel*);
-    /* 8015736C */ void setHitodamaParticle();
-    /* 80157524 */ J3DModelData* getNpcMdlDataP(int);
-    /* 80157588 */ J3DModelData* getObjMdlDataP(int);
-    /* 80AA8694 */ virtual ~daNpcCd_c() {}
+    int NpcCreate(int);
+    J3DModel* ObjCreate(int);
+    BOOL isM_();
+    J3DAnmTransform* getAnmP(int, int);
+    int setAttention(int);
+    int loadResrc(int, int);
+    int removeResrc(int, int);
+    void setEnvTevCol();
+    void setRoomNo();
+    void animation();
+    void setAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
+    int drawObj(int, J3DModel*, f32);
+    int drawNpc();
+    int jntNodeCB(J3DJoint*, J3DModel*);
+    void setHitodamaParticle();
+    J3DModelData* getNpcMdlDataP(int);
+    J3DModelData* getObjMdlDataP(int);
+    virtual ~daNpcCd_c() {}
 
     static dCcD_SrcCyl const m_cylDat;
 
@@ -51,8 +51,8 @@ STATIC_ASSERT(sizeof(daNpcCd_c) == 0x9EC);
 
 
 struct daNpcCd_HIO_Jnt_c : public JORReflexible {
-    /* 80157810 */ virtual ~daNpcCd_HIO_Jnt_c() {}
-    /* 801578B0 */ daNpcCd_HIO_Jnt_c() {}
+    virtual ~daNpcCd_HIO_Jnt_c() {}
+    daNpcCd_HIO_Jnt_c() {}
 
 #ifdef DEBUG
     void genMessage(JORMContext*);
@@ -63,8 +63,8 @@ struct daNpcCd_HIO_Jnt_c : public JORReflexible {
 };
 
 struct daNpcCd_HIO_Child_c : public JORReflexible {
-    /* 801577A0 */ virtual ~daNpcCd_HIO_Child_c() {}
-    /* 80157858 */ daNpcCd_HIO_Child_c() {}
+    virtual ~daNpcCd_HIO_Child_c() {}
+    daNpcCd_HIO_Child_c() {}
 
 #ifdef DEBUG
     void genMessage(JORMContext*);
@@ -88,8 +88,8 @@ STATIC_ASSERT(sizeof(daNpcCd_HIO_Child_c) == 0x164);
 
 class daNpcCd_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80157600 */ daNpcCd_HIO_c();
-    /* 801577A0 */ virtual ~daNpcCd_HIO_c() {}
+    daNpcCd_HIO_c();
+    virtual ~daNpcCd_HIO_c() {}
 
 #ifdef DEBUG
     void genMessage(JORMContext*);

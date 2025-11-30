@@ -17,16 +17,15 @@ class JKRSolidHeap;
  */
 class JASHeap {
 public:
-    /* 80290140 */ JASHeap(JASDisposer* param_0 = NULL);
-    /* 802901AC */ void initRootHeap(void*, u32);
-    /* 8029021C */ bool alloc(JASHeap*, u32);
-    /* 802903F4 */ bool allocTail(JASHeap*, u32);
-    /* 802904E4 */ bool free();
-    /* 80290608 */ void insertChild(JASHeap*, JASHeap*, void*, u32, bool);
-    /* 802906F0 */ JASHeap* getTailHeap();
-    /* 8029077C */ u32 getTailOffset();
-    /* 802907E0 */ u32 getCurOffset();
-    /* 80290B54 */ ~JASHeap() {}
+    JASHeap(JASDisposer* param_0 = NULL);
+    void initRootHeap(void*, u32);
+    bool alloc(JASHeap*, u32);
+    bool allocTail(JASHeap*, u32);
+    bool free();
+    void insertChild(JASHeap*, JASHeap*, void*, u32, bool);
+    JASHeap* getTailHeap();
+    u32 getTailOffset();
+    u32 getCurOffset();
 
     void* getBase() { return mBase; }
     bool isAllocated() { return mBase; }
@@ -45,11 +44,11 @@ public:
  * 
  */
 struct JASGenericMemPool {
-    /* 80290848 */ JASGenericMemPool();
-    /* 80290860 */ ~JASGenericMemPool();
-    /* 802908C8 */ void newMemPool(u32, int);
-    /* 80290948 */ void* alloc(u32);
-    /* 80290994 */ void free(void*, u32);
+    JASGenericMemPool();
+    ~JASGenericMemPool();
+    void newMemPool(u32, int);
+    void* alloc(u32);
+    void free(void*, u32);
 
     /* 0x00 */ void* field_0x0;
     /* 0x04 */ u32 freeMemCount;
@@ -70,7 +69,11 @@ namespace JASThreadingModel {
     };
 
     template <typename A0>
-    struct ObjectLevelLockable {
+    struct ObjectLevelLockable : public OSMutex {
+        ObjectLevelLockable() {
+            OSInitMutex(this);
+        }
+
         struct Lock {
             Lock(A0 const& mutex) {
                 mMutex = (A0*)&mutex;
@@ -84,7 +87,7 @@ namespace JASThreadingModel {
             A0* mMutex;
         };
     };
-};
+};  // namespace JASThreadingModel
 
 /**
  * @ingroup jsystem-jaudio
@@ -113,7 +116,7 @@ namespace JASKernel { JKRHeap* getSystemHeap(); };
  * 
  */
 template<u32 ChunkSize, template<typename> class T>
-class JASMemChunkPool : public OSMutex {
+class JASMemChunkPool : public T<JASMemChunkPool<ChunkSize, T> >::ObjectLevelLockable {
     struct MemoryChunk {
         MemoryChunk(MemoryChunk* nextChunk) {
             mNextChunk = nextChunk;
@@ -163,9 +166,9 @@ class JASMemChunkPool : public OSMutex {
     };
 public:
     JASMemChunkPool() {
-        OSInitMutex(this);
         field_0x18 = NULL;
-        createNewChunk();
+        bool ret = createNewChunk();
+        JUT_ASSERT(320, ret);
     }
 
     bool createNewChunk() {
@@ -179,6 +182,7 @@ public:
             if (field_0x18 != NULL) {
                 uVar2 = 1;
             } else {
+                JUT_WARN(428, "%s", "Not enough JASSystemHeap");
                 field_0x18 = new (JKRHeap::getSystemHeap(), 0) MemoryChunk(pMVar4);
                 if (field_0x18 != NULL) {
                     uVar2 = 1;
@@ -193,7 +197,8 @@ public:
 
     void* alloc(u32 size) {
         typename T<JASMemChunkPool<ChunkSize, T> >::Lock lock(*this);
-        if (field_0x18->getFreeSize() < size) {
+        u32 freeSize = field_0x18->getFreeSize();
+        if (freeSize < size) {
             if (ChunkSize < size) {
                 return NULL;
             }
@@ -230,11 +235,11 @@ public:
 };
 
 namespace JASKernel {
-    /* 802909B8 */ void setupRootHeap(JKRSolidHeap*, u32);
-    /* 80290AC0 */ JKRHeap* getSystemHeap();
-    /* 80290AC8 */ JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>* getCommandHeap();
-    /* 80290AD0 */ void setupAramHeap(u32, u32);
-    /* 80290B08 */ JASHeap* getAramHeap();
+    void setupRootHeap(JKRSolidHeap*, u32);
+    JKRHeap* getSystemHeap();
+    JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>* getCommandHeap();
+    void setupAramHeap(u32, u32);
+    JASHeap* getAramHeap();
 
     extern JASHeap audioAramHeap;
     extern u32 sAramBase;

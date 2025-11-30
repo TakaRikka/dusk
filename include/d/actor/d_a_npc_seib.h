@@ -14,7 +14,7 @@
 
 class daNpc_seiB_Param_c {
 public:
-    /* 80AC6FB8 */ virtual ~daNpc_seiB_Param_c() {};
+    virtual ~daNpc_seiB_Param_c() {};
     struct Data {
         /* 0x00 */ f32 field_0x00;
         /* 0x04 */ f32 mGravity;
@@ -67,33 +67,33 @@ public:
         TYPE_1,
     };
 
-    /* 80AC50EC */ ~daNpc_seiB_c();
-    /* 80AC5188 */ int create();
-    /* 80AC53C8 */ int CreateHeap();
-    /* 80AC5520 */ int Delete();
-    /* 80AC5554 */ int Execute();
-    /* 80AC5574 */ int Draw();
-    /* 80AC5608 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AC5628 */ u8 getType();
-    /* 80AC5648 */ int getFlowNodeNo();
-    /* 80AC5664 */ int isDelete();
-    /* 80AC566C */ void reset();
-    /* 80AC57C4 */ void setParam();
-    /* 80AC58F0 */ void srchActors();
-    /* 80AC58F4 */ BOOL evtTalk();
-    /* 80AC59F4 */ BOOL evtCutProc();
-    /* 80AC5ABC */ void action();
-    /* 80AC5B44 */ void beforeMove();
-    /* 80AC5BC4 */ void setAttnPos();
-    /* 80AC5C20 */ int drawDbgInfo();
-    /* 80AC5C28 */ bool afterSetMotionAnm(int, int, f32, int);
-    /* 80AC5DC0 */ int selectAction();
-    /* 80AC5E08 */ int chkAction(int (daNpc_seiB_c::*)(void*));
-    /* 80AC5E34 */ int setAction(int (daNpc_seiB_c::*)(void*));
-    /* 80AC5EDC */ void ctrlWaitAnm();
-    /* 80AC6140 */ int wait(void*);
-    /* 80AC616C */ int talk(void*);
-    /* 80AC6F74 */ daNpc_seiB_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
+    ~daNpc_seiB_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    u8 getType();
+    int getFlowNodeNo();
+    int isDelete();
+    void reset();
+    void setParam();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    int drawDbgInfo();
+    bool afterSetMotionAnm(int, int, f32, int);
+    int selectAction();
+    int chkAction(int (daNpc_seiB_c::*)(void*));
+    int setAction(int (daNpc_seiB_c::*)(void*));
+    void ctrlWaitAnm();
+    int wait(void*);
+    int talk(void*);
+    daNpc_seiB_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
                                 daNpcT_evtData_c const* param_7, char** param_8) :

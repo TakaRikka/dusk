@@ -9,15 +9,15 @@
  */
 class J2DOrthoGraph : public J2DGrafContext {
 public:
-    /* 802E9670 */ J2DOrthoGraph();
-    /* 802E96D0 */ J2DOrthoGraph(f32 x, f32 y, f32 width, f32 height, f32 far, f32 near);
-    /* 802E980C */ void setOrtho(JGeometry::TBox2<f32> const& bounds, f32 far, f32 near);
-    /* 802E987C */ void scissorBounds(JGeometry::TBox2<f32>*, JGeometry::TBox2<f32> const*);
+    J2DOrthoGraph();
+    J2DOrthoGraph(f32 x, f32 y, f32 width, f32 height, f32 far, f32 near);
+    void setOrtho(JGeometry::TBox2<f32> const& bounds, f32 far, f32 near);
+    void scissorBounds(JGeometry::TBox2<f32>*, JGeometry::TBox2<f32> const*);
 
-    /* 8000B118 */ virtual ~J2DOrthoGraph() {}
-    /* 802E97B4 */ virtual void setPort();
-    /* 802E9C88 */ virtual s32 getGrafType() const { return 1; }
-    /* 802E9840 */ virtual void setLookat();
+    virtual ~J2DOrthoGraph() {}
+    virtual void setPort();
+    virtual s32 getGrafType() const { return 1; }
+    virtual void setLookat();
 
     f32 getWidthPower() const { return mBounds.getWidth() / mOrtho.getWidth(); }
     f32 getHeightPower() const { return mBounds.getHeight() / mOrtho.getHeight(); }

@@ -14,7 +14,6 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/actor/d_a_mirror.h"
 
-/* 804C6DCC-804C6E10 0000EC 0044+00 1/1 0/0 0/0 .text coHitCallback__9daNbomb_cFP10fopAc_ac_c */
 void daNbomb_c::coHitCallback(fopAc_ac_c* i_hitActor) {
     if (fopAcM_GetGroup(i_hitActor) == fopAc_ENEMY_e ||
         (checkStateFlg0(FLG0_INSECT_BOMB) &&
@@ -24,31 +23,23 @@ void daNbomb_c::coHitCallback(fopAc_ac_c* i_hitActor) {
     }
 }
 
-/* 804C6E10-804C6E34 000130 0024+00 2/2 0/0 0/0 .text
- * daNbomb_coHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void daNbomb_coHitCallback(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
                                   fopAc_ac_c* i_coActorB, dCcD_GObjInf* i_coObjInfB) {
     ((daNbomb_c*)i_coActorA)->coHitCallback(i_coActorB);
 }
 
-/* 804CC340-804CC34C 000000 000C+00 12/12 0/0 0/0 .rodata          @3767 */
 static u8 const lit_3767[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 804CC34C-804CC358 00000C 000C+00 0/1 0/0 0/0 .rodata          l_localCenterOffset */
 static Vec const l_localCenterOffset = {0.0f, 30.0f, 0.0f};
 
-/* 804CC358-804CC360 000018 0006+02 1/0 0/0 0/0 .rodata          l_arcNameBombF */
 static char const l_arcNameBombF[] = "Bombf";
 
-/* 804CC360-804CC368 000020 0005+03 1/1 0/0 0/0 .rodata          l_arcNameBombE */
 static char const l_arcNameBombE[] = "E_BI";
 
-/* 804CC368-804CC370 000028 0005+03 1/1 0/0 0/0 .rodata          l_arcNameBombEW */
 static char const l_arcNameBombEW[] = "E_BG";
 
-/* 804C6E34-804C6F78 000154 0144+00 1/1 0/0 0/0 .text tgHitCallback__9daNbomb_cFP12dCcD_GObjInf */
 void daNbomb_c::tgHitCallback(dCcD_GObjInf* i_hitObj) {
     if (i_hitObj->ChkAtType(AT_TYPE_BOOMERANG)) {
         if (!fopAcM_checkCarryNow(this) && !fopAcM_checkHookCarryNow(this) &&
@@ -80,14 +71,11 @@ void daNbomb_c::tgHitCallback(dCcD_GObjInf* i_hitObj) {
     }
 }
 
-/* 804C6FB4-804C6FD8 0002D4 0024+00 1/1 0/0 0/0 .text
- * daNbomb_tgHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void daNbomb_tgHitCallback(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
                                   fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf) {
     ((daNbomb_c*)i_tgActor)->tgHitCallback(i_atObjInf);
 }
 
-/* 804C6FD8-804C70C0 0002F8 00E8+00 1/1 0/0 0/0 .text searchEnemy__9daNbomb_cFP10fopAc_ac_c */
 int daNbomb_c::searchEnemy(fopAc_ac_c* i_enemy) {
     mDoMtx_multVec(field_0xa70, &i_enemy->current.pos, &field_0xc14);
 
@@ -105,7 +93,6 @@ int daNbomb_c::searchEnemy(fopAc_ac_c* i_enemy) {
     return 0;
 }
 
-/* 804C70C0-804C7114 0003E0 0054+00 1/1 0/0 0/0 .text daNbomb_searchEnemy__FP10fopAc_ac_cPv */
 static void* daNbomb_searchEnemy(fopAc_ac_c* i_actor, void* i_data) {
     if (fopAcM_GetGroup(i_actor) == fopAc_ENEMY_e &&
         ((daNbomb_c*)i_data)->searchEnemy(i_actor) != NULL)
@@ -116,7 +103,6 @@ static void* daNbomb_searchEnemy(fopAc_ac_c* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 804CC4D8-804CC518 000000 0040+00 1/1 0/0 0/0 .data            l_sphSrc */
 static dCcD_SrcSph l_sphSrc = {
     {
         {0x0, {{AT_TYPE_BOMB, 0x4, 0x1e}, {0xd8fbffef, 0x11}, 0x79}},  // mObj
@@ -129,13 +115,11 @@ static dCcD_SrcSph l_sphSrc = {
     }  // mSphAttr
 };
 
-/* 804CC518-804CC530 -00001 0018+00 4/4 0/0 0/0 .data            m_arcNameList__9daNbomb_c */
 const char* daNbomb_c::m_arcNameList[6] = {
     daAlink_c::getAlinkArcName(), daAlink_c::getAlinkArcName(), daAlink_c::getAlinkArcName(),
     l_arcNameBombF, l_arcNameBombE, l_arcNameBombEW,
 };
 
-/* 804C7114-804C72BC 000434 01A8+00 1/1 0/0 0/0 .text            createHeap__9daNbomb_cFv */
 int daNbomb_c::createHeap() {
     static u16 const bmdIdx[6] = {0x001E, 0x0027, 0x0026, 0x0003, 0x000E, 0x000A};
 
@@ -174,13 +158,10 @@ int daNbomb_c::createHeap() {
     return 1;
 }
 
-/* 804C7304-804C7324 000624 0020+00 1/1 0/0 0/0 .text            daNbomb_createHeap__FP10fopAc_ac_c
- */
 static int daNbomb_createHeap(fopAc_ac_c* i_this) {
     return ((daNbomb_c*)i_this)->createHeap();
 }
 
-/* 804C7324-804C7B44 000644 0820+00 1/1 0/0 0/0 .text            create__9daNbomb_cFv */
 int daNbomb_c::create() {
     fopAcM_GetID(this);
     fopAcM_ct(this, daNbomb_c);
@@ -385,12 +366,10 @@ int daNbomb_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 804C7E94-804C7EB4 0011B4 0020+00 1/0 0/0 0/0 .text            daNbomb_Create__FP10fopAc_ac_c */
 static int daNbomb_Create(fopAc_ac_c* i_this) {
     return ((daNbomb_c*)i_this)->create();
 }
 
-/* 804C7EB4-804C826C 0011D4 03B8+00 1/1 0/0 0/0 .text            __dt__9daNbomb_cFv */
 daNbomb_c::~daNbomb_c() {
     if (mExplodeMode < 2) {
         dKy_actor_addcol_set(0, 0, 0, 0.0f);
@@ -431,13 +410,11 @@ daNbomb_c::~daNbomb_c() {
     }
 }
 
-/* 804C826C-804C8294 00158C 0028+00 1/0 0/0 0/0 .text            daNbomb_Delete__FP9daNbomb_c */
 static int daNbomb_Delete(daNbomb_c* i_this) {
     i_this->~daNbomb_c();
     return 1;
 }
 
-/* 804C8294-804C82D8 0015B4 0044+00 2/2 0/0 0/0 .text            checkTimerStop__9daNbomb_cFv */
 bool daNbomb_c::checkTimerStop() {
     return fopAcM_GetParam(this) == PRM_FLOWER_BOMB ||
            checkStateFlg0(daNbomb_FLG0(FLG0_UNK_800 | FLG0_FROZEN)) ||
@@ -445,7 +422,6 @@ bool daNbomb_c::checkTimerStop() {
             fopAcM_GetParam(this) == PRM_ENEMY_BOMB_BOOMERANG_MOVE);
 }
 
-/* 804C82D8-804C8430 0015F8 0158+00 5/5 0/0 0/0 .text            checkExplode__9daNbomb_cFv */
 BOOL daNbomb_c::checkExplode() {
     if (checkStateFlg0(daNbomb_FLG0(FLG0_UNK_800 | FLG0_FROZEN))) {
         return false;
@@ -476,7 +452,6 @@ BOOL daNbomb_c::checkExplode() {
     return false;
 }
 
-/* 804C8430-804C84D8 001750 00A8+00 5/5 0/0 0/0 .text            setRoomInfo__9daNbomb_cFv */
 void daNbomb_c::setRoomInfo() {
     int room_no;
     if (mAcch.GetGroundH() != -G_CM3D_F_INF) {
@@ -493,7 +468,6 @@ void daNbomb_c::setRoomInfo() {
     fopAcM_SetRoomNo(this, room_no);
 }
 
-/* 804C84D8-804C8588 0017F8 00B0+00 2/2 0/0 0/0 .text            setSmokePos__9daNbomb_cFv */
 void daNbomb_c::setSmokePos() {
     if (mType == TYPE_INSECT_ENEMY || mType == TYPE_WATER_ENEMY) {
         mDoMtx_multVecZero(mpModel->getBaseTRMtx(), &mEffectPosition);
@@ -505,7 +479,6 @@ void daNbomb_c::setSmokePos() {
     field_0xbe4 = (mEffectPosition - mEffectLastPosition) * 0.5f;
 }
 
-/* 804C8588-804C87F0 0018A8 0268+00 1/1 0/0 0/0 .text            setEffect__9daNbomb_cFv */
 void daNbomb_c::setEffect() {
     static cXyz effectScale(1.8f, 1.8f, 1.8f);
 
@@ -544,7 +517,6 @@ void daNbomb_c::setEffect() {
     }
 }
 
-/* 804C87F0-804C88CC 001B10 00DC+00 2/2 0/0 0/0 .text            setHookshotOffset__9daNbomb_cFv */
 void daNbomb_c::setHookshotOffset() {
     daAlink_c* player = daAlink_getAlinkActorClass();
 
@@ -558,7 +530,6 @@ void daNbomb_c::setHookshotOffset() {
     offStateFlg0(FLG0_SET_HOOKSHOT_OFFSET);
 }
 
-/* 804C88CC-804C88F0 001BEC 0024+00 2/2 0/0 0/0 .text            setFreeze__9daNbomb_cFv */
 void daNbomb_c::setFreeze() {
     if (!checkStateFlg0(FLG0_FROZEN)) {
         onStateFlg0(FLG0_FROZEN);
@@ -566,12 +537,10 @@ void daNbomb_c::setFreeze() {
     }
 }
 
-/* 804C88F0-804C8928 001C10 0038+00 3/3 0/0 0/0 .text            checkWaterIn__9daNbomb_cFv */
 BOOL daNbomb_c::checkWaterIn() {
     return mAcch.ChkWaterHit() && current.pos.y + 30.0f < mAcch.m_wtr.GetHeight();
 }
 
-/* 804C8928-804C8A40 001C48 0118+00 3/3 0/0 0/0 .text            insectLineCheck__9daNbomb_cFv */
 int daNbomb_c::insectLineCheck() {
     if (dComIfG_Bgsp().LineCross(&mLineChk)) {
         cM3dGPla chk_poly;
@@ -591,7 +560,6 @@ int daNbomb_c::insectLineCheck() {
     return 0;
 }
 
-/* 804C8A88-804C8CF8 001DA8 0270+00 2/2 0/0 0/0 .text            setHitPolygon__9daNbomb_cFi */
 void daNbomb_c::setHitPolygon(BOOL param_0) {
     if (!param_0) {
         mInsectHitPolyInfo.SetPolyInfo(mLineChk);
@@ -636,7 +604,6 @@ void daNbomb_c::setHitPolygon(BOOL param_0) {
     mDoMtx_inverse(mpModel->getBaseTRMtx(), field_0xa70);
 }
 
-/* 804C8CF8-804C9118 002018 0420+00 5/5 0/0 0/0 .text            procExplodeInit__9daNbomb_cFv */
 BOOL daNbomb_c::procExplodeInit() {
     fopAcM_OnStatus(this, 0x20000);
     daAlink_c* player = daAlink_getAlinkActorClass();
@@ -738,7 +705,6 @@ BOOL daNbomb_c::procExplodeInit() {
     return true;
 }
 
-/* 804C9118-804C93E0 002438 02C8+00 1/0 0/0 0/0 .text            procExplode__9daNbomb_cFv */
 BOOL daNbomb_c::procExplode() {
     camera_class* camera = dComIfGp_getCamera(0);
     f32 dist_scale = 0.0f;
@@ -790,7 +756,6 @@ BOOL daNbomb_c::procExplode() {
     return true;
 }
 
-/* 804C93E0-804C955C 002700 017C+00 6/6 0/0 0/0 .text            procCarryInit__9daNbomb_cFv */
 BOOL daNbomb_c::procCarryInit() {
     mProcFunc = &daNbomb_c::procCarry;
 
@@ -818,7 +783,6 @@ BOOL daNbomb_c::procCarryInit() {
     return true;
 }
 
-/* 804C955C-804C9930 00287C 03D4+00 1/0 0/0 0/0 .text            procCarry__9daNbomb_cFv */
 BOOL daNbomb_c::procCarry() {
     daAlink_c* player = daAlink_getAlinkActorClass();
 
@@ -892,7 +856,6 @@ BOOL daNbomb_c::procCarry() {
     return true;
 }
 
-/* 804C9930-804C9984 002C50 0054+00 4/4 0/0 0/0 .text            procWaitInit__9daNbomb_cFv */
 BOOL daNbomb_c::procWaitInit() {
     if (fopAcM_GetParam(this) == PRM_BOMB_CARRY) {
         onStateFlg0(FLG0_UNK_20000);
@@ -904,7 +867,6 @@ BOOL daNbomb_c::procWaitInit() {
     return true;
 }
 
-/* 804C9984-804CA268 002CA4 08E4+00 2/1 0/0 0/0 .text            procWait__9daNbomb_cFv */
 BOOL daNbomb_c::procWait() {
     if (checkExplode()) {
         return true;
@@ -1095,7 +1057,6 @@ BOOL daNbomb_c::procWait() {
     return true;
 }
 
-/* 804CA268-804CA2EC 003588 0084+00 1/1 0/0 0/0 .text            procFlowerWaitInit__9daNbomb_cFv */
 BOOL daNbomb_c::procFlowerWaitInit() {
     mProcFunc = &daNbomb_c::procFlowerWait;
 
@@ -1108,7 +1069,6 @@ BOOL daNbomb_c::procFlowerWaitInit() {
     return true;
 }
 
-/* 804CA2EC-804CA3B8 00360C 00CC+00 1/0 0/0 0/0 .text            procFlowerWait__9daNbomb_cFv */
 BOOL daNbomb_c::procFlowerWait() {
     if (scale.x < 1.0f) {
         cLib_chaseF(&scale.x, 1.0f, 0.1f);
@@ -1132,8 +1092,6 @@ BOOL daNbomb_c::procFlowerWait() {
     return true;
 }
 
-/* 804CA3B8-804CA4E0 0036D8 0128+00 2/2 0/0 0/0 .text
- * procBoomerangMoveInit__9daNbomb_cFP12dCcD_GObjInf            */
 BOOL daNbomb_c::procBoomerangMoveInit(dCcD_GObjInf* unused) {
     if (mProcFunc == &daNbomb_c::procBoomerangMove) {
         return false;
@@ -1160,7 +1118,6 @@ BOOL daNbomb_c::procBoomerangMoveInit(dCcD_GObjInf* unused) {
     return true;
 }
 
-/* 804CA4E0-804CA688 003800 01A8+00 2/0 0/0 0/0 .text            procBoomerangMove__9daNbomb_cFv */
 BOOL daNbomb_c::procBoomerangMove() {
     if (checkExplode()) {
         return true;
@@ -1209,7 +1166,6 @@ BOOL daNbomb_c::procBoomerangMove() {
     return true;
 }
 
-/* 804CA688-804CA780 0039A8 00F8+00 2/2 0/0 0/0 .text            procInsectMoveInit__9daNbomb_cFv */
 BOOL daNbomb_c::procInsectMoveInit() {
     mProcFunc = &daNbomb_c::procInsectMove;
 
@@ -1228,7 +1184,6 @@ BOOL daNbomb_c::procInsectMoveInit() {
     return true;
 }
 
-/* 804CA780-804CAEE8 003AA0 0768+00 2/1 0/0 0/0 .text            procInsectMove__9daNbomb_cFv */
 BOOL daNbomb_c::procInsectMove() {
     if (mNoHitPlayerTimer != 0) {
         mNoHitPlayerTimer--;
@@ -1362,7 +1317,6 @@ BOOL daNbomb_c::procInsectMove() {
     return true;
 }
 
-/* 804CAEE8-804CBC40 004208 0D58+00 1/1 0/0 0/0 .text            execute__9daNbomb_cFv */
 int daNbomb_c::execute() {
     if (!checkStateFlg0(FLG0_UNK_2000)) {
         field_0xb51 = 0;
@@ -1605,12 +1559,10 @@ int daNbomb_c::execute() {
 }
 
 
-/* 804CBC40-804CBC60 004F60 0020+00 1/0 0/0 0/0 .text            daNbomb_Execute__FP9daNbomb_c */
 static int daNbomb_Execute(daNbomb_c* i_this) {
     return i_this->execute();
 }
 
-/* 804CBC60-804CC200 004F80 05A0+00 1/1 0/0 0/0 .text            draw__9daNbomb_cFv */
 int daNbomb_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
 
@@ -1714,14 +1666,12 @@ int daNbomb_c::draw() {
 }
 
 
-/* 804CC200-804CC220 005520 0020+00 1/0 0/0 0/0 .text            daNbomb_Draw__FP9daNbomb_c */
 static int daNbomb_Draw(daNbomb_c* i_this) {
     return i_this->draw();
 }
 
 AUDIO_INSTANCES;
 
-/* 804CC590-804CC5B0 -00001 0020+00 1/0 0/0 0/0 .data            l_daNbombMethod */
 static actor_method_class l_daNbombMethod = {
     (process_method_func)daNbomb_Create,
     (process_method_func)daNbomb_Delete,
@@ -1730,7 +1680,6 @@ static actor_method_class l_daNbombMethod = {
     (process_method_func)daNbomb_Draw,
 };
 
-/* 804CC5B0-804CC5E0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NBOMB */
 extern actor_process_profile_definition g_profile_NBOMB = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

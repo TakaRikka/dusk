@@ -6,7 +6,6 @@
 #include "JSystem/JUtility/JUTVideo.h"
 #include <stdint.h>
 
-/* 802E5888-802E599C 2E01C8 0114+00 1/1 0/0 0/0 .text            __ct__10JUTProcBarFv */
 JUTProcBar::JUTProcBar() {
     mVisible = true;
     mHeapBarVisible = true;
@@ -28,16 +27,12 @@ JUTProcBar::JUTProcBar() {
     mWatchHeap = NULL;
 }
 
-/* ############################################################################################## */
-/* 80451558-8045155C 000A58 0004+00 4/4 6/6 0/0 .sbss            sManager__10JUTProcBar */
 JUTProcBar* JUTProcBar::sManager;
 
-/* 802E599C-802E59E0 2E02DC 0044+00 1/1 0/0 0/0 .text            __dt__10JUTProcBarFv */
 JUTProcBar::~JUTProcBar() {
     sManager = NULL;
 }
 
-/* 802E59E0-802E5A28 2E0320 0048+00 0/0 1/1 0/0 .text            create__10JUTProcBarFv */
 JUTProcBar* JUTProcBar::create() {
     if (!sManager) {
         sManager = new JUTProcBar();
@@ -45,7 +40,6 @@ JUTProcBar* JUTProcBar::create() {
     return sManager;
 }
 
-/* 802E5A28-802E5A60 2E0368 0038+00 0/0 1/1 0/0 .text            destroy__10JUTProcBarFv */
 void JUTProcBar::destroy() {
     if (sManager) {
         delete sManager;
@@ -53,14 +47,10 @@ void JUTProcBar::destroy() {
     sManager = NULL;
 }
 
-/* ############################################################################################## */
-/* 80450900-80450904 000380 0004+00 2/2 0/0 0/0 .sdata           oneFrameRate */
 static f32 oneFrameRate = 8.0f;
 
-/* 80450904-80450908 000384 0004+00 2/2 0/0 0/0 .sdata           oneFrameRateUser */
 static f32 oneFrameRateUser = 10.0f;
 
-/* 802E5A60-802E5B30 2E03A0 00D0+00 0/0 1/1 0/0 .text            clear__10JUTProcBarFv */
 void JUTProcBar::clear() {
     sManager->idleStart();
     sManager->cpuStart();
@@ -71,8 +61,6 @@ void JUTProcBar::clear() {
     oneFrameRateUser = 10.0f;
 }
 
-/* 802E5B30-802E5CC4 2E0470 0194+00 1/1 0/0 0/0 .text
- * bar_subroutine__10JUTProcBarFiiiiiiiQ28JUtility6TColorQ28JUtility6TColor */
 void JUTProcBar::bar_subroutine(int param_0, int param_1, int param_2, int param_3, int param_4,
                                 int param_5, int param_6, JUtility::TColor param_7,
                                 JUtility::TColor param_8) {
@@ -88,7 +76,6 @@ void JUTProcBar::bar_subroutine(int param_0, int param_1, int param_2, int param
     }
 }
 
-/* 802E5CC4-802E5E08 2E0604 0144+00 1/1 0/0 0/0 .text adjustMeterLength__10JUTProcBarFUlPfffPi */
 void JUTProcBar::adjustMeterLength(u32 param_0, f32* param_1, f32 param_2, f32 param_3,
                                    int* param_4) {
     BOOL var2 = false;
@@ -117,13 +104,11 @@ void JUTProcBar::adjustMeterLength(u32 param_0, f32* param_1, f32 param_2, f32 p
     *param_1 = var1;
 }
 
-/* 802E5E08-802E5E3C 2E0748 0034+00 0/0 1/1 0/0 .text            draw__10JUTProcBarFv */
 void JUTProcBar::draw() {
     drawProcessBar();
     drawHeapBar();
 }
 
-/* 802E5E3C-802E6D3C 2E077C 0F00+00 1/1 0/0 0/0 .text            drawProcessBar__10JUTProcBarFv */
 void JUTProcBar::drawProcessBar() {
     if (mVisible) {
         int frameDuration = 16666;  // duration in miliseconds? for how long a frame takes,
@@ -264,17 +249,14 @@ void JUTProcBar::drawProcessBar() {
     }
 }
 
-/* 802E6D3C-802E6DA4 2E167C 0068+00 2/2 0/0 0/0 .text            addrToXPos__FPvi */
 static int addrToXPos(void* param_0, int param_1) {
     return param_1 * (((uintptr_t)param_0 - 0x80000000) / (float)JKRHeap::mMemorySize);
 }
 
-/* 802E6DA4-802E6E0C 2E16E4 0068+00 2/2 0/0 0/0 .text            byteToXLen__Fii */
 static int byteToXLen(int param_0, int param_1) {
     return param_1 * (param_0 / (float)JKRHeap::mMemorySize);
 }
 
-/* 802E6E0C-802E6FA0 2E174C 0194+00 1/1 0/0 0/0 .text            heapBar__FP7JKRHeapiiiii */
 static void heapBar(JKRHeap* param_0, int param_1, int param_2, int param_3, int param_4,
                     int param_5) {
     int stack52 = param_1 + addrToXPos(param_0->getStartAddr(), param_4);
@@ -286,7 +268,6 @@ static void heapBar(JKRHeap* param_0, int param_1, int param_2, int param_3, int
                JUtility::TColor(255, 180, 250, 255));
 }
 
-/* 802E6FA0-802E7340 2E18E0 03A0+00 1/1 0/0 0/0 .text            drawHeapBar__10JUTProcBarFv */
 void JUTProcBar::drawHeapBar() {
     if (mHeapBarVisible) {
         int start;  // required/workaround for regswaps, end might be a shared variable too, however

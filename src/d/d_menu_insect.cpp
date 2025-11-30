@@ -35,8 +35,6 @@ static moveFunc map_move_process[] = {
     &dMenu_Insect_c::explain_close_move,
 };
 
-/* 801D8114-801D82F4 1D2A54 01E0+00 0/0 2/2 0/0 .text
- * __ct__14dMenu_Insect_cFP10JKRExpHeapP9STControlP10CSTControlUc */
 dMenu_Insect_c::dMenu_Insect_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i_cstick,
                                u8 param_3) {
     mpHeap = i_heap;
@@ -68,7 +66,6 @@ dMenu_Insect_c::dMenu_Insect_c(JKRExpHeap* i_heap, STControl* i_stick, CSTContro
     mpExpItemTex = (ResTIMG*)mpHeap->alloc(0xc00, 0x20);
 }
 
-/* 801D82F4-801D8658 1D2C34 0364+00 1/0 0/0 0/0 .text            __dt__14dMenu_Insect_cFv */
 dMenu_Insect_c::~dMenu_Insect_c() {
     delete mpBlackTex;
     mpBlackTex = NULL;
@@ -139,7 +136,6 @@ dMenu_Insect_c::~dMenu_Insect_c() {
     dComIfGp_getMsgArchive(0)->removeResourceAll();
 }
 
-/* 801D8658-801D86C8 1D2F98 0070+00 1/1 0/0 0/0 .text            _create__14dMenu_Insect_cFv */
 void dMenu_Insect_c::_create() {
     mpString = new dMsgString_c();
     screenSetBase();
@@ -149,7 +145,6 @@ void dMenu_Insect_c::_create() {
     init();
 }
 
-/* 801D86C8-801D8760 1D3008 0098+00 0/0 3/3 0/0 .text            _move__14dMenu_Insect_cFv */
 void dMenu_Insect_c::_move() {
     JKRHeap* heap = mDoExt_setCurrentHeap((JKRHeap*)mpHeap);
     u8 process = field_0xf3;
@@ -161,7 +156,6 @@ void dMenu_Insect_c::_move() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 801D8760-801D88EC 1D30A0 018C+00 1/1 1/1 0/0 .text            _draw__14dMenu_Insect_cFv */
 void dMenu_Insect_c::_draw() {
     if (mpArchive != NULL) {
         J2DGrafContext* grafPort = dComIfGp_getCurrentGrafPort();
@@ -181,7 +175,6 @@ void dMenu_Insect_c::_draw() {
     }
 }
 
-/* 801D88EC-801D8914 1D322C 0028+00 0/0 3/3 0/0 .text            isSync__14dMenu_Insect_cFv */
 bool dMenu_Insect_c::isSync() {
     if (mpMount != NULL && mpMount->sync() == false) {
         return 0;
@@ -189,12 +182,10 @@ bool dMenu_Insect_c::isSync() {
     return 1;
 }
 
-/* 801D8914-801D894C 1D3254 0038+00 1/1 0/0 0/0 .text            init__14dMenu_Insect_cFv */
 void dMenu_Insect_c::init() {
     (this->*map_init_process[field_0xf3])();
 }
 
-/* 801D894C-801D8B2C 1D328C 01E0+00 0/0 3/3 0/0 .text            _open__14dMenu_Insect_cFv */
 int dMenu_Insect_c::_open() {
     if (mpMount == NULL) {
         mpMount = mDoDvdThd_mountArchive_c::create("/res/Layout/insectRes.arc", 0, NULL);
@@ -236,7 +227,6 @@ int dMenu_Insect_c::_open() {
     }
 }
 
-/* 801D8B2C-801D8C68 1D346C 013C+00 0/0 1/1 0/0 .text            _close__14dMenu_Insect_cFv */
 int dMenu_Insect_c::_close() {
     s16 closeFrame = g_drawHIO.mInsectListScreen.mCloseFrame;
     field_0xf0 = 0;
@@ -261,7 +251,6 @@ int dMenu_Insect_c::_close() {
     return field_0xf0 <= 0;
 }
 
-/* 801D8C68-801D8CCC 1D35A8 0064+00 1/0 0/0 0/0 .text            wait_init__14dMenu_Insect_cFv */
 void dMenu_Insect_c::wait_init() {
     if (isGetInsect(field_0xf4, field_0xf5) != 0) {
         setAButtonString(0x368);
@@ -271,7 +260,6 @@ void dMenu_Insect_c::wait_init() {
     setBButtonString(0x3f9);
 }
 
-/* 801D8CCC-801D8E00 1D360C 0134+00 1/0 0/0 0/0 .text            wait_move__14dMenu_Insect_cFv */
 void dMenu_Insect_c::wait_move() {
     if (mDoGph_gInf_c::getFader()->getStatus() == 1) {
         if (mDoCPd_c::getTrigB(PAD_1) || field_0xf7 == 0) {
@@ -295,7 +283,6 @@ void dMenu_Insect_c::wait_move() {
     }
 }
 
-/* 801D8E00-801D91E4 1D3740 03E4+00 1/0 0/0 0/0 .text explain_open_init__14dMenu_Insect_cFv */
 void dMenu_Insect_c::explain_open_init() {
     char local_78[32];
     char local_98[32];
@@ -363,7 +350,6 @@ void dMenu_Insect_c::explain_open_init() {
     mpExpParent->alphaAnimeStart(0);
 }
 
-/* 801D91E4-801D9264 1D3B24 0080+00 1/0 0/0 0/0 .text explain_open_move__14dMenu_Insect_cFv */
 void dMenu_Insect_c::explain_open_move() {
     if (mpExpParent->alphaAnime(10, 0, 0xff, 1)) {
         if (field_0xf6 == 1 && isGiveInsect(field_0xf4, field_0xf5) == 0) {
@@ -374,12 +360,10 @@ void dMenu_Insect_c::explain_open_move() {
     }
 }
 
-/* 801D9264-801D9268 1D3BA4 0004+00 1/0 0/0 0/0 .text explain_move_init__14dMenu_Insect_cFv */
 void dMenu_Insect_c::explain_move_init() {
     /* empty function */
 }
 
-/* 801D9268-801D9290 1D3BA8 0028+00 1/0 0/0 0/0 .text explain_move_move__14dMenu_Insect_cFv */
 void dMenu_Insect_c::explain_move_move() {
     if (mDoCPd_c::getTrigA(PAD_1) == 0 && mDoCPd_c::getTrigB(PAD_1) == 0) {
         return;
@@ -387,14 +371,12 @@ void dMenu_Insect_c::explain_move_move() {
     field_0xf3 = 4;
 }
 
-/* 801D9290-801D92DC 1D3BD0 004C+00 1/0 0/0 0/0 .text select_move_init__14dMenu_Insect_cFv */
 void dMenu_Insect_c::select_move_init() {
     dMeter2Info_setInsectSelectType(0xff);
     setAButtonString(0x40c);
     setBButtonString(0x3f9);
 }
 
-/* 801D92DC-801D9504 1D3C1C 0228+00 1/0 0/0 0/0 .text select_move_move__14dMenu_Insect_cFv */
 void dMenu_Insect_c::select_move_move() {
     mpStick->checkTrigger();
     if (mDoCPd_c::getTrigA(PAD_1)) {
@@ -432,7 +414,6 @@ void dMenu_Insect_c::select_move_move() {
     }
 }
 
-/* 801D9504-801D95AC 1D3E44 00A8+00 1/0 0/0 0/0 .text explain_close_init__14dMenu_Insect_cFv */
 void dMenu_Insect_c::explain_close_init() {
     setAButtonString(0);
     setBButtonString(0x3f9);
@@ -444,7 +425,6 @@ void dMenu_Insect_c::explain_close_init() {
     mpExpParent->alphaAnimeStart(0);
 }
 
-/* 801D95AC-801D9644 1D3EEC 0098+00 1/0 0/0 0/0 .text explain_close_move__14dMenu_Insect_cFv */
 void dMenu_Insect_c::explain_close_move() {
     bool alphaAnime = mpExpParent->alphaAnime(10, 0xff, 0, 1);
     bool cVar2;
@@ -458,8 +438,6 @@ void dMenu_Insect_c::explain_close_move() {
     }
 }
 
-/* 801D9644-801D98F0 1D3F84 02AC+00 1/1 0/0 0/0 .text            screenSetBase__14dMenu_Insect_cFv
- */
 void dMenu_Insect_c::screenSetBase() {
     static const u64 insect_tag[MAX_INSECT_NUM] = {
         'ari_os',  'ari_ms',   'kag_os',  'kag_ms',   'kab_os', 'kab_ms',  'kam_os',  'kam_mes',
@@ -507,7 +485,6 @@ void dMenu_Insect_c::screenSetBase() {
     mpString->getString(0x5ba, textBox, NULL, NULL, NULL, 0);
 }
 
-/* 801D98F0-801D9BD0 1D4230 02E0+00 1/1 0/0 0/0 .text screenSetExplain__14dMenu_Insect_cFv */
 void dMenu_Insect_c::screenSetExplain() {
     mpExpScreen = new J2DScreen();
     mpExpScreen->setPriority("zelda_gold_insects_info.blo", 0x20000, mpArchive);
@@ -541,8 +518,6 @@ void dMenu_Insect_c::screenSetExplain() {
     field_0x5c->setString(0x100, "");
 }
 
-/* 801D9BD0-801D9D4C 1D4510 017C+00 1/1 0/0 0/0 .text            screenSetDoIcon__14dMenu_Insect_cFv
- */
 void dMenu_Insect_c::screenSetDoIcon() {
     static const u64 text_a_tag[5] = {
         'atext1_1', 'atext1_2', 'atext1_3', 'atext1_4', 'atext1_5',
@@ -568,8 +543,6 @@ void dMenu_Insect_c::screenSetDoIcon() {
     }
 }
 
-/* 801D9D4C-801D9DCC 1D468C 0080+00 0/0 1/1 0/0 .text            getGetInsectNum__14dMenu_Insect_cFv
- */
 u8 dMenu_Insect_c::getGetInsectNum() {
     static u8 l_itemno[MAX_INSECT_NUM] = {
         fpcNm_ITEM_M_BEETLE,      fpcNm_ITEM_F_BEETLE,      fpcNm_ITEM_M_BUTTERFLY, fpcNm_ITEM_F_BUTTERFLY, fpcNm_ITEM_M_STAG_BEETLE, fpcNm_ITEM_F_STAG_BEETLE,
@@ -591,7 +564,6 @@ u8 dMenu_Insect_c::getGetInsectNum() {
     return insectNum;
 }
 
-/* 801D9DCC-801D9DE4 1D470C 0018+00 3/3 0/0 0/0 .text getInsectItemID__14dMenu_Insect_cFii */
 u8 dMenu_Insect_c::getInsectItemID(int param_0, int param_1) {
     static u8 l_itemno[MAX_INSECT_NUM] = {
         fpcNm_ITEM_M_ANT,       fpcNm_ITEM_F_ANT,       fpcNm_ITEM_M_MAYFLY,      fpcNm_ITEM_F_MAYFLY,      fpcNm_ITEM_M_BEETLE,     fpcNm_ITEM_F_BEETLE,
@@ -604,12 +576,10 @@ u8 dMenu_Insect_c::getInsectItemID(int param_0, int param_1) {
     return l_itemno[index];
 }
 
-/* 801D9DE4-801D9E20 1D4724 003C+00 4/4 0/0 0/0 .text            isGetInsect__14dMenu_Insect_cFii */
 bool dMenu_Insect_c::isGetInsect(int param_0, int param_1) {
     return dComIfGs_isItemFirstBit(getInsectItemID(param_0, param_1)) != 0;
 }
 
-/* 801D9E20-801D9E7C 1D4760 005C+00 4/4 0/0 0/0 .text            isGiveInsect__14dMenu_Insect_cFii */
 bool dMenu_Insect_c::isGiveInsect(int param_0, int param_1) {
     static const u32 i_evtID[MAX_INSECT_NUM] = {
         0x1A5, /* dSv_event_flag_c::F_0421 - Misc. - Ant (M) */
@@ -641,7 +611,6 @@ bool dMenu_Insect_c::isGiveInsect(int param_0, int param_1) {
     return dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[i_evtID[param_0 + param_1 * 6]]) != 0;
 }
 
-/* 801D9E7C-801D9ED4 1D47BC 0058+00 1/1 0/0 0/0 .text            isCatchInsect__14dMenu_Insect_cFUc */
 bool dMenu_Insect_c::isCatchInsect(u8 i_insectID) {
     if (i_insectID >= fpcNm_ITEM_M_BEETLE && i_insectID <= fpcNm_ITEM_F_MAYFLY) {
         return dComIfGs_isItemFirstBit(i_insectID);
@@ -649,7 +618,6 @@ bool dMenu_Insect_c::isCatchInsect(u8 i_insectID) {
     return false;
 }
 
-/* 801D9ED4-801D9F3C 1D4814 0068+00 1/1 0/0 0/0 .text            isGiveInsect__14dMenu_Insect_cFUc */
 bool dMenu_Insect_c::isGiveInsect(u8 i_insectID) {
     if (i_insectID >= fpcNm_ITEM_M_BEETLE && i_insectID <= fpcNm_ITEM_F_MAYFLY) {
         int label = i_insectID + 0xd1;
@@ -658,8 +626,6 @@ bool dMenu_Insect_c::isGiveInsect(u8 i_insectID) {
     return false;
 }
 
-/* 801D9F3C-801D9F8C 1D487C 0050+00 0/0 1/1 12/12 .text isCatchNotGiveInsect__14dMenu_Insect_cFUc
- */
 bool dMenu_Insect_c::isCatchNotGiveInsect(u8 param_0) {
     if (isCatchInsect(param_0) != 0 && isGiveInsect(param_0) == 0) {
         return 1;
@@ -667,7 +633,6 @@ bool dMenu_Insect_c::isCatchNotGiveInsect(u8 param_0) {
     return 0;
 }
 
-/* 801D9F8C-801DA1EC 1D48CC 0260+00 1/1 0/0 0/0 .text            cursorMove__14dMenu_Insect_cFv */
 void dMenu_Insect_c::cursorMove() {
     u8 oldF4 = field_0xf4;
     u8 oldF5 = field_0xf5;
@@ -725,7 +690,6 @@ void dMenu_Insect_c::cursorMove() {
     }
 }
 
-/* 801DA1EC-801DA2FC 1D4B2C 0110+00 3/3 0/0 0/0 .text            setCursorPos__14dMenu_Insect_cFv */
 void dMenu_Insect_c::setCursorPos() {
     int index = field_0xf4 + field_0xf5 * 6;
     Vec pos = mpINSParent[index]->getGlobalVtxCenter(false, 0);
@@ -741,12 +705,10 @@ void dMenu_Insect_c::setCursorPos() {
     }
 }
 
-/* 801DA2FC-801DA304 1D4C3C 0008+00 1/1 0/0 0/0 .text            dpdMove__14dMenu_Insect_cFv */
 u8 dMenu_Insect_c::dpdMove() {
     return 0;
 }
 
-/* 801DA304-801DA3B4 1D4C44 00B0+00 5/5 0/0 0/0 .text setAButtonString__14dMenu_Insect_cFUs */
 void dMenu_Insect_c::setAButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
@@ -759,7 +721,6 @@ void dMenu_Insect_c::setAButtonString(u16 i_stringID) {
     }
 }
 
-/* 801DA3B4-801DA464 1D4CF4 00B0+00 4/4 0/0 0/0 .text setBButtonString__14dMenu_Insect_cFUs */
 void dMenu_Insect_c::setBButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
@@ -772,7 +733,6 @@ void dMenu_Insect_c::setBButtonString(u16 i_stringID) {
     }
 }
 
-/* 801DA464-801DA630 1D4DA4 01CC+00 2/2 0/0 0/0 .text            setHIO__14dMenu_Insect_cFb */
 void dMenu_Insect_c::setHIO(bool i_useHIO) {
     if (i_useHIO || g_drawHIO.mInsectListScreen.mDebugON) {
         mpExpSubWin[0]->paneTrans(g_drawHIO.mInsectListScreen.mDescWindowPosX,

@@ -8,14 +8,12 @@
 #include "d/actor/d_a_npc_yelia.h"
 #include "d/actor/d_a_demo_item.h"
 
-/* 80B524FC-80B52514 000020 0018+00 1/1 0/0 0/0 .data            l_bmdData */
 static daNpc_GetParam1 l_bmdData[3] = {
     {3, 1},
     {3, 4},
     {8, 7},
 };
 
-/* 80B52514-80B52544 -00001 0030+00 1/2 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[6] = {
     {"", 0},
     {"NO_RESPONSE", 0},
@@ -25,7 +23,6 @@ static daNpcT_evtData_c l_evtList[6] = {
     {"THANK_YOU", 6},
 };
 
-/* 80B52544-80B52564 -00001 0020+00 2/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[8] = {
     "",
     "Yelia",
@@ -37,34 +34,25 @@ static char* l_resNameList[8] = {
     "yelB_TW",
 };
 
-/* 80B52564-80B52568 000088 0004+00 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[4] = {1, 2, 3, -1};
 
-/* 80B52568-80B5256C 00008C 0003+01 1/0 0/0 0/0 .data            l_loadResPtrn1 */
 static s8 l_loadResPtrn1[3] = {2, 4, -1};
 
-/* 80B5256C-80B52570 000090 0004+00 1/0 0/0 0/0 .data            l_loadResPtrn2 */
 static s8 l_loadResPtrn2[4] = {1, 2, 5, -1};
 
-/* 80B52570-80B52574 000094 0004+00 1/0 0/0 0/0 .data            l_loadResPtrn3 */
 static s8 l_loadResPtrn3[4] = {2, 4, 6, -1};
 
-/* 80B52574-80B52578 000098 0004+00 1/0 0/0 0/0 .data            l_loadResPtrn4 */
 static s8 l_loadResPtrn4[4] = {2, 7, 6, -1};
 
-/* 80B52578-80B52580 00009C 0005+03 1/0 0/0 0/0 .data            l_loadResPtrn5 */
 static s8 l_loadResPtrn5[5] = {2, 4, 7, 6, -1};
 
-/* 80B52580-80B52588 0000A4 0008+00 1/0 0/0 0/0 .data            l_loadResPtrn9 */
 static s8 l_loadResPtrn9[8] = {1, 2, 3, 4, 5, 6, 7, -1};
 
-/* 80B52588-80B525B0 -00001 0028+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[10] = {
     l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn2, l_loadResPtrn3, l_loadResPtrn4,
     l_loadResPtrn5, l_loadResPtrn3, l_loadResPtrn3, l_loadResPtrn9, l_loadResPtrn0,
 };
 
-/* 80B525B0-80B528C0 0000D4 0310+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0, 19, J3DFrameCtrl::EMode_LOOP, 2, TRUE},
     {7, J3DFrameCtrl::EMode_NONE, 2, 19, J3DFrameCtrl::EMode_LOOP, 2, TRUE},
@@ -96,7 +84,6 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[] = {
     {9, J3DFrameCtrl::EMode_LOOP, 2, 23, J3DFrameCtrl::EMode_LOOP, 2, FALSE},
 };
 
-/* 80B528C0-80B52C94 0003E4 03D4+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[] = {
     {13, J3DFrameCtrl::EMode_LOOP, 2, 16, J3DFrameCtrl::EMode_NONE, 2, TRUE},
     {-1, J3DFrameCtrl::EMode_NONE, 0, -1, J3DFrameCtrl::EMode_NONE, 0, FALSE},
@@ -135,7 +122,6 @@ static daNpcT_motionAnmData_c l_motionAnmData[] = {
     {11, J3DFrameCtrl::EMode_NONE, 2, 16, J3DFrameCtrl::EMode_NONE, 2, TRUE},
 };
 
-/* 80B52C94-80B52E44 0007B8 01B0+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -166,7 +152,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80B52E44-80B53064 000968 0220+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -204,7 +189,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[] = {
     {32, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80B53064-80B5307C -00001 0018+00 1/1 0/0 0/0 .data            mCutNameList__13daNpc_Yelia_c */
 char* daNpc_Yelia_c::mCutNameList[6] = {
     "",
     "CONVERSATION_ABOUT_LOOPHOLE",
@@ -214,7 +198,6 @@ char* daNpc_Yelia_c::mCutNameList[6] = {
     "THANK_YOU",
 };
 
-/* 80B530B8-80B53100 000BDC 0048+00 1/2 0/0 0/0 .data            mCutList__13daNpc_Yelia_c */
 BOOL (daNpc_Yelia_c::*daNpc_Yelia_c::mCutList[6])(int) = {
     NULL,
     &daNpc_Yelia_c::cutConversationAboutLoopHole,
@@ -355,10 +338,8 @@ daNpc_Yelia_Param_c::param const daNpc_Yelia_Param_c::m = {
     0.0f,
 };
 
-/* 80B533FC-80B53400 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daNpc_Yelia_Param_c l_HIO;
 
-/* 80B4D30C-80B4D458 0000EC 014C+00 1/0 0/0 0/0 .text            __dt__13daNpc_Yelia_cFv */
 daNpc_Yelia_c::~daNpc_Yelia_c() {
     if (mpMorf[0] != NULL) {
         mpMorf[0]->stopZelAnime();
@@ -366,7 +347,6 @@ daNpc_Yelia_c::~daNpc_Yelia_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-/* 80B4D458-80B4D754 000238 02FC+00 1/1 0/0 0/0 .text            create__13daNpc_Yelia_cFv */
 cPhs__Step daNpc_Yelia_c::create() {
     if (!fopAcM_CheckCondition(this, fopAcCnd_INIT_e)) {
         new (this) daNpc_Yelia_c(l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
@@ -424,7 +404,6 @@ cPhs__Step daNpc_Yelia_c::create() {
     return step;
 }
 
-/* 80B4D754-80B4DA64 000534 0310+00 1/1 0/0 0/0 .text            CreateHeap__13daNpc_Yelia_cFv */
 int daNpc_Yelia_c::CreateHeap() {
     int bmd_idx = 1;
     if (mTwilight) {
@@ -471,18 +450,15 @@ int daNpc_Yelia_c::CreateHeap() {
     }
 }
 
-/* 80B4DC20-80B4DC54 000A00 0034+00 1/1 0/0 0/0 .text            Delete__13daNpc_Yelia_cFv */
 int daNpc_Yelia_c::Delete() {
     this->~daNpc_Yelia_c();
     return 1;
 }
 
-/* 80B4DC54-80B4DC74 000A34 0020+00 2/2 0/0 0/0 .text            Execute__13daNpc_Yelia_cFv */
 int daNpc_Yelia_c::Execute() {
     return execute();
 }
 
-/* 80B4DC74-80B4DD08 000A54 0094+00 1/1 0/0 0/0 .text            Draw__13daNpc_Yelia_cFv */
 int daNpc_Yelia_c::Draw() {
     if (mpMatAnm[0] != NULL) {
         J3DModelData* model_data = mpMorf[0]->getModel()->getModelData();
@@ -491,14 +467,10 @@ int daNpc_Yelia_c::Draw() {
     return draw(FALSE, FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
-/* 80B4DD08-80B4DD28 000AE8 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__13daNpc_Yelia_cFP10fopAc_ac_c            */
 int daNpc_Yelia_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Yelia_c*>(i_this)->CreateHeap();
 }
 
-/* 80B4DD28-80B4DD80 000B08 0058+00 1/1 0/0 0/0 .text
- * ctrlJointCallBack__13daNpc_Yelia_cFP8J3DJointi               */
 int daNpc_Yelia_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -510,7 +482,6 @@ int daNpc_Yelia_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80B4DD80-80B4DDF8 000B60 0078+00 2/1 0/0 0/0 .text            getType__13daNpc_Yelia_cFv */
 u8 daNpc_Yelia_c::getType() {
     switch (fopAcM_GetParam(this) & 0xff) {
     case 0:
@@ -536,7 +507,6 @@ u8 daNpc_Yelia_c::getType() {
     }
 }
 
-/* 80B4DDF8-80B4DF10 000BD8 0118+00 2/1 0/0 0/0 .text            isDelete__13daNpc_Yelia_cFv */
 BOOL daNpc_Yelia_c::isDelete() {
     switch (mType) {
     case TYPE_HORSE:
@@ -562,7 +532,6 @@ BOOL daNpc_Yelia_c::isDelete() {
     }
 }
 
-/* 80B4DF10-80B4E068 000CF0 0158+00 1/1 0/0 0/0 .text            reset__13daNpc_Yelia_cFv */
 void daNpc_Yelia_c::reset() {
     u32 size = (uintptr_t)&field_0xfec - (uintptr_t)&mpNextAction;
     if (mpMatAnm[0] != NULL) {
@@ -577,7 +546,6 @@ void daNpc_Yelia_c::reset() {
     setAngle(home.angle.y);
 }
 
-/* 80B4E068-80B4E0F4 000E48 008C+00 1/0 0/0 0/0 .text            afterJntAnm__13daNpc_Yelia_cFi */
 void daNpc_Yelia_c::afterJntAnm(int i_jointNo) {
     if (i_jointNo == 1) {
         mDoMtx_stack_c::YrotM(-mStagger.getAngleZ(1));
@@ -588,7 +556,6 @@ void daNpc_Yelia_c::afterJntAnm(int i_jointNo) {
     }
 }
 
-/* 80B4E0F4-80B4E2C0 000ED4 01CC+00 1/0 0/0 0/0 .text            setParam__13daNpc_Yelia_cFv */
 void daNpc_Yelia_c::setParam() {
     selectAction();
     srchActors();
@@ -642,8 +609,6 @@ void daNpc_Yelia_c::setParam() {
     }
 }
 
-/* 80B4E2C0-80B4E5BC 0010A0 02FC+00 1/0 0/0 0/0 .text            checkChangeEvt__13daNpc_Yelia_cFv
- */
 BOOL daNpc_Yelia_c::checkChangeEvt() {
     if (!chkAction(&daNpc_Yelia_c::talk)) {
         mPreItemNo = 0;
@@ -711,7 +676,6 @@ BOOL daNpc_Yelia_c::checkChangeEvt() {
     return FALSE;
 }
 
-/* 80B4E5BC-80B4E6A0 00139C 00E4+00 2/0 0/0 0/0 .text setAfterTalkMotion__13daNpc_Yelia_cFv */
 void daNpc_Yelia_c::setAfterTalkMotion() {
     int no = FACE_NONE;
     switch (mFaceMotionSeqMngr.getNo()) {
@@ -755,7 +719,6 @@ void daNpc_Yelia_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(no, -1.0f, FALSE, 0);
 }
 
-/* 80B4E6A0-80B4E7C8 001480 0128+00 1/1 0/0 0/0 .text            srchActors__13daNpc_Yelia_cFv */
 void daNpc_Yelia_c::srchActors() {
     switch (mType) {
     case TYPE_KAKARIKO:
@@ -789,7 +752,6 @@ void daNpc_Yelia_c::srchActors() {
     }
 }
 
-/* 80B4E7C8-80B4E868 0015A8 00A0+00 1/0 0/0 0/0 .text            evtTalk__13daNpc_Yelia_cFv */
 BOOL daNpc_Yelia_c::evtTalk() {
     if (chkAction(&daNpc_Yelia_c::talk)) {
         (this->*mpAction)(NULL);
@@ -799,7 +761,6 @@ BOOL daNpc_Yelia_c::evtTalk() {
     return TRUE;
 }
 
-/* 80B4E868-80B4E930 001648 00C8+00 1/0 0/0 0/0 .text            evtCutProc__13daNpc_Yelia_cFv */
 BOOL daNpc_Yelia_c::evtCutProc() {
     int staff_id = dComIfGp_getEventManager().getMyStaffId("Yelia", this, -1);
     if (staff_id != -1) {
@@ -814,7 +775,6 @@ BOOL daNpc_Yelia_c::evtCutProc() {
     }
 }
 
-/* 80B4E930-80B4EA28 001710 00F8+00 1/0 0/0 0/0 .text            action__13daNpc_Yelia_cFv */
 void daNpc_Yelia_c::action() {
     hitChk(&mCcCyl, -1);
     if (mStagger.checkRebirth()) {
@@ -830,7 +790,6 @@ void daNpc_Yelia_c::action() {
     }
 }
 
-/* 80B4EA28-80B4EAEC 001808 00C4+00 1/0 0/0 0/0 .text            beforeMove__13daNpc_Yelia_cFv */
 void daNpc_Yelia_c::beforeMove() {
     fopAcM_OffStatus(this, 0x8000000);
     if (checkHide()) {
@@ -841,7 +800,6 @@ void daNpc_Yelia_c::beforeMove() {
     }
 }
 
-/* 80B4EAEC-80B4EE4C 0018CC 0360+00 1/0 0/0 0/0 .text            setAttnPos__13daNpc_Yelia_cFv */
 void daNpc_Yelia_c::setAttnPos() {
     cXyz eye_offset(30.0f, -5.0f, 0.0f);
     cXyz vec(0.0f, -5.0f, 0.0f);
@@ -878,7 +836,6 @@ void daNpc_Yelia_c::setAttnPos() {
     attention_info.position = vec + current.pos;
 }
 
-/* 80B4EE4C-80B4EFA4 001C2C 0158+00 1/0 0/0 0/0 .text            setCollision__13daNpc_Yelia_cFv */
 void daNpc_Yelia_c::setCollision() {
     cXyz vec;
 
@@ -913,12 +870,10 @@ void daNpc_Yelia_c::setCollision() {
     mCcCyl.ClrTgHit();
 }
 
-/* 80B4EFA4-80B4EFAC 001D84 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__13daNpc_Yelia_cFv */
 BOOL daNpc_Yelia_c::drawDbgInfo() {
     return FALSE;
 }
 
-/* 80B4EFAC-80B4F054 001D8C 00A8+00 1/1 0/0 0/0 .text            selectAction__13daNpc_Yelia_cFv */
 BOOL daNpc_Yelia_c::selectAction() {
     mpNextAction = NULL;
     switch (mType) {
@@ -935,14 +890,10 @@ BOOL daNpc_Yelia_c::selectAction() {
     return TRUE;
 }
 
-/* 80B4F054-80B4F080 001E34 002C+00 2/2 0/0 0/0 .text
- * chkAction__13daNpc_Yelia_cFM13daNpc_Yelia_cFPCvPvPv_i        */
 BOOL daNpc_Yelia_c::chkAction(BOOL (daNpc_Yelia_c::*i_action)(void*)) {
     return mpAction == i_action;
 }
 
-/* 80B4F080-80B4F128 001E60 00A8+00 2/2 0/0 0/0 .text
- * setAction__13daNpc_Yelia_cFM13daNpc_Yelia_cFPCvPvPv_i        */
 BOOL daNpc_Yelia_c::setAction(BOOL (daNpc_Yelia_c::*i_action)(void*)) {
     mMode = MODE_EXIT;
     if (mpAction != NULL) {
@@ -958,8 +909,6 @@ BOOL daNpc_Yelia_c::setAction(BOOL (daNpc_Yelia_c::*i_action)(void*)) {
     return TRUE;
 }
 
-/* 80B4F128-80B4F3E0 001F08 02B8+00 1/0 0/0 0/0 .text
- * cutConversationAboutLoopHole__13daNpc_Yelia_cFi              */
 BOOL daNpc_Yelia_c::cutConversationAboutLoopHole(int i_staffId) {
     BOOL ret = FALSE;
     int prm = -1;
@@ -1017,8 +966,6 @@ BOOL daNpc_Yelia_c::cutConversationAboutLoopHole(int i_staffId) {
     return ret;
 }
 
-/* 80B4F3E0-80B4F534 0021C0 0154+00 1/0 0/0 0/0 .text            cutTWResistance__13daNpc_Yelia_cFi
- */
 BOOL daNpc_Yelia_c::cutTWResistance(int i_staffId) {
     BOOL ret = FALSE;
     int prm = -1;
@@ -1057,7 +1004,6 @@ BOOL daNpc_Yelia_c::cutTWResistance(int i_staffId) {
     return ret;
 }
 
-/* 80B4F534-80B4FDD8 002314 08A4+00 1/0 0/0 0/0 .text cutTakeWoodStatue__13daNpc_Yelia_cFi */
 BOOL daNpc_Yelia_c::cutTakeWoodStatue(int i_staffId) {
     daDitem_c* item = NULL;
     cXyz pos;
@@ -1252,7 +1198,6 @@ BOOL daNpc_Yelia_c::cutTakeWoodStatue(int i_staffId) {
     return ret;
 }
 
-/* 80B4FDD8-80B4FE78 002BB8 00A0+00 1/0 0/0 0/0 .text            cutClothTry__13daNpc_Yelia_cFi */
 BOOL daNpc_Yelia_c::cutClothTry(int i_staffId) {
     BOOL ret = 0;
     int prm = -1;
@@ -1273,7 +1218,6 @@ BOOL daNpc_Yelia_c::cutClothTry(int i_staffId) {
     return ret;
 }
 
-/* 80B4FE78-80B50084 002C58 020C+00 1/0 0/0 0/0 .text            cutThankYou__13daNpc_Yelia_cFi */
 BOOL daNpc_Yelia_c::cutThankYou(int i_staffId) {
     BOOL ret = 0;
     int prm = -1;
@@ -1337,7 +1281,6 @@ BOOL daNpc_Yelia_c::cutThankYou(int i_staffId) {
     return ret;
 }
 
-/* 80B50084-80B5080C 002E64 0788+00 1/0 0/0 0/0 .text            wait__13daNpc_Yelia_cFPv */
 BOOL daNpc_Yelia_c::wait(void* param_0) {
     switch (mMode) {
     case MODE_ENTER:
@@ -1465,7 +1408,6 @@ BOOL daNpc_Yelia_c::wait(void* param_0) {
     return TRUE;
 }
 
-/* 80B5080C-80B50A0C 0035EC 0200+00 5/0 0/0 0/0 .text            horseWait__13daNpc_Yelia_cFPv */
 BOOL daNpc_Yelia_c::horseWait(void* param_0) {
     switch (mMode) {
     case MODE_ENTER:
@@ -1505,7 +1447,6 @@ BOOL daNpc_Yelia_c::horseWait(void* param_0) {
     return TRUE;
 }
 
-/* 80B50A0C-80B50B60 0037EC 0154+00 1/0 0/0 0/0 .text            reminiscence__13daNpc_Yelia_cFPv */
 BOOL daNpc_Yelia_c::reminiscence(void* param_0) {
     switch (mMode) {
     case MODE_ENTER:
@@ -1535,7 +1476,6 @@ BOOL daNpc_Yelia_c::reminiscence(void* param_0) {
     return TRUE;
 }
 
-/* 80B50B60-80B50EE0 003940 0380+00 3/0 0/0 0/0 .text            talk__13daNpc_Yelia_cFPv */
 BOOL daNpc_Yelia_c::talk(void* param_0) {
     switch (mMode) {
     case MODE_ENTER:
@@ -1591,32 +1531,26 @@ BOOL daNpc_Yelia_c::talk(void* param_0) {
     return FALSE;
 }
 
-/* 80B50EE0-80B50F00 003CC0 0020+00 1/0 0/0 0/0 .text            daNpc_Yelia_Create__FPv */
 static cPhs__Step daNpc_Yelia_Create(void* i_this) {
     return static_cast<daNpc_Yelia_c*>(i_this)->create();
 }
 
-/* 80B50F00-80B50F20 003CE0 0020+00 1/0 0/0 0/0 .text            daNpc_Yelia_Delete__FPv */
 static int daNpc_Yelia_Delete(void* i_this) {
     return static_cast<daNpc_Yelia_c*>(i_this)->Delete();
 }
 
-/* 80B50F20-80B50F40 003D00 0020+00 1/0 0/0 0/0 .text            daNpc_Yelia_Execute__FPv */
 static int daNpc_Yelia_Execute(void* i_this) {
     return static_cast<daNpc_Yelia_c*>(i_this)->Execute();
 }
 
-/* 80B50F40-80B50F60 003D20 0020+00 1/0 0/0 0/0 .text            daNpc_Yelia_Draw__FPv */
 static int daNpc_Yelia_Draw(void* i_this) {
     return static_cast<daNpc_Yelia_c*>(i_this)->Draw();
 }
 
-/* 80B50F60-80B50F68 003D40 0008+00 1/0 0/0 0/0 .text            daNpc_Yelia_IsDelete__FPv */
 static int daNpc_Yelia_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80B53220-80B53240 -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Yelia_MethodTable */
 static actor_method_class daNpc_Yelia_MethodTable = {
     (process_method_func)daNpc_Yelia_Create,
     (process_method_func)daNpc_Yelia_Delete,
@@ -1625,7 +1559,6 @@ static actor_method_class daNpc_Yelia_MethodTable = {
     (process_method_func)daNpc_Yelia_Draw,
 };
 
-/* 80B53240-80B53270 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_YELIA */
 extern actor_process_profile_definition g_profile_NPC_YELIA = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID

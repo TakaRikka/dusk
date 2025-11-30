@@ -7,7 +7,6 @@
 
 #include "JSystem/JAudio2/JASSeqReader.h"
 
-/* 80296108-80296148 290A48 0040+00 0/0 2/2 0/0 .text            init__12JASSeqReaderFv */
 void JASSeqReader::init() {
     field_0x00 = 0;
     field_0x04 = 0;
@@ -19,7 +18,6 @@ void JASSeqReader::init() {
     }
 }
 
-/* 80296148-8029618C 290A88 0044+00 0/0 1/1 0/0 .text            init__12JASSeqReaderFPv */
 void JASSeqReader::init(void* param_0) {
     field_0x00 = (u8*)param_0;
     field_0x04 = field_0x00;
@@ -32,7 +30,6 @@ void JASSeqReader::init(void* param_0) {
     
 }
 
-/* 8029618C-802961CC 290ACC 0040+00 0/0 3/3 0/0 .text            call__12JASSeqReaderFUl */
 bool JASSeqReader::call(u32 param_0) {
     if (field_0x08 >= 8) {
         return false;
@@ -44,7 +41,6 @@ bool JASSeqReader::call(u32 param_0) {
     return true;
 }
 
-/* 802961CC-80296210 290B0C 0044+00 0/0 1/1 0/0 .text            loopStart__12JASSeqReaderFUl */
 bool JASSeqReader::loopStart(u32 param_0) {
     if (8 <= field_0x08) {
         return false;
@@ -57,7 +53,6 @@ bool JASSeqReader::loopStart(u32 param_0) {
 }
 
 
-/* 80296210-8029627C 290B50 006C+00 0/0 1/1 0/0 .text            loopEnd__12JASSeqReaderFv */
 bool JASSeqReader::loopEnd() {
     if (field_0x08 == 0) {
         return false;
@@ -79,7 +74,6 @@ bool JASSeqReader::loopEnd() {
     return true;
 }
 
-/* 8029627C-802962B0 290BBC 0034+00 0/0 2/2 0/0 .text            ret__12JASSeqReaderFv */
 bool JASSeqReader::ret() {
     if (field_0x08 == 0) {
         return false;
@@ -90,7 +84,6 @@ bool JASSeqReader::ret() {
     return true;
 }
 
-/* 802962B0-8029631C 290BF0 006C+00 0/0 2/2 0/0 .text            readMidiValue__12JASSeqReaderFv */
 int JASSeqReader::readMidiValue() {
     int byte = readByte();
 

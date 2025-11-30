@@ -9,7 +9,6 @@
 #include "d/actor/d_a_midna.h"
 #include "d/d_procname.h"
 
-/* 80D5BE18-80D5BFFC 000078 01E4+00 1/1 0/0 0/0 .text            create__12daTagMwait_cFv */
 int daTagMwait_c::create() {
     fopAcM_ct(this, daTagMwait_c);
 
@@ -54,23 +53,17 @@ int daTagMwait_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D5BFFC-80D5C01C 00025C 0020+00 1/0 0/0 0/0 .text            daTagMwait_Create__FP10fopAc_ac_c
- */
 static int daTagMwait_Create(fopAc_ac_c* i_this) {
     return static_cast<daTagMwait_c*>(i_this)->create();
 }
 
-/* 80D5C01C-80D5C080 00027C 0064+00 1/1 0/0 0/0 .text            __dt__12daTagMwait_cFv */
 daTagMwait_c::~daTagMwait_c() {}
 
-/* 80D5C080-80D5C0A8 0002E0 0028+00 1/0 0/0 0/0 .text            daTagMwait_Delete__FP12daTagMwait_c
- */
 static int daTagMwait_Delete(daTagMwait_c* i_this) {
     i_this->~daTagMwait_c();
     return 1;
 }
 
-/* 80D5C0A8-80D5C550 000308 04A8+00 1/1 0/0 0/0 .text            execute__12daTagMwait_cFv */
 int daTagMwait_c::execute() {
     daMidna_c* midna_p = daPy_py_c::getMidnaActor();
     daPy_py_c* player_p = daPy_getLinkPlayerActorClass();
@@ -148,26 +141,20 @@ int daTagMwait_c::execute() {
     return 1;
 }
 
-/* 80D5C550-80D5C570 0007B0 0020+00 1/0 0/0 0/0 .text daTagMwait_Execute__FP12daTagMwait_c */
 static int daTagMwait_Execute(daTagMwait_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D5C570-80D5C578 0007D0 0008+00 1/0 0/0 0/0 .text            daTagMwait_Draw__FP12daTagMwait_c
- */
 static int daTagMwait_Draw(daTagMwait_c* i_this) {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80D5C5C4-80D5C5E4 -00001 0020+00 1/0 0/0 0/0 .data            l_daTagMwait_Method */
 static actor_method_class l_daTagMwait_Method = {
     (process_method_func)daTagMwait_Create,  (process_method_func)daTagMwait_Delete,
     (process_method_func)daTagMwait_Execute, (process_method_func)NULL,
     (process_method_func)daTagMwait_Draw,
 };
 
-/* 80D5C5E4-80D5C614 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_Mwait */
 extern actor_process_profile_definition g_profile_Tag_Mwait = {
     fpcLy_CURRENT_e,
     7,

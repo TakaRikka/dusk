@@ -127,18 +127,18 @@ public:
 
     void setFieldBgmPlay(bool value) { mFlags.mFieldBgmPlay = value; }
 
-    /* 802B99AC */ void unMuteSceneBgm(u32 fadeTime) {
+    void unMuteSceneBgm(u32 fadeTime) {
         mBgmPause.move(1.0f, 0);
         mSceneBgm.move(1.0f, fadeTime);
     }
 
-    /* 802B9A24 */ void muteSceneBgm(u32 fadeTime, f32 vol) { mSceneBgm.move(vol, fadeTime); }
+    void muteSceneBgm(u32 fadeTime, f32 vol) { mSceneBgm.move(vol, fadeTime); }
 
-    /* 802B9AD0 */ void setTwilightGateVol(f32 vol) {
+    void setTwilightGateVol(f32 vol) {
         mTwilightGateVol = vol < 0.0f ? 0.0f : vol > 1.0f ? 1.0f : vol;
     }
 
-    /* 802B9AFC */ void setWindStoneVol(f32 vol, u32 fadeTime) { mWindStone.move(vol, fadeTime); };
+    void setWindStoneVol(f32 vol, u32 fadeTime) { mWindStone.move(vol, fadeTime); };
 
     void onEnemyDamage() { setBattleSeqState(2); }
 

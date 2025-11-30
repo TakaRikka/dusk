@@ -10,7 +10,6 @@ static int daAlink_modelCallBack(J3DJoint* p_joint, int param_1);
 static int daAlink_headModelCallBack(J3DJoint* i_joint, int param_1);
 static int daAlink_wolfModelCallBack(J3DJoint* i_joint, int param_1);
 
-/* 8013FF28-8013FF90 13A868 0068+00 2/2 0/0 0/0 .text            setArcName__9daAlink_cFi */
 void daAlink_c::setArcName(BOOL i_isWolf) {
     if (i_isWolf) {
         mArcName = l_wArcName;
@@ -33,7 +32,6 @@ inline bool checkShopWoodShieldEquip() {
     return dComIfGs_getSelectEquipShield() == fpcNm_ITEM_SHIELD;
 }
 
-/* 8013FF90-8013FFD8 13A8D0 0048+00 2/2 0/0 0/0 .text            setShieldArcName__9daAlink_cFv */
 void daAlink_c::setShieldArcName() {
     if (checkCarvingWoodShieldEquip() || !checkShieldGet()) {
         mShieldArcName = l_cWShdArcName;
@@ -44,8 +42,6 @@ void daAlink_c::setShieldArcName() {
     }
 }
 
-/* 8013FFD8-80140038 13A918 0060+00 1/1 0/0 0/0 .text setOriginalHeap__9daAlink_cFPP10JKRExpHeapUl
- */
 void daAlink_c::setOriginalHeap(JKRExpHeap** i_ppheap, u32 i_size) {
     if (*i_ppheap == NULL) {
         *i_ppheap =
@@ -53,7 +49,6 @@ void daAlink_c::setOriginalHeap(JKRExpHeap** i_ppheap, u32 i_size) {
     }
 }
 
-/* 80140038-80140064 13A978 002C+00 1/0 0/0 0/0 .text            setClothesChange__9daAlink_cFi */
 void daAlink_c::setClothesChange(int param_0) {
     if (!checkWolf()) {
         mClothesChangeWaitTimer = 4;
@@ -64,12 +59,10 @@ void daAlink_c::setClothesChange(int param_0) {
     }    
 }
 
-/* 80140064-80140070 13A9A4 000C+00 0/0 1/1 0/0 .text            setShieldChange__9daAlink_cFv */
 void daAlink_c::setShieldChange() {
     mShieldChangeWaitTimer = 4;
 }
 
-/* 80140070-801401F8 13A9B0 0188+00 3/3 0/0 0/0 .text            loadModelDVD__9daAlink_cFv */
 int daAlink_c::loadModelDVD() {
     if (mClothesChangeWaitTimer != 0) {
         mClothesChangeWaitTimer--;
@@ -123,7 +116,6 @@ int daAlink_c::loadModelDVD() {
     return 0;
 }
 
-/* 801401F8-80140274 13AB38 007C+00 2/2 0/0 0/0 .text            setShieldModel__9daAlink_cFv */
 void daAlink_c::setShieldModel() {
     JKRHeap* heap = mAnmHeap4.setAnimeHeap();
     mShieldModel = initModel((J3DModelData*)dComIfG_getObjectRes(mShieldArcName, 3), 0);
@@ -131,7 +123,6 @@ void daAlink_c::setShieldModel() {
     mDoExt_setCurrentHeap(heap);
 }
 
-/* 80140274-80140338 13ABB4 00C4+00 2/2 0/0 0/0 .text            loadShieldModelDVD__9daAlink_cFv */
 int daAlink_c::loadShieldModelDVD() {
     if (mShieldChangeWaitTimer != 0) {
         mShieldChangeWaitTimer--;
@@ -158,8 +149,6 @@ int daAlink_c::loadShieldModelDVD() {
     return 0;
 }
 
-/* 80140338-80140550 13AC78 0218+00 3/3 0/0 0/0 .text            changeModelDataDirect__9daAlink_cFi
- */
 void daAlink_c::changeModelDataDirect(int param_0) {
     u16 i;
 
@@ -212,7 +201,6 @@ void daAlink_c::changeModelDataDirect(int param_0) {
     }
 }
 
-/* 80140550-801406A8 13AE90 0158+00 3/3 0/0 0/0 .text changeModelDataDirectWolf__9daAlink_cFi */
 void daAlink_c::changeModelDataDirectWolf(int param_0) {
     u16 i;
 
@@ -248,7 +236,6 @@ void daAlink_c::changeModelDataDirectWolf(int param_0) {
     }
 }
 
-/* 801406A8-80140888 13AFE8 01E0+00 0/0 1/1 0/0 .text            initStatusWindow__9daAlink_cFv */
 void daAlink_c::initStatusWindow() {
     onNoResetFlg2(FLG2_STATUS_WINDOW_DRAW);
     
@@ -301,7 +288,6 @@ void daAlink_c::initStatusWindow() {
 }
 
 
-/* 80140888-80140984 13B1C8 00FC+00 0/0 1/1 0/0 .text statusWindowExecute__9daAlink_cFPC4cXyzs */
 void daAlink_c::statusWindowExecute(const cXyz* i_pos, s16 i_angle) {
     if (loadModelDVD()) {
         if (mSwordChangeWaitTimer != 0) {
@@ -330,7 +316,6 @@ void daAlink_c::statusWindowExecute(const cXyz* i_pos, s16 i_angle) {
     }
 }
 
-/* 80140984-80140AC8 13B2C4 0144+00 0/0 1/1 0/0 .text            statusWindowDraw__9daAlink_cFv */
 void daAlink_c::statusWindowDraw() {
     static const GXColorS10 waterColor = {0, 0, 0, 0};
 
@@ -370,7 +355,6 @@ void daAlink_c::statusWindowDraw() {
     }
 }
 
-/* 80140AC8-80140B88 13B408 00C0+00 0/0 1/1 0/0 .text            resetStatusWindow__9daAlink_cFv */
 void daAlink_c::resetStatusWindow() {
     offNoResetFlg2(FLG2_STATUS_WINDOW_DRAW);
 

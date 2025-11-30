@@ -14,12 +14,12 @@
  */
 class daB_ZANTS_c : public fopAc_ac_c {
 public:
-    /* 806529D8 */ int draw();
-    /* 80652B28 */ void action();
-    /* 80652DA8 */ int execute();
-    /* 80652EC0 */ int _delete();
-    /* 80652F38 */ int CreateHeap();
-    /* 806531E8 */ int create();
+    int draw();
+    void action();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    int create();
 
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ J3DModel* mpModel;

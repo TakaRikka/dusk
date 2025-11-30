@@ -54,7 +54,7 @@ void daNpc_yamiD_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
     JORFile aJStack_910;
     int len;
-    switch (reinterpret_cast<u32>(event->id)) {
+    switch ((u32)event->id) {
     case 0x40000002:
         if (aJStack_910.open(6, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL) != 0) {
             memset(auStack_7e0, 0, 2000);
@@ -76,72 +76,60 @@ void daNpc_yamiD_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-/* 80B46164-80B4616C 000020 0008+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[1][2] = {
     {BMDR_YAMID, YAMID},
 };
 
-/* 80B4616C-80B4617C -00001 0010+00 0/1 0/0 0/0 .data            l_evtList */
 static daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"STOPPER", 1},
 };
 
-/* 80B4617C-80B46184 -00001 0008+00 2/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "yamiD",
 };
 
-/* 80B46184-80B46188 000040 0002+02 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[2] = {
     1, -1
 };
 
-/* 80B46188-80B46194 -00001 000C+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[3] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-/* 80B46194-80B461CC 000050 0038+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0, BTP_YAMID, J3DFrameCtrl::EMode_LOOP, YAMID, 1},
     {BCK_YAMID_F_TALK_A, J3DFrameCtrl::EMode_NONE, YAMID, BTP_YAMID, J3DFrameCtrl::EMode_LOOP, YAMID, 1},
 };
 
-/* 80B461CC-80B46204 000088 0038+00 0/1 0/0 0/0 .data            l_motionAnmData */
 static daNpcT_motionAnmData_c l_motionAnmData[2] = {
     {BCK_YAMID_WAIT_A, J3DFrameCtrl::EMode_LOOP, YAMID, BTK_YAMID, J3DFrameCtrl::EMode_NONE, YAMID, 1, 0},
     {BCK_YAMID_STEP, J3DFrameCtrl::EMode_NONE, YAMID, BTK_YAMID, J3DFrameCtrl::EMode_NONE, YAMID, 1, 0},
 };
 
-/* 80B46204-80B46224 0000C0 0020+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80B46224-80B46244 0000E0 0020+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80B46244-80B4624C -00001 0008+00 1/1 0/0 0/0 .data            mCutNameList__13daNpc_yamiD_c */
 char* daNpc_yamiD_c::mCutNameList[2] = {
     "",
     "STOPPER",
 };
 
-/* 80B46258-80B46270 000114 0018+00 2/2 0/0 0/0 .data            mCutList__13daNpc_yamiD_c */
 daNpc_yamiD_c::cutFunc daNpc_yamiD_c::mCutList[2] = {
     NULL,
     &daNpc_yamiD_c::cutStopper,
 };
 
-/* 80B42F4C-80B43084 0000EC 0138+00 1/0 0/0 0/0 .text            __dt__13daNpc_yamiD_cFv */
 daNpc_yamiD_c::~daNpc_yamiD_c() {
     OS_REPORT("|%06d:%x|daNpc_yamiD_c -> デストラクト\n", g_Counter.mCounter0, this);
     if (heap != NULL) {
@@ -156,7 +144,6 @@ daNpc_yamiD_c::~daNpc_yamiD_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-/* 80B4604C-80B460D8 000000 008C+00 7/7 0/0 0/0 .rodata          m__19daNpc_yamiD_Param_c */
 daNpc_yamiD_HIOParam const daNpc_yamiD_Param_c::m = {
     180.0f,
     -3.0f,
@@ -201,10 +188,8 @@ daNpc_yamiD_HIOParam const daNpc_yamiD_Param_c::m = {
     0.0f,
 };
 
-/* 80B4647C-80B46480 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static NPC_YAMID_HIO_CLASS l_HIO;
 
-/* 80B43084-80B43338 000224 02B4+00 1/1 0/0 0/0 .text            create__13daNpc_yamiD_cFv */
 cPhs__Step daNpc_yamiD_c::create() {
     daNpcT_ct(this, daNpc_yamiD_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
@@ -270,7 +255,6 @@ cPhs__Step daNpc_yamiD_c::create() {
     return phase;
 }
 
-/* 80B43338-80B435CC 0004D8 0294+00 1/1 0/0 0/0 .text            CreateHeap__13daNpc_yamiD_cFv */
 int daNpc_yamiD_c::CreateHeap() {
     J3DModelData* mdlData_p = NULL;
     J3DModel* model = NULL;
@@ -311,7 +295,6 @@ int daNpc_yamiD_c::CreateHeap() {
     return 0;
 }
 
-/* 80B43788-80B437BC 000928 0034+00 1/1 0/0 0/0 .text            Delete__13daNpc_yamiD_cFv */
 int daNpc_yamiD_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_yamiD_c -> Delete\n", g_Counter.mCounter0, this);
     fpc_ProcID reg_r30 = fopAcM_GetID(this);
@@ -319,12 +302,10 @@ int daNpc_yamiD_c::Delete() {
     return 1;
 }
 
-/* 80B437BC-80B437DC 00095C 0020+00 2/2 0/0 0/0 .text            Execute__13daNpc_yamiD_cFv */
 int daNpc_yamiD_c::Execute() {
     return execute();
 }
 
-/* 80B437DC-80B43884 00097C 00A8+00 1/1 0/0 0/0 .text            Draw__13daNpc_yamiD_cFv */
 int daNpc_yamiD_c::Draw() {
     if (is_vanish()) {
         return 0;
@@ -338,13 +319,11 @@ int daNpc_yamiD_c::Draw() {
     return draw(FALSE, FALSE, mRealShadowSize, NULL, 0.0f, TRUE, FALSE, FALSE);
 }
 
-/* 80B43884-80B438A4 000A24 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__13daNpc_yamiD_cFP10fopAc_ac_c */
 int daNpc_yamiD_c::createHeapCallBack(fopAc_ac_c* i_this) {
     daNpc_yamiD_c* a_this = (daNpc_yamiD_c*)i_this;
     return a_this->CreateHeap();
 }
 
-/* 80B438A4-80B438FC 000A44 0058+00 1/1 0/0 0/0 .text            ctrlJointCallBack__13daNpc_yamiD_cFP8J3DJointi */
 int daNpc_yamiD_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -358,7 +337,6 @@ int daNpc_yamiD_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80B438FC-80B43934 000A9C 0038+00 1/1 0/0 0/0 .text            getType__13daNpc_yamiD_cFv */
 u8 daNpc_yamiD_c::getType() {
     u8 prm = fopAcM_GetParam(this);
     switch (prm & 0xFF) {
@@ -373,7 +351,6 @@ u8 daNpc_yamiD_c::getType() {
     }
 }
 
-/* 80B43934-80B43998 000AD4 0064+00 1/1 0/0 0/0 .text            getFlowNodeNo__13daNpc_yamiD_cFv */
 u32 daNpc_yamiD_c::getFlowNodeNo() {
     u32 rv = -1;
 
@@ -390,7 +367,6 @@ u32 daNpc_yamiD_c::getFlowNodeNo() {
     return rv;
 }
 
-/* 80B43998-80B43A20 000B38 0088+00 1/1 0/0 0/0 .text            isDelete__13daNpc_yamiD_cFv */
 BOOL daNpc_yamiD_c::isDelete() {
     BOOL rv = FALSE;
 
@@ -409,7 +385,6 @@ BOOL daNpc_yamiD_c::isDelete() {
     return rv;
 }
 
-/* 80B43A20-80B43C34 000BC0 0214+00 1/1 0/0 0/0 .text            reset__13daNpc_yamiD_cFv */
 void daNpc_yamiD_c::reset() {
     initialize();
 
@@ -440,7 +415,6 @@ void daNpc_yamiD_c::reset() {
     setAction(&daNpc_yamiD_c::wait);
 }
 
-/* 80B43C34-80B43CC0 000DD4 008C+00 1/0 0/0 0/0 .text            afterJntAnm__13daNpc_yamiD_cFi */
 void daNpc_yamiD_c::afterJntAnm(int param_1) {
     if (param_1 == 2) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -451,7 +425,6 @@ void daNpc_yamiD_c::afterJntAnm(int param_1) {
     }
 }
 
-/* 80B43CC0-80B43DBC 000E60 00FC+00 1/0 0/0 0/0 .text            setParam__13daNpc_yamiD_cFv */
 void daNpc_yamiD_c::setParam() {
     int reg_r26 = 66;
     selectAction();
@@ -480,7 +453,6 @@ void daNpc_yamiD_c::setParam() {
     mMorfFrames = mpHIO->m.common.morf_frame;
 }
 
-/* 80B43DBC-80B43E1C 000F5C 0060+00 1/0 0/0 0/0 .text setAfterTalkMotion__13daNpc_yamiD_cFv */
 void daNpc_yamiD_c::setAfterTalkMotion() {
     int face = FACE_TALKE_A;
     mFaceMotionSeqMngr.getNo();
@@ -488,7 +460,6 @@ void daNpc_yamiD_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(face, -1.0f, FALSE, 0);
 }
 
-/* 80B43E1C-80B43E28 000FBC 000C+00 1/1 0/0 0/0 .text            srchActors__13daNpc_yamiD_cFv */
 void daNpc_yamiD_c::srchActors() {
     switch (mType) {
     case 1:
@@ -496,7 +467,6 @@ void daNpc_yamiD_c::srchActors() {
     }
 }
 
-/* 80B43E28-80B43F0C 000FC8 00E4+00 1/0 0/0 0/0 .text            evtTalk__13daNpc_yamiD_cFv */
 BOOL daNpc_yamiD_c::evtTalk() {
     if (chkAction(&daNpc_yamiD_c::talk)) {
         (this->*mAction)(NULL);
@@ -507,7 +477,6 @@ BOOL daNpc_yamiD_c::evtTalk() {
     return TRUE;
 }
 
-/* 80B43F0C-80B43FD4 0010AC 00C8+00 1/0 0/0 0/0 .text            evtCutProc__13daNpc_yamiD_cFv */
 BOOL daNpc_yamiD_c::evtCutProc() {
     int rv = FALSE;
 
@@ -525,7 +494,6 @@ BOOL daNpc_yamiD_c::evtCutProc() {
     return rv;
 }
 
-/* 80B43FD4-80B440C0 001174 00EC+00 1/0 0/0 0/0 .text            action__13daNpc_yamiD_cFv */
 void daNpc_yamiD_c::action() {
     if (mStagger.checkRebirth()) {
         mStagger.initialize();
@@ -541,14 +509,12 @@ void daNpc_yamiD_c::action() {
     }
 }
 
-/* 80B440C0-80B44138 001260 0078+00 1/0 0/0 0/0 .text            beforeMove__13daNpc_yamiD_cFv */
 void daNpc_yamiD_c::beforeMove() {
     if (checkHide() || mNoDraw) {
         attention_info.flags = 0;
     }
 }
 
-/* 80B44138-80B44364 0012D8 022C+00 1/0 0/0 0/0 .text            setAttnPos__13daNpc_yamiD_cFv */
 void daNpc_yamiD_c::setAttnPos() {
     cXyz work(-30.0f, 0.0f, 0.0f);
 
@@ -571,7 +537,6 @@ void daNpc_yamiD_c::setAttnPos() {
     attention_info.position.y += mpHIO->m.common.attention_offset;
 }
 
-/* 80B44364-80B44498 001504 0134+00 1/0 0/0 0/0 .text            setCollision__13daNpc_yamiD_cFv */
 void daNpc_yamiD_c::setCollision() {
     cXyz work;
     u32 tgType = 0xD8FBFDFF;
@@ -607,12 +572,10 @@ void daNpc_yamiD_c::setCollision() {
     field_0xe44.ClrTgHit();
 }
 
-/* 80B44498-80B444A0 001638 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__13daNpc_yamiD_cFv */
 int daNpc_yamiD_c::drawDbgInfo() {
     return 0;
 }
 
-/* 80B444A0-80B4450C 001640 006C+00 1/0 0/0 0/0 .text            drawGhost__13daNpc_yamiD_cFv */
 void daNpc_yamiD_c::drawGhost() {
     J3DModel* model = mpMorf[0]->getModel();
     g_env_light.settingTevStruct(3, &current.pos, &tevStr);
@@ -620,19 +583,16 @@ void daNpc_yamiD_c::drawGhost() {
     mpMorf[0]->entryDL();
 }
 
-/* 80B4450C-80B44554 0016AC 0048+00 1/1 0/0 0/0 .text            selectAction__13daNpc_yamiD_cFv */
 int daNpc_yamiD_c::selectAction() {
     mNextAction = NULL;
     mNextAction = &daNpc_yamiD_c::wait;
     return 1;
 }
 
-/* 80B44554-80B44580 0016F4 002C+00 1/1 0/0 0/0 .text            chkAction__13daNpc_yamiD_cFM13daNpc_yamiD_cFPCvPvPv_i */
 BOOL daNpc_yamiD_c::chkAction(actionFunc action) {
     return mAction == action;
 }
 
-/* 80B44580-80B44628 001720 00A8+00 3/3 0/0 0/0 .text            setAction__13daNpc_yamiD_cFM13daNpc_yamiD_cFPCvPvPv_i */
 int daNpc_yamiD_c::setAction(actionFunc action) {
     mMode = 3;
 
@@ -650,7 +610,6 @@ int daNpc_yamiD_c::setAction(actionFunc action) {
     return 1;
 }
 
-/* 80B44628-80B44900 0017C8 02D8+00 2/0 0/0 0/0 .text            wait__13daNpc_yamiD_cFPv */
 int daNpc_yamiD_c::wait(void* param_1) {
     switch (mMode) {
         case 0:
@@ -711,7 +670,6 @@ int daNpc_yamiD_c::wait(void* param_1) {
     return 1;
 }
 
-/* 80B44900-80B44AF8 001AA0 01F8+00 2/0 0/0 0/0 .text            talk__13daNpc_yamiD_cFPv */
 int daNpc_yamiD_c::talk(void* param_1) {
     switch (mMode) {
         case 0:
@@ -754,7 +712,6 @@ int daNpc_yamiD_c::talk(void* param_1) {
     return 0;
 }
 
-/* 80B44AF8-80B44B8C 001C98 0094+00 1/0 0/0 0/0 .text            cutStopper__13daNpc_yamiD_cFi */
 BOOL daNpc_yamiD_c::cutStopper(int i_cutIndex) {
     int* cutId = dComIfGp_evmng_getMyIntegerP(i_cutIndex, "cutId");
     if (cutId == NULL) {
@@ -769,7 +726,6 @@ BOOL daNpc_yamiD_c::cutStopper(int i_cutIndex) {
     return _cutStopper_Main(*cutId);
 }
 
-/* 80B44B8C-80B44BD4 001D2C 0048+00 1/1 0/0 0/0 .text _cutStopper_Init__13daNpc_yamiD_cFRCi */
 BOOL daNpc_yamiD_c::_cutStopper_Init(int const& i_cutId) {
     switch (i_cutId) {
         case 10:
@@ -782,7 +738,6 @@ BOOL daNpc_yamiD_c::_cutStopper_Init(int const& i_cutId) {
     return TRUE;
 }
 
-/* 80B44BD4-80B44D00 001D74 012C+00 1/1 0/0 0/0 .text _cutStopper_Main__13daNpc_yamiD_cFRCi */
 BOOL daNpc_yamiD_c::_cutStopper_Main(int const& i_cutId) {
     BOOL rv = FALSE;
 
@@ -811,32 +766,26 @@ BOOL daNpc_yamiD_c::_cutStopper_Main(int const& i_cutId) {
     return rv;
 }
 
-/* 80B44D00-80B44D20 001EA0 0020+00 1/0 0/0 0/0 .text            daNpc_yamiD_Create__FPv */
 static int daNpc_yamiD_Create(void* i_this) {
     return ((daNpc_yamiD_c*)i_this)->create();
 }
 
-/* 80B44D20-80B44D40 001EC0 0020+00 1/0 0/0 0/0 .text            daNpc_yamiD_Delete__FPv */
 static int daNpc_yamiD_Delete(void* i_this) {
     return ((daNpc_yamiD_c*)i_this)->Delete();
 }
 
-/* 80B44D40-80B44D60 001EE0 0020+00 1/0 0/0 0/0 .text            daNpc_yamiD_Execute__FPv */
 static int daNpc_yamiD_Execute(void* i_this) {
     return ((daNpc_yamiD_c*)i_this)->Execute();
 }
 
-/* 80B44D60-80B44D80 001F00 0020+00 1/0 0/0 0/0 .text            daNpc_yamiD_Draw__FPv */
 static int daNpc_yamiD_Draw(void* i_this) {
     return ((daNpc_yamiD_c*)i_this)->Draw();
 }
 
-/* 80B44D80-80B44D88 001F20 0008+00 1/0 0/0 0/0 .text            daNpc_yamiD_IsDelete__FPv */
 static int daNpc_yamiD_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80B462A0-80B462C0 -00001 0020+00 1/0 0/0 0/0 .data            daNpc_yamiD_MethodTable */
 static actor_method_class daNpc_yamiD_MethodTable = {
     (process_method_func)daNpc_yamiD_Create,
     (process_method_func)daNpc_yamiD_Delete,
@@ -845,7 +794,6 @@ static actor_method_class daNpc_yamiD_MethodTable = {
     (process_method_func)daNpc_yamiD_Draw,
 };
 
-/* 80B462C0-80B462F0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_YAMID */
 extern actor_process_profile_definition g_profile_NPC_YAMID = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID

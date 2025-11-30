@@ -10,9 +10,9 @@
  */
 class JASVoiceBank : public JASBank {
 public:
-    /* 80297F74 */ virtual bool getInstParam(int, int, int, JASInstParam*) const;
-    /* 80297FAC */ virtual ~JASVoiceBank();
-    /* 80298008 */ virtual u32 getType() const;
+    virtual bool getInstParam(int, int, int, JASInstParam*) const;
+    virtual ~JASVoiceBank();
+    virtual u32 getType() const;
 
     static const JASOscillator::Data sOscData;
     static JASOscillator::Data* sOscTable;

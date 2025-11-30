@@ -30,13 +30,13 @@ struct KazoNekoAttr {
  */
 class daObjKazeNeko_c : public fopAc_ac_c {
 public:
-    /* 80C3C8D8 */ void create_init();
-    /* 80C3C968 */ void initBaseMtx();
-    /* 80C3C988 */ void setBaseMtx();
-    /* 80C3CA8C */ void initCcCylinder();
-    /* 80C3CB10 */ void setCcCylinder();
-    /* 80C3CB7C */ void swingHead();
-    /* 80C3CC40 */ void getFirstVec(cXyz*, int);
+    void create_init();
+    void initBaseMtx();
+    void setBaseMtx();
+    void initCcCylinder();
+    void setCcCylinder();
+    void swingHead();
+    void getFirstVec(cXyz*, int);
     inline int createHeap();
     inline int draw();
     inline int execute();

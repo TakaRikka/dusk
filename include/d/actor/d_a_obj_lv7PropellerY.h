@@ -14,24 +14,24 @@
  */
 class daPropY_c : public dBgS_MoveBgActor {
 public:
-    /* 80C8550C */ void setBaseMtx();
-    /* 80C85624 */ int create();
-    /* 80C85860 */ void procMain();
-    /* 80C859B4 */ void init_modeMoveWait();
-    /* 80C859C0 */ void modeMoveWait();
-    /* 80C859C4 */ void init_modeMove();
-    /* 80C859E0 */ void modeMove();
-    /* 80C85B08 */ void init_modeWait();
-    /* 80C85B24 */ void modeWait();
-    /* 80C85B5C */ void init_modeMove2();
-    /* 80C85B84 */ void modeMove2();
-    /* 80C85CAC */ void init_modeStop();
-    /* 80C85DD0 */ void modeStop();
+    void setBaseMtx();
+    int create();
+    void procMain();
+    void init_modeMoveWait();
+    void modeMoveWait();
+    void init_modeMove();
+    void modeMove();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMove2();
+    void modeMove2();
+    void init_modeStop();
+    void modeStop();
 
-    /* 80C855A4 */ virtual int CreateHeap();
-    /* 80C85810 */ virtual int Execute(Mtx**);
-    /* 80C85F14 */ virtual int Draw();
-    /* 80C85FB8 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getType() { return fopAcM_GetParamBit(this, 0, 4); }
     int getSw() { return fopAcM_GetParamBit(this, 8, 8); }

@@ -21,7 +21,7 @@
  */
 class e_rdy_class {
 public:
-    /* 80779340 */ e_rdy_class();
+    e_rdy_class();
 
     /* 0x0000 */ fopEn_enemy_c actor;
     /* 0x05AC */ request_of_phase_process_class mPhase;

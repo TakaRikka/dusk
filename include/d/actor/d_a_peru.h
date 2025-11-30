@@ -19,48 +19,48 @@ public:
     typedef int (daPeru_c::*cutAppearFunc)(int);
     typedef int (daPeru_c::*actionFunc)(int);
 
-    /* 80D46EEC */ virtual ~daPeru_c();
-    /* 80D46FCC */ int create();
-    /* 80D4720C */ int CreateHeap();
-    /* 80D4765C */ int typeInitialize();
-    /* 80D47750 */ int Delete();
-    /* 80D47784 */ int Execute();
-    /* 80D477A4 */ int Draw();
-    /* 80D47840 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80D47860 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80D478B8 */ int isDelete();
-    /* 80D478EC */ void reset();
-    /* 80D47B20 */ void setParam();
-    /* 80D47C4C */ void setAfterTalkMotion();
-    /* 80D47CAC */ void srchActors();
-    /* 80D47D5C */ int evtTalk();
-    /* 80D47E48 */ int evtCutProc();
-    /* 80D47F10 */ void action();
-    /* 80D47F5C */ void setAttnPos();
-    /* 80D481A4 */ void setCollision();
-    /* 80D4835C */ BOOL drawDbgInfo();
-    /* 80D48364 */ int setAction(actionFunc, int);
-    /* 80D48414 */ int wait(int);
-    /* 80D486A0 */ BOOL is_AppearDemo_start();
-    /* 80D48720 */ void _AppearDemoTag_delete();
-    /* 80D48750 */ int talk(int);
-    /* 80D48A7C */ int jump_st(int);
-    /* 80D48C58 */ int jump_ed(int);
-    /* 80D48E34 */ int sniff(int);
-    /* 80D48FA8 */ int demo_appear(int);
-    /* 80D4910C */ int demo_walk_to_link(int);
-    /* 80D492A8 */ int demo_walk_circle(int);
-    /* 80D49418 */ int demo_walk_to_window(int);
-    /* 80D4971C */ int demo_walk_to_pathway(int);
-    /* 80D499AC */ int cutAppear(int);
-    /* 80D49A40 */ int _cutAppear_Init(int const&);
-    /* 80D4A334 */ int _cutAppear_Main(int const&);
-    /* 80D4A840 */ void _catdoor_open();
-    /* 80D4A920 */ void _catdoor_open_demoskip();
-    /* 80D4A984 */ int cutAppear_skip(int);
-    /* 80D4AA18 */ int _cutAppear_skip_Init(int const&);
-    /* 80D4AAF0 */ int _cutAppear_skip_Main(int const&);
-    /* 80D4BE2C */ daPeru_c(daNpcT_faceMotionAnmData_c const* param_1,
+    virtual ~daPeru_c();
+    int create();
+    int CreateHeap();
+    int typeInitialize();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    int isDelete();
+    void reset();
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    int evtTalk();
+    int evtCutProc();
+    void action();
+    void setAttnPos();
+    void setCollision();
+    BOOL drawDbgInfo();
+    int setAction(actionFunc, int);
+    int wait(int);
+    BOOL is_AppearDemo_start();
+    void _AppearDemoTag_delete();
+    int talk(int);
+    int jump_st(int);
+    int jump_ed(int);
+    int sniff(int);
+    int demo_appear(int);
+    int demo_walk_to_link(int);
+    int demo_walk_circle(int);
+    int demo_walk_to_window(int);
+    int demo_walk_to_pathway(int);
+    int cutAppear(int);
+    int _cutAppear_Init(int const&);
+    int _cutAppear_Main(int const&);
+    void _catdoor_open();
+    void _catdoor_open_demoskip();
+    int cutAppear_skip(int);
+    int _cutAppear_skip_Init(int const&);
+    int _cutAppear_skip_Main(int const&);
+    daPeru_c(daNpcT_faceMotionAnmData_c const* param_1,
                             daNpcT_motionAnmData_c const* param_2,
                             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
@@ -68,13 +68,13 @@ public:
         : daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8) {
             OS_REPORT("|%06d:%x|daPeru_c -> コンストラクト\n", g_Counter.mCounter0, this);
         }
-    /* 80D4BEC4 */ u16 getEyeballMaterialNo() { return 1; }
-    /* 80D4BECC */ s32 getHeadJointNo() { return 4; }
-    /* 80D4BED4 */ s32 getNeckJointNo() { return 3; }
-    /* 80D4BEDC */ s32 getBackboneJointNo() { return 1; }
-    /* 80D4BEE4 */ int checkChangeJoint(int param_1) { return param_1 == 4; }
-    /* 80D4BEE4 */ int checkRemoveJoint(int param_1) { return param_1 == 5; }
-    /* 80D4BF04 */ void beforeMove() {
+    u16 getEyeballMaterialNo() { return 1; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return 1; }
+    int checkChangeJoint(int param_1) { return param_1 == 4; }
+    int checkRemoveJoint(int param_1) { return param_1 == 5; }
+    void beforeMove() {
         if (checkHide() || mNoDraw) {
             attention_info.flags = 0;
         }
@@ -146,7 +146,7 @@ struct PeruParams {
 
 class daPeru_Param_c {
 public:
-    /* 80D4BF7C */ virtual ~daPeru_Param_c() {}
+    virtual ~daPeru_Param_c() {}
 
     static PeruParams const m;
 };

@@ -25,23 +25,23 @@ public:
         ACTION_DEAD,
     };
 
-    /* 80D0D618 */ void initBaseMtx();
-    /* 80D0D654 */ void setBaseMtx();
-    /* 80D0D6B8 */ int Create();
-    /* 80D0D7F8 */ int CreateHeap();
-    /* 80D0D868 */ int create1st();
-    /* 80D0D8E8 */ int Execute(Mtx**);
-    /* 80D0D9B4 */ void set_cyl();
-    /* 80D0DAC8 */ void action();
-    /* 80D0DB90 */ void event_proc_call();
-    /* 80D0DC4C */ void actionWait();
-    /* 80D0DCC8 */ void actionOrderEvent();
-    /* 80D0DD90 */ void actionEvent();
-    /* 80D0DE30 */ void actionDead();
-    /* 80D0DE34 */ int demoProc();
-    /* 80D0E06C */ BOOL checkArea();
-    /* 80D0E150 */ int Draw();
-    /* 80D0E1F4 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void set_cyl();
+    void action();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    int demoProc();
+    BOOL checkArea();
+    int Draw();
+    int Delete();
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     int getMsg() { return fopAcM_GetParamBit(this, 8, 16); }

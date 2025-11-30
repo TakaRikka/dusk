@@ -9,10 +9,8 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor.h"
 
-/* 8058F2AC-8058F2E0 000014 0034+00 4/4 0/0 0/0 .bss             l_HIO */
 static daLv2Candle_HIO_c l_HIO;
 
-/* 8058E04C-8058E0F4 0000EC 00A8+00 1/1 0/0 0/0 .text            __ct__17daLv2Candle_HIO_cFv */
 daLv2Candle_HIO_c::daLv2Candle_HIO_c() {
     mTimer = 30;
     mPow = 500.0f;
@@ -37,7 +35,6 @@ daLv2Candle_HIO_c::daLv2Candle_HIO_c() {
     mColor2B = 0x42;
 }
 
-/* 8058F144-8058F174 000014 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__13daLv2Candle_c */
 dCcD_SrcGObjInf const daLv2Candle_c::mCcDObjInfo = {
     {
         0, {
@@ -51,27 +48,23 @@ dCcD_SrcGObjInf const daLv2Candle_c::mCcDObjInfo = {
     {0},
 };
 
-/* 8058F1C8-8058F20C 000000 0044+00 2/2 0/0 0/0 .data            mCcDCyl__13daLv2Candle_c */
 dCcD_SrcCyl daLv2Candle_c::mCcDCyl = {
     daLv2Candle_c::mCcDObjInfo,
     { {0.0f, 0.0f, 0.0f}, 0, 0}
 };
 
-/* 8058F20C-8058F218 -00001 000C+00 3/3 0/0 0/0 .data            l_resNameIdx */
 static char* l_resNameIdx[3] = {
     "L2candl",
     "L4candl",
     "L9Candle",
 };
 
-/* 8058F174-8058F180 000044 000C+00 1/1 0/0 0/0 .rodata          l_bmdIdx */
 static u32 const l_bmdIdx[3] = {
     4,
     4,
     3,
 };
 
-/* 8058E13C-8058E1C4 0001DC 0088+00 2/2 0/0 0/0 .text            setBaseMtx__13daLv2Candle_cFv */
 void daLv2Candle_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
@@ -79,7 +72,6 @@ void daLv2Candle_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 8058E1C4-8058E244 000264 0080+00 1/1 0/0 0/0 .text            CreateHeap__13daLv2Candle_cFv */
 int daLv2Candle_c::CreateHeap() {
     J3DModelData* bmd =
         (J3DModelData*)dComIfG_getObjectRes(l_resNameIdx[mModelType], l_bmdIdx[mModelType]);
@@ -90,7 +82,6 @@ int daLv2Candle_c::CreateHeap() {
     return true;
 }
 
-/* 8058E244-8058E52C 0002E4 02E8+00 1/1 0/0 0/0 .text            create__13daLv2Candle_cFv */
 cPhs__Step daLv2Candle_c::create() {
     fopAcM_ct(this, daLv2Candle_c);
     mModelType = getModelType();
@@ -147,18 +138,14 @@ cPhs__Step daLv2Candle_c::create() {
     return step;
 }
 
-/* 8058E5BC-8058E608 00065C 004C+00 2/2 0/0 0/0 .text            isSwitch__13daLv2Candle_cFv */
 u8 daLv2Candle_c::isSwitch() {
     return mSwType ^ fopAcM_isSwitch(this, mSw);
 }
 
-/* 8058E608-8058E628 0006A8 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__13daLv2Candle_cFP10fopAc_ac_c            */
 int daLv2Candle_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daLv2Candle_c*>(i_this)->CreateHeap();
 }
 
-/* 8058E628-8058E678 0006C8 0050+00 1/1 0/0 0/0 .text searchDemoTagAct__13daLv2Candle_cFPvPv */
 void* daLv2Candle_c::searchDemoTagAct(void* i_actor, void* param_1) {
     if (i_actor != NULL && fopAc_IsActor(i_actor) &&
                            fopAcM_GetProfName(i_actor) == PROC_Tag_Lv4Candle) {
@@ -167,7 +154,6 @@ void* daLv2Candle_c::searchDemoTagAct(void* i_actor, void* param_1) {
     return NULL;
 }
 
-/* 8058E678-8058E720 000718 00A8+00 1/1 0/0 0/0 .text            lightInit__13daLv2Candle_cFv */
 void daLv2Candle_c::lightInit() {
     mLightPos = mTorchPos;
     mLightPos.y += 10.0f;
@@ -184,22 +170,18 @@ void daLv2Candle_c::lightInit() {
     mIntensity = 0.0f;
 }
 
-/* 8058E720-8058E750 0007C0 0030+00 2/2 0/0 0/0 .text            setLight__13daLv2Candle_cFv */
 void daLv2Candle_c::setLight() {
     if (mLightType != 0) {
         dKy_plight_set(&mLight);
     }
 }
 
-/* 8058E750-8058E780 0007F0 0030+00 1/1 0/0 0/0 .text            cutLight__13daLv2Candle_cFv */
 void daLv2Candle_c::cutLight() {
     if (mLightType != 0) {
         dKy_plight_cut(&mLight);
     }
 }
 
-/* 8058E780-8058E99C 000820 021C+00 1/1 0/0 0/0 .text            pointLightProc__13daLv2Candle_cFv
- */
 void daLv2Candle_c::pointLightProc() {
     if (mLightType != 0) {
         if (mIsLit && mLightAnm != 0xf) {
@@ -247,7 +229,6 @@ void daLv2Candle_c::pointLightProc() {
     }
 }
 
-/* 8058E99C-8058EEC8 000A3C 052C+00 1/1 0/0 0/0 .text            Execute__13daLv2Candle_cFv */
 int daLv2Candle_c::Execute() {
     if (mSw == 0xff) {
         if (mTimer != 0) {
@@ -369,7 +350,6 @@ int daLv2Candle_c::Execute() {
     return true;
 }
 
-/* 8058EEC8-8058EF6C 000F68 00A4+00 1/1 0/0 0/0 .text            Draw__13daLv2Candle_cFv */
 int daLv2Candle_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -379,7 +359,6 @@ int daLv2Candle_c::Draw() {
     return true;
 }
 
-/* 8058EF6C-8058EFD0 00100C 0064+00 1/1 0/0 0/0 .text            Delete__13daLv2Candle_cFv */
 int daLv2Candle_c::Delete() {
     mSound.deleteObject();
     dComIfG_resDelete(&mPhase, l_resNameIdx[mModelType]);
@@ -389,29 +368,22 @@ int daLv2Candle_c::Delete() {
     return true;
 }
 
-/* 8058EFD0-8058EFF0 001070 0020+00 1/0 0/0 0/0 .text            daLv2Candle_Draw__FP13daLv2Candle_c
- */
 static int daLv2Candle_Draw(daLv2Candle_c* i_this) {
     return i_this->Draw();
 }
 
-/* 8058EFF0-8058F010 001090 0020+00 1/0 0/0 0/0 .text daLv2Candle_Execute__FP13daLv2Candle_c */
 static int daLv2Candle_Execute(daLv2Candle_c* i_this) {
     return i_this->Execute();
 }
 
-/* 8058F010-8058F030 0010B0 0020+00 1/0 0/0 0/0 .text daLv2Candle_Delete__FP13daLv2Candle_c */
 static int daLv2Candle_Delete(daLv2Candle_c* i_this) {
     return i_this->Delete();
 }
 
-/* 8058F030-8058F050 0010D0 0020+00 1/0 0/0 0/0 .text            daLv2Candle_Create__FP10fopAc_ac_c
- */
 static cPhs__Step daLv2Candle_Create(fopAc_ac_c* i_this) {
     return static_cast<daLv2Candle_c*>(i_this)->create();
 }
 
-/* 8058F218-8058F238 -00001 0020+00 1/0 0/0 0/0 .data            l_daLv2Candle_Method */
 static actor_method_class l_daLv2Candle_Method = {
     (process_method_func)daLv2Candle_Create,
     (process_method_func)daLv2Candle_Delete,
@@ -420,7 +392,6 @@ static actor_method_class l_daLv2Candle_Method = {
     (process_method_func)daLv2Candle_Draw,
 };
 
-/* 8058F238-8058F268 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv2Candle */
 extern actor_process_profile_definition g_profile_Obj_Lv2Candle = {
     fpcLy_CURRENT_e,
     3,

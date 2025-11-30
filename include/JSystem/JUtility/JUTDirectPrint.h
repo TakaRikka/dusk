@@ -10,20 +10,20 @@
 */
 class JUTDirectPrint {
 private:
-    /* 802E41E8 */ JUTDirectPrint();
+    JUTDirectPrint();
 
 public:
-    /* 802E4288 */ void erase(int, int, int, int);
-    /* 802E431C */ void drawChar(int, int, int);
-    /* 802E456C */ void changeFrameBuffer(void*, u16, u16);
+    void erase(int, int, int, int);
+    void drawChar(int, int, int);
+    void changeFrameBuffer(void*, u16, u16);
     /* -------- */ void print(u16, u16, char const*, ...);
-    /* 802E45A4 */ void printSub(u16, u16, char const*, va_list, bool);
-    /* 802E46D8 */ void drawString(u16, u16, char*);
-    /* 802E4708 */ void drawString_f(u16, u16, char const*, ...);
-    /* 802E47C8 */ void setCharColor(u8, u8, u8);
-    /* 802E4798 */ void setCharColor(JUtility::TColor);
+    void printSub(u16, u16, char const*, va_list, bool);
+    void drawString(u16, u16, char*);
+    void drawString_f(u16, u16, char const*, ...);
+    void setCharColor(u8, u8, u8);
+    void setCharColor(JUtility::TColor);
 
-    /* 802E4240 */ static JUTDirectPrint* start();
+    static JUTDirectPrint* start();
 
     bool isActive() const { return field_0x00 != 0; }
     JUtility::TColor getCharColor() const { return mCharColor; }

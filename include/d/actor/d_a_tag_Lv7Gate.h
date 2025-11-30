@@ -5,10 +5,10 @@
 
 class daTagLv7Gate_c : public fopAc_ac_c {
 public:
-    /* 80D50C64 */ int create();
-    /* 80D50D30 */ void create_init();
-    /* 80D511C8 */ int execute();
-    /* 80D51628 */ void calcFly();
+    int create();
+    void create_init();
+    int execute();
+    void calcFly();
 
     inline ~daTagLv7Gate_c();
 

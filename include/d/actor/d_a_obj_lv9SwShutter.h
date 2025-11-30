@@ -14,20 +14,20 @@
  */
 class daLv9SwShutter_c : public dBgS_MoveBgActor {
 public:
-    /* 80C8CF38 */ void setBaseMtx();
-    /* 80C8D040 */ int create();
-    /* 80C8D1B8 */ void moveShutter();
-    /* 80C8D2BC */ void init_modeWait();
-    /* 80C8D2C8 */ void modeWait();
-    /* 80C8D2CC */ void init_modeOpen();
-    /* 80C8D2D8 */ void modeOpen();
-    /* 80C8D440 */ void init_modeClose();
-    /* 80C8D458 */ void modeClose();
+    void setBaseMtx();
+    int create();
+    void moveShutter();
+    void init_modeWait();
+    void modeWait();
+    void init_modeOpen();
+    void modeOpen();
+    void init_modeClose();
+    void modeClose();
 
-    /* 80C8CFD4 */ virtual int CreateHeap();
-    /* 80C8D168 */ virtual int Execute(Mtx**);
-    /* 80C8D5D0 */ virtual int Draw();
-    /* 80C8D674 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     int getSw() { return fopAcM_GetParamBit(this, 0, 8); }
 

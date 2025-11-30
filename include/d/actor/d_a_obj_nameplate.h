@@ -15,15 +15,15 @@
  */
 class daObjNameplate_c : public fopAc_ac_c {
 public:
-    /* 80594098 */ void create_init();
-    /* 8059415C */ void initBaseMtx();
-    /* 8059417C */ void setBaseMtx();
-    /* 80594248 */ void initCcSphere();
-    /* 805942B8 */ void setCcSphere();
-    /* 8059434C */ void calcAngle();
-    /* 805945CC */ void calcSpring();
-    /* 80594754 */ int checkHitAngle();
-    /* 805947F8 */ void messageProc();
+    void create_init();
+    void initBaseMtx();
+    void setBaseMtx();
+    void initCcSphere();
+    void setCcSphere();
+    void calcAngle();
+    void calcSpring();
+    int checkHitAngle();
+    void messageProc();
 
     struct M_attrs {
         /* 0x00 */ f32 radius1;

@@ -7,8 +7,8 @@ class dStage_SoundInfo_c;
 
 class dEnvSe_c : public kankyo_class {
 public:
-    /* 80182FD8 */ int execute_common(dStage_SoundInfo_c*, s8*, u8);
-    /* 80183480 */ int execute();
+    int execute_common(dStage_SoundInfo_c*, s8*, u8);
+    int execute();
 
     /* 0x0F8 */ u8 field_0xf8[0x0FC - 0x0F8];
     /* 0x0FC */ s8 field_0xfc;

@@ -15,23 +15,23 @@ class daObj_Oiltubo_c : public fopAc_ac_c {
 public:
     typedef int (daObj_Oiltubo_c::*processFn)(void*);
 
-    /* 80CA6718 */ int create();
-    /* 80CA6B28 */ int CreateHeap();
-    /* 80CA6C5C */ int Delete();
-    /* 80CA6CA0 */ int Execute();
-    /* 80CA6EDC */ int Draw();
-    /* 80CA6FC8 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80CA6FE8 */ const char* getResName();
-    /* 80CA6FF8 */ void restart();
-    /* 80CA7068 */ void initialize();
-    /* 80CA720C */ int setProcess(processFn);
-    /* 80CA72BC */ void setParam();
-    /* 80CA7318 */ void setEnvTevColor();
-    /* 80CA7374 */ void setRoomNo();
-    /* 80CA73B8 */ void setMtx();
-    /* 80CA7430 */ void setAttnPos();
-    /* 80CA7478 */ BOOL chkEvent();
-    /* 80CA74C8 */ int wait(void*);
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    const char* getResName();
+    void restart();
+    void initialize();
+    int setProcess(processFn);
+    void setParam();
+    void setEnvTevColor();
+    void setRoomNo();
+    void setMtx();
+    void setAttnPos();
+    BOOL chkEvent();
+    int wait(void*);
 
     static const dCcD_SrcGObjInf mCcDObjInfo;
     static dCcD_SrcCyl mCcDCyl;
@@ -54,7 +54,7 @@ private:
     /* 0xACC */ u16 mMode;
 
 public:
-    /* 80CA7628 */ virtual ~daObj_Oiltubo_c() {}
+    virtual ~daObj_Oiltubo_c() {}
 };
 
 STATIC_ASSERT(sizeof(daObj_Oiltubo_c) == 0xAD4);

@@ -47,17 +47,17 @@ public:
 
 class Z2SoundObjAnime : public Z2SoundObjBase {
 public:
-    /* 802BEB94 */ Z2SoundObjAnime();
-    /* 802BEBFC */ void initAnime(void* animation, bool, f32 startFrame, f32);
-    /* 802BED68 */ void ageSounds_();
-    /* 802BEED4 */ void updateAnime(f32, f32);
-    /* 802BF304 */ void updateSoundLifeTime_(f32, f32);
-    /* 802BF660 */ void startSoundInner(const JGeometry::TVec3<f32>& pos, f32 param_1,
+    Z2SoundObjAnime();
+    void initAnime(void* animation, bool, f32 startFrame, f32);
+    void ageSounds_();
+    void updateAnime(f32, f32);
+    void updateSoundLifeTime_(f32, f32);
+    void startSoundInner(const JGeometry::TVec3<f32>& pos, f32 param_1,
                                         Z2SoundStarter* soundStarter, u32 mapinfo, s8 reverb);
-    /* 802BF890 */ u32 getSoundID(const JAUSoundAnimationSound* animationSound, const JGeometry::TVec3<f32>&, f32);
-    /* 802BF898 */ bool playsSound(const JAUSoundAnimationSound* animationSound, const JGeometry::TVec3<f32>&, f32);
+    u32 getSoundID(const JAUSoundAnimationSound* animationSound, const JGeometry::TVec3<f32>&, f32);
+    bool playsSound(const JAUSoundAnimationSound* animationSound, const JGeometry::TVec3<f32>&, f32);
 
-    /* 802BEBDC */ virtual void init(Vec* posPtr, u8 handleNum);
+    virtual void init(Vec* posPtr, u8 handleNum);
 
     void stopAnime() { animation_ = NULL; }
 
@@ -106,8 +106,8 @@ public:
 
 class Z2SoundObjArrow : public Z2DopplerSoundObjBase {
 public:
-    /* 802BEB38 */ Z2SoundObjArrow();
-    /* 802BEB74 */ virtual void init(Vec* posPtr, u8 handleNum);
+    Z2SoundObjArrow();
+    virtual void init(Vec* posPtr, u8 handleNum);
 };
 
 #endif /* Z2SOUNDOBJECT_H */

@@ -18,14 +18,14 @@ public:
         GEAR_L_e,
     };
 
-    /* 80C67FB4 */ void initBaseMtx();
-    /* 80C67FF0 */ void setBaseMtx();
-    /* 80C68050 */ int Create();
-    /* 80C680A4 */ int CreateHeap();
-    /* 80C68124 */ int create();
-    /* 80C681F4 */ int execute();
-    /* 80C683E0 */ int draw();
-    /* 80C68444 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    int draw();
+    int _delete();
 
     u8 getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getType() { return fopAcM_GetParamBit(this, 8, 4); }

@@ -6,8 +6,8 @@
 #include "f_op/f_op_actor.h"
 
 struct rock_ss {
-    /* 80CBE5A4 */ ~rock_ss();
-    /* 80CBE678 */ rock_ss();
+    ~rock_ss();
+    rock_ss();
 
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ cXyz mPos;

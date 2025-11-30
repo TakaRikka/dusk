@@ -8,17 +8,14 @@
 #include "d/actor/d_a_obj_mirror_chain.h"
 #include "d/d_com_inf_game.h"
 
-/* 80C98080-80C98084 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char const* l_arcName = "MR-Chain";
 
-/* 80C98138-80C98148 000000 0010+00 2/2 0/0 0/0 .bss             l_scissor */
 static u32 l_scissor[4];
 
 #if DEBUG
 static u8 l_begin;
 #endif
 
-/* 80C96698-80C96DAC 000078 0714+00 1/0 0/0 0/0 .text            draw__22dScissorBegin_packet_cFv */
 void dScissorBegin_packet_c::draw() {
     GXGetScissor(&l_scissor[0], &l_scissor[1], &l_scissor[2], &l_scissor[3]);
 
@@ -183,7 +180,6 @@ void dScissorBegin_packet_c::draw() {
     }
 }
 
-/* 80C96DE8-80C96E20 0007C8 0038+00 1/0 0/0 0/0 .text            draw__20dScissorEnd_packet_cFv */
 void dScissorEnd_packet_c::draw() {
     #if DEBUG
     JUT_ASSERT(246, l_begin);
@@ -193,13 +189,10 @@ void dScissorEnd_packet_c::draw() {
     GXSetScissor(l_scissor[0], l_scissor[1], l_scissor[2], l_scissor[3]);
 }
 
-/* 80C96E20-80C96E40 000800 0020+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return ((daObjMirrorChain_c*)i_this)->createHeap();
 }
 
-/* 80C96E40-80C975A4 000820 0764+00 1/1 0/0 0/0 .text            createHeap__18daObjMirrorChain_cFv
- */
 int daObjMirrorChain_c::createHeap() {
     J3DModelData* modelData;
 
@@ -300,15 +293,11 @@ int daObjMirrorChain_c::createHeap() {
     return 1;
 }
 
-/* 80C975EC-80C97618 000FCC 002C+00 1/1 0/0 0/0 .text            initBaseMtx__18daObjMirrorChain_cFv
- */
 void daObjMirrorChain_c::initBaseMtx() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     setBaseMtx();
 }
 
-/* 80C97618-80C97698 000FF8 0080+00 1/1 0/0 0/0 .text            setBaseMtx__18daObjMirrorChain_cFv
- */
 void daObjMirrorChain_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -322,13 +311,10 @@ void daObjMirrorChain_c::setBaseMtx() {
     mpActiveBgW->Move();
 }
 
-/* 80C97698-80C976B8 001078 0020+00 1/0 0/0 0/0 .text
- * daObjMirrorChain_Draw__FP18daObjMirrorChain_c                */
 static int daObjMirrorChain_Draw(daObjMirrorChain_c* i_this) {
     return i_this->draw();
 }
 
-/* 80C976B8-80C97968 001098 02B0+00 1/1 0/0 0/0 .text            draw__18daObjMirrorChain_cFv */
 int daObjMirrorChain_c::draw() {
     static const f32 SCISSOR_CENTER_X = 1799.2f;
     static const f32 SCISSOR_CENTER_Y = 4779.58f;
@@ -408,13 +394,10 @@ int daObjMirrorChain_c::draw() {
     return 1;
 }
 
-/* 80C97968-80C97988 001348 0020+00 1/0 0/0 0/0 .text
- * daObjMirrorChain_Execute__FP18daObjMirrorChain_c             */
 static int daObjMirrorChain_Execute(daObjMirrorChain_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C97988-80C97BA4 001368 021C+00 1/1 0/0 0/0 .text            execute__18daObjMirrorChain_cFv */
 int daObjMirrorChain_c::execute() {
     if (mpBckAnm != NULL) {
         mpBckAnm->play();
@@ -454,8 +437,6 @@ int daObjMirrorChain_c::execute() {
     return 1;
 }
 
-/* 80C97BA4-80C97BAC 001584 0008+00 1/0 0/0 0/0 .text
- * daObjMirrorChain_IsDelete__FP18daObjMirrorChain_c            */
 static int daObjMirrorChain_IsDelete(daObjMirrorChain_c* i_this) {
     return 1;
 }
@@ -472,8 +453,6 @@ daObjMirrorChain_c::~daObjMirrorChain_c() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
 }
 
-/* 80C97BAC-80C97CC4 00158C 0118+00 1/0 0/0 0/0 .text
- * daObjMirrorChain_Delete__FP18daObjMirrorChain_c              */
 static int daObjMirrorChain_Delete(daObjMirrorChain_c* i_this) {
     fopAcM_GetID(i_this);
     i_this->~daObjMirrorChain_c();
@@ -512,13 +491,11 @@ cPhs__Step daObjMirrorChain_c::create() {
     return phase_state;
 }
 
-/* 80C97D24-80C97F3C 001704 0218+00 1/0 0/0 0/0 .text daObjMirrorChain_Create__FP10fopAc_ac_c */
 static cPhs__Step daObjMirrorChain_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return ((daObjMirrorChain_c*)i_this)->create();
 }
 
-/* 80C980B4-80C980D4 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjMirrorChain_Method */
 static actor_method_class l_daObjMirrorChain_Method = {
     (process_method_func)daObjMirrorChain_Create,
     (process_method_func)daObjMirrorChain_Delete,
@@ -527,7 +504,6 @@ static actor_method_class l_daObjMirrorChain_Method = {
     (process_method_func)daObjMirrorChain_Draw,
 };
 
-/* 80C980D4-80C98104 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_MirrorChain */
 extern actor_process_profile_definition g_profile_Obj_MirrorChain = {
     fpcLy_CURRENT_e,
     3,

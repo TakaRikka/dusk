@@ -6,10 +6,10 @@
 class daTagChgRestart_c : public fopAc_ac_c {
 public:
     daTagChgRestart_c() {}
-    /* 80D56758 */ s32 Create();
-    /* 80D567E4 */ s32 create();
-    /* 80D568B8 */ s32 execute();
-    /* 80D56A84 */ s32 _delete();
+    s32 Create();
+    s32 create();
+    s32 execute();
+    s32 _delete();
 
     /* 0x0568 */ cXyz mVertices[4];
 };

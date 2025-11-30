@@ -14,8 +14,6 @@
 #include "string.h"
 #include <stdint.h>
 
-/* 802D87D4-802D887C 2D3114 00A8+00 0/0 1/1 0/0 .text
- * __ct__14JKRCompArchiveFlQ210JKRArchive15EMountDirection      */
 JKRCompArchive::JKRCompArchive(s32 entryNum, JKRArchive::EMountDirection eMountDirection)
     : JKRArchive(entryNum, MOUNT_COMP) {
     mMountDirection = eMountDirection;
@@ -30,7 +28,6 @@ JKRCompArchive::JKRCompArchive(s32 entryNum, JKRArchive::EMountDirection eMountD
     mIsMounted = true;
 }
 
-/* 802D887C-802D89BC 2D31BC 0140+00 1/0 0/0 0/0 .text            __dt__14JKRCompArchiveFv */
 JKRCompArchive::~JKRCompArchive() {
     if (mArcInfoBlock != NULL) {
         SDIFileEntry* file = mFiles;
@@ -63,7 +60,6 @@ JKRCompArchive::~JKRCompArchive() {
     mIsMounted = false;
 }
 
-/* 802D89BC-802D8F40 2D32FC 0584+00 1/1 0/0 0/0 .text            open__14JKRCompArchiveFl */
 bool JKRCompArchive::open(s32 entryNum) {
     mArcInfoBlock = NULL;
     field_0x64 = 0;
@@ -223,8 +219,6 @@ bool JKRCompArchive::open(s32 entryNum) {
 }
 
 
-/* 802D8F40-802D90C0 2D3880 0180+00 1/0 0/0 0/0 .text
- * fetchResource__14JKRCompArchiveFPQ210JKRArchive12SDIFileEntryPUl */
 void* JKRCompArchive::fetchResource(SDIFileEntry *fileEntry, u32 *pSize) {
     JUT_ASSERT(597, isMounted());
     u32 ptrSize;
@@ -269,10 +263,7 @@ void* JKRCompArchive::fetchResource(SDIFileEntry *fileEntry, u32 *pSize) {
     return fileEntry->data;
 }
 
-/* ############################################################################################## */
 
-/* 802D90C0-802D9260 2D3A00 01A0+00 1/0 0/0 0/0 .text
- * fetchResource__14JKRCompArchiveFPvUlPQ210JKRArchive12SDIFileEntryPUl */
 void *JKRCompArchive::fetchResource(void *data, u32 compressedSize, SDIFileEntry *fileEntry, u32 *pSize)
 {
     u32 size = 0;
@@ -320,7 +311,6 @@ void *JKRCompArchive::fetchResource(void *data, u32 compressedSize, SDIFileEntry
     return data;
 }
 
-/* 802D9260-802D92F4 2D3BA0 0094+00 1/0 0/0 0/0 .text removeResourceAll__14JKRCompArchiveFv */
 void JKRCompArchive::removeResourceAll() {
     if (mArcInfoBlock != NULL && mMountMode != MOUNT_MEM) {
         SDIFileEntry* fileEntry = mFiles;
@@ -338,8 +328,6 @@ void JKRCompArchive::removeResourceAll() {
     }
 }
 
-/* 802D92F4-802D9360 2D3C34 006C+00 1/0 0/0 0/0 .text            removeResource__14JKRCompArchiveFPv
- */
 bool JKRCompArchive::removeResource(void* resource) {
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (!fileEntry)
@@ -353,9 +341,7 @@ bool JKRCompArchive::removeResource(void* resource) {
     return true;
 }
 
-/* ############################################################################################## */
 
-/* 802D9360-802D9518 2D3CA0 01B8+00 1/0 0/0 0/0 .text getExpandedResSize__14JKRCompArchiveCFPCv */
 u32 JKRCompArchive::getExpandedResSize(const void *resource) const
 {
     if (mExpandedSize == NULL) {

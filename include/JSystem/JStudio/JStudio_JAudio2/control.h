@@ -18,10 +18,10 @@ struct TCreateObject : public JStudio::TCreateObject {
         JUT_ASSERT(45, pJAISoundStarter_!=NULL);
     }
 
-    /* 8028D550 */ virtual ~TCreateObject();
-    /* 8028D5B0 */ virtual bool create(JStudio::TObject**,
+    virtual ~TCreateObject();
+    virtual bool create(JStudio::TObject**,
                                        JStudio::stb::data::TParse_TBlock_object const&);
-    /* 8028D624 */ static JStudio::TObject*
+    static JStudio::TObject*
     createObject_JAI_SOUND_(JStudio::stb::data::TParse_TBlock_object const&,
                             JStudio_JAudio2::TCreateObject*);
     JAISoundStarter* get_pJAISoundStarter_() { return pJAISoundStarter_; }
@@ -40,38 +40,38 @@ struct TAdaptor_sound : public JStudio::TAdaptor_sound {
     struct TVVOSetValue_ : public JStudio::TVariableValue::TOutput {
         TVVOSetValue_(TEVariableValue param_1, TVVOSoundSetFunc param_2)
             : field_0x04(param_1), field_0x08(param_2) {}
-        /* 8028DECC */ virtual void operator()(f32, JStudio::TAdaptor*) const;
-        /* 8028E094 */ virtual ~TVVOSetValue_() {}
+        virtual void operator()(f32, JStudio::TAdaptor*) const;
+        virtual ~TVVOSetValue_() {}
 
         /* 0x04 */ TEVariableValue field_0x04;
         /* 0x08 */ TVVOSoundSetFunc field_0x08;
     };
 
-    /* 8028D828 */ TAdaptor_sound(JStudio_JAudio2::TCreateObject*);
-    /* 8028DF04 */ void prepareSound_();
-    /* 8028DFA4 */ void beginSound_fadeIn_();
-    /* 8028E054 */ void endSound_fadeOut_(u32);
+    TAdaptor_sound(JStudio_JAudio2::TCreateObject*);
+    void prepareSound_();
+    void beginSound_fadeIn_();
+    void endSound_fadeOut_(u32);
 
-    /* 8028D8F4 */ virtual ~TAdaptor_sound();
-    /* 8028D9A4 */ virtual void adaptor_do_prepare();
-    /* 8028DA74 */ virtual void adaptor_do_end();
-    /* 8028DA78 */ virtual void adaptor_do_update(u32);
-    /* 8028DC20 */ virtual void adaptor_do_SOUND(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028DC54 */ virtual void adaptor_do_BEGIN(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028DC88 */ virtual void adaptor_do_BEGIN_FADE_IN(JStudio::data::TEOperationData, void const*,
+    virtual ~TAdaptor_sound();
+    virtual void adaptor_do_prepare();
+    virtual void adaptor_do_end();
+    virtual void adaptor_do_update(u32);
+    virtual void adaptor_do_SOUND(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_BEGIN(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_BEGIN_FADE_IN(JStudio::data::TEOperationData, void const*,
                                                     u32);
-    /* 8028DCD0 */ virtual void adaptor_do_END(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028DD00 */ virtual void adaptor_do_END_FADE_OUT(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_END(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_END_FADE_OUT(JStudio::data::TEOperationData, void const*,
                                                 u32);
-    /* 8028DD48 */ virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028DDB4 */ virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*,
                                                 u32);
-    /* 8028DE34 */ virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*,
                                                     u32);
-    /* 8028DE50 */ virtual void adaptor_do_REPEAT(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028DE6C */ virtual void adaptor_do_CONTINUOUS(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028DE88 */ virtual void adaptor_do_LOCATED(JStudio::data::TEOperationData, void const*, u32);
-    /* 8028DEB0 */ virtual void adaptor_do_ON_EXIT_NOT_END(JStudio::data::TEOperationData, void const*,
+    virtual void adaptor_do_REPEAT(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_CONTINUOUS(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_LOCATED(JStudio::data::TEOperationData, void const*, u32);
+    virtual void adaptor_do_ON_EXIT_NOT_END(JStudio::data::TEOperationData, void const*,
                                                     u32);
 
     void beginSound_fadeIn_(u32 param_1) {

@@ -18,28 +18,28 @@
 class daTurara_c : public dBgS_MoveBgActor, public request_of_phase_process_class, public dEvLib_callback_c {
 public:
     daTurara_c() : dEvLib_callback_c(this) {}
-    /* 80B9E710 */ ~daTurara_c() {}
+    ~daTurara_c() {}
 
-    /* 80B9CC9C */ void setBaseMtx();
-    /* 80B9CD74 */ int CreateHeap();
-    /* 80B9CED8 */ int create();
-    /* 80B9D468 */ void setFallStat();
-    /* 80B9D4CC */ int Execute(Mtx**);
-    /* 80B9D548 */ void move();
-    /* 80B9D72C */ void init_modeWait();
-    /* 80B9D738 */ void modeWait();
-    /* 80B9D998 */ bool eventStart();
-    /* 80B9D9BC */ void init_modeDropInit();
-    /* 80B9DA00 */ void modeDropInit();
-    /* 80B9DA44 */ void init_modeDrop();
-    /* 80B9DB44 */ void modeDrop();
-    /* 80B9DB90 */ void bgCheck();
-    /* 80B9DBD0 */ void init_modeDropEnd();
-    /* 80B9DE48 */ void modeDropEnd();
-    /* 80B9E078 */ void init_modeDropEnd2();
-    /* 80B9E338 */ void modeDropEnd2();
-    /* 80B9E388 */ int Draw();
-    /* 80B9E478 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    void setFallStat();
+    int Execute(Mtx**);
+    void move();
+    void init_modeWait();
+    void modeWait();
+    bool eventStart();
+    void init_modeDropInit();
+    void modeDropInit();
+    void init_modeDrop();
+    void modeDrop();
+    void bgCheck();
+    void init_modeDropEnd();
+    void modeDropEnd();
+    void init_modeDropEnd2();
+    void modeDropEnd2();
+    int Draw();
+    int Delete();
 
     int getSwBit1() { return fopAcM_GetParamBit(this, 0, 8); }
     int getSwBit2() { return fopAcM_GetParamBit(this, 8, 8); }

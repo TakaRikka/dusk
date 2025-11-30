@@ -63,8 +63,8 @@ STATIC_ASSERT(sizeof(e_is_class) == 0xcf8);
 
 class daE_IS_HIO_c : public JORReflexible {
 public:
-    /* 806F5A4C */ daE_IS_HIO_c();
-    /* 806F7AC4 */ virtual ~daE_IS_HIO_c() {}
+    daE_IS_HIO_c();
+    virtual ~daE_IS_HIO_c() {}
 
     void genMessage(JORMContext*);
 

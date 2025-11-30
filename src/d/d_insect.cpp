@@ -10,9 +10,7 @@
 #include "d/d_menu_insect.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
-#include "dol2asm.h"
 
-/* 8015E010-8015E078 158950 0068+00 0/0 0/0 13/13 .text            __ct__9dInsect_cFv */
 dInsect_c::dInsect_c() {
     m_itemId = -1;
     field_0x56c = 0;
@@ -23,8 +21,6 @@ dInsect_c::dInsect_c() {
     field_0x585 = 0;
 }
 
-/* 8015E078-8015E26C 1589B8 01F4+00 0/0 0/0 24/24 .text            Insect_GetDemoMain__9dInsect_cFv
- */
 void dInsect_c::Insect_GetDemoMain() {
     switch (m_mode) {
     case 0:
@@ -78,7 +74,6 @@ void dInsect_c::Insect_GetDemoMain() {
     }
 }
 
-/* 8015E26C-8015E3F8 158BAC 018C+00 0/0 0/0 3/3 .text            CalcZBuffer__9dInsect_cFf */
 void dInsect_c::CalcZBuffer(f32 param_0) {
     f32 camera_trim_height;
     cXyz pos_projected;

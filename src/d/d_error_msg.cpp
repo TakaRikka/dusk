@@ -48,7 +48,6 @@ struct BMG_INF1 : JUTDataBlockHeader {
 #define CHAR_SPACE  1.0f
 #endif
 
-/* 8009CB88-8009D194 0974C8 060C+00 1/1 0/0 0/0 .text            messageSet__FUlb */
 static void messageSet(u32 status, bool i_drawBg) {
     BMG_INF1* inf1;
     const char* msg_p;
@@ -180,7 +179,6 @@ static void messageSet(u32 status, bool i_drawBg) {
     #endif
 }
 
-/* 8009D194-8009D354 097AD4 01C0+00 1/1 0/0 0/0 .text            draw__14dDvdErrorMsg_cFl */
 void dDvdErrorMsg_c::draw(s32 status) {
     JUtility::TColor backColor = g_clearColor;
     JFWDisplay::getManager()->setClearColor(backColor);
@@ -211,7 +209,6 @@ void dDvdErrorMsg_c::draw(s32 status) {
     JFWDisplay::getManager()->resetFader();
 }
 
-/* 8009D354-8009D410 097C94 00BC+00 0/0 1/1 0/0 .text            execute__14dDvdErrorMsg_cFv */
 u8 dDvdErrorMsg_c::execute() {
     static u8 l_dvdError;
 
@@ -239,7 +236,6 @@ u8 dDvdErrorMsg_c::execute() {
 
 static u8 l_captureAlpha = 0xFF;
 
-/* 8009D410-8009D790 097D50 0380+00 1/1 0/0 0/0 .text            drawCapture__FUc */
 static void drawCapture(u8 alpha) {
     static bool l_texCopied = false;
 
@@ -296,7 +292,6 @@ static void drawCapture(u8 alpha) {
     JFWDisplay::getManager()->resetFader();
 }
 
-/* 8009D790-8009D87C 0980D0 00EC+00 0/0 1/1 0/0 .text            execute__19dShutdownErrorMsg_cFv */
 bool dShutdownErrorMsg_c::execute() {
     if (!mDoRst::isShutdown() && !mDoRst::isReturnToMenu()) {
         return false;

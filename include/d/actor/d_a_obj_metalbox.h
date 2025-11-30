@@ -24,14 +24,14 @@ private:
     /* 0x7e4 */ dCcD_Cyl mCyl;
     /* 0x904 */ u8 field_0x804[0x944 - 0x93c];
 public:
-    /* 80592E98 */ void initBaseMtx();
-    /* 80592ED4 */ void setBaseMtx();
-    /* 80592F48 */ int Create();
-    /* 80592FD4 */ int CreateHeap();
-    /* 80593044 */ int create();
-    /* 805932C4 */ int Execute(Mtx**);
-    /* 805932F0 */ int Draw();
-    /* 80593394 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 };
 
 STATIC_ASSERT(sizeof(daObjMBox_c) == 0x944);

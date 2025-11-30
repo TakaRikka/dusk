@@ -24,13 +24,13 @@ class JPABaseEmitter;
  */
 class dPaPo_c {
 public:
-    /* 80050C9C */ void init(dBgS_Acch*, f32, f32);
-    /* 80050CC4 */ int checkWaterIn(cXyz*, cXyz const*, dKy_tevstr_c const*, u32, s8, f32, f32);
-    /* 80050E7C */ void setEffect(u32*, int, dKy_tevstr_c const*, cXyz const*, u32, u32,
+    void init(dBgS_Acch*, f32, f32);
+    int checkWaterIn(cXyz*, cXyz const*, dKy_tevstr_c const*, u32, s8, f32, f32);
+    void setEffect(u32*, int, dKy_tevstr_c const*, cXyz const*, u32, u32,
                                   cXyz const*, csXyz const*, s8, u8*, u8*);
-    /* 80051008 */ int setEffectCenter(dKy_tevstr_c const*, cXyz const*, u32, u32, cXyz const*,
+    int setEffectCenter(dKy_tevstr_c const*, cXyz const*, u32, u32, cXyz const*,
                                        csXyz const*, cXyz const*, s8, f32, f32);
-    /* 8005113C */ void clearID(u32*, u8*);
+    void clearID(u32*, u8*);
 
     void clearCenterID() { clearID(field_0x8[0], &field_0x36); }
     void changeWaterOffset(f32 i_offset) { mWaterOffset = i_offset; }
@@ -52,10 +52,10 @@ public:
 
 class dPaPoT_c : public dPaPo_c {
 public:
-    /* 8005115C */ int setEffectTwo(dKy_tevstr_c const*, cXyz const*, u32, u32, cXyz const*,
+    int setEffectTwo(dKy_tevstr_c const*, cXyz const*, u32, u32, cXyz const*,
                                     cXyz const*, cXyz const*, csXyz const*, cXyz const*, s8, f32,
                                     f32);
-    /* 80051294 */ void clearTwoAllID();
+    void clearTwoAllID();
 
     void clearLeftID() { clearID(mLeftEmitter[0], &field_0x7c); }
     void clearRightID() { clearID(mRightEmitter[0], &field_0x7d); }
@@ -91,10 +91,10 @@ public:
 
 class dPaPoF_c : public dPaPoT_c {
 public:
-    /* 800512E8 */ int setEffectFour(dKy_tevstr_c const*, cXyz const*, u32, u32, cXyz const*,
+    int setEffectFour(dKy_tevstr_c const*, cXyz const*, u32, u32, cXyz const*,
                                      cXyz const*, cXyz const*, cXyz const*, cXyz const*,
                                      csXyz const*, cXyz const*, s8, f32, f32);
-    /* 80051424 */ void clearFourAllID();
+    void clearFourAllID();
 
     void clearBLeftID() { clearID(mBackLeftEmitter[0], &field_0xc4); }
     void clearBRightID() { clearID(mBackRightEmitter[0], &field_0xc5); }

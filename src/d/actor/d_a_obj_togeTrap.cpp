@@ -10,7 +10,6 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 
-/* 80D17B6C-80D17BD0 0000EC 0064+00 1/1 0/0 0/0 .text            __ct__16daTogeTrap_HIO_cFv */
 daTogeTrap_HIO_c::daTogeTrap_HIO_c() {
     mInitialSpeed = 0.0f;
     mMaxSpeed = 250.0f;
@@ -21,10 +20,8 @@ daTogeTrap_HIO_c::daTogeTrap_HIO_c() {
     mRange = 500.0f;
 }
 
-/* 80D190B4-80D190D4 000014 0020+00 8/8 0/0 0/0 .bss             l_HIO */
 static daTogeTrap_HIO_c l_HIO;
 
-/* 80D18F30-80D18F74 000020 0044+00 2/2 0/0 0/0 .data            mCcDCyl__12daTogeTrap_c */
 const dCcD_SrcGObjInf daTogeTrap_c::mCcDObjInfo = {
     {0, {{2, 1, 0x1D}, {0x480028, 0x11}, {0}}},
     {dCcD_SE_SWORD, 0, 0, 0, 0},
@@ -32,7 +29,6 @@ const dCcD_SrcGObjInf daTogeTrap_c::mCcDObjInfo = {
     {0},
 };
 
-/* 80CA9C38-80CA9C7C 000020 0044+00 2/2 0/0 0/0 .data            mCcDCyl__11daOnsTaru_c */
 dCcD_SrcCyl daTogeTrap_c::mCcDCyl = {
     daTogeTrap_c::mCcDObjInfo,
     {
@@ -42,7 +38,6 @@ dCcD_SrcCyl daTogeTrap_c::mCcDCyl = {
     }  // mCyl
 };
 
-/* 80D17C74-80D17D5C 0001F4 00E8+00 2/2 0/0 0/0 .text            setBaseMtx__12daTogeTrap_cFv */
 void daTogeTrap_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -54,7 +49,6 @@ void daTogeTrap_c::setBaseMtx() {
     mWolfEyeModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80D17D5C-80D17E14 0002DC 00B8+00 1/0 0/0 0/0 .text            CreateHeap__12daTogeTrap_cFv */
 int daTogeTrap_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("P_Toge", 4);
     JUT_ASSERT(251, modelData != NULL);
@@ -72,7 +66,6 @@ int daTogeTrap_c::CreateHeap() {
     return 1;
 }
 
-/* 80D17E14-80D18008 000394 01F4+00 1/1 0/0 0/0 .text            create__12daTogeTrap_cFv */
 int daTogeTrap_c::create() {
     fopAcM_ct(this, daTogeTrap_c);
     mSwBit = getSwBit();
@@ -110,16 +103,12 @@ int daTogeTrap_c::create() {
     return phase;
 }
 
-/* 80D18244-80D1825C 0007C4 0018+00 1/1 0/0 0/0 .text
- * rideCallBack__12daTogeTrap_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daTogeTrap_c::rideCallBack(dBgW* param_1, fopAc_ac_c* param_2, fopAc_ac_c* param_3) {
     if (fopAcM_GetName(param_3) == PROC_Obj_Movebox) {
         ((daTogeTrap_c*)param_2)->field_0xadd = 1;
     }
 }
 
-/* 80D1825C-80D182C8 0007DC 006C+00 1/0 0/0 0/0 .text            Execute__12daTogeTrap_cFPPA3_A4_f
- */
 int daTogeTrap_c::Execute(Mtx** i_mtx) {
     moveMain();
     *i_mtx = &mModel->getBaseTRMtx();
@@ -131,7 +120,6 @@ int daTogeTrap_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80D182C8-80D185DC 000848 0314+00 1/1 0/0 0/0 .text            moveMain__12daTogeTrap_cFv */
 void daTogeTrap_c::moveMain() {
     static daTogeTrap_c::modeFunc mode_proc[4] = {
         &daTogeTrap_c::modeWait,
@@ -184,8 +172,6 @@ void daTogeTrap_c::moveMain() {
     (this->*mode_proc[mMode])();
 }
 
-/* 80D185DC-80D186B0 000B5C 00D4+00 2/2 0/0 0/0 .text            playerAreaCheck__12daTogeTrap_cFv
- */
 BOOL daTogeTrap_c::playerAreaCheck() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz local_48 = current.pos - player->current.pos;
@@ -200,16 +186,12 @@ BOOL daTogeTrap_c::playerAreaCheck() {
     return rv;
 }
 
-/* 80D186B0-80D186BC 000C30 000C+00 3/3 0/0 0/0 .text            init_modeWait__12daTogeTrap_cFv */
 void daTogeTrap_c::init_modeWait() {
     mMode = MODE_WAIT;
 }
 
-/* 80D186BC-80D186C0 000C3C 0004+00 1/0 0/0 0/0 .text            modeWait__12daTogeTrap_cFv */
 void daTogeTrap_c::modeWait() {}
 
-/* 80D186C0-80D18784 000C40 00C4+00 1/1 0/0 0/0 .text            init_modeMoveUp__12daTogeTrap_cFv
- */
 void daTogeTrap_c::init_modeMoveUp() {
     fopAcM_SetSpeedF(this, l_HIO.mInitialSpeed);
     mDoAud_seStart(Z2SE_OBJ_SWD_FENCE_POP, &home.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -220,7 +202,6 @@ void daTogeTrap_c::init_modeMoveUp() {
     this->mMode = MODE_MOVE_UP;
 }
 
-/* 80D18784-80D188C0 000D04 013C+00 1/0 0/0 0/0 .text            modeMoveUp__12daTogeTrap_cFv */
 void daTogeTrap_c::modeMoveUp() {
     cLib_chaseF(&speedF, l_HIO.mMaxSpeed, l_HIO.mMaxSpeed / 30.0f);
     if (cLib_addCalc(&current.pos.y, home.pos.y, 1.0f, fopAcM_GetSpeedF(this), 1.0f) == 0.0f) {
@@ -236,14 +217,11 @@ void daTogeTrap_c::modeMoveUp() {
     }
 }
 
-/* 80D188C0-80D188DC 000E40 001C+00 1/1 0/0 0/0 .text            init_modeMoveDown__12daTogeTrap_cFv
- */
 void daTogeTrap_c::init_modeMoveDown() {
     fopAcM_SetSpeedF(this, l_HIO.mInitialDownSpeed);
     this->mMode = MODE_MOVE_DOWN;
 }
 
-/* 80D188DC-80D18994 000E5C 00B8+00 1/0 0/0 0/0 .text            modeMoveDown__12daTogeTrap_cFv */
 void daTogeTrap_c::modeMoveDown() {
     cLib_chaseF(&speedF, l_HIO.mMaxDownSpeed, l_HIO.mMaxDownSpeed / 30.0f);
     if (cLib_addCalc(&current.pos.y, home.pos.y - 300.0f, 1.0f, fopAcM_GetSpeedF(this), 1.0f) == 0.0f) {
@@ -255,7 +233,6 @@ void daTogeTrap_c::modeMoveDown() {
     }
 }
 
-/* 80D18994-80D18A5C 000F14 00C8+00 1/1 0/0 0/0 .text            init_modeBreak__12daTogeTrap_cFv */
 void daTogeTrap_c::init_modeBreak() {
     daPy_py_c* player = dComIfGp_getLinkPlayer();
     if (player->getSpinnerRideSpeed() >= l_HIO.mSpinnerSpeed && mpBgW != NULL) {
@@ -265,7 +242,6 @@ void daTogeTrap_c::init_modeBreak() {
     this->mMode = MODE_BREAK;
 }
 
-/* 80D18A5C-80D18BEC 000FDC 0190+00 1/0 0/0 0/0 .text            modeBreak__12daTogeTrap_cFv */
 void daTogeTrap_c::modeBreak() {
     dComIfGp_particle_set(0x8ada, &current.pos, &shape_angle, 0);
     dComIfGp_particle_set(0x8adb, &current.pos, &shape_angle, 0);
@@ -277,7 +253,6 @@ void daTogeTrap_c::modeBreak() {
     fopAcM_delete(this);
 }
 
-/* 80D18BEC-80D18CA4 00116C 00B8+00 1/0 0/0 0/0 .text            Draw__12daTogeTrap_cFv */
 int daTogeTrap_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -290,7 +265,6 @@ int daTogeTrap_c::Draw() {
     return 1;
 }
 
-/* 80D18CA4-80D18CD4 001224 0030+00 1/0 0/0 0/0 .text            Delete__12daTogeTrap_cFv */
 int daTogeTrap_c::Delete() {
     dComIfG_resDelete(&mPhase, "P_Toge");
 
@@ -301,30 +275,22 @@ int daTogeTrap_c::Delete() {
     return 1;
 }
 
-/* 80D18CD4-80D18D00 001254 002C+00 1/0 0/0 0/0 .text            daTogeTrap_Draw__FP12daTogeTrap_c
- */
 static int daTogeTrap_Draw(daTogeTrap_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80D18D00-80D18D20 001280 0020+00 1/0 0/0 0/0 .text daTogeTrap_Execute__FP12daTogeTrap_c */
 static int daTogeTrap_Execute(daTogeTrap_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D18D20-80D18D40 0012A0 0020+00 1/0 0/0 0/0 .text            daTogeTrap_Delete__FP12daTogeTrap_c
- */
 static int daTogeTrap_Delete(daTogeTrap_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D18D40-80D18D60 0012C0 0020+00 1/0 0/0 0/0 .text            daTogeTrap_Create__FP10fopAc_ac_c
- */
 static int daTogeTrap_Create(fopAc_ac_c* i_this) {
     return ((daTogeTrap_c*)i_this)->create();
 }
 
-/* 80D18FD4-80D18FF4 -00001 0020+00 1/0 0/0 0/0 .data            l_daTogeTrap_Method */
 static actor_method_class l_daTogeTrap_Method = {
     (process_method_func)daTogeTrap_Create,
     (process_method_func)daTogeTrap_Delete,
@@ -333,7 +299,6 @@ static actor_method_class l_daTogeTrap_Method = {
     (process_method_func)daTogeTrap_Draw,
 };
 
-/* 80D18FF4-80D19024 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_TogeTrap */
 extern actor_process_profile_definition g_profile_Obj_TogeTrap = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

@@ -14,15 +14,15 @@
  */
 class daObjIBone_c : public fopAc_ac_c {
 public:
-    /* 80C27830 */ void initBaseMtx();
-    /* 80C2786C */ void setBaseMtx();
-    /* 80C278CC */ int Create();
-    /* 80C279A8 */ int CreateHeap();
-    /* 80C27A20 */ int create();
-    /* 80C27C4C */ int execute();
-    /* 80C27E48 */ void setBreakEffect();
-    /* 80C27FEC */ int draw();
-    /* 80C28050 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    void setBreakEffect();
+    int draw();
+    int _delete();
 
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ J3DModel* mpModel;

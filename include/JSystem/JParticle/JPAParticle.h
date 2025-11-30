@@ -20,13 +20,13 @@ struct JPAEmitterWorkData;
 class JPABaseParticle {
 public:
     ~JPABaseParticle() {}
-    /* 8027EFEC */ void init_p(JPAEmitterWorkData*);
-    /* 8027F8C8 */ void init_c(JPAEmitterWorkData*, JPABaseParticle*);
-    /* 8027FFD0 */ bool calc_p(JPAEmitterWorkData*);
-    /* 80280260 */ bool calc_c(JPAEmitterWorkData*);
-    /* 802804C8 */ bool canCreateChild(JPAEmitterWorkData*);
-    /* 80280548 */ f32 getWidth(JPABaseEmitter const*) const;
-    /* 80280568 */ f32 getHeight(JPABaseEmitter const*) const;
+    void init_p(JPAEmitterWorkData*);
+    void init_c(JPAEmitterWorkData*, JPABaseParticle*);
+    bool calc_p(JPAEmitterWorkData*);
+    bool calc_c(JPAEmitterWorkData*);
+    bool canCreateChild(JPAEmitterWorkData*);
+    f32 getWidth(JPABaseEmitter const*) const;
+    f32 getHeight(JPABaseEmitter const*) const;
     int getAge() { return mAge; }
     void setOffsetPosition(const JGeometry::TVec3<f32>& pos) { mOffsetPosition.set(pos); }
     void setOffsetPosition(f32 x, f32 y, f32 z) { mOffsetPosition.set(x, y, z); }

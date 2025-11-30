@@ -21,36 +21,36 @@ public:
         TYPE_1,
     };
 
-    /* 80B6C1AC */ ~daNpc_Zant_c();
-    /* 80B6C2D0 */ int create();
-    /* 80B6C574 */ int CreateHeap();
-    /* 80B6C700 */ int Delete();
-    /* 80B6C734 */ int Execute();
-    /* 80B6C754 */ int Draw();
-    /* 80B6C7E8 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80B6C808 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80B6C860 */ u8 getType();
-    /* 80B6C880 */ u32 getFlowNodeNo();
-    /* 80B6C89C */ int isDelete();
-    /* 80B6C8CC */ void reset();
-    /* 80B6C9F0 */ void afterJntAnm(int);
-    /* 80B6C9F4 */ void setParam();
-    /* 80B6CAF0 */ void setAfterTalkMotion();
-    /* 80B6CB50 */ void srchActors();
-    /* 80B6CB54 */ BOOL evtTalk();
-    /* 80B6CC54 */ BOOL evtCutProc();
-    /* 80B6CD1C */ void action();
-    /* 80B6CE08 */ void beforeMove();
-    /* 80B6CE80 */ void setAttnPos();
-    /* 80B6D074 */ void setCollision();
-    /* 80B6D1A8 */ int drawDbgInfo();
-    /* 80B6D1B0 */ void drawGhost();
-    /* 80B6D21C */ int selectAction();
-    /* 80B6D264 */ int chkAction(int (daNpc_Zant_c::*)(void*));
-    /* 80B6D290 */ int setAction(int (daNpc_Zant_c::*)(void*));
-    /* 80B6D338 */ int wait(void*);
-    /* 80B6D584 */ int talk(void*);
-    /* 80B6E800 */ daNpc_Zant_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
+    ~daNpc_Zant_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    u32 getFlowNodeNo();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawGhost();
+    int selectAction();
+    int chkAction(int (daNpc_Zant_c::*)(void*));
+    int setAction(int (daNpc_Zant_c::*)(void*));
+    int wait(void*);
+    int talk(void*);
+    daNpc_Zant_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
                                 daNpcT_evtData_c const* param_7, char** param_8) :
@@ -73,7 +73,7 @@ STATIC_ASSERT(sizeof(daNpc_Zant_c) == 0xfa0);
 
 class daNpc_Zant_Param_c {
 public:
-    /* 80B6E93C */ virtual ~daNpc_Zant_Param_c() {}
+    virtual ~daNpc_Zant_Param_c() {}
     struct Data {
         /* 0x00 */ f32 field_0x0;
         /* 0x04 */ f32 field_0x4;

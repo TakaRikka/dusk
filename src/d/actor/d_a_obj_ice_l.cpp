@@ -18,14 +18,10 @@ f32 dummyLiteral() {
     return 0.0f;
 }
 
-/* 80C1F9F8-80C1FA60 000078 0068+00 1/1 0/0 0/0 .text            RideOn_Angle__12daObjIce_l_cFRsfsf
- */
 void daObjIce_l_c::RideOn_Angle(s16& i_angle, f32 param_1, s16 param_2, f32 param_3) {
     cLib_addCalcAngleS(&i_angle, param_2 * (param_1 / param_3), 1, 0x100, 1);
 }
 
-/* 80C1FA60-80C1FCCC 0000E0 026C+00 1/1 0/0 0/0 .text            Check_RideOn__12daObjIce_l_cF4cXyz
- */
 int daObjIce_l_c::Check_RideOn(cXyz param_0) {
     fopAc_ac_c* player_p = (fopAc_ac_c*)daPy_getPlayerActorClass();
     f32 player_speed = 0.0f;
@@ -56,13 +52,11 @@ int daObjIce_l_c::Check_RideOn(cXyz param_0) {
     return 0;
 }
 
-/* 80C1FCCC-80C1FCF8 00034C 002C+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjIce_l_cFv */
 void daObjIce_l_c::initBaseMtx() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     setBaseMtx();
 }
 
-/* 80C1FCF8-80C1FD5C 000378 0064+00 2/2 0/0 0/0 .text            setBaseMtx__12daObjIce_l_cFv */
 void daObjIce_l_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -72,8 +66,6 @@ void daObjIce_l_c::setBaseMtx() {
     cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80C1FD5C-80C20034 0003DC 02D8+00 1/1 0/0 0/0 .text
- * rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c              */
 static void rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2) {
     daPy_py_c* player_p = daPy_getPlayerActorClass();
     cXyz* ball_pos = player_p->getIronBallCenterPos();
@@ -113,39 +105,29 @@ static void rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2
     }
 }
 
-/* 80C20034-80C20060 0006B4 002C+00 1/0 0/0 0/0 .text            daObjIce_l_Draw__FP12daObjIce_l_c
- */
 static int daObjIce_l_Draw(daObjIce_l_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C20060-80C20080 0006E0 0020+00 1/0 0/0 0/0 .text daObjIce_l_Execute__FP12daObjIce_l_c */
 static int daObjIce_l_Execute(daObjIce_l_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C20080-80C20088 000700 0008+00 1/0 0/0 0/0 .text daObjIce_l_IsDelete__FP12daObjIce_l_c */
 static int daObjIce_l_IsDelete(daObjIce_l_c* i_this) {
     return 1;
 }
 
-/* 80C20088-80C200AC 000708 0024+00 1/0 0/0 0/0 .text            daObjIce_l_Delete__FP12daObjIce_l_c
- */
 static int daObjIce_l_Delete(daObjIce_l_c* i_this) {
     i_this->MoveBGDelete();
     return 1;
 }
 
-/* 80C200AC-80C200CC 00072C 0020+00 1/0 0/0 0/0 .text            daObjIce_l_Create__FP10fopAc_ac_c
- */
 static int daObjIce_l_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjIce_l_c*>(i_this)->create();
 }
 
-/* 80C20838-80C2083C -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "V_Ice_l";
 
-/* 80C200CC-80C2030C 00074C 0240+00 1/1 0/0 0/0 .text            create__12daObjIce_l_cFv */
 int daObjIce_l_c::create() {
     fopAcM_ct(this, daObjIce_l_c);
 
@@ -194,7 +176,6 @@ int daObjIce_l_c::create() {
 }
 
 
-/* 80C2030C-80C20384 00098C 0078+00 1/0 0/0 0/0 .text            CreateHeap__12daObjIce_l_cFv */
 int daObjIce_l_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "Ice_l.bmd");
     JUT_ASSERT(82, modelData != NULL);
@@ -207,15 +188,12 @@ int daObjIce_l_c::CreateHeap() {
     return 1;
 }
 
-/* 80C20384-80C203C4 000A04 0040+00 1/0 0/0 0/0 .text            Create__12daObjIce_l_cFv */
 int daObjIce_l_c::Create() {
     initBaseMtx();
     mpBgW->SetRideCallback(rideCallBack);
     return cPhs_COMPLEATE_e;
 }
 
-/* 80C203C4-80C206AC 000A44 02E8+00 1/0 0/0 0/0 .text            Execute__12daObjIce_l_cFPPA3_A4_f
- */
 int daObjIce_l_c::Execute(Mtx** param_0) {
     daPy_py_c* player_p = daPy_getPlayerActorClass();
     cXyz& pos = fopAcM_GetPosition(player_p);
@@ -253,7 +231,6 @@ int daObjIce_l_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80C206AC-80C20750 000D2C 00A4+00 1/0 0/0 0/0 .text            Draw__12daObjIce_l_cFv */
 int daObjIce_l_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -264,13 +241,11 @@ int daObjIce_l_c::Draw() {
     return 1;
 }
 
-/* 80C20750-80C20784 000DD0 0034+00 1/0 0/0 0/0 .text            Delete__12daObjIce_l_cFv */
 int daObjIce_l_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     return 1;
 }
 
-/* 80C2083C-80C2085C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjIce_l_Method */
 static actor_method_class l_daObjIce_l_Method = {
     (process_method_func)daObjIce_l_Create,
     (process_method_func)daObjIce_l_Delete,
@@ -279,7 +254,6 @@ static actor_method_class l_daObjIce_l_Method = {
     (process_method_func)daObjIce_l_Draw,
 };
 
-/* 80C2085C-80C2088C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Ice_l */
 extern actor_process_profile_definition g_profile_Obj_Ice_l = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

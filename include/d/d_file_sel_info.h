@@ -20,17 +20,17 @@ class dSv_save_c;
 
 class dFile_info_c {
 public:
-    /* 80192434 */ dFile_info_c(JKRArchive*, u8);
-    /* 80192570 */ void screenSet();
-    /* 80192954 */ int setSaveData(dSv_save_c*, int, u8);
-    /* 80192AA0 */ void setHeartCnt(dSv_save_c*);
-    /* 80192C08 */ void setSaveDate(dSv_save_c*);
-    /* 80192C70 */ void setPlayTime(dSv_save_c*);
-    /* 80192D58 */ void modeWait();
-    /* 80192D5C */ void modeMove();
-    /* 80192D60 */ void _draw();
+    dFile_info_c(JKRArchive*, u8);
+    void screenSet();
+    int setSaveData(dSv_save_c*, int, u8);
+    void setHeartCnt(dSv_save_c*);
+    void setSaveDate(dSv_save_c*);
+    void setPlayTime(dSv_save_c*);
+    void modeWait();
+    void modeMove();
+    void _draw();
 
-    /* 801924A0 */ virtual ~dFile_info_c();
+    virtual ~dFile_info_c();
 
     void setBasePane(J2DPane* pane) { mFileInfo.mBasePane = pane; }
     CPaneMgrAlpha* getDatBase() { return mDatBase; }

@@ -16,16 +16,16 @@
 
 class daObjIta_c : public dBgS_MoveBgActor {
 public:
-    /* 80C283AC */ void Search_Ymb();
-    /* 80C28674 */ BOOL Check_RideOn();
-    /* 80C28788 */ void initBaseMtx();
-    /* 80C287B4 */ void setBaseMtx();
-    /* 80C28928 */ inline cPhs__Step create();
-    /* 80C28BB0 */ inline int CreateHeap();
-    /* 80C28C28 */ inline int Create();
-    /* 80C28C70 */ inline int Execute(Mtx**);
-    /* 80C290AC */ inline int Draw();
-    /* 80C29150 */ inline int Delete();
+    void Search_Ymb();
+    BOOL Check_RideOn();
+    void initBaseMtx();
+    void setBaseMtx();
+    inline cPhs__Step create();
+    inline int CreateHeap();
+    inline int Create();
+    inline int Execute(Mtx**);
+    inline int Draw();
+    inline int Delete();
     
     f32 dummy2();
 

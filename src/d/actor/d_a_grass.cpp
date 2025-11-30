@@ -15,7 +15,6 @@
 #include "d/actor/d_grass.inc" // IWYU pragma: keep
 #include "d/actor/d_flower.inc"
 
-/* 8051BD4C-8051BEFC 0000EC 01B0+00 1/1 0/0 0/0 .text            randam_addcol_set__FPs */
 static void randam_addcol_set(s16* param_0) {
     s16 temp_r4 = *param_0;
     s16 var_r30 = temp_r4 & 0x1F;
@@ -61,7 +60,6 @@ static void randam_addcol_set(s16* param_0) {
     *param_0 = ((x) << 5) | (var_r30 & 0x1F);
 }
 
-/* 8051BEFC-8051BF68 00029C 006C+00 1/1 0/0 0/0 .text            createGrass__9daGrass_cFv */
 bool daGrass_c::createGrass() {
     if (m_grass != NULL) {
         return 1;
@@ -75,7 +73,6 @@ bool daGrass_c::createGrass() {
     return 1;
 }
 
-/* 8051BF68-8051BFBC 000308 0054+00 1/1 0/0 0/0 .text            deleteGrass__9daGrass_cFv */
 void daGrass_c::deleteGrass() {
     if (m_grass != NULL) {
         delete m_grass;
@@ -86,27 +83,23 @@ void daGrass_c::deleteGrass() {
 dGrass_packet_c::~dGrass_packet_c() {
 }
 
-/* 8051C040-8051C074 0003E0 0034+00 1/1 0/0 0/0 .text            executeGrass__9daGrass_cFv */
 void daGrass_c::executeGrass() {
     if (m_grass != NULL) {
         m_grass->calc();
     }
 }
 
-/* 8051C074-8051C0A8 000414 0034+00 1/1 0/0 0/0 .text            drawGrass__9daGrass_cFv */
 void daGrass_c::drawGrass() {
     if (m_grass != NULL) {
         m_grass->update();
     }
 }
 
-/* 8051C0A8-8051C0D4 000448 002C+00 1/1 0/0 0/0 .text newGrassData__9daGrass_cFR4cXyziUcUcsUc */
 void daGrass_c::newGrassData(cXyz& i_pos, int i_roomNo, u8 i_itemNo, u8 i_itemBitNo, s16 i_addCol,
                              u8 param_5) {
     m_grass->newData(i_pos, i_roomNo, i_itemNo, i_itemBitNo, i_addCol, param_5);
 }
 
-/* 8051C0D4-8051C140 000474 006C+00 1/1 0/0 0/0 .text            createFlower__9daGrass_cFv */
 bool daGrass_c::createFlower() {
     if (m_flower != NULL) {
         return 1;
@@ -120,7 +113,6 @@ bool daGrass_c::createFlower() {
     return 1;
 }
 
-/* 8051C140-8051C194 0004E0 0054+00 1/1 0/0 0/0 .text            deleteFlower__9daGrass_cFv */
 void daGrass_c::deleteFlower() {
     if (m_flower != NULL) {
         delete m_flower;
@@ -128,38 +120,31 @@ void daGrass_c::deleteFlower() {
     }
 }
 
-/* 8051C194-8051C218 000534 0084+00 1/0 0/0 0/0 .text            __dt__16dFlower_packet_cFv */
 dFlower_packet_c::~dFlower_packet_c() {}
 
-/* 8051C218-8051C24C 0005B8 0034+00 1/1 0/0 0/0 .text            executeFlower__9daGrass_cFv */
 void daGrass_c::executeFlower() {
     if (m_flower != NULL) {
         m_flower->calc();
     }
 }
 
-/* 8051C24C-8051C280 0005EC 0034+00 1/1 0/0 0/0 .text            drawFlower__9daGrass_cFv */
 void daGrass_c::drawFlower() {
     if (m_flower != NULL) {
         m_flower->update();
     }
 }
 
-/* 8051C280-8051C2AC 000620 002C+00 1/1 0/0 0/0 .text newFlowerData__9daGrass_cFScR4cXyziScs */
 void daGrass_c::newFlowerData(s8 param_0, cXyz& i_pos, int i_roomNo, s8 i_tableNo, s16 i_addCol) {
     m_flower->newData(param_0, i_pos, i_roomNo, i_tableNo, i_addCol);
 }
 
-/* 8051C2AC-8051C2B0 00064C 0004+00 1/1 0/0 0/0 .text            dGrass_Tex_Change__Fv */
 static void dGrass_Tex_Change() {}
 
-/* 8051C2B0-8051C304 000650 0054+00 1/0 0/0 0/0 .text            daGrass_create__FP9daGrass_c */
 static int daGrass_create(daGrass_c* i_this) {
     fopAcM_ct(i_this, daGrass_c);
     return i_this->create();
 }
 
-/* 8051C304-8051D6CC 0006A4 13C8+00 1/1 0/0 0/0 .text            create__9daGrass_cFv */
 int daGrass_c::create() {
     static csXyz l_setType0[] = {
         csXyz(0, 0, 0),
@@ -379,7 +364,6 @@ int daGrass_c::Delete() {
     return 1;
 }
 
-/* 8051D6CC-8051D720 001A6C 0054+00 1/0 0/0 0/0 .text            daGrass_Delete__FP9daGrass_c */
 static int daGrass_Delete(daGrass_c* i_this) {
     return i_this->Delete();
 }
@@ -394,7 +378,6 @@ int daGrass_c::execute() {
     return 1;
 }
 
-/* 8051D720-8051D77C 001AC0 005C+00 1/0 0/0 0/0 .text            daGrass_execute__FP9daGrass_c */
 static int daGrass_execute(daGrass_c* i_this) {
     return i_this->execute();
 }
@@ -405,12 +388,10 @@ int daGrass_c::draw() {
     return 1;
 }
 
-/* 8051D77C-8051D7B4 001B1C 0038+00 1/0 0/0 0/0 .text            daGrass_draw__FP9daGrass_c */
 static int daGrass_draw(daGrass_c* i_this) {
     return i_this->draw();
 }
 
-/* 80527840-80527860 -00001 0020+00 1/0 0/0 0/0 .data            daGrass_METHODS */
 static actor_method_class daGrass_METHODS = {
     (process_method_func)daGrass_create,
     (process_method_func)daGrass_Delete,
@@ -419,7 +400,6 @@ static actor_method_class daGrass_METHODS = {
     (process_method_func)daGrass_draw,
 };
 
-/* 80527860-80527890 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_GRASS */
 extern actor_process_profile_definition g_profile_GRASS = {
   fpcLy_CURRENT_e,       // mLayerID
   11,                    // mListID

@@ -10,9 +10,9 @@
 
 struct dPa_YkgrPcallBack : public JPAParticleCallBack {
     dPa_YkgrPcallBack();
-    /* 805A8E3C */ ~dPa_YkgrPcallBack() {}
-    /* 805A848C */ void draw(JPABaseEmitter*, JPABaseParticle*);
-    /* 805A84D4 */ void setParam(f32);
+    ~dPa_YkgrPcallBack() {}
+    void draw(JPABaseEmitter*, JPABaseParticle*);
+    void setParam(f32);
 
     /* 0x04 */ f32 field_0x4[2][3];
     /* 0x1C */ s8 field_0x1c;

@@ -11,11 +11,6 @@
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_math.h"
 
-//
-// Declarations:
-//
-
-/* 80D20738-80D2079C 000078 0064+00 1/0 0/0 0/0 .text daObj_Udoor_Draw__FP15obj_udoor_class */
 static int daObj_Udoor_Draw(obj_udoor_class* i_this) {
     g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType_MAJI(i_this->mpModel, &i_this->tevStr);
@@ -23,7 +18,6 @@ static int daObj_Udoor_Draw(obj_udoor_class* i_this) {
     return 1;
 }
 
-/* 80D2079C-80D209BC 0000DC 0220+00 2/1 0/0 0/0 .text daObj_Udoor_Execute__FP15obj_udoor_class */
 static int daObj_Udoor_Execute(obj_udoor_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
@@ -69,12 +63,10 @@ static int daObj_Udoor_Execute(obj_udoor_class* i_this) {
     return 1;
 }
 
-/* 80D209BC-80D209C4 0002FC 0008+00 1/0 0/0 0/0 .text daObj_Udoor_IsDelete__FP15obj_udoor_class */
 static bool daObj_Udoor_IsDelete(obj_udoor_class* param_0) {
     return true;
 }
 
-/* 80D209C4-80D20A1C 000304 0058+00 1/0 0/0 0/0 .text daObj_Udoor_Delete__FP15obj_udoor_class */
 static int daObj_Udoor_Delete(obj_udoor_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "Obj_udoor");
@@ -85,7 +77,6 @@ static int daObj_Udoor_Delete(obj_udoor_class* i_this) {
     return 1;
 }
 
-/* 80D20A1C-80D20B40 00035C 0124+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     static int bmdd[2] = { 4, 5 };
 
@@ -116,7 +107,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80D20B40-80D20D48 000480 0208+00 1/0 0/0 0/0 .text            daObj_Udoor_Create__FP10fopAc_ac_c */
 static cPhs__Step daObj_Udoor_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph cc_sph_src = {
         {
@@ -166,7 +156,6 @@ static cPhs__Step daObj_Udoor_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 80D20E6C-80D20E8C -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Udoor_Method */
 static actor_method_class l_daObj_Udoor_Method = {
     (process_method_func)daObj_Udoor_Create,
     (process_method_func)daObj_Udoor_Delete,
@@ -175,7 +164,6 @@ static actor_method_class l_daObj_Udoor_Method = {
     (process_method_func)daObj_Udoor_Draw,
 };
 
-/* 80D20E8C-80D20EBC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_UDOOR */
 extern actor_process_profile_definition g_profile_OBJ_UDOOR = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

@@ -26,7 +26,7 @@ struct daObj_Pumpkin_HIOParam {
 
 class daObj_Pumpkin_Param_c {
 public:
-    /* 80CB8304 */ virtual ~daObj_Pumpkin_Param_c() {}
+    virtual ~daObj_Pumpkin_Param_c() {}
 
     static const daObj_Pumpkin_HIOParam m;
 };
@@ -114,24 +114,24 @@ private:
     /* 0xBB4 */ u8 field_0xbb4;
 
 public:
-    /* 80CB578C */ virtual ~daObj_Pumpkin_c();
-    /* 80CB5A04 */ int create();
-    /* 80CB5F88 */ int CreateHeap();
-    /* 80CB6018 */ int Delete();
-    /* 80CB604C */ int Execute();
-    /* 80CB7638 */ int Draw();
-    /* 80CB7824 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80CB7844 */ int isDelete();
-    /* 80CB78C8 */ void setEnvTevColor();
-    /* 80CB7924 */ void setRoomNo();
-    /* 80CB7968 */ void reset();
-    /* 80CB79DC */ void setMtx();
-    /* 80CB7AE4 */ s16 calcRollAngle(s16, int);
-    /* 80CB7B84 */ int getWallAngle(s16, s16*);
-    /* 80CB7D14 */ void setSmokePrtcl();
-    /* 80CB7D98 */ void setWaterPrtcl();
-    /* 80CB7E98 */ void setHamonPrtcl();
-    /* 80CB7EF4 */ void crash();
+    virtual ~daObj_Pumpkin_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    int isDelete();
+    void setEnvTevColor();
+    void setRoomNo();
+    void reset();
+    void setMtx();
+    s16 calcRollAngle(s16, int);
+    int getWallAngle(s16, s16*);
+    void setSmokePrtcl();
+    void setWaterPrtcl();
+    void setHamonPrtcl();
+    void crash();
 
     void setMtx(MtxP mtx) {
         cXyz newPos;

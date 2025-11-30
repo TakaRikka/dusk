@@ -12,12 +12,12 @@ class JSUMemoryInputStream : public JSURandomInputStream {
 public:
     JSUMemoryInputStream(const void* res, s32 size) { setBuffer(res, size); }
 
-    /* 802552B8 */ virtual ~JSUMemoryInputStream() {}
-    /* 802DC520 */ void setBuffer(void const*, s32);
-    /* 802DC534 */ u32 readData(void*, s32);
-    /* 802DC5AC */ s32 seekPos(s32, JSUStreamSeekFrom);
-    /* 802DC628 */ s32 getLength() const;
-    /* 802DC630 */ s32 getPosition() const;
+    virtual ~JSUMemoryInputStream() {}
+    void setBuffer(void const*, s32);
+    u32 readData(void*, s32);
+    s32 seekPos(s32, JSUStreamSeekFrom);
+    s32 getLength() const;
+    s32 getPosition() const;
 
     void* getPointer() const {
         return (u8*)mBuffer + mPosition;

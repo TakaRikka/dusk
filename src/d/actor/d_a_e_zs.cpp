@@ -11,21 +11,15 @@
 
 class daE_ZS_HIO_c {
 public:
-    /* 808330AC */ daE_ZS_HIO_c();
-    /* 80834DDC */ virtual ~daE_ZS_HIO_c() {}
+    daE_ZS_HIO_c();
+    virtual ~daE_ZS_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 field_0x8;
     /* 0xc */ f32 field_0xc;
 };
 
-//
-// Declarations:
-//
-
 namespace {
-/* 80835384-808353C8 000038 0044+00 1/1 0/0 0/0 .data            cc_zs_src__22@unnamed@d_a_e_zs_cpp@
- */
 static dCcD_SrcCyl cc_zs_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x43}, 0x75}},  // mObj
@@ -41,14 +35,12 @@ static dCcD_SrcCyl cc_zs_src = {
 };
 }
 
-/* 808330AC-808330DC 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__12daE_ZS_HIO_cFv */
 daE_ZS_HIO_c::daE_ZS_HIO_c() {
     field_0x4 = -1;
     field_0x8 = 1.4;
     field_0xc = 1200.0f;
 }
 
-/* 808330DC-808331C4 00011C 00E8+00 1/1 0/0 0/0 .text            draw__8daE_ZS_cFv */
 int daE_ZS_c::draw() {
     if (field_0x673 == 0) {
         return 1;
@@ -66,32 +58,25 @@ int daE_ZS_c::draw() {
     return 1;
 }
 
-/* 808331C4-808331E4 000204 0020+00 1/0 0/0 0/0 .text            daE_ZS_Draw__FP8daE_ZS_c */
 static int daE_ZS_Draw(daE_ZS_c* i_this) {
     return i_this->draw();
 }
 
-/* 808331E4-80833290 000224 00AC+00 4/4 0/0 0/0 .text            setBck__8daE_ZS_cFiUcff */
 void daE_ZS_c::setBck(int i_res_index, u8 i_attr, f32 i_morf, f32 i_rate) {
     J3DAnmTransform* anmTransform = (J3DAnmTransform*)dComIfG_getObjectRes("E_ZS", i_res_index);
     mpMorf->setAnm(anmTransform, i_attr, i_morf, i_rate, 0.0f, -1.0f);
     mResIndex = i_res_index;
 }
 
-/* 80833290-8083329C 0002D0 000C+00 7/7 0/0 0/0 .text            setActionMode__8daE_ZS_cFii */
 void daE_ZS_c::setActionMode(int i_action, int i_mode) {
     mAction = i_action;
     mMode = i_mode;
 }
 
-/* ############################################################################################## */
-/* 808354A0-808354A4 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 lbl_259_bss_8;
 
-/* 808354B0-808354C0 000018 0010+00 6/6 0/0 0/0 .bss             l_HIO */
 static daE_ZS_HIO_c l_HIO;
 
-/* 8083329C-8083364C 0002DC 03B0+00 1/1 0/0 0/0 .text            damage_check__8daE_ZS_cFv */
 void daE_ZS_c::damage_check() {
     static u16 eff_Damage_id[] = {0x8BE9, 0x8BEA, 0x8BEB};
 
@@ -148,7 +133,6 @@ void daE_ZS_c::damage_check() {
     }
 }
 
-/* 8083364C-80833698 00068C 004C+00 4/4 0/0 0/0 .text            s_BossSearch__FPvPv */
 static void* s_BossSearch(void* i_lhs, void* i_rhs) {
     if (fopAcM_IsActor(i_lhs) && fopAcM_GetName(i_lhs) == 0xf6) {
         return i_lhs;
@@ -156,7 +140,6 @@ static void* s_BossSearch(void* i_lhs, void* i_rhs) {
     return NULL;
 }
 
-/* 80833698-80833964 0006D8 02CC+00 2/2 0/0 0/0 .text            mBossHandCheck__8daE_ZS_cFv */
 u8 daE_ZS_c::mBossHandCheck() {
     daB_DS_c* stallord_boss = (daB_DS_c*) fpcM_Search(s_BossSearch, this);
     if (stallord_boss == NULL) {
@@ -179,11 +162,9 @@ u8 daE_ZS_c::mBossHandCheck() {
     return 0;
 }
 
-/* 808354C0-808354C4 -00001 0004+00 3/3 0/0 0/0 .bss             None */
 static u8 lbl_259_bss_28;
 static u8 lbl_259_bss_29;
 
-/* 80833964-80833D30 0009A4 03CC+00 1/1 0/0 0/0 .text            executeAppear__8daE_ZS_cFv */
 void daE_ZS_c::executeAppear() {
     static u16 eff_Appear_id[] = {0x8BE7, 0x8BE8};
 
@@ -275,7 +256,6 @@ void daE_ZS_c::executeAppear() {
     }
 }
 
-/* 80833D30-80833F1C 000D70 01EC+00 1/2 0/0 0/0 .text            executeWait__8daE_ZS_cFv */
 void daE_ZS_c::executeWait() {
     switch (mMode) {
         case 0:
@@ -315,7 +295,6 @@ void daE_ZS_c::executeWait() {
     }
 }
 
-/* 80833F1C-80834108 000F5C 01EC+00 1/1 0/0 0/0 .text            executeDamage__8daE_ZS_cFv */
 void daE_ZS_c::executeDamage() {
     static u16 w_eff_id[] = {0x854C, 0x854D, 0x854E, 0x854F};
 
@@ -352,7 +331,6 @@ void daE_ZS_c::executeDamage() {
     }
 }
 
-/* 80834108-808342C8 001148 01C0+00 1/1 0/0 0/0 .text            executeDrive__8daE_ZS_cFv */
 void daE_ZS_c::executeDrive() {
     switch (mMode) {
         case 0:
@@ -389,7 +367,6 @@ void daE_ZS_c::executeDrive() {
     }
 }
 
-/* 808342C8-80834478 001308 01B0+00 1/1 0/0 0/0 .text            action__8daE_ZS_cFv */
 void daE_ZS_c::action() {
     damage_check();
     switch (mAction) {
@@ -434,7 +411,6 @@ void daE_ZS_c::action() {
     }
 }
 
-/* 80834478-80834518 0014B8 00A0+00 1/1 0/0 0/0 .text            mtx_set__8daE_ZS_cFv */
 void daE_ZS_c::mtx_set() {
     if (field_0x673) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
@@ -446,7 +422,6 @@ void daE_ZS_c::mtx_set() {
     }
 }
 
-/* 80834518-80834650 001558 0138+00 1/1 0/0 0/0 .text            cc_set__8daE_ZS_cFv */
 void daE_ZS_c::cc_set() {
     if (field_0x673) {
         cXyz my_vec_0;
@@ -467,7 +442,6 @@ void daE_ZS_c::cc_set() {
     }
 }
 
-/* 80834650-808346BC 001690 006C+00 1/1 0/0 0/0 .text            execute__8daE_ZS_cFv */
 int daE_ZS_c::execute() {
     if (field_0x670 != 0) {
         --field_0x670;
@@ -483,17 +457,14 @@ int daE_ZS_c::execute() {
     return 1;
 }
 
-/* 808346BC-808346DC 0016FC 0020+00 2/1 0/0 0/0 .text            daE_ZS_Execute__FP8daE_ZS_c */
 static int daE_ZS_Execute(daE_ZS_c* i_this) {
     return i_this->execute();
 }
 
-/* 808346DC-808346E4 00171C 0008+00 1/0 0/0 0/0 .text            daE_ZS_IsDelete__FP8daE_ZS_c */
 static int daE_ZS_IsDelete(daE_ZS_c* i_this) {
     return true;
 }
 
-/* 808346E4-80834758 001724 0074+00 1/1 0/0 0/0 .text            _delete__8daE_ZS_cFv */
 int daE_ZS_c::_delete() {
     dComIfG_resDelete(&mPhase, "E_ZS");
     if (field_0xa28) {
@@ -507,12 +478,10 @@ int daE_ZS_c::_delete() {
     return 1;
 }
 
-/* 80834758-80834778 001798 0020+00 1/0 0/0 0/0 .text            daE_ZS_Delete__FP8daE_ZS_c */
 static int daE_ZS_Delete(daE_ZS_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80834778-80834864 0017B8 00EC+00 1/1 0/0 0/0 .text            CreateHeap__8daE_ZS_cFv */
 int daE_ZS_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes("E_ZS", 0xC);
     JUT_ASSERT(0x3e9, modelData != NULL);
@@ -524,12 +493,10 @@ int daE_ZS_c::CreateHeap() {
     return 1;
 }
 
-/* 80834864-80834884 0018A4 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static void useHeapInit(fopAc_ac_c* i_this) {
     static_cast<daE_ZS_c*>(i_this)->CreateHeap();
 }
 
-/* 80834884-80834BA8 0018C4 0324+00 1/1 0/0 0/0 .text            create__8daE_ZS_cFv */
 int daE_ZS_c::create() {
     fopAcM_ct(this, daE_ZS_c);
     int phase = dComIfG_resLoad(&mPhase, "E_ZS");
@@ -588,12 +555,10 @@ int daE_ZS_c::create() {
     return phase;
 }
 
-/* 80834D74-80834D94 001DB4 0020+00 1/0 0/0 0/0 .text            daE_ZS_Create__FP8daE_ZS_c */
 static int daE_ZS_Create(daE_ZS_c* i_this) {
     return i_this->create();
 }
 
-/* 808353DC-808353FC -00001 0020+00 1/0 0/0 0/0 .data            l_daE_ZS_Method */
 static actor_method_class l_daE_ZS_Method = {
     (process_method_func)daE_ZS_Create,
     (process_method_func)daE_ZS_Delete,
@@ -602,7 +567,6 @@ static actor_method_class l_daE_ZS_Method = {
     (process_method_func)daE_ZS_Draw,
 };
 
-/* 808353FC-8083542C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_ZS */
 extern actor_process_profile_definition g_profile_E_ZS = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

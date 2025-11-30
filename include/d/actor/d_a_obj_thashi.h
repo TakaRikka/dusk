@@ -16,14 +16,14 @@
  */
 class daObjTHASHI_c : public dBgS_MoveBgActor {
 public:
-    /* 80D0C238 */ void initCcCylinder();
-    /* 80D0C354 */ void setBaseMtx();
-    /* 80D0C654 */ int CreateHeap();
-    /* 80D0C8B4 */ int create();
-    /* 80D0CE70 */ int Create();
-    /* 80D0CEB4 */ int Execute(Mtx**);
-    /* 80D0CEE0 */ int Draw();
-    /* 80D0D140 */ int Delete();
+    void initCcCylinder();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
 // private:
 

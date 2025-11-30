@@ -8,14 +8,12 @@
 #include "d/actor/d_a_obj_knBullet.h"
 #include "d/actor/d_a_npc_kn.h"
 
-/* 80C47950-80C4795C 000000 000C+00 4/4 0/0 0/0 .rodata          l_DATA */
 static const daObjKnBullet_Hio_Param_c l_DATA = {
     30.0f,
     20.0f,
     150
 };
 
-/* 80C4795C-80C4799C 00000C 0040+00 1/1 0/0 0/0 .rodata          l_sph_src */
 const static dCcD_SrcSph l_sph_src = {
     {
         {0x0, {{AT_TYPE_THROW_OBJ, 0x0, 0xd}, {0x10, 0x1f}, 0x0}}, // mObj
@@ -28,7 +26,6 @@ const static dCcD_SrcSph l_sph_src = {
     } // mSphAttr
 };
 
-/* 80C47118-80C47270 000078 0158+00 1/1 0/0 0/0 .text            Create__15daObjKnBullet_cFv */
 int daObjKnBullet_c::Create() {
     fopAcM_ct(this, daObjKnBullet_c);
 
@@ -47,7 +44,6 @@ int daObjKnBullet_c::Create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80C47300-80C47480 000260 0180+00 1/1 0/0 0/0 .text            Execute__15daObjKnBullet_cFv */
 int daObjKnBullet_c::Execute() {
     if (!col_chk()) {
         return 1;
@@ -79,24 +75,20 @@ int daObjKnBullet_c::Execute() {
     return 1;
 }
 
-/* 80C47480-80C47488 0003E0 0008+00 1/1 0/0 0/0 .text            Draw__15daObjKnBullet_cFv */
 int daObjKnBullet_c::Draw() {
     return 1;
 }
 
-/* 80C47488-80C47490 0003E8 0008+00 1/1 0/0 0/0 .text            Delete__15daObjKnBullet_cFv */
 int daObjKnBullet_c::Delete() {
     return 1;
 }
 
-/* 80C47490-80C474E8 0003F0 0058+00 2/2 0/0 0/0 .text            setBaseMtx__15daObjKnBullet_cFv */
 void daObjKnBullet_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::XYZrotM(shape_angle);
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
-/* 80C474E8-80C47558 000448 0070+00 1/1 0/0 0/0 .text            col_init__15daObjKnBullet_cFv */
 void daObjKnBullet_c::col_init() {
     mCcStts.Init(0xFF, 0xFF, this);
     mCcSph.Set(l_sph_src);
@@ -105,7 +97,6 @@ void daObjKnBullet_c::col_init() {
     mCcSph.SetR(l_DATA.radius);
 }
 
-/* 80C47558-80C477B4 0004B8 025C+00 1/1 0/0 0/0 .text            col_chk__15daObjKnBullet_cFv */
 BOOL daObjKnBullet_c::col_chk() {
     if (mActionMode == 0) {
         return TRUE;
@@ -163,7 +154,6 @@ BOOL daObjKnBullet_c::col_chk() {
     return TRUE;
 }
 
-/* 80C477B4-80C478A4 000714 00F0+00 1/1 0/0 0/0 .text            hitPrtclSet__15daObjKnBullet_cFv */
 void daObjKnBullet_c::hitPrtclSet() {
     for (int i = 0; i < 3; i++) {
         JPABaseEmitter* emt = dComIfGp_particle_getEmitter(mEmtIds[i]);
@@ -184,34 +174,26 @@ void daObjKnBullet_c::hitPrtclSet() {
     }
 }
 
-/* 80C478A4-80C478C4 000804 0020+00 1/0 0/0 0/0 .text daObjKnBullet_Execute__FP15daObjKnBullet_c
- */
 static int daObjKnBullet_Execute(daObjKnBullet_c* i_this) {
     return i_this->Execute();
 }
 
-/* 80C478C4-80C478E4 000824 0020+00 1/0 0/0 0/0 .text daObjKnBullet_Draw__FP15daObjKnBullet_c */
 static int daObjKnBullet_Draw(daObjKnBullet_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80C478E4-80C478EC 000844 0008+00 1/0 0/0 0/0 .text daObjKnBullet_IsDelete__FP15daObjKnBullet_c
- */
 static int daObjKnBullet_IsDelete(daObjKnBullet_c* i_this) {
     return 1;
 }
 
-/* 80C478EC-80C4790C 00084C 0020+00 1/0 0/0 0/0 .text daObjKnBullet_Delete__FP15daObjKnBullet_c */
 static int daObjKnBullet_Delete(daObjKnBullet_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80C4790C-80C4792C 00086C 0020+00 1/0 0/0 0/0 .text daObjKnBullet_create__FP10fopAc_ac_c */
 static int daObjKnBullet_create(fopAc_ac_c* i_this) {
     return ((daObjKnBullet_c*)i_this)->Create();
 }
 
-/* 80C479CC-80C479EC -00001 0020+00 1/0 0/0 0/0 .data            l_daObjKnBullet_Method */
 static actor_method_class l_daObjKnBullet_Method = {
     (process_method_func)daObjKnBullet_create,
     (process_method_func)daObjKnBullet_Delete,
@@ -220,7 +202,6 @@ static actor_method_class l_daObjKnBullet_Method = {
     (process_method_func)daObjKnBullet_Draw,
 };
 
-/* 80C479EC-80C47A1C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KN_BULLET */
 extern actor_process_profile_definition g_profile_KN_BULLET = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

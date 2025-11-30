@@ -5,9 +5,9 @@
 
 class daTagAJnot_c : public fopAc_ac_c {
 public:
-    /* 805A2658 */ int create();
-    /* 805A26C8 */ ~daTagAJnot_c();
-    /* 805A2744 */ int execute();
+    int create();
+    ~daTagAJnot_c();
+    int execute();
 };
 
 #endif /* D_A_TAG_AJNOT_H */

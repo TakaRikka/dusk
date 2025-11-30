@@ -26,19 +26,19 @@ public:
 
     daLv3Water_c() : dEvLib_callback_c(this) {}
 
-    /* 80C58838 */ void setBaseMtx();
-    /* 80C5891C */ virtual int CreateHeap();
-    /* 80C58ABC */ int create();
-    /* 80C58D68 */ virtual int Execute(Mtx**);
-    /* 80C58E20 */ void effectSet();
-    /* 80C596F4 */ void mode_proc_wait();
-    /* 80C59754 */ void mode_init_levelCtrl();
-    /* 80C597FC */ void mode_proc_levelCtrl();
-    /* 80C598BC */ virtual int Draw();
-    /* 80C59AA0 */ virtual int Delete();
+    void setBaseMtx();
+    virtual int CreateHeap();
+    int create();
+    virtual int Execute(Mtx**);
+    void effectSet();
+    void mode_proc_wait();
+    void mode_init_levelCtrl();
+    void mode_proc_levelCtrl();
+    virtual int Draw();
+    virtual int Delete();
 
-    /* 80C59D80 */ virtual ~daLv3Water_c() {}
-    /* 80C59AE0 */ virtual bool eventStart();
+    virtual ~daLv3Water_c() {}
+    virtual bool eventStart();
 
     int getParam() { return fpcM_GetParam(this) >> 0xC & 0x0FFF; }
     int getParamSw() { return fpcM_GetParam(this) & 0xFF; }

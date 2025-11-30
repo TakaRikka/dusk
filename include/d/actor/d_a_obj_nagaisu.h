@@ -10,15 +10,15 @@ class daObjNagaisu_c;
 // child seat / couch?
 class daObjIsuChild_c {
 public:
-    /* 80C9FA90 */ daObjIsuChild_c();
-    /* 80C9FCDC */ virtual ~daObjIsuChild_c();
-    /* 80C9FD4C */ int createHeap();
-    /* 80C9FE28 */ void create(daObjNagaisu_c*, dCcD_Stts*);
-    /* 80C9FF54 */ int execute();
-    /* 80CA0034 */ int draw(dMdl_c*);
-    /* 80CA00B8 */ void Delete();
-    /* 80CA0118 */ bool chkHit();
-    /* 80CA0180 */ void callEmt();
+    daObjIsuChild_c();
+    virtual ~daObjIsuChild_c();
+    int createHeap();
+    void create(daObjNagaisu_c*, dCcD_Stts*);
+    int execute();
+    int draw(dMdl_c*);
+    void Delete();
+    bool chkHit();
+    void callEmt();
     
     void setDeadFlg(bool i_flg) { mIsDead = i_flg; }
     bool getDeadFlg() { return mIsDead; }
@@ -49,15 +49,15 @@ public:
  */
 class daObjNagaisu_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80C9F3D8 */ daObjNagaisu_c();
-    /* 80C9F4B8 */ virtual ~daObjNagaisu_c();
-    /* 80C9F5A8 */ int createHeap();
-    /* 80C9F668 */ int create();
-    /* 80C9F7A8 */ int Delete();
-    /* 80C9F81C */ int draw();
-    /* 80C9F8C4 */ int execute();
-    /* 80C9F914 */ void init();
-    /* 80C9F944 */ void setIsu();
+    daObjNagaisu_c();
+    virtual ~daObjNagaisu_c();
+    int createHeap();
+    int create();
+    int Delete();
+    int draw();
+    int execute();
+    void init();
+    void setIsu();
 
     static const int REMOVE_ISU_IDX[];
 

@@ -9,7 +9,6 @@
 #include "f_op/f_op_scene.h"
 #include "f_pc/f_pc_leaf.h"
 
-/* 803C32B0-803C32D8 -00001 0028+00 0/0 0/0 1/0 .data            g_profile_WARNING_SCENE */
 extern scene_process_profile_definition g_profile_WARNING_SCENE = {
     fpcLy_ROOT_e,           // mLayerID     
     1,                      // mListID
@@ -23,7 +22,6 @@ extern scene_process_profile_definition g_profile_WARNING_SCENE = {
     NULL,                   // mpMtd
 };
 
-/* 803C32D8-803C3300 -00001 0028+00 0/0 0/0 1/0 .data            g_profile_WARNING2_SCENE */
 extern scene_process_profile_definition g_profile_WARNING2_SCENE = {
     fpcLy_ROOT_e,           // mLayerID          
     1,                      // mListID   

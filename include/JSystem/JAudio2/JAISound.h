@@ -45,8 +45,8 @@ class JASTrack;
  * 
  */
 struct JAISoundStatus_ {
-    /* 802A2220 */ s32 lockWhenPrepared();
-    /* 802A2244 */ s32 unlockIfLocked();
+    s32 lockWhenPrepared();
+    s32 unlockIfLocked();
 
     void init() {
         field_0x0.value = 0;
@@ -233,26 +233,26 @@ class JAITempoMgr;
  */
 class JAISound {
 public:
-    /* 802A21A0 */ void releaseHandle();
-    /* 802A21BC */ void attachHandle(JAISoundHandle* handle);
-    /* 802A22F8 */ JAISound();
-    /* 802A2328 */ void start_JAISound_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience);
-    /* 802A244C */ bool acceptsNewAudible() const;
-    /* 802A2474 */ void newAudible(const JGeometry::TVec3<f32>&, JGeometry::TVec3<f32> const*, u32,
+    void releaseHandle();
+    void attachHandle(JAISoundHandle* handle);
+    JAISound();
+    void start_JAISound_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience);
+    bool acceptsNewAudible() const;
+    void newAudible(const JGeometry::TVec3<f32>&, JGeometry::TVec3<f32> const*, u32,
                                    JAIAudience*);
-    /* 802A2598 */ void stop();
-    /* 802A24DC */ void stop(u32 fadeTime);
-    /* 802A25F0 */ void die_JAISound_();
-    /* 802A266C */ void increasePrepareCount_JAISound_();
-    /* 802A26B8 */ bool calc_JAISound_();
-    /* 802A29DC */ void initTrack_JAISound_(JASTrack* track);
+    void stop();
+    void stop(u32 fadeTime);
+    void die_JAISound_();
+    void increasePrepareCount_JAISound_();
+    bool calc_JAISound_();
+    void initTrack_JAISound_(JASTrack* track);
 
     virtual s32 getNumChild() const = 0;
     virtual JAISoundChild* getChild(int) = 0;
     virtual void releaseChild(int) = 0;
-    /* 802A25D8 */ virtual JAISe* asSe();
-    /* 802A25E0 */ virtual JAISeq* asSeq();
-    /* 802A25E8 */ virtual JAIStream* asStream();
+    virtual JAISe* asSe();
+    virtual JAISeq* asSeq();
+    virtual JAIStream* asStream();
     virtual JASTrack* getTrack() = 0;
     virtual JASTrack* getChildTrack(int) = 0;
     virtual JAITempoMgr* getTempoMgr() = 0;

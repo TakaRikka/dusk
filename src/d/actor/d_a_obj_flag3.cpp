@@ -52,13 +52,10 @@ public:
 daObjFlag3_Hio_c M_hio;
 #endif
 
-/* 80BF0458-80BF046C 000000 0014+00 3/3 0/0 0/0 .rodata          M_attr__12daObjFlag3_c */
 daObjFlag3_Attr_c const daObjFlag3_c::M_attr = {
     -2.0f, 0.6f, 0.68f, 40.0f, 100.0f,
 };
 
-/* 80BEF278-80BEF6D0 000878 0458+00 1/1 0/0 0/0 .text
- * calcFlagFactor__12FlagCloth2_cFP4cXyzP4cXyzP4cXyzi           */
 inline cXyz FlagCloth2_c::calcFlagFactor(cXyz* param_1, cXyz* param_2, cXyz* param_3, int param_4) {
     cXyz flagFactor(0.0f, 0.0f, 0.0f);
     if (param_4 == 0 || param_4 == 30) {
@@ -140,7 +137,6 @@ inline void FlagCloth2_c::calcFlagFactorSub(cXyz* param_1, cXyz* param_2, cXyz* 
     *param_3 += cStack_38;
 }
 
-/* 80BEEF74-80BEF278 000574 0304+00 2/2 0/0 0/0 .text calcFlagNormal__12FlagCloth2_cFP4cXyzi */
 inline void FlagCloth2_c::calcFlagNormal(cXyz* param_1, int param_2) {
     cXyz* pPos = getPos();
     cXyz cStack_44(pPos[param_2]);
@@ -226,7 +222,6 @@ void FlagCloth2_c::initCcSphere(fopAc_ac_c*) {
     };
 }
 
-/* 80BF00A0-80BF0434 0016A0 0394+00 1/0 0/0 0/0 .text            draw__12FlagCloth2_cFv */
 inline void FlagCloth2_c::draw() {
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
@@ -303,7 +298,6 @@ inline void FlagCloth2_c::draw() {
     J3DShape::resetVcdVatCache();
 }
 
-/* 80BEEA78-80BEEC3C 000078 01C4+00 1/1 0/0 0/0 .text            createHeap__12daObjFlag3_cFv */
 int daObjFlag3_c::createHeap() {
     s8 flagNum = (u8)shape_angle.x;
     if (mFlagValid) {
@@ -329,7 +323,6 @@ int daObjFlag3_c::createHeap() {
     return mModel != NULL ? TRUE : FALSE;
 }
 
-/* 80BEEC3C-80BEEC5C 00023C 0020+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjFlag3_c*>(i_this)->createHeap();
 }
@@ -346,18 +339,14 @@ inline int daObjFlag3_c::draw() {
     return 1;
 }
 
-/* 80BEEC5C-80BEED1C 00025C 00C0+00 1/0 0/0 0/0 .text            daObjFlag3_Draw__FP12daObjFlag3_c
- */
 static int daObjFlag3_Draw(daObjFlag3_c* i_this) {
     return i_this->draw();
 }
 
-/* 80BEED1C-80BEED3C 00031C 0020+00 1/0 0/0 0/0 .text daObjFlag3_Execute__FP12daObjFlag3_c */
 static int daObjFlag3_Execute(daObjFlag3_c* i_this) {
     return i_this->execute();
 }
 
-/* 80BEED3C-80BEEDA8 00033C 006C+00 1/1 0/0 0/0 .text            execute__12daObjFlag3_cFv */
 int daObjFlag3_c::execute() {
     if (!mFlagValid) {
         return 1;
@@ -377,7 +366,6 @@ int daObjFlag3_c::execute() {
 }
 
 
-/* 80BEEDE4-80BEEF74 0003E4 0190+00 1/1 0/0 0/0 .text            execute__12FlagCloth2_cFv */
 void FlagCloth2_c::execute() {
     cXyz direction;
     f32 power;
@@ -409,20 +397,16 @@ void FlagCloth2_c::execute() {
     DCStoreRangeNoSync(getNormalBack(), sizeof(cXyz) * 36);
 }
 
-/* 80BEF6D0-80BEF6D8 000CD0 0008+00 1/0 0/0 0/0 .text daObjFlag3_IsDelete__FP12daObjFlag3_c */
 static int daObjFlag3_IsDelete(daObjFlag3_c* i_this) {
     return 1;
 }
 
-/* 80BEF6D8-80BEF700 000CD8 0028+00 1/0 0/0 0/0 .text            daObjFlag3_Delete__FP12daObjFlag3_c
- */
 static int daObjFlag3_Delete(daObjFlag3_c* i_this) {
     fopAcM_GetID(i_this);
     i_this->~daObjFlag3_c();
     return 1;
 }
 
-/* 80BEF700-80BEF790 000D00 0090+00 1/1 0/0 0/0 .text            __dt__12daObjFlag3_cFv */
 daObjFlag3_c::~daObjFlag3_c() {
     #ifdef DEBUG
     M_hio.dt();
@@ -434,11 +418,8 @@ daObjFlag3_c::~daObjFlag3_c() {
     dComIfG_resDelete(&mArcPhase, daSetBgObj_c::getArcName(this));
 }
 
-/* 80BEF790-80BEF93C 000D90 01AC+00 2/1 0/0 0/0 .text            __dt__12FlagCloth2_cFv */
 FlagCloth2_c::~FlagCloth2_c() {}
 
-/* 80BEF93C-80BEF95C 000F3C 0020+00 1/0 0/0 0/0 .text            daObjFlag3_Create__FP10fopAc_ac_c
- */
 static int daObjFlag3_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return static_cast<daObjFlag3_c*>(i_this)->create();
@@ -450,7 +431,6 @@ void daObjFlag3_c::initBaseMtx() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
 }
 
-/* 80BEFBC4-80BEFD08 0011C4 0144+00 1/1 0/0 0/0 .text            create_init__12daObjFlag3_cFv */
 void daObjFlag3_c::create_init() {
     int* pOffset = (int*)dComIfG_getObjectRes(daSetBgObj_c::getArcName(this), "spec.dat");
     f32 offset = (u16)*pOffset;
@@ -470,7 +450,6 @@ void daObjFlag3_c::create_init() {
     #endif
 }
 
-/* 80BEFD08-80BEFF30 001308 0228+00 1/1 0/0 0/0 .text            initFlagPos__12FlagCloth2_cFP4cXyzP10fopAc_ac_c */
 void FlagCloth2_c::initFlagPos(cXyz* param_0, fopAc_ac_c* param_1) {
     mpFlagPosition = param_0;
     cXyz direction;
@@ -503,7 +482,6 @@ void FlagCloth2_c::initFlagPos(cXyz* param_0, fopAc_ac_c* param_1) {
     initTexCoord();
 }
 
-/* 80BEF95C-80BEFBC4 000F5C 0268+00 1/1 0/0 0/0 .text            create__12daObjFlag3_cFv */
 int daObjFlag3_c::create() {
     fopAcM_ct(this, daObjFlag3_c);
     s8 flagNum = (u8)shape_angle.x;
@@ -528,7 +506,6 @@ int daObjFlag3_c::create() {
     return rv;
 }
 
-/* 80BF058C-80BF05AC -00001 0020+00 1/0 0/0 0/0 .data            l_daObjFlag3_Method */
 static actor_method_class l_daObjFlag3_Method = {
     (process_method_func)daObjFlag3_Create,
     (process_method_func)daObjFlag3_Delete,
@@ -537,7 +514,6 @@ static actor_method_class l_daObjFlag3_Method = {
     (process_method_func)daObjFlag3_Draw,
 };
 
-/* 80BF05AC-80BF05DC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Flag3 */
 extern actor_process_profile_definition g_profile_Obj_Flag3 = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

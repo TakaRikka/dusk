@@ -11,8 +11,6 @@
 #include "f_pc/f_pc_line.h"
 
 
-/* 800236C0-80023728 0068+00 s=1 e=0 z=0  None .text
- * fpcLnIt_MethodCall__FP16create_tag_classP13method_filter     */
 static s32 fpcLnIt_MethodCall(create_tag_class* i_createTag, method_filter* i_filter) {
     layer_class* layer = static_cast<base_process_class*>(i_createTag->mpTagData)->layer_tag.layer;
     layer_class* save_layer = fpcLy_CurrentLayer();
@@ -25,7 +23,6 @@ static s32 fpcLnIt_MethodCall(create_tag_class* i_createTag, method_filter* i_fi
     return ret;
 }
 
-/* 80023728-80023764 003C+00 s=0 e=1 z=0  None .text      fpcLnIt_Queue__FPFPvPv_i */
 void fpcLnIt_Queue(fpcLnIt_QueueFunc i_queueFunc) {
     method_filter filter;
     filter.mpMethodFunc = (cNdIt_MethodFunc)i_queueFunc;

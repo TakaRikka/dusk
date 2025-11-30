@@ -8,13 +8,13 @@ public:
     /* 0x568 */ f32 mRadius;
     /* 0x56c */ f32 field_0x56c;
 
-    /* 80D618A4 */ void initBaseMtx();
-    /* 80D618C4 */ void setBaseMtx();
-    /* 80D6191C */ int Create();
-    /* 80D6196C */ int CreateHeap();
-    /* 80D61974 */ int create();
-    /* 80D61A00 */ int execute();
-    /* 80D61AB4 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    int _delete();
     f32 GetR() { return mRadius; }
 };
 

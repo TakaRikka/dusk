@@ -13,7 +13,6 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 8061DCB8-8061DDB0 000078 00F8+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jntNo = i_joint->getJntNo();
@@ -35,7 +34,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 8061DDB0-8061DE4C 000170 009C+00 1/0 0/0 0/0 .text            daB_OH2_Draw__FP11b_oh2_class */
 static int daB_OH2_Draw(b_oh2_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
 
@@ -49,11 +47,9 @@ static int daB_OH2_Draw(b_oh2_class* i_this) {
     return 1;
 }
 
-/* 8061EAE8-8061EAEC 000000 0004+00 3/3 0/0 0/0 .bss             boss */
 // pointer to main morpheel boss actor
 static b_ob_class* boss;
 
-/* 8061DE4C-8061E19C 00020C 0350+00 1/1 0/0 0/0 .text            dmcalc__FP11b_oh2_class */
 static void dmcalc(b_oh2_class* i_this) {
     cXyz sp20;
     cXyz sp14;
@@ -133,7 +129,6 @@ static void dmcalc(b_oh2_class* i_this) {
     }
 }
 
-/* 8061E1D8-8061E410 000598 0238+00 1/1 0/0 0/0 .text            action__FP11b_oh2_class */
 static void action(b_oh2_class* i_this) {
     cXyz local_20;
     cXyz vstack_2C;
@@ -176,7 +171,6 @@ static void action(b_oh2_class* i_this) {
     i_this->mpMorf->modelCalc();
 }
 
-/* 8061E410-8061E4E8 0007D0 00D8+00 2/1 0/0 0/0 .text            daB_OH2_Execute__FP11b_oh2_class */
 static int daB_OH2_Execute(b_oh2_class* i_this) {
     if (cDmrNowMidnaTalk()) {
         return 1;
@@ -206,13 +200,10 @@ static int daB_OH2_Execute(b_oh2_class* i_this) {
     return 1;
 }
 
-/* 8061E4E8-8061E4F0 0008A8 0008+00 1/0 0/0 0/0 .text            daB_OH2_IsDelete__FP11b_oh2_class
- */
 static int daB_OH2_IsDelete(b_oh2_class* i_this) {
     return 1;
 }
 
-/* 8061E4F0-8061E540 0008B0 0050+00 1/0 0/0 0/0 .text            daB_OH2_Delete__FP11b_oh2_class */
 static int daB_OH2_Delete(b_oh2_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "B_oh");
     if (i_this->heap != NULL) {
@@ -222,7 +213,6 @@ static int daB_OH2_Delete(b_oh2_class* i_this) {
     return 1;
 }
 
-/* 8061E540-8061E820 000900 02E0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     b_oh2_class* _this = static_cast<b_oh2_class*>(i_this);
 
@@ -274,7 +264,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 8061E868-8061E9EC 000C28 0184+00 1/0 0/0 0/0 .text            daB_OH2_Create__FP10fopAc_ac_c */
 static int daB_OH2_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, b_oh2_class);
     b_oh2_class* _this = static_cast<b_oh2_class*>(i_this);
@@ -304,14 +293,12 @@ static int daB_OH2_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 8061EA8C-8061EAAC -00001 0020+00 1/0 0/0 0/0 .data            l_daB_OH2_Method */
 static actor_method_class l_daB_OH2_Method = {
     (process_method_func)daB_OH2_Create,  (process_method_func)daB_OH2_Delete,
     (process_method_func)daB_OH2_Execute, (process_method_func)daB_OH2_IsDelete,
     (process_method_func)daB_OH2_Draw,
 };
 
-/* 8061EAAC-8061EADC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_B_OH2 */
 extern actor_process_profile_definition g_profile_B_OH2 = {
     fpcLy_CURRENT_e,
     7,

@@ -9,8 +9,6 @@
 #include "d/d_msg_out_font.h"
 #include "d/d_pane_class.h"
 
-/* 80248954-80248F14 243294 05C0+00 0/0 1/1 0/0 .text
- * __ct__14dMsgScrnTree_cFP7JUTFontP10JKRExpHeap                */
 dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
     if (param_1 != NULL) {
         field_0xd8 = param_1;
@@ -133,7 +131,6 @@ dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
     }
 }
 
-/* 80248F14-80249118 243854 0204+00 1/0 0/0 0/0 .text            __dt__14dMsgScrnTree_cFv */
 dMsgScrnTree_c::~dMsgScrnTree_c() {
     delete mpScreen;
     mpScreen = NULL;
@@ -169,7 +166,6 @@ dMsgScrnTree_c::~dMsgScrnTree_c() {
     dComIfGp_getMsgArchive(2)->removeResourceAll();
 }
 
-/* 80249118-80249270 243A58 0158+00 1/0 0/0 0/0 .text            exec__14dMsgScrnTree_cFv */
 void dMsgScrnTree_c::exec() {
     field_0xdc += 1.0f;
     if (field_0xdc >= field_0xd0->getFrameMax()) {
@@ -190,7 +186,6 @@ void dMsgScrnTree_c::exec() {
     mpPmP_c->scale(g_MsgObject_HIO_c.mBoxWoodScaleX, g_MsgObject_HIO_c.mBoxWoodScaleY);
 }
 
-/* 80249270-802492F8 243BB0 0088+00 1/0 0/0 0/0 .text            draw__14dMsgScrnTree_cFv */
 void dMsgScrnTree_c::draw() {
     J2DGrafContext* grafContext = dComIfGp_getCurrentGrafPort();
     grafContext->setup2D();
@@ -198,7 +193,6 @@ void dMsgScrnTree_c::draw() {
     mpOutFont->draw(NULL, 0.0f, 0.0f, 1.0f);
 }
 
-/* 802492F8-802493AC 243C38 00B4+00 1/0 0/0 0/0 .text            fukiAlpha__14dMsgScrnTree_cFf */
 void dMsgScrnTree_c::fukiAlpha(f32 param_0) {
     field_0xc4->setAlphaRate(param_0);
     mpPmP_c->setAlphaRate(param_0 * g_MsgObject_HIO_c.mBoxWoodAlphaP);
@@ -212,8 +206,6 @@ void dMsgScrnTree_c::fukiAlpha(f32 param_0) {
     }
 }
 
-/* 802493AC-802493B0 243CEC 0004+00 1/0 0/0 0/0 .text            fukiScale__14dMsgScrnTree_cFf */
 void dMsgScrnTree_c::fukiScale(f32 param_0) {}
 
-/* 802493B0-802493B4 243CF0 0004+00 1/0 0/0 0/0 .text            fukiTrans__14dMsgScrnTree_cFff */
 void dMsgScrnTree_c::fukiTrans(f32 param_0, f32 param_1) {}

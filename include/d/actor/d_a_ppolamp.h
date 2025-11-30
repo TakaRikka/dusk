@@ -14,16 +14,16 @@
  */
 class daPPolamp_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80D4C958 */ virtual ~daPPolamp_c();
-    /* 80D4C9FC */ int create();
-    /* 80D4CB24 */ int execute();
-    /* 80D4CB84 */ int draw();
-    /* 80D4CCF0 */ int Delete();
-    /* 80D4CD24 */ void setModelMtx();
-    /* 80D4CDA8 */ void setPclModelMtx();
-    /* 80D4CE9C */ int createHeap();
-    /* 80D4CFB0 */ void moveSwing();
-    /* 80D4D10C */ void initParam();
+    virtual ~daPPolamp_c();
+    int create();
+    int execute();
+    int draw();
+    int Delete();
+    void setModelMtx();
+    void setPclModelMtx();
+    int createHeap();
+    void moveSwing();
+    void initParam();
 
 private:
     /* 0x574 */ J3DModel* mModel1;

@@ -74,9 +74,9 @@ STATIC_ASSERT(sizeof(dComIfG_camera_info_class) == 0x38);
 
 class dComIfG_resLoader_c {
 public:
-    /* 8002F314 */ dComIfG_resLoader_c();
-    /* 8002F328 */ ~dComIfG_resLoader_c();
-    /* 8002F3B4 */ int load(char const**, JKRHeap*);
+    dComIfG_resLoader_c();
+    ~dComIfG_resLoader_c();
+    int load(char const**, JKRHeap*);
 
 private:
     /* 0x0 */ const char** mResNameTable;

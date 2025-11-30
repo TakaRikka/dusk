@@ -11,17 +11,14 @@
 #include "d/d_procname.h"
 #include "SSystem/SComponent/c_math.h"
 
-/* 80D4056C-80D4059C 0000EC 0030+00 1/1 0/0 0/0 .text            __ct__16daZrTurara_HIO_cFv */
 daZrTurara_HIO_c::daZrTurara_HIO_c() {
     mDebrisNum = 5;
     // mDebrisRange = 250.0f;
     mDebrisRange = 250.0f;
 }
 
-/* 80D4178C-80D41798 000014 000C+00 2/2 0/0 0/0 .bss             l_HIO */
 static daZrTurara_HIO_c l_HIO;
 
-/* 80D415A0-80D415D0 000004 0030+00 1/1 0/0 0/0 .rodata          mCcDObjInfo__12daZrTurara_c */
 dCcD_SrcGObjInf const daZrTurara_c::mCcDObjInfo = {
     {0, {
         {0, 0, 0},
@@ -33,13 +30,11 @@ dCcD_SrcGObjInf const daZrTurara_c::mCcDObjInfo = {
     {0}
 };
 
-/* 80D41628-80D4166C 000020 0044+00 2/2 0/0 0/0 .data            mCcDCyl__12daZrTurara_c */
 dCcD_SrcCyl daZrTurara_c::mCcDCyl = {
     mCcDObjInfo,
     {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
 };
 
-/* 80D405E4-80D40714 000164 0130+00 2/2 0/0 0/0 .text            setBaseMtx__12daZrTurara_cFv */
 void daZrTurara_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -57,7 +52,6 @@ void daZrTurara_c::setBaseMtx() {
     PSMTXCopy(mDoMtx_stack_c::get(), mRockBgMtx);
 }
 
-/* 80D40714-80D40844 000294 0130+00 1/0 0/0 0/0 .text            CreateHeap__12daZrTurara_cFv */
 int daZrTurara_c::CreateHeap() {
     J3DModelData* base_model_data = (J3DModelData*)dComIfG_getObjectRes("M_DrpRock", 5);
     mpBaseModel = mDoExt_J3DModel__create(base_model_data, 0x80000, 0x11000084);
@@ -79,7 +73,6 @@ int daZrTurara_c::CreateHeap() {
     return 1;
 }
 
-/* 80D40844-80D40B1C 0003C4 02D8+00 1/1 0/0 0/0 .text            create__12daZrTurara_cFv */
 cPhs__Step daZrTurara_c::create() {
     fopAcM_ct(this, daZrTurara_c);
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, "M_DrpRock");
@@ -129,8 +122,6 @@ cPhs__Step daZrTurara_c::create() {
     return step;
 }
 
-/* 80D40C08-80D40C68 000788 0060+00 1/0 0/0 0/0 .text            Execute__12daZrTurara_cFPPA3_A4_f
- */
 int daZrTurara_c::Execute(Mtx** i_mtxP) {
     move();
     *i_mtxP = &mpBaseModel->getBaseTRMtx();
@@ -141,7 +132,6 @@ int daZrTurara_c::Execute(Mtx** i_mtxP) {
     return 1;
 }
 
-/* 80D40C68-80D40D88 0007E8 0120+00 1/1 0/0 0/0 .text            move__12daZrTurara_cFv */
 void daZrTurara_c::move() {
     typedef void (daZrTurara_c::*daZrTurara_modeFunc)();
     static daZrTurara_modeFunc mode_proc[3] = {
@@ -159,7 +149,6 @@ void daZrTurara_c::move() {
 }
 
 
-/* 80D40D88-80D40E0C 000908 0084+00 1/0 0/0 0/0 .text            modeWait__12daZrTurara_cFv */
 void daZrTurara_c::modeWait() {
     if (mSw2 != 0xff && fopAcM_isSwitch(this, mSw2)) {
         init_modeBreak();
@@ -169,7 +158,6 @@ void daZrTurara_c::modeWait() {
     }
 }
 
-/* 80D40E0C-80D410E0 00098C 02D4+00 1/1 0/0 0/0 .text            init_modeBreak__12daZrTurara_cFv */
 void daZrTurara_c::init_modeBreak() {
     mDoAud_seStart(Z2SE_OBJ_RG_ROCK_BREAK, &current.pos, 0,
                    dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -193,7 +181,6 @@ void daZrTurara_c::init_modeBreak() {
     mMode = 1;
 }
 
-/* 80D410E0-80D412A0 000C60 01C0+00 1/0 0/0 0/0 .text            modeBreak__12daZrTurara_cFv */
 void daZrTurara_c::modeBreak() {
     cXyz scale(mScaleF, mScaleF, mScaleF);
     mParticleKey = dComIfGp_particle_set(mParticleKey, 0x8a98, &current.pos, NULL, &scale);
@@ -218,17 +205,14 @@ void daZrTurara_c::modeBreak() {
     }
 }
 
-/* 80D412A0-80D412AC 000E20 000C+00 2/2 0/0 0/0 .text            init_modeEnd__12daZrTurara_cFv */
 void daZrTurara_c::init_modeEnd() {
     mMode = 2;
 }
 
-/* 80D412AC-80D412B0 000E2C 0004+00 1/0 0/0 0/0 .text            modeEnd__12daZrTurara_cFv */
 void daZrTurara_c::modeEnd() {
     /* empty function */
 }
 
-/* 80D412B0-80D41380 000E30 00D0+00 1/0 0/0 0/0 .text            Draw__12daZrTurara_cFv */
 int daZrTurara_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpBaseModel, &tevStr);
@@ -242,7 +226,6 @@ int daZrTurara_c::Draw() {
     return 1;
 }
 
-/* 80D41380-80D413E8 000F00 0068+00 1/0 0/0 0/0 .text            Delete__12daZrTurara_cFv */
 int daZrTurara_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, "M_DrpRock");
     if (mpRockBgW != NULL && mpRockBgW->ChkUsed()) {
@@ -251,30 +234,22 @@ int daZrTurara_c::Delete() {
     return 1;
 }
 
-/* 80D413E8-80D41414 000F68 002C+00 1/0 0/0 0/0 .text            daZrTurara_Draw__FP12daZrTurara_c
- */
 static int daZrTurara_Draw(daZrTurara_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80D41414-80D41434 000F94 0020+00 1/0 0/0 0/0 .text daZrTurara_Execute__FP12daZrTurara_c */
 static int daZrTurara_Execute(daZrTurara_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D41434-80D41454 000FB4 0020+00 1/0 0/0 0/0 .text            daZrTurara_Delete__FP12daZrTurara_c
- */
 static int daZrTurara_Delete(daZrTurara_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D41454-80D41474 000FD4 0020+00 1/0 0/0 0/0 .text            daZrTurara_Create__FP10fopAc_ac_c
- */
 static cPhs__Step daZrTurara_Create(fopAc_ac_c* i_this) {
     return static_cast<daZrTurara_c*>(i_this)->create();
 }
 
-/* 80D416B4-80D416D4 -00001 0020+00 1/0 0/0 0/0 .data            l_daZrTurara_Method */
 static actor_method_class l_daZrTurara_Method = {
     (process_method_func)daZrTurara_Create,
     (process_method_func)daZrTurara_Delete,
@@ -283,7 +258,6 @@ static actor_method_class l_daZrTurara_Method = {
     (process_method_func)daZrTurara_Draw,
 };
 
-/* 80D416D4-80D41704 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_zrTurara */
 extern actor_process_profile_definition g_profile_Obj_zrTurara = {
     fpcLy_CURRENT_e,
     3,

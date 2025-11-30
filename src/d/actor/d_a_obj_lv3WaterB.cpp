@@ -10,8 +10,6 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 
-/* 80C5B578-80C5B71C 000078 01A4+00 1/0 0/0 0/0 .text
- * daObj_Lv3waterB_Draw__FP19obj_lv3WaterB_class                */
 static int daObj_Lv3waterB_Draw(obj_lv3WaterB_class* i_this) {
     g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType_MAJI(i_this->mpBWaterModel, &i_this->tevStr);
@@ -44,7 +42,6 @@ static int daObj_Lv3waterB_Draw(obj_lv3WaterB_class* i_this) {
     return 1;
 }
 
-/* 80C5B71C-80C5B89C 00021C 0180+00 1/1 0/0 0/0 .text            action__FP19obj_lv3WaterB_class */
 static void action(obj_lv3WaterB_class* i_this) {
     switch (i_this->mAction) {
     case LV3WATERB_ACT_WAIT:
@@ -83,21 +80,15 @@ static void action(obj_lv3WaterB_class* i_this) {
     }
 }
 
-/* 80C5B89C-80C5B8C0 00039C 0024+00 2/1 0/0 0/0 .text
- * daObj_Lv3waterB_Execute__FP19obj_lv3WaterB_class             */
 static int daObj_Lv3waterB_Execute(obj_lv3WaterB_class* i_this) {
     action(i_this);
     return 1;
 }
 
-/* 80C5B8C0-80C5B8C8 0003C0 0008+00 1/0 0/0 0/0 .text
- * daObj_Lv3waterB_IsDelete__FP19obj_lv3WaterB_class            */
 static int daObj_Lv3waterB_IsDelete(obj_lv3WaterB_class* i_this) {
     return 1;
 }
 
-/* 80C5B8C8-80C5B94C 0003C8 0084+00 1/0 0/0 0/0 .text
- * daObj_Lv3waterB_Delete__FP19obj_lv3WaterB_class              */
 static int daObj_Lv3waterB_Delete(obj_lv3WaterB_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mBWaterPhase, "L3_bwater");
@@ -112,7 +103,6 @@ static int daObj_Lv3waterB_Delete(obj_lv3WaterB_class* i_this) {
     return 1;
 }
 
-/* 80C5B94C-80C5BB8C 00044C 0240+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_lv3WaterB_class* a_this = static_cast<obj_lv3WaterB_class*>(i_this);
 
@@ -167,7 +157,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80C5BBD4-80C5BD48 0006D4 0174+00 1/0 0/0 0/0 .text daObj_Lv3waterB_Create__FP10fopAc_ac_c */
 static int daObj_Lv3waterB_Create(fopAc_ac_c* i_this) {
     obj_lv3WaterB_class* a_this = static_cast<obj_lv3WaterB_class*>(i_this);
     fopAcM_ct(a_this, obj_lv3WaterB_class);
@@ -209,14 +198,12 @@ static int daObj_Lv3waterB_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 80C5BD84-80C5BDA4 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Lv3waterB_Method */
 static actor_method_class l_daObj_Lv3waterB_Method = {
     (process_method_func)daObj_Lv3waterB_Create,  (process_method_func)daObj_Lv3waterB_Delete,
     (process_method_func)daObj_Lv3waterB_Execute, (process_method_func)daObj_Lv3waterB_IsDelete,
     (process_method_func)daObj_Lv3waterB_Draw,
 };
 
-/* 80C5BDA4-80C5BDD4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_LV3WATERB */
 extern actor_process_profile_definition g_profile_OBJ_LV3WATERB = {
     fpcLy_CURRENT_e,
     3,

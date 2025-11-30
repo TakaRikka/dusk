@@ -8,7 +8,6 @@
 #define J3D_ASSERTMSG(LINE, COND, MSG) JUT_ASSERT_MSG(LINE, (COND) != 0, MSG)
 #define J3D_WARN1(LINE, MSG, ARG1) JUT_WARN(LINE, MSG, ARG1)
 
-/* 80327100-80327184 321A40 0084+00 0/0 3/3 0/0 .text            initialize__8J3DModelFv */
 void J3DModel::initialize() {
     mModelData = NULL;
     mFlags = 0;
@@ -33,8 +32,6 @@ void J3DModel::initialize() {
     mUnkCalc2 = NULL;
 }
 
-/* 80327184-80327300 321AC4 017C+00 0/0 3/3 0/0 .text
- * entryModelData__8J3DModelFP12J3DModelDataUlUl                */
 s32 J3DModel::entryModelData(J3DModelData* pModelData, u32 mdlFlags, u32 mtxNum) {
     J3D_ASSERTMSG(83, pModelData != NULL, "Error : null pointer.");
     J3D_ASSERTMSG(84, mtxNum != 0, "Error : non-zero argument is specified 0.");
@@ -95,8 +92,6 @@ s32 J3DModel::entryModelData(J3DModelData* pModelData, u32 mdlFlags, u32 mtxNum)
     return kJ3DError_Success;
 }
 
-/* 80327300-803273CC 321C40 00CC+00 1/1 0/0 0/0 .text createShapePacket__8J3DModelFP12J3DModelData
- */
 s32 J3DModel::createShapePacket(J3DModelData* pModelData) {
     J3D_ASSERTMSG(173, pModelData != NULL, "Error : null pointer.");
 
@@ -116,8 +111,6 @@ s32 J3DModel::createShapePacket(J3DModelData* pModelData) {
     return kJ3DError_Success;
 }
 
-/* 803273CC-803275FC 321D0C 0230+00 1/1 0/0 0/0 .text createMatPacket__8J3DModelFP12J3DModelDataUl
- */
 s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 mdlFlags) {
     J3D_ASSERTMSG(207, pModelData != NULL, "Error : null pointer.");
     s32 ret = 0;
@@ -200,7 +193,6 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 mdlFlags) {
     return kJ3DError_Success;
 }
 
-/* 803275FC-8032767C 321F3C 0080+00 0/0 1/1 0/0 .text newDifferedDisplayList__8J3DModelFUl */
 s32 J3DModel::newDifferedDisplayList(u32 diffFlags) {
     mDiffFlag = diffFlags;
 
@@ -232,7 +224,6 @@ void J3DModel::ptrToIndex() {
     }
 }
 
-/* 8032767C-803276B4 321FBC 0038+00 0/0 4/4 0/0 .text            lock__8J3DModelFv */
 void J3DModel::lock() {
     int matNum = mModelData->getMaterialNum();
     for (int i = 0; i < matNum; i++) {
@@ -240,7 +231,6 @@ void J3DModel::lock() {
     }
 }
 
-/* 803276B4-803276EC 321FF4 0038+00 0/0 2/2 0/0 .text            unlock__8J3DModelFv */
 void J3DModel::unlock() {
     int matNum = mModelData->getMaterialNum();
     for (int i = 0; i < matNum; i++) {
@@ -259,7 +249,6 @@ void J3DModel::makeDL() {
     }
 }
 
-/* 803276EC-80327858 32202C 016C+00 1/0 0/0 0/0 .text            calcMaterial__8J3DModelFv */
 void J3DModel::calcMaterial() {
     j3dSys.setModel(this);
 
@@ -291,7 +280,6 @@ void J3DModel::calcMaterial() {
     }
 }
 
-/* 80327858-803279A0 322198 0148+00 1/0 0/0 0/0 .text            calcDiffTexMtx__8J3DModelFv */
 void J3DModel::calcDiffTexMtx() {
     j3dSys.setModel(this);
 
@@ -317,7 +305,6 @@ void J3DModel::calcDiffTexMtx() {
     }
 }
 
-/* 803279A0-80327A2C 3222E0 008C+00 0/0 2/2 0/0 .text            diff__8J3DModelFv */
 void J3DModel::diff() {
     u16 matNum = mModelData->getMaterialNum();
     for (u16 i = 0; i < matNum; i++) {
@@ -326,8 +313,6 @@ void J3DModel::diff() {
     }
 }
 
-/* 80327A2C-80327AA0 32236C 0074+00 0/0 1/1 2/2 .text setDeformData__8J3DModelFP13J3DDeformDataUl
- */
 s32 J3DModel::setDeformData(J3DDeformData* p_deformData, u32 param_1) {
     mDeformData = p_deformData;
 
@@ -347,8 +332,6 @@ s32 J3DModel::setDeformData(J3DDeformData* p_deformData, u32 param_1) {
     return kJ3DError_Success;
 }
 
-/* 80327AA0-80327BD4 3223E0 0134+00 0/0 0/0 2/2 .text setSkinDeform__8J3DModelFP13J3DSkinDeformUl
- */
 s32 J3DModel::setSkinDeform(J3DSkinDeform* p_skinDeform, u32 flags) {
     mSkinDeform = p_skinDeform;
 
@@ -394,7 +377,6 @@ s32 J3DModel::setSkinDeform(J3DSkinDeform* p_skinDeform, u32 flags) {
     return ret;
 }
 
-/* 80327BD4-80327C58 322514 0084+00 1/1 0/0 2/2 .text            calcAnmMtx__8J3DModelFv */
 void J3DModel::calcAnmMtx() {
     j3dSys.setModel(this);
 
@@ -405,8 +387,6 @@ void J3DModel::calcAnmMtx() {
     }
 }
 
-/* 80327C58-80327CA4 322598 004C+00 1/1 1/1 1/1 .text            calcWeightEnvelopeMtx__8J3DModelFv
- */
 void J3DModel::calcWeightEnvelopeMtx() {
     if (getModelData()->getWEvlpMtxNum() != 0 && !checkFlag(J3DMdlFlag_EnableLOD)) {
         if (!getModelData()->checkFlag(0x100)) {
@@ -415,13 +395,11 @@ void J3DModel::calcWeightEnvelopeMtx() {
     }
 }
 
-/* 80327CA4-80327CF0 3225E4 004C+00 1/0 0/0 0/0 .text            update__8J3DModelFv */
 void J3DModel::update() {
     calc();
     entry();
 }
 
-/* 80327CF0-80327E4C 322630 015C+00 1/0 0/0 0/0 .text            calc__8J3DModelFv */
 void J3DModel::calc() {
     j3dSys.setModel(this);
 
@@ -468,7 +446,6 @@ void J3DModel::calc() {
     }
 }
 
-/* 80327E4C-80327F40 32278C 00F4+00 1/0 0/0 0/0 .text            entry__8J3DModelFv */
 void J3DModel::entry() {
     j3dSys.setModel(this);
 
@@ -495,7 +472,6 @@ void J3DModel::entry() {
     }
 }
 
-/* 80327F40-80328190 322880 0250+00 1/0 0/0 0/0 .text            viewCalc__8J3DModelFv */
 void J3DModel::viewCalc() {
     mMtxBuffer->swapDrawMtx();
     mMtxBuffer->swapNrmMtx();
@@ -532,12 +508,10 @@ void J3DModel::viewCalc() {
     prepareShapePackets();
 }
 
-/* 80328190-803281B4 322AD0 0024+00 1/1 0/0 0/0 .text            calcNrmMtx__8J3DModelFv */
 void J3DModel::calcNrmMtx() {
     mMtxBuffer->calcNrmMtx();
 }
 
-/* 803281B4-803282B8 322AF4 0104+00 1/1 0/0 0/0 .text            calcBumpMtx__8J3DModelFv */
 void J3DModel::calcBumpMtx() {
     if (getModelData()->checkBumpFlag()) {
         u32 bumpMtxIdx = 0;
@@ -555,14 +529,12 @@ void J3DModel::calcBumpMtx() {
     }
 }
 
-/* 803282B8-803282EC 322BF8 0034+00 1/1 0/0 0/0 .text            calcBBoardMtx__8J3DModelFv */
 void J3DModel::calcBBoardMtx() {
     if (getModelData()->checkBBoardFlag()) {
         mMtxBuffer->calcBBoardMtx();
     }
 }
 
-/* 803282EC-80328350 322C2C 0064+00 2/2 0/0 0/0 .text            prepareShapePackets__8J3DModelFv */
 void J3DModel::prepareShapePackets() {
     u16 shapeNum = mModelData->getShapeNum();
 

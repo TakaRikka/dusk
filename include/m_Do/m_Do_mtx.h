@@ -157,20 +157,20 @@ public:
         end = buffer + 16;
     }
 
-    /* 8000CCC8 */ static bool push();
-    /* 8000CD14 */ static bool pop();
+    static bool push();
+    static bool pop();
 
     /**
      * Translates the `now` Matrix by the given cXyz
      * @param xyz The xyz translation vector
      */
-    /* 8000CD64 */ static void transS(cXyz const& xyz);
+    static void transS(cXyz const& xyz);
 
     /**
      * Translates a new Matrix by the given cXyz and then concatenates it with the `now` matrix
      * @param xyz The xyz translation vector
      */
-    /* 8000CDD4 */ static void transM(cXyz const& xyz);
+    static void transM(cXyz const& xyz);
 
     /**
      * Translates a new Matrix by the given X, Y, and Z values and then concatenates it with the `now` matrix
@@ -178,19 +178,19 @@ public:
      * @param y The y-axis translation value
      * @param z The z-axis translation value
      */
-    /* 8000CD9C */ static void transM(f32 x, f32 y, f32 z);
+    static void transM(f32 x, f32 y, f32 z);
 
     /**
      * Scales the `now` Matrix by the given cXyz
      * @param xyz The xyz scale vector
      */
-    /* 8000CE00 */ static void scaleS(cXyz const& xyz);
+    static void scaleS(cXyz const& xyz);
 
     /**
      * Scales a new Matrix by the given cXyz and then concatenates it with the `now` matrix
      * @param xyz The xyz scale vector
      */
-    /* 8000CE70 */ static void scaleM(cXyz const& xyz);
+    static void scaleM(cXyz const& xyz);
 
     /**
      * Scales a new Matrix by the given X, Y, and Z values and then concatenates it with the `now` matrix
@@ -198,30 +198,30 @@ public:
      * @param y The y-axis scale value
      * @param z The z-axis scale value
      */
-    /* 8000CE38 */ static void scaleM(f32 x, f32 y, f32 z);
+    static void scaleM(f32 x, f32 y, f32 z);
 
-    /* 8000CE9C */ static void XYZrotS(csXyz const& xyz);
+    static void XYZrotS(csXyz const& xyz);
 
     /**
      * Rotates the `now` matrix by the given csXyz in the order Z, Y, X
      * @param xyz The xyz rotation vector
      */
-    /* 8000CED4 */ static void XYZrotM(csXyz const& xyz);
+    static void XYZrotM(csXyz const& xyz);
 
-    /* 8000CF0C */ static void ZXYrotS(csXyz const& xyz);
+    static void ZXYrotS(csXyz const& xyz);
 
     /**
      * Rotates the `now` matrix by the given csXyz in the order X, Y, Z
      * @param xyz The xyz rotation vector
      */
-    /* 8000CF44 */ static void ZXYrotM(csXyz const& xyz);
+    static void ZXYrotM(csXyz const& xyz);
 
     static void quatS(const Quaternion* quat) {
         MTXQuat(now, quat);
     }
 
-    /* 8000CF7C */ static void quatM(Quaternion const*);
-    /* 8000D070 */ ~mDoMtx_stack_c() {}  // inline
+    static void quatM(Quaternion const*);
+    ~mDoMtx_stack_c() {}  // inline
 
     /**
      * Returns the `now` Matrix

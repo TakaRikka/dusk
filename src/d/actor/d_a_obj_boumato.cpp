@@ -14,12 +14,10 @@
 
 static const char* dummyString() { return ""; }
 
-/* 80BBC470-80BBC48C 000000 001C+00 4/4 0/0 0/0 .rodata          m__21daObj_BouMato_Param_c */
 f32 const daObj_BouMato_Param_c::m[7] = {
     0.0f, -3.0f, 1.0f, 400.0f, 300.0f, 4.0f, 20.0f,
 };
 
-/* 80BBC48C-80BBC4BC 00001C 0030+00 1/1 0/0 0/0 .rodata          l_ccDObjData */
 static dCcD_SrcGObjInf const l_ccDObjData = 
 {
         {0x0, {{0x0, 0x0, 0}, {0xD8FBFDFF, 0x1F}, 0x79}}, // mObj
@@ -28,7 +26,6 @@ static dCcD_SrcGObjInf const l_ccDObjData =
         {0x0}, // mGObjCo
 };
 
-/* 80BBC52C-80BBC570 000000 0044+00 2/2 0/0 0/0 .data            l_ccDCyl */
 static dCcD_SrcCyl l_ccDCyl = {
     l_ccDObjData, // mObjInf
     {
@@ -38,10 +35,8 @@ static dCcD_SrcCyl l_ccDCyl = {
     } // mCyl
 };
 
-/* 80BBC570-80BBC574 -00001 0004+00 1/1 0/0 0/0 .data            l_resName */
 static char* l_resName = "H_BouMato";
 
-/* 80BBC574-80BBC58C 000048 0018+00 1/0 0/0 0/0 .data            jntCoOffset$4044 */
 static Vec jntCoOffset[2] = {
     {0.0f, 0.0f, 0.0f},
     {0.0f, 300.0f, 0.0f},
@@ -52,13 +47,11 @@ static dJntColData_c jntCoData = {
     1, 1, 0, 4.0f, jntCoOffset,
 };
 
-/* 80BBAFEC-80BBB1F4 0000EC 0208+00 1/0 0/0 0/0 .text            __dt__15daObj_BouMato_cFv */
 daObj_BouMato_c::~daObj_BouMato_c() {
     OS_REPORT("|%06d:%x|daObj_BouMato_c -> デストラクト\n", g_Counter.mCounter0, this);
     dComIfG_resDelete(&mPhase, getResName());
 }
 
-/* 80BBB230-80BBB558 000330 0328+00 1/1 0/0 0/0 .text            create__15daObj_BouMato_cFv */
 int daObj_BouMato_c::create() {
     fopAcM_ct(this, daObj_BouMato_c);
     field_0xa32 = getType();
@@ -95,7 +88,6 @@ int daObj_BouMato_c::create() {
     return rv;
 }
 
-/* 80BBB770-80BBB800 000870 0090+00 1/1 0/0 0/0 .text            CreateHeap__15daObj_BouMato_cFv */
 int daObj_BouMato_c::CreateHeap() {
     J3DModelData*  mdlData_p = (J3DModelData*)dComIfG_getObjectRes(getResName(), 4);
     JUT_ASSERT(374, NULL != mdlData_p);
@@ -106,14 +98,12 @@ int daObj_BouMato_c::CreateHeap() {
     return mJntCol.init(this, &jntCoData, mModel, 1) ? 1 : 0;
 }
 
-/* 80BBB800-80BBB834 000900 0034+00 1/1 0/0 0/0 .text            Delete__15daObj_BouMato_cFv */
 int daObj_BouMato_c::Delete() {
     OS_REPORT("|%06d:%x|daObj_BouMato_c -> Delete\n", g_Counter.mCounter0, this);
     this->~daObj_BouMato_c();
     return 1;
 }
 
-/* 80BBB834-80BBBD80 000934 054C+00 2/2 0/0 0/0 .text            Execute__15daObj_BouMato_cFv */
 int daObj_BouMato_c::Execute() {
     cXyz cStack_34;
     cXyz local_40;
@@ -200,7 +190,6 @@ int daObj_BouMato_c::Execute() {
     return 1;
 }
 
-/* 80BBBD80-80BBBE50 000E80 00D0+00 1/1 0/0 0/0 .text            Draw__15daObj_BouMato_cFv */
 int daObj_BouMato_c::Draw() {
     if (field_0xa38 == 0) {
         g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -216,14 +205,10 @@ int daObj_BouMato_c::Draw() {
     return 1;
 }
 
-/* 80BBBE50-80BBBE70 000F50 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__15daObj_BouMato_cFP10fopAc_ac_c          */
 int daObj_BouMato_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daObj_BouMato_c*>(i_this)->CreateHeap();
 }
 
-/* 80BBBE70-80BBBEA0 000F70 0030+00 1/1 0/0 0/0 .text
- * tgHitCallBack__15daObj_BouMato_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 void daObj_BouMato_c::tgHitCallBack(fopAc_ac_c* param_1, dCcD_GObjInf* param_2,
                                         fopAc_ac_c* param_3, dCcD_GObjInf* param_4) {
     u8 cutType = 0;
@@ -237,15 +222,10 @@ void daObj_BouMato_c::tgHitCallBack(fopAc_ac_c* param_1, dCcD_GObjInf* param_2,
     static_cast<daObj_BouMato_c*>(param_1)->setCutType(cutType);
 }
 
-/* ############################################################################################## */
-/* 80BBC678-80BBC808 000008 0190+00 2/2 0/0 0/0 .bss             l_findActorPtrs */
 static daArrow_c* l_findActorPtrs[100];
 
-/* 80BBC808-80BBC80C 000198 0004+00 2/2 0/0 0/0 .bss             l_findCount */
 static u32 l_findCount;
 
-/* 80BBBEA0-80BBBF4C 000FA0 00AC+00 1/1 0/0 0/0 .text            srchArrow__15daObj_BouMato_cFPvPv
- */
 void* daObj_BouMato_c::srchArrow(void* param_1, void* param_2) {
     if (l_findCount < 100 && param_1 != NULL && param_1 != param_2) {
         if (fopAcM_IsExecuting(fopAcM_GetID(param_1)) && fopAcM_GetName(param_1) == PROC_ARROW &&
@@ -258,7 +238,6 @@ void* daObj_BouMato_c::srchArrow(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80BBBF4C-80BBBFF8 00104C 00AC+00 1/1 0/0 0/0 .text deleteStuckArrow__15daObj_BouMato_cFv */
 void daObj_BouMato_c::deleteStuckArrow() {
     l_findCount = 0;
     fopAcM_Search(srchArrow, this);
@@ -270,13 +249,10 @@ void daObj_BouMato_c::deleteStuckArrow() {
     }
 }
 
-/* 80BBBFF8-80BBC008 0010F8 0010+00 3/3 0/0 0/0 .text            getResName__15daObj_BouMato_cFv */
 char* daObj_BouMato_c::getResName() {
     return l_resName;
 }
 
-/* 80BBC008-80BBC19C 001108 0194+00 1/1 0/0 0/0 .text
- * setSwayParam__15daObj_BouMato_cFP10fopAc_ac_c                */
 void daObj_BouMato_c::setSwayParam(fopAc_ac_c* param_1) {
     f32 dVar7 = 1.0f;
     f32 local_48[3] = {0.0f, 0.0f, daObj_BouMato_Param_c::m[6]};;
@@ -314,21 +290,17 @@ void daObj_BouMato_c::setSwayParam(fopAc_ac_c* param_1) {
     }
 }
 
-/* 80BBC19C-80BBC1F8 00129C 005C+00 2/2 0/0 0/0 .text            setEnvTevColor__15daObj_BouMato_cFv
- */
 void daObj_BouMato_c::setEnvTevColor() {
     tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(mGndChk);
     tevStr.room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
 }
 
-/* 80BBC1F8-80BBC23C 0012F8 0044+00 2/2 0/0 0/0 .text            setRoomNo__15daObj_BouMato_cFv */
 void daObj_BouMato_c::setRoomNo() {
     s32 roomId = dComIfG_Bgsp().GetRoomId(mGndChk);
     fopAcM_SetRoomNo(this, roomId);
     mStts.SetRoomId(roomId);
 }
 
-/* 80BBC23C-80BBC2C0 00133C 0084+00 1/1 0/0 0/0 .text            setMtx__15daObj_BouMato_cFv */
 void daObj_BouMato_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -338,35 +310,28 @@ void daObj_BouMato_c::setMtx() {
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80BBC2C0-80BBC2E0 0013C0 0020+00 1/0 0/0 0/0 .text            daObj_BouMato_Create__FPv */
 static int daObj_BouMato_Create(void* i_this) {
     return static_cast<daObj_BouMato_c*>(i_this)->create();
 }
 
-/* 80BBC2E0-80BBC300 0013E0 0020+00 1/0 0/0 0/0 .text            daObj_BouMato_Delete__FPv */
 static int daObj_BouMato_Delete(void* i_this) {
     return static_cast<daObj_BouMato_c*>(i_this)->Delete();
 }
 
-/* 80BBC300-80BBC320 001400 0020+00 1/0 0/0 0/0 .text            daObj_BouMato_Execute__FPv */
 static int daObj_BouMato_Execute(void* i_this) {
     return static_cast<daObj_BouMato_c*>(i_this)->Execute();
 }
 
-/* 80BBC320-80BBC340 001420 0020+00 1/0 0/0 0/0 .text            daObj_BouMato_Draw__FPv */
 static int daObj_BouMato_Draw(void* i_this) {
     return static_cast<daObj_BouMato_c*>(i_this)->Draw();
 }
 
-/* 80BBC340-80BBC348 001440 0008+00 1/0 0/0 0/0 .text            daObj_BouMato_IsDelete__FPv */
 static int daObj_BouMato_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80BBC818-80BBC81C 0001A8 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daObj_BouMato_Param_c l_HIO;
 
-/* 80BBC598-80BBC5B8 -00001 0020+00 1/0 0/0 0/0 .data            daObj_BouMato_MethodTable */
 static actor_method_class daObj_BouMato_MethodTable = {
     (process_method_func)daObj_BouMato_Create,
     (process_method_func)daObj_BouMato_Delete,
@@ -375,7 +340,6 @@ static actor_method_class daObj_BouMato_MethodTable = {
     (process_method_func)daObj_BouMato_Draw,
 };
 
-/* 80BBC5B8-80BBC5E8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_BOUMATO */
 extern actor_process_profile_definition g_profile_OBJ_BOUMATO = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID

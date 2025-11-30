@@ -84,7 +84,7 @@ void daNpc_Zelda_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
     JORReflexible::listenPropertyEvent(event);
 
     JORFile aJStack_910;
-    switch (reinterpret_cast<u32>(event->id)) {
+    switch ((u32)event->id) {
     case 0x40000002:
         if (aJStack_910.open(6, "", NULL, NULL, NULL) != 0) {
             memset(auStack_7e0, 0, 2000);
@@ -101,7 +101,6 @@ void daNpc_Zelda_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 }
 #endif
 
-/* 80B7512C-80B7524C 0000EC 0120+00 1/0 0/0 0/0 .text            __dt__13daNpc_Zelda_cFv */
 daNpc_Zelda_c::~daNpc_Zelda_c() {
     OS_REPORT("|%06d:%x|daNpc_Zelda_c -> デストラクト\n", g_Counter.mCounter0, this);
 
@@ -118,8 +117,6 @@ daNpc_Zelda_c::~daNpc_Zelda_c() {
     deleteRes(l_loadResPtrnList[field_0xf80], (const char**)l_resNameList);
 }
 
-/* ############################################################################################## */
-/* 80B77FC8-80B78054 000000 008C+00 7/7 0/0 0/0 .rodata          m__19daNpc_Zelda_Param_c */
 const daNpc_Zelda_HIOParam daNpc_Zelda_Param_c::m = {{
     190.0f, // attention_offset
     -3.0f, // gravity
@@ -164,7 +161,6 @@ const daNpc_Zelda_HIOParam daNpc_Zelda_Param_c::m = {{
     0.0f, // box_offset
 }};
 
-/* 80B7524C-80B75530 00020C 02E4+00 1/1 0/0 0/0 .text            create__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::create() {
     static u32 const heapSize[2] = {
         0x8FE0,
@@ -254,7 +250,6 @@ static f32 dummy2() {
     return 0.2f;
 }
 
-/* 80B75530-80B757BC 0004F0 028C+00 1/1 0/0 0/0 .text            CreateHeap__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::CreateHeap() {
     J3DModelData* modelData = NULL;
     J3DModel* model = NULL;
@@ -298,7 +293,6 @@ int daNpc_Zelda_c::CreateHeap() {
     }
 }
 
-/* 80B75978-80B759AC 000938 0034+00 1/1 0/0 0/0 .text            Delete__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Zelda_c -> Delete\n", g_Counter.mCounter0, this);
     fpc_ProcID unusedId = fopAcM_GetID(this);
@@ -306,12 +300,10 @@ int daNpc_Zelda_c::Delete() {
     return 1;
 }
 
-/* 80B759AC-80B759CC 00096C 0020+00 2/2 0/0 0/0 .text            Execute__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::Execute() {
     return execute();
 }
 
-/* 80B759CC-80B75A90 00098C 00C4+00 1/1 0/0 0/0 .text            Draw__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::Draw() {
     J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
     if (mpMatAnm[0] != NULL) {
@@ -328,15 +320,11 @@ int daNpc_Zelda_c::Draw() {
 #endif
 }
 
-/* 80B75A90-80B75AB0 000A50 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__13daNpc_Zelda_cFP10fopAc_ac_c            */
 int daNpc_Zelda_c::createHeapCallBack(fopAc_ac_c* i_this) {
     daNpc_Zelda_c* zelda = ((daNpc_Zelda_c*)i_this);
     return zelda->CreateHeap();
 }
 
-/* 80B75AB0-80B75B08 000A70 0058+00 1/1 0/0 0/0 .text
- * ctrlJointCallBack__13daNpc_Zelda_cFP8J3DJointi               */
 int daNpc_Zelda_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -348,7 +336,6 @@ int daNpc_Zelda_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80B75B08-80B75B28 000AC8 0020+00 1/1 0/0 0/0 .text            getType__13daNpc_Zelda_cFv */
 u8 daNpc_Zelda_c::getType() {
     u8 param = fopAcM_GetParam(this);
     switch (param & 0xff) {
@@ -359,12 +346,10 @@ u8 daNpc_Zelda_c::getType() {
     }
 }
 
-/* 80B75B28-80B75B30 000AE8 0008+00 1/1 0/0 0/0 .text            isDelete__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::isDelete() {
     return 0;
 }
 
-/* 80B75B30-80B75C9C 000AF0 016C+00 1/1 0/0 0/0 .text            reset__13daNpc_Zelda_cFv */
 void daNpc_Zelda_c::reset() {
     csXyz acStack_20;
     u32 clearSize = (uintptr_t)&field_0xf9c - (uintptr_t)&mAction1;
@@ -389,7 +374,6 @@ void daNpc_Zelda_c::reset() {
     }
 }
 
-/* 80B75C9C-80B75D28 000C5C 008C+00 1/0 0/0 0/0 .text            afterJntAnm__13daNpc_Zelda_cFi */
 void daNpc_Zelda_c::afterJntAnm(int param_0) {
     if (param_0 == 1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -400,7 +384,6 @@ void daNpc_Zelda_c::afterJntAnm(int param_0) {
     }
 }
 
-/* 80B75D28-80B75E34 000CE8 010C+00 1/0 0/0 0/0 .text            ctrlBtk__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::ctrlBtk() {
     if ((mpMatAnm[0] != NULL) && (mpMatAnm[1] != NULL)) {
         if (field_0xe29 != 0) {
@@ -426,8 +409,6 @@ int daNpc_Zelda_c::ctrlBtk() {
     return 0;
 }
 
-/* 80B75E34-80B75EE8 000DF4 00B4+00 1/0 0/0 0/0 .text            checkChangeEvt__13daNpc_Zelda_cFv
- */
 int daNpc_Zelda_c::checkChangeEvt() {
     if (!chkAction(&daNpc_Zelda_c::talk)) {
         mPreItemNo = 0;
@@ -442,7 +423,6 @@ int daNpc_Zelda_c::checkChangeEvt() {
     return 0;
 }
 
-/* 80B75EE8-80B76014 000EA8 012C+00 1/0 0/0 0/0 .text            setParam__13daNpc_Zelda_cFv */
 void daNpc_Zelda_c::setParam() {
     selectAction();
     srchActors();
@@ -476,14 +456,12 @@ void daNpc_Zelda_c::setParam() {
     return;
 }
 
-/* 80B76014-80B76074 000FD4 0060+00 1/0 0/0 0/0 .text setAfterTalkMotion__13daNpc_Zelda_cFv */
 void daNpc_Zelda_c::setAfterTalkMotion() {
     s32 index = 2;
     mFaceMotionSeqMngr.getNo();
     mFaceMotionSeqMngr.setNo(index, -1.0f, 0, 0);
 }
 
-/* 80B76074-80B76078 001034 0004+00 1/1 0/0 0/0 .text            srchActors__13daNpc_Zelda_cFv */
 void daNpc_Zelda_c::srchActors() {
 #if DEBUG
     switch (field_0xf80) {
@@ -493,7 +471,6 @@ void daNpc_Zelda_c::srchActors() {
 #endif
 }
 
-/* 80B76078-80B76118 001038 00A0+00 1/0 0/0 0/0 .text            evtTalk__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::evtTalk() {
     if (chkAction(&daNpc_Zelda_c::talk)) {
         (this->*mAction2)(NULL);
@@ -504,7 +481,6 @@ int daNpc_Zelda_c::evtTalk() {
     return 1;
 }
 
-/* 80B76118-80B761E0 0010D8 00C8+00 1/0 0/0 0/0 .text            evtCutProc__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::evtCutProc() {
     s32 staff_id = dComIfGp_getEventManager().getMyStaffId("Zelda", this, -1);
     if (staff_id != -1) {
@@ -520,7 +496,6 @@ int daNpc_Zelda_c::evtCutProc() {
     return 0;
 }
 
-/* 80B761E0-80B762CC 0011A0 00EC+00 1/0 0/0 0/0 .text            action__13daNpc_Zelda_cFv */
 void daNpc_Zelda_c::action() {
     if (mStagger.checkRebirth() != 0) {
         mStagger.initialize();
@@ -536,14 +511,12 @@ void daNpc_Zelda_c::action() {
     }
 }
 
-/* 80B762CC-80B76344 00128C 0078+00 1/0 0/0 0/0 .text            beforeMove__13daNpc_Zelda_cFv */
 void daNpc_Zelda_c::beforeMove() {
     if (checkHide() != 0 || mNoDraw != 0) {
         attention_info.flags = 0;
     }
 }
 
-/* 80B76344-80B765D4 001304 0290+00 1/0 0/0 0/0 .text            setAttnPos__13daNpc_Zelda_cFv */
 void daNpc_Zelda_c::setAttnPos() {
     s32 iVar2;
     s32 iVar3;
@@ -589,7 +562,6 @@ void daNpc_Zelda_c::setAttnPos() {
     attention_info.position = acStack_3c + current.pos;
 }
 
-/* 80B765D4-80B76774 001594 01A0+00 1/0 0/0 0/0 .text            setCollision__13daNpc_Zelda_cFv */
 void daNpc_Zelda_c::setCollision() {
     cXyz newCenter;
     if (!mHide) {
@@ -639,7 +611,6 @@ void daNpc_Zelda_c::setCollision() {
     mCyl.ClrTgHit();
 }
 
-/* 80B76774-80B7677C 001734 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::drawDbgInfo() {
 #if DEBUG
     const daNpc_Zelda_HIOParam* m = &daNpc_Zelda_Param_c::m;
@@ -661,21 +632,16 @@ int daNpc_Zelda_c::drawDbgInfo() {
     return 0;
 }
 
-/* 80B7677C-80B767C4 00173C 0048+00 1/1 0/0 0/0 .text            selectAction__13daNpc_Zelda_cFv */
 int daNpc_Zelda_c::selectAction() {
     mAction1 = NULL;
     mAction1 = &daNpc_Zelda_c::wait;
     return 1;
 }
 
-/* 80B767C4-80B767F0 001784 002C+00 2/2 0/0 0/0 .text
- * chkAction__13daNpc_Zelda_cFM13daNpc_Zelda_cFPCvPvPv_i        */
 BOOL daNpc_Zelda_c::chkAction(actionFunc action) {
     return mAction2 == action;
 }
 
-/* 80B767F0-80B76898 0017B0 00A8+00 2/2 0/0 0/0 .text
- * setAction__13daNpc_Zelda_cFM13daNpc_Zelda_cFPCvPvPv_i        */
 BOOL daNpc_Zelda_c::setAction(int (daNpc_Zelda_c::*action)(void*)) {
     mMode = 3;
     if (mAction2) {
@@ -691,7 +657,6 @@ BOOL daNpc_Zelda_c::setAction(int (daNpc_Zelda_c::*action)(void*)) {
     return TRUE;
 }
 
-/* 80B76898-80B76B74 001858 02DC+00 1/0 0/0 0/0 .text            wait__13daNpc_Zelda_cFPv */
 int daNpc_Zelda_c::wait(void* param_0) {
     switch (mMode) {
     case 0:
@@ -755,7 +720,6 @@ int daNpc_Zelda_c::wait(void* param_0) {
     return 1;
 }
 
-/* 80B76B74-80B76D60 001B34 01EC+00 3/0 0/0 0/0 .text            talk__13daNpc_Zelda_cFPv */
 int daNpc_Zelda_c::talk(void* param_0) {
     switch (mMode) {
     case 0:
@@ -796,32 +760,26 @@ int daNpc_Zelda_c::talk(void* param_0) {
     return 0;
 }
 
-/* 80B76D60-80B76D80 001D20 0020+00 1/0 0/0 0/0 .text            daNpc_Zelda_Create__FPv */
 static int daNpc_Zelda_Create(void* param_0) {
     return ((daNpc_Zelda_c*)param_0)->create();
 }
 
-/* 80B76D80-80B76DA0 001D40 0020+00 1/0 0/0 0/0 .text            daNpc_Zelda_Delete__FPv */
 static int daNpc_Zelda_Delete(void* param_0) {
     return ((daNpc_Zelda_c*)param_0)->Delete();
 }
 
-/* 80B76DA0-80B76DC0 001D60 0020+00 1/0 0/0 0/0 .text            daNpc_Zelda_Execute__FPv */
 static int daNpc_Zelda_Execute(void* param_0) {
     return ((daNpc_Zelda_c*)param_0)->Execute();
 }
 
-/* 80B76DC0-80B76DE0 001D80 0020+00 1/0 0/0 0/0 .text            daNpc_Zelda_Draw__FPv */
 static int daNpc_Zelda_Draw(void* param_0) {
     return ((daNpc_Zelda_c*)param_0)->Draw();
 }
 
-/* 80B76DE0-80B76DE8 001DA0 0008+00 1/0 0/0 0/0 .text            daNpc_Zelda_IsDelete__FPv */
 static int daNpc_Zelda_IsDelete(void* param_0) {
     return 1;
 }
 
-/* 80B78240-80B78260 -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Zelda_MethodTable */
 static actor_method_class daNpc_Zelda_MethodTable = {
     (process_method_func)daNpc_Zelda_Create,
     (process_method_func)daNpc_Zelda_Delete,
@@ -830,7 +788,6 @@ static actor_method_class daNpc_Zelda_MethodTable = {
     (process_method_func)daNpc_Zelda_Draw,
 };
 
-/* 80B78260-80B78290 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_ZELDA */
 extern actor_process_profile_definition g_profile_NPC_ZELDA = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID

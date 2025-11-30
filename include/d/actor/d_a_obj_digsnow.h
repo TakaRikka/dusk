@@ -30,21 +30,21 @@ public:
         /* 2 */ ACTION_END_e,
     };
 
-    /* 80BDCC58 */ void initBaseMtx();
-    /* 80BDCC94 */ void setBaseMtx();
-    /* 80BDCD08 */ virtual int Create();
-    /* 80BDCD64 */ virtual int CreateHeap();
-    /* 80BDCDD4 */ int create1st();
-    /* 80BDCE84 */ virtual int Execute(Mtx**);
-    /* 80BDCF00 */ void action();
-    /* 80BDCFA4 */ void mode_init_wait();
-    /* 80BDCFB0 */ void mode_wait();
-    /* 80BDCFDC */ void mode_init_dig();
-    /* 80BDD124 */ void mode_dig();
-    /* 80BDD1BC */ void mode_init_end();
-    /* 80BDD210 */ void mode_end();
-    /* 80BDD214 */ virtual int Draw();
-    /* 80BDD2B8 */ virtual int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    virtual int Create();
+    virtual int CreateHeap();
+    int create1st();
+    virtual int Execute(Mtx**);
+    void action();
+    void mode_init_wait();
+    void mode_wait();
+    void mode_init_dig();
+    void mode_dig();
+    void mode_init_end();
+    void mode_end();
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
     void startDig() { mMode = ACTION_DIG_e; }

@@ -52,8 +52,8 @@ STATIC_ASSERT(sizeof(obj_kita_class) == 0xd78);
 
 class daObj_Kita_HIO_c : public JORReflexible {
 public:
-    /* 80C4534C */ daObj_Kita_HIO_c();
-    /* 80C45E84 */ virtual ~daObj_Kita_HIO_c() {}
+    daObj_Kita_HIO_c();
+    virtual ~daObj_Kita_HIO_c() {}
 
     void genMessage(JORMContext*);
 

@@ -7,8 +7,6 @@
 #include "JSystem/JStudio/JStudio_JAudio2/control.h"
 #include "JSystem/JGadget/pointer.h"
 
-/* 8028D550-8028D5B0 287E90 0060+00 1/0 0/0 0/0 .text __dt__Q215JStudio_JAudio213TCreateObjectFv
- */
 JStudio_JAudio2::TCreateObject::~TCreateObject() {}
 
 /* 8028D5B0-8028D624 287EF0 0074+00 1/0 0/0 0/0 .text

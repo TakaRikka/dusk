@@ -3,13 +3,10 @@
 #include "TRK_MINNOW_DOLPHIN/utils/common/MWTrace.h"
 #include "trk.h"
 
-/* 8044F270-8044F288 07BF90 0014+04 3/3 0/0 0/0 .bss             gTRKFramingState */
 static TRKFramingState gTRKFramingState;
 
-/* 804519B8-804519C0 000EB8 0004+04 0/0 2/2 0/0 .sbss            gTRKInputPendingPtr */
 void* gTRKInputPendingPtr;
 
-/* 8036D9D4-8036DB10 368314 013C+00 1/1 1/1 0/0 .text            TRKTestForPacket */
 MessageBufferID TRKTestForPacket() {
     u8 payloadBuf[0x880];
     u8 packetBuf[0x40];
@@ -52,7 +49,6 @@ MessageBufferID TRKTestForPacket() {
     return result;
 }
 
-/* 8036D974-8036D9D4 3682B4 0060+00 0/0 1/1 0/0 .text            TRKGetInput */
 void TRKGetInput(void) {
     MessageBufferID id = TRKTestForPacket();
     if (id != -1) {
@@ -65,7 +61,6 @@ void TRKGetInput(void) {
     }
 }
 
-/* 8036D924-8036D974 368264 0050+00 0/0 1/1 0/0 .text            TRKProcessInput */
 void TRKProcessInput(int bufferIdx) {
     TRKEvent event;
 
@@ -75,7 +70,6 @@ void TRKProcessInput(int bufferIdx) {
     TRKPostEvent(&event);
 }
 
-/* 8036D860-8036D924 3681A0 00C4+00 0/0 1/1 0/0 .text            TRKInitializeSerialHandler */
 DSError TRKInitializeSerialHandler() {
     gTRKFramingState.msgBufID = -1;
     gTRKFramingState.receiveState = DSRECV_Wait;
@@ -91,7 +85,6 @@ DSError TRKInitializeSerialHandler() {
     return DS_NoError;
 }
 
-/* 8036D858-8036D860 368198 0008+00 0/0 1/1 0/0 .text            TRKTerminateSerialHandler */
 DSError TRKTerminateSerialHandler(void) {
     return DS_NoError;
 }

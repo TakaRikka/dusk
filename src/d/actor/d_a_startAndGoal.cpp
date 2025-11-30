@@ -10,7 +10,6 @@
 #include "d/d_meter2_info.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 80D4D7B8-80D4D84C 000078 0094+00 1/1 0/0 0/0 .text chkPassed2__21daStartAndGoal_Path_cF4cXyz */
 BOOL daStartAndGoal_Path_c::chkPassed2(cXyz i_checkPos) {
     int var_r31 = 0;
     while (var_r31 < 1) {
@@ -27,7 +26,6 @@ BOOL daStartAndGoal_Path_c::chkPassed2(cXyz i_checkPos) {
     return var_r31 > 0;
 }
 
-/* 80D4D84C-80D4D884 00010C 0038+00 1/1 0/0 0/0 .text            getType__16daStartAndGoal_cFv */
 int daStartAndGoal_c::getType() {
     switch (fopAcM_GetParam(this) & 0xFF) {
     case 0:
@@ -39,21 +37,18 @@ int daStartAndGoal_c::getType() {
     }
 }
 
-/* ############################################################################################## */
 struct timer_info {
     /* 0x0 */ s32 mode;
     /* 0x4 */ u8 type;
     /* 0x5 */ u8 field_0x5;
 };
 
-/* 80D4DECC-80D4DEE4 000000 0018+00 4/4 0/0 0/0 .data            l_timerType */
 static timer_info l_timerType[] = {
     {3, 0, 1},
     {4, 2, 0},
     {3, 1, 1},
 };
 
-/* 80D4D884-80D4D928 000144 00A4+00 1/1 0/0 0/0 .text            Create__16daStartAndGoal_cFv */
 int daStartAndGoal_c::Create() {
     fopAcM_ct(this, daStartAndGoal_c);
 
@@ -63,10 +58,8 @@ int daStartAndGoal_c::Create() {
 
 daStartAndGoal_Path_c::~daStartAndGoal_Path_c() {}
 
-/* 80D4DEB8-80D4DEBC 000000 0001+03 1/1 0/0 0/0 .rodata          l_DATA */
 static const u8 l_DATA[1] = {0};  // unused
 
-/* 80D4D998-80D4DA68 000258 00D0+00 1/1 0/0 0/0 .text            init__16daStartAndGoal_cFv */
 void daStartAndGoal_c::init() {
     field_0xb98 = 1;
     mStarted = false;
@@ -84,8 +77,6 @@ void daStartAndGoal_c::init() {
     mAction = 0;
 }
 
-/* 80D4DA68-80D4DB30 000328 00C8+00 1/1 0/0 0/0 .text            actorPosCheck__16daStartAndGoal_cFv
- */
 void daStartAndGoal_c::actorPosCheck() {
     cXyz pos(daPy_getPlayerActorClass()->current.pos);
     if (mPath.chkPassed2(pos)) {
@@ -100,7 +91,6 @@ void daStartAndGoal_c::actorPosCheck() {
     }
 }
 
-/* 80D4DB30-80D4DBAC 0003F0 007C+00 0/0 0/0 2/2 .text readyStartTimer__16daStartAndGoal_cFv */
 int daStartAndGoal_c::readyStartTimer() {
     if (dComIfG_TimerStart(l_timerType[mType].mode, 0)) {
         mAction = 1;
@@ -111,14 +101,10 @@ int daStartAndGoal_c::readyStartTimer() {
     return 0;
 }
 
-/* 80D4DBAC-80D4DBD0 00046C 0024+00 1/1 0/0 2/2 .text            isStartCheck__16daStartAndGoal_cFv
- */
 BOOL daStartAndGoal_c::isStartCheck() {
     return dTimer_isStart();
 }
 
-/* 80D4DBD0-80D4DC50 000490 0080+00 1/1 0/0 0/0 .text            isReadyCheck__16daStartAndGoal_cFv
- */
 BOOL daStartAndGoal_c::isReadyCheck() {
     if (mStarted) {
         return TRUE;
@@ -135,7 +121,6 @@ BOOL daStartAndGoal_c::isReadyCheck() {
     return dTimer_isStart();
 }
 
-/* 80D4DC50-80D4DCF4 000510 00A4+00 1/1 0/0 0/0 .text            Execute__16daStartAndGoal_cFv */
 int daStartAndGoal_c::Execute() {
     switch (mAction) {
     case 0:
@@ -161,12 +146,10 @@ int daStartAndGoal_c::Execute() {
     return 1;
 }
 
-/* 80D4DCF4-80D4DCFC 0005B4 0008+00 1/1 0/0 0/0 .text            Draw__16daStartAndGoal_cFv */
 int daStartAndGoal_c::Draw() {
     return 1;
 }
 
-/* 80D4DCFC-80D4DD80 0005BC 0084+00 1/1 0/0 0/0 .text            Delete__16daStartAndGoal_cFv */
 int daStartAndGoal_c::Delete() {
     if (field_0xb98 == 1) {
         dComIfG_TimerDeleteRequest(l_timerType[mType].mode);
@@ -179,42 +162,32 @@ int daStartAndGoal_c::Delete() {
     return 1;
 }
 
-/* 80D4DD80-80D4DDA0 000640 0020+00 1/0 0/0 0/0 .text daStartAndGoal_Execute__FP16daStartAndGoal_c
- */
 static int daStartAndGoal_Execute(daStartAndGoal_c* i_this) {
     return i_this->Execute();
 }
 
-/* 80D4DDA0-80D4DDC0 000660 0020+00 1/0 0/0 0/0 .text daStartAndGoal_Draw__FP16daStartAndGoal_c */
 static int daStartAndGoal_Draw(daStartAndGoal_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80D4DDC0-80D4DDC8 000680 0008+00 1/0 0/0 0/0 .text
- * daStartAndGoal_IsDelete__FP16daStartAndGoal_c                */
 static int daStartAndGoal_IsDelete(daStartAndGoal_c* i_this) {
     return 1;
 }
 
-/* 80D4DDC8-80D4DDE8 000688 0020+00 1/0 0/0 0/0 .text daStartAndGoal_Delete__FP16daStartAndGoal_c
- */
 static int daStartAndGoal_Delete(daStartAndGoal_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80D4DDE8-80D4DE08 0006A8 0020+00 1/0 0/0 0/0 .text daStartAndGoal_create__FP10fopAc_ac_c */
 static int daStartAndGoal_create(fopAc_ac_c* i_this) {
     return static_cast<daStartAndGoal_c*>(i_this)->Create();
 }
 
-/* 80D4DEE4-80D4DF04 -00001 0020+00 1/0 0/0 0/0 .data            l_daStartAndGoal_Method */
 static actor_method_class l_daStartAndGoal_Method = {
     (process_method_func)daStartAndGoal_create,  (process_method_func)daStartAndGoal_Delete,
     (process_method_func)daStartAndGoal_Execute, (process_method_func)daStartAndGoal_IsDelete,
     (process_method_func)daStartAndGoal_Draw,
 };
 
-/* 80D4DF04-80D4DF34 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_START_AND_GOAL */
 extern actor_process_profile_definition g_profile_START_AND_GOAL = {
     fpcLy_CURRENT_e,
     9,

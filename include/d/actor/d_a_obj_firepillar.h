@@ -32,20 +32,20 @@ public:
         static u8 getSwNo(daObjFPillar_c* i_this) { return fopAcM_GetParam(i_this); }
     };
 
-    /* 80BE9118 */ void initBaseMtx();
-    /* 80BE9138 */ void setBaseMtx();
-    /* 80BE9190 */ int Create();
-    /* 80BE9230 */ int create();
-    /* 80BE94E4 */ int execute();
-    /* 80BE9610 */ void action();
-    /* 80BE96B4 */ void actionOffInit();
-    /* 80BE96E0 */ void actionOff();
-    /* 80BE9784 */ void actionOnWaitInit();
-    /* 80BE97B8 */ void actionOnWait();
-    /* 80BE986C */ void actionOnInit();
-    /* 80BE98A0 */ void actionOn();
-    /* 80BE9984 */ int draw();
-    /* 80BE99B8 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int create();
+    int execute();
+    void action();
+    void actionOffInit();
+    void actionOff();
+    void actionOnWaitInit();
+    void actionOnWait();
+    void actionOnInit();
+    void actionOn();
+    int draw();
+    int _delete();
 
 private:
     /* 0x568 */ request_of_phase_process_class mPhase;

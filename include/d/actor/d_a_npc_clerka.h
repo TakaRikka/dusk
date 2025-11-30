@@ -12,7 +12,7 @@ struct daNpc_clerkA_HIOParam {
 
 class daNpc_clerkA_Param_c {
 public:
-    /* 80B2CD94 */ virtual ~daNpc_clerkA_Param_c() {}
+    virtual ~daNpc_clerkA_Param_c() {}
 
     static const daNpc_clerkA_HIOParam m;
 };
@@ -65,37 +65,37 @@ public:
         /* 0x6 */ MOT_UNK_6 = 6,
     };
 
-    /* 8099252C */ ~daNpc_clerkA_c();
-    /* 8099266C */ int create();
-    /* 80992914 */ int CreateHeap();
-    /* 80992D50 */ int Delete();
-    /* 80992D84 */ int Execute();
-    /* 80992E5C */ int Draw();
-    /* 80992EF0 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80992F10 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80992F68 */ u8 getType();
-    /* 80992F88 */ int isDelete();
-    /* 80992FB8 */ void reset();
-    /* 809930EC */ void afterJntAnm(int);
-    /* 80993170 */ void setParam();
-    /* 809932A4 */ void setAfterTalkMotion();
-    /* 80993330 */ void srchActors();
-    /* 8099338C */ BOOL evtTalk();
-    /* 80993568 */ BOOL evtCutProc();
-    /* 80993630 */ void action();
-    /* 8099371C */ void beforeMove();
-    /* 80993794 */ void setAttnPos();
-    /* 80993A40 */ void setCollision();
-    /* 80993B74 */ int drawDbgInfo();
-    /* 80993B7C */ void drawOtherMdl();
-    /* 80993BDC */ int selectAction();
-    /* 80993C58 */ int chkAction(int (daNpc_clerkA_c::*)(void*));
-    /* 80993C84 */ int setAction(int (daNpc_clerkA_c::*)(void*));
-    /* 80993D2C */ int wait(void*);
-    /* 80993F84 */ int tend(void*);
-    /* 809941B8 */ int talk(void*);
-    /* 809943B0 */ int shop(void*);
-    /* 809955C8 */ daNpc_clerkA_c(
+    ~daNpc_clerkA_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getType();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    int selectAction();
+    int chkAction(int (daNpc_clerkA_c::*)(void*));
+    int setAction(int (daNpc_clerkA_c::*)(void*));
+    int wait(void*);
+    int tend(void*);
+    int talk(void*);
+    int shop(void*);
+    daNpc_clerkA_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -105,12 +105,12 @@ public:
         : dShopSystem_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
                         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
                         i_arcNames) {}
-    /* 80995694 */ u16 getEyeballMaterialNo() { return 3; }
-    /* 8099569C */ s32 getHeadJointNo() { return 4; }
-    /* 809956A4 */ s32 getNeckJointNo() { return 3; }
-    /* 809956AC */ s32 getBackboneJointNo() { return 1; }
-    /* 809956B4 */ BOOL checkChangeJoint(int i_joint) { return i_joint == 4; }
-    /* 809956C4 */ BOOL checkRemoveJoint(int i_joint) { return i_joint == 8; }
+    u16 getEyeballMaterialNo() { return 3; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return 1; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == 4; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == 8; }
 
     u32 getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

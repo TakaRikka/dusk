@@ -23,7 +23,7 @@ struct g_himo_s {
 
 class b_gnd_class : public fopEn_enemy_c {
 public:
-    /* 80601960 */ b_gnd_class();
+    b_gnd_class();
 
     bool checkAttackChance() { return field_0x2740 != 0; }
     bool checkPiyo() { return field_0x1e08 != 0; }

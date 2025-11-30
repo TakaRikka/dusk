@@ -29,28 +29,28 @@ public:
         ACTION_DEAD,
     };
 
-    /* 80CC1558 */ void initBaseMtx();
-    /* 80CC1614 */ void setBaseMtx();
-    /* 80CC16B0 */ int Create();
-    /* 80CC17F0 */ int CreateHeap();
-    /* 80CC1A28 */ int create1st();
-    /* 80CC1AF0 */ int Execute(Mtx**);
-    /* 80CC1BA4 */ void move_proc_call();
-    /* 80CC1C30 */ void init_modeWait();
-    /* 80CC1CF0 */ void modeWait();
-    /* 80CC1DF8 */ void init_modeRotate();
-    /* 80CC1EC8 */ void modeRotate();
-    /* 80CC2024 */ void event_proc_call();
-    /* 80CC20E0 */ void actionWait();
-    /* 80CC2158 */ void actionOrderEvent();
-    /* 80CC21C0 */ void actionEvent();
-    /* 80CC221C */ void actionDead();
-    /* 80CC2220 */ int checkChangeSw();
-    /* 80CC22A0 */ void offSwitch(int);
-    /* 80CC2310 */ void onWaterModel();
-    /* 80CC2364 */ void offWaterModel();
-    /* 80CC23C4 */ int Draw();
-    /* 80CC25C0 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void move_proc_call();
+    void init_modeWait();
+    void modeWait();
+    void init_modeRotate();
+    void modeRotate();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    int checkChangeSw();
+    void offSwitch(int);
+    void onWaterModel();
+    void offWaterModel();
+    int Draw();
+    int Delete();
 
     u8 getSwNo() { return mSwNo; }
     u8 getSwNo2() { return (mSwNo >> 8) & 0xff; }

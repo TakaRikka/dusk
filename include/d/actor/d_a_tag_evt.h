@@ -7,15 +7,15 @@
 
 class daTag_Evt_c : public fopAc_ac_c {
 public:
-    /* 8048B918 */ int create();
-    /* 8048B9D8 */ int destroy();
-    /* 8048BA0C */ int execute();
-    /* 8048BE44 */ int draw();
-    /* 8048BE4C */ int getParam();
-    /* 8048BF64 */ int isDelete();
-    /* 8048C090 */ int doEvtCutWait(int);
-    /* 8048C124 */ int doEvtCutTalk(int);
-    /* 8048C1C8 */ int doEvtCutNext(int);
+    int create();
+    int destroy();
+    int execute();
+    int draw();
+    int getParam();
+    int isDelete();
+    int doEvtCutWait(int);
+    int doEvtCutTalk(int);
+    int doEvtCutNext(int);
 
     static char* mEvtCutList[3];
 
@@ -36,7 +36,7 @@ public:
     /* 0x5E2 */ u16 field_0x5E2;
     /* 0x5E4 */ s8 field_0x5E4;
 
-    /* 8048C304 */ virtual ~daTag_Evt_c();
+    virtual ~daTag_Evt_c();
 };
 
 STATIC_ASSERT(sizeof(daTag_Evt_c) == 0x5EC);

@@ -18,7 +18,6 @@
 #include "Z2AudioLib/Z2AudioMgr.h"
 #endif
 
-/* 8002064C-8002065C 0010+00 s=0 e=14 z=0  None .text      fpcBs_Is_JustOfType__Fii */
 BOOL fpcBs_Is_JustOfType(int i_typeA, int i_typeB) {
     if (i_typeB == i_typeA) {
         return TRUE;
@@ -27,10 +26,8 @@ BOOL fpcBs_Is_JustOfType(int i_typeA, int i_typeB) {
     }
 }
 
-/* 80450D00-80450D04 0004+00 s=1 e=0 z=0  None .sbss      g_fpcBs_type */
 int g_fpcBs_type;
 
-/* 8002065C-8002069C 0040+00 s=1 e=5 z=0  None .text      fpcBs_MakeOfType__FPi */
 int fpcBs_MakeOfType(int* i_type) {
     static int t_type = 0x9130000;
     if (*i_type == 0) {
@@ -39,13 +36,11 @@ int fpcBs_MakeOfType(int* i_type) {
     return *i_type;
 }
 
-/* 8002069C-800206C4 0028+00 s=0 e=2 z=0  None .text      fpcBs_MakeOfId__Fv */
 int fpcBs_MakeOfId() {
     static int process_id = 1;
     return process_id++;
 }
 
-/* 800206C4-80020720 005C+00 s=0 e=1 z=0  None .text      fpcBs_Execute__FP18base_process_class */
 int fpcBs_Execute(base_process_class* i_proc) {
     int result = 1;
 
@@ -71,8 +66,6 @@ int fpcBs_Execute(base_process_class* i_proc) {
     return result;
 }
 
-/* 80020720-80020760 0040+00 s=2 e=0 z=0  None .text      fpcBs_DeleteAppend__FP18base_process_class
- */
 void fpcBs_DeleteAppend(base_process_class* i_proc) {
     if (i_proc->append != NULL) {
         cMl::free(i_proc->append);
@@ -80,7 +73,6 @@ void fpcBs_DeleteAppend(base_process_class* i_proc) {
     }
 }
 
-/* 80020760-800207BC 005C+00 s=0 e=1 z=0  None .text      fpcBs_IsDelete__FP18base_process_class */
 int fpcBs_IsDelete(base_process_class* i_proc) {
     int result;
     layer_class* save_layer = fpcLy_CurrentLayer();
@@ -92,7 +84,6 @@ int fpcBs_IsDelete(base_process_class* i_proc) {
     return result;
 }
 
-/* 800207BC-80020820 0064+00 s=0 e=2 z=0  None .text      fpcBs_Delete__FP18base_process_class */
 int fpcBs_Delete(base_process_class* i_proc) {
     BOOL result = TRUE;
     if (result == TRUE) {
@@ -124,7 +115,6 @@ int fpcBs_Delete(base_process_class* i_proc) {
     return result;
 }
 
-/* 80020820-8002091C 00FC+00 s=0 e=2 z=0  None .text      fpcBs_Create__FsUiPv */
 base_process_class* fpcBs_Create(s16 i_profname, fpc_ProcID i_procID, void* i_append) {
     process_profile_definition* pprofile;
     base_process_class* pprocess;

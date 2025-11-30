@@ -44,8 +44,8 @@ STATIC_ASSERT(sizeof(e_ga_class) == 0x4d7c);
 
 class daE_Ga_HIO_c {
 public:
-    /* 804FB0EC */ daE_Ga_HIO_c();
-    /* 804FBAF8 */ virtual ~daE_Ga_HIO_c() {}
+    daE_Ga_HIO_c();
+    virtual ~daE_Ga_HIO_c() {}
 
     /* 0x4 */ s8 id;
     /* 0x8 */ f32 base_size;

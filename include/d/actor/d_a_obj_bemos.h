@@ -43,9 +43,9 @@ public:
             STATE_40_e = 0x40,
         };
 
-        /* 80BB0E0C */ Bgc_c();
-        /* 80BB0ED4 */ void wall_pos(fopAc_ac_c const*, daObjBm_c::BgcSrc_c const*, int, s16, f32);
-        /* 80BB1154 */ bool chk_wall_pre(fopAc_ac_c const*, daObjBm_c::BgcSrc_c const*, int, s16);
+        Bgc_c();
+        void wall_pos(fopAc_ac_c const*, daObjBm_c::BgcSrc_c const*, int, s16, f32);
+        bool chk_wall_pre(fopAc_ac_c const*, daObjBm_c::BgcSrc_c const*, int, s16);
 
         static daObjBm_c::BgcSrc_c M_lin5[];
         static const daObjBm_c::BgcSrc_c M_lin20[];
@@ -76,56 +76,56 @@ public:
     u8 getBeamSearchDist() { return field_0x100a & 15; }
     u8 checkLockOnCamera() { return (field_0x100a & 0x8000) >> 15; }
 
-    /* 80BAE36C */ static fopAc_ac_c* PPCallBack(fopAc_ac_c*, fopAc_ac_c*, s16,
+    static fopAc_ac_c* PPCallBack(fopAc_ac_c*, fopAc_ac_c*, s16,
                                                  dBgW_Base::PushPullLabel);
-    /* 80BAE5FC */ void initBaseMtx();
-    /* 80BAE68C */ void setBaseMtx();
-    /* 80BAE778 */ int Create();
-    /* 80BAEADC */ int CreateHeap();
-    /* 80BAEFD8 */ int create1st();
-    /* 80BAF09C */ int Execute(Mtx**);
-    /* 80BAF29C */ void main_proc_call();
-    /* 80BAF328 */ void initActionEnBemos();
-    /* 80BAF37C */ void initActionObjBemos();
-    /* 80BAF46C */ void actionEnBemos();
-    /* 80BAF750 */ void actionObjBemos();
-    /* 80BAF80C */ void setCrawCO();
-    /* 80BAF8F8 */ void calcBeamPos();
-    /* 80BAFC08 */ void calcBeamLenAndAt();
-    /* 80BAFFA8 */ s8 checkFindPlayer();
-    /* 80BB0104 */ s8 checkSearchPlayer();
-    /* 80BB0260 */ f32 getSearchDistance();
-    /* 80BB02B8 */ f32 getBeamSearchDistance();
-    /* 80BB0310 */ void effect_proc();
-    /* 80BB0580 */ void effectWait();
-    /* 80BB0584 */ void initEffectSet0();
-    /* 80BB0718 */ void effectSet0();
-    /* 80BB071C */ void effectSet1();
-    /* 80BB0720 */ void effectEnd();
-    /* 80BB0724 */ int check_to_walk();
-    /* 80BB0824 */ void mode_wait_init();
-    /* 80BB0888 */ void mode_wait();
-    /* 80BB09C8 */ void mode_walk_init();
-    /* 80BB09E0 */ void mode_walk();
-    /* 80BB0DA8 */ void mode_afl();
-    /* 80BB0DC0 */ void mode_dead_init();
-    /* 80BB0DE4 */ void mode_dead();
-    /* 80BB0DE8 */ void clr_moment_cnt();
-    /* 80BB1194 */ void initActionSwWait();
-    /* 80BB11D4 */ void actionSwWait();
-    /* 80BB14C8 */ void initActionWarning();
-    /* 80BB154C */ void actionWarning();
-    /* 80BB1654 */ void initActionFindPlayer();
-    /* 80BB1814 */ void actionFindPlayer();
-    /* 80BB1960 */ void initActionAttack();
-    /* 80BB1BD0 */ void actionAttack();
-    /* 80BB248C */ void initActionDead();
-    /* 80BB2700 */ void actionDead();
-    /* 80BB2AB0 */ int Draw();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void main_proc_call();
+    void initActionEnBemos();
+    void initActionObjBemos();
+    void actionEnBemos();
+    void actionObjBemos();
+    void setCrawCO();
+    void calcBeamPos();
+    void calcBeamLenAndAt();
+    s8 checkFindPlayer();
+    s8 checkSearchPlayer();
+    f32 getSearchDistance();
+    f32 getBeamSearchDistance();
+    void effect_proc();
+    void effectWait();
+    void initEffectSet0();
+    void effectSet0();
+    void effectSet1();
+    void effectEnd();
+    int check_to_walk();
+    void mode_wait_init();
+    void mode_wait();
+    void mode_walk_init();
+    void mode_walk();
+    void mode_afl();
+    void mode_dead_init();
+    void mode_dead();
+    void clr_moment_cnt();
+    void initActionSwWait();
+    void actionSwWait();
+    void initActionWarning();
+    void actionWarning();
+    void initActionFindPlayer();
+    void actionFindPlayer();
+    void initActionAttack();
+    void actionAttack();
+    void initActionDead();
+    void actionDead();
+    int Draw();
 #ifdef DEBUG
     /* 0x000000 */ void debugDraw();
 #endif
-    /* 80BB2C8C */ int Delete();
+    int Delete();
 
     static s16 const M_dir_base[4];
     // private:

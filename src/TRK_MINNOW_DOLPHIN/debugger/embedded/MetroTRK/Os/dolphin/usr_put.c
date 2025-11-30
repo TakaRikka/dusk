@@ -10,7 +10,6 @@
 // look into issue later
 extern void OSReport(char* fmt);
 
-/* 8036DB14-8036DB9C 368454 0088+00 0/0 2/2 0/0 .text            usr_puts_serial */
 BOOL usr_puts_serial(const char* msg) {
     BOOL connect_ = FALSE;
     char c;
@@ -32,5 +31,4 @@ BOOL usr_puts_serial(const char* msg) {
     return connect_;
 }
 
-/* 8036DB10-8036DB14 368450 0004+00 0/0 1/1 0/0 .text            usr_put_initialize */
 void usr_put_initialize(void) {}

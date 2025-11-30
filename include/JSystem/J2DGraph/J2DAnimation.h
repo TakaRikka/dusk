@@ -30,8 +30,8 @@ public:
         mFrame = 0;
         mFrameMax = 0;
     }
-    /* 80053C94 */ virtual ~J2DAnmBase() {}
-    /* 800569B0 */ virtual void searchUpdateMaterialID(J2DScreen*) {}
+    virtual ~J2DAnmBase() {}
+    virtual void searchUpdateMaterialID(J2DScreen*) {}
 
     s16 getFrameMax() const { return mFrameMax; }
     void setFrame(f32 frame) { mFrame = frame; }
@@ -61,8 +61,8 @@ public:
             mVtxColorIndexData[i] = NULL;
         }
     }
-    /* 8030A358 */ virtual ~J2DAnmVtxColor() {}
-    /* 8030363C */ virtual void getColor(u8, u16, _GXColor*) const {}
+    virtual ~J2DAnmVtxColor() {}
+    virtual void getColor(u8, u16, _GXColor*) const {}
     u16 getAnmTableNum(u8 param_0) const { return mAnmTableNum[param_0]; }
     J3DAnmVtxColorIndexData* getAnmVtxColorIndexData(u8 param_1, u16 param_2) const {
         J3D_PANIC(344, param_1 < 2, "Error : range over.");
@@ -90,8 +90,8 @@ public:
             mInfoTable[i] = NULL;
         }
     }
-    /* 8030CC20 */ virtual ~J2DAnmVtxColorKey() {}
-    /* 8030B704 */ virtual void getColor(u8, u16, _GXColor*) const;
+    virtual ~J2DAnmVtxColorKey() {}
+    virtual void getColor(u8, u16, _GXColor*) const;
 
     /* 0x24 */ J3DAnmColorKeyTable* mInfoTable[2];
     /* 0x2C */ s16* mRValues;
@@ -111,8 +111,8 @@ public:
             mInfoTable[i] = NULL;
         }
     }
-    /* 8030CC8C */ virtual ~J2DAnmVtxColorFull() {}
-    /* 8030B4C4 */ virtual void getColor(u8, u16, _GXColor*) const;
+    virtual ~J2DAnmVtxColorFull() {}
+    virtual void getColor(u8, u16, _GXColor*) const;
 
     /* 0x24 */ J3DAnmColorFullTable* mInfoTable[2];
     /* 0x2C */ u8* mRValues;
@@ -134,8 +134,8 @@ public:
         mValues = NULL;
         mKind = KIND_VISIBILITY;
     }
-    /* 8030A3B4 */ virtual ~J2DAnmVisibilityFull() {}
-    /* 8030C048 */ void getVisibility(u16, u8*) const;
+    virtual ~J2DAnmVisibilityFull() {}
+    void getVisibility(u16, u8*) const;
 
     /* 0x10 */ u16 field_0x10;
     /* 0x12 */ u16 field_0x12;
@@ -155,8 +155,8 @@ public:
         mTranslateValues = pTranslateValues;
         mKind = KIND_TRANSFORM;
     }
-    /* 80184370 */ virtual ~J2DAnmTransform() {}
-    /* 80191130 */ virtual void getTransform(u16, J3DTransformInfo*) const {}
+    virtual ~J2DAnmTransform() {}
+    virtual void getTransform(u16, J3DTransformInfo*) const {}
 
     /* 0x10 */ f32* mScaleValues;
     /* 0x14 */ s16* mRotationValues;
@@ -173,11 +173,11 @@ public:
         field_0x24 = 0;
         mInfoTable = NULL;
     }
-    /* 801959C0 */ virtual ~J2DAnmTransformKey() {}
-    /* 8030CD7C */ virtual void getTransform(u16 p1, J3DTransformInfo* pInfo) const {
+    virtual ~J2DAnmTransformKey() {}
+    virtual void getTransform(u16 p1, J3DTransformInfo* pInfo) const {
         this->calcTransform(getFrame(), p1, pInfo);
     }
-    /* 8030AAFC */ virtual void calcTransform(f32, u16, J3DTransformInfo*) const;
+    virtual void calcTransform(f32, u16, J3DTransformInfo*) const;
 
     /* 0x1C */ u8 field_0x1c[6];
     /* 0x22 */ s16 field_0x22;
@@ -192,8 +192,8 @@ public:
 class J2DAnmTransformFull : public J2DAnmTransform {
 public:
     J2DAnmTransformFull() : J2DAnmTransform(NULL, NULL, NULL) { mTableInfo = NULL; }
-    /* 8030CDAC */ virtual ~J2DAnmTransformFull() {}
-    /* 8030A590 */ virtual void getTransform(u16, J3DTransformInfo*) const;
+    virtual ~J2DAnmTransformFull() {}
+    virtual void getTransform(u16, J3DTransformInfo*) const;
 
     /* 0x1C */ u8 field_0x1c[6];
     /* 0x22 */ u16 field_0x22;
@@ -227,10 +227,10 @@ public:
         field_0x7c = 0;
         mKind = KIND_TEXTURE_SRT;
     }
-    /* 8030B9F0 */ void calcTransform(f32, u16, J3DTextureSRTInfo*) const;
+    void calcTransform(f32, u16, J3DTextureSRTInfo*) const;
 
-    /* 80184274 */ virtual ~J2DAnmTextureSRTKey() {}
-    /* 8030BC60 */ virtual void searchUpdateMaterialID(J2DScreen*);
+    virtual ~J2DAnmTextureSRTKey() {}
+    virtual void searchUpdateMaterialID(J2DScreen*);
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum / 3; }
     u16 getUpdateMaterialID(u16 i) const { return mUpdateMaterialID[i]; }
     u8 getUpdateTexMtxID(u16 i) const { return mUpdateTexMtxID[i]; }
@@ -273,8 +273,8 @@ public:
 class J2DAnmTexPattern : public J2DAnmBase {
 public:
     struct J2DAnmTexPatternTIMGPointer {
-        /* 8030CB2C */ J2DAnmTexPatternTIMGPointer();
-        /* 8030CB3C */ ~J2DAnmTexPatternTIMGPointer();
+        J2DAnmTexPatternTIMGPointer();
+        ~J2DAnmTexPatternTIMGPointer();
 
         /* 0x0 */ ResTIMG* mRes;
         /* 0x4 */ JUTPalette* mPalette;
@@ -289,12 +289,12 @@ public:
         mTIMGPtrArray = NULL;
     }
 
-    /* 8030BEE8 */ void getTexNo(u16, u16*) const;
-    /* 8030BF9C */ ResTIMG* getResTIMG(u16) const;
-    /* 8030BFF0 */ JUTPalette* getPalette(u16) const;
+    void getTexNo(u16, u16*) const;
+    ResTIMG* getResTIMG(u16) const;
+    JUTPalette* getPalette(u16) const;
 
-    /* 8030CB90 */ virtual ~J2DAnmTexPattern() { delete[] mTIMGPtrArray; }
-    /* 8030BD10 */ virtual void searchUpdateMaterialID(J2DScreen*);
+    virtual ~J2DAnmTexPattern() { delete[] mTIMGPtrArray; }
+    virtual void searchUpdateMaterialID(J2DScreen*);
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     u16 getUpdateMaterialID(u16 i) const { return mUpdateMaterialID[i]; }
     J3DAnmTexPatternFullTable* getAnmTable() const { return mAnmTable; }
@@ -337,11 +337,11 @@ public:
         mKRValues = NULL;
         mKind = KIND_TEV_REG;
     }
-    /* 8030C0F0 */ void getTevColorReg(u16, _GXColorS10*) const;
-    /* 8030C3B4 */ void getTevKonstReg(u16, _GXColor*) const;
+    void getTevColorReg(u16, _GXColorS10*) const;
+    void getTevKonstReg(u16, _GXColor*) const;
 
-    /* 801841EC */ virtual ~J2DAnmTevRegKey() {}
-    /* 8030C678 */ virtual void searchUpdateMaterialID(J2DScreen* pScreen);
+    virtual ~J2DAnmTevRegKey() {}
+    virtual void searchUpdateMaterialID(J2DScreen* pScreen);
 
     u16 getCRegUpdateMaterialNum() const { return mCRegUpdateMaterialNum; }
     u16 getCRegUpdateMaterialID(u16 i) const { return mCRegUpdateMaterialID[i]; }
@@ -393,9 +393,9 @@ public:
         mUpdateMaterialID = NULL;
         mKind = KIND_COLOR;
     }
-    /* 801842FC */ virtual ~J2DAnmColor() {}
-    /* 8030AF24 */ virtual void searchUpdateMaterialID(J2DScreen*);
-    /* 802EB390 */ virtual void getColor(u16, _GXColor*) const {}
+    virtual ~J2DAnmColor() {}
+    virtual void searchUpdateMaterialID(J2DScreen*);
+    virtual void getColor(u16, _GXColor*) const {}
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     u16 getUpdateMaterialID(u16 i) const { return mUpdateMaterialID[i]; }
 
@@ -421,8 +421,8 @@ public:
         mAValues = NULL;
         mInfoTable = NULL;
     }
-    /* 80239BE0 */ virtual ~J2DAnmColorKey() {}
-    /* 8030B200 */ virtual void getColor(u16, _GXColor*) const;
+    virtual ~J2DAnmColorKey() {}
+    virtual void getColor(u16, _GXColor*) const;
 
     /* 0x30 */ s16* mRValues;
     /* 0x34 */ s16* mGValues;
@@ -459,8 +459,8 @@ public:
         mAValues = NULL;
         mInfoTable = NULL;
     }
-    /* 8030CCF8 */ virtual ~J2DAnmColorFull() {}
-    /* 8030AFC8 */ virtual void getColor(u16, _GXColor*) const;
+    virtual ~J2DAnmColorFull() {}
+    virtual void getColor(u16, _GXColor*) const;
 
     /* 0x30 */ u8* mRValues;
     /* 0x34 */ u8* mGValues;
@@ -482,6 +482,7 @@ template <>
 inline f32 J2DHermiteInterpolation<s16>(register f32 pp1, register s16* pp2, register s16* pp3,
                                         register s16* pp4, register s16* pp5, register s16* pp6,
                                         register s16* pp7) {
+#ifdef __MWERKS__
     register f32 p1 = pp1;
     register f32 ff8;
     register f32 ff7;
@@ -499,7 +500,6 @@ inline f32 J2DHermiteInterpolation<s16>(register f32 pp1, register s16* pp2, reg
     register s16* p6 = pp6;
     register s16* p7 = pp7;
     // clang-format off
-#ifdef __MWERKS__
     asm {
         psq_l ff2, 0(p2), 0x1, 5
         psq_l ff0, 0(p5), 0x1, 5
@@ -522,9 +522,9 @@ inline f32 J2DHermiteInterpolation<s16>(register f32 pp1, register s16* pp2, reg
         fmadds fout, ff4, ff2, fout
         fsubs fout, fout, ff0
     }
-#endif
     // clang-format on
     return fout;
+#endif
 }
 
 #endif /* J2DANIMATION_H */

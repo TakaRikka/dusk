@@ -19,16 +19,16 @@ public:
     virtual ~JUTVideo();
 
     // TODO: return types not confirmed
-    /* 802E4C54 */ static JUTVideo* createManager(GXRenderModeObj const*);
-    /* 802E4CAC */ static void destroyManager();
-    /* 802E5088 */ static void drawDoneStart();
-    /* 802E50B0 */ static void dummyNoDrawWait();
-    /* 802E5198 */ void setRenderMode(GXRenderModeObj const*);
-    /* 802E5210 */ void waitRetraceIfNeed();
+    static JUTVideo* createManager(GXRenderModeObj const*);
+    static void destroyManager();
+    static void drawDoneStart();
+    static void dummyNoDrawWait();
+    void setRenderMode(GXRenderModeObj const*);
+    void waitRetraceIfNeed();
 
-    /* 802E4E50 */ static void preRetraceProc(u32);
-    /* 802E5144 */ static void postRetraceProc(u32);
-    /* 802E50BC */ static void drawDoneCallback();
+    static void preRetraceProc(u32);
+    static void postRetraceProc(u32);
+    static void drawDoneCallback();
 
     u16 getFbWidth() const { return mRenderObj->fbWidth; }
     u16 getEfbHeight() const { return mRenderObj->efbHeight; }

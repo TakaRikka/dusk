@@ -17,7 +17,6 @@ enum {
     HS_MODE_RETURN_e = 6,
 };
 
-/* 80107900-801083C8 102240 0AC8+00 1/0 0/0 0/0 .text draw__Q29daAlink_c14hsChainShape_cFv */
 void daAlink_c::hsChainShape_c::draw() {
     daAlink_c* temp_r3 = (daAlink_c*)getUserArea();
     J3DModelData* sp60 = temp_r3->getItemModelData();
@@ -209,8 +208,6 @@ void daAlink_c::hsChainShape_c::draw() {
     }
 }
 
-/* 801083C8-8010859C 102D08 01D4+00 1/1 0/0 0/0 .text
- * hookshotAtHitCallBack__9daAlink_cFP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 void daAlink_c::hookshotAtHitCallBack(dCcD_GObjInf* i_atObjInf, fopAc_ac_c* i_tgActor,
                                       dCcD_GObjInf* i_tgObjInf) {
     if (i_tgActor != NULL && fopAcM_IsActor(i_tgActor) && !i_tgObjInf->ChkTgHookshotThrough()) {
@@ -236,14 +233,11 @@ void daAlink_c::hookshotAtHitCallBack(dCcD_GObjInf* i_atObjInf, fopAc_ac_c* i_tg
     }
 }
 
-/* 8010859C-801085BC 102EDC 0020+00 1/1 0/0 0/0 .text
- * daAlink_hookshotAtHitCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void daAlink_hookshotAtHitCallBack(fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf,
                                           fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf) {
     static_cast<daAlink_c*>(i_atActor)->hookshotAtHitCallBack(i_atObjInf, i_tgActor, i_tgObjInf);
 }
 
-/* 801085BC-80108600 102EFC 0044+00 1/0 0/0 0/0 .text            getHookshotTopPos__9daAlink_cFv */
 cXyz* daAlink_c::getHookshotTopPos() {
     if (checkHookshotItem(mEquipItem)) {
         return &mHookshotTopPos;
@@ -252,28 +246,22 @@ cXyz* daAlink_c::getHookshotTopPos() {
     return NULL;
 }
 
-/* 80108600-80108668 102F40 0068+00 1/0 0/0 0/0 .text checkHookshotReturnMode__9daAlink_cCFv */
 bool daAlink_c::checkHookshotReturnMode() const {
     return checkHookshotItem(mEquipItem) &&
            (mItemMode == HS_MODE_FLY_e || mItemMode == 5 || mItemMode == HS_MODE_RETURN_e);
 }
 
-/* 80108668-801086DC 102FA8 0074+00 1/0 0/0 0/0 .text checkHookshotShootReturnMode__9daAlink_cCFv
- */
 bool daAlink_c::checkHookshotShootReturnMode() const {
     return (checkHookshotItem(mEquipItem) && mItemMode == HS_MODE_SHOOT_e) ||
            checkHookshotReturnMode();
 }
 
-/* 801086DC-8010871C 10301C 0040+00 6/6 0/0 0/0 .text            resetHookshotMode__9daAlink_cFv */
 void daAlink_c::resetHookshotMode() {
     mItemMode = HS_MODE_NONE_e;
     initLockAt();
     mSearchBallScale = FLT_MAX;
 }
 
-/* 8010871C-80108784 10305C 0068+00 0/0 0/0 1/1 .text
- * setEnemyBombHookshot__9daAlink_cFP10fopAc_ac_c               */
 BOOL daAlink_c::setEnemyBombHookshot(fopAc_ac_c* i_actor) {
     if (mHookTargetAcKeep.getActor() != NULL) {
         cancelHookshotCarry();
@@ -284,13 +272,10 @@ BOOL daAlink_c::setEnemyBombHookshot(fopAc_ac_c* i_actor) {
     return false;
 }
 
-/* 80108784-801087B0 1030C4 002C+00 3/3 0/0 0/0 .text            checkLv7BossRoom__9daAlink_cFv */
 bool daAlink_c::checkLv7BossRoom() {
     return checkStageName("D_MN07A");
 }
 
-/* 801087B0-80108828 1030F0 0078+00 6/6 0/0 0/0 .text
- * checkHookshotStickBG__9daAlink_cFR13cBgS_PolyInfo            */
 BOOL daAlink_c::checkHookshotStickBG(cBgS_PolyInfo& i_poly) {
     if (dComIfG_Bgsp().ChkPolyHSStick(i_poly)) {
         dBgW_Base* bgw_p = dComIfG_Bgsp().GetBgWBasePointer(i_poly);
@@ -302,8 +287,6 @@ BOOL daAlink_c::checkHookshotStickBG(cBgS_PolyInfo& i_poly) {
     return false;
 }
 
-/* 80108828-80108864 103168 003C+00 4/4 0/0 0/0 .text            cancelHookshotCarry__9daAlink_cFv
- */
 void daAlink_c::cancelHookshotCarry() {
     if (mHookTargetAcKeep.getActor() != NULL) {
         fopAcM_cancelHookCarryNow(mHookTargetAcKeep.getActor());
@@ -311,7 +294,6 @@ void daAlink_c::cancelHookshotCarry() {
     }
 }
 
-/* 80108864-801088A0 1031A4 003C+00 2/2 0/0 0/0 .text changeHookshotDrawModel__9daAlink_cFv */
 void daAlink_c::changeHookshotDrawModel() {
     if (mEquipItem == fpcNm_ITEM_HOOKSHOT && field_0x3020 == 1) {
         J3DModel* old_item = mHeldItemModel;
@@ -324,13 +306,11 @@ void daAlink_c::changeHookshotDrawModel() {
     }
 }
 
-/* 801088A0-801088C8 1031E0 0028+00 6/6 0/0 0/0 .text checkHookshotRoofLv7Boss__9daAlink_cFv */
 BOOL daAlink_c::checkHookshotRoofLv7Boss() {
     return mCargoCarryAcKeep.getActor() != NULL &&
            fopAcM_GetName(mCargoCarryAcKeep.getActor()) == PROC_B_DR;
 }
 
-/* 801088C8-80108980 103208 00B8+00 2/2 0/0 0/0 .text            checkChaseHookshot__9daAlink_cFv */
 BOOL daAlink_c::checkChaseHookshot() {
     if (field_0x2804 == NULL) {
         if (mTargetedActor != NULL) {
@@ -352,33 +332,24 @@ BOOL daAlink_c::checkChaseHookshot() {
     return false;
 }
 
-/* 80108980-801089E8 1032C0 0068+00 2/2 0/0 0/0 .text checkOctaIealSpecialCollect__9daAlink_cFv */
 BOOL daAlink_c::checkOctaIealSpecialCollect() {
     return mProcID == PROC_HOOKSHOT_FLY && checkHookshotItem(mEquipItem) && checkBossOctaIealRoom();
 }
 
-/* 801089E8-80108A18 103328 0030+00 5/5 0/0 0/0 .text            checkBossOctaIealRoom__9daAlink_cFv
- */
 BOOL daAlink_c::checkBossOctaIealRoom() {
     return checkStageName("D_MN01A");
 }
 
-/* 80108A18-80108A3C 103358 0024+00 19/19 0/0 0/0 .text            checkHookshotWait__9daAlink_cCFv
- */
 BOOL daAlink_c::checkHookshotWait() const {
     return mItemMode == HS_MODE_NONE_e || mItemMode == HS_MODE_READY_e;
 }
 
-/* 80108A3C-80108A90 10337C 0054+00 1/1 0/0 0/0 .text            setHookshotCatchNow__9daAlink_cFv
- */
 void daAlink_c::setHookshotCatchNow() {
     field_0x3026 = 5;
     dComIfGp_getVibration().StartShock(4, 1, cXyz(0.0f, 1.0f, 0.0f));
 }
 
 
-/* 80108A90-80108B34 1033D0 00A4+00 1/0 0/0 0/0 .text setHookshotCarryOffset__9daAlink_cFUiPC4cXyz
- */
 bool daAlink_c::setHookshotCarryOffset(fpc_ProcID i_carryActorID, cXyz const* i_posOffset) {
     if (dComIfGp_checkPlayerStatus1(0, 0x10000)) {
         fopAc_ac_c* carryActor_p = mCargoCarryAcKeep.getActor();
@@ -402,7 +373,6 @@ bool daAlink_c::setHookshotCarryOffset(fpc_ProcID i_carryActorID, cXyz const* i_
     return false;
 }
 
-/* 80108B34-80108DB4 103474 0280+00 1/1 0/0 0/0 .text            setHookshotModel__9daAlink_cFv */
 void daAlink_c::setHookshotModel() {
     J3DAnmTransform* bck = (J3DAnmTransform*)mAnmHeap9.loadDataIdx(0x17E);
 
@@ -452,7 +422,6 @@ void daAlink_c::setHookshotModel() {
     mpHookSound->init(&mHookshotTopPos, 1);
 }
 
-/* 80108DB4-80108EEC 1036F4 0138+00 6/6 0/0 0/0 .text            setHookshotSight__9daAlink_cFv */
 void daAlink_c::setHookshotSight() {
     cXyz sight_pos;
     f32 length;
@@ -496,7 +465,6 @@ void daAlink_c::setHookshotSight() {
 }
 
 
-/* 80108EEC-80108F64 10382C 0078+00 1/1 0/0 0/0 .text            cancelHookshotShot__9daAlink_cFv */
 void daAlink_c::cancelHookshotShot() {
     if (checkHookshotItem(mEquipItem) &&
         (mItemMode == HS_MODE_SHOOT_e || mItemMode == 5 || mItemMode == HS_MODE_FLY_e))
@@ -509,7 +477,6 @@ void daAlink_c::cancelHookshotShot() {
     }
 }
 
-/* 80108F64-8010903C 1038A4 00D8+00 4/4 0/0 0/0 .text            cancelHookshotMove__9daAlink_cFv */
 bool daAlink_c::cancelHookshotMove() {
     if (mFastShotTime == 0 && mItemMode == HS_MODE_NONE_e) {
         if (checkHookshotAnime() &&
@@ -524,14 +491,11 @@ bool daAlink_c::cancelHookshotMove() {
 }
 
 
-/* 8010903C-80109070 10397C 0034+00 2/2 0/0 0/0 .text
- * checkHookshotReadyMaterialOffMode__9daAlink_cCFv             */
 BOOL daAlink_c::checkHookshotReadyMaterialOffMode() const {
     return mProcID == PROC_HOOKSHOT_WALL_SHOOT || mProcID == PROC_HORSE_HOOKSHOT_SUBJECT ||
            mProcID == PROC_SWIM_HOOKSHOT_SUBJECT || mProcID == PROC_HOOKSHOT_SUBJECT;
 }
 
-/* 80109070-801090EC 1039B0 007C+00 5/5 0/0 0/0 .text setHookshotReadyMaterial__9daAlink_cFv */
 void daAlink_c::setHookshotReadyMaterial() {
     if (checkNoResetFlg2(FLG2_UNK_80000) || checkCasualWearFlg()) {
         mFallVoiceInit = 0;
@@ -547,7 +511,6 @@ void daAlink_c::setHookshotReadyMaterial() {
     }
 }
 
-/* 801090EC-80109170 103A2C 0084+00 8/8 0/0 0/0 .text initHookshotUpperAnimeSpeed__9daAlink_cFi */
 int daAlink_c::initHookshotUpperAnimeSpeed(int param_0) {
     if (checkHookshotWait()) {
         if (param_0) {
@@ -565,7 +528,6 @@ int daAlink_c::initHookshotUpperAnimeSpeed(int param_0) {
     return 0;
 }
 
-/* 80109170-801091E4 103AB0 0074+00 4/4 0/0 0/0 .text            initHookshotReady__9daAlink_cFv */
 void daAlink_c::initHookshotReady() {
     mItemMode = HS_MODE_READY_e;
 
@@ -578,8 +540,6 @@ void daAlink_c::initHookshotReady() {
     field_0x3494 = -1.0f;
 }
 
-/* 801091E4-80109284 103B24 00A0+00 1/1 0/0 0/0 .text            setHookshotReadyAnime__9daAlink_cFv
- */
 void daAlink_c::setHookshotReadyAnime() {
     f32 speed;
     if (!checkAttentionLock() && mFastShotTime == 0) {
@@ -593,8 +553,6 @@ void daAlink_c::setHookshotReadyAnime() {
     initHookshotReady();
 }
 
-/* 80109284-801095C8 103BC4 0344+00 3/3 0/0 0/0 .text checkUpperItemActionHookshot__9daAlink_cFv
- */
 int daAlink_c::checkUpperItemActionHookshot() {
     if (checkHookshotWait()) {
         mSearchBallScale = FLT_MAX;
@@ -689,7 +647,6 @@ int daAlink_c::checkUpperItemActionHookshot() {
     return cancelUpperItemReadyAnime(0);
 }
 
-/* 801095C8-801097A0 103F08 01D8+00 7/7 0/0 0/0 .text checkNextActionHookshot__9daAlink_cFv */
 int daAlink_c::checkNextActionHookshot() {
     if (mProcID == PROC_HOOKSHOT_ROOF_SHOOT || mProcID == PROC_HOOKSHOT_WALL_SHOOT) {
         return 0;
@@ -733,8 +690,6 @@ int daAlink_c::checkNextActionHookshot() {
     }
 }
 
-/* 801097A0-80109890 1040E0 00F0+00 2/2 0/0 0/0 .text            setHookshotReturnEnd__9daAlink_cFv
- */
 void daAlink_c::setHookshotReturnEnd() {
     resetHookshotMode();
     cancelItemUseQuake(0);
@@ -752,8 +707,6 @@ void daAlink_c::setHookshotReturnEnd() {
     mFastShotTime = 0;
 }
 
-/* 80109890-80109AAC 1041D0 021C+00 3/3 0/0 0/0 .text setHookshotHangMoveBGCollect__9daAlink_cFv
- */
 int daAlink_c::setHookshotHangMoveBGCollect() {
     cBgS_PolyInfo* poly;
     if (mItemMode == 4) {
@@ -805,8 +758,6 @@ int daAlink_c::setHookshotHangMoveBGCollect() {
     return 1;
 }
 
-/* 80109AAC-80109BDC 1043EC 0130+00 2/2 0/0 0/0 .text            setHookshotTopPosFly__9daAlink_cFv
- */
 void daAlink_c::setHookshotTopPosFly() {
     fopAc_ac_c* targetAc_p = mHookTargetAcKeep.getActor();
 
@@ -830,10 +781,8 @@ void daAlink_c::setHookshotTopPosFly() {
     }
 }
 
-/* 804256AC-804256B8 0523CC 000C+00 1/2 0/0 0/0 .bss             l_hookSnowSandHitScale */
 static cXyz l_hookSnowSandHitScale(0.5f, 0.5f, 0.5f);
 
-/* 80109BDC-8010B2DC 10451C 1700+00 1/1 0/0 0/0 .text            setHookshotPos__9daAlink_cFv */
 void daAlink_c::setHookshotPos() {
     mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(field_0x30c0));
     mDoMtx_stack_c::transM(-2.0f, 1.0f, 1.0f);
@@ -1223,7 +1172,6 @@ void daAlink_c::setHookshotPos() {
     field_0x0714->calc();
 }
 
-/* 8010B2DC-8010B35C 105C1C 0080+00 2/2 0/0 0/0 .text setHookshotRoofWaitAnime__9daAlink_cFv */
 void daAlink_c::setHookshotRoofWaitAnime() {
     daAlink_ANM anm;
     if (checkHookshotRoofLv7Boss()) {
@@ -1245,7 +1193,6 @@ void daAlink_c::setHookshotRoofWaitAnime() {
     setSingleAnimeBaseMorf(anm, 2.0f);
 }
 
-/* 8010B35C-8010B3AC 105C9C 0050+00 2/2 0/0 0/0 .text setHookshotWallWaitAnime__9daAlink_cFv */
 void daAlink_c::setHookshotWallWaitAnime() {
     daAlink_ANM anm;
     if (field_0x3020 == 0) {
@@ -1258,7 +1205,6 @@ void daAlink_c::setHookshotWallWaitAnime() {
     onModeFlg(0x100);
 }
 
-/* 8010B3AC-8010B644 105CEC 0298+00 2/2 0/0 0/0 .text            hookshotRoofTurn__9daAlink_cFv */
 void daAlink_c::hookshotRoofTurn() {
     BOOL play_sound = false;
     if (!dComIfGp_checkPlayerStatus0(0, 0x2000)) {
@@ -1325,8 +1271,6 @@ void daAlink_c::hookshotRoofTurn() {
 }
 
 
-/* 8010B644-8010B720 105F84 00DC+00 3/3 0/0 0/0 .text
- * initHookshotRoofWaitActor__9daAlink_cFP10fopAc_ac_c          */
 void daAlink_c::initHookshotRoofWaitActor(fopAc_ac_c* i_actor) {
     if (i_actor != NULL) {
         mCargoCarryAcKeep.setData(i_actor);
@@ -1345,7 +1289,6 @@ void daAlink_c::initHookshotRoofWaitActor(fopAc_ac_c* i_actor) {
     }
 }
 
-/* 8010B720-8010B84C 106060 012C+00 2/2 0/0 0/0 .text            checkNextHookPoint__9daAlink_cFv */
 int daAlink_c::checkNextHookPoint() {
     if (field_0x3026 != 0) {
         fopAc_ac_c* targetAc_p = mHookTargetAcKeep.getActor();
@@ -1368,8 +1311,6 @@ int daAlink_c::checkNextHookPoint() {
     return procFallInit(1, 5.0f);
 }
 
-/* 8010B84C-8010B96C 10618C 0120+00 2/2 0/0 0/0 .text            checkLandHookshotHang__9daAlink_cFv
- */
 int daAlink_c::checkLandHookshotHang() {
     mLinkGndChk.SetPos(&field_0x3834);
 
@@ -1395,7 +1336,6 @@ int daAlink_c::checkLandHookshotHang() {
     return 0;
 }
 
-/* 8010B96C-8010BA6C 1062AC 0100+00 3/3 0/0 0/0 .text commonHookshotRoofWait__9daAlink_cFv */
 int daAlink_c::commonHookshotRoofWait() {
     setJumpMode();
     if (mProcVar4.field_0x3010 != 0) {
@@ -1425,13 +1365,11 @@ int daAlink_c::commonHookshotRoofWait() {
     return 0;
 }
 
-/* 8010BA6C-8010BAA8 1063AC 003C+00 2/2 0/0 0/0 .text commonHookshotWallWait__9daAlink_cFv */
 int daAlink_c::commonHookshotWallWait() {
     setJumpMode();
     return checkLandHookshotHang() ? TRUE : FALSE;
 }
 
-/* 8010BAA8-8010BB48 1063E8 00A0+00 1/1 0/0 0/0 .text procHookshotSubjectInit__9daAlink_cFv */
 int daAlink_c::procHookshotSubjectInit() {
     if (!commonProcInitNotSameProc(PROC_HOOKSHOT_SUBJECT)) {
         return 0;
@@ -1451,8 +1389,6 @@ int daAlink_c::procHookshotSubjectInit() {
 }
 
 
-/* 8010BB48-8010BC08 106488 00C0+00 1/0 0/0 0/0 .text            procHookshotSubject__9daAlink_cFv
- */
 int daAlink_c::procHookshotSubject() {
     if (checkHookshotWait()) {
         setDoStatus(0x12);
@@ -1476,8 +1412,6 @@ int daAlink_c::procHookshotSubject() {
     return 1;
 }
 
-/* 8010BC08-8010BCA4 106548 009C+00 1/1 0/0 0/0 .text            procHookshotMoveInit__9daAlink_cFv
- */
 int daAlink_c::procHookshotMoveInit() {
     if (!commonProcInitNotSameProc(PROC_HOOKSHOT_MOVE)) {
         return 0;
@@ -1495,7 +1429,6 @@ int daAlink_c::procHookshotMoveInit() {
     return 1;
 }
 
-/* 8010BCA4-8010BD90 1065E4 00EC+00 1/0 0/0 0/0 .text            procHookshotMove__9daAlink_cFv */
 int daAlink_c::procHookshotMove() {
     cancelHookshotMove();
 
@@ -1507,7 +1440,7 @@ int daAlink_c::procHookshotMove() {
 
             if (field_0x2f98 != 2) {
                 field_0x2f98 = 2;
-                blend = daAlinkHIO_basic_c0::m.mAnmBlendFactor;
+                blend = daAlinkHIO_basic_c0::m.mBasicInterpolation;
             }
         } else {
             offModeFlg(1);
@@ -1524,8 +1457,6 @@ int daAlink_c::procHookshotMove() {
     return 1;
 }
 
-/* 8010BD90-8010BEF0 1066D0 0160+00 2/2 0/0 0/0 .text            procHookshotFlyInit__9daAlink_cFv
- */
 int daAlink_c::procHookshotFlyInit() {
     commonProcInit(PROC_HOOKSHOT_FLY);
 
@@ -1570,7 +1501,6 @@ int daAlink_c::procHookshotFlyInit() {
 }
 
 
-/* 8010BEF0-8010C830 106830 0940+00 2/1 0/0 0/0 .text            procHookshotFly__9daAlink_cFv */
 int daAlink_c::procHookshotFly() {
     fopAc_ac_c* targetAc_p = mHookTargetAcKeep.getActor();
 
@@ -1712,8 +1642,6 @@ int daAlink_c::procHookshotFly() {
 }
 
 
-/* 8010C830-8010C9F4 107170 01C4+00 4/4 0/0 0/0 .text
- * procHookshotRoofWaitInit__9daAlink_cFiP10fopAc_ac_ci         */
 int daAlink_c::procHookshotRoofWaitInit(int param_0, fopAc_ac_c* param_1, int param_2) {
     commonProcInit(PROC_HOOKSHOT_ROOF_WAIT);
 
@@ -1764,8 +1692,6 @@ int daAlink_c::procHookshotRoofWaitInit(int param_0, fopAc_ac_c* param_1, int pa
 }
 
 
-/* 8010C9F4-8010CC80 107334 028C+00 1/0 0/0 0/0 .text            procHookshotRoofWait__9daAlink_cFv
- */
 int daAlink_c::procHookshotRoofWait() {
     if (dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x80)) {
         if (checkSubjectEnd(1)) {
@@ -1827,8 +1753,6 @@ int daAlink_c::procHookshotRoofWait() {
 }
 
 
-/* 8010CC80-8010CD60 1075C0 00E0+00 1/1 0/0 0/0 .text
- * procHookshotRoofShootInit__9daAlink_cFP10fopAc_ac_c          */
 int daAlink_c::procHookshotRoofShootInit(fopAc_ac_c* param_0) {
     commonProcInit(PROC_HOOKSHOT_ROOF_SHOOT);
 
@@ -1859,8 +1783,6 @@ int daAlink_c::procHookshotRoofShootInit(fopAc_ac_c* param_0) {
 }
 
 
-/* 8010CD60-8010CF6C 1076A0 020C+00 1/0 0/0 0/0 .text            procHookshotRoofShoot__9daAlink_cFv
- */
 int daAlink_c::procHookshotRoofShoot() {
     if (checkHookshotWait()) {
         setDoStatus(0x12);
@@ -1925,8 +1847,6 @@ int daAlink_c::procHookshotRoofShoot() {
 }
 
 
-/* 8010CF6C-8010D034 1078AC 00C8+00 1/1 0/0 0/0 .text
- * procHookshotRoofBootsInit__9daAlink_cFP10fopAc_ac_c          */
 int daAlink_c::procHookshotRoofBootsInit(fopAc_ac_c* param_0) {
     commonProcInit(PROC_HOOKSHOT_ROOF_BOOTS);
 
@@ -1954,8 +1874,6 @@ int daAlink_c::procHookshotRoofBootsInit(fopAc_ac_c* param_0) {
 }
 
 
-/* 8010D034-8010D174 107974 0140+00 1/0 0/0 0/0 .text            procHookshotRoofBoots__9daAlink_cFv
- */
 int daAlink_c::procHookshotRoofBoots() {
     if (commonHookshotRoofWait()) {
         return 1;
@@ -1984,7 +1902,6 @@ int daAlink_c::procHookshotRoofBoots() {
 }
 
 
-/* 8010D174-8010D38C 107AB4 0218+00 3/3 0/0 0/0 .text procHookshotWallWaitInit__9daAlink_cFisi */
 int daAlink_c::procHookshotWallWaitInit(int param_0, s16 param_1, int param_2) {
     commonProcInit(PROC_HOOKSHOT_WALL_WAIT);
 
@@ -2036,8 +1953,6 @@ int daAlink_c::procHookshotWallWaitInit(int param_0, s16 param_1, int param_2) {
 }
 
 
-/* 8010D38C-8010D5F4 107CCC 0268+00 1/0 0/0 0/0 .text            procHookshotWallWait__9daAlink_cFv
- */
 int daAlink_c::procHookshotWallWait() {
     if (dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x80)) {
         if (checkSubjectEnd(1)) {
@@ -2101,7 +2016,6 @@ int daAlink_c::procHookshotWallWait() {
 }
 
 
-/* 8010D5F4-8010D6CC 107F34 00D8+00 1/1 0/0 0/0 .text procHookshotWallShootInit__9daAlink_cFv */
 int daAlink_c::procHookshotWallShootInit() {
     commonProcInit(PROC_HOOKSHOT_WALL_SHOOT);
 
@@ -2131,8 +2045,6 @@ int daAlink_c::procHookshotWallShootInit() {
 }
 
 
-/* 8010D6CC-8010D93C 10800C 0270+00 1/0 0/0 0/0 .text            procHookshotWallShoot__9daAlink_cFv
- */
 int daAlink_c::procHookshotWallShoot() {
     if (checkHookshotWait()) {
         setDoStatus(0x12);

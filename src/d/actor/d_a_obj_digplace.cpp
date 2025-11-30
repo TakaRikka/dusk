@@ -10,7 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 8057BF98-8057C138 000078 01A0+00 1/1 0/0 0/0 .text            create__12daObjDigpl_cFv */
 int daObjDigpl_c::create() {
     fopAcM_ct(this, daObjDigpl_c);
 
@@ -46,23 +45,17 @@ int daObjDigpl_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8057C138-8057C158 000218 0020+00 1/0 0/0 0/0 .text            daObjDigpl_Create__FP10fopAc_ac_c
- */
 static int daObjDigpl_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjDigpl_c*>(i_this)->create();
 }
 
-/* 8057C158-8057C1B8 000238 0060+00 1/0 0/0 0/0 .text            __dt__12daObjDigpl_cFv */
 daObjDigpl_c::~daObjDigpl_c() {}
 
-/* 8057C1B8-8057C1EC 000298 0034+00 1/0 0/0 0/0 .text            daObjDigpl_Delete__FP12daObjDigpl_c
- */
 static int daObjDigpl_Delete(daObjDigpl_c* i_this) {
     i_this->~daObjDigpl_c();
     return 1;
 }
 
-/* 8057C1EC-8057C880 0002CC 0694+00 1/1 0/0 0/0 .text            execute__12daObjDigpl_cFv */
 int daObjDigpl_c::execute() {
     daPy_py_c* player_p = daPy_getLinkPlayerActorClass();
 
@@ -168,25 +161,20 @@ int daObjDigpl_c::execute() {
     return 1;
 }
 
-/* 8057C880-8057C8A0 000960 0020+00 1/0 0/0 0/0 .text daObjDigpl_Execute__FP12daObjDigpl_c */
 static int daObjDigpl_Execute(daObjDigpl_c* i_this) {
     return i_this->execute();
 }
 
-/* 8057C8A0-8057C8A8 000980 0008+00 1/0 0/0 0/0 .text            daObjDigpl_Draw__FP12daObjDigpl_c
- */
 static int daObjDigpl_Draw(daObjDigpl_c* i_this) {
     return 1;
 }
 
-/* 8057C8F8-8057C918 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjDigpl_Method */
 static actor_method_class l_daObjDigpl_Method = {
     (process_method_func)daObjDigpl_Create,  (process_method_func)daObjDigpl_Delete,
     (process_method_func)daObjDigpl_Execute, (process_method_func)NULL,
     (process_method_func)daObjDigpl_Draw,
 };
 
-/* 8057C918-8057C948 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Digpl */
 extern actor_process_profile_definition g_profile_Obj_Digpl = {
     fpcLy_CURRENT_e,
     3,

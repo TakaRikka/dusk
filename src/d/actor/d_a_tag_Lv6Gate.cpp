@@ -10,21 +10,16 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
 
-/* 80D4F898-80D4F8B8 000078 0020+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daTagLv6Gate_c*>(i_this)->createHeap();
 }
 
-/* 80D50908-80D50914 000000 000C+00 2/2 0/0 0/0 .rodata          l_minRelative */
 static f32 const l_minRelative[] = {-700.0f, -300.0f, -2000.0f};
 
-/* 80D50914-80D50920 00000C 000C+00 0/1 0/0 0/0 .rodata          l_maxRelative */
 static f32 const l_maxRelative[] = {700.0f, 0.0f, 1000.0f};
 
-/* 80D509C8-80D509CC -00001 0004+00 4/4 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Lv6Gate";
 
-/* 80D4F8B8-80D4FB70 000098 02B8+00 1/1 0/0 0/0 .text            createHeap__14daTagLv6Gate_cFv */
 int daTagLv6Gate_c::createHeap() {
     J3DAnmTextureSRTKey* btk;
 
@@ -72,8 +67,6 @@ int daTagLv6Gate_c::createHeap() {
     return 1;
 }
 
-/* 80D4FBB8-80D4FBD8 000398 0020+00 1/0 0/0 0/0 .text            daTagLv6Gate_Create__FP10fopAc_ac_c
- */
 static int daTagLv6Gate_Create(fopAc_ac_c* i_this) {
     return static_cast<daTagLv6Gate_c*>(i_this)->create();
 }
@@ -122,7 +115,6 @@ inline bool daTagLv6Gate_c::checkOpenArea() {
     return false;
 }
 
-/* 80D4FEDC-80D5068C 0006BC 07B0+00 1/1 0/0 0/0 .text            execute__14daTagLv6Gate_cFv */
 inline int daTagLv6Gate_c::execute() {
     dComIfG_inf_c& game_info = g_dComIfG_gameInfo;  // Fake match?
 
@@ -301,7 +293,6 @@ void daTagLv6Gate_c::create_init() {
     }
 }
 
-/* 80D4FBD8-80D4FE5C 0003B8 0284+00 1/1 0/0 0/0 .text            create__14daTagLv6Gate_cFv */
 int daTagLv6Gate_c::create() {
     fopAcM_ct(this, daTagLv6Gate_c);
 
@@ -318,17 +309,14 @@ int daTagLv6Gate_c::create() {
     return phase;
 }
 
-/* 80D4FEBC-80D4FEDC 00069C 0020+00 1/0 0/0 0/0 .text daTagLv6Gate_Execute__FP14daTagLv6Gate_c */
 static int daTagLv6Gate_Execute(daTagLv6Gate_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D5068C-80D506AC 000E6C 0020+00 1/0 0/0 0/0 .text daTagLv6Gate_Draw__FP14daTagLv6Gate_c */
 static int daTagLv6Gate_Draw(daTagLv6Gate_c* i_this) {
     return i_this->draw();
 }
 
-/* 80D506AC-80D50848 000E8C 019C+00 1/1 0/0 0/0 .text            draw__14daTagLv6Gate_cFv */
 int daTagLv6Gate_c::draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
 
@@ -357,7 +345,6 @@ int daTagLv6Gate_c::draw() {
     return 1;
 }
 
-/* 80D50848-80D50850 001028 0008+00 1/0 0/0 0/0 .text daTagLv6Gate_IsDelete__FP14daTagLv6Gate_c */
 static int daTagLv6Gate_IsDelete(daTagLv6Gate_c* i_this) {
     return 1;
 }
@@ -372,20 +359,17 @@ daTagLv6Gate_c::~daTagLv6Gate_c() {
     dComIfG_resDelete(&mPhase, l_arcName);
 }
 
-/* 80D50850-80D50900 001030 00B0+00 1/0 0/0 0/0 .text daTagLv6Gate_Delete__FP14daTagLv6Gate_c */
 static int daTagLv6Gate_Delete(daTagLv6Gate_c* i_this) {
     i_this->~daTagLv6Gate_c();
     return 1;
 }
 
-/* 80D509CC-80D509EC -00001 0020+00 1/0 0/0 0/0 .data            l_daTagLv6Gate_Method */
 static actor_method_class l_daTagLv6Gate_Method = {
     (process_method_func)daTagLv6Gate_Create,  (process_method_func)daTagLv6Gate_Delete,
     (process_method_func)daTagLv6Gate_Execute, (process_method_func)daTagLv6Gate_IsDelete,
     (process_method_func)daTagLv6Gate_Draw,
 };
 
-/* 80D509EC-80D50A1C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_Lv6Gate */
 extern actor_process_profile_definition g_profile_Tag_Lv6Gate = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

@@ -11,15 +11,15 @@ public:
         init();
     }
 
-    /* 80845EAC */ void init();
+    void init();
 
     void setNowOffsetX(f32 i_offsetX) { mNowOffsetX = i_offsetX; }
     void setNowOffsetY(f32 i_offsetY) { mNowOffsetY = i_offsetY; }
     f32* getNowOffsetXP() { return &mNowOffsetX; }
     f32* getNowOffsetYP() { return &mNowOffsetY; }
 
-    /* 80848D54 */ virtual ~daHoZelda_matAnm_c() {}
-    /* 80845EDC */ virtual void calc(J3DMaterial*) const;
+    virtual ~daHoZelda_matAnm_c() {}
+    virtual void calc(J3DMaterial*) const;
 
     static u8 getEyeMoveFlg() { return mEyeMoveFlg; }
     static void offEyeMoveFlg() { mEyeMoveFlg = false; }
@@ -78,31 +78,31 @@ public:
  */
 class daHoZelda_c : public fopAc_ac_c {
 public:
-    /* 80846000 */ int createHeap();
-    /* 80846718 */ void modelCallBack(u16);
-    /* 808469B0 */ int create();
-    /* 80846DB0 */ ~daHoZelda_c();
-    /* 80846F4C */ int setDoubleAnime(f32, f32, f32, u16, u16, f32);
-    /* 8084718C */ int setUpperAnime(u16);
-    /* 80847234 */ void resetUpperAnime();
-    /* 808472C0 */ int setSingleAnime(u16, f32, f32, s16, f32);
-    /* 80847430 */ void animePlay();
-    /* 80847574 */ void setEyeBtp(u16);
-    /* 808475F0 */ void setEyeBtk(u16, u8);
-    /* 80847670 */ void setNormalFace();
-    /* 808476B0 */ void setAnm();
-    /* 80847E44 */ void setBowModel();
-    /* 80847F54 */ void setMatrix();
-    /* 80848058 */ void shootArrow();
-    /* 80848090 */ void deleteArrow();
-    /* 80848118 */ void setBowBck(u16);
-    /* 8084819C */ void setRideOffset();
-    /* 80848204 */ void clearEyeMove();
-    /* 80848254 */ void setEyeMove(cXyz const*, s16, s16);
-    /* 808484B8 */ void setNeckAngle();
-    /* 80848774 */ void searchBodyAngle();
-    /* 808489CC */ int execute();
-    /* 80848B64 */ int draw();
+    int createHeap();
+    void modelCallBack(u16);
+    int create();
+    ~daHoZelda_c();
+    int setDoubleAnime(f32, f32, f32, u16, u16, f32);
+    int setUpperAnime(u16);
+    void resetUpperAnime();
+    int setSingleAnime(u16, f32, f32, s16, f32);
+    void animePlay();
+    void setEyeBtp(u16);
+    void setEyeBtk(u16, u8);
+    void setNormalFace();
+    void setAnm();
+    void setBowModel();
+    void setMatrix();
+    void shootArrow();
+    void deleteArrow();
+    void setBowBck(u16);
+    void setRideOffset();
+    void clearEyeMove();
+    void setEyeMove(cXyz const*, s16, s16);
+    void setNeckAngle();
+    void searchBodyAngle();
+    int execute();
+    int draw();
 
     MtxP getRightHandMtx() { return mpZeldaModel->getAnmMtx(22); }
     MtxP getRightFingerMtx() { return mpZeldaModel->getAnmMtx(23); }

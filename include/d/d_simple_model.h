@@ -20,15 +20,15 @@ public:
 
 class diff_model_c {
 public:
-    /* 80048D60 */ diff_model_c();
-    /* 800490EC */ BOOL create(J3DModelData*, int, u8);
-    /* 800491F4 */ J3DModelData* getModelData();
-    /* 80049210 */ void remove(int);
-    /* 80049270 */ void draw();
-    /* 80049368 */ void init();
-    /* 80049388 */ BOOL isSame(J3DModelData*, int);
-    /* 800493FC */ s32 getRoomNo();
-    /* 80049408 */ void insert(modelList_c*);
+    diff_model_c();
+    BOOL create(J3DModelData*, int, u8);
+    J3DModelData* getModelData();
+    void remove(int);
+    void draw();
+    void init();
+    BOOL isSame(J3DModelData*, int);
+    s32 getRoomNo();
+    void insert(modelList_c*);
 
     J3DModel* getModel() { return mpModel; }
 
@@ -44,13 +44,13 @@ private:
 
 class dSmplMdl_draw_c {
 public:
-    /* 80048CB4 */ dSmplMdl_draw_c();
-    /* 80048E0C */ void draw();
-    /* 80048EBC */ void entry(J3DModel*, int);
-    /* 80048F70 */ BOOL addModel(J3DModelData*, int, u8);
-    /* 80049058 */ int removeModel(J3DModelData*, int);
+    dSmplMdl_draw_c();
+    void draw();
+    void entry(J3DModel*, int);
+    BOOL addModel(J3DModelData*, int, u8);
+    int removeModel(J3DModelData*, int);
 
-    /* 80048D80 */ virtual ~dSmplMdl_draw_c();
+    virtual ~dSmplMdl_draw_c();
 
 private:
     /* 0x04 */ diff_model_c mModel[8];

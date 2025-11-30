@@ -15,7 +15,7 @@ struct daObjTks_HIOParam {
 
 class daObjTks_Param_c {
 public:
-    /* 80D126D0 */ virtual ~daObjTks_Param_c() {}
+    virtual ~daObjTks_Param_c() {}
 
     static const daObjTks_HIOParam m;
 };
@@ -31,37 +31,37 @@ public:
 
 class daObjTks_c : public daNpcF_c {
 public:
-    /* 80D0F28C */ daObjTks_c();
-    /* 80D0F480 */ virtual ~daObjTks_c();
+    daObjTks_c();
+    virtual ~daObjTks_c();
 
-    /* 80D0F640 */ int Create();
-    /* 80D0F904 */ int CreateHeap();
-    /* 80D0FD34 */ int Delete();
-    /* 80D0FD68 */ int Execute();
-    /* 80D0FE60 */ int Draw();
-    /* 80D0FED0 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80D10094 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80D100B4 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80D103E8 */ void reset();
-    /* 80D10578 */ inline int setAction(void (daObjTks_c::*)());
-    /* 80D10618 */ void wait();
-    /* 80D106F4 */ void talk();
-    /* 80D10A80 */ void demo();
-    /* 80D11228 */ void warp();
-    /* 80D11CB4 */ inline void lookat();
+    int Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void reset();
+    inline int setAction(void (daObjTks_c::*)());
+    void wait();
+    void talk();
+    void demo();
+    void warp();
+    inline void lookat();
 
-    /* 80D11670 */ virtual inline void setParam();
-    /* 80D116C8 */ virtual inline BOOL main();
-    /* 80D118E8 */ virtual inline BOOL ctrlBtk();
-    /* 80D10100 */ virtual inline void setMtx();
-    /* 80D119BC */ virtual inline void setAttnPos();
-    /* 80D10184 */ virtual inline bool setExpressionAnm(int, bool);
-    /* 80D102D0 */ virtual inline bool setExpressionBtp(int);
-    /* 80D106C8 */ virtual inline void setExpression(int, f32);
-    /* 80D11104 */ virtual inline void setMotionAnm(int, f32);
-    /* 80D103A4 */ virtual inline void setMotion(int, f32, int);
-    /* 80D11E94 */ virtual inline BOOL drawDbgInfo();
-    /* 80D11E9C */ virtual inline void drawOtherMdls();
+    virtual inline void setParam();
+    virtual inline BOOL main();
+    virtual inline BOOL ctrlBtk();
+    virtual inline void setMtx();
+    virtual inline void setAttnPos();
+    virtual inline bool setExpressionAnm(int, bool);
+    virtual inline bool setExpressionBtp(int);
+    virtual inline void setExpression(int, f32);
+    virtual inline void setMotionAnm(int, f32);
+    virtual inline void setMotion(int, f32, int);
+    virtual inline BOOL drawDbgInfo();
+    virtual inline void drawOtherMdls();
 
     void calcSpringF(f32* param_0, f32 param_1, f32* param_2) {
         *param_2 = daObjTks_Param_c::m.spring_atten * (*param_2 + (daObjTks_Param_c::m.spring_factor * (*param_0 - param_1)));

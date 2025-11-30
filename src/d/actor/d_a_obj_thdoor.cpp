@@ -24,8 +24,6 @@ void daObjThDoor_HIO_c::genMessage(JORMContext* ctx) {
 static daObjThDoor_HIO_c l_HIO;
 #endif
 
-/* 80D0D4F8-80D0D59C 000078 00A4+00 1/1 0/0 0/0 .text            checkPlayerPos__FP13daObjThDoor_c
- */
 static BOOL checkPlayerPos(daObjThDoor_c* i_this) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz acStack_28 = player->current.pos - i_this->current.pos;
@@ -40,8 +38,6 @@ static BOOL checkPlayerPos(daObjThDoor_c* i_this) {
     return rv;
 }
 
-/* 80D0D59C-80D0D618 00011C 007C+00 1/1 0/0 0/0 .text
- * doorCoHitCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void doorCoHitCallBack(fopAc_ac_c* param_1, dCcD_GObjInf* param_2, fopAc_ac_c* param_3,
                               dCcD_GObjInf* param_4) {
     daPy_py_c* player = dComIfGp_getLinkPlayer();
@@ -54,13 +50,11 @@ static void doorCoHitCallBack(fopAc_ac_c* param_1, dCcD_GObjInf* param_2, fopAc_
     }
 }
 
-/* 80D0D618-80D0D654 000198 003C+00 1/1 0/0 0/0 .text            initBaseMtx__13daObjThDoor_cFv */
 void daObjThDoor_c::initBaseMtx() {
     mModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80D0D654-80D0D6B8 0001D4 0064+00 2/2 0/0 0/0 .text            setBaseMtx__13daObjThDoor_cFv */
 void daObjThDoor_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -68,16 +62,12 @@ void daObjThDoor_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80D0E678-80D0E67C -00001 0004+00 3/4 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "V_CTDoor";
 
-/* 80D0E67C-80D0E680 -00001 0004+00 0/1 0/0 0/0 .data            l_evName */
 static char* l_evName = "CHASE_AWAY_WOLF";
 
-/* 80D0E680-80D0E684 -00001 0004+00 1/1 0/0 0/0 .data            l_staffName */
 static char* l_staffName = "thdoor";
 
-/* 80D0E684-80D0E6C8 00002C 0044+00 0/1 0/0 0/0 .data            l_cyl_src */
 static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x10}, 0x19}}, // mObj
@@ -92,7 +82,6 @@ static dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 80D0D6B8-80D0D7F8 000238 0140+00 1/0 0/0 0/0 .text            Create__13daObjThDoor_cFv */
 int daObjThDoor_c::Create() {
     if (fopAcM_isSwitch(this, getSwbit())) {
         field_0x608 = 0;
@@ -123,7 +112,6 @@ int daObjThDoor_c::Create() {
     return 1;
 }
 
-/* 80D0D7F8-80D0D868 000378 0070+00 1/0 0/0 0/0 .text            CreateHeap__13daObjThDoor_cFv */
 int daObjThDoor_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 5);
     JUT_ASSERT(319, modelData != NULL);
@@ -131,7 +119,6 @@ int daObjThDoor_c::CreateHeap() {
     return mModel != NULL ? 1 : 0;
 }
 
-/* 80D0D868-80D0D8E8 0003E8 0080+00 1/1 0/0 0/0 .text            create1st__13daObjThDoor_cFv */
 int daObjThDoor_c::create1st() {
     int rv = dComIfG_resLoad(&mPhase, l_arcName);
     if (rv == cPhs_COMPLEATE_e) {
@@ -152,8 +139,6 @@ int daObjThDoor_c::create1st() {
     return rv;
 }
 
-/* 80D0D8E8-80D0D9B4 000468 00CC+00 1/0 0/0 0/0 .text            Execute__13daObjThDoor_cFPPA3_A4_f
- */
 int daObjThDoor_c::Execute(Mtx** i_mtx) {
     event_proc_call();
     current.angle.y = home.angle.y - field_0x608;
@@ -165,7 +150,6 @@ int daObjThDoor_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80D0D9B4-80D0DAC8 000534 0114+00 1/1 0/0 0/0 .text            set_cyl__13daObjThDoor_cFv */
 void daObjThDoor_c::set_cyl() {
     cXyz acStack_28[2] = {cXyz(37.5f, 0.0f, 0.0f), cXyz(112.5f, 0.0f, 0.0f)};
     cXyz cStack_38;
@@ -179,7 +163,6 @@ void daObjThDoor_c::set_cyl() {
     }
 }
 
-/* 80D0DAC8-80D0DB90 000648 00C8+00 1/1 0/0 0/0 .text            action__13daObjThDoor_cFv */
 void daObjThDoor_c::action() {
     s16 sVar1 = field_0x608;
     set_cyl();
@@ -204,8 +187,6 @@ void daObjThDoor_c::action() {
     }
 }
 
-/* 80D0DB90-80D0DC4C 000710 00BC+00 1/1 0/0 0/0 .text            event_proc_call__13daObjThDoor_cFv
- */
 void daObjThDoor_c::event_proc_call() {
     static daObjThDoor_c::actionFunc l_func[4] = {
         &daObjThDoor_c::actionWait,
@@ -217,7 +198,6 @@ void daObjThDoor_c::event_proc_call() {
     (this->*l_func[mAction])();
 }
 
-/* 80D0DC4C-80D0DCC8 0007CC 007C+00 1/0 0/0 0/0 .text            actionWait__13daObjThDoor_cFv */
 void daObjThDoor_c::actionWait() {
     action();
     if (checkDemo() && checkArea()) {
@@ -227,8 +207,6 @@ void daObjThDoor_c::actionWait() {
     }
 }
 
-/* 80D0DCC8-80D0DD90 000848 00C8+00 1/0 0/0 0/0 .text            actionOrderEvent__13daObjThDoor_cFv
- */
 void daObjThDoor_c::actionOrderEvent() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(ACTION_EVENT);
@@ -243,7 +221,6 @@ void daObjThDoor_c::actionOrderEvent() {
     }
 }
 
-/* 80D0DD90-80D0DE30 000910 00A0+00 1/0 0/0 0/0 .text            actionEvent__13daObjThDoor_cFv */
 void daObjThDoor_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventIdx)) {
         setAction(ACTION_DEAD);
@@ -260,11 +237,9 @@ void daObjThDoor_c::actionEvent() {
     }
 }
 
-/* 80D0DE30-80D0DE34 0009B0 0004+00 1/0 0/0 0/0 .text            actionDead__13daObjThDoor_cFv */
 void daObjThDoor_c::actionDead() {}
 
 
-/* 80D0DE34-80D0E06C 0009B4 0238+00 2/2 0/0 0/0 .text            demoProc__13daObjThDoor_cFv */
 int daObjThDoor_c::demoProc() {
     static char* action_table[3] = {
         "WAIT",
@@ -324,7 +299,6 @@ int daObjThDoor_c::demoProc() {
     return 0;
 }
 
-/* 80D0E06C-80D0E150 000BEC 00E4+00 1/1 0/0 0/0 .text            checkArea__13daObjThDoor_cFv */
 BOOL daObjThDoor_c::checkArea() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz local_28(player->current.pos);
@@ -343,7 +317,6 @@ BOOL daObjThDoor_c::checkArea() {
     return 1;
 }
 
-/* 80D0E150-80D0E1F4 000CD0 00A4+00 1/0 0/0 0/0 .text            Draw__13daObjThDoor_cFv */
 int daObjThDoor_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -353,7 +326,6 @@ int daObjThDoor_c::Draw() {
     return 1;
 }
 
-/* 80D0E1F4-80D0E228 000D74 0034+00 1/0 0/0 0/0 .text            Delete__13daObjThDoor_cFv */
 int daObjThDoor_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
 
@@ -364,31 +336,23 @@ int daObjThDoor_c::Delete() {
     return 1;
 }
 
-/* 80D0E228-80D0E2E4 000DA8 00BC+00 1/0 0/0 0/0 .text daObjThDoor_create1st__FP13daObjThDoor_c */
 static int daObjThDoor_create1st(daObjThDoor_c* i_this) {
     fopAcM_ct(i_this, daObjThDoor_c);
     return i_this->create1st();
 }
 
-/* 80D0E520-80D0E540 0010A0 0020+00 1/0 0/0 0/0 .text daObjThDoor_MoveBGDelete__FP13daObjThDoor_c
- */
 static int daObjThDoor_MoveBGDelete(daObjThDoor_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80D0E540-80D0E560 0010C0 0020+00 1/0 0/0 0/0 .text daObjThDoor_MoveBGExecute__FP13daObjThDoor_c
- */
 static int daObjThDoor_MoveBGExecute(daObjThDoor_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80D0E560-80D0E58C 0010E0 002C+00 1/0 0/0 0/0 .text daObjThDoor_MoveBGDraw__FP13daObjThDoor_c */
 static int daObjThDoor_MoveBGDraw(daObjThDoor_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* ############################################################################################## */
-/* 80D0E734-80D0E754 -00001 0020+00 1/0 0/0 0/0 .data            daObjThDoor_METHODS */
 static actor_method_class daObjThDoor_METHODS = {
     (process_method_func)daObjThDoor_create1st,
     (process_method_func)daObjThDoor_MoveBGDelete,
@@ -397,7 +361,6 @@ static actor_method_class daObjThDoor_METHODS = {
     (process_method_func)daObjThDoor_MoveBGDraw,
 };
 
-/* 80D0E754-80D0E784 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_TDoor */
 extern actor_process_profile_definition g_profile_Obj_TDoor = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

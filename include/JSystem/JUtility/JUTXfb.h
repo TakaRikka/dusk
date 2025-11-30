@@ -19,14 +19,14 @@ public:
         UNK_3 = 3,
     };
 
-    /* 802E5214 */ void clearIndex();
-    /* 802E5228 */ void common_init(int);
-    /* 802E5260 */ JUTXfb(_GXRenderModeObj const*, JKRHeap*, JUTXfb::EXfbNumber);
-    /* 802E5308 */ ~JUTXfb();
-    /* 802E5378 */ void delXfb(int);
-    /* 802E53B8 */ static JUTXfb* createManager(JKRHeap*, JUTXfb::EXfbNumber);
-    /* 802E5424 */ static void destroyManager();
-    /* 802E5454 */ void initiate(u16, u16, JKRHeap*, JUTXfb::EXfbNumber);
+    void clearIndex();
+    void common_init(int);
+    JUTXfb(_GXRenderModeObj const*, JKRHeap*, JUTXfb::EXfbNumber);
+    ~JUTXfb();
+    void delXfb(int);
+    static JUTXfb* createManager(JKRHeap*, JUTXfb::EXfbNumber);
+    static void destroyManager();
+    void initiate(u16, u16, JKRHeap*, JUTXfb::EXfbNumber);
 
     s32 getBufferNum() const { return mBufferNum; }
     s16 getDrawnXfbIndex() const { return mDrawnXfbIndex; }

@@ -28,32 +28,32 @@ public:
         /* 0xA */ ACT_CANCEL_EVENT,
     };
 
-    /* 80579700 */ void initBaseMtx();
-    /* 80579748 */ void setBaseMtx();
-    /* 805797B8 */ int Create();
-    /* 80579934 */ int CreateHeap();
-    /* 80579B70 */ cPhs__Step create();
-    /* 80579C30 */ void appear(int);
-    /* 80579D98 */ void set_appear();
-    /* 80579E08 */ void disappear(int);
-    /* 80579E5C */ BOOL checkDistance();
-    /* 80579FF8 */ int execute();
-    /* 8057A390 */ void event_proc_call();
-    /* 8057A4F4 */ void actionWait();
-    /* 8057A54C */ void actionOrderEvent();
-    /* 8057A610 */ void actionEvent();
-    /* 8057A678 */ void actionWaitWarp();
-    /* 8057A6E0 */ void actionOrderWarpEvent();
-    /* 8057A778 */ void actionWarpEvent();
-    /* 8057A7C4 */ void actionDead();
-    /* 8057A7C8 */ void actionOrderChkEvent();
-    /* 8057A8B4 */ void actionChkEvent();
-    /* 8057A994 */ void actionOrderCancelEvent();
-    /* 8057AA2C */ void actionCancelEvent();
-    /* 8057AA94 */ int demoProc();
-    /* 8057B0D8 */ void setGoal();
-    /* 8057B190 */ int draw();
-    /* 8057B23C */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    cPhs__Step create();
+    void appear(int);
+    void set_appear();
+    void disappear(int);
+    BOOL checkDistance();
+    int execute();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionWaitWarp();
+    void actionOrderWarpEvent();
+    void actionWarpEvent();
+    void actionDead();
+    void actionOrderChkEvent();
+    void actionChkEvent();
+    void actionOrderCancelEvent();
+    void actionCancelEvent();
+    int demoProc();
+    void setGoal();
+    int draw();
+    int _delete();
 
     u8 getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSceneListNo() { return fopAcM_GetParamBit(this, 8, 8); }

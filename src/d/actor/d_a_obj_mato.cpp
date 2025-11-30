@@ -10,8 +10,6 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 80C91B58-80C91C1C 000078 00C4+00 5/5 0/0 0/0 .text
- * setAction__11daObjMATO_cFM11daObjMATO_cFPCvPvi_vi            */
 void daObjMATO_c::setAction(void (daObjMATO_c::*i_action)(int), int i_no) {
     if (mData[i_no].action != NULL) {
         mData[i_no].mode = -1;
@@ -24,7 +22,6 @@ void daObjMATO_c::setAction(void (daObjMATO_c::*i_action)(int), int i_no) {
     (this->*mData[i_no].action)(i_no);
 }
 
-/* 80C92C50-80C92C6C 000000 001C+00 6/6 0/0 0/0 .rodata          l_B_ling_bmd_table */
 static const int l_B_ling_bmd_table[] = {
     4,
     3,
@@ -54,26 +51,21 @@ int daObjMATO_c::CreateHeap() {
     return 1;
 }
 
-/* 80C91C1C-80C91D04 00013C 00E8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return ((daObjMATO_c*)i_this)->CreateHeap();
 }
 
-/* 80C91D04-80C91D24 000224 0020+00 1/0 0/0 0/0 .text            daObjMATO_Create__FP10fopAc_ac_c */
 static int daObjMATO_Create(fopAc_ac_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     return ((daObjMATO_c*)i_this)->create();
 }
 
-/* 80C91D24-80C91D48 000244 0024+00 1/0 0/0 0/0 .text            daObjMATO_Delete__FP11daObjMATO_c
- */
 static int daObjMATO_Delete(daObjMATO_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     i_this->_delete();
     return 1;
 }
 
-/* 80C91D48-80C91DE4 000268 009C+00 1/1 0/0 0/0 .text            action__11daObjMATO_cFv */
 void daObjMATO_c::action() {
     int i;
     for (i = 0; i < mpPath->m_num; i++) {
@@ -86,7 +78,6 @@ void daObjMATO_c::action() {
 }
 
 namespace {
-/* 80C92CDC-80C92D20 000000 0044+00 1/1 0/0 0/0 .data cc_cyl_src__26@unnamed@d_a_obj_mato_cpp@ */
 static dCcD_SrcCyl cc_cyl_src = {
     {
         {0, {{0, 0, 0}, {0, 0}, 0x119}},
@@ -102,7 +93,6 @@ static dCcD_SrcCyl cc_cyl_src = {
 };
 }
 
-/* 80C91DE4-80C91ECC 000304 00E8+00 1/1 0/0 0/0 .text            hit_check__11daObjMATO_cFv */
 void daObjMATO_c::hit_check() {
     if (field_0x39f6 != 0) {
         for (int i = 0; i < mpPath->m_num; i++) {
@@ -121,7 +111,6 @@ void daObjMATO_c::hit_check() {
     }
 }
 
-/* 80C91ECC-80C91F74 0003EC 00A8+00 2/0 0/0 0/0 .text            start_wait__11daObjMATO_cFi */
 void daObjMATO_c::start_wait(int i_no) {
     if (mData[i_no].mode == 0) {
         mData[i_no].is_hit = FALSE;
@@ -133,7 +122,6 @@ void daObjMATO_c::start_wait(int i_no) {
     }
 }
 
-/* 80C91F74-80C92044 000494 00D0+00 1/0 0/0 0/0 .text            wait__11daObjMATO_cFi */
 void daObjMATO_c::wait(int i_no) {
     if (mData[i_no].mode == 0) {
         mData[i_no].mode++;
@@ -148,7 +136,6 @@ void daObjMATO_c::wait(int i_no) {
     }
 }
 
-/* 80C92C78-80C92C94 000028 001C+00 0/1 0/0 0/0 .rodata          l_rupee_itemno_table */
 static const int l_rupee_itemno_table[] = {
     fpcNm_ITEM_GREEN_RUPEE,
     fpcNm_ITEM_BLUE_RUPEE,
@@ -159,7 +146,6 @@ static const int l_rupee_itemno_table[] = {
     fpcNm_ITEM_SILVER_RUPEE,
 };
 
-/* 80C92C94-80C92C9C 000044 0007+01 0/1 0/0 0/0 .rodata          l_rupee_count_table */
 static const u8 l_rupee_count_table[] = {
     1,
     5,
@@ -170,7 +156,6 @@ static const u8 l_rupee_count_table[] = {
     200,
 };
 
-/* 80C92C9C-80C92CB8 00004C 001C+00 0/1 0/0 0/0 .rodata          l_rupee_getse */
 static const u32 l_rupee_getse[] = {
     Z2SE_GREEN_LUPY_GET,
     Z2SE_BLUE_LUPY_GET,
@@ -181,7 +166,6 @@ static const u32 l_rupee_getse[] = {
     Z2SE_RED_LUPY_GET,
 };
 
-/* 80C92044-80C921A8 000564 0164+00 2/0 0/0 0/0 .text            disappear__11daObjMATO_cFi */
 void daObjMATO_c::disappear(int i_no) {
     if (mData[i_no].mode == 0) {
         mData[i_no].timer = 20;
@@ -211,7 +195,6 @@ void daObjMATO_c::disappear(int i_no) {
     }
 }
 
-/* 80C921A8-80C922AC 0006C8 0104+00 1/1 0/0 0/0 .text            getRupee__11daObjMATO_cFi */
 void daObjMATO_c::getRupee(int i_no) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz size(1.0f, 1.0f, 1.0f);
@@ -224,7 +207,6 @@ void daObjMATO_c::getRupee(int i_no) {
     mDoAud_seStart(l_rupee_getse[mData[i_no].type], NULL, 0, 0);
 }
 
-/* 80C922AC-80C92380 0007CC 00D4+00 1/1 0/0 0/0 .text            execute__11daObjMATO_cFv */
 int daObjMATO_c::execute() {
     u8 swbit = (fopAcM_GetParam(this) & 0xFF00) >> 8;
     if (swbit != 0xFF) {
@@ -247,7 +229,6 @@ int daObjMATO_c::execute() {
     return 1;
 }
 
-/* 80C92380-80C9243C 0008A0 00BC+00 1/1 0/0 0/0 .text            _delete__11daObjMATO_cFv */
 int daObjMATO_c::_delete() {
     if (mIsAddSimpleModel) {
         J3DModelData* a_pModelData[2];
@@ -262,7 +243,6 @@ int daObjMATO_c::_delete() {
     return 1;
 }
 
-/* 80C9243C-80C92584 00095C 0148+00 1/1 0/0 0/0 .text            setBaseMtx__11daObjMATO_cFv */
 void daObjMATO_c::setBaseMtx() {
     cXyz sp8;
     for (int i = 0; i < mpPath->m_num; i++) {
@@ -291,18 +271,14 @@ int daObjMATO_c::draw() {
     return 1;
 }
 
-/* 80C92584-80C92630 000AA4 00AC+00 1/0 0/0 0/0 .text            daObjMATO_Draw__FP11daObjMATO_c */
 static int daObjMATO_Draw(daObjMATO_c* i_this) {
     return i_this->draw();
 }
 
-/* 80C92630-80C92650 000B50 0020+00 2/1 0/0 0/0 .text            daObjMATO_Execute__FP11daObjMATO_c
- */
 static int daObjMATO_Execute(daObjMATO_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C92650-80C927AC 000B70 015C+00 1/1 0/0 0/0 .text            mato_init__11daObjMATO_cFv */
 int daObjMATO_c::mato_init() {
     int rail_no = fopAcM_GetParam(this) & 0xFF;
     mpPath = dPath_GetRoomPath(rail_no, fopAcM_GetRoomNo(this));
@@ -339,7 +315,6 @@ int daObjMATO_c::mato_init() {
     return 1;
 }
 
-/* 80C927AC-80C92924 000CCC 0178+00 1/1 0/0 0/0 .text            create__11daObjMATO_cFv */
 int daObjMATO_c::create() {
     fopAcM_ct(this, daObjMATO_c);
 
@@ -384,13 +359,10 @@ int daObjMATO_c::create() {
     return phase_state;
 }
 
-/* 80C92BF8-80C92C00 001118 0008+00 1/0 0/0 0/0 .text            daObjMATO_IsDelete__FP11daObjMATO_c
- */
 static int daObjMATO_IsDelete(daObjMATO_c* i_this) {
     return 1;
 }
 
-/* 80C92D5C-80C92D7C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjMATO_Method */
 static actor_method_class l_daObjMATO_Method = {
     (process_method_func)daObjMATO_Create,
     (process_method_func)daObjMATO_Delete,
@@ -399,7 +371,6 @@ static actor_method_class l_daObjMATO_Method = {
     (process_method_func)daObjMATO_Draw,
 };
 
-/* 80C92D7C-80C92DAC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Mato */
 extern actor_process_profile_definition g_profile_Obj_Mato = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

@@ -18,23 +18,23 @@ class daObjBATTA_c : public dInsect_c {
 public:
     typedef void (daObjBATTA_c::*actionFunc)();
 
-    /* 80BA9E5C */ void setAction(void (daObjBATTA_c::*)());
-    /* 80BAA1C8 */ void wait();
-    /* 80BAA47C */ void turn();
-    /* 80BAAA18 */ void jump();
-    /* 80BAAD30 */ void fly_up();
-    /* 80BAB234 */ void fly_down();
-    /* 80BAB500 */ void bin_wait();
-    /* 80BAB6C8 */ void bin_action();
-    /* 80BAB820 */ void hook();
-    /* 80BAB934 */ void boomerang();
-    /* 80BABA98 */ void batta_setParticle();
-    /* 80BABCA4 */ void action();
-    /* 80BABD6C */ void hit_check();
-    /* 80BABE20 */ int execute();
-    /* 80BABFA4 */ int _delete();
-    /* 80BAC00C */ void mtx_set();
-    /* 80BAC194 */ int create();
+    void setAction(void (daObjBATTA_c::*)());
+    void wait();
+    void turn();
+    void jump();
+    void fly_up();
+    void fly_down();
+    void bin_wait();
+    void bin_action();
+    void hook();
+    void boomerang();
+    void batta_setParticle();
+    void action();
+    void hit_check();
+    int execute();
+    int _delete();
+    void mtx_set();
+    int create();
 
     inline int CreateHeap();
     inline int draw();

@@ -23,15 +23,15 @@ private:
 public:
     typedef JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable> ThreadMemPool;
 
-    /* 8028F6C4 */ JASTaskThread(int priority, int msgCount, u32 stackSize);
-    /* 8028F9EC */ void* allocCallStack(JASThreadCallback callback, void* msg);
-    /* 8028F850 */ void* allocCallStack(JASThreadCallback callback, const void* msg, u32 msgSize);
-    /* 8028FC54 */ int sendCmdMsg(JASThreadCallback callback, void* msg);
-    /* 8028FB5C */ int sendCmdMsg(JASThreadCallback callback, const void* msg, u32 msgSize);
-    /* 8028FE88 */ void pause(bool);
+    JASTaskThread(int priority, int msgCount, u32 stackSize);
+    void* allocCallStack(JASThreadCallback callback, void* msg);
+    void* allocCallStack(JASThreadCallback callback, const void* msg, u32 msgSize);
+    int sendCmdMsg(JASThreadCallback callback, void* msg);
+    int sendCmdMsg(JASThreadCallback callback, const void* msg, u32 msgSize);
+    void pause(bool);
 
-    /* 8028F724 */ virtual ~JASTaskThread();
-    /* 8028FD4C */ virtual void* run();
+    virtual ~JASTaskThread();
+    virtual void* run();
 
     /* 0x7C */ OSThreadQueue threadQueue_;
     /* 0x84 */ bool field_0x84;

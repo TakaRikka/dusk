@@ -5,35 +5,25 @@
 
 #include "SSystem/SComponent/c_phase.h"
 
-/* 80266624-80266630 000C+00 s=1 e=2 z=0  None .text
- * cPhs_Reset__FP30request_of_phase_process_class               */
 void cPhs_Reset(request_of_phase_process_class* phase) {
     phase->id = cPhs_INIT_e;
 }
 
-/* 80266630-80266640 0010+00 s=0 e=3 z=0  None .text
- * cPhs_Set__FP30request_of_phase_process_classPPFPv_i          */
 void cPhs_Set(request_of_phase_process_class* phase, cPhs__Handler* handlerTbl) {
     phase->mpHandlerTable = handlerTbl;
     phase->id = cPhs_INIT_e;
 }
 
-/* 80266640-80266668 0028+00 s=1 e=0 z=0  None .text
- * cPhs_UnCompleate__FP30request_of_phase_process_class         */
 void cPhs_UnCompleate(request_of_phase_process_class* phase) {
     phase->mpHandlerTable = NULL;
     cPhs_Reset(phase);
 }
 
-/* 80266668-80266678 0010+00 s=2 e=0 z=0  None .text
- * cPhs_Compleate__FP30request_of_phase_process_class           */
 int cPhs_Compleate(request_of_phase_process_class* phase) {
     phase->mpHandlerTable = NULL;
     return cPhs_COMPLEATE_e;
 }
 
-/* 80266678-802666D8 0060+00 s=1 e=0 z=0  None .text cPhs_Next__FP30request_of_phase_process_class
- */
 int cPhs_Next(request_of_phase_process_class* phase) {
     if (phase->mpHandlerTable != NULL) {
         cPhs__Handler* handler = phase->mpHandlerTable;
@@ -52,8 +42,6 @@ int cPhs_Next(request_of_phase_process_class* phase) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 802666D8-802667AC 00D4+00 s=1 e=3 z=0  None .text cPhs_Do__FP30request_of_phase_process_classPv
- */
 int cPhs_Do(request_of_phase_process_class* phase, void* data) {
     cPhs__Handler* handler = phase->mpHandlerTable;
 
@@ -87,8 +75,6 @@ int cPhs_Do(request_of_phase_process_class* phase, void* data) {
     return cPhs_Compleate(phase);
 }
 
-/* 802667AC-802667D4 0028+00 s=0 e=2 z=0  None .text
- * cPhs_Handler__FP30request_of_phase_process_classPPFPv_iPv    */
 int cPhs_Handler(request_of_phase_process_class* phase, cPhs__Handler* handlerTbl, void* data) {
     phase->mpHandlerTable = handlerTbl;
     return cPhs_Do(phase, data);

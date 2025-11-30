@@ -8,19 +8,12 @@
 #include "d/actor/d_a_obj_Y_taihou.h"
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
-#include "dol2asm.h"
 #include "d/actor/d_a_obj_carry.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_player.h"
 
 
-//
-// Declarations:
-//
-
-/* 80B9FAEC-80B9FC40 0000EC 0154+00 1/1 0/0 0/0 .text
- * ccHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void ccHitCallback(fopAc_ac_c* param_0, dCcD_GObjInf* param_1, fopAc_ac_c* param_2,
                           dCcD_GObjInf* param_3) {
     if (fopAcM_checkCarryNow(param_2) != 0) {
@@ -42,8 +35,6 @@ static void ccHitCallback(fopAc_ac_c* param_0, dCcD_GObjInf* param_1, fopAc_ac_c
     }
 }
 
-/* 80B9FC40-80B9FD20 000240 00E0+00 1/1 0/0 0/0 .text
- * pushPullcallBack__FP10fopAc_ac_cP10fopAc_ac_csQ29dBgW_Base13PushPullLabel */
 static fopAc_ac_c* pushPullcallBack(fopAc_ac_c* param_0, fopAc_ac_c* param_1, s16 param_2,
                                     dBgW_Base::PushPullLabel label) {
     if (cLib_checkBit(label, dBgW_Base::PPLABEL_3)) {
@@ -67,7 +58,6 @@ static fopAc_ac_c* pushPullcallBack(fopAc_ac_c* param_0, fopAc_ac_c* param_1, s1
     return param_0;
 }
 
-/* 80B9FD5C-80B9FDE8 00035C 008C+00 1/1 0/0 0/0 .text            searchIronBallCallback__FPvPv */
 static void* searchIronBallCallback(void* i_actor, void* i_data) {
     daObjYtaihou_c* taihou_rhs = (daObjYtaihou_c*)i_data;
     if (fopAcM_GetProfName(i_actor) == PROC_Obj_Carry) {
@@ -83,10 +73,8 @@ static void* searchIronBallCallback(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80BA11E0-80BA11E4 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
-SECTION_DATA static char const* l_arcName[1] = {"Y_taihou"};
+static char const* l_arcName[1] = {"Y_taihou"};
 
-/* 80B9FDE8-80B9FEB0 0003E8 00C8+00 1/1 0/0 0/0 .text            create1st__14daObjYtaihou_cFv */
 int daObjYtaihou_c::create1st() {
     int phase = dComIfG_resLoad(this, l_arcName[0]);
     if (phase == cPhs_COMPLEATE_e) {
@@ -105,8 +93,6 @@ int daObjYtaihou_c::create1st() {
     return phase;
 }
 
-/* 80B9FEB0-80B9FF08 0004B0 0058+00 3/3 0/0 0/0 .text
- * setIronBall__14daObjYtaihou_cFP12daObjCarry_c                */
 void daObjYtaihou_c::setIronBall(daObjCarry_c* obj) {
     mIronBallId = fopAcM_GetID(obj);
     obj->offDraw();
@@ -115,12 +101,10 @@ void daObjYtaihou_c::setIronBall(daObjCarry_c* obj) {
     obj->old.pos = current.pos;
 }
 
-/* 80B9FF08-80B9FF1C 000508 0014+00 1/1 0/0 0/0 .text            getEvent__14daObjYtaihou_cFUc */
 int daObjYtaihou_c::getEvent(u8 param_0) {
     return fopAcM_GetParamBit(this, (param_0 & 0x1f) << 3, 8);
 }
 
-/* 80B9FF1C-80B9FFAC 00051C 0090+00 1/1 0/0 0/0 .text            loadAngle__14daObjYtaihou_cFv */
 void daObjYtaihou_c::loadAngle() {
     int sw = home.angle.x >> 8 & 0xff;
     field_0x775 = (fopAcM_isSwitch(this, home.angle.x & 0xff)) ? 2 : 0;
@@ -129,7 +113,6 @@ void daObjYtaihou_c::loadAngle() {
     }
 }
 
-/* 80B9FFAC-80BA0060 0005AC 00B4+00 1/1 0/0 0/0 .text            saveAngle__14daObjYtaihou_cFv */
 void daObjYtaihou_c::saveAngle() {
     int sw_1 = home.angle.x & 0xff;
     int sw_2 = home.angle.x >> 8 & 0xff;
@@ -145,8 +128,6 @@ void daObjYtaihou_c::saveAngle() {
     }
 }
 
-/* ############################################################################################## */
-/* 80BA11E4-80BA1228 000004 0044+00 1/1 0/0 0/0 .data            l_cc_cyl_src */
 static dCcD_SrcCyl l_cc_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x0}, 0x79}}, // mObj
@@ -161,23 +142,18 @@ static dCcD_SrcCyl l_cc_cyl_src = {
     } // mCyl
 };
 
-/* 80BA1228-80BA1230 000048 0008+00 1/1 0/0 0/0 .data            l_offsetAngle$3829 */
 static u16 l_offsetAngle[4] = {
     0x0, 0xC000, 0x8000, 0x4000,
 };
 
-/* 80BA0060-80BA0084 000660 0024+00 2/2 0/0 0/0 .text            setNextAngle__14daObjYtaihou_cFv */
 void daObjYtaihou_c::setNextAngle() {
     current.angle.z = home.angle.y + l_offsetAngle[field_0x775];
 }
 
-/* 80BA1358-80BA135C 000048 0004+00 1/1 0/0 0/0 .bss             l_wheelMinR$3836 */
 static f32 l_wheelMinR;
 
-/* 80BA135C-80BA1360 00004C 0004+00 1/1 0/0 0/0 .bss             None */
 static u8 lbl_396_bss_4C;
 
-/* 80BA0084-80BA0208 000684 0184+00 2/2 0/0 0/0 .text            setMtx__14daObjYtaihou_cFv */
 void daObjYtaihou_c::setMtx() {
     home.angle.z += (s16) ((s16)(shape_angle.y - old.angle.y) * 0.8f);
     if ((s8)lbl_396_bss_4C == 0) {
@@ -195,7 +171,6 @@ void daObjYtaihou_c::setMtx() {
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
 }
 
-/* 80BA0208-80BA045C 000808 0254+00 1/1 0/0 0/0 .text            rotateCheck__14daObjYtaihou_cFv */
 void daObjYtaihou_c::rotateCheck() {
     if (shape_angle.y != current.angle.z) {
         cLib_chaseAngleS(&current.angle.x, 0xbe, 5);
@@ -233,17 +208,12 @@ void daObjYtaihou_c::rotateCheck() {
     }
 }
 
-/* ############################################################################################## */
-/* 80BA1190-80BA119C 00003C 000C+00 0/1 0/0 0/0 .rodata          l_hibanaOffset$3954 */
 static const Vec l_hibanaOffset = {0.0f, 150.0f, 50.0f};
 
-/* 80BA119C-80BA11A8 000048 000C+00 0/1 0/0 0/0 .rodata          l_shotOffset$3961 */
 static const Vec l_shotOffset = {0.0f, 130.0f, -100.0f};
 
-/* 80BA11A8-80BA11B4 000054 000C+00 0/1 0/0 0/0 .rodata          l_shotSmokeOffset$3962 */
 static const Vec l_shotSmokeOffset = {0.0f, 0.0f, 0.0f};
 
-/* 80BA045C-80BA0964 000A5C 0508+00 1/1 0/0 0/0 .text            shotCheck__14daObjYtaihou_cFv */
 void daObjYtaihou_c::shotCheck() {
     if (mStartBomb == 0) {
         f32 player_dist = fopAcM_searchPlayerDistanceY(this);
@@ -314,13 +284,11 @@ void daObjYtaihou_c::shotCheck() {
     mCyl.SetCoHitCallback(NULL);
 }
 
-/* 80BA0964-80BA0974 000F64 0010+00 2/1 0/0 0/0 .text            eventStart__14daObjYtaihou_cFv */
 bool daObjYtaihou_c::eventStart() {
     mStartBomb = 0x5a;
     return true;
 }
 
-/* 80BA0974-80BA09E4 000F74 0070+00 1/0 0/0 0/0 .text            CreateHeap__14daObjYtaihou_cFv */
 int daObjYtaihou_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*) dComIfG_getObjectRes(l_arcName[0], 0x4);
     JUT_ASSERT(0x247, model_data != NULL);
@@ -332,7 +300,6 @@ int daObjYtaihou_c::CreateHeap() {
     }
 }
 
-/* 80BA09E4-80BA0A94 000FE4 00B0+00 1/0 0/0 0/0 .text            Create__14daObjYtaihou_cFv */
 int daObjYtaihou_c::Create() {
     mpModel->setBaseTRMtx(mMtx);
     fopAcM_SetMtx(this, mMtx);
@@ -348,12 +315,8 @@ int daObjYtaihou_c::Create() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80BA11C8-80BA11D4 000074 000C+00 1/1 0/0 0/0 .rodata          l_cc_offset$4147 */
 static const Vec l_cc_offset = {0.0f, 0.0f, -50.0f};
 
-/* 80BA0A94-80BA0B4C 001094 00B8+00 1/0 0/0 0/0 .text            Execute__14daObjYtaihou_cFPPA3_A4_f
- */
 int daObjYtaihou_c::Execute(Mtx** i_mtx) {
     old.angle.y = shape_angle.y;
     rotateCheck();
@@ -371,7 +334,6 @@ int daObjYtaihou_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80BA0B4C-80BA0C1C 00114C 00D0+00 1/0 0/0 0/0 .text            Draw__14daObjYtaihou_cFv */
 int daObjYtaihou_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -384,7 +346,6 @@ int daObjYtaihou_c::Draw() {
     return 1;
 }
 
-/* 80BA0C1C-80BA0C88 00121C 006C+00 1/0 0/0 0/0 .text            Delete__14daObjYtaihou_cFv */
 int daObjYtaihou_c::Delete() {
     dComIfG_resDelete(this, l_arcName[0]);
     daObjCarry_c* pCarry = (daObjCarry_c*) fopAcM_SearchByID(mIronBallId);
@@ -394,33 +355,23 @@ int daObjYtaihou_c::Delete() {
     return 1;
 }
 
-/* 80BA0C88-80BA0DA4 001288 011C+00 1/0 0/0 0/0 .text daObjYtaihou_create1st__FP14daObjYtaihou_c
- */
 static void daObjYtaihou_create1st(daObjYtaihou_c* i_this) {
     fopAcM_ct(i_this, daObjYtaihou_c);
     i_this->create1st();
 }
 
-/* 80BA0E90-80BA0EB0 001490 0020+00 1/0 0/0 0/0 .text
- * daObjYtaihou_MoveBGDelete__FP14daObjYtaihou_c                */
 static void daObjYtaihou_MoveBGDelete(daObjYtaihou_c* i_this) {
     i_this->MoveBGDelete();
 }
 
-/* 80BA0EB0-80BA0ED0 0014B0 0020+00 1/0 0/0 0/0 .text
- * daObjYtaihou_MoveBGExecute__FP14daObjYtaihou_c               */
 static void daObjYtaihou_MoveBGExecute(daObjYtaihou_c* i_this) {
     i_this->MoveBGExecute();
 }
 
-/* 80BA0ED0-80BA0EFC 0014D0 002C+00 1/0 0/0 0/0 .text daObjYtaihou_MoveBGDraw__FP14daObjYtaihou_c
- */
 static void daObjYtaihou_MoveBGDraw(daObjYtaihou_c* i_this) {
     i_this->Draw();
 }
 
-/* ############################################################################################## */
-/* 80BA1230-80BA1250 -00001 0020+00 1/0 0/0 0/0 .data            daObjYtaihou_METHODS */
 static actor_method_class daObjYtaihou_METHODS = {
     (process_method_func)daObjYtaihou_create1st,
     (process_method_func)daObjYtaihou_MoveBGDelete,
@@ -429,7 +380,6 @@ static actor_method_class daObjYtaihou_METHODS = {
     (process_method_func)daObjYtaihou_MoveBGDraw,
 };
 
-/* 80BA1250-80BA1280 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Ytaihou */
 extern actor_process_profile_definition g_profile_Obj_Ytaihou = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

@@ -80,7 +80,6 @@ void daObjKznkarm_Hio_c::genMessage(JORMContext* ctx) {
 
 #endif
 
-/* 80C50D08-80C50D40 000000 0038+00 8/8 0/0 0/0 .rodata          M_attr__14daObjKznkarm_c */
  daObjKznkarm_Attr_c const daObjKznkarm_c::M_attr = {
     -5.0f, -30.0f, 0.6f, 0.94f,
      40.0f, 40.0f, -60.0f,
@@ -88,10 +87,8 @@ void daObjKznkarm_Hio_c::genMessage(JORMContext* ctx) {
     12.0f, 0, 0x1000, 0, 0xE000,
 };
 
-/* 80C50DC4-80C50DC8 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "J_Kazami";
 
-/* 80C50E28-80C50E88 000084 0060+00 1/2 0/0 0/0 .data            ActionTable__14daObjKznkarm_c */
 daObjKznkarm_c::actionFunc daObjKznkarm_c::ActionTable[4][2] = {
     &daObjKznkarm_c::initBroken,
     &daObjKznkarm_c::executeBroken,
@@ -103,21 +100,17 @@ daObjKznkarm_c::actionFunc daObjKznkarm_c::ActionTable[4][2] = {
     &daObjKznkarm_c::executeStay,
 };
 
-/* 80C4F858-80C4F88C 000078 0034+00 5/5 0/0 0/0 .text
- * setAction__14daObjKznkarm_cFQ214daObjKznkarm_c6Mode_e        */
 void daObjKznkarm_c::setAction(daObjKznkarm_c::Mode_e i_action) {
     JUT_ASSERT(209, i_action < MODE_MAX_e);
     mAction = ActionTable[i_action];
     callInit();
 }
 
-/* 80C4F88C-80C4F8B4 0000AC 0028+00 1/1 0/0 0/0 .text            callInit__14daObjKznkarm_cFv */
 void daObjKznkarm_c::callInit() {
     JUT_ASSERT(225, mAction != NULL);
     (this->*mAction[0])();
 }
 
-/* 80C4F8B4-80C4F8E0 0000D4 002C+00 1/1 0/0 0/0 .text            callExecute__14daObjKznkarm_cFv */
 void daObjKznkarm_c::callExecute() {
     JUT_ASSERT(238, mAction != NULL);
     (this->*mAction[1])();
@@ -131,7 +124,6 @@ inline daObjKznkarm_Attr_c* daObjKznkarm_c::attr() const {
     #endif
 }
 
-/* 80C4F8E0-80C4F960 000100 0080+00 1/0 0/0 0/0 .text            initBroken__14daObjKznkarm_cFv */
 void daObjKznkarm_c::initBroken() {
     mMode = MODE_BROKEN_e;
     fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x80);
@@ -145,8 +137,6 @@ void daObjKznkarm_c::initBroken() {
     field_0x7b0 = 10;
 }
 
-/* 80C4F960-80C4FBBC 000180 025C+00 1/0 0/0 0/0 .text            executeBroken__14daObjKznkarm_cFv
- */
 void daObjKznkarm_c::executeBroken() {
     speed.y += gravity;
     if (speed.y < maxFallSpeed) {
@@ -185,7 +175,6 @@ void daObjKznkarm_c::executeBroken() {
     mAcch.CrrPos(dComIfG_Bgsp());
 }
 
-/* 80C4FBBC-80C4FBEC 0003DC 0030+00 1/0 0/0 0/0 .text            initCarry__14daObjKznkarm_cFv */
 void daObjKznkarm_c::initCarry() {
     mMode = MODE_CARRY_e;
     fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x80);
@@ -194,7 +183,6 @@ void daObjKznkarm_c::initCarry() {
     field_0x7af = 0;
 }
 
-/* 80C4FBEC-80C4FD18 00040C 012C+00 1/0 0/0 0/0 .text            executeCarry__14daObjKznkarm_cFv */
 void daObjKznkarm_c::executeCarry() {
     eyePos = attention_info.position = current.pos;
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -220,7 +208,6 @@ void daObjKznkarm_c::executeCarry() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C4FD18-80C4FDB4 000538 009C+00 1/0 0/0 0/0 .text            initThrow__14daObjKznkarm_cFv */
 void daObjKznkarm_c::initThrow() {
     mMode = MODE_THROW_e;
     fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x80);
@@ -235,7 +222,6 @@ void daObjKznkarm_c::initThrow() {
     field_0x7ac = attr()->throw_angular_speed;
 }
 
-/* 80C4FDB4-80C50440 0005D4 068C+00 1/0 0/0 0/0 .text            executeThrow__14daObjKznkarm_cFv */
 void daObjKznkarm_c::executeThrow() {
     if (field_0x7ae != 0) {
         speed.y += gravity * 0.2f;
@@ -313,7 +299,6 @@ void daObjKznkarm_c::executeThrow() {
     setBaseMtx();
 }
 
-/* 80C50488-80C50504 000CA8 007C+00 1/0 0/0 0/0 .text            initStay__14daObjKznkarm_cFv */
 void daObjKznkarm_c::initStay() {
     mMode = MODE_STAY_e;
     fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x80);
@@ -323,7 +308,6 @@ void daObjKznkarm_c::initStay() {
     shape_angle.z = (s16)getGroundSlope(shape_angle.y - 0x4000);
 }
 
-/* 80C50504-80C505F8 000D24 00F4+00 1/0 0/0 0/0 .text            executeStay__14daObjKznkarm_cFv */
 void daObjKznkarm_c::executeStay() {
     if (shape_angle.x != field_0x7a8) {
         eyePos = attention_info.position = current.pos;
@@ -340,7 +324,6 @@ void daObjKznkarm_c::executeStay() {
     }
 }
 
-/* 80C505F8-80C506DC 000E18 00E4+00 1/1 0/0 0/0 .text            create_init__14daObjKznkarm_cFv */
 void daObjKznkarm_c::create_init() {
     fopAcM_setCullSizeBox(this, -10.0f, -15.0f, -15.0f, 120.0f, 40.0f, 15.0f);
     fopAcM_OnCarryType(this, fopAcM_CARRY_UNK_30);
@@ -359,13 +342,11 @@ void daObjKznkarm_c::create_init() {
     #endif
 }
 
-/* 80C506DC-80C50708 000EFC 002C+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjKznkarm_cFv */
 void daObjKznkarm_c::initBaseMtx() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     setBaseMtx();
 }
 
-/* 80C50708-80C5076C 000F28 0064+00 3/3 0/0 0/0 .text            setBaseMtx__14daObjKznkarm_cFv */
 void daObjKznkarm_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -373,8 +354,6 @@ void daObjKznkarm_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C5076C-80C507F8 000F8C 008C+00 1/1 0/0 0/0 .text            getGroundSlope__14daObjKznkarm_cFs
- */
 s16 daObjKznkarm_c::getGroundSlope(s16 param_0) {
     cM3dGPla groundPla;
     bool hit = dComIfG_Bgsp().GetTriPla(mAcch.m_gnd, &groundPla);
@@ -394,7 +373,6 @@ inline int daObjKznkarm_c::createHeap() {
     return TRUE;
 }
 
-/* 80C507F8-80C50870 001018 0078+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c */
 static int createSolidHeap(fopAc_ac_c* a_this) {
     daObjKznkarm_c* i_this = ((daObjKznkarm_c*)a_this);
     return i_this->createHeap();
@@ -413,7 +391,6 @@ inline int daObjKznkarm_c::draw() {
     return 1;
 }
 
-/* 80C50870-80C50984 001090 0114+00 1/0 0/0 0/0 .text daObjKznkarm_Draw__FP14daObjKznkarm_c */
 static int daObjKznkarm_Draw(daObjKznkarm_c* i_this) {
     return i_this->draw();
 }
@@ -428,12 +405,10 @@ inline int daObjKznkarm_c::execute() {
     return 1;
 }
 
-/* 80C50984-80C509A8 0011A4 0024+00 1/0 0/0 0/0 .text daObjKznkarm_Execute__FP14daObjKznkarm_c */
 static int daObjKznkarm_Execute(daObjKznkarm_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C509A8-80C509B0 0011C8 0008+00 1/0 0/0 0/0 .text daObjKznkarm_IsDelete__FP14daObjKznkarm_c */
 static int daObjKznkarm_IsDelete(daObjKznkarm_c* i_this) {
     return 1;
 }
@@ -445,7 +420,6 @@ inline daObjKznkarm_c::~daObjKznkarm_c() {
     dComIfG_resDelete(&mPhase, l_arcName);
 }
 
-/* 80C509B0-80C50A5C 0011D0 00AC+00 1/0 0/0 0/0 .text daObjKznkarm_Delete__FP14daObjKznkarm_c */
 static int daObjKznkarm_Delete(daObjKznkarm_c* i_this) {
     fopAcM_RegisterDeleteID(i_this, "KznkArm");
     i_this->~daObjKznkarm_c();
@@ -464,14 +438,11 @@ inline int daObjKznkarm_c::create() {
     return rv;
 }
 
-/* 80C50A5C-80C50B3C 00127C 00E0+00 1/0 0/0 0/0 .text            daObjKznkarm_Create__FP10fopAc_ac_c
- */
 static int daObjKznkarm_Create(fopAc_ac_c* i_this) {
     fopAcM_RegisterCreateID(daObjKznkarm_c, i_this, "KznkArm");
     return a_this->create();
 }
 
-/* 80C50E90-80C50EB0 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjKznkarm_Method */
 static actor_method_class l_daObjKznkarm_Method = {
     (process_method_func)daObjKznkarm_Create,
     (process_method_func)daObjKznkarm_Delete,
@@ -480,7 +451,6 @@ static actor_method_class l_daObjKznkarm_Method = {
     (process_method_func)daObjKznkarm_Draw,
 };
 
-/* 80C50EB0-80C50EE0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_KznkArm */
 extern actor_process_profile_definition g_profile_Obj_KznkArm = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

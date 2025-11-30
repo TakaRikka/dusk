@@ -86,8 +86,8 @@ enum Action_Mode {
 
 class daE_YG_HIO_c : public JORReflexible {
 public:
-    /* 807F834C */ daE_YG_HIO_c();
-    /* 807FC168 */ virtual ~daE_YG_HIO_c() {}
+    daE_YG_HIO_c();
+    virtual ~daE_YG_HIO_c() {}
     void genMessage(JORMContext*);
 
     /* 0x04 */ s8 id;
@@ -98,7 +98,6 @@ public:
     /* 0x18 */ f32 pl_recognition_dist;
 };
 
-/* 807F834C-807F8394 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__12daE_YG_HIO_cFv */
 daE_YG_HIO_c::daE_YG_HIO_c() {
     id = -1;
     basic_size = 1.0f;
@@ -119,13 +118,11 @@ void daE_YG_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 807F8394-807F8440 000134 00AC+00 7/7 0/0 0/0 .text            anm_init__FP10e_yg_classifUcf */
 static void anm_init(e_yg_class* i_this, int i_index, f32 i_morf, u8 i_attr, f32 i_rate) {
     i_this->mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_YG", i_index), i_attr, i_morf, i_rate, 0.0f, -1.0f);
     i_this->mAnm = i_index;
 }
 
-/* 807F8440-807F848C 0001E0 004C+00 3/3 0/0 0/0 .text            pl_check__FP10e_yg_classf */
 static BOOL pl_check(e_yg_class* i_this, f32 i_dist) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -137,7 +134,6 @@ static BOOL pl_check(e_yg_class* i_this, f32 i_dist) {
     return FALSE;
 }
 
-/* 807F848C-807F8610 00022C 0184+00 1/0 0/0 0/0 .text            daE_YG_Draw__FP10e_yg_class */
 static int daE_YG_Draw(e_yg_class* i_this) {    
     if (i_this->mDispFlag) {
         return 1;
@@ -169,7 +165,6 @@ static int daE_YG_Draw(e_yg_class* i_this) {
     return 1;
 }
 
-/* 807F8610-807F86F8 0003B0 00E8+00 2/2 0/0 0/0 .text            sibuki_set__FP10e_yg_class */
 static void sibuki_set(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
@@ -191,10 +186,8 @@ static void sibuki_set(e_yg_class* i_this) {
 
 static bool l_initHIO;
 
-/* 807FD06C-807FD088 000054 001C+00 6/8 0/0 0/0 .bss             l_HIO */
 static daE_YG_HIO_c l_HIO;
 
-/* 807F86F8-807F8A68 000498 0370+00 1/1 0/0 0/0 .text            ms_disappear__FP10e_yg_class */
 static void ms_disappear(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz unused, prtcl_pos;
@@ -246,13 +239,10 @@ static void ms_disappear(e_yg_class* i_this) {
     }
 }
 
-/* 807FD0D4-807FD124 0000BC 0050+00 2/2 0/0 0/0 .bss             target_info */
 static fopAc_ac_c* target_info[20];
 
-/* 807FD124-807FD128 00010C 0004+00 2/2 0/0 0/0 .bss             target_info_count */
 static int target_info_count;
 
-/* 807F8A68-807F8AE4 000808 007C+00 1/1 0/0 0/0 .text            s_d_sub__FPvPv */
 static void* s_d_sub(void* i_actor, void* i_data) {
     daObjCarry_c* actor = (daObjCarry_c*)i_actor;
     
@@ -264,7 +254,6 @@ static void* s_d_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 807F8AE4-807F8C60 000884 017C+00 1/1 0/0 0/0 .text            search_dokuro__FP10e_yg_class */
 static fopAc_ac_c* search_dokuro(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
@@ -304,7 +293,6 @@ static fopAc_ac_c* search_dokuro(e_yg_class* i_this) {
     return NULL;
 }
 
-/* 807F8C60-807F8DD8 000A00 0178+00 1/1 0/0 0/0 .text            way_set__FP10e_yg_class */
 static BOOL way_set(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz start, end, work;
@@ -339,7 +327,6 @@ static BOOL way_set(e_yg_class* i_this) {
     return FALSE;
 }
 
-/* 807F8DD8-807F9154 000B78 037C+00 1/1 0/0 0/0 .text            e_yg_normal__FP10e_yg_class */
 static s8 e_yg_normal(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     f32 target = 0.0f;
@@ -424,7 +411,6 @@ static s8 e_yg_normal(e_yg_class* i_this) {
     return rv;
 }
 
-/* 807F9154-807F94E8 000EF4 0394+00 2/1 0/0 0/0 .text            e_yg_attack__FP10e_yg_class */
 static s8 e_yg_attack(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     f32 target = 0.0f;
@@ -535,7 +521,6 @@ static s8 e_yg_attack(e_yg_class* i_this) {
     return rv;
 }
 
-/* 807F94E8-807F99CC 001288 04E4+00 1/1 0/0 0/0 .text            search_ground_1__FP10e_yg_class */
 static void search_ground_1(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     dBgS_LinChk lin_chk;
@@ -594,7 +579,6 @@ static void search_ground_1(e_yg_class* i_this) {
     }
 }
 
-/* 807F99D0-807F9BB8 001770 01E8+00 1/1 0/0 0/0 .text            e_yg_swim__FP10e_yg_class */
 static void e_yg_swim(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -646,7 +630,6 @@ static void e_yg_swim(e_yg_class* i_this) {
     }
 }
 
-/* 807F9BB8-807F9EF8 001958 0340+00 1/1 0/0 0/0 .text            e_yg_dokuro__FP10e_yg_class */
 static void e_yg_dokuro(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* skull_p = fopAcM_SearchByID(i_this->mSkullActorID);
@@ -702,7 +685,6 @@ static void e_yg_dokuro(e_yg_class* i_this) {
     }
 }
 
-/* 807F9EF8-807FA14C 001C98 0254+00 1/1 0/0 0/0 .text            e_yg_damage__FP10e_yg_class */
 static void e_yg_damage(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
@@ -757,7 +739,6 @@ static void e_yg_damage(e_yg_class* i_this) {
     }
 }
 
-/* 807FA14C-807FA284 001EEC 0138+00 1/1 0/0 0/0 .text            e_yg_wolfbite__FP10e_yg_class */
 static void e_yg_wolfbite(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -787,7 +768,6 @@ static void e_yg_wolfbite(e_yg_class* i_this) {
     }
 }
 
-/* 807FA284-807FA2E4 002024 0060+00 1/1 0/0 0/0 .text            e_yg_standby__FP10e_yg_class */
 static void e_yg_standby(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
@@ -800,7 +780,6 @@ static void e_yg_standby(e_yg_class* i_this) {
     }
 }
 
-/* 807FA2E4-807FA478 002084 0194+00 1/1 0/0 0/0 .text            damage_check__FP10e_yg_class */
 static void damage_check(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -851,7 +830,6 @@ static void damage_check(e_yg_class* i_this) {
     }
 }
 
-/* 807FA478-807FA7B0 002218 0338+00 1/1 0/0 0/0 .text ke_control__FP10e_yg_classP7yg_ke_sif */
 static void ke_control(e_yg_class* i_this, yg_ke_s* yg_p, int param_3, f32 i_posZ) {
     cXyz work, pos_offset;
     int i;
@@ -919,7 +897,6 @@ static void ke_control(e_yg_class* i_this, yg_ke_s* yg_p, int param_3, f32 i_pos
     }
 }
 
-/* 807FA7B0-807FA888 002550 00D8+00 1/1 0/0 0/0 .text ke_move__FP10e_yg_classP19mDoExt_3DlineMat0_cP7yg_ke_sif     */
 static void ke_move(e_yg_class* i_this, mDoExt_3DlineMat0_c* i_lineMat, yg_ke_s* yg_p, int i_idx, f32 i_posZ) {
     ke_control(i_this, yg_p, i_idx, i_posZ);
     cXyz* pos_p = i_lineMat->getPos(i_idx);
@@ -938,7 +915,6 @@ static void ke_move(e_yg_class* i_this, mDoExt_3DlineMat0_c* i_lineMat, yg_ke_s*
     }
 }
 
-/* 807FD1C4-807FD260 0001AC 009C+00 1/2 0/0 0/0 .bss             ke_p */
 static cXyz ke_p[13] = {
     cXyz(8.0f, 5.0f, 0.0f),
     cXyz(30.0f, 13.0f, 0.0f),
@@ -955,7 +931,6 @@ static cXyz ke_p[13] = {
     cXyz(40.0f, -2.0f, -10.0f),
 };
 
-/* 807FD2FC-807FD34C 0002E4 004E+02 1/2 0/0 0/0 .bss             ke_a */
 static csXyz ke_a[13] = {
     csXyz(0, 0, 5000),
     csXyz(0, 0, 3000),
@@ -972,7 +947,6 @@ static csXyz ke_a[13] = {
     csXyz(0, -20000, -5000),
 };
 
-/* 807FA888-807FAA34 002628 01AC+00 1/1 0/0 0/0 .text            ke_set__FP10e_yg_class */
 static void ke_set(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz work, unused;
@@ -1004,7 +978,6 @@ static void ke_set(e_yg_class* i_this) {
     }
 }
 
-/* 807FAA34-807FB034 0027D4 0600+00 2/1 0/0 0/0 .text            action__FP10e_yg_class */
 static void action(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -1165,7 +1138,6 @@ static void action(e_yg_class* i_this) {
     cLib_addCalc2(&i_this->mCurrentPosYOffset, target, 0.4f, 5.0f);
 }
 
-/* 807FB034-807FB3FC 002DD4 03C8+00 1/1 0/0 0/0 .text            anm_se_set__FP10e_yg_class */
 static void anm_se_set(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     s8 footnote_flag = false;
@@ -1220,7 +1192,6 @@ static void anm_se_set(e_yg_class* i_this) {
     }
 }
 
-/* 807FB3FC-807FB908 00319C 050C+00 2/1 0/0 0/0 .text            daE_YG_Execute__FP10e_yg_class */
 static int daE_YG_Execute(e_yg_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
     cXyz work, center, unused;
@@ -1322,12 +1293,10 @@ static int daE_YG_Execute(e_yg_class* i_this) {
     return 1;
 }
 
-/* 807FB908-807FB910 0036A8 0008+00 1/0 0/0 0/0 .text            daE_YG_IsDelete__FP10e_yg_class */
 static int daE_YG_IsDelete(e_yg_class* i_this) {
     return 1;
 }
 
-/* 807FB910-807FB978 0036B0 0068+00 1/0 0/0 0/0 .text            daE_YG_Delete__FP10e_yg_class */
 static int daE_YG_Delete(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fpc_ProcID id = fopAcM_GetID(i_this);
@@ -1346,7 +1315,6 @@ static int daE_YG_Delete(e_yg_class* i_this) {
     return 1;
 }
 
-/* 807FB978-807FBA88 003718 0110+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     e_yg_class* i_this = (e_yg_class*)a_this;
 
@@ -1364,7 +1332,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 807FBA88-807FBE70 003828 03E8+00 1/0 0/0 0/0 .text            daE_YG_Create__FP10fopAc_ac_c */
 static cPhs__Step daE_YG_Create(fopAc_ac_c* actor) {
     e_yg_class* i_this = (e_yg_class*)actor;
 
@@ -1471,7 +1438,6 @@ static cPhs__Step daE_YG_Create(fopAc_ac_c* actor) {
 
 AUDIO_INSTANCES;
 
-/* 807FCF48-807FCF68 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_YG_Method */
 static actor_method_class l_daE_YG_Method = {
     (process_method_func)daE_YG_Create,
     (process_method_func)daE_YG_Delete,
@@ -1480,7 +1446,6 @@ static actor_method_class l_daE_YG_Method = {
     (process_method_func)daE_YG_Draw,
 };
 
-/* 807FCF68-807FCF98 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_YG */
 extern actor_process_profile_definition g_profile_E_YG = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

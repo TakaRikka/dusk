@@ -11,10 +11,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_horse.h"
 
-/* 805A4238-805A4240 000000 0007+01 4/4 0/0 0/0 .rodata          l_arcName */
 static char const l_arcName[] = "Hfence";
 
-/* 805A3AB8-805A3B24 000078 006C+00 1/0 0/0 0/0 .text            CreateHeap__12daTagHjump_cFv */
 int daTagHjump_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
@@ -25,7 +23,6 @@ int daTagHjump_c::CreateHeap() {
     return 1;
 }
 
-/* 805A3B24-805A3D80 0000E4 025C+00 1/1 0/0 0/0 .text            create__12daTagHjump_cFv */
 int daTagHjump_c::create() {
     fopAcM_ct(this, daTagHjump_c);
 
@@ -88,28 +85,22 @@ int daTagHjump_c::create() {
     return phase;
 }
 
-/* 805A3D80-805A3DA0 000340 0020+00 1/0 0/0 0/0 .text            daTagHjump_Create__FP10fopAc_ac_c
- */
 static int daTagHjump_Create(fopAc_ac_c* i_this) {
     return static_cast<daTagHjump_c*>(i_this)->create();
 }
 
-/* 805A3DA0-805A3E34 000360 0094+00 1/1 0/0 0/0 .text            __dt__12daTagHjump_cFv */
 daTagHjump_c::~daTagHjump_c() {
     if (mType != TYPE_TRIGGER_e) {
         dComIfG_resDelete(&mPhase, l_arcName);
     }
 }
 
-/* 805A3E34-805A3E70 0003F4 003C+00 1/0 0/0 0/0 .text            daTagHjump_Delete__FP12daTagHjump_c
- */
 static int daTagHjump_Delete(daTagHjump_c* i_this) {
     i_this->MoveBGDelete();
     i_this->~daTagHjump_c();
     return 1;
 }
 
-/* 805A3E70-805A4134 000430 02C4+00 1/1 0/0 0/0 .text            execute__12daTagHjump_cFv */
 int daTagHjump_c::execute() {
     daHorse_c* horse_p = dComIfGp_getHorseActor();
 
@@ -168,12 +159,10 @@ int daTagHjump_c::execute() {
     return 1;
 }
 
-/* 805A4134-805A4154 0006F4 0020+00 1/0 0/0 0/0 .text daTagHjump_Execute__FP12daTagHjump_c */
 static int daTagHjump_Execute(daTagHjump_c* i_this) {
     return i_this->execute();
 }
 
-/* 805A4154-805A4204 000714 00B0+00 1/0 0/0 0/0 .text            Draw__12daTagHjump_cFv */
 int daTagHjump_c::Draw() {
     if (mType != TYPE_TRIGGER_e) {
         g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
@@ -187,20 +176,16 @@ int daTagHjump_c::Draw() {
     return 1;
 }
 
-/* 805A4204-805A4230 0007C4 002C+00 1/0 0/0 0/0 .text            daTagHjump_Draw__FP12daTagHjump_c
- */
 static int daTagHjump_Draw(daTagHjump_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 805A426C-805A428C -00001 0020+00 1/0 0/0 0/0 .data            l_daTagHjump_Method */
 static actor_method_class l_daTagHjump_Method = {
     (process_method_func)daTagHjump_Create,  (process_method_func)daTagHjump_Delete,
     (process_method_func)daTagHjump_Execute, (process_method_func)NULL,
     (process_method_func)daTagHjump_Draw,
 };
 
-/* 805A428C-805A42BC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Tag_Hjump */
 extern actor_process_profile_definition g_profile_Tag_Hjump = {
     fpcLy_CURRENT_e,
     3,

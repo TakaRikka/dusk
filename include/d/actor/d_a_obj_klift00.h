@@ -16,14 +16,14 @@
  */
 class daObjKLift00_c : public dBgS_MoveBgActor, public request_of_phase_process_class {
 public:
-    /* 8058B02C */ cPhs__Step create1st();
-    /* 8058B0D0 */ void setMtx();
-    /* 8058B4B0 */ void rideActor(fopAc_ac_c*);
-    /* 8058B5EC */ int CreateHeap();
-    /* 8058B77C */ int Create();
-    /* 8058B97C */ int Execute(Mtx**);
-    /* 8058BEEC */ int Draw();
-    /* 8058C014 */ int Delete();
+    cPhs__Step create1st();
+    void setMtx();
+    void rideActor(fopAc_ac_c*);
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     enum Param_e {
         LOCK_e = (1 << 6), NO_BASE_DISP = (1 << 7)

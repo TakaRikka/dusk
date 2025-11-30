@@ -9,13 +9,10 @@
 #include "d/d_stage.h"
 #include "f_op/f_op_overlap_mng.h"
 
-/* 8085A278-8085A280 000078 0008+00 1/0 0/0 0/0 .text            daKytag07_Draw__FP13kytag07_class
- */
 static int daKytag07_Draw(kytag07_class* i_this) {
     return 1;
 }
 
-/* 8085A280-8085A334 000080 00B4+00 1/0 0/0 0/0 .text daKytag07_Execute__FP13kytag07_class */
 static int daKytag07_Execute(kytag07_class* i_this) {
     if (i_this->field_0x58c != 99) {
         cLib_addCalc(&i_this->mLightInfluence.mPow, i_this->field_0x588, 0.1f, 1000.0f, 0.001f);
@@ -32,7 +29,6 @@ static int daKytag07_Execute(kytag07_class* i_this) {
     return 1;
 }
 
-/* 8085A334-8085A388 000134 0054+00 1/0 0/0 0/0 .text daKytag07_IsDelete__FP13kytag07_class */
 static int daKytag07_IsDelete(kytag07_class* i_this) {
     i_this->field_0x58c = 99;
 
@@ -43,14 +39,11 @@ static int daKytag07_IsDelete(kytag07_class* i_this) {
     }
 }
 
-/* 8085A388-8085A3B0 000188 0028+00 1/0 0/0 0/0 .text            daKytag07_Delete__FP13kytag07_class
- */
 static int daKytag07_Delete(kytag07_class* i_this) {
     dKy_plight_cut(&i_this->mLightInfluence);
     return 1;
 }
 
-/* 8085A3B0-8085A47C 0001B0 00CC+00 1/0 0/0 0/0 .text            daKytag07_Create__FP10fopAc_ac_c */
 static int daKytag07_Create(fopAc_ac_c* i_this) {
     kytag07_class* a_this = (kytag07_class*)i_this;
 
@@ -69,13 +62,11 @@ static int daKytag07_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8085A4A8-8085A4C8 -00001 0020+00 1/0 0/0 0/0 .data            l_daKytag07_Method */
 static actor_method_class l_daKytag07_Method = {
     (process_method_func)daKytag07_Create, (process_method_func)daKytag07_Delete,
     (process_method_func)daKytag07_Execute, (process_method_func)daKytag07_IsDelete,
     (process_method_func)daKytag07_Draw};
 
-/* 8085A4C8-8085A4F8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KYTAG07 */
 extern actor_process_profile_definition g_profile_KYTAG07 = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

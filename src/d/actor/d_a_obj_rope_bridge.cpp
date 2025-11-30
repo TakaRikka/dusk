@@ -9,13 +9,10 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-/* 80597E84-80597E8C -00001 0008+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[2] = {"L_RopeB_S", "L_RopeB_L"};
 
-/* 80597E8C-80597E90 -00001 0004+00 3/3 0/0 0/0 .data            l_ropeArcName */
 static char* l_ropeArcName = "L_Ropest";
 
-/* 80595E38-80595ED8 000078 00A0+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjRBridge_cFv */
 void daObjRBridge_c::initBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(NULL, current.angle.y, 0);
@@ -29,7 +26,6 @@ void daObjRBridge_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 80595ED8-80595F84 000118 00AC+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjRBridge_cFv */
 void daObjRBridge_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -45,8 +41,6 @@ void daObjRBridge_c::setBaseMtx() {
     }
 }
 
-/* 80595F84-80595FE0 0001C4 005C+00 2/2 0/0 0/0 .text            checkE3Special__14daObjRBridge_cFv
- */
 BOOL daObjRBridge_c::checkE3Special() {
     // E3 Dungeon - Fortress (Interior 1)
     if (strcmp(dComIfGp_getStartStageName(), "D_MN54") == 0 && dComIfGp_roomControl_getStayNo() == 7) {
@@ -56,37 +50,28 @@ BOOL daObjRBridge_c::checkE3Special() {
     return FALSE;
 }
 
-/* 80597D7C-80597D84 000000 0008+00 9/9 0/0 0/0 .rodata          l_brgBmdIdx */
 static const int l_brgBmdIdx[] = {4, 4};
 
-/* 80597D84-80597D8C 000008 0008+00 1/1 0/0 0/0 .rodata          l_brgDzbIdx */
 static const int l_brgDzbIdx[] = {7, 7};
 
-/* 80597D8C-80597D94 000010 0008+00 0/0 0/0 0/0 .rodata          l_brg_height */
 static const f32 l_brg_height[] = {600.0f, 1200.0f};
 
-/* 80597D94-80597D9C 000018 0008+00 0/1 0/0 0/0 .rodata          l_rope_length */
 static const f32 l_rope_length[] = {300.0f, 450.0f};
 
-/* 80597D9C-80597DA4 000020 0008+00 0/2 0/0 0/0 .rodata          l_himo_thick */
 static const int l_himo_thick[] = {80, 220};
 
-/* 80597DA4-80597DAC 000028 0008+00 1/1 0/0 0/0 .rodata          l_heap_size */
 static const u32 l_heap_size[] = {0x2500, 0x2500};
 
-/* 80597DAC-80597DC4 000030 0018+00 1/1 0/0 0/0 .rodata          l_rope_cullbox_offset */
 static const Vec l_rope_cullbox_offset[] = {
     {0.0f, 550.0f, 0.0f},
     {0.0f, 1100.0f, 0.0f},
 };
 
-/* 80597DC4-80597DDC 000048 0018+00 1/1 0/0 0/0 .rodata          l_rope_cullbox */
 static const cull_box l_rope_cullbox = {
     {-350.0f, 0.0f, -350.0f},
     {350.0f, 350.0f, 350.0f},
 };
 
-/* 80595FE0-80596130 000220 0150+00 1/1 0/0 0/0 .text            setStPos__14daObjRBridge_cFv */
 void daObjRBridge_c::setStPos() {
     f32 height[2] = {845.0f + KREG_F(3), 1600.0f + KREG_F(4)};
     cXyz start(0.0f, 0.0f, 100.0f);
@@ -110,7 +95,6 @@ void daObjRBridge_c::setStPos() {
     eyePos = mStopPos;
 }
 
-/* 8059616C-805963C4 0003AC 0258+00 1/1 0/0 0/0 .text            initLinePos__14daObjRBridge_cFv */
 void daObjRBridge_c::initLinePos() {
     cXyz st_pos;
     cXyz brg_pos[2];
@@ -150,7 +134,6 @@ void daObjRBridge_c::initLinePos() {
     }
 }
 
-/* 805963C4-80596768 000604 03A4+00 1/1 0/0 0/0 .text            setLinePos__14daObjRBridge_cFv */
 void daObjRBridge_c::setLinePos() {
     cXyz st_pos;
     cXyz brg_pos[2];
@@ -216,22 +199,18 @@ void daObjRBridge_c::setLinePos() {
     }
 }
 
-/* 80597E90-80597EA8 00002C 0018+00 1/1 0/0 0/0 .data            l_rope_offsetL */
 static Vec l_rope_offsetL[] = {
     {-120.0f, 1165.0f, 0.0f},
     {120.0f, 1165.0f, 0.0f},
 };
 
-/* 80597EA8-80597EC0 000044 0018+00 1/1 0/0 0/0 .data            l_rope_offsetS */
 static Vec l_rope_offsetS[] = {
     {-120.0f, 575.0f, 0.0f},
     {120.0f, 575.0f, 0.0f},
 };
 
-/* 80597EC0-80597ECC 00005C 000C+00 1/1 0/0 0/0 .data            l_rope_offsetSt */
 static Vec l_rope_offsetSt = {0.0f, 0.0f, 70.0f};
 
-/* 80596768-805967E4 0009A8 007C+00 4/4 0/0 0/0 .text getLinePosSt__14daObjRBridge_cFP4cXyz */
 void daObjRBridge_c::getLinePosSt(cXyz* o_pos) {
     *o_pos = l_rope_offsetSt;
     mDoMtx_stack_c::transS(mStopPos);
@@ -239,7 +218,6 @@ void daObjRBridge_c::getLinePosSt(cXyz* o_pos) {
     mDoMtx_stack_c::multVec(o_pos, o_pos);
 }
 
-/* 805967E4-8059689C 000A24 00B8+00 4/4 0/0 0/0 .text getLinePosBrg__14daObjRBridge_cFiP4cXyz */
 void daObjRBridge_c::getLinePosBrg(int param_0, cXyz* o_pos) {
     if (mType == 0) {
         *o_pos = l_rope_offsetS[param_0];
@@ -252,7 +230,6 @@ void daObjRBridge_c::getLinePosBrg(int param_0, cXyz* o_pos) {
     mDoMtx_stack_c::multVec(o_pos, o_pos);
 }
 
-/* 8059689C-805969FC 000ADC 0160+00 1/1 0/0 0/0 .text            checkTight__14daObjRBridge_cFv */
 BOOL daObjRBridge_c::checkTight() {
     cXyz brg_pos;
     cXyz st_pos;
@@ -266,31 +243,24 @@ BOOL daObjRBridge_c::checkTight() {
     return FALSE;
 }
 
-/* 80597ECC-80597EE4 000068 0018+00 0/1 0/0 0/0 .data            l_cull_sizeS */
 static cull_box l_cull_sizeS = {
     {-250.0f, 0.0f, -100.0f},
     {250.0f, 1100.0f, 1000.0f},
 };
 
-/* 80597EE4-80597EFC 000080 0018+00 0/1 0/0 0/0 .data            l_cull_sizeL */
 static cull_box l_cull_sizeL = {
     {-400.0f, 0.0f, -100.0f},
     {400.0f, 1500.0f, 1500.0f},
 };
 
-/* 80597EFC-80597F04 000098 0008+00 0/1 0/0 0/0 .data            l_att_disXZ */
 static f32 l_att_disXZ[] = {2000.0f, 2000.0f};
 
-/* 80597F04-80597F0C 0000A0 0008+00 0/1 0/0 0/0 .data            l_att_high */
 static f32 l_att_high[] = {1000.0f, 2000.0f};
 
-/* 80597F0C-80597F14 0000A8 0008+00 0/1 0/0 0/0 .data            l_att_low */
 static f32 l_att_low[] = {-500.0f, -500.0f};
 
-/* 80597F14-80597F18 0000B0 0004+00 0/1 0/0 0/0 .data            l_att_ang */
 static s16 l_att_ang[] = {0x6000, 0x6000};
 
-/* 80597F18-80597F58 0000B4 0040+00 0/1 0/0 0/0 .data            l_sph_src */
 static dCcD_SrcSph l_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x2002, 0x11}, 0x18}}, // mObj
@@ -303,7 +273,6 @@ static dCcD_SrcSph l_sph_src = {
     } // mSphAttr
 };
 
-/* 80597F58-80597F98 0000F4 0040+00 0/1 0/0 0/0 .data            l_sph_src2 */
 static dCcD_SrcSph l_sph_src2 = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x10}, 0x19}}, // mObj
@@ -316,7 +285,6 @@ static dCcD_SrcSph l_sph_src2 = {
     } // mSphAttr
 };
 
-/* 80597F98-80597FE4 000134 004C+00 0/1 0/0 0/0 .data            l_cps_src */
 static dCcD_SrcCps l_cps_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x2002, 0x11}, 0x0}}, // mObj
@@ -329,7 +297,6 @@ static dCcD_SrcCps l_cps_src = {
     } // mCpsAttr
 };
 
-/* 805969FC-80596B88 000C3C 018C+00 1/0 0/0 0/0 .text            Create__14daObjRBridge_cFv */
 int daObjRBridge_c::Create() {
     if (fopAcM_isSwitch(this, getSwbit()) || fopAcM_isSwitch(this, getSwbit2())) {
         shape_angle.x = 0x4000;
@@ -371,7 +338,6 @@ int daObjRBridge_c::Create() {
     return 1;
 }
 
-/* 80596B88-80596DE8 000DC8 0260+00 1/0 0/0 0/0 .text            CreateHeap__14daObjRBridge_cFv */
 int daObjRBridge_c::CreateHeap() {
     void* modelData = dComIfG_getObjectRes(l_arcName[mType], l_brgBmdIdx[mType]);
     JUT_ASSERT(837, modelData != NULL);
@@ -421,7 +387,6 @@ int daObjRBridge_c::CreateHeap() {
     return 1;
 }
 
-/* 80596DEC-80596EBC 00102C 00D0+00 1/1 0/0 0/0 .text            create1st__14daObjRBridge_cFv */
 int daObjRBridge_c::create1st() {
     mType = getType();
     if (mType != 0 && mType != 1) {
@@ -448,8 +413,6 @@ int daObjRBridge_c::create1st() {
     return phase_state;
 }
 
-/* 80596EBC-80596FA8 0010FC 00EC+00 1/0 0/0 0/0 .text            Execute__14daObjRBridge_cFPPA3_A4_f
- */
 int daObjRBridge_c::Execute(Mtx** param_0) {
     action();
     setLinePos();
@@ -466,7 +429,6 @@ int daObjRBridge_c::Execute(Mtx** param_0) {
     return 1;
 }
 
-/* 80596FA8-8059715C 0011E8 01B4+00 1/1 0/0 0/0 .text            action__14daObjRBridge_cFv */
 void daObjRBridge_c::action() {
     typedef void (daObjRBridge_c::*modeProc)();
     static modeProc mode_proc[] = {
@@ -500,13 +462,11 @@ void daObjRBridge_c::action() {
     dComIfG_Ccsp()->Set(&mCcSph2);
 }
 
-/* 8059715C-80597170 00139C 0014+00 1/1 0/0 0/0 .text            init_wait__14daObjRBridge_cFv */
 void daObjRBridge_c::init_wait() {
     mFallTimer = 5;
     mMode = 0;
 }
 
-/* 80597170-805973BC 0013B0 024C+00 1/0 0/0 0/0 .text            mode_wait__14daObjRBridge_cFv */
 void daObjRBridge_c::mode_wait() {
     if (checkTight()) {
         field_0xb18 = 0;
@@ -552,7 +512,6 @@ void daObjRBridge_c::mode_wait() {
     }
 }
 
-/* 805973BC-805973E4 0015FC 0028+00 1/1 0/0 0/0 .text            init_cut__14daObjRBridge_cFv */
 void daObjRBridge_c::init_cut() {
     field_0xb18 = 0;
     field_0xb1a = 0;
@@ -561,7 +520,6 @@ void daObjRBridge_c::init_cut() {
     mMode = 1;
 }
 
-/* 805973E4-805975E8 001624 0204+00 1/0 0/0 0/0 .text            mode_cut__14daObjRBridge_cFv */
 void daObjRBridge_c::mode_cut() {
     if (mFallTimer >= 0) {
         if (mFallTimer == 0 && !checkE3Special()) {
@@ -593,15 +551,12 @@ void daObjRBridge_c::mode_cut() {
     }
 }
 
-/* 805975E8-805975F4 001828 000C+00 2/2 0/0 0/0 .text            init_end__14daObjRBridge_cFv */
 void daObjRBridge_c::init_end() {
     mMode = 2;
 }
 
-/* 805975F4-805975F8 001834 0004+00 1/0 0/0 0/0 .text            mode_end__14daObjRBridge_cFv */
 void daObjRBridge_c::mode_end() {}
 
-/* 805975F8-805977D0 001838 01D8+00 1/0 0/0 0/0 .text            Draw__14daObjRBridge_cFv */
 int daObjRBridge_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpBrgModel, &tevStr);
@@ -633,7 +588,6 @@ int daObjRBridge_c::Draw() {
     return 1;
 }
 
-/* 805977D0-805978BC 001A10 00EC+00 1/1 0/0 0/0 .text checkHimoCulling__14daObjRBridge_cFv */
 BOOL daObjRBridge_c::checkHimoCulling() {
     Mtx cullmtx;
     cXyz offset(l_rope_cullbox_offset[mType]);
@@ -649,7 +603,6 @@ BOOL daObjRBridge_c::checkHimoCulling() {
     return fopAcM_checkCullingBox(cullmtx, min.x, min.y, min.z, max.x, max.y, max.z);
 }
 
-/* 805978BC-80597920 001AFC 0064+00 1/0 0/0 0/0 .text            Delete__14daObjRBridge_cFv */
 int daObjRBridge_c::Delete() {
     mSound.deleteObject();
 
@@ -658,32 +611,23 @@ int daObjRBridge_c::Delete() {
     return 1;
 }
 
-/* 80597920-80597A90 001B60 0170+00 1/0 0/0 0/0 .text daObjRBridge_create1st__FP14daObjRBridge_c
- */
 static int daObjRBridge_create1st(daObjRBridge_c* a_this) {
     fopAcM_ct(a_this, daObjRBridge_c);
     return a_this->create1st();
 }
 
-/* 80597CC0-80597CE0 001F00 0020+00 1/0 0/0 0/0 .text
- * daObjRBridge_MoveBGDelete__FP14daObjRBridge_c                */
 static int daObjRBridge_MoveBGDelete(daObjRBridge_c* a_this) {
     return a_this->MoveBGDelete();
 }
 
-/* 80597CE0-80597D00 001F20 0020+00 1/0 0/0 0/0 .text
- * daObjRBridge_MoveBGExecute__FP14daObjRBridge_c               */
 static int daObjRBridge_MoveBGExecute(daObjRBridge_c* a_this) {
     return a_this->MoveBGExecute();
 }
 
-/* 80597D00-80597D2C 001F40 002C+00 1/0 0/0 0/0 .text daObjRBridge_MoveBGDraw__FP14daObjRBridge_c
- */
 static int daObjRBridge_MoveBGDraw(daObjRBridge_c* a_this) {
     return a_this->MoveBGDraw();
 }
 
-/* 8059803C-8059805C -00001 0020+00 1/0 0/0 0/0 .data            daObjRBridge_METHODS */
 static actor_method_class daObjRBridge_METHODS = {
     (process_method_func)daObjRBridge_create1st,
     (process_method_func)daObjRBridge_MoveBGDelete,
@@ -692,7 +636,6 @@ static actor_method_class daObjRBridge_METHODS = {
     (process_method_func)daObjRBridge_MoveBGDraw,
 };
 
-/* 8059805C-8059808C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_RopeBridge */
 extern actor_process_profile_definition g_profile_Obj_RopeBridge = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

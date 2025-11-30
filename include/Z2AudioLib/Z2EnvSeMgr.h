@@ -12,10 +12,10 @@ enum WindType {
 };
 
 struct Z2EnvSeBase {
-    /* 802C589C */ Z2EnvSeBase(Vec* posPtr = NULL);
-    /* 802C58AC */ ~Z2EnvSeBase();
-    /* 802C5908 */ bool startEnvSe(JAISoundID soundID, f32 fxMix, f32 volume, f32 pan, f32 dolby, f32 pitch, u32 moveSteps);
-    /* 802C5AB4 */ bool startEnvSeLevel(JAISoundID soundID, f32 fxMix, f32 volume, f32 pan, f32 dolby, f32 pitch, u32 moveSteps);
+    Z2EnvSeBase(Vec* posPtr = NULL);
+    ~Z2EnvSeBase();
+    bool startEnvSe(JAISoundID soundID, f32 fxMix, f32 volume, f32 pan, f32 dolby, f32 pitch, u32 moveSteps);
+    bool startEnvSeLevel(JAISoundID soundID, f32 fxMix, f32 volume, f32 pan, f32 dolby, f32 pitch, u32 moveSteps);
 
     JAISoundHandle* getHandle() { return &mHandle; }
     void setPos(Vec* pos) { mPos = pos; }
@@ -25,11 +25,11 @@ struct Z2EnvSeBase {
 };  // Size: 0x8
 
 struct Z2EnvSeAutoPan : public Z2EnvSeBase {
-    /* 802C5ECC */ Z2EnvSeAutoPan();
-    /* 802C5F28 */ ~Z2EnvSeAutoPan();
-    /* 802C5F7C */ void setPanParam(f32 pan, f32 dolby, bool, bool, f32, f32);
-    /* 802C5F98 */ void calcPan();
-    /* 802C60E0 */ bool startEnvSeAutoPanLevel(JAISoundID soundID, f32 fxMix, f32 volume, f32 pitch);
+    Z2EnvSeAutoPan();
+    ~Z2EnvSeAutoPan();
+    void setPanParam(f32 pan, f32 dolby, bool, bool, f32, f32);
+    void calcPan();
+    bool startEnvSeAutoPanLevel(JAISoundID soundID, f32 fxMix, f32 volume, f32 pitch);
 
     /* 0x08 */ f32 mPan;
     /* 0x0C */ f32 mDolby;
@@ -40,11 +40,11 @@ struct Z2EnvSeAutoPan : public Z2EnvSeBase {
 };  // Size: 0x1C
 
 struct Z2EnvSeDir : public Z2EnvSeBase {
-    /* 802C5C9C */ Z2EnvSeDir(Vec* dir = NULL);
-    /* 802C5D1C */ ~Z2EnvSeDir();
-    /* 802C5D70 */ void setPanDir(Vec* dir);
-    /* 802C5D9C */ void calcPan(f32);
-    /* 802C5E90 */ bool startEnvSeDirLevel(JAISoundID soundID, f32 fxMix, f32 volume);
+    Z2EnvSeDir(Vec* dir = NULL);
+    ~Z2EnvSeDir();
+    void setPanDir(Vec* dir);
+    void calcPan(f32);
+    bool startEnvSeDirLevel(JAISoundID soundID, f32 fxMix, f32 volume);
 
     /* 0x08 */ f32 mPan;
     /* 0x0C */ f32 mDolby;
@@ -52,41 +52,41 @@ struct Z2EnvSeDir : public Z2EnvSeBase {
 };  // Size: 0x1C
 
 struct Z2EnvSeMgr : public JASGlobalInstance<Z2EnvSeMgr> {
-    /* 802C611C */ Z2EnvSeMgr();
-    /* 802C6540 */ ~Z2EnvSeMgr();
-    /* 802C66B0 */ void framework();
-    /* 802C6998 */ void resetScene();
-    /* 802C699C */ void resetSceneInner();
-    /* 802C6AC0 */ void initSceneEnvSe(s32 sceneID, s8 room, f32);
-    /* 802C6C1C */ void playSceneEnvSe();
-    /* 802C6C84 */ void initStaticEnvSe(u8, u8, u8, u8, Vec*);
-    /* 802C70C8 */ bool startStaticEnvSe(s8 reverb);
-    /* 802C780C */ void registWindowPos(Vec* posPtr);
-    /* 802C7830 */ bool startRainSe(s32, s8);
-    /* 802C7CF4 */ void startNearThunderSe(s8 reverb);
-    /* 802C7E68 */ void startFarThunderSe(Vec* posPtr, s8 reverb);
-    /* 802C7FB4 */ void setSnowPower(s8 reverb);
-    /* 802C7FBC */ void initStrongWindSe();
-    /* 802C7FC8 */ void setWindDirection(Vec* dir);
-    /* 802C800C */ bool startStrongWindSe(s8 reverb);
-    /* 802C80F8 */ void initRiverSe(u8, u8, u8, u8);
-    /* 802C8234 */ void registRiverSePos(Vec* posPtr);
-    /* 802C8258 */ void setHyrulSewerOpen(bool isSewerOpen);
-    /* 802C8300 */ bool startRiverSe(s8 reverb);
-    /* 802C8730 */ void initFallSe(u8, u8, u8, u8);
-    /* 802C886C */ void registFallSePos(Vec* posPtr);
-    /* 802C8890 */ bool startFallSe(s8 reverb);
-    /* 802C8A90 */ void initEtcSe(u8, u8, u8, u8);
-    /* 802C8C24 */ void registEtcSePos(Vec* posPtr);
-    /* 802C8C48 */ bool startEtcSe(s8 reverb);
-    /* 802C92C8 */ void registWolfSmellSePos(Vec* posPtr);
-    /* 802C92EC */ void startFogWipeTrigger(Vec* pos);
-    /* 802C93A0 */ void setFogWipeWidth(f32 width);
-    /* 802C93E4 */ f32 getFogDensity();
-    /* 802C9400 */ bool startFogSe();
-    /* 802C950C */ void initLv3WaterSe(u8, u8, u8, u8);
-    /* 802C9F58 */ void registLv3WaterSePos(u8, Vec* posPtr);
-    /* 802CA794 */ void startLv3WaterSe(s8 reverb);
+    Z2EnvSeMgr();
+    ~Z2EnvSeMgr();
+    void framework();
+    void resetScene();
+    void resetSceneInner();
+    void initSceneEnvSe(s32 sceneID, s8 room, f32);
+    void playSceneEnvSe();
+    void initStaticEnvSe(u8, u8, u8, u8, Vec*);
+    bool startStaticEnvSe(s8 reverb);
+    void registWindowPos(Vec* posPtr);
+    bool startRainSe(s32, s8);
+    void startNearThunderSe(s8 reverb);
+    void startFarThunderSe(Vec* posPtr, s8 reverb);
+    void setSnowPower(s8 reverb);
+    void initStrongWindSe();
+    void setWindDirection(Vec* dir);
+    bool startStrongWindSe(s8 reverb);
+    void initRiverSe(u8, u8, u8, u8);
+    void registRiverSePos(Vec* posPtr);
+    void setHyrulSewerOpen(bool isSewerOpen);
+    bool startRiverSe(s8 reverb);
+    void initFallSe(u8, u8, u8, u8);
+    void registFallSePos(Vec* posPtr);
+    bool startFallSe(s8 reverb);
+    void initEtcSe(u8, u8, u8, u8);
+    void registEtcSePos(Vec* posPtr);
+    bool startEtcSe(s8 reverb);
+    void registWolfSmellSePos(Vec* posPtr);
+    void startFogWipeTrigger(Vec* pos);
+    void setFogWipeWidth(f32 width);
+    f32 getFogDensity();
+    bool startFogSe();
+    void initLv3WaterSe(u8, u8, u8, u8);
+    void registLv3WaterSePos(u8, Vec* posPtr);
+    void startLv3WaterSe(s8 reverb);
 
     void setWindType(u8 type) { mWindType = type; }
     void registSmellSePos(Vec* posPtr) { registEtcSePos(posPtr); }

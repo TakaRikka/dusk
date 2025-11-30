@@ -6,47 +6,35 @@
 #include "JSystem/J3DGraphBase/J3DFifo.h"
 #include "global.h"
 
-/* 80434AC8-80434BE4 0617E8 011C+00 1/1 151/151 486/486 .bss             j3dSys */
 J3DSys j3dSys;
 
-/* 80434BE4-80434C14 061904 0030+00 0/0 17/17 154/154 .bss             mCurrentMtx__6J3DSys */
 Mtx J3DSys::mCurrentMtx;
 
-/* 80434C14-80434C20 061934 000C+00 0/0 6/6 0/0 .bss             mCurrentS__6J3DSys */
 Vec J3DSys::mCurrentS;
 
-/* 80434C20-80434C2C 061940 000C+00 0/0 5/5 0/0 .bss             mParentS__6J3DSys */
 Vec J3DSys::mParentS;
 
-/* 80434C2C-80434C70 06194C 0040+04 1/1 17/17 0/0 .bss             sTexCoordScaleTable__6J3DSys */
 J3DTexCoordScaleInfo J3DSys::sTexCoordScaleTable[8];
 
-/* 803CD8A0-803CD8B0 02A9C0 0010+00 1/1 0/0 0/0 .data            NullTexData */
-static u8 NullTexData[0x10] ALIGN_DECL(32) = {0};
+static u8 NullTexData[0x10] ATTRIBUTE_ALIGN(32) = {0};
 
-/* 803CD8B0-803CD8E0 02A9D0 0030+00 1/1 0/0 0/0 .data            j3dIdentityMtx */
 static Mtx j3dIdentityMtx = {
     1.0f, 0.0f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 1.0f, 0.0f,
 };
 
-/* 803CD8E0-803CD8F8 02AA00 0018+00 1/1 0/0 0/0 .data            IndMtx */
 static Mtx23 IndMtx = {
     0.5f, 0.0f, 0.0f,
     0.0f, 0.5f, 0.0f,
 };
 
-/* 80451598-804515A0 000A98 0004+04 0/0 1/1 0/0 .sbss            j3dDefaultViewNo */
 u32 j3dDefaultViewNo;
 
-/* 80450950-80450954 0003D0 0004+00 2/2 0/0 0/0 .sdata           ColorBlack */
 static GXColor ColorBlack = {0x00, 0x00, 0x00, 0x00};
 
-/* 80450954-80450958 0003D4 0004+00 2/2 0/0 0/0 .sdata           ColorWhite */
 static GXColor ColorWhite = {0xFF, 0xFF, 0xFF, 0xFF};
 
-/* 8030FDE8-8030FEC0 30A728 00D8+00 1/1 0/0 0/0 .text            __ct__6J3DSysFv */
 J3DSys::J3DSys() {
     makeTexCoordTable();
     makeTevSwapTable();
@@ -80,19 +68,15 @@ J3DSys::J3DSys() {
     }
 }
 
-/* 8030FEC0-8030FEE4 30A800 0024+00 0/0 1/1 0/0 .text            loadPosMtxIndx__6J3DSysCFiUs */
 void J3DSys::loadPosMtxIndx(int addr, u16 indx) const {
     // J3DFifoLoadPosMtxIndx(indx, addr * 3);  // matches debug, not retail
     J3DFifoLoadIndx(GX_LOAD_INDX_A, indx, 0xB000 | ((u16)(addr * 0x0C)));
 }
 
-/* 8030FEE4-8030FF0C 30A824 0028+00 0/0 1/1 0/0 .text            loadNrmMtxIndx__6J3DSysCFiUs */
 void J3DSys::loadNrmMtxIndx(int addr, u16 indx) const {
     J3DFifoLoadNrmMtxIndx3x3(indx, addr * 3);
 }
 
-/* 8030FF0C-803100BC 30A84C 01B0+00 1/1 0/0 0/0 .text setTexCacheRegion__6J3DSysF15_GXTexCacheSize
- */
 void J3DSys::setTexCacheRegion(GXTexCacheSize size) {
     J3D_ASSERT_RANGE(173, size >= 0 && size < 3);
 
@@ -131,7 +115,6 @@ void J3DSys::setTexCacheRegion(GXTexCacheSize size) {
     }
 }
 
-/* 803100BC-8031073C 30A9FC 0680+00 0/0 3/3 0/0 .text            drawInit__6J3DSysFv */
 void J3DSys::drawInit() {
     GXInvalidateVtxCache();
     GXSetCurrentMtx(GX_PNMTX0);
@@ -237,7 +220,6 @@ void J3DSys::drawInit() {
     setTexCacheRegion(GX_TEXCACHE_32K);
 }
 
-/* 8031073C-8031079C 30B07C 0060+00 0/0 16/16 6/6 .text            reinitGX__6J3DSysFv */
 void J3DSys::reinitGX() {
     reinitGenMode();
     reinitLighting();
@@ -249,7 +231,6 @@ void J3DSys::reinitGX() {
     GXFlush();
 }
 
-/* 8031079C-803107E8 30B0DC 004C+00 1/1 0/0 0/0 .text            reinitGenMode__6J3DSysFv */
 void J3DSys::reinitGenMode() {
     GXSetNumChans(0);
     GXSetNumTexGens(1);
@@ -259,7 +240,6 @@ void J3DSys::reinitGenMode() {
     GXSetCoPlanar(GX_FALSE);
 }
 
-/* 803107E8-80310894 30B128 00AC+00 1/1 0/0 0/0 .text            reinitLighting__6J3DSysFv */
 void J3DSys::reinitLighting() {
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE,
                   GX_AF_NONE);
@@ -271,7 +251,6 @@ void J3DSys::reinitLighting() {
     GXSetChanMatColor(GX_COLOR1A1, ColorWhite);
 }
 
-/* 80310894-80310998 30B1D4 0104+00 1/1 0/0 0/0 .text            reinitTransform__6J3DSysFv */
 void J3DSys::reinitTransform() {
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
@@ -284,7 +263,6 @@ void J3DSys::reinitTransform() {
     GXSetTexCoordGen(GX_TEXCOORD7, GX_TG_MTX2x4, GX_TG_TEX7, GX_IDENTITY);
 }
 
-/* 80310998-80310A3C 30B2D8 00A4+00 2/2 0/0 0/0 .text            reinitTexture__6J3DSysFv */
 void J3DSys::reinitTexture() {
     GXTexObj texObj;
     GXInitTexObj(&texObj, NullTexData, 4, 4, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -298,7 +276,6 @@ void J3DSys::reinitTexture() {
     GXLoadTexObj(&texObj, GX_TEXMAP7);
 }
 
-/* 80310A3C-80310D44 30B37C 0308+00 1/1 0/0 0/0 .text            reinitTevStages__6J3DSysFv */
 void J3DSys::reinitTevStages() {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
     GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
@@ -346,7 +323,6 @@ void J3DSys::reinitTevStages() {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
 }
 
-/* 80310D44-80310E3C 30B684 00F8+00 1/1 0/0 0/0 .text            reinitIndStages__6J3DSysFv */
 void J3DSys::reinitIndStages() {
     u32 i;
     for (i = 0; i < GX_MAX_TEVSTAGE; i++) {
@@ -366,7 +342,6 @@ void J3DSys::reinitIndStages() {
     GXSetIndTexMtx(GX_ITM_2, IndMtx, 1);
 }
 
-/* 80310E3C-80310ED0 30B77C 0094+00 1/1 0/0 0/0 .text            reinitPixelProc__6J3DSysFv */
 void J3DSys::reinitPixelProc() {
     GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetColorUpdate(GX_TRUE);

@@ -75,8 +75,8 @@ STATIC_ASSERT(sizeof(e_sg_class) == 0xAB0);
 
 class daE_SG_HIO_c {
 public:
-    /* 8078A22C */ daE_SG_HIO_c();
-    /* 8078DC84 */ virtual ~daE_SG_HIO_c() {};
+    daE_SG_HIO_c();
+    virtual ~daE_SG_HIO_c() {};
 
     s8 mUnk0;
     f32 mScaleFactor;

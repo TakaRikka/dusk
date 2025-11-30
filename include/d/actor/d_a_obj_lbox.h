@@ -42,8 +42,8 @@ STATIC_ASSERT(sizeof(obj_lbox_class) == 0xA90);
 
 class daObj_Lbox_HIO_c {
 public:
-    /* 80C5356C */ daObj_Lbox_HIO_c();
-    /* 80C53F14 */ virtual ~daObj_Lbox_HIO_c() {};
+    daObj_Lbox_HIO_c();
+    virtual ~daObj_Lbox_HIO_c() {};
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mSize;

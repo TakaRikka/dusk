@@ -20,7 +20,7 @@ struct daNpcRafrel_HIOParam {
 
 class daNpcRafrel_Param_c {
 public:
-    /* 80ABF974 */ virtual ~daNpcRafrel_Param_c() {}
+    virtual ~daNpcRafrel_Param_c() {}
 
     static const daNpcRafrel_HIOParam m;
 };
@@ -41,45 +41,45 @@ public:
 
 class daNpcRafrel_c : public daNpcF_c {
 public:
-    /* 80AB962C */ daNpcRafrel_c();
+    daNpcRafrel_c();
     
-    /* 80AB9A40 */ int Create();
-    /* 80AB9E3C */ int CreateHeap();
-    /* 80ABA380 */ int Delete();
-    /* 80ABA3B4 */ int Execute();
-    /* 80ABA3D8 */ int Draw();
-    /* 80ABA4A8 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80ABA678 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80ABA698 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80ABAB88 */ void reset();
-    /* 80ABADC4 */ inline void setWaitAction();
-    /* 80ABAFBC */ inline bool isSneaking();
-    /* 80ABB014 */ bool wait_type01(void*);
-    /* 80ABBBDC */ bool wait_type2(void*);
-    /* 80ABBE84 */ bool talk(void*);
-    /* 80ABC50C */ bool demo(void*);
-    /* 80ABCA40 */ bool leave(void*);
-    /* 80ABCD74 */ inline int EvCut_Introduction(int);
-    /* 80ABCE74 */ inline int EvCut_Meeting(int);
-    /* 80ABD124 */ inline int EvCut_Appear(int);
-    /* 80ABD8A0 */ inline int EvCut_WiretapSponsor(int);
-    /* 80ABDB7C */ inline int EvCut_WiretapEntrant(int);
+    int Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    void reset();
+    inline void setWaitAction();
+    inline bool isSneaking();
+    bool wait_type01(void*);
+    bool wait_type2(void*);
+    bool talk(void*);
+    bool demo(void*);
+    bool leave(void*);
+    inline int EvCut_Introduction(int);
+    inline int EvCut_Meeting(int);
+    inline int EvCut_Appear(int);
+    inline int EvCut_WiretapSponsor(int);
+    inline int EvCut_WiretapEntrant(int);
 
-    /* 80ABE470 */ inline void playMotion();
-    /* 80ABEE98 */ inline void lookat();
+    inline void playMotion();
+    inline void lookat();
     inline void playExpression();
 
-    /* 80AB9840 */ virtual ~daNpcRafrel_c();
-    /* 80ABDE9C */ virtual inline void setParam();
-    /* 80ABE1D0 */ virtual inline BOOL main();
-    /* 80ABE9FC */ virtual inline BOOL ctrlBtk();
-    /* 80ABEAD8 */ virtual inline void setAttnPos();
-    /* 80ABA6E4 */ virtual inline bool setExpressionAnm(int, bool);
-    /* 80ABA8EC */ virtual inline bool setExpressionBtp(int);
-    /* 80ABBBB0 */ virtual void setExpression(int, f32);
-    /* 80ABA9CC */ virtual void setMotionAnm(int, f32);
-    /* 80ABBB10 */ virtual void setMotion(int, f32, int);
-    /* 80ABF074 */ virtual inline BOOL drawDbgInfo();
+    virtual ~daNpcRafrel_c();
+    virtual inline void setParam();
+    virtual inline BOOL main();
+    virtual inline BOOL ctrlBtk();
+    virtual inline void setAttnPos();
+    virtual inline bool setExpressionAnm(int, bool);
+    virtual inline bool setExpressionBtp(int);
+    virtual void setExpression(int, f32);
+    virtual void setMotionAnm(int, f32);
+    virtual void setMotion(int, f32, int);
+    virtual inline BOOL drawDbgInfo();
 
     int setAction(bool (daNpcRafrel_c::*i_actionFn)(void*)) {
         field_0xe10 = 3;

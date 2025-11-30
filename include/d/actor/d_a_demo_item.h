@@ -22,26 +22,26 @@ public:
         ACTION_END_e,
     };
 
-    /* 804DFBD4 */ int CreateInit();
-    /* 804DFC98 */ void action();
-    /* 804DFD10 */ void actionStart();
-    /* 804E00DC */ void actionEvent();
-    /* 804E0A50 */ void actionWaitLightEnd();
-    /* 804E0B40 */ void actionEnd();
-    /* 804E0B60 */ void setInsectEffect();
-    /* 804E0C44 */ void followInsectEffect();
-    /* 804E0CB0 */ void endInsectEffect();
-    /* 804E0D44 */ void onEventReg(int, int);
-    /* 804E0DB4 */ void set_pos();
-    /* 804E105C */ void anim_control();
-    /* 804E1098 */ void initEffectLight();
-    /* 804E10D0 */ void settingEffectLight();
-    /* 804E111C */ void set_mtx();
-    /* 804E1230 */ void draw_WOOD_STICK();
+    int CreateInit();
+    void action();
+    void actionStart();
+    void actionEvent();
+    void actionWaitLightEnd();
+    void actionEnd();
+    void setInsectEffect();
+    void followInsectEffect();
+    void endInsectEffect();
+    void onEventReg(int, int);
+    void set_pos();
+    void anim_control();
+    void initEffectLight();
+    void settingEffectLight();
+    void set_mtx();
+    void draw_WOOD_STICK();
 
-    /* 804E122C */ virtual void setListStart();
-    /* 804E11D4 */ virtual void setTevStr();
-    /* 804DFBCC */ virtual int __CreateHeap();
+    virtual void setListStart();
+    virtual void setTevStr();
+    virtual int __CreateHeap();
 
     inline int Delete();
     inline int create();

@@ -21,8 +21,8 @@ class J3DMaterialTable;
  * 
  */
 struct J3DDrawMtxData {
-    /* 803115E0 */ J3DDrawMtxData();
-    /* 803115F4 */ ~J3DDrawMtxData();
+    J3DDrawMtxData();
+    ~J3DDrawMtxData();
 
     /* 0x0 */ u16 mEntryNum;
     /* 0x2 */ u16 mDrawFullWgtMtxNum;
@@ -38,13 +38,13 @@ class J3DShapeTable;
  */
 class J3DJointTree {
 public:
-    /* 80325A18 */ J3DJointTree();
-    /* 80325A9C */ void makeHierarchy(J3DJoint*, J3DModelHierarchy const**, J3DMaterialTable*,
+    J3DJointTree();
+    void makeHierarchy(J3DJoint*, J3DModelHierarchy const**, J3DMaterialTable*,
                                       J3DShapeTable*);
-    /* 80325C00 */ void findImportantMtxIndex();
+    void findImportantMtxIndex();
 
-    /* 80325CAC */ virtual void calc(J3DMtxBuffer*, Vec const&, f32 const (&)[3][4]);
-    /* 80325D24 */ virtual ~J3DJointTree() {}
+    virtual void calc(J3DMtxBuffer*, Vec const&, f32 const (&)[3][4]);
+    virtual ~J3DJointTree() {}
 
     J3DModelHierarchy const* getHierarchy() { return mHierarchy; }
     void setHierarchy(J3DModelHierarchy* hierarchy) { mHierarchy = hierarchy; }

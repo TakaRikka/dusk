@@ -15,33 +15,33 @@
  */
 class daGpTaru_c : public fopAc_ac_c {
 public:
-    /* 8057D1F8 */ void setBaseMtx();
-    /* 8057D33C */ int create();
-    /* 8057D7CC */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 8057DB3C */ BOOL chkSinkAll();
-    /* 8057DB60 */ BOOL chkWaterLineIn();
-    /* 8057DB84 */ void bgCheck();
-    /* 8057E494 */ void mode_proc_call();
-    /* 8057E5DC */ void mode_init_wait();
-    /* 8057E618 */ void mode_proc_wait();
-    /* 8057E63C */ void mode_init_carry();
-    /* 8057E660 */ void mode_proc_carry();
-    /* 8057E700 */ void mode_init_drop();
-    /* 8057E72C */ void mode_proc_drop();
-    /* 8057E750 */ void mode_init_roll();
-    /* 8057E768 */ void mode_proc_roll();
-    /* 8057EBA4 */ void mode_init_exploInit();
-    /* 8057EC60 */ void mode_proc_exploInit();
-    /* 8057EE2C */ void mode_init_explosion();
-    /* 8057EFB0 */ void mode_proc_explosion();
-    /* 8057EFFC */ void mode_init_sink();
-    /* 8057F014 */ void mode_proc_sink();
-    /* 8057F104 */ void breakEffSet();
+    void setBaseMtx();
+    int create();
+    static int createHeapCallBack(fopAc_ac_c*);
+    BOOL chkSinkAll();
+    BOOL chkWaterLineIn();
+    void bgCheck();
+    void mode_proc_call();
+    void mode_init_wait();
+    void mode_proc_wait();
+    void mode_init_carry();
+    void mode_proc_carry();
+    void mode_init_drop();
+    void mode_proc_drop();
+    void mode_init_roll();
+    void mode_proc_roll();
+    void mode_init_exploInit();
+    void mode_proc_exploInit();
+    void mode_init_explosion();
+    void mode_proc_explosion();
+    void mode_init_sink();
+    void mode_proc_sink();
+    void breakEffSet();
 
-    /* 8057D2D0 */ virtual int CreateHeap();
-    /* 8057E224 */ virtual int Execute();
-    /* 8057F284 */ virtual int Draw();
-    /* 8057F328 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute();
+    virtual int Draw();
+    virtual int Delete();
 
     static const dCcD_SrcGObjInf mCcDObjInfo;
     static dCcD_SrcCyl mCcDCyl;
@@ -78,8 +78,8 @@ STATIC_ASSERT(sizeof(daGpTaru_c) == 0x9ac);
 
 class daGpTaru_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 8057D0CC */ daGpTaru_HIO_c();
-    /* 8057F458 */ virtual ~daGpTaru_HIO_c() {}
+    daGpTaru_HIO_c();
+    virtual ~daGpTaru_HIO_c() {}
 
     void genMessage(JORMContext*);
 

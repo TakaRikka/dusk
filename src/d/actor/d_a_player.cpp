@@ -33,7 +33,6 @@ void daPy_frameCtrl_c::updateFrame() {
     offNowSetFlg();
 }
 
-/* 8015E544-8015E5B0 158E84 006C+00 0/0 1/1 6/6 .text setFrameCtrl__16daPy_frameCtrl_cFUcssff */
 void daPy_frameCtrl_c::setFrameCtrl(u8 i_attribute, s16 i_start, s16 i_end, f32 i_rate,
                                     f32 i_frame) {
     setAttribute(i_attribute);
@@ -51,8 +50,6 @@ void daPy_frameCtrl_c::setFrameCtrl(u8 i_attribute, s16 i_start, s16 i_end, f32 
     offEndFlg();
 }
 
-/* 8015E5B0-8015E654 158EF0 00A4+00 0/0 1/1 18/18 .text initOffset__20daPy_boomerangMove_cFPC4cXyz
- */
 void daPy_boomerangMove_c::initOffset(cXyz const* i_offset) {
     daBoomerang_c* boomerang_p = daPy_py_c::getThrowBoomerangActor();
 
@@ -68,7 +65,6 @@ void daPy_boomerangMove_c::initOffset(cXyz const* i_offset) {
     field_0x0 = 0;
 }
 
-/* 80451018-8045101C 000518 0004+00 2/2 33/32 103/103 .sbss            m_midnaActor__9daPy_py_c */
 daMidna_c* daPy_py_c::m_midnaActor;
 
 /* 8045101C 0002+00 data_8045101C m_dropAngleY__20daPy_boomerangMove_c */
@@ -77,8 +73,6 @@ s16 daPy_boomerangMove_c::m_dropAngleY;
 /* 8045101E 0002+00 data_8045101E m_eventKeepFlg__20daPy_boomerangMove_c */
 s16 daPy_boomerangMove_c::m_eventKeepFlg;
 
-/* 8015E654-8015E87C 158F94 0228+00 0/0 1/1 17/17 .text
- * posMove__20daPy_boomerangMove_cFP4cXyzPsP10fopAc_ac_cs       */
 int daPy_boomerangMove_c::posMove(cXyz* param_0, s16* param_1, fopAc_ac_c* param_2, s16 param_3) {
     daBoomerang_c* boomerang_p = daPy_py_c::getThrowBoomerangActor();
 
@@ -127,8 +121,6 @@ int daPy_boomerangMove_c::posMove(cXyz* param_0, s16* param_1, fopAc_ac_c* param
     return 0;
 }
 
-/* 8015E87C-8015EA0C 1591BC 0190+00 1/1 1/1 17/17 .text
- * bgCheckAfterOffset__20daPy_boomerangMove_cFPC4cXyz           */
 void daPy_boomerangMove_c::bgCheckAfterOffset(cXyz const* i_offset) {
     daBoomerang_c* boomerang_p = daPy_py_c::getThrowBoomerangActor();
     if (boomerang_p != NULL) {
@@ -139,31 +131,24 @@ void daPy_boomerangMove_c::bgCheckAfterOffset(cXyz const* i_offset) {
     }
 }
 
-/* 8015EA0C-8015EA20 15934C 0014+00 0/0 3/3 0/0 .text            setParamData__9daPy_py_cFiiii */
 u32 daPy_py_c::setParamData(int param_0, int param_1, int param_2, int param_3) {
     return param_3 | (param_0 & 0x3F | (param_1 & 0x1F) << 0xC | param_2 << 0x18);
 }
 
-/* 8015EA20-8015EA48 159360 0028+00 0/0 10/10 3/3 .text            checkFishingRodItem__9daPy_py_cFi
- */
 BOOL daPy_py_c::checkFishingRodItem(int i_itemNo) {
     return i_itemNo == fpcNm_ITEM_FISHING_ROD_1 || (i_itemNo >= fpcNm_ITEM_BEE_ROD && i_itemNo <= fpcNm_ITEM_JEWEL_WORM_ROD);
 }
 
-/* 8015EA48-8015EA88 159388 0040+00 0/0 3/3 0/0 .text            checkBombItem__9daPy_py_cFi */
 BOOL daPy_py_c::checkBombItem(int i_itemNo) {
     return i_itemNo == fpcNm_ITEM_NORMAL_BOMB || i_itemNo == fpcNm_ITEM_WATER_BOMB || i_itemNo == fpcNm_ITEM_POKE_BOMB;
 }
 
-/* 8015EA88-8015EAD8 1593C8 0050+00 0/0 5/5 0/0 .text            checkBottleItem__9daPy_py_cFi */
 BOOL daPy_py_c::checkBottleItem(int i_itemNo) {
     return (i_itemNo >= fpcNm_ITEM_EMPTY_BOTTLE && i_itemNo <= fpcNm_ITEM_FAIRY) || i_itemNo == fpcNm_ITEM_BEE_CHILD ||
            i_itemNo == fpcNm_ITEM_WORM || i_itemNo == fpcNm_ITEM_FAIRY_DROP || i_itemNo == fpcNm_ITEM_CHUCHU_BLACK ||
            (i_itemNo >= fpcNm_ITEM_CHUCHU_RARE && i_itemNo <= fpcNm_ITEM_LV3_SOUP);
 }
 
-/* 8015EAD8-8015EB40 159418 0068+00 0/0 3/3 0/0 .text            checkDrinkBottleItem__9daPy_py_cFi
- */
 BOOL daPy_py_c::checkDrinkBottleItem(int i_itemNo) {
     return (i_itemNo >= fpcNm_ITEM_RED_BOTTLE && i_itemNo <= fpcNm_ITEM_HALF_MILK_BOTTLE) || i_itemNo == fpcNm_ITEM_RED_BOTTLE_2 ||
            i_itemNo == fpcNm_ITEM_UGLY_SOUP || i_itemNo == fpcNm_ITEM_HOT_SPRING || i_itemNo == fpcNm_ITEM_BEE_CHILD ||
@@ -171,42 +156,32 @@ BOOL daPy_py_c::checkDrinkBottleItem(int i_itemNo) {
            (i_itemNo >= fpcNm_ITEM_CHUCHU_RARE && i_itemNo != fpcNm_ITEM_CHUCHU_YELLOW && i_itemNo <= fpcNm_ITEM_LV3_SOUP);
 }
 
-/* 8015EB40-8015EB68 159480 0028+00 0/0 4/4 0/0 .text            checkOilBottleItem__9daPy_py_cFi */
 BOOL daPy_py_c::checkOilBottleItem(int i_itemNo) {
     return i_itemNo == fpcNm_ITEM_CHUCHU_YELLOW || i_itemNo == fpcNm_ITEM_OIL_BOTTLE_2 || i_itemNo == fpcNm_ITEM_OIL_BOTTLE;
 }
 
-/* 8015EB68-8015EB90 1594A8 0028+00 0/0 2/2 0/0 .text            checkOpenBottleItem__9daPy_py_cFi
- */
 BOOL daPy_py_c::checkOpenBottleItem(int i_itemNo) {
     return i_itemNo == fpcNm_ITEM_WATER_BOTTLE || i_itemNo == fpcNm_ITEM_WORM || i_itemNo == fpcNm_ITEM_FAIRY;
 }
 
-/* 8015EB90-8015EBB8 1594D0 0028+00 0/0 11/11 0/0 .text            checkBowItem__9daPy_py_cFi */
 BOOL daPy_py_c::checkBowItem(int i_itemNo) {
     return i_itemNo == fpcNm_ITEM_BOW || i_itemNo == fpcNm_ITEM_BOMB_ARROW || i_itemNo == fpcNm_ITEM_HAWK_ARROW;
 }
 
-/* 8015EBB8-8015EBD8 1594F8 0020+00 0/0 23/23 0/0 .text            checkHookshotItem__9daPy_py_cFi
- */
 BOOL daPy_py_c::checkHookshotItem(int i_itemNo) {
     return i_itemNo == fpcNm_ITEM_HOOKSHOT || i_itemNo == fpcNm_ITEM_W_HOOKSHOT;
 }
 
-/* 8015EBD8-8015EC28 159518 0050+00 0/0 3/3 0/0 .text            checkTradeItem__9daPy_py_cFi */
 BOOL daPy_py_c::checkTradeItem(int i_itemNo) {
     return (i_itemNo >= fpcNm_ITEM_LETTER && i_itemNo <= fpcNm_ITEM_IRIAS_PENDANT) || i_itemNo == fpcNm_ITEM_ANCIENT_DOCUMENT ||
            i_itemNo == fpcNm_ITEM_AIR_LETTER || i_itemNo == fpcNm_ITEM_ANCIENT_DOCUMENT2 || i_itemNo == fpcNm_ITEM_RAFRELS_MEMO ||
            i_itemNo == fpcNm_ITEM_TKS_LETTER || i_itemNo == fpcNm_ITEM_ASHS_SCRIBBLING;
 }
 
-/* 8015EC28-8015EC48 159568 0020+00 0/0 2/2 0/0 .text            checkDungeonWarpItem__9daPy_py_cFi
- */
 BOOL daPy_py_c::checkDungeonWarpItem(int i_itemNo) {
     return i_itemNo == fpcNm_ITEM_DUNGEON_EXIT || i_itemNo == fpcNm_ITEM_DUNGEON_BACK;
 }
 
-/* 8015EC48-8015ECB8 159588 0070+00 0/0 10/10 3/3 .text            setActor__16daPy_actorKeep_cFv */
 void daPy_actorKeep_c::setActor() {
     if (mID != -1) {
         mActor = fopAcM_SearchByID(mID);
@@ -219,8 +194,6 @@ void daPy_actorKeep_c::setActor() {
     }
 }
 
-/* 8015ECB8-8015ECFC 1595F8 0044+00 0/0 59/59 4/4 .text setData__16daPy_actorKeep_cFP10fopAc_ac_c
- */
 void daPy_actorKeep_c::setData(fopAc_ac_c* i_actor) {
     if (i_actor != NULL) {
         mActor = i_actor;
@@ -252,14 +225,11 @@ void daPy_anmHeap_c::initData() {
     resetArcNo();
 }
 
-/* 8015EDC4-8015EE00 159704 003C+00 0/0 1/1 1/1 .text            mallocBuffer__14daPy_anmHeap_cFv */
 void* daPy_anmHeap_c::mallocBuffer() {
     mBuffer = new (0x20) u8[mBufferSize];
     return mBuffer;
 }
 
-/* 8015EE00-8015EF84 159740 0184+00 0/0 1/1 1/1 .text
- * createHeap__14daPy_anmHeap_cFQ214daPy_anmHeap_c16daAlinkHEAP_TYPE */
 void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType) {
     u32 size;
 
@@ -294,7 +264,6 @@ void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType) {
     mDoExt_adjustSolidHeap(mAnimeHeap);
 }
 
-/* 8015EF84-8015F068 1598C4 00E4+00 3/3 0/0 0/0 .text            loadData__14daPy_anmHeap_cFUs */
 void* daPy_anmHeap_c::loadData(u16 i_resId) {
     static const char twglArcName[] = "TWGate_Lk";
     static const char twgwArcName[] = "TWGate_Wf";
@@ -325,7 +294,6 @@ void* daPy_anmHeap_c::loadData(u16 i_resId) {
     return dComIfG_getObjectRes(arcName[mArcNo - 1], i_resId);
 }
 
-/* 8015F068-8015F0D0 1599A8 0068+00 0/0 9/9 5/5 .text            loadDataIdx__14daPy_anmHeap_cFUs */
 void* daPy_anmHeap_c::loadDataIdx(u16 i_resID) {
     void* data;
 
@@ -344,8 +312,6 @@ void* daPy_anmHeap_c::loadDataIdx(u16 i_resID) {
     return data;
 }
 
-/* 8015F0D0-8015F118 159A10 0048+00 0/0 3/3 0/0 .text            loadDataPriIdx__14daPy_anmHeap_cFUs
- */
 void* daPy_anmHeap_c::loadDataPriIdx(u16 i_resID) {
     void* data;
 
@@ -359,7 +325,6 @@ void* daPy_anmHeap_c::loadDataPriIdx(u16 i_resID) {
     return data;
 }
 
-/* 8015F118-8015F168 159A58 0050+00 0/0 5/5 5/5 .text loadDataDemoRID__14daPy_anmHeap_cFUsUs */
 void* daPy_anmHeap_c::loadDataDemoRID(u16 i_resID, u16 i_arcNo) {
     void* data;
 
@@ -374,14 +339,11 @@ void* daPy_anmHeap_c::loadDataDemoRID(u16 i_resID, u16 i_arcNo) {
     return data;
 }
 
-/* 8015F168-8015F1A0 159AA8 0038+00 1/1 4/4 0/0 .text            setAnimeHeap__14daPy_anmHeap_cFv */
 JKRHeap* daPy_anmHeap_c::setAnimeHeap() {
     mAnimeHeap->freeAll();
     return mDoExt_setCurrentHeap(mAnimeHeap);
 }
 
-/* ############################################################################################## */
-/* 803BA0C0-803BA14C 0171E0 0089+03 1/1 0/0 0/0 .data            l_sightDL */
 static u8 l_sightDL[] = {
     0x10, 0x00, 0x00, 0x10, 0x40, 0xFF, 0xFF, 0x42, 0x80, 0x08, 0x30, 0x3C, 0xF3, 0xCF, 0x00, 0x10,
     0x00, 0x00, 0x10, 0x18, 0x3C, 0xF3, 0xCF, 0x00, 0x61, 0x28, 0x38, 0x03, 0xC0, 0x61, 0xC0, 0x08,
@@ -394,7 +356,6 @@ static u8 l_sightDL[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 8015F1A0-8015F2FC 159AE0 015C+00 1/0 1/1 0/0 .text            draw__18daPy_sightPacket_cFv */
 void daPy_sightPacket_c::draw() {
     GXTexObj texObj;
 
@@ -424,7 +385,6 @@ void daPy_sightPacket_c::draw() {
     J3DShape::resetVcdVatCache();
 }
 
-/* 8015F2FC-8015F384 159C3C 0088+00 0/0 1/1 0/0 .text            setSight__18daPy_sightPacket_cFv */
 void daPy_sightPacket_c::setSight() {
     Vec proj;
 
@@ -435,14 +395,11 @@ void daPy_sightPacket_c::setSight() {
     dComIfGd_set2DXlu(this);
 }
 
-/* 8015F384-8015F398 159CC4 0014+00 0/0 1/1 0/0 .text
- * setSightImage__18daPy_sightPacket_cFP7ResTIMG                */
 void daPy_sightPacket_c::setSightImage(ResTIMG* i_img) {
     mpImg = i_img;
     mpData = (u8*)i_img + i_img->imageOffset;
 }
 
-/* 8015F398-8015F3C4 159CD8 002C+00 0/0 8/8 10/10 .text checkMasterSwordEquip__9daPy_py_cFv */
 BOOL daPy_py_c::checkMasterSwordEquip() {
     u32 equipSword = dComIfGs_getSelectEquipSword();
     bool isMasterSword = false;
@@ -454,16 +411,12 @@ BOOL daPy_py_c::checkMasterSwordEquip() {
     return isMasterSword;
 }
 
-/* 8015F3C4-8015F3FC 159D04 0038+00 0/0 4/4 0/0 .text            checkWoodShieldEquip__9daPy_py_cFv
- */
 BOOL daPy_py_c::checkWoodShieldEquip() {
     u16 equipShield = dComIfGs_getSelectEquipShield();
 
     return equipShield == fpcNm_ITEM_WOOD_SHIELD || equipShield == fpcNm_ITEM_SHIELD;
 }
 
-/* 8015F3FC-8015F424 159D3C 0028+00 0/0 4/4 3/3 .text            getAttentionOffsetY__9daPy_py_cFv
- */
 f32 daPy_py_c::getAttentionOffsetY() {
     if (checkNowWolf()) {
         return -12.5f;
@@ -472,14 +425,10 @@ f32 daPy_py_c::getAttentionOffsetY() {
     return 57.5f;
 }
 
-/* 8015F424-8015F438 159D64 0014+00 0/0 17/17 33/33 .text            checkNowWolfEyeUp__9daPy_py_cFv
- */
 int daPy_py_c::checkNowWolfEyeUp() {
     return daAlink_getAlinkActorClass()->checkWolfEyeUp();
 }
 
-/* 8015F438-8015F478 159D78 0040+00 0/0 0/0 1/1 .text            forceRestartRoom__9daPy_py_cFiUli
- */
 
 void daAlink_c::startRestartRoomFromOut(int param_0, u32 param_1, int param_2) {
     startRestartRoom(param_1, param_2, param_0, dComIfGp_event_runCheck());
@@ -489,43 +438,32 @@ void daPy_py_c::forceRestartRoom(int param_0, u32 param_1, int param_2) {
     daAlink_getAlinkActorClass()->startRestartRoomFromOut(param_0, param_1, param_2);
 }
 
-/* 8015F478-8015F4B8 159DB8 0040+00 0/0 0/0 3/3 .text
- * setFmChainPos__9daPy_py_cFP10fopAc_ac_cP4cXyzi               */
 BOOL daPy_py_c::setFmChainPos(fopAc_ac_c* param_0, cXyz* param_1, int param_2) {
     return daAlink_getAlinkActorClass()->setFmChainPosFromOut(param_0, param_1, param_2);
 }
 
-/* 8015F4B8-8015F4F0 159DF8 0038+00 0/0 0/0 1/1 .text            cancelFmChainGrab__9daPy_py_cFv */
 void daPy_py_c::cancelFmChainGrab() {
     daAlink_getAlinkActorClass()->cancelFmChainGrabFromOut();
 }
 
-/* 8015F4F0-8015F520 159E30 0030+00 0/0 0/0 17/17 .text            setLookPos__9daPy_py_cFP4cXyz */
 void daPy_py_c::setLookPos(cXyz* i_pos) {
     daAlink_getAlinkActorClass()->setLookPosFromOut(i_pos);
 }
 
-/* 8015F520-8015F55C 159E60 003C+00 0/0 0/0 4/4 .text            setPlayerSe__9daPy_py_cFUl */
 void daPy_py_c::setPlayerSe(u32 i_sfxID) {
     daAlink_getAlinkActorClass()->seStartOnlyReverb(i_sfxID);
 }
 
-/* 8015F55C-8015F60C 159E9C 00B0+00 1/1 0/0 2/2 .text
- * linkGrabSubjectNoDraw__9daPy_py_cFP10fopAc_ac_c              */
 bool daPy_py_c::linkGrabSubjectNoDraw(fopAc_ac_c* i_actor) {
     return (fopAcM_checkCarryNow(i_actor) &&
             daPy_getPlayerActorClass()->getGrabActorID() == fopAcM_GetID(i_actor)) &&
            dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 2);
 }
 
-/* 8015F60C-8015F660 159F4C 0054+00 0/0 0/0 2/2 .text
- * wolfGrabSubjectNoDraw__9daPy_py_cFP10fopAc_ac_c              */
 bool daPy_py_c::wolfGrabSubjectNoDraw(fopAc_ac_c* i_actor) {
     return checkNowWolf() && linkGrabSubjectNoDraw(i_actor);
 }
 
-/* 8015F660-8015F698 159FA0 0038+00 2/2 1/1 1/1 .text            checkRoomRestartStart__9daPy_py_cFv
- */
 bool daPy_py_c::checkRoomRestartStart() {
     u8 mode = getLastSceneMode();
     if (mode == 4 || mode == 8 || mode == 5) {
@@ -535,7 +473,6 @@ bool daPy_py_c::checkRoomRestartStart() {
     return false;
 }
 
-/* 8015F698-8015F730 159FD8 0098+00 0/0 2/2 1/1 .text checkCarryStartLightBallA__9daPy_py_cFv */
 u32 daPy_py_c::checkCarryStartLightBallA() {
     if (checkRoomRestartStart() || !dComIfGp_getStage() ||
         !dComIfGp_getStage()->getStagInfo() ||
@@ -547,7 +484,6 @@ u32 daPy_py_c::checkCarryStartLightBallA() {
     return dComIfGs_getLastSceneMode() & 0x100000;
 }
 
-/* 8015F730-8015F7C8 15A070 0098+00 0/0 2/2 1/1 .text checkCarryStartLightBallB__9daPy_py_cFv */
 u32 daPy_py_c::checkCarryStartLightBallB() {
     if (checkRoomRestartStart() || !dComIfGp_getStage() ||
         !dComIfGp_getStage()->getStagInfo() ||
@@ -571,7 +507,6 @@ f32 daPy_py_c::getSpinnerRideSpeed() const {
     return rideSpeed;
 }
 
-/* 8015F814-8015F89C 15A154 0088+00 0/0 0/0 1/1 .text checkSpinnerReflectEffect__9daPy_py_cFv */
 bool daPy_py_c::checkSpinnerReflectEffect() {
     daSpinner_c* spinner_p = getSpinnerActor();
 
@@ -582,49 +517,39 @@ bool daPy_py_c::checkSpinnerReflectEffect() {
     return false;
 }
 
-/* 8015F89C-8015F8C8 15A1DC 002C+00 0/0 0/0 7/7 .text            checkBoomerangCharge__9daPy_py_cFv
- */
 bool daPy_py_c::checkBoomerangCharge() {
     return daAlink_getAlinkActorClass()->checkBoomerangChargeEnd();
 }
 
-/* 8015F8C8-8015F8D0 15A208 0008+00 0/0 0/0 1/1 .text checkBoomerangChargeTime__9daPy_py_cFv */
 u8 daPy_py_c::checkBoomerangChargeTime() {
     return 0;
 }
 
-/* 8015F8D0-8015F8E4 15A210 0014+00 3/3 1/1 5/5 .text getThrowBoomerangActor__9daPy_py_cFv */
 daBoomerang_c* daPy_py_c::getThrowBoomerangActor() {
     return static_cast<daBoomerang_c*>(
         daAlink_getAlinkActorClass()->getThrowBoomerangAcKeep()->getActor());
 }
 
-/* 8015F8E4-8015F914 15A224 0030+00 0/0 0/0 2/2 .text
- * cancelBoomerangLockActor__9daPy_py_cFP10fopAc_ac_c           */
 void daPy_py_c::cancelBoomerangLockActor(fopAc_ac_c* i_actor) {
     daAlink_getAlinkActorClass()->cancelBoomerangLock(i_actor);
 }
 
-/* 8015F914-8015F954 15A254 0040+00 0/0 0/0 2/2 .text            setPlayerDamage__9daPy_py_cFii */
 void daPy_py_c::setPlayerDamage(int i_dmgAmount, int i_setDmgTimer) {
     daAlink_getAlinkActorClass()->setDamagePoint(i_dmgAmount, FALSE, i_setDmgTimer, 0);
 }
 
-/* 8015F954-8015F968 15A294 0014+00 0/0 3/3 0/0 .text            setMidnaMotionNum__9daPy_py_cFi */
 void daPy_py_c::setMidnaMotionNum(int i_motionNum) {
     if (m_midnaActor != NULL) {
         m_midnaActor->setMotionNum(i_motionNum);
     }
 }
 
-/* 8015F968-8015F97C 15A2A8 0014+00 0/0 3/3 0/0 .text            setMidnaFaceNum__9daPy_py_cFi */
 void daPy_py_c::setMidnaFaceNum(int i_faceNum) {
     if (m_midnaActor != NULL) {
         m_midnaActor->setFaceNum(i_faceNum);
     }
 }
 
-/* 8015F97C-8015FA2C 15A2BC 00B0+00 0/0 7/7 2/2 .text            daPy_addCalcShort__FPsssss */
 int daPy_addCalcShort(s16* i_value, s16 i_target, s16 i_scale, s16 i_maxStep, s16 i_minStep) {
     int delta = i_target - *i_value;
 

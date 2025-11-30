@@ -8,7 +8,6 @@
 #include "d/actor/d_a_npc_impal.h"
 #include "d/actor/d_a_npc.h"
 
-/* 80A0C270-80A0C2E0 000000 0070+00 12/12 0/0 0/0 .rodata          m__18daNpcImpal_Param_c */
 daNpcImpal_HIOParam const daNpcImpal_Param_c::m = {
     135.0f,        // attention_offset
     -3.0f,         // gravity
@@ -48,20 +47,17 @@ daNpcImpal_HIOParam const daNpcImpal_Param_c::m = {
 
 NPC_IMPAL_HIO_CLASS l_HIO;
 
-/* 80A0C544-80A0C61C 000020 00D8+00 1/2 0/0 0/0 .data            l_bckGetParamList */
 static daNpc_GetParam2 l_bckGetParamList[18] = {
     {-1, 2, 0}, {14, 0, 0}, {8, 0, 0},  {7, 2, 0},  {11, 0, 0}, {13, 0, 0},
     {12, 0, 0}, {15, 2, 0}, {17, 2, 0}, {16, 2, 0}, {22, 2, 0}, {19, 2, 0},
     {23, 2, 0}, {18, 0, 0}, {21, 0, 0}, {20, 0, 0}, {10, 0, 0}, {9, 2, 0},
 };
 
-/* 80A0C61C-80A0C694 0000F8 0078+00 1/1 0/0 0/0 .data            l_btpGetParamList */
 static daNpc_GetParam2 l_btpGetParamList[10] = {
     {35, 2, 0}, {41, 2, 0}, {37, 0, 0}, {36, 2, 0}, {38, 2, 0},
     {40, 2, 0}, {39, 0, 0}, {42, 2, 0}, {44, 2, 0}, {43, 2, 0},
 };
 
-/* 80A0C694-80A0C6C4 000170 0030+00 1/2 0/0 0/0 .data            l_btkGetParamList */
 static daNpc_GetParam2 l_btkGetParamList[4] = {
     {29, 2, 0},
     {32, 2, 0},
@@ -69,10 +65,8 @@ static daNpc_GetParam2 l_btkGetParamList[4] = {
     {30, 2, 0},
 };
 
-/* 80A0C6C4-80A0C6C8 -00001 0004+00 6/7 0/0 0/0 .data            l_arcNames */
 static char* l_arcNames[1] = {"impal"};
 
-/* 80A0C6C8-80A0C6D8 -00001 0010+00 0/1 0/0 0/0 .data            l_evtNames */
 static char* l_evtNames[4] = {
     NULL,
     "IMPAL_APPEAR1",
@@ -80,10 +74,8 @@ static char* l_evtNames[4] = {
     "IMPAL_COPYROD",
 };
 
-/* 80A0C6D8-80A0C6E4 0001B4 000C+00 2/2 0/0 0/0 .data            l_resetPos */
 static Vec l_resetPos = {2536.763671875f, 99.99166107177734f, -1154.2318115234375f};
 
-/* 80A0C6E4-80A0C6E8 -00001 0004+00 0/2 0/0 0/0 .data            l_myName */
 static char* l_myName = "impal";
 
 #if DEBUG
@@ -98,7 +90,6 @@ void daNpcImpal_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-/* 80A0C70C-80A0C73C 0001E8 0030+00 0/2 0/0 0/0 .data            mEvtSeqList__12daNpcImpal_c */
 daNpcImpal_c::EventFn daNpcImpal_c::mEvtSeqList[4] = {
     NULL,
     &daNpcImpal_c::EvCut_ImpalAppear1,
@@ -106,10 +97,8 @@ daNpcImpal_c::EventFn daNpcImpal_c::mEvtSeqList[4] = {
     &daNpcImpal_c::EvCut_CopyRod,
 };
 
-/* 80A079EC-80A07B70 0000EC 0184+00 1/1 0/0 0/0 .text            __ct__12daNpcImpal_cFv */
 daNpcImpal_c::daNpcImpal_c() {}
 
-/* 80A07C00-80A07DC4 000300 01C4+00 1/0 0/0 0/0 .text            __dt__12daNpcImpal_cFv */
 daNpcImpal_c::~daNpcImpal_c() {
     for (int i = 0; i < 1; i++) {
         dComIfG_resDelete(&mPhase[i], l_arcNames[i]);
@@ -126,7 +115,6 @@ daNpcImpal_c::~daNpcImpal_c() {
 #endif
 }
 
-/* 80A07DC4-80A080F8 0004C4 0334+00 1/1 0/0 0/0 .text            Create__12daNpcImpal_cFv */
 int daNpcImpal_c::Create() {
 
     fopAcM_ct(this, daNpcImpal_c);
@@ -194,7 +182,6 @@ int daNpcImpal_c::Create() {
     return phase;
 }
 
-/* 80A080F8-80A08368 0007F8 0270+00 1/1 0/0 0/0 .text            CreateHeap__12daNpcImpal_cFv */
 BOOL daNpcImpal_c::CreateHeap() {
     J3DModelData* mdlData_p = NULL;
     J3DModel* model = NULL;
@@ -231,20 +218,17 @@ BOOL daNpcImpal_c::CreateHeap() {
     return TRUE;
 }
 
-/* 80A08524-80A08558 000C24 0034+00 1/1 0/0 0/0 .text            Delete__12daNpcImpal_cFv */
 int daNpcImpal_c::Delete() {
     fopAcM_RegisterDeleteID(this, "NPC_IMPAL");
     this->~daNpcImpal_c();
     return 1;
 }
 
-/* 80A08558-80A0857C 000C58 0024+00 2/2 0/0 0/0 .text            Execute__12daNpcImpal_cFv */
 int daNpcImpal_c::Execute() {
     execute();
     return 1;
 }
 
-/* 80A0857C-80A085EC 000C7C 0070+00 1/1 0/0 0/0 .text            Draw__12daNpcImpal_cFv */
 int daNpcImpal_c::Draw() {
     if (field_0xde9 == 0) {
         return 1;
@@ -257,8 +241,6 @@ int daNpcImpal_c::Draw() {
     return 1;
 }
 
-/* 80A085EC-80A087BC 000CEC 01D0+00 1/1 0/0 0/0 .text
- * ctrlJoint__12daNpcImpal_cFP8J3DJointP8J3DModel               */
 bool daNpcImpal_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     J3DJoint* my_joint = i_joint;
     int jointNo = my_joint->getJntNo();
@@ -403,15 +385,11 @@ void daNpcImpal_c::playMotion() {
     }
 }
 
-/* 80A087BC-80A087DC 000EBC 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__12daNpcImpal_cFP10fopAc_ac_c             */
 int daNpcImpal_c::createHeapCallBack(fopAc_ac_c* i_this) {
     daNpcImpal_c* a_this = static_cast<daNpcImpal_c*>(i_this);
     return a_this->CreateHeap();
 }
 
-/* 80A087DC-80A08828 000EDC 004C+00 1/1 0/0 0/0 .text
- * ctrlJointCallBack__12daNpcImpal_cFP8J3DJointi                */
 int daNpcImpal_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -423,8 +401,6 @@ int daNpcImpal_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80A08828-80A08A68 000F28 0240+00 2/0 0/0 0/0 .text            setExpressionAnm__12daNpcImpal_cFib
- */
 bool daNpcImpal_c::setExpressionAnm(int i_idx, bool i_modify) {
     mAnmFlags &= ~ANM_EXPRESSION_FLAGS;
 
@@ -490,8 +466,6 @@ bool daNpcImpal_c::setExpressionAnm(int i_idx, bool i_modify) {
     return false;
 }
 
-/* 80A08A68-80A08B48 001168 00E0+00 1/0 0/0 0/0 .text            setExpressionBtp__12daNpcImpal_cFi
- */
 bool daNpcImpal_c::setExpressionBtp(int i_idx) {
     J3DAnmTexPattern* btpAnm = getTexPtrnAnmP(l_arcNames[l_btpGetParamList[i_idx].arcIdx],
                                               l_btpGetParamList[i_idx].fileIdx);
@@ -516,7 +490,6 @@ bool daNpcImpal_c::setExpressionBtp(int i_idx) {
     return false;
 }
 
-/* 80A08B48-80A08CBC 001248 0174+00 1/0 0/0 0/0 .text            setMotionAnm__12daNpcImpal_cFif */
 void daNpcImpal_c::setMotionAnm(int i_idx, f32 i_morf) {
     int iVar5 = 0;
 
@@ -560,7 +533,6 @@ void daNpcImpal_c::setMotionAnm(int i_idx, f32 i_morf) {
     }
 }
 
-/* 80A08CBC-80A08EB8 0013BC 01FC+00 1/1 0/0 0/0 .text            reset__12daNpcImpal_cFv */
 void daNpcImpal_c::reset() {
     initialize();
     mpMatAnm->initialize();
@@ -599,8 +571,6 @@ void daNpcImpal_c::reset() {
     setAction(&daNpcImpal_c::wait);
 }
 
-/* 80A08EB8-80A08F60 0015B8 00A8+00 1/1 0/0 0/0 .text
- * setAction__12daNpcImpal_cFM12daNpcImpal_cFPCvPvPv_b          */
 bool daNpcImpal_c::setAction(daNpcImpal_c::actionFunc i_actionFn) {
     mMode = 3;
     if (mpActionFn != NULL) {
@@ -614,7 +584,6 @@ bool daNpcImpal_c::setAction(daNpcImpal_c::actionFunc i_actionFn) {
     return true;
 }
 
-/* 80A0B76C-80A0B94C 003E6C 01E0+00 1/1 0/0 0/0 .text            lookat__12daNpcImpal_cFv */
 void daNpcImpal_c::lookat() {
     fopAc_ac_c* actor = NULL;
     J3DModel* model = mAnm_p->getModel();
@@ -666,7 +635,6 @@ void daNpcImpal_c::lookat() {
     mLookat.calc(this, model->getBaseTRMtx(), lookat_angle, snap, angle_delta, false);
 }
 
-/* 80A08F60-80A090E8 001660 0188+00 1/1 0/0 0/0 .text            s_sub1__FPvPv */
 static void* s_sub1(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_Carry &&
         ((fopAc_ac_c*)i_actor)->current.pos.absXZ(((fopAc_ac_c*)i_data)->current.pos) < 1000.0f)
@@ -710,7 +678,6 @@ void daNpcImpal_c::deleteObstacle() {
     fpcM_Search(s_sub1, this);
 }
 
-/* 80A090E8-80A099B4 0017E8 08CC+00 4/0 0/0 0/0 .text            wait__12daNpcImpal_cFPv */
 bool daNpcImpal_c::wait(void* param_0) {
     switch (mMode) {
     case 0:
@@ -804,7 +771,6 @@ bool daNpcImpal_c::wait(void* param_0) {
     return true;
 }
 
-/* 80A099B4-80A099F8 0020B4 0044+00 1/0 0/0 0/0 .text            setMotion__12daNpcImpal_cFifi */
 void daNpcImpal_c::setMotion(int i_motion, f32 i_morf, BOOL i_restart) {
     s16 motion = (s16)i_motion;
     if ((i_restart || mMotion != motion) && i_motion >= 0 && i_motion < 7) {
@@ -815,7 +781,6 @@ void daNpcImpal_c::setMotion(int i_motion, f32 i_morf, BOOL i_restart) {
     }
 }
 
-/* 80A099F8-80A09A24 0020F8 002C+00 1/0 0/0 0/0 .text            setExpression__12daNpcImpal_cFif */
 void daNpcImpal_c::setExpression(int i_expression, f32 i_morf) {
     if (i_expression >= 0 && i_expression < 8) {
         mExpression = (s16)i_expression;
@@ -825,7 +790,6 @@ void daNpcImpal_c::setExpression(int i_expression, f32 i_morf) {
     }
 }
 
-/* 80A09A24-80A09F4C 002124 0528+00 2/0 0/0 0/0 .text            talk__12daNpcImpal_cFPv */
 bool daNpcImpal_c::talk(void* param_0) {
     bool ret = false;
 
@@ -888,7 +852,6 @@ bool daNpcImpal_c::talk(void* param_0) {
     return ret;
 }
 
-/* 80A09F4C-80A0A1E0 00264C 0294+00 1/0 0/0 0/0 .text            demo__12daNpcImpal_cFPv */
 bool daNpcImpal_c::demo(void* param_0) {
     // FIXME: Create proper enum list for impal events:
     enum Impal_Enums_are_magic {
@@ -937,7 +900,6 @@ bool daNpcImpal_c::demo(void* param_0) {
     return true;
 }
 
-/* 80A0A1E0-80A0A680 0028E0 04A0+00 1/0 0/0 0/0 .text EvCut_ImpalAppear1__12daNpcImpal_cFi */
 BOOL daNpcImpal_c::EvCut_ImpalAppear1(int i_cut_index) {
     int* cut_name = (int*)dComIfGp_getEventManager().getMyNowCutName(i_cut_index);
 
@@ -1032,7 +994,6 @@ BOOL daNpcImpal_c::EvCut_ImpalAppear1(int i_cut_index) {
     return FALSE;
 }
 
-/* 80A0A680-80A0A950 002D80 02D0+00 1/0 0/0 0/0 .text EvCut_ImpalAppear2__12daNpcImpal_cFi */
 BOOL daNpcImpal_c::EvCut_ImpalAppear2(int i_cut_index) {
     int* cut_name = (int*)dComIfGp_getEventManager().getMyNowCutName(i_cut_index);
 
@@ -1077,7 +1038,6 @@ BOOL daNpcImpal_c::EvCut_ImpalAppear2(int i_cut_index) {
     return FALSE;
 }
 
-/* 80A0A950-80A0AD40 003050 03F0+00 1/0 0/0 0/0 .text            EvCut_CopyRod__12daNpcImpal_cFi */
 BOOL daNpcImpal_c::EvCut_CopyRod(int i_cut_index) {
     int* cut_name = (int*)dComIfGp_getEventManager().getMyNowCutName(i_cut_index);
 
@@ -1149,32 +1109,26 @@ BOOL daNpcImpal_c::EvCut_CopyRod(int i_cut_index) {
     return FALSE;
 }
 
-/* 80A0AD40-80A0AD60 003440 0020+00 1/0 0/0 0/0 .text            daNpcImpal_Create__FPv */
 static int daNpcImpal_Create(void* i_this) {
     return static_cast<daNpcImpal_c*>(i_this)->Create();
 }
 
-/* 80A0AD60-80A0AD80 003460 0020+00 1/0 0/0 0/0 .text            daNpcImpal_Delete__FPv */
 static int daNpcImpal_Delete(void* i_this) {
     return static_cast<daNpcImpal_c*>(i_this)->Delete();
 }
 
-/* 80A0AD80-80A0ADA0 003480 0020+00 1/0 0/0 0/0 .text            daNpcImpal_Execute__FPv */
 static int daNpcImpal_Execute(void* i_this) {
     return static_cast<daNpcImpal_c*>(i_this)->Execute();
 }
 
-/* 80A0ADA0-80A0ADC0 0034A0 0020+00 1/0 0/0 0/0 .text            daNpcImpal_Draw__FPv */
 static int daNpcImpal_Draw(void* i_this) {
     return static_cast<daNpcImpal_c*>(i_this)->Draw();
 }
 
-/* 80A0ADC0-80A0ADC8 0034C0 0008+00 1/0 0/0 0/0 .text            daNpcImpal_IsDelete__FPv */
 static int daNpcImpal_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80A0ADF8-80A0AEA8 0034F8 00B0+00 1/0 0/0 0/0 .text            setParam__12daNpcImpal_cFv */
 void daNpcImpal_c::setParam() {
     attention_info.distances[0] =
         getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
@@ -1194,7 +1148,6 @@ void daNpcImpal_c::setParam() {
     gravity = mpHIO->m.common.gravity;
 }
 
-/* 80A0AEA8-80A0B380 0035A8 04D8+00 1/0 0/0 0/0 .text            main__12daNpcImpal_cFv */
 BOOL daNpcImpal_c::main() {
     if (mpActionFn != NULL) {
         (this->*mpActionFn)(NULL);
@@ -1213,7 +1166,6 @@ BOOL daNpcImpal_c::main() {
     return TRUE;
 }
 
-/* 80A0B380-80A0B45C 003A80 00DC+00 1/0 0/0 0/0 .text            ctrlBtk__12daNpcImpal_cFv */
 BOOL daNpcImpal_c::ctrlBtk() {
     if (mpMatAnm != NULL) {
         J3DAnmTextureSRTKey* btkAnm = NULL;
@@ -1232,7 +1184,6 @@ BOOL daNpcImpal_c::ctrlBtk() {
     return FALSE;
 }
 
-/* 80A0B45C-80A0B76C 003B5C 0310+00 1/0 0/0 0/0 .text            setAttnPos__12daNpcImpal_cFv */
 void daNpcImpal_c::setAttnPos() {
     if (mLookMode == 1) {
         for (int i = 0; i < 3; i++) {
@@ -1275,19 +1226,16 @@ void daNpcImpal_c::setAttnPos() {
     }
 }
 
-/* 80A0B94C-80A0B954 00404C 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__12daNpcImpal_cFv */
 BOOL daNpcImpal_c::drawDbgInfo() {
     return FALSE;
 }
 
-/* 80A0C7B8-80A0C7D8 -00001 0020+00 1/0 0/0 0/0 .data            daNpcImpal_MethodTable */
 static actor_method_class daNpcImpal_MethodTable = {
     (process_method_func)daNpcImpal_Create,  (process_method_func)daNpcImpal_Delete,
     (process_method_func)daNpcImpal_Execute, (process_method_func)daNpcImpal_IsDelete,
     (process_method_func)daNpcImpal_Draw,
 };
 
-/* 80A0C7D8-80A0C808 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_IMPAL */
 extern actor_process_profile_definition g_profile_NPC_IMPAL = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID

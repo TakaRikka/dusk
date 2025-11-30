@@ -15,32 +15,32 @@ class daNpc_Kakashi_c : public daNpcT_c {
 public:
     typedef int (daNpc_Kakashi_c::*ActionFunc)(void*);
     
-    /* 8054B4E8 */ int create();
-    /* 8054B7D8 */ int CreateHeap();
-    /* 8054B908 */ int Delete();
-    /* 8054B93C */ int Execute();
-    /* 8054B994 */ int Draw();
-    /* 8054BB34 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 8054BB54 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 8054BBAC */ int getType();
-    /* 8054BC10 */ int isDelete();
-    /* 8054BC98 */ void reset();
-    /* 8054BF88 */ void srchActors();
-    /* 8054C92C */ int selectAction();
-    /* 8054CA1C */ BOOL chkAction(ActionFunc);
-    /* 8054CA48 */ int setAction(ActionFunc);
-    /* 8054CAF0 */ fopAc_ac_c* hitChk();
-    /* 8054CEA0 */ void setStaggerParam(fopAc_ac_c*);
-    /* 8054D26C */ void setPrtcls(int);
-    /* 8054D374 */ int judgeSwdTutorial();
-    /* 8054D490 */ int cutSwdTutorial(int);
-    /* 8054D57C */ int cutGetWoodSwd(int);
-    /* 8054D604 */ int cutMarosWhisper(int);
-    /* 8054D668 */ int wait(void*);
-    /* 8054D694 */ int swdTutorial(void*);
-    /* 8054D8BC */ int talk(void*);
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    int getType();
+    int isDelete();
+    void reset();
+    void srchActors();
+    int selectAction();
+    BOOL chkAction(ActionFunc);
+    int setAction(ActionFunc);
+    fopAc_ac_c* hitChk();
+    void setStaggerParam(fopAc_ac_c*);
+    void setPrtcls(int);
+    int judgeSwdTutorial();
+    int cutSwdTutorial(int);
+    int cutGetWoodSwd(int);
+    int cutMarosWhisper(int);
+    int wait(void*);
+    int swdTutorial(void*);
+    int talk(void*);
 
-    /* 8054E804 */ daNpc_Kakashi_c(daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
+    daNpc_Kakashi_c(daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
                                    daNpcT_motionAnmData_c const* i_motionAnmData,
                                    daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
                                    int i_faceMotionStepNum,
@@ -53,18 +53,18 @@ public:
                         OS_REPORT("|%06d:%x|daNpc_Kakashi_c -> コンストラクト\n", g_Counter.mCounter0, this);
                     }
 
-    /* 8054B36C */ virtual ~daNpc_Kakashi_c();
-    /* 8054B9D8 */ virtual int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 8054BEA8 */ virtual void setParam();
-    /* 8054BF8C */ virtual BOOL checkChangeEvt();
-    /* 8054C034 */ virtual BOOL evtTalk();
-    /* 8054C0D4 */ virtual BOOL evtEndProc();
-    /* 8054C0E8 */ virtual BOOL evtCutProc();
-    /* 8054C1B0 */ virtual void action();
-    /* 8054C268 */ virtual void beforeMove();
-    /* 8054C2E0 */ virtual void setAttnPos();
-    /* 8054C584 */ virtual void setCollision();
-    /* 8054C924 */ virtual int drawDbgInfo();
+    virtual ~daNpc_Kakashi_c();
+    virtual int ctrlJoint(J3DJoint*, J3DModel*);
+    virtual void setParam();
+    virtual BOOL checkChangeEvt();
+    virtual BOOL evtTalk();
+    virtual BOOL evtEndProc();
+    virtual BOOL evtCutProc();
+    virtual void action();
+    virtual void beforeMove();
+    virtual void setAttnPos();
+    virtual void setCollision();
+    virtual int drawDbgInfo();
 
     int getFlowNodeNo() {
         u16 prm = home.angle.x;
@@ -118,7 +118,7 @@ struct daNpc_Kakashi_HIOParam {
 
 class daNpc_Kakashi_Param_c {
 public:
-    /* 8054EA58 */ virtual ~daNpc_Kakashi_Param_c() {}
+    virtual ~daNpc_Kakashi_Param_c() {}
 
     static const daNpc_Kakashi_HIOParam m;
 };

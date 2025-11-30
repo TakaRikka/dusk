@@ -30,7 +30,7 @@ class daNpc_GWolf_HIO_c : public mDoHIO_entry_c {
 
 class daNpc_GWolf_Param_c {
 public:
-    /* 809F8488 */ virtual ~daNpc_GWolf_Param_c() {}
+    virtual ~daNpc_GWolf_Param_c() {}
 
     static daNpc_GWolf_HIOParam const m;
 };
@@ -40,52 +40,52 @@ public:
     typedef BOOL (daNpc_GWolf_c::*actionFunc)(void*);
     typedef BOOL (daNpc_GWolf_c::*cutFunc)(int);
 
-    /* 809F30AC */ daNpc_GWolf_c();
-    /* 809F34C0 */ cPhs__Step create();
-    /* 809F37C0 */ int CreateHeap();
-    /* 809F3BD8 */ int Delete();
-    /* 809F3C0C */ int Execute();
-    /* 809F3C2C */ int Draw();
-    /* 809F3CBC */ int draw(int, int, f32, GXColorS10*, int);
-    /* 809F3FB8 */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 809F41EC */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 809F420C */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 809F420C */ u8 getTypeFromParam();
-    /* 809F4E84 */ int getModeFromParam();
-    /* 809F4F00 */ BOOL isDelete();
-    /* 809F4FF4 */ void reset();
-    /* 809F520C */ void playMotion();
-    /* 809F55D0 */ BOOL chkAction(actionFunc);
-    /* 809F55FC */ BOOL setAction(actionFunc);
-    /* 809F56A4 */ BOOL selectAction();
-    /* 809F5770 */ void doNormalAction(int);
-    /* 809F5884 */ BOOL doEvent();
-    /* 809F5B60 */ void setLookMode(int);
-    /* 809F5B84 */ void lookat();
-    /* 809F5E0C */ BOOL ECut_attackWarp(int);
-    /* 809F6548 */ BOOL ECut_attackWarpHorse(int);
-    /* 809F6BFC */ BOOL ECut_howlingSessionA(int);
-    /* 809F70A8 */ void meetGWolfSkip();
-    /* 809F70EC */ BOOL ECut_meetGWolf(int);
-    /* 809F71E0 */ BOOL wait(void*);
-    /* 809F75C0 */ BOOL waitHowling(void*);
-    /* 809F775C */ BOOL waitBrave(void*);
-    /* 809F77E4 */ BOOL talk(void*);
-    /* 809F797C */ BOOL test(void*);
-    /* 809F7A30 */ s16 getGroundSlope(dBgS_ObjAcch&, s16);
+    daNpc_GWolf_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int draw(int, int, f32, GXColorS10*, int);
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    u8 getTypeFromParam();
+    int getModeFromParam();
+    BOOL isDelete();
+    void reset();
+    void playMotion();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    BOOL selectAction();
+    void doNormalAction(int);
+    BOOL doEvent();
+    void setLookMode(int);
+    void lookat();
+    BOOL ECut_attackWarp(int);
+    BOOL ECut_attackWarpHorse(int);
+    BOOL ECut_howlingSessionA(int);
+    void meetGWolfSkip();
+    BOOL ECut_meetGWolf(int);
+    BOOL wait(void*);
+    BOOL waitHowling(void*);
+    BOOL waitBrave(void*);
+    BOOL talk(void*);
+    BOOL test(void*);
+    s16 getGroundSlope(dBgS_ObjAcch&, s16);
 
-    /* 809F32C0 */ virtual ~daNpc_GWolf_c();
-    /* 809F4258 */ virtual void setParam();
-    /* 809F4390 */ virtual BOOL main();
-    /* 809F4558 */ virtual BOOL ctrlBtk();
-    /* 809F4638 */ virtual void adjustShapeAngle();
-    /* 809F4698 */ virtual void setAttnPos();
-    /* 809F4BB0 */ virtual bool setExpressionAnm(int, bool);
-    /* 809F4BB8 */ virtual void setExpression(int, f32);
-    /* 809F4BBC */ virtual void setMotionAnm(int, f32);
-    /* 809F4DE8 */ virtual void setMotion(int, f32, int);
-    /* 809F4E2C */ virtual BOOL drawDbgInfo();
-    /* 809F4E34 */ virtual void drawOtherMdls();
+    virtual ~daNpc_GWolf_c();
+    virtual void setParam();
+    virtual BOOL main();
+    virtual BOOL ctrlBtk();
+    virtual void adjustShapeAngle();
+    virtual void setAttnPos();
+    virtual bool setExpressionAnm(int, bool);
+    virtual void setExpression(int, f32);
+    virtual void setMotionAnm(int, f32);
+    virtual void setMotion(int, f32, int);
+    virtual BOOL drawDbgInfo();
+    virtual void drawOtherMdls();
 
     int getSwBitFromParam() { return (fopAcM_GetParam(this) & 0xFF0000) >> 16; }
     u16 getSaveTableFromParam() { return home.angle.z & 0xFF; }

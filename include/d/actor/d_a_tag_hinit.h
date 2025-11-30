@@ -6,9 +6,9 @@
 
 class daTagHinit_c : public fopAc_ac_c {
 public:
-    /* 805A3758 */ int create();
-    /* 805A3820 */ ~daTagHinit_c();
-    /* 805A389C */ int execute();
+    int create();
+    ~daTagHinit_c();
+    int execute();
 
     /* 0x568 */ u8 field_0x568;
     /* 0x569 */ u8 field_0x569;

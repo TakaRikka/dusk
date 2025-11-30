@@ -4,16 +4,12 @@
 #include "JSystem/JAudio2/JAIAudience.h"
 #include "JSystem/JAudio2/JAISeMgr.h"
 
-/* 8029F03C-8029F0F8 29997C 00BC+00 0/0 1/1 0/0 .text
- * __ct__5JAISeFP8JAISeMgrP27JAISoundStrategyMgr<5JAISe>Ul      */
 JAISe::JAISe(JAISeMgr* seMgr, JAISoundStrategyMgr<JAISe>* soundStrategyMgr, u32 priority) : JSULink<JAISe>(this) {
     inner_.mSoundStrategyMgr = soundStrategyMgr;
     inner_.seMgr = seMgr;
     inner_.mProperPriority = priority;
 }
 
-/* 8029F0F8-8029F214 299A38 011C+00 1/1 0/0 0/0 .text            mixOut___5JAISeFRC14JASSoundParams
-*/
 void JAISe::mixOut_(const JASSoundParams& params) {
     inner_.track.setTempoRate(inner_.mTempoMgr.getTempo());
     JASSoundParams mixParams;
@@ -33,7 +29,6 @@ void JAISe::mixOut_(const JASSoundParams& params) {
     }
 }
 
-/* 8029F214-8029F250 299B54 003C+00 1/1 0/0 0/0 .text            stopTrack___5JAISeFv */
 void JAISe::stopTrack_() {
     switch (inner_.track.getStatus()) {
     case JASTrack::STATUS_FREE:
@@ -46,7 +41,6 @@ void JAISe::stopTrack_() {
     }
 }
 
-/* 8029F250-8029F304 299B90 00B4+00 1/1 0/0 0/0 .text startTrack___5JAISeFRC14JASSoundParams */
 void JAISe::startTrack_(const JASSoundParams& params) {
     JUT_ASSERT(72, inner_.track.getStatus() != JASTrack::STATUS_RUN);
 
@@ -67,8 +61,6 @@ void JAISe::startTrack_(const JASSoundParams& params) {
     inner_.track.startSeq();
 }
 
-/* 8029F304-8029F4CC 299C44 01C8+00 0/0 1/1 0/0 .text
- * JAISeCategoryMgr_mixOut___5JAISeFbRC14JASSoundParams16JAISoundActivity */
 void JAISe::JAISeCategoryMgr_mixOut_(bool param_0, const JASSoundParams& params, JAISoundActivity activity) {
     mixOut_(params);
     if (isStopping()) {
@@ -104,7 +96,6 @@ void JAISe::JAISeCategoryMgr_mixOut_(bool param_0, const JASSoundParams& params,
     }
 }
 
-/* 8029F4CC-8029F5C8 299E0C 00FC+00 0/0 1/1 0/0 .text            JAISeCategoryMgr_calc___5JAISeFv */
 void JAISe::JAISeCategoryMgr_calc_() {
     prepare_();
 
@@ -122,7 +113,6 @@ void JAISe::JAISeCategoryMgr_calc_() {
     }
 }
 
-/* 8029F5C8-8029F650 299F08 0088+00 2/1 0/0 0/0 .text            JAISound_tryDie___5JAISeFv */
 bool JAISe::JAISound_tryDie_() {
     switch (inner_.track.getStatus()) {
     case JASTrack::STATUS_FREE:
@@ -139,8 +129,6 @@ bool JAISe::JAISound_tryDie_() {
     return false;
 }
 
-/* 8029F650-8029F6D8 299F90 0088+00 0/0 1/1 0/0 .text
- * JAISeMgr_startID___5JAISeF10JAISoundIDPCQ29JGeometry8TVec3<f>P11JAIAudience */
 void JAISe::JAISeMgr_startID_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience) {
     JUT_ASSERT(221, inner_.track.getStatus() == JASTrack::STATUS_FREE);
 
@@ -153,20 +141,16 @@ void JAISe::JAISeMgr_startID_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr
     }
 }
 
-/* 8029F6D8-8029F6E0 29A018 0008+00 2/1 0/0 0/0 .text            getNumChild__5JAISeCFv */
 s32 JAISe::getNumChild() const {
     return 0;
 }
 
-/* 8029F6E0-8029F6E8 29A020 0008+00 2/1 0/0 0/0 .text            getChild__5JAISeFi */
 JAISoundChild* JAISe::getChild(int param_0) {
     return NULL;
 }
 
-/* 8029F6E8-8029F6EC 29A028 0004+00 2/1 0/0 0/0 .text            releaseChild__5JAISeFi */
 void JAISe::releaseChild(int param_0) {}
 
-/* 8029F6EC-8029F78C 29A02C 00A0+00 1/1 0/0 0/0 .text            prepare_getSeqData___5JAISeFv */
 bool JAISe::prepare_getSeqData_() {
     JUT_ASSERT(271, inner_.track.getStatus() != JASTrack::STATUS_RUN);
     JUT_ASSERT(272, inner_.seMgr);
@@ -189,7 +173,6 @@ bool JAISe::prepare_getSeqData_() {
     return false;
 }
 
-/* 8029F78C-8029F84C 29A0CC 00C0+00 1/1 0/0 0/0 .text            prepare___5JAISeFv */
 void JAISe::prepare_() {
     switch (status_.state.unk) {
     case 6:
@@ -217,22 +200,18 @@ void JAISe::prepare_() {
     }
 }
 
-/* 8029F84C-8029F854 29A18C 0008+00 2/1 0/0 0/0 .text            getTrack__5JAISeFv */
 JASTrack* JAISe::getTrack() {
     return &inner_.track;
 }
 
-/* 8029F854-8029F864 29A194 0010+00 2/1 0/0 0/0 .text            getChildTrack__5JAISeFi */
 JASTrack* JAISe::getChildTrack(int param_0) {
     return inner_.track.getChild(param_0);
 }
 
-/* 8029F864-8029F868 29A1A4 0004+00 2/1 0/0 0/0 .text            asSe__5JAISeFv */
 JAISe* JAISe::asSe() {
     return this;
 }
 
-/* 8029F868-8029F870 29A1A8 0008+00 2/1 0/0 0/0 .text            getTempoMgr__5JAISeFv */
 JAITempoMgr* JAISe::getTempoMgr() {
     return &inner_.mTempoMgr;
 }

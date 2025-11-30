@@ -15,7 +15,7 @@
  */
 class e_gb_class {
 public:
-    /* 806C6B94 */ e_gb_class();
+    e_gb_class();
 
     /* 0x000 */ fopEn_enemy_c actor;
     /* 0x5AC */ request_of_phase_process_class mPhase;

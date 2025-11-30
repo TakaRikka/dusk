@@ -45,21 +45,21 @@ private:
     /* 0xA39 */ bool mIsCurTurnRight;
 
 public:
-    /* 80BBAFEC */ virtual ~daObj_BouMato_c();
-    /* 80BBB230 */ int create();
-    /* 80BBB770 */ int CreateHeap();
-    /* 80BBB800 */ int Delete();
-    /* 80BBB834 */ int Execute();
-    /* 80BBBD80 */ int Draw();
-    /* 80BBBE50 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80BBBE70 */ static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
-    /* 80BBBEA0 */ static void* srchArrow(void*, void*);
-    /* 80BBBF4C */ void deleteStuckArrow();
-    /* 80BBBFF8 */ char* getResName();
-    /* 80BBC008 */ void setSwayParam(fopAc_ac_c*);
-    /* 80BBC19C */ void setEnvTevColor();
-    /* 80BBC1F8 */ void setRoomNo();
-    /* 80BBC23C */ void setMtx();
+    virtual ~daObj_BouMato_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
+    static void* srchArrow(void*, void*);
+    void deleteStuckArrow();
+    char* getResName();
+    void setSwayParam(fopAc_ac_c*);
+    void setEnvTevColor();
+    void setRoomNo();
+    void setMtx();
 
     int checkCrs(fopAc_ac_c* param_0, cXyz param_1, cXyz param_2, f32 param_3) {
         daArrow_c* arrow_p = (daArrow_c*)param_0;
@@ -95,7 +95,7 @@ STATIC_ASSERT(sizeof(daObj_BouMato_c) == 0xa40);
 
 class daObj_BouMato_Param_c {
 public:
-    /* 80BBC404 */ virtual ~daObj_BouMato_Param_c() {}
+    virtual ~daObj_BouMato_Param_c() {}
 
     static f32 const m[7];
 };

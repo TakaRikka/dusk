@@ -22,8 +22,8 @@ class dDlst_MenuSaveExplain_c : public dDlst_base_c {
 public:
     dDlst_MenuSaveExplain_c() { mpScrn = NULL; }
 
-    /* 801F6ADC */ virtual void draw();
-    /* 801F6B8C */ virtual ~dDlst_MenuSaveExplain_c() {}
+    virtual void draw();
+    virtual ~dDlst_MenuSaveExplain_c() {}
 
     void setScrnExplain(dMsgScrnExplain_c* p_scrn) { mpScrn = p_scrn; }
 
@@ -38,8 +38,8 @@ public:
         mMsgString = NULL;
     }
 
-    /* 801F6B0C */ virtual void draw();
-    /* 801F6B44 */ virtual ~dDlst_MenuSave_c() {}
+    virtual void draw();
+    virtual ~dDlst_MenuSave_c() {}
 
     /* 0x04 */ J2DScreen* Scr;
     /* 0x08 */ JUTFont* font[2];
@@ -48,8 +48,8 @@ public:
 
 class dMs_HIO_c {
 public:
-    /* 801EF654 */ dMs_HIO_c();
-    /* 801F6BD4 */ virtual ~dMs_HIO_c() {}
+    dMs_HIO_c();
+    virtual ~dMs_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x5 */ u8 mDisplayWaitFrames;
@@ -142,130 +142,130 @@ public:
         /* 0x3C */ PROC_ERR_YES_NO_CURSOR_MOVE_ANM,
     };
 
-    /* 801EF6A0 */ dMenu_save_c();
-    /* 801EF7AC */ void _create();
-    /* 801EF904 */ void screenSet();
-    /* 801F0938 */ void initialize();
-    /* 801F0958 */ void displayInit();
-    /* 801F09AC */ bool _open();
-    /* 801F0B10 */ int _close();
-    /* 801F0B28 */ void _delete();
-    /* 801F1048 */ void _move();
-    /* 801F1100 */ void saveSelAnm();
-    /* 801F1148 */ void selFileWakuAnm();
-    /* 801F11F4 */ void bookIconAnm();
-    /* 801F12F0 */ void memCardWatch();
-    /* 801F1378 */ void saveQuestion();
-    /* 801F1558 */ void saveQuestion2();
-    /* 801F1620 */ void saveQuestion21();
-    /* 801F1644 */ void saveQuestion3();
-    /* 801F16B8 */ void saveQuestion4();
-    /* 801F16F4 */ void saveGuide();
-    /* 801F1720 */ void memCardCheck();
-    /* 801F191C */ void memCardErrMsgWaitKey();
-    /* 801F19A8 */ void backSaveQuestionInitSet();
-    /* 801F19DC */ void backSaveQuestion();
-    /* 801F1A48 */ void backSaveQuestion2();
-    /* 801F1B38 */ void closeSelect();
-    /* 801F1BF8 */ void closeSelect2();
-    /* 801F1C70 */ void iplSelMsgInitSet();
-    /* 801F1C94 */ void iplSelInitSet();
-    /* 801F1CEC */ void IPLSelectDisp1();
-    /* 801F1D54 */ void IPLSelectDisp2();
-    /* 801F1DD4 */ void memCardErrGoIPLSel();
-    /* 801F1E58 */ void IPLSelect2Disp();
-    /* 801F1EE0 */ void memCardErrGoIPLSel2();
-    /* 801F1F80 */ void memCardErrGotoIPL();
-    /* 801F2000 */ void memCardErrMsgWaitFormatSel();
-    /* 801F20AC */ void cardFormatYesSelDisp();
-    /* 801F2134 */ void cardFormatNoSelDisp();
-    /* 801F219C */ void memCardErrMsgWaitFormatSel2();
-    /* 801F2250 */ void cardFormatYesSel2Disp();
-    /* 801F22CC */ void memCardFormat();
-    /* 801F232C */ void memCardFormatWait();
-    /* 801F23A4 */ void gameFileMakeSelInitSet();
-    /* 801F23FC */ void makeGameFileSelDisp();
-    /* 801F247C */ void memCardMakeGameFileSel();
-    /* 801F2514 */ void makeGameFileDisp();
-    /* 801F25AC */ void memCardMakeGameFile();
-    /* 801F260C */ void memCardMakeGameFileWait();
-    /* 801F2698 */ void memCardCommandEnd();
-    /* 801F2708 */ void memCardCommandEnd2();
-    /* 801F27CC */ void memCardDataLoadWait();
-    /* 801F2840 */ void dataWrite();
-    /* 801F28E4 */ void memCardDataSaveWait();
-    /* 801F298C */ void memCardDataSaveWait2();
-    /* 801F2B5C */ void gameContinueDisp();
-    /* 801F2BF8 */ void gameContinue();
-    /* 801F2D78 */ void gameContinue2();
-    /* 801F2DA0 */ void gameContinue3();
-    /* 801F2DD4 */ void saveEnd();
-    /* 801F2E88 */ void endingNoSave();
-    /* 801F2F08 */ void endingNoSave2();
-    /* 801F2F38 */ void endingDataCheck();
-    /* 801F2F4C */ void retryQuestion0();
-    /* 801F2FB4 */ void retryQuestion1();
-    /* 801F3040 */ void retryQuestion2();
-    /* 801F30B8 */ void restartInit();
-    /* 801F31B0 */ void saveWait();
-    /* 801F31B4 */ void messageChange();
-    /* 801F328C */ int YesNoSelect();
-    /* 801F34BC */ void msgTxtSet(u16, bool);
-    /* 801F3588 */ void openSaveSelect();
-    /* 801F36B4 */ void openSaveSelect2();
-    /* 801F37A0 */ void openSaveSelect3();
-    /* 801F3934 */ void saveSelect();
-    /* 801F3A94 */ void saveSelectStart();
-    /* 801F3BE0 */ void selectDataOpenMove();
-    /* 801F3C7C */ void dataSelectAnmSet();
-    /* 801F3E30 */ void saveSelectMoveAnime();
-    /* 801F40D8 */ void saveYesNoSelect();
-    /* 801F4238 */ void yesnoSelectStart();
-    /* 801F42FC */ void saveMoveDisp();
-    /* 801F43F8 */ void saveMoveDisp2();
-    /* 801F4510 */ void yesnoSelectAnmSet(u8);
-    /* 801F46B4 */ void yesNoCursorMoveAnm();
-    /* 801F4724 */ void yesnoCancelAnmSet();
-    /* 801F47DC */ void saveYesNoCancelMove();
-    /* 801F485C */ void headerTxtSet(u16);
-    /* 801F4928 */ bool headerTxtChangeAnm();
-    /* 801F4A10 */ void errDispInitSet(int);
-    /* 801F4B84 */ void msgWindowInitOpen();
-    /* 801F4D10 */ void msgWindowOpen();
-    /* 801F4DAC */ void msgWindowClose();
-    /* 801F4E48 */ bool errYesNoSelect(u8, u8);
-    /* 801F4FB4 */ void errCurMove(u8, u8);
-    /* 801F5054 */ void errYesNoCursorMoveAnm();
-    /* 801F50C4 */ void errorTxtSet(u16);
-    /* 801F5190 */ bool errorTxtChangeAnm();
-    /* 801F5278 */ void saveSelectOpenInit();
-    /* 801F533C */ void selectDataBaseMoveAnmInitSet(int, int);
-    /* 801F53D4 */ bool selectDataBaseMoveAnm();
-    /* 801F54C0 */ void saveSelectOpenAnmSet();
-    /* 801F5508 */ void selectDataMoveAnmInitSet(int, int);
-    /* 801F5600 */ bool selectDataMoveAnm();
-    /* 801F5744 */ void yesnoMenuMoveAnmInitSet(int anmFrame, int frameMax, u8 param_2);
-    /* 801F58C8 */ bool yesnoMenuMoveAnm();
-    /* 801F5AE4 */ bool yesnoSelectMoveAnm(u8);
-    /* 801F5D84 */ void yesnoCursorShow();
-    /* 801F5EF4 */ void errorMoveAnmInitSet(int, int);
-    /* 801F5F84 */ bool errorMoveAnm();
-    /* 801F60A4 */ void modoruTxtDispAnmInit(u8);
-    /* 801F6120 */ bool modoruTxtDispAnm();
-    /* 801F61FC */ void ketteiTxtDispAnmInit(u8);
-    /* 801F6278 */ bool ketteiTxtDispAnm();
-    /* 801F6354 */ void selectWakuAlpahAnmInit(u8, u8, u8, u8);
-    /* 801F6390 */ bool selectWakuAlpahAnm(u8);
-    /* 801F6458 */ void selFileCursorShow();
-    /* 801F6608 */ void yesnoWakuAlpahAnmInit(u8, u8, u8, u8);
-    /* 801F6654 */ bool yesnoWakuAlpahAnm(u8);
-    /* 801F67B8 */ void dataSave();
-    /* 801F67F0 */ void setSaveData();
-    /* 801F6954 */ void setInitSaveData();
-    /* 801F69B8 */ void _draw();
-    /* 801F69FC */ void _draw2();
+    dMenu_save_c();
+    void _create();
+    void screenSet();
+    void initialize();
+    void displayInit();
+    bool _open();
+    int _close();
+    void _delete();
+    void _move();
+    void saveSelAnm();
+    void selFileWakuAnm();
+    void bookIconAnm();
+    void memCardWatch();
+    void saveQuestion();
+    void saveQuestion2();
+    void saveQuestion21();
+    void saveQuestion3();
+    void saveQuestion4();
+    void saveGuide();
+    void memCardCheck();
+    void memCardErrMsgWaitKey();
+    void backSaveQuestionInitSet();
+    void backSaveQuestion();
+    void backSaveQuestion2();
+    void closeSelect();
+    void closeSelect2();
+    void iplSelMsgInitSet();
+    void iplSelInitSet();
+    void IPLSelectDisp1();
+    void IPLSelectDisp2();
+    void memCardErrGoIPLSel();
+    void IPLSelect2Disp();
+    void memCardErrGoIPLSel2();
+    void memCardErrGotoIPL();
+    void memCardErrMsgWaitFormatSel();
+    void cardFormatYesSelDisp();
+    void cardFormatNoSelDisp();
+    void memCardErrMsgWaitFormatSel2();
+    void cardFormatYesSel2Disp();
+    void memCardFormat();
+    void memCardFormatWait();
+    void gameFileMakeSelInitSet();
+    void makeGameFileSelDisp();
+    void memCardMakeGameFileSel();
+    void makeGameFileDisp();
+    void memCardMakeGameFile();
+    void memCardMakeGameFileWait();
+    void memCardCommandEnd();
+    void memCardCommandEnd2();
+    void memCardDataLoadWait();
+    void dataWrite();
+    void memCardDataSaveWait();
+    void memCardDataSaveWait2();
+    void gameContinueDisp();
+    void gameContinue();
+    void gameContinue2();
+    void gameContinue3();
+    void saveEnd();
+    void endingNoSave();
+    void endingNoSave2();
+    void endingDataCheck();
+    void retryQuestion0();
+    void retryQuestion1();
+    void retryQuestion2();
+    void restartInit();
+    void saveWait();
+    void messageChange();
+    int YesNoSelect();
+    void msgTxtSet(u16, bool);
+    void openSaveSelect();
+    void openSaveSelect2();
+    void openSaveSelect3();
+    void saveSelect();
+    void saveSelectStart();
+    void selectDataOpenMove();
+    void dataSelectAnmSet();
+    void saveSelectMoveAnime();
+    void saveYesNoSelect();
+    void yesnoSelectStart();
+    void saveMoveDisp();
+    void saveMoveDisp2();
+    void yesnoSelectAnmSet(u8);
+    void yesNoCursorMoveAnm();
+    void yesnoCancelAnmSet();
+    void saveYesNoCancelMove();
+    void headerTxtSet(u16);
+    bool headerTxtChangeAnm();
+    void errDispInitSet(int);
+    void msgWindowInitOpen();
+    void msgWindowOpen();
+    void msgWindowClose();
+    bool errYesNoSelect(u8, u8);
+    void errCurMove(u8, u8);
+    void errYesNoCursorMoveAnm();
+    void errorTxtSet(u16);
+    bool errorTxtChangeAnm();
+    void saveSelectOpenInit();
+    void selectDataBaseMoveAnmInitSet(int, int);
+    bool selectDataBaseMoveAnm();
+    void saveSelectOpenAnmSet();
+    void selectDataMoveAnmInitSet(int, int);
+    bool selectDataMoveAnm();
+    void yesnoMenuMoveAnmInitSet(int anmFrame, int frameMax, u8 param_2);
+    bool yesnoMenuMoveAnm();
+    bool yesnoSelectMoveAnm(u8);
+    void yesnoCursorShow();
+    void errorMoveAnmInitSet(int, int);
+    bool errorMoveAnm();
+    void modoruTxtDispAnmInit(u8);
+    bool modoruTxtDispAnm();
+    void ketteiTxtDispAnmInit(u8);
+    bool ketteiTxtDispAnm();
+    void selectWakuAlpahAnmInit(u8, u8, u8, u8);
+    bool selectWakuAlpahAnm(u8);
+    void selFileCursorShow();
+    void yesnoWakuAlpahAnmInit(u8, u8, u8, u8);
+    bool yesnoWakuAlpahAnm(u8);
+    void dataSave();
+    void setSaveData();
+    void setInitSaveData();
+    void _draw();
+    void _draw2();
 
-    /* 802844D0 */ virtual ~dMenu_save_c() {}
+    virtual ~dMenu_save_c() {}
 
     u8 getSaveStatus() { return mSaveStatus; }
     u8 getEndStatus() { return mEndStatus; }

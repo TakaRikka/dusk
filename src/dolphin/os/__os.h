@@ -108,7 +108,7 @@ void __init_user(void);
 void _ExitProcess(void);
 
 // start
-__declspec(weak) void InitMetroTRK_BBA();
+DECL_WEAK void InitMetroTRK_BBA();
 
 __declspec(section ".init") void __start(void);
 

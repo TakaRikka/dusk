@@ -68,31 +68,31 @@ public:
         mDrawEnable = false;
     }
 
-    /* 801CE15C */ void init(u8*, u16, u16, u16, u16);
-    /* 801CE188 */ void entry(dMenu_Fmap_world_data_c*, int, f32, f32, f32);
-    /* 801CE224 */ bool isSwitchSpecialOff(int);
-    /* 801CE288 */ bool isSwitch(group_class const*);
-    /* 801CE3C0 */ int getPointStagePathInnerNo(dMenu_Fmap_region_data_c*, f32, f32, int, int*,
+    void init(u8*, u16, u16, u16, u16);
+    void entry(dMenu_Fmap_world_data_c*, int, f32, f32, f32);
+    bool isSwitchSpecialOff(int);
+    bool isSwitch(group_class const*);
+    int getPointStagePathInnerNo(dMenu_Fmap_region_data_c*, f32, f32, int, int*,
                                                 int*);
-    /* 801CE410 */ void preDrawPath();
-    /* 801CE4D4 */ bool isDrawPath();
-    /* 801CE4DC */ bool isDrawRoom();
-    /* 801CE560 */ void postDrawPath();
-    /* 801CE5B8 */ void postRenderingMap();
-    /* 801CE5EC */ void roomSetteing();
-    /* 801CE6A8 */ room_class* getFirstRoomPointer();
-    /* 801CE75C */ void getFirstRegion();
-    /* 801CE7A8 */ void getFirstStage();
-    /* 801CE80C */ void getFirstRoom();
-    /* 801CE84C */ bool getNextRoom();
-    /* 801CE8B8 */ bool getNextStage();
-    /* 801CE93C */ bool getNextRegion();
-    /* 801CE9A4 */ room_class* getNextRoomPointer();
+    void preDrawPath();
+    bool isDrawPath();
+    bool isDrawRoom();
+    void postDrawPath();
+    void postRenderingMap();
+    void roomSetteing();
+    room_class* getFirstRoomPointer();
+    void getFirstRegion();
+    void getFirstStage();
+    void getFirstRoom();
+    bool getNextRoom();
+    bool getNextStage();
+    bool getNextRegion();
+    room_class* getNextRoomPointer();
 
-    /* 801CF4D0 */ ~renderingFmap_c() {}
-    /* 801CF55C */ bool isRenderingFloor(int) { return true; }
-    /* 801CF564 */ void beforeDrawPath() {}
-    /* 801CF568 */ void afterDrawPath() {}
+    ~renderingFmap_c() {}
+    bool isRenderingFloor(int) { return true; }
+    void beforeDrawPath() {}
+    void afterDrawPath() {}
     int getNowDrawRegionNo() { return mRegionNo; }
     bool isDrawEnable() { return mDrawEnable; }
 
@@ -124,24 +124,24 @@ public:
 
 class dMenu_FmapMap_c : public renderingFmap_c {
 public:
-    /* 801CEAAC */ void setFmapPaletteColor(palette_e, GXColor const&);
-    /* 801CEA38 */ void setFmapPaletteColor(palette_e, u8, u8, u8, u8);
-    /* 801CEAE0 */ bool isFlashRoomNoCheck(int) const;
-    /* 801CEB1C */ void setPointColor(f32);
-    /* 801CEC24 */ dMenu_FmapMap_c();
-    /* 801CED38 */ ~dMenu_FmapMap_c();
-    /* 801CEDE8 */ void _create(u16, u16, u16, u16, void*);
-    /* 801CEE3C */ void _delete();
-    /* 801CEE94 */ void draw();
-    /* 801CF0B4 */ void rendering(line_class const*);
-    /* 801CF12C */ int getLineWidth(int);
-    /* 801CF1D4 */ bool isDrawType(int);
-    /* 801CF1E0 */ void setFlashOn(int, int, u8*, int);
-    /* 801CF208 */ const GXColor* getLineColor(int, int);
-    /* 801CF298 */ const GXColor* getBackColor() const;
-    /* 801CF2A0 */ const GXColor* getColor(int);
-    /* 801CF394 */ void setTexture(u16, u16, u16, u16);
-    /* 801CF450 */ void setRendering(dMenu_Fmap_world_data_c*, int, f32, f32, f32, f32);
+    void setFmapPaletteColor(palette_e, GXColor const&);
+    void setFmapPaletteColor(palette_e, u8, u8, u8, u8);
+    bool isFlashRoomNoCheck(int) const;
+    void setPointColor(f32);
+    dMenu_FmapMap_c();
+    ~dMenu_FmapMap_c();
+    void _create(u16, u16, u16, u16, void*);
+    void _delete();
+    void draw();
+    void rendering(line_class const*);
+    int getLineWidth(int);
+    bool isDrawType(int);
+    void setFlashOn(int, int, u8*, int);
+    const GXColor* getLineColor(int, int);
+    const GXColor* getBackColor() const;
+    const GXColor* getColor(int);
+    void setTexture(u16, u16, u16, u16);
+    void setRendering(dMenu_Fmap_world_data_c*, int, f32, f32, f32, f32);
 
     f32 getRateWithFrameCount(int param_0) {
         return (f32)(g_Counter.mCounter0 % param_0) / (f32)param_0;

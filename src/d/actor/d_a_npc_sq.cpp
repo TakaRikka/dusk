@@ -14,25 +14,20 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
 
-/* 80AF75C0-80AF75C4 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool hioInit;
 
-/* 80AF75D0-80AF75DC 000018 000C+00 4/4 0/0 0/0 .bss             l_HIO */
 static daNpc_Sq_HIO_c l_HIO;
 
-/* 80AF5FEC-80AF6010 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__14daNpc_Sq_HIO_cFv */
 daNpc_Sq_HIO_c::daNpc_Sq_HIO_c() {
     field_0x4 = -1;
     mScale = 2.0f;
 }
 
-/* 80AF6010-80AF60B8 000110 00A8+00 2/2 0/0 0/0 .text            anm_init__FP12npc_sq_classifUcf */
 static void anm_init(npc_sq_class* i_this, int i_bck, f32 i_morf, u8 i_mode, f32 i_speed) {
     i_this->mpMorf->setAnm(static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Sq", i_bck)),
                            i_mode, i_morf, i_speed, 0.0f, -1.0f, NULL);
 }
 
-/* 80AF60B8-80AF61B0 0001B8 00F8+00 1/0 0/0 0/0 .text            daNpc_Sq_Draw__FP12npc_sq_class */
 static int daNpc_Sq_Draw(npc_sq_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
@@ -48,7 +43,6 @@ static int daNpc_Sq_Draw(npc_sq_class* i_this) {
     return 1;
 }
 
-/* 80AF61B0-80AF63C0 0002B0 0210+00 1/1 0/0 0/0 .text            npc_sq_normal__FP12npc_sq_class */
 static void npc_sq_normal(npc_sq_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -80,7 +74,6 @@ static void npc_sq_normal(npc_sq_class* i_this) {
     }
 }
 
-/* 80AF63C0-80AF6518 0004C0 0158+00 1/1 0/0 0/0 .text            action__FP12npc_sq_class */
 static void action(npc_sq_class* i_this) {
     i_this->mPlayerDist = fopAcM_searchPlayerDistance(i_this);
     
@@ -116,7 +109,6 @@ static void action(npc_sq_class* i_this) {
     i_this->shape_angle.z = i_this->current.angle.z;
 }
 
-/* 80AF6518-80AF65FC 000618 00E4+00 1/1 0/0 0/0 .text            cam_3d_morf__FP12npc_sq_classf */
 static void cam_3d_morf(npc_sq_class* i_this, f32 i_scale) {
     cLib_addCalc2(&i_this->mCameraCenter.x, i_this->mCameraTargetCenter.x, i_scale,
                   i_this->mCameraCenterDist.x * i_this->mCameraSpeed);
@@ -132,7 +124,6 @@ static void cam_3d_morf(npc_sq_class* i_this, f32 i_scale) {
                   i_this->mCameraEyeDist.z * i_this->mCameraSpeed);
 }
 
-/* 80AF65FC-80AF6B74 0006FC 0578+00 2/1 0/0 0/0 .text            demo_camera__FP12npc_sq_class */
 static void demo_camera(npc_sq_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     camera_class* player_camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
@@ -257,8 +248,6 @@ static void demo_camera(npc_sq_class* i_this) {
     }
 }
 
-/* 80AF6B74-80AF6D54 000C74 01E0+00 2/1 0/0 0/0 .text            daNpc_Sq_Execute__FP12npc_sq_class
- */
 static int daNpc_Sq_Execute(npc_sq_class* i_this) {
     cXyz vec(0.0f, 0.0f, 0.0f);
     i_this->mCounter++;
@@ -295,14 +284,10 @@ static int daNpc_Sq_Execute(npc_sq_class* i_this) {
     return 1;
 }
 
-/* 80AF6D54-80AF6D5C 000E54 0008+00 1/0 0/0 0/0 .text            daNpc_Sq_IsDelete__FP12npc_sq_class
- */
 static int daNpc_Sq_IsDelete(npc_sq_class* i_this) {
     return 1;
 }
 
-/* 80AF6D5C-80AF6DB0 000E5C 0054+00 1/0 0/0 0/0 .text            daNpc_Sq_Delete__FP12npc_sq_class
- */
 static int daNpc_Sq_Delete(npc_sq_class* i_this) {
     dComIfG_resDelete(&i_this->mPhaseReq, "Sq");
     if (i_this->mHIOInit) {
@@ -311,7 +296,6 @@ static int daNpc_Sq_Delete(npc_sq_class* i_this) {
     return 1;
 }
 
-/* 80AF6DB0-80AF6F50 000EB0 01A0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     npc_sq_class* _this = static_cast<npc_sq_class*>(i_this);
     
@@ -332,7 +316,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
                                  1, 0, 1.0f, 0, -1) ? 1 : 0;
 }
 
-/* 80AF6F98-80AF7260 001098 02C8+00 1/0 0/0 0/0 .text            daNpc_Sq_Create__FP10fopAc_ac_c */
 static cPhs__Step daNpc_Sq_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, npc_sq_class);
     npc_sq_class* _this = static_cast<npc_sq_class*>(i_this);
@@ -398,7 +381,6 @@ static cPhs__Step daNpc_Sq_Create(fopAc_ac_c* i_this) {
     return step;
 }
 
-/* 80AF7510-80AF7530 -00001 0020+00 1/0 0/0 0/0 .data            l_daNpc_Sq_Method */
 static actor_method_class l_daNpc_Sq_Method = {
     (process_method_func)daNpc_Sq_Create,
     (process_method_func)daNpc_Sq_Delete,
@@ -407,7 +389,6 @@ static actor_method_class l_daNpc_Sq_Method = {
     (process_method_func)daNpc_Sq_Draw,
 };
 
-/* 80AF7530-80AF7560 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_SQ */
 extern actor_process_profile_definition g_profile_NPC_SQ = {
     fpcLy_CURRENT_e,
     7,

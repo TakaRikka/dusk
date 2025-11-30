@@ -1,4 +1,3 @@
-#include "dol2asm.h"
 #include <dolphin.h>
 #include "__ppc_eabi_linker.h"
 
@@ -9,36 +8,32 @@ extern void __init_user(void);
 extern void InitMetroTRK_BBA(void);
 extern void DBInit();
 
-SECTION_INIT extern void __check_pad3(void);
-SECTION_INIT extern void __set_debug_bba(void);
-SECTION_INIT extern u8 __get_debug_bba(void);
-SECTION_INIT extern void __start(void);
-SECTION_INIT extern void __init_registers(void);
-SECTION_INIT extern void __init_data(void);
-SECTION_INIT extern void __init_hardware(void);
-SECTION_INIT extern void __flush_cache(void* addr, u32 size);
+__declspec(section ".init") extern void __check_pad3(void);
+__declspec(section ".init") extern void __set_debug_bba(void);
+__declspec(section ".init") extern u8 __get_debug_bba(void);
+__declspec(section ".init") extern void __start(void);
+__declspec(section ".init") extern void __init_registers(void);
+__declspec(section ".init") extern void __init_data(void);
+__declspec(section ".init") extern void __init_hardware(void);
+__declspec(section ".init") extern void __flush_cache(void* addr, u32 size);
 
 extern u8 Debug_BBA_804516D0;
 
-/* 80003100-80003140 000000 0040+00 1/1 0/0 0/0 .init            __check_pad3 */
-SECTION_INIT void __check_pad3(void) {
+__declspec(section ".init") void __check_pad3(void) {
     if ((*(u16*)0x800030E4 & 0xEEF) == 0xEEF) {
         OSResetSystem(0, 0, 0);
     }
 }
 
-/* 80003140-8000314C 000040 000C+00 1/1 0/0 0/0 .init            __set_debug_bba */
 void __set_debug_bba(void) {
     Debug_BBA_804516D0 = 1;
 }
 
-/* 8000314C-80003154 -00001 0008+00 0/0 0/0 0/0 .init            __get_debug_bba */
-SECTION_INIT u8 __get_debug_bba(void) {
+__declspec(section ".init") u8 __get_debug_bba(void) {
     return Debug_BBA_804516D0;
 }
 
-/* 80003154-800032B0 000054 015C+00 0/0 1/0 0/0 .init            __start */
-SECTION_INIT asm void __start(void) {
+__declspec(section ".init") asm void __start(void) {
     // clang-format off
     nofralloc
 
@@ -152,8 +147,7 @@ lbl_8000329C:
     // clang-format on
 }
 
-/* 800032B0-80003340 0001B0 0090+00 1/1 0/0 0/0 .init            __init_registers */
-SECTION_INIT asm void __init_registers(void) {
+__declspec(section ".init") asm void __init_registers(void) {
     // clang-format off
     nofralloc
 
@@ -211,8 +205,7 @@ inline static void __init_bss_section(void* dst, u32 size)
     }
 }
 
-/* 80003340-80003400 000240 00C0+00 1/1 0/0 1/1 .init            __init_data */
-SECTION_INIT void __init_data() {
+__declspec(section ".init") void __init_data() {
     __rom_copy_info* dci;
     __bss_init_info* bii;
 
@@ -233,8 +226,7 @@ SECTION_INIT void __init_data() {
     }
 }
 
-/* 80003400-80003424 000300 0024+00 1/1 0/0 0/0 .init            __init_hardware */
-SECTION_INIT asm void __init_hardware() {
+__declspec(section ".init") asm void __init_hardware() {
     // clang-format off
     nofralloc
 
@@ -250,8 +242,7 @@ SECTION_INIT asm void __init_hardware() {
     // clang-format on
 }
 
-/* 80003424-80003458 000324 0034+00 1/1 0/0 0/0 .init            __flush_cache */
-SECTION_INIT asm void __flush_cache() {
+__declspec(section ".init") asm void __flush_cache() {
     // clang-format off
     nofralloc
 

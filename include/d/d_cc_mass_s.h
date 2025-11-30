@@ -68,15 +68,15 @@ public:
 public:
     dCcMassS_Mng();
     virtual ~dCcMassS_Mng() {}
-    /* 800855E4 */ void Ct();
-    /* 80085630 */ void SetAttr(f32 radius, f32 height, u8 param_2, u8 param_3);
-    /* 80085690 */ void Prepare();
-    /* 800858AC */ u32 Chk(cXyz* p_xyz, fopAc_ac_c** p_actor, dCcMassS_HitInf* p_hitInf);
-    /* 80085CF0 */ void Clear();
-    /* 80085D98 */ void Set(cCcD_Obj* p_obj, u8 priority);
-    /* 80085E6C */ void SetCam(cM3dGCps const& cps);
-    /* 80085EB0 */ u32 GetResultCam() const;
-    /* 80085EB8 */ void GetCamTopPos(Vec* p_out);
+    void Ct();
+    void SetAttr(f32 radius, f32 height, u8 param_2, u8 param_3);
+    void Prepare();
+    u32 Chk(cXyz* p_xyz, fopAc_ac_c** p_actor, dCcMassS_HitInf* p_hitInf);
+    void Clear();
+    void Set(cCcD_Obj* p_obj, u8 priority);
+    void SetCam(cM3dGCps const& cps);
+    u32 GetResultCam() const;
+    void GetCamTopPos(Vec* p_out);
 };
 
 STATIC_ASSERT(sizeof(dCcMassS_Mng) == 0x278);

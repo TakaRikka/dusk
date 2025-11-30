@@ -10,24 +10,19 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 
-/* 80BA6CD0-80BA6CD8 000020 0008+00 4/5 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[1][2] = {
     9, 1,
 };
 
-/* 80BA6CD8-80BA6CE0 -00001 0008+00 4/6 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "AutoMata",
 };
 
-/* ############################################################################################## */
-/* 80BA6C10-80BA6C1C 000000 000C+00 5/5 0/0 0/0 .rodata          m__22daObj_AutoMata_Param_c */
 f32 const daObj_AutoMata_Param_c::m[3] = {
     220.0f, 80.0f, 40.0f,
 };
 
-/* 80BA6C1C-80BA6C4C 00000C 0030+00 1/1 0/0 0/0 .rodata          l_ccDObjData */
 static dCcD_SrcGObjInf const l_ccDObjData = 
 {
         {0x0, {{0x0, 0x0, 0}, {0xD8FBFDFF, 0x1F}, 0x79}}, // mObj
@@ -36,7 +31,6 @@ static dCcD_SrcGObjInf const l_ccDObjData =
         {0x0}, // mGObjCo
 };
 
-/* 80BA6CE0-80BA6D24 000030 0044+00 1/2 0/0 0/0 .data            l_ccDCyl */
 static dCcD_SrcCyl l_ccDCyl = {
     l_ccDObjData, // mObjInf
     {
@@ -46,7 +40,6 @@ static dCcD_SrcCyl l_ccDCyl = {
     } // mCyl
 };
 
-/* 80BA6D24-80BA6D64 000074 0040+00 1/2 0/0 0/0 .data            l_ccDSph */
 static dCcD_SrcSph l_ccDSph = {
     l_ccDObjData, // mObjInf
     {
@@ -54,7 +47,6 @@ static dCcD_SrcSph l_ccDSph = {
     } // mSphAttr
 };
 
-/* 80BA56EC-80BA5990 0000EC 02A4+00 1/0 0/0 0/0 .text            __dt__16daObj_AutoMata_cFv */
 daObj_AutoMata_c::~daObj_AutoMata_c() {
     OS_REPORT("|%06d:%x|daObj_AutoMata_c -> デストラクト\n", g_Counter.mCounter0, this);
     if (mpMorf != NULL) {
@@ -63,7 +55,6 @@ daObj_AutoMata_c::~daObj_AutoMata_c() {
     dComIfG_resDelete(&mPhase, l_resNameList[l_bmdData[field_0xb30][1]]);
 }
 
-/* 80BA5990-80BA5D2C 000390 039C+00 1/1 0/0 0/0 .text            create__16daObj_AutoMata_cFv */
 int daObj_AutoMata_c::create() {
     fopAcM_ct(this, daObj_AutoMata_c);
     field_0xb30 = 0;
@@ -97,7 +88,6 @@ int daObj_AutoMata_c::create() {
     return rv;
 }
 
-/* 80BA5F88-80BA60A0 000988 0118+00 1/1 0/0 0/0 .text            CreateHeap__16daObj_AutoMata_cFv */
 int daObj_AutoMata_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(
         l_resNameList[l_bmdData[field_0xb30][1]],
@@ -113,14 +103,12 @@ int daObj_AutoMata_c::CreateHeap() {
     return setAnm(0, false) ? 1 : 0;
 }
 
-/* 80BA60A0-80BA60D4 000AA0 0034+00 1/1 0/0 0/0 .text            Delete__16daObj_AutoMata_cFv */
 int daObj_AutoMata_c::Delete() {
     OS_REPORT("|%06d:%x|daObj_AutoMata_c -> Delete\n", g_Counter.mCounter0, this);
     this->~daObj_AutoMata_c();
     return 1;
 }
 
-/* 80BA60D4-80BA639C 000AD4 02C8+00 2/2 0/0 0/0 .text            Execute__16daObj_AutoMata_cFv */
 int daObj_AutoMata_c::Execute() {
     if (home.roomNo == dComIfGp_roomControl_getStayNo()) {
         cXyz sphCenter;
@@ -170,7 +158,6 @@ int daObj_AutoMata_c::Execute() {
     return 0;
 }
 
-/* 80BA639C-80BA6480 000D9C 00E4+00 1/1 0/0 0/0 .text            Draw__16daObj_AutoMata_cFv */
 int daObj_AutoMata_c::Draw() {
     J3DModel* morfModel = mpMorf->getModel();
     J3DModelData* modelData = morfModel->getModelData();
@@ -188,14 +175,10 @@ int daObj_AutoMata_c::Draw() {
     return 1;
 }
 
-/* 80BA6480-80BA64A0 000E80 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__16daObj_AutoMata_cFP10fopAc_ac_c         */
 int daObj_AutoMata_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daObj_AutoMata_c*>(i_this)->CreateHeap();
 }
 
-/* 80BA64A0-80BA6500 000EA0 0060+00 1/1 0/0 0/0 .text
- * srchTHouse__16daObj_AutoMata_cFP10fopAc_ac_cPv               */
 void* daObj_AutoMata_c::srchTHouse(fopAc_ac_c* actor, void* param_1) {
     if (fopAcM_GetName(actor) == PROC_Obj_TobyHouse) {
         if (fopAcM_IsExecuting(fopAcM_GetID(actor))) {
@@ -205,23 +188,18 @@ void* daObj_AutoMata_c::srchTHouse(fopAc_ac_c* actor, void* param_1) {
     return NULL;
 }
 
-/* ############################################################################################## */
-/* 80BA6C78-80BA6C80 000068 0008+00 0/1 0/0 0/0 .rodata          bckArcIx$4220 */
 static int const bckArcIx[2] = {
     5, 6,
 };
 
-/* 80BA6C80-80BA6C88 000070 0008+00 0/1 0/0 0/0 .rodata          btkArcIx$4221 */
 static int const btkArcIx[2] = {
     12, 13,
 };
 
-/* 80BA6C88-80BA6C90 000078 0008+00 0/1 0/0 0/0 .rodata          playMode$4222 */
 static int const playMode[2] = {
     0, 2,
 };
 
-/* 80BA6500-80BA6634 000F00 0134+00 1/1 0/0 1/1 .text            setAnm__16daObj_AutoMata_cFib */
 int daObj_AutoMata_c::setAnm(int param_1, bool param_2) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     const char* resName = l_resNameList[l_bmdData[field_0xb30][1]];
@@ -246,20 +224,17 @@ int daObj_AutoMata_c::setAnm(int param_1, bool param_2) {
     return 0;
 }
 
-/* 80BA6634-80BA6690 001034 005C+00 2/2 0/0 0/0 .text setEnvTevColor__16daObj_AutoMata_cFv */
 void daObj_AutoMata_c::setEnvTevColor() {
     tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(mGndChk);
     tevStr.room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
 }
 
-/* 80BA6690-80BA66D4 001090 0044+00 2/2 0/0 0/0 .text            setRoomNo__16daObj_AutoMata_cFv */
 void daObj_AutoMata_c::setRoomNo() {
     s32 roomId = dComIfG_Bgsp().GetRoomId(mGndChk);
     fopAcM_SetRoomNo(this, roomId);
     mStts.SetRoomId(roomId);
 }
 
-/* 80BA66D4-80BA674C 0010D4 0078+00 1/1 0/0 0/0 .text            setMtx__16daObj_AutoMata_cFv */
 void daObj_AutoMata_c::setMtx() {
     J3DModel* morfModel = mpMorf->getModel();
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
@@ -269,7 +244,6 @@ void daObj_AutoMata_c::setMtx() {
     mpMorf->modelCalc();
 }
 
-/* 80BA674C-80BA6A10 00114C 02C4+00 1/1 0/0 0/0 .text            setSe__16daObj_AutoMata_cFv */
 void daObj_AutoMata_c::setSe() {
     if (cM3d_IsZero(mpMorf->getPlaySpeed()) == false) {
         const char* resName = l_resNameList[l_bmdData[field_0xb30][1]];
@@ -305,35 +279,28 @@ void daObj_AutoMata_c::setSe() {
     }
 }
 
-/* 80BA6A10-80BA6A30 001410 0020+00 1/0 0/0 0/0 .text            daObj_AutoMata_Create__FPv */
 static int daObj_AutoMata_Create(void* i_this) {
     return static_cast<daObj_AutoMata_c*>(i_this)->create();
 }
 
-/* 80BA6A30-80BA6A50 001430 0020+00 1/0 0/0 0/0 .text            daObj_AutoMata_Delete__FPv */
 static int daObj_AutoMata_Delete(void* i_this) {
     return static_cast<daObj_AutoMata_c*>(i_this)->Delete();
 }
 
-/* 80BA6A50-80BA6A70 001450 0020+00 1/0 0/0 0/0 .text            daObj_AutoMata_Execute__FPv */
 static int daObj_AutoMata_Execute(void* i_this) {
     return static_cast<daObj_AutoMata_c*>(i_this)->Execute();
 }
 
-/* 80BA6A70-80BA6A90 001470 0020+00 1/0 0/0 0/0 .text            daObj_AutoMata_Draw__FPv */
 static int daObj_AutoMata_Draw(void* i_this) {
     return static_cast<daObj_AutoMata_c*>(i_this)->Draw();
 }
 
-/* 80BA6A90-80BA6A98 001490 0008+00 1/0 0/0 0/0 .text            daObj_AutoMata_IsDelete__FPv */
 static int daObj_AutoMata_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80BA6E5C-80BA6E60 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daObj_AutoMata_Param_c l_HIO;
 
-/* 80BA6D64-80BA6D84 -00001 0020+00 1/0 0/0 0/0 .data            daObj_AutoMata_MethodTable */
 static actor_method_class daObj_AutoMata_MethodTable = {
     (process_method_func)daObj_AutoMata_Create,
     (process_method_func)daObj_AutoMata_Delete,
@@ -342,7 +309,6 @@ static actor_method_class daObj_AutoMata_MethodTable = {
     (process_method_func)daObj_AutoMata_Draw,
 };
 
-/* 80BA6D84-80BA6DB4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_AUTOMATA */
 extern actor_process_profile_definition g_profile_OBJ_AUTOMATA = {
   fpcLy_CURRENT_e,             // mLayerID
   8,                           // mListID

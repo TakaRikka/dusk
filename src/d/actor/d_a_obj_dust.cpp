@@ -7,14 +7,11 @@
 
 #include "d/actor/d_a_obj_dust.h"
 
-/* 80BE3054-80BE3058 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static const char* l_arcName = "M_Dust";
 
 namespace {
-/* 80BE30F8-80BE30FC 000000 0004+00 2/2 0/0 0/0 .bss             e_ymb__26@unnamed@d_a_obj_dust_cpp@ */
 static fopAc_ac_c* e_ymb;
 
-/* 80BE30FC-80BE3100 000004 0004+00 2/2 0/0 0/0 .bss e_ymb_Pos__26@unnamed@d_a_obj_dust_cpp@ */
 static cXyz* e_ymb_Pos;
 };
 
@@ -26,7 +23,6 @@ static f64 dummyFloat2() {
     return 4503601774854144.0;
 }
 
-/* 80BE22B8-80BE2490 000078 01D8+00 1/1 0/0 0/0 .text            Search_Ymb__11daObjDust_cFv */
 void daObjDust_c::Search_Ymb() {
     f32 e_ymb_speed = 0.0f;
     cXyz ymb_rel_dist(e_ymb_Pos->x - current.pos.x, e_ymb_Pos->y - current.pos.y, e_ymb_Pos->z - current.pos.z);
@@ -55,12 +51,10 @@ void daObjDust_c::Search_Ymb() {
     }
 }
 
-/* 80BE2490-80BE24F8 000250 0068+00 1/1 0/0 0/0 .text            RideOn_Angle__11daObjDust_cFRsfsf */
 void daObjDust_c::RideOn_Angle(s16& o_angle, f32 i_value, s16 i_scale, f32 i_max) {
     cLib_addCalcAngleS(&o_angle, i_scale * (i_value / i_max), 1, 0x100, 1);
 }
 
-/* 80BE24F8-80BE2708 0002B8 0210+00 1/1 0/0 0/0 .text            Check_RideOn__11daObjDust_cFv */
 int daObjDust_c::Check_RideOn() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz& player_pos = fopAcM_GetPosition(player);
@@ -96,13 +90,11 @@ int daObjDust_c::Check_RideOn() {
     return 0;
 }
 
-/* 80BE2708-80BE2734 0004C8 002C+00 1/1 0/0 0/0 .text            initBaseMtx__11daObjDust_cFv */
 void daObjDust_c::initBaseMtx() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     setBaseMtx();
 }
 
-/* 80BE2734-80BE2790 0004F4 005C+00 2/2 0/0 0/0 .text            setBaseMtx__11daObjDust_cFv */
 void daObjDust_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -111,8 +103,6 @@ void daObjDust_c::setBaseMtx() {
     cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80BE2790-80BE27BC 000550 002C+00 1/1 0/0 0/0 .text
- * rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c              */
 static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideActor) {
     fopAc_ac_c* ride_actor = (fopAc_ac_c*)i_rideActor;
     daObjDust_c* a_this = (daObjDust_c*)i_bgActor;
@@ -122,25 +112,18 @@ static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* i_bgActor, fopAc_ac_c* i_rideA
     }
 }
 
-/* 80BE27BC-80BE27E8 00057C 002C+00 1/0 0/0 0/0 .text            daObjDust_Draw__FP11daObjDust_c */
 static int daObjDust_Draw(daObjDust_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BE27E8-80BE2808 0005A8 0020+00 1/0 0/0 0/0 .text            daObjDust_Execute__FP11daObjDust_c
- */
 static int daObjDust_Execute(daObjDust_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BE2808-80BE2810 0005C8 0008+00 1/0 0/0 0/0 .text            daObjDust_IsDelete__FP11daObjDust_c
- */
 static int daObjDust_IsDelete(daObjDust_c* i_this) {
     return 1;
 }
 
-/* 80BE2810-80BE2834 0005D0 0024+00 1/0 0/0 0/0 .text            daObjDust_Delete__FP11daObjDust_c
- */
 static int daObjDust_Delete(daObjDust_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     i_this->MoveBGDelete();
@@ -179,14 +162,12 @@ int daObjDust_c::create() {
     return phase_state;
 }
 
-/* 80BE2834-80BE2A00 0005F4 01CC+00 1/0 0/0 0/0 .text            daObjDust_Create__FP10fopAc_ac_c */
 static int daObjDust_Create(fopAc_ac_c* i_this) {
     daObjDust_c* a_this = (daObjDust_c*)i_this;
     fpc_ProcID id = fopAcM_GetID(i_this);
     return a_this->create();
 }
 
-/* 80BE2A70-80BE2AE8 000830 0078+00 1/0 0/0 0/0 .text            CreateHeap__11daObjDust_cFv */
 int daObjDust_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "M_FloatingDust01.bmd");
     JUT_ASSERT(86, modelData != NULL);
@@ -199,7 +180,6 @@ int daObjDust_c::CreateHeap() {
     return 1;
 }
 
-/* 80BE2AE8-80BE2B30 0008A8 0048+00 1/0 0/0 0/0 .text            Create__11daObjDust_cFv */
 int daObjDust_c::Create() {
     initBaseMtx();
     mpBgW->SetRideCallback(rideCallBack);
@@ -207,8 +187,6 @@ int daObjDust_c::Create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80BE2B30-80BE2E9C 0008F0 036C+00 1/0 0/0 0/0 .text            Execute__11daObjDust_cFPPA3_A4_f */
-// NONMATCHING somehow this needs to not inline TSinCosTable<13,f32>::sinShort
 int daObjDust_c::Execute(Mtx** i_mtx) {
     fopAcM_seStartLevel(this, Z2SE_OBJ_FLOATBOARD, 0);
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -249,7 +227,6 @@ int daObjDust_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80BE2E9C-80BE2F40 000C5C 00A4+00 1/0 0/0 0/0 .text            Draw__11daObjDust_cFv */
 int daObjDust_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -259,13 +236,11 @@ int daObjDust_c::Draw() {
     return 1;
 }
 
-/* 80BE2F40-80BE2F74 000D00 0034+00 1/0 0/0 0/0 .text            Delete__11daObjDust_cFv */
 int daObjDust_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, l_arcName);
     return 1;
 }
 
-/* 80BE3058-80BE3078 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjDust_Method */
 static actor_method_class l_daObjDust_Method = {
     (process_method_func)daObjDust_Create,
     (process_method_func)daObjDust_Delete,
@@ -275,7 +250,6 @@ static actor_method_class l_daObjDust_Method = {
 };
 
 
-/* 80BE3078-80BE30A8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_DUST */
 extern actor_process_profile_definition g_profile_Obj_DUST = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID

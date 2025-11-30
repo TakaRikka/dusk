@@ -11,26 +11,18 @@
 namespace JStudio_JAudio2 {
 namespace {
     
-/* 8028D728-8028D750 288068 0028+00 1/1 0/0 0/0 .text
- * setValue_VOLUME___Q215JStudio_JAudio226@unnamed@object_sound_cpp@FP8JAISoundf */
 static void setValue_VOLUME_(JAISound *param_1, float param_2) {
     param_1->getAuxiliary().moveVolume(param_2, 0);
 }
 
-/* 8028D750-8028D778 288090 0028+00 1/1 0/0 0/0 .text
- * setValue_PAN___Q215JStudio_JAudio226@unnamed@object_sound_cpp@FP8JAISoundf */
 static void setValue_PAN_(JAISound *param_1, float param_2) {
     param_1->getAuxiliary().movePan(param_2, 0);
 }
 
-/* 8028D778-8028D7A0 2880B8 0028+00 1/1 0/0 0/0 .text
- * setValue_PITCH___Q215JStudio_JAudio226@unnamed@object_sound_cpp@FP8JAISoundf */
 static void setValue_PITCH_(JAISound *param_1, float param_2) {
     param_1->getAuxiliary().movePitch(param_2, 0);
 }
 
-/* 8028D7A0-8028D800 2880E0 0060+00 1/1 0/0 0/0 .text
- * setValue_TEMPO___Q215JStudio_JAudio226@unnamed@object_sound_cpp@FP8JAISoundf */
 static void setValue_TEMPO_(JAISound *param_1, float param_2) {
     JAITempoMgr* tempoMgr = param_1->getTempoMgr();
     if (tempoMgr != NULL) {
@@ -38,8 +30,6 @@ static void setValue_TEMPO_(JAISound *param_1, float param_2) {
     }
 }
 
-/* 8028D800-8028D828 288140 0028+00 1/1 0/0 0/0 .text
- * setValue_ECHO___Q215JStudio_JAudio226@unnamed@object_sound_cpp@FP8JAISoundf */
 static void setValue_ECHO_(JAISound *param_1, float param_2) {
     param_1->getAuxiliary().moveFxMix(param_2, 0);
 }
@@ -47,8 +37,6 @@ static void setValue_ECHO_(JAISound *param_1, float param_2) {
 };  // namespace
 };  // namespace JStudio_JAudio2
 
-/* 8028D828-8028D8F4 288168 00CC+00 0/0 1/1 0/0 .text
- * __ct__Q215JStudio_JAudio214TAdaptor_soundFPQ215JStudio_JAudio213TCreateObject */
 JStudio_JAudio2::TAdaptor_sound::TAdaptor_sound(JStudio_JAudio2::TCreateObject* param_1) :
     pCreateObject_(param_1) {
     field_0x11c = 0;
@@ -65,8 +53,6 @@ JStudio_JAudio2::TAdaptor_sound::TAdaptor_sound(JStudio_JAudio2::TCreateObject* 
     JUT_ASSERT(112, pCreateObject_!=NULL);
 }
 
-/* 8028D8F4-8028D9A4 288234 00B0+00 1/0 0/0 0/0 .text __dt__Q215JStudio_JAudio214TAdaptor_soundFv
- */
 JStudio_JAudio2::TAdaptor_sound::~TAdaptor_sound() {
     if (opJAISoundHandle_) {
         if (field_0x11f == 0) {
@@ -79,8 +65,6 @@ JStudio_JAudio2::TAdaptor_sound::~TAdaptor_sound() {
     }
 }
 
-/* 8028D9A4-8028DA74 2882E4 00D0+00 1/0 0/0 0/0 .text
- * adaptor_do_prepare__Q215JStudio_JAudio214TAdaptor_soundFv    */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_prepare() {
     static JStudio::TAdaptor::TSetVariableValue_immediate aoData[4] = {
         TSetVariableValue_immediate(0, 0.0f),
@@ -94,8 +78,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_prepare() {
     }
 }
 
-/* 804314F8-80431540 05E218 0048+00 1/2 0/0 0/0 .bss
- * saoVVOSetValue___Q215JStudio_JAudio214TAdaptor_sound         */
 JStudio_JAudio2::TAdaptor_sound::TVVOSetValue_ JStudio_JAudio2::TAdaptor_sound::saoVVOSetValue_[6] = {
     JStudio_JAudio2::TAdaptor_sound::TVVOSetValue_(
         JStudio_JAudio2::TAdaptor_sound::UNK_7, setValue_VOLUME_ 
@@ -117,13 +99,9 @@ JStudio_JAudio2::TAdaptor_sound::TVVOSetValue_ JStudio_JAudio2::TAdaptor_sound::
     ),
 };
 
-/* 8028DA74-8028DA78 2883B4 0004+00 1/0 0/0 0/0 .text
- * adaptor_do_end__Q215JStudio_JAudio214TAdaptor_soundFv        */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_end() {
 }
 
-/* 8028DA78-8028DC20 2883B8 01A8+00 1/0 0/0 0/0 .text
- * adaptor_do_update__Q215JStudio_JAudio214TAdaptor_soundFUl    */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_update(u32 param_1) {
     const JStudio::TObject* pObject = adaptor_getObject();
     JUT_ASSERT(194, pObject!=NULL);
@@ -166,8 +144,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_update(u32 param_1) {
     }
 }
 
-/* 8028DC20-8028DC54 288560 0034+00 1/0 0/0 0/0 .text
- * adaptor_do_SOUND__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_SOUND(JStudio::data::TEOperationData param_1,
                                                            void const* pContent, u32 uSize) {
     switch(param_1) {
@@ -180,8 +156,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_SOUND(JStudio::data::TEOperatio
     }
 }
 
-/* 8028DC54-8028DC88 288594 0034+00 1/0 0/0 0/0 .text
- * adaptor_do_BEGIN__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_BEGIN(JStudio::data::TEOperationData param_1,
                                                        void const* pContent, u32 uSize) {
     switch (param_1) {
@@ -206,8 +180,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_BEGIN_FADE_IN(
     }
 }
 
-/* 8028DCD0-8028DD00 288610 0030+00 1/0 0/0 0/0 .text
- * adaptor_do_END__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_END(JStudio::data::TEOperationData param_1,
                                                      void const* pContent, u32 uSize) {
     switch (param_1) {
@@ -232,8 +204,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_END_FADE_OUT(
     }
 }
 
-/* 8028DD48-8028DDB4 288688 006C+00 1/0 0/0 0/0 .text
- * adaptor_do_PARENT__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_PARENT(
     JStudio::data::TEOperationData param_1, void const* pContent, u32 uSize) {
     switch (param_1) {
@@ -288,8 +258,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_PARENT_ENABLE(
     }
 }
 
-/* 8028DE50-8028DE6C 288790 001C+00 1/0 0/0 0/0 .text
- * adaptor_do_REPEAT__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_REPEAT(JStudio::data::TEOperationData param_1,
                                                         const void* pContent, u32 uSize) {
     if (param_1 == JStudio::data::UNK_0x2) {
@@ -311,8 +279,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_CONTINUOUS(JStudio::data::TEOpe
     }
 }
 
-/* 8028DE88-8028DEB0 2887C8 0028+00 1/0 0/0 0/0 .text
- * adaptor_do_LOCATED__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_LOCATED(JStudio::data::TEOperationData param_1,
                                                          const void* pContent, u32 uSize) {
     if (param_1 == JStudio::data::UNK_0x2) {
@@ -338,8 +304,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_ON_EXIT_NOT_END(
     }
 }
 
-/* 8028DECC-8028DF04 28880C 0038+00 1/0 0/0 0/0 .text
- * __cl__Q315JStudio_JAudio214TAdaptor_sound13TVVOSetValue_CFfPQ27JStudio8TAdaptor */
 void JStudio_JAudio2::TAdaptor_sound::TVVOSetValue_::operator()(f32 param_1,
                                                                 JStudio::TAdaptor* param_2) const {
     JUT_ASSERT(596, param_2 != NULL);
@@ -349,8 +313,6 @@ void JStudio_JAudio2::TAdaptor_sound::TVVOSetValue_::operator()(f32 param_1,
     }
 }
 
-/* 8028DF04-8028DFA4 288844 00A0+00 2/2 0/0 0/0 .text
- * prepareSound___Q215JStudio_JAudio214TAdaptor_soundFv         */
 void JStudio_JAudio2::TAdaptor_sound::prepareSound_() {
     if (opJAISoundHandle_) {
         opJAISoundHandle_stop_();
@@ -366,8 +328,6 @@ void JStudio_JAudio2::TAdaptor_sound::prepareSound_() {
     }
 }
 
-/* 8028DFA4-8028E054 2888E4 00B0+00 3/3 0/0 0/0 .text
- * beginSound_fadeIn___Q215JStudio_JAudio214TAdaptor_soundFv    */
 void JStudio_JAudio2::TAdaptor_sound::beginSound_fadeIn_() {
     if (opJAISoundHandle_) {
         opJAISoundHandle_->fadeIn(field_0x128);
@@ -376,8 +336,6 @@ void JStudio_JAudio2::TAdaptor_sound::beginSound_fadeIn_() {
     }
 }
 
-/* 8028E054-8028E094 288994 0040+00 2/2 0/0 0/0 .text
- * endSound_fadeOut___Q215JStudio_JAudio214TAdaptor_soundFUl    */
 void JStudio_JAudio2::TAdaptor_sound::endSound_fadeOut_(u32 u32FadeTime) {
 	if (opJAISoundHandle_) {
 		opJAISoundHandle_->stop(u32FadeTime);

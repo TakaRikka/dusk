@@ -15,29 +15,23 @@
 #include "d/d_procname.h"
 #include "d/actor/d_a_e_rdy.h"
 
-/* 807F2B08-807F2B0C 000008 0004+00 4/4 0/0 0/0 .bss             S_area_dis */
 static f32 S_area_dis;
 
-/* 807F2B0C-807F2B10 00000C 0004+00 2/2 0/0 0/0 .bss             None */
 static bool hioInit;
 
-/* 807F2B1C-807F2B28 00001C 000C+00 3/3 0/0 0/0 .bss             l_HIO */
 static daE_YC_HIO_c l_HIO;
 
-/* 807EFECC-807EFEF0 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__12daE_YC_HIO_cFv */
 daE_YC_HIO_c::daE_YC_HIO_c() {
     field_0x4 = -1;
     mScale = 1.0f;
 }
 
-/* 807EFEF0-807EFF9C 000110 00AC+00 5/5 0/0 0/0 .text            anm_init__FP10e_yc_classifUcf */
 static void anm_init(e_yc_class* i_this, int i_anmID, f32 i_morf, u8 i_attr, f32 i_rate) {
     J3DAnmTransform* anm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("E_yc", i_anmID));
     i_this->mpMorf->setAnm(anm, i_attr, i_morf, i_rate, 0.0f, -1.0f);
     i_this->mAnm = i_anmID;
 }
 
-/* 807EFF9C-807F00BC 0001BC 0120+00 1/0 0/0 0/0 .text            daE_YC_Draw__FP10e_yc_class */
 static int daE_YC_Draw(e_yc_class* i_this) {
     if (i_this->mNoDrawFlag) {
         return 1;
@@ -60,7 +54,6 @@ static int daE_YC_Draw(e_yc_class* i_this) {
     return 1;
 }
 
-/* 807F00BC-807F01AC 0002DC 00F0+00 1/1 0/0 0/0 .text            damage_check__FP10e_yc_class */
 static void damage_check(e_yc_class* i_this) {
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
     i_this->mCcStts.Move();
@@ -79,7 +72,6 @@ static void damage_check(e_yc_class* i_this) {
     }
 }
 
-/* 807F01AC-807F06AC 0003CC 0500+00 2/1 0/0 0/0 .text            e_yc_fly__FP10e_yc_class */
 static void e_yc_fly(e_yc_class* i_this) {
     fopAc_ac_c* base_rdy = fopAcM_SearchByID(i_this->mRiderID);
     e_rdy_class* rider = (e_rdy_class*) base_rdy;
@@ -196,7 +188,6 @@ static void e_yc_fly(e_yc_class* i_this) {
     cLib_addCalc2(&i_this->speedF, target_speed, 1.0f, accel);
 }
 
-/* 807F06AC-807F0AA0 0008CC 03F4+00 1/1 0/0 0/0 .text            e_yc_f_fly__FP10e_yc_class */
 static void e_yc_f_fly(e_yc_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     int frame = i_this->mpMorf->getFrame();
@@ -278,7 +269,6 @@ static void e_yc_f_fly(e_yc_class* i_this) {
     cLib_addCalc2(&i_this->speedF, 25.0f, 1.0f, 1.0f);
 }
 
-/* 807F0AA0-807F0C40 000CC0 01A0+00 1/1 0/0 0/0 .text            e_yc_hovering__FP10e_yc_class */
 static void e_yc_hovering(e_yc_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 target_speed = 0.0f;
@@ -317,7 +307,6 @@ static void e_yc_hovering(e_yc_class* i_this) {
     cLib_addCalcAngleS2(&i_this->current.angle.z, 0, 4, 0x800);
 }
 
-/* 807F0C40-807F1218 000E60 05D8+00 2/1 0/0 0/0 .text            e_yc_attack__FP10e_yc_class */
 static void e_yc_attack(e_yc_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz delta;
@@ -437,7 +426,6 @@ static void e_yc_attack(e_yc_class* i_this) {
     }
 }
 
-/* 807F1218-807F165C 001438 0444+00 1/1 0/0 0/0 .text            e_yc_wolfbite__FP10e_yc_class */
 static void e_yc_wolfbite(e_yc_class* i_this) {
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
@@ -529,7 +517,6 @@ static void e_yc_wolfbite(e_yc_class* i_this) {
     cLib_addCalcAngleS2(&_this->current.angle.y, player->shape_angle.y + 0x8000, 2, 0x1000);
 }
 
-/* 807F165C-807F1AD4 00187C 0478+00 1/1 0/0 0/0 .text            anm_se_set__FP10e_yc_class */
 static void anm_se_set(e_yc_class* i_this) {
     if ((i_this->mAnm == e_yc_class::ANM_FLY && i_this->mpMorf->checkFrame(28.0f))
         || (i_this->mAnm == e_yc_class::ANM_CATCH_START && i_this->mpMorf->checkFrame(27.0f))
@@ -568,7 +555,6 @@ static void anm_se_set(e_yc_class* i_this) {
     }
 }
 
-/* 807F1AD4-807F1CE4 001CF4 0210+00 2/1 0/0 0/0 .text            action__FP10e_yc_class */
 static void action(e_yc_class* i_this) {
     cXyz vec1, vec2;
     fopAc_ac_c* _this = static_cast<fopAc_ac_c*>(i_this);
@@ -626,7 +612,6 @@ static void action(e_yc_class* i_this) {
     _this->old.pos.y += 200.0f;
 }
 
-/* 807F1CE4-807F2234 001F04 0550+00 2/1 0/0 0/0 .text            daE_YC_Execute__FP10e_yc_class */
 static int daE_YC_Execute(e_yc_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz vec1, vec2;
@@ -735,12 +720,10 @@ static int daE_YC_Execute(e_yc_class* i_this) {
     return 1;
 }
 
-/* 807F2234-807F223C 002454 0008+00 1/0 0/0 0/0 .text            daE_YC_IsDelete__FP10e_yc_class */
 static int daE_YC_IsDelete(e_yc_class* i_this) {
     return 1;
 }
 
-/* 807F223C-807F22A4 00245C 0068+00 1/0 0/0 0/0 .text            daE_YC_Delete__FP10e_yc_class */
 static int daE_YC_Delete(e_yc_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_yc");
 
@@ -755,7 +738,6 @@ static int daE_YC_Delete(e_yc_class* i_this) {
     return 1;
 }
 
-/* 807F22A4-807F239C 0024C4 00F8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_yc_class* _this = static_cast<e_yc_class*>(i_this);
 
@@ -770,7 +752,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 807F239C-807F26BC 0025BC 0320+00 1/0 0/0 0/0 .text            daE_YC_Create__FP10fopAc_ac_c */
 static cPhs__Step daE_YC_Create(fopAc_ac_c* i_this) {
     e_yc_class* _this = static_cast<e_yc_class*>(i_this);
     fopAcM_ct(i_this, e_yc_class);
@@ -845,7 +826,6 @@ static cPhs__Step daE_YC_Create(fopAc_ac_c* i_this) {
     return step;
 }
 
-/* 807F2A68-807F2A88 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_YC_Method */
 static actor_method_class l_daE_YC_Method = {
     (process_method_func)daE_YC_Create,
     (process_method_func)daE_YC_Delete,
@@ -854,7 +834,6 @@ static actor_method_class l_daE_YC_Method = {
     (process_method_func)daE_YC_Draw,
 };
 
-/* 807F2A88-807F2AB8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_YC */
 extern actor_process_profile_definition g_profile_E_YC = {
     fpcLy_CURRENT_e,
     4,

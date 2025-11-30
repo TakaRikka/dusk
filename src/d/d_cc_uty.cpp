@@ -14,7 +14,6 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 803AC418-803AC500 009538 00E8+00 1/1 0/0 0/0 .data            plCutLRC */
 static int plCutLRC[58] = {
     0,  //
     0,  // CUT_VERTICAL
@@ -76,7 +75,6 @@ static int plCutLRC[58] = {
     0,  //
 };
 
-/* 800873B0-800873D4 081CF0 0024+00 0/0 0/0 3/3 .text            pl_cut_LRC__Fi */
 int pl_cut_LRC(int index) {
     if (index >= 58) {
         return 0;
@@ -85,7 +83,6 @@ int pl_cut_LRC(int index) {
     return plCutLRC[index];
 }
 
-/* 800873D4-800874C4 081D14 00F0+00 1/1 0/0 14/14 .text            cc_pl_cut_bit_get__Fv */
 u16 cc_pl_cut_bit_get() {
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
 
@@ -122,7 +119,6 @@ u16 cc_pl_cut_bit_get() {
     return bit;
 }
 
-/* 800874C4-800874F0 081E04 002C+00 1/1 0/0 0/0 .text            getMapInfo__FSc */
 static int getMapInfo(s8 param_0) {
     int map_info = 30;
     if (param_0 == 1) {
@@ -134,14 +130,11 @@ static int getMapInfo(s8 param_0) {
     return map_info;
 }
 
-/* 800874F0-80087514 081E30 0024+00 2/2 0/0 0/0 .text            getHitId__FP8cCcD_Obji */
 static u32 getHitId(cCcD_Obj* i_ccObj, int i_useReboundSe) {
     dCcD_GObjInf* dObj = static_cast<dCcD_GObjInf*>(i_ccObj);
     return dObj->getHitSeID(dObj->GetAtSe(), i_useReboundSe);
 }
 
-/* 80087514-80087594 081E54 0080+00 0/0 0/0 47/47 .text
- * def_se_set__FP10Z2CreatureP8cCcD_ObjUlP10fopAc_ac_c          */
 void def_se_set(Z2Creature* i_sound, cCcD_Obj* i_ccObj, u32 i_mapInfo, fopAc_ac_c* i_actor) {
     if (i_sound != NULL) {
         int useReboundSe;
@@ -154,7 +147,6 @@ void def_se_set(Z2Creature* i_sound, cCcD_Obj* i_ccObj, u32 i_mapInfo, fopAc_ac_
     }
 }
 
-/* 80087594-80087A58 081ED4 04C4+00 1/1 0/0 0/0 .text            at_power_get__FP11dCcU_AtInfo */
 static u8 at_power_get(dCcU_AtInfo* i_AtInfo) {
     u8 power = i_AtInfo->mpCollider->GetAtAtp();
 
@@ -314,8 +306,6 @@ static u8 at_power_get(dCcU_AtInfo* i_AtInfo) {
     return power;
 }
 
-/* 80087A58-80087C04 082398 01AC+00 1/1 0/0 38/38 .text            at_power_check__FP11dCcU_AtInfo
- */
 fopAc_ac_c* at_power_check(dCcU_AtInfo* i_AtInfo) {
     if (i_AtInfo->mpCollider == NULL) {
         return NULL;
@@ -374,8 +364,6 @@ fopAc_ac_c* at_power_check(dCcU_AtInfo* i_AtInfo) {
     return i_AtInfo->mpActor;
 }
 
-/* 80087C04-80088134 082544 0530+00 0/0 0/0 84/84 .text cc_at_check__FP10fopAc_ac_cP11dCcU_AtInfo
- */
 fopAc_ac_c* cc_at_check(fopAc_ac_c* i_enemy, dCcU_AtInfo* i_AtInfo) {
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
     i_AtInfo->mpActor = at_power_check(i_AtInfo);

@@ -10,10 +10,8 @@
 
 static int useHeapInit(fopAc_ac_c*);
 
-/* 80B9C9B4-80B9C9B8 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Lv5_KEY";
 
-/* 80B9B9B8-80B9BA94 000078 00DC+00 1/1 0/0 0/0 .text            CreateHeap__13daObjLv5Key_cFv */
 int daObjLv5Key_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 7);
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 4);
@@ -31,7 +29,6 @@ int daObjLv5Key_c::CreateHeap() {
     return 1;
 }
 
-/* 80B9BA94-80B9BB5C 000154 00C8+00 1/1 0/0 0/0 .text            Init__13daObjLv5Key_cFv */
 int daObjLv5Key_c::Init() {
     initCcSph();
     fopAcM_setCullSizeBox(this, -50.0f, 30.0f, -20.0f, 50.0f, -90.0f, 20.0f);
@@ -43,7 +40,6 @@ int daObjLv5Key_c::Init() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80B9BB5C-80B9BBCC 00021C 0070+00 1/1 0/0 0/0 .text            setBgc__13daObjLv5Key_cFv */
 void daObjLv5Key_c::setBgc() {
     OS_REPORT("-------------setBgc!!\n");
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
@@ -52,7 +48,6 @@ void daObjLv5Key_c::setBgc() {
     mAcchCir.SetWall(30.0f, 30.0f);
 }
 
-/* 80B9BBCC-80B9BC2C 00028C 0060+00 1/1 0/0 0/0 .text            initCcSph__13daObjLv5Key_cFv */
 void daObjLv5Key_c::initCcSph() {
     static const dCcD_SrcSph ccShpSrc = {
         {
@@ -72,7 +67,6 @@ void daObjLv5Key_c::initCcSph() {
     mCcSph.SetC(current.pos);
 }
 
-/* 80B9BC2C-80B9BCEC 0002EC 00C0+00 1/1 0/0 0/0 .text            setCcSph__13daObjLv5Key_cFv */
 void daObjLv5Key_c::setCcSph() {
     cXyz center(0.0f, -17.5f, 0.0f);
     mDoMtx_stack_c::transS(current.pos);
@@ -88,20 +82,15 @@ void daObjLv5Key_c::setCcSph() {
     }
 }
 
-/* 80B9BCEC-80B9BD0C 0003AC 0020+00 1/0 0/0 0/0 .text            daObjLv5Key_Create__FP10fopAc_ac_c
- */
 static int daObjLv5Key_Create(fopAc_ac_c* i_this) {
     return ((daObjLv5Key_c*)i_this)->create_1st();
 }
 
-/* 80B9BD0C-80B9BD30 0003CC 0024+00 1/0 0/0 0/0 .text daObjLv5Key_Delete__FP13daObjLv5Key_c */
 static int daObjLv5Key_Delete(daObjLv5Key_c* i_this) {
     i_this->Delete();
     return 1;
 }
 
-/* 80B9BD30-80B9BDD8 0003F0 00A8+00 5/5 0/0 0/0 .text
- * setAction__13daObjLv5Key_cFM13daObjLv5Key_cFPCvPvi_vi        */
 void daObjLv5Key_c::setAction(daObjLv5Key_c::actionFunc i_action, int param_1) {
     if (mAction != i_action) {
         if (mAction != NULL) {
@@ -115,7 +104,6 @@ void daObjLv5Key_c::setAction(daObjLv5Key_c::actionFunc i_action, int param_1) {
     }
 }
 
-/* 80B9BDD8-80B9BE24 000498 004C+00 1/1 0/0 0/0 .text            Action__13daObjLv5Key_cFv */
 void daObjLv5Key_c::Action() {
     if (mAction == NULL) {
         OS_REPORT("ACTION NOT SET!!\n");
@@ -124,7 +112,6 @@ void daObjLv5Key_c::Action() {
     }
 }
 
-/* 80B9BE24-80B9BF08 0004E4 00E4+00 2/0 0/0 0/0 .text            Wait__13daObjLv5Key_cFi */
 void daObjLv5Key_c::Wait(int param_0) {
     switch (mMode) {
     case -1:
@@ -144,7 +131,6 @@ void daObjLv5Key_c::Wait(int param_0) {
     }
 }
 
-/* 80B9BF08-80B9BFDC 0005C8 00D4+00 1/0 0/0 0/0 .text            Open__13daObjLv5Key_cFi */
 void daObjLv5Key_c::Open(int param_0) {
     switch (mMode) {
     case -1:
@@ -163,7 +149,6 @@ void daObjLv5Key_c::Open(int param_0) {
     }
 }
 
-/* 80B9BFDC-80B9C17C 00069C 01A0+00 1/0 0/0 0/0 .text            Fall__13daObjLv5Key_cFi */
 void daObjLv5Key_c::Fall(int param_0) {
     switch (mMode) {
     case -1:
@@ -213,7 +198,6 @@ void daObjLv5Key_c::Fall(int param_0) {
     }
 }
 
-/* 80B9C17C-80B9C268 00083C 00EC+00 1/0 0/0 0/0 .text            Land__13daObjLv5Key_cFi */
 void daObjLv5Key_c::Land(int param_0) {
     switch (mMode) {
     case -1:
@@ -240,7 +224,6 @@ void daObjLv5Key_c::Land(int param_0) {
     }
 }
 
-/* 80B9C268-80B9C3B0 000928 0148+00 1/0 0/0 0/0 .text            Shake__13daObjLv5Key_cFi */
 void daObjLv5Key_c::Shake(int param_0) {
     switch (mMode) {
     case -1:
@@ -274,7 +257,6 @@ void daObjLv5Key_c::Shake(int param_0) {
     }
 }
 
-/* 80B9C3B0-80B9C410 000A70 0060+00 1/1 0/0 0/0 .text TranslateByNowDirect__13daObjLv5Key_cFfff */
 void daObjLv5Key_c::TranslateByNowDirect(f32 i_x, f32 i_y, f32 i_z) {
     cXyz trans;
     trans.set(i_x, i_y, i_z);
@@ -284,7 +266,6 @@ void daObjLv5Key_c::TranslateByNowDirect(f32 i_x, f32 i_y, f32 i_z) {
     current.pos += trans;
 }
 
-/* 80B9C410-80B9C450 000AD0 0040+00 1/1 0/0 0/0 .text            Execute__13daObjLv5Key_cFv */
 int daObjLv5Key_c::Execute() {
     Action();
     setBaseMtx();
@@ -292,7 +273,6 @@ int daObjLv5Key_c::Execute() {
     return 1;
 }
 
-/* 80B9C450-80B9C500 000B10 00B0+00 1/1 0/0 0/0 .text            Draw__13daObjLv5Key_cFv */
 int daObjLv5Key_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -304,13 +284,11 @@ int daObjLv5Key_c::Draw() {
     return 1;
 }
 
-/* 80B9C500-80B9C534 000BC0 0034+00 1/1 0/0 0/0 .text            Delete__13daObjLv5Key_cFv */
 int daObjLv5Key_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     return 1;
 }
 
-/* 80B9C534-80B9C5AC 000BF4 0078+00 1/1 0/0 0/0 .text            setBaseMtx__13daObjLv5Key_cFv */
 void daObjLv5Key_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
 
@@ -322,18 +300,14 @@ void daObjLv5Key_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80B9C5AC-80B9C5CC 000C6C 0020+00 1/0 0/0 0/0 .text            daObjLv5Key_Draw__FP13daObjLv5Key_c
- */
 static int daObjLv5Key_Draw(daObjLv5Key_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80B9C5CC-80B9C5EC 000C8C 0020+00 2/1 0/0 0/0 .text daObjLv5Key_Execute__FP13daObjLv5Key_c */
 static int daObjLv5Key_Execute(daObjLv5Key_c* i_this) {
     return i_this->Execute();
 }
 
-/* 80B9C5EC-80B9C798 000CAC 01AC+00 1/1 0/0 0/0 .text            create_1st__13daObjLv5Key_cFv */
 int daObjLv5Key_c::create_1st() {
     fopAcM_ct(this, daObjLv5Key_c);
 
@@ -351,24 +325,20 @@ int daObjLv5Key_c::create_1st() {
     return phase;
 }
 
-/* 80B9C8E0-80B9C900 000FA0 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return ((daObjLv5Key_c*)i_this)->CreateHeap();
 }
 
-/* 80B9C900-80B9C908 000FC0 0008+00 1/0 0/0 0/0 .text daObjLv5Key_IsDelete__FP13daObjLv5Key_c */
 static int daObjLv5Key_IsDelete(daObjLv5Key_c* i_this) {
     return 1;
 }
 
-/* 80B9CA00-80B9CA20 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjLv5Key_Method */
 static actor_method_class l_daObjLv5Key_Method = {
     (process_method_func)daObjLv5Key_Create,  (process_method_func)daObjLv5Key_Delete,
     (process_method_func)daObjLv5Key_Execute, (process_method_func)daObjLv5Key_IsDelete,
     (process_method_func)daObjLv5Key_Draw,
 };
 
-/* 80B9CA20-80B9CA50 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv5Key */
 extern actor_process_profile_definition g_profile_Obj_Lv5Key = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

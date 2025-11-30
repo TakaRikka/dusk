@@ -19,15 +19,15 @@ public:
 
 class dMdl_c : public J3DPacket {
 public:
-    /* 8009C650 */ void create(J3DModelData*, u16, dKy_tevstr_c*);
-    /* 8009C668 */ void entryObj(dMdl_obj_c*);
-    /* 8009C930 */ dMdl_c() {
+    void create(J3DModelData*, u16, dKy_tevstr_c*);
+    void entryObj(dMdl_obj_c*);
+    dMdl_c() {
                         mpModelData = NULL;
                         mMaterialId = 0;
                     }
 
-    /* 8009C4FC */ virtual void draw();
-    /* 8009C808 */ virtual ~dMdl_c();
+    virtual void draw();
+    virtual ~dMdl_c();
 
     J3DModelData* getModelData() { return mpModelData; }
     u16 getMaterialId() { return mMaterialId; }
@@ -46,12 +46,12 @@ public:
     dMdl_mng_c() { field_0x80 = 0; }
     ~dMdl_mng_c() {}
 
-    /* 8009C6DC */ dMdl_c* search(J3DModelData*, u16, dKy_tevstr_c*);
-    /* 8009C724 */ dMdl_c* entry(J3DModelData*, u16, dKy_tevstr_c*);
-    /* 8009C8D8 */ static dMdl_c* entry(J3DModelData*, u16, int);
-    /* 8009C7AC */ static void create();
-    /* 8009C864 */ static void remove();
-    /* 8009C8C0 */ static void reset();
+    dMdl_c* search(J3DModelData*, u16, dKy_tevstr_c*);
+    dMdl_c* entry(J3DModelData*, u16, dKy_tevstr_c*);
+    static dMdl_c* entry(J3DModelData*, u16, int);
+    static void create();
+    static void remove();
+    static void reset();
 
     static dMdl_mng_c* m_myObj;
 

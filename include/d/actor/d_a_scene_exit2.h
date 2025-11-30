@@ -26,20 +26,20 @@ public:
         ACTION_DEAD_e,
     };
 
-    /* 8059E158 */ void initBaseMtx();
-    /* 8059E178 */ void setBaseMtx();
-    /* 8059E1B0 */ int Create();
-    /* 8059E230 */ int create();
-    /* 8059E2C0 */ int execute();
-    /* 8059E2E4 */ void event_proc_call();
-    /* 8059E3A0 */ void actionWait();
-    /* 8059E408 */ void actionOrderEvent();
-    /* 8059E488 */ void actionEvent();
-    /* 8059E504 */ void actionDead();
-    /* 8059E508 */ int demoProc();
-    /* 8059E6CC */ BOOL checkArea();
-    /* 8059E714 */ int draw();
-    /* 8059E71C */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int create();
+    int execute();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    int demoProc();
+    BOOL checkArea();
+    int draw();
+    int _delete();
 
     int getSceneID() { return fopAcM_GetParamBit(this, 0, 8); }
     void setAction(u8 i_action) { mAction = i_action; }

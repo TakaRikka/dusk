@@ -13,13 +13,12 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "dol2asm.h"
 #include "f_op/f_op_kankyo_mng.h"
 
 class daFr_HIO_c : public JORReflexible {
 public:
-    /* 805198EC */ daFr_HIO_c();
-    /* 8051B920 */ virtual ~daFr_HIO_c() {}
+    daFr_HIO_c();
+    virtual ~daFr_HIO_c() {}
 
 #if DEBUG
     void genMessage(JORMContext*);
@@ -37,7 +36,6 @@ public:
     /* 0x28 */ f32 field_0x28;
 };
 
-/* 805198EC-8051994C 0000EC 0060+00 1/1 0/0 0/0 .text            __ct__10daFr_HIO_cFv */
 daFr_HIO_c::daFr_HIO_c() {
     field_0x4 = -1;
     field_0x8 = 10.0f;
@@ -51,13 +49,11 @@ daFr_HIO_c::daFr_HIO_c() {
     field_0x28 = 6.0f;
 }
 
-/* 8051994C-805199F4 00014C 00A8+00 7/7 0/0 0/0 .text            anm_init__FP8fr_classifUcf */
 static void anm_init(fr_class* i_this, int i_index, f32 i_morf, u8 i_mode, f32 i_speed) {
     i_this->mMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Fr", i_index),
     i_mode, i_morf, i_speed, 0.0f, -1.0f, NULL);
 }
 
-/* 805199F4-80519AB8 0001F4 00C4+00 1/0 0/0 0/0 .text            daFr_Draw__FP8fr_class */
 static int daFr_Draw(fr_class* i_this) {
     fopAc_ac_c* actor = i_this;
 
@@ -78,7 +74,6 @@ static int daFr_Draw(fr_class* i_this) {
     return 1;
 }
 
-/* 80519AB8-80519B14 0002B8 005C+00 1/1 0/0 0/0 .text            sibuki_set__FP8fr_class */
 static void sibuki_set(fr_class* i_this) {
     fopAc_ac_c* actor = i_this;
 
@@ -87,7 +82,6 @@ static void sibuki_set(fr_class* i_this) {
     fopKyM_createWpillar(&sp18, actor->scale.x * 0.3f, 0);
 }
 
-/* 80519B14-80519B60 000314 004C+00 1/1 0/0 0/0 .text            s_wd_sub__FPvPv */
 static void* s_wd_sub(void* param_1, void* param_2) {
     (void)param_2;
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_OBJ_LP) {
@@ -97,7 +91,6 @@ static void* s_wd_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80519B60-80519D28 000360 01C8+00 1/1 0/0 0/0 .text            wd_check__FP8fr_class */
 static wd_ss* wd_check(fr_class* i_this) {
     fopAc_ac_c* actor = i_this;
 
@@ -116,7 +109,6 @@ static wd_ss* wd_check(fr_class* i_this) {
     return NULL;
 }
 
-/* 80519D28-80519E24 000528 00FC+00 4/4 0/0 0/0 .text            way_bg_check__FP8fr_class */
 static BOOL way_bg_check(fr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     cXyz sp24;
@@ -144,13 +136,10 @@ static BOOL way_bg_check(fr_class* i_this) {
     }
 }
 
-/* 8051BC10-8051BC14 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool l_initHIO;
 
-/* 8051BC20-8051BC4C 000018 002C+00 9/9 0/0 0/0 .bss             l_HIO */
 static daFr_HIO_c l_HIO;
 
-/* 80519E24-8051A0D8 000624 02B4+00 1/2 0/0 0/0 .text            fr_normal__FP8fr_class */
 static void fr_normal(fr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -203,7 +192,6 @@ static void fr_normal(fr_class* i_this) {
     }
 }
 
-/* 8051A0D8-8051A318 0008D8 0240+00 1/2 0/0 0/0 .text            fr_away__FP8fr_class */
 static void fr_away(fr_class* i_this) {
     fopAc_ac_c* actor = i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -250,7 +238,6 @@ static void fr_away(fr_class* i_this) {
     }
 }
 
-/* 8051A318-8051A558 000B18 0240+00 1/1 0/0 0/0 .text            fr_s_normal__FP8fr_class */
 static void fr_s_normal(fr_class* i_this) {
     fopAc_ac_c* actor = i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -303,7 +290,6 @@ static void fr_s_normal(fr_class* i_this) {
     }
 }
 
-/* 8051A558-8051A620 000D58 00C8+00 1/1 0/0 0/0 .text            fr_s_wait__FP8fr_class */
 static void fr_s_wait(fr_class* i_this) {
     fopAc_ac_c* actor = i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -326,7 +312,6 @@ static void fr_s_wait(fr_class* i_this) {
 
 }
 
-/* 8051A620-8051A820 000E20 0200+00 1/1 0/0 0/0 .text            fr_s_away__FP8fr_class */
 static void fr_s_away(fr_class* i_this) {
     fopAc_ac_c* actor = i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -375,7 +360,6 @@ static void fr_s_away(fr_class* i_this) {
     }
 }
 
-/* 8051A820-8051A904 001020 00E4+00 1/1 0/0 0/0 .text            fr_eat__FP8fr_class */
 static void fr_eat(fr_class* i_this) {
     fopAc_ac_c* this_actor = i_this;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -403,7 +387,6 @@ static void fr_eat(fr_class* i_this) {
     }
 }
 
-/* 8051A904-8051AA9C 001104 0198+00 2/2 0/0 0/0 .text            swim_on__FP8fr_class */
 static void swim_on(fr_class* i_this) {
     if (i_this->field_0x5ec == 0) {
         i_this->field_0x5d2 = 0;
@@ -436,7 +419,6 @@ static void swim_on(fr_class* i_this) {
     }
 }
 
-/* 8051AA9C-8051AC2C 00129C 0190+00 1/1 0/0 0/0 .text            swim_off__FP8fr_class */
 static void swim_off(fr_class* i_this) {
     fopAc_ac_c* this_actor = i_this;
 
@@ -467,7 +449,6 @@ static void swim_off(fr_class* i_this) {
     }
 }
 
-/* 8051AC2C-8051AD04 00142C 00D8+00 1/1 0/0 0/0 .text            fr_message__FP8fr_class */
 static void fr_message(fr_class* i_this) {
     fopAc_ac_c* this_actor = i_this;
 
@@ -487,7 +468,6 @@ static void fr_message(fr_class* i_this) {
     }
 }
 
-/* 8051AD04-8051B04C 001504 0348+00 2/1 0/0 0/0 .text            action__FP8fr_class */
 static void action(fr_class* i_this) {
     fopAc_ac_c* this_actor = (fopAc_ac_c*)i_this;
 
@@ -589,7 +569,6 @@ static void action(fr_class* i_this) {
     }
 }
 
-/* 8051B04C-8051B170 00184C 0124+00 1/1 0/0 0/0 .text            message__FP8fr_class */
 static int message(fr_class* i_this) {
     if (i_this->field_0x992) {
         i_this->field_0x5e4 = 10;
@@ -618,7 +597,6 @@ static int message(fr_class* i_this) {
     return 0;
 }
 
-/* 8051B170-8051B354 001970 01E4+00 2/1 0/0 0/0 .text            daFr_Execute__FP8fr_class */
 static int daFr_Execute(fr_class* i_this) {
     if (cDmrNowMidnaTalk()) {
         return 1;
@@ -660,12 +638,10 @@ static int daFr_Execute(fr_class* i_this) {
     return 1;
 }
 
-/* 8051B354-8051B35C 001B54 0008+00 1/0 0/0 0/0 .text            daFr_IsDelete__FP8fr_class */
 static int daFr_IsDelete(fr_class* i_this) {
     return true;
 }
 
-/* 8051B35C-8051B3B0 001B5C 0054+00 1/0 0/0 0/0 .text            daFr_Delete__FP8fr_class */
 static int daFr_Delete(fr_class* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
 
@@ -679,7 +655,6 @@ static int daFr_Delete(fr_class* i_this) {
     return 1;
 }
 
-/* 8051B3B0-8051B550 001BB0 01A0+00 1/1 0/0 0/0 .text            useHeapIfrt__FP10fopAc_ac_c */
 static BOOL useHeapIfrt(fopAc_ac_c* a_this) {
     fr_class* i_this = (fr_class*)a_this;
 
@@ -701,7 +676,6 @@ static BOOL useHeapIfrt(fopAc_ac_c* a_this) {
                               -1) != 0 ? 1 : 0;
 }
 
-/* 8051B598-8051B820 001D98 0288+00 1/0 0/0 0/0 .text            daFr_Create__FP10fopAc_ac_c */
 static int daFr_Create(fopAc_ac_c* a_this) {
     fopAc_ac_c* actor = a_this;
     fr_class* i_this = (fr_class*)actor;
@@ -757,7 +731,6 @@ static int daFr_Create(fopAc_ac_c* a_this) {
     return phase_state;
 }
 
-/* 8051BB60-8051BB80 -00001 0020+00 1/0 0/0 0/0 .data            l_daFr_Method */
 static actor_method_class l_daFr_Method = {
     (process_method_func)daFr_Create,
     (process_method_func)daFr_Delete,
@@ -766,7 +739,6 @@ static actor_method_class l_daFr_Method = {
     (process_method_func)daFr_Draw,
 };
 
-/* 8051BB80-8051BBB0 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_FR */
 extern actor_process_profile_definition g_profile_FR = {
   fpcLy_CURRENT_e,       // mLayerID
   8,                     // mListID

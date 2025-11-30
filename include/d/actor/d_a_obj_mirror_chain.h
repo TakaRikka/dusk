@@ -8,8 +8,8 @@
 
 class dScissorBegin_packet_c : public J3DPacket {
 public:
-    /* 80C96698 */ void draw();
-    /* 80C97F98 */ ~dScissorBegin_packet_c() {}
+    void draw();
+    ~dScissorBegin_packet_c() {}
 
     cXyz* getQuad() { return mQuad; }
     void entryPacket() { j3dSys.getDrawBuffer(1)->entryImm(this, 0); }
@@ -19,8 +19,8 @@ public:
 
 class dScissorEnd_packet_c : public J3DPacket {
 public:
-    /* 80C96DE8 */ void draw();
-    /* 80C97F3C */ ~dScissorEnd_packet_c() {}
+    void draw();
+    ~dScissorEnd_packet_c() {}
 
     void entryPacket() { j3dSys.getDrawBuffer(1)->entryImm(this, 0); }
 };
@@ -35,11 +35,11 @@ public:
  */
 class daObjMirrorChain_c : public fopAc_ac_c {
 public:
-    /* 80C96E40 */ int createHeap();
-    /* 80C975EC */ void initBaseMtx();
-    /* 80C97618 */ void setBaseMtx();
-    /* 80C976B8 */ inline int draw();
-    /* 80C97988 */ int execute();
+    int createHeap();
+    void initBaseMtx();
+    void setBaseMtx();
+    inline int draw();
+    int execute();
     inline ~daObjMirrorChain_c();
     inline void create_init();
     inline cPhs__Step create();

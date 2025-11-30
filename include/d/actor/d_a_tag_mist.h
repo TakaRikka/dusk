@@ -5,15 +5,15 @@
 
 class daTagMist_c : public fopAc_ac_c {
 public:
-    /* 8048F258 */ void offSw();
-    /* 8048F2C4 */ void onMySw();
-    /* 8048F310 */ BOOL isMySw();
-    /* 8048F370 */ int Create();
-    /* 8048F444 */ int create();
-    /* 8048F558 */ int execute();
-    /* 8048F690 */ int _delete();
+    void offSw();
+    void onMySw();
+    BOOL isMySw();
+    int Create();
+    int create();
+    int execute();
+    int _delete();
 
-    /* 80031CF0 */ static u8 getPlayerNo();
+    static u8 getPlayerNo();
     static void setPlayerNo(u8 i_playerNo) { mPlayerNo = i_playerNo; }
 
     static u8 mPlayerNo;

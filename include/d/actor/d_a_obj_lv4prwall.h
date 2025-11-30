@@ -14,15 +14,15 @@
  */
 class daObjLv4PRwall_c : public dBgS_MoveBgActor, request_of_phase_process_class {
 public:
-    /* 80C68C98 */ int create1st();
-    /* 80C68DD8 */ void setMtx();
+    int create1st();
+    void setMtx();
 
-    /* 80C68F20 */ virtual int CreateHeap();
-    /* 80C68FA0 */ virtual int Create();
-    /* 80C690D8 */ virtual int Execute(Mtx**);
-    /* 80C696BC */ virtual int Draw();
-    /* 80C69760 */ virtual int Delete();
-    /* 80C69870 */ virtual ~daObjLv4PRwall_c() {}
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
+    virtual ~daObjLv4PRwall_c() {}
     
     int getType() { return fopAcM_GetParamBit(this, 0, 3); }
     int getSwNo() { return fopAcM_GetParamBit(this, 3, 8); }

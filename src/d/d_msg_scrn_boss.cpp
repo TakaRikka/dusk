@@ -6,7 +6,6 @@
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
 
-/* 8023C5C8-8023C928 236F08 0360+00 0/0 1/1 0/0 .text            __ct__14dMsgScrnBoss_cFv */
 dMsgScrnBoss_c::dMsgScrnBoss_c() {
     static u64 t_tag[7] = {
         'sfontb0', 'sfontb1', 'sfontb2', 'sfontl0', 'sfontl1', 'sfontl2', 'sfont00',
@@ -54,7 +53,6 @@ dMsgScrnBoss_c::dMsgScrnBoss_c() {
     mTextBoxPosY = mpTm_c[0]->getGlobalPosY();
 }
 
-/* 8023C928-8023CA88 237268 0160+00 1/0 0/0 0/0 .text            __dt__14dMsgScrnBoss_cFv */
 dMsgScrnBoss_c::~dMsgScrnBoss_c() {
     delete mpScreen;
     mpScreen = NULL;
@@ -76,7 +74,6 @@ dMsgScrnBoss_c::~dMsgScrnBoss_c() {
     dComIfGp_getMsgArchive(4)->removeResourceAll();
 }
 
-/* 8023CA88-8023CB98 2373C8 0110+00 1/0 0/0 0/0 .text            exec__14dMsgScrnBoss_cFv */
 void dMsgScrnBoss_c::exec() {
     mpPmP_c->scale(g_MsgObject_HIO_c.mBossNameScaleX, g_MsgObject_HIO_c.mBossNameScaleY);
 
@@ -93,14 +90,12 @@ void dMsgScrnBoss_c::exec() {
     }
 }
 
-/* 8023CB98-8023CBF0 2374D8 0058+00 1/0 0/0 0/0 .text            drawSelf__14dMsgScrnBoss_cFv */
 void dMsgScrnBoss_c::drawSelf() {
     J2DGrafContext* ctx = dComIfGp_getCurrentGrafPort();
     ctx->setup2D();
     drawOutFont(0.0f, 0.0f, 1.0f);
 }
 
-/* 8023CBF0-8023CC7C 237530 008C+00 1/0 0/0 0/0 .text            fukiAlpha__14dMsgScrnBoss_cFf */
 void dMsgScrnBoss_c::fukiAlpha(f32 i_alpha) {
     mpPmP_c->setAlphaRate(i_alpha);
     mpBaseParent->setAlphaRate(i_alpha * g_MsgObject_HIO_c.mBossNameBaseAlpha);
@@ -110,11 +105,8 @@ void dMsgScrnBoss_c::fukiAlpha(f32 i_alpha) {
     }
 }
 
-/* 8023CC7C-8023CC80 2375BC 0004+00 1/0 0/0 0/0 .text            fukiScale__14dMsgScrnBoss_cFf */
 void dMsgScrnBoss_c::fukiScale(f32) {}
 
-/* 8023CC80-8023CC84 2375C0 0004+00 1/0 0/0 0/0 .text            fukiTrans__14dMsgScrnBoss_cFff */
 void dMsgScrnBoss_c::fukiTrans(f32, f32) {}
 
-/* 8023CC84-8023CC88 2375C4 0004+00 1/0 0/0 0/0 .text            fontAlpha__14dMsgScrnBoss_cFf */
 void dMsgScrnBoss_c::fontAlpha(f32) {}

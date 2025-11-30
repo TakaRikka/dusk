@@ -8,8 +8,8 @@
  * 
  */
 struct JASSoundParams {
-    /* 8029E3B0 */ void clamp();
-    /* 8029E47C */ void combine(JASSoundParams const&, JASSoundParams const&);
+    void clamp();
+    void combine(JASSoundParams const&, JASSoundParams const&);
 
     void initVolume() { mVolume = 1.0f; }
     void initFxMix() { mFxMix = 0.0f; }

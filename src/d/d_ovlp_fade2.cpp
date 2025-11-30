@@ -11,7 +11,6 @@
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_graphic.h"
 
-/* 8025247C-80252990 24CDBC 0514+00 1/0 0/0 0/0 .text            draw__15dOvlpFd2_dlst_cFv */
 void dOvlpFd2_dlst_c::draw() {
     GXSetViewport(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT, 0.0f, 1.0f);
     GXSetScissor(0, 0, FB_WIDTH, FB_HEIGHT);
@@ -104,14 +103,12 @@ void dOvlpFd2_dlst_c::draw() {
     graf_ctx->setup2D();
 }
 
-/* 80252990-802529F4 24D2D0 0064+00 1/1 0/0 0/0 .text            __ct__10dOvlpFd2_cFv */
 dOvlpFd2_c::dOvlpFd2_c() {
     setExecute(&dOvlpFd2_c::execFirstSnap);
     dComIfGp_2dShowOff();
     mTimer = 2;
 }
 
-/* 802529F4-80252A78 24D334 0084+00 1/0 0/0 0/0 .text            execFirstSnap__10dOvlpFd2_cFv */
 void dOvlpFd2_c::execFirstSnap() {
     if (field_0x11c != 0) {
         if (cLib_calcTimer<s8>(&mTimer) == 0) {
@@ -124,7 +121,6 @@ void dOvlpFd2_c::execFirstSnap() {
     }
 }
 
-/* 80252A78-80252BC0 24D3B8 0148+00 1/0 0/0 0/0 .text            execFadeOut__10dOvlpFd2_cFv */
 void dOvlpFd2_c::execFadeOut() {
     dComIfGp_setWindowNum(0);
     cLib_chaseAngleS(&field_0x112, 2000, 100);
@@ -158,7 +154,6 @@ void dOvlpFd2_c::execFadeOut() {
     cLib_addCalc2(&field_0x118, TREG_F(1) + 1.0f, 1.0f, TREG_F(2) + 0.05f);
 }
 
-/* 80252BC0-80252C68 24D500 00A8+00 1/0 0/0 0/0 .text            execNextSnap__10dOvlpFd2_cFv */
 void dOvlpFd2_c::execNextSnap() {
     if (cLib_calcTimer<s8>(&mTimer) == 0) {
         if (!JFWDisplay::getManager()->getFader()->startFadeIn(16)) {
@@ -172,7 +167,6 @@ void dOvlpFd2_c::execNextSnap() {
     }
 }
 
-/* 80252C68-80252D0C 24D5A8 00A4+00 1/0 0/0 0/0 .text            execFadeIn__10dOvlpFd2_cFv */
 void dOvlpFd2_c::execFadeIn() {
     field_0x114 -= TREG_S(0) + 0x800;
 
@@ -209,7 +203,6 @@ void dOvlpFd2_c::draw() {
     mDoGph_gInf_c::offBlure();
 }
 
-/* 80252D0C-80252E08 24D64C 00FC+00 1/0 0/0 0/0 .text            dOvlpFd2_Draw__FP10dOvlpFd2_c */
 static int dOvlpFd2_Draw(dOvlpFd2_c* i_this) {
     i_this->draw();
     return 1;
@@ -219,37 +212,30 @@ void dOvlpFd2_c::execute() {
     (this->*mExecuteFn)();
 }
 
-/* 80252E08-80252E34 24D748 002C+00 1/0 0/0 0/0 .text            dOvlpFd2_Execute__FP10dOvlpFd2_c */
 static int dOvlpFd2_Execute(dOvlpFd2_c* i_this) {
     i_this->execute();
     return 1;
 }
 
-/* 80252E34-80252E3C 24D774 0008+00 1/0 0/0 0/0 .text            dOvlpFd2_IsDelete__FP10dOvlpFd2_c
- */
 static int dOvlpFd2_IsDelete(dOvlpFd2_c* i_this) {
     return 1;
 }
 
-/* 80252E3C-80252E44 24D77C 0008+00 1/0 0/0 0/0 .text            dOvlpFd2_Delete__FP10dOvlpFd2_c */
 static int dOvlpFd2_Delete(dOvlpFd2_c* i_this) {
     return 1;
 }
 
-/* 80252E44-80252E70 24D784 002C+00 1/0 0/0 0/0 .text            dOvlpFd2_Create__FPv */
 static int dOvlpFd2_Create(void* i_this) {
     new (i_this) dOvlpFd2_c();
     return cPhs_COMPLEATE_e;
 }
 
-/* 803C2D20-803C2D34 -00001 0014+00 1/0 0/0 0/0 .data            l_dOvlpFd2_Method */
 static leafdraw_method_class l_dOvlpFd2_Method = {
     (process_method_func)dOvlpFd2_Create,  (process_method_func)dOvlpFd2_Delete,
     (process_method_func)dOvlpFd2_Execute, (process_method_func)dOvlpFd2_IsDelete,
     (process_method_func)dOvlpFd2_Draw,
 };
 
-/* 803C2D34-803C2D5C -00001 0028+00 0/0 0/0 1/0 .data            g_profile_OVERLAP2 */
 extern overlap_process_profile_definition g_profile_OVERLAP2 = {
     fpcLy_ROOT_e,
     2,

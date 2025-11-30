@@ -6,11 +6,11 @@
 
 class daTag_Lantern_c : public fopAc_ac_c {
 public:
-    /* 8048ED28 */ int create();
-    /* 8048EDA8 */ int Delete();
-    /* 8048EDDC */ int Execute();
-    /* 8048EF6C */ int Draw();
-    /* 8048EF74 */ void initialize();
+    int create();
+    int Delete();
+    int Execute();
+    int Draw();
+    void initialize();
 
     BOOL chkClimbDownLadderStatus() {
         f32 var_f31 = fopAcM_searchPlayerDistanceY(this);
@@ -35,12 +35,12 @@ public:
     /* 0x600 */ int mFlowIndex;
     /* 0x604 */ u8 field_0x604;
     
-    /* 8048ECAC */ virtual ~daTag_Lantern_c();
+    virtual ~daTag_Lantern_c();
 }; // Size: 0x60C
 
 class daTag_Lantern_Param_c {
 public:
-    /* 8048F0EC */ inline virtual ~daTag_Lantern_Param_c() {}
+    inline virtual ~daTag_Lantern_Param_c() {}
 };
 
 #endif /* D_A_TAG_LANTERN_H */

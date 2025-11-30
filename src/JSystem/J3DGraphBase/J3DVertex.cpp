@@ -6,7 +6,6 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include <string.h>
 
-/* 80310EF8-80310F78 30B838 0080+00 0/0 1/1 0/0 .text            __ct__13J3DVertexDataFv */
 J3DVertexData::J3DVertexData() {
     mVtxNum = 0;
     mNrmNum = 0;
@@ -31,8 +30,6 @@ J3DVertexData::J3DVertexData() {
     mVtxNrmType = GX_F32;
 }
 
-/* 80310F78-80310FD8 30B8B8 0060+00 0/0 1/1 0/0 .text
- * setVertexData__15J3DVertexBufferFP13J3DVertexData            */
 void J3DVertexBuffer::setVertexData(J3DVertexData* pVtxData) {
     J3D_ASSERT_NULLPTR(175, pVtxData != NULL);
 
@@ -52,7 +49,6 @@ void J3DVertexBuffer::setVertexData(J3DVertexData* pVtxData) {
     frameInit();
 }
 
-/* 80310FD8-80311030 30B918 0058+00 0/0 3/3 0/0 .text            init__15J3DVertexBufferFv */
 void J3DVertexBuffer::init() {
     mVtxData = NULL;
 
@@ -69,18 +65,14 @@ void J3DVertexBuffer::init() {
     frameInit();
 }
 
-/* 80311030-8031106C 30B970 003C+00 0/0 1/1 0/0 .text            __dt__15J3DVertexBufferFv */
 J3DVertexBuffer::~J3DVertexBuffer() {}
 
-/* 8031106C-80311090 30B9AC 0024+00 0/0 1/1 0/0 .text            setArray__15J3DVertexBufferCFv */
 void J3DVertexBuffer::setArray() const {
     j3dSys.setVtxPos(mCurrentVtxPos);
     j3dSys.setVtxNrm(mCurrentVtxNrm);
     j3dSys.setVtxCol(mCurrentVtxCol);
 }
 
-/* 80311090-803111B0 30B9D0 0120+00 1/1 0/0 0/0 .text copyLocalVtxPosArray__15J3DVertexBufferFUl
- */
 s32 J3DVertexBuffer::copyLocalVtxPosArray(u32 flag) {
     if (flag & 1) {
         for (int i = 0; i < 2; i++) {
@@ -109,8 +101,6 @@ s32 J3DVertexBuffer::copyLocalVtxPosArray(u32 flag) {
     return kJ3DError_Success;
 }
 
-/* 803111B0-803112D0 30BAF0 0120+00 1/1 0/0 0/0 .text copyLocalVtxNrmArray__15J3DVertexBufferFUl
- */
 s32 J3DVertexBuffer::copyLocalVtxNrmArray(u32 flag) {
     if (flag & 1) {
         for (int i = 0; i < 2; i++) {
@@ -139,7 +129,6 @@ s32 J3DVertexBuffer::copyLocalVtxNrmArray(u32 flag) {
     return kJ3DError_Success;
 }
 
-/* 803112D0-80311478 30BC10 01A8+00 0/0 1/1 0/0 .text copyLocalVtxArray__15J3DVertexBufferFUl */
 s32 J3DVertexBuffer::copyLocalVtxArray(u32 flag) {
     void* oldPosArray[2];
     void* oldNrmArray[2];
@@ -191,8 +180,6 @@ s32 J3DVertexBuffer::copyLocalVtxArray(u32 flag) {
     return kJ3DError_Success;
 }
 
-/* 80311478-8031152C 30BDB8 00B4+00 0/0 1/1 0/0 .text
- * allocTransformedVtxPosArray__15J3DVertexBufferFv             */
 s32 J3DVertexBuffer::allocTransformedVtxPosArray() {
     if (mTransformedVtxPosArray[0] != NULL && mTransformedVtxPosArray[1] != NULL)
         return kJ3DError_Success;
@@ -208,8 +195,6 @@ s32 J3DVertexBuffer::allocTransformedVtxPosArray() {
     return kJ3DError_Success;
 }
 
-/* 8031152C-803115E0 30BE6C 00B4+00 0/0 1/1 0/0 .text
- * allocTransformedVtxNrmArray__15J3DVertexBufferFv             */
 s32 J3DVertexBuffer::allocTransformedVtxNrmArray() {
     if (mTransformedVtxNrmArray[0] != NULL && mTransformedVtxNrmArray[1] != NULL)
         return kJ3DError_Success;
@@ -225,12 +210,10 @@ s32 J3DVertexBuffer::allocTransformedVtxNrmArray() {
     return kJ3DError_Success;
 }
 
-/* 803115E0-803115F4 30BF20 0014+00 0/0 1/1 0/0 .text            __ct__14J3DDrawMtxDataFv */
 J3DDrawMtxData::J3DDrawMtxData() {
     mEntryNum = 0;
     mDrawMtxFlag = NULL;
     mDrawMtxIndex = NULL;
 }
 
-/* 803115F4-80311630 30BF34 003C+00 0/0 2/2 0/0 .text            __dt__14J3DDrawMtxDataFv */
 J3DDrawMtxData::~J3DDrawMtxData() {}

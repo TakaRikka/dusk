@@ -5,19 +5,19 @@
 
 class daTag_EvtArea_c : public fopAc_ac_c {
 public:
-    /* 8048C4F8 */ cPhs__Step create();
-    /* 8048C728 */ BOOL Delete();
-    /* 8048C730 */ BOOL Execute();
-    /* 8048C894 */ BOOL Draw();
-    /* 8048C89C */ BOOL isDelete();
-    /* 8048C94C */ BOOL chkPointInArea(cXyz, cXyz);
+    cPhs__Step create();
+    BOOL Delete();
+    BOOL Execute();
+    BOOL Draw();
+    BOOL isDelete();
+    BOOL chkPointInArea(cXyz, cXyz);
 
-    /* 8048CD08 */ BOOL chkPointInArea(cXyz param_0) {
+    BOOL chkPointInArea(cXyz param_0) {
         cXyz local_28(0.0f, 0.0f, 0.0f);
         return chkPointInArea(param_0, local_28);
     }
 
-    /* 8048CD68 */ virtual ~daTag_EvtArea_c() {}
+    virtual ~daTag_EvtArea_c() {}
 
     int getType() {
         u16 type = shape_angle.z & 0xFF;

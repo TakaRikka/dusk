@@ -16,7 +16,7 @@ public:
     JAUBankTable(u32 param_0, JASBank** param_1, u32 param_2) : mBankPtrTable(param_1, param_2) {
         field_0xc = param_0;
     }
-    /* 802A4AA0 */ const JASBank* getBank(u32 bank) const { return mBankPtrTable.get(bank); }
+    const JASBank* getBank(u32 bank) const { return mBankPtrTable.get(bank); }
     JASBank* getBank(u32 bank) { return mBankPtrTable.get(bank); }
 
     void registBank(u32 param_0, JASBank* param_1) { mBankPtrTable.set(param_0, param_1); }
@@ -39,7 +39,7 @@ public:
  * 
  */
 struct JAUBankTableDictionary : JSUList<JAUBankTable> {
-    /* 802A4A80 */ void appendBankTable(JSULink<JAUBankTable>*);
+    void appendBankTable(JSULink<JAUBankTable>*);
 };
 
 class JASWaveBank;

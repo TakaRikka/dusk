@@ -10,23 +10,19 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-/* 807A6F58-807A6F60 000078 0008+00 1/0 0/0 0/0 .text daE_ST_LINE_Draw__FP15e_st_line_class */
 static int daE_ST_LINE_Draw(e_st_line_class* i_this) {
     cXyz unused;  // necessary to generate weak cXyz dtor
     return 1;
 }
 
-/* 807A6F9C-807A6FA4 0000BC 0008+00 2/1 0/0 0/0 .text daE_ST_LINE_Execute__FP15e_st_line_class */
 static int daE_ST_LINE_Execute(e_st_line_class* i_this) {
     return 1;
 }
 
-/* 807A6FA4-807A6FAC 0000C4 0008+00 1/0 0/0 0/0 .text daE_ST_LINE_IsDelete__FP15e_st_line_class */
 static int daE_ST_LINE_IsDelete(e_st_line_class* i_this) {
     return 1;
 }
 
-/* 807A6FAC-807A7008 0000CC 005C+00 1/0 0/0 0/0 .text daE_ST_LINE_Delete__FP15e_st_line_class */
 static int daE_ST_LINE_Delete(e_st_line_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_st");
     if (i_this->field_0xcc4 == 0 && i_this->heap != NULL) {
@@ -74,7 +70,6 @@ f32 dummyLiteralOrder3() {
     return dummy;
 }
 
-/* 807A7008-807A707C 000128 0074+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_st_line_class* a_this = (e_st_line_class*)i_this;
 
@@ -91,8 +86,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 807A707C-807A7220 00019C 01A4+00 1/0 0/0 0/0 .text            daE_ST_LINE_Create__FP10fopAc_ac_c
- */
 static int daE_ST_LINE_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, e_st_line_class);
     e_st_line_class* a_this = (e_st_line_class*)i_this;
@@ -123,14 +116,12 @@ static int daE_ST_LINE_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 807A72A4-807A72C4 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_ST_LINE_Method */
 static actor_method_class l_daE_ST_LINE_Method = {
     (process_method_func)daE_ST_LINE_Create,  (process_method_func)daE_ST_LINE_Delete,
     (process_method_func)daE_ST_LINE_Execute, (process_method_func)daE_ST_LINE_IsDelete,
     (process_method_func)daE_ST_LINE_Draw,
 };
 
-/* 807A72C4-807A72F4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_ST_LINE */
 extern actor_process_profile_definition g_profile_E_ST_LINE = {
     fpcLy_CURRENT_e,
     7,

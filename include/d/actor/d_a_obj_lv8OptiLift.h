@@ -26,36 +26,36 @@ public:
         MODE_INIT_SET2_e,
     };
 
-    /* 80C8A3B0 */ void setBaseMtx();
-    /* 80C8A500 */ int create();
-    /* 80C8A780 */ void lightSet();
-    /* 80C8A7D0 */ static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-    /* 80C8A848 */ void moveLift();
-    /* 80C8AAC4 */ void init_modeAcc();
-    /* 80C8AAD0 */ void modeAcc();
-    /* 80C8ABB0 */ void init_modeMove();
-    /* 80C8ABBC */ void modeMove();
-    /* 80C8AED4 */ void init_modeBrk();
-    /* 80C8AEE0 */ void modeBrk();
-    /* 80C8B100 */ void init_modeMoveInit();
-    /* 80C8B1B0 */ void modeMoveInit();
-    /* 80C8B1F0 */ void init_modeMoveWait();
-    /* 80C8B230 */ void modeMoveWait();
-    /* 80C8B288 */ void init_modeWait();
-    /* 80C8B294 */ void modeWait();
-    /* 80C8B298 */ void init_modeStop();
-    /* 80C8B318 */ void modeStop();
-    /* 80C8B428 */ void init_modeInitSet();
-    /* 80C8B464 */ void modeInitSet();
-    /* 80C8B484 */ void init_modeInitSet2();
-    /* 80C8B4B8 */ void modeInitSet2();
-    /* 80C8B4D8 */ void liftReset();
-    /* 80C8B53C */ void setNextPoint();
+    void setBaseMtx();
+    int create();
+    void lightSet();
+    static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+    void moveLift();
+    void init_modeAcc();
+    void modeAcc();
+    void init_modeMove();
+    void modeMove();
+    void init_modeBrk();
+    void modeBrk();
+    void init_modeMoveInit();
+    void modeMoveInit();
+    void init_modeMoveWait();
+    void modeMoveWait();
+    void init_modeWait();
+    void modeWait();
+    void init_modeStop();
+    void modeStop();
+    void init_modeInitSet();
+    void modeInitSet();
+    void init_modeInitSet2();
+    void modeInitSet2();
+    void liftReset();
+    void setNextPoint();
 
-    /* 80C8A438 */ virtual int CreateHeap();
-    /* 80C8A7E8 */ virtual int Execute(Mtx**);
-    /* 80C8B66C */ virtual int Draw();
-    /* 80C8B824 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getPthID() { return fopAcM_GetParamBit(this, 8, 8); }
     int getMoveSpped() { return fopAcM_GetParamBit(this, 0x10, 4); }
@@ -91,8 +91,8 @@ STATIC_ASSERT(sizeof(daOptiLift_c) == 0x618);
 
 class daOptiLift_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C8A30C */ daOptiLift_HIO_c();
-    /* 80C8B900 */ virtual ~daOptiLift_HIO_c() {}
+    daOptiLift_HIO_c();
+    virtual ~daOptiLift_HIO_c() {}
 
     void genMessage(JORMContext*);
 

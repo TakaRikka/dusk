@@ -25,36 +25,36 @@ public:
     u8 getItemNo() { return fopAcM_GetParamBit(this,8,8); }
     u8 getItemBit() { return fopAcM_GetParamBit(this,16,8); }
 
-    /* 80CE93C4 */ void initBaseMtx();
-    /* 80CE9468 */ void setBaseMtx();
-    /* 80CE9540 */ int Create();
-    /* 80CE97C0 */ bool CreateHeap();
-    /* 80CE9840 */ int create();
-    /* 80CE9BA0 */ int execute();
-    /* 80CE9CF8 */ void mode_proc_call();
-    /* 80CEAF88 */ void init_modePutWait();
-    /* 80CEAFD8 */ void modePutWait();
-    /* 80CEAFE8 */ void init_modeWait();
-    /* 80CEB01C */ void modeWait();
-    /* 80CEB0B8 */ void init_modeDrop();
-    /* 80CEB0F8 */ void modeDrop();
-    /* 80CEB35C */ void init_modeCarry();
-    /* 80CEB480 */ void modeCarry();
-    /* 80CEB6E8 */ void init_modeWalk();
-    /* 80CEB720 */ void modeWalk();
-    /* 80CEBCDC */ void init_modePushWolfNonBreak();
-    /* 80CEBE24 */ void init_modeYogan();
-    /* 80CEBE84 */ void modeYogan();
-    /* 80CEBF1C */ void init_modeBreak();
-    /* 80CEC180 */ void modeBreak();
-    /* 80CEC1AC */ void CrrPos();
-    /* 80CEC264 */ void createItem();
-    /* 80CEC33C */ void calcRotBaseMtx(s16*);
-    /* 80CEC5BC */ int checkRollAngle();
-    /* 80CEC6D8 */ void set_carry_eff();
-    /* 80CEC7DC */ void effect_delete(bool);
-    /* 80CEC888 */ int draw();
-    /* 80CEC948 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    bool CreateHeap();
+    int create();
+    int execute();
+    void mode_proc_call();
+    void init_modePutWait();
+    void modePutWait();
+    void init_modeWait();
+    void modeWait();
+    void init_modeDrop();
+    void modeDrop();
+    void init_modeCarry();
+    void modeCarry();
+    void init_modeWalk();
+    void modeWalk();
+    void init_modePushWolfNonBreak();
+    void init_modeYogan();
+    void modeYogan();
+    void init_modeBreak();
+    void modeBreak();
+    void CrrPos();
+    void createItem();
+    void calcRotBaseMtx(s16*);
+    int checkRollAngle();
+    void set_carry_eff();
+    void effect_delete(bool);
+    int draw();
+    int _delete();
 
 private:
     /* 0x0568 */ request_of_phase_process_class mPhase;

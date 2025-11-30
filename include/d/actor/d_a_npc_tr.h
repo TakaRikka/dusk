@@ -38,8 +38,8 @@ public:
 
 class daNPC_TR_HIO_c {
 public:
-    /* 80B25A0C */ daNPC_TR_HIO_c();
-    /* 80B264E4 */ virtual ~daNPC_TR_HIO_c();
+    daNPC_TR_HIO_c();
+    virtual ~daNPC_TR_HIO_c();
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ f32 field_0x8;

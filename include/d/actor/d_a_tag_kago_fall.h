@@ -11,12 +11,12 @@ public:
         /* 1 */ ACTION_MODE_FALL
     };
 
-    /* 80D59C58 */ int create();
-    /* 80D59DE0 */ int execute();
-    /* 80D59E18 */ void setActionMode(ActionMode mode, u8 state);
-    /* 80D59E24 */ void actionWaitRiver();
-    /* 80D5A218 */ void actionWaitFall();
-    /* 80D5A67C */ int _delete();
+    int create();
+    int execute();
+    void setActionMode(ActionMode mode, u8 state);
+    void actionWaitRiver();
+    void actionWaitFall();
+    int _delete();
 
     /* 0x568 */ dMsgFlow_c mMsgFlow;
     /* 0x5b4 */ Mtx mMtx;

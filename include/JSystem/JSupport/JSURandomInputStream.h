@@ -22,9 +22,9 @@ public:
     /* vt[8] */ virtual s32 seekPos(s32, JSUStreamSeekFrom) = 0;
 
     // TODO: fix return types
-    /* 802DC370 */ s32 align(s32);
-    /* 802DC458 */ s32 peek(void*, s32);
-    /* 802DC4DC */ s32 seek(s32, JSUStreamSeekFrom);
+    s32 align(s32);
+    s32 peek(void*, s32);
+    s32 seek(s32, JSUStreamSeekFrom);
 };  // Size = 0x8
 
 #endif

@@ -14,7 +14,6 @@ static int dKyeff_Draw(dKyeff_c* i_this) {
     return 1;
 }
 
-/* 801ADD5C-801ADDB4 1A869C 0058+00 1/1 0/0 0/0 .text            execute__8dKyeff_cFv */
 int dKyeff_c::execute() {
     if (strcmp(dComIfGp_getStartStageName(), "Name")) {
         dKyw_wether_move();
@@ -52,7 +51,6 @@ static f32 dummyLiteralOrder3(s32 hours) {
     return hours;
 }
 
-/* 801ADE00-801ADEA0 1A8740 00A0+00 1/0 0/0 0/0 .text            dKyeff_Create__FP12kankyo_class */
 static int dKyeff_Create(kankyo_class* i_this) {
     OSCalendarTime time;
 
@@ -67,15 +65,12 @@ static int dKyeff_Create(kankyo_class* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* ############################################################################################## */
-/* 803BC158-803BC16C -00001 0014+00 1/0 0/0 0/0 .data            l_dKyeff_Method */
 static leafdraw_method_class l_dKyeff_Method = {
     (process_method_func)dKyeff_Create,  (process_method_func)dKyeff_Delete,
     (process_method_func)dKyeff_Execute, (process_method_func)dKyeff_IsDelete,
     (process_method_func)dKyeff_Draw,
 };
 
-/* 803BC16C-803BC198 -00001 0028+04 0/0 0/0 1/0 .data            g_profile_KYEFF */
 extern kankyo_process_profile_definition g_profile_KYEFF = {
     fpcLy_CURRENT_e,
     12,

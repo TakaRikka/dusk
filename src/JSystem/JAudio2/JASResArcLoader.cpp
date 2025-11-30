@@ -10,8 +10,6 @@
 #include "JSystem/JAudio2/JASTaskThread.h"
 
 
-/* 80290BD0-80290C04 28B510 0034+00 0/0 2/2 0/0 .text
- * getResSize__15JASResArcLoaderFPC10JKRArchiveUs               */
 size_t JASResArcLoader::getResSize(JKRArchive const* i_archiveP, u16 i_resourceID) {    
     JKRArchive::SDIFileEntry* file = i_archiveP->findIdResource(i_resourceID);
 
@@ -22,8 +20,6 @@ size_t JASResArcLoader::getResSize(JKRArchive const* i_archiveP, u16 i_resourceI
     return file->data_size;
 }
 
-/* 80290C04-80290C7C 28B544 0078+00 0/0 1/1 0/0 .text
- * getResMaxSize__15JASResArcLoaderFPC10JKRArchive              */
 size_t JASResArcLoader::getResMaxSize(JKRArchive const* i_archiveP) {
     u32 maxSize, index;
     u32 fileEntries = i_archiveP->countFile();
@@ -40,8 +36,6 @@ size_t JASResArcLoader::getResMaxSize(JKRArchive const* i_archiveP) {
     return maxSize;
 }
 
-/* 80290C7C-80290D18 28B5BC 009C+00 1/1 0/0 0/0 .text loadResourceCallback__15JASResArcLoaderFPv
- */
 static void JASResArcLoader::loadResourceCallback(void* args) {
     CallbackArgs* castedArgs = static_cast<CallbackArgs*>(args);
 	u32 readResult           = castedArgs->mArchive->readResource(castedArgs->mBuffer, castedArgs->mBufferSize, castedArgs->mID);
@@ -60,8 +54,6 @@ static void JASResArcLoader::loadResourceCallback(void* args) {
 	}
 }
 
-/* 80290D18-80290D74 28B658 005C+00 0/0 1/1 0/0 .text
- * loadResourceAsync__15JASResArcLoaderFP10JKRArchiveUsPUcUlPFUlUl_vUl */
 
 int JASResArcLoader::loadResourceAsync(JKRArchive* archive, u16 id, u8* buffer, u32 size, LoadCallback callback, u32 cbArg)
 {

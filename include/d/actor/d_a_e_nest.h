@@ -9,8 +9,8 @@
 #include "Z2AudioLib/Z2Creature.h"
 
 struct nest_hahen_s {
-    /* 805044E8 */ nest_hahen_s() {}
-    /* 805044AC */ ~nest_hahen_s() {}
+    nest_hahen_s() {}
+    ~nest_hahen_s() {}
 
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ cXyz mPos;
@@ -112,8 +112,8 @@ STATIC_ASSERT(sizeof(e_nest_class) == 0xCF8);
 
 class daE_Nest_HIO_c {
 public:
-    /* 80500F8C */ daE_Nest_HIO_c();
-    /* 80504634 */ virtual ~daE_Nest_HIO_c() {}
+    daE_Nest_HIO_c();
+    virtual ~daE_Nest_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mScale;

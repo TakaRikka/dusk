@@ -17,11 +17,11 @@ class dPath;
  */
 class daPasserMng_c : public fopAc_ac_c {
 public:
-    /* 80D45738 */ int execute();
-    /* 80D4597C */ int getPasserParam();
-    /* 80D45E14 */ int getLuggageParamHigh(u32);
-    /* 80D46768 */ int create();
-    /* 80D467C0 */ void create_init();
+    int execute();
+    int getPasserParam();
+    int getLuggageParamHigh(u32);
+    int create();
+    void create_init();
     ~daPasserMng_c() { delete [] childProcIds; }
 
     u8 getDetailLevel() { return argument; }

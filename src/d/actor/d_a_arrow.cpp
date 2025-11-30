@@ -18,7 +18,6 @@
 #include "d/actor/d_a_horse.h"
 #include "d/actor/d_a_hozelda.h"
 
-/* 80499C6C-80499D6C 0000EC 0100+00 1/1 0/0 0/0 .text            createHeap__9daArrow_cFv */
 int daArrow_c::createHeap() {
     J3DModelData* model_data;
 
@@ -49,18 +48,14 @@ int daArrow_c::createHeap() {
     return TRUE;
 }
 
-/* 8049DC84-8049DC90 000000 000C+00 15/15 0/0 0/0 .rodata          @3768 */
 static u8 const lit_3768[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 80499D6C-80499D8C 0001EC 0020+00 1/1 0/0 0/0 .text            daArrow_createHeap__FP10fopAc_ac_c
- */
 static int daArrow_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daArrow_c*>(i_this)->createHeap();
 }
 
-/* 8049DC90-8049DCDC 00000C 004C+00 0/1 0/0 0/0 .rodata          l_atCpsSrc */
 const static dCcD_SrcCps l_atCpsSrc = {
     {
         {0x0, {{AT_TYPE_ARROW, 0x2, 0x1b}, {0xd8fbffff, 0x11}, 0x0}}, // mObj
@@ -73,7 +68,6 @@ const static dCcD_SrcCps l_atCpsSrc = {
     } // mCpsAttr
 };
 
-/* 8049DCDC-8049DD1C 000058 0040+00 0/1 0/0 0/0 .rodata          l_coSphSrc */
 const static dCcD_SrcSph l_coSphSrc = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x0}, 0x319}}, // mObj
@@ -86,8 +80,6 @@ const static dCcD_SrcSph l_coSphSrc = {
     } // mSphAttr
 };
 
-/* 80499D8C-80499F9C 00020C 0210+00 1/1 0/0 0/0 .text
- * atHitCallBack__9daArrow_cFP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 void daArrow_c::atHitCallBack(dCcD_GObjInf* i_atObjInf, fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf) {
     if (i_tgObjInf->ChkTgArrowThrough()) {
         if (i_tgActor != NULL && fopAcM_GetName(i_tgActor) == PROC_E_PZ) {
@@ -116,13 +108,10 @@ void daArrow_c::atHitCallBack(dCcD_GObjInf* i_atObjInf, fopAc_ac_c* i_tgActor, d
     }
 }
 
-/* 80499F9C-80499FBC 00041C 0020+00 1/1 0/0 0/0 .text
- * daArrow_atHitCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void daArrow_atHitCallBack(fopAc_ac_c* i_this, dCcD_GObjInf* i_atObjInf, fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf) {
     static_cast<daArrow_c*>(i_this)->atHitCallBack(i_atObjInf, i_tgActor, i_tgObjInf);
 }
 
-/* 80499FBC-8049A04C 00043C 0090+00 5/5 0/0 0/0 .text            decAlphaBlur__9daArrow_cFv */
 void daArrow_c::decAlphaBlur() {
     for (int i = 0; i < field_0x946; i++) {
         JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(field_0x97c[0]);
@@ -138,7 +127,6 @@ void daArrow_c::decAlphaBlur() {
     }
 }
 
-/* 8049A04C-8049A110 0004CC 00C4+00 5/5 0/0 0/0 .text            setBlur__9daArrow_cFv */
 void daArrow_c::setBlur() {
     for (int i = 0; i < field_0x946; i++) {
         field_0x97c[i] = dComIfGp_particle_set(field_0x97c[i], field_0x94c, &current.pos, &tevStr);
@@ -146,7 +134,6 @@ void daArrow_c::setBlur() {
     }
 }
 
-/* 8049A110-8049A1EC 000590 00DC+00 1/1 0/0 0/0 .text setLightArrowHitMark__9daArrow_cFPC4cXyz */
 void daArrow_c::setLightArrowHitMark(cXyz const* param_0) {
     static u16 const effName[] = {0x896F, 0x8970, 0x8971, 0x8972, 0x8973, 0x8974};
     for (int i = 0; i < 6; i++) {
@@ -157,8 +144,6 @@ void daArrow_c::setLightArrowHitMark(cXyz const* param_0) {
     mSoundObjArrow.startSound(Z2SE_ZELDA_ARROW_HIT, 0, mReverb);
 }
 
-/* 8049A1EC-8049A334 00066C 0148+00 2/2 0/0 0/0 .text            setLightChargeEffect__9daArrow_cFi
- */
 void daArrow_c::setLightChargeEffect(int param_0) {
     static u16 const effName[] = {0x8975, 0x8976, 0x8977, 0x8978};
     static Vec const localEffPos = {0.0f, 0.0f, 90.0f};
@@ -180,8 +165,6 @@ void daArrow_c::setLightChargeEffect(int param_0) {
     }
 }
 
-/* 8049A370-8049A76C 0007F0 03FC+00 2/2 0/0 0/0 .text
- * setArrowWaterNextPos__9daArrow_cFP4cXyzP4cXyz                */
 int daArrow_c::setArrowWaterNextPos(cXyz* i_start, cXyz* i_end) {
     field_0x5dc.Set(i_start, i_end, this);
 
@@ -220,7 +203,6 @@ int daArrow_c::setArrowWaterNextPos(cXyz* i_start, cXyz* i_end) {
     return 0;
 }
 
-/* 8049A76C-8049A9CC 000BEC 0260+00 2/2 0/0 0/0 .text            setArrowAt__9daArrow_cFf */
 void daArrow_c::setArrowAt(f32 param_0) {
     daAlink_c* player = daAlink_getAlinkActorClass();
 
@@ -274,7 +256,6 @@ void daArrow_c::setArrowAt(f32 param_0) {
     dComIfG_Ccsp()->SetMass(&field_0x688, 1);
 }
 
-/* 8049A9CC-8049AC84 000E4C 02B8+00 2/2 0/0 0/0 .text            arrowShooting__9daArrow_cFv */
 void daArrow_c::arrowShooting() {
     daAlink_c* link = daAlink_getAlinkActorClass();
 
@@ -347,13 +328,11 @@ void daArrow_c::arrowShooting() {
     clearNearActorData();
 }
 
-/* 8049AC84-8049ACE0 001104 005C+00 3/3 0/0 0/0 .text setBombArrowExplode__9daArrow_cFP4cXyz */
 void daArrow_c::setBombArrowExplode(cXyz* param_0) {
     dBomb_c::createNormalBombExplode(param_0);
     field_0x93f = 1;
 }
 
-/* 8049ACE0-8049AD74 001160 0094+00 1/1 0/0 0/0 .text            setRoomInfo__9daArrow_cFv */
 void daArrow_c::setRoomInfo() {
     int roomNo;
 
@@ -369,14 +348,12 @@ void daArrow_c::setRoomInfo() {
     fopAcM_SetRoomNo(this, roomNo);
 }
 
-/* 8049AD74-8049AD94 0011F4 0020+00 2/2 0/0 0/0 .text            clearNearActorData__9daArrow_cFv */
 void daArrow_c::clearNearActorData() {
     field_0x93e = 0;
     field_0x998 = FLT_MAX;
     mHitAcID = -1;
 }
 
-/* 8049AD94-8049AE64 001214 00D0+00 2/2 0/0 0/0 .text            getVibAngle__9daArrow_cFv */
 s16 daArrow_c::getVibAngle() {
     s16 angle;
     if (cLib_calcTimer(&field_0x952)) {
@@ -391,7 +368,6 @@ s16 daArrow_c::getVibAngle() {
     return angle;
 }
 
-/* 8049AE64-8049AF18 0012E4 00B4+00 4/4 0/0 0/0 .text            setNormalMatrix__9daArrow_cFv */
 void daArrow_c::setNormalMatrix() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, 0);
@@ -406,7 +382,6 @@ void daArrow_c::setNormalMatrix() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 8049AF18-8049AFEC 001398 00D4+00 3/3 0/0 0/0 .text            setSmokePos__9daArrow_cFv */
 void daArrow_c::setSmokePos() {
     static cXyz localOffset(-3.3f, -3.0f, 94.0f);
 
@@ -416,7 +391,6 @@ void daArrow_c::setSmokePos() {
     mSmokePos = (field_0x9cc - field_0x9d8) * 0.9f;
 }
 
-/* 8049AFEC-8049B120 00146C 0134+00 3/3 0/0 0/0 .text            setKeepMatrix__9daArrow_cFv */
 void daArrow_c::setKeepMatrix() {
     if (mArrowType == 2) {
         daHoZelda_c* actor = (daHoZelda_c*)field_0xa08.getActor();
@@ -440,7 +414,6 @@ void daArrow_c::setKeepMatrix() {
     current.angle.x = -shape_angle.x;
 }
 
-/* 8049B120-8049B214 0015A0 00F4+00 2/2 0/0 0/0 .text            setStopActorMatrix__9daArrow_cFv */
 fopAc_ac_c* daArrow_c::setStopActorMatrix() {
     s16 vibe_angle = getVibAngle();
     fopAc_ac_c* actor = fopAcM_SearchByID(mHitAcID);
@@ -462,7 +435,6 @@ fopAc_ac_c* daArrow_c::setStopActorMatrix() {
     return actor;
 }
 
-/* 8049B214-8049B370 001694 015C+00 4/4 0/0 0/0 .text            setBombMoveEffect__9daArrow_cFv */
 void daArrow_c::setBombMoveEffect() {
     if (mArrowType == 1 && field_0x945 == 0 && field_0x943 == 0) {
         setSmokePos();
@@ -482,7 +454,6 @@ void daArrow_c::setBombMoveEffect() {
     }
 }
 
-/* 8049B370-8049B45C 0017F0 00EC+00 2/2 0/0 0/0 .text            checkReget__9daArrow_cFv */
 bool daArrow_c::checkReget() {
     if (field_0x7cc.ChkCoHit()) {
         dComIfGp_setItemArrowNumCount(1);
@@ -497,7 +468,6 @@ bool daArrow_c::checkReget() {
     }
 }
 
-/* 8049B45C-8049B764 0018DC 0308+00 1/0 0/0 0/0 .text            procWait__9daArrow_cFv */
 int daArrow_c::procWait() {
     setKeepMatrix();
 
@@ -569,7 +539,6 @@ int daArrow_c::procWait() {
     return TRUE;
 }
 
-/* 8049B764-8049C6B8 001BE4 0F54+00 2/0 0/0 0/0 .text            procMove__9daArrow_cFv */
 int daArrow_c::procMove() {
     if (fopAcM_GetParam(this) == 6) {
         setBlur();
@@ -874,7 +843,6 @@ int daArrow_c::procMove() {
     return TRUE;
 }
 
-/* 8049C700-8049C874 002B80 0174+00 1/1 0/0 0/0 .text            procReturnInit__9daArrow_cFi */
 int daArrow_c::procReturnInit(int param_0) {
     setBlur();
     setBombMoveEffect();
@@ -902,7 +870,6 @@ int daArrow_c::procReturnInit(int param_0) {
     return TRUE;
 }
 
-/* 8049C874-8049CB70 002CF4 02FC+00 1/0 0/0 0/0 .text            procReturn__9daArrow_cFv */
 int daArrow_c::procReturn() {
     setBombMoveEffect();
 
@@ -946,7 +913,6 @@ int daArrow_c::procReturn() {
     return TRUE;
 }
 
-/* 8049CB70-8049CC60 002FF0 00F0+00 1/0 0/0 0/0 .text            procBGStop__9daArrow_cFv */
 int daArrow_c::procBGStop() {
     if (field_0x944 != 0 || !dComIfG_Bgsp().ChkPolySafe(field_0x56c)) {
         field_0x93f = 1;
@@ -975,7 +941,6 @@ int daArrow_c::procBGStop() {
     return TRUE;
 }
 
-/* 8049CC60-8049CCCC 0030E0 006C+00 1/0 0/0 0/0 .text            procActorStop__9daArrow_cFv */
 int daArrow_c::procActorStop() {
     decAlphaBlur();
 
@@ -991,15 +956,11 @@ int daArrow_c::procActorStop() {
     return TRUE;
 }
 
-/* 8049CCCC-8049CCF0 00314C 0024+00 2/1 0/0 0/0 .text            procActorControllStop__9daArrow_cFv
- */
 int daArrow_c::procActorControllStop() {
     decAlphaBlur();
     return TRUE;
 }
 
-/* 8049CCF0-8049CE50 003170 0160+00 1/1 0/0 0/0 .text
- * procSlingHitInit__9daArrow_cFP4cXyzP12dCcD_GObjInf           */
 int daArrow_c::procSlingHitInit(cXyz* param_0, dCcD_GObjInf* param_1) {
     fopAc_ac_c* hit_ac;
     if (param_1 != NULL) {
@@ -1032,7 +993,6 @@ int daArrow_c::procSlingHitInit(cXyz* param_0, dCcD_GObjInf* param_1) {
     return TRUE;
 }
 
-/* 8049CE50-8049CEA0 0032D0 0050+00 1/0 0/0 0/0 .text            procSlingHit__9daArrow_cFv */
 int daArrow_c::procSlingHit() {
     decAlphaBlur();
 
@@ -1044,7 +1004,6 @@ int daArrow_c::procSlingHit() {
     return TRUE;
 }
 
-/* 8049CEA0-8049D0AC 003320 020C+00 1/1 0/0 0/0 .text            execute__9daArrow_cFv */
 int daArrow_c::execute() {
     field_0xa08.setActor();
     mReverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
@@ -1099,12 +1058,10 @@ int daArrow_c::execute() {
     return TRUE;
 }
 
-/* 8049D0AC-8049D0CC 00352C 0020+00 1/0 0/0 0/0 .text            daArrow_execute__FP9daArrow_c */
 static int daArrow_execute(daArrow_c* i_this) {
     return i_this->execute();
 }
 
-/* 8049D0CC-8049D40C 00354C 0340+00 1/1 0/0 0/0 .text            draw__9daArrow_cFv */
 int daArrow_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
 
@@ -1163,13 +1120,10 @@ int daArrow_c::draw() {
     return TRUE;
 }
 
-/* 8049D40C-8049D42C 00388C 0020+00 1/0 0/0 0/0 .text            daArrow_draw__FP9daArrow_c */
 static int daArrow_draw(daArrow_c* i_this) {
     return i_this->draw();
 }
 
-/* 8049D42C-8049D440 0038AC 0014+00 1/1 0/0 0/0 .text daAlink_searchHorseZelda__FP10fopAc_ac_cPv
- */
 static void* daAlink_searchHorseZelda(fopAc_ac_c* param_0, void* param_1) {
     if (fopAcM_GetName(param_0) == PROC_HOZELDA) {
         return param_0;
@@ -1178,7 +1132,6 @@ static void* daAlink_searchHorseZelda(fopAc_ac_c* param_0, void* param_1) {
     return NULL;
 }
 
-/* 8049D440-8049D808 0038C0 03C8+00 1/1 0/0 0/0 .text            create__9daArrow_cFv */
 cPhs__Step daArrow_c::create() {
     fopAcM_ct(this, daArrow_c);
 
@@ -1241,18 +1194,15 @@ cPhs__Step daArrow_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 8049D96C-8049D98C 003DEC 0020+00 1/0 0/0 0/0 .text            daArrow_create__FP9daArrow_c */
 static int daArrow_create(daArrow_c* i_this) {
     return i_this->create();
 }
 
-/* 8049D98C-8049DBD8 003E0C 024C+00 1/1 0/0 0/0 .text            __dt__9daArrow_cFv */
 daArrow_c::~daArrow_c() {
     mSoundObjArrow.deleteObject();
     setLightChargeEffect(1);
 }
 
-/* 8049DBD8-8049DC00 004058 0028+00 1/0 0/0 0/0 .text            daArrow_delete__FP9daArrow_c */
 static int daArrow_delete(daArrow_c* i_this) {
     i_this->~daArrow_c();
     return TRUE;
@@ -1262,7 +1212,6 @@ AUDIO_INSTANCES;
 template<>
 JAUSectionHeap* JASGlobalInstance<JAUSectionHeap>::sInstance;
 
-/* 8049DE8C-8049DEAC -00001 0020+00 1/0 0/0 0/0 .data            l_daArrowMethodTable */
 static actor_method_class l_daArrowMethodTable = {
     (process_method_func)daArrow_create,
     (process_method_func)daArrow_delete,
@@ -1271,7 +1220,6 @@ static actor_method_class l_daArrowMethodTable = {
     (process_method_func)daArrow_draw,
 };
 
-/* 8049DEAC-8049DEDC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_ARROW */
 extern actor_process_profile_definition g_profile_ARROW = {
   fpcLy_CURRENT_e,        // mLayerID
   9,                      // mListID

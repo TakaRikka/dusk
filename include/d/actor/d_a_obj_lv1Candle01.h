@@ -16,16 +16,16 @@
  */
 class daLv1Cdl01_c : public dBgS_MoveBgActor {
 public:
-    /* 80C56D20 */ void setBaseMtx();
-    /* 80C56DA8 */ int CreateHeap();
-    /* 80C56E14 */ cPhs__Step create();
-    /* 80C570D8 */ void lightInit();
-    /* 80C57164 */ void setLight();
-    /* 80C57194 */ void cutLight();
-    /* 80C571C4 */ void pointLightProc();
-    /* 80C57274 */ int Execute(Mtx**);
-    /* 80C575F4 */ int Draw();
-    /* 80C57698 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    void lightInit();
+    void setLight();
+    void cutLight();
+    void pointLightProc();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
@@ -50,8 +50,8 @@ STATIC_ASSERT(sizeof(daLv1Cdl01_c) == 0x78C);
 
 class daLv1Cdl01_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C56CAC */ daLv1Cdl01_HIO_c();
-    /* 80C5777C */ ~daLv1Cdl01_HIO_c() {}
+    daLv1Cdl01_HIO_c();
+    ~daLv1Cdl01_HIO_c() {}
 
     void genMessage(JORMContext*);
 

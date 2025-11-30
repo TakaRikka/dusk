@@ -7,22 +7,18 @@
 
 #include "d/actor/d_a_obj_smtile.h"
 #include "d/d_com_inf_game.h"
-#include "dol2asm.h"
 #include "SSystem/SComponent/c_counter.h"
 
-/* 80CDE394-80CDE39C 000000 0008+00 3/3 0/0 0/0 .data            l_bmdData */
 static u32 l_bmdData[1][2] = {
     4, 1,
 };
 
-/* 80CDE39C-80CDE3A4 -00001 0008+00 3/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "A_SMTile",
 };
 
-/* 80CDE3A4-80CDE3F8 000010 0054+00 3/3 0/0 0/0 .data            l_tileMoveData */
-SECTION_DATA static s8 l_tileMoveData[21][4] = {
+static s8 l_tileMoveData[21][4] = {
     0x01, 0x03, 0x05, 0x01, 0x01, 0x02, 0x04, 0x01, 0x01, 0x01, 0x03, 0x01, 0x01, 0x02,
     0x04, 0x00, 0x00, 0x02, 0x03, 0x01, 0x01, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x01,
     0x00, 0xFF, 0x02, 0x01, 0x00, 0x01, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
@@ -31,7 +27,6 @@ SECTION_DATA static s8 l_tileMoveData[21][4] = {
     0x02, 0x02, 0xFF, 0x03, 0x05, 0x02, 0xFF, 0x02, 0x04, 0x02, 0xFF, 0x01, 0x03, 0x02,
 };
 
-/* 80CDD2AC-80CDD3AC 0000EC 0100+00 1/0 0/0 0/0 .text            __dt__14daObj_SMTile_cFv */
 daObj_SMTile_c::~daObj_SMTile_c() {
     OS_REPORT("|%06d:%x|daObj_SMTile_c -> デストラクト\n", g_Counter.mCounter0, this);
     dComIfG_resDelete(
@@ -39,7 +34,6 @@ daObj_SMTile_c::~daObj_SMTile_c() {
         l_resNameList[l_bmdData[mType][1]]);
 }
 
-/* 80CDD3E8-80CDD580 000228 0198+00 1/1 0/0 0/0 .text            create__14daObj_SMTile_cFv */
 int daObj_SMTile_c::create() {
     fopAcM_ct(this, daObj_SMTile_c);
     mType = getType();
@@ -65,13 +59,10 @@ int daObj_SMTile_c::create() {
     return rv;
 }
 
-/* ############################################################################################## */
-/* 80CDE35C-80CDE364 000000 0008+00 4/4 0/0 0/0 .rodata          m__20daObj_SMTile_Param_c */
 f32 const daObj_SMTile_Param_c::m[2] = {
     600.0f, 20.0f,
 };
 
-/* 80CDD5CC-80CDD6E8 00040C 011C+00 1/1 0/0 0/0 .text            CreateHeap__14daObj_SMTile_cFv */
 int daObj_SMTile_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(
         l_resNameList[l_bmdData[mType][1]],
@@ -93,14 +84,12 @@ int daObj_SMTile_c::CreateHeap() {
     return 0;
 }
 
-/* 80CDD6E8-80CDD71C 000528 0034+00 1/1 0/0 0/0 .text            Delete__14daObj_SMTile_cFv */
 int daObj_SMTile_c::Delete() {
     OS_REPORT("|%06d:%x|daObj_SMTile_c -> Delete\n", g_Counter.mCounter0, this);
     this->~daObj_SMTile_c();
     return 1;
 }
 
-/* 80CDD71C-80CDDA98 00055C 037C+00 2/2 0/0 0/0 .text            Execute__14daObj_SMTile_cFv */
 int daObj_SMTile_c::Execute() {
     if (home.roomNo == dComIfGp_roomControl_getStayNo()) {
         if (field_0xb2b != 0) {
@@ -179,7 +168,6 @@ int daObj_SMTile_c::Execute() {
     return 0;
 }
 
-/* 80CDDA98-80CDDB28 0008D8 0090+00 1/1 0/0 0/0 .text            Draw__14daObj_SMTile_cFv */
 int daObj_SMTile_c::Draw() {
     J3DModelData* modelData = mModel->getModelData();
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -190,13 +178,10 @@ int daObj_SMTile_c::Draw() {
     return 1;
 }
 
-/* 80CDDB28-80CDDB48 000968 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__14daObj_SMTile_cFP10fopAc_ac_c           */
 int daObj_SMTile_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daObj_SMTile_c*>(i_this)->CreateHeap();
 }
 
-/* 80CDDB48-80CDDD28 000988 01E0+00 1/1 0/0 0/0 .text            setDstPos__14daObj_SMTile_cFv */
 void daObj_SMTile_c::setDstPos() {
     cXyz local_2c;
     cXyz local_38;
@@ -230,7 +215,6 @@ void daObj_SMTile_c::setDstPos() {
     }
 }
 
-/* 80CDDD28-80CDDEFC 000B68 01D4+00 1/1 0/0 0/0 .text            setPrtcls__14daObj_SMTile_cFii */
 void daObj_SMTile_c::setPrtcls(int param_1, int param_2) {
     switch(param_1) {
     case 1:
@@ -255,12 +239,10 @@ void daObj_SMTile_c::setPrtcls(int param_1, int param_2) {
     }
 }
 
-/* 80CDE37C-80CDE384 000020 0008+00 0/1 0/0 0/0 .rodata          id$4105 */
 static u16 const id[4] = {
     0xFFFF, 0x86EC, 0x86ED, 0x86EE,
 };
 
-/* 80CDDEFC-80CDE1A8 000D3C 02AC+00 1/1 0/0 0/0 .text            touchPrtcls__14daObj_SMTile_cFf */
 void daObj_SMTile_c::touchPrtcls(f32 param_1) {
     cXyz local_3c;
     cXyz cStack_48(1.0f, 1.0f, 1.0f);
@@ -302,7 +284,6 @@ void daObj_SMTile_c::touchPrtcls(f32 param_1) {
     }
 }
 
-/* 80CDE1A8-80CDE21C 000FE8 0074+00 1/1 0/0 0/0 .text            setMtx__14daObj_SMTile_cFv */
 void daObj_SMTile_c::setMtx() {
     csXyz acStack_18(shape_angle);
     acStack_18.y += 0x8000;
@@ -312,35 +293,28 @@ void daObj_SMTile_c::setMtx() {
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CDE21C-80CDE23C 00105C 0020+00 1/0 0/0 0/0 .text            daObj_SMTile_Create__FPv */
 static int daObj_SMTile_Create(void* i_this) {
     static_cast<daObj_SMTile_c*>(i_this)->create();
 }
 
-/* 80CDE23C-80CDE25C 00107C 0020+00 1/0 0/0 0/0 .text            daObj_SMTile_Delete__FPv */
 static int daObj_SMTile_Delete(void* i_this) {
     static_cast<daObj_SMTile_c*>(i_this)->Delete();
 }
 
-/* 80CDE25C-80CDE27C 00109C 0020+00 1/0 0/0 0/0 .text            daObj_SMTile_Execute__FPv */
 static int daObj_SMTile_Execute(void* i_this) {
     static_cast<daObj_SMTile_c*>(i_this)->Execute();
 }
 
-/* 80CDE27C-80CDE29C 0010BC 0020+00 1/0 0/0 0/0 .text            daObj_SMTile_Draw__FPv */
 static int daObj_SMTile_Draw(void* i_this) {
     static_cast<daObj_SMTile_c*>(i_this)->Draw();
 }
 
-/* 80CDE29C-80CDE2A4 0010DC 0008+00 1/0 0/0 0/0 .text            daObj_SMTile_IsDelete__FPv */
 static int daObj_SMTile_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80CDE484-80CDE488 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daObj_SMTile_Param_c l_HIO;
 
-/* 80CDE3F8-80CDE418 -00001 0020+00 1/0 0/0 0/0 .data            daObj_SMTile_MethodTable */
 static actor_method_class daObj_SMTile_MethodTable = {
     (process_method_func)daObj_SMTile_Create,
     (process_method_func)daObj_SMTile_Delete,
@@ -349,7 +323,6 @@ static actor_method_class daObj_SMTile_MethodTable = {
     (process_method_func)daObj_SMTile_Draw,
 };
 
-/* 80CDE418-80CDE448 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_SMTILE */
 extern actor_process_profile_definition g_profile_OBJ_SMTILE = {
   fpcLy_CURRENT_e,           // mLayerID
   7,                         // mListID

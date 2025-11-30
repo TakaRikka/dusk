@@ -14,7 +14,7 @@ class JUTProcBar {
 public:
     class CTime {
     public:
-        /* 802E7340 */ CTime() { clear(); }
+        CTime() { clear(); }
 
         void clear() {
             mCost = 0;
@@ -71,17 +71,17 @@ public:
         void setUserPosition(int userPos) { mUserPosition = userPos; }
     };
 
-    /* 802E5888 */ JUTProcBar();
-    /* 802E599C */ ~JUTProcBar();
-    /* 802E59E0 */ static JUTProcBar* create();
-    /* 802E5A28 */ static void destroy();
-    /* 802E5A60 */ static void clear();
-    /* 802E5B30 */ void bar_subroutine(int, int, int, int, int, int, int, JUtility::TColor,
+    JUTProcBar();
+    ~JUTProcBar();
+    static JUTProcBar* create();
+    static void destroy();
+    static void clear();
+    void bar_subroutine(int, int, int, int, int, int, int, JUtility::TColor,
                                        JUtility::TColor);
-    /* 802E5CC4 */ void adjustMeterLength(u32, f32*, f32, f32, int*);
-    /* 802E5E08 */ void draw();
-    /* 802E5E3C */ void drawProcessBar();
-    /* 802E6FA0 */ void drawHeapBar();
+    void adjustMeterLength(u32, f32*, f32, f32, int*);
+    void draw();
+    void drawProcessBar();
+    void drawHeapBar();
 
     void cpuStart() { mCpu.start(255, 129, 30); }
     void cpuEnd() { mCpu.end(); }

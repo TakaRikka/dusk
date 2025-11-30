@@ -20,26 +20,26 @@ public:
         READY_CLOSE = 3,
     };
 
-    /* 801C4D54 */ dMenu_Fishing_c(JKRExpHeap*, STControl*, CSTControl*);
-    /* 801C504C */ void _create();
-    /* 801C50B4 */ void _move();
-    /* 801C514C */ void _draw();
-    /* 801C5204 */ bool isSync();
-    /* 801C522C */ void init();
-    /* 801C52E4 */ int _open();
-    /* 801C5470 */ int _close();
-    /* 801C556C */ void wait_init();
-    /* 801C55A8 */ void wait_move();
-    /* 801C55D8 */ void screenSetBase();
-    /* 801C5D3C */ void screenSetDoIcon();
-    /* 801C5EB8 */ void setAButtonString(u16);
-    /* 801C5F68 */ void setBButtonString(u16);
-    /* 801C6018 */ u8 getFigure(int);
-    /* 801C605C */ void setFishParam(int, u16, u8);
-    /* 801C6210 */ void setHIO(bool);
+    dMenu_Fishing_c(JKRExpHeap*, STControl*, CSTControl*);
+    void _create();
+    void _move();
+    void _draw();
+    bool isSync();
+    void init();
+    int _open();
+    int _close();
+    void wait_init();
+    void wait_move();
+    void screenSetBase();
+    void screenSetDoIcon();
+    void setAButtonString(u16);
+    void setBButtonString(u16);
+    u8 getFigure(int);
+    void setFishParam(int, u16, u8);
+    void setHIO(bool);
 
-    /* 801C659C */ virtual void draw() { _draw(); }
-    /* 801C4D98 */ virtual ~dMenu_Fishing_c();
+    virtual void draw() { _draw(); }
+    virtual ~dMenu_Fishing_c();
 
     u8 getStatus() { return mStatus; }
 

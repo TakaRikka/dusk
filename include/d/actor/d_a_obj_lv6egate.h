@@ -15,17 +15,17 @@
  */
 class daObjLv6EGate_c : public dBgS_MoveBgActor, public request_of_phase_process_class {
 public:
-    /* 80C82078 */ int create1st();
-    /* 80C82108 */ void setMtx();
-    /* 80C822DC */ void offDisp();
-    /* 80C82330 */ void onDisp();
+    int create1st();
+    void setMtx();
+    void offDisp();
+    void onDisp();
 
-    /* 80C82178 */ virtual int CreateHeap();
-    /* 80C82180 */ virtual int Create();
-    /* 80C82388 */ virtual int Execute(Mtx**);
-    /* 80C82690 */ virtual int Draw();
-    /* 80C826A0 */ virtual int Delete();
-    /* 80C82A80 */ virtual ~daObjLv6EGate_c() {}
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
+    virtual ~daObjLv6EGate_c() {}
 
     int getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
     int getType() { return fopAcM_GetParamBit(this, 8, 1); }

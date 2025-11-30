@@ -5,8 +5,8 @@
 
 class daObjFchain_shape_c : public J3DPacket {
 public:
-    /* 80BE7194 */ virtual void draw();
-    /* 80BE73D4 */ virtual ~daObjFchain_shape_c() {}
+    virtual void draw();
+    virtual ~daObjFchain_shape_c() {}
 };
 
 /**
@@ -19,13 +19,13 @@ public:
  */
 class daObjFchain_c : public fopAc_ac_c {
 public:
-    /* 80BE5FF8 */ int createHeap();
-    /* 80BE6074 */ int create();
-    /* 80BE63C8 */ ~daObjFchain_c();
-    /* 80BE64E0 */ void checkPlayerFoot(cXyz const*, cXyz const*, cXyz*);
-    /* 80BE66B4 */ void setGroundVec(cXyz*, f32);
-    /* 80BE6868 */ int execute();
-    /* 80BE7324 */ int draw();
+    int createHeap();
+    int create();
+    ~daObjFchain_c();
+    void checkPlayerFoot(cXyz const*, cXyz const*, cXyz*);
+    void setGroundVec(cXyz*, f32);
+    int execute();
+    int draw();
 
     cXyz* getPos() { return field_0x694; }
     csXyz* getAngle() { return field_0x8a4; }

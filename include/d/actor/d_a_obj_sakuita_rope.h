@@ -14,16 +14,16 @@ struct daObjItaRope_Attr_c {
 
 class Sakuita_c {
 public:
-    /* 80CC5238 */ int setModelData(J3DModelData*);
-    /* 80CC527C */ void create(cXyz*, s16, s8);
-    /* 80CC5314 */ void execute(cXyz*, s16);
-    /* 80CC5354 */ void draw();
-    /* 80CC5390 */ void initBaseMtx();
-    /* 80CC53B0 */ void setBaseMtx();
-    /* 80CC5444 */ void setPlatePos(cXyz*);
-    /* 80CC5720 */ void calcAngle();
-    /* 80CC63E4 */ ~Sakuita_c();
-    /* 80CC6420 */ Sakuita_c();
+    int setModelData(J3DModelData*);
+    void create(cXyz*, s16, s8);
+    void execute(cXyz*, s16);
+    void draw();
+    void initBaseMtx();
+    void setBaseMtx();
+    void setPlatePos(cXyz*);
+    void calcAngle();
+    ~Sakuita_c();
+    Sakuita_c();
 
     /* 0x00 */ J3DModel* mModel;
     /* 0x04 */ cXyz* field_0x04;
@@ -39,8 +39,8 @@ public:
 
 class RopeWork_c {
 public:
-    /* 80CC6424 */ ~RopeWork_c();
-    /* 80CC6460 */ RopeWork_c();
+    ~RopeWork_c();
+    RopeWork_c();
 
     /* 0x00 */ cXyz field_0x00;
     /* 0x0C */ cXyz field_0x0c;
@@ -57,10 +57,10 @@ public:
  */
 class daObjItaRope_c : public fopAc_ac_c {
 public:
-    /* 80CC57E4 */ void create_init();
-    /* 80CC5E48 */ void initBaseMtx();
-    /* 80CC5E7C */ void setBaseMtx();
-    /* 80CC5ECC */ void setNormalRopePos();
+    void create_init();
+    void initBaseMtx();
+    void setBaseMtx();
+    void setNormalRopePos();
 
     inline ~daObjItaRope_c();
     inline int createHeap();

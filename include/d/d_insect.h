@@ -17,11 +17,11 @@ public:
         /* 3 */ LOC_UNK_3,
     };
 
-    /* 8015E010 */ dInsect_c();
-    /* 8015E078 */ void Insect_GetDemoMain();
-    /* 8015E26C */ void CalcZBuffer(f32);
+    dInsect_c();
+    void Insect_GetDemoMain();
+    void CalcZBuffer(f32);
 
-    /* 80110648 */ virtual void Insect_Release() { field_0x56c = 1; }
+    virtual void Insect_Release() { field_0x56c = 1; }
     bool ChkGetDemo() { return m_mode > 0; }
     void setItemNo(u8 i_itemNo) { m_itemNo = i_itemNo; }
     void setSaveBitNo(s16 i_saveBitNo) { m_saveBitNo = i_saveBitNo; }

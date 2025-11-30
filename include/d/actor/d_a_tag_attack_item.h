@@ -9,18 +9,18 @@ class daTagAtkItem_c : public fopAc_ac_c , public dEvLib_callback_c {
 public:
     daTagAtkItem_c() : dEvLib_callback_c(this) {}
 
-    /* 805A2958 */ void setBaseMtx();
-    /* 805A2990 */ int Create();
-    /* 805A2A34 */ int create();
-    /* 805A2C48 */ int execute();
-    /* 805A2CA8 */ void action();
-    /* 805A2D58 */ BOOL checkHit();
-    /* 805A2F54 */ void createItem();
-    /* 805A3038 */ int _delete();
+    void setBaseMtx();
+    int Create();
+    int create();
+    int execute();
+    void action();
+    BOOL checkHit();
+    void createItem();
+    int _delete();
 
-    /* 805A3118 */ virtual ~daTagAtkItem_c() {}
-    /* 805A2D10 */ virtual bool eventStart();
-    /* 805A2D34 */ virtual bool eventEnd();
+    virtual ~daTagAtkItem_c() {}
+    virtual bool eventStart();
+    virtual bool eventEnd();
 
     u8 getEvId() { return fopAcM_GetParamBit(this, 0x18, 8); }
     u8 getNum() { return fopAcM_GetParamBit(this, 8, 8); }

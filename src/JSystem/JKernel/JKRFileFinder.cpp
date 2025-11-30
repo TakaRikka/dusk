@@ -3,7 +3,6 @@
 #include "JSystem/JKernel/JKRFileFinder.h"
 #include "JSystem/JKernel/JKRArchive.h"
 
-/* 802D4638-802D46C4 2CEF78 008C+00 0/0 1/1 0/0 .text __ct__12JKRArcFinderFP10JKRArchivell */
 JKRArcFinder::JKRArcFinder(JKRArchive* archive, s32 startIndex, s32 numEntries) : JKRFileFinder() {
     mArchive = archive;
     mIsAvailable = numEntries > 0;
@@ -13,7 +12,6 @@ JKRArcFinder::JKRArcFinder(JKRArchive* archive, s32 startIndex, s32 numEntries) 
     findNextFile();
 }
 
-/* 802D46C4-802D4770 2CF004 00AC+00 1/0 0/0 0/0 .text            findNextFile__12JKRArcFinderFv */
 bool JKRArcFinder::findNextFile(void) {
     JKRArchive::SDirEntry entry;
 
@@ -32,21 +30,18 @@ bool JKRArcFinder::findNextFile(void) {
     return mIsAvailable;
 }
 
-/* 802D4770-802D47F4 2CF0B0 0084+00 0/0 1/1 0/0 .text            __ct__12JKRDvdFinderFPCc */
 JKRDvdFinder::JKRDvdFinder(const char* directory) : JKRFileFinder() {
     mDvdIsOpen = DVDOpenDir(directory, &mDvdDirectory);
     mIsAvailable = mDvdIsOpen;
     findNextFile();
 }
 
-/* 802D47F4-802D4874 2CF134 0080+00 1/0 0/0 0/0 .text            __dt__12JKRDvdFinderFv */
 JKRDvdFinder::~JKRDvdFinder() {
     if (mDvdIsOpen) {
         DVDCloseDir(&mDvdDirectory);
     }
 }
 
-/* 802D4874-802D4910 2CF1B4 009C+00 1/0 0/0 0/0 .text            findNextFile__12JKRDvdFinderFv */
 bool JKRDvdFinder::findNextFile(void) {
     if (mIsAvailable) {
         DVDDirEntry directoryEntry;

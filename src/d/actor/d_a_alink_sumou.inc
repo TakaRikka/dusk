@@ -8,7 +8,6 @@
 #include "d/actor/d_a_npc_wrestler.h"
 #include "d/actor/d_a_boomerang.h"
 
-/* 800EA844-800EA8D0 0E5184 008C+00 5/5 0/0 0/0 .text            checkSumouVsActor__9daAlink_cFv */
 BOOL daAlink_c::checkSumouVsActor() {
     mCargoCarryAcKeep.setActor();
 
@@ -26,24 +25,19 @@ BOOL daAlink_c::checkSumouVsActor() {
     return true;
 }
 
-/* 800EA8D0-800EA908 0E5210 0038+00 5/5 0/0 0/0 .text            cancelSumouMode__9daAlink_cFv */
 void daAlink_c::cancelSumouMode() {
     mCargoCarryAcKeep.clearData();
     mSpecialMode = 0;
 }
 
-/* 800EA908-800EA92C 0E5248 0024+00 2/2 0/0 0/0 .text            sumouPunchTrigger__9daAlink_cFv */
 BOOL daAlink_c::sumouPunchTrigger() {
     return itemTriggerCheck(BTN_B);
 }
 
-/* 800EA92C-800EA950 0E526C 0024+00 5/5 0/0 0/0 .text            setSumouPunchStatus__9daAlink_cFv
- */
 void daAlink_c::setSumouPunchStatus() {
     setBStatus(ACTION_STR_SLAP);
 }
 
-/* 800EA950-800EAA28 0E5290 00D8+00 4/4 0/0 0/0 .text            procSumouReadyInit__9daAlink_cFv */
 int daAlink_c::procSumouReadyInit() {
     if (!commonProcInitNotSameProc(PROC_SUMOU_READY)) {
         return 0;
@@ -67,7 +61,6 @@ int daAlink_c::procSumouReadyInit() {
     return 1;
 }
 
-/* 800EAA28-800EAC4C 0E5368 0224+00 1/0 0/0 0/0 .text            procSumouReady__9daAlink_cFv */
 int daAlink_c::procSumouReady() {
     field_0x2f99 = 4;
 
@@ -134,7 +127,6 @@ int daAlink_c::procSumouReady() {
 }
 
 
-/* 800EAC4C-800EAD84 0E558C 0138+00 1/1 0/0 0/0 .text            procSumouMoveInit__9daAlink_cFv */
 int daAlink_c::procSumouMoveInit() {
     daNpcWrestler_c* wrestler_p = (daNpcWrestler_c*)mCargoCarryAcKeep.getActor();
     commonProcInit(PROC_SUMOU_MOVE);
@@ -183,7 +175,6 @@ int daAlink_c::procSumouMoveInit() {
 }
 
 
-/* 800EAD84-800EB208 0E56C4 0484+00 1/0 0/0 0/0 .text            procSumouMove__9daAlink_cFv */
 int daAlink_c::procSumouMove() {
     field_0x2f99 = 4;
 
@@ -281,7 +272,7 @@ int daAlink_c::procSumouMove() {
             if (mSpeedModifier > 0.0f && checkInputOnR()) {
                 int direction = getDirectionFromAngle(mStickAngle);
                 if (direction == DIR_LEFT || direction == DIR_RIGHT) {
-                    var_r31 = field_0x33ac * (daAlinkHIO_pushpull_c0::m.field_0xE * field_0x33ac);
+                    var_r31 = field_0x33ac * (daAlinkHIO_pushpull_c0::m.mSumoRotationAngle * field_0x33ac);
 
                     if (direction == DIR_RIGHT) {
                         var_r31 = -var_r31;
@@ -321,8 +312,6 @@ int daAlink_c::procSumouMove() {
 }
 
 
-/* 800EB208-800EB2BC 0E5B48 00B4+00 4/4 0/0 0/0 .text            procSumouSideMoveInit__9daAlink_cFv
- */
 int daAlink_c::procSumouSideMoveInit() {
     commonProcInit(PROC_SUMOU_SIDE_MOVE);
     mSpecialMode = 0x16;
@@ -343,7 +332,6 @@ int daAlink_c::procSumouSideMoveInit() {
     return 1;
 }
 
-/* 800EB2BC-800EB624 0E5BFC 0368+00 1/0 0/0 0/0 .text            procSumouSideMove__9daAlink_cFv */
 int daAlink_c::procSumouSideMove() {
     field_0x2f99 = 4;
 
@@ -444,8 +432,6 @@ int daAlink_c::procSumouSideMove() {
 }
 
 
-/* 800EB624-800EBCE0 0E5F64 06BC+00 4/4 0/0 0/0 .text            procSumouActionInit__9daAlink_cFiii
- */
 int daAlink_c::procSumouActionInit(BOOL i_doTrigger, BOOL i_punchTrigger, int unused) {
     commonProcInit(PROC_SUMOU_ACTION);
 
@@ -649,7 +635,6 @@ int daAlink_c::procSumouActionInit(BOOL i_doTrigger, BOOL i_punchTrigger, int un
 }
 
 
-/* 800EBCE0-800EC0F8 0E6620 0418+00 1/0 0/0 0/0 .text            procSumouAction__9daAlink_cFv */
 int daAlink_c::procSumouAction() {
     field_0x2f99 = 4;
 
@@ -741,8 +726,6 @@ int daAlink_c::procSumouAction() {
 }
 
 
-/* 800EC0F8-800EC170 0E6A38 0078+00 1/1 0/0 0/0 .text            procSumouStaggerInit__9daAlink_cFv
- */
 int daAlink_c::procSumouStaggerInit() {
     commonProcInit(PROC_SUMOU_STAGGER);
 
@@ -759,7 +742,6 @@ int daAlink_c::procSumouStaggerInit() {
     return 1;
 }
 
-/* 800EC170-800EC20C 0E6AB0 009C+00 1/0 0/0 0/0 .text            procSumouStagger__9daAlink_cFv */
 int daAlink_c::procSumouStagger() {
     field_0x2f99 = 4;
 
@@ -777,8 +759,6 @@ int daAlink_c::procSumouStagger() {
     return 1;
 }
 
-/* 800EC20C-800EC3D8 0E6B4C 01CC+00 1/1 0/0 0/0 .text            procSumouWinLoseInit__9daAlink_cFv
- */
 int daAlink_c::procSumouWinLoseInit() {
     if (mSpecialMode == 0xB && mUnderFrameCtrl[0].getAttribute() == 2) {
         cancelSumouMode();
@@ -839,7 +819,6 @@ int daAlink_c::procSumouWinLoseInit() {
 }
 
 
-/* 800EC3D8-800EC538 0E6D18 0160+00 1/0 0/0 0/0 .text            procSumouWinLose__9daAlink_cFv */
 int daAlink_c::procSumouWinLose() {
     if (mProcVar3.field_0x300e == 0) {
         if (mProcVar2.field_0x300c != 0) {
@@ -882,7 +861,6 @@ int daAlink_c::procSumouWinLose() {
 }
 
 
-/* 800EC538-800EC5F4 0E6E78 00BC+00 1/0 0/0 0/0 .text            procSumouShikoInit__9daAlink_cFv */
 int daAlink_c::procSumouShikoInit() {
     if (!commonProcInitNotSameProc(PROC_SUMOU_SHIKO)) {
         return 0;
@@ -901,7 +879,6 @@ int daAlink_c::procSumouShikoInit() {
     return 1;
 }
 
-/* 800EC5F4-800EC724 0E6F34 0130+00 1/0 0/0 0/0 .text            procSumouShiko__9daAlink_cFv */
 int daAlink_c::procSumouShiko() {
     daPy_frameCtrl_c* frameCtrl_p = mUnderFrameCtrl;
     if (field_0x2f99 != 12) {

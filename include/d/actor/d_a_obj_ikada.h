@@ -16,15 +16,15 @@
 
 class daObjIkada_c : public dBgS_MoveBgActor {
 public:
-    /* 80C269B8 */ void RideOn_Angle(s16&, f32, s16, f32);
-    /* 80C26A20 */ BOOL Check_RideOn();
-    /* 80C26C50 */ void initBaseMtx();
-    /* 80C26C7C */ void setBaseMtx();
-    /* 80C27028 */ inline int CreateHeap();
-    /* 80C270A0 */ inline int Create();
-    /* 80C270E0 */ inline int Execute(Mtx**);
-    /* 80C27400 */ inline int Draw();
-    /* 80C274A4 */ inline int Delete();
+    void RideOn_Angle(s16&, f32, s16, f32);
+    BOOL Check_RideOn();
+    void initBaseMtx();
+    void setBaseMtx();
+    inline int CreateHeap();
+    inline int Create();
+    inline int Execute(Mtx**);
+    inline int Draw();
+    inline int Delete();
 
     inline cPhs__Step create();
 

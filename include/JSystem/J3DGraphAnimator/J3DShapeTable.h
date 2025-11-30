@@ -18,10 +18,10 @@ public:
         mShapeName = NULL;
     }
 
-    /* 803258A0 */ void hide();
-    /* 803258D8 */ void show();
-    /* 80325910 */ void initShapeNodes(J3DDrawMtxData*, J3DVertexData*);
-    /* 8032597C */ void sortVcdVatCmd();
+    void hide();
+    void show();
+    void initShapeNodes(J3DDrawMtxData*, J3DVertexData*);
+    void sortVcdVatCmd();
 
     virtual ~J3DShapeTable() {}
 

@@ -26,27 +26,27 @@ public:
         ACTION_RETURN,
     };
 
-    /* 806791BC */ void initCcCylinder();
-    /* 80679284 */ void setCcCylinder();
-    /* 80679350 */ void anm_init(int, f32, u8, f32);
-    /* 806793FC */ int Draw();
-    /* 806794F4 */ BOOL player_way_check();
-    /* 80679538 */ BOOL other_bg_check(fopAc_ac_c*);
-    /* 80679610 */ BOOL pl_check(f32, s16);
-    /* 8067968C */ void damage_check();
-    /* 80679DC8 */ void e_ai_damage();
-    /* 8067A2CC */ void e_ai_attack();
-    /* 8067A54C */ void e_ai_move();
-    /* 8067AA48 */ void e_ai_wait();
-    /* 8067ACA0 */ void e_ai_return();
-    /* 8067B024 */ void action();
-    /* 8067B2B0 */ void PlayerWaySet();
-    /* 8067B31C */ void AttentionSet();
-    /* 8067B378 */ int Execute();
-    /* 8067B598 */ void setBaseMtx();
-    /* 8067B620 */ int Delete();
-    /* 8067B6F0 */ int CreateHeap();
-    /* 8067B8E4 */ int Create();
+    void initCcCylinder();
+    void setCcCylinder();
+    void anm_init(int, f32, u8, f32);
+    int Draw();
+    BOOL player_way_check();
+    BOOL other_bg_check(fopAc_ac_c*);
+    BOOL pl_check(f32, s16);
+    void damage_check();
+    void e_ai_damage();
+    void e_ai_attack();
+    void e_ai_move();
+    void e_ai_wait();
+    void e_ai_return();
+    void action();
+    void PlayerWaySet();
+    void AttentionSet();
+    int Execute();
+    void setBaseMtx();
+    int Delete();
+    int CreateHeap();
+    int Create();
 
 private:
     /* 0x5AC */ JPABaseEmitter* mpEmitter;

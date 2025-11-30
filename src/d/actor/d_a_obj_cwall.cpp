@@ -14,13 +14,11 @@
 #include "d/d_com_inf_game.h"
 #include "cmath.h"
 
-/* 80BD6A4C-80BD6A88 0000EC 003C+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjCwall_cFv */
 void daObjCwall_c::initBaseMtx() {
     mWallModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80BD6A88-80BD6AEC 000128 0064+00 2/2 0/0 0/0 .text            setBaseMtx__12daObjCwall_cFv */
 void daObjCwall_c::setBaseMtx() {
     mDoMtx_stack_c::transS(field_0xf38);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -28,69 +26,56 @@ void daObjCwall_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80BD9FA4-80BD9FAC 000000 0008+00 11/11 0/0 0/0 .rodata          l_wallBmd */
 static u32 const l_wallBmd[2] = {
     5, 5,
 };
 
-/* 80BD9FAC-80BD9FB4 000008 0008+00 0/1 0/0 0/0 .rodata          l_chainBmd */
 static u32 const l_chainBmd[2] = {
     4, 4,
 };
 
-/* 80BD9FB4-80BD9FBC 000010 0008+00 0/1 0/0 0/0 .rodata          l_handleBmd */
 static u32 const l_handleBmd[2] = {
     6, 6,
 };
 
-/* 80BD9FBC-80BD9FC4 000018 0008+00 1/1 0/0 0/0 .rodata          l_dzb */
 static u32 const l_dzb[2] = {
     9, 9,
 };
 
-/* 80BD9FC4-80BD9FCC 000020 0008+00 1/1 0/0 0/0 .rodata          l_heap_size */
 static u32 const l_heap_size[2] = {
     0x4600, 0x5F00,
 };
 
-/* 80BD9FCC-80BD9FD8 000028 000C+00 0/1 0/0 0/0 .rodata          l_top_co_offset */
 static Vec const l_top_co_offset = {
     0.0f, 0.0f, -600.0f,
 };
 
-/* 80BD9FD8-80BD9FE4 000034 000C+00 0/1 0/0 0/0 .rodata          l_check_min */
 static Vec const l_check_min = {
     -120.0f, 0.0f, -20.0f,
 };
 
-/* 80BD9FE4-80BD9FF0 000040 000C+00 0/1 0/0 0/0 .rodata          l_check_max */
 static Vec const l_check_max = {
     120.0f, 0.0f, 80.0f,
 };
 
-/* 80BD9FF0-80BD9FFC 00004C 000C+00 0/1 0/0 0/0 .rodata          l_check_min_wolf */
 static Vec const l_check_min_wolf = {
     -120.0f, 0.0f, 50.0f,
 };
 
-/* 80BD9FFC-80BDA008 000058 000C+00 0/1 0/0 0/0 .rodata          l_check_max_wolf */
 static Vec const l_check_max_wolf = {
     120.0f, 0.0f, 160.0f,
 };
 
-/* 80BDA0E0-80BDA0E8 -00001 0008+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[2] = {
     "P_Cwall",
     "P_L4Cwall",
 };
 
-/* 80BDA0E8-80BDA100 000028 0018+00 0/1 0/0 0/0 .data            l_cull_box */
 static Vec l_cull_box[2] = {
     {-300.0f, -100.0f, -650.0f},
     {300.0f, 500.0f, 300.0f},
 };
 
-/* 80BDA100-80BDA130 000040 0030+00 1/1 0/0 0/0 .data            l_side_co_offset */
 static Vec l_side_co_offset[4] = {
     {-255.0f, 0.0f, -30.0f},
     {-135.0f, 0.0f, -30.0f},
@@ -98,7 +83,6 @@ static Vec l_side_co_offset[4] = {
     {255.0f, 0.0f, -30.0f},
 };
 
-/* 80BDA130-80BDA174 000070 0044+00 0/1 0/0 0/0 .data            l_cyl_src */
 static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x0}, 0x79}}, // mObj
@@ -113,7 +97,6 @@ static dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 80BDA174-80BDA1B8 0000B4 0044+00 0/1 0/0 0/0 .data            l_cyl_src2 */
 static dCcD_SrcCyl l_cyl_src2 = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x0}, 0x19}}, // mObj
@@ -128,7 +111,6 @@ static dCcD_SrcCyl l_cyl_src2 = {
     } // mCyl
 };
 
-/* 80BDA1B8-80BDA1F8 0000F8 0040+00 0/1 0/0 0/0 .data            l_sph_src */
 static dCcD_SrcSph l_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x4000, 0x11}, 0x58}}, // mObj
@@ -141,7 +123,6 @@ static dCcD_SrcSph l_sph_src = {
     } // mSphAttr
 };
 
-/* 80BD6AEC-80BD6CCC 00018C 01E0+00 1/0 0/0 0/0 .text            Create__12daObjCwall_cFv */
 int daObjCwall_c::Create() {
     field_0xf38 = current.pos;
     field_0xf0c = getArg0();
@@ -176,7 +157,6 @@ int daObjCwall_c::Create() {
     return 1;
 }
 
-/* 80BD6D08-80BD6E94 0003A8 018C+00 1/0 0/0 0/0 .text            CreateHeap__12daObjCwall_cFv */
 int daObjCwall_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName[mType], l_wallBmd[mType]);
     JUT_ASSERT(573, modelData != NULL);
@@ -208,15 +188,12 @@ int daObjCwall_c::CreateHeap() {
     return 1;
 }
 
-/* 80BD6E94-80BD6ED0 000534 003C+00 1/1 0/0 0/0 .text            __dt__Q212daObjCwall_c7chain_sFv */
 daObjCwall_c::chain_s::~chain_s() {
 }
 
-/* 80BD6ED0-80BD6ED4 000570 0004+00 1/1 0/0 0/0 .text            __ct__Q212daObjCwall_c7chain_sFv */
 daObjCwall_c::chain_s::chain_s() {
 }
 
-/* 80BD6ED4-80BD6F80 000574 00AC+00 1/1 0/0 0/0 .text            create1st__12daObjCwall_cFv */
 int daObjCwall_c::create1st() {
     mType = getType();
     int rv = dComIfG_resLoad(&mPhase, l_arcName[mType]);
@@ -229,8 +206,6 @@ int daObjCwall_c::create1st() {
     return rv;
 }
 
-/* 80BD6F80-80BD7288 000620 0308+00 1/0 0/0 0/0 .text            Execute__12daObjCwall_cFPPA3_A4_f
- */
 int daObjCwall_c::Execute(Mtx** param_1) {
     field_0xf44 = field_0xf38;
     field_0xf54 = field_0xf50;
@@ -290,7 +265,6 @@ int daObjCwall_c::Execute(Mtx** param_1) {
     return 1;
 }
 
-/* 80BD7288-80BD7718 000928 0490+00 1/1 0/0 0/0 .text            setTension__12daObjCwall_cFv */
 void daObjCwall_c::setTension() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 dVar9 = field_0xf54;
@@ -336,7 +310,6 @@ void daObjCwall_c::setTension() {
     }
 }
 
-/* 80BD7718-80BD7788 000DB8 0070+00 2/2 0/0 0/0 .text            calcSePos__12daObjCwall_cFv */
 void daObjCwall_c::calcSePos() {
     field_0xf2c.set(0.0f, 0.0f, 300.0f);
     mDoMtx_stack_c::transS(field_0xf38);
@@ -344,10 +317,8 @@ void daObjCwall_c::calcSePos() {
     mDoMtx_stack_c::multVec(&field_0xf2c, &field_0xf2c);
 }
 
-/* 80BDA34C-80BDA358 000054 000C+00 1/2 0/0 0/0 .bss             l_chainOffset */
 static cXyz l_chainOffset(0.0f, 105.0f, 30.0f);
 
-/* 80BD7788-80BD7804 000E28 007C+00 5/5 0/0 0/0 .text getChainBasePos__12daObjCwall_cFP4cXyz */
 void daObjCwall_c::getChainBasePos(cXyz* pBasePos) {
     *pBasePos = l_chainOffset;
     mDoMtx_stack_c::transS(field_0xf38);
@@ -355,7 +326,6 @@ void daObjCwall_c::getChainBasePos(cXyz* pBasePos) {
     mDoMtx_stack_c::multVec(pBasePos, pBasePos);
 }
 
-/* 80BD7804-80BD7AD4 000EA4 02D0+00 1/1 0/0 0/0 .text            setChainMtx__12daObjCwall_cFv */
 void daObjCwall_c::setChainMtx() {
     chain_s* pChain = mChains;
     s16 sVar7 = home.angle.y;
@@ -389,7 +359,6 @@ void daObjCwall_c::setChainMtx() {
     cLib_addCalcAngleS2(&field_0xf1a, field_0xf1c, 5, 0x800);
 }
 
-/* 80BD7AD4-80BD7ED8 001174 0404+00 1/1 0/0 0/0 .text            chain_control__12daObjCwall_cFv */
 void daObjCwall_c::chain_control() {
     cXyz* nextPos;
     cXyz* pos;
@@ -459,7 +428,6 @@ void daObjCwall_c::chain_control() {
     }
 }
 
-/* 80BD7ED8-80BD84C0 001578 05E8+00 1/1 0/0 0/0 .text            chain_control2__12daObjCwall_cFv */
 void daObjCwall_c::chain_control2() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     chain_s* local_130 = &mChains[5];
@@ -551,10 +519,8 @@ void daObjCwall_c::chain_control2() {
     }
 }
 
-/* 80BDA364-80BDA370 00006C 000C+00 0/1 0/0 0/0 .bss             l_smokeSetOffset */
 static cXyz l_smokeSetOffset(0.0f,0.0f,-200.0f);
 
-/* 80BD84C0-80BD8594 001B60 00D4+00 1/1 0/0 0/0 .text block_mode_proc_call__12daObjCwall_cFv */
 void daObjCwall_c::block_mode_proc_call() {
     static daObjCwall_c::modeFunc l_func[3] = {
         &daObjCwall_c::modeWait,
@@ -567,7 +533,6 @@ void daObjCwall_c::block_mode_proc_call() {
     }
 }
 
-/* 80BD8594-80BD85C0 001C34 002C+00 2/2 0/0 0/0 .text            initWait__12daObjCwall_cFv */
 void daObjCwall_c::initWait() {
     speed.setall(0.0f);
     field_0xf0e = 0;
@@ -575,7 +540,6 @@ void daObjCwall_c::initWait() {
     field_0xe92 = 0;
 }
 
-/* 80BD85C0-80BD8748 001C60 0188+00 1/0 0/0 0/0 .text            modeWait__12daObjCwall_cFv */
 void daObjCwall_c::modeWait() {
     u8 bVar2;
     daPy_py_c* player = static_cast<daPy_py_c*>(daPy_getPlayerActorClass());
@@ -610,7 +574,6 @@ void daObjCwall_c::modeWait() {
     }
 }
 
-/* 80BD8748-80BD8778 001DE8 0030+00 2/2 0/0 0/0 .text            initWalk__12daObjCwall_cFv */
 void daObjCwall_c::initWalk() {
     speed.setall(0.0f);
     field_0xf14 = 13;
@@ -618,7 +581,6 @@ void daObjCwall_c::initWalk() {
     field_0xe92 = 1;
 }
 
-/* 80BD8778-80BD8BC8 001E18 0450+00 1/0 0/0 0/0 .text            modeWalk__12daObjCwall_cFv */
 void daObjCwall_c::modeWalk() {
     s16 bVar1 = 13;
     f32 dVar7 = 75.0f;
@@ -650,14 +612,12 @@ void daObjCwall_c::modeWalk() {
     }
 }
 
-/* 80BD8BC8-80BD8BF0 002268 0028+00 1/1 0/0 0/0 .text            initClose__12daObjCwall_cFv */
 void daObjCwall_c::initClose() {
     speed.setall(0.0f);
     field_0xf0e = 0;
     field_0xe92 = 2;
 }
 
-/* 80BD8BF0-80BD935C 002290 076C+00 1/0 0/0 0/0 .text            modeClose__12daObjCwall_cFv */
 void daObjCwall_c::modeClose() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 dVar11 = field_0xf38.absXZ(home.pos);
@@ -745,7 +705,6 @@ void daObjCwall_c::modeClose() {
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 80BD935C-80BD9414 0029FC 00B8+00 2/2 0/0 0/0 .text            setPower__12daObjCwall_cFfPs */
 void daObjCwall_c::setPower(f32 param_1, s16* param_2) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     s16 sVar3;
@@ -761,7 +720,6 @@ void daObjCwall_c::setPower(f32 param_1, s16* param_2) {
     field_0xf0f = 1;
 }
 
-/* 80BD9414-80BD95A0 002AB4 018C+00 1/1 0/0 0/0 .text            checkWall__12daObjCwall_cFv */
 BOOL daObjCwall_c::checkWall() {
     cXyz acStack_30[2] = {cXyz(-95.0f, 5.0f, 1.0f), cXyz(95.0f, 5.0f, 1.0f)};
     cXyz cStack_40(0.0f, 0.0f, 1.0f);
@@ -782,7 +740,6 @@ BOOL daObjCwall_c::checkWall() {
     return rv;
 }
 
-/* 80BD95A0-80BD977C 002C40 01DC+00 2/2 0/0 0/0 .text            checkPullNow__12daObjCwall_cFv */
 BOOL daObjCwall_c::checkPullNow() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     s16 dummy;
@@ -811,7 +768,6 @@ BOOL daObjCwall_c::checkPullNow() {
     return 0;
 }
 
-/* 80BD977C-80BD9848 002E1C 00CC+00 2/2 0/0 0/0 .text            checkPull__12daObjCwall_cFv */
 BOOL daObjCwall_c::checkPull() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz local_2c;
@@ -824,7 +780,6 @@ BOOL daObjCwall_c::checkPull() {
     return 0;
 }
 
-/* 80BD9848-80BD9948 002EE8 0100+00 1/0 0/0 0/0 .text            Draw__12daObjCwall_cFv */
 int daObjCwall_c::Draw() {
     g_env_light.settingTevStruct( 0x10,
                                          &field_0xf38, &tevStr);
@@ -845,35 +800,28 @@ int daObjCwall_c::Draw() {
     return 1;
 }
 
-/* 80BD9948-80BD9988 002FE8 0040+00 1/0 0/0 0/0 .text            Delete__12daObjCwall_cFv */
 int daObjCwall_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName[mType]);
     return 1;
 }
 
-/* 80BD9988-80BD9B70 003028 01E8+00 1/0 0/0 0/0 .text daObjCwall_create1st__FP12daObjCwall_c */
 static int daObjCwall_create1st(daObjCwall_c* i_this) {
     fopAcM_ct(i_this, daObjCwall_c);
     return i_this->create1st();
 }
 
-/* 80BD9DF8-80BD9E18 003498 0020+00 1/0 0/0 0/0 .text daObjCwall_MoveBGDelete__FP12daObjCwall_c */
 static int daObjCwall_MoveBGDelete(daObjCwall_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80BD9E18-80BD9E38 0034B8 0020+00 1/0 0/0 0/0 .text daObjCwall_MoveBGExecute__FP12daObjCwall_c
- */
 static int daObjCwall_MoveBGExecute(daObjCwall_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BD9E38-80BD9E64 0034D8 002C+00 1/0 0/0 0/0 .text daObjCwall_MoveBGDraw__FP12daObjCwall_c */
 static int daObjCwall_MoveBGDraw(daObjCwall_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80BDA240-80BDA260 -00001 0020+00 1/0 0/0 0/0 .data            daObjCwall_METHODS */
 static actor_method_class daObjCwall_METHODS = {
     (process_method_func)daObjCwall_create1st,
     (process_method_func)daObjCwall_MoveBGDelete,
@@ -882,7 +830,6 @@ static actor_method_class daObjCwall_METHODS = {
     (process_method_func)daObjCwall_MoveBGDraw,
 };
 
-/* 80BDA260-80BDA290 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_ChainWall */
 extern actor_process_profile_definition g_profile_Obj_ChainWall = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

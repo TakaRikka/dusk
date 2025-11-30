@@ -8,13 +8,10 @@
 #include "d/actor/d_a_hitobj.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-/* 8046B358-8046B360 000078 0008+00 1/0 0/0 0/0 .text            daHitobj_Draw__FP12hitobj_class */
 static int daHitobj_Draw(hitobj_class* i_this) {
     return 1;
 }
 
-/* 8046B360-8046B3C8 000080 0068+00 1/0 0/0 0/0 .text            daHitobj_Execute__FP12hitobj_class
- */
 static int daHitobj_Execute(hitobj_class* i_this) {
     if (i_this->field_0x572 != 0) {
         i_this->field_0x572--;
@@ -27,21 +24,15 @@ static int daHitobj_Execute(hitobj_class* i_this) {
     return 1;
 }
 
-/* 8046B3C8-8046B3D0 0000E8 0008+00 1/0 0/0 0/0 .text            daHitobj_IsDelete__FP12hitobj_class
- */
 static int daHitobj_IsDelete(hitobj_class* i_this) {
     return 1;
 }
 
-/* 8046B3D0-8046B400 0000F0 0030+00 1/0 0/0 0/0 .text            daHitobj_Delete__FP12hitobj_class
- */
 static int daHitobj_Delete(hitobj_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase,"Hitobj");
     return 1;
 }
 
-/* ############################################################################################## */
-/* 8046B5DC-8046B61C 000000 0040+00 1/1 0/0 0/0 .data            cc_sph_src$3657 */
 static dCcD_SrcSph cc_sph_src = {
     {
         {0, {{0, 0, 0x13}, {0, 3}, 0}},
@@ -57,7 +48,6 @@ static dCcD_SrcSph cc_sph_src = {
     }
 };
 
-/* 8046B400-8046B53C 000120 013C+00 1/0 0/0 0/0 .text            daHitobj_Create__FP10fopAc_ac_c */
 static int daHitobj_Create(fopAc_ac_c* i_this) {
     hitobj_class* hitobj = (hitobj_class*)i_this;
     fopAcM_ct(i_this, hitobj_class);
@@ -75,7 +65,6 @@ static int daHitobj_Create(fopAc_ac_c* i_this) {
     return ret;
 }
 
-/* 8046B61C-8046B63C -00001 0020+00 1/0 0/0 0/0 .data            l_daHitobj_Method */
 static actor_method_class l_daHitobj_Method = {
     (process_method_func)daHitobj_Create,
     (process_method_func)daHitobj_Delete,
@@ -84,7 +73,6 @@ static actor_method_class l_daHitobj_Method = {
     (process_method_func)daHitobj_Draw
 };
 
-/* 8046B63C-8046B66C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_HITOBJ */
 extern actor_process_profile_definition g_profile_HITOBJ = {
     fpcLy_CURRENT_e,        // mLayerID   
     7,                      // mListID  

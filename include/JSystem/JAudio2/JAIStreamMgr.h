@@ -14,16 +14,16 @@ class JAIStreamDataMgr;
  */
 class JAIStreamMgr : public JASGlobalInstance<JAIStreamMgr> {
 public:
-    /* 802A3B68 */ JAIStreamMgr(bool setInstance);
-    /* 802A3C3C */ bool startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr);
-    /* 802A3D70 */ void freeDeadStream_();
-    /* 802A3EBC */ void calc();
-    /* 802A4028 */ void stop();
-    /* 802A4068 */ void stop(u32 fadeTime);
-    /* 802A40B8 */ void stopSoundID(JAISoundID id);
-    /* 802A4118 */ void mixOut();
-    /* 802A4174 */ JAIStream* newStream_();
-    /* 802B9978 */ bool isActive() const { return mStreamList.getNumLinks() != 0; }
+    JAIStreamMgr(bool setInstance);
+    bool startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr);
+    void freeDeadStream_();
+    void calc();
+    void stop();
+    void stop(u32 fadeTime);
+    void stopSoundID(JAISoundID id);
+    void mixOut();
+    JAIStream* newStream_();
+    bool isActive() const { return mStreamList.getNumLinks() != 0; }
 
     JAIAudience* getAudience() { return mAudience; }
     JAISoundParamsMove* getParams() { return &mParams; }

@@ -11,21 +11,17 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-/* 80C24718-80C24738 000078 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjIceLeaf_c*)i_this)->CreateHeap();
 }
 
-/* 80C24738-80C24774 000098 003C+00 1/1 0/0 0/0 .text            initBaseMtx__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80C25DD0-80C25DD4 -00001 0004+00 7/7 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "V_IceLeaf";
 
-/* 80C24774-80C249E4 0000D4 0270+00 2/2 0/0 0/0 .text            setBaseMtx__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::setBaseMtx() {
     if (mRide) {
         daPy_py_c* player = dComIfGp_getLinkPlayer();
@@ -79,7 +75,6 @@ void daObjIceLeaf_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
-/* 80C25DD4-80C25E18 000024 0044+00 1/1 0/0 0/0 .data            l_cyl_src */
 static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x1f}, {0x400000, 0x11}, 0x78}},  // mObj
@@ -94,7 +89,6 @@ static dCcD_SrcCyl l_cyl_src = {
     }  // mCyl
 };
 
-/* 80C249E4-80C24BC4 000344 01E0+00 1/1 0/0 0/0 .text            Create__14daObjIceLeaf_cFv */
 int daObjIceLeaf_c::Create() {
     J3DJoint* joint = mpModel->getModelData()->getJointNodePointer(0);
     mTransformInfo = joint->getTransformInfo();
@@ -135,7 +129,6 @@ int daObjIceLeaf_c::Create() {
     return 1;
 }
 
-/* 80C24BC4-80C24C9C 000524 00D8+00 2/2 0/0 0/0 .text            setAnmPos__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::setAnmPos() {
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(0x168, pbck != NULL);
@@ -151,7 +144,6 @@ void daObjIceLeaf_c::setAnmPos() {
     shape_angle.z += mTransformInfo.mRotation.z;
 }
 
-/* 80C24C9C-80C24DCC 0005FC 0130+00 1/1 0/0 0/0 .text            CreateHeap__14daObjIceLeaf_cFv */
 int daObjIceLeaf_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 7);
     JUT_ASSERT(0x189, modelData != NULL);
@@ -173,7 +165,6 @@ int daObjIceLeaf_c::CreateHeap() {
     return 1;
 }
 
-/* 80C24E14-80C24F8C 000774 0178+00 1/1 0/0 0/0 .text            create__14daObjIceLeaf_cFv */
 int daObjIceLeaf_c::create() {
     fopAcM_ct(this, daObjIceLeaf_c);
 
@@ -191,7 +182,6 @@ int daObjIceLeaf_c::create() {
     return phase_state;
 }
 
-/* 80C25158-80C25360 000AB8 0208+00 1/1 0/0 0/0 .text            execute__14daObjIceLeaf_cFv */
 int daObjIceLeaf_c::execute() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -224,7 +214,6 @@ int daObjIceLeaf_c::execute() {
     return 1;
 }
 
-/* 80C25360-80C2541C 000CC0 00BC+00 1/1 0/0 0/0 .text            action__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::action() {
     typedef void (daObjIceLeaf_c::*mode_func)();
     static mode_func l_func[] = {
@@ -237,7 +226,6 @@ void daObjIceLeaf_c::action() {
     (this->*l_func[mMode])();
 }
 
-/* 80C2541C-80C25614 000D7C 01F8+00 1/0 0/0 0/0 .text            modeDropWait__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::modeDropWait() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -271,7 +259,6 @@ void daObjIceLeaf_c::modeDropWait() {
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
-/* 80C25614-80C258F8 000F74 02E4+00 1/0 0/0 0/0 .text            modeDrop__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::modeDrop() {
     if (mpBck->play()) {
         J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 4);
@@ -322,17 +309,12 @@ void daObjIceLeaf_c::modeDrop() {
     }
 }
 
-/* 80C258F8-80C25904 001258 000C+00 1/0 0/0 0/0 .text            modePlayerWait__14daObjIceLeaf_cFv
- */
 void daObjIceLeaf_c::modePlayerWait() {
     attention_info.flags = fopAc_AttnFlag_ETC_e;
 }
 
-/* 80C25904-80C25908 001264 0004+00 1/0 0/0 0/0 .text            modeRide__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::modeRide() {}
 
-/* 80C25908-80C259C4 001268 00BC+00 1/1 0/0 0/0 .text            event_proc_call__14daObjIceLeaf_cFv
- */
 void daObjIceLeaf_c::event_proc_call() {
     typedef void (daObjIceLeaf_c::*action_func)();
     static action_func l_func[] = {
@@ -345,10 +327,8 @@ void daObjIceLeaf_c::event_proc_call() {
     (this->*l_func[mAction])();
 }
 
-/* 80C259C4-80C259C8 001324 0004+00 1/0 0/0 0/0 .text            actionWait__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::actionWait() {}
 
-/* 80C259C8-80C25A68 001328 00A0+00 1/0 0/0 0/0 .text actionOrderEvent__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::actionOrderEvent() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         setAction(ACT_EVENT_e);
@@ -363,7 +343,6 @@ void daObjIceLeaf_c::actionOrderEvent() {
     }
 }
 
-/* 80C25A68-80C25AC4 0013C8 005C+00 1/0 0/0 0/0 .text            actionEvent__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventID)) {
         setAction(ACT_DEAD_e);
@@ -371,10 +350,8 @@ void daObjIceLeaf_c::actionEvent() {
     }
 }
 
-/* 80C25AC4-80C25AC8 001424 0004+00 1/0 0/0 0/0 .text            actionDead__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::actionDead() {}
 
-/* 80C25AC8-80C25BB8 001428 00F0+00 1/1 0/0 0/0 .text            setFallSE__14daObjIceLeaf_cFv */
 void daObjIceLeaf_c::setFallSE() {
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(0x36C, pbck != NULL);
@@ -391,7 +368,6 @@ void daObjIceLeaf_c::setFallSE() {
               mFallStartSEPos.z);
 }
 
-/* 80C25BB8-80C25C50 001518 0098+00 1/1 0/0 0/0 .text            draw__14daObjIceLeaf_cFv */
 int daObjIceLeaf_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -406,40 +382,33 @@ int daObjIceLeaf_c::draw() {
     return 1;
 }
 
-/* 80C25C50-80C25C84 0015B0 0034+00 1/1 0/0 0/0 .text            _delete__14daObjIceLeaf_cFv */
 int daObjIceLeaf_c::_delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     return 1;
 }
 
-/* 80C25C84-80C25CA4 0015E4 0020+00 1/0 0/0 0/0 .text daObjIceLeaf_Draw__FP14daObjIceLeaf_c */
 static int daObjIceLeaf_Draw(daObjIceLeaf_c* i_this) {
     return i_this->draw();
 }
 
-/* 80C25CA4-80C25CC4 001604 0020+00 1/0 0/0 0/0 .text daObjIceLeaf_Execute__FP14daObjIceLeaf_c */
 static int daObjIceLeaf_Execute(daObjIceLeaf_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C25CC4-80C25CE4 001624 0020+00 1/0 0/0 0/0 .text daObjIceLeaf_Delete__FP14daObjIceLeaf_c */
 static int daObjIceLeaf_Delete(daObjIceLeaf_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80C25CE4-80C25D04 001644 0020+00 1/0 0/0 0/0 .text daObjIceLeaf_Create__FP14daObjIceLeaf_c */
 static int daObjIceLeaf_Create(daObjIceLeaf_c* i_this) {
     return i_this->create();
 }
 
-/* 80C25ED8-80C25EF8 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjIceLeaf_Method */
 static actor_method_class l_daObjIceLeaf_Method = {
     (process_method_func)daObjIceLeaf_Create,  (process_method_func)daObjIceLeaf_Delete,
     (process_method_func)daObjIceLeaf_Execute, (process_method_func)NULL,
     (process_method_func)daObjIceLeaf_Draw,
 };
 
-/* 80C25EF8-80C25F28 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_IceLeaf */
 extern actor_process_profile_definition g_profile_Obj_IceLeaf = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

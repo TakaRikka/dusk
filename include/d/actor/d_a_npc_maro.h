@@ -38,65 +38,65 @@ public:
         TYPE_16,
     };
 
-    /* 8055B58C */ ~daNpc_Maro_c();
-    /* 8055B6E0 */ int create();
-    /* 8055B9A8 */ int CreateHeap();
-    /* 8055BDE8 */ int Delete();
-    /* 8055BE1C */ int Execute();
-    /* 8055BF0C */ int Draw();
-    /* 8055BFA0 */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 8055BFC0 */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 8055C018 */ static void* srchArrow(void*, void*);
-    /* 8055C0B4 */ fopAc_ac_c* getArrowP();
-    /* 8055C1AC */ static void* srchItaMato(void*, void*);
-    /* 8055C248 */ fopAc_ac_c* getItaMatoP(int);
-    /* 8055C330 */ u8 getType();
-    /* 8055C3E0 */ int isDelete();
-    /* 8055C614 */ void reset();
-    /* 8055C834 */ void afterJntAnm(int);
-    /* 8055C8B0 */ void setParam();
-    /* 8055CB14 */ BOOL checkChangeEvt();
-    /* 8055CC9C */ BOOL evtEndProc();
-    /* 8055CCD8 */ void setAfterTalkMotion();
-    /* 8055CD74 */ void srchActors();
-    /* 8055D0D8 */ BOOL evtTalk();
-    /* 8055D1F4 */ BOOL evtCutProc();
-    /* 8055D368 */ void action();
-    /* 8055D5C4 */ void beforeMove();
-    /* 8055D688 */ void setAttnPos();
-    /* 8055D918 */ void setCollision();
-    /* 8055DA70 */ BOOL drawDbgInfo();
-    /* 8055DA78 */ void drawOtherMdl();
-    /* 8055DAD8 */ daNpcT_faceMotionAnmData_c getFaceMotionAnm(daNpcT_faceMotionAnmData_c);
-    /* 8055DB64 */ daNpcT_motionAnmData_c getMotionAnm(daNpcT_motionAnmData_c);
-    /* 8055DBF0 */ int selectAction();
-    /* 8055DD08 */ int chkAction(int (daNpc_Maro_c::*)(void*));
-    /* 8055DD34 */ int setAction(int (daNpc_Maro_c::*)(void*));
-    /* 8055DDDC */ int cutConversationAboutPachinko(int);
-    /* 8055DF7C */ int cutConversationAboutWoodSwd(int);
-    /* 8055E124 */ int cutSwdTutorial(int);
-    /* 8055E414 */ int cutHail(int);
-    /* 8055E578 */ int cutFindMonkey(int);
-    /* 8055E968 */ int cutGiveMeWoodSwd(int);
-    /* 8055ECF4 */ int cutGetWoodSwd(int);
-    /* 8055F508 */ int cutConversationWithMaro(int);
-    /* 8055F634 */ int cutCacaricoConversation(int);
-    /* 8055F82C */ int cutSurprise(int);
-    /* 8055FAF0 */ int cutArrowTutorial(int);
-    /* 805611E0 */ int cutBokinTalk(int);
-    /* 80561328 */ int cutMarosWhisper(int);
-    /* 80561614 */ int cutTagPush1(int);
-    /* 8056178C */ int cutNotGonnaLet(int);
-    /* 80561E70 */ int cutTalkToKakashi(int);
-    /* 80562174 */ int wait(void*);
-    /* 805629A4 */ int swdTutorial(void*);
-    /* 80562B14 */ int talk_withTaro(void*);
-    /* 80562CA4 */ int choccai(void*);
-    /* 80562EC8 */ int tend(void*);
-    /* 8056319C */ int arrowTutorial(void*);
-    /* 8056342C */ int talk(void*);
-    /* 80563660 */ int shop(void*);
-    /* 805648A4 */ daNpc_Maro_c(
+    ~daNpc_Maro_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    static void* srchArrow(void*, void*);
+    fopAc_ac_c* getArrowP();
+    static void* srchItaMato(void*, void*);
+    fopAc_ac_c* getItaMatoP(int);
+    u8 getType();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    BOOL checkChangeEvt();
+    BOOL evtEndProc();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    BOOL drawDbgInfo();
+    void drawOtherMdl();
+    daNpcT_faceMotionAnmData_c getFaceMotionAnm(daNpcT_faceMotionAnmData_c);
+    daNpcT_motionAnmData_c getMotionAnm(daNpcT_motionAnmData_c);
+    int selectAction();
+    int chkAction(int (daNpc_Maro_c::*)(void*));
+    int setAction(int (daNpc_Maro_c::*)(void*));
+    int cutConversationAboutPachinko(int);
+    int cutConversationAboutWoodSwd(int);
+    int cutSwdTutorial(int);
+    int cutHail(int);
+    int cutFindMonkey(int);
+    int cutGiveMeWoodSwd(int);
+    int cutGetWoodSwd(int);
+    int cutConversationWithMaro(int);
+    int cutCacaricoConversation(int);
+    int cutSurprise(int);
+    int cutArrowTutorial(int);
+    int cutBokinTalk(int);
+    int cutMarosWhisper(int);
+    int cutTagPush1(int);
+    int cutNotGonnaLet(int);
+    int cutTalkToKakashi(int);
+    int wait(void*);
+    int swdTutorial(void*);
+    int talk_withTaro(void*);
+    int choccai(void*);
+    int tend(void*);
+    int arrowTutorial(void*);
+    int talk(void*);
+    int shop(void*);
+    daNpc_Maro_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -108,12 +108,12 @@ public:
                    i_arcNames) {
         OS_REPORT("|%06d:%x|daNpc_Maro_c -> コンストラクト\n", g_Counter.mCounter0, this);
     }
-    /* 80564970 */ u16 getEyeballMaterialNo() { return 1; }
-    /* 80564978 */ s32 getHeadJointNo() { return 4; }
-    /* 80564980 */ s32 getNeckJointNo() { return 3; }
-    /* 80564988 */ s32 getBackboneJointNo() { return 1; }
-    /* 80564990 */ BOOL checkChangeJoint(int arg0) { return arg0 == 4; };
-    /* 805649A0 */ BOOL checkRemoveJoint(int arg0) { return arg0 == 6; };
+    u16 getEyeballMaterialNo() { return 1; }
+    s32 getHeadJointNo() { return 4; }
+    s32 getNeckJointNo() { return 3; }
+    s32 getBackboneJointNo() { return 1; }
+    BOOL checkChangeJoint(int arg0) { return arg0 == 4; };
+    BOOL checkRemoveJoint(int arg0) { return arg0 == 6; };
 
     u8 getBitSW() { return (fopAcM_GetParam(this) & 0xFF0000) >> 16; }
 
@@ -186,7 +186,7 @@ struct daNpc_Maro_HIOParam {
 
 class daNpc_Maro_Param_c {
 public:
-    /* 805649B0 */ virtual ~daNpc_Maro_Param_c() {}
+    virtual ~daNpc_Maro_Param_c() {}
 
     static const daNpc_Maro_HIOParam m;
 };

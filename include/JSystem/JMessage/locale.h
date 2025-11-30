@@ -16,10 +16,10 @@ struct locale {
         return c >= 0x81 && (c <= 0x9F || (c >= 0xE0 && c <= 0xFC));
     }
 
-    /* 802A9490 */ static int parseCharacter_1Byte(const char** ppszText);
-    /* 802A94A8 */ static int parseCharacter_2Byte(const char** ppszText);
-    /* 802A9528 */ static int parseCharacter_ShiftJIS(const char** ppszText);
-    /* 802A958C */ static int parseCharacter_UTF8(const char** ppszText);
+    static int parseCharacter_1Byte(const char** ppszText);
+    static int parseCharacter_2Byte(const char** ppszText);
+    static int parseCharacter_ShiftJIS(const char** ppszText);
+    static int parseCharacter_UTF8(const char** ppszText);
 };
 };  // namespace JMessage
 

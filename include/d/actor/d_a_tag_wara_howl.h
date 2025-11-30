@@ -5,15 +5,15 @@
 
 class daTagWrHowl_c : public fopAc_ac_c {
 public:
-    /* 80D63F38 */ daTagWrHowl_c();
-    /* 80D63FD4 */ int create();
-    /* 80D6402C */ int Delete();
-    /* 80D64034 */ int draw();
-    /* 80D6403C */ int execute();
-    /* 80D64090 */ void init();
-    /* 80D640B4 */ bool chkWlfInTag();
+    daTagWrHowl_c();
+    int create();
+    int Delete();
+    int draw();
+    int execute();
+    void init();
+    bool chkWlfInTag();
 
-    /* 80D63F74 */ virtual ~daTagWrHowl_c();
+    virtual ~daTagWrHowl_c();
 
     s8 getTuneId() { return fopAcM_GetParamBit(this, 4, 4); }
 

@@ -9,7 +9,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-/* 806DFF58-806DFFC0 000078 0068+00 1/0 0/0 0/0 .text daE_HB_LEAF_Draw__FP15e_hb_leaf_class */
 static int daE_HB_LEAF_Draw(e_hb_leaf_class* i_this) {
     g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType_MAJI(i_this->mpMorf->getModel(), &i_this->tevStr);
@@ -17,7 +16,6 @@ static int daE_HB_LEAF_Draw(e_hb_leaf_class* i_this) {
     return 1;
 }
 
-/* 806DFFC0-806E00A0 0000E0 00E0+00 2/1 0/0 0/0 .text daE_HB_LEAF_Execute__FP15e_hb_leaf_class */
 static int daE_HB_LEAF_Execute(e_hb_leaf_class* i_this) {
     mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z);
     mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
@@ -38,18 +36,15 @@ static int daE_HB_LEAF_Execute(e_hb_leaf_class* i_this) {
     return 1;
 }
 
-/* 806E00A0-806E00A8 0001C0 0008+00 1/0 0/0 0/0 .text daE_HB_LEAF_IsDelete__FP15e_hb_leaf_class */
 static int daE_HB_LEAF_IsDelete(e_hb_leaf_class* i_this) {
     return 1;
 }
 
-/* 806E00A8-806E00D8 0001C8 0030+00 1/0 0/0 0/0 .text daE_HB_LEAF_Delete__FP15e_hb_leaf_class */
 static int daE_HB_LEAF_Delete(e_hb_leaf_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_HB");
     return 1;
 }
 
-/* 806E00D8-806E01D8 0001F8 0100+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_hb_leaf_class* a_this = static_cast<e_hb_leaf_class*>(i_this);
 
@@ -63,8 +58,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 806E01D8-806E0288 0002F8 00B0+00 1/0 0/0 0/0 .text            daE_HB_LEAF_Create__FP10fopAc_ac_c
- */
 static int daE_HB_LEAF_Create(fopAc_ac_c* i_this) {
     e_hb_leaf_class* a_this = static_cast<e_hb_leaf_class*>(i_this);
     fopAcM_ct(a_this, e_hb_leaf_class);
@@ -87,14 +80,12 @@ static int daE_HB_LEAF_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 806E029C-806E02BC -00001 0020+00 1/0 0/0 0/0 .data            l_daE_HB_LEAF_Method */
 static actor_method_class l_daE_HB_LEAF_Method = {
     (process_method_func)daE_HB_LEAF_Create,  (process_method_func)daE_HB_LEAF_Delete,
     (process_method_func)daE_HB_LEAF_Execute, (process_method_func)daE_HB_LEAF_IsDelete,
     (process_method_func)daE_HB_LEAF_Draw,
 };
 
-/* 806E02BC-806E02EC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_HB_LEAF */
 extern actor_process_profile_definition g_profile_E_HB_LEAF = {
     fpcLy_CURRENT_e,
     7,

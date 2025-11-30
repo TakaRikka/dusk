@@ -13,13 +13,13 @@
  */
 class daObjZCloth_c : public daItemBase_c {
 public:
-    /* 80D3EE18 */ void initBaseMtx();
-    /* 80D3EE54 */ void setBaseMtx();
-    /* 80D3EEC0 */ int Create();
-    /* 80D3EF0C */ int create();
-    /* 80D3F1AC */ int execute();
-    /* 80D3F1D0 */ int draw();
-    /* 80D3F200 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int create();
+    int execute();
+    int draw();
+    int _delete();
 };
 
 STATIC_ASSERT(sizeof(daObjZCloth_c) == 0x92C);

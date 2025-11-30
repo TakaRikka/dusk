@@ -12,8 +12,8 @@
 
 class daE_DB_HIO_c : public JORReflexible {
 public:
-    /* 8069AAEC */ daE_DB_HIO_c();
-    /* 806A13D8 */ virtual ~daE_DB_HIO_c() {}
+    daE_DB_HIO_c();
+    virtual ~daE_DB_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -42,7 +42,6 @@ enum daE_DB_ACTION {
     ACTION_E_DEAD,
 };
 
-/* 8069AAEC-8069AB34 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__12daE_DB_HIO_cFv */
 daE_DB_HIO_c::daE_DB_HIO_c() {
     id = -1;
     base_size = 1.0f;
@@ -52,13 +51,11 @@ daE_DB_HIO_c::daE_DB_HIO_c() {
     attack_freq = 30;
 }
 
-/* 8069AB34-8069ABE0 000134 00AC+00 12/12 0/0 0/0 .text            anm_init__FP10e_db_classifUcf */
 static void anm_init(e_db_class* i_this, int i_anm, f32 i_morf, u8 i_mode, f32 i_speed) {
     i_this->modelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_db", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f);
     i_this->anm = i_anm;
 }
 
-/* 8069ABE0-8069ACB8 0001E0 00D8+00 11/11 0/0 0/0 .text leaf_anm_init__FP10e_db_classifUcf */
 static BOOL leaf_anm_init(e_db_class* i_this, int i_anm, f32 i_morf, u8 i_mode, f32 i_speed) {
     e_db_leaf_class* pleaf = (e_db_leaf_class*)fopAcM_SearchByID(i_this->leaf_actor_id);
     if (pleaf != NULL) {
@@ -69,7 +66,6 @@ static BOOL leaf_anm_init(e_db_class* i_this, int i_anm, f32 i_morf, u8 i_mode, 
     return FALSE;
 }
 
-/* 8069ACB8-8069AFB4 0002B8 02FC+00 1/0 0/0 0/0 .text            daE_DB_Draw__FP10e_db_class */
 static int daE_DB_Draw(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -121,7 +117,6 @@ static int daE_DB_Draw(e_db_class* i_this) {
     return 1;
 }
 
-/* 8069AFB4-8069B000 0005B4 004C+00 2/2 0/0 0/0 .text            pl_check__FP10e_db_classf */
 static BOOL pl_check(e_db_class* i_this, f32 i_range) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -133,7 +128,6 @@ static BOOL pl_check(e_db_class* i_this, f32 i_range) {
     }
 }
 
-/* 8069B000-8069B468 000600 0468+00 1/1 0/0 0/0 .text            damage_check__FP10e_db_class */
 static void damage_check(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -271,13 +265,10 @@ static void damage_check(e_db_class* i_this) {
     }
 }
 
-/* 806A1D98-806A1D9C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 806A1DA8-806A1DC0 000018 0018+00 11/11 0/0 0/0 .bss             l_HIO */
 static daE_DB_HIO_c l_HIO;
 
-/* 8069B468-8069B7C0 000A68 0358+00 1/1 0/0 0/0 .text            e_db_stay__FP10e_db_class */
 static void e_db_stay(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
 
@@ -337,7 +328,6 @@ static void e_db_stay(e_db_class* i_this) {
     }
 }
 
-/* 8069B7C0-8069BA80 000DC0 02C0+00 1/1 0/0 0/0 .text            e_db_appear__FP10e_db_class */
 static void e_db_appear(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     int anm_frame = i_this->modelMorf->getFrame();
@@ -389,7 +379,6 @@ static void e_db_appear(e_db_class* i_this) {
     cLib_addCalc2(&i_this->size, l_HIO.appear_size, 1.0f, 0.1f);
 }
 
-/* 8069BA80-8069BC4C 001080 01CC+00 1/1 0/0 0/0 .text            e_db_appear_v__FP10e_db_class */
 static void e_db_appear_v(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -429,7 +418,6 @@ static void e_db_appear_v(e_db_class* i_this) {
     i_this->field_0xb14 = 1;
 }
 
-/* 8069BC4C-8069C1AC 00124C 0560+00 1/1 0/0 0/0 .text            e_db_wait__FP10e_db_class */
 static void e_db_wait(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp48;
@@ -517,7 +505,6 @@ static void e_db_wait(e_db_class* i_this) {
     }
 }
 
-/* 8069C1AC-8069C408 0017AC 025C+00 1/1 0/0 0/0 .text            e_db_mk_roof__FP10e_db_class */
 static void e_db_mk_roof(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz spC;
@@ -562,7 +549,6 @@ static void e_db_mk_roof(e_db_class* i_this) {
     actor->shape_angle.z = 0;
 }
 
-/* 8069C408-8069CED8 001A08 0AD0+00 1/1 0/0 0/0 .text            e_db_attack__FP10e_db_class */
 static void e_db_attack(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -766,7 +752,6 @@ static void e_db_attack(e_db_class* i_this) {
     }
 }
 
-/* 8069CED8-8069D234 0024D8 035C+00 1/1 0/0 0/0 .text            e_db_attack_s__FP10e_db_class */
 static void e_db_attack_s(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* temp_r28 = dComIfGp_getPlayer(0);
@@ -808,7 +793,6 @@ static void e_db_attack_s(e_db_class* i_this) {
     i_this->field_0xb14 = 1;
 }
 
-/* 8069D234-8069D534 002834 0300+00 1/1 0/0 0/0 .text            e_db_chance__FP10e_db_class */
 static void e_db_chance(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -873,7 +857,6 @@ static void e_db_chance(e_db_class* i_this) {
     cLib_addCalc2(&i_this->field_0x844, 0.5f + JREG_F(4), 1.0f, 0.05f);
 }
 
-/* 8069D534-8069D770 002B34 023C+00 1/1 0/0 0/0 .text            e_db_s_damage__FP10e_db_class */
 static void e_db_s_damage(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp10;
@@ -925,7 +908,6 @@ static void e_db_s_damage(e_db_class* i_this) {
     }
 }
 
-/* 8069D770-8069DB68 002D70 03F8+00 1/1 0/0 0/0 .text            e_db_damage__FP10e_db_class */
 static void e_db_damage(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp1C;
@@ -1000,7 +982,6 @@ static void e_db_damage(e_db_class* i_this) {
     }
 }
 
-/* 8069DB68-8069DEC4 003168 035C+00 1/1 0/0 0/0 .text            kuki_control1__FP10e_db_class */
 static void kuki_control1(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp40;
@@ -1091,7 +1072,6 @@ static void kuki_control1(e_db_class* i_this) {
     }
 }
 
-/* 8069DEC4-8069E038 0034C4 0174+00 1/1 0/0 0/0 .text            kuki_control2__FP10e_db_class */
 static void kuki_control2(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp28;
@@ -1127,7 +1107,6 @@ static void kuki_control2(e_db_class* i_this) {
     }
 }
 
-/* 8069E038-8069E114 003638 00DC+00 1/1 0/0 0/0 .text            kuki_control3__FP10e_db_class */
 static void kuki_control3(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp20;
@@ -1140,7 +1119,6 @@ static void kuki_control3(e_db_class* i_this) {
     }
 }
 
-/* 8069E114-8069E200 003714 00EC+00 1/1 0/0 0/0 .text            kuki_ha_set__FP10e_db_class */
 static void kuki_ha_set(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz* ppos = i_this->field_0x69c;
@@ -1160,7 +1138,6 @@ static void kuki_ha_set(e_db_class* i_this) {
     }
 }
 
-/* 8069E200-8069E504 003800 0304+00 1/1 0/0 0/0 .text            kuki_control1_e__FP10e_db_class */
 static void kuki_control1_e(e_db_class* i_this) {
     fopAc_ac_c* sp18 = &i_this->enemy;
     cXyz sp58;
@@ -1227,7 +1204,6 @@ static void kuki_control1_e(e_db_class* i_this) {
     }
 }
 
-/* 8069E504-8069F360 003B04 0E5C+00 2/1 0/0 0/0 .text            e_db_escape__FP10e_db_class */
 static s8 e_db_escape(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
@@ -1538,7 +1514,6 @@ static s8 e_db_escape(e_db_class* i_this) {
     return spD;
 }
 
-/* 8069F360-8069F978 004960 0618+00 1/1 0/0 0/0 .text            e_db_e_dead__FP10e_db_class */
 static void e_db_e_dead(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp24;
@@ -1683,7 +1658,6 @@ static void e_db_e_dead(e_db_class* i_this) {
     }
 }
 
-/* 8069F978-8069FFFC 004F78 0684+00 2/1 0/0 0/0 .text            action__FP10e_db_class */
 static void action(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -1854,7 +1828,6 @@ static void action(e_db_class* i_this) {
     setMidnaBindEffect((fopEn_enemy_c*)actor, &i_this->sound, &actor->eyePos, &effsize);
 }
 
-/* 8069FFFC-806A03C4 0055FC 03C8+00 1/1 0/0 0/0 .text            eff_set__FP10e_db_classi */
 static void eff_set(e_db_class* i_this, int param_1) {
     fopAc_ac_c* actor = &i_this->enemy;
     J3DModel* model = i_this->modelMorf->getModel();
@@ -1925,7 +1898,6 @@ static void eff_set(e_db_class* i_this, int param_1) {
     }
 }
 
-/* 806A03C4-806A052C 0059C4 0168+00 1/1 0/0 0/0 .text            anm_se_set__FP10e_db_class */
 static void anm_se_set(e_db_class* i_this) {
     if (i_this->anm == 5) {
         if (i_this->modelMorf->checkFrame(22.0f)) {
@@ -1946,7 +1918,6 @@ static void anm_se_set(e_db_class* i_this) {
     }
 }
 
-/* 806A052C-806A08F0 005B2C 03C4+00 2/1 0/0 0/0 .text            daE_DB_Execute__FP10e_db_class */
 static int daE_DB_Execute(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     cXyz sp4C;
@@ -2038,12 +2009,10 @@ static int daE_DB_Execute(e_db_class* i_this) {
     return 1;
 }
 
-/* 806A08F0-806A08F8 005EF0 0008+00 1/0 0/0 0/0 .text            daE_DB_IsDelete__FP10e_db_class */
 static int daE_DB_IsDelete(e_db_class* i_this) {
     return 1;
 }
 
-/* 806A08F8-806A0960 005EF8 0068+00 1/0 0/0 0/0 .text            daE_DB_Delete__FP10e_db_class */
 static int daE_DB_Delete(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
     fpc_ProcID id = fopAcM_GetID(i_this);
@@ -2061,7 +2030,6 @@ static int daE_DB_Delete(e_db_class* i_this) {
     return 1;
 }
 
-/* 806A0960-806A0B54 005F60 01F4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_db_class* a_this = (e_db_class*)i_this;
 
@@ -2096,7 +2064,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 806A0B54-806A106C 006154 0518+00 1/0 0/0 0/0 .text            daE_DB_Create__FP10fopAc_ac_c */
 static int daE_DB_Create(fopAc_ac_c* i_this) {
     e_db_class* a_this = (e_db_class*)i_this;
     fopAcM_ct(i_this, e_db_class);
@@ -2230,7 +2197,6 @@ static int daE_DB_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 806A1CC0-806A1CE0 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_DB_Method */
 static actor_method_class l_daE_DB_Method = {
     (process_method_func)daE_DB_Create,
     (process_method_func)daE_DB_Delete,
@@ -2239,7 +2205,6 @@ static actor_method_class l_daE_DB_Method = {
     (process_method_func)daE_DB_Draw,
 };
 
-/* 806A1CE0-806A1D10 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_DB */
 extern actor_process_profile_definition g_profile_E_DB = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

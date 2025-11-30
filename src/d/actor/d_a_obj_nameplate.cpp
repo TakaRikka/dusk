@@ -12,8 +12,6 @@
 #include "f_op/f_op_actor.h"
 #include "include/SSystem/SComponent/c_math.h"
 
-/* ############################################################################################## */
-/* 80594E74-80594E94 000000 0020+00 5/5 0/0 0/0 .rodata          M_attr__16daObjNameplate_c */
 // clang-format off
 daObjNameplate_c::M_attrs const daObjNameplate_c::M_attr = {
     50.0f,
@@ -29,8 +27,6 @@ daObjNameplate_c::M_attrs const daObjNameplate_c::M_attr = {
 };
 // clang-format on
 
-/* 80594098-8059415C 000078 00C4+00 1/1 0/0 0/0 .text            create_init__16daObjNameplate_cFv
- */
 void daObjNameplate_c::create_init() {
     fopAcM_setCullSizeBox(this, -75.0f, -180.0f, -25.0f, 75.0f, 20.0f, 25.0f);
 
@@ -45,13 +41,10 @@ void daObjNameplate_c::create_init() {
     initCcSphere();
 }
 
-/* 8059415C-8059417C 00013C 0020+00 1/1 0/0 0/0 .text            initBaseMtx__16daObjNameplate_cFv
- */
 void daObjNameplate_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 8059417C-80594248 00015C 00CC+00 2/2 0/0 0/0 .text            setBaseMtx__16daObjNameplate_cFv */
 void daObjNameplate_c::setBaseMtx() {
     mDoMtx_stack_c::transS(home.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -73,8 +66,6 @@ void daObjNameplate_c::setBaseMtx() {
     PSMTXCopy(mDoMtx_stack_c::now, mMtx);
 }
 
-/* 80594248-805942B8 000228 0070+00 1/1 0/0 0/0 .text            initCcSphere__16daObjNameplate_cFv
- */
 void daObjNameplate_c::initCcSphere() {
     /* 80594EB4-80594EF4 000040 0040+00 1/1 0/0 0/0 .rodata          ccSphSrc$3700 */
     const static dCcD_SrcSph ccSphSrc = {
@@ -96,8 +87,6 @@ void daObjNameplate_c::initCcSphere() {
     mCcDSph.SetR(attr().radius1);
 }
 
-/* 805942B8-8059434C 000298 0094+00 1/1 0/0 0/0 .text            setCcSphere__16daObjNameplate_cFv
- */
 void daObjNameplate_c::setCcSphere() {
     cXyz local_lc1;
     cXyz local_lc(0.0f, -115.0f, 0.0f);  // fails unless this unused cXyz is present
@@ -112,8 +101,6 @@ void daObjNameplate_c::setCcSphere() {
     dComIfG_Ccsp()->Set(&mCcDSph);
 }
 
-/* 8059434C-805945CC 00032C 0280+00 1/1 0/0 0/0 .text            calcAngle__16daObjNameplate_cFv
- */
 void daObjNameplate_c::calcAngle() {
     if (field_0x77E > 0) {
         field_0x77E += -1;
@@ -193,8 +180,6 @@ void daObjNameplate_c::calcSpring() {
     field_0x722 = field_0x778;
 }
 
-/* 80594754-805947F8 000734 00A4+00 1/1 0/0 0/0 .text checkHitAngle__16daObjNameplate_cFv
- */
 int daObjNameplate_c::checkHitAngle() {
     s16 sourceAngle = fopAcM_searchPlayerAngleY(this) - shape_angle.y;
 
@@ -211,8 +196,6 @@ int daObjNameplate_c::checkHitAngle() {
     return -1;
 }
 
-/* 805947F8-80594950 0007D8 0158+00 1/1 0/0 0/0 .text messageProc__16daObjNameplate_cFv
- */
 void daObjNameplate_c::messageProc() {
     switch (mShowMessage) {
     case 0:
@@ -247,7 +230,6 @@ void daObjNameplate_c::messageProc() {
     }
 }
 
-/* 80594F28-80594F2C -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 char* daObjNameplate_c::l_arcName = "J_Hyosatu";
 
 int daObjNameplate_c::createHeap() {
@@ -262,8 +244,6 @@ int daObjNameplate_c::createHeap() {
     return 1;
 }
 
-/* 80594950-805949C8 000930 0078+00 1/1 0/0 0/0 .text            createSolidHeap__FP10fopAc_ac_c
- */
 static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjNameplate_c*>(i_this)->createHeap();
 }
@@ -279,8 +259,6 @@ int daObjNameplate_c::draw() {
     return 1;
 }
 
-/* 805949C8-80594A6C 0009A8 00A4+00 1/0 0/0 0/0 .text daObjNameplate_Draw__FP16daObjNameplate_c
- */
 static int daObjNameplate_Draw(daObjNameplate_c* i_this) {
     return i_this->draw();
 }
@@ -297,8 +275,6 @@ static int daObjNameplate_Execute(daObjNameplate_c* i_this) {
     return 1;
 }
 
-/* 80594AB4-80594ABC 000A94 0008+00 1/0 0/0 0/0 .text
- * daObjNameplate_IsDelete__FP16daObjNameplate_c                */
 static int daObjNameplate_IsDelete(daObjNameplate_c* i_this) {
     return 1;
 }
@@ -326,21 +302,18 @@ int daObjNameplate_c::create() {
     return phase_state;
 }
 
-/* 80594BF8-80594D38 000BD8 0140+00 1/0 0/0 0/0 .text daObjNameplate_Create__FP10fopAc_ac_c */
 static int daObjNameplate_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjNameplate_c*>(i_this)->create();
 }
 
 /* ##############################################################################################
  */
-/* 80594F2C-80594F4C -00001 0020+00 1/0 0/0 0/0 .data            l_daObjNameplate_Method */
 static actor_method_class l_daObjNameplate_Method = {
     (process_method_func)daObjNameplate_Create,  (process_method_func)daObjNameplate_Delete,
     (process_method_func)daObjNameplate_Execute, (process_method_func)daObjNameplate_IsDelete,
     (process_method_func)daObjNameplate_Draw,
 };
 
-/* 80594F4C-80594F7C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_NamePlate */
 extern actor_process_profile_definition g_profile_Obj_NamePlate = {
     fpcLy_CURRENT_e,           // mLayerID
     7,                         // mListID

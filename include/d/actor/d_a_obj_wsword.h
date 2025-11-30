@@ -16,14 +16,14 @@
  */
 class daObjWSword_c : public fopAc_ac_c {
 public:
-    /* 80D3B998 */ void initBaseMtx();
-    /* 80D3B9D4 */ void setBaseMtx();
-    /* 80D3BA40 */ int Create();
-    /* 80D3BAB8 */ int CreateHeap();
-    /* 80D3BB28 */ int create();
-    /* 80D3BDA0 */ int execute();
-    /* 80D3BDF0 */ int draw();
-    /* 80D3BE54 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    int draw();
+    int _delete();
 
 private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;

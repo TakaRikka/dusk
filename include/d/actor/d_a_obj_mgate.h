@@ -24,15 +24,15 @@ public:
         /* 1 */ TYPE_RIGHT,
     };
 
-    /* 805935B8 */ void initBaseMtx();
-    /* 80593630 */ void setBaseMtx();
-    /* 8059388C */ int create1st();
+    void initBaseMtx();
+    void setBaseMtx();
+    int create1st();
 
-    /* 805937AC */ virtual int CreateHeap();
-    /* 80593760 */ virtual int Create();
-    /* 80593988 */ virtual int Execute(Mtx**);
-    /* 80593C4C */ virtual int Draw();
-    /* 80593D18 */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getType() { return fopAcM_GetParamBit(this, 0, 1); }
     u8 getKind() { return fopAcM_GetParamBit(this, 1, 4); }

@@ -12,13 +12,10 @@
 #include "d/actor/d_a_npc.h"
 #include "d/d_procname.h"
 
-/* 80BAE198-80BAE19C -00001 0004+00 1/1 0/0 0/0 .data            l_resName */
 static char* l_resName = "KH_Bed";
 
-/* 80BAE168-80BAE178 000000 0010+00 2/2 0/0 0/0 .rodata          m__17daObj_Bed_Param_c */
 daObj_Bed_Param_c::params const daObj_Bed_Param_c::m = {NULL, -3.0f, 1.0f, 600.0f};
 
-/* 80BAD66C-80BAD790 0000EC 0124+00 1/0 0/0 0/0 .text            __dt__11daObj_Bed_cFv */
 daObj_Bed_c::~daObj_Bed_c() {
     if (mpCollider != NULL) {
         dComIfG_Bgsp().Release(mpCollider);
@@ -26,7 +23,6 @@ daObj_Bed_c::~daObj_Bed_c() {
     dComIfG_resDelete(&mPhase, getResName());
 }
 
-/* 80BAD790-80BADA00 000210 0270+00 1/1 0/0 0/0 .text            create__11daObj_Bed_cFv */
 cPhs__Step daObj_Bed_c::create() {
     fopAcM_ct(this, daObj_Bed_c);
     mType = getType();
@@ -59,7 +55,6 @@ cPhs__Step daObj_Bed_c::create() {
     return step;
 }
 
-/* 80BADB70-80BADC80 0005F0 0110+00 1/1 0/0 0/0 .text            CreateHeap__11daObj_Bed_cFv */
 int daObj_Bed_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(getResName(), 4);
     if (model_data == NULL) {
@@ -81,13 +76,11 @@ int daObj_Bed_c::CreateHeap() {
     return 1;
 }
 
-/* 80BADC80-80BADCB4 000700 0034+00 1/1 0/0 0/0 .text            Delete__11daObj_Bed_cFv */
 int daObj_Bed_c::Delete() {
     this->~daObj_Bed_c();
     return 1;
 }
 
-/* 80BADCB4-80BADDF4 000734 0140+00 2/2 0/0 0/0 .text            Execute__11daObj_Bed_cFv */
 int daObj_Bed_c::Execute() {
     mAcch.CrrPos(dComIfG_Bgsp());
     mGndChk = mAcch.m_gnd;
@@ -106,7 +99,6 @@ int daObj_Bed_c::Execute() {
     return 1;
 }
 
-/* 80BADDF4-80BADEB8 000874 00C4+00 1/1 0/0 0/0 .text            Draw__11daObj_Bed_cFv */
 int daObj_Bed_c::Draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -120,23 +112,18 @@ int daObj_Bed_c::Draw() {
     return 1;
 }
 
-/* 80BADEB8-80BADED8 000938 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__11daObj_Bed_cFP10fopAc_ac_c              */
 int daObj_Bed_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daObj_Bed_c*>(i_this)->CreateHeap();
 }
 
-/* 80BADED8-80BADEE0 000958 0008+00 1/1 0/0 0/0 .text            getType__11daObj_Bed_cFv */
 u8 daObj_Bed_c::getType() {
     return 0;
 }
 
-/* 80BADEE0-80BADEF0 000960 0010+00 3/3 0/0 0/0 .text            getResName__11daObj_Bed_cFv */
 char* daObj_Bed_c::getResName() {
     return l_resName;
 }
 
-/* 80BADEF0-80BADF34 000970 0044+00 1/1 0/0 0/0 .text            isDelete__11daObj_Bed_cFv */
 int daObj_Bed_c::isDelete() {
     switch (mType) {
         case 0:
@@ -146,18 +133,15 @@ int daObj_Bed_c::isDelete() {
     }
 }
 
-/* 80BADF34-80BADF90 0009B4 005C+00 2/2 0/0 0/0 .text            setEnvTevColor__11daObj_Bed_cFv */
 void daObj_Bed_c::setEnvTevColor() {
     tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(mGndChk);
     tevStr.room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
 }
 
-/* 80BADF90-80BADFD0 000A10 0040+00 2/2 0/0 0/0 .text            setRoomNo__11daObj_Bed_cFv */
 void daObj_Bed_c::setRoomNo() {
     fopAcM_SetRoomNo(this, dComIfG_Bgsp().GetRoomId(mGndChk));
 }
 
-/* 80BADFD0-80BAE034 000A50 0064+00 1/1 0/0 0/0 .text            setMtx__11daObj_Bed_cFv */
 void daObj_Bed_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -165,36 +149,29 @@ void daObj_Bed_c::setMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80BAE034-80BAE054 000AB4 0020+00 1/0 0/0 0/0 .text            daObj_Bed_Create__FPv */
 
 static cPhs__Step daObj_Bed_Create(void* i_this) {
     return static_cast<daObj_Bed_c*>(i_this)->create();
 }
 
-/* 80BAE054-80BAE074 000AD4 0020+00 1/0 0/0 0/0 .text            daObj_Bed_Delete__FPv */
 static int daObj_Bed_Delete(void* i_this) {
     return static_cast<daObj_Bed_c*>(i_this)->Delete();
 }
 
-/* 80BAE074-80BAE094 000AF4 0020+00 1/0 0/0 0/0 .text            daObj_Bed_Execute__FPv */
 static int daObj_Bed_Execute(void* i_this) {
     return static_cast<daObj_Bed_c*>(i_this)->Execute();
 }
 
-/* 80BAE094-80BAE0B4 000B14 0020+00 1/0 0/0 0/0 .text            daObj_Bed_Draw__FPv */
 static int daObj_Bed_Draw(void* i_this) {
     return static_cast<daObj_Bed_c*>(i_this)->Draw();
 }
 
-/* 80BAE0B4-80BAE0BC 000B34 0008+00 1/0 0/0 0/0 .text            daObj_Bed_IsDelete__FPv */
 static int daObj_Bed_IsDelete(void* param_0) {
     return 1;
 }
 
-/* 80BAE264-80BAE268 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daObj_Bed_Param_c l_HIO;
 
-/* 80BAE19C-80BAE1BC -00001 0020+00 1/0 0/0 0/0 .data            daObj_Bed_MethodTable */
 static actor_method_class daObj_Bed_MethodTable = {
     (process_method_func)daObj_Bed_Create,
     (process_method_func)daObj_Bed_Delete,
@@ -203,7 +180,6 @@ static actor_method_class daObj_Bed_MethodTable = {
     (process_method_func)daObj_Bed_Draw,
 };
 
-/* 80BAE1BC-80BAE1EC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_BED */
 extern actor_process_profile_definition g_profile_OBJ_BED = {
     fpcLy_CURRENT_e,
     7,

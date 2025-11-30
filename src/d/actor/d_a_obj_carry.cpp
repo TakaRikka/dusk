@@ -21,7 +21,6 @@
 #include "d/d_debug_viewer.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-/* 8047990C-80479A24 000000 0118+00 29/29 0/0 0/0 .rodata          l_cyl_info */
 static const cM3dGCylS l_cyl_info[] = {
     { 0.0f, 0.0f, 0.0f, 30.0f, 100.0f },
     { 0.0f, 0.0f, 0.0f, 50.0f, 100.0f },
@@ -39,7 +38,6 @@ static const cM3dGCylS l_cyl_info[] = {
     { 0.0f, 0.0f, 0.0f, 50.0f, 100.0f },
 };
 
-/* 80479A24-8047A23C 000118 0818+00 1/1 0/0 0/0 .rodata          mData__12daObjCarry_c */
 const daObjCarry_dt_t daObjCarry_c::mData[] = {
     // TYPE_TSUBO
     {
@@ -659,7 +657,6 @@ const daObjCarry_dt_t daObjCarry_c::mData[] = {
     },
 };
 
-/* 8047A23C-8047A280 000930 0044+00 0/1 0/0 0/0 .rodata          l_cyl_src */
 const static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{AT_TYPE_THROW_OBJ, 0x2, 0x1f}, {0xd8fbfdff, 0x1f}, 0x79}},  // mObj
@@ -674,7 +671,6 @@ const static dCcD_SrcCyl l_cyl_src = {
     }  // mCyl
 };
 
-/* 8047A280-8047A2C0 000974 0040+00 0/1 0/0 0/0 .rodata          l_light_at_sph_src */
 const static dCcD_SrcSph l_light_at_sph_src = {
     {
         {0x0, {{AT_TYPE_LANTERN_SWING, 0x0, 0x11}, {0x0, 0x10}, 0x0}},  // mObj
@@ -687,7 +683,6 @@ const static dCcD_SrcSph l_light_at_sph_src = {
     }  // mSphAttr
 };
 
-/* 8047A2C0-8047A30C 0009B4 004C+00 0/1 0/0 0/0 .rodata          l_atCpsSrc */
 const static dCcD_SrcCps l_atCpsSrc = {
     {
         {0x0, {{AT_TYPE_IRON_BALL, 0x64, 0x1f}, {0x0, 0x10}, 0x0}},  // mObj
@@ -700,7 +695,6 @@ const static dCcD_SrcCps l_atCpsSrc = {
     }  // mCpsAttr
 };
 
-/* 8047A30C-8047A350 000A00 0044+00 0/1 0/0 0/0 .rodata          l_tg_cyl */
 const static dCcD_SrcCyl l_tg_cyl = {
     {
         {0x0, {{0x0, 0x0, 0x1e}, {0x200, 0x11}, 0x0}},  // mObj
@@ -715,16 +709,13 @@ const static dCcD_SrcCyl l_tg_cyl = {
     }  // mCyl
 };
 
-/* 8047A350-8047A354 000A44 0004+00 0/0 0/0 0/0 .rodata          l_light_color */
 static const GXColor l_light_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
-/* 8047A670-8047A6A8 -00001 0038+00 1/1 0/0 0/0 .data            l_arcName */
 static char* l_arcName[] = {
     "J_tubo_00", "J_tubo_01", "Kkiba_00",  "Y_ironbal", "J_taru00", "J_doku00", "Obj_bkl",
     "K_tubo02",  "Obj_ballS", "Obj_ballS", "D_aotubo0", "Obj_tama", "O_tuboS",  "O_tuboB",
 };
 
-/* 8047A6A8-8047A6E0 -00001 0038+00 1/1 0/0 0/0 .data            l_bmdName */
 static char* l_bmdName[] = {
     "J_tubo_00.bmd",       "J_tubo_01.bmd",       "J_hako_00.bmd",  "Yironball.bmd",
     "J_taru_00.bmd",       "J_doku_00.bmd",       "K_hb00.bmd",     "K_tubo02.bmd",
@@ -732,26 +723,21 @@ static char* l_bmdName[] = {
     "O_tuboS_LV8.bmd",     "O_tuboB_LV8.bmd",
 };
 
-/* 8047A6E0-8047A6F8 000090 0018+00 1/0 0/0 0/0 .data            kibako_jv_offset */
 static Vec kibako_jv_offset[] = {
     {0.0f, 0.0f, 0.0f},
     {0.0f, 150.0f, 0.0f},
 };
 
-/* 8047A6F8-8047A710 0000A8 0018+00 1/0 0/0 0/0 .data            taru_jv_offset */
 static Vec taru_jv_offset[] = {
     {0.0f, 0.0f, 0.0f},
     {0.0f, 100.0f, 0.0f},
 };
 
-/* 8047A710-8047A71C -00001 000C+00 1/1 0/0 0/0 .data            kibako_jc_data */
 // box joint col data
 static dJntColData_c kibako_jc_data = {1, 1, 0, 45.0f, kibako_jv_offset};
 
-/* 8047A71C-8047A728 -00001 000C+00 1/1 0/0 0/0 .data            taru_jc_data */
 static dJntColData_c taru_jc_data = {1, 1, 0, 45.0f, taru_jv_offset};
 
-/* 8046EFF8-8046F2F4 000078 02FC+00 1/1 0/0 0/0 .text            bound__FP4cXyzRC13cBgS_PolyInfof */
 static f32 bound(cXyz* param_0, const cBgS_PolyInfo& param_1, f32 param_2) {
     cM3dGPla plane;
 
@@ -768,13 +754,9 @@ static f32 bound(cXyz* param_0, const cBgS_PolyInfo& param_1, f32 param_2) {
     }
 }
 
-/* 8046F33C-8046F340 0003BC 0004+00 1/0 0/0 0/0 .text
- * TgHitCallBackBase__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void TgHitCallBackBase(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
                               fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf) {}
 
-/* 8046F340-8046F3E0 0003C0 00A0+00 1/0 0/0 0/0 .text
- * TgHitCallBackBokkuri__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void TgHitCallBackBokkuri(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
                                  fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf) {
     daObjCarry_c* objCarry = (daObjCarry_c*)i_tgActor;
@@ -787,13 +769,9 @@ static void TgHitCallBackBokkuri(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf
     }
 }
 
-/* 8046F3E0-8046F3E4 000460 0004+00 1/0 0/0 0/0 .text
- * CoHitCallBackBase__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void CoHitCallBackBase(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
                               fopAc_ac_c* i_coActorB, dCcD_GObjInf* i_coObjInfB) {}
 
-/* 8046F3E4-8046F4AC 000464 00C8+00 1/0 0/0 0/0 .text
- * CoHitCallBackBokkuri__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void CoHitCallBackBokkuri(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
                                  fopAc_ac_c* i_coActorB, dCcD_GObjInf* i_coObjInfB) {
     daObjCarry_c* objCarry = (daObjCarry_c*)i_coActorA;
@@ -814,7 +792,6 @@ static void CoHitCallBackBokkuri(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjIn
     }
 }
 
-/* 8046F4AC-8046F52C 00052C 0080+00 1/1 0/0 0/0 .text            s_swA_sub__FPvPv */
 static void* s_swA_sub(void* i_actor, void* i_data) {
     daObjSwBallA_c* swball = (daObjSwBallA_c*)i_actor;
     daObjCarry_c* objCarry = (daObjCarry_c*)i_data;
@@ -830,10 +807,8 @@ static void* s_swA_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8047B1D8-8047B1DC 000000 0004+00 3/3 0/0 0/0 .bss             l_sw_id */
 static int l_sw_id;
 
-/* 8046F52C-8046F59C 0005AC 0070+00 2/2 0/0 0/0 .text            s_sw_sub__FPvPv */
 static void* s_sw_sub(void* i_actor, void* i_data) {
     daObjSwBallB_c* swball = (daObjSwBallB_c*)i_actor;
 
@@ -846,7 +821,6 @@ static void* s_sw_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8046F59C-8046F610 00061C 0074+00 1/1 0/0 0/0 .text            s_setA_sub__FPvPv */
 static void* s_setA_sub(void* i_actor, void* i_data) {
     daTagSetBall_c* tagball = (daTagSetBall_c*)i_actor;
 
@@ -859,7 +833,6 @@ static void* s_setA_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8046F610-8046F684 000690 0074+00 1/1 0/0 0/0 .text            s_setB_sub__FPvPv */
 static void* s_setB_sub(void* i_actor, void* i_data) {
     daTagSetBall_c* tagball = (daTagSetBall_c*)i_actor;
 
@@ -872,32 +845,26 @@ static void* s_setB_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 8046F684-8046F6A4 000704 0020+00 1/1 0/0 0/0 .text            CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjCarry_c*)i_this)->CreateHeap();
 }
 
-/* 8046F6A4-8046F6BC 000724 0018+00 40/40 0/0 0/0 .text            data__12daObjCarry_cFv */
 const daObjCarry_dt_t& daObjCarry_c::data() {
     return mData[mType];
 }
 
-/* 8046F6BC-8046F6D4 00073C 0018+00 3/3 0/0 0/0 .text            getArcName__12daObjCarry_cFv */
 char* daObjCarry_c::getArcName() {
     return l_arcName[mType];
 }
 
-/* 8046F6D4-8046F6EC 000754 0018+00 1/1 0/0 0/0 .text            getBmdName__12daObjCarry_cFv */
 char* daObjCarry_c::getBmdName() {
     return l_bmdName[mType];
 }
 
-/* 8046F6EC-8046F724 00076C 0038+00 2/2 0/0 0/0 .text            checkFlag__12daObjCarry_cFUc */
 BOOL daObjCarry_c::checkFlag(u8 i_flag) {
     return cLib_checkBit<u8>(data().m_flags, i_flag);
 }
 
-/* 8046F724-8046F7AC 0007A4 0088+00 1/1 0/0 0/0 .text            initBaseMtx__12daObjCarry_cFv */
 void daObjCarry_c::initBaseMtx() {
     mRotAxis = cXyz::Zero;
     mRotation = 0;
@@ -906,7 +873,6 @@ void daObjCarry_c::initBaseMtx() {
     setBaseMtx();
 }
 
-/* 8046F7AC-8046FACC 00082C 0320+00 3/4 0/0 0/0 .text            setBaseMtx__12daObjCarry_cFv */
 void daObjCarry_c::setBaseMtx() {
     Mtx rot_mtx;
 
@@ -944,7 +910,6 @@ void daObjCarry_c::setBaseMtx() {
     mpModel->setBaseScale(scale);
 }
 
-/* 8046FACC-8046FB78 000B4C 00AC+00 1/1 0/0 0/0 .text            preInit__12daObjCarry_cFv */
 int daObjCarry_c::preInit() {
     fopAcM_ct(this, daObjCarry_c);
 
@@ -965,10 +930,8 @@ int daObjCarry_c::preInit() {
     return 1;
 }
 
-/* 8046FB78-8046FD90 000BF8 0218+00 1/1 0/0 0/0 .text            __ct__12daObjCarry_cFv */
 daObjCarry_c::daObjCarry_c() {}
 
-/* 8046FFA4-8046FFF8 001024 0054+00 1/1 0/0 0/0 .text checkBreakWolfAttack__12daObjCarry_cFv */
 BOOL daObjCarry_c::checkBreakWolfAttack() {
     if (mType == TYPE_TSUBO   ||
         mType == TYPE_TSUBO_2 ||
@@ -985,7 +948,6 @@ BOOL daObjCarry_c::checkBreakWolfAttack() {
     return FALSE;
 }
 
-/* 8046FFF8-80470054 001078 005C+00 1/1 0/0 0/0 .text checkCarryBoomerang__12daObjCarry_cFv */
 BOOL daObjCarry_c::checkCarryBoomerang() {
     if (mType == TYPE_TSUBO   ||
         mType == TYPE_TSUBO_2 ||
@@ -1003,7 +965,6 @@ BOOL daObjCarry_c::checkCarryBoomerang() {
     return FALSE;
 }
 
-/* 80470054-80470080 0010D4 002C+00 1/1 0/0 0/0 .text checkCarryHookshot__12daObjCarry_cFv */
 BOOL daObjCarry_c::checkCarryHookshot() {
     if (mType == TYPE_BALL_S   ||
         mType == TYPE_BALL_S_2 ||
@@ -1015,7 +976,6 @@ BOOL daObjCarry_c::checkCarryHookshot() {
     return FALSE;
 }
 
-/* 80470080-804700B4 001100 0034+00 1/1 0/0 0/0 .text            checkCarryWolf__12daObjCarry_cFv */
 BOOL daObjCarry_c::checkCarryWolf() {
     if (mType == TYPE_TSUBO   ||
         mType == TYPE_DOKURO  ||
@@ -1028,8 +988,6 @@ BOOL daObjCarry_c::checkCarryWolf() {
     return FALSE;
 }
 
-/* 804700B4-804700F0 001134 003C+00 1/1 0/0 0/0 .text            checkCarryOneHand__12daObjCarry_cFv
- */
 BOOL daObjCarry_c::checkCarryOneHand() {
     if (mType == TYPE_TSUBO   ||
         mType == TYPE_DOKURO  ||
@@ -1043,7 +1001,6 @@ BOOL daObjCarry_c::checkCarryOneHand() {
     return FALSE;
 }
 
-/* 804700F0-804705DC 001170 04EC+00 1/1 0/0 0/0 .text            Create__12daObjCarry_cFv */
 int daObjCarry_c::Create() {
     scale.set(data().scale, data().scale, data().scale);
 
@@ -1163,8 +1120,6 @@ int daObjCarry_c::Create() {
     return 1;
 }
 
-/* 804705DC-80470650 00165C 0074+00 3/0 0/0 0/0 .text            CreateInit_tsubo__12daObjCarry_cFv
- */
 int daObjCarry_c::CreateInit_tsubo() {
     if (!checkCrashRoll()) {
         mCanCrashRoll = true;
@@ -1179,15 +1134,11 @@ int daObjCarry_c::CreateInit_tsubo() {
     return 1;
 }
 
-/* 80470650-80470674 0016D0 0024+00 3/0 0/0 0/0 .text            CreateInit_ootubo__12daObjCarry_cFv
- */
 int daObjCarry_c::CreateInit_ootubo() {
     mode_init_wait();
     return 1;
 }
 
-/* 80470674-804706D4 0016F4 0060+00 1/0 0/0 0/0 .text            CreateInit_kibako__12daObjCarry_cFv
- */
 int daObjCarry_c::CreateInit_kibako() {
     if (!mJntCol.init(this, &kibako_jc_data, mpModel, 1)) {
         return 0;
@@ -1197,7 +1148,6 @@ int daObjCarry_c::CreateInit_kibako() {
     return 1;
 }
 
-/* 804706D4-804707E0 001754 010C+00 1/0 0/0 0/0 .text CreateInit_ironball__12daObjCarry_cFv */
 int daObjCarry_c::CreateInit_ironball() {
     if (chkSaveFlag()) {
         u8 l_saveID = getSaveID();
@@ -1225,8 +1175,6 @@ int daObjCarry_c::CreateInit_ironball() {
     return 1;
 }
 
-/* 804707E0-80470840 001860 0060+00 1/0 0/0 0/0 .text            CreateInit_taru__12daObjCarry_cFv
- */
 int daObjCarry_c::CreateInit_taru() {
     if (!mJntCol.init(this, &taru_jc_data, mpModel, 1)) {
         return 0;
@@ -1236,14 +1184,11 @@ int daObjCarry_c::CreateInit_taru() {
     return 1;
 }
 
-/* 80470840-80470890 0018C0 0050+00 1/0 0/0 0/0 .text            CreateInit_dokuro__12daObjCarry_cFv
- */
 int daObjCarry_c::CreateInit_dokuro() {
     mode_init_wait();
     return fopAcM_isSwitch(this, getSwbit()) == FALSE ? TRUE : FALSE;
 }
 
-/* 80470890-804709DC 001910 014C+00 1/0 0/0 0/0 .text CreateInit_bokkuri__12daObjCarry_cFv */
 int daObjCarry_c::CreateInit_bokkuri() {
     mCyl.SetTgHitMark(CcG_Tg_UNK_MARK_0);
     mCyl.OnTgNoHitMark();
@@ -1284,7 +1229,6 @@ int daObjCarry_c::CreateInit_bokkuri() {
     return 1;
 }
 
-/* 804709DC-80470AB4 001A5C 00D8+00 2/0 0/0 0/0 .text CreateInit_LightBall__12daObjCarry_cFv */
 int daObjCarry_c::CreateInit_LightBall() {
     mSound.init(&current.pos, 1);
 
@@ -1309,7 +1253,6 @@ int daObjCarry_c::CreateInit_LightBall() {
     return 1;
 }
 
-/* 80470AB4-80470B5C 001B34 00A8+00 1/0 0/0 0/0 .text CreateInit_Lv8Ball__12daObjCarry_cFv */
 int daObjCarry_c::CreateInit_Lv8Ball() {
     mSound.init(&current.pos, 1);
 
@@ -1327,7 +1270,6 @@ int daObjCarry_c::CreateInit_Lv8Ball() {
     return 1;
 }
 
-/* 80470B5C-80470BF4 001BDC 0098+00 1/1 0/0 0/0 .text            CreateHeap__12daObjCarry_cFv */
 int daObjCarry_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(getArcName(), getBmdName());
     JUT_ASSERT(2813, modelData != NULL);
@@ -1341,7 +1283,6 @@ int daObjCarry_c::CreateHeap() {
     return 1;
 }
 
-/* 80470BF4-80470CF0 001C74 00FC+00 1/1 0/0 0/0 .text            create__12daObjCarry_cFv */
 int daObjCarry_c::create() {
     preInit();
 
@@ -1384,7 +1325,6 @@ next:
     return phase_state;
 }
 
-/* 80470CF0-8047114C 001D70 045C+00 1/1 0/0 0/0 .text checkCreate_LightBallA__12daObjCarry_cFv */
 int daObjCarry_c::checkCreate_LightBallA() {
     fopAc_ac_c* var_r29 = NULL;
 
@@ -1528,7 +1468,6 @@ int daObjCarry_c::checkCreate_LightBallA() {
     return cPhs_NEXT_e;
 }
 
-/* 8047114C-804715A8 0021CC 045C+00 1/1 0/0 0/0 .text checkCreate_LightBallB__12daObjCarry_cFv */
 BOOL daObjCarry_c::checkCreate_LightBallB() {
     fopAc_ac_c* var_r29 = NULL;
 
@@ -1672,7 +1611,6 @@ BOOL daObjCarry_c::checkCreate_LightBallB() {
     return cPhs_NEXT_e;
 }
 
-/* 804715A8-80471680 002628 00D8+00 1/1 0/0 0/0 .text checkCreate_Lv8Ball__12daObjCarry_cFv */
 BOOL daObjCarry_c::checkCreate_Lv8Ball() {
     if (!fopAcM_isSwitch(this, getSwbit())) {
         return cPhs_NEXT_e;
@@ -1690,13 +1628,11 @@ BOOL daObjCarry_c::checkCreate_Lv8Ball() {
     return cPhs_NEXT_e;
 }
 
-/* 80471680-804716D4 002700 0054+00 1/1 0/0 0/0 .text            resetIconPosForLightBallA__12daObjCarry_cFv */
 void daObjCarry_c::resetIconPosForLightBallA() {
     cXyz pos(0.0f, 100.0f, -3930.0f);
     dTres_c::setIconPositionOfCarryLight(getTrboxBit(), &pos, 51);
 }
 
-/* 804716D4-804717B4 002754 00E0+00 1/1 0/0 0/0 .text            setIconPosForLightBallAAtR00__12daObjCarry_cFv */
 void daObjCarry_c::setIconPosForLightBallAAtR00() {
     cXyz pos;
 
@@ -1711,7 +1647,6 @@ void daObjCarry_c::setIconPosForLightBallAAtR00() {
     dTres_c::setIconPositionOfCarryLight(getTrboxBit(), &pos, 0);
 }
 
-/* 804717B4-80471894 002834 00E0+00 1/1 0/0 0/0 .text           setIconPosForLightBallBAtR00__12daObjCarry_cFv */
 void daObjCarry_c::setIconPosForLightBallBAtR00() {
     cXyz pos;
 
@@ -1726,13 +1661,11 @@ void daObjCarry_c::setIconPosForLightBallBAtR00() {
     dTres_c::setIconPositionOfCarryLight(getTrboxBit(), &pos, 0);
 }
 
-/* 80471894-804718E8 002914 0054+00 1/1 0/0 0/0 .text resetIconPosForLightBallB__12daObjCarry_cFv */
 void daObjCarry_c::resetIconPosForLightBallB() {
     cXyz pos(0.0f, 100.0f, -3930.0f);
     dTres_c::setIconPositionOfCarryLight(getTrboxBit(), &pos, 52);
 }
 
-/* 804718E8-8047233C 002968 0A54+00 1/1 0/0 0/0 .text            execute__12daObjCarry_cFv */
 int daObjCarry_c::execute() {
     mRecover = 0;
 
@@ -1941,7 +1874,6 @@ int daObjCarry_c::execute() {
     return 1;
 }
 
-/* 8047233C-80472460 0033BC 0124+00 1/1 0/0 0/0 .text            checkCulling__12daObjCarry_cFv */
 BOOL daObjCarry_c::checkCulling() {
     BOOL is_cull = FALSE;
 
@@ -1975,7 +1907,6 @@ BOOL daObjCarry_c::checkCulling() {
     return is_cull;
 }
 
-/* 80472460-80472730 0034E0 02D0+00 1/1 0/0 0/0 .text            draw__12daObjCarry_cFv */
 int daObjCarry_c::draw() {
     if (checkCulling()) {
         return 1;
@@ -2037,7 +1968,6 @@ int daObjCarry_c::draw() {
     return 1;
 }
 
-/* 80472730-80472734 0037B0 0004+00 1/1 0/0 0/0 .text            debugDraw__12daObjCarry_cFv */
 void daObjCarry_c::debugDraw() {
 #ifdef DEBUG
     if (KREG_S(8) == 10000 && !mRotAxis.isZero()) {
@@ -2100,7 +2030,6 @@ void daObjCarry_c::debugDraw() {
 #endif
 }
 
-/* 80472734-80472B54 0037B4 0420+00 1/1 0/0 0/0 .text            _delete__12daObjCarry_cFv */
 int daObjCarry_c::_delete() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     fopAcM_offActor(this, fopAcM_GetSetId(this));
@@ -2190,7 +2119,6 @@ int daObjCarry_c::_delete() {
     return 1;
 }
 
-/* 80472B54-80472D8C 003BD4 0238+00 1/1 0/0 0/0 .text            crr_pos__12daObjCarry_cFv */
 void daObjCarry_c::crr_pos() {
     if (field_0xd14 != 0) {
         mAcch.ClrRoofHit();
@@ -2251,7 +2179,6 @@ void daObjCarry_c::crr_pos() {
     }
 }
 
-/* 80472D8C-80472E5C 003E0C 00D0+00 1/1 0/0 0/0 .text            check_sink__12daObjCarry_cFPf */
 int daObjCarry_c::check_sink(f32* param_0) {
     int var_r29 = 0;
     f32 temp_f31 = mAcch.m_wtr.GetHeight();
@@ -2271,7 +2198,6 @@ int daObjCarry_c::check_sink(f32* param_0) {
     return var_r29;
 }
 
-/* 80472E5C-80472EF0 003EDC 0094+00 4/4 0/0 0/0 .text            calc_gravity__12daObjCarry_cFv */
 f32 daObjCarry_c::calc_gravity() {
     f32 obj_gravity = fopAcM_GetGravity(this);
 
@@ -2290,7 +2216,6 @@ f32 daObjCarry_c::calc_gravity() {
     return obj_gravity;
 }
 
-/* 80472EF0-80473050 003F70 0160+00 1/1 0/0 0/0 .text            checkRollAngle__12daObjCarry_cFv */
 BOOL daObjCarry_c::checkRollAngle() {
     f32 roll_angle = data().m_rollAngle;
 
@@ -2313,7 +2238,6 @@ BOOL daObjCarry_c::checkRollAngle() {
     return FALSE;
 }
 
-/* 80473050-804733E8 0040D0 0398+00 1/1 0/0 0/0 .text            mode_proc_call__12daObjCarry_cFv */
 void daObjCarry_c::mode_proc_call() {
     typedef int (daObjCarry_c::*mode_func)();
     static mode_func l_mode_func[] = {
@@ -2385,7 +2309,6 @@ void daObjCarry_c::mode_proc_call() {
     }
 }
 
-/* 804733E8-804734B0 004468 00C8+00 15/15 0/0 0/0 .text            mode_init_wait__12daObjCarry_cFv */
 void daObjCarry_c::mode_init_wait() {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -2409,7 +2332,6 @@ void daObjCarry_c::mode_init_wait() {
     mMode = MODE_WAIT;
 }
 
-/* 804734B0-80473718 004530 0268+00 1/0 0/0 0/0 .text            mode_proc_wait__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_wait() {
     bool do_crash_roll = false;
     bool var_r26 = true;
@@ -2455,7 +2377,6 @@ int daObjCarry_c::mode_proc_wait() {
     return 1;
 }
 
-/* 80473718-804737CC 004798 00B4+00 5/5 0/0 0/0 .text            mode_init_walk__12daObjCarry_cFUc */
 void daObjCarry_c::mode_init_walk(u8 unused) {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -2479,7 +2400,6 @@ void daObjCarry_c::mode_init_walk(u8 unused) {
     mMode = MODE_WALK;
 }
 
-/* 804737CC-80473ED8 00484C 070C+00 1/0 0/0 0/0 .text            mode_proc_walk__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_walk() {
     bool gnd_hit = mAcch.ChkGroundHit() != 0;
     bool gnd_landing = mAcch.ChkGroundLanding() != 0;
@@ -2579,7 +2499,6 @@ int daObjCarry_c::mode_proc_walk() {
     return 1;
 }
 
-/* 80473ED8-804741A8 004F58 02D0+00 2/2 0/0 0/0 .text            mode_init_carry__12daObjCarry_cFv */
 void daObjCarry_c::mode_init_carry() {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -2654,8 +2573,6 @@ void daObjCarry_c::mode_init_carry() {
     mMode = MODE_CARRY;
 }
 
-/* 804741A8-80474448 005228 02A0+00 1/0 0/0 0/0 .text            mode_proc_carry__12daObjCarry_cFv
- */
 int daObjCarry_c::mode_proc_carry() {
     daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
 
@@ -2727,7 +2644,6 @@ int daObjCarry_c::mode_proc_carry() {
     return 1;
 }
 
-/* 80474448-80474540 0054C8 00F8+00 3/3 0/0 1/1 .text            mode_init_drop__12daObjCarry_cFUc */
 void daObjCarry_c::mode_init_drop(u8 param_0) {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -2759,7 +2675,6 @@ void daObjCarry_c::mode_init_drop(u8 param_0) {
     field_0xdb4 = 0;
 }
 
-/* 80474540-80474618 0055C0 00D8+00 1/0 0/0 0/0 .text            mode_proc_drop__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_drop() {
     if (field_0xdb4 == 0) {
         mAcch.OnLineCheck();
@@ -2780,7 +2695,6 @@ int daObjCarry_c::mode_proc_drop() {
     return 1;
 }
 
-/* 80474618-80474734 005698 011C+00 2/2 0/0 0/0 .text            mode_init_float__12daObjCarry_cFv */
 void daObjCarry_c::mode_init_float() {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -2814,8 +2728,6 @@ void daObjCarry_c::mode_init_float() {
     mMode = MODE_FLOAT;
 }
 
-/* 80474734-80474A08 0057B4 02D4+00 1/0 0/0 0/0 .text            mode_proc_float__12daObjCarry_cFv
- */
 int daObjCarry_c::mode_proc_float() {
     field_0xdc4++;
     gravity = 0.0f;
@@ -2876,7 +2788,6 @@ int daObjCarry_c::mode_proc_float() {
     return 1;
 }
 
-/* 80474A08-80474B8C 005A88 0184+00 2/2 0/0 0/0 .text            mode_init_sink__12daObjCarry_cFv */
 void daObjCarry_c::mode_init_sink() {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -2906,7 +2817,6 @@ void daObjCarry_c::mode_init_sink() {
     mMode = MODE_SINK;
 }
 
-/* 80474B8C-80474D64 005C0C 01D8+00 1/0 0/0 0/0 .text            mode_proc_sink__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_sink() {
     cXyz sp24;
     f32 speed_target;
@@ -2952,7 +2862,6 @@ int daObjCarry_c::mode_proc_sink() {
     return 1;
 }
 
-/* 80474D64-80474E08 005DE4 00A4+00 1/1 0/0 0/0 .text            mode_init_yogan__12daObjCarry_cFv */
 void daObjCarry_c::mode_init_yogan() {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -2974,8 +2883,6 @@ void daObjCarry_c::mode_init_yogan() {
     mMode = MODE_YOGAN;
 }
 
-/* 80474E08-80474E98 005E88 0090+00 1/0 0/0 0/0 .text            mode_proc_yogan__12daObjCarry_cFv
- */
 int daObjCarry_c::mode_proc_yogan() {
     bool temp_r30 = mAcch.m_wtr.GetHeight() > 200.0f + current.pos.y;
     bool gnd_landing = mAcch.ChkGroundLanding();
@@ -2990,18 +2897,14 @@ int daObjCarry_c::mode_proc_yogan() {
     return 1;
 }
 
-/* 80474E98-80474EA0 005F18 0008+00 1/0 0/0 0/0 .text            mode_proc_magne__12daObjCarry_cFv
- */
 int daObjCarry_c::mode_proc_magne() {
     return 1;
 }
 
-/* 80474EA0-80474EA8 005F20 0008+00 1/0 0/0 0/0 .text mode_proc_magneCarry__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_magneCarry() {
     return 1;
 }
 
-/* 80474EA8-80474FA8 005F28 0100+00 1/1 0/0 0/0 .text mode_init_boomCarry__12daObjCarry_cFv */
 void daObjCarry_c::mode_init_boomCarry() {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -3034,7 +2937,6 @@ void daObjCarry_c::mode_init_boomCarry() {
     mMode = MODE_BOOM_CARRY;
 }
 
-/* 80474FA8-80475014 006028 006C+00 1/0 0/0 0/0 .text mode_proc_boomCarry__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_boomCarry() {
     if (!mBoomerangMove.posMove(&current.pos, &shape_angle.y, this, 0x1C00)) {
         if (fopAcM_checkCarryNow(this)) {
@@ -3047,7 +2949,6 @@ int daObjCarry_c::mode_proc_boomCarry() {
     return 1;
 }
 
-/* 80475014-804750C8 006094 00B4+00 1/1 0/0 0/0 .text            mode_init_growth__12daObjCarry_cFv */
 void daObjCarry_c::mode_init_growth() {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -3066,8 +2967,6 @@ void daObjCarry_c::mode_init_growth() {
     mMode = MODE_GROWTH;
 }
 
-/* 804750C8-8047515C 006148 0094+00 1/0 0/0 0/0 .text            mode_proc_growth__12daObjCarry_cFv
- */
 int daObjCarry_c::mode_proc_growth() {
     f32 sp8 = scale.x;
     f32 temp_f31 = cLib_addCalc(&sp8, data().scale, 0.05f, 0.1f, 0.01f);
@@ -3082,12 +2981,10 @@ int daObjCarry_c::mode_proc_growth() {
     return 1;
 }
 
-/* 8047515C-80475164 0061DC 0008+00 1/0 0/0 0/0 .text            mode_proc_end__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_end() {
     return 1;
 }
 
-/* 80475164-80475210 0061E4 00AC+00 1/1 0/0 0/0 .text            mode_init_dbDrop__12daObjCarry_cFUc */
 void daObjCarry_c::mode_init_dbDrop(u8 param_0) {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -3107,13 +3004,11 @@ void daObjCarry_c::mode_init_dbDrop(u8 param_0) {
     mMode = MODE_DB_DROP;
 }
 
-/* 80475210-80475238 006290 0028+00 1/0 0/0 0/0 .text            mode_proc_dbDrop__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_dbDrop() {
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     return 1;
 }
 
-/* 80475238-80475354 0062B8 011C+00 1/1 0/0 0/0 .text            mode_init_hookCarry__12daObjCarry_cFv */
 void daObjCarry_c::mode_init_hookCarry() {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -3142,7 +3037,6 @@ void daObjCarry_c::mode_init_hookCarry() {
     mMode = MODE_HOOK_CARRY;
 }
 
-/* 80475354-80475384 0063D4 0030+00 1/0 0/0 0/0 .text            mode_proc_hookCarry__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_hookCarry() {
     if (!fopAcM_checkHookCarryNow(this)) {
         mode_init_wait();
@@ -3151,7 +3045,6 @@ int daObjCarry_c::mode_proc_hookCarry() {
     return 1;
 }
 
-/* 80475384-80475450 006404 00CC+00 2/2 0/0 0/0 .text            mode_init_fit__12daObjCarry_cFv */
 void daObjCarry_c::mode_init_fit() {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -3176,13 +3069,11 @@ void daObjCarry_c::mode_init_fit() {
     mMode = MODE_FIT;
 }
 
-/* 80475450-80475478 0064D0 0028+00 1/0 0/0 0/0 .text            mode_proc_fit__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_fit() {
     fopAcM_posMoveF(this, NULL);
     return 1;
 }
 
-/* 80475478-804754D0 0064F8 0058+00 1/0 0/0 0/0 .text            mode_proc_controled__12daObjCarry_cFv */
 int daObjCarry_c::mode_proc_controled() {
     calc_rot_call();
     setBaseMtx();
@@ -3191,7 +3082,6 @@ int daObjCarry_c::mode_proc_controled() {
     return 1;
 }
 
-/* 804754D0-80475598 006550 00C8+00 1/1 0/0 0/0 .text            mode_init_resetLightBall__12daObjCarry_cFv */
 void daObjCarry_c::mode_init_resetLightBall() {
     mAcch.ClrMoveBGOnly();
     mAcch.ClrGrndNone();
@@ -3215,8 +3105,6 @@ void daObjCarry_c::mode_init_resetLightBall() {
     mMode = MODE_RESET_LIGHTBALL;
 }
 
-/* 80475598-80475618 006618 0080+00 1/0 0/0 0/0 .text mode_proc_resetLightBall__12daObjCarry_cFv
- */
 int daObjCarry_c::mode_proc_resetLightBall() {
     if (cLib_chaseF(&scale.x, 1.0f, 0.05f)) {
         field_0xcf3 = 10;
@@ -3230,22 +3118,18 @@ int daObjCarry_c::mode_proc_resetLightBall() {
     return 1;
 }
 
-/* 80475618-8047567C 006698 0064+00 1/1 0/0 0/0 .text            chkSinkAll__12daObjCarry_cFv */
 BOOL daObjCarry_c::chkSinkAll() {
     return mAcch.m_wtr.GetHeight() > current.pos.y + data().field_0x2c * 2.0f;
 }
 
-/* 8047567C-804756D4 0066FC 0058+00 3/3 0/0 0/0 .text            chkWaterLineIn__12daObjCarry_cFv */
 BOOL daObjCarry_c::chkWaterLineIn() {
     return mAcch.m_wtr.GetHeight() > current.pos.y + data().field_0x24;
 }
 
-/* 804756D4-8047573C 006754 0068+00 2/2 0/0 0/0 .text            chkSinkObj__12daObjCarry_cFv */
 BOOL daObjCarry_c::chkSinkObj() {
     return data().m_gravity + data().m_Buoyancy <= 0.0f;
 }
 
-/* 8047573C-80476618 0067BC 0EDC+00 1/1 0/0 0/0 .text            bg_check__12daObjCarry_cFv */
 void daObjCarry_c::bg_check() {
     bool roof_hit = mAcch.ChkRoofHit();
     bool wall_hit = mAcch.ChkWallHit();
@@ -3477,8 +3361,6 @@ void daObjCarry_c::bg_check() {
     field_0xe0d = wall_hit;
 }
 
-/* 80476618-80476764 007698 014C+00 2/2 0/0 0/0 .text check_bg_damage_proc_base__12daObjCarry_cFv
- */
 bool daObjCarry_c::check_bg_damage_proc_base() {
     bool gnd_landing = mAcch.ChkGroundLanding();
     bool wall_hit = mAcch.ChkWallHit();
@@ -3513,7 +3395,6 @@ bool daObjCarry_c::check_bg_damage_proc_base() {
     return 0;
 }
 
-/* 80476764-804767C4 0077E4 0060+00 7/4 0/0 0/0 .text bg_damage_proc_kotubo__12daObjCarry_cFv */
 bool daObjCarry_c::bg_damage_proc_kotubo() {
     bool rt = check_bg_damage_proc_base();
     if (rt) {
@@ -3524,32 +3405,26 @@ bool daObjCarry_c::bg_damage_proc_kotubo() {
     return rt;
 }
 
-/* 804767C4-804767E4 007844 0020+00 3/0 0/0 0/0 .text bg_damage_proc_ootubo__12daObjCarry_cFv */
 bool daObjCarry_c::bg_damage_proc_ootubo() {
     return bg_damage_proc_kotubo();
 }
 
-/* 804767E4-80476804 007864 0020+00 1/0 0/0 0/0 .text bg_damage_proc_kibako__12daObjCarry_cFv */
 bool daObjCarry_c::bg_damage_proc_kibako() {
     return bg_damage_proc_kotubo();
 }
 
-/* 80476804-8047680C 007884 0008+00 1/0 0/0 0/0 .text bg_damage_proc_ironball__12daObjCarry_cFv */
 bool daObjCarry_c::bg_damage_proc_ironball() {
     return false;
 }
 
-/* 8047680C-8047682C 00788C 0020+00 1/0 0/0 0/0 .text bg_damage_proc_taru__12daObjCarry_cFv */
 bool daObjCarry_c::bg_damage_proc_taru() {
     return bg_damage_proc_kotubo();
 }
 
-/* 8047682C-8047684C 0078AC 0020+00 1/0 0/0 0/0 .text bg_damage_proc_dokuro__12daObjCarry_cFv */
 bool daObjCarry_c::bg_damage_proc_dokuro() {
     return bg_damage_proc_kotubo();
 }
 
-/* 8047684C-80476930 0078CC 00E4+00 1/0 0/0 0/0 .text bg_damage_proc_bokkuri__12daObjCarry_cFv */
 bool daObjCarry_c::bg_damage_proc_bokkuri() {
     bool rt = check_bg_damage_proc_base();
     if (field_0xd74 != 0) {
@@ -3570,18 +3445,14 @@ bool daObjCarry_c::bg_damage_proc_bokkuri() {
     return rt;
 }
 
-/* 80476930-80476938 0079B0 0008+00 2/0 0/0 0/0 .text            bg_damage_proc_LightBall__12daObjCarry_cFv
- */
 bool daObjCarry_c::bg_damage_proc_LightBall() {
     return false;
 }
 
-/* 80476938-80476940 0079B8 0008+00 1/0 0/0 0/0 .text            bg_damage_proc_Lv8Ball__12daObjCarry_cFv */
 bool daObjCarry_c::bg_damage_proc_Lv8Ball() {
     return false;
 }
 
-/* 80476940-80476A5C 0079C0 011C+00 6/6 0/0 0/0 .text            obj_break__12daObjCarry_cFbbb */
 void daObjCarry_c::obj_break(bool i_createItem, bool i_cancelCarry, bool i_doBreakEff) {
     int item_no = getItemNo();
     int item_bit = getItemBit();
@@ -3607,8 +3478,6 @@ void daObjCarry_c::obj_break(bool i_createItem, bool i_cancelCarry, bool i_doBre
     }
 }
 
-/* 80476A5C-80476B04 007ADC 00A8+00 1/1 0/0 0/0 .text check_cc_damage_proc_base__12daObjCarry_cFb
- */
 bool daObjCarry_c::check_cc_damage_proc_base(bool param_0) {
     bool rt = false;
 
@@ -3626,7 +3495,6 @@ bool daObjCarry_c::check_cc_damage_proc_base(bool param_0) {
     return rt;
 }
 
-/* 80476B04-80476B68 007B84 0064+00 5/2 0/0 0/0 .text cc_damage_proc_kotubo__12daObjCarry_cFv */
 bool daObjCarry_c::cc_damage_proc_kotubo() {
     bool rt = check_cc_damage_proc_base(false);
     if (rt) {
@@ -3637,12 +3505,10 @@ bool daObjCarry_c::cc_damage_proc_kotubo() {
     return rt;
 }
 
-/* 80476B68-80476B88 007BE8 0020+00 3/0 0/0 0/0 .text cc_damage_proc_ootubo__12daObjCarry_cFv */
 bool daObjCarry_c::cc_damage_proc_ootubo() {
     return cc_damage_proc_kotubo();
 }
 
-/* 80476B88-80476CE4 007C08 015C+00 1/0 0/0 0/0 .text cc_damage_proc_kibako__12daObjCarry_cFv */
 bool daObjCarry_c::cc_damage_proc_kibako() {
     bool break_obj = false;
     bool do_break_eff = false;
@@ -3689,7 +3555,6 @@ bool daObjCarry_c::cc_damage_proc_kibako() {
     return break_obj;
 }
 
-/* 80476CE4-80476E04 007D64 0120+00 1/0 0/0 0/0 .text cc_damage_proc_ironball__12daObjCarry_cFv */
 bool daObjCarry_c::cc_damage_proc_ironball() {
     bool var_r26 = false;
     bool var_r27 = true;
@@ -3716,7 +3581,6 @@ bool daObjCarry_c::cc_damage_proc_ironball() {
     return var_r26;
 }
 
-/* 80476E04-80476F88 007E84 0184+00 1/0 0/0 0/0 .text cc_damage_proc_taru__12daObjCarry_cFv */
 bool daObjCarry_c::cc_damage_proc_taru() {
     bool break_obj = false;
     bool do_break_eff = false;
@@ -3765,12 +3629,10 @@ bool daObjCarry_c::cc_damage_proc_taru() {
     return break_obj;
 }
 
-/* 80476F88-80476FA8 008008 0020+00 1/0 0/0 0/0 .text cc_damage_proc_dokuro__12daObjCarry_cFv */
 bool daObjCarry_c::cc_damage_proc_dokuro() {
     return cc_damage_proc_kotubo();
 }
 
-/* 80476FA8-804771B0 008028 0208+00 1/0 0/0 0/0 .text cc_damage_proc_bokkuri__12daObjCarry_cFv */
 bool daObjCarry_c::cc_damage_proc_bokkuri() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     bool break_obj = false;
@@ -3828,18 +3690,14 @@ bool daObjCarry_c::cc_damage_proc_bokkuri() {
     return break_obj;
 }
 
-/* 804771B0-804771B8 008230 0008+00 2/0 0/0 0/0 .text cc_damage_proc_LightBall__12daObjCarry_cFv
- */
 bool daObjCarry_c::cc_damage_proc_LightBall() {
     return false;
 }
 
-/* 804771B8-804771C0 008238 0008+00 1/0 0/0 0/0 .text cc_damage_proc_Lv8Ball__12daObjCarry_cFv */
 bool daObjCarry_c::cc_damage_proc_Lv8Ball() {
     return false;
 }
 
-/* 804771C0-8047731C 008240 015C+00 7/7 0/0 0/0 .text eff_break_tuboBmd__12daObjCarry_cFUs4cXyz */
 void daObjCarry_c::eff_break_tuboBmd(u16 param_0, cXyz param_1) {
     J3DModelData* tubo_bmd = (J3DModelData*)dComIfG_getObjectRes("Always", 0x20);
     J3DAnmTexPattern* tubo_btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", 0x42);
@@ -3854,7 +3712,6 @@ void daObjCarry_c::eff_break_tuboBmd(u16 param_0, cXyz param_1) {
     dComIfGp_particle_set(0x15D, &current.pos, NULL, NULL, 0xFF, dPa_control_c::getTsuboSelectTexEcallBack(param_0), fopAcM_GetRoomNo(this), NULL, NULL, &param_1);
 }
 
-/* 8047731C-8047747C 00839C 0160+00 2/2 0/0 0/0 .text eff_break_kibakoBmd__12daObjCarry_cF4cXyz */
 void daObjCarry_c::eff_break_kibakoBmd(cXyz i_size) {
     cXyz pos(current.pos);
 
@@ -3871,8 +3728,6 @@ void daObjCarry_c::eff_break_kibakoBmd(cXyz i_size) {
     }
 }
 
-/* 8047747C-804774D4 0084FC 0058+00 1/0 0/0 0/0 .text            eff_break_tsubo__12daObjCarry_cFv
- */
 void daObjCarry_c::eff_break_tsubo() {
     u16 var_r31 = 0;
 
@@ -3880,8 +3735,6 @@ void daObjCarry_c::eff_break_tsubo() {
     eff_break_tuboBmd(var_r31, spC);
 }
 
-/* 804774D4-8047752C 008554 0058+00 1/0 0/0 0/0 .text            eff_break_ootubo__12daObjCarry_cFv
- */
 void daObjCarry_c::eff_break_ootubo() {
     u16 var_r31 = 1;
 
@@ -3889,24 +3742,18 @@ void daObjCarry_c::eff_break_ootubo() {
     eff_break_tuboBmd(var_r31, spC);
 }
 
-/* 8047752C-80477574 0085AC 0048+00 1/0 0/0 0/0 .text            eff_break_kibako__12daObjCarry_cFv
- */
 void daObjCarry_c::eff_break_kibako() {
     cXyz size(scale);
     eff_break_kibakoBmd(size);
 }
 
-/* 80477574-80477578 0085F4 0004+00 1/0 0/0 0/0 .text eff_break_ironball__12daObjCarry_cFv */
 void daObjCarry_c::eff_break_ironball() {}
 
-/* 80477578-804775BC 0085F8 0044+00 1/0 0/0 0/0 .text            eff_break_taru__12daObjCarry_cFv */
 void daObjCarry_c::eff_break_taru() {
     cXyz size(0.75f, 0.75f, 0.75f);
     eff_break_kibakoBmd(size);
 }
 
-/* 804775BC-80477614 00863C 0058+00 1/0 0/0 0/0 .text            eff_break_dokuro__12daObjCarry_cFv
- */
 void daObjCarry_c::eff_break_dokuro() {
     u16 var_r31 = 2;
 
@@ -3914,8 +3761,6 @@ void daObjCarry_c::eff_break_dokuro() {
     eff_break_tuboBmd(var_r31, spC);
 }
 
-/* 80477614-80477798 008694 0184+00 1/0 0/0 0/0 .text            eff_break_bokkuri__12daObjCarry_cFv
- */
 void daObjCarry_c::eff_break_bokkuri() {
     cXyz pos(current.pos);
     pos.y += 50.0f;
@@ -3936,8 +3781,6 @@ void daObjCarry_c::eff_break_bokkuri() {
     }
 }
 
-/* 80477798-804777F0 008818 0058+00 1/0 0/0 0/0 .text            eff_break_kotubo2__12daObjCarry_cFv
- */
 void daObjCarry_c::eff_break_kotubo2() {
     u16 var_r31 = 1;
 
@@ -3945,11 +3788,8 @@ void daObjCarry_c::eff_break_kotubo2() {
     eff_break_tuboBmd(var_r31, spC);
 }
 
-/* 804777F0-804777F4 008870 0004+00 2/0 0/0 0/0 .text eff_break_LightBall__12daObjCarry_cFv */
 void daObjCarry_c::eff_break_LightBall() {}
 
-/* 804777F4-8047784C 008874 0058+00 1/0 0/0 0/0 .text            eff_break_ootubo2__12daObjCarry_cFv
- */
 void daObjCarry_c::eff_break_ootubo2() {
     u16 var_r31 = 0;
 
@@ -3957,12 +3797,8 @@ void daObjCarry_c::eff_break_ootubo2() {
     eff_break_tuboBmd(var_r31, spC);
 }
 
-/* 8047784C-80477850 0088CC 0004+00 1/0 0/0 0/0 .text            eff_break_Lv8Ball__12daObjCarry_cFv
- */
 void daObjCarry_c::eff_break_Lv8Ball() {}
 
-/* 80477850-804778A8 0088D0 0058+00 1/0 0/0 0/0 .text            eff_break_tsuboL8__12daObjCarry_cFv
- */
 void daObjCarry_c::eff_break_tsuboL8() {
     u16 var_r31 = 7;
 
@@ -3970,7 +3806,6 @@ void daObjCarry_c::eff_break_tsuboL8() {
     eff_break_tuboBmd(var_r31, spC);
 }
 
-/* 804778A8-80477900 008928 0058+00 1/0 0/0 0/0 .text eff_break_ootuboL8__12daObjCarry_cFv */
 void daObjCarry_c::eff_break_ootuboL8() {
     u16 var_r31 = 7;
 
@@ -3978,29 +3813,24 @@ void daObjCarry_c::eff_break_ootuboL8() {
     eff_break_tuboBmd(var_r31, spC);
 }
 
-/* 80477900-80477990 008980 0090+00 1/1 0/0 0/0 .text se_break__12daObjCarry_cFP13cBgS_PolyInfo */
 void daObjCarry_c::se_break(cBgS_PolyInfo*) {
     if (field_0xdb3 == 0) {
         fopAcM_seStart(this, data().m_breakSound, 0);
     }
 }
 
-/* 80477990-80477A14 008A10 0084+00 1/1 0/0 0/0 .text se_put__12daObjCarry_cFP13cBgS_PolyInfo */
 void daObjCarry_c::se_put(cBgS_PolyInfo*) {
     fopAcM_seStart(this, data().m_putSound, 0);
 }
 
-/* 80477A14-80477A98 008A94 0084+00 1/1 0/0 0/0 .text            se_put_water__12daObjCarry_cFv */
 void daObjCarry_c::se_put_water() {
     fopAcM_seStart(this, data().m_putWaterSound, 0);
 }
 
-/* 80477A98-80477B1C 008B18 0084+00 1/1 0/0 0/0 .text            se_fall_water__12daObjCarry_cFv */
 void daObjCarry_c::se_fall_water() {
     fopAcM_seStart(this, data().m_fallWaterSound, 0);
 }
 
-/* 80477B1C-80477FE0 008B9C 04C4+00 7/7 0/0 0/0 .text calc_rot_axis_base__12daObjCarry_cFUc */
 void daObjCarry_c::calc_rot_axis_base(u8 param_0) {
     field_0xd4c = ZeroQuat;
 
@@ -4060,7 +3890,6 @@ void daObjCarry_c::calc_rot_axis_base(u8 param_0) {
     field_0xd7b = param_0;
 }
 
-/* 80477FE0-80478004 009060 0024+00 2/0 0/0 0/0 .text calc_rot_axis_tsubo__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_axis_tsubo() {
     cXyz sp20;
     int var_r30 = 0;
@@ -4104,12 +3933,10 @@ void daObjCarry_c::calc_rot_axis_tsubo() {
     }
 }
 
-/* 80478004-80478028 009084 0024+00 3/0 0/0 0/0 .text calc_rot_axis_ootubo__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_axis_ootubo() {
     calc_rot_axis_base(10);
 }
 
-/* 80478028-8047814C 0090A8 0124+00 2/1 0/0 0/0 .text calc_rot_axis_kibako__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_axis_kibako() {
     if (fopAcM_checkCarryNow(this)) {
         mRotAxis = cXyz::Zero;
@@ -4128,22 +3955,18 @@ void daObjCarry_c::calc_rot_axis_kibako() {
     }
 }
 
-/* 8047814C-80478170 0091CC 0024+00 1/0 0/0 0/0 .text calc_rot_axis_ironball__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_axis_ironball() {
     calc_rot_axis_base(10);
 }
 
-/* 80478170-80478190 0091F0 0020+00 1/0 0/0 0/0 .text calc_rot_axis_taru__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_axis_taru() {
     calc_rot_axis_kibako();
 }
 
-/* 80478190-804781B4 009210 0024+00 1/0 0/0 0/0 .text calc_rot_axis_dokuro__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_axis_dokuro() {
     calc_rot_axis_base(5);
 }
 
-/* 804781B4-804783C0 009234 020C+00 1/0 0/0 0/0 .text calc_rot_axis_bokkuri__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_axis_bokkuri() {
     if (mMode == MODE_DROP || mMode == MODE_DB_DROP) {
         if (fopAcM_checkCarryNow(this)) {
@@ -4174,22 +3997,18 @@ void daObjCarry_c::calc_rot_axis_bokkuri() {
     }
 }
 
-/* 804783C0-804783E4 009440 0024+00 1/0 0/0 0/0 .text calc_rot_axis_kotubo2__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_axis_kotubo2() {
     calc_rot_axis_base(5);
 }
 
-/* 804783E4-80478408 009464 0024+00 2/0 0/0 0/0 .text calc_rot_axis_LightBall__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_axis_LightBall() {
     calc_rot_axis_base(10);
 }
 
-/* 80478408-8047842C 009488 0024+00 1/0 0/0 0/0 .text calc_rot_axis_Lv8Ball__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_axis_Lv8Ball() {
     calc_rot_axis_base(10);
 }
 
-/* 8047842C-80478808 0094AC 03DC+00 2/2 0/0 0/0 .text            set_wind_power__12daObjCarry_cFv */
 void daObjCarry_c::set_wind_power() {
     if (!fopAcM_checkCarryNow(this)) {
         if (mTgCyl.ChkTgHit()) {
@@ -4226,23 +4045,16 @@ void daObjCarry_c::set_wind_power() {
     }
 }
 
-/* 80478808-80478828 009888 0020+00 3/0 0/0 0/0 .text            exec_proc_tsubo__12daObjCarry_cFv
- */
 void daObjCarry_c::exec_proc_tsubo() {
     set_wind_power();
 }
 
-/* 80478828-80478848 0098A8 0020+00 3/0 0/0 0/0 .text            exec_proc_ootubo__12daObjCarry_cFv
- */
 void daObjCarry_c::exec_proc_ootubo() {
     set_wind_power();
 }
 
-/* 80478848-8047884C 0098C8 0004+00 1/0 0/0 0/0 .text            exec_proc_kibako__12daObjCarry_cFv
- */
 void daObjCarry_c::exec_proc_kibako() {}
 
-/* 8047884C-804788C4 0098CC 0078+00 1/0 0/0 0/0 .text exec_proc_ironball__12daObjCarry_cFv */
 void daObjCarry_c::exec_proc_ironball() {
     if (mAcch.GetGroundH() != -G_CM3D_F_INF) {
         savePos(getSaveID(), current.pos);
@@ -4250,15 +4062,10 @@ void daObjCarry_c::exec_proc_ironball() {
     }
 }
 
-/* 804788C4-804788C8 009944 0004+00 1/0 0/0 0/0 .text            exec_proc_taru__12daObjCarry_cFv */
 void daObjCarry_c::exec_proc_taru() {}
 
-/* 804788C8-804788CC 009948 0004+00 1/0 0/0 0/0 .text            exec_proc_dokuro__12daObjCarry_cFv
- */
 void daObjCarry_c::exec_proc_dokuro() {}
 
-/* 804788CC-80478C18 00994C 034C+00 1/0 0/0 0/0 .text            exec_proc_bokkuri__12daObjCarry_cFv
- */
 void daObjCarry_c::exec_proc_bokkuri() {
     switch (field_0xd79) {
     case 0:
@@ -4332,7 +4139,6 @@ void daObjCarry_c::exec_proc_bokkuri() {
     }
 }
 
-/* 80478C18-80478CE4 009C98 00CC+00 2/0 0/0 0/0 .text exec_proc_LightBall__12daObjCarry_cFv */
 void daObjCarry_c::exec_proc_LightBall() {
     mDalkmistInf.mPos = current.pos;
     mLightAtSph.SetC(current.pos);
@@ -4345,8 +4151,6 @@ void daObjCarry_c::exec_proc_LightBall() {
     mSound.framework(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
-/* 80478CE4-80478D78 009D64 0094+00 1/0 0/0 0/0 .text            exec_proc_Lv8Ball__12daObjCarry_cFv
- */
 void daObjCarry_c::exec_proc_Lv8Ball() {
     if (mCyl.ChkTgHit() && mCyl.GetTgHitObj()) {
         mSound.startCollisionSE(mCyl.GetTgHitObjHitSeID(1), 2, NULL);
@@ -4355,7 +4159,6 @@ void daObjCarry_c::exec_proc_Lv8Ball() {
     mSound.framework(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
-/* 80478D78-80478F50 009DF8 01D8+00 1/1 0/0 0/0 .text bg_damage_proc_call__12daObjCarry_cFv */
 void daObjCarry_c::bg_damage_proc_call() {
     typedef bool (daObjCarry_c::*type_func)();
     static type_func l_type_func[] = {
@@ -4373,7 +4176,6 @@ void daObjCarry_c::bg_damage_proc_call() {
     }
 }
 
-/* 80478F50-80479128 009FD0 01D8+00 1/1 0/0 0/0 .text cc_damage_proc_call__12daObjCarry_cFv */
 void daObjCarry_c::cc_damage_proc_call() {
     typedef bool (daObjCarry_c::*type_func)();
     static type_func l_type_func[] = {
@@ -4391,7 +4193,6 @@ void daObjCarry_c::cc_damage_proc_call() {
     }
 }
 
-/* 80479128-804792D4 00A1A8 01AC+00 1/1 0/0 0/0 .text            eff_break_call__12daObjCarry_cFv */
 void daObjCarry_c::eff_break_call() {
     typedef void (daObjCarry_c::*type_func)();
     static type_func l_type_func[] = {
@@ -4407,7 +4208,6 @@ void daObjCarry_c::eff_break_call() {
     (this->*l_type_func[mType])();
 }
 
-/* 804792D4-80479480 00A354 01AC+00 2/2 0/0 0/0 .text            calc_rot_call__12daObjCarry_cFv */
 void daObjCarry_c::calc_rot_call() {
     typedef void (daObjCarry_c::*type_func)();
     static type_func l_type_func[] = {
@@ -4423,7 +4223,6 @@ void daObjCarry_c::calc_rot_call() {
     (this->*l_type_func[mType])();
 }
 
-/* 80479480-8047962C 00A500 01AC+00 1/1 0/0 0/0 .text obj_execute_proc_call__12daObjCarry_cFv */
 void daObjCarry_c::obj_execute_proc_call() {
     typedef void (daObjCarry_c::*type_func)();
     static type_func l_type_func[] = {
@@ -4439,8 +4238,6 @@ void daObjCarry_c::obj_execute_proc_call() {
     (this->*l_type_func[mType])();
 }
 
-/* 8047962C-80479648 00A6AC 001C+00 1/1 0/0 0/0 .text            setTgHitCallBack__12daObjCarry_cFv
- */
 void daObjCarry_c::setTgHitCallBack() {
     typedef void (*TgCallBack)(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
     static TgCallBack l_callback[] = {
@@ -4454,8 +4251,6 @@ void daObjCarry_c::setTgHitCallBack() {
     mCyl.SetTgHitCallback(l_callback[mType]);
 }
 
-/* 80479648-80479664 00A6C8 001C+00 1/1 0/0 0/0 .text            setCoHitCallBack__12daObjCarry_cFv
- */
 void daObjCarry_c::setCoHitCallBack() {
     typedef void (*CoCallBack)(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
     static CoCallBack l_callback[] = {
@@ -4469,7 +4264,6 @@ void daObjCarry_c::setCoHitCallBack() {
     mCyl.SetCoHitCallback(l_callback[mType]);
 }
 
-/* 80479664-80479810 00A6E4 01AC+00 1/1 0/0 0/0 .text            CreateInitCall__12daObjCarry_cFv */
 int daObjCarry_c::CreateInitCall() {
     typedef int (daObjCarry_c::*CreateInitFunc)();
     static CreateInitFunc l_func[] = {
@@ -4485,36 +4279,27 @@ int daObjCarry_c::CreateInitCall() {
     return (this->*l_func[mType])();
 }
 
-/* 80479810-80479830 00A890 0020+00 1/0 0/0 0/0 .text            daObjCarry_Draw__FP12daObjCarry_c
- */
 static int daObjCarry_Draw(daObjCarry_c* i_this) {
     return i_this->draw();
 }
 
-/* 80479830-80479850 00A8B0 0020+00 1/0 0/0 0/0 .text daObjCarry_Execute__FP12daObjCarry_c */
 static int daObjCarry_Execute(daObjCarry_c* i_this) {
     return i_this->execute();
 }
 
-/* 80479850-80479870 00A8D0 0020+00 1/0 0/0 0/0 .text            daObjCarry_Delete__FP12daObjCarry_c
- */
 static int daObjCarry_Delete(daObjCarry_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80479870-80479890 00A8F0 0020+00 1/0 0/0 0/0 .text            daObjCarry_Create__FP10fopAc_ac_c
- */
 static int daObjCarry_Create(fopAc_ac_c* i_this) {
     return ((daObjCarry_c*)i_this)->create();
 }
 
-/* 8047B110-8047B130 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjCarry_Method */
 static actor_method_class l_daObjCarry_Method = {
     (process_method_func)daObjCarry_Create, (process_method_func)daObjCarry_Delete,
     (process_method_func)daObjCarry_Execute, (process_method_func)NULL,
     (process_method_func)daObjCarry_Draw};
 
-/* 8047B130-8047B160 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Carry */
 extern actor_process_profile_definition g_profile_Obj_Carry = {
     fpcLy_CURRENT_e,         // mLayerID
     8,                       // mListID

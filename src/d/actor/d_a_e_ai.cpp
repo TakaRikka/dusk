@@ -11,8 +11,8 @@
 
 class daE_AI_HIO_c : public JORReflexible {
 public:
-    /* 8067916C */ daE_AI_HIO_c();
-    /* 8067BF40 */ virtual ~daE_AI_HIO_c() {}
+    daE_AI_HIO_c();
+    virtual ~daE_AI_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -25,7 +25,6 @@ public:
     /* 0x1C */ f32 home_distance;
 };
 
-/* 8067916C-806791BC 0000EC 0050+00 1/1 0/0 0/0 .text            __ct__12daE_AI_HIO_cFv */
 daE_AI_HIO_c::daE_AI_HIO_c() {
     id = -1;
     model_size = 1.0f;
@@ -36,7 +35,6 @@ daE_AI_HIO_c::daE_AI_HIO_c() {
     home_distance = 0.0f;
 }
 
-/* 806791BC-80679284 00013C 00C8+00 1/1 0/0 0/0 .text            initCcCylinder__10e_ai_classFv */
 void e_ai_class::initCcCylinder() {
     m_ccAtStts.Init(250, 0, this);
     m_ccShieldStts.Init(250, 0, this);
@@ -93,7 +91,6 @@ void e_ai_class::initCcCylinder() {
     m_ccCyl.OnTgIronBallRebound();
 }
 
-/* 80679284-80679350 000204 00CC+00 1/1 0/0 0/0 .text            setCcCylinder__10e_ai_classFv */
 void e_ai_class::setCcCylinder() {
     m_ccCyl.SetC(current.pos);
     dComIfG_Ccsp()->Set(&m_ccCyl);
@@ -112,13 +109,11 @@ void e_ai_class::setCcCylinder() {
     dComIfG_Ccsp()->Set(&m_ccShieldSph);
 }
 
-/* 80679350-806793FC 0002D0 00AC+00 6/6 0/0 0/0 .text            anm_init__10e_ai_classFifUcf */
 void e_ai_class::anm_init(int i_anm, f32 i_morf, u8 i_mode, f32 i_speed) {
     m_modelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_AI", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f);
     m_anm = i_anm;
 }
 
-/* 806793FC-806794F4 00037C 00F8+00 1/1 0/0 0/0 .text            Draw__10e_ai_classFv */
 int e_ai_class::Draw() {
     J3DModel* model_p = m_modelMorf->getModel();
 
@@ -136,7 +131,6 @@ int e_ai_class::Draw() {
     return 1;
 }
 
-/* 806794F4-80679538 000474 0044+00 1/1 0/0 0/0 .text            player_way_check__10e_ai_classFv */
 BOOL e_ai_class::player_way_check() {
     s16 angle_diff = shape_angle.y - dComIfGp_getPlayer(0)->shape_angle.y;
     if (angle_diff < 0) {
@@ -150,8 +144,6 @@ BOOL e_ai_class::player_way_check() {
     return TRUE;
 }
 
-/* 80679538-80679610 0004B8 00D8+00 1/1 0/0 0/0 .text other_bg_check__10e_ai_classFP10fopAc_ac_c
- */
 BOOL e_ai_class::other_bg_check(fopAc_ac_c* i_other) {
     dBgS_LinChk linchk;
     cXyz sp24;
@@ -172,7 +164,6 @@ BOOL e_ai_class::other_bg_check(fopAc_ac_c* i_other) {
     return FALSE;
 }
 
-/* 80679610-8067968C 000590 007C+00 2/2 0/0 0/0 .text            pl_check__10e_ai_classFfs */
 BOOL e_ai_class::pl_check(f32 i_range, s16 i_angle) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     
@@ -186,7 +177,6 @@ BOOL e_ai_class::pl_check(f32 i_range, s16 i_angle) {
     return FALSE;
 }
 
-/* 8067968C-80679DC8 00060C 073C+00 1/1 0/0 0/0 .text            damage_check__10e_ai_classFv */
 void e_ai_class::damage_check() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp44;
@@ -348,13 +338,10 @@ void e_ai_class::damage_check() {
     }
 }
 
-/* 8067C698-8067C69C 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 l_HIOInit;
 
-/* 8067C6A8-8067C6C8 000018 0020+00 7/7 0/0 0/0 .bss             l_HIO */
 static daE_AI_HIO_c l_HIO;
 
-/* 80679DC8-8067A2CC 000D48 0504+00 1/1 0/0 0/0 .text            e_ai_damage__10e_ai_classFv */
 void e_ai_class::e_ai_damage() {
     switch (field_0x692) {
     case 0:
@@ -450,7 +437,6 @@ void e_ai_class::e_ai_damage() {
     }
 }
 
-/* 8067A2CC-8067A54C 00124C 0280+00 1/1 0/0 0/0 .text            e_ai_attack__10e_ai_classFv */
 void e_ai_class::e_ai_attack() {
     speedF = 0.0f;
     cLib_addCalcAngleS2(&current.angle.y, field_0x6a8 + TREG_S(4) + 4000, 2, 0x400);
@@ -502,7 +488,6 @@ void e_ai_class::e_ai_attack() {
     }
 }
 
-/* 8067A54C-8067AA48 0014CC 04FC+00 1/1 0/0 0/0 .text            e_ai_move__10e_ai_classFv */
 void e_ai_class::e_ai_move() {
     if ((field_0x5cc == 0x10 || field_0x5cc == 0x12) && m_brk->isStop()) {
         m_brk->init(m_modelMorf->getModel()->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("E_AI", 0x11), 1, 2, 1.0f, 0, -1);
@@ -583,7 +568,6 @@ void e_ai_class::e_ai_move() {
     }
 }
 
-/* 8067AA48-8067ACA0 0019C8 0258+00 1/1 0/0 0/0 .text            e_ai_wait__10e_ai_classFv */
 void e_ai_class::e_ai_wait() {
     switch (m_mode) {
     case 0:
@@ -620,7 +604,6 @@ void e_ai_class::e_ai_wait() {
     }
 }
 
-/* 8067ACA0-8067B024 001C20 0384+00 1/1 0/0 0/0 .text            e_ai_return__10e_ai_classFv */
 void e_ai_class::e_ai_return() {
     switch (m_mode) {
     case 0:
@@ -674,7 +657,6 @@ void e_ai_class::e_ai_return() {
     }
 }
 
-/* 8067B024-8067B2B0 001FA4 028C+00 1/1 0/0 0/0 .text            action__10e_ai_classFv */
 void e_ai_class::action() {
     cXyz sp14;
     cXyz sp8;
@@ -749,7 +731,6 @@ void e_ai_class::action() {
     m_acch.CrrPos(dComIfG_Bgsp());
 }
 
-/* 8067B2B0-8067B31C 002230 006C+00 1/1 0/0 0/0 .text            PlayerWaySet__10e_ai_classFv */
 void e_ai_class::PlayerWaySet() {
     if (player_way_check()) {
         m_ccCyl.OnTgShield();
@@ -762,7 +743,6 @@ void e_ai_class::PlayerWaySet() {
     }
 }
 
-/* 8067B31C-8067B378 00229C 005C+00 1/1 0/0 0/0 .text            AttentionSet__10e_ai_classFv */
 void e_ai_class::AttentionSet() {
     eyePos = current.pos;
     eyePos.y += 100.0f + TREG_F(2);
@@ -771,7 +751,6 @@ void e_ai_class::AttentionSet() {
     attention_info.position.y += 130.0f;
 }
 
-/* 8067B378-8067B598 0022F8 0220+00 1/1 0/0 0/0 .text            Execute__10e_ai_classFv */
 int e_ai_class::Execute() {
     cXyz sp38;
     cXyz sp2C;
@@ -834,7 +813,6 @@ int e_ai_class::Execute() {
     return 1;
 }
 
-/* 8067B598-8067B620 002518 0088+00 1/1 0/0 0/0 .text            setBaseMtx__10e_ai_classFv */
 void e_ai_class::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -846,7 +824,6 @@ void e_ai_class::setBaseMtx() {
     m_modelMorf->modelCalc();
 }
 
-/* 8067B620-8067B688 0025A0 0068+00 1/1 0/0 0/0 .text            Delete__10e_ai_classFv */
 int e_ai_class::Delete() {
     dComIfG_resDelete(&m_phase, "E_AI");
 
@@ -862,27 +839,22 @@ int e_ai_class::Delete() {
     return 1;
 }
 
-/* 8067B688-8067B6A8 002608 0020+00 1/0 0/0 0/0 .text            daE_AI_Draw__FP10e_ai_class */
 static int daE_AI_Draw(e_ai_class* i_this) {
     return i_this->Draw();
 }
 
-/* 8067B6A8-8067B6C8 002628 0020+00 2/1 0/0 0/0 .text            daE_AI_Execute__FP10e_ai_class */
 static int daE_AI_Execute(e_ai_class* i_this) {
     return i_this->Execute();
 }
 
-/* 8067B6C8-8067B6D0 002648 0008+00 1/0 0/0 0/0 .text            daE_AI_IsDelete__FP10e_ai_class */
 static int daE_AI_IsDelete(e_ai_class* i_this) {
     return 1;
 }
 
-/* 8067B6D0-8067B6F0 002650 0020+00 1/0 0/0 0/0 .text            daE_AI_Delete__FP10e_ai_class */
 static int daE_AI_Delete(e_ai_class* i_this) {
     return i_this->Delete();
 }
 
-/* 8067B6F0-8067B87C 002670 018C+00 1/1 0/0 0/0 .text            CreateHeap__10e_ai_classFv */
 int e_ai_class::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_AI", 0xD);
     JUT_ASSERT(1703, modelData != NULL);
@@ -905,12 +877,10 @@ int e_ai_class::CreateHeap() {
     return 1;
 }
 
-/* 8067B8C4-8067B8E4 002844 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return ((e_ai_class*)i_this)->CreateHeap();
 }
 
-/* 8067B8E4-8067BAEC 002864 0208+00 1/1 0/0 0/0 .text            Create__10e_ai_classFv */
 int e_ai_class::Create() {
     fopAcM_ct(this, e_ai_class);
 
@@ -966,12 +936,10 @@ int e_ai_class::Create() {
     return phase_state;
 }
 
-/* 8067BED8-8067BEF8 002E58 0020+00 1/0 0/0 0/0 .text            daE_AI_Create__FP10fopAc_ac_c */
 static int daE_AI_Create(fopAc_ac_c* i_this) {
     return ((e_ai_class*)i_this)->Create();
 }
 
-/* 8067C5BC-8067C5DC -00001 0020+00 1/0 0/0 0/0 .data            l_daE_AI_Method */
 static actor_method_class l_daE_AI_Method = {
     (process_method_func)daE_AI_Create,
     (process_method_func)daE_AI_Delete,
@@ -980,7 +948,6 @@ static actor_method_class l_daE_AI_Method = {
     (process_method_func)daE_AI_Draw,
 };
 
-/* 8067C5DC-8067C60C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_AI */
 extern actor_process_profile_definition g_profile_E_AI = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

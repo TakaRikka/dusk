@@ -9,35 +9,23 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 
-//
-// Declarations:
-//
-
-/* 80C17498-80C174B8 000078 0020+00 1/1 0/0 0/0 .text daObjHFtr_c_createHeap__FP10fopAc_ac_c */
 static int daObjHFtr_c_createHeap(fopAc_ac_c* param_0) {
     return ((daObjHFtr_c*)param_0)->createHeap();
 }
 
-/* 80C1817C-80C18188 -00001 000C+00 3/3 0/0 0/0 .data            l_arcName */
 static const char* l_arcName[3] = {"HChair", "HSofa", "HTable"};
 
-/* 80C174B8-80C1753C 000098 0084+00 2/2 0/0 0/0 .text            __ct__11daObjHFtr_cFv */
 daObjHFtr_c::daObjHFtr_c() {}
 
-/* 80C17778-80C17874 000358 00FC+00 1/0 0/0 0/0 .text            __dt__11daObjHFtr_cFv */
 daObjHFtr_c::~daObjHFtr_c() {
     u32 index = getNameId();
     dComIfG_resDelete(this, l_arcName[index]);
 }
 
-/* ############################################################################################## */
-/* 80C180B8-80C180C4 000000 000C+00 2/2 0/0 0/0 .rodata          l_bmdIdx */
 static u32 const l_bmdIdx[3] = {4, 4, 4};
 
-/* 80C180C4-80C180D0 00000C 000C+00 1/1 0/0 0/0 .rodata          l_dzbIdx */
 static u32 const l_dzbIdx[3] = {7, 7, 7};
 
-/* 80C17874-80C179B0 000454 013C+00 1/1 0/0 0/0 .text            createHeap__11daObjHFtr_cFv */
 int daObjHFtr_c::createHeap() {
     uint nameId = getNameId();
 
@@ -67,11 +55,8 @@ int daObjHFtr_c::createHeap() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80C180D0-80C180DC 000018 000C+00 1/1 0/0 0/0 .rodata          l_heapSize */
 static u32 const l_heapSize[3] = {0x2000, 0x2000, 0x2000};
 
-/* 80C179B0-80C17AC0 000590 0110+00 1/1 0/0 0/0 .text            create__11daObjHFtr_cFv */
 int daObjHFtr_c::create() {
     fopAcM_ct(this, daObjHFtr_c);
 
@@ -95,7 +80,6 @@ int daObjHFtr_c::create() {
     return loadResult;
 }
 
-/* 80C17AC0-80C17B30 0006A0 0070+00 1/1 0/0 0/0 .text            Delete__11daObjHFtr_cFv */
 int daObjHFtr_c::Delete() {
     if (field_0x5a4 != NULL && field_0x5a4->ChkUsed()) {
         dComIfG_Bgsp().Release(field_0x5a4);
@@ -104,7 +88,6 @@ int daObjHFtr_c::Delete() {
     return 1;
 }
 
-/* 80C17B30-80C17BD4 000710 00A4+00 1/1 0/0 0/0 .text            draw__11daObjHFtr_cFv */
 int daObjHFtr_c::draw() {
     g_env_light.settingTevStruct(8, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -130,7 +113,6 @@ dCcD_SrcCyl const daObjHFtr_c::s_CcDCyl = {
     }  // mCyl
 };
 
-/* 80C17BD4-80C17CD0 0007B4 00FC+00 1/1 0/0 0/0 .text            execute__11daObjHFtr_cFv */
 int daObjHFtr_c::execute() {
     if (chkHit()) {
         callEmt();
@@ -150,7 +132,6 @@ int daObjHFtr_c::execute() {
     return 1;
 }
 
-/* 80C17CD0-80C17E10 0008B0 0140+00 1/1 0/0 0/0 .text            init__11daObjHFtr_cFv */
 void daObjHFtr_c::init() {
     static s32 const COL_OFFSET_X[3][2] = {{0, 0}, {50, -50}, {0, 0}};
     static s32 const COL_HEIGHT[3] = {170, 160, 110};
@@ -169,14 +150,12 @@ void daObjHFtr_c::init() {
     // return iVar2;
 }
 
-/* 80C17E10-80C17E74 0009F0 0064+00 2/2 0/0 0/0 .text            setModelMtx__11daObjHFtr_cFv */
 void daObjHFtr_c::setModelMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80C17E74-80C17EDC 000A54 0068+00 1/1 0/0 0/0 .text            chkHit__11daObjHFtr_cFv */
 bool daObjHFtr_c::chkHit() {
     for (s32 i = 0; i < 2; i++) {
         if (mCyls[i].ChkTgHit()) {
@@ -187,7 +166,6 @@ bool daObjHFtr_c::chkHit() {
 }
 
 
-/* 80C17EDC-80C17FB4 000ABC 00D8+00 1/1 0/0 0/0 .text            callEmt__11daObjHFtr_cFv */
 void daObjHFtr_c::callEmt() {
     static u16 const PARTICLE_NAME[4] = {
         0x8AE7,
@@ -204,38 +182,29 @@ void daObjHFtr_c::callEmt() {
     }
 }
 
-/* 80C17FB4-80C18008 000B94 0054+00 1/0 0/0 0/0 .text            daObjHFtr_create__FP11daObjHFtr_c
- */
 static int daObjHFtr_create(daObjHFtr_c* param_0) {
     fopAcM_ct(param_0, daObjHFtr_c);
     return param_0->create();
 }
 
-/* 80C18008-80C18028 000BE8 0020+00 1/0 0/0 0/0 .text            daObjHFtr_Delete__FP11daObjHFtr_c
- */
 static int daObjHFtr_Delete(daObjHFtr_c* param_0) {
     return param_0->Delete();
 }
 
-/* 80C18028-80C18048 000C08 0020+00 1/0 0/0 0/0 .text            daObjHFtr_execute__FP11daObjHFtr_c
- */
 static int daObjHFtr_execute(daObjHFtr_c* param_0) {
     return param_0->execute();
 }
 
-/* 80C18048-80C18068 000C28 0020+00 1/0 0/0 0/0 .text            daObjHFtr_draw__FP11daObjHFtr_c */
 static int daObjHFtr_draw(daObjHFtr_c* param_0) {
     return param_0->draw();
 }
 
-/* 80C18188-80C181A8 -00001 0020+00 1/0 0/0 0/0 .data            daObjHFtr_METHODS */
 static actor_method_class daObjHFtr_METHODS = {
     (process_method_func)daObjHFtr_create,  (process_method_func)daObjHFtr_Delete,
     (process_method_func)daObjHFtr_execute, 0,
     (process_method_func)daObjHFtr_draw,
 };
 
-/* 80C181A8-80C181D8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_HFtr */
 extern actor_process_profile_definition g_profile_Obj_HFtr = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

@@ -8,7 +8,6 @@
 #include "f_pc/f_pc_layer.h"
 #include "f_pc/f_pc_load.h"
 
-/* 80023A48-80023A98 0050+00 s=1 e=3 z=52  None .text      fpcFCtRq_Do__FP19fast_create_request */
 s32 fpcFCtRq_Do(fast_create_request* i_createReq) {
     if (i_createReq->create_func != NULL &&
         i_createReq->create_func(i_createReq->base.process, i_createReq->data) == 0)
@@ -19,14 +18,10 @@ s32 fpcFCtRq_Do(fast_create_request* i_createReq) {
     }
 }
 
-/* 80023A98-80023AA0 0008+00 s=1 e=0 z=0  None .text      fpcFCtRq_Delete__FP19fast_create_request
- */
 s32 fpcFCtRq_Delete(fast_create_request* i_createReq) {
     return 1;
 }
 
-/* 80023AA0-80023B70 00D0+00 s=0 e=3 z=43  None .text
- * fpcFCtRq_Request__FP11layer_classsPFPvPv_iPvPv               */
 base_process_class* fpcFCtRq_Request(layer_class* i_layer, s16 i_procname,
                                      fstCreateFunc i_createFunc, void* i_createData, void* i_append) {
     static create_request_method_class submethod = {(cPhs__Handler)fpcFCtRq_Do, NULL,

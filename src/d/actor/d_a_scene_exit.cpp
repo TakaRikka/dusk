@@ -10,7 +10,6 @@
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_mtx.h"
 
-/* 80485838-80485974 000078 013C+00 1/1 0/0 0/0 .text            checkWork__8daScex_cFv */
 int daScex_c::checkWork() {
     if (getArg1() == 0xFF || getArg1() == 0 || getArg1() == 3) {
         if (fopAcM_isSwitch(this, getSwNo())) {
@@ -48,18 +47,15 @@ inline int daScex_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80485974-80485A30 0001B4 00BC+00 1/0 0/0 0/0 .text            daScex_Create__FP10fopAc_ac_c */
 static int daScex_Create(fopAc_ac_c* i_this) {
     daScex_c* scx = static_cast<daScex_c*>(i_this);
     return scx->create();
 }
 
-/* 80485A30-80485A50 000270 0020+00 1/0 0/0 0/0 .text            daScex_Execute__FP8daScex_c */
 static int daScex_Execute(daScex_c* i_this) {
     return i_this->execute();
 }
 
-/* 80485A50-80485C90 000290 0240+00 1/1 0/0 0/0 .text            execute__8daScex_cFv */
 // NONMATCHING - regalloc, this matches debug but not retail :/
 int daScex_c::execute() {
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -103,15 +99,12 @@ int daScex_c::execute() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80485CAC-80485CCC -00001 0020+00 1/0 0/0 0/0 .data            l_daScex_Method */
 static actor_method_class l_daScex_Method = {
     (process_method_func)daScex_Create,
     NULL,
     (process_method_func)daScex_Execute,
 };
 
-/* 80485CCC-80485D00 -00001 0034+00 0/0 0/0 1/0 .data            g_profile_SCENE_EXIT */
 extern actor_process_profile_definition2 g_profile_SCENE_EXIT = {
   fpcLy_CURRENT_e,       // mLayerID
   10,                    // mListID

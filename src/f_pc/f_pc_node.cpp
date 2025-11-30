@@ -7,13 +7,10 @@
 #include "f_pc/f_pc_layer_iter.h"
 #include "f_pc/f_pc_debug_sv.h"
 
-/* 800224F0-80022514 0024+00 s=1 e=1 z=0  None .text fpcNd_DrawMethod__FP21nodedraw_method_classPv
- */
 s32 fpcNd_DrawMethod(nodedraw_method_class* i_method_class, void* i_data) {
     return fpcMtd_Method(i_method_class->draw_method, i_data);
 }
 
-/* 80022514-80022580 006C+00 s=1 e=0 z=0  None .text      fpcNd_Draw__FP18process_node_class */
 s32 fpcNd_Draw(process_node_class* i_procNode) {
     s32 ret = 0;
     process_node_class* var_r28 = i_procNode;
@@ -28,7 +25,6 @@ s32 fpcNd_Draw(process_node_class* i_procNode) {
     return ret;
 }
 
-/* 80022580-800225DC 005C+00 s=1 e=0 z=0  None .text      fpcNd_Execute__FP18process_node_class */
 s32 fpcNd_Execute(process_node_class* i_procNode) {
     s32 ret = 0;
     layer_class* save_layer = fpcLy_CurrentLayer();
@@ -48,10 +44,8 @@ s32 fpcNd_Execute(process_node_class* i_procNode) {
     return ret;
 }
 
-/* 80450D40-80450D48 0004+04 s=2 e=11 z=0  None .sbss      g_fpcNd_type */
 int g_fpcNd_type;
 
-/* 800225DC-8002265C 0080+00 s=1 e=0 z=0  None .text      fpcNd_IsCreatingFromUnder__FPv */
 void* fpcNd_IsCreatingFromUnder(void* i_procNode) {
     layer_class* layer;
     process_node_class* procnode = (process_node_class*)i_procNode;
@@ -69,11 +63,8 @@ void* fpcNd_IsCreatingFromUnder(void* i_procNode) {
     return NULL;
 }
 
-/* 804505E0-804505E8 0004+04 s=1 e=0 z=0  None .sdata     g_fpcNd_IsCheckOfDeleteTiming */
 BOOL g_fpcNd_IsCheckOfDeleteTiming = TRUE;
 
-/* 8002265C-8002269C 0040+00 s=0 e=2 z=0  None .text fpcNd_IsDeleteTiming__FP18process_node_class
- */
 s32 fpcNd_IsDeleteTiming(process_node_class* i_procNode) {
     if (g_fpcNd_IsCheckOfDeleteTiming == TRUE && fpcNd_IsCreatingFromUnder(i_procNode) != NULL) {
         return 0;
@@ -82,12 +73,10 @@ s32 fpcNd_IsDeleteTiming(process_node_class* i_procNode) {
     return 1;
 }
 
-/* 8002269C-800226C4 0028+00 s=1 e=0 z=0  None .text      fpcNd_IsDelete__FP18process_node_class */
 s32 fpcNd_IsDelete(process_node_class* i_procNode) {
     return fpcMtd_IsDelete(&i_procNode->nodedraw_method->base, i_procNode);
 }
 
-/* 800226C4-80022728 0064+00 s=1 e=0 z=0  None .text      fpcNd_Delete__FP18process_node_class */
 s32 fpcNd_Delete(process_node_class* i_procNode) {
     if (!fpcLy_IsDeletingMesg(&i_procNode->layer) &&
         fpcMtd_Delete(&i_procNode->nodedraw_method->base, i_procNode) == 1)
@@ -99,7 +88,6 @@ s32 fpcNd_Delete(process_node_class* i_procNode) {
     return 0;
 }
 
-/* 80022728-800227C4 009C+00 s=1 e=0 z=0  None .text      fpcNd_Create__FP18process_node_class */
 s32 fpcNd_Create(process_node_class* i_procNode) {
     process_node_class* procnode = (process_node_class*)i_procNode;
     layer_class* save_layer;
@@ -120,7 +108,6 @@ s32 fpcNd_Create(process_node_class* i_procNode) {
     return ret;
 }
 
-/* 803A3A20-803A3A38 0014+04 s=0 e=9 z=0  None .data      g_fpcNd_Method */
 nodedraw_method_class g_fpcNd_Method = {
     (process_method_func)fpcNd_Create, (process_method_func)fpcNd_Delete,
     (process_method_func)fpcNd_Execute, (process_method_func)fpcNd_IsDelete,

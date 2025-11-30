@@ -29,26 +29,26 @@ public:
         ACT_DEAD_e,
     };
 
-    /* 80C24738 */ void initBaseMtx();
-    /* 80C24774 */ void setBaseMtx();
-    /* 80C249E4 */ int Create();
-    /* 80C24BC4 */ void setAnmPos();
-    /* 80C24C9C */ int CreateHeap();
-    /* 80C24E14 */ int create();
-    /* 80C25158 */ int execute();
-    /* 80C25360 */ void action();
-    /* 80C2541C */ void modeDropWait();
-    /* 80C25614 */ void modeDrop();
-    /* 80C258F8 */ void modePlayerWait();
-    /* 80C25904 */ void modeRide();
-    /* 80C25908 */ void event_proc_call();
-    /* 80C259C4 */ void actionWait();
-    /* 80C259C8 */ void actionOrderEvent();
-    /* 80C25A68 */ void actionEvent();
-    /* 80C25AC4 */ void actionDead();
-    /* 80C25AC8 */ void setFallSE();
-    /* 80C25BB8 */ int draw();
-    /* 80C25C50 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    void setAnmPos();
+    int CreateHeap();
+    int create();
+    int execute();
+    void action();
+    void modeDropWait();
+    void modeDrop();
+    void modePlayerWait();
+    void modeRide();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    void setFallSE();
+    int draw();
+    int _delete();
 
     void offRide() { mRide = false; }
     void onRide() { mRide = true; }

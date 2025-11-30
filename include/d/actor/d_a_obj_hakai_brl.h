@@ -14,23 +14,23 @@
  */
 class daObjHBarrel_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80C16758 */ daObjHBarrel_c();
-    /* 80C16918 */ virtual ~daObjHBarrel_c();
-    /* 80C16A98 */ int createHeap();
-    /* 80C16B08 */ int create();
-    /* 80C16BF8 */ int Delete();
-    /* 80C16C44 */ int draw();
-    /* 80C16CA8 */ int execute();
-    /* 80C16D50 */ void init();
-    /* 80C16DEC */ void setModelMtx();
-    /* 80C16E50 */ void hitAction();
+    daObjHBarrel_c();
+    virtual ~daObjHBarrel_c();
+    int createHeap();
+    int create();
+    int Delete();
+    int draw();
+    int execute();
+    void init();
+    void setModelMtx();
+    void hitAction();
     u8 getItemBit() {
         return fopAcM_GetParamBit(this, 8, 8);
     }
     u8 getItemNo() {
         return fopAcM_GetParamBit(this, 0, 8);
     }
-    /* 80C17090 */ void callEmt();
+    void callEmt();
 
     static dCcD_SrcCyl const s_CcDCyl;
 

@@ -18,12 +18,12 @@ public:
         setColor(0);
     }
 
-    /* 80D4347C */ int create(cXyz const&, s8, s8, s8, s8);
-    /* 80D434F8 */ BOOL loadModel();
-    /* 80D4357C */ void init(cXyz const&, s8, s8, s8);
-    /* 80D43808 */ void calcSpeed();
-    /* 80D43864 */ void setMtx();
-    /* 80D438C8 */ void draw();
+    int create(cXyz const&, s8, s8, s8, s8);
+    BOOL loadModel();
+    void init(cXyz const&, s8, s8, s8);
+    void calcSpeed();
+    void setMtx();
+    void draw();
 
     inline void setColor(const s8& i_color) { mColor = i_color; }
     s8 getColor() { return mColor; }
@@ -62,9 +62,9 @@ class _ZraMark_Hahen_Mng_c {
 public:
     _ZraMark_Hahen_Mng_c() : field_0x2(0) {}
 
-    /* 80D43968 */ int create(cXyz const&, s8, s8, s8, s8);
-    /* 80D439F8 */ void calc();
-    /* 80D43A74 */ void draw();
+    int create(cXyz const&, s8, s8, s8, s8);
+    void calc();
+    void draw();
 
     s16 getTimer() { return mTimer; }
     void setTimer(s16 i_timer) { mTimer = i_timer; }
@@ -97,18 +97,18 @@ public:
         TYPE_RED,
     };
 
-    /* 80D42678 */ int Create();
-    /* 80D4287C */ int CreateHeap();
-    /* 80D42A7C */ int Execute();
-    /* 80D42B0C */ int Draw();
-    /* 80D42C98 */ int Delete();
-    /* 80D42CE0 */ int getType();
-    /* 80D42D2C */ void setBaseMtx();
-    /* 80D42EE0 */ void col_init();
-    /* 80D42F5C */ void col_set();
-    /* 80D432C8 */ daNpc_Hoz_c* schHoz();
-    /* 80D43314 */ bool entryPointer(fopAc_ac_c*);
-    /* 80D43370 */ void informBlast();
+    int Create();
+    int CreateHeap();
+    int Execute();
+    int Draw();
+    int Delete();
+    int getType();
+    void setBaseMtx();
+    void col_init();
+    void col_set();
+    daNpc_Hoz_c* schHoz();
+    bool entryPointer(fopAc_ac_c*);
+    void informBlast();
 
     u8 getMarkNo() { return fopAcM_GetParam(this) & 0xff; }
     void initBlastFlag() { mBlastFlag = false; }

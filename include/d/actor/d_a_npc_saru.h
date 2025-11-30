@@ -20,7 +20,7 @@ struct daNpc_Saru_HIOParam {
 
 class daNpc_Saru_Param_c : public JORReflexible {
 public:
-    /* 80AC448C */ virtual ~daNpc_Saru_Param_c() {}
+    virtual ~daNpc_Saru_Param_c() {}
 
 #ifdef DEBUG
     void genMessage(JORMContext*);
@@ -71,49 +71,49 @@ public:
         /* 0x15 */ JNT_FOOR_R,
     };
 
-    /* 80AC042C */ ~daNpc_Saru_c();
-    /* 80AC0578 */ int create();
-    /* 80AC082C */ int CreateHeap();
-    /* 80AC0A54 */ int Delete();
-    /* 80AC0A88 */ int Execute();
-    /* 80AC0AA8 */ int Draw();
-    /* 80AC0AEC */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AC0B0C */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80AC0B64 */ static void* srchYm(void*, void*);
-    /* 80AC0C0C */ u8 getType();
-    /* 80AC0C58 */ int isDelete();
-    /* 80AC0CE8 */ void reset();
-    /* 80AC0EA4 */ void afterJntAnm(int);
-    /* 80AC0F28 */ BOOL checkChangeEvt();
-    /* 80AC0FDC */ void setParam();
-    /* 80AC1110 */ void setAfterTalkMotion();
-    /* 80AC1170 */ void srchActors();
-    /* 80AC11D4 */ BOOL evtTalk();
-    /* 80AC1274 */ BOOL evtCutProc();
-    /* 80AC133C */ void action();
-    /* 80AC14E4 */ void beforeMove();
-    /* 80AC15B4 */ void setAttnPos();
-    /* 80AC18A0 */ void setCollision();
-    /* 80AC1A20 */ int drawDbgInfo();
-    /* 80AC1A28 */ void drawOtherMdl();
-    /* 80AC1B30 */ int selectAction();
-    /* 80AC1B78 */ BOOL chkAction(int (daNpc_Saru_c::*)(void*));
-    /* 80AC1BA4 */ int setAction(int (daNpc_Saru_c::*)(void*));
-    /* 80AC1C4C */ void setSe();
-    /* 80AC216C */ int cutFindMonkey(int);
-    /* 80AC2368 */ int cutHelpMe(int);
-    /* 80AC2598 */ int cutYmLook(int);
-    /* 80AC28A4 */ int wait(void*);
-    /* 80AC2FD8 */ int talk(void*);
-    /* 80AC4394 */ daNpc_Saru_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
+    ~daNpc_Saru_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    static void* srchYm(void*, void*);
+    u8 getType();
+    int isDelete();
+    void reset();
+    void afterJntAnm(int);
+    BOOL checkChangeEvt();
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    int selectAction();
+    BOOL chkAction(int (daNpc_Saru_c::*)(void*));
+    int setAction(int (daNpc_Saru_c::*)(void*));
+    void setSe();
+    int cutFindMonkey(int);
+    int cutHelpMe(int);
+    int cutYmLook(int);
+    int wait(void*);
+    int talk(void*);
+    daNpc_Saru_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
                                 daNpcT_evtData_c const* param_7, char** param_8) :
                                 daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8)
                                 {}
-    /* 80AC4474 */ s32 getHeadJointNo() { return JNT_HEAD; }
-    /* 80AC447C */ s32 getNeckJointNo() { return JNT_NECK; }
-    /* 80AC4484 */ s32 getBackboneJointNo() { return JNT_BACKBONE_1; }
+    s32 getHeadJointNo() { return JNT_HEAD; }
+    s32 getNeckJointNo() { return JNT_NECK; }
+    s32 getBackboneJointNo() { return JNT_BACKBONE_1; }
 
     u32 getFlowNodeNo() {
         u16 rv = home.angle.x;

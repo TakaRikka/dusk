@@ -37,21 +37,21 @@ public:
 
     typedef void (daObjKznkarm_c::*actionFunc)();
     
-    /* 80C4F858 */ void setAction(daObjKznkarm_c::Mode_e);
-    /* 80C4F88C */ void callInit();
-    /* 80C4F8B4 */ void callExecute();
-    /* 80C4F8E0 */ void initBroken();
-    /* 80C4F960 */ void executeBroken();
-    /* 80C4FBBC */ void initCarry();
-    /* 80C4FBEC */ void executeCarry();
-    /* 80C4FD18 */ void initThrow();
-    /* 80C4FDB4 */ void executeThrow();
-    /* 80C50488 */ void initStay();
-    /* 80C50504 */ void executeStay();
-    /* 80C505F8 */ void create_init();
-    /* 80C506DC */ void initBaseMtx();
-    /* 80C50708 */ void setBaseMtx();
-    /* 80C5076C */ s16 getGroundSlope(s16);
+    void setAction(daObjKznkarm_c::Mode_e);
+    void callInit();
+    void callExecute();
+    void initBroken();
+    void executeBroken();
+    void initCarry();
+    void executeCarry();
+    void initThrow();
+    void executeThrow();
+    void initStay();
+    void executeStay();
+    void create_init();
+    void initBaseMtx();
+    void setBaseMtx();
+    s16 getGroundSlope(s16);
 
     inline int createHeap();
     inline int draw();

@@ -13,10 +13,10 @@
  */
 class daObjDigholl_c : public fopAc_ac_c {
 public:
-    /* 80BDC618 */ int create();
-    /* 80BDC75C */ ~daObjDigholl_c();
-    /* 80BDC7D8 */ int execute();
-    /* 80BDCB0C */ int draw();
+    int create();
+    ~daObjDigholl_c();
+    int execute();
+    int draw();
 
     void onDigStart() { field_0x568 = 1; }
     s16 getSceneNum() const { return field_0x56c; }

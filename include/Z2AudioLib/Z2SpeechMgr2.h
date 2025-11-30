@@ -6,9 +6,9 @@
 #include "Z2AudioLib/Z2SoundStarter.h"
 
 struct Z2SpeechStarter : public Z2SoundStarter {
-    /* 802CCFB8 */ Z2SpeechStarter();
+    Z2SpeechStarter();
 
-    /* 802CCFF8 */ virtual bool startSound(JAISoundID, JAISoundHandle*,
+    virtual bool startSound(JAISoundID, JAISoundHandle*,
                                            JGeometry::TVec3<f32> const*, u32, f32, f32, f32, f32,
                                            f32, u32);
 };
@@ -18,17 +18,17 @@ struct Z2SpeechMgr : public JASGlobalInstance<Z2SpeechMgr> {
 };
 
 struct Z2SpeechMgr2 : public JASGlobalInstance<Z2SpeechMgr2> {
-    /* 802CBC60 */ Z2SpeechMgr2();
+    Z2SpeechMgr2();
     ~Z2SpeechMgr2() {}
-    /* 802CBD88 */ void setString(u16 const*, s16, u8, u16);
-    /* 802CBF60 */ void setTextCount(s16);
-    /* 802CC190 */ void speakOneWord(bool);
-    /* 802CC2FC */ bool isNonVerbal();
-    /* 802CC4C0 */ void selectUnit(bool);
-    /* 802CC738 */ void selectTail();
-    /* 802CC9D0 */ void framework();
-    /* 802CCA18 */ void playOneShotVoice(u8, u16, Vec*, s8);
-    /* 802CCF88 */ bool isMidnaSpeak();
+    void setString(u16 const*, s16, u8, u16);
+    void setTextCount(s16);
+    void speakOneWord(bool);
+    bool isNonVerbal();
+    void selectUnit(bool);
+    void selectTail();
+    void framework();
+    void playOneShotVoice(u8, u16, Vec*, s8);
+    bool isMidnaSpeak();
 
     /* 0x000 */ JAISoundHandle field_0x0;
     /* 0x004 */ JAISoundHandle field_0x4;

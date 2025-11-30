@@ -24,8 +24,8 @@
 
 class daE_VA_HIO_c {
 public:
-    /* 807C25EC */ daE_VA_HIO_c();
-    /* 807CE2AC */ virtual ~daE_VA_HIO_c() {}
+    daE_VA_HIO_c();
+    virtual ~daE_VA_HIO_c() {}
 
     /* 0x04 */ s8 field_0x04;
     /* 0x08 */ f32 mModelSize;
@@ -103,7 +103,6 @@ enum daE_VA_JOINT {
 namespace
 {
 
-/* 807CEF40-807CEF80 000038 0040+00 0/1 0/0 0/0 .data cc_vt_neck_src__22@unnamed@d_a_e_vt_cpp@ */
 static dCcD_SrcSph cc_vt_neck_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x80000000, 0x3}, 0x0}},  // mObj
@@ -116,7 +115,6 @@ static dCcD_SrcSph cc_vt_neck_src = {
     }  // mSphAttr
 };
 
-/* 807CEF80-807CEFC4 000078 0044+00 0/1 0/0 0/0 .data cc_vt_body_src__22@unnamed@d_a_e_vt_cpp@ */
 static dCcD_SrcCyl cc_vt_body_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x43}, 0x75}},  // mObj
@@ -131,8 +129,6 @@ static dCcD_SrcCyl cc_vt_body_src = {
     }  // mCyl
 };
 
-/* 807CEFC4-807CF004 0000BC 0040+00 0/1 0/0 0/0 .data cc_vt_attack_src__22@unnamed@d_a_e_vt_cpp@
- */
 static dCcD_SrcSph cc_vt_attack_src = {
     {
         {0x0, {{0x100000, 0x2, 0xD}, {0xD8FBFDFF, 0x43}, 0x75}},  // mObj
@@ -145,7 +141,6 @@ static dCcD_SrcSph cc_vt_attack_src = {
     }  // mSphAttr
 };
 
-/* 807CF004-807CF044 0000FC 0040+00 0/1 0/0 0/0 .data cc_vt_line_src__22@unnamed@d_a_e_vt_cpp@ */
 static dCcD_SrcSph cc_vt_line_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xD8FBFDFF, 0x43}, 0x75}},  // mObj
@@ -158,7 +153,6 @@ static dCcD_SrcSph cc_vt_line_src = {
     }  // mSphAttr
 };
 
-/* 807CF044-807CF084 00013C 0040+00 0/1 0/0 0/0 .data cc_vt_magic_src__22@unnamed@d_a_e_vt_cpp@ */
 static dCcD_SrcSph cc_vt_magic_src = {
     {
         {0x0, {{0x400, 0x2, 0xD}, {0xD8FBFDFF, 0x0}, 0x0}},  // mObj
@@ -171,21 +165,18 @@ static dCcD_SrcSph cc_vt_magic_src = {
     }  // mSphAttr
 };
 
-/* 807CF084-807CF0AC 00017C 0027+01 1/1 0/0 0/0 .data va_tag_set_size__22@unnamed@d_a_e_vt_cpp@ */
 static u8 va_tag_set_size[39] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
     0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
     0x02, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02,
 };
 
-/* 807CF0AC-807CF0D4 0001A4 0027+01 3/4 0/0 0/0 .data va_tag_set_num__22@unnamed@d_a_e_vt_cpp@ */
 static u8 va_tag_set_num[39] = {
     0x01, 0x0C, 0x16, 0x1F, 0x21, 0x2A, 0x2B, 0x02, 0x04, 0x0D, 0x0F, 0x15, 0x18,
     0x20, 0x2C, 0x03, 0x05, 0x06, 0x0B, 0x10, 0x17, 0x19, 0x1A, 0x22, 0x24, 0x29,
     0x2D, 0x34, 0x49, 0x52, 0x36, 0x3E, 0x54, 0x5C, 0x39, 0x41, 0x4C, 0x56, 0x5E,
 };
 
-/* 807CF0D4-807CF170 0001CC 009C+00 1/1 0/0 0/0 .data va_tag_offset__22@unnamed@d_a_e_vt_cpp@ */
 static f32 va_tag_offset[39] = {
     20.0f, 20.0f, 20.0f, 20.0f, 20.0f, 0.0f,  40.0f, 0.0f, 30.0f, 10.0f, 0.0f,  0.0f,  20.0f,
     0.0f,  10.0f, 20.0f, 40.0f, 0.0f,  20.0f, 0.0f,  0.0f, 20.0f, 0.0f,  10.0f, 0.0f,  0.0f,
@@ -194,7 +185,6 @@ static f32 va_tag_offset[39] = {
 
 }  // namespace
 
-/* 807C25EC-807C267C 0000EC 0090+00 1/1 0/0 0/0 .text            __ct__12daE_VA_HIO_cFv */
 daE_VA_HIO_c::daE_VA_HIO_c() {
     field_0x04 = -1;
     mModelSize = 1.2f;
@@ -214,17 +204,14 @@ daE_VA_HIO_c::daE_VA_HIO_c() {
     mKRegLightA = 210.0f;
 }
 
-/* 807CF4B4-807CF4B8 -00001 0004+00 2/2 0/0 0/0 .bss             None */
 /* 807CF4B5 0003+00 data_807CF4B5 None */
 #pragma push
 #pragma force_active on
 static u8 init_hio;
 #pragma pop
 
-/* 807CF4C4-807CF504 000054 0040+00 17/18 0/0 0/0 .bss             l_HIO */
 static daE_VA_HIO_c l_HIO;
 
-/* 807C267C-807C284C 00017C 01D0+00 1/1 0/0 0/0 .text ctrlJoint__8daE_VA_cFP8J3DJointP8J3DModel */
 int daE_VA_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     int joint_no = i_joint->getJntNo();
     mDoMtx_stack_c::copy(i_model->getAnmMtx(joint_no));
@@ -268,7 +255,6 @@ int daE_VA_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 807C284C-807C2898 00034C 004C+00 1/1 0/0 0/0 .text JointCallBack__8daE_VA_cFP8J3DJointi */
 int daE_VA_c::JointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -282,7 +268,6 @@ int daE_VA_c::JointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 807C2898-807C2A4C 000398 01B4+00 1/1 0/0 0/0 .text            calcJointNeck__8daE_VA_cFv */
 void daE_VA_c::calcJointNeck() {
     csXyz sp18;
 
@@ -322,7 +307,6 @@ void daE_VA_c::calcJointNeck() {
     }
 }
 
-/* 807C2A4C-807C3264 00054C 0818+00 1/1 0/0 0/0 .text            calcJointSleeve__8daE_VA_cFv */
 void daE_VA_c::calcJointSleeve() {
     csXyz sp128;
     cXyz sp90(field_0x13b8);
@@ -458,7 +442,6 @@ void daE_VA_c::calcJointSleeve() {
     }
 }
 
-/* 807C3264-807C37F8 000D64 0594+00 1/1 0/0 0/0 .text            draw__8daE_VA_cFv */
 int daE_VA_c::draw() {
     J3DModel* model = mpMorf->getModel();
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -569,24 +552,20 @@ int daE_VA_c::draw() {
     return 1;
 }
 
-/* 807C37F8-807C3818 0012F8 0020+00 1/0 0/0 0/0 .text            daE_VA_Draw__FP8daE_VA_c */
 static int daE_VA_Draw(daE_VA_c* i_this) {
     return i_this->draw();
 }
 
-/* 807C3818-807C38BC 001318 00A4+00 19/19 0/0 0/0 .text            setBck__8daE_VA_cFiUcff */
 void daE_VA_c::setBck(int i_anmID, u8 i_attr, f32 i_morf, f32 i_rate) {
     mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_VA", i_anmID), i_attr, i_morf, i_rate,
                    0.0f, -1.0f);
 }
 
-/* 807C38BC-807C3918 0013BC 005C+00 8/8 0/0 0/0 .text            checkBck__8daE_VA_cFi */
 bool daE_VA_c::checkBck(int i_anmID) {
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes("E_VA", i_anmID);
     return mpMorf->getAnm() == pbck ? TRUE : FALSE;
 }
 
-/* 807C3918-807C39C4 001418 00AC+00 21/21 0/0 0/0 .text            setActionMode__8daE_VA_cFii */
 void daE_VA_c::setActionMode(int i_action, int i_mode) {
     if (dComIfGs_isOneZoneSwitch(6, fopAcM_GetRoomNo(this)) && i_action != ACTION_OPACI_DOWN_e &&
         i_action != ACTION_OPACI_DOWN_DAMAGE_e)
@@ -604,7 +583,6 @@ void daE_VA_c::setActionMode(int i_action, int i_mode) {
     mGlowBody = 0;
 }
 
-/* 807C39C4-807C3A1C 0014C4 0058+00 1/1 0/0 0/0 .text            getWolfCutType__8daE_VA_cFv */
 int daE_VA_c::getWolfCutType() {
     switch (daPy_getPlayerActorClass()->getCutType()) {
     case daPy_py_c::CUT_TYPE_WOLF_B_LEFT:
@@ -627,7 +605,6 @@ int daE_VA_c::getWolfCutType() {
     return 0;
 }
 
-/* 807C3A1C-807C3A50 00151C 0034+00 3/3 0/0 0/0 .text            onSwordAtBit__8daE_VA_cFv */
 void daE_VA_c::onSwordAtBit() {
     mAttackSphs[0].OnAtSetBit();
     mAttackSphs[1].OnAtSetBit();
@@ -635,7 +612,6 @@ void daE_VA_c::onSwordAtBit() {
     mAttackSphs[3].OnAtSetBit();
 }
 
-/* 807C3A50-807C3AB0 001550 0060+00 3/3 0/0 0/0 .text            offSwordShield__8daE_VA_cFv */
 void daE_VA_c::offSwordShield() {
     if (daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_WOLF_JUMP) {
         mOffTgTimer = 3;
@@ -648,7 +624,6 @@ void daE_VA_c::offSwordShield() {
     }
 }
 
-/* 807C3AB0-807C3B58 0015B0 00A8+00 1/1 0/0 0/0 .text            setTransDamage__8daE_VA_cFP4cXyz */
 void daE_VA_c::setTransDamage(cXyz* param_0) {
     u16 hitmark;
     if (field_0x138f >= 4)
@@ -661,7 +636,6 @@ void daE_VA_c::setTransDamage(cXyz* param_0) {
     setActionMode(ACTION_TRANS_DAMAGE_e, 0);
 }
 
-/* 807C3B58-807C440C 001658 08B4+00 1/1 0/0 0/0 .text            damage_check__8daE_VA_cFv */
 void daE_VA_c::damage_check() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     int cut_type = getWolfCutType();
@@ -886,7 +860,6 @@ void daE_VA_c::damage_check() {
     }
 }
 
-/* 807C4844-807C49B4 002344 0170+00 1/1 0/0 0/0 .text            setFireEffect__8daE_VA_cFi */
 void daE_VA_c::setFireEffect(int param_0) {
     cXyz scale(1.0f, 1.0f, 1.0f);
     int idx = param_0 * 3;
@@ -903,7 +876,6 @@ f32 dummy() {
     return 3.2f;
 }
 
-/* 807C49B4-807C4B54 0024B4 01A0+00 1/1 0/0 0/0 .text            setFootEffect__8daE_VA_cFv */
 void daE_VA_c::setFootEffect() {
     if (!field_0x1388) {
         int var_r6 = 0;
@@ -934,21 +906,18 @@ void daE_VA_c::setFootEffect() {
     }
 }
 
-/* 807CF17C-807CF184 000274 0006+02 1/1 0/0 0/0 .data            va_wepon_eff_id1 */
 static u16 va_wepon_eff_id1[] = {
     0x85D8,
     0x85D9,
     0x85DA,
 };
 
-/* 807CF184-807CF18C 00027C 0006+02 1/1 0/0 0/0 .data            va_wepon_eff_id2 */
 static u16 va_wepon_eff_id2[] = {
     0x85C6,
     0x85C7,
     0x85C8,
 };
 
-/* 807C4B54-807C4DFC 002654 02A8+00 1/1 0/0 0/0 .text            setWeponEffect__8daE_VA_cFv */
 void daE_VA_c::setWeponEffect() {
     cXyz pos;
     cXyz scale(l_HIO.mModelSize, l_HIO.mModelSize, l_HIO.mModelSize);
@@ -986,17 +955,14 @@ void daE_VA_c::setWeponEffect() {
     }
 }
 
-/* 807CF18C-807CF1A4 000284 0018+00 1/1 0/0 0/0 .data            va_bugs_eff_jnt */
 static u16 va_bugs_eff_jnt[] = {
     0x01, 0x02, 0x22, 0x04, 0x05, 0x07, 0x10, 0x11, 0x13, 0x2C, 0x2F, 0x32,
 };
 
-/* 807CF1A4-807CF1BC 00029C 0018+00 1/1 0/0 0/0 .data            va_bugs_eff_id */
 static u16 va_bugs_eff_id[] = {
     0x85E1, 0x85E2, 0x85E3, 0x85DB, 0x85DC, 0x85DD, 0x85DE, 0x85DF, 0x85E0, 0x85E4, 0x85E5, 0x85E6,
 };
 
-/* 807C4DFC-807C4F10 0028FC 0114+00 1/1 0/0 0/0 .text            setBugsEffect__8daE_VA_cFv */
 void daE_VA_c::setBugsEffect() {
     J3DModel* model = mpMorf->getModel();
     JGeometry::TVec3<f32> scale(l_HIO.mModelSize, l_HIO.mModelSize, l_HIO.mModelSize);
@@ -1011,14 +977,12 @@ void daE_VA_c::setBugsEffect() {
     }
 }
 
-/* 807CF1BC-807CF1C4 0002B4 0006+02 1/1 0/0 0/0 .data            va_weapon_land_eff_id */
 static u16 va_weapon_land_eff_id[] = {
     0x85C9,
     0x85CA,
     0x85CB,
 };
 
-/* 807C4F10-807C4FCC 002A10 00BC+00 4/4 0/0 0/0 .text            setWeponLandEffect__8daE_VA_cFv */
 void daE_VA_c::setWeponLandEffect() {
     cXyz scale(l_HIO.mModelSize, l_HIO.mModelSize, l_HIO.mModelSize);
 
@@ -1028,7 +992,6 @@ void daE_VA_c::setWeponLandEffect() {
     }
 }
 
-/* 807C4FCC-807C50A4 002ACC 00D8+00 1/1 0/0 0/0 .text            setWeponGlow__8daE_VA_cFv */
 void daE_VA_c::setWeponGlow() {
     mWeponEffEmtrIDs[0] = dComIfGp_particle_set(mWeponEffEmtrIDs[0], 0x8600, &current.pos, &tevStr);
 
@@ -1038,21 +1001,18 @@ void daE_VA_c::setWeponGlow() {
     }
 }
 
-/* 807C50A4-807C5188 002BA4 00E4+00 1/1 0/0 0/0 .text            setWeponFlashScreen__8daE_VA_cFv */
 void daE_VA_c::setWeponFlashScreen() {
     cXyz pos(0.0f, 0.0f, 0.0f);
     dComIfGp_particle_set(0x85FE, &pos, &tevStr, NULL, NULL);
     dComIfGp_particle_set(0x85FF, &pos, &tevStr, NULL, NULL);
 }
 
-/* 807CF1C4-807CF1CC 0002BC 0006+02 1/1 0/0 0/0 .data            va_magic_eff_id */
 static u16 va_magic_eff_id[] = {
     0x8848,
     0x8849,
     0x884A,
 };
 
-/* 807C5188-807C5258 002C88 00D0+00 1/1 0/0 0/0 .text            setMagicEffect__8daE_VA_cFi */
 void daE_VA_c::setMagicEffect(int param_0) {
     int idx = param_0 * 3;
 
@@ -1062,20 +1022,17 @@ void daE_VA_c::setMagicEffect(int param_0) {
     }
 }
 
-/* 807C5258-807C5338 002D58 00E0+00 1/1 0/0 0/0 .text            setMagicHitEffect__8daE_VA_cFi */
 void daE_VA_c::setMagicHitEffect(int param_0) {
     dComIfGp_particle_set(0x8846, &mMagicPos[param_0], NULL, NULL);
     dComIfGp_particle_set(0x8847, &mMagicPos[param_0], NULL, NULL);
 }
 
-/* 807C5338-807C53A8 002E38 0070+00 1/1 0/0 0/0 .text            demo_skip__8daE_VA_cFi */
 void daE_VA_c::demo_skip(int param_0) {
     Z2GetAudioMgr()->bgmStreamStop(30);
     cDmr_SkipInfo = 1;
     dStage_changeScene(1, 0.0f, 0, fopAcM_GetRoomNo(this), 0, -1);
 }
 
-/* 807C53A8-807C53DC 002EA8 0034+00 1/1 0/0 0/0 .text            DemoSkipCallBack__8daE_VA_cFPvi */
 int daE_VA_c::DemoSkipCallBack(void* i_this, int param_1) {
     if (i_this != NULL) {
         ((daE_VA_c*)i_this)->demo_skip(param_1);
@@ -1085,7 +1042,6 @@ int daE_VA_c::DemoSkipCallBack(void* i_this, int param_1) {
     return 0;
 }
 
-/* 807C53DC-807C53FC 002EDC 0020+00 2/2 0/0 0/0 .text            getRopeLength__8daE_VA_cFi */
 f32 daE_VA_c::getRopeLength(int param_0) {
     if (param_0 < 5) {
         return nREG_F(18) + 115.0f;
@@ -1094,12 +1050,10 @@ f32 daE_VA_c::getRopeLength(int param_0) {
     }
 }
 
-/* 807CF1CC-807CF1F8 0002C4 002C+00 1/1 0/0 0/0 .data            line_pull_power */
 static f32 line_pull_power[] = {
     0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f,
 };
 
-/* 807CF57C-807CF5F4 00010C 0078+00 1/2 0/0 0/0 .bss             line_end_pos */
 static cXyz line_end_pos[] = {
     cXyz(0.0f, 5.0f, 990.0f),     cXyz(971.0f, 5.0f, 326.0f),  cXyz(582.0f, 5.0f, -801.0f),
     cXyz(-582.0f, 5.0f, -801.0f), cXyz(-942.0f, 5.0f, 306.0f), cXyz(202.0f, 5.0f, 501.0f),
@@ -1107,7 +1061,6 @@ static cXyz line_end_pos[] = {
     cXyz(-414.0f, 5.0f, 347.0f),
 };
 
-/* 807CF66C-807CF6E4 0001FC 0078+00 1/2 0/0 0/0 .bss             line_start_pos */
 static cXyz line_start_pos[] = {
     cXyz(-5.0f, -10.0f, -15.0f), cXyz(0.0f, 0.0f, -10.0f), cXyz(0.0f, -10.0f, -10.0f),
     cXyz(0.0f, 0.0f, -5.0f),     cXyz(0.0f, -5.0f, -5.0f), cXyz(0.0f, 25.0f, -15.0f),
@@ -1115,7 +1068,6 @@ static cXyz line_start_pos[] = {
     cXyz(-8.0f, 23.0f, 8.0f),
 };
 
-/* 807C53FC-807C5CF0 002EFC 08F4+00 2/2 0/0 0/0 .text            calcOpRopePos__8daE_VA_cFv */
 void daE_VA_c::calcOpRopePos() {
     cXyz sp60;
     cXyz sp6C;
@@ -1289,7 +1241,6 @@ void daE_VA_c::calcOpRopePos() {
     }
 }
 
-/* 807C5CF0-807C5DF4 0037F0 0104+00 1/1 0/0 0/0 .text            onRopeCutStatus__8daE_VA_cFiii */
 void daE_VA_c::onRopeCutStatus(int param_0, int param_1, int param_2) {
     int var_r31 = param_0 * 10;
 
@@ -1318,14 +1269,12 @@ void daE_VA_c::onRopeCutStatus(int param_0, int param_1, int param_2) {
     }
 }
 
-/* 807C5DF4-807C5EAC 0038F4 00B8+00 1/1 0/0 0/0 .text            setVibRope__8daE_VA_cFff */
 void daE_VA_c::setVibRope(f32 param_0, f32 param_1) {
     field_0x1336 += (s16)(param_1 * 7168.0f);
     field_0x122c.y += (s16)(param_0 * cM_ssin(field_0x1336));
     field_0x123e += (s16)(param_0 * 50.0f * cM_ssin(field_0x1336));
 }
 
-/* 807CF1F8-807CF200 0002F0 0008+00 1/2 0/0 0/0 .data            TAG_VIB_ANGLE */
 static s16 TAG_VIB_ANGLE[] = {
     -0x800,
     0x800,
@@ -1333,12 +1282,10 @@ static s16 TAG_VIB_ANGLE[] = {
     0x1000,
 };
 
-/* 807CF200-807CF210 0002F8 0010+00 0/1 0/0 0/0 .data            TAG_VIB_WIDTH */
 static s16 TAG_VIB_WIDTH[] = {
     0x1C0, 0x280, 0x180, 0x240, 0x380, 0x500, 0x300, 0x480,
 };
 
-/* 807C5EAC-807C6164 0039AC 02B8+00 2/2 0/0 0/0 .text            setVibTag__8daE_VA_cFii */
 void daE_VA_c::setVibTag(int param_0, int param_1) {
     for (int i = 0; i < 40; i++) {
         if (param_1 == -1 || param_1 == va_tag_set_num[i] / 10) {
@@ -1373,7 +1320,6 @@ void daE_VA_c::setVibTag(int param_0, int param_1) {
     }
 }
 
-/* 807C6164-807C638C 003C64 0228+00 2/2 0/0 0/0 .text            calcTagAngle__8daE_VA_cFv */
 void daE_VA_c::calcTagAngle() {
     for (int i = 0; i < 40; i++) {
         if (mCardFlags[i] & 8) {
@@ -1421,7 +1367,6 @@ void daE_VA_c::calcTagAngle() {
     }
 }
 
-/* 807C638C-807C6564 003E8C 01D8+00 1/1 0/0 0/0 .text            calcRopeFirePos__8daE_VA_cFv */
 void daE_VA_c::calcRopeFirePos() {
     int temp_r28;
     int var_r24;
@@ -1451,7 +1396,6 @@ void daE_VA_c::calcRopeFirePos() {
     }
 }
 
-/* 807C6564-807C67A4 004064 0240+00 1/1 0/0 0/0 .text            executeDemoOpWait__8daE_VA_cFv */
 void daE_VA_c::executeDemoOpWait() {
     cXyz sp34;
 
@@ -1495,7 +1439,6 @@ void daE_VA_c::executeDemoOpWait() {
     calcTagAngle();
 }
 
-/* 807C67A4-807C7534 0042A4 0D90+00 2/1 0/0 0/0 .text            executeDemoOp__8daE_VA_cFv */
 void daE_VA_c::executeDemoOp() {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp2C;
@@ -1789,7 +1732,6 @@ void daE_VA_c::executeDemoOp() {
     dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
 }
 
-/* 807C7534-807C7640 005034 010C+00 1/1 0/0 0/0 .text            executeClearWait__8daE_VA_cFv */
 void daE_VA_c::executeClearWait() {
     switch (mMode) {
     case 1:
@@ -1815,7 +1757,6 @@ void daE_VA_c::executeClearWait() {
     }
 }
 
-/* 807C7640-807C783C 005140 01FC+00 1/1 0/0 0/0 .text            executeClearChase__8daE_VA_cFv */
 void daE_VA_c::executeClearChase() {
     cLib_addCalc(&current.pos.y, 0.0f, 0.1f, 10.0f, 1.0f);
 
@@ -1857,7 +1798,6 @@ void daE_VA_c::executeClearChase() {
     }
 }
 
-/* 807C783C-807C7A8C 00533C 0250+00 1/1 0/0 0/0 .text            executeClearAttack__8daE_VA_cFv */
 void daE_VA_c::executeClearAttack() {
     f32 anm_frame = mpMorf->getFrame();
     cLib_addCalc(&current.pos.y, 0.0f, 0.1f, 10.0f, 1.0f);
@@ -1897,7 +1837,6 @@ void daE_VA_c::executeClearAttack() {
     }
 }
 
-/* 807C7A8C-807C7C74 00558C 01E8+00 1/1 0/0 0/0 .text            executeTransWait__8daE_VA_cFv */
 void daE_VA_c::executeTransWait() {
     switch (mMode) {
     case 0:
@@ -1937,7 +1876,6 @@ void daE_VA_c::executeTransWait() {
     }
 }
 
-/* 807C7C74-807C7ED4 005774 0260+00 1/1 0/0 0/0 .text            executeTransChase__8daE_VA_cFv */
 void daE_VA_c::executeTransChase() {
     f32 dist_to_player = fopAcM_searchPlayerDistanceXZ(this);
     s16 angleY_to_player = fopAcM_searchPlayerAngleY(this);
@@ -1990,7 +1928,6 @@ void daE_VA_c::executeTransChase() {
     }
 }
 
-/* 807C7ED4-807C839C 0059D4 04C8+00 1/1 0/0 0/0 .text            executeTransAttack__8daE_VA_cFv */
 void daE_VA_c::executeTransAttack() {
     f32 anm_frame = mpMorf->getFrame();
 
@@ -2074,8 +2011,6 @@ void daE_VA_c::executeTransAttack() {
     }
 }
 
-/* 807C839C-807C8860 005E9C 04C4+00 1/1 0/0 0/0 .text            executeTransBiteDamage__8daE_VA_cFv
- */
 void daE_VA_c::executeTransBiteDamage() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz sp38;
@@ -2167,7 +2102,6 @@ void daE_VA_c::executeTransBiteDamage() {
     }
 }
 
-/* 807C8860-807C8A84 006360 0224+00 1/1 0/0 0/0 .text            executeTransDamage__8daE_VA_cFv */
 void daE_VA_c::executeTransDamage() {
     if (checkWolfBiteDamage()) {
         offWolfBiteDamage();
@@ -2215,7 +2149,6 @@ void daE_VA_c::executeTransDamage() {
     }
 }
 
-/* 807C8A84-807C8B78 006584 00F4+00 1/1 0/0 0/0 .text            executeTransThrough__8daE_VA_cFv */
 void daE_VA_c::executeTransThrough() {
     switch (mMode) {
     case 0:
@@ -2236,7 +2169,6 @@ void daE_VA_c::executeTransThrough() {
     }
 }
 
-/* 807C8B78-807C915C 006678 05E4+00 2/1 0/0 0/0 .text            executeOpaciWait__8daE_VA_cFv */
 void daE_VA_c::executeOpaciWait() {
     dCamera_c* camera = dCam_getBody();
     cXyz sp24;
@@ -2359,7 +2291,6 @@ void daE_VA_c::executeOpaciWait() {
     }
 }
 
-/* 807C915C-807C9A40 006C5C 08E4+00 2/1 0/0 0/0 .text            executeOpaciFly__8daE_VA_cFv */
 void daE_VA_c::executeOpaciFly() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     s16 var_r31 = cM_atan2s(current.pos.x, current.pos.z);
@@ -2516,7 +2447,6 @@ void daE_VA_c::executeOpaciFly() {
     }
 }
 
-/* 807C9A40-807C9C8C 007540 024C+00 1/1 0/0 0/0 .text            executeOpaciDamage__8daE_VA_cFv */
 void daE_VA_c::executeOpaciDamage() {
     switch (mMode) {
     case 0:
@@ -2559,7 +2489,6 @@ void daE_VA_c::executeOpaciDamage() {
     }
 }
 
-/* 807C9C8C-807CA364 00778C 06D8+00 1/1 0/0 0/0 .text            executeOpaciChase__8daE_VA_cFv */
 void daE_VA_c::executeOpaciChase() {
     cXyz sp44;
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -2697,7 +2626,6 @@ void daE_VA_c::executeOpaciChase() {
     }
 }
 
-/* 807CA364-807CA73C 007E64 03D8+00 1/1 0/0 0/0 .text            executeOpaciAttack__8daE_VA_cFv */
 void daE_VA_c::executeOpaciAttack() {
     f32 anm_frame = mpMorf->getFrame();
 
@@ -2765,7 +2693,6 @@ void daE_VA_c::executeOpaciAttack() {
     }
 }
 
-/* 807CA73C-807CAA80 00823C 0344+00 1/1 0/0 0/0 .text            executeOpaciDown__8daE_VA_cFv */
 void daE_VA_c::executeOpaciDown() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     mBodyCyls[1].OnTgSetBit();
@@ -2839,8 +2766,6 @@ void daE_VA_c::executeOpaciDown() {
     }
 }
 
-/* 807CAA80-807CACE0 008580 0260+00 1/1 0/0 0/0 .text            executeOpaciDownDamage__8daE_VA_cFv
- */
 void daE_VA_c::executeOpaciDownDamage() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -2892,7 +2817,6 @@ void daE_VA_c::executeOpaciDownDamage() {
     }
 }
 
-/* 807CACE0-807CADB8 0087E0 00D8+00 1/1 0/0 0/0 .text            executeOpaciFlip__8daE_VA_cFv */
 void daE_VA_c::executeOpaciFlip() {
     switch (mMode) {
     case 0:
@@ -2907,8 +2831,6 @@ void daE_VA_c::executeOpaciFlip() {
     }
 }
 
-/* 807CADB8-807CB1C4 0088B8 040C+00 2/1 0/0 0/0 .text            executeOpaciFadeAway__8daE_VA_cFv
- */
 void daE_VA_c::executeOpaciFadeAway() {
     attention_info.flags = 0;
     mBodyCylIFrameTimer = 3;
@@ -2990,7 +2912,6 @@ void daE_VA_c::executeOpaciFadeAway() {
     }
 }
 
-/* 807CB1C4-807CB8CC 008CC4 0708+00 2/1 0/0 0/0 .text            executeOpaciDeath__8daE_VA_cFv */
 void daE_VA_c::executeOpaciDeath() {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -3136,7 +3057,6 @@ void daE_VA_c::executeOpaciDeath() {
     camera->mCamera.Set(mDemoCamCenter, mDemoCamEye, mDemoCamBank, 0);
 }
 
-/* 807CB8CC-807CBC00 0093CC 0334+00 1/1 0/0 0/0 .text            calcMagicMove__8daE_VA_cFv */
 void daE_VA_c::calcMagicMove() {
     for (int i = 0; i < 2; i++) {
         switch (field_0x1228[i]) {
@@ -3191,7 +3111,6 @@ void daE_VA_c::calcMagicMove() {
     }
 }
 
-/* 807CBC00-807CC004 009700 0404+00 1/1 0/0 0/0 .text            setAlphaType__8daE_VA_cFv */
 void daE_VA_c::setAlphaType() {
     switch (mAlphaType) {
     case 0:
@@ -3269,7 +3188,6 @@ void daE_VA_c::setAlphaType() {
     }
 }
 
-/* 807CC004-807CC4D0 009B04 04CC+00 2/1 0/0 0/0 .text            action__8daE_VA_cFv */
 void daE_VA_c::action() {
     field_0x1391 = 0;
     setAlphaType();
@@ -3441,7 +3359,6 @@ void daE_VA_c::action() {
     mpEndEfBrk->play();
 }
 
-/* 807CC4D0-807CC864 009FD0 0394+00 1/1 0/0 0/0 .text            mtx_set__8daE_VA_cFv */
 void daE_VA_c::mtx_set() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -3521,7 +3438,6 @@ void daE_VA_c::mtx_set() {
     }
 }
 
-/* 807CC864-807CCD24 00A364 04C0+00 1/1 0/0 0/0 .text            cc_set__8daE_VA_cFv */
 void daE_VA_c::cc_set() {
     cXyz sp24;
 
@@ -3621,7 +3537,6 @@ void daE_VA_c::cc_set() {
     }
 }
 
-/* 807CCD24-807CCF3C 00A824 0218+00 1/1 0/0 0/0 .text            execute__8daE_VA_cFv */
 int daE_VA_c::execute() {
     if (mDemoModeTimer != 0) {
         mDemoModeTimer--;
@@ -3694,17 +3609,14 @@ int daE_VA_c::execute() {
     return 1;
 }
 
-/* 807CCF3C-807CCF5C 00AA3C 0020+00 2/1 0/0 0/0 .text            daE_VA_Execute__FP8daE_VA_c */
 static int daE_VA_Execute(daE_VA_c* i_this) {
     return i_this->execute();
 }
 
-/* 807CCF5C-807CCF64 00AA5C 0008+00 1/0 0/0 0/0 .text            daE_VA_IsDelete__FP8daE_VA_c */
 static int daE_VA_IsDelete(daE_VA_c* i_this) {
     return 1;
 }
 
-/* 807CCF64-807CD028 00AA64 00C4+00 1/1 0/0 0/0 .text            _delete__8daE_VA_cFv */
 int daE_VA_c::_delete() {
     dComIfG_resDelete(&mPhase, "E_VA");
 
@@ -3726,12 +3638,10 @@ int daE_VA_c::_delete() {
     return 1;
 }
 
-/* 807CD028-807CD048 00AB28 0020+00 1/0 0/0 0/0 .text            daE_VA_Delete__FP8daE_VA_c */
 static int daE_VA_Delete(daE_VA_c* i_this) {
     return i_this->_delete();
 }
 
-/* 807CD048-807CD600 00AB48 05B8+00 1/1 0/0 0/0 .text            CreateHeap__8daE_VA_cFv */
 int daE_VA_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_VA", 0x33);
     JUT_ASSERT(0, modelData != NULL);
@@ -3851,12 +3761,10 @@ int daE_VA_c::CreateHeap() {
     return 1;
 }
 
-/* 807CD648-807CD668 00B148 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     return ((daE_VA_c*)i_this)->CreateHeap();
 }
 
-/* 807CD668-807CDAD8 00B168 0470+00 1/1 0/0 0/0 .text            create__8daE_VA_cFv */
 int daE_VA_c::create() {
     fopAcM_ct(this, daE_VA_c);
 
@@ -3973,17 +3881,14 @@ int daE_VA_c::create() {
 }
 
 
-/* 807CDAD8-807CDE90 00B5D8 03B8+00 1/1 0/0 0/0 .text            __ct__8daE_VA_cFv */
 daE_VA_c::daE_VA_c() {
     /* empty function */
 }
 
-/* 807CE244-807CE264 00BD44 0020+00 1/0 0/0 0/0 .text            daE_VA_Create__FP8daE_VA_c */
 static int daE_VA_Create(daE_VA_c* i_this) {
     return i_this->create();
 }
 
-/* 807CF384-807CF3A4 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_VA_Method */
 static actor_method_class l_daE_VA_Method = {
     (process_method_func)daE_VA_Create,
     (process_method_func)daE_VA_Delete,
@@ -3992,7 +3897,6 @@ static actor_method_class l_daE_VA_Method = {
     (process_method_func)daE_VA_Draw,
 };
 
-/* 807CF3A4-807CF3D4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_VT */
 extern actor_process_profile_definition g_profile_E_VT = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID

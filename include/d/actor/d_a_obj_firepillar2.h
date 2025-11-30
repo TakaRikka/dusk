@@ -30,21 +30,21 @@ public:
         ACTION_ON,
     };
 
-    /* 80BE9CD8 */ void initBaseMtx();
-    /* 80BE9D5C */ void setBaseMtx();
-    /* 80BE9DDC */ int Create();
-    /* 80BEA034 */ int CreateHeap();
-    /* 80BEA228 */ int create();
-    /* 80BEA584 */ int execute();
-    /* 80BEA734 */ void action();
-    /* 80BEA808 */ void actionOffInit();
-    /* 80BEA854 */ void actionOff();
-    /* 80BEA98C */ void actionOnWaitInit();
-    /* 80BEAAE4 */ void actionOnWait();
-    /* 80BEAC68 */ void actionOnInit();
-    /* 80BEADD0 */ void actionOn();
-    /* 80BEB1B4 */ int draw();
-    /* 80BEB278 */ int _delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int execute();
+    void action();
+    void actionOffInit();
+    void actionOff();
+    void actionOnWaitInit();
+    void actionOnWait();
+    void actionOnInit();
+    void actionOn();
+    int draw();
+    int _delete();
 
     u8 getKind() { return (field_0x97a >> 4) & 0xf; }
     u8 getSize() { return (field_0x97a) & 0xf; }

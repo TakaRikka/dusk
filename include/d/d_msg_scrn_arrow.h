@@ -11,14 +11,14 @@ class CPaneMgr;
 
 class dMsgScrnArrow_c {
 public:
-    /* 8023B9B4 */ dMsgScrnArrow_c();
-    /* 8023BC78 */ virtual ~dMsgScrnArrow_c();
-    /* 8023BDC0 */ void draw();
-    /* 8023BDF8 */ void setPos(f32, f32);
-    /* 8023BE34 */ void arwAnimeInit();
-    /* 8023BE90 */ void arwAnimeMove();
-    /* 8023BFC4 */ void dotAnimeInit();
-    /* 8023C010 */ void dotAnimeMove();
+    dMsgScrnArrow_c();
+    virtual ~dMsgScrnArrow_c();
+    void draw();
+    void setPos(f32, f32);
+    void arwAnimeInit();
+    void arwAnimeMove();
+    void dotAnimeInit();
+    void dotAnimeMove();
 
     /* 0x04 */ J2DScreen* mpScreen;
     /* 0x08 */ J2DAnmTransform* mpBck;

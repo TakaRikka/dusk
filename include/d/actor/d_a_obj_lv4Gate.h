@@ -21,20 +21,20 @@ public:
         MODE_MOVE_END_e,
     };
 
-    /* 80C5EBE4 */ void setBaseMtx();
-    /* 80C5ECEC */ int create();
-    /* 80C5EEA4 */ void moveGate();
-    /* 80C5EF48 */ void init_modeWait();
-    /* 80C5EF54 */ void modeWait();
-    /* 80C5EFB0 */ void init_modeMove();
-    /* 80C5EFBC */ void modeMove();
-    /* 80C5F0C4 */ void init_modeMoveEnd();
-    /* 80C5F1E4 */ void modeMoveEnd();
+    void setBaseMtx();
+    int create();
+    void moveGate();
+    void init_modeWait();
+    void modeWait();
+    void init_modeMove();
+    void modeMove();
+    void init_modeMoveEnd();
+    void modeMoveEnd();
 
-    /* 80C5EC80 */ virtual int CreateHeap();
-    /* 80C5EE54 */ virtual int Execute(Mtx**);
-    /* 80C5F1E8 */ virtual int Draw();
-    /* 80C5F28C */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpModel;
@@ -48,8 +48,8 @@ public:
 
 class daLv4Gate_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C5EB6C */ daLv4Gate_HIO_c();
-    /* 80C5F348 */ virtual ~daLv4Gate_HIO_c() {}
+    daLv4Gate_HIO_c();
+    virtual ~daLv4Gate_HIO_c() {}
 
     void genMessage(JORMContext*);
 

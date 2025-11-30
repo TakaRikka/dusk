@@ -22,7 +22,7 @@ class daNpc_Raca_HIO_c : public mDoHIO_entry_c {
 
 class daNpc_Raca_Param_c {
 public:
-    /* 80AB8DFC */ virtual ~daNpc_Raca_Param_c() {}
+    virtual ~daNpc_Raca_Param_c() {}
 
     static daNpc_Raca_HIOParam const m;
 };
@@ -70,37 +70,37 @@ public:
     typedef int (daNpc_Raca_c::*actionFunc)(void*);
     typedef int (daNpc_Raca_c::*cutFunc)(int);
 
-    /* 80AB5CAC */ ~daNpc_Raca_c();
-    /* 80AB5DFC */ cPhs__Step create();
-    /* 80AB60B8 */ int CreateHeap();
-    /* 80AB6514 */ int Delete();
-    /* 80AB6548 */ int Execute();
-    /* 80AB6568 */ int Draw();
-    /* 80AB65FC */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80AB661C */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80AB6674 */ static void* srchNi(void*, void*);
-    /* 80AB6700 */ fopAc_ac_c* getNiP();
-    /* 80AB67CC */ u8 getType();
-    /* 80AB67EC */ BOOL isDelete();
-    /* 80AB681C */ void reset();
-    /* 80AB6984 */ void afterJntAnm(int);
-    /* 80AB6A10 */ void setParam();
-    /* 80AB6B0C */ void setAfterTalkMotion();
-    /* 80AB6BB0 */ void srchActors();
-    /* 80AB6C14 */ BOOL evtTalk();
-    /* 80AB6D14 */ BOOL evtCutProc();
-    /* 80AB6DDC */ void action();
-    /* 80AB6EC8 */ void beforeMove();
-    /* 80AB6F40 */ void setAttnPos();
-    /* 80AB7180 */ void setCollision();
-    /* 80AB72B4 */ int drawDbgInfo();
-    /* 80AB72BC */ BOOL selectAction();
-    /* 80AB73B0 */ BOOL chkAction(actionFunc);
-    /* 80AB73DC */ BOOL setAction(actionFunc);
-    /* 80AB7484 */ int wait(void*);
-    /* 80AB7710 */ int walk(void*);
-    /* 80AB7918 */ int talk(void*);
-    /* 80AB8CCC */ daNpc_Raca_c(
+    ~daNpc_Raca_c();
+    cPhs__Step create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    static void* srchNi(void*, void*);
+    fopAc_ac_c* getNiP();
+    u8 getType();
+    BOOL isDelete();
+    void reset();
+    void afterJntAnm(int);
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    BOOL selectAction();
+    BOOL chkAction(actionFunc);
+    BOOL setAction(actionFunc);
+    int wait(void*);
+    int walk(void*);
+    int talk(void*);
+    daNpc_Raca_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
@@ -112,14 +112,14 @@ public:
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
         i_arcNames) {}
-    /* 80AB8DAC */ u16 getEyeballMaterialNo() { return RACA_EYEBALL_M; }
-    /* 80AB8DB4 */ s32 getHeadJointNo() { return JNT_HEAD; }
-    /* 80AB8DBC */ s32 getNeckJointNo() { return JNT_NECK; }
-    /* 80AB8DC4 */ s32 getBackboneJointNo() { return JNT_BACKBONE1; }
-    /* 80AB8DCC */ BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
-    /* 80AB8DDC */ BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_MOUTH; }
-    /* 80AB8DEC */ s32 getFootLJointNo() { return JNT_FOOTL; }
-    /* 80AB8DF4 */ s32 getFootRJointNo() { return JNT_FOOTR; }
+    u16 getEyeballMaterialNo() { return RACA_EYEBALL_M; }
+    s32 getHeadJointNo() { return JNT_HEAD; }
+    s32 getNeckJointNo() { return JNT_NECK; }
+    s32 getBackboneJointNo() { return JNT_BACKBONE1; }
+    BOOL checkChangeJoint(int i_joint) { return i_joint == JNT_HEAD; }
+    BOOL checkRemoveJoint(int i_joint) { return i_joint == JNT_MOUTH; }
+    s32 getFootLJointNo() { return JNT_FOOTL; }
+    s32 getFootRJointNo() { return JNT_FOOTR; }
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

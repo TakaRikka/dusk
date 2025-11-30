@@ -24,17 +24,13 @@ enum daCrod_ANM {
     /* 18 */ ANM_WAIT_C,
 };
 
-/* ############################################################################################## */
-/* 804A40EC-804A40F8 000000 000C+00 2/2 0/0 0/0 .rodata          @3759 */
 // not sure what this is
 static u8 const lit_3759[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 804A40F8-804A4104 00000C 000C+00 1/2 0/0 0/0 .rodata          l_localRodPos */
 static const Vec l_localRodPos = {81.0f, -12.5f, -12.0f};
 
-/* 804A2E38-804A2EF8 000078 00C0+00 1/1 0/0 0/0 .text            createHeap__8daCrod_cFv */
 int daCrod_c::createHeap() {
     J3DModelData* model_data =
         (J3DModelData*)dComIfG_getObjectRes(daAlink_c::getAlinkArcName(), RES_CROD_BALL_BMD);
@@ -53,14 +49,10 @@ int daCrod_c::createHeap() {
     return 1;
 }
 
-/* 804A2EF8-804A2F18 000138 0020+00 1/1 0/0 0/0 .text            daCrod_createHeap__FP10fopAc_ac_c
- */
 static int daCrod_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daCrod_c*>(i_this)->createHeap();
 }
 
-/* ############################################################################################## */
-/* 804A413C-804A4188 000000 004C+00 1/1 0/0 0/0 .data            l_atCpsSrc */
 static dCcD_SrcCps l_atCpsSrc = {
     {
         {0, {{AT_TYPE_1000000, 0, 0x1B}, {0, 0}, 0}},
@@ -77,7 +69,6 @@ static dCcD_SrcCps l_atCpsSrc = {
     }
 };
 
-/* 804A2F18-804A31F8 000158 02E0+00 1/1 0/0 0/0 .text            create__8daCrod_cFv */
 int daCrod_c::create() {
     fopAcM_ct(this, daCrod_c);
 
@@ -131,12 +122,10 @@ int daCrod_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 804A32E4-804A3304 000524 0020+00 1/0 0/0 0/0 .text            daCrod_Create__FP10fopAc_ac_c */
 static int daCrod_Create(fopAc_ac_c* i_this) {
     return static_cast<daCrod_c*>(i_this)->create();
 }
 
-/* 804A3304-804A3488 000544 0184+00 1/1 0/0 0/0 .text            __dt__8daCrod_cFv */
 daCrod_c::~daCrod_c() {
     if (fopAcM_GetParam(this) == 6) {
         if (daAlink_getAlinkActorClass() != NULL) {
@@ -147,23 +136,19 @@ daCrod_c::~daCrod_c() {
     }
 }
 
-/* 804A3488-804A34B0 0006C8 0028+00 1/0 0/0 0/0 .text            daCrod_Delete__FP8daCrod_c */
 static int daCrod_Delete(daCrod_c* i_this) {
     i_this->~daCrod_c();
     return 1;
 }
 
-/* 804A34B0-804A34B4 0006F0 0004+00 2/2 0/0 0/0 .text            setRoomInfo__8daCrod_cFv */
 void daCrod_c::setRoomInfo() {}
 
-/* 804A34B4-804A3500 0006F4 004C+00 2/2 0/0 0/0 .text            setMatrix__8daCrod_cFv */
 void daCrod_c::setMatrix() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpBallModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 804A3500-804A3580 000740 0080+00 1/1 0/0 0/0 .text            posMove__8daCrod_cFv */
 void daCrod_c::posMove() {
     speed.set(
         speedF * cM_ssin(current.angle.y) * cM_scos(current.angle.x),
@@ -173,14 +158,12 @@ void daCrod_c::posMove() {
     current.pos += speed;
 }
 
-/* 804A3580-804A35FC 0007C0 007C+00 2/2 0/0 0/0 .text            setBckAnm__8daCrod_cFUs */
 void daCrod_c::setBckAnm(u16 i_anmResID) {
     J3DAnmTransform* bck =
         (J3DAnmTransform*)dComIfG_getObjectRes(daAlink_c::getAlinkArcName(), i_anmResID);
     mBck.init(bck, TRUE, -1, 1.0f, 0, -1, true);
 }
 
-/* 804A35FC-804A365C 00083C 0060+00 1/1 0/0 0/0 .text            setReturn__8daCrod_cFv */
 void daCrod_c::setReturn() {
     if (fopAcM_GetParam(this) == 4) {
         setBckAnm(ANM_WAIT_A_T);
@@ -191,7 +174,6 @@ void daCrod_c::setReturn() {
     mControllActorKeep.clearData();
 }
 
-/* 804A365C-804A36D8 00089C 007C+00 2/2 0/0 0/0 .text            setLightPower__8daCrod_cFv */
 void daCrod_c::setLightPower() {
     if (daAlink_getAlinkActorClass()->checkCopyRodTopUse()) {
         mLight.mPow = 300.0f;
@@ -202,7 +184,6 @@ void daCrod_c::setLightPower() {
     }
 }
 
-/* 804A36D8-804A3FB4 000918 08DC+00 1/1 0/0 0/0 .text            execute__8daCrod_cFv */
 int daCrod_c::execute() {
     daAlink_c* player = daAlink_getAlinkActorClass();
 
@@ -374,12 +355,10 @@ int daCrod_c::execute() {
     return 1;
 }
 
-/* 804A3FB4-804A3FD4 0011F4 0020+00 1/0 0/0 0/0 .text            daCrod_Execute__FP8daCrod_c */
 static int daCrod_Execute(daCrod_c* i_this) {
     return i_this->execute();
 }
 
-/* 804A3FD4-804A407C 001214 00A8+00 1/1 0/0 0/0 .text            draw__8daCrod_cFv */
 int daCrod_c::draw() {
     if (fopAcM_GetParam(this) == 6 ||
         (!daAlink_getAlinkActorClass()->checkCopyRodTopUse() && field_0x732 == 0))
@@ -393,19 +372,16 @@ int daCrod_c::draw() {
     return 1;
 }
 
-/* 804A407C-804A409C 0012BC 0020+00 1/0 0/0 0/0 .text            daCrod_Draw__FP8daCrod_c */
 static int daCrod_Draw(daCrod_c* i_this) {
     return i_this->draw();
 }
 
-/* 804A4194-804A41B4 -00001 0020+00 1/0 0/0 0/0 .data            l_daCrod_Method */
 static actor_method_class l_daCrod_Method = {
     (process_method_func)daCrod_Create,  (process_method_func)daCrod_Delete,
     (process_method_func)daCrod_Execute, (process_method_func)NULL,
     (process_method_func)daCrod_Draw,
 };
 
-/* 804A41B4-804A41E4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_CROD */
 extern actor_process_profile_definition g_profile_CROD = {
     fpcLy_CURRENT_e,
     8,

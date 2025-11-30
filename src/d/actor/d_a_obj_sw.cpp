@@ -15,7 +15,6 @@
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_ext.h"
 
-/* 80CF0638-80CF0774 000078 013C+00 1/0 0/0 0/0 .text            daObj_Sw_Draw__FP12obj_sw_class */
 static int daObj_Sw_Draw(obj_sw_class* i_this) {
     static _GXColor l_color = {
         0x14,
@@ -50,10 +49,8 @@ static int daObj_Sw_Draw(obj_sw_class* i_this) {
     return 1;
 }
 
-/* 80CF3278-80CF327C 000000 0004+00 3/3 0/0 0/0 .bss             saru_ct */
 static int saru_ct;
 
-/* 80CF0774-80CF07F8 0001B4 0084+00 1/1 0/0 0/0 .text            s_ks_sub__FPvPv */
 static void* s_ks_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_KS) {
         int swBit = fopAcM_GetParam(i_actor) >> 24;
@@ -73,7 +70,6 @@ struct path {
     f32 field_0xc;
 };
 
-/* 80CF3100-80CF3210 000004 0110+00 3/3 0/0 0/0 .data            sc_path */
 static path sc_path[17] = {
     {1, 8172.0f, 3380.0f, -10887.0f},
     {1, 8305.0f, 3524.0f, -11275.0f},
@@ -94,7 +90,6 @@ static path sc_path[17] = {
     {0, 0.0f, 0.0f, 0.0f},
 };
 
-/* 80CF07F8-80CF08F8 000238 0100+00 1/1 0/0 0/0 .text            s_ksdel_sub__FPvPv */
 static void* s_ksdel_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_KS) {
         fopAcM_delete((fopAc_ac_c*)i_actor);
@@ -111,14 +106,12 @@ static void* s_ksdel_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80CF08F8-80CF09A8 000338 00B0+00 3/3 0/0 0/0 .text            anm_init__FP8obj_sc_sifUcf */
 static void anm_init(obj_sc_s* i_this, int param_2, f32 i_morf, u8 i_mode, f32 i_speed) {
     i_this->mpModelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Npc_ksw", param_2), i_mode,
                                 i_morf, i_speed, 0.0f, -1.0f, NULL);
     i_this->field_0x3c = param_2;
 }
 
-/* 80CF09A8-80CF1008 0003E8 0660+00 1/1 0/0 0/0 .text            sc_build__FP12obj_sw_class */
 static void sc_build(obj_sw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     obj_sc_s* sc_p = i_this->field_0x5a8;
@@ -237,7 +230,6 @@ static void sc_build(obj_sw_class* i_this) {
     }
 }
 
-/* 80CF1044-80CF1384 000A84 0340+00 1/1 0/0 0/0 .text            sc_move__FP12obj_sw_class */
 static void sc_move(obj_sw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp24, sp30;
@@ -282,7 +274,6 @@ static void sc_move(obj_sw_class* i_this) {
     }
 }
 
-/* 80CF1384-80CF1970 000DC4 05EC+00 1/1 0/0 0/0 .text            demo_camera__FP12obj_sw_class */
 static void demo_camera(obj_sw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -407,7 +398,6 @@ static void demo_camera(obj_sw_class* i_this) {
     }
 }
 
-/* 80CF1970-80CF2160 0013B0 07F0+00 1/1 0/0 0/0 .text            sc_action__FP12obj_sw_class */
 static void sc_action(obj_sw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     cXyz sp90;
@@ -543,7 +533,6 @@ static void sc_action(obj_sw_class* i_this) {
     demo_camera(i_this);
 }
 
-/* 80CF2160-80CF2604 001BA0 04A4+00 1/1 0/0 0/0 .text            sw_action__FP12obj_sw_class */
 static void sw_action(obj_sw_class* i_this) {
     f32 tmp;
     f32 fVar1;
@@ -618,8 +607,6 @@ static void sw_action(obj_sw_class* i_this) {
     i_this->field_0x900 = 0.0f;
 }
 
-/* 80CF2604-80CF26F0 002044 00EC+00 2/1 0/0 0/0 .text            daObj_Sw_Execute__FP12obj_sw_class
- */
 static int daObj_Sw_Execute(obj_sw_class* i_this) {
     for (int i = 0; i < 3; i++) {
         if (i_this->field_0x57a[i] != 0) {
@@ -646,14 +633,10 @@ static int daObj_Sw_Execute(obj_sw_class* i_this) {
     return 1;
 }
 
-/* 80CF26F0-80CF26F8 002130 0008+00 1/0 0/0 0/0 .text            daObj_Sw_IsDelete__FP12obj_sw_class
- */
 static int daObj_Sw_IsDelete(obj_sw_class* i_this) {
     return 1;
 }
 
-/* 80CF26F8-80CF2790 002138 0098+00 1/0 0/0 0/0 .text            daObj_Sw_Delete__FP12obj_sw_class
- */
 static int daObj_Sw_Delete(obj_sw_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     fopAcM_GetID(a_this);
@@ -672,7 +655,6 @@ static int daObj_Sw_Delete(obj_sw_class* i_this) {
     return 1;
 }
 
-/* 80CF2790-80CF29D4 0021D0 0244+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_sw_class* i_this = (obj_sw_class*)a_this;
 
@@ -719,7 +701,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80CF29D4-80CF2F38 002414 0564+00 1/0 0/0 0/0 .text            daObj_Sw_Create__FP10fopAc_ac_c */
 static int daObj_Sw_Create(fopAc_ac_c* a_this) {
     obj_sw_class* i_this = (obj_sw_class*)a_this;
     int phase;
@@ -831,14 +812,12 @@ static int daObj_Sw_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-/* 80CF3210-80CF3230 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Sw_Method */
 static actor_method_class l_daObj_Sw_Method = {
     (process_method_func)daObj_Sw_Create,  (process_method_func)daObj_Sw_Delete,
     (process_method_func)daObj_Sw_Execute, (process_method_func)daObj_Sw_IsDelete,
     (process_method_func)daObj_Sw_Draw,
 };
 
-/* 80CF3230-80CF3260 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_SW */
 extern actor_process_profile_definition g_profile_OBJ_SW = {
     fpcLy_CURRENT_e,       // mLayerID
     4,                     // mListID

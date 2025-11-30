@@ -46,8 +46,8 @@ struct JPAExtraShapeData {
  */
 class JPAExtraShape {
 public:
-    /* 8027AD88 */ JPAExtraShape(u8 const*);
-    /* 8027ADBC */ void init();
+    JPAExtraShape(u8 const*);
+    void init();
 
     f32 getScaleInTiming() const { return mpData->mScaleInTiming; }
     f32 getScaleOutTiming() const { return mpData->mScaleOutTiming; }

@@ -18,20 +18,20 @@ public:
         RELEASE_SEQ_1 = 1,
         RELEASE_SEQ_2 = 2,
     };
-    /* 802A1914 */ JAISeqMgr(bool setInstance);
-    /* 802A1A08 */ void freeDeadSeq_();
-    /* 802A1B48 */ bool startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr);
-    /* 802A1C90 */ void calc();
-    /* 802A1DFC */ void stop();
-    /* 802A1E3C */ void stop(u32 fadeTime);
-    /* 802A1E8C */ void stopSoundID(JAISoundID id);
-    /* 802A1EFC */ void mixOut();
-    /* 802A1F58 */ JAISeq* beginStartSeq_();
-    /* 802A1FE8 */ bool endStartSeq_(JAISeq* seq, JAISoundHandle* handle);
+    JAISeqMgr(bool setInstance);
+    void freeDeadSeq_();
+    bool startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr);
+    void calc();
+    void stop();
+    void stop(u32 fadeTime);
+    void stopSoundID(JAISoundID id);
+    void mixOut();
+    JAISeq* beginStartSeq_();
+    bool endStartSeq_(JAISeq* seq, JAISoundHandle* handle);
 
-    /* 802A20F0 */ virtual ~JAISeqMgr() {}
-    /* 802A1804 */ virtual bool isUsingSeqData(const JAISeqDataRegion& seqDataRegion);
-    /* 802A1870 */ virtual int releaseSeqData(const JAISeqDataRegion& seqDataRegion);
+    virtual ~JAISeqMgr() {}
+    virtual bool isUsingSeqData(const JAISeqDataRegion& seqDataRegion);
+    virtual int releaseSeqData(const JAISeqDataRegion& seqDataRegion);
 
     void setAudience(JAIAudience* audience) { mAudience = audience; }
     JAIAudience* getAudience() { return mAudience; }

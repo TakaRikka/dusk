@@ -80,8 +80,8 @@ STATIC_ASSERT(sizeof(obj_msima_class) == 0x8a4);
 
 class daObj_Msima_HIO_c : public JORReflexible {
 public:
-    /* 80C9B40C */ daObj_Msima_HIO_c();
-    /* 80C9CAA0 */ virtual ~daObj_Msima_HIO_c() {}
+    daObj_Msima_HIO_c();
+    virtual ~daObj_Msima_HIO_c() {}
 
     void genMessage(JORMContext*);
 

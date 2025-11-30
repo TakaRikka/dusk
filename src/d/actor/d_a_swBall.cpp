@@ -11,13 +11,10 @@
 #include "d/d_lib.h"
 #include "d/d_s_play.h"
 
-/* 80D4EA50-80D4EA70 000000 0020+00 2/2 0/0 0/0 .bss             l_target_info */
 static fopAc_ac_c* l_target_info[8];
 
-/* 80D4EA70-80D4EA74 000020 0004+00 2/2 0/0 0/0 .bss             l_target_info_count */
 static int l_target_info_count;
 
-/* 80D4DFD8-80D4E054 000078 007C+00 1/1 0/0 0/0 .text            s_ball_sub__FPvPv */
 static void* s_ball_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_Carry && ((daObjCarry_c*)i_actor)->getType() == daObjCarry_c::TYPE_LV8_BALL) {
         if (l_target_info_count < 8) {
@@ -32,7 +29,6 @@ static void* s_ball_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80D4E054-80D4E194 0000F4 0140+00 2/2 0/0 0/0 .text checkArea_sub__10daSwBall_cFP10fopAc_ac_c */
 BOOL daSwBall_c::checkArea_sub(fopAc_ac_c* i_ball) {
     if (getType() == 0) {
         if (i_ball->current.pos.y >= current.pos.y - 10.0f && i_ball->current.pos.y < current.pos.y + (100.0f * scale.y) && fopAcM_searchActorDistanceXZ(this, i_ball) < (100.0f * scale.x)) {
@@ -52,7 +48,6 @@ BOOL daSwBall_c::checkArea_sub(fopAc_ac_c* i_ball) {
     return FALSE;
 }
 
-/* 80D4E194-80D4E248 000234 00B4+00 2/2 0/0 0/0 .text            checkArea__10daSwBall_cFv */
 BOOL daSwBall_c::checkArea() {
     fopAc_ac_c* ball_actors[8];
 
@@ -71,7 +66,6 @@ BOOL daSwBall_c::checkArea() {
     return FALSE;
 }
 
-/* 80D4E248-80D4E374 0002E8 012C+00 1/1 0/0 0/0 .text            search_ball__10daSwBall_cFv */
 void daSwBall_c::search_ball() {
     l_target_info_count = 0;
 
@@ -106,7 +100,6 @@ void daSwBall_c::search_ball() {
     }
 }
 
-/* 80D4E374-80D4E42C 000414 00B8+00 1/1 0/0 0/0 .text            Create__10daSwBall_cFv */
 int daSwBall_c::Create() {
     for (int i = 0; i < 8; i++) {
         mBallIDs[i] = fpcM_ERROR_PROCESS_ID_e;
@@ -131,7 +124,6 @@ int daSwBall_c::Create() {
     return 1;
 }
 
-/* 80D4E42C-80D4E494 0004CC 0068+00 1/1 0/0 0/0 .text            create__10daSwBall_cFv */
 int daSwBall_c::create() {
     fopAcM_ct(this, daSwBall_c);
 
@@ -142,7 +134,6 @@ int daSwBall_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 80D4E494-80D4E524 000534 0090+00 2/2 0/0 0/0 .text            execute__10daSwBall_cFv */
 int daSwBall_c::execute() {
     static void (daSwBall_c::*l_func[])() = {
         &daSwBall_c::actionRun,
@@ -153,7 +144,6 @@ int daSwBall_c::execute() {
     return 1;
 }
 
-/* 80D4E524-80D4E6C4 0005C4 01A0+00 1/0 0/0 0/0 .text            actionRun__10daSwBall_cFv */
 void daSwBall_c::actionRun() {
     search_ball();
     BOOL in_area = checkArea();
@@ -204,10 +194,8 @@ void daSwBall_c::actionRun() {
     PutCrrPos();
 }
 
-/* 80D4E6C4-80D4E6C8 000764 0004+00 1/0 0/0 0/0 .text            actionStop__10daSwBall_cFv */
 void daSwBall_c::actionStop() {}
 
-/* 80D4E6C8-80D4E90C 000768 0244+00 1/1 0/0 0/0 .text            PutCrrPos__10daSwBall_cFv */
 void daSwBall_c::PutCrrPos() {
     if (checkPullLBall()) {
         daPy_py_c* player = daPy_getPlayerActorClass();
@@ -266,34 +254,28 @@ void daSwBall_c::PutCrrPos() {
     }
 }
 
-/* 80D4E90C-80D4E914 0009AC 0008+00 1/1 0/0 0/0 .text            _delete__10daSwBall_cFv */
 int daSwBall_c::_delete() {
     return 1;
 }
 
-/* 80D4E914-80D4E934 0009B4 0020+00 1/0 0/0 0/0 .text            daSwBall_Execute__FP10daSwBall_c */
 static int daSwBall_Execute(daSwBall_c* i_this) {
     return i_this->execute();
 }
 
-/* 80D4E934-80D4E954 0009D4 0020+00 1/0 0/0 0/0 .text            daSwBall_Delete__FP10daSwBall_c */
 static int daSwBall_Delete(daSwBall_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80D4E954-80D4E974 0009F4 0020+00 1/0 0/0 0/0 .text            daSwBall_Create__FP10fopAc_ac_c */
 static int daSwBall_Create(fopAc_ac_c* i_this) {
     return ((daSwBall_c*)i_this)->create();
 }
 
-/* 80D4E9FC-80D4EA1C -00001 0020+00 1/0 0/0 0/0 .data            l_daSwBall_Method */
 static actor_method_class l_daSwBall_Method = {
     (process_method_func)daSwBall_Create,
     (process_method_func)daSwBall_Delete,
     (process_method_func)daSwBall_Execute,
 };
 
-/* 80D4EA1C-80D4EA4C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_SwBall */
 extern actor_process_profile_definition g_profile_SwBall = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

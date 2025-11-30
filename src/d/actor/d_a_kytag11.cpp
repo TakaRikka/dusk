@@ -9,13 +9,10 @@
 #include "d/d_procname.h"
 #include "d/d_kankyo_static.h"
 
-/* 80529518-80529520 000078 0008+00 1/0 0/0 0/0 .text            daKytag11_Draw__FP13kytag11_class
- */
 static int daKytag11_Draw(kytag11_class* i_this) {
     return 1;
 }
 
-/* 80529520-80529798 000080 0278+00 1/0 0/0 0/0 .text daKytag11_Execute__FP13kytag11_class */
 static int daKytag11_Execute(kytag11_class* i_this) {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
 
@@ -85,18 +82,14 @@ static int daKytag11_Execute(kytag11_class* i_this) {
     return 1;
 }
 
-/* 80529798-805297A0 0002F8 0008+00 1/0 0/0 0/0 .text daKytag11_IsDelete__FP13kytag11_class */
 static int daKytag11_IsDelete(kytag11_class* i_this) {
     return 1;
 }
 
-/* 805297A0-805297A8 000300 0008+00 1/0 0/0 0/0 .text            daKytag11_Delete__FP13kytag11_class
- */
 static int daKytag11_Delete(kytag11_class* i_this) {
     return 1;
 }
 
-/* 805297A8-80529854 000308 00AC+00 1/0 0/0 0/0 .text            daKytag11_Create__FP10fopAc_ac_c */
 static int daKytag11_Create(fopAc_ac_c* i_this) {
     kytag11_class* a_this = (kytag11_class*)i_this;
     fopAcM_ct(i_this, kytag11_class);
@@ -114,14 +107,12 @@ static int daKytag11_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-/* 805298B4-805298D4 -00001 0020+00 1/0 0/0 0/0 .data            l_daKytag11_Method */
 static actor_method_class l_daKytag11_Method = {
     (process_method_func)daKytag11_Create,  (process_method_func)daKytag11_Delete,
     (process_method_func)daKytag11_Execute, (process_method_func)daKytag11_IsDelete,
     (process_method_func)daKytag11_Draw,
 };
 
-/* 805298D4-80529904 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_KYTAG11 */
 extern actor_process_profile_definition g_profile_KYTAG11 = {
     fpcLy_CURRENT_e,
     7,

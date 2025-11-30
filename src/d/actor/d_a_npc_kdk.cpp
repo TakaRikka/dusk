@@ -6,10 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_kdk.h"
-#include "dol2asm.h"
 
-/* ############################################################################################## */
-/* 80A2A8E0-80A2A910 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_KDK */
 extern actor_process_profile_definition g_profile_NPC_KDK = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

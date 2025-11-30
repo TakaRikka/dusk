@@ -304,13 +304,13 @@ public:
         fopEn_throwMode_ThrowRight = 0x10,
     };
 
-    /* 80019404 */ BOOL initBallModel();
-    /* 800194FC */ bool checkBallModelDraw();
-    /* 80019520 */ void setBallModelEffect(dKy_tevstr_c*);
-    /* 800196A0 */ void drawBallModel(dKy_tevstr_c*);
+    BOOL initBallModel();
+    bool checkBallModelDraw();
+    void setBallModelEffect(dKy_tevstr_c*);
+    void drawBallModel(dKy_tevstr_c*);
 
     bool checkWolfNoLock() const { return mFlags & fopEn_flag_WolfNoLock; }
-    bool checkHeadLockFlg() const { return mFlags & fopEn_flag_HeadLock; }
+    BOOL checkHeadLockFlg() const { return mFlags & fopEn_flag_HeadLock; }
     BOOL checkWolfBiteDamage() const { return mFlags & fopEn_flag_WolfBiteDamage; }
     bool checkWolfDownPullFlg() const { return mFlags & fopEn_flag_WolfDownPull; }
     bool checkDownFlg() { return mFlags & fopEn_flag_Down; }

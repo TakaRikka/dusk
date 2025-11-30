@@ -1,14 +1,12 @@
 #include "TRK_MINNOW_DOLPHIN/MetroTRK/Portable/msgbuf.h"
 #include "TRK_MINNOW_DOLPHIN/MetroTRK/Portable/nubinit.h"
 
-/* 8044D8C0-8044F270 07A5E0 19B0+00 4/4 0/0 0/0 .bss             gTRKMsgBufs */
 TRKBuffer gTRKMsgBufs[3];
 
 void TRKSetBufferUsed(TRKBuffer* msg, BOOL state) {
     msg->isInUse = state;
 }
 
-/* 8036D7E4-8036D858 368124 0074+00 0/0 1/1 0/0 .text            TRKInitializeMessageBuffers */
 DSError TRKInitializeMessageBuffers(void) {
     int i;
     for (i = 0; i < 3; i++) {
@@ -21,7 +19,6 @@ DSError TRKInitializeMessageBuffers(void) {
     return DS_NoError;
 }
 
-/* 8036D71C-8036D7E4 36805C 00C8+00 0/0 6/6 0/0 .text            TRKGetFreeBuffer */
 DSError TRKGetFreeBuffer(int* msgID, TRKBuffer** outMsg) {
     TRKBuffer* buf;
     DSError error = DS_NoMessageBufferAvailable;
@@ -51,7 +48,6 @@ DSError TRKGetFreeBuffer(int* msgID, TRKBuffer** outMsg) {
     return error;
 }
 
-/* 8036D6F0-8036D71C 368030 002C+00 0/0 7/7 0/0 .text            TRKGetBuffer */
 void* TRKGetBuffer(int idx) {
     TRKBuffer* buf = NULL;
     if (idx >= 0 && idx < 3) {
@@ -61,7 +57,6 @@ void* TRKGetBuffer(int idx) {
     return buf;
 }
 
-/* 8036D68C-8036D6F0 367FCC 0064+00 0/0 8/8 0/0 .text            TRKReleaseBuffer */
 void TRKReleaseBuffer(int idx) {
     TRKBuffer* msg;
     if (idx != -1 && idx >= 0 && idx < 3) {
@@ -72,7 +67,6 @@ void TRKReleaseBuffer(int idx) {
     }
 }
 
-/* 8036D64C-8036D68C 367F8C 0040+00 0/0 4/4 0/0 .text            TRKResetBuffer */
 void TRKResetBuffer(TRKBuffer* msg, BOOL keepData) {
     msg->length = 0;
     msg->position = 0;
@@ -82,7 +76,6 @@ void TRKResetBuffer(TRKBuffer* msg, BOOL keepData) {
     }
 }
 
-/* 8036D61C-8036D64C 367F5C 0030+00 0/0 7/7 0/0 .text            TRKSetBufferPosition */
 DSError TRKSetBufferPosition(TRKBuffer* msg, u32 pos) {
     DSError error = DS_NoError;
 
@@ -100,7 +93,6 @@ DSError TRKSetBufferPosition(TRKBuffer* msg, u32 pos) {
     return error;
 }
 
-/* 8036D578-8036D61C 367EB8 00A4+00 0/0 3/3 0/0 .text            TRKAppendBuffer */
 DSError TRKAppendBuffer(TRKBuffer* msg, const void* data, size_t length) {
     DSError error = DS_NoError;  // r31
     u32 bytesLeft;
@@ -134,7 +126,6 @@ DSError TRKAppendBuffer(TRKBuffer* msg, const void* data, size_t length) {
     return error;
 }
 
-/* 8036D4EC-8036D578 367E2C 008C+00 0/0 1/1 0/0 .text            TRKReadBuffer */
 DSError TRKReadBuffer(TRKBuffer* msg, void* data, size_t length) {
     DSError error = DS_NoError;
     unsigned int bytesLeft;  // this has to be unsigned int not u32 to match lmfao.
@@ -188,7 +179,6 @@ DSError TRKAppendBuffer1_ui32(TRKBuffer* buffer, const u32 data) {
     return TRKAppendBuffer(buffer, (const void*)bigEndianData, sizeof(data));
 }
 
-/* 8036D3F0-8036D4EC 367D30 00FC+00 0/0 2/2 0/0 .text            TRKAppendBuffer1_ui64 */
 DSError TRKAppendBuffer1_ui64(TRKBuffer* buffer, const u64 data) {
     u8* bigEndianData;
     u8* byteData;
@@ -212,7 +202,6 @@ DSError TRKAppendBuffer1_ui64(TRKBuffer* buffer, const u64 data) {
     return TRKAppendBuffer(buffer, (const void*)bigEndianData, sizeof(data));
 }
 
-/* 8036D388-8036D3F0 367CC8 0068+00 0/0 8/8 0/0 .text            TRKAppendBuffer_ui8 */
 DSError TRKAppendBuffer_ui8(TRKBuffer* buffer, const u8* data, int count) {
     DSError err;
     int i;
@@ -224,7 +213,6 @@ DSError TRKAppendBuffer_ui8(TRKBuffer* buffer, const u8* data, int count) {
     return err;
 }
 
-/* 8036D28C-8036D388 367BCC 00FC+00 0/0 2/2 0/0 .text            TRKAppendBuffer_ui32 */
 DSError TRKAppendBuffer_ui32(TRKBuffer* buffer, const u32* data, int count) {
     DSError err;
     int i;
@@ -268,7 +256,6 @@ DSError TRKReadBuffer1_ui32(TRKBuffer* buffer, u32* data) {
     // UNUSED FUNCTION
 }
 
-/* 8036D1A4-8036D28C 367AE4 00E8+00 0/0 2/2 0/0 .text            TRKReadBuffer1_ui64 */
 DSError TRKReadBuffer1_ui64(TRKBuffer* buffer, u64* data) {
     DSError err;
 
@@ -300,7 +287,6 @@ DSError TRKReadBuffer1_ui64(TRKBuffer* buffer, u64* data) {
     return err;
 }
 
-/* 8036D10C-8036D1A4 367A4C 0098+00 0/0 1/1 0/0 .text            TRKReadBuffer_ui8 */
 DSError TRKReadBuffer_ui8(TRKBuffer* buffer, u8* data, int count) {
     DSError err;
     int i;
@@ -312,7 +298,6 @@ DSError TRKReadBuffer_ui8(TRKBuffer* buffer, u8* data, int count) {
     return err;
 }
 
-/* 8036D01C-8036D10C 36795C 00F0+00 0/0 2/2 0/0 .text            TRKReadBuffer_ui32 */
 DSError TRKReadBuffer_ui32(TRKBuffer* buffer, u32* data, int count) {
     DSError err;
     s32 i;

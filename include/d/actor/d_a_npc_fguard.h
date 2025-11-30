@@ -15,10 +15,10 @@
 
 class daNpcFgd_c : public daNpcCd2_c {
 public:
-    /* 809BA53C */ void initPosAngle(Vec&, s16);
-    /* 809BA584 */ cPhs__Step create();
-    /* 809BA730 */ void create_init();
-    /* 809BAA80 */ inline virtual ~daNpcFgd_c();
+    void initPosAngle(Vec&, s16);
+    cPhs__Step create();
+    void create_init();
+    inline virtual ~daNpcFgd_c();
 
     int getType() { return fopAcM_GetParam(this) & 0xFF; }
     int getObjNum() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }

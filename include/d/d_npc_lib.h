@@ -5,14 +5,14 @@
 
 class dNpcLib_lookat_c {
 public:
-    /* 80251314 */ dNpcLib_lookat_c();
-    /* 8025140C */ void init(J3DModel*, int*, csXyz*, csXyz*);
-    /* 80251534 */ void action(cXyz, cXyz, fopAc_ac_c*, f32 (*)[4], int);
-    /* 80251B60 */ void dbView();
-    /* 80251B64 */ void setPrm();
-    /* 80251EF8 */ void update();
-    /* 80252018 */ int limitter(s16*, s16, s16, s16);
-    /* 80252094 */ virtual ~dNpcLib_lookat_c() {}
+    dNpcLib_lookat_c();
+    void init(J3DModel*, int*, csXyz*, csXyz*);
+    void action(cXyz, cXyz, fopAc_ac_c*, f32 (*)[4], int);
+    void dbView();
+    void setPrm();
+    void update();
+    int limitter(s16*, s16, s16, s16);
+    virtual ~dNpcLib_lookat_c() {}
 
     /* 0x04 */ cXyz field_0x04[4];
     /* 0x34 */ csXyz field_0x34[4];

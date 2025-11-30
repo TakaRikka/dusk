@@ -14,26 +14,26 @@
  */
 class daObjBmSh_c : public dBgS_MoveBgActor {
 public:
-    /* 80BB9A58 */ void initBaseMtx();
-    /* 80BB9AE4 */ void setBaseMtx();
-    /* 80BB9B84 */ int Create();
-    /* 80BB9C50 */ int CreateHeap();
-    /* 80BB9CC0 */ int create();
-    /* 80BB9DB4 */ int Execute(Mtx**);
-    /* 80BB9F34 */ int checkSw();
-    /* 80BB9FBC */ int checkAnySw();
-    /* 80BBA044 */ int checkMySw();
-    /* 80BBA080 */ void event_proc_call();
-    /* 80BBA13C */ void actionWait();
-    /* 80BBA1A4 */ void actionOrderEvent();
-    /* 80BBA20C */ void actionEvent();
-    /* 80BBA268 */ void actionDead();
-    /* 80BBA26C */ void mode_proc_call();
-    /* 80BBA394 */ void modeWait();
-    /* 80BBA5B4 */ void modeMove();
-    /* 80BBA640 */ void modeEnd();
-    /* 80BBA644 */ int Draw();
-    /* 80BBA6E8 */ int Delete();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create();
+    int Execute(Mtx**);
+    int checkSw();
+    int checkAnySw();
+    int checkMySw();
+    void event_proc_call();
+    void actionWait();
+    void actionOrderEvent();
+    void actionEvent();
+    void actionDead();
+    void mode_proc_call();
+    void modeWait();
+    void modeMove();
+    void modeEnd();
+    int Draw();
+    int Delete();
 
     u32 getEvNo() { return fopAcM_GetParamBit(this, 16, 8); }
     u32 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }

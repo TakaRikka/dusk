@@ -11,14 +11,12 @@
 #include "d/actor/d_a_npc_lf.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 80A6AA1C-80A6AA28 000000 000C+00 1/1 0/0 0/0 .data            wp$3976 */
 static f32 wp[3] = {
     0.5f,
     1.0f,
     2.5f
 };
 
-/* 80A69B6C-80A69BB4 0000EC 0048+00 1/1 0/0 0/0 .text            __ct__14daNPC_LF_HIO_cFv */
 daNPC_LF_HIO_c::daNPC_LF_HIO_c() {
     field_0x04 = -1;
     field_0x08 = 1.0f;
@@ -28,7 +26,6 @@ daNPC_LF_HIO_c::daNPC_LF_HIO_c() {
     field_0x18 = 250.0f;
 }
 
-/* 80A69BB4-80A69CD8 000134 0124+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         int jnt_no = i_joint->getJntNo();
@@ -50,7 +47,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80A69CD8-80A69D90 000258 00B8+00 1/0 0/0 0/0 .text            daNPC_LF_Draw__FP12npc_lf_class */
 static int daNPC_LF_Draw(npc_lf_class* i_this) {
     lf_s* fish = i_this->mFish;
     s8 j = 0;
@@ -74,17 +70,13 @@ static int daNPC_LF_Draw(npc_lf_class* i_this) {
     return 1;
 }
 
-/* 80A6AA90-80A6AA94 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 data_80A6AA90;
 
-/* 80A6AAA0-80A6AABC 000018 001C+00 4/4 0/0 0/0 .bss             l_HIO */
 static daNPC_LF_HIO_c l_HIO;
 
 f32 dummyLiteral1() { return 50.0f; }
 f32 dummyLiteral2() { return 0.0f; }
 
-/* 80A69D90-80A6A1B8 000310 0428+00 1/1 0/0 0/0 .text            npc_lf_move__FP10fopAc_ac_cP4lf_s
- */
 static void npc_lf_move(fopAc_ac_c* param_0, lf_s* pFish) {
     cXyz pos;
     s16 maxStepAngle;
@@ -162,7 +154,6 @@ static void npc_lf_move(fopAc_ac_c* param_0, lf_s* pFish) {
     cLib_addCalc2(&pFish->field_0x44, (pFish->field_0x3c * l_HIO.field_0x10), 1.0f, maxStep);
 }
 
-/* 80A6A1B8-80A6A420 000738 0268+00 1/1 0/0 0/0 .text            action__FP10fopAc_ac_cP4lf_s */
 static void action(fopAc_ac_c* param_0, lf_s* pFish) {
     cXyz pos;
     pFish->field_0x18++;
@@ -209,8 +200,6 @@ static void action(fopAc_ac_c* param_0, lf_s* pFish) {
     pFish->mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80A6A420-80A6A514 0009A0 00F4+00 2/1 0/0 0/0 .text            daNPC_LF_Execute__FP12npc_lf_class
- */
 static int daNPC_LF_Execute(npc_lf_class* i_this2) {
     npc_lf_class* i_this = (npc_lf_class*) i_this2;
     view_class* camera;
@@ -234,14 +223,10 @@ static int daNPC_LF_Execute(npc_lf_class* i_this2) {
     return 1;
 }
 
-/* 80A6A514-80A6A51C 000A94 0008+00 1/0 0/0 0/0 .text            daNPC_LF_IsDelete__FP12npc_lf_class
- */
 static bool daNPC_LF_IsDelete(npc_lf_class* param_0) {
     return true;
 }
 
-/* 80A6A51C-80A6A570 000A9C 0054+00 1/0 0/0 0/0 .text            daNPC_LF_Delete__FP12npc_lf_class
- */
 static int daNPC_LF_Delete(npc_lf_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "NPC_LF");
 
@@ -252,7 +237,6 @@ static int daNPC_LF_Delete(npc_lf_class* i_this) {
     return 1;
 }
 
-/* 80A6A570-80A6A650 000AF0 00E0+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     u16 jnt_no;
     npc_lf_class* a_this = static_cast<npc_lf_class*>(i_this);
@@ -277,7 +261,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80A6A650-80A6A8A4 000BD0 0254+00 1/0 0/0 0/0 .text            daNPC_LF_Create__FP10fopAc_ac_c */
 static cPhs__Step daNPC_LF_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, npc_lf_class);
     npc_lf_class* a_this = static_cast<npc_lf_class*>(i_this);
@@ -335,16 +318,12 @@ static cPhs__Step daNPC_LF_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-/* 80A6A8A4-80A6A8E0 000E24 003C+00 1/1 0/0 0/0 .text            __dt__4lf_sFv */
 lf_s::~lf_s() {}
 
-/* 80A6A8E0-80A6A8E4 000E60 0004+00 1/1 0/0 0/0 .text            __ct__4lf_sFv */
 lf_s::lf_s() {}
 
-/* 80A6A8E4-80A6A92C 000E64 0048+00 2/1 0/0 0/0 .text            __dt__14daNPC_LF_HIO_cFv */
 daNPC_LF_HIO_c::~daNPC_LF_HIO_c() {}
 
-/* 80A6AA28-80A6AA48 -00001 0020+00 1/1 0/0 0/0 .data            l_daNPC_LF_Method */
 static actor_method_class l_daNPC_LF_Method = {
     (process_method_func)daNPC_LF_Create,
     (process_method_func)daNPC_LF_Delete,
@@ -353,7 +332,6 @@ static actor_method_class l_daNPC_LF_Method = {
     (process_method_func)daNPC_LF_Draw,
 };
 
-/* 80A6AA48-80A6AA78 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_LF */
 extern actor_process_profile_definition g_profile_NPC_LF = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID

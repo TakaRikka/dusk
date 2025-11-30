@@ -11,7 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s.h"
 #include "d/d_bg_w.h"
-#include "dol2asm.h"
 #include "f_op/f_op_actor_mng.h"
 
 struct Attr {
@@ -31,10 +30,7 @@ struct Attr {
     /* 0x20 */ f32 field_0x20;
 };
 
-/* ############################################################################################## */
-/* 8058DD50-8058DD74 000000 0024+00 5/5 0/0 0/0 .rodata
- * L_attr__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@        */
- SECTION_RODATA static Attr const L_attr = {
+static Attr const L_attr = {
     -3.0f, 0.005f, 0.0005f,
     0.5f, 0x03, 0x4B, 0x32, 0x2D, 0x28, 0x4E20,
     0x3CC3, 0x0F, 2.0f, 1.0f,
@@ -44,8 +40,7 @@ inline static const Attr& attr() {
     return L_attr;
 }
 
-/* 8058DD74-8058DD7C 000024 0005+03 3/3 0/0 0/0 .rodata          M_arcname__Q211daObjLadder5Act_c */
-SECTION_RODATA char const daObjLadder::Act_c::M_arcname[5] = "Mhsg";
+char const daObjLadder::Act_c::M_arcname[5] = "Mhsg";
 
 struct AttrType {
     /* 0x0 */ s16 field_0x0;
@@ -53,9 +48,7 @@ struct AttrType {
     /* 0x4 */ f32 field_0x4;
 };
 
-/* 8058DDCC-8058DDFC 000020 0030+00 3/3 0/0 0/0 .data
- * L_attr_type__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@   */
-SECTION_DATA static AttrType L_attr_type[6] = {
+static AttrType L_attr_type[6] = {
     { 0x08, 0x10, 600.0f},
     { 0x09, 0x11, 900.0f},
     { 0x04, 0x0C, 1200.0f},
@@ -68,8 +61,6 @@ static inline const AttrType& attr_type(daObjLadder::Act_c::Type_e type) {
     return L_attr_type[type];
 }
 
-/* 8058D158-8058D1D8 000078 0080+00 1/0 0/0 0/0 .text            CreateHeap__Q211daObjLadder5Act_cFv
- */
 int daObjLadder::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr_type(mType).field_0x0);
     JUT_ASSERT(382, model_data != NULL);
@@ -77,7 +68,6 @@ int daObjLadder::Act_c::CreateHeap() {
     return mModel != NULL;
 }
 
-/* 8058D1D8-8058D378 0000F8 01A0+00 1/0 0/0 0/0 .text            Create__Q211daObjLadder5Act_cFv */
 int daObjLadder::Act_c::Create() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     init_mtx();
@@ -106,7 +96,6 @@ int daObjLadder::Act_c::Create() {
     return 1;
 }
 
-/* 8058D378-8058D478 000298 0100+00 1/1 0/0 0/0 .text Mthd_Create__Q211daObjLadder5Act_cFv */
 int daObjLadder::Act_c::Mthd_Create() {
     fopAcM_ct(this, Act_c);
     int phase_state = dComIfG_resLoad(&mPhase, M_arcname);
@@ -119,19 +108,16 @@ int daObjLadder::Act_c::Mthd_Create() {
     return phase_state;
 }
 
-/* 8058D4F0-8058D4F8 000410 0008+00 1/0 0/0 0/0 .text            Delete__Q211daObjLadder5Act_cFv */
 int daObjLadder::Act_c::Delete() {
     return 1;
 }
 
-/* 8058D4F8-8058D544 000418 004C+00 1/1 0/0 0/0 .text Mthd_Delete__Q211daObjLadder5Act_cFv */
 int daObjLadder::Act_c::Mthd_Delete() {
     int rv = MoveBGDelete();
     dComIfG_resDelete(&mPhase, M_arcname);
     return rv;
 }
 
-/* 8058D544-8058D5AC 000464 0068+00 1/1 0/0 0/0 .text demo_end_reset__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::demo_end_reset() {
     if (mInDemo && dComIfGp_evmng_endCheck(mEventIdx)) {
         dComIfGp_event_reset();
@@ -139,27 +125,21 @@ void daObjLadder::Act_c::demo_end_reset() {
     }
 }
 
-/* 8058D5AC-8058D5B8 0004CC 000C+00 1/1 0/0 0/0 .text mode_wait_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_wait_init() {
     mMode = MODE_WAIT;
 }
 
-/* 8058D5B8-8058D614 0004D8 005C+00 1/0 0/0 0/0 .text            mode_wait__Q211daObjLadder5Act_cFv
- */
 void daObjLadder::Act_c::mode_wait() {
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
         mode_demoreq_init();
     }
 }
 
-/* 8058D614-8058D628 000534 0014+00 1/1 0/0 0/0 .text mode_demoreq_init__Q211daObjLadder5Act_cFv
- */
 void daObjLadder::Act_c::mode_demoreq_init() {
     mMode = MODE_DEMOREQ;
     mInDemo = false;
 }
 
-/* 8058D628-8058D6E8 000548 00C0+00 1/0 0/0 0/0 .text mode_demoreq__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_demoreq() {
     bool isDemo = false;
     if (dComIfGp_evmng_existence(mEventIdx)) {
@@ -178,7 +158,6 @@ void daObjLadder::Act_c::mode_demoreq() {
     }
 }
 
-/* 8058D6E8-8058D710 000608 0028+00 1/1 0/0 0/0 .text mode_vib_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_vib_init() {
     mVibrationTimer = attr().vibrationTimer;
     field_0x610 = 0;
@@ -186,8 +165,6 @@ void daObjLadder::Act_c::mode_vib_init() {
     mMode = MODE_VIB;
 }
 
-/* 8058D710-8058D7A8 000630 0098+00 1/0 0/0 0/0 .text            mode_vib__Q211daObjLadder5Act_cFv
- */
 void daObjLadder::Act_c::mode_vib() {
     field_0x610 += attr().field_0x16;
     field_0x612 += attr().field_0x18;
@@ -198,7 +175,6 @@ void daObjLadder::Act_c::mode_vib() {
     }
 }
 
-/* 8058D7A8-8058D7EC 0006C8 0044+00 1/1 0/0 0/0 .text mode_drop_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_drop_init() {
     gravity = -5.0f;
     speed.set(cXyz::Zero);
@@ -206,8 +182,6 @@ void daObjLadder::Act_c::mode_drop_init() {
     mMode = MODE_DROP;
 }
 
-/* 8058D7EC-8058D9C0 00070C 01D4+00 1/0 0/0 0/0 .text            mode_drop__Q211daObjLadder5Act_cFv
- */
 void daObjLadder::Act_c::mode_drop() {
     daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().field_0x04, attr().field_0x08);
     if (current.pos.y < mHeight) {
@@ -240,21 +214,15 @@ void daObjLadder::Act_c::mode_drop() {
     }
 }
 
-/* 8058D9C0-8058D9CC 0008E0 000C+00 2/2 0/0 0/0 .text mode_fell_init__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::mode_fell_init() {
     mMode = MODE_FELL;
 }
 
-/* 8058D9CC-8058D9D0 0008EC 0004+00 1/0 0/0 0/0 .text            mode_fell__Q211daObjLadder5Act_cFv
- */
 void daObjLadder::Act_c::mode_fell() {
 }
 
-/* ############################################################################################## */
-/* 8058DF20-8058DF50 000000 0030+00 2/2 0/0 0/0 .bss             M_tmp_mtx__Q211daObjLadder5Act_c */
 Mtx daObjLadder::Act_c::M_tmp_mtx;
 
-/* 8058D9D0-8058DA64 0008F0 0094+00 3/3 0/0 0/0 .text            set_mtx__Q211daObjLadder5Act_cFv */
 void daObjLadder::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -263,14 +231,11 @@ void daObjLadder::Act_c::set_mtx() {
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 8058DA64-8058DAA0 000984 003C+00 1/1 0/0 0/0 .text            init_mtx__Q211daObjLadder5Act_cFv
- */
 void daObjLadder::Act_c::init_mtx() {
     mModel->setBaseScale(scale);
     set_mtx();
 }
 
-/* 8058DAA0-8058DBB8 0009C0 0118+00 1/0 0/0 0/0 .text Execute__Q211daObjLadder5Act_cFPPA3_A4_f */
 int daObjLadder::Act_c::Execute(f32 (**param_1)[3][4]) {
     static const daObjLadder::Act_c::modeProc mode_proc[5] = {
         &daObjLadder::Act_c::mode_wait, &daObjLadder::Act_c::mode_demoreq,
@@ -286,7 +251,6 @@ int daObjLadder::Act_c::Execute(f32 (**param_1)[3][4]) {
     return 1;
 }
 
-/* 8058DBB8-8058DC5C 000AD8 00A4+00 1/0 0/0 0/0 .text            Draw__Q211daObjLadder5Act_cFv */
 int daObjLadder::Act_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -297,38 +261,26 @@ int daObjLadder::Act_c::Draw() {
     return 1;
 }
 
-/* 8058DC5C-8058DC7C 000B7C 0020+00 1/0 0/0 0/0 .text
- * Mthd_Create__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
 static int Mthd_Create(daObjLadder::Act_c* i_this) {
     return i_this->Mthd_Create();
 }
 
-/* 8058DC7C-8058DC9C 000B9C 0020+00 1/0 0/0 0/0 .text
- * Mthd_Delete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
 static int Mthd_Delete(daObjLadder::Act_c* i_this) {
     return i_this->Mthd_Delete();
 }
 
-/* 8058DC9C-8058DCBC 000BBC 0020+00 1/0 0/0 0/0 .text
- * Mthd_Execute__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
 static int Mthd_Execute(daObjLadder::Act_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 8058DCBC-8058DCE8 000BDC 002C+00 1/0 0/0 0/0 .text
- * Mthd_Draw__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv  */
 static int Mthd_Draw(daObjLadder::Act_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 8058DCE8-8058DD14 000C08 002C+00 1/0 0/0 0/0 .text
- * Mthd_IsDelete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
 static int Mthd_IsDelete(daObjLadder::Act_c* i_this) {
     return i_this->MoveBGIsDelete();
 }
 
-/* 8058DE74-8058DE94 -00001 0020+00 1/0 0/0 0/0 .data
- * Mthd_Table__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@    */
 static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create, 
     (process_method_func)Mthd_Delete, 
@@ -337,7 +289,6 @@ static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Draw,
 };
 
-/* 8058DE94-8058DEC4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Ladder */
 extern actor_process_profile_definition g_profile_Obj_Ladder = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

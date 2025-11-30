@@ -16,8 +16,6 @@
 #define FLAG_MOTOR_VIB  0x1
 
 namespace {
-/* 8006F168-8006F184 069AA8 001C+00 1/1 0/0 0/0 .text makedata__25@unnamed@d_vibration_cpp@FPUsUll
- */
 u16* makedata(u16* data, u32 pattern, s32 length) {
     data[0] = length;
     data[1] = pattern >> 16;
@@ -26,15 +24,11 @@ u16* makedata(u16* data, u32 pattern, s32 length) {
     return data;
 }
 
-/* 8006F184-8006F1A4 069AC4 0020+00 1/1 0/0 0/0 .text rollshift__25@unnamed@d_vibration_cpp@FUlll
- */
 s32 rollshift(u32 pattern, s32 length, s32 index) {
     index %= length;
     return (pattern >> index) | (pattern << (length - index));
 }
 
-/* 8006F1A4-8006F1D8 069AE4 0034+00 2/2 0/0 0/0 .text makebits__25@unnamed@d_vibration_cpp@FUlll
- */
 u32 makebits(u32 bits, s32 length, s32 numbits) {
     s32 i;
     u32 mask = bits & (-1 << (32 - length));
@@ -47,7 +41,6 @@ u32 makebits(u32 bits, s32 length, s32 numbits) {
     return bits;
 }
 
-/* 8006F1D8-8006F268 069B18 0090+00 1/1 0/0 0/0 .text randombit__25@unnamed@d_vibration_cpp@Fll */
 u32 randombit(s32 rounds, s32 length) {
     u32 value = 0;
     
@@ -58,7 +51,6 @@ u32 randombit(s32 rounds, s32 length) {
 }
 };
 
-/* 8006F268-8006FA24 069BA8 07BC+00 0/0 2/2 0/0 .text            Run__12dVibration_cFv */
 int dVibration_c::Run() {
     mMode = MODE_RUN;
 
@@ -277,7 +269,6 @@ int dVibration_c::Run() {
     return 1;
 }
 
-/* 8006FA24-8006FB10 06A364 00EC+00 0/0 62/62 298/298 .text StartShock__12dVibration_cFii4cXyz */
 bool dVibration_c::StartShock(int i_vibmode, int i_flags, cXyz i_pos) {
     bool ret = false;
     if (i_flags & FLAG_CAMERA_VIB) {
@@ -304,7 +295,6 @@ bool dVibration_c::StartShock(int i_vibmode, int i_flags, cXyz i_pos) {
     return ret;
 }
 
-/* 8006FB10-8006FC0C 06A450 00FC+00 0/0 8/8 67/67 .text StartQuake__12dVibration_cFii4cXyz */
 bool dVibration_c::StartQuake(int i_vibmode, int i_flags, cXyz i_pos) {
     bool ret = false;
     if (i_flags & FLAG_CAMERA_VIB) {
@@ -330,7 +320,6 @@ bool dVibration_c::StartQuake(int i_vibmode, int i_flags, cXyz i_pos) {
     return ret;
 }
 
-/* 8006FC0C-8006FD94 06A54C 0188+00 0/0 2/2 2/2 .text StartQuake__12dVibration_cFPCUcii4cXyz */
 bool dVibration_c::StartQuake(const u8* i_pattern, int i_rounds, int i_flags, cXyz i_pos) {
     bool ret = false;
 
@@ -363,7 +352,6 @@ bool dVibration_c::StartQuake(const u8* i_pattern, int i_rounds, int i_flags, cX
     return ret;
 }
 
-/* 8006FD94-8006FE00 06A6D4 006C+00 0/0 6/6 82/82 .text            StopQuake__12dVibration_cFi */
 int dVibration_c::StopQuake(int i_flags) {
     int ret = FALSE;
     if (i_flags & FLAG_CAMERA_VIB) {
@@ -384,19 +372,16 @@ int dVibration_c::StopQuake(int i_flags) {
     return ret;
 }
 
-/* 8006FE00-8006FE5C 06A740 005C+00 2/2 0/0 0/0 .text            Kill__12dVibration_cFv */
 void dVibration_c::Kill() {
     mDoCPd_c::stopMotorWaveHard(PAD_1);
     mDoCPd_c::stopMotorHard(PAD_1);
     setDefault();
 }   
 
-/* 8006FE5C-8006FE84 06A79C 0028+00 0/0 0/0 10/10 .text            CheckQuake__12dVibration_cFv */
 bool dVibration_c::CheckQuake() {
     return mCamera.mQuake.mVibMode != VIBMODE_Q_NONE || mMotor.mQuake.mVibMode != VIBMODE_Q_NONE;
 }
 
-/* 8006FE84-8006FF04 06A7C4 0080+00 2/2 0/0 0/0 .text            setDefault__12dVibration_cFv */
 void dVibration_c::setDefault() {
     mMotor.mShock.mVibMode = VIBMODE_S_NONE;
     mCamera.mShock.mVibMode = VIBMODE_S_NONE;
@@ -428,13 +413,11 @@ void dVibration_c::setDefault() {
     mFrame = 0;
 }
 
-/* 8006FF04-8006FF38 06A844 0034+00 0/0 2/2 0/0 .text            Init__12dVibration_cFv */
 void dVibration_c::Init() {
     Kill();
     setDefault();
 }
 
-/* 8006FF38-8006FFF8 06A878 00C0+00 0/0 1/1 0/0 .text            Pause__12dVibration_cFv */
 void dVibration_c::Pause() {
     if (mMode != MODE_PAUSE) {
         if (mMotor.mShock.mVibMode != VIBMODE_S_NONE || mMotor.mQuake.mVibMode != VIBMODE_Q_NONE) {
@@ -458,7 +441,6 @@ void dVibration_c::Pause() {
     }
 }
 
-/* 8006FFF8-80070018 06A938 0020+00 0/0 1/1 0/0 .text            Remove__12dVibration_cFv */
 void dVibration_c::Remove() {
     Kill();
 }

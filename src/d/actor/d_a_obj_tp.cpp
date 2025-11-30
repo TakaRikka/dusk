@@ -17,7 +17,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
 
-/* 80D1D578-80D1D764 000078 01EC+00 1/0 0/0 0/0 .text            daObj_Tp_Draw__FP12obj_tp_class */
 static int daObj_Tp_Draw(obj_tp_class* i_this) {
     g_env_light.settingTevStruct(0x10, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType_MAJI(i_this->mMorf->getModel(), &i_this->tevStr);
@@ -57,7 +56,6 @@ static int daObj_Tp_Draw(obj_tp_class* i_this) {
     return 1;
 }
 
-/* 80D1D764-80D1D850 000264 00EC+00 1/1 0/0 0/0 .text            anm_init__FP12obj_tp_classifUcf */
 static void anm_init(obj_tp_class* i_this, int param_2, f32 param_3, u8 param_4, f32 param_5) {
     if (i_this->field_0x594 != 0) {
         if (param_2 == 7) {
@@ -73,7 +71,6 @@ static void anm_init(obj_tp_class* i_this, int param_2, f32 param_3, u8 param_4,
     i_this->field_0x574 = param_2;
 }
 
-/* 80D1D850-80D1D8C8 000350 0078+00 1/1 0/0 0/0 .text            s_tp_sub__FPvPv */
 static void* s_tp_sub(void* param_1, void* param_2) {
     if ((fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_OBJ_TP) &&
         ((fopAc_ac_c*)param_1)->parentActorID == ((fopAc_ac_c*)param_2)->parentActorID &&
@@ -84,8 +81,6 @@ static void* s_tp_sub(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80D1D8C8-80D1E460 0003C8 0B98+00 3/1 0/0 0/0 .text            daObj_Tp_Execute__FP12obj_tp_class
- */
 static int daObj_Tp_Execute(obj_tp_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (i_this->field_0x5a4 != 0) {
@@ -280,14 +275,10 @@ static int daObj_Tp_Execute(obj_tp_class* i_this) {
     return 1;
 }
 
-/* 80D1E460-80D1E468 000F60 0008+00 1/0 0/0 0/0 .text            daObj_Tp_IsDelete__FP12obj_tp_class
- */
 static int daObj_Tp_IsDelete(obj_tp_class* param_0) {
     return 1;
 }
 
-/* 80D1E468-80D1E4C0 000F68 0058+00 1/0 0/0 0/0 .text            daObj_Tp_Delete__FP12obj_tp_class
- */
 static int daObj_Tp_Delete(obj_tp_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "Obj_tp");
@@ -297,33 +288,26 @@ static int daObj_Tp_Delete(obj_tp_class* i_this) {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80D1EEE0-80D1EEE8 000040 0008+00 0/1 0/0 0/0 .data            bmd$4283 */
 static int bmd[2] = {
     0x11, 0x12,
 };
 
-/* 80D1EEE8-80D1EEF0 000048 0008+00 0/1 0/0 0/0 .data            brk$4284 */
 static int brk[2] = {
     0x17, 0x18,
 };
 
-/* 80D1EEF0-80D1EEF8 000050 0008+00 0/1 0/0 0/0 .data            eff_bmd$4296 */
 static int eff_bmd[2] = {
     0x0F, 0x10,
 };
 
-/* 80D1EEF8-80D1EF00 000058 0008+00 0/1 0/0 0/0 .data            eff_btk$4297 */
 static int eff_btk[2] = {
     0x1B, 0x1C,
 };
 
-/* 80D1EF00-80D1EF08 000060 0008+00 0/1 0/0 0/0 .data            eff_brk$4298 */
 static int eff_brk[2] = {
     0x15, 0x16,
 };
 
-/* 80D1EF08-80D1EF4C 000068 0044+00 1/1 0/0 0/0 .data            cc_cyl_src$4468 */
 static dCcD_SrcCyl cc_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xd8fafdbf, 0x11}, 0x79}}, // mObj
@@ -338,7 +322,6 @@ static dCcD_SrcCyl cc_cyl_src = {
     } // mCyl
 };
 
-/* 80D1E4C0-80D1E908 000FC0 0448+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     obj_tp_class* tp = static_cast<obj_tp_class*>(i_this);
     tp->mMorf =
@@ -419,7 +402,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80D1E950-80D1ECF0 001450 03A0+00 1/0 0/0 0/0 .text            daObj_Tp_Create__FP10fopAc_ac_c */
 static int daObj_Tp_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_tp_class);
     obj_tp_class* tp = (obj_tp_class*)i_this;
@@ -498,7 +480,6 @@ static int daObj_Tp_Create(fopAc_ac_c* i_this) {
     return rv;
 }
 
-/* 80D1EF4C-80D1EF6C -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Tp_Method */
 static actor_method_class l_daObj_Tp_Method = {
     (process_method_func)daObj_Tp_Create,
     (process_method_func)daObj_Tp_Delete,
@@ -507,7 +488,6 @@ static actor_method_class l_daObj_Tp_Method = {
     (process_method_func)daObj_Tp_Draw,
 };
 
-/* 80D1EF6C-80D1EF9C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_TP */
 extern actor_process_profile_definition g_profile_OBJ_TP = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

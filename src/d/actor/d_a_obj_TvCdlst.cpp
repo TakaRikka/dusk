@@ -6,18 +6,10 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_TvCdlst.h"
-#include "dol2asm.h"
 #include "include/d/d_com_inf_game.h"
 
-//
-// Declarations:
-//
-
-/* 80B9F9DC-80B9F9E4 000014 0008+00 1/1 0/0 0/0 .bss             l_HIO */
 static daTvCdlst_HIO_c l_HIO;
 
-/* ############################################################################################## */
-/* 80B9F900-80B9F944 000000 0044+00 2/2 0/0 0/0 .data            mCcDCyl__11daTvCdlst_c */
 dCcD_SrcCyl daTvCdlst_c::mCcDCyl = {
     daTvCdlst_c::mCcDObjInfo, // mObjInf
     {
@@ -27,13 +19,11 @@ dCcD_SrcCyl daTvCdlst_c::mCcDCyl = {
     } // mCyl
 };
 
-/* 80B9ECCC-80B9ECF8 0000EC 002C+00 1/1 0/0 0/0 .text            __ct__15daTvCdlst_HIO_cFv */
 daTvCdlst_HIO_c::daTvCdlst_HIO_c() {
     field_0x4 = 0x3c;
     field_0x5 = 1;
 }
 
-/* 80B9ED40-80B9EDC8 000160 0088+00 2/2 0/0 0/0 .text            setBaseMtx__11daTvCdlst_cFv */
 void daTvCdlst_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
@@ -41,7 +31,6 @@ void daTvCdlst_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80B9EDC8-80B9EE34 0001E8 006C+00 1/1 0/0 0/0 .text            CreateHeap__11daTvCdlst_cFv */
 int daTvCdlst_c::CreateHeap() {
     J3DModelData* pModelData = (J3DModelData*) dComIfG_getObjectRes("HShokudai", 3);
     JUT_ASSERT(222, pModelData != NULL);
@@ -51,8 +40,6 @@ int daTvCdlst_c::CreateHeap() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80B9F890-80B9F8C0 000000 0030+00 4/4 0/0 0/0 .rodata          mCcDObjInfo__11daTvCdlst_c */
 const dCcD_SrcGObjInf daTvCdlst_c::mCcDObjInfo = {
     {0, // mFlags
         {
@@ -66,7 +53,6 @@ const dCcD_SrcGObjInf daTvCdlst_c::mCcDObjInfo = {
     {0} // mGObjCo
 };
 
-/* 80B9EE34-80B9F0B4 000254 0280+00 1/1 0/0 0/0 .text            create__11daTvCdlst_cFv */
 int daTvCdlst_c::create() {
     fopAcM_ct(this, daTvCdlst_c);
     int phase = dComIfG_resLoad(&mPhaseReq,"HShokudai");
@@ -106,13 +92,10 @@ int daTvCdlst_c::create() {
     return phase;
 }
 
-/* 80B9F144-80B9F164 000564 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__11daTvCdlst_cFP10fopAc_ac_c              */
 int daTvCdlst_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daTvCdlst_c*>(i_this)->CreateHeap();
 }
 
-/* 80B9F164-80B9F1F0 000584 008C+00 1/1 0/0 0/0 .text            lightInit__11daTvCdlst_cFv */
 void daTvCdlst_c::lightInit() {
     field_0x700 = field_0x6ec;
     field_0x700.y += 10.0f;
@@ -128,21 +111,18 @@ void daTvCdlst_c::lightInit() {
     field_0x710 = 0.0f;
 }
 
-/* 80B9F1F0-80B9F220 000610 0030+00 2/2 0/0 0/0 .text            setLight__11daTvCdlst_cFv */
 void daTvCdlst_c::setLight() {
     if (mLightType) {
         dKy_plight_set(&mLight);
     }
 }
 
-/* 80B9F220-80B9F250 000640 0030+00 1/1 0/0 0/0 .text            cutLight__11daTvCdlst_cFv */
 void daTvCdlst_c::cutLight() {
     if (mLightType) {
         dKy_plight_cut(&mLight);
     }
 }
 
-/* 80B9F250-80B9F300 000670 00B0+00 1/1 0/0 0/0 .text            pointLightProc__11daTvCdlst_cFv */
 void daTvCdlst_c::pointLightProc() {
     if (mLightType == 0) {
         GXColor color = {0xbc, 0x66, 0x42, 0xff};
@@ -157,7 +137,6 @@ void daTvCdlst_c::pointLightProc() {
     }
 }
 
-/* 80B9F300-80B9F634 000720 0334+00 1/1 0/0 0/0 .text            Execute__11daTvCdlst_cFv */
 int daTvCdlst_c::Execute() {
     mIsOn = fopAcM_isSwitch(this, mOnSw);
     mIsOff = fopAcM_isSwitch(this, mOffSw);
@@ -199,7 +178,6 @@ int daTvCdlst_c::Execute() {
     return 1;
 }
 
-/* 80B9F634-80B9F6D8 000A54 00A4+00 1/1 0/0 0/0 .text            Draw__11daTvCdlst_cFv */
 int daTvCdlst_c::Draw() {
     g_env_light.settingTevStruct(0x40, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -209,7 +187,6 @@ int daTvCdlst_c::Draw() {
     return 1;
 }
 
-/* 80B9F6D8-80B9F730 000AF8 0058+00 1/1 0/0 0/0 .text            Delete__11daTvCdlst_cFv */
 int daTvCdlst_c::Delete() {
     mSound.deleteObject();
     dComIfG_resDelete(&mPhaseReq, "HShokudai");
@@ -219,29 +196,22 @@ int daTvCdlst_c::Delete() {
     return 1;
 }
 
-/* 80B9F730-80B9F750 000B50 0020+00 1/0 0/0 0/0 .text            daTvCdlst_Draw__FP11daTvCdlst_c */
 static int daTvCdlst_Draw(daTvCdlst_c* i_this) {
     return i_this->Draw();
 }
 
-/* 80B9F750-80B9F770 000B70 0020+00 1/0 0/0 0/0 .text            daTvCdlst_Execute__FP11daTvCdlst_c
- */
 static int daTvCdlst_Execute(daTvCdlst_c* i_this) {
     return i_this->Execute();
 }
 
-/* 80B9F770-80B9F790 000B90 0020+00 1/0 0/0 0/0 .text            daTvCdlst_Delete__FP11daTvCdlst_c
- */
 static int daTvCdlst_Delete(daTvCdlst_c* i_this) {
     return i_this->Delete();
 }
 
-/* 80B9F790-80B9F7B0 000BB0 0020+00 1/0 0/0 0/0 .text            daTvCdlst_Create__FP10fopAc_ac_c */
 static int daTvCdlst_Create(fopAc_ac_c* i_this) {
     return static_cast<daTvCdlst_c*>(i_this)->create();
 }
 
-/* 80B9F944-80B9F964 -00001 0020+00 1/0 0/0 0/0 .data            l_daTvCdlst_Method */
 static actor_method_class l_daTvCdlst_Method = {
     (process_method_func)daTvCdlst_Create,
     (process_method_func)daTvCdlst_Delete,
@@ -250,7 +220,6 @@ static actor_method_class l_daTvCdlst_Method = {
     (process_method_func)daTvCdlst_Draw,
 };
 
-/* 80B9F964-80B9F994 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_TvCdlst */
 extern actor_process_profile_definition g_profile_Obj_TvCdlst = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID

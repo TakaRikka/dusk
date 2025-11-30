@@ -11,16 +11,16 @@ namespace JStage {
     * 
     */
     struct TFog : public TObject {
-        /* 80280C80 */ virtual ~TFog() = 0;
-        /* 80280CE0 */ virtual s32 JSGFGetType() const;
-        /* 80280CE8 */ virtual bool JSGGetFogFunction() const;
-        /* 80280CF0 */ virtual void JSGSetFogFunction(GXFogType);
-        /* 80280CF4 */ virtual f32 JSGGetStartZ() const;
-        /* 80280CFC */ virtual void JSGSetStartZ(f32);
-        /* 80280D00 */ virtual f32 JSGGetEndZ() const;
-        /* 80280D0C */ virtual void JSGSetEndZ(f32);
-        /* 80280D10 */ virtual GXColor JSGGetColor() const;
-        /* 80280D24 */ virtual void JSGSetColor(GXColor);
+        virtual ~TFog() = 0;
+        virtual s32 JSGFGetType() const;
+        virtual bool JSGGetFogFunction() const;
+        virtual void JSGSetFogFunction(GXFogType);
+        virtual f32 JSGGetStartZ() const;
+        virtual void JSGSetStartZ(f32);
+        virtual f32 JSGGetEndZ() const;
+        virtual void JSGSetEndZ(f32);
+        virtual GXColor JSGGetColor() const;
+        virtual void JSGSetColor(GXColor);
     };
 };
 

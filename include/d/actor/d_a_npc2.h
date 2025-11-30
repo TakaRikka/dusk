@@ -10,10 +10,10 @@
 
 class daBaseNpc_acMngr_c {
 public:
-    /* 8014D804 */ daBaseNpc_acMngr_c();
-    /* 8014D81C */ void entry(fopAc_ac_c*);
-    /* 8014D838 */ fopAc_ac_c* getActor();
-    /* 80150524 */ virtual ~daBaseNpc_acMngr_c() {}
+    daBaseNpc_acMngr_c();
+    void entry(fopAc_ac_c*);
+    fopAc_ac_c* getActor();
+    virtual ~daBaseNpc_acMngr_c() {}
 
 private:
     /* 0x04 */ fpc_ProcID mActorId;
@@ -21,8 +21,8 @@ private:
 
 class daBaseNpc_matAnm_c : public J3DMaterialAnm {
 public:
-    /* 80150444 */ virtual ~daBaseNpc_matAnm_c() {}
-    /* 8014D884 */ virtual void calc(J3DMaterial*) const;
+    virtual ~daBaseNpc_matAnm_c() {}
+    virtual void calc(J3DMaterial*) const;
 
     /* 0x0F4 */ mutable f32 field_0xF4;
     /* 0x0F8 */ mutable f32 field_0xF8;
@@ -34,17 +34,17 @@ public:
 
 class daBaseNpc_path_c {
 public:
-    /* 8014D998 */ daBaseNpc_path_c();
-    /* 8014D9A8 */ BOOL isPath();
-    /* 8014D9BC */ int setPathInfo(u8, s8, s8);
-    /* 8014DA48 */ void reverseDir();
-    /* 8014DA64 */ s32 chkPnt(cXyz);
-    /* 8014DAC4 */ BOOL setNextPnt();
-    /* 8014DB04 */ u16 getIdx();
-    /* 8014DB0C */ void setIdx(u16);
-    /* 8014DB14 */ Vec getPntPos(u16);
+    daBaseNpc_path_c();
+    BOOL isPath();
+    int setPathInfo(u8, s8, s8);
+    void reverseDir();
+    s32 chkPnt(cXyz);
+    BOOL setNextPnt();
+    u16 getIdx();
+    void setIdx(u16);
+    Vec getPntPos(u16);
     void dbgDraw(f32);
-    /* 801503FC */ virtual ~daBaseNpc_path_c() {}
+    virtual ~daBaseNpc_path_c() {}
 
     static const int MAXNUMCONTROLPNT_e = 64;
 
@@ -65,14 +65,14 @@ public:
 
 class daBaseNpc_lookat_c {
 public:
-    /* 8014DB40 */ void limitter(s16, s16*, s16, s16);
-    /* 8014DBB4 */ void calc(fopAc_ac_c*, f32 (*)[4], s16);
-    /* 8014E634 */ void setMaxJntLmt(csXyz, int);
-    /* 8014E658 */ void setMinJntLmt(csXyz, int);
-    /* 8014E67C */ void setJntPos(cXyz, int);
-    /* 8014E6A0 */ int setAttnPos(cXyz*);
-    /* 8014E6AC */ csXyz getRot(int);
-    /* 801502EC */ virtual ~daBaseNpc_lookat_c() {}
+    void limitter(s16, s16*, s16, s16);
+    void calc(fopAc_ac_c*, f32 (*)[4], s16);
+    void setMaxJntLmt(csXyz, int);
+    void setMinJntLmt(csXyz, int);
+    void setJntPos(cXyz, int);
+    int setAttnPos(cXyz*);
+    csXyz getRot(int);
+    virtual ~daBaseNpc_lookat_c() {}
 
     /* 0x04 */ csXyz mMaxJntLmt[4];
     /* 0x1C */ csXyz mMinJntLmt[4];
@@ -85,33 +85,33 @@ public:
 
 class daBaseNpc_c : public fopAc_ac_c {
 public:
-    /* 8014E6C8 */ daBaseNpc_c();
-    /* 8014EE44 */ J3DAnmTransform* getTrnsfrmKeyAnmP(char*, int);
-    /* 8014EE80 */ int setMcaMorfAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
-    /* 8014EEE4 */ int setBckAnm(J3DAnmTransform*, f32, int, int, int, bool);
-    /* 8014EF28 */ J3DAnmTransform* getTexPtrnAnmP(char*, int);
-    /* 8014EF64 */ int setBtpAnm(J3DAnmTexPattern*, J3DModelData*, f32, int);
-    /* 8014EFF4 */ void orderEvent(int, char*);
-    /* 8014F0A0 */ void setEnvTevColor();
-    /* 8014F0FC */ void setRoomNo();
-    /* 8014F148 */ int checkEndAnm(f32);
-    /* 8014F1C8 */ int checkEndAnm(J3DFrameCtrl*);
+    daBaseNpc_c();
+    J3DAnmTransform* getTrnsfrmKeyAnmP(char*, int);
+    int setMcaMorfAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
+    int setBckAnm(J3DAnmTransform*, f32, int, int, int, bool);
+    J3DAnmTransform* getTexPtrnAnmP(char*, int);
+    int setBtpAnm(J3DAnmTexPattern*, J3DModelData*, f32, int);
+    void orderEvent(int, char*);
+    void setEnvTevColor();
+    void setRoomNo();
+    int checkEndAnm(f32);
+    int checkEndAnm(J3DFrameCtrl*);
 
-    /* 8014E89C */ virtual ~daBaseNpc_c();
-    /* 8014EAD0 */ virtual int execute();
-    /* 8014EC50 */ virtual int draw(f32);
-    /* 8014EE3C */ virtual const char* getResName();
-    /* 8014EFA4 */ virtual void attnSttsOn(int, int);
-    /* 8014EFF0 */ virtual void setParam();
-    /* 8014F09C */ virtual void mainProc();
-    /* 8014F140 */ virtual BOOL btkCtrl();
-    /* 8014F228 */ virtual void allAnmPlay();
-    /* 8014F38C */ virtual void adjustShapeAngle();
-    /* 8014F390 */ virtual void setMtx(int);
-    /* 8014F4A0 */ virtual void setCollisions();
-    /* 8014F4A4 */ virtual void setAttnPos();
-    /* 8014F4A8 */ virtual void drawOtherMdls();
-    /* 8014F4AC */ virtual bool dbgDraw();
+    virtual ~daBaseNpc_c();
+    virtual int execute();
+    virtual int draw(f32);
+    virtual const char* getResName();
+    virtual void attnSttsOn(int, int);
+    virtual void setParam();
+    virtual void mainProc();
+    virtual BOOL btkCtrl();
+    virtual void allAnmPlay();
+    virtual void adjustShapeAngle();
+    virtual void setMtx(int);
+    virtual void setCollisions();
+    virtual void setAttnPos();
+    virtual void drawOtherMdls();
+    virtual bool dbgDraw();
 
     static dCcD_SrcGObjInf const mCcDObj;
     static dCcD_SrcCyl mCcDCyl;
@@ -155,25 +155,25 @@ STATIC_ASSERT(sizeof(daBaseNpc_c) == 0xA14);
 
 class daBaseNpc_moveBgActor_c : public daBaseNpc_c {
 public:
-    /* 8014F4B4 */ daBaseNpc_moveBgActor_c();
-    /* 8014F518 */ int MoveBGCreateHeap();
-    /* 8014F60C */ int MoveBGCreate(char const*, int, MoveBGActor_SetFunc, u32);
-    /* 8014F6FC */ int MoveBGDelete();
-    /* 8014F770 */ int MoveBGExecute();
+    daBaseNpc_moveBgActor_c();
+    int MoveBGCreateHeap();
+    int MoveBGCreate(char const*, int, MoveBGActor_SetFunc, u32);
+    int MoveBGDelete();
+    int MoveBGExecute();
     int MoveBGDraw() {
         int ret = Draw();
         return ret;
     }
 
-    /* 80155FB0 */ virtual ~daBaseNpc_moveBgActor_c() {}
-    /* 801503BC */ virtual int CreateHeap() { return 1; }
-    /* 801503C4 */ virtual int Create() { return 1; }
-    /* 801503D4 */ virtual int Execute(Mtx**) { return 1; }
-    /* 801503DC */ virtual int Draw() { return 1; }
-    /* 801503CC */ virtual int Delete() { return 1; }
-    /* 801503E4 */ virtual int IsDelete() { return 1; }
-    /* 801503EC */ virtual int ToFore() { return 1; }
-    /* 801503F4 */ virtual int ToBack() { return 1; }
+    virtual ~daBaseNpc_moveBgActor_c() {}
+    virtual int CreateHeap() { return 1; }
+    virtual int Create() { return 1; }
+    virtual int Execute(Mtx**) { return 1; }
+    virtual int Draw() { return 1; }
+    virtual int Delete() { return 1; }
+    virtual int IsDelete() { return 1; }
+    virtual int ToFore() { return 1; }
+    virtual int ToBack() { return 1; }
 
     static const char* m_name;
     static int m_dzb_id;

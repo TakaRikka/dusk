@@ -97,18 +97,18 @@ namespace daObjMovebox {
             STATE_40_e = 0x40,
         };
 
-        /* 8047DAEC */ Bgc_c();
-        /* 8047DBF0 */ void gnd_pos(daObjMovebox::Act_c const*, daObjMovebox::BgcSrc_c const*, int,
+        Bgc_c();
+        void gnd_pos(daObjMovebox::Act_c const*, daObjMovebox::BgcSrc_c const*, int,
                                     f32);
-        /* 8047DD88 */ void wrt_pos(cXyz const&);
-        /* 8047DE58 */ void wall_pos(daObjMovebox::Act_c const*, daObjMovebox::BgcSrc_c const*, int,
+        void wrt_pos(cXyz const&);
+        void wall_pos(daObjMovebox::Act_c const*, daObjMovebox::BgcSrc_c const*, int,
                                      s16, f32);
-        /* 8047E134 */ void proc_vertical(daObjMovebox::Act_c*);
-        /* 8047E2D4 */ bool chk_wall_pre(daObjMovebox::Act_c const*, daObjMovebox::BgcSrc_c const*,
+        void proc_vertical(daObjMovebox::Act_c*);
+        bool chk_wall_pre(daObjMovebox::Act_c const*, daObjMovebox::BgcSrc_c const*,
                                          int, s16);
-        /* 8047E350 */ bool chk_wall_touch(daObjMovebox::Act_c const*,
+        bool chk_wall_touch(daObjMovebox::Act_c const*,
                                            daObjMovebox::BgcSrc_c const*, s16);
-        /* 8047E5A0 */ bool chk_wall_touch2(daObjMovebox::Act_c const*,
+        bool chk_wall_touch2(daObjMovebox::Act_c const*,
                                             daObjMovebox::BgcSrc_c const*, int, s16);
 
         static const daObjMovebox::BgcSrc_c M_lin5[];
@@ -136,38 +136,38 @@ namespace daObjMovebox {
             PRM_1C_e = 0x1C,
         };
 
-        /* 8047E628 */ int prm_get_swSave1() const;
-        /* 8047E650 */ void prmZ_init();
-        /* 8047E680 */ void prmX_init();
-        /* 8047E6B0 */ const daObjMovebox::Hio_c::Attr_c& attr() const;
-        /* 8047E6C8 */ void set_mtx();
-        /* 8047E7B0 */ void init_mtx();
-        /* 8047E7F4 */ void path_init();
-        /* 8047E92C */ void path_save();
-        /* 8047EBEC */ static void RideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-        /* 8047ED10 */ static fopAc_ac_c* PPCallBack(fopAc_ac_c*, fopAc_ac_c*, s16, dBgW_Base::PushPullLabel);
-        /* 8047F11C */ void afl_sway();
-        /* 8047F38C */ int check_to_walk();
-        /* 8047F50C */ void clr_moment_cnt();
-        /* 8047F530 */ bool chk_appear() const;
-        /* 8047F5CC */ void eff_smoke_slip_start();
-        /* 8047F634 */ void mode_wait_init();
-        /* 8047F6A8 */ void mode_wait();
-        /* 8047F8D4 */ void mode_walk_init();
-        /* 8047F8F4 */ void mode_walk();
-        /* 8047FCBC */ void mode_afl_init();
-        /* 8047FCE4 */ void mode_afl();
-        /* 8047FF5C */ void sound_slip();
-        /* 80480020 */ void sound_limit();
-        /* 804800E4 */ void sound_land();
-        /* 804801A8 */ void vib_land();
-        /* 804801FC */ void eff_land_smoke();
+        int prm_get_swSave1() const;
+        void prmZ_init();
+        void prmX_init();
+        const daObjMovebox::Hio_c::Attr_c& attr() const;
+        void set_mtx();
+        void init_mtx();
+        void path_init();
+        void path_save();
+        static void RideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+        static fopAc_ac_c* PPCallBack(fopAc_ac_c*, fopAc_ac_c*, s16, dBgW_Base::PushPullLabel);
+        void afl_sway();
+        int check_to_walk();
+        void clr_moment_cnt();
+        bool chk_appear() const;
+        void eff_smoke_slip_start();
+        void mode_wait_init();
+        void mode_wait();
+        void mode_walk_init();
+        void mode_walk();
+        void mode_afl_init();
+        void mode_afl();
+        void sound_slip();
+        void sound_limit();
+        void sound_land();
+        void vib_land();
+        void eff_land_smoke();
 
-        /* 8047EB48 */ virtual int CreateHeap();
-        /* 8047EE0C */ virtual int Create();
-        /* 8048027C */ virtual int Execute(Mtx**);
-        /* 80480728 */ virtual int Draw();
-        /* 804808FC */ virtual int Delete();
+        virtual int CreateHeap();
+        virtual int Create();
+        virtual int Execute(Mtx**);
+        virtual int Draw();
+        virtual int Delete();
 
         inline void mode_proc_call();
         inline int Mthd_Create();

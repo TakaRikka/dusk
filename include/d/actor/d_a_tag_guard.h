@@ -6,8 +6,8 @@
 
 class daTagGuard_c : public fopAc_ac_c {
 public:
-    /* 80D597F8 */ int getAppearPoint(Vec*);
-    /* 80D5985C */ void createGuard(u32);
+    int getAppearPoint(Vec*);
+    void createGuard(u32);
 
     u8 getPathID() { return fopAcM_GetParam(this) >> 8; }
     inline int create();

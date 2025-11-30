@@ -14,16 +14,16 @@
  */
 class daObjMirrorTable_c : public fopAc_ac_c {
 public:
-    /* 80C99938 */ inline int createHeap();
-    /* 80C99F7C */ inline bool isSwitch();
+    inline int createHeap();
+    inline bool isSwitch();
     inline void checkOnPanel();
-    /* 80C9A298 */ int draw();
+    int draw();
     inline void setBaseMtx();
-    /* 80C9A4D0 */ int execute();
+    int execute();
     inline ~daObjMirrorTable_c();
-    /* 80C9AB30 */ cPhs__Step create();
-    /* 80C9ABFC */ void create_init();
-    /* 80C9AFD0 */ void initBaseMtx();
+    cPhs__Step create();
+    void create_init();
+    void initBaseMtx();
 
     u8 getSwitchNo() { return (fopAcM_GetParam(this) >> 8) & 0xff; }
     void setAnmSpeed(f32 speed) { mpTableUpBckAnm->setPlaySpeed(speed); }

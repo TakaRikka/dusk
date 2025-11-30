@@ -10,7 +10,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 
-/* 806031AC-806031EC 0000EC 0040+00 1/1 0/0 0/0 .text            __ct__12daB_GO_HIO_cFv */
 daB_GO_HIO_c::daB_GO_HIO_c() {
     field_0x4 = -1;
     mSmallSize = 1.5f;
@@ -19,14 +18,10 @@ daB_GO_HIO_c::daB_GO_HIO_c() {
     mDisplayModelImage = false;
 }
 
-/* ############################################################################################## */
-/* 80604140-80604144 000008 0004+00 2/2 0/0 0/0 .bss             None */
 static bool data_80604140;
 
-/* 80604150-80604168 000018 0018+00 6/6 0/0 0/0 .bss             l_HIO */
 static daB_GO_HIO_c l_HIO;
 
-/* 806031EC-80603270 00012C 0084+00 1/0 0/0 0/0 .text            daB_GO_Draw__FP10b_go_class */
 static int daB_GO_Draw(b_go_class* i_this) {
     if (l_HIO.mDisplayModelImage) {
         J3DModel* model = i_this->mpMorf->getModel();
@@ -39,17 +34,14 @@ static int daB_GO_Draw(b_go_class* i_this) {
     return 1;
 }
 
-/* 80603270-8060331C 0001B0 00AC+00 3/3 0/0 0/0 .text            anm_init__FP10b_go_classifUcf */
 static void anm_init(b_go_class* i_this, int i_anmID, f32 i_morf, u8 i_attribute, f32 i_speed) {
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("B_go", i_anmID);
     i_this->mpMorf->setAnm(bck, i_attribute, i_morf, i_speed, 0.0f, -1.0f);
     i_this->mAnmID = i_anmID;
 }
 
-/* 8060331C-80603320 00025C 0004+00 1/1 0/0 0/0 .text            damage_check__FP10b_go_class */
 static void damage_check(b_go_class* i_this) {}
 
-/* 80603320-806033F0 000260 00D0+00 1/1 0/0 0/0 .text            h_wait__FP10b_go_class */
 static void h_wait(b_go_class* i_this) {
     i_this->speedF = 0.0f;
 
@@ -68,7 +60,6 @@ static void h_wait(b_go_class* i_this) {
     }
 }
 
-/* 806033F0-80603508 000330 0118+00 1/1 0/0 0/0 .text            h_walk__FP10b_go_class */
 static void h_walk(b_go_class* i_this) {
     f32 speed = 0.0f;
 
@@ -94,7 +85,6 @@ static void h_walk(b_go_class* i_this) {
     cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->mAngleToPlayer, 1, 0x200);
 }
 
-/* 80603508-80603638 000448 0130+00 1/1 0/0 0/0 .text            h_attack__FP10b_go_class */
 static void h_attack(b_go_class* i_this) {
     int anm_frame = i_this->mpMorf->getFrame();
     cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
@@ -122,7 +112,6 @@ static void h_attack(b_go_class* i_this) {
     }
 }
 
-/* 80603638-806037E8 000578 01B0+00 1/1 0/0 0/0 .text            action__FP10b_go_class */
 static void action(b_go_class* i_this) {
     cXyz speed_offset;
     cXyz move_speed;
@@ -172,7 +161,6 @@ static void action(b_go_class* i_this) {
     i_this->mAcch.CrrPos(dComIfG_Bgsp());
 }
 
-/* 806037E8-806038EC 000728 0104+00 2/1 0/0 0/0 .text            daB_GO_Execute__FP10b_go_class */
 static int daB_GO_Execute(b_go_class* i_this) {
     i_this->unk_0x668++;
 
@@ -200,12 +188,10 @@ static int daB_GO_Execute(b_go_class* i_this) {
     return 1;
 }
 
-/* 806038EC-806038F4 00082C 0008+00 1/0 0/0 0/0 .text            daB_GO_IsDelete__FP10b_go_class */
 static int daB_GO_IsDelete(b_go_class* i_this) {
     return 1;
 }
 
-/* 806038F4-8060395C 000834 0068+00 1/0 0/0 0/0 .text            daB_GO_Delete__FP10b_go_class */
 static int daB_GO_Delete(b_go_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "B_go");
 
@@ -220,7 +206,6 @@ static int daB_GO_Delete(b_go_class* i_this) {
     return 1;
 }
 
-/* 8060395C-80603A54 00089C 00F8+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     b_go_class* a_this = (b_go_class*)i_this;
 
@@ -236,7 +221,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80603A54-80603CA0 000994 024C+00 1/0 0/0 0/0 .text            daB_GO_Create__FP10fopAc_ac_c */
 static int daB_GO_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, b_go_class);
     b_go_class* a_this = (b_go_class*)i_this;
@@ -298,17 +282,14 @@ static int daB_GO_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-/* 80603CA0-80603E54 000BE0 01B4+00 1/1 0/0 0/0 .text            __ct__10b_go_classFv */
 b_go_class::b_go_class() {}
 
-/* 80604094-806040B4 -00001 0020+00 1/0 0/0 0/0 .data            l_daB_GO_Method */
 static actor_method_class l_daB_GO_Method = {
     (process_method_func)daB_GO_Create,  (process_method_func)daB_GO_Delete,
     (process_method_func)daB_GO_Execute, (process_method_func)daB_GO_IsDelete,
     (process_method_func)daB_GO_Draw,
 };
 
-/* 806040B4-806040E4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_B_GO */
 extern actor_process_profile_definition g_profile_B_GO = {
     fpcLy_CURRENT_e,
     7,

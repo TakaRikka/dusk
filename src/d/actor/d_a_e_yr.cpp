@@ -48,7 +48,7 @@ public:
         mDetectAngleGround = 20000;
     }
 
-    /* 808282CC */ virtual ~e_yrHIO_c() {}
+    virtual ~e_yrHIO_c() {}
 
 #if DEBUG
     void genMessage(JORMContext*);
@@ -140,7 +140,6 @@ void e_yrHIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 8082220C-808225C0 0000EC 03B4+00 1/1 0/0 0/0 .text            nodeCallBack__FP8J3DJointi */
 static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DJoint* joint = i_joint;
@@ -212,7 +211,6 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 808225C0-80822790 0004A0 01D0+00 1/1 0/0 0/0 .text            yr_disappear__FP10e_yr_class */
 static void yr_disappear(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -242,7 +240,6 @@ static void yr_disappear(e_yr_class* i_this) {
     }
 }
 
-/* 80822790-80822848 000670 00B8+00 8/8 0/0 0/0 .text            anm_init__FP10e_yr_classifUcf */
 static void anm_init(e_yr_class* i_this, int param_1, f32 param_2, u8 param_3, f32 param_4) {
     if (i_this->field_0x66b < 3) {
         i_this->mpMorfSO->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_Yr", param_1), param_3,
@@ -251,7 +248,6 @@ static void anm_init(e_yr_class* i_this, int param_1, f32 param_2, u8 param_3, f
     }
 }
 
-/* 80822848-80822874 000728 002C+00 3/3 0/0 0/0 .text            kuti_open__FP10e_yr_classsUl */
 static void kuti_open(e_yr_class* i_this, s16 param_1, u32 param_2) {
     if (i_this->field_0xe8a == 0) {
         i_this->field_0xe8a = param_1;
@@ -260,7 +256,6 @@ static void kuti_open(e_yr_class* i_this, s16 param_1, u32 param_2) {
     }
 }
 
-/* 80822874-80822954 000754 00E0+00 1/1 0/0 0/0 .text e_yr_player_bg_check__FP10e_yr_class */
 static int e_yr_player_bg_check(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -284,10 +279,8 @@ static int e_yr_player_bg_check(e_yr_class* i_this) {
     }
 }
 
-/* 80828DBC-80828E34 000014 0078+00 10/10 0/0 0/0 .bss             l_e_yrHIO */
 static e_yrHIO_c l_e_yrHIO;
 
-/* 80822954-80822AFC 000834 01A8+00 4/4 0/0 0/0 .text e_yr_player_view_check__FP10e_yr_class */
 static int e_yr_player_view_check(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -332,7 +325,6 @@ static int e_yr_player_view_check(e_yr_class* i_this) {
     return 0;
 }
 
-/* 80822AFC-80822D4C 0009DC 0250+00 1/1 0/0 0/0 .text            path_check__FP10e_yr_class */
 static void path_check(e_yr_class* i_this) {
     static u8 check_index[255];
 
@@ -405,7 +397,6 @@ static void path_check(e_yr_class* i_this) {
     }
 }
 
-/* 80822D4C-80822DB8 000C2C 006C+00 2/2 0/0 0/0 .text            pl_horse_check__FP10e_yr_class */
 static int pl_horse_check(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
     if (daPy_getPlayerActorClass()->checkHorseRide() && dComIfGp_getHorseActor()->speedF > 20.0f) {
@@ -415,8 +406,6 @@ static int pl_horse_check(e_yr_class* i_this) {
     }
 }
 
-/* 80822DB8-80822E48 000C98 0090+00 1/1 0/0 0/0 .text            daE_Yr_shadowDraw__FP10e_yr_class
- */
 static void daE_Yr_shadowDraw(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -430,7 +419,6 @@ static void daE_Yr_shadowDraw(e_yr_class* i_this) {
                                    0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
 }
 
-/* 80822E48-80822F0C 000D28 00C4+00 1/0 0/0 0/0 .text            daE_Yr_Draw__FP10e_yr_class */
 static int daE_Yr_Draw(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -454,7 +442,6 @@ static int daE_Yr_Draw(e_yr_class* i_this) {
     return 1;
 }
 
-/* 80822F0C-80823148 000DEC 023C+00 6/6 0/0 0/0 .text            e_yr_pos_move__FP10e_yr_class */
 static void e_yr_pos_move(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -500,7 +487,6 @@ static void e_yr_pos_move(e_yr_class* i_this) {
     }
 }
 
-/* 80823148-80823284 001028 013C+00 1/1 0/0 0/0 .text e_yr_ground_pos_move__FP10e_yr_class */
 static void e_yr_ground_pos_move(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -530,7 +516,6 @@ static void e_yr_ground_pos_move(e_yr_class* i_this) {
     }
 }
 
-/* 80823284-808239F8 001164 0774+00 2/1 0/0 0/0 .text            e_yr_path_move__FP10e_yr_class */
 static void e_yr_path_move(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -787,7 +772,6 @@ static void e_yr_path_move(e_yr_class* i_this) {
     }
 }
 
-/* 808239F8-80823D3C 0018D8 0344+00 1/1 0/0 0/0 .text            e_yr_auto_move__FP10e_yr_class */
 static void e_yr_auto_move(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
     fopAc_ac_c* playerActor = dComIfGp_getPlayer(0);
@@ -870,7 +854,6 @@ static void e_yr_auto_move(e_yr_class* i_this) {
     e_yr_pos_move(i_this);
 }
 
-/* 80823D3C-80824BBC 001C1C 0E80+00 2/1 0/0 0/0 .text            e_yr_atack_move__FP10e_yr_class */
 static void e_yr_atack_move(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -1184,7 +1167,6 @@ static void e_yr_atack_move(e_yr_class* i_this) {
     }
 }
 
-/* 80824BBC-80825484 002A9C 08C8+00 1/1 0/0 0/0 .text            e_yr_horse_move__FP10e_yr_class */
 static void e_yr_horse_move(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
     fopAc_ac_c* playerActor = dComIfGp_getPlayer(0);
@@ -1361,7 +1343,6 @@ static void e_yr_horse_move(e_yr_class* i_this) {
     }
 }
 
-/* 80825484-80825ADC 003364 0658+00 2/1 0/0 0/0 .text            e_yr_wait_move__FP10e_yr_class */
 static void e_yr_wait_move(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -1561,8 +1542,6 @@ static void e_yr_wait_move(e_yr_class* i_this) {
     }
 }
 
-/* 80825ADC-808260E8 0039BC 060C+00 2/1 0/0 0/0 .text            e_yr_su_wait_move__FP10e_yr_class
- */
 static void e_yr_su_wait_move(e_yr_class* i_this) {
     s32 old_0x6e0;
 
@@ -1758,7 +1737,6 @@ f32 dummy() {
     return -50.0f;
 }
 
-/* 808260E8-808264F4 003FC8 040C+00 1/1 0/0 0/0 .text            e_yr_damage__FP10e_yr_class */
 static s8 e_yr_damage(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
     fopEn_enemy_c* enemy = (fopEn_enemy_c*)actor;
@@ -1870,7 +1848,6 @@ static s8 e_yr_damage(e_yr_class* i_this) {
     return unkFlag1;
 }
 
-/* 808264F4-808267C0 0043D4 02CC+00 1/1 0/0 0/0 .text            damage_check__FP10e_yr_class */
 static void damage_check(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -1952,7 +1929,6 @@ static void damage_check(e_yr_class* i_this) {
     }
 }
 
-/* 808267C0-80826AFC 0046A0 033C+00 1/1 0/0 0/0 .text            ground_angle_set__FP10e_yr_class */
 static void ground_angle_set(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -2050,7 +2026,6 @@ static void ground_angle_set(e_yr_class* i_this) {
     cLib_addCalcAngleS2(&i_this->field_0x6f8.z, unkShort1, 1, 0x400);
 }
 
-/* 80826AFC-8082789C 0049DC 0DA0+00 2/1 0/0 0/0 .text            daE_Yr_Execute__FP10e_yr_class */
 static int daE_Yr_Execute(e_yr_class* i_this) {
     static s32 wing_j[4] = {12, 13, 17, 18};
 
@@ -2399,12 +2374,10 @@ static int daE_Yr_Execute(e_yr_class* i_this) {
     return 1;
 }
 
-/* 8082789C-808278A4 00577C 0008+00 1/0 0/0 0/0 .text            daE_Yr_IsDelete__FP10e_yr_class */
 static int daE_Yr_IsDelete(e_yr_class* i_this) {
     return 1;
 }
 
-/* 808278A4-808278F4 005784 0050+00 1/0 0/0 0/0 .text            daE_Yr_Delete__FP10e_yr_class */
 static int daE_Yr_Delete(e_yr_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->mEnemy;
 
@@ -2420,7 +2393,6 @@ static int daE_Yr_Delete(e_yr_class* i_this) {
     return 1;
 }
 
-/* 808278F4-80827A30 0057D4 013C+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     e_yr_class* yr = (e_yr_class*)i_this;
 
@@ -2446,7 +2418,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-/* 80827A30-80827D64 005910 0334+00 1/0 0/0 0/0 .text            daE_Yr_Create__FP10fopAc_ac_c */
 static int daE_Yr_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph at_sph_src = {
         {
@@ -2590,8 +2561,6 @@ static int daE_Yr_Create(fopAc_ac_c* i_this) {
     return loadResult;
 }
 
-/* ############################################################################################## */
-/* 80828CD0-80828CF0 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_Yr_Method */
 static actor_method_class l_daE_Yr_Method = {
     (process_method_func)daE_Yr_Create,
     (process_method_func)daE_Yr_Delete,
@@ -2600,7 +2569,6 @@ static actor_method_class l_daE_Yr_Method = {
     (process_method_func)daE_Yr_Draw,
 };
 
-/* 80828CF0-80828D20 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_YR */
 extern actor_process_profile_definition g_profile_E_YR = {
     (u32)fpcLy_CURRENT_e,   // mLayerID
     7,                      // mListID
@@ -2618,6 +2586,5 @@ extern actor_process_profile_definition g_profile_E_YR = {
     fopAc_CULLBOX_CUSTOM_e, // cullType
 };
 
-/* 80827D64-80827F80 005C44 021C+00 1/1 0/0 0/0 .text            __ct__10e_yr_classFv */
 e_yr_class::e_yr_class() {
 }

@@ -15,18 +15,18 @@ namespace nObjMHasu {
  */
 class daObjMHasu_c : public dBgS_MoveBgActor, public request_of_phase_process_class {
 public:
-        /* 80C182DC */ daObjMHasu_c();
-        /* 80C18340 */ int create1st();
-        /* 80C183D0 */ void setMtx();
-        /* 80C18440 */ int CreateHeap();
-        /* 80C184B0 */ int Create();
-        /* 80C185A4 */ int Execute(Mtx**);
-        /* 80C18600 */ int Draw();
-        /* 80C186A4 */ int Delete();
-        /* 80C186E0 */ void upDownHasu();
-        /* 80C18888 */ void updateCount(u8);
-        /* 80C188A0 */ void setHasuCount(f32);
-        /* 80C189E0 */ virtual ~daObjMHasu_c() {};
+        daObjMHasu_c();
+        int create1st();
+        void setMtx();
+        int CreateHeap();
+        int Create();
+        int Execute(Mtx**);
+        int Draw();
+        int Delete();
+        void upDownHasu();
+        void updateCount(u8);
+        void setHasuCount(f32);
+        virtual ~daObjMHasu_c() {};
 
         void setRideFlag(bool i_ride) { mRideFlag = i_ride; }
 private:

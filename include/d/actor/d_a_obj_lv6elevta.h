@@ -19,15 +19,15 @@ class daObjLv6ElevtA_c : public dBgS_MoveBgActor,
 public:
     daObjLv6ElevtA_c() : dEvLib_callback_c(this) {}
     virtual ~daObjLv6ElevtA_c() {};
-    /* 80C82D38 */ int create1st();
-    /* 80C82DC8 */ void setMtx();
-    /* 80C82E38 */ int CreateHeap();
-    /* 80C82EA8 */ int Create();
-    /* 80C83028 */ bool eventStart();
-    /* 80C830BC */ void moveAngle(void*);
-    /* 80C8321C */ int Execute(Mtx**);
-    /* 80C83538 */ int Draw();
-    /* 80C835DC */ int Delete();
+    int create1st();
+    void setMtx();
+    int CreateHeap();
+    int Create();
+    bool eventStart();
+    void moveAngle(void*);
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
 
     int getSwNo() { return fopAcM_GetParamBit(this, 0, 8); };
     int getSw2No() { return fopAcM_GetParamBit(this, 8, 8); };

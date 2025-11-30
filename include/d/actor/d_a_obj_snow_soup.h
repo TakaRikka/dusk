@@ -14,19 +14,19 @@
  */
 class daObjSnowSoup_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
-    /* 80CDF878 */ daObjSnowSoup_c();
-    /* 80CDF910 */ virtual ~daObjSnowSoup_c();
-    /* 80CDF990 */ int createHeap();
-    /* 80CDFA3C */ cPhs__Step create();
-    /* 80CDFB70 */ int Delete();
-    /* 80CDFBC4 */ int draw();
-    /* 80CDFC40 */ int execute();
-    /* 80CDFE14 */ void init();
-    /* 80CDFEA4 */ void setModelMtx();
-    /* 80CDFF14 */ void createSmkEmtCommon();
-    /* 80CDFFF8 */ void deleteSmkEmtCommon();
-    /* 80CE003C */ void createSmkEmtChange(int);
-    /* 80CE0134 */ void deleteSmkEmtChange(int);
+    daObjSnowSoup_c();
+    virtual ~daObjSnowSoup_c();
+    int createHeap();
+    cPhs__Step create();
+    int Delete();
+    int draw();
+    int execute();
+    void init();
+    void setModelMtx();
+    void createSmkEmtCommon();
+    void deleteSmkEmtCommon();
+    void createSmkEmtChange(int);
+    void deleteSmkEmtChange(int);
 
 private:
     /* 0x574 */ cXyz mFirewoodPos;

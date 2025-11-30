@@ -12,7 +12,6 @@
 #include "d/d_tresure.h"
 #include "f_op/f_op_camera_mng.h"
 
-/* 80CDB7F4-80CDB838 000000 0044+00 6/6 0/0 0/0 .rodata          l_cyl_src */
 const static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xffffffff, 0x11}, 0x59}}, // mObj
@@ -27,7 +26,6 @@ const static dCcD_SrcCyl l_cyl_src = {
     } // mCyl
 };
 
-/* 80CD97B8-80CD9B40 000078 0388+00 1/1 0/0 0/0 .text            searchParentSub__FPvPv */
 static void* searchParentSub(void* i_actor, void* i_data) {
     fopAc_ac_c* a_actor = (fopAc_ac_c*)i_actor;
     fopAc_ac_c* a_other = (fopAc_ac_c*)i_data;
@@ -56,8 +54,6 @@ static void* searchParentSub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80CD9B40-80CD9E3C 000400 02FC+00 1/1 0/0 0/0 .text            Reflect__FP4cXyzRC13cBgS_PolyInfof
- */
 static f32 Reflect(cXyz* i_vec, cBgS_PolyInfo const& i_polyinfo, f32 i_scale) {
     cM3dGPla plane;
 
@@ -73,8 +69,6 @@ static f32 Reflect(cXyz* i_vec, cBgS_PolyInfo const& i_polyinfo, f32 i_scale) {
     return 0.0f;
 }
 
-/* 80CD9E84-80CD9EE0 000744 005C+00 1/1 0/0 0/0 .text
- * keyGetTgCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void keyGetTgCallBack(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
                              fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf) {
     daKey_c* a_tgActor = (daKey_c*)i_tgActor;
@@ -86,8 +80,6 @@ static void keyGetTgCallBack(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
     }
 }
 
-/* 80CD9EE0-80CD9F2C 0007A0 004C+00 1/1 0/0 0/0 .text
- * keyGetCoCallBack__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void keyGetCoCallBack(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
                              fopAc_ac_c* i_coActorB, dCcD_GObjInf* i_coObjInfB) {
     daKey_c* a_coActorA = (daKey_c*)i_coActorA;
@@ -99,13 +91,11 @@ static void keyGetCoCallBack(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
     }
 }
 
-/* 80CD9F2C-80CD9F68 0007EC 003C+00 1/1 0/0 0/0 .text            initBaseMtx__7daKey_cFv */
 void daKey_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80CD9F68-80CD9FDC 000828 0074+00 2/2 0/0 0/0 .text            setBaseMtx__7daKey_cFv */
 void daKey_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::transM(0.0f, 5.0f, 0.0f);
@@ -114,7 +104,6 @@ void daKey_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80CD9FDC-80CDA15C 00089C 0180+00 1/1 0/0 0/0 .text            Create__7daKey_cFv */
 int daKey_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -144,12 +133,10 @@ int daKey_c::Create() {
     return 1;
 }
 
-/* 80CDA15C-80CDA164 000A1C 0008+00 1/0 0/0 0/0 .text            __CreateHeap__7daKey_cFv */
 int daKey_c::__CreateHeap() {
     return 1;
 }
 
-/* 80CDA164-80CDA404 000A24 02A0+00 1/1 0/0 0/0 .text            create__7daKey_cFv */
 int daKey_c::create() {
     fopAcM_ct(this, daKey_c);
 
@@ -194,7 +181,6 @@ int daKey_c::create() {
     return phase_state;
 }
 
-/* 80CDA680-80CDA7E8 000F40 0168+00 1/1 0/0 0/0 .text            bg_check__7daKey_cFv */
 void daKey_c::bg_check() {
     f32 temp_f31 = 0.7f;
 
@@ -221,7 +207,6 @@ void daKey_c::bg_check() {
     }
 }
 
-/* 80CDA7E8-80CDA81C 0010A8 0034+00 1/1 0/0 0/0 .text            actionInitInit__7daKey_cFv */
 int daKey_c::actionInitInit() {
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     mCcCyl.OffTgSPrmBit(1);
@@ -230,7 +215,6 @@ int daKey_c::actionInitInit() {
     return 1;
 }
 
-/* 80CDA81C-80CDA8C8 0010DC 00AC+00 1/0 0/0 0/0 .text            actionInit__7daKey_cFv */
 int daKey_c::actionInit() {
     void* pparent = fpcM_Search(searchParentSub, this);
     if (pparent != NULL) {
@@ -250,7 +234,6 @@ int daKey_c::actionInit() {
     return 1;
 }
 
-/* 80CDA8C8-80CDA8FC 001188 0034+00 1/1 0/0 0/0 .text            actionParentWaitInit__7daKey_cFv */
 int daKey_c::actionParentWaitInit() {
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     mCcCyl.OffTgSPrmBit(1);
@@ -259,7 +242,6 @@ int daKey_c::actionParentWaitInit() {
     return 1;
 }
 
-/* 80CDA8FC-80CDA9AC 0011BC 00B0+00 1/0 0/0 0/0 .text            actionParentWait__7daKey_cFv */
 int daKey_c::actionParentWait() {
     fopAc_ac_c* pparent = (fopAc_ac_c*)fopAcM_SearchByID(parentActorID);
     if (pparent == NULL) {
@@ -275,7 +257,6 @@ int daKey_c::actionParentWait() {
     return 1;
 }
 
-/* 80CDA9AC-80CDAA28 00126C 007C+00 3/3 0/0 1/1 .text            actionWaitInit__7daKey_cFv */
 int daKey_c::actionWaitInit() {
     mCcCyl.OnTgSPrmBit(1);
     mCcCyl.OffCoSPrmBit(1);
@@ -288,7 +269,6 @@ int daKey_c::actionWaitInit() {
     return 1;
 }
 
-/* 80CDAA28-80CDAB74 0012E8 014C+00 1/0 0/0 0/0 .text            actionWait__7daKey_cFv */
 int daKey_c::actionWait() {
     fopAcM_posMoveF(this, mCcStts.GetCCMoveP());
     mAcch.CrrPos(dComIfG_Bgsp());
@@ -327,8 +307,6 @@ int daKey_c::actionWait() {
     return 1;
 }
 
-/* 80CDAB74-80CDAC18 001434 00A4+00 2/2 0/0 0/0 .text            initActionOrderGetDemo__7daKey_cFv
- */
 int daKey_c::initActionOrderGetDemo() {
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     mCcCyl.OffTgSPrmBit(1);
@@ -346,7 +324,6 @@ int daKey_c::initActionOrderGetDemo() {
     return 1;
 }
 
-/* 80CDAC18-80CDAC94 0014D8 007C+00 1/0 0/0 0/0 .text            actionOrderGetDemo__7daKey_cFv */
 int daKey_c::actionOrderGetDemo() {
     if (eventInfo.checkCommandItem()) {
         setStatus(STATUS_GET_DEMO_e);
@@ -361,7 +338,6 @@ int daKey_c::actionOrderGetDemo() {
     return 1;
 }
 
-/* 80CDAC94-80CDAD28 001554 0094+00 1/0 0/0 0/0 .text            actionGetDemo__7daKey_cFv */
 int daKey_c::actionGetDemo() {
     if (dComIfGp_evmng_endCheck("DEFAULT_GETITEM")) {
         dComIfGs_onTbox(getSaveBitNo());
@@ -373,7 +349,6 @@ int daKey_c::actionGetDemo() {
     return 1;
 }
 
-/* 80CDAD28-80CDADD4 0015E8 00AC+00 1/1 0/0 0/0 .text            actionInitSwOnWait__7daKey_cFv */
 int daKey_c::actionInitSwOnWait() {
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     mCcCyl.OffTgSPrmBit(1);
@@ -394,7 +369,6 @@ int daKey_c::actionInitSwOnWait() {
     return 1;
 }
 
-/* 80CDADD4-80CDAE54 001694 0080+00 1/0 0/0 0/0 .text            actionSwOnWait__7daKey_cFv */
 int daKey_c::actionSwOnWait() {
     if (fopAcM_isSwitch(this, getSwNo()) && cLib_calcTimer<u8>(&mSwOnTimer) == 0) {
         show();
@@ -405,7 +379,6 @@ int daKey_c::actionSwOnWait() {
     return 1;
 }
 
-/* 80CDAE54-80CDAF40 001714 00EC+00 1/1 0/0 0/0 .text actionInitBoomerangCarry__7daKey_cFv */
 int daKey_c::actionInitBoomerangCarry() {
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     mCcCyl.OnTgSPrmBit(1);
@@ -422,7 +395,6 @@ int daKey_c::actionInitBoomerangCarry() {
     return 1;
 }
 
-/* 80CDAF40-80CDAFB4 001800 0074+00 1/0 0/0 0/0 .text            actionBoomerangCarry__7daKey_cFv */
 int daKey_c::actionBoomerangCarry() {
     fopAc_ac_c* pboomerang = fopAcM_SearchByName(PROC_BOOMERANG);
     if (pboomerang != NULL) {
@@ -438,7 +410,6 @@ int daKey_c::actionBoomerangCarry() {
     return 1;
 }
 
-/* 80CDAFB4-80CDB0D8 001874 0124+00 2/2 0/0 0/0 .text            effectSet__7daKey_cFv */
 void daKey_c::effectSet() {
     if (mEffect[0].getEmitter() == NULL) {
         cXyz eff_scale[] = {  // needs to be an array to match...
@@ -452,13 +423,11 @@ void daKey_c::effectSet() {
     }
 }
 
-/* 80CDB0D8-80CDB128 001998 0050+00 2/2 0/0 0/0 .text            effectStop__7daKey_cFv */
 void daKey_c::effectStop() {
     mEffect[0].remove();
     mEffect[1].remove();
 }
 
-/* 80CDB128-80CDB2E0 0019E8 01B8+00 1/1 0/0 0/0 .text            effectCtrl__7daKey_cFv */
 void daKey_c::effectCtrl() {
     cXyz eff_scale;
     f32 cam_dist = current.pos.abs(dComIfGp_getCamera(0)->lookat.eye);
@@ -491,15 +460,12 @@ void daKey_c::effectCtrl() {
     }
 }
 
-/* 80CDB2E0-80CDB36C 001BA0 008C+00 5/5 0/0 0/0 .text            seStartTwinkle_private__7daKey_cFUl
- */
 void daKey_c::seStartTwinkle_private(u32 i_soundId) {
     if (field_0x984 == 0) {
         fopAcM_seStartLevel(this, i_soundId, 0);
     }
 }
 
-/* 80CDB36C-80CDB3D8 001C2C 006C+00 1/1 0/0 0/0 .text            actionInitE_GB__7daKey_cFv */
 int daKey_c::actionInitE_GB() {
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     mCcCyl.OffTgSPrmBit(1);
@@ -511,13 +477,11 @@ int daKey_c::actionInitE_GB() {
     return 1;
 }
 
-/* 80CDB3D8-80CDB404 001C98 002C+00 1/0 0/0 0/0 .text            actionE_GB__7daKey_cFv */
 int daKey_c::actionE_GB() {
     seStartTwinkle_private(Z2SE_OBJ_KEY_TWINKLE_HIDDEN);
     return 1;
 }
 
-/* 80CDB404-80CDB5D4 001CC4 01D0+00 2/2 0/0 0/0 .text            execute__7daKey_cFv */
 int daKey_c::execute() {
     static int (daKey_c::*l_demoFunc[])() = {
         &daKey_c::actionInit,
@@ -549,7 +513,6 @@ int daKey_c::execute() {
     return 1;
 }
 
-/* 80CDB5D4-80CDB628 001E94 0054+00 1/1 0/0 0/0 .text            draw__7daKey_cFv */
 int daKey_c::draw() {
     if (!chkDraw()) {
         return 1;
@@ -559,36 +522,30 @@ int daKey_c::draw() {
     return 1;
 }
 
-/* 80CDB628-80CDB674 001EE8 004C+00 1/1 0/0 0/0 .text            _delete__7daKey_cFv */
 int daKey_c::_delete() {
     effectStop();
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
     return 1;
 }
 
-/* 80CDB674-80CDB694 001F34 0020+00 1/0 0/0 0/0 .text            daKey_Draw__FP7daKey_c */
 static int daKey_Draw(daKey_c* i_this) {
     return i_this->draw();
 }
 
-/* 80CDB694-80CDB6B4 001F54 0020+00 1/0 0/0 0/0 .text            daKey_Execute__FP7daKey_c */
 static int daKey_Execute(daKey_c* i_this) {
     return i_this->execute();
 }
 
-/* 80CDB6B4-80CDB6D4 001F74 0020+00 1/0 0/0 0/0 .text            daKey_Delete__FP7daKey_c */
 static int daKey_Delete(daKey_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
-/* 80CDB6D4-80CDB6F4 001F94 0020+00 1/0 0/0 0/0 .text            daKey_Create__FP10fopAc_ac_c */
 static int daKey_Create(fopAc_ac_c* i_this) {
     fpc_ProcID id = fopAcM_GetID(i_this);
     return ((daKey_c*)i_this)->create();
 }
 
-/* 80CDB988-80CDB9A8 -00001 0020+00 1/0 0/0 0/0 .data            l_daKey_Method */
 static actor_method_class l_daKey_Method = {
     (process_method_func)daKey_Create,
     (process_method_func)daKey_Delete,
@@ -597,7 +554,6 @@ static actor_method_class l_daKey_Method = {
     (process_method_func)daKey_Draw,
 };
 
-/* 80CDB9A8-80CDB9D8 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_SmallKey */
 extern actor_process_profile_definition g_profile_Obj_SmallKey = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID

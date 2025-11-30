@@ -31,40 +31,40 @@ public:
     /* 0x2808 */ cCcD_DivideArea mDivideArea;
     /* 0x2848 vtable */
 
-    /* 80264A6C */ cCcS();
-    /* 80264A94 */ void Ct();
-    /* 80264B60 */ void Dt();
-    /* 80264B80 */ WeightType GetWt(u8) const;
-    /* 80264BA8 */ void Set(cCcD_Obj*);
-    /* 80264C5C */ void ClrCoHitInf();
-    /* 80264CF0 */ void ClrTgHitInf();
-    /* 80264D90 */ void ClrAtHitInf();
-    /* 80264E2C */ bool ChkNoHitAtTg(cCcD_Obj*, cCcD_Obj*);
-    /* 80264F40 */ void ChkAtTg();
-    /* 8026515C */ bool ChkNoHitCo(cCcD_Obj*, cCcD_Obj*);
-    /* 80265230 */ void ChkCo();
-    /* 802653A0 vt[2] */ virtual void CalcTgPlusDmg(cCcD_Obj*, cCcD_Obj*, cCcD_Stts*, cCcD_Stts*);
-    /* 802653C8 */ void SetAtTgCommonHitInf(cCcD_Obj*, cCcD_Obj*, cXyz*);
-    /* 802655E4 */ void SetCoCommonHitInf(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, f32);
+    cCcS();
+    void Ct();
+    void Dt();
+    WeightType GetWt(u8) const;
+    void Set(cCcD_Obj*);
+    void ClrCoHitInf();
+    void ClrTgHitInf();
+    void ClrAtHitInf();
+    bool ChkNoHitAtTg(cCcD_Obj*, cCcD_Obj*);
+    void ChkAtTg();
+    bool ChkNoHitCo(cCcD_Obj*, cCcD_Obj*);
+    void ChkCo();
+    virtual void CalcTgPlusDmg(cCcD_Obj*, cCcD_Obj*, cCcD_Stts*, cCcD_Stts*);
+    void SetAtTgCommonHitInf(cCcD_Obj*, cCcD_Obj*, cXyz*);
+    void SetCoCommonHitInf(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, f32);
     /* 80265750 vt[3]*/ virtual void SetPosCorrect(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, f32);
-    /* 80265BB4 */ void CalcArea();
-    /* 80265CCC */ void Move();
-    /* 80265D30 */ void DrawClear();
-    /* 80265DF8 vt[4] */ virtual void SetCoGObjInf(bool, bool, cCcD_GObjInf*, cCcD_GObjInf*,
+    void CalcArea();
+    void Move();
+    void DrawClear();
+    virtual void SetCoGObjInf(bool, bool, cCcD_GObjInf*, cCcD_GObjInf*,
                                                    cCcD_Stts*, cCcD_Stts*, cCcD_GStts*,
                                                    cCcD_GStts*);
-    /* 80265DFC vt[5] */ virtual void SetAtTgGObjInf(bool, bool, cCcD_Obj*, cCcD_Obj*,
+    virtual void SetAtTgGObjInf(bool, bool, cCcD_Obj*, cCcD_Obj*,
                                                      cCcD_GObjInf*, cCcD_GObjInf*, cCcD_Stts*,
                                                      cCcD_Stts*, cCcD_GStts*, cCcD_GStts*, cXyz*);
-    /* 80265E00 vt[6] */ virtual bool ChkNoHitGAtTg(cCcD_GObjInf const*, cCcD_GObjInf const*,
+    virtual bool ChkNoHitGAtTg(cCcD_GObjInf const*, cCcD_GObjInf const*,
                                                     cCcD_GStts*, cCcD_GStts*);
-    /* 80265E08 vt[7] */ virtual bool ChkAtTgHitAfterCross(bool, bool, cCcD_GObjInf const*,
+    virtual bool ChkAtTgHitAfterCross(bool, bool, cCcD_GObjInf const*,
                                                            cCcD_GObjInf const*, cCcD_Stts*,
                                                            cCcD_Stts*, cCcD_GStts*, cCcD_GStts*);
-    /* 80265E10 vt[8] */ virtual bool ChkNoHitGCo(cCcD_Obj*, cCcD_Obj*);
-    /* 80030BDC vt[9] */ virtual ~cCcS() {}
-    /* 80265E18 vt[10] */ virtual void MoveAfterCheck();
-    /* 80265DF4 vt[11] */ virtual void SetCoGCorrectProc(cCcD_Obj*, cCcD_Obj*);
+    virtual bool ChkNoHitGCo(cCcD_Obj*, cCcD_Obj*);
+    virtual ~cCcS() {}
+    virtual void MoveAfterCheck();
+    virtual void SetCoGCorrectProc(cCcD_Obj*, cCcD_Obj*);
 };  // Size = 0x284C
 
 STATIC_ASSERT(sizeof(cCcS) == 0x284C);

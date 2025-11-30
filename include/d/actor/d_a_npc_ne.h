@@ -77,7 +77,7 @@ public:
         LOOK_NONE = 3,
     };
 
-    /* 80A92118 */ npc_ne_class();
+    npc_ne_class();
 
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ u8 mBehavior;
@@ -196,8 +196,8 @@ STATIC_ASSERT(sizeof(npc_ne_class) == 0xCC4);
 
 class daNpc_Ne_HIO_c {
 public:
-    /* 80A88CCC */ daNpc_Ne_HIO_c();
-    /* 80A92374 */ virtual ~daNpc_Ne_HIO_c() {}
+    daNpc_Ne_HIO_c();
+    virtual ~daNpc_Ne_HIO_c() {}
 
     /* 0x04 */ s8 field_0x04;
     /* 0x08 */ f32 mScale;

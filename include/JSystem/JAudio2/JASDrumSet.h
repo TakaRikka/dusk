@@ -11,8 +11,8 @@ struct JKRHeap;
  */
 struct JASDrumSet : public JASInst {
     struct TPerc {
-        /* 802984C4 */ TPerc();
-        /* 802984E4 */ void setRelease(u32);
+        TPerc();
+        void setRelease(u32);
 
         void setVolume(f32 volume) { mVolume = volume; }
         void setPitch(f32 pitch) { mPitch = pitch; }
@@ -27,12 +27,12 @@ struct JASDrumSet : public JASInst {
         /* 0x14 */ f32 field_0x14;
     };
 
-    /* 802982EC */ JASDrumSet();
-    /* 80298314 */ virtual ~JASDrumSet();
-    /* 80298370 */ void newPercArray(u8, JKRHeap*);
-    /* 802983CC */ virtual bool getParam(int, int, JASInstParam*) const;
-    /* 802984B4 */ void setPerc(int, JASDrumSet::TPerc*);
-    /* 802984EC */ virtual u32 getType() const;
+    JASDrumSet();
+    virtual ~JASDrumSet();
+    void newPercArray(u8, JKRHeap*);
+    virtual bool getParam(int, int, JASInstParam*) const;
+    void setPerc(int, JASDrumSet::TPerc*);
+    virtual u32 getType() const;
     
     /* 0x4 */ TPerc** field_0x4;
     /* 0x8 */ u8 field_0x8;

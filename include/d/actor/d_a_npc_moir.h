@@ -21,7 +21,7 @@ struct daNpcMoiR_HIOParam {
 
 class daNpcMoiR_Param_c {
 public:
-    /* 80A83240 */ virtual ~daNpcMoiR_Param_c() {}
+    virtual ~daNpcMoiR_Param_c() {}
 
     static daNpcMoiR_HIOParam const m;
 };
@@ -143,43 +143,43 @@ public:
         /* 0x2 */ MODE_2,
     };
 
-    /* 80A7C16C */ daNpcMoiR_c();
-    /* 80A7C380 */ ~daNpcMoiR_c();
-    /* 80A7C580 */ cPhs__Step Create();
-    /* 80A7C978 */ int CreateHeap();
-    /* 80A7CE48 */ int Delete();
-    /* 80A7CE7C */ int Execute();
-    /* 80A7CEA0 */ int Draw();
-    /* 80A7CEFC */ int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 80A7D0CC */ static int createHeapCallBack(fopAc_ac_c*);
-    /* 80A7D0EC */ static int ctrlJointCallBack(J3DJoint*, int);
-    /* 80A7D138 */ inline bool setExpressionAnm(int, bool);
-    /* 80A7D394 */ inline bool setExpressionBtp(int);
-    /* 80A7D474 */ void setMotionAnm(int, f32);
-    /* 80A7D5C4 */ void reset();
-    /* 80A7D73C */ inline void setWaitAction();
-    /* 80A7D934 */ bool wait_type0(void*);
-    /* 80A7DD94 */ void setMotion(int, f32, int);
-    /* 80A7DDD8 */ void setExpression(int, f32);
-    /* 80A7DE04 */ bool wait_type1(void*);
-    /* 80A7E668 */ bool wait_type2(void*);
-    /* 80A7E8C0 */ bool talk(void*);
-    /* 80A7EFBC */ BOOL multiTalk(void*);
-    /* 80A7F40C */ bool fight(void*);
-    /* 80A7F9AC */ bool demo(void*);
-    /* 80A7FEE8 */ bool leave(void*);
-    /* 80A802C4 */ inline BOOL EvCut_Introduction(int);
-    /* 80A803A0 */ inline BOOL EvCut_Appear(int);
-    /* 80A8081C */ inline BOOL EvCut_Appear2(int);
-    /* 80A810FC */ inline void setParam();
-    /* 80A81274 */ inline BOOL main();
-    /* 80A815D4 */ inline void checkHeadGear();
-    /* 80A818B4 */ inline void playMotion();
-    /* 80A8210C */ inline BOOL ctrlBtk();
-    /* 80A821E0 */ inline void setAttnPos();
-    /* 80A825A0 */ inline void lookat();
-    /* 80A82878 */ inline void drawOtherMdls();
-    /* 80A82900 */ inline BOOL drawDbgInfo();
+    daNpcMoiR_c();
+    ~daNpcMoiR_c();
+    cPhs__Step Create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    int Draw();
+    int ctrlJoint(J3DJoint*, J3DModel*);
+    static int createHeapCallBack(fopAc_ac_c*);
+    static int ctrlJointCallBack(J3DJoint*, int);
+    inline bool setExpressionAnm(int, bool);
+    inline bool setExpressionBtp(int);
+    void setMotionAnm(int, f32);
+    void reset();
+    inline void setWaitAction();
+    bool wait_type0(void*);
+    void setMotion(int, f32, int);
+    void setExpression(int, f32);
+    bool wait_type1(void*);
+    bool wait_type2(void*);
+    bool talk(void*);
+    BOOL multiTalk(void*);
+    bool fight(void*);
+    bool demo(void*);
+    bool leave(void*);
+    inline BOOL EvCut_Introduction(int);
+    inline BOOL EvCut_Appear(int);
+    inline BOOL EvCut_Appear2(int);
+    inline void setParam();
+    inline BOOL main();
+    inline void checkHeadGear();
+    inline void playMotion();
+    inline BOOL ctrlBtk();
+    inline void setAttnPos();
+    inline void lookat();
+    inline void drawOtherMdls();
+    inline BOOL drawDbgInfo();
 
     MtxP getHandRMtx() { return mAnm_p->getModel()->getAnmMtx(17); }
 

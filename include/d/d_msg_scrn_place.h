@@ -5,15 +5,15 @@
 
 class dMsgScrnPlace_c : public dMsgScrnBase_c {
 public:
-    /* 802463CC */ dMsgScrnPlace_c();
+    dMsgScrnPlace_c();
 
-    /* 802467C4 */ virtual ~dMsgScrnPlace_c();
-    /* 80246924 */ virtual void exec();
-    /* 80246A44 */ virtual void drawSelf();
-    /* 80246A9C */ virtual void fukiAlpha(f32);
-    /* 80246B28 */ virtual void fukiScale(f32);
-    /* 80246B2C */ virtual void fukiTrans(f32, f32);
-    /* 80246B30 */ virtual void fontAlpha(f32);
+    virtual ~dMsgScrnPlace_c();
+    virtual void exec();
+    virtual void drawSelf();
+    virtual void fukiAlpha(f32);
+    virtual void fukiScale(f32);
+    virtual void fukiTrans(f32, f32);
+    virtual void fontAlpha(f32);
 
     /* 0xC4 */ CPaneMgr* mpBaseParent;
     /* 0xC8 */ CPaneMgr* mpFontParent;

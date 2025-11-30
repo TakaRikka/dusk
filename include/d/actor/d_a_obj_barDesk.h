@@ -16,18 +16,18 @@
  */
 class daBarDesk_c : public dBgS_MoveBgActor {
 public:
-    /* 80BA9200 */ void setBaseMtx();
-    /* 80BA9288 */ int CreateHeap();
-    /* 80BA92F4 */ cPhs__Step create();
-    /* 80BA95A4 */ int Execute(Mtx**);
-    /* 80BA95F4 */ void windowProc();
-    /* 80BA9680 */ void init_modeWait();
-    /* 80BA968C */ void modeWait();
-    /* 80BA973C */ void init_modeBreak();
-    /* 80BA9824 */ void modeBreak();
-    /* 80BA9844 */ void setBreakEffect();
-    /* 80BA98E8 */ int Draw();
-    /* 80BA998C */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    int Execute(Mtx**);
+    void windowProc();
+    void init_modeWait();
+    void modeWait();
+    void init_modeBreak();
+    void modeBreak();
+    void setBreakEffect();
+    int Draw();
+    int Delete();
 
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpModel;
@@ -44,8 +44,8 @@ STATIC_ASSERT(sizeof(daBarDesk_c) == 0x730);
 
 class daBarDesk_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80BA918C */ daBarDesk_HIO_c();
-    /* 80BA9A90 */ ~daBarDesk_HIO_c() {}
+    daBarDesk_HIO_c();
+    ~daBarDesk_HIO_c() {}
 
     void genMessage(JORMContext*);
 

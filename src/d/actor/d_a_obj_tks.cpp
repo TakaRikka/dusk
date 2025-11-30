@@ -10,7 +10,6 @@
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 
-/* 80D12910-80D12940 000020 0030+00 1/2 0/0 0/0 .data            l_bckGetParamList */
 static daNpc_GetParam1 l_bckGetParamList[] = {
     {-1, 2},
     {7, 0},
@@ -20,17 +19,14 @@ static daNpc_GetParam1 l_bckGetParamList[] = {
     {9, 0},
 };
 
-/* 80D12940-80D12948 000050 0008+00 1/1 0/0 0/0 .data            l_btpGetParamList */
 static daNpc_GetParam1 l_btpGetParamList[] = {
     {20, 2},
 };
 
-/* 80D12948-80D12950 000058 0008+00 1/2 0/0 0/0 .data            l_btkGetParamList */
 static daNpc_GetParam1 l_btkGetParamList[] = {
     {17, 2},
 };
 
-/* 80D12950-80D12954 000060 0004+00 0/0 0/0 0/0 .data            l_evtNames */
 // unused
 static u8 l_evtNames[4] = {
     0x00,
@@ -39,16 +35,12 @@ static u8 l_evtNames[4] = {
     0x00,
 };
 
-/* 80D12954-80D12958 -00001 0004+00 6/9 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "TKS2";
 
-/* 80D12958-80D1295C -00001 0004+00 0/2 0/0 0/0 .data            l_myName */
 static char* l_myName = "ObjTks";
 
-/* 80D0F28C-80D0F3F0 0000EC 0164+00 1/1 0/0 0/0 .text            __ct__10daObjTks_cFv */
 daObjTks_c::daObjTks_c() {}
 
-/* 80D0F480-80D0F640 0002E0 01C0+00 1/0 0/0 0/0 .text            __dt__10daObjTks_cFv */
 daObjTks_c::~daObjTks_c() {
     dComIfG_resDelete(&mPhase, l_arcName);
 
@@ -61,7 +53,6 @@ daObjTks_c::~daObjTks_c() {
     }
 }
 
-/* 80D1273C-80D127BC 000000 0080+00 11/11 0/0 0/0 .rodata          m__16daObjTks_Param_c */
 const daObjTks_HIOParam daObjTks_Param_c::m = {
     90.0f,
     -3.0f,
@@ -103,7 +94,6 @@ const daObjTks_HIOParam daObjTks_Param_c::m = {
     0.8f,
 };
 
-/* 80D0F640-80D0F904 0004A0 02C4+00 1/1 0/0 0/0 .text            Create__10daObjTks_cFv */
 int daObjTks_c::Create() {
     fopAcM_ct(this, daObjTks_c);
 
@@ -156,7 +146,6 @@ int daObjTks_c::Create() {
     return phase_state;
 }
 
-/* 80D0F904-80D0FB78 000764 0274+00 1/1 0/0 0/0 .text            CreateHeap__10daObjTks_cFv */
 int daObjTks_c::CreateHeap() {
     J3DModelData* mdlData_p = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 0xE);
     JUT_ASSERT(314, NULL != mdlData_p);
@@ -192,14 +181,12 @@ int daObjTks_c::CreateHeap() {
     return 1;
 }
 
-/* 80D0FD34-80D0FD68 000B94 0034+00 1/1 0/0 0/0 .text            Delete__10daObjTks_cFv */
 int daObjTks_c::Delete() {
     fpc_ProcID id = fopAcM_GetID(this);
     this->~daObjTks_c();
     return 1;
 }
 
-/* 80D0FD68-80D0FE60 000BC8 00F8+00 2/2 0/0 0/0 .text            Execute__10daObjTks_cFv */
 int daObjTks_c::Execute() {
     if (field_0xde0 == 0) {
         return 1;
@@ -216,7 +203,6 @@ int daObjTks_c::Execute() {
     return 1;
 }
 
-/* 80D0FE60-80D0FED0 000CC0 0070+00 1/1 0/0 0/0 .text            Draw__10daObjTks_cFv */
 int daObjTks_c::Draw() {
     if (field_0xde0 == 0) {
         return 1;
@@ -227,8 +213,6 @@ int daObjTks_c::Draw() {
     return 1;
 }
 
-/* 80D0FED0-80D10094 000D30 01C4+00 1/1 0/0 0/0 .text ctrlJoint__10daObjTks_cFP8J3DJointP8J3DModel
- */
 int daObjTks_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     int jnt_no = i_joint->getJntNo();
 
@@ -266,14 +250,10 @@ int daObjTks_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-/* 80D10094-80D100B4 000EF4 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__10daObjTks_cFP10fopAc_ac_c               */
 int daObjTks_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return ((daObjTks_c*)i_this)->CreateHeap();
 }
 
-/* 80D100B4-80D10100 000F14 004C+00 1/1 0/0 0/0 .text ctrlJointCallBack__10daObjTks_cFP8J3DJointi
- */
 int daObjTks_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == NULL) {
         J3DModel* mdl_p = j3dSys.getModel();
@@ -287,7 +267,6 @@ int daObjTks_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 80D10100-80D10184 000F60 0084+00 1/0 0/0 0/0 .text            setMtx__10daObjTks_cFv */
 void daObjTks_c::setMtx() {
     J3DModel* mdl_p = mAnm_p->getModel();
 
@@ -305,8 +284,6 @@ void daObjTks_c::setMtx() {
     mAnm_p->modelCalc();
 }
 
-/* 80D10184-80D102D0 000FE4 014C+00 1/0 0/0 0/0 .text            setExpressionAnm__10daObjTks_cFib
- */
 bool daObjTks_c::setExpressionAnm(int i_anm, bool i_modify) {
     mAnmFlags &= ~ANM_EXPRESSION_FLAGS;
 
@@ -345,7 +322,6 @@ bool daObjTks_c::setExpressionAnm(int i_anm, bool i_modify) {
     }    
 }
 
-/* 80D102D0-80D103A4 001130 00D4+00 1/0 0/0 0/0 .text            setExpressionBtp__10daObjTks_cFi */
 bool daObjTks_c::setExpressionBtp(int i_anm) {
     J3DAnmTexPattern* btp_p = getTexPtrnAnmP(l_arcName, l_btpGetParamList[i_anm].fileIdx);
     int mode = l_btpGetParamList[i_anm].arcIdx;
@@ -368,7 +344,6 @@ bool daObjTks_c::setExpressionBtp(int i_anm) {
     }
 }
 
-/* 80D103A4-80D103E8 001204 0044+00 1/0 0/0 0/0 .text            setMotion__10daObjTks_cFifi */
 void daObjTks_c::setMotion(int i_motion, f32 i_morf, BOOL i_restart) {
     s16 motion = i_motion;
     if (i_restart || mMotion != motion) {
@@ -381,7 +356,6 @@ void daObjTks_c::setMotion(int i_motion, f32 i_morf, BOOL i_restart) {
     }
 }
 
-/* 80D103E8-80D10578 001248 0190+00 1/1 0/0 0/0 .text            reset__10daObjTks_cFv */
 void daObjTks_c::reset() {
     initialize();
     mpMatAnm->initialize();
@@ -413,8 +387,6 @@ void daObjTks_c::reset() {
     mMotionMorfOverride = 0.0f;
 }
 
-/* 80D10578-80D10618 0013D8 00A0+00 1/1 0/0 0/0 .text
- * setAction__10daObjTks_cFM10daObjTks_cFPCvPv_v                */
 int daObjTks_c::setAction(void (daObjTks_c::*i_action)()) {
     field_0xdde = 3;
 
@@ -432,7 +404,6 @@ int daObjTks_c::setAction(void (daObjTks_c::*i_action)()) {
     return 1;
 }
 
-/* 80D10618-80D106C8 001478 00B0+00 3/0 0/0 0/0 .text            wait__10daObjTks_cFv */
 void daObjTks_c::wait() {
     switch (field_0xdde) {
     case 0:
@@ -451,7 +422,6 @@ void daObjTks_c::wait() {
     }
 }
 
-/* 80D106C8-80D106F4 001528 002C+00 1/0 0/0 0/0 .text            setExpression__10daObjTks_cFif */
 void daObjTks_c::setExpression(int i_expression, f32 i_morf) {
     if (i_expression >= 0 && i_expression < 2) {
         mExpression = i_expression;
@@ -495,7 +465,6 @@ void daObjTks_c::playMotion() {
     }
 }
 
-/* 80D11CB4-80D11E94 002B14 01E0+00 1/1 0/0 0/0 .text            lookat__10daObjTks_cFv */
 void daObjTks_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model_p = mAnm_p->getModel();
@@ -548,7 +517,6 @@ void daObjTks_c::lookat() {
     mLookat.calc(this, model_p->getBaseTRMtx(), sp24, var_r28, temp_r26, 0);
 }
 
-/* 80D106F4-80D10A80 001554 038C+00 1/0 0/0 0/0 .text            talk__10daObjTks_cFv */
 void daObjTks_c::talk() {
     switch (field_0xdde) {
     case 0:
@@ -601,7 +569,6 @@ void daObjTks_c::talk() {
     }
 }
 
-/* 80D10A80-80D11104 0018E0 0684+00 1/0 0/0 0/0 .text            demo__10daObjTks_cFv */
 void daObjTks_c::demo() {
     switch (field_0xdde) {
     case 0:
@@ -711,7 +678,6 @@ void daObjTks_c::demo() {
     }
 }
 
-/* 80D11104-80D11228 001F64 0124+00 1/0 0/0 0/0 .text            setMotionAnm__10daObjTks_cFif */
 void daObjTks_c::setMotionAnm(int i_anm, f32 i_morf) {
     if (i_anm < 2 || i_anm >= 6) {
         return;
@@ -732,7 +698,6 @@ void daObjTks_c::setMotionAnm(int i_anm, f32 i_morf) {
     }
 }
 
-/* 80D11228-80D115B8 002088 0390+00 3/0 0/0 0/0 .text            warp__10daObjTks_cFv */
 void daObjTks_c::warp() {
     switch (field_0xdde) {
     case 0:
@@ -800,32 +765,26 @@ void daObjTks_c::warp() {
     }
 }
 
-/* 80D115B8-80D115D8 002418 0020+00 1/0 0/0 0/0 .text            daObjTks_Create__FPv */
 static int daObjTks_Create(void* i_this) {
     return ((daObjTks_c*)i_this)->Create();
 }
 
-/* 80D115D8-80D115F8 002438 0020+00 1/0 0/0 0/0 .text            daObjTks_Delete__FPv */
 static int daObjTks_Delete(void* i_this) {
     return ((daObjTks_c*)i_this)->Delete();
 }
 
-/* 80D115F8-80D11618 002458 0020+00 1/0 0/0 0/0 .text            daObjTks_Execute__FPv */
 static int daObjTks_Execute(void* i_this) {
     return ((daObjTks_c*)i_this)->Execute();
 }
 
-/* 80D11618-80D11638 002478 0020+00 1/0 0/0 0/0 .text            daObjTks_Draw__FPv */
 static int daObjTks_Draw(void* i_this) {
     return ((daObjTks_c*)i_this)->Draw();
 }
 
-/* 80D11638-80D11640 002498 0008+00 1/0 0/0 0/0 .text            daObjTks_IsDelete__FPv */
 static int daObjTks_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80D11670-80D116C8 0024D0 0058+00 1/0 0/0 0/0 .text            setParam__10daObjTks_cFv */
 void daObjTks_c::setParam() {
     calcSpringF(&field_0xdcc, 0.7f, &field_0xdd0);
     scale.setall(field_0xdcc);
@@ -836,7 +795,6 @@ void daObjTks_c::setParam() {
     #endif
 }
 
-/* 80D116C8-80D118E8 002528 0220+00 1/0 0/0 0/0 .text            main__10daObjTks_cFv */
 BOOL daObjTks_c::main() {
     if (mAction != NULL) {
         (this->*mAction)();
@@ -847,7 +805,6 @@ BOOL daObjTks_c::main() {
     return 1;
 }
 
-/* 80D118E8-80D119BC 002748 00D4+00 1/0 0/0 0/0 .text            ctrlBtk__10daObjTks_cFv */
 BOOL daObjTks_c::ctrlBtk() {
     if (mpMatAnm != NULL) {
         J3DAnmTextureSRTKey* btk_p = getTexSRTKeyAnmP(l_arcName, l_btkGetParamList[0].fileIdx);
@@ -864,7 +821,6 @@ BOOL daObjTks_c::ctrlBtk() {
     return FALSE;
 }
 
-/* 80D119BC-80D11CB4 00281C 02F8+00 1/0 0/0 0/0 .text            setAttnPos__10daObjTks_cFv */
 void daObjTks_c::setAttnPos() {
     if (mLookMode == LOOK_RESET) {
         for (int i = 0; i < 3; i++) {
@@ -910,18 +866,14 @@ void daObjTks_c::setAttnPos() {
     }
 }
 
-/* 80D11E94-80D11E9C 002CF4 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__10daObjTks_cFv */
 BOOL daObjTks_c::drawDbgInfo() {
     return false;
 }
 
-/* 80D11E9C-80D11EA0 002CFC 0004+00 1/0 0/0 0/0 .text            drawOtherMdls__10daObjTks_cFv */
 void daObjTks_c::drawOtherMdls() {}
 
-/* 80D12B04-80D12B08 000014 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static daObjTks_Param_c l_HIO;
 
-/* 80D129BC-80D129DC -00001 0020+00 1/0 0/0 0/0 .data            daObjTks_MethodTable */
 static actor_method_class daObjTks_MethodTable = {
     (process_method_func)daObjTks_Create,
     (process_method_func)daObjTks_Delete,
@@ -930,7 +882,6 @@ static actor_method_class daObjTks_MethodTable = {
     (process_method_func)daObjTks_Draw,
 };
 
-/* 80D129DC-80D12A0C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_TKS */
 extern actor_process_profile_definition g_profile_OBJ_TKS = {
     fpcLy_CURRENT_e,            // mLayerID
     7,                          // mListID

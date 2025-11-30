@@ -19,7 +19,7 @@
  */
 class b_gos_class : public fopEn_enemy_c {
 public:
-    /* 80605024 */ b_gos_class();
+    b_gos_class();
 
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpMorf;
@@ -56,8 +56,8 @@ STATIC_ASSERT(sizeof(b_gos_class) == 0xCCC);
 class daB_GOS_HIO_c {
 public:
 public:
-    /* 8060426C */ daB_GOS_HIO_c();
-    /* 80605320 */ virtual ~daB_GOS_HIO_c() {}
+    daB_GOS_HIO_c();
+    virtual ~daB_GOS_HIO_c() {}
 
     /* 0x4 */ s8 field_0x4;
     /* 0x8 */ f32 mSize;

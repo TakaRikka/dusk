@@ -14,21 +14,21 @@ private:
     /* 0x0576 */ u8 mBottleItemType;
 
 public:
-    /* 80D55FD8 */ s32 create();
-    /* 80D5605C */ s32 Delete();
-    /* 80D56064 */ s32 Execute();
-    /* 80D560D0 */ s32 Draw();
-    /* 80D560D8 */ void setTypeFromParam();
-    /* 80D56100 */ void restart();
-    /* 80D56170 */ void initialize();
-    /* 80D561E8 */ int checkProcess(ProcessFunc);
-    /* 80D56214 */ int setProcess(ProcessFunc);
-    /* 80D56300 */ void setAttnPos();
-    /* 80D56334 */ s32 chkEvent();
-    /* 80D56384 */ s32 orderEvent();
-    /* 80D56418 */ void makeSoup();
-    /* 80D564A0 */ int wait(void*);
-    /* 80D565F0 */ virtual ~daTag_BottleItem_c();
+    s32 create();
+    s32 Delete();
+    s32 Execute();
+    s32 Draw();
+    void setTypeFromParam();
+    void restart();
+    void initialize();
+    int checkProcess(ProcessFunc);
+    int setProcess(ProcessFunc);
+    void setAttnPos();
+    s32 chkEvent();
+    s32 orderEvent();
+    void makeSoup();
+    int wait(void*);
+    virtual ~daTag_BottleItem_c();
 };
 
 STATIC_ASSERT(sizeof(daTag_BottleItem_c) == 0x57C);

@@ -14,7 +14,6 @@ enum {
     kTypeShape      = 0x12,
 };
 
-/* 80325A18-80325A9C 320358 0084+00 0/0 1/1 0/0 .text            __ct__12J3DJointTreeFv */
 J3DJointTree::J3DJointTree()
     : mHierarchy(NULL), mFlags(0), mModelDataType(0), mRootNode(NULL), mBasicMtxCalc(NULL),
       mJointNodePointer(NULL), mJointNum(0), mWEvlpMtxNum(0), mWEvlpMixMtxNum(0),
@@ -72,7 +71,6 @@ void J3DJointTree::makeHierarchy(J3DJoint* pJoint, const J3DModelHierarchy** pHi
     }
 }
 
-/* 80325C00-80325CAC 320540 00AC+00 0/0 2/2 0/0 .text findImportantMtxIndex__12J3DJointTreeFv */
 void J3DJointTree::findImportantMtxIndex() {
     s32 wEvlpMtxNum = getWEvlpMtxNum();
     u32 tableIdx = 0;
@@ -102,8 +100,6 @@ void J3DJointTree::findImportantMtxIndex() {
     }
 }
 
-/* 80325CAC-80325D1C 3205EC 0070+00 1/0 0/0 0/0 .text
- * calc__12J3DJointTreeFP12J3DMtxBufferRC3VecRA3_A4_Cf          */
 void J3DJointTree::calc(J3DMtxBuffer* pMtxBuffer, Vec const& scale, f32 const (&mtx)[3][4]) {
     J3D_ASSERT_NULLPTR(217, pMtxBuffer != NULL);
     getBasicMtxCalc()->init(scale, mtx);
@@ -117,8 +113,6 @@ void J3DJointTree::calc(J3DMtxBuffer* pMtxBuffer, Vec const& scale, f32 const (&
     root->recursiveCalc();
 }
 
-/* 80325D1C-80325D24 32065C 0008+00 1/1 0/0 0/0 .text setMtxBuffer__10J3DMtxCalcFP12J3DMtxBuffer
- */
 void J3DMtxCalc::setMtxBuffer(J3DMtxBuffer* mtxBuffer) {
     J3DMtxCalc::mMtxBuffer = mtxBuffer;
 }

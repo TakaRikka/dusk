@@ -1,11 +1,9 @@
 #include "TRK_MINNOW_DOLPHIN/utils/common/CircleBuffer.h"
 
-/* 80372900-80372908 36D240 0008+00 0/0 2/2 0/0 .text            CBGetBytesAvailableForRead */
 u32 CBGetBytesAvailableForRead(CircleBuffer* cb) {
     return cb->mBytesToRead;
 }
 
-/* 803728B0-80372900 36D1F0 0050+00 0/0 2/2 0/0 .text            CircleBufferInitialize */
 void CircleBufferInitialize(CircleBuffer* cb, u8* buf, s32 size) {
     cb->start_ptr = buf;
     cb->size = size;
@@ -16,7 +14,6 @@ void CircleBufferInitialize(CircleBuffer* cb, u8* buf, s32 size) {
     MWInitializeCriticalSection(&cb->mCriticalSection);
 }
 
-/* 803727A8-803728B0 36D0E8 0108+00 0/0 4/4 0/0 .text            CircleBufferWriteBytes */
 int CircleBufferWriteBytes(CircleBuffer* cb, u8* buf, u32 size) {
     int availSize;
 
@@ -44,7 +41,6 @@ int CircleBufferWriteBytes(CircleBuffer* cb, u8* buf, u32 size) {
     return 0;
 }
 
-/* 803726A0-803727A8 36CFE0 0108+00 0/0 2/2 0/0 .text            CircleBufferReadBytes */
 int CircleBufferReadBytes(CircleBuffer* cb, u8* buf, u32 size) {
     int availSize;
 

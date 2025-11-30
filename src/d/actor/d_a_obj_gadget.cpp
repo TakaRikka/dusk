@@ -34,13 +34,11 @@ public:
 #endif
 
 
-/* 80BF4944-80BF4970 000000 002C+00 4/4 0/0 0/0 .rodata          m__20daObj_Gadget_Param_c */
 daObj_Gadget_HIOParam const daObj_Gadget_Param_c::m = {
     0.0f, -4.0f, 1.0f, 100.0f, 37.0f, 26.0f, 13.0f, 14.0f,
      37.0f, 50.0f, 18.0f,
 };
 
-/* 80BF4970-80BF49A0 00002C 0030+00 1/1 0/0 0/0 .rodata          l_ccDObjData */
 static dCcD_SrcGObjInf const l_ccDObjData = 
 {
         {0x0, {{0x0, 0x0, 0}, {0xD8FBFDFF, 0x1F}, 0x79}}, // mObj
@@ -49,18 +47,15 @@ static dCcD_SrcGObjInf const l_ccDObjData =
         {0x0}, // mGObjCo
 };
 
-/* 80BF4A4C-80BF4A5C 000020 0010+00 2/3 0/0 0/0 .data            l_bmdData */
 static u32 l_bmdData[2][2] = {
     35, 1, 34, 1,
 };
 
-/* 80BF4A5C-80BF4A64 -00001 0008+00 2/4 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[2] = {
     "",
     "ykM1",
 };
 
-/* 80BF4A64-80BF4AA8 000038 0044+00 1/2 0/0 0/0 .data            l_ccDCyl */
 static dCcD_SrcCyl l_ccDCyl = {
     l_ccDObjData, // mObjInf
     {
@@ -141,10 +136,8 @@ void daObj_Gadget_HIO_c::genMessage(JORMContext* ctx) {
 
 #endif
 
-/* 80BF4BE4-80BF4BE8 000054 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static PARAM_CLASS l_HIO;
 
-/* 80BF2D2C-80BF2F28 0000EC 01FC+00 1/0 0/0 0/0 .text            __dt__14daObj_Gadget_cFv */
 daObj_Gadget_c::~daObj_Gadget_c() {
     OS_REPORT("|%06d:%x|daObj_Gadget_c -> デストラクト\n", g_Counter.mCounter0, this);
     
@@ -159,7 +152,6 @@ daObj_Gadget_c::~daObj_Gadget_c() {
         l_resNameList[l_bmdData[field_0x9d0][1]]);
 }
 
-/* 80BF2F28-80BF3228 0002E8 0300+00 1/1 0/0 0/0 .text            create__14daObj_Gadget_cFv */
 int daObj_Gadget_c::create() {
     fopAcM_ct(this, daObj_Gadget_c);
     field_0x9d0 = getType();
@@ -200,7 +192,6 @@ int daObj_Gadget_c::create() {
     return rv;
 }
 
-/* 80BF3478-80BF3504 000838 008C+00 1/1 0/0 0/0 .text            CreateHeap__14daObj_Gadget_cFv */
 int daObj_Gadget_c::CreateHeap() {
     J3DModelData* mdlData_p = (J3DModelData*)dComIfG_getObjectRes(
         l_resNameList[l_bmdData[field_0x9d0][1]],
@@ -210,14 +201,12 @@ int daObj_Gadget_c::CreateHeap() {
     return mModel != NULL ? TRUE : FALSE;
 }
 
-/* 80BF3504-80BF3538 0008C4 0034+00 1/1 0/0 0/0 .text            Delete__14daObj_Gadget_cFv */
 int daObj_Gadget_c::Delete() {
     OS_REPORT("|%06d:%x|daObj_Gadget_c -> Delete\n", g_Counter.mCounter0, this);
     this->~daObj_Gadget_c();
     return 1;
 }
 
-/* 80BF3538-80BF3FAC 0008F8 0A74+00 2/2 0/0 0/0 .text            Execute__14daObj_Gadget_cFv */
 int daObj_Gadget_c::Execute() {
     BOOL carryNow = fopAcM_checkCarryNow(this) != FALSE;
     
@@ -452,7 +441,6 @@ int daObj_Gadget_c::Execute() {
     return 1;
 }
 
-/* 80BF3FAC-80BF40E8 00136C 013C+00 1/1 0/0 0/0 .text            Draw__14daObj_Gadget_cFv */
 int daObj_Gadget_c::Draw() {
     if (mHide == 0) {
         g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -475,27 +463,21 @@ int daObj_Gadget_c::Draw() {
     return 1;
 }
 
-/* 80BF4130-80BF4150 0014F0 0020+00 1/1 0/0 0/0 .text
- * createHeapCallBack__14daObj_Gadget_cFP10fopAc_ac_c           */
 int daObj_Gadget_c::createHeapCallBack(fopAc_ac_c* a_this) {
     return ((daObj_Gadget_c*)a_this)->CreateHeap();
 }
 
-/* 80BF4150-80BF41AC 001510 005C+00 2/2 0/0 0/0 .text            setEnvTevColor__14daObj_Gadget_cFv
- */
 void daObj_Gadget_c::setEnvTevColor() {
     tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(mGndChk);
     tevStr.room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
 }
 
-/* 80BF41AC-80BF41F0 00156C 0044+00 2/2 0/0 0/0 .text            setRoomNo__14daObj_Gadget_cFv */
 void daObj_Gadget_c::setRoomNo() {
     s8 room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
     fopAcM_SetRoomNo(this, room_no);
     mStts.SetRoomId(room_no);
 }
 
-/* 80BF41F0-80BF424C 0015B0 005C+00 1/1 0/0 0/0 .text            reset__14daObj_Gadget_cFv */
 void daObj_Gadget_c::reset() {
     memset(&field_0x9d4, 0, (u8*)&field_0xa47 - (u8*)&field_0x9d4);
     switch (field_0x9d0) {
@@ -506,7 +488,6 @@ void daObj_Gadget_c::reset() {
     }
 }
 
-/* 80BF424C-80BF4354 00160C 0108+00 1/1 0/0 0/0 .text            setMtx__14daObj_Gadget_cFv */
 void daObj_Gadget_c::setMtx() {
     s16 angleDiff = shape_angle.y - current.angle.y;
     s16 cosVal = field_0xa14 * cM_scos(angleDiff);
@@ -521,8 +502,6 @@ void daObj_Gadget_c::setMtx() {
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80BF4354-80BF43F4 001714 00A0+00 1/1 0/0 0/0 .text            calcRollAngle__14daObj_Gadget_cFsi
- */
 s16 daObj_Gadget_c::calcRollAngle(s16 param_1, int param_2) {
     int result;
     if (param_1 != 0) {
@@ -546,8 +525,6 @@ s16 daObj_Gadget_c::calcRollAngle(s16 param_1, int param_2) {
     return 0;
 }
 
-/* 80BF43F4-80BF4584 0017B4 0190+00 1/1 0/0 0/0 .text            getWallAngle__14daObj_Gadget_cFsPs
- */
 BOOL daObj_Gadget_c::getWallAngle(s16 param_0, s16* param_1) {
     cXyz startPos;
     cXyz checkPos[2];
@@ -579,16 +556,12 @@ BOOL daObj_Gadget_c::getWallAngle(s16 param_0, s16* param_1) {
     return TRUE;
 }
 
-/* 80BF4584-80BF4600 001944 007C+00 1/1 0/0 0/0 .text            setSmokePrtcl__14daObj_Gadget_cFv
- */
 void daObj_Gadget_c::setSmokePrtcl() {
     fopAcM_effSmokeSet1(&field_0xa38, &field_0xa3c, &current.pos, NULL, 0.4f, &tevStr, 1);
     dComIfGp_particle_levelEmitterOnEventMove(field_0xa38);
     dComIfGp_particle_levelEmitterOnEventMove(field_0xa3c);
 }
 
-/* 80BF4600-80BF4728 0019C0 0128+00 1/1 0/0 0/0 .text            setWaterPrtcl__14daObj_Gadget_cFv
- */
 void daObj_Gadget_c::setWaterPrtcl() {
     static cXyz scl(0.4f, 0.4f, 0.4f);
     static u16 emttrId[4] = {
@@ -607,41 +580,33 @@ void daObj_Gadget_c::setWaterPrtcl() {
     }
 }
 
-/* 80BF4728-80BF4778 001AE8 0050+00 1/1 0/0 0/0 .text            setHamonPrtcl__14daObj_Gadget_cFv
- */
 void daObj_Gadget_c::setHamonPrtcl() {
     cXyz pos(current.pos.x, field_0xa04, current.pos.z);
     fopAcM_effHamonSet(&field_0xa30, &pos, 0.7f, 0.05f);
 }
 
-/* 80BF4778-80BF4798 001B38 0020+00 1/0 0/0 0/0 .text            daObj_Gadget_Create__FPv */
 static int daObj_Gadget_Create(void* i_this) {
     return ((daObj_Gadget_c*)i_this)->create();
 }
 
-/* 80BF4798-80BF47B8 001B58 0020+00 1/0 0/0 0/0 .text            daObj_Gadget_Delete__FPv */
 static int daObj_Gadget_Delete(void* i_this) {
     return ((daObj_Gadget_c*)i_this)->Delete();
 }
 
-/* 80BF47B8-80BF47D8 001B78 0020+00 1/0 0/0 0/0 .text            daObj_Gadget_Execute__FPv */
 static int daObj_Gadget_Execute(void* i_this) {
     return ((daObj_Gadget_c*)i_this)->Execute();
 }
 
-/* 80BF47D8-80BF47F8 001B98 0020+00 1/0 0/0 0/0 .text            daObj_Gadget_Draw__FPv */
 static int daObj_Gadget_Draw(void* i_this) {
     return ((daObj_Gadget_c*)i_this)->Draw();
 }
 
-/* 80BF47F8-80BF4800 001BB8 0008+00 1/0 0/0 0/0 .text            daObj_Gadget_IsDelete__FPv */
 static int daObj_Gadget_IsDelete(void* i_this) {
     return 1;
 }
 
 AUDIO_INSTANCES
 
-/* 80BF4AB0-80BF4AD0 -00001 0020+00 1/0 0/0 0/0 .data            daObj_Gadget_MethodTable */
 static actor_method_class daObj_Gadget_MethodTable = {
     (process_method_func)daObj_Gadget_Create,
     (process_method_func)daObj_Gadget_Delete,
@@ -650,7 +615,6 @@ static actor_method_class daObj_Gadget_MethodTable = {
     (process_method_func)daObj_Gadget_Draw,
 };
 
-/* 80BF4AD0-80BF4B00 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_GADGET */
 extern actor_process_profile_definition g_profile_OBJ_GADGET = {
   fpcLy_CURRENT_e,           // mLayerID
   8,                         // mListID

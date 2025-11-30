@@ -14,28 +14,22 @@
 #include "dolphin/gf/GFLight.h"
 #include "m_Do/m_Do_lib.h"
 
-/* 80870BB8-80870BD8 000078 0020+00 1/1 0/0 0/0 .text daMirror_c_createHeap__FP10fopAc_ac_c */
 static BOOL daMirror_c_createHeap(fopAc_ac_c* i_this) {
     return ((daMirror_c*)i_this)->createHeap();
 }
 
-/* 80872660-80872664 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Mirror";
 
-/* 80872664-80872668 -00001 0004+00 2/2 0/0 0/0 .data            l_arcName2 */
 static char* l_arcName2 = "MR-Table";
 
-/* 80870BD8-80870C54 000098 007C+00 1/1 0/0 0/0 .text            __ct__16dMirror_packet_cFv */
 dMirror_packet_c::dMirror_packet_c() {
     reset();
 }
 
-/* 80870C94-80870CA0 000154 000C+00 2/2 0/0 0/0 .text            reset__16dMirror_packet_cFv */
 void dMirror_packet_c::reset() {
     mModelCount = 0;
 }
 
-/* 80870CA0-80870D58 000160 00B8+00 1/1 0/0 0/0 .text            calcMinMax__16dMirror_packet_cFv */
 void dMirror_packet_c::calcMinMax() {
     mMinVal.set(FLT_MAX, FLT_MAX, FLT_MAX);
     mMaxVal.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
@@ -74,7 +68,6 @@ void dMirror_packet_c::calcMinMax() {
     }
 }
 
-/* 80870D58-80870D88 000218 0030+00 1/1 0/0 0/0 .text entryModel__16dMirror_packet_cFP8J3DModel */
 int dMirror_packet_c::entryModel(J3DModel* i_model) {
     if (mModelCount >= 0x40) {
         return 0;
@@ -84,8 +77,6 @@ int dMirror_packet_c::entryModel(J3DModel* i_model) {
     return 1;
 }
 
-/* 80870D88-80871268 000248 04E0+00 1/1 0/0 0/0 .text mirrorZdraw__16dMirror_packet_cFPfPfffffff
- */
 void dMirror_packet_c::mirrorZdraw(f32* param_0, f32* param_1, f32 param_2, f32 param_3,
                                    f32 param_4, f32 param_5, f32 param_6, f32 param_7) {
     GXSetNumChans(1);
@@ -189,8 +180,6 @@ void dMirror_packet_c::mirrorZdraw(f32* param_0, f32* param_1, f32 param_2, f32 
     GXSetAlphaUpdate(GX_DISABLE);
 }
 
-/* 80871268-8087146C 000728 0204+00 1/1 0/0 0/0 .text
- * modelDraw__16dMirror_packet_cFP8J3DModelPA4_f                */
 void dMirror_packet_c::modelDraw(J3DModel* i_model, Mtx param_1) {
     Mtx& model_mtx = i_model->getBaseTRMtx();
     cXyz sp28(model_mtx[0][3], model_mtx[1][3], model_mtx[2][3]);
@@ -246,7 +235,6 @@ void dMirror_packet_c::modelDraw(J3DModel* i_model, Mtx param_1) {
     }
 }
 
-/* 8087146C-80871D84 00092C 0918+00 1/1 0/0 0/1 .text            mainDraw__16dMirror_packet_cFv */
 void dMirror_packet_c::mainDraw() {
     j3dSys.reinitGX();
 
@@ -439,7 +427,6 @@ void dMirror_packet_c::mainDraw() {
     }
 }
 
-/* 80871D84-80871E24 001244 00A0+00 1/0 0/0 0/0 .text            draw__16dMirror_packet_cFv */
 void dMirror_packet_c::draw() {
     mDoLib_clipper::changeFar(dComIfGd_getView()->far);
     if (!mDoLib_clipper::clip(j3dSys.getViewMtx(), &mMaxVal, &mMinVal)) {
@@ -450,15 +437,12 @@ void dMirror_packet_c::draw() {
     reset();
 }
 
-/* 80871E24-80871E84 0012E4 0060+00 1/1 0/0 0/0 .text            __ct__10daMirror_cFv */
 daMirror_c::daMirror_c() {
     m_entryModel = &daMirror_c::entryModel;
 }
 
-/* 80871E84-80871F08 001344 0084+00 1/0 0/0 0/0 .text            __dt__16dMirror_packet_cFv */
 dMirror_packet_c::~dMirror_packet_c() {}
 
-/* 80871F08-80871F78 0013C8 0070+00 1/1 0/0 0/0 .text            createHeap__10daMirror_cFv */
 BOOL daMirror_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
@@ -469,7 +453,6 @@ BOOL daMirror_c::createHeap() {
     return true;
 }
 
-/* 80871F78-80872018 001438 00A0+00 1/1 0/0 0/0 .text            setModelMtx__10daMirror_cFv */
 void daMirror_c::setModelMtx() {
     mpModel->setBaseScale(scale);
 
@@ -480,13 +463,11 @@ void daMirror_c::setModelMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* 80872018-8087206C 0014D8 0054+00 1/0 0/0 0/0 .text            daMirror_create__FP10daMirror_c */
 static int daMirror_create(daMirror_c* i_this) {
     fopAcM_ct(i_this, daMirror_c);
     return i_this->daMirror_c::create();
 }
 
-/* 8087206C-80872344 00152C 02D8+00 2/2 0/0 0/0 .text            create__10daMirror_cFv */
 int daMirror_c::create() {
     if (getSw() != 0xFF && !fopAcM_isSwitch(this, getSw())) {
         return cPhs_COMPLEATE_e;
@@ -574,17 +555,14 @@ int daMirror_c::Delete() {
     return 1;
 }
 
-/* 80872344-808723C4 001804 0080+00 1/0 0/0 0/0 .text            daMirror_Delete__FP10daMirror_c */
 static int daMirror_Delete(daMirror_c* i_this) {
     return i_this->Delete();
 }
 
-/* 808723C4-808723E4 001884 0020+00 1/0 0/0 0/0 .text            daMirror_execute__FP10daMirror_c */
 static int daMirror_execute(daMirror_c* i_this) {
     return i_this->execute();
 }
 
-/* 808723E4-808724C0 0018A4 00DC+00 1/1 0/0 0/0 .text            execute__10daMirror_cFv */
 int daMirror_c::execute() {
     if (this != m_myObj) {
         if (m_myObj == NULL) {
@@ -625,25 +603,20 @@ int daMirror_c::draw() {
     return 1;
 }
 
-/* 808724C0-80872560 001980 00A0+00 1/0 0/0 0/0 .text            daMirror_draw__FP10daMirror_c */
 static int daMirror_draw(daMirror_c* i_this) {
     return i_this->draw();
 }
 
-/* 80872560-80872584 001A20 0024+00 1/0 0/0 0/0 .text            entryModel__10daMirror_cFP8J3DModel
- */
 int daMirror_c::entryModel(J3DModel* i_model) {
     return mPacket.entryModel(i_model);
 }
 
-/* 80872674-80872694 -00001 0020+00 1/0 0/0 0/0 .data            daMirror_METHODS */
 static actor_method_class daMirror_METHODS = {
     (process_method_func)daMirror_create,  (process_method_func)daMirror_Delete,
     (process_method_func)daMirror_execute, (process_method_func)NULL,
     (process_method_func)daMirror_draw,
 };
 
-/* 80872694-808726C4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_MIRROR */
 extern actor_process_profile_definition g_profile_MIRROR = {
     fpcLy_CURRENT_e,
     7,

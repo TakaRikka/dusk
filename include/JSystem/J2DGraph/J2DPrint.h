@@ -24,21 +24,21 @@ public:
 
     void initiate();
 
-    /* 802F4394 */ J2DPrint(JUTFont*, f32, f32, JUtility::TColor, JUtility::TColor, JUtility::TColor, JUtility::TColor);
-    /* 802F4658 */ static u8* setBuffer(size_t);
-    /* 802F46C4 */ void setFontSize();
-    /* 802F475C */ void locate(f32, f32);
-    /* 802F4778 */ f32 print(f32, f32, u8, char const*, ...);
-    /* 802F4828 */ void printReturn(char const*, f32, f32, J2DTextBoxHBinding, J2DTextBoxVBinding,
+    J2DPrint(JUTFont*, f32, f32, JUtility::TColor, JUtility::TColor, JUtility::TColor, JUtility::TColor);
+    static u8* setBuffer(size_t);
+    void setFontSize();
+    void locate(f32, f32);
+    f32 print(f32, f32, u8, char const*, ...);
+    void printReturn(char const*, f32, f32, J2DTextBoxHBinding, J2DTextBoxVBinding,
                                     f32, f32, u8);
-    /* 802F4B4C */ f32 parse(u8 const*, int, int, u16*, J2DPrint::TSize&, u8, bool);
-    /* 802F52E8 */ void doCtrlCode(int);
-    /* 802F5410 */ u16 doEscapeCode(u8 const**, u8);
-    /* 802F594C */ void initchar();
-    /* 802F59C0 */ s32 getNumberS32(u8 const**, s32, s32, int);
-    /* 802F5AC4 */ f32 getNumberF32(u8 const**, f32, f32, int);
+    f32 parse(u8 const*, int, int, u16*, J2DPrint::TSize&, u8, bool);
+    void doCtrlCode(int);
+    u16 doEscapeCode(u8 const**, u8);
+    void initchar();
+    s32 getNumberS32(u8 const**, s32, s32, int);
+    f32 getNumberF32(u8 const**, f32, f32, int);
 
-    /* 802F4420 */ virtual ~J2DPrint();
+    virtual ~J2DPrint();
 
     f32 print_va(u8 alpha, const char* fmt, va_list args) {
         return J2DPrint_print_alpha_va(this, alpha, fmt, args);
@@ -66,7 +66,7 @@ public:
     static size_t mStrBuffSize;
 
 private:
-    /* 802F4468 */ void private_initiate(JUTFont*, f32, f32, JUtility::TColor, JUtility::TColor,
+    void private_initiate(JUTFont*, f32, f32, JUtility::TColor, JUtility::TColor,
                                          JUtility::TColor, JUtility::TColor, bool);
 
     /* 0x04 */ JUTFont* mFont;

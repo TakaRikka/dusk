@@ -12,12 +12,10 @@
 
 u8 data_805197E0[4];
 
-/* 80519518-80519520 000078 0008+00 1/0 0/0 0/0 .text            daEcont_Draw__FP11econt_class */
 static int daEcont_Draw(econt_class* i_this) {
     return 1;
 }
 
-/* 80519520-80519578 000080 0058+00 1/1 0/0 0/0 .text            s_rd_sub__FPvPv */
 static void* s_rd_sub(void* i_this, void* param_1) {
     if (fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_E_RD) {
         data_805197E0[0]++;
@@ -25,7 +23,6 @@ static void* s_rd_sub(void* i_this, void* param_1) {
     return 0;
 }
 
-/* 80519578-80519664 0000D8 00EC+00 1/1 0/0 0/0 .text            rider_game__FP11econt_class */
 static void rider_game(econt_class* i_this) {
     if (dComIfGs_isSwitch(0x2e,fopAcM_GetRoomNo(i_this)) && dComIfGp_event_runCheck() == 0) {
         data_805197E0[0] = 0;
@@ -46,7 +43,6 @@ static void rider_game(econt_class* i_this) {
     }
 }
 
-/* 80519664-805196B4 0001C4 0050+00 1/0 0/0 0/0 .text            daEcont_Execute__FP11econt_class */
 static int daEcont_Execute(econt_class* i_this) {
     for (int i = 0; i < 3; i++) {
         if (i_this->field_0x5b8[i] != 0) {
@@ -57,19 +53,15 @@ static int daEcont_Execute(econt_class* i_this) {
     return 1;
 }
 
-/* 805196B4-805196BC 000214 0008+00 1/0 0/0 0/0 .text            daEcont_IsDelete__FP11econt_class
- */
 static int daEcont_IsDelete(econt_class* i_this) {
     return 1;
 }
 
-/* 805196BC-805196E4 00021C 0028+00 1/0 0/0 0/0 .text            daEcont_Delete__FP11econt_class */
 static int daEcont_Delete(econt_class* i_this) {
     dComIfG_TimerDeleteRequest(8);
     return 1;
 }
 
-/* 805196E4-80519774 000244 0090+00 1/0 0/0 0/0 .text            daEcont_Create__FP10fopAc_ac_c */
 static int daEcont_Create(fopAc_ac_c* i_this) {
     econt_class* encounter = (econt_class*)i_this;
     fopAcM_ct(i_this, econt_class);
@@ -79,8 +71,6 @@ static int daEcont_Create(fopAc_ac_c* i_this) {
     
 }
 
-/* ############################################################################################## */
-/* 8051978C-805197AC -00001 0020+00 1/0 0/0 0/0 .data            l_daEcont_Method */
 static actor_method_class l_daEcont_Method = {
     (process_method_func)daEcont_Create,
     (process_method_func)daEcont_Delete,
@@ -89,7 +79,6 @@ static actor_method_class l_daEcont_Method = {
     (process_method_func)daEcont_Draw
 };
 
-/* 805197AC-805197DC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_ECONT */
 extern actor_process_profile_definition g_profile_ECONT = {
     fpcLy_CURRENT_e,        // mLayerID   
     8,                      // mListID 

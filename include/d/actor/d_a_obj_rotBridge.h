@@ -15,16 +15,16 @@
  */
 class daRotBridge_c : public dBgS_MoveBgActor {
 public:
-    /* 80CBEA24 */ void setBaseMtx();
-    /* 80CBECBC */ int create();
-    /* 80CBEF1C */ static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-    /* 80CBF050 */ void playerAreaCheck();
-    /* 80CBF1EC */ void moveBridge();
+    void setBaseMtx();
+    int create();
+    static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+    void playerAreaCheck();
+    void moveBridge();
 
-    /* 80CBEB38 */ virtual int CreateHeap();
-    /* 80CBEF34 */ virtual int Execute(Mtx**);
-    /* 80CBF404 */ virtual int Draw();
-    /* 80CBF4BC */ virtual int Delete();
+    virtual int CreateHeap();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
 
     u8 getPlayerRide() { return mIsPlayerRide; }
     u8 getBridgeAngle() { return mBridgeAngle; }
@@ -48,8 +48,8 @@ STATIC_ASSERT(sizeof(daRotBridge_c) == 0x610);
 
 class daRotBridge_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80CBE98C */ daRotBridge_HIO_c();
-    /* 80CBF5BC */ virtual ~daRotBridge_HIO_c() {}
+    daRotBridge_HIO_c();
+    virtual ~daRotBridge_HIO_c() {}
 
     void genMessage(JORMContext*);
 

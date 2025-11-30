@@ -45,44 +45,44 @@ public:
         /* 0x18 */ JNT_SAYA,
     };
 
-    /* 80AECBAC */ ~daNpc_solA_c();
-    /* 80AECCD0 */ int create();
-    /* 80AECF58 */ int CreateHeap();
-    /* 80AED0F8 */ int Delete();
-    /* 80AED12C */ int Execute();
-    /* 80AED14C */ void Draw();
-    /* 80AED1E8 */ static BOOL createHeapCallBack(fopAc_ac_c*);
-    /* 80AED208 */ static BOOL ctrlJointCallBack(J3DJoint*, int);
-    /* 80AED260 */ bool getType();
-    /* 80AED268 */ int getFlowNodeNo();
-    /* 80AED284 */ int isDelete();
-    /* 80AED294 */ void reset();
-    /* 80AED3B8 */ void setParam();
-    /* 80AED4A4 */ void setAfterTalkMotion();
-    /* 80AED504 */ void srchActors();
-    /* 80AED508 */ BOOL evtTalk();
-    /* 80AED608 */ BOOL evtCutProc();
-    /* 80AED6D0 */ void action();
-    /* 80AED758 */ void beforeMove();
-    /* 80AED7D0 */ void setAttnPos();
-    /* 80AED9DC */ void setCollision();
-    /* 80AEDABC */ int drawDbgInfo();
-    /* 80AEDAC4 */ void drawOtherMdl();
-    /* 80AEDAC8 */ int selectAction();
-    /* 80AEDB10 */ int chkAction(int (daNpc_solA_c::*)(void*));
-    /* 80AEDB3C */ int setAction(int (daNpc_solA_c::*)(void*));
-    /* 80AEDBE4 */ int wait(void*);
-    /* 80AEDD60 */ int talk(void*);
-    /* 80AEEF40 */ daNpc_solA_c(daNpcT_faceMotionAnmData_c const* param_1,
+    ~daNpc_solA_c();
+    int create();
+    int CreateHeap();
+    int Delete();
+    int Execute();
+    void Draw();
+    static BOOL createHeapCallBack(fopAc_ac_c*);
+    static BOOL ctrlJointCallBack(J3DJoint*, int);
+    bool getType();
+    int getFlowNodeNo();
+    int isDelete();
+    void reset();
+    void setParam();
+    void setAfterTalkMotion();
+    void srchActors();
+    BOOL evtTalk();
+    BOOL evtCutProc();
+    void action();
+    void beforeMove();
+    void setAttnPos();
+    void setCollision();
+    int drawDbgInfo();
+    void drawOtherMdl();
+    int selectAction();
+    int chkAction(int (daNpc_solA_c::*)(void*));
+    int setAction(int (daNpc_solA_c::*)(void*));
+    int wait(void*);
+    int talk(void*);
+    daNpc_solA_c(daNpcT_faceMotionAnmData_c const* param_1,
                                 daNpcT_motionAnmData_c const* param_2,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3,
                                 int param_4,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5,
                                 int param_6, daNpcT_evtData_c const* param_7, char** param_8)
         : daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8) {}
-    /* 80AEF084 */ s32 getHeadJointNo() { return JNT_HEAD; }
-    /* 80AEF084 */ s32 getNeckJointNo() { return JNT_NECK; }
-    /* 80AEF094 */ s32 getBackboneJointNo() { return JNT_BACKBONE1; }
+    s32 getHeadJointNo() { return JNT_HEAD; }
+    s32 getNeckJointNo() { return JNT_NECK; }
+    s32 getBackboneJointNo() { return JNT_BACKBONE1; }
 
     static char* mCutNameList[1];
     static cutFunc mCutList[1];
@@ -104,7 +104,7 @@ struct daNpc_solA_HIOParam {
 
 class daNpc_solA_Param_c {
 public:
-    /* 80AEF094 */ virtual ~daNpc_solA_Param_c() {}
+    virtual ~daNpc_solA_Param_c() {}
 
     static daNpc_solA_HIOParam const m;
 };

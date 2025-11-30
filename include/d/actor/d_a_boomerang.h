@@ -9,15 +9,15 @@
 
 class daBoomerang_sight_c : public dDlst_base_c {
 public:
-    /* 8049E0B8 */ int createHeap();
-    /* 8049E36C */ void initialize();
-    /* 8049EB64 */ int playAnime(int, int);
-    /* 8049EDA8 */ void initFrame(int);
-    /* 8049EDE8 */ void copyNumData(int);
-    /* 8049EEC8 */ void setSight(cXyz const*, int);
+    int createHeap();
+    void initialize();
+    int playAnime(int, int);
+    void initFrame(int);
+    void copyNumData(int);
+    void setSight(cXyz const*, int);
 
-    /* 8049EF60 */ virtual void draw();
-    /* 804A278C */ virtual ~daBoomerang_sight_c() {}
+    virtual void draw();
+    virtual ~daBoomerang_sight_c() {}
 
     u8 getReserve() const { return mReserve; }
     u8 getAlpha(int i_index) { return m_alpha[i_index]; }
@@ -86,30 +86,30 @@ public:
         /* 0x080 */ WIND_CATCH = 0x80,
     };
 
-    /* 8049F280 */ void windModelCallBack();
-    /* 8049F39C */ int draw();
-    /* 8049F5F4 */ void lockLineCallback(fopAc_ac_c*);
-    /* 8049F660 */ void moveLineCallback(fopAc_ac_c*);
-    /* 8049F710 */ void pushLockList(int);
-    /* 8049F818 */ void cancelLockActorBase(fopAc_ac_c*);
-    /* 8049F874 */ void setAimActorBase(fopAc_ac_c*);
-    /* 8049F8B0 */ int setLockActor(fopAc_ac_c*, int);
-    /* 8049F9A4 */ void resetLockActor();
-    /* 8049F9F0 */ void setRoomInfo();
-    /* 8049FAA4 */ void setKeepMatrix();
-    /* 8049FBAC */ void setMoveMatrix();
-    /* 8049FCD0 */ void setRotAngle();
-    /* 8049FD6C */ void setAimPos();
-    /* 8049FE6C */ void checkBgHit(cXyz*, cXyz*);
-    /* 804A006C */ JPABaseEmitter* setEffectTraceMatrix(u32*, u16);
-    /* 804A012C */ void setEffect();
-    /* 804A0874 */ int procWait();
-    /* 804A0F0C */ int procMove();
-    /* 804A1814 */ int execute();
-    /* 804A1BF4 */ ~daBoomerang_c();
-    /* 804A1EE4 */ int createHeap();
-    /* 804A2084 */ int create();
-    /* 804A230C */ daBoomerang_c();
+    void windModelCallBack();
+    int draw();
+    void lockLineCallback(fopAc_ac_c*);
+    void moveLineCallback(fopAc_ac_c*);
+    void pushLockList(int);
+    void cancelLockActorBase(fopAc_ac_c*);
+    void setAimActorBase(fopAc_ac_c*);
+    int setLockActor(fopAc_ac_c*, int);
+    void resetLockActor();
+    void setRoomInfo();
+    void setKeepMatrix();
+    void setMoveMatrix();
+    void setRotAngle();
+    void setAimPos();
+    void checkBgHit(cXyz*, cXyz*);
+    JPABaseEmitter* setEffectTraceMatrix(u32*, u16);
+    void setEffect();
+    int procWait();
+    int procMove();
+    int execute();
+    ~daBoomerang_c();
+    int createHeap();
+    int create();
+    daBoomerang_c();
 
     u32 checkStateFlg0(daBoomerang_FLG0 i_flag) const { return m_stateFlg0 & i_flag; }
     void onStateFlg0(daBoomerang_FLG0 flag) { m_stateFlg0 |= flag; }

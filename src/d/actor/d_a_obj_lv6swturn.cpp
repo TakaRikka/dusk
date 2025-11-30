@@ -28,8 +28,6 @@ void daObjLv6SwTurn_HIO_c::genMessage(JORMContext* context) {
 }
 #endif
 
-/* 80C83998-80C83A98 000078 0100+00 1/1 0/0 0/0 .text
- * PPCallBack__FP10fopAc_ac_cP10fopAc_ac_csQ29dBgW_Base13PushPullLabel */
 static fopAc_ac_c* PPCallBack(fopAc_ac_c* actor1, fopAc_ac_c* actor2, s16 param_2,
                               dBgW_Base::PushPullLabel pushPull) {
     (void)param_2;  // needed to match debug
@@ -59,17 +57,13 @@ static fopAc_ac_c* PPCallBack(fopAc_ac_c* actor1, fopAc_ac_c* actor2, s16 param_
     return actor1;
 }
 
-/* 80C846F0-80C846F4 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "Obj_l6tsw";
 
-/* 80C83A98-80C83AD4 000178 003C+00 1/1 0/0 0/0 .text            initBaseMtx__16daObjLv6SwTurn_cFv
- */
 void daObjLv6SwTurn_c::initBaseMtx() {
     unk5A8->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80C83AD4-80C83B38 0001B4 0064+00 2/2 0/0 0/0 .text            setBaseMtx__16daObjLv6SwTurn_cFv */
 void daObjLv6SwTurn_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -77,7 +71,6 @@ void daObjLv6SwTurn_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80C83B38-80C83C10 000218 00D8+00 1/0 0/0 0/0 .text            Create__16daObjLv6SwTurn_cFv */
 int daObjLv6SwTurn_c::Create() {
     if (fopAcM_isSwitch(this, getSwbit())) {
         unk5BC = 1;
@@ -96,7 +89,6 @@ int daObjLv6SwTurn_c::Create() {
 }
 
 
-/* 80C83C10-80C83C80 0002F0 0070+00 1/0 0/0 0/0 .text            CreateHeap__16daObjLv6SwTurn_cFv */
 int daObjLv6SwTurn_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(268, modelData != NULL);
@@ -111,7 +103,6 @@ int daObjLv6SwTurn_c::CreateHeap() {
 static daObjLv6SwTurn_HIO_c l_HIO;
 #endif
 
-/* 80C83C80-80C83D04 000360 0084+00 1/1 0/0 0/0 .text            create1st__16daObjLv6SwTurn_cFv */
 int daObjLv6SwTurn_c::create1st() {
     int step = dComIfG_resLoad(&unk5A0, l_arcName);
     if (step == cPhs_COMPLEATE_e) {
@@ -126,7 +117,6 @@ int daObjLv6SwTurn_c::create1st() {
     return step;
 }
 
-/* 80C83D04-80C83D94 0003E4 0090+00 1/0 0/0 0/0 .text Execute__16daObjLv6SwTurn_cFPPA3_A4_f */
 int daObjLv6SwTurn_c::Execute(Mtx** i_pMtx) {
     unk5C0++;
     mode_proc_call();
@@ -138,7 +128,6 @@ int daObjLv6SwTurn_c::Execute(Mtx** i_pMtx) {
     return TRUE;
 }
 
-/* 80C83D94-80C83E20 000474 008C+00 1/1 0/0 0/0 .text mode_proc_call__16daObjLv6SwTurn_cFv */
 enum daObjLv6SwTurn_c_mode{
     DAOBJLV6SWTURN_C_MODE_WAIT,
     DAOBJLV6SWTURN_C_MODE_ROTATE,
@@ -162,8 +151,6 @@ void daObjLv6SwTurn_c::mode_proc_call() {
 #endif
 }
 
-/* 80C83E20-80C83E58 000500 0038+00 2/2 0/0 0/0 .text            init_modeWait__16daObjLv6SwTurn_cFv
- */
 void daObjLv6SwTurn_c::init_modeWait() {
     unk5B2 = 0;
     unk5B8 = -1;
@@ -173,7 +160,6 @@ void daObjLv6SwTurn_c::init_modeWait() {
     mMode = DAOBJLV6SWTURN_C_MODE_WAIT;
 }
 
-/* 80C83E58-80C84238 000538 03E0+00 1/0 0/0 0/0 .text            modeWait__16daObjLv6SwTurn_cFv */
 void daObjLv6SwTurn_c::modeWait() {
     bool a = true;
     int b = -1;
@@ -266,7 +252,6 @@ void daObjLv6SwTurn_c::modeWait() {
     unk5CA = current.angle.y;
 }
 
-/* 80C84238-80C8425C 000918 0024+00 1/1 0/0 0/0 .text init_modeRotate__16daObjLv6SwTurn_cFv */
 void daObjLv6SwTurn_c::init_modeRotate() {
     unk5B4 = 0;
     unk5BD = 0;
@@ -275,7 +260,6 @@ void daObjLv6SwTurn_c::init_modeRotate() {
     mMode = DAOBJLV6SWTURN_C_MODE_ROTATE;
 }
 
-/* 80C8425C-80C844F8 00093C 029C+00 1/0 0/0 0/0 .text            modeRotate__16daObjLv6SwTurn_cFv */
 void daObjLv6SwTurn_c::modeRotate() {
     unk5B0++;
 #if DEBUG
@@ -320,7 +304,6 @@ void daObjLv6SwTurn_c::modeRotate() {
     }
 }
 
-/* 80C844F8-80C8459C 000BD8 00A4+00 1/0 0/0 0/0 .text            Draw__16daObjLv6SwTurn_cFv */
 int daObjLv6SwTurn_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(unk5A8, &tevStr);
@@ -335,7 +318,6 @@ int daObjLv6SwTurn_c::Draw() {
     return TRUE;
 }
 
-/* 80C8459C-80C845D0 000C7C 0034+00 1/0 0/0 0/0 .text            Delete__16daObjLv6SwTurn_cFv */
 int daObjLv6SwTurn_c::Delete() {
     dComIfG_resDelete(&unk5A0, l_arcName);
 #if DEBUG
@@ -344,33 +326,23 @@ int daObjLv6SwTurn_c::Delete() {
     return TRUE;
 }
 
-/* 80C845D0-80C84630 000CB0 0060+00 1/0 0/0 0/0 .text
- * daObjLv6SwTurn_create1st__FP16daObjLv6SwTurn_c               */
 static int daObjLv6SwTurn_create1st(daObjLv6SwTurn_c* i_this) {
     fopAcM_ct(i_this, daObjLv6SwTurn_c);
     return i_this->create1st();
 }
 
-/* 80C84630-80C84650 000D10 0020+00 1/0 0/0 0/0 .text
- * daObjLv6SwTurn_MoveBGDelete__FP16daObjLv6SwTurn_c            */
 static int daObjLv6SwTurn_MoveBGDelete(daObjLv6SwTurn_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-/* 80C84650-80C84670 000D30 0020+00 1/0 0/0 0/0 .text
- * daObjLv6SwTurn_MoveBGExecute__FP16daObjLv6SwTurn_c           */
 static int daObjLv6SwTurn_MoveBGExecute(daObjLv6SwTurn_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C84670-80C8469C 000D50 002C+00 1/0 0/0 0/0 .text
- * daObjLv6SwTurn_MoveBGDraw__FP16daObjLv6SwTurn_c              */
 static int daObjLv6SwTurn_MoveBGDraw(daObjLv6SwTurn_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* ############################################################################################## */
-/* 80C84724-80C84744 -00001 0020+00 1/0 0/0 0/0 .data            daObjLv6SwTurn_METHODS */
 static actor_method_class daObjLv6SwTurn_METHODS = {
     (process_method_func)daObjLv6SwTurn_create1st,
     (process_method_func)daObjLv6SwTurn_MoveBGDelete,
@@ -379,7 +351,6 @@ static actor_method_class daObjLv6SwTurn_METHODS = {
     (process_method_func)daObjLv6SwTurn_MoveBGDraw,
 };
 
-/* 80C84744-80C84774 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv6SwTurn */
 extern actor_process_profile_definition g_profile_Obj_Lv6SwTurn = {
     fpcLy_CURRENT_e,           // mLayerID
     3,                         // mListID

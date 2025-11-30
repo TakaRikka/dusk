@@ -42,7 +42,7 @@ public:
  */
 class J3DDifferedTexMtx {
 public:
-    /* 8031322C */ static void loadExecute(f32 const (*)[4]);
+    static void loadExecute(f32 const (*)[4]);
 
     static inline void load(const Mtx m) {
         if (sTexGenBlock != NULL)
@@ -66,17 +66,17 @@ public:
         : J3DShapeMtx(useMtxIndex)
     {}
 
-    /* 80314730 */ virtual ~J3DShapeMtxConcatView() {}
-    /* 803147E0 */ virtual u32 getType() const { return 'SMCV'; }
-    /* 80313C54 */ virtual void load() const;
-    /* 80314598 */ virtual void loadNrmMtx(int, u16) const {}
-    /* 80313D28 */ virtual void loadNrmMtx(int, u16, f32 (*)[4]) const;
+    virtual ~J3DShapeMtxConcatView() {}
+    virtual u32 getType() const { return 'SMCV'; }
+    virtual void load() const;
+    virtual void loadNrmMtx(int, u16) const {}
+    virtual void loadNrmMtx(int, u16, f32 (*)[4]) const;
 
-    /* 80313828 */ void loadMtxConcatView_PNGP(int, u16) const;
-    /* 803138C8 */ void loadMtxConcatView_PCPU(int, u16) const;
-    /* 8031396C */ void loadMtxConcatView_NCPU(int, u16) const;
-    /* 80313A14 */ void loadMtxConcatView_PNCPU(int, u16) const;
-    /* 80313AC8 */ void loadMtxConcatView_PNGP_LOD(int, u16) const;
+    void loadMtxConcatView_PNGP(int, u16) const;
+    void loadMtxConcatView_PCPU(int, u16) const;
+    void loadMtxConcatView_NCPU(int, u16) const;
+    void loadMtxConcatView_PNCPU(int, u16) const;
+    void loadMtxConcatView_PNGP_LOD(int, u16) const;
 
     static J3DShapeMtxConcatView_LoadFunc sMtxLoadPipeline[4];
     static J3DShapeMtxConcatView_LoadFunc sMtxLoadLODPipeline[4];
@@ -93,9 +93,9 @@ public:
         : J3DShapeMtxConcatView(useMtxIndex)
     {}
 
-    /* 80314520 */ virtual ~J3DShapeMtxYBBoardConcatView() {}
-    /* 803147E0 */ virtual u32 getType() const { return 'SMYB'; }
-    /* 803143E4 */ virtual void load() const;
+    virtual ~J3DShapeMtxYBBoardConcatView() {}
+    virtual u32 getType() const { return 'SMYB'; }
+    virtual void load() const;
 };
 
 /**
@@ -108,9 +108,9 @@ public:
         : J3DShapeMtxConcatView(useMtxIndex)
     {}
 
-    /* 803145A4 */ virtual ~J3DShapeMtxBBoardConcatView() {}
-    /* 803147E0 */ virtual u32 getType() const { return 'SMBB'; }
-    /* 803142D4 */ virtual void load() const;
+    virtual ~J3DShapeMtxBBoardConcatView() {}
+    virtual u32 getType() const { return 'SMBB'; }
+    virtual void load() const;
 };
 
 /**
@@ -125,12 +125,12 @@ public:
         , mUseMtxIndexTable(useMtxIndexTable)
     {}
 
-    /* 803146B0 */ virtual ~J3DShapeMtxMulti() {}
-    /* 803147E0 */ virtual u32 getType() const { return 'SMML'; }
-    /* 80273E08 */ virtual u16 getUseMtxNum() const { return mUseMtxNum; }
-    /* 8031459C */ virtual u16 getUseMtxIndex(u16 no) const { return mUseMtxIndexTable[no]; }
-    /* 80313E4C */ virtual void load() const;
-    /* 80313EEC */ virtual void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
+    virtual ~J3DShapeMtxMulti() {}
+    virtual u32 getType() const { return 'SMML'; }
+    virtual u16 getUseMtxNum() const { return mUseMtxNum; }
+    virtual u16 getUseMtxIndex(u16 no) const { return mUseMtxIndexTable[no]; }
+    virtual void load() const;
+    virtual void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
 
 private:
     /* 0x8 */ u16 mUseMtxNum;
@@ -149,13 +149,13 @@ public:
         , mUseMtxIndexTable(useMtxIndexTable)
     {}
 
-    /* 8031461C */ virtual ~J3DShapeMtxMultiConcatView() {}
-    /* 803147E0 */ virtual u32 getType() const { return 'SMMC'; }
-    /* 80273E08 */ virtual u16 getUseMtxNum() const { return mUseMtxNum; }
-    /* 8031459C */ virtual u16 getUseMtxIndex(u16 no) const { return mUseMtxIndexTable[no]; }
-    /* 80313FA4 */ virtual void load() const;
-    /* 803146AC */ virtual void loadNrmMtx(int, u16) const {}
-    /* 8031419C */ virtual void loadNrmMtx(int, u16, f32 (*)[4]) const;
+    virtual ~J3DShapeMtxMultiConcatView() {}
+    virtual u32 getType() const { return 'SMMC'; }
+    virtual u16 getUseMtxNum() const { return mUseMtxNum; }
+    virtual u16 getUseMtxIndex(u16 no) const { return mUseMtxIndexTable[no]; }
+    virtual void load() const;
+    virtual void loadNrmMtx(int, u16) const {}
+    virtual void loadNrmMtx(int, u16, f32 (*)[4]) const;
 
 private:
     /* 0x8 */ u16 mUseMtxNum;

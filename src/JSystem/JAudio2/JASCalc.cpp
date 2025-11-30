@@ -4,7 +4,6 @@
 #include <math.h>
 #include <limits.h>
 
-/* 8028F2E8-8028F318 289C28 0030+00 0/0 1/1 0/0 .text            imixcopy__7JASCalcFPCsPCsPsUl */
 void JASCalc::imixcopy(const s16* s1, const s16* s2, s16* dst, u32 n) {
     for (n; n != 0; n--) {
         *dst++ = *((s16*)s1)++;
@@ -12,7 +11,6 @@ void JASCalc::imixcopy(const s16* s1, const s16* s2, s16* dst, u32 n) {
     }
 }
 
-/* 8028F318-8028F354 289C58 003C+00 1/1 0/0 0/0 .text            bcopyfast__7JASCalcFPCvPvUl */
 void JASCalc::bcopyfast(const void* src, void* dest, u32 size) {
     JUT_ASSERT(226, (reinterpret_cast<u32>(src) & 0x03) == 0);
     JUT_ASSERT(227, (reinterpret_cast<u32>(dest) & 0x03) == 0);
@@ -35,7 +33,6 @@ void JASCalc::bcopyfast(const void* src, void* dest, u32 size) {
     }
 }
 
-/* 8028F354-8028F454 289C94 0100+00 0/0 3/3 0/0 .text            bcopy__7JASCalcFPCvPvUl */
 void JASCalc::bcopy(const void* src, void* dest, u32 size) {
     u32* usrc;
     u32* udest;
@@ -79,7 +76,6 @@ void JASCalc::bcopy(const void* src, void* dest, u32 size) {
     }
 }
 
-/* 8028F454-8028F480 289D94 002C+00 1/1 0/0 0/0 .text            bzerofast__7JASCalcFPvUl */
 void JASCalc::bzerofast(void* dest, u32 size) {
     JUT_ASSERT(336, (reinterpret_cast<u32>(dest) & 0x03) == 0);
     JUT_ASSERT(337, (size & 0x0f) == 0);
@@ -94,7 +90,6 @@ void JASCalc::bzerofast(void* dest, u32 size) {
     }
 }
 
-/* 8028F480-8028F578 289DC0 00F8+00 0/0 6/6 0/0 .text            bzero__7JASCalcFPvUl */
 void JASCalc::bzero(void* dest, u32 size) {
     u32* udest;
     u8* bdest = (u8*)dest;
@@ -137,7 +132,6 @@ void JASCalc::bzero(void* dest, u32 size) {
     }
 }
 
-/* 8039ABB8-8039AFB8 027218 0400+00 0/0 4/4 0/0 .rodata          CUTOFF_TO_IIR_TABLE__7JASCalc */
 s16 const JASCalc::CUTOFF_TO_IIR_TABLE[128][4] = {
     0x0F5C, 0x0A3D, 0x4665, 0x1E73,
     0x0F5E, 0x0A3D, 0x4664, 0x1E73,
@@ -277,7 +271,6 @@ f32 JASCalc::fake1() { return 0.5f; }
 f32 JASCalc::fake2(long x) { return JASCalc::clamp<s16, long>(x); }
 f32 JASCalc::fake3() { return 0.0f; }
 
-/* 8028F578-8028F69C 289EB8 0124+00 0/0 2/2 0/0 .text            pow2__7JASCalcFf */
 f32 JASCalc::pow2(f32 x) {
     s32 frac_index = 0;
     union {

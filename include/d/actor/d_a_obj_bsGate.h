@@ -21,19 +21,19 @@ public:
         /* 2 */ MODE_CLOSE,
     };
 
-    /* 80BC2910 */ void setBaseMtx();
-    /* 80BC29AC */ int CreateHeap();
-    /* 80BC2A18 */ cPhs__Step create();
-    /* 80BC2B6C */ int Execute(Mtx**);
-    /* 80BC2BBC */ void moveGate();
-    /* 80BC2CC4 */ void init_modeWait();
-    /* 80BC2CD0 */ void modeWait();
-    /* 80BC2CD4 */ void init_modeOpen();
-    /* 80BC2CE0 */ void modeOpen();
-    /* 80BC2E34 */ void init_modeClose();
-    /* 80BC2E40 */ void modeClose();
-    /* 80BC2F94 */ int Draw();
-    /* 80BC3038 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    cPhs__Step create();
+    int Execute(Mtx**);
+    void moveGate();
+    void init_modeWait();
+    void modeWait();
+    void init_modeOpen();
+    void modeOpen();
+    void init_modeClose();
+    void modeClose();
+    int Draw();
+    int Delete();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhaseReq;
@@ -50,8 +50,8 @@ STATIC_ASSERT(sizeof(daBsGate_c) == 0x5B8);
 
 class daBsGate_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80BC288C */ daBsGate_HIO_c();
-    /* 80BC30F4 */ ~daBsGate_HIO_c() {}
+    daBsGate_HIO_c();
+    ~daBsGate_HIO_c() {}
 
     void genMessage(JORMContext*);
 

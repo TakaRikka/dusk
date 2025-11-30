@@ -28,10 +28,8 @@ enum Action {
     /* 0x1 */ ACTION_BROKEN,
 };
 
-/* 80BD0260-80BD0264 -00001 0004+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName = "CrvFence";
 
-/* 80BCEC98-80BCED24 000078 008C+00 2/2 0/0 0/0 .text            CheckVec__15daObjCRVFENCE_cFv */
 BOOL daObjCRVFENCE_c::CheckVec() {
     cXyz vec(fopAcM_GetPosition((fopAc_ac_c*)daPy_getPlayerActorClass()));
     Mtx mtx;
@@ -42,7 +40,6 @@ BOOL daObjCRVFENCE_c::CheckVec() {
     return vec.z > 0.0f;
 }
 
-/* 80BCED60-80BCEE1C 000140 00BC+00 1/1 0/0 0/0 .text Wall_Check__15daObjCRVFENCE_cF4cXyz4cXyz */
 BOOL daObjCRVFENCE_c::Wall_Check(cXyz i_start, cXyz param_2) {
     dBgS_LinChk lin_chk;
     cXyz i_end(i_start.x + param_2.x, i_start.y, i_start.z + param_2.z);
@@ -55,18 +52,15 @@ BOOL daObjCRVFENCE_c::Wall_Check(cXyz i_start, cXyz param_2) {
     return FALSE;
 }
 
-/* 80BCEE1C-80BCEE3C 0001FC 0020+00 1/0 0/0 0/0 .text daObjCRVFENCE_Create__FP10fopAc_ac_c */
 static int daObjCRVFENCE_Create(fopAc_ac_c* a_this) {
     return static_cast<daObjCRVFENCE_c*>(a_this)->create();
 }
 
-/* 80BCEE3C-80BCEE60 00021C 0024+00 1/0 0/0 0/0 .text daObjCRVFENCE_Delete__FP15daObjCRVFENCE_c */
 static int daObjCRVFENCE_Delete(daObjCRVFENCE_c* a_this) {
     static_cast<daObjCRVFENCE_c*>(a_this)->MoveBGDelete();
     return 1;
 }
 
-/* 80BCEE60-80BCEED0 000240 0070+00 1/1 0/0 0/0 .text            BgRelease__15daObjCRVFENCE_cFv */
 void daObjCRVFENCE_c::BgRelease() {
     if (mpBgW != NULL) {
         if (mpBgW->ChkUsed() && dComIfG_Bgsp().Release(mpBgW)) {
@@ -75,14 +69,12 @@ void daObjCRVFENCE_c::BgRelease() {
     }
 }
 
-/* 80BCEED0-80BCEF30 0002B0 0060+00 1/1 0/0 0/0 .text            PosSet__15daObjCRVFENCE_cFP4cXyz */
 void daObjCRVFENCE_c::PosSet(cXyz* pos) {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::multVec(pos, pos);
 }
 
-/* 80BCEF30-80BCF0B0 000310 0180+00 1/1 0/0 0/0 .text            FenceMove__15daObjCRVFENCE_cFRUcP4cXyzP5csXyzP4cXyzRs */
 void daObjCRVFENCE_c::FenceMove(u8& param_1, cXyz* param_2, csXyz* param_3, cXyz* param_4, s16& param_5) {
     if (param_1 <= 3) {
         f32 fVar1 = 20.0f;
@@ -111,7 +103,6 @@ void daObjCRVFENCE_c::FenceMove(u8& param_1, cXyz* param_2, csXyz* param_3, cXyz
     }
 }
 
-/* 80BCF0B0-80BCF390 000490 02E0+00 1/1 0/0 0/0 .text            BrokenAction__15daObjCRVFENCE_cFv */
 void daObjCRVFENCE_c::BrokenAction() {
     switch (field_0x5a0) {
         case 0:
@@ -170,7 +161,6 @@ void daObjCRVFENCE_c::BrokenAction() {
     }
 }
 
-/* 80BCF390-80BCF404 000770 0074+00 1/1 0/0 0/0 .text            s_obj_sub__FPvPv */
 static void* s_obj_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_searchActorDistance((fopAc_ac_c*)i_data, (fopAc_ac_c*)i_actor) < 600.0f && fopAcM_GetName(i_actor) == PROC_E_WB) {
         return i_actor;
@@ -179,7 +169,6 @@ static void* s_obj_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 80BCF404-80BCF7DC 0007E4 03D8+00 1/1 0/0 0/0 .text            NormalAction__15daObjCRVFENCE_cFv */
 void daObjCRVFENCE_c::NormalAction() {
     if (!field_0x5f4) {
         e_wb_class* wb_p = (e_wb_class*)fpcM_Search(s_obj_sub, this);
@@ -233,7 +222,6 @@ void daObjCRVFENCE_c::NormalAction() {
     }
 }
 
-/* 80BCF7DC-80BCF860 000BBC 0084+00 1/1 0/0 0/0 .text checkViewArea__15daObjCRVFENCE_cFP4cXyz */
 bool daObjCRVFENCE_c::checkViewArea(cXyz* param_1) {
     Vec sp24;
     mDoLib_project(param_1, &sp24);
@@ -269,7 +257,6 @@ bool daObjCRVFENCE_c::checkViewArea(cXyz* param_1) {
     return rv;
 }
 
-/* 80BCF860-80BCF8A4 000C40 0044+00 1/1 0/0 0/0 .text            Action__15daObjCRVFENCE_cFv */
 void daObjCRVFENCE_c::Action() {
     switch (mAction) {
         case ACTION_NORMAL:
@@ -282,7 +269,6 @@ void daObjCRVFENCE_c::Action() {
     }
 }
 
-/* 80BCF8A4-80BCF998 000C84 00F4+00 1/1 0/0 0/0 .text            setBaseMtx__15daObjCRVFENCE_cFv */
 void daObjCRVFENCE_c::setBaseMtx() {
     mDoMtx_stack_c::transS(field_0x5ac);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -302,17 +288,14 @@ void daObjCRVFENCE_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80BCF998-80BCF9C4 000D78 002C+00 1/0 0/0 0/0 .text daObjCRVFENCE_Draw__FP15daObjCRVFENCE_c */
 static int daObjCRVFENCE_Draw(daObjCRVFENCE_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80BCF9C4-80BCF9E4 000DA4 0020+00 2/1 0/0 0/0 .text daObjCRVFENCE_Execute__FP15daObjCRVFENCE_c */
 static int daObjCRVFENCE_Execute(daObjCRVFENCE_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80BCF9E4-80BCFAE4 000DC4 0100+00 1/0 0/0 0/0 .text            CreateHeap__15daObjCRVFENCE_cFv */
 int daObjCRVFENCE_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "CaravanFence.bmd");
 
@@ -340,7 +323,6 @@ int daObjCRVFENCE_c::CreateHeap() {
     return 1;
 }
 
-/* 80BCFAE4-80BCFD6C 000EC4 0288+00 1/1 0/0 0/0 .text            create__15daObjCRVFENCE_cFv */
 cPhs__Step daObjCRVFENCE_c::create() {
     fopAcM_ct(this, daObjCRVFENCE_c);
 
@@ -390,18 +372,15 @@ cPhs__Step daObjCRVFENCE_c::create() {
     return phase;
 }
 
-/* 80BCFFC0-80BCFFC8 0013A0 0008+00 1/0 0/0 0/0 .text            daObjCRVFENCE_IsDelete__FP15daObjCRVFENCE_c */
 static int daObjCRVFENCE_IsDelete(daObjCRVFENCE_c* i_this) {
     return 1;
 }
 
-/* 80BCFFC8-80BD000C 0013A8 0044+00 1/0 0/0 0/0 .text            Create__15daObjCRVFENCE_cFv */
 int daObjCRVFENCE_c::Create() {
     fopAcM_setCullSizeBox(this, -1000.0f, -500.0f, -1000.0f, 1000.0f, 500.0f, 1000.0f);
     return cPhs_COMPLEATE_e;
 }
 
-/* 80BD000C-80BD0058 0013EC 004C+00 1/0 0/0 0/0 .text Execute__15daObjCRVFENCE_cFPPA3_A4_f */
 int daObjCRVFENCE_c::Execute(Mtx** mtx) {
     Action();
     *mtx = &mBgMtx;
@@ -409,7 +388,6 @@ int daObjCRVFENCE_c::Execute(Mtx** mtx) {
     return 1;
 }
 
-/* 80BD0058-80BD013C 001438 00E4+00 1/0 0/0 0/0 .text            Draw__15daObjCRVFENCE_cFv */
 int daObjCRVFENCE_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
 
@@ -432,13 +410,11 @@ int daObjCRVFENCE_c::Draw() {
     return 1;
 }
 
-/* 80BD013C-80BD0170 00151C 0034+00 1/0 0/0 0/0 .text            Delete__15daObjCRVFENCE_cFv */
 int daObjCRVFENCE_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     return 1;
 }
 
-/* 80BD0264-80BD0284 -00001 0020+00 1/0 0/0 0/0 .data            l_daObjCRVFENCE_Method */
 static actor_method_class l_daObjCRVFENCE_Method = {
     (process_method_func)daObjCRVFENCE_Create,
     (process_method_func)daObjCRVFENCE_Delete,
@@ -447,7 +423,6 @@ static actor_method_class l_daObjCRVFENCE_Method = {
     (process_method_func)daObjCRVFENCE_Draw,
 };
 
-/* 80BD0284-80BD02B4 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_CRVFENCE */
 extern actor_process_profile_definition g_profile_Obj_CRVFENCE = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID

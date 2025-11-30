@@ -8,7 +8,6 @@
 #include "d/actor/d_a_suspend.h"
 #include "d/d_procname.h"
 
-/* 804D5118-804D51E0 000078 00C8+00 1/1 0/0 0/0 .text            create__7daSus_cFv */
 int daSus_c::create() {
     s8 roomNo = fopAcM_GetRoomNo(this);
 
@@ -34,19 +33,15 @@ int daSus_c::create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 804D51E0-804D5234 000140 0054+00 1/0 0/0 0/0 .text            daSus_create__FP7daSus_c */
 static int daSus_create(daSus_c* i_this) {
     fopAcM_ct(i_this, daSus_c);
 
     return i_this->create();
 }
-/* ############################################################################################## */
-/* 804D524C-804D526C -00001 0020+00 1/0 0/0 0/0 .data            daSus_METHODS */
 static actor_method_class daSus_METHODS = {
     (process_method_func)daSus_create, NULL, NULL, NULL, NULL,
 };
 
-/* 804D526C-804D529C -00001 0030+00 0/0 0/0 1/0 .data            g_profile_SUSPEND */
 extern actor_process_profile_definition g_profile_SUSPEND = {
     fpcLy_CURRENT_e,
     11,

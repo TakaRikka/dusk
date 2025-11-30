@@ -10,11 +10,8 @@
 #include <stdio.h>
 #include "global.h"
 
-/* 80451570-80451574 000A70 0004+00 4/4 7/7 0/0 .sbss            sManager__17JUTConsoleManager */
 JUTConsoleManager* JUTConsoleManager::sManager;
 
-/* 802E7354-802E73E4 2E1C94 0090+00 0/0 1/1 0/0 .text            create__10JUTConsoleFUiUiP7JKRHeap
- */
 JUTConsole* JUTConsole::create(unsigned int param_0, unsigned int maxLines, JKRHeap* pHeap) {
     JUTConsoleManager* pManager = JUTConsoleManager::getManager();
     JUT_ASSERT(33, pManager != NULL);
@@ -29,7 +26,6 @@ JUTConsole* JUTConsole::create(unsigned int param_0, unsigned int maxLines, JKRH
     return console;
 }
 
-/* 802E73E4-802E746C 2E1D24 0088+00 0/0 1/1 0/0 .text            create__10JUTConsoleFUiPvUl */
 JUTConsole* JUTConsole::create(unsigned int param_0, void* buffer, u32 bufferSize) {
     JUTConsoleManager* pManager = JUTConsoleManager::getManager();
     JUT_ASSERT(59, pManager != NULL);
@@ -45,7 +41,6 @@ JUTConsole* JUTConsole::create(unsigned int param_0, void* buffer, u32 bufferSiz
     return console;
 }
 
-/* 802E746C-802E755C 2E1DAC 00F0+00 2/2 0/0 0/0 .text            __ct__10JUTConsoleFUiUib */
 JUTConsole::JUTConsole(unsigned int param_0, unsigned int maxLines, bool param_2) {
     field_0x2c = param_2;
     field_0x20 = param_0;
@@ -71,24 +66,19 @@ JUTConsole::JUTConsole(unsigned int param_0, unsigned int maxLines, bool param_2
     field_0x64 = 8;
 }
 
-/* 802E755C-802E75CC 2E1E9C 0070+00 1/0 0/0 0/0 .text            __dt__10JUTConsoleFv */
 JUTConsole::~JUTConsole() {
     JUT_ASSERT(154, JUTConsoleManager::getManager());
     JUTConsoleManager::getManager()->removeConsole(this);
 }
 
-/* 802E75CC-802E75DC 2E1F0C 0010+00 1/1 0/0 0/0 .text
- * getObjectSizeFromBufferSize__10JUTConsoleFUiUi               */
 size_t JUTConsole::getObjectSizeFromBufferSize(unsigned int param_0, unsigned int maxLines) {
     return (param_0 + 2) * maxLines + sizeof(JUTConsole);
 }
 
-/* 802E75DC-802E75EC 2E1F1C 0010+00 1/1 1/1 0/0 .text getLineFromObjectSize__10JUTConsoleFUlUi */
 size_t JUTConsole::getLineFromObjectSize(u32 bufferSize, unsigned int param_1) {
     return (bufferSize - sizeof(JUTConsole)) / (param_1 + 2);
 }
 
-/* 802E75EC-802E7648 2E1F2C 005C+00 2/2 2/2 0/0 .text            clear__10JUTConsoleFv */
 void JUTConsole::clear() {
     field_0x30 = 0;
     field_0x34 = 0;
@@ -103,8 +93,6 @@ void JUTConsole::clear() {
     *getLinePtr(0) = 0;
 }
 
-/* 802E7648-802E7BB8 2E1F88 0570+00 2/2 0/0 0/0 .text
- * doDraw__10JUTConsoleCFQ210JUTConsole12EConsoleType           */
 void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
     f32 font_yOffset;
     s32 changeLine_1;
@@ -184,7 +172,6 @@ void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
     }
 }
 
-/* 802E7BB8-802E7C38 2E24F8 0080+00 0/0 13/13 0/0 .text            print_f__10JUTConsoleFPCce */
 void JUTConsole::print_f(char const* fmt, ...) {
     va_list args;
     va_start(args, fmt);
@@ -192,7 +179,6 @@ void JUTConsole::print_f(char const* fmt, ...) {
     va_end(args);
 }
 
-/* 802E7C38-802E7F30 2E2578 02F8+00 2/2 10/10 0/0 .text            print__10JUTConsoleFPCc */
 void JUTConsole::print(char const* str) {
     if (mOutput & 2) {
         OS_REPORT("%s", str);
@@ -260,7 +246,6 @@ void JUTConsole::print(char const* str) {
     }
 }
 
-/* 802E7F30-802E7F7C 2E2870 004C+00 1/1 1/1 0/0 .text            JUTConsole_print_f_va_ */
 extern "C" void JUTConsole_print_f_va_(JUTConsole* console, const char* fmt, va_list args) {
     JUT_ASSERT(563, console!=NULL);
 
@@ -269,7 +254,6 @@ extern "C" void JUTConsole_print_f_va_(JUTConsole* console, const char* fmt, va_
     console->print(buf);
 }
 
-/* 802E7F7C-802E80A8 2E28BC 012C+00 0/0 2/2 0/0 .text            dumpToTerminal__10JUTConsoleFUi */
 void JUTConsole::dumpToTerminal(unsigned int param_0) {
     if (param_0 == 0) {
         return;
@@ -311,7 +295,6 @@ void JUTConsole::dumpToTerminal(unsigned int param_0) {
     OS_REPORT(":::dump of console[%x] END----------------------------\n", this);
 }
 
-/* 802E80A8-802E8184 2E29E8 00DC+00 0/0 3/3 0/0 .text            scroll__10JUTConsoleFi */
 void JUTConsole::scroll(int scrollAmnt) {
     if (scrollAmnt < 0) {
         int diff = diffIndex(field_0x34, field_0x30);
@@ -342,24 +325,19 @@ void JUTConsole::scroll(int scrollAmnt) {
     }
 }
 
-/* 802E8184-802E81A8 2E2AC4 0024+00 0/0 2/2 0/0 .text            getUsedLine__10JUTConsoleCFv */
 int JUTConsole::getUsedLine() const {
     return diffIndex(field_0x34, field_0x38);
 }
 
-/* 802E81A8-802E81CC 2E2AE8 0024+00 0/0 3/3 0/0 .text            getLineOffset__10JUTConsoleCFv */
 int JUTConsole::getLineOffset() const {
     return diffIndex(field_0x34, field_0x30);
 }
 
-/* 802E81CC-802E81F4 2E2B0C 0028+00 1/1 0/0 0/0 .text            __ct__17JUTConsoleManagerFv */
 JUTConsoleManager::JUTConsoleManager() {
     mActiveConsole = NULL;
     mDirectConsole = NULL;
 }
 
-/* 802E81F4-802E8240 2E2B34 004C+00 0/0 1/1 0/0 .text createManager__17JUTConsoleManagerFP7JKRHeap
- */
 JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
     JUT_ASSERT(0x39c, sManager == NULL);
 
@@ -372,8 +350,6 @@ JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
     return manager;
 }
 
-/* 802E8240-802E82B0 2E2B80 0070+00 3/3 0/0 0/0 .text
- * appendConsole__17JUTConsoleManagerFP10JUTConsole             */
 void JUTConsoleManager::appendConsole(JUTConsole* console) {
     JUT_ASSERT(961, sManager != NULL && console != NULL);
 
@@ -385,8 +361,6 @@ void JUTConsoleManager::appendConsole(JUTConsole* console) {
     }
 }
 
-/* 802E82B0-802E8384 2E2BF0 00D4+00 2/2 0/0 0/0 .text
- * removeConsole__17JUTConsoleManagerFP10JUTConsole             */
 void JUTConsoleManager::removeConsole(JUTConsole* console) {
     JUT_ASSERT(982, sManager != NULL && console != NULL);
     JUT_ASSERT(985, soLink_.Find( console ) != soLink_.end());
@@ -407,7 +381,6 @@ void JUTConsoleManager::removeConsole(JUTConsole* console) {
     soLink_.Remove(console);
 }
 
-/* 802E8384-802E8450 2E2CC4 00CC+00 0/0 1/1 0/0 .text            draw__17JUTConsoleManagerCFv */
 void JUTConsoleManager::draw() const {
     ConsoleList::const_iterator iter = soLink_.begin();
     ConsoleList::const_iterator end = soLink_.end();
@@ -422,8 +395,6 @@ void JUTConsoleManager::draw() const {
         mActiveConsole->doDraw(JUTConsole::CONSOLE_TYPE_0);
 }
 
-/* 802E8450-802E84C4 2E2D90 0074+00 0/0 5/5 0/0 .text            drawDirect__17JUTConsoleManagerCFb
- */
 void JUTConsoleManager::drawDirect(bool waitRetrace) const {
     if (mDirectConsole != NULL) {
         if (waitRetrace) {
@@ -439,8 +410,6 @@ void JUTConsoleManager::drawDirect(bool waitRetrace) const {
     }
 }
 
-/* 802E84C4-802E8520 2E2E04 005C+00 0/0 2/2 0/0 .text
- * setDirectConsole__17JUTConsoleManagerFP10JUTConsole          */
 void JUTConsoleManager::setDirectConsole(JUTConsole* console) {
     if (mDirectConsole != NULL) {
         appendConsole(mDirectConsole);
@@ -452,33 +421,26 @@ void JUTConsoleManager::setDirectConsole(JUTConsole* console) {
     mDirectConsole = console;
 }
 
-/* 80451574-80451578 000A74 0004+00 2/1 0/0 0/0 .sbss            sReportConsole */
 static JUTConsole* sReportConsole;
 
-/* 802E8520-802E8528 2E2E60 0008+00 1/1 1/1 0/0 .text            JUTSetReportConsole */
 extern "C" void JUTSetReportConsole(JUTConsole* console) {
     sReportConsole = console;
 }
 
-/* 802E8528-802E8530 -00001 0008+00 0/0 0/0 0/0 .text            JUTGetReportConsole */
 extern "C" JUTConsole* JUTGetReportConsole() {
     return sReportConsole;
 }
 
-/* 80451578-80451580 000A78 0004+04 2/1 0/0 0/0 .sbss            sWarningConsole */
 static JUTConsole* sWarningConsole;
 
-/* 802E8530-802E8538 2E2E70 0008+00 1/1 1/1 0/0 .text            JUTSetWarningConsole */
 extern "C" void JUTSetWarningConsole(JUTConsole* console) {
     sWarningConsole = console;
 }
 
-/* 802E8538-802E8540 -00001 0008+00 0/0 0/0 0/0 .text            JUTGetWarningConsole */
 extern "C" JUTConsole* JUTGetWarningConsole() {
     return sWarningConsole;
 }
 
-/* 802E8540-802E85C8 2E2E80 0088+00 2/2 0/0 0/0 .text            JUTReportConsole_f_va */
 extern "C" void JUTReportConsole_f_va(const char* fmt, va_list args) {
     char buf[256];
 
@@ -492,7 +454,6 @@ extern "C" void JUTReportConsole_f_va(const char* fmt, va_list args) {
     }
 }
 
-/* 802E85C8-802E8648 2E2F08 0080+00 2/2 8/8 0/0 .text            JUTReportConsole_f */
 extern "C" void JUTReportConsole_f(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
@@ -505,7 +466,6 @@ static void dummyString() {
     DEAD_STRING(":::dump of console[%x] END------------\n");
 }
 
-/* 802E8648-802E867C 2E2F88 0034+00 0/0 6/6 0/0 .text            JUTReportConsole */
 void JUTReportConsole(const char* message) {
     JUTReportConsole_f("%s", message);
 }
@@ -524,7 +484,6 @@ void JUTWarningConsole_f_va(const char* fmt, va_list args) {
     }
 }
 
-/* 802E867C-802E86FC 2E2FBC 0080+00 0/0 9/9 0/0 .text            JUTWarningConsole_f */
 void JUTWarningConsole_f(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
@@ -532,7 +491,6 @@ void JUTWarningConsole_f(const char* fmt, ...) {
     va_end(args);
 }
 
-/* 802E86FC-802E8730 2E303C 0034+00 0/0 2/2 0/0 .text            JUTWarningConsole */
 void JUTWarningConsole(const char* message) {
     JUTReportConsole_f("%s", message);
 }

@@ -7,10 +7,10 @@
 
 class daTagSppath_c : public fopAc_ac_c {
 public:
-    /* 80D61C18 */ int create();
-    /* 80D61EC4 */ ~daTagSppath_c();
-    /* 80D62024 */ int getNearPathPos(cXyz*, dPath*);
-    /* 80D629C0 */ int execute();
+    int create();
+    ~daTagSppath_c();
+    int getNearPathPos(cXyz*, dPath*);
+    int execute();
 
     dPath* getKeepPath() { return mpBestPath; }
     u16 getKeepPointNum() const { return mBestNo; }

@@ -6,7 +6,6 @@
 #define lpd ((unsigned long*)dst)
 #define deref_auto_inc(p) *++(p)
 
-/* 80366410-803664CC 360D50 00BC+00 0/0 1/1 0/0 .text            __copy_longs_aligned */
 void __copy_longs_aligned(void* dst, const void* src, size_t n) {
     unsigned long i;
 
@@ -60,7 +59,6 @@ void __copy_longs_aligned(void* dst, const void* src, size_t n) {
     return;
 }
 
-/* 80366368-80366410 360CA8 00A8+00 0/0 1/1 0/0 .text            __copy_longs_rev_aligned */
 void __copy_longs_rev_aligned(void* dst, const void* src, size_t n) {
     unsigned long i;
 
@@ -108,7 +106,6 @@ void __copy_longs_rev_aligned(void* dst, const void* src, size_t n) {
     return;
 }
 
-/* 803662A8-80366368 360BE8 00C0+00 0/0 1/1 0/0 .text            __copy_longs_unaligned */
 void __copy_longs_unaligned(void* dst, const void* src, size_t n) {
     unsigned long i, v1, v2;
     unsigned int src_offset, left_shift, right_shift;
@@ -167,7 +164,6 @@ void __copy_longs_unaligned(void* dst, const void* src, size_t n) {
     return;
 }
 
-/* 803661FC-803662A8 360B3C 00AC+00 0/0 1/1 0/0 .text            __copy_longs_rev_unaligned */
 void __copy_longs_rev_unaligned(void* dst, const void* src, size_t n) {
     unsigned long i, v1, v2;
     unsigned int src_offset, left_shift, right_shift;

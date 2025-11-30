@@ -5,15 +5,15 @@
 
 class daTag_Cam_c : public fopAc_ac_c {
 public:
-    /* 80489F14 */ u8 getSwType();
-    /* 80489F20 */ u8 getPrio();
-    /* 80489F2C */ u8 getSwBit();
-    /* 80489F38 */ u8 getCondition();
-    /* 80489F44 */ u8 getCameraId();
-    /* 80489F50 */ u8 getRailID();
-    /* 80489F5C */ u16 getAreaType();
-    /* 80489F68 */ u16 getAreaNoChk();
-    /* 80489F74 */ int execute();
+    u8 getSwType();
+    u8 getPrio();
+    u8 getSwBit();
+    u8 getCondition();
+    u8 getCameraId();
+    u8 getRailID();
+    u16 getAreaType();
+    u16 getAreaNoChk();
+    int execute();
 
     inline int create();
 

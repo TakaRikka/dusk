@@ -24,24 +24,24 @@ public:
         STATUS_OPEN,
     };
 
-    /* 80B9B9B8 */ int CreateHeap();
-    /* 80B9BA94 */ int Init();
-    /* 80B9BB5C */ void setBgc();
-    /* 80B9BBCC */ void initCcSph();
-    /* 80B9BC2C */ void setCcSph();
-    /* 80B9BD30 */ void setAction(actionFunc, int);
-    /* 80B9BDD8 */ void Action();
-    /* 80B9BE24 */ void Wait(int);
-    /* 80B9BF08 */ void Open(int);
-    /* 80B9BFDC */ void Fall(int);
-    /* 80B9C17C */ void Land(int);
-    /* 80B9C268 */ void Shake(int);
-    /* 80B9C3B0 */ void TranslateByNowDirect(f32, f32, f32);
-    /* 80B9C410 */ int Execute();
-    /* 80B9C450 */ int Draw();
-    /* 80B9C500 */ int Delete();
-    /* 80B9C534 */ void setBaseMtx();
-    /* 80B9C5EC */ int create_1st();
+    int CreateHeap();
+    int Init();
+    void setBgc();
+    void initCcSph();
+    void setCcSph();
+    void setAction(actionFunc, int);
+    void Action();
+    void Wait(int);
+    void Open(int);
+    void Fall(int);
+    void Land(int);
+    void Shake(int);
+    void TranslateByNowDirect(f32, f32, f32);
+    int Execute();
+    int Draw();
+    int Delete();
+    void setBaseMtx();
+    int create_1st();
 
     void setLocalOffset(f32 x, f32 y, f32 z) { mLocalOffset.set(x, y, z); }
     void setRotateSpd(s16 x, s16 y, s16 z) { mRotateSpd.set(x, y, z); }

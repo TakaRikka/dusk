@@ -18,14 +18,11 @@
 #include "JSystem/JUtility/JUTResFont.h"
 #include "Z2AudioLib/Z2Creature.h"
 #include "d/d_com_inf_game.h"
-#include "dol2asm.h"
 #include "global.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "stdio.h"
 
-/* 8000D0AC-8000D320 0079EC 0274+00 5/5 0/0 0/0 .text
- * mDoExt_setJ3DData__FPA4_fPC16J3DTransformInfoUs              */
 static void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 param_2) {
     bool local_28;
     if (cM3d_IsZero(transformInfo->mScale.x - 1.0f) && cM3d_IsZero(transformInfo->mScale.y - 1.0f) && cM3d_IsZero(transformInfo->mScale.z - 1.0f)) {
@@ -80,7 +77,6 @@ static BOOL isCurrentSolidHeap() {
     return TRUE;
 }
 
-/* 8000D320-8000D428 007C60 0108+00 6/6 0/0 0/0 .text            initPlay__14mDoExt_baseAnmFsifss */
 int mDoExt_baseAnm::initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF,
                              s16 i_endF) {
     mFrameCtrl.setStart(i_startF);
@@ -105,14 +101,11 @@ int mDoExt_baseAnm::initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_
     return 1;
 }
 
-/* 8000D428-8000D47C 007D68 0054+00 0/0 12/12 198/198 .text            play__14mDoExt_baseAnmFv */
 int mDoExt_baseAnm::play() {
     mFrameCtrl.update();
     return isStop();
 }
 
-/* 8000D47C-8000D518 007DBC 009C+00 0/0 3/3 6/6 .text
- * init__13mDoExt_bpkAnmFP16J3DMaterialTableP11J3DAnmColoriifss */
 int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, int i_anmPlay,
                         int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF) {
     mpAnm = i_bpk;
@@ -132,15 +125,11 @@ int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, int i_
     return 1;
 }
 
-/* 8000D518-8000D54C 007E58 0034+00 0/0 3/3 6/6 .text entry__13mDoExt_bpkAnmFP16J3DMaterialTablef
- */
 void mDoExt_bpkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
     mpAnm->setFrame(i_frame);
     i_matTable->entryMatColorAnimator(mpAnm);
 }
 
-/* 8000D54C-8000D5E8 007E8C 009C+00 0/0 5/5 28/28 .text
- * init__13mDoExt_btpAnmFP16J3DMaterialTableP16J3DAnmTexPatterniifss */
 int mDoExt_btpAnm::init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btp, int i_anmPlay,
                         int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF) {
     mpAnm = i_btp;
@@ -160,15 +149,11 @@ int mDoExt_btpAnm::init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btp, i
     return 1;
 }
 
-/* 8000D5E8-8000D63C 007F28 0054+00 0/0 5/5 28/28 .text
- * entry__13mDoExt_btpAnmFP16J3DMaterialTables                  */
 void mDoExt_btpAnm::entry(J3DMaterialTable* i_matTable, s16 i_frame) {
     mpAnm->setFrame(i_frame);
     i_matTable->entryTexNoAnimator(mpAnm);
 }
 
-/* 8000D63C-8000D6D8 007F7C 009C+00 0/0 6/6 137/137 .text
- * init__13mDoExt_btkAnmFP16J3DMaterialTableP19J3DAnmTextureSRTKeyiifss */
 int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk, int i_anmPlay,
                         int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF) {
     mpAnm = i_btk;
@@ -188,15 +173,11 @@ int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk
     return 1;
 }
 
-/* 8000D6D8-8000D70C 008018 0034+00 0/0 7/7 117/117 .text
- * entry__13mDoExt_btkAnmFP16J3DMaterialTablef                  */
 void mDoExt_btkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
     mpAnm->setFrame(i_frame);
     i_matTable->entryTexMtxAnimator(mpAnm);
 }
 
-/* 8000D70C-8000D7A8 00804C 009C+00 0/0 8/8 112/112 .text
- * init__13mDoExt_brkAnmFP16J3DMaterialTableP15J3DAnmTevRegKeyiifss */
 int mDoExt_brkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, int i_anmPlay,
                         int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF) {
     mpAnm = i_brk;
@@ -216,13 +197,11 @@ int mDoExt_brkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, in
     return 1;
 }
 
-/* 8000D7A8-8000D7DC 0080E8 0034+00 0/0 8/8 96/96 .text          entry__13mDoExt_brkAnmFP16J3DMaterialTablef */
 void mDoExt_brkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
     mpAnm->setFrame(i_frame);
     i_matTable->entryTevRegAnimator(mpAnm);
 }
 
-/* 8000D7DC-8000D8E4 00811C 0108+00 0/0 18/18 85/85 .text        init__13mDoExt_bckAnmFP15J3DAnmTransformiifssb */
 int mDoExt_bckAnm::init(J3DAnmTransform* i_bck, int i_play, int i_attr, f32 i_rate,
                         s16 i_startF, s16 i_endF, bool i_modify) {
     JUT_ASSERT(614, (i_modify || isCurrentSolidHeap()) && i_bck != NULL);
@@ -242,25 +221,21 @@ int mDoExt_bckAnm::init(J3DAnmTransform* i_bck, int i_play, int i_attr, f32 i_ra
     return 1;
 }
 
-/* 8000D990-8000D9CC 0082D0 003C+00 0/0 5/5 31/31 .text          changeBckOnly__13mDoExt_bckAnmFP15J3DAnmTransform */
 void mDoExt_bckAnm::changeBckOnly(J3DAnmTransform* i_bck) {
     mAnm = i_bck;
     mpMtxCalc->setAnmTransform(mAnm);
 }
 
-/* 8000D9CC-8000D9E8 00830C 001C+00 0/0 11/11 59/59 .text        entry__13mDoExt_bckAnmFP12J3DModelDataf */
 void mDoExt_bckAnm::entry(J3DModelData* i_modelData, f32 i_frame) {
     mAnm->setFrame(i_frame);
     i_modelData->getJointNodePointer(0)->setMtxCalc(mpMtxCalc);
 }
 
-/* 8000D9E8-8000DA08 008328 0020+00 0/0 1/1 1/1 .text            entryJoint__13mDoExt_bckAnmFP12J3DModelDataUsf */
 void mDoExt_bckAnm::entryJoint(J3DModelData* i_modelData, u16 i_jntNo, f32 i_frame) {
     mAnm->setFrame(i_frame);
     i_modelData->getJointNodePointer(i_jntNo)->setMtxCalc(mpMtxCalc);
 }
 
-/* 8000DA08-8000DAA8 008348 00A0+00 0/0 1/1 3/3 .text            init__13mDoExt_blkAnmFP13J3DDeformDataP13J3DAnmClusteriifss */
 int mDoExt_blkAnm::init(J3DDeformData* i_deformData, J3DAnmCluster* i_blk, int i_anmPlay,
                         int i_attribute, f32 i_rate, s16 i_start, s16 param_6) {
     mpAnm = i_blk;
@@ -280,7 +255,6 @@ int mDoExt_blkAnm::init(J3DDeformData* i_deformData, J3DAnmCluster* i_blk, int i
     return 1;
 }
 
-/* 8000DAA8-8000DB10 0083E8 0068+00 3/3 0/0 0/0 .text            mDoExt_changeMaterial__FP8J3DModel */
 static void mDoExt_changeMaterial(J3DModel* i_model) {
     J3DModelData* model_data = i_model->getModelData();
 
@@ -289,7 +263,6 @@ static void mDoExt_changeMaterial(J3DModel* i_model) {
     }
 }
 
-/* 8000DB10-8000DBC8 008450 00B8+00 0/0 0/0 1/1 .text mDoExt_modelTexturePatch__FP12J3DModelData */
 void mDoExt_modelTexturePatch(J3DModelData* i_modelData) {
     j3dSys.setTexture(i_modelData->getTexture());
 
@@ -314,14 +287,12 @@ static void dummy1() {
     ((J3DPEBlock*)NULL)->patch();
 }
 
-/* 8000DBD8-8000DC2C 008518 0054+00 3/3 0/0 0/0 .text            mDoExt_modelDiff__FP8J3DModel */
 static void mDoExt_modelDiff(J3DModel* i_model) {
     i_model->calcMaterial();
     i_model->diff();
     i_model->entry();
 }
 
-/* 8000DC2C-8000DCC4 00856C 0098+00 0/0 0/0 8/8 .text            mDoExt_modelUpdate__FP8J3DModel */
 void mDoExt_modelUpdate(J3DModel* i_model) {
     J3DModelData* model_data = i_model->getModelData();
 
@@ -338,7 +309,6 @@ void mDoExt_modelUpdate(J3DModel* i_model) {
     i_model->viewCalc();
 }
 
-/* 8000DCC4-8000DD64 008604 00A0+00 1/1 12/12 414/414 .text mDoExt_modelUpdateDL__FP8J3DModel */
 void mDoExt_modelUpdateDL(J3DModel* i_model) {
     J3DModelData* model_data = i_model->getModelData();
 
@@ -356,7 +326,6 @@ void mDoExt_modelUpdateDL(J3DModel* i_model) {
     i_model->viewCalc();
 }
 
-/* 8000DD64-8000DDF0 0086A4 008C+00 4/4 3/3 10/10 .text            mDoExt_modelEntryDL__FP8J3DModel */
 void mDoExt_modelEntryDL(J3DModel* i_model) {
     J3DModelData* model_data = i_model->getModelData();
 
@@ -373,7 +342,6 @@ void mDoExt_modelEntryDL(J3DModel* i_model) {
     i_model->viewCalc();
 }
 
-/* 8000DDF0-8000DE8C 008730 009C+00 0/0 0/0 14/14 .text          mDoExt_btkAnmRemove__FP12J3DModelData */
 void mDoExt_btkAnmRemove(J3DModelData* i_modelData) {
     for (u16 i = 0; i < i_modelData->getMaterialNum(); i++) {
         J3DMaterialAnm* matAnm = i_modelData->getMaterialNodePointer(i)->getMaterialAnm();
@@ -386,7 +354,6 @@ void mDoExt_btkAnmRemove(J3DModelData* i_modelData) {
     }
 }
 
-/* 8000DE8C-8000DF3C 0087CC 00B0+00 0/0 0/0 7/7 .text            mDoExt_brkAnmRemove__FP12J3DModelData */
 void mDoExt_brkAnmRemove(J3DModelData* i_modelData) {
     for (u16 i = 0; i < i_modelData->getMaterialNum(); i++) {
         J3DMaterialAnm* matAnm = i_modelData->getMaterialNodePointer(i)->getMaterialAnm();
@@ -504,7 +471,6 @@ static void dummy2() {
     peBlock->getZCompLoc();
 }
 
-/* 8000E53C-8000E5F8 008E7C 00BC+00 0/0 0/0 19/19 .text          create__21mDoExt_invisibleModelFP8J3DModelUc */
 int mDoExt_invisibleModel::create(J3DModel* i_model, u8 param_1) {
     J3DModelData* model_data = i_model->getModelData();
 
@@ -524,8 +490,6 @@ int mDoExt_invisibleModel::create(J3DModel* i_model, u8 param_1) {
     return 1;
 }
 
-/* 8000E6C8-8000E7C0 009008 00F8+00 1/1 0/0 0/0 .text            entryJoint__21mDoExt_invisibleModelFP4cXyz
- */
 void mDoExt_invisibleModel::entryJoint(cXyz* param_0) {
     J3DModelData* modelData = mModel->getModelData();
     mDoExt_invJntPacket* packet = mpPackets;
@@ -546,7 +510,6 @@ void mDoExt_invisibleModel::entryJoint(cXyz* param_0) {
     }
 }
 
-/* 8000E7C0-8000E834 009100 0074+00 0/0 0/0 17/17 .text entryDL__21mDoExt_invisibleModelFP4cXyz */
 void mDoExt_invisibleModel::entryDL(cXyz* param_0) {
     J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
     J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
@@ -557,8 +520,6 @@ void mDoExt_invisibleModel::entryDL(cXyz* param_0) {
     j3dSys.setDrawBuffer(buffer1, 1);
 }
 
-/* 8000E834-8000EA80 009174 024C+00 0/0 0/0 7/7 .text
- * mDoExt_setupShareTexture__FP12J3DModelDataP12J3DModelData    */
 void mDoExt_setupShareTexture(J3DModelData* i_modelData, J3DModelData* i_shareModelData) {
     JUT_ASSERT(1547, i_modelData != NULL && i_shareModelData != NULL);
     J3DTexture* texture = i_modelData->getTexture();
@@ -614,8 +575,6 @@ static const char* dummy3() {
         "\xAA\x82\xC8\x81\x49\x0A";
 }
 
-/* 8000EA80-8000ECC0 0093C0 0240+00 0/0 0/0 6/6 .text mDoExt_setupStageTexture__FP12J3DModelData
- */
 void mDoExt_setupStageTexture(J3DModelData* i_modelData) {
     J3DTexture* texture_p = i_modelData->getTexture();
 
@@ -664,58 +623,44 @@ void mDoExt_setupStageTexture(J3DModelData* i_modelData) {
     }
 }
 
-/* 80450C20-80450C24 000120 0004+00 2/1 0/0 0/0 .sbss            AssertHeap */
 static JKRAssertHeap* AssertHeap;
 
-/* 8000ECC0-8000ECE4 009600 0024+00 0/0 1/1 0/0 .text            mDoExt_createAssertHeap__FP7JKRHeap
- */
 JKRAssertHeap* mDoExt_createAssertHeap(JKRHeap* i_heap) {
     return AssertHeap = JKRAssertHeap::create(i_heap);
 }
 
-/* 8000ECE4-8000ECEC -00001 0008+00 0/0 0/0 0/0 .text            mDoExt_getAssertHeap__Fv */
 JKRAssertHeap* mDoExt_getAssertHeap() {
     return AssertHeap;
 }
 
-/* 80450C24-80450C28 000124 0004+00 2/1 0/0 0/0 .sbss            DbPrintHeap */
 static JKRExpHeap* DbPrintHeap;
 
-/* 8000ECEC-8000ED14 00962C 0028+00 0/0 1/1 0/0 .text mDoExt_createDbPrintHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createDbPrintHeap(u32 heapSize, JKRHeap* i_heap) {
     return DbPrintHeap = JKRExpHeap::create(heapSize, i_heap, true);
 }
 
-/* 8000ED14-8000ED1C -00001 0008+00 0/0 0/0 0/0 .text            mDoExt_getDbPrintHeap__Fv */
 JKRExpHeap* mDoExt_getDbPrintHeap() {
     return DbPrintHeap;
 }
 
-/* 80450C28-80450C2C 000128 0004+00 2/1 3/3 0/0 .sbss            gameHeap */
 JKRExpHeap* gameHeap;
 
-/* 8000ED1C-8000ED50 00965C 0034+00 0/0 1/1 0/0 .text            mDoExt_createGameHeap__FUlP7JKRHeap
- */
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap) {
     gameHeap = JKRExpHeap::create(heapSize, i_heap, true);
     gameHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return gameHeap;
 }
 
-/* 8000ED50-8000ED58 -00001 0008+00 0/0 0/0 0/0 .text            mDoExt_getGameHeap__Fv */
 JKRExpHeap* mDoExt_getGameHeap() {
     return gameHeap;
 }
 
-/* 80450C2C-80450C30 00012C 0004+00 2/1 3/3 0/0 .sbss            zeldaHeap */
 JKRExpHeap* zeldaHeap;
 
-/* 8000ED58-8000ED80 009698 0028+00 0/0 1/1 0/0 .text mDoExt_createZeldaHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap) {
     return zeldaHeap = JKRExpHeap::create(heapSize, i_heap, true);
 }
 
-/* 8000ED80-8000ED88 -00001 0008+00 0/0 0/0 0/0 .text            mDoExt_getZeldaHeap__Fv */
 JKRExpHeap* mDoExt_getZeldaHeap() {
     return zeldaHeap;
 }
@@ -728,59 +673,46 @@ s32 mDoExt_getSafeZeldaHeapSize() {
 }
 #endif
 
-/* 80450C30-80450C34 000130 0004+00 2/1 1/1 0/0 .sbss            commandHeap */
 JKRExpHeap* commandHeap;
 
-/* 8000ED88-8000EDB0 0096C8 0028+00 0/0 1/1 0/0 .text mDoExt_createCommandHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap) {
     return commandHeap = JKRExpHeap::create(heapSize, i_heap, true);
 }
 
-/* 8000EDB0-8000EDB8 -00001 0008+00 0/0 0/0 0/0 .text            mDoExt_getCommandHeap__Fv */
 JKRExpHeap* mDoExt_getCommandHeap() {
     return commandHeap;
 }
 
-/* 80450C34-80450C38 000134 0004+00 3/1 5/5 0/0 .sbss            archiveHeap */
 JKRExpHeap* archiveHeap;
 
-/* 8000EDB8-8000EDEC 0096F8 0034+00 0/0 1/1 0/0 .text mDoExt_createArchiveHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap) {
     archiveHeap = JKRExpHeap::create(heapSize, i_heap, true);
     archiveHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return archiveHeap;
 }
 
-/* 8000EDEC-8000EDF4 -00001 0008+00 0/0 0/0 0/0 .text            mDoExt_getArchiveHeap__Fv */
 JKRExpHeap* mDoExt_getArchiveHeap() {
     return archiveHeap;
 }
 
-/* 8000EDF4-8000EDFC -00001 0008+00 0/0 0/0 0/0 .text            mDoExt_getArchiveHeapPtr__Fv */
 JKRExpHeap* mDoExt_getArchiveHeapPtr() {
     return archiveHeap;
 }
 
-/* 80450C38-80450C3C 000138 0004+00 2/1 0/0 0/0 .sbss            j2dHeap */
 static JKRExpHeap* j2dHeap;
 
-/* 8000EDFC-8000EE30 00973C 0034+00 0/0 1/1 0/0 .text            mDoExt_createJ2dHeap__FUlP7JKRHeap
- */
 JKRExpHeap* mDoExt_createJ2dHeap(u32 heapSize, JKRHeap* i_heap) {
     j2dHeap = JKRExpHeap::create(heapSize, i_heap, true);
     j2dHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return j2dHeap;
 }
 
-/* 8000EE30-8000EE38 -00001 0008+00 0/0 0/0 0/0 .text            mDoExt_getJ2dHeap__Fv */
 JKRExpHeap* mDoExt_getJ2dHeap() {
     return j2dHeap;
 }
 
-/* 80450C3C-80450C40 00013C 0004+00 1/0 0/0 0/0 .sbss            HostIOHeap */
 static JKRExpHeap* HostIOHeap;
 
-/* 8000EE38-8000EE40 -00001 0008+00 0/0 0/0 0/0 .text            mDoExt_getHostIOHeap__Fv */
 JKRExpHeap* mDoExt_getHostIOHeap() {
     return HostIOHeap;
 }
@@ -789,7 +721,6 @@ JKRExpHeap* mDoExt_getHostIOHeap() {
 extern u8 lbl_8074C3B9[1];
 #endif
 
-/* 8000EE40-8000EED8 009780 0098+00 3/3 0/0 0/0 .text mDoExt_createSolidHeap__FUlP7JKRHeapUl */
 static JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignment) {
     if (i_heap == NULL) {
         i_heap = JKRGetCurrentHeap();
@@ -850,18 +781,14 @@ static JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_a
     return createdHeap;
 }
 
-/* 8000EED8-8000EF20 009818 0048+00 0/0 2/2 0/0 .text mDoExt_createSolidHeapFromGame__FUlUl */
 JKRSolidHeap* mDoExt_createSolidHeapFromGame(u32 i_size, u32 i_alignment) {
     return mDoExt_createSolidHeap(i_size, mDoExt_getGameHeap(), i_alignment);
 }
 
-/* 8000EF20-8000EF68 009860 0048+00 0/0 1/1 0/0 .text mDoExt_createSolidHeapFromSystem__FUlUl */
 JKRSolidHeap* mDoExt_createSolidHeapFromSystem(u32 i_size, u32 i_alignment) {
     return mDoExt_createSolidHeap(i_size, mDoExt_getZeldaHeap(), i_alignment);
 }
 
-/* 8000EF68-8000EFBC 0098A8 0054+00 2/2 0/0 0/0 .text
- * mDoExt_createSolidHeapToCurrent__FPP7JKRHeapUlP7JKRHeapUl    */
 JKRSolidHeap* mDoExt_createSolidHeapToCurrent(JKRHeap** o_heap, u32 i_size, JKRHeap* i_parent,
                                               u32 i_alignment) {
     if (o_heap != NULL) {
@@ -876,30 +803,21 @@ JKRSolidHeap* mDoExt_createSolidHeapToCurrent(JKRHeap** o_heap, u32 i_size, JKRH
     return resultHeap;
 }
 
-/* 80450C40-80450C44 000140 0004+00 2/2 0/0 0/0 .sbss            mDoExt_SaveCurrentHeap */
 static JKRHeap* mDoExt_SaveCurrentHeap;
 
-/* 8000EFBC-8000EFF4 0098FC 0038+00 1/1 3/3 0/0 .text
- * mDoExt_createSolidHeapToCurrent__FUlP7JKRHeapUl              */
 JKRSolidHeap* mDoExt_createSolidHeapToCurrent(u32 i_size, JKRHeap* i_parent, u32 i_alignment) {
     return mDoExt_createSolidHeapToCurrent(&mDoExt_SaveCurrentHeap, i_size, i_parent, i_alignment);
 }
 
-/* 8000EFF4-8000F044 009934 0050+00 0/0 2/2 0/0 .text
- * mDoExt_createSolidHeapFromGameToCurrent__FPP7JKRHeapUlUl     */
 JKRSolidHeap* mDoExt_createSolidHeapFromGameToCurrent(JKRHeap** o_heap, u32 i_size,
                                                       u32 i_alignment) {
     return mDoExt_createSolidHeapToCurrent(o_heap, i_size, mDoExt_getGameHeap(), i_alignment);
 }
 
-/* 8000F044-8000F08C 009984 0048+00 0/0 7/7 0/0 .text
- * mDoExt_createSolidHeapFromGameToCurrent__FUlUl               */
 JKRSolidHeap* mDoExt_createSolidHeapFromGameToCurrent(u32 i_size, u32 i_alignment) {
     return mDoExt_createSolidHeapToCurrent(i_size, mDoExt_getGameHeap(), i_alignment);
 }
 
-/* 8000F08C-8000F158 0099CC 00CC+00 1/1 11/11 0/0 .text mDoExt_adjustSolidHeap__FP12JKRSolidHeap
- */
 u32 mDoExt_adjustSolidHeap(JKRSolidHeap* i_heap) {
     if (i_heap == NULL) {
         return -1;
@@ -929,43 +847,33 @@ u32 mDoExt_adjustSolidHeap(JKRSolidHeap* i_heap) {
     return result;
 }
 
-/* 8000F158-8000F18C 009A98 0034+00 0/0 1/1 0/0 .text
- * mDoExt_adjustSolidHeapToSystem__FP12JKRSolidHeap             */
 u32 mDoExt_adjustSolidHeapToSystem(JKRSolidHeap* i_heap) {
     u32 result = mDoExt_adjustSolidHeap(i_heap);
     mDoExt_restoreCurrentHeap();
     return result;
 }
 
-/* 8000F18C-8000F1AC 009ACC 0020+00 0/0 13/13 0/0 .text mDoExt_destroySolidHeap__FP12JKRSolidHeap
- */
 void mDoExt_destroySolidHeap(JKRSolidHeap* i_heap) {
     i_heap->destroy();
 }
 
-/* 8000F1AC-8000F1CC 009AEC 0020+00 0/0 7/7 0/0 .text mDoExt_destroyExpHeap__FP10JKRExpHeap */
 void mDoExt_destroyExpHeap(JKRExpHeap* i_heap) {
     i_heap->destroy();
 }
 
-/* 8000F1CC-8000F1EC 009B0C 0020+00 1/1 78/78 2/2 .text            mDoExt_setCurrentHeap__FP7JKRHeap
- */
 JKRHeap* mDoExt_setCurrentHeap(JKRHeap* heap) {
     return heap->becomeCurrentHeap();
 }
 
-/* 8000F1EC-8000F1F4 -00001 0008+00 0/0 0/0 0/0 .text            mDoExt_getCurrentHeap__Fv */
 JKRHeap* mDoExt_getCurrentHeap() {
     return JKRHeap::getCurrentHeap();
 }
 
-/* 8000F1F4-8000F220 009B34 002C+00 1/1 9/9 0/0 .text            mDoExt_restoreCurrentHeap__Fv */
 void mDoExt_restoreCurrentHeap() {
     mDoExt_SaveCurrentHeap->becomeCurrentHeap();
     mDoExt_SaveCurrentHeap = NULL;
 }
 
-/* 8000F220-8000F26C 009B60 004C+00 0/0 1/1 0/0 .text mDoExt_resIDToIndex__FP10JKRArchiveUs */
 int mDoExt_resIDToIndex(JKRArchive* p_archive, u16 id) {
     JKRArchive::SDIFileEntry* res = p_archive->findIdResource(id);
 
@@ -976,8 +884,6 @@ int mDoExt_resIDToIndex(JKRArchive* p_archive, u16 id) {
     return res - p_archive->mFiles;
 }
 
-/* 8000F26C-8000F4B0 009BAC 0244+00 1/0 0/0 0/0 .text            calc__25mDoExt_MtxCalcAnmBlendTblFv
- */
 void mDoExt_MtxCalcAnmBlendTbl::calc() {
     u16 jntNo = getJoint()->getJntNo();
     j3dSys.setCurrentMtxCalc(this);
@@ -1018,7 +924,6 @@ void mDoExt_MtxCalcAnmBlendTbl::calc() {
 }
 
 
-/* 8000F4B0-8000F848 009DF0 0398+00 1/0 0/0 0/0 .text calc__28mDoExt_MtxCalcAnmBlendTblOldFv */
 void mDoExt_MtxCalcAnmBlendTblOld::calc() {
     u16 jntNo = getJoint()->getJntNo();
     j3dSys.setCurrentMtxCalc(this);
@@ -1076,8 +981,6 @@ void mDoExt_MtxCalcAnmBlendTblOld::calc() {
     }
 }
 
-/* 8000F848-8000F8CC 00A188 0084+00 0/0 26/26 8/8 .text
- * initOldFrameMorf__22mDoExt_MtxCalcOldFrameFfUsUs             */
 void mDoExt_MtxCalcOldFrame::initOldFrameMorf(f32 param_0, u16 frameStartJoint, u16 frameEndJoint) {
     if (param_0 > 0.0f) {
         mOldFrameMorfCounter = param_0;
@@ -1098,8 +1001,6 @@ void mDoExt_MtxCalcOldFrame::initOldFrameMorf(f32 param_0, u16 frameStartJoint, 
     mOldFrameEndJoint = frameEndJoint;
 }
 
-/* 8000F8CC-8000F950 00A20C 0084+00 2/2 0/0 0/0 .text
- * decOldFrameMorfCounter__22mDoExt_MtxCalcOldFrameFv           */
 void mDoExt_MtxCalcOldFrame::decOldFrameMorfCounter() {
     if (mOldFrameMorfCounter > 0.0f) {
 
@@ -1121,7 +1022,6 @@ void mDoExt_MtxCalcOldFrame::decOldFrameMorfCounter() {
     }
 }
 
-/* 8000F950-8000F9D8 00A290 0088+00 3/3 0/0 0/0 .text            __ct__13mDoExt_morf_cFv */
 mDoExt_morf_c::mDoExt_morf_c() {
     mpModel = NULL;
     mpAnm = NULL;
@@ -1129,12 +1029,10 @@ mDoExt_morf_c::mDoExt_morf_c() {
     mpQuat = NULL;
 }
 
-/* 8000FAE8-8000FB7C 00A428 0094+00 4/3 0/0 0/0 .text            __dt__13mDoExt_morf_cFv */
 mDoExt_morf_c::~mDoExt_morf_c() {
     /* empty function */
 }
 
-/* 8000FB7C-8000FBC0 00A4BC 0044+00 3/3 4/4 20/20 .text            setMorf__13mDoExt_morf_cFf */
 void mDoExt_morf_c::setMorf(f32 i_morf) {
     if (mPrevMorf < 0.0f || i_morf == 0.0f) {
         mCurMorf = 1.0f;
@@ -1147,7 +1045,6 @@ void mDoExt_morf_c::setMorf(f32 i_morf) {
     mPrevMorf = mCurMorf;
 }
 
-/* 8000FBC0-8000FC4C 00A500 008C+00 3/3 0/0 0/0 .text            frameUpdate__13mDoExt_morf_cFv */
 void mDoExt_morf_c::frameUpdate() {
     if (mCurMorf < 1.0f) {
         mPrevMorf = mCurMorf;
@@ -1176,7 +1073,6 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
     create(modelData, callback1, callback2, anmTransform, param_4, param_5, param_6, param_7, param_8, param_9, param_10, param_11);
 }
 
-/* 8000FD10-8000FD94 00A650 0084+00 1/0 0/0 0/0 .text            __dt__14mDoExt_McaMorfFv */
 mDoExt_McaMorf::~mDoExt_McaMorf() {
     if (field_0x50 && mpSound != NULL) {
         mpSound->stopAnime();
@@ -1267,7 +1163,6 @@ int mDoExt_McaMorf::create(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* c
     return 0;
 }
 
-/* 80010074-8001037C 00A9B4 0308+00 1/0 0/0 0/0 .text            calc__14mDoExt_McaMorfFv */
 void mDoExt_McaMorf::calc() {
     if (mpModel == NULL) {
         return;
@@ -1344,8 +1239,6 @@ void mDoExt_McaMorf::calc() {
     }
 }
 
-/* 8001037C-800105C8 00ACBC 024C+00 1/1 1/1 29/29 .text
- * setAnm__14mDoExt_McaMorfFP15J3DAnmTransformiffffPv           */
 void mDoExt_McaMorf::setAnm(J3DAnmTransform* param_0, int param_1, f32 param_2, f32 param_3,
                                 f32 param_4, f32 param_5, void* param_6) {
     mpAnm = param_0;
@@ -1384,8 +1277,6 @@ void mDoExt_McaMorf::setAnm(J3DAnmTransform* param_0, int param_1, f32 param_2, 
     }
 }
 
-/* 800105C8-80010680 00AF08 00B8+00 0/0 1/1 37/37 .text            play__14mDoExt_McaMorfFP3VecUlSc
- */
 u32 mDoExt_McaMorf::play(Vec* param_0, u32 param_1, s8 param_2) {
     frameUpdate();
     if (mpSound != NULL && mpSound->field_0x48 != NULL && param_0 != NULL) {
@@ -1396,14 +1287,12 @@ u32 mDoExt_McaMorf::play(Vec* param_0, u32 param_1, s8 param_2) {
     return isStop();
 }
 
-/* 80010680-800106AC 00AFC0 002C+00 0/0 0/0 33/33 .text            entryDL__14mDoExt_McaMorfFv */
 void mDoExt_McaMorf::entryDL() {
     if (mpModel != NULL) {
         mDoExt_modelEntryDL(mpModel);
     }
 }
 
-/* 800106AC-80010710 00AFEC 0064+00 0/0 0/0 37/37 .text            modelCalc__14mDoExt_McaMorfFv */
 void mDoExt_McaMorf::modelCalc() {
     if (mpModel != NULL) {
         if (mpAnm != NULL) {
@@ -1415,8 +1304,6 @@ void mDoExt_McaMorf::modelCalc() {
     }
 }
 
-/* 80010710-800107D0 00B050 00C0+00 1/1 0/0 0/0 .text
- * getTransform__14mDoExt_McaMorfFUsP16J3DTransformInfo         */
 void mDoExt_McaMorf::getTransform(u16 param_0, J3DTransformInfo* param_1) {
     mpAnm->getTransform(param_0, param_1);
     if (field_0x51) {
@@ -1446,7 +1333,6 @@ mDoExt_McaMorfSO::mDoExt_McaMorfSO(J3DModelData* param_0, mDoExt_McaMorfCallBack
            i_modelFlag, i_differedDlistFlag);
 }
 
-/* 80010888-800108F0 00B1C8 0068+00 1/0 0/0 0/0 .text            __dt__16mDoExt_McaMorfSOFv */
 mDoExt_McaMorfSO::~mDoExt_McaMorfSO() {
     stopZelAnime();
 }
@@ -1537,7 +1423,6 @@ int mDoExt_McaMorfSO::create(J3DModelData* i_modelData, mDoExt_McaMorfCallBack1_
     return 0;
 }
 
-/* 80010B68-80010E70 00B4A8 0308+00 1/0 0/0 0/0 .text            calc__16mDoExt_McaMorfSOFv */
 void mDoExt_McaMorfSO::calc() {
     if (mpModel != NULL) {
         u16 jnt_no = getJoint()->getJntNo();
@@ -1624,8 +1509,6 @@ void mDoExt_McaMorfSO::calc() {
     }
 }
 
-/* 80010E70-800110B0 00B7B0 0240+00 1/1 5/5 208/208 .text
- * setAnm__16mDoExt_McaMorfSOFP15J3DAnmTransformiffff           */
 void mDoExt_McaMorfSO::setAnm(J3DAnmTransform* i_anm, int i_attr, f32 i_morf, f32 i_rate,
                               f32 i_start, f32 i_end) {
     mpAnm = i_anm;
@@ -1670,8 +1553,6 @@ void mDoExt_McaMorfSO::setAnm(J3DAnmTransform* i_anm, int i_attr, f32 i_morf, f3
     }
 }
 
-/* 800110B0-80011154 00B9F0 00A4+00 0/0 5/5 143/143 .text            play__16mDoExt_McaMorfSOFUlSc
- */
 int mDoExt_McaMorfSO::play(u32 param_0, s8 param_1) {
     frameUpdate();
 
@@ -1686,7 +1567,6 @@ int mDoExt_McaMorfSO::play(u32 param_0, s8 param_1) {
     return isStop();
 }
 
-/* 80011154-800111C0 00BA94 006C+00 0/0 0/0 4/4 .text            updateDL__16mDoExt_McaMorfSOFv */
 void mDoExt_McaMorfSO::updateDL() {
     if (mpModel != NULL) {
         if (mpAnm != NULL) {
@@ -1699,16 +1579,12 @@ void mDoExt_McaMorfSO::updateDL() {
     }
 }
 
-/* 800111C0-800111EC 00BB00 002C+00 0/0 5/5 137/137 .text            entryDL__16mDoExt_McaMorfSOFv
- */
 void mDoExt_McaMorfSO::entryDL() {
     if (mpModel != NULL) {
         mDoExt_modelEntryDL(mpModel);
     }
 }
 
-/* 800111EC-80011250 00BB2C 0064+00 0/0 4/4 174/174 .text            modelCalc__16mDoExt_McaMorfSOFv
- */
 void mDoExt_McaMorfSO::modelCalc() {
     if (mpModel != NULL) {
         if (mpAnm != NULL) {
@@ -1720,8 +1596,6 @@ void mDoExt_McaMorfSO::modelCalc() {
     }
 }
 
-/* 80011250-80011310 00BB90 00C0+00 1/1 0/0 1/1 .text
- * getTransform__16mDoExt_McaMorfSOFUsP16J3DTransformInfo       */
 void mDoExt_McaMorfSO::getTransform(u16 param_0, J3DTransformInfo* param_1) {
     mpAnm->getTransform(param_0, param_1);
     if (mTranslate) {
@@ -1738,7 +1612,6 @@ void mDoExt_McaMorfSO::getTransform(u16 param_0, J3DTransformInfo* param_1) {
     }
 }
 
-/* 80011310-80011348 00BC50 0038+00 1/1 2/2 260/260 .text stopZelAnime__16mDoExt_McaMorfSOFv */
 void mDoExt_McaMorfSO::stopZelAnime() {
     if (mpSound != NULL) {
         mpSound->deleteObject();
@@ -1756,7 +1629,6 @@ mDoExt_McaMorf2::mDoExt_McaMorf2(J3DModelData* param_0, mDoExt_McaMorfCallBack1_
            param_10, param_11);
 }
 
-/* 800113FC-80011464 00BD3C 0068+00 1/0 0/0 0/0 .text            __dt__15mDoExt_McaMorf2Fv */
 mDoExt_McaMorf2::~mDoExt_McaMorf2() {
     stopZelAnime();
 }
@@ -1832,7 +1704,6 @@ mDoExt_McaMorf2::~mDoExt_McaMorf2() {
     return 1;
 }
 
-/* 800116B4-800116F4 00BFF4 0040+00 1/1 0/0 0/0 .text            ERROR_EXIT__15mDoExt_McaMorf2Fv */
 void mDoExt_McaMorf2::ERROR_EXIT() {
     if (mpTransformInfo != NULL) {
         mpTransformInfo = NULL;
@@ -1847,7 +1718,6 @@ void mDoExt_McaMorf2::ERROR_EXIT() {
     }
 }
 
-/* 800116F4-80011D70 00C034 067C+00 1/0 0/0 0/0 .text            calc__15mDoExt_McaMorf2Fv */
 void mDoExt_McaMorf2::calc() {
     if (mpModel != NULL) {
         u16 jnt_no = J3DMtxCalc::getJoint()->getJntNo();
@@ -2013,8 +1883,6 @@ void mDoExt_McaMorf2::calc() {
     }
 }
 
-/* 80011D70-80011FCC 00C6B0 025C+00 1/1 0/0 2/2 .text
- * setAnm__15mDoExt_McaMorf2FP15J3DAnmTransformP15J3DAnmTransformfiffff */
 void mDoExt_McaMorf2::setAnm(J3DAnmTransform* param_0, J3DAnmTransform* param_1, f32 param_2,
                              int i_attr, f32 i_morf, f32 i_speed, f32 i_start, f32 i_end) {
     mpAnm = param_0;
@@ -2062,7 +1930,6 @@ void mDoExt_McaMorf2::setAnm(J3DAnmTransform* param_0, J3DAnmTransform* param_1,
     }
 }
 
-/* 80011FCC-800120A0 00C90C 00D4+00 0/0 0/0 2/2 .text            setAnmRate__15mDoExt_McaMorf2Ff */
 void mDoExt_McaMorf2::setAnmRate(f32 param_0) {
     void* pBas = NULL;
     mAnmRate = param_0;
@@ -2085,7 +1952,6 @@ void mDoExt_McaMorf2::setAnmRate(f32 param_0) {
     }
 }
 
-/* 800120A0-80012144 00C9E0 00A4+00 0/0 0/0 1/1 .text            play__15mDoExt_McaMorf2FUlSc */
 int mDoExt_McaMorf2::play(u32 param_0, s8 param_1) {
     frameUpdate();
 
@@ -2100,14 +1966,12 @@ int mDoExt_McaMorf2::play(u32 param_0, s8 param_1) {
     return isStop();
 }
 
-/* 80012144-80012170 00CA84 002C+00 0/0 0/0 1/1 .text            entryDL__15mDoExt_McaMorf2Fv */
 void mDoExt_McaMorf2::entryDL() {
     if (mpModel != NULL) {
         mDoExt_modelEntryDL(mpModel);
     }
 }
 
-/* 80012170-800121E8 00CAB0 0078+00 0/0 0/0 1/1 .text            modelCalc__15mDoExt_McaMorf2Fv */
 void mDoExt_McaMorf2::modelCalc() {
     if (mpModel != NULL) {
         if (mpAnm != NULL) {
@@ -2123,15 +1987,12 @@ void mDoExt_McaMorf2::modelCalc() {
     }
 }
 
-/* 800121E8-80012220 00CB28 0038+00 1/1 0/0 1/1 .text            stopZelAnime__15mDoExt_McaMorf2Fv
- */
 void mDoExt_McaMorf2::stopZelAnime() {
     if (mpSound != NULL) {
         mpSound->deleteObject();
     }
 }
 
-/* 80012220-800123D0 00CB60 01B0+00 1/0 0/0 0/0 .text            draw__19mDoExt_invJntPacketFv */
 void mDoExt_invJntPacket::draw() {
     J3DShape::resetVcdVatCache();
 
@@ -2163,7 +2024,7 @@ void mDoExt_invJntPacket::draw() {
             } while (shapePkt != NULL);
         }
     } else {
-        static u8 l_invisibleMat[] ALIGN_DECL(32) = {
+        static u8 l_invisibleMat[] ATTRIBUTE_ALIGN(32) = {
             0x10, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x04, 0x00, 0x10, 0x00, 0x00, 0x10, 0x10, 0x00,
             0x00, 0x04, 0x00, 0x61, 0x28, 0x38, 0x00, 0x00, 0x61, 0xC0, 0x08, 0xFF, 0xFC, 0x61, 0xC1,
             0x08, 0xFF, 0xF0, 0x61, 0xF3, 0x7F, 0x00, 0x00, 0x61, 0x43, 0x00, 0x00, 0x41, 0x61, 0x40,
@@ -2196,7 +2057,6 @@ void mDoExt_invJntPacket::draw() {
     GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 1, 0, 1);
 }
 
-/* 800123D0-800125DC 00CD10 020C+00 2/2 0/0 0/0 .text            init__15mDoExt_3Dline_cFUsii */
 int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
     field_0x0 = new cXyz[param_0];
     if (field_0x0 == NULL) {
@@ -2259,8 +2119,6 @@ int mDoExt_3Dline_c::init(u16 param_0, int param_1, BOOL param_2) {
     return 1;
 }
 
-/* 800125E0-800126BC 00CF20 00DC+00 0/0 0/0 12/12 .text            init__19mDoExt_3DlineMat0_cFUsUsi
- */
 int mDoExt_3DlineMat0_c::init(u16 param_0, u16 param_1, int param_2) {
     field_0x10 = param_0;
     field_0x12 = param_1;
@@ -2281,8 +2139,7 @@ int mDoExt_3DlineMat0_c::init(u16 param_0, u16 param_1, int param_2) {
     return 1;
 }
 
-/* 803A30C0-803A3160 0001E0 0084+1C 1/1 0/0 0/0 .data            l_matDL */
-static u8 l_matDL[132] ALIGN_DECL(32) = {
+static u8 l_matDL[132] ATTRIBUTE_ALIGN(32) = {
     0x08, 0x30, 0x3C, 0xF3, 0xCF, 0x00, 0x10, 0x00, 0x00, 0x10, 0x18, 0x3C, 0xF3, 0xCF, 0x00,
     0x10, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x7F, 0x32, 0x10, 0x00, 0x00, 0x10, 0x10, 0x00,
     0x00, 0x05, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0C, 0xFF, 0xFF, 0xFF, 0xFF, 0x61, 0x28, 0x38,
@@ -2294,8 +2151,7 @@ static u8 l_matDL[132] ALIGN_DECL(32) = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 803A3160-803A31F0 000280 008D+03 1/1 0/0 0/0 .data            l_mat1DL */
-static u8 l_mat1DL[141] ALIGN_DECL(32) = {
+static u8 l_mat1DL[141] ATTRIBUTE_ALIGN(32) = {
     0x10, 0x00, 0x00, 0x10, 0x40, 0xFF, 0xFF, 0x42, 0x80, 0x08, 0x30, 0x3C, 0xF3, 0xCF, 0x00, 0x10,
     0x00, 0x00, 0x10, 0x18, 0x3C, 0xF3, 0xCF, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x7F,
     0x32, 0x10, 0x00, 0x00, 0x10, 0x10, 0x00, 0x00, 0x05, 0x00, 0x10, 0x00, 0x00, 0x10, 0x0C, 0xFF,
@@ -2307,7 +2163,6 @@ static u8 l_mat1DL[141] ALIGN_DECL(32) = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-/* 800126C0-80012774 00D000 00B4+00 1/0 0/0 0/0 .text setMaterial__19mDoExt_3DlineMat0_cFv */
 void mDoExt_3DlineMat0_c::setMaterial() {
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
@@ -2323,7 +2178,6 @@ void mDoExt_3DlineMat0_c::setMaterial() {
     GXLoadNrmMtxImm(cMtx_getIdentity(), GX_PNMTX0);
 }
 
-/* 80012774-80012874 00D0B4 0100+00 1/0 0/0 0/0 .text            draw__19mDoExt_3DlineMat0_cFv */
 void mDoExt_3DlineMat0_c::draw() {
     GXSetTevColor(GX_TEVREG2, field_0x8);
 
@@ -2353,8 +2207,6 @@ void mDoExt_3DlineMat0_c::draw() {
     field_0x16 ^= (u8)1;
 }
 
-/* 80012874-80012E3C 00D1B4 05C8+00 0/0 0/0 2/2 .text
- * update__19mDoExt_3DlineMat0_cFifR8_GXColorUsP12dKy_tevstr_c  */
 void mDoExt_3DlineMat0_c::update(int param_0, f32 param_1, GXColor& param_2, u16 param_3,
                                      dKy_tevstr_c* param_4) {
     field_0x8 = param_2;
@@ -2474,8 +2326,6 @@ void mDoExt_3DlineMat0_c::update(int param_0, f32 param_1, GXColor& param_2, u16
     }
 }
 
-/* 80012E3C-80013360 00D77C 0524+00 0/0 0/0 9/9 .text
- * update__19mDoExt_3DlineMat0_cFiR8_GXColorP12dKy_tevstr_c     */
 void mDoExt_3DlineMat0_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* param_4) {
     field_0x8 = param_2;
     field_0xc = param_4;
@@ -2588,8 +2438,6 @@ void mDoExt_3DlineMat0_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
     }
 }
 
-/* 80013360-800134F8 00DCA0 0198+00 0/0 0/0 19/19 .text init__19mDoExt_3DlineMat1_cFUsUsP7ResTIMGi
- */
 int mDoExt_3DlineMat1_c::init(u16 param_0, u16 param_1, ResTIMG* param_2, int param_3) {
     mNumLines = param_0;
     field_0x32 = param_1;
@@ -2618,7 +2466,6 @@ int mDoExt_3DlineMat1_c::init(u16 param_0, u16 param_1, ResTIMG* param_2, int pa
     return 1;
 }
 
-/* 800134F8-800135D0 00DE38 00D8+00 1/0 0/0 0/0 .text setMaterial__19mDoExt_3DlineMat1_cFv */
 void mDoExt_3DlineMat1_c::setMaterial() {
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
@@ -2636,7 +2483,6 @@ void mDoExt_3DlineMat1_c::setMaterial() {
     GXLoadNrmMtxImm(g_mDoMtx_identity, GX_PNMTX0);
 }
 
-/* 800135D0-8001373C 00DF10 016C+00 1/0 0/0 0/0 .text            draw__19mDoExt_3DlineMat1_cFv */
 void mDoExt_3DlineMat1_c::draw() {
     GXLoadTexObj(&mTextureObject, GX_TEXMAP0);
     GXSetTexCoordScaleManually(GX_TEXCOORD0, 1, GXGetTexObjWidth(&mTextureObject), GXGetTexObjHeight(&mTextureObject));
@@ -2669,8 +2515,6 @@ void mDoExt_3DlineMat1_c::draw() {
     mIsDrawn ^= (u8)1;
 }
 
-/* 8001373C-80013FB0 00E07C 0874+00 0/0 0/0 6/6 .text
- * update__19mDoExt_3DlineMat1_cFifR8_GXColorUsP12dKy_tevstr_c  */
 void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u16 param_3,
                                      dKy_tevstr_c* param_4) {
     mColor = param_2;
@@ -2831,8 +2675,6 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
     }
 }
 
-/* 80013FB0-80014738 00E8F0 0788+00 0/0 0/0 14/14 .text
- * update__19mDoExt_3DlineMat1_cFiR8_GXColorP12dKy_tevstr_c     */
 void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* param_4) {
     mColor = param_2;
     this->mpTevStr = param_4;
@@ -2947,8 +2789,6 @@ void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* p
     }
 }
 
-/* 80014738-8001479C 00F078 0064+00 0/0 0/0 29/29 .text
- * setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c   */
 void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c* i_3DlineMat) {
     if (mp3DlineMat == NULL) {
         dComIfGd_getListPacket()->entryImm(this, 0);
@@ -2957,7 +2797,6 @@ void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c* i_3DlineMat) {
     mp3DlineMat = i_3DlineMat;
 }
 
-/* 8001479C-80014804 00F0DC 0068+00 1/0 0/0 0/0 .text draw__26mDoExt_3DlineMatSortPacketFv */
 void mDoExt_3DlineMatSortPacket::draw() {
     mp3DlineMat->setMaterial();
     mDoExt_3DlineMat_c* lineMat = mp3DlineMat;
@@ -3509,8 +3348,6 @@ void mDoExt_cylinderMPacket::draw() {
 }
 #endif
 
-/* 80014804-8001494C 00F144 0148+00 3/3 0/0 0/0 .text
- * mDoExt_initFontCommon__FPP7JUTFontPP7ResFONTP7JKRHeapPCcP10JKRArchiveUcUlUl */
 static void mDoExt_initFontCommon(JUTFont** mDoExt_font, ResFONT** mDoExt_resfont, JKRHeap* param_2,
                                   char const* param_3, JKRArchive* param_4, u8 param_5,
                                   u32 param_6, u32 param_7) {
@@ -3540,16 +3377,12 @@ static void mDoExt_initFontCommon(JUTFont** mDoExt_font, ResFONT** mDoExt_resfon
     JUT_ASSERT(7183, mDoExt_font != NULL);
 }
 
-/* 80450C44-80450C48 000144 0004+00 3/3 0/0 0/0 .sbss            mDoExt_font0 */
 static JUTFont* mDoExt_font0;
 
-/* 80450C48-80450C4C 000148 0004+00 2/2 0/0 0/0 .sbss            mDoExt_font0_getCount */
 static int mDoExt_font0_getCount;
 
-/* 80450C4C-80450C50 00014C 0004+00 2/2 0/0 0/0 .sbss            mDoExt_resfont0 */
 static ResFONT* mDoExt_resfont0;
 
-/* 80014994-800149F0 00F2D4 005C+00 1/1 0/0 0/0 .text            mDoExt_initFont0__Fv */
 static void mDoExt_initFont0() {
     static char const fontdata[] = "rodan_b_24_22.bfn";
 #if REGION_JPN
@@ -3561,7 +3394,6 @@ static void mDoExt_initFont0() {
 #endif
 }
 
-/* 800149F0-80014A2C 00F330 003C+00 0/0 51/51 2/2 .text            mDoExt_getMesgFont__Fv */
 JUTFont* mDoExt_getMesgFont() {
     if (mDoExt_font0 == NULL) {
         mDoExt_initFont0();
@@ -3571,7 +3403,6 @@ JUTFont* mDoExt_getMesgFont() {
     return mDoExt_font0;
 }
 
-/* 80014A2C-80014AA4 00F36C 0078+00 0/0 6/6 0/0 .text            mDoExt_removeMesgFont__Fv */
 void mDoExt_removeMesgFont() {
     JUT_ASSERT(7238, mDoExt_font0_getCount > 0);
     if (mDoExt_font0_getCount > 0) {
@@ -3592,23 +3423,18 @@ void mDoExt_removeMesgFont() {
     }
 }
 
-/* 80450C50-80450C54 000150 0004+00 2/2 0/0 0/0 .sbss            mDoExt_font1 */
 static JUTFont* mDoExt_font1;
 
-/* 80450C54-80450C58 000154 0004+00 1/1 0/0 0/0 .sbss            mDoExt_font1_getCount */
 static int mDoExt_font1_getCount;
 
-/* 80450C58-80450C5C 000158 0004+00 1/1 0/0 0/0 .sbss            mDoExt_resfont1 */
 static ResFONT* mDoExt_resfont1;
 
-/* 80014AA4-80014B04 00F3E4 0060+00 1/1 0/0 0/0 .text            mDoExt_initFont1__Fv */
 static void mDoExt_initFont1() {
     static char const fontdata[] = "reishotai_24_22.bfn";
     mDoExt_initFontCommon(&mDoExt_font1, &mDoExt_resfont1, mDoExt_getZeldaHeap(),
                           fontdata, dComIfGp_getRubyArchive(), 1, 1, 0x8000);
 }
 
-/* 80014B04-80014B40 00F444 003C+00 0/0 8/8 0/0 .text            mDoExt_getRubyFont__Fv */
 JUTFont* mDoExt_getRubyFont() {
     if (mDoExt_font1 == NULL) {
         mDoExt_initFont1();
@@ -3618,23 +3444,18 @@ JUTFont* mDoExt_getRubyFont() {
     return mDoExt_font1;
 }
 
-/* 80450C5C-80450C60 00015C 0004+00 3/3 0/0 0/0 .sbss            mDoExt_font2 */
 static JUTFont* mDoExt_font2;
 
-/* 80450C60-80450C64 000160 0004+00 2/2 0/0 0/0 .sbss            mDoExt_font2_getCount */
 static int mDoExt_font2_getCount;
 
-/* 80450C64-80450C68 000164 0004+00 2/2 0/0 0/0 .sbss            mDoExt_resfont2 */
 static ResFONT* mDoExt_resfont2;
 
-/* 80014B40-80014BA0 00F480 0060+00 1/1 0/0 0/0 .text            mDoExt_initFont2__Fv */
 static void mDoExt_initFont2() {
     static char const fontdata[] = "reishotai_24_22.bfn";
     mDoExt_initFontCommon(&mDoExt_font2, &mDoExt_resfont2, mDoExt_getZeldaHeap(),
                           fontdata, dComIfGp_getRubyArchive(), 1, 1, 0x8000);
 }
 
-/* 80014BA0-80014BDC 00F4E0 003C+00 0/0 11/11 0/0 .text            mDoExt_getSubFont__Fv */
 JUTFont* mDoExt_getSubFont() {
     if (mDoExt_font2 == NULL) {
         mDoExt_initFont2();
@@ -3644,7 +3465,6 @@ JUTFont* mDoExt_getSubFont() {
     return mDoExt_font2;
 }
 
-/* 80014BDC-80014C54 00F51C 0078+00 0/0 2/2 0/0 .text            mDoExt_removeSubFont__Fv */
 void mDoExt_removeSubFont() {
     JUT_ASSERT(7354, mDoExt_font2_getCount > 0);
     if (mDoExt_font2_getCount > 0) {
@@ -3661,8 +3481,6 @@ void mDoExt_removeSubFont() {
     }
 }
 
-/* 80014C54-80014D5C 00F594 0108+00 3/3 14/14 445/445 .text
- * mDoExt_J3DModel__create__FP12J3DModelDataUlUl                */
 J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u32 i_differedDlistFlag) {
     if (i_modelData != NULL) {
         J3DModel* model = new J3DModel();
@@ -3696,16 +3514,12 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
     return NULL;
 }
 
-/* 80450C68-80450C70 000168 0004+04 1/1 0/0 0/0 .sbss            aram_cache_size */
 u32 aram_cache_size;
 
-/* 80014D5C-80014D64 00F69C 0008+00 0/0 1/1 0/0 .text            mDoExt_setAraCacheSize__FUl */
 void mDoExt_setAraCacheSize(u32 size) {
     aram_cache_size = size;
 }
 
-/* 80014D64-80014D9C 00F6A4 0038+00 0/0 2/2 0/0 .text            mDoExt_GetCurrentRunningThread__Fv
- */
 OSThread* mDoExt_GetCurrentRunningThread() {
     OSThread* thread = OSGetCurrentThread();
     if (thread != NULL && thread->state != 2) {

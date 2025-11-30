@@ -11,7 +11,7 @@
  */
 class J3DLightInfo {
 public:
-    /* 803256C4 */ J3DLightInfo& operator=(J3DLightInfo const&);
+    J3DLightInfo& operator=(J3DLightInfo const&);
 
     /* 0x00 */ Vec mLightPosition;
     /* 0x0C */ Vec mLightDirection;
@@ -28,8 +28,8 @@ extern "C" extern J3DLightInfo const j3dDefaultLightInfo;
  */
 class J3DLightObj {
 public:
-    /* 80018C0C */ J3DLightObj() { mInfo = j3dDefaultLightInfo; }
-    /* 80323590 */ void load(u32) const;
+    J3DLightObj() { mInfo = j3dDefaultLightInfo; }
+    void load(u32) const;
 
     J3DLightInfo& getLightInfo() { return mInfo; }
     J3DLightObj& operator=(J3DLightObj const& other) {
@@ -53,20 +53,20 @@ struct J3DTextureSRTInfo {
     /* 0x10 */ f32 mTranslationY;
 
     inline void operator=(J3DTextureSRTInfo const& other) {
+#ifdef __MWERKS__
         register const f32* src = &other.mScaleX;
         register f32* dst = &mScaleX;
         register f32 xy;
-#ifdef __MWERKS__
         asm {
             psq_l xy, 0(src), 0, 0
             psq_st xy, 0(dst), 0, 0
         };
-#endif
+
         // Unclear why there's a 4 byte copy here.
         *(u32*)&mRotation = *(u32*)&other.mRotation;
         src = &other.mTranslationX;
         dst = &mTranslationX;
-#ifdef __MWERKS__
+
         asm {
             psq_l xy, 0(src), 0, 0
             psq_st xy, 0(dst), 0, 0
@@ -95,8 +95,8 @@ enum J3DTexMtxMode {
  * 
  */
 struct J3DTexMtxInfo {
-    /* 80325718 */ J3DTexMtxInfo& operator=(J3DTexMtxInfo const&);
-    /* 80325794 */ void setEffectMtx(Mtx);
+    J3DTexMtxInfo& operator=(J3DTexMtxInfo const&);
+    void setEffectMtx(Mtx);
 
     /* 0x00 */ u8 mProjection;
     /* 0x01 */ u8 mInfo;
@@ -122,7 +122,7 @@ struct J3DIndTexMtxInfo {
  * 
  */
 struct J3DFogInfo {
-    /* 80325800 */ J3DFogInfo& operator=(J3DFogInfo const&);
+    J3DFogInfo& operator=(J3DFogInfo const&);
 
     /* 0x00 */ u8 mType;
     /* 0x01 */ u8 mAdjEnable;
@@ -140,7 +140,7 @@ struct J3DFogInfo {
  * 
  */
 struct J3DNBTScaleInfo {
-    /* 8032587C */ J3DNBTScaleInfo& operator=(J3DNBTScaleInfo const&);
+    J3DNBTScaleInfo& operator=(J3DNBTScaleInfo const&);
 
     /* 0x0 */ u8 mbHasScale;
     /* 0x4 */ Vec mScale;

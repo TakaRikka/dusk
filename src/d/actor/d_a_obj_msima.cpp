@@ -14,7 +14,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-/* 80C9B40C-80C9B44C 0000EC 0040+00 1/1 0/0 0/0 .text            __ct__17daObj_Msima_HIO_cFv */
 daObj_Msima_HIO_c::daObj_Msima_HIO_c() {
     mId = -1;
     mSize = 1.0f;
@@ -42,8 +41,6 @@ void daObj_Msima_HIO_c::genMessage(JORMContext* context) {
 }
 #endif
 
-/* 80C9B44C-80C9B4A8 00012C 005C+00 1/1 0/0 0/0 .text
- * ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c            */
 static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* a_this, fopAc_ac_c* param_3) {
     if (fopAcM_GetName(param_3) == PROC_ALINK || fopAcM_GetName(param_3) == PROC_E_GOB ||
     fopAcM_GetName(param_3) == PROC_B_ZANT)
@@ -59,7 +56,6 @@ static void ride_call_back(dBgW* i_bgw, fopAc_ac_c* a_this, fopAc_ac_c* param_3)
     }
 }
 
-/* 80C9B4A8-80C9B5F8 000188 0150+00 1/0 0/0 0/0 .text daObj_Msima_Draw__FP15obj_msima_class */
 static int daObj_Msima_Draw(obj_msima_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     J3DModel* pModel;
@@ -85,24 +81,19 @@ static int daObj_Msima_Draw(obj_msima_class* i_this) {
     return 1;
 }
 
-/* 80C9B5F8-80C9B60C 0002D8 0014+00 1/1 0/0 0/0 .text            msima_start__FP15obj_msima_class */
 static void msima_start(obj_msima_class* i_this) {
     i_this->field_0x598 = 0x802;
     i_this->field_0x59a = 0x708;
 }
 
-/* 80C9CEA4-80C9CEA8 -00001 0004+00 2/2 0/0 0/0 .bss             None */
 /* 80C9CEA4 0001+00 data_80C9CEA4 @1009 */
 /* 80C9CEA5 0003+00 data_80C9CEA5 None */
 static bool l_HIOInit;
 
-/* 80C9CEB4-80C9CEC8 000054 0014+00 4/5 0/0 0/0 .bss             l_HIO */
 static daObj_Msima_HIO_c l_HIO;
 
-/* 80C9CED4-80C9CEE0 000074 000C+00 1/2 0/0 0/0 .bss             c_pos */
 static cXyz c_pos(0.0f,0.0f,0.0f);
 
-/* 80C9B60C-80C9B890 0002EC 0284+00 1/1 0/0 0/0 .text            msima_drop__FP15obj_msima_class */
 static void msima_drop(obj_msima_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     a_this->shape_angle.x = -i_this->field_0x59c * cM_ssin(i_this->field_0x594);
@@ -136,7 +127,6 @@ static void msima_drop(obj_msima_class* i_this) {
     }
 }
 
-/* 80C9B8CC-80C9BA30 0005AC 0164+00 1/1 0/0 0/0 .text            msima_float__FP15obj_msima_class */
 static void msima_float(obj_msima_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     f32 dVar7 = i_this->field_0x59c * 0.004f;
@@ -162,7 +152,6 @@ static void msima_float(obj_msima_class* i_this) {
     cLib_addCalc2(&i_this->field_0x5a8, fVar1, 1.0f, 5.0f);
 }
 
-/* 80C9BA30-80C9BEB0 000710 0480+00 1/1 0/0 0/0 .text            action__FP15obj_msima_class */
 static void action(obj_msima_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -264,7 +253,6 @@ static void action(obj_msima_class* i_this) {
     }
 }
 
-/* 80C9CF10-80C9CF40 0000B0 0030+00 1/2 0/0 0/0 .bss             chain_p */
 static cXyz chain_p[4] = {
     cXyz(0.0f,200.0f,1100.0f),
     cXyz(-1100.0f,200.0f,0.0f),
@@ -272,8 +260,6 @@ static cXyz chain_p[4] = {
     cXyz(1100.0f,200.0f,0.0f),
 };
 
-/* 80C9BEB0-80C9C00C 000B90 015C+00 1/1 0/0 0/0 .text
- * chain_move__FP15obj_msima_classP10ms_chain_si                */
 static void chain_move(obj_msima_class* i_this, ms_chain_s* param_2, int param_3) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     cXyz cStack_4c;
@@ -296,7 +282,6 @@ static void chain_move(obj_msima_class* i_this, ms_chain_s* param_2, int param_3
     }
 }
 
-/* 80C9CF70-80C9CFA0 000110 0030+00 1/2 0/0 0/0 .bss             chain_p2 */
 static cXyz chain_p2[4] = {
     cXyz(0.0f,4000.0f,1100.0f),
     cXyz(-1100.0f,4000.0f,0.0f),
@@ -304,8 +289,6 @@ static cXyz chain_p2[4] = {
     cXyz(1100.0f,4000.0f,0.0f),
 };
 
-/* 80C9C00C-80C9C25C 000CEC 0250+00 1/1 0/0 0/0 .text
- * chain_move2__FP15obj_msima_classP10ms_chain_si               */
 static void chain_move2(obj_msima_class* i_this, ms_chain_s* param_2, int param_3) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     cXyz local_5c;
@@ -340,7 +323,6 @@ static void chain_move2(obj_msima_class* i_this, ms_chain_s* param_2, int param_
     cLib_addCalc0(&param_2->field_0x8c, 0.03f, 20.0f);
 }
 
-/* 80C9C25C-80C9C3A8 000F3C 014C+00 2/1 0/0 0/0 .text daObj_Msima_Execute__FP15obj_msima_class */
 static int daObj_Msima_Execute(obj_msima_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     if (dComIfGp_event_runCheck()) {
@@ -375,12 +357,10 @@ static int daObj_Msima_Execute(obj_msima_class* i_this) {
     return 1;
 }
 
-/* 80C9C3A8-80C9C3B0 001088 0008+00 1/0 0/0 0/0 .text daObj_Msima_IsDelete__FP15obj_msima_class */
 static int daObj_Msima_IsDelete(obj_msima_class* i_this) {
     return 1;
 }
 
-/* 80C9C3B0-80C9C42C 001090 007C+00 1/0 0/0 0/0 .text daObj_Msima_Delete__FP15obj_msima_class */
 static int daObj_Msima_Delete(obj_msima_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->mActor;
     fopAcM_GetID(a_this);
@@ -396,7 +376,6 @@ static int daObj_Msima_Delete(obj_msima_class* i_this) {
     return 1;
 }
 
-/* 80C9C42C-80C9C720 00110C 02F4+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* a_this) {
     obj_msima_class* i_this = (obj_msima_class*)a_this;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("MAGNESIMA", obj_msima_class::BMDR_S_MAGNE_SIMA);
@@ -454,8 +433,6 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-/* 80C9C768-80C9CA60 001448 02F8+00 1/0 0/0 0/0 .text            daObj_Msima_Create__FP10fopAc_ac_c
- */
 static int daObj_Msima_Create(fopAc_ac_c* a_this) {
     obj_msima_class* i_this = (obj_msima_class*)a_this;
     fopAcM_ct(a_this, obj_msima_class);
@@ -529,7 +506,6 @@ static int daObj_Msima_Create(fopAc_ac_c* a_this) {
     return rv;
 }
 
-/* 80C9CDF8-80C9CE18 -00001 0020+00 1/0 0/0 0/0 .data            l_daObj_Msima_Method */
 static actor_method_class l_daObj_Msima_Method = {
     (process_method_func)daObj_Msima_Create,
     (process_method_func)daObj_Msima_Delete,
@@ -538,7 +514,6 @@ static actor_method_class l_daObj_Msima_Method = {
     (process_method_func)daObj_Msima_Draw,
 };
 
-/* 80C9CE18-80C9CE48 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_OBJ_MSIMA */
 extern actor_process_profile_definition g_profile_OBJ_MSIMA = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID

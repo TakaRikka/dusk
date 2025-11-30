@@ -4,8 +4,8 @@
 #include "d/actor/d_a_npc.h"
 
 struct lf_s {
-    /* 80A6A8A4 */ ~lf_s();
-    /* 80A6A8E0 */ lf_s();
+    ~lf_s();
+    lf_s();
 
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ cXyz mPos;
@@ -34,8 +34,8 @@ struct lf_s {
 
 class daNPC_LF_HIO_c {
 public:
-    /* 80A69B6C */ daNPC_LF_HIO_c();
-    /* 80A6A8E4 */ virtual ~daNPC_LF_HIO_c();
+    daNPC_LF_HIO_c();
+    virtual ~daNPC_LF_HIO_c();
 
 public:
     /* 0x04 */ s8 field_0x04;

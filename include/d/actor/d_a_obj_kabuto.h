@@ -24,27 +24,27 @@ public:
         /* 2 */ ACT_WALK,
     };
 
-    /* 80C2AEA4 */ void InitCcSph();
-    /* 80C2AF10 */ void SetCcSph();
-    /* 80C2AF88 */ int CreateHeap();
-    /* 80C2B36C */ void ShopWaitAction();
-    /* 80C2B4D4 */ void WaitAction();
-    /* 80C2B618 */ BOOL WallCheck();
-    /* 80C2B88C */ void SpeedSet();
-    /* 80C2B998 */ void WallWalk();
-    /* 80C2BDE8 */ void WalkAction();
-    /* 80C2BFE8 */ void MoveAction();
-    /* 80C2C7C8 */ void Z_BufferChk();
-    /* 80C2C944 */ void Action();
-    /* 80C2CA08 */ void ShopAction();
-    /* 80C2CAC4 */ void Insect_Release();
-    /* 80C2CADC */ void ParticleSet();
-    /* 80C2CC18 */ int Execute();
-    /* 80C2D21C */ void ObjHit();
-    /* 80C2D3A4 */ int Delete();
-    /* 80C2D40C */ void setBaseMtx();
-    /* 80C2D578 */ bool CreateChk();
-    /* 80C2D724 */ cPhs__Step create();
+    void InitCcSph();
+    void SetCcSph();
+    int CreateHeap();
+    void ShopWaitAction();
+    void WaitAction();
+    BOOL WallCheck();
+    void SpeedSet();
+    void WallWalk();
+    void WalkAction();
+    void MoveAction();
+    void Z_BufferChk();
+    void Action();
+    void ShopAction();
+    void Insect_Release();
+    void ParticleSet();
+    int Execute();
+    void ObjHit();
+    int Delete();
+    void setBaseMtx();
+    bool CreateChk();
+    cPhs__Step create();
     inline int Draw();
 
 private:
@@ -86,8 +86,8 @@ STATIC_ASSERT(sizeof(daObjKABUTO_c) == 0xA14);
 
 class daObj_KabHIO_c {
 public:
-    /* 80C2AE6C */ daObj_KabHIO_c();
-    /* 80C2E068 */ virtual ~daObj_KabHIO_c() {}
+    daObj_KabHIO_c();
+    virtual ~daObj_KabHIO_c() {}
 
     /* 0x04 */ s8 field_0x4;
     /* 0x08 */ f32 field_0x8;

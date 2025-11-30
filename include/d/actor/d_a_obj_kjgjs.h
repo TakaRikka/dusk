@@ -14,14 +14,14 @@
  */
 class daObjKJgjs_c : public dBgS_MoveBgActor, public request_of_phase_process_class {
 public:
-    /* 80C46098 */ int create1st();
-    /* 80C4616C */ void setMtx();
-    /* 80C461E4 */ int CreateHeap();
-    /* 80C46264 */ int Create();
-    /* 80C46310 */ int Execute(Mtx**);
-    /* 80C46320 */ int Draw();
-    /* 80C463C4 */ int Delete();
-    /* 80C464CC */ virtual ~daObjKJgjs_c();
+    int create1st();
+    void setMtx();
+    int CreateHeap();
+    int Create();
+    int Execute(Mtx**);
+    int Draw();
+    int Delete();
+    virtual ~daObjKJgjs_c();
 
     u32 getType() { return fopAcM_GetParamBit(this, 0, 4); }
 

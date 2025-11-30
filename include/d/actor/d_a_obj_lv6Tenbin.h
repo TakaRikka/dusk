@@ -14,18 +14,18 @@
  */
 class daTenbin_c : public dBgS_MoveBgActor {
 public:
-    /* 80C769D0 */ void setBaseMtx();
-    /* 80C76BCC */ int CreateHeap();
-    /* 80C76D10 */ int create();
-    /* 80C76EE0 */ static void rideCallBackRight(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-    /* 80C77078 */ static void rideCallBackLeft(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
-    /* 80C77200 */ int Execute(Mtx**);
-    /* 80C772BC */ void procMain();
-    /* 80C77464 */ void init_modeWait();
-    /* 80C77470 */ void modeWait();
-    /* 80C77668 */ void balanceCheck();
-    /* 80C7772C */ int Draw();
-    /* 80C77810 */ int Delete();
+    void setBaseMtx();
+    int CreateHeap();
+    int create();
+    static void rideCallBackRight(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+    static void rideCallBackLeft(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+    int Execute(Mtx**);
+    void procMain();
+    void init_modeWait();
+    void modeWait();
+    void balanceCheck();
+    int Draw();
+    int Delete();
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
@@ -66,8 +66,8 @@ STATIC_ASSERT(sizeof(daTenbin_c) == 0x654);
 
 class daTenbin_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 80C768EC */ daTenbin_HIO_c();
-    /* 80C77904 */ ~daTenbin_HIO_c() {}
+    daTenbin_HIO_c();
+    ~daTenbin_HIO_c() {}
 #if DEBUG
     void genMessage(JORMContext*);
 #endif

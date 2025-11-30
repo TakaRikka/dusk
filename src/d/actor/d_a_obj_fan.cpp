@@ -9,45 +9,36 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
 
-/* ############################################################################################## */
-/* 80BE5D80-80BE5D8C 000000 000C+00 3/3 0/0 0/0 .rodata          l_bmd */
 static int const l_bmd[3] = {
     4,4,4,
 };
 
-/* 80BE5D8C-80BE5D98 00000C 000C+00 1/1 0/0 0/0 .rodata          l_dzb2 */
 static int const l_dzb2[3] = {
     7,8,8,
 };
 
-/* 80BE5D98-80BE5DA4 000018 000C+00 1/1 0/0 0/0 .rodata          l_dzb3 */
 static int const l_dzb3[3] = {
     7,9,9,
 };
 
-/* 80BE5DA4-80BE5DB0 000024 000C+00 0/1 0/0 0/0 .rodata          l_se */
 static int const l_se[3] = {
     Z2SE_OBJ_FAN_ROLL_S, Z2SE_OBJ_FAN_ROLL_M, Z2SE_OBJ_FAN_ROLL_L,
 };
 
-/* 80BE5DB0-80BE5DBC 000030 000C+00 0/1 0/0 0/0 .rodata          l_wind_se */
 static int const l_wind_se[3] = {
     Z2SE_OBJ_FAN_WIND_S, Z2SE_OBJ_FAN_WIND_M, Z2SE_OBJ_FAN_WIND_L,
 };
 
-/* 80BE5DBC-80BE5DC4 00003C 0006+02 1/2 0/0 0/0 .rodata          l_max_rotspeed */
 static s16 const l_max_rotspeed[3] = {
     0x2000,
     0x2000,
     0x0BB8,
 };
 
-/* 80BE5DC4-80BE5DD0 000044 000C+00 1/1 0/0 0/0 .rodata          l_heap_size */
 static u32 const l_heap_size[3] = {
     0x1680, 0x9AA0, 0x7E80,
 };
 
-/* 80BE5DD0-80BE5E10 000050 0040+00 1/1 0/0 0/0 .rodata          l_sph_src */
 const static dCcD_SrcSph l_sph_src = {
     {
         {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0x1f}, {0x0, 0x11}, 0x0}}, // mObj
@@ -60,7 +51,6 @@ const static dCcD_SrcSph l_sph_src = {
     } // mSphAttr
 };
 
-/* 80BE4C38-80BE4D98 000078 0160+00 1/1 0/0 0/0 .text            searchTornado2__FPvPv */
 static void* searchTornado2(void* param_1, void* param_2) {
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
     if (actor != NULL && fopAcM_IsActor(actor) && fopAcM_GetProfName(actor) == 0x15c &&
@@ -71,7 +61,6 @@ static void* searchTornado2(void* param_1, void* param_2) {
     return NULL;
 }
 
-/* 80BE4D98-80BE4E08 0001D8 0070+00 1/1 0/0 0/0 .text            search_tornado__10daObjFan_cFv */
 fopAc_ac_c* daObjFan_c::search_tornado() {
     fopAc_ac_c* rv = NULL;
     field_0xad0 = parentActorID;
@@ -84,13 +73,11 @@ fopAc_ac_c* daObjFan_c::search_tornado() {
     return rv;
 }
 
-/* 80BE4E08-80BE4E44 000248 003C+00 1/1 0/0 0/0 .text            initBaseMtx__10daObjFan_cFv */
 void daObjFan_c::initBaseMtx() {
     mModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80BE4E44-80BE4F08 000284 00C4+00 2/2 0/0 0/0 .text            setBaseMtx__10daObjFan_cFv */
 void daObjFan_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -107,7 +94,6 @@ void daObjFan_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-/* 80BE4F08-80BE4FD4 000348 00CC+00 1/0 0/0 0/0 .text            Create__10daObjFan_cFv */
 int daObjFan_c::Create() {
     field_0xace = 0x2000;
     home.angle.x -= 0x4000;
@@ -125,15 +111,12 @@ int daObjFan_c::Create() {
     return 1;
 }
 
-/* ############################################################################################## */
-/* 80BE5E78-80BE5E84 -00001 000C+00 3/3 0/0 0/0 .data            l_arcName */
 static char* l_arcName[3] = {
     "Obj_prop1",
     "Obj_prop0",
     "Obj_prop2",
 };
 
-/* 80BE4FD4-80BE50EC 000414 0118+00 1/0 0/0 0/0 .text            CreateHeap__10daObjFan_cFv */
 int daObjFan_c::CreateHeap() {
     void* modelData = dComIfG_getObjectRes(l_arcName[field_0xad4], l_bmd[field_0xad4]);
     JUT_ASSERT(352, modelData != NULL);
@@ -152,7 +135,6 @@ int daObjFan_c::CreateHeap() {
     return 1;
 }
 
-/* 80BE50EC-80BE519C 00052C 00B0+00 1/1 0/0 0/0 .text            create1st__10daObjFan_cFv */
 int daObjFan_c::create1st() {
     field_0xad4 = getType();
     int rv = dComIfG_resLoad(&mPhase, l_arcName[field_0xad4]);
@@ -171,7 +153,6 @@ int daObjFan_c::create1st() {
     return rv;
 }
 
-/* 80BE519C-80BE538C 0005DC 01F0+00 1/0 0/0 0/0 .text            Execute__10daObjFan_cFPPA3_A4_f */
 int daObjFan_c::Execute(f32 (**param_1)[3][4]) {
     search_tornado();
     if (field_0xad4 != 0) {
@@ -207,7 +188,6 @@ int daObjFan_c::Execute(f32 (**param_1)[3][4]) {
     return 1;
 }
 
-/* 80BE538C-80BE583C 0007CC 04B0+00 1/1 0/0 0/0 .text            action__10daObjFan_cFv */
 void daObjFan_c::action() {
     f32 dVar11 = 0.0f;
     f32 dVar10 = 0.0f;
@@ -275,7 +255,6 @@ void daObjFan_c::action() {
     }
 }
 
-/* 80BE5E84-80BE5EB4 00000C 0030+00 1/1 0/0 0/0 .data            l_offset_posM$3940 */
 static Vec l_offset_posM[4] = {
     {-150.0f, 150.0f, 0.0f},
     {-150.0f, -150.0f, 0.0f},
@@ -283,7 +262,6 @@ static Vec l_offset_posM[4] = {
     {150.0f, -150.0f, 0.0f},
 };
 
-/* 80BE5EB4-80BE5EE4 00003C 0030+00 1/1 0/0 0/0 .data            l_offset_posL$3941 */
 static Vec l_offset_posL[4] = {
     {-300.0f, 300.0f, 0.0f},
     {-300.0f, -300.0f, 0.0f},
@@ -291,7 +269,6 @@ static Vec l_offset_posL[4] = {
     {300.0f, -300.0f, 0.0f},
 };
 
-/* 80BE583C-80BE5960 000C7C 0124+00 1/1 0/0 0/0 .text            setCollision__10daObjFan_cFv */
 void daObjFan_c::setCollision() {
     if (field_0xad4 == 0) {
         return;
@@ -316,7 +293,6 @@ void daObjFan_c::setCollision() {
     }
 }
 
-/* 80BE5960-80BE5A04 000DA0 00A4+00 1/0 0/0 0/0 .text            Draw__10daObjFan_cFv */
 int daObjFan_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
@@ -326,7 +302,6 @@ int daObjFan_c::Draw() {
     return 1;
 }
 
-/* 80BE5A04-80BE5A78 000E44 0074+00 1/0 0/0 0/0 .text            Delete__10daObjFan_cFv */
 int daObjFan_c::Delete() {
     if (field_0x5ac != NULL && field_0x5ac->ChkUsed()) {
         dComIfG_Bgsp().Release(field_0x5ac);
@@ -335,30 +310,23 @@ int daObjFan_c::Delete() {
     return 1;
 }
 
-/* 80BE5A78-80BE5B2C 000EB8 00B4+00 1/0 0/0 0/0 .text            daObjFan_create1st__FP10daObjFan_c
- */
 static void daObjFan_create1st(daObjFan_c* param_0) {
     fopAcM_ct(param_0, daObjFan_c);
     param_0->create1st();
 }
 
-/* 80BE5D0C-80BE5D2C 00114C 0020+00 1/0 0/0 0/0 .text daObjFan_MoveBGDelete__FP10daObjFan_c */
 static int daObjFan_MoveBGDelete(daObjFan_c* param_0) {
     return param_0->MoveBGDelete();
 }
 
-/* 80BE5D2C-80BE5D4C 00116C 0020+00 1/0 0/0 0/0 .text daObjFan_MoveBGExecute__FP10daObjFan_c */
 static int daObjFan_MoveBGExecute(daObjFan_c* param_0) {
     return param_0->MoveBGExecute();
 }
 
-/* 80BE5D4C-80BE5D78 00118C 002C+00 1/0 0/0 0/0 .text            daObjFan_MoveBGDraw__FP10daObjFan_c
- */
 static int daObjFan_MoveBGDraw(daObjFan_c* param_0) {
     return param_0->MoveBGDraw();
 }
 
-/* 80BE5EE4-80BE5F04 -00001 0020+00 1/0 0/0 0/0 .data            daObjFan_METHODS */
 static actor_method_class daObjFan_METHODS = {
     (process_method_func)daObjFan_create1st,
     (process_method_func)daObjFan_MoveBGDelete,

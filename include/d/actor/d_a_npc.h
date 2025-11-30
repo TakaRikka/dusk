@@ -32,14 +32,14 @@ private:
     /* 0x0 */ fpc_ProcID mActorID;
 
 public:
-    /* 801456D4 */ void initialize();
-    /* 801456E0 */ void entry(fopAc_ac_c*);
-    /* 801456FC */ void remove();
-    /* 80145708 */ fopAc_ac_c* getActorP();
+    void initialize();
+    void entry(fopAc_ac_c*);
+    void remove();
+    fopAc_ac_c* getActorP();
 
     daNpcT_ActorMngr_c() { initialize(); };
 
-    /* 8014D108 */ virtual ~daNpcT_ActorMngr_c() {}
+    virtual ~daNpcT_ActorMngr_c() {}
 };
 
 class daNpcT_MatAnm_c : public J3DMaterialAnm {
@@ -54,9 +54,9 @@ private:
 public:
     daNpcT_MatAnm_c() { initialize(); }
 
-    /* 80145764 */ void initialize();
-    /* 8014D24C */ virtual ~daNpcT_MatAnm_c() {}
-    /* 80145788 */ virtual void calc(J3DMaterial*) const;
+    void initialize();
+    virtual ~daNpcT_MatAnm_c() {}
+    virtual void calc(J3DMaterial*) const;
 
     void setNowOffsetX(f32 i_value) { mNowOffsetX = i_value; }
     void setNowOffsetY(f32 i_value) { mNowOffsetY = i_value; }
@@ -74,9 +74,9 @@ public:
         /* 0x3 */ s8 mLoopCount;
     };  // Size: 0x4?
 
-    /* 80145898 */ void initialize();
-    /* 801458C0 */ int play(u16, int*, f32*);
-    /* 80145A24 */ s32 checkEndSequence();
+    void initialize();
+    int play(u16, int*, f32*);
+    s32 checkEndSequence();
 
     daNpcT_MotionSeqMngr_c(sequenceStepData_c const* param_1,int param_2) :
     mpSeqData(param_1), mStepNum(param_2) {
@@ -112,7 +112,7 @@ private:
     /* 0x1C */ bool mEndSequence;
 
 public:
-    /* 8014D0C0 */ virtual ~daNpcT_MotionSeqMngr_c() {}
+    virtual ~daNpcT_MotionSeqMngr_c() {}
 };
 
 class daNpcT_Hermite_c {
@@ -123,7 +123,7 @@ public:
     /* 0x0C */ f32 H10;
     /* 0x10 */ f32 H11;
 
-    /* 8014CBAC */ virtual ~daNpcT_Hermite_c() {}
+    virtual ~daNpcT_Hermite_c() {}
 
     f32 GetH00() { return H00; }
     f32 GetH01() { return H01; }
@@ -154,20 +154,20 @@ public:
     /* 0x20 */ u8 mDirection;
     /* 0x21 */ u8 mIsClosed;
 
-    /* 80145B7C */ void hermite(cXyz&, cXyz&, cXyz&, cXyz&, daNpcT_Hermite_c&, cXyz&);
-    /* 80145C40 */ void initialize();
-    /* 80145C74 */ int setPathInfo(u8, s8, u8);
-    /* 80145D2C */ int setNextPathInfo(s8, u8);
-    /* 80145DA0 */ void reverse();
+    void hermite(cXyz&, cXyz&, cXyz&, cXyz&, daNpcT_Hermite_c&, cXyz&);
+    void initialize();
+    int setPathInfo(u8, s8, u8);
+    int setNextPathInfo(s8, u8);
+    void reverse();
     void setNextIdx() { setNextIdx(getNumPnts()); }
-    /* 80145DD0 */ int setNextIdx(int);
+    int setNextIdx(int);
     int getDstPos(cXyz i_pnt, cXyz* o_pos_p) {
         return getDstPos(i_pnt, o_pos_p, getNumPnts());
     }
-    /* 80145E38 */ int getDstPos(cXyz, cXyz*, int);
-    /* 80145FB4 */ int getDstPosH(cXyz, cXyz*, int, int);
-    /* 80146188 */ int chkPassed1(cXyz, int);
-    /* 801464D8 */ int chkPassed2(cXyz, cXyz*, int, int);
+    int getDstPos(cXyz, cXyz*, int);
+    int getDstPosH(cXyz, cXyz*, int, int);
+    int chkPassed1(cXyz, int);
+    int chkPassed2(cXyz, cXyz*, int, int);
 #if DEBUG
     int drawDbgInfo(f32, int);
 #endif
@@ -245,11 +245,11 @@ private:
     /* 0x158 */ u8 field_0x158;
 
 public:
-    /* 80146C98 */ void initialize();
-    /* 80146CD8 */ void setParam(fopAc_ac_c*, J3DModel*, cXyz*, int, int, int, f32, f32, f32, f32,
+    void initialize();
+    void setParam(fopAc_ac_c*, J3DModel*, cXyz*, int, int, int, f32, f32, f32, f32,
                                  f32, f32, f32, f32, f32, f32, cXyz*);
-    /* 80147858 */ void calc(f32);
-    /* 80147C38 */ void calcJntRad(f32, f32, f32);
+    void calc(f32);
+    void calcJntRad(f32, f32, f32);
 #if DEBUG
     void drawDbgInfo();
 #endif
@@ -338,7 +338,7 @@ public:
     daNpcT_JntAnm_c() {
         initialize();
     }
-    /* 8014D150 */ virtual ~daNpcT_JntAnm_c() {}
+    virtual ~daNpcT_JntAnm_c() {}
 
     void clrDirectFlag() { mDirectFlag = 0; }
     int getMode() { return mMode; }
@@ -446,8 +446,8 @@ public:
 
 class daNpcT_DmgStagger_c {
 public:
-    /* 80147DCC */ void setParam(fopAc_ac_c*, fopAc_ac_c*, s16);
-    /* 80147E3C */ void calc(BOOL);
+    void setParam(fopAc_ac_c*, fopAc_ac_c*, s16);
+    void calc(BOOL);
 
     void initialize() {
         //TODO: Separate decl is fakematch, but using 0 directly in the setall call causes
@@ -641,113 +641,113 @@ public:
         initialize();
     }
 
-    /* 80147FA4 */ static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
-    /* 80147FD4 */ static void* srchActor(void*, void*);
-    /* 80148058 */ J3DAnmTransform* getTrnsfrmAnmP(char const*, int);
-    /* 80148094 */ J3DAnmTransformKey* getTrnsfrmKeyAnmP(char const*, int);
-    /* 801480D0 */ J3DAnmTexPattern* getTexPtrnAnmP(char const*, int);
-    /* 8014810C */ J3DAnmTextureSRTKey* getTexSRTKeyAnmP(char const*, int);
-    /* 80148148 */ J3DAnmTevRegKey* getTevRegKeyAnmP(char const*, int);
-    /* 80148184 */ J3DAnmColor* getColorAnmP(char const*, int);
-    /* 801481C0 */ int setBckAnm(J3DAnmTransform*, f32, int, int, int, bool);
-    /* 80148204 */ int setMcaMorfAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
-    /* 801482F8 */ int setBtpAnm(J3DAnmTexPattern*, J3DModelData*, f32, int);
-    /* 80148338 */ int setBtkAnm(J3DAnmTextureSRTKey*, J3DModelData*, f32, int);
-    /* 80148378 */ int setBrkAnm(J3DAnmTevRegKey*, J3DModelData*, f32, int);
-    /* 801483B8 */ int setBpkAnm(J3DAnmColor*, J3DModelData*, f32, int);
-    /* 801483F8 */ int loadRes(s8 const*, char const**);
-    /* 801484AC */ void deleteRes(s8 const*, char const**);
-    /* 8014852C */ int execute();
-    /* 8014886C */ int draw(BOOL, BOOL, f32, _GXColorS10*, f32, BOOL, BOOL, BOOL);
-    /* 80148C70 */ void setEnvTevColor();
-    /* 80148CCC */ void setRoomNo();
-    /* 80148D10 */ int checkEndAnm(f32);
-    /* 80148DD0 */ int checkEndAnm(J3DFrameCtrl*, f32);
-    /* 80148E4C */ void playAllAnm();
-    /* 80149190 */ void setMtx();
-    /* 8014924C */ void ctrlFaceMotion();
-    /* 80149300 */ void ctrlMotion();
-    /* 801493B8 */ int ctrlMsgAnm(int*, int*, fopAc_ac_c*, int);
-    /* 8014A224 */ void evtChange();
-    /* 8014A388 */ bool setFaceMotionAnm(int, bool);
-    /* 8014A908 */ void setPos(cXyz);
-    /* 8014AA18 */ void setAngle(s16);
-    /* 8014A99C */ void setAngle(csXyz);
-    /* 8014AA40 */ fopAc_ac_c* hitChk(dCcD_GObjInf*, u32);
-    /* 8014AAD0 */ void setDamage(int, int, int);
-    /* 8014ABD0 */ BOOL chkActorInSight(fopAc_ac_c*, f32, s16);
-    /* 8014ACF0 */ BOOL chkPointInArea(cXyz, cXyz, f32, f32, f32, s16);
-    /* 8014ADA0 */ BOOL chkPointInArea(cXyz, cXyz, cXyz, s16);
-    /* 8014AE1C */ BOOL chkFindActor(fopAc_ac_c*, BOOL, s16);
-    /* 8014B024 */ BOOL chkWolfAction();
-    /* 8014B0C8 */ BOOL chkFindWolf(s16, int, int, f32, f32, f32, f32, BOOL);
-    /* 8014B338 */ BOOL srchPlayerActor();
-    /* 8014B3EC */ cXyz getAttnPos(fopAc_ac_c*);
-    /* 8014B4A4 */ BOOL turn(s16, int, int);
-    /* 8014B648 */ BOOL step(s16, int, int, int, int);
-    /* 8014B808 */ void calcSpeedAndAngle(cXyz, BOOL, s16, s16);
-    /* 8014BB00 */ int getActorDistance(fopAc_ac_c*, int, int);
-    /* 8014BBF0 */ BOOL initTalk(int, fopAc_ac_c**);
-    /* 8014BC78 */ BOOL talkProc(int*, BOOL, fopAc_ac_c**, BOOL);
-    /* 8014BE2C */ fopAc_ac_c* getNearestActorP(s16);
-    /* 8014BEE4 */ fopAc_ac_c* getEvtAreaTagP(int, int);
-    /* 8014BFB0 */ fopAc_ac_c* getShopItemTagP();
-    /* 8014C030 */ void setHitodamaPrtcl();
+    static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
+    static void* srchActor(void*, void*);
+    J3DAnmTransform* getTrnsfrmAnmP(char const*, int);
+    J3DAnmTransformKey* getTrnsfrmKeyAnmP(char const*, int);
+    J3DAnmTexPattern* getTexPtrnAnmP(char const*, int);
+    J3DAnmTextureSRTKey* getTexSRTKeyAnmP(char const*, int);
+    J3DAnmTevRegKey* getTevRegKeyAnmP(char const*, int);
+    J3DAnmColor* getColorAnmP(char const*, int);
+    int setBckAnm(J3DAnmTransform*, f32, int, int, int, bool);
+    int setMcaMorfAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
+    int setBtpAnm(J3DAnmTexPattern*, J3DModelData*, f32, int);
+    int setBtkAnm(J3DAnmTextureSRTKey*, J3DModelData*, f32, int);
+    int setBrkAnm(J3DAnmTevRegKey*, J3DModelData*, f32, int);
+    int setBpkAnm(J3DAnmColor*, J3DModelData*, f32, int);
+    int loadRes(s8 const*, char const**);
+    void deleteRes(s8 const*, char const**);
+    int execute();
+    int draw(BOOL, BOOL, f32, _GXColorS10*, f32, BOOL, BOOL, BOOL);
+    void setEnvTevColor();
+    void setRoomNo();
+    int checkEndAnm(f32);
+    int checkEndAnm(J3DFrameCtrl*, f32);
+    void playAllAnm();
+    void setMtx();
+    void ctrlFaceMotion();
+    void ctrlMotion();
+    int ctrlMsgAnm(int*, int*, fopAc_ac_c*, int);
+    void evtChange();
+    bool setFaceMotionAnm(int, bool);
+    void setPos(cXyz);
+    void setAngle(s16);
+    void setAngle(csXyz);
+    fopAc_ac_c* hitChk(dCcD_GObjInf*, u32);
+    void setDamage(int, int, int);
+    BOOL chkActorInSight(fopAc_ac_c*, f32, s16);
+    BOOL chkPointInArea(cXyz, cXyz, f32, f32, f32, s16);
+    BOOL chkPointInArea(cXyz, cXyz, cXyz, s16);
+    BOOL chkFindActor(fopAc_ac_c*, BOOL, s16);
+    BOOL chkWolfAction();
+    BOOL chkFindWolf(s16, int, int, f32, f32, f32, f32, BOOL);
+    BOOL srchPlayerActor();
+    cXyz getAttnPos(fopAc_ac_c*);
+    BOOL turn(s16, int, int);
+    BOOL step(s16, int, int, int, int);
+    void calcSpeedAndAngle(cXyz, BOOL, s16, s16);
+    int getActorDistance(fopAc_ac_c*, int, int);
+    BOOL initTalk(int, fopAc_ac_c**);
+    BOOL talkProc(int*, BOOL, fopAc_ac_c**, BOOL);
+    fopAc_ac_c* getNearestActorP(s16);
+    fopAc_ac_c* getEvtAreaTagP(int, int);
+    fopAc_ac_c* getShopItemTagP();
+    void setHitodamaPrtcl();
 
-    /* 8014CD20 */ virtual ~daNpcT_c() {
+    virtual ~daNpcT_c() {
         // "daNpcT_c -> destructed"
         OS_REPORT("|%06d:%x|daNpcT_c -> デストラクト\n", g_Counter.mCounter0, this);
     }
-    /* 801490D4 */ virtual BOOL ctrlBtk();
-    /* 8014CC14 */ virtual void ctrlSubFaceMotion(int) {}
-    /* 8014CC40 */ virtual BOOL checkChangeJoint(int) { return FALSE; }
-    /* 8014CC38 */ virtual BOOL checkRemoveJoint(int) { return FALSE; }
-    /* 8014CC5C */ virtual s32 getBackboneJointNo() { return -1; }
-    /* 8014CC54 */ virtual s32 getNeckJointNo() { return -1; }
-    /* 8014CC4C */ virtual s32 getHeadJointNo() { return -1; }
-    /* 8014CC90 */ virtual s32 getFootLJointNo() { return -1; }
-    /* 8014CC88 */ virtual s32 getFootRJointNo() { return -1; }
-    /* 8014D0A8 */ virtual u16 getEyeballLMaterialNo() { return 0; }
-    /* 8014D0B0 */ virtual u16 getEyeballRMaterialNo() { return 0; }
-    /* 8014D0B8 */ virtual u16 getEyeballMaterialNo() { return 0; }
-    /* 8014951C */ virtual int ctrlJoint(J3DJoint*, J3DModel*);
-    /* 8014CC48 */ virtual void afterJntAnm(int) {}
-    /* 8014CC24 */ virtual void setParam() {}
-    /* 8014CC80 */ virtual BOOL checkChangeEvt() { return FALSE; }
-    /* 8014CC78 */ virtual BOOL evtTalk() { return TRUE; }
-    /* 8014CC70 */ virtual BOOL evtEndProc() { return TRUE; }
-    /* 8014CC68 */ virtual BOOL evtCutProc() { return FALSE; }
-    /* 8014CC64 */ virtual void setAfterTalkMotion() {}
-    /* 8014997C */ virtual BOOL evtProc();
-    /* 8014CC20 */ virtual void action() {}
-    /* 8014CC1C */ virtual void beforeMove() {}
-    /* 8014CC18 */ virtual void afterMoved() {}
-    /* 8014CC10 */ virtual void setAttnPos() {}
-    /* 80149BB4 */ virtual void setFootPos();
-    /* 8014CC0C */ virtual void setCollision() {}
-    /* 80149D7C */ virtual void setFootPrtcl(cXyz*, f32, f32);
-    /* 8014A05C */ virtual bool checkCullDraw();
-    /* 8014A064 */ virtual void twilight();
-    /* 8014CC98 */ virtual BOOL chkXYItems() { return FALSE; }
-    /* 8014A0B0 */ virtual void evtOrder();
-    /* 8014CBF4 */ virtual void decTmr() {
+    virtual BOOL ctrlBtk();
+    virtual void ctrlSubFaceMotion(int) {}
+    virtual BOOL checkChangeJoint(int) { return FALSE; }
+    virtual BOOL checkRemoveJoint(int) { return FALSE; }
+    virtual s32 getBackboneJointNo() { return -1; }
+    virtual s32 getNeckJointNo() { return -1; }
+    virtual s32 getHeadJointNo() { return -1; }
+    virtual s32 getFootLJointNo() { return -1; }
+    virtual s32 getFootRJointNo() { return -1; }
+    virtual u16 getEyeballLMaterialNo() { return 0; }
+    virtual u16 getEyeballRMaterialNo() { return 0; }
+    virtual u16 getEyeballMaterialNo() { return 0; }
+    virtual int ctrlJoint(J3DJoint*, J3DModel*);
+    virtual void afterJntAnm(int) {}
+    virtual void setParam() {}
+    virtual BOOL checkChangeEvt() { return FALSE; }
+    virtual BOOL evtTalk() { return TRUE; }
+    virtual BOOL evtEndProc() { return TRUE; }
+    virtual BOOL evtCutProc() { return FALSE; }
+    virtual void setAfterTalkMotion() {}
+    virtual BOOL evtProc();
+    virtual void action() {}
+    virtual void beforeMove() {}
+    virtual void afterMoved() {}
+    virtual void setAttnPos() {}
+    virtual void setFootPos();
+    virtual void setCollision() {}
+    virtual void setFootPrtcl(cXyz*, f32, f32);
+    virtual bool checkCullDraw();
+    virtual void twilight();
+    virtual BOOL chkXYItems() { return FALSE; }
+    virtual void evtOrder();
+    virtual void decTmr() {
         if (mDamageTimer != 0) {
             mDamageTimer--;
         }
     }
-    /* 8014A324 */ virtual void clrParam();
-    /* 8014CC30 */ virtual int drawDbgInfo() { return 0; }
-    /* 8014CC28 */ virtual void drawOtherMdl() {}
-    /* 8014CC2C */ virtual void drawGhost() {}
-    /* 8014CCA0 */ virtual bool afterSetFaceMotionAnm(int, int, f32, int) { return true; }
-    /* 8014CCE0 */ virtual bool afterSetMotionAnm(int, int, f32, int) { return true; }
-    /* 8014CCB0 */ virtual daNpcT_faceMotionAnmData_c getFaceMotionAnm(daNpcT_faceMotionAnmData_c param_1) { return param_1; }
-    /* 8014CCF0 */ virtual daNpcT_motionAnmData_c getMotionAnm(daNpcT_motionAnmData_c param_1) { return param_1; }
-    /* 8014CCEC */ virtual void changeAnm(int*, int*) {}
-    /* 8014CCAC */ virtual void changeBck(int*, int*) {}
-    /* 8014CCA8 */ virtual void changeBtp(int*, int*) {}
-    /* 8014CCE8 */ virtual void changeBtk(int*, int*) {}
-    /* 8014A628 */ virtual bool setMotionAnm(int, f32, BOOL);
+    virtual void clrParam();
+    virtual int drawDbgInfo() { return 0; }
+    virtual void drawOtherMdl() {}
+    virtual void drawGhost() {}
+    virtual bool afterSetFaceMotionAnm(int, int, f32, int) { return true; }
+    virtual bool afterSetMotionAnm(int, int, f32, int) { return true; }
+    virtual daNpcT_faceMotionAnmData_c getFaceMotionAnm(daNpcT_faceMotionAnmData_c param_1) { return param_1; }
+    virtual daNpcT_motionAnmData_c getMotionAnm(daNpcT_motionAnmData_c param_1) { return param_1; }
+    virtual void changeAnm(int*, int*) {}
+    virtual void changeBck(int*, int*) {}
+    virtual void changeBtp(int*, int*) {}
+    virtual void changeBtk(int*, int*) {}
+    virtual bool setMotionAnm(int, f32, BOOL);
 
     bool checkHide() { return mHide || (!dComIfGs_wolfeye_effect_check() && mTwilight); }
     BOOL checkStep() { return mStepMode == 1; }

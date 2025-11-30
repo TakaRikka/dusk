@@ -38,8 +38,8 @@ enum OC_ACTIONS {
 
 class daE_OC_HIO_c : public JORReflexible {
 public:
-    /* 8072C5CC */ daE_OC_HIO_c();
-    /* 80735630 */ virtual ~daE_OC_HIO_c() {}
+    daE_OC_HIO_c();
+    virtual ~daE_OC_HIO_c() {}
 
     /* 0x04 */ s8 field_0x04;
     /* 0x05 */ u8 radius_representation;
@@ -57,19 +57,16 @@ public:
 #endif
 };
 
-/* 80735B54-80735B7C 00002C 0028+00 0/1 0/0 0/0 .rodata          oc_attackb_trans__6E_OC_n */
 f32 const E_OC_n::oc_attackb_trans[10] = {
     0.0f, 0.0f, 0.0f, 0.0f, 15.3f, 
     38.4f, 63.3f, 86.2f, 103.3f, 112.0f
 };
 
-/* 80735B7C-80735BA4 000054 0028+00 0/1 0/0 0/0 .rodata          oc_attackc_trans__6E_OC_n */
 f32 const E_OC_n::oc_attackc_trans[10] = {
     0.0f, 31.3f, 72.7f, 91.5f, 91.5f,
     91.5f, 91.5f, 91.5f, 91.5f, 91.5f
 };
 
-/* 80735D64-80735DA4 000038 0040+00 1/1 0/0 0/0 .data            cc_sph_src__6E_OC_n */
 dCcD_SrcSph E_OC_n::cc_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xD8FBFDFF, 0x3}, 0x75}}, // mObj
@@ -82,7 +79,6 @@ dCcD_SrcSph E_OC_n::cc_sph_src = {
     } // mSphAttr
 };
 
-/* 80735DA4-80735DE4 000078 0040+00 1/1 0/0 0/0 .data            at_sph_src__6E_OC_n */
 dCcD_SrcSph E_OC_n::at_sph_src = {
     {
         {0x0, {{0x1000, 0x1, 0xD}, {0x0, 0x0}, 0x0}}, // mObj
@@ -95,7 +91,6 @@ dCcD_SrcSph E_OC_n::at_sph_src = {
     } // mSphAttr
 };
 
-/* 8072C5CC-8072C630 0000EC 0064+00 1/1 0/0 0/0 .text            __ct__12daE_OC_HIO_cFv */
 daE_OC_HIO_c::daE_OC_HIO_c() {
     field_0x04 = -1;
     radius_representation = 0;
@@ -134,7 +129,6 @@ void daE_OC_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-/* 8072C630-8072C6E8 000150 00B8+00 1/1 0/0 0/0 .text ctrlJoint__8daE_OC_cFP8J3DJointP8J3DModel */
 int daE_OC_c::ctrlJoint(J3DJoint* i_joint, J3DModel* param_1) {
     J3DJoint* my_joint = i_joint;
     int jnt_no = my_joint->getJntNo();
@@ -149,7 +143,6 @@ int daE_OC_c::ctrlJoint(J3DJoint* i_joint, J3DModel* param_1) {
     return 1;
 }
 
-/* 8072C6E8-8072C734 000208 004C+00 1/1 0/0 0/0 .text JointCallBack__8daE_OC_cFP8J3DJointi */
 int daE_OC_c::JointCallBack(J3DJoint* i_joint, int param_1) {
     if (param_1 == 0) {
         J3DModel* model_p = j3dSys.getModel();
@@ -161,7 +154,6 @@ int daE_OC_c::JointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-/* 8072C734-8072C918 000254 01E4+00 1/1 0/0 0/0 .text            draw__8daE_OC_cFv */
 int daE_OC_c::draw() {
     J3DModel* model = mpMorf->getModel();
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -196,30 +188,22 @@ int daE_OC_c::draw() {
     return 1;
 }
 
-/* 8072C918-8072C938 000438 0020+00 1/0 0/0 0/0 .text            daE_OC_Draw__FP8daE_OC_c */
 static void daE_OC_Draw(daE_OC_c* i_this) {
     i_this->draw();
 }
 
-/* 80736040-80736044 000048 0004+00 0/2 0/0 0/0 .bss             m_battle_oc__6E_OC_n */
 daE_OC_c* E_OC_n::m_battle_oc;
 
-/* 80736044-80736048 00004C 0004+00 0/2 0/0 0/0 .bss             m_damage_oc__6E_OC_n */
 daE_OC_c* E_OC_n::m_damage_oc;
 
-/* 80736048-8073604C 000050 0004+00 0/2 0/0 0/0 .bss             m_death_oc__6E_OC_n */
 daE_OC_c* E_OC_n::m_death_oc;
 
-/* 8073604C-80736050 000054 0004+00 0/2 0/0 0/0 .bss             m_talk_oc__6E_OC_n */
 daE_OC_c* E_OC_n::m_talk_oc;
 
-/* 80736050-80736054 000058 0004+00 2/2 0/0 0/0 .bss             None */
 static u8 lbl_216_bss_58;
 
-/* 80736060-80736088 000068 0028+00 6/7 0/0 0/0 .bss             l_HIO */
 static daE_OC_HIO_c l_HIO;
 
-/* 8072C938-8072CBD4 000458 029C+00 1/1 0/0 0/0 .text            s_other_oc__FPvPv */
 static void* s_other_oc(void* arg_lhs, void* arg_rhs) {
     f32 dist;
     if (arg_lhs != arg_rhs && fopAcM_IsActor(arg_lhs)) {
@@ -263,12 +247,10 @@ static void* s_other_oc(void* arg_lhs, void* arg_rhs) {
     return NULL;
 }
 
-/* 8072CBD4-8072CC10 0006F4 003C+00 1/1 0/0 0/0 .text getVisionAngle__8daE_OC_cFP10fopAc_ac_c */
 s16 daE_OC_c::getVisionAngle(fopAc_ac_c* other_oc) {
     return cLib_distanceAngleS(shape_angle.y, fopAcM_searchActorAngleY(this, other_oc));
 }
 
-/* 8072CC10-8072CDA8 000730 0198+00 1/1 0/0 0/0 .text            searchOtherOc__8daE_OC_cFv */
 void daE_OC_c::searchOtherOc() {
     if (field_0x6e3 == 0) {
         field_0x6dd = 0;
@@ -307,7 +289,6 @@ void daE_OC_c::searchOtherOc() {
     }
 }
 
-/* 8072CDA8-8072CE00 0008C8 0058+00 5/5 0/0 0/0 .text            setWatchMode__8daE_OC_cFv */
 bool daE_OC_c::setWatchMode() {
     if (field_0x6dd != 0) {
         if (field_0x6dd == 1) {
@@ -322,7 +303,6 @@ bool daE_OC_c::setWatchMode() {
     return false;
 }
 
-/* 8072CE00-8072CF00 000920 0100+00 1/1 0/0 0/0 .text            searchPlayer__8daE_OC_cFv */
 bool daE_OC_c::searchPlayer() {
     if (fopAcM_searchPlayerDistance(this) < mPlayerRange) {
         s16 diff = shape_angle.y - fopAcM_searchPlayerAngleY(this);
@@ -348,7 +328,6 @@ bool daE_OC_c::searchPlayer() {
     return false;
 }
 
-/* 8072CF00-8072CF90 000A20 0090+00 1/1 0/0 0/0 .text            s_obj_sub__FPvPv */
 static void* s_obj_sub(void* arg_lhs, void* arg_rhs) {
     if (fopAcM_IsActor(arg_lhs)) {
         if (fpcM_IsCreating(fopAcM_GetID(arg_lhs)) == 0 && fopAcM_GetName(arg_lhs) == PROC_Obj_RotBridge) {
@@ -361,7 +340,6 @@ static void* s_obj_sub(void* arg_lhs, void* arg_rhs) {
     return NULL;
 }
 
-/* 8072CF90-8072D100 000AB0 0170+00 6/6 0/0 0/0 .text            searchPlayer2__8daE_OC_cFv */
 bool daE_OC_c::searchPlayer2() {
     field_0x6e2 = 0;
     if (field_0x6b4 == 2) {
@@ -406,8 +384,6 @@ bool daE_OC_c::searchPlayer2() {
     return false;
 }
 
-/* 8072D100-8072D1DC 000C20 00DC+00 2/2 0/0 0/0 .text            searchPlayerShakeHead__8daE_OC_cFv
- */
 bool daE_OC_c::searchPlayerShakeHead() {
     if (field_0x6e3) {
         return false;
@@ -429,7 +405,6 @@ bool daE_OC_c::searchPlayerShakeHead() {
     return false;
 }
 
-/* 8072D1DC-8072D2E8 000CFC 010C+00 3/3 0/0 0/0 .text            searchSound__8daE_OC_cFv */
 bool daE_OC_c::searchSound() {
     if (field_0x6b4 == 2 && mpBridge && mpBridge->getPlayerRide()) {
         return false;
@@ -450,7 +425,6 @@ bool daE_OC_c::searchSound() {
     return false;
 }
 
-/* 8072D2E8-8072D364 000E08 007C+00 1/1 0/0 0/0 .text            s_demo_oc__FPvPv */
 static void* s_demo_oc(void* arg_lhs, void* arg_rhs) {
     (void) arg_rhs;
     if (fopAcM_IsActor(arg_lhs)) {
@@ -463,7 +437,6 @@ static void* s_demo_oc(void* arg_lhs, void* arg_rhs) {
     return NULL;
 }
 
-/* 8072D364-8072D5F8 000E84 0294+00 1/1 0/0 0/0 .text            checkBeforeBg__8daE_OC_cFv */
 int daE_OC_c::checkBeforeBg() {
     dBgS_LinChk link_chk;
     cM3dGPla plane;
@@ -495,7 +468,6 @@ int daE_OC_c::checkBeforeBg() {
     return 0;
 }
 
-/* 8072D640-8072D87C 001160 023C+00 1/2 0/0 0/0 .text            checkBeforeBgFind__8daE_OC_cFv */
 bool daE_OC_c::checkBeforeBgFind() {
     dBgS_LinChk line_chk;
     cXyz oc_pos;
@@ -532,7 +504,6 @@ bool daE_OC_c::checkBeforeBgFind() {
     }
 }
 
-/* 8072D87C-8072D994 00139C 0118+00 2/2 0/0 0/0 .text            checkBeforeFloorBg__8daE_OC_cFf */
 bool daE_OC_c::checkBeforeFloorBg(f32 arg) {
     cXyz my_vec_0;
     dBgS_ObjGndChk_Spl gnd_chk_spl;
@@ -552,7 +523,6 @@ bool daE_OC_c::checkBeforeFloorBg(f32 arg) {
     return false;
 }
 
-/* 8072D994-8072DB10 0014B4 017C+00 1/1 0/0 0/0 .text            checkDamageBg__8daE_OC_cFv */
 void daE_OC_c::checkDamageBg() {
     cXyz my_vec(current.pos);
     my_vec.y += 50.0f;
@@ -582,7 +552,6 @@ void daE_OC_c::checkDamageBg() {
     }
 }
 
-/* 8072DB10-8072DCBC 001630 01AC+00 1/1 0/0 0/0 .text            setGroundAngle__8daE_OC_cFv */
 void daE_OC_c::setGroundAngle() {
     cXyz my_vec_0;
     cXyz my_vec_1;
@@ -611,7 +580,6 @@ void daE_OC_c::setGroundAngle() {
     }
 }
 
-/* 8072DCBC-8072DD18 0017DC 005C+00 21/21 0/0 0/0 .text            setActionMode__8daE_OC_cFii */
 void daE_OC_c::setActionMode(int i_action, int i_state) {
     mOldActionMode = mActionMode;
     mActionMode = i_action;
@@ -624,7 +592,6 @@ void daE_OC_c::setActionMode(int i_action, int i_state) {
     offHeadLockFlg();
 }
 
-/* 8072DD18-8072DD8C 001838 0074+00 2/1 0/0 0/0 .text            getCutType__8daE_OC_cFv */
 int daE_OC_c::getCutType() {
     if (daPy_getPlayerActorClass()->getCutCount() >= 4) {
         return 5;
@@ -660,7 +627,6 @@ int daE_OC_c::getCutType() {
     }
 }
 
-/* 8072DD8C-8072DDF4 0018AC 0068+00 4/4 0/0 0/0 .text            offTgSph__8daE_OC_cFv */
 void daE_OC_c::offTgSph() {
     mSphs_cc[0].OffTgSetBit();
     mSphs_cc[0].ClrTgHit();
@@ -668,7 +634,6 @@ void daE_OC_c::offTgSph() {
     mSphs_cc[1].ClrTgHit();
 }
 
-/* 8072DDF4-8072E274 001914 0480+00 1/1 0/0 0/0 .text            damage_check__8daE_OC_cFv */
 void daE_OC_c::damage_check() {
     if (checkCutDownHitFlg()) {
         // Following needed to use r31 for debug asm:
@@ -812,13 +777,11 @@ void daE_OC_c::damage_check() {
     }
 }
 
-/* 8072E274-8072E31C 001D94 00A8+00 17/17 0/0 0/0 .text            setBck__8daE_OC_cFiUcff */
 void daE_OC_c::setBck(int i_index, u8 i_attr, f32 i_morf, f32 i_rate) {
     mpMorf->setAnm((J3DAnmTransform *) dComIfG_getObjectRes("E_ocb", i_index),
                     i_attr, i_morf, i_rate, 0.0f, -1.0f);
 }
 
-/* 8072E31C-8072E37C 001E3C 0060+00 11/11 0/0 0/0 .text            checkBck__8daE_OC_cFi */
 bool daE_OC_c::checkBck(int i_index) {
     if (mpMorf->getAnm() != dComIfG_getObjectRes("E_ocb", i_index)) {
         return false;
@@ -827,7 +790,6 @@ bool daE_OC_c::checkBck(int i_index) {
     }
 }
 
-/* 8072E37C-8072E42C 001E9C 00B0+00 3/3 0/0 0/0 .text            setSpitEffect__8daE_OC_cFv */
 void daE_OC_c::setSpitEffect() {
     MtxP my_mtx_p = mpMorf->getModel()->getAnmMtx(0x11);
     cXyz my_vec(my_mtx_p[0][3], my_mtx_p[1][3], my_mtx_p[2][3]);
@@ -836,7 +798,6 @@ void daE_OC_c::setSpitEffect() {
                                              -1, NULL, -1, NULL, NULL, NULL);
 }
 
-/* 8072E42C-8072E498 001F4C 006C+00 1/1 0/0 0/0 .text            getHeadAngle__8daE_OC_cFv */
 s16 daE_OC_c::getHeadAngle() {
     cXyz my_vec_0;
     cXyz my_vec_1;
@@ -847,7 +808,6 @@ s16 daE_OC_c::getHeadAngle() {
     return (s16)cLib_targetAngleY(&my_vec_0, &my_vec_1);
 }
 
-/* 8072E498-8072E528 001FB8 0090+00 1/1 0/0 0/0 .text            setStabPos__8daE_OC_cFv */
 void daE_OC_c::setStabPos() {
     cXyz my_vec_0;
     cXyz my_vec_1;
@@ -857,14 +817,12 @@ void daE_OC_c::setStabPos() {
     setDownPos(&my_vec_0);
 }
 
-/* 8072E528-8072E5A4 002048 007C+00 1/1 0/0 0/0 .text            setWaitSound__8daE_OC_cFv */
 void daE_OC_c::setWaitSound() {
     if (checkBck(0x1b) && mpMorf->checkFrame(0.0f)) {
         mSound.startCreatureVoice(Z2SE_EN_OC_V_WAIT, -1);
     }
 }
 
-/* 8072E5A4-8072E670 0020C4 00CC+00 1/1 0/0 0/0 .text            setWalkSound__8daE_OC_cFv */
 void daE_OC_c::setWalkSound() {
     if (checkBck(0x1d)) {
         if (mpMorf->checkFrame(14.0f)) {
@@ -875,7 +833,6 @@ void daE_OC_c::setWalkSound() {
     }
 }
 
-/* 8072E670-8072E788 002190 0118+00 1/1 0/0 0/0 .text            setWalkStSound__8daE_OC_cFv */
 void daE_OC_c::setWalkStSound() {
     if (checkBck(0x1e)) {
         if (mpMorf->checkFrame(0.0f)) {
@@ -888,7 +845,6 @@ void daE_OC_c::setWalkStSound() {
     }
 }
 
-/* 8072E788-8072E910 0022A8 0188+00 1/1 0/0 0/0 .text            setDashSound__8daE_OC_cFv */
 void daE_OC_c::setDashSound() {
     if (checkBck(0xb)) {
         if (mpMorf->checkFrame(0.0f)) {
@@ -906,7 +862,6 @@ void daE_OC_c::setDashSound() {
     }
 }
 
-/* 8072E910-8072EA58 002430 0148+00 1/1 0/0 0/0 .text            setWaitStSound__8daE_OC_cFv */
 void daE_OC_c::setWaitStSound() {
     if (checkBck(0x1c)) {
         if (mpMorf->checkFrame(0.0f)) {
@@ -919,7 +874,6 @@ void daE_OC_c::setWaitStSound() {
     }
 }
 
-/* 8072EA58-8072EAA4 002578 004C+00 1/1 0/0 0/0 .text            setFootNoteSound__8daE_OC_cFv */
 void daE_OC_c::setFootNoteSound() {
     setWaitSound();
     setWalkSound();
@@ -928,7 +882,6 @@ void daE_OC_c::setFootNoteSound() {
     setWaitStSound();
 }
 
-/* 8072EAA4-8072F1A8 0025C4 0704+00 1/1 0/0 0/0 .text            executeWait__8daE_OC_cFv */
 void daE_OC_c::executeWait() {
     mPrevShapeAngle = shape_angle.y;
     field_0x6de = 0;
@@ -1019,7 +972,6 @@ void daE_OC_c::executeWait() {
     }
 }
 
-/* 8072F1A8-8072F5E0 002CC8 0438+00 1/1 0/0 0/0 .text            executeWalk__8daE_OC_cFv */
 void daE_OC_c::executeWalk() {
     mPrevShapeAngle = shape_angle.y;
     field_0x6de = 0;
@@ -1095,7 +1047,6 @@ void daE_OC_c::executeWalk() {
     }
 }
 
-/* 8072F5E0-8072F914 003100 0334+00 1/1 0/0 0/0 .text            executeTalk__8daE_OC_cFv */
 void daE_OC_c::executeTalk() {
     field_0x6de = 0;
     if (setWatchMode()) {
@@ -1172,7 +1123,6 @@ void daE_OC_c::executeTalk() {
     }
 }
 
-/* 8072F914-807302E8 003434 09D4+00 1/1 0/0 0/0 .text            executeFind__8daE_OC_cFv */
 void daE_OC_c::executeFind() {
     s16 pl_ang = fopAcM_searchPlayerAngleY(this);
     f32 pl_dist = fopAcM_searchPlayerDistance(this);
@@ -1381,8 +1331,6 @@ void daE_OC_c::executeFind() {
     }
 }
 
-/* 807302E8-807305C0 003E08 02D8+00 1/1 0/0 0/0 .text            setWeaponGroundAngle__8daE_OC_cFv
- */
 void daE_OC_c::setWeaponGroundAngle() {
     s16 my_val = 0;
     if (checkBck(5) && mpMorf->getFrame() >= 30.0f && mpMorf->getFrame() <= 45.0f) {
@@ -1416,7 +1364,6 @@ void daE_OC_c::setWeaponGroundAngle() {
     cLib_addCalcAngleS(&field_0x6d0, my_val, 4, 0x1000, 0x100);
 }
 
-/* 807305C0-80730DC0 0040E0 0800+00 1/1 0/0 0/0 .text            executeAttack__8daE_OC_cFv */
 void daE_OC_c::executeAttack() {
     f32 my_float = 0.0f;
     int frame_ctrl = (mpMorf->getFrame() - 9.0f);
@@ -1563,7 +1510,6 @@ void daE_OC_c::executeAttack() {
     current.angle.y = shape_angle.y;
 }
 
-/* 80730DC0-80731124 0048E0 0364+00 2/1 0/0 0/0 .text            executeDamage__8daE_OC_cFv */
 void daE_OC_c::executeDamage() {
     mBattleOn = true;
     mPrevShapeAngle = shape_angle.y;
@@ -1633,7 +1579,6 @@ void daE_OC_c::executeDamage() {
     }
 }
 
-/* 80731124-807316F8 004C44 05D4+00 1/1 0/0 0/0 .text            executeBigDamage__8daE_OC_cFv */
 void daE_OC_c::executeBigDamage() {
     mBattleOn = true;
     mPrevShapeAngle = shape_angle.y;
@@ -1757,7 +1702,6 @@ void daE_OC_c::executeBigDamage() {
     }
 }
 
-/* 807316F8-807319E4 005218 02EC+00 1/1 0/0 0/0 .text            executeWatch__8daE_OC_cFv */
 void daE_OC_c::executeWatch() {
     mPrevShapeAngle = shape_angle.y;
     switch (mOcState) {
@@ -1810,7 +1754,6 @@ void daE_OC_c::executeWatch() {
     }
 }
 
-/* 807319E4-80731D18 005504 0334+00 1/1 0/0 0/0 .text            executeSoundWatch__8daE_OC_cFv */
 void daE_OC_c::executeSoundWatch() {
     field_0x6bc = mPrevShapeAngle = cLib_targetAngleY(&current.pos, &mWatchPos);
     if (mOcState == 2) {
@@ -1860,7 +1803,6 @@ void daE_OC_c::executeSoundWatch() {
     }
 }
 
-/* 80731D18-80731D4C 005838 0034+00 1/1 0/0 0/0 .text            checkBeforeDeath__8daE_OC_cFv */
 bool daE_OC_c::checkBeforeDeath() {
     if (mActionMode == E_OC_ACTION_DEATH && mOcState >= 2 && field_0x6c0 < 2) {
         return true;
@@ -1869,7 +1811,6 @@ bool daE_OC_c::checkBeforeDeath() {
     return false;
 }
 
-/* 80731D4C-80731F5C 00586C 0210+00 1/1 0/0 0/0 .text            executeDeath__8daE_OC_cFv */
 void daE_OC_c::executeDeath() {
     mBattleOn = true;
     mPrevShapeAngle = shape_angle.y;
@@ -1917,7 +1858,6 @@ void daE_OC_c::executeDeath() {
     }
 }
 
-/* 80731F5C-80732074 005A7C 0118+00 1/1 0/0 0/0 .text            setWaterEffect__8daE_OC_cFv */
 void daE_OC_c::setWaterEffect() {
     cXyz my_vec_0(current.pos.x, mWaterLvl, current.pos.z);
     static cXyz sc(1.0f, 1.0f, 1.0f);
@@ -1935,7 +1875,6 @@ void daE_OC_c::setWaterEffect() {
     }
 }
 
-/* 80732074-807323A4 005B94 0330+00 1/1 0/0 0/0 .text            executeWaterDeath__8daE_OC_cFv */
 void daE_OC_c::executeWaterDeath() {
     switch (mOcState) {
         case 0:
@@ -1995,7 +1934,6 @@ void daE_OC_c::executeWaterDeath() {
     }
 }
 
-/* 807323A4-80732B04 005EC4 0760+00 2/1 0/0 0/0 .text            executeDemoMaster__8daE_OC_cFv */
 void daE_OC_c::executeDemoMaster() {
     cXyz my_vec_0(-4264.0f, 302.0f, -2330.0f);
     cXyz my_vec_1(16200.0f, 2850.0f, 7000.0f);
@@ -2116,7 +2054,6 @@ void daE_OC_c::executeDemoMaster() {
     }
 }
 
-/* 80732B04-80732E64 006624 0360+00 2/1 0/0 0/0 .text            executeDemoChild__8daE_OC_cFv */
 void daE_OC_c::executeDemoChild() {
     cXyz local_18(-4264.0f, 302.0f, -2330.0f);
     mPrevShapeAngle = shape_angle.y;
@@ -2180,7 +2117,6 @@ void daE_OC_c::executeDemoChild() {
     }
 }
 
-/* 80732E64-8073301C 006984 01B8+00 1/1 0/0 0/0 .text            checkFall__8daE_OC_cFv */
 void daE_OC_c::checkFall() {
     dBgS_GndChk gnd_chk;
     cXyz gnd_pos = current.pos;
@@ -2211,7 +2147,6 @@ void daE_OC_c::checkFall() {
     }
 }
 
-/* 8073301C-807331CC 006B3C 01B0+00 1/1 0/0 0/0 .text            executeFallDead__8daE_OC_cFv */
 void daE_OC_c::executeFallDead() {
     mPrevShapeAngle = shape_angle.y;
     switch (mOcState) {
@@ -2248,7 +2183,6 @@ void daE_OC_c::executeFallDead() {
     }
 }
 
-/* 807331CC-8073332C 006CEC 0160+00 1/1 0/0 0/0 .text            executeFall__8daE_OC_cFv */
 void daE_OC_c::executeFall() {
     mPrevShapeAngle = shape_angle.y;
     cLib_chaseF(&speedF, 0.0f, 0.1f);
@@ -2276,7 +2210,6 @@ void daE_OC_c::executeFall() {
     }
 }
 
-/* 8073332C-807335B4 006E4C 0288+00 1/1 0/0 0/0 .text            executeFindStay__8daE_OC_cFv */
 void daE_OC_c::executeFindStay() {
     s16 target_angle = fopAcM_searchPlayerAngleY(this);
     f32 target_dist = fopAcM_searchPlayerDistance(this);
@@ -2337,7 +2270,6 @@ void daE_OC_c::executeFindStay() {
     }
 }
 
-/* 807335B4-80733E48 0070D4 0894+00 1/1 0/0 0/0 .text            executeMoveOut__8daE_OC_cFv */
 void daE_OC_c::executeMoveOut() {
     f32 player_distance = fopAcM_searchPlayerDistance(this);
     s16 target_angle = fopAcM_searchPlayerAngleY(this);
@@ -2431,7 +2363,6 @@ void daE_OC_c::executeMoveOut() {
     }
 }
 
-/* 80733E48-80733F20 007968 00D8+00 1/1 0/0 0/0 .text            checkWaterSurface__8daE_OC_cFv */
 bool daE_OC_c::checkWaterSurface() {
     dBgS_ObjGndChk_Spl gnd_chk_spl;
     cXyz my_vec_0 = current.pos;
@@ -2449,7 +2380,6 @@ bool daE_OC_c::checkWaterSurface() {
     }
 }
 
-/* 80733F20-807345D8 007A40 06B8+00 2/1 0/0 0/0 .text            action__8daE_OC_cFv */
 void daE_OC_c::action() {
     mSphs_at[0].OffAtSetBit();
     mSphs_at[1].OffAtSetBit();
@@ -2572,7 +2502,6 @@ void daE_OC_c::action() {
     mpMorf->play(0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 }
 
-/* 807345D8-80734698 0080F8 00C0+00 1/1 0/0 0/0 .text            mtx_set__8daE_OC_cFv */
 void daE_OC_c::mtx_set() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(field_0x688);
@@ -2587,7 +2516,6 @@ void daE_OC_c::mtx_set() {
     }
 }
 
-/* 80734698-807348DC 0081B8 0244+00 1/1 0/0 0/0 .text            cc_set__8daE_OC_cFv */
 void daE_OC_c::cc_set() {
     cXyz my_vec_lhs;
     cXyz my_vec_rhs;
@@ -2623,7 +2551,6 @@ void daE_OC_c::cc_set() {
     dComIfG_Ccsp()->Set(&mSphs_at[1]);
 }
 
-/* 807348DC-80734B44 0083FC 0268+00 1/1 0/0 0/0 .text            execute__8daE_OC_cFv */
 int daE_OC_c::execute() {
     if (field_0x6c0) {
         --field_0x6c0;
@@ -2680,17 +2607,14 @@ int daE_OC_c::execute() {
     return 1;
 }
 
-/* 80734B44-80734B64 008664 0020+00 2/1 0/0 0/0 .text            daE_OC_Execute__FP8daE_OC_c */
 static void daE_OC_Execute(daE_OC_c* i_this) {
     i_this->execute();
 }
 
-/* 80734B64-80734B6C 008684 0008+00 1/0 0/0 0/0 .text            daE_OC_IsDelete__FP8daE_OC_c */
 static bool daE_OC_IsDelete(daE_OC_c* param_0) {
     return true;
 }
 
-/* 80734B6C-80734BF0 00868C 0084+00 1/1 0/0 0/0 .text            _delete__8daE_OC_cFv */
 int daE_OC_c::_delete() {
     dComIfG_resDelete(&mPhaseReqs[0], mName);
     dComIfG_resDelete(&mPhaseReqs[1], "E_ocb");
@@ -2706,13 +2630,11 @@ int daE_OC_c::_delete() {
     return 1;
 }
 
-/* 80734BF0-80734C10 008710 0020+00 1/0 0/0 0/0 .text            daE_OC_Delete__FP8daE_OC_c */
 static void daE_OC_Delete(daE_OC_c* i_this) {
     fopAcM_RegisterDeleteID(i_this, "E_OC");
     i_this->_delete();
 }
 
-/* 80734C10-80734D88 008730 0178+00 1/1 0/0 0/0 .text            CreateHeap__8daE_OC_cFv */
 int daE_OC_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(mName, 0x3);
     JUT_ASSERT(3443, modelData != NULL);
@@ -2742,13 +2664,11 @@ int daE_OC_c::CreateHeap() {
     return 1;
 }
 
-/* 80734D88-80734DA8 0088A8 0020+00 1/1 0/0 0/0 .text            useHeapInit__FP10fopAc_ac_c */
 static int useHeapInit(fopAc_ac_c* i_this) {
     daE_OC_c* a_this = static_cast<daE_OC_c*>(i_this);
     return a_this->CreateHeap();
 }
 
-/* 80734DA8-807352AC 0088C8 0504+00 1/1 0/0 0/0 .text            create__8daE_OC_cFv */
 cPhs__Step daE_OC_c::create() {
     fopAcM_ct(this, daE_OC_c);
     field_0x6b4 = fopAcM_GetParam(this) & 0xFF;
@@ -2871,12 +2791,10 @@ cPhs__Step daE_OC_c::create() {
     return phase;
 }
 
-/* 807355C8-807355E8 0090E8 0020+00 1/0 0/0 0/0 .text            daE_OC_Create__FP8daE_OC_c */
 static void daE_OC_Create(daE_OC_c* i_this) {
     i_this->create();
 }
 
-/* 80735F30-80735F50 -00001 0020+00 1/0 0/0 0/0 .data            l_daE_OC_Method */
 static actor_method_class l_daE_OC_Method = {
     (process_method_func)daE_OC_Create,
     (process_method_func)daE_OC_Delete,
@@ -2885,7 +2803,6 @@ static actor_method_class l_daE_OC_Method = {
     (process_method_func)daE_OC_Draw,
 };
 
-/* 80735F50-80735F80 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_E_OC */
 extern actor_process_profile_definition g_profile_E_OC = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID

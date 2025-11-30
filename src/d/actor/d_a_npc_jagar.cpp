@@ -8,7 +8,6 @@
 #include "d/actor/d_a_npc_jagar.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/actor/d_a_npc_bou.h"
-#include "dol2asm.h"
 #include "d/d_meter2_info.h"
 #include "d/actor/d_a_tag_push.h"
 
@@ -138,7 +137,6 @@ enum Event {
     /* 0x8 */ EVENT_FIND_WOLF_VER2,
 };
 
-/* 80A1A330-80A1A3D0 000000 00A0+00 13/13 0/0 1/1 .rodata          m__19daNpc_Jagar_Param_c */
 daNpc_Jagar_HIOParam const daNpc_Jagar_Param_c::m = {
     170.0f, -3.0f, 1.0f, 400.0f, 255.0f, 160.0f,
     35.0f, 30.0f, 0.0f, 0.0f, 10.0f, -10.0f,
@@ -177,13 +175,11 @@ void daNpc_Jagar_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-/* 80A1A568-80A1A570 000020 0008+00 1/1 0/0 0/0 .data            l_bmdData */
 static int l_bmdData[1][2] = {
     {BMDR_JAGAR, 1},
 };
 
-/* 80A1A570-80A1A5B8 -00001 0048+00 0/1 0/0 0/0 .data            l_evtList */
-SECTION_DATA static daNpcT_evtData_c l_evtList[9] = {
+static daNpcT_evtData_c l_evtList[9] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"CLIMBUP", 2},
@@ -195,7 +191,6 @@ SECTION_DATA static daNpcT_evtData_c l_evtList[9] = {
     {"FIND_WOLF_VER2", 3},
 };
 
-/* 80A1A5B8-80A1A5CC -00001 0014+00 2/3 0/0 0/0 .data            l_resNameList */
 static char* l_resNameList[5] = {
     "",
     "Jagar",
@@ -204,22 +199,18 @@ static char* l_resNameList[5] = {
     "Jagar3",
 };
 
-/* 80A1A5CC-80A1A5D0 000084 0004+00 1/0 0/0 0/0 .data            l_loadResPtrn0 */
 static s8 l_loadResPtrn0[4] = {
     1, 2, 4, -1,
 };
 
-/* 80A1A5D0-80A1A5D4 000088 0003+01 1/0 0/0 0/0 .data            l_loadResPtrn1 */
 static s8 l_loadResPtrn1[3] = {
     1, 3, -1
 };
 
-/* 80A1A5D4-80A1A5DC 00008C 0005+03 1/0 0/0 0/0 .data            l_loadResPtrn9 */
 static s8 l_loadResPtrn9[5] = {
     1, 2, 3, 4, -1
 };
 
-/* 80A1A5DC-80A1A5EC -00001 0010+00 1/2 0/0 0/0 .data            l_loadResPtrnList */
 static s8* l_loadResPtrnList[4] = {
     l_loadResPtrn0,
     l_loadResPtrn1,
@@ -227,7 +218,6 @@ static s8* l_loadResPtrnList[4] = {
     l_loadResPtrn9,
 };
 
-/* 80A1A5EC-80A1A704 0000A4 0118+00 0/1 0/0 0/0 .data            l_faceMotionAnmData */
 static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0,
         BTP_JAGA, J3DFrameCtrl::EMode_LOOP, Jagar, 1},
@@ -251,7 +241,6 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
         BTP_JAGA_F_SURPRISE_WAIT, J3DFrameCtrl::EMode_LOOP, Jagar2, 0},
 };
 
-/* 80A1A704-80A1A8FC 0001BC 01F8+00 0/1 0/0 0/0 .data            l_motionAnmData */
 daNpcT_motionAnmData_c l_motionAnmData[18] = {
     {BCK_JAGAR_WAIT_A, J3DFrameCtrl::EMode_LOOP, Jagar,
         BTK_JAGA, J3DFrameCtrl::EMode_NONE, Jagar, 1, 0},
@@ -291,7 +280,6 @@ daNpcT_motionAnmData_c l_motionAnmData[18] = {
         BTK_JAGA, J3DFrameCtrl::EMode_NONE, Jagar, 1, 0},
 };
 
-/* 80A1A8FC-80A1A98C 0003B4 0090+00 0/1 0/0 0/0 .data            l_faceMotionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] = {
     {1, -1, 1}, {7, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {8, -1, 1}, {9, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -304,7 +292,6 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80A1A98C-80A1AABC 000444 0130+00 0/1 0/0 0/0 .data            l_motionSequenceData */
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[76] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, 
     {8, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -327,8 +314,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[76] = {
     {13, -1, 1}, {12, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-/* 80A1AABC-80A1AAD8 -00001 001C+00 1/1 0/0 0/0 .data            mCutNameList__13daNpc_Jagar_c */
-SECTION_DATA char* daNpc_Jagar_c::mCutNameList[7] = {
+char* daNpc_Jagar_c::mCutNameList[7] = {
     "",
     "CLIMBUP",
     "NEED_YOUR_HELP",
@@ -338,7 +324,6 @@ SECTION_DATA char* daNpc_Jagar_c::mCutNameList[7] = {
     "FIND_WOLF",
 };
 
-/* 80A1AB20-80A1AB74 0005D8 0054+00 1/2 0/0 0/0 .data            mCutList__13daNpc_Jagar_c */
 daNpc_Jagar_c::cutFunc daNpc_Jagar_c::mCutList[7] = {
     NULL,
     &daNpc_Jagar_c::cutClimbUp,
@@ -349,10 +334,8 @@ daNpc_Jagar_c::cutFunc daNpc_Jagar_c::mCutList[7] = {
     &daNpc_Jagar_c::cutFindWolf,
 };
 
-/* 80A1AE2C-80A1AE30 000054 0004+00 1/1 0/0 0/0 .bss             l_HIO */
 static NPC_JAGAR_HIO_CLASS l_HIO;
 
-/* 80A1470C-80A14858 0000EC 014C+00 1/0 0/0 0/0 .text            __dt__13daNpc_Jagar_cFv */
 daNpc_Jagar_c::~daNpc_Jagar_c() {
     if (mpMorf[0] != 0) {
         mpMorf[0]->stopZelAnime();
@@ -360,7 +343,6 @@ daNpc_Jagar_c::~daNpc_Jagar_c() {
     deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
 }
 
-/* 80A14858-80A14B20 000238 02C8+00 1/1 0/0 0/0 .text            create__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::create() {
     static int const heapSize[4] = {14416, 14448, 14448, 0};
     daNpcT_ct(this, daNpc_Jagar_c, l_faceMotionAnmData,
@@ -409,7 +391,6 @@ int daNpc_Jagar_c::create() {
     return rv;
 }
 
-/* 80A14B20-80A14D90 000500 0270+00 1/1 0/0 0/0 .text            CreateHeap__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(
         l_resNameList[l_bmdData[0][1]], l_bmdData[0][0]));
@@ -439,19 +420,16 @@ int daNpc_Jagar_c::CreateHeap() {
     return 0;
 }
 
-/* 80A14F4C-80A14F80 00092C 0034+00 1/1 0/0 0/0 .text            Delete__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::Delete() {
     fopAcM_GetID(this);
     this->~daNpc_Jagar_c();
     return 1;
 }
 
-/* 80A14F80-80A14FA0 000960 0020+00 2/2 0/0 0/0 .text            Execute__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::Execute() {
     return daNpcT_c::execute();
 }
 
-/* 80A14FA0-80A15034 000980 0094+00 1/1 0/0 0/0 .text            Draw__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::Draw() {
     if (mpMatAnm[0] != NULL) {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
@@ -460,12 +438,10 @@ int daNpc_Jagar_c::Draw() {
     return daNpcT_c::draw(0, 0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
-/* 80A15034-80A15054 000A14 0020+00 1/1 0/0 0/0 .text            createHeapCallBack__13daNpc_Jagar_cFP10fopAc_ac_c */
 int daNpc_Jagar_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Jagar_c*>(i_this)->CreateHeap();
 }
 
-/* 80A15054-80A150AC 000A34 0058+00 1/1 0/0 0/0 .text            ctrlJointCallBack__13daNpc_Jagar_cFP8J3DJointi */
 int daNpc_Jagar_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
         J3DModel* model = j3dSys.getModel();
@@ -477,7 +453,6 @@ int daNpc_Jagar_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-/* 80A150AC-80A150F8 000A8C 004C+00 1/1 0/0 2/2 .text            getType__13daNpc_Jagar_cFv */
 u8 daNpc_Jagar_c::getType() {
     switch ((u8)fopAcM_GetParam(this)) {
         case 0:
@@ -494,7 +469,6 @@ u8 daNpc_Jagar_c::getType() {
     }
 }
 
-/* 80A150F8-80A15198 000AD8 00A0+00 1/1 0/0 0/0 .text            isDelete__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::isDelete() {
     switch (mType) {
         case TYPE_0:
@@ -517,7 +491,6 @@ int daNpc_Jagar_c::isDelete() {
     }
 }
 
-/* 80A15198-80A15364 000B78 01CC+00 1/1 0/0 0/0 .text            reset__13daNpc_Jagar_cFv */
 void daNpc_Jagar_c::reset() {
     csXyz acStack_20;
     int iVar1 = (u8*)&field_0x1008 - (u8*)&field_0xfd4;
@@ -551,7 +524,6 @@ void daNpc_Jagar_c::reset() {
     }
 }
 
-/* 80A15364-80A153E8 000D44 0084+00 1/0 0/0 0/0 .text            afterJntAnm__13daNpc_Jagar_cFi */
 void daNpc_Jagar_c::afterJntAnm(int param_1) {
     if (param_1 == 1) {
         mDoMtx_stack_c::YrotM(mStagger.getAngleZ(1));
@@ -562,7 +534,6 @@ void daNpc_Jagar_c::afterJntAnm(int param_1) {
     }
 }
 
-/* 80A153E8-80A155E4 000DC8 01FC+00 1/0 0/0 0/0 .text            setParam__13daNpc_Jagar_cFv */
 void daNpc_Jagar_c::setParam() {
     selectAction();
     srchActors();
@@ -631,7 +602,6 @@ void daNpc_Jagar_c::setParam() {
     gravity = mpHIO->m.common.gravity;
 }
 
-/* 80A155E4-80A15714 000FC4 0130+00 1/0 0/0 0/0 .text            checkChangeEvt__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::checkChangeEvt() {
     if (!chkAction(&daNpc_Jagar_c::talk)) {
         mPreItemNo = 0;
@@ -668,7 +638,6 @@ int daNpc_Jagar_c::checkChangeEvt() {
     return false;
 }
 
-/* 80A15714-80A157B4 0010F4 00A0+00 1/0 0/0 0/0 .text setAfterTalkMotion__13daNpc_Jagar_cFv */
 void daNpc_Jagar_c::setAfterTalkMotion() {
     int iVar2 = 8;
     switch(mFaceMotionSeqMngr.getNo()) {
@@ -691,7 +660,6 @@ void daNpc_Jagar_c::setAfterTalkMotion() {
     mFaceMotionSeqMngr.setNo(iVar2, -1.0f, 0, 0);
 }
 
-/* 80A157B4-80A158A0 001194 00EC+00 1/1 0/0 0/0 .text            srchActors__13daNpc_Jagar_cFv */
 void daNpc_Jagar_c::srchActors() {
     switch(mType) {
         case TYPE_0:
@@ -719,7 +687,6 @@ void daNpc_Jagar_c::srchActors() {
     }
 }
 
-/* 80A158A0-80A15940 001280 00A0+00 1/0 0/0 0/0 .text            evtTalk__13daNpc_Jagar_cFv */
 BOOL daNpc_Jagar_c::evtTalk() {
     if (chkAction(&daNpc_Jagar_c::talk)) {
         (this->*field_0xfe0)(NULL);
@@ -729,7 +696,6 @@ BOOL daNpc_Jagar_c::evtTalk() {
     return 1;
 }
 
-/* 80A15940-80A15A08 001320 00C8+00 1/0 0/0 0/0 .text            evtCutProc__13daNpc_Jagar_cFv */
 BOOL daNpc_Jagar_c::evtCutProc() {
     int staffId = dComIfGp_getEventManager().getMyStaffId("Jagar", this, -1);
     if (staffId != -1) {
@@ -743,7 +709,6 @@ BOOL daNpc_Jagar_c::evtCutProc() {
     return false;
 }
 
-/* 80A15A08-80A15CA4 0013E8 029C+00 1/0 0/0 0/0 .text            action__13daNpc_Jagar_cFv */
 void daNpc_Jagar_c::action() {
     fopAc_ac_c* hitActor = hitChk(&mCyl1, 0xffffffff);
     if (hitActor && mCyl1.GetTgHitObj()->ChkAtType(AT_TYPE_THROW_OBJ)) {
@@ -794,7 +759,6 @@ void daNpc_Jagar_c::action() {
     }
 }
 
-/* 80A15CA4-80A15D68 001684 00C4+00 1/0 0/0 0/0 .text            beforeMove__13daNpc_Jagar_cFv */
 void daNpc_Jagar_c::beforeMove() {
     fopAcM_OffStatus(this, 0x8000000);
     if (checkHide()) {
@@ -806,7 +770,6 @@ void daNpc_Jagar_c::beforeMove() {
     }
 }
 
-/* 80A15D68-80A1607C 001748 0314+00 1/0 0/0 0/0 .text            setAttnPos__13daNpc_Jagar_cFv */
 void daNpc_Jagar_c::setAttnPos() {
     cXyz cStack_3c(-10.0f, 10.0f, 0.0f);
     mStagger.calc(0);
@@ -840,7 +803,6 @@ void daNpc_Jagar_c::setAttnPos() {
     }
 }
 
-/* 80A1607C-80A161EC 001A5C 0170+00 1/0 0/0 0/0 .text            setCollision__13daNpc_Jagar_cFv */
 void daNpc_Jagar_c::setCollision() {
     cXyz cStack_48;
     if (mHide == 0) {
@@ -879,12 +841,10 @@ void daNpc_Jagar_c::setCollision() {
     mCyl1.ClrTgHit();
 }
 
-/* 80A161EC-80A161F4 001BCC 0008+00 1/0 0/0 0/0 .text            drawDbgInfo__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::drawDbgInfo() {
     return 0;
 }
 
-/* 80A161F4-80A16234 001BD4 0040+00 1/0 0/0 0/0 .text            changeBtp__13daNpc_Jagar_cFPiPi */
 void daNpc_Jagar_c::changeBtp(int* param_0, int* param_1) {
     if (((mType == TYPE_1 || mType == TYPE_2) && *param_0 == 19) && *param_1 == 1) {
         *param_0 = 17;
@@ -893,7 +853,6 @@ void daNpc_Jagar_c::changeBtp(int* param_0, int* param_1) {
     return;
 }
 
-/* 80A16234-80A162B0 001C14 007C+00 1/1 0/0 0/0 .text            selectAction__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::selectAction() {
     field_0xfd4 = NULL;
     switch (mType) {
@@ -908,12 +867,10 @@ int daNpc_Jagar_c::selectAction() {
     return 1;
 }
 
-/* 80A162B0-80A162DC 001C90 002C+00 2/2 0/0 0/0 .text            chkAction__13daNpc_Jagar_cFM13daNpc_Jagar_cFPCvPvPv_i */
 int daNpc_Jagar_c::chkAction(int (daNpc_Jagar_c::*action)(void*)) {
     return field_0xfe0 == action;
 }
 
-/* 80A162DC-80A16384 001CBC 00A8+00 2/2 0/0 0/0 .text            setAction__13daNpc_Jagar_cFM13daNpc_Jagar_cFPCvPvPv_i */
 int daNpc_Jagar_c::setAction(int (daNpc_Jagar_c::*action)(void*)) {
     mMode = 3;
     if (field_0xfe0 != NULL) {
@@ -929,7 +886,6 @@ int daNpc_Jagar_c::setAction(int (daNpc_Jagar_c::*action)(void*)) {
     return 1;
 }
 
-/* 80A16384-80A16544 001D64 01C0+00 1/0 0/0 0/0 .text            cutClimbUp__13daNpc_Jagar_cFi */
 int daNpc_Jagar_c::cutClimbUp(int i_cutIndex) {
     int rv = 0;
     int prm = -1;
@@ -968,7 +924,6 @@ int daNpc_Jagar_c::cutClimbUp(int i_cutIndex) {
     return rv;
 }
 
-/* 80A16544-80A16CD8 001F24 0794+00 1/0 0/0 0/0 .text            cutNeedYourHelp__13daNpc_Jagar_cFi */
 int daNpc_Jagar_c::cutNeedYourHelp(int i_cutIndex) {
     int rv = 0;
     int prm = -1;
@@ -1111,7 +1066,6 @@ int daNpc_Jagar_c::cutNeedYourHelp(int i_cutIndex) {
     return rv;
 }
 
-/* 80A16CD8-80A16EFC 0026B8 0224+00 1/0 0/0 0/0 .text            cutAnger__13daNpc_Jagar_cFi */
 int daNpc_Jagar_c::cutAnger(int i_cutIndex) {
     int rv = 0;
     int prm = -1;
@@ -1161,7 +1115,6 @@ int daNpc_Jagar_c::cutAnger(int i_cutIndex) {
     return rv;
 }
 
-/* 80A16EFC-80A1705C 0028DC 0160+00 1/0 0/0 0/0 .text cutConversationWithBou__13daNpc_Jagar_cFi */
 int daNpc_Jagar_c::cutConversationWithBou(int i_cutIndex) {
     daTag_Push_c* this_00 = (daTag_Push_c*)field_0xba0.getActorP();
     int rv = 0;
@@ -1192,7 +1145,6 @@ int daNpc_Jagar_c::cutConversationWithBou(int i_cutIndex) {
     return rv;
 }
 
-/* 80A1705C-80A173D8 002A3C 037C+00 1/0 0/0 0/0 .text            cutConfidentialConversation__13daNpc_Jagar_cFi */
 int daNpc_Jagar_c::cutConfidentialConversation(int i_cutIndex) {
     int rv = 0;
     int prm = -1;
@@ -1261,7 +1213,6 @@ int daNpc_Jagar_c::cutConfidentialConversation(int i_cutIndex) {
     return rv;
 }
 
-/* 80A173D8-80A17898 002DB8 04C0+00 3/0 0/0 0/0 .text            cutFindWolf__13daNpc_Jagar_cFi */
 int daNpc_Jagar_c::cutFindWolf(int i_cutIndex) {
     int rv = 0;
     int prm = -1;
@@ -1379,7 +1330,6 @@ int daNpc_Jagar_c::cutFindWolf(int i_cutIndex) {
     return rv;
 }
 
-/* 80A17898-80A17924 003278 008C+00 1/1 0/0 0/0 .text            chkSitMotion__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::chkSitMotion() {
     if (daNpcT_chkEvtBit(0x235) /* dSv_event_flag_c::F_0565 - N/A - 2nd Day Complete */) {
         if (field_0x1002) {
@@ -1396,7 +1346,6 @@ int daNpc_Jagar_c::chkSitMotion() {
     return 1;
 }
 
-/* 80A17924-80A17984 003304 0060+00 1/1 0/0 0/0 .text            chkSitMotion2__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::chkSitMotion2() {
     if (daNpcT_chkEvtBit(0x235) /* dSv_event_flag_c::F_0565 - N/A - 2nd Day Complete */) {
         if (daNpcT_chkEvtBit(0x224) /* dSv_event_flag_c::F_0548 - Ordon Village - Opening 3rd day - spoke with Jaggle */) {
@@ -1409,7 +1358,6 @@ int daNpc_Jagar_c::chkSitMotion2() {
     return 0;
 }
 
-/* 80A17984-80A179F8 003364 0074+00 3/3 0/0 0/0 .text            chkChuMotion__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::chkChuMotion() {
     if (!daNpcT_chkEvtBit(0x235) /* dSv_event_flag_c::F_0565 - N/A - 2nd Day Complete */
         && daNpcT_chkEvtBit(0x1C) /* dSv_event_flag_c::F_0023 - Ordon Village - Called by Jaggle from below hill */) {
@@ -1423,13 +1371,11 @@ int daNpc_Jagar_c::chkChuMotion() {
     return 0;
 }
 
-/* 80A179F8-80A17A2C 0033D8 0034+00 1/1 0/0 0/0 .text            chkToMotion__13daNpc_Jagar_cFv */
 int daNpc_Jagar_c::chkToMotion() {
     return mMotionSeqMngr.getNo() == MOT_SIT_TO_WAIT || mMotionSeqMngr.getNo() == MOT_TO_CHU ||
            mMotionSeqMngr.getNo() == MOT_CHU_TO_SIT || mMotionSeqMngr.getNo() == MOT_WAIT_TO_SIT;
 }
 
-/* 80A17A2C-80A1856C 00340C 0B40+00 1/0 0/0 0/0 .text            wait__13daNpc_Jagar_cFPv */
 int daNpc_Jagar_c::wait(void* param_1) {
     cXyz cStack_24;
 
@@ -1663,7 +1609,6 @@ int daNpc_Jagar_c::wait(void* param_1) {
     return 1;
 }
 
-/* 80A1856C-80A18B74 003F4C 0608+00 1/0 0/0 0/0 .text            talkwithBou__13daNpc_Jagar_cFPv */
 int daNpc_Jagar_c::talkwithBou(void* param_0) {
     daNpc_Bou_c* bo = (daNpc_Bou_c *)mActorMngr[2].getActorP();
 
@@ -1753,7 +1698,6 @@ int daNpc_Jagar_c::talkwithBou(void* param_0) {
     return 1;
 }
 
-/* 80A18B74-80A18F28 004554 03B4+00 3/0 0/0 0/0 .text            talk__13daNpc_Jagar_cFPv */
 int daNpc_Jagar_c::talk(void* param_0) {
     switch(mMode) {
         case 0:
@@ -1818,32 +1762,26 @@ int daNpc_Jagar_c::talk(void* param_0) {
     return 0;
 }
 
-/* 80A18F28-80A18F48 004908 0020+00 1/0 0/0 0/0 .text            daNpc_Jagar_Create__FPv */
 static int daNpc_Jagar_Create(void* i_this) {
     return static_cast<daNpc_Jagar_c*>(i_this)->create();
 }
 
-/* 80A18F48-80A18F68 004928 0020+00 1/0 0/0 0/0 .text            daNpc_Jagar_Delete__FPv */
 static int daNpc_Jagar_Delete(void* i_this) {
     return static_cast<daNpc_Jagar_c*>(i_this)->Delete();
 }
 
-/* 80A18F68-80A18F88 004948 0020+00 1/0 0/0 0/0 .text            daNpc_Jagar_Execute__FPv */
 static int daNpc_Jagar_Execute(void* i_this) {
     return static_cast<daNpc_Jagar_c*>(i_this)->Execute();
 }
 
-/* 80A18F88-80A18FA8 004968 0020+00 1/0 0/0 0/0 .text            daNpc_Jagar_Draw__FPv */
 static int daNpc_Jagar_Draw(void* i_this) {
     return static_cast<daNpc_Jagar_c*>(i_this)->Draw();
 }
 
-/* 80A18FA8-80A18FB0 004988 0008+00 1/0 0/0 0/0 .text            daNpc_Jagar_IsDelete__FPv */
 static int daNpc_Jagar_IsDelete(void* i_this) {
     return 1;
 }
 
-/* 80A1AC10-80A1AC30 -00001 0020+00 1/0 0/0 0/0 .data            daNpc_Jagar_MethodTable */
 static actor_method_class daNpc_Jagar_MethodTable = {
     (process_method_func)daNpc_Jagar_Create,
     (process_method_func)daNpc_Jagar_Delete,
@@ -1852,7 +1790,6 @@ static actor_method_class daNpc_Jagar_MethodTable = {
     (process_method_func)daNpc_Jagar_Draw,
 };
 
-/* 80A1AC30-80A1AC60 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_NPC_JAGAR */
 extern actor_process_profile_definition g_profile_NPC_JAGAR = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID

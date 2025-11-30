@@ -15,16 +15,16 @@
  */
 class daObjYchndlr_c : public dBgS_MoveBgActor, public request_of_phase_process_class {
 public:
-    /* 80C6D758 */ int create1st();
-    /* 80C6D7E0 */ void setMtx();
-    /* 80C6D9A8 */ void rideActor(fopAc_ac_c*);
+    int create1st();
+    void setMtx();
+    void rideActor(fopAc_ac_c*);
 
-    /* 80C6DA5C */ virtual int CreateHeap();
-    /* 80C6DB5C */ virtual int Create();
-    /* 80C6DC64 */ virtual int Execute(Mtx**);
-    /* 80C6E300 */ virtual int Draw();
-    /* 80C6E3C8 */ virtual int Delete();
-    /* 80C6E808 */ virtual ~daObjYchndlr_c() {}
+    virtual int CreateHeap();
+    virtual int Create();
+    virtual int Execute(Mtx**);
+    virtual int Draw();
+    virtual int Delete();
+    virtual ~daObjYchndlr_c() {}
 
 private:
     /* 0x5A8 */ Mtx field_0x5a8;

@@ -4,7 +4,6 @@
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/JMath/JMath.h"
 
-/* 803283FC-8032842C 322D3C 0030+00 0/0 25/25 285/285 .text            init__12J3DFrameCtrlFs */
 void J3DFrameCtrl::init(s16 endFrame) {
     mAttribute = EMode_LOOP;
     mState = 0;
@@ -15,8 +14,6 @@ void J3DFrameCtrl::init(s16 endFrame) {
     mFrame = 0.0f;
 }
 
-/* 8032842C-803289CC 322D6C 05A0+00 0/0 92/92 382/382 .text            checkPass__12J3DFrameCtrlFf
- */
 int J3DFrameCtrl::checkPass(f32 passFrame) {
     f32 next_frame = mFrame + mRate;
 
@@ -135,7 +132,6 @@ int J3DFrameCtrl::checkPass(f32 passFrame) {
 }
 
 
-/* 803289CC-80328E40 32330C 0474+00 0/0 3/3 0/0 .text            update__12J3DFrameCtrlFv */
 void J3DFrameCtrl::update() {
     mState = 0;
     mFrame += mRate;
@@ -206,7 +202,6 @@ void J3DFrameCtrl::update() {
     }
 }
 
-/* 80328E40-80328E90 323780 0050+00 0/0 3/3 0/0 .text            __ct__15J3DAnmTransformFsPfPsPf */
 J3DAnmTransform::J3DAnmTransform(s16 frameMax, f32* pScaleData, s16* pRotData, f32* pTransData)
  : J3DAnmBase(frameMax) {
     mScaleData = pScaleData;
@@ -218,8 +213,6 @@ J3DAnmTransform::J3DAnmTransform(s16 frameMax, f32* pScaleData, s16* pRotData, f
     field_0x1e = 0;
 }
 
-/* 80328E90-803291F0 3237D0 0360+00 1/0 0/0 0/0 .text
- * getTransform__19J3DAnmTransformFullCFUsP16J3DTransformInfo   */
 void J3DAnmTransformFull::getTransform(u16 jointNo, J3DTransformInfo* pTransform) const {
     J3D_ASSERT_RANGE(317, jointNo >= 0 && jointNo < field_0x1e);
     J3D_ASSERT_NULLPTR(318, pTransform != NULL);
@@ -310,8 +303,6 @@ void J3DAnmTransformFull::getTransform(u16 jointNo, J3DTransformInfo* pTransform
     }
 }
 
-/* 803291F0-80329A34 323B30 0844+00 1/0 0/0 0/0 .text
- * getTransform__27J3DAnmTransformFullWithLerpCFUsP16J3DTransformInfo */
 void J3DAnmTransformFullWithLerp::getTransform(u16 jointNo, J3DTransformInfo* pTransform) const {
     J3D_ASSERT_RANGE(421, jointNo >= 0 && jointNo < field_0x1e);
     J3D_ASSERT_NULLPTR(422, pTransform != NULL);
@@ -520,6 +511,7 @@ inline f32 J3DHermiteInterpolation(register f32 pp1, register s16 const* pp2,
                                    register s16 const* pp3, register s16 const* pp4,
                                    register s16 const* pp5, register s16 const* pp6,
                                    register s16 const* pp7) {
+#ifdef __MWERKS__
     register f32 p1 = pp1;
     register f32 ff8;
     register f32 ff7;
@@ -561,6 +553,7 @@ inline f32 J3DHermiteInterpolation(register f32 pp1, register s16 const* pp2,
     }
     // clang-format on
     return fout;
+#endif
 }
 
 template<typename T>
@@ -614,8 +607,6 @@ f32 J3DGetKeyFrameInterpolation(f32 frame, J3DAnmKeyTableBase* pKeyTable, T* pDa
     }
 }
 
-/* 80329A34-80329E5C 324374 0428+00 0/0 1/1 0/0 .text
- * calcTransform__18J3DAnmTransformKeyCFfUsP16J3DTransformInfo  */
 void J3DAnmTransformKey::calcTransform(f32 frame, u16 jointNo, J3DTransformInfo* pTransform) const {
     J3D_ASSERT_RANGE(829, jointNo >= 0 && jointNo < field_0x1e);
     J3D_ASSERT_NULLPTR(830, pTransform != NULL);
@@ -734,7 +725,6 @@ void J3DAnmTransformKey::calcTransform(f32 frame, u16 jointNo, J3DTransformInfo*
     }
 }
 
-/* 80329E5C-80329F14 32479C 00B8+00 0/0 2/2 0/0 .text            __ct__19J3DAnmTextureSRTKeyFv */
 J3DAnmTextureSRTKey::J3DAnmTextureSRTKey() {
     mDecShift = 0;
     mTrackNum = mScaleNum = mRotNum = mTransNum = 0;
@@ -748,8 +738,6 @@ J3DAnmTextureSRTKey::J3DAnmTextureSRTKey() {
     mTexMtxCalcType = 0;
 }
 
-/* 80329F14-8032A184 324854 0270+00 0/0 1/1 0/0 .text
- * calcTransform__19J3DAnmTextureSRTKeyCFfUsP17J3DTextureSRTInfo */
 void J3DAnmTextureSRTKey::calcTransform(f32 frame, u16 jointNo, J3DTextureSRTInfo* pTexSRTInfo) const {
     J3D_ASSERT_RANGE(992, jointNo >= 0 && jointNo < mTrackNum);
     J3D_ASSERT_NULLPTR(993, pTexSRTInfo != NULL);
@@ -820,8 +808,6 @@ void J3DAnmTextureSRTKey::calcTransform(f32 frame, u16 jointNo, J3DTextureSRTInf
     }
 }
 
-/* 8032A184-8032A218 324AC4 0094+00 1/0 0/0 0/0 .text            getWeight__17J3DAnmClusterFullCFUs
- */
 f32 J3DAnmClusterFull::getWeight(u16 index) const {
     int maxFrame = mAnmTable[index].mMaxFrame;
     int frame = (int)(mFrame + 0.5f);
@@ -835,8 +821,6 @@ f32 J3DAnmClusterFull::getWeight(u16 index) const {
     }
 }
 
-/* 8032A218-8032A29C 324B58 0084+00 1/0 0/0 0/0 .text            getWeight__16J3DAnmClusterKeyCFUs
- */
 f32 J3DAnmClusterKey::getWeight(u16 index) const {
     int maxFrame = (u16)mAnmTable[index].mWeightTable.mMaxFrame;
     switch (maxFrame) {
@@ -850,7 +834,6 @@ f32 J3DAnmClusterKey::getWeight(u16 index) const {
     }
 }
 
-/* 8032A29C-8032A30C 324BDC 0070+00 2/2 0/0 0/0 .text            __ct__14J3DAnmVtxColorFv */
 J3DAnmVtxColor::J3DAnmVtxColor() {
     for (int i = 0; i < 2; i++) {
         mAnmTableNum[i] = 0;
@@ -860,15 +843,12 @@ J3DAnmVtxColor::J3DAnmVtxColor() {
     }
 }
 
-/* 8032A30C-8032A368 324C4C 005C+00 0/0 1/1 0/0 .text            __ct__18J3DAnmVtxColorFullFv */
 J3DAnmVtxColorFull::J3DAnmVtxColorFull() {
     for (int i = 0; i < 2; i++) {
         mpTable[i] = NULL;
     }
 }
 
-/* 8032A368-8032A4E0 324CA8 0178+00 1/0 0/0 0/0 .text
- * getColor__18J3DAnmVtxColorFullCFUcUsP8_GXColor               */
 void J3DAnmVtxColorFull::getColor(u8 tableNo, u16 index, GXColor* pColor) const {
     J3D_ASSERT_NULLPTR(1254, pColor != NULL);
     J3DAnmColorFullTable* entry = &mpTable[tableNo][index];
@@ -912,15 +892,12 @@ void J3DAnmVtxColorFull::getColor(u8 tableNo, u16 index, GXColor* pColor) const 
     }
 }
 
-/* 8032A4E0-8032A53C 324E20 005C+00 0/0 1/1 0/0 .text            __ct__17J3DAnmVtxColorKeyFv */
 J3DAnmVtxColorKey::J3DAnmVtxColorKey() {
     for (int i = 0; i < 2; i++) {
         mpTable[i] = 0;
     }
 }
 
-/* 8032A53C-8032A828 324E7C 02EC+00 1/0 0/0 0/0 .text
- * getColor__17J3DAnmVtxColorKeyCFUcUsP8_GXColor                */
 void J3DAnmVtxColorKey::getColor(u8 tableNo, u16 index, GXColor* pColor) const {
     J3D_ASSERT_NULLPTR(1338, pColor != NULL);
     J3DAnmColorKeyTable* entry = &mpTable[tableNo][index];
@@ -1003,13 +980,10 @@ void J3DAnmVtxColorKey::getColor(u8 tableNo, u16 index, GXColor* pColor) const {
     }
 }
 
-/* 8032A828-8032A8A4 325168 007C+00 2/2 0/0 0/0 .text            __ct__11J3DAnmColorFv */
 J3DAnmColor::J3DAnmColor() : field_0xc(0), field_0xe(0), field_0x10(0),
     field_0x12(0), mUpdateMaterialNum(0), mUpdateMaterialID(NULL) {}
 
 
-/* 8032A8A4-8032A93C 3251E4 0098+00 0/0 1/1 0/0 .text
- * searchUpdateMaterialID__11J3DAnmColorFP16J3DMaterialTable    */
 void J3DAnmColor::searchUpdateMaterialID(J3DMaterialTable* pMatTable) {
     for (u16 i = 0; i < mUpdateMaterialNum; i++) {
         int index = pMatTable->getMaterialName()->getIndex(mUpdateMaterialName.getName(i));
@@ -1021,7 +995,6 @@ void J3DAnmColor::searchUpdateMaterialID(J3DMaterialTable* pMatTable) {
     }
 }
 
-/* 8032A93C-8032A990 32527C 0054+00 0/0 1/1 0/0 .text            __ct__15J3DAnmColorFullFv */
 J3DAnmColorFull::J3DAnmColorFull() {
     mColorR = NULL;
     mColorG = NULL;
@@ -1030,7 +1003,6 @@ J3DAnmColorFull::J3DAnmColorFull() {
     mAnmTable = NULL;
 }
 
-/* 8032A990-8032AB00 3252D0 0170+00 1/0 0/0 0/0 .text getColor__15J3DAnmColorFullCFUsP8_GXColor */
 void J3DAnmColorFull::getColor(u16 index, GXColor* pColor) const {
     J3D_ASSERT_RANGE(1537, index >= 0 && index < mUpdateMaterialNum);
     J3D_ASSERT_NULLPTR(1538, pColor != NULL);
@@ -1075,7 +1047,6 @@ void J3DAnmColorFull::getColor(u16 index, GXColor* pColor) const {
     }
 }
 
-/* 8032AB00-8032AB54 325440 0054+00 0/0 1/1 0/0 .text            __ct__14J3DAnmColorKeyFv */
 J3DAnmColorKey::J3DAnmColorKey() {
     mColorR = NULL;
     mColorG = NULL;
@@ -1084,7 +1055,6 @@ J3DAnmColorKey::J3DAnmColorKey() {
     mAnmTable = NULL;
 }
 
-/* 8032AB54-8032AE18 325494 02C4+00 1/0 0/0 0/0 .text getColor__14J3DAnmColorKeyCFUsP8_GXColor */
 void J3DAnmColorKey::getColor(u16 index, GXColor* pColor) const {
     J3D_ASSERT_RANGE(1614, index >= 0 && index < mUpdateMaterialNum);
     J3D_ASSERT_NULLPTR(1615, pColor != NULL);
@@ -1168,7 +1138,6 @@ void J3DAnmColorKey::getColor(u16 index, GXColor* pColor) const {
     }
 }
 
-/* 8032AE18-8032AED8 325758 00C0+00 0/0 1/1 0/0 .text            __ct__15J3DAnmTevRegKeyFv */
 J3DAnmTevRegKey::J3DAnmTevRegKey() {
     mCRegUpdateMaterialNum = mKRegUpdateMaterialNum = 0;
 
@@ -1196,11 +1165,9 @@ J3DAnmTevRegKey::J3DAnmTevRegKey() {
 }
 
 
-/* 8032AED8-8032AF50 325818 0078+00 0/0 2/2 0/0 .text            __ct__16J3DAnmTexPatternFv */
 J3DAnmTexPattern::J3DAnmTexPattern() : mTextureIndex(NULL), mAnmTable(NULL),
     field_0x14(0), mUpdateMaterialNum(0), mUpdateMaterialID(NULL) {}
 
-/* 8032AF50-8032B004 325890 00B4+00 0/0 1/1 72/72 .text getTexNo__16J3DAnmTexPatternCFUsPUs */
 void J3DAnmTexPattern::getTexNo(u16 index, u16* pTexNo) const {
     u32 maxFrame = mAnmTable[index].mMaxFrame;
     J3D_ASSERT_RANGE(1743, index >= 0 && index < mUpdateMaterialNum);
@@ -1215,8 +1182,6 @@ void J3DAnmTexPattern::getTexNo(u16 index, u16* pTexNo) const {
     }
 }
 
-/* 8032B004-8032B09C 325944 0098+00 1/1 1/1 0/0 .text
- * searchUpdateMaterialID__16J3DAnmTexPatternFP16J3DMaterialTable */
 void J3DAnmTexPattern::searchUpdateMaterialID(J3DMaterialTable* pMatTable) {
     J3D_ASSERT_NULLPTR(1790, pMatTable != NULL);
 
@@ -1230,15 +1195,11 @@ void J3DAnmTexPattern::searchUpdateMaterialID(J3DMaterialTable* pMatTable) {
     }
 }
 
-/* 8032B09C-8032B0C0 3259DC 0024+00 0/0 4/4 1/1 .text
- * searchUpdateMaterialID__16J3DAnmTexPatternFP12J3DModelData   */
 void J3DAnmTexPattern::searchUpdateMaterialID(J3DModelData* pModelData) {
     J3D_ASSERT_NULLPTR(1813, pModelData != NULL);
     searchUpdateMaterialID(&pModelData->getMaterialTable());
 }
 
-/* 8032B0C0-8032B1D4 325A00 0114+00 1/1 1/1 0/0 .text
- * searchUpdateMaterialID__19J3DAnmTextureSRTKeyFP16J3DMaterialTable */
 void J3DAnmTextureSRTKey::searchUpdateMaterialID(J3DMaterialTable* pMatTable) {
     J3D_ASSERT_NULLPTR(1832, pMatTable != NULL);
 
@@ -1261,15 +1222,11 @@ void J3DAnmTextureSRTKey::searchUpdateMaterialID(J3DMaterialTable* pMatTable) {
     }
 }
 
-/* 8032B1D4-8032B1F8 325B14 0024+00 0/0 8/8 6/6 .text
- * searchUpdateMaterialID__19J3DAnmTextureSRTKeyFP12J3DModelData */
 void J3DAnmTextureSRTKey::searchUpdateMaterialID(J3DModelData* pModelData) {
     J3D_ASSERT_NULLPTR(1871, pModelData != NULL);
     searchUpdateMaterialID(&pModelData->getMaterialTable());
 }
 
-/* 8032B1F8-8032B4BC 325B38 02C4+00 0/0 2/2 1/1 .text
- * getTevColorReg__15J3DAnmTevRegKeyCFUsP11_GXColorS10          */
 void J3DAnmTevRegKey::getTevColorReg(u16 index, GXColorS10* pColor) const {
     J3D_ASSERT_RANGE(1887, index >= 0 && index < mCRegUpdateMaterialNum);
     J3D_ASSERT_NULLPTR(1888, pColor != NULL);
@@ -1353,8 +1310,6 @@ void J3DAnmTevRegKey::getTevColorReg(u16 index, GXColorS10* pColor) const {
     }
 }
 
-/* 8032B4BC-8032B780 325DFC 02C4+00 0/0 1/1 1/1 .text
- * getTevKonstReg__15J3DAnmTevRegKeyCFUsP8_GXColor              */
 void J3DAnmTevRegKey::getTevKonstReg(u16 index, GXColor* pColor) const {
     J3D_ASSERT_RANGE(1989, index >= 0 && index < mKRegUpdateMaterialNum);
     J3D_ASSERT_NULLPTR(1990, pColor != NULL);
@@ -1438,8 +1393,6 @@ void J3DAnmTevRegKey::getTevKonstReg(u16 index, GXColor* pColor) const {
     }
 }
 
-/* 8032B780-8032B87C 3260C0 00FC+00 1/1 1/1 0/0 .text
- * searchUpdateMaterialID__15J3DAnmTevRegKeyFP16J3DMaterialTable */
 void J3DAnmTevRegKey::searchUpdateMaterialID(J3DMaterialTable* pMatTable) {
     J3D_ASSERT_NULLPTR(2083, pMatTable != NULL);
 
@@ -1462,8 +1415,6 @@ void J3DAnmTevRegKey::searchUpdateMaterialID(J3DMaterialTable* pMatTable) {
     }
 }
 
-/* 8032B87C-8032B8A0 3261BC 0024+00 0/0 9/9 4/4 .text
- * searchUpdateMaterialID__15J3DAnmTevRegKeyFP12J3DModelData    */
 void J3DAnmTevRegKey::searchUpdateMaterialID(J3DModelData* pModelData) {
     J3D_ASSERT_NULLPTR(2119, pModelData != NULL);
     searchUpdateMaterialID(&pModelData->getMaterialTable());

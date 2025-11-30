@@ -101,9 +101,9 @@ inline Z2CreatureLink* Z2GetLink() {
 
 class Z2CreatureRide;
 struct Z2RideSoundStarter : public Z2SoundStarter {
-    /* 802C5234 */ Z2RideSoundStarter(Z2CreatureRide* ride);
+    Z2RideSoundStarter(Z2CreatureRide* ride);
 
-    /* 802C5284 */ virtual bool startSound(JAISoundID soundID, JAISoundHandle* handle,
+    virtual bool startSound(JAISoundID soundID, JAISoundHandle* handle,
                                            const JGeometry::TVec3<f32>* posPtr, u32 mapinfo,
                                            f32 fxMix, f32 pitch, f32 volume, f32 pan,
                                            f32 dolby, u32 moveSteps);
@@ -129,11 +129,11 @@ private:
 
 class Z2SoundObjCoach : public Z2SoundObjBase {
 public:
-    /* 802C54B8 */ Z2SoundObjCoach();
-    /* 802C54FC */ void init(Vec* posPtr, u8 handleNum);
-    /* 802C551C */ Z2SoundHandlePool* startWheelSound(f32);
-    /* 802C56C0 */ Z2SoundHandlePool* startFireSound(u16);
-    /* 802C57C0 */ Z2SoundHandlePool* startSound(JAISoundID soundID, u32 mapinfo, s8 reverb);
+    Z2SoundObjCoach();
+    void init(Vec* posPtr, u8 handleNum);
+    Z2SoundHandlePool* startWheelSound(f32);
+    Z2SoundHandlePool* startFireSound(u16);
+    Z2SoundHandlePool* startSound(JAISoundID soundID, u32 mapinfo, s8 reverb);
 
 private:
     /* 0x20 */ f32 field_0x20;

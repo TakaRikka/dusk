@@ -11,8 +11,8 @@
 #include "m_Do/m_Do_graphic.h"
 
 struct daLv3Water2_HIO_c : public mDoHIO_entry_c {
-    /* 80C5A40C */ daLv3Water2_HIO_c();
-    /* 80C5B14C */ ~daLv3Water2_HIO_c() {}
+    daLv3Water2_HIO_c();
+    ~daLv3Water2_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -28,7 +28,6 @@ static int daLv3Water2_Create(fopAc_ac_c* i_this);
 
 static daLv3Water2_HIO_c l_HIO;
 
-/* 80C5A40C-80C5A430 0000EC 0024+00 1/1 0/0 0/0 .text            __ct__17daLv3Water2_HIO_cFv */
 daLv3Water2_HIO_c::daLv3Water2_HIO_c() {
     mLevelControlWaitFrames = 0;
 }
@@ -39,15 +38,12 @@ void daLv3Water2_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-/* 80C5B3C4-80C5B3C8 -00001 0004+00 3/3 0/0 0/0 .data            l_resNameIdx */
 static char* l_resNameIdx[] = {"Kr03wat04"};
 
-/* 80C5B3E0-80C5B3F8 00003C 0018+00 1/2 0/0 0/0 .data            l_mode_func */
 static actionFunc l_mode_func[] = {
     &daLv3Water2_c::mode_proc_wait, &daLv3Water2_c::mode_proc_levelCtrl 
 };
 
-/* 80C5B3F8-80C5B418 -00001 0020+00 1/0 0/0 0/0 .data            l_daLv3Water2_Method */
 static actor_method_class l_daLv3Water2_Method = {
     (process_method_func)daLv3Water2_Create,
     (process_method_func)daLv3Water2_Delete,
@@ -56,7 +52,6 @@ static actor_method_class l_daLv3Water2_Method = {
     (process_method_func)daLv3Water2_Draw,
 };
 
-/* 80C5B418-80C5B448 -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Lv3Water2 */
 extern actor_process_profile_definition g_profile_Obj_Lv3Water2 = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
@@ -74,7 +69,6 @@ extern actor_process_profile_definition g_profile_Obj_Lv3Water2 = {
   fopAc_CULLBOX_CUSTOM_e, // cullType
 };
 
-/* 80C5A478-80C5A4F8 000158 0080+00 2/2 0/0 0/0 .text            setBaseMtx__13daLv3Water2_cFv */
 void daLv3Water2_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -83,17 +77,12 @@ void daLv3Water2_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-/* ############################################################################################## */
-/* 80C5B364-80C5B368 000000 0004+00 3/3 0/0 0/0 .rodata          l_bmdIdx */
 static const int l_bmdIdx[] = {5};
 
-/* 80C5B368-80C5B36C 000004 0004+00 1/1 0/0 0/0 .rodata          l_dzbIdx */
 static const int l_dzbIdx[] = {13};
 
-/* 80C5B36C-80C5B370 000008 0004+00 0/1 0/0 0/0 .rodata          l_btkIdx */
 static const int l_btkIdx[] = {9};
 
-/* 80C5A4F8-80C5A5E4 0001D8 00EC+00 1/0 0/0 0/0 .text            CreateHeap__13daLv3Water2_cFv */
 int daLv3Water2_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_resNameIdx[mResourceIndex], l_bmdIdx[mResourceIndex]));
     JUT_ASSERT(171, modelData != NULL);
@@ -107,7 +96,6 @@ int daLv3Water2_c::CreateHeap() {
     return 1;
 }
 
-/* 80C5A5E4-80C5A7FC 0002C4 0218+00 1/1 0/0 0/0 .text            create__13daLv3Water2_cFv */
 cPhs__Step daLv3Water2_c::create() {
     fopAcM_ct(this, daLv3Water2_c);
     mResourceIndex = getParam(0, 4);
@@ -140,8 +128,6 @@ cPhs__Step daLv3Water2_c::create() {
     return resPhase;
 }
 
-/* 80C5A844-80C5AC10 000524 03CC+00 1/0 0/0 0/0 .text            Execute__13daLv3Water2_cFPPA3_A4_f
- */
 int daLv3Water2_c::Execute(Mtx** i_mtx) {
     mWaterSurfaceRefractionAnm.play();
 
@@ -172,8 +158,6 @@ int daLv3Water2_c::Execute(Mtx** i_mtx) {
     return 1;
 }
 
-/* 80C5AC10-80C5ACB8 0008F0 00A8+00 1/0 0/0 0/0 .text            mode_proc_wait__13daLv3Water2_cFv
- */
 void daLv3Water2_c::mode_proc_wait() {
     if(mEastSwInitialStatus != mEastSwCurrentStatus) {
         if(getParamEvent() != 0xFF)
@@ -189,7 +173,6 @@ void daLv3Water2_c::mode_proc_wait() {
     }
 }
 
-/* 80C5ACB8-80C5ACE4 000998 002C+00 1/1 0/0 0/0 .text mode_init_levelCtrl__13daLv3Water2_cFv */
 void daLv3Water2_c::mode_init_levelCtrl() {
     mCurrentWaterLvFrame = 0;
     mLevelControlWaitFrames = l_HIO.mLevelControlWaitFrames;
@@ -197,7 +180,6 @@ void daLv3Water2_c::mode_init_levelCtrl() {
     mMode = LEVEL_CTRL;
 }
 
-/* 80C5ACE4-80C5ADA4 0009C4 00C0+00 1/0 0/0 0/0 .text mode_proc_levelCtrl__13daLv3Water2_cFv */
 void daLv3Water2_c::mode_proc_levelCtrl() {
     if(mLevelControlWaitFrames) {
         mLevelControlWaitFrames--;
@@ -219,7 +201,6 @@ void daLv3Water2_c::mode_proc_levelCtrl() {
     }
 }
 
-/* 80C5ADA4-80C5AEFC 000A84 0158+00 1/0 0/0 0/0 .text            Draw__13daLv3Water2_cFv */
 int daLv3Water2_c::Draw() {
     g_env_light.settingTevStruct(16, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
@@ -253,7 +234,6 @@ int daLv3Water2_c::Draw() {
     return 1;
 }
 
-/* 80C5AEFC-80C5AF3C 000BDC 0040+00 1/0 0/0 0/0 .text            Delete__13daLv3Water2_cFv */
 int daLv3Water2_c::Delete() {
     dComIfG_resDelete(&mPhase, l_resNameIdx[mResourceIndex]);
 
@@ -264,7 +244,6 @@ int daLv3Water2_c::Delete() {
     return 1;
 }
 
-/* 80C5AF3C-80C5B0C0 000C1C 0184+00 2/1 0/0 0/0 .text            eventStart__13daLv3Water2_cFv */
 bool daLv3Water2_c::eventStart() {
     if(mEastSwInitialStatus != mEastSwCurrentStatus) {
         mWaterLv = getParamLevel1() * 5.0f;
@@ -290,25 +269,19 @@ bool daLv3Water2_c::eventStart() {
     return true;
 }
 
-/* 80C5B0C0-80C5B0EC 000DA0 002C+00 1/0 0/0 0/0 .text            daLv3Water2_Draw__FP13daLv3Water2_c
- */
 static int daLv3Water2_Draw(daLv3Water2_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-/* 80C5B0EC-80C5B10C 000DCC 0020+00 1/0 0/0 0/0 .text daLv3Water2_Execute__FP13daLv3Water2_c */
 static int daLv3Water2_Execute(daLv3Water2_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-/* 80C5B10C-80C5B12C 000DEC 0020+00 1/0 0/0 0/0 .text daLv3Water2_Delete__FP13daLv3Water2_c */
 static int daLv3Water2_Delete(daLv3Water2_c* i_this) {
     const fpc_ProcID procID = fopAcM_GetID(i_this);
     return i_this->MoveBGDelete();
 }
 
-/* 80C5B12C-80C5B14C 000E0C 0020+00 1/0 0/0 0/0 .text            daLv3Water2_Create__FP10fopAc_ac_c
- */
 static int daLv3Water2_Create(fopAc_ac_c* i_this) {
     daLv3Water2_c* const lv3Water2 = static_cast<daLv3Water2_c*>(i_this);
     const fpc_ProcID procID = fopAcM_GetID(i_this);

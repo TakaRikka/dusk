@@ -14,25 +14,25 @@
  */
 class daObjYOUSEI_c : public fopEn_enemy_c {
 public:
-    /* 804CE738 */ void InitCcSph();
-    /* 804CE7A4 */ void SetCcSph();
-    /* 804CE920 */ void SpeedSet();
-    /* 804CE9D0 */ void MoveAction();
-    /* 804CEE50 */ void BinAction();
-    /* 804CF098 */ void LinkChk();
-    /* 804CF6C4 */ void WaitAction();
-    /* 804CFCE8 */ void LinkAction();
-    /* 804D057C */ bool LinkSearch();
-    /* 804D065C */ bool WayBgCheck(f32, f32, s16);
-    /* 804D0780 */ void CareAction();
-    /* 804D080C */ void CheckGround();
-    /* 804D0988 */ bool CheckWater();
-    /* 804D0AD0 */ void Action();
-    /* 804D0CCC */ void ObjHit();
-    /* 804D0DF0 */ int Execute();
-    /* 804D0F98 */ int Delete();
-    /* 804D0FCC */ void setBaseMtx();
-    /* 804D111C */ int create();
+    void InitCcSph();
+    void SetCcSph();
+    void SpeedSet();
+    void MoveAction();
+    void BinAction();
+    void LinkChk();
+    void WaitAction();
+    void LinkAction();
+    bool LinkSearch();
+    bool WayBgCheck(f32, f32, s16);
+    void CareAction();
+    void CheckGround();
+    bool CheckWater();
+    void Action();
+    void ObjHit();
+    int Execute();
+    int Delete();
+    void setBaseMtx();
+    int create();
 
     inline int CreateHeap();
     inline int Draw();

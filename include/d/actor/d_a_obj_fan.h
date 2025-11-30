@@ -15,17 +15,17 @@
  */
 class daObjFan_c : public dBgS_MoveBgActor {
 public:
-    /* 80BE4D98 */ fopAc_ac_c* search_tornado();
-    /* 80BE4E08 */ void initBaseMtx();
-    /* 80BE4E44 */ void setBaseMtx();
-    /* 80BE4F08 */ int Create();
-    /* 80BE4FD4 */ int CreateHeap();
-    /* 80BE50EC */ int create1st();
-    /* 80BE519C */ int Execute(Mtx**);
-    /* 80BE538C */ void action();
-    /* 80BE583C */ void setCollision();
-    /* 80BE5960 */ int Draw();
-    /* 80BE5A04 */ int Delete();
+    fopAc_ac_c* search_tornado();
+    void initBaseMtx();
+    void setBaseMtx();
+    int Create();
+    int CreateHeap();
+    int create1st();
+    int Execute(Mtx**);
+    void action();
+    void setCollision();
+    int Draw();
+    int Delete();
 
     u8 getType() { return fopAcM_GetParamBit(this,0,4); }
 

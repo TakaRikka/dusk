@@ -15,20 +15,20 @@ class daDr_c : public fopAc_ac_c {
 public:
     typedef void (daDr_c::*actionFn)();
 
-    /* 805A9238 */ void setAction(actionFn);
-    /* 805A92DC */ void action();
-    /* 805A9304 */ void mtx_set();
-    /* 805A93D4 */ int draw();
-    /* 805A9478 */ void wait();
-    /* 805A963C */ void pl_walk();
-    /* 805A9914 */ void pl_turn();
-    /* 805A9A34 */ void bridge_destroy();
-    /* 805A9D10 */ void bridge_destroy2();
-    /* 805A9EE4 */ int execute();
-    /* 805A9FFC */ int _delete();
-    /* 805AA084 */ int CreateHeap();
-    /* 805AA19C */ BOOL check_start();
-    /* 805AA224 */ int create();
+    void setAction(actionFn);
+    void action();
+    void mtx_set();
+    int draw();
+    void wait();
+    void pl_walk();
+    void pl_turn();
+    void bridge_destroy();
+    void bridge_destroy2();
+    int execute();
+    int _delete();
+    int CreateHeap();
+    BOOL check_start();
+    int create();
 
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ mDoExt_McaMorfSO* mpModelMorf;

@@ -13,10 +13,10 @@
  */
 class daSetBgObj_c : public fopAc_ac_c {
 public:
-    /* 80031870 */ static const char* getArcName(fopAc_ac_c*);
-    /* 80485D78 */ int CreateInit();
-    /* 80485DFC */ int create();
-    /* 80485E88 */ int Delete();
+    static const char* getArcName(fopAc_ac_c*);
+    int CreateInit();
+    int create();
+    int Delete();
 
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ char mArcName[16];

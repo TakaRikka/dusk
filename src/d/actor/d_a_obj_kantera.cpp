@@ -15,7 +15,6 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 80C39648-80C3968C 000000 0044+00 4/4 0/0 0/0 .rodata          l_cyl_src */
 const static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xffffffff, 0x11}, 0x59}},  // mObj
@@ -30,8 +29,6 @@ const static dCcD_SrcCyl l_cyl_src = {
     }                        // mCyl
 };
 
-/* 80C38678-80C38974 000078 02FC+00 1/1 0/0 0/0 .text            Reflect__FP4cXyzRC13cBgS_PolyInfof
- */
 static f32 Reflect(cXyz* i_xyz, cBgS_PolyInfo const& param_2, f32 param_3) {
     cM3dGPla acStack_3c;
     if (dComIfG_Bgsp().GetTriPla(param_2, &acStack_3c) != 0) {
@@ -45,20 +42,17 @@ static f32 Reflect(cXyz* i_xyz, cBgS_PolyInfo const& param_2, f32 param_3) {
     return 0.0f;
 }
 
-/* 80C389BC-80C389F8 0003BC 003C+00 1/1 0/0 0/0 .text            initBaseMtx__15daItemKantera_cFv */
 void daItemKantera_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
     setBaseMtx();
 }
 
-/* 80C389F8-80C38A64 0003F8 006C+00 2/2 0/0 0/0 .text            setBaseMtx__15daItemKantera_cFv */
 void daItemKantera_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
 }
 
-/* 80C38A64-80C38BA8 000464 0144+00 1/1 0/0 0/0 .text            Create__15daItemKantera_cFv */
 int daItemKantera_c::Create() {
     initBaseMtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -77,13 +71,10 @@ int daItemKantera_c::Create() {
     return 1;
 }
 
-/* 80C38BA8-80C38BB0 0005A8 0008+00 1/0 0/0 0/0 .text            __CreateHeap__15daItemKantera_cFv
- */
 int daItemKantera_c::__CreateHeap() {
     return 1;
 }
 
-/* 80C38BB0-80C38DAC 0005B0 01FC+00 1/1 0/0 0/0 .text            create__15daItemKantera_cFv */
 int daItemKantera_c::create() {
     fopAcM_ct(this, daItemKantera_c);
 
@@ -114,7 +105,6 @@ int daItemKantera_c::create() {
     return phase;
 }
 
-/* 80C38F78-80C39068 000978 00F0+00 1/1 0/0 0/0 .text            bg_check__15daItemKantera_cFv */
 void daItemKantera_c::bg_check() {
     f32 dVar6 = 0.7f;
     if (mAcch.ChkWallHit()) {
@@ -138,15 +128,12 @@ void daItemKantera_c::bg_check() {
     }
 }
 
-/* 80C39068-80C390A0 000A68 0038+00 1/0 0/0 0/0 .text            actionInit__15daItemKantera_cFv */
 int daItemKantera_c::actionInit() {
     show();
     actionWaitInit();
     return 1;
 }
 
-/* 80C390A0-80C3911C 000AA0 007C+00 2/2 0/0 0/0 .text            actionWaitInit__15daItemKantera_cFv
- */
 int daItemKantera_c::actionWaitInit() {
     mCcCyl.OffTgSPrmBit(1);
     mCcCyl.OffCoSPrmBit(1);
@@ -158,7 +145,6 @@ int daItemKantera_c::actionWaitInit() {
     return 1;
 }
 
-/* 80C3911C-80C39234 000B1C 0118+00 1/0 0/0 0/0 .text            actionWait__15daItemKantera_cFv */
 int daItemKantera_c::actionWait() {
     fopAcM_posMoveF(this, mCcStts.GetCCMoveP());
     mAcch.CrrPos(dComIfG_Bgsp());
@@ -186,8 +172,6 @@ int daItemKantera_c::actionWait() {
     return 1;
 }
 
-/* 80C39234-80C392D0 000C34 009C+00 1/1 0/0 0/0 .text initActionOrderGetDemo__15daItemKantera_cFv
- */
 int daItemKantera_c::initActionOrderGetDemo() {
     cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
     mCcCyl.OffTgSPrmBit(1);
@@ -201,7 +185,6 @@ int daItemKantera_c::initActionOrderGetDemo() {
     return 1;
 }
 
-/* 80C392D0-80C3934C 000CD0 007C+00 1/0 0/0 0/0 .text actionOrderGetDemo__15daItemKantera_cFv */
 int daItemKantera_c::actionOrderGetDemo() {
     if (eventInfo.checkCommandItem()) {
         setStatus(3);
@@ -215,8 +198,6 @@ int daItemKantera_c::actionOrderGetDemo() {
     return 1;
 }
 
-/* 80C3934C-80C393B0 000D4C 0064+00 1/0 0/0 0/0 .text            actionGetDemo__15daItemKantera_cFv
- */
 int daItemKantera_c::actionGetDemo() {
     if (dComIfGp_evmng_endCheck("DEFAULT_GETITEM")) {
         dComIfGp_event_reset();
@@ -225,7 +206,6 @@ int daItemKantera_c::actionGetDemo() {
     return 1;
 }
 
-/* 80C393B0-80C394DC 000DB0 012C+00 1/1 0/0 0/0 .text            execute__15daItemKantera_cFv */
 int daItemKantera_c::execute() {
     static daItemKantera_c::actionFunc l_demoFunc[4] = {
         &daItemKantera_c::actionInit,
@@ -242,7 +222,6 @@ int daItemKantera_c::execute() {
     return 1;
 }
 
-/* 80C394DC-80C39530 000EDC 0054+00 1/1 0/0 0/0 .text            draw__15daItemKantera_cFv */
 int daItemKantera_c::draw() {
     if (!chkDraw()) {
         return 1;
@@ -251,35 +230,28 @@ int daItemKantera_c::draw() {
     return 1;
 }
 
-/* 80C39530-80C39568 000F30 0038+00 1/1 0/0 0/0 .text            _delete__15daItemKantera_cFv */
 int daItemKantera_c::_delete() {
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
     return 1;
 }
 
-/* 80C39568-80C39588 000F68 0020+00 1/0 0/0 0/0 .text daItemKantera_Draw__FP15daItemKantera_c */
 static int daItemKantera_Draw(daItemKantera_c* i_this) {
     return i_this->draw();
 }
 
-/* 80C39588-80C395A8 000F88 0020+00 1/0 0/0 0/0 .text daItemKantera_Execute__FP15daItemKantera_c
- */
 static int daItemKantera_Execute(daItemKantera_c* i_this) {
     return i_this->execute();
 }
 
-/* 80C395A8-80C395C8 000FA8 0020+00 1/0 0/0 0/0 .text daItemKantera_Delete__FP15daItemKantera_c */
 static int daItemKantera_Delete(daItemKantera_c* i_this) {
     return i_this->_delete();
 }
 
-/* 80C395C8-80C395E8 000FC8 0020+00 1/0 0/0 0/0 .text daItemKantera_Create__FP10fopAc_ac_c */
 static int daItemKantera_Create(fopAc_ac_c* i_this) {
     return static_cast<daItemKantera_c*>(i_this)->create();
 }
 
 
-/* 80C3975C-80C3977C -00001 0020+00 1/0 0/0 0/0 .data            l_daItemKantera_Method */
 static actor_method_class l_daItemKantera_Method = {
     (process_method_func)daItemKantera_Create,
     (process_method_func)daItemKantera_Delete,
@@ -288,7 +260,6 @@ static actor_method_class l_daItemKantera_Method = {
     (process_method_func)daItemKantera_Draw,
 };
 
-/* 80C3977C-80C397AC -00001 0030+00 0/0 0/0 1/0 .data            g_profile_Obj_Kantera */
 extern actor_process_profile_definition g_profile_Obj_Kantera = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID

@@ -8,15 +8,12 @@
 #include "d/d_pane_class.h"
 #include "cstring.h"
 
-/* 8023C0DC-8023C124 236A1C 0048+00 0/0 9/9 0/0 .text            __ct__14dMsgScrnBase_cFv */
 dMsgScrnBase_c::dMsgScrnBase_c() {
     init();
 }
 
-/* 8023C124-8023C16C 236A64 0048+00 1/0 9/9 0/0 .text            __dt__14dMsgScrnBase_cFv */
 dMsgScrnBase_c::~dMsgScrnBase_c() {}
 
-/* 8023C16C-8023C234 236AAC 00C8+00 1/1 9/9 0/0 .text            init__14dMsgScrnBase_cFv */
 void dMsgScrnBase_c::init() {
     mpScreen = NULL;
     mpPmP_c = NULL;
@@ -59,14 +56,12 @@ void dMsgScrnBase_c::init() {
     mCharAlphaRate = 1.0f;
 }
 
-/* 8023C234-8023C274 236B74 0040+00 1/0 9/0 0/0 .text            multiDraw__14dMsgScrnBase_cFv */
 void dMsgScrnBase_c::multiDraw() {
     if (field_0x48 != NULL) {
         dComIfGd_set2DOpa(field_0x48);
     }
 }
 
-/* 8023C274-8023C300 236BB4 008C+00 1/0 7/0 0/0 .text            draw__14dMsgScrnBase_cFv */
 void dMsgScrnBase_c::draw() {
     J2DGrafContext* ctx = dComIfGp_getCurrentGrafPort();
 
@@ -76,18 +71,14 @@ void dMsgScrnBase_c::draw() {
     ctx->setup2D();
 }
 
-/* 8023C300-8023C32C 236C40 002C+00 1/0 2/0 0/0 .text            drawSelf__14dMsgScrnBase_cFv */
 void dMsgScrnBase_c::drawSelf() {
     drawOutFont(0.0f, 0.0f, 1.0f);
 }
 
-/* 8023C32C-8023C360 236C6C 0034+00 1/1 6/6 0/0 .text            drawOutFont__14dMsgScrnBase_cFfff
- */
 void dMsgScrnBase_c::drawOutFont(f32 param_0, f32 param_1, f32 param_2) {
     mpOutFont->draw(NULL, param_0, param_1, param_2);
 }
 
-/* 8023C360-8023C3EC 236CA0 008C+00 0/0 2/2 0/0 .text            setString__14dMsgScrnBase_cFPcPc */
 void dMsgScrnBase_c::setString(char* mpText, char* i_stringB) {
     for (int i = 0; i < 7; i++) {
         if (mpTm_c[i] != NULL) {
@@ -101,8 +92,6 @@ void dMsgScrnBase_c::setString(char* mpText, char* i_stringB) {
     }
 }
 
-/* 8023C3EC-8023C458 236D2C 006C+00 0/0 2/2 0/0 .text            setRubyString__14dMsgScrnBase_cFPc
- */
 void dMsgScrnBase_c::setRubyString(char* mpText) {
     for (int i = 0; i < 3; i++) {
         if (mpTmr_c[i] != NULL) {
@@ -112,23 +101,19 @@ void dMsgScrnBase_c::setRubyString(char* mpText) {
     }
 }
 
-/* 8023C458-8023C480 236D98 0028+00 1/0 0/0 0/0 .text            fukiScale__14dMsgScrnBase_cFf */
 void dMsgScrnBase_c::fukiScale(f32 i_scale) {
     mpPmP_c->paneScale(i_scale, i_scale);
 }
 
-/* 8023C480-8023C4A4 236DC0 0024+00 1/0 0/0 0/0 .text            fukiTrans__14dMsgScrnBase_cFff */
 void dMsgScrnBase_c::fukiTrans(f32 i_posX, f32 i_posY) {
     mpPmP_c->paneTrans(i_posX, i_posY);
 }
 
-/* 8023C4A4-8023C4F4 236DE4 0050+00 1/0 0/0 0/0 .text            fukiAlpha__14dMsgScrnBase_cFf */
 void dMsgScrnBase_c::fukiAlpha(f32 i_alpha) {
     fontAlpha(i_alpha);
     mpPmP_c->setAlphaRate(i_alpha);
 }
 
-/* 8023C4F4-8023C574 236E34 0080+00 1/0 5/0 0/0 .text            fontAlpha__14dMsgScrnBase_cFf */
 void dMsgScrnBase_c::fontAlpha(f32 i_alpha) {
     for (int i = 0; i < 7; i++) {
         if (mpTm_c[i] != NULL) {
@@ -141,7 +126,6 @@ void dMsgScrnBase_c::fontAlpha(f32 i_alpha) {
     }
 }
 
-/* 8023C574-8023C5C8 236EB4 0054+00 1/0 8/8 0/0 .text            isTalkNow__14dMsgScrnBase_cFv */
 bool dMsgScrnBase_c::isTalkNow() {
     switch (dMsgObject_getMsgObjectClass()->getStatus()) {
     case 5:
