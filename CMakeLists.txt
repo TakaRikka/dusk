@@ -1355,7 +1355,7 @@ source_group("dusk" FILES ${DUSK_FILES})
 
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})
 target_compile_definitions(game PRIVATE TARGET_PC VERSION=0)
-message(INFO "${CMAKE_CURRENT_BINARY_DIR}/${DUSK_GAME_VERSION}/include")
+
 target_include_directories(game PRIVATE include src ${DUSK_POWERPC_EABI_SUPPORT_INCLUDES} assets/${DUSK_GAME_VERSION} ${CMAKE_BINARY_DIR}/../${DUSK_GAME_VERSION}/include)
 target_link_libraries(game PRIVATE aurora::core aurora::gx aurora::si aurora::vi aurora::pad)
 
