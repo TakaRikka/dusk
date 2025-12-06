@@ -4,7 +4,7 @@
 #include "JSystem/JGadget/linklist.h"
 #include "JSystem/JKernel/JKRDisposer.h"
 #include "JSystem/JUtility/JUTFont.h"
-#include "__va_arg.h"
+#include <cstdarg>
 
 /**
 * @ingroup jsystem-jutility
@@ -141,7 +141,7 @@ public:
     typedef JGadget::TLinkList<JUTConsole, -offsetof(JUTConsole, mListNode)> ConsoleList;
 #else
     // clangd does not support offsetof in template arguments.
-    typedef JGadget::TLinkList<JUTConsole, -sizeof(JKRDisposer)> ConsoleList;
+    typedef JGadget::TLinkList<JUTConsole, -static_cast<int>(sizeof(JKRDisposer))> ConsoleList;
 #endif
 
 private:

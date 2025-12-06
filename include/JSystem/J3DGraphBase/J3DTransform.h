@@ -23,10 +23,10 @@ struct J3DTransformInfo {
     } */
 
 #ifdef __MWERKS__
-    inline J3DTransformInfo& operator=(const register J3DTransformInfo& b) {
-        register const J3DTransformInfo& var_r31 = b;
-        register J3DTransformInfo& var_r30 = *this;
-        register f32 var_f31;
+    inline J3DTransformInfo& operator=(const __REGISTER J3DTransformInfo& b) {
+        __REGISTER const J3DTransformInfo& var_r31 = b;
+        __REGISTER J3DTransformInfo& var_r30 = *this;
+        __REGISTER f32 var_f31;
         asm {
             psq_l var_f31, J3DTransformInfo.mScale(var_r31), 0, 0
             psq_st var_f31, J3DTransformInfo.mScale(var_r30), 0, 0
@@ -64,13 +64,13 @@ void J3DScaleNrmMtx33(f32 (*)[3], const Vec&);
 void J3DMtxProjConcat(f32 (*)[4], f32 (*)[4], f32 (*)[4]);
 void J3DPSMtxArrayConcat(f32 (*)[4], f32 (*)[4], f32 (*)[4], u32);
 
-inline void J3DPSMtx33Copy(register Mtx3P src, register Mtx3P dst) {
+inline void J3DPSMtx33Copy(__REGISTER Mtx3P src, __REGISTER Mtx3P dst) {
 #ifdef __MWERKS__
-    register f32 fr4;
-    register f32 fr3;
-    register f32 fr2;
-    register f32 fr1;
-    register f32 fr0;
+    __REGISTER f32 fr4;
+    __REGISTER f32 fr3;
+    __REGISTER f32 fr2;
+    __REGISTER f32 fr1;
+    __REGISTER f32 fr0;
 
     asm {
         psq_l fr4, 0(src), 0, 0
@@ -87,14 +87,14 @@ inline void J3DPSMtx33Copy(register Mtx3P src, register Mtx3P dst) {
 #endif
 }
 
-inline void J3DPSMtx33CopyFrom34(register MtxP src, register Mtx3P dst) {
+inline void J3DPSMtx33CopyFrom34(__REGISTER MtxP src, __REGISTER Mtx3P dst) {
 #ifdef __MWERKS__
-    register f32 x_y1;
-    register f32 z1;
-    register f32 x_y2;
-    register f32 z2;
-    register f32 x_y3;
-    register f32 z3;
+    __REGISTER f32 x_y1;
+    __REGISTER f32 z1;
+    __REGISTER f32 x_y2;
+    __REGISTER f32 z2;
+    __REGISTER f32 x_y3;
+    __REGISTER f32 z3;
     asm {
         psq_l x_y1, 0(src), 0, 0
         lfs z1, 8(src)
@@ -112,7 +112,7 @@ inline void J3DPSMtx33CopyFrom34(register MtxP src, register Mtx3P dst) {
 #endif
 }
 
-inline void J3DPSMulMtxVec(register MtxP mtx, register Vec* vec, register Vec* dst) {
+inline void J3DPSMulMtxVec(__REGISTER MtxP mtx, __REGISTER Vec* vec, __REGISTER Vec* dst) {
 #ifdef __MWERKS__
     asm {
         psq_l f0, 0(vec), 0, 0
@@ -139,7 +139,7 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register Vec* vec, register Vec* d
 #endif
 }
 
-inline void J3DPSMulMtxVec(register MtxP mtx, register S16Vec* vec, register S16Vec* dst) {
+inline void J3DPSMulMtxVec(__REGISTER MtxP mtx, __REGISTER S16Vec* vec, __REGISTER S16Vec* dst) {
 #ifdef __MWERKS__
     asm {
         psq_l f0, 0(vec), 0, 7
@@ -166,7 +166,7 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register S16Vec* vec, register S16
 #endif
 }
 
-inline void J3DPSMulMtxVec(register Mtx3P mtx, register Vec* vec, register Vec* dst) {
+inline void J3DPSMulMtxVec(__REGISTER Mtx3P mtx, __REGISTER Vec* vec, __REGISTER Vec* dst) {
 #ifdef __MWERKS__
     asm {
         lis r6, PSMulUnit01@ha
@@ -197,7 +197,7 @@ inline void J3DPSMulMtxVec(register Mtx3P mtx, register Vec* vec, register Vec* 
 #endif
 }
 
-inline void J3DPSMulMtxVec(register Mtx3P mtx, register S16Vec* vec, register S16Vec* dst) {
+inline void J3DPSMulMtxVec(__REGISTER Mtx3P mtx, __REGISTER S16Vec* vec, __REGISTER S16Vec* dst) {
 #ifdef __MWERKS__
     asm {
         lis r6, PSMulUnit01@ha

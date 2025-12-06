@@ -59,7 +59,11 @@ void GDSetChanCtrl(GXChannelID chan, u8 enable, GXColorSrc amb_src,
 inline static u16 __GDLightID2Index(GXLightID id) {
 	u16 idx;
 
+#ifdef __MWERKS__
 	idx = 0x1F - __cntlzw(id);
+#else
+	idx = 0x1F - __builtin_clz(id);
+#endif
 	if (idx > 7) {
 		idx = 0;
 	}

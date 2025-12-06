@@ -1,7 +1,7 @@
 #ifndef JORMCONTEXT_H
 #define JORMCONTEXT_H
 
-#include <dolphin.h>
+#include <dolphin/dolphin.h>
 #include <stdint.h>
 #include "JSystem/JHostIO/JORReflexible.h"
 #include "JSystem/JSupport/JSUMemoryStream.h"

@@ -56,6 +56,12 @@ typedef unsigned int uint;
 #endif
 #endif
 
+#if defined(__MWERKS__)
+#define __REGISTER register
+#else
+#define __REGISTER
+#endif
+
 #ifndef DECL_WEAK
 #if defined(__MWERKS__)
 #define DECL_WEAK __declspec(weak)

@@ -2,7 +2,7 @@
 #define _MSL_COMMON_PRINTF_H
 
 #include "ansi_files.h"
-#include "__va_arg.h"
+#include <cstdarg>
 
 #ifdef __cplusplus
 extern "C" {

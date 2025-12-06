@@ -7,9 +7,9 @@
 void JMAMTXApplyScale(const Mtx, Mtx, f32, f32, f32);
 void JMAEulerToQuat(s16 param_0, s16 param_1, s16 param_2, Quaternion* param_3);
 void JMAQuatLerp(const Quaternion*, const Quaternion*, f32, Quaternion*);
-void JMAFastVECNormalize(register const Vec* src, register Vec* dst);
-void JMAVECScaleAdd(register const Vec* vec1, register const Vec* vec2, register Vec* dst,
-                    register f32 scale);
+void JMAFastVECNormalize(__REGISTER const Vec* src, __REGISTER Vec* dst);
+void JMAVECScaleAdd(__REGISTER const Vec* vec1, __REGISTER const Vec* vec2, __REGISTER Vec* dst,
+                    __REGISTER f32 scale);
 
 inline int JMAAbs(int value) {
 #ifdef __MWERKS__
@@ -23,9 +23,9 @@ inline f32 JMAFastReciprocal(f32 value) {
 #endif
 }
 
-inline float __frsqrtes(register double f) {
+inline float __frsqrtes(__REGISTER double f) {
 #ifdef __MWERKS__
-    register float out;
+    __REGISTER float out;
     // clang-format off
 
     asm {
@@ -37,10 +37,10 @@ inline float __frsqrtes(register double f) {
 #endif
 }
 
-inline f32 JMAFastSqrt(register f32 input) {
+inline f32 JMAFastSqrt(__REGISTER f32 input) {
 #ifdef __MWERKS__
     if (input > 0.0f) {
-        register f32 out;
+        __REGISTER f32 out;
         asm {
             frsqrte out, input
         }
@@ -51,17 +51,17 @@ inline f32 JMAFastSqrt(register f32 input) {
 #endif
 }
 
-inline f32 JMAHermiteInterpolation(register f32 p1, register f32 p2, register f32 p3,
-                                   register f32 p4, register f32 p5, register f32 p6,
-                                   register f32 p7) {
+inline f32 JMAHermiteInterpolation(__REGISTER f32 p1, __REGISTER f32 p2, __REGISTER f32 p3,
+                                   __REGISTER f32 p4, __REGISTER f32 p5, __REGISTER f32 p6,
+                                   __REGISTER f32 p7) {
 #ifdef __MWERKS__
-    register f32 ff25;
-    register f32 ff31;
-    register f32 ff30;
-    register f32 ff29;
-    register f32 ff28;
-    register f32 ff27;
-    register f32 ff26;
+    __REGISTER f32 ff25;
+    __REGISTER f32 ff31;
+    __REGISTER f32 ff30;
+    __REGISTER f32 ff29;
+    __REGISTER f32 ff28;
+    __REGISTER f32 ff27;
+    __REGISTER f32 ff26;
     // clang-format off
     asm {
         fsubs   ff31, p1, p2
@@ -99,10 +99,10 @@ inline void fastVECNormalize(const Vec* src, Vec* dst) {
     return JMAFastVECNormalize(src, dst);
 }
 
-inline void gekko_ps_copy3(register void* dst, register const void* src) {
+inline void gekko_ps_copy3(__REGISTER void* dst, __REGISTER const void* src) {
 #ifdef __MWERKS__
-    register f32 src0;
-    register f32 src1;
+    __REGISTER f32 src0;
+    __REGISTER f32 src1;
     asm {
         psq_l src0, 0(src), 0, 0
         lfs src1, 8(src)
@@ -112,11 +112,11 @@ inline void gekko_ps_copy3(register void* dst, register const void* src) {
 #endif
 }
 
-inline void gekko_ps_copy6(register void* dst, register const void* src) {
+inline void gekko_ps_copy6(__REGISTER void* dst, __REGISTER const void* src) {
 #ifdef __MWERKS__
-    register f32 src0;
-    register f32 src1;
-    register f32 src2;
+    __REGISTER f32 src0;
+    __REGISTER f32 src1;
+    __REGISTER f32 src2;
     asm {
         psq_l src0, 0(src), 0, 0
         psq_l src1, 8(src), 0, 0
@@ -128,14 +128,14 @@ inline void gekko_ps_copy6(register void* dst, register const void* src) {
 #endif
 }
 
-inline void gekko_ps_copy12(register void* dst, register const void* src) {
+inline void gekko_ps_copy12(__REGISTER void* dst, __REGISTER const void* src) {
 #ifdef __MWERKS__
-    register f32 src0;
-    register f32 src1;
-    register f32 src2;
-    register f32 src3;
-    register f32 src4;
-    register f32 src5;
+    __REGISTER f32 src0;
+    __REGISTER f32 src1;
+    __REGISTER f32 src2;
+    __REGISTER f32 src3;
+    __REGISTER f32 src4;
+    __REGISTER f32 src5;
     asm {
         psq_l src0, 0(src), 0, 0
         psq_l src1, 8(src), 0, 0
@@ -153,16 +153,16 @@ inline void gekko_ps_copy12(register void* dst, register const void* src) {
 #endif
 }
 
-inline void gekko_ps_copy16(register void* dst, register const void* src) {
+inline void gekko_ps_copy16(__REGISTER void* dst, __REGISTER const void* src) {
 #ifdef __MWERKS__
-    register f32 src0;
-    register f32 src1;
-    register f32 src2;
-    register f32 src3;
-    register f32 src4;
-    register f32 src5;
-    register f32 src6;
-    register f32 src7;
+    __REGISTER f32 src0;
+    __REGISTER f32 src1;
+    __REGISTER f32 src2;
+    __REGISTER f32 src3;
+    __REGISTER f32 src4;
+    __REGISTER f32 src5;
+    __REGISTER f32 src6;
+    __REGISTER f32 src7;
     asm {
         psq_l src0, 0(src), 0, 0
         psq_l src1, 8(src), 0, 0
@@ -187,13 +187,13 @@ inline void gekko_ps_copy16(register void* dst, register const void* src) {
 };  // namespace JMath
 
 namespace JMathInlineVEC {
-    inline void C_VECAdd(register const Vec* a, register const Vec* b, register Vec* ab) {
+    inline void C_VECAdd(__REGISTER const Vec* a, __REGISTER const Vec* b, __REGISTER Vec* ab) {
     #ifdef __MWERKS__
-        register f32 axy;
-        register f32 bxy;
-        register f32 az;
-        register f32 sumz;
-        register f32 bz;
+        __REGISTER f32 axy;
+        __REGISTER f32 bxy;
+        __REGISTER f32 az;
+        __REGISTER f32 sumz;
+        __REGISTER f32 bz;
         asm {
             psq_l axy, 0(a), 0, 0
             psq_l bxy, 0(b), 0, 0
@@ -207,13 +207,13 @@ namespace JMathInlineVEC {
     #endif
     }
 
-    inline void C_VECSubtract(register const Vec* a, register const Vec* b, register Vec* ab) {
+    inline void C_VECSubtract(__REGISTER const Vec* a, __REGISTER const Vec* b, __REGISTER Vec* ab) {
     #ifdef __MWERKS__
-        register f32 axy;
-        register f32 bxy;
-        register f32 az;
-        register f32 subz;
-        register f32 bz;
+        __REGISTER f32 axy;
+        __REGISTER f32 bxy;
+        __REGISTER f32 az;
+        __REGISTER f32 subz;
+        __REGISTER f32 bz;
         asm {
             psq_l axy, 0(a), 0, 0
             psq_l bxy, 0(b), 0, 0
@@ -227,11 +227,11 @@ namespace JMathInlineVEC {
     #endif
     }
 
-    inline f32 C_VECSquareMag(register const Vec* v) {
+    inline f32 C_VECSquareMag(__REGISTER const Vec* v) {
     #ifdef __MWERKS__
-        register f32 x_y;
-        register f32 z;
-        register f32 res;
+        __REGISTER f32 x_y;
+        __REGISTER f32 z;
+        __REGISTER f32 res;
     
         asm {
             psq_l   x_y, 0(v), 0, 0
@@ -244,13 +244,13 @@ namespace JMathInlineVEC {
     #endif
     }
 
-    inline f32 C_VECDotProduct(register const Vec *a, register const Vec *b) {
+    inline f32 C_VECDotProduct(__REGISTER const Vec *a, __REGISTER const Vec *b) {
     #ifdef __MWERKS__
-        register f32 res;
-        register f32 thisyz;
-        register f32 otheryz;
-        register f32 otherxy;
-        register f32 thisxy;
+        __REGISTER f32 res;
+        __REGISTER f32 thisyz;
+        __REGISTER f32 otheryz;
+        __REGISTER f32 otherxy;
+        __REGISTER f32 thisxy;
         asm {
             psq_l thisyz, 4(a), 0, 0
             psq_l otheryz, 4(b), 0, 0
