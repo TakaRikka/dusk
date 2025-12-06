@@ -2,7 +2,7 @@
 #define D_D_PATH_H
 
 #include "dolphin/types.h"
-#include "mtx.h"
+#include "dolphin/mtx.h"
 
 class cBgS_PolyInfo;
 struct cXyz;

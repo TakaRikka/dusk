@@ -926,7 +926,7 @@ void dMenu_save_c::memCardCheck() {
             field_0x1c0 = 0;
             errDispInitSet(0x3B4);  // There is Insufficient space on the Memory Card in Slot A.
             field_0x9e = 0;
-            mpErrFunc = &iplSelMsgInitSet;
+            mpErrFunc = &dMenu_save_c::iplSelMsgInitSet;
             mErrProc = PROC_IPL_SELECT_DISP1;
             field_0x1b4 = 9;
             break;
@@ -938,7 +938,7 @@ void dMenu_save_c::memCardCheck() {
             field_0x1c0 = 0;
             errDispInitSet(0x3C4);  // There is no save for this game on the Memory Card in Slot A.
             field_0x9e = 0;
-            mpErrFunc = &gameFileMakeSelInitSet;
+            mpErrFunc = &dMenu_save_c::gameFileMakeSelInitSet;
             mErrProc = PROC_MAKE_GAME_FILE_SEL_DISP;
             field_0x1b4 = 9;
             break;
@@ -1048,7 +1048,7 @@ void dMenu_save_c::iplSelInitSet() {
 
 void dMenu_save_c::IPLSelectDisp1() {
     if (errorTxtChangeAnm() == true) {
-        mpErrFunc = &iplSelInitSet;
+        mpErrFunc = &dMenu_save_c::iplSelInitSet;
         mErrProc = PROC_IPL_SELECT_DISP2;
         mMenuProc = PROC_MEMCARD_ERRMSG_WAIT_KEY;
     }

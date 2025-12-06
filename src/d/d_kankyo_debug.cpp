@@ -689,9 +689,11 @@ void dKydb_timedisp() {
         }
     }
 
+#ifdef DEBUG
     if (g_presetHIO.field_0x2716 != 0) {
         dDbVw_Report(0x1E, 0x55, "JYOKYO FILE YOMIKOMI SIPPAI!");
     }
+#endif
 
     int var_r31 = 0x55;
     if ((g_kankyoHIO.navy.field_0x22a & 1)) {

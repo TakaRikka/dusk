@@ -3,7 +3,7 @@
 #include "JSystem/JHostIO/JHIMccBuf.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JHostIO/JHIRMcc.h"
-#include <dolphin.h>
+#include <dolphin/dolphin.h>
 #include <cstring.h>
 
 extern "C" int HIO2Read(u32, u32, void*, u32);

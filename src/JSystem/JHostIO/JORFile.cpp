@@ -2,7 +2,7 @@
 
 #include "JSystem/JHostIO/JORFile.h"
 #include "JSystem/JHostIO/JORServer.h"
-#include <dolphin.h>
+#include <dolphin/dolphin.h>
 
 JORFile::JORFile()
 : mHandle(0),

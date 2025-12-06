@@ -27,7 +27,7 @@ public:
         return ret;
     }
     const void* getContent() const {
-        return (const void*)((int)getBlockEnd_() + align_roundUp(get_IDSize(), 4));
+        return (const void*)((uintptr_t)getBlockEnd_() + align_roundUp(get_IDSize(), 4));
     }
 };
 

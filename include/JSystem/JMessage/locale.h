@@ -1,7 +1,7 @@
 #ifndef JMESSAGE_LOCALE_H
 #define JMESSAGE_LOCALE_H
 
-#include <dolphin.h>
+#include <dolphin/dolphin.h>
 
 namespace JMessage {
 
