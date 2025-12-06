@@ -364,15 +364,15 @@ bool dBgWKCol::LineCheck(cBgS_LinChk* plinchk) {
                                               ((u32)y_sp3C >> shift) << m_pkc_head->m_area_x_blocks_shift |
                                                (u32)x_sp38 >> shift) << 2;
 
-                                while ((offset = *(int*)((int)block + offset)) >= 0) {
-                                    block = (u16*)((int)block + offset);
+                                while ((offset = *(int*)((intptr_t)block + offset)) >= 0) {
+                                    block = (u16*)((intptr_t)block + offset);
                                     shift--;
                                     offset = (((u32)z_sp40 >> shift & 1) << 2 |
                                               ((u32)y_sp3C >> shift & 1) << 1 |
                                               ((u32)x_sp38 >> shift & 1) << 0) << 2;
                                 }
 
-                                u16* sp28 = (u16*)((int)block + (offset & 0x7FFFFFFF));
+                                u16* sp28 = (u16*)((intptr_t)block + (offset & 0x7FFFFFFF));
 
                                 shift = 1 << shift;
                                 int cellSize = shift - 1;
@@ -927,15 +927,15 @@ void dBgWKCol::CaptPoly(dBgS_CaptPoly& i_captpoly) {
                                 4 * (((u32)sp24 >> r29) << m_pkc_head->m_area_xy_blocks_shift |
                                      ((u32)sp20 >> r29) << m_pkc_head->m_area_x_blocks_shift |
                                       (u32)sp1C >> r29);
-                            while ((sp14 = (*(int*)((int)sp18 + sp14))) >= 0) {
-                                sp18 = (u16*)((int)sp18 + sp14);
+                            while ((sp14 = (*(int*)((intptr_t)sp18 + sp14))) >= 0) {
+                                sp18 = (u16*)((intptr_t)sp18 + sp14);
                                 r29--;
                                 sp14 = (((u32)sp24 >> r29 & 1) << 2 |
                                         ((u32)sp20 >> r29 & 1) << 1 |
                                         ((u32)sp1C >> r29 & 1) << 0) << 2;
                             }
 
-                            u16* r28 = (u16*)((int)sp18 + (sp14 & 0x7FFFFFFF));
+                            u16* r28 = (u16*)((intptr_t)sp18 + (sp14 & 0x7FFFFFFF));
 
                             r29 = 1 << r29;
                             int sp10 = r29 - 1;
@@ -1098,8 +1098,8 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
                     ((u32)sp_e0 >> shift_d0) << m_pkc_head->m_area_xy_blocks_shift |
                     ((u32)sp_dc >> shift_d0) << m_pkc_head->m_area_x_blocks_shift |
                     ((u32)sp_d8 >> shift_d0));
-                while ((sp_cc = *(int*)((int)block_d4 + sp_cc)) >= 0) {
-                    block_d4 = (u16*)((int)block_d4 + sp_cc);
+                while ((sp_cc = *(int*)((intptr_t)block_d4 + sp_cc)) >= 0) {
+                    block_d4 = (u16*)((intptr_t)block_d4 + sp_cc);
                     shift_d0--;
                     sp_cc = 4 * (
                         ((((u32)sp_e0 >> shift_d0) & 1) << 2) |
@@ -1107,7 +1107,7 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
                         ((((u32)sp_d8 >> shift_d0) & 1) << 0)
                     );
                 }
-                u16* sp_c8 = (u16*)((int)block_d4 + (sp_cc & 0x7fffffff));
+                u16* sp_c8 = (u16*)((intptr_t)block_d4 + (sp_cc & 0x7fffffff));
                 shift_d0 = 1 << shift_d0;
                 int sp_c4 = shift_d0 - 1;
                 sp_108 = shift_d0 - (sp_d8 & sp_c4);
@@ -1556,15 +1556,15 @@ bool dBgWKCol::WallCorrect(dBgS_Acch* pwi) {
                          ((u32)spB8 >> spAC) << m_pkc_head->m_area_x_blocks_shift |
                           (u32)spB4 >> spAC);
 
-                while ((spA8 = *(int*)((int)spB0 + spA8)) >= 0) {
-                    spB0 = (u16*)((int)spB0 + spA8);
+                while ((spA8 = *(int*)((intptr_t)spB0 + spA8)) >= 0) {
+                    spB0 = (u16*)((intptr_t)spB0 + spA8);
                     spAC--;
                     spA8 = ((((u32)spBC >> spAC) & 1) << 2 |
                             (((u32)spB8 >> spAC) & 1) << 1 |
                             (((u32)spB4 >> spAC) & 1) << 0) * 4;
                 }
 
-                u16* spA4 = (u16*)((int)spB0 + (spA8 & 0x7FFFFFFF));
+                u16* spA4 = (u16*)((intptr_t)spB0 + (spA8 & 0x7FFFFFFF));
                 spAC = 1 << spAC;
                 u32 spA0 = spAC - 1;
                 spDC = spAC - (spB4 & spA0);
@@ -2012,7 +2012,7 @@ bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk* param_0) {
         int sp20 = 4 * (((u32)sp34 >> sp24) << m_pkc_head->m_area_xy_blocks_shift |
                         ((u32)sp2C >> sp24) << m_pkc_head->m_area_x_blocks_shift |
                          (u32)sp38 >> sp24);
-        while ((sp20 = *(int*)((int)sp28 + sp20)) >= 0) {
+        while ((sp20 = *(int*)((intptr_t)sp28 + sp20)) >= 0) {
             sp28 = ((int)sp28 + sp20);
             sp24--;
             sp20 = 4 *
@@ -2172,15 +2172,15 @@ bool dBgWKCol::SphChk(dBgS_SphChk* param_0, void* param_1) {
                 int sp1C = (((u32)sp2C >> var_r29 << m_pkc_head->m_area_xy_blocks_shift) |
                             ((u32)sp28 >> var_r29 << m_pkc_head->m_area_x_blocks_shift) |
                             ((u32)sp24 >> var_r29)) * 4;
-                while ((sp1C = *(int*)((int)sp20 + sp1C)) >= 0) {
-                    sp20 = (u16*)((int)sp20 + sp1C);
+                while ((sp1C = *(int*)((intptr_t)sp20 + sp1C)) >= 0) {
+                    sp20 = (u16*)((intptr_t)sp20 + sp1C);
                     var_r29--;
                     sp1C = (((u32)sp2C >> var_r29 & 1) << 2 |
                             ((u32)sp28 >> var_r29 & 1) << 1 |
                             ((u32)sp24 >> var_r29 & 1)) * 4;
                 }
 
-                u16* var_r28 = (u16*)((int)sp20 + (sp1C & 0x7fffffff));
+                u16* var_r28 = (u16*)((intptr_t)sp20 + (sp1C & 0x7fffffff));
                 var_r29 = 1 << var_r29;
                 int sp18 = var_r29 - 1;
                 sp4C = var_r29 - (sp24 & sp18);

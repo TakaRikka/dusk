@@ -1,7 +1,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_kankyo.h"
-#include <dolphin.h>
+#include <dolphin/dolphin.h>
 #include <dolphin/gf/GFPixel.h>
 
 #include "SSystem/SComponent/c_counter.h"

@@ -2,7 +2,7 @@
 
 #include "JSystem/JSupport/JSUInputStream.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
-#include <dolphin.h>
+#include <dolphin/dolphin.h>
 
 JSUInputStream::~JSUInputStream() {
     if (!isGood()) {

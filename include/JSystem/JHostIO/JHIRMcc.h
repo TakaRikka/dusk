@@ -1,7 +1,7 @@
 #ifndef JHIRMCC_H
 #define JHIRMCC_H
 
-#include <dolphin.h>
+#include <dolphin/dolphin.h>
 
 struct JHIMccContext;
 

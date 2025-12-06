@@ -1,6 +1,6 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
-#include <dolphin.h>
+#include <dolphin/dolphin.h>
 #include "global.h"
 
 extern u8 const JUTResFONT_Ascfont_fix12[16736] ATTRIBUTE_ALIGN(32) = {

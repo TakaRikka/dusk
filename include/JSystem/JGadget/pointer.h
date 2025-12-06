@@ -15,9 +15,9 @@ public:
 template<class T>
 class TPointer_delete : public TPointer<T> {
 public:
-    TPointer_delete(T* ptr) : TPointer(ptr) {}
+    TPointer_delete(T* ptr) : TPointer<T>::TPointer(ptr) {}
     ~TPointer_delete() {
-        delete mPtr;
+        delete this->mPtr;
     }
 };
 

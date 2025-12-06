@@ -1,5 +1,5 @@
 #include "m_Do/m_Do_hostIO.h"
-#include <dolphin.h>
+#include <dolphin/dolphin.h>
 
 #ifdef DEBUG
 

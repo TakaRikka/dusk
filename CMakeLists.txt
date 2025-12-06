@@ -1339,13 +1339,24 @@ set(DUSK_FILES
     src/dusk/stubs.c
     )
 
+set(DUSK_POWERPC_EABI_SUPPORT_INCLUDES
+    src/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/Include
+    src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include
+    src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Include
+    )
+
+# TODO Handle version
+set(DUSK_GAME_VERSION
+    GZ2E01
+    )
+
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES})
 source_group("dusk" FILES ${DUSK_FILES})
 
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})
 target_compile_definitions(game PRIVATE TARGET_PC VERSION=0)
-# TODO: version handling for res includes
-target_include_directories(game PRIVATE include assets/GZ2E01 src/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/Include src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Include)
+message(INFO "${CMAKE_CURRENT_BINARY_DIR}/${DUSK_GAME_VERSION}/include")
+target_include_directories(game PRIVATE include ${DUSK_POWERPC_EABI_SUPPORT_INCLUDES} assets/${DUSK_GAME_VERSION} ${CMAKE_BINARY_DIR}/../${DUSK_GAME_VERSION}/include)
 target_link_libraries(game PRIVATE aurora::core aurora::gx aurora::si aurora::vi aurora::pad)
 
 add_executable(dusk src/dusk/main.cpp)

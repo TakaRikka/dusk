@@ -39,7 +39,7 @@ void fpcDt_Handler() {
         g_fpcDbSv_service[6](&g_fpcDtTg_Queue.mSize);
     }
 #endif
-    cLsIt_Method(&g_fpcDtTg_Queue, (cNdIt_MethodFunc)fpcDtTg_Do, fpcDt_deleteMethod);
+    cLsIt_Method(&g_fpcDtTg_Queue, (cNdIt_MethodFunc)fpcDtTg_Do, (void*)fpcDt_deleteMethod);
 }
 
 s32 fpcDt_ToQueue(base_process_class* i_proc) {

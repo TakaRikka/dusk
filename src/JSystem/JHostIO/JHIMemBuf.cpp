@@ -2,7 +2,7 @@
 
 #include "JSystem/JHostIO/JHICommonMem.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include <dolphin.h>
+#include <dolphin/dolphin.h>
 
 int JHIMemBuf::create() {
     int rt = 1;

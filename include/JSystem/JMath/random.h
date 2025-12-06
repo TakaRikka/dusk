@@ -42,7 +42,7 @@ public:
     TRandom_(u32 value) : RandomT(value) {}
 
     u8 get_uint8(u8 param_0) {
-        return get_ufloat_1() * param_0;
+        return this->get_ufloat_1() * param_0;
     }
 };
 

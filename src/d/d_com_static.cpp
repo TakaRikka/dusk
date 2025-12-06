@@ -272,8 +272,8 @@ const char* daSetBgObj_c::getArcName(fopAc_ac_c* i_this) {
 s16 const daObjMovebox::Act_c::M_dir_base[4] = {
     0x0000,
     0x4000,
-    0x8000,
-    0xC000,
+    static_cast<s16>(0x8000),
+    static_cast<s16>(0xC000),
 };
 
 f32 const daDsh_c::OPEN_SIZE = 270.1f;
