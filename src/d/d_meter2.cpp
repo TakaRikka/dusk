@@ -3088,9 +3088,9 @@ static leafdraw_method_class l_dMeter2_Method = {
 };
 
 extern msg_process_profile_definition g_profile_METER2 = {
-    -3,
+    static_cast<unsigned int>(-3),
     12,
-    -3,
+    static_cast<u16>(-3),
     PROC_METER2,
     (process_method_class*)&g_fpcLf_Method,
     sizeof(dMeter2_c),

@@ -485,7 +485,7 @@ void dFile_select_c::dataSelectInAnmSet() {
             }
         }
 
-        (char*)pSave += 0xa94;
+        pSave = (dSv_save_c*)((u8*)pSave + 0xa94);
 
         if (field_0x025b[i] != 0 || mDataNew[i] != 0) {
             field_0x0220[i]->setAlpha(0);
@@ -2720,7 +2720,7 @@ void dFile_select_c::setSaveData() {
             mDataNew[i] = res;
             field_0x025b[i] = 0;
         }
-        (char*)pSave += 0xa94;
+        pSave = (dSv_save_c*)((u8*)pSave + 0xa94);
     }
 }
 
@@ -4096,5 +4096,7 @@ void dFile_select3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz* 
 #pragma pop
 
 void dFile_select3D_c::calcViewMtx(Mtx param_0) {
-    cMtx_lookAt(param_0, &cXyz(0.0f, 0.0f, -1000.0f), &cXyz::Zero, &cXyz(0.0f, 1.0f, 0.0f), 0);
+    auto pos1 = cXyz(0.0f, 0.0f, -1000.0f);
+    auto pos2 = cXyz(0.0f, 1.0f, 0.0f);
+    cMtx_lookAt(param_0, &pos1, &cXyz::Zero, &pos2, 0);
 }

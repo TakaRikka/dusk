@@ -4223,13 +4223,13 @@ bool dCamera_c::lockonCamera(s32 param_0) {
 
         // this should probably be an ifdef, but we force it to be compiled
         // to make the function large enough to stop doing inlining
-        if (!NDEBUG) {
-            if (mCamSetup.CheckFlag(0x8000)) {
-                //char name[28];
-                fopAcM_getNameString(mpPlayerActor, NULL);
-                dDbVw_Report(0x1e0, 0x109, "%s", NULL);
-            }
+#ifndef NDEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            //char name[28];
+            fopAcM_getNameString(mpPlayerActor, NULL);
+            dDbVw_Report(0x1e0, 0x109, "%s", NULL);
         }
+#endif
 
         if (check_owner_action(mPadID, 0x2000008)) {
             cXyz vec(0.0f, 0.0f, -90.0f);
@@ -9035,7 +9035,7 @@ bool dCamera_c::eventCamera(s32 param_0) {
              mEventData.field_0xc == specialType[20] || mEventData.field_0xc == specialType[21] ||
              mEventData.field_0xc == specialType[22] || mEventData.field_0xc == specialType[23] ||
              mEventData.field_0xc == specialType[24] || mEventData.field_0xc == specialType[18]) &&
-             *(int*)((int)&mEventData + 0xc) != -1) // fakematch to force additional load
+             *(int*)((intptr_t)&mEventData + 0xc) != -1) // fakematch to force additional load
         {
             var_r29 = 28;
         } else if (mEventData.field_0xc == specialType[14] && var_r29 != 2) {

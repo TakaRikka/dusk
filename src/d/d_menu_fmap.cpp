@@ -105,7 +105,7 @@ const char* dMenuFmap_getStartStageName(void* i_fieldData) {
     stage_stag_info_class* stag_info = dComIfGp_getStage()->getStagInfo();
     if (dStage_stagInfo_GetUpButton(stag_info) == 5) {
         dMenu_Fmap_virtual_stage_data_c* data_list = (dMenu_Fmap_virtual_stage_data_c*)
-                ((int)i_fieldData + ((dMenu_Fmap_field_data_c*)i_fieldData)->mVirtualStageOffset);
+                ((intptr_t)i_fieldData + ((dMenu_Fmap_field_data_c*)i_fieldData)->mVirtualStageOffset);
         dMenu_Fmap_virtual_stage_data_c::data* data = data_list->mData;
         for (int i = 0; i < data_list->mCount; i++) {
             if (!strcmp(dComIfGp_getStartStageName(), data[i].mStageName)) {
@@ -1801,7 +1801,7 @@ bool dMenu_Fmap_c::isRoomCheck(int i_stageNo, int i_roomNo) {
     }
 
     dMenuMapCommon_c::Stage_c* stage_data
-        = (dMenuMapCommon_c::Stage_c*)((int)mpFieldDat + mpFieldDat->mStageDataOffset);
+        = (dMenuMapCommon_c::Stage_c*)((intptr_t)mpFieldDat + mpFieldDat->mStageDataOffset);
     dMenuMapCommon_c::Stage_c::data* stages = stage_data->mData;
     u8 stage_no = 0;
     int i = 0;
@@ -1890,7 +1890,7 @@ bool dMenu_Fmap_c::isRoomCheck(int i_stageNo, int i_roomNo) {
 
 u16 dMenu_Fmap_c::checkStRoomData() {
     dMenu_Fmap_field_room_data_c* room_data
-        = (dMenu_Fmap_field_room_data_c*)((int)mpFieldDat + mpFieldDat->mRoomDataOffset);
+        = (dMenu_Fmap_field_room_data_c*)((intptr_t)mpFieldDat + mpFieldDat->mRoomDataOffset);
     dMenu_Fmap_field_room_data_c::data* data = room_data->mData;
     int count = room_data->mCount;
     for (int i = 0; i < count; i++) {
@@ -1909,7 +1909,7 @@ u16 dMenu_Fmap_c::checkStRoomData() {
             }
         }
 
-        data = (dMenu_Fmap_field_room_data_c::data*)((int)data + offset);
+        data = (dMenu_Fmap_field_room_data_c::data*)((intptr_t)data + offset);
     }
 
     mFlashRoomCount = 0;
@@ -2010,7 +2010,7 @@ bool dMenu_Fmap_c::readAreaData(u8 i_regionNo, bool i_isSelectedRegion) {
     char tmp_stage_name[8];
 
     dMenuMapCommon_c::Stage_c::data* stages
-        = ((dMenuMapCommon_c::Stage_c*)((int)mpFieldDat + mpFieldDat->mStageDataOffset))->mData;
+        = ((dMenuMapCommon_c::Stage_c*)((intptr_t)mpFieldDat + mpFieldDat->mStageDataOffset))->mData;
     u8 stage_no = 0;
     dMenu_Fmap_stage_data_c* prev_stage_data = NULL;
     dMenuMapCommon_c::RoomData_c* prev_room_data = NULL;
@@ -2254,7 +2254,7 @@ bool dMenu_Fmap_c::readFieldMapData(void** o_data, char const* i_path, bool para
 }
 
 void dMenu_Fmap_c::decodeFieldMapData() {
-    int field_data = (int)mpFieldDat;
+    int field_data = (intptr_t)mpFieldDat;
     dMenu_Fmap_field_region_data_c* region_data
         = (dMenu_Fmap_field_region_data_c*)(field_data + mpFieldDat->mRegionDataOffset);
     dMenuMapCommon_c::Stage_c* stage_data
@@ -2682,7 +2682,7 @@ void dMenu_Fmap_c::drawPortalIcon() {
 u8 dMenu_Fmap_c::getRegionStageNum(int param_0) {
     if (mpFieldDat != NULL) {
         dMenu_Fmap_field_region_data_c* region_data
-            = (dMenu_Fmap_field_region_data_c*)((int)mpFieldDat + mpFieldDat->mRegionDataOffset);
+            = (dMenu_Fmap_field_region_data_c*)((intptr_t)mpFieldDat + mpFieldDat->mRegionDataOffset);
         dMenu_Fmap_field_region_data_c::data* regions = region_data->mData;
         for (int i = 0; i < region_data->mCount; i++) {
             if (param_0 == regions[i].mTextureReadNum) {
