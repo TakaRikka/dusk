@@ -1,7 +1,8 @@
 #ifndef M_DO_M_DO_PRINTF_H
 #define M_DO_M_DO_PRINTF_H
 
-#include "__va_arg.h"
+#include <cstdarg>
+#include "dolphin/types.h"
 
 void my_PutString(const char*);
 void mDoPrintf_vprintf_Interrupt(char const*, va_list);

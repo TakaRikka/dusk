@@ -288,10 +288,10 @@ extern int __OSInIPL;
     
 #define ASSERT(cond) ASSERTLINE(__LINE__, cond)
 
-inline s16 __OSf32tos16(register f32 inF) {
-    register s16 out;
+inline s16 __OSf32tos16(__REGISTER f32 inF) {
+    __REGISTER s16 out;
     u32 tmp;
-    register u32* tmpPtr = &tmp;
+    __REGISTER u32* tmpPtr = &tmp;
     // clang-format off
 #ifdef __MWERKS__
     asm {
@@ -308,10 +308,10 @@ inline void OSf32tos16(f32* f, s16* out) {
     *out = __OSf32tos16(*f);
 }
 
-inline u8 __OSf32tou8(register f32 inF) {
-    register u8 out;
+inline u8 __OSf32tou8(__REGISTER f32 inF) {
+    __REGISTER u8 out;
     u32 tmp;
-    register u32* tmpPtr = &tmp;
+    __REGISTER u32* tmpPtr = &tmp;
     // clang-format off
 #ifdef __MWERKS__
     asm {

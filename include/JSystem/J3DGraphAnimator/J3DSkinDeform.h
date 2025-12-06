@@ -100,7 +100,7 @@ public:
     /* 0x10 */ u32 mFlags;
 };  // Size: 0x14
 
-inline void J3DFillZero32B(register void* param_0, register u32 param_1) {
+inline void J3DFillZero32B(__REGISTER void* param_0, __REGISTER u32 param_1) {
 #ifdef __MWERKS__
     asm {
         srwi param_1, param_1, 5
