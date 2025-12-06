@@ -1344,7 +1344,8 @@ source_group("dusk" FILES ${DUSK_FILES})
 
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})
 target_compile_definitions(game PRIVATE TARGET_PC VERSION=0)
-target_include_directories(game PRIVATE include src/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/Include src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Include)
+# TODO: version handling for res includes
+target_include_directories(game PRIVATE include assets/GZ2E01 src/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/Include src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Include)
 target_link_libraries(game PRIVATE aurora::core aurora::gx aurora::si aurora::vi aurora::pad)
 
 add_executable(dusk src/dusk/main.cpp)
