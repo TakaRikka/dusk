@@ -45,7 +45,7 @@ s32 fpcEx_ToLineQ(base_process_class* i_proc) {
             return 0;
         }
 
-#ifdef DEBUG
+#if DEBUG
         if (g_fpcDbSv_service[1] != NULL) {
             g_fpcDbSv_service[1](i_proc);
         }

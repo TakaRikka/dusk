@@ -106,7 +106,7 @@ Z2SeqMgr::Z2SeqMgr() : JASGlobalInstance<Z2SeqMgr>(true) {
     mAllBgmMaster.forceIn();
     field_0xa4.forceIn();
 
-    #ifdef DEBUG
+    #if DEBUG
     field_0x00_debug = 1.0f;
     field_0x04_debug = 0;
     #endif

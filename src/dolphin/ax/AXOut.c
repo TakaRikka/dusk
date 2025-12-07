@@ -170,7 +170,7 @@ void __AXOutInitDSP(void) {
 }
 
 void __AXOutInit(u32 outputBufferMode) {
-#ifdef DEBUG
+#if DEBUG
     OSReport("Initializing AXOut code module\n");
 #endif
     ASSERTLINE(404, ((u32)&__AXOutBuffer[0][0] & 0x1F) == 0);
@@ -214,7 +214,7 @@ void __AXOutInit(u32 outputBufferMode) {
 
 void __AXOutQuit(void) {
     BOOL old;
-#ifdef DEBUG
+#if DEBUG
     OSReport("Shutting down AXOut code module\n");
 #endif
     old = OSDisableInterrupts();

@@ -237,10 +237,10 @@ s32 J3DMtxBuffer::createBumpMtxArray(J3DModelData* i_modelData, u32 mtxNum) {
 static f32 J3DUnit01[] = { 0.0f, 1.0f };
 
 void J3DMtxBuffer::calcWeightEnvelopeMtx() {
-    register MtxP weightAnmMtx;
-    register Mtx* worldMtx;
-    register Mtx* invMtx;
-    register f32 weight;
+    __REGISTER MtxP weightAnmMtx;
+    __REGISTER Mtx* worldMtx;
+    __REGISTER Mtx* invMtx;
+    __REGISTER f32 weight;
     int idx;
     int j;
     int mixNum;
@@ -251,27 +251,27 @@ void J3DMtxBuffer::calcWeightEnvelopeMtx() {
     u8* pScale;
 
     #if DEBUG || !__MWERKS__
-    register Mtx mtx;
+    __REGISTER Mtx mtx;
     #else
-    register f32 var_f1;
-    register f32 var_f2;
-    register f32 var_f3;
-    register f32 var_f4;
-    register f32 var_f5;
-    register f32 var_f6;
-    register f32 var_f7;
-    register f32 var_f8;
-    register f32 var_f9;
-    register f32 var_f10;
-    register f32 var_f11;
-    register f32 var_f12;
-    register f32 var_f13;
-    register f32 var_f31;
-    register f32 var_f30;
-    register f32 var_f29;
-    register f32 var_f28;
-    register f32 var_f27;
-    register f32* var_r7 = J3DUnit01;
+    __REGISTER f32 var_f1;
+    __REGISTER f32 var_f2;
+    __REGISTER f32 var_f3;
+    __REGISTER f32 var_f4;
+    __REGISTER f32 var_f5;
+    __REGISTER f32 var_f6;
+    __REGISTER f32 var_f7;
+    __REGISTER f32 var_f8;
+    __REGISTER f32 var_f9;
+    __REGISTER f32 var_f10;
+    __REGISTER f32 var_f11;
+    __REGISTER f32 var_f12;
+    __REGISTER f32 var_f13;
+    __REGISTER f32 var_f31;
+    __REGISTER f32 var_f30;
+    __REGISTER f32 var_f29;
+    __REGISTER f32 var_f28;
+    __REGISTER f32 var_f27;
+    __REGISTER f32* var_r7 = J3DUnit01;
     #endif
 
     i = -1;
@@ -316,8 +316,8 @@ void J3DMtxBuffer::calcWeightEnvelopeMtx() {
             MTXConcat(*worldMtx, *invMtx, mtx);
             #else
             // Fakematch? Doesn't match if worldMtx and invMtx are used directly.
-            register void* var_r5 = worldMtx;
-            register void* var_r6 = invMtx;
+            __REGISTER void* var_r5 = worldMtx;
+            __REGISTER void* var_r6 = invMtx;
             asm {
                 psq_l var_f2, 0x0(var_r6), 0, 0 /* qr0 */
                 psq_l var_f1, 0x0(var_r5), 0, 0 /* qr0 */

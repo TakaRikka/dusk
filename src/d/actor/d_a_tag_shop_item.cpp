@@ -27,25 +27,19 @@ int daTag_ShopItem_c::create() {
     if (getGroupID() == 15) {
         mCreateTimer = 150;
 
-#ifdef DEBUG
         // "Event Item\n"
-        OSReport("イベントアイテム\n");
-#endif
+        OS_REPORT("イベントアイテム\n");
 
         if (getSwitchBit1() != 0xFF) {
             if (!dComIfGs_isSaveSwitch(getSwitchBit1())) {
                 dComIfGs_onSaveSwitch(getSwitchBit2());
                 field_0x572 = true;
                 mCreateTimer = 0;
-#ifdef DEBUG
                 // "Before Talk\n"
-                OSReport("会話前\n");
-#endif
+                OS_REPORT("会話前\n");
             } else {
-#ifdef DEBUG
                 // "After Talk\n"
-                OSReport("会話後\n");
-#endif
+                OS_REPORT("会話後\n");
             }
         }
     } else {
@@ -54,20 +48,16 @@ int daTag_ShopItem_c::create() {
         if (getSwitchBit1() != 0xFF) {
             if (dComIfGs_isSaveSwitch(getSwitchBit1())) {
                 mCreateTimer = 150;
-#ifdef DEBUG
                 // "Already Sold\n"
-                OSReport("もう売れたよ\n");
-#endif
+                OS_REPORT("もう売れたよ\n");
             }
         }
 
         if (getSwitchBit2() != 0xFF) {
             if (!dComIfGs_isSaveSwitch(getSwitchBit2())) {
                 mCreateTimer = 150;
-#ifdef DEBUG
                 // "Not sold yet\n"
-                OSReport("まだ売れない\n");
-#endif
+                OS_REPORT("まだ売れない\n");
             }
         }
     }

@@ -21,7 +21,7 @@
 
 #include <strtoul.h>
  
-#ifdef DEBUG
+#if DEBUG
 extern "C" int atoi(const char* str);
 
 void dScnMenu_setItem(int i_slotNo, u8 i_itemNo);

@@ -85,7 +85,7 @@ void PSMTXScaleApply(const Mtx src, Mtx dst, f32 xS, f32 yS, f32 zS);
 void PSMTXQuat(Mtx m, const Quaternion* q);
 void PSMTXReflect(Mtx m, const Vec* p, const Vec* n);
 
-#ifdef DEBUG
+#if DEBUG
 #define MTXIdentity   C_MTXIdentity
 #define MTXCopy       C_MTXCopy
 #define MTXConcat     C_MTXConcat
@@ -145,7 +145,7 @@ void PSMTXMultVecArray(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 count)
 void PSMTXMultVecSR(const Mtx m, const Vec* src, Vec* dst);
 void PSMTXMultVecArraySR(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 count);
 
-#ifdef DEBUG
+#if DEBUG
 #define MTXMultVec        C_MTXMultVec
 #define MTXMultVecArray   C_MTXMultVecArray
 #define MTXMultVecSR      C_MTXMultVecSR
@@ -184,7 +184,7 @@ void PSMTX44RotRad(Mtx44 m, char axis, f32 rad);
 void PSMTX44RotTrig(Mtx44 m, char axis, f32 sinA, f32 cosA);
 void PSMTX44RotAxisRad(Mtx44 m, const Vec* axis, f32 rad);
 
-#ifdef DEBUG
+#if DEBUG
 #define MTX44Identity   C_MTX44Identity
 #define MTX44Copy       C_MTX44Copy
 #define MTX44Concat     C_MTX44Concat
@@ -234,7 +234,7 @@ void PSMTX44MultVecArray(const Mtx44 m, const Vec* srcBase, Vec* dstBase, u32 co
 void PSMTX44MultVecSR(const Mtx44 m, const Vec* src, Vec* dst);
 void PSMTX44MultVecArraySR(const Mtx44 m, const Vec* srcBase, Vec* dstBase, u32 count);
 
-#ifdef DEBUG
+#if DEBUG
 #define MTX44MultVec        C_MTX44MultVec
 #define MTX44MultVecArray   C_MTX44MultVecArray
 #define MTX44MultVecSR      C_MTX44MultVecSR
@@ -287,7 +287,7 @@ void PSVECCrossProduct(const Vec* a, const Vec* b, Vec* axb);
 f32 PSVECSquareDistance(const Vec* a, const Vec* b);
 f32 PSVECDistance(const Vec* a, const Vec* b);
 
-#ifdef DEBUG
+#if DEBUG
 #define VECAdd            C_VECAdd
 #define VECSubtract       C_VECSubtract
 #define VECScale          C_VECScale
@@ -338,7 +338,7 @@ void PSQUATNormalize(const Quaternion* src, Quaternion* unit);
 void PSQUATInverse(const Quaternion* src, Quaternion* inv);
 void PSQUATDivide(const Quaternion* p, const Quaternion* q, Quaternion* r);
 
-#ifdef DEBUG
+#if DEBUG
 #define QUATAdd        C_QUATAdd
 #define QUATSubtract   C_QUATSubtract
 #define QUATMultiply   C_QUATMultiply

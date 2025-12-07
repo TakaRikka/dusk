@@ -1543,6 +1543,15 @@ struct J3DAlphaCompInfo {
     /* 0x5 */ u8 field_0x5;
     /* 0x6 */ u8 field_0x6;
     /* 0x7 */ u8 field_0x7;
+
+    J3DAlphaCompInfo& operator=(const J3DAlphaCompInfo& other) {
+        mComp0 = other.mComp0;
+        mRef0 = other.mRef0;
+        mOp = other.mOp;
+        mComp1 = other.mComp1;
+        mRef1 = other.mRef1;
+        return *this;
+    }
 };
 
 extern const u16 j3dDefaultAlphaCmpID;

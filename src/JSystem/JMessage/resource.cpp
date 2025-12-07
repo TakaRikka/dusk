@@ -243,7 +243,7 @@ bool JMessage::TParse::parseBlock_next(const void** ppData_inout, u32* puData_ou
                 }
             }
         } else {
-            #ifdef DEBUG
+            #if DEBUG
             JMessage::TResource* pResource = rcResource.Get_groupID(u16GroupID);
             if (pResource != pResource_) {
                 JGADGET_WARNMSG1(444, "group-ID already exist : ", u16GroupID);

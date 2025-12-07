@@ -15,7 +15,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_meter2_info.h"
 
-#ifdef DEBUG
+#if DEBUG
 daObjVolcBom_HIO_c::daObjVolcBom_HIO_c() {
 
 }
@@ -118,7 +118,7 @@ int daObjVolcBom_c::Create() {
         }
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     if (mEffectJntNo != 0xffff) {
         mBtk1->entry(mModel1->getModelData());
         mModel1->calcMaterial();
@@ -211,7 +211,7 @@ int daObjVolcBom_c::create1st() {
             return rv;
         }
 
-        #ifdef DEBUG
+        #if DEBUG
         // The Great Lava Bombs
         l_HIO.entryHIO("大溶岩弾");
         #endif
@@ -227,7 +227,7 @@ int daObjVolcBom_c::Execute(Mtx** i_mtx) {
     mBtk1->play();
     mBrk1->play();
 
-    #ifdef DEBUG
+    #if DEBUG
     if (l_HIO.field_0x14 != 0) {
         switch (mMode) {
         case MODE_WAIT_APPEAR:
@@ -260,7 +260,7 @@ void daObjVolcBom_c::mode_proc_call() {
     cXyz scale(mBaseScale, mBaseScale, mBaseScale);
     mModel1->setBaseScale(scale);
 
-    #ifdef DEBUG
+    #if DEBUG
     if (l_HIO.field_0x15 != 0) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
         current.pos.x = player->current.pos.x;
@@ -800,7 +800,7 @@ int daObjVolcBom_c::Draw() {
         mModel1->calc();
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     if (l_HIO.field_0x34 != 0) 
     {
         cXyz cStack_24;
@@ -835,7 +835,7 @@ int daObjVolcBom_c::Draw() {
 }
 
 int daObjVolcBom_c::Delete() {
-    #ifdef DEBUG
+    #if DEBUG
     if (l_HIO.field_0x04 != 0) {
         fopAcM_offSwitch(this, getSwbit());
     }
@@ -850,7 +850,7 @@ int daObjVolcBom_c::Delete() {
     endBindEffect();
     dComIfG_resDelete(&mPhase, l_arcName);
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO();
     #endif
 

@@ -14,7 +14,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-#ifdef DEBUG
+#if DEBUG
 #include "d/d_debug_viewer.h"
 #endif
 
@@ -79,7 +79,7 @@ static int daObj_Toby_Draw(obj_toby_class* i_this) {
         }
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     if (mDoCPd_c::getHoldY(PAD_2)) {
         GXColor local_104;
         local_104.r = 100;

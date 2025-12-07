@@ -208,7 +208,7 @@ DECL_WEAK void OSReportForceEnableOff(void);
 DECL_WEAK void OSReportForceEnableOn(void);
 DECL_WEAK void OSVReport(const char* format, va_list list);
 
-#ifdef DEBUG
+#if DEBUG
 #define OS_REPORT(...) OSReport(__VA_ARGS__)
 #define OS_WARNING(...) OSReport_Warning(__VA_ARGS__)
 #define OS_REPORT_ERROR(...) OSReport_Error(__VA_ARGS__)
@@ -261,7 +261,7 @@ extern int __OSInIPL;
     #define LINE(l0, l1, l2) (l2)
 #endif
 
-#ifdef DEBUG
+#if DEBUG
 #define ASSERTLINE(line, cond) \
     ((cond) || (OSPanic(__FILE__, line, "Failed assertion " #cond), 0))
 

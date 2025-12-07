@@ -259,7 +259,7 @@ public:
     /* 0x09B8 */ DUNGEON_LIGHT dungeonlight[8];
     /* 0x0C18 */ BOSS_LIGHT field_0x0c18[8];
     /* 0x0D58 */ BOSS_LIGHT field_0x0d58[6];
-#ifdef DEBUG
+#if DEBUG
     /* 0x0E48 */ NAVYCHAN navy;
     /* 0x0E58 */ u8 field_0xe58[0xE68 - 0xE58];  // part of NAVYCHAN?
 #endif
@@ -784,20 +784,14 @@ public:
     /* 0x29C */ u8 field_0x29c;
     /* 0x29D */ u8 field_0x29d;
     /* 0x29E */ u8 field_0x29e;
-    /* 0x29F */ u8 field_0x29f;
-    /* 0x2A0 */ u8 field_0x2a0;
-    /* 0x2A1 */ u8 field_0x2a1;
-    /* 0x2A2 */ u8 field_0x2a2;
-    /* 0x2A3 */ u8 field_0x2a3;
-    /* 0x2A4 */ u8 field_0x2a4;
-    /* 0x2A5 */ u8 field_0x2a5;
-    /* 0x2A6 */ u8 field_0x2a6;
-    /* 0x2A7 */ u8 field_0x2a7;
-    /* 0x2A8 */ u8 field_0x2a8;
-    /* 0x2A9 */ u8 field_0x2a9;
-    /* 0x2AA */ u8 field_0x2aa;
+    /* 0x29F */ color_RGB_class unk_color_1;
+    /* 0x2A2 */ u8 unk_alpha_1;
+    /* 0x2A3 */ color_RGB_class unk_color_2;
+    /* 0x2A6 */ u8 unk_alpha_2;
+    /* 0x2A7 */ color_RGB_class unk_color_3;
+    /* 0x2AA */ u8 unk_alpha_3;
     /* 0x2AB */ color_RGB_class camera_light_col;
-    /* 0x2AE */ u8 field_0x2ae;
+    /* 0x2AE */ u8 camera_light_alpha;
     /* 0x2B0 */ f32 camera_light_y_shift;
     /* 0x2B4 */ f32 camera_light_power;
     /* 0x2B8 */ f32 camera_light_cutoff;
@@ -842,7 +836,7 @@ public:
     /* 0x30E */ u8 twilight_sense_saturation_mode;
     /* 0x30F */ u8 twilight_sense_pat;
     /* 0x310 */ u8 twilight_sense_pat_tv_display_ON;
-    /* 0x311 */ u8 field_0x311;
+    /* 0x311 */ u8 use_debug;
     /* 0x312 */ u8 field_0x312;
     /* 0x313 */ u8 camera_light_adjust_ON;
     /* 0x314 */ f32 field_0x314;
@@ -850,11 +844,11 @@ public:
     /* 0x31C */ f32 influence_multiplier;
     /* 0x320 */ f32 cutoff_multiplier;
     /* 0x324 */ color_RGB_class possessed_zelda_light_col;
-    /* 0x327 */ u8 field_0x327;
+    /* 0x327 */ u8 possessed_zelda_light_alpha;
     /* 0x328 */ f32 possessed_zelda_light_height;
     /* 0x32C */ f32 possessed_zelda_light_power;
     /* 0x330 */ color_RGB_class beast_ganon_light_col;
-    /* 0x333 */ u8 field_0x333;
+    /* 0x333 */ u8 beast_ganon_light_alpha;
     /* 0x334 */ f32 beast_ganon_light_height;
     /* 0x338 */ f32 beast_ganon_light_power;
     /* 0x33C */ color_RGB_class water_in_light_col;

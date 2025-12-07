@@ -245,7 +245,7 @@ daNpc_Taro_c::~daNpc_Taro_c() {
         mpMorf[0]->stopZelAnime();
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     if (field_0xe40 != NULL) {
         field_0xe40->removeHIO();
     }
@@ -300,7 +300,7 @@ int daNpc_Taro_c::create() {
         mSound.init(&current.pos, &eyePos, 3, 1);
         field_0x9c0.init(&mAcch, 0.0f, 0.0f);
 
-#ifdef DEBUG
+#if DEBUG
         // I'm unsure exactly how we're supposed to set + use the param ptr in the debug build...
         // field_0xe40 = &l_HIO;
         // field_0xe40->entryHIO("タロ");
@@ -894,7 +894,7 @@ void daNpc_Taro_c::action() {
                                         hitActor, mCurAngle.y);
         setDamage(0, 17, 33);
 
-        #ifdef DEBUG
+        #if DEBUG
         mStagger.setPower(0.0f);
         #else
         for (int i = 0; i < 2; i++) {
@@ -906,7 +906,7 @@ void daNpc_Taro_c::action() {
         mJntAnm.lookNone(1);
     }
     if (mStagger.checkRebirth()) {
-        #ifdef DEBUG
+        #if DEBUG
         mStagger.initialize();
         #else
         for (int i = 0; i < 2; i++) {

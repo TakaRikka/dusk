@@ -608,7 +608,7 @@ void daNpc_Len_c::action() {
 
     if (mStagger.checkRebirth()) {
         // FIXME: Fakematch - same issue in npc_besu
-#ifdef DEBUG
+#if DEBUG
         mStagger.initialize();
 #else
         for (int i = 0; i < 2; i++) {

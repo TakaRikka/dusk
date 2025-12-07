@@ -9,7 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 
-#ifdef DEBUG
+#if DEBUG
 class daObjSwLight_HIO_c : public mDoHIO_entry_c {
 public:
     /* 811CF8C0 */ daObjSwLight_HIO_c();
@@ -108,7 +108,7 @@ static dCcD_SrcCyl l_cyl_src = {
 int daObjSwLight_c::Create() {
     if (fopAcM_isSwitch(this, getSwbit())) {
         init_modeSwOffWait();
-#ifdef DEBUG
+#if DEBUG
         field_0xadc = l_HIO.mLightMaxRadius;
 #else
         field_0xadc = 500.0f;
@@ -143,7 +143,7 @@ int daObjSwLight_c::Create() {
         }
     }
 
-#ifdef DEBUG
+#if DEBUG
     if (field_0xae8 == 0xffff) {
         // Light Candlestick Switch: Material "cc_LB_v" is missing.
         OSReport_Error("光燭台スイッチ：マテリアル\"cc_LB_v\"がありません\n");
@@ -178,7 +178,7 @@ int daObjSwLight_c::create1st() {
         if (phase == cPhs_ERROR_e) {
             return phase;
         }
-#ifdef DEBUG
+#if DEBUG
         // Light Candlestick Switch
         l_HIO.entryHIO("光燭台スイッチ");
 #endif
@@ -222,7 +222,7 @@ void daObjSwLight_c::action() {
         mTgSph[i].SetC(cStack_48);
         dComIfG_Ccsp()->Set(&mTgSph[i]);
     }
-#ifdef DEBUG
+#if DEBUG
     u8 a = 1;
     u8 light_hit = l_HIO.mNoLightHit == 0;
 #endif
@@ -240,7 +240,7 @@ void daObjSwLight_c::action() {
         }
     }
 
-#ifdef DEBUG
+#if DEBUG
     u8 tmp = field_0xadc / l_HIO.mLightMaxRadius * 255.0f;
 #else
     u8 tmp = field_0xadc / 500.0f * 255.0f;
@@ -276,13 +276,13 @@ void daObjSwLight_c::modeSwOnWait() {
             if (field_0xae1 < 5) {
                 field_0xadc = 0.0f;
             } else if (field_0xae1 == 5) {
-#ifdef DEBUG
+#if DEBUG
                 field_0xadc = l_HIO.mLightMaxRadius * 0.25f;
 #else
                 field_0xadc = 500.0f * 0.25f;
 #endif
             } else if (field_0xae1 < 50) {
-#ifdef DEBUG
+#if DEBUG
                 field_0xadc =
                     l_HIO.mLightMaxRadius * ((field_0xae1 - 5) * 0.25f / 45.0f + 0.25f);
 #else
@@ -290,7 +290,7 @@ void daObjSwLight_c::modeSwOnWait() {
 #endif
 
             } else if (field_0xae1 == 50) {
-#ifdef DEBUG
+#if DEBUG
                 field_0xadc = l_HIO.mLightMaxRadius;
 #else
                 field_0xadc = 500.0f;
@@ -309,7 +309,7 @@ void daObjSwLight_c::init_modeOnLight() {
 }
 
 void daObjSwLight_c::modeOnLight() {
-#ifdef DEBUG
+#if DEBUG
     if (cLib_chaseF(&field_0xadc, l_HIO.mLightMaxRadius, l_HIO.mLightMaxRadius * 0.05f)) {
         init_modeSwOffWait();
     }
@@ -341,7 +341,7 @@ void daObjSwLight_c::modeSwOffWait() {
 
     if (field_0xae3 != 0) {
         if (!fopAcM_isSwitch(this, getSwbit2())) {
-#ifdef DEBUG
+#if DEBUG
             if (cLib_chaseF(&field_0xadc, 0.0f, l_HIO.mLightMaxRadius * 0.05f)) {
 #else
             if (cLib_chaseF(&field_0xadc, 0.0f, 500.0f * 0.05f)) {
@@ -349,7 +349,7 @@ void daObjSwLight_c::modeSwOffWait() {
                 init_modeSwOnWait();
             }
         } else {
-#ifdef DEBUG
+#if DEBUG
             cLib_chaseF(&field_0xadc, l_HIO.mLightMaxRadius, l_HIO.mLightMaxRadius * 0.05f);
 #else
             cLib_chaseF(&field_0xadc, 500.0f, 500.0f * 0.05);
@@ -359,7 +359,7 @@ void daObjSwLight_c::modeSwOffWait() {
     } else {
         if (!cLib_checkBit<u8>(field_0xae6, (u8)1) && !cLib_checkBit<u8>(field_0xae6, 2) &&
             !cLib_calcTimer(&field_0xae4) &&
-#ifdef DEBUG
+#if DEBUG
             cLib_chaseF(&field_0xadc, 0.0f, l_HIO.mLightMaxRadius * 0.05f))
         {
 #else
@@ -420,7 +420,7 @@ int daObjSwLight_c::Draw() {
     J3DMaterial* material = modelData->getMaterialNodePointer(field_0xae8);
     J3DGXColor* color = material->getTevKColor(0);
 
-#ifdef DEBUG
+#if DEBUG
     u8 fVar1 = field_0xadc / l_HIO.mLightMaxRadius * 255.0f;
 #else
     u8 fVar1 = field_0xadc / 500.0f * 255.0f;
@@ -433,7 +433,7 @@ int daObjSwLight_c::Draw() {
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
 
-#ifdef DEBUG
+#if DEBUG
     if (l_HIO.mCheckRendering) {
         mpBgW->CalcPlane();
     }
@@ -445,7 +445,7 @@ int daObjSwLight_c::Draw() {
 int daObjSwLight_c::Delete() {
     mSound.deleteObject();
     dComIfG_resDelete(&mPhase, l_arcName);
-#ifdef DEBUG
+#if DEBUG
     l_HIO.removeHIO();
 #endif
     return 1;

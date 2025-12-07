@@ -8,7 +8,7 @@
 #include "__os.h"
 #include "__vi.h"
 
-#ifdef DEBUG
+#if DEBUG
 const char* __VIVersion = "<< Dolphin SDK - VI\tdebug build: Apr  7 2004 03:55:59 (0x2301) >>";
 #else
 const char* __VIVersion = "<< Dolphin SDK - VI\trelease build: Apr  7 2004 04:13:59 (0x2301) >>";
@@ -773,7 +773,7 @@ void VIConfigure(const GXRenderModeObj* rm) {
         "VIConfigure(): Odd number(%d) is specified to viHeight\n",
         rm->viHeight);
 
-#ifdef DEBUG
+#if DEBUG
     if (rm->xFBmode == VI_XFBMODE_DF || newNonInter == VI_TVMODE_NTSC_PROG || newNonInter == 3) {
         ASSERTMSGLINEV(1933, rm->xfbHeight == rm->viHeight,
             "VIConfigure(): xfbHeight(%d) is not equal to viHeight(%d) when DF XFB mode or progressive mode is specified\n",

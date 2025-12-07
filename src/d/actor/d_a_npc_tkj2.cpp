@@ -1099,7 +1099,7 @@ static cPhs__Step daNpc_Tkj2_Create(fopAc_ac_c* a_this) {
             l_HIO.field_0x4 = -1;
         }
 
-        #ifdef DEBUG
+        #if DEBUG
         fopAcM_OnStatus(a_this, 0);
         #endif
 

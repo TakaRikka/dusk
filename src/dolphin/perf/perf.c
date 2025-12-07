@@ -50,7 +50,7 @@ static void PERFTimerCallback(OSAlarm* alarm, OSContext* context);
 void PERFStartAutoSampling(f32 msInterval);
 void PERFStopAutoSampling(void);
 
-#ifndef DEBUG
+#if !DEBUG
 inline s32 PERFGetNewSample(void) {
     if (PERFCurrSample >= (PERFNumSamples - 1)) {
         PERFCurrSample = PERFNumSamples - 1;

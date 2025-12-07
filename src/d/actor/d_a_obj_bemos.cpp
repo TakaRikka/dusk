@@ -38,7 +38,7 @@ s16 const daObjBm_c::M_dir_base[4] = {
     0xC000,
 };
 
-#ifdef DEBUG
+#if DEBUG
 class daObjBm_HIO_c : public mDoHIO_entry_c {
 public:
     daObjBm_HIO_c();
@@ -391,7 +391,7 @@ int daObjBm_c::CreateHeap() {
     }
     mpBtkAnm->setFrame(mpBtkAnm->getEndFrame());
 
-#ifdef DEBUG
+#if DEBUG
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 0x18);
     JUT_ASSERT(840, pbtk != NULL);
 #endif
@@ -447,8 +447,8 @@ int daObjBm_c::create1st() {
             return phase_state;
         }
 
-#ifdef DEBUG
         OS_REPORT("新ビーモス：0x%x\n", fopAcM_GetParam(this));
+#if DEBUG
         l_HIO.entryHIO("ビーモス");
 #endif
     }
@@ -457,7 +457,7 @@ int daObjBm_c::create1st() {
 }
 
 int daObjBm_c::Execute(Mtx** param_0) {
-#ifdef DEBUG
+#if DEBUG
     scale.setall(l_HIO.mBodyScale);
     mpModel->setBaseScale(scale);
     daPy_py_c* player = daPy_getPlayerActorClass();
@@ -1727,7 +1727,7 @@ int daObjBm_c::Draw() {
     return 1;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daObjBm_c::debugDraw() {
     if (l_HIO.mDebugDraw) {
         GXColor local_4c = {

@@ -776,7 +776,7 @@ int daNpc_ykM_c::Draw() {
     }
 
     rv = draw(
-        #ifdef DEBUG
+        #if DEBUG
         chkAction(&daNpc_ykM_c::test),
         #else
         FALSE,
@@ -3470,9 +3470,7 @@ BOOL daNpc_ykM_c::race(void* param_1) {
                 angleY = cLib_targetAngleY(&field_0x14fc, &daPy_getPlayerActorClass()->current.pos);
 
                 if (field_0x1560 < 0 ||
-#if DEBUG
-                    field_0x1558.field_0x0 >= 0 &&
-#endif
+                    (!DEBUG || field_0x1558.field_0x0 >= 0) &&
                     (field_0x14fc.abs2(daPy_getPlayerActorClass()->current.pos) < 640000.0f && (angleY < -0x4000 || angleY > 0x4000))) {
                     field_0x1560 = -1;
                     mGndChk.SetPos(&daPy_getPlayerActorClass()->current.pos);
@@ -3695,7 +3693,6 @@ BOOL daNpc_ykM_c::talk(void* param_1) {
     return FALSE;
 }
 
-#ifdef DEBUG
 BOOL daNpc_ykM_c::test(void* param_1) {
     int rv = FALSE;
     switch (mMode) {
@@ -3718,7 +3715,6 @@ BOOL daNpc_ykM_c::test(void* param_1) {
 
     return rv;
 }
-#endif
 
 static int daNpc_ykM_Create(void* i_this) {
     return ((daNpc_ykM_c*)i_this)->create();

@@ -417,7 +417,7 @@ void daNpcKasiMich_c::setAttnPos() {
     mDoMtx_stack_c::multVecZero(&sp28);
     sp28.y = current.pos.y;
     mCyl.SetC(sp28);
-    #ifdef DEBUG
+    #if DEBUG
     mCyl.SetH(daNpcKasiMich_Param_c::m.common.height);
     mCyl.SetR(daNpcKasiMich_Param_c::m.common.width);
     #endif

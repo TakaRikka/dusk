@@ -319,10 +319,10 @@ static inline u32 ConvLightID2Num(GXLightID id) {
     }
 }
 
-static inline void PushLight(const register GXLightObj* lt_obj, register void* dest) {
-    register u32 zero, color;
-    register f32 a0_a1, a2_k0, k1_k2;
-    register f32 px_py, pz_dx, dy_dz;
+static inline void PushLight(const __REGISTER GXLightObj* lt_obj, __REGISTER void* dest) {
+    __REGISTER u32 zero, color;
+    __REGISTER f32 a0_a1, a2_k0, k1_k2;
+    __REGISTER f32 px_py, pz_dx, dy_dz;
 #ifdef __MWERKS__  // clang-format off
 	asm {
 		lwz     color, 12(lt_obj)

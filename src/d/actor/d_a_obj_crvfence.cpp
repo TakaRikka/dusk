@@ -228,7 +228,7 @@ bool daObjCRVFENCE_c::checkViewArea(cXyz* param_1) {
     bool rv = false;
     bool bVar1 = false;
 
-    #ifdef DEBUG
+    #if DEBUG
     if (sp24.x >= 0.0f) {
         if (sp24.y <= FB_WIDTH) {
             bVar1 = true;

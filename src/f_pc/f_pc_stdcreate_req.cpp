@@ -44,7 +44,7 @@ s32 fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_request) {
     fpcLy_SetCurrentLayer(i_request->base.layer);
     int ret = fpcBs_SubCreate(i_request->base.process);
 
-#ifdef DEBUG
+#if DEBUG
     if (ret == 0 && i_request->unk_0x60-- <= 0) {
         i_request->unk_0x60 = 0;
         if (g_fpcDbSv_service[0] != NULL) {
@@ -139,7 +139,7 @@ fpc_ProcID fpcSCtRq_Request(layer_class* i_layer, s16 i_procName, stdCreateFunc 
     request->create_post_method = i_createFunc;
     request->unk_0x5C = param_4;
     request->process_append = i_append;
-#ifdef DEBUG
+#if DEBUG
     request->unk_0x60 = 60;
 #endif
 

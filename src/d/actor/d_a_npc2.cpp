@@ -754,7 +754,7 @@ int daBaseNpc_moveBgActor_c::MoveBGCreate(char const* i_arcName, int i_dzbId, Mo
         return cPhs_ERROR_e;
     }
 
-#ifdef DEBUG
+#if DEBUG
     if (mpBgw != NULL && mpBgw->ChkUsed()) {
         BOOL isConnect = mDoCPd_c::isConnect(PAD_3);
         if (isConnect) {

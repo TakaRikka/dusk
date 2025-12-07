@@ -163,7 +163,7 @@ int daTurara_c::create() {
         fopAcM_setCullSizeBox2(this, mpModel[field_0x984]->getModelData());
         setBaseMtx();
         field_0x994 = 1;
-        #ifdef DEBUG
+        #if DEBUG
         l_HIO.entryHIO("つらら");
         #endif
     }

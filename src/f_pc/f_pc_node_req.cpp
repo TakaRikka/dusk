@@ -29,7 +29,7 @@ void fpcNdRq_ToRequestQ(node_create_request* i_request) {
 
 s32 fpcNdRq_phase_IsCreated(node_create_request* i_request) {
     if (fpcCtRq_IsCreatingByID(i_request->creating_id) == TRUE) {
-#ifdef DEBUG
+#if DEBUG
         if (i_request->unk_0x64-- <= 0) {
             i_request->unk_0x64 = 0;
             if (g_fpcDbSv_service[8] != NULL) {
@@ -64,7 +64,7 @@ s32 fpcNdRq_phase_IsDeleteTiming(node_create_request* i_request) {
 
 s32 fpcNdRq_phase_IsDeleted(node_create_request* i_request) {
     if (fpcDt_IsComplete() == FALSE) {
-#ifdef DEBUG
+#if DEBUG
         if (i_request->unk_0x68-- <= 0) {
             i_request->unk_0x68 = 0;
             if (g_fpcDbSv_service[7] != NULL) {
@@ -140,7 +140,7 @@ s32 fpcNdRq_Cancel(node_create_request* i_request) {
 s32 fpcNdRq_Handler() {
     node_class* node = l_fpcNdRq_Queue.mpHead;
 
-#ifdef DEBUG
+#if DEBUG
     if (g_fpcDbSv_service[9] != NULL) {
         g_fpcDbSv_service[9](&l_fpcNdRq_Queue.mSize);
     }
@@ -218,7 +218,7 @@ node_create_request* fpcNdRq_Create(u32 i_requestSize) {
         cTg_Create(&req->create_tag, req);
         fpcMtdTg_Init(&req->method_tag, (process_method_tag_func)fpcNdRq_Cancel, req);
         req->request_id = request_id++;
-#ifdef DEBUG
+#if DEBUG
         req->unk_0x64 = 60;
         req->unk_0x68 = 60;
 #endif

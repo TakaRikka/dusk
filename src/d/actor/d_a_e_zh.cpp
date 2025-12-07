@@ -224,7 +224,7 @@ int daE_ZH_c::draw() {
         return 1;
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     mBgc.DrawWall(dComIfG_Bgsp());
     #endif
     
@@ -1069,7 +1069,7 @@ void daE_ZH_c::executeOpenStart() {
                 break;
             }
 
-            #ifdef DEBUG
+            #if DEBUG
             if (ZREG_S(0) == 0) {
                 break;
             }

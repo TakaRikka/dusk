@@ -2533,9 +2533,9 @@ void daAlink_c::setRoofHangHandOnSE(cBgS_PolyInfo* unused) {
 int daAlink_c::checkRoofHangMovePos() {
     static const s16 offsetAngle[] = {
         0x0000,
-        static_cast<s16>(0x8000),
+        -0x8000,
         0x4000,
-        static_cast<s16>(0xC000),
+        -0x4000,
     };
 
     if (field_0x2f98 >= 4) {

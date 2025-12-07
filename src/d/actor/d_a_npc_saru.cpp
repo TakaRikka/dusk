@@ -312,7 +312,7 @@ int daNpc_Saru_c::create() {
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
-        #ifdef DEBUG
+        #if DEBUG
         field_0xe90->entryHIO("サル"); // Monkey
         #endif
         reset();
@@ -552,7 +552,7 @@ void daNpc_Saru_c::setParam() {
 }
 
 void daNpc_Saru_c::setAfterTalkMotion() {
-    #ifdef DEBUG
+    #if DEBUG
     mFaceMotionSeqMngr.getNo();
     #endif
     mFaceMotionSeqMngr.setNo(FACE_NONE, -1.0f, 0, 0);

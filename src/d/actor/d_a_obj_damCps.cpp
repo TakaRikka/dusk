@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_damCps.h"
 
-#ifdef DEBUG
+#if DEBUG
 #include "d/d_debug_viewer.h"
 
 static daObjDamCps_HIO_c l_HIO;
@@ -210,7 +210,7 @@ extern actor_process_profile_definition g_profile_Obj_DamCps = {
     0,                      // mParameters
     &g_fopAc_Method.base,   // sub_method
     629,                    // mPriority
-#ifdef DEBUG
+#if DEBUG
     &l_daObjDamCps_Method,  // sub_method
 #else
     NULL,  // sub_method

@@ -23,7 +23,7 @@ static void __GXXfVtxSpecs(void) {
 
     nNrm = __GXData->hasBiNrms ? 2 : __GXData->hasNrms ? 1 : 0;
 
-#ifdef DEBUG
+#if DEBUG
     nCols = GET_REG_FIELD(__GXData->vcdLo, 2, 13) ? 1 : 0;
     nCols += GET_REG_FIELD(__GXData->vcdLo, 2, 15) ? 1 : 0;
 #else
@@ -31,7 +31,7 @@ static void __GXXfVtxSpecs(void) {
     nCols /= 2;
 #endif
 
-#ifdef DEBUG
+#if DEBUG
     nTex = 0;
     nTex += GET_REG_FIELD(__GXData->vcdHi, 2, 0) ? 1 : 0;
     nTex += GET_REG_FIELD(__GXData->vcdHi, 2, 2) ? 1 : 0;
@@ -332,7 +332,7 @@ void GXSetVtxAttrFmt(GXVtxFmt vtxfmt, GXAttr attr, GXCompCnt cnt, GXCompType typ
     vc = &__GXData->vatC[vtxfmt];
     SETVAT(va, vb, vc, attr, cnt, type, frac);
 
-#ifdef DEBUG
+#if DEBUG
     __GXVerifyVATImm(attr, cnt, type, frac);
 #endif
 
@@ -357,7 +357,7 @@ void GXSetVtxAttrFmtv(GXVtxFmt vtxfmt, const GXVtxAttrFmtList* list) {
         CHECK_ATTRNAME4(725, list->attr);
         CHECK_FRAC(726, list->frac);
         SETVAT(va, vb, vc, list->attr, list->cnt, list->type, list->frac);
-#ifdef DEBUG
+#if DEBUG
         __GXVerifyVATImm(list->attr, list->cnt, list->type, list->frac);
 #endif
         list++;

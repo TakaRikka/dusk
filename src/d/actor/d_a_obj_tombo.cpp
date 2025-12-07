@@ -19,7 +19,7 @@ public:
     daObj_TomHIO_c();
     virtual ~daObj_TomHIO_c() {}
 
-    #ifdef DEBUG
+    #if DEBUG
     void genMessage(JORMContext* context) {
         // Golden dragonfly
         context->genLabel("黄金蟲(トンボ)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);

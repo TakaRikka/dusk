@@ -32,7 +32,7 @@ daLv3Water2_HIO_c::daLv3Water2_HIO_c() {
     mLevelControlWaitFrames = 0;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daLv3Water2_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genSlider("wait time", &mLevelControlWaitFrames, 0, 255, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
 }
@@ -120,7 +120,7 @@ cPhs__Step daLv3Water2_c::create() {
         mMode = WAIT;
 
         // "LV3 Water surface (2SW)"
-        #ifdef DEBUG
+        #if DEBUG
         l_HIO.entryHIO("ＬＶ３水面(2SW)");
         #endif
     }
@@ -237,7 +237,7 @@ int daLv3Water2_c::Draw() {
 int daLv3Water2_c::Delete() {
     dComIfG_resDelete(&mPhase, l_resNameIdx[mResourceIndex]);
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO();
     #endif
 

@@ -4,7 +4,7 @@
 
 #include <dolphin/dolphin.h>
 
-#ifdef DEBUG
+#if DEBUG
 
 char* fpcDbSv_getNameString(s16 i_name);
 

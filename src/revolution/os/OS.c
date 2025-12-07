@@ -936,7 +936,7 @@ entry __OSEVEnd
 void __OSUnhandledException(__OSException exception, OSContext* context, u32 dsisr, u32 dar);
 
 #ifdef __GEKKO__
-asm void OSDefaultExceptionHandler(register __OSException exception, register OSContext* context) {
+asm void OSDefaultExceptionHandler(__REGISTER __OSException exception, __REGISTER OSContext* context) {
     nofralloc
     OS_EXCEPTION_SAVE_GPRS(context)
     mfdsisr r5

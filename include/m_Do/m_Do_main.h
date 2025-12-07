@@ -62,7 +62,7 @@ private:
 };
 
 struct mDoMain {
-#ifdef DEBUG
+#if DEBUG
     static int argument;
     static int e3menu_no;
     static u32 archiveHeapSize;

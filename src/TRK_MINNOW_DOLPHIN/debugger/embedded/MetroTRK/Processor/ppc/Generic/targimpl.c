@@ -71,12 +71,12 @@ DSError TRKPPCAccessFPRegister(void* srcDestPtr, u32 fpr, BOOL read);
 DSError TRKPPCAccessSpecialReg(void* value, u32* access_func, BOOL read);
 static void TRKExceptionHandler(u16);
 void TRKInterruptHandlerEnableInterrupts(void);
-void WriteFPSCR(register f64*);
-void ReadFPSCR(register f64*);
-void __TRK_set_MSR(register u32 msr);
+void WriteFPSCR(__REGISTER f64*);
+void ReadFPSCR(__REGISTER f64*);
+void __TRK_set_MSR(__REGISTER u32 msr);
 u32 __TRK_get_MSR();
-void TRK_ppc_memcpy(register void* dest, register const void* src, register int n,
-                    register u32 param_4, register u32 param_5);
+void TRK_ppc_memcpy(__REGISTER void* dest, __REGISTER const void* src, __REGISTER int n,
+                    __REGISTER u32 param_4, __REGISTER u32 param_5);
 
 void TRKRestoreExtended1Block();
 void TRKUARTInterruptHandler();
@@ -827,7 +827,7 @@ asm u32 __TRK_get_MSR() {
     // clang-format on
 }
 
-asm void __TRK_set_MSR(register u32) {
+asm void __TRK_set_MSR(__REGISTER u32) {
     // clang-format off
 	nofralloc
 	mtmsr r3
@@ -835,8 +835,8 @@ asm void __TRK_set_MSR(register u32) {
     // clang-format on
 }
 
-static asm void TRK_ppc_memcpy(register void* dest, register const void* src, register int n,
-                               register u32 param_4, register u32 param_5) {
+static asm void TRK_ppc_memcpy(__REGISTER void* dest, __REGISTER const void* src, __REGISTER int n,
+                               __REGISTER u32 param_4, __REGISTER u32 param_5) {
     // clang-format off
 	#define msr		r8
 	#define byte	r9
@@ -1113,7 +1113,7 @@ asm void TRKInterruptHandlerEnableInterrupts(void) {
     // clang-format on
 }
 
-asm void ReadFPSCR(register f64*) {
+asm void ReadFPSCR(__REGISTER f64*) {
     // clang-format off
 	nofralloc
 	stwu	r1, -0x40(r1)
@@ -1128,7 +1128,7 @@ asm void ReadFPSCR(register f64*) {
     // clang-format on
 }
 
-asm void WriteFPSCR(register f64*) {
+asm void WriteFPSCR(__REGISTER f64*) {
     // clang-format off
 	nofralloc
 	stwu	r1, -0x40(r1)

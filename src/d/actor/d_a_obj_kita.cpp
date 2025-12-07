@@ -18,7 +18,7 @@ daObj_Kita_HIO_c::daObj_Kita_HIO_c() {
     mSwingRange = 0.6f;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daObj_Kita_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genLabel("　 風で動く連続板", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
     // Model Size X

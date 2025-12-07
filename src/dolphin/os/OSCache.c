@@ -53,37 +53,37 @@ asm void DCUnfreeze(void) {
     blr
 }
 
-asm void DCTouchLoad(register void* addr) {
+asm void DCTouchLoad(__REGISTER void* addr) {
     nofralloc
     dcbt r0, addr
     blr
 }
 
-asm void DCBlockZero(register void* addr) {
+asm void DCBlockZero(__REGISTER void* addr) {
     nofralloc
     dcbz r0, addr
     blr
 }
 
-asm void DCBlockStore(register void* addr) {
+asm void DCBlockStore(__REGISTER void* addr) {
     nofralloc
     dcbst r0, addr
     blr
 }
 
-asm void DCBlockFlush(register void* addr) {
+asm void DCBlockFlush(__REGISTER void* addr) {
     nofralloc
     dcbf r0, addr
     blr
 }
 
-asm void DCBlockInvalidate(register void* addr) {
+asm void DCBlockInvalidate(__REGISTER void* addr) {
     nofralloc
     dcbi r0, addr
     blr
 }
 
-asm void DCInvalidateRange(register void* addr, register u32 nBytes) {
+asm void DCInvalidateRange(__REGISTER void* addr, __REGISTER u32 nBytes) {
     nofralloc
     cmplwi nBytes, 0
     blelr
@@ -100,7 +100,7 @@ asm void DCInvalidateRange(register void* addr, register u32 nBytes) {
     blr
 }
 
-asm void DCFlushRange(register void* addr, register u32 nBytes) {
+asm void DCFlushRange(__REGISTER void* addr, __REGISTER u32 nBytes) {
     nofralloc
     cmplwi nBytes, 0
     blelr
@@ -118,7 +118,7 @@ asm void DCFlushRange(register void* addr, register u32 nBytes) {
     blr
 }
 
-asm void DCStoreRange(register void* addr, register u32 nBytes) {
+asm void DCStoreRange(__REGISTER void* addr, __REGISTER u32 nBytes) {
     nofralloc
     cmplwi nBytes, 0
     blelr
@@ -137,7 +137,7 @@ asm void DCStoreRange(register void* addr, register u32 nBytes) {
     blr
 }
 
-asm void DCFlushRangeNoSync(register void* addr, register u32 nBytes) {
+asm void DCFlushRangeNoSync(__REGISTER void* addr, __REGISTER u32 nBytes) {
     nofralloc
     cmplwi nBytes, 0
     blelr
@@ -154,7 +154,7 @@ asm void DCFlushRangeNoSync(register void* addr, register u32 nBytes) {
     blr
 }
 
-asm void DCStoreRangeNoSync(register void* addr, register u32 nBytes) {
+asm void DCStoreRangeNoSync(__REGISTER void* addr, __REGISTER u32 nBytes) {
     nofralloc
     cmplwi nBytes, 0
     blelr
@@ -172,7 +172,7 @@ asm void DCStoreRangeNoSync(register void* addr, register u32 nBytes) {
     blr
 }
 
-asm void DCZeroRange(register void* addr, register u32 nBytes) {
+asm void DCZeroRange(__REGISTER void* addr, __REGISTER u32 nBytes) {
   nofralloc
   cmplwi nBytes, 0
   blelr
@@ -190,7 +190,7 @@ asm void DCZeroRange(register void* addr, register u32 nBytes) {
   blr
 }
 
-asm void DCTouchRange(register void* addr, register u32 nBytes) {
+asm void DCTouchRange(__REGISTER void* addr, __REGISTER u32 nBytes) {
     nofralloc
     cmplwi nBytes, 0
     blelr
@@ -208,7 +208,7 @@ asm void DCTouchRange(register void* addr, register u32 nBytes) {
     blr
 }
 
-asm void ICInvalidateRange(register void* addr, register u32 nBytes) {
+asm void ICInvalidateRange(__REGISTER void* addr, __REGISTER u32 nBytes) {
     nofralloc
     cmplwi nBytes, 0
     blelr
@@ -271,7 +271,7 @@ asm void ICUnfreeze(void) {
     blr
 }
 
-asm void ICBlockInvalidate(register void* addr) {
+asm void ICBlockInvalidate(__REGISTER void* addr) {
     nofralloc
     icbi r0, addr
     blr
@@ -371,7 +371,7 @@ asm void LCDisable(void) {
     blr
 }
 
-asm void LCAllocOneTag(register BOOL invalidate, register void* tag) {
+asm void LCAllocOneTag(__REGISTER BOOL invalidate, __REGISTER void* tag) {
     nofralloc
     cmpwi invalidate, 0
     beq @1
@@ -381,7 +381,7 @@ asm void LCAllocOneTag(register BOOL invalidate, register void* tag) {
     blr
 }
 
-asm void LCAllocTags(register BOOL invalidate, register void* startTag, register u32 numBlocks) {
+asm void LCAllocTags(__REGISTER BOOL invalidate, __REGISTER void* startTag, __REGISTER u32 numBlocks) {
     nofralloc
     mflr r6
     cmplwi numBlocks, 0
@@ -404,7 +404,7 @@ asm void LCAllocTags(register BOOL invalidate, register void* startTag, register
     blr
 }
 
-asm void LCLoadBlocks(register void* destTag, register void* srcAddr, register u32 numBlocks) {
+asm void LCLoadBlocks(__REGISTER void* destTag, __REGISTER void* srcAddr, __REGISTER u32 numBlocks) {
     nofralloc
     rlwinm  r6, numBlocks, 30, 27, 31
     rlwinm  srcAddr, srcAddr, 0, 4, 31
@@ -417,7 +417,7 @@ asm void LCLoadBlocks(register void* destTag, register void* srcAddr, register u
     blr
 }
 
-asm void LCStoreBlocks(register void* destAddr, register void* srcTag, register u32 numBlocks) {
+asm void LCStoreBlocks(__REGISTER void* destAddr, __REGISTER void* srcTag, __REGISTER u32 numBlocks) {
     nofralloc
     rlwinm  r6, numBlocks, 30, 27, 31
     rlwinm  destAddr, destAddr, 0, 4, 31
@@ -509,7 +509,7 @@ asm u32 LCQueueLength(void) {
     blr
 }
 
-asm void LCQueueWait(register u32 len) {
+asm void LCQueueWait(__REGISTER u32 len) {
     nofralloc
 @1
     mfspr r4, HID2

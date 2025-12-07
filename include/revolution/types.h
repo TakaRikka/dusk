@@ -73,6 +73,12 @@ typedef unsigned int uint;
 #endif
 #endif
 
+#ifdef __MWERKS__
+#define __REGISTER register
+#else
+#define __REGISTER
+#endif
+
 #include <stddef.h>
 
 #endif

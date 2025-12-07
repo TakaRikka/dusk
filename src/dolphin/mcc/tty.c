@@ -1,7 +1,7 @@
 #include <dolphin.h>
 #include <dolphin/mcc.h>
 
-#ifdef DEBUG
+#if DEBUG
 const char* __TTYVersion = "<< Dolphin SDK - TTY\tdebug build: Apr  5 2004 03:57:08 (0x2301) >>";
 #else
 const char* __TTYVersion = "<< Dolphin SDK - TTY\trelease build: Apr  5 2004 04:15:50 (0x2301) >>";

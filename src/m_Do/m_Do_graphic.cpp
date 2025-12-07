@@ -767,8 +767,9 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
     if (daPy_getLinkPlayerActorClass() != NULL) {
         u8 sp8 = 1;
         #if DEBUG
-        if (g_envHIO.mOther.mDepthOfField) {
+        if (g_envHIO.mOther.mDepthOfField)
         #endif
+        {
             if (mDoGph_gInf_c::isAutoForcus()) {
                 f32 sp4C[7];
                 f32 sp34[6];
@@ -998,9 +999,7 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
             GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_BLUE, GX_CH_BLUE, GX_CH_BLUE, GX_CH_ALPHA);
             GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
             GXSetProjection(param_0->projMtx, GX_PERSPECTIVE);
-        #if DEBUG
         }
-        #endif
     }
 }
 
@@ -1537,17 +1536,11 @@ int mDoGph_Painter() {
             dComIfGd_drawOpaListDarkBG();
             dComIfGd_drawOpaListMiddle();
 
-            #if DEBUG
-            if (fapGmHIO_getParticle())
-            #endif
-            {
+            if (fapGmHIO_getParticle()) {
                 dComIfGp_particle_drawFogPri0_B(&draw_info);
             }
 
-            #if DEBUG
-            if (fapGmHIO_getParticle())
-            #endif
-            {
+            if (fapGmHIO_getParticle()) {
                 dComIfGp_particle_drawNormalPri0_B(&draw_info);
             }
 
@@ -1569,14 +1562,11 @@ int mDoGph_Painter() {
 
             dComIfGd_drawOpaList();
 
-            #if DEBUG
-            if (g_kankyoHIO.navy.field_0x30d) {
+            if (DEBUG && g_kankyoHIO.navy.field_0x30d) {
                 if (dKy_darkworld_check() != TRUE) {
                     dComIfGd_drawOpaListDark();
                 }
-            } else
-            #endif
-            {
+            } else {
                 dComIfGd_drawOpaListDark();
             }
 
@@ -1592,10 +1582,7 @@ int mDoGph_Painter() {
             dComIfGd_drawXluListBG();
             dComIfGd_drawXluListDarkBG();
 
-            #if DEBUG
-            if (fapGmHIO_getParticle())
-            #endif
-            {
+            if (fapGmHIO_getParticle()) {
                 dComIfGp_particle_drawFogPri0_A(&draw_info);
                 dComIfGp_particle_drawNormalPri0_A(&draw_info);
             }
@@ -1609,14 +1596,11 @@ int mDoGph_Painter() {
 
             dComIfGd_drawXluList();
 
-            #if DEBUG
-            if (g_kankyoHIO.navy.field_0x30d) {
+            if (DEBUG && g_kankyoHIO.navy.field_0x30d) {
                 if (dKy_darkworld_check() != TRUE) {
                     dComIfGd_drawXluListDark();
                 }
-            } else
-            #endif
-            {
+            } else {
                 dComIfGd_drawXluListDark();
             }
 
@@ -1653,10 +1637,8 @@ int mDoGph_Painter() {
                 fapGm_HIO_c::startCpuTimer();
                 #endif
 
-                #if DEBUG
-                if (g_kankyoHIO.navy.field_0x30d == 0 || dKy_darkworld_check() != TRUE)
-                #endif
-                {
+                if (!(DEBUG && g_kankyoHIO.navy.field_0x30d != 0 &&
+                      dKy_darkworld_check() == TRUE)) {
                     if (g_env_light.is_blure == 0) {
                         dComIfGd_drawOpaListInvisible();
                         dComIfGd_drawXluListInvisible();
@@ -1671,10 +1653,7 @@ int mDoGph_Painter() {
                 fapGm_HIO_c::startCpuTimer();
                 #endif
 
-                #if DEBUG
-                if (fapGmHIO_getParticle())
-                #endif
-                {
+                if (fapGmHIO_getParticle()) {
                     dComIfGp_particle_drawFogPri4(&draw_info);
                     dComIfGp_particle_drawProjection(&draw_info);
                 }
@@ -1697,14 +1676,11 @@ int mDoGph_Painter() {
 
                 GXSetClipMode(GX_CLIP_ENABLE);
 
-                #if DEBUG
-                if (g_kankyoHIO.navy.field_0x30d) {
+                if (DEBUG && g_kankyoHIO.navy.field_0x30d) {
                     if (dKy_darkworld_check() != TRUE) {
                         dComIfGd_drawOpaListFilter();
                     }
-                } else
-                #endif
-                {
+                } else {
                     dComIfGd_drawOpaListFilter();
                 }
 
@@ -1717,10 +1693,7 @@ int mDoGph_Painter() {
 
                 GXSetClipMode(GX_CLIP_ENABLE);
 
-                #if DEBUG
-                if (fapGmHIO_getParticle())
-                #endif
-                {
+                if (fapGmHIO_getParticle()) {
                     dComIfGp_particle_drawFogPri1(&draw_info);
                     dComIfGp_particle_draw(&draw_info);
                     dComIfGp_particle_drawFogPri2(&draw_info);
@@ -1748,20 +1721,15 @@ int mDoGph_Painter() {
 
                 GXSetClipMode(GX_CLIP_ENABLE);
 
-                #if DEBUG
-                if (g_kankyoHIO.navy.field_0x30d == 0 || dKy_darkworld_check() != TRUE)
-                #endif
-                {
+                if (!(DEBUG && g_kankyoHIO.navy.field_0x30d != 0 &&
+                      dKy_darkworld_check() == TRUE)) {
                     if (g_env_light.is_blure == 1) {
                         dComIfGd_drawOpaListInvisible();
                         dComIfGd_drawXluListInvisible();
                     }
                 }
 
-                #if DEBUG
-                if (fapGmHIO_getParticle())
-                #endif
-                {
+                if (fapGmHIO_getParticle()) {
                     dComIfGp_particle_drawScreen(&draw_info);
                 }
 
@@ -1848,10 +1816,7 @@ int mDoGph_Painter() {
                 fapGm_HIO_c::startCpuTimer();
                 #endif
 
-                #if DEBUG
-                if (fapGmHIO_getParticle())
-                #endif
-                {
+                if (fapGmHIO_getParticle()) {
                     #if WIDESCREEN_SUPPORT
                     if (mDoGph_gInf_c::isWideZoom()) {
                         ortho.setOrtho(0.0f, 0.0f, 608.0f, 448.0f, 100000.0f, -100000.0f);
@@ -1947,10 +1912,7 @@ int mDoGph_Painter() {
     captureScreenSetPort();
     #endif
 
-    #if DEBUG
-    if (fapGmHIO_get2Ddraw())
-    #endif
-    {
+    if (fapGmHIO_get2Ddraw()) {
         Mtx m4;
         cMtx_copy(j3dSys.getViewMtx(), m4);
 

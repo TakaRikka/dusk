@@ -717,7 +717,7 @@ JKRExpHeap* mDoExt_getHostIOHeap() {
     return HostIOHeap;
 }
 
-#ifdef DEBUG
+#if DEBUG
 extern u8 lbl_8074C3B9[1];
 #endif
 
@@ -728,7 +728,7 @@ static JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_a
 
     JKRSolidHeap* createdHeap;
     if (i_size == 0 || i_size == -1) {
-        #ifdef DEBUG
+        #if DEBUG
         if (lbl_8074C3B9[0] != 0) {
             OS_REPORT("\x1b[44mmDoExt_createSolidHeap サイズ未設定\n\x1b[m");
             OS_REPORT("最大空き容量確保します %08x\n\x1b[m", i_heap->getFreeSize());
@@ -748,7 +748,7 @@ static JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_a
 
     if (createdHeap != NULL) {
         JKRSetErrorFlag(createdHeap, true);
-        #ifdef DEBUG
+        #if DEBUG
         if (lbl_8074C3B9[0] != 0) {
             u32 heapSize = createdHeap->getHeapSize();
             OS_REPORT(
@@ -761,7 +761,7 @@ static JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_a
         #endif
     }
 
-#ifdef DEBUG
+#if DEBUG
     if (createdHeap == NULL) {
         OS_WARNING(
             "mDoExt_createMaxSolidHeap : ソリッドヒープ%fKの確保に失敗 連続空き容量=%fK 残り空き容量=%f\n",
@@ -2807,7 +2807,7 @@ void mDoExt_3DlineMatSortPacket::draw() {
     J3DShape::resetVcdVatCache();
 }
 
-#ifdef DEBUG
+#if DEBUG
 mDoExt_cube8pPacket::mDoExt_cube8pPacket(cXyz* i_points, const GXColor& i_color) {
     cXyz* pnt_array = mPoints;
 

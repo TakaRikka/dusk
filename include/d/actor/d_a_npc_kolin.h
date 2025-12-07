@@ -67,9 +67,7 @@ public:
     int follow(void*);
     int clothWait(void*);
     int talk(void*);
-#if DEBUG
     int test(void*);
-#endif
     daNpc_Kolin_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,

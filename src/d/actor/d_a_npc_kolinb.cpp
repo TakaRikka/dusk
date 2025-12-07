@@ -590,7 +590,7 @@ int daNpc_Kolinb_c::drawDbgInfo() {
 int daNpc_Kolinb_c::selectAction() {
     mNextAction = NULL;
 
-#ifdef DEBUG
+#if DEBUG
     if (daNpc_Kolinb_Param_c::m.common.debug_mode_ON) {
         mNextAction = &daNpc_Kolinb_c::test;
         return 1;

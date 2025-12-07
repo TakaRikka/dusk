@@ -28,7 +28,7 @@ struct daNpcTks_HIOParam {
 };
 
 class daNpcTks_HIO_c
-#ifdef DEBUG
+#if DEBUG
 : public mDoHIO_entry_c
 #endif
 {

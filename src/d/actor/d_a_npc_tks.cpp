@@ -2950,7 +2950,7 @@ void daNpcTks_c::setAttnPos() {
     if (!fopAcM_checkCarryNow(this)) {
         if (!field_0x138a) {
             mCyl.SetC(current.pos);
-            #ifdef DEBUG
+            #if DEBUG
             mCyl.SetH(daNpcTks_Param_c::m.common.height);
             mCyl.SetR(daNpcTks_Param_c::m.common.width);
             #endif

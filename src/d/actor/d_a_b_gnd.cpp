@@ -2525,7 +2525,7 @@ static void action(b_gnd_class* i_this) {
         i_this->field_0xc7d = 0;
     }
 
-#ifdef DEBUG
+#if DEBUG
     if (mDoCPd_c::getTrigR(PAD_2)) {
         dScnKy_env_light_c* kankyo = dKy_getEnvlight();
         kankyo->wether = 1;

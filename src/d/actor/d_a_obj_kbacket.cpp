@@ -39,7 +39,7 @@ static dCcD_SrcCyl l_ccDCyl = {
 static daObj_KBacket_Param_c l_HIO;
 
 static inline const daObj_KBacket_HIOParam* get_params(daObj_KBacket_c* i_this) {
-#ifdef DEBUG
+#if DEBUG
     return &i_this->mHIO->param;
 #else
     return &daObj_KBacket_Param_c::m;
@@ -48,7 +48,7 @@ static inline const daObj_KBacket_HIOParam* get_params(daObj_KBacket_c* i_this) 
 
 daObj_KBacket_c::~daObj_KBacket_c() {
     OS_REPORT("|%06d:%x|daObj_KBacket_c -> デストラクト\n", g_Counter.mCounter0, this);
-#ifdef DEBUG
+#if DEBUG
     if (mHIO != NULL) {
         mHIO->removeHIO();
     }
@@ -340,7 +340,7 @@ int daObj_KBacket_c::Execute() {
                         field_0xa4a = 1;
                     } else {
                         if (mObjAcch.ChkGroundHit() != 0) {
-#ifndef DEBUG
+#if !DEBUG
                             fopAcM_seStart(this, Z2SE_OBJ_WOODSTICK_BOUND, 0);
 #endif
                             if (field_0x9d4.y < -30.0f) {
@@ -359,7 +359,7 @@ int daObj_KBacket_c::Execute() {
                 } else {
                     if (field_0xa4a != 0) {
                         if (mObjAcch.ChkGroundHit() != 0) {
-#ifndef DEBUG
+#if !DEBUG
                             fopAcM_seStart(this, Z2SE_OBJ_WOODSTICK_BOUND, 0);
 #endif
                             if (this->field_0x9d4.y < -30.0f) {
@@ -376,7 +376,7 @@ int daObj_KBacket_c::Execute() {
                         }
                     } else {
                         if (field_0xa49 != 0) {
-#ifndef DEBUG
+#if !DEBUG
                             fopAcM_seStart(this, Z2SE_OBJ_WOODSTICK_PUT, 0);
 #endif
                         } else {

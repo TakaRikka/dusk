@@ -68,7 +68,7 @@ daBd_HIO_c::daBd_HIO_c() {
     field_0x1E = 0;
 }
 
-#ifdef DEBUG
+#if DEBUG
 /* daBd_HIO_c::genMessage (JORMContext *) */
 void daBd_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genLabel("小鳥", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);

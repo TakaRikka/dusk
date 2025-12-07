@@ -14,7 +14,7 @@ typedef struct standard_create_request_class {
     /* 0x54 */ void* process_append;
     /* 0x58 */ stdCreateFunc create_post_method;
     /* 0x5C */ void* unk_0x5C;
-#ifdef DEBUG
+#if DEBUG
     /* 0x60 */ int unk_0x60;
 #endif
 } standard_create_request_class;

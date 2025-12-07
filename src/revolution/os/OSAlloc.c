@@ -9,7 +9,7 @@
 #define HEADERSIZE 32u
 #define MINOBJSIZE 64u
 
-#ifdef DEBUG
+#if DEBUG
 #define ENABLE_HEAPDESC
 #endif
 

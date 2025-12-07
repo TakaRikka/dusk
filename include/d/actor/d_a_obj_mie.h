@@ -26,7 +26,7 @@ struct daObj_Mie_Param_c {
 };
 
 class daObj_Mie_HIO_c 
-#ifdef DEBUG
+#if DEBUG
 : public mDoHIO_entry_c
 #endif
 {

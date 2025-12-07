@@ -94,7 +94,7 @@ bool JKRMemArchive::open(s32 entryNum, JKRArchive::EMountDirection mountDirectio
         mIsOpen = true;
     }
 
-#ifdef DEBUG
+#if DEBUG
     if (mMountMode == 0) {
         OSReport(":::Cannot alloc memory [%s][%d]\n", __FILE__, 460);
     }

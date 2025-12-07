@@ -143,9 +143,7 @@ cleanup:
         JKRFreeToSysHeap(mem);
     }
     if (mMountMode == 0) {
-#ifdef DEBUG
-        OSReport(":::[%s: %d] Cannot alloc memory\n", __FILE__, 415);
-#endif
+        OS_REPORT(":::[%s: %d] Cannot alloc memory\n", __FILE__, 415);
         if (mDvdFile != NULL) {
             delete mDvdFile;
         }

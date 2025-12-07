@@ -294,7 +294,7 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
             // This section is weird. The debug seems like entriesStr is outside the condition
             // but the normal build doesn't really work with that. Same for pInfoBlock->entries.
 
-#ifdef DEBUG
+#if DEBUG
             dMsgUnit_inf1_entry* entriesInf = &pInfoBlock->entries[i_type];
             u32 dat1EntryOffset = entriesInf->dat1EntryOffset;
             const char* uVar5;
@@ -322,13 +322,13 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
 #else
             if (i_value == 1) {
 #endif
-#ifdef DEBUG
+#if DEBUG
                 uVar5 = entriesStr->str + vals[0];
 #else
                 uVar5 = pStrAttributeBlock->entries->str + vals[0];
 #endif
             } else {
-#ifdef DEBUG
+#if DEBUG
                 uVar5 = entriesStr->str + vals[1];
 #else
                 uVar5 = pStrAttributeBlock->entries->str + vals[1];

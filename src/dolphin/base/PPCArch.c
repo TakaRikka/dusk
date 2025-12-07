@@ -7,27 +7,27 @@ asm u32 PPCMfmsr() {
     blr    
 }
 
-asm void PPCMtmsr(register u32 newMSR) {
+asm void PPCMtmsr(__REGISTER u32 newMSR) {
     nofralloc
     mtmsr newMSR
     blr
 }
 
-asm u32 PPCOrMsr(register u32 value) {
+asm u32 PPCOrMsr(__REGISTER u32 value) {
     nofralloc
     mfmsr r4
     or value, r4, value
     blr
 }
 
-asm u32 PPCAndMsr(register u32 value) {
+asm u32 PPCAndMsr(__REGISTER u32 value) {
     nofralloc
     mfmsr r4
     and value, r4, value
     blr
 }
 
-asm u32 PPCAndCMsr(register u32 value) {
+asm u32 PPCAndCMsr(__REGISTER u32 value) {
     nofralloc
     mfmsr r4
     andc value, r4, value
@@ -40,7 +40,7 @@ asm u32 PPCMfhid0() {
     blr
 }
 
-asm void PPCMthid0(register u32 newHID0) {
+asm void PPCMthid0(__REGISTER u32 newHID0) {
     nofralloc
     mtspr HID0, newHID0
     blr
@@ -58,13 +58,13 @@ asm u32 PPCMfl2cr() {
     blr
 }
 
-asm void PPCMtl2cr(register u32 newL2cr) {
+asm void PPCMtl2cr(__REGISTER u32 newL2cr) {
     nofralloc
     mtspr L2CR, newL2cr
     blr
 }
 
-asm void PPCMtdec(register u32 newDec) {
+asm void PPCMtdec(__REGISTER u32 newDec) {
     nofralloc
     mtdec newDec
     blr
@@ -115,7 +115,7 @@ asm u32 PPCMfmmcr0() {
     blr
 }
 
-asm void PPCMtmmcr0(register u32 newMmcr0) {
+asm void PPCMtmmcr0(__REGISTER u32 newMmcr0) {
     nofralloc
     mtspr MMCR0, newMmcr0
     blr
@@ -127,7 +127,7 @@ asm u32 PPCMfmmcr1() {
     blr
 }
 
-asm void PPCMtmmcr1(register u32 newMmcr1) {
+asm void PPCMtmmcr1(__REGISTER u32 newMmcr1) {
     nofralloc
     mtspr MMCR1, newMmcr1
     blr
@@ -139,7 +139,7 @@ asm u32 PPCMfpmc1() {
     blr
 }
 
-asm void PPCMtpmc1(register u32 newPmc1) {
+asm void PPCMtpmc1(__REGISTER u32 newPmc1) {
     nofralloc
     mtspr PMC1, newPmc1
     blr
@@ -151,7 +151,7 @@ asm u32 PPCMfpmc2() {
     blr
 }
 
-asm void PPCMtpmc2(register u32 newPmc2) {
+asm void PPCMtpmc2(__REGISTER u32 newPmc2) {
     nofralloc
     mtspr PMC2, newPmc2
     blr
@@ -163,7 +163,7 @@ asm u32 PPCMfpmc3() {
     blr
 }
 
-asm void PPCMtpmc3(register u32 newPmc3) {
+asm void PPCMtpmc3(__REGISTER u32 newPmc3) {
     nofralloc
     mtspr PMC3, newPmc3
     blr
@@ -175,7 +175,7 @@ asm u32 PPCMfpmc4() {
     blr
 }
 
-asm void PPCMtpmc4(register u32 newPmc4) {
+asm void PPCMtpmc4(__REGISTER u32 newPmc4) {
     nofralloc
     mtspr PMC4, newPmc4
     blr
@@ -187,7 +187,7 @@ asm u32 PPCMfsia() {
     blr
 }
 
-asm void PPCMtsia(register u32 newSia) {
+asm void PPCMtsia(__REGISTER u32 newSia) {
     nofralloc
     mtspr SIA, newSia
     blr
@@ -204,7 +204,7 @@ u32 PPCMffpscr() {
     return m.u.fpscr; 
 }
 
-void PPCMtfpscr(register u32 newFPSCR) {
+void PPCMtfpscr(__REGISTER u32 newFPSCR) {
     union FpscrUnion m;
 
     asm {
@@ -222,7 +222,7 @@ asm u32 PPCMfhid2() {
     blr
 }
 
-asm void PPCMthid2(register u32 newhid2) {
+asm void PPCMthid2(__REGISTER u32 newhid2) {
     nofralloc
     mtspr HID2, newhid2
     blr
@@ -235,7 +235,7 @@ asm u32 PPCMfwpar() {
     blr
 }
 
-asm void PPCMtwpar(register u32 newwpar) {
+asm void PPCMtwpar(__REGISTER u32 newwpar) {
     nofralloc
     mtspr WPAR, newwpar
     blr
@@ -253,13 +253,13 @@ asm u32 PPCMfdmaL() {
     blr
 }
 
-asm void PPCMtdmaU(register u32 newdmau) {
+asm void PPCMtdmaU(__REGISTER u32 newdmau) {
     nofralloc
     mtspr DMA_U, newdmau
     blr
 }
 
-asm void PPCMtdmaL(register u32 newdmal) {
+asm void PPCMtdmaL(__REGISTER u32 newdmal) {
     nofralloc
     mtspr DMA_L, newdmal
     blr

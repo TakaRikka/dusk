@@ -1856,7 +1856,7 @@ int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
     return 0;
 }
 
-#ifdef DEBUG
+#if DEBUG
 flagFile_c::flagFile_c() {
     m_no = mDoHIO_CREATE_CHILD("フラグファイル", this);
     m_flags = FLAG_ALL_e;

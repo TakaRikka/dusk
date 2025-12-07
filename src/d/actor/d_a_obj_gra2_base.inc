@@ -62,7 +62,7 @@ int daObj_GrA_c::waitDemo(void* param_1) {
                         }
                     }
                 } else {
-                    #ifdef DEBUG
+                    #if DEBUG
                     if (mpHIO->m.field_0x8a) {
                         fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
                     } else {
@@ -79,7 +79,7 @@ int daObj_GrA_c::waitDemo(void* param_1) {
             break;
 
         case 2:
-            #ifdef DEBUG
+            #if DEBUG
             fopAcM_OnStatus(this, fopAcM_STATUS_UNK_0x100);
             #endif
             break;

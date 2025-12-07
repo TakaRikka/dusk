@@ -51,7 +51,7 @@ public:
 
 STATIC_ASSERT(sizeof(daObjLv6SwTurn_c) == 0x5cc);
 
-#ifdef DEBUG
+#if DEBUG
 class daObjLv6SwTurn_HIO_c : public mDoHIO_entry_c {
 public:
     daObjLv6SwTurn_HIO_c();

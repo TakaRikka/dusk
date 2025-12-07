@@ -1783,7 +1783,7 @@ void dComIfGs_gameStart() {
     dComIfGp_setNextStage(name, point, roomNo, -1, 0.0f, 0, 1, 0, 0, 0, 0);
 }
 
-#ifdef DEBUG
+#if DEBUG
 void dComIfG_playerStatusD() {
     dComIfGs_setDataNum(0);
     dComIfGs_setMaxLife(50);

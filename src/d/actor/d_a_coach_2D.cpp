@@ -156,7 +156,7 @@ int daCoach2D_c::create() {
             return cPhs_ERROR_e;
         }
 
-#ifdef DEBUG
+#if DEBUG
         l_HOSTIO.entryHIO("馬車アイコン");
 #endif
     }
@@ -166,7 +166,7 @@ int daCoach2D_c::create() {
 
 int daCoach2D_c::destroy() {
     dComIfG_resDelete(this, l_arcName);
-#ifdef DEBUG
+#if DEBUG
         l_HOSTIO.removeHIO();
 #endif
 
@@ -186,7 +186,7 @@ int daCoach2D_c::draw() {
 }
 
 int daCoach2D_c::execute() {
-#ifdef DEBUG
+#if DEBUG
     s32 freeSize = mDoExt_getCurrentHeap()->getTotalFreeSize();
 #endif
 

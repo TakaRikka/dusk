@@ -36,7 +36,7 @@ daE_YH_HIO_c::daE_YH_HIO_c() {
     mAttackFreq = 30;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daE_YH_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genLabel("  デグババ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
     ctx->genSlider("基本サイズ", &mBasicSize, 0.0f, 5.0f, 0, NULL, 0xffff, 0xffff, 0x200,

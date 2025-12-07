@@ -591,7 +591,7 @@ static asm void ConfigMEM_ES1_0(void) {
 #endif
 
 #ifdef __GEKKO__
-static asm void RealMode(register u32 addr) {
+static asm void RealMode(__REGISTER u32 addr) {
     nofralloc
     clrlwi addr, addr, 2
     mtsrr0 addr
@@ -648,7 +648,7 @@ void __OSRestoreCodeExecOnMEM1(u32 param_0) {
 
 void __OSInitMemoryProtection(void) {
     static BOOL initialized = FALSE;
-#ifndef DEBUG
+#if !DEBUG
     u32 padding[9];
     u32 temp;
 #endif

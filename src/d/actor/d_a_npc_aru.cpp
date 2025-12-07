@@ -423,7 +423,7 @@ int daNpc_Aru_c::Draw() {
     }
 
     draw(
-#ifdef DEBUG
+#if DEBUG
         chkAction(&daNpc_Aru_c::test),
 #else
         FALSE,
@@ -2018,11 +2018,8 @@ int daNpc_Aru_c::talk(void* param_1) {
     return 0;
 }
 
-#ifdef DEBUG
 int daNpc_Aru_c::test(void* param_1) {
-
 }
-#endif
 
 static int daNpc_Aru_Create(void* a_this) {
     return static_cast<daNpc_Aru_c*>(a_this)->create();

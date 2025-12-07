@@ -32,9 +32,10 @@ void GXProject(f32 x, f32 y, f32 z, const Mtx mtx, const f32* pm, const f32* vp,
     *sz = vp[5] + (wc * (zc * (vp[5] - vp[4])));
 }
 
-static void WriteProjPS(const register f32 proj[6], register volatile void* dest) {
-    register f32 p01, p23, p45;
+static void WriteProjPS(const __REGISTER f32 proj[6], __REGISTER volatile void* dest) {
+    __REGISTER f32 p01, p23, p45;
 
+#ifdef __MWERKS__
     asm {
         psq_l  p01,  0(proj), 0, 0
         psq_l  p23,  8(proj), 0, 0
@@ -43,10 +44,11 @@ static void WriteProjPS(const register f32 proj[6], register volatile void* dest
         psq_st p23,  0(dest), 0, 0
         psq_st p45,  0(dest), 0, 0
     }
+#endif
 }
 
-static void Copy6Floats(const register f32 src[6], register volatile f32* dest) {
-    register f32 ps01, ps23, ps45;
+static void Copy6Floats(const __REGISTER f32 src[6], __REGISTER volatile f32* dest) {
+    __REGISTER f32 ps01, ps23, ps45;
 
     asm {
         psq_l  ps01,  0(src), 0, 0
@@ -135,13 +137,13 @@ void GXGetProjectionv(f32* ptr) {
 #endif
 }
 
-static void WriteMTXPS4x3(const register f32 mtx[3][4], register volatile f32* dest) {
-    register f32 a00_a01;
-    register f32 a02_a03;
-    register f32 a10_a11;
-    register f32 a12_a13;
-    register f32 a20_a21;
-    register f32 a22_a23;
+static void WriteMTXPS4x3(const __REGISTER f32 mtx[3][4], __REGISTER volatile f32* dest) {
+    __REGISTER f32 a00_a01;
+    __REGISTER f32 a02_a03;
+    __REGISTER f32 a10_a11;
+    __REGISTER f32 a12_a13;
+    __REGISTER f32 a20_a21;
+    __REGISTER f32 a22_a23;
 
     asm {
         psq_l a00_a01, 0x00(mtx), 0, qr0
@@ -159,13 +161,13 @@ static void WriteMTXPS4x3(const register f32 mtx[3][4], register volatile f32* d
     }
 }
 
-static void WriteMTXPS3x3from3x4(register f32 mtx[3][4], register volatile f32* dest) {
-    register f32 a00_a01;
-    register f32 a02_a03;
-    register f32 a10_a11;
-    register f32 a12_a13;
-    register f32 a20_a21;
-    register f32 a22_a23;
+static void WriteMTXPS3x3from3x4(__REGISTER f32 mtx[3][4], __REGISTER volatile f32* dest) {
+    __REGISTER f32 a00_a01;
+    __REGISTER f32 a02_a03;
+    __REGISTER f32 a10_a11;
+    __REGISTER f32 a12_a13;
+    __REGISTER f32 a20_a21;
+    __REGISTER f32 a22_a23;
 
     asm {
         psq_l  a00_a01, 0x00(mtx), 0, qr0
@@ -183,12 +185,12 @@ static void WriteMTXPS3x3from3x4(register f32 mtx[3][4], register volatile f32* 
     }
 }
 
-static void WriteMTXPS3x3(register f32 mtx[3][3], register volatile f32* dest) {
-    register f32 a00_a01;
-    register f32 a02_a10;
-    register f32 a11_a12;
-    register f32 a20_a21;
-    register f32 a22_nnn;
+static void WriteMTXPS3x3(__REGISTER f32 mtx[3][3], __REGISTER volatile f32* dest) {
+    __REGISTER f32 a00_a01;
+    __REGISTER f32 a02_a10;
+    __REGISTER f32 a11_a12;
+    __REGISTER f32 a20_a21;
+    __REGISTER f32 a22_nnn;
 
     asm {
         psq_l a00_a01, 0x00(mtx), 0, qr0
@@ -204,11 +206,11 @@ static void WriteMTXPS3x3(register f32 mtx[3][3], register volatile f32* dest) {
     }
 }
 
-static void WriteMTXPS4x2(const register f32 mtx[2][4], register volatile f32* dest) {
-    register f32 a00_a01;
-    register f32 a02_a03;
-    register f32 a10_a11;
-    register f32 a12_a13;
+static void WriteMTXPS4x2(const __REGISTER f32 mtx[2][4], __REGISTER volatile f32* dest) {
+    __REGISTER f32 a00_a01;
+    __REGISTER f32 a02_a03;
+    __REGISTER f32 a10_a11;
+    __REGISTER f32 a12_a13;
 
     asm {
         psq_l a00_a01, 0x00(mtx), 0, qr0

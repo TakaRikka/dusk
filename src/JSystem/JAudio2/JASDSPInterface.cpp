@@ -659,6 +659,6 @@ u16 DSP_CreateMap2(u32 param_0) {
 
 u32 JASWaveInfo::one = 1;
 
-#ifdef DEBUG
+#if DEBUG
 s32 dspMutex = 1;
 #endif

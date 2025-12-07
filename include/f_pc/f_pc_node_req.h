@@ -36,7 +36,7 @@ typedef struct node_create_request {
     /* 0x58 */ s16 name;
     /* 0x5C */ void* data;
     /* 0x60 */ s16 unk_0x60;
-#ifdef DEBUG
+#if DEBUG
     /* 0x64 */ int unk_0x64;
     /* 0x68 */ int unk_0x68;
 #endif

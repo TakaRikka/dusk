@@ -352,7 +352,7 @@ int daObjFlag3_c::execute() {
         return 1;
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     mFlagCloth.setSpringRate(attr().mSpringCoeeficient);
     mFlagCloth.setWindRate(attr().mWindCoefficient);
     mFlagCloth.setDecayRate(attr().mDecayRate);
@@ -408,7 +408,7 @@ static int daObjFlag3_Delete(daObjFlag3_c* i_this) {
 }
 
 daObjFlag3_c::~daObjFlag3_c() {
-    #ifdef DEBUG
+    #if DEBUG
     M_hio.dt();
     #endif
 
@@ -445,7 +445,7 @@ void daObjFlag3_c::create_init() {
     mFlagCloth.setTornado(attr().mTornado);
     initBaseMtx();
 
-    #ifdef DEBUG
+    #if DEBUG
     M_hio.ct();
     #endif
 }

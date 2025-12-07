@@ -17,7 +17,7 @@ struct daNpc_grR_HIOParam {
 };
 
 class daNpc_grR_HIO_c
-#ifdef DEBUG
+#if DEBUG
 : public mDoHIO_entry_c
 #endif
 {

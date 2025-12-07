@@ -1,7 +1,6 @@
 #ifndef D_EVENT_D_EVENT_DEBUG_H
 #define D_EVENT_D_EVENT_DEBUG_H
 
-#ifdef DEBUG
 #include "JSystem/JHostIO/JORMContext.h"
 #include "d/d_event.h"
 
@@ -170,7 +169,5 @@ struct dEvM_HIO_c : public JORReflexible {
         BTN_FORCED_TERMINATION = (1 << 31) + 4
     };
 };
-
-#endif /* DEBUG */
 
 #endif /* D_EVENT_D_EVENT_DEBUG_H */

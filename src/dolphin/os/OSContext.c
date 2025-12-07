@@ -14,7 +14,7 @@ volatile OSContext* __OSCurrentContext AT_ADDRESS(OS_BASE_CACHED | 0x00D4);
 volatile OSContext* __OSFPUContext AT_ADDRESS(OS_BASE_CACHED | 0x00D8);
 
 #ifdef __GEKKO__
-static asm void __OSLoadFPUContext(register u32 dummy, register OSContext* fpucontext) {
+static asm void __OSLoadFPUContext(__REGISTER u32 dummy, __REGISTER OSContext* fpucontext) {
     nofralloc
     lhz r5, fpucontext->state;
     clrlwi. r5, r5, 31
@@ -96,7 +96,7 @@ _return:
     blr
 }
 
-static asm void __OSSaveFPUContext(register u32 dummy1, register u32 dummy2, register OSContext* fpucontext) {
+static asm void __OSSaveFPUContext(__REGISTER u32 dummy1, __REGISTER u32 dummy2, __REGISTER OSContext* fpucontext) {
     nofralloc
 
     lhz     r3,   fpucontext->state
@@ -182,19 +182,19 @@ _return:
     blr
 }
 
-asm void OSLoadFPUContext(register OSContext* fpucontext) {
+asm void OSLoadFPUContext(__REGISTER OSContext* fpucontext) {
     nofralloc
     addi    r4, fpucontext, 0
     b       __OSLoadFPUContext
 }
 
-asm void OSSaveFPUContext(register OSContext* fpucontext) {
+asm void OSSaveFPUContext(__REGISTER OSContext* fpucontext) {
     nofralloc
     addi    r5, fpucontext, 0
     b       __OSSaveFPUContext
 }
 
-asm void OSSetCurrentContext(register OSContext* context){
+asm void OSSetCurrentContext(__REGISTER OSContext* context){
     nofralloc
 
     addis   r4, r0, OS_CACHED_REGION_PREFIX
@@ -234,7 +234,7 @@ OSContext* OSGetCurrentContext(void) {
 }
 
 #ifdef __GEKKO__
-asm u32 OSSaveContext(register OSContext* context) {
+asm u32 OSSaveContext(__REGISTER OSContext* context) {
     nofralloc
     stmw    r13, context->gpr[13]
     mfspr   r0, GQR1
@@ -270,7 +270,7 @@ asm u32 OSSaveContext(register OSContext* context) {
     blr
 }
 
-asm void OSLoadContext(register OSContext* context) {
+asm void OSLoadContext(__REGISTER OSContext* context) {
     nofralloc
 
     lis      r4,__RAS_OSDisableInterrupts_begin@ha
@@ -347,7 +347,7 @@ asm u32 OSGetStackPointer() {
     blr
 }
 
-asm u32 OSSwitchStack(register u32 newsp) {
+asm u32 OSSwitchStack(__REGISTER u32 newsp) {
     nofralloc
     mr  r5, r1
     mr  r1, newsp
@@ -355,7 +355,7 @@ asm u32 OSSwitchStack(register u32 newsp) {
     blr
 }
 
-asm int OSSwitchFiber(register u32 pc, register u32 newsp) {
+asm int OSSwitchFiber(__REGISTER u32 pc, __REGISTER u32 newsp) {
     nofralloc
     mflr    r0
     mr      r5, r1
@@ -372,7 +372,7 @@ asm int OSSwitchFiber(register u32 pc, register u32 newsp) {
 }
 #endif
 
-void OSClearContext(register OSContext* context) {
+void OSClearContext(__REGISTER OSContext* context) {
     context->mode = 0;
     context->state = 0;
     if (context == __OSFPUContext)
@@ -380,7 +380,7 @@ void OSClearContext(register OSContext* context) {
 }
 
 #ifdef __GEKKO__
-asm void OSInitContext(register OSContext* context, register u32 pc, register u32 newsp) {
+asm void OSInitContext(__REGISTER OSContext* context, __REGISTER u32 pc, __REGISTER u32 newsp) {
     nofralloc
 
     stw     pc,  OS_CONTEXT_SRR0(context)
@@ -491,7 +491,7 @@ void OSDumpContext(OSContext* context) {
 }
 
 #ifdef __GEKKO__
-static asm void OSSwitchFPUContext(register __OSException exception, register OSContext* context) {
+static asm void OSSwitchFPUContext(__REGISTER __OSException exception, __REGISTER OSContext* context) {
     nofralloc
     mfmsr   r5
     ori     r5, r5, 0x2000
@@ -538,7 +538,7 @@ void __OSContextInit(void) {
 }
 
 #ifdef __GEKKO__
-asm void OSFillFPUContext(register OSContext* context) {
+asm void OSFillFPUContext(__REGISTER OSContext* context) {
     nofralloc
     mfmsr   r5
     ori     r5, r5, 0x2000

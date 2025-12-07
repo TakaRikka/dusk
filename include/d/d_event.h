@@ -128,7 +128,7 @@ public:
     u8 getMode() const { return mMode; }
 
     void onHindFlag(u16 flag) { mHindFlag |= flag; }
-    #ifdef DEBUG
+    #if DEBUG
     void offHindFlag(u16 flag) { mHindFlag &= (u16)~flag; }
     #else
     void offHindFlag(u16 flag) { mHindFlag &= ~flag; }

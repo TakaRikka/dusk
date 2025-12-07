@@ -22,7 +22,7 @@ s32 fpcLf_Draw(leafdraw_class* i_leaf) {
 }
 
 s32 fpcLf_Execute(leafdraw_class* i_leaf) {
-#ifdef DEBUG
+#if DEBUG
     if (fpcBs_Is_JustOfType(g_fpcLf_type, i_leaf->base.subtype) == 0) {
         if (g_fpcDbSv_service[12] != NULL) {
             g_fpcDbSv_service[12](i_leaf);

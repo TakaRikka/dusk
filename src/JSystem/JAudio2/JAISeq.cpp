@@ -97,15 +97,14 @@ void JAISeq::releaseChildTracks_() {
 }
 
 bool JAISeq::prepare_getSeqData_() {
-    JAISoundID id(soundID_);  // fakematch, should be using getID but it messes up stack
-    if (id.isAnonymous()) {
+    if (getID().isAnonymous()) {
         return true;
     }
 
     JAISeqDataMgr* seqDataMgr = inner_.seqMgr->getSeqDataMgr();
     JUT_ASSERT(162, seqDataMgr);
 
-    switch (seqDataMgr->getSeqData(id, &inner_.mSeqData)) {
+    switch (seqDataMgr->getSeqData(getID(), &inner_.mSeqData)) {
     case 0:
         OS_REPORT("Failed In Loading Sequence Data:SEQ(0x%08x)\n", getID());
         status_.state.unk = 2;

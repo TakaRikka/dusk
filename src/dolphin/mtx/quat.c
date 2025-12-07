@@ -13,8 +13,8 @@ void C_QUATAdd(const Quaternion* p, const Quaternion* q, Quaternion* r) {
     r->w = p->w + q->w;
 }
 
-void PSQUATAdd(const register Quaternion* p, const register Quaternion* q, register Quaternion* r) {
-    register f32 pxy, qxy, rxy, pzw, qzw, rzw;
+void PSQUATAdd(const __REGISTER Quaternion* p, const __REGISTER Quaternion* q, __REGISTER Quaternion* r) {
+    __REGISTER f32 pxy, qxy, rxy, pzw, qzw, rzw;
 
     asm {
         psq_l pxy, 0(p), 0, 0
@@ -39,8 +39,8 @@ void C_QUATSubtract(const Quaternion* p, const Quaternion* q, Quaternion* r) {
     r->w = p->w - q->w;
 }
 
-void PSQUATSubtract(const register Quaternion* p, const register Quaternion* q, register Quaternion* r) {
-    register f32 pxy, qxy, rxy, pzw, qzw, rzw;
+void PSQUATSubtract(const __REGISTER Quaternion* p, const __REGISTER Quaternion* q, __REGISTER Quaternion* r) {
+    __REGISTER f32 pxy, qxy, rxy, pzw, qzw, rzw;
 
     asm {
         psq_l pxy, 0(p), 0, 0
@@ -78,12 +78,12 @@ void C_QUATMultiply(const Quaternion* p, const Quaternion* q, Quaternion* pq) {
     }
 }
 
-void PSQUATMultiply(const register Quaternion* p, const register Quaternion* q, register Quaternion* pq) {
-    register f32 pxy, pzw;
-    register f32 qxy, qzw;
-    register f32 pnxy, pnzw, pnxny, pnznw;
-    register f32 rxy, rzw;
-    register f32 sxy, szw;
+void PSQUATMultiply(const __REGISTER Quaternion* p, const __REGISTER Quaternion* q, __REGISTER Quaternion* pq) {
+    __REGISTER f32 pxy, pzw;
+    __REGISTER f32 qxy, qzw;
+    __REGISTER f32 pnxy, pnzw, pnxny, pnznw;
+    __REGISTER f32 rxy, rzw;
+    __REGISTER f32 sxy, szw;
     
     asm {
         psq_l pxy, 0x0(p), 0, 0
@@ -121,8 +121,8 @@ void C_QUATScale(const Quaternion* q, Quaternion* r, f32 scale) {
     r->w = q->w * scale;
 }
 
-void PSQUATScale(const register Quaternion* q, register Quaternion* r, register f32 scale) {
-    register f32 rxy, rzw;
+void PSQUATScale(const __REGISTER Quaternion* q, __REGISTER Quaternion* r, __REGISTER f32 scale) {
+    __REGISTER f32 rxy, rzw;
     
     asm {
         psq_l rxy, 0(q), 0, 0
@@ -141,8 +141,8 @@ f32 C_QUATDotProduct(const Quaternion* p, const Quaternion* q) {
     return (q->x * p->x) + (q->y * p->y) + (q->z * p->z) + (q->w * p->w);
 }
 
-f32 PSQUATDotProduct(const register Quaternion* p, const register Quaternion* q) {
-    register f32 pxy, pzw, qxy, qzw, dp;
+f32 PSQUATDotProduct(const __REGISTER Quaternion* p, const __REGISTER Quaternion* q) {
+    __REGISTER f32 pxy, pzw, qxy, qzw, dp;
 
     asm {
         psq_l pxy, 0(p), 0, 0
@@ -175,16 +175,16 @@ void C_QUATNormalize(const Quaternion* src, Quaternion* unit) {
     }
 }
 
-void PSQUATNormalize(const register Quaternion* src, register Quaternion* unit) {
-    register f32 sxy, szw;
-    register f32 mag, rsqmag;
-    register f32 diff;
-    register f32 c_zero;
-    register f32 nwork0, nwork1;
+void PSQUATNormalize(const __REGISTER Quaternion* src, __REGISTER Quaternion* unit) {
+    __REGISTER f32 sxy, szw;
+    __REGISTER f32 mag, rsqmag;
+    __REGISTER f32 diff;
+    __REGISTER f32 c_zero;
+    __REGISTER f32 nwork0, nwork1;
 
-    register f32 epsilon = 0.00001f;
-    register f32 c_half = 0.5f;
-    register f32 c_three = 3.0f;
+    __REGISTER f32 epsilon = 0.00001f;
+    __REGISTER f32 c_half = 0.5f;
+    __REGISTER f32 c_three = 3.0f;
 
     asm {
         psq_l sxy, 0x0(src), 0, 0
@@ -224,15 +224,15 @@ void C_QUATInverse(const Quaternion* src, Quaternion* inv) {
     inv->w =  src->w * norminv;
 }
 
-void PSQUATInverse(const register Quaternion* src, register Quaternion* inv) {
-    register f32 sxy, szw;
-    register f32 izz, iww;
-    register f32 mag, nmag;
-    register f32 norminv, nninv;
-    register f32 nwork0;
-    register f32 c_two;
-    register f32 c_zero;
-    register f32 c_one = 1.0f;
+void PSQUATInverse(const __REGISTER Quaternion* src, __REGISTER Quaternion* inv) {
+    __REGISTER f32 sxy, szw;
+    __REGISTER f32 izz, iww;
+    __REGISTER f32 mag, nmag;
+    __REGISTER f32 norminv, nninv;
+    __REGISTER f32 nwork0;
+    __REGISTER f32 c_two;
+    __REGISTER f32 c_zero;
+    __REGISTER f32 c_one = 1.0f;
 
     asm {
         psq_l sxy, 0x0(src), 0, 0
@@ -305,7 +305,7 @@ void C_QUATLogN(const Quaternion* q, Quaternion* r) {
 
     scale = (q->x * q->x) + (q->y * q->y) + (q->z * q->z);
 
-#ifdef DEBUG
+#if DEBUG
     mag = scale + (q->z * q->z);
     if (mag < 1.0f - 0.00001f || mag > 1.0f + 0.00001f || mag > 1.00001f) {}
 #endif

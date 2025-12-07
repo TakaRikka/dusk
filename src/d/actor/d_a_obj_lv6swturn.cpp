@@ -99,7 +99,7 @@ int daObjLv6SwTurn_c::CreateHeap() {
     return TRUE;
 }
 
-#ifdef DEBUG
+#if DEBUG
 static daObjLv6SwTurn_HIO_c l_HIO;
 #endif
 

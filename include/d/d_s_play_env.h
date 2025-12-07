@@ -8,13 +8,13 @@ public:
     virtual ~dScnPly_env_otherHIO_c() {}
     void genMessage(JORMContext*);
 
-    #ifdef DEBUG
+    #if DEBUG
     /* 0x04 */ s8 field_0x04;
     #endif
     
     /* 0x08 */ f32 mShadowDensity;
 
-    #ifdef DEBUG
+    #if DEBUG
     /* 0x0C */ f32 mCullFarValue;
     /* 0x10 */ f32 mRailSize;
     /* 0x14 */ s16 mRailColorR;
@@ -28,7 +28,7 @@ public:
     /* 0x45 */ u8 field_0x45;
     /* 0x46 */ u8 mDisplayTransparentCyl;
 
-    #ifdef DEBUG
+    #if DEBUG
     /* 0x47 */ u8 mDisplayShadows;
     /* 0x48 */ u8 mDisplayShadowImage;
     /* 0x49 */ u8 mDisplayShadowPoly;

@@ -335,11 +335,7 @@ int daNpc_grS_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
 
 void daNpc_grS_c::setParam() {
     actionFunc oldAction = mpNextActionFn;
-#if DEBUG
-    u32 flags = 0x42;
-#else
-    u32 flags = 0xa;
-#endif
+    u32 flags = fopAc_AttnFlag_TALK_e | fopAc_AttnFlag_SPEAK_e;
 
     selectAction();
 

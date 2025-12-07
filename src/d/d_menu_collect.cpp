@@ -2579,8 +2579,8 @@ void dMenu_Collect3D_c::toItem3Dpos(f32 param_0, f32 param_1, f32 param_2, cXyz*
 #pragma pop
 
 void dMenu_Collect3D_c::calcViewMtx(Mtx param_0) {
-    auto pos1 = cXyz(0.0f, 0.0f, -1000.0f);
-    auto pos2 = cXyz(0.0f, 1.0f, 0.0f);
+    cXyz pos1(0.0f, 0.0f, -1000.0f);
+    cXyz pos2(0.0f, 1.0f, 0.0f);
     mDoMtx_lookAt(param_0, &pos1, &cXyz::Zero, &pos2, 0);
 }
 

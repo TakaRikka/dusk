@@ -34,7 +34,7 @@ dMsgScrnItem_c::dMsgScrnItem_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     int iVar6 = dMsgObject_getMessageID();
     bool bVar5 = false;
 
-    #ifdef DEBUG
+    #if DEBUG
     if (dMsgObject_getMessageID() >= 0x10cc && dMsgObject_getMessageID() < 0x11cc) {
         mItemIndex = dMsgObject_getMessageID() - 0x10cc;
         bVar5 = true;
@@ -122,7 +122,7 @@ dMsgScrnItem_c::dMsgScrnItem_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
         dMeter2Info_setItemColor(
             mItemIndex, mpItemPane[0], mpItemPane[1],
             mpItemPane[2], NULL);
-        #ifdef DEBUG
+        #if DEBUG
         if (mItemIndex == 0x81 || mItemIndex == 0x23) {
             field_0x19e = true;
         }

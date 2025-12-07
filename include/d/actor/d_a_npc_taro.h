@@ -55,7 +55,7 @@ class daNpc_Taro_Param_c {
     };
 
 class daNpc_Taro_HIO_c 
-#ifdef DEBUG
+#if DEBUG
 : public mDoHIO_entry_c 
 #endif
 {

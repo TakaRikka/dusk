@@ -3,7 +3,7 @@
 
 #include "__ax.h"
 
-#ifdef DEBUG
+#if DEBUG
 const char* __AXVersion = "<< Dolphin SDK - AX\tdebug build: Apr  5 2004 03:56:21 (0x2301) >>";
 #else
 const char* __AXVersion = "<< Dolphin SDK - AX\trelease build: Apr  5 2004 04:15:05 (0x2301) >>";
@@ -14,7 +14,7 @@ void AXInit(void) {
 }
 
 void AXInitEx(u32 outputBufferMode) {
-#ifdef DEBUG
+#if DEBUG
     OSReport("Initializing AX\n");
 #endif
     OSRegisterVersion(__AXVersion);
@@ -28,7 +28,7 @@ void AXInitEx(u32 outputBufferMode) {
 }
 
 void AXQuit(void) {
-#ifdef DEBUG
+#if DEBUG
     OSReport("Shutting down AX\n");
 #endif
     __AXAllocQuit();

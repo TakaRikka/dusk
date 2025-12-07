@@ -331,7 +331,7 @@ u32 OSGetProgressiveMode(void) {
 }
 
 void OSSetProgressiveMode(u32 on) {
-#ifndef DEBUG
+#if !DEBUG
     u32 padding[1];
 #endif
     OSSram* sram;
@@ -439,7 +439,7 @@ u32 OSGetEuRgb60Mode(void) {
 }
 
 void OSSetEuRgb60Mode(u32 on) {
-#ifndef DEBUG
+#if !DEBUG
     u32 padding[1];
 #endif
     OSSram* sram;
@@ -492,7 +492,7 @@ u16 OSGetGbsMode(void) {
 }
 
 void OSSetGbsMode(u16 mode) {
-#ifndef DEBUG
+#if !DEBUG
     u32 padding[1];
 #endif
     OSSramEx* sram;

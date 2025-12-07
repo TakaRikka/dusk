@@ -28,7 +28,7 @@ static const char* l_arcName = "K_Wheel01";
 // Likely to have been a macro; matches for loop at beginning of create1st for both debug and retail, despite retail only calling getArg4567()
 #define CHECK_KLIFT_EXISTS(kLiftNum) (!((1 << kLiftNum) & getArg4567()))
 
-#ifdef DEBUG
+#if DEBUG
 static daObjKWheel01_HIO_c l_HIO;
 
 daObjKWheel01_HIO_c::daObjKWheel01_HIO_c() {
@@ -94,7 +94,7 @@ cPhs__Step daObjKWheel01_c::create1st() {
         }
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     // "Pulley(Lv3)"
     l_HIO.entryHIO("滑車(Lv3)");
     #endif
@@ -163,7 +163,7 @@ int daObjKWheel01_c::Create() {
     fopAcM_SetMtx(this, mTransformMtx);
 
     if(getSwNo() != 0xFF && fopAcM_isSwitch(this, getSwNo())) {
-        #ifdef DEBUG
+        #if DEBUG
         if(getArg0()) {
             mYAngularVelocity = l_HIO.mTargetYAngularSpeed;
         }
@@ -208,7 +208,7 @@ int daObjKWheel01_c::Execute(Mtx** i_mtx) {
             shape_angle.y = current.angle.y;
 
             if(current.angle.y != old.angle.y) {
-                #ifdef DEBUG
+                #if DEBUG
                 mYAngularVelocity = l_HIO.mTargetYAngularSpeed;
                 #else
                 mYAngularVelocity = 64;
@@ -230,7 +230,7 @@ int daObjKWheel01_c::Execute(Mtx** i_mtx) {
         }
 
         if(mYAngularVelocity != 0) {
-            #ifdef DEBUG
+            #if DEBUG
             if(mYAngularVelocity > 0) {
                 if(mYAngularVelocity < l_HIO.mTargetYAngularSpeed)
                     mYAngularVelocity += l_HIO.mYAngularAcceleration;
@@ -299,7 +299,7 @@ int daObjKWheel01_c::Draw() {
 int daObjKWheel01_c::Delete() {
     dComIfG_resDelete(this, l_arcName);
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO();
     #endif
 
@@ -312,7 +312,7 @@ int daObjKWheel01_c::Delete() {
 }
 
 bool daObjKWheel01_c::eventStart() {
-    #ifdef DEBUG
+    #if DEBUG
     if(getArg0())
         mYAngularVelocity = l_HIO.mYAngularAcceleration;
     else

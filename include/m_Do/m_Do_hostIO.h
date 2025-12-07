@@ -26,7 +26,7 @@ public:
 
 class mDoHIO_entry_c : public JORReflexible {
 public:
-#ifdef DEBUG
+#if DEBUG
     mDoHIO_entry_c();
     void entryHIO(const char* i_name);
     void removeHIO();
@@ -73,7 +73,7 @@ void mDoHIO_updateChild(s8 i_no);
 void mDoHIO_deleteChild(s8 i_no);
 s8 mDoHIO_createChild(const char*, JORReflexible*);
 
-#ifdef DEBUG
+#if DEBUG
 #define mDoHIO_CREATE_CHILD(i_name, i_node) mDoHIO_createChild(i_name, i_node)
 #define mDoHIO_DELETE_CHILD(i_no)           mDoHIO_deleteChild(i_no)
 #else

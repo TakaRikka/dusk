@@ -1004,7 +1004,7 @@ struct wcs_data {
 
 static wcs_data l_wcsbuf[84];
 
-#ifdef DEBUG
+#if DEBUG
 static u8 lit_5300[8] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
@@ -1168,7 +1168,7 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
                                             sp_e8 = &l_wcsbuf[wcsIndex_e4];
                                             wcsIndex_e4++;
                                         } else {
-                                            #ifdef DEBUG
+                                            #if DEBUG
                                             lit_5300[0] = 1;
                                             #endif
                                         }
@@ -1182,7 +1182,7 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
                                                 // local_118->_0 = l_wcsbuf[local_11c]._0;
                                                 wcsIndex_e4++;
                                             } else {
-                                                #ifdef DEBUG
+                                                #if DEBUG
                                                 lit_5300[0] = 1;
                                                 #endif
                                             }
@@ -1197,7 +1197,7 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
                                                         sp_a8->next = &l_wcsbuf[wcsIndex_e4];
                                                         wcsIndex_e4++;
                                                     } else {
-                                                        #ifdef DEBUG
+                                                        #if DEBUG
                                                         lit_5300[0] = 1;
                                                         #endif
                                                     }
@@ -1217,7 +1217,7 @@ bool dBgWKCol::WallCorrectSort(dBgS_Acch* pwi) {
                                                         sp_a8->next = &l_wcsbuf[wcsIndex_e4];
                                                         wcsIndex_e4++;
                                                     } else {
-                                                        #ifdef DEBUG
+                                                        #if DEBUG
                                                         lit_5300[0] = 1;
                                                         #endif
                                                     }

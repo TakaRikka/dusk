@@ -44,7 +44,7 @@ static dCcD_SrcCyl l_ccDCyl = {
     } // mCyl
 };
 
-#ifdef DEBUG
+#if DEBUG
 void daObj_Mie_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genSlider("注目オフセット  ", &mParams.focus_offset, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
                    0x200, 0x18);

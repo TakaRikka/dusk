@@ -33,7 +33,7 @@ private:
     int mLine;
 };
 
-#ifdef DEBUG
+#if DEBUG
 
 #define JGADGET_ASSERTWARN(line, COND) \
     ((COND)) || (JGadget_outMessage(JGadget_outMessage::warning, __FILE__, line) << #COND, false);

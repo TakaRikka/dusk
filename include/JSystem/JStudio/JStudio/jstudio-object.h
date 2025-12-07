@@ -47,7 +47,7 @@ struct TVariableValue {
     }
 
      void setValue_none() {
-#ifdef DEBUG
+#if DEBUG
         field_0xc.fv = NULL;
 #endif
         field_0x8 = NULL;

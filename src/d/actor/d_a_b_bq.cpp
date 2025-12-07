@@ -564,7 +564,7 @@ static void b_bq_wait(b_bq_class* i_this) {
             i_this->mSound.startCreatureVoice(Z2SE_EN_BQ_V_WAIT, -1);
         }
 
-#ifdef DEBUG
+#if DEBUG
         if (mDoCPd_c::getTrigRight(PAD_1)) {
             i_this->mAction = ACTION_END;
             i_this->mMode = 0;

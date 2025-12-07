@@ -2581,7 +2581,7 @@ static void action(e_fm_class* i_this) {
 
     i_this->mAngleToPlayer = fopAcM_searchPlayerAngleY(actor);
 
-#ifdef DEBUG
+#if DEBUG
     if (mDoCPd_c::getTrigStart(PAD_2) && i_this->mAction != ACTION_DOWN) {
         i_this->mAction = ACTION_DOWN;
         i_this->mMode = 0;

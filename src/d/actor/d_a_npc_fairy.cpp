@@ -1239,7 +1239,6 @@ int daNpc_Fairy_c::talk(int param_1) {
     return 1;
 }
 
-#if DEBUG
 int daNpc_Fairy_c::test(int param_1) {
     int rv = 0;
 
@@ -1263,7 +1262,6 @@ int daNpc_Fairy_c::test(int param_1) {
 
     return rv;
 }
-#endif
 
 void daNpc_Fairy_c::AppearDemoCall() {
     if (mType == TYPE_50F) {

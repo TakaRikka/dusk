@@ -416,7 +416,7 @@ static void core_start(b_ob_class* i_this) {
         }
         break;
     case 1:
-#ifdef DEBUG
+#if DEBUG
         if (mDoCPd_c::getTrigY(PAD_2)) {
             i_this->mMode = 2;
             i_this->mDemoAction = 30;

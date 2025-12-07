@@ -14,7 +14,7 @@
  *
  */
 class daObjDamCps_c : public fopAc_ac_c {
-#ifdef DEBUG
+#if DEBUG
 public:
     daObjDamCps_c() {};
     void initBaseMtx();

@@ -68,7 +68,7 @@ public:
     daTogeTrap_HIO_c();
     ~daTogeTrap_HIO_c() {}
 
-    #ifdef DEBUG
+    #if DEBUG
     void genMessage(JORMContext* ctx) {
         // Speed
         ctx->genLabel("--- 速 出現時---", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);

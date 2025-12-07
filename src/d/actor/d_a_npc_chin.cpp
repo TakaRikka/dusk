@@ -284,7 +284,7 @@ int daNpcChin_c::Create() {
         mpHIO = &l_HIO;
         // "W Hook Shot Shop"
         mpHIO->entryHIO("Wフックショット屋");
-#endif
+        #endif
 
         mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
 

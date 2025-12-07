@@ -773,10 +773,7 @@ static GXFogAdjTable S_xfog_table_data[2] = {
 };
 
 void dKyd_xfog_table_set(u8 tblIdx) {
-    #if DEBUG
-    if (g_kankyoHIO.light.field_0x5 != 1) 
-    #endif
-    {
+    if (!(DEBUG && g_kankyoHIO.light.field_0x5 == 1)) {
         for (int i = 0; i < 10; i++) {
             g_env_light.mXFogTbl.r[i] = S_xfog_table_data[tblIdx].r[i];
         }

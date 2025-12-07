@@ -6,7 +6,7 @@
 static u32 Dev;
 #define HIO_DEV Dev
 
-#ifdef DEBUG
+#if DEBUG
 const char* __HIOVersion = "<< Dolphin SDK - HIO\tdebug build: Apr  5 2004 03:57:05 (0x2301) >>";
 #else
 const char* __HIOVersion = "<< Dolphin SDK - HIO\trelease build: Apr  5 2004 04:15:47 (0x2301) >>";
@@ -14,7 +14,7 @@ const char* __HIOVersion = "<< Dolphin SDK - HIO\trelease build: Apr  5 2004 04:
 
 static char __HIODigest1[71] = "\"HIO library - Copyright (C) 2000-2002 Nintendo. All rights reserved.\"";
 
-#ifdef DEBUG
+#if DEBUG
 static char __HIODigest2[34] = "\"HIO built: Apr  5 2004 03:57:05\"";
 #else
 static char __HIODigest2[34] = "\"HIO built: Apr  5 2004 04:15:47\"";

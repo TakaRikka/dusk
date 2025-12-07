@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/J3DAssert.h"
 #include "JSystem/JUtility/JUTTexture.h"
+#include "global.h"
 #include <stdint.h>
 
 /**
@@ -79,6 +80,14 @@ struct J3DTexCoordInfo {
     /* 0x1 */ u8 mTexGenSrc;
     /* 0x2 */ u8 mTexGenMtx;
     /* 0x3 */ u8 pad;
+
+    J3DTexCoordInfo& operator=(const J3DTexCoordInfo& other) {
+        mTexGenType = other.mTexGenType;
+        mTexGenSrc = other.mTexGenSrc;
+        mTexGenMtx = other.mTexGenMtx;
+        pad = other.pad;
+        return *this;
+    }
 };
 
 extern J3DTexCoordInfo const j3dDefaultTexCoordInfo[8];
@@ -108,7 +117,7 @@ struct J3DTexCoord : public J3DTexCoordInfo {
     void setTexMtxReg(u16 reg) { mTexMtxReg = reg; }
     J3DTexCoord& operator=(const J3DTexCoord& other) {
         // Fake match (__memcpy or = doesn't match)
-        *(uintptr_t*)this = *(uintptr_t*)&other;
+        *(u32*)this = *(u32*)&other;
         return *this;
     }
 

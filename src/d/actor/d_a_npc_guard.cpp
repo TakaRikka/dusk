@@ -528,7 +528,7 @@ static int daNpcGuard_Execute(void* i_this) {
 }
 
 void daNpcGuard_c::setCollision() {
-#ifdef DEBUG
+#if DEBUG
     mCyl.SetR(Cd2_HIO_cylR(m_type));
     mCyl.SetH(Cd2_HIO_cylH(m_type));
 #endif

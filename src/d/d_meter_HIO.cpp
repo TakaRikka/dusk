@@ -801,7 +801,7 @@ void dMeter_drawLightDropHIO_c::genMessage(JORMContext* mctx) {
 #endif
 
 dMeter_drawHIO_c::dMeter_drawHIO_c() {
-    #ifdef DEBUG
+    #if DEBUG
     field_0x8_debug = 0;
     #endif
     mLifeTopPosX = 40.0f;

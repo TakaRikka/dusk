@@ -198,7 +198,7 @@ public:
     JAISoundHandle* getMainBgmHandle() { return &mMainBgmHandle; }
     JAISoundHandle* getSubBgmHandle() { return &mSubBgmHandle; }
 
-    #ifdef DEBUG
+    #if DEBUG
     f32 field_0x00_debug;
     u8 field_0x04_debug;
     #endif

@@ -266,7 +266,7 @@ inline JKRHeap* JKRGetRootHeap2() {
 }
 #endif
 
-#ifdef DEBUG
+#if DEBUG
 inline void JKRSetDebugFillNotuse(u8 status) { data_804508B1 = status; }
 inline void JKRSetDebugFillNew(u8 status) { data_804508B2 = status; }
 inline void JKRSetDebugFillDelete(u8 status) { data_804508B3 = status; }

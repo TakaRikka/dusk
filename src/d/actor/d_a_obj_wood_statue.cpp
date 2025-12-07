@@ -12,7 +12,7 @@
 #include "d/d_item_data.h"
 #include "d/d_s_play.h"
 
-#ifdef DEBUG
+#if DEBUG
 
 class daObjWStatue_HIO_c : public fOpAcm_HIO_entry_c {
 public:
@@ -125,7 +125,7 @@ int daObjWStatue_c::Create() {
     eventInfo.setArchiveName(l_arcName);
     mEventIdx = (s16)dComIfGp_getEventManager().getEventIdx(this, l_eventName, 0xff);
 
-    #ifdef DEBUG
+    #if DEBUG
     if (mEventIdx == -1) {
         // Wooden statue: Event acquisition failure
         OS_REPORT_ERROR("木彫りの像：イベント取得失敗\n");
@@ -159,7 +159,7 @@ int daObjWStatue_c::create() {
             return cPhs_ERROR_e;
         }
 
-        #ifdef DEBUG
+        #if DEBUG
         // Wooden statue
         l_HIO.entryHIO("木彫りの像");
         #endif
@@ -279,7 +279,7 @@ int daObjWStatue_c::actionSwOnWait() {
     switch (field_0x93a) {
     case 0:
         if (iVar2 == NULL) {
-            #ifdef DEBUG
+            #if DEBUG
             mRespawnTimer = l_HIO.mRespawnTimer;
             #else
             mRespawnTimer = 30;
@@ -438,7 +438,7 @@ void daObjWStatue_c::setListStart() {}
 int daObjWStatue_c::_delete() {
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO(this);
     #endif
 

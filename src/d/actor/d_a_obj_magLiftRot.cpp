@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_magLiftRot.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#ifdef DEBUG
+#if DEBUG
 #include "m_Do/m_Do_hostIO.h"
 #endif
 #include "d/d_bg_w.h"

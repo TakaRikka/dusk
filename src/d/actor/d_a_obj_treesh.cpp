@@ -88,7 +88,7 @@ int daTreeSh_c::create1st() {
             return cPhs_ERROR_e;
         }
 
-#ifdef DEBUG
+#if DEBUG
         l_HIO.entryHIO("針葉樹");
 #endif
     }
@@ -128,7 +128,7 @@ int daTreeSh_c::Draw() {
 
 int daTreeSh_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
-#ifdef DEBUG
+#if DEBUG
     l_HIO.removeHIO();
 #endif
     return 1;

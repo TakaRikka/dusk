@@ -45,7 +45,7 @@ public:
     inline float getStartRate(cXyz* param_1);
 
 
-    #ifdef DEBUG
+    #if DEBUG
     const daObjLndRope_Hio_c* attr() const {
         return &M_Hio;
     };

@@ -414,7 +414,7 @@ BOOL DVDLowRequestAudioStatus(u32 subcmd, DVDLowCallback callback) {
 }
 
 BOOL DVDLowAudioBufferConfig(BOOL enable, u32 size, DVDLowCallback callback) {
-#ifdef DEBUG
+#if DEBUG
     u32 bufSize;
     u32 trigger;
 #endif
@@ -422,7 +422,7 @@ BOOL DVDLowAudioBufferConfig(BOOL enable, u32 size, DVDLowCallback callback) {
 	Callback = callback;
 	StopAtNextInt = FALSE;
 
-#ifdef DEBUG
+#if DEBUG
     bufSize = size & 0xF;
     trigger = (size >> 4) & 0xF;
     ASSERTLINE(1242, bufSize < 16);

@@ -100,7 +100,7 @@ BOOL fpcCtRq_Do(create_request* i_request) {
     }
     case cPhs_UNK3_e:
     case cPhs_ERROR_e:
-#ifdef DEBUG
+#if DEBUG
         if (g_fpcDbSv_service[2] != NULL) {
             g_fpcDbSv_service[2](i_request->process);
         }
@@ -112,7 +112,7 @@ BOOL fpcCtRq_Do(create_request* i_request) {
 }
 
 int fpcCtRq_Handler() {
-#ifdef DEBUG
+#if DEBUG
     if (g_fpcDbSv_service[3] != NULL) {
         g_fpcDbSv_service[3](&g_fpcCtTg_Queue.mSize);
     }

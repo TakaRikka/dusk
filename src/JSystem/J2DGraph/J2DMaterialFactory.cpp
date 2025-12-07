@@ -396,8 +396,3 @@ u8 J2DMaterialFactory::newDither(int param_0) const {
     }
     return 0;
 }
-
-J2DTevStage::J2DTevStage(J2DTevStageInfo const& param_0) {
-    setTevStageInfo(param_0);
-    setTevSwapModeInfo(j2dDefaultTevSwapMode);
-}

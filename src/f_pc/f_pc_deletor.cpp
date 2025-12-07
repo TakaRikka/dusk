@@ -34,7 +34,7 @@ s32 fpcDt_deleteMethod(base_process_class* i_proc) {
 }
 
 void fpcDt_Handler() {
-#ifdef DEBUG
+#if DEBUG
     if (g_fpcDbSv_service[6] != NULL) {
         g_fpcDbSv_service[6](&g_fpcDtTg_Queue.mSize);
     }
@@ -105,7 +105,7 @@ s32 fpcDt_Delete(void* i_proc) {
     base_process_class* proc = (base_process_class*)i_proc;
     
     if (proc != NULL) {
-#ifdef DEBUG
+#if DEBUG
         if (!fpcBs_Is_JustOfType(g_fpcBs_type, proc->type)) {
             if (g_fpcDbSv_service[12] != NULL) {
                 g_fpcDbSv_service[12](proc);
@@ -121,7 +121,7 @@ s32 fpcDt_Delete(void* i_proc) {
             return 0;
 
         int ret = fpcDt_ToDeleteQ(proc);
-#ifdef DEBUG
+#if DEBUG
         if (ret == 0) {
             if (g_fpcDbSv_service[5] != NULL) {
                 g_fpcDbSv_service[5](proc);

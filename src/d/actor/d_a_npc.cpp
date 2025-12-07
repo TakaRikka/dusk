@@ -13,7 +13,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-#ifdef DEBUG
+#if DEBUG
 void daNpcT_cmnListenPropertyEvent(char* param_0, int* param_1, daNpcT_HIOParam* param_2) {
     sprintf(&param_0[*param_1], "%.3ff,\t//  注目オフセット\n", param_2->attention_offset);
     *param_1 = strlen(param_0);

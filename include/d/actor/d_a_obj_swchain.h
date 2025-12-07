@@ -117,7 +117,7 @@ private:
     /* 0xA9C */ u8 field_0xa9c;
     /* 0xA9D */ u8 field_0xa9d;
     /* 0xA9E */ u8 field_0xa9e;
-#ifdef DEBUG
+#if DEBUG
     /* 0xAA0 */ cXyz field_0xac0;
 #endif
 };

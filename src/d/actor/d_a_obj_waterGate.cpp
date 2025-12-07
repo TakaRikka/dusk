@@ -23,7 +23,7 @@ daWtGate_HIO_c::daWtGate_HIO_c() {
     field_0x9 = 4;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daWtGate_HIO_c::genMessage(JORMContext* ctx) {
     // "Maximum speed"
     ctx->genSlider("最大速度", &mMaxSpeed, 0.1, 500.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
@@ -82,7 +82,7 @@ cPhs__Step daWtGate_c::create() {
 
 
         // "Sluice gate(Lv3)"
-        #ifdef DEBUG
+        #if DEBUG
         l_HIO.entryHIO("水門(Lv3)");
         #endif
     }
@@ -180,7 +180,7 @@ int daWtGate_c::Draw() {
 int daWtGate_c::Delete() {
     dComIfG_resDelete(&mPhase, "S_Zsuimon");
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO();
     #endif
 

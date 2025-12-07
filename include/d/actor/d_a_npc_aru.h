@@ -131,9 +131,7 @@ public:
     int bullRunning(void*);
     int skipFence(void*);
     int talk(void*);
-    #ifdef DEBUG
     int test(void*);
-    #endif
     daNpc_Aru_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,

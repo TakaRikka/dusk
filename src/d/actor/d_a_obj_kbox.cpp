@@ -15,7 +15,7 @@ daObj_Kbox_HIO_c::daObj_Kbox_HIO_c() {
     mWidth = 2.0f;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daObj_Kbox_HIO_c::genMessage(JORMContext* ctx) {
     // Skull fish wooden box
     ctx->genLabel("　スカル魚木箱　", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);

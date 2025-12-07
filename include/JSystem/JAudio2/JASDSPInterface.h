@@ -119,7 +119,7 @@ namespace JASDsp {
     extern FxBuf* FX_BUF;
     extern f32 sDSPVolume;
 
-    #ifdef DEBUG
+    #if DEBUG
     extern s32 dspMutex;
     #endif
 };

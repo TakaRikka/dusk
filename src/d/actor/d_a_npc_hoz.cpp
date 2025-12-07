@@ -396,11 +396,14 @@ int daNpc_Hoz_c::Draw() {
         modelData->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    #if DEBUG
-    return draw(chkAction(&daNpc_Hoz_c::test), FALSE, daNpc_Hoz_Param_c::m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE, FALSE);
-    #else
-    return draw(FALSE, FALSE, daNpc_Hoz_Param_c::m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE, FALSE);
-    #endif
+    return draw(
+#if DEBUG
+        chkAction(&daNpc_Hoz_c::test),
+#else
+        FALSE,
+#endif
+        FALSE, daNpc_Hoz_Param_c::m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE, FALSE
+    );
 }
 
 int daNpc_Hoz_c::createHeapCallBack(fopAc_ac_c* actor) {
@@ -822,6 +825,10 @@ void daNpc_Hoz_c::evtOrder() {
 
 BOOL daNpc_Hoz_c::drawDbgInfo() {
     return false;
+}
+
+int daNpc_Hoz_c::test(void* i_this) {
+    // DEBUG NONMATCHING
 }
 
 int daNpc_Hoz_c::selectAction() {

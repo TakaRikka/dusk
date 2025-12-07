@@ -64,7 +64,7 @@ enum fopAc_Cull_e {
     fopAc_CULLBOX_11_e,
     fopAc_CULLBOX_12_e,
     fopAc_CULLBOX_13_e,
-#ifdef DEBUG
+#if DEBUG
     fopAc_CULLBOX_14_e,
 #endif
     fopAc_CULLBOX_CUSTOM_e,
@@ -76,7 +76,7 @@ enum fopAc_Cull_e {
     fopAc_CULLSPHERE_5_e,
     fopAc_CULLSPHERE_6_e,
     fopAc_CULLSPHERE_7_e,
-#ifdef DEBUG
+#if DEBUG
     fopAc_CULLSPHERE_8_e,
 #endif
     fopAc_CULLSPHERE_CUSTOM_e,

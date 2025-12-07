@@ -1090,7 +1090,7 @@ void daNpc_Kolin_c::changeBck(int* param_1, int* param_2) {
 int daNpc_Kolin_c::selectAction() {
     mNextAction = NULL;
 
-#ifdef DEBUG
+#if DEBUG
     if (daNpc_Kolin_Param_c::m.common.debug_mode_ON) {
         mNextAction = &daNpc_Kolin_c::test;
         return 1;

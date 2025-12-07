@@ -1,7 +1,7 @@
 #include <dolphin.h>
 #include <dolphin/mcc.h>
 
-#ifdef DEBUG
+#if DEBUG
 const char* __MCCVersion = "<< Dolphin SDK - MCC\tdebug build: Apr  5 2004 03:57:07 (0x2301) >>";
 #else
 const char* __MCCVersion = "<< Dolphin SDK - MCC\trelease build: Apr  5 2004 04:15:49 (0x2301) >>";
@@ -303,7 +303,7 @@ static int AsyncResourceIsBusy(void) {
 static int LoadChannelInfo(MCC_ChannelInfo* info) {
     volatile int result = 0;
     u8 count;
-#ifndef DEBUG
+#if !DEBUG
     int unused; // this is fake, but i cant seem to find whats messing with the stack.
 #endif
 
@@ -453,7 +453,7 @@ static int NotifyCompulsorily(MCC_CHANNEL chID, u32 notify, u32 timeout) {
     volatile u32 tickStart;
     volatile u32 tickCur;
     volatile u32 tickSec;
-#ifndef DEBUG
+#if !DEBUG
     int unused; // fake but blah
 #endif
 
@@ -500,7 +500,7 @@ static int NotifyInitDone(void) {
 }
 
 static int NotifyChannelEvent(MCC_CHANNEL chID, u32 notify) {
-#ifndef DEBUG
+#if !DEBUG
     int unused[2]; // fake but blah
 #endif
 
@@ -539,7 +539,7 @@ static void MailboxCheck(void) {
     u8 chID;
     u32 value;
     BOOL bDoCall;
-#ifndef DEBUG
+#if !DEBUG
     int unused[3]; // fake but blah
 #endif
 
@@ -643,7 +643,7 @@ static void MCCRxCallback(void) {
 static int mccInitializeCheck(u8 timeout) {
     int dmyFlag;
     int i;
-#ifndef DEBUG
+#if !DEBUG
     int unused[3]; // fake but blah
 #endif
 
@@ -699,7 +699,7 @@ int MCCInit(MCC_EXI exiChannel, u8 timeout, MCC_CBSysEvent callbackSysEvent) {
     u32 mailbox;
     u32 status;
     int i;
-#ifndef DEBUG
+#if !DEBUG
     int unused[3]; // fake but blah
 #endif
 
@@ -796,7 +796,7 @@ int MCCEnumDevices(MCC_CBEnumDevices callbackEnumDevices) {
 }
 
 u8 MCCGetFreeBlocks(MCC_MODE mode) {
-#ifndef DEBUG
+#if !DEBUG
     int unused[3]; // fake but blah
 #endif
 
@@ -824,7 +824,7 @@ u8 MCCGetLastError(void) {
 }
 
 int MCCGetChannelInfo(MCC_CHANNEL chID, MCC_Info* info) {
-#ifndef DEBUG
+#if !DEBUG
     int unused[3]; // fake but blah
 #endif
 
@@ -852,7 +852,7 @@ int MCCGetChannelInfo(MCC_CHANNEL chID, MCC_Info* info) {
 
 int MCCGetConnectionStatus(MCC_CHANNEL chID, MCC_CONNECT* connect) {
     MCC_Info info;
-#ifndef DEBUG
+#if !DEBUG
     int unused[2]; // fake but blah
 #endif
 
@@ -886,7 +886,7 @@ int MCCGetConnectionStatus(MCC_CHANNEL chID, MCC_CONNECT* connect) {
 
 int MCCNotify(MCC_CHANNEL chID, u32 notify) {
     MCC_CONNECT connect;
-#ifndef DEBUG
+#if !DEBUG
     int unused[3]; // fake but blah
 #endif
 
@@ -916,7 +916,7 @@ int MCCNotify(MCC_CHANNEL chID, u32 notify) {
 
 u32 MCCSetChannelEventMask(MCC_CHANNEL chID, u32 event) {
     u32 oldMask;
-#ifndef DEBUG
+#if !DEBUG
     int unused[2]; // fake but blah
 #endif
 
@@ -942,11 +942,11 @@ u32 MCCSetChannelEventMask(MCC_CHANNEL chID, u32 event) {
 int MCCOpen(MCC_CHANNEL chID, u8 blockSize, MCC_CBEvent callbackEvent) {
     u8 connectSide;
     u8 blockIndex;
-#ifndef DEBUG
+#if !DEBUG
     int unused2[2];
 #endif
     u8 freeBlocks;
-#ifndef DEBUG
+#if !DEBUG
     int unused[6]; // fake but blah
 #endif
 
@@ -1038,7 +1038,7 @@ exit:;
 
 int MCCClose(MCC_CHANNEL chID) {
     u8 connectSide;
-#ifndef DEBUG
+#if !DEBUG
     int unused[4]; // fake but blah
 #endif
 
@@ -1093,7 +1093,7 @@ exit:;
 }
 
 int MCCLock(MCC_CHANNEL chID) {
-#ifndef DEBUG
+#if !DEBUG
     int unused[7]; // fake but blah
 #endif
 
@@ -1146,7 +1146,7 @@ exit:;
 }
 
 int MCCUnlock(MCC_CHANNEL chID) {
-#ifndef DEBUG
+#if !DEBUG
     int unused[7]; // fake but blah
 #endif
 
@@ -1199,7 +1199,7 @@ exit:
 }
 
 int MCCRead(MCC_CHANNEL chID, u32 offset, void* data, s32 size, MCC_SYNC_STATE async) {
-#ifndef DEBUG
+#if !DEBUG
     int unused[11]; // fake but blah
 #endif
 
@@ -1285,7 +1285,7 @@ exit:;
 }
 
 int MCCWrite(MCC_CHANNEL chID, u32 offset, void* data, s32 size, MCC_SYNC_STATE async) {
-#ifndef DEBUG
+#if !DEBUG
     int unused[11]; // fake but blah
 #endif
     mccDebugPrint("MCCWrite\n");
@@ -1379,7 +1379,7 @@ int MCCCheckAsyncDone() {
     u16 stat;
     u16 mode;
     u8 chID;
-#ifndef DEBUG
+#if !DEBUG
     int unused[5]; // fake but blah
 #endif
 

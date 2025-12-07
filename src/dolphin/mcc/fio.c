@@ -1,7 +1,7 @@
 #include <dolphin.h>
 #include <dolphin/mcc.h>
 
-#ifdef DEBUG
+#if DEBUG
 const char* __FIOVersion = "<< Dolphin SDK - FIO\tdebug build: Apr  5 2004 03:57:07 (0x2301) >>";
 #else
 const char* __FIOVersion = "<< Dolphin SDK - FIO\trelease build: Apr  5 2004 04:15:50 (0x2301) >>";
@@ -1205,7 +1205,7 @@ exit:;
 }
 
 static int fioPacketResultWrite(void* buffer, u32 dataSize) {
-    register int nResult = 0;
+    __REGISTER int nResult = 0;
     MCC_CHANNEL nChID;
     u8 nChannelBlocks = 0;
     u32 dataBlockSize;

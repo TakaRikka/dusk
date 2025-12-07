@@ -524,7 +524,7 @@ void daObjKAM_c::Z_BufferChk() {
     } else {
         cameraHeight = 0.0f;
     }
-#ifdef DEBUG
+#if DEBUG
 #define Z_BUFFERCHK_X_MAX FB_WIDTH
 #define Z_BUFFERCHK_Y_MAX FB_HEIGHT
 #else
@@ -779,7 +779,7 @@ int daObjKAM_c::create() {
             mDraw = true;
         }
 
-#ifdef DEBUG
+#if DEBUG
 #define DAOBJKAM_C_CREATE_DIST_INDEX fopAc_attn_ETC_e
 #else
 #define DAOBJKAM_C_CREATE_DIST_INDEX fopAc_attn_CARRY_e

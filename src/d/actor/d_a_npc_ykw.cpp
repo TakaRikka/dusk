@@ -452,11 +452,14 @@ int daNpc_ykW_c::Draw() {
         modelData->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
+    result = draw(
 #if DEBUG
-    result = draw(chkAction(NULL), 0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
+        chkAction(NULL),
 #else
-    result = draw(FALSE, 0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
+        FALSE,
 #endif
+        0, mRealShadowSize, NULL, 100.0f, 0, 0, 0
+    );
 
     if (field_0x1069 != 0) {
         fopAc_ac_c* actor = mActorMngrs[3].getActorP();
@@ -2982,7 +2985,6 @@ int daNpc_ykW_c::talk(void* param_0) {
     return 0;
 }
 
-#if DEBUG
 int daNpc_ykW_c::test(void* param_0) {
     int retval = 0;
 
@@ -3008,7 +3010,6 @@ int daNpc_ykW_c::test(void* param_0) {
 
     return retval;
 }
-#endif
 
 
 static int daNpc_ykW_Create(void* i_this) {

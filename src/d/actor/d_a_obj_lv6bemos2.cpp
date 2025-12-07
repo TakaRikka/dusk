@@ -201,7 +201,7 @@ int daObjLv6Bm_c::Create() {
         }
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     if (mEyeMaterial == NULL) {
         OS_REPORT("Lv6ビーモス：目のマテリアル<%s>がありません\n", l_eye_matName); // Lv6 Beamos: Eye material <%s> is not available.
         return 0;
@@ -248,7 +248,7 @@ int daObjLv6Bm_c::CreateHeap() {
         return 0;
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, BRK_BM6_TURN);
     JUT_ASSERT(644, pbrk != NULL);
     #endif
@@ -275,7 +275,7 @@ int daObjLv6Bm_c::CreateHeap() {
     }
     mpBtkAnm->setFrame(mpBtkAnm->getEndFrame());
 
-    #ifdef DEBUG
+    #if DEBUG
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, BTK_EF_BIMOL6_ON);
     JUT_ASSERT(693, pbtk != NULL);
     #endif

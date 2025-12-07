@@ -353,7 +353,7 @@ void daSCannon_c::middleExe() {
 void daSCannon_c::orderEvtInit() {
     eventInfo.setArchiveName(l_arcName_Zev);
     mEvtIdx = dComIfGp_getEventManager().getEventIdx(this, l_eventName[mDemoType], 0xFF);
-#ifdef DEBUG
+#if DEBUG
     if (mEvtIdx == -1) {
         // "××××××××××××× Sky Cannon d_a_obj_scannon.cpp: Failed to get event\n"
         OS_REPORT("×××××××××××××天空砲台 d_a_obj_scannon.cpp：イベント取得失敗\n");
@@ -603,7 +603,7 @@ void daSCannon_c::demoExeFire() {
 }
 
 void daSCannon_c::demoInitFinish() {
-#ifdef DEBUG
+#if DEBUG
     if (dComIfG_play_c::getLayerNo(0) == 3 || dComIfG_play_c::getLayerNo(0) == 10) {
         J3DJoint* joint_p = mpModels[mIsRepaired]->getModelData()->getJointNodePointer(mHeadJointNo);
         if (joint_p == NULL) {

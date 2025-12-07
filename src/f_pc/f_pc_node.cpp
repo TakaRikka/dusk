@@ -29,7 +29,7 @@ s32 fpcNd_Execute(process_node_class* i_procNode) {
     s32 ret = 0;
     layer_class* save_layer = fpcLy_CurrentLayer();
 
-#ifdef DEBUG
+#if DEBUG
     if (fpcBs_Is_JustOfType(g_fpcNd_type, i_procNode->base.subtype) == 0) {
         if (g_fpcDbSv_service[11] != NULL) {
             g_fpcDbSv_service[11](i_procNode);

@@ -88,7 +88,7 @@ public:
     static const vib_pattern CQ_patt[VIBMODE_Q_MAX];
 
 private:
-#ifdef DEBUG
+#if DEBUG
     /* 0x00 */ dVibTest_c mVibTest;
 #endif
 

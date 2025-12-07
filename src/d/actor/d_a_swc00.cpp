@@ -55,7 +55,7 @@ static BOOL hitCheck(daSwc00_c* i_swc) {
     return FALSE;
 }
 
-#ifdef DEBUG
+#if DEBUG
 
 int daSwc00_Draw(daSwc00_c* i_this) {
     fopAc_ac_c* a_this = i_this;
@@ -329,7 +329,7 @@ static actor_method_class l_daSwc00_Method = {
     (process_method_func)daSwc00_Delete,
     (process_method_func)daSwc00_Execute,
     (process_method_func)daSwc00_IsDelete,
-    #ifdef DEBUG
+    #if DEBUG
     (process_method_func)daSwc00_Draw,
     #else
     NULL

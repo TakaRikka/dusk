@@ -73,7 +73,7 @@ s32 JKRSolidHeap::adjustSize(void) {
 }
 
 void* JKRSolidHeap::do_alloc(u32 size, int alignment) {
-#ifdef DEBUG
+#if DEBUG
     // TODO(Julgodis): JUTAssertion::setConfirmMessage
     /* if (alignment != 0) {
         int u = abs(alignment);
@@ -179,7 +179,7 @@ void JKRSolidHeap::do_freeTail(void) {
 }
 
 void JKRSolidHeap::do_fillFreeArea() {
-#ifdef DEBUG
+#if DEBUG
     // fillMemory(mSolidHead, mEnd - mSolidHead, (uint)DAT_8074a8ba);
 #endif
 }

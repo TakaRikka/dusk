@@ -87,7 +87,7 @@ public:
 
     /* 0x0568 */ cXyz field_0x568;
     /* 0x0574 */ csXyz field_0x574;
-    #ifdef DEBUG
+    #if DEBUG
     cXyz debug_field_0x570;
     csXyz debug_field_0x57c;
     #endif

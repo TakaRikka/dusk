@@ -1847,7 +1847,7 @@ void daNpcMoiR_c::setParam() {
         }
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
     mAcchCir.SetWallR(mpHIO->m.common.width);
     mAcchCir.SetWallH(mpHIO->m.common.knee_length);

@@ -254,11 +254,14 @@ int daNpc_zanB_c::Draw() {
         mdlData_p->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    #if DEBUG
-    return draw(chkAction(&daNpc_zanB_c::test), FALSE, mRealShadowSize, NULL, 0.0f, TRUE, FALSE, FALSE);
-    #else
-    return draw(FALSE, FALSE, mRealShadowSize, NULL, 0.0f, TRUE, FALSE, FALSE);
-    #endif
+    return draw(
+#if DEBUG
+        chkAction(&daNpc_zanB_c::test),
+#else
+        FALSE,
+#endif
+        FALSE, mRealShadowSize, NULL, 0.0f, TRUE, FALSE, FALSE
+    );
 }
 
 int daNpc_zanB_c::createHeapCallBack(fopAc_ac_c* i_this) {

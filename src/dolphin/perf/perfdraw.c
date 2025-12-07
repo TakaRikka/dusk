@@ -107,7 +107,7 @@ static f32 GPPts[4] = {
 void (*GameDrawInit)();
 Mtx mID;
 
-#ifndef DEBUG
+#if !DEBUG
 inline f32 HEIGHT(u32 a, f32 f) {
     return 140.0f * ((f32) a / ((f32) MaxBusTransactions * f));
 }

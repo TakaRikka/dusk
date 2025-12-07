@@ -156,7 +156,7 @@ struct __copy_backward<T, true>
 {
 	static T* copy_backward(T* first, T* last, T* result)
 	{
-#ifdef DEBUG
+#if DEBUG
 		size_t n = static_cast<size_t>(last - first);
 		result -= n;
 		memmove(result, first, n*sizeof(T));

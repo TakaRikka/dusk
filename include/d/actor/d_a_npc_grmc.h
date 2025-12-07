@@ -13,13 +13,19 @@
  *
 */
 
+#if DEBUG
+#define NPC_GRMC_HIO_CLASS daNpc_grMC_HIO_c
+#else
+#define NPC_GRMC_HIO_CLASS daNpc_grMC_Param_c
+#endif
+
 struct daNpc_grMC_HIOParam {
     /* 0x0 */ daNpcT_HIOParam common;
 };
 
 class daNpc_grMC_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 0x8 */ daNpc_grMC_HIOParam param;
+    /* 0x8 */ daNpc_grMC_HIOParam m;
 };
 
 class daNpc_grMC_Param_c {
@@ -92,9 +98,7 @@ public:
     int tend(void*);
     int talk(void*);
     int shop(void*);
-    #ifdef DEBUG
     int test(void*);
-    #endif
     daNpc_grMC_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,
@@ -118,10 +122,7 @@ public:
     static cutFunc mCutList[1];
 
 private:
-    #ifdef DEBUG
-    /* 0xFCC */ daNpc_grMC_HIO_c* mHIO;
-    #endif
-    /* 0x0F7C */ u8 field_0xf7c[0xf80 - 0xf7c];
+    /* 0x0F7C */ NPC_GRMC_HIO_CLASS* mHIO;
     /* 0x0F80 */ dCcD_Cyl mCyl;
     /* 0x10BC */ u8 mType;
     /* 0x10C0 */ actionFunc mNextAction;

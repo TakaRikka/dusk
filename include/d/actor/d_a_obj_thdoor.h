@@ -67,7 +67,7 @@ public:
 
 STATIC_ASSERT(sizeof(daObjThDoor_c) == 0x8c0);
 
-#ifdef DEBUG
+#if DEBUG
 class daObjThDoor_HIO_c : public mDoHIO_entry_c {
 public:
     daObjThDoor_HIO_c();

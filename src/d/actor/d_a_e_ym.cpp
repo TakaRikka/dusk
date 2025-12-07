@@ -929,9 +929,7 @@ void daE_YM_c::executeDown() {
     } else {
         gravity = 0.0f;
     }
-#if DEBUG
-    OSReport("YM executeDown %d %f %f \n", gnd_cross, current.pos.z, mMode);
-#endif
+    OS_REPORT("YM executeDown %d %f %f \n", gnd_cross, current.pos.z, mMode);
     field_0x6cf = 0;
     switch (mMode) {
         case 0:
@@ -3355,10 +3353,8 @@ int daE_YM_c::create() {
     field_0x6a3 = (current.angle.x & 0xff00) >> 8;
 
     if (mSwitchBit != 0xFF && dComIfGs_isSwitch(mSwitchBit, fopAcM_GetRoomNo(this))) {
-#ifdef DEBUG
         // E_YM won't reset because it's already been defeated.
-        OSReport("E_YM やられ後なので再セットしません\n");
-#endif
+        OS_REPORT("E_YM やられ後なので再セットしません\n");
         return cPhs_ERROR_e;
     }
 

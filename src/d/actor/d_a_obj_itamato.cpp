@@ -50,7 +50,7 @@ daObj_ItaMato_HIOParam const daObj_ItaMato_Param_c::m = {
     20.0f,
 };
 
-#ifdef DEBUG
+#if DEBUG
 daObj_ItaMato_HIO_c::daObj_ItaMato_HIO_c() {
     mAttr = daObj_ItaMato_Param_c::m;
 }
@@ -117,7 +117,7 @@ static char* l_resName = "H_ItaMato";
 daObj_ItaMato_c::~daObj_ItaMato_c() {
     OS_REPORT("|%06d:%x|daObj_ItaMato_c -> デストラクト\n", g_Counter.mCounter0, this);
 
-    #ifdef DEBUG
+    #if DEBUG
     if (mHIO != NULL) {
         mHIO->removeHIO();
     }
@@ -152,7 +152,7 @@ cPhs__Step daObj_ItaMato_c::create() {
         fopAcM_SetMtx(this, mpModels[health]->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -50.0f, -200.0f, 200.0f, 200.0f, 200.0f);
 
-        #ifdef DEBUG
+        #if DEBUG
         mHIO = &l_HIO;
         mHIO->entryHIO("板的");
         #endif

@@ -1,4 +1,3 @@
-#ifdef DEBUG
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_event_debug.h"
@@ -447,5 +446,3 @@ char* dEvDb_flag_base_c::searchDirNameReg(int bit) {
 
     return NULL;
 }
-
-#endif

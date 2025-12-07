@@ -1858,7 +1858,7 @@ void daObj_GrA_c::calcCatchPos(f32 param_1, int param_2) {
             field_0x91a.y = shape_angle.y;
         }
     } else {
-        #ifdef DEBUG
+        #if DEBUG
         dDbVw_Report(100, 100, "pos.y = %f", sp9c.y - player->current.pos.y);
         #endif
 

@@ -22,7 +22,7 @@ class daNpc_Saru_Param_c : public JORReflexible {
 public:
     virtual ~daNpc_Saru_Param_c() {}
 
-#ifdef DEBUG
+#if DEBUG
     void genMessage(JORMContext*);
 #endif
 
@@ -129,7 +129,7 @@ public:
     static char* mCutNameList[4];
     static cutFunc mCutList[4];
 private:
-    #ifdef DEBUG
+    #if DEBUG
     /* 0xE90 */ daNpc_Saru_HIO_c* field_0xe90;
     #endif
     /* 0xE40 */ u8 field_0xe40[0xe44 - 0xe40];

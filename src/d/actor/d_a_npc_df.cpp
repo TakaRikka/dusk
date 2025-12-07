@@ -11,6 +11,12 @@
 #include "d/actor/d_a_npc_henna.h"
 #include "Z2AudioLib/Z2Instances.h"
 
+#if DEBUG
+#define NPC_DF_HEAP_SIZE 0x4B000
+#else
+#define NPC_DF_HEAP_SIZE 0x3B90
+#endif
+
 static int daNpc_Df_Draw(npc_df_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     df_s* df_p = i_this->mDfs;
@@ -369,13 +375,7 @@ static cPhs__Step daNpc_Df_Create(fopAc_ac_c* i_this) {
 
         OS_REPORT("NPC_DF//////////////NPC_DF SET 1 !!\n");
 
-        if (
-            #if DEBUG
-            !fopAcM_entrySolidHeap(i_this, useHeapInit, 0x4B000)
-            #else
-            !fopAcM_entrySolidHeap(i_this, useHeapInit, 0x3B90)
-            #endif
-        ) {
+        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, NPC_DF_HEAP_SIZE)) {
             OS_REPORT("//////////////NPC_DF SET NON !!\n");
             return cPhs_ERROR_e;
         }

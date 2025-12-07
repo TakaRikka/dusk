@@ -176,7 +176,7 @@ const static f32 value0_6 = 0.6f;
 const static f32 value0_3 = 0.3f;
 const static double i2fMagic = 4503601774854144.0;
 
-asm static void HandleReverbDpl2(register s32* sptr, register AXFX_REVHI_WORK_DPL2* rv, register s32 k) {
+asm static void HandleReverbDpl2(__REGISTER s32* sptr, __REGISTER AXFX_REVHI_WORK_DPL2* rv, __REGISTER s32 k) {
     nofralloc
 	stwu r1, -0xc0(r1)
 	stmw r14, 0x8(r1)

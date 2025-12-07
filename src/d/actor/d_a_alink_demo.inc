@@ -2145,7 +2145,7 @@ int daAlink_c::procCoGetItem() {
     }
 
     daItemBase_c* item_partner_p = (daItemBase_c*)fopAcM_getItemEventPartner(this);
-#ifdef DEBUG
+#if DEBUG
     if (item_partner_p != NULL && fopAcM_GetName(item_partner_p) != PROC_ITEM &&
         fopAcM_GetName(item_partner_p) != PROC_Demo_Item)
     {
@@ -3603,7 +3603,7 @@ int daAlink_c::procNotUseItem() {
 
     if (mProcVar3.field_0x300e != 0) {
         daItemBase_c* item_partner_p = (daItemBase_c*)fopAcM_getItemEventPartner(this);
-#ifdef DEBUG
+#if DEBUG
         if (item_partner_p != NULL && fopAcM_GetName(item_partner_p) != PROC_ITEM &&
             fopAcM_GetName(item_partner_p) != PROC_Demo_Item)
         {

@@ -121,7 +121,7 @@ do { \
     VERIF_RAS_REG(value); \
 } while (0)
 
-#ifdef DEBUG
+#if DEBUG
 #define GX_WRITE_SOME_REG2(a, b, c, addr) \
 do { \
     long regAddr; \
@@ -142,7 +142,7 @@ do { \
 } while (0)
 #endif
 
-#ifdef DEBUG
+#if DEBUG
 #define GX_WRITE_SOME_REG3(a, b, c, addr) \
 do { \
     long regAddr; \

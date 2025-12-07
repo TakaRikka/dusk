@@ -107,7 +107,7 @@ void daObjL4DigSand_c::mode_init_dig() {
     if (gnd_y != -G_CM3D_F_INF) {
         mGroundY = gnd_y;
     } else {
-#ifdef DEBUG
+#if DEBUG
         // "No BG below dig-sand!"
         OS_REPORT_ERROR("掘れる砂の下にＢＧがありません！");
         fopAcM_delete(this);

@@ -81,7 +81,7 @@ OSTime __OSTimeToSystemTime(OSTime time) {
 }
 
 #ifdef __GEKKO__
-asm void __OSSetTick(register OSTick newTicks) {
+asm void __OSSetTick(__REGISTER OSTick newTicks) {
     nofralloc
     mttbl newTicks
     blr

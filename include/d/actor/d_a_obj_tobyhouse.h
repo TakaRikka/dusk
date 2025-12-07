@@ -79,7 +79,7 @@ public:
 
 STATIC_ASSERT(sizeof(daObjTobyHouse_c) == 0x600);
 
-#ifdef DEBUG
+#if DEBUG
 
 class daObjTobyHouse_HIO_c : public mDoHIO_entry_c {
 public:

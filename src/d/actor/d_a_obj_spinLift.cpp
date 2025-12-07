@@ -12,7 +12,7 @@ public:
     daSpinLift_HIO_c();
     ~daSpinLift_HIO_c() {};
 
-#ifdef DEBUG
+#if DEBUG
     void genMessage(JORMContext*);
 #endif
 
@@ -29,7 +29,7 @@ daSpinLift_HIO_c::daSpinLift_HIO_c() {
     mVibration = 4;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daSpinLift_HIO_c::genMessage(JORMContext* ctx) {
     // === Ascent ===
     ctx->genLabel("\n=== 上昇 ===", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
@@ -106,7 +106,7 @@ int daSpinLift_c::create() {
         }
 
         setBaseMtx();
-#ifdef DEBUG
+#if DEBUG
         // Spin Lift
         l_HIO.entryHIO("スピンリフト");
 #endif
@@ -247,7 +247,7 @@ int daSpinLift_c::Draw() {
 
 int daSpinLift_c::Delete() {
     dComIfG_resDelete(&mPhase, l_resNameIdx[mModelType]);
-#ifdef DEBUG
+#if DEBUG
     l_HIO.removeHIO();
 #endif
     return 1;

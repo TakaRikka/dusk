@@ -418,9 +418,10 @@ int daNpc_Toby_c::Draw() {
 #if DEBUG
         chkAction(&daNpc_Toby_c::test),
 #else
-        0,
+        FALSE,
 #endif
-        0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
+        FALSE, mRealShadowSize, NULL, 100.0f, 0, 0, 0
+    );
 }
 
 int daNpc_Toby_c::createHeapCallBack(fopAc_ac_c* i_this) {
@@ -2182,11 +2183,9 @@ int daNpc_Toby_c::talk(void*) {
     return 0;
 }
 
-#if DEBUG
 int daNpc_Toby_c::test(void* param_0) {
     // TODO
 }
-#endif
 
 static int daNpc_Toby_Create(void* i_this) {
     return static_cast<daNpc_Toby_c*>(i_this)->create();

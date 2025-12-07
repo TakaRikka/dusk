@@ -5,7 +5,7 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JMath/JMath.h"
 
-void __MTGQR7(register u32 v) {
+void __MTGQR7(__REGISTER u32 v) {
 #ifdef __MWERKS__
     // clang-format off
 	asm {
@@ -23,8 +23,8 @@ void J3DGQRSetup7(u32 r0, u32 r1, u32 r2, u32 r3) {
 
 // this uses a non-standard sqrtf, not sure why or how its supposed to be setup
 #if !PLATFORM_SHIELD
-inline f32 J3D_sqrtf(register f32 x) {
-	register f32 recip;
+inline f32 J3D_sqrtf(__REGISTER f32 x) {
+	__REGISTER f32 recip;
 
 	if (x > 0.0f) {
 #ifdef __MWERKS__ // clang-format off
@@ -38,7 +38,7 @@ inline f32 J3D_sqrtf(register f32 x) {
 #define J3D_sqrtf sqrtf
 #endif
 
-void J3DCalcBBoardMtx(register Mtx mtx) {
+void J3DCalcBBoardMtx(__REGISTER Mtx mtx) {
     f32 x = (mtx[0][0] * mtx[0][0]) + (mtx[1][0] * mtx[1][0]) + (mtx[2][0] * mtx[2][0]);
     f32 y = (mtx[0][1] * mtx[0][1]) + (mtx[1][1] * mtx[1][1]) + (mtx[2][1] * mtx[2][1]);
     f32 z = (mtx[0][2] * mtx[0][2]) + (mtx[1][2] * mtx[1][2]) + (mtx[2][2] * mtx[2][2]);
@@ -53,7 +53,7 @@ void J3DCalcBBoardMtx(register Mtx mtx) {
         z = J3D_sqrtf(z);
     }
 
-    register f32 zero = 0.0f;
+    __REGISTER f32 zero = 0.0f;
 // zero out gaps of zeroes
 #ifdef __MWERKS__ // clang-format off
     asm {
@@ -101,7 +101,7 @@ void J3DCalcYBBoardMtx(Mtx mtx) {
 	mtx[2][2] = vec.z * z;
 }
 
-asm void J3DPSCalcInverseTranspose(register Mtx src, register Mtx33 dst) {
+asm void J3DPSCalcInverseTranspose(__REGISTER Mtx src, __REGISTER Mtx33 dst) {
 #ifdef __MWERKS__ // clang-format off
 	psq_l    f0, 0(src), 1, 0
 	psq_l    f1, 4(src), 0, 0
@@ -290,7 +290,7 @@ void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo& srt, Mtx dst) {
 	dst[2][2] = 1.0f;
 }
 
-asm void J3DScaleNrmMtx(register Mtx mtx, const register Vec& scl) {
+asm void J3DScaleNrmMtx(__REGISTER Mtx mtx, const __REGISTER Vec& scl) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc;
 
@@ -326,7 +326,7 @@ asm void J3DScaleNrmMtx(register Mtx mtx, const register Vec& scl) {
 #endif // clang-format on
 }
 
-asm void J3DScaleNrmMtx33(register Mtx33 mtx, const register Vec& scale) {
+asm void J3DScaleNrmMtx33(__REGISTER Mtx33 mtx, const __REGISTER Vec& scale) {
 #ifdef __MWERKS__ // clang-format off
 	psq_l    f0, 0(mtx), 0, 0
 	psq_l    f6, 0(scale), 0, 0
@@ -352,7 +352,7 @@ asm void J3DScaleNrmMtx33(register Mtx33 mtx, const register Vec& scale) {
 #endif // clang-format on
 }
 
-asm void J3DMtxProjConcat(register Mtx mtx1, register Mtx mtx2, register Mtx dst) {
+asm void J3DMtxProjConcat(__REGISTER Mtx mtx1, __REGISTER Mtx mtx2, __REGISTER Mtx dst) {
 #ifdef __MWERKS__ // clang-format off
 	psq_l    f2, 0(mtx1), 0, 0
 	psq_l    f3, 8(mtx1), 0, 0

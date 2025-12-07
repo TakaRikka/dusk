@@ -182,7 +182,6 @@ void Z2SceneMgr::setFadeInStart(u8 fadeType) {
     inGame = true;
 }
 
-// NONMATCHING JSULink<JAIStream>::getNext() inlining
 void Z2SceneMgr::setSceneName(char* spot, s32 room, s32 layer) {
     OS_REPORT("[Z2SceneMgr::setSceneName] spot = %s, room = %d, layer = %d\n", spot, room, layer);
     JAISoundID bgm_id = -1;
@@ -1927,7 +1926,6 @@ void Z2SceneMgr::load2ndDynamicWave() {
     }
 }
 
-// NONMATCHING - extra BGM_ID load
 void Z2SceneMgr::sceneBgmStart() {
     OS_REPORT("[Z2SceneMgr::sceneBgmStart] %08x\n", *(u32*)&BGM_ID);
     inGame = true;

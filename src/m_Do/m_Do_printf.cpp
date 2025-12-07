@@ -19,7 +19,7 @@ u8 __OSReport_System_disable;
 u8 __OSReport_enable;
 
 #ifdef __GEKKO__
-asm void OSSwitchFiberEx(register u32 param_0, register u32 param_1, register u32 param_2, register u32 param_3, register u32 code, register u32 stack) {
+asm void OSSwitchFiberEx(__REGISTER u32 param_0, __REGISTER u32 param_1, __REGISTER u32 param_2, __REGISTER u32 param_3, __REGISTER u32 code, __REGISTER u32 stack) {
     nofralloc
     
     mflr r0

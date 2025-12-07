@@ -313,11 +313,14 @@ int daNpc_Zelda_c::Draw() {
         modelData->getMaterialNodePointer(getEyeballRMaterialNo())->setMaterialAnm(mpMatAnm[1]);
     }
 
+    return draw(
 #if DEBUG
-    return draw(chkAction(NULL), TRUE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
+        chkAction(NULL),
 #else
-    return draw(NULL, TRUE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
+        FALSE,
 #endif
+        TRUE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE
+    );
 }
 
 int daNpc_Zelda_c::createHeapCallBack(fopAc_ac_c* i_this) {

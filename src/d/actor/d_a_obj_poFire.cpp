@@ -45,7 +45,7 @@ daPoFire_HIO_c::daPoFire_HIO_c() {
     mPickupRange = 150.0f;
     mFireWaitTime = 20;
 }
-#ifdef DEBUG
+#if DEBUG
 /* daPoFire_HIO_c::genMessage (JORMContext *) */
 void daPoFire_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genSlider("捕まえ範囲", &mPickupRange, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
@@ -106,7 +106,7 @@ int daPoFire_c::create() {
         init_modeOnFire();
     }
 
-#ifdef DEBUG
+#if DEBUG
     l_HIO.entryHIO("ポウ炎");
 #endif
 
@@ -407,7 +407,7 @@ int daPoFire_c::Draw() {
 int daPoFire_c::Delete() {
     dComIfG_resDelete(&mPhase, "poFire");
 
-#ifdef DEBUG
+#if DEBUG
     l_HIO.removeHIO();
 #endif
 

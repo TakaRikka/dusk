@@ -106,7 +106,7 @@ static const u32 __constants[] = {
 	0x00000000, 0x00000000, 0x41F00000, 0x00000000, 0x41E00000, 0x00000000,
 };
 
-asm u32 __cvt_fp2unsigned(register f64 d)
+asm u32 __cvt_fp2unsigned(__REGISTER f64 d)
 {
 #ifdef __MWERKS__ // clang-format off
 		nofralloc

@@ -18,7 +18,7 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/actor/d_a_movie_player.h"
-#ifdef DEBUG
+#if DEBUG
 #include "d/d_debug_viewer.h"
 #endif
 
@@ -40,7 +40,7 @@ static UnknownLightData l_lightData = {
     0x00000000,
 };
 
-#ifndef DEBUG
+#if !DEBUG
 // TODO: what is this?
 static const u8 lit_3727[0xC] = {};
 #endif
@@ -113,7 +113,7 @@ void daDemo00_c::setBaseMtx() {
 
     if (tevStr.mInitTimer == 1) {
         field_0x574 = shape_angle;
-        #ifdef DEBUG
+        #if DEBUG
         debug_field_0x570 = current.pos;
         debug_field_0x57c = shape_angle;
         #endif
@@ -388,7 +388,7 @@ int daDemo00_c::createHeap() {
                 return 0;
             }
 
-            #ifdef DEBUG
+            #if DEBUG
             mModel.field_0x5d4->getBaseTRMtx()[0][0] = 1.0f;
             #endif
             mModel.field_0x5d4->calc();
@@ -1725,7 +1725,7 @@ int daDemo00_c::draw() {
             }
         }
 
-        #ifdef DEBUG
+        #if DEBUG
         if (field_0x6aa > -1) {
             dDbVw_Report(0x32, 0x91, "DEMOTOOL ERR : Model ga arunoni hisyakai sindo meirei!!!!");
             OSReport_Error("\nDEMOTOOL ERR : Model ga arunoni hisyakai sindo meirei!!!!");
@@ -1754,7 +1754,7 @@ int daDemo00_c::draw() {
                 g_env_light.mDemoAttentionPoint = -1.0f;
             }
 
-            #ifdef DEBUG
+            #if DEBUG
             dDbVw_Report(300, 0x19, "DEMO Depth %f", g_env_light.mDemoAttentionPoint);
             #endif
         } else {
@@ -1769,7 +1769,7 @@ int daDemo00_c::draw() {
             g_env_light.field_0x1278 = 1.0f;
         }
 
-        #ifdef DEBUG
+        #if DEBUG
         dDbVw_Report(10, 0x17C, "\nbloom pat[%d] ratio[%f]", g_env_light.field_0x1278, field_0x6ab);
         #endif
     }

@@ -95,7 +95,7 @@ int daTogeTrap_c::create() {
         init_modeWait();
         setBaseMtx();
 
-        #ifdef DEBUG
+        #if DEBUG
         // Spike traps
         l_HIO.entryHIO("トゲトラップ");
         #endif
@@ -268,7 +268,7 @@ int daTogeTrap_c::Draw() {
 int daTogeTrap_c::Delete() {
     dComIfG_resDelete(&mPhase, "P_Toge");
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO(this);
     #endif
 

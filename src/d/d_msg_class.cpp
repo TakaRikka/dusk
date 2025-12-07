@@ -1971,7 +1971,7 @@ void jmessage_tSequenceProcessor::do_end() {
 
 bool jmessage_tSequenceProcessor::do_isReady() {
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
-    #ifdef DEBUG
+    #if DEBUG
     if (pReference->getRevoMessageID() != 0) {
         return 0;
     }

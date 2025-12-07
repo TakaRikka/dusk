@@ -36,7 +36,7 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_prepare() {
 void JStudio_JStage::TAdaptor_actor::adaptor_do_begin() {
     adaptor_object_begin_();
     const JStage::TActor* pActor = get_pJSG_();
-#ifdef  DEBUG
+#if DEBUG
     { // This block is needed to match the stack in debug
         const JStudio::TObject* pObject = adaptor_getObject();
         JUT_ASSERT(72, pObject!=NULL);

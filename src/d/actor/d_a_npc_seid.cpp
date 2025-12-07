@@ -61,7 +61,7 @@ daNpc_seiD_c::~daNpc_seiD_c() {
         mpMorf[0]->stopZelAnime();
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     if (field_0xe40 != NULL) {
         field_0xe40->removeHIO();
     }
@@ -137,7 +137,7 @@ int daNpc_seiD_c::create() {
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         mSound.init(&current.pos, &eyePos, 3, 1);
 
-#ifdef DEBUG
+#if DEBUG
         //field_0xe40->field_0x8 = &l_HIO;
         field_0xe40->entryHIO("光の精霊ｄ"); // Spirit of Light d
 #endif

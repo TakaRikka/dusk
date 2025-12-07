@@ -1824,7 +1824,6 @@ int daNpc_Bans_c::shop(void* param_1) {
     return 0;
 }
 
-#if DEBUG
 int daNpc_Bans_c::test(void* param_1) {
     int rv = 0;
     
@@ -1848,7 +1847,6 @@ int daNpc_Bans_c::test(void* param_1) {
 
     return rv;
 }
-#endif
 
 static int daNpc_Bans_Create(void* i_this) {
     return static_cast<daNpc_Bans_c*>(i_this)->create();

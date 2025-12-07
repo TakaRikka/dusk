@@ -890,7 +890,7 @@ void daNpcKasiHana_c::setAttnPos() {
     mDoMtx_stack_c::multVecZero(&sp28);
     sp28.y = current.pos.y;
     mCyl.SetC(sp28);
-    #ifdef DEBUG
+    #if DEBUG
     mCyl.SetH(mHIO->m.common.height);
     mCyl.SetR(mHIO->m.common.width);
     #endif

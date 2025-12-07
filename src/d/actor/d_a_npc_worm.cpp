@@ -116,7 +116,7 @@ static void npc_worm_normal(npc_worm_class* i_this) {
             a_this->eventInfo.onCondition(dEvtCnd_40_e);
         }
         
-        #ifndef DEBUG
+        #if !DEBUG
         if (i_this->field_0x5e8[1] == 0) {
             i_this->field_0x5a6 = 2;
             i_this->field_0x5a8 = 0;

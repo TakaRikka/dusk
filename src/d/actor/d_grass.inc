@@ -556,10 +556,10 @@ void dGrass_packet_c::draw() {
             f32 sp58 = 1.0f - temp_f27;
             temp_f27 += 0.5f * sp58;
 
-            J3DLightInfo& sp40 = sp44->mLights[0].getLightInfo();
-            sp98.r = sp40.mColor.r * temp_f27;
-            sp98.g = sp40.mColor.g * temp_f27;
-            sp98.b = sp40.mColor.b * temp_f27;
+            J3DLightInfo* sp40 = sp44->mLights[0].getLightInfo();
+            sp98.r = sp40->mColor.r * temp_f27;
+            sp98.g = sp40->mColor.g * temp_f27;
+            sp98.b = sp40->mColor.b * temp_f27;
             sp98.a = var_f29;
 
             if (memcmp(dComIfGp_getStartStageName(), "D_MN01", 6) == 0) {
@@ -642,13 +642,11 @@ void dGrass_packet_c::draw() {
 
                 GXColor sp38;
 
-#if DEBUG
-                if (g_kankyoHIO.navy.grass_adjust_ON) {
+                if (DEBUG && g_kankyoHIO.navy.grass_adjust_ON) {
                     sp38.r = g_kankyoHIO.navy.grass_ambcol.r * 2;
                     sp38.g = g_kankyoHIO.navy.grass_ambcol.g * 2;
                     sp38.b = g_kankyoHIO.navy.grass_ambcol.b * 2;
                 } else {
-#endif
                     sp38.r = (var_r29->m_addCol & 0x1F) * 2;
                     sp38.g = ((var_r29->m_addCol >> 5) & 0x1F) * 2;
                     sp38.b = ((var_r29->m_addCol >> 0xA) & 0x1F) * 2;
@@ -693,9 +691,7 @@ void dGrass_packet_c::draw() {
                     } else {
                         sp38.b = sp38.b * var_f28;
                     }
-#ifdef DEBUG
                 }
-#endif
 
                 GXSetChanAmbColor(GX_COLOR0A0, sp38);
 

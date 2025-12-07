@@ -347,7 +347,7 @@ void daObjSwpush::Act_c::rideCB(dBgW* i_bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt)
         cXyz spa8;
         int vtxnum = i_this->mpBgW->GetVtxNum();
 
-        #ifdef DEBUG
+        #if DEBUG
         for (int i = 0; i < 4; i++) {
             JUT_ASSERT(859, M_op_vtx[i] < vtxnum);
         }

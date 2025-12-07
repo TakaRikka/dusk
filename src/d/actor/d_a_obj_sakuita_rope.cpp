@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_path.h"
 
-#ifdef DEBUG
+#if DEBUG
 #include "d/d_a_obj.h"
 
 class daObjItaRope_Hio_c : public JORReflexible {
@@ -139,12 +139,12 @@ void Sakuita_c::calcAngle() {
 
 static char* l_arcName = "A_Sakuita";
 
-#ifdef DEBUG
+#if DEBUG
 daObjItaRope_Hio_c M_hio;
 #endif
 
 inline daObjItaRope_c::~daObjItaRope_c() {
-#ifdef DEBUG
+#if DEBUG
     M_hio.dt();
 #endif
     delete [] mRopes;
@@ -207,7 +207,7 @@ void daObjItaRope_c::create_init() {
         pSakuita->create(pPos, sVar12, fopAcM_GetRoomNo(this));
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     M_hio.ct();
     #endif
 }

@@ -53,7 +53,7 @@ daB_BH_HIO_c::daB_BH_HIO_c() {
     down_revive_time = 250;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daB_BH_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genLabel("  ボスデグババ手", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
     ctx->genSlider("本体サイズ", &model_size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
@@ -962,17 +962,12 @@ static void damage_check(b_bh_class* i_this) {
         if (i_this->field_0xa24 != 0) {
             i_this->mCcSph.OffCoSetBit();
 
-            if (fpcM_Search(s_b_sub, i_this)
-#ifdef DEBUG
-                || mDoCPd_c::getTrigA(PAD_3)
-#endif
-               )
-            {
+            if (fpcM_Search(s_b_sub, i_this) || (DEBUG && mDoCPd_c::getTrigA(PAD_3))) {
                 if (i_this->field_0xa25 != 0) {
                     i_this->mAction = ACTION_B_BOMB_EAT;
                     dComIfGs_onOneZoneSwitch(14, -1);
                 } else {
-#ifdef DEBUG
+#if DEBUG
                     if (mDoCPd_c::getTrigA(PAD_3)) {
                         b_bq_class* var_r25 = (b_bq_class*)fopAcM_SearchByID(a_this->parentActorID);
                         var_r25->field_0x6fd = 1;

@@ -83,7 +83,7 @@ struct fopAcM_search_prm {
 struct fOpAcm_HIO_entry_c : public mDoHIO_entry_c {
     virtual ~fOpAcm_HIO_entry_c() {}
 
-    #ifdef DEBUG
+    #if DEBUG
     void removeHIO(const fopAc_ac_c* i_this) { removeHIO(*i_this); }
     void removeHIO(const fopAc_ac_c& i_this) { removeHIO(i_this.base); }
     void removeHIO(const leafdraw_class& i_this) { removeHIO(i_this.base); }
@@ -816,7 +816,7 @@ inline void fopAcM_effSmokeSet2(u32* param_0, u32* param_1, cXyz const* param_2,
 
 inline void fopAcM_setWarningMessage_f(const fopAc_ac_c* i_actor, const char* i_filename,
                                        int i_line, const char* i_msg, ...) {
-#ifdef DEBUG
+#if DEBUG
     /* va_list args;
     va_start(args, i_msg);
 
@@ -834,7 +834,7 @@ void fopAcM_showAssert_f(const fopAc_ac_c*, const char*, int, const char*, ...);
 #define fopAcM_assert(line, actor, COND, msg) \
     (COND) ? (void)0 : (fopAcM_showAssert_f(actor, __FILE__, line, msg));
 
-#ifdef DEBUG
+#if DEBUG
 #define fopAcM_setWarningMessage(i_actor, i_filename, i_line, i_msg)                               \
     fopAcM_setWarningMessage_f(i_actor, i_filename, i_line, i_msg)
 #else

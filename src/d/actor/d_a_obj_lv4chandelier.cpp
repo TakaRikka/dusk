@@ -12,7 +12,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_cc_uty.h"
 
-#ifdef DEBUG
+#if DEBUG
 class daObjLv4Chan_HIO_c : public mDoHIO_entry_c {
 public:
     daObjLv4Chan_HIO_c();
@@ -70,7 +70,7 @@ int daObjLv4Chan_c::create1st() {
             return rv;
         }
 
-        #ifdef DEBUG
+        #if DEBUG
         // “Chandelier (Lv4)”
         l_HIO.entryHIO("シャンデリア(Lv4)");
         #endif

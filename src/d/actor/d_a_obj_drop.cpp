@@ -19,7 +19,7 @@
 #include "d/actor/d_a_e_ymb.h"
 #include "f_op/f_op_camera_mng.h"
 
-#ifdef DEBUG
+#if DEBUG
 daObjDrop_HIO_c l_HIO;
 #endif
 
@@ -215,7 +215,7 @@ int daObjDrop_c::modeNoParent() {
         parentActorID = fopAcM_GetID(pparent);
         setMode(MODE_PARENT_WAIT_e);
     } else {
-#ifdef DEBUG
+#if DEBUG
         if (!l_HIO.field_0x17) {
             // "Drop of Light: Waiting for Shadow Insect Creation! SW=%d\n"
             OS_REPORT("光の雫：闇虫生成待ち！SW=%d\n", getYmSwbit());

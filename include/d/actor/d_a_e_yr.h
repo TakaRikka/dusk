@@ -77,7 +77,7 @@ public:
     /* 0x70C */ dBgS_AcchCir mAcchCir;
     /* 0x74C */ dBgS_ObjAcch mAcch;
     /* 0x924 */ u8 field_0x924;
-#ifndef DEBUG
+#if !DEBUG
     /* 0x928 */ f32 field_0x928;
 #endif
     /* 0x92C */ dCcD_Stts mStts;

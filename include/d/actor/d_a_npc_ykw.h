@@ -75,9 +75,7 @@ public:
     int walk(void*);
     int race(void*);
     int talk(void*);
-#if DEBUG
     int test(void*);
-#endif
     daNpc_ykW_c(const daNpcT_faceMotionAnmData_c * param_0,
                                const daNpcT_motionAnmData_c* param_1,
                                const daNpcT_MotionSeqMngr_c::sequenceStepData_c* param_2,

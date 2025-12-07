@@ -4,24 +4,30 @@
 #include <dolphin/dolphin.h>
 #include <dolphin/gf/GFPixel.h>
 
+#include "JSystem/JHostIO/JORFile.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "SSystem/SComponent/c_math.h"
+#include "c/c_damagereaction.h"
 #include "d/actor/d_a_kytag08.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_gnd_chk.h"
-#include "d/d_debug_viewer.h"
 #include "d/d_debug_pad.h"
+#include "d/d_debug_viewer.h"
+#include "d/d_kankyo_debug.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_static.h"
-#include "d/d_kankyo_debug.h"
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
+#include "f_ap/f_ap_game.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo.h"
-#include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
-#include "c/c_damagereaction.h"
+
+#if DEBUG
+extern "C" int atoi(const char* str);
+extern "C" f32 atof(const char* str);
+#endif
 
 static void GxXFog_set();
 
@@ -517,30 +523,32 @@ void dKy_twi_wolflight_set(int light_id) {
     if (g_kankyoHIO.navy.room_light_type != 0) {
         size = g_kankyoHIO.navy.room_light_type - 1;
     }
-
-    if (!g_kankyoHIO.navy.camera_light_adjust_ON) {
     #endif
 
-    switch (size) {
-    case LIGHT_SIZE_S:
-        kankyo->field_0x0c18[light_id].mPos.y += 1500.0f;
-        break;
-    case LIGHT_SIZE_M:
-        kankyo->field_0x0c18[light_id].mPos.y += 500.0f;
-        break;
-    case LIGHT_SIZE_L:
-        kankyo->field_0x0c18[light_id].mPos.y += 1000.0f;
-        break;
-    case LIGHT_SIZE_LL:
-        kankyo->field_0x0c18[light_id].mPos.y += 1500.0f;
-        break;
-    default:
-        kankyo->field_0x0c18[light_id].mPos.y += 500.0f;
-        break;
-    }
-
     #if DEBUG
-    } else {
+    if (!g_kankyoHIO.navy.camera_light_adjust_ON)
+    #endif
+    {
+        switch (size) {
+        case LIGHT_SIZE_S:
+            kankyo->field_0x0c18[light_id].mPos.y += 1500.0f;
+            break;
+        case LIGHT_SIZE_M:
+            kankyo->field_0x0c18[light_id].mPos.y += 500.0f;
+            break;
+        case LIGHT_SIZE_L:
+            kankyo->field_0x0c18[light_id].mPos.y += 1000.0f;
+            break;
+        case LIGHT_SIZE_LL:
+            kankyo->field_0x0c18[light_id].mPos.y += 1500.0f;
+            break;
+        default:
+            kankyo->field_0x0c18[light_id].mPos.y += 500.0f;
+            break;
+        }
+    }
+    #if DEBUG
+    else {
         kankyo->field_0x0c18[light_id].mPos.y += g_kankyoHIO.navy.camera_light_y_shift;
     }
     #endif
@@ -706,20 +714,20 @@ static s16 kankyo_color_ratio_set(u8 color_a_start, u8 color_a_end, f32 color_ra
 
     s16 a = s16_data_ratio_set(color_a_start, color_a_end, color_ratio);
     s16 b = s16_data_ratio_set(color_b_start, color_b_end, color_ratio);
-    s16 blend_color = s16_data_ratio_set(a, b, blend_ratio);
-    blend_color += add_color;
+    s16 color = s16_data_ratio_set(a, b, blend_ratio);
+    color = color + add_color;
 
-    s16 calc_color = kankyo->now_allcol_ratio * scale * blend_color;
+    color = kankyo->now_allcol_ratio * scale * color;
 
-    if (calc_color < 0) {
-        calc_color = 0;
+    if (color < 0) {
+        color = 0;
     }
 
-    if (calc_color > 255) {
-        calc_color = 255;
+    if (color > 255) {
+        color = 255;
     }
 
-    return calc_color;
+    return color;
 }
 
 static f32 fl_data_ratio_set(f32 start, f32 end, f32 ratio) {
@@ -877,14 +885,13 @@ int dKy_light_influence_id(cXyz position, int param_1) {
     int sp8 = 0;
     int j;
     int var_r25 = -1;
-    int i;
 
     f32 var_f30 = 800.0f;
     if (strcmp(dComIfGp_getStartStageName(), "D_MN09") == 0) {
         var_f30 = 250.0f;
     }
 
-    for (i = 0; i <= param_1; i++) {
+    for (int i = 0; i <= param_1; i++) {
         for (j = 0; j < 100; j++) {
             if (g_env_light.pointlight[j] != NULL && (i == 0 || j != closest_plight_no) &&
                 g_env_light.pointlight[j]->mPow > 0.01f)
@@ -957,9 +964,9 @@ int dKy_eflight_influence_id(cXyz position, int param_1) {
     int var_r27 = -1;
     int var_r26;
     int sp8 = 0;
-    int j, i;
+    int j;
 
-    for (i = 0; i <= param_1; i++) {
+    for (int i = 0; i <= param_1; i++) {
         for (j = 0; j < 5; j++) {
             if (g_env_light.efplight[j] != NULL && (i == 0 || j != var_r28)) {
                 if (var_f31 > position.abs(g_env_light.efplight[j]->mPosition) &&
@@ -1072,10 +1079,8 @@ static void plight_set() {
                 dKy_plight_set(&g_env_light.mLightInfluence[plight_no]);
                 plight_no++;
             } else {
-#ifdef DEBUG
                 // "\nToo many Point Lights set!!!"
-                OSReport_Warning("\nポイントライトマップ配置が多すぎます！！！");
-#endif
+                OS_WARNING("\nポイントライトマップ配置が多すぎます！！！");
             }
         }
     }
@@ -1409,14 +1414,14 @@ static void envcolor_init() {
     g_kankyoHIO.navy.camera_light_col.r = 25;
     g_kankyoHIO.navy.camera_light_col.g = 90;
     g_kankyoHIO.navy.camera_light_col.b = 183;
-    g_kankyoHIO.navy.field_0x2ae = 0xFF;
+    g_kankyoHIO.navy.camera_light_alpha = 0xFF;
     g_kankyoHIO.navy.camera_light_y_shift = 1500.0f;
     g_kankyoHIO.navy.camera_light_power = 1.25f;
     g_kankyoHIO.navy.camera_light_cutoff = 90.0f;
     g_kankyoHIO.navy.camera_light_sp = 2;
     g_kankyoHIO.navy.camera_light_da = 3;
     g_kankyoHIO.navy.room_light_type = 0;
-    g_kankyoHIO.navy.field_0x311 = 0;
+    g_kankyoHIO.navy.use_debug = 0;
     g_kankyoHIO.navy.field_0x312 = 0;
     g_kankyoHIO.navy.field_0x314 = 0.0f;
     g_kankyoHIO.navy.terrain_height_crr = 200.0f;
@@ -1460,10 +1465,7 @@ static void envcolor_init() {
     }
     #endif
 
-    #if DEBUG
-    if (g_env_light.time_change_rate < 1000.0f) 
-    #endif
-    {
+    if (!DEBUG || g_env_light.time_change_rate < 1000.0f) {
         stage_stag_info_class* stageinfo = dComIfGp_getStage()->getStagInfo();
         int stage_time = dStage_stagInfo_GetTimeH(stageinfo);
         if ((s8)stage_time >= 0) {
@@ -1471,14 +1473,11 @@ static void envcolor_init() {
         }
     }
 
-    #if DEBUG
-    if (g_env_light.time_change_rate >= 2000.0f) {
+    if (DEBUG && g_env_light.time_change_rate >= 2000.0f) {
         g_env_light.time_change_rate = 0.03f;
-    } else if (g_env_light.time_change_rate >= 1000.0f) {
+    } else if (DEBUG && g_env_light.time_change_rate >= 1000.0f) {
         g_env_light.time_change_rate = 0.0f;
-    } else
-    #endif
-    {
+    } else {
         g_env_light.time_change_rate = 0.012f;
     }
 
@@ -2252,7 +2251,23 @@ void dKy_calc_color_set(GXColorS10* out_color_p, color_RGB_class* color_a_start_
 }
 
 void dScnKy_env_light_c::setLight() {
+    f32 color_ratio;
+
+    stage_palette_info_class* prev_pal_start_p;
+    stage_palette_info_class* prev_pal_end_p;
+    stage_palette_info_class* next_pal_start_p;
+    stage_palette_info_class* next_pal_end_p;
+
+    stage_vrboxcol_info_class* prev_vrboxcol_start_p;
+    stage_vrboxcol_info_class* prev_vrboxcol_end_p;
+    stage_vrboxcol_info_class* next_vrboxcol_start_p;
+    stage_vrboxcol_info_class* next_vrboxcol_end_p;
+
+    int start_pat_pal_id;
+    int end_pat_pal_id;
     u8* init_timer = &g_env_light.light_init_timer;
+    int i;
+    f32 sp8C;
     camera_class* camera_p = dComIfGp_getCamera(0);
 
     GXColorS10 add_col;
@@ -2297,9 +2312,6 @@ void dScnKy_env_light_c::setLight() {
         u8 next_pal_start_id;
         u8 prev_pal_end_id;
         u8 next_pal_end_id;
-        f32 color_ratio;
-        int start_pat_pal_id;
-        int end_pat_pal_id;
         setLight_palno_get(&g_env_light.PrevCol, &g_env_light.UseCol, &g_env_light.wether_pat0,
                            &g_env_light.wether_pat1, &prev_pal_start_id, &prev_pal_end_id,
                            &next_pal_start_id, &next_pal_end_id, &color_ratio, &start_pat_pal_id,
@@ -2310,17 +2322,17 @@ void dScnKy_env_light_c::setLight() {
             actor_amb_col.g = 0;
             actor_amb_col.b = 0;
 
-            for (int i = 0; i < 4; i++) {
+            for (i = 0; i < 4; i++) {
                 bg_amb_col[i].r = 255;
                 bg_amb_col[i].g = 0;
                 bg_amb_col[i].b = 0;
                 bg_amb_col[i].a = 0;
             }
         } else {
-            stage_palette_info_class* prev_pal_start_p = &g_env_light.stage_palette_info[prev_pal_start_id];
-            stage_palette_info_class* prev_pal_end_p = &g_env_light.stage_palette_info[prev_pal_end_id];
-            stage_palette_info_class* next_pal_start_p = &g_env_light.stage_palette_info[next_pal_start_id];
-            stage_palette_info_class* next_pal_end_p = &g_env_light.stage_palette_info[next_pal_end_id];
+            prev_pal_start_p = &g_env_light.stage_palette_info[prev_pal_start_id];
+            prev_pal_end_p = &g_env_light.stage_palette_info[prev_pal_end_id];
+            next_pal_start_p = &g_env_light.stage_palette_info[next_pal_start_id];
+            next_pal_end_p = &g_env_light.stage_palette_info[next_pal_end_id];
 
             #if DEBUG
             if (!g_kankyoHIO.light.m_HOSTIO_setting && !g_kankyoHIO.vrbox.m_VrboxSetting)
@@ -2333,7 +2345,7 @@ void dScnKy_env_light_c::setLight() {
                                add_col,
                                g_env_light.field_0x1210 * (g_env_light.now_actcol_ratio * g_env_light.now_actcol_ratio));
 
-            for (int i = 0; i < 4; i++) {
+            for (i = 0; i < 4; i++) {
                 if (i != 3 || (strcmp(dComIfGp_getStartStageName(), "R_SP127") != 0 &&
                                strcmp(dComIfGp_getStartStageName(), "F_SP127") != 0))
                 {
@@ -2380,7 +2392,7 @@ void dScnKy_env_light_c::setLight() {
                 mFogDensity = -1;
             }
 
-            for (int i = 0; i < 6; i++) {
+            for (i = 0; i < 6; i++) {
                 dKy_calc_color_set(&dungeonlight_col[i], &prev_pal_start_p->plight_col[i],
                                    &next_pal_start_p->plight_col[i], &prev_pal_end_p->plight_col[i],
                                    &next_pal_end_p->plight_col[i], color_ratio,
@@ -2417,6 +2429,11 @@ void dScnKy_env_light_c::setLight() {
             }
             }
 
+            u8 sp2B;
+            u8 sp2A;
+            u8 sp29;
+            u8 sp28;
+
             u8 prev_bloom_start_id = prev_pal_start_p->bloom_tbl_id;
             u8 next_bloom_start_id = next_pal_start_p->bloom_tbl_id;
             u8 prev_bloom_end_id = prev_pal_end_p->bloom_tbl_id;
@@ -2438,17 +2455,18 @@ void dScnKy_env_light_c::setLight() {
                 prev_bloom_start_id = next_bloom_start_id = prev_bloom_end_id = next_bloom_end_id = 3;
             }
 
-            f32 temp_f31;
             if (g_env_light.field_0x12fc >= 0) {
                 prev_bloom_end_id = g_env_light.field_0x12fc;
                 next_bloom_end_id = g_env_light.field_0x12fc;
-                temp_f31 = color_ratio;
+                sp8C = color_ratio;
                 color_ratio = g_env_light.field_0x1278;
             }
 
+            GXColor bloom_blend_col;
+
             dKydata_BloomInfo_c* bloomInf0_p;
-            dKydata_BloomInfo_c* bloomInf1_p;
             dKydata_BloomInfo_c* bloomInf2_p;
+            dKydata_BloomInfo_c* bloomInf1_p;
             dKydata_BloomInfo_c* bloomInf3_p;
 
             bloomInf0_p = dKyd_BloomInf_tbl_getp(prev_bloom_start_id);
@@ -2471,6 +2489,8 @@ void dScnKy_env_light_c::setLight() {
                 bloomInf0_p->info.mBlurAmount, bloomInf1_p->info.mBlurAmount, color_ratio,
                 bloomInf2_p->info.mBlurAmount, bloomInf3_p->info.mBlurAmount, g_env_light.pat_ratio, 0, 1.0f);
 
+            GXColor bloom_mono_col;
+
             if (dKy_darkworld_check()) {
                 static s16 S_fuwan_sin;
 
@@ -2486,7 +2506,6 @@ void dScnKy_env_light_c::setLight() {
                 bloomInf3_p->info.mDensity, g_env_light.pat_ratio, 0, 1.0f);
             mDoGph_gInf_c::getBloom()->setBlureRatio(sp21);
 
-            GXColor bloom_blend_col;
             bloom_blend_col.r = kankyo_color_ratio_set(
                 bloomInf0_p->info.mColorR, bloomInf1_p->info.mColorR, color_ratio, bloomInf2_p->info.mColorR,
                 bloomInf3_p->info.mColorR, g_env_light.pat_ratio, 0, 1.0f);
@@ -2503,10 +2522,9 @@ void dScnKy_env_light_c::setLight() {
             mDoGph_gInf_c::getBloom()->setBlendColor(bloom_blend_col);
 
             if (g_env_light.field_0x12fc >= 0) {
-                color_ratio = temp_f31;
+                color_ratio = sp8C;
             }
 
-            GXColor bloom_mono_col;
             bloom_mono_col.r = kankyo_color_ratio_set(
                 bloomInf0_p->info.mSaturateSubtractR, bloomInf1_p->info.mSaturateSubtractR, color_ratio,
                 bloomInf2_p->info.mSaturateSubtractR, bloomInf3_p->info.mSaturateSubtractR,
@@ -2607,20 +2625,20 @@ void dScnKy_env_light_c::setLight() {
             if (!g_kankyoHIO.light.m_HOSTIO_setting && !g_kankyoHIO.vrbox.m_VrboxSetting)
             #endif
             {
-            
-            u8 sp2B = prev_pal_start_p->vrboxcol_id;
-            u8 sp2A = prev_pal_end_p->vrboxcol_id;
-            u8 sp29 = next_pal_start_p->vrboxcol_id;
-            u8 sp28 = next_pal_end_p->vrboxcol_id;
+
+            sp2B = prev_pal_start_p->vrboxcol_id;
+            sp2A = prev_pal_end_p->vrboxcol_id;
+            sp29 = next_pal_start_p->vrboxcol_id;
+            sp28 = next_pal_end_p->vrboxcol_id;
 
             #if DEBUG
             dKydb_HIO_vrbox_debug(&sp2B, &sp2A, &sp29, &sp28);
             #endif
 
-            stage_vrboxcol_info_class* prev_vrboxcol_start_p = &g_env_light.stage_vrboxcol_info[sp2B];
-            stage_vrboxcol_info_class* prev_vrboxcol_end_p = &g_env_light.stage_vrboxcol_info[sp2A];
-            stage_vrboxcol_info_class* next_vrboxcol_start_p = &g_env_light.stage_vrboxcol_info[sp29];
-            stage_vrboxcol_info_class* next_vrboxcol_end_p = &g_env_light.stage_vrboxcol_info[sp28];
+            prev_vrboxcol_start_p = &g_env_light.stage_vrboxcol_info[sp2B];
+            prev_vrboxcol_end_p = &g_env_light.stage_vrboxcol_info[sp2A];
+            next_vrboxcol_start_p = &g_env_light.stage_vrboxcol_info[sp29];
+            next_vrboxcol_end_p = &g_env_light.stage_vrboxcol_info[sp28];
 
             vrbox_sky_col.r = kankyo_color_ratio_set(
                 prev_vrboxcol_start_p->sky_col.r, prev_vrboxcol_end_p->sky_col.r, color_ratio,
@@ -2834,7 +2852,7 @@ void dScnKy_env_light_c::setLight_bg(dKy_tevstr_c* tevstr_p, GXColorS10* bg_col_
                 plight_colors[i].b = 0;
             }
 
-            J3DLightInfo& light_info = tevstr_p->mLights[i].getLightInfo();
+            J3DLightInfo& light_info = *tevstr_p->mLights[i].getLightInfo();
 
             GXColor light_color;
             light_color.r = plight_colors[i].r;
@@ -2930,7 +2948,7 @@ void dScnKy_env_light_c::setLight_actor(dKy_tevstr_c* tevstr_p, GXColorS10* fog_
 
         GXColorS10 plight_col[6];
         for (i = 0; i < 6; i++) {
-            J3DLightInfo* light_info = &tevstr_p->mLights[i].getLightInfo();
+            J3DLightInfo* light_info = tevstr_p->mLights[i].getLightInfo();
 
             if (i == 0) {
                 if (tevstr_p->Type == 10 || tevstr_p->Type == 9 || tevstr_p->Material_id != 0) {
@@ -2946,7 +2964,7 @@ void dScnKy_env_light_c::setLight_actor(dKy_tevstr_c* tevstr_p, GXColorS10* fog_
                         plight_col[i].b = 0;
                     }
 
-                    light_info = &tevstr_p->mLights[i].getLightInfo();
+                    light_info = tevstr_p->mLights[i].getLightInfo();
 
                     GXColor light_col;
                     light_col.r = plight_col[i].r;
@@ -3177,6 +3195,7 @@ static void cLib_addCalcU8(u8* i_value, u8 i_target, s16 i_scale, s16 i_maxStep)
 void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr_c* tevstr_p,
                                                          GXColorS10 param_2, GXColorS10 param_3,
                                                          u8 init_timer) {
+    (void)param_3;
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     cXyz light_pos;
     Vec spDC;
@@ -3184,6 +3203,7 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr
     f32 light_dist;
     f32 light_power;
     f32 light_yuragi;
+    BOOL sp44;
     int sp40 = 0;
     int sp3C = 0;
     int light_inf_id;
@@ -3192,11 +3212,11 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     if (pos_p != NULL) {
-        J3DLightInfo* light_info = &tevstr_p->mLightObj.getLightInfo();
+        J3DLightInfo* light_info = tevstr_p->mLightObj.getLightInfo();
         light_info->mColor.a = 0xFF;
 
         light_inf_id = dKy_light_influence_id(*pos_p, 0);
-        BOOL sp44 = 0;
+        sp44 = 0;
 
         if (tevstr_p->Type == 7 || tevstr_p->Type == 1 ||
             ((tevstr_p->Type == 2 || tevstr_p->Type == 6 || tevstr_p->Type == 3) &&
@@ -3241,7 +3261,7 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr
             {
                 cXyz camfwd;
                 camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
-                J3DLightInfo* light0_info = &tevstr_p->mLights[0].getLightInfo();
+                J3DLightInfo* light0_info = tevstr_p->mLights[0].getLightInfo();
                 sp9 = 1;
 
                 dKyr_get_vectle_calc(&camera->lookat.center, &camera->lookat.eye, &camfwd);
@@ -3287,9 +3307,9 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr
                             #endif
                         }
                     } else if (dComIfG_play_c::getLayerNo(0) == 1 && tevstr_p->Type == 0) {
-                        field_0x10f8.r = 0x3C;
-                        field_0x10f8.g = 0x5F;
-                        field_0x10f8.b = 0x64;
+                        field_0x10f8.r = 60;
+                        field_0x10f8.g = 95;
+                        field_0x10f8.b = 100;
                         light_pos.y += -800.0f;
                         light_power = 150.0f;
 
@@ -3368,7 +3388,7 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr
                     }
                     break;
                 case 7: {
-                    f32 sp34 = tevstr_p->TevColor.a / 255.0f;
+                    sp34 = tevstr_p->TevColor.a / 255.0f;
                     field_0x10f8.r = 180;
                     field_0x10f8.g = 180;
                     field_0x10f8.b = 180;
@@ -3399,15 +3419,15 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr
                     }
                     break;
                 }
-            }
 
-            #if DEBUG
-            if (tevstr_p->Type >= 1 && tevstr_p->Type <= 9 && g_kankyoHIO.navy.adjust_light_mode == 2) {
-                field_0x10f8.r = (s16)g_kankyoHIO.navy.adjust_light_dif0_col_R;
-                field_0x10f8.g = (s16)g_kankyoHIO.navy.adjust_light_dif0_col_G;
-                field_0x10f8.b = (s16)g_kankyoHIO.navy.adjust_light_dif0_col_B;
+                #if DEBUG
+                if (tevstr_p->Type >= 1 && tevstr_p->Type <= 9 && g_kankyoHIO.navy.adjust_light_mode == 2) {
+                    field_0x10f8.r = (s16)g_kankyoHIO.navy.adjust_light_dif0_col_R;
+                    field_0x10f8.g = (s16)g_kankyoHIO.navy.adjust_light_dif0_col_G;
+                    field_0x10f8.b = (s16)g_kankyoHIO.navy.adjust_light_dif0_col_B;
+                }
+                #endif
             }
-            #endif
             }
         } else {
             light_pos = dKy_light_influence_pos(light_inf_id);
@@ -3480,6 +3500,7 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr
         if (init_timer != 0 || sp40 != 0 || tevstr_p->field_0x384 != 0) {
             tevstr_p->field_0x32c = light_pos;
         } else {
+            f32 sp1C;
             f32 sp18 = pos_p->abs(tevstr_p->field_0x32c);
             f32 sp14 = sp18 / 10000.0f;
             if (sp14 > 1.0f) {
@@ -3495,7 +3516,7 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr
 
             var_f28 = 1.0f - var_f28;
             var_f28 *= var_f28 * var_f28;
-            f32 sp1C = 10.0f + (10000.0f * sp14) + (100.0f * var_f28);
+            sp1C = 10.0f + (10000.0f * sp14) + (100.0f * var_f28);
             cLib_addCalc(&tevstr_p->field_0x32c.x, light_pos.x, 0.5f, sp1C, 0.001f);
             cLib_addCalc(&tevstr_p->field_0x32c.y, light_pos.y, 0.5f, sp1C, 0.001f);
             cLib_addCalc(&tevstr_p->field_0x32c.z, light_pos.z, 0.5f, sp1C, 0.001f);
@@ -3618,6 +3639,9 @@ void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr
 void dScnKy_env_light_c::settingTevStruct(int tevstrType, cXyz* pos_p, dKy_tevstr_c* tevstr_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    f32 fog_near;
+    f32 fog_far;
     int sp58 = 0;
     int sp54 = -1;
 
@@ -3626,9 +3650,6 @@ void dScnKy_env_light_c::settingTevStruct(int tevstrType, cXyz* pos_p, dKy_tevst
 
     GXColorS10 amb_col;
     GXColorS10 fog_tev_col;
-
-    f32 fog_near;
-    f32 fog_far;
 
     cXyz pos;
     if (tevstr_p->room_no < 0) {
@@ -3704,7 +3725,7 @@ void dScnKy_env_light_c::settingTevStruct(int tevstrType, cXyz* pos_p, dKy_tevst
         dKyr_get_vectle_calc(&pos, &camera_p->lookat.eye, &calc_pos);
 
         for (int i = 0; i < 6; i++) {
-            J3DLightInfo& light_info = tevstr_p->mLights[i].getLightInfo();
+            J3DLightInfo& light_info = *tevstr_p->mLights[i].getLightInfo();
 
             if (i == 0) {
                 if (!dKy_darkworld_check()) {
@@ -3785,6 +3806,7 @@ void dScnKy_env_light_c::settingTevStruct(int tevstrType, cXyz* pos_p, dKy_tevst
             light_info.mLightDirection.z = -light_info.mLightDirection.z;
         }
 
+        J3DLightInfo* light_info;
         MtxP view_mtx = j3dSys.getViewMtx();
         Vec sp8C;
         Vec sp80;
@@ -3793,25 +3815,25 @@ void dScnKy_env_light_c::settingTevStruct(int tevstrType, cXyz* pos_p, dKy_tevst
         sp80.y = camera_p->lookat.eye.y;
         sp80.z = camera_p->lookat.eye.z;
 
-        J3DLightInfo& light_info = tevstr_p->mLightObj.getLightInfo();
+        light_info = tevstr_p->mLightObj.getLightInfo();
         cMtx_multVec(view_mtx, &sp80, &sp8C);
 
-        light_info.mLightPosition = sp8C;
+        light_info->mLightPosition = sp8C;
         tevstr_p->field_0x32c = sp80;
         tevstr_p->mLightPosWorld = sp80;
-        light_info.mLightDirection = g_env_light.field_0x1064;
+        light_info->mLightDirection = g_env_light.field_0x1064;
 
-        light_info.mColor.r = 0;
-        light_info.mColor.g = 0;
-        light_info.mColor.b = 0;
+        light_info->mColor.r = 0;
+        light_info->mColor.g = 0;
+        light_info->mColor.b = 0;
 
-        light_info.mCosAtten.x = 1.0f;
-        light_info.mCosAtten.y = 0.0f;
-        light_info.mCosAtten.z = 0.0f;
+        light_info->mCosAtten.x = 1.0f;
+        light_info->mCosAtten.y = 0.0f;
+        light_info->mCosAtten.z = 0.0f;
 
-        light_info.mDistAtten.x = 1.0f;
-        light_info.mDistAtten.y = 0.0f;
-        light_info.mDistAtten.z = 0.0f;
+        light_info->mDistAtten.x = 1.0f;
+        light_info->mDistAtten.y = 0.0f;
+        light_info->mDistAtten.z = 0.0f;
     } else if (tevstrType == 12 || tevstrType == 13) {
         MtxP sp3C = j3dSys.getViewMtx();
         camera_class* camera_p = (camera_class*)dComIfGp_getCamera(0);
@@ -3864,7 +3886,7 @@ void dScnKy_env_light_c::settingTevStruct(int tevstrType, cXyz* pos_p, dKy_tevst
 
         for (int i = 0; i < 6; i++) {
             camera_class* sp30 = dComIfGp_getCamera(0);
-            J3DLightInfo& temp_r31 = tevstr_p->mLights[i].getLightInfo();
+            J3DLightInfo& temp_r31 = *tevstr_p->mLights[i].getLightInfo();
 
             if (i == 0) {
                 if (tevstrType == 12) {
@@ -3936,6 +3958,7 @@ void dScnKy_env_light_c::settingTevStruct(int tevstrType, cXyz* pos_p, dKy_tevst
             temp_r31.mLightDirection.z = -temp_r31.mLightDirection.z;
         }
 
+        J3DLightInfo* light_info;
         MtxP view_mtx = j3dSys.getViewMtx();
         Vec sp74;
         Vec sp68;
@@ -3944,28 +3967,28 @@ void dScnKy_env_light_c::settingTevStruct(int tevstrType, cXyz* pos_p, dKy_tevst
         sp68.y = camera_p->lookat.eye.y;
         sp68.z = camera_p->lookat.eye.z;
 
-        J3DLightInfo& light_info = tevstr_p->mLightObj.getLightInfo();
+        light_info = tevstr_p->mLightObj.getLightInfo();
         cMtx_multVec(view_mtx, &sp68, &sp74);
 
-        light_info.mLightPosition = sp74;
+        light_info->mLightPosition = sp74;
         if (tevstrType == 13) {
             tevstr_p->field_0x32c = sp68;
             tevstr_p->mLightPosWorld = sp68;
         }
 
-        light_info.mLightDirection = g_env_light.field_0x1064;
+        light_info->mLightDirection = g_env_light.field_0x1064;
 
-        light_info.mColor.r = 0;
-        light_info.mColor.g = 0;
-        light_info.mColor.b = 0;
+        light_info->mColor.r = 0;
+        light_info->mColor.g = 0;
+        light_info->mColor.b = 0;
 
-        light_info.mCosAtten.x = 1.0f;
-        light_info.mCosAtten.y = 0.0f;
-        light_info.mCosAtten.z = 0.0f;
+        light_info->mCosAtten.x = 1.0f;
+        light_info->mCosAtten.y = 0.0f;
+        light_info->mCosAtten.z = 0.0f;
 
-        light_info.mDistAtten.x = 1.0f;
-        light_info.mDistAtten.y = 0.0f;
-        light_info.mDistAtten.z = 0.0f;
+        light_info->mDistAtten.x = 1.0f;
+        light_info->mDistAtten.y = 0.0f;
+        light_info->mDistAtten.z = 0.0f;
     } else if (!(tevstrType & 0xF0)) {
         tevstr_p->mLightMode = 1;
 
@@ -4082,6 +4105,7 @@ void dScnKy_env_light_c::settingTevStruct(int tevstrType, cXyz* pos_p, dKy_tevst
         sp54 = tevstrType & 3;
         field_0x10f0 = BG_col[sp54];
 
+        J3DLightInfo* light_info;
         MtxP view_mtx = j3dSys.getViewMtx();
         Vec sp5C;
         cXyz pos;
@@ -4095,43 +4119,44 @@ void dScnKy_env_light_c::settingTevStruct(int tevstrType, cXyz* pos_p, dKy_tevst
 
         if (var_r25_3 == 1) {
             pos = g_env_light.pointlight[light_inf_id]->mPosition;
-            J3DLightInfo& light_info = tevstr_p->mLightObj.getLightInfo();
+            light_info = tevstr_p->mLightObj.getLightInfo();
 
             cMtx_multVec(view_mtx, &pos, &sp5C);
 
-            light_info.mLightPosition = sp5C;
+            light_info->mLightPosition = sp5C;
             tevstr_p->field_0x32c = pos;
-            light_info.mLightDirection = g_env_light.field_0x1064;
+            light_info->mLightDirection = g_env_light.field_0x1064;
 
-            light_info.mColor.a = g_env_light.pointlight[light_inf_id]->mColor.a;
-            light_info.mColor.r = g_env_light.pointlight[light_inf_id]->mColor.r;
-            light_info.mColor.g = g_env_light.pointlight[light_inf_id]->mColor.g;
-            light_info.mColor.b = g_env_light.pointlight[light_inf_id]->mColor.b;
-            dKy_GXInitLightSpot(&light_info, 90.0f, GX_SP_OFF);
-            dKy_GXInitLightDistAttn(&light_info,
+            light_info->mColor.a = g_env_light.pointlight[light_inf_id]->mColor.a;
+            light_info->mColor.r = g_env_light.pointlight[light_inf_id]->mColor.r;
+            light_info->mColor.g = g_env_light.pointlight[light_inf_id]->mColor.g;
+            light_info->mColor.b = g_env_light.pointlight[light_inf_id]->mColor.b;
+            dKy_GXInitLightSpot(light_info, 90.0f, GX_SP_OFF);
+            dKy_GXInitLightDistAttn(light_info,
                                     g_env_light.pointlight[light_inf_id]->mPow * 0.001f, 0.99999f,
                                     GX_DA_STEEP);
         } else {
+            J3DLightInfo* light_info;
             MtxP view_mtx = j3dSys.getViewMtx();
-            J3DLightInfo& light_info = tevstr_p->mLightObj.getLightInfo();
+            light_info = tevstr_p->mLightObj.getLightInfo();
             Vec sp44;
             cMtx_multVec(view_mtx, &lightStatusData[0].position, &sp44);
 
-            light_info.mLightPosition = sp44;
+            light_info->mLightPosition = sp44;
             tevstr_p->field_0x32c = lightStatusData[0].position;
-            light_info.mLightDirection = g_env_light.field_0x1064;
+            light_info->mLightDirection = g_env_light.field_0x1064;
 
-            light_info.mColor.r = 0;
-            light_info.mColor.g = 0;
-            light_info.mColor.b = 0;
+            light_info->mColor.r = 0;
+            light_info->mColor.g = 0;
+            light_info->mColor.b = 0;
 
-            light_info.mCosAtten.x = 0.0f;
-            light_info.mCosAtten.y = 0.0f;
-            light_info.mCosAtten.z = 0.0f;
+            light_info->mCosAtten.x = 0.0f;
+            light_info->mCosAtten.y = 0.0f;
+            light_info->mCosAtten.z = 0.0f;
 
-            light_info.mDistAtten.x = 0.0f;
-            light_info.mDistAtten.y = 0.0f;
-            light_info.mDistAtten.z = 0.0f;
+            light_info->mDistAtten.x = 0.0f;
+            light_info->mDistAtten.y = 0.0f;
+            light_info->mDistAtten.z = 0.0f;
         }
 
         tevstr_p->mLightPosWorld = kankyo->base_light.mPosition;
@@ -4168,11 +4193,12 @@ static void setLightTevColorType_MAJI_sub(J3DMaterial* material_p, dKy_tevstr_c*
                                           int lightType) {
     int i;
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+    J3DLightInfo* sp20;
     MtxP view_mtx = j3dSys.getViewMtx();
+    GXColor amb_col;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
 
     if (tevstr_p != NULL) {
-        GXColor amb_col;
         amb_col.r = tevstr_p->AmbCol.r;
         amb_col.g = tevstr_p->AmbCol.g;
         amb_col.b = tevstr_p->AmbCol.b;
@@ -4242,7 +4268,7 @@ static void setLightTevColorType_MAJI_sub(J3DMaterial* material_p, dKy_tevstr_c*
         MtxP sp10 = j3dSys.getViewMtx();
         if (sp10 != NULL) {
             Vec sp28;
-            J3DLightInfo* sp20 = &tevstr_p->mLightObj.getLightInfo();
+            sp20 = tevstr_p->mLightObj.getLightInfo();
             cMtx_multVec(sp10, &tevstr_p->field_0x32c, &sp28);
             sp20->mLightPosition = sp28;
         }
@@ -4304,11 +4330,11 @@ static void setLightTevColorType_MAJI_sub(J3DMaterial* material_p, dKy_tevstr_c*
                             kankyo->global_maple_col_change[i].light_obj = tevstr_p->mLights[i];
 
                             J3DLightInfo* sp8 =
-                                &kankyo->global_maple_col_change[1].light_obj.getLightInfo();
-                            var_r28 = &kankyo->global_maple_col_change[i].light_obj.getLightInfo();
+                                kankyo->global_maple_col_change[1].light_obj.getLightInfo();
+                            var_r28 = kankyo->global_maple_col_change[i].light_obj.getLightInfo();
                             sp8->mColor = var_r28->mColor;
                         } else {
-                            var_r28 = &kankyo->global_maple_col_change[i].light_obj.getLightInfo();
+                            var_r28 = kankyo->global_maple_col_change[i].light_obj.getLightInfo();
                         }
 
                         maple_color.r =
@@ -4478,7 +4504,7 @@ void dScnKy_env_light_c::setLightTevColorType_MAJI(J3DModelData* modelData_p,
                             tevstr_p->Material_use_fg);
         }
         #endif
-        
+
         if (tevstr_p->Material_use_fg != 123) {
             dKy_tevstr_init(tevstr_p, dComIfGp_roomControl_getStayNo(), 0xFF);
         }
@@ -4893,14 +4919,14 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
     // ● Adjustment of kantera, wolf lights, and underwater lights.
     mctx->genLabel("●カンテラ・狼ライト・水中ライトの調整", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
                    0x200, 0x18);
-    mctx->genCheckBox("調整開始", &g_kankyoHIO.navy.field_0x311, 1, 0, NULL, 0xFFFF,
+    mctx->genCheckBox("調整開始", &g_kankyoHIO.navy.use_debug, 1, 0, NULL, 0xFFFF,
                       0xFFFF, 0x200, 0x18);
-    mctx->genSlider("地形のみ高さ補正", &g_kankyoHIO.navy.terrain_height_crr, -5000.0,
-                    5000.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("影響力　倍率", &g_kankyoHIO.navy.influence_multiplier, 0.0,
-                    100.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("cutoff　倍率", &g_kankyoHIO.navy.cutoff_multiplier, 0.01,
-                    10.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("地形のみ高さ補正", &g_kankyoHIO.navy.terrain_height_crr, -5000.0f,
+                    5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("影響力　倍率", &g_kankyoHIO.navy.influence_multiplier, 0.0f,
+                    100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("cutoff　倍率", &g_kankyoHIO.navy.cutoff_multiplier, 0.01f,
+                    10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genLabel("● 部屋ライトタイプのＳｍＬLL切り替え（調整用）", 0x80000001, 0, NULL, 0xFFFF,
                    0xFFFF, 0x200, 0x18);
     mctx->startComboBox("選択", &g_kankyoHIO.navy.room_light_type, 0, NULL, 0xFFFF,
@@ -4953,8 +4979,8 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
                    0xFFFF, 0x200, 0x18);
     mctx->genLabel("● カラーパレットごとに入っている設定値", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
                    0x200, 0x18);
-    mctx->genSlider("地形ライト影響率 ", &g_env_light.bg_light_influence, 0.0,
-                    2.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("地形ライト影響率 ", &g_env_light.bg_light_influence, 0.0f,
+                    2.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genSlider("雲影の濃さ ", &g_env_light.mFogDensity, 0, 0xff, 0, NULL,
                     0xFFFF, 0xFFFF, 0x200, 0x18);
 
@@ -5131,9 +5157,9 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
     mctx->genButton("RGB同時加算     -100", 0x40000033, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
 
     mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("          near", &g_env_light.mFogNear, -2500000.0, 2500000.0, 0,
+    mctx->genSlider("          near", &g_env_light.mFogNear, -2500000.0f, 2500000.0f, 0,
                     NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("           far", &g_env_light.mFogFar, -2500000.0, 2500000.0, 0,
+    mctx->genSlider("           far", &g_env_light.mFogFar, -2500000.0f, 2500000.0f, 0,
                     NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
 
     mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
@@ -5361,13 +5387,13 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
 
         mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
         mctx->genSlider("位置Ｘ", &g_env_light.dungeonlight[i].mPosition.x,
-                        -300000.0, 300000.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        -300000.0f, 300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
         mctx->genSlider("    Ｙ", &g_env_light.dungeonlight[i].mPosition.y,
-                        -300000.0, 300000.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        -300000.0f, 300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
         mctx->genSlider("    Ｚ", &g_env_light.dungeonlight[i].mPosition.z,
-                        -300000.0, 300000.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        -300000.0f, 300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
         mctx->genSlider("ref_distance",
-                        &g_env_light.dungeonlight[i].mRefDistance, 0.01, 10000.0,
+                        &g_env_light.dungeonlight[i].mRefDistance, 0.01, 10000.0f,
                         0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
         mctx->startComboBox("距離減衰　○推奨",
                             &g_env_light.dungeonlight[i].mDistAttenuation, 0, NULL,
@@ -5391,12 +5417,12 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
         mctx->genLabel("角度減衰をポイント以外に設定したらスポットライトなので以下も設定を！",
                        0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
         mctx->genSlider("カットオフ角度",
-                        &g_env_light.dungeonlight[i].mCutoffAngle, 0.001, 90.0,
+                        &g_env_light.dungeonlight[i].mCutoffAngle, 0.001, 90.0f,
                         0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
         mctx->genSlider("Ｘ角度(紫軸)", &g_env_light.dungeonlight[i].mAngleX,
-                        -360.0, 360.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        -360.0f, 360.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
         mctx->genSlider("Ｙ角度(緑軸)", &g_env_light.dungeonlight[i].mAngleY,
-                        -360.0, 360.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        -360.0f, 360.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
         mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     }
 
@@ -5407,19 +5433,19 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
                    0xFFFF, 0x200, 0x18);
     mctx->genLabel("調整した値をマップツールで「地形反映えせライト」のパラメータへ指定して下さい",
                    0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("位置Ｘ", &g_kankyoHIO.light.m_BG_fakelight_pos.x, -300000.0,
-                    300000.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("    Ｙ", &g_kankyoHIO.light.m_BG_fakelight_pos.y, -300000.0,
-                    300000.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("    Ｚ", &g_kankyoHIO.light.m_BG_fakelight_pos.z, -300000.0,
-                    300000.0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("位置Ｘ", &g_kankyoHIO.light.m_BG_fakelight_pos.x, -300000.0f,
+                    300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("    Ｙ", &g_kankyoHIO.light.m_BG_fakelight_pos.y, -300000.0f,
+                    300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("    Ｚ", &g_kankyoHIO.light.m_BG_fakelight_pos.z, -300000.0f,
+                    300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genSlider("Color    R", &g_kankyoHIO.light.m_BG_fakelight_R, 0, 0xff, 0,
                     NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genSlider("         G", &g_kankyoHIO.light.m_BG_fakelight_G, 0, 0xff, 0,
                     NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genSlider("         B", &g_kankyoHIO.light.m_BG_fakelight_B, 0, 0xff, 0,
                     NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("Power    ", &g_kankyoHIO.light.m_BG_fakelight_power, 0.0, 1000.0,
+    mctx->genSlider("Power    ", &g_kankyoHIO.light.m_BG_fakelight_power, 0.0f, 1000.0f,
                     0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
 
     mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
@@ -5578,7 +5604,608 @@ void dKankyo_lightHIO_c::dKankyo_lightHIOInfoUpDateF() {
 }
 
 void dKankyo_lightHIO_c::listenPropertyEvent(const JORPropertyEvent* property) {
-    // DEBUG NONMATCHING
+    char colorPaletteInBuf[1000];
+    char lightDirInBuf[5000];
+    char colorPaletteOutBuf[5000];
+    char lightDirOutBuf[5000];
+    char colorPaletteScratchBuf[100];
+    char lightDirScratchBuf[100];
+
+    JORReflexible::listenPropertyEvent(property);
+    JORFile file;
+    int i;
+    switch ((uintptr_t)property->id) {
+    case 0x40000001: {
+        if (file.open(1, "カラーパレット(*.csv)\0*.csv\0", "csv", "NULL", "_P.csv")) {
+            int cursor = 0;
+
+            memset(colorPaletteInBuf, 0x20, 1000);
+            file.readData(colorPaletteInBuf, 0);
+            cursor += 243;
+            cursor -= 1;
+            cursor += 5;
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+            g_kankyoHIO.bloom.m_saturationPattern = (u8)atoi(colorPaletteScratchBuf);
+            cursor += 4;
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+            g_env_light.actor_amb_col.r = (u8)atoi(colorPaletteScratchBuf);
+            cursor += 4;
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+            g_env_light.actor_amb_col.g = (u8)atoi(colorPaletteScratchBuf);
+            cursor += 4;
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+            g_env_light.actor_amb_col.b = (u8)atoi(colorPaletteScratchBuf);
+            cursor += 4;
+
+            for (i = 0; i < 4; i++) {
+                memset(colorPaletteScratchBuf, 0, 100);
+                memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+                g_env_light.bg_amb_col[i].r = (u8)atoi(colorPaletteScratchBuf);
+                cursor += 4;
+
+                memset(colorPaletteScratchBuf, 0, 100);
+                memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+                g_env_light.bg_amb_col[i].g = (u8)atoi(colorPaletteScratchBuf);
+                cursor += 4;
+
+                memset(colorPaletteScratchBuf, 0, 100);
+                memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+                g_env_light.bg_amb_col[i].b = (u8)atoi(colorPaletteScratchBuf);
+                cursor += 4;
+
+                if (i == 1) {
+                    memset(colorPaletteScratchBuf, 0, 100);
+                    memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+                    g_env_light.bg_amb_col[1].a = (u8)atoi(colorPaletteScratchBuf);
+                    cursor += 4;
+
+                    memset(colorPaletteScratchBuf, 0, 100);
+                    memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+                    g_env_light.bg_amb_col[2].a = (u8)atoi(colorPaletteScratchBuf);
+                    cursor += 4;
+                } else if (i == 3) {
+                    memset(colorPaletteScratchBuf, 0, 100);
+                    memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+                    g_env_light.bg_amb_col[3].a = (u8)atoi(colorPaletteScratchBuf);
+                    cursor += 4;
+                }
+            }
+
+            for (i = 0; i < 6; i++) {
+                memset(colorPaletteScratchBuf, 0, 100);
+                memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+                g_env_light.dungeonlight[i].mColor.r = (u8)atoi(colorPaletteScratchBuf);
+                cursor += 4;
+
+                memset(colorPaletteScratchBuf, 0, 100);
+                memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+                g_env_light.dungeonlight[i].mColor.g = (u8)atoi(colorPaletteScratchBuf);
+                cursor += 4;
+
+                memset(colorPaletteScratchBuf, 0, 100);
+                memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+                g_env_light.dungeonlight[i].mColor.b = (u8)atoi(colorPaletteScratchBuf);
+                cursor += 4;
+            }
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+            g_env_light.fog_col.r = (u8)atoi(colorPaletteScratchBuf);
+            cursor += 4;
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+            g_env_light.fog_col.g = (u8)atoi(colorPaletteScratchBuf);
+            cursor += 4;
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+            g_env_light.fog_col.b = (u8)atoi(colorPaletteScratchBuf);
+            cursor += 4;
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 0x10);
+            g_env_light.mFogNear = (f64)atof(colorPaletteScratchBuf);
+            cursor += 17;
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 0x10);
+            g_env_light.mFogFar = (f64)atof(colorPaletteScratchBuf);
+            cursor += 17;
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+            g_env_light.mFogDensity = atoi(colorPaletteScratchBuf);
+            cursor += 4;
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 3);
+            g_env_light.field_0x12f9 = atoi(colorPaletteScratchBuf);
+            cursor += 4;
+
+            memset(colorPaletteScratchBuf, 0, 100);
+            memcpy(colorPaletteScratchBuf, colorPaletteInBuf + cursor, 4);
+            g_env_light.bg_light_influence = (f64)atof(colorPaletteScratchBuf);
+            cursor += 4;
+
+            file.close();
+
+            g_kankyoHIO.light.field_0x52 = 0;
+        } else {
+            OS_REPORT("!!!!!!! read error\n");
+        }
+
+        break;
+    }
+    case 0x41000001: {
+        // "Light direction file"
+        if (file.open(1, "ライト方向ファイル(*.csv)\0*.csv\0", "csv", "NULL", "_L.csv")) {
+            int cursor = 0;
+            memset(lightDirInBuf, 0x20, 5000);
+
+            file.readData(lightDirInBuf, 0);
+
+            cursor += 136;
+            cursor -= 1;
+
+            g_kankyoHIO.dungeonLight.usedLights = 6;
+            int i;
+            for (i = 0; i < 7; i++) {
+                cursor += 7;
+
+                OS_REPORT("\n[%s]", lightDirInBuf + cursor);
+
+                if (memcmp(lightDirInBuf + cursor, ",,部屋毎のライト,", 0x11)) {
+                    g_kankyoHIO.dungeonLight.usedLights = i;
+                    break;
+                }
+
+                cursor += 18;
+                cursor -= 1;
+
+                memset(lightDirScratchBuf, 0, 100);
+                memcpy(lightDirScratchBuf, lightDirInBuf + cursor, 0x10);
+                g_env_light.dungeonlight[i].mPosition.x = (f64)atof(lightDirScratchBuf);
+                cursor += 17;
+
+                memset(lightDirScratchBuf, 0, 100);
+                memcpy(lightDirScratchBuf, lightDirInBuf + cursor, 0x10);
+                g_env_light.dungeonlight[i].mPosition.y = (f64)atof(lightDirScratchBuf);
+                cursor += 17;
+
+                memset(lightDirScratchBuf, 0, 100);
+                memcpy(lightDirScratchBuf, lightDirInBuf + cursor, 0x10);
+                g_env_light.dungeonlight[i].mPosition.z = (f64)atof(lightDirScratchBuf);
+                cursor += 17;
+
+                memset(lightDirScratchBuf, 0, 100);
+                memcpy(lightDirScratchBuf, lightDirInBuf + cursor, 0x10);
+                g_env_light.dungeonlight[i].mRefDistance = (f64)atof(lightDirScratchBuf);
+                cursor += 17;
+
+                memset(lightDirScratchBuf, 0, 100);
+                memcpy(lightDirScratchBuf, lightDirInBuf + cursor, 0x10);
+                g_env_light.dungeonlight[i].mAngleX = (f64)atof(lightDirScratchBuf);
+                cursor += 17;
+
+                memset(lightDirScratchBuf, 0, 100);
+                memcpy(lightDirScratchBuf, lightDirInBuf + cursor, 0x10);
+                g_env_light.dungeonlight[i].mAngleY = (f64)atof(lightDirScratchBuf);
+                cursor += 17;
+
+                memset(lightDirScratchBuf, 0, 100);
+                memcpy(lightDirScratchBuf, lightDirInBuf + cursor, 0x10);
+                g_env_light.dungeonlight[i].mCutoffAngle = (f64)atof(lightDirScratchBuf);
+                cursor += 17;
+
+                if (memcmp(lightDirInBuf + cursor, "ポイント,", 9) == 0) {
+                    cursor += 9;
+                    g_env_light.dungeonlight[i].mAngleAttenuation = 0;
+                } else if (memcmp(lightDirInBuf + cursor, "直角,", 5) == 0) {
+                    cursor += 5;
+                    g_env_light.dungeonlight[i].mAngleAttenuation = 1;
+                } else if (memcmp(lightDirInBuf + cursor, "COS曲線,", 8) == 0) {
+                    cursor += 8;
+                    g_env_light.dungeonlight[i].mAngleAttenuation = 2;
+                } else if (memcmp(lightDirInBuf + cursor, "COS2曲線,", 9) == 0) {
+                    cursor += 9;
+                    g_env_light.dungeonlight[i].mAngleAttenuation = 3;
+                } else if (memcmp(lightDirInBuf + cursor, "シャープ,", 9) == 0) {
+                    cursor += 9;
+                    g_env_light.dungeonlight[i].mAngleAttenuation = 4;
+                } else if (memcmp(lightDirInBuf + cursor, "リング状,", 9) == 0) {
+                    cursor += 9;
+                    g_env_light.dungeonlight[i].mAngleAttenuation = 5;
+                } else if (memcmp(lightDirInBuf + cursor, "リング状2,", 10) == 0) {
+                    cursor += 10;
+                    g_env_light.dungeonlight[i].mAngleAttenuation = 6;
+                }
+
+                if (memcmp(lightDirInBuf + cursor, "減衰なし,", 9) == 0) {
+                    cursor += 9;
+                    g_env_light.dungeonlight[i].mDistAttenuation = 0;
+                } else if (memcmp(lightDirInBuf + cursor, "おだやか,", 9) == 0) {
+                    cursor += 9;
+                    g_env_light.dungeonlight[i].mDistAttenuation = 1;
+                } else if (memcmp(lightDirInBuf + cursor, "中間,", 5) == 0) {
+                    cursor += 5;
+                    g_env_light.dungeonlight[i].mDistAttenuation = 2;
+                } else if (memcmp(lightDirInBuf + cursor, "険しい,", 7) == 0) {
+                    cursor += 7;
+                    g_env_light.dungeonlight[i].mDistAttenuation = 3;
+                }
+
+                cursor += 6;
+                cursor -= 1;
+            }
+
+            file.close();
+
+            g_kankyoHIO.light.field_0x52 = 0;
+        } else {
+            OS_REPORT("read2 error\n");
+        }
+
+        break;
+    }
+    case 0x40000002: {
+        // "Color palette"
+        if (file.open(6, "カラーパレット(*.csv)\0*.csv\0", "csv", "NULL", "_P.csv")) {
+            int cursor = 0;
+
+            memset(colorPaletteOutBuf, 0x20, 5000);
+            memcpy(colorPaletteOutBuf,
+                   "no,l_no,LayerName,comment,VRBOXNO,SAF_NUM,A_AMCOL,"
+                   "BG0_AMCOL,BG1_AMCOL,BG1_AM_A,BG1_AM_A2,BG2_AMCOL,BG3_AMCOL,BG3_AM_A,"
+                   "LIGHT0_COL,LIGHT1_COL,LIGHT2_COL,LIGHT3_COL,LIGHT4_COL,LIGHT5_COL,"
+                   "FOG_COL,FOGNEAR,FOGFAR,CLOUD_SHADOW,MONO_FILTER,LIGHT_INF\n",
+                   243);
+
+            cursor += 243;
+            cursor -= 1;
+
+            memcpy(colorPaletteOutBuf + cursor, ",,,,,", 5);
+            cursor += 5;
+
+            sprintf(colorPaletteOutBuf + cursor, "%03d,", g_kankyoHIO.bloom.m_saturationPattern);
+            cursor += 4;
+
+            sprintf(colorPaletteOutBuf + cursor, "%03d/", g_env_light.actor_amb_col.r);
+            cursor += 4;
+
+            sprintf(colorPaletteOutBuf + cursor, "%03d/", g_env_light.actor_amb_col.g);
+            cursor += 4;
+
+            sprintf(colorPaletteOutBuf + cursor, "%03d,", g_env_light.actor_amb_col.b);
+            cursor += 4;
+
+            for (i = 0; i < 4; i++) {
+                sprintf(colorPaletteOutBuf + cursor, "%03d/", g_env_light.bg_amb_col[i].r);
+                cursor += 4;
+                sprintf(colorPaletteOutBuf + cursor, "%03d/", g_env_light.bg_amb_col[i].g);
+                cursor += 4;
+                sprintf(colorPaletteOutBuf + cursor, "%03d,", g_env_light.bg_amb_col[i].b);
+                cursor += 4;
+
+                if (i == 1) {
+                    sprintf(colorPaletteOutBuf + cursor, "%03d,", g_env_light.bg_amb_col[1].a);
+                    cursor += 4;
+
+                    sprintf(colorPaletteOutBuf + cursor, "%03d,", g_env_light.bg_amb_col[2].a);
+                    cursor += 4;
+                } else if (i == 3) {
+                    sprintf(colorPaletteOutBuf + cursor, "%03d,", g_env_light.bg_amb_col[3].a);
+                    cursor += 4;
+                }
+            }
+
+            for (i = 0; i < 6; i++) {
+                sprintf(colorPaletteOutBuf + cursor, "%03d/",
+                        g_env_light.dungeonlight[i].mColor.r);
+                cursor += 4;
+
+                sprintf(colorPaletteOutBuf + cursor, "%03d/",
+                        g_env_light.dungeonlight[i].mColor.g);
+                cursor += 4;
+
+                sprintf(colorPaletteOutBuf + cursor, "%03d,",
+                        g_env_light.dungeonlight[i].mColor.b);
+                cursor += 4;
+            }
+
+            sprintf(colorPaletteOutBuf + cursor, "%03d/", g_env_light.fog_col.r);
+            cursor += 4;
+
+            sprintf(colorPaletteOutBuf + cursor, "%03d/", g_env_light.fog_col.g);
+            cursor += 4;
+
+            sprintf(colorPaletteOutBuf + cursor, "%03d,", g_env_light.fog_col.b);
+            cursor += 4;
+
+            sprintf(colorPaletteOutBuf + cursor, "%16f,", g_env_light.mFogNear);
+            cursor += 17;
+
+            sprintf(colorPaletteOutBuf + cursor, "%16f,", g_env_light.mFogFar);
+            cursor += 17;
+
+            sprintf(colorPaletteOutBuf + cursor, "%03d,", g_env_light.mFogDensity);
+            cursor += 4;
+
+            sprintf(colorPaletteOutBuf + cursor, "%03d,", g_env_light.field_0x12f9);
+            cursor += 4;
+
+            sprintf(colorPaletteOutBuf + cursor, "%-1.2f", g_env_light.bg_light_influence);
+            cursor += 4;
+
+            file.writeData(colorPaletteOutBuf, cursor);
+            file.close();
+
+            OS_REPORT("write append success %d\n", 0x1330);
+        } else {
+            OS_REPORT("write append error\n");
+        }
+
+        break;
+    }
+    case 0x40000004:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0x1;
+        break;
+    case 0x40000005:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0x2;
+        break;
+    case 0x40000006:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0x3;
+        break;
+    case 0x40000007:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0x4;
+        break;
+    case 0x40000008:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0x5;
+        break;
+    case 0x40000009:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0x6;
+        break;
+    case 0x400000a0:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xa0;
+        break;
+    case 0x400000a1:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xa1;
+        break;
+    case 0x400000a2:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xa2;
+        break;
+    case 0x400000a3:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xa3;
+        break;
+    case 0x400000a4:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xa4;
+        break;
+    case 0x400000a5:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xa5;
+        break;
+    case 0x4000000a:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xa;
+        break;
+    case 0x4000000b:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xb;
+        break;
+    case 0x4000000c:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xc;
+        break;
+    case 0x4000000d:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xd;
+        break;
+    case 0x4000000e:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xe;
+        break;
+    case 0x4000000f:
+        g_kankyoHIO.dungeonLight.field_0x8 = 0xf;
+        break;
+    case 0x40000010:
+    case 0x40000011:
+    case 0x40000012:
+    case 0x40000013:
+    case 0x40000014:
+    case 0x40000015:
+        field_0x60 = (uintptr_t)property->id - 0x4000000f;
+        break;
+    case 0x40000016:
+    case 0x40000017:
+    case 0x40000018:
+    case 0x40000019:
+    case 0x4000001a:
+    case 0x4000001b:
+        field_0x61 = (uintptr_t)property->id - 0x40000015;
+        break;
+    case 0x4000001c:
+    case 0x4000001d:
+    case 0x4000001e:
+    case 0x4000001f:
+    case 0x40000020:
+    case 0x40000021:
+        field_0x62 = (uintptr_t)property->id - 0x4000001b;
+        break;
+    case 0x40000022:
+    case 0x40000023:
+    case 0x40000024:
+    case 0x40000025:
+    case 0x40000026:
+    case 0x40000027:
+        field_0x63 = (uintptr_t)property->id - 0x40000021;
+        break;
+    case 0x40000028:
+    case 0x40000029:
+    case 0x4000002a:
+    case 0x4000002b:
+    case 0x4000002c:
+    case 0x4000002d:
+        field_0x64 = (uintptr_t)property->id - 0x40000027;
+        break;
+    case 0x4000002e:
+    case 0x4000002f:
+    case 0x40000030:
+    case 0x40000031:
+    case 0x40000032:
+    case 0x40000033:
+        field_0x65 = (uintptr_t)property->id - 0x4000002d;
+        break;
+    case 0x40000034:
+    case 0x40000035:
+    case 0x40000036:
+    case 0x40000037:
+    case 0x40000038:
+    case 0x40000039:
+        field_0x66 = (uintptr_t)property->id - 0x40000033;
+        break;
+    case 0x4000003a:
+    case 0x4000003b:
+    case 0x4000003c:
+    case 0x4000003d:
+    case 0x4000003e:
+    case 0x4000003f:
+        field_0x67 = (uintptr_t)property->id - 0x40000039;
+        break;
+    case 0x40000040:
+    case 0x40000041:
+    case 0x40000042:
+    case 0x40000043:
+    case 0x40000044:
+    case 0x40000045:
+        field_0x68 = (uintptr_t)property->id - 0x4000003f;
+        break;
+    case 0x40000046:
+    case 0x40000047:
+    case 0x40000048:
+    case 0x40000049:
+    case 0x4000004a:
+    case 0x4000004b:
+        field_0x69 = (uintptr_t)property->id - 0x40000045;
+        break;
+    case 0x4000004c:
+    case 0x4000004d:
+    case 0x4000004e:
+    case 0x4000004f:
+    case 0x40000050:
+    case 0x40000051:
+        field_0x6a = (uintptr_t)property->id - 0x4000004b;
+        break;
+    case 0x40000052:
+    case 0x40000053:
+    case 0x40000054:
+    case 0x40000055:
+    case 0x40000056:
+    case 0x40000057:
+        field_0x6b = (uintptr_t)property->id - 0x40000051;
+        break;
+    case 0x40000003: {
+        // "light direction file"
+        if (file.open(6, "ライト方向ファイル(*.csv)\0*.csv\0", "csv", "NULL", "_L.csv")) {
+            int cursor = 0;
+            memset(lightDirOutBuf, 0x20, 5000);
+            memcpy(lightDirOutBuf,
+                   "no,MultiFileName,LayerName,name,pos_x,pos_y,pos_z,ref_distance,angX,angY,"
+                   "cutoff,spot_func,dist_func,action_type,SW_KIND,BitSW,SW_LIGHT\n",
+                   0x88);
+            cursor += 0x88;
+            cursor -= 1;
+            for (int i = 0; i < g_kankyoHIO.dungeonLight.usedLights; i++)
+            {
+                sprintf(lightDirOutBuf + cursor, "     %01x,", i);
+                cursor += 7;
+                // "lights per room"
+                memcpy(lightDirOutBuf + cursor, ",,部屋毎のライト,", 0x12);
+                cursor += 18;
+                cursor -= 1;
+                sprintf(lightDirOutBuf + cursor, "%16f,",
+                        g_env_light.dungeonlight[i].mPosition.x);
+                cursor += 17;
+                sprintf(lightDirOutBuf + cursor, "%16f,",
+                        g_env_light.dungeonlight[i].mPosition.y);
+                cursor += 17;
+                sprintf(lightDirOutBuf + cursor, "%16f,",
+                        g_env_light.dungeonlight[i].mPosition.z);
+                cursor += 17;
+                sprintf(lightDirOutBuf + cursor, "%16f,",
+                        g_env_light.dungeonlight[i].mRefDistance);
+                cursor += 17;
+                sprintf(lightDirOutBuf + cursor, "%16f,",
+                                g_env_light.dungeonlight[i].mAngleX);
+                cursor += 17;
+                sprintf(lightDirOutBuf + cursor, "%16f,", g_env_light.dungeonlight[i].mAngleY);
+                cursor += 17;
+                sprintf(lightDirOutBuf + cursor, "%16f,",
+                        g_env_light.dungeonlight[i].mCutoffAngle);
+                cursor += 17;
+
+                switch (g_env_light.dungeonlight[i].mAngleAttenuation) {
+                case 0:
+                    memcpy(lightDirOutBuf + cursor, "ポイント,", 10);
+                    cursor += 9;
+                    break;
+                case 1:
+                    memcpy(lightDirOutBuf + cursor, "直角,", 6);
+                    cursor += 5;
+                    break;
+                case 2:
+                    memcpy(lightDirOutBuf + cursor, "COS曲線,", 9);
+                    cursor += 8;
+                    break;
+                case 3:
+                    memcpy(lightDirOutBuf + cursor, "COS2曲線,", 10);
+                    cursor += 9;
+                    break;
+                case 4:
+                    memcpy(lightDirOutBuf + cursor, "シャープ,", 10);
+                    cursor += 9;
+                    break;
+                case 5:
+                    memcpy(lightDirOutBuf + cursor, "リング状,", 10);
+                    cursor += 9;
+                    break;
+                case 6:
+                    memcpy(lightDirOutBuf + cursor, "リング状2,", 11);
+                    cursor += 10;
+                }
+
+                switch (g_env_light.dungeonlight[i].mDistAttenuation) {
+                case GX_DA_OFF:
+                    memcpy(lightDirOutBuf + cursor, "減衰なし,", 10);
+                    cursor += 9;
+                    break;
+                case GX_DA_GENTLE:
+                    memcpy(lightDirOutBuf + cursor, "おだやか,", 10);
+                    cursor += 9;
+                    break;
+                case GX_DA_MEDIUM:
+                    memcpy(lightDirOutBuf + cursor, "中間,", 6);
+                    cursor += 5;
+                    break;
+                case GX_DA_STEEP:
+                    memcpy(lightDirOutBuf + cursor, "険しい,", 8);
+                    cursor += 7;
+                    break;
+                }
+
+                memcpy(lightDirOutBuf + cursor, "0,,,\n", 6);
+                cursor += 6;
+                cursor -= 1;
+            }
+
+            file.writeData(lightDirOutBuf, cursor);
+            file.close();
+        } else {
+            OS_REPORT("write append error\n");
+        }
+
+        break;
+    }
+    }
 }
 
 dKankyo_vrboxHIO_c::dKankyo_vrboxHIO_c() {
@@ -5602,15 +6229,532 @@ dKankyo_vrboxHIO_c::dKankyo_vrboxHIO_c() {
 }
 
 void dKankyo_vrboxHIO_c::genMessage(JORMContext* mctx) {
-    // DEBUG NONMATCHING
+    // "VR-BOX color setting TV screen confirmation display"
+    mctx->genCheckBox("VR-BOXカラー設定ＴＶ画面確認表示", &m_displayVrboxTVColorSettings, 1, 0, NULL,
+                      0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                   0x200, 0x18);
+    // “Set the elevation (horizon) *Entered in the room settings in the map tool”
+    mctx->genCheckBox("海抜（地平線）の設定 ※マップツールの部屋設定に入力", &field_0x14, 1, 0, NULL,
+                      0xffff, 0xffff, 0x200, 0x18);
+    // "Height above sea level"
+    mctx->genSlider("海抜の高さ", &m_horizonHeight, -100000.0f, 100000.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                   0x200, 0x18);
+    // "VRBOX settings"
+    mctx->startComboBox("■VRBOX設定", &m_VrboxSetting, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    // "Do not"
+    mctx->genComboBoxItem("しない", 0);
+    // HOSTIO settings
+    mctx->genComboBoxItem("ＨＯＳＴＩＯ設定！", 1);
+    mctx->endComboBox();
+
+    // "The moment you select the HOSTIO setting, the current data will be entered!"
+    mctx->genLabel("ＨＯＳＴＩＯ設定を選択した瞬間、現在データが入ります！", 0x80000001, 0, NULL,
+                   0xffff, 0xffff, 0x200, 0x18);
+    // "●Export VR-BOX information to a CSV file"
+    mctx->genLabel("●VR-BOX情報のCSVファイル書き出し", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                   0x18);
+    mctx->genButton("FILE WRITE", 0x40000002, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "●Loading CSV file of VR-BOX information (for confirmation)"
+    mctx->genLabel("●VR-BOX情報のCSVファイル読み込み（確認用）", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                   0x200, 0x18);
+    mctx->genButton("FILE READ", 0x40000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("------------------------------------------------------", 0x80000001, 0, NULL,
+                   0xffff, 0xffff, 0x200, 0x18);
+    // "Forced VRBOX specification"
+    mctx->startComboBox("強制VRBOX指定", &field_0x7, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    // "Do not"
+    mctx->genComboBoxItem("しない", 0);
+    // "Using pattern 0"
+    mctx->genComboBoxItem("パターン０使用", 1);
+    // "Using pattern 1"
+    mctx->genComboBoxItem("パターン１使用", 2);
+    // "Using pattern 2"
+    mctx->genComboBoxItem("パターン２使用", 3);
+    // "Using pattern 3"
+    mctx->genComboBoxItem("パターン３使用", 4);
+    // "Using pattern 4"
+    mctx->genComboBoxItem("パターン４使用", 5);
+    // "Using pattern 5"
+    mctx->genComboBoxItem("パターン５使用", 6);
+    // "Using pattern 6"
+    mctx->genComboBoxItem("パターン６使用", 7);
+    // "Using pattern 7"
+    mctx->genComboBoxItem("パターン７使用", 8);
+    // "Using pattern 8"
+    mctx->genComboBoxItem("パターン８使用", 9);
+    // "Using pattern 9"
+    mctx->genComboBoxItem("パターン９使用", 10);
+    // "Using pattern 10"
+    mctx->genComboBoxItem("パターン１０使用", 11);
+    // "Using pattern 11"
+    mctx->genComboBoxItem("パターン１１使用", 12);
+    // "Using pattern 12"
+    mctx->genComboBoxItem("パターン１２使用", 13);
+    // "Using pattern 13"
+    mctx->genComboBoxItem("パターン１３使用", 14);
+    // "Using pattern 14"
+    mctx->genComboBoxItem("パターン１４使用", 15);
+    // "Using pattern 15"
+    mctx->genComboBoxItem("パターン１５使用", 16);
+    mctx->endComboBox();
+
+    mctx->genLabel("------------------------------------------------------", 0x80000001, 0, NULL,
+                   0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                   0x200, 0x18);
+    // "● Sky color"
+    mctx->genLabel("● 空の色", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Set fog color"
+    mctx->genButton("fog色をセット", 0x40000004, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Color R"
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_sky_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_sky_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_sky_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    // "RGB simultaneous addition +100"
+    mctx->genButton("RGB同時加算     +100", 0x40000005, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition + 10"
+    mctx->genButton("RGB同時加算     + 10", 0x40000006, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition +  1"
+    mctx->genButton("RGB同時加算     +  1", 0x40000007, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -  1"
+    mctx->genButton("RGB同時加算     -  1", 0x40000008, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition - 10"
+    mctx->genButton("RGB同時加算     - 10", 0x40000009, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -100"
+    mctx->genButton("RGB同時加算     -100", 0x4000000a, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    // "● Upper cloud color"
+    mctx->genLabel("● 上雲カラー", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Set fog color"
+    mctx->genButton("fog色をセット", 0x4000000b, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Color R"
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kumo_top_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kumo_top_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kumo_top_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    // "RGB simultaneous addition +100"
+    mctx->genButton("RGB同時加算     +100", 0x4000000c, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition + 10"
+    mctx->genButton("RGB同時加算     + 10", 0x4000000d, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition +  1"
+    mctx->genButton("RGB同時加算     +  1", 0x4000000e, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -  1"
+    mctx->genButton("RGB同時加算     -  1", 0x4000000f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition - 10"
+    mctx->genButton("RGB同時加算     - 10", 0x40000010, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -100"
+    mctx->genButton("RGB同時加算     -100", 0x40000011, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    // "Lower cloud color"
+    mctx->genLabel("● 下雲カラー", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Set fog color"
+    mctx->genButton("fog色をセット", 0x40000012, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Color R"
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kumo_bottom_col.r, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kumo_bottom_col.g, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kumo_bottom_col.b, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition +100"
+    mctx->genButton("RGB同時加算     +100", 0x40000013, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition + 10"
+    mctx->genButton("RGB同時加算     + 10", 0x40000014, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition +  1"
+    mctx->genButton("RGB同時加算     +  1", 0x40000015, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -  1"
+    mctx->genButton("RGB同時加算     -  1", 0x40000016, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition - 10"
+    mctx->genButton("RGB同時加算     - 10", 0x40000017, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -100"
+    mctx->genButton("RGB同時加算     -100", 0x40000018, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    // "● Lower cloud shadow color"
+    mctx->genLabel("● 下雲影カラー", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Set fog color"
+    mctx->genButton("fog色をセット", 0x40000019, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Color R"
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kumo_shadow_col.r, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kumo_shadow_col.g, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kumo_shadow_col.b, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     α", &g_env_light.vrbox_kumo_top_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    // "RGB simultaneous addition +100"
+    mctx->genButton("RGB同時加算     +100", 0x4000001a, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition + 10"
+    mctx->genButton("RGB同時加算     + 10", 0x4000001b, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition +  1"
+    mctx->genButton("RGB同時加算     +  1", 0x4000001c, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -  1"
+    mctx->genButton("RGB同時加算     -  1", 0x4000001d, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition - 10"
+    mctx->genButton("RGB同時加算     - 10", 0x4000001e, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -100"
+    mctx->genButton("RGB同時加算     -100", 0x4000001f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    // "● Near kasumi"
+    mctx->genLabel("● 前かすみ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Set fog color"
+    mctx->genButton("fog色をセット", 0x40000020, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Color R"
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kasumi_outer_col.r, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kasumi_outer_col.g, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kasumi_outer_col.b, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     α", &g_env_light.vrbox_kasumi_outer_col.a, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition +100"
+    mctx->genButton("RGB同時加算     +100", 0x40000021, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition + 10"
+    mctx->genButton("RGB同時加算     + 10", 0x40000022, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition +  1"
+    mctx->genButton("RGB同時加算     +  1", 0x40000023, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -  1"
+    mctx->genButton("RGB同時加算     -  1", 0x40000024, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition - 10"
+    mctx->genButton("RGB同時加算     - 10", 0x40000025, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -100"
+    mctx->genButton("RGB同時加算     -100", 0x40000026, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    // "● Inner kasumi"
+    mctx->genLabel("● 奥かすみ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Set fog color"
+    mctx->genButton("fog色をセット", 0x40000027, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Color R"
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kasumi_inner_col.r, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kasumi_inner_col.g, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kasumi_inner_col.b, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("     α", &g_env_light.vrbox_kasumi_inner_col.a, 0, 0xff, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition +100"
+    mctx->genButton("RGB同時加算     +100", 0x40000028, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition + 10"
+    mctx->genButton("RGB同時加算     + 10", 0x40000029, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition +  1"
+    mctx->genButton("RGB同時加算     +  1", 0x4000002a, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -  1"
+    mctx->genButton("RGB同時加算     -  1", 0x4000002b, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition - 10"
+    mctx->genButton("RGB同時加算     - 10", 0x4000002c, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "RGB simultaneous addition -100"
+    mctx->genButton("RGB同時加算     -100", 0x4000002d, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
 }
 
 void dKankyo_vrboxHIO_c::dKankyo_vrboxHIOInfoUpDateF() {
-    // DEBUG NONMATCHING
+    JORMContext* ctx = attachJORMContext(8);
+    ctx->startUpdateNode(&g_kankyoHIO.vrbox);
+    ctx->updateSlider(2, &g_env_light.vrbox_sky_col.r, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_sky_col.g, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_sky_col.b, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_top_col.r, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_top_col.g, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_top_col.b, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_top_col.a, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_bottom_col.r, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_bottom_col.g, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_bottom_col.b, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_bottom_col.a, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_shadow_col.r, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_shadow_col.g, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_shadow_col.b, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kumo_shadow_col.a, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kasumi_outer_col.r, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kasumi_outer_col.g, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kasumi_outer_col.b, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kasumi_outer_col.a, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kasumi_inner_col.r, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kasumi_inner_col.g, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kasumi_inner_col.b, 0, 0, 0);
+    ctx->updateSlider(2, &g_env_light.vrbox_kasumi_inner_col.a, 0, 0, 0);
+    releaseJORMContext(ctx);
 }
 
 void dKankyo_vrboxHIO_c::listenPropertyEvent(const JORPropertyEvent* property) {
-    // DEBUG NONMATCHING
+    char inBuf[1000];
+    char outBuf[1000];
+
+    JORReflexible::listenPropertyEvent(property);
+    JORFile file;
+    char scratchBuf[0x68];
+    switch ((uintptr_t)property->id) {
+    case 0x40000001: {
+        if (file.open(1, "ＶＲＢＯＸファイル(*.csv)\0*.csv\0", "csv", "NULL", "_V.csv")) {
+            int off = 0;
+
+            memset(inBuf, 0x20, 1000);
+            file.readData(inBuf, 0);
+            file.close();
+
+            off += 91;
+            off += 2;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_sky_col.r = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_sky_col.g = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_sky_col.b = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kumo_top_col.r = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kumo_top_col.g = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kumo_top_col.b = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kumo_bottom_col.r = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kumo_bottom_col.g = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kumo_bottom_col.b = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kumo_shadow_col.r = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kumo_shadow_col.g = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kumo_shadow_col.b = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kumo_top_col.a = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kasumi_outer_col.r = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kasumi_outer_col.g = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kasumi_outer_col.b = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kasumi_outer_col.a = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kasumi_inner_col.r = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kasumi_inner_col.g = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kasumi_inner_col.b = (u8)atoi(scratchBuf);
+            off += 4;
+
+            memset(scratchBuf, 0, 100);
+            memcpy(scratchBuf, inBuf + off, 3);
+            g_env_light.vrbox_kasumi_inner_col.a = (u8)atoi(scratchBuf);
+            off += 5;
+
+            g_kankyoHIO.vrbox.field_0x5 = 0;
+
+            OS_REPORT("read append success %d\n", 0x1330);
+        } else {
+            OS_REPORT("write append error\n");
+        }
+
+        break;
+    case 0x40000002: {
+        // "VRBOX file"
+        if (file.open(6, "ＶＲＢＯＸファイル(*.csv)\0*.csv\0", "csv", "NULL", "_V.csv")) {
+            int off = 0;
+
+            memset(outBuf, 0x20, 1000);
+            memcpy(outBuf,
+                   "*dummy,No,空色,上雲色,下雲色,下雲影色,下雲α,霞手前色,霞手前α,霞奥色,"
+                   "霞奥α,備考,レイヤー\n\n",
+                   93);
+            off += 91;
+
+            memcpy(outBuf + off, ",,", 2);
+            off += 2;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_sky_col.r);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_sky_col.g);
+            off += 4;
+            sprintf(outBuf + off, "%03d,", g_env_light.vrbox_sky_col.b);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_kumo_top_col.r);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_kumo_top_col.g);
+            off += 4;
+            sprintf(outBuf + off, "%03d,", g_env_light.vrbox_kumo_top_col.b);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_kumo_bottom_col.r);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_kumo_bottom_col.g);
+            off += 4;
+            sprintf(outBuf + off, "%03d,", g_env_light.vrbox_kumo_bottom_col.b);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_kumo_shadow_col.r);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_kumo_shadow_col.g);
+            off += 4;
+            sprintf(outBuf + off, "%03d,", g_env_light.vrbox_kumo_shadow_col.b);
+            off += 4;
+            sprintf(outBuf + off, "%03d,", g_env_light.vrbox_kumo_top_col.a);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_kasumi_outer_col.r);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_kasumi_outer_col.g);
+            off += 4;
+            sprintf(outBuf + off, "%03d,", g_env_light.vrbox_kasumi_outer_col.b);
+            off += 4;
+            sprintf(outBuf + off, "%03d,", g_env_light.vrbox_kasumi_outer_col.a);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_kasumi_inner_col.r);
+            off += 4;
+            sprintf(outBuf + off, "%03d/", g_env_light.vrbox_kasumi_inner_col.g);
+            off += 4;
+            sprintf(outBuf + off, "%03d,", g_env_light.vrbox_kasumi_inner_col.b);
+            off += 4;
+            sprintf(outBuf + off, "%03d,,", g_env_light.vrbox_kasumi_inner_col.a);
+            off += 5;
+
+            file.writeData(outBuf, off);
+            file.close();
+            OS_REPORT("write append success %d\n", 0x1330);
+        } else {
+            OS_REPORT("write append error\n");
+        }
+
+        break;
+    }
+    case 0x40000004:
+    case 0x40000005:
+    case 0x40000006:
+    case 0x40000007:
+    case 0x40000008:
+    case 0x40000009:
+    case 0x4000000a:
+        field_0xe = (uintptr_t)property->id - 0x40000004;
+        break;
+        break;
+    case 0x4000000b:
+    case 0x4000000c:
+    case 0x4000000d:
+    case 0x4000000e:
+    case 0x4000000f:
+    case 0x40000010:
+    case 0x40000011:
+        field_0xf = (uintptr_t)property->id - 0x4000000b;
+        break;
+    case 0x40000012:
+    case 0x40000013:
+    case 0x40000014:
+    case 0x40000015:
+    case 0x40000016:
+    case 0x40000017:
+    case 0x40000018:
+        field_0x10 = (uintptr_t)property->id - 0x40000012;
+        break;
+    case 0x40000019:
+    case 0x4000001a:
+    case 0x4000001b:
+    case 0x4000001c:
+    case 0x4000001d:
+    case 0x4000001e:
+    case 0x4000001f:
+        field_0x11 = (uintptr_t)property->id - 0x40000019;
+        break;
+    case 0x40000020:
+    case 0x40000021:
+    case 0x40000022:
+    case 0x40000023:
+    case 0x40000024:
+    case 0x40000025:
+    case 0x40000026:
+        field_0x12 = (uintptr_t)property->id - 0x40000020;
+        break;
+    case 0x40000027:
+    case 0x40000028:
+    case 0x40000029:
+    case 0x4000002a:
+    case 0x4000002b:
+    case 0x4000002c:
+    case 0x4000002d:
+        field_0x13 = (uintptr_t)property->id - 0x40000027;
+        break;
+    }
+    }
 }
 
 dKankyo_bloomHIO_c::dKankyo_bloomHIO_c() {
@@ -5625,63 +6769,1546 @@ dKankyo_bloomHIO_c::dKankyo_bloomHIO_c() {
 }
 
 void dKankyo_bloomHIO_c::listenPropertyEvent(const JORPropertyEvent* property) {
-    // DEBUG NONMATCHING
+    char outBuf[0x1390];
+
+    JORReflexible::listenPropertyEvent(property);
+
+    JORFile file;
+    switch ((uintptr_t)property->id) {
+    case 0x40000002: {
+        // "Bloom file"
+        if (file.open(6, "飽和加算ファイル(*.csv)\0*.csv\0", "csv", "NULL", "_bloom.csv")) {
+            int off = 0;
+
+            memset(outBuf, 0x20, 5000);
+            memcpy(outBuf,
+                   "/*======================================================================*/\n",
+                   76);
+            off += 76;
+            off -= 1;
+
+            memcpy(outBuf + off,
+                   "static dKydata_BloomInfo_c l_kydata_BloomInf_tbl[BLOOMINFO_MAX] ={\n", 0x44);
+            off += 68;
+            off -= 1;
+
+            for (int i = 0; i < ARRAY_SIZE(bloom_info); i++) {
+                sprintf(
+                    outBuf + off,
+                    "{ %01d, %3d, %3d, %3d, %3d, %3d, %3d, %3d, %3d, %3d, %3d, %3d }, /* %02d */\n",
+                    bloom_info[i].mType, bloom_info[i].mThreshold, bloom_info[i].mBlurAmount,
+                    bloom_info[i].mDensity, bloom_info[i].mColorR, bloom_info[i].mColorG,
+                    bloom_info[i].mColorB, bloom_info[i].mOrigDensity,
+                    bloom_info[i].mSaturateSubtractR, bloom_info[i].mSaturateSubtractG,
+                    bloom_info[i].mSaturateSubtractB, bloom_info[i].mSaturateSubtractA, i);
+                off += 71;
+            }
+
+            memcpy(outBuf + off, "};\n", 4);
+            off += 4;
+            off -= 1;
+
+            file.writeData(outBuf, off);
+            file.close();
+        } else {
+            OS_REPORT("write append error\n");
+        }
+    }
+    }
 }
 
 void dKankyo_bloomHIO_c::genMessage(JORMContext* mctx) {
-    // DEBUG NONMATCHING
+    int i;
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    // "Bloom settings"
+    mctx->genLabel("　飽 和 加 算 設 定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    // "Options that seem useful for adjustment"
+    mctx->genLabel("□調整用に便利そうな項目", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Screen display"
+    mctx->genCheckBox("画面表示", &field_0x5, '\x01', 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Time speed"
+    mctx->genSlider("■時刻速度", &g_env_light.time_change_rate, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Time change"
+    mctx->startComboBox("■時刻切替", &g_kankyoHIO.time_change, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    // "Normal time"
+    mctx->genComboBoxItem("通常時間", 0);
+    // "Fixed at midnight"
+    mctx->genComboBoxItem("朝0時間に固定", 1);
+    // "Fixed at 1 AM"
+    mctx->genComboBoxItem("朝1時間に固定", 2);
+    // "Fixed at daytime"
+    mctx->genComboBoxItem("昼時間に固定", 3);
+    // "Fixed at noon"
+    mctx->genComboBoxItem("夕0時間に固定", 4);
+    // "Fixed at 1 PM"
+    mctx->genComboBoxItem("夕1時間に固定", 5);
+    // "Fixed at nighttime"
+    mctx->genComboBoxItem("夜時間に固定", 6);
+    // "Map settings ignored"
+    mctx->genComboBoxItem("マップ設定無視経過", 7);
+    mctx->endComboBox();
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    // "Bloom adjustment"
+    mctx->startComboBox("■飽和値調整を", &field_0x4, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    // "Do not"
+    mctx->genComboBoxItem("しない", 0);
+    // "Set with HOSTIO!"
+    mctx->genComboBoxItem("ＨＯＳＴＩＯで設定！", 1);
+    mctx->endComboBox();
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "File output"
+    mctx->genButton("ファイル出力", 0x40000002, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "If you make any changes, please send this file to Sasaki at SRD!"
+    mctx->genLabel("変更した場合はこのファイルをＳＲＤささきまで！", 0x80000001, 0, NULL, 0xffff,
+                  0xffff, 0x200, 0x18);
+    // "Of course, it's okay to just tell me the values of the places you changed or added!"
+    mctx->genLabel("※もちろん、変更・追加した場所の数値のみ伝えてもらってもＯＫです！", 0x80000001,
+                  0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    for (int i = 1; i < ARRAY_SIZE(bloom_info); i++) {
+        mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+        mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                       0xffff, 0x200, 0x18);
+        if (true) {
+            switch (i) {
+            case 1:
+                // "○ 1 Twilight (ku)"
+                mctx->genLabel("○ １ トワイライト(く)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                               0x18);
+                break;
+            case 2:
+                // "○ 2 Twilight_weak (ku)"
+                mctx->genLabel("○ ２ トワイライト_弱(く)", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                               0x200, 0x18);
+                break;
+            case 3:
+                // "○ 3 Sense"
+                mctx->genLabel("○ ３ センス", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 4:
+                // "○ 4 Field standard (morning 0)"
+                mctx->genLabel("○ ４ フィールド基準（朝０）", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                               0x200, 0x18);
+                break;
+            case 5:
+                // "○ 5 Field standard (morning 1)"
+                mctx->genLabel("○ ５ フィールド基準（朝１）", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                               0x200, 0x18);
+                break;
+            case 6:
+                // "○ 6 Field standard (noon)"
+                mctx->genLabel("○ ６ フィールド基準（昼）", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                               0x200, 0x18);
+                break;
+            case 7:
+                // "○ 7 Field standard (evening 0)"
+                mctx->genLabel("○ ７ フィールド基準（夕０）", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                               0x200, 0x18);
+                break;
+            case 8:
+                // "○ 8 Field standard (evening 1)"
+                mctx->genLabel("○ ８ フィールド基準（夕１）", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                               0x200, 0x18);
+                break;
+            case 9:
+                // "○ 9 Field standard (night)"
+                mctx->genLabel("○ ９ フィールド基準（夜）", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                               0x200, 0x18);
+                break;
+            case 10:
+                // "○ 10 Caravan fire"
+                mctx->genLabel("○ 10 キャラバン火事", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                               0x18);
+                break;
+            case 11:
+                // "○ 11 LV8 Dark Palace"
+                mctx->genLabel("○ 11 LV8闇の宮殿", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 12:
+                // "○ 12 demo28_03"
+                mctx->genLabel("○ 12 demo28_03", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 13:
+                // "○ 13 Insect glow"
+                mctx->genLabel("○ 13 虫が光る", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 14:
+                // "○ 14 Sea of Clouds (hero's chamber)"
+                mctx->genLabel("○ 14 雲海(勇者の間)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                              0x18);
+                break;
+            case 15:
+                // "○ 15 Zora's Domain waterfall TW"
+                mctx->genLabel("○ 15 ゾーラの里 滝TW", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                              0x18);
+                break;
+            case 16:
+                // "○ 16 Zora's Domain throne TW"
+                mctx->genLabel("○ 16 ゾーラの里 玉座TW", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                              0x18);
+                break;
+            case 17:
+                // "○ 17 Pseudo-sense"
+                mctx->genLabel("○ 17 センスもどき", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                              0x18);
+                mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 18:
+                // "○ 18 Switch between present and past"
+                mctx->genLabel("○ 18 現在過去切替", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                              0x18);
+                break;
+            case 19:
+                // "○ 19 Miyagi's sewer" (E3 demo?)
+                mctx->genLabel("○ 19 宮城さん下水道", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                              0x18);
+                break;
+            case 0x14:
+                // "○ 20 Flashback scene"
+                mctx->genLabel("○ 20 回想シーン", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x15:
+                // "○ 21 Twilight gate"
+                mctx->genLabel("○ 21 トワイライトゲート", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                              0x18);
+                break;
+            case 0x16:
+                // "○ 22 Underwater (standard)"
+                mctx->genLabel("○ 22 水中（基準）", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x17:
+                // "● 23 Vacant"
+                mctx->genLabel("● 23 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x18:
+                // "○ 24 Vacant"
+                mctx->genLabel("● 24 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x19:
+                // "○ 25 Dungeon standard_weak"
+                mctx->genLabel("○ 25 ダンジョン基準_弱", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                               0x18);
+                break;
+            case 0x1a:
+                // "○ 26 Dungeon standard_strong"
+                mctx->genLabel("○ 26 ダンジョン基準_強", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                               0x18);
+                break;
+            case 0x1b:
+                // "○ 27 Lava (ku)"
+                mctx->genLabel("○ 27 溶岩(く)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x1c:
+                // "○ Other than Lava_Lv2 (ku)"
+                mctx->genLabel("○ 28 ダ溶岩以外_Lv2(く)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                               0x18);
+                break;
+            case 0x1d:
+                // "○ 29 Past"
+                mctx->genLabel("○ 29 過去", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x1e:
+                // "○ 30 City walls"
+                mctx->genLabel("○ 30 城壁", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x1f:
+                // "● 31 Vacant"
+                mctx->genLabel("● 31 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x20:
+                // "● 32 Vacant"
+                mctx->genLabel("● 32 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x21:
+                // "● 33 Vacant"
+                mctx->genLabel("● 33 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x22:
+                // "● 34 Vacant"
+                mctx->genLabel("● 34 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x23:
+                // "● 35 Vacant"
+                mctx->genLabel("● 35 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x24:
+                // "● 36 Vacant"
+                mctx->genLabel("● 36 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x25:
+                // "● 37 Vacant"
+                mctx->genLabel("● 37 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x26:
+                // "● 38 Vacant"
+                mctx->genLabel("● 38 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x27:
+                // "● 39 Vacant"
+                mctx->genLabel("● 39 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x28:
+                // "○ 40 Demo: Flashback"
+                mctx->genLabel("○ 40 デモ：回想シーン", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                               0x18);
+                break;
+            case 0x29:
+                // "○ 41 Demo: Fake TW"
+                mctx->genLabel("○ 41 デモ：にせＴＷ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                               0x18);
+                break;
+            case 0x2a:
+                // "○ 42 Demo: for demo32_03"
+                mctx->genLabel("○ 42 デモ：demo32_03用", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                               0x18);
+                break;
+            case 0x2b:
+                // "○ 43 Demo: TW flashback scene"
+                mctx->genLabel("○ 43 デモ：ＴＷ回想シーン", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                               0x18);
+                break;
+            case 0x2c:
+                // "○ 44 Demo: for demo31_20"
+                mctx->genLabel("○ 44 デモ：demo31_20用", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                               0x18);
+                break;
+            case 0x2d:
+                // "○ 45 Demo: Lava W"
+                mctx->genLabel("○ 45 デモ：溶岩Ｗ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x2e:
+                // "● 46 Vacant"
+                mctx->genLabel("● 46 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x2f:
+                // "● 47 Vacant"
+                mctx->genLabel("● 47 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x30:
+                // "● 48 Vacant"
+                mctx->genLabel("● 48 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x31:
+                // "● 49 Vacant"
+                mctx->genLabel("● 49 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x32:
+                // "● 50 Vacant"
+                mctx->genLabel("● 50 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x33:
+                // "● 51 Vacant"
+                mctx->genLabel("● 51 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x34:
+                // "● 52 Vacant"
+                mctx->genLabel("● 52 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x35:
+                // "● 53 Vacant"
+                mctx->genLabel("● 53 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x36:
+                // "● 54 Vacant"
+                mctx->genLabel("● 54 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x37:
+                // "● 55 Vacant"
+                mctx->genLabel("● 55 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x38:
+                // "● 56 Vacant"
+                mctx->genLabel("● 56 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x39:
+                // "● 57 Vacant"
+                mctx->genLabel("● 57 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x3a:
+                // "● 58 Vacant"
+                mctx->genLabel("● 58 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x3b:
+                // "● 59 Vacant"
+                mctx->genLabel("● 59 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x3c:
+                // "● 60 Vacant"
+                mctx->genLabel("● 60 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x3d:
+                // "● 61 Vacant"
+                mctx->genLabel("● 61 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x3e:
+                // "● 62 Vacant"
+                mctx->genLabel("● 62 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                break;
+            case 0x3f:
+                // "● 63 Vacant"
+                mctx->genLabel("● 63 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+            }
+        }
+        mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                      0xffff, 0x200, 0x18);
+        mctx->startComboBox("タイプ", &bloom_info[i].mType, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+        mctx->genComboBoxItem("くっきり(0)", 0);
+        mctx->genComboBoxItem("やわらか(1)", 1);
+        mctx->endComboBox();
+        mctx->genSlider("しきい値", &bloom_info[i].mThreshold, 0, 0xff, 0, NULL, 0xffff, 0xffff,
+                        0x200, 0x18);
+        mctx->genSlider("ぼやけ幅", &bloom_info[i].mBlurAmount, 0, 0xff, 0, NULL, 0xffff, 0xffff,
+                        0x200, 0x18);
+        mctx->genSlider("ぼやけ濃さ", &bloom_info[i].mDensity, 0, 0xff, 0, NULL, 0xffff, 0xffff,
+                        0x200, 0x18);
+        mctx->genSlider("濃さ R", &bloom_info[i].mColorR, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                        0x18);
+        mctx->genSlider("     G", &bloom_info[i].mColorG, 0, 0xff, 0, NULL, 0xffff, 0xffff,
+                        0x200, 0x18);
+        mctx->genSlider("     B", &bloom_info[i].mColorB, 0, 0xff, 0, NULL, 0xffff, 0xffff,
+                        0x200, 0x18);
+        mctx->genSlider("元濃さ", &bloom_info[i].mOrigDensity, 0, 0xff, 0, NULL, 0xffff, 0xffff,
+                        0x200, 0x18);
+        mctx->genSlider("彩度減算 R", &bloom_info[i].mSaturateSubtractR, 0, 0xff, 0, NULL, 0xffff,
+                        0xffff, 0x200, 0x18);
+        mctx->genSlider("         G", &bloom_info[i].mSaturateSubtractG, 0, 0xff, 0, NULL,
+                        0xffff, 0xffff, 0x200, 0x18);
+        mctx->genSlider("         B", &bloom_info[i].mSaturateSubtractB, 0, 0xff, 0, NULL,
+                        0xffff, 0xffff, 0x200, 0x18);
+        mctx->genSlider("         A", &bloom_info[i].mSaturateSubtractA, 0, 0xff, 0, NULL,
+                        0xffff, 0xffff, 0x200, 0x18);
+    }
 }
 
-void dKankyo_dungeonlightHIO_c::listenPropertyEvent(const JORPropertyEvent* property) {}
+void dKankyo_dungeonlightHIO_c::listenPropertyEvent(const JORPropertyEvent* property) {
+    // empty function
+}
 
 dKankyo_navyHIO_c::dKankyo_navyHIO_c() {
-    // DEBUG NONMATCHING
+    field_0x5 = 0;
+    field_0x6 = 0;
+    field_0x8 = 12;
+    cloud_sunny_wind_influence_rate = 10.0f;
+    cloud_sunny_bottom_height = 2500.0f;
+    cloud_sunny_top_height = 2500.0f;
+    cloud_sunny_size = 0.6f;
+    cloud_sunny_height_shrink_rate = 0.9999f;
+    cloud_sunny_alpha = 1.0f;
+    cloud_cloudy_wind_influence_rate = 25.0f;
+    cloud_cloudy_bottom_height = 1200.0f;
+    cloud_cloudy_top_height = 1200.0f;
+    cloud_cloudy_size = 0.84f;
+    cloud_cloudy_height_shrink_rate = 0.96f;
+    cloud_cloudy_alpha = 1.0f;
+    field_0x3c = 4000.0f;
+    field_0x40 = 2000.0f;
+    field_0x44 = 2500.0f;
+    field_0x48 = 80.0f;
+    field_0x4c = 0.18f;
+    field_0x68 = 1;
+    field_0x69 = 3;
+    field_0x50 = 255.0f;
+    field_0x58 = 800.0f;
+    field_0x5c = 250.0f;
+    field_0x54 = 1.0f;
+    field_0x60 = 1000.0f;
+    field_0x64 = 0.2f;
+    housi_max_number = 300;
+    housi_max_alpha = 120.0f;
+    housi_max_scale = 9.0f;
+    field_0x74 = 45;
+    field_0x75 = 136;
+    field_0x76 = 170;
+    field_0x78 = 109;
+    field_0x79 = 60;
+    field_0x7a = 205;
+    field_0x7c = 120.0f;
+    field_0x80 = 100.0f;
+    field_0x84 = 0.2f;
+    field_0x8a = 0;
+    field_0x88 = 0;
+    field_0x80 = 0.0f;
+    moon_col.r = 0;
+    moon_col.g = 0;
+    moon_col.b = 0;
+    moon_col.a = 255;
+    moon_scale = 8000.0f;
+    field_0xb0.x = 16.5f;
+    field_0xb0.y = -2.0f;
+    field_0xb0.z = 30.0f;
+    field_0xbc = 160.0f;
+    field_0xc0 = 0.06f;
+    field_0xc4 = 200;
+    field_0xc8 = 3.0f;
+    field_0xcc = 60.0f;
+    field_0xd0 = 69;
+    field_0xd1 = 60;
+    field_0xd2 = 39;
+    field_0xd4 = 124;
+    field_0xd5 = 124;
+    field_0xd6 = 104;
+    field_0xd3 = 255;
+    field_0xd8 = 255;
+    field_0xd9 = 0;
+    field_0xda = 0;
+    field_0xdc = 255;
+    field_0xdd = 255;
+    field_0xde = 0;
+    field_0xe0 = 500;
+    field_0xe4 = 0.4f;
+    sun_col.r = 255;
+    sun_col.g = 255;
+    sun_col.b = 241;
+    sun_col2.r = 255;
+    sun_col2.g = 145;
+    sun_col2.b = 73;
+    sun_adjust_ON = 0;
+    smell_adjust_ON = 0;
+    smell_col.r = 255;
+    smell_col.g = 255;
+    smell_col.b = 115;
+    smell_col2.r = 80;
+    smell_col2.g = 50;
+    smell_col2.b = 0;
+    smell_alpha = 1.0f;
+    field_0xf0 = 190;
+    field_0xf1 = 120;
+    field_0xf2 = 120;
+    field_0x108 = 60;
+    field_0x109 = 0;
+    field_0x10a = 0;
+    field_0xf4 = 60;
+    field_0xf5 = 150;
+    field_0xf6 = 230;
+    field_0x10c = 50;
+    field_0x10d = 65;
+    field_0x10e = 80;
+    field_0xf8 = 80;
+    field_0xf9 = 80;
+    field_0xfa = 20;
+    field_0x110 = 30;
+    field_0x111 = 30;
+    field_0x112 = 10;
+    field_0xfc = 33;
+    field_0xfd = 255;
+    field_0xfe = 125;
+    field_0x114 = 33;
+    field_0x115 = 255;
+    field_0x116 = 125;
+    field_0x120 = 0.1f;
+    field_0x124 = 1.0f;
+    constellation_maker_ON = 0;
+    constellation_maker_pos[0].x = 5900.0f;
+    constellation_maker_pos[0].y = 14000.0f;
+    constellation_maker_pos[0].z = -16000.0f;
+    constellation_maker_pos[1].x = 7500.0f;
+    constellation_maker_pos[1].y = 14000.0f;
+    constellation_maker_pos[1].z = -14700.0f;
+    constellation_maker_pos[2].x = 8700.0f;
+    constellation_maker_pos[2].y = 13920.0f;
+    constellation_maker_pos[2].z = -14700.0f;
+    constellation_maker_pos[3].x = 10200.0f;
+    constellation_maker_pos[3].y = 14320.0f;
+    constellation_maker_pos[3].z = -15000.0f;
+    constellation_maker_pos[4].x = 12300.0f;
+    constellation_maker_pos[4].y = 15400.0f;
+    constellation_maker_pos[4].z = -18400.0f;
+    constellation_maker_pos[5].x = 13000.0f;
+    constellation_maker_pos[5].y = 13500.0f;
+    constellation_maker_pos[5].z = -15000.0f;
+    constellation_maker_pos[6].x = 13000.0f;
+    constellation_maker_pos[6].y = 15400.0f;
+    constellation_maker_pos[6].z = -14500.0f;
+    constellation_maker_pos[7].x = 13000.0f;
+    constellation_maker_pos[7].y = 15400.0f;
+    constellation_maker_pos[7].z = -14500.0f;
+    constellation_maker_pos[8].x = 13000.0f;
+    constellation_maker_pos[8].y = 15400.0f;
+    constellation_maker_pos[8].z = -14500.0f;
+    constellation_maker_pos[9].x = 13000.0f;
+    constellation_maker_pos[9].y = 15400.0f;
+    constellation_maker_pos[9].z = -14500.0f;
+    lightning_scale_x_min = 14.0f;
+    lightning_scale_x_max = 20.0f;
+    lightning_scale_y_min = 14.0f;
+    lightning_scale_y_max = 20.0f;
+    lightning_tilt_angle = 2000;
+    field_0x1b6 = 3;
+    lightning_debug_mode = 0;
+    collect_light_reflect_pos.x = 60000.0f;
+    collect_light_reflect_pos.y = -5000.0f;
+    collect_light_reflect_pos.z = 0.0f;
+    moya_alpha = 0.12f;
+    field_0x1c5 = 0;
+    thunder_col.r = 75;
+    thunder_col.g = 130;
+    thunder_col.b = 150;
+    thunder_height = 2000.0f;
+    thunder_blacken_rate = 0.75f;
+    water_in_col_ratio_R = 0.0f;
+    water_in_col_ratio_G = 0.4f;
+    water_in_col_ratio_B = 0.5f;
+    field_0x1e8 = -10.0f;
+    field_0x1ec = 40.0f;
+    field_0x1f0 = 50.0f;
+    field_0x1f4 = 200.0f;
+    field_0x1f8 = 0.0f;
+    field_0x1e4 = 80;
+    field_0x1e5 = 80;
+    field_0x1e6 = 80;
+    field_0x1fd = 2;
+    field_0x1fe = 3;
+    field_0x1ff = 0;
+    field_0x200 = 0;
+    mist_tag_fog_near = -2000.0f;
+    mist_tag_fog_far = 200.0f;
+    wipe_test_ON = 0xff;
+    field_0x210 = 0.0f;
+    fade_test_speed = 0;
+    field_0x215 = 1;
+    smell_railtag_space = 0.0f;
+    field_0x22a = 0;
+    field_0x22c = 0;
+    field_0x22d = 0;
+    light_adjust_ON = 0;
+    adjust_light_ambcol.r = 24;
+    adjust_light_ambcol.g = 24;
+    adjust_light_ambcol.b = 24;
+    adjust_light_dif0_col_R = 126;
+    adjust_light_dif0_col_G = 110;
+    adjust_light_dif0_col_B = 89;
+    adjust_light_dif1_col.r = 24;
+    adjust_light_dif1_col.g = 41;
+    adjust_light_dif1_col.b = 50;
+    adjust_light_main_pos.x = 500.0f;
+    adjust_light_main_pos.y = 500.0f;
+    adjust_light_main_pos.z = 500.0f;
+    mist_twilight_c1_col.r = 182;
+    mist_twilight_c1_col.g = 88;
+    mist_twilight_c1_col.b = 50;
+    mist_twilight_c1_col.a = 150;
+    mist_twilight_c2_col.r = 117;
+    mist_twilight_c2_col.g = 69;
+    mist_twilight_c2_col.b = 50;
+    mist_twilight_c2_col.a = 255;
+    field_0x264.r = 124;
+    field_0x264.g = 60;
+    field_0x264.b = 50;
+    field_0x267 = 255;
+    field_0x268 = 150;
+    adjust_custom_R = 70;
+    adjust_custom_G = 70;
+    adjust_custom_B = 70;
+    adjust_light_mode = 1;
+    adjust_height = 0.0f;
+    field_0x278 = 120.0f;
+    shadow_adjust_ON = 0;
+    shadow_normal_alpha = 0.4f;
+    shadow_max_alpha = 0.65f;
+    field_0x29c = 0;
+    field_0x27c = 70.0f;
+    field_0x280 = 0.05f;
+    field_0x284 = 1.5f;
+    field_0x288 = 0.00025f;
+    field_0x28c = 0.001f;
+    unk_color_1.r = 255;
+    unk_color_1.g = 255;
+    unk_color_1.b = 255;
+    unk_alpha_1 = 255;
+    unk_color_2.r = 0;
+    unk_color_2.g = 0;
+    unk_color_2.b = 0;
+    unk_alpha_2 = 255;
+    unk_color_3.r = 60;
+    unk_color_3.g = 30;
+    unk_color_3.b = 0;
+    unk_alpha_3 = 255;
+    field_0x29d = 1;
+    camera_light_col.r = 25;
+    camera_light_col.g = 90;
+    camera_light_col.b = 183;
+    camera_light_alpha = 255;
+    camera_light_y_shift = 1500.0f;
+    camera_light_power = 1.25f;
+    camera_light_cutoff = 90.0f;
+    camera_light_sp = 2;
+    camera_light_da = 3;
+    demo_adjust_SW = 0;
+    demo_focus_pos = 30;
+    demo_focus_offset_x = 0.0025f;
+    demo_focus_offset_y = 0.0025f;
+    grass_ambcol.r = 0;
+    grass_ambcol.g = 0;
+    grass_ambcol.b = 0;
+    grass_adjust_ON = 0;
+    grass_shine_value = 0.0f;
+    stars_max_number = 0xffff;
+    display_save_location = 0;
+    unk_light_influence_ratio = 100;
+    door_light_influence_ratio = 255;
+    fish_pond_colreg_adjust_ON = 0;
+    fish_pond_colreg_c0.r = 0;
+    fish_pond_colreg_c0.g = 0;
+    fish_pond_colreg_c0.b = 0;
+    water_mud_adjust_ON = 0;
+    field_0x2ea = 0;
+    field_0x2ec = 0;
+    fish_pond_tree_adjust_ON = 0;
+    fish_pond_tree_ambcol.r = 0;
+    fish_pond_tree_ambcol.g = 0;
+    fish_pond_tree_ambcol.b = 0;
+    fish_pond_tree_dif0_col.r = 0;
+    fish_pond_tree_dif0_col.g = 0;
+    fish_pond_tree_dif0_col.b = 0;
+    fish_pond_tree_dif1_col.r = 0;
+    fish_pond_tree_dif1_col.g = 0;
+    fish_pond_tree_dif1_col.b = 0;
+    rainbow_adjust_ON = 0;
+    rainbow_separation_dist = 4500;
+    rainbow_max_alpha = 175;
+    field_0x2ff = 0;
+    grass_light_influence_ratio = 100;
+    grass_light_debug = 0;
+    field_0x302 = 2000;
+    field_0x304 = 0.6f;
+    field_0x308 = 0;
+    moya_col.r = 255;
+    moya_col.g = 255;
+    moya_col.b = 255;
+    field_0x30d = 0;
+    twilight_sense_saturation_mode = 0;
+    twilight_sense_pat = 0;
+    twilight_sense_pat_tv_display_ON = 0;
+    camera_light_adjust_ON = 0;
+    possessed_zelda_light_col.r = 30;
+    possessed_zelda_light_col.g = 55;
+    possessed_zelda_light_col.b = 110;
+    possessed_zelda_light_alpha = 255;
+    possessed_zelda_light_height = -800.0f;
+    possessed_zelda_light_power = 250.0f;
+    beast_ganon_light_col.r = 60;
+    beast_ganon_light_col.g = 95;
+    beast_ganon_light_col.b = 100;
+    beast_ganon_light_alpha = 255;
+    beast_ganon_light_height = -800.0f;
+    beast_ganon_light_power = 150.0f;
+    water_in_light_col.r = 138;
+    water_in_light_col.g = 192;
+    water_in_light_col.b = 188;
 }
 
 void dKankyo_navyHIO_c::genMessage(JORMContext* mctx) {
-    // DEBUG NONMATCHING
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+
+    mctx->genLabel("■ 水中ライト　色", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("col  R", &water_in_light_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("     G", &water_in_light_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("     B", &water_in_light_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+
+    mctx->genLabel("■ カメライトの設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("現在の設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel(" S Y:1500.0f power:1.25f cutoff 90.0f", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                   0x200, 0x18);
+    mctx->genLabel(" M Y:500.0f  power:2.0f  cutoff 70.0f", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                   0x200, 0x18);
+    mctx->genLabel(" L Y:2000.0f power:3.0f  cutoff 70.0f", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                   0x200, 0x18);
+    mctx->genLabel("LL Y:1500.0f power:4.0f  cutoff 65.0f", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                   0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genCheckBox("調整開始", &camera_light_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("Ｙずらし", &camera_light_y_shift, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("色        R", &camera_light_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("          G", &camera_light_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("          B", &camera_light_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("power", &camera_light_power, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("cutoff", &camera_light_cutoff, 0.001f, 90.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->startComboBox("距離減衰", &camera_light_da, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("減衰なし [GX_DA_OFF]", 0);
+    mctx->genComboBoxItem("おだやか [GX_DA_GENTLE]", 1);
+    mctx->genComboBoxItem("中間     [GX_DA_MEDIUM]", 2);
+    mctx->genComboBoxItem("険しい   [GX_DA_STEEP]", 3);
+    mctx->endComboBox();
+    mctx->startComboBox("角度減衰", &camera_light_sp, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("ポイント [GX_SP_OFF]", 0);
+    mctx->genComboBoxItem("直角     [GX_SP_FLAT]", 1);
+    mctx->genComboBoxItem("COS曲線  [GX_SP_COS]", 2);
+    mctx->genComboBoxItem("COS2曲線 [GX_SP_COS2]", 3);
+    mctx->genComboBoxItem("シャープ [GX_SP_SHARP]", 4);
+    mctx->genComboBoxItem("リング状 [GX_SP_RING1]", 5);
+    mctx->genComboBoxItem("リング状2[GX_SP_RING2]", 6);
+    mctx->endComboBox();
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ トワイライト　センスパターン", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genCheckBox("ＴＶ画面に表示", &twilight_sense_pat_tv_display_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200,
+                      0x18);
+    mctx->startComboBox("パターン", &twilight_sense_pat, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("未使用", 0);
+    mctx->genComboBoxItem("１：フィールド基本", 1);
+    mctx->genComboBoxItem("２：ハイリア湖専用", 2);
+    mctx->genComboBoxItem("３：ゾーラ川専用", 3);
+    mctx->genComboBoxItem("４：雪山専用", 4);
+    mctx->genComboBoxItem("５：ダンジョン基本", 5);
+    mctx->genComboBoxItem("６：Ｌｖ４専用", 6);
+    mctx->genComboBoxItem("７：Ｌｖ５専用", 7);
+    mctx->genComboBoxItem("８：Ｌｖ６・７・９専用", 8);
+    mctx->genComboBoxItem("９：Ｌｖ８専用　D_MN08", 9);
+    mctx->genComboBoxItem("１０：サブダンジョン系", 10);
+    mctx->genComboBoxItem("１１：室内（広め）", 11);
+    mctx->genComboBoxItem("１２：室内（狭め）", 12);
+    mctx->genComboBoxItem("１３：デモなど広め", 13);
+    mctx->endComboBox();
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ トワイライト　センス専用飽和実験", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("　 ・センス仕様で飽和加算のパターンを変えてみる", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->startComboBox("モード", &twilight_sense_saturation_mode, 0, NULL, 0xffff, 0xffff, 0x100,
+                        0x1a);
+    mctx->genComboBoxItem("ゲームまかせ", 0);
+    mctx->genComboBoxItem("トワイライト（暗）", 32);
+    mctx->genComboBoxItem("トワイライト（明）", 33);
+    mctx->genComboBoxItem("光世界（低彩度）", 34);
+    mctx->genComboBoxItem("影響なし", 35);
+    mctx->endComboBox();
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 憑依ゼルダ　女優ライト調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genSlider("col  R", &possessed_zelda_light_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     G", &possessed_zelda_light_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     B", &possessed_zelda_light_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("takasa", &possessed_zelda_light_height, -5000.0f, 5000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("power", &possessed_zelda_light_power, 0.0f, 2000.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 豚ガノン    女優ライト調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genSlider("col  R", &beast_ganon_light_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     G", &beast_ganon_light_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     B", &beast_ganon_light_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("takasa", &beast_ganon_light_height, -5000.0f, 5000.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("power", &beast_ganon_light_power, 0.0f, 2000.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ MA09水面てらてら具合", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("てらてら率", &g_env_light.mWaterSurfaceShineRate, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 虹の調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("調整開始", &rainbow_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200,
+                      0x18);
+    mctx->genSlider("離れ距離", &rainbow_separation_dist, 0, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("最大α", &rainbow_max_alpha, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 釣堀　木の色調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("調整開始", &fish_pond_tree_adjust_ON, 1, 0, NULL, 0xffff, 0xffff,
+                      0x200, 0x18);
+    mctx->genSlider("amb  R", &fish_pond_tree_ambcol.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     G", &fish_pond_tree_ambcol.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     B", &fish_pond_tree_ambcol.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("dif0 R", &fish_pond_tree_dif0_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     G", &fish_pond_tree_dif0_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     B", &fish_pond_tree_dif0_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("dif1 R", &fish_pond_tree_dif1_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     G", &fish_pond_tree_dif1_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     B", &fish_pond_tree_dif1_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genLabel("○現在設定値　はる amb  (r 101) (g  94) (b 105)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("                   dif0 (r  86) (g  75) (b  57)", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("                   dif1 (r  82) (g  65) (b 102)", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("              なつ amb  (r  14) (g  35) (b  11)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("                   dif0 (r  55) (g  40) (b  30)", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("                   dif1 (r  25) (g  15) (b   0)", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("              あき amb  (r  40) (g  20) (b   5)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("                   dif0 (r 110) (g  50) (b  15)", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("                   dif1 (r  70) (g   0) (b  15)", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 釣堀　colreg 色変化", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("調整開始", &this->fish_pond_colreg_adjust_ON, 1, 0, NULL, 0xffff, 0xffff,
+                      0x200, 0x18);
+    mctx->genSlider("c0 R", &fish_pond_colreg_c0.r, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("   G", &fish_pond_colreg_c0.g, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("   B", &fish_pond_colreg_c0.b, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genLabel("○現在設定値　はる (r   0) (g   0) (b   0)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("              なつ (r  -3) (g   0) (b  -4)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("              あき (r   0) (g -10) (b -13)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("              ふゆ (r  14) (g  15) (b  22)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 強引　水面にごり変更", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("調整開始", &water_mud_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("全体", &field_0x2ea, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("手前", &field_0x2ec, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ コレクト＆装備　ライティング", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("調整開始", &light_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("AMB R", &adjust_light_ambcol.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    G", &adjust_light_ambcol.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    B", &adjust_light_ambcol.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("○メイン", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("Pos X", &adjust_light_main_pos.x, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("    Y", &adjust_light_main_pos.y, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("    Z", &adjust_light_main_pos.z, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("Dif0 R", &adjust_light_dif0_col_R, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     G", &adjust_light_dif0_col_G, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     B", &adjust_light_dif0_col_B, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genLabel("○反射", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("Pos X", &collect_light_reflect_pos.x, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("    Y", &collect_light_reflect_pos.y, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("    Z", &collect_light_reflect_pos.z, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("Dif1 R", &adjust_light_dif1_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     G", &adjust_light_dif1_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     B", &adjust_light_dif1_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 現在セーブ再開位置", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("常に表示", &this->display_save_location, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 星", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("最大数", &this->stars_max_number, -1, 2800, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 草てかり調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("てかり値", &this->grass_shine_value, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("草ライト影響率 ", &g_env_light.grass_light_inf_rate, 0.0, 2.0, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 霧沼　トワイライト時　色設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("調整開始", &light_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("c1 R", &mist_twilight_c1_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("   G", &mist_twilight_c1_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("   B", &mist_twilight_c1_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("   a", &mist_twilight_c1_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("c2 R", &mist_twilight_c2_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("   G", &mist_twilight_c2_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("   B", &mist_twilight_c2_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("   A", &mist_twilight_c2_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ トワイライトＮＰＣ ライト設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 闇ライト一つ設定キャラ設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->startComboBox("モード", &adjust_light_mode, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("ゲームまかせ", 0);
+    mctx->genComboBoxItem("ゲームまかせ", 1);
+    mctx->genComboBoxItem("カスタム調整", 2);
+    mctx->endComboBox();
+    mctx->genSlider("AMB R", &adjust_light_ambcol.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    G", &adjust_light_ambcol.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    B", &adjust_light_ambcol.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("LIGHT0 R", &adjust_light_dif0_col_R, 0, 500, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("       G", &adjust_light_dif0_col_G, 0, 500, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("       B", &adjust_light_dif0_col_B, 0, 500, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ デモ用？　遠目対応　被写界深度", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("-1:奥にピント 1:手前にピント", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("注目点", &g_env_light.mDemoAttentionPoint, -1.0f, 1.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genCheckBox("調整ＳＷ", &demo_adjust_SW, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("ピント位置", &demo_focus_pos, -0xfe, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("ずらし幅X", &demo_focus_offset_x, -1.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("ずらし幅Y", &demo_focus_offset_y, -1.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 影の濃さ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("調整開始", &shadow_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("通常α", &shadow_normal_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("接近ＭＡＸα", &shadow_max_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ アイテムゲット ライト設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->startComboBox("モード", &adjust_light_mode, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("ゲームまかせ", 0);
+    mctx->genComboBoxItem("ゲームまかせ", 1);
+    mctx->genComboBoxItem("カスタム調整", 2);
+    mctx->endComboBox();
+    mctx->genSlider("AMB R", &adjust_light_ambcol.r, '\0', 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("    G", &adjust_light_ambcol.g, '\0', 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("    B", &adjust_light_ambcol.b, '\0', 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("Dif0 R", &adjust_light_dif0_col_R, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     G", &adjust_light_dif0_col_G, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     B", &adjust_light_dif0_col_B, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("Dif1 R", &adjust_light_dif1_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     G", &adjust_light_dif1_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("     B", &adjust_light_dif1_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("Pos X", &adjust_light_main_pos.x, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("    Y", &adjust_light_main_pos.y, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genSlider("    Z", &adjust_light_main_pos.z, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+
+    mctx->genLabel("■ 女優さんライト", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->startComboBox("種類", &adjust_light_mode, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("ありのままで勝負", 0);
+    mctx->genComboBoxItem("レフ板", 1);
+    mctx->genComboBoxItem("カスタム調整", 2);
+    mctx->endComboBox();
+
+    mctx->genSlider("カスタム時 R", &adjust_custom_R, 0, 2000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("           G", &adjust_custom_G, 0, 2000, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("           B", &adjust_custom_B, 0, 2000, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("高さ調整", &adjust_height, -5000.0f, 5000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 沼", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("調整開始", &light_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("水面R", &mist_twilight_c1_col.r, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    G", &mist_twilight_c1_col.g, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("    B", &mist_twilight_c1_col.b, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("補佐α", &mist_twilight_c1_col.a, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Overall α" (alpha)
+    mctx->genSlider("全体α", &field_0x268, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("泥１R", &mist_twilight_c2_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    G", &mist_twilight_c2_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("    B", &mist_twilight_c2_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("    a", &mist_twilight_c2_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    // "Mud 2 R"
+    mctx->genSlider("泥２R", &field_0x264.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    G", &field_0x264.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    B", &field_0x264.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ においもやの調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("色設定開始", &smell_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("色　Ｒ", &smell_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider(" 　 Ｇ", &smell_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("  　Ｂ", &smell_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("色　Ｒ", &smell_col2.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider(" 　 Ｇ", &smell_col2.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("  　Ｂ", &smell_col2.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("アルファ", &smell_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("■ においレールタグ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("間隔", &smell_railtag_space, -1000.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 太陽フレア　加算に切替", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // "Change to addition!!"
+    mctx->genCheckBox("加算にチェンジ！！", &field_0x215, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ ワイプタイプをテスト", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->startComboBox("ワイプテスト", &wipe_test_ON, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("フェード黒", 0);
+    mctx->genComboBoxItem("フェード白", 1);
+    mctx->genComboBoxItem("回転", 2);
+    mctx->genComboBoxItem("時間ごまかし実験", 3);
+    mctx->genComboBoxItem("ぼモザイク", 4);
+    mctx->genComboBoxItem("無し", 5);
+    mctx->genComboBoxItem("無し-無し", 6);
+    mctx->genComboBoxItem("無し-ホワイト", 7);
+    mctx->genComboBoxItem("フェード２黒", 8);
+    mctx->genComboBoxItem("フェード２白", 9);
+    mctx->genComboBoxItem("無し-fade黒", 10);
+    mctx->genComboBoxItem("無し-fade白", 11);
+    mctx->genComboBoxItem("表裏", 12);
+    mctx->genComboBoxItem("13", 13);
+    mctx->genComboBoxItem("霧色フェード", 14);
+    mctx->genComboBoxItem("15", 15);
+    mctx->genComboBoxItem("ポ切 黒→黒", 16);
+    mctx->genComboBoxItem("ポ切 白→白", 17);
+    mctx->genComboBoxItem("ポ切 黒→黒n", 18);
+    mctx->genComboBoxItem("ポ切 白→白n", 19);
+    mctx->genComboBoxItem("ポ切 霧色", 20);
+    mctx->genComboBoxItem("白のまま", 21);
+    mctx->genComboBoxItem("黒のまま", 22);
+    mctx->genComboBoxItem("通常動作", 255);
+    mctx->endComboBox();
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("・フェード時間テスト用　０以外で有効になります", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("フェード速度指定", &fade_test_speed, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 霧壁タグ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("フォグ near", &mist_tag_fog_near, -100000.0f, 100000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("フォグ far", &mist_tag_fog_far, -100000.0f, 100000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 水中カラー割合　現在カラーに乗算します", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("Ｒ", &water_in_col_ratio_R, 0.0f, 2.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("Ｇ", &water_in_col_ratio_G, 0.0f, 2.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("Ｂ", &water_in_col_ratio_B, 0.0f, 2.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ もや　", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("基本色 R", &moya_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("       G", &moya_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("       B", &moya_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("アルファ", &moya_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 雷の調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("色　Ｒ", &thunder_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider(" 　 Ｇ", &thunder_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("  　Ｂ", &thunder_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("高さ", &thunder_height, -50000.0, 50000.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("黒くする率", &thunder_blacken_rate, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 稲妻", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("デバッグ常時出現", &lightning_debug_mode, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("Xスケールmin", &lightning_scale_x_min, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("Xスケールmax", &lightning_scale_x_max, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("Yスケールmin", &lightning_scale_y_min, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("Yスケールmax", &lightning_scale_y_max, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("最大傾き角度", &lightning_tilt_angle, -0x8000, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("表示d範囲幅 XZ", &collect_light_reflect_pos.x, 0.0f, 1000000.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("表示範囲幅 Y", &collect_light_reflect_pos.y, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                    0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 月の調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("設定開始", &rainbow_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("色　Ｒ", &moon_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider(" 　 Ｇ", &moon_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("  　Ｂ", &moon_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("  　α", &moon_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("スケール", &moon_scale, 0.0f, 100000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 太陽の調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("色設定開始", &sun_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("色　Ｒ", &sun_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider(" 　 Ｇ", &sun_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("  　Ｂ", &sun_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("色　Ｒ", &sun_col2.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider(" 　 Ｇ", &sun_col2.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("  　Ｂ", &sun_col2.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 胞子の調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("最大数", &housi_max_number, 0, 1000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("最大アルファ", &housi_max_alpha, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("最大スケール", &housi_max_scale, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 雲の調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("晴れ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("風の影響率", &cloud_sunny_wind_influence_rate, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("高さ　端", &cloud_sunny_bottom_height, 0.0f, 50000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("高さ　てっぺん", &cloud_sunny_top_height, 0.0f, 50000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("大きさ", &cloud_sunny_size, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("高さ縮小率", &cloud_sunny_height_shrink_rate, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("アルファ", &cloud_sunny_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("曇り", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("風の影響率", &cloud_cloudy_wind_influence_rate, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("高さ　端", &cloud_cloudy_bottom_height, 0.0f, 50000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("高さ　てっぺん", &cloud_cloudy_top_height, 0.0f, 50000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("大きさ", &cloud_cloudy_size, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("高さ縮小率", &cloud_cloudy_height_shrink_rate, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("アルファ", &cloud_cloudy_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
+                   0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 星座作成くん", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("設定開始！", &constellation_maker_ON, '\x01', 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    for (int i = 0; i < 10; i++) {
+        mctx->genSlider("X", &constellation_maker_pos[i].x, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                        0xffff, 0x200, 0x18);
+        mctx->genSlider("y", &constellation_maker_pos[i].y, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                        0xffff, 0x200, 0x18);
+        mctx->genSlider("z", &constellation_maker_pos[i].z, -100000.0f, 100000.0f, 0, NULL, 0xffff,
+                        0xffff, 0x200, 0x18);
+    }
 }
 
 dKankyo_efflightHIO_c::dKankyo_efflightHIO_c() {
-    // DEBUG NONMATCHING
+    adjust_ON = 0;
+    power = 80.0f;
+    fluctuation = 100.0f;
+
+    step1.start_frame = 1;
+    step1.r = 191;
+    step1.g = 150;
+    step1.b = 45;
+
+    step2.start_frame = 4;
+    step2.r = 180;
+    step2.g = 60;
+    step2.b = 0;
+
+    step3.start_frame = 8;
+    step3.r = 75;
+    step3.g = 15;
+    step3.b = 0;
+
+    step4.start_frame = 15;
+    step4.r = 0;
+    step4.g = 0;
+    step4.b = 0;
 }
 
 void dKankyo_efflightHIO_c::genMessage(JORMContext* mctx) {
-    // DEBUG NONMATCHING
+    mctx->genLabel("エフェクトライトカラー", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("設定開始", &adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("第１段階", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("frame", &step1.start_frame, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("色  Ｒ", &step1.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    Ｇ", &step1.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    Ｂ", &step1.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("第２段階", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("frame", &step2.start_frame, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("色  Ｒ", &step2.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    Ｇ", &step2.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    Ｂ", &step2.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("第３段階", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("frame", &step3.start_frame, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("色  Ｒ", &step3.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    Ｇ", &step3.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    Ｂ", &step3.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("第４段階", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("frame", &step4.start_frame, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("色  Ｒ", &step4.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    Ｇ", &step4.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    Ｂ", &step4.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("影響範囲", &power, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("ゆらぎ", &fluctuation, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
 }
 
 dKankyo_windHIO_c::dKankyo_windHIO_c() {
-    // DEBUG NONMATCHING
+    display_wind_dir = 0;
+    use_HOSTIO_adjustment = 0;
+    field_0x8 = -1;
+    global_x_angle = 0;
+    global_y_angle = 0;
+    global_wind_power = 0.3f;
+    field_0x14 = 0.0;
+    field_0x18 = 35.0f;
+    field_0x1c = 6.0f;
+    display_wind_trajectory = 0;
+    lightsword_x_angle = 1800;
+    lightsword_init_scale = 500.0f;
+    lightsword_end_scale = 300.0f;
+    influence = 1.0f;
+    lightsword_move_speed = 150.0f;
+    influence_attenuation = 0.3f;
+    wind_change_speed = 0.05f;
+    minigame_no_wind_duration = 90;
+    minigame_low_wind_duration = 60;
+    minigame_high_wind_duration = 90;
 }
 
 dKankyo_demolightHIO_c::dKankyo_demolightHIO_c() {
-    // DEBUG NONMATCHING
+    adjust_ON = 0;
+    light.mPosition.x = 0.0f;
+    light.mPosition.y = 0.0f;
+    light.mPosition.z = 0.0f;
+    light.mColor.r = 255;
+    light.mColor.g = 255;
+    light.mColor.b = 255;
+    light.mPow = 1000.0f;
+    light.mFluctuation = 0.0f;
 }
 
 void dKankyo_demolightHIO_c::genMessage(JORMContext* mctx) {
-    // DEBUG NONMATCHING
+    mctx->genLabel("デモ用ポイントライト", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("設定開始", &adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("color R", &light.mColor.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("      G", &light.mColor.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("      B", &light.mColor.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("影響範囲", &light.mPow, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("ゆらぎ", &light.mFluctuation, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
 }
 
 void dKankyo_windHIO_c::genMessage(JORMContext* mctx) {
-    // DEBUG NONMATCHING
+    mctx->genLabel("○グローバル風の設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("風向き確認表示", &display_wind_dir, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("風変化補完速度", &wind_change_speed, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+
+    mctx->genLabel("===============================================================", 0x80000001, 0,
+                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("HOSTIOでの調整", &use_HOSTIO_adjustment, 1, 0, NULL, 0xffff, 0xffff, 0x200,
+                      0x18);
+    mctx->genLabel("画面中心のバーが設定した向きで", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                   0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("Ｘアングル", &global_x_angle, -0x8000, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("Ｙアングル", &global_y_angle, -0x8000, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200,
+                    0x18);
+    mctx->genSlider("風力", &global_wind_power, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genLabel("===============================================================", 0x80000001, 0,
+                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("○光の剣実験パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("実験風軌道表示", &display_wind_trajectory, 1, 0, NULL, 0xffff, 0xffff, 0x200,
+                      0x18);
+    mctx->genSlider("Ｘアングル", &lightsword_x_angle, -0x7fff, 0x7fff, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("開始スケール", &lightsword_init_scale, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("終了スケール", &lightsword_end_scale, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("影響力", &influence, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("影響力減衰値", &influence_attenuation, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("移動速度", &lightsword_move_speed, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+
+    mctx->genLabel("===============================================================", 0x80000001, 0,
+                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("○風避けゲーム強風タイマー調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
+                   0x18);
+    mctx->genSlider("無風継続時間", &minigame_no_wind_duration, 0, 1000, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("弱風継続時間", &minigame_low_wind_duration, 0, 1000, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+    mctx->genSlider("強風継続時間", &minigame_high_wind_duration, 0, 1000, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
 }
 
 dKankyo_dungeonlightHIO_c::dKankyo_dungeonlightHIO_c() {
-    // DEBUG NONMATCHING
+    field_0x5 = 0;
+    usedLights = 0;
+    displayDebugSphere = 0;
+    field_0x8 = 0;
+    field_0x9 = 0;
 }
 
-void dKankyo_dungeonlightHIO_c::genMessage(JORMContext* mctx) {}
+void dKankyo_dungeonlightHIO_c::genMessage(JORMContext* mctx) {
+    // empty function
+}
 
 dKankyo_ParticlelightHIO_c::dKankyo_ParticlelightHIO_c() {
-    // DEBUG NONMATCHING
+    field_0x5 = 0;
+    prim_col.r = 255;
+    prim_col.g = 255;
+    prim_col.b = 255;
+    prim_col.a = 255;
+    env_col.r = 255;
+    env_col.g = 255;
+    env_col.b = 255;
+    env_col.a = 255;
+    blend_ratio = 0.5f;
+    field_0x14 = 0;
+    type = 0;
+    field_0x19 = 1;
+    field_0x1a = 0;
 }
 
 void dKankyo_ParticlelightHIO_c::genMessage(JORMContext* mctx) {
-    // DEBUG NONMATCHING
+    mctx->genLabel("パーティクル色　設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("五感発動時のみに見えるパーティクルの実験", 0x80000001, 0, NULL, 0xffff, 0xffff,
+                   0x200, 0x18);
+    mctx->genLabel("下をＯＮにしてからテストパーティクルを出してみて下さい", 0x80000001, 0, NULL,
+                   0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("←五感発動時にしか見えなくなります！", &field_0x1a, 1, 0, NULL, 0xffff,
+                      0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("インダイレクトより後に移動！", &field_0x19, 1, 0, NULL, 0xffff, 0xffff,
+                      0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->startComboBox("タイプ", &type, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("TESTSMOKE_A01", 0);
+    mctx->genComboBoxItem("DASHSMOKE_A", 1);
+    mctx->genComboBoxItem("DOWNSMOKE_A", 2);
+    mctx->genComboBoxItem("TESTSMOKE_A02", 3);
+    mctx->genComboBoxItem("SCREENKAGEROU01", 4);
+    mctx->genComboBoxItem("ZENKAISCREEN2_A", 5);
+    mctx->genComboBoxItem("ZENKAISCREEN2_B", 6);
+    mctx->genComboBoxItem("TESTSMOKE_B01", 7);
+    mctx->genComboBoxItem("TESTSMOKE_B02", 8);
+    mctx->genComboBoxItem("TESTSMOKE_C01", 9);
+    mctx->genComboBoxItem("TESTSMOKE_C02", 10);
+    mctx->endComboBox();
+    mctx->genSlider("Prim　R", &prim_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("      G", &prim_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    　B", &prim_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("Env 　R", &env_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("      G", &env_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("    　B", &env_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("基本α", &prim_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("ブレンド率", &blend_ratio, 0.001f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("プレイヤー位置に発生！", 0x40000004, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
 }
 
 void dKankyo_ParticlelightHIO_c::listenPropertyEvent(const JORPropertyEvent* property) {
-    // DEBUG NONMATCHING
+    JORReflexible::listenPropertyEvent(property);
+
+    switch ((uintptr_t)property->id) {
+    case 0x40000004:
+        field_0x14 = 1;
+        break;
+    }
 }
 
 dKankyo_HIO_c::dKankyo_HIO_c() {
@@ -5690,7 +8317,141 @@ dKankyo_HIO_c::dKankyo_HIO_c() {
 }
 
 void dKankyo_HIO_c::genMessage(JORMContext* mctx) {
-    // DEBUG NONMATCHING
+    mctx->genSlider("時刻速度", &g_env_light.time_change_rate, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff,
+                    0x200, 0x18);
+
+    mctx->startComboBox("時刻切替", &time_change, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("通常時間", 0);
+    mctx->genComboBoxItem("朝0時間に固定", 1);
+    mctx->genComboBoxItem("朝1時間に固定", 2);
+    mctx->genComboBoxItem("昼時間に固定", 3);
+    mctx->genComboBoxItem("夕0時間に固定", 4);
+    mctx->genComboBoxItem("夕1時間に固定", 5);
+    mctx->genComboBoxItem("夜時間に固定", 6);
+    mctx->genComboBoxItem("マップ設定無視経過", 7);
+    mctx->endComboBox();
+
+    mctx->startComboBox("天候エフェクト", &wether_effect, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("なし", 0);
+    mctx->genComboBoxItem("雨", 1);
+    mctx->genComboBoxItem("雪", 2);
+    mctx->genComboBoxItem("星", 3);
+    mctx->genComboBoxItem("胞子", 4);
+    mctx->genComboBoxItem("もや", 0x10);
+    mctx->genComboBoxItem("匂い", 6);
+    mctx->genComboBoxItem("水泥", 7);
+    mctx->genComboBoxItem("海雪", 8);
+    mctx->genComboBoxItem("全消去", 0x99);
+    mctx->endComboBox();
+
+    mctx->startComboBox("天候パレット", &wether_palette, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("通常", 0);
+    mctx->genComboBoxItem("晴に変更", 0x40);
+    mctx->genComboBoxItem("雨に変更", 1);
+    mctx->genComboBoxItem("雪に変更", 2);
+    mctx->genComboBoxItem("他に変更", 3);
+    mctx->genComboBoxItem("松明０に変更", 4);
+    mctx->genComboBoxItem("松明１に変更", 5);
+    mctx->genComboBoxItem("松明２に変更", 6);
+    mctx->genComboBoxItem("宝箱に変更", 7);
+    mctx->genComboBoxItem("08に変更", 8);
+    mctx->genComboBoxItem("09に変更", 9);
+    mctx->genComboBoxItem("10に変更", 10);
+    mctx->genComboBoxItem("11に変更", 11);
+    mctx->genComboBoxItem("12に変更", 12);
+    mctx->genComboBoxItem("13に変更", 13);
+    mctx->genComboBoxItem("14に変更", 14);
+    mctx->genComboBoxItem("15に変更", 15);
+    mctx->genComboBoxItem("16に変更", 16);
+    mctx->genComboBoxItem("17に変更", 17);
+    mctx->genComboBoxItem("18に変更", 18);
+    mctx->genComboBoxItem("19に変更", 19);
+    mctx->genComboBoxItem("20に変更", 20);
+    mctx->genComboBoxItem("21に変更", 21);
+    mctx->genComboBoxItem("22に変更", 22);
+    mctx->genComboBoxItem("23に変更", 23);
+    mctx->genComboBoxItem("24に変更", 24);
+    mctx->genComboBoxItem("25に変更", 25);
+    mctx->genComboBoxItem("26に変更", 26);
+    mctx->genComboBoxItem("27に変更", 27);
+    mctx->genComboBoxItem("28に変更", 28);
+    mctx->genComboBoxItem("29に変更", 29);
+    mctx->genComboBoxItem("30に変更", 30);
+    mctx->genComboBoxItem("31に変更", 31);
+    mctx->genComboBoxItem("32に変更", 32);
+    mctx->genComboBoxItem("33に変更", 33);
+    mctx->genComboBoxItem("34に変更", 34);
+    mctx->genComboBoxItem("35に変更", 35);
+    mctx->genComboBoxItem("36に変更", 36);
+    mctx->genComboBoxItem("37に変更", 37);
+    mctx->genComboBoxItem("38に変更", 38);
+    mctx->genComboBoxItem("39に変更", 39);
+    mctx->genComboBoxItem("40に変更", 40);
+    mctx->genComboBoxItem("41に変更", 41);
+    mctx->genComboBoxItem("42に変更", 42);
+    mctx->genComboBoxItem("43に変更", 43);
+    mctx->genComboBoxItem("44に変更", 44);
+    mctx->genComboBoxItem("45に変更", 43); // possible bug?
+    mctx->genComboBoxItem("46に変更", 46);
+    mctx->genComboBoxItem("47に変更", 47);
+    mctx->genComboBoxItem("48に変更", 48);
+    mctx->genComboBoxItem("49に変更", 49);
+    mctx->genComboBoxItem("50に変更", 50);
+    mctx->genComboBoxItem("51に変更", 51);
+    mctx->genComboBoxItem("52に変更", 52);
+    mctx->genComboBoxItem("53に変更", 53);
+    mctx->genComboBoxItem("54に変更", 54);
+    mctx->genComboBoxItem("55に変更", 55);
+    mctx->genComboBoxItem("56に変更", 56);
+    mctx->genComboBoxItem("57に変更", 57);
+    mctx->genComboBoxItem("58に変更", 58);
+    mctx->genComboBoxItem("59に変更", 59);
+    mctx->genComboBoxItem("60に変更", 60);
+    mctx->genComboBoxItem("61に変更", 61);
+    mctx->genComboBoxItem("62に変更", 62);
+    mctx->genComboBoxItem("63に変更", 63);
+    mctx->endComboBox();
+
+    mctx->genCheckBox("環境タグデバッグ表示", &display_env_tag_debug, 1, 0, NULL, 0xffff, 0xffff,
+                      0x200, 0x18);
+    mctx->genCheckBox("天気予報表デバッグ表示", &display_wether_debug, 1, 0, NULL, 0xffff, 0xffff,
+                      0x200, 0x18);
+    mctx->genCheckBox("スケジュールビット表示", &display_schedule_bit, 1, 0, NULL, 0xffff, 0xffff,
+                      0x200, 0x18);
+
+    mctx->startComboBox("雨を降らせる", &start_rain, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genComboBoxItem("無し", 0);
+    mctx->genComboBoxItem("小雨", 1);
+    mctx->genComboBoxItem("大雨", 2);
+    mctx->genComboBoxItem("曇る", 3);
+    mctx->genComboBoxItem("晴れに戻す", 4);
+    mctx->genComboBoxItem("カミナリ", 5);
+    mctx->genComboBoxItem("カミナリ&大雨", 6);
+    mctx->endComboBox();
+
+    mctx->genCheckBox("エフェクトライトモニタ", &effect_light_monitor, 1, 0, NULL, 0xffff, 0xffff,
+                      0x200, 0x18);
+
+    mctx->startComboBox("ポイントライトモニタ", &point_light_monitor, 0, NULL, 0xffff, 0xffff,
+                        0x100, 0x1a);
+    mctx->genComboBoxItem("しない", 0);
+    mctx->genComboBoxItem("ID一覧", 1);
+    mctx->genComboBoxItem("位置も表示", 2);
+    mctx->endComboBox();
+
+    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("settingTevStructをしない", &no_setting_tevstr, 1, 0, NULL, 0xffff, 0xffff,
+                      0x200, 0x18);
+    mctx->genCheckBox("colortypeをしない", &no_color_type, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+
+    mctx->genNode("ライト設定", &light, 0, 0);
+    mctx->genNode("ＶＲボックス", &vrbox, 0, 0);
+    mctx->genNode("飽和加算設定", &bloom, 0, 0);
+    mctx->genNode("環境エフェクト色々", &navy, 0, 0);
+    mctx->genNode("エフェクトライト", &effLight, 0, 0);
+    mctx->genNode("風", &wind, 0, 0);
+    mctx->genNode("デモライト", &demoLight, 0, 0);
+    mctx->genNode("パーティクル設定", &particleLight, 0, 0);
 }
 
 #endif
@@ -5838,7 +8599,7 @@ static int dKy_Delete(sub_kankyo__class* i_this) {
 }
 
 static int dKy_Create(void* i_this) {
-    (void)i_this;
+    kankyo_class* kankyo = (kankyo_class*)i_this;
     BOOL next_time_set = false;
 
     stage_envr_info_class* stage_envr_p = dComIfGp_getStageEnvrInfo();
@@ -5850,7 +8611,7 @@ static int dKy_Create(void* i_this) {
             #if DEBUG
             OS_REPORT("\n-----------------------------------");
             OS_REPORT("\n飽和加算用にＲＡＭを確保しました！ ");
-            OS_REPORT("\n-----------------------------------");
+            OS_REPORT("\n-----------------------------------\n");
             #endif
         }
     }
@@ -5916,6 +8677,31 @@ static int dKy_Create(void* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
+static leafdraw_method_class l_dKy_Method = {
+    (process_method_func)dKy_Create,  (process_method_func)dKy_Delete,
+    (process_method_func)dKy_Execute, (process_method_func)dKy_IsDelete,
+    (process_method_func)dKy_Draw,
+};
+
+extern kankyo_process_profile_definition g_profile_KANKYO = {
+    fpcLy_CURRENT_e,
+    1,
+    fpcPi_CURRENT_e,
+    PROC_KANKYO,
+    &g_fpcLf_Method.base,
+    sizeof(sub_kankyo__class),
+    0,
+    0,
+    &g_fopKy_Method,
+    2,
+    &l_dKy_Method,
+};
+
+static void dummy_str_0x40a0() {
+    char* str1 = "ステージが変わったときかなぁ～？？？";
+    char* str2 = "POINTLIGHT RECALL![%f][%f][%f]";
+}
+
 void dKy_setLight_init() {
     for (int i = 0; i < 8; i++) {
         lightStatusData[i] = lightStatusBase;
@@ -5976,13 +8762,16 @@ BOOL dKy_lightswitch_check(stage_pure_lightvec_info_class* stage_light_info_p, c
 void dKy_setLight_nowroom_common(char room_no, f32 light_ratio) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
-    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     MtxP view_mtx = j3dSys.getViewMtx();
     dKy_tevstr_c* room_tevstr = dComIfGp_roomControl_getTevStr(room_no);
 
     if (dComIfGp_roomControl_getStatusRoomDt(room_no) != NULL) {
-        stage_pure_lightvec_info_class* room_light_info = dComIfGp_roomControl_getStatusRoomDt(room_no)->getLightVecInfo();
-        int room_light_info_num = dComIfGp_roomControl_getStatusRoomDt(room_no)->getLightVecInfoNum();
+        int room_light_info_num;
+        int eflight_id;
+        stage_pure_lightvec_info_class* room_light_info =
+            dComIfGp_roomControl_getStatusRoomDt(room_no)->getLightVecInfo();
+        room_light_info_num = dComIfGp_roomControl_getStatusRoomDt(room_no)->getLightVecInfoNum();
         if (room_light_info_num > 6) {
             room_light_info_num = 6;
         }
@@ -6018,7 +8807,7 @@ void dKy_setLight_nowroom_common(char room_no, f32 light_ratio) {
         }
 
         if (camera != 0) {
-            int eflight_id = dKy_eflight_influence_id(camera->lookat.eye, 0);
+            eflight_id = dKy_eflight_influence_id(camera->lookat.eye, 0);
             if (eflight_id >= 0) {
                 dKy_bgparts_activelight_set(g_env_light.efplight[eflight_id], 1);
                 if (dKy_Indoor_check() == TRUE) {
@@ -6061,84 +8850,128 @@ void dKy_setLight_nowroom_common(char room_no, f32 light_ratio) {
         }
 
         for (int i = 0; i < 6; i++) {
-            if (room_light_info != 0) {
-                if (i < room_light_info_num) {
-                    lightStatusPt[i + 2].position.x = room_light_info[i].position.x;
-                    lightStatusPt[i + 2].position.y = room_light_info[i].position.y;
-                    lightStatusPt[i + 2].position.z = room_light_info[i].position.z;
+            #if DEBUG
+            if (!g_kankyoHIO.light.m_HOSTIO_setting)
+            #endif
+            {
+                #if DEBUG
+                if (dComIfGp_roomControl_getStayNo() == room_no) {
+                    g_kankyoHIO.dungeonLight.usedLights = room_light_info_num;
+                }
+                #endif
 
-                    if (dKy_lightswitch_check(&room_light_info[i], room_no) == TRUE) {
-                        lightStatusPt[i + 2].mRefDist = room_light_info[i].radius;
+                if (room_light_info != 0) {
+                    if (i < room_light_info_num) {
+                        (lightStatusPt + 2)[i].position.x = room_light_info[i].position.x;
+                        (lightStatusPt + 2)[i].position.y = room_light_info[i].position.y;
+                        (lightStatusPt + 2)[i].position.z = room_light_info[i].position.z;
+
+                        if (dKy_lightswitch_check(&room_light_info[i], room_no) == TRUE) {
+                            (lightStatusPt + 2)[i].mRefDist = room_light_info[i].radius;
+                        } else {
+                            (lightStatusPt + 2)[i].mRefDist = 0.000001f;
+                        }
+
+                        (lightStatusPt + 2)[i].mRefBrightness = 0.99999f;
+                        (lightStatusPt + 2)[i].field_0x1c = 0;
+                        (lightStatusPt + 2)[i].mSpotFn = (GXSpotFn)room_light_info[i].spot_type;
+                        (lightStatusPt + 2)[i].mDistFn = (GXDistAttnFn)room_light_info[i].dist_atten_type;
+                        (lightStatusPt + 2)[i].mCutoff = room_light_info[i].spotCutoff;
+                        dKy_lightdir_set(room_light_info[i].directionX, room_light_info[i].directionY,
+                                         &(lightStatusPt + 2)[i].mLightDir);
                     } else {
-                        lightStatusPt[i + 2].mRefDist = 0.000001f;
+                        (lightStatusPt + 2)[i].mRefDist = 0.0f;
+                        (lightStatusPt + 2)[i].mRefBrightness = 0.99999f;
+                        (lightStatusPt + 2)[i].field_0x1c = 0;
+                        (lightStatusPt + 2)[i].mDistFn = GX_DA_OFF;
+                        (lightStatusPt + 2)[i].mSpotFn = GX_SP_OFF;
+                        (lightStatusPt + 2)[i].mCutoff = 90.0f;
+                    }
+                }
+
+                if (dKy_SunMoon_Light_Check() == TRUE && i <= 1) {
+                    lightMask |= lightMaskData[2];
+                    lightMask |= lightMaskData[3];
+
+                    if (i == 0) {
+                        (lightStatusPt + 2)[i].position = kankyo->sun_pos;
+                    } else if (camera != 0) {
+                        (lightStatusPt + 2)[i].position = camera->lookat.eye + kankyo->moon_pos;
+                    } else {
+                        (lightStatusPt + 2)[i].position = kankyo->moon_pos;
                     }
 
-                    lightStatusPt[i + 2].mRefBrightness = 0.99999f;
-                    lightStatusPt[i + 2].field_0x1c = 0;
-                    lightStatusPt[i + 2].mSpotFn = (GXSpotFn)room_light_info[i].spot_type;
-                    lightStatusPt[i + 2].mDistFn = (GXDistAttnFn)room_light_info[i].dist_atten_type;
-                    lightStatusPt[i + 2].mCutoff = room_light_info[i].spotCutoff;
-                    dKy_lightdir_set(room_light_info[i].directionX, room_light_info[i].directionY,
-                                     &((&lightStatusPt[i] + 2))->mLightDir);
+                    (lightStatusPt + 2)[i].mRefDist = 10000.0f;
+                    (lightStatusPt + 2)[i].mRefBrightness = 0.99999f;
+                    (lightStatusPt + 2)[i].field_0x1c = 1;
+                    (lightStatusPt + 2)[i].mDistFn = GX_DA_STEEP;
+                    (lightStatusPt + 2)[i].mSpotFn = GX_SP_OFF;
+                }
+
+                if (lightMask & lightMaskData[i + 2]) {
+                    if (room_tevstr == NULL) {
+                        JUT_ASSERT(12633, FALSE);
+                    }
+
+                    J3DLightInfo* room_light = room_tevstr->mLights[i].getLightInfo();
+                    if (room_light != NULL) {
+                        (lightStatusPt + 2)[i].color =
+                            dKy_light_influence_col(&room_light->mColor, light_ratio);
+                    } else {
+                        (lightStatusPt + 2)[i].color =
+                            dKy_light_influence_col(&g_env_light.dungeonlight[i].mColor, light_ratio);
+                    }
+
+                    #if DEBUG
+                    if (!g_kankyoHIO.light.m_HOSTIO_setting)
+                    #endif
+                    {
+                        if (room_no == dComIfGp_roomControl_getStayNo() && room_light_info != NULL &&
+                            i < room_light_info_num)
+                        {
+                            g_env_light.dungeonlight[i].mPosition = (lightStatusPt + 2)[i].position;
+                            g_env_light.dungeonlight[i].mRefDistance = (lightStatusPt + 2)[i].mRefDist;
+                            g_env_light.dungeonlight[i].mCutoffAngle = (lightStatusPt + 2)[i].mCutoff;
+                            g_env_light.dungeonlight[i].mAngleAttenuation = (lightStatusPt + 2)[i].mSpotFn;
+                            g_env_light.dungeonlight[i].mDistAttenuation = (lightStatusPt + 2)[i].mDistFn;
+                            g_env_light.dungeonlight[i].mAngleX = room_light_info[i].directionX;
+                            g_env_light.dungeonlight[i].mAngleY = room_light_info[i].directionY;
+                        }
+                    }
                 } else {
-                    lightStatusPt[i + 2].mRefDist = 0.0f;
-                    lightStatusPt[i + 2].mRefBrightness = 0.99999f;
-                    lightStatusPt[i + 2].field_0x1c = 0;
-                    lightStatusPt[i + 2].mDistFn = GX_DA_OFF;
-                    lightStatusPt[i + 2].mSpotFn = GX_SP_OFF;
-                    lightStatusPt[i + 2].mCutoff = 90.0f;
+                    (lightStatusPt + 2)[i].color.r = 0;
+                    (lightStatusPt + 2)[i].color.g = 0;
+                    (lightStatusPt + 2)[i].color.b = 0;
                 }
             }
-
-            if (dKy_SunMoon_Light_Check() == TRUE && i <= 1) {
-                lightMask |= lightMaskData[2];
-                lightMask |= lightMaskData[3];
-
-                if (i == 0) {
-                    ((&lightStatusPt[i] + 2))->position = kankyo->sun_pos;
-                } else if (camera != 0) {
-                    ((&lightStatusPt[i] + 2))->position = camera->lookat.eye + kankyo->moon_pos;
+            #if DEBUG
+            else {
+                (lightStatusPt + 2)[i].position = g_env_light.dungeonlight[i].mPosition;
+                (lightStatusPt + 2)[i].mRefDist = g_env_light.dungeonlight[i].mRefDistance;
+                #if DEBUG
+                (lightStatusPt + 2)[i].mRefBrightness = 0.99999f;
+                #else
+                (lightStatusPt + 2)[i].mRefBrightness = g_env_light.dungeonlight[i].mRefDistance;
+                #endif
+                (lightStatusPt + 2)[i].field_0x1c = 0;
+                (lightStatusPt + 2)[i].mSpotFn = (GXSpotFn)g_env_light.dungeonlight[i].mAngleAttenuation;
+                (lightStatusPt + 2)[i].mDistFn = (GXDistAttnFn)g_env_light.dungeonlight[i].mDistAttenuation;
+                (lightStatusPt + 2)[i].mCutoff = g_env_light.dungeonlight[i].mCutoffAngle;
+                dKy_lightdir_set(g_env_light.dungeonlight[i].mAngleX,
+                                 g_env_light.dungeonlight[i].mAngleY,
+                                 &(lightStatusPt + 2)[i].position);
+                if (g_kankyoHIO.dungeonLight.usedLights < i) {
+                    lightMask |= lightMaskData[i + 2];
+                    (lightStatusPt + 2)[i].color = dKy_light_influence_col(
+                        &g_env_light.dungeonlight[i].mColor,
+                        g_env_light.bg_light_influence * light_ratio);
                 } else {
-                    ((&lightStatusPt[i] + 2))->position = kankyo->moon_pos;
+                    (lightStatusPt + 2)[i].color.r = 0;
+                    (lightStatusPt + 2)[i].color.g = 0;
+                    (lightStatusPt + 2)[i].color.b = 0;
                 }
-
-                lightStatusPt[i + 2].mRefDist = 10000.0f;
-                lightStatusPt[i + 2].mRefBrightness = 0.99999f;
-                lightStatusPt[i + 2].field_0x1c = 1;
-                lightStatusPt[i + 2].mDistFn = GX_DA_STEEP;
-                lightStatusPt[i + 2].mSpotFn = GX_SP_OFF;
             }
-
-            if (lightMask & lightMaskData[i + 2]) {
-                if (room_tevstr == NULL) {
-                    JUT_ASSERT(12633, FALSE);
-                }
-
-                J3DLightInfo* room_light = &room_tevstr->mLights[i].getLightInfo();
-                if (room_light != NULL) {
-                    ((&lightStatusPt[i] + 2))->color =
-                        dKy_light_influence_col(&room_light->mColor, light_ratio);
-                } else {
-                    ((&lightStatusPt[i] + 2))->color =
-                        dKy_light_influence_col(&g_env_light.dungeonlight[i].mColor, light_ratio);
-                }
-
-                if (room_no == dComIfGp_roomControl_getStayNo() && room_light_info != NULL &&
-                    i < room_light_info_num)
-                {
-                    g_env_light.dungeonlight[i].mPosition = ((&lightStatusPt[i] + 2))->position;
-                    g_env_light.dungeonlight[i].mRefDistance = lightStatusPt[i + 2].mRefDist;
-                    g_env_light.dungeonlight[i].mCutoffAngle = lightStatusPt[i + 2].mCutoff;
-                    g_env_light.dungeonlight[i].mAngleAttenuation = lightStatusPt[i + 2].mSpotFn;
-                    g_env_light.dungeonlight[i].mDistAttenuation = lightStatusPt[i + 2].mDistFn;
-                    g_env_light.dungeonlight[i].mAngleX = room_light_info[i].directionX;
-                    g_env_light.dungeonlight[i].mAngleY = room_light_info[i].directionY;
-                }
-            } else {
-                lightStatusPt[i + 2].color.r = 0;
-                lightStatusPt[i + 2].color.g = 0;
-                lightStatusPt[i + 2].color.b = 0;
-            }
+            #endif
         }
 
         for (int i = 0; i < 6; i++) {
@@ -6154,32 +8987,32 @@ void dKy_setLight_nowroom_common(char room_no, f32 light_ratio) {
                         }
 
                         if (room_tevstr->Type < 16) {
-                            lightStatusPt[j + 2].position.x = kankyo->field_0x0c18[i].mPos.x;
-                            lightStatusPt[j + 2].position.y = kankyo->field_0x0c18[i].mPos.y;
-                            lightStatusPt[j + 2].position.z = kankyo->field_0x0c18[i].mPos.z;
+                            (lightStatusPt + 2)[j].position.x = kankyo->field_0x0c18[i].mPos.x;
+                            (lightStatusPt + 2)[j].position.y = kankyo->field_0x0c18[i].mPos.y;
+                            (lightStatusPt + 2)[j].position.z = kankyo->field_0x0c18[i].mPos.z;
                         } else {
-                            lightStatusPt[j + 2].position.x = kankyo->field_0x0c18[i].mPos.x;
+                            (lightStatusPt + 2)[j].position.x = kankyo->field_0x0c18[i].mPos.x;
                             if (i == 0) {
-                                lightStatusPt[j + 2].position.y =
+                                (lightStatusPt + 2)[j].position.y =
                                     kankyo->field_0x0c18[i].mPos.y + g_env_light.field_0x127c;
                             } else {
-                                lightStatusPt[j + 2].position.y =
+                                (lightStatusPt + 2)[j].position.y =
                                     200.0f + kankyo->field_0x0c18[i].mPos.y;
                             }
-                            lightStatusPt[j + 2].position.z = kankyo->field_0x0c18[i].mPos.z;
+                            (lightStatusPt + 2)[j].position.z = kankyo->field_0x0c18[i].mPos.z;
                         }
 
-                        ((&lightStatusPt[j] + 2))->color = dKy_light_influence_col(&kankyo->field_0x0c18[i].mColor, light_ratio);
-                        lightStatusPt[j + 2].mRefDist = kankyo->field_0x0c18[i].mRefDistance;
-                        lightStatusPt[j + 2].mRefBrightness = 0.99999f;
-                        lightStatusPt[j + 2].field_0x1c = 1;
-                        lightStatusPt[j + 2].mSpotFn = (GXSpotFn)kankyo->field_0x0c18[i].mAngleAttenuation;
-                        lightStatusPt[j + 2].mDistFn = (GXDistAttnFn)kankyo->field_0x0c18[i].mDistAttenuation;
-                        lightStatusPt[j + 2].mCutoff = kankyo->field_0x0c18[i].mCutoffAngle;
+                        (lightStatusPt + 2)[j].color = dKy_light_influence_col(&kankyo->field_0x0c18[i].mColor, light_ratio);
+                        (lightStatusPt + 2)[j].mRefDist = kankyo->field_0x0c18[i].mRefDistance;
+                        (lightStatusPt + 2)[j].mRefBrightness = 0.99999f;
+                        (lightStatusPt + 2)[j].field_0x1c = 1;
+                        (lightStatusPt + 2)[j].mSpotFn = (GXSpotFn)kankyo->field_0x0c18[i].mAngleAttenuation;
+                        (lightStatusPt + 2)[j].mDistFn = (GXDistAttnFn)kankyo->field_0x0c18[i].mDistAttenuation;
+                        (lightStatusPt + 2)[j].mCutoff = kankyo->field_0x0c18[i].mCutoffAngle;
 
                         dKy_lightdir_set(kankyo->field_0x0c18[i].mAngleX,
                                          kankyo->field_0x0c18[i].mAngleY,
-                                         &((&lightStatusPt[j] + 2))->mLightDir);
+                                         &(lightStatusPt + 2)[j].mLightDir);
                         break;
                     }
                 }
@@ -6289,7 +9122,8 @@ void dKy_setLight_nowroom_actor(dKy_tevstr_c* tevstr_p) {
 
     if (dComIfGp_roomControl_getStatusRoomDt(room_no) != NULL) {
         J3DLightInfo* light;
-        stage_pure_lightvec_info_class* room_lights = dComIfGp_roomControl_getStatusRoomDt(room_no)->getLightVecInfo();
+        stage_pure_lightvec_info_class* room_lights =
+            dComIfGp_roomControl_getStatusRoomDt(room_no)->getLightVecInfo();
         int room_light_num = dComIfGp_roomControl_getStatusRoomDt(room_no)->getLightVecInfoNum();
         if (room_light_num > 6) {
             room_light_num = 6;
@@ -6312,128 +9146,210 @@ void dKy_setLight_nowroom_actor(dKy_tevstr_c* tevstr_p) {
 
         room_lights = dComIfGp_roomControl_getStatusRoomDt(room_no)->getLightVecInfo();
 
+        f32 var_f30;
+        f32 var_f29;
         for (int i = 0; i < 6; i++) {
-            light = &tevstr_p->mLights[i].getLightInfo();
-            if (view_mtx != NULL) {
-                if (room_lights != 0 && i < room_light_num) {
-                    sp3C.x = room_lights[i].position.x;
-                    sp3C.y = room_lights[i].position.y;
-                    sp3C.z = room_lights[i].position.z;
+            light = tevstr_p->mLights[i].getLightInfo();
+            if (
+                #if DEBUG
+                !g_kankyoHIO.light.m_HOSTIO_setting && !g_kankyoHIO.vrbox.m_VrboxSetting
+                #else
+                true
+                #endif
+            ) {
+                if (view_mtx != NULL) {
+                    if (room_lights != 0 && i < room_light_num) {
+                        sp3C.x = room_lights[i].position.x;
+                        sp3C.y = room_lights[i].position.y;
+                        sp3C.z = room_lights[i].position.z;
 
-                    dKy_GXInitLightSpot(light, room_lights[i].spotCutoff, room_lights[i].spot_type);
+                        dKy_GXInitLightSpot(light, room_lights[i].spotCutoff, room_lights[i].spot_type);
 
-                    f32 var_f29;
-                    if (dKy_lightswitch_check(&room_lights[i], room_no) == TRUE) {
-                        var_f29 = light_ratio * room_lights[i].radius;
-                    } else {
-                        var_f29 = 0.000001f;
+                        if (dKy_lightswitch_check(&room_lights[i], room_no) == TRUE) {
+                            var_f29 = light_ratio * room_lights[i].radius;
+                        } else {
+                            var_f29 = 0.000001f;
+                        }
+
+                        dKy_GXInitLightDistAttn(light, var_f29, 0.99999f,
+                                                room_lights[i].dist_atten_type);
+                        dKy_lightdir_set(room_lights[i].directionX, room_lights[i].directionY,
+                                         &light->mLightDirection);
+                        light->mLightDirection.x = -light->mLightDirection.x;
+                        light->mLightDirection.y = -light->mLightDirection.y;
+                        light->mLightDirection.z = -light->mLightDirection.z;
                     }
 
-                    dKy_GXInitLightDistAttn(light, var_f29, 0.99999f,
-                                            room_lights[i].dist_atten_type);
-                    dKy_lightdir_set(room_lights[i].directionX, room_lights[i].directionY,
-                                     &light->mLightDirection);
-                    light->mLightDirection.x = -light->mLightDirection.x;
-                    light->mLightDirection.y = -light->mLightDirection.y;
-                    light->mLightDirection.z = -light->mLightDirection.z;
-                }
+                    if (dKy_SunMoon_Light_Check() == TRUE && i <= 1) {
+                        lightMask |= lightMaskData[2];
+                        lightMask |= lightMaskData[3];
 
-                if (dKy_SunMoon_Light_Check() == TRUE && i <= 1) {
-                    lightMask |= lightMaskData[2];
-                    lightMask |= lightMaskData[3];
+                        if (i == 0) {
+                            sp3C.x = kankyo->sun_pos.x;
+                            sp3C.y = kankyo->sun_pos.y;
+                            sp3C.z = kankyo->sun_pos.z;
+                        } else if (camera != NULL) {
+                            sp3C.x = camera->lookat.eye.x + kankyo->moon_pos.x;
+                            sp3C.y = camera->lookat.eye.y + kankyo->moon_pos.y;
+                            sp3C.z = camera->lookat.eye.z + kankyo->moon_pos.z;
+                        } else {
+                            sp3C.x = kankyo->moon_pos.x;
+                            sp3C.y = kankyo->moon_pos.y;
+                            sp3C.z = kankyo->moon_pos.z;
+                        }
 
-                    if (i == 0) {
-                        sp3C.x = kankyo->sun_pos.x;
-                        sp3C.y = kankyo->sun_pos.y;
-                        sp3C.z = kankyo->sun_pos.z;
-                    } else if (camera != NULL) {
-                        sp3C.x = camera->lookat.eye.x + kankyo->moon_pos.x;
-                        sp3C.y = camera->lookat.eye.y + kankyo->moon_pos.y;
-                        sp3C.z = camera->lookat.eye.z + kankyo->moon_pos.z;
-                    } else {
-                        sp3C.x = kankyo->moon_pos.x;
-                        sp3C.y = kankyo->moon_pos.y;
-                        sp3C.z = kankyo->moon_pos.z;
+                        dKy_GXInitLightSpot(light, 90.0f, GX_SP_OFF);
+                        var_f29 = 10000.0f;
+                        dKy_GXInitLightDistAttn(light, var_f29, 0.99999f, GX_DA_STEEP);
                     }
 
-                    dKy_GXInitLightSpot(light, 90.0f, GX_SP_OFF);
-                    dKy_GXInitLightDistAttn(light, 10000.0f, 0.99999f, GX_DA_STEEP);
+                    cMtx_multVec(view_mtx, &sp3C, &light_pos);
+                    light->mLightPosition = light_pos;
+
+                    if (1.0f != light_ratio) {
+                        light->mColor.r *= light_ratio;
+                        light->mColor.g *= light_ratio;
+                        light->mColor.b *= light_ratio;
+                    }
                 }
 
-                cMtx_multVec(view_mtx, &sp3C, &light_pos);
-                light->mLightPosition = light_pos;
+                if (!(lightMask & lightMaskData[i + 2])) {
+                    light->mColor.r = 0;
+                    light->mColor.g = 0;
+                    light->mColor.b = 0;
+                }
 
+                #if DEBUG
+                if ((tevstr_p->Type == 10 || tevstr_p->Type == 9) &&
+                    dComIfGp_roomControl_getStayNo() == room_no) {
+                    if (room_lights != NULL) {
+                        if (i < room_light_num) {
+                            g_env_light.dungeonlight[i].mPosition = sp3C;
+                            if (dKy_SunMoon_Light_Check() == TRUE) {
+                                if (i <= 1) {
+                                    g_env_light.dungeonlight[i].mRefDistance = 10000.0f;
+                                } else {
+                                    g_env_light.dungeonlight[i].mRefDistance =
+                                        room_lights[i].radius;
+                                }
+                            }
+                        }
+                    } else {
+                        if (dKy_SunMoon_Light_Check() == TRUE) {
+                            if (i <= 1) {
+                                g_kankyoHIO.dungeonLight.usedLights = 2;
+                                g_env_light.dungeonlight[i].mPosition = sp3C;
+                                if (dKy_SunMoon_Light_Check() == TRUE) {
+                                    if (i <= 1) {
+                                        g_env_light.dungeonlight[i].mRefDistance = 10000.0f;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                #endif
+
+                light = tevstr_p->mLightObj.getLightInfo();
                 if (1.0f != light_ratio) {
                     light->mColor.r *= light_ratio;
                     light->mColor.g *= light_ratio;
                     light->mColor.b *= light_ratio;
                 }
-            }
+            } else {
+                if (view_mtx != NULL) {
+                    sp3C.x = g_env_light.dungeonlight[i].mPosition.x;
+                    sp3C.y = g_env_light.dungeonlight[i].mPosition.y;
+                    sp3C.z = g_env_light.dungeonlight[i].mPosition.z;
 
-            if (!(lightMask & lightMaskData[i + 2])) {
-                light->mColor.r = 0;
-                light->mColor.g = 0;
-                light->mColor.b = 0;
-            }
+                    cMtx_multVec(view_mtx, &sp3C, &light_pos);
+                    light->mLightPosition = light_pos;
+                    light->mLightPosition.x = light_pos.x;
+                    light->mLightPosition.y = light_pos.y;
+                    light->mLightPosition.z = light_pos.z;
 
-            light = &tevstr_p->mLightObj.getLightInfo();
-            if (1.0f != light_ratio) {
-                light->mColor.r *= light_ratio;
-                light->mColor.g *= light_ratio;
-                light->mColor.b *= light_ratio;
+                    dKy_GXInitLightSpot(light, g_env_light.dungeonlight[i].mCutoffAngle,
+                                        g_env_light.dungeonlight[i].mAngleAttenuation);
+
+                    var_f30 = g_env_light.dungeonlight[i].mRefDistance;
+                    if (var_f30 <= 0.0f) {
+                        var_f30 = 0.000001f;
+                    }
+                    dKy_GXInitLightDistAttn(light, var_f30, 0.99999f,
+                                            g_env_light.dungeonlight[i].mDistAttenuation);
+
+                    dKy_lightdir_set(g_env_light.dungeonlight[i].mAngleX,
+                                     g_env_light.dungeonlight[i].mAngleY,
+                                     &light->mLightDirection);
+
+                    light->mLightDirection.x = -light->mLightDirection.x;
+                    light->mLightDirection.y = -light->mLightDirection.y;
+                    light->mLightDirection.z = -light->mLightDirection.z;
+                }
+
+                if (i < g_kankyoHIO.dungeonLight.usedLights) {
+                    lightMask |= lightMaskData[i + 2];
+
+                    light->mColor = dKy_light_influence_col(
+                        &g_env_light.dungeonlight[i].mColor, tevstr_p->field_0x374);
+                } else {
+                    light->mColor.r = 0;
+                    light->mColor.g = 0;
+                    light->mColor.b = 0;
+                }
             }
         }
 
-        for (int i = 0; i < 6; i++) {
-            if (kankyo->field_0x0c18[i].field_0x26 == 1 && view_mtx != NULL) {
-                for (int j = 0; j < 6; j++) {
-                    if (!(lightMask & lightMaskData[j + 2])) {
-                        lightMask |= lightMaskData[j + 2];
+        for (int i_sp30 = 0; i_sp30 < 6; i_sp30++) {
+            if (kankyo->field_0x0c18[i_sp30].field_0x26 == 1 && view_mtx != NULL) {
+                for (int j_sp14 = 0; j_sp14 < 6; j_sp14++) {
+                    if (!(lightMask & lightMaskData[j_sp14 + 2])) {
+                        lightMask |= lightMaskData[j_sp14 + 2];
 
-                        light = &tevstr_p->mLights[j].getLightInfo();
-                        if (kankyo->field_0x0c18[i].mColor.a == 254 ||
-                            kankyo->field_0x0c18[i].mColor.a == 253)
+                        light = tevstr_p->mLights[j_sp14].getLightInfo();
+                        if (kankyo->field_0x0c18[i_sp30].mColor.a == 254 ||
+                            kankyo->field_0x0c18[i_sp30].mColor.a == 253)
                         {
-                            dKy_twi_wolflight_set(i);
+                            dKy_twi_wolflight_set(i_sp30);
                         }
 
-                        light->mColor = dKy_light_influence_col(&kankyo->field_0x0c18[i].mColor,
+                        light->mColor = dKy_light_influence_col(&kankyo->field_0x0c18[i_sp30].mColor,
                                                                 tevstr_p->field_0x374);
 
                         if (tevstr_p->Type < 16) {
-                            sp3C.x = kankyo->field_0x0c18[i].mPos.x;
-                            sp3C.y = kankyo->field_0x0c18[i].mPos.y;
-                            sp3C.z = kankyo->field_0x0c18[i].mPos.z;
+                            sp3C.x = kankyo->field_0x0c18[i_sp30].mPos.x;
+                            sp3C.y = kankyo->field_0x0c18[i_sp30].mPos.y;
+                            sp3C.z = kankyo->field_0x0c18[i_sp30].mPos.z;
 
-                            if (kankyo->field_0x0c18[i].mColor.a == 253) {
+                            if (kankyo->field_0x0c18[i_sp30].mColor.a == 253) {
                                 light->mColor.r = light->mColor.r * 0.65f;
                                 light->mColor.g = light->mColor.g * 0.65f;
                                 light->mColor.b = light->mColor.b * 0.65f;
                             }
                         } else {
-                            sp3C.x = kankyo->field_0x0c18[i].mPos.x;
-                            if (i == 0) {
-                                sp3C.y = kankyo->field_0x0c18[i].mPos.y + g_env_light.field_0x127c;
+                            sp3C.x = kankyo->field_0x0c18[i_sp30].mPos.x;
+                            if (i_sp30 == 0) {
+                                sp3C.y = kankyo->field_0x0c18[i_sp30].mPos.y + g_env_light.field_0x127c;
                             } else {
-                                sp3C.y = 200.0f + kankyo->field_0x0c18[i].mPos.y;
+                                sp3C.y = 200.0f + kankyo->field_0x0c18[i_sp30].mPos.y;
                             }
-                            sp3C.z = kankyo->field_0x0c18[i].mPos.z;
+                            sp3C.z = kankyo->field_0x0c18[i_sp30].mPos.z;
                         }
 
-                        dKy_GXInitLightSpot(light, kankyo->field_0x0c18[i].mCutoffAngle,
-                                            kankyo->field_0x0c18[i].mAngleAttenuation);
-                        f32 var_f30 = kankyo->field_0x0c18[i].mRefDistance * light_ratio;
+                        dKy_GXInitLightSpot(light, kankyo->field_0x0c18[i_sp30].mCutoffAngle,
+                                            kankyo->field_0x0c18[i_sp30].mAngleAttenuation);
+                        var_f30 = kankyo->field_0x0c18[i_sp30].mRefDistance * light_ratio;
                         if (var_f30 <= 0.0f) {
                             var_f30 = 0.000001f;
                         }
 
                         dKy_GXInitLightDistAttn(light, var_f30, 0.99999f,
-                                                kankyo->field_0x0c18[i].mDistAttenuation);
+                                                kankyo->field_0x0c18[i_sp30].mDistAttenuation);
                         cMtx_multVec(view_mtx, &sp3C, &light_pos);
                         light->mLightPosition = light_pos;
 
-                        dKy_lightdir_set(kankyo->field_0x0c18[i].mAngleX,
-                                         kankyo->field_0x0c18[i].mAngleY, &light->mLightDirection);
+                        dKy_lightdir_set(kankyo->field_0x0c18[i_sp30].mAngleX,
+                                         kankyo->field_0x0c18[i_sp30].mAngleY, &light->mLightDirection);
                         light->mLightDirection.x = -light->mLightDirection.x;
                         light->mLightDirection.y = -light->mLightDirection.y;
                         light->mLightDirection.z = -light->mLightDirection.z;
@@ -6529,7 +9445,9 @@ void dKy_plight_set(LIGHT_INFLUENCE* light_inf_p) {
             var_r30 = 1;
             g_env_light.pointlight[i] = light_inf_p;
             g_env_light.pointlight[i]->mIndex = i + 1;
+            #if !DEBUG
             break;
+            #endif
         }
     }
 
@@ -6729,6 +9647,16 @@ void dKy_Itemgetcol_chg_on() {
     }
 }
 
+// unused and stripped, existence is inferred from string in .data
+void dKy_Itemgetcol_chg_off() {
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+    OS_REPORT("\ndKy_Itemgetcol_chg_off[%d]", kankyo->Itemgetcol_chg);
+
+    if (kankyo->Itemgetcol_chg == 1 || kankyo->Itemgetcol_chg == 6) {
+        kankyo->Itemgetcol_chg = 0;
+    }
+}
+
 void dKy_Sound_init() {
     g_env_light.sound_influence.position.x = 999999.9f;
     g_env_light.sound_influence.position.y = 999999.9f;
@@ -6857,7 +9785,7 @@ void dKy_GfFog_tevstr_set(dKy_tevstr_c* tevstr_p) {
 
 static void GxXFog_set() {
     dKyd_xfog_table_set(g_env_light.mFogAdjTableType);
-    GXSetFogRangeAdj(g_env_light.mFogAdjEnable, g_env_light.mFogAdjCenter, &g_env_light.mXFogTbl);
+    GXSetFogRangeAdj(g_env_light.mFogAdjEnable, (u16)g_env_light.mFogAdjCenter, &g_env_light.mXFogTbl);
 }
 
 void dKy_change_colpat(u8 colpat) {
@@ -6889,7 +9817,7 @@ void dKy_custom_colset(u8 prevGather, u8 curGather, f32 blend) {
 
 void dKy_setLight_mine(dKy_tevstr_c* tevstr_p) {
     GXLightObj light;
-    J3DLightInfo& info = tevstr_p->mLightObj.getLightInfo();
+    J3DLightInfo& info = *tevstr_p->mLightObj.getLightInfo();
 
     GXInitLightPos(&light, info.mLightPosition.x, info.mLightPosition.y, info.mLightPosition.z);
     GXInitLightDir(&light, info.mLightDirection.x, info.mLightDirection.y, info.mLightDirection.z);
@@ -6922,7 +9850,7 @@ void dKy_tevstr_init(dKy_tevstr_c* tevstr_p, s8 room_no, u8 floorCol) {
     tevstr_p->field_0x374 = 1.0f;
     tevstr_p->field_0x384 = 0;
 
-    light_info = &tevstr_p->mLightObj.getLightInfo();
+    light_info = tevstr_p->mLightObj.getLightInfo();
     light_info->mColor.g = 0;
     light_info->mColor.b = 0;
     light_info->mColor.a = 255;
@@ -6935,7 +9863,7 @@ void dKy_tevstr_init(dKy_tevstr_c* tevstr_p, s8 room_no, u8 floorCol) {
 
     int i;
     for (i = 0; i < 6; i++) {
-        light_info = &tevstr_p->mLights[i].getLightInfo();
+        light_info = tevstr_p->mLights[i].getLightInfo();
 
         light_info->mLightPosition = lightStatusData[i].position;
         light_info->mColor = lightStatusData[i].color;
@@ -7080,26 +10008,6 @@ static GXColor NewAmbColGet(GXColorS10* in_col_p) {
     return amb_col;
 }
 
-static leafdraw_method_class l_dKy_Method = {
-    (process_method_func)dKy_Create,  (process_method_func)dKy_Delete,
-    (process_method_func)dKy_Execute, (process_method_func)dKy_IsDelete,
-    (process_method_func)dKy_Draw,
-};
-
-extern kankyo_process_profile_definition g_profile_KANKYO = {
-    fpcLy_CURRENT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_KANKYO,
-    &g_fpcLf_Method.base,
-    sizeof(sub_kankyo__class),
-    0,
-    0,
-    &g_fopKy_Method,
-    2,
-    &l_dKy_Method,
-};
-
 // fixes float literal order
 static f32 dummy() {
     return 50.0f;
@@ -7114,6 +10022,7 @@ void dKy_ParticleColor_get_base(cXyz* param_0, dKy_tevstr_c* param_1, GXColor* p
     u8 spD = 0;
     s8 room_no;
 
+    GXColorS10 sp50;
     GXColorS10 sp48;
     J3DLightInfo* sp44;
     GXColor sp40;
@@ -7124,7 +10033,7 @@ void dKy_ParticleColor_get_base(cXyz* param_0, dKy_tevstr_c* param_1, GXColor* p
 
     for (i = 0; i < 6; i++) {
         if (param_1 != NULL) {
-            sp44 = &param_1->mLights[i].getLightInfo();
+            sp44 = param_1->mLights[i].getLightInfo();
             sp40 = sp44->mColor;
         } else {
             sp38 = dComIfGp_roomControl_getStayNo();
@@ -7143,6 +10052,24 @@ void dKy_ParticleColor_get_base(cXyz* param_0, dKy_tevstr_c* param_1, GXColor* p
                 }
             }
         }
+
+        #if DEBUG
+        if (g_kankyoHIO.light.m_HOSTIO_setting || g_kankyoHIO.vrbox.m_VrboxSetting) {
+            int stayNo = dComIfGp_roomControl_getStayNo();
+            if (dComIfGp_roomControl_getStatusRoomDt(stayNo) != NULL) {
+                stage_pure_lightvec_info_class* sp28 =
+                    dComIfGp_roomControl_getStatusRoomDt(stayNo)->getLightVecInfo();
+                int sp24 = dComIfGp_roomControl_getStatusRoomDt(stayNo)->getLightVecInfoNum();
+                if (i < sp24) {
+                    sp40 = g_env_light.dungeonlight[i].mColor;
+                } else {
+                    sp40.r = 0;
+                    sp40.g = 0;
+                    sp40.b = 0;
+                }
+            }
+        }
+        #endif
 
         f32 var_f31;
         if (dKy_SunMoon_Light_Check() == TRUE && i <= 1) {
@@ -7203,10 +10130,10 @@ void dKy_ParticleColor_get_base(cXyz* param_0, dKy_tevstr_c* param_1, GXColor* p
                         var_f27 = 0.0f;
                     }
                 } else {
-                    sp64.x = lightStatusPt[i + 2].position.x;
-                    sp64.y = lightStatusPt[i + 2].position.y;
-                    sp64.z = lightStatusPt[i + 2].position.z;
-                    var_f27 = 190.0f * lightStatusPt[i + 2].mRefDist;
+                    sp64.x = (lightStatusPt + 2)[i].position.x;
+                    sp64.y = (lightStatusPt + 2)[i].position.y;
+                    sp64.z = (lightStatusPt + 2)[i].position.z;
+                    var_f27 = 190.0f * (lightStatusPt + 2)[i].mRefDist;
                 }
             } else {
                 sp64.x = 100000000.0f;
@@ -7257,7 +10184,7 @@ void dKy_ParticleColor_get_base(cXyz* param_0, dKy_tevstr_c* param_1, GXColor* p
     sp48.g = 0;
     sp48.b = 0;
 
-    for (int i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
         if (sp58[i] < 100000000.0f) {
             spD++;
         }
@@ -7270,16 +10197,17 @@ void dKy_ParticleColor_get_base(cXyz* param_0, dKy_tevstr_c* param_1, GXColor* p
         {0.6f, 0.3f, 0.1f},
     };
 
+    f32 temp_f28;
     if (sp58[0] < 100000000.0f) {
-        f32 temp_f28 = parcent_tabel[spD][0];
+        temp_f28 = parcent_tabel[spD][0];
         sp48.r = sp70[0].r * temp_f28;
         sp48.g = sp70[0].g * temp_f28;
         sp48.b = sp70[0].b * temp_f28;
     }
 
-    for (int i = 1; i < 3; i++) {
+    for (i = 1; i < 3; i++) {
         if (sp58[i] < 100000000.0f) {
-            f32 temp_f28 = parcent_tabel[spD][i];
+            temp_f28 = parcent_tabel[spD][i];
             sp48.r += (s16)(sp70[i].r * temp_f28);
             sp48.g += (s16)(sp70[i].g * temp_f28);
             sp48.b += (s16)(sp70[i].b * temp_f28);
@@ -7292,31 +10220,31 @@ void dKy_ParticleColor_get_base(cXyz* param_0, dKy_tevstr_c* param_1, GXColor* p
     sp48.g = (0.8f * param_2->g) + (1.2f * param_3->g);
     sp48.b = (0.8f * param_2->b) + (1.2f * param_3->b);
 
+    f32 temp_f30;
     if (sp48.r > 0xFF) {
-        f32 temp_f30 = 255.0f / sp48.r;
+        temp_f30 = 255.0f / sp48.r;
         sp48.r *= temp_f30;
         sp48.g *= temp_f30;
         sp48.b *= temp_f30;
     }
 
     if (sp48.g > 0xFF) {
-        f32 temp_f30 = 255.0f / sp48.g;
+        temp_f30 = 255.0f / sp48.g;
         sp48.r *= temp_f30;
         sp48.g *= temp_f30;
         sp48.b *= temp_f30;
     }
 
     if (sp48.b > 0xFF) {
-        f32 temp_f30 = 255.0f / sp48.b;
+        temp_f30 = 255.0f / sp48.b;
         sp48.r *= temp_f30;
         sp48.g *= temp_f30;
         sp48.b *= temp_f30;
     }
 
-    GXColorS10 sp50;
-    sp50.r = sp48.r & 0xFF;
-    sp50.g = sp48.g & 0xFF;
-    sp50.b = sp48.b & 0xFF;
+    sp50.r = (u8)sp48.r;
+    sp50.g = (u8)sp48.g;
+    sp50.b = (u8)sp48.b;
 
     f32 sp20 = param_4->r / 255.0f;
     f32 sp1C = param_4->g / 255.0f;
@@ -7404,6 +10332,9 @@ int dKy_BossLight_set(cXyz* pos_p, GXColor* color_p, f32 ref_dist, u8 param_3) {
             boss_light_p[i].mColor.b = color_p->b;
             boss_light_p[i].mColor.a = 0xFF;
             boss_light_p[i].mRefDistance = ref_dist;
+            if (boss_light_p[i].mRefDistance <= 0.0f && boss_light_p[i].mRefDistance < 0.000001f) {
+                // empty
+            }
             boss_light_p[i].field_0x14 = 0.99f;
             boss_light_p[i].mCutoffAngle = 90.0f;
             boss_light_p[i].mAngleX = 0.0f;
@@ -7452,6 +10383,9 @@ int dKy_BossLight_set(cXyz* pos_p, GXColor* color_p, f32 ref_dist, u8 param_3) {
             boss_light_p[i].mColor.b = color_p->b;
             boss_light_p[i].mColor.a = 0xFF;
             boss_light_p[i].mRefDistance = ref_dist;
+            if (boss_light_p[i].mRefDistance <= 0.0f && boss_light_p[i].mRefDistance < 0.000001f) {
+                // empty
+            }
             boss_light_p[i].field_0x14 = 0.99f;
             boss_light_p[i].mCutoffAngle = 90.0f;
             boss_light_p[i].mAngleX = 0.0f;
@@ -7483,6 +10417,10 @@ int dKy_BossSpotLight_set(cXyz* pos_p, f32 angle_x, f32 angle_y, f32 cutoff, GXC
             kankyo->field_0x0c18[i].mColor.b = color_p->b;
             kankyo->field_0x0c18[i].mColor.a = 0xFF;
             kankyo->field_0x0c18[i].mRefDistance = ref_dist;
+            if (kankyo->field_0x0c18[i].mRefDistance <= 0.0f &&
+                kankyo->field_0x0c18[i].mRefDistance < 0.000001f) {
+                // empty
+            }
             kankyo->field_0x0c18[i].field_0x14 = 0.99f;
             kankyo->field_0x0c18[i].mCutoffAngle = cutoff;
             kankyo->field_0x0c18[i].mAngleX = angle_x;
@@ -7516,6 +10454,10 @@ int dKy_BossSpotLight_set(cXyz* pos_p, f32 angle_x, f32 angle_y, f32 cutoff, GXC
                 kankyo->field_0x0c18[i].mColor.b = color_p->b;
                 kankyo->field_0x0c18[i].mColor.a = 0xFF;
                 kankyo->field_0x0c18[i].mRefDistance = ref_dist;
+                if (kankyo->field_0x0c18[i].mRefDistance <= 0.0f &&
+                    kankyo->field_0x0c18[i].mRefDistance < 0.000001f) {
+                    // empty
+                }
                 kankyo->field_0x0c18[i].field_0x14 = 0.99f;
                 kankyo->field_0x0c18[i].mCutoffAngle = cutoff;
                 kankyo->field_0x0c18[i].mAngleX = angle_x;
@@ -7534,26 +10476,48 @@ int dKy_BossSpotLight_set(cXyz* pos_p, f32 angle_x, f32 angle_y, f32 cutoff, GXC
 int dKy_WolfEyeLight_set(cXyz* pos_p, f32 angle_x, f32 angle_y, f32 cutoff, GXColor* color_p,
                          f32 ref_dist, u8 spot_type, u8 distattn_type) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
+    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
 
-    kankyo->field_0x0c18[0].mPos = *pos_p;
+    int sp28 = 0;
+    int sp24 = 0;
+    f32 var_f28 = -100000000.0f;
+    f32 var_f27 = 0.0f;
+    int var_r29 = 0;
 
-    kankyo->field_0x0c18[0].mColor.r = color_p->r;
-    kankyo->field_0x0c18[0].mColor.g = color_p->g;
-    kankyo->field_0x0c18[0].mColor.b = color_p->b;
-    kankyo->field_0x0c18[0].mColor.a = 255;
+    kankyo->field_0x0c18[var_r29].mPos = *pos_p;
 
-    kankyo->field_0x0c18[0].mRefDistance = ref_dist;
-    kankyo->field_0x0c18[0].field_0x14 = 0.99f;
-    kankyo->field_0x0c18[0].mCutoffAngle = cutoff;
-    kankyo->field_0x0c18[0].mAngleX = angle_x;
-    kankyo->field_0x0c18[0].mAngleY = angle_y + 90.0f;
-    kankyo->field_0x0c18[0].mAngleAttenuation = spot_type;
-    kankyo->field_0x0c18[0].mDistAttenuation = distattn_type;
+    kankyo->field_0x0c18[var_r29].mColor.r = color_p->r;
+    kankyo->field_0x0c18[var_r29].mColor.g = color_p->g;
+    kankyo->field_0x0c18[var_r29].mColor.b = color_p->b;
+    kankyo->field_0x0c18[var_r29].mColor.a = 255;
+
+    kankyo->field_0x0c18[var_r29].mRefDistance = ref_dist;
+
+    if (kankyo->field_0x0c18[var_r29].mRefDistance <= 0 &&
+        kankyo->field_0x0c18[var_r29].mRefDistance < 0.000001f) {
+        // empty
+    }
+
+    kankyo->field_0x0c18[var_r29].field_0x14 = 0.99f;
+    kankyo->field_0x0c18[var_r29].mCutoffAngle = cutoff;
+    kankyo->field_0x0c18[var_r29].mAngleX = angle_x;
+    kankyo->field_0x0c18[var_r29].mAngleY = angle_y + 90.0f;
+    kankyo->field_0x0c18[var_r29].mAngleAttenuation = spot_type;
+    kankyo->field_0x0c18[var_r29].mDistAttenuation = distattn_type;
+
+    int light_size = g_env_light.light_size;
+#if DEBUG
+    if (g_kankyoHIO.navy.room_light_type != 0) {
+        int dummy; /// dummy declaration to force debug to use r31 for stack pointer
+        light_size = g_kankyoHIO.navy.room_light_type - 1;
+    }
+#endif
 
     f32 var_f31;
     f32 var_f30;
     f32 var_f29;
-    switch (kankyo->light_size) {
+    switch (light_size) {
     case LIGHT_SIZE_S:
         var_f31 = 50.0f;
         var_f30 = 1.0f;
@@ -7576,18 +10540,56 @@ int dKy_WolfEyeLight_set(cXyz* pos_p, f32 angle_x, f32 angle_y, f32 cutoff, GXCo
         var_f29 = 1.5f;
     }
 
-    kankyo->field_0x127c = var_f31;
-    kankyo->field_0x0c18[0].mRefDistance *= var_f30;
-    kankyo->field_0x0c18[0].mCutoffAngle *= var_f29;
-    kankyo->field_0x0c18[0].field_0x26 = 1;
-    return 1;
+#if DEBUG
+    if (!g_kankyoHIO.navy.use_debug)
+#endif
+    {
+        kankyo->field_0x127c = var_f31;
+
+#if DEBUG
+        kankyo->field_0x0c18[var_r29].mRefDistance *= var_f30;
+        kankyo->field_0x0c18[var_r29].mCutoffAngle *= var_f29;
+#endif
+    }
+
+#if DEBUG
+    static int S_mLighSize_pat_old = 0x63;
+    if (S_mLighSize_pat_old != g_kankyoHIO.navy.room_light_type) {
+        S_mLighSize_pat_old = g_kankyoHIO.navy.room_light_type;
+
+        g_kankyoHIO.navy.terrain_height_crr = var_f31;
+        g_kankyoHIO.navy.influence_multiplier = var_f30;
+        g_kankyoHIO.navy.cutoff_multiplier = var_f29;
+
+        g_kankyoHIO.light.dKankyo_lightHIOInfoUpDateF();
+    }
+
+    if (g_kankyoHIO.navy.use_debug) {
+        kankyo->field_0x127c = g_kankyoHIO.navy.terrain_height_crr;
+        kankyo->field_0x0c18[var_r29].mRefDistance *= g_kankyoHIO.navy.influence_multiplier;
+        kankyo->field_0x0c18[var_r29].mCutoffAngle *= g_kankyoHIO.navy.cutoff_multiplier;
+    }
+#else
+    kankyo->field_0x0c18[var_r29].mRefDistance *= var_f30;
+    kankyo->field_0x0c18[var_r29].mCutoffAngle *= var_f29;
+#endif
+
+    kankyo->field_0x0c18[var_r29].field_0x26 = 1;
+
+    sp28 = 1;
+    return sp28;
 }
 
 void dKy_twilight_camelight_set() {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
     camera_class* camera_p = (camera_class*)dComIfGp_getCamera(0);
-    u8 sp8 = 0;
+
+    f32 var_f31;
+    f32 var_f30;
+    int i;
+    int sp8 = 0;
+    f32 var_f29 = -100000000.0f;
 
     if (strcmp(dComIfGp_getStartStageName(), "R_SP107") != 0 ||
         dComIfGp_roomControl_getStayNo() != 3 || dComIfGp_getStartStageLayer() != 12)
@@ -7597,15 +10599,15 @@ void dKy_twilight_camelight_set() {
         }
 
         if (!daPy_py_c::checkNowWolfPowerUp()) {
-            for (int i = 0; i < 6; i++) {
+            for (i = 0; i < 6; i++) {
                 if (kankyo->field_0x0c18[i].field_0x26 != 1) {
                     dKy_twi_wolflight_set(i);
                     kankyo->field_0x0c18[i].field_0x14 = 0.99f;
                     kankyo->field_0x0c18[i].mColor.a = 254;
 
-                    f32 var_f31 = 0.0f;
+                    var_f31 = 0.0f;
                     if (player_p != NULL) {
-                        f32 var_f30 = camera_p->lookat.eye.y - player_p->current.pos.y;
+                        var_f30 = camera_p->lookat.eye.y - player_p->current.pos.y;
                         if (var_f30 < 0.0f) {
                             var_f30 = 0.0f;
                         }
@@ -7650,9 +10652,60 @@ void dKy_twilight_camelight_set() {
                         break;
                     }
 
+                    #if DEBUG
+
+                    switch (g_kankyoHIO.navy.room_light_type) {
+                    case 0:
+                        break;
+                    case 1:
+                        cLib_addCalc(&kankyo->field_0x0c18[i].mRefDistance,
+                                     0.75f * var_f31 + 1.0625f, 0.5f, 100.0f, 0.0001f);
+                        kankyo->field_0x0c18[i].mCutoffAngle = 90.0f;
+                        break;
+                    case 2:
+                        cLib_addCalc(&kankyo->field_0x0c18[i].mRefDistance,
+                                     0.75f * var_f31 + 1.7f, 0.5f, 100.0f, 0.0001f);
+                        kankyo->field_0x0c18[i].mCutoffAngle = 70.0f;
+                        break;
+                    case 3:
+                        cLib_addCalc(&kankyo->field_0x0c18[i].mRefDistance,
+                                     0.75f * var_f31 + 2.5500002f, 0.5f, 100.0f, 0.0001f);
+                        kankyo->field_0x0c18[i].mCutoffAngle = 70.0f;
+                        break;
+                    case 4:
+                        cLib_addCalc(&kankyo->field_0x0c18[i].mRefDistance,
+                                     0.75f * var_f31 + 3.4f, 0.5f, 100.0f, 0.0001f);
+                        kankyo->field_0x0c18[i].mCutoffAngle = 65.0f;
+                        break;
+                    }
+
+                    if (g_kankyoHIO.navy.camera_light_adjust_ON) {
+                        kankyo->field_0x0c18[i].mColor.r = g_kankyoHIO.navy.camera_light_col.r;
+                        kankyo->field_0x0c18[i].mColor.g = g_kankyoHIO.navy.camera_light_col.g;
+                        kankyo->field_0x0c18[i].mColor.b = g_kankyoHIO.navy.camera_light_col.b;
+
+                        kankyo->field_0x0c18[i].mRefDistance =
+                            g_kankyoHIO.navy.camera_light_power * 0.85f + var_f31 * 0.75f;
+                        kankyo->field_0x0c18[i].mCutoffAngle = g_kankyoHIO.navy.camera_light_cutoff;
+                    }
+
+                    if (kankyo->field_0x0c18[i].mRefDistance <= 0 &&
+                        kankyo->field_0x0c18[i].mRefDistance < 0.000001f) {
+                        // empty
+                    }
+
+                    kankyo->field_0x0c18[i].mAngleAttenuation = g_kankyoHIO.navy.camera_light_sp;
+                    kankyo->field_0x0c18[i].mDistAttenuation = g_kankyoHIO.navy.camera_light_da;
+                    kankyo->field_0x0c18[i].field_0x26 = 1;
+
+                    #else
+
                     kankyo->field_0x0c18[i].mAngleAttenuation = GX_SP_COS;
                     kankyo->field_0x0c18[i].mDistAttenuation = GX_DA_STEEP;
                     kankyo->field_0x0c18[i].field_0x26 = 1;
+
+                    #endif
+
                     break;
                 }
             }
@@ -7660,7 +10713,6 @@ void dKy_twilight_camelight_set() {
     }
 }
 
-// NONMATCHING - direct g_env_light member loads instead of storing to temps. matches debug, not retail
 void dKy_WaterIn_Light_set() {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
@@ -7769,7 +10821,7 @@ void dKy_WaterIn_Light_set() {
             }
 
 #if DEBUG
-            if (g_kankyoHIO.navy.field_0x311 == 0) {
+            if (g_kankyoHIO.navy.use_debug == 0) {
 #endif
                 kankyo->field_0x127c = var_f29;
                 kankyo->field_0x0c18[i].mRefDistance *= var_f28;
@@ -7787,7 +10839,7 @@ void dKy_WaterIn_Light_set() {
                 g_kankyoHIO.light.dKankyo_lightHIOInfoUpDateF();
             }
 
-            if (g_kankyoHIO.navy.field_0x311 != 0) {
+            if (g_kankyoHIO.navy.use_debug != 0) {
                 kankyo->field_0x127c = g_kankyoHIO.navy.terrain_height_crr;
                 kankyo->field_0x0c18[i].mRefDistance *= g_kankyoHIO.navy.influence_multiplier;
                 kankyo->field_0x0c18[i].mCutoffAngle *= g_kankyoHIO.navy.cutoff_multiplier;
@@ -7803,11 +10855,13 @@ void dKy_WaterIn_Light_set() {
 }
 
 void dKy_camera_water_in_status_set(u8 status) {
-    g_env_light.camera_water_in_status = status;
+    dScnKy_env_light_c* envlight = dKy_getEnvlight();
+    envlight->camera_water_in_status = status;
 }
 
 BOOL dKy_camera_water_in_status_check() {
-    return g_env_light.camera_water_in_status;
+    dScnKy_env_light_c* envlight = dKy_getEnvlight();
+    return envlight->camera_water_in_status;
 }
 
 u8 dKy_pol_efftype_get(const cBgS_PolyInfo* polyinfo_p) {
@@ -7892,6 +10946,9 @@ u8 dKy_pol_sound_get(const cBgS_PolyInfo* polyinfo_p) {
     }
 
     if (sound == 0xFF) {
+        #if DEBUG
+        dDbVw_Report(20, 100, "err code.csv sound z0[%d]z1[%d]", z0, z1);
+        #endif
         sound = 0;
     }
 
@@ -7899,7 +10956,7 @@ u8 dKy_pol_sound_get(const cBgS_PolyInfo* polyinfo_p) {
 }
 
 u8 dKy_pol_argument_get(const cBgS_PolyInfo* polyinfo_p) {
-    dScnKy_env_light_c* kankyo = &g_env_light;
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
         return 0;
     }
@@ -7912,15 +10969,19 @@ u8 dKy_pol_argument_get(const cBgS_PolyInfo* polyinfo_p) {
     }
 
     int z1 = dComIfG_Bgsp().GetPolyAtt1(*polyinfo_p);
+    u8 retval;
     if (kankyo->pol_arg != NULL) {
-        return kankyo->pol_arg[z0].data[z1];
+        retval = kankyo->pol_arg[z0].data[z1];
+    } else {
+        retval = 0;
     }
 
-    return 0;
+    return retval;
 }
 
 u8 dKy_pol_eff_prim_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
-    dScnKy_env_light_c* kankyo = &g_env_light;
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+    u8 eff_id = 0;
     if (polyinfo_p == NULL || out_color_p == NULL || &dComIfG_Bgsp() == NULL) {
         return 0xFF;
     }
@@ -7939,7 +11000,6 @@ u8 dKy_pol_eff_prim_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
     }
 
     int z1 = dComIfG_Bgsp().GetPolyAtt1(*polyinfo_p);
-    u8 eff_id;
     if (kankyo->pol_effcol != NULL) {
         eff_id = kankyo->pol_effcol[z0].data[z1];
     } else {
@@ -7957,7 +11017,8 @@ u8 dKy_pol_eff_prim_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
 }
 
 u8 dKy_pol_eff_env_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
-    dScnKy_env_light_c* kankyo = &g_env_light;
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+    u8 eff_id = 0;
     if (polyinfo_p == NULL || out_color_p == NULL || &dComIfG_Bgsp() == NULL) {
         return 0xFF;
     }
@@ -7976,7 +11037,6 @@ u8 dKy_pol_eff_env_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
     }
 
     int z1 = dComIfG_Bgsp().GetPolyAtt1(*polyinfo_p);
-    u8 eff_id;
     if (kankyo->pol_effcol != NULL) {
         eff_id = kankyo->pol_effcol[z0].data[z1];
     } else {
@@ -7994,7 +11054,8 @@ u8 dKy_pol_eff_env_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
 }
 
 u8 dKy_pol_eff2_prim_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
-    dScnKy_env_light_c* kankyo = &g_env_light;
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+    u8 eff_id = 0;
     if (polyinfo_p == NULL || out_color_p == NULL || &dComIfG_Bgsp() == NULL) {
         return 0xFF;
     }
@@ -8013,7 +11074,6 @@ u8 dKy_pol_eff2_prim_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) 
     }
 
     int z1 = dComIfG_Bgsp().GetPolyAtt1(*polyinfo_p);
-    u8 eff_id;
     if (kankyo->pol_effcol2 != NULL) {
         eff_id = kankyo->pol_effcol2[z0].data[z1];
     } else {
@@ -8031,7 +11091,8 @@ u8 dKy_pol_eff2_prim_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) 
 }
 
 u8 dKy_pol_eff2_env_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
-    dScnKy_env_light_c* kankyo = &g_env_light;
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+    u8 eff_id = 0;
     if (polyinfo_p == NULL || out_color_p == NULL || &dComIfG_Bgsp() == NULL) {
         return 0xFF;
     }
@@ -8050,7 +11111,6 @@ u8 dKy_pol_eff2_env_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
     }
 
     int z1 = dComIfG_Bgsp().GetPolyAtt1(*polyinfo_p);
-    u8 eff_id;
     if (kankyo->pol_effcol2 != NULL) {
         eff_id = kankyo->pol_effcol2[z0].data[z1];
     } else {
@@ -8068,12 +11128,14 @@ u8 dKy_pol_eff2_env_get(const cBgS_PolyInfo* polyinfo_p, GXColor* out_color_p) {
 }
 
 u8 dKy_pol_eff_alpha_get(const cBgS_PolyInfo* polyinfo_p) {
-    dScnKy_env_light_c* kankyo = &g_env_light;
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+    int z0;
+    u8 eff_id = 0;
     if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
         return 0xFF;
     }
 
-    int z0 = dComIfG_Bgsp().GetPolyAtt0(*polyinfo_p);
+    z0 = dComIfG_Bgsp().GetPolyAtt0(*polyinfo_p);
     if (strcmp(dComIfGp_getStartStageName(), "F_SP127") == 0 &&
         g_env_light.fishing_hole_season == 4)
     {
@@ -8087,7 +11149,6 @@ u8 dKy_pol_eff_alpha_get(const cBgS_PolyInfo* polyinfo_p) {
     }
 
     int z1 = dComIfG_Bgsp().GetPolyAtt1(*polyinfo_p);
-    u8 eff_id;
     if (kankyo->pol_effcol != NULL) {
         eff_id = kankyo->pol_effcol[z0].data[z1];
     } else {
@@ -8103,7 +11164,8 @@ u8 dKy_pol_eff_alpha_get(const cBgS_PolyInfo* polyinfo_p) {
 }
 
 f32 dKy_pol_eff_ratio_get(const cBgS_PolyInfo* polyinfo_p) {
-    dScnKy_env_light_c* kankyo = &g_env_light;
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+    u8 eff_id;
     f32 ratio = 0.0f;
 
     if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
@@ -8124,7 +11186,6 @@ f32 dKy_pol_eff_ratio_get(const cBgS_PolyInfo* polyinfo_p) {
     }
 
     int z1 = dComIfG_Bgsp().GetPolyAtt1(*polyinfo_p);
-    u8 eff_id;
     if (kankyo->pol_effcol != NULL) {
         eff_id = kankyo->pol_effcol[z0].data[z1];
     } else {
@@ -8141,12 +11202,14 @@ f32 dKy_pol_eff_ratio_get(const cBgS_PolyInfo* polyinfo_p) {
 }
 
 u8 dKy_pol_eff2_alpha_get(const cBgS_PolyInfo* polyinfo_p) {
-    dScnKy_env_light_c* kankyo = &g_env_light;
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+    int z0;
+    u8 retval = 0;
     if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
         return 0xFF;
     }
 
-    int z0 = dComIfG_Bgsp().GetPolyAtt0(*polyinfo_p);
+    z0 = dComIfG_Bgsp().GetPolyAtt0(*polyinfo_p);
     if (strcmp(dComIfGp_getStartStageName(), "F_SP127") == 0 &&
         g_env_light.fishing_hole_season == 4)
     {
@@ -8160,23 +11223,22 @@ u8 dKy_pol_eff2_alpha_get(const cBgS_PolyInfo* polyinfo_p) {
     }
 
     int z1 = dComIfG_Bgsp().GetPolyAtt1(*polyinfo_p);
-    u8 var_r30;
     if (kankyo->pol_effcol2 != NULL) {
-        var_r30 = kankyo->pol_effcol2[z0].data[z1];
+        retval = kankyo->pol_effcol2[z0].data[z1];
     } else {
         return 0xFF;
     }
 
-    if (var_r30 >= 100) {
+    if (retval >= 100) {
         return 0xFF;
     }
 
-    var_r30 = kankyo->colordata_tbl[var_r30].data[6];
-    return var_r30;
+    retval = kankyo->colordata_tbl[retval].data[6];
+    return retval;
 }
 
 f32 dKy_pol_eff2_ratio_get(const cBgS_PolyInfo* polyinfo_p) {
-    dScnKy_env_light_c* kankyo = &g_env_light;
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     f32 ratio = 0.0f;
 
     if (polyinfo_p == NULL || &dComIfG_Bgsp() == NULL) {
@@ -8214,11 +11276,17 @@ f32 dKy_pol_eff2_ratio_get(const cBgS_PolyInfo* polyinfo_p) {
 }
 
 BOOL dKy_TeachWind_existence_chk() {
-    if (g_env_light.TeachWind_existence == 0xFF) {
+    dScnKy_env_light_c* envlight = dKy_getEnvlight();
+
+    if (envlight->TeachWind_existence == 0xFF) {
         return -1;
     }
 
-    return g_env_light.TeachWind_existence ? TRUE : FALSE;
+    if (envlight->TeachWind_existence) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 BOOL dKy_SunMoon_Light_Check() {
@@ -8284,7 +11352,13 @@ void dKy_depth_dist_set(void* process_p) {
         if (var_f31 < 2000.0f && var_f31 < kankyo->field_0x1268) {
             mDoLib_project(&actor_p->eyePos, &sp30);
 
-            if ((sp30.x >= 0.0f && sp30.x < FB_WIDTH) && (sp30.y >= 0.0f && sp30.y < 600.0f)) {
+            if ((sp30.x >= 0.0f && sp30.x < FB_WIDTH) && (sp30.y >= 0.0f &&
+                #if DEBUG
+                sp30.y < 608.0f
+                #else
+                sp30.y < 600.0f
+                #endif
+            )) {
                 cXyz sp18;
                 cXyz spC;
                 dKyr_get_vectle_calc(&camera_p->lookat.eye, &camera_p->lookat.center, &sp18);
@@ -8293,7 +11367,8 @@ void dKy_depth_dist_set(void* process_p) {
                 s16 temp_r27 = cM_atan2s(sp18.x, sp18.z);
                 s16 temp_r26 = cM_atan2s(spC.x, spC.z);
 
-                if ((s16)fabsf((f32)temp_r26 - (f32)temp_r27) > 0) {
+                temp_r27 = fabsf((f32)temp_r26 - (f32)temp_r27);
+                if (temp_r27 > 0) {
                     kankyo->field_0x1268 = var_f31;
                 }
             }
@@ -8406,15 +11481,17 @@ u8 dKy_darkworld_stage_check(char const* stageName, int roomNo) {
         if (!strcmp(stageName, darkworldTbl[i].stageName)) {
             if (darkworldTbl[i].darkLv != KY_DARKLV_ALWAYS) {
                 int fsp121CheckResult = dKy_F_SP121Check(stageName, roomNo, darkLv, i);
-                if (fsp121CheckResult >= 0) {
-                    if (fsp121CheckResult == 0) {
-                        *darkLv = darkworldTbl[i].darkLv;
-                    }
-                    if (!dComIfGs_isDarkClearLV(*darkLv)) {
-                        result = TRUE;
-                    }
-                    break;
+                if (fsp121CheckResult < 0) {
+                    continue;
                 }
+
+                if (fsp121CheckResult == 0) {
+                    *darkLv = darkworldTbl[i].darkLv;
+                }
+                if (!dComIfGs_isDarkClearLV(*darkLv)) {
+                    result = TRUE;
+                }
+                break;
             } else {
                 // KY_DARKLV_ALWAYS is used to force twilight (likely for testing). This will
                 // never normally run since it is not present in l_darkworld_tbl.
@@ -8500,6 +11577,13 @@ void dKy_murky_set(J3DMaterial* material_p) {
         tev_col.a = (u8)(g_env_light.field_0x1302 * var_f29);
     }
 
+    #if DEBUG
+    if (g_kankyoHIO.navy.water_mud_adjust_ON) {
+        tev_kcol.a = (u8)(f32)g_kankyoHIO.navy.field_0x2ea;
+        tev_col.a = (u8)(f32)g_kankyoHIO.navy.field_0x2ec;
+    }
+    #endif
+
     if (lenz_packet != NULL && sun_packet->mVisibility > 0.000001f) {
         tev_col.a = (u8)(tev_col.a *
                          (1.0f - (sun_packet->mVisibility *
@@ -8509,7 +11593,8 @@ void dKy_murky_set(J3DMaterial* material_p) {
     // Diababa room handling
     if (strcmp(dComIfGp_getStartStageName(), "D_MN05A") == 0) {
         dScnKy_env_light_c* var_r26 = dKy_getEnvlight();
-        dKankyo_mud_Packet* var_r27 = var_r26->mpMudPacket;
+        u8* sp08 = &var_r26->mMudInitialized;
+        dKankyo_mud_Packet* var_r27 = g_env_light.mpMudPacket;
 
         f32 var_f31;
         if (var_r27 != NULL) {
@@ -8520,12 +11605,12 @@ void dKy_murky_set(J3DMaterial* material_p) {
         tev_col.g = 6;
         tev_col.b = 15;
 
-        tev_col.r = (u8)(tev_col.r + (s16)(-(f32)tev_col.r * var_f31));
-        tev_col.g = (u8)(tev_col.g + (s16)((36.0f - tev_col.g) * var_f31));
-        tev_col.b = (u8)(tev_col.b + (s16)((29.0f - tev_col.b) * var_f31));
+        tev_col.r = (u8)((s16)tev_col.r + (s16)(-(f32)tev_col.r * var_f31));
+        tev_col.g = (u8)((s16)tev_col.g + (s16)((36.0f - tev_col.g) * var_f31));
+        tev_col.b = (u8)((s16)tev_col.b + (s16)((29.0f - tev_col.b) * var_f31));
 
         if (camera_p != NULL && camera_p->lookat.eye.z < 1800.0f) {
-            f32 var_f30;
+            f32 var_f30 = 1.0f;
             if (camera_p->lookat.eye.z < 1550.0f) {
                 var_f30 = 1.0f;
             } else {
@@ -8536,10 +11621,10 @@ void dKy_murky_set(J3DMaterial* material_p) {
             tev_col.a = 0;
         }
 
-        tev_col.a = (u8)(tev_col.a + (s16)(-(f32)tev_col.a * var_f31));
+        tev_col.a = (u8)((s16)tev_col.a + (s16)(-(f32)tev_col.a * var_f31));
 
         tev_kcol.a = 0xFF;
-        tev_kcol.a = (u8)(tev_kcol.a + (s16)((140.0f - tev_kcol.a) * var_f31));
+        tev_kcol.a = (u8)((s16)tev_kcol.a + (s16)((140.0f - tev_kcol.a) * var_f31));
     }
 
     tev_kcol.r = 0;
@@ -8567,26 +11652,27 @@ static J3DZModeInfo l_zmodeUpEnable = {1, 3, 1};
 static J3DZModeInfo l_zmodeUpDisable = {1, 3, 0};
 
 static J3DAlphaCompInfo l_alphaCompInfoOPA = {
-    0x07, 0x00, 0x01, 0x07, 0x00, 0x00, 0x00, 0x00,
+    0x07, 0x00, 0x01, 0x07, 0x00,
 };
 
 static J3DAlphaCompInfo l_alphaCompInfo = {
-    0x04, 0x80, 0x00, 0x03, 0xFF, 0x00, 0x00, 0x00,
+    0x04, 0x80, 0x00, 0x03, 0xFF,
 };
 
 void dKy_bg_MAxx_proc(void* bg_model_p) {
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     J3DModel* model_p = (J3DModel*)bg_model_p;
+    J3DModelData* modelData;
+    J3DTexMtxInfo* tex_mtx_inf;
+    GXColor sp5C;
     dDlst_window_c* window = dComIfGp_getWindow(0);
     camera_class* camera_p = (camera_class*)dComIfGp_getCamera(window->getCameraID());
     fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
 
     if (model_p != NULL && player_p != NULL) {
-        J3DModelData* modelData = model_p->getModelData();
+        modelData = model_p->getModelData();
 
         for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
-            J3DGXColor sp5C;
-
             J3DMaterial* mat_p = modelData->getMaterialNodePointer(i);
             JUTNameTab* mat_nametbl = modelData->getMaterialName();
             const char* mat_name = mat_nametbl->getName(i);
@@ -8657,7 +11743,7 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                     dComIfGd_setListInvisisble();
 
                     if (mat_p->getTexGenBlock()->getTexMtx(0) != NULL) {
-                        J3DTexMtxInfo* tex_mtx_inf =
+                        tex_mtx_inf =
                             &mat_p->getTexGenBlock()->getTexMtx(0)->getTexMtxInfo();
                         if (tex_mtx_inf != NULL) {
                             cXyz* sp34 = dKyw_get_wind_vec();
@@ -8672,8 +11758,11 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                                                       camera_p->aspect, 0.49f, -0.49f, 0.5f, 0.5f);
                             }
 
+                            #if !PLATFORM_GCN
+                            mDoGph_gInf_c::setWideZoomLightProjection(sp1D8);
+                            #endif
                             tex_mtx_inf->setEffectMtx(sp1D8);
-                            modelData->simpleCalcMaterial(0, (MtxP)j3dDefaultMtx);
+                            modelData->simpleCalcMaterial((MtxP)j3dDefaultMtx);
                         }
                     }
                 }
@@ -8681,7 +11770,7 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                 if (memcmp(&mat_name[3], "MA00", 4) == 0 || memcmp(&mat_name[3], "MA01", 4) == 0 ||
                     memcmp(&mat_name[3], "MA04", 4) == 0 || memcmp(&mat_name[3], "MA16", 4) == 0)
                 {
-                    sp5C.r = g_env_light.mFogDensity;
+                    sp5C.r = (u8)g_env_light.mFogDensity;
                     sp5C.g = 0;
                     sp5C.b = 0;
                     if (mat_name[6] == '1') {
@@ -8701,11 +11790,11 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                         sp5C.a = 0;
                     }
 
-                    mat_p->setTevKColor(1, &sp5C);
+                    mat_p->setTevKColor(1, (J3DGXColor*)&sp5C);
                 }
 
                 if (memcmp(&mat_name[3], "MA11", 4) == 0) {
-                    J3DGXColorS10 sp90;
+                    GXColorS10 sp90;
                     if (dKy_darkworld_check()) {
                         dComIfGd_setListDarkBG();
 
@@ -8713,13 +11802,29 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                         sp90.g = 160;
                         sp90.b = 255;
                         sp90.a = 255;
-                        mat_p->setTevColor(1, &sp90);
+                        mat_p->setTevColor(1, (J3DGXColorS10*)&sp90);
 
                         sp90.r = 50;
                         sp90.g = 20;
                         sp90.b = 90;
                         sp90.a = 255;
-                        mat_p->setTevColor(2, &sp90);
+                        mat_p->setTevColor(2, (J3DGXColorS10*)&sp90);
+
+#if DEBUG
+                        if (g_kankyoHIO.navy.light_adjust_ON) {
+                            sp90.r = g_kankyoHIO.navy.mist_twilight_c1_col.r;
+                            sp90.g = g_kankyoHIO.navy.mist_twilight_c1_col.g;
+                            sp90.b = g_kankyoHIO.navy.mist_twilight_c1_col.b;
+                            sp90.a = g_kankyoHIO.navy.mist_twilight_c1_col.a;
+                            mat_p->setTevColor(1, (J3DGXColorS10*)&sp90);
+
+                            sp90.r = g_kankyoHIO.navy.mist_twilight_c2_col.r;
+                            sp90.g = g_kankyoHIO.navy.mist_twilight_c2_col.g;
+                            sp90.b = g_kankyoHIO.navy.mist_twilight_c2_col.b;
+                            sp90.a = g_kankyoHIO.navy.mist_twilight_c2_col.a;
+                            mat_p->setTevColor(2, (J3DGXColorS10*)&sp90);
+                        }
+#endif
                     } else {
                         cXyz spFC;
                         cXyz spF0;
@@ -8733,24 +11838,42 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                             sp90.a = 0;
                         }
 
-                        mat_p->setTevColor(1, &sp90);
+                        mat_p->setTevColor(1, (J3DGXColorS10*)&sp90);
 
                         sp90.r = 40;
                         sp90.g = 30;
                         sp90.b = 65;
                         sp90.a = 255;
-                        mat_p->setTevColor(2, &sp90);
+                        mat_p->setTevColor(2, (J3DGXColorS10*)&sp90);
+
+#if DEBUG
+                        if (g_kankyoHIO.navy.light_adjust_ON) {
+                            sp90.r = g_kankyoHIO.navy.mist_twilight_c1_col.r;
+                            sp90.g = g_kankyoHIO.navy.mist_twilight_c1_col.g;
+                            sp90.b = g_kankyoHIO.navy.mist_twilight_c1_col.b;
+                            sp90.a = g_kankyoHIO.navy.mist_twilight_c1_col.a;
+                            mat_p->setTevColor(1, (J3DGXColorS10*)&sp90);
+
+                            sp90.r = g_kankyoHIO.navy.mist_twilight_c2_col.r;
+                            sp90.g = g_kankyoHIO.navy.mist_twilight_c2_col.g;
+                            sp90.b = g_kankyoHIO.navy.mist_twilight_c2_col.b;
+                            sp90.a = g_kankyoHIO.navy.mist_twilight_c2_col.a;
+                            mat_p->setTevColor(2, (J3DGXColorS10*)&sp90);
+                        }
+#endif
 
                         if (kankyo->fog_avoid_tag != NULL) {
-                            spF0 = kankyo->fog_avoid_tag->mAvoidPos;
+                            J3DTexMtxInfo* tex_mtx_inf;
+                            kytag08_class* sp28 = kankyo->fog_avoid_tag;
+                            spF0 = sp28->mAvoidPos;
                             f32 var_f28 =
-                                kankyo->fog_avoid_tag->mSize.x * kankyo->fog_avoid_tag->mSizeScale;
+                                sp28->mSize.x * sp28->mSizeScale;
                             if (var_f28 < 0.1f) {
                                 var_f28 = 0.1f;
                             }
 
                             if (mat_p->getTexGenBlock()->getTexMtx(0) != NULL) {
-                                J3DTexMtxInfo* tex_mtx_inf =
+                                tex_mtx_inf =
                                     &mat_p->getTexGenBlock()->getTexMtx(0)->getTexMtxInfo();
 
                                 if (tex_mtx_inf != NULL) {
@@ -8758,12 +11881,15 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                                     Mtx sp178;
                                     C_MTXLightPerspective(sp1A8, var_f28 * 2.8f, 1.0f, 0.5f, 0.5f,
                                                           0.0f, 0.0f);
+                                    #if !PLATFORM_GCN
+                                    mDoGph_gInf_c::setWideZoomLightProjection(sp1A8);
+                                    #endif
                                     spFC.x = spF0.x;
                                     spFC.y = 100.0f;
                                     spFC.z = spF0.z;
 
-                                    cXyz spE4(spF0.x, -1000.0f, spF0.z);
-                                    mDoMtx_lookAt(sp178, &spE4, &spFC, 0);
+                                    cXyz spE4(spFC.x, -1000.0f, spFC.z);
+                                    cMtx_lookAt(sp178, &spE4, &spFC, 0);
                                     cMtx_concat(sp1A8, sp178, sp178);
                                     tex_mtx_inf->setEffectMtx(sp178);
                                 }
@@ -8779,13 +11905,13 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                             fog_inf->mType = 7;
                         }
 
-                        J3DGXColorS10 sp88;
+                        GXColorS10 sp88;
                         sp88.r = g_env_light.bg_amb_col[3].r;
                         sp88.g = g_env_light.bg_amb_col[3].g;
                         sp88.b = g_env_light.bg_amb_col[3].b;
                         sp88.a = 255;
 
-                        mat_p->setTevColor(1, &sp88);
+                        mat_p->setTevColor(1, (J3DGXColorS10*)&sp88);
 
                         if (mat_p->getTexGenBlock()->getTexMtx(2) != NULL) {
                             J3DTexMtxInfo* tex_mtx_inf =
@@ -8795,13 +11921,16 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                                 Mtx sp148;
                                 Mtx sp118;
                                 C_MTXLightPerspective(sp148, 170.0f, 1.0f, 1.5f, 1.5f, 0.0f, 0.0f);
+                                #if !PLATFORM_GCN
+                                mDoGph_gInf_c::setWideZoomLightProjection(sp148);
+                                #endif
                                 spD8.x = player_p->current.pos.x;
                                 spD8.y = -14770.0f;
                                 spD8.z = player_p->current.pos.z;
 
                                 cXyz spC0(player_p->current.pos.x, -14570.0f,
                                           player_p->current.pos.z);
-                                mDoMtx_lookAt(sp118, &spC0, &spD8, 0);
+                                cMtx_lookAt(sp118, &spC0, &spD8, 0);
                                 cMtx_concat(sp148, sp118, sp118);
                                 tex_mtx_inf->setEffectMtx(sp118);
                             }
@@ -8842,10 +11971,9 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
             }
 
             if (memcmp(&mat_name[3], "Rainbow", 7) == 0) {
+                f32 time = g_env_light.getDaytime();
                 f32 temp_f29;
                 f32 temp_f31;
-
-                f32 time = g_env_light.getDaytime();
                 cXyz spB4;
                 camera_class* camera_p = dComIfGp_getCamera(0);
                 J3DGXColor sp10;
@@ -8857,13 +11985,23 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
 
                 temp_f31 = spA8.abs(camera_p->lookat.eye);
                 temp_f31 = -0.2f + (temp_f31 / 4500.0f);
+
+#if DEBUG
+                if (g_kankyoHIO.navy.rainbow_adjust_ON) {
+                    temp_f31 = spA8.abs(camera_p->lookat.eye);
+                    temp_f31 = temp_f31 / g_kankyoHIO.navy.rainbow_separation_dist + -0.2f;
+                }
+#endif
+
                 if (temp_f31 > 1.0f) {
                     temp_f31 = 1.0f;
                 } else if (temp_f31 < 0.0f) {
                     temp_f31 = 0.0f;
                 }
 
-                sp10.b = sp10.g = sp10.r = 255;
+                sp10.r = 255;
+                sp10.g = 255;
+                sp10.b = 255;
                 sp10.a = 255;
 
                 temp_f29 = 0.0f;
@@ -8883,9 +12021,7 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                     temp_f29 = 0.0f;
                 }
 
-                sp10.b = 255;
-                sp10.g = 255;
-                sp10.r = 255;
+                sp10.r = sp10.g = sp10.b = 255;
 
                 f32 temp_f25 = 1.0f;
 
@@ -8904,6 +12040,12 @@ void dKy_bg_MAxx_proc(void* bg_model_p) {
                         temp_f26 = (temp_f27 - 0.2f) / 0.4f;
                     }
                     sp10.a = temp_f25 * (temp_f31 * (115.0f * temp_f26 * temp_f29));
+
+#if DEBUG
+                    if (g_kankyoHIO.navy.rainbow_adjust_ON) {
+                        sp10.a = temp_f25 * (temp_f31 * (g_kankyoHIO.navy.rainbow_max_alpha * temp_f26 * temp_f29));
+                    }
+#endif
                 }
 
                 mat_p->setTevKColor(3, &sp10);

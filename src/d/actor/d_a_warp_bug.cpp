@@ -53,15 +53,11 @@ static int daWarpBug_Draw(daWarpBug_c* i_this) {
 }
 
 int daWarpBug_c::draw() {
-#ifdef DEBUG
+#if DEBUG
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
     if (!player_p->checkMidnaWarp()) {
-#endif
-
         field_0x57c = 0;
         return 1;
-
-#ifdef DEBUG
     }
 
     cLib_chaseS(&field_0x57c, 255, 25);
@@ -94,20 +90,22 @@ int daWarpBug_c::draw() {
     mpBtk->entry(modelData);
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
+#else
+    field_0x57c = 0;
+#endif
 
     return 1;
-#endif
 }
 
 int daWarpBug_c::execute() {
-#ifdef DEBUG
+#if DEBUG
     daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
 #endif
 
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
     mDoMtx_stack_c::multVecZero(&current.pos);
 
-#ifdef DEBUG
+#if DEBUG
     if (player_p->checkMidnaWarp()) {
         mpBrk->play();
         mpBtk->play();

@@ -147,13 +147,13 @@ int daObjIkada_c::Execute(Mtx** mtx) {
         posY = fopAcM_wt_c::getWaterY();
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     field_0x5c4 = field_0x5c4 + (((TREG_S(1) + 0x350) + (HREG_F(1) + 2.0f)) * field_0x5a0 + field_0x5a4 * HREG_F(9));
     #else
     field_0x5c4 = field_0x5c4 + (((HREG_F(1) + 2.0f) * field_0x5a0) + 848.0f) + field_0x5a4 * HREG_F(9);
     #endif
 
-    #ifdef DEBUG
+    #if DEBUG
     field_0x5c6 = field_0x5c6 + (((TREG_S(2) + 0x350) + (HREG_F(2) + 2.0f)) * field_0x5a0 + field_0x5a4 * HREG_F(9));
     #else
     field_0x5c6 = field_0x5c6 + (((HREG_F(2) + 2.0f) * field_0x5a0) + 848.0f) + field_0x5a4 * HREG_F(9);

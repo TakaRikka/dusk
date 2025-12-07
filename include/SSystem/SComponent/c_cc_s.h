@@ -15,14 +15,14 @@ public:
     /* 0x0400 */ cCcD_Obj* mpObjTg[0x300];
     /* 0x1000 */ cCcD_Obj* mpObjCo[0x100];
     /* 0x1400 */ cCcD_Obj* mpObj[0x500];
-#ifdef DEBUG
+#if DEBUG
     /* 0x2800 */ int m_debug_code;
 #endif
     /* 0x2800 */ u16 mObjAtCount;
     /* 0x2802 */ u16 mObjTgCount;
     /* 0x2804 */ u16 mObjCoCount;
     /* 0x2806 */ u16 mObjCount;
-#ifdef DEBUG
+#if DEBUG
     /* 0x280C */ u16 field_0x280c;
     /* 0x280E */ u16 field_0x280e;
     /* 0x2810 */ u16 field_0x2810;

@@ -4,7 +4,7 @@
 #include "d/d_save.h"
 #include "d/d_com_inf_game.h"
 
-#ifdef DEBUG
+#if DEBUG
 static const char* sSpotName[] = {
     "F_SP00",
     "F_SP103",
@@ -1039,7 +1039,7 @@ void Z2EnvSeMgr::setHyrulSewerOpen(bool isSewerOpen) {
 }
 
 bool Z2EnvSeMgr::startRiverSe(s8 param_1) {
-    #ifdef DEBUG
+    #if DEBUG
     const char** spotName = sSpotName;
     #endif
     
@@ -1271,7 +1271,7 @@ void Z2EnvSeMgr::registEtcSePos(Vec* posPtr) {
 }
 
 bool Z2EnvSeMgr::startEtcSe(s8 reverb) {
-    #ifdef DEBUG
+    #if DEBUG
     const char** spotName = sSpotName;
     #endif
 

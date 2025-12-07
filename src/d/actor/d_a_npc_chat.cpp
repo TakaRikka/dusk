@@ -2700,7 +2700,7 @@ cPhs__Step daNpcChat_c::Create() {
         mSound.init(&current.pos, &eyePos, 3, 1);
         mSound.setMdlType(mType, false, mTwilight & 0xFF);
 
-        #ifdef DEBUG
+        #if DEBUG
         // mHIO = l_HIO;
         mHIO->entryHIO("多人数会話NPC");
         #endif
@@ -3065,7 +3065,7 @@ void daNpcChat_c::setParam() {
         }
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     scale.set(daNpcChat_Param_c::m.common.scale, daNpcChat_Param_c::m.common.scale, daNpcChat_Param_c::m.common.scale);
     mAcchCir.SetWallR(daNpcChat_Param_c::m.common.width);
     mAcchCir.SetWallH(daNpcChat_Param_c::m.common.knee_length);

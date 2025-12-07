@@ -285,9 +285,9 @@ if config.version in USE_REVOLUTION_SDK_VERSIONS:
 # Debug flags
 if args.debug:
     # Or -sym dwarf-2 for Wii compilers
-    cflags_base.extend(["-sym on", "-DDEBUG=1"])
+    cflags_base.extend(["-sym on", "-DDEBUG=1", "-DDEBUG_DEFINED=1", "-DNDEBUG_DEFINED=0"])
 else:
-    cflags_base.append("-DNDEBUG=1")
+    cflags_base.extend(["-DNDEBUG=1", "-DNDEBUG_DEFINED=1", "-DDEBUG_DEFINED=0"])
 
 # Warning flags
 if args.warn == "all":
@@ -691,7 +691,7 @@ config.libs = [
             Object(MatchingFor(ALL_GCN), "d/d_a_horse_static.cpp"),
             Object(MatchingFor(ALL_GCN), "d/d_demo.cpp"),
             Object(MatchingFor(ALL_GCN, "Shield"), "d/d_door_param2.cpp"), # debug weak func order
-            Object(NonMatching, "d/d_resorce.cpp"),
+            Object(MatchingFor(ALL_GCN), "d/d_resorce.cpp"),
             Object(MatchingFor(ALL_GCN), "d/d_map_path.cpp"),
             Object(MatchingFor(ALL_GCN), "d/d_map_path_fmap.cpp"),
             Object(MatchingFor(ALL_GCN), "d/d_map_path_dmap.cpp"),
@@ -1103,10 +1103,10 @@ config.libs = [
             Object(MatchingFor(ALL_GCN), "Z2AudioLib/Z2SeMgr.cpp"),
             Object(MatchingFor(ALL_GCN), "Z2AudioLib/Z2SeqMgr.cpp"),
             Object(MatchingFor(ALL_GCN), "Z2AudioLib/Z2StatusMgr.cpp"),
-            Object(NonMatching, "Z2AudioLib/Z2SceneMgr.cpp"),
+            Object(Equivalent, "Z2AudioLib/Z2SceneMgr.cpp"), # weak func order
             Object(MatchingFor(ALL_GCN), "Z2AudioLib/Z2FxLineMgr.cpp"),
             Object(MatchingFor(ALL_GCN), "Z2AudioLib/Z2SoundInfo.cpp"),
-            Object(Equivalent, "Z2AudioLib/Z2Audience.cpp"),
+            Object(Equivalent, "Z2AudioLib/Z2Audience.cpp"), # weak func order
             Object(MatchingFor(ALL_GCN), "Z2AudioLib/Z2SoundObject.cpp"),
             Object(MatchingFor(ALL_GCN), "Z2AudioLib/Z2SoundObjMgr.cpp"),
             Object(MatchingFor(ALL_GCN), "Z2AudioLib/Z2Creature.cpp"),
@@ -1209,7 +1209,7 @@ config.libs = [
             Object(MatchingFor(ALL_GCN), "JSystem/J2DGraph/J2DOrthoGraph.cpp"),
             Object(MatchingFor(ALL_GCN), "JSystem/J2DGraph/J2DTevs.cpp"),
             Object(Equivalent, "JSystem/J2DGraph/J2DMaterial.cpp"), # weak func order
-            Object(NonMatching, "JSystem/J2DGraph/J2DMatBlock.cpp"), # weak func order (J3DTevBlock)
+            Object(MatchingFor(ALL_GCN), "JSystem/J2DGraph/J2DMatBlock.cpp"),
             Object(MatchingFor(ALL_GCN), "JSystem/J2DGraph/J2DMaterialFactory.cpp"),
             Object(MatchingFor(ALL_GCN), "JSystem/J2DGraph/J2DPrint.cpp"),
             Object(MatchingFor(ALL_GCN), "JSystem/J2DGraph/J2DPane.cpp"),
@@ -1238,7 +1238,7 @@ config.libs = [
             Object(MatchingFor(ALL_GCN, "ShieldD"), "JSystem/J3DGraphBase/J3DShapeDraw.cpp"),
             Object(MatchingFor(ALL_GCN), "JSystem/J3DGraphBase/J3DShape.cpp"),
             Object(MatchingFor(ALL_GCN), "JSystem/J3DGraphBase/J3DMaterial.cpp"),
-            Object(Equivalent, "JSystem/J3DGraphBase/J3DMatBlock.cpp"), # virtual function order
+            Object(Equivalent, "JSystem/J3DGraphBase/J3DMatBlock.cpp"), # weak func order (J3DTevBlock)
             Object(MatchingFor(ALL_GCN), "JSystem/J3DGraphBase/J3DTevs.cpp"),
             Object(MatchingFor(ALL_GCN), "JSystem/J3DGraphBase/J3DDrawBuffer.cpp"),
             Object(MatchingFor(ALL_GCN), "JSystem/J3DGraphBase/J3DStruct.cpp"),

@@ -51,7 +51,7 @@ static bool l_HIOInit;
 
 static daObj_BattaHIO_c l_HIO;
 
-#ifdef DEBUG
+#if DEBUG
 
 void daObj_BattaHIO_c::genMessage(JORMContext* ctx) {
     // Golden bugs

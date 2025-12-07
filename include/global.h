@@ -27,6 +27,11 @@
 #define REGION_KOR (VERSION == VERSION_WII_KOR)
 #define REGION_CHN (VERSION == VERSION_SHIELD || VERSION == VERSION_SHIELD_PROD || VERSION == VERSION_SHIELD_DEBUG)
 
+// define DEBUG if it isn't already so it can be used in conditions
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 #define ARRAY_SIZE(o) (s32)(sizeof(o) / sizeof(o[0]))
 #define ARRAY_SIZEU(o) (sizeof(o) / sizeof(o[0]))
 

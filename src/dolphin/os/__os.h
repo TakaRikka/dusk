@@ -98,7 +98,7 @@ void __OSReschedule(void);
 // OSTime
 void __OSSetTime(OSTime time);
 OSTime __OSGetSystemTime();
-void __OSSetTick(register OSTick newTicks);
+void __OSSetTick(__REGISTER OSTick newTicks);
 OSTime __OSTimeToSystemTime(OSTime time);
 
 // ppc_eabi_init

@@ -587,7 +587,7 @@ public:
         #endif
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     virtual void listenPropertyEvent(const JORPropertyEvent*);
     virtual void genMessage(JORMContext*);
 
@@ -601,7 +601,7 @@ public:
 
     /* 0x000 */  // vtable
     /* 0x004 */ s8 field_0x4;
-    #ifdef DEBUG
+    #if DEBUG
     int field_0x8_debug;
     #endif
     /* 0x008 */ f32 mLifeTopPosX;
@@ -1185,7 +1185,7 @@ public:
     };  // Size: 0x28
 
     dMeter_fmapHIO_c();
-#ifdef DEBUG
+#if DEBUG
     void update();
     void createEvtCallBackObject();
     void deleteEvtCallBackObject();

@@ -11,7 +11,7 @@
 #include "d/d_debug_viewer.h"
 #include "d/d_procname.h"
 
-#ifdef DEBUG
+#if DEBUG
 
 daObjFallObj_HIO_c::daObjFallObj_HIO_c() {
     mMovementShake = 0;
@@ -120,7 +120,7 @@ int daObjFallObj_c::create1st() {
             return phase;
         }
               
-        #ifdef DEBUG
+        #if DEBUG
         // Falling obj
         l_HIO.entryHIO("落下ＯＢＪ");
         #endif
@@ -363,7 +363,7 @@ int daObjFallObj_c::Draw() {
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
 
-    #ifdef DEBUG
+    #if DEBUG
     if (l_HIO.mCheckDisplay) {
         mpBgW->CalcPlane();
         daPy_py_c* player = daPy_getPlayerActorClass();
@@ -381,7 +381,7 @@ int daObjFallObj_c::Delete() {
     mSoundObj.deleteObject();
     dComIfG_resDelete(&mPhaseReq, l_arcName);
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO();
     #endif
     return 1;

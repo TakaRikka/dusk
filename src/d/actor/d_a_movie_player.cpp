@@ -808,7 +808,7 @@ static void __THPDecompressiMCURow512x448() {
     __THPInfo->dLC[2] += 0x800;
 }
 
-static void __THPInverseDCTY8(register THPCoeff* in, register u32 xPos) {
+static void __THPInverseDCTY8(__REGISTER THPCoeff* in, __REGISTER u32 xPos) {
 #ifdef __MWERKS__
     register f32 *q, *ws;
     register f32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8, tmp9;
@@ -1120,7 +1120,7 @@ static void __THPInverseDCTY8(register THPCoeff* in, register u32 xPos) {
 #endif
 }
 
-static void __THPInverseDCTNoYPos(register THPCoeff* in, register u32 xPos) {
+static void __THPInverseDCTNoYPos(__REGISTER THPCoeff* in, __REGISTER u32 xPos) {
 #ifdef __MWERKS__
     register f32 *q, *ws;
     register f32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8, tmp9;
@@ -1558,11 +1558,11 @@ static void __THPDecompressiMCURowNxN() {
     __THPInfo->dLC[2] += ((sizeof(u8) * 64) * (x / 16));
 }
 
-static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block) {
+static void __THPHuffDecodeDCTCompY(__REGISTER THPFileInfo* info, THPCoeff* block) {
     {
-        register s32 t;
+        __REGISTER s32 t;
         THPCoeff dc;
-        register THPCoeff diff;
+        __REGISTER THPCoeff diff;
 
         __dcbz((void*)block, 0);
         t = __THPHuffDecodeTab(info, Ydchuff);
@@ -1572,13 +1572,13 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
 
         if (t) {
             {
-                register s32 v;
-                register u32 cb;
-                register u32 cnt;
-                register u32 code;
-                register u32 tmp;
-                register u32 cnt1;
-                register u32 tmp1;
+                __REGISTER s32 v;
+                __REGISTER u32 cb;
+                __REGISTER u32 cnt;
+                __REGISTER u32 code;
+                __REGISTER u32 tmp;
+                __REGISTER u32 cnt1;
+                __REGISTER u32 tmp1;
                 // clang-format off
 #ifdef __MWERKS__
                 asm {
@@ -1637,13 +1637,13 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
     }
 
     {
-        register s32 k;
-        register s32 code;
-        register u32 cnt;
-        register u32 cb;
-        register u32 increment;
-        register s32 tmp;
-        register THPHuffmanTab* h = Yachuff;
+        __REGISTER s32 k;
+        __REGISTER s32 code;
+        __REGISTER u32 cnt;
+        __REGISTER u32 cb;
+        __REGISTER u32 increment;
+        __REGISTER s32 tmp;
+        __REGISTER THPHuffmanTab* h = Yachuff;
 
         // clang-format off
 #ifdef __MWERKS__
@@ -1658,8 +1658,8 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
 
         for (k = 1; k < 64; k++)
         {
-            register s32 ssss;
-            register s32 rrrr;
+            __REGISTER s32 ssss;
+            __REGISTER s32 rrrr;
 
             // clang-format off
 #ifdef __MWERKS__
@@ -1681,8 +1681,8 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
             // clang-format on
 
             {
-                register u32 maxcodebase;
-                register u32 tmp2;
+                __REGISTER u32 maxcodebase;
+                __REGISTER u32 tmp2;
 
             _FailedCheckEnoughBits:
                 cnt += 5;
@@ -1827,8 +1827,8 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
             goto _DoneDecodeTab;
 
         _Read4 : {
-            register u32 maxcodebase = (u32) & (h->maxCode);
-            register u32 tmp2;
+            __REGISTER u32 maxcodebase = (u32) & (h->maxCode);
+            __REGISTER u32 tmp2;
 
             // clang-format off
 #ifdef __MWERKS__
@@ -1860,9 +1860,9 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
         _FailedCheckNoBits0:
         _FailedCheckNoBits1:
         _REALFAILEDCHECKNOBITS : {
-            register u32 mask = 0xFFFFFFFF << (33 - cnt);
-            register u32 tmp2;
-            register u32 tmp3;
+            __REGISTER u32 mask = 0xFFFFFFFF << (33 - cnt);
+            __REGISTER u32 tmp2;
+            __REGISTER u32 tmp3;
             code = (s32)(cb & (~mask));
             mask = (u32) & (h->maxCode);
 
@@ -1917,9 +1917,9 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
             {
                 k += ssss;
                 {
-                    register s32 v;
-                    register u32 cnt1;
-                    register u32 tmp1;
+                    __REGISTER s32 v;
+                    __REGISTER u32 cnt1;
+                    __REGISTER u32 tmp1;
                     // clang-format off
 #ifdef __MWERKS__
                     asm
@@ -1992,12 +1992,12 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
     }
 }
 
-static s32 __THPHuffDecodeTab(register THPFileInfo* info, register THPHuffmanTab* h) {
-    register s32 code;
-    register u32 cnt;
-    register s32 cb;
-    register u32 increment;
-    register s32 tmp;
+static s32 __THPHuffDecodeTab(__REGISTER THPFileInfo* info, __REGISTER THPHuffmanTab* h) {
+    __REGISTER s32 code;
+    __REGISTER u32 cnt;
+    __REGISTER s32 cb;
+    __REGISTER u32 increment;
+    __REGISTER s32 tmp;
 
     // clang-format off
 #ifdef __MWERKS__
@@ -2024,8 +2024,8 @@ _done:
     return code;
 
     {
-        register u32 maxcodebase;
-        register u32 tmp2;
+        __REGISTER u32 maxcodebase;
+        __REGISTER u32 tmp2;
 
     _FailedCheckEnoughBits:
         maxcodebase = (u32) & (h->maxCode);
@@ -2134,8 +2134,8 @@ _FCEB_Done:
     return tmp;
 
 _Read4 : {
-    register u32 maxcodebase = (u32) & (h->maxCode);
-    register u32 tmp2;
+    __REGISTER u32 maxcodebase = (u32) & (h->maxCode);
+    __REGISTER u32 tmp2;
 
     // clang-format off
 #ifdef __MWERKS__
@@ -2215,8 +2215,8 @@ _FailedCheckNoBits0:
 _FailedCheckNoBits1:
 
 {
-    register u32 mask = 0xFFFFFFFF << (33 - cnt);
-    register u32 tmp2;
+    __REGISTER u32 mask = 0xFFFFFFFF << (33 - cnt);
+    __REGISTER u32 tmp2;
 
     code = (s32)(cb & (~mask));
     mask = (u32) & (h->maxCode);
@@ -2262,20 +2262,20 @@ _FailedCheckNoBits1:
     return (h->Vij[(s32)(code + h->valPtr[cnt])]);
 }
 
-static void __THPHuffDecodeDCTCompU(register THPFileInfo* info, THPCoeff* block) {
-    register s32 t;
-    register THPCoeff diff;
+static void __THPHuffDecodeDCTCompU(__REGISTER THPFileInfo* info, THPCoeff* block) {
+    __REGISTER s32 t;
+    __REGISTER THPCoeff diff;
     THPCoeff dc;
-    register s32 v;
-    register u32 cb;
-    register u32 cnt;
-    register u32 cnt33;
-    register u32 tmp;
-    register u32 cnt1;
-    register u32 tmp1;
-    register s32 k;
-    register s32 ssss;
-    register s32 rrrr;
+    __REGISTER s32 v;
+    __REGISTER u32 cb;
+    __REGISTER u32 cnt;
+    __REGISTER u32 cnt33;
+    __REGISTER u32 tmp;
+    __REGISTER u32 cnt1;
+    __REGISTER u32 tmp1;
+    __REGISTER s32 k;
+    __REGISTER s32 ssss;
+    __REGISTER s32 rrrr;
 
     __dcbz((void*)block, 0);
     t = __THPHuffDecodeTab(info, Udchuff);
@@ -2406,20 +2406,20 @@ static void __THPHuffDecodeDCTCompU(register THPFileInfo* info, THPCoeff* block)
     }
 }
 
-static void __THPHuffDecodeDCTCompV(register THPFileInfo* info, THPCoeff* block) {
-    register s32 t;
-    register THPCoeff diff;
+static void __THPHuffDecodeDCTCompV(__REGISTER THPFileInfo* info, THPCoeff* block) {
+    __REGISTER s32 t;
+    __REGISTER THPCoeff diff;
     THPCoeff dc;
-    register s32 v;
-    register u32 cb;
-    register u32 cnt;
-    register u32 cnt33;
-    register u32 tmp;
-    register u32 cnt1;
-    register u32 tmp1;
-    register s32 k;
-    register s32 ssss;
-    register s32 rrrr;
+    __REGISTER s32 v;
+    __REGISTER u32 cb;
+    __REGISTER u32 cnt;
+    __REGISTER u32 cnt33;
+    __REGISTER u32 tmp;
+    __REGISTER u32 cnt1;
+    __REGISTER u32 tmp1;
+    __REGISTER s32 k;
+    __REGISTER s32 ssss;
+    __REGISTER s32 rrrr;
 
     __dcbz((void*)block, 0);
     t = __THPHuffDecodeTab(info, Vdchuff);

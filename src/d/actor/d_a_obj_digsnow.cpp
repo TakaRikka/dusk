@@ -110,7 +110,7 @@ void daObjDigSnow_c::mode_init_dig() {
     if (gnd_height != -G_CM3D_F_INF) {
         mGroundHeight = gnd_height;
     } else {
-#ifdef DEBUG
+#if DEBUG
         // "No BG under digsnow!"
         OS_REPORT_ERROR("掘る雪の下にＢＧがありません！");
         fopAcM_delete(this);

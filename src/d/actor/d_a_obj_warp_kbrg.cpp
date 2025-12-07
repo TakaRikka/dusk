@@ -127,7 +127,7 @@ int daObjWarpKBrg_c::Create() {
             }
         }
 
-        #ifdef DEBUG
+        #if DEBUG
         if (mEffJointNo == 0xFFFF) {
             // "Kakariko Bridge: joint effect_p not found"
             OSReport_Error("カカリコ橋；ジョイント effect_p が見つかりませんでした\n");

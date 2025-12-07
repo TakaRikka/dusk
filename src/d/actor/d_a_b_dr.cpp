@@ -360,7 +360,7 @@ int daB_DR_c::draw() {
         return 1;
     }
 
-#ifdef DEBUG
+#if DEBUG
     if (WREG_S(0) != 0 || l_HIO.display_range) {
         cXyz sp24;
         cXyz sp18;
@@ -1247,7 +1247,7 @@ void daB_DR_c::executeWait() {
     cXyz sp20;
     cXyz sp14;
 
-#ifdef DEBUG
+#if DEBUG
     dDbVw_Report(30, 100, "wait tyuu No Attack Timer:%d ", mTimer[2]);
 #endif
 
@@ -1311,7 +1311,7 @@ void daB_DR_c::executeFlyWait() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp8;
 
-#ifdef DEBUG
+#if DEBUG
     if (mMoveMode > 1) {
         if (mTimer[2] != 0) {
             dDbVw_Report(30, 100, "wait tyuu No Attack Timer:%d ", mTimer[2]);
@@ -1383,7 +1383,7 @@ void daB_DR_c::executeTailHit() {
     cXyz mae;
     cXyz ato;
 
-#ifdef DEBUG
+#if DEBUG
     if (mTimer[0] != 0) {
         if (mMoveMode < 13) {
             dDbVw_Report(30, 100, "Tail Hit chance Timer:%d ", mTimer[0]);
@@ -1734,7 +1734,7 @@ void daB_DR_c::executeWeekHit() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     cXyz sp50;
 
-#ifdef DEBUG
+#if DEBUG
     if (mTimer[2] != 0) {
         dDbVw_Report(30, 100, "week HIT chance Timer:%d ", mTimer[2]);
     }
@@ -2133,7 +2133,7 @@ void daB_DR_c::executeBreathAttack() {
     s16 spA = 0;
     bool sp8 = false;
 
-#ifdef DEBUG
+#if DEBUG
     if (mTimer[3] != 0) {
         if (mMoveMode < 100) {
             dDbVw_Report(30, 100, "Breath tyuu No Attack Timer:%d ", mTimer[3]);
@@ -2366,7 +2366,7 @@ void daB_DR_c::executeWindAttack() {
 
     bool sp8 = 0;
 
-#ifdef DEBUG
+#if DEBUG
     dDbVw_Report(30, 100, "normal Timer:%d center Timer:%d ", mTimer[1], mTimer[2]);
 #endif
 
@@ -2900,7 +2900,7 @@ void daB_DR_c::executePillarSearch() {
 }
 
 void daB_DR_c::executePillarWait() {
-#ifdef DEBUG
+#if DEBUG
     dDbVw_Report(30, 100, "Pole wait tyuu Timer:%d ", mTimer[0]);
     if (mTimer[1] != 0) {
         dDbVw_Report(30, 100, "sukosi zensin :%d ", mTimer[1]);

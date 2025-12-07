@@ -320,7 +320,7 @@ int daNpc_grMC_c::Execute() {
 
 int daNpc_grMC_c::Draw() {
     return draw(
-        #ifdef DEBUG
+        #if DEBUG
         chkAction(&daNpc_grMC_c::test),
         #else
         FALSE,
@@ -737,7 +737,6 @@ int daNpc_grMC_c::shop(void* param_1) {
     return 0;
 }
 
-#ifdef DEBUG
 int daNpc_grMC_c::test(void* param_1) {
     int rv = 0;
 
@@ -749,8 +748,8 @@ int daNpc_grMC_c::test(void* param_1) {
             mMode = 2;
             // fallthrough
         case 2:
-            mFaceMotionSeqMngr.setNo(mHIO->param.common.face_expression, -1.0f, FALSE, 0);
-            mMotionSeqMngr.setNo(mHIO->param.common.motion, -1.0f, FALSE, 0);
+            mFaceMotionSeqMngr.setNo(mHIO->m.common.face_expression, -1.0f, FALSE, 0);
+            mMotionSeqMngr.setNo(mHIO->m.common.motion, -1.0f, FALSE, 0);
             mJntAnm.lookNone(0);
             attention_info.flags = 0;
             break;
@@ -761,7 +760,6 @@ int daNpc_grMC_c::test(void* param_1) {
 
     return rv;
 }
-#endif
 
 static int daNpc_grMC_Create(void* a_this) {
     return static_cast<daNpc_grMC_c*>(a_this)->create();

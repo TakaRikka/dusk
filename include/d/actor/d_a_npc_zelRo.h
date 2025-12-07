@@ -115,9 +115,7 @@ public:
     BOOL setAction(actionFunc);
     int wait(void*);
     int talk(void*);
-    #ifdef DEBUG
     int test(void*);
-    #endif
     daNpc_ZelRo_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,

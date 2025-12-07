@@ -705,7 +705,7 @@ static cull_box l_cullSizeBox[] = {
         {-60.0f, -20.0f, -60.0f},
         {60.0f, 160.0f, 60.0f},
     },
-#ifdef DEBUG
+#if DEBUG
     {
         {-200.0f, 0.0f, -200.0f},
         {200.0f, 400.0f, 200.0f},
@@ -746,7 +746,7 @@ static cull_sphere l_cullSizeSphere[] = {
         {0.0f, 0.0f, 0.0f},
         400.0f,
     },
-#ifdef DEBUG
+#if DEBUG
     {
         {0.0f, 0.0f, 0.0f},
         400.0f,
@@ -1140,7 +1140,7 @@ u8 fopAcM_getItemNoFromTableNo(u8 i_tableNo) {
         return i_tableNo;
     }
 
-#ifdef DEBUG
+#if DEBUG
     if (tableList->mTableNum - 1 < i_tableNo) {
         // "Table Num<%d>, Specified Table<%d>, over table num!\n"
         OSReport_Error("テーブル数<%d>、指定テーブル番号<%d>で、テーブル数オーバーしています！\n",
@@ -1231,7 +1231,7 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz const* i_pos, int i_itemNo, int i_ite
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-#ifdef DEBUG
+#if DEBUG
     if (tableList->mTableNum - 1 < i_itemNo) {
         // "Table Num<%d>, Specified Table<%d>, over table num!\n"
         OSReport_Error("テーブル数<%d>、指定テーブル番号<%d>で、テーブル数オーバーしています！\n",
@@ -1335,7 +1335,7 @@ fpc_ProcID fopAcM_createItem(const cXyz* i_pos, int i_itemNo, int i_itemBitNo, i
     switch (i_itemNo) {
     case fpcNm_ITEM_RECOVERY_FAILY:
         return fopAcM_create(PROC_Obj_Yousei, 0xFFFFFFFF, i_pos, i_roomNo, i_angle, i_scale, -1);
-#ifdef DEBUG
+#if DEBUG
     case fpcNm_ITEM_SMALL_KEY:
         // "Small Key: Can't support map display, so program generation is prohibited!\n"
         OS_REPORT_ERROR("小さい鍵：マップ表示対応出来ないので、プログラム生成禁止！\n");
@@ -1391,7 +1391,7 @@ fopAc_ac_c* fopAcM_fastCreateItem2(const cXyz* i_pos, int i_itemNo, int i_itemBi
     case fpcNm_ITEM_RECOVERY_FAILY:
         return fopAcM_fastCreate(PROC_Obj_Yousei, 0xFFFFFFFF, i_pos, i_roomNo, i_angle, i_scale, -1,
                                  NULL, NULL);
-#ifdef DEBUG
+#if DEBUG
     case fpcNm_ITEM_SMALL_KEY:
         // "Small Key: Can't support map display, so program generation is prohibited!\n"
         OS_REPORT_ERROR("小さい鍵：マップ表示対応出来ないので、プログラム生成禁止！\n");
@@ -1449,7 +1449,7 @@ fopAc_ac_c* fopAcM_fastCreateItem(const cXyz* i_pos, int i_itemNo, int i_roomNo,
     case fpcNm_ITEM_RECOVERY_FAILY:
         return fopAcM_fastCreate(PROC_Obj_Yousei, 0xFFFFFFFF, i_pos, i_roomNo, i_angle, i_scale, -1,
                                  NULL, NULL);
-#ifdef DEBUG
+#if DEBUG
     case fpcNm_ITEM_SMALL_KEY:
         // "Small Key: Can't support map display, so program generation is prohibited!\n"
         OS_REPORT_ERROR("小さい鍵：マップ表示対応出来ないので、プログラム生成禁止！\n");

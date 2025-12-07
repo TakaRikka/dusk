@@ -20,8 +20,8 @@ public:
 
     JAISoundID() {}
 
-    bool isAnonymous() const { return id_.composite_ == 0xFFFFFFFF; }
-    void setAnonymous() { id_.composite_ = 0xFFFFFFFF; }
+    bool isAnonymous() const { return id_.composite_ == -1; }
+    void setAnonymous() { id_.composite_ = -1; }
 
     union {
         u32 composite_;

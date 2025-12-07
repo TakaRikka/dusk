@@ -3,6 +3,7 @@
 
 #include <dolphin/gx.h>
 #include "dolphin/mtx.h"
+#include "global.h"
 
 /**
  * @ingroup jsystem-j2d
@@ -213,6 +214,19 @@ struct J2DIndTevStageInfo {
     /* 0x9 */ u8 field_0x9;
     /* 0xa */ u8 field_0xa;
     /* 0xb */ u8 field_0xb;
+
+    J2DIndTevStageInfo& operator=(const J2DIndTevStageInfo& other) {
+        mIndStage = other.mIndStage;
+        mIndFormat = other.mIndFormat;
+        mBiasSel = other.mBiasSel;
+        mMtxSel = other.mMtxSel;
+        mWrapS = other.mWrapS;
+        mWrapT = other.mWrapT;
+        mPrev = other.mPrev;
+        mLod = other.mLod;
+        mAlphaSel = other.mAlphaSel;
+        return *this;
+    }
 };
 
 inline u32 J2DCalcIndTevStage(J2DIndTevStageInfo info) {
@@ -264,9 +278,9 @@ struct J2DTexCoordInfo {
     u8 padding;  // ?
 
     J2DTexCoordInfo& operator=(const J2DTexCoordInfo& other) {
-        this->mTexGenType = other.mTexGenType;
-        this->mTexGenSrc = other.mTexGenSrc;
-        this->mTexGenMtx = other.mTexGenMtx;
+        mTexGenType = other.mTexGenType;
+        mTexGenSrc = other.mTexGenSrc;
+        mTexGenMtx = other.mTexGenMtx;
         return *this;
     }
 };
@@ -386,9 +400,20 @@ extern const J2DTevSwapModeInfo j2dDefaultTevSwapMode;
  */
 class J2DTevStage {
 public:
-    J2DTevStage(J2DTevStageInfo const&);
-    J2DTevStage();
-    void setTevStageInfo(J2DTevStageInfo const&);
+    J2DTevStage(J2DTevStageInfo const& param_0) {
+        setTevStageInfo(param_0);
+        setTevSwapModeInfo(j2dDefaultTevSwapMode);
+    }
+    J2DTevStage() {
+        setTevStageInfo(j2dDefaultTevStageInfo);
+        setTevSwapModeInfo(j2dDefaultTevSwapMode);
+    }
+    void setTevStageInfo(J2DTevStageInfo const& info) {
+        setColorABCD(info.mColorA, info.mColorB, info.mColorC, info.mColorD);
+        setTevColorOp(info.mCOp, info.mCBias, info.mCScale, info.mCClamp, info.mCReg);
+        setAlphaABCD(info.mAlphaA, info.mAlphaB, info.mAlphaC, info.mAlphaD);
+        setTevAlphaOp(info.mAOp, info.mABias, info.mAScale, info.mAClamp, info.mAReg);
+    }
 
     void setStageNo(u32 param_0) {
         field_0x0 = (param_0 << 1) + 0xc0;
@@ -522,6 +547,14 @@ struct J2DTevSwapModeTableInfo {
     /* 0x1 */ u8 field_0x1;
     /* 0x2 */ u8 field_0x2;
     /* 0x3 */ u8 field_0x3;
+
+    J2DTevSwapModeTableInfo& operator=(const J2DTevSwapModeTableInfo& other) {
+        field_0x0 = other.field_0x0;
+        field_0x1 = other.field_0x1;
+        field_0x2 = other.field_0x2;
+        field_0x3 = other.field_0x3;
+        return *this;
+    }
 };
 
 inline u8 J2DCalcTevSwapTable(u8 param_0, u8 param_1, u8 param_2, u8 param_3) {
@@ -564,6 +597,14 @@ struct J2DColorChanInfo {
     /* 0x0 */ u8 field_0x1;
     /* 0x0 */ u8 field_0x2;
     /* 0x0 */ u8 field_0x3;
+
+    J2DColorChanInfo& operator=(const J2DColorChanInfo& other) {
+        field_0x0 = other.field_0x0;
+        field_0x1 = other.field_0x1;
+        field_0x2 = other.field_0x2;
+        field_0x3 = other.field_0x3;
+        return *this;
+    }
 };
 
 inline u16 J2DCalcColorChanID(u8 param_0) { return param_0; }

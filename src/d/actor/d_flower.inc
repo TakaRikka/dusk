@@ -569,19 +569,15 @@ void dFlower_packet_c::draw() {
             dKy_setLight_nowroom_grass(sp50->room_no, 1.0f);
 
             for (dFlower_data_c* sp44 = sp5C->getData(); sp44 != NULL; sp44 = sp44->mp_next) {
-#if DEBUG
-                if (g_kankyoHIO.navy.grass_adjust_ON != 0) {
+                if (DEBUG && g_kankyoHIO.navy.grass_adjust_ON != 0) {
                     sp64.r = g_kankyoHIO.navy.grass_ambcol.r * 2;
                     sp64.g = g_kankyoHIO.navy.grass_ambcol.g * 2;
                     sp64.b = g_kankyoHIO.navy.grass_ambcol.b * 2;
                 } else {
-#endif
                     sp64.r = (sp44->field_0x04 & 0x1F) * 2;
                     sp64.g = ((sp44->field_0x04 >> 5) & 0x1F) * 2;
                     sp64.b = ((sp44->field_0x04 >> 0xA) & 0x1F) * 2;
-#if DEBUG
                 }
-#endif
 
                 if (daPy_py_c::checkNowWolfPowerUp()) {
                     f32 var_f31 = g_env_light.bg_amb_col[0].r / 255.0f;

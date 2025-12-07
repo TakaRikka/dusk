@@ -44,7 +44,7 @@ int fpcBs_MakeOfId() {
 int fpcBs_Execute(base_process_class* i_proc) {
     int result = 1;
 
-#ifdef DEBUG
+#if DEBUG
     if (!fpcBs_Is_JustOfType(g_fpcBs_type, i_proc->type)) {
         if (g_fpcDbSv_service[10] != NULL) {
             g_fpcDbSv_service[10](i_proc);

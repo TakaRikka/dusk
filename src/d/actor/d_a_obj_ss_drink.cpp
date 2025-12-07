@@ -305,7 +305,7 @@ void daObj_SSDrink_c::setParam() {
 
     gravity = -5.0f;
 
-#ifdef DEBUG
+#if DEBUG
     bool bVar1 = false;
     bool bVar2 = false;
 #endif
@@ -409,7 +409,7 @@ int daObj_SSDrink_c::orderEvent() {
 }
 
 int daObj_SSDrink_c::wait(void* param_0) {
-#ifdef DEBUG
+#if DEBUG
     switch (field_0xb08) {
     case 0:
     case 2:

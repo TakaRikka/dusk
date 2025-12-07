@@ -3,7 +3,7 @@
 
 #include "dolphin/os.h"
 
-#ifdef DEBUG
+#if DEBUG
 #define JUT_SHOW_ASSERT(LINE, COND) JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, #COND)
 
 #define JUT_ASSERT(LINE, COND) \

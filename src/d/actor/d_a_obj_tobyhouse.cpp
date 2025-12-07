@@ -13,7 +13,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-#ifdef DEBUG
+#if DEBUG
 daObjTobyHouse_HIO_c l_HIO;
 
 daObjTobyHouse_HIO_c::daObjTobyHouse_HIO_c() {
@@ -153,7 +153,7 @@ int daObjTobyHouse_c::Create() {
         for (int i = 0; i < 2; i++) {
             mEventIds[i] = (s16)dComIfGp_getEventManager().getEventIdx(this, l_event_name[i], 0xff);
 
-            #ifdef DEBUG
+            #if DEBUG
             if (mEventIds[i] == -1) {
                 // Cannon shed - failure to obtain event
                 OS_REPORT_ERROR("大砲小屋：イベント取得失敗\n");
@@ -236,7 +236,7 @@ int daObjTobyHouse_c::create1st() {
             return rv;
         }
 
-        #ifdef DEBUG
+        #if DEBUG
         // Toby's Cannon Shack
         l_HIO.entryHIO("トビーの大砲小屋");
         #endif
@@ -519,7 +519,7 @@ int daObjTobyHouse_c::Draw() {
         mDoExt_bckAnmRemove(mModel->getModelData());
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     if (l_HIO.mDrawCollision) {
         mpBgW->CalcPlane();
     }
@@ -572,7 +572,7 @@ int daObjTobyHouse_c::Delete() {
     
     dComIfG_resDelete(&mPhase, l_arcName[mType]);
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO();
     #endif
     return 1;

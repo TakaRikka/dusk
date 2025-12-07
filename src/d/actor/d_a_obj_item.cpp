@@ -245,7 +245,7 @@ int daItem_c::_daItem_create() {
     m_itemNo = daItem_prm::getItemNo(this);
     BOOL flag = dItem_data::chkFlag(m_itemNo, 2);
 
-#ifdef DEBUG
+#if DEBUG
     if (dItem_data::getFieldArc(m_itemNo) == NULL) {
         // "Item Num<%d>: No Resource Archive specified!!\n"
         OS_REPORT_ERROR("アイテム番号<%d>:リソースのアーカイブ指定がありません！！\n", m_itemNo);

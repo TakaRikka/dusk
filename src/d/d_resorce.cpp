@@ -116,8 +116,6 @@ static const J3DTexMtxInfo l_texMtxInfo = {
     },
 };
 
-// NONMATCHING l_alphaCompInfo needs to be placed in .sdata2, but the function breaks if it is declared const
-// Also see J3DAlphaComp::setAlphaCompInfo in J3DMatBlock.h
 static void addWarpMaterial(J3DModelData* i_modelData) {
     static J3DTevStageInfo const l_tevStageInfo = {
         0x05, 0x0F, 0x08, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x01, 0x00,
@@ -125,6 +123,7 @@ static void addWarpMaterial(J3DModelData* i_modelData) {
     };
     static J3DTexCoordInfo l_texCoordInfo = {0x00, 0x00, 0x27};
     static J3DTevOrderInfo l_tevOrderInfo = {0x00, 0x03, 0xFF, 0x00};
+    static J3DAlphaCompInfo const l_alphaCompInfo = {0x04, 0x80, 0x00, 0x03, 0xFF};
 
     ResTIMG* resTimg = (ResTIMG*)dComIfG_getObjectRes("Always", 0x5d);
     JUT_ASSERT(279, resTimg != NULL);
@@ -166,7 +165,6 @@ static void addWarpMaterial(J3DModelData* i_modelData) {
 
         J3DPEBlock* peBlock = material->getPEBlock();
         J3DAlphaComp* alphaComp = peBlock->getAlphaComp();
-        static J3DAlphaCompInfo l_alphaCompInfo = {0x04, 0x80, 0x00, 0x03, 0xFF, 0, 0, 0};
         alphaComp->setAlphaCompInfo(l_alphaCompInfo);
         peBlock->setZCompLoc((u8)0);
     }
@@ -344,7 +342,7 @@ int dRes_info_c::loadResource() {
 
                     JKRExpHeap* parentHeap = (JKRExpHeap*)JKRHeap::findFromRoot(JKRHeap::getCurrentHeap());
                     JUT_ASSERT(0x308, parentHeap != NULL && (parentHeap == mDoExt_getGameHeap() || parentHeap == mDoExt_getArchiveHeap()));
-#ifdef DEBUG
+#if DEBUG
                     char* heapName;
                     if (parentHeap == mDoExt_getGameHeap()) {
                         heapName = "GameHeap";
@@ -401,7 +399,7 @@ int dRes_info_c::loadResource() {
                     }
 
                     modelData = (J3DModelData*)result;
-#ifdef DEBUG
+#if DEBUG
                     J3DMaterial* materialp = modelData->getMaterialNodePointer(0);
                     if (materialp->isDrawModeOpaTexEdge()) {
                         // "BMDG:Translucent model can't be drawn!!\n"
@@ -733,7 +731,7 @@ int dRes_control_c::syncRes(char const* i_arcName, dRes_info_c* i_resInfo, int i
     dRes_info_c* resInfo = getResInfo(i_arcName, i_resInfo, i_infoNum);
 
     if (resInfo == NULL) {
-#ifdef DEBUG
+#if DEBUG
         if (i_arcName[0] == 'R' ||
             (i_arcName[0] == 'S' && i_arcName[1] == 't' && i_arcName[2] == 'g' && i_arcName[3] == '_' && i_arcName[4] == '0' && i_arcName[5] == '0') ||
             strncmp(i_arcName, "Pack", 4) == 0)
@@ -755,7 +753,7 @@ int dRes_control_c::deleteRes(char const* i_arcName, dRes_info_c* i_resInfo, int
     dRes_info_c* resInfo = getResInfo(i_arcName, i_resInfo, i_infoNum);
 
     if (resInfo == NULL) {
-#ifdef DEBUG
+#if DEBUG
     if (strcmp(i_arcName, "Xtg_00") == 0) {
         // "<%s.arc> deleteRes: res nothing !!\n(Detected deleting an unregistered resource! Please fix.)\n"
         OS_REPORT_ERROR("<%s.arc> deleteRes: res nothing !!\n(未登録のリソースを削除してるのを発見しました！修正してください。)\n", i_arcName);   
@@ -799,7 +797,7 @@ dRes_info_c* dRes_control_c::getResInfoLoaded(char const* i_arcName, dRes_info_c
     dRes_info_c* resInfo = getResInfo(i_arcName, i_resInfo, i_infoNum);
 
     if (resInfo == NULL) {
-#ifdef DEBUG
+#if DEBUG
     if (stricmp(i_arcName, "Xtg_00") == 0) {
         OS_REPORT("\x1b[35m<%s.arc> getRes: res nothing !!\n\x1b[m", i_arcName);   
     }
@@ -879,7 +877,7 @@ int dRes_control_c::setObjectRes(char const* i_arcName, void* i_archiveRes, u32 
                                  JKRHeap* i_heap) {
     JUT_ASSERT(0x7A3, i_archiveRes != NULL);
 
-#ifdef DEBUG
+#if DEBUG
     dRes_info_c* nowInfo = getResInfo(i_arcName, mObjectInfo, ARRAY_SIZEU(mObjectInfo));
     JUT_ASSERT(0x7A6, nowInfo == NULL);
 #endif

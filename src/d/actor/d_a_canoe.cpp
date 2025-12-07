@@ -15,7 +15,7 @@
 #include "JSystem/JAudio2/JAUSectionHeap.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-#ifdef DEBUG
+#if DEBUG
 static BOOL l_debugMode; 
 #endif
 
@@ -616,7 +616,7 @@ int daCanoe_c::execute() {
     mOldFrontPos = mFrontPos;
     mOldBackPos = mBackPos;
 
-#ifdef DEBUG
+#if DEBUG
     if (player->checkCanoeRideOwn(this) && daAlink_c::checkDebugMoveInput()) {
         if (l_debugMode) {
             l_debugMode = FALSE;

@@ -373,7 +373,7 @@ static void ReadROM(void* buf, int length, int offset) {
 
 static u32 ReadFont(void* img, u16 encode, void* fontData) {
     u32 size;
-#ifndef DEBUG
+#if !DEBUG
     u32 padding[1];
 #endif
 

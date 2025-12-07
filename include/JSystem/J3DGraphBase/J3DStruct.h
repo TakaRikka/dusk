@@ -31,7 +31,7 @@ public:
     J3DLightObj() { mInfo = j3dDefaultLightInfo; }
     void load(u32) const;
 
-    J3DLightInfo& getLightInfo() { return mInfo; }
+    J3DLightInfo* getLightInfo() { return &mInfo; }
     J3DLightObj& operator=(J3DLightObj const& other) {
         mInfo = other.mInfo;
         return *this;
@@ -54,9 +54,9 @@ struct J3DTextureSRTInfo {
 
     inline void operator=(J3DTextureSRTInfo const& other) {
 #ifdef __MWERKS__
-        register const f32* src = &other.mScaleX;
-        register f32* dst = &mScaleX;
-        register f32 xy;
+        __REGISTER const f32* src = &other.mScaleX;
+        __REGISTER f32* dst = &mScaleX;
+        __REGISTER f32 xy;
         asm {
             psq_l xy, 0(src), 0, 0
             psq_st xy, 0(dst), 0, 0

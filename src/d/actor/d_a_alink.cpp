@@ -1690,7 +1690,7 @@ daAlinkHIO_c::daAlinkHIO_c() {}
 
 daAlinkHIO_wolf_c::~daAlinkHIO_wolf_c() {}
 
-#ifdef DEBUG
+#if DEBUG
 daAlinkHIO_swim_c::~daAlinkHIO_swim_c() {}
 
 daAlinkHIO_grab_c::~daAlinkHIO_grab_c() {}
@@ -6573,10 +6573,10 @@ void daAlink_c::commonDoubleAnime(J3DAnmTransform* param_0, J3DAnmTransform* par
 int daAlink_c::setDoubleAnime(f32 i_blendRate, f32 i_anmSpeedA, f32 i_anmSpeedB,
                               daAlink_c::daAlink_ANM i_anmA, daAlink_c::daAlink_ANM i_anmB,
                               int param_5, f32 i_morf) {
-#ifdef DEBUG
+#if DEBUG
     if (checkWolf()) {
         // "Player is Wolf, but setting Link animation\n"
-        OSReport("狼なのにリンクアニメ設定\n");
+        OS_REPORT("狼なのにリンクアニメ設定\n");
         JUT_ASSERT(8591, FALSE);
     }
 #endif
@@ -10883,7 +10883,7 @@ int daAlink_c::orderZTalk() {
         dMeter2Info_onUseButton(0x800);
 
         if (midnaTalkTrigger()
-#ifdef DEBUG
+#if DEBUG
             && (!mDoCPd_c::getHoldL(PAD_1) || !mDoCPd_c::getHoldR(PAD_1))
 #endif
            )

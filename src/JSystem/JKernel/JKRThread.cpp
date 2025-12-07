@@ -185,10 +185,10 @@ void JKRThreadSwitch::callback(OSThread* current, OSThread* next) {
                     next_heap = JKRHeap::getCurrentHeap();
                 } else if (JKRHeap::getRootHeap()->isSubHeap(next_heap)) {
                     continue;
-#ifdef DEBUG
+                #if PLATFORM_WII || PLATFORM_SHIELD
                 } else if (!JKRHeap::getRootHeap2()->isSubHeap(next_heap)) {
                     continue;
-#endif
+                #endif
                 } else {
                     switch (thread->getCurrentHeapError()) {
                     case 0:
@@ -224,10 +224,8 @@ void JKRThreadSwitch::draw(JKRThreadName_* thread_name_list, JUTConsole* console
     const char* print_1 = " -------------------------------------\n";
 
     if (!console) {
-#ifdef DEBUG
-        OSReport(print_0, getTotalCount(), (int)this->field_0x18, this->field_0x10);
-        OSReport(print_1);
-#endif
+        OS_REPORT(print_0, getTotalCount(), (int)this->field_0x18, this->field_0x10);
+        OS_REPORT(print_1);
     } else {
         console->clear();
         console->print_f(print_0, getTotalCount(), (int)this->field_0x18, this->field_0x10);
@@ -264,10 +262,8 @@ void JKRThreadSwitch::draw(JKRThreadName_* thread_name_list, JUTConsole* console
             u32 cost_int = (u32)(cost_per_0x18 * 100.0f);
             u32 cost_float = (u32)(cost_per_0x18 * 1000.0f) % 10;
             if (!console) {
-#ifdef DEBUG
-                OSReport(" [%10s] switch:%5d  cost:%2d.%d%%\n", thread_print_name, switch_count,
+                OS_REPORT(" [%10s] switch:%5d  cost:%2d.%d%%\n", thread_print_name, switch_count,
                          cost_int, cost_float);
-#endif
             } else {
                 console->print_f(" [%10s] switch:%5d  cost:%2d.%d%%\n", thread_print_name,
                                  switch_count, cost_int, cost_float);

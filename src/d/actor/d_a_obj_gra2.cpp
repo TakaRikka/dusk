@@ -12,7 +12,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_inf_actor.h"
-#ifdef DEBUG
+#if DEBUG
 #include "d/d_debug_viewer.h"
 #endif
 #include "d/d_msg_object.h"
@@ -1468,7 +1468,7 @@ int daObj_GrA_c::talk(void* param_1) {
             }
 
             if (mMsgFlow.doFlow(this, NULL, 0) != 0) {
-                #ifdef DEBUG
+                #if DEBUG
                 char* cVar1;
                 int choiceNo = mMsgFlow.getChoiceNo();
                 if (choiceNo != 0) {

@@ -1,4 +1,4 @@
-#ifdef DEBUG
+#if DEBUG
 
 #include "f_pc/f_pc_base.h"
 #include "f_pc/f_pc_debug_sv.h"

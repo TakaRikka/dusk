@@ -249,9 +249,7 @@ public:
     BOOL cook(void*);
     BOOL race(void*);
     BOOL talk(void*);
-    #ifdef DEBUG
     BOOL test(void*);
-    #endif
     daNpc_ykM_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,

@@ -94,7 +94,7 @@ void AXARTServiceSound(AXART_SOUND* sound) {
             AXARTLpf((AXART_LPF*)articulator, sound->axvpb);
             break;
         default:
-#ifdef DEBUG
+#if DEBUG
             OSPanic(__FILE__, 196, "unknown articulator type!\n");
 #endif
             break;

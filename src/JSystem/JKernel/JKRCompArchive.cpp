@@ -206,10 +206,8 @@ bool JKRCompArchive::open(s32 entryNum) {
     {
         JKRFreeToSysHeap(arcHeader);
     }
-    if(mMountMode == 0) {
-#ifdef DEBUG
-        OSReport(":::[%s: %d] Cannot alloc memory in mounting CompArchive\n", __FILE__, 567);
-#endif
+    if (mMountMode == 0) {
+        OS_REPORT(":::[%s: %d] Cannot alloc memory in mounting CompArchive\n", __FILE__, 567);
         if(mDvdFile != NULL) {
             delete mDvdFile;
         }

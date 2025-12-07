@@ -1286,32 +1286,28 @@ int daObjCarry_c::CreateHeap() {
 int daObjCarry_c::create() {
     preInit();
 
-#ifdef DEBUG
-    if (prm_chk_type_lightball() && strcmp(dComIfGp_getStartStageName(), "T_ENE02") == 0) {
-        goto next;
-    }
-#endif
+    if (!(DEBUG && prm_chk_type_lightball() &&
+          strcmp(dComIfGp_getStartStageName(), "T_ENE02") == 0)) {
+        int create_phase;
+        create_phase = cPhs_NEXT_e;
 
-    int create_phase;
-    create_phase = cPhs_NEXT_e;
+        switch (mType) {
+        case TYPE_BALL_S:
+            create_phase = (cPhs__Step)checkCreate_LightBallA();
+            break;
+        case TYPE_BALL_S_2:
+            create_phase = (cPhs__Step)checkCreate_LightBallB();
+            break;
+        case TYPE_LV8_BALL:
+            create_phase = (cPhs__Step)checkCreate_Lv8Ball();
+            break;
+        }
 
-    switch (mType) {
-    case TYPE_BALL_S:
-        create_phase = (cPhs__Step)checkCreate_LightBallA();
-        break;
-    case TYPE_BALL_S_2:
-        create_phase = (cPhs__Step)checkCreate_LightBallB();
-        break;
-    case TYPE_LV8_BALL:
-        create_phase = (cPhs__Step)checkCreate_Lv8Ball();
-        break;
-    }
-
-    if (create_phase != cPhs_NEXT_e) {
-        return create_phase;
+        if (create_phase != cPhs_NEXT_e) {
+            return create_phase;
+        }
     }
 
-next:
     int phase_state = dComIfG_resLoad(&mPhaseReq, getArcName());
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, data().m_heapSize)) {
@@ -1970,7 +1966,7 @@ int daObjCarry_c::draw() {
 }
 
 void daObjCarry_c::debugDraw() {
-#ifdef DEBUG
+#if DEBUG
     if (KREG_S(8) == 10000 && !mRotAxis.isZero()) {
         cXyz start(current.pos);
         start.y += 35.0f;

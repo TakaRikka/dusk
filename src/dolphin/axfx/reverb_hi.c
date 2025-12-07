@@ -186,7 +186,7 @@ const static f32 value1_0 = 1.0f;
 const static f32 value0_3 = 0.3f;
 const static f32 value0_6 = 0.6f;
 
-asm static void DoCrossTalk(register s32* l, register s32* r, register f32 cross, register f32 invcross) {
+asm static void DoCrossTalk(__REGISTER s32* l, __REGISTER s32* r, __REGISTER f32 cross, __REGISTER f32 invcross) {
     nofralloc
 	stwu r1, -48(r1)
 	stfd f14, 40(r1)
@@ -291,7 +291,7 @@ loop:
 	blr
 }
 
-asm static void HandleReverb(register s32* sptr, register AXFX_REVHI_WORK* rv, register s32 k) {
+asm static void HandleReverb(__REGISTER s32* sptr, __REGISTER AXFX_REVHI_WORK* rv, __REGISTER s32 k) {
     nofralloc
 	stwu r1, -0xc0(r1)
 	stmw r14, 0x8(r1)

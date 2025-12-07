@@ -399,7 +399,7 @@ int daBg_c::draw() {
                                 break;
                             }
 
-#ifdef DEBUG
+#if DEBUG
                             sp50.a = 0xFF;
                             if (g_kankyoHIO.navy.fish_pond_colreg_adjust_ON) {
                                 sp50 = g_kankyoHIO.navy.fish_pond_colreg_c0;

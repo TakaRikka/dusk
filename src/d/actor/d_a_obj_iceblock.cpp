@@ -142,7 +142,7 @@ int daObjIceBlk_c::saveCurrentPos() {
     int nearest_point_no = 0;
 
     for (int i = 0; i < mpPath->m_num; i++) {
-#ifdef DEBUG
+#if DEBUG
         f32 dist = current.pos.absXZ(point->m_position);
         if (dist < nearest_dist) {
             nearest_point_no = i;
@@ -279,7 +279,7 @@ int daObjIceBlk_c::Create() {
                 mColdEffEmitters[i] =
                     dComIfGp_particle_set(l_eff_id[i], &current.pos, &home.angle, &scale, 0xFF,
                                           NULL, -1, NULL, NULL, NULL);
-#ifdef DEBUG
+#if DEBUG
                 if (mColdEffEmitters[i] == NULL) {
                     // "Ice Block: Cold Effect set failed\n"
                     OS_REPORT("氷ブロック：冷気エフェクトセット失敗\n");

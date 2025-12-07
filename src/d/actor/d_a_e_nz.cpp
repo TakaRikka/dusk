@@ -68,7 +68,7 @@ daE_NZ_HIO_c::daE_NZ_HIO_c() {
     mVanishingAlphaSpeed = 30.0f;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daE_NZ_HIO_c::genMessage(JORMContext* ctx) {
     // Ghost Rat
     ctx->genLabel("  幽霊ネズミ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);

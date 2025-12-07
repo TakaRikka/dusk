@@ -2,7 +2,7 @@
 #include <dolphin/mtx.h>
 #include "fake_tgmath.h"
 
-asm void PSMTXReorder(const register Mtx src, register ROMtx dest) {
+asm void PSMTXReorder(const __REGISTER Mtx src, __REGISTER ROMtx dest) {
     psq_l f0, 0(src), 0, 0
     psq_l f2, 16(src), 0, 0
     psq_l f4, 32(src), 0, 0
@@ -23,7 +23,7 @@ asm void PSMTXReorder(const register Mtx src, register ROMtx dest) {
     psq_st f10, 40(dest), 0, 0
 }
 
-asm void PSMTXROMultVecArray(const register ROMtx m, const register Vec* srcBase, register Vec* dstBase, register u32 count) {
+asm void PSMTXROMultVecArray(const __REGISTER ROMtx m, const __REGISTER Vec* srcBase, __REGISTER Vec* dstBase, __REGISTER u32 count) {
     nofralloc
     stwu r1, -64(r1)
     stfd f14, 8(r1)
@@ -99,7 +99,7 @@ exit:
     blr
 }
 
-asm void PSMTXROSkin2VecArray(const register ROMtx m0, const register ROMtx m1, const register f32* wtBase, const register Vec* srcBase, register Vec* dstBase, register u32 count) {
+asm void PSMTXROSkin2VecArray(const __REGISTER ROMtx m0, const __REGISTER ROMtx m1, const __REGISTER f32* wtBase, const __REGISTER Vec* srcBase, __REGISTER Vec* dstBase, __REGISTER u32 count) {
     nofralloc
     stwu r1, -160(r1)
     stfd f14, 8(r1)
@@ -210,7 +210,7 @@ loop:
     blr
 }
 
-asm void PSMTXROMultS16VecArray(const register Mtx m, const register S16Vec* srcBase, register Vec* dstBase, register u32 count) {
+asm void PSMTXROMultS16VecArray(const __REGISTER Mtx m, const __REGISTER S16Vec* srcBase, __REGISTER Vec* dstBase, __REGISTER u32 count) {
     nofralloc
     stwu r1, -64(r1)
     stfd f14, 8(r1)
@@ -288,7 +288,7 @@ exit:
     blr
 }
 
-asm void PSMTXMultS16VecArray(const register ROMtx* m, const register S16Vec* srcBase, register Vec* dstBase, register u32 count) {
+asm void PSMTXMultS16VecArray(const __REGISTER ROMtx* m, const __REGISTER S16Vec* srcBase, __REGISTER Vec* dstBase, __REGISTER u32 count) {
     psq_l f0, 0(m), 0, 0
     lis r7, 7
     mtspr GQR6, r7

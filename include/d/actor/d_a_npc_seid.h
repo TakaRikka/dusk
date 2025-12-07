@@ -60,14 +60,14 @@ class daNpc_seiD_Param_c {
 };
 
 class daNpc_seiD_HIO_c
-#ifdef DEBUG
+#if DEBUG
 : public mDoHIO_entry_c 
 #endif
 {
 public:
     void genMessage(JORMContext*);
 
-    #ifdef DEBUG
+    #if DEBUG
     /* 0x08 */ daNpc_seiD_HIOParam field_0x8;
     // /* 0x94 */ f32 field_0x94;                  // "強制会話距離" "Forced conversation distance" | Slider
     // /* 0x98 */ f32 field_0x98;                  // "会話距離" "Conversation distance" | Slider

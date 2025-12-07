@@ -1196,11 +1196,9 @@ void dAttention_c::judgementStatus4Hold() {
         }
     }
 
-#if DEBUG
     if (var_r29 != mAttnStatus) {
         OS_REPORT("%06d: attention: status %d, %d -> %d (%d)\n", g_Counter.mCounter0, mLockonCount, var_r29, mAttnStatus, var_r30);
     }
-#endif
 }
 
 void dAttention_c::judgementStatus4Switch() {
@@ -1320,11 +1318,9 @@ void dAttention_c::judgementStatus4Switch() {
         }
     }
 
-#if DEBUG
     if (var_r29 != mAttnStatus) {
         OS_REPORT("%06d: attention: status %d, %d -> %d (%d)\n", g_Counter.mCounter0, mLockonCount, var_r29, mAttnStatus, var_r30);
     }
-#endif
 }
 
 int dAttention_c::Run() {

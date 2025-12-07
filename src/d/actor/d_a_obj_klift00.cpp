@@ -27,7 +27,7 @@ struct daObjKLift00_HIO_c : public mDoHIO_entry_c {
     /* 0x1C */ f32 field_0x1C;
 };
 
-#ifdef DEBUG
+#if DEBUG
 static daObjKLift00_HIO_c l_HIO;
 
 daObjKLift00_HIO_c::daObjKLift00_HIO_c() {
@@ -102,7 +102,7 @@ static dCcD_SrcCyl l_cc_cyl_src = {
     } // mCyl
 };
 
-#ifdef DEBUG
+#if DEBUG
 static const int l_dzbidx[] = {9};
 #endif
 
@@ -128,7 +128,7 @@ cPhs__Step daObjKLift00_c::create1st() {
     }
 
     // "Foothold(Lv3)"
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.entryHIO("足場(Lv3)");
     #endif
 
@@ -328,7 +328,7 @@ int daObjKLift00_c::Execute(Mtx** i_mtx) {
 
     // Check if player hit chains, and play sfx & move the chains accordingly
     bool playedHitSfx = false;
-    #ifdef DEBUG
+    #if DEBUG
     for(int i = 0; i < 8; i++) {
         const s32 currentChainIdx = (mNumChains - 1) - (i * 2);
         if(currentChainIdx >= 0 && mChainSphereColliders[i].ChkTgHit() ) {
@@ -461,7 +461,7 @@ int daObjKLift00_c::Draw() {
 int daObjKLift00_c::Delete() {
     dComIfG_resDelete(this, l_arcName);
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO();
     #endif
 

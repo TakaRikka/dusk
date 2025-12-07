@@ -4,7 +4,7 @@
 
 #include "__ar.h"
 
-#ifdef DEBUG
+#if DEBUG
 const char* __ARVersion = "<< Dolphin SDK - AR\tdebug build: Apr  5 2004 03:56:19 (0x2301) >>";
 #else
 const char* __ARVersion = "<< Dolphin SDK - AR\trelease build: Apr  5 2004 04:15:03 (0x2301) >>";
@@ -134,7 +134,7 @@ void ARReset(void) {
 }
 
 void ARSetSize(void) {
-#ifdef DEBUG
+#if DEBUG
     OSReport("ARSetSize(): I don't do anything anymore!\n");
 #endif
 }
@@ -405,7 +405,7 @@ static void __ARChecksize(void) {
             }
         }
 
-#ifdef DEBUG
+#if DEBUG
         OSReport("__ARChecksize(): ARAM Expansion present.\n");
 #endif
         __DSPRegs[9] = (u16)((__DSPRegs[9] & ~(0x07 | 0x38)) | ARAM_mode);

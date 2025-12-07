@@ -127,9 +127,7 @@ cleanup:
     }
 
     if (mMountMode == UNKNOWN_MOUNT_MODE) {
-#ifdef DEBUG
-        OSReport(":::Cannot alloc memory [%s][%d]\n", __FILE__, 397);
-#endif
+        OS_REPORT(":::Cannot alloc memory [%s][%d]\n", __FILE__, 397);
         if (mDvdFile) {
             delete mDvdFile;
         }

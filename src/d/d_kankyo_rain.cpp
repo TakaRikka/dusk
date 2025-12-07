@@ -1859,7 +1859,7 @@ void vrkumo_move() {
 
         if (filelist != NULL) {
             sp2C = dStage_FileList_dt_SeaLevel(filelist);
-            #ifdef DEBUG
+            #if DEBUG
             if (g_kankyoHIO.vrbox.field_0x14) {
                 sp2C = g_kankyoHIO.vrbox.m_horizonHeight;
             } else {
@@ -4624,7 +4624,7 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
             sp70 = dStage_FileList_dt_SeaLevel(filelist);
         }
 
-#ifdef DEBUG
+#if DEBUG
         if (g_kankyoHIO.vrbox.field_0x14) {
             sp70 = g_kankyoHIO.vrbox.m_horizonHeight;
         } else {
@@ -4714,7 +4714,7 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
 
                     static f32 howa_loop_cnt = 0.0f;
 
-#ifdef DEBUG
+#if DEBUG
                     spAC = g_kankyoHIO.navy.cloud_sunny_size;
                     spA8 = g_kankyoHIO.navy.cloud_cloudy_size;
 #else

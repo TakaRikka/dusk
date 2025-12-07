@@ -196,9 +196,7 @@ public:
     BOOL setAction(actionFunc, int);
     int wait(int);
     int talk(int);
-    #if DEBUG
     int test(int);
-    #endif
     void AppearDemoCall();
     void ReturnDemoCall();
     void PresentDemoCall();

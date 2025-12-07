@@ -116,7 +116,7 @@ const static double i2fMagic = 4503601774854144.0;
 static void do_src1(AXFX_CHORUS_SRCINFO* src);
 static void do_src2(AXFX_CHORUS_SRCINFO* src);
 
-asm static void do_src1(register AXFX_CHORUS_SRCINFO* src) {
+asm static void do_src1(__REGISTER AXFX_CHORUS_SRCINFO* src) {
     nofralloc
 	stwu r1, -64(r1)
 	stmw r26, 40(r1)
@@ -227,7 +227,7 @@ L_00000160:
     blr
 }
 
-asm static void do_src2(register AXFX_CHORUS_SRCINFO* src) {
+asm static void do_src2(__REGISTER AXFX_CHORUS_SRCINFO* src) {
     nofralloc
 	stwu r1, -64(r1)
 	stmw r26, 40(r1)

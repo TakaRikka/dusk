@@ -37,7 +37,7 @@ dCcD_SrcCps l_cps_src = {
     }  // mCpsAttr
 };
 
-#ifdef DEBUG
+#if DEBUG
 static daObjMHole_HIO_c l_HIO;
 
 daObjMHole_HIO_c::daObjMHole_HIO_c() {
@@ -86,7 +86,7 @@ void daObjMHole_c::initBaseMtx() {
 }
 
 void daObjMHole_c::setBaseMtx() {
-#ifdef DEBUG
+#if DEBUG
     if (l_HIO.scale_adjust_on != 0) {
         scale = l_HIO.scale;
     }
@@ -198,8 +198,8 @@ int daObjMHole_c::create() {
         if (Create() == 0) {
             return cPhs_ERROR_e;
         }
-#ifdef DEBUG
-        OSReport("MHole Param<%x> arc<%s>\n", fopAcM_GetParam(this), l_arcName[mKind]);
+        OS_REPORT("MHole Param<%x> arc<%s>\n", fopAcM_GetParam(this), l_arcName[mKind]);
+#if DEBUG
         l_HIO.entryHIO("マグネホール");
 #endif
     }
@@ -333,7 +333,7 @@ int daObjMHole_c::draw() {
     mDoExt_brkAnmRemove(mpModel->getModelData());
     mDoExt_btkAnmRemove(mpModel->getModelData());
 
-#ifdef DEBUG
+#if DEBUG
     if (l_HIO.collision_display != 0) {
         GXColor color = {0xFF, 0x0, 0x0, 0xFF};
         if (mCps.GetAtVecP() != NULL) {
@@ -349,7 +349,7 @@ int daObjMHole_c::_delete() {
     effectEnd();
     mSound.deleteObject();
     dComIfG_resDelete(&mPhase, l_arcName[mKind]);
-#ifdef DEBUG
+#if DEBUG
     l_HIO.removeHIO();
 #endif
 

@@ -9,7 +9,7 @@
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 
-#ifdef DEBUG
+#if DEBUG
 class daObjSakuita_Hio_c : public JORReflexible {
 public:
     void genMessage(JORMContext* ctx);
@@ -78,7 +78,7 @@ void daObjSakuita_c::create_init() {
     }
     field_0x74c = 1;
 
-    #ifdef DEBUG
+    #if DEBUG
     M_hio.ct();
     #endif
 }
@@ -156,7 +156,7 @@ static int daObjSakuita_Draw(daObjSakuita_c* i_this) {
 }
 
 inline int daObjSakuita_c::execute() {
-    #ifdef DEBUG
+    #if DEBUG
     gravity = attr().mGravity;
     #endif
     current.pos.y += attr().mHangingPosition;
@@ -181,7 +181,7 @@ static int daObjSakuita_Delete(daObjSakuita_c* i_this) {
 }
 
 daObjSakuita_c::~daObjSakuita_c() {
-    #ifdef DEBUG
+    #if DEBUG
     M_hio.dt();
     #endif
 

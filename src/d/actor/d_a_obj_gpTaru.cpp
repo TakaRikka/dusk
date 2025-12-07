@@ -125,7 +125,7 @@ int daGpTaru_c::create() {
         mExplosionRange = 80.0f;
         field_0x955 = 1;
 
-        #ifdef DEBUG
+        #if DEBUG
         l_HIO.entryHIO("火薬樽");
         #endif
     }
@@ -557,7 +557,7 @@ int daGpTaru_c::Delete() {
     dKyw_pntwind_cut(&mWind);
     dComIfG_resDelete(&mPhase, "K_ktar00");
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO(this);
     #endif
     return 1;

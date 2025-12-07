@@ -12,7 +12,7 @@
  */
 
 static void dKankyo_DayProc() {
-    dComIfGs_offTmpBit(dSv_event_tmp_flag_c::tempBitLabels[91]);
+    dComIfGs_offTmpBit((u16)dSv_event_tmp_flag_c::tempBitLabels[91]);
 }
 
 #endif /* D_KANKYO_STATIC_H */

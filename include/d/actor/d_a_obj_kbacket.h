@@ -22,12 +22,12 @@ struct daObj_KBacket_HIOParam
 };
 
 class daObj_KBacket_HIO_c
-#ifdef DEBUG
+#if DEBUG
     : public mDoHIO_entry_c
 #endif
 {
 public:
-#ifdef DEBUG
+#if DEBUG
     void genMessage(JORMContext*);
 
     daObj_KBacket_HIOParam param;

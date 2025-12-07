@@ -507,10 +507,10 @@ inline f32 J3DHermiteInterpolation(f32 p1, f32 const* p2, f32 const* p3, f32 con
     return JMAHermiteInterpolation(p1, *p2, *p3, *p4, *p5, *p6, *p7);
 }
 
-inline f32 J3DHermiteInterpolation(register f32 pp1, register s16 const* pp2,
-                                   register s16 const* pp3, register s16 const* pp4,
-                                   register s16 const* pp5, register s16 const* pp6,
-                                   register s16 const* pp7) {
+inline f32 J3DHermiteInterpolation(__REGISTER f32 pp1, __REGISTER s16 const* pp2,
+                                   __REGISTER s16 const* pp3, __REGISTER s16 const* pp4,
+                                   __REGISTER s16 const* pp5, __REGISTER s16 const* pp6,
+                                   __REGISTER s16 const* pp7) {
 #ifdef __MWERKS__
     register f32 p1 = pp1;
     register f32 ff8;

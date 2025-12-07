@@ -17,7 +17,7 @@ enum J_Necktie_RES_File_ID {
     /* 0x7 */ BTK_J_NECKTIE = 0x7,
 };
 
-#ifdef DEBUG
+#if DEBUG
 class daObjOnCloth_Hio_c : public JORReflexible {
 public:
 

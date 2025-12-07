@@ -834,7 +834,7 @@ void daNpcDoorBoy_c::setAttnPos() {
     sp28.y = current.pos.y;
     
     field_0xc98.SetC(sp28);
-    #ifdef DEBUG
+    #if DEBUG
     field_0xc98.SetH(daNpcDoorBoy_Param_c::m.common.height);
     field_0xc98.SetR(daNpcDoorBoy_Param_c::m.common.width);
     #endif

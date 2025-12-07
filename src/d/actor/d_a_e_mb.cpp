@@ -47,7 +47,7 @@ daE_MB_HIO_c::daE_MB_HIO_c() {
     reappear_time = 70;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daE_MB_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genLabel("  ボス戦ブーメラン猿", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
     ctx->genSlider("基本サイズ", &base_size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);

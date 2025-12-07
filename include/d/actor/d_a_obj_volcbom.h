@@ -131,7 +131,7 @@ private:
 
 STATIC_ASSERT(sizeof(daObjVolcBom_c) == 0xa1c);
 
-#ifdef DEBUG
+#if DEBUG
 class daObjVolcBom_HIO_c : public mDoHIO_entry_c {
 public:
     daObjVolcBom_HIO_c();

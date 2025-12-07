@@ -163,7 +163,7 @@ daE_WW_HIO_c::daE_WW_HIO_c() {
     move_range_debug_display = 0;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daE_WW_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genLabel("ホワイトウルフォス", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
     mctx->genSlider("モデルサイズ", &model_size, 0.0f, 10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
@@ -245,7 +245,7 @@ void daE_WW_c::setHeadAngle() {
 
 int daE_WW_c::draw() {
     if (mAction == ACTION_MASTER) {
-        #ifdef DEBUG
+        #if DEBUG
         if (l_HIO.move_range_debug_display != 0) {
             cXyz curr_pos = current.pos;
             curr_pos.y += 100.0f;

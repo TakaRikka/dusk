@@ -11,7 +11,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 
-#ifdef DEBUG
+#if DEBUG
 
 daObjThDoor_HIO_c::daObjThDoor_HIO_c() {
 }
@@ -127,10 +127,10 @@ int daObjThDoor_c::create1st() {
             return rv;
         }
 
-        #ifdef DEBUG
         // Telma's door
         OS_REPORT("テルマの家のドア：sw<%d>msg<%d>\n", getSwbit(), getMsg());
 
+        #if DEBUG
         // Telma's door
         l_HIO.entryHIO("テルマの家のドア");
         #endif
@@ -329,7 +329,7 @@ int daObjThDoor_c::Draw() {
 int daObjThDoor_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO();
     #endif
 

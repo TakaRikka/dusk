@@ -57,7 +57,7 @@ static u8 data_80807EF8;
 
 static daE_YK_HIO_c l_HIO;
 
-#ifdef DEBUG
+#if DEBUG
 void daE_YK_HIO_c::genMessage(JORMContext* ctx) {
   ctx->genLabel("闇キース", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
   ctx->genSlider("基本サイズ", &mModelScale, 0.0f, 3.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x512, 24);

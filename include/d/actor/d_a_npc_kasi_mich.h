@@ -20,7 +20,7 @@ struct daNpcKasiMich_HIOParam {
 };
 
 class daNpcKasiMich_HIO_c
-#ifdef DEBUG
+#if DEBUG
 : public mDoHIO_entry_c
 #endif
 {

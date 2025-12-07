@@ -66,7 +66,7 @@ u8 dKy_pol_sound_get(cBgS_PolyInfo const* param_0);
 
 class dBgS_HIO : public JORReflexible {
 public:
-#ifdef DEBUG
+#if DEBUG
     dBgS_HIO() {
         field_0x6 = 0;
         field_0x8 = 0;
@@ -152,7 +152,7 @@ public:
     void DebugDrawPoly(dBgW_Base *param_1) {}
     fopAc_ac_c* GetActorPointer(cBgS_PolyInfo const& param_0) const { return cBgS::GetActorPointer(param_0); }
     bool LineCross(cBgS_LinChk* i_linChk) {
-        #ifdef DEBUG
+        #if DEBUG
         if (m_hio.ChkLineOff()) {
             return false;
         }
@@ -173,7 +173,7 @@ public:
         #endif
     }
     f32 GroundCross(cBgS_GndChk* i_gndChk) {
-        #ifdef DEBUG
+        #if DEBUG
         if (m_hio.ChkCheckCounter()) {
             g_ground_counter++;
         }
@@ -193,7 +193,7 @@ public:
 
     void ChkDeleteActorRegist(fopAc_ac_c*);
 
-#ifdef DEBUG
+#if DEBUG
     /* 0x1404 */ u8 field_0x1404[0x1408 - 0x1404];
     /* 0x1408 */ dBgS_HIO m_hio;
 #endif

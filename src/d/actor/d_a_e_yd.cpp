@@ -942,7 +942,7 @@ static void kuki_ha_set(e_yd_class* i_this) {
             mDoMtx_stack_c::YrotM(rot->y);
             mDoMtx_stack_c::XrotM(rot->x);
             mDoMtx_stack_c::ZrotM(i << 13);
-#ifdef DEBUG
+#if DEBUG
             if (i_this->actor.current.pos.x == 1.0f &&
                 i_this->actor.current.pos.y == 1.0f &&
                 i_this->actor.current.pos.z == 1.0f) {

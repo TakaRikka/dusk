@@ -40,7 +40,7 @@ void GXBeginDisplayList(void* list, u32 size) {
 
 u32 GXEndDisplayList(void) {
     u32 ov;
-#ifdef DEBUG
+#if DEBUG
     u32 reg;
 #endif
     BOOL enabled;
@@ -49,7 +49,7 @@ u32 GXEndDisplayList(void) {
     CHECK_GXBEGIN(195, "GXEndDisplayList");
     ASSERTMSGLINE(196, __GXData->inDispList == TRUE, "GXEndDisplayList: no display list in progress");
     GXFlush();
-#ifdef DEBUG
+#if DEBUG
     reg = GX_GET_PI_REG(5);
     ov = (reg >> 26) & 1;
 #else

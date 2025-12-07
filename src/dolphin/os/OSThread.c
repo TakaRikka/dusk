@@ -131,7 +131,7 @@ void __OSThreadInit() {
     thread->mutex = 0;
 
     OSInitThreadQueue(&thread->queueJoin);
-#ifdef DEBUG
+#if DEBUG
     OSInitMutexQueue(&thread->queueMutex);
 #else
     thread->queueMutex.head = thread->queueMutex.tail = 0; // it got inlined? cant reproduce the inline...
@@ -208,7 +208,7 @@ static BOOL __OSIsThreadActive(OSThread* thread) {
 }
 
 s32 OSDisableScheduler(void) {
-    register BOOL enabled;
+    __REGISTER BOOL enabled;
     s32 count;
 
     enabled = OSDisableInterrupts();
@@ -219,7 +219,7 @@ s32 OSDisableScheduler(void) {
 }
 
 s32 OSEnableScheduler(void) {
-    register BOOL enabled;
+    __REGISTER BOOL enabled;
     s32 count;
 
     enabled = OSDisableInterrupts();
@@ -430,7 +430,7 @@ int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param, void* st
     thread->val = (void*)-1;
     thread->mutex = 0;
     OSInitThreadQueue(&thread->queueJoin);
-#ifdef DEBUG
+#if DEBUG
     OSInitMutexQueue(&thread->queueMutex);
 #else
     OSInitThreadQueue((void*)&thread->queueMutex); // why
@@ -492,7 +492,7 @@ void OSExitThread(void* val) {
     __OSUnlockAllMutex(currentThread);
     OSWakeupThread(&currentThread->queueJoin);
     RunQueueHint = 1;
-#ifdef DEBUG
+#if DEBUG
     __OSReschedule();
 #else
     if (RunQueueHint != 0) {
@@ -839,9 +839,9 @@ s32 OSCheckActiveThreads(void) {
 }
 
 void OSClearStack(u8 val) {
-    register u32 sp;
-    register u32* p;
-    register u32 pattern;
+    __REGISTER u32 sp;
+    __REGISTER u32* p;
+    __REGISTER u32 pattern;
     
     pattern = (val << 24) | (val << 16) | (val << 8) | val;
     sp = OSGetStackPointer();

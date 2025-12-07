@@ -4223,13 +4223,13 @@ bool dCamera_c::lockonCamera(s32 param_0) {
 
         // this should probably be an ifdef, but we force it to be compiled
         // to make the function large enough to stop doing inlining
-#ifndef NDEBUG
-        if (mCamSetup.CheckFlag(0x8000)) {
-            //char name[28];
-            fopAcM_getNameString(mpPlayerActor, NULL);
-            dDbVw_Report(0x1e0, 0x109, "%s", NULL);
+        if (!NDEBUG_DEFINED) {
+            if (mCamSetup.CheckFlag(0x8000)) {
+                //char name[28];
+                fopAcM_getNameString(mpPlayerActor, NULL);
+                dDbVw_Report(0x1e0, 0x109, "%s", NULL);
+            }
         }
-#endif
 
         if (check_owner_action(mPadID, 0x2000008)) {
             cXyz vec(0.0f, 0.0f, -90.0f);

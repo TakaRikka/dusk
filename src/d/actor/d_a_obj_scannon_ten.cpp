@@ -160,7 +160,7 @@ void daObjSCannonTen_c::exeModeWait() {
     if (aREG_F(0) == 0.0f && fopAcM_checkHookCarryNow(this) && dComIfGp_checkPlayerStatus1(0, 0x10)) {
         eventInfo.setArchiveName(l_arcName);
         mEvtIdx = dComIfGp_getEventManager().getEventIdx(this, l_eventName, 0xFF);
-#ifdef DEBUG
+#if DEBUG
         if (mEvtIdx == -1) {
             // "××××××××××××× Sky Cannon (City in the Sky) d_a_obj_scannon_ten.cpp: Failed to get event\n"
             OS_REPORT("×××××××××天空砲台(天空都市） d_a_obj_scannon_ten.cpp：イベント取得失敗\n");
@@ -316,7 +316,7 @@ void daObjSCannonTen_c::demoExeFireEnd() {
 }
 
 void daObjSCannonTen_c::demoInitFinish() {
-#ifdef DEBUG
+#if DEBUG
     J3DJoint* joint_p = mpModel->getModelData()->getJointNodePointer(mHeadJointNo);
     if (joint_p == NULL) {
         // "××××××Sky Cannon—The head joint is missing!!!! ××××××"

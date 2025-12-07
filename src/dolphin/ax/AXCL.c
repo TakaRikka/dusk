@@ -144,7 +144,7 @@ void __AXNextFrame(void* sbuffer, void* buffer) {
 }
 
 void __AXClInit(void) {
-#ifdef DEBUG
+#if DEBUG
     OSReport("Initializing AXCL code module\n");
 #endif
     ASSERTLINE(338, ((u32)&__AXCommandList[0][0] & 0x1F) == 0);
@@ -156,7 +156,7 @@ void __AXClInit(void) {
 }
 
 void __AXClQuit(void) {
-#ifdef DEBUG
+#if DEBUG
     OSReport("Shutting down AXCL code module\n");
 #endif
 }

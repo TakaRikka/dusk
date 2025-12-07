@@ -29,7 +29,7 @@ struct daYkgr_HIO_c : public mDoHIO_entry_c {
     /* 0x24 */ f32 field_0x24;
 };
 
-#ifdef DEBUG
+#if DEBUG
 void daYkgr_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genLabel("竜の山陽炎HIO", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     ctx->genSlider("アルファ速度", &field_0xc, 0, 255, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
@@ -155,7 +155,7 @@ inline int daYkgr_c::_create() {
             field_0x5a8 = 0.0f;
             stop();
         }
-#ifdef DEBUG
+#if DEBUG
         l_HIO.entryHIO("竜の山陽炎");
 #endif
     } else {
@@ -177,7 +177,7 @@ static int daYkgrCreate(void* i_this) {
 }
 
 inline int daYkgr_c::_delete() {
-#ifdef DEBUG
+#if DEBUG
     l_HIO.removeHIO();
 #endif
     return 1;
@@ -250,13 +250,10 @@ inline int daYkgr_c::_draw() {
         set_mtx();
         if  (m_emitter != NULL) {
             m_emitter->setGlobalRTMatrix(field_0x570);
-#ifdef DEBUG
-            if (l_HIO.field_0x4 != 0) {
+            if (DEBUG && l_HIO.field_0x4 != 0) {
                 m_emitter->setGlobalAlpha(l_HIO.field_0x8);
                 YkgrCB.setParam(l_HIO.field_0x10);
-            } else
-#endif
-            {
+            } else {
                 m_emitter->setGlobalAlpha(m_alpha);
             }
         }

@@ -13,7 +13,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 
-#ifdef DEBUG
+#if DEBUG
 class daObjFlag2_Hio_c : public JORReflexible {
 public:
     daObjFlag2_Hio_c() {
@@ -329,7 +329,7 @@ void daObjFlag2_c::create_init() {
     initBaseMtx();
     initCollision();
 
-    #ifdef DEBUG
+    #if DEBUG
     M_hio.ct();
     #endif
 }
@@ -449,7 +449,7 @@ int daObjFlag2_c::execute() {
         return 1;
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     mFlagCloth.setSpringRate(attr().mSpringCoeeficient);
     mFlagCloth.setWindRate(attr().mWindCoefficient);
     mFlagCloth.setDecayRate(attr().mDecayRate);
@@ -485,7 +485,7 @@ static int daObjFlag2_Delete(daObjFlag2_c* i_this) {
 }
 
 daObjFlag2_c::~daObjFlag2_c() {
-    #ifdef DEBUG
+    #if DEBUG
     M_hio.dt();
     #endif
 

@@ -171,8 +171,7 @@ static daB_GM_HIO_c l_HIO;
 static int daB_GM_Draw(b_gm_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
-    #ifdef DEBUG
-    # else
+    #if !DEBUG
     g_env_light.settingTevStruct(0, &a_this->current.pos, &a_this->tevStr);
     #endif
 
@@ -187,7 +186,7 @@ static int daB_GM_Draw(b_gm_class* i_this) {
     }
 
     J3DModel* model = i_this->mpModelMorf->getModel();
-    #ifdef DEBUG
+    #if DEBUG
     g_env_light.settingTevStruct(0, &a_this->current.pos, &a_this->tevStr);
     #endif
     g_env_light.setLightTevColorType_MAJI(model, &a_this->tevStr);
@@ -1618,7 +1617,7 @@ static int daB_GM_Execute(b_gm_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz spD4, spC8;
 
-    #ifdef DEBUG
+    #if DEBUG
     if (mDoCPd_c::getTrigA(2) && i_this->mDemoMode == 0 && !i_this->mIsDisappear) {
         i_this->mAction = 0xB;
         i_this->mMode = 0x14;

@@ -28,7 +28,7 @@ void jstudio_tAdaptor_message::adaptor_do_MESSAGE(JStudio::data::TEOperationData
         break;
     }
     default:
-#ifdef DEBUG
+#if DEBUG
         JGadget_outMessage msg(JGadget_outMessage::warning, __FILE__, 124);
         msg << "unknown data-type : " << iType << "\n  demo-object : " << adaptor_getID_string();
         int x = 0;
@@ -96,7 +96,7 @@ dDemo_actor_c::~dDemo_actor_c() {
     mBtkId = -1;
     mBrkId = -1;
 
-    #ifdef DEBUG
+    #if DEBUG
     if(dComIfGp_event_getMode() == 0) {
         g_dComIfG_gameInfo.play.getEvent().setDebugStb(0);
     }

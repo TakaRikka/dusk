@@ -447,7 +447,7 @@ void daNpcF_Lookat_c::initCalc(fopAc_ac_c* i_actor, Mtx i_baseTransformMtx, cXyz
         param_3[i].setall(0);
         param_3[i].x = -cM_atan2s(local_90.y, local_90.absXZ());
 
-        #ifdef DEBUG
+        #if DEBUG
         if (i_debug) {
             f32 var_f31 = fabsf(cM_ssin(param_3[i].x));
             OS_REPORT(">>>>>>>%d: sin(%d):%f\n", i, abs(param_3[i].x), var_f31);
@@ -1905,9 +1905,9 @@ BOOL daNpcF_chkDoBtnEqSpeak(fopAc_ac_c* i_actor_p) {
             if (dComIfGp_getAttention()->LockonTarget(i) == i_actor_p &&
                 dComIfGp_getAttention()->getActionBtnB() &&
                 (dComIfGp_getAttention()->getActionBtnB()->mType == fopAc_attn_TALK_e
-#if DEBUG
+                #if !PLATFORM_GCN
                 || dComIfGp_getAttention()->getActionBtnB()->mType == fopAc_attn_UNK_4
-#endif
+                #endif
                 ))
             {
                 ret = TRUE;

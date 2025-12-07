@@ -19,10 +19,10 @@ void JMAEulerToQuat(s16 x, s16 y, s16 z, Quaternion* quat) {
     quat->z = sinZ * (cosX * cosY) - cosZ * (sinX * sinY);
 }
 
-void JMAQuatLerp(register const Quaternion* p, register const Quaternion* q, f32 t,
+void JMAQuatLerp(__REGISTER const Quaternion* p, __REGISTER const Quaternion* q, f32 t,
                  Quaternion* dst) {
-    register f32 pxy, pzw, qxy, qzw;
-    register f32 dp;
+    __REGISTER f32 pxy, pzw, qxy, qzw;
+    __REGISTER f32 dp;
 
 #ifdef __MWERKS__ // clang-format off    
     // compute dot product
@@ -52,8 +52,8 @@ void JMAQuatLerp(register const Quaternion* p, register const Quaternion* q, f32
     }
 }
 
-void JMAFastVECNormalize(register const Vec* src, register Vec* dst) {
-    register f32 vxy, rxy, vz, length;
+void JMAFastVECNormalize(__REGISTER const Vec* src, __REGISTER Vec* dst) {
+    __REGISTER f32 vxy, rxy, vz, length;
 #ifdef __MWERKS__  // clang-format off
 	asm {
 		psq_l vxy, 0(src), 0, 0
@@ -70,11 +70,11 @@ void JMAFastVECNormalize(register const Vec* src, register Vec* dst) {
 #endif  // clang-format on
 }
 
-void JMAVECScaleAdd(register const Vec* vec1, register const Vec* vec2, register Vec* dst,
-                    register f32 scale) {
-    register f32 v1xy;
-    register f32 v2xy = scale;
-    register f32 rxy, v1z, v2z, rz;
+void JMAVECScaleAdd(__REGISTER const Vec* vec1, __REGISTER const Vec* vec2, __REGISTER Vec* dst,
+                    __REGISTER f32 scale) {
+    __REGISTER f32 v1xy;
+    __REGISTER f32 v2xy = scale;
+    __REGISTER f32 rxy, v1z, v2z, rz;
 #ifdef __MWERKS__  // clang-format off
 	asm {
         psq_l v1xy, 0(vec1), 0, 0
@@ -90,11 +90,11 @@ void JMAVECScaleAdd(register const Vec* vec1, register const Vec* vec2, register
 #endif  // clang-format on
 }
 
-void JMAMTXApplyScale(register const Mtx src, register Mtx dst, register f32 xScale,
-                      register f32 yScale, register f32 zScale) {
-    register f32 scale = yScale;
-    register f32 x, y, z;
-    register f32 normal = 1.0f;
+void JMAMTXApplyScale(__REGISTER const Mtx src, __REGISTER Mtx dst, __REGISTER f32 xScale,
+                      __REGISTER f32 yScale, __REGISTER f32 zScale) {
+    __REGISTER f32 scale = yScale;
+    __REGISTER f32 x, y, z;
+    __REGISTER f32 normal = 1.0f;
 #ifdef __MWERKS__  // clang-format off
     asm {
         // scale first 2 components

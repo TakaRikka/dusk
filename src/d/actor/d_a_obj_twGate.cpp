@@ -28,7 +28,7 @@ daTwGate_HIO_c::daTwGate_HIO_c() {
     mRange = 1900.0f;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daTwGate_HIO_c::genMessage(JORMContext* ctx) {
     // Range
     ctx->genSlider("範囲", &mRange, 0.0f, 500000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
@@ -139,7 +139,7 @@ int daTwGate_c::create() {
         mLine.SetStartEnd(l_cheeckPos0[mGateType], l_cheeckPos1[mGateType]);
         mBrk.setPlaySpeed(-1.0f);
 
-        #ifdef DEBUG
+        #if DEBUG
         // Twilight Gate
         l_HIO.entryHIO("トワイライトゲート");
         #endif
@@ -186,7 +186,7 @@ int daTwGate_c::Draw() {
 int daTwGate_c::Delete() {
     dComIfG_resDelete(&mPhase, l_resNameIdx[mGateType]);
 
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO(this);
     #endif
 

@@ -1011,7 +1011,7 @@ public:
     /* 0x54 */ stage_tgsc_class* mDrTg;
     /* 0x58 */ stage_tgsc_class* mDoor;
     /* 0x5C */ dStage_FloorInfo_c* mFloorInfo;
-#ifdef DEBUG
+#if DEBUG
     /* 0x60 */ int field_0x60;
 #endif
     /* 0x60 */ u16 mPlayerNum;
@@ -1092,7 +1092,7 @@ public:
     static void SetTimePass(int i_TimePass) { m_time_pass = i_TimePass; }
     static void setZoneNo(int, int);
     static dBgp_c* getBgp(int i_roomNo) {
-#ifdef DEBUG
+#if DEBUG
         // NONMATCHING
 #else
         return NULL;

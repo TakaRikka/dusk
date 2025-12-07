@@ -917,7 +917,7 @@ int daNpc_Pachi_Taro_c::Draw() {
     }
 
     return draw(
-#ifdef DEBUG
+#if DEBUG
         chkAction(&daNpc_Pachi_Taro_c::test),
 #else
         FALSE,

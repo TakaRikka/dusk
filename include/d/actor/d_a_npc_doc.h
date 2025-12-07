@@ -74,10 +74,8 @@ public:
             OS_REPORT("|%06d:%x|daNpc_Doc_c -> コンストラクト\n", g_Counter.mCounter0, this);
         }
 
-    #if DEBUG
     int test(void*);
-    #endif
-    
+
     BOOL checkChangeJoint(int i_jointNo) { return i_jointNo == 4; }
     BOOL checkRemoveJoint(int i_jointNo) { return i_jointNo == 8; }
     s32 getBackboneJointNo() { return 1; }

@@ -667,7 +667,7 @@ int daNpc_Pachi_Maro_c::Draw() {
     }
 
     return draw(
-#ifdef DEBUG
+#if DEBUG
         chkAction(&daNpc_Pachi_Maro_c::test),
 #else
         FALSE,

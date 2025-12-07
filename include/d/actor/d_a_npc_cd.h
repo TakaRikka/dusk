@@ -54,7 +54,7 @@ struct daNpcCd_HIO_Jnt_c : public JORReflexible {
     virtual ~daNpcCd_HIO_Jnt_c() {}
     daNpcCd_HIO_Jnt_c() {}
 
-#ifdef DEBUG
+#if DEBUG
     void genMessage(JORMContext*);
 #endif
 
@@ -66,7 +66,7 @@ struct daNpcCd_HIO_Child_c : public JORReflexible {
     virtual ~daNpcCd_HIO_Child_c() {}
     daNpcCd_HIO_Child_c() {}
 
-#ifdef DEBUG
+#if DEBUG
     void genMessage(JORMContext*);
 #endif
 
@@ -91,7 +91,7 @@ public:
     daNpcCd_HIO_c();
     virtual ~daNpcCd_HIO_c() {}
 
-#ifdef DEBUG
+#if DEBUG
     void genMessage(JORMContext*);
 #endif
 

@@ -678,7 +678,7 @@ void TFunctionValue_list_parameter::data_set(const f32* pf, u32 u) {
     dat1.set(pfData_);
     dat2.set(&pfData_[uData_ * 2]);
     dat3 = dat1;
-#ifdef DEBUG
+#if DEBUG
     pfnUpdate_ = NULL;
 #endif
 }

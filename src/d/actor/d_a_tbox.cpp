@@ -1299,7 +1299,7 @@ u8 daTbox_c::getBombItemNoMain(u8 i_itemNo) {
         }
     }
 
-#ifdef DEBUG
+#if DEBUG
     // "====Bomb Bag count is %d====\n"
     OS_REPORT("====バクダン袋の数は %d 個です====\n", bag_count);
     for (int i = 0; i < 3; i++) {

@@ -21,7 +21,7 @@ void C_MTX44MultVec(const Mtx44 m, const Vec* src, Vec* dst) {
     dst->z = vTmp.z * w;
 }
 
-asm void PSMTX44MultVec(const register Mtx44 m, const register Vec* src, register Vec* dst) {
+asm void PSMTX44MultVec(const __REGISTER Mtx44 m, const __REGISTER Vec* src, __REGISTER Vec* dst) {
     nofralloc
     psq_l f0, 0x0(src), 0, 0
     psq_l f2, 0x30(m), 0, 0
@@ -78,7 +78,7 @@ void C_MTX44MultVecArray(const Mtx44 m, const Vec* srcBase, Vec* dstBase, u32 co
     }
 }
 
-asm void PSMTX44MultVecArray(const register Mtx44 m, const register Vec* srcBase, register Vec* dstBase, register u32 count) {
+asm void PSMTX44MultVecArray(const __REGISTER Mtx44 m, const __REGISTER Vec* srcBase, __REGISTER Vec* dstBase, __REGISTER u32 count) {
     nofralloc
     stwu r1, -0x10(r1)
     subi count, count, 0x1
@@ -157,7 +157,7 @@ void C_MTX44MultVecSR(const Mtx44 m, const Vec* src, Vec* dst) {
     dst->z = vTmp.z;
 }
 
-asm void PSMTX44MultVecSR(const register Mtx m, const register Vec* src, register Vec* dst) {
+asm void PSMTX44MultVecSR(const __REGISTER Mtx m, const __REGISTER Vec* src, __REGISTER Vec* dst) {
     nofralloc
     psq_l f0, 0x0(m), 0, 0
     psq_l f6, 0x0(src), 0, 0
@@ -202,7 +202,7 @@ void C_MTX44MultVecArraySR(const Mtx44 m, const Vec* srcBase, Vec* dstBase, u32 
     }
 }
 
-asm void PSMTX44MultVecArraySR(const register Mtx44 m, const register Vec* srcBase, register Vec* dstBase, register u32 count) {
+asm void PSMTX44MultVecArraySR(const __REGISTER Mtx44 m, const __REGISTER Vec* srcBase, __REGISTER Vec* dstBase, __REGISTER u32 count) {
     nofralloc
     psq_l f0, 0x0(m), 0, 0
     subi count, count, 0x1

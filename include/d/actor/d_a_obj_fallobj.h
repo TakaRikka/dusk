@@ -68,7 +68,7 @@ private:
 
 STATIC_ASSERT(sizeof(daObjFallObj_c) == 0x614);
 
-#ifdef DEBUG
+#if DEBUG
 class daObjFallObj_HIO_c : public mDoHIO_entry_c {
 public:
     daObjFallObj_HIO_c();

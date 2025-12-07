@@ -90,9 +90,7 @@ public:
     int walk(void*);
     int play(void*);
     int talk(void*);
-#if DEBUG
     int test(void*);
-#endif
     daNpc_Toby_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,

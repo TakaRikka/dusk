@@ -22,7 +22,7 @@ daObj_Msima_HIO_c::daObj_Msima_HIO_c() {
     mBasicPosition = 800.0f;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daObj_Msima_HIO_c::genMessage(JORMContext* context) {
     // Magma Island
     context->genLabel("　マグネ島　", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);

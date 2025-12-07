@@ -7,7 +7,6 @@
 #include "JSystem/JUtility/JUTTexture.h"
 #include "dolphin/gx.h"
 
-// NONMATCHING - instruction order. matches if const is removed from j2dDefaultColorChanInfo, but then it's in the wrong section
 void J2DColorBlock::initialize() {
     for (int i = 0; i < 2; i++) {
         mMatColor[i] = JUtility::TColor(j2dDefaultColInfo);
@@ -848,7 +847,6 @@ J2DTevBlock4::~J2DTevBlock4() {
     }
 }
 
-// NONMATCHING - inlines
 void J2DTevBlock4::initialize() {
     for (int i = 0; i < 4; i++) {
         mTexNo[i] = -1;
@@ -1292,7 +1290,6 @@ J2DTevBlock8::~J2DTevBlock8() {
     }
 }
 
-// NONMATCHING - inlines
 void J2DTevBlock8::initialize() {
     for (int i = 0; i < 8; i++) {
         mTexNo[i] = 0xffff;
@@ -1732,7 +1729,6 @@ J2DTevBlock16::~J2DTevBlock16() {
     }
 }
 
-// NONMATCHING - inlines
 void J2DTevBlock16::initialize() {
     for (int i = 0; i < 8; i++) {
         mTexNo[i] = 0xffff;
@@ -2186,16 +2182,4 @@ void J2DPEBlock::setGX() {
     GXSetAlphaCompare(GXCompare(mAlphaComp.getComp0()), mAlphaComp.getRef0(), GXAlphaOp(mAlphaComp.getOp()), GXCompare(mAlphaComp.getComp1()), mAlphaComp.getRef1());
     GXSetBlendMode(GXBlendMode(mBlend.getType()), GXBlendFactor(mBlend.getSrcFactor()), GXBlendFactor(mBlend.getDstFactor()), GXLogicOp(mBlend.getOp()));
     GXSetDither(mDither);
-}
-
-J2DTevStage::J2DTevStage() {
-    setTevStageInfo(j2dDefaultTevStageInfo);
-    setTevSwapModeInfo(j2dDefaultTevSwapMode);
-}
-
-void J2DTevStage::setTevStageInfo(J2DTevStageInfo const& info) {
-    setColorABCD(info.mColorA, info.mColorB, info.mColorC, info.mColorD);
-    setTevColorOp(info.mCOp, info.mCBias, info.mCScale, info.mCClamp, info.mCReg);
-    setAlphaABCD(info.mAlphaA, info.mAlphaB, info.mAlphaC, info.mAlphaD);
-    setTevAlphaOp(info.mAOp, info.mABias, info.mAScale, info.mAClamp, info.mAReg);
 }

@@ -7,7 +7,7 @@
 #include "d/actor/d_a_alink.h"
 #include "d/d_com_inf_game.h"
 
-#ifdef DEBUG
+#if DEBUG
 
 static void daAlinkHIO_setAnmGenMessage(daAlinkHIO_anm_c* i_anmP, JORMContext* ctx, char* param_3,
                                         f32 param_4, int param_5) {

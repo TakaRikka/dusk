@@ -5,7 +5,7 @@
 
 #include "__gx.h"
 
-#ifdef DEBUG
+#if DEBUG
 const char* __AIVersion = "<< Dolphin SDK - AI\tdebug build: Apr  5 2004 03:56:18 (0x2301) >>";
 #else
 const char* __AIVersion = "<< Dolphin SDK - AI\trelease build: Apr  5 2004 04:15:02 (0x2301) >>";
@@ -317,7 +317,7 @@ static void __AIDHandler(__OSInterrupt interrupt, OSContext* context) {
     OSSetCurrentContext(context);
 }
 
-static asm void __AICallbackStackSwitch(register void* cb) {
+static asm void __AICallbackStackSwitch(__REGISTER void* cb) {
     nofralloc
     mflr r0
     stw r0, 0x4(r1)

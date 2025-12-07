@@ -31,7 +31,7 @@ daAmiShutter_HIO_c::daAmiShutter_HIO_c() {
     mWaitTime = 0;
 }
 
-#ifdef DEBUG
+#if DEBUG
 void daAmiShutter_HIO_c::genMessage(JORMContext* i_ctx) {
     i_ctx->genSlider("open速度", &mMaxOpenSpeed, 0.1f, 1000.0f, 
         0, NULL, 0xffff, 0xffff, 512, 24);
@@ -102,7 +102,7 @@ cPhs__Step daAmiShutter_c::create() {
             init_modeWait();
         }
         setBaseMtx();
-        #ifdef DEBUG
+        #if DEBUG
         l_HIO.entryHIO("アミシャッター");
         #endif
     }
@@ -263,7 +263,7 @@ int daAmiShutter_c::Draw() {
 
 int daAmiShutter_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, "S_Zami");
-    #ifdef DEBUG
+    #if DEBUG
     l_HIO.removeHIO();
     #endif
 

@@ -215,7 +215,7 @@ daNpc_grR_c::~daNpc_grR_c() {
         mAnm_p->stopZelAnime();
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     if (mHIO != NULL) {
         mHIO->removeHIO();
     }

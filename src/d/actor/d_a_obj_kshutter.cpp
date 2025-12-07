@@ -270,7 +270,7 @@ int daObjKshtr_c::CreateHeap() {
         }
     }
 
-    #ifdef DEBUG
+    #if DEBUG
     if (checkKey() != 0) {
         mIsCheckKey = true;
     }
@@ -320,7 +320,7 @@ cPhs__Step daObjKshtr_c::phase_0() {
     mType = getType() + 1;
     mSwNo = getSwNo();
 
-    #ifdef DEBUG
+    #if DEBUG
     if (mSwNo == 0xFF) {
         OS_REPORT_ERROR("鍵付き壁ドア：スイッチ指定がありません\n"); // Locked wall door: No switch specification
         return cPhs_ERROR_e;
@@ -329,7 +329,7 @@ cPhs__Step daObjKshtr_c::phase_0() {
     initKey();
     #endif
 
-    #ifdef DEBUG
+    #if DEBUG
     if (mType >= 6) {
         OS_REPORT_ERROR("鍵付き壁ドア：引数０のタイプ指定が不正値です\n"); // Locked wall door: The type specification for argument 0 is invalid
 
@@ -835,7 +835,7 @@ void daObjKshtr_c::anmInit() {
 
         JUT_ASSERT(1278, anm != NULL);
 
-        #ifdef DEBUG
+        #if DEBUG
         if (!mpBckAnm->init(anm, 1, 0, 1.0f, 0, -1, true)) {
             JUT_ASSERT(1281, FALSE);
 

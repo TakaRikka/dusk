@@ -173,7 +173,7 @@ public:
 
     void initWord(fopAc_ac_c*, const char*, u8, int, fopAc_ac_c**);
 
-#ifdef DEBUG
+#if DEBUG
     void dbgPrint();
 #endif
 

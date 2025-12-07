@@ -20,7 +20,7 @@ static cXyz l_wolf_offset = cXyz(13.0f, 135.0f, 57.0f);
 
 static cXyz l_horse_offset = cXyz(0.0f, 20.0f, 54.0f);
 
-#ifdef DEBUG
+#if DEBUG
 
 class DitemHIO_c 
 : public mDoHIO_entry_c 

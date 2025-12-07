@@ -91,9 +91,7 @@ public:
     virtual void evtOrder();
     virtual int drawDbgInfo();
 
-    #if DEBUG
     int test(void*);
-    #endif
 
     bool getGameStartFlag() { return mGameStartFlag; }
     void setPotBreakFlag() { mPotBreakFlag = true; }

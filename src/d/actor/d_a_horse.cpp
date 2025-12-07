@@ -560,6 +560,8 @@ BOOL daHorse_c::checkEnding() {
 
 #if DEBUG
 int l_debugMode;
+#else
+#define l_debugMode 0
 #endif
 extern int g_horsePosInit;
 
@@ -610,9 +612,7 @@ int daHorse_c::create() {
         m_offRideFlg = &daHorse_c::offRideFlgSubstance;
 
         if (daAlink_getAlinkActorClass()->checkHorseStart() || checkStateFlg0(FLG0_UNK_8000) ||
-#if DEBUG
-            g_horsePosInit ||
-#endif
+            (DEBUG && g_horsePosInit) ||
             strcmp(dComIfGs_getHorseRestartStageName(), "") == 0
             /* dSv_event_flag_c::M_002 - Cutscene - [cutscene: 2] Met with Ilia (brings horse to
                spring) */
@@ -4301,6 +4301,7 @@ int daHorse_c::execute() {
             l_debugMode = 1;
         }
     }
+#endif
 
     if (l_debugMode) {
         f32 f31 = 50.0f;
@@ -4318,140 +4319,136 @@ int daHorse_c::execute() {
         setMatrix();
         m_model->calc();
         setBodyPart();
-    } else {  // unsure of the best way to handle this jump
-#endif
-
-    animePlay();
-    checkDemoAction();
-
-    (this->*m_proc)();
-
-    cXyz old_pos(current.pos);
-    f32 old_speedF = speedF;
-    speedF *= cM_scos(shape_angle.x);
-
-    if (m_procID == PROC_JUMP_e) {
-        fopAcM_posMoveF(this, NULL);
     } else {
-        fopAcM_posMoveF(this, m_cc_stts.GetCCMoveP());
-        if (m_cc_stts.GetCCMoveP()->abs() > 0.0001f) {
-            s16 old_shape_y = shape_angle.y;
-            s16 old_angle_y = current.angle.y;
+        animePlay();
+        checkDemoAction();
 
-            for (int i = 0; i < 8; i++) {
-                if (checkHorseNoMove(1) == 2) {
-                    current.pos -= *m_cc_stts.GetCCMoveP();
-                    break;
+        (this->*m_proc)();
+
+        cXyz old_pos(current.pos);
+        f32 old_speedF = speedF;
+        speedF *= cM_scos(shape_angle.x);
+
+        if (m_procID == PROC_JUMP_e) {
+            fopAcM_posMoveF(this, NULL);
+        } else {
+            fopAcM_posMoveF(this, m_cc_stts.GetCCMoveP());
+            if (m_cc_stts.GetCCMoveP()->abs() > 0.0001f) {
+                s16 old_shape_y = shape_angle.y;
+                s16 old_angle_y = current.angle.y;
+
+                for (int i = 0; i < 8; i++) {
+                    if (checkHorseNoMove(1) == 2) {
+                        current.pos -= *m_cc_stts.GetCCMoveP();
+                        break;
+                    }
+
+                    shape_angle.y += (s16)0x2000;
+                    current.angle.y = shape_angle.y;
                 }
 
-                shape_angle.y += (s16)0x2000;
-                current.angle.y = shape_angle.y;
-            }
-
-            shape_angle.y = old_shape_y;
-            current.angle.y = old_angle_y;
-        }
-    }
-
-    speedF = old_speedF;
-
-    m_cc_stts.ClrCcMove();
-    f32 old_speed_y = speed.y;
-
-    bgCheck();
-    m_acch.CrrPos(dComIfG_Bgsp());
-
-    if (checkStateFlg0(FLG0_UNK_4000)) {
-        autoGroundHit();
-    } else {
-        current.pos.y = old_pos.y;
-        speed.y = 0.0f;
-    }
-
-    if (m_procID == PROC_TOOL_DEMO_e) {
-        J3DTransformInfo sp70;
-        m_mtxcalc->getAnm(0)->getTransform(0, &sp70);
-
-        mDoMtx_stack_c::transS(old_pos);
-        mDoMtx_stack_c::YrotM(shape_angle.y);
-
-        Vec sp54 = {0.0f, 0.0f, 0.0f};
-        sp54.x = sp70.mTranslate.x;
-        f32 f28 = sp70.mTranslate.z;
-        sp54.z = f28;
-
-        mDoMtx_stack_c::multVec(&sp54, &current.pos);
-        if (field_0x1730 != 0 && -G_CM3D_F_INF != m_acch.GetGroundH()) {
-            current.pos.y = m_acch.GetGroundH();
-        }
-    } else if (m_procID == PROC_JUMP_e) {
-        speed.y = old_speed_y;
-    }
-
-    if (checkStateFlg0(FLG0_UNK_1) && m_acch.ChkGroundHit() && checkStateFlg0(FLG0_UNK_2)) {
-        if (!checkStateFlg0(FLG0_UNK_1000)) {
-            dComIfGp_getVibration().StartQuake(VIBMODE_S_DOKUTT, 1, cXyz(0.0f, 1.0f, 0.0f));
-            onStateFlg0(FLG0_UNK_1000);
-        }
-    } else if (checkStateFlg0(FLG0_UNK_1000)) {
-        dComIfGp_getVibration().StopQuake(0x1F);
-        offStateFlg0(FLG0_UNK_1000);
-    }
-
-    setRoomInfo(0);
-    setMatrix();
-    footBgCheck();
-    setTailAngle();
-
-    m_model->calc();
-    setBodyPart();
-
-    if (m_procID == PROC_TOOL_DEMO_e) {
-        cXyz sp48;
-        mDoMtx_multVec(m_model->getAnmMtx(0), &cXyz::BaseX, &sp48);
-        field_0x170e = cM_atan2s(-sp48.x, -sp48.z);
-    } else {
-        field_0x170e = shape_angle.y;
-    }
-
-    cXyz sp3C;
-    cXyz sp30;
-    mDoMtx_multVecZero(m_model->getAnmMtx(0xB), &sp3C);
-    mDoMtx_multVecZero(m_model->getAnmMtx(0x14), &sp30);
-    sp30 -= sp3C;
-
-    field_0x1712 = sp30.atan2sX_Z() - field_0x170e;
-    if (field_0x1712 > 0x2000) {
-        field_0x1712 = 0x2000;
-    } else if (field_0x1712 < -0x2000) {
-        field_0x1712 = -0x2000;
-    }
-
-    if (checkResetStateFlg0(RFLG0_UNK_1)) {
-        mDoMtx_stack_c::transS(m_bodyEyePos.x, m_bodyEyePos.y, m_bodyEyePos.z);
-        mDoMtx_stack_c::YrotM(field_0x170e - field_0x1710);
-        mDoMtx_stack_c::transM(-field_0x17b8.x, -field_0x17b8.y, -field_0x17b8.z);
-
-        daHorseRein_c* rein_p = m_rein;
-        cXyz* var_r26;
-        for (int i = 0; i < 3; i++, rein_p++) {
-            var_r26 = rein_p->field_0x0[0];
-            for (int j = 0; j < rein_p->field_0x8[1]; j++, var_r26++) {
-                mDoMtx_stack_c::multVec(var_r26, var_r26);
+                shape_angle.y = old_shape_y;
+                current.angle.y = old_angle_y;
             }
         }
-    }
 
-    field_0x17b8 = m_bodyEyePos;
+        speedF = old_speedF;
 
-    m_sound.framework(m_poly_sound, m_reverb);
+        m_cc_stts.ClrCcMove();
+        f32 old_speed_y = speed.y;
 
-    if (field_0x1144 != NULL) {
-        m_sound.updateAnime(field_0x1144->getFrame(), field_0x1144->getRate());
+        bgCheck();
+        m_acch.CrrPos(dComIfG_Bgsp());
+
+        if (checkStateFlg0(FLG0_UNK_4000)) {
+            autoGroundHit();
+        } else {
+            current.pos.y = old_pos.y;
+            speed.y = 0.0f;
+        }
+
+        if (m_procID == PROC_TOOL_DEMO_e) {
+            J3DTransformInfo sp70;
+            m_mtxcalc->getAnm(0)->getTransform(0, &sp70);
+
+            mDoMtx_stack_c::transS(old_pos);
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+
+            Vec sp54 = {0.0f, 0.0f, 0.0f};
+            sp54.x = sp70.mTranslate.x;
+            f32 f28 = sp70.mTranslate.z;
+            sp54.z = f28;
+
+            mDoMtx_stack_c::multVec(&sp54, &current.pos);
+            if (field_0x1730 != 0 && -G_CM3D_F_INF != m_acch.GetGroundH()) {
+                current.pos.y = m_acch.GetGroundH();
+            }
+        } else if (m_procID == PROC_JUMP_e) {
+            speed.y = old_speed_y;
+        }
+
+        if (checkStateFlg0(FLG0_UNK_1) && m_acch.ChkGroundHit() && checkStateFlg0(FLG0_UNK_2)) {
+            if (!checkStateFlg0(FLG0_UNK_1000)) {
+                dComIfGp_getVibration().StartQuake(VIBMODE_S_DOKUTT, 1, cXyz(0.0f, 1.0f, 0.0f));
+                onStateFlg0(FLG0_UNK_1000);
+            }
+        } else if (checkStateFlg0(FLG0_UNK_1000)) {
+            dComIfGp_getVibration().StopQuake(0x1F);
+            offStateFlg0(FLG0_UNK_1000);
+        }
+
+        setRoomInfo(0);
+        setMatrix();
+        footBgCheck();
+        setTailAngle();
+
+        m_model->calc();
+        setBodyPart();
+
+        if (m_procID == PROC_TOOL_DEMO_e) {
+            cXyz sp48;
+            mDoMtx_multVec(m_model->getAnmMtx(0), &cXyz::BaseX, &sp48);
+            field_0x170e = cM_atan2s(-sp48.x, -sp48.z);
+        } else {
+            field_0x170e = shape_angle.y;
+        }
+
+        cXyz sp3C;
+        cXyz sp30;
+        mDoMtx_multVecZero(m_model->getAnmMtx(0xB), &sp3C);
+        mDoMtx_multVecZero(m_model->getAnmMtx(0x14), &sp30);
+        sp30 -= sp3C;
+
+        field_0x1712 = sp30.atan2sX_Z() - field_0x170e;
+        if (field_0x1712 > 0x2000) {
+            field_0x1712 = 0x2000;
+        } else if (field_0x1712 < -0x2000) {
+            field_0x1712 = -0x2000;
+        }
+
+        if (checkResetStateFlg0(RFLG0_UNK_1)) {
+            mDoMtx_stack_c::transS(m_bodyEyePos.x, m_bodyEyePos.y, m_bodyEyePos.z);
+            mDoMtx_stack_c::YrotM(field_0x170e - field_0x1710);
+            mDoMtx_stack_c::transM(-field_0x17b8.x, -field_0x17b8.y, -field_0x17b8.z);
+
+            daHorseRein_c* rein_p = m_rein;
+            cXyz* var_r26;
+            for (int i = 0; i < 3; i++, rein_p++) {
+                var_r26 = rein_p->field_0x0[0];
+                for (int j = 0; j < rein_p->field_0x8[1]; j++, var_r26++) {
+                    mDoMtx_stack_c::multVec(var_r26, var_r26);
+                }
+            }
+        }
+
+        field_0x17b8 = m_bodyEyePos;
+
+        m_sound.framework(m_poly_sound, m_reverb);
+
+        if (field_0x1144 != NULL) {
+            m_sound.updateAnime(field_0x1144->getFrame(), field_0x1144->getRate());
+        }
     }
-#if DEBUG
-    }
-#endif
     setEffect();
     setCollision();
 
