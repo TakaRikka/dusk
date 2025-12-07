@@ -191,7 +191,9 @@ static void drawHeapMap() {
                 heap = mDoExt_getGameHeap();
                 OSReport_Error("ゲームヒープマップ表示\n");
             } else if (l_heapMapMode == 2) {
+#if PLATFORM_WII || PLATFORM_SHIELD
                 heap = (JKRExpHeap*)DynamicModuleControlBase::getHeap();
+#endif
                 OSReport_Error("ダイナミックリンクヒープマップ表示\n");
             } else if (l_heapMapMode == 4) {
                 heap = mDoExt_getZeldaHeap();

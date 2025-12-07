@@ -1350,16 +1350,23 @@ set(DUSK_GAME_VERSION
     GZ2E01
     )
 
+# TODO Handle debug cases
+if(false)
+    set(DEBUG_DEFINE DEBUG=1 DEBUG_DEFINED=1 NDEBUG_DEFINED=0)
+else()
+    set(DEBUG_DEFINE NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
+endif()
+
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES})
 source_group("dusk" FILES ${DUSK_FILES})
 
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})
-target_compile_definitions(game PRIVATE TARGET_PC VERSION=0)
+target_compile_definitions(game PRIVATE TARGET_PC VERSION=0 ${DEBUG_DEFINE})
 
 target_include_directories(game PRIVATE include src ${DUSK_POWERPC_EABI_SUPPORT_INCLUDES} assets/${DUSK_GAME_VERSION} ${CMAKE_BINARY_DIR}/../${DUSK_GAME_VERSION}/include)
 target_link_libraries(game PRIVATE aurora::core aurora::gx aurora::si aurora::vi aurora::pad)
 
 add_executable(dusk src/dusk/main.cpp)
-target_compile_definitions(dusk PRIVATE TARGET_PC VERSION=0)
+target_compile_definitions(dusk PRIVATE TARGET_PC VERSION=0 ${DEBUG_DEFINE})
 target_include_directories(dusk PRIVATE include)
 target_link_libraries(dusk PRIVATE game aurora::main)

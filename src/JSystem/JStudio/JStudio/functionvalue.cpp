@@ -778,8 +778,8 @@ f64 TFunctionValue_list_parameter::update_INTERPOLATE_BSPLINE_dataMore3_(
     local_68[2] = pfVar2[1];
     local_48[2] = pfVar2[-2];
     local_48[3] = pfVar2[0];
-    s32 iVar5 = ((int)pfVar2 - (int)rThis.dat1.get()) / 4;
-    s32 iVar3 = ((int)rThis.dat2.get() - (int)pfVar2) / 4;
+    s32 iVar5 = ((intptr_t)pfVar2 - (intptr_t)rThis.dat1.get()) / 4;
+    s32 iVar3 = ((intptr_t)rThis.dat2.get() - (intptr_t)pfVar2) / 4;
     switch(iVar5) {
     case 2:
         local_68[0] = 2.0 * local_68[1] - local_68[2];

@@ -3,6 +3,7 @@
 #include "JSystem/JStudio/JStudio/stb-data-parse.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/os.h"
+#include "stdint.h"
 
 namespace JStudio {
 namespace stb {
@@ -22,12 +23,12 @@ void TParse_TSequence::getData(TData* pData) const {
     if (type == 0)
         return;
     
-    const void* next = (const void*)((int)getRaw() + 4);
+    const void* next = (const void*)((intptr_t)getRaw() + 4);
     if (type <= 0x7f) {
         pData->next = next;
     } else {
         pData->content = next;
-        pData->next = (const void*)((int)next + param);
+        pData->next = (const void*)((intptr_t)next + param);
     }
 }
 
@@ -43,7 +44,7 @@ void TParse_TParagraph::getData(TData* pData) const {
         pData->next = data;
     } else {
         pData->content = data;
-        pData->next = (const void*)((int)data + align_roundUp(result, 4));
+        pData->next = (const void*)((intptr_t)data + align_roundUp(result, 4));
     }
 }
 

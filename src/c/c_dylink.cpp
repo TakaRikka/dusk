@@ -795,7 +795,7 @@ static DynamicNameTableEntry const DynamicNameTable[] = {
     #if !PLATFORM_SHIELD
     {PROC_GRASS, "d_a_grass"},
     #endif
-    {static_cast<s16>(0xFFFF), NULL},
+    {-1, NULL},
 };
 
 static DynamicModuleControlBase* DMC[PROC_MAX_NUM];

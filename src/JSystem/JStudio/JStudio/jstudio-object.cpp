@@ -186,7 +186,7 @@ void JStudio::TAdaptor::adaptor_setVariableValue_n(JStudio::TControl* pControl,
     JGadget::TEnumerator<const u32*> enumerator(param_2, param_2 + param_3);
     while (enumerator) {
         (*pcVar6)(this, pControl, **enumerator, param_5, iVar7);
-        param_5 = (const void*)((int)param_5 + iVar7);
+        param_5 = (const void*)((intptr_t)param_5 + iVar7);
     }
 }
 
