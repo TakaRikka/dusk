@@ -193,7 +193,7 @@ static actor_method_class l_daLv6FurikoTrap_Method = {
     (process_method_func)daLv6FurikoTrap_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv6FuriTrap = {
+actor_process_profile_definition g_profile_Obj_Lv6FuriTrap = {
   fpcLy_CURRENT_e,           // mLayerID
   3,                         // mListID
   fpcPi_CURRENT_e,           // mListPrio

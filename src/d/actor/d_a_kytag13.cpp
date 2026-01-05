@@ -387,7 +387,7 @@ static actor_method_class l_daKytag13_Method = {
     (process_method_func)daKytag13_Draw,
 };
 
-extern actor_process_profile_definition g_profile_KYTAG13 = {
+actor_process_profile_definition g_profile_KYTAG13 = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

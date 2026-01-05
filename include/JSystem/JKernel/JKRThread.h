@@ -117,7 +117,7 @@ private:
     /* 0x28 */ JKRHeap* mHeap;
     /* 0x2C */ OSThread* mThreadRecord;
     /* 0x30 */ OSMessageQueue mMessageQueue;
-    /* 0x50 */ OSMessage* mMessages;
+    /* 0x50 */ OSMessage* mMesgBuffer;
     /* 0x54 */ s32 mMessageCount;
     /* 0x58 */ void* mStackMemory;
     /* 0x5C */ u32 mStackSize;
@@ -159,7 +159,7 @@ public:
 private:
     static JKRThreadSwitch* sManager;
     static u32 sTotalCount;
-    static u32 sTotalStart;
+    static u64 sTotalStart;
     static JKRThreadSwitch_PreCallback mUserPreCallback;
     static JKRThreadSwitch_PostCallback mUserPostCallback;
 

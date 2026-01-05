@@ -10,7 +10,7 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
-#include "cstring.h"
+#include <string>
 #include "d/d_com_inf_game.h"
 #include "d/d_select_cursor.h"
 #include "d/d_msg_object.h"
@@ -108,7 +108,7 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
     }
 
 #if VERSION == VERSION_GCN_JPN
-    if (dComIfGs_getOptUnk0() == 0) {
+    if (dComIfGs_getOptRuby() == 0) {
         mpTmSel_c[0] = new CPaneMgr(mpScreen, 'a_tf', 0, NULL);
 
         mpTmSel_c[1] = new CPaneMgr(mpScreen, 'b_tf', 0, NULL);
@@ -911,7 +911,7 @@ void dMsgScrn3Select_c::selectTrans() {
     f32 sp68[3];
     for (int i = 0; i < 3; i++) {
 #if VERSION == VERSION_GCN_JPN
-        if (dComIfGs_getOptUnk0() == 0 && (field_0x112 & (u8)(1 << i)) != 0) {
+        if (dComIfGs_getOptRuby() == 0 && (field_0x112 & (u8)(1 << i)) != 0) {
             sp68[i] = 0.0f;
         } else {
             f32 temp = mpTmSel_c[i]->getInitPosY();

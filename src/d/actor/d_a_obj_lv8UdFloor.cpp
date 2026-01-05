@@ -287,7 +287,7 @@ static actor_method_class l_daUdFloor_Method = {
     (process_method_func)daUdFloor_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv8UdFloor = {
+actor_process_profile_definition g_profile_Obj_Lv8UdFloor = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

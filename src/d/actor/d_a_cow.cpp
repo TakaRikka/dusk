@@ -59,7 +59,7 @@ static f32 l_CowRoomPosX[20] = {-10600.0f, -10600.0f, -10800.0f, -10800.0f, -110
 static f32 l_CowRoomPosZ[2] = {-19646.0f, -20926.0f};
 
 #define N_WOLF_BUSTERS 3
-extern fpc_ProcID gWolfBustersID[N_WOLF_BUSTERS] = {-1, -1, -1};
+fpc_ProcID gWolfBustersID[N_WOLF_BUSTERS] = {fpcM_ERROR_PROCESS_ID_e, fpcM_ERROR_PROCESS_ID_e, fpcM_ERROR_PROCESS_ID_e};
 
 }  // namespace
 
@@ -431,10 +431,8 @@ void daCow_c::setGroundAngle() {
 
 static f32 m_near_dist;
 
-/* 806634F8 0002+00 data_806634F8 m_view_angle_wide */
 static s16 m_view_angle_wide;
 
-/* 806634FA 0002+00 data_806634FA m_view_angle */
 static s16 m_view_angle;
 
 #define IS_COW(actor) (fopAcM_GetName((actor)) == PROC_COW)
@@ -3116,10 +3114,7 @@ u8 daCow_c::initialize() {
 }
 
 int daCow_c::create() {
-    if (!fopAcM_CheckCondition(this, 8)) {
-        new (this) daCow_c();
-        fopAcM_OnCondition(this, 8);
-    }
+    fopAcM_ct(this, daCow_c);
 
     mPrm0 = fopAcM_GetParam(this);
     if (mPrm0 == (u8)-1 || mPrm0 >= 5) {
@@ -3280,7 +3275,7 @@ static actor_method_class daCow_MethodTable = {
     daCow_Create, daCow_Delete, daCow_Execute, daCow_IsDelete, daCow_Draw,
 };
 
-extern actor_process_profile_definition g_profile_COW = {
+actor_process_profile_definition g_profile_COW = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

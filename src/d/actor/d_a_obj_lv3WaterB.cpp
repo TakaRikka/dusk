@@ -204,7 +204,7 @@ static actor_method_class l_daObj_Lv3waterB_Method = {
     (process_method_func)daObj_Lv3waterB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_LV3WATERB = {
+actor_process_profile_definition g_profile_OBJ_LV3WATERB = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

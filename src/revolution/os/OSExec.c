@@ -2,7 +2,7 @@
 #include <revolution/os.h>
 #include <revolution/esp.h>
 #include <revolution/ipc.h>
-#include <string.h>
+#include <cstring>
 
 #include "__os.h"
 #include "__dvd.h"

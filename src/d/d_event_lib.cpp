@@ -94,7 +94,7 @@ bool dEvLib_callback_c::executeRun() {
     if (!dComIfGp_evmng_endCheck(mActor->eventInfo.getEventId())) {
         return eventRun();
     } else {
-        dComIfGp_getEvent().reset();
+        dComIfGp_getEvent()->reset();
         setAction(NULL);
         return eventEnd();
     }

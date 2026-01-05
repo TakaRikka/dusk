@@ -51,10 +51,12 @@ dCcD_SrcCyl const daNpc_Shop0_c::mCylDat = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        0.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            0.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    }
 };
 
 daNpc_Shop0_Param_c::param const daNpc_Shop0_Param_c::mParam = {
@@ -347,7 +349,7 @@ static actor_method_class daNpc_Shop0_MethodTable = {
     daNpc_Shop0_Create, daNpc_Shop0_Delete, daNpc_Shop0_Execute, daNpc_Shop0_IsDelete, daNpc_Shop0_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_SHOP0 = {
+actor_process_profile_definition g_profile_NPC_SHOP0 = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

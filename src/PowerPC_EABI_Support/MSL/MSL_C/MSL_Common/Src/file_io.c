@@ -1,5 +1,5 @@
 #include "file_io.h"
-#include "ctype.h"
+#include <ctype>
 
 int fclose(FILE* file) {
     int flush_result, close_result;
@@ -72,8 +72,8 @@ int __msl_strnicmp(const char* str1, const char* str2, int n) {
     char c1, c2;
 
     for (i = 0; i < n; i++) {
-        c1 = _tolower(*str1++);
-        c2 = _tolower(*str2++);
+        c1 = tolower(*str1++);
+        c2 = tolower(*str2++);
 
         if (c1 < c2) {
             return -1;

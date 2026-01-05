@@ -1,6 +1,8 @@
 #include "ansi_files.h"
 #include "critical_regions.h"
 
+#include "global.h"
+
 static unsigned char stdin_buff[0x100];
 
 static unsigned char stdout_buff[0x100];

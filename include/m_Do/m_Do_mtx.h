@@ -5,6 +5,9 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include <dolphin/mtx.h>
 
+extern u8 g_printCurrentHeapDebug;
+extern u8 g_printOtherHeapDebug;
+
 void mDoMtx_XYZrotS(Mtx, s16, s16, s16);
 void mDoMtx_XYZrotM(Mtx, s16, s16, s16);
 void mDoMtx_ZXYrotS(Mtx, s16, s16, s16);
@@ -45,7 +48,7 @@ inline void mDoMtx_multVec(CMtxP m, const Vec* src, Vec* dst) {
 }
 
 inline void mDoMtx_multVecArray(const Mtx m, const Vec* src, Vec* dst, u32 count) {
-    MTXMultVecArray(m, src, dst, count);
+    PSMTXMultVecArray(m, src, dst, count);
 }
 
 inline void mDoMtx_copy(const Mtx src, Mtx dst) {
@@ -100,6 +103,10 @@ inline void cMtx_copy(const Mtx src, Mtx dst) {
     mDoMtx_copy(src, dst);
 }
 
+inline void cMtx_trans(Mtx pDest, f32 x, f32 y, f32 z) {
+    mDoMtx_trans(pDest, x, y, z);
+}
+
 inline void cMtx_multVecArray(const Mtx mtx, const Vec* src, Vec* dst, u32 count) {
     mDoMtx_multVecArray(mtx, src, dst, count);
 }
@@ -140,6 +147,10 @@ inline void mDoMtx_scale(Mtx m, f32 x, f32 y, f32 z) {
 
 inline void mDoMtx_quat(Mtx m, const Quaternion* q) {
     MTXQuat(m, q);
+}
+
+inline void cMtx_identity(Mtx mtx) {
+    mDoMtx_identity(mtx);
 }
 
 inline void cMtx_inverse(const Mtx a, Mtx b) {

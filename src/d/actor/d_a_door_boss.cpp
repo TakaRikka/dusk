@@ -416,7 +416,7 @@ static actor_method_class l_daBdoor_Method = {
     (process_method_func)daBdoor_Draw,
 };
 
-extern actor_process_profile_definition g_profile_BOSS_DOOR = {
+actor_process_profile_definition g_profile_BOSS_DOOR = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

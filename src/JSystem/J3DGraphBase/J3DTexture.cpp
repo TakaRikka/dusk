@@ -49,7 +49,7 @@ void J3DTexture::addResTIMG(u16 newNum, const ResTIMG* newRes) {
     if (newNum == 0)
         return;
 
-    J3D_ASSERT_NULLPTR(105, newRes != 0);
+    J3D_ASSERT_NULLPTR(105, newRes != NULL);
 
     u16 oldNum = mNum;
     ResTIMG* oldRes = mpRes;

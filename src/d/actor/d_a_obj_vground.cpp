@@ -135,7 +135,7 @@ static actor_method_class l_daObjVGnd_Method = {
     (process_method_func)daObjVGnd_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_VolcGnd = {
+actor_process_profile_definition g_profile_Obj_VolcGnd = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

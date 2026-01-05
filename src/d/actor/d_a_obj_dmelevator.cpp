@@ -22,7 +22,7 @@ static void rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2
 
     daPy_py_c* pdVar1 = daPy_getPlayerActorClass();
     if (fopAcM_CheckStatus(param_2, 0x400) != 0 && fopAcM_GetName(param_2) == 0xfd) {
-        static cXyz l_push_check_pos0[4] = {
+        static cXyz l_push_check_pos[4] = {
             cXyz(-50.0f, 0.0f, -50.0f),
             cXyz(50.0f, 0.0f, -50.0f),
             cXyz(50.0f, 0.0f, 50.0f),
@@ -33,10 +33,10 @@ static void rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2
         mDoMtx_stack_c::YrotS(-param_1->current.angle.y);
         mDoMtx_stack_c::multVec(&local_2c, &local_2c);
 
-        if (l_push_check_pos0[0].x <= local_2c.x) {
-            if (l_push_check_pos0[2].x >= local_2c.x) {
-                if (l_push_check_pos0[0].z <= local_2c.z) {
-                    if (l_push_check_pos0[2].z >= local_2c.z) {
+        if (l_push_check_pos[0].x <= local_2c.x) {
+            if (l_push_check_pos[2].x >= local_2c.x) {
+                if (l_push_check_pos[0].z <= local_2c.z) {
+                    if (l_push_check_pos[2].z >= local_2c.z) {
                         if ((pdVar1->checkEquipHeavyBoots())) {
                             pthis->field_0x632 = 1;
                             pthis->field_0x634 = 1;
@@ -360,7 +360,7 @@ void daObjDmElevator_c::actionSwPause() {
     daPy_getPlayerActorClass()->mEndResetFlg1 = daPy_getPlayerActorClass()->mEndResetFlg1 | 0x200;
     field_0x62a += -1;
     if (field_0x62a == 0) {
-        g_dComIfG_gameInfo.play.mEvent.reset();
+        dComIfGp_event_reset();
         actionSwPauseNoneInit();
     }
 }
@@ -589,10 +589,7 @@ int daObjDmElevator_c::demoProc() {
 void daObjDmElevator_c::moveInit() {
     speedF = 0.0f;
     if (field_0x5e0 == 0) {
-        s8 i_reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
-
-        Z2AudioMgr::mAudioMgrPtr->seStart(Z2SE_OBJ_ELEVATOR_START, (Vec*)&eyePos, 0, i_reverb, 1.0,
-                                          1.0, -1.0, -1.0, 0);
+        fopAcM_seStart(this, Z2SE_OBJ_ELEVATOR_START, 0);
     }
 }
 
@@ -683,7 +680,7 @@ static actor_method_class daObjDmElevator_METHODS = {
     (process_method_func)daObjDmElevator_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Elevator = {
+actor_process_profile_definition g_profile_Obj_Elevator = {
     fpcLy_CURRENT_e,            // mLayerID
     3,                          // mListID
     fpcPi_CURRENT_e,            // mListPrio

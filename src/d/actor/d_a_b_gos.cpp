@@ -389,12 +389,14 @@ static int daB_GOS_Create(fopAc_ac_c* i_this) {
                 {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                 // mGObjAt
                 {dCcD_SE_NONE, 0x5, 0x0, 0x0, 0x2},                 // mGObjTg
                 {0x0},                                              // mGObjCo
-            },                                                      // mObjInf
-            {
-                {0.0f, 0.0f, 0.0f},  // mCenter
-                150.0f,              // mRadius
-                60.0f                // mHeight
-            }                        // mCyl
+            },     
+            {                                                 // mObjInf
+                {
+                    {0.0f, 0.0f, 0.0f},  // mCenter
+                    150.0f,              // mRadius
+                    60.0f                // mHeight
+                }                        // mCyl
+            }
         };
 
         a_this->mCcStts.Init(0xFA, 0, a_this);
@@ -415,7 +417,7 @@ static actor_method_class l_daB_GOS_Method = {
     (process_method_func)daB_GOS_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_GOS = {
+actor_process_profile_definition g_profile_B_GOS = {
     fpcLy_CURRENT_e,
     8,
     fpcPi_CURRENT_e,

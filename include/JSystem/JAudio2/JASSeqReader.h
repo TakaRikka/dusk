@@ -9,6 +9,7 @@
  */
 class JASSeqReader {
 public:
+    JASSeqReader() { init(); }
     void init();
     void init(void*);
     bool call(u32);
@@ -25,7 +26,7 @@ public:
         field_0x04 = (u8*)param_1;
     }
 
-    u32 get24(int param_0) const {
+    u32 get24(u32 param_0) const {
         return (*(u32*)(field_0x00 + param_0 - 1)) & 0xffffff;
     }
 

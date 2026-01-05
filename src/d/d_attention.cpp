@@ -1761,17 +1761,9 @@ void dAttCatch_c::proc() {
     mCatchItemNo = fpcNm_ITEM_WATER_BOTTLE;
 }
 
-// FAKEMATCH: this fixes regalloc in `dAttCatch_c::request` but breaks most other calls
-// some more accurate fix should be found eventually
-inline fopAc_ac_c* dComIfGp_getPlayer_fakematch(int idx) {
-    daAlink_c* const link = (daAlink_c* const)g_dComIfG_gameInfo.play.getPlayer(idx);
-    fopAc_ac_c* player = (fopAc_ac_c*)link;
-    return player;
-}
-
 int dAttCatch_c::request(fopAc_ac_c* i_reqActor, u8 i_itemNo, f32 i_horizontalDist, f32 i_upDist,
                          f32 i_downDist, s16 i_angle, int param_7) {
-    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer_fakematch(0);
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (param_7 > field_0x4) {
         return 0;
     } 

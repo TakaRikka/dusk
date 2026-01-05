@@ -26,8 +26,7 @@ int daTalk_c::create() {
 }
 
 int daTalk_c::execute() {
-    dComIfG_inf_c& dcomif = g_dComIfG_gameInfo;
-    if (dcomif.play.getEvent().runCheck()) {
+    if (dComIfGp_event_runCheck()) {
         if (!eventInfo.checkCommandTalk()) {
             fopAcM_delete(this);
         }
@@ -49,7 +48,7 @@ int daTalk_c::execute() {
             } else if (getStatus() == 14) {
                 setStatus(16);
             } else if (getStatus() == 18) {
-                dcomif.play.getEvent().reset();
+                dComIfGp_event_reset();
                 setStatus(19);
                 mMessageID = -1;
                 fopAcM_delete(this);
@@ -58,7 +57,7 @@ int daTalk_c::execute() {
             mMsgFlow.init(this, dMsgObject_getMsgObjectClass()->getNodeIdx(), 0, NULL);
             mMessageID = 2;
         } else if (mMsgFlow.doFlow(dMsgObject_getMsgObjectClass()->getpTalkActor(), NULL, 0)) {
-            dcomif.play.getEvent().reset();
+            dComIfGp_event_reset();
             mMessageID = -1;
             fopAcM_delete(this);
         }
@@ -107,7 +106,7 @@ static actor_method_class l_daTalk_Method = {
     (process_method_func)daTalk_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TALK = {
+actor_process_profile_definition g_profile_TALK = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

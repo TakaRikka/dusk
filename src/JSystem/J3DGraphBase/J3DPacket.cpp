@@ -7,7 +7,7 @@
 #include "JSystem/J3DGraphBase/J3DShapeMtx.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include <dolphin/os.h>
-#include "string.h"
+#include <string>
 #include "global.h"
 
 J3DError J3DDisplayListObj::newDisplayList(u32 maxSize) {

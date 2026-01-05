@@ -47,6 +47,10 @@ struct Z2Param {
     static u8 BGM_CROSS_FADEOUT_TIME;
     static u8 BATTLE_BGM_WAIT_TIME;
 
+    static f32 ENEMY_NEARBY_DIST;
+    static f32 BATTLE_FADEIN_DIST;
+    static f32 BATTLE_FADEOUT_DIST;
+
     static u8 FOUND_TRACK_FI_TIME;
     static u8 FOUND_TRACK_FO_TIME;
     static u8 CLOSE_BATTLE_TRACK_FI_TIME;
@@ -60,6 +64,10 @@ struct Z2Param {
     static u8 DARK_SE_FILTER_ON;
     static u8 DARK_SE_LOW_PASS_FILTER_SETTING;
     static u8 SYSTEM_SE_USE_DARK_SE_SETTING;
+
+    static f32 AUDIBLE_DELTA_RANGE_VOLUME;
+    static f32 AUDIBLE_DELTA_RANGE_PAN;
+    static f32 AUDIBLE_DELTA_RANGE_DOLBY;
 };
 
 extern u8 data_8045086C;

@@ -46,7 +46,7 @@ dMsgScrnJimaku_c::dMsgScrnJimaku_c(u8 param_0, JKRExpHeap* i_heap) {
     mpPmP_c->paneTrans(0.0f, field_0xcc);
 
 #if VERSION == VERSION_GCN_JPN
-    if (dComIfGs_getOptUnk0() == 0) {
+    if (dComIfGs_getOptRuby() == 0) {
         mpTm_c[0] = new CPaneMgr(mpScreen, 'mg_3flin', 0, NULL);
         mpTm_c[1] = new CPaneMgr(mpScreen, 't3f_s', 0, NULL);
 

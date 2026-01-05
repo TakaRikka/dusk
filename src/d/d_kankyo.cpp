@@ -24,25 +24,11 @@
 #include "f_op/f_op_kankyo.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
-
-#if DEBUG
-extern "C" int atoi(const char* str);
-extern "C" f32 atof(const char* str);
-#endif
+#include <stdlib>
 
 static void GxXFog_set();
 
 struct sub_kankyo__class : public kankyo_class {};
-
-// setSunpos calls these functions as inlines somehow
-// these need to be moved to MSL_C once an appropriate solution is found
-inline float sinf(float x) {
-    return sin(x);
-}
-
-inline float cosf(float x) {
-    return cos(x);
-}
 
 static LightStatus lightStatusBase = {
     {-36384.5f, 29096.699f, 17422.199f},
@@ -2233,9 +2219,6 @@ void dScnKy_env_light_c::setLight_palno_get(u8* prev_envr_id_p, u8* next_envr_id
     #endif
 }
 
-/* 801A0340-801A040C 19AC80 00CC+00 3/3 0/0 0/0 .text
- * dKy_calc_color_set__FP11_GXColorS10P15color_RGB_classP15color_RGB_classP15color_RGB_classP15color_RGB_classff11_GXColorS10f
- */
 void dKy_calc_color_set(GXColorS10* out_color_p, color_RGB_class* color_a_start_p,
                         color_RGB_class* color_b_start_p, color_RGB_class* color_a_end_p,
                         color_RGB_class* color_b_end_p, f32 color_ratio, f32 blend_ratio,
@@ -3060,9 +3043,6 @@ void dScnKy_env_light_c::setLight_actor(dKy_tevstr_c* tevstr_p, GXColorS10* fog_
     }
 }
 
-/* 801A1D64-801A1F58 19C6A4 01F4+00 1/1 0/0 0/0 .text
- * settingTevStruct_colget_actor__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_cP11_GXColorS10P11_GXColorS10PfPf
- */
 void dScnKy_env_light_c::settingTevStruct_colget_actor(cXyz* unused, dKy_tevstr_c* tevstr_p,
                                                        GXColorS10* out_color_p,
                                                        GXColorS10* fog_col_p, f32* fog_near_p,
@@ -3190,13 +3170,10 @@ static void cLib_addCalcU8(u8* i_value, u8 i_target, s16 i_scale, s16 i_maxStep)
     *i_value = value;
 }
 
-/* 801A2128-801A37C4 19CA68 169C+00 2/1 0/0 0/0 .text
- * settingTevStruct_plightcol_plus__18dScnKy_env_light_cFP4cXyzP12dKy_tevstr_c11_GXColorS1011_GXColorS10Uc
- */
 void dScnKy_env_light_c::settingTevStruct_plightcol_plus(cXyz* pos_p, dKy_tevstr_c* tevstr_p,
                                                          GXColorS10 param_2, GXColorS10 param_3,
                                                          u8 init_timer) {
-    (void)param_3;
+    UNUSED(param_3);
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     cXyz light_pos;
     Vec spDC;
@@ -4684,7 +4661,7 @@ void dScnKy_env_light_c::exeKankyo() {
 
     g_env_light.mColPatMode = g_env_light.mColPatModeGather;
 
-    if (dComIfGp_event_runCheck() == false && g_env_light.mColPatModeGather != 0) {
+    if (dComIfGp_event_runCheck() == FALSE && g_env_light.mColPatModeGather != 0) {
         if (g_env_light.mColPatModeGather >= 3) {
             g_env_light.mColPatModeGather = 0;
         } else {
@@ -8525,7 +8502,7 @@ void dKy_undwater_filter_draw() {
 }
 
 static int dKy_Draw(sub_kankyo__class* i_this) {
-    (void)i_this;
+    UNUSED(i_this);
     g_env_light.drawKankyo();
 
     #if DEBUG
@@ -8545,7 +8522,7 @@ static int dKy_Draw(sub_kankyo__class* i_this) {
 }
 
 static int dKy_Execute(sub_kankyo__class* i_this) {
-    (void)i_this;
+    UNUSED(i_this);
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     g_env_light.exeKankyo();
     dKyw_wind_set();
@@ -8584,7 +8561,7 @@ static int dKy_IsDelete(sub_kankyo__class* i_this) {
 }
 
 static int dKy_Delete(sub_kankyo__class* i_this) {
-    (void)i_this;
+    UNUSED(i_this);
     plight_init();
     mDoAud_mEnvse_resetScene();
 
@@ -8684,7 +8661,7 @@ static leafdraw_method_class l_dKy_Method = {
     (process_method_func)dKy_Draw,
 };
 
-extern kankyo_process_profile_definition g_profile_KANKYO = {
+kankyo_process_profile_definition g_profile_KANKYO = {
     fpcLy_CURRENT_e,
     1,
     fpcPi_CURRENT_e,

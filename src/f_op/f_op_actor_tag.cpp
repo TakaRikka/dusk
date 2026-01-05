@@ -12,8 +12,8 @@ int fopAcTg_ToActorQ(create_tag_class* i_createTag) {
     return cTg_Addition(&g_fopAcTg_Queue, i_createTag);
 }
 
-int fopAcTg_ActorQTo(create_tag_class* i_createTag) {
-    return cTg_SingleCutFromTree(i_createTag);
+void fopAcTg_ActorQTo(create_tag_class* i_createTag) {
+    int _ = cTg_SingleCutFromTree(i_createTag);
 }
 
 int fopAcTg_Init(create_tag_class* i_createTag, void* i_data) {

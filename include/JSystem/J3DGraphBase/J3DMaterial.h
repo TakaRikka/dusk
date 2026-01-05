@@ -4,7 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DShape.h"
-#include <stdint.h>
+#include <stdint>
 
 class J3DJoint;
 class J3DMaterialAnm;
@@ -56,12 +56,9 @@ public:
     J3DIndBlock* getIndBlock() { return mIndBlock; }
     J3DJoint* getJoint() { return mJoint; }
     J3DMaterialAnm* getMaterialAnm() {
-        if ((uintptr_t)mMaterialAnm < 0xC0000000) {
-            return mMaterialAnm;
-        } else {
-            return NULL;
-        }
+        return (uintptr_t)mMaterialAnm < 0xC0000000 ? mMaterialAnm : NULL;
     }
+    u32 getMaterialMode() { return mMaterialMode; }
     J3DNBTScale* getNBTScale() { return mTexGenBlock->getNBTScale(); }
     u16 getTexNo(u32 idx) { return mTevBlock->getTexNo(idx); }
     J3DGXColor* getTevKColor(u32 param_0) { return mTevBlock->getTevKColor(param_0); }

@@ -50,10 +50,12 @@ static dCcD_SrcCyl cc_kk_src = {
         {0x0},                                               // mGObjCo
     },                                                       // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        40.0f,               // mRadius
-        0.0f                 // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            40.0f,               // mRadius
+            0.0f                 // mHeight
+        }  // mCyl
+    }
 };
 
 static dCcD_SrcSph cc_kk_at_src = {
@@ -213,7 +215,7 @@ void daE_KK_c::setActionMode(int i_action, int i_mode) {
     mMoveMode = i_mode;
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_KK_HIO_c l_HIO;
 
@@ -1307,7 +1309,7 @@ int daE_KK_c::_delete() {
     dComIfG_resDelete(&mPhaseReq, "E_KK");
 
     if (mHIOInit != 0) {
-        l_initHIO = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.field_0x4);
     }
 
@@ -1380,8 +1382,8 @@ int daE_KK_c::create() {
         if (field_0x679 != 1 && field_0x67b != 0xFF && fopAcM_isSwitch(this, field_0x67b)) {
             return cPhs_ERROR_e;
         }
-        if (!l_initHIO) {
-            l_initHIO = 1;
+        if (!hio_set) {
+            hio_set = 1;
             mHIOInit = 1;
             l_HIO.field_0x4 = mDoHIO_CREATE_CHILD("氷の剣士", &l_HIO);
         }
@@ -1490,7 +1492,7 @@ static actor_method_class l_daE_KK_Method = {
     (process_method_func)daE_KK_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_KK = {
+actor_process_profile_definition g_profile_E_KK = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

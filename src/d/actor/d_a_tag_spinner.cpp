@@ -99,7 +99,7 @@ static actor_method_class l_daTagSpinner_Method = {
 
 };
 
-extern actor_process_profile_definition g_profile_Tag_Spinner = {
+actor_process_profile_definition g_profile_Tag_Spinner = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

@@ -70,7 +70,7 @@ bool daAlink_c::checkSetNpcTks(cXyz* i_basePos, int i_roomNo, int param_2) {
 }
 
 int daAlink_c::checkDemoAction() {
-    if (dComIfGp_getEvent().isOrderOK()) {
+    if (dComIfGp_getEvent()->isOrderOK()) {
         if (!dComIfGp_event_runCheck()) {
             offNoResetFlg0(FLG0_UNK_200000);
         }
@@ -566,7 +566,7 @@ void daAlink_c::setNoDrawSwordShield(int param_0, u16 param_1) {
 }
 
 void daAlink_c::setDemoData() {
-    if (dComIfGp_getEvent().isOrderOK()) {
+    if (dComIfGp_getEvent()->isOrderOK()) {
         if (checkPlayerDemoMode() && mClothesChangeWaitTimer == 0) {
             endDemoMode();
         }

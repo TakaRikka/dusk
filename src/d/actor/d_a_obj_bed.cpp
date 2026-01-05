@@ -180,7 +180,7 @@ static actor_method_class daObj_Bed_MethodTable = {
     (process_method_func)daObj_Bed_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_BED = {
+actor_process_profile_definition g_profile_OBJ_BED = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

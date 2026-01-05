@@ -118,7 +118,6 @@ static int daB_OH_Draw(b_oh_class* i_this) {
     return 1;
 }
 
-/* 8061DBB5 0003+00 data_8061DBB5 None */
 static u8 data_8061DBB5;
 
 static daB_OH_HIO_c l_HIO;
@@ -831,7 +830,7 @@ static actor_method_class l_daB_OH_Method = {
     (process_method_func)daB_OH_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_OH = {
+actor_process_profile_definition g_profile_B_OH = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

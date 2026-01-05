@@ -27,14 +27,14 @@ static char* l_resNameList[3] = {
 };
 
 static s8 l_loadResPtrn0[2] = {
-    0x01,
-    0xFF,
+    1,
+    -1,
 };
 
 static s8 l_loadResPtrn1[3] = {
-    0x01,
-    0x02,
-    0xFF,
+    1,
+    2,
+    -1,
 };
 
 static s8* l_loadResPtrnList[8] = {
@@ -836,7 +836,7 @@ int daObj_Sekizoa_c::setYariAnm(int i_frame, int i_mode, f32 i_morf) {
         u32 param_0;
         u32 param_1;
     } yariAnmData[24] = {
-        {-1, 0},
+        {0xFFFFFFFF, 0},
         {ANM_YARIA_STILL_L, 1},
         {ANM_YARIA_STILL_L, 1},
         {ANM_YARIA_STILL_L, 1},
@@ -1320,11 +1320,11 @@ int daObj_Sekizoa_c::cutStart(int i_staffIdx) {
             if (mType == TYPE_0) {
                 daObj_SMTile_c* actor_4 = (daObj_SMTile_c*)mActorMngrs[4].getActorP();
                 actor_4->reset();
-                dComIfGp_getEvent().setPt2(actor_4);
+                dComIfGp_getEvent()->setPt2(actor_4);
                 strcpy(acStack_90, l_evtList[2].eventName);
                 strcat(acStack_90, "@");
-                dComIfGp_getEvent().setSkipZev(this, acStack_90);
-                dComIfGp_getEvent().onSkipFade();
+                dComIfGp_getEvent()->setSkipZev(this, acStack_90);
+                dComIfGp_getEvent()->onSkipFade();
                 if (daNpcT_getPlayerInfoFromPlayerList(1, fopAcM_GetRoomNo(this), &c_stack_9c,
                                                        &c_stack_c8))
                 {
@@ -1434,7 +1434,7 @@ int daObj_Sekizoa_c::cutStart(int i_staffIdx) {
                 if (prm == 13) {
                     daObj_SMTile_c* actor_4 = (daObj_SMTile_c*)mActorMngrs[4].getActorP();
                     actor_4->reset();
-                    dComIfGp_getEvent().setPt2(actor_4);
+                    dComIfGp_getEvent()->setPt2(actor_4);
                     mDoAud_seStart(Z2SE_SY_MG_SEKI_WHITE_OUT, 0, 0, 0);
                 }
             }
@@ -1815,8 +1815,8 @@ int daObj_Sekizoa_c::cutGoal(int i_staffIdx) {
             if (mType == TYPE_0) {
                 strcpy(acStack_9c, l_evtList[6].eventName);
                 strcat(acStack_9c, "@");
-                dComIfGp_getEvent().setSkipZev(this, acStack_9c);
-                dComIfGp_getEvent().onSkipFade();
+                dComIfGp_getEvent()->setSkipZev(this, acStack_9c);
+                dComIfGp_getEvent()->onSkipFade();
             }
             mEventTimer = timer;
             break;
@@ -2181,10 +2181,10 @@ int daObj_Sekizoa_c::cutExtinction(int i_staffIdx) {
                                                              actor_0->shape_angle.y - -0x8000, 0);
             strcpy(acStack_a4, l_evtList[9].eventName);
             strcat(acStack_a4, "@");
-            dComIfGp_getEvent().setSkipZev(actor_0, acStack_a4);
-            dComIfGp_getEvent().onSkipFade();
+            dComIfGp_getEvent()->setSkipZev(actor_0, acStack_a4);
+            dComIfGp_getEvent()->onSkipFade();
             actor_0->pullMasterSword();
-            dComIfGp_getEvent().setPt2(actor_0);
+            dComIfGp_getEvent()->setPt2(actor_0);
             break;
 
         case 1:
@@ -2418,7 +2418,7 @@ static actor_method_class daObj_Sekizoa_MethodTable = {
     daObj_Sekizoa_IsDelete, daObj_Sekizoa_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_SEKIZOA = {
+actor_process_profile_definition g_profile_OBJ_SEKIZOA = {
     fpcLy_CURRENT_e,             // mLayerID
     3,                           // mListID
     fpcPi_CURRENT_e,             // mListPrio

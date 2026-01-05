@@ -241,7 +241,7 @@ daNpcCoach_Attr_c const daNpcCoach_c::M_attr = {
     0,
     0,
     1000.0f,
-    0xE000,
+    -0x2000,
     0x4000,
     0,
     0xFF,
@@ -430,7 +430,9 @@ void daNpcCoach_c::initCollision() {
             0,
         },
         {
-            0.0f, 0.0f
+            {
+                0.0f, 0.0f
+            }
         }
     };
 
@@ -2173,7 +2175,7 @@ static actor_method_class l_daNpcCoach_Method = {
     (process_method_func)daNpcCoach_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_COACH = {
+actor_process_profile_definition g_profile_NPC_COACH = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

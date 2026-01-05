@@ -75,7 +75,6 @@ void daObjMirrorScrew_c::initDown() {
 }
 
 void daObjMirrorScrew_c::executeDown() {
-    dComIfG_inf_c* gameinfo = &g_dComIfG_gameInfo;
     if (dComIfGp_event_runCheck()) {
         daPy_py_c* player = daPy_getPlayerActorClass();
         player->changeOriginalDemo();
@@ -112,9 +111,8 @@ void daObjMirrorScrew_c::executeDown() {
     if (current.pos.y <= home.pos.y + M_attr.mDownDist) {
         current.pos.y = home.pos.y + M_attr.mDownDist;
 
-        // fake match: these should be dComIfGp_getVibration()
-        gameinfo->play.getVibration().StartShock(8, 0xf, cXyz(0.0f, 1.0f, 0.0f));
-        gameinfo->play.getVibration().StopQuake(0x1f);
+        dComIfGp_getVibration().StartShock(8, 0xf, cXyz(0.0f, 1.0f, 0.0f));
+        dComIfGp_getVibration().StopQuake(0x1f);
         Z2GetAudioMgr()->seStart(Z2SE_OBJ_MR_SCRW_OFF, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f,
                                  0);
 
@@ -260,7 +258,7 @@ static actor_method_class l_daObjMirrorScrew_Method = {
     (process_method_func)daObjMirrorScrew_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_MirrorScrew = {
+actor_process_profile_definition g_profile_Obj_MirrorScrew = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

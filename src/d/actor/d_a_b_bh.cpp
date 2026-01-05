@@ -94,8 +94,7 @@ static int daB_BH_Draw(b_bh_class* i_this) {
     return 1;
 }
 
-/* 805B33ED 0003+00 data_805B33ED None */
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daB_BH_HIO_c l_HIO;
 
@@ -1414,7 +1413,7 @@ static int daB_BH_Delete(b_bh_class* i_this) {
     
     dComIfG_resDelete(&i_this->mPhase, "B_BH");
     if (i_this->mInitHIO) {
-        l_initHIO = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.no);
     }
 
@@ -1489,9 +1488,9 @@ static int daB_BH_Create(fopAc_ac_c* i_this) {
 
         OS_REPORT("//////////////B_BH SET 2 !!\n");
 
-        if (!l_initHIO) {
+        if (!hio_set) {
             a_this->mInitHIO = TRUE;
-            l_initHIO = TRUE;
+            hio_set = TRUE;
             l_HIO.no = mDoHIO_CREATE_CHILD("ボスババ触手", &l_HIO);
         }
 
@@ -1577,7 +1576,7 @@ static actor_method_class l_daB_BH_Method = {
     (process_method_func)daB_BH_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_BH = {
+actor_process_profile_definition g_profile_B_BH = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

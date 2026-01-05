@@ -206,7 +206,7 @@ f32 Z2WolfHowlMgr::getNowInputValue() {
 }
 
 void Z2WolfHowlMgr::calcPitchMod(f32 param_0, f32 param_1) {
-    (void)param_0;
+    UNUSED(param_0);
 
     f32 pitch = 1.0f;
     field_0x20 = getNowPitch();

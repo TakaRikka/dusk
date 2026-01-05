@@ -137,7 +137,7 @@ public:
     }
 
     void setSpeed(f32 param_0, f32 param_1, f32* param_2, int param_3) {
-        (void)param_3;
+        UNUSED(param_3);
         f32 target = field_0xb5c * (param_1 * field_0xb5c);
         f32 step = field_0xb5c * (param_0 * field_0xb5c);
         if (param_1 < target) {

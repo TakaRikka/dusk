@@ -3,6 +3,13 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 
+#if PLATFORM_SHIELD
+#define ADD_ANGLE(x, y) ((x) += (s16)(y))
+#else
+#define ADD_ANGLE(x, y) ((x) += (y))
+#endif
+
+
 class cSAngle {
 private:
     s16 mAngle;

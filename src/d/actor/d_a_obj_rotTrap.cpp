@@ -28,7 +28,9 @@ dCcD_SrcGObjInf const daRotTrap_c::mCcDObjInfo = {
 
 dCcD_SrcCyl daRotTrap_c::mCcDCyl = {
     mCcDObjInfo,
-    {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
+    {
+        {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
+    }
 };
 
 static Vec atPos[] = {
@@ -317,7 +319,7 @@ static actor_method_class l_daRotTrap_Method = {
     (process_method_func)daRotTrap_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_RotTrap = {
+actor_process_profile_definition g_profile_Obj_RotTrap = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

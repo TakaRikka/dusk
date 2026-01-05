@@ -59,9 +59,11 @@ static const dCcD_SrcCyl l_cyl_src = {
         {0},
     },
     {
-        {0.0f, 0.0f, 0.0f},
-        100.0f,
-        100.0f,
+        {
+            {0.0f, 0.0f, 0.0f},
+            100.0f,
+            100.0f,
+        },
     },
 };
 
@@ -328,7 +330,7 @@ static actor_method_class l_daObjSwPr_Method = {
     (process_method_func)daObjSwPr_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Swpropeller = {
+actor_process_profile_definition g_profile_Obj_Swpropeller = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

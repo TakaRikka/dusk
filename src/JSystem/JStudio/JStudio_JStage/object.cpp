@@ -6,9 +6,6 @@
 
 #include "JSystem/JStudio/JStudio_JStage/object.h"
 
-/* 8028A1F8-8028A290 284B38 0098+00 0/0 2/2 0/0 .text
- * transform_toGlobalFromLocal__14JStudio_JStageFPA4_fRCQ37JStudio8TControl39TTransform_translation_rotation_scalingPCQ26JStage7TObjectUl
- */
 bool JStudio_JStage::transform_toGlobalFromLocal(
     f32 (*param_1)[4], JStudio::TControl::TTransform_translation_rotation_scaling const& param_2,
     JStage::TObject const* param_3, u32 param_4) {
@@ -26,9 +23,6 @@ bool JStudio_JStage::transform_toGlobalFromLocal(
     return true;
 }
 
-/* 8028A290-8028A328 284BD0 0098+00 0/0 3/3 0/0 .text
- * transform_toGlobalFromLocal__14JStudio_JStageFPA4_fRCQ37JStudio8TControl19TTransform_positionPCQ26JStage7TObjectUl
- */
 bool JStudio_JStage::transform_toGlobalFromLocal(
     f32 (*param_1)[4], JStudio::TControl::TTransform_position const& param_2,
     JStage::TObject const* param_3, u32 param_4) {
@@ -45,9 +39,6 @@ bool JStudio_JStage::transform_toGlobalFromLocal(
     return true;
 }
 
-/* 8028A328-8028A3CC 284C68 00A4+00 0/0 1/1 0/0 .text
- * transform_toLocalFromGlobal__14JStudio_JStageFPA4_fRCQ37JStudio8TControl39TTransform_translation_rotation_scalingPCQ26JStage7TObjectUl
- */
 bool JStudio_JStage::transform_toLocalFromGlobal(
     f32 (*param_1)[4], JStudio::TControl::TTransform_translation_rotation_scaling const& param_2,
     JStage::TObject const* param_3, u32 param_4) {
@@ -67,9 +58,6 @@ bool JStudio_JStage::transform_toLocalFromGlobal(
     return true;
 }
 
-/* 8028A3CC-8028A470 284D0C 00A4+00 0/0 2/2 0/0 .text
- * transform_toLocalFromGlobal__14JStudio_JStageFPA4_fRCQ37JStudio8TControl19TTransform_positionPCQ26JStage7TObjectUl
- */
 bool JStudio_JStage::transform_toLocalFromGlobal(
     f32 (*param_1)[4], JStudio::TControl::TTransform_position const& param_2,
     JStage::TObject const* param_3, u32 param_4) {
@@ -118,9 +106,6 @@ s32 JStudio_JStage::TAdaptor_object_::adaptor_object_findJSGObjectNode_(
     return param_1->JSGFindNodeID(param_2);
 }
 
-/* 8028A550-8028A5F0 284E90 00A0+00 0/0 1/1 0/0 .text
- * adaptor_object_ENABLE___Q214JStudio_JStage16TAdaptor_object_FQ37JStudio4data15TEOperationDataPCvUl
- */
 void
 JStudio_JStage::TAdaptor_object_::adaptor_object_ENABLE_(JStudio::data::TEOperationData param_1,
                                                          void const* pContent, u32 uSize) {

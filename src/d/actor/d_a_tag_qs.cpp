@@ -21,10 +21,12 @@ static dCcD_SrcCyl l_cc_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        50.0f, // mRadius
-        50.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            50.0f, // mRadius
+            50.0f // mHeight
+        } // mCyl
+    }
 };
 
 daTagQs_c::~daTagQs_c() {}
@@ -234,7 +236,7 @@ static actor_method_class l_daTagQs_Method = {
     (process_method_func)daTagQs_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_QS = {
+actor_process_profile_definition g_profile_TAG_QS = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

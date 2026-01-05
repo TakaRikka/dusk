@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "dolphin/gd/GDBase.h"
-#include <stdint.h>
+#include <stdint>
 
 class J3DMatPacket;
 

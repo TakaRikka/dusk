@@ -528,8 +528,8 @@ u32 Z2SoundObjAnime::getSoundID(const JAUSoundAnimationSound* animationSound,
 
 bool Z2SoundObjAnime::playsSound(const JAUSoundAnimationSound* animationSound,
                                  const JGeometry::TVec3<f32>& param_1, f32 param_2) {
-    (void)param_1;
-    (void)param_2;
+    UNUSED(param_1);
+    UNUSED(param_2);
 
     if (animationSound->playsOnlyOnce()) {
         if (field_0x3c != animationSound->field_0x16) {

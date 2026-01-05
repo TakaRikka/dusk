@@ -3,12 +3,13 @@
 #include "JSystem/JKernel/JKRFile.h"
 #include "dolphin/vi.h"
 
-s32 JKRFile::read(void* data, s32 size, s32 offset) {
+void JKRFile::read(void* data, s32 length, s32 offset) {
+    JUT_ASSERT(32, ( length & 0x1f ) == 0);
     while (true) {
-        s32 result = readData(data, size, offset);
-        if (size != result)
+        if (length != readData(data, length, offset)) {
             VIWaitForRetrace();
-        else
-            return result;
+        } else {
+            return;
+        }
     }
 }

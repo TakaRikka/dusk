@@ -12,4 +12,10 @@ struct dDvdErrorMsg_c {
     static u8 execute();
 };
 
+#if !PLATFORM_GCN
+struct dConnectErrorMsg_c {
+    static void disable();
+};
+#endif
+
 #endif /* D_D_ERROR_MSG_H */

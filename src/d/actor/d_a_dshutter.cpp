@@ -245,7 +245,7 @@ static actor_method_class l_daDsh_Method = {
     (process_method_func)daDsh_Draw,
 };
 
-extern actor_process_profile_definition2 g_profile_DSHUTTER = {
+actor_process_profile_definition2 g_profile_DSHUTTER = {
     {
         fpcLy_CURRENT_e,        // mLayerID
         7,                      // mListID

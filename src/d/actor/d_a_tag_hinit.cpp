@@ -70,7 +70,7 @@ static actor_method_class l_daTagHinit_Method = {
 
 };
 
-extern actor_process_profile_definition g_profile_Tag_Hinit = {
+actor_process_profile_definition g_profile_Tag_Hinit = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

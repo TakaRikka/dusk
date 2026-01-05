@@ -20,7 +20,7 @@ u8* JAUSeqDataBlocks::getSeqData(JAISoundID param_0) {
             link = link->getNext())
     {
         if ((u32)link->getObject()->field_0x10 == (u32)param_0) {
-            return link->getObject()->field_0x14.addr;
+            return link->getObject()->region.addr;
         }
     }
     return NULL;
@@ -32,7 +32,7 @@ JSULink<JAUSeqDataBlock>* JAUSeqDataBlocks::seekFreeBlock(u32 size) {
     for (JSULink<JAUSeqDataBlock>* link = getFirst(); link != NULL; link = link->getNext())
     {
         if (link->getObject()->field_0x10.isAnonymous()) {
-            u32 blockSize = link->getObject()->field_0x14.size;
+            u32 blockSize = link->getObject()->region.size;
             if (blockSize >= size && blockSize < currentBlockSize) {
                 rv = link;
                 currentBlockSize = blockSize;
@@ -54,8 +54,8 @@ bool JAUSeqDataBlocks::remove(JSULink<JAUSeqDataBlock>* param_0) {
 }
 
 bool JAUSeqDataBlocks::hasFailedBlock(JAISoundID param_0) {
-    JSULink<JAUSeqDataBlock>* rv = NULL;
-    for (JSULink<JAUSeqDataBlock>* link = getFirst(); link != NULL; link = link->getNext())
+    JSULink<JAUSeqDataBlock>* link;
+    for (link = getFirst(); link != NULL; link = link->getNext())
     {
         if (link->getObject()->field_0x10 == param_0) {
             link->getObject()->field_0x10.setAnonymous();
@@ -70,6 +70,7 @@ JAUDynamicSeqDataBlocks::JAUDynamicSeqDataBlocks() {
 }
 
 void JAUDynamicSeqDataBlocks::setSeqDataArchive(JKRArchive* param_0) {
+    JUT_ASSERT(104, seqDataArchive_ == NULL);
     seqDataArchive_ = param_0;
 }
 
@@ -98,17 +99,21 @@ s32 JAUDynamicSeqDataBlocks::getSeqData(JAISoundID param_0, JAISeqDataUser* para
 }
 
 bool JAUDynamicSeqDataBlocks::appendDynamicSeqDataBlock(JAUSeqDataBlock* seqDataBlock) {
+    JUT_ASSERT(135, ( reinterpret_cast < u32 > ( seqDataBlock->region.addr ) & 0x1f ) == 0);
     rearrangeLoadingSeqs_();
+    bool result;
     if (seqDataBlock->field_0x10.isAnonymous()) {
-        mFreeBlocks.append(&seqDataBlock->field_0x0);
+        result = mFreeBlocks.append(&seqDataBlock->field_0x0);
     } else {
-        mLoadedBlocks.append(&seqDataBlock->field_0x0);
+        result = mLoadedBlocks.append(&seqDataBlock->field_0x0);
     }
+    JUT_ASSERT(144, result);
     return 1;
 }
 
 static void JAUDynamicSeqDataBlocks_receiveLoaded_(u32 param_0, u32 param_1) {
-    JAUSeqDataBlock* seqDataBlock = ((JSULink<JAUSeqDataBlock>*)param_1)->getObject();
+    JSULink<JAUSeqDataBlock>* link = (JSULink<JAUSeqDataBlock>*)param_1;
+    JAUSeqDataBlock* seqDataBlock = link->getObject();
     if (param_0 != NULL) {
         seqDataBlock->field_0x1c = 2;
     } else {
@@ -118,35 +123,38 @@ static void JAUDynamicSeqDataBlocks_receiveLoaded_(u32 param_0, u32 param_1) {
 
 bool JAUDynamicSeqDataBlocks::loadDynamicSeq(JAISoundID param_0, bool param_1,
                                              JAISeqDataUser* param_2) {
-    if (seqDataArchive_ == NULL) {
-        return false;
-    }
-    JAUSoundInfo* soundInfo = JASGlobalInstance<JAUSoundInfo>::getInstance();
-    if (soundInfo == NULL) {
-        return false;
-    } 
-    u16 resourceId = soundInfo->getBgmSeqResourceID(param_0);
-    size_t resSize = JASResArcLoader::getResSize(seqDataArchive_, resourceId);
-    JSULink<JAUSeqDataBlock>* link = mFreeBlocks.seekFreeBlock(resSize);
-    if (link == NULL) {
-        if (param_1) {
-            link = &releaseIdleDynamicSeqDataBlock_(param_2, resSize)->field_0x0;
-            if (link == NULL) {
-                return false;
-            }
-        } else {
+    {
+        if (seqDataArchive_ == NULL) {
+            JUT_WARN(192, "%s", "cannot get sequence data archive.");
             return false;
         }
+        JAUSoundInfo* soundInfo = JASGlobalInstance<JAUSoundInfo>::getInstance();
+        if (soundInfo == NULL) {
+            JUT_WARN(198, "%s", "cannot JAUSoundInfo::getInstance().");
+            return false;
+        }
+        u16 resourceId = soundInfo->getBgmSeqResourceID(param_0);
+        size_t resSize = JASResArcLoader::getResSize(seqDataArchive_, resourceId);
+        JSULink<JAUSeqDataBlock>* link = mFreeBlocks.seekFreeBlock(resSize);
+        if (link == NULL) {
+            if (param_1) {
+                link = &releaseIdleDynamicSeqDataBlock_(param_2, resSize)->field_0x0;
+                if (link == NULL) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        mFreeBlocks.remove(link);
+        link->getObject()->field_0x10 = param_0;
+        link->getObject()->field_0x1c = 1;
+        field_0xc.append(link);
+        JASResArcLoader::loadResourceAsync(
+            seqDataArchive_, resourceId,
+            link->getObject()->region.addr, link->getObject()->region.size,
+            JAUDynamicSeqDataBlocks_receiveLoaded_, (u32)link);
     }
-    mFreeBlocks.remove(link);
-    JAUSeqDataBlock* seqDataBlock = link->getObject();
-    seqDataBlock->field_0x10 = param_0;
-    link->getObject()->field_0x1c = 1;
-    field_0xc.append(link);
-    JASResArcLoader::loadResourceAsync(
-        seqDataArchive_, resourceId,
-        link->getObject()->field_0x14.addr, link->getObject()->field_0x14.size,
-        JAUDynamicSeqDataBlocks_receiveLoaded_, (u32)link);
     return true;
 }
 
@@ -157,12 +165,12 @@ u32 JAUDynamicSeqDataBlocks::releaseIdleDynamicSeqDataBlock(JAISeqDataUser* para
     for (JSULink<JAUSeqDataBlock>* link = mLoadedBlocks.getFirst(); link != NULL; ) {
         nextLink = link->getNext();
         JAUSeqDataBlock* seqDataBlock = link->getObject();
-        if (param_0 == NULL || !param_0->isUsingSeqData(seqDataBlock->field_0x14)) {
+        if (param_0 == NULL || !param_0->isUsingSeqData(seqDataBlock->region)) {
             mLoadedBlocks.remove(link);
             JAUSeqDataBlock* seqDataBlock = link->getObject();
-            link->getObject()->field_0x10.setAnonymous();
-            if (size < seqDataBlock->field_0x14.size) {
-                size = seqDataBlock->field_0x14.size;
+            seqDataBlock->field_0x10.setAnonymous();
+            if (size < seqDataBlock->region.size) {
+                size = seqDataBlock->region.size;
             }
             mFreeBlocks.append(link);
         }
@@ -181,8 +189,8 @@ JAUDynamicSeqDataBlocks::releaseIdleDynamicSeqDataBlock_(JAISeqDataUser* param_0
     while (link != NULL) {
         nextLink = link->getNext();
         JAUSeqDataBlock* seqDataBlock = link->getObject();
-        if (param_0 == NULL || !param_0->isUsingSeqData(seqDataBlock->field_0x14)) {
-            u32 size = seqDataBlock->field_0x14.size;
+        if (param_0 == NULL || !param_0->isUsingSeqData(seqDataBlock->region)) {
+            u32 size = seqDataBlock->region.size;
             if (size >= param_1 && size < minSize) {
                 foundBlock = link;
                 minSize = size;

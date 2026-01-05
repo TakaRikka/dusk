@@ -9,6 +9,8 @@
  */
 class JASTrackPort {
 public:
+    static const int MAX_PORTS = 16;
+
     void init();
     u16 readImport(u32);
     u16 readExport(u32);
@@ -22,7 +24,7 @@ public:
 
     u16 field_0x0;
     u16 field_0x2;
-    u16 field_0x4[16];
+    u16 field_0x4[MAX_PORTS];
 };
 
 #endif /* JASTRACKPORT_H */

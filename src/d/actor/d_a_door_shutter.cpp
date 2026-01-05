@@ -14,7 +14,7 @@
 #include "d/d_msg_object.h"
 #include "d/d_map_path_dmap.h"
 #include "SSystem/SComponent/c_math.h"
-#include "printf.h"
+#include <cstdio>
 
 char* daDoor20_c::getStopBmdName() {
     switch (door_param2_c::getKind(this)) {
@@ -50,9 +50,8 @@ char* daDoor20_c::getArcName() {
     }
 }
 
-static char bmdName[32];
-
 char* daDoor20_c::getBmdName() {
+    static char bmdName[32];
     switch(door_param2_c::getKind(this)) {
     case 0:
     case 1:
@@ -1524,110 +1523,109 @@ void daDoor20_c::startDemoProc() {
     }
 }
 
-static char* table[19] = {
-    "DEFAULT_STOP_OPEN",
-    "DEFAULT_STOP_OPEN",
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-static char* tate_table[4] = {
-    "DEFAULT_SHUTTER_DOOR_10",
-    "DEFAULT_SHUTTER_DOOR_10",
-    "DEFAULT_SHUTTER_DOOR_F_STOP",
-    "DEFAULT_SHUTTER_DOOR_F_STOP",
-};
-
-static char* tate_w_table[4] = {
-    "WOLF_SHUTTER_DOOR_10",
-    "WOLF_SHUTTER_DOOR_10",
-    "WOLF_SHUTTER_DOOR_F_STOP",
-    "WOLF_SHUTTER_DOOR_F_STOP",
-};
-
-static char* yoko_table[4] = {
-    "DEFAULT_SHUTTER_DOOR_14",
-    "DEFAULT_SHUTTER_DOOR_14",
-    "DEFAULT_SHUTTER_DOOR_F_STOP_14",
-    "DEFAULT_SHUTTER_DOOR_F_STOP_14",
-};
-
-static char* yoko_w_table[4] = {
-    "WOLF_SHUTTER_DOOR_14",
-    "WOLF_SHUTTER_DOOR_14",
-    "WOLF_SHUTTER_DOOR_F_STOP_14",
-    "WOLF_SHUTTER_DOOR_F_STOP_14",
-};
-
-static char* lv8_table[4] = {
-    "DEFAULT_SHUTTER_DOOR_18",
-    "DEFAULT_SHUTTER_DOOR_18",
-    "DEFAULT_SHUTTER_DOOR_F_STOP_18",
-    "DEFAULT_SHUTTER_DOOR_F_STOP_18",
-};
-
-static char* lv8_w_table[4] = {
-    "WOLF_SHUTTER_DOOR_18",
-    "WOLF_SHUTTER_DOOR_18",
-    "WOLF_SHUTTER_DOOR_F_STOP_18",
-    "WOLF_SHUTTER_DOOR_F_STOP_18",
-};
-
-static char* knob_table[7] = {
-    "DEFAULT_KNOB_DOOR_F",
-    "DEFAULT_KNOB_DOOR_B",
-    "DEFAULT_KNOB_DOOR_F_STOP",
-    "DEFAULT_KNOB_DOOR_B_STOP",
-    "DEFAULT_KNOB_DOOR_NOTOPEN_F",
-    "DEFAULT_KNOB_DOOR_NOTOPEN_B",
-    "DEFAULT_KNOB_DOOR_TALK_NOTOPEN_F",
-};
-
-static char* lv7_table[4] = {
-    "DEFAULT_SHUTTER_DOOR_20",
-    "DEFAULT_SHUTTER_DOOR_20",
-    "DEFAULT_SHUTTER_DOOR_F_STOP_20",
-    "DEFAULT_SHUTTER_DOOR_F_STOP_20",
-};
-
-static char* lv7_w_table[4] = {
-    "WOLF_SHUTTER_DOOR_20",
-    "WOLF_SHUTTER_DOOR_20",
-    "WOLF_SHUTTER_DOOR_F_STOP_20",
-    "WOLF_SHUTTER_DOOR_F_STOP_20",
-};
-
-static char* lv9_table[4] = {
-    "DEFAULT_SHUTTER_DOOR_22",
-    "DEFAULT_SHUTTER_DOOR_22",
-    "DEFAULT_SHUTTER_DOOR_F_STOP_22",
-    "DEFAULT_SHUTTER_DOOR_F_STOP_22",
-};
-
-static char* lv9_w_table[4] = {
-    "WOLF_SHUTTER_DOOR_22",
-    "WOLF_SHUTTER_DOOR_22",
-    "WOLF_SHUTTER_DOOR_F_STOP_22",
-    "WOLF_SHUTTER_DOOR_F_STOP_22",
-};
-
-
 void daDoor20_c::makeEventId() {
+    static char* table[19] = {
+        "DEFAULT_STOP_OPEN",
+        "DEFAULT_STOP_OPEN",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+
+    static char* tate_table[4] = {
+        "DEFAULT_SHUTTER_DOOR_10",
+        "DEFAULT_SHUTTER_DOOR_10",
+        "DEFAULT_SHUTTER_DOOR_F_STOP",
+        "DEFAULT_SHUTTER_DOOR_F_STOP",
+    };
+
+    static char* tate_w_table[4] = {
+        "WOLF_SHUTTER_DOOR_10",
+        "WOLF_SHUTTER_DOOR_10",
+        "WOLF_SHUTTER_DOOR_F_STOP",
+        "WOLF_SHUTTER_DOOR_F_STOP",
+    };
+
+    static char* yoko_table[4] = {
+        "DEFAULT_SHUTTER_DOOR_14",
+        "DEFAULT_SHUTTER_DOOR_14",
+        "DEFAULT_SHUTTER_DOOR_F_STOP_14",
+        "DEFAULT_SHUTTER_DOOR_F_STOP_14",
+    };
+
+    static char* yoko_w_table[4] = {
+        "WOLF_SHUTTER_DOOR_14",
+        "WOLF_SHUTTER_DOOR_14",
+        "WOLF_SHUTTER_DOOR_F_STOP_14",
+        "WOLF_SHUTTER_DOOR_F_STOP_14",
+    };
+
+    static char* lv8_table[4] = {
+        "DEFAULT_SHUTTER_DOOR_18",
+        "DEFAULT_SHUTTER_DOOR_18",
+        "DEFAULT_SHUTTER_DOOR_F_STOP_18",
+        "DEFAULT_SHUTTER_DOOR_F_STOP_18",
+    };
+
+    static char* lv8_w_table[4] = {
+        "WOLF_SHUTTER_DOOR_18",
+        "WOLF_SHUTTER_DOOR_18",
+        "WOLF_SHUTTER_DOOR_F_STOP_18",
+        "WOLF_SHUTTER_DOOR_F_STOP_18",
+    };
+
+    static char* knob_table[7] = {
+        "DEFAULT_KNOB_DOOR_F",
+        "DEFAULT_KNOB_DOOR_B",
+        "DEFAULT_KNOB_DOOR_F_STOP",
+        "DEFAULT_KNOB_DOOR_B_STOP",
+        "DEFAULT_KNOB_DOOR_NOTOPEN_F",
+        "DEFAULT_KNOB_DOOR_NOTOPEN_B",
+        "DEFAULT_KNOB_DOOR_TALK_NOTOPEN_F",
+    };
+
+    static char* lv7_table[4] = {
+        "DEFAULT_SHUTTER_DOOR_20",
+        "DEFAULT_SHUTTER_DOOR_20",
+        "DEFAULT_SHUTTER_DOOR_F_STOP_20",
+        "DEFAULT_SHUTTER_DOOR_F_STOP_20",
+    };
+
+    static char* lv7_w_table[4] = {
+        "WOLF_SHUTTER_DOOR_20",
+        "WOLF_SHUTTER_DOOR_20",
+        "WOLF_SHUTTER_DOOR_F_STOP_20",
+        "WOLF_SHUTTER_DOOR_F_STOP_20",
+    };
+
+    static char* lv9_table[4] = {
+        "DEFAULT_SHUTTER_DOOR_22",
+        "DEFAULT_SHUTTER_DOOR_22",
+        "DEFAULT_SHUTTER_DOOR_F_STOP_22",
+        "DEFAULT_SHUTTER_DOOR_F_STOP_22",
+    };
+
+    static char* lv9_w_table[4] = {
+        "WOLF_SHUTTER_DOOR_22",
+        "WOLF_SHUTTER_DOOR_22",
+        "WOLF_SHUTTER_DOOR_F_STOP_22",
+        "WOLF_SHUTTER_DOOR_F_STOP_22",
+    };
+
     for (int i = 0; i < 19; i++) {
         field_0x692[i] = dComIfGp_getEventManager().getEventIdx(this, table[i], 0xff);
         field_0x6b8[i] = 0xff;
@@ -1831,39 +1829,38 @@ void daDoor20_c::getRestartPos(cXyz* param_1) {
     param_1->z = current.pos.z - fVar1 * field_0x680.z;
 }
 
-static char* action_table[29] = {
-    "WAIT",
-    "STOP_OPEN",
-    "STOP_CLOSE",
-    "OPEN",
-    "CLOSE",
-    "SMOKE",
-    "SMOKE_END",
-    "SETGOAL",
-    "UNLOCK",
-    "SETSTART",
-    "SETANGLE",
-    "ADJUSTMENT",
-    "OPEN_PUSH",
-    "OPEN_PULL",
-    "OPEN_PUSH2",
-    "OPEN_PULL2",
-    "TALK",
-    "SETSTART_PUSH",
-    "SETSTART_PULL",
-    "END_CHECK",
-    "DROP_BF",
-    "DROP_AF",
-    "DELETE_LOCK",
-    "OPEN_INIT",
-    "ADJUSTMENT2",
-    "NOT_OPEN",
-    "MESSAGE",
-    "LIGHT_ANM",
-    "LIGHT_ANM2",
-};
-
 int daDoor20_c::getDemoAction() {
+    static char* action_table[29] = {
+        "WAIT",
+        "STOP_OPEN",
+        "STOP_CLOSE",
+        "OPEN",
+        "CLOSE",
+        "SMOKE",
+        "SMOKE_END",
+        "SETGOAL",
+        "UNLOCK",
+        "SETSTART",
+        "SETANGLE",
+        "ADJUSTMENT",
+        "OPEN_PUSH",
+        "OPEN_PULL",
+        "OPEN_PUSH2",
+        "OPEN_PULL2",
+        "TALK",
+        "SETSTART_PUSH",
+        "SETSTART_PULL",
+        "END_CHECK",
+        "DROP_BF",
+        "DROP_AF",
+        "DELETE_LOCK",
+        "OPEN_INIT",
+        "ADJUSTMENT2",
+        "NOT_OPEN",
+        "MESSAGE",
+        "LIGHT_ANM",
+        "LIGHT_ANM2",
+    };
     return dComIfGp_evmng_getMyActIdx(field_0x6cc, action_table, 29, 0, 0);
 }
 
@@ -2018,7 +2015,7 @@ int daDoor20_c::chkStopOpen() {
         roomNo = door_param2_c::getBRoomNo(this);
     }
     if ((field_0x68c == 0 && frontOption == 3) || (field_0x68c == 1 && backOption == 3)) {
-        if (dComIfGp_event_runCheck() == 0 || (field_0x68d == 0)) {
+        if (dComIfGp_event_runCheck() == FALSE || (field_0x68d == 0)) {
             if (dComIfGp_roomControl_checkRoomDisp(roomNo) &&
                 fopAcM_myRoomSearchEnemy(roomNo) == NULL)
             {
@@ -2027,7 +2024,7 @@ int daDoor20_c::chkStopOpen() {
                     return 0;
                 }
                 if (swBit != 0xff) {
-                    g_dComIfG_gameInfo.info.onSwitch(swBit, roomNo);
+                    dComIfGs_onSwitch(swBit, roomNo);
                 }
                 return 1;
             }
@@ -2148,7 +2145,7 @@ static actor_method_class l_daDoor20_Method = {
     (process_method_func)daDoor20_Draw,
 };
 
-extern actor_process_profile_definition g_profile_DOOR20 = {
+actor_process_profile_definition g_profile_DOOR20 = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

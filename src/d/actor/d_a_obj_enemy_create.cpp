@@ -253,7 +253,7 @@ static actor_method_class l_daObjE_CREATE_Method = {
     (process_method_func)daObjE_CREATE_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_E_CREATE = {
+actor_process_profile_definition g_profile_Obj_E_CREATE = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

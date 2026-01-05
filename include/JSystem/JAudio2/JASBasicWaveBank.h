@@ -10,9 +10,9 @@
  */
 struct JASBasicWaveBank : public JASWaveBank {
     struct TWaveHandle : public JASWaveHandle {
-        int getWavePtr() const;
         TWaveHandle() { mHeap = NULL; }
-        const JASWaveInfo* getWaveInfo() const { return &field_0x4; }
+        virtual int getWavePtr() const;
+        virtual const JASWaveInfo* getWaveInfo() const { return &field_0x4; }
         bool compareHeap(JASHeap* heap) const { return mHeap == heap;}
 
         /* 0x04 */ JASWaveInfo field_0x4;
@@ -31,10 +31,10 @@ struct JASBasicWaveBank : public JASWaveBank {
 
     struct TWaveGroup : JASWaveArc {
         TWaveGroup();
-        ~TWaveGroup();
+        virtual ~TWaveGroup();
         void setWaveCount(u32, JKRHeap*);
-        void onLoadDone();
-        void onEraseDone();
+        virtual void onLoadDone();
+        virtual void onEraseDone();
         u32 getWaveID(int) const;
 
         /* 0x74 */ JASBasicWaveBank* mBank;

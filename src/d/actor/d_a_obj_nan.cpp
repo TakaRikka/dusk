@@ -573,12 +573,12 @@ int daObjNAN_c::execute() {
     return 1;
 }
 
-static u8 l_hio_init;
+static u8 hio_set;
 
 int daObjNAN_c::_delete() {
     dComIfG_resDelete(&mPhase, "I_Nan");
     if (field_0x7fd != 0) {
-        l_hio_init = 0;
+        hio_set = 0;
     }
     if (heap != NULL) {
         mMorf->stopZelAnime();
@@ -686,8 +686,8 @@ int daObjNAN_c::create() {
             return cPhs_ERROR_e;
         }
         OS_REPORT("/////////////// I_NAN SET OK //////////\n");
-        if (l_hio_init == 0) {
-            l_hio_init = 1;
+        if (hio_set == 0) {
+            hio_set = 1;
             field_0x7fd = 1;
             l_HIO.field_0x4 = -1;
         }
@@ -727,7 +727,7 @@ static actor_method_class l_daObjNAN_Method = {
     (process_method_func)daObjNAN_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Nan = {
+actor_process_profile_definition g_profile_Obj_Nan = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

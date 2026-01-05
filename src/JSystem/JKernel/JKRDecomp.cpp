@@ -4,11 +4,17 @@
 #include "JSystem/JKernel/JKRAramPiece.h"
 #include "global.h"
 
+#if PLATFORM_GCN
+const u32 stack_size = 0x800;
+#else
+const u32 stack_size = 0x4000;
+#endif
+
 JKRDecomp* JKRDecomp::sDecompObject;
 
 JKRDecomp* JKRDecomp::create(s32 priority) {
     if (!sDecompObject) {
-        sDecompObject = new (JKRHeap::getSystemHeap(), 0) JKRDecomp(priority);
+        sDecompObject = new (JKRGetSystemHeap(), 0) JKRDecomp(priority);
     }
 
     return sDecompObject;
@@ -18,7 +24,7 @@ OSMessage JKRDecomp::sMessageBuffer[8] = {0};
 
 OSMessageQueue JKRDecomp::sMessageQueue = {0};
 
-JKRDecomp::JKRDecomp(s32 priority) : JKRThread(0x800, 0x10, priority) {
+JKRDecomp::JKRDecomp(s32 priority) : JKRThread(stack_size, 0x10, priority) {
     resume();
 }
 
@@ -35,7 +41,7 @@ void* JKRDecomp::run() {
 
         if (command->field_0x20 != 0) {
             if (command->field_0x20 == 1) {
-                JKRAramPiece::sendCommand(command->mAMCommand);
+                JKRAramPcs_SendCommand(command->mAMCommand);
             }
             continue;
         }
@@ -56,7 +62,7 @@ void* JKRDecomp::run() {
 JKRDecompCommand* JKRDecomp::prepareCommand(u8* srcBuffer, u8* dstBuffer, u32 srcLength,
                                             u32 dstLength,
                                             JKRDecompCommand::AsyncCallback callback) {
-    JKRDecompCommand* command = new (JKRHeap::getSystemHeap(), -4) JKRDecompCommand();
+    JKRDecompCommand* command = new (JKRGetSystemHeap(), -4) JKRDecompCommand();
     command->mSrcBuffer = srcBuffer;
     command->mDstBuffer = dstBuffer;
     command->mSrcLength = srcLength;
@@ -66,7 +72,8 @@ JKRDecompCommand* JKRDecomp::prepareCommand(u8* srcBuffer, u8* dstBuffer, u32 sr
 }
 
 void JKRDecomp::sendCommand(JKRDecompCommand* command) {
-    OSSendMessage(&sMessageQueue, command, OS_MESSAGE_NOBLOCK);
+    int result = OSSendMessage(&sMessageQueue, command, OS_MESSAGE_NOBLOCK);
+    JUT_ASSERT_MSG(142, result, "Decomp MesgBuf FULL!");
 }
 
 JKRDecompCommand* JKRDecomp::orderAsync(u8* srcBuffer, u8* dstBuffer, u32 srcLength, u32 dstLength,
@@ -79,15 +86,16 @@ JKRDecompCommand* JKRDecomp::orderAsync(u8* srcBuffer, u8* dstBuffer, u32 srcLen
 
 bool JKRDecomp::sync(JKRDecompCommand* command, int isNonBlocking) {
     OSMessage message;
-    bool result;
     if (isNonBlocking == JKRDECOMP_SYNC_BLOCKING) {
         OSReceiveMessage(&command->mMessageQueue, &message, OS_MESSAGE_BLOCK);
-        result = true;
-    } else {
-        result =
-            OSReceiveMessage(&command->mMessageQueue, &message, OS_MESSAGE_NOBLOCK) != FALSE;
+        return true;
     }
-
+    bool result;
+    if (!OSReceiveMessage(&command->mMessageQueue, &message, OS_MESSAGE_NOBLOCK)) {
+        result = false;
+    } else {
+        result = true;
+    }
     return result;
 }
 

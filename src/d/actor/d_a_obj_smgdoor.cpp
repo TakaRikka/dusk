@@ -319,7 +319,7 @@ void daObjSmgDoor_c::actionWaitEvent() {
 
 void daObjSmgDoor_c::actionEvent() {
     dMeter2Info_onGameStatus(2);
-    dComIfGp_getEvent().setSkipProc(this, eventCallBack, 0);
+    dComIfGp_getEvent()->setSkipProc(this, eventCallBack, 0);
     demoProc();
 }
 
@@ -425,7 +425,7 @@ static actor_method_class daObjSmgDoor_METHODS = {
     (process_method_func)daObjSmgDoor_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SmgDoor = {
+actor_process_profile_definition g_profile_Obj_SmgDoor = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

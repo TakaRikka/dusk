@@ -2,7 +2,7 @@
 #define JMESSAGE_PROCESSOR_H
 
 #include "JSystem/JMessage/resource.h"
-#include <algorithm.h>
+#include <algorithm>
 #include "global.h"
 
 namespace JMessage {

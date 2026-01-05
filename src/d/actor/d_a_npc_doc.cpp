@@ -879,7 +879,7 @@ static actor_method_class daNpc_Doc_MethodTable = {
     (process_method_func)daNpc_Doc_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_DOC = {
+actor_process_profile_definition g_profile_NPC_DOC = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

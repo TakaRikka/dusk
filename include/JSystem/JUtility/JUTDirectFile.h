@@ -17,6 +17,8 @@ struct JUTDirectFile {
     void fclose();
     int fgets(void*, int);
 
+    bool isOpened() const { return mIsOpen; }
+
     /* 0x000 */ u8 mBuffer[0x820];
 	/* 0x820 */ u8* mSectorStart;
 	/* 0x824 */ u32 mToRead;

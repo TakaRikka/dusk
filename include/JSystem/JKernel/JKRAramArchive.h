@@ -12,9 +12,12 @@ class JKRFile;
  */
 class JKRAramArchive : public JKRArchive {
 public:
+    JKRAramArchive();
     JKRAramArchive(s32, JKRArchive::EMountDirection);
     virtual ~JKRAramArchive();
 
+    void fixedInit(s32, JKRArchive::EMountDirection);
+    BOOL mountFixed(s32, JKRArchive::EMountDirection);
     bool open(s32);
     u32 getAramAddress_Entry(SDIFileEntry*);
     u32 getAramAddress(char const*);

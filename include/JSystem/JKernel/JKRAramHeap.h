@@ -17,7 +17,6 @@ public:
     };
 
 public:
-    // TODO: fix type
     static JSUList<JKRAramBlock> sAramList;
 
     JKRAramHeap(u32, u32);

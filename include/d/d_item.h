@@ -6,6 +6,7 @@
 class dEnemyItem_c {
 public:
     static void setItemData(u8* data) { mData = data; }
+    static u8* getItemData() { return mData; }
 
     static u8* mData;
 };

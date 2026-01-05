@@ -90,13 +90,10 @@ public:
 };
 
 namespace {
-    /* 806D7B34-806D7B38 000038 0004+00 2/3 0/0 0/0 .data l_hitActorID__22@unnamed@d_a_e_gm_cpp@ */
     static fpc_ProcID l_hitActorID = fpcM_ERROR_PROCESS_ID_e;
 
-    /* 806D7B38-806D7B3C 00003C 0004+00 2/4 0/0 0/0 .data l_coreActorID__22@unnamed@d_a_e_gm_cpp@ */
     static fpc_ProcID l_coreActorID = fpcM_ERROR_PROCESS_ID_e;
 
-    /* 806D7B3C-806D7B7C 000040 0040+00 0/1 0/0 0/0 .data cc_sph_src__22@unnamed@d_a_e_gm_cpp@ */
     static dCcD_SrcSph cc_sph_src = {
         {
             {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0xD}, {0xDAFBFDFF, 0x3}, 0x75}},
@@ -134,31 +131,24 @@ void daE_GM_c::setAction(actionFunc action) {
     (this->*mAction)();
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_GM_HIO_c l_HIO;
 
 namespace {
-    /* 806D7EF8-806D7F04 000088 000C+00 0/3 0/0 0/0 .bss             l_corePos__22@unnamed@d_a_e_gm_cpp@ */
     static cXyz l_corePos(0.0f, 0.0f, 0.0f);
 
-    /* 806D7F10-806D7F18 0000A0 0006+02 0/3 0/0 0/0 .bss             l_coreAngle__22@unnamed@d_a_e_gm_cpp@ */
     static csXyz l_coreAngle;
 
-    /* 806D7F18-806D7F1C 0000A8 0004+00 0/2 0/0 0/0 .bss             l_coreSpeedF__22@unnamed@d_a_e_gm_cpp@ */
     static f32 l_coreSpeedF;
 } // namespace
 
-/* 806D7F1C -00001 0004+00 11/14 0/0 0/0 .bss             None */
 static u8 lbl_195_bss_AC;
 
-/* 806D7F1D 0001+00 data_806D7F1D None */
 static u8 lbl_195_bss_AD;
 
-/* 806D7F1E 0001+00 data_806D7F1E None */
 static u8 lbl_195_bss_AE;
 
-/* 806D7F1F 0001+00 data_806D7F1F None */
 static u8 lbl_195_bss_AF;
 
 void daE_GM_c::action() {
@@ -332,11 +322,11 @@ void daE_GM_c::appear() {
 }
 
 static s16 const l_rand[4] = {
-    0xF800, 0x0400, 0xFC00, 0x0800,
+    -0x0800, 0x0400, -0x0400, 0x0800,
 };
 
 static s16 const l_rand2[4] = {
-    0xD000, 0x3800, 0xB800, 0x5000,
+    -0x3000, 0x3800, -0x4800, 0x5000,
 };
 
 static f32 const l_rand_base_spd[4] = {
@@ -1646,8 +1636,8 @@ int daE_GM_c::_delete() {
         l_coreActorID = fpcM_ERROR_PROCESS_ID_e;
     }
 
-    if (l_initHIO != 0) {
-        l_initHIO = 0;
+    if (hio_set != 0) {
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -1755,8 +1745,8 @@ cPhs__Step daE_GM_c::create() {
 
         OS_REPORT("//////////////E_GM SET 2 !!\n");
 
-        if (l_initHIO == 0) {
-            l_initHIO = 1;
+        if (hio_set == 0) {
+            hio_set = 1;
             field_0xa77 = 1;
             l_HIO.id = -1;
         }
@@ -1833,7 +1823,7 @@ static actor_method_class l_daE_GM_Method = {
     (process_method_func)daE_GM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_GM = {
+actor_process_profile_definition g_profile_E_GM = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

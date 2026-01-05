@@ -322,7 +322,7 @@ void dMirror_packet_c::mainDraw() {
         }
 
         f32 aspect = view->aspect;
-        f32 temp_f0_2 = i_tanf(MTXDegToRad(view->fovy * 0.5f));
+        f32 temp_f0_2 = tanf(MTXDegToRad(view->fovy * 0.5f));
         view_port_class* view_port = dComIfGd_getViewport();
 
         f32 var_f3;
@@ -617,7 +617,7 @@ static actor_method_class daMirror_METHODS = {
     (process_method_func)daMirror_draw,
 };
 
-extern actor_process_profile_definition g_profile_MIRROR = {
+actor_process_profile_definition g_profile_MIRROR = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

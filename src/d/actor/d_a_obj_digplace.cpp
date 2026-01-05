@@ -175,7 +175,7 @@ static actor_method_class l_daObjDigpl_Method = {
     (process_method_func)daObjDigpl_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Digpl = {
+actor_process_profile_definition g_profile_Obj_Digpl = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

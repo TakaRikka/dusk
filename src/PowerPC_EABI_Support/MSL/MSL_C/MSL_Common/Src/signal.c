@@ -1,14 +1,20 @@
 #include "signal.h"
 #include "critical_regions.h"
 
+#if PLATFORM_GCN
+#define SIGNAL_NUM 6
+#else
+#define SIGNAL_NUM 7
+#endif
+
 #define __std(ref) ref
 
-__signal_func_ptr signal_funcs[6];
+__signal_func_ptr signal_funcs[SIGNAL_NUM];
 
 int raise(int sig) {
     __signal_func_ptr signal_func;
 
-    if (sig < 1 || sig > 6) {
+    if (sig < 1 || sig > SIGNAL_NUM) {
         return -1;
     }
 

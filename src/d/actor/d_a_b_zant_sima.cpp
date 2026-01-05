@@ -227,7 +227,7 @@ static actor_method_class l_daB_ZANTS_Method = {
     (process_method_func)daB_ZANTS_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_ZANTS = {
+actor_process_profile_definition g_profile_B_ZANTS = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

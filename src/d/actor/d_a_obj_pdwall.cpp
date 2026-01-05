@@ -198,7 +198,7 @@ static actor_method_class daObjPDwall_METHODS = {
     (process_method_func)daObjPDwall_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_PDwall = {
+actor_process_profile_definition g_profile_Obj_PDwall = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

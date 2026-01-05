@@ -4,7 +4,7 @@
 #include "d/actor/d_a_npc.h"
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "string.h"
+#include <string>
 
 struct EventListItem {
     char* mEventName;
@@ -101,9 +101,7 @@ int daTag_KMsg_c::Execute() {
             attention_info.flags = 0;
         }
 
-        // TODO: gameInfo fake match to force reuse of pointer
-        dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-        if (play->getEvent().runCheck()) {
+        if (dComIfGp_event_runCheck()) {
             if (eventInfo.checkCommandTalk()) {
                 u16 iVar10 = 0;
                 switch (getType()) {
@@ -119,7 +117,7 @@ int daTag_KMsg_c::Execute() {
                         }
                         mEventIdx =
                             dComIfGp_getEventManager().getEventIdx(this, l_evtList[iVar10].mEventName, 0xff);
-                        play->getEvent().reset(this);
+                        dComIfGp_getEvent()->reset(this);
                         fopAcM_orderChangeEventId(this, mEventIdx, 1, 0xffff);
                     }
 
@@ -263,19 +261,27 @@ static int daTag_KMsg_IsDelete(void* param_0) {
     return 1;
 }
 
-static void* daTag_KMsg_MethodTable[8] = {
-    (void*)daTag_KMsg_Create,
-    (void*)daTag_KMsg_Delete,
-    (void*)daTag_KMsg_Execute,
-    (void*)daTag_KMsg_IsDelete,
-    (void*)daTag_KMsg_Draw,
+static actor_method_class daTag_KMsg_MethodTable = {
+    (process_method_func)daTag_KMsg_Create,
+    (process_method_func)daTag_KMsg_Delete,
+    (process_method_func)daTag_KMsg_Execute,
+    (process_method_func)daTag_KMsg_IsDelete,
+    (process_method_func)daTag_KMsg_Draw,
 };
 
-extern void* g_profile_TAG_KMSG[12] = {
-    (void*)0xFFFFFFFD, (void*)0x0008FFFD,
-    (void*)0x02EB0000, (void*)&g_fpcLf_Method,
-    (void*)0x000005CC, (void*)NULL,
-    (void*)NULL,       (void*)&g_fopAc_Method,
-    (void*)0x01220000, (void*)&daTag_KMsg_MethodTable,
-    (void*)0x00044000, (void*)0x000E0000,
+actor_process_profile_definition g_profile_TAG_KMSG = {
+    fpcLy_CURRENT_e,
+    8,
+    fpcPi_CURRENT_e,
+    PROC_TAG_KMSG,
+    &g_fpcLf_Method.base,
+    sizeof(daTag_KMsg_c),
+    0,
+    0,
+    &g_fopAc_Method.base,
+    0x122,
+    &daTag_KMsg_MethodTable,
+    0x44000,
+    fopAc_ACTOR_e,
+    fopAc_CULLBOX_CUSTOM_e,
 };

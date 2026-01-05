@@ -13,17 +13,16 @@ JKRArcFinder::JKRArcFinder(JKRArchive* archive, s32 startIndex, s32 numEntries) 
 }
 
 bool JKRArcFinder::findNextFile(void) {
-    JKRArchive::SDirEntry entry;
-
     if (mIsAvailable) {
         mIsAvailable = !(mNextIndex > mEndIndex);
         if (mIsAvailable) {
+            JKRArchive::SDirEntry entry;
             mIsAvailable = mArchive->getDirEntry(&entry, mNextIndex);
             mEntryName = entry.name;
             mEntryFileIndex = mNextIndex;
             mEntryId = entry.id;
             mEntryTypeFlags = entry.flags;
-            mIsFileOrDirectory = (mEntryTypeFlags >> 1) & 1;
+            mIsFileOrDirectory = mEntryTypeFlags & 2;
             mNextIndex++;
         }
     }

@@ -516,7 +516,7 @@ void daSCannon_c::exeModeActionEvt() {
         }
     } else {
         if ((mLayerNo == 3 || mLayerNo == 10) && fopAcM_isSwitch(this, getSw2())) {
-            dComIfGp_getEvent().setSkipProc(this, eventCallBack, 0);
+            dComIfGp_getEvent()->setSkipProc(this, eventCallBack, 0);
         }
         demoExe();
     }
@@ -849,7 +849,7 @@ static actor_method_class daSCannon_METHODS = {
     (process_method_func)daSCannon_draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SCannon = {
+actor_process_profile_definition g_profile_Obj_SCannon = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

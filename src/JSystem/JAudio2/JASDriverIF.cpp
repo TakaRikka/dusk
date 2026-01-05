@@ -15,6 +15,10 @@ u16 JASDriver::getChannelLevel_dsp() {
     return JASDriver::MAX_MIXERLEVEL;
 }
 
+f32 JASDriver::getChannelLevel() {
+    return MAX_MIXERLEVEL / 16383.5f;
+}
+
 f32 JASDriver::getDSPLevel() {
     return JASDsp::getDSPMixerLevel();
 }

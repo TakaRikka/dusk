@@ -121,7 +121,7 @@ static actor_method_class daTagRmbitSw_METHODS = {
 
 };
 
-extern actor_process_profile_definition g_profile_Tag_RmbitSw = {
+actor_process_profile_definition g_profile_Tag_RmbitSw = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

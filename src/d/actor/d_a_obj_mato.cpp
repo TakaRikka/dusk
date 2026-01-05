@@ -86,10 +86,12 @@ static dCcD_SrcCyl cc_cyl_src = {
         {2},
     },
     {
-        {0.0f, 0.0f, 0.0f},
-        150.0f,
-        300.0f,
-    },
+        {
+            {0.0f, 0.0f, 0.0f},
+            150.0f,
+            300.0f,
+        },
+    }
 };
 }
 
@@ -371,7 +373,7 @@ static actor_method_class l_daObjMATO_Method = {
     (process_method_func)daObjMATO_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Mato = {
+actor_process_profile_definition g_profile_Obj_Mato = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

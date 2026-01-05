@@ -116,7 +116,7 @@ static actor_method_class l_daObj_Usaku_Method = {
     (process_method_func)daObj_Usaku_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_USAKU = {
+actor_process_profile_definition g_profile_OBJ_USAKU = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

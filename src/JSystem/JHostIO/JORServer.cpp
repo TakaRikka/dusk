@@ -5,7 +5,7 @@
 #include "JSystem/JHostIO/JORFile.h"
 #include "JSystem/JHostIO/JORHostInfo.h"
 #include "JSystem/JSupport/JSUMemoryStream.h"
-#include <string.h>
+#include <string>
 
 void JOREventCallbackListNode::JORAppend() {
     JORServer* pServer = JORServer::getInstance();

@@ -3,11 +3,8 @@
 #include "JSystem/JHostIO/JHIMccBuf.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JHostIO/JHIRMcc.h"
-#include <dolphin/dolphin.h>
-#include <cstring.h>
-
-extern "C" int HIO2Read(u32, u32, void*, u32);
-extern "C" int HIO2Write(u32, u32, void*, u32);
+#include <revolution/hio2.h>
+#include <string>
 
 void JHIReport(const char* fmt, ...) {}
 

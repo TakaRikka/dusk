@@ -12,7 +12,7 @@ public:
     JKRFile() : mIsAvailable(false) {}
     virtual ~JKRFile() {}
 
-    s32 read(void*, s32, s32);
+    void read(void*, s32, s32);
 
     bool isAvailable() const { return mIsAvailable; }
 

@@ -9,7 +9,7 @@
 #include "f_op/f_op_scene.h"
 #include "f_pc/f_pc_leaf.h"
 
-extern scene_process_profile_definition g_profile_WARNING_SCENE = {
+scene_process_profile_definition g_profile_WARNING_SCENE = {
     fpcLy_ROOT_e,           // mLayerID     
     1,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio
@@ -22,7 +22,7 @@ extern scene_process_profile_definition g_profile_WARNING_SCENE = {
     NULL,                   // mpMtd
 };
 
-extern scene_process_profile_definition g_profile_WARNING2_SCENE = {
+scene_process_profile_definition g_profile_WARNING2_SCENE = {
     fpcLy_ROOT_e,           // mLayerID          
     1,                      // mListID   
     fpcPi_CURRENT_e,        // mListPrio    

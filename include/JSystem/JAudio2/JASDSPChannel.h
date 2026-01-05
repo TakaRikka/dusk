@@ -38,6 +38,9 @@ struct JASDSPChannel {
     static void updateAll();
     static int killActiveChannel();
     static JASDSPChannel* getHandle(u32);
+    static u32 getNumUse();
+    static u32 getNumFree();
+    static u32 getNumBreak();
 
     static JASDSPChannel* sDspChannels;
 

@@ -86,7 +86,7 @@ static actor_method_class l_daE_HB_LEAF_Method = {
     (process_method_func)daE_HB_LEAF_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_HB_LEAF = {
+actor_process_profile_definition g_profile_E_HB_LEAF = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

@@ -274,10 +274,11 @@ static void demo_camera(e_warpappear_class* i_this) {
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_class* camera0 = dComIfGp_getCamera(0);
     daHorse_c* horseActor = (daHorse_c*)dComIfGp_getHorseActor();
 
     cXyz sp48, sp54;
-    dComIfG_play_c* play;
+    cXyz temp1, temp2;
     switch (i_this->field_0x59e) {
     case 1:
         if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
@@ -464,9 +465,7 @@ static void demo_camera(e_warpappear_class* i_this) {
             i_this->field_0x5f8 = 0.0f;
         }
 
-        // TODO: gameInfo fake match to force reuse of pointer
-        play = &g_dComIfG_gameInfo.play;
-        play->getEvent().onHindFlag(15);
+        dComIfGp_event_onHindFlag(15);
 
         if (i_this->field_0x59e == 5) {
             if (i_this->field_0x5a0 >= 310) {
@@ -496,7 +495,7 @@ static void demo_camera(e_warpappear_class* i_this) {
             camera->mCamera.Reset(i_this->field_0x5b0, i_this->field_0x5a4, i_this->field_0x5f4, 0);
             camera->mCamera.Start();
             camera->mCamera.SetTrimSize(0);
-            play->getEvent().reset();
+            dComIfGp_event_reset();
             daPy_getPlayerActorClass()->cancelOriginalDemo();
             fopAcM_delete(i_this);
             fpcM_Search(s_s1fight_sub, i_this);
@@ -895,7 +894,7 @@ static actor_method_class l_daE_Warpappear_Method = {
     (process_method_func)daE_Warpappear_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_WAP = {
+actor_process_profile_definition g_profile_E_WAP = {
     fpcLy_CURRENT_e,             // mLayerID
     7,                           // mListID
     fpcPi_CURRENT_e,             // mListPrio

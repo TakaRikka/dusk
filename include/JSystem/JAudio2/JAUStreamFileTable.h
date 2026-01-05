@@ -4,8 +4,8 @@
 #include "JSystem/JAudio2/JAIStreamDataMgr.h"
 
 struct BinaryStreamFileTable {
-    /* 0x0 */ char mIdentifier[4];
-    /* 0x4 */ int mNumFiles;
+    /* 0x0 */ u8 mIdentifier[4];
+    /* 0x4 */ u32 mNumFiles;
     /* 0x8 */ int mFilePathOffsets[];
 };
 
@@ -16,7 +16,7 @@ struct BinaryStreamFileTable {
 struct JAUStreamFileTable {
     JAUStreamFileTable();
     void init(void const*);
-    int getNumFiles() const;
+    u32 getNumFiles() const;
     const char* getFilePath(int) const;
 
     bool isValid() { return mData; }

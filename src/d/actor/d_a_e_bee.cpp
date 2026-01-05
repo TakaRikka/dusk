@@ -15,8 +15,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* 80685675 0003+00 data_80685675 None */
-static bool hioInit;
+static bool hio_set;
 
 static daE_Bee_HIO_c l_HIO;
 
@@ -671,7 +670,7 @@ static int daE_Bee_Delete(e_bee_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_bee");
     
     if (i_this->mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
 
     if (i_this->heap != NULL) {
@@ -738,9 +737,9 @@ static cPhs__Step daE_Bee_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!hioInit) {
+        if (!hio_set) {
             _this->mHIOInit = true;
-            hioInit = true;
+            hio_set = true;
             l_HIO.field_0x4 = -1;
         }
 
@@ -771,10 +770,12 @@ static cPhs__Step daE_Bee_Create(fopAc_ac_c* i_this) {
                 {0x0}, // mGObjCo
             }, // mObjInf
             {
-                {0.0f, 0.0f, 0.0f}, // mCenter
-                30.0f, // mRadius
-                130.0f // mHeight
-            } // mCcCyl
+                {
+                    {0.0f, 0.0f, 0.0f}, // mCenter
+                    30.0f, // mRadius
+                    130.0f // mHeight
+                } // mCcCyl
+            }
         };
         _this->mCcCyl.Set(cc_cyl_src);
         _this->mCcCyl.SetStts(&_this->mCcStts);
@@ -814,7 +815,7 @@ static actor_method_class l_daE_Bee_Method = {
     (process_method_func)daE_Bee_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_BEE = {
+actor_process_profile_definition g_profile_E_BEE = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

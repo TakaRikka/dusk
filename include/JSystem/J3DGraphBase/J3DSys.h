@@ -139,7 +139,10 @@ struct J3DSys {
 
     J3DMtxCalc * getCurrentMtxCalc() const { return mCurrentMtxCalc; }
 
-    void setTexture(J3DTexture* pTex) { mTexture = pTex; }
+    void setTexture(J3DTexture* pTex) {
+        JUT_ASSERT_MSG(220, pTex != NULL, "Error : null pointer.");
+        mTexture = pTex;
+    }
     J3DTexture* getTexture() { return mTexture; }
 
     void setNBTScale(Vec* scale) { mNBTScale = scale; }

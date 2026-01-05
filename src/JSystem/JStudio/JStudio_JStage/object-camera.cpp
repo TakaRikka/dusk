@@ -88,9 +88,6 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT(JStudio::data::TEOperati
     }
 }
 
-/* 8028BC14-8028BC70 286554 005C+00 1/0 0/0 0/0 .text
- * adaptor_do_PARENT_NODE__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData param_1,
                                                         void const* pContent, u32 uSize) {
     switch (param_1) {
@@ -107,9 +104,6 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_NODE(JStudio::data::TEOp
     }
 }
 
-/* 8028BC70-8028BCEC 2865B0 007C+00 1/0 0/0 0/0 .text
- * adaptor_do_PARENT_ENABLE__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl
- */
 void
 JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData param_1,
                                                           void const* pContent, u32 uSize) {
@@ -136,9 +130,6 @@ JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_ENABLE(JStudio::data::TEOpera
     }
 }
 
-/* 8028BCEC-8028BD00 28662C 0014+00 1/0 0/0 0/0 .text
- * adaptor_do_PARENT_FUNCTION__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl
- */
 void
 JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_FUNCTION(JStudio::data::TEOperationData param_1,
                                                           void const* pContent, u32 uSize) {
@@ -151,9 +142,6 @@ JStudio_JStage::TAdaptor_camera::adaptor_do_PARENT_FUNCTION(JStudio::data::TEOpe
     }
 }
 
-/* 8028BD00-8028BD44 286640 0044+00 1/0 0/0 0/0 .text
- * adaptor_do_TARGET_PARENT__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_camera::adaptor_do_TARGET_PARENT(
     JStudio::data::TEOperationData param_1, void const* pContent, u32 uSize) {
     switch(param_1) {
@@ -165,9 +153,6 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_TARGET_PARENT(
     }
 }
 
-/* 8028BD44-8028BDA0 286684 005C+00 1/0 0/0 0/0 .text
- * adaptor_do_TARGET_PARENT_NODE__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_camera::adaptor_do_TARGET_PARENT_NODE(
     JStudio::data::TEOperationData param_1, void const* pContent, u32 uSize) {
     switch (param_1) {
@@ -184,9 +169,6 @@ void JStudio_JStage::TAdaptor_camera::adaptor_do_TARGET_PARENT_NODE(
     }
 }
 
-/* 8028BDA0-8028BDBC 2866E0 001C+00 1/0 0/0 0/0 .text
- * adaptor_do_TARGET_PARENT_ENABLE__Q214JStudio_JStage15TAdaptor_cameraFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_camera::adaptor_do_TARGET_PARENT_ENABLE(
     JStudio::data::TEOperationData param_1, void const* pContent, u32 uSize) {
     switch(param_1) {

@@ -660,14 +660,7 @@ BOOL daNpc_Hoz_c::evtCutProc() {
 int daNpc_Hoz_c::evtProc() {
     BOOL ret = FALSE;
 
-#if VERSION != VERSION_SHIELD_DEBUG
-        // TODO: gameInfo fake match to force reuse of pointer
-        dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-        if (play->getEvent().runCheck())
-#else
-        if (dComIfGp_event_runCheck())
-#endif
-        {
+    if (dComIfGp_event_runCheck()) {
         if (eventInfo.checkCommandTalk()) {
             if (!checkChangeEvt()) {
                 evtTalk();
@@ -676,11 +669,7 @@ int daNpc_Hoz_c::evtProc() {
         } else if (eventInfo.checkCommandDemoAccrpt()
                         && dComIfGp_getEventManager().endCheck(mEvtId)) {
             if (evtEndProc()) {
-#if VERSION != VERSION_SHIELD_DEBUG
-                play->getEvent().reset();
-#else
                 dComIfGp_event_reset();
-#endif
                 mEvtId = -1;
             }
         } else {
@@ -829,6 +818,25 @@ BOOL daNpc_Hoz_c::drawDbgInfo() {
 
 int daNpc_Hoz_c::test(void* i_this) {
     // DEBUG NONMATCHING
+    int r30 = 0;
+    switch (mMode) {
+    case 0:
+    case 1:
+        speedF = 0.0f;
+        speed.setall(0.0f);
+        mMode = 2;
+        // fall-through
+    case 2:
+        // TODO: determine pointer type of field_0xE40
+        mFaceMotionSeqMngr.setNo(field_0xE40, -1.0f, 0, 0);
+        mMotionSeqMngr.setNo(field_0xE40, -1.0f, 0, 0);
+        mJntAnm.lookNone(0);
+        attention_info.flags = 0;
+    case 3:
+    default:
+        break;
+    }
+    return r30;
 }
 
 int daNpc_Hoz_c::selectAction() {
@@ -1667,7 +1675,7 @@ static actor_method_class daNpc_Hoz_MethodTable = {
     (process_method_func)daNpc_Hoz_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_HOZ = {
+actor_process_profile_definition g_profile_NPC_HOZ = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

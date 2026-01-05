@@ -898,8 +898,8 @@ static void damage_check(e_sm2_class* i_this) {
                         for (int j = 0; j < bun_d[i_this->sizetype]; j++) {
                             static int j_d[] = {0, 6, 1, 5, 2, 4, 0, 6, 1, 5, 2, 4};
                             static s16 ya_d[] = {
-                                0x0000, 0x8000, 0x0000, 0x8000, 0x0000, 0x8000,
-                                0x0000, 0x8000, 0x0000, 0x8000, 0x0000, 0x8000,
+                                0x0000, -0x8000, 0x0000, -0x8000, 0x0000, -0x8000,
+                                0x0000, -0x8000, 0x0000, -0x8000, 0x0000, -0x8000,
                             };
                             static f32 y_ad[] = {20.0f, 30.0f, 40.0f, 50.0f, 60.0f,};
 
@@ -1634,7 +1634,7 @@ static actor_method_class l_daE_SM2_Method = {
     (process_method_func)daE_SM2_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_SM2 = {
+actor_process_profile_definition g_profile_E_SM2 = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

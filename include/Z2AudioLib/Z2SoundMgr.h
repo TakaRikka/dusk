@@ -9,6 +9,12 @@ u16 seqCallback(JASTrack* track, u16 command);
 
 class Z2SoundMgr : public JASGlobalInstance<Z2SoundMgr> {
 public:
+#if PLATFORM_GCN
+    static const int MAX_CATEGORIES = 9;
+#else
+    static const int MAX_CATEGORIES = 10;
+#endif
+
     Z2SoundMgr();
     void calc();
     void setIIR(JAISound* sound, const s16* iir);

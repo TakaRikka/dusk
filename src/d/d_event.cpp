@@ -728,16 +728,16 @@ void dEvt_control_c::clearSkipSystem() {
 int dEv_defaultSkipProc(void* actor, int parameter) {
     // "%06d: event: skip event!!!"
     OS_REPORT("\x1b[34m%06d: event: スキップ event!!!\n\x1b[m", g_Counter.mCounter0);
-    dEvt_control_c& event = dComIfGp_getEvent();
+    dEvt_control_c* event = dComIfGp_getEvent();
 
-    event.reset(actor);
+    event->reset(actor);
     return 1;
 }
 
 int dEv_defaultSkipZev(void* actor, int parameter) {
     // "%06d: event: skip ZEV event!!!"
     OS_REPORT("\x1b[34m%06d: event: スキップ ZEV event!!!\n\x1b[m", g_Counter.mCounter0);
-    dEvt_control_c* event = &dComIfGp_getEvent();
+    dEvt_control_c* event = dComIfGp_getEvent();
 
     s16 eventID = -1;
     dStage_MapEvent_dt_c* data = event->getStageEventDt();
@@ -761,9 +761,9 @@ int dEv_defaultSkipZev(void* actor, int parameter) {
         OS_REPORT("%06d: event:   [%d] %s!\n", g_Counter.mCounter0, eventID, eventName);
         break;
     case 1:
-        skipName = dComIfGp_getEvent().getSkipEventName();
+        skipName = dComIfGp_getEvent()->getSkipEventName();
         eventID = dComIfGp_getEventManager().getEventIdx(skipName, 0xFF, -1);
-        OS_REPORT("%06d: event:   [%d] %s!\n", g_Counter.mCounter0, eventID, dComIfGp_getEvent().getSkipEventName());
+        OS_REPORT("%06d: event:   [%d] %s!\n", g_Counter.mCounter0, eventID, dComIfGp_getEvent()->getSkipEventName());
         break;
     default:
         OS_REPORT("%06d: event: ERROR: illegal prameter!\n", g_Counter.mCounter0);
@@ -785,7 +785,7 @@ int dEv_defaultSkipZev(void* actor, int parameter) {
 
 int dEv_defaultSkipStb(void* actor, int parameter) {
     OS_REPORT("\x1b[34m%06d: event: スキップ STB event!!!\n\x1b[m", g_Counter.mCounter0);
-    dEvt_control_c* event = &dComIfGp_getEvent();
+    dEvt_control_c* event = dComIfGp_getEvent();
 
     s16 eventID = -1;
     dStage_MapEvent_dt_c* data = event->getStageEventDt();
@@ -809,9 +809,9 @@ int dEv_defaultSkipStb(void* actor, int parameter) {
         OS_REPORT("%06d: event:   [%d] %s!\n", g_Counter.mCounter0, eventID, eventName);
         break;
     case 1:
-        skipName = dComIfGp_getEvent().getSkipEventName();
+        skipName = dComIfGp_getEvent()->getSkipEventName();
         eventID = dComIfGp_getEventManager().getEventIdx(skipName, 0xFF, -1);
-        OS_REPORT("%06d: event:   [%d] %s!\n", g_Counter.mCounter0, eventID, dComIfGp_getEvent().getSkipEventName());
+        OS_REPORT("%06d: event:   [%d] %s!\n", g_Counter.mCounter0, eventID, dComIfGp_getEvent()->getSkipEventName());
         break;
     default:
         OS_REPORT("%06d: event: ERROR: illegal prameter!\n", g_Counter.mCounter0);
@@ -834,7 +834,7 @@ int dEv_defaultSkipStb(void* actor, int parameter) {
 }
 
 int dEv_noFinishSkipProc(void* actor, int parameter) {
-    dComIfGp_getEvent().offSkipFade();
+    dComIfGp_getEvent()->offSkipFade();
     return 0;
 }
 

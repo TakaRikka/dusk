@@ -115,7 +115,7 @@ static actor_method_class daObjPRElvtr_METHODS = {
     (process_method_func)daObjPRElvtr_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_PRElvtr = {
+actor_process_profile_definition g_profile_Obj_PRElvtr = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

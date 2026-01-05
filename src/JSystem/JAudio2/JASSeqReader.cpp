@@ -32,6 +32,7 @@ void JASSeqReader::init(void* param_0) {
 
 bool JASSeqReader::call(u32 param_0) {
     if (field_0x08 >= 8) {
+        JUT_WARN(42, "%s", "Cannot exec call command");
         return false;
     }
 
@@ -43,6 +44,7 @@ bool JASSeqReader::call(u32 param_0) {
 
 bool JASSeqReader::loopStart(u32 param_0) {
     if (8 <= field_0x08) {
+        JUT_WARN(53, "%s", "Cannot exec loopStart command");
         return false;
     }
 
@@ -55,6 +57,7 @@ bool JASSeqReader::loopStart(u32 param_0) {
 
 bool JASSeqReader::loopEnd() {
     if (field_0x08 == 0) {
+        JUT_WARN(65, "%s", "cannot loopE for call-stack is NULL");
         return false;
     }
 
@@ -97,6 +100,7 @@ int JASSeqReader::readMidiValue() {
 
     while (true) {
         if (2 < i) {
+            JUT_WARN(100, "%s", "readMidiValue: Too large value");
             return 0;
         }
 

@@ -471,7 +471,7 @@ static actor_method_class l_daNpc_Inko_Method = {
     (process_method_func)daNpc_Inko_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_INKO = {
+actor_process_profile_definition g_profile_NPC_INKO = {
   fpcLy_CURRENT_e,        // mLayerID
   8,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

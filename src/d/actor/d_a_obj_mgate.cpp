@@ -241,7 +241,7 @@ static actor_method_class daObjMGate_METHODS = {
     (process_method_func)daObjMGate_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_MGate = {
+actor_process_profile_definition g_profile_Obj_MGate = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

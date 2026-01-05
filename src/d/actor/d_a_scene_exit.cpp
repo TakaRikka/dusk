@@ -104,7 +104,7 @@ static actor_method_class l_daScex_Method = {
     (process_method_func)daScex_Execute,
 };
 
-extern actor_process_profile_definition2 g_profile_SCENE_EXIT = {
+actor_process_profile_definition2 g_profile_SCENE_EXIT = {
   fpcLy_CURRENT_e,       // mLayerID
   10,                    // mListID
   fpcPi_CURRENT_e,       // mListPrio

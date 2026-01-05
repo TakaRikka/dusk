@@ -913,7 +913,7 @@ static void anm_se_set(e_hzelda_class* i_this) {
     }
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_HZELDA_HIO_c l_HIO;
 
@@ -1297,7 +1297,7 @@ static int daE_HZELDA_Delete(e_hzelda_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Hzelda");
 
     if (i_this->mInitHIO) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (i_this->heap != NULL) {
@@ -1387,9 +1387,9 @@ static int daE_HZELDA_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (l_initHIO == 0) {
+        if (hio_set == 0) {
             a_this->mInitHIO = 1;
-            l_initHIO = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -1534,7 +1534,7 @@ static actor_method_class l_daE_HZELDA_Method = {
     (process_method_func)daE_HZELDA_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_HZELDA = {
+actor_process_profile_definition g_profile_E_HZELDA = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

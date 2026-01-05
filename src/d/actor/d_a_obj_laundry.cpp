@@ -65,10 +65,12 @@ const static dCcD_SrcCyl ccCylSrc = {
         {0x0},                                             // mGObjCo
     },                                                     // mObjInf
     {
-        {0.0f, -80.0f, 0.0f},  // mCenter
-        25.0f,                 // mRadius
-        25.0f                  // mHeight
-    }  // mCyl
+        {
+            {0.0f, -80.0f, 0.0f},  // mCenter
+            25.0f,                 // mRadius
+            25.0f                  // mHeight
+        }  // mCyl
+    }
 };
 
 static f32 dummy(cXyz v) {
@@ -281,7 +283,7 @@ static actor_method_class l_daObjLdy_Method = {
     (process_method_func)daObjLdy_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Laundry = {
+actor_process_profile_definition g_profile_Obj_Laundry = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

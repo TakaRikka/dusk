@@ -122,7 +122,7 @@ static actor_method_class daObjRCircle_METHODS = {
     (process_method_func)daObjRCircle_draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_RCircle = {
+actor_process_profile_definition g_profile_Obj_RCircle = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

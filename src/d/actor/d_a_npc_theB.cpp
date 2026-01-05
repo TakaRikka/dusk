@@ -452,7 +452,7 @@ BOOL daNpcTheB_c::main() {
         field_0x9ee = false;
     }
 
-    if (dComIfGp_event_runCheck() == FALSE || (mOrderNewEvt && dComIfGp_getEvent().isOrderOK())) {
+    if (dComIfGp_event_runCheck() == FALSE || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())) {
         mOrderEvtNo = EVT_NONE;
 
         if (strcmp(dComIfGp_getStartStageName(), "F_SP121") == 0) {
@@ -880,8 +880,7 @@ BOOL daNpcTheB_c::doEvent() {
     BOOL rv = FALSE;
     s32 staffId;
     
-    dComIfG_play_c& play = g_dComIfG_gameInfo.play; // Fakematch
-    if (play.getEvent().runCheck()) {
+    if (dComIfGp_event_runCheck()) {
         if (eventInfo.checkCommandTalk()) {
             if (chkAction(&daNpcTheB_c::talk)) {
                 (this->*mAction)(NULL);
@@ -896,8 +895,8 @@ BOOL daNpcTheB_c::doEvent() {
 
             rv = TRUE;
         } else {
-            dEvent_manager_c& eventManager = play.getEvtManager();
-            staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
+            dEvent_manager_c* eventManager = &dComIfGp_getEventManager();
+            staffId = eventManager->getMyStaffId(l_myName, NULL, 0);
             if (staffId != -1) {
                 mStaffID = staffId;
                 JUT_ASSERT(1357, NULL != mEvtSeqList[mOrderEvtNo]);
@@ -908,7 +907,7 @@ BOOL daNpcTheB_c::doEvent() {
                 }
 
                 if ((this->*mEvtSeqList[mOrderEvtNo])(staffId)) {
-                    eventManager.cutEnd(staffId);
+                    eventManager->cutEnd(staffId);
                 }
 
                 rv = TRUE;
@@ -926,7 +925,7 @@ BOOL daNpcTheB_c::doEvent() {
                 }
             }
 
-            if (eventInfo.checkCommandDemoAccrpt() && mEventIdx != -1 && eventManager.endCheck(mEventIdx)) {
+            if (eventInfo.checkCommandDemoAccrpt() && mEventIdx != -1 && eventManager->endCheck(mEventIdx)) {
                 switch (mOrderEvtNo) {
                     default:
                         break;
@@ -1245,7 +1244,7 @@ int daNpcTheB_c::EvCut_PersonalCombatRevenge(int i_staffId) {
                     }
                 }
 
-                dComIfGp_getEvent().startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
                 break;
             }
             
@@ -1264,9 +1263,9 @@ int daNpcTheB_c::EvCut_PersonalCombatRevenge(int i_staffId) {
         }
     }
 
-    if (dComIfGp_getEvent().checkSkipEdge()) {
+    if (dComIfGp_getEvent()->checkSkipEdge()) {
         daNpcF_clearMessageTmpBit();
-        dComIfGp_getEvent().onSkipFade();
+        dComIfGp_getEvent()->onSkipFade();
         dComIfGp_setNextStage("F_SP123", 0, 13, 0);
     }
 
@@ -1575,7 +1574,7 @@ static actor_method_class daNpcTheB_MethodTable = {
     (process_method_func)daNpcTheB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_THEB = {
+actor_process_profile_definition g_profile_NPC_THEB = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -4,8 +4,8 @@
 #include "layout.h"
 #include "pane.h"
 
-#include "new.h"
-#include <cstring.h>
+#include <new>
+#include <string>
 
 namespace {
     // pretend this is nw4hbm::lyt

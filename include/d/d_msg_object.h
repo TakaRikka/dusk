@@ -417,7 +417,7 @@ inline void dMsgObject_changeFlowGroup(s32 flow) {
 
 inline void dMsgObject_setTalkActor(fopAc_ac_c* actor) {
     if (dMsgObject_getMsgObjectClass() != NULL) {
-        dMsgObject_c::setTalkActor(actor);
+        dMsgObject_getMsgObjectClass()->setTalkActor(actor);
     }
 }
 
@@ -445,7 +445,7 @@ inline void dMsgObject_setKillMessageFlag() {
 }
 
 inline void dMsgObject_endFlowGroup() {
-    dMsgObject_c::endFlowGroup();
+    dMsgObject_getMsgObjectClass()->endFlowGroup();
 }
 
 inline void dMsgObject_setSmellType(u8 type) {

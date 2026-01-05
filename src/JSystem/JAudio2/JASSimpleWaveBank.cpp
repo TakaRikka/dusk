@@ -1,6 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JAudio2/JASSimpleWaveBank.h"
+#include <stdint>
 
 JASSimpleWaveBank::JASSimpleWaveBank() {
     mWaveTable = NULL;
@@ -14,6 +15,7 @@ JASSimpleWaveBank::~JASSimpleWaveBank() {
 void JASSimpleWaveBank::setWaveTableSize(u32 size, JKRHeap* heap) {
     delete[] mWaveTable;
     mWaveTable = new (heap, 0) TWaveHandle[size];
+    JUT_ASSERT(29, mWaveTable != NULL);
     mWaveTableSize = size;
 }
 
@@ -42,7 +44,7 @@ int JASSimpleWaveBank::TWaveHandle::getWavePtr() const {
     if (base == NULL) {
         return NULL;
     }
-    return (int)base + mWaveInfo.field_0x08;
+    return (intptr_t)base + mWaveInfo.field_0x08;
 }
 
 JASSimpleWaveBank::TWaveHandle::TWaveHandle() {

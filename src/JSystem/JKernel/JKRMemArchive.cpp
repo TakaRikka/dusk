@@ -5,9 +5,9 @@
 #include "JSystem/JKernel/JKRDvdRipper.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include "string.h"
+#include <string>
 #include "global.h"
-#include <stdint.h>
+#include <stdint>
 
 JKRMemArchive::JKRMemArchive(s32 entryNum, JKRArchive::EMountDirection mountDirection)
     : JKRArchive(entryNum, MOUNT_MEM) {
@@ -20,7 +20,7 @@ JKRMemArchive::JKRMemArchive(s32 entryNum, JKRArchive::EMountDirection mountDire
     mVolumeType = 'RARC';
     mVolumeName = mStringTable + mNodes->name_offset;
 
-    getVolumeList().prepend(&mFileLoaderLink);
+    sVolumeList.prepend(&mFileLoaderLink);
     mIsMounted = true;
 }
 
@@ -34,7 +34,7 @@ JKRMemArchive::JKRMemArchive(void* buffer, u32 bufferSize, JKRMemBreakFlag param
     mVolumeType = 'RARC';
     mVolumeName = mStringTable + mNodes->name_offset;
 
-    getVolumeList().prepend(&mFileLoaderLink);
+    sVolumeList.prepend(&mFileLoaderLink);
     mIsMounted = true;
 }
 
@@ -45,9 +45,15 @@ JKRMemArchive::~JKRMemArchive() {
                 JKRFreeToHeap(mHeap, mArcHeader);
         }
 
-        getVolumeList().remove(&mFileLoaderLink);
+        sVolumeList.remove(&mFileLoaderLink);
         mIsMounted = false;
     }
+}
+
+static void dummy() {
+    OS_REPORT(__FILE__);
+    OS_REPORT("isMounted()");
+    OS_REPORT("mMountCount == 1");
 }
 
 bool JKRMemArchive::open(s32 entryNum, JKRArchive::EMountDirection mountDirection) {
@@ -83,7 +89,7 @@ bool JKRMemArchive::open(s32 entryNum, JKRArchive::EMountDirection mountDirectio
         mMountMode = UNKNOWN_MOUNT_MODE;
     }
     else {
-        JUT_ASSERT(438, mArcHeader->signature =='RARC');
+        JUT_ASSERT(438, mArcHeader->signature == 'RARC');
         mArcInfoBlock = (SArcDataInfo *)((u8 *)mArcHeader + mArcHeader->header_length);
         mNodes = (SDIDirEntry *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->node_offset);
         mFiles = (SDIFileEntry *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->file_entry_offset);
@@ -105,7 +111,7 @@ bool JKRMemArchive::open(s32 entryNum, JKRArchive::EMountDirection mountDirectio
 
 bool JKRMemArchive::open(void* buffer, u32 bufferSize, JKRMemBreakFlag flag) {
     mArcHeader = (SArcHeader *)buffer;
-    JUT_ASSERT(491, mArcHeader->signature =='RARC');
+    JUT_ASSERT(491, mArcHeader->signature == 'RARC');
     mArcInfoBlock = (SArcDataInfo *)((u8 *)mArcHeader + mArcHeader->header_length);
     mNodes = (SDIDirEntry *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->node_offset);
     mFiles = (SDIFileEntry *)((u8 *)&mArcInfoBlock->num_nodes + mArcInfoBlock->file_entry_offset);
@@ -141,10 +147,10 @@ void* JKRMemArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* f
     if (fileEntry->data != NULL) {
         memcpy(buffer, fileEntry->data, srcLength);
     } else {
-        JKRCompression compression = JKRConvertAttrToCompressionType(fileEntry->getAttr());
-        void* data = mArchiveData + fileEntry->data_offset;
+        u8 flags = fileEntry->type_flags_and_name_offset >> 24;
+        JKRCompression compression = JKRConvertAttrToCompressionType(flags);
         srcLength =
-            fetchResource_subroutine((u8*)data, srcLength, (u8*)buffer, bufferSize, compression);
+            fetchResource_subroutine(mArchiveData + fileEntry->data_offset, srcLength, (u8*)buffer, bufferSize, compression);
     }
 
     if (resourceSize) {
@@ -170,6 +176,7 @@ void JKRMemArchive::removeResourceAll(void) {
             fileEntry->data = NULL;
         }
     }
+    fileEntry++;
 }
 
 bool JKRMemArchive::removeResource(void* resource) {
@@ -197,15 +204,12 @@ u32 JKRMemArchive::fetchResource_subroutine(u8* src, u32 srcLength, u8* dst, u32
     case COMPRESSION_YAY0:
     case COMPRESSION_YAZ0: {
         u32 expendedSize = JKRDecompExpandSize(src);
-        #if VERSION != VERSION_SHIELD_DEBUG
-        srcLength = expendedSize;
-        #endif
         if (expendedSize > dstLength) {
-            srcLength = dstLength;
+            expendedSize = dstLength;
         }
 
-        JKRDecompress(src, dst, srcLength, 0);
-        return srcLength;
+        JKRDecompress(src, dst, expendedSize, 0);
+        return expendedSize;
     }
 
     default: {
@@ -221,9 +225,10 @@ u32 JKRMemArchive::getExpandedResSize(const void* resource) const {
     if (fileEntry == NULL)
         return -1;
 
-    if (fileEntry->isCompressed() == false) {
+    u8 flags = fileEntry->type_flags_and_name_offset >> 24;
+    if ((flags & 4) == false) {
         return getResSize(resource);
-    } else {
-        return JKRDecompExpandSize((u8*)resource);
     }
+    u32 expandSize = JKRDecompExpandSize((u8*)resource);
+    return expandSize;
 }

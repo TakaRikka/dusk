@@ -333,7 +333,7 @@ void daObjWarpKBrg_c::actionWait() {
     if (dComIfGp_evmng_startCheck(mEventId[mEventType])) {
         if (strcmp(dComIfGp_getEventManager().getRunEventName(), "PORTAL_WARP_KBRIDGE") == 0) {
             midna_p->onTagWaitPosPortalObj(&mMidnaWaitPos);
-            dComIfGp_getEvent().setPt2(this);
+            dComIfGp_getEvent()->setPt2(this);
             mStaffId = dComIfGp_evmng_getMyStaffId(l_staff_name, NULL, 0);
             setAction(ACTION_WARP_EVENT_e);
             demoProc();
@@ -360,7 +360,7 @@ void daObjWarpKBrg_c::actionWaitWarpEvent() {
 
     if (dComIfGp_evmng_startCheck(mEventId[mEventType])) {
         midna_p->onTagWaitPosPortalObj(&mMidnaWaitPos);
-        dComIfGp_getEvent().setPt2(this);
+        dComIfGp_getEvent()->setPt2(this);
         mStaffId = dComIfGp_evmng_getMyStaffId(l_staff_name, NULL, 0);
         setAction(ACTION_WARP_EVENT_e);
         demoProc();
@@ -375,7 +375,7 @@ void daObjWarpKBrg_c::actionOrderATalkEvent() {
         mMsgFlow.init(this, getMsgID(), 0, NULL);
     } else if (dComIfGp_evmng_startCheck(mEventId[mEventType])) {
         midna_p->onTagWaitPosPortalObj(&mMidnaWaitPos);
-        dComIfGp_getEvent().setPt2(this);
+        dComIfGp_getEvent()->setPt2(this);
         mStaffId = dComIfGp_evmng_getMyStaffId(l_staff_name, NULL, 0);
         setAction(ACTION_WARP_EVENT_e);
         demoProc();
@@ -408,7 +408,7 @@ void daObjWarpKBrg_c::actionTalkEvent() {
 
 void daObjWarpKBrg_c::actionWarpEvent() {
     if (!dComIfGp_evmng_endCheck(mEventId[mEventType])) {
-        dComIfGp_getEvent().setSkipProc(this, eventCallBack, 0);
+        dComIfGp_getEvent()->setSkipProc(this, eventCallBack, 0);
         demoProc();
     }
 }
@@ -822,7 +822,7 @@ static actor_method_class daObjWarpKBrg_METHODS = {
     (process_method_func)daObjWarpKBrg_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_KakarikoBrg = {
+actor_process_profile_definition g_profile_Obj_KakarikoBrg = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

@@ -28,10 +28,10 @@ public:
     JUTDbPrint(JUTFont*, JKRHeap*);
     static JUTDbPrint* start(JUTFont*, JKRHeap*);
     JUTFont* changeFont(JUTFont*);
-    void enter(int, int, int, char const*, int);
+    void enter(int, int, int, const char*, int);
     void flush(int, int, int, int);
     void flush();
-    void drawString(int, int, int, u8 const*);
+    void drawString(int, int, int, const u8*);
 
     static JUTDbPrint* getManager() { return sDebugPrint; }
 

@@ -16,9 +16,8 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-/* 8066F2B6 0002+00 data_8066F2B6 None */
 static bool noFallCheck;
-static bool hioInit;
+static bool hio_set;
 
 static daDo_HIO_c l_HIO;
 
@@ -2346,7 +2345,7 @@ static int daDo_Delete(do_class* i_this) {
     u32 actor_id = fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "Do");
     if (i_this->mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
     if (i_this->heap) {
         i_this->mSound.deleteObject();
@@ -2425,9 +2424,9 @@ static cPhs__Step daDo_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!hioInit) {
+        if (!hio_set) {
             _this->mHIOInit = true;
-            hioInit = 1;
+            hio_set = 1;
             l_HIO.field_0x04 = -1;
         }
 
@@ -2500,7 +2499,7 @@ static actor_method_class l_daDo_Method = {
     (process_method_func)daDo_Draw,
 };
 
-extern actor_process_profile_definition g_profile_DO = {
+actor_process_profile_definition g_profile_DO = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

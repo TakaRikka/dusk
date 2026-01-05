@@ -717,7 +717,7 @@ static actor_method_class daBalloon2D_METHODS = {
     (process_method_func)daBalloon2D_draw,
 };
 
-extern actor_process_profile_definition g_profile_BALLOON2D = {
+actor_process_profile_definition g_profile_BALLOON2D = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

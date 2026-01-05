@@ -33,10 +33,12 @@ void daE_MD_c::initCcCylinder() {
             {0x0}, // mGObjCo
         }, // mObjInf
         {
-            {0.0f, 0.0f, 0.0f}, // mCenter
-            60.0f, // mRadius
-            350.0f // mHeight
-        } // mCyl
+            {
+                {0.0f, 0.0f, 0.0f}, // mCenter
+                60.0f, // mRadius
+                350.0f // mHeight
+            } // mCyl
+        }
     };
 
     mCcStts.Init(200, 0xFF, this);
@@ -455,7 +457,7 @@ static actor_method_class l_daE_MD_Method = {
     (process_method_func)daE_MD_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_MD = {
+actor_process_profile_definition g_profile_E_MD = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

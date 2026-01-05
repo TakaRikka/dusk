@@ -99,10 +99,12 @@ static dCcD_SrcCyl l_cc_cyl_src = {
         {0x0},                                       // mGObjCo
     },                                               // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        90.0f,               // mRadius
-        200.0f               // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            90.0f,               // mRadius
+            200.0f               // mHeight
+        }  // mCyl
+    }
 };
 
 int daObjYIblltray_c::Create() {
@@ -578,7 +580,7 @@ static actor_method_class daObjYIblltray_METHODS = {
     (process_method_func)daObjYIblltray_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_YIblltray = {
+actor_process_profile_definition g_profile_Obj_YIblltray = {
     fpcLy_CURRENT_e,           // mLayerID
     3,                         // mListID
     fpcPi_CURRENT_e,           // mListPrio

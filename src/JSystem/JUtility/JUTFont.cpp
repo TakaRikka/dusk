@@ -12,9 +12,8 @@ JUTFont::JUTFont() : mColor1(), mColor2(), mColor3(), mColor4() {
 }
 
 void JUTFont::initialize_state() {
-    setCharColor(JUtility::TColor());
-    mFixed = false;
-    mFixedWidth = 0;
+    setCharColor(-1);
+    setFixedWidth(false, 0);
     mValid = false;
 }
 
@@ -36,14 +35,15 @@ f32 JUTFont::drawString_size_scale(f32 a1, f32 a2, f32 a3, f32 a4, const char* s
                                    bool a7) {
     f32 temp = a1;
 
-    for (; usz > 0; usz--, str++) {
+    for (; usz > 0; --usz, ++str) {
         u32 c = *(u8*)str;
         u32 b = c;
         if (isLeadByte(b)) {
+            JUT_ASSERT(114, usz >= 2);
+            usz--;
             str++;
             b <<= 8;
             b |= *(u8*)str;
-            usz--;
         }
 
         a1 += drawChar_scale(a1, a2, a3, a4, b, a7);

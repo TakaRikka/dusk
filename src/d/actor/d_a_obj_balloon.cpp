@@ -62,7 +62,7 @@ void daObj_Balloon_c::saveBestScore() {
     dComIfGp_setMessageCountNumber(m_balloon_score);
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daObj_Balloon_HIO_c l_HIO;
 
@@ -204,7 +204,7 @@ int daObj_Balloon_c::_delete() {
     dComIfG_resDelete(&mPhase, "Obj_bal");
     Z2GetAudioMgr()->seStop(Z2SE_OBJ_WATERMILL_ROUND, 0);
     if (mHIOInit) {
-        l_initHIO = false;
+        hio_set = false;
     }
     return 1;
 }
@@ -245,9 +245,9 @@ int daObj_Balloon_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!l_initHIO) {
+        if (!hio_set) {
             mHIOInit = true;
-            l_initHIO = true;
+            hio_set = true;
             l_HIO.field_0x04 = -1;
         }
 
@@ -295,7 +295,7 @@ static actor_method_class l_daObj_Balloon_Method = {
     (process_method_func)daObj_Balloon_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_BALLOON = {
+actor_process_profile_definition g_profile_OBJ_BALLOON = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

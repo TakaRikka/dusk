@@ -177,7 +177,7 @@ static actor_method_class daPPolamp_METHODS = {
     (process_method_func)daPPolamp_draw,
 };
 
-extern actor_process_profile_definition g_profile_PPolamp = {
+actor_process_profile_definition g_profile_PPolamp = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

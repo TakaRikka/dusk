@@ -27,7 +27,7 @@ static char* l_resNameList[2] = {
 };
 
 static s8 l_loadResPtrn0[2] = {
-    1, 0xFF
+    1, -1
 };
 
 static s8* l_loadResPtrnList[2] = {
@@ -148,7 +148,7 @@ int daNpc_ZelR_c::create() {
         mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
         mAcch.CrrPos(dComIfG_Bgsp());
         mGndChk = mAcch.m_gnd;
-        mGroundH = mAcch.m_ground_h;
+        mGroundH = mAcch.GetGroundH();
 
         setEnvTevColor();
         setRoomNo();
@@ -603,7 +603,7 @@ static actor_method_class daNpc_ZelR_MethodTable = {
     (process_method_func)daNpc_ZelR_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_ZELR = {
+actor_process_profile_definition g_profile_NPC_ZELR = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

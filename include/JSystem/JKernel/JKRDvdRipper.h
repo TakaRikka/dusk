@@ -35,6 +35,7 @@ class JKRDvdRipper {
 public:
     static JSUList<JKRDMCommand> sDvdAsyncList;
     static u32 sSZSBufferSize;
+    static bool errorRetry;
 
     enum EAllocDirection {
         UNKNOWN_EALLOC_DIRECTION = 0,
@@ -51,11 +52,19 @@ public:
     static void* loadToMainRAM(JKRDvdFile*, u8*, JKRExpandSwitch, u32, JKRHeap*, EAllocDirection,
                                u32, JKRCompression*, u32*);
 
-    static u8 isErrorRetry(void);
+    static bool isErrorRetry(void) { return errorRetry; }
     inline static u32 getSZSBufferSize() { return sSZSBufferSize; }
 };
 
 // void JKRDecompressFromDVD(JKRDvdFile*, void*, u32, u32, u32, u32, u32*);
+
+
+inline void* JKRDvdToMainRam(JKRDvdFile* file, u8* dst, JKRExpandSwitch expandSwitch, u32 dstLength,
+                             JKRHeap* heap, JKRDvdRipper::EAllocDirection allocDirection,
+                             u32 offset, JKRCompression* compression, u32* returnSize) {
+    return JKRDvdRipper::loadToMainRAM(file, dst, expandSwitch, dstLength, heap, allocDirection,
+                                       offset, compression, returnSize);
+}
 
 inline void* JKRDvdToMainRam(s32 entryNum, u8* dst, JKRExpandSwitch expandSwitch, u32 dstLength,
                              JKRHeap* heap, JKRDvdRipper::EAllocDirection allocDirection,

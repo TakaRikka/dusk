@@ -105,7 +105,7 @@ int daNpc_Zant_c::create() {
 
             mAcch.CrrPos(dComIfG_Bgsp());
             mGndChk = mAcch.m_gnd;
-            mGroundH = mAcch.m_ground_h;
+            mGroundH = mAcch.GetGroundH();
             if (mGroundH != -G_CM3D_F_INF) {
                 setEnvTevColor();
                 setRoomNo();
@@ -532,7 +532,7 @@ static actor_method_class daNpc_Zant_MethodTable = {
     (process_method_func)daNpc_Zant_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_ZANT = {
+actor_process_profile_definition g_profile_NPC_ZANT = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

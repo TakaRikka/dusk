@@ -870,7 +870,7 @@ void dEvDtStaff_c::specialProcDirector() {
     f32* rate;
 
     daPy_py_c* player = dComIfGp_getLinkPlayer();
-    dEvt_control_c& evtControl = dComIfGp_getEvent();
+    dEvt_control_c* evtControl = dComIfGp_getEvent();
     GXColor color;
 
     int staffId = dComIfGp_evmng_getMyStaffId("DIRECTOR", NULL, 0);
@@ -979,15 +979,15 @@ void dEvDtStaff_c::specialProcDirector() {
             break;
         case 'SKIP': {
             char* zev = dComIfGp_evmng_getMyStringP(staffId, "Zev");
-            void* pt = (void*)evtControl.getPt1();
+            void* pt = (void*)evtControl->getPt1();
             if (NULL == pt) {
-                pt = evtControl.getPt2();
+                pt = evtControl->getPt2();
             }
 
             if (zev != NULL) {
-                evtControl.setSkipZev(pt, zev);
+                evtControl->setSkipZev(pt, zev);
             } else {
-                evtControl.setSkipProc(pt, dEv_defaultSkipProc, 0);
+                evtControl->setSkipProc(pt, dEv_defaultSkipProc, 0);
             }
             break;
         }
@@ -1090,7 +1090,7 @@ void dEvDtStaff_c::specialProcDirector() {
             if (sdata != NULL) {
                 evt_actor_p = fopAcM_searchFromName4Event(sdata, -1);
                 if (evt_actor_p != NULL) {
-                    evtControl.setPt2(evt_actor_p);
+                    evtControl->setPt2(evt_actor_p);
                     OS_REPORT("%06d: event: derector: set %s as Pt2!\n", g_Counter.mCounter0, sdata);
                 } else {
                     OS_REPORT("%06d: event: derector: casting: %s not found!\n", g_Counter.mCounter0, sdata);
@@ -1101,7 +1101,7 @@ void dEvDtStaff_c::specialProcDirector() {
             if (sdata != NULL) {
                 evt_actor_p = fopAcM_searchFromName4Event(sdata, -1);
                 if (evt_actor_p != NULL) {
-                    evtControl.setPtT(evt_actor_p);
+                    evtControl->setPtT(evt_actor_p);
                     OS_REPORT("%06d: event: derector: set %s as PtT!\n", g_Counter.mCounter0, sdata);
                 } else {
                     OS_REPORT("%06d: event: derector: casting: %s not found!\n", g_Counter.mCounter0, sdata);
@@ -1112,7 +1112,7 @@ void dEvDtStaff_c::specialProcDirector() {
             if (sdata != NULL) {
                 evt_actor_p = fopAcM_searchFromName4Event(sdata, -1);
                 if (evt_actor_p != NULL) {
-                    evtControl.setPtI(evt_actor_p);
+                    evtControl->setPtI(evt_actor_p);
                     OS_REPORT("%06d: event: derector: set %s as PtI!\n", g_Counter.mCounter0, sdata);
                 } else {
                     OS_REPORT("%06d: event: derector: casting: %s not found!\n", g_Counter.mCounter0, sdata);
@@ -1123,7 +1123,7 @@ void dEvDtStaff_c::specialProcDirector() {
             if (sdata != NULL) {
                 evt_actor_p = fopAcM_searchFromName4Event(sdata, -1);
                 if (evt_actor_p != NULL) {
-                    evtControl.setPtD(evt_actor_p);
+                    evtControl->setPtD(evt_actor_p);
                     OS_REPORT("%06d: event: derector: set %s as PtD!\n", g_Counter.mCounter0, sdata);
                 } else {
                     OS_REPORT("%06d: event: derector: casting: %s not found!\n", g_Counter.mCounter0, sdata);
@@ -1267,13 +1267,11 @@ void dEvDtStaff_c::specialProcPackage() {
                 offsetAngY = 0.0f;
             }
 
-            // fake match: should not save event from g_dComIfG_gameInfo to register
-            dComIfG_play_c& info = g_dComIfG_gameInfo.play;
-            demo_data = (u8*)info.getEvent().getStbDemoData(sdata);
+            demo_data = (u8*)dComIfGp_getEvent()->getStbDemoData(sdata);
             JUT_ASSERT(1571, demo_data);
 
             dDemo_c::start(demo_data, xyzdata, offsetAngY);
-            info.getEvent().setCullRate(10.0f); // fake match: suppoed to be dComIfGp_event_setCullRate
+            dComIfGp_event_setCullRate(10.0f);
 
             idata = dComIfGp_evmng_getMyIntegerP(staffId, "EventFlag");
             if (idata != NULL) {
@@ -1287,10 +1285,10 @@ void dEvDtStaff_c::specialProcPackage() {
         specialProc_WaitProc(staffId);
         break;
     case 'PLAY': {
-        dEvt_control_c& evtControl = dComIfGp_getEvent();
+        dEvt_control_c* evtControl = dComIfGp_getEvent();
         if (dDemo_c::getMode() == 2) {
-            dStage_MapEvent_dt_c* event = dComIfGp_getEvent().getStageEventDt();
-            if (event != NULL && event->field_0x7 != 0xFF && !evtControl.chkFlag2(1)) {
+            dStage_MapEvent_dt_c* event = dComIfGp_getEvent()->getStageEventDt();
+            if (event != NULL && event->field_0x7 != 0xFF && !evtControl->chkFlag2(1)) {
                 dDemo_c::getControl()->suspend(100);
                 dComIfGp_evmng_cutEnd(staffId);
             } else {

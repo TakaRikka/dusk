@@ -127,7 +127,7 @@ static actor_method_class daObjOnsen_METHODS = {
     (process_method_func)daObjOnsen_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Onsen = {
+actor_process_profile_definition g_profile_Obj_Onsen = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

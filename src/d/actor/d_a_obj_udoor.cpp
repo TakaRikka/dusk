@@ -164,7 +164,7 @@ static actor_method_class l_daObj_Udoor_Method = {
     (process_method_func)daObj_Udoor_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_UDOOR = {
+actor_process_profile_definition g_profile_OBJ_UDOOR = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

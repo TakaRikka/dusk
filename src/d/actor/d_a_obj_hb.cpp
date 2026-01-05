@@ -716,7 +716,7 @@ static actor_method_class l_daOBJ_HB_Method = {
     (process_method_func)daOBJ_HB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_HB = {
+actor_process_profile_definition g_profile_OBJ_HB = {
   fpcLy_CURRENT_e,       // mLayerID
   8,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

@@ -67,11 +67,8 @@ u32 J3DShapeMtx::sCurrentPipeline;
 
 u8* J3DShapeMtx::sCurrentScaleFlag;
 
-// This below is technically part of J3DScaleFlag.
-/* 804515B0 0001+00 data_804515B0 None */
 bool J3DShapeMtx::sNBTFlag;
 
-/* 804515B1 0003+00 data_804515B1 None */
 bool J3DShapeMtx::sLODFlag;
 
 u32 J3DShapeMtx::sTexMtxLoadType;

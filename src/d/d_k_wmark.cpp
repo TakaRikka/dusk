@@ -168,7 +168,7 @@ static leafdraw_method_class l_dkWmark_Method = {
     (process_method_func)dkWmark_Draw,
 };
 
-extern kankyo_process_profile_definition g_profile_WMARK = {
+kankyo_process_profile_definition g_profile_WMARK = {
     fpcLy_CURRENT_e,
     9,
     fpcPi_CURRENT_e,

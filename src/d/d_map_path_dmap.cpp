@@ -357,10 +357,8 @@ bool dMpath_c::isExistMapPathData() {
 
 int dMapInfo_c::mNextRoomNo = -1;
 
-/* 80450634 0001+00 data_80450634 None */
 s8 dMpath_c::mBottomFloorNo = 127;
 
-/* 80450635 0001+00 data_80450635 None */
 s8 dMpath_c::mTopFloorNo = -128;
 
 int dMpath_c::getTopBottomFloorNo(s8* i_topFloorNo, s8* i_bottomFloorNo) {

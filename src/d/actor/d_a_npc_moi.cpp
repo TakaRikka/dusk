@@ -1477,7 +1477,7 @@ int daNpc_Moi_c::cutAppearanceMoi(int param_1) {
         case 2:
             mFaceMotionSeqMngr.setNo(MOT_UNK_21, -1.0f, 0, 0);
             mMotionSeqMngr.setNo(MOT_UNK_45, -1.0f, 0, 0);
-            dComIfGp_getEvent().setPt2(this);
+            dComIfGp_getEvent()->setPt2(this);
             mEventTimer = local_78;
             break;
         case 3:
@@ -1976,7 +1976,7 @@ static actor_method_class daNpc_Moi_MethodTable = {
     (process_method_func)daNpc_Moi_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_MOI = {
+actor_process_profile_definition g_profile_NPC_MOI = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

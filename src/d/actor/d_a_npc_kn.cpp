@@ -18,7 +18,9 @@
 
 dCcD_SrcCyl daNpc_Kn_c::mCcDCyl = {
     mCcDObjData,
-    {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f},
+    {
+        {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f},
+    }
 };
 
 dCcD_SrcSph daNpc_Kn_c::mCcDSph = {
@@ -787,7 +789,7 @@ u8 daNpc_Kn_c::getPath() {
 
 BOOL daNpc_Kn_c::isDelete() {
     static s16 l_appearFlag[7] = {
-        0xFFFF, 0x0153, 0x0152, 0x0154, 0x0155, 0x0156, 0x0157,
+        -1, 0x0153, 0x0152, 0x0154, 0x0155, 0x0156, 0x0157,
     };
     static s16 l_delFlag[7] = {
         0x0153, 0x0152, 0x0154, 0x0155, 0x0156, 0x0157, 0x0158,
@@ -832,7 +834,7 @@ void daNpc_Kn_c::resetCol() {
 
 void daNpc_Kn_c::reset() {
     initialize();
-    memset(&mpTeachAction, 0, (int)&field_0x1754 - (int)&mpTeachAction);
+    memset(&mpTeachAction, 0, (intptr_t)&field_0x1754 - (intptr_t)&mpTeachAction);
 
     if (mpMatAnm != NULL) {
         mpMatAnm->initialize();
@@ -5279,7 +5281,7 @@ static actor_method_class daNpc_Kn_MethodTable = {
     (process_method_func)daNpc_Kn_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_KN = {
+actor_process_profile_definition g_profile_NPC_KN = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

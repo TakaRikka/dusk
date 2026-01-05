@@ -125,10 +125,8 @@ daMidna_hio_c1 const daMidna_hio_c0::m = {
     25.0f,
 };
 
-#if VERSION != VERSION_GCN_PAL
 bool daMidna_matAnm_c::sEyeMoveFlg;
 u8 daMidna_matAnm_c::sMorfFrame;
-#endif
 
 void daMidna_matAnm_c::init() {
     mOldTransX = 0.0f;
@@ -2780,7 +2778,7 @@ void daMidna_c::setDemoData() {
         mStaffID = dComIfGp_evmng_getMyStaffId("Midna", this, 0);
     }
 
-    if (dComIfGp_getEvent().isOrderOK()) {
+    if (dComIfGp_getEvent()->isOrderOK()) {
         if (mDemoType != 0) {
             mDemoType = 0;
             mDemoMode = 0;
@@ -3258,7 +3256,7 @@ int daMidna_c::execute() {
                 }
 
                 if (event_id == 4 || event_id == 5) {
-                    dComIfGp_getEvent().reset(this);
+                    dComIfGp_getEvent()->reset(this);
                     offStateFlg0(FLG0_UNK_8000);
                     fopAcM_orderPotentialEvent(this, 0x400, 0xffff, 1);
                     link->changeOriginalDemo();
@@ -3285,13 +3283,13 @@ int daMidna_c::execute() {
                         link->onMidnaTalkPolySpeed();
                     }
 
-                    dComIfGp_getEvent().reset(this);
+                    dComIfGp_getEvent()->reset(this);
                     offStateFlg0(FLG0_UNK_8000);
                 }
             }
         }
     } else if (eventInfo.checkCommandDemoAccrpt() && !link->checkMetamorphose()) {
-        dComIfGp_getEvent().reset(this);
+        dComIfGp_getEvent()->reset(this);
     }
 
     if (link->checkMidnaRide()) {
@@ -3599,7 +3597,7 @@ static actor_method_class l_daMidna_Method = {
     (process_method_func)daMidna_Draw,
 };
 
-extern actor_process_profile_definition g_profile_MIDNA = {
+actor_process_profile_definition g_profile_MIDNA = {
     fpcLy_CURRENT_e,
     6,
     fpcPi_CURRENT_e,

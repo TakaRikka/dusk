@@ -1145,7 +1145,7 @@ static actor_method_class daNpc_Kakashi_MethodTable = {
     (process_method_func)daNpc_Kakashi_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_KAKASHI = {
+actor_process_profile_definition g_profile_NPC_KAKASHI = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID
   fpcPi_CURRENT_e,            // mListPrio

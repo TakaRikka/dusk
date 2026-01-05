@@ -20,8 +20,17 @@
 #include "d/d_com_inf_game.h"
 #include "global.h"
 #include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_main.h"
 #include "m_Do/m_Do_mtx.h"
-#include "stdio.h"
+#include <stdio>
+
+namespace m_Do_ext {
+u8 CurrentHeapAdjustVerbose;
+u8 HeapAdjustVerbose;
+u8 HeapAdjustQuiet;
+}
+
+static intptr_t safeGameHeapSize = -1;
 
 static void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 param_2) {
     bool local_28;
@@ -37,29 +46,42 @@ static void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u1
     mtx[2][3] = transformInfo->mTranslate.z;
 
     if (!local_28) {
-        mtx[0][0] *= transformInfo->mScale.x;
-        mtx[0][1] *= transformInfo->mScale.y;
-        mtx[0][2] *= transformInfo->mScale.z;
-        mtx[1][0] *= transformInfo->mScale.x;
-        mtx[1][1] *= transformInfo->mScale.y;
-        mtx[1][2] *= transformInfo->mScale.z;
-        mtx[2][0] *= transformInfo->mScale.x;
-        mtx[2][1] *= transformInfo->mScale.y;
-        mtx[2][2] *= transformInfo->mScale.z;
+        f32* mtx_p = (f32*)mtx;
+        *mtx_p *= transformInfo->mScale.x;
+        mtx_p++;
+        *mtx_p *= transformInfo->mScale.y;
+        mtx_p++;
+        *mtx_p *= transformInfo->mScale.z;
+        mtx_p += 2;
+        *mtx_p *= transformInfo->mScale.x;
+        mtx_p++;
+        *mtx_p *= transformInfo->mScale.y;
+        mtx_p++;
+        *mtx_p *= transformInfo->mScale.z;
+        mtx_p += 2;
+        *mtx_p *= transformInfo->mScale.x;
+        mtx_p++;
+        *mtx_p *= transformInfo->mScale.y;
+        mtx_p++;
+        *mtx_p *= transformInfo->mScale.z;
     }
     if (j3dSys.getModel()->getModelData()->getJointNodePointer(param_2)->getScaleCompensate() == 1) {
-        f32 x = 1.0f / J3DSys::mParentS.x;
-        f32 y = 1.0f / J3DSys::mParentS.y;
-        f32 z = 1.0f / J3DSys::mParentS.z;
-        mtx[0][0] *= x;
-        mtx[0][1] *= x;
-        mtx[0][2] *= x;
-        mtx[1][0] *= y;
-        mtx[1][1] *= y;
-        mtx[1][2] *= y;
-        mtx[2][0] *= z;
-        mtx[2][1] *= z;
-        mtx[2][2] *= z;
+        f32* mtx_p = (f32*)mtx;
+        Vec sp0C;
+        sp0C.x = 1.0f / J3DSys::mParentS.x;
+        sp0C.y = 1.0f / J3DSys::mParentS.y;
+        sp0C.z = 1.0f / J3DSys::mParentS.z;
+        *mtx_p++ *= sp0C.x;
+        *mtx_p++ *= sp0C.x;
+        *mtx_p++ *= sp0C.x;
+        *mtx_p++;
+        *mtx_p++ *= sp0C.y;
+        *mtx_p++ *= sp0C.y;
+        *mtx_p++ *= sp0C.y;
+        *mtx_p++;
+        *mtx_p++ *= sp0C.z;
+        *mtx_p++ *= sp0C.z;
+        *mtx_p++ *= sp0C.z;
     }
     mDoMtx_concat(J3DSys::mCurrentMtx, mtx, J3DSys::mCurrentMtx);
     j3dSys.getModel()->setAnmMtx(param_2, J3DSys::mCurrentMtx);
@@ -108,18 +130,14 @@ int mDoExt_baseAnm::play() {
 
 int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, int i_anmPlay,
                         int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF) {
+    JUT_ASSERT(371, (i_anmPlay == FALSE || getFrameCtrl() != NULL || isCurrentSolidHeap()) && i_matTable != NULL && i_bpk != NULL);
+
     mpAnm = i_bpk;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
     if (i_anmPlay) {
-        int attribute;
-        if (i_attribute < 0) {
-            attribute = mpAnm->getAttribute();
-        } else {
-            attribute = i_attribute;
-        }
-
-        return initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF);
+        return initPlay(mpAnm->getFrameMax(), i_attribute < 0 ? mpAnm->getAttribute() : i_attribute,
+                        i_rate, i_startF, i_endF);
     }
 
     return 1;
@@ -132,18 +150,13 @@ void mDoExt_bpkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
 
 int mDoExt_btpAnm::init(J3DMaterialTable* i_matTable, J3DAnmTexPattern* i_btp, int i_anmPlay,
                         int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF) {
+    JUT_ASSERT(420, (i_anmPlay == FALSE || getFrameCtrl() != NULL || isCurrentSolidHeap()) && i_matTable != NULL && i_btp != NULL);
+
     mpAnm = i_btp;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
     if (i_anmPlay) {
-        int attribute;
-        if (i_attribute < 0) {
-            attribute = mpAnm->getAttribute();
-        } else {
-            attribute = i_attribute;
-        }
-
-        return initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF);
+        return initPlay(mpAnm->getFrameMax(), i_attribute < 0 ? mpAnm->getAttribute() : i_attribute, i_rate, i_startF, i_endF);
     }
 
     return 1;
@@ -156,18 +169,13 @@ void mDoExt_btpAnm::entry(J3DMaterialTable* i_matTable, s16 i_frame) {
 
 int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk, int i_anmPlay,
                         int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF) {
+    JUT_ASSERT(468, (i_anmPlay == FALSE || getFrameCtrl() != NULL || isCurrentSolidHeap()) && i_matTable != NULL && i_btk != NULL);
+
     mpAnm = i_btk;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
     if (i_anmPlay) {
-        int attribute;
-        if (i_attribute < 0) {
-            attribute = mpAnm->getAttribute();
-        } else {
-            attribute = i_attribute;
-        }
-
-        return initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF);
+        return initPlay(mpAnm->getFrameMax(), i_attribute < 0 ? mpAnm->getAttribute() : i_attribute, i_rate, i_startF, i_endF);
     }
 
     return 1;
@@ -180,18 +188,13 @@ void mDoExt_btkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
 
 int mDoExt_brkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, int i_anmPlay,
                         int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF) {
+    JUT_ASSERT(516, (i_anmPlay == FALSE || getFrameCtrl() != NULL || isCurrentSolidHeap()) && i_matTable != NULL && i_brk != NULL);
+
     mpAnm = i_brk;
     mpAnm->searchUpdateMaterialID(i_matTable);
 
     if (i_anmPlay) {
-        int attribute;
-        if (i_attribute < 0) {
-            attribute = mpAnm->getAttribute();
-        } else {
-            attribute = i_attribute;
-        }
-
-        return initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF);
+        return initPlay(mpAnm->getFrameMax(), i_attribute < 0 ? mpAnm->getAttribute() : i_attribute, i_rate, i_startF, i_endF);
     }
 
     return 1;
@@ -202,54 +205,57 @@ void mDoExt_brkAnm::entry(J3DMaterialTable* i_matTable, f32 i_frame) {
     i_matTable->entryTevRegAnimator(mpAnm);
 }
 
+void dummy3(J3DModel* i_model, void* i_bva, bool i_modify) {
+    JUT_ASSERT(0, (i_modify || isCurrentSolidHeap()) && i_model != NULL && i_bva != NULL);
+}
+
 int mDoExt_bckAnm::init(J3DAnmTransform* i_bck, int i_play, int i_attr, f32 i_rate,
                         s16 i_startF, s16 i_endF, bool i_modify) {
     JUT_ASSERT(614, (i_modify || isCurrentSolidHeap()) && i_bck != NULL);
-    mAnm = i_bck;
+    mAnmTransform = i_bck;
     if (!i_modify) {
-        mpMtxCalc = new J3DMtxCalcAnimation<J3DMtxCalcAnimationAdaptorDefault<J3DMtxCalcCalcTransformMaya>, J3DMtxCalcJ3DSysInitMaya>(mAnm);
-        if (!mpMtxCalc) {
+        mAnm = new J3DMtxCalcAnimation<J3DMtxCalcAnimationAdaptorDefault<J3DMtxCalcCalcTransformMaya>, J3DMtxCalcJ3DSysInitMaya>(mAnmTransform);
+        if (!mAnm) {
             return 0;
         }
     } else {
-        mpMtxCalc->setAnmTransform(mAnm);
+        mAnm->setAnmTransform(mAnmTransform);
     }
     if (i_play) {
-        i_attr = i_attr < 0 ? mAnm->getAttribute() : i_attr;
-        return initPlay(mAnm->getFrameMax(), i_attr, i_rate, i_startF, i_endF);
+        return initPlay(mAnmTransform->getFrameMax(), i_attr < 0 ? mAnmTransform->getAttribute() : i_attr, i_rate, i_startF, i_endF);
     }
     return 1;
 }
 
 void mDoExt_bckAnm::changeBckOnly(J3DAnmTransform* i_bck) {
-    mAnm = i_bck;
-    mpMtxCalc->setAnmTransform(mAnm);
+    mAnmTransform = i_bck;
+    JUT_ASSERT(646, mAnm != 0);
+    mAnm->setAnmTransform(mAnmTransform);
+}
+
+void dummy4(J3DModel* i_model, void* i_bxa, bool i_modify) {
+    JUT_ASSERT(0, (i_modify || isCurrentSolidHeap()) && i_model != NULL && i_bxa != NULL);
 }
 
 void mDoExt_bckAnm::entry(J3DModelData* i_modelData, f32 i_frame) {
-    mAnm->setFrame(i_frame);
-    i_modelData->getJointNodePointer(0)->setMtxCalc(mpMtxCalc);
+    mAnmTransform->setFrame(i_frame);
+    i_modelData->getJointNodePointer(0)->setMtxCalc(mAnm);
 }
 
 void mDoExt_bckAnm::entryJoint(J3DModelData* i_modelData, u16 i_jntNo, f32 i_frame) {
-    mAnm->setFrame(i_frame);
-    i_modelData->getJointNodePointer(i_jntNo)->setMtxCalc(mpMtxCalc);
+    mAnmTransform->setFrame(i_frame);
+    i_modelData->getJointNodePointer(i_jntNo)->setMtxCalc(mAnm);
 }
 
 int mDoExt_blkAnm::init(J3DDeformData* i_deformData, J3DAnmCluster* i_blk, int i_anmPlay,
                         int i_attribute, f32 i_rate, s16 i_start, s16 param_6) {
+    JUT_ASSERT(747, (i_anmPlay == FALSE || getFrameCtrl() != NULL || isCurrentSolidHeap()) && i_deformData != NULL && i_blk != NULL);
+
     mpAnm = i_blk;
     i_deformData->setAnm(mpAnm);
 
     if (i_anmPlay) {
-        int attribute;
-        if (i_attribute < 0) {
-            attribute = mpAnm->getAttribute();
-        } else {
-            attribute = i_attribute;
-        }
-
-        return initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_start, param_6);
+        return initPlay(mpAnm->getFrameMax(), i_attribute < 0 ? mpAnm->getAttribute() : i_attribute, i_rate, i_start, param_6);
     }
 
     return 1;
@@ -281,19 +287,35 @@ void mDoExt_modelTexturePatch(J3DModelData* i_modelData) {
     }
 }
 
-static void dummy1() {
-    ((J3DTevBlock*)NULL)->patch();
-    ((J3DColorBlock*)NULL)->patchLight();
-    ((J3DPEBlock*)NULL)->patch();
+static void dummy1(J3DModel* model, J3DMaterial* material) {
+    J3DMatPacket* packet = model->getMatPacket(0);
+    packet->beginPatch();
+    material->getTevBlock()->patch();
+    material->getColorBlock()->patchLight();
+    material->getTexGenBlock();
+    material->getPEBlock()->patch();
+    packet->endPatch();
+}
+
+static inline void modelMtxErrorCheck(J3DModel* i_model) {
+#if DEBUG
+    if (i_model->getBaseTRMtx()[0][0] == FLT_MAX) {
+        i_model->getBaseTRMtx()[0][0] = 1.0f;
+        JUT_WARN(883, "%s", "Model Matrix Not Initialize !\n");
+    }
+#endif
 }
 
 static void mDoExt_modelDiff(J3DModel* i_model) {
+    modelMtxErrorCheck(i_model);
     i_model->calcMaterial();
     i_model->diff();
     i_model->entry();
 }
 
 void mDoExt_modelUpdate(J3DModel* i_model) {
+    modelMtxErrorCheck(i_model);
+
     J3DModelData* model_data = i_model->getModelData();
 
     if (model_data->getMaterialNodePointer(0)->getSharedDisplayListObj() != NULL &&
@@ -310,6 +332,8 @@ void mDoExt_modelUpdate(J3DModel* i_model) {
 }
 
 void mDoExt_modelUpdateDL(J3DModel* i_model) {
+    modelMtxErrorCheck(i_model);
+
     J3DModelData* model_data = i_model->getModelData();
 
     if (model_data->getMaterialNodePointer(0)->getSharedDisplayListObj() != NULL &&
@@ -327,6 +351,8 @@ void mDoExt_modelUpdateDL(J3DModel* i_model) {
 }
 
 void mDoExt_modelEntryDL(J3DModel* i_model) {
+    modelMtxErrorCheck(i_model);
+
     J3DModelData* model_data = i_model->getModelData();
 
     if (model_data->getMaterialNodePointer(0)->getSharedDisplayListObj() != NULL &&
@@ -384,20 +410,24 @@ static void dummy2() {
     FORCE_DONT_INLINE;
     FORCE_DONT_INLINE;
 
+    ((J3DMaterial*)NULL)->getMaterialMode();
+
     J3DGXColor gxColor;
     J3DColorChan colorChan;
     J3DTexCoord texCoord;
     J3DGXColorS10 gxColorS10;
+    J3DTevStageInfo tevStageInfo;
+    J3DTevStage* stage_p = NULL;
+    stage_p->setTevStageInfo(tevStageInfo);
+    J3DTevStage tevStage;
+    J3DIndTevStage indStage;
     J3DIndTevStage indTevStage;
     J3DTevOrder tevOrder;
     J3DTevSwapModeTable tevSwapModeTable;
     J3DIndTexOrder indTexOrder;
 
-    J3DTevStage* tevStage_p = NULL;
-    J3DTevStageInfo tevStageInfo;
-    tevStage_p->setTevStageInfo(tevStageInfo);
-    J3DTevStage tevStage;
-
+    J3DIndTexMtx* indTexMtx = new J3DIndTexMtx();
+    J3DIndTexCoordScale* indTexCoordScale = new J3DIndTexCoordScale();
     J3DColorBlock* colorBlock = NULL;
     colorBlock->setColorChanNum((u8)NULL);
     colorBlock->setMatColor(0, gxColor);
@@ -422,10 +452,8 @@ static void dummy2() {
 
     J3DIndBlock* indBlock = NULL;
     indBlock->setIndTexStageNum(0);
-    J3DIndTexMtx indTexMtx;
-    indBlock->setIndTexMtx(0, indTexMtx);
-    J3DIndTexCoordScale indTexCoordScale;
-    indBlock->setIndTexCoordScale(0, indTexCoordScale);
+    indBlock->setIndTexMtx(0, *indTexMtx);
+    indBlock->setIndTexCoordScale(0, *indTexCoordScale);
 
     J3DPEBlock* peBlock = NULL;
     J3DAlphaComp alphaComp;
@@ -463,12 +491,17 @@ static void dummy2() {
     indBlock->getIndTexMtx(0);
     indBlock->getIndTexCoordScale(0);
 
+    indTexOrder.getMap();
+    indTexOrder.getCoord();
+
     peBlock = NULL;
     peBlock->getFog();
     peBlock->getAlphaComp();
     peBlock->getBlend();
     peBlock->getZMode();
     peBlock->getZCompLoc();
+
+    ((J3DMaterial*)NULL)->setMaterialAnm(NULL);
 }
 
 int mDoExt_invisibleModel::create(J3DModel* i_model, u8 param_1) {
@@ -533,8 +566,7 @@ void mDoExt_setupShareTexture(J3DModelData* i_modelData, J3DModelData* i_shareMo
 
     bool bvar = false;
     for (u16 i = 0; i < texture->getNum(); i++) {
-        ResTIMG* res = texture->getResTIMG(i);
-        if (res->imageOffset == 0) {
+        if (texture->getResTIMG(i)->imageOffset == 0) {
             for (u16 j = 0; j < shareTexture->getNum(); j++) {
                 if (!strcmp(textureName->getName(i), shareTextureName->getName(j))) {
                     JUT_ASSERT(1564, shareTexture->getResTIMG(j)->imageOffset != 0);
@@ -584,12 +616,13 @@ void mDoExt_setupStageTexture(J3DModelData* i_modelData) {
             bool set_timg = false;
 
             for (u16 i = 0; i < texture_p->getNum(); i++) {
-                ResTIMG* img = texture_p->getResTIMG(i);
-                if (img->imageOffset == 0) {
+                if (texture_p->getResTIMG(i)->imageOffset == 0) {
                     char res_name[64];
                     snprintf(res_name, sizeof(res_name), "%s.bti", tex_name_p->getName(i));
+                    OS_REPORT("%d:設定テクスチャー名<%s>\n", i, res_name);
 
                     ResTIMG* timg = (ResTIMG*)dComIfG_getStageRes(res_name);
+                    JUT_ASSERT(1623, timg != NULL);
                     texture_p->setResTIMG(i, *timg);
                     set_timg = true;
                 }
@@ -625,8 +658,10 @@ void mDoExt_setupStageTexture(J3DModelData* i_modelData) {
 
 static JKRAssertHeap* AssertHeap;
 
-JKRAssertHeap* mDoExt_createAssertHeap(JKRHeap* i_heap) {
-    return AssertHeap = JKRAssertHeap::create(i_heap);
+JKRAssertHeap* mDoExt_createAssertHeap(JKRHeap* parentHeap) {
+    JUT_ASSERT(1666, AssertHeap == NULL);
+    AssertHeap = JKRAssertHeap::create(parentHeap);
+    return AssertHeap;
 }
 
 JKRAssertHeap* mDoExt_getAssertHeap() {
@@ -635,8 +670,10 @@ JKRAssertHeap* mDoExt_getAssertHeap() {
 
 static JKRExpHeap* DbPrintHeap;
 
-JKRExpHeap* mDoExt_createDbPrintHeap(u32 heapSize, JKRHeap* i_heap) {
-    return DbPrintHeap = JKRExpHeap::create(heapSize, i_heap, true);
+JKRExpHeap* mDoExt_createDbPrintHeap(u32 heapSize, JKRHeap* parentHeap) {
+    JUT_ASSERT(1693, DbPrintHeap == NULL || heapSize == 0);
+    DbPrintHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    return DbPrintHeap;
 }
 
 JKRExpHeap* mDoExt_getDbPrintHeap() {
@@ -645,8 +682,9 @@ JKRExpHeap* mDoExt_getDbPrintHeap() {
 
 JKRExpHeap* gameHeap;
 
-JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap) {
-    gameHeap = JKRExpHeap::create(heapSize, i_heap, true);
+JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* parentHeap) {
+    JUT_ASSERT(1739, gameHeap == NULL || heapSize == 0);
+    gameHeap = JKRExpHeap::create(heapSize, parentHeap, true);
     gameHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return gameHeap;
 }
@@ -655,44 +693,114 @@ JKRExpHeap* mDoExt_getGameHeap() {
     return gameHeap;
 }
 
-JKRExpHeap* zeldaHeap;
+void mDoExt_setSafeGameHeapSize() {
+    if (safeGameHeapSize < 0) {
+        safeGameHeapSize = mDoExt_getGameHeap()->getTotalUsedSize();
+        OS_REPORT("++++++++++++++++++++++++++++++ GameHeap Rock !!\n");
+        mDoExt_getGameHeap()->dump();
+        mDoExt_getGameHeap()->changeGroupID(7);
+    }
+}
 
-JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap) {
-    return zeldaHeap = JKRExpHeap::create(heapSize, i_heap, true);
+void dummy5() {
+    JUT_ASSERT(0, safeGameHeapSize >= 0);
+    OS_REPORT("++++++++++++++++++++++++++++++ safeGameHeapSize <%x>\n", safeGameHeapSize);
+}
+
+size_t mDoExt_getSafeGameHeapSize() {
+    return safeGameHeapSize;
+}
+
+JKRExpHeap* zeldaHeap;
+intptr_t safeZeldaHeapSize = -1;
+
+JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* parentHeap) {
+    JUT_ASSERT(1815, zeldaHeap == NULL || heapSize == 0);
+    zeldaHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    return zeldaHeap;
 }
 
 JKRExpHeap* mDoExt_getZeldaHeap() {
     return zeldaHeap;
 }
 
-#if DEBUG
-s32 safeZeldaHeapSize = -1;
+void mDoExt_setSafeZeldaHeapSize() {
+    if (safeGameHeapSize < 0) {
+        safeGameHeapSize = mDoExt_getGameHeap()->getTotalUsedSize();
+        OS_REPORT("++++++++++++++++++++++++++++++ ZeldaHeap Rock !!\n");
+        mDoExt_getGameHeap()->dump();
+        mDoExt_getGameHeap()->changeGroupID(7);
+    }
+}
 
-s32 mDoExt_getSafeZeldaHeapSize() {
+void mDoExt_addSafeZeldaHeapSize(intptr_t size) {
+    JUT_ASSERT(1869, safeZeldaHeapSize >= 0);
+    safeZeldaHeapSize -= size;
+    OS_REPORT("++++++++++++++++++++++++++++++ addSafeZeldaHeapSize <%x>\n", -size);
+    mDoExt_getZeldaHeap()->changeGroupID(mDoExt_getZeldaHeap()->getCurrentGroupId() + 1);
+}
+
+intptr_t mDoExt_getSafeZeldaHeapSize() {
     return safeZeldaHeapSize;
 }
-#endif
 
 JKRExpHeap* commandHeap;
+intptr_t safeCommandHeapSize = -1;
 
-JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap) {
-    return commandHeap = JKRExpHeap::create(heapSize, i_heap, true);
+JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* parentHeap) {
+    JUT_ASSERT(1894, commandHeap == 0 || heapSize == 0);
+    commandHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    return commandHeap;
 }
 
 JKRExpHeap* mDoExt_getCommandHeap() {
     return commandHeap;
 }
 
-JKRExpHeap* archiveHeap;
+void mDoExt_setSafeCommandHeapSize() {
+    if (safeCommandHeapSize < 0) {
+        safeCommandHeapSize = mDoExt_getGameHeap()->getTotalUsedSize();
+        OS_REPORT("++++++++++++++++++++++++++++++ CommandHeap Rock !!\n");
+        mDoExt_getGameHeap()->dump();
+        mDoExt_getGameHeap()->changeGroupID(7);
+    }
+}
 
-JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap) {
-    archiveHeap = JKRExpHeap::create(heapSize, i_heap, true);
+intptr_t mDoExt_getSafeCommandHeapSize() {
+    return safeCommandHeapSize;
+}
+
+JKRExpHeap* archiveHeap;
+intptr_t safeArchiveHeapSize = -1;
+
+JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* parentHeap) {
+    JUT_ASSERT(1966, archiveHeap == 0 || heapSize == 0);
+    archiveHeap = JKRExpHeap::create(heapSize, parentHeap, true);
     archiveHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return archiveHeap;
 }
 
+void mDoExt_setSafeArchiveHeapSize() {
+    if (safeArchiveHeapSize < 0) {
+        safeArchiveHeapSize = mDoExt_getArchiveHeap()->getTotalUsedSize();
+        OS_REPORT("++++++++++++++++++++++++++++++ ArchiveHeap Rock !!\n");
+        mDoExt_getArchiveHeap()->dump();
+        mDoExt_getArchiveHeap()->changeGroupID(7);
+    }
+}
+
+void dummy6() {
+    JUT_ASSERT(0, safeArchiveHeapSize >= 0);
+    OS_REPORT("++++++++++++++++++++++++++++++ safeArchiveHeapSize <%x>\n", safeArchiveHeapSize);
+}
+
+intptr_t mDoExt_getSafeArchiveHeapSize() {
+    return safeArchiveHeapSize;
+}
+
 JKRExpHeap* mDoExt_getArchiveHeap() {
-    return archiveHeap;
+    JKRExpHeap* heap = archiveHeap;
+    return heap;
 }
 
 JKRExpHeap* mDoExt_getArchiveHeapPtr() {
@@ -700,41 +808,80 @@ JKRExpHeap* mDoExt_getArchiveHeapPtr() {
 }
 
 static JKRExpHeap* j2dHeap;
+intptr_t safeJ2dHeapSize = -1;
 
-JKRExpHeap* mDoExt_createJ2dHeap(u32 heapSize, JKRHeap* i_heap) {
-    j2dHeap = JKRExpHeap::create(heapSize, i_heap, true);
+JKRExpHeap* mDoExt_createJ2dHeap(u32 heapSize, JKRHeap* parentHeap) {
+    JUT_ASSERT(2059, j2dHeap == 0 || heapSize == 0);
+    j2dHeap = JKRExpHeap::create(heapSize, parentHeap, true);
     j2dHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     return j2dHeap;
 }
 
+void mDoExt_setSafeJ2dHeapSize() {
+    if (safeJ2dHeapSize < 0) {
+        safeJ2dHeapSize = mDoExt_getJ2dHeap()->getTotalUsedSize();
+        OS_REPORT("++++++++++++++++++++++++++++++ j2dHeap Rock !!\n");
+        mDoExt_getJ2dHeap()->dump();
+        mDoExt_getJ2dHeap()->changeGroupID(7);
+    }
+}
+
+void dummy7() {
+    JUT_ASSERT(0, safeJ2dHeapSize >= 0);
+    OS_REPORT("++++++++++++++++++++++++++++++ safeJ2dHeapSize <%x>\n", safeJ2dHeapSize);
+}
+
+intptr_t mDoExt_getSafeJ2dHeapSize() {
+    return safeJ2dHeapSize;
+}
+
 JKRExpHeap* mDoExt_getJ2dHeap() {
-    return j2dHeap;
+    JKRExpHeap* heap = j2dHeap;
+    return heap;
 }
 
 static JKRExpHeap* HostIOHeap;
+
+JKRHeap* mDoExt_createHostIOHeap(u32 heapSize, JKRHeap* parentHeap) {
+    JUT_ASSERT(2142, HostIOHeap == 0 || heapSize == 0);
+    HostIOHeap = JKRExpHeap::create(heapSize, parentHeap, true);
+    return HostIOHeap;
+}
 
 JKRExpHeap* mDoExt_getHostIOHeap() {
     return HostIOHeap;
 }
 
-#if DEBUG
-extern u8 lbl_8074C3B9[1];
-#endif
+static JKRHeap* situationHeap;
 
-static JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignment) {
-    if (i_heap == NULL) {
-        i_heap = JKRGetCurrentHeap();
+void dummy8(u32 heapSize) {
+    int situationHeapLocked = 0;
+    JUT_ASSERT(0, situationHeap == 0 || heapSize == 0);
+    JUT_ASSERT(0, situationHeapLocked == 0);
+    JUT_ASSERT(0, situationHeap);
+    JUT_ASSERT(0, situationHeapLocked);
+    JKRHeap* heap = NULL;
+    JUT_ASSERT(0, heap == situationHeap);
+}
+
+static JKRHeap* mDoExt_SaveCurrentHeap;
+
+JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_parent, u32 i_alignment) {
+    if (i_parent == NULL) {
+        i_parent = JKRGetCurrentHeap();
     }
 
     JKRSolidHeap* createdHeap;
     if (i_size == 0 || i_size == -1) {
         #if DEBUG
-        if (lbl_8074C3B9[0] != 0) {
+        if (mDoExt::HeapAdjustVerbose) {
+            // "mDoExt_createSolidHeap size not set"
             OS_REPORT("\x1b[44mmDoExt_createSolidHeap サイズ未設定\n\x1b[m");
-            OS_REPORT("最大空き容量確保します %08x\n\x1b[m", i_heap->getFreeSize());
+            // "Ensure that the maximum available space is allocated %08x"
+            OS_REPORT("最大空き容量確保します %08x\n\x1b[m", i_parent->getFreeSize());
         }
         #endif
-        createdHeap = JKRCreateSolidHeap(-1, i_heap, false);
+        createdHeap = JKRCreateSolidHeap(-1, i_parent, false);
     } else {
         u32 solidHeapSize = ALIGN_NEXT(sizeof(JKRSolidHeap), 0x10);
         i_size = ALIGN_NEXT(i_size, 0x10);
@@ -743,19 +890,19 @@ static JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_a
         if (0x10 < i_alignment) {
             i_size = (i_alignment - 0x10 + i_size);
         }
-        createdHeap = JKRCreateSolidHeap(i_size, i_heap, false);
+        createdHeap = JKRCreateSolidHeap(i_size, i_parent, false);
     }
 
     if (createdHeap != NULL) {
         JKRSetErrorFlag(createdHeap, true);
         #if DEBUG
-        if (lbl_8074C3B9[0] != 0) {
-            u32 heapSize = createdHeap->getHeapSize();
+        if (mDoExt::HeapAdjustVerbose != 0) {
+            u32 solidHeapSize = createdHeap->getHeapSize();
             OS_REPORT(
                 "JKRCreateSolidHeap %08x i_size=%08x solidHeapSize=%08x\n",
                 createdHeap,
                 i_size,
-                heapSize
+                solidHeapSize
             );
         }
         #endif
@@ -766,13 +913,13 @@ static JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_a
         OS_WARNING(
             "mDoExt_createMaxSolidHeap : ソリッドヒープ%fKの確保に失敗 連続空き容量=%fK 残り空き容量=%f\n",
             i_size / 1024.0f,
-            i_heap->getFreeSize() / 1024.0f,
-            i_heap->getTotalFreeSize() / 1024.0f
+            i_parent->getFreeSize() / 1024.0f,
+            i_parent->getTotalFreeSize() / 1024.0f
         );
-        static BOOL dumped = FALSE;
-        if (dumped == FALSE) {
-            dumped = TRUE;
-            i_heap->dump_sort();
+        static BOOL displayed = FALSE;
+        if (displayed == FALSE) {
+            displayed = TRUE;
+            i_parent->dump_sort();
         }
         return createdHeap;
     }
@@ -792,7 +939,7 @@ JKRSolidHeap* mDoExt_createSolidHeapFromSystem(u32 i_size, u32 i_alignment) {
 JKRSolidHeap* mDoExt_createSolidHeapToCurrent(JKRHeap** o_heap, u32 i_size, JKRHeap* i_parent,
                                               u32 i_alignment) {
     if (o_heap != NULL) {
-        *o_heap = JKRHeap::getCurrentHeap();
+        *o_heap = JKRGetCurrentHeap();
     }
 
     JKRSolidHeap* resultHeap = mDoExt_createSolidHeap(i_size, i_parent, i_alignment);
@@ -803,19 +950,30 @@ JKRSolidHeap* mDoExt_createSolidHeapToCurrent(JKRHeap** o_heap, u32 i_size, JKRH
     return resultHeap;
 }
 
-static JKRHeap* mDoExt_SaveCurrentHeap;
-
 JKRSolidHeap* mDoExt_createSolidHeapToCurrent(u32 i_size, JKRHeap* i_parent, u32 i_alignment) {
-    return mDoExt_createSolidHeapToCurrent(&mDoExt_SaveCurrentHeap, i_size, i_parent, i_alignment);
+    JUT_ASSERT(2427, OSGetCurrentThread() == &mainThread);
+    JUT_ASSERT(2428, mDoExt_SaveCurrentHeap == NULL);
+    JKRSolidHeap* heap =
+        mDoExt_createSolidHeapToCurrent(&mDoExt_SaveCurrentHeap, i_size, i_parent, i_alignment);
+    if (mDoExt::CurrentHeapAdjustVerbose) {
+        // "Saving the current heap %08x"
+        OS_REPORT("カレントヒープを保存 %08x\n", mDoExt_SaveCurrentHeap);
+    }
+    return heap;
 }
 
 JKRSolidHeap* mDoExt_createSolidHeapFromGameToCurrent(JKRHeap** o_heap, u32 i_size,
                                                       u32 i_alignment) {
-    return mDoExt_createSolidHeapToCurrent(o_heap, i_size, mDoExt_getGameHeap(), i_alignment);
+    JKRExpHeap* gameHeap = mDoExt_getGameHeap();
+    JKRSolidHeap* solidHeap =
+        mDoExt_createSolidHeapToCurrent(o_heap, i_size, gameHeap, i_alignment);
+    return solidHeap;
 }
 
 JKRSolidHeap* mDoExt_createSolidHeapFromGameToCurrent(u32 i_size, u32 i_alignment) {
-    return mDoExt_createSolidHeapToCurrent(i_size, mDoExt_getGameHeap(), i_alignment);
+    JKRExpHeap* gameHeap = mDoExt_getGameHeap();
+    JKRSolidHeap* solidHeap = mDoExt_createSolidHeapToCurrent(i_size, gameHeap, i_alignment);
+    return solidHeap;
 }
 
 u32 mDoExt_adjustSolidHeap(JKRSolidHeap* i_heap) {
@@ -831,17 +989,42 @@ u32 mDoExt_adjustSolidHeap(JKRSolidHeap* i_heap) {
         return -1;
     }
 
+    u32 estimatedSize = i_heap->getHeapSize();
     s32 result = i_heap->adjustSize();
     if (result < 0) {
         // "adjustSize failure %08x\n"
         OSReport_Error("adjustSize失敗 %08x\n", i_heap);
         return -1;
     }
+    u32 actualSize = i_heap->getHeapSize();
+
+    #if DEBUG
+    if (mDoExt::HeapAdjustVerbose) {
+        // "\x1B[33mSolid heap estimate: %08x actual: %08x\n\x1B[m"
+        OS_REPORT("\x1B[33mソリッドヒープの見積もり %08x 実際 %08x\n\x1B[m", estimatedSize, actualSize);
+
+        if (estimatedSize > 0x400 && estimatedSize > (actualSize + 0x400)) {
+            // "\x1B[33mThe estimate is %x bytes too large (%5.2f times). This could lead to degraded memory efficiency.\n\x1B[m"
+            OS_REPORT("\x1B[33m見積もりが %x バイト大きい(%5.2f倍)です。メモリ効率悪化が懸念されます。\n\x1B[m", estimatedSize - actualSize, (f32)estimatedSize / (f32)actualSize);
+        } else if (estimatedSize >= (actualSize + 0x20)) {
+            // "\x1B[36mThe estimate is %x bytes too large. That's pretty good.\n\x1B[m"
+            OS_REPORT("\x1B[36m見積もりが %x バイト大きいです。だいぶいい感じです。\n\x1B[m", estimatedSize - actualSize);
+        } else {
+            // "\x1B[32mThe estimate is spot on! Perfect.\n\x1B[m"
+            OS_REPORT("\x1B[32m見積もりが、ジャストミート！完璧です。\n\x1B[m");
+        }
+    }
+
+    if (mDoExt::HeapAdjustVerbose) {
+        OS_REPORT("JKRSolidHeap::adjustSize %08x (%08x bytes)\n", (u32)i_heap, result);
+    }
+    #endif
 
     // this probably indicates that 0x80 is some constant, maybe from a sizeof(JKRSolidHeap)
     // with alignment?
-    if (result >= (u32)0x80) {
-        result -= 0x80;
+    u32 r25 = 0x80;
+    if (result >= r25) {
+        return result - r25;
     }
 
     return result;
@@ -854,23 +1037,45 @@ u32 mDoExt_adjustSolidHeapToSystem(JKRSolidHeap* i_heap) {
 }
 
 void mDoExt_destroySolidHeap(JKRSolidHeap* i_heap) {
-    i_heap->destroy();
+    JKRDestroySolidHeap(i_heap);
+    if (g_printOtherHeapDebug) {
+        // "Solid heap destruction"
+        OS_REPORT("mDoExt_destroySolidHeap ソリッドヒープ破壊 %08x\n", i_heap);
+    }
 }
 
 void mDoExt_destroyExpHeap(JKRExpHeap* i_heap) {
-    i_heap->destroy();
+    ASSERTLINE(2576, i_heap != mDoExt_getCurrentHeap());
+    JKRDestroyExpHeap(i_heap);
+#if DEBUG
+    if (mDoExt::HeapAdjustVerbose) {
+        OS_REPORT("mDoExt_destroyExpHeap Expヒープ破壊 %08x\n", i_heap);
+    }
+#endif
 }
 
 JKRHeap* mDoExt_setCurrentHeap(JKRHeap* heap) {
-    return heap->becomeCurrentHeap();
+    JUT_ASSERT(2594, heap != NULL);
+    JKRHeap* result = JKRSetCurrentHeap(heap);
+    if (mDoExt::CurrentHeapAdjustVerbose) {
+        // "Changing the current heap to the specified heap %08x->%08x"
+        OS_REPORT("カレントヒープを指定ヒープに変更 %08x->%08x\n", result, heap);
+    }
+    return result;
 }
 
 JKRHeap* mDoExt_getCurrentHeap() {
-    return JKRHeap::getCurrentHeap();
+    return JKRGetCurrentHeap();
 }
 
 void mDoExt_restoreCurrentHeap() {
-    mDoExt_SaveCurrentHeap->becomeCurrentHeap();
+    JUT_ASSERT(2711, OSGetCurrentThread() == &mainThread);
+    JUT_ASSERT(2712, mDoExt_SaveCurrentHeap != FALSE);
+    JKRHeap* result = JKRSetCurrentHeap(mDoExt_SaveCurrentHeap);
+    if (mDoExt::CurrentHeapAdjustVerbose) {
+        // "The current heap has been restored %08x->%08x"
+        OS_REPORT("カレントヒープを復帰しました %08x->%08x\n", result, mDoExt_SaveCurrentHeap);
+    }
     mDoExt_SaveCurrentHeap = NULL;
 }
 
@@ -899,14 +1104,14 @@ void mDoExt_MtxCalcAnmBlendTbl::calc() {
     Quaternion quat3;
     mAnmRatio->getAnmTransform()->getTransform(jntNo, &info2);
     JMAEulerToQuat(info2.mRotation.x, info2.mRotation.y, info2.mRotation.z, &quat1);
+    f32 f30 = mAnmRatio->getRatio();
     quat3 = quat1;
     for (int i = 1; i < mNum; i++) {
-        J3DAnmTransform* transform = mAnmRatio[i].getAnmTransform();
-        if (transform) {
+        if (mAnmRatio[i].getAnmTransform() != NULL) {
             J3DTransformInfo info3;
-            transform->getTransform(jntNo, &info3);
+            mAnmRatio[i].getAnmTransform()->getTransform(jntNo, &info3);
             f32 ratio = mAnmRatio[i].getRatio();
-            f32 f30 = 1.0f - ratio;
+            f30 = 1.0f - ratio;
             JMAEulerToQuat(info3.mRotation.x, info3.mRotation.y, info3.mRotation.z, &quat2);
             JMAQuatLerp(&quat1, &quat2, ratio, &quat3);
             quat1 = quat3;
@@ -919,7 +1124,7 @@ void mDoExt_MtxCalcAnmBlendTbl::calc() {
         }
     }
     Mtx mtx;
-    MTXQuat(mtx, &quat3);
+    mDoMtx_quat(mtx, &quat3);
     mDoExt_setJ3DData(mtx, &info2, jntNo);
 }
 
@@ -934,23 +1139,24 @@ void mDoExt_MtxCalcAnmBlendTblOld::calc() {
     Quaternion quat3;
     mAnmRatio->getAnmTransform()->getTransform(jntNo, &info1);
     JMAEulerToQuat(info1.mRotation.x, info1.mRotation.y, info1.mRotation.z, &quat1);
+    f32 var_f31;
+    f32 var_f30 = mAnmRatio[0].getRatio();
     quat3 = quat1;
     for (int i = 1; i < mNum; i++) {
         if (mAnmRatio[i].getAnmTransform()) {
-            J3DAnmTransform* transform = mAnmRatio[i].getAnmTransform();
             J3DTransformInfo info2;
-            transform->getTransform(jntNo, &info2);
-            f32 ratio = mAnmRatio[i].getRatio();
-            f32 f30 = 1.0f - ratio;
+            mAnmRatio[i].getAnmTransform()->getTransform(jntNo, &info2);
+            var_f31 = mAnmRatio[i].getRatio();
+            var_f30 = 1.0f - var_f31;
             JMAEulerToQuat(info2.mRotation.x, info2.mRotation.y, info2.mRotation.z, &quat2);
-            JMAQuatLerp(&quat1, &quat2, ratio, &quat3);
+            JMAQuatLerp(&quat1, &quat2, var_f31, &quat3);
             quat1 = quat3;
-            info1.mTranslate.x = info1.mTranslate.x * f30 + info2.mTranslate.x * ratio;
-            info1.mTranslate.y = info1.mTranslate.y * f30 + info2.mTranslate.y * ratio;
-            info1.mTranslate.z = info1.mTranslate.z * f30 + info2.mTranslate.z * ratio;
-            info1.mScale.x = info1.mScale.x * f30 + info2.mScale.x * ratio;
-            info1.mScale.y = info1.mScale.y * f30 + info2.mScale.y * ratio;
-            info1.mScale.z = info1.mScale.z * f30 + info2.mScale.z * ratio;
+            info1.mTranslate.x = info1.mTranslate.x * var_f30 + info2.mTranslate.x * var_f31;
+            info1.mTranslate.y = info1.mTranslate.y * var_f30 + info2.mTranslate.y * var_f31;
+            info1.mTranslate.z = info1.mTranslate.z * var_f30 + info2.mTranslate.z * var_f31;
+            info1.mScale.x = info1.mScale.x * var_f30 + info2.mScale.x * var_f31;
+            info1.mScale.y = info1.mScale.y * var_f30 + info2.mScale.y * var_f31;
+            info1.mScale.z = info1.mScale.z * var_f30 + info2.mScale.z * var_f31;
         }
     }
 
@@ -958,15 +1164,15 @@ void mDoExt_MtxCalcAnmBlendTblOld::calc() {
     Quaternion* oldQuat = mOldFrame->getOldFrameQuaternion(jntNo);
     if (mOldFrame->getOldFrameFlg()) {
         if (mOldFrame->getOldFrameRate() > 0.0f && mOldFrame->getOldFrameStartJoint() <= jntNo && mOldFrame->getOldFrameEndJoint() > jntNo) {
-            f32 oldFrameRate = mOldFrame->getOldFrameRate();
-            f32 f31 = 1.0f - oldFrameRate;
-            JMAQuatLerp(oldQuat, &quat1, f31, &quat3);
-            info1.mTranslate.x = info1.mTranslate.x * f31 + oldTransInfo->mTranslate.x * oldFrameRate;
-            info1.mTranslate.y = info1.mTranslate.y * f31 + oldTransInfo->mTranslate.y * oldFrameRate;
-            info1.mTranslate.z = info1.mTranslate.z * f31 + oldTransInfo->mTranslate.z * oldFrameRate;
-            info1.mScale.x = info1.mScale.x * f31 + oldTransInfo->mScale.x * oldFrameRate;
-            info1.mScale.y = info1.mScale.y * f31 + oldTransInfo->mScale.y * oldFrameRate;
-            info1.mScale.z = info1.mScale.z * f31 + oldTransInfo->mScale.z * oldFrameRate;
+            var_f30 = mOldFrame->getOldFrameRate();
+            var_f31 = 1.0f - var_f30;
+            JMAQuatLerp(oldQuat, &quat1, var_f31, &quat3);
+            info1.mTranslate.x = info1.mTranslate.x * var_f31 + oldTransInfo->mTranslate.x * var_f30;
+            info1.mTranslate.y = info1.mTranslate.y * var_f31 + oldTransInfo->mTranslate.y * var_f30;
+            info1.mTranslate.z = info1.mTranslate.z * var_f31 + oldTransInfo->mTranslate.z * var_f30;
+            info1.mScale.x = info1.mScale.x * var_f31 + oldTransInfo->mScale.x * var_f30;
+            info1.mScale.y = info1.mScale.y * var_f31 + oldTransInfo->mScale.y * var_f30;
+            info1.mScale.z = info1.mScale.z * var_f31 + oldTransInfo->mScale.z * var_f30;
         }
     } else if (jntNo == modelData->getJointNum() - 1) {
         mOldFrame->onOldFrameFlg();
@@ -1060,9 +1266,6 @@ void mDoExt_morf_c::frameUpdate() {
     mFrameCtrl.update();
 }
 
-/* 8000FC4C-8000FD10 00A58C 00C4+00 0/0 0/0 34/34 .text
- * __ct__14mDoExt_McaMorfFP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformifiiiPvUlUl
- */
 mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1,
                                    mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform,
                                    int param_4, f32 param_5, int param_6, int param_7, int param_8,
@@ -1079,9 +1282,6 @@ mDoExt_McaMorf::~mDoExt_McaMorf() {
     }
 }
 
-/* 8000FD94-80010074 00A6D4 02E0+00 1/1 0/0 0/0 .text
- * create__14mDoExt_McaMorfFP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformifiiiPvUlUl
- */
 int mDoExt_McaMorf::create(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1,
                            mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform,
                            int param_4, f32 param_5, int param_6, int param_7, int param_8,
@@ -1126,10 +1326,7 @@ int mDoExt_McaMorf::create(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* c
         goto cleanup;
     }
     mpQuat = new Quaternion[modelData->getJointNum()];
-    if (!mpQuat) {
-        goto cleanup;
-    }
-    {
+    if (mpQuat) {
         J3DTransformInfo* info = mpTransformInfo;
         Quaternion* quat = mpQuat;
         J3DModelData* r23 = mpModel->getModelData();
@@ -1320,9 +1517,6 @@ void mDoExt_McaMorf::getTransform(u16 param_0, J3DTransformInfo* param_1) {
     }
 }
 
-/* 800107D0-80010888 00B110 00B8+00 0/0 2/2 222/222 .text
- * __ct__16mDoExt_McaMorfSOFP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformifiiP10Z2CreatureUlUl
- */
 mDoExt_McaMorfSO::mDoExt_McaMorfSO(J3DModelData* param_0, mDoExt_McaMorfCallBack1_c* param_1,
                                    mDoExt_McaMorfCallBack2_c* param_2, J3DAnmTransform* param_3,
                                    int param_4, f32 param_5, int param_6, int param_7,
@@ -1337,9 +1531,6 @@ mDoExt_McaMorfSO::~mDoExt_McaMorfSO() {
     stopZelAnime();
 }
 
-/* 800108F0-80010B68 00B230 0278+00 1/1 0/0 0/0 .text
- * create__16mDoExt_McaMorfSOFP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformifiiP10Z2CreatureUlUl
- */
 int mDoExt_McaMorfSO::create(J3DModelData* i_modelData, mDoExt_McaMorfCallBack1_c* param_1,
                              mDoExt_McaMorfCallBack2_c* param_2, J3DAnmTransform* param_3,
                              int param_4, f32 param_5, int param_6, int param_7,
@@ -1618,9 +1809,6 @@ void mDoExt_McaMorfSO::stopZelAnime() {
     }
 }
 
-/* 80011348-800113FC 00BC88 00B4+00 0/0 0/0 1/1 .text
- * __ct__15mDoExt_McaMorf2FP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformP15J3DAnmTransformifiiP10Z2CreatureUlUl
- */
 mDoExt_McaMorf2::mDoExt_McaMorf2(J3DModelData* param_0, mDoExt_McaMorfCallBack1_c* param_1,
                                  mDoExt_McaMorfCallBack2_c* param_2, J3DAnmTransform* param_3,
                                  J3DAnmTransform* param_4, int param_5, f32 param_6, int param_7,
@@ -1633,9 +1821,6 @@ mDoExt_McaMorf2::~mDoExt_McaMorf2() {
     stopZelAnime();
 }
 
-/* 80011464-800116B4 00BDA4 0250+00 1/1 0/0 0/0 .text
- * create__15mDoExt_McaMorf2FP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformP15J3DAnmTransformifiiP10Z2CreatureUlUl
- */
  int mDoExt_McaMorf2::create(J3DModelData* param_0, mDoExt_McaMorfCallBack1_c* param_1,
                                  mDoExt_McaMorfCallBack2_c* param_2, J3DAnmTransform* param_3,
                                  J3DAnmTransform* param_4, int param_5, f32 param_6, int param_7,
@@ -1991,6 +2176,14 @@ void mDoExt_McaMorf2::stopZelAnime() {
     if (mpSound != NULL) {
         mpSound->deleteObject();
     }
+}
+
+void mDoExt_offCupOnAupPacket::draw() {
+    GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 0, 1, 1);
+}
+
+void mDoExt_onCupOffAupPacket::draw() {
+    GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 1, 0, 1);
 }
 
 void mDoExt_invJntPacket::draw() {
@@ -2357,14 +2550,14 @@ void mDoExt_3DlineMat0_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
     mDoExt_3Dline_field_0x10_c* local_r30;
     mDoExt_3Dline_field_0x10_c* local_r29;
     mDoExt_3Dline_field_0x10_c* sp_1c;
-    f32* sp_18;
+    f32* size_p;
 
     for (s32 sp_14 = 0; sp_14 < field_0x10; sp_14++) {
         local_r27 = sp_30->field_0x0;
 
-        sp_18 = sp_30->field_0x4;
+        size_p = sp_30->field_0x4;
 
-        JUT_ASSERT(0x1545, sp_18 != NULL);
+        JUT_ASSERT(5445, size_p != NULL);
 
         sp_20 = ((mDoExt_3Dline_c*)((intptr_t)sp_30 + (field_0x16 << 2)))->field_0x8;
         sp_24 = sp_20;
@@ -2385,11 +2578,11 @@ void mDoExt_3DlineMat0_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
         local_r29->y = -local_r30->y;
         local_r29->z = -local_r30->z;
 
-        sp_120 *= *sp_18;
+        sp_120 *= *size_p;
         *sp_24++ = *local_r27 + sp_120;
         *sp_24++ = *local_r27 - sp_120;
         local_r27++;
-        sp_18++;
+        size_p++;
         sp_114 = *local_r27 + sp_120;
         sp_108 = *local_r27 - sp_120;
 
@@ -2409,14 +2602,14 @@ void mDoExt_3DlineMat0_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
             local_r29->y = -local_r30->y;
             local_r29->z = -local_r30->z;
 
-            sp_120 *= *sp_18;
+            sp_120 *= *size_p;
             sp_114 += *local_r27 + sp_120;
             sp_108 += *local_r27 - sp_120;
             *sp_24++ = sp_114 * 0.5f;
             *sp_24++ = sp_108 * 0.5f;
 
             local_r27++;
-            sp_18++;
+            size_p++;
 
             sp_114 = *local_r27 + sp_120;
             sp_108 = *local_r27 - sp_120;
@@ -2480,7 +2673,7 @@ void mDoExt_3DlineMat1_c::setMaterial() {
     dKy_GxFog_set();
     GXCallDisplayList(l_mat1DL, 0x80);
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
-    GXLoadNrmMtxImm(g_mDoMtx_identity, GX_PNMTX0);
+    GXLoadNrmMtxImm(cMtx_getIdentity(), GX_PNMTX0);
 }
 
 void mDoExt_3DlineMat1_c::draw() {
@@ -2528,16 +2721,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
     }
     view_class* sp_3c = dComIfGd_getView();
     mDoExt_3Dline_c* sp_38 = mpLines;
-    f32 local_f30;
-    f32 local_f26;
-    f32 local_f29;
-    f32 local_f27;
-    if (param_3 != 0) {
-        local_f26 = param_1 / param_3;
-    } else {
-        local_f26 = 0.0f;
-    }
-    local_f27 = local_f26;
+    f32 local_f27 = param_3 != 0 ? param_1 / param_3 : 0.0f;
 
     u32 sp_34 = (field_0x34 << 1) * 12;
     u32 sp_30 = (field_0x34 << 1) * 3;
@@ -2560,6 +2744,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
 
     mDoExt_3Dline_field_0x18_c* sp_18;
 
+    f32 local_f29;
     f32 local_f31 = 0.0f;
 
     for (s32 sp_14 = 0; sp_14 < mNumLines; sp_14++) {
@@ -2580,7 +2765,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
         sp_1c++->field_0x4 = local_f31;
 
         sp_130 = local_r27[1] - local_r27[0];
-        local_f30 = sp_130.abs();
+        f32 local_f30 = sp_130.abs();
 
         if (param_1 < 8.0f) {
             local_f31 += local_f30 * 0.1f;
@@ -2599,7 +2784,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
         local_r28->y = -local_r30->y;
         local_r28->z = -local_r30->z;
 
-        sp_130 *= param_1;
+        sp_130 *= local_f29;
         *sp_28++ = *local_r27 + sp_130;
         *sp_28++ = *local_r27 - sp_130;
         local_r27++;
@@ -2674,6 +2859,23 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, _GXColor& param_2, u1
         sp_38++;
     }
 }
+#include "assets/l_mat2DL__d_a_grass.h"
+
+void mDoExt_3DlineMat2_c::setMaterial() {
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_RGB8, 6);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+    dKy_GxFog_set();
+    GXCallDisplayList(NULL, 0x80); // DEBUG NONMATCHING - this is supposed to reference l_mat2DL
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), 0);
+    GXLoadNrmMtxImm(cMtx_getIdentity(), 0);
+}
 
 void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* param_4) {
     mColor = param_2;
@@ -2706,11 +2908,11 @@ void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* p
     mDoExt_3Dline_field_0x18_c* sp_1c;
     mDoExt_3Dline_field_0x18_c* sp_18;
     f32 local_f31 = 0.0f;
-    f32* local_r18;
+    f32* size_p;
     for (s32 sp_14 = 0; sp_14 < mNumLines; sp_14++) {
         local_r27 = sp_38[0].field_0x0;
-        local_r18 = sp_38->field_0x4;
-        JUT_ASSERT(0x16f3, sp_18 != NULL);
+        size_p = sp_38->field_0x4;
+        JUT_ASSERT(5875, size_p != NULL);
         sp_24 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x8;
         sp_28 = sp_24;
         sp_20 = ((mDoExt_3Dline_c*)((intptr_t)sp_38 + (mIsDrawn << 2)))->field_0x10;
@@ -2732,11 +2934,11 @@ void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* p
         local_r28->x = -local_r30->x;
         local_r28->y = -local_r30->y;
         local_r28->z = -local_r30->z;
-        sp_130 *= *local_r18;
+        sp_130 *= *size_p;
         *sp_28++ = local_r27[0] + sp_130;
         *sp_28++ = local_r27[0] - sp_130;
         local_r27++;
-        local_r18++;
+        size_p++;
         sp_124 = local_r27[0] + sp_130;
         sp_118 = local_r27[0] - sp_130;
         for (s32 sp_10 = field_0x34 - 2; sp_10 > 0; sp_10--) {
@@ -2756,13 +2958,13 @@ void mDoExt_3DlineMat1_c::update(int param_0, _GXColor& param_2, dKy_tevstr_c* p
             local_r28->x = -local_r30->x;
             local_r28->y = -local_r30->y;
             local_r28->z = -local_r30->z;
-            sp_130 *= *local_r18;
+            sp_130 *= *size_p;
             sp_124 += local_r27[0] + sp_130;
             sp_118 += local_r27[0] - sp_130;
             *sp_28++ = sp_124 * 0.5f;
             *sp_28++ = sp_118 * 0.5f;
             local_r27++;
-            local_r18++;
+            size_p++;
             sp_124 = local_r27[0] + sp_130;
             sp_118 = local_r27[0] - sp_130;
         }
@@ -3348,33 +3550,50 @@ void mDoExt_cylinderMPacket::draw() {
 }
 #endif
 
-static void mDoExt_initFontCommon(JUTFont** mDoExt_font, ResFONT** mDoExt_resfont, JKRHeap* param_2,
+static void mDoExt_initFontCommon(JUTFont** mDoExt_font_p, ResFONT** mDoExt_resfont_p, JKRHeap* param_2,
                                   char const* param_3, JKRArchive* param_4, u8 param_5,
                                   u32 param_6, u32 param_7) {
-    JUT_ASSERT(7141, mDoExt_font == NULL);
-    JUT_ASSERT(7142, mDoExt_resfont == NULL);
+    JUTFont** mDoExt_font = mDoExt_font_p;
+    ResFONT** mDoExt_resfont = mDoExt_resfont_p;
+    // these assertion messages are fakematches, not quite sure what's going on here -
+    // the assembly indicates the parameters are dereferenced inline into compiler temps,
+    // but the messages don't show a dereference
+    JUT_ASSERT_MSG(7141, *mDoExt_font == NULL, "mDoExt_font == 0");
+    JUT_ASSERT_MSG(7142, *mDoExt_resfont == NULL, "mDoExt_resfont == 0");
     *mDoExt_resfont = (ResFONT*)JKRGetResource('ROOT', param_3, param_4);
-    JUT_ASSERT(7144, *mDoExt_resfont != NULL);
+    JUT_ASSERT_MSG(7144, *mDoExt_resfont != NULL, "mDoExt_resfont != 0");
     if (param_5 == 0) {
         u32 cacheSize = JUTCacheFont::calcCacheSize(param_7, param_6);
         JUTCacheFont* cacheFont = new (param_2, 0) JUTCacheFont(*mDoExt_resfont, cacheSize, param_2);
         if (cacheFont->isValid()) {
+            // "Allocated %d bytes for font cache buffer size"
+            OS_REPORT("\nキャッシュフォントバッファサイズとして %d バイト確保しました\n", cacheSize);
+            // "The size of the JUTCacheFont class is %d bytes."
+            OS_REPORT("JUTCacheFontクラスサイズは %d バイトです。\n", sizeof(JUTCacheFont));
+            // "The number of cached pages is %d."
+            OS_REPORT("キャッシュページ数は %d です。\n\n", cacheFont->getCachePage());
+            // "The maximum sheet size is %d."
+            OS_REPORT("シートサイズ（最大）は %d です。\n\n", cacheFont->getMaxSheetSize());
             *mDoExt_font = cacheFont;
             cacheFont->setPagingType(JUTCacheFont::PAGE_TYPE_1);
         }
         JKRRemoveResource(*mDoExt_resfont, NULL);
         *mDoExt_resfont = NULL;
     } else {
-        JUTResFont* local_28 = new JUTResFont(*mDoExt_resfont, param_2);
-        *mDoExt_font = local_28;
+        *mDoExt_font = new JUTResFont(*mDoExt_resfont, param_2);
+        // "Allocated %d bytes for the font buffer size"
+        OS_REPORT("\nフォントバッファサイズとして %d バイト確保しました\n",
+                  JKRGetMemBlockSize(param_2, *mDoExt_font));
+        // "The size of the JUTResFont class is %d bytes."
+        OS_REPORT("JUTResFontクラスサイズは %d バイトです。\n", sizeof(JUTResFont));
     }
     if (*mDoExt_font != NULL && !(*mDoExt_font)->isValid()) {
-        // Failed to create cache font class
+        // "Failed to create cache font class"
         OSReport_FatalError("\nキャッシュフォントクラス作成に失敗しました\n");
         delete *mDoExt_font;
         *mDoExt_font = NULL;
     }
-    JUT_ASSERT(7183, mDoExt_font != NULL);
+    JUT_ASSERT_MSG(7183, *mDoExt_font != NULL, "mDoExt_font != 0");
 }
 
 static JUTFont* mDoExt_font0;
@@ -3465,6 +3684,10 @@ JUTFont* mDoExt_getSubFont() {
     return mDoExt_font2;
 }
 
+void dummy9() {
+    JUT_ASSERT(0, mDoExt_font1_getCount > 0);
+}
+
 void mDoExt_removeSubFont() {
     JUT_ASSERT(7354, mDoExt_font2_getCount > 0);
     if (mDoExt_font2_getCount > 0) {
@@ -3486,8 +3709,13 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
         J3DModel* model = new J3DModel();
 
         if (model != NULL) {
+#if DEBUG
+            model->getBaseTRMtx()[0][0] = MAXFLOAT;
+#endif
+            bool hasSharedDlistObj =
+                i_modelData->getMaterialNodePointer(0)->getSharedDisplayListObj() != NULL;
             // Update the modelFlag if the model data passed in has a shared dlist object
-            if (i_modelData->getMaterialNodePointer(0)->getSharedDisplayListObj() != NULL) {
+            if (hasSharedDlistObj != NULL) {
                 if (i_modelData->isLocked()) {
                     i_modelFlag = J3DMdlFlag_UseSharedDL;
                 } else if (i_modelFlag == J3DMdlFlag_UseSharedDL) {
@@ -3498,7 +3726,8 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
             }
 
             // Set up the model
-            if (model->entryModelData(i_modelData, i_modelFlag, 1) == kJ3DError_Success) {
+            s32 entryModelData = model->entryModelData(i_modelData, i_modelFlag, 1);
+            if (entryModelData == kJ3DError_Success) {
                 if (i_modelFlag == J3DMdlFlag_DifferedDLBuffer &&
                     model->newDifferedDisplayList(i_differedDlistFlag) != kJ3DError_Success)
                 {
@@ -3514,7 +3743,119 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
     return NULL;
 }
 
+DummyCheckHeap* dch;
+
+DummyCheckHeap::DummyCheckHeap() {
+    mAlloc = NULL;
+    mSize = 0;
+    mHeap = NULL;
+}
+
+DummyCheckHeap::~DummyCheckHeap() {
+    if (mHeap != NULL) {
+        mHeap->destroy();
+    }
+}
+
+int DummyCheckHeap::isVirgin() {
+    if (mAlloc != NULL && mSize > 0) {
+        for (int i = 0; i < mSize; i++) {
+            if (((u8*)mAlloc)[i] != 0xdd) {
+                u8* off = (u8*)mAlloc + i;
+                // "DummyCheckHeap: Heap corruption detected"
+                OS_REPORT_ERROR("DummyCheckHeap 領域破壊発見 %08x+%08x=%08x\n", mAlloc, i, off);
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+JKRHeap* DummyCheckHeap::getHeap() {
+    if (mHeap != NULL) {
+        JUT_ASSERT(7604, mHeap);
+        JUT_ASSERT(7605, mAlloc);
+        JKRHeap* heap = mHeap;
+        JUT_ASSERT(7607, mSize > 0);
+        isVirgin();
+        JKRFreeToHeap(mHeap, mAlloc);
+        mHeap = NULL;
+        mAlloc = NULL;
+        return heap;
+    } else {
+        return NULL;
+    }
+}
+
+void DummyCheckHeap::setHeap(JKRHeap* heap) {
+    JUT_ASSERT(7620, heap != NULL);
+    JUT_ASSERT(7621, mHeap == NULL);
+    JUT_ASSERT(7622, mAlloc == NULL);
+    mHeap = heap;
+    mSize = JKRGetFreeSize(mHeap);
+    JUT_ASSERT(7625, mSize > 0);
+    mAlloc = JKRAllocFromHeap(mHeap, mSize, 0);
+    JUT_ASSERT(7627, mAlloc);
+    memset(mAlloc, 0xdd, mSize);
+}
+
+int DummyCheckHeap_init() {
+    JUT_ASSERT(7634, dch == NULL);
+    dch = new((JKRHeap*)mDoExt_getZeldaHeap(), 0) DummyCheckHeap();
+    if (dch == NULL) {
+        return false;
+    }
+
+    return true;
+}
+
+int DummyCheckHeap_create() {
+    if (dch != NULL) {
+        if (dch->mHeap == NULL) {
+            JKRHeap* rootHeap = JKRGetRootHeap2();
+            JKRHeap* heap = JKRCreateExpHeap(0x60000, rootHeap, false);
+            if (heap == NULL) {
+                // "DummyCheckHeap allocation failure"
+                OS_REPORT_ERROR("DummyCheckHeap_create 領域確保失敗\n");
+                return 0;
+            }
+            dch->setHeap(heap);
+        }
+        return 1;
+    }
+    return 0;
+}
+
+void DummyCheckHeap_destroy() {
+    if (dch != NULL && dch->mHeap != NULL) {
+        JKRHeap* heap = dch->getHeap();
+        if (heap != NULL) {
+            heap->destroy();
+        }
+    }
+}
+
+int DummyCheckHeap_isVirgin() {
+    int retval;
+    if (dch != NULL) {
+        retval = dch->isVirgin();
+    } else {
+        retval = 1;
+    }
+    return retval;
+}
+
+void DummyCheckHeap_check() {
+    if (dch != NULL) {
+       DummyCheckHeap_isVirgin();
+    }
+}
+
 u32 aram_cache_size;
+
+u32 mDoExt_getAraCacheSize() {
+    return aram_cache_size;
+}
 
 void mDoExt_setAraCacheSize(u32 size) {
     aram_cache_size = size;

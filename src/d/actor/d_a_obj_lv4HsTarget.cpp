@@ -90,7 +90,7 @@ static actor_method_class l_daLv4HsTarget_Method = {
     (process_method_func)daLv4HsTarget_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv4HsTarget = {
+actor_process_profile_definition g_profile_Obj_Lv4HsTarget = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

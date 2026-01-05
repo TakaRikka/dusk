@@ -5,8 +5,8 @@
 #include "JSystem/JAudio2/JASAramStream.h"
 #include "JSystem/JAudio2/JASHeapCtrl.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "bitset.h"
-#include <stdint.h>
+#include <bitset>
+#include <stdint>
 
 /**
  * @ingroup jsystem-jaudio

@@ -27,10 +27,12 @@ void daObjRIVERROCK_c::initCcCylinder() {
             {0x0}, // mGObjCo
         }, // mObjInf
         {
-            {0.0f, -500.0f, 0.0f}, // mCenter
-            1000.0f, // mRadius
-            1000.0f // mHeight
-        } // mCyl
+            {
+                {0.0f, -500.0f, 0.0f}, // mCenter
+                1000.0f, // mRadius
+                1000.0f // mHeight
+            } // mCyl
+        }
     };
 
     mStts.Init(0xff, 0xff, this);
@@ -103,7 +105,7 @@ void daObjRIVERROCK_c::CheckBG() {
     field_0x5d0 = particlePos;
 }
 
-static bool mHIOInitialized;
+static bool hio_set;
 
 static daObjRIVERROCK_HIO_c l_HIO;
 
@@ -244,8 +246,8 @@ int daObjRIVERROCK_c::create() {
         } else {
             field_0x5c4.set(1.0f, 1.0f, 1.0f);
         }
-        if (!mHIOInitialized) {
-            mHIOInitialized = true;
+        if (!hio_set) {
+            hio_set = true;
             mHIONeedDelete = true;
             l_HIO.field_0x4 = -1;
         }
@@ -304,7 +306,7 @@ int daObjRIVERROCK_c::Draw() {
 int daObjRIVERROCK_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     if (mHIONeedDelete) {
-        mHIOInitialized = false;
+        hio_set = false;
     }
     mSoundObj.deleteObject();
     return 1;
@@ -318,7 +320,7 @@ static actor_method_class l_daObjRIVERROCK_Method = {
     (process_method_func)daObjRIVERROCK_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_RIVERROCK = {
+actor_process_profile_definition g_profile_Obj_RIVERROCK = {
   fpcLy_CURRENT_e,          // mLayerID
   3,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

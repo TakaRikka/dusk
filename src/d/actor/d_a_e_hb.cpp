@@ -213,7 +213,7 @@ static void damage_check(e_hb_class* i_this) {
     }
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_HB_HIO_c l_HIO;
 
@@ -1327,7 +1327,7 @@ static int daE_HB_Delete(e_hb_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "E_hb");
 
     if (i_this->HIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -1410,9 +1410,9 @@ static int daE_HB_Create(fopAc_ac_c* i_this) {
 
         OS_REPORT("//////////////E_HB SET 2 !!\n");
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             a_this->HIOInit = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("デグババ（ボックリ）", &l_HIO);
         }
 
@@ -1510,7 +1510,7 @@ static actor_method_class l_daE_HB_Method = {
     (process_method_func)daE_HB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_HB = {
+actor_process_profile_definition g_profile_E_HB = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

@@ -35,7 +35,7 @@ static actor_method_class daNpc_P2MethodTable = {
     (process_method_func)daNpc_P2Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_P2 = {
+actor_process_profile_definition g_profile_NPC_P2 = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

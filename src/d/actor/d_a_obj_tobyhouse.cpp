@@ -306,7 +306,7 @@ void daObjTobyHouse_c::actionEvent() {
         dComIfGs_offOneZoneSwitch(6, 0xffffffff);
         setAction(ACTION_WAIT);
     } else {
-        dComIfGp_getEvent().setSkipProc(this, eventCallBack, 0);
+        dComIfGp_getEvent()->setSkipProc(this, eventCallBack, 0);
         demoProc();
     }
 }
@@ -603,7 +603,7 @@ static actor_method_class daObjTobyHouse_METHODS = {
     (process_method_func)daObjTobyHouse_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_TobyHouse = {
+actor_process_profile_definition g_profile_Obj_TobyHouse = {
   fpcLy_CURRENT_e,          // mLayerID
   3,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

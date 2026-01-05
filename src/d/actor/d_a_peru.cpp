@@ -386,7 +386,7 @@ void daPeru_c::srchActors() {
 int daPeru_c::evtTalk() {
     if (chkAction(&daPeru_c::talk)) {
         (this->*(mActionFunc))(0);
-    } else if (!g_dComIfG_gameInfo.play.mEvent.chkTalkXY() || g_dComIfG_gameInfo.play.mEvtManager.ChkPresentEnd()) {
+    } else if (dComIfGp_event_chkTalkXY() == FALSE || dComIfGp_evmng_ChkPresentEnd()) {
         setAction(&daPeru_c::talk, 0);
     }
     return 1;
@@ -1217,7 +1217,7 @@ static actor_method_class daPeru_MethodTable = {
     (process_method_func)daPeru_Draw,
 };
 
-extern actor_process_profile_definition g_profile_PERU = {
+actor_process_profile_definition g_profile_PERU = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

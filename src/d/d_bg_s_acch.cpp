@@ -121,9 +121,8 @@ void dBgS_Acch::Set(fopAc_ac_c* i_actor, int i_tbl_size, dBgS_AcchCir* i_acchcir
 }
 
 void dBgS_Acch::GroundCheckInit(dBgS& i_bgs) {
+    UNUSED(i_bgs);
     if (!(m_flags & 2)) {
-        i_bgs; // necessary to match
-
         m_ground_h = -G_CM3D_F_INF;
         m_gnd.SetExtChk(*this);
         field_0xb4 = ChkGroundHit();

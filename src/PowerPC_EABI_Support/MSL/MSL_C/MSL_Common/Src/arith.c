@@ -7,6 +7,10 @@ int abs(int n) {
         return (n);
 }
 
+long labs(long __x) {
+    return __x > 0 ? __x : -__x;
+}
+
 div_t div(int numerator, int denominator) {
     div_t ret;
     int i = 1;

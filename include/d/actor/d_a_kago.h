@@ -120,10 +120,10 @@ public:
     MtxP getLegR3Mtx() { return mLegR3Mtx; }
     MtxP getMidnaLocaterMtx() { return mpMorf->getModel()->getAnmMtx(4); }
     s8 getPathDir() { return mPathDir; }
-    bool isFlying() { return mIsFlying; }
+    u8 isFlying() { return mIsFlying; }
     fopAc_ac_c* getLockActor() { return mpLockActor; }
     void setLockActor(fopAc_ac_c* actor) { mpLockActor = actor; }
-    void setEatYm() { field_0x6d8 |= 4; }
+    void setEatYm() { field_0x6d8 |= (u8) 4; }
     MtxP getMouthMtx() { return mpMorf->getModel()->getAnmMtx(7); }
 
 private:
@@ -156,7 +156,7 @@ private:
     /* 0x6DE */ u8 field_0x6de;
     /* 0x6DF */ u8 field_0x6df;
     /* 0x6E0 */ u8 field_0x6e0;
-    /* 0x6E1 */ bool mIsFlying;
+    /* 0x6E1 */ u8 mIsFlying;
     /* 0x6E2 */ u8 field_0x6e2[0x6e3 - 0x6e2];
     /* 0x6E3 */ u8 field_0x6e3;
     /* 0x6E4 */ u8 field_0x6e4;

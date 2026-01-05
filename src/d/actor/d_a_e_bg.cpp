@@ -231,15 +231,15 @@ void daE_BG_c::setSparkEffect() {
 
 fopAc_ac_c* daE_BG_c::search_esa() {
     dmg_rod_class* rod = (dmg_rod_class*)fopAcM_SearchByName(PROC_MG_ROD);
-    if (rod != NULL && rod->kind == 1 && rod->action != 5 && rod->field_0x100d != 0 &&
-        rod->actor.current.pos.y < rod->field_0x590 - 20.0f) {
+    if (rod != NULL && rod->kind == 1 && rod->action != 5 && rod->is_hook_in_water != 0 &&
+        rod->actor.current.pos.y < rod->water_surface_y - 20.0f) {
         return &rod->actor;
     } else {
         return NULL;
     }
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_BG_HIO_c l_HIO;
 
@@ -1271,7 +1271,7 @@ int daE_BG_c::_delete() {
     dComIfG_resDelete(&mPhaseReq, "E_BG");
 
     if (mHIOInit) {
-        l_initHIO = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.field_0x4);
     }
 
@@ -1349,8 +1349,8 @@ int daE_BG_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (l_initHIO == FALSE) {
-            l_initHIO = 1;
+        if (hio_set == FALSE) {
+            hio_set = 1;
             mHIOInit = 1;
             l_HIO.field_0x4 = mDoHIO_CREATE_CHILD("爆弾魚", &l_HIO);
         }
@@ -1422,7 +1422,7 @@ static actor_method_class l_daE_BG_Method = {
     (process_method_func)daE_BG_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_BG = {
+actor_process_profile_definition g_profile_E_BG = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

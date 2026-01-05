@@ -581,11 +581,10 @@ static BOOL pl_pass_check(e_rd_class* i_this, f32 param_2) {
 
 static e_rd_class* boss;
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_RD_HIO_c l_HIO;
 
-/* 805191E4 0002+00 data_805191E4 S_find */
 static s16 S_find;
 
 static s8 lbl_70_bss_AE;
@@ -6804,7 +6803,7 @@ static int daE_RD_Delete(e_rd_class* i_this) {
 
     dComIfG_resDelete(&i_this->mPhase, i_this->mResName);
     if (i_this->field_0x125c != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (a_this->heap != NULL) {
@@ -7256,9 +7255,9 @@ static cPhs__Step daE_RD_Create(fopAc_ac_c* a_this) {
             ride_game_actor_set(i_this);
         }
 
-        if (l_initHIO == 0) {
+        if (hio_set == 0) {
             i_this->field_0x125c = 1;
-            l_initHIO = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -7372,7 +7371,7 @@ static actor_method_class l_daE_RD_Method = {
     (process_method_func)daE_RD_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_RD = {
+actor_process_profile_definition g_profile_E_RD = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

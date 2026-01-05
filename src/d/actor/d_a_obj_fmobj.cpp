@@ -118,7 +118,7 @@ static actor_method_class l_daObj_Fmobj_Method = {
     (process_method_func)daObj_Fmobj_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_FMOBJ = {
+actor_process_profile_definition g_profile_OBJ_FMOBJ = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

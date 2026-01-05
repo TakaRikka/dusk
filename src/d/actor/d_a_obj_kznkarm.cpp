@@ -84,7 +84,7 @@ void daObjKznkarm_Hio_c::genMessage(JORMContext* ctx) {
     -5.0f, -30.0f, 0.6f, 0.94f,
      40.0f, 40.0f, -60.0f,
     -6.0f, -6.0f, -60.0f, 0.0f, 
-    12.0f, 0, 0x1000, 0, 0xE000,
+    12.0f, 0, 0x1000, 0, -0x2000,
 };
 
 static char* l_arcName = "J_Kazami";
@@ -451,7 +451,7 @@ static actor_method_class l_daObjKznkarm_Method = {
     (process_method_func)daObjKznkarm_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_KznkArm = {
+actor_process_profile_definition g_profile_Obj_KznkArm = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

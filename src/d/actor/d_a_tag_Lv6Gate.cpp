@@ -116,9 +116,7 @@ inline bool daTagLv6Gate_c::checkOpenArea() {
 }
 
 inline int daTagLv6Gate_c::execute() {
-    dComIfG_inf_c& game_info = g_dComIfG_gameInfo;  // Fake match?
-
-    if (game_info.getPlay().getEvent().runCheck() && !eventInfo.checkCommandTalk()) {
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
         dEvent_manager_c& eventManager = dComIfGp_getEventManager();
         s32 cut_index = eventManager.getMyStaffId(l_arcName, NULL, 0);
         if (cut_index != -1) {
@@ -129,7 +127,7 @@ inline int daTagLv6Gate_c::execute() {
             if (eventManager.getIsAddvance(cut_index)) {
                 switch (*cut_name) {
                 case '0001': {
-                    dComIfGp_getEvent().setSkipZev(this, "LV6_GATE_APPEAR_SKIP");
+                    dComIfGp_getEvent()->setSkipZev(this, "LV6_GATE_APPEAR_SKIP");
 
                     cXyz pos(0.0f, 0.0f, 78.0f);
 
@@ -288,8 +286,10 @@ void daTagLv6Gate_c::create_init() {
     initBaseMtx();
 
     if (!fopAcM_isSwitch(this, getSwitchNo1())) {
-        parentActorID = fopAcM_create(PROC_NPC_TKS, 2, &cXyz(-13.272481f, 2887.0f, -10373.718f),
-                                      fopAcM_GetRoomNo(this), &csXyz(0, 0x7FFF, 0), NULL, -1);
+        cXyz i_pos(-13.272481f, 2887.0f, -10373.718f);
+        csXyz i_angle(0, 0x7FFF, 0);
+        parentActorID = fopAcM_create(PROC_NPC_TKS, 2, &i_pos,
+                                      fopAcM_GetRoomNo(this), &i_angle, NULL, -1);
     }
 }
 
@@ -370,7 +370,7 @@ static actor_method_class l_daTagLv6Gate_Method = {
     (process_method_func)daTagLv6Gate_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_Lv6Gate = {
+actor_process_profile_definition g_profile_Tag_Lv6Gate = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

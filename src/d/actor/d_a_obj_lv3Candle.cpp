@@ -218,7 +218,7 @@ static actor_method_class l_daLv3Candle_Method = {
     (process_method_func)daLv3Candle_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv3Candle = {
+actor_process_profile_definition g_profile_Obj_Lv3Candle = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

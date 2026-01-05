@@ -130,7 +130,7 @@ static actor_method_class l_daSnowEffTag_Method = {
     (process_method_func)daSnowEffTag_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_SnowEff = {
+actor_process_profile_definition g_profile_Tag_SnowEff = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

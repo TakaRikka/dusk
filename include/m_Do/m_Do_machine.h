@@ -8,7 +8,7 @@ class JKRHeap;
 
 void myHeapCheckRecursive(JKRHeap*);
 BOOL mDoMch_IsProgressiveMode();
-bool exceptionReadPad(u32*, u32*);
+void exceptionReadPad(u32*, u32*);
 void exceptionRestart();
 void myExceptionCallback(u16, OSContext*, u32, u32);
 void my_SysPrintHeap(char const*, void*, u32);

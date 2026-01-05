@@ -125,8 +125,8 @@ void daZrTuraRc_c::modeDrop() {
 }
 
 void daZrTuraRc_c::bgCheck() {
-    // this should be ChkGroundHit but that doesn't match
-    if (mAcch.m_flags >> 5 & 1) {
+    bool r31 = mAcch.ChkGroundHit();
+    if (r31) {
         init_modeDropEnd();
     }
 }
@@ -177,7 +177,7 @@ static actor_method_class l_daZrTuraRc_Method = {
     (process_method_func)daZrTuraRc_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_zrTuraraRc = {
+actor_process_profile_definition g_profile_Obj_zrTuraraRc = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

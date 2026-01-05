@@ -20,43 +20,53 @@ enum AnmNum {
     CD2_ANM_14 = 14,
 };
 
+// Fake name
+struct daNpcCd2_HIO_Jnt_UnkStruct_s {
+    /* 0x00 */ f32 field_0x00[3];
+    /* 0x0C */ s16 field_0x0C[3];
+};  // Size: 0x14
+
 struct daNpcCd2_HIO_Jnt_c : public JORReflexible {
     virtual ~daNpcCd2_HIO_Jnt_c() {}
     daNpcCd2_HIO_Jnt_c() {}
 
     void genMessage(JORMContext*);
 
-    /* 0x04 */ f32 field_0x04[3];
-    /* 0x10 */ s16 field_0x10[3];
+    /* 0x04 */ daNpcCd2_HIO_Jnt_UnkStruct_s field_0x04;
 };
+
+// Fake name
+struct daNpcCd2_HIO_Child_UnkStruct_s {
+    /* 0x00 */ s16 mMaxLmtX_BACKBONE;
+    /* 0x02 */ s16 mMaxLmtY_BACKBONE;
+    /* 0x04 */ s16 mMinLmtX_BACKBONE;
+    /* 0x06 */ s16 mMinLmtY_BACKBONE;
+    /* 0x08 */ s16 mMaxLmtX_NECK;
+    /* 0x0A */ s16 mMaxLmtY_NECK;
+    /* 0x0C */ s16 mMinLmtX_NECK;
+    /* 0x0E */ s16 mMinLmtY_NECK;
+    /* 0x10 */ s16 mMaxLmtX_HEAD;
+    /* 0x12 */ s16 mMaxLmtY_HEAD;
+    /* 0x14 */ s16 mMinLmtX_HEAD;
+    /* 0x16 */ s16 mMinLmtY_HEAD;
+    /* 0x18 */ f32 mScale;
+    /* 0x1C */ s16 mAttn;
+    /* 0x20 */ f32 mAnmPlaySpeed;
+    /* 0x24 */ f32 mWalkAnmPlaySpeed;
+    /* 0x28 */ f32 mMaxSpeed;
+    /* 0x2C */ f32 mWalkMaxSpeed;
+    /* 0x30 */ f32 mCylH;
+    /* 0x34 */ f32 mCylR;
+    /* 0x38 */ f32 mChkWallH;
+    /* 0x3C */ f32 mChkWallR;
+};  // Size: 0x40
 
 struct daNpcCd2_HIO_MChild_c {
     virtual ~daNpcCd2_HIO_MChild_c() {}
     daNpcCd2_HIO_MChild_c() {}
 
     /* 0x004 */ daNpcCd2_HIO_Jnt_c field_0x004[19];
-    /* 0x1CE */ s16 mMaxLmtX_BACKBONE;
-    /* 0x1CA */ s16 mMaxLmtY_BACKBONE;
-    /* 0x1CC */ s16 mMinLmtX_BACKBONE;
-    /* 0x1CE */ s16 mMinLmtY_BACKBONE;
-    /* 0x1D0 */ s16 mMaxLmtX_NECK;
-    /* 0x1D2 */ s16 mMaxLmtY_NECK;
-    /* 0x1D4 */ s16 mMinLmtX_NECK;
-    /* 0x1D6 */ s16 mMinLmtY_NECK;
-    /* 0x1D0 */ s16 mMaxLmtX_HEAD;
-    /* 0x1D2 */ s16 mMaxLmtY_HEAD;
-    /* 0x1D4 */ s16 mMinLmtX_HEAD;
-    /* 0x1D6 */ s16 mMinLmtY_HEAD;
-    /* 0x1E0 */ f32 mScale;
-    /* 0x1E4 */ s16 mAttn;
-    /* 0x1E8 */ f32 mAnmPlaySpeed;
-    /* 0x1EC */ f32 mWalkAnmPlaySpeed;
-    /* 0x1F0 */ f32 mMaxSpeed;
-    /* 0x1F4 */ f32 mWalkMaxSpeed;
-    /* 0x1F8 */ f32 mCylH;
-    /* 0x1FC */ f32 mCylR;
-    /* 0x200 */ f32 mChkWallH;
-    /* 0x204 */ f32 mChkWallR;
+    /* 0x1D0 */ daNpcCd2_HIO_Child_UnkStruct_s field_0x1D0;
 };
 
 struct daNpcCd2_HIO_WChild_c {
@@ -64,28 +74,7 @@ struct daNpcCd2_HIO_WChild_c {
     daNpcCd2_HIO_WChild_c() {}
 
     /* 0x004 */ daNpcCd2_HIO_Jnt_c field_0x004[21];
-    /* 0x1FE */ s16 mMaxLmtX_BACKBONE;
-    /* 0x1FA */ s16 mMaxLmtY_BACKBONE;
-    /* 0x1FC */ s16 mMinLmtX_BACKBONE;
-    /* 0x1FE */ s16 mMinLmtY_BACKBONE;
-    /* 0x200 */ s16 mMaxLmtX_NECK;
-    /* 0x202 */ s16 mMaxLmtY_NECK;
-    /* 0x204 */ s16 mMinLmtX_NECK;
-    /* 0x206 */ s16 mMinLmtY_NECK;
-    /* 0x200 */ s16 mMaxLmtX_HEAD;
-    /* 0x202 */ s16 mMaxLmtY_HEAD;
-    /* 0x204 */ s16 mMinLmtX_HEAD;
-    /* 0x206 */ s16 mMinLmtY_HEAD;
-    /* 0x218 */ f32 mScale;
-    /* 0x21C */ s16 mAttn;
-    /* 0x220 */ f32 mAnmPlaySpeed;
-    /* 0x224 */ f32 mWalkAnmPlaySpeed;
-    /* 0x228 */ f32 mMaxSpeed;
-    /* 0x22C */ f32 mWalkMaxSpeed;
-    /* 0x230 */ f32 mCylH;
-    /* 0x234 */ f32 mCylR;
-    /* 0x238 */ f32 mChkWallH;
-    /* 0x23C */ f32 mChkWallR;
+    /* 0x1FC */ daNpcCd2_HIO_Child_UnkStruct_s field_0x1FC;
 };
 
 struct daNpcCd2_HIO_c : public fOpAcm_HIO_entry_c {
@@ -103,120 +92,120 @@ extern daNpcCd2_HIO_c l_Cd2_HIO;
 inline s16 Cd2_HIO_atnOfs(int param_1) {
     s16 rv;
     if (param_1 < 16) {
-        rv = l_Cd2_HIO.field_0x0004[param_1].mAttn;
+        rv = l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mAttn;
     } else {
-        rv = l_Cd2_HIO.field_0x20c4[param_1 - 16].mAttn;
+        rv = l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mAttn;
     }
     return rv;
 }
 
 inline f32 Cd2_HIO_objScale(int param_1) {
-    return (f32)(param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].mScale : l_Cd2_HIO.field_0x20c4[param_1 - 16].mScale);
+    return (f32)(param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mScale : l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mScale);
 
 }
 
 inline f32 Cd2_HIO_walkMaxSpeed(int param_1) {
-    return (f32)(param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].mWalkMaxSpeed : l_Cd2_HIO.field_0x20c4[param_1 - 16].mWalkMaxSpeed);
+    return (f32)(param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mWalkMaxSpeed : l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mWalkMaxSpeed);
 }
 
 inline f32 Cd2_HIO_walkAnmPlaySpeed(int param_1) {
-    return (f32)(param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].mWalkAnmPlaySpeed : l_Cd2_HIO.field_0x20c4[param_1 - 16].mWalkAnmPlaySpeed);
+    return (f32)(param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mWalkAnmPlaySpeed : l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mWalkAnmPlaySpeed);
 }
 
 inline f32 Cd2_HIO_maxSpeed(int param_1) {
-    return (f32)(param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].mMaxSpeed : l_Cd2_HIO.field_0x20c4[param_1 - 16].mMaxSpeed);
+    return (f32)(param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMaxSpeed : l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMaxSpeed);
 }
 
 inline f32 Cd2_HIO_anmPlaySpeed(int param_1) {
-    return (f32)(param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].mAnmPlaySpeed : l_Cd2_HIO.field_0x20c4[param_1 - 16].mAnmPlaySpeed);
+    return (f32)(param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mAnmPlaySpeed : l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mAnmPlaySpeed);
 }
 
 inline f32 Cd2_HIO_chkWallH(int param_1) {
-    return param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].mChkWallH : l_Cd2_HIO.field_0x20c4[param_1 - 16].mChkWallH;
+    return param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mChkWallH : l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mChkWallH;
 }
 
 inline f32 Cd2_HIO_chkWallR(int param_1) {
-    return param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].mChkWallR : l_Cd2_HIO.field_0x20c4[param_1 - 16].mChkWallR;
+    return param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mChkWallR : l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mChkWallR;
 }
 
 inline f32 Cd2_HIO_cylR(int param_1) {
-    return param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].mCylR : l_Cd2_HIO.field_0x20c4[param_1 - 16].mCylR;
+    return param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mCylR : l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mCylR;
 }
 
 inline f32 Cd2_HIO_cylH(int param_1) {
-    return param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].mCylH : l_Cd2_HIO.field_0x20c4[param_1 - 16].mCylH;
+    return param_1 < 16 ? l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mCylH : l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mCylH;
 }
 
 inline s16 Cd2_HIO_maxLmtX_BACKBONE(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMaxLmtX_BACKBONE :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMaxLmtX_BACKBONE);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMaxLmtX_BACKBONE :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMaxLmtX_BACKBONE);
 }
 
 inline s16 Cd2_HIO_maxLmtY_BACKBONE(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMaxLmtY_BACKBONE :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMaxLmtY_BACKBONE);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMaxLmtY_BACKBONE :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMaxLmtY_BACKBONE);
 }
 
 inline s16 Cd2_HIO_maxLmtX_NECK(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMaxLmtX_NECK :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMaxLmtX_NECK);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMaxLmtX_NECK :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMaxLmtX_NECK);
 }
 
 inline s16 Cd2_HIO_maxLmtY_NECK(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMaxLmtY_NECK :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMaxLmtY_NECK);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMaxLmtY_NECK :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMaxLmtY_NECK);
 }
 
 inline s16 Cd2_HIO_maxLmtX_HEAD(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMaxLmtX_HEAD :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMaxLmtX_HEAD);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMaxLmtX_HEAD :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMaxLmtX_HEAD);
 }
 
 inline s16 Cd2_HIO_maxLmtY_HEAD(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMaxLmtY_HEAD :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMaxLmtY_HEAD);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMaxLmtY_HEAD :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMaxLmtY_HEAD);
 }
 
 inline s16 Cd2_HIO_minLmtX_BACKBONE(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMinLmtX_BACKBONE :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMinLmtX_BACKBONE);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMinLmtX_BACKBONE :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMinLmtX_BACKBONE);
 }
 
 inline s16 Cd2_HIO_minLmtY_BACKBONE(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMinLmtY_BACKBONE :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMinLmtY_BACKBONE);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMinLmtY_BACKBONE :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMinLmtY_BACKBONE);
 }
 
 inline s16 Cd2_HIO_minLmtX_NECK(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMinLmtX_NECK :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMinLmtX_NECK);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMinLmtX_NECK :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMinLmtX_NECK);
 }
 
 inline s16 Cd2_HIO_minLmtY_NECK(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMinLmtY_NECK :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMinLmtY_NECK);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMinLmtY_NECK :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMinLmtY_NECK);
 }
 
 inline s16 Cd2_HIO_minLmtX_HEAD(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMinLmtX_HEAD :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMinLmtX_HEAD);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMinLmtX_HEAD :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMinLmtX_HEAD);
 }
 
 inline s16 Cd2_HIO_minLmtY_HEAD(int param_1) {
     return (s16)(param_1 < 16 ?
-        l_Cd2_HIO.field_0x0004[param_1].mMinLmtY_HEAD :
-        l_Cd2_HIO.field_0x20c4[param_1 - 16].mMinLmtY_HEAD);
+        l_Cd2_HIO.field_0x0004[param_1].field_0x1D0.mMinLmtY_HEAD :
+        l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x1FC.mMinLmtY_HEAD);
 }
 
 class PathTrace_c {

@@ -3,6 +3,8 @@
 #include "misc_io.h"
 #include "wchar_io.h"
 
+#include "global.h"
+
 int __put_char(int c, FILE* stream) {
     int ret;
 
@@ -18,8 +20,15 @@ int __put_char(int c, FILE* stream) {
     }
 
     if (stream->file_state.io_state == __neutral && (stream->file_mode.io_mode & __write)) {
-        if ((stream->file_mode.io_mode & __append) && fseek(stream, 0, 2) != 0) {
-            return 0;
+        if ((stream->file_mode.io_mode & __append)) {
+            #if PLATFORM_GCN
+            if (fseek(stream, 0, 2) != 0)
+            #else
+            if (_fseek(stream, 0, 2) != 0)
+            #endif
+            {
+                return 0;
+            }
         }
 
         stream->file_state.io_state = __writing;
@@ -61,31 +70,21 @@ exit:
     return ret;
 }
 
+#if PLATFORM_GCN
+#define __putc(c, file) \
+	((fwide(file, -1) >= 0) ? -1 : (file)->buffer_length-- ? (int) (*(file)->buffer_ptr++ = (unsigned char)(c)) : __put_char(c, file))
+#else
+#define __putc(c, file) \
+	((__fwide(file, -1) >= 0) ? -1 : (file)->buffer_length-- ? (int) (*(file)->buffer_ptr++ = (unsigned char)(c)) : __put_char(c, file))
+#endif
+
 int fputs(const char* s, FILE* stream) {
     char c;
-    int var_r3;
-    unsigned long len;
     int ret = 0;
 
     __begin_critical_region(stdin_access);
     while (c = *s++, c != 0) {
-        if (fwide(stream, -1) >= 0) {
-            var_r3 = -1;
-        } else {
-            len = stream->buffer_length;
-            stream->buffer_length = len - 1;
-
-            if (len != 0) {
-                char* buf = (char*)stream->buffer_ptr;
-                stream->buffer_ptr++;
-
-                *buf = var_r3 = c & 0xFF;
-            } else {
-                var_r3 = __put_char(c, stream);
-            }
-        }
-
-        if (var_r3 == -1) {
+        if (__putc(c, stream) == -1) {
             ret = -1;
             break;
         }

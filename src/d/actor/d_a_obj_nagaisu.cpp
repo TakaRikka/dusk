@@ -58,10 +58,12 @@ const dCcD_SrcCyl daObjIsuChild_c::s_CcDCyl = {
         {0},
     },
     {
-        {0.0f, 0.0f, 0.0f},
-        0.0f,
-        0.0f,
-    },
+        {
+            {0.0f, 0.0f, 0.0f},
+            0.0f,
+            0.0f,
+        },
+    }
 };
 
 int daObjNagaisu_c::create() {
@@ -318,7 +320,7 @@ static actor_method_class daObjNagaisu_METHODS = {
     (process_method_func)daObjNagaisu_draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Nagaisu = {
+actor_process_profile_definition g_profile_Obj_Nagaisu = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

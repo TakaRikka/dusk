@@ -3,7 +3,7 @@
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JParticle/JPADynamicsBlock.h"
 #include "JSystem/JParticle/JPAResource.h"
-#include "string.h"
+#include <string>
 
 struct JPAResourceLoader {
     JPAResourceLoader(u8 const*, JPAResourceManager*);

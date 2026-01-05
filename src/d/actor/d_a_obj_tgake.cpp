@@ -131,7 +131,7 @@ static actor_method_class daObjGake_METHODS = {
     (process_method_func)daObjGake_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Gake = {
+actor_process_profile_definition g_profile_Obj_Gake = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

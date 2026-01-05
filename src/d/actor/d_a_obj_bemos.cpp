@@ -54,8 +54,8 @@ static Vec const l_craw_offset[4] = {
 s16 const daObjBm_c::M_dir_base[4] = {
     0x0000,
     0x4000,
-    0x8000,
-    0xC000,
+    -0x8000,
+    -0x4000,
 };
 
 static const char* l_arcName = "Obj_bm";
@@ -113,10 +113,12 @@ static dCcD_SrcCyl l_cyl_src = {
         {0x0},                                        // mGObjCo
     },                                                // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        15.0f,               // mRadius
-        60.0f                // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            15.0f,               // mRadius
+            60.0f                // mHeight
+        }  // mCyl
+    }
 };
 
 
@@ -1115,8 +1117,9 @@ dBgS_WtrChk daObjBm_c::Bgc_c::M_wrt_work;
 
 dBgS_ObjLinChk daObjBm_c::Bgc_c::M_wall_work[23];
 
-static dBgS_ObjGndChk dummy_touch_work() {
+void daObjBm_c::Bgc_c::chk_wall_touch(const fopAc_ac_c*, const daObjBm_c::BgcSrc_c*, short) {
     static dBgS_ObjLinChk touch_work;
+    const static float bgc_add = 10.0f;
 }
 
 static f32 dummy_rodata_5158() {
@@ -1907,7 +1910,7 @@ static actor_method_class daObjBm_METHODS = {
     (process_method_func)daObjBm_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Bemos = {
+actor_process_profile_definition g_profile_Obj_Bemos = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

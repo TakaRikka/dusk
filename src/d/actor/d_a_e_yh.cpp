@@ -277,7 +277,7 @@ static void damage_check(e_yh_class* i_this) {
     }
 }
 
-static bool l_HIOInit;
+static bool hio_set;
 
 static daE_YH_HIO_c l_HIO;
 
@@ -2064,7 +2064,7 @@ static int daE_YH_Delete(e_yh_class* i_this) {
     fopAcM_RegisterDeleteID(a_this, "E_YH");
     dComIfG_resDelete(&i_this->mPhase, "E_yd");
     if (i_this->mIsHIOOwner) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.mId);
     }
 
@@ -2157,9 +2157,9 @@ static int daE_YH_Create(fopAc_ac_c* a_this) {
 
         OS_REPORT("//////////////E_YH SET 2 !!\n");
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             i_this->mIsHIOOwner = true;
-            l_HIOInit = true;
+            hio_set = true;
             l_HIO.mId = mDoHIO_CREATE_CHILD("デグババ", &l_HIO);
         }
 
@@ -2257,7 +2257,7 @@ static actor_method_class l_daE_YH_Method = {
     (process_method_func)daE_YH_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_YH = {
+actor_process_profile_definition g_profile_E_YH = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

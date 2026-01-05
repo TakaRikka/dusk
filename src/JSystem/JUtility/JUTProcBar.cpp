@@ -4,7 +4,7 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTVideo.h"
-#include <stdint.h>
+#include <stdint>
 
 JUTProcBar::JUTProcBar() {
     mVisible = true;
@@ -64,15 +64,16 @@ void JUTProcBar::clear() {
 void JUTProcBar::bar_subroutine(int param_0, int param_1, int param_2, int param_3, int param_4,
                                 int param_5, int param_6, JUtility::TColor param_7,
                                 JUtility::TColor param_8) {
-    int var1 = param_6 * param_3 / param_4;
-    J2DFillBox(param_0, param_1, param_5 * param_3 / param_4, param_2, param_7);
-    if (var1 < 0) {
+    int r29 = param_5 * param_3 / param_4;
+    int r31 = param_6 * param_3 / param_4;
+    J2DFillBox(param_0, param_1, r29, param_2, param_7);
+    if (r31 < 0) {
         return;
     }
-    if (var1 < 6) {
-        J2DFillBox(param_0, param_1, var1, param_2, param_8);
+    if (r31 < 6) {
+        J2DFillBox(param_0, param_1, r31, param_2, param_8);
     } else {
-        J2DFillBox(param_0 + var1 - 6, param_1, 6.0f, param_2, param_8);
+        J2DFillBox(param_0 + r31 - 6, param_1, 6.0f, param_2, param_8);
     }
 }
 
@@ -250,18 +251,21 @@ void JUTProcBar::drawProcessBar() {
 }
 
 static int addrToXPos(void* param_0, int param_1) {
-    return param_1 * (((uintptr_t)param_0 - 0x80000000) / (float)JKRHeap::mMemorySize);
+    int result = param_1 * (((uintptr_t)param_0 - 0x80000000) / (float)JKRHeap::getMemorySize());
+    return result;
 }
 
 static int byteToXLen(int param_0, int param_1) {
-    return param_1 * (param_0 / (float)JKRHeap::mMemorySize);
+    int result = param_1 * (param_0 / (float)JKRHeap::getMemorySize());
+    return result;
 }
 
 static void heapBar(JKRHeap* param_0, int param_1, int param_2, int param_3, int param_4,
                     int param_5) {
     int stack52 = param_1 + addrToXPos(param_0->getStartAddr(), param_4);
     int var1 = param_1 + addrToXPos(param_0->getEndAddr(), param_4);
-    int stack36 = byteToXLen(param_0->getTotalFreeSize(), param_4);
+    s32 freeSize = param_0->getTotalFreeSize();
+    int stack36 = byteToXLen(freeSize, param_4);
     J2DFillBox(stack52, param_2 - param_5 * 2 + param_5 / 2, var1 - stack52, param_5 / 2,
                JUtility::TColor(255, 0, 200, 255));
     J2DFillBox(stack52, param_2 - param_5 * 2 + param_5 / 2, stack36, param_5 / 2,
@@ -270,8 +274,6 @@ static void heapBar(JKRHeap* param_0, int param_1, int param_2, int param_3, int
 
 void JUTProcBar::drawHeapBar() {
     if (mHeapBarVisible) {
-        int start;  // required/workaround for regswaps, end might be a shared variable too, however
-                    // doesn't seem to be needed?
         int posX = mParams.mPosX;
         int posY = mParams.mPosY;
         int barHeight = mParams.mBarWidth * 2;
@@ -284,25 +286,26 @@ void JUTProcBar::drawHeapBar() {
                      6);
 
         // Draws a pink line that shows the size of the memstart to start of arenalow?
-        start = posX + addrToXPos(JKRHeap::getCodeStart(), width);
-        int codeEnd = posX + addrToXPos(JKRHeap::getCodeEnd(), width);
-        J2DFillBox(start, posY - (height * 2), codeEnd - start, height,
+        int start = posX + addrToXPos(JKRHeap::getCodeStart(), width);
+        int end = posX + addrToXPos(JKRHeap::getCodeEnd(), width);
+        J2DFillBox(start, posY - (height * 2), end - start, height,
                    JUtility::TColor(255, 50, 150, 255));
 
         // draws a dark blue line that shows how much memory is free?
         start = posX + addrToXPos(JKRHeap::getUserRamStart(), width);
-        int userEnd = posX + addrToXPos(JKRHeap::getUserRamEnd(), width);
-        J2DFillBox(start, posY - (height * 2), userEnd - start, height,
+        end = posX + addrToXPos(JKRHeap::getUserRamEnd(), width);
+        J2DFillBox(start, posY - (height * 2), end - start, height,
                    JUtility::TColor(0, 50, 150, 255));
 
         // draws a light blue line that shows how much memory is free in the root heap(blends to
         // light pink, not sure how this works)
-        int size = byteToXLen(JKRHeap::getRootHeap()->getTotalFreeSize(), width);
+        s32 freeSize = JKRHeap::getRootHeap()->getTotalFreeSize();
+        int size = byteToXLen(freeSize, width);
         J2DFillBox(start, posY - (height * 2), size, height / 2,
                    JUtility::TColor(0, 250, 250, 255));
         if (field_0x128 == 0) {
             // draws a line of either the watch heap(if available), otherwise draw the current heap
-            JKRHeap* heap = mWatchHeap ? mWatchHeap : JKRGetCurrentHeap();
+            JKRHeap* heap = mWatchHeap ? mWatchHeap : JKRHeap::getCurrentHeap();
             if (heap != JKRHeap::getSystemHeap()) {
                 heapBar(heap, posX, posY, barHeight, width, height);
             }

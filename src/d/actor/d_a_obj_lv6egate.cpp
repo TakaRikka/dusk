@@ -48,10 +48,12 @@ static dCcD_SrcCyl l_at_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        50.0f, // mRadius
-        300.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            50.0f, // mRadius
+            300.0f // mHeight
+        } // mCyl
+    }
 };
 
 int daObjLv6EGate_c::Create() {
@@ -210,7 +212,7 @@ static actor_method_class daObjLv6EGate_METHODS = {
     (process_method_func)daObjLv6EGate_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv6EGate = {
+actor_process_profile_definition g_profile_Obj_Lv6EGate = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

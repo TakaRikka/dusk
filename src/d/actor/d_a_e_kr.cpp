@@ -2233,7 +2233,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     }
 
     J3DModel* model = kr->mpMorf->getModel();
-    model->setUserArea((int)kr);
+    model->setUserArea((intptr_t)kr);
 
     for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
         if (i != 0) {
@@ -2390,7 +2390,7 @@ static actor_method_class l_daE_Kr_Method = {
     (process_method_func)daE_Kr_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_KR = {
+actor_process_profile_definition g_profile_E_KR = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

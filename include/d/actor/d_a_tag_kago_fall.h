@@ -13,7 +13,7 @@ public:
 
     int create();
     int execute();
-    void setActionMode(ActionMode mode, u8 state);
+    void setActionMode(u8 mode, u8 state);
     void actionWaitRiver();
     void actionWaitFall();
     int _delete();

@@ -66,8 +66,7 @@ int daTag_Msg_c::execute() {
     eyePos.set(current.pos.x, current.pos.y + 150.0f, current.pos.z);
     attention_info.position = eyePos;
 
-    dComIfG_play_c& play = g_dComIfG_gameInfo.play;  // FAKE, event inlines need to be fixed
-    if (play.getEvent().runCheck()) {
+    if (dComIfGp_event_runCheck()) {
         set_event = false;
 
         if (eventInfo.checkCommandTalk()) {
@@ -76,7 +75,7 @@ int daTag_Msg_c::execute() {
                     dComIfGs_onSwitch(mOffSwitch, fopAcM_GetRoomNo(this));
                 }
 
-                play.getEvent().reset();
+                dComIfGp_event_reset();
                 set_event = true;
             }
 
@@ -90,7 +89,7 @@ int daTag_Msg_c::execute() {
                     dComIfGs_onSwitch(mOffSwitch, fopAcM_GetRoomNo(this));
                 }
 
-                play.getEvent().reset();
+                dComIfGp_event_reset();
                 set_event = true;
             } else {
                 int staff_id = dComIfGp_evmng_getMyStaffId(mStaffName, NULL, 0);
@@ -238,7 +237,7 @@ static actor_method_class daTag_Msg_MethodTable = {
     (process_method_func)daTag_Msg_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_MSG = {
+actor_process_profile_definition g_profile_TAG_MSG = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

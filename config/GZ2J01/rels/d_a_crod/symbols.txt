@@ -44,4 +44,4 @@ __vt__10cCcD_GStts = .data:0x000000A8; // type:object size:0xC scope:global
 __vt__10dCcD_GStts = .data:0x000000B4; // type:object size:0xC scope:global
 __vt__8cM3dGAab = .data:0x000000C0; // type:object size:0xC scope:global
 __vt__12J3DFrameCtrl = .data:0x000000CC; // type:object size:0xC scope:global
-lbl_47_bss_0 = .bss:0x00000000; // type:object size:0x1 data:byte
+init$0000 = .bss:0x00000000; // type:object size:0x1 scope:local align:1 data:byte

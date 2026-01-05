@@ -520,7 +520,7 @@ static actor_method_class l_daSyRock_Method = {
     (process_method_func)daSyRock_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SyRock = {
+actor_process_profile_definition g_profile_Obj_SyRock = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

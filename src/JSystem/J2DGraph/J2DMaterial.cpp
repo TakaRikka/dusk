@@ -40,7 +40,7 @@ void J2DMaterial::setGX() {
 }
 
 J2DTevBlock* J2DMaterial::createTevBlock(int block_type, bool noAlign) {
-    J2DTevBlock* block;
+    J2DTevBlock* block = NULL;
 
     if (noAlign) {
         if (block_type <= 1) {
@@ -67,12 +67,15 @@ J2DTevBlock* J2DMaterial::createTevBlock(int block_type, bool noAlign) {
             block = new (-4) J2DTevBlock16();
         }
     }
+    if (!block) {
+        OS_PANIC(101, "Error : allocate memory.");
+    }
 
     return block;
 }
 
 J2DIndBlock* J2DMaterial::createIndBlock(int block_type, bool noAlign) {
-    J2DIndBlock* block;
+    J2DIndBlock* block = NULL;
 
     if (noAlign) {
         if (block_type != 0) {
@@ -86,6 +89,9 @@ J2DIndBlock* J2DMaterial::createIndBlock(int block_type, bool noAlign) {
         } else {
             block = new (-4) J2DIndBlockNull();
         }
+    }
+    if (!block) {
+        OS_PANIC(133, "Error : allocate memory.");
     }
 
     return block;
@@ -116,8 +122,18 @@ J2DMaterial::J2DMaterialAnmPointer::J2DMaterialAnmPointer() {
 }
 
 void J2DMaterial::makeAnmPointer() {
+    int r29;
+    int r28;
     if (mAnmPointer == NULL) {
         mAnmPointer = new J2DMaterialAnmPointer();
+        r29 = 1;
+        if (mAnmPointer == NULL) {
+            OS_PANIC(171, "Error : allocate memory.");
+            r28 = 0;
+            if (!r28) {
+                r29 = 0;
+            }
+        }
     }
 }
 
@@ -157,9 +173,7 @@ void J2DMaterial::setAnimation(J2DAnmTextureSRTKey* anm) {
             u16 index = getIndex();
 
             for (u16 i = 0; i < matNum; i++) {
-                u16 matID = anm->getUpdateMaterialID(i);
-
-                if (index == matID) {
+                if (index == anm->getUpdateMaterialID(i)) {
                     u8 mtxID = anm->getUpdateTexMtxID(i);
                     mAnmPointer->mSRTIds[mtxID] = i;
                 }
@@ -183,9 +197,7 @@ void J2DMaterial::setAnimation(J2DAnmTexPattern* anm) {
             J3DAnmTexPatternFullTable* anmTbl = anm->getAnmTable();
 
             for (u16 i = 0; i < matNum; i++) {
-                u16 matID = anm->getUpdateMaterialID(i);
-
-                if (index == matID) {
+                if (index == anm->getUpdateMaterialID(i)) {
                     mAnmPointer->mPatternIds[anmTbl[i].mTexNo] = i;
                 }
             }

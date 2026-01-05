@@ -12,8 +12,8 @@ static int l_fopDwTg_id;
 
 create_tag_class* fopDwIt_GetTag() {
     while (l_fopDwTg_id + 1 < g_fopDwTg_Queue.mNumLists) {
-        l_fopDwTg_id++;
-        node_class* node = g_fopDwTg_Queue.mpLists[l_fopDwTg_id].mpHead;
+        node_list_class* list = &g_fopDwTg_Queue.mpLists[++l_fopDwTg_id];
+        node_class* node = list->mpHead;
     
         if (node != NULL) {
             return (create_tag_class*)node;
@@ -30,13 +30,15 @@ create_tag_class* fopDwIt_Begin() {
     if (tag != NULL) {
         return tag;
     }
-    return tag = fopDwIt_GetTag();
+    return fopDwIt_GetTag();
 }
 
 create_tag_class* fopDwIt_Next(create_tag_class* i_createTag) {
+    (void)&i_createTag;
     create_tag_class* tag = (create_tag_class*)i_createTag->mpNode.mpNextNode;
+
     if (tag == NULL) {
-        tag = fopDwIt_GetTag();
+        return fopDwIt_GetTag();
     }
     return tag;
 }

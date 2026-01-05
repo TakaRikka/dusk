@@ -1892,7 +1892,7 @@ void dMenu_Fmap2DBack_c::regionMapMove(STControl* i_stick) {
 }
 
 void dMenu_Fmap2DBack_c::stageMapMove(STControl* i_stick, u8 param_1, bool param_2) {
-    (void)param_1;
+    UNUSED(param_1);
     
     f32 slow_bound = g_fmapHIO.mScrollSpeedSlowBound < g_fmapHIO.mScrollSpeedFastBound ?
     g_fmapHIO.mScrollSpeedSlowBound : g_fmapHIO.mScrollSpeedFastBound;

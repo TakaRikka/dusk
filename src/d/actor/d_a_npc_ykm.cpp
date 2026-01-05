@@ -461,7 +461,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[64] =
 };
 
 static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[188] = {
-    {0, 0xF7, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
+    {0, -9, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {7, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {8, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -470,7 +470,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[188] = {
     {0xC, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0xD, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0xD, -1, 1}, {2, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
-    {2, 0xF7, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
+    {2, -9, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0xF, -1, 1}, {6, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0x10, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -485,7 +485,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[188] = {
     {0x2C, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0x2D, -1, 1}, {0x2E, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0x29, -1, 1}, {0x2E, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
-    {0x2E, 0xF7, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
+    {0x2E, -9, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0x2F, -1, 1}, {0x30, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0x30, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -979,7 +979,6 @@ BOOL daNpc_ykM_c::isDelete() {
     }
 }
 
-// NONMATCHING - m_nextID load issue, regalloc
 void daNpc_ykM_c::reset() {
     csXyz angle;
     int iVar1 = (u8*)&field_0x1588 - (u8*)&mpNextAction;
@@ -2553,7 +2552,7 @@ int daNpc_ykM_c::cutLv5DungeonClear(int i_cutIndex) {
                 mEventTimer = timer;
                 angleY = fopAcM_searchActorAngleY(player, this);
                 ((daPy_py_c*)daPy_getPlayerActorClass())->setPlayerPosAndAngle(&player->current.pos, angleY, 0);
-                dComIfGp_getEvent().setPt2(this);
+                dComIfGp_getEvent()->setPt2(this);
                 break;
 
             case 2:
@@ -3746,7 +3745,7 @@ static actor_method_class daNpc_ykM_MethodTable = {
     (process_method_func)daNpc_ykM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_YKM = {
+actor_process_profile_definition g_profile_NPC_YKM = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

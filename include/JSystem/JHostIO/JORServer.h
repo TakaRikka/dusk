@@ -131,7 +131,7 @@ public:
     /* 0x1107C */ CallbackLinkList m_eventCallbackList;
 };
 
-inline void JOR_MESSAGELOOP() {
+inline u32 JOR_MESSAGELOOP() {
     JORServer* server = JORServer::getInstance();
     JHIComPortManager<JHICmnMem>::getInstance()->dispatchMessage();
     if (server->getEvent()) {
@@ -160,7 +160,7 @@ inline void JOR_MESSAGELOOP() {
         }
         server->doneEvent();
     }
-    JHIEventLoop();
+    return JHIEventLoop();
 }
 
 inline void JOR_INIT() {
@@ -174,7 +174,16 @@ inline void JOR_SETROOTNODE(const char* name, JORReflexible* node, u32 param_3, 
 inline JORMContext* attachJORMContext(u32 msgID) {
     return JORServer::getInstance()->attachMCTX(msgID);
 }
+
+inline JORMContext* JORAttachMContext(u32 msgID) {
+    return JORServer::getInstance()->attachMCTX(msgID);
+}
+
 inline void releaseJORMContext(JORMContext* mctx) {
+    JORServer::getInstance()->releaseMCTX(mctx);
+}
+
+inline void JORReleaseMContext(JORMContext* mctx) {
     JORServer::getInstance()->releaseMCTX(mctx);
 }
 

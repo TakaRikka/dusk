@@ -710,7 +710,7 @@ BOOL daNpcIns_c::main() {
         (this->*mAction)(NULL);
     }
 
-    if (mItemID != fpcM_ERROR_PROCESS_ID_e && dComIfGp_event_runCheck() != FALSE) {
+    if (mItemID != fpcM_ERROR_PROCESS_ID_e && dComIfGp_event_runCheck()) {
         if (strcmp(dComIfGp_getEventManager().getRunEventName(), "DEFAULT_GETITEM") == 0) {
             dComIfGp_event_setItemPartnerId(mItemID);
             mItemID = fpcM_ERROR_PROCESS_ID_e;
@@ -1053,7 +1053,7 @@ BOOL daNpcIns_c::setAction(actionFunc action) {
 }
 
 void daNpcIns_c::waitEventMng() {
-    if (dComIfGp_event_runCheck() != FALSE) {
+    if (dComIfGp_event_runCheck()) {
         if (eventInfo.checkCommandTalk()) {
             setAction(&daNpcIns_c::talk);
         } else if (dComIfGp_getEventManager().getMyStaffId(l_myName, NULL, 0) != -1) {
@@ -1469,7 +1469,7 @@ int daNpcIns_c::talk(void* param_1) {
                             if (mItemID != fpcM_ERROR_PROCESS_ID_e) {
                                 daPy_getPlayerActorClass()->cancelOriginalDemo();
                                 s16 eventIdx = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);
-                                dComIfGp_getEvent().reset(this);
+                                dComIfGp_getEvent()->reset(this);
                                 fopAcM_orderChangeEventId(this, eventIdx, 1, 0xFFFF);
                                 field_0x9ec = true;
                                 mOrderSpeakEvent = 1;
@@ -1533,7 +1533,7 @@ int daNpcIns_c::demo(void* param_1) {
             mMode = 2;
             // fallthrough        
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 eventManager = &dComIfGp_getEventManager();
                 s32 staffId = eventManager->getMyStaffId(l_myName, NULL, 0);
                 if (staffId != -1) {
@@ -1788,7 +1788,7 @@ static actor_method_class daNpcIns_MethodTable = {
     (process_method_func)daNpcIns_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_INS = {
+actor_process_profile_definition g_profile_NPC_INS = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

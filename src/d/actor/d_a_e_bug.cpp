@@ -23,16 +23,12 @@ daE_Bug_HIO_c::daE_Bug_HIO_c() {
     field_0xc = 1.0f;
 }
 
-/* 80697E6C 0001+00 data_80697E6C @1009 */
-/* 80697E6D 0003+00 data_80697E6D None */
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_Bug_HIO_c l_HIO;
 
-/* 80697E8C 0001+00 data_80697E8C None */
 static s8 l_roomNo;
 
-/* 80697E8D 0003+00 data_80697E8D None */
 static s8 data_80697E8D;
 
 static int daE_Bug_Draw(e_bug_class* i_this) {
@@ -768,7 +764,7 @@ static int daE_Bug_Delete(e_bug_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_bug");
 
     if (i_this->field_0x7dac != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (a_this->heap != NULL) {
@@ -831,9 +827,9 @@ static cPhs__Step daE_Bug_Create(fopAc_ac_c* a_this) {
         }
 
         OS_REPORT("//////////////E_BUG SET 2 !!\n");
-        if (l_initHIO == 0) {
+        if (hio_set == 0) {
             i_this->field_0x7dac = 1;
-            l_initHIO = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -904,7 +900,7 @@ static actor_method_class l_daE_Bug_Method = {
     (process_method_func)daE_Bug_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_BUG = {
+actor_process_profile_definition g_profile_E_BUG = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

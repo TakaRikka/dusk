@@ -7,18 +7,17 @@ JAUStreamFileTable::JAUStreamFileTable() {
 }
 
 void JAUStreamFileTable::init(void const* data) {
-    if (data == NULL) {
+    const BinaryStreamFileTable* binaryTable = (const BinaryStreamFileTable*)data;
+    if (binaryTable == NULL) {
         mData = NULL;
         return;
     }
-    const BinaryStreamFileTable* binaryTable = (const BinaryStreamFileTable*)data;
-    const char* ident = binaryTable->mIdentifier;
-    if (ident[0] == 'b' && ident[1] == 's' && ident[2] == 'f' && ident[3] == 't') {
+    if (binaryTable->mIdentifier[0] == 'b' && binaryTable->mIdentifier[1] == 's' && binaryTable->mIdentifier[2] == 'f' && binaryTable->mIdentifier[3] == 't') {
         mData = binaryTable;
     }
 }
 
-int JAUStreamFileTable::getNumFiles() const {
+u32 JAUStreamFileTable::getNumFiles() const {
     return mData->mNumFiles;
 }
 
@@ -26,8 +25,8 @@ const char* JAUStreamFileTable::getFilePath(int index) const {
     if (mData == NULL) {
         return 0;
     }
-    ASSERT(index >= 0);
-    ASSERT(index < getNumFiles());
+    JUT_ASSERT(52, index >= 0);
+    JUT_ASSERT(53, index < getNumFiles());
     char* data = (char*)mData;
     return (char*)(data + *(int*)(data + 8 + (index * sizeof(s32))));
 }

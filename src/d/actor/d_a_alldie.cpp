@@ -62,7 +62,7 @@ int daAlldie_c::actionOrder() {
 
 int daAlldie_c::actionEvent() {
     if (dComIfGp_evmng_endCheck(mEventIdx)) {
-        dComIfGp_getEvent().reset();
+        dComIfGp_getEvent()->reset();
 
         if (mNextEventIdx != -1) {
             mAction = ACT_NEXT;
@@ -187,7 +187,7 @@ static actor_method_class l_daAlldie_Method = {
     (process_method_func)daAlldie_Draw,
 };
 
-extern actor_process_profile_definition g_profile_ALLDIE = {
+actor_process_profile_definition g_profile_ALLDIE = {
     fpcLy_CURRENT_e,
     2,
     fpcPi_CURRENT_e,

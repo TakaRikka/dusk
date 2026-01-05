@@ -2,7 +2,7 @@
 
 #include "JSystem/J2DGraph/J2DManage.h"
 #include "JSystem/JSupport/JSUInputStream.h"
-#include "string.h"
+#include <string>
 
 void* J2DDataManage::get(char const* name) {
     for (J2DataManageLink* link = mList; link != NULL; link = link->mNext) {

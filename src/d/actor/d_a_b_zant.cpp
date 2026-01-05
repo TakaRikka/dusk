@@ -17,7 +17,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "JSystem/JAudio2/JAUSectionHeap.h"
-#include <cmath.h>
+#include <math>
 
 enum Joint {
     /* 0x00 */ JNT_CENTER,
@@ -128,12 +128,14 @@ dCcD_SrcCyl cc_zant_roll_src = {
         {dCcD_SE_METAL, 0x0, 0x6, 0x0, 0x0},                 // mGObjAt
         {dCcD_SE_NONE, 0x2, 0x0, 0x0, 0x303},                 // mGObjTg
         {0x0},                                              // mGObjCo
-    },                                                      // mObjInf
-    {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        40.0f,              // mRadius
-        40.0f                // mHeight
-    }                        // mCyl
+    },     
+    {                                                 // mObjInf
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            40.0f,              // mRadius
+            40.0f                // mHeight
+        }                        // mCyl
+    }
 };
 
 dCcD_SrcSph cc_zant_foot_src = {
@@ -399,8 +401,7 @@ void daB_ZANT_c::setDamageSe(dCcD_Sph* i_hitSph, int i_dmgAmount) {
     }
 }
 
-/* 8064F5F5 0003+00 l_initHIO None */
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daB_ZANT_HIO_c l_HIO;
 
@@ -5364,7 +5365,7 @@ int daB_ZANT_c::_delete() {
     dComIfG_resDelete(&mPhase, "B_zan");
     
     if (mInitHIO) {
-        l_initHIO = false;
+        hio_set = false;
     }
 
     if (heap != NULL) {
@@ -5487,8 +5488,8 @@ int daB_ZANT_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!l_initHIO) {
-            l_initHIO = true;
+        if (!hio_set) {
+            hio_set = true;
             mInitHIO = true;
             l_HIO.field_0x4 = -1;
         }
@@ -5598,7 +5599,7 @@ static actor_method_class l_daB_ZANT_Method = {
     (process_method_func)daB_ZANT_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_ZANT = {
+actor_process_profile_definition g_profile_B_ZANT = {
   fpcLy_CURRENT_e,              // mLayerID
   4,                            // mListID
   fpcPi_CURRENT_e,              // mListPrio

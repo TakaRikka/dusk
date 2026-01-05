@@ -412,7 +412,7 @@ static actor_method_class daObjFallObj_METHODS = {
     (process_method_func)daObjFallObj_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_FallObj = {
+actor_process_profile_definition g_profile_Obj_FallObj = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

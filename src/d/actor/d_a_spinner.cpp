@@ -44,9 +44,11 @@ static dCcD_SrcCyl l_cylSrc = {
         {0},
     },
     {
-        {0.0f, 0.0f, 0.0f},
-        40.0f,
-        85.0f,
+        {
+            {0.0f, 0.0f, 0.0f},
+            40.0f,
+            85.0f,
+        }
     }
 };
 
@@ -934,7 +936,7 @@ static actor_method_class l_daSpinner_Method = {
     (process_method_func)daSpinner_Draw,
 };
 
-extern actor_process_profile_definition g_profile_SPINNER = {
+actor_process_profile_definition g_profile_SPINNER = {
   fpcLy_CURRENT_e,       // mLayerID
   4,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

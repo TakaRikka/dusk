@@ -173,7 +173,7 @@ static actor_method_class daObjGWall2_METHODS = {
     (process_method_func)daObjGWall2_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_GanonWall2 = {
+actor_process_profile_definition g_profile_Obj_GanonWall2 = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

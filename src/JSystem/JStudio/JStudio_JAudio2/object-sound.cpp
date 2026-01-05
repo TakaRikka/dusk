@@ -166,9 +166,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_BEGIN(JStudio::data::TEOperatio
     }
 }
 
-/* 8028DC88-8028DCD0 2885C8 0048+00 1/0 0/0 0/0 .text
- * adaptor_do_BEGIN_FADE_IN__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_BEGIN_FADE_IN(
     JStudio::data::TEOperationData param_1, void const* pContent, u32 uSize) {
     switch (param_1) {
@@ -190,9 +187,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_END(JStudio::data::TEOperationD
     }
 }
 
-/* 8028DD00-8028DD48 288640 0048+00 1/0 0/0 0/0 .text
- * adaptor_do_END_FADE_OUT__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_END_FADE_OUT(
     JStudio::data::TEOperationData param_1, void const* pContent, u32 uSize) {
     switch (param_1) {
@@ -222,9 +216,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_PARENT(
     }
 }
 
-/* 8028DDB4-8028DE34 2886F4 0080+00 1/0 0/0 0/0 .text
- * adaptor_do_PARENT_NODE__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData param_1,
                                                              const void* pContent, u32 uSize) {
     switch (param_1) {
@@ -246,9 +237,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_PARENT_NODE(JStudio::data::TEOp
 	}
 }
 
-/* 8028DE34-8028DE50 288774 001C+00 1/0 0/0 0/0 .text
- * adaptor_do_PARENT_ENABLE__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_PARENT_ENABLE(
     JStudio::data::TEOperationData param_1, const void* pContent, u32 uSize) {
     if (param_1 == JStudio::data::UNK_0x2) {
@@ -267,9 +255,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_REPEAT(JStudio::data::TEOperati
     }
 }
 
-/* 8028DE6C-8028DE88 2887AC 001C+00 1/0 0/0 0/0 .text
- * adaptor_do_CONTINUOUS__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_CONTINUOUS(JStudio::data::TEOperationData param_1,
                                                             const void* pContent, u32 uSize) {
     if (param_1 == JStudio::data::UNK_0x2) {
@@ -292,9 +277,6 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_LOCATED(JStudio::data::TEOperat
     }
 }
 
-/* 8028DEB0-8028DECC 2887F0 001C+00 1/0 0/0 0/0 .text
- * adaptor_do_ON_EXIT_NOT_END__Q215JStudio_JAudio214TAdaptor_soundFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JAudio2::TAdaptor_sound::adaptor_do_ON_EXIT_NOT_END(
     JStudio::data::TEOperationData param_1, const void* pContent, u32 uSize) {
     if (param_1 == JStudio::data::UNK_0x2) {

@@ -330,7 +330,7 @@ static actor_method_class l_daTag_Event_Method = {
     (process_method_func)daTag_Event_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_EVENT = {
+actor_process_profile_definition g_profile_TAG_EVENT = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

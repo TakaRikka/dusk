@@ -1,6 +1,8 @@
 #include "alloc.h"
 #include "critical_regions.h"
-#include <string.h>
+#include <cstring>
+
+#include "global.h"
 
 typedef struct Block {
     struct Block* prev;
@@ -83,7 +85,6 @@ typedef struct mem_pool_obj {
 } mem_pool_obj;
 
 mem_pool_obj __malloc_pool;
-static int initialized = 0;
 
 static SubBlock* SubBlock_merge_prev(SubBlock*, SubBlock**);
 static void SubBlock_merge_next(SubBlock*, SubBlock**);
@@ -125,7 +126,29 @@ static const unsigned long fix_pool_sizes[] = {4, 12, 20, 36, 52, 68};
 
 void __sys_free();
 
-static inline SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start) {
+void Block_link(Block* ths, SubBlock* sb) {
+    SubBlock** st;
+    SubBlock_set_free(sb);
+    st = &Block_start(ths);
+
+    if (*st != 0) {
+        sb->prev = (*st)->prev;
+        sb->prev->next = sb;
+        sb->next = *st;
+        (*st)->prev = sb;
+        *st = sb;
+        *st = SubBlock_merge_prev(*st, st);
+        SubBlock_merge_next(*st, st);
+    } else {
+        *st = sb;
+        sb->prev = sb;
+        sb->next = sb;
+    }
+    if (ths->max_size < SubBlock_size(*st))
+        ths->max_size = SubBlock_size(*st);
+}
+
+static SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start) {
     unsigned long prevsz;
     SubBlock* p;
 
@@ -145,7 +168,7 @@ static inline SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start) {
     return ths;
 }
 
-static inline void SubBlock_merge_next(SubBlock* pBlock, SubBlock** pStart) {
+static void SubBlock_merge_next(SubBlock* pBlock, SubBlock** pStart) {
     SubBlock* next_sub_block;
     unsigned long this_cur_size;
 
@@ -180,29 +203,7 @@ static inline void SubBlock_merge_next(SubBlock* pBlock, SubBlock** pStart) {
     }
 }
 
-inline void Block_link(Block* ths, SubBlock* sb) {
-    SubBlock** st;
-    SubBlock_set_free(sb);
-    st = &Block_start(ths);
-
-    if (*st != 0) {
-        sb->prev = (*st)->prev;
-        sb->prev->next = sb;
-        sb->next = *st;
-        (*st)->prev = sb;
-        *st = sb;
-        *st = SubBlock_merge_prev(*st, st);
-        SubBlock_merge_next(*st, st);
-    } else {
-        *st = sb;
-        sb->prev = sb;
-        sb->next = sb;
-    }
-    if (ths->max_size < SubBlock_size(*st))
-        ths->max_size = SubBlock_size(*st);
-}
-
-static inline Block* __unlink(__mem_pool_obj* pool_obj, Block* bp) {
+static Block* __unlink(__mem_pool_obj* pool_obj, Block* bp) {
     Block* result = bp->next;
     if (result == bp) {
         result = 0;

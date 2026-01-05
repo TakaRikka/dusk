@@ -195,7 +195,7 @@ public:
     f32 GetCx() const { return pm_pos->x; }
     f32 GetCz() const { return pm_pos->z; }
     
-public:
+private:
     /* 0x02C */ u32 m_flags;
     /* 0x030 */ cXyz* pm_pos;
     /* 0x034 */ cXyz* pm_old_pos;
@@ -231,9 +231,11 @@ public:
     /* 0x0E4 */ cXyz unk_0xe4;
 #endif
     /* 0x0D8 */ f32 field_0xd8;
+public:
     /* 0x0DC */ dBgS_GndChk m_gnd;
     /* 0x130 */ dBgS_RoofChk m_roof;
     /* 0x180 */ dBgS_WtrChk m_wtr;
+private:
     /* 0x1D4 */ u8 m_wtr_mode;
 }; // Size: 0x1D8
 

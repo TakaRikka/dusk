@@ -7,7 +7,7 @@
 #include "JSystem/JStudio/JStudio/jstudio-control.h"
 #include "JSystem/JStudio/JStudio/jstudio-math.h"
 #include "JSystem/JStudio/JStudio/jstudio-data.h"
-#include "string.h"
+#include <string>
 
 JStudio::TControl::TControl() {
     mTransformOnSet = false;

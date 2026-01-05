@@ -30,10 +30,12 @@ const dCcD_SrcGObjInf daOnsTaru_c::mCcDObjInfo = {
 dCcD_SrcCyl daOnsTaru_c::mCcDCyl = {
     daOnsTaru_c::mCcDObjInfo,
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,                // mRadius
-        0.0f                 // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,                // mRadius
+            0.0f                 // mHeight
+        }  // mCyl
+    }
 };
 
 void daOnsTaru_c::setBaseMtx() {
@@ -206,7 +208,7 @@ int daOnsTaru_c::Execute() {
 
     if (mStartTimer) {
         if (mTimer < (s16)(l_HIO.mCoolTime * 30)) {
-            if (!g_dComIfG_gameInfo.play.mEvent.runCheck()) {
+            if (dComIfGp_event_runCheck() == FALSE) {
                 mTimer++;
             }
 
@@ -383,7 +385,7 @@ static actor_method_class l_daOnsTaru_Method = {
     (process_method_func)daOnsTaru_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_OnsenTaru = {
+actor_process_profile_definition g_profile_Obj_OnsenTaru = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

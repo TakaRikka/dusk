@@ -215,7 +215,6 @@ void daObjWarpOBrg_c::actionWait() {
     daMidna_c* midna_p = daPy_py_c::getMidnaActor();
 
     if (midna_p != NULL) {
-        dComIfG_play_c* play = &g_dComIfG_gameInfo.play;  // fakematch
         if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk()) {
             midna_p->onTagWaitPosPortalObj(&mMidnaWaitPos);
             if (midna_p->current.pos.abs(mMidnaWaitPos) < 5.0f) {
@@ -243,10 +242,9 @@ void daObjWarpOBrg_c::actionWait() {
             if (strcmp(dComIfGp_getEventManager().getRunEventName(), "PORTAL_WARP_OBRIDGE") == 0) {
                 mStaffId = dComIfGp_evmng_getMyStaffId(l_staff_name[getNameArg()], NULL, 0);
                 setAction(ACTION_WARP_EVENT_e);
-                dEvt_control_c* event = &play->getEvent();  // fakematch
-                event->startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
                 midna_p->offTagWaitPos();
-                event->setPt2(this);
+                dComIfGp_getEvent()->setPt2(this);
             }
         }
     }
@@ -265,9 +263,9 @@ void daObjWarpOBrg_c::actionOrderEvent() {
     } else if (dComIfGp_evmng_startCheck(mEventId)) {
         mStaffId = dComIfGp_evmng_getMyStaffId(l_staff_name[getNameArg()], NULL, 0);
         setAction(ACTION_WARP_EVENT_e);
-        dComIfGp_getEvent().startCheckSkipEdge(this);
+        dComIfGp_getEvent()->startCheckSkipEdge(this);
         midna_p->offTagWaitPos();
-        dComIfGp_getEvent().setPt2(this);
+        dComIfGp_getEvent()->setPt2(this);
     } else {
         eventInfo.onCondition(1);
         if (checkTalkDistance()) {
@@ -295,7 +293,7 @@ void daObjWarpOBrg_c::actionWarpEvent() {
     if (!dComIfGp_evmng_endCheck(mEventId)) {
         demoProc();
 
-        if (dComIfGp_getEvent().checkSkipEdge()) {
+        if (dComIfGp_getEvent()->checkSkipEdge()) {
             /* dSv_event_tmp_flag_c::T_0010 - General use - General use temporary flag (flow control) A */
             dComIfGs_offTmpBit(dSv_event_tmp_flag_c::tempBitLabels[11]);
             /* dSv_event_tmp_flag_c::T_0011 - General use - General use temporary flag (flow control) B */
@@ -600,7 +598,7 @@ static actor_method_class daObjWarpOBrg_METHODS = {
     (process_method_func)daObjWarpOBrg_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_OrdinBrg = {
+actor_process_profile_definition g_profile_Obj_OrdinBrg = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

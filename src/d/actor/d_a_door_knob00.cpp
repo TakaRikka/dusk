@@ -11,7 +11,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_meter2_info.h"
 #include "SSystem/SComponent/c_math.h"
-#include "printf.h"
+#include <cstdio>
 
 u32 knob_param_c::getDoorModel(fopAc_ac_c* i_this) {
     return fopAcM_GetParamBit(i_this, 5, 3);
@@ -51,9 +51,9 @@ char* daKnob20_c::getDummyBmd() {
 
 static char* l_bmd_base_name = "door-knob_";
 
-static char l_bmdName[32];
-
 char* daKnob20_c::getBmd() {
+    static char l_bmdName[32];
+
     sprintf(l_bmdName, "%s%02d.bmd", l_bmd_base_name, knob_param_c::getDoorModel(this));
     return l_bmdName;
 }
@@ -192,17 +192,17 @@ void daKnob20_c::setActionFromFlow() {
     }
 }
 
-static char* ev_name_table[7] = {
-    "DEFAULT_KNOB_DOOR_F_OPEN",
-    "DEFAULT_KNOB_DOOR_B_OPEN",
-    "DEFAULT_KNOB_TALK",
-    "DEFAULT_KNOB_TALK_B",
-    "DEFAULT_KNOB_TALK_F_OPEN",
-    "DEFAULT_KNOB_TALK_B_OPEN",
-    "DEFAULT_KNOB_TALK",
-};
-
 void daKnob20_c::setEventId() {
+    static char* ev_name_table[7] = {
+        "DEFAULT_KNOB_DOOR_F_OPEN",
+        "DEFAULT_KNOB_DOOR_B_OPEN",
+        "DEFAULT_KNOB_TALK",
+        "DEFAULT_KNOB_TALK_B",
+        "DEFAULT_KNOB_TALK_F_OPEN",
+        "DEFAULT_KNOB_TALK_B_OPEN",
+        "DEFAULT_KNOB_TALK",
+    };
+
     for (int i = 0; i < 7; i++) {
         field_0x5b2[i] = 0xff;
         field_0x5a4[i] =
@@ -294,26 +294,26 @@ int daKnob20_c::frontCheck() {
     return 1;
 }
 
-static char* action_table[16] = {
-    "WAIT",
-    "SETSTART",
-    "SETANGLE",
-    "ADJUSTMENT",
-    "OPEN_PUSH",
-    "OPEN_PULL",
-    "OPEN_PUSH2",
-    "OPEN_PULL2",
-    "OPEN_PUSH_STOP",
-    "OPEN_PULL_STOP",
-    "TALK",
-    "TALK_END",
-    "SETSTART_PUSH",
-    "SETSTART_PULL",
-    "DEMO_OPEN",
-    "DEMO_CLOSE",
-};
-
 int daKnob20_c::getDemoAction() {
+    static char* action_table[16] = {
+        "WAIT",
+        "SETSTART",
+        "SETANGLE",
+        "ADJUSTMENT",
+        "OPEN_PUSH",
+        "OPEN_PULL",
+        "OPEN_PUSH2",
+        "OPEN_PULL2",
+        "OPEN_PUSH_STOP",
+        "OPEN_PULL_STOP",
+        "TALK",
+        "TALK_END",
+        "SETSTART_PUSH",
+        "SETSTART_PULL",
+        "DEMO_OPEN",
+        "DEMO_CLOSE",
+    };
+
     return dComIfGp_evmng_getMyActIdx(field_0x5bc, action_table, 16, 0, 0);
 }
 
@@ -461,14 +461,14 @@ int daKnob20_c::adjustmentProc() {
     return 0;
 }
 
-static char* bck_table[4] = {
-    "FDoorA.bck",
-    "FDoorB.bck",
-    "FDoorA.bck",
-    "FDoorB.bck",
-};
-
 int daKnob20_c::openInit(int param_1) {
+    static char* bck_table[4] = {
+        "FDoorA.bck",
+        "FDoorB.bck",
+        "FDoorA.bck",
+        "FDoorB.bck",
+    };
+
     J3DAnmTransform* anm =
         (J3DAnmTransform*)dComIfG_getObjectRes(getAlwaysArcName(), bck_table[param_1]);
     JUT_ASSERT(937, anm != NULL);
@@ -699,7 +699,7 @@ static actor_method_class l_daKnob20_Method = {
     (process_method_func)daKnob20_Draw,
 };
 
-extern actor_process_profile_definition g_profile_KNOB20 = {
+actor_process_profile_definition g_profile_KNOB20 = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

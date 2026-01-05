@@ -141,13 +141,13 @@ public:
     virtual void genMessage(JORMContext*);
     virtual u32 addString(char* param_1, u32 param_2, u32 param_3) { return field_0xc.addString(param_1, param_2, param_3); }
     virtual u32 addData(char* param_1, u32 param_2, u32 param_3) {
-        (void)param_2;
-        (void)param_3;
+        UNUSED(param_2);
+        UNUSED(param_3);
         memcpy(param_1, dMfm_HIO_prm_res_dst_s::m_res, 366);
         return 366;
     }
     virtual void copyReadBufToData(const char* param_1, s32 param_2) {
-        (void)param_2;
+        UNUSED(param_2);
         field_0xc.copyBufToHio(param_1);
     }
     virtual u32 addStringBinary(char* param_1, u32 param_2, u32 param_3) { return field_0xc.addStringBinary(param_1, param_2, param_3); }

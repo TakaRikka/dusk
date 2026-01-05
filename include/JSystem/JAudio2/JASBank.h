@@ -17,6 +17,8 @@ namespace JASDsp {
  */
 class JASBank {
 public:
+    static const int PRG_OSC = 240;
+
     JASBank() { mWaveBank = NULL; }
     virtual ~JASBank() {};
     virtual bool getInstParam(int, int, int, JASInstParam*) const = 0;

@@ -19,11 +19,9 @@
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTReport.h"
 
-#include <strtoul.h>
+#include <stdlib>
  
 #if DEBUG
-extern "C" int atoi(const char* str);
-
 void dScnMenu_setItem(int i_slotNo, u8 i_itemNo);
 void dScnMenu_setPlayerDebugMode();
 void dScnMenu_setPlayerItemReset();
@@ -1990,7 +1988,7 @@ bool dScnMenu_setPlayerDebugModeDungeon() {
 myFontClass::~myFontClass() {}
 
 f32 myFontClass::drawChar_scale(f32 param_0, f32 param_1, f32 param_2, f32 param_3, int param_4, bool param_5) {
-    param_2;
+    UNUSED(param_2);
 
     if (param_4 < 0xFF) {
         return field_0x70.drawChar_scale(param_0, param_1, 8.75f, param_3, param_4, param_5);
@@ -1999,13 +1997,13 @@ f32 myFontClass::drawChar_scale(f32 param_0, f32 param_1, f32 param_2, f32 param
     }
 }
 
-static leafdraw_method_class l_dScnMenu_Method = {
+static scene_method_class l_dScnMenu_Method = {
     (process_method_func)dScnMenu_Create,  (process_method_func)dScnMenu_Delete,
     (process_method_func)dScnMenu_Execute, (process_method_func)dScnMenu_IsDelete,
     (process_method_func)dScnMenu_Draw,
 };
 
-extern scene_process_profile_definition g_profile_MENU_SCENE = {
+scene_process_profile_definition g_profile_MENU_SCENE = {
     fpcLy_ROOT_e,                               // mLayerID
     1,                                          // mListID
     fpcPi_CURRENT_e,                            // mListPrio
@@ -2015,10 +2013,10 @@ extern scene_process_profile_definition g_profile_MENU_SCENE = {
     0,                                          // mSizeOther
     0,                                          // mParameters
     &g_fopScn_Method.base,                     // sub_method
-    (process_method_class*)&l_dScnMenu_Method,  // mpMtd
+    &l_dScnMenu_Method,  // mpMtd
 };
 #else
-extern scene_process_profile_definition g_profile_MENU_SCENE = {
+scene_process_profile_definition g_profile_MENU_SCENE = {
     fpcLy_ROOT_e,           // mLayerID
     1,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

@@ -2,7 +2,7 @@
 #include <revolution/pad.h>
 #include <revolution/si.h>
 
-#include <string.h>
+#include <cstring>
 
 #include "__si.h"
 

@@ -61,6 +61,7 @@ public:
     void checkResetCallback(OSTime holdTime);
     void update();
     void stopPatternedRumble() { mRumble.stopPatternedRumble(mPortNum); }
+    void setButtonRepeat(u32, u32, u32);
     
     static void checkResetSwitch();
     static void clearForReset();
@@ -72,6 +73,8 @@ public:
         PADSetAnalogMode(mode);
     }
 
+    static int getClampMode() { return sClampMode; }
+
     static void clearResetOccurred() { C3ButtonReset::sResetOccurred = false; }
 
     static void setResetCallback(callbackFn callback, void* arg) {
@@ -81,6 +84,8 @@ public:
 
     u32 getButton() const { return mButton.mButton; }
     u32 getTrigger() const { return mButton.mTrigger; }
+    u32 getRelease() const { return mButton.mRelease; }
+    u32 getRepeat() const { return mButton.mRepeat; }
     f32 getMainStickX() const { return mMainStick.mPosX; }
     f32 getMainStickY() const { return mMainStick.mPosY; }
     f32 getMainStickValue() const { return mMainStick.mValue; }
@@ -100,6 +105,7 @@ public:
     JUTGamePadRecordBase* getPadReplay() const { return mPadReplay; }
     JUTGamePadRecordBase* getPadRecord() const { return mPadRecord; }
 
+    bool testButton(u32 button) const { return mButton.mButton & button; }
     bool testTrigger(u32 button) const { return mButton.mTrigger & button; }
 
     bool isPushing3ButtonReset() const {
@@ -108,7 +114,7 @@ public:
 
     void stopMotorWave() { mRumble.stopPatternedRumbleAtThePeriod(); }
     void stopMotor() { mRumble.stopMotor(mPortNum, false); }
-    void stopMotorHard() { mRumble.stopMotorHard(mPortNum); }
+    void stopMotorHard() { CRumble::stopMotorHard(mPortNum); }
 
     static s8 getPortStatus(EPadPort port) {
         JUT_ASSERT(360, 0 <= port && port < 4);
@@ -178,7 +184,7 @@ public:
         CRumble(JUTGamePad* pad) { clear(pad); }
 
         static u32 sChannelMask[4];
-        static bool mStatus[4];
+        static u8 mStatus[4];
         static u32 mEnabled;
 
         enum ERumble {
@@ -198,9 +204,18 @@ public:
         void stopPatternedRumbleAtThePeriod();
         static void setEnabled(u32 mask);
 
-        void stopMotorHard(int port) { stopMotor(port, true); }
+        static void stopMotor(int port) { stopMotor(port, false); }
+        static void stopMotorHard(int port) { stopMotor(port, true); }
 
-        static bool isEnabled(u32 mask) { return mEnabled & mask; }
+        static bool isEnabled(u32 mask) {
+            bool result;
+            if (mEnabled & mask) {
+                result = true;
+            } else {
+                result = false;
+            }
+            return result;
+        }
 
         static bool isEnabledPort(int port) {
             JUT_ASSERT(250, 0 <= port && port < 4);
@@ -270,5 +285,7 @@ struct JUTGamePadLongPress {
     /* 0x4C */ void (*mCallback)(s32, JUTGamePadLongPress*, s32);
     /* 0x50 */ s32 field_0x50;
 };
+
+inline void JUTReadGamePad() { JUTGamePad::read(); }
 
 #endif /* JUTGAMEPAD_H */

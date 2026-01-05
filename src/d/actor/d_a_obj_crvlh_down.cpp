@@ -24,10 +24,12 @@ void daObjCRVLH_DW_c::initCcCylinder() {
             {0x0},                                             // mGObjCo
         },                                                     // mObjInf
         {
-            {0.0f, 0.0f, 0.0f},  // mCenter
-            250.0f,              // mRadius
-            400.0f               // mHeight
-        }  // mCyl
+            {
+                {0.0f, 0.0f, 0.0f},  // mCenter
+                250.0f,              // mRadius
+                400.0f               // mHeight
+            }  // mCyl
+        }
     };
 
     mStts.Init(0xff, 0xff, this);
@@ -237,7 +239,7 @@ static actor_method_class l_daObjCRVLH_DW_Method = {
     (process_method_func)daObjCRVLH_DW_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_CRVLH_DW = {
+actor_process_profile_definition g_profile_Obj_CRVLH_DW = {
     fpcLy_CURRENT_e,          // mLayerID
     3,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

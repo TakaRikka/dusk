@@ -13,7 +13,7 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_camera_mng.h"
 
-static bool hioInit;
+static bool hio_set;
 
 static daObj_DanHIO_c l_HIO;
 
@@ -424,7 +424,7 @@ int daObjDAN_c::Execute() {
 int daObjDAN_c::Delete() {
     dComIfG_resDelete(&mPhase, "I_Dan");
     if (mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
     if (heap != NULL) {
         mpMorf->stopZelAnime();
@@ -538,8 +538,8 @@ cPhs__Step daObjDAN_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!hioInit) {
-            hioInit = true;
+        if (!hio_set) {
+            hio_set = true;
             mHIOInit = true;
             l_HIO.field_0x4 = -1;
         }
@@ -601,7 +601,7 @@ static actor_method_class l_daObjDAN_Method = {
     (process_method_func)daObjDAN_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Dan = {
+actor_process_profile_definition g_profile_Obj_Dan = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

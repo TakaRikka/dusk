@@ -86,9 +86,7 @@ static void msima_start(obj_msima_class* i_this) {
     i_this->field_0x59a = 0x708;
 }
 
-/* 80C9CEA4 0001+00 data_80C9CEA4 @1009 */
-/* 80C9CEA5 0003+00 data_80C9CEA5 None */
-static bool l_HIOInit;
+static bool hio_set;
 
 static daObj_Msima_HIO_c l_HIO;
 
@@ -366,7 +364,7 @@ static int daObj_Msima_Delete(obj_msima_class* i_this) {
     fopAcM_GetID(a_this);
     dComIfG_resDelete(&i_this->mPhase, "MAGNESIMA");
     if (i_this->mIsHIOOwner) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.mId);
     }
     dComIfG_Bgsp().Release(i_this->mpBgW);
@@ -458,9 +456,9 @@ static int daObj_Msima_Create(fopAc_ac_c* a_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             i_this->mIsHIOOwner = true;
-            l_HIOInit = 1;
+            hio_set = 1;
             // Magma Island
             l_HIO.mId = mDoHIO_CREATE_CHILD("マグネ島", &l_HIO);
         }
@@ -514,7 +512,7 @@ static actor_method_class l_daObj_Msima_Method = {
     (process_method_func)daObj_Msima_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_MSIMA = {
+actor_process_profile_definition g_profile_OBJ_MSIMA = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

@@ -3,15 +3,15 @@
 #include "JSystem/JStudio/JStudio/jstudio-math.h"
 #include "JSystem/JGeometry.h"
 #include "JSystem/TPosition3.h"
-#include "math.h"
+#include <math>
 
 void JStudio::math::getRotation_xyz(MtxP param_1, f32 x, f32 y, f32 z) {
-    f32 cosx = i_cosf(DEG_TO_RAD(x));
-    f32 sinx = i_sinf(DEG_TO_RAD(x));
-    f32 cosy = i_cosf(DEG_TO_RAD(y));
-    f32 siny = i_sinf(DEG_TO_RAD(y));
-    f32 cosz = i_cosf(DEG_TO_RAD(z));
-    f32 sinz = i_sinf(DEG_TO_RAD(z));
+    f32 cosx = cosf(DEG_TO_RAD(x));
+    f32 sinx = sinf(DEG_TO_RAD(x));
+    f32 cosy = cosf(DEG_TO_RAD(y));
+    f32 siny = sinf(DEG_TO_RAD(y));
+    f32 cosz = cosf(DEG_TO_RAD(z));
+    f32 sinz = sinf(DEG_TO_RAD(z));
     f32 cosxcosz = cosx * cosz;
     f32 cosxsinz = cosx * sinz;
     f32 sinxcosz = sinx * cosz;

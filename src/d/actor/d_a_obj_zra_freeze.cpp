@@ -199,7 +199,7 @@ static actor_method_class l_daZraFreeze_Method = {
     (process_method_func)daZraFreeze_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_ZRAFREEZE = {
+actor_process_profile_definition g_profile_OBJ_ZRAFREEZE = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

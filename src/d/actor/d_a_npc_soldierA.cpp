@@ -427,7 +427,7 @@ BOOL daNpc_SoldierA_c::main() {
     }
 
     if (!mHIO->m.common.debug_mode_ON) {
-        if (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent().isOrderOK())) {
+        if (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())) {
             if (mOrderEvtNo != EVT_NONE) {
                 eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
             }
@@ -766,7 +766,7 @@ BOOL daNpc_SoldierA_c::doEvent() {
     int unused = 0;
     BOOL rv = FALSE;
 
-    if (dComIfGp_event_runCheck() != FALSE) {
+    if (dComIfGp_event_runCheck()) {
         dEvent_manager_c& event_manager = dComIfGp_getEventManager();
 
         if (eventInfo.checkCommandTalk() || eventInfo.checkCommandDemoAccrpt()) {
@@ -1149,7 +1149,7 @@ static actor_method_class daNpc_SoldierA_MethodTable = {
     (process_method_func)daNpc_SoldierA_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_SOLDIERa = {
+actor_process_profile_definition g_profile_NPC_SOLDIERa = {
   fpcLy_CURRENT_e,             // mLayerID
   7,                           // mListID
   fpcPi_CURRENT_e,             // mListPrio

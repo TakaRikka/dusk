@@ -1,5 +1,5 @@
 #include <revolution.h>
-#include <string.h>
+#include <cstring>
 
 static u32 IpcReqPtrArray[96] = {0};
 static u32 IpcReqArray[0x300] = {0};

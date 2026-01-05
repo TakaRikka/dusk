@@ -404,7 +404,7 @@ static actor_method_class l_daLv3Water_Method = {
     (process_method_func)daLv3Water_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv3Water = {
+actor_process_profile_definition g_profile_Obj_Lv3Water = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

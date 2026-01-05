@@ -65,4 +65,4 @@ __vt__10dCcD_GStts = .data:0x00000138; // type:object size:0xC scope:global
 __vt__8cM3dGAab = .data:0x00000144; // type:object size:0xC scope:global
 __vt__8cM3dGCyl = .data:0x00000150; // type:object size:0xC scope:global
 __vt__13daObjThDoor_c = .data:0x0000015C; // type:object size:0x28 scope:global
-init$1622 = .bss:0x00000000; // type:object size:0x1 scope:local data:byte
+init$1622 = .bss:0x00000000; // type:object size:0x1 scope:local align:1 data:byte

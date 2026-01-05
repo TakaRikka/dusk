@@ -192,7 +192,7 @@ static actor_method_class daObjSnowSoup_METHODS = {
     (process_method_func)daObjSnowSoup_draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SnowSoup = {
+actor_process_profile_definition g_profile_Obj_SnowSoup = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

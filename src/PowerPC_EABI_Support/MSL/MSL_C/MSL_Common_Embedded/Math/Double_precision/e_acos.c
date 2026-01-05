@@ -34,7 +34,7 @@
  * Function needed: sqrt
  */
 
-#include "math.h"
+#include <cmath>
 
 #ifdef __STDC__
 static const double 
@@ -72,6 +72,11 @@ qS4 =  7.70381505559019352791e-02; /* 0x3FB3B8C5, 0xB12E9282 */
 		if(hx>0) return 0.0;		/* acos(1) = 0  */
 		else return pi+2.0*pio2_lo;	/* acos(-1)= pi */
 	    }
+
+		#if PLATFORM_SHIELD
+           errno = EDOM;
+        #endif
+
 	    return NAN;		/* acos(|x|>1) is NaN */
 	}
 	if(ix<0x3fe00000) {	/* |x| < 0.5 */

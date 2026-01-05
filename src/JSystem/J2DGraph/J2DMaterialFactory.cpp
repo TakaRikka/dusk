@@ -5,7 +5,7 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTResource.h"
-#include "string.h"
+#include <string>
 #include "dolphin/types.h"
 
 J2DMaterialFactory::J2DMaterialFactory(J2DMaterialBlock const& param_0) {
@@ -60,9 +60,6 @@ u32 J2DMaterialFactory::countStages(int param_0) const {
     return uVar3;
 }
 
-/* 802F2D1C-802F362C 2ED65C 0910+00 0/0 1/1 0/0 .text
- * create__18J2DMaterialFactoryCFP11J2DMaterialiUlP15J2DResReferenceP15J2DResReferenceP10JKRArchive
- */
 J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 param_2,
                                     J2DResReference* param_3, J2DResReference* param_4,
                                     JKRArchive* param_5) const {

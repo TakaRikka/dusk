@@ -1,6 +1,6 @@
 #include <dolphin/dolphin.h>
 #include <dolphin/mtx.h>
-#include "fake_tgmath.h"
+#include "sdk_math.h"
 
 void MTXInitStack(MTXStack* sPtr, u32 numMtx) {
     ASSERTMSGLINE(74, sPtr, "MTXInitStack():  NULL MtxStackPtr 'sPtr' ");

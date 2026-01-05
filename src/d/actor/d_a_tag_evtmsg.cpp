@@ -47,7 +47,7 @@ int daTag_EvtMsg_c::Execute() {
     dEvent_manager_c& evt_mng = dComIfGp_getEventManager();
 
     if (home.roomNo == dComIfGp_roomControl_getStayNo()) {
-        if (dComIfGp_event_runCheck() != 0) {
+        if (dComIfGp_event_runCheck()) {
             int staff_id;
             BOOL reset = false;
             if (eventInfo.checkCommandTalk()) {
@@ -234,7 +234,7 @@ static actor_method_class daTag_EvtMsg_MethodTable = {
     (process_method_func)daTag_EvtMsg_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_EVTMSG = {
+actor_process_profile_definition g_profile_TAG_EVTMSG = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

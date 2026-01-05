@@ -131,7 +131,7 @@ static int daE_NZ_Draw(e_nz_class* i_this) {
     return 1;
 }
 
-bool l_HIOInit;
+bool hio_set;
 
 static daE_NZ_HIO_c l_HIO;
 
@@ -648,7 +648,7 @@ static int daE_NZ_Delete(e_nz_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "E_NZ");
     if (i_this->mIsHIOOwner) {
-        l_HIOInit = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.mId);
     }
 
@@ -696,9 +696,9 @@ static int daE_NZ_Create(fopAc_ac_c* a_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             i_this->mIsHIOOwner = 1;
-            l_HIOInit = true;
+            hio_set = true;
             // Ghost Rat
             l_HIO.mId = mDoHIO_CREATE_CHILD("幽霊ネズミ", &l_HIO);
         }
@@ -745,7 +745,7 @@ static actor_method_class l_daE_NZ_Method = {
     (process_method_func)daE_NZ_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_NZ = {
+actor_process_profile_definition g_profile_E_NZ = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

@@ -349,8 +349,6 @@ daTagEscape_c* daNpcKasiMich_c::mTargetTag;
 
 f32 daNpcKasiMich_c::mTargetTagDist;
 
-/* 80A2A7F8 0002+00 data_80A2A7F8 mWolfAngle__15daNpcKasiMich_c */
-/* 80A2A7FA 0002+00 data_80A2A7FA None */
 s16 daNpcKasiMich_c::mWolfAngle;
 
 BOOL daNpcKasiMich_c::main() {
@@ -772,24 +770,13 @@ int daNpcKasiMich_c::wait(int param_1) {
                 }
             }
 
-#if VERSION != VERSION_SHIELD_DEBUG
-            // TODO: gameInfo fake match to force reuse of pointer
-            dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-            if (play->getEvent().runCheck())
-#else
-            if (dComIfGp_event_runCheck())
-#endif
-            {
+            if (dComIfGp_event_runCheck()) {
                 if (eventInfo.checkCommandTalk()) {
-                    if (!dComIfGp_event_chkTalkXY() || dComIfGp_evmng_ChkPresentEnd()) {
+                    if (dComIfGp_event_chkTalkXY() == FALSE || dComIfGp_evmng_ChkPresentEnd()) {
                         OS_REPORT("------------------mich talk reset!!\n");
 
                         mTalked = true;
-#if VERSION != VERSION_SHIELD_DEBUG
-                        play->getEvent().reset();
-#else
                         dComIfGp_event_reset();
-#endif
                     }
                 }
             } else {
@@ -1323,22 +1310,11 @@ int daNpcKasiMich_c::cheer(int param_1) {
             current.angle.y = mCurAngle.y;
             shape_angle.y = mCurAngle.y;
 
-#if VERSION != VERSION_SHIELD_DEBUG
-        // TODO: gameInfo fake match to force reuse of pointer
-            dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-            if (play->getEvent().runCheck())
-#else
-            if (dComIfGp_event_runCheck())
-#endif
-            {
+            if (dComIfGp_event_runCheck()) {
                 if (eventInfo.checkCommandTalk()) {
-                    if (!dComIfGp_event_chkTalkXY() || dComIfGp_evmng_ChkPresentEnd()) {
+                    if (dComIfGp_event_chkTalkXY() == FALSE || dComIfGp_evmng_ChkPresentEnd()) {
                         mTalked = true;
-#if VERSION != VERSION_SHIELD_DEBUG
-                        play->getEvent().reset();
-#else
                         dComIfGp_event_reset();
-#endif
                     }
                 }
             } else {
@@ -1414,7 +1390,7 @@ static actor_method_class daNpcKasiMich_MethodTable = {
     (process_method_func)daNpcKasiMich_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_KASIMICH = {
+actor_process_profile_definition g_profile_NPC_KASIMICH = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID
   fpcPi_CURRENT_e,            // mListPrio

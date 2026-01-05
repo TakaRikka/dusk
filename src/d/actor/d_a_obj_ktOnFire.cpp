@@ -35,10 +35,12 @@ const dCcD_SrcGObjInf daKtOnFire_c::mCcDObjInfo = {
 dCcD_SrcCyl daKtOnFire_c::mCcDCyl = {
     mCcDObjInfo,
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        0.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            0.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    }
 };
 
 daKtOnFire_HIO_c::daKtOnFire_HIO_c() {
@@ -200,7 +202,7 @@ static actor_method_class l_daKtOnFire_Method = {
     (process_method_func)daKtOnFire_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_KtOnFire = {
+actor_process_profile_definition g_profile_Tag_KtOnFire = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

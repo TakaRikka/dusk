@@ -1,7 +1,8 @@
 #ifndef _MSL_COMMON_FLOAT_H
 #define _MSL_COMMON_FLOAT_H
 
-#include "fdlibm.h"
+#include <fdlibm.h>
+#include "global.h"
 
 #define FP_SNAN 0
 #define FP_QNAN 1
@@ -22,6 +23,7 @@
 	((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : \
 	__fpclassifyd((double)(x)) )
 #endif
+
 #define signbit(x) ((sizeof(x) == sizeof(float)) ? __signbitf(x) : __signbitd(x))
 #define isfinite(x) ((fpclassify(x) > FP_INFINITE))
 #define isnan(x) (fpclassify(x) == FP_NAN)
@@ -36,6 +38,10 @@ extern int __float_nan[];
 extern int __float_huge[];
 extern int __float_max[];
 extern int __float_epsilon[];
+
+#if !PLATFORM_GCN
+extern int __double_huge[];
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -107,5 +113,16 @@ int __fpclassifyl(long double __value);
 #define DBL_MIN_10_EXP (-308)
 #define DBL_MAX_EXP    1024
 #define DBL_MAX_10_EXP 308
+
+#define LDBL_MANT_DIG 53
+#define LDBL_DIG 15
+#define LDBL_MIN_EXP (-1021)
+#define LDBL_MIN_10_EXP (-308)
+#define LDBL_MAX_EXP 1024
+#define LDBL_MAX_10_EXP 308
+
+#define LDBL_MAX 0x1.fffffffffffffP1023L
+#define LDBL_EPSILON 0x1.0000000000000P-52L
+#define LDBL_MIN 0x1.0000000000000P-1022L
 
 #endif /* _MSL_COMMON_FLOAT_H */

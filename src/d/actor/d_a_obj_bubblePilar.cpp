@@ -20,7 +20,9 @@ const dCcD_SrcGObjInf daBubbPilar_c::mCcDObjInfo = {
 
 dCcD_SrcCyl daBubbPilar_c::mCcDCyl = {
     daBubbPilar_c::mCcDObjInfo,
-    {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
+    {
+        {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
+    }
 };
 
 daBubbPilar_HIO_c::daBubbPilar_HIO_c() {
@@ -224,7 +226,7 @@ static actor_method_class l_daBubbPilar_Method = {
     (process_method_func)daBubbPilar_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_awaPlar = {
+actor_process_profile_definition g_profile_Obj_awaPlar = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

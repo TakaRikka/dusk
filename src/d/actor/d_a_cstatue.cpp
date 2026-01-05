@@ -99,12 +99,14 @@ static dCcD_SrcCyl l_cylSrc = {
         {dCcD_SE_STONE, 0x0, 0x0, 0x0, 0x0},                                // mGObjAt
         {dCcD_SE_NONE, 0x5, 0x0, 0x0, 0x3},                                 // mGObjTg
         {0x0},                                                              // mGObjCo
-    },                                                                      // mObjInf
+    },      
+    {                                                                // mObjInf
     {
         {0.0f, 0.0f, 0.0f},  // mCenter
         88.0f,               // mRadius
         392.0f               // mHeight
-    }  // mCyl
+        }  // mCyl
+    }
 };
 
 static dCcD_SrcSph l_sphSrc = {
@@ -397,7 +399,7 @@ int daCstatue_c::create() {
     return result;
 }
 
-static int daCstatue_Create(void* actor) {
+static int daCstatue_Create(fopAc_ac_c* actor) {
     return static_cast<daCstatue_c*>(actor)->create();
 }
 
@@ -413,7 +415,7 @@ daCstatue_c::~daCstatue_c() {
     dComIfG_resDelete(&mPhaseReq, mResName);
 }
 
-static int daCstatue_Delete(void* actor) {
+static int daCstatue_Delete(daCstatue_c* actor) {
     static_cast<daCstatue_c*>(actor)->~daCstatue_c();
     return cPhs_LOADING_e;
 }
@@ -1041,7 +1043,7 @@ void daCstatue_c::initStartBrkBtk() {
     for (int iParticle = 0; iParticle < 2; iParticle++) {
         dComIfGp_particle_set(0x88bb, &mBallPos, &angle, NULL);
         dComIfGp_particle_set(0x88bc, &mBallPos, &angle, NULL);
-        angle.y -= (s16)0x8000;
+        ADD_ANGLE(angle.y, 0x8000);
     }
 }
 
@@ -1166,7 +1168,7 @@ int daCstatue_c::execute() {
     return 1;
 }
 
-static int daCstatue_Execute(void* actor) {
+static int daCstatue_Execute(daCstatue_c* actor) {
     return static_cast<daCstatue_c*>(actor)->execute();
 }
 
@@ -1200,15 +1202,19 @@ int daCstatue_c::draw() {
     return 1;
 }
 
-static int daCstatue_Draw(void* actor) {
+static int daCstatue_Draw(daCstatue_c* actor) {
     return static_cast<daCstatue_c*>(actor)->draw();
 }
 
 static actor_method_class l_daCstatue_Method = {
-    daCstatue_Create, daCstatue_Delete, daCstatue_Execute, NULL, daCstatue_Draw,
+    (process_method_func)daCstatue_Create,
+    (process_method_func)daCstatue_Delete,
+    (process_method_func)daCstatue_Execute,
+    (process_method_func)NULL,
+    (process_method_func)daCstatue_Draw,
 };
 
-extern actor_process_profile_definition g_profile_CSTATUE = {
+actor_process_profile_definition g_profile_CSTATUE = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

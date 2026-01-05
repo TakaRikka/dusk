@@ -40,10 +40,12 @@ const dCcD_SrcCyl l_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        40.0f, // mRadius
-        100.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            40.0f, // mRadius
+            100.0f // mHeight
+        } // mCyl
+    }
 };
 
 int daObjBurnBox_c::Create() {
@@ -190,7 +192,7 @@ actor_method_class daObjBurnBox_METHODS = {
     (process_method_func) daObjBurnBox_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_BurnBox = {
+actor_process_profile_definition g_profile_Obj_BurnBox = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

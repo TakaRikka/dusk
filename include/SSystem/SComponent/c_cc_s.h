@@ -46,7 +46,7 @@ public:
     virtual void CalcTgPlusDmg(cCcD_Obj*, cCcD_Obj*, cCcD_Stts*, cCcD_Stts*);
     void SetAtTgCommonHitInf(cCcD_Obj*, cCcD_Obj*, cXyz*);
     void SetCoCommonHitInf(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, f32);
-    /* 80265750 vt[3]*/ virtual void SetPosCorrect(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, f32);
+    /* vt[3]*/ virtual void SetPosCorrect(cCcD_Obj*, cXyz*, cCcD_Obj*, cXyz*, f32);
     void CalcArea();
     void Move();
     void DrawClear();

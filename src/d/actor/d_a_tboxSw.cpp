@@ -62,7 +62,7 @@ static actor_method_class l_daTboxSw_Method = {
     (process_method_func)daTboxSw_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TBOX_SW = {
+actor_process_profile_definition g_profile_TBOX_SW = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

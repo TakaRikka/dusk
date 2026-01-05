@@ -343,7 +343,7 @@ static actor_method_class l_daGrdWater_Method = {
     (process_method_func)daGrdWater_Draw,
 };
 
-extern actor_process_profile_definition g_profile_GRDWATER = {
+actor_process_profile_definition g_profile_GRDWATER = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

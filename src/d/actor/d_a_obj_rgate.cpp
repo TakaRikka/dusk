@@ -80,10 +80,12 @@ static const dCcD_SrcCyl l_cyl_src = {
         {0x0},                                          // mGObjCo
     },                                                  // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        40.0f,               // mRadius
-        350.0f               // mHeight
-    }                        // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            40.0f,               // mRadius
+            350.0f               // mHeight
+        }                        // mCyl
+    }                            // mCylAttr
 };
 
 void daObjRgate_c::initBaseMtx() {
@@ -876,7 +878,7 @@ static actor_method_class daObjRgate_METHODS = {
     (process_method_func)daObjRgate_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_RiderGate = {
+actor_process_profile_definition g_profile_Obj_RiderGate = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

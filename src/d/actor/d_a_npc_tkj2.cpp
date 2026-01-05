@@ -420,7 +420,7 @@ static cXyz return_pos_get(npc_tkj2_class* i_this) {
     return player->current.pos;
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daNpc_Tkj2_HIO_c l_HIO;
 
@@ -1029,7 +1029,7 @@ static int daNpc_Tkj2_Delete(npc_tkj2_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Tkj2");
 
     if (i_this->field_0xa9c != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (a_this->heap != NULL) {
@@ -1093,9 +1093,9 @@ static cPhs__Step daNpc_Tkj2_Create(fopAc_ac_c* a_this) {
             return cPhs_ERROR_e;
         }
 
-        if (l_initHIO == 0) {
+        if (hio_set == 0) {
             i_this->field_0xa9c = 1;
-            l_initHIO = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -1156,7 +1156,7 @@ static actor_method_class l_daNpc_Tkj2_Method = {
     (process_method_func)daNpc_Tkj2_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_TKJ2 = {
+actor_process_profile_definition g_profile_NPC_TKJ2 = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

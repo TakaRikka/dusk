@@ -3967,7 +3967,7 @@ int daAlink_c::procWolfHowlDemo() {
     daPy_frameCtrl_c* frameCtrl_p = mUnderFrameCtrl;
     daNpc_GWolf_c* gwolf_p = (daNpc_GWolf_c*)field_0x280c.getActor();
 
-    BOOL skip_edge = dComIfGp_getEvent().checkSkipEdge();
+    BOOL skip_edge = dComIfGp_getEvent()->checkSkipEdge();
     if (skip_edge) {
         mZ2WolfHowlMgr.skipCorrectDemo();
     }
@@ -4012,11 +4012,11 @@ int daAlink_c::procWolfHowlDemo() {
 
         if (checkUnderMove0BckNoArcWolf(WANM_HOWL_SUCCESS)) {
             if (gwolf_p == NULL) {
-                dComIfGp_getEvent().startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
             }
         } else if (checkUnderMove0BckNoArcWolf(WANM_HOWL_END)) {
             if (gwolf_p == NULL) {
-                dComIfGp_getEvent().startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
             }
         } else if ((var_r26 || mZ2WolfHowlMgr.getTimer() != 0) &&
                    mZ2WolfHowlMgr.getReleaseTimer() != 30)
@@ -4143,7 +4143,7 @@ int daAlink_c::procWolfHowlDemo() {
 
                 dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
             } else {
-                dComIfGp_getEvent().startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
             }
         }
 
@@ -9281,7 +9281,7 @@ int daAlink_c::procWolfGetSmell() {
 
     if (field_0x319c >= 0) {
         if (checkSpecialDemoMode()) {
-            dComIfGp_getEvent().reset(this);
+            dComIfGp_getEvent()->reset(this);
             dComIfGp_clearPlayerStatus1(0, 0x4000000);
 
             if (mProcVar5.field_0x3012 == fpcNm_ITEM_SMELL_YELIA_POUCH) {

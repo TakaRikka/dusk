@@ -839,7 +839,7 @@ static actor_method_class l_daL7ODR_Method = {
     (process_method_func)daL7ODR_Draw,
 };
 
-extern actor_process_profile_definition g_profile_L7ODR = {
+actor_process_profile_definition g_profile_L7ODR = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

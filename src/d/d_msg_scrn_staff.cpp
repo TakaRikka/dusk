@@ -11,11 +11,11 @@
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
 
-static u64 t_tag[6] = {
-    'right_s', 'right', 'center_s', 'center', 'left_s', 'left',
-};
-
 dMsgScrnStaff_c::dMsgScrnStaff_c(u8 unused) {
+    static u64 t_tag[6] = {
+        'right_s', 'right', 'center_s', 'center', 'left_s', 'left',
+    };
+
     init();
 
     field_0xd0 = 0.0f;

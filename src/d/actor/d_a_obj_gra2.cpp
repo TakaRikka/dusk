@@ -203,7 +203,7 @@ static char* l_evtNameList[2] = {
 };
 
 static u16 l_entryJntNoList[4] = {
-    5, 6, 7, -1,
+    5, 6, 7, 0xFFFF,
 };
 
 static int jointCtrlCallBack(J3DJoint* i_joint, int param_2) {
@@ -368,7 +368,7 @@ static const f32 l_bgcParam[20] = {
     -0.5f, 1.0f, 0.5f, -1.0f,
 };
 
-const s16 l_dirToAngleTBL[4] = {0, 0x4000, 0x8000, 0xC000};
+const s16 l_dirToAngleTBL[4] = {0, 0x4000, -0x8000, -0x4000};
 
 int daObj_GrA_c::CreateHeap() {
     J3DModelData* aMdlData_p = NULL;
@@ -980,10 +980,6 @@ void daObj_GrA_c::setParam() {
 
 BOOL daObj_GrA_c::checkEvent() {
     BOOL rv = TRUE;
-#if VERSION != VERSION_SHIELD_DEBUG
-    // TODO: gameInfo fake match to force reuse of pointer
-    dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-#endif
     if (dComIfGp_event_runCheck()) {
         rv = FALSE;
         if (eventInfo.checkCommandTalk()) {
@@ -994,11 +990,7 @@ BOOL daObj_GrA_c::checkEvent() {
             }
         } else if (eventInfo.checkCommandDemoAccrpt()) {
             if (dComIfGp_getEventManager().endCheck(mEvtIdx) != 0) {
-#if VERSION != VERSION_SHIELD_DEBUG
-                play->getEvent().reset();
-#else
                 dComIfGp_event_reset();
-#endif
                 field_0x1520 = 0;
                 mEvtIdx = -1;
                 rv = TRUE;
@@ -2136,7 +2128,7 @@ static actor_method_class daObj_GrA_MethodTable = {
     (process_method_func)daObj_GrA_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_GRA = {
+actor_process_profile_definition g_profile_OBJ_GRA = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

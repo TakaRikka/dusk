@@ -15,7 +15,7 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_camera_mng.h"
 
-static bool l_hioInit;
+static bool hio_set;
 
 static daE_Nest_HIO_c l_HIO;
 
@@ -924,7 +924,7 @@ static int daE_Nest_Delete(e_nest_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_nest");
     
     if (i_this->mHIOInit) {
-        l_hioInit = false;
+        hio_set = false;
     }
 
     if (i_this->heap != NULL) {
@@ -980,9 +980,9 @@ static cPhs__Step daE_Nest_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!l_hioInit) {
+        if (!hio_set) {
             _this->mHIOInit = true;
-            l_hioInit = true;
+            hio_set = true;
             l_HIO.field_0x4 = -1;
         }
 
@@ -1035,10 +1035,12 @@ static cPhs__Step daE_Nest_Create(fopAc_ac_c* i_this) {
                 {0x0}, // mGObjCo
             }, // mObjInf
             {
-                {0.0f, 0.0f, 0.0f}, // mCenter
-                5.0f, // mRadius
-                10.0f // mHeight
-            } // mCcCyl
+                {
+                    {0.0f, 0.0f, 0.0f}, // mCenter
+                    5.0f, // mRadius
+                    10.0f // mHeight
+                } // mCcCyl
+            }
         };
         _this->mCcCyl.Set(cc_cyl_src);
         _this->mCcCyl.SetStts(&_this->mCcStts);
@@ -1071,7 +1073,7 @@ static actor_method_class l_daE_Nest_Method = {
     (process_method_func)daE_Nest_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_NEST = {
+actor_process_profile_definition g_profile_E_NEST = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

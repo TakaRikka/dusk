@@ -150,7 +150,7 @@ static actor_method_class daObj_Pleaf_MethodTable = {
     (process_method_func)daObj_Pleaf_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_PLEAF = {
+actor_process_profile_definition g_profile_OBJ_PLEAF = {
     fpcLy_CURRENT_e,           // mLayerID
     8,                         // mListID
     fpcPi_CURRENT_e,           // mListPrio

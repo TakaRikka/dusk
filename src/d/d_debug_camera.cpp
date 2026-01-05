@@ -557,6 +557,8 @@ int dDbgCamera_c::moveTool() {
     field_0x44.Val(*sp30 - *var_r28);
 
     switch (field_0xc00) {
+    f32 temp_f26;
+    f32 temp_f1_2;
     case 2:
         *var_r28 = *var_r28 + (field_0x44.Norm() * mCamSetup.Turbo(field_0xc10 * var_f30));
 
@@ -571,8 +573,8 @@ int dDbgCamera_c::moveTool() {
         *var_r28 = *var_r28 - (field_0x44.Norm() * mCamSetup.Translate(field_0xc10 * var_f30));
         break;
     case 3: {
-        f32 temp_f26 = fabsf(substick_x);
-        f32 temp_f1_2 = fabsf(substick_y);
+        temp_f26 = fabsf(substick_x);
+        temp_f1_2 = fabsf(substick_y);
 
         if (field_0xc0c == 0 || temp_f26 < temp_f1_2) {
             cXyz sp1B0(0.0f, 1.0f, 0.0f);
@@ -707,7 +709,7 @@ int dDbgCamera_c::cmdTool() {
         default:
             return 1;
         }
-    } else if (dComIfGp_event_runCheck() == 0) {
+    } else if (!dComIfGp_event_runCheck()) {
         mIsPlaying = false;
     }
 

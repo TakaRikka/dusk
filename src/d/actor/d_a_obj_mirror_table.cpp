@@ -461,7 +461,7 @@ static actor_method_class l_daObjMirrorTable_Method = {
     (process_method_func)daObjMirrorTable_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_MirrorTable = {
+actor_process_profile_definition g_profile_Obj_MirrorTable = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

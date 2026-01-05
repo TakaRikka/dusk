@@ -43,7 +43,7 @@ static void anm_init(e_rb_class* i_this, int i_anm, f32 i_morf, u8 i_mode, f32 i
     i_this->modelMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("E_rb", i_anm), i_mode, i_morf, i_speed, 0.0f, -1.0f);
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_RB_HIO_c l_HIO;
 
@@ -742,7 +742,7 @@ static int daE_RB_Delete(e_rb_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "E_rb");
 
     if (i_this->HIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -816,9 +816,9 @@ static int daE_RB_Create(fopAc_ac_c* i_this) {
         }
     
         OS_REPORT("//////////////E_RB SET 2 !!\n");
-        if (!l_HIOInit) {
+        if (!hio_set) {
             a_this->HIOInit = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("リーバ", &l_HIO);
         }
 
@@ -869,7 +869,7 @@ static actor_method_class l_daE_RB_Method = {
     (process_method_func)daE_RB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_RB = {
+actor_process_profile_definition g_profile_E_RB = {
     fpcLy_CURRENT_e,       // mLayerID
     7,                     // mListID
     fpcPi_CURRENT_e,       // mListPrio

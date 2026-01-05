@@ -163,7 +163,7 @@ static actor_method_class l_daCoachFire_Method = {
     (process_method_func)daCoachFire_Draw,
 };
 
-extern actor_process_profile_definition g_profile_COACH_FIRE = {
+actor_process_profile_definition g_profile_COACH_FIRE = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

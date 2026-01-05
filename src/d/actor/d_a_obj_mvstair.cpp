@@ -462,7 +462,7 @@ static actor_method_class daObjStair_METHODS = {
     (process_method_func)daObjStair_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_MvStair = {
+actor_process_profile_definition g_profile_Obj_MvStair = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

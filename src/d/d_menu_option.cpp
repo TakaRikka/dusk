@@ -22,7 +22,7 @@
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
-#include "string.h"
+#include <string>
 
 typedef void (dMenu_Option_c::*initFunc)();
 static initFunc init[] = {
@@ -899,7 +899,7 @@ void dMenu_Option_c::sound_move() {
                                      -1.0f, 0);
             break;
         }
-        Z2AudioMgr::mAudioMgrPtr->setOutputMode(dMo_soundMode[field_0x3e9]);
+        mDoAud_setOutputMode(dMo_soundMode[field_0x3e9]);
         setSoundMode(dMo_soundMode[field_0x3e9]);
         field_0x3ef = SelectType3;
         field_0x3f5 = SelectType2;
@@ -925,7 +925,7 @@ void dMenu_Option_c::sound_move() {
                                      -1.0f, 0);
             break;
         }
-        Z2AudioMgr::mAudioMgrPtr->setOutputMode(dMo_soundMode[field_0x3e9]);
+        mDoAud_setOutputMode(dMo_soundMode[field_0x3e9]);
         setSoundMode(dMo_soundMode[field_0x3e9]);
         field_0x3ef = SelectType3;
         field_0x3f5 = SelectType2;
@@ -1128,9 +1128,9 @@ void dMenu_Option_c::confirm_close_move() {
                 dComIfGs_setOptAttentionType(field_0x3e4);
 #if VERSION == VERSION_GCN_JPN
                 if (field_0x3e5_JPN == 0) {
-                    dComIfGs_setOptUnk0(1);
+                    dComIfGs_setOptRuby(1);
                 } else {
-                    dComIfGs_setOptUnk0(0);
+                    dComIfGs_setOptRuby(0);
                 }
 #endif
                 if (isRumbleSupported()) {
@@ -2144,7 +2144,7 @@ void dMenu_Option_c::paneResize(u64 i_tag) {
 void dMenu_Option_c::initialize() {
     field_0x3e4 = dComIfGs_getOptAttentionType();
 #if VERSION == VERSION_GCN_JPN
-    if (dComIfGs_getOptUnk0() == 0) {
+    if (dComIfGs_getOptRuby() == 0) {
         field_0x3e5_JPN = 1;
     } else {
         field_0x3e5_JPN = 0;

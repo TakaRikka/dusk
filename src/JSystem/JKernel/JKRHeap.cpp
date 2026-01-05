@@ -8,15 +8,16 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include <stdint.h>
-
-bool data_804508B0 = 1;
+#include <stdint>
+#include <string>
 
 #if DEBUG
-u8 data_804508B1;
-u8 data_804508B2;
-u8 data_804508B3;
+u8 JKRValue_DEBUGFILL_NOTUSE = 0xFD;
+u8 JKRValue_DEBUGFILL_NEW = 0xCD;
+u8 JKRValue_DEBUGFILL_DELETE = 0xDD;
 #endif
+
+bool JKRHeap::sDefaultFillFlag = true;
 
 JKRHeap* JKRHeap::sSystemHeap;
 
@@ -45,11 +46,11 @@ JKRHeap::JKRHeap(void* data, u32 size, JKRHeap* parent, bool errorFlag)
     } else {
         parent->mChildTree.appendChild(&mChildTree);
 
-        if (getSystemHeap() == getRootHeap()) {
+        if (sSystemHeap == sRootHeap) {
             becomeSystemHeap();
         }
 
-        if (getCurrentHeap() == getRootHeap()) {
+        if (sCurrentHeap == sRootHeap) {
             becomeCurrentHeap();
         }
     }
@@ -59,7 +60,7 @@ JKRHeap::JKRHeap(void* data, u32 size, JKRHeap* parent, bool errorFlag)
         mErrorHandler = JKRDefaultMemoryErrorRoutine;
     }
 
-    mDebugFill = data_804508B0;
+    mDebugFill = sDefaultFillFlag;
     mCheckMemoryFilled = data_80451380;
     mInitFlag = false;
 }
@@ -87,35 +88,54 @@ void* JKRHeap::mUserRamEnd;
 
 u32 JKRHeap::mMemorySize;
 
-bool JKRHeap::initArena(char** memory, u32* size, int maxHeaps) {
-    void* ram_start;
-    void* ram_end;
-    void* arenaStart;
+JKRHeap::JKRAllocCallback JKRHeap::sAllocCallback;
 
+JKRHeap::JKRFreeCallback JKRHeap::sFreeCallback;
+
+bool JKRHeap::initArena(char** memory, u32* size, int maxHeaps) {
     void* arenaLo = OSGetArenaLo();
     void* arenaHi = OSGetArenaHi();
+    OS_REPORT("original arenaLo = %p arenaHi = %p\n", arenaLo, arenaHi);
     if (arenaLo == arenaHi)
         return false;
 
-    arenaStart = OSInitAlloc(arenaLo, arenaHi, maxHeaps);
-    ram_start = (void*)ALIGN_NEXT((uintptr_t)arenaStart, 0x20);
-    ram_end = (void*)ALIGN_PREV((uintptr_t)arenaHi, 0x20);
+    arenaLo = OSInitAlloc(arenaLo, arenaHi, maxHeaps);
+    arenaLo = (void*)ALIGN_NEXT((uintptr_t)arenaLo, 0x20);
+    arenaHi = (void*)ALIGN_PREV((uintptr_t)arenaHi, 0x20);
 
     OSBootInfo* codeStart = (OSBootInfo*)OSPhysicalToCached(0);
     mCodeStart = codeStart;
-    mCodeEnd = ram_start;
+    mCodeEnd = arenaLo;
 
-    mUserRamStart = ram_start;
-    mUserRamEnd = ram_end;
+    mUserRamStart = arenaLo;
+    mUserRamEnd = arenaHi;
     mMemorySize = codeStart->memorySize;
 
-    OSSetArenaLo(ram_end);
-    OSSetArenaHi(ram_end);
+    OSSetArenaLo(arenaHi);
+    OSSetArenaHi(arenaHi);
 
-    *memory = (char*)ram_start;
-    *size = (uintptr_t)ram_end - (uintptr_t)ram_start;
+    *memory = (char*)arenaLo;
+    *size = (uintptr_t)arenaHi - (uintptr_t)arenaLo;
     return true;
 }
+
+#if PLATFORM_WII || PLATFORM_SHIELD
+bool JKRHeap::initArena2(char** memory, u32* size, int maxHeaps) {
+    void* arenaLo = OSGetMEM2ArenaLo();
+    void* arenaHi = OSGetMEM2ArenaHi();
+    OS_REPORT("original arenaLo = %p arenaHi = %p\n", arenaLo, arenaHi);
+    if (arenaLo == arenaHi) {
+        return false;
+    }
+    arenaLo = (void*)0x91100000;
+    arenaHi = (void*)ALIGN_PREV(uintptr_t(arenaHi), 32);
+    OSSetMEM2ArenaLo(arenaHi);
+    OSSetMEM2ArenaHi(arenaHi);
+    *memory = (char*)arenaLo;
+    *size = uintptr_t(arenaHi) - uintptr_t(arenaLo);
+    return true;
+}
+#endif
 
 JKRHeap* JKRHeap::becomeSystemHeap() {
     JKRHeap* prev = sSystemHeap;
@@ -131,6 +151,10 @@ JKRHeap* JKRHeap::becomeCurrentHeap() {
 
 void JKRHeap::destroy() {
     do_destroy();
+}
+
+static void dummy1(JKRHeap* heap) {
+    JUT_ASSERT(0, heap != 0);
 }
 
 void* JKRHeap::alloc(u32 size, int alignment, JKRHeap* heap) {
@@ -149,7 +173,13 @@ void* JKRHeap::alloc(u32 size, int alignment) {
     if (mInitFlag) {
         JUT_WARN(393, "alloc %x byte in heap %x", size, this);
     }
-    return do_alloc(size, alignment);
+    void* mem = do_alloc(size, alignment);
+#if DEBUG
+    if (sAllocCallback) {
+        sAllocCallback(size, alignment, this, mem);
+    }
+#endif
+    return mem;
 }
 
 void JKRHeap::free(void* ptr, JKRHeap* heap) {
@@ -166,6 +196,11 @@ void JKRHeap::free(void* ptr) {
     if (mInitFlag) {
         JUT_WARN(441, "free %x in heap %x", ptr, this);
     }
+#if DEBUG
+    if (sFreeCallback) {
+        sFreeCallback(ptr, this);
+    }
+#endif
     do_free(ptr);
 }
 
@@ -189,6 +224,10 @@ void JKRHeap::freeTail() {
         JUT_WARN(507, "freeTail in heap %x", this);
     }
     do_freeTail();
+}
+
+static void dummy2() {
+    OS_REPORT("fillFreeArea in heap %x");
 }
 
 s32 JKRHeap::resize(void* ptr, u32 size, JKRHeap* heap) {
@@ -241,6 +280,10 @@ s32 JKRHeap::changeGroupID(u8 groupID) {
     return do_changeGroupID(groupID);
 }
 
+u8 JKRHeap::getCurrentGroupId() {
+    return do_getCurrentGroupId();
+}
+
 u32 JKRHeap::getMaxAllocatableSize(int alignment) {
     u32 maxFreeBlock = (uintptr_t)getMaxFreeBlock();
     u32 ptrOffset = (alignment - 1) & alignment - (maxFreeBlock & 0xf);
@@ -255,7 +298,11 @@ JKRHeap* JKRHeap::findFromRoot(void* ptr) {
     if (sRootHeap->mStart <= ptr && ptr < sRootHeap->mEnd) {
         return sRootHeap->find(ptr);
     }
-
+#if PLATFORM_WII || PLATFORM_SHIELD
+    if (sRootHeap2->mStart <= ptr && ptr < sRootHeap2->mEnd) {
+        return sRootHeap2->find(ptr);
+    }
+#endif
     return sRootHeap->findAllHeap(ptr);
 }
 
@@ -299,29 +346,24 @@ JKRHeap* JKRHeap::findAllHeap(void* ptr) const {
 }
 
 void JKRHeap::dispose_subroutine(u32 begin, u32 end) {
-    JSUListIterator<JKRDisposer> last_iterator;
-    JSUListIterator<JKRDisposer> next_iterator;
-    JSUListIterator<JKRDisposer> iterator;
-
-    for (iterator = mDisposerList.getFirst(); iterator != mDisposerList.getEnd();
-         iterator = next_iterator)
-    {
-        JKRDisposer* disposer = iterator.getObject();
+    JSUListIterator<JKRDisposer> next_iterator((JSULink<JKRDisposer>*)NULL);
+    JSUListIterator<JKRDisposer> it = mDisposerList.getFirst();
+    while (it != mDisposerList.getEnd()) {
+        JKRDisposer* disposer = it.getObject();
 
         if ((void*)begin <= disposer && disposer < (void*)end) {
-            disposer->~JKRDisposer();
+            it->~JKRDisposer();
 
-            if (last_iterator == NULL) {
-                next_iterator = mDisposerList.getFirst();
-            } else {
-                next_iterator = last_iterator;
-                next_iterator++;
+            if (next_iterator == JSUListIterator<JKRDisposer>((JSULink<JKRDisposer>*)NULL)) {
+                it = mDisposerList.getFirst();
+                continue;
             }
-        } else {
-            last_iterator = iterator;
-            next_iterator = iterator;
-            next_iterator++;
+            it = next_iterator;
+            it++;
+            continue;
         }
+        next_iterator = it;
+        it++;
     }
 }
 
@@ -346,18 +388,19 @@ void JKRHeap::copyMemory(void* dst, void* src, u32 size) {
 
     u32* dst_32 = (u32*)dst;
     u32* src_32 = (u32*)src;
-    while (count > 0) {
-        *dst_32 = *src_32;
-        dst_32++;
-        src_32++;
-        count--;
+    while (count-- > 0) {
+        *dst_32++ = *src_32++;
     }
 }
 
 void JKRDefaultMemoryErrorRoutine(void* heap, u32 size, int alignment) {
     OS_REPORT("Error: Cannot allocate memory %d(0x%x)byte in %d byte alignment from %08x\n", size,
              size, alignment, heap);
+#if PLATFORM_GCN
     JUTException::panic(__FILE__, 831, "abort\n");
+#else
+    JUTException::panic(__FILE__, 912, "abort\n");
+#endif
 }
 
 bool JKRHeap::setErrorFlag(bool errorFlag) {
@@ -369,12 +412,35 @@ bool JKRHeap::setErrorFlag(bool errorFlag) {
 JKRErrorHandler JKRHeap::setErrorHandler(JKRErrorHandler errorHandler) {
     JKRErrorHandler prev = mErrorHandler;
 
-    if (!errorHandler) {
-        errorHandler = JKRDefaultMemoryErrorRoutine;
-    }
+    mErrorHandler = !errorHandler ? JKRDefaultMemoryErrorRoutine : errorHandler;
 
-    mErrorHandler = errorHandler;
     return prev;
+}
+
+void JKRHeap::fillMemory(u8* dst, u32 size, u8 val) {
+    uintptr_t ptr = uintptr_t(dst);
+    memset(dst, val, size);
+    DCFlushRange((void*)ALIGN_PREV(ptr, 32), ALIGN_NEXT(size, 32));
+}
+
+bool JKRHeap::checkMemoryFilled(u8* mem, u32 size, u8 val) {
+    void* ptr = mem;
+    bool result = true;
+    for (int i = 0; i < size; i++) {
+        if (val == mem[i]) {
+            continue;
+        }
+        result = false;
+        if (fillcheck_dispcount <= 0) {
+            continue;
+        }
+        fillcheck_dispcount--;
+        JUT_WARN(999, "**** checkMemoryFilled:\n address %08x size %x:\n (%08x = %02x)\n", mem, size, mem + i, mem[i]);
+        if (data_8074A8D0_debug) {
+            break;
+        }
+    }
+    return result;
 }
 
 bool JKRHeap::isSubHeap(JKRHeap* heap) const {
@@ -382,8 +448,7 @@ bool JKRHeap::isSubHeap(JKRHeap* heap) const {
         return false;
 
     if (mChildTree.getNumChildren() != 0) {
-        JSUTreeIterator<JKRHeap> iterator;
-        for (iterator = mChildTree.getFirstChild(); iterator != mChildTree.getEndChild();
+        for (JSUTreeIterator<JKRHeap> iterator = mChildTree.getFirstChild(); iterator != mChildTree.getEndChild();
              ++iterator)
         {
             if (iterator.getObject() == heap) {
@@ -431,6 +496,9 @@ void operator delete[](void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
 
+s32 fillcheck_dispcount = 100;
+bool data_8074A8D0_debug = true;
+
 void JKRHeap::state_register(JKRHeap::TState* p, u32 id) const {
     JUT_ASSERT(1213, p != NULL);
     JUT_ASSERT(1214, p->getHeap() == this);
@@ -446,6 +514,10 @@ void JKRHeap::state_dump(const JKRHeap::TState& p) const {
     JUT_LOG(1247, "id         : 0x%08x", p.getId());
     JUT_LOG(1248, "used size  : %u", p.getUsedSize());
 }
+
+void* ARALT_AramStartAdr = (void*)0x90000000;
+
+void* JKRHeap::getAltAramStartAdr() { return ARALT_AramStartAdr; }
 
 s32 JKRHeap::do_changeGroupID(u8 param_0) {
     return 0;

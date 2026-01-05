@@ -2,7 +2,7 @@
 #include "TRK_MINNOW_DOLPHIN/MetroTRK/Portable/nubevent.h"
 #include "TRK_MINNOW_DOLPHIN/utils/common/MWTrace.h"
 #include "trk.h"
-#include <string.h>
+#include <cstring>
 
 static BOOL IsTRKConnected;
 

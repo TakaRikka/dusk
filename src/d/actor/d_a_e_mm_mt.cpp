@@ -261,8 +261,6 @@ static void e_mm_mt_carry(e_mm_mt_class* i_this) {
     cLib_addCalcAngleS2(&i_this->m_carryAngleSpeed, 0x2000, 1, 0x100);
 }
 
-// /* 807239CC-80723B70 000ACC 01A4+00 1/1 0/0 0/0 .text            wall_angle_get__FP13e_mm_mt_class
-//  */
 static s16 wall_angle_get(e_mm_mt_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz vec1, vec2, vec3[2];
@@ -603,7 +601,7 @@ static void action(e_mm_mt_class* i_this) {
                         daPy_getPlayerActorClass()->getCutType() == 24) {
                         actor->speedF = cM_rndF(10.0f) + 40.0f +  TREG_F(16);
                         i_this->m_spin = (s16)(cM_rndF(2000.0f) + 5500.0f);
-                        i_this->field_0x69C = (f32)(s16)(cM_rndF(1000.0f) + 5000.0f);
+                        i_this->field_0x69C = (s16)(cM_rndF(1000.0f) + 5000.0f);
                     } else {
                         actor->speedF = TREG_F(17) + 30.0f;
                         i_this->m_spin = (s16)cM_rndFX(3000.0f);
@@ -850,7 +848,7 @@ static actor_method_class l_daE_MM_MT_Method = {
     (process_method_func)daE_MM_MT_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_MM_MT = {
+actor_process_profile_definition g_profile_E_MM_MT = {
   fpcLy_CURRENT_e,        // mLayerID
   8,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

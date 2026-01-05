@@ -322,13 +322,13 @@ static int dScnName_Create(scene_class* i_this) {
     return static_cast<dScnName_c*>(i_this)->create();
 }
 
-static leafdraw_method_class l_dScnName_Method = {
+static scene_method_class l_dScnName_Method = {
     (process_method_func)dScnName_Create, (process_method_func)dScnName_Delete,
     (process_method_func)dScnName_Execute, (process_method_func)dScnName_IsDelete,
     (process_method_func)dScnName_Draw,
 };
 
-extern scene_process_profile_definition g_profile_NAME_SCENE = {
+scene_process_profile_definition g_profile_NAME_SCENE = {
     fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,
@@ -338,11 +338,11 @@ extern scene_process_profile_definition g_profile_NAME_SCENE = {
     0,
     0,
     &g_fopScn_Method.base,
-    (process_method_class*)&l_dScnName_Method,
+    &l_dScnName_Method,
     NULL,
 };
 
-extern scene_process_profile_definition g_profile_NAMEEX_SCENE = {
+scene_process_profile_definition g_profile_NAMEEX_SCENE = {
     fpcLy_ROOT_e,
     1,
     fpcPi_CURRENT_e,
@@ -352,6 +352,6 @@ extern scene_process_profile_definition g_profile_NAMEEX_SCENE = {
     0,
     0,
     &g_fopScn_Method.base,
-    (process_method_class*)&l_dScnName_Method,
+    &l_dScnName_Method,
     NULL,
 };

@@ -179,7 +179,7 @@ public:
 
 public:
     void initialize() {
-        memset(&mFootLPos, 0, (int)&field_0xe3c - (int)&mFootLPos);
+        memset(&mFootLPos, 0, (intptr_t)&field_0xe3c - (intptr_t)&mFootLPos);
 
         mFaceMotionSeqMngr.initialize();
         mMotionSeqMngr.initialize();

@@ -1996,7 +1996,7 @@ static actor_method_class l_daNi_Method = {
     (process_method_func)daNi_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NI = {
+actor_process_profile_definition g_profile_NI = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

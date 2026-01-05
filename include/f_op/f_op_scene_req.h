@@ -15,6 +15,6 @@ public:
 fpc_ProcID fopScnRq_Request(int i_reqType, scene_class* i_scene, s16 i_procName, void* i_data, s16 param_5,
                      u16 param_6);
 s32 fopScnRq_ReRequest(fpc_ProcID i_requestId, s16 i_procName, void* i_data);
-void fopScnRq_Handler();
+int fopScnRq_Handler();
 
 #endif

@@ -1,13 +1,13 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JAudio2/JASCalc.h"
-#include <math.h>
-#include <limits.h>
+#include <math>
+#include <limits>
 
 void JASCalc::imixcopy(const s16* s1, const s16* s2, s16* dst, u32 n) {
     for (n; n != 0; n--) {
-        *dst++ = *((s16*)s1)++;
-        *dst++ = *((s16*)s2)++;
+        *dst++ = *(s1)++;
+        *dst++ = *(s2)++;
     }
 }
 
@@ -21,10 +21,10 @@ void JASCalc::bcopyfast(const void* src, void* dest, u32 size) {
     u32* udest = (u32*)dest;
 
     for (size = size / (4 * sizeof(u32)); size != 0; size--) {
-        copy1 = *((u32*)usrc)++;
-        copy2 = *((u32*)usrc)++;
-        copy3 = *((u32*)usrc)++;
-        copy4 = *((u32*)usrc)++;
+        copy1 = *(usrc)++;
+        copy2 = *(usrc)++;
+        copy3 = *(usrc)++;
+        copy4 = *(usrc)++;
 
         *udest++ = copy1;
         *udest++ = copy2;
@@ -263,6 +263,9 @@ s16 const JASCalc::CUTOFF_TO_IIR_TABLE[128][4] = {
     0x7FFF, 0x0000, 0x0000, 0x0000,
 };
 
+template <>
+s16 JASCalc::clamp(s32);
+
 // currently required because of missing functions
 // JASCalc::hannWindow(short *, u32)
 // JASCalc::hammWindow(short *, u32)
@@ -319,7 +322,7 @@ f32 JASCalc::pow2(f32 x) {
 
 template <>
 s16 JASCalc::clamp(s32 x) {
-    if (std::numeric_limits<s16>::min() >= x)
+    if (x <= std::numeric_limits<s16>::min())
         return std::numeric_limits<s16>::min();
     if (x >= std::numeric_limits<s16>::max())
         return std::numeric_limits<s16>::max();

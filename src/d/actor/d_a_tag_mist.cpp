@@ -146,7 +146,7 @@ static actor_method_class l_daTagMist_Method = {
     (process_method_func)NULL,
 };
 
-extern actor_process_profile_definition g_profile_Tag_Mist = {
+actor_process_profile_definition g_profile_Tag_Mist = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

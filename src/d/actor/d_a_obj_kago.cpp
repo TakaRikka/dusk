@@ -28,7 +28,6 @@ daObj_Kago_Param_c::Data const daObj_Kago_Param_c::m = {
     10.0f,
 };
 
-// /* 80C33CAC-80C33CDC 00002C 0030+00 0/0 0/0 0/0 .rodata          l_ccDObjData */
 const dCcD_SrcGObjInf l_ccDObjData = {
     {0, // mFlags
         {
@@ -54,10 +53,12 @@ static char* l_resNameList[2] = {
 static dCcD_SrcCyl l_ccDCyl = {
     daNpcT_c::mCcDObjData, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        0.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            0.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    }
 };
 
 daObj_Kago_c::~daObj_Kago_c() {
@@ -656,7 +657,7 @@ static actor_method_class daObj_Kago_MethodTable = {
     (process_method_func)daObj_Kago_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_KAGO = {
+actor_process_profile_definition g_profile_OBJ_KAGO = {
   fpcLy_CURRENT_e,         // mLayerID
   8,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

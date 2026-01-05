@@ -675,7 +675,7 @@ void daObjSwpush::Act_c::demo_reqPause_init() {
     if (mDemoMode == DEMO_MODE_NON) {
         mDemoMode = DEMO_MODE_REQ_PAUSE;
         fopAcM_orderPotentialEvent(this, 2, 0, 0);
-        eventInfo.onCondition(fopAcCnd_NOEXEC_e);
+        eventInfo.onCondition(dEvtCnd_CANDEMO_e);
     }
 }
 
@@ -718,7 +718,7 @@ void daObjSwpush::Act_c::demo_reqSw_init() {
         demo_stop_puase();
         mDemoMode = DEMO_MODE_REQ_SW;
         fopAcM_orderOtherEventId(this, mEventID, prm_get_evId(), 0xFFFF, 0, 1);
-        eventInfo.onCondition(fopAcCnd_NOEXEC_e);
+        eventInfo.onCondition(dEvtCnd_CANDEMO_e);
     }
 }
 
@@ -727,7 +727,7 @@ void daObjSwpush::Act_c::demo_reqSw() {
         demo_runSw_init();
     } else {
         fopAcM_orderOtherEventId(this, mEventID, prm_get_evId(), 0xFFFF, 0, 1);
-        eventInfo.onCondition(fopAcCnd_NOEXEC_e);
+        eventInfo.onCondition(dEvtCnd_CANDEMO_e);
     }
 }
 
@@ -852,7 +852,6 @@ namespace {
         return 1;
     }
     
-    /* 80484F88-80484FA8 -00001 0020+00 1/0 0/0 0/0 .data            Mthd_Table__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@ */
     static actor_method_class Mthd_Table = {
         (process_method_func)Mthd_Create, 
         (process_method_func)Mthd_Delete, 
@@ -865,7 +864,7 @@ namespace {
 
 AUDIO_INSTANCES;
 
-extern actor_process_profile_definition g_profile_Obj_Swpush = {
+actor_process_profile_definition g_profile_Obj_Swpush = {
   fpcLy_CURRENT_e,        // mLayerID
   2,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

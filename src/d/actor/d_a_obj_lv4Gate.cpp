@@ -179,7 +179,7 @@ static actor_method_class l_daLv4Gate_Method = {
     (process_method_func)daLv4Gate_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv4Gate = {
+actor_process_profile_definition g_profile_Obj_Lv4Gate = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

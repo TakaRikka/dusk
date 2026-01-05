@@ -67,7 +67,7 @@ static int daE_MS_Draw(e_ms_class* i_this) {
     cXyz shadow_pos(i_this->current.pos.x, i_this->current.pos.y + 100.0f, i_this->current.pos.z);
     i_this->mShadowKey =
         dComIfGd_setShadow(i_this->mShadowKey, 1, model, &shadow_pos, 400.0f, 40.0f,
-                           i_this->current.pos.y, i_this->mAcch.m_ground_h, i_this->mAcch.m_gnd,
+                           i_this->current.pos.y, i_this->mAcch.GetGroundH(), i_this->mAcch.m_gnd,
                            &i_this->tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
 
     return 1;
@@ -79,7 +79,7 @@ static void sibuki_set(e_ms_class* i_this) {
         cXyz pos(i_this->current.pos);
         pos.y = i_this->field_0x690;
         fopKyM_createWpillar(&pos, 1.0f, 0);
-        if (i_this->field_0x690 - i_this->mAcch.m_ground_h > 50.0f) {
+        if (i_this->field_0x690 - i_this->mAcch.GetGroundH() > 50.0f) {
             i_this->mSound.startCreatureSound(Z2SE_CM_BODYFALL_ASASE_S, 0, -1);
         } else {
             i_this->mSound.startCreatureSound(Z2SE_EN_MS_FALLWATER, 0, -1);
@@ -108,8 +108,7 @@ static void ms_disappear(e_ms_class* i_this) {
     }
 }
 
-/* 807297FD 0003+00 data_807297FD None */
-static u8 hioInit;
+static u8 hio_set;
 
 static daE_MS_HIO_c l_HIO;
 
@@ -949,7 +948,7 @@ static int daE_MS_IsDelete(e_ms_class* i_this) {
 static int daE_MS_Delete(e_ms_class* i_this) {
     dComIfG_resDelete(&i_this->mPhaseReq, "E_MS");
     if (i_this->mHIOInit) {
-        hioInit = 0;
+        hio_set = 0;
     }
 
     if (i_this->heap) {
@@ -1017,9 +1016,9 @@ static int daE_MS_Create(fopAc_ac_c* actor) {
             return cPhs_ERROR_e;
         }
 
-        if (!hioInit) {
+        if (!hio_set) {
             i_this->mHIOInit = 1;
-            hioInit = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -1062,7 +1061,7 @@ static actor_method_class l_daE_MS_Method = {
     (process_method_func)daE_MS_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_MS = {
+actor_process_profile_definition g_profile_E_MS = {
     fpcLy_CURRENT_e,       // mLayerID
     7,                     // mListID
     fpcPi_CURRENT_e,       // mListPrio

@@ -13,7 +13,11 @@
 #include "d/d_save.h"
 #include "d/d_save_init.h"
 #include "f_op/f_op_scene_mng.h"
-#include "stdio.h"
+#include <stdio>
+
+#if PLATFORM_WII || PLATFORM_SHIELD
+#include <revolution/sc.h>
+#endif
 
 #if VERSION == VERSION_SHIELD
 #include "lingcod/lingcod.h"
@@ -281,8 +285,8 @@ void dSv_player_last_mark_info_c::setWarpItemData(const char* i_name, const cXyz
     mAngleY = i_angle;
     mRoomNo = i_roomNo;
 
-    (void)unk_4;
-    (void)unk_5;
+    UNUSED(unk_4);
+    UNUSED(unk_5);
 }
 
 void dSv_player_item_c::init() {
@@ -967,22 +971,20 @@ void dSv_player_info_c::init() {
     }
 }
 
-extern "C" u8 SCGetLanguage();
-
 void dSv_player_config_c::init() {
 #if VERSION == VERSION_GCN_JPN
-    unk0 = 0;
+    mRuby = 0;
 #else
-    unk0 = 1;
+    mRuby = 1;
 #endif
 
 #if PLATFORM_GCN
     if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
         mSoundMode = OS_SOUND_MODE_MONO;
-        Z2AudioMgr::mAudioMgrPtr->setOutputMode(OS_SOUND_MODE_MONO);
+        mDoAud_setOutputMode(OS_SOUND_MODE_MONO);
     } else {
         mSoundMode = OS_SOUND_MODE_STEREO;
-        Z2AudioMgr::mAudioMgrPtr->setOutputMode(OS_SOUND_MODE_STEREO);
+        mDoAud_setOutputMode(OS_SOUND_MODE_STEREO);
     }
 #endif
 
@@ -1796,13 +1798,13 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
 
 #if PLATFORM_GCN
     if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
-        g_dComIfG_gameInfo.info.getPlayer().getConfig().setSound(OS_SOUND_MODE_MONO);
-        Z2AudioMgr::mAudioMgrPtr->setOutputMode(OS_SOUND_MODE_MONO);
-    } else if (g_dComIfG_gameInfo.info.getPlayer().getConfig().getSound() == 2) {
-        Z2AudioMgr::mAudioMgrPtr->setOutputMode(2);
+        dComIfGs_setOptSound(OS_SOUND_MODE_MONO);
+        mDoAud_setOutputMode(OS_SOUND_MODE_MONO);
+    } else if (dComIfGs_getOptSound() == 2) {
+        mDoAud_setOutputMode(2);
     } else {
-        g_dComIfG_gameInfo.info.getPlayer().getConfig().setSound(OS_SOUND_MODE_STEREO);
-        Z2AudioMgr::mAudioMgrPtr->setOutputMode(OS_SOUND_MODE_STEREO);
+        dComIfGs_setOptSound(OS_SOUND_MODE_STEREO);
+        mDoAud_setOutputMode(OS_SOUND_MODE_STEREO);
     }
 #endif
 

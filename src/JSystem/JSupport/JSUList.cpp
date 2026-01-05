@@ -23,11 +23,9 @@ JSUPtrList::JSUPtrList(bool init) {
 
 JSUPtrList::~JSUPtrList() {
     JSUPtrLink* node = mHead;
-    s32 removed = 0;
-    while (mLength > removed) {
+    for (int i = 0; i < mLength; i++) {
         node->mList = NULL;
-        node = node->getNext();
-        removed += 1;
+        node = node->mNext;
     }
 }
 
@@ -47,10 +45,9 @@ void JSUPtrList::setFirst(JSUPtrLink* first) {
 }
 
 bool JSUPtrList::append(JSUPtrLink* ptr) {
-    JSUPtrList* list = ptr->mList;
-    bool result = (NULL == list);
+    bool result = ptr->mList == NULL;
     if (!result) {
-        result = list->remove(ptr);
+        result = ptr->mList->remove(ptr);
     }
 
     if (result) {
@@ -70,10 +67,9 @@ bool JSUPtrList::append(JSUPtrLink* ptr) {
 }
 
 bool JSUPtrList::prepend(JSUPtrLink* ptr) {
-    JSUPtrList* list = ptr->mList;
-    bool result = (NULL == list);
+    bool result = ptr->mList == NULL;
     if (!result) {
-        result = list->remove(ptr);
+        result = ptr->mList->remove(ptr);
     }
 
     if (result) {
@@ -103,7 +99,7 @@ bool JSUPtrList::insert(JSUPtrLink* before, JSUPtrLink* ptr) {
         return false;
     }
 
-    bool result = (NULL == ptr->mList);
+    bool result = ptr->mList == NULL;
     if (!result) {
         result = ptr->mList->remove(ptr);
     }
@@ -152,7 +148,7 @@ JSUPtrLink* JSUPtrList::getNthLink(u32 index) const {
 
     JSUPtrLink* node = mHead;
     for (u32 i = 0; i < index; i++) {
-        node = node->getNext();
+        node = node->mNext;
     }
 
     return node;

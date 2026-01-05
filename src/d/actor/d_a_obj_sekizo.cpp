@@ -132,7 +132,7 @@ static actor_method_class daObj_Sekizo_MethodTable = {
     (process_method_func)daObj_Sekizo_Execute, (process_method_func)daObj_Sekizo_IsDelete,
     (process_method_func)daObj_Sekizo_Draw};
 
-extern actor_process_profile_definition g_profile_OBJ_SEKIZO = {
+actor_process_profile_definition g_profile_OBJ_SEKIZO = {
     fpcLy_CURRENT_e,            // mLayerID
     7,                          // mListID
     fpcPi_CURRENT_e,            // mListPrio

@@ -257,7 +257,7 @@ static actor_method_class daObj_SekiDoor_MethodTable = {
     (process_method_func)daObj_SekiDoor_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_SEKIDOOR = {
+actor_process_profile_definition g_profile_OBJ_SEKIDOOR = {
     fpcLy_CURRENT_e,             // mLayerID
     7,                           // mListID
     fpcPi_CURRENT_e,             // mListPrio

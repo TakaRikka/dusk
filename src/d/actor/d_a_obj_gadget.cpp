@@ -59,10 +59,12 @@ static char* l_resNameList[2] = {
 static dCcD_SrcCyl l_ccDCyl = {
     l_ccDObjData, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        0.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            0.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    }
 };
 
 #if DEBUG
@@ -615,7 +617,7 @@ static actor_method_class daObj_Gadget_MethodTable = {
     (process_method_func)daObj_Gadget_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_GADGET = {
+actor_process_profile_definition g_profile_OBJ_GADGET = {
   fpcLy_CURRENT_e,           // mLayerID
   8,                         // mListID
   fpcPi_CURRENT_e,           // mListPrio

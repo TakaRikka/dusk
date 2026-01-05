@@ -17,7 +17,7 @@ struct JAUSeqDataBlock {
 
     /* 0x00 */ JSULink<JAUSeqDataBlock> field_0x0;
     /* 0x10 */ JAISoundID field_0x10;
-    /* 0x14 */ JAISeqDataRegion field_0x14;
+    /* 0x14 */ JAISeqDataRegion region;
     /* 0x1C */ int field_0x1c;
 };
 

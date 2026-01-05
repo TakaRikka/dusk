@@ -170,7 +170,7 @@ static void action(obj_rw_class* i_this) {
     i_this->field_0x670 = i_this->field_0x66c * (20.0f + TREG_F(16)) * cM_ssin(i_this->field_0x672);
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daOBJ_RW_HIO_c l_HIO;
 
@@ -267,7 +267,7 @@ static int daOBJ_RW_Delete(obj_rw_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "Obj_rw");
 
     if (i_this->HIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -310,9 +310,9 @@ static int daOBJ_RW_Create(fopAc_ac_c* actor) {
 
         OS_REPORT("//////////////OBJ_RW SET 2 !!\n");
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             i_this->HIOInit = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("いのししまる焼き", &l_HIO);
         }
 
@@ -343,10 +343,12 @@ static int daOBJ_RW_Create(fopAc_ac_c* actor) {
                 {0x0}, // mGObjCo
             }, // mObjInf
             {
-                {0.0f, 0.0f, 0.0f}, // mCenter
-                200.0f, // mRadius
-                250.0f // mHeight
-            } // mCyl
+                {
+                    {0.0f, 0.0f, 0.0f}, // mCenter
+                    200.0f, // mRadius
+                    250.0f // mHeight
+                } // mCyl
+            }
         };
 
         i_this->ccStts.Init(0xFF, 0, actor);
@@ -392,7 +394,7 @@ static actor_method_class l_daOBJ_RW_Method = {
     (process_method_func)daOBJ_RW_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_RW = {
+actor_process_profile_definition g_profile_OBJ_RW = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

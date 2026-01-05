@@ -150,7 +150,7 @@ void daE_TT_c::calcHitGroundSpeed() {
     }
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_TT_HIO_c l_HIO;
 
@@ -1180,7 +1180,7 @@ int daE_TT_c::_delete() {
     dComIfG_resDelete(&mPhaseReq2, "E_TT");
 
     if (mHIOInit) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -1272,8 +1272,8 @@ int daE_TT_c::create() {
                 return cPhs_ERROR_e;
             }
 
-            if (!l_HIOInit) {
-                l_HIOInit = true;
+            if (!hio_set) {
+                hio_set = true;
                 mHIOInit = true;
                 l_HIO.id = mDoHIO_CREATE_CHILD("テクタイト", &l_HIO);  // Tektite
             }
@@ -1319,7 +1319,7 @@ static actor_method_class l_daE_TT_Method = {
     (process_method_func)daE_TT_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_TT = {
+actor_process_profile_definition g_profile_E_TT = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

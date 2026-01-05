@@ -285,7 +285,7 @@ public:
     dMsgObject_c* getMsgObjectClass() { return mItemInfo.mMsgObjectClass; }
     dStage_roomControl_c* getRoomControl() { return &mRoomControl; }
     dStage_dt_c& getStage() { return mStageData; }
-    dEvt_control_c& getEvent() { return mEvent; }
+    dEvt_control_c* getEvent() { return &mEvent; }
     daHorse_c* getHorseActor() { return (daHorse_c*)mPlayerPtr[1]; }
     J2DGrafContext* getCurrentGrafPort() { return (J2DGrafContext*)mCurrentGrafPort; }
     dVibration_c& getVibration() { return mVibration; }
@@ -566,7 +566,7 @@ public:
     void setStartStageLayer(s8 layer) { mStartStage.setLayer(layer); }
 
     const char* getNextStageName() { return mNextStage.getName(); }
-    dStage_startStage_c* getNextStartStage() { return &mNextStage; }
+    dStage_startStage_c* getNextStartStage() { return mNextStage.getStartStage(); }
     s8 getNextStageRoomNo() { return mNextStage.getRoomNo(); }
     s8 getNextStageLayer() { return mNextStage.getLayer(); }
     s16 getNextStagePoint() { return mNextStage.getPoint(); }
@@ -779,7 +779,7 @@ public:
     /* 0x04780 */ dAttention_c mAttention;
     /* 0x04C9C */ dVibration_c mVibration;
     /* 0x04D2C */ u8 field_0x4d2c[4];
-    #if PLATFORM_WII
+    #if PLATFORM_WII || VERSION == VERSION_SHIELD
     /* 0x04D38 */ u8 unk_0x4d38[8];
     #endif
     /* 0x04D30 */ JKRArchive* mFieldMapArchive2;
@@ -840,7 +840,6 @@ public:
     ~dComIfG_inf_c() {}
     void ct();
     void createBaseCsr();
-    dComIfG_play_c& getPlay() { return play; }
 
 #if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
     class baseCsr_c : public mDoGph_gInf_c::csr_c {
@@ -1462,25 +1461,61 @@ inline u8 dComIfGs_getSelectItemIndex(int i_no) {
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusA().getSelectItemIndex(i_no);
 }
 
-//TODO: actual name is unknown
-inline u8 dComIfGs_getOptUnk0() {
-    return g_dComIfG_gameInfo.info.getPlayer().getConfig().getUnk0();
+// Ruby inline names are from TWW debug.
+inline u8 dComIfGs_getOptRuby() {
+    return g_dComIfG_gameInfo.info.getPlayer().getConfig().getRuby();
+}
+
+inline void dComIfGs_setOptRuby(u8 i_ruby) {
+    g_dComIfG_gameInfo.info.getPlayer().getConfig().setRuby(i_ruby);
 }
 
 inline u8 dComIfGs_getOptVibration() {
     return g_dComIfG_gameInfo.info.getPlayer().getConfig().getVibration();
 }
 
+inline void dComIfGs_setOptVibration(u8 i_status) {
+    g_dComIfG_gameInfo.info.getPlayer().getConfig().setVibration(i_status);
+}
+
 inline u8 dComIfGs_getOptAttentionType() {
     return g_dComIfG_gameInfo.info.getPlayer().getConfig().getAttentionType();
+}
+
+inline void dComIfGs_setOptAttentionType(u8 i_attentionType) {
+    g_dComIfG_gameInfo.info.getPlayer().getConfig().setAttentionType(i_attentionType);
 }
 
 inline u8 dComIfGs_getOptCameraControl() {
     return g_dComIfG_gameInfo.info.getPlayer().getConfig().getCameraControl();
 }
 
+inline void dComIfGs_setOptCameraControl(u8 i_cameraControl) {
+    g_dComIfG_gameInfo.info.getPlayer().getConfig().setCameraControl(i_cameraControl);
+}
+
 inline u8 dComIfGs_getOptSound() {
     return g_dComIfG_gameInfo.info.getPlayer().getConfig().getSound();
+}
+
+inline void dComIfGs_setOptSound(u8 i_mode) {
+    g_dComIfG_gameInfo.info.getPlayer().getConfig().setSound(i_mode);
+}
+
+inline void dComIfGs_setOptCalValue(s8 i_calValue) {
+    g_dComIfG_gameInfo.info.getPlayer().getConfig().setCalValue(i_calValue);
+}
+
+inline void dComIfGs_setOptCalibrateDist(u16 i_calibrateDist) {
+    g_dComIfG_gameInfo.info.getPlayer().getConfig().setCalibrateDist(i_calibrateDist);
+}
+
+inline u8 dComIfGs_getOptPointer() {
+    return g_dComIfG_gameInfo.info.getPlayer().getConfig().getPointer();
+}
+
+inline void dComIfGs_setOptPointer(u8 i_pointer) {
+    g_dComIfG_gameInfo.info.getPlayer().getConfig().setPointer(i_pointer);
 }
 
 inline BOOL dComIfGs_isTbox(int i_no) {
@@ -2034,35 +2069,6 @@ inline void dComIfGs_setLastWarpAcceptStage(s8 param_0) {
     g_dComIfG_gameInfo.info.getPlayer().getPlayerLastMarkInfo().setWarpAcceptStage(param_0);
 }
 
-//TODO: actual name is unknown
-inline void dComIfGs_setOptUnk0(u8 i_unk0) {
-    g_dComIfG_gameInfo.info.getPlayer().getConfig().setUnk0(i_unk0);
-}
-
-inline void dComIfGs_setOptSound(u8 i_mode) {
-    g_dComIfG_gameInfo.info.getPlayer().getConfig().setSound(i_mode);
-}
-
-inline void dComIfGs_setOptVibration(u8 i_status) {
-    g_dComIfG_gameInfo.info.getPlayer().getConfig().setVibration(i_status);
-}
-
-inline void dComIfGs_setOptAttentionType(u8 i_attentionType) {
-    g_dComIfG_gameInfo.info.getPlayer().getConfig().setAttentionType(i_attentionType);
-}
-
-inline void dComIfGs_setOptCameraControl(u8 i_cameraControl) {
-    g_dComIfG_gameInfo.info.getPlayer().getConfig().setCameraControl(i_cameraControl);
-}
-
-inline void dComIfGs_setOptPointer(u8 i_pointer) {
-    g_dComIfG_gameInfo.info.getPlayer().getConfig().setPointer(i_pointer);
-}
-
-inline u8 dComIfGs_getOptPointer() {
-    return g_dComIfG_gameInfo.info.getPlayer().getConfig().getPointer();
-}
-
 inline u8 dComIfGs_getNewFile() {
     return g_dComIfG_gameInfo.info.getNewFile();
 }
@@ -2089,14 +2095,6 @@ inline void dComIfGs_addDeathCount() {
 
 inline u8 dComIfGs_getWalletSize() {
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusA().getWalletSize();
-}
-
-inline void dComIfGs_setOptCalValue(s8 i_calValue) {
-    g_dComIfG_gameInfo.info.getPlayer().getConfig().setCalValue(i_calValue);
-}
-
-inline void dComIfGs_setOptCalibrateDist(u16 i_calibrateDist) {
-    g_dComIfG_gameInfo.info.getPlayer().getConfig().setCalibrateDist(i_calibrateDist);
 }
 
 inline u16 dComIfGs_getFishNum(u8 param_0) {
@@ -2572,7 +2570,7 @@ inline s8 dComIfGp_getNextStageLayer() {
     return g_dComIfG_gameInfo.play.getNextStageLayer();
 }
 
-inline s32 dComIfGp_getNextStageWipe() {
+inline s8 dComIfGp_getNextStageWipe() {
     return g_dComIfG_gameInfo.play.getNextStageWipe();
 }
 
@@ -3582,7 +3580,7 @@ inline u8 dComIfGp_getAdvanceDirection() {
     return g_dComIfG_gameInfo.play.getDirection();
 }
 
-inline dEvt_control_c& dComIfGp_getEvent() {
+inline dEvt_control_c* dComIfGp_getEvent() {
     return g_dComIfG_gameInfo.play.getEvent();
 }
 
@@ -3611,41 +3609,41 @@ inline s16 dComIfGp_getItemMaxBombNumCount() {
 }
 
 inline BOOL dComIfGp_event_compulsory(void* i_actor, const char* i_eventname, u16 i_hindFlag) {
-    return g_dComIfG_gameInfo.play.getEvent().compulsory(i_actor, i_eventname, i_hindFlag);
+    return g_dComIfG_gameInfo.play.getEvent()->compulsory(i_actor, i_eventname, i_hindFlag);
 }
 
 inline int dComIfGp_event_moveApproval(void* i_actor) {
-    return g_dComIfG_gameInfo.play.getEvent().moveApproval(i_actor);
+    return g_dComIfG_gameInfo.play.getEvent()->moveApproval(i_actor);
 }
 
 inline int dComIfGp_event_order(u16 i_type, u16 i_prio, u16 i_flags, u16 i_hindFlags, void* i_requestActor,
                                 void* i_targetActor, s16 i_eventID, u8 i_mapToolId) {
-    return g_dComIfG_gameInfo.play.getEvent().order(i_type, i_prio, i_flags, i_hindFlags, i_requestActor,
+    return g_dComIfG_gameInfo.play.getEvent()->order(i_type, i_prio, i_flags, i_hindFlags, i_requestActor,
                                                     i_targetActor, i_eventID, i_mapToolId);
 }
 
-inline void dComIfGp_event_setGtItm(int i_itemNo) {
-    g_dComIfG_gameInfo.play.getEvent().setGtItm(i_itemNo);
+inline void dComIfGp_event_setGtItm(u8 i_itemNo) {
+    g_dComIfG_gameInfo.play.getEvent()->setGtItm(i_itemNo);
 }
 
 inline void dComIfGp_event_reset() {
-    g_dComIfG_gameInfo.play.getEvent().reset();
+    g_dComIfG_gameInfo.play.getEvent()->reset();
 }
 
 inline void dComIfGp_event_remove() {
-    g_dComIfG_gameInfo.play.getEvent().remove();
+    g_dComIfG_gameInfo.play.getEvent()->remove();
 }
 
 inline void dComIfGp_event_onEventFlag(u16 i_flag) {
-    g_dComIfG_gameInfo.play.getEvent().onEventFlag(i_flag);
+    g_dComIfG_gameInfo.play.getEvent()->onEventFlag(i_flag);
 }
 
 inline void dComIfGp_event_onHindFlag(u16 i_flag) {
-    g_dComIfG_gameInfo.play.getEvent().onHindFlag(i_flag);
+    g_dComIfG_gameInfo.play.getEvent()->onHindFlag(i_flag);
 }
 
 inline void dComIfGp_event_offHindFlag(u16 i_flag) {
-    g_dComIfG_gameInfo.play.getEvent().offHindFlag(i_flag);
+    g_dComIfG_gameInfo.play.getEvent()->offHindFlag(i_flag);
 }
 
 inline void dComIfGp_evmng_cutEnd(int i_staffId) {
@@ -3677,19 +3675,19 @@ inline int dComIfGp_evmng_cameraPlay() {
 }
 
 inline u8 dComIfGp_event_getPreItemNo() {
-    return g_dComIfG_gameInfo.play.getEvent().getPreItemNo();
+    return g_dComIfG_gameInfo.play.getEvent()->getPreItemNo();
 }
 
 inline void dComIfGp_event_setItemPartner(void* i_actor) {
-    g_dComIfG_gameInfo.play.getEvent().setPtI(i_actor);
+    g_dComIfG_gameInfo.play.getEvent()->setPtI(i_actor);
 }
 
 inline void dComIfGp_event_setItemPartnerId(fpc_ProcID i_id) {
-    g_dComIfG_gameInfo.play.getEvent().setPtI_Id(i_id);
+    g_dComIfG_gameInfo.play.getEvent()->setPtI_Id(i_id);
 }
 
 inline u8 dComIfGp_event_getGtItm() {
-    return g_dComIfG_gameInfo.play.getEvent().getGtItm();
+    return g_dComIfG_gameInfo.play.getEvent()->getGtItm();
 }
 
 inline int dComIfGp_evmng_startDemo(int i_mapToolId) {
@@ -3697,58 +3695,62 @@ inline int dComIfGp_evmng_startDemo(int i_mapToolId) {
 }
 
 inline void dComIfGp_event_setTalkPartner(void* i_actor) {
-    g_dComIfG_gameInfo.play.getEvent().setPtT(i_actor);
+    g_dComIfG_gameInfo.play.getEvent()->setPtT(i_actor);
 }
 
 inline fopAc_ac_c* dComIfGp_event_getTalkPartner() {
-    return g_dComIfG_gameInfo.play.getEvent().getPtT();
+    return g_dComIfG_gameInfo.play.getEvent()->getPtT();
 }
 
 inline fopAc_ac_c* dComIfGp_event_getItemPartner() {
-    return g_dComIfG_gameInfo.play.getEvent().getPtI();
+    return g_dComIfG_gameInfo.play.getEvent()->getPtI();
 }
 
 inline fopAc_ac_c* dComIfGp_event_getPt1() {
-    return g_dComIfG_gameInfo.play.getEvent().getPt1();
+    return g_dComIfG_gameInfo.play.getEvent()->getPt1();
 }
 
 inline fopAc_ac_c* dComIfGp_event_getPt2() {
-    return g_dComIfG_gameInfo.play.getEvent().getPt2();
+    return g_dComIfG_gameInfo.play.getEvent()->getPt2();
 }
 
 inline BOOL dComIfGp_event_runCheck() {
-    return g_dComIfG_gameInfo.play.getEvent().runCheck();
+    return g_dComIfG_gameInfo.play.getEvent()->runCheck();
 }
 
 inline f32 dComIfGp_event_getCullRate() {
-    return g_dComIfG_gameInfo.play.getEvent().getCullRate();
+    return g_dComIfG_gameInfo.play.getEvent()->getCullRate();
 }
 
 inline u16 dComIfGp_event_checkHind(u16 i_hindFlag) {
     if (!dComIfGp_event_runCheck()) {
         return false;
     }
-    return g_dComIfG_gameInfo.play.getEvent().checkHind(i_hindFlag);
+    return g_dComIfG_gameInfo.play.getEvent()->checkHind(i_hindFlag);
 }
 
 inline u16 dComIfGp_event_chkEventFlag(u16 i_flag) {
-    return g_dComIfG_gameInfo.play.getEvent().chkEventFlag(i_flag);
+    return g_dComIfG_gameInfo.play.getEvent()->chkEventFlag(i_flag);
 }
 
 inline BOOL dComIfGp_event_chkTalkXY() {
-    return g_dComIfG_gameInfo.play.getEvent().chkTalkXY();
+    return g_dComIfG_gameInfo.play.getEvent()->chkTalkXY();
 }
 
 inline void dComIfGp_event_setCullRate(f32 i_rate) {
-    g_dComIfG_gameInfo.play.getEvent().setCullRate(i_rate);
+    g_dComIfG_gameInfo.play.getEvent()->setCullRate(i_rate);
 }
 
 inline u8 dComIfGp_event_getMode() {
-    return g_dComIfG_gameInfo.play.getEvent().getMode();
+    return g_dComIfG_gameInfo.play.getEvent()->getMode();
 }
 
 inline fopAc_ac_c* dComIfGp_event_getDoorPartner() {
-    return g_dComIfG_gameInfo.play.getEvent().getPtD();
+    return g_dComIfG_gameInfo.play.getEvent()->getPtD();
+}
+
+inline void dComIfGp_event_setDoorPartner(void* i_partner) {
+    g_dComIfG_gameInfo.play.getEvent()->setPtD(i_partner);
 }
 
 inline int dComIfGp_evmng_getMyStaffId(const char* i_staffname, fopAc_ac_c* i_actor, int i_tagId) {
@@ -4195,6 +4197,13 @@ inline void dComIfGd_drawListItem3d() {
     g_dComIfG_gameInfo.drawlist.drawOpaListItem3d();
     g_dComIfG_gameInfo.drawlist.drawXluListItem3d();
 }
+
+# if VERSION > VERSION_GCN_JPN
+inline void dComIfGd_drawListCursor() {
+    g_dComIfG_gameInfo.drawlist.drawOpaListCursor();
+    g_dComIfG_gameInfo.drawlist.drawXluListCursor();
+}
+#endif
 
 inline void dComIfGd_reset() {
     g_dComIfG_gameInfo.drawlist.reset();

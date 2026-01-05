@@ -3,7 +3,7 @@
 
 #include <revolution/types.h>
 
-#include <stdio.h>
+#include <stdio>
 
 namespace nw4hbm {
     namespace db {

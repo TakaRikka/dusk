@@ -29,7 +29,7 @@ daObj_Fw_HIO_c::daObj_Fw_HIO_c() {
     size = 1.0f;
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daObj_Fw_HIO_c l_HIO;
 
@@ -192,7 +192,7 @@ static int daObj_Fw_Delete(obj_fw_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "RYUW00");
 
     if (i_this->field_0x624 != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     dComIfG_Bgsp().Release(i_this->mpBgW);
@@ -277,9 +277,9 @@ static cPhs__Step daObj_Fw_Create(fopAc_ac_c* a_this) {
             return cPhs_ERROR_e;
         }
 
-        if (l_initHIO == 0) {
+        if (hio_set == 0) {
             i_this->field_0x624 = 1;
-            l_initHIO = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -305,7 +305,7 @@ static actor_method_class l_daObj_Fw_Method = {
     (process_method_func)daObj_Fw_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_FW = {
+actor_process_profile_definition g_profile_OBJ_FW = {
   fpcLy_CURRENT_e,        // mLayerID
   8,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

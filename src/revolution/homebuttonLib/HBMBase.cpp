@@ -8,7 +8,7 @@
 #include "nw4hbm/lyt/arcResourceAccessor.h"
 #include "nw4hbm/math/triangular.h"
 
-#include "new.h"
+#include <new>
 
 #if HBM_REVISION == 1
 #define LN(rev1, rev2) rev1

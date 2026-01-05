@@ -6,8 +6,9 @@
 #include "JSystem/JAudio2/JAISoundInfo.h"
 
 bool JAISeqMgr::isUsingSeqData(const JAISeqDataRegion& seqDataRegion) {
-    for (JSULink<JAISeq>* i = mSeqList.getFirst(); i != NULL; i = i->getNext()) {
-        if (seqDataRegion.intersects(i->getObject()->getSeqData())) {
+    JSULink<JAISeq>* link;
+    for (link = mSeqList.getFirst(); link != NULL; link = link->getNext()) {
+        if (seqDataRegion.intersects(link->getObject()->getSeqData())) {
             return true;
         }
     }
@@ -16,9 +17,10 @@ bool JAISeqMgr::isUsingSeqData(const JAISeqDataRegion& seqDataRegion) {
 
 int JAISeqMgr::releaseSeqData(const JAISeqDataRegion& seqDataRegion) {
     bool bVar1 = false;
-    for (JSULink<JAISeq>* i = mSeqList.getFirst(); i != NULL; i = i->getNext()) {
-        if (seqDataRegion.intersects(i->getObject()->getSeqData())) {
-            i->getObject()->stop();
+    JSULink<JAISeq>* link;
+    for (link = mSeqList.getFirst(); link != NULL; link = link->getNext()) {
+        if (seqDataRegion.intersects(link->getObject()->getSeqData())) {
+            link->getObject()->stop();
             bVar1 = true;
         }
     }
@@ -120,7 +122,7 @@ void JAISeqMgr::mixOut() {
 JAISeq* JAISeqMgr::beginStartSeq_() {
     JAISeq* seq = new JAISeq(this, field_0x10);
     if (seq == NULL) {
-        JUT_WARN(273,  "JASPoolAllocObject::<JAISeq>::operator new failed .\n");
+        JUT_WARN(273, "%s", "JASPoolAllocObject::<JAISeq>::operator new failed .\n");
     }
     return seq;
 }

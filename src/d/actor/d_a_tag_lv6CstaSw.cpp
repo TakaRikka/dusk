@@ -96,7 +96,7 @@ static actor_method_class l_daLv6CstaSw_Method = {
     (process_method_func)daLv6CstaSw_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_Lv6CstaSw = {
+actor_process_profile_definition g_profile_Tag_Lv6CstaSw = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

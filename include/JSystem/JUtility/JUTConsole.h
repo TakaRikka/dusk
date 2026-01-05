@@ -4,7 +4,7 @@
 #include "JSystem/JGadget/linklist.h"
 #include "JSystem/JKernel/JKRDisposer.h"
 #include "JSystem/JUtility/JUTFont.h"
-#include <cstdarg>
+#include <stdarg>
 
 /**
 * @ingroup jsystem-jutility
@@ -71,15 +71,18 @@ public:
     bool isVisible() const { return mVisible; }
     void setVisible(bool visible) { mVisible = visible; }
 
-    u8 getLineAttr(int param_0) { return mBuf[(field_0x20 + 2) * param_0]; }
+    u8 getLineAttr(int param_0) const { return mBuf[(field_0x20 + 2) * param_0]; }
     void setLineAttr(int param_0, u8 param_1) { mBuf[(field_0x20 + 2) * param_0] = param_1; }
     u8* getLinePtr(int param_0) const { return &mBuf[(field_0x20 + 2) * param_0] + 1; }
     int diffIndex(int param_0, int param_1) const {
+        int result;
         int diff = param_1 - param_0;
         if (diff >= 0) {
-            return diff;
+            result = diff;
+        } else {
+            result = diff + mMaxLines;
         }
-        return diff += mMaxLines;
+        return result;
     }
 
     int prevIndex(int index) const {

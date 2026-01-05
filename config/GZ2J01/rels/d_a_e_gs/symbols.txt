@@ -38,6 +38,6 @@ l_daE_GS_Method = .data:0x00000000; // type:object size:0x20 scope:global
 g_profile_E_GS = .data:0x00000020; // type:object size:0x30 scope:global
 __vt__12daE_GS_HIO_c = .data:0x00000050; // type:object size:0xC scope:global
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
-lbl_197_bss_8 = .bss:0x00000008; // type:object size:0x1 data:byte
+hio_set = .bss:0x00000008; // type:object size:0x1 scope:local align:1 data:byte
 @3641 = .bss:0x0000000C; // type:object size:0xC scope:local
 l_HIO = .bss:0x00000018; // type:object size:0x1C scope:global data:byte

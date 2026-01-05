@@ -39,9 +39,6 @@ JPAEmitterManager::JPAEmitterManager(u32 i_ptclNum, u32 i_emtrNum, JKRHeap* pHea
     JUT_ASSERT(67, pWd);
 }
 
-/* 8027DEBC-8027DFA0 2787FC 00E4+00 0/0 3/3 0/0 .text
- * createSimpleEmitterID__17JPAEmitterManagerFRCQ29JGeometry8TVec3<f>UsUcUcP18JPAEmitterCallBackP19JPAParticleCallBack
- */
 JPABaseEmitter* JPAEmitterManager::createSimpleEmitterID(JGeometry::TVec3<f32> const& pos,
                                                          u16 resID, u8 group_id, u8 res_mgr_id,
                                                          JPAEmitterCallBack* emtrCB,

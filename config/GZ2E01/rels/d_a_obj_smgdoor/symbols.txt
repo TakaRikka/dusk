@@ -61,4 +61,4 @@ l_func$3923 = .data:0x00000094; // type:object size:0x24 scope:local
 daObjSmgDoor_METHODS = .data:0x000000B8; // type:object size:0x20 scope:global
 g_profile_Obj_SmgDoor = .data:0x000000D8; // type:object size:0x30 scope:global
 __vt__14daObjSmgDoor_c = .data:0x00000108; // type:object size:0x28 scope:global
-init$1847 = .bss:0x00000000; // type:object size:0x1 data:byte
+init$1847 = .bss:0x00000000; // type:object size:0x1 scope:local align:1 data:byte

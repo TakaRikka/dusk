@@ -2407,7 +2407,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     }
 
     J3DModel* model = yr->mpMorfSO->getModel();
-    model->setUserArea((int)yr);
+    model->setUserArea((intptr_t)yr);
 
     for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
         if (i != 0) {
@@ -2569,7 +2569,7 @@ static actor_method_class l_daE_Yr_Method = {
     (process_method_func)daE_Yr_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_YR = {
+actor_process_profile_definition g_profile_E_YR = {
     (u32)fpcLy_CURRENT_e,   // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

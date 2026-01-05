@@ -29,23 +29,15 @@ static dCcD_SrcGObjInf const l_ccDObjData =
 static dCcD_SrcCyl l_ccDCyl = {
     l_ccDObjData, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        0.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            0.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    }
 };
 
 static char* l_resName = "H_BouMato";
-
-static Vec jntCoOffset[2] = {
-    {0.0f, 0.0f, 0.0f},
-    {0.0f, 300.0f, 0.0f},
-};
-
-// /* 80BBC58C-80BBC598 -00001 000C+00 1/1 0/0 0/0 .data            jntCoData$4045 */
-static dJntColData_c jntCoData = {
-    1, 1, 0, 4.0f, jntCoOffset,
-};
 
 daObj_BouMato_c::~daObj_BouMato_c() {
     OS_REPORT("|%06d:%x|daObj_BouMato_c -> デストラクト\n", g_Counter.mCounter0, this);
@@ -89,6 +81,15 @@ int daObj_BouMato_c::create() {
 }
 
 int daObj_BouMato_c::CreateHeap() {
+    static Vec jntCoOffset[2] = {
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 300.0f, 0.0f},
+    };
+
+    static dJntColData_c jntCoData = {
+        1, 1, 0, 4.0f, jntCoOffset,
+    };
+
     J3DModelData*  mdlData_p = (J3DModelData*)dComIfG_getObjectRes(getResName(), 4);
     JUT_ASSERT(374, NULL != mdlData_p);
     mModel = mDoExt_J3DModel__create(mdlData_p, 0x80000, 0x11000084);
@@ -120,10 +121,9 @@ int daObj_BouMato_c::Execute() {
     if (field_0xa38 == 1 && dVar1 == 0) {
         deleteStuckArrow();
     }
-    dComIfG_play_c& play = g_dComIfG_gameInfo.play;
-    if (play.getEvent().runCheck() && !eventInfo.checkCommandTalk()) {
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
         if (eventInfo.checkCommandDemoAccrpt() && dComIfGp_getEventManager().endCheck(field_0xa30)) {
-            play.getEvent().reset();
+            dComIfGp_event_reset();
             field_0xa30 = -1;
         } else {
             int staffId = dComIfGp_getEventManager().getMyStaffId("BouMato", this, -1);
@@ -340,7 +340,7 @@ static actor_method_class daObj_BouMato_MethodTable = {
     (process_method_func)daObj_BouMato_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_BOUMATO = {
+actor_process_profile_definition g_profile_OBJ_BOUMATO = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID
   fpcPi_CURRENT_e,            // mListPrio

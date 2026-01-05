@@ -170,7 +170,7 @@ static actor_method_class daObjLv4Brg_METHODS = {
     (process_method_func)daObjLv4Brg_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv4Bridge = {
+actor_process_profile_definition g_profile_Obj_Lv4Bridge = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

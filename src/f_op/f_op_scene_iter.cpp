@@ -8,6 +8,7 @@
 #include "SSystem/SComponent/c_tag_iter.h"
 #include "f_op/f_op_scene_tag.h"
 
+// Wii: NONMATCHING, regalloc, scheduling
 void* fopScnIt_Judge(fop_ScnItFunc i_judgeFunc, void* i_data) {
     struct {
         fop_ScnItFunc func;

@@ -131,7 +131,6 @@ protected:
     JKRArchive(s32, EMountMode);
 
 public:
-    virtual ~JKRArchive();
     bool getDirEntry(SDirEntry*, u32) const;
     void* getIdxResource(u32);
     void* getResource(u16);
@@ -167,6 +166,7 @@ public:
     /* vt[17] */ virtual void* fetchResource(void*, u32, SDIFileEntry*, u32*) = 0;
     /* vt[18] */ virtual void setExpandSize(SDIFileEntry*, u32);
     /* vt[19] */ virtual u32 getExpandSize(SDIFileEntry*) const;
+    virtual ~JKRArchive();
 
     u32 countFile() const { return mArcInfoBlock->num_file_entries; }
     s32 countDirectory() const { return mArcInfoBlock->num_nodes; }
@@ -186,7 +186,7 @@ public:
     /* 0x48 */ SDIDirEntry* mNodes;
     /* 0x4C */ SDIFileEntry* mFiles;
     /* 0x50 */ s32* mExpandedSize;
-    /* 0x54 */ char* mStringTable;
+    /* 0x54 */ const char* mStringTable;
 
 protected:
     /* 0x58 */ u32 field_0x58;
@@ -200,29 +200,27 @@ public:
     static JKRArchive* mount(s32, EMountMode, JKRHeap*, EMountDirection);
     static void* getGlbResource(u32, const char*, JKRArchive*);
 
-    static JKRCompression convertAttrToCompressionType(u32 attr) {
+    static JKRCompression convertAttrToCompressionType(int attr) {
 #define JKRARCHIVE_ATTR_COMPRESSION 0x04
 #define JKRARCHIVE_ATTR_YAZ0 0x80
 
-        JKRCompression compression;
         if (!(attr & JKRARCHIVE_ATTR_COMPRESSION)) {
-            compression = COMPRESSION_NONE;
+            return COMPRESSION_NONE;
         } else if (attr & JKRARCHIVE_ATTR_YAZ0) {
-            compression = COMPRESSION_YAZ0;
+            return COMPRESSION_YAZ0;
         } else {
-            compression = COMPRESSION_YAY0;
+           return COMPRESSION_YAY0;
         }
-        return compression;
     }
 
     static u32 getCurrentDirID() { return sCurrentDirID; }
     static void setCurrentDirID(u32 dirID) { sCurrentDirID = dirID; }
 
-private:
+protected:
     static u32 sCurrentDirID;
 };
 
-inline JKRCompression JKRConvertAttrToCompressionType(u32 attr) {
+inline JKRCompression JKRConvertAttrToCompressionType(int attr) {
     return JKRArchive::convertAttrToCompressionType(attr);
 }
 

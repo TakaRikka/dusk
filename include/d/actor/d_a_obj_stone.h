@@ -81,7 +81,7 @@ private:
     /* 0x094E */ bool mIsInWater;
     /* 0x094F */ u8 field_0x094f;
     /* 0x0950 */ u8 field_0x0950;
-    /* 0x0951 */ u8 field_0x0951;
+    /* 0x0951 */ bool field_0x0951;
     /* 0x0954 */ u32 field_0x0954;
     /* 0x0954 */ u32 field_0x0958;
     /* 0x0954 */ u32 field_0x095c;

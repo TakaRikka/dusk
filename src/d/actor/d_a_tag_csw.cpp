@@ -22,10 +22,12 @@ static dCcD_SrcCyl l_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        300.0f, // mRadius
-        600.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            300.0f, // mRadius
+            600.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 #pragma pop
 
@@ -39,10 +41,12 @@ static dCcD_SrcCyl l_tg_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        300.0f, // mRadius
-        600.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            300.0f, // mRadius
+            600.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 #pragma pop
 
@@ -505,7 +509,7 @@ static actor_method_class l_daTagCsw_Method = {
     (process_method_func)daTagCsw_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_CSW = {
+actor_process_profile_definition g_profile_TAG_CSW = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

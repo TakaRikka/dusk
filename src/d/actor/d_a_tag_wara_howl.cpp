@@ -82,7 +82,7 @@ static actor_method_class daTagWrHowl_METHODS = {
     (process_method_func)daTagWrHowl_draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_WaraHowl = {
+actor_process_profile_definition g_profile_Tag_WaraHowl = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

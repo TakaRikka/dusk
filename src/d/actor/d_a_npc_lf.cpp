@@ -11,12 +11,6 @@
 #include "d/actor/d_a_npc_lf.h"
 #include "f_op/f_op_camera_mng.h"
 
-static f32 wp[3] = {
-    0.5f,
-    1.0f,
-    2.5f
-};
-
 daNPC_LF_HIO_c::daNPC_LF_HIO_c() {
     field_0x04 = -1;
     field_0x08 = 1.0f;
@@ -70,7 +64,7 @@ static int daNPC_LF_Draw(npc_lf_class* i_this) {
     return 1;
 }
 
-static u8 data_80A6AA90;
+static u8 hio_set;
 
 static daNPC_LF_HIO_c l_HIO;
 
@@ -155,6 +149,12 @@ static void npc_lf_move(fopAc_ac_c* param_0, lf_s* pFish) {
 }
 
 static void action(fopAc_ac_c* param_0, lf_s* pFish) {
+    static f32 wp[3] = {
+        0.5f,
+        1.0f,
+        2.5f
+    };
+
     cXyz pos;
     pFish->field_0x18++;
 
@@ -231,7 +231,7 @@ static int daNPC_LF_Delete(npc_lf_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "NPC_LF");
 
     if (i_this->field_0x1fc0 != 0) {
-        data_80A6AA90 = 0;
+        hio_set = 0;
     }
 
     return 1;
@@ -293,9 +293,9 @@ static cPhs__Step daNPC_LF_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (data_80A6AA90 == 0) {
+        if (hio_set == 0) {
             a_this->field_0x1fc0 = 1;
-            data_80A6AA90 = 1;
+            hio_set = 1;
             l_HIO.field_0x04 = -1;
         }
 
@@ -332,7 +332,7 @@ static actor_method_class l_daNPC_LF_Method = {
     (process_method_func)daNPC_LF_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_LF = {
+actor_process_profile_definition g_profile_NPC_LF = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

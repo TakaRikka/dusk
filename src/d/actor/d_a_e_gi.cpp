@@ -156,7 +156,7 @@ void daE_GI_c::setActionMode(int i_actionMode, int i_moveMode) {
     offHeadLockFlg();
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_GI_HIO_c l_HIO;
 
@@ -970,7 +970,7 @@ int daE_GI_c::_delete() {
     dComIfG_resDelete(&mPhase, "E_GI");
 
     if (mHIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -1042,8 +1042,8 @@ int daE_GI_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!l_HIOInit) {
-            l_HIOInit = TRUE;
+        if (!hio_set) {
+            hio_set = TRUE;
             mHIOInit = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("ギブド", &l_HIO);
         }
@@ -1111,7 +1111,7 @@ static actor_method_class l_daE_GI_Method = {
     (process_method_func)daE_GI_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_GI = {
+actor_process_profile_definition g_profile_E_GI = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

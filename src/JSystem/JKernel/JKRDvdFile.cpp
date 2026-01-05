@@ -3,6 +3,7 @@
 #include "JSystem/JKernel/JKRDvdFile.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
+#include <stdint>
 
 JSUList<JKRDvdFile> JKRDvdFile::sDvdList;
 
@@ -12,10 +13,9 @@ JKRDvdFile::JKRDvdFile() : mDvdLink(this) {
 
 JKRDvdFile::JKRDvdFile(const char* name) : mDvdLink(this) {
     initiate();
-    bool result = open(name);
-    mIsAvailable = result;
+    mIsAvailable = open(name);
     // weird code. doesn't match without this, maybe remains from assert or something?
-    if (mIsAvailable)
+    if (!mIsAvailable)
         return;
     else
         return;
@@ -23,10 +23,9 @@ JKRDvdFile::JKRDvdFile(const char* name) : mDvdLink(this) {
 
 JKRDvdFile::JKRDvdFile(s32 entryNum) : mDvdLink(this) {
     initiate();
-    bool result = open(entryNum);
-    mIsAvailable = result;
+    mIsAvailable = open(entryNum);
     // weird code. doesn't match without this, maybe remains from assert or something?
-    if (mIsAvailable)
+    if (!mIsAvailable)
         return;
     else
         return;
@@ -51,7 +50,7 @@ bool JKRDvdFile::open(const char* name) {
     if (!mIsAvailable) {
         mIsAvailable = DVDOpen(name, &mFileInfo);
         if (mIsAvailable) {
-            getDvdList().append(&mDvdLink);
+            sDvdList.append(&mDvdLink);
             getStatus();
         }
     }
@@ -62,7 +61,7 @@ bool JKRDvdFile::open(s32 entryNum) {
     if (!mIsAvailable) {
         mIsAvailable = DVDFastOpen(entryNum, &mFileInfo);
         if (mIsAvailable) {
-            getDvdList().append(&mDvdLink);
+            sDvdList.append(&mDvdLink);
             getStatus();
         }
     }
@@ -71,10 +70,9 @@ bool JKRDvdFile::open(s32 entryNum) {
 
 void JKRDvdFile::close() {
     if (mIsAvailable) {
-        s32 result = DVDClose(&mFileInfo);
-        if (result != 0) {
+        if (DVDClose(&mFileInfo) != 0) {
             mIsAvailable = false;
-            getDvdList().remove(&mDvdLink);
+            sDvdList.remove(&mDvdLink);
         } else {
             JUTException::panic(__FILE__, 213, "cannot close DVD file\n");
         }
@@ -98,9 +96,7 @@ s32 JKRDvdFile::readData(void* param_1, s32 length, s32 param_3) {
     mOSThread = OSGetCurrentThread();
 
     s32 result = -1;
-    s32 readAsyncResult =
-        DVDReadAsyncPrio(&mFileInfo, param_1, length, param_3, JKRDvdFile::doneProcess, 2);
-    if (readAsyncResult) {
+    if (DVDReadAsyncPrio(&mFileInfo, param_1, length, param_3, JKRDvdFile::doneProcess, 2)) {
         result = sync();
     }
 
@@ -123,7 +119,7 @@ s32 JKRDvdFile::sync(void) {
     OSReceiveMessage(&mMessageQueue2, &message, 1);
     mOSThread = NULL;
     OSUnlockMutex(&mMutex1);
-    return (int)message;
+    return (intptr_t)message;
 }
 
 void JKRDvdFile::doneProcess(s32 id, DVDFileInfo* fileInfo) {

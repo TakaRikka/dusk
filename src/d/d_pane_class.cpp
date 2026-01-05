@@ -283,9 +283,6 @@ bool CPaneMgr::scaleAnime(s16 param_0, f32 param_1, f32 param_2, u8 param_3) {
     return false;
 }
 
-/* 802548BC-80254C90 24F1FC 03D4+00 0/0 4/4 0/0 .text
- * colorAnime__8CPaneMgrFsQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorUc
- */
 bool CPaneMgr::colorAnime(s16 anmTimer, JUtility::TColor startBlack, JUtility::TColor endBlack,
                               JUtility::TColor startWhite, JUtility::TColor endWhite, u8 calcType) {
     if (mColorAnime < anmTimer - 1) {

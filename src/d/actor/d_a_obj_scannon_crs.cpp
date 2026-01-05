@@ -160,7 +160,7 @@ void daSCannonCrs_c::middleExe(daMidna_c* i_midna_p) {
 void daSCannonCrs_c::exeModeWait(daMidna_c* i_midna_p) {
     if (dComIfGp_evmng_startCheck(mEvtIdx) != 0) {
         if (strcmp(dComIfGp_getEventManager().getRunEventName(), "SKY_CANNON_WARP_START") == 0) {
-            dComIfGp_getEvent().setPt2(this);
+            dComIfGp_getEvent()->setPt2(this);
             
             daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
             if (player_p != NULL) {
@@ -211,7 +211,7 @@ void daSCannonCrs_c::exeModeOrderEvt(daMidna_c* i_midna_p) {
         }
     } else {
         if (dComIfGp_evmng_startCheck(mEvtIdx) != 0) {
-            dComIfGp_getEvent().setPt2(this);
+            dComIfGp_getEvent()->setPt2(this);
 
             daPy_py_c* player_p = (daPy_py_c*)dComIfGp_getPlayer(0);
             if (player_p != NULL) {
@@ -259,7 +259,7 @@ void daSCannonCrs_c::exeModeWarpEvt(daMidna_c* i_midna_p) {
     if (dComIfGp_evmng_endCheck(mEvtIdx) != 0) {
         mMode = MODE_END;
     } else {
-        dComIfGp_getEvent().setSkipProc(this, eventCallBack, 0);
+        dComIfGp_getEvent()->setSkipProc(this, eventCallBack, 0);
         demoExe();
     }
 }
@@ -516,7 +516,7 @@ static actor_method_class daSCannonCrs_METHODS = {
     (process_method_func)daSCannonCrs_draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SCannonCrs = {
+actor_process_profile_definition g_profile_Obj_SCannonCrs = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

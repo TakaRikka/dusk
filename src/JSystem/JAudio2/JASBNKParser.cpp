@@ -40,13 +40,13 @@ JASBasicBank* JASBNKParser::createBasicBank(void const* stream, JKRHeap* heap) {
 
 JASBNKParser::Ver1::TChunk* JASBNKParser::Ver1::findChunk(void const* stream, u32 id) {
     TFileHeader* header = (TFileHeader*)stream;
-    void* end = (void*)((int)stream + header->mSize);
-    TChunk* chunk = (TChunk*)((int)stream + 0x20);
+    void* end = (void*)((intptr_t)stream + header->mSize);
+    TChunk* chunk = (TChunk*)((intptr_t)stream + 0x20);
     while (chunk < end) {
         if (chunk->mID == id) {
             return chunk;
         }
-        chunk = (TChunk*)(((int)chunk + 0xb + chunk->mSize) & ~3);
+        chunk = (TChunk*)(((intptr_t)chunk + 0xb + chunk->mSize) & ~3);
     }
     return NULL;
 }
@@ -62,8 +62,11 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
     }
 
     TEnvtChunk* envt_chunk = (TEnvtChunk*)findChunk(stream, 'ENVT');
+    JUT_ASSERT(139, envt_chunk);
     TOscChunk* osc_chunk = (TOscChunk*)findChunk(stream, 'OSCT');
+    JUT_ASSERT(142, osc_chunk);
     TListChunk* list_chunk = (TListChunk*)findChunk(stream, 'LIST');
+    JUT_ASSERT(145, list_chunk);
 
     u8* envt = new (heap, 2) u8[envt_chunk->mSize];
     JASCalc::bcopy(envt_chunk->mData, envt, envt_chunk->mSize);
@@ -72,36 +75,40 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
     u32 count = *ptr++;
     JASOscillator::Data* osc_data = new (heap, 0) JASOscillator::Data[count];
     for (int i = 0; i < count; i++, ptr += sizeof(TOsc) >> 2) {
-        TOsc* osc = (TOsc*)ptr;
+        TOsc* op = (TOsc*)ptr;
+        JUT_ASSERT(155, op->id == 'Osci');
         JASOscillator::Data* data = &osc_data[i];
-        data->mTarget = osc->mTarget;
-        data->_04 = osc->_08;
-        data->mScale = osc->mScale;
-        data->_14 = osc->_18;
-        data->mTable = (JASOscillator::Point*)(envt + osc->mTableOffset);
-        data->_0C = (JASOscillator::Point*)(envt + osc->_10);
+        data->mTarget = op->mTarget;
+        data->_04 = op->_08;
+        data->mScale = op->mScale;
+        data->_14 = op->_18;
+        data->mTable = (JASOscillator::Point*)(envt + op->mTableOffset);
+        data->rel_table = (JASOscillator::Point*)(envt + op->_10);
     }
+    TListChunk* list = list_chunk;
+    JUT_ASSERT(172, list->count <= JASBank::PRG_OSC);
 
-    bank->newInstTable(list_chunk->mCount, heap);
-    for (int i = 0; i < list_chunk->mCount; i++) {
+    bank->newInstTable(list_chunk->count, heap);
+    for (int i = 0; i < list_chunk->count; i++) {
         if (list_chunk->mOffsets[i] != 0) {
-            u32* data = (u32*)((int)stream + list_chunk->mOffsets[i]);
+            u32* data = (u32*)((intptr_t)stream + list_chunk->mOffsets[i]);
             switch (*data++) {
             case 'Inst': {
-                JASBasicInst* inst = new (heap, 0) JASBasicInst();
+                JASBasicInst* instp = new (heap, 0) JASBasicInst();
+                JUT_ASSERT(187, instp != NULL);
                 u32 count = *data++;
                 for (int j = 0; j < count; j++) {
                     u32 index = *data++;
-                    inst->setOsc(j, &osc_data[index]);
+                    instp->setOsc(j, &osc_data[index]);
                 }
                 count = *data++;
                 for (int j = 0; j < count; j++) {
                     data++;
                 }
                 count = *data++;
-                inst->setKeyRegionCount(count, heap);
+                instp->setKeyRegionCount(count, heap);
                 for (int j = 0; j < count; j++) {
-                    JASBasicInst::TKeymap* keymap = inst->getKeyRegion(j);
+                    JASBasicInst::TKeymap* keymap = instp->getKeyRegion(j);
                     keymap->setHighKey(*data >> 0x18);
                     u32 fVar4 = data[1];
                     keymap->field_0x4 = JSULoHalf(data[3]);
@@ -112,42 +119,51 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
                         data += 4;
                     }
                 }
-                inst->setVolume(*(f32*)&data[0]);
-                inst->setPitch(*(f32*)&data[1]);
-                bank->setInst(i, inst);
+                instp->setVolume(*(f32*)&data[0]);
+                instp->setPitch(*(f32*)&data[1]);
+                bank->setInst(i, instp);
                 break;
             }
 
             case 'Perc': {
-                JASDrumSet* drum = new (heap, 0) JASDrumSet();
+                JASDrumSet* drump = new (heap, 0) JASDrumSet();
+                JUT_ASSERT(264, drump != NULL);
+                u32 pmap_count = data[1];
+                JUT_ASSERT(268, pmap_count <= 128);
                 u32 count = *data++;
-                drum->newPercArray(count, heap);
+                drump->newPercArray(count, heap);
                 for (int j = 0; j < count; j++) {
                     u32 offset = *data++;
                     if (offset != 0) {
-                        JASDrumSet::TPerc* perc = new (heap, 0) JASDrumSet::TPerc();
-                        u32* ptr = (u32*)((int)stream + offset);
+                        JASDrumSet::TPerc* percp = new (heap, 0) JASDrumSet::TPerc();
+                        JUT_ASSERT(277, percp);
+                        u32 type = data[0];
+                        JUT_ASSERT(282, type == 'Pmap');
+                        u32* ptr = (u32*)((intptr_t)stream + offset);
                         TPercData* perc_data = (TPercData*)(ptr + 1);
-                        perc->setVolume(perc_data->mVolume);
-                        perc->setPitch(perc_data->mPitch);
-                        perc->setPan((f32)perc_data->mPan / 127.0f);
-                        perc->setRelease(perc_data->mRelease);
+                        percp->setVolume(perc_data->mVolume);
+                        percp->setPitch(perc_data->mPitch);
+                        percp->setPan((f32)perc_data->mPan / 127.0f);
+                        percp->setRelease(perc_data->mRelease);
                         ptr = (u32*)&perc_data->field_0xc;
                         u32 count2 = *ptr++;
                         for (int k = 0; k < count2; k++) {
                             ptr++;
                         }
                         u32 pVar6 = ptr[0];
-                        perc->field_0xe = JSULoHalf(ptr[2]);
-                        perc->field_0x10 = *(f32*)&ptr[3];
-                        perc->field_0x14 = *(f32*)&ptr[4];
+                        percp->field_0xe = JSULoHalf(ptr[2]);
+                        percp->field_0x10 = *(f32*)&ptr[3];
+                        percp->field_0x14 = *(f32*)&ptr[4];
                         for (int k = 0; k < pVar6; k++) {}
-                        drum->setPerc(j, perc);
+                        drump->setPerc(j, percp);
                     }
                 }
-                bank->setInst(i, drum);
+                bank->setInst(i, drump);
                 break;
             }
+            default:
+                JUT_PANIC(338, "Unexpected Inst Type");
+                break;
             }
         }
     }
@@ -208,9 +224,9 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                             JASOscillator::Point* table = new (heap, 0) JASOscillator::Point[size];
                             JUT_ASSERT(409, table != NULL);
                             JASCalc::bcopy(points, table, size * sizeof(JASOscillator::Point));
-                            osc->_0C = table;
+                            osc->rel_table = table;
                         } else {
-                            osc->_0C = NULL;
+                            osc->rel_table = NULL;
                         }
 
                         osc->mScale = tosc->mScale;
@@ -270,9 +286,6 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
     return bank;
 }
 
-/* 80299E68-80299F8C 2947A8 0124+00 1/1 0/0 0/0 .text
- * findOscPtr__Q212JASBNKParser4Ver0FP12JASBasicBankPCQ312JASBNKParser4Ver07THeaderPCQ312JASBNKParser4Ver04TOsc
- */
 JASOscillator::Data* JASBNKParser::Ver0::findOscPtr(JASBasicBank* bank, THeader const* header,
                                                     TOsc const* osc) {
     TOffsetData const* data = &header->mOffsets;
@@ -280,8 +293,7 @@ JASOscillator::Data* JASBNKParser::Ver0::findOscPtr(JASBasicBank* bank, THeader 
         TInst* tinst = data->mInstOffset[i].ptr(header);
         if (tinst != NULL) {
             for (int j = 0; j < 2; j++) {
-                TOsc* tosc = tinst->mOscOffset[j].ptr(header);
-                if (tosc == osc) {
+                if (tinst->mOscOffset[j].ptr(header) == osc) {
                     JASInst* inst = bank->getInst(i);
                     if (inst != NULL) {
                         JASInstParam param;
@@ -298,12 +310,15 @@ JASOscillator::Data* JASBNKParser::Ver0::findOscPtr(JASBasicBank* bank, THeader 
 }
 
 JASOscillator::Point const* JASBNKParser::Ver0::getOscTableEndPtr(JASOscillator::Point const* points) {
-    s16 tmp;
-    do {
-        tmp = points->_0;
-        points++;
-    } while (tmp <= 10);
-    return points;
+    const JASOscillator::Point* ptr = points;
+    while(true) {
+        s16 tmp = ptr->_0;
+        ptr++;
+        if (tmp > 10) {
+            break;
+        }
+    }
+    return ptr;
 }
 
 // Fakematch? Why is this here?

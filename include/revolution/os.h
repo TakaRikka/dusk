@@ -1,7 +1,7 @@
 #ifndef _REVOLUTION_OS_H_
 #define _REVOLUTION_OS_H_
 
-#include <stdio.h>
+#include <cstdio>
 
 #include <revolution/types.h>
 #include <revolution/gx/GXStruct.h>
@@ -320,9 +320,9 @@ extern BOOL __OSInReboot;
     
 #define ASSERT(cond) ASSERTLINE(__LINE__, cond)
 
-static inline u8 __OSf32tou8(register f32 in) {
+static inline u8 __OSf32tou8(__REGISTER f32 in) {
 	f32 a;
-	register f32* ptr = &a;
+	__REGISTER f32* ptr = &a;
 	u8 r;
 
 #if defined(__MWERKS__)
@@ -336,9 +336,9 @@ static inline u8 __OSf32tou8(register f32 in) {
 	return r;
 }
 
-static inline u16 __OSf32tou16(register f32 in) {
+static inline u16 __OSf32tou16(__REGISTER f32 in) {
 	f32 a;
-	register f32* ptr = &a;
+	__REGISTER f32* ptr = &a;
 	u16 r;
 
 #if defined(__MWERKS__)
@@ -352,9 +352,9 @@ static inline u16 __OSf32tou16(register f32 in) {
 	return r;
 }
 
-static inline s16 __OSf32tos16(register f32 in) {
+static inline s16 __OSf32tos16(__REGISTER f32 in) {
 	f32 a;
-	register f32* ptr = &a;
+	__REGISTER f32* ptr = &a;
 	s16 r;
 
 #if defined(__MWERKS__)
@@ -368,8 +368,8 @@ static inline s16 __OSf32tos16(register f32 in) {
 	return r;
 }
 
-static inline f32 __OSu16tof32(register u16 const* arg) {
-	register f32 ret;
+static inline f32 __OSu16tof32(__REGISTER u16 const* arg) {
+	__REGISTER f32 ret;
 
 #if defined(__MWERKS__)
 	asm { psq_l ret, 0(arg), 1, 3 };
@@ -381,8 +381,8 @@ static inline f32 __OSu16tof32(register u16 const* arg) {
 	return ret;
 }
 
-static inline f32 __OSs16tof32(register s16 const* arg) {
-	register f32 ret;
+static inline f32 __OSs16tof32(__REGISTER s16 const* arg) {
+	__REGISTER f32 ret;
 
 #if defined(__MWERKS__)
 	asm { psq_l ret, 0(arg), 1, 5 };

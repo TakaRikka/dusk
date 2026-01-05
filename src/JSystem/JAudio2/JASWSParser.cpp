@@ -8,7 +8,8 @@
 
 u32 JASWSParser::getGroupCount(void const* stream) {
 	THeader* header = (THeader*)stream;
-	return header->mCtrlGroupOffset.ptr(header)->mGroupCount;
+    TCtrlGroup* group = header->mCtrlGroupOffset.ptr(header);
+	return group->mGroupCount;
 }
 
 
@@ -38,9 +39,11 @@ JASBasicWaveBank* JASWSParser::createBasicWaveBank(void const* stream, JKRHeap* 
     wave_bank->setGroupCount(ctrl_group->mGroupCount, heap);
     wave_bank->setWaveTableSize(header->mWaveTableSize, heap);
     for (u32 i = 0; i < ctrl_group->mGroupCount; i++) {
-        TCtrl* ctrl = ctrl_group->mCtrlSceneOffsets[i].ptr(header)->mCtrlOffset.ptr(header);
+        TCtrlScene* ctrlScene = ctrl_group->mCtrlSceneOffsets[i].ptr(header);
+        TCtrl* ctrl = ctrlScene->mCtrlOffset.ptr(header);
         JASBasicWaveBank::TWaveGroup* wave_group = wave_bank->getWaveGroup(i);
-        TWaveArchive* archive = header->mArchiveBankOffset.ptr(header)->mArchiveOffsets[i].ptr(header);
+        TWaveArchiveBank* archiveBank = header->mArchiveBankOffset.ptr(header);
+        TWaveArchive* archive = archiveBank->mArchiveOffsets[i].ptr(header);
         wave_group->setWaveCount(ctrl->mWaveCount, heap);
         for (int j = 0; j < ctrl->mWaveCount; j++) {
             TWave* wave = archive->mWaveOffsets[j].ptr(header);
@@ -57,7 +60,8 @@ JASBasicWaveBank* JASWSParser::createBasicWaveBank(void const* stream, JKRHeap* 
             wave_info.field_0x1c = wave->_20;
             wave_info.field_0x1e = wave->_22;
             TCtrlWave* ctrl_wave = ctrl->mCtrlWaveOffsets[j].ptr(header);
-            wave_bank->setWaveInfo(wave_group, j, JSULoHalf(ctrl_wave->_00), wave_info);
+            u16 local_74 = JSULoHalf(ctrl_wave->_00);
+            wave_bank->setWaveInfo(wave_group, j, local_74, wave_info);
         }
         wave_group->setFileName(archive->mFileName);
     }
@@ -84,10 +88,13 @@ JASSimpleWaveBank* JASWSParser::createSimpleWaveBank(void const* stream, JKRHeap
     }
 
     u32 max = 0;
-    TCtrl* ctrl = ctrl_group->mCtrlSceneOffsets[0].ptr(header)->mCtrlOffset.ptr(header);
-    TWaveArchive* archive = header->mArchiveBankOffset.ptr(header)->mArchiveOffsets[0].ptr(header);
+    TCtrlScene* ctrlScene = ctrl_group->mCtrlSceneOffsets[0].ptr(header);
+    TCtrl* ctrl = ctrlScene->mCtrlOffset.ptr(header);
+    TWaveArchiveBank* archiveBank = header->mArchiveBankOffset.ptr(header);
+    TWaveArchive* archive = archiveBank->mArchiveOffsets[0].ptr(header);
     for (int i = 0; i < ctrl->mWaveCount; i++) {
-        u32 tmp = JSULoHalf(ctrl->mCtrlWaveOffsets[i].ptr(header)->_00);
+        TCtrlWave* ctrlWave = ctrl->mCtrlWaveOffsets[i].ptr(header);
+        u32 tmp = JSULoHalf(ctrlWave->_00);
         if (max < tmp) {
             max = tmp;
         }
@@ -109,7 +116,8 @@ JASSimpleWaveBank* JASWSParser::createSimpleWaveBank(void const* stream, JKRHeap
         wave_info.field_0x1c = wave->_20;
         wave_info.field_0x1e = wave->_22;
         TCtrlWave* ctrl_wave = ctrl->mCtrlWaveOffsets[i].ptr(header);
-        wave_bank->setWaveInfo(JSULoHalf(ctrl_wave->_00), wave_info);
+        u32 tmp = JSULoHalf(ctrl_wave->_00);
+        wave_bank->setWaveInfo(tmp, wave_info);
     }
     wave_bank->setFileName(archive->mFileName);
 

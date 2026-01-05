@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_path.h"
 #include "f_op/f_op_camera_mng.h"
-#include "string.h"
+#include <string>
 
 static int dEnvSe_Draw(dEnvSe_c* i_this) {
     return 1;
@@ -236,7 +236,7 @@ static leafdraw_method_class l_dEnvSe_Method = {
     (process_method_func)dEnvSe_Draw,
 };
 
-extern kankyo_process_profile_definition g_profile_ENVSE = {
+kankyo_process_profile_definition g_profile_ENVSE = {
     fpcLy_CURRENT_e,
     2,
     fpcPi_CURRENT_e,

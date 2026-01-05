@@ -11,7 +11,7 @@
 #include "d/d_cc_uty.h"
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_math.h"
-#include <cmath.h>
+#include <math>
 
 namespace {
 dCcD_SrcSph cc_zant_src = {
@@ -34,10 +34,12 @@ static dCcD_SrcCyl cc_zant_snort_src = {
         {0},
     },
     {
-        {0.0f, 0.0f, 0.0f},
-        40.0f,
-        40.0f,
-    },
+        {
+            {0.0f, 0.0f, 0.0f},
+            40.0f,
+            40.0f,
+        },
+    }
 };
 }
 
@@ -337,7 +339,7 @@ void daB_ZANTZ_c::cc_set() {
     }
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daB_ZANTZ_HIO_c l_HIO;
 
@@ -380,7 +382,7 @@ static int daB_ZANTZ_IsDelete(daB_ZANTZ_c* i_this) {
 
 int daB_ZANTZ_c::_delete() {
     if (mInitHIO) {
-        l_initHIO = false;
+        hio_set = false;
     }
 
     dComIfG_resDelete(&mPhase, "B_oh");
@@ -441,8 +443,8 @@ int daB_ZANTZ_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!l_initHIO) {
-            l_initHIO = true;
+        if (!hio_set) {
+            hio_set = true;
             mInitHIO = true;
             l_HIO.field_0x4 = -1;
         }
@@ -506,7 +508,7 @@ static actor_method_class l_daB_ZANTZ_Method = {
     (process_method_func)daB_ZANTZ_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_ZANTZ = {
+actor_process_profile_definition g_profile_B_ZANTZ = {
   fpcLy_CURRENT_e,        // mLayerID
   4,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

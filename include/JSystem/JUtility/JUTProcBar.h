@@ -62,6 +62,7 @@ public:
         /* 0x0C */ int mWidth;
         /* 0x10 */ int mUserPosition;
 
+        CParamSet() {}
         void setBarWidth(int width) { mBarWidth = width; }
         void setPosition(int x, int y) {
             mPosX = x;

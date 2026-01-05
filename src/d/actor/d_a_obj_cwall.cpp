@@ -12,7 +12,7 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
-#include "cmath.h"
+#include <math>
 
 void daObjCwall_c::initBaseMtx() {
     mWallModel->setBaseScale(scale);
@@ -91,10 +91,12 @@ static dCcD_SrcCyl l_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        70.0f, // mRadius
-        450.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            70.0f, // mRadius
+            450.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 
 static dCcD_SrcCyl l_cyl_src2 = {
@@ -105,10 +107,12 @@ static dCcD_SrcCyl l_cyl_src2 = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        60.0f, // mRadius
-        300.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            60.0f, // mRadius
+            300.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 
 static dCcD_SrcSph l_sph_src = {
@@ -830,7 +834,7 @@ static actor_method_class daObjCwall_METHODS = {
     (process_method_func)daObjCwall_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_ChainWall = {
+actor_process_profile_definition g_profile_Obj_ChainWall = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

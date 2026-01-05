@@ -279,7 +279,7 @@ bool daNpcDrSol_c::wait(void* param_0) {
         mMode = 2;
         break;
     case 2:
-        if (dComIfGp_event_runCheck() != 0 && eventInfo.checkCommandTalk()) {
+        if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk()) {
             if (!dComIfGp_event_chkTalkXY() || dComIfGp_evmng_ChkPresentEnd()) {
                 setAction(&daNpcDrSol_c::talk);
             }
@@ -444,7 +444,7 @@ static actor_method_class daNpcDrSol_MethodTable = {
     (process_method_func)daNpcDrSol_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_DRSOL = {
+actor_process_profile_definition g_profile_NPC_DRSOL = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

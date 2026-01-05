@@ -12,7 +12,7 @@
 
 static int ki_bmd[2] = {9, 10};
 
-static bool hioInit;
+static bool hio_set;
 
 static daObj_Ki_HIO_c l_HIO;
 
@@ -100,7 +100,7 @@ static int daObj_Ki_IsDelete(obj_ki_class* i_this) {
 static int daObj_Ki_Delete(obj_ki_class* i_this) {
     dComIfG_resDelete(&i_this->mPhaseReq, "Obj_Ki");
     if (i_this->mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
     dComIfG_Bgsp().Release(i_this->mpBgW);
     return 1;
@@ -160,9 +160,9 @@ static cPhs__Step daObj_Ki_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!hioInit) {
+        if (!hio_set) {
             _this->mHIOInit = true;
-            hioInit = true;
+            hio_set = true;
             l_HIO.field_0x4 = -1;
         }
 
@@ -224,7 +224,7 @@ static actor_method_class l_daObj_Ki_Method = {
     (process_method_func)daObj_Ki_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_KI = {
+actor_process_profile_definition g_profile_OBJ_KI = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

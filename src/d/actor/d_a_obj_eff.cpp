@@ -55,7 +55,7 @@ static actor_method_class Mthd_Table = {
 };
 };  // namespace daObjEff
 
-extern actor_process_profile_definition g_profile_Obj_Eff = {
+actor_process_profile_definition g_profile_Obj_Eff = {
     fpcLy_CURRENT_e,
     9,
     fpcPi_CURRENT_e,

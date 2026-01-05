@@ -28,7 +28,7 @@ static int daObj_Myogan_Draw(obj_myogan_class* i_this) {
     return 1;
 }
 
-static bool initialized;
+static bool hio_set;
 
 static daObj_Myogan_HIO_c l_HIO;
 
@@ -74,7 +74,7 @@ static int daObj_Myogan_IsDelete(obj_myogan_class* i_this) {
 static int daObj_Myogan_Delete(obj_myogan_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "S_YOGAN");
     if (i_this->mInitialized) {
-        initialized = false;
+        hio_set = false;
     }
 
     dComIfG_Bgsp().Release(i_this->mpBgW);
@@ -142,9 +142,9 @@ static int daObj_Myogan_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!initialized) {
+        if (!hio_set) {
             a_this->mInitialized = 1;
-            initialized = true;
+            hio_set = true;
             l_HIO.field_0x4 = -1;
         }
 
@@ -167,7 +167,7 @@ static actor_method_class l_daObj_Myogan_Method = {
     (process_method_func)daObj_Myogan_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_MYOGAN = {
+actor_process_profile_definition g_profile_OBJ_MYOGAN = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

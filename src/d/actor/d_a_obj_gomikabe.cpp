@@ -272,7 +272,7 @@ int daObjGOMIKABE_c::CreateHeap() {
     return 1;
 }
 
-static bool l_HIOInit;
+static bool hio_set;
 
 static daObjGOMIKABE_HIO_c l_HIO;
 
@@ -309,8 +309,8 @@ int daObjGOMIKABE_c::create() {
             mBaseScale.set(1.0f, 1.0f, 1.0f);
         }
 
-        if (!l_HIOInit) {
-            l_HIOInit = true;
+        if (!hio_set) {
+            hio_set = true;
             mIsHIOOwner = 1;
             // Garbage Wall
             l_HIO.mId = mDoHIO_CREATE_CHILD("ごみ壁", &l_HIO);
@@ -379,7 +379,7 @@ int daObjGOMIKABE_c::Draw() {
 int daObjGOMIKABE_c::Delete() {
     dComIfG_resDelete(&mPhase, l_arcName);
     if (mIsHIOOwner) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.mId);
     }
     return 1;
@@ -393,7 +393,7 @@ static actor_method_class l_daObjGOMIKABE_Method = {
     (process_method_func)daObjGOMIKABE_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_GOMIKABE = {
+actor_process_profile_definition g_profile_Obj_GOMIKABE = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

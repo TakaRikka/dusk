@@ -1,6 +1,7 @@
 #ifndef F_PC_MANAGER_H_
 #define F_PC_MANAGER_H_
 
+#include "f_op/f_op_scene.h"
 #include "f_pc/f_pc_create_iter.h"
 #include "f_pc/f_pc_executor.h"
 #include "f_pc/f_pc_leaf.h"
@@ -41,12 +42,16 @@ inline fpc_ProcID fpcM_Create(s16 i_procName, FastCreateReqFunc i_createFunc, vo
                             i_append);
 }
 
-inline s16 fpcM_DrawPriority(const void* i_process) {
+inline s32 fpcM_DrawPriority(const void* i_process) {
     return (s16)fpcLf_GetPriority((const leafdraw_class*)i_process);
 }
 
 inline s32 fpcM_ChangeLayerID(void* i_process, int i_layerID) {
     return fpcPi_Change(&((base_process_class*)i_process)->priority, i_layerID, 0xFFFD, 0xFFFD);
+}
+
+inline s32 fpcM_MakeOfType(int* i_type) {
+    return fpcBs_MakeOfType(i_type);
 }
 
 inline BOOL fpcM_IsJustType(int i_typeA, int i_typeB) {
@@ -83,6 +88,10 @@ inline base_process_class* fpcM_SearchByName(s16 name) {
 
 inline base_process_class* fpcM_SearchByID(fpc_ProcID i_id) {
     return fpcEx_SearchByID(i_id);
+}
+
+inline process_node_class* fpcM_Layer(void* i_process) {
+    return ((base_process_class*)i_process)->layer_tag.layer->process_node;
 }
 
 void fpcM_Draw(void* i_process);

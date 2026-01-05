@@ -1296,7 +1296,7 @@ static actor_method_class l_daE_PH_Method = {
     (process_method_func)daE_PH_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_PH = {
+actor_process_profile_definition g_profile_E_PH = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

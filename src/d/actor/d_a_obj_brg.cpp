@@ -353,7 +353,6 @@ static int daObj_Brg_Draw(obj_brg_class* i_this) {
     return 1;
 }
 
-/* 80BC2526 0002+00 data_80BC2526 wy */
 static s16 wy;
 
 static void control1(obj_brg_class* i_this, br_s* i_part) {
@@ -601,7 +600,7 @@ static void himo_cut_control1(obj_brg_class* i_this, cXyz* param_1, f32 param_2)
     sp74.y = 0.0f;
     sp74.z = param_2;
 
-    int i, temp_r27 = (int) ++param_1;
+    int i, temp_r27 = (intptr_t) ++param_1;
     f32 var_f31, var_f30, var_f29, var_f28, var_f27;
     for (i = 1; i < 5; i++, param_1++) {
         var_f28 = i_this->field_0xaf30 * cM_ssin( (i_this->field_0xaf20 * 6000) + (NREG_S(3) - 10000) * (temp_r27 + i) )
@@ -1430,10 +1429,12 @@ static void CreateInit(fopAc_ac_c* i_this) {
             {0x0}, // mGObjCo
         }, // mObjInf
         {
-            {0.0f, 0.0f, 0.0f}, // mCenter
-            5.0f, // mRadius
-            1000.0f // mHeight
-        } // mCyl
+            {
+                {0.0f, 0.0f, 0.0f}, // mCenter
+                5.0f, // mRadius
+                1000.0f // mHeight
+            } // mCyl
+        } // mCylAttr
     };
 
     static dCcD_SrcCyl wire_cyl_src = {
@@ -1444,10 +1445,12 @@ static void CreateInit(fopAc_ac_c* i_this) {
             {0x0}, // mGObjCo
         }, // mObjInf
         {
-            {0.0f, 0.0f, 0.0f}, // mCenter
-            5.0f, // mRadius
-            1000.0f // mHeight
-        } // mCyl
+            {
+                {0.0f, 0.0f, 0.0f}, // mCenter
+                5.0f, // mRadius
+                1000.0f // mHeight
+            } // mCyl
+        } // mCylAttr
     };
 
     br_s* part = a_this->mBr;
@@ -1825,7 +1828,7 @@ static actor_method_class l_daObj_Brg_Method = {
     (process_method_func)daObj_Brg_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_BRG = {
+actor_process_profile_definition g_profile_OBJ_BRG = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

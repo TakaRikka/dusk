@@ -86,7 +86,9 @@ public:
     /* vt 0x18 */ virtual void resize(f32 x, f32 y);
     /* vt 0x1C */ virtual void setCullBack(bool cull);
     /* vt 0x20 */ virtual void setCullBack(_GXCullMode cmode);
-    /* vt 0x24 */ virtual void setAlpha(u8);
+    /* vt 0x24 */ virtual void setAlpha(u8 alpha) {
+        mAlpha = alpha;
+    };
     /* vt 0x28 */ virtual bool setConnectParent(bool connected);
     /* vt 0x2C */ virtual void calcMtx() {
         if (mPaneTree.getParent() != NULL) {

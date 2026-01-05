@@ -667,7 +667,7 @@ int daNpc_Kyury_c::cutConversation(int param_0) {
         switch (local_34) {
         case 0:
             actor_p = mActorMngr[0].getActorP();
-            dComIfGp_getEvent().setPt2(actor_p);
+            dComIfGp_getEvent()->setPt2(actor_p);
             mPlayerAngle = fopAcM_searchPlayerAngleY(this);
             if (checkStep()) {
                 mStepMode = 0;
@@ -876,7 +876,7 @@ static actor_method_class daNpc_Kyury_MethodTable = {
     (process_method_func)daNpc_Kyury_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_KYURY = {
+actor_process_profile_definition g_profile_NPC_KYURY = {
     fpcLy_CURRENT_e,           // mLayerID
     7,                         // mListID
     fpcPi_CURRENT_e,           // mListPrio

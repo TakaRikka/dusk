@@ -222,7 +222,7 @@ static actor_method_class l_daLv4EdShutter_Method = {
     (process_method_func)daLv4EdShutter_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv4EdShutter = {
+actor_process_profile_definition g_profile_Obj_Lv4EdShutter = {
   fpcLy_CURRENT_e,          // mLayerID
   3,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

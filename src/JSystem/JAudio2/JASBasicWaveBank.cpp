@@ -4,6 +4,7 @@
 #include "JSystem/JAudio2/JASMutex.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include <stdint>
 
 JASBasicWaveBank::JASBasicWaveBank() {
     mWaveTable = NULL;
@@ -130,5 +131,5 @@ int JASBasicWaveBank::TWaveHandle::getWavePtr() const {
     if (base == 0) {
         return 0;
     }
-    return (int)base + field_0x4.field_0x08;
+    return (intptr_t)base + field_0x4.field_0x08;
 }

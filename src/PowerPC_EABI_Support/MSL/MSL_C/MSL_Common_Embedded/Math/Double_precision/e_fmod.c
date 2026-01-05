@@ -37,6 +37,9 @@ double __ieee754_fmod(x, y) double x, y;
 #endif
 {
     int n, hx, hy, hz, ix, iy, sx, i;
+    #if !PLATFORM_GCN
+    int diff;
+    #endif
     unsigned lx, ly, lz;
 
     hx = __HI(x);         /* high word of x */
@@ -110,9 +113,19 @@ double __ieee754_fmod(x, y) double x, y;
 
     /* fix point fmod */
     n = ix - iy;
+    #if !PLATFORM_GCN
+    diff = n + 2;
+    #endif
+
     while (n--) {
         hz = hx - hy;
         lz = lx - ly;
+        #if PLATFORM_SHIELD
+        if (!hz)
+            if((lx >> diff) == (ly >> diff))
+                return Zero[(unsigned)sx>>31];
+        #endif
+
         if (lx < ly)
             hz -= 1;
         if (hz < 0) {
@@ -127,6 +140,12 @@ double __ieee754_fmod(x, y) double x, y;
     }
     hz = hx - hy;
     lz = lx - ly;
+    #if PLATFORM_SHIELD
+    if (!hz)
+        if((lx >> diff) == (ly >> diff))
+            return Zero[(unsigned)sx>>31];
+    #endif
+
     if (lx < ly)
         hz -= 1;
     if (hz >= 0) {

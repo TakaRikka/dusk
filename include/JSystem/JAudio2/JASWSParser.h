@@ -17,7 +17,7 @@ public:
     template<class T>
     class TOffset {
     public:
-        T* ptr(void const* param_0) {
+        T* ptr(void const* param_0) const {
             return JSUConvertOffsetToPtr<T>(param_0, mOffset);
         }
     

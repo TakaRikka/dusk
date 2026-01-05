@@ -42,7 +42,7 @@ int daObjTable_c::create() {
 }
 
 static int daObjTable_Draw(daObjTable_c* i_this) {
-    return i_this->Draw();
+    return i_this->MoveBGDraw();
 }
 
 static int daObjTable_Execute(daObjTable_c* i_this) {
@@ -64,6 +64,7 @@ static int daObjTable_Create(fopAc_ac_c* i_this) {
 
 int daObjTable_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 5);
+    JUT_ASSERT(76, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
 
     if (mpModel == NULL) {
@@ -140,23 +141,26 @@ int daObjTable_c::Create() {
 int daObjTable_c::Execute(Mtx** i_mtx) {
     eventInfo.onCondition(1);
 
-    dComIfG_inf_c& gameInfo = g_dComIfG_gameInfo;
     if (dComIfGp_event_runCheck()) {
         if (eventInfo.checkCommandTalk()) {
             if (mMsgFlow.doFlow(this, NULL, 0) != 0) {
-                gameInfo.getPlay().getEvent().reset(this);  // Fake match?
+                dComIfGp_getEvent()->reset(this);
                 eventInfo.setArchiveName("Table");
                 dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
                 mEventID = dComIfGp_getEventManager().getEventIdx(this, "TABLE_MAP", -1);
 
-                fopAcM_orderChangeEventId(this, mEventID, 1, -1);
+                int r27 = fopAcM_orderChangeEventId(this, mEventID, 1, -1);
             }
-        } else if (dComIfGp_getEventManager().getMyStaffId(l_arcName, NULL, 0) != -1 &&
-                   eventInfo.checkCommandDemoAccrpt() && mEventID != -1 &&
-                   dComIfGp_getEventManager().endCheck(mEventID))
-        {
-            mEventID = -1;
-            dMeter2Info_setPauseStatus(7);
+        } else {
+            dEvent_manager_c& evtMgr = dComIfGp_getEventManager();
+            int staffId = evtMgr.getMyStaffId(l_arcName, NULL, 0);
+            if (staffId != -1 &&
+                eventInfo.checkCommandDemoAccrpt() && mEventID != -1 &&
+                evtMgr.endCheck(mEventID))
+            {
+                mEventID = -1;
+                dMeter2Info_setPauseStatus(7);
+            }
         }
     } else {
         mMsgFlow.init(this, getMessageNo(), 0, NULL);
@@ -193,7 +197,7 @@ static actor_method_class l_daObjTable_Method = {
     (process_method_func)daObjTable_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Table = {
+actor_process_profile_definition g_profile_Obj_Table = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

@@ -170,7 +170,7 @@ static actor_method_class daObjLv4Sand_METHODS = {
     (process_method_func)daObjLv4Sand_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv4Sand = {
+actor_process_profile_definition g_profile_Obj_Lv4Sand = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

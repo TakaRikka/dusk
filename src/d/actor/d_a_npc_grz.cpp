@@ -420,9 +420,9 @@ daNpc_Grz_HIOParam const daNpc_Grz_Param_c::m = {
     false,
     false,
     60,
-    0xFFD8,
-    0xFFD8,
-    0xFFD8,
+    -40,
+    -40,
+    -40,
     11.0f,
     35.0f,
     500.0f,
@@ -711,7 +711,7 @@ BOOL daNpc_Grz_c::main() {
     }
 
     if (!daNpc_Grz_Param_c::m.common.debug_mode_ON) {
-        if (!dComIfGp_event_runCheck() || mOrderNewEvt && dComIfGp_getEvent().isOrderOK()) {
+        if (!dComIfGp_event_runCheck() || mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()) {
             if (mOrderEvtNo != EVT_NONE) {
                 eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
             }
@@ -1500,7 +1500,7 @@ void daNpc_Grz_c::doNormalAction(int param_1) {
 BOOL daNpc_Grz_c::doEvent() {
     BOOL rv = FALSE;
 
-    if (dComIfGp_event_runCheck() != FALSE) {
+    if (dComIfGp_event_runCheck()) {
         dEvent_manager_c& eventManager = dComIfGp_getEventManager();
 
         if (eventInfo.checkCommandTalk() || eventInfo.checkCommandDemoAccrpt()) {
@@ -1601,8 +1601,8 @@ bool daNpc_Grz_c::setSkipZev(int param_1, int param_2) {
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
 
     if (strcmp(eventManager.getRunEventName(), l_evtNames[param_1]) == 0) {
-        dComIfGp_getEvent().setSkipZev(this, l_evtNames[param_2]);
-        dComIfGp_getEvent().onSkipFade();
+        dComIfGp_getEvent()->setSkipZev(this, l_evtNames[param_2]);
+        dComIfGp_getEvent()->onSkipFade();
         return true;
     }
 
@@ -2508,7 +2508,7 @@ static actor_method_class daNpc_Grz_MethodTable = {
     (process_method_func)daNpc_Grz_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_GRZ = {
+actor_process_profile_definition g_profile_NPC_GRZ = {
   fpcLy_CURRENT_e,               // mLayerID
   7,                             // mListID
   fpcPi_CURRENT_e,               // mListPrio

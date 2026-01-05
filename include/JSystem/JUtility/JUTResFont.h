@@ -79,6 +79,7 @@ public:
     /* 0x6C */ const IsLeadByte_func* mIsLeadByte;
 };
 
-extern u8 const JUTResFONT_Ascfont_fix12[16736];
+extern u8 const JUTResFONT_Ascfont_fix12[];
+extern u8 const JUTResFONT_Ascfont_fix16[];
 
 #endif /* JUTRESFONT_H */

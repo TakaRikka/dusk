@@ -96,7 +96,6 @@ static int daObjKJgjs_MoveBGDelete(daObjKJgjs_c* i_this) {
     return static_cast<dBgS_MoveBgActor*>(i_this)->MoveBGDelete();
 }
 
-/* 80C46480-80C464A0 000460 0020+00 1/0 0/0 0/0 .text daObjKJgjs_MoveBGExecute__FP12daObjKJgjs_c*/
 static int daObjKJgjs_MoveBGExecute(daObjKJgjs_c* i_this) {
     return static_cast<dBgS_MoveBgActor*>(i_this)->MoveBGExecute();
 }
@@ -113,7 +112,7 @@ static actor_method_class daObjKJgjs_METHODS = {
     (process_method_func)daObjKJgjs_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_KJgjs = {
+actor_process_profile_definition g_profile_Obj_KJgjs = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

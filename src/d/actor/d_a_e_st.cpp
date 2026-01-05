@@ -293,7 +293,7 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
 
 static BOOL small;
 
-static bool l_initHIO;
+static bool hio_set;
 
 static daE_ST_HIO_c l_HIO;
 
@@ -2851,7 +2851,7 @@ static int daE_ST_Delete(e_st_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_st");
     
     if (i_this->mIsFirstSpawn) {
-        l_initHIO = false;
+        hio_set = false;
     }
 
     if (a_this->heap != NULL) {
@@ -2909,11 +2909,11 @@ static int useHeapInit(fopAc_ac_c* a_this) {
 }
 
 static s16 ya[6] = {
-    -0x4000, 0x4000, 0x0000, 0x8000, 0x0000, 0x0000,
+    -0x4000, 0x4000, 0x0000, -0x8000, 0x0000, 0x0000,
 };
 
 static s16 xa[6] = {
-    -0x4000, -0x4000, -0x4000, -0x4000, 0x0000, 0x8000,
+    -0x4000, -0x4000, -0x4000, -0x4000, 0x0000, -0x8000,
 };
 
 static int kabe_initial_pos_set(e_st_class* i_this) {
@@ -3046,9 +3046,9 @@ static cPhs__Step daE_ST_Create(fopAc_ac_c* a_this) {
 
         OS_REPORT("//////////////E_ST SET 2 !!\n");
 
-        if (!l_initHIO) {
+        if (!hio_set) {
             i_this->mIsFirstSpawn = true;
-            l_initHIO = true;
+            hio_set = true;
             l_HIO.id = -1;
         }
         
@@ -3095,10 +3095,12 @@ static cPhs__Step daE_ST_Create(fopAc_ac_c* a_this) {
                 {0x0}, // mGObjCo
             }, // mObjInf
             {
-                {0.0f, 0.0f, 0.0f}, // mCenter
-                30.0f, // mRadius
-                2000.0f // mHeight
-            } // mLineCyl
+                {
+                    {0.0f, 0.0f, 0.0f}, // mCenter
+                    30.0f, // mRadius
+                    2000.0f // mHeight
+                } // mLineCyl
+            }
         };
 
         static dCcD_SrcSph def_sph_src = {
@@ -3166,7 +3168,7 @@ static actor_method_class l_daE_ST_Method = {
     (process_method_func)daE_ST_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_ST = {
+actor_process_profile_definition g_profile_E_ST = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

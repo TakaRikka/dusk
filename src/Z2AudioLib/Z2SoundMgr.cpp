@@ -14,6 +14,10 @@
 #include "Z2AudioLib/Z2AudioCS.h"
 #endif
 
+static void dummy() {
+    OS_REPORT("seqCallBack!!!!!\n");
+}
+
 u16 seqCallback(JASTrack* track, u16 command) {
     switch (command) {
     case 0x1000:
@@ -157,7 +161,7 @@ bool Z2SoundMgr::startSound(JAISoundID soundID, JAISoundHandle* handle, const JG
                     OS_REPORT("[Z2SoundMgr::startSound] FAILED!!! LOAD SEQ_DATA id: %08x\n", *(u32*)&soundID);
 
                     for (JSULink<JAUSeqDataBlock>* link = sectionHeap->getSectionHeapData().seqDataBlocks.getFreeBlocks().getFirst(); link != NULL; link = link->getNext()) {
-                        OS_REPORT("       freeSeqBlock: %d\n", link->getObject()->field_0x14.size);
+                        OS_REPORT("       freeSeqBlock: %d\n", link->getObject()->region.size);
                     }
                 }
 
@@ -246,7 +250,7 @@ void Z2SoundMgr::resetFilterAll() {
         i = 0;
     }
 
-    for (; i < 9; i++) {
+    for (; i < MAX_CATEGORIES; i++) {
         JAISeCategoryMgr* category = seMgr_.getCategory(i);
         int se_count = category->getMaxActiveSe();
         if (se_count > 0) {
@@ -274,7 +278,7 @@ void Z2SoundMgr::mixOut() {
             i = 0;
         }
 
-        for (; i < 9; i++) {
+        for (; i < MAX_CATEGORIES; i++) {
             JAISeCategoryMgr* category = seMgr_.getCategory(i);
             int se_count = category->getMaxActiveSe();
             if (se_count > 0) {

@@ -152,8 +152,8 @@ int daObj_GrA_c::startDemo(void* param_1) {
                     gra_p->setProcess(&daObj_GrA_c::soldierDemo);
                     fopAcM_OnStatus(gra_p, fopAcM_STATUS_UNK_0x8000);
                     field_0x2056 = 0;
-                    dComIfGp_getEvent().setSkipProc(this, skipCallBack, 0);
-                    dComIfGp_getEvent().onSkipFade();
+                    dComIfGp_getEvent()->setSkipProc(this, skipCallBack, 0);
+                    dComIfGp_getEvent()->onSkipFade();
                 }
                 // fallthrough
                 case 2: {

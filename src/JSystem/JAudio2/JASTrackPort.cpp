@@ -11,21 +11,25 @@ void JASTrackPort::init() {
 }
 
 u16 JASTrackPort::readImport(u32 port_num) {
+    JUT_ASSERT(27, port_num < MAX_PORTS);
     field_0x0 = field_0x0 & ~(1 << port_num);
     return field_0x4[port_num];
 }
 
 u16 JASTrackPort::readExport(u32 port_num) {
+    JUT_ASSERT(34, port_num < MAX_PORTS);
     field_0x2 = field_0x2 & ~(1 << port_num);
     return field_0x4[port_num];
 }
 
 void JASTrackPort::writeImport(u32 port_num, u16 param_1) {
+    JUT_ASSERT(41, port_num < MAX_PORTS);
     field_0x0 = field_0x0 | (1 << port_num);
     field_0x4[port_num] = param_1;
 }
 
 void JASTrackPort::writeExport(u32 port_num, u16 param_1) {
+    JUT_ASSERT(47, port_num < MAX_PORTS);
     field_0x2 = field_0x2 | (1 << port_num);
     field_0x4[port_num] = param_1;
 }

@@ -1,7 +1,7 @@
 #include "d/actor/d_a_obj_gra2.h"
 #include "d/d_camera.h"
 #include "d/actor/d_a_tag_gra.h"
-#include <cmath.h>
+#include <math>
 
 f32 daObj_GrA_c::getSrchCircleR() {
     f32 srchCircleR;
@@ -1289,7 +1289,7 @@ int daObj_GrA_c::rollEscape(void* param_1) {
             }
 
             rollLanding();
-            if (!dComIfGp_event_runCheck() || dComIfGp_getEvent().isOrderOK()) {
+            if (!dComIfGp_event_runCheck() || dComIfGp_getEvent()->isOrderOK()) {
                 if (dComIfGoat_GetThrow() == this) {
                     dComIfGoat_SetThrow(0);
                     if (isFirstGra()) {

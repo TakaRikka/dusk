@@ -114,7 +114,7 @@ void Z2StatusMgr::heartGaugeOn() {
 
 void Z2StatusMgr::processHeartGaugeSound() {
     if (!dComIfGp_event_runCheck() && mHeartGaugeOn != 0) {
-        if (dScnPly_c::isPause()) {
+        if (!dScnPly_c::isPause()) {
             mHeartGaugeOn--;
         }
 

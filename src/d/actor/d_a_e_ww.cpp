@@ -118,7 +118,6 @@ public:
 };
 
 namespace {
-    /* 807EF904-807EF944 000038 0040+00 1/1 0/0 0/0 .data            cc_ww_src__22@unnamed@d_a_e_ww_cpp@ */
     dCcD_SrcSph cc_ww_src = {
         {
             {0x0, {{0x400, 0x1, 0xC}, {0x0, 0x0}, 0x75}}, // mObj
@@ -131,7 +130,6 @@ namespace {
         } // mSphAttr
     };
     
-    /* 807EF944-807EF984 000078 0040+00 1/1 0/0 0/0 .data cc_ww_tg_src__22@unnamed@d_a_e_ww_cpp@ */
     dCcD_SrcSph cc_ww_tg_src = {
         {
             {0x0, {{0x0, 0x1, 0x0}, {0xD8FBFDFF, 0x43}, 0x0}}, // mObj
@@ -145,7 +143,7 @@ namespace {
     };
 } // namespace
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_WW_HIO_c l_HIO;
 
@@ -2132,7 +2130,7 @@ static int daE_WW_IsDelete(daE_WW_c* i_this) {
 int daE_WW_c::_delete() {
     dComIfG_resDelete(&mPhase, "E_WW");
     if (field_0xec4 != 0) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.field_0x04);
     }
 
@@ -2233,8 +2231,8 @@ int daE_WW_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (l_HIOInit == false) {
-            l_HIOInit = true;
+        if (hio_set == false) {
+            hio_set = true;
             field_0xec4 = 1;
             l_HIO.field_0x04 = mDoHIO_CREATE_CHILD("ホワイトウルフォス", (JORReflexible*)&l_HIO);
         }
@@ -2306,7 +2304,7 @@ static actor_method_class l_daE_WW_Method = {
     (process_method_func)daE_WW_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_WW = {
+actor_process_profile_definition g_profile_E_WW = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -46,19 +46,19 @@ static int const l_bmdIdx[13] = {
     6, 6, 6, -1, -1, -1, 6, 6, 6, 6, 6, 6, -1,
 };
 
-static u32 const l_dzbIdx[13] = {
+static int const l_dzbIdx[13] = {
     15, 15, 15, -1, -1, -1, 15, 15, 15, 15, 15, 15, -1,
 };
 
-static u32 const l_btkIdx[13] = {
+static int const l_btkIdx[13] = {
     12, 12, 12, -1, -1, -1, 12, 12, 12, 12, 12, 12, -1,
 };
 
-static u32 const l_brkIdx[13] = {
+static int const l_brkIdx[13] = {
     9, 9, 9, -1, -1, -1, 9, 9, 9, 9, 9, 9, -1,
 };
 
-static u32 const l_twFlagIdx[13] = {
+static int const l_twFlagIdx[13] = {
     0, 1, 2, 4, -1, -1, 0, 1, 1, 2, 2, 4, 4,
 };
 
@@ -219,7 +219,7 @@ static actor_method_class l_daTwGate_Method = {
     (process_method_func)daTwGate_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_TwGate = {
+actor_process_profile_definition g_profile_Obj_TwGate = {
   fpcLy_CURRENT_e,               // mLayerID
   3,                             // mListID
   fpcPi_CURRENT_e,               // mListPrio

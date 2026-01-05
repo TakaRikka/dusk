@@ -29,7 +29,7 @@ public:
 
 STATIC_ASSERT(sizeof(daE_BA_HIO_c) == 0x1C);
 
-static bool hioInit;
+static bool hio_set;
 
 static daE_BA_HIO_c l_HIO;
 
@@ -968,7 +968,7 @@ static int daE_BA_Delete(e_ba_class* i_this) {
     fopEn_enemy_c* a_this = &i_this->mEnemy;
     dComIfG_resDelete(&i_this->mPhase, i_this->mArcName);
     if (i_this->mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
     if (a_this->heap != NULL) {
         i_this->mpMorf->stopZelAnime();
@@ -1057,9 +1057,9 @@ static cPhs__Step daE_BA_Create(fopAc_ac_c* i_this) {
             }
         }
 
-        if (!hioInit) {
+        if (!hio_set) {
             _this->mHIOInit = true;
-            hioInit = true;
+            hio_set = true;
             l_HIO.field_0x04 = -1;
         }
 
@@ -1104,7 +1104,7 @@ static actor_method_class l_daE_BA_Method = {
     (process_method_func)daE_BA_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_BA = {
+actor_process_profile_definition g_profile_E_BA = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

@@ -55,10 +55,12 @@ const static dCcD_SrcCyl ccCylSrc = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        10.0f, // mRadius
-        30.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            10.0f, // mRadius
+            30.0f // mHeight
+        } // mCyl
+    }
 };
 
 void daObjKazeNeko_c::initCcCylinder() {
@@ -225,7 +227,7 @@ static actor_method_class l_daObjKazeNeko_Method = {
     (process_method_func)daObjKazeNeko_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_KazeNeko = {
+actor_process_profile_definition g_profile_Obj_KazeNeko = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

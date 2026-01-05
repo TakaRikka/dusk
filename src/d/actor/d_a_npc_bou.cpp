@@ -784,7 +784,7 @@ int daNpc_Bou_c::cutWildGoat(int arg) {
             case 2: {
                 actor_p = mActorMngr[0].getActorP();
                 JUT_ASSERT(0x811, NULL != actor_p);
-                dComIfGp_getEvent().setPt2(actor_p);
+                dComIfGp_getEvent()->setPt2(actor_p);
                 Z2GetAudioMgr()->subBgmStart(0x1000011);
                 break;
             }
@@ -1160,7 +1160,7 @@ int daNpc_Bou_c::cutFindWolf(int arg) {
             case 0: {
                 mFaceMotionSeqMngr.setNo(1, -1.0f, 0, 0);
                 mMotionSeqMngr.setNo(3, -1.0f, 0, 0);
-                dComIfGp_getEvent().setPtT(this);
+                dComIfGp_getEvent()->setPtT(this);
                 initTalk(0xD4, NULL);
                 break;
             }
@@ -1639,7 +1639,7 @@ static actor_method_class daNpc_Bou_MethodTable = {
     (process_method_func)daNpc_Bou_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_BOU = {
+actor_process_profile_definition g_profile_NPC_BOU = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

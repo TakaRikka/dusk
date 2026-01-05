@@ -352,7 +352,7 @@ void daObjCRVGATE_c::CloseAction() {
                 daPy_py_c* player = daPy_getPlayerActorClass();
                 cXyz* player_pos = &fopAcM_GetPosition(player);
 
-                if (dComIfGp_event_runCheck() != 0) {
+                if (dComIfGp_event_runCheck()) {
                     cXyz* boar_speed = &fopAcM_GetSpeed(boar_ac);
                     daPy_py_c* player = daPy_getPlayerActorClass();
                     cXyz* player_pos = &fopAcM_GetPosition(player);
@@ -834,7 +834,7 @@ static actor_method_class l_daObjCRVGATE_Method = {
     (process_method_func)daObjCRVGATE_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_CRVGATE = {
+actor_process_profile_definition g_profile_Obj_CRVGATE = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

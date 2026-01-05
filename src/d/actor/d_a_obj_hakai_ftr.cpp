@@ -105,12 +105,14 @@ dCcD_SrcCyl const daObjHFtr_c::s_CcDCyl = {
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},               // mGObjAt
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},               // mGObjTg
         {0x0},                                            // mGObjCo
-    },                                                    // mObjInf
-    {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,                // mRadius
-        0.0f                 // mHeight
-    }  // mCyl
+    },   
+    {                                                 // mObjInf
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,                // mRadius
+            0.0f                 // mHeight
+        }  // mCyl
+    }
 };
 
 int daObjHFtr_c::execute() {
@@ -205,7 +207,7 @@ static actor_method_class daObjHFtr_METHODS = {
     (process_method_func)daObjHFtr_draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_HFtr = {
+actor_process_profile_definition g_profile_Obj_HFtr = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

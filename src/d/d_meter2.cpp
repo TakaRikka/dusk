@@ -418,8 +418,7 @@ void dMeter2_c::checkStatus() {
     mStatus = 0;
     field_0x12c = field_0x128;
 
-    // supposed to be daPy_py_c::checkNowWolf, but it messes with reg alloc?
-    field_0x128 = ((daPy_py_c*)g_dComIfG_gameInfo.play.getPlayerPtr(LINK_PTR))->checkWolf();
+    field_0x128 = daPy_py_c::checkNowWolf();
 
     if (!dComIfGp_2dShowCheck() || dMsgObject_getMsgObjectClass()->isPlaceMessage()) {
         mStatus |= 0x4000;
@@ -1008,33 +1007,30 @@ void dMeter2_c::moveLightDrop() {
 
 void dMeter2_c::moveRupee() {
     s16 temp_r5;
-    s16 var_r6;
     s32 temp_r0;
-    bool draw_rupee;
 
     temp_r5 = dComIfGs_getRupeeMax();
-    draw_rupee = false;
+    s16 r29 = 0;
+    bool draw_rupee = false;
 
-    // using dComIfGp_getItemRupeeCount() here swaps r3/r4 reg alloc?
-    if (g_dComIfG_gameInfo.play.mItemInfo.mItemRupeeCount != 0) {
-        var_r6 = dComIfGs_getRupee() + dComIfGp_getItemRupeeCount();
-        if (var_r6 > temp_r5) {
-            var_r6 = temp_r5;
-        } else if (var_r6 < 0) {
-            var_r6 = 0;
+    if (dComIfGp_getItemRupeeCount() != 0) {
+        r29 = dComIfGs_getRupee() + dComIfGp_getItemRupeeCount();
+        if (r29 > temp_r5) {
+            r29 = temp_r5;
+        } else if (r29 < 0) {
+            r29 = 0;
         }
 
-        dComIfGs_setRupee(var_r6);
+        dComIfGs_setRupee(r29);
         dComIfGp_clearItemRupeeCount();
-        temp_r0 = (u16)var_r6 - mRupeeNum;
 
-        if (temp_r0 >= 5) {
+        if (dComIfGs_getRupee() - mRupeeNum >= 5) {
             onRupeeSoundBit(2);
             if (isRupeeSoundBit(3)) {
                 offRupeeSoundBit(3);
                 offRupeeSoundBit(1);
             }
-        } else if (temp_r0 <= -5) {
+        } else if (dComIfGs_getRupee() - mRupeeNum <= -5) {
             onRupeeSoundBit(3);
             if (isRupeeSoundBit(2)) {
                 offRupeeSoundBit(2);
@@ -3087,12 +3083,12 @@ static leafdraw_method_class l_dMeter2_Method = {
     (process_method_func)dMeter2_Draw,
 };
 
-extern msg_process_profile_definition g_profile_METER2 = {
+msg_process_profile_definition g_profile_METER2 = {
     fpcLy_CURRENT_e,
     12,
     fpcPi_CURRENT_e,
     PROC_METER2,
-    (process_method_class*)&g_fpcLf_Method,
+    &g_fpcLf_Method.base,
     sizeof(dMeter2_c),
     0,
     0,

@@ -791,9 +791,6 @@ u8 dMeter2Info_c::getItemType(u8 i_itemNo) {
     return type;
 }
 
-/* 8021CF08-8021D36C 217848 0464+00 0/0 9/9 0/0 .text
- * readItemTexture__13dMeter2Info_cFUcPvP10J2DPicturePvP10J2DPicturePvP10J2DPicturePvP10J2DPicturei
- */
 int dMeter2Info_c::readItemTexture(u8 i_itemNo, void* i_texBuf1, J2DPicture* i_pic1, void* i_texBuf2,
                                    J2DPicture* i_pic2, void* i_texBuf3, J2DPicture* i_pic3,
                                    void* i_texBuf4, J2DPicture* i_pic4, int param_9) {

@@ -147,7 +147,7 @@ int useHeapInit(fopAc_ac_c* i_this) {
     J3DModelData* modelData =
         static_cast<J3DModelData*>(dComIfG_getObjectRes("Obj_Bef", bef_bmd[a_this->mEffectType]));
 
-    JUT_ASSERT(339, modelData != 0);
+    JUT_ASSERT(339, modelData != NULL);
 
     a_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
 
@@ -235,7 +235,7 @@ actor_method_class l_daObj_Brakeeff_Method = {
     (process_method_func)daObj_Brakeeff_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_BEF = {
+actor_process_profile_definition g_profile_OBJ_BEF = {
     fpcLy_CURRENT_e,             // mLayerID
     3,                           // mListID
     fpcPi_CURRENT_e,             // mListPrio

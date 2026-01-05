@@ -1,6 +1,6 @@
 #include "abort_exit.h"
 #include "critical_regions.h"
-#include "stddef.h"
+#include <cstddef>
 
 extern void (*_dtors[])(void);
 

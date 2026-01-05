@@ -28,7 +28,7 @@ public:
 
     u32 getFileID() const { return mFileInfo.startAddr; }
     DVDFileInfo* getFileInfo() { return &mFileInfo; }
-    int getStatus() { return DVDGetCommandBlockStatus(&mFileInfo.cb); }
+    int getStatus() const { return DVDGetCommandBlockStatus(&mFileInfo.cb); }
 
 public:
     /* vt[03] */ virtual bool open(const char*);               /* override */

@@ -2144,9 +2144,5 @@ dBgW* dBgW_NewSet(cBgD_t* pbgd, u32 flags, Mtx* pbase_mtx) {
     return nw;
 }
 
-/* 80450F88 0001+00 data_80450F88 None */
-/* 80450F89 0001+00 data_80450F89 None */
-/* 80450F8A 0001+00 data_80450F8A None */
-/* 80450F8B 0005+00 data_80450F8B None */
 extern u8 struct_80450F88[8];
 u8 struct_80450F88[8];

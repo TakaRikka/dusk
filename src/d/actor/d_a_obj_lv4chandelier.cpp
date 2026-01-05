@@ -95,7 +95,7 @@ void daObjLv4Chan_c::setMtxChain(daObjLv4Chan_c::ChainPos* i_chains, dMdl_obj_c*
             f32 dVar10 = VECDotProduct(&cStack_7c, &::cXyz::BaseZ);
             if (!cM3d_IsZero(cStack_88.getSquareMag()) && -1.0f <= dVar10 && dVar10 <= 1.0f) {
                 cStack_88.normalize();
-                f32 fVar11 = i_acosf(dVar10);
+                f32 fVar11 = acosf(dVar10);
                 i_chains[i].field_0x24 = fVar11 - M_PI / 2;
                 MTXRotAxisRad(afStack_70, &cStack_88, fVar11);
             } else {
@@ -133,7 +133,7 @@ void daObjLv4Chan_c::setMtx() {
         f32 dVar9 = VECDotProduct(&local_78, &::cXyz::BaseY);
         if (!cM3d_IsZero(cStack_84.getSquareMag()) && -1.0f <= dVar9 && dVar9 <= 1.0f) {
             cStack_84.normalize();
-            MTXRotAxisRad(afStack_68, &cStack_84, i_acosf(dVar9));
+            MTXRotAxisRad(afStack_68, &cStack_84, acosf(dVar9));
             local_78 *= -150.0f;
         } else {
             MTXIdentity(afStack_68);
@@ -873,7 +873,7 @@ static actor_method_class daObjLv4Chan_METHODS = {
     (process_method_func)daObjLv4Chan_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv4Chan = {
+actor_process_profile_definition g_profile_Obj_Lv4Chan = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

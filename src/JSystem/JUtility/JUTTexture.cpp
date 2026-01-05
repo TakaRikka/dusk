@@ -14,14 +14,12 @@ JUTTexture::~JUTTexture() {
 }
 
 void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
-    _GXTlut tlut;
-
     if (param_0 && param_1 < 0x10) {
         mTexInfo = param_0;
-        mTexData = (void*)((int)mTexInfo + mTexInfo->imageOffset);
+        mTexData = (void*)((intptr_t)mTexInfo + mTexInfo->imageOffset);
 
         if (mTexInfo->imageOffset == 0) {
-            mTexData = (void*)((int)mTexInfo + 0x20);
+            mTexData = (void*)((intptr_t)mTexInfo + 0x20);
         }
 
         field_0x2c = NULL;
@@ -37,19 +35,20 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
         if (mTexInfo->numColors == 0) {
             initTexObj();
         } else {
+            GXTlut tlut;
             if (mTexInfo->numColors > 0x100) {
-                tlut = (_GXTlut)((param_1 % 4) + GX_BIGTLUT0);
+                tlut = (GXTlut)((param_1 % 4) + GX_BIGTLUT0);
             } else {
-                tlut = (_GXTlut)param_1;
+                tlut = (GXTlut)param_1;
             }
 
             if (mEmbPalette == NULL || !getEmbPaletteDelFlag()) {
-                mEmbPalette = new JUTPalette(tlut, (_GXTlutFmt)mTexInfo->colorFormat,
+                mEmbPalette = new JUTPalette(tlut, (GXTlutFmt)mTexInfo->colorFormat,
                                              (JUTTransparency)mTexInfo->alphaEnabled, mTexInfo->numColors,
                                              (void*)(&mTexInfo->format + mTexInfo->paletteOffset));
-                mFlags = mFlags & 1 | 2;
+                setEmbPaletteDelFlag(true);
             } else {
-                mEmbPalette->storeTLUT(tlut, (_GXTlutFmt)mTexInfo->colorFormat,
+                mEmbPalette->storeTLUT(tlut, (GXTlutFmt)mTexInfo->colorFormat,
                                        (JUTTransparency)mTexInfo->alphaEnabled, mTexInfo->numColors,
                                        (void*)(&mTexInfo->format + mTexInfo->paletteOffset));
             }
@@ -59,18 +58,18 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, u8 param_1) {
 }
 
 void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1) {
-    _GXTlut type;
+    GXTlut type;
 
     if (param_1 != NULL) {
-        type = (_GXTlut)param_1->getTlutName();
+        type = param_1->getTlutName();
     } else {
         type = GX_TLUT0;
     }
     storeTIMG(param_0, param_1, type);
 }
 
-void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1, _GXTlut param_2) {
-    _GXTlut type;
+void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1, GXTlut param_2) {
+    GXTlut type;
 
     if (param_0 == NULL) {
         return;
@@ -89,13 +88,11 @@ void JUTTexture::storeTIMG(ResTIMG const* param_0, JUTPalette* param_1, _GXTlut 
     if (param_1 != NULL) {
         mTlutName = param_2;
         if (param_2 != param_1->getTlutName()) {
-            u8 format = param_1->getFormat();
-            u8 transperancy = param_1->getTransparency();
+            GXTlutFmt format = param_1->getFormat();
+            JUTTransparency transperancy = param_1->getTransparency();
             u16 numColors = param_1->getNumColors();
             ResTLUT* colorTable = param_1->getColorTable();
-            param_1->storeTLUT(param_2, (_GXTlutFmt)format,
-                            (JUTTransparency)transperancy,
-                            numColors, colorTable);
+            param_1->storeTLUT(param_2, format, transperancy, numColors, colorTable);
         }
     }
 
@@ -116,8 +113,7 @@ void JUTTexture::attachPalette(JUTPalette* param_0) {
         } else {
             field_0x2c = param_0;
         }
-        _GXTlut name = (_GXTlut)field_0x2c->getTlutName();
-        initTexObj(name);
+        initTexObj(field_0x2c->getTlutName());
     }
 }
 
@@ -128,8 +124,9 @@ void JUTTexture::init() {
         if (mEmbPalette != NULL) {
             field_0x2c = mEmbPalette;
 
-            _GXTlut name = (_GXTlut)field_0x2c->getTlutName();
-            initTexObj(name);
+            initTexObj(field_0x2c->getTlutName());
+        } else {
+            OS_REPORT("This texture is CI-Format, but EmbPalette is NULL.\n");
         }
     }
 }
@@ -151,7 +148,7 @@ void JUTTexture::initTexObj() {
                     mTexInfo->doEdgeLOD, (GXAnisotropy)mTexInfo->maxAnisotropy);
 }
 
-void JUTTexture::initTexObj(_GXTlut param_0) {
+void JUTTexture::initTexObj(GXTlut param_0) {
     GXBool mipmapEnabled;
     if (mTexInfo->mipmapEnabled != 0) {
         mipmapEnabled = 1;
@@ -169,7 +166,7 @@ void JUTTexture::initTexObj(_GXTlut param_0) {
                     mTexInfo->doEdgeLOD, (GXAnisotropy)mTexInfo->maxAnisotropy);
 }
 
-void JUTTexture::load(_GXTexMapID param_0) {
+void JUTTexture::load(GXTexMapID param_0) {
     if (field_0x2c) {
         field_0x2c->load();
     }

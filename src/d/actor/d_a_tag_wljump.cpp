@@ -105,7 +105,7 @@ int daTagWljump_c::execute() {
         if (field_0x571 != 0xff) {
             fopAcM_onSwitch(this, field_0x571);
         }
-    } else if (!dComIfGp_getEvent().isOrderOK()) {
+    } else if (!dComIfGp_getEvent()->isOrderOK()) {
         field_0x572 = 0;
     } else {
         if (!midna->checkWolfNoPos()) {
@@ -240,7 +240,7 @@ static actor_method_class l_daTagWljump_Method = {
     (process_method_func)daTagWljump_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_Wljump = {
+actor_process_profile_definition g_profile_Tag_Wljump = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

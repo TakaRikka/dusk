@@ -11,7 +11,7 @@
 #include "SSystem/SComponent/c_m3d_g_pla.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "c/c_damagereaction.h"
-#include "cmath.h"
+#include <math>
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_canoe.h"
 #include "d/actor/d_a_mg_fshop.h"
@@ -221,7 +221,7 @@ static void* s_npc_sub(void* param_0, void* param_1) {
 }
 
 static void* s_piro_sub(void* param_0, void* param_1) {
-    (void)param_1;  // debug match
+    UNUSED(param_1);
     if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_NPC_INKO) {
         return param_0;
     }
@@ -239,7 +239,7 @@ static void* s_du_sub(void* param_0, void* param_1) {
 }
 
 static void* s_shop_sub(void* param_0, void* param_1) {
-    (void)param_1;  // debug match
+    UNUSED(param_1);
     if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_FSHOP &&
         (s32)(fopAcM_GetParam(param_0) & 0xff) < 35)
     {
@@ -249,7 +249,7 @@ static void* s_shop_sub(void* param_0, void* param_1) {
 }
 
 static void* s_koro2ball_sub(void* param_0, void* param_1) {
-    (void)param_1;  // debug match
+    UNUSED(param_1);
     if (fopAcM_IsActor(param_0)) {
         if (fopAcM_GetName(param_0) == PROC_FSHOP && (fopAcM_GetParam(param_0) & 0xff) == 35) {
             return param_0;
@@ -274,7 +274,7 @@ static void message_shop(npc_henna_class* i_this) {
         i_this->actor.attention_info.distances[1] = 4;
         i_this->actor.attention_info.distances[3] = 4;
         i_this->actor.eventInfo.onCondition(1);
-        if (dComIfGp_event_runCheck() != 0 && i_this->cam_mode == 0 &&
+        if (dComIfGp_event_runCheck() && i_this->cam_mode == 0 &&
             i_this->actor.eventInfo.checkCommandTalk() != 0)
         {
             dComIfGp_event_reset();
@@ -402,7 +402,7 @@ static void henna_shop(npc_henna_class* i_this) {
 }
 
 static void* s_rod_sub(void* param_0, void* param_1) {
-    (void)param_1;  // debug match
+    UNUSED(param_1);
     if (fopAcM_IsActor(param_0) && fopAcM_GetName(param_0) == PROC_MG_ROD) {
         return param_0;
     }
@@ -423,7 +423,7 @@ static void* s_fish_sub(void* param_0, void* param_1) {
     return 0;
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daNpc_Henna_HIO_c l_HIO;
 
@@ -450,7 +450,7 @@ static void henna_ride(npc_henna_class* i_this) {
     i_this->field_0x70e = 1300;
     i_this->field_0x720 = player->eyePos;
 
-    if (dComIfGp_checkPlayerStatus0(0, 0x2000) != 0 || dComIfGp_event_runCheck() != 0) {
+    if (dComIfGp_checkPlayerStatus0(0, 0x2000) != 0 || dComIfGp_event_runCheck()) {
         stickX = stickY = 0.0f;
     }
     stickMag = JMAFastSqrt(stickX * stickX + stickY * stickY);
@@ -601,7 +601,7 @@ static void henna_ride(npc_henna_class* i_this) {
                     lookat_pos.y = 0.0f;
                     lookat_pos.z = -100.0f + VREG_F(8);
                     MtxPosition(&lookat_pos, &pos);
-                    pos.y = lrl->field_0x590;
+                    pos.y = lrl->water_surface_y;
                     f32 unkFloat1;
                     if (i_this->mAnmResIndex == 7) {
                         unkFloat1 = 22.0f;
@@ -630,7 +630,7 @@ static void henna_ride(npc_henna_class* i_this) {
         i_this->field_0x70d = 10;
     }
 
-    if ((lrl != NULL && lrl->field_0x146d != 0) || i_this->field_0x7b8 != 0 ||
+    if ((lrl != NULL && lrl->msg_flow_state != 0) || i_this->field_0x7b8 != 0 ||
         dComIfGp_checkPlayerStatus0(0, 0x2000) != 0)
     {
         i_this->field_0x70d = 2;
@@ -1015,7 +1015,7 @@ static void demo_camera_shop(npc_henna_class* i_this) {
 
     switch (i_this->cam_mode) {
     case 0: {
-        if (dComIfGp_event_runCheck() == FALSE) {
+        if (!dComIfGp_event_runCheck()) {
             if (i_this->field_0x7b5 != 0) {
                 if (i_this->field_0x7b5 == 1 || i_this->field_0x7b5 == 21 ||
                     i_this->field_0x7b5 == 41)
@@ -2197,14 +2197,7 @@ static void message_guide(npc_henna_class* i_this) {
             return;
         }
 
-#if VERSION != VERSION_SHIELD_DEBUG
-        // TODO: gameInfo fake match to force reuse of pointer
-        dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-        if (play->getEvent().runCheck())
-#else
-        if (dComIfGp_event_runCheck())
-#endif
-        {
+        if (dComIfGp_event_runCheck()) {
             if (!actor->eventInfo.checkCommandTalk()) {
                 return;
             }
@@ -2234,11 +2227,7 @@ static void message_guide(npc_henna_class* i_this) {
             }
 
             if (i_this->mMsgFlow.doFlow(actor, NULL, 0) != 0) {
-#if VERSION != VERSION_SHIELD_DEBUG
-                play->getEvent().reset();
-#else
                 dComIfGp_event_reset();
-#endif
                 i_this->mIsTalking = 0;
             }
         } else {
@@ -2592,7 +2581,7 @@ static bool daNpc_Henna_IsDelete(npc_henna_class* param_0) {
 static int daNpc_Henna_Delete(npc_henna_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "Henna");
     if (i_this->hio_init != 0) {
-        l_HIOInit = 0;
+        hio_set = 0;
     }
     return 1;
 }
@@ -2694,9 +2683,9 @@ static int daNpc_Henna_Create(fopAc_ac_c* i_this) {
         }
         OS_REPORT("//////////////NPC_HENNA SET 2 !!\n");
 
-        if (!l_HIOInit ) {
+        if (!hio_set ) {
             a_this->hio_init = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             // "Henna"
             l_HIO.id = mDoHIO_CREATE_CHILD("ヘナさま", &l_HIO);
         }
@@ -2833,7 +2822,7 @@ static actor_method_class l_daNpc_Henna_Method = {
     (process_method_func)daNpc_Henna_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_HENNA = {
+actor_process_profile_definition g_profile_NPC_HENNA = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

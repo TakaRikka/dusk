@@ -34,6 +34,6 @@ l_daTagWaterFall_Method = .data:0x00000004; // type:object size:0x20 scope:local
 g_profile_Tag_WaterFall = .data:0x00000024; // type:object size:0x30 scope:global
 __vt__20daTagWaterFall_HIO_c = .data:0x00000054; // type:object size:0xC scope:global
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
-lbl_751_bss_8 = .bss:0x00000008; // type:object size:0x1 scope:local data:byte
+masterWaterfallTagExists = .bss:0x00000008; // type:object size:0x1 scope:local data:byte
 @3753 = .bss:0x0000000C; // type:object size:0xC scope:local
 l_HIO = .bss:0x00000018; // type:object size:0x24 scope:local data:byte

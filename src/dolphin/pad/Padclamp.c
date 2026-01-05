@@ -1,4 +1,4 @@
-#include "fake_tgmath.h"
+#include "sdk_math.h"
 #include <dolphin/dolphin.h>
 #include <dolphin/pad.h>
 

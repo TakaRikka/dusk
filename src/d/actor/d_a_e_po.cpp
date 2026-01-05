@@ -1,5 +1,5 @@
 /**
-* @file d_a_e_po.cpp
+ * @file d_a_e_po.cpp
  *
  */
 
@@ -71,7 +71,7 @@ daE_PO_HIO_c::daE_PO_HIO_c() {
     mModelSize = 1.0f;
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 static daE_PO_HIO_c l_HIO;
 
 static s16 mRollCount;
@@ -1231,21 +1231,10 @@ static void e_po_dead(e_po_class* i_this) {
         i_this->mType += 1;
 
     case 51:
-#if VERSION != VERSION_SHIELD_DEBUG
-        // TODO: gameInfo fake match to force reuse of pointer
-        dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-        if (play->getEvent().runCheck())
-#else
-        if (dComIfGp_event_runCheck())
-#endif
-        {
+        if (dComIfGp_event_runCheck()) {
             if (a_this->eventInfo.checkCommandDemoAccrpt()) {
                 if (dComIfGp_getEventManager().endCheck(i_this->field_0x762) != 0) {
-#if VERSION != VERSION_SHIELD_DEBUG
-                    play->getEvent().reset();
-#else
                     dComIfGp_event_reset();
-#endif
                 } else {
                     if (strcmp(dComIfGp_getEventManager().getRunEventName(), "DEFAULT_GETITEM") ==
                             0 &&
@@ -1259,7 +1248,7 @@ static void e_po_dead(e_po_class* i_this) {
                 }
             }
         } else if (i_this->field_0x75B != 0) {
-            if (dComIfGp_getEvent().isOrderOK()) {
+            if (dComIfGp_getEvent()->isOrderOK()) {
                 if (!a_this->eventInfo.checkCommandDemoAccrpt()) {
                     fopAcM_orderPotentialEvent(a_this, 2, -1, 0);
                     a_this->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
@@ -1706,8 +1695,8 @@ static void e_po_holl_demo(e_po_class* i_this) {
     };
     static s16 mKAngInit_dt[4] = {
         0x0000,
-        0x8000,
-        0x8000,
+        -0x8000,
+        -0x8000,
         0x0000,
     };
 
@@ -2839,7 +2828,7 @@ static int daE_PO_Delete(e_po_class* i_this) {
 
     dComIfG_resDelete(&i_this->mPhase, "E_PO");
     if (i_this->field_0xECC != 0) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
     }
     if (a_this->heap != NULL) {
         i_this->mSound1.deleteObject();
@@ -2946,9 +2935,9 @@ static int daE_PO_Create(fopAc_ac_c* i_act_this) {
             return cPhs_ERROR_e;
         }
 
-        if (l_HIOInit == FALSE) {
+        if (hio_set == FALSE) {
             i_this->field_0xECC = 1;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.field_0x04[0] = mDoHIO_CREATE_CHILD("ポウ", (JORReflexible*)&l_HIO);
         }
 
@@ -2965,10 +2954,12 @@ static int daE_PO_Create(fopAc_ac_c* i_act_this) {
                 {0x0},                                             // mGObjCo
             },                                                     // mObjInf
             {
-                {0.0f, 0.0f, 0.0f},  // mCenter
-                50.0f,               // mRadius
-                300.0f               // mHeight
-            }  // mCyl
+                {
+                    {0.0f, 0.0f, 0.0f},  // mCenter
+                    50.0f,               // mRadius
+                    300.0f               // mHeight
+                }  // mCyl
+            }
         };
 
         i_this->mCyl.Set(cc_cyl_src);
@@ -3171,7 +3162,7 @@ static actor_method_class l_daE_PO_Method = {
     (process_method_func)daE_PO_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_PO = {
+actor_process_profile_definition g_profile_E_PO = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

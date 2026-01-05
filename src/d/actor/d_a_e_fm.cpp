@@ -234,8 +234,7 @@ static void* s_fmobj_del(void* i_actor, void* i_data) {
     return NULL;
 }
 
-/* 804FAE95 0003+00 data_804FAE95 None */
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_FM_HIO_c l_HIO;
 
@@ -1285,7 +1284,7 @@ static void demo_camera(e_fm_class* i_this) {
         i_this->mDemoCamCenter = camera0->lookat.center;
         i_this->field_0x778 = 0.0f;
         camera->mCamera.SetTrimSize(3);
-        dComIfGp_getEvent().startCheckSkipEdge(actor);
+        dComIfGp_getEvent()->startCheckSkipEdge(actor);
     case 11:
         if (i_this->mDemoCamTimer == (s16)(VREG_S(0) + 8)) {
             daPy_getPlayerActorClass()->changeDemoMode(0x19, 0, 0, 0);
@@ -1975,7 +1974,7 @@ static s8 e_fm_start(e_fm_class* i_this) {
     i_this->mDamageInvulnerabilityTimer = 5;
     int var_r26 = 0;
 
-    if (i_this->mDemoCamMode >= 11 && dComIfGp_getEvent().checkSkipEdge()) {
+    if (i_this->mDemoCamMode >= 11 && dComIfGp_getEvent()->checkSkipEdge()) {
         cDmr_SkipInfo = 1;
         i_this->mDemoCamMode = 1000;
         dComIfGp_event_reset();
@@ -3458,7 +3457,7 @@ static int daE_FM_Delete(e_fm_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_fm");
 
     if (i_this->mInitHIO != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.no);
     }
 
@@ -3773,9 +3772,9 @@ static int daE_FM_Create(fopAc_ac_c* i_this) {
 
         OS_REPORT("//////////////E_FM SET 2 !!\n");
 
-        if (!l_initHIO) {
+        if (!hio_set) {
             a_this->mInitHIO = TRUE;
-            l_initHIO = TRUE;
+            hio_set = TRUE;
             l_HIO.no = mDoHIO_CREATE_CHILD("火魔人", &l_HIO);
         }
 
@@ -3880,7 +3879,7 @@ static actor_method_class l_daE_FM_Method = {
     (process_method_func)daE_FM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_FM = {
+actor_process_profile_definition g_profile_E_FM = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

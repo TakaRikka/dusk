@@ -84,7 +84,6 @@ namespace {
         }
     };
 
-    /* 8082F480-8082F4C4 000060 0044+00 0/1 0/0 0/0 .data cc_zhCyl_src__22@unnamed@d_a_e_zh_cpp@ */
     static dCcD_SrcCyl cc_zhCyl_src = {
         {
             {0, {{AT_TYPE_0, 0, 0}, {0xD84860BA, 3}, 0x15}},
@@ -93,11 +92,12 @@ namespace {
             {0}
         },
         {
-            {0.0f, 0.0f, 0.0f}, 50.0f, 300.0f,
+            {
+                {0.0f, 0.0f, 0.0f}, 50.0f, 300.0f,
+            }
         }
     };
 
-    /* 8082F4C4-8082F508 0000A4 0044+00 0/1 0/0 0/0 .data cc_zhCyl_at_src__22@unnamed@d_a_e_zh_cpp@ */
     static dCcD_SrcCyl cc_zhCyl_at_src = {
         {
             {0, {{AT_TYPE_CSTATUE_SWING, 4, 0xD}, {0, 0}, 0}},
@@ -106,7 +106,9 @@ namespace {
             {0},
         },
         {
-            {0.0f, 0.0f, 0.0f}, 50.0f, 300.0f,
+            {
+                {0.0f, 0.0f, 0.0f}, 50.0f, 300.0f,
+            }
         }
     };
 }
@@ -121,8 +123,7 @@ daE_ZH_HIO_c::daE_ZH_HIO_c() {
     dungeon_bit_check = 0;
 }
 
-/* 8082F725 0003+00 data_8082F725 None */
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_ZH_HIO_c l_HIO;
 
@@ -750,7 +751,7 @@ void daE_ZH_c::executeStartDemo() {
     switch (mMoveMode) {
         case 0:
             if (startDemoCheck()) {
-                dComIfGp_getEvent().startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
                 mDemoCamCenter.set(-30.0f, 650.0f, 1955.0f);
                 mDemoCamEye.set(-25.0f, 720.0f, 2330.0f);
                 field_0x794[0] = 60;
@@ -795,7 +796,7 @@ void daE_ZH_c::executeStartDemo() {
     }
 
     if (mMoveMode != 0 && mActionMode != ACTION_EXECUTE_WAIT) {
-        if (dComIfGp_getEvent().checkSkipEdge()) {
+        if (dComIfGp_getEvent()->checkSkipEdge()) {
             fopAcM_onSwitch(this, 0x12);
             dStage_changeScene(2, 0.0f, 0, fopAcM_GetRoomNo(this), 0, -1);
         }
@@ -898,11 +899,11 @@ void daE_ZH_c::executeBallWait() {
             }
 
             dCam_getBody()->StartBlure(100, this, 0.8f, 1.4f);
-            dComIfGp_getEvent().startCheckSkipEdge(this);
+            dComIfGp_getEvent()->startCheckSkipEdge(this);
             mMoveMode++;
             // fallthrough
         case 12:
-            if (dComIfGp_getEvent().checkSkipEdge()) {
+            if (dComIfGp_getEvent()->checkSkipEdge()) {
                 dCam_getBody()->ResetBlure();
                 field_0x794[2] = 2;
                 camera->mCamera.Start();
@@ -2111,7 +2112,7 @@ int daE_ZH_c::_delete() {
     }
 
     if (field_0xe04 != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (heap != NULL) {
@@ -2217,8 +2218,8 @@ cPhs__Step daE_ZH_c::create() {
                 return cPhs_ERROR_e;
             }
 
-            if (l_initHIO == 0) {
-                l_initHIO = 1;
+            if (hio_set == 0) {
+                hio_set = 1;
                 field_0xe04 = 1;
                 l_HIO.field_0x4 = -1;
             }
@@ -2333,7 +2334,7 @@ static actor_method_class l_daE_ZH_Method = {
     (process_method_func)daE_ZH_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_ZH = {
+actor_process_profile_definition g_profile_E_ZH = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

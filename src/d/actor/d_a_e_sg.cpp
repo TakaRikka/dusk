@@ -104,7 +104,7 @@ static int daE_SG_Draw(e_sg_class* i_this) {
     return 1;
 }
 
-static bool hio_init;
+static bool hio_set;
 
 static daE_SG_HIO_c l_HIO;
 
@@ -215,8 +215,8 @@ static obj_kbox_class* search_box(e_sg_class* i_this) {
 static dmg_rod_class* search_esa(e_sg_class* i_this) {
     dmg_rod_class* rod = (dmg_rod_class*)fopAcM_SearchByName(PROC_MG_ROD);
 
-    if (rod != NULL && rod->kind == 1 && rod->action != 5 && rod->field_0x100d != 0 &&
-        rod->actor.current.pos.y < rod->field_0x590 - 20.0f)
+    if (rod != NULL && rod->kind == 1 && rod->action != 5 && rod->is_hook_in_water != 0 &&
+        rod->actor.current.pos.y < rod->water_surface_y - 20.0f)
     {
         return rod;
     }
@@ -1105,7 +1105,7 @@ static int daE_SG_Delete(e_sg_class* i_this) {
     dComIfG_resDelete(&i_this->mPhaseReq, "E_sg");
 
     if (i_this->mHioInit) {
-        hio_init = false;
+        hio_set = false;
     }
 
     if (i_this->heap != NULL) {
@@ -1170,9 +1170,9 @@ static int daE_SG_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (hio_init == false) {
+        if (hio_set == false) {
             a_this->mHioInit = true;
-            hio_init = true;
+            hio_set = true;
             l_HIO.mUnk0 = -1;
         }
 
@@ -1252,7 +1252,7 @@ static actor_method_class l_daE_SG_Method = {
     (process_method_func)daE_SG_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_SG = {
+actor_process_profile_definition g_profile_E_SG = {
     fpcLy_CURRENT_e,       // mLayerID
     7,                     // mListID
     fpcPi_CURRENT_e,       // mListPrio

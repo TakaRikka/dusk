@@ -6,7 +6,7 @@
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "CaptureScreen.h"
-#include <string.h>
+#include <string>
 
 void fapGm_After();
 void fapGm_Create();
@@ -33,7 +33,7 @@ public:
         JUT_ASSERT(46, mCaptureScreen != NULL);
     }
 
-    static u8 isCaptureScreen() {
+    static bool isCaptureScreen() {
         return mCaptureScreenFlag;
     }
 
@@ -44,6 +44,12 @@ public:
     static void offCpuTimer() {
         m_CpuTimerOff = FALSE;
     }
+
+    static u8 getCaptureScreenNumH() { return mCaptureScreenNumH; }
+    static u8 getCaptureScreenNumV() { return mCaptureScreenNumV; }
+
+    static u8 getCaptureScreenDivH() { return mCaptureScreenDivH; }
+    static u8 getCaptureScreenDivV() { return mCaptureScreenDivV; }
     #endif
 
     #if DEBUG
@@ -63,6 +69,9 @@ public:
     static u8 mCaptureScreenNumV;
 
     static u8 mParticle254Fix;
+
+    static u8 mCaptureScreenDivH;
+    static u8 mCaptureScreenDivV;
     #endif
 
     /* 0x04 */ s8 field_0x04;

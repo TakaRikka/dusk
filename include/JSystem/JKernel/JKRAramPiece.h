@@ -42,6 +42,16 @@ public:
     /* 0x94 */ void* field_0x94;
 };
 
+struct JKRAramCommand {
+    s32 field_0x00;
+    void* command;
+
+    void setting(int param_1, void* param_2) {
+        field_0x00 = param_1;
+        command = param_2;
+    }
+};
+
 /**
  * @ingroup jsystem-jkernel
  * 
@@ -51,12 +61,6 @@ public:
     static OSMutex mMutex;
     // TODO: fix type
     static JSUList<JKRAMCommand> sAramPieceCommandList;
-
-public:
-    struct Message {
-        s32 field_0x00;
-        JKRAMCommand* command;
-    };
 
 public:
     static JKRAMCommand* prepareCommand(int, u32, u32, u32, JKRAramBlock*,
@@ -73,6 +77,10 @@ private:
     static void lock() { OSLockMutex(&mMutex); }
     static void unlock() { OSUnlockMutex(&mMutex); }
 };
+
+inline void JKRAramPcs_SendCommand(JKRAMCommand* command) {
+    JKRAramPiece::sendCommand(command);
+}
 
 inline BOOL JKRAramPcs(int direction, u32 source, u32 destination, u32 length,
                        JKRAramBlock* block) {

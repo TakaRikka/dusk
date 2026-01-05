@@ -2,7 +2,7 @@
 #define JAISEQDATAMGR_H
 
 #include "JSystem/JAudio2/JAISound.h"
-#include <stdint.h>
+#include <stdint>
 
 /**
  * @ingroup jsystem-jaudio
@@ -14,8 +14,8 @@ struct JAISeqData {
         field_0x4 = param_1;
     }
 
-    void set(void* param_0, u32 param_1) {
-        field_0x0 = param_0;
+    void set(const void* param_0, u32 param_1) {
+        field_0x0 = (void*)param_0;
         field_0x4 = param_1;
     }
 

@@ -171,7 +171,9 @@ public:
     /* 0x0130 */ u8 mFlags;
     /* 0x0131 */ bool mTextFontOwned;
     /* 0x0132 */ u16 mStringLength;
+#if PLATFORM_GCN
     /* 0x0134 */ u8 field_0x134[4];
+#endif
 };  // Size: 0x138
 
 #endif /* J2DTEXTBOX_H */

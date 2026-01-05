@@ -615,12 +615,12 @@ void daObjTEN_c::Z_BufferChk() {
     field_0x618 = ((near + ((far * near) / local_5c.z)) / (far - near) + 1.0f) * 16777215.0f;
 }
 
-static u8 data_80D0BAB8;
+static u8 hio_set;
 
 int daObjTEN_c::Delete() {
     dComIfG_resDelete(&mPhase, "I_Ten");
     if (field_0xa64 != 0) {
-        data_80D0BAB8 = 0;
+        hio_set = 0;
     }
     mCreature.deleteObject();
     return 1;
@@ -722,8 +722,8 @@ int daObjTEN_c::create() {
         if (fopAcM_entrySolidHeap(this, useHeapInit, 0xbc0) == 0) {
             return cPhs_ERROR_e;
         }
-        if (data_80D0BAB8 == 0) {
-            data_80D0BAB8 = 1;
+        if (hio_set == 0) {
+            hio_set = 1;
             field_0xa64 = 1;
             l_HIO.field_0x4 = -1;
         }
@@ -808,7 +808,7 @@ static actor_method_class l_daObjTEN_Method = {
     (process_method_func)daObjTEN_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Ten = {
+actor_process_profile_definition g_profile_Obj_Ten = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

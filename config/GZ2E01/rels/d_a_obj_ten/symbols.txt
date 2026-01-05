@@ -96,6 +96,6 @@ __vt__8cM3dGPla = .data:0x00000098; // type:object size:0xC scope:global
 __vt__12J3DFrameCtrl = .data:0x000000A4; // type:object size:0xC scope:global
 __vt__14daObj_TenHIO_c = .data:0x000000B0; // type:object size:0xC scope:global
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
-data_80D0BAB8 = .bss:0x00000008; // type:object size:0x1 scope:local data:byte
+hio_set = .bss:0x00000008; // type:object size:0x1 scope:local align:1 data:byte
 @3770 = .bss:0x0000000C; // type:object size:0xC scope:local
 l_HIO = .bss:0x00000018; // type:object size:0x10 scope:local align:4 data:float

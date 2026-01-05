@@ -13,7 +13,7 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_camera_mng.h"
 
-static bool hioInit;
+static bool hio_set;
 
 static daObj_AriHIO_c l_HIO;
 
@@ -523,7 +523,7 @@ void daObjARI_c::Z_BufferChk() {
 int daObjARI_c::Delete() {
     dComIfG_resDelete(&mPhase, "I_Ari");
     if (mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
     if (heap != NULL) {
         mpMorf->stopZelAnime();
@@ -640,8 +640,8 @@ cPhs__Step daObjARI_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!hioInit) {
-            hioInit = true;
+        if (!hio_set) {
+            hio_set = true;
             mHIOInit = true;
             l_HIO.field_0x4 = -1;
         }
@@ -738,7 +738,7 @@ static actor_method_class l_daObjARI_Method = {
     (process_method_func)daObjARI_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Ari = {
+actor_process_profile_definition g_profile_Obj_Ari = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

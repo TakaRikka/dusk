@@ -34,7 +34,7 @@ s32 fpcLy_ToQueue(layer_class* i_layer, int i_treeListNo, create_tag_class* i_cr
 }
 
 s32 fpcLy_QueueTo(layer_class* i_layer, create_tag_class* i_createTag) {
-    i_layer;
+    UNUSED(i_layer);
 
     int ret = cTg_SingleCutFromTree(i_createTag);
     return ret;

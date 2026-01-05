@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_tag_chkpoint.h"
-#include <cmath.h>
+#include <math>
 #include "d/actor/d_a_player.h"
 
 int daTag_Chk_c::execute() {
@@ -101,7 +101,7 @@ static actor_method_class l_daTag_Chk_Method = {
     (process_method_func)daTag_Chk_Execute, (process_method_func)daTag_Chk_IsDelete,
     (process_method_func)daTag_Chk_Draw};
 
-extern actor_process_profile_definition g_profile_TAG_CHKPOINT = {
+actor_process_profile_definition g_profile_TAG_CHKPOINT = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

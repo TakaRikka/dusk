@@ -438,7 +438,7 @@ static actor_method_class l_daTogeRoll_Method = {
     (process_method_func)daTogeRoll_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv6TogeRoll = {
+actor_process_profile_definition g_profile_Obj_Lv6TogeRoll = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

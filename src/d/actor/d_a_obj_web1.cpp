@@ -181,13 +181,13 @@ static int daObj_Web1_IsDelete(obj_web1_class* i_this) {
     return 1;
 }
 
-static u8 data_80D361F8;
+static u8 hio_set;
 
 static int daObj_Web1_Delete(obj_web1_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Obj_web1");
 
     if (i_this->field_0x76c) {
-        data_80D361F8 = 0;
+        hio_set = 0;
     }
 
     dComIfG_Bgsp().Release(i_this->mpBgW);
@@ -250,10 +250,12 @@ static int daObj_Web1_Create(fopAc_ac_c* i_this) {
             {0},
         },
         {
-            {0.0f, 0.0f, 0.0f},
-            50.0f,
-            2.0f,
-        },
+            {
+                {0.0f, 0.0f, 0.0f},
+                50.0f,
+                2.0f,
+            },
+        }
     };
 
     int phase = dComIfG_resLoad(&_this->mPhase, "Obj_web1");
@@ -279,9 +281,9 @@ static int daObj_Web1_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!data_80D361F8) {
+        if (!hio_set) {
             _this->field_0x76c = 1;
-            data_80D361F8 = true;
+            hio_set = true;
             l_HIO.field_0x4 = -1;
         }
 
@@ -313,7 +315,7 @@ static actor_method_class l_daObj_Web1_Method = {
     (process_method_func)daObj_Web1_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_WEB1 = {
+actor_process_profile_definition g_profile_OBJ_WEB1 = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

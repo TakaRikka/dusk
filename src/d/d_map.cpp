@@ -36,7 +36,7 @@ dMap_HIO_c::dMap_HIO_c() {
 }
 
 void dMap_HIO_c::listenPropertyEvent(const JORPropertyEvent* evt) {
-    // NONMATCHING
+    // DEBUG NONMATCHING
     JORReflexible::listenPropertyEvent(evt);
 
     if (dMap_HIO_prm_res_dst_s::m_res != NULL) {
@@ -117,7 +117,7 @@ void dMap_HIO_c::listenPropertyEvent(const JORPropertyEvent* evt) {
 }
 
 void dMap_HIO_list_c::copySrcToHio() {
-    // NONMATCHING
+    // DEBUG NONMATCHING
     if (dMap_HIO_c::m_res_src_p != NULL) {
         dMpath_RGBA_c color;
         for (int i = 0; i < 51; i++) {

@@ -88,9 +88,6 @@ f32 dMsgStringBase_c::getStringLocal(u32 param_1, J2DTextBox* param_2, J2DTextBo
     return lineLength;
 }
 
-/* 802498D8-80249A48 244218 0170+00 1/1 1/1 0/0 .text
- * getStringPageLocal__16dMsgStringBase_cFUlUcUcP10J2DTextBoxP10J2DTextBoxP7JUTFontP10COutFont_cUc
- */
 f32 dMsgStringBase_c::getStringPageLocal(u32 param_1, u8 param_2, u8 param_3,
                                               J2DTextBox* param_4, J2DTextBox* param_5,
                                               JUTFont* param_6, COutFont_c* param_7, u8 param_8) {

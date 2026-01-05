@@ -79,6 +79,6 @@ lbl_462_data_E8 = .data:0x000000E8; // type:object size:0xF data:string
 lbl_462_data_F7 = .data:0x000000F7; // type:object size:0x15 data:string
 lbl_462_data_10C = .data:0x0000010C; // type:object size:0xF data:string
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
-l_HIOInit = .bss:0x00000008; // type:object size:0x1 scope:local data:byte
+hio_set = .bss:0x00000008; // type:object size:0x1 scope:local data:byte
 @93404 = .bss:0x0000000C; // type:object size:0xC scope:local
 l_HIO = .bss:0x00000018; // type:object size:0x8 scope:local data:byte

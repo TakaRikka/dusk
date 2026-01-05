@@ -725,7 +725,7 @@ static actor_method_class daNpc_yamiS_MethodTable = {
     (process_method_func)daNpc_yamiS_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_YAMIS = {
+actor_process_profile_definition g_profile_NPC_YAMIS = {
     fpcLy_CURRENT_e,           // mLayerID
     7,                         // mListID
     fpcPi_CURRENT_e,           // mListPrio

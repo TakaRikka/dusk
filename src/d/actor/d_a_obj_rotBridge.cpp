@@ -260,7 +260,7 @@ static actor_method_class l_daRotBridge_Method = {
     (process_method_func)daRotBridge_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_RotBridge = {
+actor_process_profile_definition g_profile_Obj_RotBridge = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

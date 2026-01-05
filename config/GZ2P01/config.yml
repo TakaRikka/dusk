@@ -14,6 +14,12 @@ force_active: [
 block_relocations:
 - source: .sdata:0x8045256c
 add_relocations:
+- source: extab:0x80005624
+  type: abs
+  target: __dt__26__partial_array_destructorFv
+- source: extab:0x80005644
+  type: abs
+  target: __dt__26__partial_array_destructorFv
 - source: .sdata:0x8045256c
   type: abs
   target: buffer__14mDoMtx_stack_c

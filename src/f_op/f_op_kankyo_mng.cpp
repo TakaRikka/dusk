@@ -7,12 +7,22 @@
 #include "SSystem/SComponent/c_malloc.h"
 #include "d/d_com_inf_game.h"
 
+void dummy(fpcLyIt_JudgeFunc i_createFunc, void* i_this) {
+    fpcM_Search(i_createFunc, i_this);
+}
+
+void fopKyM_IsKy(void* i_this) {
+    fopKy_IsKankyo((fopKyM_prm_class*)i_this);
+}
+
 fopKyM_prm_class* fopKyM_CreateAppend() {
     fopKyM_prm_class* append = (fopKyM_prm_class*)cMl::memalignB(-4, sizeof(fopKyM_prm_class));
 
     if (append != NULL) {
         cLib_memSet(append, 0, sizeof(fopKyM_prm_class));
-        append->scale.set(1.0f, 1.0f, 1.0f);
+        append->scale.x = 1.0f;
+        append->scale.y = 1.0f;
+        append->scale.z = 1.0f;
     }
     return append;
 }
@@ -71,9 +81,7 @@ fpc_ProcID fopKyM_createWpillar(cXyz const* i_pos, f32 scale, int i_param) {
     }
 
     append->pos = *i_pos;
-    append->scale.x = scale;
-    append->scale.y = scale;
-    append->scale.z = scale;
+    append->scale.set(scale, scale, scale);
     append->parameters = i_param;
 
     return fopKyM_Create(PROC_WPILLAR, NULL, append);
@@ -86,9 +94,7 @@ fpc_ProcID fopKyM_createMpillar(cXyz const* i_pos, f32 i_size) {
     };
 
     cXyz scale;
-    scale.x = i_size;
-    scale.y = i_size;
-    scale.z = i_size;
+    scale.setall(i_size);
 
     for (int i = 0; i < 2; i++) {
         dComIfGp_particle_set(m_name[i], i_pos, NULL, &scale);

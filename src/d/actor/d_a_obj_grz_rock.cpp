@@ -161,7 +161,7 @@ static actor_method_class l_daObjGrzRock_Method = {
     (process_method_func)daObjGrzRock_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_GrzRock = {
+actor_process_profile_definition g_profile_Obj_GrzRock = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

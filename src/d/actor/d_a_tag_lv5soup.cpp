@@ -81,7 +81,7 @@ static actor_method_class daTag_Lv5Soup_MethodTable = {
     (process_method_func)daTag_Lv5Soup_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_LV5SOUP = {
+actor_process_profile_definition g_profile_TAG_LV5SOUP = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

@@ -308,12 +308,8 @@ cPhs__Step daObjKshtr_c::phase_0() {
     if (!field_0x619) {
         mHomeAngleZ = home.angle.z;
         mHomeAngleX = home.angle.x;
-        shape_angle.x = 0;
-        current.angle.x = 0;
-        home.angle.x = 0;
-        shape_angle.z = 0;
-        current.angle.z = 0;
-        home.angle.z = 0;
+        home.angle.x = current.angle.x = shape_angle.x = 0;
+        home.angle.z = current.angle.z = shape_angle.z = 0;
         field_0x619 = true;
     }
 
@@ -330,7 +326,8 @@ cPhs__Step daObjKshtr_c::phase_0() {
     #endif
 
     #if DEBUG
-    if (mType >= 6) {
+    int r28 = 5;
+    if (mType > r28) {
         OS_REPORT_ERROR("鍵付き壁ドア：引数０のタイプ指定が不正値です\n"); // Locked wall door: The type specification for argument 0 is invalid
 
         return cPhs_ERROR_e;
@@ -345,7 +342,8 @@ cPhs__Step daObjKshtr_c::phase_0() {
         }
     }
 
-    if (dComIfG_resLoad(&mPhase1, l_arcName[mType]) == cPhs_COMPLEATE_e) {
+    phase = (cPhs__Step)dComIfG_resLoad(&mPhase1, l_arcName[mType]);
+    if (phase == cPhs_COMPLEATE_e) {
         phase = (cPhs__Step)MoveBGCreate(l_arcName[mType], l_dzb[mType], NULL, l_heap_size[mType], NULL);
         if (phase == cPhs_ERROR_e) {
             return phase;
@@ -355,6 +353,7 @@ cPhs__Step daObjKshtr_c::phase_0() {
         OS_REPORT("KSHTR PARAM:0x%x\n", fopAcM_GetParam(this));
         return cPhs_INIT_e;
     }
+    return phase;
 }
 
 cPhs__Step daObjKshtr_c::phase_1() {
@@ -972,7 +971,7 @@ static actor_method_class daObjKshtr_METHODS = {
     (process_method_func)daObjKshtr_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Kshutter = {
+actor_process_profile_definition g_profile_Obj_Kshutter = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

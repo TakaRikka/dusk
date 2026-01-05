@@ -4,7 +4,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JGadget/define.h"
 #include "JSystem/JGadget/search.h"
-#include <iterator.h>
+#include <iterator>
 
 
 namespace JGadget {
@@ -234,7 +234,10 @@ struct TLinkList : TNodeLinkList {
     const_iterator begin() const { return const_iterator(const_cast<TLinkList*>(this)->begin()); }
     iterator end() { return iterator(TNodeLinkList::end()); }
     const_iterator end() const { return const_iterator(const_cast<TLinkList*>(this)->end()); }
-    T& front() { return *begin(); }
+    T& front() {
+        JUT_ASSERT(642, !empty());
+        return *begin();
+    }
     T& back() { JUT_ASSERT(652, !empty()); return *--end(); }
     void pop_front() { erase(TNodeLinkList::begin()); }
     void Push_front(T* element) { Insert(begin(), element); }
@@ -262,7 +265,7 @@ struct TLinkList_factory : public TLinkList<T, I> {
     }
 
     typename TLinkList<T, I>::iterator Erase_destroy(T* param_0) {
-        typename TLinkList<T, I>::iterator spC(Erase(param_0));
+        typename TLinkList<T, I>::iterator spC(this->Erase(param_0));
         Do_destroy(param_0);
         return spC;
     }
@@ -270,7 +273,11 @@ struct TLinkList_factory : public TLinkList<T, I> {
 
 template <typename T, int I>
 TLinkList_factory<T, I>::~TLinkList_factory() {
+#ifdef __MWERKS__
     JGADGET_ASSERTWARN(934, empty());
+#else
+    JGADGET_ASSERTWARN(934, this->empty());
+#endif
 }
 
 template <typename T>

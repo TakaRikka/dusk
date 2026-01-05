@@ -9,7 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include <cmath.h>
+#include <math>
 
 #define ACTION_MODE_WAIT 0
 #define ACTION_MODE_CHASE 1
@@ -43,7 +43,7 @@ enum E_DK_RES_FILE_ID {
     /* 0x1B */ BTK_DK_WAIT,
 };
 
-
+namespace {
 static dCcD_SrcSph cc_dk_src = {
     { // mObjInf
         { 0x0, { { 0, 0, { 0 } }, { (s32)0xd8fbbddf, { 3 } }, { { 0x75 } } } }, // mObj
@@ -73,6 +73,7 @@ static dCcD_SrcSph cc_dk_core_src = {
     },
     { { { 0.0f, 0.0f, 0.0f }, 40.0f, } } // mSphAttr
 };
+}
 
 daE_DK_HIO_c::daE_DK_HIO_c() {
     field_0x4 = -1;
@@ -1080,7 +1081,7 @@ static actor_method_class l_daE_DK_Method = {
     (process_method_func)daE_DK_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_DK = {
+actor_process_profile_definition g_profile_E_DK = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

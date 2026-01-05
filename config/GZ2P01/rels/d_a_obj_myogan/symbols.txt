@@ -29,6 +29,6 @@ g_profile_OBJ_MYOGAN = .data:0x00000020; // type:object size:0x30 scope:global
 __vt__12J3DFrameCtrl = .data:0x00000050; // type:object size:0xC scope:global
 __vt__18daObj_Myogan_HIO_c = .data:0x0000005C; // type:object size:0xC scope:global
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
-lbl_579_bss_8 = .bss:0x00000008; // type:object size:0x1 data:byte
+hio_set = .bss:0x00000008; // type:object size:0x1 scope:local align:1 data:byte
 @3757 = .bss:0x0000000C; // type:object size:0xC scope:local
 l_HIO = .bss:0x00000018; // type:object size:0x10 scope:global data:byte

@@ -22,7 +22,7 @@ static actor_method_class l_daTagGra_Method = {
     (process_method_func)daTagGra_Delete
 };
 
-extern actor_process_profile_definition g_profile_TAG_GRA = {
+actor_process_profile_definition g_profile_TAG_GRA = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

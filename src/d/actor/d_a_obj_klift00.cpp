@@ -96,10 +96,12 @@ static dCcD_SrcCyl l_cc_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        300.0f, // mRadius
-        100.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            300.0f, // mRadius
+            100.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 
 #if DEBUG
@@ -493,7 +495,7 @@ static actor_method_class daObjKLift00_METHODS = {
     (process_method_func)daObjKLift00_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_KLift00 = {
+actor_process_profile_definition g_profile_Obj_KLift00 = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

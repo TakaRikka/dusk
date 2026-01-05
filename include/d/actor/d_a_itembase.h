@@ -5,6 +5,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_a_itembase_static.h"
 #include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_ext.h"
 
 struct daItemBase_data {
     /* 0x00 */ f32 mGravity;

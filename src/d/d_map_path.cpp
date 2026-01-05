@@ -173,7 +173,7 @@ bool dMpath_HIO_file_base_c::readBinaryFile(const char* param_1)  {
     if (file.open(JORFile::EFlags_READ, r26, NULL, NULL, NULL)) {
         s32 r28 = file.getFileSize();
         char* buf = new char[r28];
-        JUT_ASSERT(855, buf != 0);
+        JUT_ASSERT(855, buf != NULL);
         file.readData(buf, r28);
         copyReadBufToData(buf, r28);
         OSReport("write read success!::%6d\n", r28);

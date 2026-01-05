@@ -1,7 +1,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_msg_class.h"
-#include <stdio.h>
+#include <stdio>
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
 #include "d/d_msg_unit.h"
@@ -865,7 +865,7 @@ jmessage_tMeasureProcessor::jmessage_tMeasureProcessor(jmessage_tReference const
 }
 
 void jmessage_tMeasureProcessor::do_begin(void const* pEntry, char const* pszText) {
-    (void)pszText;
+    UNUSED(pszText);
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
 
     pReference->resetCharactor();
@@ -3928,8 +3928,8 @@ jmessage_string_tMeasureProcessor::jmessage_string_tMeasureProcessor(jmessage_st
 }
 
 void jmessage_string_tMeasureProcessor::do_begin(void const* pEntry, char const* pszText) {
-    (void)pEntry;
-    (void)pszText;
+    UNUSED(pEntry);
+    UNUSED(pszText);
     mpReference->setLineCount(0);
     mpReference->resetCharactor();
 }
@@ -4357,9 +4357,6 @@ void jmessage_string_tMeasureProcessor::do_rubyset(void const* i_data, u32 i_siz
     }
 }
 
-/* 80230A08-80230A5C 22B348 0054+00 0/0 1/1 0/0 .text
- * __ct__34jmessage_string_tSequenceProcessorFPC26jmessage_string_tReferenceP24jmessage_string_tControl
- */
 jmessage_string_tSequenceProcessor::jmessage_string_tSequenceProcessor(
     jmessage_string_tReference const* pReference, jmessage_string_tControl* pControl) :
     JMessage::TSequenceProcessor(pReference, pControl),

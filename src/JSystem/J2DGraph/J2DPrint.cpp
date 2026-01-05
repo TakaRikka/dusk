@@ -3,8 +3,8 @@
 #include "JSystem/J2DGraph/J2DPrint.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTFont.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio>
+#include <stdlib>
 
 char* J2DPrint::mStrBuff;
 
@@ -34,9 +34,6 @@ J2DPrint::J2DPrint(JUTFont* pFont, JUtility::TColor charColor, JUtility::TColor 
     private_initiate(pFont, 0.0f, 0.0f, charColor, gradColor, 0, 0xFFFFFFFF, true);
 }
 
-/* 802F4394-802F4420 2EECD4 008C+00 0/0 6/6 0/0 .text
- * __ct__8J2DPrintFP7JUTFontffQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColor
- */
 J2DPrint::J2DPrint(JUTFont* pFont, f32 charSpacing, f32 lineSpacing, JUtility::TColor charColor,
                    JUtility::TColor gradColor, JUtility::TColor blackColor, JUtility::TColor whiteColor) {
     private_initiate(pFont, charSpacing, lineSpacing, charColor, gradColor, blackColor, whiteColor, false);
@@ -50,9 +47,6 @@ void J2DPrint::initiate() {
     }
 }
 
-/* 802F4468-802F4658 2EEDA8 01F0+00 1/1 0/0 0/0 .text
- * private_initiate__8J2DPrintFP7JUTFontffQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorb
- */
 void J2DPrint::private_initiate(JUTFont* pFont, f32 charSpacing, f32 lineSpacing, JUtility::TColor charColor,
                                 JUtility::TColor gradColor, JUtility::TColor blackColor,
                                 JUtility::TColor whiteColor, bool param_7) {
@@ -317,7 +311,7 @@ f32 J2DPrint::parse(const u8* pString, int length, int param_2, u16* param_3,
                 } else {
                     if (param_6) {
                         if (param_3 != NULL) {
-                            mFont->drawChar_scale(mCursorH + (f32)(s16)param_3[someIndex], mCursorV, (s32)mScaleX, (s32)mScaleY, iCharacter, true);
+                            mFont->drawChar_scale(mCursorH + (s16)param_3[someIndex], mCursorV, (s32)mScaleX, (s32)mScaleY, iCharacter, true);
                         } else {
                             mFont->drawChar_scale(mCursorH, mCursorV, (s32)mScaleX, (s32)mScaleY, iCharacter, true);
                         }

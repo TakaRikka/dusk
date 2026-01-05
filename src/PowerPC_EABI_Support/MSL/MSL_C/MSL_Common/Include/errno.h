@@ -1,6 +1,8 @@
 #ifndef MSL_COMMON_SRC_ERRNO_H
 #define MSL_COMMON_SRC_ERRNO_H
 
+#include "global.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

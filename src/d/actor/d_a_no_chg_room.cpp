@@ -156,7 +156,7 @@ static actor_method_class daNocrm_METHODS = {
     (process_method_func)daNocrm_draw,
 };
 
-extern actor_process_profile_definition g_profile_NO_CHG_ROOM = {
+actor_process_profile_definition g_profile_NO_CHG_ROOM = {
     fpcLy_CURRENT_e,
     2,
     fpcPi_CURRENT_e,

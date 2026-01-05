@@ -10,7 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_math.h"
-#include <cmath.h>
+#include <math>
 
 int daB_ZANTM_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
@@ -276,7 +276,7 @@ static actor_method_class l_daB_ZANTM_Method = {
     (process_method_func)daB_ZANTM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_ZANTM = {
+actor_process_profile_definition g_profile_B_ZANTM = {
   fpcLy_CURRENT_e,        // mLayerID
   4,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

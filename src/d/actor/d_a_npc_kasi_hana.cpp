@@ -1591,7 +1591,7 @@ int daNpcKasiHana_c::demo(int param_1) {
             break;
 
         case 1:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = dComIfGp_getEventManager().getMyStaffId(l_myName, NULL, 0);
                 if (staffId != -1) {
@@ -1721,22 +1721,11 @@ int daNpcKasiHana_c::cheer(int param_1) {
                 field_0x1440 = 1;
             }
 
-#if VERSION != VERSION_SHIELD_DEBUG
-            // TODO: gameInfo fake match to force reuse of pointer
-            dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-            if (play->getEvent().runCheck())
-#else
-            if (dComIfGp_event_runCheck())
-#endif
-            {
+            if (dComIfGp_event_runCheck()) {
                 if (eventInfo.checkCommandTalk()) {
-                    if (!dComIfGp_event_chkTalkXY() || dComIfGp_evmng_ChkPresentEnd()) {
+                    if (dComIfGp_event_chkTalkXY() == FALSE || dComIfGp_evmng_ChkPresentEnd()) {
                         mTalked = true;
-#if VERSION != VERSION_SHIELD_DEBUG
-                        play->getEvent().reset();
-#else
                         dComIfGp_event_reset();
-#endif
                     }
                 }
             } else {
@@ -2320,7 +2309,7 @@ static actor_method_class daNpcKasiHana_MethodTable = {
     (process_method_func)daNpcKasiHana_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_KASIHANA = {
+actor_process_profile_definition g_profile_NPC_KASIHANA = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID
   fpcPi_CURRENT_e,            // mListPrio

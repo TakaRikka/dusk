@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _REVOLUTION_IOSTYPES_H_
+#define _REVOLUTION_IOSTYPES_H_
 
 #include <revolution/types.h>
 
@@ -41,3 +42,5 @@ typedef struct {
     IOSCSigDummy dummy;
     IOSCName issuer;
 } IOSCSigRsa2048;
+
+#endif

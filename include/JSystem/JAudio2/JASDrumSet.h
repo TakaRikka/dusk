@@ -32,10 +32,12 @@ struct JASDrumSet : public JASInst {
     void newPercArray(u8, JKRHeap*);
     virtual bool getParam(int, int, JASInstParam*) const;
     void setPerc(int, JASDrumSet::TPerc*);
+    JASDrumSet::TPerc* getPerc(int);
+    JASDrumSet::TPerc* getPerc(int) const;
     virtual u32 getType() const;
     
-    /* 0x4 */ TPerc** field_0x4;
-    /* 0x8 */ u8 field_0x8;
+    /* 0x4 */ TPerc** mPercArray;
+    /* 0x8 */ u8 mPercNumMax;
 };
 
 #endif /* JASDRUMSET_H */

@@ -873,7 +873,3 @@ void* OSGetThreadSpecific(s32 index) {
 
     return NULL;
 }
-
-#include "global.h"
-extern u8 Debug_BBA;
-u8 Debug_BBA ATTRIBUTE_ALIGN(8);

@@ -2,7 +2,7 @@
 
 // don't include header until this "zero" mess is figured out
 // #include "JSystem/JMath/JMATrigonometric.h"
-#include "math.h"
+#include <math>
 #include "global.h"
 
 static f32 dummy() {

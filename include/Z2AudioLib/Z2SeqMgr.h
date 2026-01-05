@@ -45,7 +45,7 @@ struct Z2SoundFader {
         fadeIn(fadeTime);
     }
 
-    u32 getCount() {
+    u32 getCount() const {
         return transition_.remainingSteps_;
     }
 
@@ -53,12 +53,8 @@ struct Z2SoundFader {
         return intensity_;
     }
 
-    f32 getDest() {
-        if (getCount() != 0) {
-            return transition_.targetValue_;
-        } else {
-            return intensity_;
-        }
+    f32 getDest() const {
+        return getCount() != 0 ? transition_.targetValue_ : getIntensity();
     }
 
     void calc() {

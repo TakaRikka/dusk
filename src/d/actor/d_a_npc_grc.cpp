@@ -500,7 +500,7 @@ BOOL daNpc_grC_c::main() {
         attention_info.flags = 0;
     }
 
-    if (!daNpc_grC_Param_c::m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent().isOrderOK()))) {
+    if (!daNpc_grC_Param_c::m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()))) {
         if (mOrderEvtNo != 0) {
             eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
         }
@@ -1066,7 +1066,7 @@ void daNpc_grC_c::doNormalAction(int param_1) {
 BOOL daNpc_grC_c::doEvent() {
     BOOL rv = FALSE;
 
-    if (dComIfGp_event_runCheck() != 0) {
+    if (dComIfGp_event_runCheck()) {
         dEvent_manager_c& eventManager = dComIfGp_getEventManager();
 
         if (!field_0xe51) {
@@ -1451,7 +1451,7 @@ BOOL daNpc_grC_c::talk(void* param_1) {
 
                     if (mItemID != fpcM_ERROR_PROCESS_ID_e) {
                         s16 i_eventID = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);
-                        dComIfGp_getEvent().reset(this);
+                        dComIfGp_getEvent()->reset(this);
                         fopAcM_orderChangeEventId(this, i_eventID, 1, 0xFFFF);
                         field_0x9ec = true;
                         rv = TRUE;
@@ -1547,7 +1547,7 @@ static actor_method_class daNpc_grC_MethodTable = {
     (process_method_func)daNpc_grC_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_GRC = {
+actor_process_profile_definition g_profile_NPC_GRC = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

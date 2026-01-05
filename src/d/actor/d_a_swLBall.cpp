@@ -254,7 +254,7 @@ static actor_method_class l_daSwLBall_Method = {
     NULL,
 };
 
-extern actor_process_profile_definition g_profile_SwLBall = {
+actor_process_profile_definition g_profile_SwLBall = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

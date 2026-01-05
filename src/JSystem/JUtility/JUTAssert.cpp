@@ -4,10 +4,8 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTDirectPrint.h"
-#include "stdio.h"
+#include <stdio>
 #include <dolphin/vi.h>
-
-bool sAssertVisible = true;
 
 namespace JUTAssertion {
 
@@ -36,15 +34,15 @@ u32 flush_subroutine() {
         sMessageLife--;
     }
 
-    if (sMessageLife >= 5) {
-        return sMessageLife;
+    if (sMessageLife < 5) {
+        return 0;
     }
 
-    return 0;
+    return sMessageLife;
 }
 
 void flushMessage() {
-    if (flush_subroutine() && sAssertVisible == true) {
+    if (flush_subroutine() && mVisible == true) {
         JUTDirectPrint* manager = JUTDirectPrint::getManager();
         JUtility::TColor color = manager->getCharColor();
         manager->setCharColor(JUtility::TColor(255, 200, 200, 255));
@@ -55,7 +53,7 @@ void flushMessage() {
 }
 
 void flushMessage_dbPrint() {
-    if (flush_subroutine() && sAssertVisible == true && JUTDbPrint::getManager() != NULL) {
+    if (flush_subroutine() && mVisible == true && JUTDbPrint::getManager() != NULL) {
         JUTFont* font = JUTDbPrint::getManager()->getFont();
         if (font != NULL) {
             u8 tmp = ((VIGetRetraceCount() & 0x3C) << 2) | 0xF;
@@ -75,6 +73,7 @@ void setConfirmMessage(u32 param_1, char* file, int line, bool param_4, const ch
     if (param_4 == 1) {
         return;
     }
+    int r30 = 0;
     u32 r28 = sMessageLife;
     if (r28 == 0 && (param_1 & 1) != 0) {
         sMessageLife = sDisplayTime;
@@ -96,29 +95,30 @@ void showAssert_f_va(u32 device, const char* file, int line, const char* msg, va
         OSReport("%s\n", sMessageString);
     }
 
-    if ((device & 1) && JUTDirectPrint::getManager()) {
-        JUtility::TColor old_color(JUTDirectPrint::getManager()->getCharColor());
-        JUTDirectPrint::getManager()->setCharColor(JUtility::TColor(255, 255, 255, 255));
-        JUTDirectPrint::getManager()->erase(10, 16, 306, 24);
+    if ((device & 1)) {
+        JUTDirectPrint* directPrint = JUTDirectPrint::getManager();
+        if (directPrint) {
+            JUtility::TColor old_color(directPrint->getCharColor());
+            directPrint->setCharColor(JUtility::TColor(255, 255, 255, 255));
+            directPrint->erase(10, 16, 306, 24);
 
-        snprintf(sMessageFileLine, 63, "Failed assertion: %s:%d", file, line);
-        JUTDirectPrint::getManager()->drawString(16, 16, sMessageFileLine);
-        JUTDirectPrint::getManager()->drawString(16, 24, sMessageString);
+            snprintf(sMessageFileLine, 63, "Failed assertion: %s:%d", file, line);
+            directPrint->drawString(16, 16, sMessageFileLine);
+            directPrint->drawString(16, 24, sMessageString);
 
-        JUTDirectPrint::getManager()->setCharColor(old_color);
-        VISetNextFrameBuffer(JUTDirectPrint::getManager()->getFrameBuffer());
-        VIFlush();
-        OSEnableInterrupts();
+            directPrint->setCharColor(old_color);
+            VISetNextFrameBuffer(directPrint->getFrameBuffer());
+            VIFlush();
+            OSEnableInterrupts();
 
-        u32 retrace_count = VIGetRetraceCount();
-        u32 new_count;
-        do {
-            new_count = VIGetRetraceCount();
-        } while (retrace_count == new_count);
+            u32 retrace_count = VIGetRetraceCount();
+            do {
+            } while (retrace_count == VIGetRetraceCount());
 
-        // busy loop for 2 seconds
-        OSTime var1 = OSGetTime();
-        while (OSTicksToMilliseconds(OSGetTime() - var1) < 2000) {
+            // busy loop for 2 seconds
+            OSTime var1 = OSGetTime();
+            while (OSTicksToMilliseconds(OSGetTime() - var1) < 2000) {
+            }
         }
     }
 }
@@ -191,11 +191,15 @@ void setLogMessage_f(u32 device, char* file, int line, const char* msg, ...) {
 }
 
 void setVisible(bool visible) {
-    sAssertVisible = visible;
+    mVisible = visible;
 }
 
 void setMessageCount(int msg_count) {
-    sMessageLife = msg_count <= 0 ? 0 : msg_count;
+    if (msg_count <= 0) {
+        sMessageLife = 0;
+    } else {
+        sMessageLife = msg_count;
+    }
 }
 
 };  // namespace JUTAssertion

@@ -158,7 +158,7 @@ cPhs__Step daNpcShoe_c::Create() {
         mCcCyl.SetTgSPrm(0);
 
         mGndChk = mAcch.m_gnd;
-        mGroundH = mAcch.m_ground_h;
+        mGroundH = mAcch.GetGroundH();
         gravity = mpHIO->m.common.gravity;
 
         setEnvTevColor();
@@ -602,7 +602,7 @@ bool daNpcShoe_c::demo(void* param_0) {
     case 1:
         break;
     case 2:
-        if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+        if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
             dEvent_manager_c& eventManager = dComIfGp_getEventManager();
             s32 staff_id = eventManager.getMyStaffId(l_myName, NULL, 0);
             if (staff_id != -1) {
@@ -674,7 +674,7 @@ BOOL daNpcShoe_c::main() {
     if (mpActionFn != NULL) {
         (this->*mpActionFn)(0);
     }
-    if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk() && field_0xe00 != -1) {
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && field_0xe00 != -1) {
         dComIfGp_event_setItemPartnerId(field_0xe00);
         field_0xe00 = -1;
     }
@@ -742,7 +742,7 @@ static actor_method_class daNpcShoe_MethodTable = {
     (process_method_func)daNpcShoe_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_SHOE = {
+actor_process_profile_definition g_profile_NPC_SHOE = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

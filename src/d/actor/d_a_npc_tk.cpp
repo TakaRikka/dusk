@@ -247,7 +247,7 @@ static s16 m_near_angle;
 
 static fopAc_ac_c* m_near_actor;
 
-static u8 g_isHioChildInitted;
+static u8 hio_set;
 
 static daNPC_TK_HIO_c l_HIO;
 
@@ -1920,7 +1920,7 @@ void daNPC_TK_c::executeBackHanjoDemo() {
 void daNPC_TK_c::executeWolfEvent() {
     mIsExecutingAction = false;
     if (eventInfo.checkCommandDemoAccrpt() != 0) {
-        dComIfGp_getEvent().setSkipProc(this, dEv_defaultSkipProc, 0);
+        dComIfGp_getEvent()->setSkipProc(this, dEv_defaultSkipProc, 0);
         setActionMode(12);
         executePerch();
     } else {
@@ -2896,7 +2896,7 @@ void daNPC_TK_c::action() {
     case 1:
         mIsExecutingAction = false;
         if (eventInfo.checkCommandDemoAccrpt()) {
-            dComIfGp_getEvent().setSkipZev(this, "TAKAYOSE@");
+            dComIfGp_getEvent()->setSkipZev(this, "TAKAYOSE@");
             setActionMode(2);
             executePerch();
         } else {
@@ -3089,7 +3089,7 @@ static int daNPC_TK_IsDelete(daNPC_TK_c* i_this) {
 int daNPC_TK_c::_delete() {
     dComIfG_resDelete(&mPhase, "Npc_tk");
     if (field_0xb40) {
-        g_isHioChildInitted = 0;
+        hio_set = 0;
     }
 
     if (heap != NULL) {
@@ -3194,7 +3194,6 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 }
 
 int daNPC_TK_c::create() {
-    /* 80B0C4D4-80B0C514 0000E0 0040+00 1/1 0/0 0/0 .data            cc_sph_src$8096 */
     static dCcD_SrcSph cc_sph_src = {
         {
             {0x0, {{AT_TYPE_THROW_OBJ, 0x1, 0x1f}, {0x0, 0x0}, 0x69}},  // mObj
@@ -3218,9 +3217,9 @@ int daNPC_TK_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (g_isHioChildInitted == 0) {
+        if (hio_set == 0) {
             field_0xb40 = 1;
-            g_isHioChildInitted = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = mDoHIO_CREATE_CHILD("鷹", &l_HIO);  // hawk
         }
 
@@ -3264,7 +3263,7 @@ static actor_method_class l_daNPC_TK_Method = {
     (process_method_func)daNPC_TK_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_TK = {
+actor_process_profile_definition g_profile_NPC_TK = {
     fpcLy_CURRENT_e,         // mLayerID
     6,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

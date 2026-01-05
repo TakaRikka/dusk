@@ -2,7 +2,7 @@
 
 #include "layout.h"
 
-#include "new.h"
+#include <new>
 
 struct TextureFlipInfo {
     /* 0x00 */ u8 coords[4][2];

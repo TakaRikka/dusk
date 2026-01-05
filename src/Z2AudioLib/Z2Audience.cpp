@@ -778,9 +778,6 @@ u32 Z2Audience::calcDeltaPriority_(f32 param_0, int distVolBit, bool param_2) co
     return mSetting.field_0xac[distVolBit] * (param_0 - mSetting.field_0x3c);
 }
 
-/* 802BDCB0-802BDD00 2B85F0 0050+00 1/1 0/0 0/0 .text
- * calcPitchDoppler___10Z2AudienceCFRCQ29JGeometry8TVec3<f>RCQ29JGeometry8TVec3<f>RCQ29JGeometry8TVec3<f>f
- */
 f32 Z2Audience::calcPitchDoppler_(const JGeometry::TVec3<f32>& param_0,
                                   const JGeometry::TVec3<f32>& param_1,
                                   const JGeometry::TVec3<f32>& param_2, f32 param_3) const {

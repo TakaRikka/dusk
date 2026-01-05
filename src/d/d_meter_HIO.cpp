@@ -3481,7 +3481,7 @@ void dMeter_ringHIO_c::genMessage(JORMContext* mctx) {
 }
 
 BOOL subJOREventCallbackListNode::JORAct(u32 param_1, const char* param_2) {
-    (void)param_1;
+    UNUSED(param_1);
     JORFile file;
     if (file.open(param_2, 1, "", NULL, NULL, NULL)) {
         if (!g_fmapHIO.mpArcFile) {

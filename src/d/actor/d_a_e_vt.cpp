@@ -9,7 +9,7 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "SSystem/SComponent/c_math.h"
 #include "c/c_damagereaction.h"
-#include "cmath.h"
+#include <math>
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
@@ -123,10 +123,12 @@ static dCcD_SrcCyl cc_vt_body_src = {
         {0x0},                                               // mGObjCo
     },                                                       // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        150.0f,              // mRadius
-        158.0f               // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            150.0f,              // mRadius
+            158.0f               // mHeight
+        }  // mCyl
+    }
 };
 
 static dCcD_SrcSph cc_vt_attack_src = {
@@ -204,10 +206,9 @@ daE_VA_HIO_c::daE_VA_HIO_c() {
     mKRegLightA = 210.0f;
 }
 
-/* 807CF4B5 0003+00 data_807CF4B5 None */
 #pragma push
 #pragma force_active on
-static u8 init_hio;
+static u8 hio_set;
 #pragma pop
 
 static daE_VA_HIO_c l_HIO;
@@ -1729,8 +1730,8 @@ void daE_VA_c::executeDemoOp() {
 
     calcTagAngle();
     camera->mCamera.Set(mDemoCamCenter, mDemoCamEye, mDemoCamBank, 0);
-    dComIfGp_getEvent().onSkipFade();
-    dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+    dComIfGp_getEvent()->onSkipFade();
+    dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
 }
 
 void daE_VA_c::executeClearWait() {
@@ -3625,7 +3626,7 @@ int daE_VA_c::_delete() {
     dComIfG_resDelete(&mPhase, "E_VA");
 
     if (mInitHIO) {
-        init_hio = false;
+        hio_set = false;
     }
 
     for (int i = 0; i < 2; i++) {
@@ -3780,8 +3781,8 @@ int daE_VA_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!init_hio) {
-            init_hio = true;
+        if (!hio_set) {
+            hio_set = true;
             mInitHIO = true;
             l_HIO.field_0x04 = -1;
         }
@@ -3901,7 +3902,7 @@ static actor_method_class l_daE_VA_Method = {
     (process_method_func)daE_VA_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_VT = {
+actor_process_profile_definition g_profile_E_VT = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

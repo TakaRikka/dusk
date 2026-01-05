@@ -639,7 +639,7 @@ BOOL daNpc_grO_c::main() {
         attention_info.flags = 0;
     }
 
-    if (!mpHIO->m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent().isOrderOK()))) {
+    if (!mpHIO->m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()))) {
         if (mOrderEvtNo != EVT_NONE) {
             eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
         }
@@ -1289,7 +1289,7 @@ BOOL daNpc_grO_c::doEvent() {
     int evtCutNo = 0;
     BOOL rv = FALSE;
 
-    if (dComIfGp_event_runCheck() != 0) {
+    if (dComIfGp_event_runCheck()) {
         dEvent_manager_c& eventManager = dComIfGp_getEventManager();
 
         if ((eventInfo.checkCommandTalk() || eventInfo.checkCommandDemoAccrpt()) && !mUnkFlag) {
@@ -1672,7 +1672,7 @@ int daNpc_grO_c::talk(void* param_1) {
                         mItemID = fopAcM_createItemForPresentDemo(&current.pos, itemId, 0, -1, -1, NULL, NULL);
                         if (mItemID != fpcM_ERROR_PROCESS_ID_e) {
                             s16 eventIdx = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);
-                            dComIfGp_getEvent().reset(this);
+                            dComIfGp_getEvent()->reset(this);
                             fopAcM_orderChangeEventId(this, eventIdx, 1, 0xFFFF);
                             mUnkFlag = 1;
                             field_0x9ec = true;
@@ -1684,7 +1684,7 @@ int daNpc_grO_c::talk(void* param_1) {
                     // dSv_event_tmp_flag_c::T_0081 - Kakariko Village - For use in fundraiser event completion cutscene
                     daNpcF_chkTmpBit(81)
                 ) {
-                    dComIfGp_getEvent().reset(this);
+                    dComIfGp_getEvent()->reset(this);
                     field_0x9ec = true;
                     mOrderNewEvt = true;
                     mOrderEvtNo = EVT_BOKIN_FINISH;
@@ -1903,7 +1903,7 @@ static actor_method_class daNpc_grO_MethodTable = {
     (process_method_func)daNpc_grO_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_GRO = {
+actor_process_profile_definition g_profile_NPC_GRO = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

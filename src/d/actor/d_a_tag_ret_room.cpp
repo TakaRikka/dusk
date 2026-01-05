@@ -90,7 +90,7 @@ static actor_method_class daTagRetRm_METHODS = {
 
 };
 
-extern actor_process_profile_definition g_profile_Tag_RetRoom = {
+actor_process_profile_definition g_profile_Tag_RetRoom = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

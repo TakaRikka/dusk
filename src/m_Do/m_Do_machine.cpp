@@ -28,6 +28,33 @@
 #include "m_Do/m_Do_main.h"
 #include "DynamicLink.h"
 
+#if !PLATFORM_GCN
+#include "revolution/sc.h"
+#include "revolution/wpad.h"
+#endif
+
+#if PLATFORM_GCN
+#define MAP_FILE_PLATFORM ""
+#define MAP_FOLDER_PLATFORM "/Final"
+#elif PLATFORM_WII
+#define MAP_FILE_PLATFORM "R"
+#define MAP_FOLDER_PLATFORM "/Rfinal"
+#else
+#define MAP_FILE_PLATFORM "R"
+#define MAP_FOLDER_PLATFORM "/RVL"
+#endif
+
+#if DEBUG
+#define MAP_FILE_SUFFIX "D"
+#define MAP_FOLDER_MODE "/Debug"
+#else
+#define MAP_FILE_SUFFIX "F"
+#define MAP_FOLDER_MODE "/Release"
+#endif
+
+#define MAP_FOLDER "/map" MAP_FOLDER_PLATFORM MAP_FOLDER_MODE
+#define MAP_FILE "/" MAP_FILE_PLATFORM "framework" MAP_FILE_SUFFIX ".map"
+
 #if DEBUG
 u8 mDoMch::mDebugFill = true;
 u8 mDoMch::mDebugFillNotUse = 0xDD;
@@ -292,13 +319,16 @@ static const char* myGetHeapTypeByString(JKRHeap* p_heap) {
     case 0:
         return "(Null)";
     default:
-        u32 tmpType = heapType;
-        char* typeStr = (char*)&tmpType;
+        union {
+            char c[4];
+            u32 word;
+        } typeStr;
+        typeStr.word = heapType;
 
-        tmpString[0] = typeStr[0];
-        tmpString[1] = typeStr[1];
-        tmpString[2] = typeStr[2];
-        tmpString[3] = typeStr[3];
+        tmpString[0] = typeStr.c[0];
+        tmpString[1] = typeStr.c[1];
+        tmpString[2] = typeStr.c[2];
+        tmpString[3] = typeStr.c[3];
         tmpString[4] = 0;
         return tmpString;
     }
@@ -319,13 +349,16 @@ static void myMemoryErrorRoutine(void* p_heap, u32 size, int alignment) {
             size, size, alignment, p_heap);
     }
 
-    u32 heapType = heap->getHeapType();
-    u8* tmpString = (u8*)&heapType;
+    union {
+        u8 c[4];
+        u32 word;
+    } heapType;
+    heapType.word = heap->getHeapType();
     if (notSolidHeap) {
         OSReport_Error(
             "FreeSize=%08x TotalFreeSize=%08x HeapType=%08x(%c%c%c%c) HeapSize=%08x %s\n",
-            heap->getFreeSize(), heap->getTotalFreeSize(), heapType, tmpString[0], tmpString[1],
-            tmpString[2], tmpString[3], heap->getHeapSize(), myGetHeapTypeByString(heap));
+            heap->getFreeSize(), heap->getTotalFreeSize(), heapType.word, heapType.c[0], heapType.c[1],
+            heapType.c[2], heapType.c[3], heap->getHeapSize(), myGetHeapTypeByString(heap));
     }
 
     if (heapErrors == 0) {
@@ -350,18 +383,26 @@ static void myMemoryErrorRoutine(void* p_heap, u32 size, int alignment) {
 
 void myHeapCheckRecursive(JKRHeap* p_heap) {
     if (!p_heap->check()) {
-        const char* type = myGetHeapTypeByString(p_heap);
-        OSReport_Error("error in %08x(%s)\n", p_heap, type);
+        OSReport_Error("error in %08x(%s)\n", p_heap, myGetHeapTypeByString(p_heap));
     }
 
-    JSUTree<JKRHeap>* heapTree = &p_heap->getHeapTree();
-    for (JSUTree<JKRHeap>* i = heapTree->getFirstChild(); i != NULL; i = i->getNextChild()) {
+    for (JSUTree<JKRHeap>* i = p_heap->getHeapTree().getFirstChild(); i != NULL; i = i->getNextChild()) {
         myHeapCheckRecursive(i->getObject());
     }
 }
 
 void mDoMch_HeapCheckAll() {
-    myHeapCheckRecursive(JKRHeap::sRootHeap);
+    myHeapCheckRecursive(JKRGetRootHeap());
+#if PLATFORM_WII || PLATFORM_SHIELD
+    myHeapCheckRecursive(JKRGetRootHeap2());
+#endif
+#if DEBUG
+    DummyCheckHeap_check();
+#endif
+}
+
+void mDoMch_HeapFreeFillAll() {
+    myHeapCheckRecursive(JKRGetRootHeap());
 }
 
 static int developKeyCheck(u32 btnTrig, u32 btnHold) {
@@ -396,18 +437,73 @@ static int developKeyCheck(u32 btnTrig, u32 btnHold) {
 }
 
 BOOL mDoMch_IsProgressiveMode() {
-    return OSGetProgressiveMode() == true;
+#if PLATFORM_GCN
+    bool result = OSGetProgressiveMode() == true;
+#else
+    bool result = SCGetProgressiveMode() == true;
+#endif
+    return result;
 }
 
-bool exceptionReadPad(u32* p_btnTrig, u32* p_btnHold) {
-    return JUTException::getManager()->readPad(p_btnTrig, p_btnHold);
+#if !PLATFORM_GCN
+void exceptionNNGCReadPad(u32* p_btnTrig, u32* p_btnHold) {
+    static u32 l_cnvButton[10][2] = {
+        WPAD_BUTTON_MINUS, 0x40,
+        WPAD_BUTTON_PLUS, 0x20,
+        WPAD_BUTTON_HOME, 0x10,
+        WPAD_BUTTON_UP, 0x8,
+        WPAD_BUTTON_DOWN, 0x4,
+        WPAD_BUTTON_LEFT, 0x1,
+        WPAD_BUTTON_RIGHT, 0x2,
+        WPAD_BUTTON_1, 0x100,
+        WPAD_BUTTON_2, 0x200,
+        WPAD_BUTTON_A, 0x1000,
+    };
+    static u32 l_oldButton;
+
+    WPADStatus status;
+    WPADRead(0, &status);
+    *p_btnHold = 0;
+    u32* r29 = l_cnvButton[0];
+    for (u32 i = 0; i < 10; i++) {
+        if (status.button & r29[0]) {
+            *p_btnHold |= r29[1];
+        }
+        r29 += 2;
+    }
+    *p_btnTrig = *p_btnHold & (*p_btnHold ^ l_oldButton);
+    l_oldButton = *p_btnHold;
 }
+#endif
+
+void exceptionReadPad(u32* p_btnTrig, u32* p_btnHold) {
+#if PLATFORM_GCN
+    JUTException::getManager()->readPad(p_btnTrig, p_btnHold);
+#else
+    exceptionNNGCReadPad(p_btnTrig, p_btnHold);
+#endif
+}
+
+void forever() {
+    while (true) {}
+}
+
+#if !PLATFORM_GCN
+void exceptionShutdown() {
+    mDoRst_reset(2, 0, 0);
+    //OSShutdownSystem();
+    forever();
+}
+#endif
 
 void exceptionRestart() {
     mDoRst_reset(0, 0, 0);
+#if PLATFORM_GCN
     OSResetSystem(0, 0, 0);
-    do {
-    } while (true);
+#else
+    //OSRestart(0);
+#endif
+    while (true) {}
 }
 
 void myExceptionCallback(u16, OSContext*, u32, u32) {
@@ -429,9 +525,10 @@ void myExceptionCallback(u16, OSContext*, u32, u32) {
     } else {
         manager->setTraceSuppress(0x80);
         if (mDoMain::developmentMode == 0) {
+#if PLATFORM_GCN
             JUTGamePad pad(JUTGamePad::EPort1);
             manager->setGamePad(&pad);
-
+#endif
             if (manager != NULL) {
                 OSEnableInterrupts();
                 // "Accepting Key input\n"
@@ -440,16 +537,29 @@ void myExceptionCallback(u16, OSContext*, u32, u32) {
                     exceptionReadPad(&btnTrig, &btnHold);
                     developKeyCheck(btnTrig, btnHold);
                     JUTException::waitTime(30);
+#if PLATFORM_GCN
                     if (JUTGamePad::C3ButtonReset::sResetOccurred) {
                         exceptionRestart();
                     }
+#else
+                    if (mDoRst::isShutdown()) {
+                        exceptionShutdown();
+                    }
+                    if (OSGetResetButtonState()) {
+                        // lbl_8074C385 = 1;
+                    } else {
+#if !DEBUG
+                        exceptionRestart();
+#endif
+                    }
+#endif
                 }
                 // "JUTAssertion is visible\n"
                 OSReport("JUTAssertionを可視化しました\n");
                 JUTAssertion::setVisible(true);
                 JUTDbPrint::getManager()->setVisible(true);
-                JFWSystem::getSystemConsole()->setOutput(JUTConsole::OUTPUT_OSREPORT |
-                                                         JUTConsole::OUTPUT_CONSOLE);
+                JUTConsole* console = JFWSystem::getSystemConsole();
+                console->setOutput(JUTConsole::OUTPUT_OSREPORT | JUTConsole::OUTPUT_CONSOLE);
             } else {
                 PPCHalt();
             }
@@ -459,7 +569,7 @@ void myExceptionCallback(u16, OSContext*, u32, u32) {
             JUTException::waitTime(3000);
         }
     }
-    DVDChangeDir("/map/Final/Release");
+    DVDChangeDir(MAP_FOLDER);
     JUTDestroyVideoManager();
     GXSetDrawDoneCallback(NULL);
     VISetBlack(0);
@@ -476,10 +586,14 @@ static void fault_callback_scroll(u16, OSContext* p_context, u32, u32) {
                            *(u32*)(srr0 - 0x8), *(u32*)(srr0 - 0x4), *(u32*)srr0);
     }
 
+#if PLATFORM_GCN
     JUTGamePad pad(JUTGamePad::EPort1);
     manager->setGamePad(&pad);
 
     BOOL padDisabled = manager->isEnablePad() == false;
+#else
+    bool padDisabled = false;
+#endif
     if (!padDisabled) {
         exConsole->print("PUSH START BUTTON TO ADDITIONAL INFOMATION\n");
         exConsole->print("--------------------------------------\n");
@@ -491,10 +605,11 @@ static void fault_callback_scroll(u16, OSContext* p_context, u32, u32) {
         while (true) {
             u32 btnHold, btnTrig;
             exceptionReadPad(&btnTrig, &btnHold);
-
+#if PLATFORM_GCN
             if (JUTGamePad::C3ButtonReset::sResetOccurred) {
                 OSResetSystem(1, 0, 0);
             }
+#endif
 
             bool waitRetrace = false;
             if (btnTrig == PAD_BUTTON_START) {
@@ -504,13 +619,14 @@ static void fault_callback_scroll(u16, OSContext* p_context, u32, u32) {
 
             if (btnTrig == PAD_TRIGGER_Z) {
                 JUTConsole* sysConsole = JFWSystem::getSystemConsole();
-                if (JUTConsoleManager::getManager()->getDirectConsole() != sysConsole) {
+                JUTConsole* directConsole = JUTConsoleManager::getManager()->getDirectConsole();
+                if (directConsole != sysConsole) {
                     exConsole = sysConsole;
-                    exConsole->setFontSize(8.0f, 6.0f);
-                    exConsole->setPosition(8, 32);
-                    exConsole->setHeight(23);
-                    exConsole->setVisible(true);
-                    exConsole->setOutput(JUTConsole::OUTPUT_CONSOLE | JUTConsole::OUTPUT_OSREPORT);
+                    sysConsole->setFontSize(8.0f, 6.0f);
+                    sysConsole->setPosition(8, 32);
+                    sysConsole->setHeight(23);
+                    sysConsole->setVisible(true);
+                    sysConsole->setOutput(JUTConsole::OUTPUT_CONSOLE | JUTConsole::OUTPUT_OSREPORT);
                 } else {
                     exConsole = JUTException::getConsole();
                 }
@@ -531,13 +647,13 @@ static void fault_callback_scroll(u16, OSContext* p_context, u32, u32) {
             if (btnHold == PAD_BUTTON_UP) {
                 exConsole->scroll(holdUpCount < 3 ? -1 : (holdUpCount < 5 ? -2 : (holdUpCount < 7 ? -4 : -8)));
                 waitRetrace = true;
-                holdDownCount = 0;
                 holdUpCount++;
+                holdDownCount = 0;
             } else if (btnHold == PAD_BUTTON_DOWN) {
                 exConsole->scroll(holdDownCount < 3 ? 1 : (holdDownCount < 5 ? 2 : (holdDownCount < 7 ? 4 : 8)));
                 waitRetrace = true;
-                holdUpCount = 0;
                 holdDownCount++;
+                holdUpCount = 0;
             } else {
                 holdUpCount = 0;
                 holdDownCount = 0;
@@ -596,6 +712,27 @@ void my_SysPrintHeap(char const* message, void* start, u32 size) {
     OSReport_System("\x1b[32m%-24s = %08x-%08x size=%d KB\n\x1b[m", message, start,
                     end, size / 1024);
 }
+
+#if DEBUG
+u8 myWarningCount[115];
+
+void myGXVerifyCallback(GXWarningLevel param_1, u32 param_2, const char* param_3) {
+    if (param_2 < ARRAY_SIZE(myWarningCount)) {
+        if (myWarningCount[param_2] >= 255) {
+            return;
+        }
+        if (myWarningCount[param_2] == 0) {
+            static const char* color[] = {"\x1b[34m", "\x1b[41;37m", "\x1b[43;30m", "\x1b[33m"};
+            OSReport("%sGX L%1d, Warning %03d: %s\n\x1b[m", color[param_1], param_1, param_2, param_3);
+            JUTReportConsole_f("GX L%1d, Warning %03d: %s\n", param_1, param_2, param_3);
+        }
+        myWarningCount[param_2]++;
+    } else {
+        OSReport_Warning("GX L%1d, Warning %03d: %s\n", param_1, param_2, param_3);
+        JUTReportConsole_f("GX L%1d, Warning %03d: %s\n", param_1, param_2, param_3);
+    }
+}
+#endif
 
 int mDoMch_Create() {
     if (mDoMain::developmentMode == 0 || !(OSGetConsoleType() & 0x10000000)) {
@@ -813,11 +950,7 @@ int mDoMch_Create() {
     sysConsole->setOutput(JUTConsole::OUTPUT_CONSOLE | JUTConsole::OUTPUT_OSREPORT);
     sysConsole->setPosition(16, 42);
 
-#if DEBUG
-    JUTException::setMapFile("/map/RVL/Debug/RframeworkD.map");
-#else
-    JUTException::appendMapFile("/map/Final/Release/frameworkF.map");
-#endif
+    JUTException::setMapFile(MAP_FOLDER MAP_FILE);
     JUTException::setPreUserCallback(myExceptionCallback);
     JUTException::setPostUserCallback(fault_callback_scroll);
 

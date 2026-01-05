@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _REVOLUTION_IOSRESTYPES_H_
+#define _REVOLUTION_IOSRESTYPES_H_
 
 #include <revolution/types.h>
 
@@ -87,3 +88,5 @@ typedef struct {
         IOSResourceIoctlv ioctlv;
     } args;
 } IOSResourceRequest;
+
+#endif

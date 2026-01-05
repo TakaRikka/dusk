@@ -20,7 +20,7 @@
 #include "d/d_msg_class.h"
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
-#include "cstring.h"
+#include <string>
 
 dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     OS_REPORT("enter dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap *mp_heap)\n");
@@ -1298,9 +1298,6 @@ void dMeter2Draw_c::playOxygenBpkAnimation(J2DAnmColor* i_bpk) {
     }
 }
 
-/* 80213FF0-802140DC 20E930 00EC+00 1/1 0/0 0/0 .text
- * drawPikari__13dMeter2Draw_cFP8CPaneMgrPffQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorfUc
- */
 void dMeter2Draw_c::drawPikari(CPaneMgr* i_pane, f32* i_framep, f32 i_scale,
                                JUtility::TColor i_moyaBlack, JUtility::TColor i_moyaWhite,
                                JUtility::TColor i_moyabsBlack, JUtility::TColor i_moyabsWhite,
@@ -1310,9 +1307,6 @@ void dMeter2Draw_c::drawPikari(CPaneMgr* i_pane, f32* i_framep, f32 i_scale,
                i_moyabsWhite, param_7, param_8);
 }
 
-/* 802140DC-8021462C 20EA1C 0550+00 1/1 6/6 0/0 .text
- * drawPikari__13dMeter2Draw_cFffPffQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorfUc
- */
 void dMeter2Draw_c::drawPikari(f32 i_posX, f32 i_posY, f32* i_framep, f32 i_scale,
                                JUtility::TColor i_moyaBlack, JUtility::TColor i_moyaWhite,
                                JUtility::TColor i_moyabsBlack, JUtility::TColor i_moyabsWhite,
@@ -1385,9 +1379,6 @@ void dMeter2Draw_c::drawPikari(f32 i_posX, f32 i_posY, f32* i_framep, f32 i_scal
     }
 }
 
-/* 8021462C-802147CC 20EF6C 01A0+00 0/0 1/1 0/0 .text
- * drawPikariHakusha__13dMeter2Draw_cFffffQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColor
- */
 void dMeter2Draw_c::drawPikariHakusha(f32 i_posX, f32 i_posY, f32 i_frame, f32 i_scale,
                                       JUtility::TColor i_moyaBlack, JUtility::TColor i_moyaWhite,
                                       JUtility::TColor i_moyabsBlack,

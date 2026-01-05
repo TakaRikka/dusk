@@ -51,13 +51,11 @@ void JUTFader::control() {
 }
 
 void JUTFader::draw() {
-    if (mColor.a == 0) {
-		return;
-	}
-
-	J2DOrthoGraph orthograph;
-	orthograph.setColor(mColor);
-	orthograph.fillBox(mBox);
+    if (mColor.a != 0) {
+        J2DOrthoGraph orthograph;
+        orthograph.setColor(mColor);
+        orthograph.fillBox(mBox);
+    }
 }
 
 bool JUTFader::startFadeIn(int param_0) {

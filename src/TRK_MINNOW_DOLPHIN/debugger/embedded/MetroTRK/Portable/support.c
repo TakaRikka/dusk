@@ -1,7 +1,7 @@
 #include "TRK_MINNOW_DOLPHIN/MetroTRK/Portable/support.h"
 #include "TRK_MINNOW_DOLPHIN/utils/common/MWTrace.h"
 #include "TRK_MINNOW_DOLPHIN/MetroTRK/Portable/msgbuf.h"
-#include <string.h>
+#include <cstring>
 
 DSError TRKSuppAccessFile(u32 file_handle, u8* data, size_t* count, DSIOResult* io_result,
                           BOOL need_reply, BOOL read) {

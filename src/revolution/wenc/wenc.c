@@ -1,5 +1,5 @@
 #include <revolution/wenc.h>
-#include <string.h>
+#include <cstring>
 
 typedef struct {
     s32 nXN;   // size 0x04, offset 0x00

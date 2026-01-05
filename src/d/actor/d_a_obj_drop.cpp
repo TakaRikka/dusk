@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_drop.h"
 #include "SSystem/SComponent/c_math.h"
-#include "cmath.h"
+#include <math>
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_camera.h"
@@ -327,7 +327,7 @@ int daObjDrop_c::modeWait() {
     case 3:
         removeBodyEffect();
 
-        static const s16 target_rel_angle[] = {0xC000, 0x0000, 0x4000};
+        static const s16 target_rel_angle[] = {-0x4000, 0x0000, 0x4000};
         static const s16 target_angle_x[] = {0x0000, 0x2000, 0x0000};
 
         for (int i = 0; i < 3; i++) {
@@ -583,7 +583,7 @@ static actor_method_class l_daObjDrop_Method = {
     (process_method_func)NULL,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Drop = {
+actor_process_profile_definition g_profile_Obj_Drop = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

@@ -93,10 +93,12 @@ void daObjMasterSword_c::initCollision() {
             {0},                             // mGObjCo
         },                                   // mObjInf
         {
-            {current.pos.x, current.pos.y, current.pos.z},  // mCenter
-            18.0f,                                          // mRadius
-            180.0f                                          // mHeight
-        }                                                   // mCyl
+            {
+                {current.pos.x, current.pos.y, current.pos.z},  // mCenter
+                18.0f,                                          // mRadius
+                180.0f                                          // mHeight
+            }                                                   // mCyl
+        }
     };
 
     mCcStts.Init(0xFF, 0xFF, this);
@@ -242,7 +244,7 @@ static actor_method_class l_daObjMasterSword_Method = {
     (process_method_func)daObjMasterSword_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_MasterSword = {
+actor_process_profile_definition g_profile_Obj_MasterSword = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID
   fpcPi_CURRENT_e,            // mListPrio

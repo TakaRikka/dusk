@@ -1,4 +1,4 @@
-#include <string.h>
+#include <cstring>
 
 #include <revolution/base/PPCArch.h>
 #include <revolution/gx.h>

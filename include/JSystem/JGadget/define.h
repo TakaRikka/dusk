@@ -1,7 +1,7 @@
-#ifndef DEFINE_H
-#define DEFINE_H
+#ifndef JGADGET_DEFINE_H
+#define JGADGET_DEFINE_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,11 +25,13 @@ public:
     JGadget_outMessage& operator<<(u32);
     JGadget_outMessage& operator<<(const void*);
 
+    static const int BUFFER_SIZE = 256;
+
 private:
     MessageFunc mMsgFunc;
-    char mBuffer[256];
+    char mBuffer[BUFFER_SIZE];
     char* mWrite_p;
-    char* mFile;
+    const char* mFile;
     int mLine;
 };
 

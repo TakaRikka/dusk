@@ -117,6 +117,7 @@ int daTitle_c::create() {
     field_0x5f9 = 0;
 
     m2DHeap = JKRExpHeap::create(0x8000, mDoExt_getGameHeap(), false);
+    JUT_ASSERT(345, m2DHeap != NULL);
     loadWait_init();
     g_daTitHIO.field_0x4 = -1;
 
@@ -371,7 +372,7 @@ static actor_method_class l_daTitle_Method = {
     (process_method_func)daTitle_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TITLE = {
+actor_process_profile_definition g_profile_TITLE = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

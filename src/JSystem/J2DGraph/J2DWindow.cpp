@@ -1,6 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J2DGraph/J2DWindow.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "JSystem/JUtility/JUTPalette.h"
 #include "JSystem/JUtility/JUTResource.h"
@@ -144,6 +145,43 @@ J2DWindow::J2DWindow(J2DPane* param_0, JSURandomInputStream* param_1, J2DMateria
     initinfo2();
 }
 
+J2DWindow::J2DWindow(u64 param_0, const JGeometry::TBox2<f32>& param_1, const char* param_2, J2DTextureBase param_3, const ResTLUT* param_4) :
+    J2DPane(param_0, param_1),
+    field_0x100(NULL),
+    field_0x104(NULL),
+    field_0x108(NULL),
+    field_0x10c(NULL),
+    field_0x110(NULL),
+    mPalette(NULL) {
+    const ResTIMG* r30 = (const ResTIMG*)J2DScreen::getNameResource(param_2);
+    initiate(r30, r30, r30, r30, param_4, convertMirror(param_3), param_1);
+}
+
+void J2DWindow::initiate(const ResTIMG* param_0, const ResTIMG* param_1, const ResTIMG* param_2, const ResTIMG* param_3, const ResTLUT* param_4, J2DWindowMirror param_5, const JGeometry::TBox2<f32>& param_6) {
+    if (param_0) {
+        field_0x100 = new JUTTexture(param_0, 0);
+    }
+    if (param_1) {
+        field_0x104 = new JUTTexture(param_1, 0);
+    }
+    if (param_2) {
+        field_0x108 = new JUTTexture(param_2, 0);
+    }
+    if (param_3) {
+        field_0x10c = new JUTTexture(param_3, 0);
+    }
+    if (param_4) {
+        mPalette = new JUTPalette(GX_TLUT0, const_cast<ResTLUT*>(param_4));
+    }
+    field_0x144 = param_5;
+    if (field_0x100 && field_0x104 && field_0x108 && field_0x10c) {
+        field_0x114.set(field_0x100->getWidth(), field_0x100->getHeight(), param_6.getWidth() - field_0x104->getWidth(), param_6.getHeight() - field_0x108->getHeight());
+    } else {
+        field_0x114.set(0.0f, 0.0f, param_6.getWidth(), param_6.getHeight());
+    }
+    initinfo();
+}
+
 void J2DWindow::private_readStream(J2DPane* param_0, JSURandomInputStream* param_1,
                                    JKRArchive* param_2) {
     s32 local_188 = param_1->getPosition();
@@ -183,7 +221,7 @@ void J2DWindow::private_readStream(J2DPane* param_0, JSURandomInputStream* param
     field_0x12C.set(param_1->read32b());
     field_0x130.set(param_1->read32b());
     field_0x134.set(param_1->read32b());
-    r27 -= 14;
+    r27 -= u8(14);
     field_0x110 = NULL;
     if (r27) {
         timg = (ResTIMG*)getPointer(param_1, 'TIMG', param_2);
@@ -200,8 +238,17 @@ void J2DWindow::private_readStream(J2DPane* param_0, JSURandomInputStream* param
     }
     if (r27) {
         mWhite = JUtility::TColor(param_1->readU32());
+        r27--;
     }
     param_1->seek(local_188 + local_180[1], JSUStreamSeekFrom_SET);
+    initinfo2();
+}
+
+void J2DWindow::initinfo() {
+    mKind = 'WIN1';
+    setContentsColor(JUtility::TColor(0xffffffff));
+    mBlack = JUtility::TColor(0);
+    mWhite = JUtility::TColor(0xffffffff);
     initinfo2();
 }
 
@@ -227,6 +274,25 @@ void J2DWindow::initinfo2() {
     if (*field_0x108 != *r30) {
         field_0x145 |= 4;
     }
+}
+
+J2DWindowMirror J2DWindow::convertMirror(J2DTextureBase texBase) {
+    J2DWindowMirror winMirror = WINDOWMIRROR_39;
+    switch (texBase) {
+    case TEXTUREBASE_0:
+        winMirror = WINDOWMIRROR_39;
+        break;
+    case TEXTUREBASE_1:
+        winMirror = WINDOWMIRROR_141;
+        break;
+    case TEXTUREBASE_2:
+        winMirror = WINDOWMIRROR_114;
+        break;
+    case TEXTUREBASE_3:
+        winMirror = WINDOWMIRROR_216;
+        break;
+    }
+    return winMirror;
 }
 
 J2DWindow::~J2DWindow() {
@@ -372,9 +438,6 @@ void J2DWindow::resize(f32 param_0, f32 param_1) {
     }
 }
 
-/* 802FB12C-802FB1D8 2F5A6C 00AC+00 1/1 0/0 0/0 .text
- * setContentsColor__9J2DWindowFQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColor
- */
 void J2DWindow::setContentsColor(JUtility::TColor param_0, JUtility::TColor param_1,
                                  JUtility::TColor param_2, JUtility::TColor param_3) {
     field_0x128.set(param_0);
@@ -488,10 +551,27 @@ void J2DWindow::drawFrameTexture(JUTTexture* param_0, f32 param_1, f32 param_2, 
 
 void J2DWindow::drawFrameTexture(JUTTexture* param_0, f32 param_1, f32 param_2, bool param_3,
                                  bool param_4, bool param_5) {
-    u16 r31 = param_4 ? u16(0x8000) : u16(0);
-    u16 r30 = param_3 ? u16(0x8000) : u16(0);
-    u16 r29 = param_4 ? u16(0) : u16(0x8000);
-    u16 r28 = param_3 ? u16(0) : u16(0x8000);
+    u16 r31, r30, r29, r28;
+    if (param_4) {
+        r31 = 0x8000;
+    } else {
+        r31 = 0;
+    }
+    if (param_3) {
+        r30 = 0x8000;
+    } else {
+        r30 = 0;
+    }
+    if (param_4) {
+        r29 = 0;
+    } else {
+        r29 = 0x8000;
+    }
+    if (param_3) {
+        r28 = 0;
+    } else {
+        r28 = 0x8000;
+    }
     drawFrameTexture(param_0, param_1, param_2, param_0->getWidth(), param_0->getHeight(), r28, r29,
                      r30, r31, param_5);
 }
@@ -575,11 +655,7 @@ void J2DWindow::setTevMode(JUTTexture* param_0, JUtility::TColor param_1,
 }
 
 JUTTexture* J2DWindow::getFrameTexture(u8 param_0, u8 param_1) const {
-    JUTTexture* tmp[4] = {NULL, NULL, NULL, NULL};
-    tmp[0] = field_0x100;
-    tmp[1] = field_0x104;
-    tmp[2] = field_0x108;
-    tmp[3] = field_0x10c;
+    JUTTexture* tmp[4] = {field_0x100, field_0x104, field_0x108, field_0x10c};
     if (param_0 >= 4 || param_1 != 0) {
         return NULL;
     }
@@ -587,12 +663,7 @@ JUTTexture* J2DWindow::getFrameTexture(u8 param_0, u8 param_1) const {
 }
 
 bool J2DWindow::isUsed(ResTIMG const* param_0) {
-    JUTTexture* tmp[5] = {NULL, NULL, NULL, NULL, NULL};
-    tmp[0] = field_0x100;
-    tmp[1] = field_0x104;
-    tmp[2] = field_0x108;
-    tmp[3] = field_0x10c;
-    tmp[4] = field_0x110;
+    JUTTexture* tmp[5] = {field_0x100, field_0x104, field_0x108, field_0x10c, field_0x110};
     for (u8 i = 0; i < 5; i++) {
         if (tmp[i] && tmp[i]->getTexInfo() == param_0) {
             return true;

@@ -7,8 +7,10 @@
 #include "JSystem/JKernel/JKRDvdFile.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include "math.h"
-#include "string.h"
+#include <math>
+#include <string>
+
+JKRAramArchive::JKRAramArchive() {}
 
 JKRAramArchive::JKRAramArchive(s32 entryNumber, JKRArchive::EMountDirection mountDirection)
     : JKRArchive(entryNumber, MOUNT_ARAM) {
@@ -28,10 +30,11 @@ JKRAramArchive::~JKRAramArchive() {
     if (mIsMounted == true) {
         if (mArcInfoBlock != NULL) {
             SDIFileEntry* entry = mFiles;
-            for (int i = 0; i < mArcInfoBlock->num_file_entries; entry++, i++) {
+            for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
                 if (entry->data != NULL) {
                     JKRFreeToHeap(mHeap, entry->data);
                 }
+                entry++;
             }
 
             JKRFreeToHeap(mHeap, mArcInfoBlock);
@@ -56,8 +59,42 @@ JKRAramArchive::~JKRAramArchive() {
     }
 }
 
-inline u32 alignNext(u32 var, u32 align) {
-    return (var + align - 1) & ~(align - 1);
+void JKRAramArchive::fixedInit(s32 entryNumber, JKRArchive::EMountDirection mountDirection) {
+    mIsMounted = false;
+    mMountDirection = mountDirection;
+    mMountMode = 2;
+    mMountCount = 1;
+    field_0x58 = 2;
+    mHeap = JKRHeap::getCurrentHeap();
+    mEntryNum = entryNumber;
+    if (sCurrentVolume == NULL) {
+        sCurrentVolume = this;
+        sCurrentDirID = 0;
+    }
+}
+
+BOOL JKRAramArchive::mountFixed(s32 entryNumber, JKRArchive::EMountDirection mountDirection) {
+    if (entryNumber < 0) {
+        return FALSE;
+    }
+    if (check_mount_already(entryNumber, JKRGetCurrentHeap())) {
+        return FALSE;
+    }
+    fixedInit(entryNumber, mountDirection);
+    if (!open(entryNumber)) {
+        return FALSE;
+    }
+    mVolumeType = 'RARC';
+    mVolumeName = mStringTable + mNodes->name_offset;
+    sVolumeList.prepend(&mFileLoaderLink);
+    mIsMounted = true;
+    return TRUE;
+}
+
+static void dummy() {
+    OS_REPORT(__FILE__);
+    OS_REPORT("isMounted()");
+    OS_REPORT("mMountCount == 1");
 }
 
 bool JKRAramArchive::open(s32 entryNum) {
@@ -76,7 +113,8 @@ bool JKRAramArchive::open(s32 entryNum) {
 
     // NOTE: a different struct is used here for sure, unfortunately i can't get any hits on this
     // address, so gonna leave it like this for now
-    SArcHeader* mem = (SArcHeader*)JKRAllocFromSysHeap(32, -32);
+    SArcHeader* mem = NULL;
+    mem = (SArcHeader*)JKRAllocFromSysHeap(32, -32);
     if (mem == NULL) {
         mMountMode = 0;
     } else {
@@ -104,7 +142,7 @@ bool JKRAramArchive::open(s32 entryNum) {
             for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
                 u8 flag = fileEntry->type_flags_and_name_offset >> 24;
                 if ((flag & 1)) {
-                    compressedFiles |= (flag & JKRARCHIVE_ATTR_COMPRESSION);
+                    compressedFiles |= u8(flag & JKRARCHIVE_ATTR_COMPRESSION);
                 }
                 fileEntry++;
             }
@@ -160,7 +198,7 @@ void* JKRAramArchive::fetchResource(SDIFileEntry* pEntry, u32* pOutSize) {
         pOutSize = &outSize;
     }
 
-    JKRCompression compression = JKRConvertAttrToCompressionType(pEntry->getFlags());
+    JKRCompression compression = JKRConvertAttrToCompressionType(u8(pEntry->type_flags_and_name_offset >> 24));
     if (pEntry->data == NULL) {
         u32 size = JKRAramArchive::fetchResource_subroutine(
             pEntry->data_offset + mBlock->getAddress(), pEntry->data_size, mHeap, compression,
@@ -194,7 +232,7 @@ void* JKRAramArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* 
         size = bufferSize;
     }
 
-    JKRCompression compression = JKRConvertAttrToCompressionType(pEntry->getFlags());
+    JKRCompression compression = JKRConvertAttrToCompressionType(u8(pEntry->type_flags_and_name_offset >> 24));
     if (pEntry->data == NULL) {
         bufferSize = (s32)ALIGN_PREV(bufferSize, 0x20);
         size = JKRAramArchive::fetchResource_subroutine(pEntry->data_offset + mBlock->getAddress(),
@@ -228,12 +266,13 @@ u32 JKRAramArchive::getAramAddress_Entry(SDIFileEntry* pEntry) {
 }
 
 u32 JKRAramArchive::getAramAddress(char const* name) {
-    return JKRAramArchive::getAramAddress_Entry(this->findFsResource(name, 0));
+    SDIFileEntry* entry = this->findFsResource(name, 0);
+    return JKRAramArchive::getAramAddress_Entry(entry);
 }
 
 u32 JKRAramArchive::fetchResource_subroutine(u32 srcAram, u32 srcLength, u8* dst, u32 dstLength,
                                              int compression) {
-    JUT_ASSERT(628, (srcAram & 0x1f) == 0);
+    JUT_ASSERT(628, ( srcAram & 0x1f ) == 0);
     u32 outLen;
     u32 srcSize = ALIGN_NEXT(srcLength, 0x20);
     u32 dstSize = ALIGN_PREV(dstLength, 0x20);
@@ -299,7 +338,8 @@ u32 JKRAramArchive::getExpandedResSize(const void* ptr) const {
         return 0xFFFFFFFF;
     }
 
-    if (entry->getCompressFlag() == 0) {
+    u8 flags = entry->type_flags_and_name_offset >> 24;
+    if ((flags & 4) == 0) {
         return this->getResSize(ptr);
     }
 
@@ -312,8 +352,8 @@ u32 JKRAramArchive::getExpandedResSize(const void* ptr) const {
     u8* buf = (u8*)ALIGN_PREV((s32)&tmpBuf[0x1F], 0x20);
     JKRAramToMainRam(entry->data_offset + mBlock->getAddress(), buf, 0x20, EXPAND_SWITCH_UNKNOWN0,
                      0, NULL, -1, NULL);
-    expandSize = JKRDecompExpandSize(buf);
+    u32 expandSize2 = JKRDecompExpandSize(buf);
     // ??? casting away const?
-    ((JKRArchive*)this)->setExpandSize(entry, expandSize);
-    return expandSize;
+    ((JKRArchive*)this)->setExpandSize(entry, expandSize2);
+    return expandSize2;
 }

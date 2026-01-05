@@ -349,8 +349,6 @@ daTagEscape_c* daNpcKasiKyu_c::mTargetTag;
 
 f32 daNpcKasiKyu_c::mTargetTagDist;
 
-/* 80A26068 0002+00 data_80A26068 mWolfAngle__14daNpcKasiKyu_c */
-/* 80A2606A 0002+00 data_80A2606A None */
 s16 daNpcKasiKyu_c::mWolfAngle;
 
 BOOL daNpcKasiKyu_c::main() {
@@ -726,6 +724,7 @@ BOOL daNpcKasiKyu_c::chkFindPlayer() {
 }
 
 int daNpcKasiKyu_c::wait(int param_1) {
+    dComIfG_play_c* play;
     switch (mMode) {
         case -1:
             break;
@@ -772,24 +771,13 @@ int daNpcKasiKyu_c::wait(int param_1) {
                 }
             }
 
-#if VERSION != VERSION_SHIELD_DEBUG
-            // TODO: gameInfo fake match to force reuse of pointer
-            dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-            if (play->getEvent().runCheck())
-#else
-            if (dComIfGp_event_runCheck())
-#endif
-            {
+            if (dComIfGp_event_runCheck()) {
                 if (eventInfo.checkCommandTalk()) {
-                    if (!dComIfGp_event_chkTalkXY() || dComIfGp_evmng_ChkPresentEnd()) {
+                    if (dComIfGp_event_chkTalkXY() == FALSE || dComIfGp_evmng_ChkPresentEnd()) {
                         OS_REPORT("------------------kyu talk reset!!\n");
 
                         mTalked = true;
-#if VERSION != VERSION_SHIELD_DEBUG
-                        play->getEvent().reset();
-#else
                         dComIfGp_event_reset();
-#endif
                     }
                 }
             } else {
@@ -1336,22 +1324,11 @@ int daNpcKasiKyu_c::cheer(int param_1) {
             current.angle.y = mCurAngle.y;
             shape_angle.y = mCurAngle.y;
 
-#if VERSION != VERSION_SHIELD_DEBUG
-        // TODO: gameInfo fake match to force reuse of pointer
-            dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-            if (play->getEvent().runCheck())
-#else
-            if (dComIfGp_event_runCheck())
-#endif
-            {
+            if (dComIfGp_event_runCheck()) {
                 if (eventInfo.checkCommandTalk()) {
-                    if (!dComIfGp_event_chkTalkXY() || dComIfGp_evmng_ChkPresentEnd()) {
+                    if (dComIfGp_event_chkTalkXY() == FALSE || dComIfGp_evmng_ChkPresentEnd()) {
                         mTalked = true;
-#if VERSION != VERSION_SHIELD_DEBUG
-                        play->getEvent().reset();
-#else
                         dComIfGp_event_reset();
-#endif
                     }
                 }
             } else {
@@ -1426,7 +1403,7 @@ static actor_method_class daNpcKasiKyu_MethodTable = {
     (process_method_func)daNpcKasiKyu_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_KASIKYU = {
+actor_process_profile_definition g_profile_NPC_KASIKYU = {
   fpcLy_CURRENT_e,           // mLayerID
   7,                         // mListID
   fpcPi_CURRENT_e,           // mListPrio

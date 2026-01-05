@@ -1,6 +1,6 @@
 #include <revolution.h>
 #include <revolution/mtx.h>
-#include <math.h>
+#include <sdk_math.h>
 
 void C_MTXMultVec(const Mtx m, const Vec* src, Vec* dst) {
     Vec vTmp;

@@ -6,32 +6,33 @@
 
 #include "JSystem/J2DGraph/J2DTevs.h"
 #include "JSystem/J2DGraph/J2DMatBlock.h"
-#include "math.h"
+#include <math>
 #include "dolphin/gx.h"
 
 void J2DTexMtx::load(u32 mtxIdx) {
-    GXLoadTexMtxImm(mTexMtx, mtxIdx * 3 + GX_TEXMTX0, mInfo.getTexMtxType());
+    GXLoadTexMtxImm(mTexMtx, mtxIdx * 3 + GX_TEXMTX0, (GXTexMtxType)mInfo.mTexMtxType);
 }
 
 void J2DTexMtx::calc() {
-    if (mInfo.mTexMtxDCC == J2DTexMtxInfo::DCC_NONE) {
+    u32 dcc = mInfo.mTexMtxDCC;
+    if (dcc == J2DTexMtxInfo::DCC_NONE) {
         getTextureMtx(mInfo.mTexSRTInfo, mInfo.mCenter, mTexMtx);
-    } else if (mInfo.mTexMtxDCC == J2DTexMtxInfo::DCC_MAYA) {
+    } else if (dcc == J2DTexMtxInfo::DCC_MAYA) {
         getTextureMtxMaya(mInfo.mTexSRTInfo, mTexMtx);
     }
 }
 
 void J2DTexMtx::getTextureMtx(J2DTextureSRTInfo const& param_0, Vec param_1, Mtx param_2) {
     float f31 = (param_0.mRotationDeg * M_PI) / 180.0f;
-    param_2[0][0] = param_0.mScaleX * i_cosf(f31);
-    param_2[0][1] = -param_0.mScaleX * i_sinf(f31);
+    param_2[0][0] = param_0.mScaleX * cosf(f31);
+    param_2[0][1] = -param_0.mScaleX * sinf(f31);
     param_2[0][2] = 0.0f;
-    param_2[0][3] = -param_0.mScaleX * i_cosf(f31) * param_1.x + param_1.y * (param_0.mScaleX * i_sinf(f31)) +
+    param_2[0][3] = -param_0.mScaleX * cosf(f31) * param_1.x + param_1.y * (param_0.mScaleX * sinf(f31)) +
                     param_1.x + param_0.mTranslationX;
-    param_2[1][0] = param_0.mScaleY * i_sinf(f31);
-    param_2[1][1] = param_0.mScaleY * i_cosf(f31);
+    param_2[1][0] = param_0.mScaleY * sinf(f31);
+    param_2[1][1] = param_0.mScaleY * cosf(f31);
     param_2[1][2] = 0.0f;
-    param_2[1][3] = -param_0.mScaleY * i_sinf(f31) * param_1.x - param_1.y * (param_0.mScaleY * i_cosf(f31)) +
+    param_2[1][3] = -param_0.mScaleY * sinf(f31) * param_1.x - param_1.y * (param_0.mScaleY * cosf(f31)) +
                     param_1.y + param_0.mTranslationY;
     param_2[2][0] = 0.0f;
     param_2[2][1] = 0.0f;
@@ -41,16 +42,16 @@ void J2DTexMtx::getTextureMtx(J2DTextureSRTInfo const& param_0, Vec param_1, Mtx
 
 void J2DTexMtx::getTextureMtxMaya(J2DTextureSRTInfo const& param_0, Mtx param_1) {
     float f31 = (param_0.mRotationDeg * M_PI) / 180.0f;
-    param_1[0][0] = param_0.mScaleX * i_cosf(f31);
-    param_1[0][1] = param_0.mScaleY * i_sinf(f31);
+    param_1[0][0] = param_0.mScaleX * cosf(f31);
+    param_1[0][1] = param_0.mScaleY * sinf(f31);
     param_1[0][2] = 0.0f;
-    param_1[0][3] = (param_0.mTranslationX - 0.5f) * i_cosf(f31) -
-                    (param_0.mTranslationY - 0.5f + param_0.mScaleY) * i_sinf(f31) + 0.5f;
-    param_1[1][0] = -param_0.mScaleX * i_sinf(f31);
-    param_1[1][1] = param_0.mScaleY * i_cosf(f31);
+    param_1[0][3] = (param_0.mTranslationX - 0.5f) * cosf(f31) -
+                    (param_0.mTranslationY - 0.5f + param_0.mScaleY) * sinf(f31) + 0.5f;
+    param_1[1][0] = -param_0.mScaleX * sinf(f31);
+    param_1[1][1] = param_0.mScaleY * cosf(f31);
     param_1[1][2] = 0.0f;
-    param_1[1][3] = -(param_0.mTranslationX - 0.5f) * i_sinf(f31) -
-                    (param_0.mTranslationY - 0.5f + param_0.mScaleY) * i_cosf(f31) + 0.5f;
+    param_1[1][3] = -(param_0.mTranslationX - 0.5f) * sinf(f31) -
+                    (param_0.mTranslationY - 0.5f + param_0.mScaleY) * cosf(f31) + 0.5f;
     param_1[2][0] = 0.0f;
     param_1[2][1] = 0.0f;
     param_1[2][2] = 1.0f;
@@ -58,8 +59,8 @@ void J2DTexMtx::getTextureMtxMaya(J2DTextureSRTInfo const& param_0, Mtx param_1)
 }
 
 void J2DIndTevStage::load(u8 tevStage) {
-    GXSetTevIndirect((GXTevStageID)tevStage, getIndStage(), getIndFormat(), getBiasSel(),
-                     getMtxSel(), getWrapS(), getWrapT(), getPrev(), getLod(), getAlphaSel());
+    GXSetTevIndirect((GXTevStageID)tevStage, (GXIndTexStageID)getIndStage(), (GXIndTexFormat)getIndFormat(), (GXIndTexBiasSel)getBiasSel(),
+                     (GXIndTexMtxID)getMtxSel(), (GXIndTexWrap)getWrapS(), (GXIndTexWrap)getWrapT(), (GXBool)getPrev(), (GXBool)getLod(), (GXIndTexAlphaSel)getAlphaSel());
 }
 
 void J2DIndTexMtx::load(u8 indTexMtx) {
@@ -68,11 +69,11 @@ void J2DIndTexMtx::load(u8 indTexMtx) {
 }
 
 void J2DIndTexCoordScale::load(u8 indTexStage) {
-    GXSetIndTexCoordScale((GXIndTexStageID)indTexStage, mInfo.getScaleS(), mInfo.getScaleT());
+    GXSetIndTexCoordScale((GXIndTexStageID)indTexStage, (GXIndTexScale)mInfo.mScaleS, (GXIndTexScale)mInfo.mScaleT);
 }
 
 void J2DIndTexOrder::load(u8 indTexStage) {
-    GXSetIndTexOrder((GXIndTexStageID)indTexStage, mInfo.getTexCoordID(), mInfo.getTexMapID());
+    GXSetIndTexOrder((GXIndTexStageID)indTexStage, (GXTexCoordID)mInfo.mTexCoordID, (GXTexMapID)mInfo.mTexMapID);
 }
 
 static void dummyVirtual(J2DTevBlock* block, J2DIndBlock* indBlock) {
@@ -107,48 +108,48 @@ J2DTexMtxInfo const j2dDefaultTexMtxInfo = {1,    1,    255,  255,  0.5f, 0.5f,
 
 J2DIndTexMtxInfo const j2dDefaultIndTexMtxInfo = {{0.5f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f}, 1};
 
-extern J2DTevStageInfo const j2dDefaultTevStageInfo = {
+J2DTevStageInfo const j2dDefaultTevStageInfo = {
     4,          GX_CC_RASC,    GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV,   GX_TEV_ADD,
     GX_TB_ZERO, GX_CS_SCALE_1, 1,          GX_TEVPREV, GX_CA_RASA,    GX_CA_ZERO,
     GX_CA_ZERO, GX_CA_APREV,   GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1,
     GX_TEVPREV};
 
-extern const J2DIndTevStageInfo j2dDefaultIndTevStageInfo = {
+const J2DIndTevStageInfo j2dDefaultIndTevStageInfo = {
     GX_INDTEXSTAGE0, GX_ITB_NONE, GX_ITB_NONE, GX_ITM_OFF,  GX_ITW_OFF,
     GX_ITW_OFF,      0,           0,           GX_ITBA_OFF,
 };
 
-extern const GXColor j2dDefaultColInfo = {255, 255, 255, 255};
+const GXColor j2dDefaultColInfo = {255, 255, 255, 255};
 
-extern const J2DTevOrderInfo j2dDefaultTevOrderInfoNull = {
+const J2DTevOrderInfo j2dDefaultTevOrderInfoNull = {
     GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL, 0};
 
-extern const J2DIndTexOrderInfo j2dDefaultIndTexOrderNull = {
+const J2DIndTexOrderInfo j2dDefaultIndTexOrderNull = {
     GX_TEXCOORD_NULL,
     GX_TEXMAP_NULL,
 };
 
-extern const GXColorS10 j2dDefaultTevColor = {255, 255, 255, 255};
+const GXColorS10 j2dDefaultTevColor = {255, 255, 255, 255};
 
-extern const J2DIndTexCoordScaleInfo j2dDefaultIndTexCoordScaleInfo = {
+const J2DIndTexCoordScaleInfo j2dDefaultIndTexCoordScaleInfo = {
     GX_ITS_1,
     GX_ITS_1,
 };
 
-extern const GXColor j2dDefaultTevKColor = {255, 255, 255, 255};
+const GXColor j2dDefaultTevKColor = {255, 255, 255, 255};
 
-extern const J2DTevSwapModeInfo j2dDefaultTevSwapMode = {GX_TEV_SWAP0, GX_TEV_SWAP0, 0, 0};
+const J2DTevSwapModeInfo j2dDefaultTevSwapMode = {GX_TEV_SWAP0, GX_TEV_SWAP0, 0, 0};
 
-extern const J2DTevSwapModeTableInfo j2dDefaultTevSwapModeTable = {
+const J2DTevSwapModeTableInfo j2dDefaultTevSwapModeTable = {
     GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA};
 
-extern const J2DBlendInfo j2dDefaultBlendInfo = {GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA,
+const J2DBlendInfo j2dDefaultBlendInfo = {GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA,
                                                  GX_LO_NOOP};
 
-extern const u8 j2dDefaultPEBlockDither = 0;
+const u8 j2dDefaultPEBlockDither = 0;
 
-extern const J2DColorChanInfo j2dDefaultColorChanInfo = {0, 3, 0, 0};
+const J2DColorChanInfo j2dDefaultColorChanInfo = {0, 3, 0, 0};
 
-extern const u8 j2dDefaultTevSwapTableID = 0x1B;
+const u8 j2dDefaultTevSwapTableID = 0x1B;
 
-extern const u16 j2dDefaultAlphaCmp = 0x00E7;
+const u16 j2dDefaultAlphaCmp = 0x00E7;

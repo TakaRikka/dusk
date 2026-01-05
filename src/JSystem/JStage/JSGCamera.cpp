@@ -1,7 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JStage/JSGCamera.h"
-#include "limits.h"
+#include <limits>
 
 JStage::TCamera::~TCamera() {}
 

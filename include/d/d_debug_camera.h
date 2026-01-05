@@ -24,7 +24,7 @@ public:
     /* 0x1C */ f32 mBank;
     struct {
         /* 0x20 */ fpc_ProcID id;
-        /* 0x24 */ char name[8];
+        /* 0x24 */ char name[dStage_NAME_LENGTH];
     } mActorInfo;
     /* 0x2C */ int mAction;
     /* 0x30 */ int mTimer;

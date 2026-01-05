@@ -3,7 +3,7 @@
 #include <revolution/esp.h>
 #include <revolution/nand.h>
 #include <revolution/vi.h>
-#include <string.h>
+#include <cstring>
 
 #include "__os.h"
 

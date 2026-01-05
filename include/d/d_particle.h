@@ -18,7 +18,7 @@ class JKRSolidHeap;
 class dKy_tevstr_c;
 class fopAc_ac_c;
 
-class  dPa_levelEcallBack : public JPAEmitterCallBack {
+class dPa_levelEcallBack : public JPAEmitterCallBack {
 public:
     virtual ~dPa_levelEcallBack() { cleanup(); }
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8) = 0;
@@ -55,16 +55,15 @@ public:
     /* 0x10 */ dPa_simpleData_c* mData;
 };  // Size: 0x14
 
-class dPa_modelPcallBack : public JPAParticleCallBack {
-public:
-    virtual ~dPa_modelPcallBack() {}
-    virtual void draw(JPABaseEmitter*, JPABaseParticle*);
-};
-
 class dPa_windPcallBack : public JPAParticleCallBack {
 public:
     virtual ~dPa_windPcallBack() {}
     virtual void execute(JPABaseEmitter*, JPABaseParticle*);
+};
+
+class dPa_modelPcallBack : public JPAParticleCallBack {
+public:
+    virtual void draw(JPABaseEmitter*, JPABaseParticle*);
 };
 
 class dPa_modelEcallBack : public dPa_levelEcallBack {
@@ -127,13 +126,29 @@ public:
 
 class dPa_selectTexEcallBack : public dPa_levelEcallBack {
 public:
-    dPa_selectTexEcallBack(u8 param_0) { field_0x4 = param_0; }
+    dPa_selectTexEcallBack(u8 param_0) {
+        field_0x4 = (u8)param_0;
+    }
 
     virtual ~dPa_selectTexEcallBack() {}
     virtual void draw(JPABaseEmitter*);
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8) {}
 
     /* 0x4 */ u8 field_0x4;
+};
+
+class dPa_setColorEcallBack : public dPa_levelEcallBack {
+public:
+    dPa_setColorEcallBack(const GXColor& color) { mColor = color; }
+
+    virtual ~dPa_setColorEcallBack() {}
+    virtual void draw(JPABaseEmitter* i_emitter) {
+        UNUSED(i_emitter);
+        GXSetTevColor(GX_TEVREG1, mColor);
+    }
+    virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8) {}
+
+    /* 0x4 */ GXColor mColor;
 };
 
 class dPa_followEcallBack : public dPa_levelEcallBack {
@@ -149,7 +164,7 @@ public:
 
     void remove() { end(); }
     JPABaseEmitter* getEmitter() { return mpEmitter; }
-    bool isEnd() {
+    int isEnd() {
         return field_0x10 & 1;
     }
 
@@ -171,25 +186,31 @@ public:
 
 class dPa_light8EcallBack : public dPa_levelEcallBack {
 public:
-    virtual ~dPa_light8EcallBack() {}
     virtual void draw(JPABaseEmitter*);
-    virtual void drawAfter(JPABaseEmitter*) { dPa_cleanupGX(); }
+    virtual void drawAfter(JPABaseEmitter* i_emitter) {
+        UNUSED(i_emitter);
+        dPa_cleanupGX();
+    }
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
 };
 
 class dPa_gen_b_light8EcallBack : public dPa_levelEcallBack {
 public:
-    virtual ~dPa_gen_b_light8EcallBack() {}
     virtual void draw(JPABaseEmitter*);
-    virtual void drawAfter(JPABaseEmitter*) { dPa_cleanupGX(); }
+    virtual void drawAfter(JPABaseEmitter* i_emitter) {
+        UNUSED(i_emitter);
+        dPa_cleanupGX();
+    }
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
 };
 
 class dPa_gen_d_light8EcallBack : public dPa_levelEcallBack {
 public:
-    virtual ~dPa_gen_d_light8EcallBack() {}
     virtual void draw(JPABaseEmitter*);
-    virtual void drawAfter(JPABaseEmitter*) { dPa_cleanupGX(); }
+    virtual void drawAfter(JPABaseEmitter* i_emitter) {
+        UNUSED(i_emitter);
+        dPa_cleanupGX();
+    }
     virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8);
 };
 
@@ -247,17 +268,6 @@ private:
     /* 0x14 */ cXyz const* field_0x14;
 };
 
-class dPa_setColorEcallBack : public dPa_levelEcallBack {
-public:
-    dPa_setColorEcallBack(const GXColor& color) { mColor = color; }
-
-    virtual ~dPa_setColorEcallBack() {}
-    virtual void draw(JPABaseEmitter*) { GXSetTevColor(GX_TEVREG1, mColor); }
-    virtual void setup(JPABaseEmitter*, cXyz const*, csXyz const*, s8) {}
-
-    /* 0x4 */ GXColor mColor;
-};
-
 class dPa_simpleData_c {
 public:
     ~dPa_simpleData_c();
@@ -295,10 +305,10 @@ public:
             void onEventMove() { mStatus |= 2; }
             void offEventMove() { mStatus &= ~2; }
             #endif
-            bool isEventMove() { return mStatus & 2; }
+            BOOL isEventMove() { return mStatus & 2; }
 
             void offActive() { mStatus &= (u8)~1; }
-            bool isActive() { return mStatus & 1; }
+            BOOL isActive() { return mStatus & 1; }
             u16 getNameId() { return mNameId; }
             dPa_levelEcallBack* getCallback() { return mCallback; }
 
@@ -434,7 +444,7 @@ public:
     }
 
     static JPAEmitterManager* getEmitterManager() { return mEmitterMng; }
-    static int getEmitterNum() { return mEmitterMng->getEmitterNumber(); };
+    int getEmitterNum() { return mEmitterMng->getEmitterNumber(); };
 
     static dPa_light8PcallBack* getLight8PcallBack() { 
         return &mLight8PcallBack; 
@@ -498,7 +508,11 @@ private:
     /* 0x019 */ u8 field_0x19;
     /* 0x01A */ u8 field_0x1a;
     /* 0x01B */ u8 field_0x1b;
+#if DEBUG
+    /* 0x01C */ dPa_simpleEcallBack field_0x1c[48];
+#else
     /* 0x01C */ dPa_simpleEcallBack field_0x1c[25];
+#endif
     /* 0x210 */ level_c field_0x210;
     #if DEBUG
     u8 mSceneCount;

@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_bg_obj.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
-#include "stdio.h"
+#include <stdio>
 #include "dolphin/os.h"
 #include "d/actor/d_a_set_bgobj.h"
 #include "d/d_s_play.h"
@@ -265,10 +265,12 @@ static const dCcD_SrcCyl l_cyl_src = {
         {0},
     },
     {
-        {0.0f, 0.0f, 0.0f},
-        0.0f,
-        0.0f,
-    },
+        {
+            {0.0f, 0.0f, 0.0f},
+            0.0f,
+            0.0f,
+        },
+    }
 };
 
 void daBgObj_c::initAtt() {
@@ -1359,7 +1361,7 @@ static actor_method_class daBgObj_METHODS = {
     (process_method_func)daBgObj_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_BG_OBJ = {
+actor_process_profile_definition g_profile_BG_OBJ = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

@@ -17,15 +17,15 @@ public:
         return mNext;
     }
 
-    u8 checkStreamOn() {
+    u8 checkStreamOn() const {
         return mStreamOn;
     }
 
-    s32 checkCanoeOn() {
+    s32 checkCanoeOn() const {
         return mParameters;
     }
 
-    u8 getPower() {
+    u8 getPower() const {
         return mPower;
     }
 

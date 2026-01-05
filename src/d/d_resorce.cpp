@@ -14,7 +14,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_graphic.h"
-#include <stdio.h>
+#include <stdio>
 
 dRes_info_c::dRes_info_c() {
     mCount = 0;
@@ -44,7 +44,9 @@ dRes_info_c::~dRes_info_c() {
 int dRes_info_c::set(char const* i_arcName, char const* i_path, u8 i_mountDirection, JKRHeap* i_heap) {
     char path[40];
 
+#ifdef __MWERKS__
     JUT_ASSERT(120, strlen(i_arcName) <= NAME_MAX);
+#endif
 
     if (*i_path != NULL) {
         snprintf(path, sizeof(path), "%s%s.arc", i_path, i_arcName);
@@ -334,7 +336,9 @@ int dRes_info_c::loadResource() {
 
                     const char* name_p = mArchive->mStringTable + entry->getNameOffset();
                     size_t resNameLen = strlen(name_p) - 4;
+#ifdef __MWERKS__
                     JUT_ASSERT(0x301, resNameLen <= NAME_MAX);
+#endif
 
                     char arcName[9];
                     strncpy(arcName, name_p, resNameLen);
@@ -488,9 +492,11 @@ void dRes_info_c::deleteArchiveRes() {
                 if (mArchive->isFileEntry(fileIndex)) {
                     JKRArchive::SDIFileEntry* fileEntry = mArchive->findIdxResource(fileIndex);
                     u32 nameOffset = fileEntry->getNameOffset();
-                    char* fileName = mArchive->mStringTable + nameOffset;
+                    const char* fileName = mArchive->mStringTable + nameOffset;
                     size_t resNameLen = strlen(fileName) - 4;
+#ifdef __MWERKS__
                     JUT_ASSERT(0x46C, resNameLen <= NAME_MAX);
+#endif
 
                     char nameBuffer[12];
                     strncpy(nameBuffer, fileName, resNameLen);

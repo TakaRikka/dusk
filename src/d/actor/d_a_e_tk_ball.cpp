@@ -227,7 +227,7 @@ static void e_tk_ball_drop(e_tk_ball_class* i_this) {
 static void action(e_tk_ball_class* i_this) {
     fopAc_ac_c* actor = i_this;
 
-    static u16 e_id[4] = {0x819D, 0x819E, 0x819A, 0x0000};
+    static u16 e_id[3] = {0x819D, 0x819E, 0x819A};
 
     s8 is_moving = true;
     switch (i_this->mAction) {
@@ -436,7 +436,7 @@ static actor_method_class l_daE_TK_BALL_Method = {
     (process_method_func)daE_TK_BALL_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_TK_BALL = {
+actor_process_profile_definition g_profile_E_TK_BALL = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

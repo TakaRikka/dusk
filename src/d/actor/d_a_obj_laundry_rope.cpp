@@ -288,7 +288,7 @@ static actor_method_class l_daObjLndRope_Method = {
     (process_method_func)daObjLndRope_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_LndRope = {
+actor_process_profile_definition g_profile_Obj_LndRope = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

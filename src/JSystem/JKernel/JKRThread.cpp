@@ -3,9 +3,9 @@
 #include "JSystem/JKernel/JKRThread.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include "stdio.h"
+#include <stdio>
 #include "global.h"
-#include <stdint.h>
+#include <stdint>
 
 JSUList<JKRThread> JKRThread::sThreadList(0);
 
@@ -13,9 +13,7 @@ JKRThreadSwitch* JKRThreadSwitch::sManager;
 
 u32 JKRThreadSwitch::sTotalCount;
 
-u32 JKRThreadSwitch::sTotalStart;
-
-static u32 data_804513BC;
+u64 JKRThreadSwitch::sTotalStart;
 
 JKRThreadSwitch_PreCallback JKRThreadSwitch::mUserPreCallback;
 
@@ -24,7 +22,7 @@ JKRThreadSwitch_PostCallback JKRThreadSwitch::mUserPostCallback;
 JKRThread::JKRThread(u32 stack_size, int message_count, int param_3) : mThreadListLink(this) {
     JKRHeap* heap = JKRHeap::findFromRoot(this);
     if (heap == NULL) {
-        heap = JKRHeap::getSystemHeap();
+        heap = JKRGetSystemHeap();
     }
 
     setCommon_heapSpecified(heap, stack_size, param_3);
@@ -34,7 +32,7 @@ JKRThread::JKRThread(u32 stack_size, int message_count, int param_3) : mThreadLi
 JKRThread::JKRThread(JKRHeap* heap, u32 stack_size, int message_count, int param_4)
     : mThreadListLink(this) {
     if (heap == NULL) {
-        heap = JKRHeap::getCurrentHeap();
+        heap = JKRGetCurrentHeap();
     }
 
     setCommon_heapSpecified(heap, stack_size, param_4);
@@ -47,30 +45,30 @@ JKRThread::JKRThread(OSThread* thread, int message_count) : mThreadListLink(this
     mStackSize = (uintptr_t)thread->stackEnd - (uintptr_t)thread->stackBase;
     mStackMemory = thread->stackBase;
 
-    setCommon_mesgQueue(JKRHeap::getSystemHeap(), message_count);
+    setCommon_mesgQueue(JKRGetSystemHeap(), message_count);
 }
 
 JKRThread::~JKRThread() {
-    getList().remove(&mThreadListLink);
+    sThreadList.remove(&mThreadListLink);
 
     if (mHeap) {
-        BOOL result = OSIsThreadTerminated(mThreadRecord);
-        if (result == FALSE) {
+        if (OSIsThreadTerminated(mThreadRecord) == FALSE) {
             OSDetachThread(mThreadRecord);
             OSCancelThread(mThreadRecord);
         }
         JKRFreeToHeap(mHeap, mStackMemory);
         JKRFreeToHeap(mHeap, mThreadRecord);
     }
-    JKRFree(mMessages);
+    JKRFree(mMesgBuffer);
 }
 
 void JKRThread::setCommon_mesgQueue(JKRHeap* heap, int message_count) {
     mMessageCount = message_count;
-    mMessages = (OSMessage*)JKRHeap::alloc(mMessageCount * sizeof(OSMessage), 0, heap);
+    mMesgBuffer = (OSMessage*)JKRAllocFromHeap(heap, mMessageCount * sizeof(OSMessage), 0);
+    JUT_ASSERT(130, mMesgBuffer);
 
-    OSInitMessageQueue(&mMessageQueue, mMessages, mMessageCount);
-    getList().append(&mThreadListLink);
+    OSInitMessageQueue(&mMessageQueue, mMesgBuffer, mMessageCount);
+    sThreadList.append(&mThreadListLink);
 
     mCurrentHeap = NULL;
     mCurrentHeapError = NULL;
@@ -80,21 +78,19 @@ void JKRThread::setCommon_heapSpecified(JKRHeap* heap, u32 stack_size, int param
     mHeap = heap;
     mStackSize = stack_size & 0xffffffe0;
     mStackMemory = JKRAllocFromHeap(mHeap, mStackSize, 0x20);
+    JUT_ASSERT(164, mStackMemory);
     mThreadRecord = (OSThread*)JKRAllocFromHeap(mHeap, sizeof(OSThread), 0x20);
+    JUT_ASSERT(168, mThreadRecord);
 
-    void* stackBase = (void*)((int)mStackMemory + mStackSize);
-    OSCreateThread(mThreadRecord, start, this, stackBase, mStackSize, param_3, 1);
+    OSCreateThread(mThreadRecord, start, this, (u8*)mStackMemory + mStackSize, mStackSize, param_3, 1);
 }
 
-void* JKRThread::start(void* param) {
-    JKRThread* thread = (JKRThread*)param;
-    return thread->run();
+void* JKRThread::start(void* thread) {
+    return ((JKRThread*)thread)->run();
 }
 
 JKRThread* JKRThread::searchThread(OSThread* thread) {
-    JSUList<JKRThread>& threadList = getList();
-    JSUListIterator<JKRThread> iterator;
-    for (iterator = threadList.getFirst(); iterator != threadList.getEnd(); ++iterator) {
+    for (JSUListIterator<JKRThread> iterator = getList().getFirst(); iterator != getList().getEnd(); ++iterator) {
         if (iterator->getThreadRecord() == thread) {
             return iterator.getObject();
         }
@@ -110,7 +106,6 @@ JKRThreadSwitch::JKRThreadSwitch(JKRHeap* param_0) {
     this->field_0x10 = 1;
     this->field_0x18 = 0;
     sTotalCount = 0;
-    data_804513BC = 0;
     sTotalStart = 0;
     this->field_0x20 = 0;
     this->field_0x24 = 0;
@@ -159,24 +154,20 @@ void JKRThreadSwitch::callback(OSThread* current, OSThread* next) {
     sTotalCount = sTotalCount + 1;
 
     JKRHeap* next_heap = NULL;
-    JSUList<JKRThread>& threadList = JKRThread::getList();
-    JSUListIterator<JKRThread> iterator;
-    for (iterator = threadList.getFirst(); iterator != threadList.getEnd(); ++iterator) {
+    for (JSUListIterator<JKRThread> iterator = JKRThread::getList().getFirst(); iterator != JKRThread::getList().getEnd(); ++iterator) {
         JKRThread* thread = iterator.getObject();
 
         if (thread->getThreadRecord() == current) {
             thread->setCurrentHeap(JKRHeap::getCurrentHeap());
-            JKRThread::TLoad* loadInfo = thread->getLoadInfo();
-            if (loadInfo->isValid()) {
-                loadInfo->addCurrentCost();
+            if (thread->getLoadInfo()->isValid()) {
+                thread->getLoadInfo()->addCurrentCost();
             }
         }
 
         if (thread->getThreadRecord() == next) {
-            JKRThread::TLoad* loadInfo = thread->getLoadInfo();
-            if (loadInfo->isValid()) {
-                loadInfo->setCurrentTime();
-                loadInfo->incCount();
+            if (thread->getLoadInfo()->isValid()) {
+                thread->getLoadInfo()->setCurrentTime();
+                thread->getLoadInfo()->incCount();
             }
 
             if (sManager->mSetNextHeap) {
@@ -186,7 +177,7 @@ void JKRThreadSwitch::callback(OSThread* current, OSThread* next) {
                 } else if (JKRHeap::getRootHeap()->isSubHeap(next_heap)) {
                     continue;
                 #if PLATFORM_WII || PLATFORM_SHIELD
-                } else if (!JKRHeap::getRootHeap2()->isSubHeap(next_heap)) {
+                } else if (JKRHeap::getRootHeap2()->isSubHeap(next_heap)) {
                     continue;
                 #endif
                 } else {
@@ -223,18 +214,16 @@ void JKRThreadSwitch::draw(JKRThreadName_* thread_name_list, JUTConsole* console
     const char* print_0 = " total: switch:%3d  time:%d(%df)\n";
     const char* print_1 = " -------------------------------------\n";
 
-    if (!console) {
-        OS_REPORT(print_0, getTotalCount(), (int)this->field_0x18, this->field_0x10);
-        OS_REPORT(print_1);
-    } else {
+    if (console) {
         console->clear();
         console->print_f(print_0, getTotalCount(), (int)this->field_0x18, this->field_0x10);
         console->print(print_1);
+    } else {
+        OS_REPORT(print_0, getTotalCount(), (int)this->field_0x18, this->field_0x10);
+        OS_REPORT(print_1);
     }
 
-    JSUList<JKRThread>& threadList = JKRThread::getList();
-    JSUListIterator<JKRThread> iterator;
-    for (iterator = threadList.getFirst(); iterator != threadList.getEnd(); ++iterator) {
+    for (JSUListIterator<JKRThread> iterator = JKRThread::getList().getFirst(); iterator != JKRThread::getList().getEnd(); ++iterator) {
         JKRThread* thread = iterator.getObject();
         JKRThread::TLoad* loadInfo = thread->getLoadInfo();
 
@@ -257,16 +246,18 @@ void JKRThreadSwitch::draw(JKRThreadName_* thread_name_list, JUTConsole* console
             }
 
             u32 switch_count = loadInfo->getCount();
-            float cost_per_0x18 = loadInfo->getCost() / (float)this->field_0x18;
+            u32 cost = loadInfo->getCost();
+            f32 cost_per_0x18 = loadInfo->getCost() / f32(this->field_0x18);
 
             u32 cost_int = (u32)(cost_per_0x18 * 100.0f);
             u32 cost_float = (u32)(cost_per_0x18 * 1000.0f) % 10;
-            if (!console) {
-                OS_REPORT(" [%10s] switch:%5d  cost:%2d.%d%%\n", thread_print_name, switch_count,
-                         cost_int, cost_float);
-            } else {
+            if (console) {
                 console->print_f(" [%10s] switch:%5d  cost:%2d.%d%%\n", thread_print_name,
                                  switch_count, cost_int, cost_float);
+            } else {
+                OS_REPORT(" [%10s] switch:%5d  cost:%2d.%d%%\n", thread_print_name, switch_count,
+                         cost_int, cost_float);
+
             }
         }
     }

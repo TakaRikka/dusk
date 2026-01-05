@@ -1,7 +1,7 @@
 #ifndef _MSL_COMMON_MEM_FUNCS_H
 #define _MSL_COMMON_MEM_FUNCS_H
 
-#include "stddef.h"
+#include <cstddef>
 
 #ifdef __cplusplus
 extern "C" {

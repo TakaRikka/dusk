@@ -573,7 +573,7 @@ void daObjTks_c::demo() {
     switch (field_0xdde) {
     case 0:
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
-        dComIfGp_getEvent().reset(this);
+        dComIfGp_getEvent()->reset(this);
         eventInfo.setArchiveName(l_arcName);
         dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
         mEventIdx = dComIfGp_getEventManager().getEventIdx(this, "TKS_SECRET", 0xFF);
@@ -702,7 +702,7 @@ void daObjTks_c::warp() {
     switch (field_0xdde) {
     case 0:
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
-        dComIfGp_getEvent().reset(this);
+        dComIfGp_getEvent()->reset(this);
         eventInfo.setArchiveName(l_arcName);
         dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
         mEventIdx = dComIfGp_getEventManager().getEventIdx(this, "TKS_WARP", 0xFF);
@@ -714,7 +714,7 @@ void daObjTks_c::warp() {
         field_0xdde = 2;
         return;
     case 2:
-        if (dComIfGp_event_runCheck() != 0 && !eventInfo.checkCommandTalk()) {
+        if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
             dEvent_manager_c& eventMgr = dComIfGp_getEventManager();
             int staff_id = eventMgr.getMyStaffId(l_myName, NULL, 0);
 
@@ -882,7 +882,7 @@ static actor_method_class daObjTks_MethodTable = {
     (process_method_func)daObjTks_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_TKS = {
+actor_process_profile_definition g_profile_OBJ_TKS = {
     fpcLy_CURRENT_e,            // mLayerID
     7,                          // mListID
     fpcPi_CURRENT_e,            // mListPrio

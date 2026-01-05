@@ -1,5 +1,5 @@
-#include "__va_arg.h"
-#include <stdint.h>
+#include <cstdarg>
+#include <cstdint>
 
 #undef __va_arg
 

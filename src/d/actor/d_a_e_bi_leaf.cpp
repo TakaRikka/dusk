@@ -122,7 +122,7 @@ static actor_method_class l_daE_BI_LEAF_Method = {
     (process_method_func)daE_BI_LEAF_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_BI_LEAF = {
+actor_process_profile_definition g_profile_E_BI_LEAF = {
     fpcLy_CURRENT_e,
     9,
     fpcPi_CURRENT_e,

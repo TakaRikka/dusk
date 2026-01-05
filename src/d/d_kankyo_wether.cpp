@@ -12,7 +12,7 @@
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_rain.h"
 #include "f_op/f_op_camera_mng.h"
-#include "string.h"
+#include <string>
 #include "m_Do/m_Do_audio.h"
 
 static void dKyw_pntlight_set(WIND_INFLUENCE* pntwind);

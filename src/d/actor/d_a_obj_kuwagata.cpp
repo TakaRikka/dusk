@@ -697,14 +697,14 @@ int daObjKUW_c::Execute() {
     return 1;
 }
 
-static bool l_HIOInit;
+static bool hio_set;
 
 static daObj_KuwHIO_c l_HIO;
 
 int daObjKUW_c::Delete() {
     dComIfG_resDelete(&mPhase, "I_Kuw");
     if (mIsHIOOwner) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.mId);
     }
 
@@ -810,8 +810,8 @@ int daObjKUW_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!l_HIOInit) {
-            l_HIOInit = true;
+        if (!hio_set) {
+            hio_set = true;
             mIsHIOOwner = true;
             l_HIO.mId = mDoHIO_CREATE_CHILD("黄金蟲(クワガタ)", &l_HIO);
         }
@@ -900,7 +900,7 @@ static actor_method_class l_daObjKUW_Method = {
     (process_method_func)daObjKUW_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Kuw = {
+actor_process_profile_definition g_profile_Obj_Kuw = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

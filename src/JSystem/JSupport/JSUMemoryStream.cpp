@@ -1,7 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JSupport/JSUMemoryStream.h"
-#include "string.h"
+#include <string>
 
 void JSUMemoryInputStream::setBuffer(void const* pBuffer, s32 length) {
     mBuffer = pBuffer;

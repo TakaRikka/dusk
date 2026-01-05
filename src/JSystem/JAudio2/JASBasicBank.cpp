@@ -10,6 +10,7 @@ JASBasicBank::JASBasicBank() {
 
 void JASBasicBank::newInstTable(u8 num, JKRHeap* heap) {
     if (num != 0) {
+        JUT_ASSERT(31, num <= JASBank::PRG_OSC);
         mInstNumMax = num;
         mInstTable = new (heap, 0) JASInst*[mInstNumMax];
         JASCalc::bzero(mInstTable, mInstNumMax * 4);
@@ -27,6 +28,9 @@ bool JASBasicBank::getInstParam(int prg_no, int param_1, int param_2,
 
 void JASBasicBank::setInst(int prg_no, JASInst* inst) {
     if (mInstTable != NULL) {
+        JUT_ASSERT(50, prg_no < mInstNumMax);
+        JUT_ASSERT(54, prg_no >= 0);
+        JUT_ASSERT(56, mInstTable[prg_no] == 0);
         mInstTable[prg_no] = inst;
     }
 }

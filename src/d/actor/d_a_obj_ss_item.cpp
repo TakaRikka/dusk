@@ -371,10 +371,10 @@ static actor_method_class daObj_SSItem_MethodTable = {
     (process_method_func)daObj_SSItem_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_SSITEM = {
+actor_process_profile_definition g_profile_OBJ_SSITEM = {
     fpcLy_CURRENT_e,
     7,
-    fpcLy_CURRENT_e,
+    fpcPi_CURRENT_e,
     PROC_OBJ_SSITEM,
     &g_fpcLf_Method.base,
     sizeof(daObj_SSItem_c),

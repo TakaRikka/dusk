@@ -206,7 +206,7 @@ static actor_method_class l_daKytag10_Method = {
     (process_method_func)daKytag10_Draw,
 };
 
-extern actor_process_profile_definition g_profile_KYTAG10 = {
+actor_process_profile_definition g_profile_KYTAG10 = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

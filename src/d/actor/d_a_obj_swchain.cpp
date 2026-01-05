@@ -15,8 +15,8 @@
 #if DEBUG
 class daObjSwChain_HIO_c : public mDoHIO_entry_c {
 public:
-    /* 811C8DE0 */ daObjSwChain_HIO_c();
-    /* 811C8EE0 */ void genMessage(JORMContext*);
+    daObjSwChain_HIO_c();
+    void genMessage(JORMContext*);
 
     /* 0x06 */ u8 field_0x06;
     /* 0x08 */ f32 mGravity;
@@ -1196,7 +1196,7 @@ static actor_method_class l_daObjSwChain_Method = {
     (process_method_func)daObjSwChain_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SwChain = {
+actor_process_profile_definition g_profile_Obj_SwChain = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

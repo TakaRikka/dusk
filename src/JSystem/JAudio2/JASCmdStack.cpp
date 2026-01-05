@@ -5,11 +5,27 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JAudio2/JASCmdStack.h"
+#include "JSystem/JAudio2/JASCriticalSection.h"
 #include "dolphin/os.h"
 
 JASPortCmd::TPortHead JASPortCmd::sCommandListOnce;
 
 JASPortCmd::TPortHead JASPortCmd::sCommandListStay;
+
+bool JASPortCmd::addPortCmdOnce() {
+	JASCriticalSection cs;
+	return sCommandListOnce.append(this);
+}
+
+bool JASPortCmd::setPortCmd(Command func, JASPortArgs* args) {
+	JUT_ASSERT(81, func != NULL);
+	if (getSupervisor()) {
+		return false;
+	}
+	mFunc = func;
+	mArgs = args;
+	return true;
+}
 
 void JASPortCmd::execAllCommand() {
 	sCommandListOnce.execCommandOnce();
@@ -17,20 +33,20 @@ void JASPortCmd::execAllCommand() {
 }
 
 void JASPortCmd::TPortHead::execCommandOnce() {
-	volatile BOOL interrupts = OSDisableInterrupts();
+	JASCriticalSection cs;
 	JSULink<JASPortCmd>* next;
 	for (JSULink<JASPortCmd>* link = getFirst(); link != NULL; link = next) {
 		next = link->getNext();
-		link->getObject()->_10(link->getObject()->_14);
+		JASPortCmd* cmd = link->getObject();
+		cmd->getFunc()(cmd->getArgs());
 		remove(link);
 	}
-	OSRestoreInterrupts(interrupts);
 }
 
 void JASPortCmd::TPortHead::execCommandStay() {
-	volatile int interrupts = OSDisableInterrupts();
+	JASCriticalSection cs;
 	for (JSULink<JASPortCmd>* link = getFirst(); link != NULL; link = link->getNext()) {
-		link->getObject()->_10(link->getObject()->_14);
+		JASPortCmd* cmd = link->getObject();
+		cmd->getFunc()(cmd->getArgs());
 	}
-	OSRestoreInterrupts(interrupts);
 }

@@ -50,7 +50,7 @@ static int daObj_Key_Draw(obj_key_class* i_this) {
     return 1;
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daObj_Key_HIO_c l_HIO;
 
@@ -553,7 +553,7 @@ static int daObj_Key_Delete(obj_key_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "Obj_key");
 
     if (i_this->HIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -616,9 +616,9 @@ static int daObj_Key_Create(fopAc_ac_c* i_this) {
 
         OS_REPORT("//////////////OBJ_KEY SET 2 !!\n");
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             a_this->HIOInit = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("カギＯＢＪ", &l_HIO);
         }
 
@@ -648,7 +648,7 @@ static actor_method_class l_daObj_Key_Method = {
     (process_method_func)daObj_Key_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_KEY = {
+actor_process_profile_definition g_profile_OBJ_KEY = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

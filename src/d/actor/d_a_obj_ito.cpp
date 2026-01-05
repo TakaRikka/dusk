@@ -18,7 +18,7 @@ daObj_Ito_HIO_c::daObj_Ito_HIO_c() {
     field_0x10 = 1;
 }
 
-static u8 l_initHio;
+static u8 hio_set;
 
 static daObj_Ito_HIO_c l_HIO;
 
@@ -539,7 +539,7 @@ static int daObj_Ito_Delete(obj_ito_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "OBJ_ITO");
 
     if (i_this->field_0x150b != 0) {
-        l_initHio = 0;
+        hio_set = 0;
     }
 
     if (a_this->heap != NULL) {
@@ -613,9 +613,9 @@ static cPhs__Step daObj_Ito_Create(fopAc_ac_c* a_this) {
 
         OS_REPORT("//////////////OBJ_ITO SET 2 !!\n");
 
-        if (l_initHio == 0) {
+        if (hio_set == 0) {
             i_this->field_0x150b = 1;
-            l_initHio = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -690,7 +690,7 @@ static actor_method_class l_daObj_Ito_Method = {
     (process_method_func)daObj_Ito_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_ITO = {
+actor_process_profile_definition g_profile_OBJ_ITO = {
   fpcLy_CURRENT_e,        // mLayerID
   4,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

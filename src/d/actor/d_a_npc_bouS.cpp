@@ -325,8 +325,8 @@ daNpcBouS_HIOParam const daNpcBouS_Param_c::m = {
     100.0f,
     80.0f,
     654.78497f,
-    0xEB51,
-    0xA3C6,
+    -0x14AF,
+    -0x5C3A,
     0,
 };
 
@@ -714,7 +714,7 @@ BOOL daNpcBouS_c::main() {
         (this->*mAction)(NULL);
     }
 
-    if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk() && mItemPartnerId != fpcM_ERROR_PROCESS_ID_e) {
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && mItemPartnerId != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(mItemPartnerId);
         mItemPartnerId = fpcM_ERROR_PROCESS_ID_e;
     }
@@ -1183,7 +1183,7 @@ bool daNpcBouS_c::demo(void* param_1) {
             mMode = 2;
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
                 if (staffId != -1) {
@@ -1606,7 +1606,7 @@ static actor_method_class daNpcBouS_MethodTable = {
     (process_method_func)daNpcBouS_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_BOU_S = {
+actor_process_profile_definition g_profile_NPC_BOU_S = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -151,7 +151,7 @@ static actor_method_class l_daNpc_Fish_Method = {
     (process_method_func)daNpc_Fish_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_FISH = {
+actor_process_profile_definition g_profile_NPC_FISH = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

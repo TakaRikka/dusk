@@ -349,10 +349,12 @@ void daObjFlag2_c::initCollision() {
             {0x0},                                       // mGObjCo
         },                                               // mObjInf
         {
-            {0.0f, 0.0f, 0.0f},  // mCenter
-            15.0f,               // mRadius
-            30.0f                // mHeight
-        }  // mCyl
+            {
+                {0.0f, 0.0f, 0.0f},  // mCenter
+                15.0f,               // mRadius
+                30.0f                // mHeight
+            }  // mCyl
+        }
     };
     mStts.Init(0xff, 0xff, this);
     mCyl.Set(ccCylSrc);
@@ -507,7 +509,7 @@ static actor_method_class l_daObjFlag2_Method = {
     (process_method_func)daObjFlag2_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Flag2 = {
+actor_process_profile_definition g_profile_Obj_Flag2 = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

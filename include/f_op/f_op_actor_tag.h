@@ -3,7 +3,7 @@
 
 #include "SSystem/SComponent/c_tag.h"
 
-int fopAcTg_ActorQTo(create_tag_class* i_createTag);
+void fopAcTg_ActorQTo(create_tag_class* i_createTag);
 int fopAcTg_Init(create_tag_class* i_createTag, void* i_data);
 int fopAcTg_ToActorQ(create_tag_class* i_createTag);
 

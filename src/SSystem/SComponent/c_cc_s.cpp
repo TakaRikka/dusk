@@ -489,16 +489,10 @@ void cCcS::DrawClear() {
 
 void cCcS::SetCoGCorrectProc(cCcD_Obj* pco1_obj, cCcD_Obj* pco2_obj) {}
 
-/* 80265DF8-80265DFC 260738 0004+00 1/0 0/0 0/0 .text
- * SetCoGObjInf__4cCcSFbbP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts
- */
 void cCcS::SetCoGObjInf(bool co2_set, bool co1_set, cCcD_GObjInf* pco1_gobj,
                         cCcD_GObjInf* pco2_gobj, cCcD_Stts* pco1_stts, cCcD_Stts* pco2_stts,
                         cCcD_GStts* pco1_gstts, cCcD_GStts* pco2_gstts) {}
 
-/* 80265DFC-80265E00 26073C 0004+00 1/0 0/0 0/0 .text
- * SetAtTgGObjInf__4cCcSFbbP8cCcD_ObjP8cCcD_ObjP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GSttsP4cXyz
- */
 void cCcS::SetAtTgGObjInf(bool param_0, bool param_1, cCcD_Obj* pat_obj, cCcD_Obj* ptg_obj,
                           cCcD_GObjInf* pat_gobj, cCcD_GObjInf* ptg_gobj, cCcD_Stts* pat_stts,
                           cCcD_Stts* ptg_stts, cCcD_GStts* pat_gstts, cCcD_GStts* ptg_gstts,
@@ -509,9 +503,6 @@ bool cCcS::ChkNoHitGAtTg(const cCcD_GObjInf* pat_gobj, const cCcD_GObjInf* ptg_g
     return false;
 }
 
-/* 80265E08-80265E10 260748 0008+00 1/0 0/0 0/0 .text
- * ChkAtTgHitAfterCross__4cCcSFbbPC12cCcD_GObjInfPC12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts
- */
 bool cCcS::ChkAtTgHitAfterCross(bool param_0, bool param_1, const cCcD_GObjInf* pat_gobj,
                                 const cCcD_GObjInf* ptg_gobj, cCcD_Stts* pat_stts, cCcD_Stts* ptg_stts,
                                 cCcD_GStts* pat_gstts, cCcD_GStts* ptg_gstts) {

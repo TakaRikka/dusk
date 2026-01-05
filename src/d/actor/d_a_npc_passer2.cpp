@@ -378,7 +378,7 @@ static actor_method_class daNpcPasser2_METHODS = {
     (process_method_func)daNpcPasser2_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_PASSER2 = {
+actor_process_profile_definition g_profile_NPC_PASSER2 = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

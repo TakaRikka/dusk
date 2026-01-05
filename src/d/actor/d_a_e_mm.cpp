@@ -87,7 +87,7 @@ static BOOL pl_check(e_mm_class* i_this, f32 i_range, s16) {
     return 0;
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_MM_HIO_c l_HIO;
 
@@ -999,7 +999,7 @@ static int daE_MM_Delete(e_mm_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "E_MM");
 
     if (i_this->field_0xc00) {
-        l_HIOInit = 0;
+        hio_set = 0;
     }
 
     if (actor->heap != NULL) {
@@ -1054,9 +1054,9 @@ static int daE_MM_Create(fopAc_ac_c* actor) {
     
         OS_REPORT("//////////////E_MM SET 2 !!\n");
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             i_this->field_0xc00 = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("マグネメット", &l_HIO);
         }
 
@@ -1139,7 +1139,7 @@ static actor_method_class l_daE_MM_Method = {
     (process_method_func)daE_MM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_MM = {
+actor_process_profile_definition g_profile_E_MM = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

@@ -753,7 +753,7 @@ static actor_method_class l_daE_ARROW_Method = {
     (process_method_func)daE_ARROW_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_ARROW = {
+actor_process_profile_definition g_profile_E_ARROW = {
     fpcLy_CURRENT_e,
     8,
     fpcPi_CURRENT_e,

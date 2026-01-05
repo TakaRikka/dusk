@@ -1,62 +1,81 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JGadget/binary.h"
+#include "JSystem/JGadget/define.h"
+#include <stdint>
 
-const void*
-JGadget::binary::parseVariableUInt_16_32_following(void const* buffer, u32* param_1, u32* param_2,
-                                                   JGadget::binary::TEBit* param_3) {
-    JGadget::binary::TEBit temp;
-    if (param_3 == NULL) {
-        param_3 = &temp;
+#if DEBUG
+static void dummyString() {
+    // probably some stripped function that called JUT_ASSERT here
+    DEAD_STRING("Halt");
+}
+#endif
+
+const void* JGadget::binary::parseVariableUInt_16_32_following(const void* pBuffer, u32* pu32First, u32* pu32Second,
+                                                               JGadget::binary::TEBit* pTEBit) {
+    u16* pu16 = (u16*)pBuffer;
+    JUT_ASSERT(122, pu16!=NULL);
+    JUT_ASSERT(123, pu32First!=NULL);
+    JUT_ASSERT(124, pu32Second!=NULL);
+
+    JGadget::binary::TEBit spC;
+    if (pTEBit == NULL) {
+        pTEBit = &spC;
     }
-    u32 uVar1 = *(u16*)buffer;
-    const void* rv;
-    if ((uVar1 & 0x8000) == 0) {
-        param_3->value = 0x10;
-        *param_1 = uVar1;
-        *param_2 =  *(u16*)((u8*)buffer + 2);
-        rv = (u8*)buffer + 4;
+
+    u32 var_r30 = *pu16;
+    if ((var_r30 & 0x8000) == 0) {
+        pTEBit->value = 0x10;
+
+        *pu32First = var_r30;
+        pu16++;
+        *pu32Second =  *pu16;
+
+        return pu16 + 1;
     } else {
-        param_3->value = 0x20;
-        uVar1 <<= 16;
-        uVar1 &= 0x7fff0000;
-        uVar1 |= *(u16*)((u8*)buffer + 2);
-        *param_1 = uVar1;
-        *param_2 = *(u32*)((u8*)buffer + 4);
-        rv = (u8*)buffer + 8;
+        pTEBit->value = 0x20;
+
+        var_r30 &= 0x7FFF;
+        var_r30 <<= 16;
+        pu16++;
+        var_r30 |= *pu16;
+
+        *pu32First = var_r30;
+        pu16++;
+        *pu32Second = *(u32*)pu16;
+
+        return pu16 + 2;
     }
-    return rv;
 }
 
-JGadget::binary::TParse_header_block::~TParse_header_block() {
-}
+JGadget::binary::TParse_header_block::~TParse_header_block() {}
 
-bool JGadget::binary::TParse_header_block::parse_next(void const** ptrLocation, u32 idx) {
-    u32 headerEnd, blockEnd;
+bool JGadget::binary::TParse_header_block::parse_next(const void** ppData_inout, u32 idx) {
+    u32 uBlock, uData;
     
-    if ((ptrLocation == NULL) || (*ptrLocation == NULL)) {
+    if (ppData_inout == NULL || *ppData_inout == NULL) {
+        JGADGET_WARNMSG(172, "data not specified");
         return false;
     }
-    bool check, checkLastBlock;
-    checkLastBlock = check = false;
 
-    check = checkNext(ptrLocation, &headerEnd, idx);
-    
-    checkLastBlock = check;
-    if (!(idx & 1) && (check == false)) {
-        return check;
+    bool var_r29 = true;
+    var_r29 = parseHeader_next(ppData_inout, &uBlock, idx) && var_r29;
+
+    if (!(idx & 1) && !var_r29) {
+        return var_r29;
     }
     
-    while (headerEnd > 0) {
-        check = false;
-        if (parseBlock_next(ptrLocation, &blockEnd, idx) && checkLastBlock) {
-            check = true;
+    while (uBlock > 0) {
+        const void* p = *ppData_inout;
+        var_r29 = parseBlock_next(ppData_inout, &uData, idx) && var_r29;
+
+        JUT_ASSERT(192, std::uintptr_t(*ppData_inout)==std::uintptr_t(p)+uData);
+
+        if ((idx & 2) == 0 && !var_r29) {
+            return var_r29;
         }
-        checkLastBlock = check;
-        if (((idx & 2) == 0) && (check == false)) {
-            return check;
-        }
-        headerEnd--;
+        uBlock--;
     }
-    return checkLastBlock;
+
+    return var_r29;
 }

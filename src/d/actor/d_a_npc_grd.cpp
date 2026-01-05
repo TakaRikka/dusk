@@ -382,7 +382,7 @@ BOOL daNpc_Grd_c::main() {
     }
 
     if (!mpHIO->m.common.debug_mode_ON &&
-        (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent().isOrderOK())))
+        (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())))
     {
         if (mOrderEvtNo != 0) {
             eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
@@ -843,7 +843,7 @@ void daNpc_Grd_c::doNormalAction(int param_1) {
 BOOL daNpc_Grd_c::doEvent() {
     BOOL rv = FALSE;
 
-    if (dComIfGp_event_runCheck() != 0) {
+    if (dComIfGp_event_runCheck()) {
         dEvent_manager_c& eventManager = dComIfGp_getEventManager();
 
         if (eventInfo.mCommand == 1 || eventInfo.mCommand == 2) {
@@ -1248,7 +1248,7 @@ static actor_method_class daNpc_Grd_MethodTable = {
     (process_method_func)daNpc_Grd_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_GRD = {
+actor_process_profile_definition g_profile_NPC_GRD = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

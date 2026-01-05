@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_npc_kdk.h"
 
-extern actor_process_profile_definition g_profile_NPC_KDK = {
+actor_process_profile_definition g_profile_NPC_KDK = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -72,9 +72,6 @@ void posMoveF_resist_acc(cXyz* pos, const fopAc_ac_c* i_actor, cXyz const* strea
     pos->set(sp14);
 }
 
-/* 800374EC-80037620 031E2C 0134+00 1/1 0/0 0/0 .text
- * posMoveF_grade_acc__Q25daObj21@unnamed@d_a_obj_cpp@FP4cXyzPC10fopAc_ac_cPC4cXyzffPC4cXyzPC4cXyz
- */
 void posMoveF_grade_acc(cXyz* pos, const fopAc_ac_c* i_actor, cXyz const* param_2, f32 friction,
                         f32 no_grade_cos, const cXyz* param_5, const cXyz* param_6) {
     pos->set(cXyz::Zero);

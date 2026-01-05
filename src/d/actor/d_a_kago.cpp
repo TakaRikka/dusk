@@ -10,7 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_msg_object.h"
 
-#include <cmath.h>
+#include <math>
 
 #include "d/actor/d_a_balloon_2D.h"
 #include "d/actor/d_a_e_ym.h"
@@ -218,7 +218,7 @@ int daKago_c::executeBalloonMenu() {
     switch (field_0x6eb) {
     case 0:
         if (field_0x6e7 == 1 && (mCurrentAction == 0 || mCurrentAction == 5) &&
-            dComIfGp_event_runCheck() == 0 && mDoCPd_c::getTrigB(0))
+            !dComIfGp_event_runCheck() && mDoCPd_c::getTrigB(0))
         {
             field_0x6eb = 1;
             return 1;
@@ -270,7 +270,7 @@ int daKago_c::executeBalloonMenu() {
     return 1;
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 static daKago_HIO_c l_HIO;
 
 f32 daKago_c::checkGroundHeight(cXyz i_pos, f32* o_step) {
@@ -1740,8 +1740,12 @@ void daKago_c::initPerchDemo() {
         }
 
         cXyz cStack_54 = dPath_GetPnt(mpPath2, local_80)->m_position;
-        s16 temp = (s16)sVar5 - cLib_targetAngleY(&current.pos, &cStack_48);
-        sVar5 = temp < 0 ? (s16)((s16)sVar5 - 0x1000) : (s16)((s16)sVar5 + 0x1000); // fakematch
+        s16 sp08 = cLib_targetAngleY(&current.pos, &cStack_48);
+        if ((s16)(sVar5 - sp08) < 0) {
+            sVar5 = sVar5 - 0x1000;
+        } else {
+            sVar5 = sVar5 + 0x1000;
+        }
         shape_angle.y = current.angle.y = sVar5;
         shape_angle.x = shape_angle.z = 0;
 
@@ -1913,7 +1917,7 @@ bool daKago_c::executePerchDemo() {
             return true;
         }
 
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
 
         break;
     }
@@ -1936,16 +1940,16 @@ bool daKago_c::executePerchDemo() {
             return true;
         }
 
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
 
         break;
     }
     case 2: {
         if (field_0x6e4 == 0) {
             if (field_0x73c == 0) {
-                dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 4);
+                dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 4);
             } else if (field_0x73c == 2) {
-                dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 5);
+                dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 5);
             }
         }
 
@@ -2016,9 +2020,9 @@ bool daKago_c::executePerchDemo() {
     case 3: {
         if (field_0x6e4 == 0) {
             if (field_0x73c == 0) {
-                dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 4);
+                dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 4);
             } else if (field_0x73c == 2) {
-                dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 5);
+                dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 5);
             }
         }
 
@@ -2052,9 +2056,9 @@ bool daKago_c::executePerchDemo() {
     case 4: {
         if (field_0x6e4 == 0) {
             if (field_0x73c == 0) {
-                dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 4);
+                dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 4);
             } else if (field_0x73c == 2) {
-                dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 6);
+                dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 6);
             }
         }
 
@@ -2493,7 +2497,7 @@ bool daKago_c::executeFirstDemo() {
     int switchVal = field_0x748;
     switch (switchVal) {
     case 0:
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 2);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 2);
 
         cLib_chaseAngleS(&field_0x6bc, 0x1400, 0x40);
         cLib_chaseF(&field_0x6cc, 1250.0f, 6.7f);
@@ -2520,7 +2524,7 @@ bool daKago_c::executeFirstDemo() {
 
         break;
     case 1:
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 2);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 2);
 
         cLib_chaseAngleS(&field_0x6bc, 0x1000, 0x20);
 
@@ -2567,7 +2571,7 @@ bool daKago_c::executeFirstDemo() {
         }
         break;
     case 2:
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 3);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 3);
 
         setMidnaTagPos();
         cLib_addCalcPos(&field_0x68c, midnaPos, 0.5f, 10.0f, 10.0f);
@@ -2594,7 +2598,7 @@ bool daKago_c::executeFirstDemo() {
 
         break;
     case 3: {
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 3);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 3);
 
         setMidnaTagPos();
         cLib_addCalcAngleS(
@@ -2616,7 +2620,7 @@ bool daKago_c::executeFirstDemo() {
         break;
     }
     case 4:
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 2);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 2);
 
         cLib_addCalcAngleS(&field_0x718, 0, 8, 0x100, 0x10);
         cLib_addCalcAngleS(&field_0x71a, 0, 8, 0x100, 0x10);
@@ -2659,7 +2663,7 @@ bool daKago_c::executeFirstDemo() {
 
         break;
     case 5:
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 2);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 2);
 
         cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &field_0x6a4), 4, 0x800, 0x100);
         cLib_addCalcAngleS(&current.angle.x, -cLib_targetAngleX(&current.pos, &field_0x6a4), 4, 0x400, 0x100);
@@ -2692,7 +2696,7 @@ bool daKago_c::executeFirstDemo() {
         }
         break;
     case 6:
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 2);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 2);
 
         cLib_addCalcAngleS(&current.angle.x, 0xffffe000, 8, 0x100, 0x40);
         shape_angle.x = current.angle.x;
@@ -2754,7 +2758,7 @@ bool daKago_c::executeFirstDemo() {
         }
 
         if (field_0x728 != 0) {
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 1);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 1);
         } else {
             if (field_0x73c == 0 && setSceneChange(0)) {
                 field_0x748 = 9;
@@ -2860,7 +2864,7 @@ void daKago_c::executeLandingLakeHairia() {
             field_0x744 = 3;
         }
 
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 7);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 7);
 
         break;
     case 3:
@@ -2893,7 +2897,7 @@ void daKago_c::executeLandingLakeHairia() {
             field_0x728 = 0x28;
         }
 
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 7);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 7);
 
         break;
     case 5:
@@ -2913,7 +2917,7 @@ void daKago_c::executeLandingLakeHairia() {
 
             setBck(0xf, 0x02, 10.0f, 1.0f);
         } else {
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 7);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 7);
         }
 
         field_0x6cc = 50.0f;
@@ -2964,7 +2968,7 @@ void daKago_c::executeLandingLakeHairia() {
             return;
         }
 
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 8);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 8);
     }
 
     camera->Set(field_0x68c, field_0x698, field_0x6d4, 0);
@@ -3029,7 +3033,7 @@ void daKago_c::executeLandingBoartHouse() {
             field_0x728 = 0x28;
         }
 
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 9);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 9);
 
         break;
     }
@@ -3047,7 +3051,7 @@ void daKago_c::executeLandingBoartHouse() {
             field_0x744 = 3;
             field_0x728 = 90;
         } else {
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 9);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 9);
         }
 
         field_0x6cc = 40.0f;
@@ -3102,7 +3106,7 @@ void daKago_c::executeLandingBoartHouse() {
             return;
         }
 
-        dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 10);
+        dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 10);
 
         break;
     }
@@ -3696,7 +3700,7 @@ int daKago_c::_delete() {
     dComIfG_resDelete(&mPhase, field_0x75c);
 
     if (field_0xb54 != 0) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.mChild);
     }
 
@@ -3805,9 +3809,9 @@ int daKago_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (l_HIOInit == 0) {
+        if (hio_set == 0) {
             field_0xb54 = 1;
-            l_HIOInit = 1;
+            hio_set = 1;
             l_HIO.mChild = mDoHIO_CREATE_CHILD("", &l_HIO);
         }
 
@@ -3892,7 +3896,7 @@ static actor_method_class l_daKago_Method = {
     (process_method_func)daKago_Draw,
 };
 
-extern actor_process_profile_definition g_profile_KAGO = {
+actor_process_profile_definition g_profile_KAGO = {
     fpcLy_CURRENT_e,        // mLayerID
     4,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

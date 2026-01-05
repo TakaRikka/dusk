@@ -230,7 +230,7 @@ static actor_method_class daTag_EvtArea_MethodTable = {
     (process_method_func)daTag_EvtArea_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_EVTAREA = {
+actor_process_profile_definition g_profile_TAG_EVTAREA = {
     fpcLy_CURRENT_e,
     8,
     fpcPi_CURRENT_e,

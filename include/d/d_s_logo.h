@@ -15,6 +15,8 @@ class dLog_HIO_c {
 public:
     dLog_HIO_c();
     virtual ~dLog_HIO_c();
+
+    u8 field_0x4[0x8 - 0x4];
 };  // Size: 0x8
 
 class dScnLogo_c : public scene_class {

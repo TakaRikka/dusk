@@ -415,10 +415,8 @@ BOOL _GlSph_Mng_c::_chkAllGet_main() {
     return TRUE;
 }
 
-/* 80BFAFE8 0002+00 data_80BFAFE8 mSphSe__12_GlSph_Mng_c */
 u16 _GlSph_Mng_c::mSphSe;
 
-/* 80BFAFEA 0002+00 data_80BFAFEA mSeClrTmr__12_GlSph_Mng_c */
 s16 _GlSph_Mng_c::mSeClrTmr;
 
 void _GlSph_Mng_c::SphSeProc() {
@@ -464,7 +462,7 @@ static actor_method_class l_daGlwSph_Method = {
     (process_method_func)daGlwSph_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_glowSphere = {
+actor_process_profile_definition g_profile_Obj_glowSphere = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

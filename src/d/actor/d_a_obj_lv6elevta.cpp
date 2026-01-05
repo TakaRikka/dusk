@@ -272,7 +272,7 @@ static actor_method_class daObjLv6ElevtA_METHODS = {
     (process_method_func)daObjLv6ElevtA_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv6ElevtA = {
+actor_process_profile_definition g_profile_Obj_Lv6ElevtA = {
     fpcLy_CURRENT_e,           // mLayerID
     2,                         // mListID
     fpcPi_CURRENT_e,           // mListPrio

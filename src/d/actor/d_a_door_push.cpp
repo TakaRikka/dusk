@@ -228,9 +228,9 @@ void daDoorPush_c::actionEvent() {
     demoProc();
 }
 
-static char* action_table[3] = {"WAIT", "OPEN", "SCENE_CHG"};
-
 int daDoorPush_c::demoProc() {
+    static char* action_table[3] = {"WAIT", "OPEN", "SCENE_CHG"};
+
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     field_0x644 = dComIfGp_evmng_getMyStaffId("pdoor", NULL, 0);
@@ -366,7 +366,7 @@ static actor_method_class daDoorPush_METHODS = {
     (process_method_func)daDoorPush_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_PushDoor = {
+actor_process_profile_definition g_profile_PushDoor = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

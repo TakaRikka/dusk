@@ -29,6 +29,8 @@ public:
     JAISeq* beginStartSeq_();
     bool endStartSeq_(JAISeq* seq, JAISoundHandle* handle);
 
+    /* 0x04 */ JAISoundActivity mActivity;
+
     virtual ~JAISeqMgr() {}
     virtual bool isUsingSeqData(const JAISeqDataRegion& seqDataRegion);
     virtual int releaseSeqData(const JAISeqDataRegion& seqDataRegion);
@@ -59,7 +61,6 @@ public:
     void pause(bool paused) { mActivity.field_0x0.flags.flag2 = paused; }
 
 private:
-    /* 0x04 */ JAISoundActivity mActivity;
     /* 0x08 */ JAIAudience* mAudience;
     /* 0x0C */ JAISeqDataMgr* seqDataMgr_;
     /* 0x10 */ JAISoundStrategyMgr<JAISeq>* field_0x10;

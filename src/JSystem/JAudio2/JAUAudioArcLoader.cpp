@@ -2,11 +2,12 @@
 
 #include "JSystem/JAudio2/JAUAudioArcLoader.h"
 #include "JSystem/JAudio2/JAISeMgr.h"
+#include "JSystem/JAudio2/JASReport.h"
 #include "JSystem/JAudio2/JAUSectionHeap.h"
 
 JAUAudioArcLoader::JAUAudioArcLoader(JAUSection* section) {
-    //JUT_ASSERT(13, section->isOpen());
-    //JUT_ASSERT(14, section->isBuilding());
+    JUT_ASSERT(13, section->isOpen());
+    JUT_ASSERT(14, section->isBuilding());
     mSection = section;
 }
 
@@ -68,9 +69,80 @@ void JAUAudioArcLoader::endBNKList() {
 }
 
 void JAUAudioArcLoader::readMaxSeCategory(int param_0, int param_1, int param_2) {
-    JAISeMgr* seMgr = JASGlobalInstance<JAISeMgr>::getInstance();
-    if (seMgr) {
-        seMgr->getCategory(param_0)->setMaxActiveSe(param_1);
-        seMgr->getCategory(param_0)->setMaxInactiveSe(param_2);
+    {
+        JAISeMgr* seMgr = JASGlobalInstance<JAISeMgr>::getInstance();
+        if (seMgr) {
+            seMgr->getCategory(param_0)->setMaxActiveSe(param_1);
+            seMgr->getCategory(param_0)->setMaxInactiveSe(param_2);
+        }
+    }
+}
+
+void JAUAudioArcLoader_withoutCopy::readWS(u32 param_0, void const* param_1, u32 param_2) {
+    mSection->newWaveBank(param_0, param_1);
+    if (param_2) {
+        mSection->loadWaveArc(param_0, param_2);
+    }
+    JASReport(".ws resource remains at Heap Head\n");
+}
+
+void JAUAudioArcLoader_withoutCopy::readBNK(u32 param_0, void const* param_1) {
+    mSection->newBank(param_1, param_0);
+    JASReport(".bnk resource remains at Heap Head\n");
+}
+
+void JAUAudioArcLoader_withoutCopy::readBSC(void const* param_0, u32 param_1) {
+    UNUSED(param_1);
+    mSection->newSeSeqCollection(param_0, 0);
+}
+
+void JAUAudioArcLoader_withoutCopy::readBST(void const* param_0, u32 param_1) {
+    UNUSED(param_1);
+    mSection->newSoundTable(param_0, 0, true);
+}
+
+void JAUAudioArcLoader_withoutCopy::readBSTN(void const* param_0, u32 param_1) {
+    UNUSED(param_1);
+    mSection->newSoundNameTable(param_0, 0, true);
+}
+
+void JAUAudioArcLoader_withoutCopy::readBMS(u32 param_0, void const* param_1, u32 param_2) {
+    UNUSED(param_2);
+    mSection->newStaticSeqData(param_0, param_1, 0);
+}
+
+void JAUAudioArcLoader_withoutCopy::readBMS_fromArchive(u32 param_0) {
+    mSection->newStaticSeqData(param_0);
+}
+
+void JAUAudioArcLoader_withoutCopy::newVoiceBank(u32 param_0, u32 param_1) {
+    mSection->newVoiceBank(param_1, param_0);
+}
+
+void JAUAudioArcLoader_withoutCopy::newDynamicSeqBlock(u32 param_0) {
+    JAUSectionHeap* sectionHeap = mSection->asSectionHeap();
+    JUT_ASSERT(166, sectionHeap);
+    sectionHeap->newDynamicSeqBlock(param_0);
+}
+
+void JAUAudioArcLoader_withoutCopy::readBSFT(void const* param_0) {
+    mSection->newStreamFileTable(param_0, false);
+}
+
+void JAUAudioArcLoader_withoutCopy::beginBNKList(u32 param_0, u32 param_1) {
+    mSection->beginNewBankTable(param_0, param_1);
+}
+
+void JAUAudioArcLoader_withoutCopy::endBNKList() {
+    mSection->endNewBankTable();
+}
+
+void JAUAudioArcLoader_withoutCopy::readMaxSeCategory(int param_0, int param_1, int param_2) {
+    {
+        JAISeMgr* seMgr = JASGlobalInstance<JAISeMgr>::getInstance();
+        if (seMgr) {
+            seMgr->getCategory(param_0)->setMaxActiveSe(param_1);
+            seMgr->getCategory(param_0)->setMaxInactiveSe(param_2);
+        }
     }
 }

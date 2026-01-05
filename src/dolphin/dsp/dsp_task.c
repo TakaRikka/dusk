@@ -1,4 +1,4 @@
-#include <stddef.h>
+#include <cstddef>
 
 #include <dolphin/dolphin.h>
 #include <dolphin/hw_regs.h>

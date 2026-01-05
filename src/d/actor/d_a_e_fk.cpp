@@ -106,7 +106,7 @@ void daE_FK_c::initSwordSph() {
     OnAt();
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_FK_HIO_c l_HIO;
 
@@ -434,10 +434,8 @@ bool daE_FK_c::checkViewArea() {
 }
 
 namespace {
-/* 806BB974 0002+00 data_806BB974 s_HorseAngle__22@unnamed@d_a_e_fk_cpp@ */
 static s16 s_HorseAngle;
 
-/* 806BB976 0002+00 data_806BB976 s_AttackChk__22@unnamed@d_a_e_fk_cpp@ */
 static s16 s_AttackChk;
 }
 
@@ -671,7 +669,7 @@ int daE_FK_c::Delete() {
     dComIfG_resDelete(&mPhase, "E_fk");
 
     if (mHIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -743,8 +741,8 @@ int daE_FK_c::Create() {
             return cPhs_ERROR_e;
         }
 
-        if (!l_HIOInit) {
-            l_HIOInit = TRUE;
+        if (!hio_set) {
+            hio_set = TRUE;
             mHIOInit = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("ファントム騎馬兵", &l_HIO);
         }
@@ -813,7 +811,7 @@ static actor_method_class l_daE_FK_Method = {
     (process_method_func)daE_FK_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_FK = {
+actor_process_profile_definition g_profile_E_FK = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

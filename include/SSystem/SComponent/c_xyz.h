@@ -2,7 +2,7 @@
 #define C_XYZ_H
 
 #include "dolphin/mtx.h"
-#include "math.h"
+#include <math>
 
 struct cXyz : Vec {
     static const cXyz Zero;
@@ -36,10 +36,11 @@ struct cXyz : Vec {
         this->y = vec.y;
         this->z = vec.z;
     }
-    void operator=(const Vec& vec) {
+    cXyz& operator=(const Vec& vec) {
         this->x = vec.x;
         this->y = vec.y;
         this->z = vec.z;
+        return *this;
     }
     cXyz operator+(Vec const&) const;
     cXyz operator-(Vec const&) const;

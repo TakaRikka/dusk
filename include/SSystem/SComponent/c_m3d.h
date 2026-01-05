@@ -1,7 +1,7 @@
 #ifndef C_M3D_H_
 #define C_M3D_H_
 
-#include "math.h"
+#include <math>
 #include "dolphin/mtx.h"
 
 class cM3dGAab;
@@ -107,5 +107,12 @@ inline bool cM3d_Cross_CylSph(const cM3dGCyl* cyl, const cM3dGSph* sph, Vec* out
     f32 sp10;
     return cM3d_Cross_CylSph(cyl, sph, out, &sp10);
 }
+
+#ifdef DEBUG
+
+bool cM3d_UpMtx_Base(const Vec& param_1, const Vec& param_2, Mtx param_3);
+bool cM3d_UpMtx(const Vec& param_1, Mtx param_2);
+
+#endif
 
 #endif

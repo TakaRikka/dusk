@@ -504,7 +504,7 @@ static actor_method_class l_daObjMirrorChain_Method = {
     (process_method_func)daObjMirrorChain_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_MirrorChain = {
+actor_process_profile_definition g_profile_Obj_MirrorChain = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

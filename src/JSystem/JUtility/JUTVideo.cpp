@@ -78,20 +78,20 @@ void JUTVideo::preRetraceProc(u32 retrace_count) {
     static void* frameBuffer = NULL;
 
     if (frameBuffer) {
-        JUTVideo* videoManager = JUTGetVideoManager();
-        const GXRenderModeObj* renderMode = videoManager->getRenderMode();
-        JUTDirectPrint* directPrint = JUTDirectPrint::getManager();
-        directPrint->changeFrameBuffer(frameBuffer, renderMode->fbWidth, renderMode->efbHeight);
+        const GXRenderModeObj* renderMode = JUTGetVideoManager()->getRenderMode();
+        u16 width = renderMode->fbWidth;
+        u16 height = renderMode->efbHeight;
+        JUTDirectPrint::getManager()->changeFrameBuffer(frameBuffer, width, height);
     }
 
-    if (sManager->mSetBlack == 1) {
-        s32 frame_count = sManager->mSetBlackFrameCount;
+    if (getManager()->mSetBlack == 1) {
+        s32 frame_count = getManager()->mSetBlackFrameCount;
         if (frame_count > 0) {
             frame_count--;
         }
 
-        sManager->mSetBlackFrameCount = frame_count;
-        sManager->mSetBlack = frame_count != 0;
+        getManager()->mSetBlackFrameCount = frame_count;
+        getManager()->mSetBlack = frame_count ? true : false;
         VISetBlack(TRUE);
         VIFlush();
         return;
@@ -157,8 +157,7 @@ void JUTVideo::drawDoneCallback() {
         if (xfb->getSDrawingFlag() == 1) {
             xfb->setSDrawingFlag(0);
 
-            void* frameBuffer = xfb->getDrawnXfb();
-            if (frameBuffer) {
+            if (xfb->getDrawnXfb()) {
                 VISetNextFrameBuffer(xfb->getDrawnXfb());
                 VIFlush();
             }
@@ -175,8 +174,7 @@ void JUTVideo::postRetraceProc(u32 retrace_count) {
         sManager->mPostCallback(retrace_count);
     }
 
-    OSMessage message = (OSMessage*)VIGetRetraceCount();
-    OSSendMessage(&sManager->mMessageQueue, message, OS_MESSAGE_NOBLOCK);
+    OSSendMessage(&sManager->mMessageQueue, (OSMessage)VIGetRetraceCount(), OS_MESSAGE_NOBLOCK);
 }
 
 void JUTVideo::setRenderMode(GXRenderModeObj const* pObj) {

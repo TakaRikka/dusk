@@ -106,7 +106,7 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     mpPmP_c->scale(g_MsgObject_HIO_c.mBoxTalkScaleX, g_MsgObject_HIO_c.mBoxTalkScaleY);
 
 #if VERSION == VERSION_GCN_JPN
-    if (dComIfGs_getOptUnk0() == 0) {
+    if (dComIfGs_getOptRuby() == 0) {
         mpTm_c[0] = new CPaneMgr(mpTxScreen, 'mg_3flin', 0, NULL);
         mpTm_c[1] = new CPaneMgr(mpTxScreen, 't3f_s', 0, NULL);
 

@@ -74,14 +74,7 @@ int daTag_AllMato_c::Execute() {
             return 1;
         }
 
-#if VERSION != VERSION_SHIELD_DEBUG
-        // TODO: gameInfo fake match to force reuse of pointer
-        dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-        if (play->getEvent().runCheck())
-#else
-        if (dComIfGp_event_runCheck())
-#endif
-        {
+        if (dComIfGp_event_runCheck()) {
             if (!eventInfo.checkCommandTalk()) {
                 if (eventInfo.checkCommandDemoAccrpt() && dComIfGp_getEventManager().endCheck(mEventIdx)) {
                     u16 evt_action = EVT_NONE;
@@ -121,11 +114,7 @@ int daTag_AllMato_c::Execute() {
                         }
 
                         dCam_getBody()->CorrectCenter();
-#if VERSION != VERSION_SHIELD_DEBUG
-                        play->getEvent().reset();
-#else
                         dComIfGp_event_reset();
-#endif
                         mEventIdx = -1;
                     }
                 } else {
@@ -146,7 +135,7 @@ int daTag_AllMato_c::Execute() {
                             actor_p = mBrkMatoActorMngr.getActorP();
                             JUT_ASSERT(218, NULL != actor_p);
 
-                            dComIfGp_getEvent().setPt2(mBrkMatoActorMngr.getActorP());
+                            dComIfGp_getEvent()->setPt2(mBrkMatoActorMngr.getActorP());
 
                             if (field_0x1d08 != 0) {
                                 switch (field_0x1d08) {
@@ -552,7 +541,7 @@ void daTag_AllMato_c::evtChange(u16 i_action) {
     }
 
     mEventIdx = dComIfGp_getEventManager().getEventIdx(this, l_evtList[i_action].eventName, 0xFF);
-    dComIfGp_getEvent().reset(this);
+    dComIfGp_getEvent()->reset(this);
     fopAcM_orderChangeEventId(this, mEventIdx, 1, 0xFFFF);
 }
 
@@ -584,7 +573,7 @@ static actor_method_class daTag_AllMato_MethodTable = {
     (process_method_func)daTag_AllMato_Draw
 };
 
-extern actor_process_profile_definition g_profile_TAG_ALLMATO = {
+actor_process_profile_definition g_profile_TAG_ALLMATO = {
     fpcLy_CURRENT_e,                // mLayerID
     10,                              // mListID
     fpcPi_CURRENT_e,                // mListPri

@@ -935,8 +935,8 @@ int daNpc_Saru_c::cutYmLook(int param_1) {
             case 0:
                 strcpy(acStack_88, l_evtList[2].eventName);
                 strcat(acStack_88, "@");
-                dComIfGp_getEvent().setSkipZev(this, acStack_88);
-                dComIfGp_getEvent().onSkipFade();
+                dComIfGp_getEvent()->setSkipZev(this, acStack_88);
+                dComIfGp_getEvent()->onSkipFade();
                 field_0xfd9 = 1;
 
             case 1:
@@ -1210,7 +1210,7 @@ static actor_method_class daNpc_Saru_MethodTable = {
     (process_method_func)daNpc_Saru_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_SARU = {
+actor_process_profile_definition g_profile_NPC_SARU = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

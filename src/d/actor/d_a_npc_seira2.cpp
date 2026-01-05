@@ -579,7 +579,7 @@ void daNpc_Seira2_c::setCollision() {
     cXyz cStack_48;
     f32 cylH, wallR;
     if (!mHide) {
-        if (mTwilight == 1 && dComIfGp_event_runCheck() == FALSE) {
+        if (mTwilight == 1 && !dComIfGp_event_runCheck()) {
             mCyl1.SetCoSPrm(0x69);
         } else {
             mCyl1.SetCoSPrm(0x79);
@@ -1097,7 +1097,7 @@ static actor_method_class daNpc_Seira2_MethodTable = {
     (process_method_func)daNpc_Seira2_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_SERA2 = {
+actor_process_profile_definition g_profile_NPC_SERA2 = {
   fpcLy_CURRENT_e,           // mLayerID
   7,                         // mListID
   fpcPi_CURRENT_e,           // mListPrio

@@ -32,10 +32,12 @@ static const dCcD_SrcCyl l_sph_src = {
         {0x0},                                               // mGObjCo
     },                                                       // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,                // mRadius
-        0.0f,                // mHeight
-    }  // mCylAttr
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,                // mRadius
+            0.0f,                // mHeight
+        }  // mCylAttr
+    }
 };
 
 static const int l_arcIdx[] = {3, 6, 5, 4};
@@ -535,7 +537,7 @@ static actor_method_class l_daObjZraMark_Method = {
     (process_method_func)daObjZraMark_Draw,
 };
 
-extern actor_process_profile_definition g_profile_ZRA_MARK = {
+actor_process_profile_definition g_profile_ZRA_MARK = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

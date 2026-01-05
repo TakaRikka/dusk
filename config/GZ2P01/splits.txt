@@ -917,7 +917,7 @@ d/d_kankyo.cpp:
 	.data       start:0x803BDA98 end:0x803BDE38
 	.bss        start:0x8042EA08 end:0x804307B0
 	.sdata      start:0x804526C0 end:0x804526E0
-	.sbss       start:0x80453028 end:0x80453038
+	.sbss       start:0x80453028 end:0x80453030
 	.sdata2     start:0x80455B80 end:0x80455E18
 
 d/d_kyeff.cpp:
@@ -935,6 +935,7 @@ d/d_ky_thunder.cpp:
 	.rodata     start:0x80396740 end:0x80396750
 	.data       start:0x803BDEB8 end:0x803BDEF8
 	.bss        start:0x804307B0 end:0x804307E0
+	.sbss       start:0x80453030 end:0x80453038
 	.sdata2     start:0x80455E30 end:0x80455EB8
 
 d/d_kantera_icon_meter.cpp:
@@ -1839,6 +1840,7 @@ JSystem/JAudio2/JASTrack.cpp:
 	.rodata     start:0x8039CCB0 end:0x8039CCF8
 	.data       start:0x803C7B08 end:0x803C7B30
 	.bss        start:0x80433668 end:0x80433AD8
+	.sbss       start:0x804531F8 end:0x80453200
 	.sdata2     start:0x80457578 end:0x804575B0
 
 JSystem/JAudio2/JASTrackPort.cpp:
@@ -2006,7 +2008,7 @@ JSystem/JAudio2/osdsp.cpp:
 JSystem/JAudio2/osdsp_task.cpp:
 	.text       start:0x8029F920 end:0x8029FDAC
 	.bss        start:0x80436020 end:0x80436038
-	.sbss       start:0x804532D0 end:0x804532F8
+	.sbss       start:0x804532D0 end:0x804532D8
 
 JSystem/JAudio2/JAIAudible.cpp:
 	.text       start:0x8029FDAC end:0x8029FDF4
@@ -2026,12 +2028,14 @@ JSystem/JAudio2/JAISeMgr.cpp:
 	.rodata     start:0x8039D5D8 end:0x8039D5F0
 	.data       start:0x803CB850 end:0x803CB878
 	.bss        start:0x80436038 end:0x80436058
+	.sbss       start:0x804532D8 end:0x804532E0
 	.sdata2     start:0x80457760 end:0x80457770
 
 JSystem/JAudio2/JAISeq.cpp:
 	.text       start:0x802A186C end:0x802A2574
 	.data       start:0x803CB878 end:0x803CB8C8
 	.bss        start:0x80436058 end:0x80436080
+	.sbss       start:0x804532E0 end:0x804532E8
 	.sdata2     start:0x80457770 end:0x80457780
 
 JSystem/JAudio2/JAISeqDataMgr.cpp:
@@ -2042,6 +2046,7 @@ JSystem/JAudio2/JAISeqMgr.cpp:
 	.text       start:0x802A2604 end:0x802A2F84
 	.data       start:0x803CB8F8 end:0x803CB910
 	.bss        start:0x80436080 end:0x804360A0
+	.sbss       start:0x804532E8 end:0x804532F0
 	.sdata2     start:0x80457780 end:0x80457790
 
 JSystem/JAudio2/JAISound.cpp:
@@ -2082,6 +2087,7 @@ JSystem/JAudio2/JAIStreamDataMgr.cpp:
 JSystem/JAudio2/JAIStreamMgr.cpp:
 	.text       start:0x802A4968 end:0x802A5044
 	.bss        start:0x804360B0 end:0x804360D0
+	.sbss       start:0x804532F0 end:0x804532F8
 	.sdata2     start:0x804577D8 end:0x804577E8
 
 JSystem/JAudio2/JAUAudioArcInterpreter.cpp:
@@ -2154,7 +2160,7 @@ Z2AudioLib/Z2Calc.cpp:
 
 Z2AudioLib/Z2Param.cpp:
 	.sdata      start:0x80452798 end:0x80452830
-	.sbss       start:0x80453300 end:0x80453318
+	.sbss       start:0x80453300 end:0x80453310
 
 Z2AudioLib/Z2AudioArcLoader.cpp:
 	.text       start:0x802AA834 end:0x802AA9C8
@@ -2174,6 +2180,7 @@ Z2AudioLib/Z2SoundStarter.cpp:
 Z2AudioLib/Z2SoundHandles.cpp:
 	.text       start:0x802ABE7C end:0x802AC44C
 	.bss        start:0x80436178 end:0x80436198
+	.sbss       start:0x80453310 end:0x80453318
 
 Z2AudioLib/Z2SeMgr.cpp:
 	.text       start:0x802AC44C end:0x802AFCA0
@@ -2375,10 +2382,10 @@ JSystem/JKernel/JKRFileCache.cpp:
 
 JSystem/JKernel/JKRArchivePub.cpp:
 	.text       start:0x802D6578 end:0x802D7094
+	.data       start:0x803CE228 end:0x803CE278
 
 JSystem/JKernel/JKRArchivePri.cpp:
 	.text       start:0x802D7094 end:0x802D77B8
-	.data       start:0x803CE228 end:0x803CE278
 	.sbss       start:0x804533E8 end:0x804533F0
 
 JSystem/JKernel/JKRMemArchive.cpp:
@@ -2948,7 +2955,7 @@ dolphin/os/OSThread.c:
 	.data       start:0x803D27D8 end:0x803D2FE8
 	.bss        start:0x8044DB38 end:0x8044E530
 	.sdata      start:0x80452978 end:0x80452980
-	.sbss       start:0x80453688 end:0x804536A0
+	.sbss       start:0x80453688 end:0x80453698
 
 dolphin/os/OSTime.c:
 	.text       start:0x80343568 end:0x803439E4
@@ -2956,6 +2963,10 @@ dolphin/os/OSTime.c:
 
 dolphin/os/__ppc_eabi_init.cpp:
 	.text       start:0x803439E4 end:0x80343A78
+
+dolphin/os/__start.c:
+	.init       start:0x80003100 end:0x80003458
+	.sbss       start:0x80453698 end:0x804536A0
 
 dolphin/exi/EXIBios.c:
 	.text       start:0x80343A78 end:0x80345454
@@ -3523,9 +3534,6 @@ TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/notify.c:
 
 TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/flush_cache.c:
 	.text       start:0x80370378 end:0x803703B0
-
-dolphin/os/__start.c:
-	.init       start:0x80003100 end:0x80003458
 
 PowerPC_EABI_Support/Runtime/Src/__mem.c:
 	.init       start:0x80003458 end:0x80003590

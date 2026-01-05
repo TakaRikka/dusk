@@ -24,10 +24,12 @@ dCcD_SrcCyl const daObjGraRock_c::mCcDCyl = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        0.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            0.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    },
 };
 
 void daObjGraRock_c::setAttnPos() {
@@ -304,7 +306,7 @@ static actor_method_class l_daObjGraRock_Method = {
     (process_method_func)daObjGraRock_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_GraRock = {
+actor_process_profile_definition g_profile_Obj_GraRock = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

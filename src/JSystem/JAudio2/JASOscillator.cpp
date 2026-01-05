@@ -8,10 +8,7 @@ JASOscillator::JASOscillator() {
     mDirectRelease = 0;
     _18 = 0;
     _1C = 0;
-    _0C = 0.0f;
-    _10 = 0.0f;
-    _08 = 0.0f;
-    _04 = 0.0f;
+    _04 = _08 = _10 = _0C = 0.0f;
 }
 
 
@@ -52,11 +49,12 @@ void JASOscillator::incCounter(f32 param_0) {
 }
 
 f32 JASOscillator::getValue() const {
+    JUT_ASSERT(120, mData);
 	return _08 * mData->mScale + mData->_14;
 }
 
 void JASOscillator::release() {
-	if (mData->_0C == NULL && mDirectRelease == 0) {
+	if (mData->rel_table == NULL && mDirectRelease == 0) {
         stop();
         return;
 	}
@@ -71,13 +69,14 @@ void JASOscillator::release() {
         update();
         return;
 	}
-	
-    if (mData->mTable != mData->_0C) {
+
+    if (mData->mTable != mData->rel_table) {
+        JUT_ASSERT(157, mData->rel_table != NULL);
         _04 = 0.0f;
         _0C = _08;
-        _10 = mData->_0C[0]._4 / 32768.0f;
+        _10 = mData->rel_table[0]._4 / 32768.0f;
         _14 = 0;
-        _18 = mData->_0C[0]._0;
+        _18 = mData->rel_table[0]._0;
     }
 
     _1C = 3;
@@ -86,7 +85,7 @@ void JASOscillator::release() {
 
 void JASOscillator::update() {
     if (_1C == 4) {
-        s16 x = mDirectRelease & 0x3FFF;
+        s32 x = mDirectRelease & 0x3FFF;
         if (_04 < x) {
             updateCurrentValue(x);
         } else {
@@ -98,25 +97,21 @@ void JASOscillator::update() {
 
     if (_1C == 2) return;
 
-    const Point* psVar1;
-    if (_1C == 1) {
-        psVar1 = mData->mTable;
-    } else {
-        psVar1 = mData->_0C;
-    }
+    const Point* psVar1 = _1C == 1 ? mData->mTable : mData->rel_table;
 
     if (psVar1 == NULL) {
         _1C = 2;
         return;
     }
-    
+
     while (_04 >= psVar1[_14]._2) {
         _04 -= psVar1[_14]._2;
         _08 = _10;
         _14++;
         _0C = _08;
         const s16* ps = &psVar1[_14]._0;
-        switch(ps[0]) {
+        s16 r26 = ps[0];
+        switch(r26) {
         case 0xf:
             _1C = 0;
             return;
@@ -127,7 +122,7 @@ void JASOscillator::update() {
             _14 = ps[2];
             break;
         default:
-            _18 = ps[0];
+            _18 = r26;
             _10 = ps[2] / 32768.0f;
             break;
         }
@@ -172,7 +167,6 @@ void JASOscillator::updateCurrentValue(f32 param_0) {
     f32 fVar1 = 16.0f * (_04 / param_0);
     u32 index = (u32) fVar1;
     f32 fVar3 = (fVar1 - index);
-    f32 fVar2 = (1.0f - fVar3) * table[index];
-    f32 fVar4 = fVar2 + fVar3 * table[index + 1];
+    f32 fVar4 = (1.0f - fVar3) * table[index] + fVar3 * table[index + 1];
     _08 = _0C * fVar4 + _10 * (1.0f - fVar4);
 }

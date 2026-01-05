@@ -315,7 +315,7 @@ void loadNBTScale(J3DNBTScale& NBTScale) {
     }
 }
 
-extern const J3DLightInfo j3dDefaultLightInfo = {
+const J3DLightInfo j3dDefaultLightInfo = {
     0.0f, 0.0f, 0.0f,
     0.0f, -1.0f, 0.0f,
     0xff, 0xff, 0xff, 0xff,
@@ -323,14 +323,14 @@ extern const J3DLightInfo j3dDefaultLightInfo = {
     1.0f, 0.0f, 0.0f,
 };
 
-extern J3DTexCoordInfo const j3dDefaultTexCoordInfo[8] = {
+J3DTexCoordInfo const j3dDefaultTexCoordInfo[8] = {
     {GX_MTX2x4, GX_TG_TEX0, GX_IDENTITY, 0}, {GX_MTX2x4, GX_TG_TEX1, GX_IDENTITY, 0},
     {GX_MTX2x4, GX_TG_TEX2, GX_IDENTITY, 0}, {GX_MTX2x4, GX_TG_TEX3, GX_IDENTITY, 0},
     {GX_MTX2x4, GX_TG_TEX4, GX_IDENTITY, 0}, {GX_MTX2x4, GX_TG_TEX5, GX_IDENTITY, 0},
     {GX_MTX2x4, GX_TG_TEX6, GX_IDENTITY, 0}, {GX_MTX2x4, GX_TG_TEX7, GX_IDENTITY, 0},
 };
 
-extern J3DTexMtxInfo const j3dDefaultTexMtxInfo = {
+J3DTexMtxInfo const j3dDefaultTexMtxInfo = {
     0x01,
     0x00,
     0xFF,
@@ -341,27 +341,27 @@ extern J3DTexMtxInfo const j3dDefaultTexMtxInfo = {
      1.0f},
 };
 
-extern J3DIndTexMtxInfo const j3dDefaultIndTexMtxInfo = {
+J3DIndTexMtxInfo const j3dDefaultIndTexMtxInfo = {
     0.5f, 0.0f, 0.0f,
     0.0f, 0.5f, 0.0f,
     1
 };
 
-extern J3DTevStageInfo const j3dDefaultTevStageInfo = {
+J3DTevStageInfo const j3dDefaultTevStageInfo = {
     0x04, 0x0A, 0x0F, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
     0x05, 0x07, 0x07, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00,
 };
 
-extern J3DIndTevStageInfo const j3dDefaultIndTevStageInfo = {
+J3DIndTevStageInfo const j3dDefaultIndTevStageInfo = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-extern J3DFogInfo const j3dDefaultFogInfo = {
+J3DFogInfo const j3dDefaultFogInfo = {
     0x00, 0x00, 0x0140, 0.0f, 0.0f, 0.1f, 10000.0f, 0xFF, 0xFF, 0xFF, 0x00,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
 };
 
-extern J3DNBTScaleInfo const j3dDefaultNBTScaleInfo = {
+J3DNBTScaleInfo const j3dDefaultNBTScaleInfo = {
     0x00, 1.0f, 1.0f, 1.0f,
 };
 
@@ -413,7 +413,6 @@ void makeAlphaCmpTable() {
     }
 }
 
-extern u8 j3dZModeTable[96];
 u8 j3dZModeTable[96];
 
 void makeZModeTable() {
@@ -492,43 +491,43 @@ static void J3DGDLoadPostTexMtxImm(f32 (*param_1)[4], u32 param_2) {
     J3DGDWrite_f32(param_1[2][3]);
 }
 
-extern const GXColor j3dDefaultColInfo = {0xFF, 0xFF, 0xFF, 0xFF};
+const GXColor j3dDefaultColInfo = {0xFF, 0xFF, 0xFF, 0xFF};
 
-extern const GXColor j3dDefaultAmbInfo = {0x32, 0x32, 0x32, 0x32};
+const GXColor j3dDefaultAmbInfo = {0x32, 0x32, 0x32, 0x32};
 
-extern const u8 j3dDefaultNumChans = 1;
+const u8 j3dDefaultNumChans = 1;
 
-extern const J3DTevOrderInfo j3dDefaultTevOrderInfoNull = {0xFF, 0xFF, 0xFF, 0x00};
+const J3DTevOrderInfo j3dDefaultTevOrderInfoNull = {0xFF, 0xFF, 0xFF, 0x00};
 
-extern const J3DIndTexOrderInfo j3dDefaultIndTexOrderNull = {0xFF, 0xFF, 0x00, 0x00};
+const J3DIndTexOrderInfo j3dDefaultIndTexOrderNull = {0xFF, 0xFF, 0x00, 0x00};
 
-extern const GXColorS10 j3dDefaultTevColor = {0xFF, 0xFF, 0xFF, 0xFF};
+const GXColorS10 j3dDefaultTevColor = {0xFF, 0xFF, 0xFF, 0xFF};
 
-extern const J3DIndTexCoordScaleInfo j3dDefaultIndTexCoordScaleInfo = {
+const J3DIndTexCoordScaleInfo j3dDefaultIndTexCoordScaleInfo = {
     0x00,
     0x00,
     0x00,
     0x00,
 };
 
-extern const GXColor j3dDefaultTevKColor = {0xFF, 0xFF, 0xFF, 0xFF};
+const GXColor j3dDefaultTevKColor = {0xFF, 0xFF, 0xFF, 0xFF};
 
-extern J3DTevSwapModeInfo const j3dDefaultTevSwapMode = {
+J3DTevSwapModeInfo const j3dDefaultTevSwapMode = {
     0x00,
     0x00,
     0x00,
     0x00,
 };
 
-extern const J3DTevSwapModeTableInfo j3dDefaultTevSwapModeTable = {0x00, 0x01, 0x02, 0x03};
+const J3DTevSwapModeTableInfo j3dDefaultTevSwapModeTable = {0x00, 0x01, 0x02, 0x03};
 
-extern const J3DBlendInfo j3dDefaultBlendInfo = {GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP};
+const J3DBlendInfo j3dDefaultBlendInfo = {GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP};
 
-extern const J3DColorChanInfo j3dDefaultColorChanInfo = {
+const J3DColorChanInfo j3dDefaultColorChanInfo = {
     0x00, 0x00, 0x00, 0x02, 0x02, 0x00, 0xFF, 0xFF,
 };
 
-extern const u8 j3dDefaultTevSwapTableID = 0x1B;
+const u8 j3dDefaultTevSwapTableID = 0x1B;
 
 const u16 j3dDefaultAlphaCmpID = 0x00E7;
 

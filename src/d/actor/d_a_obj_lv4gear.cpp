@@ -160,7 +160,7 @@ static actor_method_class l_daObjLv4Gear_Method = {
     (process_method_func)daObjLv4Gear_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv4Gear = {
+actor_process_profile_definition g_profile_Obj_Lv4Gear = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

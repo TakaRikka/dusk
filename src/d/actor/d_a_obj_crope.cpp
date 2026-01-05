@@ -36,13 +36,6 @@ static dCcD_SrcSph l_sphSrc = {
     } // mSphAttr
 };
 
-static GXColor color = {
-    0x00,
-    0x00,
-    0x00,
-    0xFF,
-};
-
 int daObjCrope_c::create() {
     fopAcM_ct(this, daObjCrope_c);
     int rv = dComIfG_resLoad(&mPhase, l_arcName);
@@ -360,6 +353,13 @@ static int daObjCrope_Execute(daObjCrope_c* i_this) {
 }
 
 int daObjCrope_c::draw() {
+    static GXColor color = {
+        0x00,
+        0x00,
+        0x00,
+        0xFF,
+    };
+
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
     mLineMat.update(100, 5.0f, color, 0, &tevStr);
     dComIfGd_set3DlineMat(&mLineMat);
@@ -378,7 +378,7 @@ static actor_method_class l_daObjCrope_Method = {
     (process_method_func)daObjCrope_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Crope = {
+actor_process_profile_definition g_profile_Obj_Crope = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

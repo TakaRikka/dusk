@@ -177,7 +177,7 @@ static actor_method_class l_daTagLv2PrChk_Method = {
     (process_method_func)NULL,
 };
 
-extern actor_process_profile_definition g_profile_Tag_Lv2PrChk = {
+actor_process_profile_definition g_profile_Tag_Lv2PrChk = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

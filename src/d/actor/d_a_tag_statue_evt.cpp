@@ -241,33 +241,33 @@ void daTagStatue_c::actionDead() {
     /* empty function */
 }
 
-static char* action_table[3] = {
-    "WAIT",
-    "ST_MOVE",
-    "ITEM"
-};
-
-// Saved positions of Owl Statues for cutscenes
-static Vec l_statue_pos[6] = {
-    {-17312.3007812f, -349.100006104f, -20523.1992188f},    // Faron Woods
-    {-17312.3007812f, -349.100006104f, -20523.1992188f},    // Gerudo Desert
-    {-9675.59960938f, -4800.0f, 39693.8984375f},            // Kakariko Gorge
-    {33345.6015625f, -75.5999984741f, -36331.1015625f},     // Great Eldin Bridge
-    {-94009.5f, -5440.10009766f, 18534.9003906f},           // Lake Hylia
-    {-81451.296875f, -1654.09997559f, 20832.1992188}        // Ruined Theatre
-};
-
-// Saved y orientations of Owl Statues for cutscenes
-static s16 l_statue_ang[6] = {
-    16384,  // Faron Woods
-    16384,  // Gerudo Desert
-    8485,   // Kakariko Gorge
-    16384,  // Great Eldin Bridge
-    16384,  // Lake Hylia
-    16384   // Ruined Theatre
-};
-
 int daTagStatue_c::demoProc() {
+    static char* action_table[3] = {
+        "WAIT",
+        "ST_MOVE",
+        "ITEM"
+    };
+
+    // Saved positions of Owl Statues for cutscenes
+    static Vec l_statue_pos[6] = {
+        {-17312.3007812f, -349.100006104f, -20523.1992188f},    // Faron Woods
+        {-17312.3007812f, -349.100006104f, -20523.1992188f},    // Gerudo Desert
+        {-9675.59960938f, -4800.0f, 39693.8984375f},            // Kakariko Gorge
+        {33345.6015625f, -75.5999984741f, -36331.1015625f},     // Great Eldin Bridge
+        {-94009.5f, -5440.10009766f, 18534.9003906f},           // Lake Hylia
+        {-81451.296875f, -1654.09997559f, 20832.1992188}        // Ruined Theatre
+    };
+
+    // Saved y orientations of Owl Statues for cutscenes
+    static s16 l_statue_ang[6] = {
+        16384,  // Faron Woods
+        16384,  // Gerudo Desert
+        8485,   // Kakariko Gorge
+        16384,  // Great Eldin Bridge
+        16384,  // Lake Hylia
+        16384   // Ruined Theatre
+    };
+
     int act_id = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZEU(action_table), 0, 0);
 
     if(dComIfGp_evmng_getIsAddvance(mStaffId)) {
@@ -466,7 +466,7 @@ NULL,
 reinterpret_cast<process_method_func>(daTagStatue_Draw),
 };
 
-extern actor_process_profile_definition g_profile_Tag_Statue = {
+actor_process_profile_definition g_profile_Tag_Statue = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

@@ -354,7 +354,7 @@ static actor_method_class daCoach2D_METHODS = {
     (process_method_func)daCoach2D_draw,
 };
 
-extern actor_process_profile_definition g_profile_COACH2D = {
+actor_process_profile_definition g_profile_COACH2D = {
   fpcLy_CURRENT_e,       // mLayerID
   3,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

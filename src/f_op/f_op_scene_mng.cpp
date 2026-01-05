@@ -4,6 +4,7 @@
  */
 
 #include "f_op/f_op_scene_mng.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_scene_iter.h"
 #include "f_op/f_op_scene_req.h"
 
@@ -24,13 +25,11 @@ int fopScnM_ChangeReq(scene_class* i_scene, s16 i_procName, s16 param_3, u16 par
 }
 
 fpc_ProcID fopScnM_DeleteReq(scene_class* i_scene) {
-    fpc_ProcID request_id = fopScnRq_Request(1, i_scene, 0x7FFF, NULL, 0x7FFF, 0);
-    return request_id != fpcM_ERROR_PROCESS_ID_e;
+    return fopScnRq_Request(1, i_scene, 0x7FFF, NULL, 0x7FFF, 0) != fpcM_ERROR_PROCESS_ID_e;
 }
 
 int fopScnM_CreateReq(s16 i_procName, s16 param_2, u16 param_3, u32 i_data) {
-    fpc_ProcID request_id = fopScnRq_Request(0, 0, i_procName, (void*)i_data, param_2, param_3);
-    return request_id != fpcM_ERROR_PROCESS_ID_e;
+    return fopScnRq_Request(0, 0, i_procName, (void*)i_data, param_2, param_3) != fpcM_ERROR_PROCESS_ID_e;
 }
 
 u32 fopScnM_ReRequest(s16 i_procName, u32 i_data) {
@@ -42,7 +41,14 @@ u32 fopScnM_ReRequest(s16 i_procName, u32 i_data) {
 }
 
 void fopScnM_Management() {
+#if DEBUG
+    if (fopScnRq_Handler()) {
+        return;
+    };
+    JUT_ASSERT(326, 0);
+#else
     fopScnRq_Handler();
+#endif
 }
 
 void fopScnM_Init() {}

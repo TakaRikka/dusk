@@ -4,7 +4,7 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
-#include "stdio.h"
+#include <stdio>
 #include "d/d_com_inf_game.h"
 #include "d/d_select_cursor.h"
 #include "d/d_meter2_info.h"
@@ -981,7 +981,7 @@ void dMenu_Letter_c::screenSetLetter() {
     dPaneClass_showNullPane(mpLetterScreen[0]);
 
 #if VERSION == VERSION_GCN_JPN
-    if (dComIfGs_getOptUnk0() == 0) {
+    if (dComIfGs_getOptRuby() == 0) {
         field_0x2ec[0] = new CPaneMgr(mpLetterScreen[0], 't3f_s', 0, NULL);
         field_0x2ec[1] = new CPaneMgr(mpLetterScreen[0], 'mg_3flin', 0, NULL);
         field_0x2f4[0] = new CPaneMgr(mpLetterScreen[0], 'mg_3f_s', 0, NULL);

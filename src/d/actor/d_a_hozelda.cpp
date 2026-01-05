@@ -23,7 +23,7 @@ void daHoZelda_hio_c::genMessage(JORMContext* context) {
 #endif
 
 static void* daHoZelda_searchGanon(fopAc_ac_c* i_actor, void* i_data) {
-    (void)i_data;
+    UNUSED(i_data);
     if (fopAcM_GetName(i_actor) == PROC_B_GND) {
         return i_actor;
     }
@@ -40,10 +40,8 @@ const daHoZelda_hio_c1 daHoZelda_hio_c0::m = {
     4000.0f,
 };
 
-#if VERSION != VERSION_GCN_PAL
 u8 daHoZelda_matAnm_c::mEyeMoveFlg;
 u8 daHoZelda_matAnm_c::mMorfFrame;
-#endif
 
 void daHoZelda_matAnm_c::init() {
     field_0xf4 = 0.0f;
@@ -940,7 +938,7 @@ static actor_method_class l_daHoZelda_Method = {
     (process_method_func)daHoZelda_Draw,
 };
 
-extern actor_process_profile_definition g_profile_HOZELDA = {
+actor_process_profile_definition g_profile_HOZELDA = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

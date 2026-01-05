@@ -2,7 +2,7 @@
 
 #include "JSystem/JStudio/JStudio/fvb.h"
 #include "JSystem/JUtility/JUTException.h"
-#include <string.h>
+#include <string>
 
 namespace JStudio {
 namespace fvb {
@@ -249,7 +249,7 @@ void TObject_transition::prepare_data_(const data::TParse_TParagraph::TData& rDa
     ASSERT(rData.u32Type == data::PARAGRAPH_DATA);
 
     u32 u32Size = rData.u32Size;
-    JUT_EXPECT(u32size == 8);
+    JGADGET_ASSERTWARN(0, u32Size == 8);
 
     const f32* pContent = static_cast<const f32*>(rData.pContent);
     ASSERT(pContent != NULL);
@@ -263,7 +263,7 @@ void TObject_list::prepare_data_(const data::TParse_TParagraph::TData& rData, TC
     ASSERT(rData.u32Type == data::PARAGRAPH_DATA);
 
     u32 u32Size = rData.u32Size;
-    JUT_EXPECT(u32size >= 8);
+    JGADGET_ASSERTWARN(0, u32Size >= 8);
 
     const ListData* pContent = static_cast<const ListData*>(rData.pContent);
     ASSERT(pContent != NULL);
@@ -280,7 +280,7 @@ void TObject_list_parameter::prepare_data_(const data::TParse_TParagraph::TData&
     ASSERT(rData.u32Type == data::PARAGRAPH_DATA);
 
     u32 u32Size = rData.u32Size;
-    JUT_EXPECT(u32size >= 8);
+    JGADGET_ASSERTWARN(0, u32Size >= 8);
 
     const ListData* pContent = static_cast<const ListData*>(rData.pContent);
     ASSERT(pContent != NULL);
@@ -295,7 +295,7 @@ void TObject_hermite::prepare_data_(const data::TParse_TParagraph::TData& rData,
     ASSERT(rData.u32Type == data::PARAGRAPH_DATA);
 
     u32 u32Size = rData.u32Size;
-    JUT_EXPECT(u32size >= 8);
+    JGADGET_ASSERTWARN(0, u32Size >= 8);
 
     const ListData* pContent = static_cast<const ListData*>(rData.pContent);
     ASSERT(pContent != NULL);
@@ -306,7 +306,7 @@ void TObject_hermite::prepare_data_(const data::TParse_TParagraph::TData& rData,
 TControl::TControl() : pFactory(NULL) {}
 
 TControl::~TControl() {
-    JUT_EXPECT(ocObject_.empty());
+    JGADGET_ASSERTWARN(0, ocObject_.empty());
 }
 
 void TControl::appendObject(TObject* object) {
@@ -374,14 +374,14 @@ void TFactory::destroy(TObject* pObject) {
 }
 
 TParse::TParse(TControl* pControl) : pControl_(pControl) {
-    ASSERT(pControl_ != 0);
+    ASSERT(pControl_ != NULL);
 }
 
 TParse::~TParse() {}
 
 bool TParse::parseHeader_next(void const** ppData_inout, u32* puBlock_out, u32 flags) {
-    ASSERT(ppData_inout != 0);
-    ASSERT(puBlock_out != 0);
+    ASSERT(ppData_inout != NULL);
+    ASSERT(puBlock_out != NULL);
 
     const void* pData = *ppData_inout;
     ASSERT(pData != NULL);
@@ -415,8 +415,8 @@ bool TParse::parseHeader_next(void const** ppData_inout, u32* puBlock_out, u32 f
 }
 
 bool TParse::parseBlock_next(void const** ppData_inout, u32* puData_out, u32 flags) {
-    ASSERT(ppData_inout != 0);
-    ASSERT(puData_out != 0);
+    ASSERT(ppData_inout != NULL);
+    ASSERT(puData_out != NULL);
 
     const void* pData = *ppData_inout;
     ASSERT(pData != NULL);
@@ -425,7 +425,7 @@ bool TParse::parseBlock_next(void const** ppData_inout, u32* puData_out, u32 fla
     *puData_out = blk.get_size();
 
     TControl* pControl = getControl();
-    ASSERT(pControl != 0);
+    ASSERT(pControl != NULL);
 
     if (flags & 0x10) {
         if (pControl->getObject(blk.get_ID(), blk.get_IDSize()) != NULL)

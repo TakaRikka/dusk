@@ -1,5 +1,5 @@
 #include <dolphin/gd.h>
-#include <math.h>
+#include <sdk_math.h>
 
 void GDSetLightAttn(GXLightID light, f32 a0, f32 a1, f32 a2, f32 k0, f32 k1, f32 k2) {
     GDWriteXFCmdHdr(__GDLightID2Offset(light) + XF_LIGHT_ATTN_ID, 6);

@@ -292,7 +292,7 @@ static actor_method_class l_daObjSM_DOOR_Method = {
     (process_method_func)daObjSM_DOOR_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SM_DOOR = {
+actor_process_profile_definition g_profile_Obj_SM_DOOR = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

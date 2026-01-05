@@ -1,4 +1,4 @@
-#include <string.h>
+#include <cstring>
 
 #include <revolution/gx.h>
 #include <revolution/os.h>

@@ -9,7 +9,7 @@
 JKRAMCommand* JKRAramPiece::prepareCommand(int direction, u32 src, u32 dst, u32 length,
                                            JKRAramBlock* block,
                                            JKRAMCommand::AsyncCallback callback) {
-    JKRAMCommand* command = new (JKRHeap::getSystemHeap(), -4) JKRAMCommand();
+    JKRAMCommand* command = new (JKRGetSystemHeap(), -4) JKRAMCommand();
     command->mTransferDirection = direction;
     command->mSrc = src;
     command->mDst = dst;
@@ -23,7 +23,6 @@ void JKRAramPiece::sendCommand(JKRAMCommand* command) {
     startDMA(command);
 }
 
-// JSUList<JKRAMCommand> JKRAramPiece::sAramPieceCommandList;
 JSUList<JKRAMCommand> JKRAramPiece::sAramPieceCommandList;
 
 OSMutex JKRAramPiece::mMutex;
@@ -39,11 +38,10 @@ JKRAMCommand* JKRAramPiece::orderAsync(int direction, u32 source, u32 destinatio
         JUTException::panic(__FILE__, 108, "illegal address. abort.");
     }
 
-    Message* message = new (JKRHeap::getSystemHeap(), -4) Message();
+    JKRAramCommand* message = new (JKRGetSystemHeap(), -4) JKRAramCommand();
     JKRAMCommand* command =
         JKRAramPiece::prepareCommand(direction, source, destination, length, block, callback);
-    message->field_0x00 = 1;
-    message->command = command;
+    message->setting(1, command);
 
     OSSendMessage(&JKRAram::sMessageQueue, message, OS_MESSAGE_BLOCK);
     if (command->mCallback != NULL) {
@@ -65,8 +63,7 @@ BOOL JKRAramPiece::sync(JKRAMCommand* command, int is_non_blocking) {
         return TRUE;
     }
 
-    BOOL result = OSReceiveMessage(&command->mMessageQueue, &message, OS_MESSAGE_NOBLOCK);
-    if (!result) {
+    if (!OSReceiveMessage(&command->mMessageQueue, &message, OS_MESSAGE_NOBLOCK)) {
         unlock();
         return FALSE;
     }
@@ -109,7 +106,7 @@ void JKRAramPiece::doneDMA(u32 requestAddress) {
 
     if (command->field_0x60 != 0) {
         if (command->field_0x60 == 2) {
-            JKRDecomp::sendCommand(command->mDecompCommand);
+            JKRDecompress_SendCommand(command->mDecompCommand);
         }
         return;
     }
@@ -140,5 +137,5 @@ JKRAMCommand::~JKRAMCommand() {
         delete field_0x90;
 
     if (field_0x94)
-        JKRHeap::free(field_0x94, NULL);
+        JKRFree(field_0x94);
 }

@@ -382,7 +382,7 @@ static actor_method_class l_daCrod_Method = {
     (process_method_func)daCrod_Draw,
 };
 
-extern actor_process_profile_definition g_profile_CROD = {
+actor_process_profile_definition g_profile_CROD = {
     fpcLy_CURRENT_e,
     8,
     fpcPi_CURRENT_e,

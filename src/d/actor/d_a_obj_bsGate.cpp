@@ -170,7 +170,7 @@ static actor_method_class l_daBsGate_Method = {
     (process_method_func)daBsGate_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_BsGate = {
+actor_process_profile_definition g_profile_Obj_BsGate = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

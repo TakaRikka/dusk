@@ -49,7 +49,7 @@ public:
     /* 0x73C */ WIND_INFLUENCE mWindInfluence;
     /* 0x768 */ f32 mDefaultRadius;
     /* 0x76C */ f32 mDefaultLength;
-    /* 0x770 */ int mTimer;
+    /* 0x770 */ s32 mTimer;
     /* 0x774 */ f32 mWindPower;
     /* 0x778 */ bool mColumnOn;
     /* 0x778 */ JPABaseEmitter* mParticles[3];

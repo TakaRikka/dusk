@@ -409,6 +409,15 @@ public:
 class daNpcF_MoveBgActor_c : public daNpcF_c {
 private:
 public:
+    // these functions are inferred based on daBaseNpc_moveBgActor_c -
+    // defining them in this order fixes weak function order for this class in d_a_npc
+    // (otherwise Delete is placed under Draw instead of under Create)
+    int MoveBGCreateHeap();
+    int MoveBGCreate();
+    int MoveBGDelete();
+    int MoveBGExecute();
+    int MoveBGDraw();
+
     virtual bool CreateHeap() { return true; }
     virtual bool Create() { return true; }
     virtual bool Execute(Mtx**) { return true; }

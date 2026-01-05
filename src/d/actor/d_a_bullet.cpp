@@ -250,7 +250,7 @@ static actor_method_class daBullet_MethodTable = {
     (process_method_func)daBullet_Draw,
 };
 
-extern actor_process_profile_definition g_profile_BULLET = {
+actor_process_profile_definition g_profile_BULLET = {
   fpcLy_CURRENT_e,        // mLayerID
   8,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

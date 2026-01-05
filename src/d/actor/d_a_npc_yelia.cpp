@@ -348,11 +348,8 @@ daNpc_Yelia_c::~daNpc_Yelia_c() {
 }
 
 cPhs__Step daNpc_Yelia_c::create() {
-    if (!fopAcM_CheckCondition(this, fopAcCnd_INIT_e)) {
-        new (this) daNpc_Yelia_c(l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
-                                 l_motionSequenceData, 4, l_evtList, l_resNameList);
-        fopAcM_OnCondition(this, fopAcCnd_INIT_e);
-    }
+    daNpcT_ct(this, daNpc_Yelia_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
+                                   l_motionSequenceData, 4, l_evtList, l_resNameList);
 
     mType = getType();
     mFlowNodeNo = getFlowNodeNo();
@@ -1110,8 +1107,8 @@ BOOL daNpc_Yelia_c::cutTakeWoodStatue(int i_staffId) {
             Z2GetAudioMgr()->muteSceneBgm(90, 0.0f);
             strcpy(name, l_evtList[EVENT_TAKE_WOODSTATUE].eventName);
             strcat(name, "@");
-            dComIfGp_getEvent().setSkipZev(this, name);
-            dComIfGp_getEvent().onSkipFade();
+            dComIfGp_getEvent()->setSkipZev(this, name);
+            dComIfGp_getEvent()->onSkipFade();
             break;
         }
 
@@ -1458,7 +1455,7 @@ BOOL daNpc_Yelia_c::reminiscence(void* param_0) {
 
     case MODE_RUN:
         field_0xe2d = false;
-        if (dComIfGp_event_runCheck() != FALSE
+        if (dComIfGp_event_runCheck()
             && !strcmp("SMELL_1st", dComIfGp_getEventManager().getRunEventName()))
         {
             dComIfGp_event_setTalkPartner(this);
@@ -1559,7 +1556,7 @@ static actor_method_class daNpc_Yelia_MethodTable = {
     (process_method_func)daNpc_Yelia_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_YELIA = {
+actor_process_profile_definition g_profile_NPC_YELIA = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

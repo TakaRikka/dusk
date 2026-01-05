@@ -34,7 +34,7 @@ public:
     /* 0x18 */ u32 mSize;
     /* 0x1C */ u32 mFreeSize;
     /* 0x20 */ u8 mGroupId;
-    /* 0x21 */ u8 mIsTempMemory;
+    /* 0x21 */ bool mIsTempMemory;
     /* 0x22 */ u8 padding[2];
 };
 

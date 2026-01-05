@@ -32,7 +32,9 @@ dCcD_SrcGObjInf const daZrTurara_c::mCcDObjInfo = {
 
 dCcD_SrcCyl daZrTurara_c::mCcDCyl = {
     mCcDObjInfo,
-    {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
+    {
+        {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
+    }
 };
 
 void daZrTurara_c::setBaseMtx() {
@@ -258,7 +260,7 @@ static actor_method_class l_daZrTurara_Method = {
     (process_method_func)daZrTurara_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_zrTurara = {
+actor_process_profile_definition g_profile_Obj_zrTurara = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

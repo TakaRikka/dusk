@@ -120,9 +120,6 @@ void JStudio::TAdaptor::adaptor_do_data(void const* param_0, u32 param_1, void c
     /* empty function */
 }
 
-/* 8028602C-802860CC 28096C 00A0+00 8/7 0/0 0/0 .text
- * adaptor_setVariableValue__Q27JStudio8TAdaptorFPQ27JStudio8TControlUlQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio::TAdaptor::adaptor_setVariableValue(JStudio::TControl* pControl, u32 param_2,
                                                      JStudio::data::TEOperationData param_3,
                                                      void const* param_4, u32 param_5) {
@@ -152,9 +149,6 @@ void JStudio::TAdaptor::adaptor_setVariableValue(JStudio::TControl* pControl, u3
 }
 
 
-/* 802860CC-802861C0 280A0C 00F4+00 7/7 0/0 0/0 .text
- * adaptor_setVariableValue_n__Q27JStudio8TAdaptorFPQ27JStudio8TControlPCUlUlQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio::TAdaptor::adaptor_setVariableValue_n(JStudio::TControl* pControl,
                                                        u32 const* param_2, u32 param_3,
                                                        JStudio::data::TEOperationData param_4,
@@ -190,9 +184,6 @@ void JStudio::TAdaptor::adaptor_setVariableValue_n(JStudio::TControl* pControl,
     }
 }
 
-/* 802861C0-80286204 280B00 0044+00 0/0 2/2 0/0 .text
- * adaptor_setVariableValue_immediate__Q27JStudio8TAdaptorFPCQ37JStudio8TAdaptor27TSetVariableValue_immediate
- */
 void JStudio::TAdaptor::adaptor_setVariableValue_immediate(
     JStudio::TAdaptor::TSetVariableValue_immediate const* p) {
     JUT_ASSERT(388, p!=NULL);
@@ -244,9 +235,6 @@ void JStudio::TAdaptor::adaptor_updateVariableValue(JStudio::TControl* pControl,
     }
 }
 
-/* 8028656C-80286584 280EAC 0018+00 2/2 0/0 0/0 .text
- * adaptor_setVariableValue_VOID___Q27JStudio8TAdaptorFPQ27JStudio8TAdaptorPQ27JStudio8TControlUlPCvUl
- */
 void JStudio::TAdaptor::adaptor_setVariableValue_VOID_(JStudio::TAdaptor* param_1,
                                                        JStudio::TControl* param_2, u32 param_3,
                                                        void const* param_4, u32 uSize) {
@@ -254,9 +242,6 @@ void JStudio::TAdaptor::adaptor_setVariableValue_VOID_(JStudio::TAdaptor* param_
     param_1->pValue_[param_3].setValue_none();
 }
 
-/* 80286584-802865B0 280EC4 002C+00 2/2 0/0 0/0 .text
- * adaptor_setVariableValue_IMMEDIATE___Q27JStudio8TAdaptorFPQ27JStudio8TAdaptorPQ27JStudio8TControlUlPCvUl
- */
 void JStudio::TAdaptor::adaptor_setVariableValue_IMMEDIATE_(JStudio::TAdaptor* param_1,
                                                             JStudio::TControl* param_2, u32 param_3,
                                                             void const* param_4, u32 param_5) {
@@ -264,9 +249,6 @@ void JStudio::TAdaptor::adaptor_setVariableValue_IMMEDIATE_(JStudio::TAdaptor* p
     value->setValue_immediate(*(f32*)param_4);
 }
 
-/* 802865B0-802865DC 280EF0 002C+00 2/2 0/0 0/0 .text
- * adaptor_setVariableValue_TIME___Q27JStudio8TAdaptorFPQ27JStudio8TAdaptorPQ27JStudio8TControlUlPCvUl
- */
 void JStudio::TAdaptor::adaptor_setVariableValue_TIME_(JStudio::TAdaptor* param_1,
                                                        JStudio::TControl* param_2, u32 param_3,
                                                        void const* param_4, u32 param_5) {
@@ -274,9 +256,6 @@ void JStudio::TAdaptor::adaptor_setVariableValue_TIME_(JStudio::TAdaptor* param_
     value->setValue_time(*(f32*)param_4);
 }
 
-/* 802865DC-80286648 280F1C 006C+00 1/1 0/0 0/0 .text
- * adaptor_setVariableValue_FVR_NAME___Q27JStudio8TAdaptorFPQ27JStudio8TAdaptorPQ27JStudio8TControlUlPCvUl
- */
 void JStudio::TAdaptor::adaptor_setVariableValue_FVR_NAME_(JStudio::TAdaptor* param_1,
                                                            JStudio::TControl* param_2, u32 param_3,
                                                            void const* param_4, u32 param_5) {
@@ -284,9 +263,6 @@ void JStudio::TAdaptor::adaptor_setVariableValue_FVR_NAME_(JStudio::TAdaptor* pa
     value->setValue_functionValue(param_2->getFunctionValue(param_4,param_5));
 }
 
-/* 80286648-802866B0 280F88 0068+00 2/2 0/0 0/0 .text
- * adaptor_setVariableValue_FVR_INDEX___Q27JStudio8TAdaptorFPQ27JStudio8TAdaptorPQ27JStudio8TControlUlPCvUl
- */
 void JStudio::TAdaptor::adaptor_setVariableValue_FVR_INDEX_(JStudio::TAdaptor* param_1,
                                                             JStudio::TControl* param_2, u32 param_3,
                                                             void const* param_4, u32 param_5) {
@@ -339,9 +315,6 @@ JStudio::TObject::TObject(JStudio::stb::data::TParse_TBlock_object const& param_
 JStudio::TAdaptor_actor::~TAdaptor_actor() {
 }
 
-/* 80286910-8028694C 281250 003C+00 0/0 1/1 0/0 .text
- * __ct__Q27JStudio13TObject_actorFRCQ47JStudio3stb4data20TParse_TBlock_objectPQ27JStudio14TAdaptor_actor
- */
 JStudio::TObject_actor::TObject_actor(JStudio::stb::data::TParse_TBlock_object const& param_0,
                                           JStudio::TAdaptor_actor* param_1) : TObject(param_0, param_1) {
 
@@ -495,9 +468,6 @@ fun:
 
 JStudio::TAdaptor_ambientLight::~TAdaptor_ambientLight() {}
 
-/* 80286CFC-80286D38 28163C 003C+00 0/0 1/1 0/0 .text
- * __ct__Q27JStudio20TObject_ambientLightFRCQ47JStudio3stb4data20TParse_TBlock_objectPQ27JStudio21TAdaptor_ambientLight
- */
 JStudio::TObject_ambientLight::TObject_ambientLight(
     JStudio::stb::data::TParse_TBlock_object const& param_0,
     JStudio::TAdaptor_ambientLight* param_1) : TObject(param_0, param_1) {
@@ -560,9 +530,6 @@ value_n:
 
 JStudio::TAdaptor_camera::~TAdaptor_camera() {}
 
-/* 80286E7C-80286EB8 2817BC 003C+00 0/0 1/1 0/0 .text
- * __ct__Q27JStudio14TObject_cameraFRCQ47JStudio3stb4data20TParse_TBlock_objectPQ27JStudio15TAdaptor_camera
- */
 JStudio::TObject_camera::TObject_camera(JStudio::stb::data::TParse_TBlock_object const& param_0,
                                         JStudio::TAdaptor_camera* param_1)
     : TObject(param_0, param_1) {}
@@ -695,9 +662,6 @@ fun:
 
 JStudio::TAdaptor_fog::~TAdaptor_fog() {}
 
-/* 802871DC-80287218 281B1C 003C+00 0/0 1/1 0/0 .text
- * __ct__Q27JStudio11TObject_fogFRCQ47JStudio3stb4data20TParse_TBlock_objectPQ27JStudio12TAdaptor_fog
- */
 JStudio::TObject_fog::TObject_fog(JStudio::stb::data::TParse_TBlock_object const& param_0,
                                       JStudio::TAdaptor_fog* param_1) : TObject(param_0, param_1) {}
 
@@ -771,9 +735,6 @@ value_n:
 
 JStudio::TAdaptor_light::~TAdaptor_light() {}
 
-/* 80287368-802873A4 281CA8 003C+00 0/0 1/1 0/0 .text
- * __ct__Q27JStudio13TObject_lightFRCQ47JStudio3stb4data20TParse_TBlock_objectPQ27JStudio14TAdaptor_light
- */
 JStudio::TObject_light::TObject_light(JStudio::stb::data::TParse_TBlock_object const& param_0,
                                           JStudio::TAdaptor_light* param_1) : TObject(param_0, param_1) {}
 
@@ -910,9 +871,6 @@ fun:
 
 JStudio::TAdaptor_message::~TAdaptor_message() {}
 
-/* 80287640-8028767C 281F80 003C+00 0/0 1/1 0/0 .text
- * __ct__Q27JStudio15TObject_messageFRCQ47JStudio3stb4data20TParse_TBlock_objectPQ27JStudio16TAdaptor_message
- */
 JStudio::TObject_message::TObject_message(JStudio::stb::data::TParse_TBlock_object const& param_0,
                                           JStudio::TAdaptor_message* param_1)
     : TObject(param_0, param_1) {}
@@ -939,9 +897,6 @@ void JStudio::TObject_message::do_paragraph(u32 param_1, void const* param_2, u3
 
 JStudio::TAdaptor_particle::~TAdaptor_particle() {}
 
-/* 8028776C-802877A8 2820AC 003C+00 0/0 1/1 0/0 .text
- * __ct__Q27JStudio16TObject_particleFRCQ47JStudio3stb4data20TParse_TBlock_objectPQ27JStudio17TAdaptor_particle
- */
 JStudio::TObject_particle::TObject_particle(
     JStudio::stb::data::TParse_TBlock_object const& param_0, JStudio::TAdaptor_particle* param_1) : TObject(param_0, param_1) {}
 
@@ -1140,9 +1095,6 @@ fun:
 
 JStudio::TAdaptor_sound::~TAdaptor_sound() {}
 
-/* 80287B9C-80287BD8 2824DC 003C+00 0/0 1/1 0/0 .text
- * __ct__Q27JStudio13TObject_soundFRCQ47JStudio3stb4data20TParse_TBlock_objectPQ27JStudio14TAdaptor_sound
- */
 JStudio::TObject_sound::TObject_sound(JStudio::stb::data::TParse_TBlock_object const& param_0,
                                           JStudio::TAdaptor_sound* param_1) : TObject(param_0, param_1) {}
 

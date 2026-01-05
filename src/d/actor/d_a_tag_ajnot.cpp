@@ -62,7 +62,7 @@ static actor_method_class l_daTagAJnot_Method = {
     (process_method_func)daTagAJnot_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_AJnot = {
+actor_process_profile_definition g_profile_Tag_AJnot = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

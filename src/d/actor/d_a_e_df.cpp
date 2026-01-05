@@ -61,12 +61,14 @@ void daE_DF_c::initCcCylinder() {
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                 // mGObjAt
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x1},                 // mGObjTg
             {0x0},                                              // mGObjCo
-        },                                                      // mObjInf
-        {
-            {0.0f, 0.0f, 0.0f},  // mCenter
-            150.0f,              // mRadius
-            158.0f               // mHeight
-        }  // mCyl
+        },      
+        {                                                // mObjInf
+            {
+                {0.0f, 0.0f, 0.0f},  // mCenter
+                150.0f,              // mRadius
+                158.0f               // mHeight
+            }  // mCyl
+        }
     };
 
     mStts.Init(0xff, 0xff, this);
@@ -166,7 +168,7 @@ int daE_DF_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     return 1;
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_DF_HIO_c l_HIO;
 
@@ -609,7 +611,7 @@ int daE_DF_c::Draw() {
 int daE_DF_c::Delete() {
     dComIfG_resDelete(&mPhaseReq, "E_DF");
     if (mHIOInit) {
-        l_initHIO = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.mNo);
     }
     if (heap != NULL) {
@@ -661,8 +663,8 @@ int daE_DF_c::Create() {
             return cPhs_ERROR_e;
         }
 
-        if (!l_initHIO) {
-            l_initHIO = TRUE;
+        if (!hio_set) {
+            hio_set = TRUE;
             mHIOInit = TRUE;
             l_HIO.mNo = mDoHIO_CREATE_CHILD("デクレシア", &l_HIO);
         }
@@ -714,7 +716,7 @@ static actor_method_class l_daE_DF_Method = {
     (process_method_func)daE_DF_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_DF = {
+actor_process_profile_definition g_profile_E_DF = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

@@ -12,8 +12,6 @@ extern "C" void __DSP_remove_task(DSPTaskInfo* task);
 
 static void Dsp_Update_Request();
 
-/* 80451308 0001+00 data_80451308 None */
-/* 80451309 0003+00 data_80451309 None */
 static vu8 struct_80451308;
 static u8 struct_80451309;
 

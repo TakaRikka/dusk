@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <cstdlib>
 #include <dolphin/dolphin.h>
 #include <dolphin/os.h>
 

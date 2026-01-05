@@ -1,7 +1,7 @@
 #include <dolphin/dolphin.h>
 #include <dolphin/gx.h>
 #include <dolphin/perf.h>
-#include "fake_tgmath.h"
+#include "sdk_math.h"
 
 #include "__perf.h"
 #include "../gx/__gx.h"

@@ -1,8 +1,8 @@
-#include "string.h"
+#include <cstring>
 
 void* memmove(void* dst, const void* src, size_t n) {
-    unsigned char* csrc;
-    unsigned char* cdst;
+    const char* csrc;
+    char* cdst;
 
     int reverse = (unsigned int)src < (unsigned int)dst;
 
@@ -24,19 +24,11 @@ void* memmove(void* dst, const void* src, size_t n) {
         return dst;
     } else {
         if (!reverse) {
-            csrc = ((unsigned char*)src) - 1;
-            cdst = ((unsigned char*)dst) - 1;
-            n++;
-
-            while (--n > 0) {
+            for (csrc = (const char*)src - 1, cdst = (char*)dst - 1, n++; --n;){
                 *++cdst = *++csrc;
             }
         } else {
-            csrc = (unsigned char*)src + n;
-            cdst = (unsigned char*)dst + n;
-            n++;
-
-            while (--n > 0) {
+            for (csrc = (const char*)src + n, cdst = (char*)dst + n, n++; --n;){
                 *--cdst = *--csrc;
             }
         }

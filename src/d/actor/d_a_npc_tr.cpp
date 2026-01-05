@@ -55,7 +55,7 @@ static f32 dummyLiterals() {
     return dummy;
 }
 
-static u8 data_80B26678;
+static u8 hio_set;
 
 static daNPC_TR_HIO_c l_HIO;
 
@@ -194,7 +194,7 @@ static int daNPC_TR_Delete(npc_tr_class* npc_tr) {
     dComIfG_resDelete(&npc_tr->mPhaseReq, "NPC_TR");
 
     if (npc_tr->field_0x600) {
-        data_80B26678 = 0;
+        hio_set = 0;
     }
 
     return 1;
@@ -231,9 +231,9 @@ static int daNPC_TR_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!data_80B26678) {
+        if (!hio_set) {
             npc_tr->field_0x600 = 1;
-            data_80B26678 = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -253,7 +253,7 @@ static actor_method_class l_daNPC_TR_Method = {
     (process_method_func)daNPC_TR_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_TR = {
+actor_process_profile_definition g_profile_NPC_TR = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

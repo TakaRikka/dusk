@@ -1327,7 +1327,7 @@ bool daNpcShad_c::wait_type1(void* param_1) {
                 }
             }
 
-            if (dComIfGp_event_runCheck() != 0) {
+            if (dComIfGp_event_runCheck()) {
                 if (eventInfo.checkCommandTalk()) {
                     if (dComIfGp_event_chkTalkXY()) {
                         if (!dComIfGp_evmng_ChkPresentEnd()) {
@@ -1352,7 +1352,7 @@ bool daNpcShad_c::wait_type1(void* param_1) {
                             changeEvent(l_evtArcs[mOrderEvtNo], l_evtNames[mOrderEvtNo], 1, 0xFFFF);
                         } else {
                             s16 eventIdx = dComIfGp_getEventManager().getEventIdx(this, "NO_RESPONSE", 0xFF);
-                            dComIfGp_getEvent().reset(this);
+                            dComIfGp_getEvent()->reset(this);
                             fopAcM_orderChangeEventId(this, eventIdx, 1, 0xFFFF);
                         }
                     } else if (daNpcF_chkEvtBit(0x313)) {
@@ -1493,7 +1493,7 @@ bool daNpcShad_c::talk(void* param_1) {
 
                         if (mItemPartnerId != fpcM_ERROR_PROCESS_ID_e) {
                             eventIdx = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);
-                            dComIfGp_getEvent().reset(this);
+                            dComIfGp_getEvent()->reset(this);
                             fopAcM_orderChangeEventId(this, eventIdx, 1, 0xFFFF);
                             field_0x9ec = true;
                             setWaitAction();
@@ -1546,7 +1546,7 @@ bool daNpcShad_c::demo(void* param_1) {
             field_0xe1a = 2;
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != 0 && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 iVar1 = eventManager.getMyStaffId(l_myName, NULL, 0);
                 if (iVar1 != -1) {
@@ -1859,8 +1859,8 @@ BOOL daNpcShad_c::EvCut_ToChantSpell2(int i_cutIndex) {
                     fopAcM_OnStatus(actor, fopAcM_STATUS_UNK_0x800);
                 }
 
-                dComIfGp_getEvent().startCheckSkipEdge(this);
-                dComIfGp_getEvent().onSkipFade();
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
+                dComIfGp_getEvent()->onSkipFade();
                 // fallthrough
             case '0003':
                 setLookMode(LOOK_NONE, NULL, NULL);
@@ -1913,7 +1913,7 @@ BOOL daNpcShad_c::EvCut_ToChantSpell2(int i_cutIndex) {
         }
     }
 
-    if (dComIfGp_getEvent().checkSkipEdge()) {
+    if (dComIfGp_getEvent()->checkSkipEdge()) {
         Z2GetAudioMgr()->unMuteSceneBgm(70);
         daNpcF_clearMessageTmpBit();
         daNpcF_onEvtBit(0x12F);
@@ -2046,7 +2046,7 @@ BOOL daNpcShad_c::EvCut_DiscoveryCannon(int i_cutIndex) {
     if (eventManager->getIsAddvance(i_cutIndex)) {
         switch (*cutName) {
             case '0001':
-                dComIfGp_getEvent().startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
                 Z2GetAudioMgr()->bgmStreamPrepare(0x200007C);
                 Z2GetAudioMgr()->bgmStreamPlay();
                 setExpression(EXPR_NONE, 0.0f);
@@ -2097,7 +2097,7 @@ BOOL daNpcShad_c::EvCut_DiscoveryCannon(int i_cutIndex) {
         }
     }
 
-    if (dComIfGp_getEvent().checkSkipEdge()) {
+    if (dComIfGp_getEvent()->checkSkipEdge()) {
         Z2GetAudioMgr()->bgmStreamStop(30);
         daNpcF_clearMessageTmpBit();
         daNpcF_onEvtBit(0x312);
@@ -2201,7 +2201,7 @@ BOOL daNpcShad_c::EvCut_Disappear(int i_cutIndex) {
     if (eventManager->getIsAddvance(i_cutIndex)) {
         switch (*cutName) {
             case '0001':
-                dComIfGp_getEvent().startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
                 // fallthrough
             case '0004':
                 setExpression(EXPR_NONE, -1.0f);
@@ -2264,7 +2264,7 @@ BOOL daNpcShad_c::EvCut_Disappear(int i_cutIndex) {
         setExpressionTalkAfter();
     }
 
-    if (dComIfGp_getEvent().checkSkipEdge()) {
+    if (dComIfGp_getEvent()->checkSkipEdge()) {
         daNpcF_clearMessageTmpBit();
         daNpcF_onEvtBit(0x311);
         mOrderEvtNo = 9;
@@ -2553,7 +2553,7 @@ BOOL daNpcShad_c::main() {
         (this->*mActionFn)(NULL);
     }
 
-    if (dComIfGp_event_runCheck() != 0 && !eventInfo.checkCommandTalk() && mItemPartnerId != fpcM_ERROR_PROCESS_ID_e) {
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && mItemPartnerId != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(mItemPartnerId);
         mItemPartnerId = fpcM_ERROR_PROCESS_ID_e;
     }
@@ -2645,7 +2645,7 @@ static actor_method_class daNpcShad_MethodTable = {
     (process_method_func)daNpcShad_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_SHAD = {
+actor_process_profile_definition g_profile_NPC_SHAD = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

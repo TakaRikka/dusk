@@ -415,7 +415,7 @@ void dKyr_sun_move() {
 }
 
 void dKyr_rain_init() {
-    camera_class* camera = g_dComIfG_gameInfo.play.mCameraInfo[0].mCamera;
+    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
     g_env_light.mpRainPacket->mpTex = (u8*)dComIfG_getObjectRes("Always", 0x4a);
     g_env_light.mpRainPacket->mpTex2 = (u8*)dComIfG_getObjectRes("Always", 0x57);
     g_env_light.mpRainPacket->mCamEyePos = camera->lookat.eye;
@@ -1224,7 +1224,7 @@ void dKyr_housi_move() {
 }
 
 void dKyr_snow_init() {
-    camera_class* camera = g_dComIfG_gameInfo.play.mCameraInfo[0].mCamera;
+    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
     g_env_light.mpSnowPacket = new (32) dKankyo_snow_Packet();
 
     if (g_env_light.mpSnowPacket == NULL) {
@@ -1518,7 +1518,7 @@ void dKyr_snow_move() {
 }
 
 void dKyr_star_init() {
-    camera_class* camera = g_dComIfG_gameInfo.play.mCameraInfo[0].mCamera;
+    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
     g_env_light.mpStarPacket = new (32) dKankyo_star_Packet();
 
     if (g_env_light.mpStarPacket == NULL) {
@@ -4526,16 +4526,6 @@ void drawCloudShadow(Mtx drawMtx, u8** tex) {
         GXSetClipMode(GX_CLIP_ENABLE);
         J3DShape::resetVcdVatCache();
     }
-}
-
-// drawVrkumo calls these functions as inlines somehow
-// these need to be moved to MSL_C once an appropriate solution is found
-inline float sinf(float x) {
-    return sin(x);
-}
-
-inline float cosf(float x) {
-    return cos(x);
 }
 
 void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {

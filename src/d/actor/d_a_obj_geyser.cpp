@@ -138,7 +138,7 @@ static const Vec l_scale[] = {
 };
 
 int daObjGeyser_c::Execute(Mtx** param_0) {
-    if (dComIfGp_event_runCheck() == 0) {
+    if (!dComIfGp_event_runCheck()) {
         f32 range = 5000.0f;
         if (fopAcM_searchPlayerDistance(this) > range) {
             stopEmitterPre00();
@@ -689,7 +689,7 @@ static actor_method_class daObjGeyser_METHODS = {
     (process_method_func)daObjGeyser_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Geyser = {
+actor_process_profile_definition g_profile_Obj_Geyser = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -104,7 +104,7 @@ static actor_method_class l_daObj_Suisya_Method = {
     (process_method_func)daObj_Suisya_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_SUISYA = {
+actor_process_profile_definition g_profile_OBJ_SUISYA = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

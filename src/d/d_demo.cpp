@@ -14,9 +14,6 @@ s16 dDemo_c::m_branchId = -1;
 namespace {
 jstudio_tAdaptor_message::~jstudio_tAdaptor_message() {}
 
-/* 80037E44-80037E74 032784 0030+00 1/0 0/0 0/0 .text
- * adaptor_do_MESSAGE__Q220@unnamed@d_demo_cpp@24jstudio_tAdaptor_messageFQ37JStudio4data15TEOperationDataPCvUl
- */
 void jstudio_tAdaptor_message::adaptor_do_MESSAGE(JStudio::data::TEOperationData iType,
                                                   const void* pContent, u32 uSize) {
     switch (iType) {
@@ -40,9 +37,6 @@ void jstudio_tAdaptor_message::adaptor_do_MESSAGE(JStudio::data::TEOperationData
 
 jstudio_tCreateObject_message::~jstudio_tCreateObject_message() {}
 
-/* 80037ED4-80038020 032814 014C+00 1/0 0/0 0/0 .text
- * create__Q220@unnamed@d_demo_cpp@29jstudio_tCreateObject_messageFPPQ27JStudio7TObjectRCQ47JStudio3stb4data20TParse_TBlock_object
- */
 bool
 jstudio_tCreateObject_message::create(JStudio::TObject** ppObject,
                                       const JStudio::stb::data::TParse_TBlock_object& iBlock) {
@@ -98,7 +92,7 @@ dDemo_actor_c::~dDemo_actor_c() {
 
     #if DEBUG
     if(dComIfGp_event_getMode() == 0) {
-        g_dComIfG_gameInfo.play.getEvent().setDebugStb(0);
+        g_dComIfG_gameInfo.play.getEvent()->setDebugStb(0);
     }
     #endif
 }

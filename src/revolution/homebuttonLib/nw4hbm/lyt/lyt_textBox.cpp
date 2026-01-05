@@ -8,7 +8,7 @@
 #include "pane.h"
 #include "textBox.h"
 
-#include "new.h"
+#include <new>
 
 namespace nw4hbm {
     namespace lyt {

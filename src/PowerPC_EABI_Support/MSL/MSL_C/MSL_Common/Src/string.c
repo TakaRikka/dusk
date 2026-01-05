@@ -1,4 +1,5 @@
-#include "string.h"
+#include <cstring>
+#include "global.h"
 
 #define K1 0x80808080
 #define K2 0xFEFEFEFF
@@ -42,7 +43,9 @@ char* strcpy(char* dst, const char* src) {
     w = *((int*)(fromb));
 
     t = w + K2;
-
+    #if !PLATFORM_GCN
+    t &= ~w;
+    #endif
     t &= K1;
     if (t) {
         goto bytecopy;
@@ -54,6 +57,9 @@ char* strcpy(char* dst, const char* src) {
         w = *(++((int*)(fromb)));
 
         t = w + K2;
+        #if !PLATFORM_GCN
+        t &= ~w;
+        #endif
         t &= K1;
         if (t) {
             goto adjust;
@@ -145,6 +151,9 @@ int strcmp(const char* str1, const char* str2) {
     l1 = *(int*)left;
     r1 = *(int*)right;
     x = l1 + K2;
+    #if !PLATFORM_GCN
+    x &= ~l1;
+    #endif
     if (x & K1) {
         goto adjust;
     }
@@ -158,10 +167,12 @@ int strcmp(const char* str1, const char* str2) {
         }
     }
 
+#if PLATFORM_GCN
     if (l1 > r1) {
         return 1;
     }
     return -1;
+#endif
 
 adjust:
     l1 = *left;

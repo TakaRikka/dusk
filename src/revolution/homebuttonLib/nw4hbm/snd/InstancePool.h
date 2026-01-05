@@ -1,7 +1,7 @@
 #ifndef NW4HBM_SND_INSTANCE_POOL_H
 #define NW4HBM_SND_INSTANCE_POOL_H
 
-#include <new.h>
+#include <new>
 #include <revolution/types.h>
 
 namespace nw4hbm {

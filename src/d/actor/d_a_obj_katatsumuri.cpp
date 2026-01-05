@@ -14,7 +14,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-static u8 hioInit;
+static u8 hio_set;
 
 static daObj_KatHIO_c l_HIO;
 
@@ -30,7 +30,6 @@ static u8 const l_kat_itemno[2] = {
 };
 
 void daObjKAT_c::InitCcSph() {
-    /* 80C3C67C-80C3C6BC 000008 0040+00 1/1 0/0 0/0 .rodata          ccSphSrc$3779 */
     const static dCcD_SrcSph ccSphSrc = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0x14002, 0x11}, 0x0}}, // mObj
@@ -626,7 +625,7 @@ void daObjKAT_c::Z_BufferChk() {
 int daObjKAT_c::Delete() {
     dComIfG_resDelete(&mPhase, "Kat");
     if (field_0xa70 != 0) {
-        hioInit = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.field_0x4);
     }
     if (heap != NULL) {
@@ -728,8 +727,8 @@ int daObjKAT_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (hioInit == 0) {
-            hioInit = 1;
+        if (hio_set == 0) {
+            hio_set = 1;
             field_0xa70 = 1;
             // Golden Snail
             l_HIO.field_0x4 = mDoHIO_CREATE_CHILD("黄金蟲(カタツムリ)", &l_HIO);
@@ -856,7 +855,7 @@ static actor_method_class l_daObjKAT_Method = {
     (process_method_func)daObjKAT_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Kat = {
+actor_process_profile_definition g_profile_Obj_Kat = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

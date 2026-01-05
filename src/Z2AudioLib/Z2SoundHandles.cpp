@@ -120,8 +120,7 @@ void Z2SoundHandles::stopAllSounds(u32 fadeTime) {
 }
 
 bool Z2SoundHandles::isActive() const {
-    JSULink<Z2SoundHandlePool>* i;
-    for (i = getFirst(); i != NULL; i = i->getNext()) {
+    for (JSULink<Z2SoundHandlePool>*i = getFirst(); i != NULL; i = i->getNext()) {
         if (i->getObject()->isSoundAttached()) {
             return true;
         }

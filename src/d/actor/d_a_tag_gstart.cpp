@@ -58,7 +58,7 @@ static actor_method_class l_daTagGstart_Method = {
     (process_method_func)daTagGstart_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_Gstart = {
+actor_process_profile_definition g_profile_Tag_Gstart = {
     fpcLy_CURRENT_e,
     2,
     fpcPi_CURRENT_e,

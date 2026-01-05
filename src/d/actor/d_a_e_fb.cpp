@@ -127,7 +127,7 @@ static f32 dummy_117095() {
 }
 #endif
 
-bool l_HIOInit;
+bool hio_set;
 
 static daE_FB_HIO_c l_HIO;
 
@@ -461,7 +461,7 @@ void daE_FB_c::executeAttack() {
                     }
                 }
 
-                if (dComIfGp_event_runCheck() == FALSE) {
+                if (!dComIfGp_event_runCheck()) {
                     cMtx_YrotS(*calc_mtx, current.angle.y);
                     cMtx_XrotM(*calc_mtx, sp_0x28.x);
                     sp_0x48.x = 0.0f;
@@ -857,7 +857,7 @@ int daE_FB_c::_delete() {
     }
 
     if (mHIOInit) {
-        l_HIOInit = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.mId);
     }
 
@@ -942,8 +942,8 @@ cPhs__Step daE_FB_c::create() {
                 return cPhs_ERROR_e;
             }
 
-            if (l_HIOInit == false) {
-                l_HIOInit = true;
+            if (hio_set == false) {
+                hio_set = true;
                 mHIOInit = 1;
                 l_HIO.mId = mDoHIO_CREATE_CHILD("フリザド（大）", &l_HIO);
             }
@@ -1007,7 +1007,7 @@ static actor_method_class l_daE_FB_Method = {
     (process_method_func)daE_FB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_FB = {
+actor_process_profile_definition g_profile_E_FB = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -58,7 +58,7 @@ dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
     mpScreen->search('white_m')->setAnimation(field_0xd4);
 
 #if VERSION == VERSION_GCN_JPN
-    if (dComIfGs_getOptUnk0() != 0) {
+    if (dComIfGs_getOptRuby() != 0) {
         for (int i = 0; i < 3; i++) {
             static u64 const t_tag[3] = {'mg_3line', 't3_w', 't3_s'};
 

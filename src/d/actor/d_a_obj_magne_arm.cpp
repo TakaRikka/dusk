@@ -1098,7 +1098,7 @@ static actor_method_class daObjMarm_METHODS = {
     (process_method_func)daObjMarm_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_MagneArm = {
+actor_process_profile_definition g_profile_Obj_MagneArm = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

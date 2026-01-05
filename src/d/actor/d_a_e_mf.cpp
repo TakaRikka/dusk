@@ -289,7 +289,7 @@ static BOOL other_bg_check2(e_mf_class* i_this, cXyz* param_2) {
     return FALSE;
 }
 
-u8 l_initHIO;
+u8 hio_set;
 
 daE_MF_HIO_c l_HIO;
 
@@ -3075,7 +3075,7 @@ static int daE_MF_Delete(e_mf_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_mf");
 
     if (i_this->field_0x10b9 != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (a_this->heap != NULL) {
@@ -3174,9 +3174,9 @@ static cPhs__Step daE_MF_Create(fopAc_ac_c* a_this) {
             return cPhs_ERROR_e;
         }
 
-        if (l_initHIO == 0) {
+        if (hio_set == 0) {
             i_this->field_0x10b9 = 1;
-            l_initHIO = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -3271,7 +3271,7 @@ actor_method_class l_daE_MF_Method = {
     (process_method_func)daE_MF_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_MF = {
+actor_process_profile_definition g_profile_E_MF = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

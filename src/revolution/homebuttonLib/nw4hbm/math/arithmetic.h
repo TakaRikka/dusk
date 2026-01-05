@@ -1,8 +1,8 @@
 #ifndef NW4HBM_MATH_ARITHMETIC_H
 #define NW4HBM_MATH_ARITHMETIC_H
 
-#include <math.h>
-#include <cmath.h>
+#include <math>
+#include <math>
 
 #include <revolution/os.h>
 #include <revolution/types.h>

@@ -4,6 +4,10 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_searcher.h"
 
+#if DEBUG
+#include "d/d_debug_viewer.h"
+#endif
+
 void dCcD_GAtTgCoCommonBase::ClrActorInfo() {
     mApid = -1;
     mAc = NULL;
@@ -51,7 +55,10 @@ void dCcD_GAtTgCoCommonBase::SubtractEffCounter() {
 }
 
 bool dCcD_GAtTgCoCommonBase::ChkEffCounter() {
-    return mEffCounter > 0;
+    if (mEffCounter > 0) {
+        return true;
+    }
+    return false;
 }
 
 dCcD_GStts::dCcD_GStts() {
@@ -197,7 +204,11 @@ cCcD_GObjInf* dCcD_GObjInf::GetAtHitGObj() {
 }
 
 u8 dCcD_GObjInf::ChkAtNoGuard() {
-    return GetAtSpl() >= 12;
+    dCcG_At_Spl spl = GetAtSpl();
+    if (spl >= 12) {
+        return 1;
+    }
+    return 0;
 }
 
 void dCcD_GObjInf::ClrTgHit() {
@@ -313,8 +324,11 @@ void dCcD_GObjInf::Set(dCcD_SrcGObjInf const& src) {
     mGObjCo.Set(src.mGObjCo);
 }
 
-dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* p_obj) {
-    return (dCcD_GObjInf*)p_obj->GetGObjInf();
+dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* pobj) {
+    JUT_ASSERT(687, pobj != NULL);
+    cCcD_GObjInf* cgobj = pobj->GetGObjInf();
+    dCcD_GObjInf* dgobj = (dCcD_GObjInf*)cgobj;
+    return dgobj;
 }
 
 cCcD_ShapeAttr* dCcD_Pnt::GetShapeAttr() {
@@ -340,17 +354,57 @@ void dCcD_Cps::CalcTgVec() {
     CalcVec(dest);
 }
 
+#if DEBUG
+
+void dCcD_Cps::Draw(const GXColor& color) {
+    Mtx auStack_68;
+    Mtx auStack_98;
+    Mtx auStack_c8;
+    
+    MTXIdentity(auStack_68);
+
+    cXyz cStack_d8;
+    CalcVec(&cStack_d8);
+    cMtx_trans(auStack_98, GetStartP().x, GetStartP().y, GetStartP().z);
+    cM3d_UpMtx(cStack_d8, auStack_c8);
+    cMtx_concat(auStack_98, auStack_c8, auStack_68);
+    cMtx_scale(auStack_98, GetR(), 0.5f * GetLen(), GetR());
+    cMtx_concat(auStack_68, auStack_98, auStack_68);
+    cMtx_trans(auStack_98, 0.0f, 1.0f, 0.0f);
+    cMtx_concat(auStack_68, auStack_98, auStack_68);
+    cMtx_XrotS(auStack_98, 0x4000);
+    cMtx_concat(auStack_68, auStack_98, auStack_68);
+    dDbVw_drawCylinderMXlu(auStack_68, color, 1);
+    dDbVw_drawSphereXlu(GetStartP(), GetR(), color, 1);
+    dDbVw_drawSphereXlu(GetEndP(), GetR(), color, 1);
+}
+
+#endif
+
 void dCcD_Tri::Set(dCcD_SrcTri const& src) {
     dCcD_GObjInf::Set(src.mObjInf);
+    cCcD_TriAttr* attr = this;
 }
 
 cCcD_ShapeAttr* dCcD_Tri::GetShapeAttr() {
     return this;
 }
 
+#if DEBUG
+
+void dCcD_Tri::Draw(const GXColor& color) {
+    cXyz cStack_34[3];
+    cStack_34[0] = mA;
+    cStack_34[1] = mB;
+    cStack_34[2] = mC;
+    dDbVw_drawTriangleXlu(cStack_34, color, 1);
+}
+
+#endif
+
 void dCcD_Cyl::Set(dCcD_SrcCyl const& src) {
     dCcD_GObjInf::Set(src.mObjInf);
-    cCcD_CylAttr::Set(src.mCyl);
+    cCcD_CylAttr::Set(src.mCylAttr);
 }
 
 cCcD_ShapeAttr* dCcD_Cyl::GetShapeAttr() {
@@ -365,17 +419,27 @@ void dCcD_Cyl::StartCAt(cXyz& pos) {
 
 void dCcD_Cyl::MoveCAt(cXyz& pos) {
     const cXyz* center = GetCP();
-    cXyz diff = pos - *center;
+    cXyz diff;
+    diff = pos - *center;
     SetAtVec(diff);
     SetC(pos);
 }
 
 void dCcD_Cyl::MoveCTg(cXyz& pos) {
     const cXyz* center = GetCP();
-    cXyz diff = pos - *center;
+    cXyz diff;
+    diff = pos - *center;
     SetTgVec(diff);
     SetC(pos);
 }
+
+#if DEBUG
+
+void dCcD_Cyl::Draw(const GXColor& color) {
+    dDbVw_drawCylinderXlu(*GetCP(), GetR(), GetH(), color, 1);
+}
+
+#endif
 
 void dCcD_Sph::Set(dCcD_SrcSph const& src) {
     dCcD_GObjInf::Set(src.mObjInf);
@@ -390,7 +454,8 @@ void dCcD_Sph::StartCAt(cXyz& pos) {
 
 void dCcD_Sph::MoveCAt(cXyz& pos) {
     const cXyz* center = GetCP();
-    cXyz diff = pos - *center;
+    cXyz diff;
+    diff = pos - *center;
     SetAtVec(diff);
     SetC(pos);
 }
@@ -398,3 +463,11 @@ void dCcD_Sph::MoveCAt(cXyz& pos) {
 cCcD_ShapeAttr* dCcD_Sph::GetShapeAttr() {
     return this;
 }
+
+#if DEBUG
+
+void dCcD_Sph::Draw(const GXColor& color) {
+    dDbVw_drawSphereXlu(*GetCP(), GetR(), color, 1);
+}
+
+#endif

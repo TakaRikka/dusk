@@ -394,7 +394,7 @@ static actor_method_class daNpc_FairySeirei_MethodTable = {
     daNpc_FairySeirei_IsDelete, daNpc_FairySeirei_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_FAIRY_SEIREI = {
+actor_process_profile_definition g_profile_NPC_FAIRY_SEIREI = {
     fpcLy_CURRENT_e,                 // mLayerID
     7,                               // mListID
     fpcPi_CURRENT_e,                 // mListPrio

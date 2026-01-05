@@ -169,7 +169,7 @@ static actor_method_class l_daObjMirrorSand_Method = {
     (process_method_func)daObjMirrorSand_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_MirrorSand = {
+actor_process_profile_definition g_profile_Obj_MirrorSand = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

@@ -4,6 +4,7 @@
 #include "JSystem/J2DGraph/J2DPrint.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "JSystem/JUtility/JUTResFont.h"
+#include "JSystem/JUtility/JUTResource.h"
 
 J2DTextBox::J2DTextBox()
     : mFont(NULL), mCharColor(), mGradientColor(), mStringPtr(NULL), mWhiteColor(), mBlackColor() {
@@ -77,12 +78,8 @@ J2DTextBox::J2DTextBox(J2DPane* p_pane, JSURandomInputStream* p_stream, u32 para
 
     if (mStringPtr != NULL) {
         mStringLength = strLength;
-        int temp_r0 = (u16)strLength - 1;
-        u16 var_r26_2 = info.field_0x1e;
 
-        if (temp_r0 < var_r26_2) {
-            var_r26_2 = (u16)temp_r0;
-        }
+        u16 var_r26_2 = strLength - 1 < info.field_0x1e ? u16(strLength - 1) : info.field_0x1e;
 
         p_stream->peek(mStringPtr, var_r26_2);
         mStringPtr[var_r26_2] = 0;
@@ -94,20 +91,11 @@ J2DTextBox::J2DTextBox(J2DPane* p_pane, JSURandomInputStream* p_stream, u32 para
     mWhiteColor = JUtility::TColor(0xFFFFFFFF);
 
     if (mat != NULL && mat->getTevBlock() != NULL) {
-        if (mat->getTevBlock()->getTevStageNum() != 1) {
-            J2DGXColorS10* color0p = mat->getTevBlock()->getTevColor(0);
-            GXColorS10 color0;
-            color0.r = color0p->r;
-            color0.g = color0p->g;
-            color0.b = color0p->b;
-            color0.a = color0p->a;
+        u8 tevStageNum = u32(mat->getTevBlock()->getTevStageNum());
+        if (tevStageNum != 1) {
+            J2DGXColorS10 color0(*mat->getTevBlock()->getTevColor(0));
 
-            J2DGXColorS10* color1p = mat->getTevBlock()->getTevColor(1);
-            GXColorS10 color1;
-            color1.r = color1p->r;
-            color1.g = color1p->g;
-            color1.b = color1p->b;
-            color1.a = color1p->a;
+            J2DGXColorS10 color1(*mat->getTevBlock()->getTevColor(1));
 
             mBlackColor = JUtility::TColor(((u8)color0.r << 0x18) | ((u8)color0.g << 0x10) |
                                            ((u8)color0.b << 8) | (u8)color0.a);
@@ -121,9 +109,6 @@ J2DTextBox::J2DTextBox(J2DPane* p_pane, JSURandomInputStream* p_stream, u32 para
     mTextFontOwned = true;
 }
 
-/* 802FFBC4-802FFC58 2FA504 0094+00 0/0 1/1 0/0 .text
- * __ct__10J2DTextBoxFUxRCQ29JGeometry8TBox2<f>PC7ResFONTPCcs18J2DTextBoxHBinding18J2DTextBoxVBinding
- */
 J2DTextBox::J2DTextBox(u64 tag, JGeometry::TBox2<f32> const& bounds, ResFONT const* p_font,
                        char const* string, s16 strLength, J2DTextBoxHBinding hBind,
                        J2DTextBoxVBinding vBind)
@@ -194,6 +179,7 @@ void J2DTextBox::private_readStream(J2DPane* p_pane, JSURandomInputStream* p_str
     mKind = header.mTag;
 
     makePaneStream(p_pane, p_stream);
+    {JUTResReference ref;}
     u8 spA = p_stream->readU8();
 
     ResFONT* fontPtr = (ResFONT*)getPointer(p_stream, 'FONT', p_archive);
@@ -203,7 +189,8 @@ void J2DTextBox::private_readStream(J2DPane* p_pane, JSURandomInputStream* p_str
 
     mCharColor.set(p_stream->read32b());
     mGradientColor.set(p_stream->read32b());
-    mFlags = p_stream->read8b();
+    u8 tmp = p_stream->read8b();
+    mFlags = tmp;
     mCharSpacing = p_stream->readS16();
     mLineSpacing = p_stream->readS16();
     mFontSizeX = p_stream->read16b();
@@ -223,8 +210,8 @@ void J2DTextBox::private_readStream(J2DPane* p_pane, JSURandomInputStream* p_str
 
     spA -= 10;
     if (spA != 0) {
-        u8 sp8 = p_stream->read8b();
-        if (sp8 != 0) {
+        tmp = p_stream->read8b();
+        if (tmp != 0) {
             setConnectParent(true);
         }
 
@@ -241,6 +228,7 @@ void J2DTextBox::private_readStream(J2DPane* p_pane, JSURandomInputStream* p_str
 
     if (spA != 0) {
         mWhiteColor.set(p_stream->read32b());
+        spA--;
     }
 
     field_0x10c = 0.0f;
@@ -283,7 +271,7 @@ void J2DTextBox::draw(f32 posX, f32 posY) {
             GXSetTevDirect((GXTevStageID)i);
         }
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60, GX_FALSE, 125);
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60);
 
         if (mStringPtr != NULL) {
             print.print(0.0f, 0.0f, mAlpha, "%s", mStringPtr);
@@ -309,7 +297,7 @@ void J2DTextBox::draw(f32 posX, f32 posY, f32 param_2, J2DTextBoxHBinding hBind)
             GXSetTevDirect((GXTevStageID)i);
         }
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60, GX_FALSE, 125);
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60);
 
         if (mStringPtr != NULL) {
             print.printReturn(mStringPtr, param_2, 0.0f, hBind, VBIND_TOP, 0.0f, -mFontSizeY,
@@ -337,8 +325,7 @@ s32 J2DTextBox::setString(char const* string, ...) {
     }
 
     mStringLength = 0;
-    char* tmp = new char[len + 1];
-    mStringPtr = tmp;
+    mStringPtr = new char[len + 1];
 
     if (mStringPtr) {
         mStringLength = len + 1;
@@ -416,7 +403,7 @@ void J2DTextBox::drawSelf(f32 param_0, f32 param_1, Mtx* p_mtx) {
         GXSetTevDirect((GXTevStageID)i);
     }
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60, GX_FALSE, 125);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60);
 
     print.locate(param_0 + mBounds.i.x, param_1 + mBounds.i.y);
     if (mStringPtr != NULL) {

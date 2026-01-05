@@ -141,7 +141,7 @@ void daTag_SSDrink_c::setAttnPos() {
 
 int daTag_SSDrink_c::chkEvent() {
     int retVal = 1;
-    if (!dComIfGp_getEvent().isOrderOK()) {
+    if (!dComIfGp_getEvent()->isOrderOK()) {
         retVal = 0;
         if (eventInfo.checkCommandTalk()) {
             if (!checkProcess(&daTag_SSDrink_c::talk) == 0) {
@@ -264,10 +264,10 @@ static actor_method_class daTag_SSDrink_MethodTable = {
     (process_method_func)daTag_SSDrink_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_SSDRINK = {
+actor_process_profile_definition g_profile_TAG_SSDRINK = {
     fpcLy_CURRENT_e,
     7,
-    fpcLy_CURRENT_e,
+    fpcPi_CURRENT_e,
     PROC_TAG_SSDRINK,
     &g_fpcLf_Method.base,
     sizeof(daTag_SSDrink_c),

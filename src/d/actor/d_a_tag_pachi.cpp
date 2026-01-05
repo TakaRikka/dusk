@@ -14,10 +14,12 @@ static dCcD_SrcCyl const l_sph_src = {
         {0x0},                                              // mGObjCo
     },                                                      // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,                // mRadius
-        0.0f                 // mHeight
-    }                        // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,                // mRadius
+            0.0f                 // mHeight
+        }                        // mCyl
+    }
 };
 
 int daTagPati_c::create() {
@@ -66,10 +68,10 @@ static actor_method_class l_daTagPati_Method = {
     (process_method_func)daTagPati_Execute,
 };
 
-extern actor_process_profile_definition g_profile_TAG_PATI = {
+actor_process_profile_definition g_profile_TAG_PATI = {
     fpcLy_CURRENT_e,
     7,
-    fpcLy_CURRENT_e,
+    fpcPi_CURRENT_e,
     PROC_TAG_PATI,
     &g_fpcLf_Method.base,
     sizeof(daTagPati_c),

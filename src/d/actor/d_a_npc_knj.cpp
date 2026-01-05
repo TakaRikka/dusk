@@ -532,7 +532,7 @@ static actor_method_class daNpc_Knj_MethodTable = {
     (process_method_func)daNpc_Knj_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_KNJ = {
+actor_process_profile_definition g_profile_NPC_KNJ = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

@@ -2,7 +2,7 @@
 #define D_D_PATH_H
 
 #include "dolphin/types.h"
-#include "mtx.h"
+#include "dolphin/mtx.h"
 
 class cBgS_PolyInfo;
 struct cXyz;
@@ -30,6 +30,10 @@ inline BOOL dPath_ChkClose(const dPath* i_path) { return i_path->m_closed & 1; }
 dPath* dPath_GetRoomPath(int path_index, int room_no);
 dPath* dPath_GetNextRoomPath(dPath const* i_path, int room_no);
 dPnt* dPath_GetPnt(dPath const* i_path, int pnt_index);
+#if !PLATFORM_GCN  // Fakematch due to differing return type on non-GCN platforms
+int dPath_GetPolyRoomPathVec(cBgS_PolyInfo const& poly, cXyz* p_pathVec, int* param_2);
+#else
 u8 dPath_GetPolyRoomPathVec(cBgS_PolyInfo const& poly, cXyz* p_pathVec, int* param_2);
+#endif
 
 #endif /* D_D_PATH_H */

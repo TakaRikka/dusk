@@ -8,8 +8,6 @@ static void Z2_E_ms_modVol(Z2SoundHandlePool*, u32);
 static void Z2_E_mm_modPitch(Z2SoundHandlePool*, u32);
 static void Z2_B_zan_modPitch(Z2SoundHandlePool*, u32);
 
-/* 80451358 0001+00 data_80451358 None */
-/* 80451359 0007+00 data_80451359 None */
 s8 data_80451358;
 s8 data_80451359;
 

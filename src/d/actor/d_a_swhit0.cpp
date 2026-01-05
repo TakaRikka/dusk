@@ -476,7 +476,7 @@ static actor_method_class l_daSwhit0_Method = {
     (process_method_func)daSwhit0_Draw,
 };
 
-extern actor_process_profile_definition g_profile_SWHIT0 = {
+actor_process_profile_definition g_profile_SWHIT0 = {
   fpcLy_CURRENT_e,       // mLayerID
   8,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

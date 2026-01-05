@@ -14,7 +14,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "global.h"
 #include "SSystem/SComponent/c_math.h"
-#include "cmath.h"
+#include <math>
 
 const static int l_bmdIdx[2] = {3, 3};
 
@@ -318,11 +318,11 @@ void daObjStone_c::mode_proc_call() {
     if (mCollider.ChkAtHit()) {
         init_modeBreak();
     }
-    bool isGroundLanding = mChkObj.ChkGroundLanding() != 0;
-    u32 isWallhit = mChkObj.m_flags & dBgS_Acch::WALL_HIT;
-    bool isGroundHit = mChkObj.ChkGroundHit() != 0;
-    bool isWaterHit = mChkObj.ChkWaterHit() != 0;
-    bool isWaterIn = mChkObj.ChkWaterIn() != 0;
+    bool isGroundLanding = mChkObj.ChkGroundLanding();
+    u32 isWallhit = mChkObj.ChkWallHit();
+    bool isGroundHit = mChkObj.ChkGroundHit();
+    bool isWaterHit = mChkObj.ChkWaterHit();
+    bool isWaterIn = mChkObj.ChkWaterIn();
     if (field_0x0907 == 1) {
         if (isGroundLanding && !isWaterIn) {
             speed.x = speedF * cM_ssin(current.angle.y);
@@ -336,7 +336,7 @@ void daObjStone_c::mode_proc_call() {
             speedF = speed.absXZ();
             current.angle.y = cM_atan2s(speed.x, speed.z);
         } else {
-            if (isWallhit && field_0x0951 == 0 && isWaterIn) {
+            if (isWallhit && !field_0x0951 && isWaterIn) {
                 speed.x = speedF * cM_ssin(current.angle.y);
                 speed.z = speedF * cM_scos(current.angle.y);
                 speed.y = mLastSpeedY;
@@ -489,7 +489,7 @@ void daObjStone_c::mode_proc_call() {
     }
     (this->*(l_func[field_0x0907]))();
     CrrPos();
-    field_0x0951 = isWallhit != 0;
+    field_0x0951 = isWallhit;
 }
 
 void daObjStone_c::init_modePutWait() {
@@ -991,8 +991,7 @@ int daObjStone_c::draw() {
 
 int daObjStone_c::_delete() {
     mSound.deleteObject();
-    u16 setid = fopAcM_GetSetId(this);
-    fopAcM_offActor(this, setid);
+    fopAcM_offActor(this, fopAcM_GetSetId(this));
     effect_delete(true);
     dComIfG_resDelete(&mPhase, l_arcName[mStoneType]);
     return 1;
@@ -1022,7 +1021,7 @@ static actor_method_class l_daObjStone_Method = {
     (process_method_func)daObjStone_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Stone = {
+actor_process_profile_definition g_profile_Obj_Stone = {
     fpcLy_CURRENT_e,        // mLayerID
     8,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

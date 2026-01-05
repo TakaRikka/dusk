@@ -80,10 +80,12 @@ static dCcD_SrcCyl l_cylSrc = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        55.0f, // mRadius
-        80.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            55.0f, // mRadius
+            80.0f // mHeight
+        } // mCyl
+    }
 };
 
 int daCanoe_c::create() {
@@ -914,7 +916,7 @@ static actor_method_class l_daCanoe_Method = {
     (process_method_func)daCanoe_Draw,
 };
 
-extern actor_process_profile_definition g_profile_CANOE = {
+actor_process_profile_definition g_profile_CANOE = {
   fpcLy_CURRENT_e,         // mLayerID
   4,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

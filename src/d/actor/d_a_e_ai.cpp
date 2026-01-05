@@ -79,10 +79,12 @@ void e_ai_class::initCcCylinder() {
             {0x0}, // mGObjCo
         }, // mObjInf
         {
-            {0.0f, 0.0f, 0.0f}, // mCenter
-            80.0f, // mRadius
-            250.0f // mHeight
-        } // mCyl
+            {
+                {0.0f, 0.0f, 0.0f}, // mCenter
+                80.0f, // mRadius
+                250.0f // mHeight
+            } // mCyl
+        }
     };
 
     m_ccCyl.Set(cc_cyl_src);
@@ -338,7 +340,7 @@ void e_ai_class::damage_check() {
     }
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_AI_HIO_c l_HIO;
 
@@ -828,7 +830,7 @@ int e_ai_class::Delete() {
     dComIfG_resDelete(&m_phase, "E_AI");
 
     if (m_HIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -902,8 +904,8 @@ int e_ai_class::Create() {
         }
 
         OS_REPORT("//////////////E_AI SET 2 !!\n");
-        if (!l_HIOInit) {
-            l_HIOInit = TRUE;
+        if (!hio_set) {
+            hio_set = TRUE;
             m_HIOInit = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("アモス", &l_HIO);
         }
@@ -948,7 +950,7 @@ static actor_method_class l_daE_AI_Method = {
     (process_method_func)daE_AI_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_AI = {
+actor_process_profile_definition g_profile_E_AI = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -19,7 +19,7 @@ int fopScnPause_Enable(scene_class* i_scene) {
 
 int fopScnPause_Disable(scene_class* i_scene) {
     if (i_scene != NULL) {
-        process_node_class* process_node = i_scene->base.base.layer_tag.layer->process_node;
+        process_node_class* process_node = fpcM_Layer(i_scene);
 
         if (process_node == NULL) {
             fpcM_PauseDisable(i_scene, 1);

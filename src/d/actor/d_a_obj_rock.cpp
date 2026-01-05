@@ -89,19 +89,19 @@ static int set_pos_check(obj_rock_class* i_this, int target_index) {
     return TRUE;
 }
 
-static dCcD_SrcSph cc_sph_src = {
-    {
-        {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x11}, 0x79}},  // mObj
-        {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                  // mGObjAt
-        {dCcD_SE_METAL, 0x2, 0x0, 0x0, 0x3},                 // mGObjTg
-        {0x0},                                               // mGObjCo
-    },                                                       // mObjInf
-    {
-        {{0.0f, 0.0f, 0.0f}, 40.0f}  // mSph
-    }                                // mSphAttr
-};
-
 static int daObj_Rock_Create(fopAc_ac_c* i_this) {
+    static dCcD_SrcSph cc_sph_src = {
+        {
+            {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x11}, 0x79}},  // mObj
+            {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                  // mGObjAt
+            {dCcD_SE_METAL, 0x2, 0x0, 0x0, 0x3},                 // mGObjTg
+            {0x0},                                               // mGObjCo
+        },                                                       // mObjInf
+        {
+            {{0.0f, 0.0f, 0.0f}, 40.0f}  // mSph
+        }                                // mSphAttr
+    };
+
     obj_rock_class* a_this = static_cast<obj_rock_class*>(i_this);
     fopAcM_ct(a_this, obj_rock_class);
 
@@ -200,7 +200,7 @@ static actor_method_class l_daObj_Rock_Method = {
     (process_method_func)daObj_Rock_Execute, (process_method_func)daObj_Rock_IsDelete,
     (process_method_func)daObj_Rock_Draw};
 
-extern actor_process_profile_definition g_profile_OBJ_ROCK = {
+actor_process_profile_definition g_profile_OBJ_ROCK = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

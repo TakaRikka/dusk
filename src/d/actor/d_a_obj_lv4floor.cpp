@@ -140,7 +140,7 @@ static actor_method_class daObjLv4Floor_METHODS = {
     (process_method_func)daObjLv4Floor_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv4Floor = {
+actor_process_profile_definition g_profile_Obj_Lv4Floor = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

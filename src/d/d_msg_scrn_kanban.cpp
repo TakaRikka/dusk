@@ -58,7 +58,7 @@ dMsgScrnKanban_c::dMsgScrnKanban_c(JKRExpHeap* param_0) {
 
 
 #if VERSION == VERSION_GCN_JPN
-    if (dComIfGs_getOptUnk0() != 0) {
+    if (dComIfGs_getOptRuby() != 0) {
         static u64 const t_tag[3] = {'mg_3line', 't3_w', 't3_s'};
         for (int i = 0; i < 3; i++) {
             mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], 0, NULL);

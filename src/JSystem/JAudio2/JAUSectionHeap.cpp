@@ -195,7 +195,7 @@ JAIStreamDataMgr* JAUSection::newStreamFileTable(void const* param_0, bool param
 }
 
 JAISeqDataMgr* JAUSection::newSeSeqCollection(void const* bsc, u32 param_1) {
-    // JUT_ASSERT(398, asSectionHeap() == this);
+    JUT_ASSERT(398, asSectionHeap() == this);
     JUT_ASSERT(399, sectionHeap_->sectionHeapData_.seSeqDataMgr_ == NULL);
     if (param_1) {
         bsc = newCopy(bsc, param_1, 4);
@@ -224,14 +224,16 @@ u8* JAUSection::newStaticSeqDataBlock_(JAISoundID param_0, u32 size) {
         }
         JSULink<JAUSeqDataBlock>* link = new JSULink<JAUSeqDataBlock>(seqDataBlock);
         if (!link) {
+            JUT_WARN(432, "%s", "created UNUSED object in Heap\n");
             return NULL;
         }
         u8* r28 = new(0x20) u8[size];
         if (!r28) {
+            JUT_WARN(438, "%s", "created UNUSED object in Heap\n");
             return NULL;
         }
-        seqDataBlock->field_0x14.addr = r28;
-        seqDataBlock->field_0x14.size = size;
+        seqDataBlock->region.addr = r28;
+        seqDataBlock->region.size = size;
         seqDataBlock->field_0x10 = param_0;
         JASCriticalSection cs;
         if(data_.field_0x00.appendDynamicSeqDataBlock(seqDataBlock)) {
@@ -243,10 +245,12 @@ u8* JAUSection::newStaticSeqDataBlock_(JAISoundID param_0, u32 size) {
 }
 
 bool JAUSection::newStaticSeqData(JAISoundID param_0, void const* param_1, u32 param_2) {
-    u8* r30 = newStaticSeqDataBlock_(param_0, param_2);
-    if (r30) {
-        memcpy(r30, param_1, param_2);
-        return true;
+    {
+        u8* r30 = newStaticSeqDataBlock_(param_0, param_2);
+        if (r30) {
+            memcpy(r30, param_1, param_2);
+            return true;
+        }
     }
     return false;
 }
@@ -256,6 +260,7 @@ bool JAUSection::newStaticSeqData(JAISoundID param_0) {
     JUT_ASSERT(481, seqArchive);
     JAUSoundInfo* soundInfo = JASGlobalInstance<JAUSoundInfo>::getInstance();
     if (!soundInfo) {
+        JUT_WARN(485, "%s","cannot JAUSoundInfo::getInstance().");
         return false;
     }
     u16 r26 = soundInfo->getBgmSeqResourceID(param_0);
@@ -286,15 +291,17 @@ static bool dummy_string(int i) {
 JASWaveBank* JAUSection::newWaveBank(u32 bank_no, void const* param_1) {
     JUT_ASSERT(528, isOpen());
     JUT_ASSERT(529, isBuilding());
-    TPushCurrentHeap push(getHeap_());
-    s32 r27 = getHeap_()->getFreeSize();
-    JASWaveBank* waveBank = JASWSParser::createWaveBank(param_1, getHeap_());
-    if (waveBank) {
-        JUT_ASSERT(536, sectionHeap_->getWaveBankTable().getWaveBank( bank_no ) == NULL);
-        sectionHeap_->getWaveBankTable().registWaveBank(bank_no, waveBank);
-        data_.registeredWaveBankTables.set(bank_no, true);
-        data_.field_0xa0 += r27 - getHeap_()->getFreeSize();
-        return waveBank;
+    {
+        TPushCurrentHeap push(getHeap_());
+        s32 r27 = getHeap_()->getFreeSize();
+        JASWaveBank* waveBank = JASWSParser::createWaveBank(param_1, getHeap_());
+        if (waveBank) {
+            JUT_ASSERT(536, sectionHeap_->getWaveBankTable().getWaveBank( bank_no ) == NULL);
+            sectionHeap_->getWaveBankTable().registWaveBank(bank_no, waveBank);
+            data_.registeredWaveBankTables.set(bank_no, true);
+            data_.field_0xa0 += r27 - getHeap_()->getFreeSize();
+            return waveBank;
+        }
     }
     return NULL;
 
@@ -306,7 +313,8 @@ bool JAUSection::loadWaveArc(u32 param_0, u32 param_1) {
         if (waveBank) {
             for (u32 i = 0; i < waveBank->getArcCount(); i++) {
                 if (param_1 & 1 << i) {
-                    waveBank->getWaveArc(i)->load(NULL);
+                    JASWaveArc* waveArc = waveBank->getWaveArc(i);
+                    waveArc->load(NULL);
                 }
             }
             return true;
@@ -320,22 +328,24 @@ JASBank* JAUSection::newBank(void const* param_0, u32 param_1) {
     JUT_ASSERT(648, isBuilding());
     JASWaveBank* waveBank = sectionHeap_->getWaveBankTable().getWaveBank(param_1);
     JUT_ASSERT(650, waveBank != NULL);
-    TPushCurrentHeap push(getHeap_());
-    u32 bank_no = JASBNKParser::getBankNumber(param_0);
-    s32 r25 = getHeap_()->getFreeSize();
-    JASBank* bank = JASBNKParser::createBank(param_0, getHeap_());
-    if (bank) {
-        if (buildingBankTable_) {
-            JUT_ASSERT(660, buildingBankTable_->getBank( bank_no ) == NULL);
-            buildingBankTable_->registBank(bank_no, bank);
-        } else {
-            JUT_ASSERT(665, JASDefaultBankTable::getInstance() ->getBank( bank_no ) == NULL);
-            JASDefaultBankTable::getInstance()->registBank(bank_no, bank);
-            data_.registeredBankTables.set(bank_no, true);
+    {
+        TPushCurrentHeap push(getHeap_());
+        u32 bank_no = JASBNKParser::getBankNumber(param_0);
+        s32 r25 = getHeap_()->getFreeSize();
+        JASBank* bank = JASBNKParser::createBank(param_0, getHeap_());
+        if (bank) {
+            if (buildingBankTable_) {
+                JUT_ASSERT(660, buildingBankTable_->getBank( bank_no ) == NULL);
+                buildingBankTable_->registBank(bank_no, bank);
+            } else {
+                JUT_ASSERT(665, JASDefaultBankTable::getInstance() ->getBank( bank_no ) == NULL);
+                JASDefaultBankTable::getInstance()->registBank(bank_no, bank);
+                data_.registeredBankTables.set(bank_no, true);
+            }
+            bank->assignWaveBank(waveBank);
+            data_.field_0x9c += r25 - getHeap_()->getFreeSize();
+            return bank;
         }
-        bank->assignWaveBank(waveBank);
-        data_.field_0x9c += r25 - getHeap_()->getFreeSize();
-        return bank;
     }
     return 0;
 }
@@ -377,10 +387,10 @@ bool JAUSection::beginNewBankTable(u32 param_0, u32 param_1) {
             if (bankTableLink) {
                 buildingBankTable_ = bankTableLink;
             } else {
-
+                JUT_WARN(730, "%s","created UNUSED object in Heap\n");
             }
         } else {
-
+            JUT_WARN(735, "%s","created UNUSED object in Heap\n");
         }
     }
     return bankTableLink;
@@ -406,7 +416,8 @@ JAUSectionHeap::TSectionHeapData::TSectionHeapData() {
 
 void JAUSectionHeap::setSeqDataArchive(JKRArchive* param_0) {
     sectionHeapData_.seqDataBlocks.setSeqDataArchive(param_0);
-    for (JSULink<JAUSection>* link = mSectionList.getFirst(); link; link = link->getNext()) {
+    JSULink<JAUSection>* link;
+    for (link = mSectionList.getFirst(); link; link = link->getNext()) {
         link->getObject()->data_.field_0x00.setSeqDataArchive(param_0);
     }
 }
@@ -423,7 +434,8 @@ static JAUSectionHeap* JAUNewSectionHeap(JKRSolidHeap* heap, bool param_1) {
     JUT_ASSERT(809, JKRSolidHeap_isEmpty( heap ));
     TPushCurrentHeap push(heap);
     s32 r29 = heap->getFreeSize();
-    return new JAUSectionHeap(heap, param_1, r29);
+    JAUSectionHeap* sectionHeap = new JAUSectionHeap(heap, param_1, r29);
+    return sectionHeap;
 }
 
 JAUSectionHeap* JAUNewSectionHeap(bool param_0) {
@@ -443,42 +455,61 @@ JAUSection* JAUSectionHeap::getOpenSection() {
     return mSectionList.getLast()->getObject();
 }
 
+JAUSection* JAUSectionHeap::getSection(int param_0) {
+    JSULink<JAUSection>* link = mSectionList.getFirst();
+    while (param_0 > 0) {
+        JSULink<JAUSection>* link2 = link->getNext();
+        if (!link2) {
+            return NULL;
+        }
+        link = link2;
+        param_0--;
+    }
+    return link->getObject();
+}
+
 bool JAUSectionHeap::setSeqDataUser(JAISeqDataUser* param_0) {
     sectionHeapData_.seqDataUser = param_0;
     return true;
 }
 
 bool JAUSectionHeap::newDynamicSeqBlock(u32 size) {
-    /* JUT_ASSERT(937, isOpen());
+    JUT_ASSERT(937, isOpen());
     JUT_ASSERT(938, isBuilding());
-    JUT_ASSERT(939, sectionHeap_ == this); */
-    TPushCurrentHeap push(getHeap_());
-    JAUSeqDataBlock * seqDataBlock = new JAUSeqDataBlock();
-    if (!seqDataBlock) {
-        return false;
-    }
-    JSULink<JAUSeqDataBlock> * link = new JSULink<JAUSeqDataBlock>(seqDataBlock);
-    if (!link) {
-        return false;
-    }
-    u8* r25 = new(0x20) u8[size];
-    if (!r25) {
-        return false;
-    }
-    seqDataBlock->field_0x14.addr = r25;
-    seqDataBlock->field_0x14.size = size;
-    seqDataBlock->field_0x10.setAnonymous();
-    JASCriticalSection cs;
-    if (sectionHeap_->sectionHeapData_.seqDataBlocks.appendDynamicSeqDataBlock(seqDataBlock)) {
-        return true;
+    JUT_ASSERT(939, sectionHeap_ == this);
+    {
+        TPushCurrentHeap push(getHeap_());
+        JAUSeqDataBlock * seqDataBlock = new JAUSeqDataBlock();
+        if (!seqDataBlock) {
+            return false;
+        }
+        JSULink<JAUSeqDataBlock> * link = new JSULink<JAUSeqDataBlock>(seqDataBlock);
+        if (!link) {
+            JUT_WARN(950, "%s", "created UNUSED object in Heap\n");
+            return false;
+        }
+        u8* r25 = new(0x20) u8[size];
+        if (!r25) {
+            JUT_WARN(956, "%s", "created UNUSED object in Heap\n");
+            return false;
+        }
+        seqDataBlock->region.addr = r25;
+        seqDataBlock->region.size = size;
+        seqDataBlock->field_0x10.setAnonymous();
+        JASCriticalSection cs;
+        if (sectionHeap_->sectionHeapData_.seqDataBlocks.appendDynamicSeqDataBlock(seqDataBlock)) {
+            return true;
+        }
+        JUT_WARN(968, "%s","created UNUSED object in Heap\n");
     }
     return false;
 }
 
 JAISeqDataMgr::SeqDataReturnValue JAUSectionHeap::getSeqData(JAISoundID param_0, JAISeqData* param_1) {
+    const int JAI_ASYNC_RESULT_RETRY = 1;
     for (JSULink<JAUSection> * link = mSectionList.getFirst(); link; link = link->getNext()) {
         s32 result = link->getObject()->data_.field_0x00.getSeqData(param_0, sectionHeapData_.seqDataUser, param_1, false);
-        // JUT_ASSERT(994, result != JAI_ASYNC_RESULT_RETRY);
+        JUT_ASSERT(994, result != JAI_ASYNC_RESULT_RETRY);
         if (result == 2) {
             return JAISeqDataMgr::SeqDataReturnValue_2;
         }
@@ -487,5 +518,6 @@ JAISeqDataMgr::SeqDataReturnValue JAUSectionHeap::getSeqData(JAISoundID param_0,
 }
 
 int JAUSectionHeap::releaseSeqData() {
+    JUT_WARN(1005, "%s", "JAUSectionHeap cannot release SeqData all at once. Please pop Section.\n");
     return 0;
 }

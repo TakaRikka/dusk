@@ -212,10 +212,12 @@ const static dCcD_SrcCyl ccCylSrc = {
         {0x2},                                                // mGObjCo
     },                                                        // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        30.0f,               // mRadius
-        80.0f                // mHeight
-    }                        // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            30.0f,               // mRadius
+            80.0f                // mHeight
+        }                        // mCyl
+    }
 };
 
 void daObjYobikusa_c::initCcCylinder() {
@@ -416,7 +418,7 @@ static actor_method_class l_daObjYobikusa_Method = {
     (process_method_func)daObjYobikusa_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Yobikusa = {
+actor_process_profile_definition g_profile_Obj_Yobikusa = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

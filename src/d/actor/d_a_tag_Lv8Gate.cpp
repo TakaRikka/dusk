@@ -114,13 +114,7 @@ static int daTagLv8Gate_Execute(daTagLv8Gate_c* i_this) {
 }
 
 inline int daTagLv8Gate_c::execute() {
-    #if VERSION != VERSION_SHIELD_DEBUG
-    // TODO: gameInfo fake match to force reuse of pointer
-    dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-    if (play->getEvent().runCheck() && !eventInfo.checkCommandTalk()) {
-    #else
     if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
-    #endif
         dEvent_manager_c& eventManager = dComIfGp_getEventManager();
         s32 cut_index = eventManager.getMyStaffId(l_arcName, NULL, 0);
 
@@ -130,7 +124,7 @@ inline int daTagLv8Gate_c::execute() {
             if (eventManager.getIsAddvance(cut_index)) {
                 switch (*cut_name) {
                 case '0001': {
-                    dComIfGp_getEvent().startCheckSkipEdge(this);
+                    dComIfGp_getEvent()->startCheckSkipEdge(this);
                     daPy_getPlayerActorClass()->setPlayerPosAndAngle(&current.pos, shape_angle.y,
                                                                      0);
 
@@ -149,12 +143,9 @@ inline int daTagLv8Gate_c::execute() {
                 }
             }
 
-            #if VERSION != VERSION_SHIELD_DEBUG
-            dEvt_control_c& eventControl = play->getEvent();
-            #endif
-            if (dComIfGp_getEvent().checkSkipEdge()) {
+            if (dComIfGp_getEvent()->checkSkipEdge()) {
                 #if VERSION != VERSION_SHIELD_DEBUG
-                dComIfGp_getEvent().reset();
+                dComIfGp_getEvent()->reset();
                 #else
                 dComIfGp_event_reset();
                 #endif
@@ -234,7 +225,7 @@ static actor_method_class l_daTagLv8Gate_Method = {
     (process_method_func)daTagLv8Gate_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_Lv8Gate = {
+actor_process_profile_definition g_profile_Tag_Lv8Gate = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

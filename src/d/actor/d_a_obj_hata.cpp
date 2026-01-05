@@ -180,7 +180,7 @@ static actor_method_class daObjHata_METHODS = {
     (process_method_func)daObjHata_draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Hata = {
+actor_process_profile_definition g_profile_Obj_Hata = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

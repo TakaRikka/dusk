@@ -25,7 +25,9 @@ dCcD_SrcGObjInf const daLv1Cdl00_c::mCcDObjInfo = {
 
 dCcD_SrcCyl daLv1Cdl00_c::mCcDCyl = {
     daLv1Cdl00_c::mCcDObjInfo,
-    { {0.0f, 0.0f, 0.0f}, 0, 0}
+    {
+        { {0.0f, 0.0f, 0.0f}, 0, 0}
+    }
 };
 
 daLv1Cdl00_HIO_c::daLv1Cdl00_HIO_c() :
@@ -273,7 +275,7 @@ static actor_method_class l_daLv1Cdl00_Method = {
     (process_method_func)daLv1Cdl00_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv1Cdl00 = {
+actor_process_profile_definition g_profile_Obj_Lv1Cdl00 = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

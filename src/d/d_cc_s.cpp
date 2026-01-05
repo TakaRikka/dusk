@@ -107,9 +107,6 @@ bool dCcS::ChkShield(cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj, dCcD_GObjInf* i_atObj
 void dCcS::CalcTgPlusDmg(cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj, cCcD_Stts* i_atStts,
                          cCcD_Stts* i_tgStts) {}
 
-/* 800861B4-80086240 080AF4 008C+00 1/0 0/0 0/0 .text
- * ChkAtTgHitAfterCross__4dCcSFbbPC12cCcD_GObjInfPC12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts
- */
 bool dCcS::ChkAtTgHitAfterCross(bool i_setAt, bool i_setTg, cCcD_GObjInf const* i_atObjInf,
                                 cCcD_GObjInf const* i_tgObjInf, cCcD_Stts* i_atStts,
                                 cCcD_Stts* i_tgStts, cCcD_GStts* i_atGStts, cCcD_GStts* i_tgGStts) {
@@ -142,9 +139,6 @@ bool dCcS::ChkAtTgHitAfterCross(bool i_setAt, bool i_setTg, cCcD_GObjInf const* 
     return false;
 }
 
-/* 80086240-80086360 080B80 0120+00 1/0 0/0 0/0 .text
- * SetCoGObjInf__4dCcSFbbP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts
- */
 void dCcS::SetCoGObjInf(bool i_co1Set, bool i_co2Set, cCcD_GObjInf* i_co1Obj, cCcD_GObjInf* i_co2Obj,
                         cCcD_Stts* i_co1Stts, cCcD_Stts* i_co2Stts, cCcD_GStts* i_co1GStts,
                         cCcD_GStts* i_co2GStts) {
@@ -364,9 +358,6 @@ void dCcS::CalcParticleAngle(dCcD_GObjInf* i_atObjInf, cCcD_Stts* i_atStts, cCcD
     cM3d_CalcVecZAngle(vec, o_angle);
 }
 
-/* 8008685C-80086AC0 08119C 0264+00 1/1 0/0 0/0 .text
- * ProcAtTgHitmark__4dCcSFbbP8cCcD_ObjP8cCcD_ObjP12dCcD_GObjInfP12dCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10dCcD_GSttsP10dCcD_GSttsP4cXyzb
- */
 void dCcS::ProcAtTgHitmark(bool i_setAt, bool i_setTg, cCcD_Obj* param_2, cCcD_Obj* param_3,
                            dCcD_GObjInf* i_atObjInf, dCcD_GObjInf* i_tgObjInf, cCcD_Stts* param_6,
                            cCcD_Stts* param_7, dCcD_GStts* param_8, dCcD_GStts* param_9,
@@ -429,9 +420,6 @@ void dCcS::ProcAtTgHitmark(bool i_setAt, bool i_setTg, cCcD_Obj* param_2, cCcD_O
     }
 }
 
-/* 80086AC0-80086D8C 081400 02CC+00 1/0 0/0 0/0 .text
- * SetAtTgGObjInf__4dCcSFbbP8cCcD_ObjP8cCcD_ObjP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GSttsP4cXyz
- */
 void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg, cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj,
                           cCcD_GObjInf* i_atObjInf, cCcD_GObjInf* i_tgObjInf, cCcD_Stts* i_atStts,
                           cCcD_Stts* i_tgStts, cCcD_GStts* i_atGStts, cCcD_GStts* i_tgGStts,

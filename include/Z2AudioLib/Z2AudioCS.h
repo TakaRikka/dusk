@@ -1,7 +1,7 @@
 #ifndef Z2AUDIOCS_H
 #define Z2AUDIOCS_H
 
-#include <revolution/wpad.h>
+#include "dolphin/types.h"
 
 class JKRHeap;
 class JKRArchive;
@@ -9,8 +9,8 @@ class JKRArchive;
 class Z2AudioCS {
 public:
     static void newSpkSoundMemPool();
-    int init(JKRHeap*, JKRArchive*, s32, s32);
-    void update();
+    static int init(JKRHeap*, JKRArchive*, s32, s32);
+    static void update();
     static void connect(s32);
     static void disconnect(s32);
     static void extensionProcess(s32, s32);

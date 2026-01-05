@@ -22,6 +22,7 @@ void dDbVw_drawCircle(int i_bufferType, cXyz& i_pos, f32 i_radius, const GXColor
 void dDbVw_drawSphere(int i_bufferType, cXyz& i_pos, f32 i_size, const GXColor& i_color, u8 i_clipZ);
 void dDbVw_drawCylinder(int i_bufferType, cXyz& i_pos, f32 i_radius, f32 i_height, const GXColor& i_color, u8 i_clipZ);
 void dDbVw_drawCylinderM(int i_bufferType, Mtx i_mtx, const GXColor& i_color, u8 i_clipZ);
+void dDbVw_drawCube8pXlu(cXyz* i_points, const GXColor& i_color);
 
 inline void dDbVw_drawCube8pOpa(cXyz* i_points, const GXColor& i_color) {
     dDbVw_drawCube8p(0, i_points, i_color);

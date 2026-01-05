@@ -151,7 +151,7 @@ static int daE_Ga_IsDelete(e_ga_class* a_this) {
     return 1;
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static int daE_Ga_Delete(e_ga_class* a_this) {
     fopAc_ac_c* actor = &a_this->actor;
@@ -165,7 +165,7 @@ static int daE_Ga_Delete(e_ga_class* a_this) {
     dComIfG_resDelete(&a_this->phase, "E_ga");
 
     if (a_this->HIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
     }
 
     return 1;
@@ -222,9 +222,9 @@ static int daE_Ga_Create(fopAc_ac_c* i_this) {
         }
 
         OS_REPORT("//////////////E_GA SET 2 !!\n");
-        if (!l_HIOInit) {
+        if (!hio_set) {
             a_this->HIOInit = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = -1;
         }
 
@@ -264,7 +264,7 @@ static actor_method_class l_daE_Ga_Method = {
     (process_method_func)daE_Ga_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_GA = {
+actor_process_profile_definition g_profile_E_GA = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

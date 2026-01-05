@@ -439,7 +439,7 @@ BOOL daNpcRafrel_c::main() {
         (this->*field_0xde0)(NULL);
     }
 
-    if (field_0xe00 != fpcM_ERROR_PROCESS_ID_e && dComIfGp_event_runCheck() != 0) {
+    if (field_0xe00 != fpcM_ERROR_PROCESS_ID_e && dComIfGp_event_runCheck()) {
         if (strcmp(dComIfGp_getEventManager().getRunEventName(), "DEFAULT_GETITEM") == 0) {
             dComIfGp_event_setItemPartnerId(field_0xe00);
             field_0xe00 = -1;
@@ -1065,7 +1065,6 @@ BOOL daNpcRafrel_c::chkFindPlayer() {
     return ret;
 }
 
-// NONMATCHING - gameinfo event load stuff
 bool daNpcRafrel_c::wait_type01(void* param_0) {
     switch (field_0xe10) {
     case 0:
@@ -1130,26 +1129,13 @@ bool daNpcRafrel_c::wait_type01(void* param_0) {
             field_0xe15 = 1;
         }
 
-#if VERSION != VERSION_SHIELD_DEBUG
-        // TODO: gameInfo fake match to force reuse of pointer
-        dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-        if (play->getEvent().runCheck())
-#else
-        if (dComIfGp_event_runCheck() != 0)
-#endif
-        {
+        if (dComIfGp_event_runCheck()) {
             if (eventInfo.checkCommandTalk()) {
                 if (isSneaking()) {
                     mOrderEvtNo = 6;
                     changeEvent(l_arcNames[0], l_evtNames[mOrderEvtNo], 1, 0xFFFF);
                 } else if (dComIfGp_event_chkTalkXY()) {
-#if VERSION != VERSION_SHIELD_DEBUG
-                    dEvent_manager_c* evtmng_p = &play->getEvtManager();
-                    if (evtmng_p->ChkPresentEnd() == 0)
-#else
-                    if (dComIfGp_evmng_ChkPresentEnd() == 0)
-#endif
-                    {
+                    if (dComIfGp_evmng_ChkPresentEnd() == 0) {
                         return 1;
                     }
 
@@ -1157,12 +1143,8 @@ bool daNpcRafrel_c::wait_type01(void* param_0) {
                         field_0xe0c = 0x21;
                         setAction(&daNpcRafrel_c::talk);
                     } else {
-#if VERSION != VERSION_SHIELD_DEBUG
-                        s16 sp8 = evtmng_p->getEventIdx(this, "NO_RESPONSE", 0xFF);
-#else
                         s16 sp8 = dComIfGp_getEventManager().getEventIdx(this, "NO_RESPONSE", 0xFF);
-#endif
-                        dComIfGp_getEvent().reset(this);
+                        dComIfGp_getEvent()->reset(this);
                         fopAcM_orderChangeEventId(this, sp8, 1, 0xFFFF);
                     }
                 } else {
@@ -1332,7 +1314,7 @@ bool daNpcRafrel_c::talk(void* param_0) {
                     field_0xe00 = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, -1, NULL, NULL);
                     if (field_0xe00 != fpcM_ERROR_PROCESS_ID_e) {
                         s16 eventIdx = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);
-                        dComIfGp_getEvent().reset(this);
+                        dComIfGp_getEvent()->reset(this);
                         fopAcM_orderChangeEventId(this, eventIdx, 1, 0xFFFF);
                         field_0xe16 = 1;
                         field_0x9ec = 1;
@@ -1382,7 +1364,7 @@ bool daNpcRafrel_c::demo(void* param_0) {
         field_0xe10 = 2;
         /* fallthrough */
     case 2:
-        if (dComIfGp_event_runCheck() != 0 && !eventInfo.checkCommandTalk()) {
+        if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
             evtmgr = &dComIfGp_getEventManager();
             
             const int staffId = evtmgr->getMyStaffId(l_myName, NULL, 0);
@@ -1611,7 +1593,7 @@ int daNpcRafrel_c::EvCut_Appear(int i_staffId) {
                 OS_REPORT("二択分岐 %s\n", choiceNo == 0 ? "はい" : "いいえ");
 
                 if (choiceNo > 0) {
-                    dComIfGp_getEvent().reset(this);
+                    dComIfGp_getEvent()->reset(this);
                 }
 
                 return 1;
@@ -1776,7 +1758,7 @@ static actor_method_class daNpcRafrel_MethodTable = {
     (process_method_func)daNpcRafrel_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_RAFREL = {
+actor_process_profile_definition g_profile_NPC_RAFREL = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

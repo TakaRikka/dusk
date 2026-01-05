@@ -90,10 +90,12 @@ dCcD_SrcCyl const daObjHBarrel_c::s_CcDCyl = {
         {0x0},                                               // mGObjCo
     },                                                       // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,                // mRadius
-        0.0f                 // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,                // mRadius
+            0.0f                 // mHeight
+        }  // mCyl
+    }
 };
 
 void daObjHBarrel_c::init() {
@@ -195,7 +197,7 @@ static actor_method_class daObjHBarrel_METHODS = {
     (process_method_func)daObjHBarrel_draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_HBarrel = {
+actor_process_profile_definition g_profile_Obj_HBarrel = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

@@ -50,6 +50,7 @@ public:
     static JKRADCommand* callCommand_Async(JKRADCommand*);
     static bool syncAram(JKRADCommand*, int);
 
+    static u32 getSZSBufferSize() { return sSZSBufferSize; }
     static void setSZSBufferSize(u32 size) { sSZSBufferSize = size; }
     static bool isErrorRetry() { return errorRetry; }
 

@@ -1,20 +1,9 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JHostIO/JHIMccBuf.h"
+#include <revolution/hio2.h>
 
-enum HIO2DeviceType {
-    DEVICE_INVALID = -1,
-};
-
-typedef BOOL (*HIO2EnumCallback)(HIO2DeviceType);
-typedef void (*HIO2DisconnectCallback)(s32);
-
-extern "C" BOOL HIO2Init();
-extern "C" BOOL HIO2EnumDevices(HIO2EnumCallback);
-extern "C" BOOL HIO2Close(s32);
-extern "C" s32 HIO2Open(HIO2DeviceType, int, HIO2DisconnectCallback);
-
-HIO2DeviceType gExiDevice = DEVICE_INVALID;
+HIO2DeviceType gExiDevice = HIO2_DEVICE_INVALID;
 u8 data_8074bd04 = 1;
 
 s32 ghHIO2;
@@ -29,7 +18,7 @@ BOOL JHIhio2CallbackEnum(HIO2DeviceType type) {
 }
 
 void JHIhio2DisconnectCallback(s32) {
-    gExiDevice = DEVICE_INVALID;
+    gExiDevice = HIO2_DEVICE_INVALID;
 }
 
 u32 JHIInitInterface() {
@@ -45,7 +34,7 @@ u32 JHIInitInterface() {
         data_8074bd04 = 0;
     }
 
-    if (gExiDevice == DEVICE_INVALID) {
+    if (gExiDevice == HIO2_DEVICE_INVALID) {
         return 0;
     }
 

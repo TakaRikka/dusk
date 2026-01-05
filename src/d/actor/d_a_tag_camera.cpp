@@ -1,7 +1,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_tag_camera.h"
-#include "cmath.h"
+#include <math>
 #include "d/actor/d_a_alink.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_horse.h"
@@ -297,7 +297,7 @@ static actor_method_class l_daTag_Cam_Method = {
     (process_method_func)daTag_Cam_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_CAMERA = {
+actor_process_profile_definition g_profile_TAG_CAMERA = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

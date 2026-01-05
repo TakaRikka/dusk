@@ -1336,7 +1336,7 @@ bool daNpcMoiR_c::talk(void* param_1) {
 
                         if (field_0xdf8 != -1) {
                             s16 i_eventID = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);
-                            dComIfGp_getEvent().reset(this);
+                            dComIfGp_getEvent()->reset(this);
                             fopAcM_orderChangeEventId(this, i_eventID, 1, 0xFFFF);
                             field_0x9ec = true;
                         }
@@ -1513,7 +1513,7 @@ bool daNpcMoiR_c::demo(void* param_1) {
             field_0xe08 = 2;
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != 0 && eventInfo.checkCommandTalk() == 0) {
+            if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == 0) {
                 evt_mng = &dComIfGp_getEventManager();
                 s32 staffIdx = evt_mng->getMyStaffId(l_myName, NULL, 0);
                 if (staffIdx != -1) {
@@ -1860,7 +1860,7 @@ BOOL daNpcMoiR_c::main() {
         (this->*mAction)(NULL);
     }
 
-    if (dComIfGp_event_runCheck() != 0 && !eventInfo.checkCommandTalk() && field_0xdf8 != -1) {
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && field_0xdf8 != -1) {
         dComIfGp_event_setItemPartnerId(field_0xdf8);
         field_0xdf8 = -1;
     }
@@ -2018,7 +2018,7 @@ static actor_method_class daNpcMoiR_MethodTable = {
     (process_method_func)daNpcMoiR_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_MOIR = {
+actor_process_profile_definition g_profile_NPC_MOIR = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

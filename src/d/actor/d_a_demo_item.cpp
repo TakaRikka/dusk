@@ -559,7 +559,7 @@ static actor_method_class l_daDitem_Method = {
     (process_method_func)daDitem_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Demo_Item = {
+actor_process_profile_definition g_profile_Demo_Item = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

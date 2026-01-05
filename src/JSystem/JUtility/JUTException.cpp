@@ -4,11 +4,11 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDirectPrint.h"
 #include "JSystem/JUtility/JUTDirectFile.h"
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <math>
+#include <stdio>
+#include <stdlib>
 #include <dolphin/dolphin.h>
-#include <stdint.h>
+#include <stdint>
 
 OSMessageQueue JUTException::sMessageQueue = {0};
 
@@ -52,7 +52,8 @@ JUTException::JUTException(JUTDirectPrint* directPrint)
     sPreUserCallback = NULL;
     sPostUserCallback = NULL;
 
-    setGamePad(NULL);
+    mGamePad = NULL;
+    mGamePadPort = JUTGamePad::EPortInvalid;
 
     this->mPrintWaitTime0 = 10;
     this->mPrintWaitTime1 = 10;
@@ -64,8 +65,7 @@ JUTException::JUTException(JUTDirectPrint* directPrint)
 
 JUTException* JUTException::create(JUTDirectPrint* directPrint) {
     if (!sErrorManager) {
-        JKRHeap* systemHeap = JKRGetSystemHeap();
-        sErrorManager = new (systemHeap, 0) JUTException(directPrint);
+        sErrorManager = new (JKRGetSystemHeap(), 0) JUTException(directPrint);
         sErrorManager->resume();
     }
 
@@ -85,7 +85,9 @@ struct CallbackObject {
 };
 
 void* JUTException::run() {
-    PPCMtmsr(PPCMfmsr() & ~0x0900);
+    u32 msr = PPCMfmsr();
+    msr &= ~0x0900;
+    PPCMtmsr(msr);
     OSInitMessageQueue(&sMessageQueue, sMessageBuffer, 1);
     OSMessage message;
     while (true) {
@@ -154,8 +156,6 @@ void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, 
 
 JSUList<JUTException::JUTExMapFile> JUTException::sMapFileList(false);
 
-static OSContext context;
-
 void JUTException::panic_f_va(char const* file, int line, char const* format, va_list args) {
     char buffer[256];
     vsnprintf(buffer, sizeof(buffer) - 1, format, args);
@@ -163,8 +163,8 @@ void JUTException::panic_f_va(char const* file, int line, char const* format, va
         OSPanic((char*)file, line, buffer);
     }
 
-    OSContext* current_context = OSGetCurrentContext();
-    memcpy(&context, current_context, sizeof(OSContext));
+    static OSContext context;
+    memcpy(&context, OSGetCurrentContext(), sizeof(OSContext));
     sErrorManager->mStackPointer = (uintptr_t)OSGetStackPointer();
 
     exCallbackObject.callback = sPreUserCallback;
@@ -182,8 +182,7 @@ void JUTException::panic_f_va(char const* file, int line, char const* format, va
     }
 
     OSSendMessage(&sMessageQueue, &exCallbackObject, 1);
-    OSThread* current_thread = OSGetCurrentThread();
-    OSSuspendThread(current_thread);
+    OSSuspendThread(OSGetCurrentThread());
 }
 
 void JUTException::panic_f(char const* file, int line, char const* format, ...) {
@@ -250,7 +249,7 @@ bool JUTException::searchPartialModule(u32 address, u32* module_id, u32* section
     OSModuleInfo* module = *(OSModuleInfo**)0x800030C8;
     while (module) {
         OSSectionInfo* section = (OSSectionInfo*)module->sectionInfoOffset;
-        for (u32 i = 0; i < module->numSections; section = section + 1, i++) {
+        for (u32 i = 0; i < module->numSections; i++) {
             if (section->size) {
                 u32 addr = ALIGN_PREV(section->offset, 2);
                 if ((addr <= address) && (address < addr + section->size)) {
@@ -265,6 +264,7 @@ bool JUTException::searchPartialModule(u32 address, u32* module_id, u32* section
                     return true;
                 }
             }
+            section++;
         }
 
         module = (OSModuleInfo*)module->link.next;
@@ -274,21 +274,21 @@ bool JUTException::searchPartialModule(u32 address, u32* module_id, u32* section
 }
 
 static void search_name_part(u8* src, u8* dst, int dst_length) {
+    u8* r30 = src;
     for (u8* p = src; *p; p++) {
         if (*p == '\\') {
-            src = p;
+            r30 = p;
         }
     }
 
-    if (*src == '\\') {
-        src++;
+    if (*r30 == '\\') {
+        r30++;
     }
 
-    for (int i = 0; (*src != 0) && (i < dst_length);) {
-        if (*src == '.')
+    for (int i = 0; (*r30 != 0) && (i < dst_length); *dst++ = *r30++, i++) {
+        if (*r30 == '.') {
             break;
-        *dst++ = *src++;
-        i++;
+        }
     }
 
     *dst = '\0';
@@ -312,8 +312,7 @@ void JUTException::showStack(OSContext* context) {
 
         sConsole->print_f("%08X:  %08X    %08X\n", stackPointer, stackPointer[0], stackPointer[1]);
         showMapInfo_subroutine(stackPointer[1], false);
-        JUTConsoleManager* manager = JUTConsoleManager::sManager;
-        manager->drawDirect(true);
+        JUTConsoleManager::getManager()->drawDirect(true);
         waitTime(mPrintWaitTime1);
         stackPointer = (u32*)stackPointer[0];
     }
@@ -331,7 +330,8 @@ void JUTException::showMainInfo(u16 error, OSContext* context, u32 dsisr, u32 da
     }
 
     if (error == __OS_EXCEPTION_FLOATING_POINT_EXCEPTION) {
-        u32 flags = fpscr & (((fpscr & 0xf8) << 0x16) | 0x1f80700);
+        u32 flags = fpscr;
+        flags &= ((flags & 0xf8) << 0x16) | 0x1f80700;
         if ((flags & 0x20000000) != 0) {
             sConsole->print_f(" FPE: Invalid operation\n");
             if ((fpscr & 0x1000000) != 0) {
@@ -408,31 +408,30 @@ bool JUTException::showMapInfo_subroutine(u32 address, bool begin_with_newline) 
         new_line = "";
     }
 
-    bool result =
-        searchPartialModule(address, &module_id, &section_id, &section_offset, &name_offset);
+    bool result = searchPartialModule(address, &module_id, &section_id, &section_offset, &name_offset);
     if (result == true) {
         search_name_part((u8*)name_offset, name_part, 32);
         sConsole->print_f("%s %s:%x section:%d\n", new_line, name_part, section_offset, section_id);
+        new_line = "";
         begin_with_newline = false;
     }
 
-    JSUListIterator<JUTException::JUTExMapFile> last = sMapFileList.getEnd();
-    JSUListIterator<JUTException::JUTExMapFile> first = sMapFileList.getFirst();
-    if (first != last) {
+    JSULink<JUTException::JUTExMapFile>* last = sMapFileList.getEnd();
+    if (sMapFileList.getFirst() != last) {
         u32 out_addr;
         u32 out_size;
         char out_line[256];
-
+        bool result2;
         if (result == true) {
-            result =
+            result2 =
                 queryMapAddress((char*)name_part, section_offset, section_id, &out_addr, &out_size,
                                 out_line, ARRAY_SIZEU(out_line), true, begin_with_newline);
         } else {
-            result = queryMapAddress(NULL, address, -1, &out_addr, &out_size, out_line,
+            result2 = queryMapAddress(NULL, address, -1, &out_addr, &out_size, out_line,
                                      ARRAY_SIZEU(out_line), true, begin_with_newline);
         }
 
-        if (result == true) {
+        if (result2 == true) {
             return true;
         }
     }
@@ -455,10 +454,11 @@ void JUTException::showGPRMap(OSContext* context) {
             found_address_register = true;
 
             sConsole->print_f("R%02d: %08XH", i, address);
-            if (!showMapInfo_subroutine(address, true)) {
+            bool result = showMapInfo_subroutine(address, true);
+            if (!result) {
                 sConsole->print("  no information\n");
             }
-            JUTConsoleManager::sManager->drawDirect(true);
+            JUTConsoleManager::getManager()->drawDirect(true);
             waitTime(mPrintWaitTime1);
         }
     }
@@ -477,7 +477,8 @@ void JUTException::showSRR0Map(OSContext* context) {
     u32 address = context->srr0;
     if (address >= 0x80000000 && address <= 0x83000000 - 1) {
         sConsole->print_f("SRR0: %08XH", address);
-        if (showMapInfo_subroutine(address, true) == false) {
+        bool result = showMapInfo_subroutine(address, true);
+        if (result == false) {
             sConsole->print("  no information\n");
         }
         JUTConsoleManager::getManager()->drawDirect(true);
@@ -488,7 +489,8 @@ void JUTException::printDebugInfo(JUTException::EInfoPage page, OSError error, O
                                   u32 param_3, u32 param_4) {
     switch (page) {
     case EINFO_PAGE_GPR:
-        return showGPR(context);
+        showGPR(context);
+        break;
     case EINFO_PAGE_FLOAT:
         showFloat(context);
         if (sConsole) {
@@ -496,11 +498,14 @@ void JUTException::printDebugInfo(JUTException::EInfoPage page, OSError error, O
         }
         break;
     case EINFO_PAGE_STACK:
-        return showStack(context);
+        showStack(context);
+        break;
     case EINFO_PAGE_GPR_MAP:
-        return showGPRMap(context);
+        showGPRMap(context);
+        break;
     case EINFO_PAGE_SSR0_MAP:
-        return showSRR0Map(context);
+        showSRR0Map(context);
+        break;
     }
 }
 
@@ -511,7 +516,10 @@ bool JUTException::isEnablePad() const {
     if (mGamePadPort >= 0)
         return true;
 
-    return mGamePad;
+    if (mGamePad) {
+        return true;
+    }
+    return false;
 }
 
 bool JUTException::readPad(u32* out_trigger, u32* out_button) {
@@ -529,7 +537,7 @@ bool JUTException::readPad(u32* out_trigger, u32* out_button) {
         JUTGamePad gamePad1(JUTGamePad::EPort2);
         JUTGamePad gamePad2(JUTGamePad::EPort3);
         JUTGamePad gamePad3(JUTGamePad::EPort4);
-        JUTGamePad::read();
+        JUTReadGamePad();
 
         c3bcnt[0] =
             (gamePad0.isPushing3ButtonReset() ? (c3bcnt[0] != 0 ? c3bcnt[0] : OSGetTime()) : 0);
@@ -569,7 +577,7 @@ bool JUTException::readPad(u32* out_trigger, u32* out_button) {
         OSTime resetTime = (gamePadTime != 0) ? (OSGetTime() - gamePadTime) : 0;
         gamePad.checkResetCallback(resetTime);
 
-        JUTGamePad::read();
+        JUTReadGamePad();
         if (out_trigger) {
             *out_trigger = gamePad.getTrigger();
         }
@@ -579,7 +587,7 @@ bool JUTException::readPad(u32* out_trigger, u32* out_button) {
 
         result = true;
     } else if (mGamePad) {
-        JUTGamePad::read();
+        JUTReadGamePad();
         if (out_trigger) {
             *out_trigger = mGamePad->getTrigger();
         }
@@ -595,7 +603,7 @@ bool JUTException::readPad(u32* out_trigger, u32* out_button) {
 
 // clean up
 void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u32 dar) {
-    bool is_pad_enabled = isEnablePad() == 0;
+    bool is_pad_enabled = isEnablePad() ? false : true;
     if (!sErrorManager->mDirectPrint->isActive()) {
         return;
     }
@@ -620,37 +628,37 @@ void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u3
     while (true) {
         showMainInfo(error, context, dsisr, dar);
 
-        JUTConsoleManager::sManager->drawDirect(true);
+        JUTConsoleManager::getManager()->drawDirect(true);
         waitTime(mPrintWaitTime0);
 
         if ((mPrintFlags & JUT_PRINT_GPR) != 0) {
             printDebugInfo(EINFO_PAGE_GPR, error, context, dsisr, dar);
-            JUTConsoleManager::sManager->drawDirect(true);
+            JUTConsoleManager::getManager()->drawDirect(true);
             waitTime(mPrintWaitTime0);
         }
         if ((mPrintFlags & JUT_PRINT_SRR0_MAP) != 0) {
             printDebugInfo(EINFO_PAGE_SSR0_MAP, error, context, dsisr, dar);
-            JUTConsoleManager::sManager->drawDirect(true);
+            JUTConsoleManager::getManager()->drawDirect(true);
             waitTime(mPrintWaitTime0);
         }
         if ((mPrintFlags & JUT_PRINT_GPR_MAP) != 0) {
             printDebugInfo(EINFO_PAGE_GPR_MAP, error, context, dsisr, dar);
-            JUTConsoleManager::sManager->drawDirect(true);
+            JUTConsoleManager::getManager()->drawDirect(true);
             waitTime(mPrintWaitTime0);
         }
         if ((mPrintFlags & JUT_PRINT_FLOAT) != 0) {
             printDebugInfo(EINFO_PAGE_FLOAT, error, context, dsisr, dar);
-            JUTConsoleManager::sManager->drawDirect(true);
+            JUTConsoleManager::getManager()->drawDirect(true);
             waitTime(mPrintWaitTime0);
         }
         if ((mPrintFlags & JUT_PRINT_STACK) != 0) {
             printDebugInfo(EINFO_PAGE_STACK, error, context, dsisr, dar);
-            JUTConsoleManager::sManager->drawDirect(true);
+            JUTConsoleManager::getManager()->drawDirect(true);
             waitTime(mPrintWaitTime1);
         }
 
         sConsole->print("--------------------------------\n");
-        JUTConsoleManager::sManager->drawDirect(true);
+        JUTConsoleManager::getManager()->drawDirect(true);
 
         if (post_callback_executed == 0 && sPostUserCallback) {
             BOOL enable = OSEnableInterrupts();
@@ -663,7 +671,8 @@ void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u3
             break;
         }
 
-        sConsole->setOutput(sConsole->getOutput() & 1);
+        u32 output = sConsole->getOutput();
+        sConsole->setOutput(output & 1);
     }
 
     if (!is_pad_enabled) {
@@ -689,21 +698,15 @@ void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u3
             }
 
             if (button == 8) {
-                JUTConsole* console = sConsole;
-                up = (down < 3) ? -1 : ((down < 5) ? -2 : ((down < 7) ? -4 : -8));
-
-                console->scroll(up);
+                sConsole->scroll((down < 3) ? -1 : ((down < 5) ? -2 : ((down < 7) ? -4 : -8)));
                 draw = true;
-                up = 0;
                 down++;
+                up = 0;
             } else if (button == 4) {
-                JUTConsole* console = sConsole;
-                down = (up < 3) ? 1 : ((up < 5) ? 2 : ((up < 7) ? 4 : 8));
-
-                console->scroll(down);
+                sConsole->scroll((up < 3) ? 1 : ((up < 5) ? 2 : ((up < 7) ? 4 : 8)));
                 draw = true;
-                down = 0;
                 up++;
+                down = 0;
             } else {
                 down = 0;
                 up = 0;
@@ -713,7 +716,7 @@ void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u3
                 u32 start = VIGetRetraceCount();
                 while (start == VIGetRetraceCount())
                     ;
-                JUTConsoleManager::sManager->drawDirect(true);
+                JUTConsoleManager::getManager()->drawDirect(true);
             }
 
             waitTime(30);
@@ -722,7 +725,7 @@ void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u3
 
     while (true) {
         sConsole->scrollToFirstLine();
-        JUTConsoleManager::sManager->drawDirect(true);
+        JUTConsoleManager::getManager()->drawDirect(true);
         waitTime(2000);
 
         int line_offset;
@@ -731,23 +734,15 @@ void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u3
     next:
         for (u32 i = sConsole->getHeight(); i > 0; i--) {
             sConsole->scroll(1);
-            JUTConsoleManager::sManager->drawDirect(true);
+            JUTConsoleManager::getManager()->drawDirect(true);
 
-            height = sConsole->getHeight();
-            JUTConsole* console = sConsole;
-            line_offset = console->getLineOffset();
-            used_line = console->getUsedLine();
-            if ((used_line - height) + 1U <= line_offset)
+            if ((sConsole->getUsedLine() - sConsole->getHeight()) + 1U <= sConsole->getLineOffset())
                 break;
             waitTime(20);
         }
 
         waitTime(3000);
-        height = sConsole->getHeight();
-        JUTConsole* console = sConsole;
-        line_offset = console->getLineOffset();
-        used_line = console->getUsedLine();
-        if ((used_line - height) + 1U <= line_offset) {
+        if ((sConsole->getUsedLine() - sConsole->getHeight()) + 1U <= sConsole->getLineOffset()) {
             continue;
         }
         goto next;
@@ -811,8 +806,7 @@ void JUTException::appendMapFile(char const* path) {
         return;
     }
 
-    JSUListIterator<JUTExMapFile> iterator;
-    for (iterator = sMapFileList.getFirst(); iterator != sMapFileList.getEnd(); ++iterator) {
+    for (JSUListIterator<JUTExMapFile> iterator = sMapFileList.getFirst(); iterator != sMapFileList.getEnd(); iterator++) {
         if (strcmp(path, iterator->mPath) == 0) {
             return;
         }
@@ -834,7 +828,7 @@ bool JUTException::queryMapAddress(char* mapPath, u32 address, s32 section_id, u
         {
             return true;
         }
-    } else if (sMapFileList.getFirst() != sMapFileList.getEnd()) {
+    } else if (sMapFileList.getFirst()) {
         if (queryMapAddress_single(sMapFileList.getFirst()->getObject()->mPath, address, -1,
                                    out_addr, out_size, out_line, line_length, print,
                                    begin_with_newline) == true)
@@ -980,10 +974,9 @@ void JUTException::createConsole(void* console_buffer, u32 console_buffer_size) 
     if (lines != 0) {
         sConsoleBuffer = console_buffer;
         sConsoleBufferSize = console_buffer_size;
-        sConsole = JUTConsole::create(0x32, console_buffer, console_buffer_size);
+        sConsole = JUTConsole::create(0x32, sConsoleBuffer, sConsoleBufferSize);
 
-        JUTConsoleManager* manager = JUTConsoleManager::sManager;
-        manager->setDirectConsole(sConsole);
+        JUTConsoleManager::getManager()->setDirectConsole(sConsole);
 
         sConsole->setFontSize(10.0, 6.0);
         sConsole->setPosition(15, 26);

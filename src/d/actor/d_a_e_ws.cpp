@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_e_ws.h"
 #include "d/actor/d_a_obj_carry.h"
-#include <cmath.h>
+#include <math>
 #include "f_op/f_op_actor_enemy.h"
 
 class daE_WS_HIO_c : public JORReflexible {
@@ -150,7 +150,7 @@ s16 daE_WS_c::calcTargetAngle(cXyz i_basePos, cXyz i_targetPos) {
     return cM_atan2s(sp1C.x, sp1C.z);
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_WS_HIO_c l_HIO;
 
@@ -872,7 +872,7 @@ int daE_WS_c::_delete() {
     dComIfG_resDelete(&mPhase, "E_WS");
 
     if (mHIOInit) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -920,8 +920,8 @@ int daE_WS_c::create() {
             return cPhs_ERROR_e;
         }
     
-        if (!l_HIOInit) {
-            l_HIOInit = true;
+        if (!hio_set) {
+            hio_set = true;
             mHIOInit = true;
             l_HIO.id = mDoHIO_CREATE_CHILD("スタルウォール", &l_HIO);
         }
@@ -984,7 +984,7 @@ static actor_method_class l_daE_WS_Method = {
     (process_method_func)daE_WS_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_WS = {
+actor_process_profile_definition g_profile_E_WS = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

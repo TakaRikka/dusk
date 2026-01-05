@@ -43,6 +43,7 @@ void JASDSPChannel::drop() {
 
 void JASDSPChannel::initAll() {
     sDspChannels = new (JASDram, 0x20) JASDSPChannel[0x40];
+    JUT_ASSERT(102, sDspChannels);
     for (int i = 0; i < 0x40; i++) {
         sDspChannels[i].mChannel = JASDsp::getDSPHandle(i);
     }
@@ -87,7 +88,7 @@ JASDSPChannel* JASDSPChannel::getLowestChannel(int i_priority) {
         JASDSPChannel* channel = &sDspChannels[i];
         s16 priority = channel->mPriority;
         if (priority < 0) {
-            return channel;
+            return &sDspChannels[i];
         }
         if (priority <= i_priority && priority <= best_priority) {
             if (priority != best_priority || channel->field_0xc > best_unknown) {
@@ -127,7 +128,8 @@ JASDSPChannel* JASDSPChannel::getLowestActiveChannel() {
 }
 
 void JASDSPChannel::updateProc() {
-    int ret;
+    int ret = 0;
+    bool flush;
     if (mChannel->isFinish()) {
         mFlags &= ~2;
         if (mStatus == STATUS_ACTIVE) {
@@ -173,7 +175,7 @@ void JASDSPChannel::updateProc() {
                 mChannel->flush();
             }
         } else if (mStatus != STATUS_INACTIVE) {
-            bool flush = false;
+            flush = false;
             if (mCallback != NULL) {
                 ret = mCallback(CB_PLAY, mChannel, mCallbackData);
                 flush = true;
@@ -224,4 +226,34 @@ int JASDSPChannel::killActiveChannel() {
 
 JASDSPChannel* JASDSPChannel::getHandle(u32 i_index) {
     return &sDspChannels[i_index];
+}
+
+u32 JASDSPChannel::getNumUse() {
+    u32 count = 0;
+    for (int i = 0; i < 0x40; i++) {
+        if (sDspChannels[i].mStatus == 0) {
+            count++;
+        }
+    }
+    return count;
+}
+
+u32 JASDSPChannel::getNumFree() {
+    u32 count = 0;
+    for (int i = 0; i < 0x40; i++) {
+        if (sDspChannels[i].mStatus == 1) {
+            count++;
+        }
+    }
+    return count;
+}
+
+u32 JASDSPChannel::getNumBreak() {
+        u32 count = 0;
+    for (int i = 0; i < 0x40; i++) {
+        if (sDspChannels[i].mStatus == 2) {
+            count++;
+        }
+    }
+    return count;
 }

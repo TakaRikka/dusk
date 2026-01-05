@@ -162,7 +162,7 @@ static BOOL way_bg_check(e_cr_class* a_this, f32 param_1) {
     return FALSE;
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_CR_HIO_c l_HIO;
 
@@ -447,7 +447,7 @@ static int daE_CR_Delete(e_cr_class* a_this) {
     dComIfG_resDelete(&a_this->phase, "E_CR");
 
     if (a_this->HIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -495,9 +495,9 @@ static int daE_CR_Create(fopAc_ac_c* i_this) {
         }
     
         OS_REPORT("//////////////E_CR SET 2 !!\n");
-        if (!l_HIOInit) {
+        if (!hio_set) {
             a_this->HIOInit = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("クレイジーランナー", &l_HIO);
         }
     
@@ -545,7 +545,7 @@ static actor_method_class l_daE_CR_Method = {
     (process_method_func)daE_CR_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_CR = {
+actor_process_profile_definition g_profile_E_CR = {
     fpcLy_CURRENT_e,       // mLayerID
     7,                     // mListID
     fpcPi_CURRENT_e,       // mListPrio

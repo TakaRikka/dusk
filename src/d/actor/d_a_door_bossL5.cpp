@@ -502,7 +502,7 @@ static actor_method_class l_daBdoorL5_Method = {
     (process_method_func)daBdoorL5_Draw,
 };
 
-extern actor_process_profile_definition g_profile_L5BOSS_DOOR = {
+actor_process_profile_definition g_profile_L5BOSS_DOOR = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

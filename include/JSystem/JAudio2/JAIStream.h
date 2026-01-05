@@ -11,7 +11,7 @@ class JAIStreamMgr;
  * @ingroup jsystem-jaudio
  * 
  */
-class JAIStream : public JASPoolAllocObject<JAIStream>, public JAISound, public JSULink<JAIStream> {
+class JAIStream : public JAISound, public JSULink<JAIStream>, public JASPoolAllocObject<JAIStream> {
 public:
     struct TInner {
         JASAramStream aramStream_;

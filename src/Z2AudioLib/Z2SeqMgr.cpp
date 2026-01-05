@@ -143,15 +143,16 @@ void Z2SeqMgr::bgmStart(u32 bgmID, u32 fadeTime, s32 param_2) {
         mMainBgmMaster.forceIn();
         break;
     case Z2BGM_GAME_OVER:
-        if (getMainBgmID() != bgmID) {
-            Z2GetSceneMgr()->setInGame(false);
-            Z2GetSceneMgr()->setSceneExist(false);
-            setBattleBgmOff(true);
-            Z2GetSoundMgr()->getSeqMgr()->stop(0);
-            Z2GetSoundMgr()->getStreamMgr()->stop(0);
-            Z2GetSoundMgr()->startSound(bgmID, &mMainBgmHandle, NULL);
-            mBgmStatus = 0xff;
+        if (getMainBgmID() == bgmID) {
+            return;
         }
+        Z2GetSceneMgr()->setInGame(false);
+        Z2GetSceneMgr()->setSceneExist(false);
+        setBattleBgmOff(true);
+        Z2GetSoundMgr()->getSeqMgr()->stop(0);
+        Z2GetSoundMgr()->getStreamMgr()->stop(0);
+        Z2GetSoundMgr()->startSound(bgmID, &mMainBgmHandle, NULL);
+        mBgmStatus = 0xff;
         return;
     case Z2BGM_LAKE:
         if (Z2GetLink() != NULL && Z2GetLink()->getCurrentPos() != NULL &&
@@ -245,10 +246,6 @@ void Z2SeqMgr::bgmStop(u32 fadeTime, s32 param_1) {
 }
 
 void Z2SeqMgr::subBgmStart(u32 bgmID) {
-    #if DEBUG
-    const char** spotName = sSpotName;
-    #endif
-
     if (bgmID == -1) {
         return;
     }
@@ -350,7 +347,7 @@ void Z2SeqMgr::subBgmStart(u32 bgmID) {
         fadeoutTime = 1;
         break;
     case Z2BGM_COWBOY_GAME:
-        mAllBgmMaster.forceIn();
+        bgmAllUnMute(0);
         fadeinTime = 0;
         fadeoutTime = 1;
         break;
@@ -391,7 +388,11 @@ void Z2SeqMgr::subBgmStart(u32 bgmID) {
     }
 
     if (bgmID == getSubBgmID()) {
-        if (bgmID == Z2BGM_SUMO || bgmID == Z2BGM_COWBOY_GAME) {
+        if (bgmID == Z2BGM_SUMO
+#if PLATFORM_GCN
+            || bgmID == Z2BGM_COWBOY_GAME
+#endif
+        ) {
             mSubBgmHandle->stop(0);
             mSubBgmHandle.releaseSound();
         } else {
@@ -416,7 +417,7 @@ void Z2SeqMgr::subBgmStart(u32 bgmID) {
         bgmStreamStop(0);
         // fallthrough
     case Z2BGM_TN_MBOSS_LV9:
-        mStreamBgmMaster.forceIn();
+        mStreamBgmMaster.fadeIn(0);
         // fallthrough
     case Z2BGM_RODEO:
         changeSubBgmStatus(1);
@@ -437,9 +438,9 @@ void Z2SeqMgr::subBgmStart(u32 bgmID) {
 
     #if DEBUG
     if (bgmID == Z2BGM_HIDDEN_VIL_D1) {
-        OS_REPORT("[Z2SeqMgr::subBgmStart] HIDDEN_VIL_D01 start(%d)\n", mMainBgmHandle.isSoundAttached());
-        OS_REPORT("                        mainBgmMasterVol::%.2f \n", mMainBgmMaster.get());
+        OS_REPORT("[Z2SeqMgr::subBgmStart] HIDDEN_VIL_D01 start(%d)\n", mSubBgmHandle.isSoundAttached());
         OS_REPORT("                        subBgmMasterVol::%.2f \n", mSubBgmMaster.get());
+        OS_REPORT("                        mainBgmMasterVol::%.2f \n", mMainBgmMaster.get());
         OS_REPORT("                        allBgmMasterVol::%.2f \n", mAllBgmMaster.get());
         OS_REPORT("                        bgmPauseVol::%.2f \n", mBgmPause.get());
         OS_REPORT("                        fanfareMuteVol::%.2f \n", mFanfareMute.get());
@@ -583,7 +584,13 @@ void Z2SeqMgr::subBgmStopInner() {
     field_0xb8 = -1;
 }
 
+static void dummy1() {
+    OS_REPORT("[Z2SeqMgr::bgmStreamPrepare] %08x\n");
+    OS_REPORT("[Z2SeqMgr::bgmStreamPlay] \n");
+}
+
 void Z2SeqMgr::bgmStreamPrepare(u32 bgmID) {
+    u32 bgmID2 = bgmID;
     if (mStreamBgmHandle) {
         bgmStreamStop(0);
     }
@@ -592,18 +599,21 @@ void Z2SeqMgr::bgmStreamPrepare(u32 bgmID) {
     mStreamBgmHandle->lockWhenPrepared();
 
     switch (bgmID) {
+#if PLATFORM_GCN
     case 0x2000010:
         mAllBgmMaster.forceIn();
         // fallthrough
+#endif
     case 0x200000f:
         return;
     case 0x2000014:
         Z2GetSceneMgr()->setSceneExist(true);
         return;
     case 0x2000023:
-        if (mMainBgmHandle) {
-            mMainBgmHandle->stop(Z2Param::BGM_CROSS_FADEOUT_TIME);
+        if (!mMainBgmHandle) {
+            return;
         }
+        mMainBgmHandle->stop(Z2Param::BGM_CROSS_FADEOUT_TIME);
         return;
     case 0x2000038:
         if (mMainBgmHandle) {
@@ -613,7 +623,7 @@ void Z2SeqMgr::bgmStreamPrepare(u32 bgmID) {
     case 0x2000003:
     case 0x2000047:
     case 0x200005f:
-        mStreamBgmMaster.forceOut();
+        mStreamBgmMaster.fadeOut(0);
         return;
     case 0x200007c:
         mStreamBgmMaster.fadeOut(45);
@@ -670,453 +680,450 @@ void Z2SeqMgr::bgmStreamStop(u32 fadeTime) {
 }
 
 void Z2SeqMgr::changeBgmStatus(s32 status) {
-    if (!mMainBgmHandle) {
-        return;
-    }
+    if (mMainBgmHandle) {
+        u32 moveTime = 0;
+        bool mute;
 
-    u32 moveTime = 0;
-    bool mute;
+        #if PLATFORM_SHIELD
+        f32 volume1 = 1.0f;
+        f32 volume2 = 1.0f;
+        f32 volume3 = 1.0f;
+        f32 volume4 = 1.0f;
+        #else
+        f32 volume1, volume2, volume3, volume4;
+        #endif
 
-    #if PLATFORM_SHIELD
-    f32 volume1 = 1.0f;
-    f32 volume2 = 1.0f;
-    f32 volume3 = 1.0f;
-    f32 volume4 = 1.0f;
-    #else
-    f32 volume1, volume2, volume3, volume4;
-    #endif
+        switch (getMainBgmID()) {
+        case Z2BGM_TOAL_VILLEGE:
+            if (status == mBgmStatus) {
+                return;
+            }
 
-    switch (getMainBgmID()) {
-    case Z2BGM_TOAL_VILLEGE:
-        if (status == mBgmStatus) {
-            return;
-        }
+            if (mBgmStatus != 0xff) {
+                moveTime = 60;
+            }
 
-        if (mBgmStatus != 0xff) {
-            moveTime = 60;
-        }
+            if (status == 1) {
+                volume1 = 0.65f;
+                volume2 = 0.0f;
+                volume3 = 1.0f;
+                moveTime = 30;
+            } else {
+                volume1 = 1.0f;
+                volume2 = 1.0f;
+                volume3 = 0.0f;
+            }
 
-        if (status == 1) {
-            volume1 = 0.65f;
-            volume2 = 0.0f;
-            volume3 = 1.0f;
-            moveTime = 30;
-        } else {
-            volume1 = 1.0f;
-            volume2 = 1.0f;
-            volume3 = 0.0f;
-        }
-
-        setChildTrackVolume(&mMainBgmHandle, 0, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 1, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 2, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 4, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 5, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 6, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 7, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 8, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 9, volume3, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 10, volume3, moveTime, -1.0f, -1.0f);
-        break;
-    case Z2BGM_HORSE_BATTLE:
-        setChildTrackVolume(&mMainBgmHandle, 11, 0.0f, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 12, 0.0f, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 13, 0.0f, moveTime, -1.0f, -1.0f);
-        break;
-    case Z2BGM_DUNGEON_FOREST:
-        mute = false;
-        switch (status) {
-        case 4:
-        case 0xc:
-            muteSceneBgm(Z2Param::SCENE_CHANGE_BGM_FADEOUT_TIME, 0.0f);
-            // fallthrough
-        case 7:
-            mute = true;
+            setChildTrackVolume(&mMainBgmHandle, 0, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 1, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 2, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 4, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 5, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 6, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 7, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 8, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 9, volume3, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 10, volume3, moveTime, -1.0f, -1.0f);
             break;
-        case 2:
-            Z2GetSoundObjMgr()->setForceBattleArea(true, 1500, 5000, 10000);
+        case Z2BGM_HORSE_BATTLE:
+            setChildTrackVolume(&mMainBgmHandle, 11, 0.0f, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 12, 0.0f, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 13, 0.0f, moveTime, -1.0f, -1.0f);
             break;
-        }
+        case Z2BGM_DUNGEON_FOREST:
+            mute = false;
+            switch (status) {
+            case 4:
+            case 0xc:
+                muteSceneBgm(Z2Param::SCENE_CHANGE_BGM_FADEOUT_TIME, 0.0f);
+                // fallthrough
+            case 7:
+                mute = true;
+                break;
+            case 2:
+                Z2GetSoundObjMgr()->setForceBattleArea(true, 1500, 5000, 10000);
+                break;
+            }
 
-        if (!mute) {
-            unMuteSceneBgm(Z2Param::SCENE_CHANGE_BGM_FADEOUT_TIME);
-        }
-        break;
-    case Z2BGM_DUNGEON_LV2:
-        switch (status) {
-        case 0xe:
-        case 0x10:
-        case 0x11:
-            subBgmStart(Z2BGM_DEATH_MOUNTAIN02);
-            return;
-        default:
-            if (getSubBgmID() == Z2BGM_DEATH_MOUNTAIN02) {
-                subBgmStop();
+            if (!mute) {
+                unMuteSceneBgm(Z2Param::SCENE_CHANGE_BGM_FADEOUT_TIME);
+            }
+            break;
+        case Z2BGM_DUNGEON_LV2:
+            switch (status) {
+            case 0xe:
+            case 0x10:
+            case 0x11:
+                subBgmStart(Z2BGM_DEATH_MOUNTAIN02);
+                break;
+            default:
+                if (getSubBgmID() == Z2BGM_DEATH_MOUNTAIN02) {
+                    subBgmStop();
+                }
             }
             return;
-        }
-        break;
-    case Z2BGM_DUNGEON_LV5:
-        if (mBgmStatus != 0xff) {
-            moveTime = 45;
-        }
+        case Z2BGM_DUNGEON_LV5:
+            if (mBgmStatus != 0xff) {
+                moveTime = 45;
+            }
 
-        if (status == 2 || status == 1) {
-            volume1 = 0.0f;
-            volume2 = 1.0f;
-        } else {
-            volume1 = 1.0f;
-            volume2 = 0.0f;
-        }
+            if (status == 2 || status == 1) {
+                volume1 = 0.0f;
+                volume2 = 1.0f;
+            } else {
+                volume1 = 1.0f;
+                volume2 = 0.0f;
+            }
 
-        setChildTrackVolume(&mMainBgmHandle, 0, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 1, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 2, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 4, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 8, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 9, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 10, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 11, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 12, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 13, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 0, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 1, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 2, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 4, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 8, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 9, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 10, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 11, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 12, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 13, volume2, moveTime, -1.0f, -1.0f);
 
-        if (status == 4) {
-            muteSceneBgm(60, 0.29f);
-        } else {
-            unMuteSceneBgm(60);
-        }
-        break;
-    case Z2BGM_CASTLE_TOWN:
-        if (mBgmStatus != 0xff) {
-            moveTime = 45;
-        }
-
-        switch (status) {
-        case 0:
-        case 1:
-        case 5:
-            setChildTrackVolume(&mMainBgmHandle, 0, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 1, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 2, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 3, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 4, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 5, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 6, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 8, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 9, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 10, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 11, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 12, 0.0f, moveTime, -1.0f, -1.0f);
+            if (status == 4) {
+                muteSceneBgm(60, 0.29f);
+            } else {
+                unMuteSceneBgm(60);
+            }
             break;
-        case 2:
-            setChildTrackVolume(&mMainBgmHandle, 0, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 1, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 2, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 3, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 4, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 5, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 6, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 8, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 9, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 10, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 11, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 12, 0.0f, moveTime, -1.0f, -1.0f);
-            break;
-        case 3:
-            setChildTrackVolume(&mMainBgmHandle, 0, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 1, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 2, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 3, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 4, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 5, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 6, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 8, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 9, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 10, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 11, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 12, 1.0f, moveTime, -1.0f, -1.0f);
-            break;
-        case 4:
-            setChildTrackVolume(&mMainBgmHandle, 0, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 1, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 2, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 3, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 4, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 5, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 6, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 7, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 8, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 9, 1.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 10, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 11, 0.0f, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 12, 0.0f, moveTime, -1.0f, -1.0f);
-            break;
-        }
+        case Z2BGM_CASTLE_TOWN:
+            if (mBgmStatus != 0xff) {
+                moveTime = 45;
+            }
 
-        if (status == 5) {
-            muteSceneBgm(moveTime, 0.35f);
-            mFlags.mHeightVolMod = false;
-        } else {
-            unMuteSceneBgm(moveTime);
-            if (status < 2) {
+            switch (status) {
+            case 0:
+            case 1:
+            case 5:
+                setChildTrackVolume(&mMainBgmHandle, 0, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 1, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 2, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 3, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 4, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 5, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 6, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 8, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 9, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 10, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 11, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 12, 0.0f, moveTime, -1.0f, -1.0f);
+                break;
+            case 2:
+                setChildTrackVolume(&mMainBgmHandle, 0, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 1, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 2, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 3, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 4, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 5, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 6, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 8, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 9, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 10, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 11, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 12, 0.0f, moveTime, -1.0f, -1.0f);
+                break;
+            case 3:
+                setChildTrackVolume(&mMainBgmHandle, 0, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 1, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 2, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 3, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 4, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 5, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 6, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 8, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 9, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 10, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 11, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 12, 1.0f, moveTime, -1.0f, -1.0f);
+                break;
+            case 4:
+                setChildTrackVolume(&mMainBgmHandle, 0, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 1, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 2, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 3, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 4, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 5, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 6, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 7, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 8, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 9, 1.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 10, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 11, 0.0f, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 12, 0.0f, moveTime, -1.0f, -1.0f);
+                break;
+            }
+
+            if (status == 5) {
+                muteSceneBgm(moveTime, 0.35f);
                 mFlags.mHeightVolMod = false;
             } else {
-                mFlags.mHeightVolMod = true;
+                unMuteSceneBgm(moveTime);
+                if (status < 2) {
+                    mFlags.mHeightVolMod = false;
+                } else {
+                    mFlags.mHeightVolMod = true;
+                }
             }
-        }
-        break;
-    case Z2BGM_HOLY_FOREST:
-        if (mBgmStatus != 0xff) {
-            moveTime = 45;
-            setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, 5, -1.0f, -1.0f);
-        } else {
-            setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, 0, -1.0f, -1.0f);
-        }
-
-        if (status == 1) {
-            volume1 = 0.6f;
-            volume2 = 1.0f;
-        } else {
-            volume1 = 1.0f;
-            volume2 = 0.0f;
-        }
-
-        setChildTrackVolume(&mMainBgmHandle, 0, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 1, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 2, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 4, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 5, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 6, volume2, moveTime, -1.0f, -1.0f);
-        break;
-    case Z2BGM_LUTERA2:
-        if (status == 0) {
-            muteSceneBgm(0, 0.5f);
-        } else if (status == 1) {
-            unMuteSceneBgm(80);
-        }
-        break;
-    case Z2BGM_DEMO08:
-        if (status == 1) {
-            setChildTrackVolume(&mMainBgmHandle, 4, 1.0f, 90, -1.0f, -1.0f);
-        } else if (status == 2) {
-            bgmStop(90, 0);
-        } else {
-            setChildTrackVolume(&mMainBgmHandle, 4, 0.0f, 0, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 5, 0.0f, 0, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 6, 0.0f, 0, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, 0, -1.0f, -1.0f);
-        }
-        break;
-    case Z2BGM_DEMO10:
-        if (status == 1) {
-            setChildTrackVolume(&mMainBgmHandle, 0, 0.3f, 143, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 1, 0.3f, 143, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 2, 0.6f, 143, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 3, 0.6f, 143, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 4, 0.0f, 143, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 5, 1.0f, 143, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 6, 1.0f, 143, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 7, 1.0f, 143, -1.0f, -1.0f);
-        } else {
-            setChildTrackVolume(&mMainBgmHandle, 5, 0.0f, 0, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 6, 0.0f, 0, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, 0, -1.0f, -1.0f);
-        }
-        break;
-    case Z2BGM_BOSS_SNOWWOMAN_1:
-        if (status == 1) {
-            setChildTrackVolume(&mMainBgmHandle, 9, 0.0f, 60, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 10, 1.0f, 60, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 11, 1.0f, 60, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 12, 1.0f, 60, -1.0f, -1.0f);
-        } else {
-            setChildTrackVolume(&mMainBgmHandle, 10, 0.0f, 0, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 11, 0.0f, 0, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 12, 0.0f, 0, -1.0f, -1.0f);
-        }
-        break;
-    case Z2BGM_DUNGEON_LV8:
-        if (status == mBgmStatus) {
-            return;
-        }
-
-        if (mBgmStatus != 0xff) {
-            moveTime = 45;
-        }
-
-        if (status == 0 || status == 0xb) {
-            volume1 = 1.0f;
-            volume2 = 0.0f;
-            volume3 = 0.0f;
-            volume4 = 0.0f;
-        } else if (status >= 100) {
-            volume1 = 0.0f;
-            volume2 = 1.0f;
-
-            volume3 = status < 200  ? 1.0f :
-                      status > 3100 ? 0.0f :
-                      Z2Calc::getParamByExp(status, 3100.0f, 200.0f, 0.3f, 0.0f, 1.0f,
-                                              Z2Calc::CURVE_POSITIVE);
-
-            volume4 = status < 200  ? 1.0f :
-                      status > 1600 ? 0.0f :
-                      Z2Calc::getParamByExp(status, 1600.0f, 200.0f, 0.3f, 0.0f, 1.0f,
-                                            Z2Calc::CURVE_POSITIVE);
-        } else {
-            volume1 = 0.0f;
-            volume2 = 1.0f;
-            volume3 = 0.0f;
-            volume4 = 0.0f;
-        }
-
-        setChildTrackVolume(&mMainBgmHandle, 2, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 4, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 5, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 6, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 7, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 8, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 9, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 10, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 11, volume3, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 12, volume3, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 13, volume4, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 14, volume4, moveTime, -1.0f, -1.0f);
-        break;
-    case Z2BGM_BOSS_ZANT:
-        if (status == 0xd) {
-            mSceneBgm.move(0.3f, 134);
-        } else {
-            mSceneBgm.forceIn();
-            if (status > 6) {
-                status = (status - 7) * 2;
+            break;
+        case Z2BGM_HOLY_FOREST:
+            if (mBgmStatus != 0xff) {
+                moveTime = 45;
+                setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, 5, -1.0f, -1.0f);
             } else {
-                status = status * 2 - 1;
-            }
-        }
-        break;
-    case Z2BGM_FORTUNE:
-        if (status == 1) {
-            muteSceneBgm(45, 0.5f);
-        } else {
-            unMuteSceneBgm(45);
-        }
-        break;
-    case Z2BGM_DUNGEON_LV9_02:
-        if (mBgmStatus != 0xff) {
-            moveTime = 30;
-        }
-
-        if (status == 0xc) {
-            volume4 = 1.0f;
-            volume1 = 0.0f;
-            volume2 = 0.5f;
-            volume3 = 0.0f;
-        } else if (status == 8) {
-            volume4 = 0.0f;
-            volume1 = 0.5f;
-            volume2 = 1.0f;
-            volume3 = 0.8f;
-        } else if (status > 3000) {
-            volume4 = Z2Calc::linearTransform(status, 3150.0f, 6150.0f, 1.0f, 0.0f, false);
-            volume1 = Z2Calc::linearTransform(status, 3150.0f, 6150.0f, 0.0f, 1.0f, false);
-            volume2 = Z2Calc::linearTransform(status, 3150.0f, 6150.0f, 0.5f, 1.0f, false);
-            volume3 = Z2Calc::linearTransform(status, 3150.0f, 6150.0f, 0.0f, 1.0f, false);
-        }
-
-        setChildTrackVolume(&mMainBgmHandle, 0, volume4, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 1, volume4, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 2, volume4, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 4, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 5, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 6, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 7, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 8, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 9, volume3, moveTime, -1.0f, -1.0f);
-        break;
-    case Z2BGM_VS_GANON_02:
-        if (status == mBgmStatus) {
-            return;
-        }
-
-        if (mBgmStatus != 0xff) {
-            moveTime = 45;
-        }
-
-        if (status == 1) {
-            volume1 = 0.0f;
-            volume2 = 1.0f;
-        } else {
-            volume1 = 1.0f;
-            volume2 = 0.0f;
-        }
-
-        setChildTrackVolume(&mMainBgmHandle, 0, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 1, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 2, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 4, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 5, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 6, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 7, volume1, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 10, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 11, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 12, volume2, moveTime, -1.0f, -1.0f);
-        setChildTrackVolume(&mMainBgmHandle, 13, volume2, moveTime, -1.0f, -1.0f);
-        break;
-    case Z2BGM_TOAL_NIGHT:
-    case Z2BGM_FILONE_FOREST:
-        if (status == 1) {
-            muteSceneBgm(45, 0.5f);
-        } else if (status == 2) {
-            muteSceneBgm(0, 0.5f);
-        } else {
-            unMuteSceneBgm(45);
-        }
-        break;
-    case Z2BGM_VS_GANON_04:
-        if (status == mBgmStatus) {
-            return;
-        }
-
-        if (status >= 4) {
-            moveTime = 50;
-            if (status == 4) {
-                volume4 = 1.0f;
-                volume1 = 0.0f;
-            } else if (status == 5) {
-                volume4 = 0.0f;
-                volume1 = 1.0f;
-            } else if (status == 6) {
-                volume4 = 0.0f;
-                volume1 = 0.0f;
-            } else if (status == 7) {
-                volume4 = 0.0f;
-                volume1 = 0.0f;
-                moveTime = 0;
-            } else if (status == 8) {
-                volume4 = 1.0f;
-                volume1 = 1.0f;
-                moveTime = 0;
+                setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, 0, -1.0f, -1.0f);
             }
 
-            setChildTrackVolume(&mMainBgmHandle, 12, volume4, moveTime, -1.0f, -1.0f);
+            if (status == 1) {
+                volume1 = 0.6f;
+                volume2 = 1.0f;
+            } else {
+                volume1 = 1.0f;
+                volume2 = 0.0f;
+            }
+
+            setChildTrackVolume(&mMainBgmHandle, 0, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 1, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 2, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 4, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 5, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 6, volume2, moveTime, -1.0f, -1.0f);
+            break;
+        case Z2BGM_LUTERA2:
+            if (status == 0) {
+                muteSceneBgm(0, 0.5f);
+            } else if (status == 1) {
+                unMuteSceneBgm(80);
+            }
+            break;
+        case Z2BGM_DEMO08:
+            if (status == 1) {
+                setChildTrackVolume(&mMainBgmHandle, 4, 1.0f, 90, -1.0f, -1.0f);
+            } else if (status == 2) {
+                bgmStop(90, 0);
+            } else {
+                setChildTrackVolume(&mMainBgmHandle, 4, 0.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 5, 0.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 6, 0.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, 0, -1.0f, -1.0f);
+            }
+            break;
+        case Z2BGM_DEMO10:
+            if (status == 1) {
+                setChildTrackVolume(&mMainBgmHandle, 0, 0.3f, 143, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 1, 0.3f, 143, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 2, 0.6f, 143, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 3, 0.6f, 143, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 4, 0.0f, 143, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 5, 1.0f, 143, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 6, 1.0f, 143, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 7, 1.0f, 143, -1.0f, -1.0f);
+            } else {
+                setChildTrackVolume(&mMainBgmHandle, 5, 0.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 6, 0.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 7, 0.0f, 0, -1.0f, -1.0f);
+            }
+            break;
+        case Z2BGM_BOSS_SNOWWOMAN_1:
+            if (status == 1) {
+                setChildTrackVolume(&mMainBgmHandle, 9, 0.0f, 60, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 10, 1.0f, 60, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 11, 1.0f, 60, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 12, 1.0f, 60, -1.0f, -1.0f);
+            } else {
+                setChildTrackVolume(&mMainBgmHandle, 10, 0.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 11, 0.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 12, 0.0f, 0, -1.0f, -1.0f);
+            }
+            break;
+        case Z2BGM_DUNGEON_LV8:
+            if (status == mBgmStatus) {
+                return;
+            }
+
+            if (mBgmStatus != 0xff) {
+                moveTime = 45;
+            }
+
+            if (status == 0 || status == 0xb) {
+                volume1 = 1.0f;
+                volume2 = 0.0f;
+                volume3 = 0.0f;
+                volume4 = 0.0f;
+            } else if (status >= 100) {
+                volume1 = 0.0f;
+                volume2 = 1.0f;
+
+                volume3 = status < 200  ? 1.0f :
+                        status > 3100 ? 0.0f :
+                        Z2Calc::getParamByExp(status, 3100.0f, 200.0f, 0.3f, 0.0f, 1.0f,
+                                                Z2Calc::CURVE_POSITIVE);
+
+                volume4 = status < 200  ? 1.0f :
+                        status > 1600 ? 0.0f :
+                        Z2Calc::getParamByExp(status, 1600.0f, 200.0f, 0.3f, 0.0f, 1.0f,
+                                                Z2Calc::CURVE_POSITIVE);
+            } else {
+                volume1 = 0.0f;
+                volume2 = 1.0f;
+                volume3 = 0.0f;
+                volume4 = 0.0f;
+            }
+
+            setChildTrackVolume(&mMainBgmHandle, 2, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 4, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 5, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 6, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 7, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 8, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 9, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 10, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 11, volume3, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 12, volume3, moveTime, -1.0f, -1.0f);
             setChildTrackVolume(&mMainBgmHandle, 13, volume4, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 14, volume1, moveTime, -1.0f, -1.0f);
-            setChildTrackVolume(&mMainBgmHandle, 15, volume1, moveTime, -1.0f, -1.0f);
-        }
-        break;
-    }
+            setChildTrackVolume(&mMainBgmHandle, 14, volume4, moveTime, -1.0f, -1.0f);
+            break;
+        case Z2BGM_BOSS_ZANT:
+            if (status == 0xd) {
+                mSceneBgm.move(0.3f, 134);
+            } else {
+                mSceneBgm.forceIn();
+                if (status > 6) {
+                    status = (status - 7) * 2;
+                } else {
+                    status = status * 2 - 1;
+                }
+            }
+            break;
+        case Z2BGM_FORTUNE:
+            if (status == 1) {
+                muteSceneBgm(45, 0.5f);
+            } else {
+                unMuteSceneBgm(45);
+            }
+            break;
+        case Z2BGM_DUNGEON_LV9_02:
+            if (mBgmStatus != 0xff) {
+                moveTime = 30;
+            }
 
-    Z2GetSoundStarter()->setPortData(&mMainBgmHandle, 9, status, -1);
-    mBgmStatus = status & 0xff;
+            if (status == 0xc) {
+                volume4 = 1.0f;
+                volume1 = 0.0f;
+                volume2 = 0.5f;
+                volume3 = 0.0f;
+            } else if (status == 8) {
+                volume4 = 0.0f;
+                volume1 = 0.5f;
+                volume2 = 1.0f;
+                volume3 = 0.8f;
+            } else if (status > 3000) {
+                volume4 = Z2Calc::linearTransform(status, 3150.0f, 6150.0f, 1.0f, 0.0f, false);
+                volume1 = Z2Calc::linearTransform(status, 3150.0f, 6150.0f, 0.0f, 1.0f, false);
+                volume2 = Z2Calc::linearTransform(status, 3150.0f, 6150.0f, 0.5f, 1.0f, false);
+                volume3 = Z2Calc::linearTransform(status, 3150.0f, 6150.0f, 0.0f, 1.0f, false);
+            }
+
+            setChildTrackVolume(&mMainBgmHandle, 0, volume4, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 1, volume4, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 2, volume4, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 4, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 5, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 6, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 7, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 8, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 9, volume3, moveTime, -1.0f, -1.0f);
+            break;
+        case Z2BGM_VS_GANON_02:
+            if (status == mBgmStatus) {
+                return;
+            }
+
+            if (mBgmStatus != 0xff) {
+                moveTime = 45;
+            }
+
+            if (status == 1) {
+                volume1 = 0.0f;
+                volume2 = 1.0f;
+            } else {
+                volume1 = 1.0f;
+                volume2 = 0.0f;
+            }
+
+            setChildTrackVolume(&mMainBgmHandle, 0, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 1, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 2, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 3, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 4, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 5, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 6, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 7, volume1, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 10, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 11, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 12, volume2, moveTime, -1.0f, -1.0f);
+            setChildTrackVolume(&mMainBgmHandle, 13, volume2, moveTime, -1.0f, -1.0f);
+            break;
+        case Z2BGM_TOAL_NIGHT:
+        case Z2BGM_FILONE_FOREST:
+            if (status == 1) {
+                muteSceneBgm(45, 0.5f);
+            } else if (status == 2) {
+                muteSceneBgm(0, 0.5f);
+            } else {
+                unMuteSceneBgm(45);
+            }
+            break;
+        case Z2BGM_VS_GANON_04:
+            if (status == mBgmStatus) {
+                return;
+            }
+
+            if (status >= 4) {
+                moveTime = 50;
+                if (status == 4) {
+                    volume4 = 1.0f;
+                    volume1 = 0.0f;
+                } else if (status == 5) {
+                    volume4 = 0.0f;
+                    volume1 = 1.0f;
+                } else if (status == 6) {
+                    volume4 = 0.0f;
+                    volume1 = 0.0f;
+                } else if (status == 7) {
+                    volume4 = 0.0f;
+                    volume1 = 0.0f;
+                    moveTime = 0;
+                } else if (status == 8) {
+                    volume4 = 1.0f;
+                    volume1 = 1.0f;
+                    moveTime = 0;
+                }
+
+                setChildTrackVolume(&mMainBgmHandle, 12, volume4, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 13, volume4, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 14, volume1, moveTime, -1.0f, -1.0f);
+                setChildTrackVolume(&mMainBgmHandle, 15, volume1, moveTime, -1.0f, -1.0f);
+            }
+            break;
+        }
+
+        Z2GetSoundStarter()->setPortData(&mMainBgmHandle, 9, status, -1);
+        mBgmStatus = status & 0xff;
+    }
 }
 
 void Z2SeqMgr::changeSubBgmStatus(s32 status) {
@@ -1284,9 +1291,11 @@ void Z2SeqMgr::changeSubBgmStatus(s32 status) {
             setChildTrackVolume(&mSubBgmHandle, 11, 0.0f, moveTime, -1.0f, -1.0f);
             setChildTrackVolume(&mSubBgmHandle, 12, 0.0f, moveTime, -1.0f, -1.0f);
         }
+#if PLATFORM_GCN
         break;
     case Z2BGM_BATTLE_NORMAL:
         return;
+#endif
     }
 
     if (bvar2) {
@@ -1341,6 +1350,14 @@ void Z2SeqMgr::changeFishingBgm(s32 param_0) {
     }
 }
 
+static void dummy2() {
+    OS_REPORT("[Z2SeqMgr::talkInBgm]\n");
+    OS_REPORT("[Z2SeqMgr::talkOutBgm]\n");
+    OS_REPORT("[Z2SeqMgr::menuInBgm]\n");
+    OS_REPORT("[Z2SeqMgr::menuOutBgm]\n");
+    OS_REPORT("[Z2SeqMgr::fanfareFramework] mOpenBoxWait = %d\n");
+}
+
 void Z2SeqMgr::talkInBgm() {
     if (getStreamBgmID() == 0x2000038 || getStreamBgmID() == 0x200007c || getMainBgmID() == Z2BGM_WCS_D01) {
         return;
@@ -1362,6 +1379,7 @@ void Z2SeqMgr::menuOutBgm() {
 }
 
 void Z2SeqMgr::fanfareFramework() {
+    u8 r30;
     switch (mFanfareID) {
     case Z2BGM_OPEN_BOX:
         mFanfareCount = 150;
@@ -1395,6 +1413,7 @@ void Z2SeqMgr::fanfareFramework() {
     case Z2BGM_ITEM_GET_SMELL:
     case Z2BGM_ITEM_GET_POU:
     case Z2BGM_ITEM_GET_ME_S:
+        r30 = mFanfareCount;
         if (mFanfareCount == 0) {
             Z2GetSoundMgr()->startSound(mFanfareID, &mFanfareHandle, 0);
             mFanfareMute.fadeOut(1);
@@ -1420,7 +1439,7 @@ void Z2SeqMgr::fanfareFramework() {
             mFanfareCount = 50;
             mFanfareMute.fadeOut(30);
         } else if (mFanfareCount == 1) {
-            Z2GetSoundMgr()->startSound((u32)mFanfareID, &mFanfareHandle, 0);
+            Z2GetSoundMgr()->startSound(mFanfareID, &mFanfareHandle, 0);
             mFanfareID.setAnonymous();
         }
         break;
@@ -1528,21 +1547,17 @@ void Z2SeqMgr::processBgmFramework() {
         && Z2GetLink() != NULL && Z2GetLink()->getCurrentPos() != NULL)
     {
         f32 link_y = Z2GetLink()->getCurrentPos()->y;
-        f32 volume, depth;
+        f32 depth;
         switch (getMainBgmID()) {
         case Z2BGM_DEATH_MOUNTAIN01:
-            volume = Z2Calc::getParamByExp(link_y, sDeathMtTop, sDeathMtBottom, 0.3f, 0.0f, 1.0f,
-                                           Z2Calc::CURVE_NEGATIVE);
-            field_0x84.move(volume, 0);
+            field_0x84.move(Z2Calc::getParamByExp(link_y, sDeathMtTop, sDeathMtBottom, 0.3f, 0.0f, 1.0f, Z2Calc::CURVE_NEGATIVE), 0);
             break;
         case Z2BGM_RAKKA_HOUSE:
             if (link_y < -10500.0f) {
                 bgmStart(Z2BGM_LAKE, 150, 0);
                 field_0x84.forceIn();
             } else if (link_y < -7500.0f) {
-                volume = Z2Calc::getParamByExp(link_y, -10500.0f, -7500.0f, 0.3f, 0.0f, 1.0f,
-                                               Z2Calc::CURVE_POSITIVE);
-                field_0x84.move(volume, 0);
+                field_0x84.move(Z2Calc::getParamByExp(link_y, -10500.0f, -7500.0f, 0.3f, 0.0f, 1.0f, Z2Calc::CURVE_POSITIVE), 0);
             }
             break;
         case Z2BGM_FIELD_LINK_DAY:
@@ -1554,9 +1569,7 @@ void Z2SeqMgr::processBgmFramework() {
             if (depth > sUnderWaterDepthMax) {
                 field_0x84.forceOut();
             } else if (depth > 0.0f) {
-                volume = Z2Calc::getParamByExp(depth, sUnderWaterDepthMax, 0.0f, 0.3f, 0.1f, 1.0f,
-                                               Z2Calc::CURVE_POSITIVE);
-                field_0x84.move(volume, 0);
+                field_0x84.move(Z2Calc::getParamByExp(depth, sUnderWaterDepthMax, 0.0f, 0.3f, 0.1f, 1.0f, Z2Calc::CURVE_POSITIVE), 0);
             } else if (field_0x84.getDest() != 1.0f) {
                 field_0x84.fadeIn(30);
             }
@@ -1566,9 +1579,7 @@ void Z2SeqMgr::processBgmFramework() {
                 if (link_y > -1500.0f) {
                     field_0x84.move(0.3f, 0);
                 } else if (link_y > -13000.0f) {
-                    volume = Z2Calc::getParamByExp(link_y, -1500.0f, -13000.0f, 0.3f, 0.3f, 1.0f,
-                                                   Z2Calc::CURVE_NEGATIVE);
-                    field_0x84.move(volume, 0);
+                    field_0x84.move(Z2Calc::getParamByExp(link_y, -1500.0f, -13000.0f, 0.3f, 0.3f, 1.0f, Z2Calc::CURVE_NEGATIVE), 0);
                 } else {
                     field_0x84.forceIn();
                 }
@@ -1576,9 +1587,7 @@ void Z2SeqMgr::processBgmFramework() {
                 if (link_y > -4500.0f) {
                     field_0x84.fadeOut(30);
                 } else if (link_y > -45000.0f) {
-                    volume = Z2Calc::getParamByExp(link_y, -3000.0f, -45000.0f, 0.3f, 0.0f, 1.0f,
-                                                   Z2Calc::CURVE_NEGATIVE);
-                    field_0x84.move(volume, 0);
+                    field_0x84.move(Z2Calc::getParamByExp(link_y, -3000.0f, -45000.0f, 0.3f, 0.0f, 1.0f, Z2Calc::CURVE_NEGATIVE), 0);
                 } else {
                     field_0x84.forceIn();
                 }
@@ -1586,9 +1595,7 @@ void Z2SeqMgr::processBgmFramework() {
                 if (link_y > 900.0f) {
                     field_0x84.forceOut();
                 } else if (link_y > -1500.0f) {
-                    volume = Z2Calc::getParamByExp(link_y, 900.0f, -1500.0f, 0.3f, 0.0f, 0.3f,
-                                                   Z2Calc::CURVE_NEGATIVE);
-                    field_0x84.move(volume, 0);
+                    field_0x84.move(Z2Calc::getParamByExp(link_y, 900.0f, -1500.0f, 0.3f, 0.0f, 0.3f, Z2Calc::CURVE_NEGATIVE), 0);
                 } else {
                     field_0x84.move(0.3f, 0);
                 }
@@ -1624,7 +1631,11 @@ void Z2SeqMgr::processBgmFramework() {
     field_0xa4.calc();
     
     f32 base_vol = mAllBgmMaster.get() * mBgmPause.get() * mFanfareMute.get() * mWindStone.get() * mTwilightGateVol;
-
+#if DEBUG
+    if (field_0x04_debug) {
+        base_vol *= field_0x00_debug;
+    }
+#endif
     if (mMainBgmHandle) {
         f32 volume = 1.0f;
         if (getMainBgmID() != Z2BGM_GAME_OVER) {
@@ -1634,13 +1645,11 @@ void Z2SeqMgr::processBgmFramework() {
     }
 
     if (mSubBgmHandle) {
-        f32 volume = base_vol * mSubBgmMaster.get() * mStreamBgmMaster.get();
-        mSubBgmHandle->getAuxiliary().moveVolume(volume, 0);
+        mSubBgmHandle->getAuxiliary().moveVolume(base_vol * mSubBgmMaster.get() * mStreamBgmMaster.get(), 0);
     }
 
     if (mStreamBgmHandle) {
-        f32 volume = base_vol * mMainBgmMaster.get() * mSceneBgm.get();
-        mStreamBgmHandle->getAuxiliary().moveVolume(volume, 0);
+        mStreamBgmHandle->getAuxiliary().moveVolume(base_vol * mMainBgmMaster.get() * mSceneBgm.get(), 0);
     }
 
     setWindStoneVol(1.0f, 30);
@@ -1663,13 +1672,20 @@ bool Z2SeqMgr::checkBgmIDPlaying(u32 bgmID) {
 }
 
 f32 Z2SeqMgr::getChildTrackVolume(JAISoundHandle* handle, int trackId) {
+    JUT_ASSERT(2030, handle);
     f32 volume = 0.0f;
     if (*handle) {
         JAISeq* seq = handle->getSound()->asSeq();
-        if (seq != NULL && seq->getChildTrack(trackId) != NULL) {
-            JAISoundChild* child = seq->getChild(trackId);
-            if (child != NULL) {
-                volume = child->mMove.params_.mVolume;
+        if (seq != NULL) {
+            JASTrack* track = seq->getChildTrack(trackId);
+            if (!track) {
+                int r24 = trackId;
+            } else {
+                JAISoundChild* child = seq->getChild(trackId);
+                if (child != NULL) {
+                    volume = child->mMove.params_.mVolume;
+                    f32 f30 = volume;
+                }
             }
         }
     }
@@ -1677,18 +1693,31 @@ f32 Z2SeqMgr::getChildTrackVolume(JAISoundHandle* handle, int trackId) {
     return volume;
 }
 
+static void dummy3() {
+    OS_REPORT("[Z2SeqMgr::getChildTrackVolume]シーケンスがないですよ。\n");
+    OS_REPORT("[Z2SeqMgr::getChildTrackVolume]子トラック%dがオープンしてませんよ\n");
+    OS_REPORT("[Z2SeqMgr::getChildTrackVolume]子トラック%dのボリューム%.2f\n");
+    OS_REPORT("[Z2SeqMgr::setChildTrackVolume]シーケンスがないですよ。\n");
+    OS_REPORT("[Z2SeqMgr::setChildTrackVolume]子トラック%dがオープンしてませんよ\n");
+    OS_REPORT("[Z2SeqMgr::setChildTrackVolume]子トラック%dのボリューム%.2f → %.2f カウント %d\n");
+}
+
 void Z2SeqMgr::setChildTrackVolume(JAISoundHandle* handle, int trackId, f32 volume,
                                    u32 moveTime, f32 pan, f32 dolby) {
+    int r24;
+    JUT_ASSERT(2064, handle);
     if (!*handle) {
         return;
     }
 
-    JAISeq* seq = (*handle)->asSeq();
+    JAISeq* seq = handle->getSound()->asSeq();
     if (seq == NULL) {
         return;
     }
 
-    if (seq->getChildTrack(trackId) == NULL) {
+    JASTrack* track = seq->getChildTrack(trackId);
+    if (track == NULL) {
+        r24 = trackId;
         return;
     }
 
@@ -1704,6 +1733,7 @@ void Z2SeqMgr::setChildTrackVolume(JAISoundHandle* handle, int trackId, f32 volu
     }
 
     child->mMove.moveVolume(volume, moveTime);
+    u32 r23 = moveTime;
     if (pan != -1.0f) {
         child->mMove.movePan(pan, moveTime);
     }
@@ -1771,17 +1801,20 @@ void Z2SeqMgr::setBattleDistState(u8 state) {
                 mBattleSeqCount = 0;
                 if (getSubBgmID() == Z2BGM_BATTLE_TWILIGHT || getSubBgmID() == Z2BGM_BATTLE_NORMAL)
                 {
-                    mSubBgmHandle->getFader().fadeIn(10);
+                    JAISoundFader* fader = mSubBgmHandle->getFader();
+                    fader->fadeIn(10);
                     mMainBgmMaster.fadeOut(10);
                 }
             }
 
+#if !DEBUG
             if ((Z2GetSoundObjMgr()->isTwilightBattle() && getSubBgmID() == Z2BGM_BATTLE_NORMAL) ||
                 (!Z2GetSoundObjMgr()->isTwilightBattle() && getSubBgmID() == Z2BGM_BATTLE_TWILIGHT))
             {
                 mSubBgmHandle->stop(30);
                 mSubBgmHandle->releaseHandle();
             }
+#endif
 
             if (Z2GetSoundObjMgr()->isTwilightBattle() || getSubBgmID() == Z2BGM_BATTLE_TWILIGHT) {
                 switch (state) {
@@ -1835,41 +1868,52 @@ void Z2SeqMgr::setBattleDistState(u8 state) {
 }
 
 void Z2SeqMgr::setBattleSeqState(u8 state) {
-    if (!mFlags.mBattleBgmOff && Z2GetSceneMgr()->isSceneExist() && mBattleSeqState != state) {
-        if (state == 0) {
-            stopBattleBgm(Z2Param::BGM_CROSS_FADEOUT_TIME, Z2Param::BGM_CROSS_FADEIN_TIME);
-        } else if (getSubBgmID() == Z2BGM_BATTLE_NORMAL && !(getMainBgmID() == Z2BGM_FIELD_LINK_DAY && !Z2GetSoundObjMgr()->isTwilightBattle())) {
-            switch (state) {
-            case 2:
-                if (mBattleSeqState == 1) {
-                    Z2GetSoundStarter()->setPortData(&mSubBgmHandle, 9, 1, -1);
-                    setChildTrackVolume(&mSubBgmHandle, data_8045086C, 1.0f, 0, -1.0f, -1.0f);
-                    setChildTrackVolume(&mSubBgmHandle, 2, 1.0f, 0, -1.0f, -1.0f);
-                    setChildTrackVolume(&mSubBgmHandle, 3, 1.0f, 0, -1.0f, -1.0f);
-                    setChildTrackVolume(&mSubBgmHandle, 12, 1.0f, 0, -1.0f, -1.0f);
-                    setChildTrackVolume(&mSubBgmHandle, 14, 1.0f, 0, -1.0f, -1.0f);
-                }
+    if (mFlags.mBattleBgmOff) {
+        return;
+    }
+    if (!Z2GetSceneMgr()->isSceneExist()) {
+        return;
+    }
+    if (mBattleSeqState == state) {
+        return;
+    }
 
-                if (mBattleSeqCount != 0) {
-                    mBattleSeqCount = 0;
-                    mSubBgmHandle->getFader().fadeIn(10);
-                    mMainBgmMaster.fadeOut(10);
-                }
-                break;
-            case 3:
-                mMainBgmMaster.forceOut();
-                mSubBgmMaster.forceIn();
-
-                if (mBattleSeqState == 1) {
-                    Z2GetSoundStarter()->setPortData(&mSubBgmHandle, 9, 3, -1);
-                } else if (mBattleSeqState == 2) {
-                    Z2GetSoundStarter()->setPortData(&mSubBgmHandle, 9, 2, -1);
-                }
-                break;
+    if (state == 0) {
+        stopBattleBgm(Z2Param::BGM_CROSS_FADEOUT_TIME, Z2Param::BGM_CROSS_FADEIN_TIME);
+        return;
+    }
+    if (getSubBgmID() == Z2BGM_BATTLE_NORMAL && !(getMainBgmID() == Z2BGM_FIELD_LINK_DAY && !Z2GetSoundObjMgr()->isTwilightBattle())) {
+        switch (state) {
+        case 2:
+            if (mBattleSeqState == 1) {
+                Z2GetSoundStarter()->setPortData(&mSubBgmHandle, 9, 1, -1);
+                setChildTrackVolume(&mSubBgmHandle, data_8045086C, 1.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mSubBgmHandle, 2, 1.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mSubBgmHandle, 3, 1.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mSubBgmHandle, 12, 1.0f, 0, -1.0f, -1.0f);
+                setChildTrackVolume(&mSubBgmHandle, 14, 1.0f, 0, -1.0f, -1.0f);
             }
 
-            mBattleSeqState = state;
+            if (mBattleSeqCount != 0) {
+                mBattleSeqCount = 0;
+                JAISoundFader* fader = mSubBgmHandle->getFader();
+                fader->fadeIn(10);
+                mMainBgmMaster.fadeOut(10);
+            }
+            break;
+        case 3:
+            mMainBgmMaster.forceOut();
+            mSubBgmMaster.forceIn();
+
+            if (mBattleSeqState == 1) {
+                Z2GetSoundStarter()->setPortData(&mSubBgmHandle, 9, 3, -1);
+            } else if (mBattleSeqState == 2) {
+                Z2GetSoundStarter()->setPortData(&mSubBgmHandle, 9, 2, -1);
+            }
+            break;
         }
+
+        mBattleSeqState = state;
     }
 }
 
@@ -1930,102 +1974,114 @@ void Z2SeqMgr::battleBgmFramework() {
 }
 
 void Z2SeqMgr::startBattleBgm(bool isFadeIn) {
-    if (!mFlags.mBattleBgmOff && Z2GetSceneMgr()->isSceneExist()
-        && mBattleSeqState == 0 && (mFlags.mBattleDistIgnore || mBattleDistState <= 1))
-    {
-        JAISoundID bgm_id = Z2BGM_BATTLE_NORMAL;
-        if (Z2GetSceneMgr()->isInDarkness() || Z2GetSoundObjMgr()->isTwilightBattle()) {
-            bgm_id = Z2BGM_BATTLE_TWILIGHT;
-        }
+    if (mFlags.mBattleBgmOff) {
+        return;
+    }
+    if (!Z2GetSceneMgr()->isSceneExist()) {
+        return;
+    }
+    if (mBattleSeqState) {
+        return;
+    }
+    if (!mFlags.mBattleDistIgnore && mBattleDistState > 1) {
+        return;
+    }
 
-        u32 subBgmID = getSubBgmID();
-        if (subBgmID != bgm_id) {
-            mBattleSeqState = 1;
-            if (Z2GetSoundMgr()->startSound(bgm_id, &mSubBgmHandle, NULL)) {
-                Z2GetSoundObjMgr()->setBattleInit();
-                mSubBgmStatus = 0xff;
+    JAISoundID bgm_id = Z2BGM_BATTLE_NORMAL;
+    if (Z2GetSceneMgr()->isInDarkness() || Z2GetSoundObjMgr()->isTwilightBattle()) {
+        bgm_id = Z2BGM_BATTLE_TWILIGHT;
+    }
 
-                s16 ivar2 = Z2GetLink()->getMoveSpeed() - 23;
-                if (ivar2 < 0) {
-                    ivar2 = 0;
-                }
+    u32 subBgmID = getSubBgmID();
+    s16 ivar2;
+    u8 fadeinTime, fadeoutTime;
+    if (subBgmID != bgm_id) {
+        mBattleSeqState = 1;
+        if (Z2GetSoundMgr()->startSound(bgm_id, &mSubBgmHandle, NULL)) {
+            Z2GetSoundObjMgr()->setBattleInit();
+            mSubBgmStatus = 0xff;
 
-                if (ivar2 > Z2Param::BGM_CROSS_FADEIN_TIME) {
-                    ivar2 = Z2Param::BGM_CROSS_FADEIN_TIME;
-                }
-
-                u8 fadeinTime, fadeoutTime;
-                switch (bgm_id) {
-                case Z2BGM_BATTLE_NORMAL:
-                    fadeinTime = Z2Param::BGM_CROSS_FADEIN_TIME - ivar2;
-                    fadeoutTime = Z2Param::BGM_CROSS_FADEOUT_TIME - ivar2 / 2;
-                    if (!mFlags.mBattleSearched) {
-                        setChildTrackVolume(&mSubBgmHandle, 2, 0.0f, 0, -1.0f, -1.0f);
-                        setChildTrackVolume(&mSubBgmHandle, 3, 0.0f, 0, -1.0f, -1.0f);
-                        setChildTrackVolume(&mSubBgmHandle, 12, 0.0f, 0, -1.0f, -1.0f);
-                        setChildTrackVolume(&mSubBgmHandle, 14, 0.0f, 0, -1.0f, -1.0f);
-                    }
-                    if (mBattleDistState != 0) {
-                        setChildTrackVolume(&mSubBgmHandle, data_8045086C, 0.0f, 0, -1.0f, -1.0f);
-                    }
-                    break;
-                case Z2BGM_BATTLE_TWILIGHT:
-                    changeSubBgmStatus(Z2GetSoundObjMgr()->isTwilightBattle());
-                    fadeinTime = 25 - ivar2 / 4;
-                    fadeoutTime = 25 - ivar2 / 4;
-                    break;
-                }
-
-                if (isFadeIn) {
-                    mSubBgmMaster.fadeInFromOut(fadeinTime);
-                } else {
-                    mSubBgmMaster.forceIn();
-                }
-
-                mMainBgmMaster.fadeOut(fadeoutTime);
+            ivar2 = Z2GetLink()->getMoveSpeed() - 23;
+            if (ivar2 < 0) {
+                ivar2 = 0;
             }
+
+            if (ivar2 > Z2Param::BGM_CROSS_FADEIN_TIME) {
+                ivar2 = Z2Param::BGM_CROSS_FADEIN_TIME;
+            }
+
+            switch (bgm_id) {
+            case Z2BGM_BATTLE_NORMAL:
+                fadeinTime = Z2Param::BGM_CROSS_FADEIN_TIME - ivar2;
+                fadeoutTime = Z2Param::BGM_CROSS_FADEOUT_TIME - ivar2 / 2;
+                if (!mFlags.mBattleSearched) {
+                    setChildTrackVolume(&mSubBgmHandle, 2, 0.0f, 0, -1.0f, -1.0f);
+                    setChildTrackVolume(&mSubBgmHandle, 3, 0.0f, 0, -1.0f, -1.0f);
+                    setChildTrackVolume(&mSubBgmHandle, 12, 0.0f, 0, -1.0f, -1.0f);
+                    setChildTrackVolume(&mSubBgmHandle, 14, 0.0f, 0, -1.0f, -1.0f);
+                }
+                if (mBattleDistState != 0) {
+                    setChildTrackVolume(&mSubBgmHandle, data_8045086C, 0.0f, 0, -1.0f, -1.0f);
+                }
+                break;
+            case Z2BGM_BATTLE_TWILIGHT:
+                changeSubBgmStatus(Z2GetSoundObjMgr()->isTwilightBattle());
+                fadeinTime = 25 - ivar2 / 4;
+                fadeoutTime = 25 - ivar2 / 4;
+                break;
+            }
+
+            if (isFadeIn) {
+                mSubBgmMaster.fadeInFromOut(fadeinTime);
+            } else {
+                mSubBgmMaster.forceIn();
+            }
+
+            mMainBgmMaster.fadeOut(fadeoutTime);
         }
     }
 }
 
 void Z2SeqMgr::stopBattleBgm(u8 subFadeoutTime, u8 mainFadeinTime) {
-    if (mBattleSeqCount == 0) {
-        s16 ivar6 = 0;
-        if (Z2GetLink() != NULL) {
-            ivar6 = Z2GetLink()->getMoveSpeed() - 23;
-        }
-
-        if (ivar6 < 0) {
-            ivar6 = 0;
-        }
-
-        if (ivar6 > Z2Param::BGM_CROSS_FADEIN_TIME) {
-            ivar6 = Z2Param::BGM_CROSS_FADEIN_TIME;
-        }
-
-        if (getSubBgmID() == Z2BGM_BATTLE_NORMAL) {
-            subFadeoutTime = Z2Param::BGM_CROSS_FADEIN_TIME + ivar6;
-            mainFadeinTime = Z2Param::BGM_CROSS_FADEOUT_TIME + ivar6 / 2;
-            mSubBgmHandle->fadeOut(subFadeoutTime);
-            mBattleSeqCount = subFadeoutTime;
-        } else if (getSubBgmID() == Z2BGM_BATTLE_TWILIGHT) {
-            if (mSubBgmStatus > 1) {
-                subFadeoutTime = Z2Param::BGM_CROSS_FADEIN_TIME + ivar6 / 4;
-                mainFadeinTime = Z2Param::BGM_CROSS_FADEIN_TIME + ivar6 / 4;
-            } else {
-                subFadeoutTime = 25 + ivar6 / 4;
-                mainFadeinTime = 25 + ivar6 / 4;
-            }
-
-            mSubBgmHandle->fadeOut(subFadeoutTime);
-            mBattleSeqCount = subFadeoutTime;
-        }
-
-        mMainBgmMaster.fadeIn(mainFadeinTime);
-        mBattleDistState = 3;
-        setBattleDistIgnore(false);
-        mFlags.mBattleSearched = false;
+    if (mBattleSeqCount) {
+        return;
     }
+
+    s16 ivar6 = 0;
+    if (Z2GetLink() != NULL) {
+        ivar6 = Z2GetLink()->getMoveSpeed() - 23;
+    }
+
+    if (ivar6 < 0) {
+        ivar6 = 0;
+    }
+
+    if (ivar6 > Z2Param::BGM_CROSS_FADEIN_TIME) {
+        ivar6 = Z2Param::BGM_CROSS_FADEIN_TIME;
+    }
+
+    if (getSubBgmID() == Z2BGM_BATTLE_NORMAL) {
+        subFadeoutTime = Z2Param::BGM_CROSS_FADEIN_TIME + ivar6;
+        mainFadeinTime = Z2Param::BGM_CROSS_FADEOUT_TIME + ivar6 / 2;
+        mSubBgmHandle->fadeOut(subFadeoutTime);
+        mBattleSeqCount = subFadeoutTime;
+    } else if (getSubBgmID() == Z2BGM_BATTLE_TWILIGHT) {
+        if (mSubBgmStatus > 1) {
+            subFadeoutTime = Z2Param::BGM_CROSS_FADEIN_TIME + ivar6 / 4;
+            mainFadeinTime = Z2Param::BGM_CROSS_FADEIN_TIME + ivar6 / 4;
+        } else {
+            subFadeoutTime = 25 + ivar6 / 4;
+            mainFadeinTime = 25 + ivar6 / 4;
+        }
+
+        mSubBgmHandle->fadeOut(subFadeoutTime);
+        mBattleSeqCount = subFadeoutTime;
+    }
+
+    mMainBgmMaster.fadeIn(mainFadeinTime);
+    mBattleDistState = 3;
+    setBattleDistIgnore(false);
+    mFlags.mBattleSearched = false;
 }
 
 void Z2SeqMgr::fieldBgmStart() {
@@ -2052,8 +2108,8 @@ void Z2SeqMgr::fieldBgmStart() {
 }
 
 void Z2SeqMgr::fieldRidingMute() {
+    f32 volume1, volume2;
     if (Z2GetSceneMgr()->isSceneExist() && mMainBgmHandle) {
-        f32 volume1, volume2;
         if (mFlags.mRiding) {
             volume1 = 1.0f;
             volume2 = 0.0f;

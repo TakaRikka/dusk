@@ -1,6 +1,6 @@
 #include <revolution/exi.h>
 #include <revolution/os.h>
-#include <limits.h>
+#include <climits>
 
 #include "__os.h"
 

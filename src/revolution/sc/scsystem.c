@@ -1,6 +1,6 @@
 #include <revolution/types.h>
 #include <revolution/sc.h>
-#include <string.h>
+#include <cstring>
 // #include <mem.h>
 
 #ifdef SDK_AUG2010

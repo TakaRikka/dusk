@@ -1,33 +1,33 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JGadget/binary.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "global.h"
-#include <stdint.h>
+#include <stdint>
+#include <stdlib>
 
 JKRSolidHeap* JKRSolidHeap::create(u32 size, JKRHeap* heap, bool useErrorHandler) {
     if (!heap) {
-        heap = getRootHeap();
+        heap = sRootHeap;
     }
+    u32 solidHeapSize = ALIGN_NEXT(sizeof(JKRSolidHeap), 0x10);
 
     if (size == -1) {
         size = heap->getMaxAllocatableSize(0x10);
     }
 
     u32 alignedSize = ALIGN_PREV(size, 0x10);
-    u32 solidHeapSize = ALIGN_NEXT(sizeof(JKRSolidHeap), 0x10);
     if (alignedSize < solidHeapSize)
         return NULL;
 
-    JKRSolidHeap* solidHeap = (JKRSolidHeap*)JKRAllocFromHeap(heap, alignedSize, 0x10);
-    void* dataPtr = (u8*)solidHeap + solidHeapSize;
-    if (!solidHeap)
+    u8* mem = (u8*)JKRAllocFromHeap(heap, alignedSize, 0x10);
+    void* dataPtr = mem + solidHeapSize;
+    if (!mem)
         return NULL;
 
-    solidHeap =
-        new (solidHeap) JKRSolidHeap(dataPtr, alignedSize - solidHeapSize, heap, useErrorHandler);
-    return solidHeap;
+    return new (mem) JKRSolidHeap(dataPtr, alignedSize - solidHeapSize, heap, useErrorHandler);
 }
 
 void JKRSolidHeap::do_destroy(void) {
@@ -44,6 +44,11 @@ JKRSolidHeap::JKRSolidHeap(void* start, u32 size, JKRHeap* parent, bool useError
     mSolidHead = (u8*)mStart;
     mSolidTail = (u8*)mEnd;
     field_0x78 = NULL;
+#if DEBUG
+    if (mDebugFill) {
+        JKRFillMemory(mStart, mSize, JKRValue_DEBUGFILL_NOTUSE);
+    }
+#endif
 }
 
 JKRSolidHeap::~JKRSolidHeap(void) {
@@ -51,12 +56,14 @@ JKRSolidHeap::~JKRSolidHeap(void) {
 }
 
 s32 JKRSolidHeap::adjustSize(void) {
+    int r25 = 0;
     JKRHeap* parent = getParent();
     if (parent) {
         lock();
         u32 thisSize = (uintptr_t)mStart - (uintptr_t)this;
         u32 newSize = ALIGN_NEXT(mSolidHead - mStart, 0x20);
-        if (parent->resize(this, thisSize + newSize) != -1) {
+        s32 r26 = parent->resize(this, thisSize + newSize);
+        if (r26 != -1) {
             mFreeSize = 0;
             mSize = newSize;
             mEnd = mStart + mSize;
@@ -74,12 +81,11 @@ s32 JKRSolidHeap::adjustSize(void) {
 
 void* JKRSolidHeap::do_alloc(u32 size, int alignment) {
 #if DEBUG
-    // TODO(Julgodis): JUTAssertion::setConfirmMessage
-    /* if (alignment != 0) {
-        int u = abs(alignment);
-        JUT_ASSERT(219, u < 0x80);
-        JUT_ASSERT(220, JGadget::binary::isPower2(u));
-    } */
+    if (alignment) {
+        u32 u = abs(alignment);
+        JUT_CONFIRM(219, u < 0x80);
+        JUT_CONFIRM(220, JGadget::binary::isPower2( u ));
+    }
 #endif
 
     lock();
@@ -92,13 +98,7 @@ void* JKRSolidHeap::do_alloc(u32 size, int alignment) {
     if (alignment >= 0) {
         ptr = allocFromHead(size, alignment < 4 ? 4 : alignment);
     } else {
-        if (-alignment < 4) {
-            alignment = 4;
-        } else {
-            alignment = -alignment;
-        }
-
-        ptr = allocFromTail(size, alignment);
+        ptr = allocFromTail(size, -alignment < 4 ? 4 : -alignment);
     }
 
     unlock();
@@ -109,9 +109,16 @@ void* JKRSolidHeap::allocFromHead(u32 size, int alignment) {
     size = ALIGN_NEXT(size, 0x4);
     void* ptr = NULL;
     u32 alignedStart = (alignment - 1 + (uintptr_t)mSolidHead) & ~(alignment - 1);
-    u32 offset = alignedStart - (uintptr_t)mSolidHead;
-    u32 totalSize = size + offset;
+    u32 totalSize = size + (alignedStart - (uintptr_t)mSolidHead);
     if (totalSize <= mFreeSize) {
+#if DEBUG
+        if (mCheckMemoryFilled) {
+            checkMemoryFilled(mSolidHead, totalSize, JKRValue_DEBUGFILL_DELETE);
+        }
+        if (mDebugFill) {
+            JKRFillMemory(mSolidHead, totalSize, JKRValue_DEBUGFILL_NEW);
+        }
+#endif
         ptr = (void*)alignedStart;
         mSolidHead += totalSize;
         mFreeSize -= totalSize;
@@ -134,6 +141,14 @@ void* JKRSolidHeap::allocFromTail(u32 size, int alignment) {
         ptr = (void*)alignedStart;
         mSolidTail -= totalSize;
         mFreeSize -= totalSize;
+#if DEBUG
+        if (mCheckMemoryFilled) {
+            checkMemoryFilled((u8*)alignedStart, totalSize, JKRValue_DEBUGFILL_DELETE);
+        }
+        if (mDebugFill) {
+            JKRFillMemory((u8*)alignedStart, totalSize, JKRValue_DEBUGFILL_NEW);
+        }
+#endif
     } else {
         JUTWarningConsole_f("allocFromTail: cannot alloc memory (0x%x byte).\n", totalSize);
         if (getErrorFlag() == true) {
@@ -155,7 +170,11 @@ void JKRSolidHeap::do_freeAll(void) {
     mSolidHead = (u8*)mStart;
     mSolidTail = (u8*)mEnd;
     field_0x78 = NULL;
-
+#if DEBUG
+    if (mDebugFill) {
+        JKRFillMemory(mStart, mSize, JKRValue_DEBUGFILL_DELETE);
+    }
+#endif
     unlock();
 }
 
@@ -165,14 +184,17 @@ void JKRSolidHeap::do_freeTail(void) {
     if (mSolidTail != mEnd) {
         dispose(mSolidTail, mEnd);
     }
+#if DEBUG
+    if (mDebugFill) {
+        JKRFillMemory(mSolidTail, mEnd - mSolidTail, JKRValue_DEBUGFILL_DELETE);
+    }
+#endif
 
     this->mFreeSize = ((uintptr_t)mEnd - (uintptr_t)mSolidTail + mFreeSize);
     this->mSolidTail = mEnd;
 
-    JKRSolidHeap::Unknown* unknown = field_0x78;
-    while (unknown) {
+    for (JKRSolidHeap::Unknown* unknown = field_0x78; unknown; unknown = unknown->mNext) {
         unknown->field_0xc = mEnd;
-        unknown = unknown->mNext;
     }
 
     unlock();
@@ -180,7 +202,7 @@ void JKRSolidHeap::do_freeTail(void) {
 
 void JKRSolidHeap::do_fillFreeArea() {
 #if DEBUG
-    // fillMemory(mSolidHead, mEnd - mSolidHead, (uint)DAT_8074a8ba);
+    JKRFillMemory(mSolidHead, mEnd - mSolidHead, JKRValue_DEBUGFILL_DELETE);
 #endif
 }
 
@@ -198,12 +220,10 @@ bool JKRSolidHeap::check(void) {
     lock();
 
     bool result = true;
-    u32 calculatedSize =
-        ((uintptr_t)mSolidHead - (uintptr_t)mStart) + mFreeSize + ((uintptr_t)mEnd - (uintptr_t)mSolidTail);
-    u32 availableSize = mSize;
-    if (calculatedSize != availableSize) {
+    u32 calculatedSize = (mSolidHead - mStart) + mFreeSize + (mEnd - mSolidTail);
+    if (calculatedSize != mSize) {
         result = false;
-        JUTWarningConsole_f("check: bad total memory block size (%08X, %08X)\n", availableSize,
+        JUTWarningConsole_f("check: bad total memory block size (%08X, %08X)\n", mSize,
                             calculatedSize);
     }
 
@@ -215,15 +235,10 @@ bool JKRSolidHeap::dump(void) {
     bool result = check();
 
     lock();
-    u32 headSize = ((uintptr_t)mSolidHead - (uintptr_t)mStart);
-    u32 tailSize = ((uintptr_t)mEnd - (uintptr_t)mSolidTail);
-    s32 htSize = headSize + tailSize;
-    JUTReportConsole_f("head %08x: %08x\n", mStart, headSize);
-    JUTReportConsole_f("tail %08x: %08x\n", mSolidTail, ((uintptr_t)mEnd - (uintptr_t)mSolidTail));
-
-    u32 totalSize = mSize;
-    float percentage = (float)htSize / (float)totalSize * 100.0f;
-    JUTReportConsole_f("%d / %d bytes (%6.2f%%) used\n", htSize, totalSize, percentage);
+    s32 htSize = (mSolidHead - mStart) + (mEnd - mSolidTail);
+    JUTReportConsole_f("head %08x: %08x\n", mStart, (mSolidHead - mStart));
+    JUTReportConsole_f("tail %08x: %08x\n", mSolidTail, (mEnd - mSolidTail));
+    JUTReportConsole_f("%d / %d bytes (%6.2f%%) used\n", htSize, mSize, f32(htSize) / f32(mSize) * 100.0f);
     unlock();
 
     return result;
@@ -232,7 +247,7 @@ void JKRSolidHeap::state_register(JKRHeap::TState* p, u32 id) const {
     JUT_ASSERT(604, p != NULL);
     JUT_ASSERT(605, p->getHeap() == this);
 
-    getState_(p);
+    void* r28 = getState_(p);
     setState_u32ID_(p, id);
     setState_uUsedSize_(p, getUsedSize((JKRSolidHeap*)this));
     u32 r29 = (uintptr_t)mSolidHead;

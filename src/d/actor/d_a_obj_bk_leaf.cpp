@@ -159,9 +159,9 @@ static actor_method_class l_daBkLeaf_Method = {
     (process_method_func)daBkLeaf_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_BkLeaf = {fpcLy_CURRENT_e,
+actor_process_profile_definition g_profile_Obj_BkLeaf = {fpcLy_CURRENT_e,
                                                                 7,
-                                                                fpcLy_CURRENT_e,
+                                                                fpcPi_CURRENT_e,
                                                                 PROC_Obj_BkLeaf,
                                                                 &g_fpcLf_Method.base,
                                                                 sizeof(daBkLeaf_c),

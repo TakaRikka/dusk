@@ -10,7 +10,7 @@
 #include "d/d_a_obj.h"
 #include "dolphin/mtx.h"
 #include "f_op/f_op_actor.h"
-#include "include/SSystem/SComponent/c_math.h"
+#include "SSystem/SComponent/c_math.h"
 
 // clang-format off
 daObjNameplate_c::M_attrs const daObjNameplate_c::M_attr = {
@@ -67,7 +67,6 @@ void daObjNameplate_c::setBaseMtx() {
 }
 
 void daObjNameplate_c::initCcSphere() {
-    /* 80594EB4-80594EF4 000040 0040+00 1/1 0/0 0/0 .rodata          ccSphSrc$3700 */
     const static dCcD_SrcSph ccSphSrc = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0x1607a, 0x11}, 0x99}},  // mObj
@@ -219,11 +218,10 @@ void daObjNameplate_c::messageProc() {
         break;
 
     case 1:
-        dComIfG_play_c& play = g_dComIfG_gameInfo.play;
-        if (play.getEvent().runCheck() && eventInfo.checkCommandTalk() != 0 &&
+        if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() != 0 &&
             mMsgFlow.doFlow(this, NULL, 0) != 0)
         {
-            play.getEvent().reset();
+            dComIfGp_event_reset();
             mShowMessage = 0;
         }
         break;
@@ -263,9 +261,6 @@ static int daObjNameplate_Draw(daObjNameplate_c* i_this) {
     return i_this->draw();
 }
 
-/* 80594A6C-80594AB4 000A4C 0048+00 1/0 0/0 0/0 .text
- * daObjNameplate_Execute__FP16daObjNameplate_c
- */
 static int daObjNameplate_Execute(daObjNameplate_c* i_this) {
     i_this->calcAngle();
     i_this->setBaseMtx();
@@ -279,9 +274,6 @@ static int daObjNameplate_IsDelete(daObjNameplate_c* i_this) {
     return 1;
 }
 
-/* 80594ABC-80594BF8 000A9C 013C+00 1/0 0/0 0/0 .text
- * daObjNameplate_Delete__FP16daObjNameplate_c
- */
 static int daObjNameplate_Delete(daObjNameplate_c* i_this) {
     i_this->~daObjNameplate_c();
     return 1;
@@ -314,7 +306,7 @@ static actor_method_class l_daObjNameplate_Method = {
     (process_method_func)daObjNameplate_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_NamePlate = {
+actor_process_profile_definition g_profile_Obj_NamePlate = {
     fpcLy_CURRENT_e,           // mLayerID
     7,                         // mListID
     fpcPi_CURRENT_e,           // mListPrio

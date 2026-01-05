@@ -11,8 +11,7 @@ JKRDisposer::JKRDisposer() : mLink(this) {
 }
 
 JKRDisposer::~JKRDisposer() {
-    JKRHeap* heap = mHeap;
-    if (heap) {
-        heap->removeDisposer(this);
+    if (mHeap) {
+        mHeap->removeDisposer(this);
     }
 }

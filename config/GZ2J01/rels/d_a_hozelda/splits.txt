@@ -13,3 +13,4 @@ d/actor/d_a_hozelda.cpp:
 	.text       start:0x00000078 end:0x00003014
 	.rodata     start:0x00000000 end:0x000000C8
 	.data       start:0x00000000 end:0x00000108
+	.bss        start:0x00000000 end:0x00000004

@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_b_tn.h"
-#include <cmath.h>
+#include <math>
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/actor/d_a_boomerang.h"
 #include "d/actor/d_a_nbomb.h"
@@ -342,8 +342,7 @@ void daB_TN_c::calcWaistAngle() {
     cLib_addCalcAngleS2(&mWaistAngle, sVar1, 4, 0x1000);
 }
 
-/* 8062F01D 0003+00 data_8062F01D None */
-static u8 s_hioinit;
+static u8 hio_set;
 
 static daB_TN_HIO_c l_HIO;
 
@@ -1553,7 +1552,7 @@ bool daB_TN_c::checkMoveAngle() {
 }
 
 void daB_TN_c::setAttackBlurEffect(int i_data) {
-    static u16 blur_effect_id_5997[4] = {
+    static u16 blur_effect_id[4] = {
         0x87DA,
         0x87DB,
         0x87DC,
@@ -1562,7 +1561,7 @@ void daB_TN_c::setAttackBlurEffect(int i_data) {
 
     if (i_data != 0) {
         for (int i = 0; i < 4; i++) {
-            mParticleKeys[i] = dComIfGp_particle_set(mParticleKeys[i], blur_effect_id_5997[i],
+            mParticleKeys[i] = dComIfGp_particle_set(mParticleKeys[i], blur_effect_id[i],
                                                      &current.pos, &tevStr);
 
             JPABaseEmitter* mBaseEmitter = dComIfGp_particle_getEmitter(mParticleKeys[i]);
@@ -1574,7 +1573,7 @@ void daB_TN_c::setAttackBlurEffect(int i_data) {
 }
 
 void daB_TN_c::setArmorBreakEffect(int i_idx) {
-    static u16 blur_effect_id_6035[3] = {0x87DE, 0x87DF, 0x87E0};
+    static u16 blur_effect_id[3] = {0x87DE, 0x87DF, 0x87E0};
 
     cXyz sp24(l_HIO.mScale, l_HIO.mScale, l_HIO.mScale);
     cXyz sp30;
@@ -1582,7 +1581,7 @@ void daB_TN_c::setArmorBreakEffect(int i_idx) {
     mDoMtx_stack_c::multVecZero(&sp30);
 
     for (int i = 0; i < 3; i++) {
-        dComIfGp_particle_set(blur_effect_id_6035[i], &sp30, &tevStr, &shape_angle, &sp24);
+        dComIfGp_particle_set(blur_effect_id[i], &sp30, &tevStr, &shape_angle, &sp24);
     }
 }
 
@@ -1818,8 +1817,8 @@ void daB_TN_c::executeRoomDemo() {
     }
 
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovY, 0);
-    dComIfGp_getEvent().onSkipFade();
-    dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 1);
+    dComIfGp_getEvent()->onSkipFade();
+    dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 1);
 }
 
 void daB_TN_c::executeOpening() {
@@ -2015,8 +2014,8 @@ void daB_TN_c::executeOpening() {
     }
 
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovY, 0);
-    dComIfGp_getEvent().onSkipFade();
-    dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+    dComIfGp_getEvent()->onSkipFade();
+    dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
 }
 
 void daB_TN_c::executeWaitH() {
@@ -4913,7 +4912,7 @@ int daB_TN_c::_delete() {
     dComIfG_resDelete(&mPhaseReq1, "B_tn");
     dComIfG_resDelete(&mPhaseReq2, mArcName);
     if (mHioInit) {
-        s_hioinit = 0;
+        hio_set = 0;
     }
 
     if (heap != NULL) {
@@ -5073,8 +5072,8 @@ int daB_TN_c::create() {
                 return cPhs_ERROR_e;
             }
 
-            if (s_hioinit == 0) {
-                s_hioinit = 1;
+            if (hio_set == 0) {
+                hio_set = 1;
                 mHioInit = 1;
                 l_HIO.mUnk1 = -1;
             }
@@ -5174,7 +5173,7 @@ static actor_method_class l_daB_TN_Method = {
     (process_method_func)daB_TN_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_TN = {
+actor_process_profile_definition g_profile_B_TN = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

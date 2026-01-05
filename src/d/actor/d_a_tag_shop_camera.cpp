@@ -60,7 +60,7 @@ static actor_method_class daTag_ShopCamera_MethodTable = {
     (process_method_func)daTag_ShopCamera_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_SHOPCAM = {
+actor_process_profile_definition g_profile_TAG_SHOPCAM = {
     fpcLy_CURRENT_e,              // mLayerID
     7,                            // mListID
     fpcPi_CURRENT_e,              // mListPrio

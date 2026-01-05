@@ -4,13 +4,13 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTVideo.h"
-#include "stdio.h"
+#include <stdio>
 
 JUTDbPrint::JUTDbPrint(JUTFont* pFont, JKRHeap* pHeap) {
     mFont = pFont;
     mFirst = NULL;
-    mHeap = pHeap != NULL ? pHeap : JKRHeap::getCurrentHeap();
-    mColor.set(255, 255, 255, 255);
+    mHeap = pHeap != NULL ? pHeap : JKRGetCurrentHeap();
+    mColor = JUtility::TColor(255, 255, 255, 255);
     mVisible = true;
 }
 
@@ -19,7 +19,7 @@ JUTDbPrint* JUTDbPrint::sDebugPrint;
 JUTDbPrint* JUTDbPrint::start(JUTFont* pFont, JKRHeap* pHeap) {
     if (sDebugPrint == NULL) {
         if (pHeap == NULL) {
-            pHeap = JKRHeap::getCurrentHeap();
+            pHeap = JKRGetCurrentHeap();
         }
         sDebugPrint = new JUTDbPrint(pFont, pHeap);
     }
@@ -35,7 +35,7 @@ JUTFont* JUTDbPrint::changeFont(JUTFont* pFont) {
     return old;
 }
 
-void JUTDbPrint::enter(int param_0, int param_1, int param_2, char const* param_3, int param_4) {
+void JUTDbPrint::enter(int param_0, int param_1, int param_2, const char* param_3, int param_4) {
     if (param_4 > 0) {
         unk_print* ptr = static_cast<unk_print*>(JKRAllocFromHeap(mHeap, param_4 + 0x10, -4));
         if (ptr != NULL) {
@@ -82,10 +82,8 @@ void JUTDbPrint::flush(int param_0, int param_1, int param_2, int param_3) {
     }
 }
 
-void JUTDbPrint::drawString(int param_0, int param_1, int param_2, u8 const* param_3) {
-    JUTFont* font = mFont;
-    font->drawString_size_scale(param_0, param_1, font->getWidth(), font->getHeight(),
-                                (const char*)param_3, param_2, true);
+void JUTDbPrint::drawString(int posX, int posY, int len, const u8* str) {
+    mFont->drawString_size(posX, posY, (const char*)str, len, true);
 }
 
 void JUTReport(int param_0, int param_1, char const* fmt, ...) {

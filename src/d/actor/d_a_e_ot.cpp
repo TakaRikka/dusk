@@ -86,13 +86,10 @@ static dCcD_SrcSph cc_ot_at_src = {
 
 }  // namespace
 
-/* 8073D2AD 0003+00 data_8073D2AD None */
-static bool hioInit;
+static bool hio_set;
 
 static daE_OT_HIO_c l_HIO;
 
-/* 8073D2DC 0001+00 data_8073D2DC None */
-/* 8073D2DD 0003+00 data_8073D2DD None */
 static u8 data_8073D2DC;
 static u8 data_8073D2DD;
 
@@ -697,7 +694,7 @@ int daE_OT_c::_delete() {
     dComIfG_resDelete(&mPhase, "E_OT");
 
     if (mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
 
     if (heap != NULL) {
@@ -753,8 +750,8 @@ cPhs__Step daE_OT_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!hioInit) {
-            hioInit = true;
+        if (!hio_set) {
+            hio_set = true;
             mHIOInit = true;
             l_HIO.field_0x4 = -1;
         }
@@ -840,7 +837,7 @@ static actor_method_class l_daE_OT_Method = {
     (process_method_func)daE_OT_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_OT = {
+actor_process_profile_definition g_profile_E_OT = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -10,7 +10,7 @@
 #include "d/d_s_play.h"
 #include "d/d_s_room.h"
 #include "m_Do/m_Do_Reset.h"
-#include "stdio.h"
+#include <stdio>
 
 static int dScnRoom_Draw(room_of_scene_class* i_this) {
     return 1;
@@ -225,9 +225,8 @@ static bool objectSetCheck(room_of_scene_class* i_this) {
 static int dScnRoom_Execute(room_of_scene_class* i_this) {
     int roomNo = fopScnM_GetParam(i_this);
 
-    u32 flag = g_dComIfG_gameInfo.play.getRoomControl()->mStatus[roomNo].mFlag;
-    if (flag & 2) {
-        dComIfGp_roomControl_setStatusFlag(roomNo, flag & ~2);
+    if (dComIfGp_roomControl_checkStatusFlag(roomNo, 2)) {
+        dComIfGp_roomControl_offStatusFlag(roomNo, 2);
         dComIfGp_roomControl_onStatusFlag(roomNo, 1);
     } else if (objectSetCheck(i_this)) {
         if (dComIfGp_roomControl_checkStatusFlag(roomNo, 4)) {
@@ -417,7 +416,7 @@ static int dScnRoom_Create(scene_class* i_this) {
     return dComLbG_PhaseHandler(&room->field_0x1c4, l_method, i_this);
 }
 
-static leafdraw_method_class l_dScnRoom_Method = {
+static scene_method_class l_dScnRoom_Method = {
     (process_method_func)dScnRoom_Create,  (process_method_func)dScnRoom_Delete,
     (process_method_func)dScnRoom_Execute, (process_method_func)dScnRoom_IsDelete,
     (process_method_func)dScnRoom_Draw,
@@ -433,5 +432,5 @@ scene_process_profile_definition g_profile_ROOM_SCENE = {
     0,                                          // mSizeOther
     0,                                          // mParameters
     &g_fopScn_Method.base,                     // sub_method
-    (process_method_class*)&l_dScnRoom_Method,  // mpMtd
+    &l_dScnRoom_Method,  // mpMtd
 };

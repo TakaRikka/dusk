@@ -42,10 +42,15 @@ struct JASPortCmd : JSULink<JASPortCmd> {
 		void execCommandStay();
 	};
 
+	bool addPortCmdOnce();
+	bool setPortCmd(Command func, JASPortArgs*);
     static void execAllCommand();
 
-    Command _10;
-	JASPortArgs* _14;
+	Command getFunc() { return mFunc; }
+	JASPortArgs* getArgs() { return mArgs; }
+
+    Command mFunc;
+	JASPortArgs* mArgs;
 
     static TPortHead sCommandListOnce;
     static TPortHead sCommandListStay;

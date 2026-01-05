@@ -1,6 +1,8 @@
 #ifndef FDLIBM_H
 #define FDLIBM_H
 
+#include <errno.h>
+
 /* @(#)fdlibm.h 1.5 04/04/22 */
 /*
  * ====================================================

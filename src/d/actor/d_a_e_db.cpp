@@ -265,7 +265,7 @@ static void damage_check(e_db_class* i_this) {
     }
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_DB_HIO_c l_HIO;
 
@@ -2019,7 +2019,7 @@ static int daE_DB_Delete(e_db_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "E_db");
 
     if (i_this->HIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -2102,9 +2102,9 @@ static int daE_DB_Create(fopAc_ac_c* i_this) {
 
         OS_REPORT("//////////////E_DB SET 2 !!\n");
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             a_this->HIOInit = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("デグババ", &l_HIO);
         }
 
@@ -2205,7 +2205,7 @@ static actor_method_class l_daE_DB_Method = {
     (process_method_func)daE_DB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_DB = {
+actor_process_profile_definition g_profile_E_DB = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

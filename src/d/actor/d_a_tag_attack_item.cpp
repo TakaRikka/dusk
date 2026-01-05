@@ -17,10 +17,12 @@ static dCcD_SrcCyl l_cyl_src = {
         {0x0},                                              // mGObjCo
     },                                                      // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        50.0f,               // mRadius
-        100.0f               // mHeight
-    }                        // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            50.0f,               // mRadius
+            100.0f               // mHeight
+        }                        // mCyl
+    }
 };
 
 int daTagAtkItem_c::Create() {
@@ -150,7 +152,7 @@ static actor_method_class l_daTagAtkItem_Method = {
     (process_method_func)NULL,
 };
 
-extern actor_process_profile_definition g_profile_Tag_AttackItem = {
+actor_process_profile_definition g_profile_Tag_AttackItem = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

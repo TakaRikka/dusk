@@ -156,7 +156,7 @@ static actor_method_class daObjBoard_METHODS = {
     (process_method_func)daObjBoard_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Cboard = {
+actor_process_profile_definition g_profile_Obj_Cboard = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

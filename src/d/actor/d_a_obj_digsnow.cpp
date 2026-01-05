@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_digsnow.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include <cmath.h>
+#include <math>
 
 void daObjDigSnow_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
@@ -179,7 +179,7 @@ static actor_method_class daObjDigSnow_METHODS = {
     (process_method_func)daObjDigSnow_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_DigSnow = {
+actor_process_profile_definition g_profile_Obj_DigSnow = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

@@ -17,7 +17,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "JSystem/JAudio2/JAUSectionHeap.h"
-#include <cmath.h>
+#include <math>
 
 #define ANM_HS_BACK_WALK           6
 #define ANM_HS_WALK_START          7
@@ -222,10 +222,12 @@ static dCcD_SrcCyl l_cylSrc = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        50.0f, // mRadius
-        230.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            50.0f, // mRadius
+            230.0f // mHeight
+        } // mCyl
+    }
 };
 
 static dCcD_SrcSph l_sphSrc = {
@@ -351,21 +353,21 @@ void daHorse_c::coHitCallbackCowHit(fopAc_ac_c* i_hitActor) {
 
 static void daHorse_coHitCallbackBoarJump(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
                                           fopAc_ac_c* i_coActorB, dCcD_GObjInf* i_coObjInfB) {
-    (void)i_coObjInfA;
-    (void)i_coObjInfB;
+    UNUSED(i_coObjInfA);
+    UNUSED(i_coObjInfB);
     ((daHorse_c*)i_coActorA)->coHitCallbackBoarJump(i_coActorB);
 }
 
 static void daHorse_coHitCallbackCowHit(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
                                         fopAc_ac_c* i_coActorB, dCcD_GObjInf* i_coObjInfB) {
-    (void)i_coObjInfA;
-    (void)i_coObjInfB;
+    UNUSED(i_coObjInfA);
+    UNUSED(i_coObjInfB);
     ((daHorse_c*)i_coActorA)->coHitCallbackCowHit(i_coActorB);
 }
 
 static void daHorse_coHitCallbackAll(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjInfA,
                                      fopAc_ac_c* i_coActorB, dCcD_GObjInf* i_coObjInfB) {
-    (void)i_coObjInfA;
+    UNUSED(i_coObjInfA);
     daHorse_c* a_this = (daHorse_c*)i_coActorA;
 
     a_this->coHitCallbackBoarJump(i_coActorB);
@@ -1002,7 +1004,7 @@ int daHorse_c::checkDemoAction() {
         return procMoveInit();
     }
 
-    if (dComIfGp_getEvent().isOrderOK()) {
+    if (dComIfGp_getEvent()->isOrderOK()) {
         return 0;
     }
 
@@ -1200,7 +1202,7 @@ void daHorse_c::setDemoData() {
         offStateFlg0(FLG0_UNK_2000000);
     }
 
-    if (dComIfGp_getEvent().isOrderOK()) {
+    if (dComIfGp_getEvent()->isOrderOK()) {
         u32 unused;
         if (checkHorseDemoMode()) {
             u32 old_demoMode = m_demoMode;
@@ -2159,7 +2161,7 @@ void daHorse_c::setMatrix() {
             var_f30 = 0.5f + ((0.5f * speedF) / m_lashMaxSpeedF);
         }
         
-        var_r29 = 4.0f * var_f30 * ((500.0f / (f32)field_0x16c2) * (f32)(s16)(field_0x16e8 - shape_angle.y));
+        var_r29 = 4.0f * var_f30 * ((500.0f / (f32)field_0x16c2) * (s16)(field_0x16e8 - shape_angle.y));
         var_r27 = -var_r29;
     }
 
@@ -4218,7 +4220,7 @@ void daHorse_c::searchSceneChangeArea(fopAc_ac_c* i_scnChg) {
 }
 
 static void* daHorse_searchSceneChangeArea(fopAc_ac_c* i_actor, void* i_data) {
-    (void)i_data;
+    UNUSED(i_data);
     dComIfGp_getHorseActor()->searchSceneChangeArea(i_actor);
     return NULL;
 }
@@ -4546,7 +4548,7 @@ static actor_method_class l_daHorse_Method = {
     (process_method_func)daHorse_Draw,
 };
 
-extern actor_process_profile_definition g_profile_HORSE = {
+actor_process_profile_definition g_profile_HORSE = {
   fpcLy_CURRENT_e,        // mLayerID
   4,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

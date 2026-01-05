@@ -61,7 +61,7 @@ static actor_method_class l_daTagGuard_Method = {
     (process_method_func)daTagGuard_Delete,
 };
 
-extern actor_process_profile_definition g_profile_TAG_GUARD = {
+actor_process_profile_definition g_profile_TAG_GUARD = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

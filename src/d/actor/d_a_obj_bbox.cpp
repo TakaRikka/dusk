@@ -17,10 +17,12 @@ const static dCcD_SrcCyl l_cyl_src = {
         {0x0},                                                // mGObjCo
     },                                                        // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        90.0f,               // mRadius
-        100.0f               // mHeight
-    }                        // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            90.0f,               // mRadius
+            100.0f               // mHeight
+        }                        // mCyl
+    }
 };
 
 static char* l_arcName = "M_BBox";
@@ -133,7 +135,7 @@ static actor_method_class daObjBBox_METHODS = {
     (process_method_func)daObjBBox_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_BBox = {
+actor_process_profile_definition g_profile_Obj_BBox = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

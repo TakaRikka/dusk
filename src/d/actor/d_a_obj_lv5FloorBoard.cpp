@@ -86,10 +86,12 @@ const dCcD_SrcGObjInf daFlorBoad_c::mCcDObjInfo = {
 dCcD_SrcCyl daFlorBoad_c::mCcDCyl = {
     daFlorBoad_c::mCcDObjInfo,
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,                // mRadius
-        0.0f                 // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,                // mRadius
+            0.0f                 // mHeight
+        }  // mCyl
+    }
 };
 
 void daFlorBoad_c::procMain() {
@@ -187,7 +189,7 @@ static actor_method_class l_daFlorBoad_Method = {
     (process_method_func)daFlorBoad_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv5FBoard = {
+actor_process_profile_definition g_profile_Obj_Lv5FBoard = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

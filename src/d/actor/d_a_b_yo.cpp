@@ -122,8 +122,7 @@ enum L5_R50_RES_FIL_ID {
     /* 0x0A */ DZB_R50_P2,
 };
 
-/* 80639F74 0001+00 data_80639F74 @1009 */
-static bool hioInit;
+static bool hio_set;
 
 static daB_YO_HIO_c l_HIO;
 
@@ -137,10 +136,12 @@ static dCcD_SrcCyl cc_yo_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        40.0f, // mRadius
-        40.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            40.0f, // mRadius
+            40.0f // mHeight
+        } // mCyl
+    }
 };
 
 static dCcD_SrcSph cc_yo_tg_src = {
@@ -569,7 +570,7 @@ void daB_YO_c::setIcicleSubNumber() {
 }
 
 void daB_YO_c::setWindowBreakEffect(int param_0) {
-    static s16 yo_window_angle[6] = {0xC000, 0xE000, 0x6000, 0x2000, 0x4000, 0x0000};
+    static s16 yo_window_angle[6] = {-0x4000, -0x2000, 0x6000, 0x2000, 0x4000, 0x0000};
     static u16 madoware_effect_id[4] = {0x87C1, 0x87C2, 0x87C3, 0x87C4};
     csXyz angle(0, yo_window_angle[param_0], 0);
     cXyz pos(0.0f, 0.0f, 0.0f);
@@ -1242,8 +1243,8 @@ void daB_YO_c::executeOpening() {
     }
 
     camera->mCamera.Set(mCamCenter, mCamEye, mCamFovY, 0);
-    dComIfGp_getEvent().onSkipFade();
-    dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+    dComIfGp_getEvent()->onSkipFade();
+    dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
 }
 
 static f32 yo_max_bound_speed[8] = {10.0f, 12.0f, 15.0f, 18.0f, 21.0f, 24.0f, 27.0f, 30.0f};
@@ -3074,7 +3075,7 @@ int daB_YO_c::_delete() {
     dComIfG_resDelete(&mPhase5, "E_FZ");
 
     if (mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
 
     if (mpRoomArenaBgW != NULL) {
@@ -3305,8 +3306,8 @@ cPhs__Step daB_YO_c::create() {
                 return cPhs_ERROR_e;
             }
 
-            if (!hioInit) {
-                hioInit = true;
+            if (!hio_set) {
+                hio_set = true;
                 mHIOInit = true;
                 l_HIO.field_0x4 = -1;
             }
@@ -3432,7 +3433,7 @@ static actor_method_class l_daB_YO_Method = {
     (process_method_func)daB_YO_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_YO = {
+actor_process_profile_definition g_profile_B_YO = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

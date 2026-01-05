@@ -24,8 +24,8 @@ f32 daAlink_c::getCrawlMoveSpeed() {
 }
 
 void daAlink_c::setCrawlMoveDirectionArrow() {
-    static const u8 data_80452F38[1] = {1};
-    static const u8 data_80452F39[1] = {4};
+    static const u8 data_80452F38 = 1;
+    static const u8 data_80452F39 = 4;
 
     u8 direction = 0;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(field_0x317c);
@@ -33,17 +33,17 @@ void daAlink_c::setCrawlMoveDirectionArrow() {
 
     if (field_0x3198 & 4) {
         if (!bvar) {
-            direction = *data_80452F38;
+            direction |= data_80452F38;
         } else {
-            direction = *data_80452F39;
+            direction |= data_80452F39;
         }
     }
 
     if (field_0x3198 & 8) {
         if (!bvar) {
-            direction |= *data_80452F39;
+            direction |= data_80452F39;
         } else {
-            direction |= *data_80452F38;
+            direction |= data_80452F38;
         }
     }
 

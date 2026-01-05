@@ -168,7 +168,7 @@ static actor_method_class l_daObjWPndlm_Method = {
     (process_method_func)daObjWPndlm_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_WoodPendulum = {
+actor_process_profile_definition g_profile_Obj_WoodPendulum = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

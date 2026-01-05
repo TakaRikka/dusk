@@ -69,10 +69,12 @@ const static dCcD_SrcCyl l_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        0.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            0.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    }
 };
 
 const daNpcBlueNS_HIOParam daNpcBlueNS_Param_c::m = {
@@ -842,7 +844,7 @@ int daNpcBlueNS_c::wait(int param_0) {
         break;
     case 2:
         chkFindPlayer();
-        if (dComIfGp_event_runCheck() != 0) {
+        if (dComIfGp_event_runCheck()) {
             if (eventInfo.checkCommandTalk()) {
                 if (!dComIfGp_event_chkTalkXY() || dComIfGp_evmng_ChkPresentEnd() != 0) {
                     setAction(&daNpcBlueNS_c::talk);
@@ -939,7 +941,7 @@ int daNpcBlueNS_c::demo(int param_0) {
         field_0xdc0 = 2;
         break;
     case 2:
-        if (dComIfGp_event_runCheck() != 0 && !eventInfo.checkCommandTalk()) {
+        if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
             evtmgr = &dComIfGp_getEventManager();
             
             int staffId = evtmgr->getMyStaffId(l_myName, this, 0);
@@ -1404,7 +1406,7 @@ static actor_method_class daNpcBlueNS_MethodTable = {
     (process_method_func)daNpcBlueNS_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_BLUENS = {
+actor_process_profile_definition g_profile_NPC_BLUENS = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

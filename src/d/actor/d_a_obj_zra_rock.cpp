@@ -149,7 +149,7 @@ static actor_method_class l_daObjZraRock_Method = {
 
 };
 
-extern actor_process_profile_definition g_profile_Obj_ZraRock = {
+actor_process_profile_definition g_profile_Obj_ZraRock = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

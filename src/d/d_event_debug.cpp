@@ -174,7 +174,7 @@ void dEvM_HIO_c::listenPropertyEvent(const JORPropertyEvent* param_0) {
         break;
     case BTN_FORCED_TERMINATION:
         // "Forced termination" button
-        dComIfGp_getEvent().reset();
+        dComIfGp_getEvent()->reset();
         break;
     }
 }

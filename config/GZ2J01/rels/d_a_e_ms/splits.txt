@@ -11,7 +11,7 @@ REL/executor.c:
 
 REL/global_destructor_chain.c:
 	.text       start:0x00000078 end:0x000000EC
-	.dtors      start:0x00000000 end:0x00000004 rename:.dtors$10
+	.dtors      start:0x00000000 end:0x00000008 rename:.dtors$10
 	.bss        start:0x00000000 end:0x00000008
 
 d/actor/d_a_e_ms.cpp:

@@ -17,7 +17,7 @@
 #include "nw4hbm/snd/SoundSystem.h"
 
 
-#include "new.h"
+#include <new>
 
 namespace homebutton {
     static void initgx();

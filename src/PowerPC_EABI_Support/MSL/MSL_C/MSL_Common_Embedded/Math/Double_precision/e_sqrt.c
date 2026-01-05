@@ -81,7 +81,7 @@
  */
 
 #include "errno.h"
-#include "math.h"
+#include <cmath>
 
 #ifdef __STDC__
 static const double one = 1.0, tiny = 1.0e-300;

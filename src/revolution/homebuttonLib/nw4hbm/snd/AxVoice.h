@@ -4,7 +4,7 @@
 #include <revolution/ax.h>
 #include <revolution/wpad.h>
 #include "DisposeCallbackManager.h"
-#include "limits.h"
+#include <climits>
 #include "snd_global.h"
 #include "snd_types.h"
 

@@ -17,7 +17,7 @@ m_Do/m_Do_main.cpp:
 	.text       start:0x80006880 end:0x8000AF00
 	.ctors      start:0x8062F7C4 end:0x8062F7C8
 	.data       start:0x8065FFA0 end:0x80660CF8
-	.sdata      start:0x8073F140 end:0x8073F264
+	.sdata      start:0x8073F140 end:0x8073F260
 	.sbss       start:0x8074C260 end:0x8074C298
 	.sdata2     start:0x8074D740 end:0x8074D768
 	.bss        start:0x80753500 end:0x80753980
@@ -25,8 +25,8 @@ m_Do/m_Do_main.cpp:
 m_Do/m_Do_printf.cpp:
 	.text       start:0x8000AF00 end:0x8000B8A0
 	.data       start:0x80660CF8 end:0x80660DE8
-	.sdata      start:0x8073F264 end:0x8073F268
-	.sbss       start:0x8074C298 end:0x8074C2C4
+	.sdata      start:0x8073F260 end:0x8073F268
+	.sbss       start:0x8074C298 end:0x8074C2C0
 	.bss        start:0x80753980 end:0x807541A0
 
 m_Do/m_Do_audio.cpp:
@@ -35,7 +35,7 @@ m_Do/m_Do_audio.cpp:
 	.rodata     start:0x8062FA20 end:0x8062FA30
 	.data       start:0x80660DE8 end:0x80661190
 	.sdata      start:0x8073F268 end:0x8073F2F0
-	.sbss       start:0x8074C2C4 end:0x8074C310
+	.sbss       start:0x8074C2C0 end:0x8074C310
 	.bss        start:0x807541A0 end:0x80755570
 
 m_Do/m_Do_controller_pad.cpp:
@@ -65,7 +65,7 @@ m_Do/m_Do_mtx.cpp:
 	.ctors      start:0x8062F7D0 end:0x8062F7D4
 	.data       start:0x80661ED0 end:0x80661FC0
 	.sdata      start:0x8073F3E8 end:0x8073F3F8
-	.sbss       start:0x8074C3B0 end:0x8074C3BC
+	.sbss       start:0x8074C3B0 end:0x8074C3B8
 	.sdata2     start:0x8074D878 end:0x8074D888
 	.bss        start:0x807558E0 end:0x80755D30
 
@@ -74,7 +74,7 @@ m_Do/m_Do_ext.cpp:
 	.rodata     start:0x8062FA30 end:0x8062FA70
 	.data       start:0x80661FC0 end:0x80663DB0
 	.sdata      start:0x8073F3F8 end:0x8073F600
-	.sbss       start:0x8074C3BC end:0x8074C418
+	.sbss       start:0x8074C3B8 end:0x8074C418
 	.sdata2     start:0x8074D888 end:0x8074D8D0
 	.bss        start:0x80755D30 end:0x80755D90
 
@@ -239,12 +239,12 @@ f_op/f_op_view.cpp:
 f_op/f_op_kankyo.cpp:
 	.text       start:0x800414A0 end:0x800417A0
 	.data       start:0x8066AB58 end:0x8066ABA0
-	.sbss       start:0x8074C508 end:0x8074C514
+	.sbss       start:0x8074C508 end:0x8074C510
 
 f_op/f_op_msg.cpp:
 	.text       start:0x800417A0 end:0x80041A50
 	.data       start:0x8066ABA0 end:0x8066ABE8
-	.sbss       start:0x8074C514 end:0x8074C518
+	.sbss       start:0x8074C510 end:0x8074C518
 
 f_op/f_op_kankyo_mng.cpp:
 	.text       start:0x80041A50 end:0x80041FD0
@@ -3151,7 +3151,7 @@ Z2AudioCSD/Z2AudioCS.cpp:
 
 revolution/gf/GFGeometry.cpp:
 	.text       start:0x804F8AE0 end:0x804F8CB0
-	.sdata      start:0x8074A8B0 end:0x8074A8BC
+	.sdata      start:0x8074A8B0 end:0x8074A8B8
 
 revolution/gf/GFLight.cpp:
 	.text       start:0x804F8CB0 end:0x804F8D20
@@ -3167,7 +3167,7 @@ revolution/gf/GFTev.cpp:
 JSystem/JKernel/JKRHeap.cpp:
 	.text       start:0x804F91A0 end:0x804FB0C0
 	.data       start:0x8070CF60 end:0x8070D2C0
-	.sdata      start:0x8074A8BC end:0x8074A8F8
+	.sdata      start:0x8074A8B8 end:0x8074A8F8
 	.sbss       start:0x8074CE20 end:0x8074CE58
 
 JSystem/JKernel/JKRStdHeap.cpp:
@@ -3294,7 +3294,7 @@ JSystem/JKernel/JKRDvdFile.cpp:
 	.text       start:0x8050B7F0 end:0x8050C090
 	.ctors      start:0x8062F9BC end:0x8062F9C0
 	.data       start:0x8070E8D0 end:0x8070E988
-	.sdata      start:0x8074AAA0 end:0x8074AAC4
+	.sdata      start:0x8074AAA0 end:0x8074AAC0
 	.bss        start:0x807E2000 end:0x807E2018
 
 JSystem/JKernel/JKRRelocation.cpp:
@@ -3304,7 +3304,7 @@ JSystem/JKernel/JKRDvdRipper.cpp:
 	.text       start:0x8050C100 end:0x8050D0B0
 	.ctors      start:0x8062F9C0 end:0x8062F9C4
 	.data       start:0x8070E988 end:0x8070EA10
-	.sdata      start:0x8074AAC4 end:0x8074AAD4
+	.sdata      start:0x8074AAC0 end:0x8074AAD0
 	.sbss       start:0x8074CEF0 end:0x8074CF30
 	.bss        start:0x807E2018 end:0x807E2048
 
@@ -3312,7 +3312,7 @@ JSystem/JKernel/JKRDvdAramRipper.cpp:
 	.text       start:0x8050D0B0 end:0x8050E3E0
 	.ctors      start:0x8062F9C4 end:0x8062F9C8
 	.data       start:0x8070EA10 end:0x8070EA60
-	.sdata      start:0x8074AAD4 end:0x8074AAE0
+	.sdata      start:0x8074AAD0 end:0x8074AAE0
 	.sbss       start:0x8074CF30 end:0x8074CF78
 	.bss        start:0x807E2048 end:0x807E2078
 
@@ -4071,8 +4071,12 @@ revolution/os/OSIpc.c:
 revolution/os/OSStateTM.c:
 	.text       start:0x805C6CD0 end:0x805C7490
 	.data       start:0x8072B550 end:0x8072B6F8
-	.sbss       start:0x8074D258 end:0x8074D280
+	.sbss       start:0x8074D258 end:0x8074D278
 	.bss        start:0x807FA2C0 end:0x807FA380
+
+revolution/os/__start.c:
+	.init       start:0x80004000 end:0x80004400
+	.sbss       start:0x8074D278 end:0x8074D280
 
 revolution/os/OSPlayRecord.c:
 	.text       start:0x805C7490 end:0x805C7C40
@@ -4109,6 +4113,7 @@ revolution/os/OSLaunch.c:
 	.text       start:0x805C95C0 end:0x805C9810
 
 revolution/os/__ppc_eabi_init.cpp:
+	.init       start:0x80004400 end:0x80004464
 	.text       start:0x805C9810 end:0x805C9920
 
 revolution/exi/EXIBios.c:
@@ -4496,6 +4501,7 @@ revolution/gd/GDGeometry.c:
 	.data       start:0x8073E268 end:0x8073E500
 
 PowerPC_EABI_Support/Runtime/Src/__mem.c:
+	.init       start:0x80004464 end:0x800047E4
 	.text       start:0x8061B4D8 end:0x8061B4F4
 
 PowerPC_EABI_Support/Runtime/Src/__va_arg.c:
@@ -4603,7 +4609,7 @@ PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/printf.c:
 	.sdata2     start:0x80752ED0 end:0x80752ED8
 
 PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/float.c:
-	.sdata      start:0x8074C238 end:0x8074C24C
+	.sdata      start:0x8074C238 end:0x8074C248
 
 PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/scanf.c:
 	.text       start:0x80621C6C end:0x80623150
@@ -4781,110 +4787,114 @@ PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_sqrt.
 PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/extras.c:
 	.text       start:0x80629B50 end:0x80629BF4
 
-TRK_Hollywood_Revolution/metrotrk/targsupp.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Export/targsupp.s:
 	.text       start:0x80629BF4 end:0x80629C14
 
-TRK_Hollywood_Revolution/metrotrk/custconn/cc_gdev.c:
+TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/gc/cc_gdev.c:
 	.text       start:0x80629C14 end:0x80629E8C
 	.sbss       start:0x8074D6D8 end:0x8074D6E0
 	.bss        start:0x8080E8A8 end:0x8080EDC8
 
-TRK_Hollywood_Revolution/metrotrk/custconn/MWCriticalSection_gc.c:
+TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/gc/MWCriticalSection_gc.c:
 	.text       start:0x80629E8C end:0x80629EC8
 
-TRK_Hollywood_Revolution/metrotrk/custconn/CircleBuffer.c:
+TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/common/CircleBuffer.c:
 	.text       start:0x80629EC8 end:0x8062A104
 
-TRK_Hollywood_Revolution/metrotrk/flush_cache.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/flush_cache.c:
 	.text       start:0x8062A104 end:0x8062A13C
 
-TRK_Hollywood_Revolution/metrotrk/main_TRK.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/main_TRK.c:
 	.text       start:0x8062A13C end:0x8062A178
 	.sbss       start:0x8074D6E0 end:0x8074D6E8
 
-TRK_Hollywood_Revolution/metrotrk/mainloop.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/mainloop.c:
 	.text       start:0x8062A178 end:0x8062A264
 
-TRK_Hollywood_Revolution/metrotrk/mem_TRK.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/mem_TRK.c:
 	.text       start:0x8062A264 end:0x8062A4C8
 
-TRK_Hollywood_Revolution/metrotrk/dispatch.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/dispatch.c:
 	.text       start:0x8062A4C8 end:0x8062A5E8
 	.data       start:0x8073EE40 end:0x8073EEB0
 
-TRK_Hollywood_Revolution/metrotrk/dolphin_trk.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/dolphin_trk.c:
 	.text       start:0x8062A5E8 end:0x8062A90C
 	.data       start:0x8073EEB0 end:0x8073EEF0
 	.sbss       start:0x8074D6E8 end:0x8074D6F4
 
-TRK_Hollywood_Revolution/metrotrk/dolphin_trk_glue.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/dolphin_trk_glue.c:
 	.text       start:0x8062A90C end:0x8062ACA8
 	.data       start:0x8073EEF0 end:0x8073EFD8
 	.sbss       start:0x8074D6F4 end:0x8074D6F8
 	.sdata2     start:0x80753480 end:0x80753484
 	.bss        start:0x8080EDC8 end:0x8080EDF0
 
-TRK_Hollywood_Revolution/metrotrk/notify.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/notify.c:
 	.text       start:0x8062ACA8 end:0x8062AD38
 
-TRK_Hollywood_Revolution/metrotrk/nubevent.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/nubevent.c:
 	.text       start:0x8062AD38 end:0x8062AED4
 	.data       start:0x8073EFD8 end:0x8073EFF8
 	.bss        start:0x8080EDF0 end:0x8080EE18
 
-TRK_Hollywood_Revolution/metrotrk/nubinit.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/nubinit.c:
 	.text       start:0x8062AED4 end:0x8062B024
 	.data       start:0x8073EFF8 end:0x8073F018
 	.sbss       start:0x8074D6F8 end:0x8074D700
 
-TRK_Hollywood_Revolution/metrotrk/serpoll.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/serpoll.c:
 	.text       start:0x8062B024 end:0x8062B16C
 	.sbss       start:0x8074D700 end:0x8074D708
 
-TRK_Hollywood_Revolution/metrotrk/string_TRK.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/string_TRK.c:
 	.text       start:0x8062B16C end:0x8062B188
 
-TRK_Hollywood_Revolution/metrotrk/support.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/support.c:
 	.text       start:0x8062B188 end:0x8062B7AC
 	.data       start:0x8073F018 end:0x8073F060
 
-TRK_Hollywood_Revolution/metrotrk/targcont.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/targcont.c:
 	.text       start:0x8062B7AC end:0x8062B7E0
 
-TRK_Hollywood_Revolution/metrotrk/mpc_7xx_603e.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/mpc_7xx_603e.c:
 	.text       start:0x8062B7E0 end:0x8062BB08
 
-TRK_Hollywood_Revolution/metrotrk/msg.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/msg.c:
 	.text       start:0x8062BB08 end:0x8062BB6C
 	.data       start:0x8073F060 end:0x8073F088
 	.sbss       start:0x8074D708 end:0x8074D710
 
-TRK_Hollywood_Revolution/metrotrk/msgbuf.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/msgbuf.c:
 	.text       start:0x8062BB6C end:0x8062C378
 	.data       start:0x8073F088 end:0x8073F0B0
 	.bss        start:0x8080EE18 end:0x808107C0
 
-TRK_Hollywood_Revolution/metrotrk/msghndlr.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/msghndlr.c:
 	.text       start:0x8062C378 end:0x8062D2FC
 	.data       start:0x8073F0B0 end:0x8073F118
 	.sbss       start:0x8074D710 end:0x8074D718
 
-TRK_Hollywood_Revolution/metrotrk/mslsupp.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Export/mslsupp.c:
 	.text       start:0x8062D2FC end:0x8062D488
 
-TRK_Hollywood_Revolution/metrotrk/targimpl.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/targimpl.c:
 	.text       start:0x8062D488 end:0x8062ECAC
 	.rodata     start:0x8065FF00 end:0x8065FF88
 	.data       start:0x8073F118 end:0x8073F128
 	.sbss       start:0x8074D718 end:0x8074D728
 	.bss        start:0x808107C0 end:0x80810D68
 
-TRK_Hollywood_Revolution/metrotrk/target_options.c:
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/target_options.c:
 	.text       start:0x8062ECAC end:0x8062ECBC
 
 NdevExi2AD/DebuggerDriver.c:
 	.text       start:0x8062ECBC end:0x8062F1EC
+	.sdata      start:0x8074C248 end:0x8074C24C
 	.sbss       start:0x8074D728 end:0x8074D73C
 
 NdevExi2AD/exi2.c:
 	.text       start:0x8062F1EC end:0x8062F7C0
+
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/exception.s:
+	.init       start:0x800047E4 end:0x80006718

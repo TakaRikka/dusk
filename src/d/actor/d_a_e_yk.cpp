@@ -53,7 +53,7 @@ daE_YK_HIO_c::daE_YK_HIO_c() {
     mChargeSpeed = 40.0f;   
 }
 
-static u8 data_80807EF8;
+static u8 hio_set;
 
 static daE_YK_HIO_c l_HIO;
 
@@ -158,7 +158,6 @@ static int daE_YK_Draw(e_yk_class* i_this) {
  * Used by the Shadow Keese's wind state to determine if it should be affected
  * by a charged boomerang's wind effect.
  */
- /* 80804B38-80804BB0 0003F8 0078+00 1/1 0/0 0/0 .text            shot_b_sub__FPvPv */
 static void* shot_b_sub(void* i_actor, void* param_1) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_BOOMERANG &&
                                 !dComIfGp_checkPlayerStatus0(0,0x80000) &&
@@ -327,8 +326,6 @@ static void damage_check(e_yk_class* i_this) {
     }
 }
 
-static u8 check_index[255];
-
 /**
  * @brief Checks visibility and accessibility of path points for Shadow Keese navigation
  * 
@@ -349,6 +346,8 @@ static u8 check_index[255];
  * and maintain valid flight paths.
  */
 static int path_check(e_yk_class* i_this) {
+    static u8 check_index[255];
+
     if (i_this->mpPath) {
         dBgS_LinChk lin_chk;
 
@@ -1356,7 +1355,8 @@ static int daE_YK_Execute(e_yk_class* i_this) {
         i_this->mCollisionSphere.SetR(30.0f * l_HIO.mModelScale);
 
         dComIfG_Ccsp()->Set(&i_this->mCollisionSphere);
-        setMidnaBindEffect(_this,&i_this->mCreature,&_this->eyePos,&cXyz(0.5f,0.5f,0.5f));
+        cXyz i_effSize(0.5f,0.5f,0.5f);
+        setMidnaBindEffect(_this,&i_this->mCreature,&_this->eyePos,&i_effSize);
     }
 
     return 1;
@@ -1387,7 +1387,7 @@ static int daE_YK_Delete(e_yk_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase,"E_YK");
 
     if (i_this->mIsFirstSpawn != 0) {
-        data_80807EF8 = 0;
+        hio_set = 0;
     }
 
     if (i_this->heap) {
@@ -1498,9 +1498,9 @@ static int daE_YK_Create(fopAc_ac_c* i_this) {
                 }
             }
 
-            if (data_80807EF8 == 0) {
+            if (hio_set == 0) {
                 yk->mIsFirstSpawn = 1;
-                data_80807EF8 = 1;
+                hio_set = 1;
                 l_HIO.field_0x04 = -1;
             }
 
@@ -1557,7 +1557,7 @@ static actor_method_class l_daE_YK_Method = {
     (process_method_func)daE_YK_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_YK = {
+actor_process_profile_definition g_profile_E_YK = {
     fpcLy_CURRENT_e,         // mLayerID  
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio 

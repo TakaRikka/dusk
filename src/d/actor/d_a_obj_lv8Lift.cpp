@@ -444,7 +444,7 @@ static actor_method_class l_daL8Lift_Method = {
     (process_method_func)daL8Lift_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv8Lift = {
+actor_process_profile_definition g_profile_Obj_Lv8Lift = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

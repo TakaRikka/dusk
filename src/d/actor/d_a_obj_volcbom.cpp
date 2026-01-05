@@ -79,10 +79,12 @@ static dCcD_SrcCyl l_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        350.0f, // mRadius
-        1500.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            350.0f, // mRadius
+            1500.0f // mHeight
+        } // mCyl
+    }
 };
 
 int daObjVolcBom_c::Create() {
@@ -598,15 +600,13 @@ void daObjVolcBom_c::actionWait() {
     }
 
     daMidna_c* midna = daPy_py_c::getMidnaActor();
-    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
+    daPy_py_c* player = daPy_getPlayerActorClass();
 
-    // Probably fake match since ebug calls different manager functions
-    dEvent_manager_c& evtMgr = g_dComIfG_gameInfo.play.getEvtManager();
-    if (evtMgr.startCheck(mEventId)) {
-        if (strcmp(evtMgr.getRunEventName(), "PORTAL_WARP_BIGVOLC") == 0) {
+    if (dComIfGp_evmng_startCheck(mEventId)) {
+        if (strcmp(dComIfGp_getEventManager().getRunEventName(), "PORTAL_WARP_BIGVOLC") == 0) {
             player->onWarpObjDemo();
-            dComIfGp_getEvent().setPt2(this);
-            mStaffId = evtMgr.getMyStaffId(l_staff_name, 0, 0);
+            dComIfGp_getEvent()->setPt2(this);
+            mStaffId = dComIfGp_evmng_getMyStaffId(l_staff_name, 0, 0);
             setAction(ACTION_WARP_EVENT);
             demoProc();
         }
@@ -638,7 +638,7 @@ void daObjVolcBom_c::actionOrderATalkEvent() {
     } else {
         if (dComIfGp_evmng_startCheck(mEventId)) {
             player->onWarpObjDemo();
-            dComIfGp_getEvent().setPt2(this);
+            dComIfGp_getEvent()->setPt2(this);
             mStaffId = dComIfGp_evmng_getMyStaffId(l_staff_name, 0, 0);
             setAction(ACTION_WARP_EVENT);
             demoProc();
@@ -670,7 +670,7 @@ void daObjVolcBom_c::actionTalkEvent() {
 
 void daObjVolcBom_c::actionWarpEvent() {
     if (!dComIfGp_evmng_endCheck(mEventId)) {
-        dComIfGp_getEvent().setSkipProc(this, eventCallBack, 0);
+        dComIfGp_getEvent()->setSkipProc(this, eventCallBack, 0);
         demoProc();
     }
 }
@@ -882,7 +882,7 @@ static actor_method_class daObjVolcBom_METHODS = {
     (process_method_func)daObjVolcBom_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_VolcanicBomb = {
+actor_process_profile_definition g_profile_Obj_VolcanicBomb = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -5,7 +5,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_door_dbdoor00.h"
-#include "printf.h"
+#include <cstdio>
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_door_param2.h"
@@ -414,7 +414,7 @@ static actor_method_class l_daDbdoor00_Method = {
     (process_method_func)daDbdoor00_Draw,
 };
 
-extern actor_process_profile_definition g_profile_DBDOOR = {
+actor_process_profile_definition g_profile_DBDOOR = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

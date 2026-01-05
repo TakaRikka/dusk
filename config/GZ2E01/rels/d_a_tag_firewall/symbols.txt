@@ -34,4 +34,4 @@ g_profile_Tag_FWall = .data:0x00000068; // type:object size:0x30 scope:global
 __vt__8cM3dGAab = .data:0x00000098; // type:object size:0xC scope:global
 __vt__8cM3dGSph = .data:0x000000A4; // type:object size:0xC scope:global
 fire_leader = .bss:0x00000000; // type:object size:0x4 scope:global
-lbl_720_bss_4 = .bss:0x00000004; // type:object size:0x1 data:byte
+fire_num = .bss:0x00000004; // type:object size:0x1 scope:local align:1 data:byte

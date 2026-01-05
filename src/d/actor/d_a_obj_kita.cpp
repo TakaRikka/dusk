@@ -48,7 +48,7 @@ static void ride_call_back(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param
     ((obj_kita_class*)param_1)->field_0x590 = 20;
 }
 
-static bool l_HIOInit;
+static bool hio_set;
 
 static daObj_Kita_HIO_c l_HIO;
 
@@ -171,7 +171,7 @@ static int daObj_Kita_Delete(obj_kita_class* i_this) {
     fopAcM_RegisterDeleteID(i_this, "Obj_Kita");
     dComIfG_resDelete(&i_this->mPhase, "Obj_kita");
     if (i_this->mIsHIOOwner) {
-        l_HIOInit = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.mId);
     }
 
@@ -244,9 +244,9 @@ static int daObj_Kita_Create(fopAc_ac_c* a_this) {
             i_this->mKitas[i].mScaleX = cM_rndFX(0.05f) + 1.0f;
         }
         
-        if (!l_HIOInit) {
+        if (!hio_set) {
             i_this->mIsHIOOwner = true;
-            l_HIOInit = 1;
+            hio_set = 1;
             l_HIO.mId = mDoHIO_CREATE_CHILD("風で動く連続板", &l_HIO);
         }
 
@@ -264,7 +264,7 @@ static actor_method_class l_daObj_Kita_Method = {
     (process_method_func)daObj_Kita_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_KITA = {
+actor_process_profile_definition g_profile_OBJ_KITA = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

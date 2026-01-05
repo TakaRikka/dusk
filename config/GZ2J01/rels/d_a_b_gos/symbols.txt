@@ -61,6 +61,6 @@ __vt__12dBgS_ObjAcch = .data:0x000001B0; // type:object size:0x24 scope:global
 __vt__13daB_GOS_HIO_c = .data:0x000001D4; // type:object size:0xC scope:global
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 boss = .bss:0x00000008; // type:object size:0x4 scope:global data:4byte
-lbl_147_bss_C = .bss:0x0000000C; // type:object size:0x1 data:byte
+data_8060560C = .bss:0x0000000C; // type:object size:0x1 scope:local data:byte
 @3641 = .bss:0x00000010; // type:object size:0xC scope:local
 l_HIO = .bss:0x0000001C; // type:object size:0x10 scope:global data:byte

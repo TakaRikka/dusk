@@ -410,7 +410,7 @@ static actor_method_class l_daObjSwBallB_Method = {
     (process_method_func)daObjSwBallB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SwBallB = {
+actor_process_profile_definition g_profile_Obj_SwBallB = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

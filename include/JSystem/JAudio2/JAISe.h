@@ -10,7 +10,7 @@ class JAISeMgr;
  * @ingroup jsystem-jaudio
  * 
  */
-class JAISe : public JSULink<JAISe>, public JASPoolAllocObject<JAISe>, public JAISound {
+class JAISe : public JSULink<JAISe>, public JAISound, public JASPoolAllocObject<JAISe> {
 public:
     class TInner {
     public:

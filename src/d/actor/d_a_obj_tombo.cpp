@@ -433,7 +433,7 @@ void daObjTOMBO_c::BoomChk() {
     }
 }
 
-static bool l_HIOInit;
+static bool hio_set;
 
 static daObj_TomHIO_c l_HIO;
 
@@ -533,7 +533,7 @@ void daObjTOMBO_c::Z_BufferChk() {
 int daObjTOMBO_c::Delete() {
     dComIfG_resDelete(&mPhase, "Tombo");
     if (mIsHIOOwner) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.mId);
     }
     if (heap != NULL) {
@@ -638,8 +638,8 @@ int daObjTOMBO_c::create() {
         if (!fopAcM_entrySolidHeap(this, useHeapInit, 0xaa0)) {
             return cPhs_ERROR_e;
         }
-        if (!l_HIOInit) {
-            l_HIOInit = true;
+        if (!hio_set) {
+            hio_set = true;
             mIsHIOOwner = true;
             // Golden Dragonfly
             l_HIO.mId = mDoHIO_CREATE_CHILD("黄金蟲(トンボ)", &l_HIO);
@@ -683,7 +683,7 @@ static actor_method_class l_daObjTOMBO_Method = {
     (process_method_func)daObjTOMBO_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Tombo = {
+actor_process_profile_definition g_profile_Obj_Tombo = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

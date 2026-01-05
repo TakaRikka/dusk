@@ -78,7 +78,7 @@ static actor_method_class daSkip2D_MethodTable = {
     (process_method_func)daSkip2D_Draw,
 };
 
-extern actor_process_profile_definition g_profile_SKIP2D = {
+actor_process_profile_definition g_profile_SKIP2D = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

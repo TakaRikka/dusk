@@ -83,7 +83,7 @@ static void sibuki_set(fr_class* i_this) {
 }
 
 static void* s_wd_sub(void* param_1, void* param_2) {
-    (void)param_2;
+    UNUSED(param_2);
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_OBJ_LP) {
         return param_1;
     }
@@ -136,7 +136,7 @@ static BOOL way_bg_check(fr_class* i_this) {
     }
 }
 
-static bool l_initHIO;
+static bool hio_set;
 
 static daFr_HIO_c l_HIO;
 
@@ -647,7 +647,7 @@ static int daFr_Delete(fr_class* i_this) {
 
     dComIfG_resDelete(&i_this->mPhase, "Fr");
     if (i_this->field_0x9e4) {
-        l_initHIO = false;
+        hio_set = false;
     }
 
     mDoHIO_DELETE_CHILD(l_HIO.field_0x4);
@@ -699,9 +699,9 @@ static int daFr_Create(fopAc_ac_c* a_this) {
 
         OS_REPORT("//////////////FR SET 2 !!\n");
 
-        if (!l_initHIO) {
+        if (!hio_set) {
             i_this->field_0x9e4 = 1;
-            l_initHIO = true;
+            hio_set = true;
             l_HIO.field_0x4 = mDoHIO_CREATE_CHILD("カエル", &l_HIO);
         }
 
@@ -739,7 +739,7 @@ static actor_method_class l_daFr_Method = {
     (process_method_func)daFr_Draw,
 };
 
-extern actor_process_profile_definition g_profile_FR = {
+actor_process_profile_definition g_profile_FR = {
   fpcLy_CURRENT_e,       // mLayerID
   8,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

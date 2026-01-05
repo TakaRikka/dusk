@@ -279,7 +279,7 @@ int daB_MGN_c::JointCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daB_MGN_HIO_c l_HIO;
 
@@ -2814,8 +2814,8 @@ void daB_MGN_c::executeOpening() {
     }
 
     camera->mCamera.Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
-    dComIfGp_getEvent().onSkipFade();
-    dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+    dComIfGp_getEvent()->onSkipFade();
+    dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
     mSound.startCreatureVoiceLevel(Z2SE_EN_MGN_DEMO_OP, -1);
 }
 
@@ -3367,7 +3367,7 @@ int daB_MGN_c::_delete() {
     dComIfG_resDelete(&mMgnePhase, "B_mgne");
 
     if (mInitHIO) {
-        l_initHIO = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.no);
     }
 
@@ -3511,8 +3511,8 @@ int daB_MGN_c::create() {
                 return cPhs_ERROR_e;
             }
 
-            if (!l_initHIO) {
-                l_initHIO = TRUE;
+            if (!hio_set) {
+                hio_set = TRUE;
                 mInitHIO = TRUE;
                 l_HIO.no = mDoHIO_CREATE_CHILD("豚ガノン", &l_HIO);
             }
@@ -3584,7 +3584,7 @@ static actor_method_class l_daB_MGN_Method = {
     (process_method_func)daB_MGN_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_MGN = {
+actor_process_profile_definition g_profile_B_MGN = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

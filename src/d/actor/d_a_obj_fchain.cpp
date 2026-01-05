@@ -309,7 +309,7 @@ static actor_method_class l_daObjFchain_Method = {
     (process_method_func)daObjFchain_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Fchain = {
+actor_process_profile_definition g_profile_Obj_Fchain = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -3,6 +3,13 @@
 
 #include "JSystem/JMath/JMATrigonometric.h"
 
+#ifndef __MWERKS__
+#include <limits>
+#ifndef FLT_MAX
+#define FLT_MAX std::numeric_limits<float>::max()
+#endif
+#endif
+
 s16 cM_rad2s(float rad);
 u16 U_GetAtanTable(float, float);
 s16 cM_atan2s(float y, float x);

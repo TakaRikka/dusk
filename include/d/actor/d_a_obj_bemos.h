@@ -46,6 +46,7 @@ public:
         };
 
         Bgc_c();
+        static void chk_wall_touch(const fopAc_ac_c*, const daObjBm_c::BgcSrc_c*, short);
         void wall_pos(fopAc_ac_c const*, daObjBm_c::BgcSrc_c const*, int, s16, f32);
         bool chk_wall_pre(fopAc_ac_c const*, daObjBm_c::BgcSrc_c const*, int, s16);
 

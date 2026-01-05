@@ -9,7 +9,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "SSystem/SComponent/c_math.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include <cmath.h>
+#include <math>
 
 static const f32 l_cull_size_box[6] = { -150.0f, -10.0f, -150.0f, 150.0f, 300.0f, 100.0f };
 
@@ -29,10 +29,12 @@ static dCcD_SrcCyl l_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        0.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            0.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    }
 };
 
 static daTbox_ModelInfo l_modelInfo[3] = {
@@ -1900,7 +1902,7 @@ static actor_method_class daTbox_METHODS = {
     (process_method_func)daTbox_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_TBOX = {
+actor_process_profile_definition g_profile_TBOX = {
     fpcLy_CURRENT_e,
     4,
     fpcPi_CURRENT_e,

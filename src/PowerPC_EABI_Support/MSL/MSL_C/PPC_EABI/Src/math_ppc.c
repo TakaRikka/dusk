@@ -14,6 +14,8 @@
 #endif
 #endif
 
+double nan(const char* arg) {}
+
 DECL_WEAK float acosf(float x) {
     return acos(x);
 }

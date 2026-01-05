@@ -132,7 +132,7 @@ static leafdraw_method_class l_dOvlpFd_Method = {
     (process_method_func)dOvlpFd_Draw,
 };
 
-extern overlap_process_profile_definition g_profile_OVERLAP0 = {
+overlap_process_profile_definition g_profile_OVERLAP0 = {
     fpcLy_ROOT_e,
     0,
     fpcPi_CURRENT_e,
@@ -146,7 +146,7 @@ extern overlap_process_profile_definition g_profile_OVERLAP0 = {
     &l_dOvlpFd_Method,
 };
 
-extern overlap_process_profile_definition g_profile_OVERLAP1 = {
+overlap_process_profile_definition g_profile_OVERLAP1 = {
     fpcLy_ROOT_e,
     0,
     fpcPi_CURRENT_e,
@@ -160,7 +160,7 @@ extern overlap_process_profile_definition g_profile_OVERLAP1 = {
     &l_dOvlpFd_Method,
 };
 
-extern overlap_process_profile_definition g_profile_OVERLAP6 = {
+overlap_process_profile_definition g_profile_OVERLAP6 = {
     fpcLy_ROOT_e,
     0,
     fpcPi_CURRENT_e,
@@ -174,7 +174,7 @@ extern overlap_process_profile_definition g_profile_OVERLAP6 = {
     &l_dOvlpFd_Method,
 };
 
-extern overlap_process_profile_definition g_profile_OVERLAP7 = {
+overlap_process_profile_definition g_profile_OVERLAP7 = {
     fpcLy_ROOT_e,
     0,
     fpcPi_CURRENT_e,
@@ -188,7 +188,7 @@ extern overlap_process_profile_definition g_profile_OVERLAP7 = {
     &l_dOvlpFd_Method,
 };
 
-extern overlap_process_profile_definition g_profile_OVERLAP8 = {
+overlap_process_profile_definition g_profile_OVERLAP8 = {
     fpcLy_ROOT_e,
     0,
     fpcPi_CURRENT_e,
@@ -202,7 +202,7 @@ extern overlap_process_profile_definition g_profile_OVERLAP8 = {
     &l_dOvlpFd_Method,
 };
 
-extern overlap_process_profile_definition g_profile_OVERLAP9 = {
+overlap_process_profile_definition g_profile_OVERLAP9 = {
     fpcLy_ROOT_e,
     0,
     fpcPi_CURRENT_e,
@@ -216,7 +216,7 @@ extern overlap_process_profile_definition g_profile_OVERLAP9 = {
     &l_dOvlpFd_Method,
 };
 
-extern overlap_process_profile_definition g_profile_OVERLAP10 = {
+overlap_process_profile_definition g_profile_OVERLAP10 = {
     fpcLy_ROOT_e,
     0,
     fpcPi_CURRENT_e,
@@ -230,7 +230,7 @@ extern overlap_process_profile_definition g_profile_OVERLAP10 = {
     &l_dOvlpFd_Method,
 };
 
-extern overlap_process_profile_definition g_profile_OVERLAP11 = {
+overlap_process_profile_definition g_profile_OVERLAP11 = {
     fpcLy_ROOT_e,
     0,
     fpcPi_CURRENT_e,

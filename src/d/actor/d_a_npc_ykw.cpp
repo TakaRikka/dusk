@@ -1023,7 +1023,7 @@ void daNpc_ykW_c::setCollision() {
         u32 type = 0xd8fbfdff;
         u32 unkInt1 = 31;
         u32 unkInt2 = 0;
-        if (dComIfGp_event_runCheck() != FALSE || field_0x1069 != 0) {
+        if (dComIfGp_event_runCheck() || field_0x1069 != 0) {
             type = 0;
             unkInt1 = 0;
         } else if (mTwilight) {
@@ -1431,7 +1431,7 @@ int daNpc_ykW_c::cutGoIntoBossRoom(int param_0) {
                 strcpy(unkStrBuf1, l_evtList[5].eventName);
             }
             strcat(unkStrBuf1, "@");
-            dComIfGp_getEvent().setSkipZev(this, unkStrBuf1);
+            dComIfGp_getEvent()->setSkipZev(this, unkStrBuf1);
         }
     }
 
@@ -1458,7 +1458,7 @@ int daNpc_ykW_c::cutGoIntoBossRoom(int param_0) {
         bossDoor = mActorMngrs[2].getActorP();
         JUT_ASSERT(0xb9e, bossDoor != NULL);
 
-        dComIfGp_getEvent().setPt2(bossDoor);
+        dComIfGp_getEvent()->setPt2(bossDoor);
 
         retval = 1;
         break;
@@ -1786,7 +1786,7 @@ BOOL daNpc_ykW_c::cutLv5DungeonClear(int param_0) {
         itemPos += *fopCamM_GetCenter_p(camera);
         unkActor1 = putUtuwaHeart(&itemPos, 22.0f, 40.0f, 0x5000, 0);
         if (unkActor1 != NULL) {
-            dComIfGp_getEvent().setPt2(unkActor1);
+            dComIfGp_getEvent()->setPt2(unkActor1);
             mDoAud_seStart(Z2SE_OBJ_YO_HEART_L, &itemPos, 0, 0);
             retval = 1;
         }
@@ -2663,7 +2663,7 @@ int daNpc_ykW_c::walk(void* param_0) {
             }
 
             dstPos2 = dstPos;
-            if (dComIfGp_event_runCheck() != 0 && mStaffId == -1) {
+            if (dComIfGp_event_runCheck() && mStaffId == -1) {
                 dstPos2 = 1;
             }
 
@@ -3042,7 +3042,7 @@ static actor_method_class daNpc_ykW_MethodTable = {
     (process_method_func)daNpc_ykW_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_YKW = {
+actor_process_profile_definition g_profile_NPC_YKW = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

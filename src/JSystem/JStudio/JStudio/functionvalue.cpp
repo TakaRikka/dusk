@@ -5,9 +5,9 @@
 #include "JSystem/JUtility/JUTException.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JGadget/linklist.h"
-#include "math.h"
-#include "stdlib.h"
-#include "limits.h"
+#include <math>
+#include <stdlib>
+#include <limits>
 
 namespace JStudio {
 
@@ -189,8 +189,6 @@ void TFunctionValueAttribute_range::range_set(f64 begin, f64 end) {
     JUT_ASSERT(458, fDifference_>=TValue(0));
 }
 
-// /* 80281A08-80281D18 27C348 0310+00 2/2 0/0 0/0 .text
-//  * range_getParameter__Q27JStudio29TFunctionValueAttribute_rangeCFddd */
 f64 TFunctionValueAttribute_range::range_getParameter(f64 arg1, f64 arg2, f64 arg3) const {
     f64 progress = range_getParameter_progress(arg1);
     TFunctionValue::TEAdjust adjust = range_getAdjust();
@@ -256,9 +254,6 @@ f64 TFunctionValue_composite::getValue(f64 arg1) {
     return pfn_(arg1, container, data_getData());
 }
 
-/* 80281E5C-80281EC8 27C79C 006C+00 0/0 1/0 0/0 .text
- * composite_raw__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad
- */
 f64 TFunctionValue_composite::composite_raw(TVector_pointer<TFunctionValue*> const& param_1,
                                                  TData const& param_2, f64 param_3) {
     u32 index = param_2.get_unsignedInteger();
@@ -267,15 +262,12 @@ f64 TFunctionValue_composite::composite_raw(TVector_pointer<TFunctionValue*> con
     }
     TFunctionValue** p = (TFunctionValue**)param_1.begin();
     std::advance(p, index);
-    JUT_ASSERT(0x247, p!=0);
+    JUT_ASSERT(0x247, p!=NULL);
     TFunctionValue* piVar4 = *p;
     return piVar4->getValue(param_3);
 }
 
 
-/* 80281EC8-8028202C 27C808 0164+00 0/0 1/0 0/0 .text
- * composite_index__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad
- */
 f64 TFunctionValue_composite::composite_index(TVector_pointer<TFunctionValue*> const& param_1,
                                               TData const& param_2, f64 param_3) {
     s32 size = param_1.size();
@@ -337,9 +329,6 @@ struct TContainerEnumerator_const_TVector : public JGadget::TEnumerator<const T*
         : JGadget::TEnumerator<const T*>(param_1.begin(), param_1.end()) {}
 };
 
-/* 8028202C-80282094 27C96C 0068+00 0/0 1/0 0/0 .text
- * composite_parameter__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad
- */
 f64
 TFunctionValue_composite::composite_parameter(TVector_pointer<TFunctionValue*> const& param_1,
                                               TData const& param_2, f64 param_3) {
@@ -353,25 +342,19 @@ TFunctionValue_composite::composite_parameter(TVector_pointer<TFunctionValue*> c
     return dVar4;
 }
 
-/* 80282094-80282118 27C9D4 0084+00 0/0 1/0 0/0 .text
- * composite_add__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad
- */
 f64 TFunctionValue_composite::composite_add(TVector_pointer<TFunctionValue*> const& param_1,
                                                  TData const& param_2, f64 param_3) {
     f64 dVar4 = param_2.get_value();
     TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
     while (aTStack_18) {
         TFunctionValue* const* p = *aTStack_18;
-        JUT_ASSERT(0x2a1, p!=0);
+        JUT_ASSERT(0x2a1, p!=NULL);
         TFunctionValue* piVar3 = *p;
         dVar4 += piVar3->getValue(param_3);
     }
     return dVar4;
 }
 
-/* 80282118-80282200 27CA58 00E8+00 0/0 1/0 0/0 .text
- * composite_subtract__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad
- */
 f64 TFunctionValue_composite::composite_subtract(TVector_pointer<TFunctionValue*> const& param_1,
                                                  TData const& param_2, f64 param_3) {
     u32 size = param_1.size();
@@ -385,7 +368,7 @@ f64 TFunctionValue_composite::composite_subtract(TVector_pointer<TFunctionValue*
     f64 dVar4 = pFront->getValue(param_3);
     while (aTStack_18) {
         TFunctionValue* const* p = *aTStack_18;
-        JUT_ASSERT(0x2b5, p!=0);
+        JUT_ASSERT(0x2b5, p!=NULL);
         TFunctionValue* piVar3 = *p;
         dVar4 -= piVar3->getValue(param_3);
     }
@@ -394,25 +377,19 @@ f64 TFunctionValue_composite::composite_subtract(TVector_pointer<TFunctionValue*
 }
 
 
-/* 80282200-80282284 27CB40 0084+00 0/0 1/0 0/0 .text
- * composite_multiply__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad
- */
 f64 TFunctionValue_composite::composite_multiply(TVector_pointer<TFunctionValue*> const& param_1,
                                                  TData const& param_2, f64 param_3) {
     f64 dVar4 = param_2.get_value();
     TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
     while (aTStack_18) {
         TFunctionValue* const* p = *aTStack_18;
-        JUT_ASSERT(0x2c5, p!=0);
+        JUT_ASSERT(0x2c5, p!=NULL);
         TFunctionValue* piVar3 = *p;
         dVar4 *= piVar3->getValue(param_3);
     }
     return dVar4;
 }
 
-/* 80282284-8028236C 27CBC4 00E8+00 0/0 1/0 0/0 .text
- * composite_divide__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad
- */
 f64 TFunctionValue_composite::composite_divide(TVector_pointer<TFunctionValue*> const& param_1,
                                                  TData const& param_2, f64 param_3) {
     u32 size = param_1.size();
@@ -426,7 +403,7 @@ f64 TFunctionValue_composite::composite_divide(TVector_pointer<TFunctionValue*> 
     TValue fData = pFront->getValue(param_3);
     while (aTStack_18) {
         TFunctionValue* const* p = *aTStack_18;
-        JUT_ASSERT(0x2d9, p!=0);
+        JUT_ASSERT(0x2d9, p!=NULL);
         TFunctionValue* piVar3 = *p;
         fData /= piVar3->getValue(param_3);
         JGADGET_ASSERTWARN(0x2db, fData!=TValue(0));
@@ -633,9 +610,6 @@ f64 TFunctionValue_list::update_INTERPOLATE_LINEAR_(const TFunctionValue_list& r
                                                     rThis._44[data._10 + 1]);
 }
 
-/* 80282C58-80282CA8 27D598 0050+00 1/1 0/0 0/0 .text
- * update_INTERPOLATE_PLATEAU___Q27JStudio19TFunctionValue_listFRCQ27JStudio19TFunctionValue_listRCQ37JStudio19TFunctionValue_list11TIndexData_
- */
 f64 TFunctionValue_list::update_INTERPOLATE_PLATEAU_(const TFunctionValue_list& rThis,
                                                      const TIndexData_& data) {
     const f32* arr = rThis._44;
@@ -645,9 +619,6 @@ f64 TFunctionValue_list::update_INTERPOLATE_PLATEAU_(const TFunctionValue_list& 
 }
 
 
-/* 80282CA8-80282D34 27D5E8 008C+00 1/1 0/0 0/0 .text
- * update_INTERPOLATE_BSPLINE_dataMore3___Q27JStudio19TFunctionValue_listFRCQ27JStudio19TFunctionValue_listRCQ37JStudio19TFunctionValue_list11TIndexData_
- */
 f64 TFunctionValue_list::update_INTERPOLATE_BSPLINE_dataMore3_(
     TFunctionValue_list const& rThis, TFunctionValue_list::TIndexData_ const& param_2) {
     f64 dVar11 = rThis._44[param_2._10];
@@ -770,9 +741,6 @@ f64 TFunctionValue_list_parameter::update_INTERPOLATE_LINEAR_(
     return functionvalue::interpolateValue_linear(d, a[-2], a[-1], a[0], a[1]);
 }
 
-/* 80283024-80283060 27D964 003C+00 1/1 0/0 0/0 .text
- * update_INTERPOLATE_PLATEAU___Q27JStudio29TFunctionValue_list_parameterFRCQ27JStudio29TFunctionValue_list_parameterd
- */
 f64 TFunctionValue_list_parameter::update_INTERPOLATE_PLATEAU_(
     const TFunctionValue_list_parameter& rThis, f64 d) {
     const f32* a = rThis.dat3.get();
@@ -780,9 +748,6 @@ f64 TFunctionValue_list_parameter::update_INTERPOLATE_PLATEAU_(
 }
 
 
-/* 80283060-802832C4 27D9A0 0264+00 1/1 0/0 0/0 .text
- * update_INTERPOLATE_BSPLINE_dataMore3___Q27JStudio29TFunctionValue_list_parameterFRCQ27JStudio29TFunctionValue_list_parameterd
- */
 f64 TFunctionValue_list_parameter::update_INTERPOLATE_BSPLINE_dataMore3_(
     TFunctionValue_list_parameter const& rThis, f64 param_2) {
     JUT_ASSERT(1457, rThis.uData_>=3)

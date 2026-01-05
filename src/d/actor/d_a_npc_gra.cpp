@@ -94,10 +94,6 @@ static int l_bckGetParamList[][2] = {
     0x07, 0x0F,
 };
 
-/* 809CA7F4 809CA874   0080
-00
-/1   0/0
-.data            l_btpGetParamList */
 static int l_btpGetParamList[][2] = {
     0x1C, 0x00,
     0x1F, 0x00,
@@ -642,7 +638,7 @@ bool daNpc_grA_c::checkTagGraSub2(fopAc_ac_c* i_this) {
 }
 
 static void* s_subShop(void* i_actor, void* i_this) {
-    (void)i_this;
+    UNUSED(i_this);
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_GRM) {
         return i_actor;
     }
@@ -650,7 +646,7 @@ static void* s_subShop(void* i_actor, void* i_this) {
 }
 
 static void* s_subGRD(void* i_actor, void* i_this) {
-    (void)i_this;
+    UNUSED(i_this);
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_NPC_WRESTLER) {
         return i_actor;
     }
@@ -658,7 +654,7 @@ static void* s_subGRD(void* i_actor, void* i_this) {
 }
 
 static void *s_subOnsenTaru(void* i_actor, void* i_this) {
-    (void)i_this;
+    UNUSED(i_this);
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_OnsenTaru &&
         !fpcM_IsCreating(fopAcM_GetID((i_actor))))
     {
@@ -788,7 +784,7 @@ BOOL daNpc_grA_c::main() {
         attention_info.flags = 0;
     }
     if (GET_HIO(mNpcFParams.debug_mode_ON) == 0 &&
-        (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent().isOrderOK())))
+        (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())))
     {
         u16 j = 1;
         if (mOrderEvtNo != 0) {
@@ -1799,7 +1795,7 @@ enum Event_Cut_Nums {
 BOOL daNpc_grA_c::doEvent() {
     dEvent_manager_c* manager = NULL;
     BOOL ret = FALSE;
-    if (dComIfGp_event_runCheck() != FALSE) {
+    if (dComIfGp_event_runCheck()) {
         manager = &dComIfGp_getEventManager();
         if (field_0x1691 == 0) {
             mOrderNewEvt = 0;
@@ -4028,7 +4024,7 @@ BOOL daNpc_grA_c::talk(void*) {
                     fopAcM_createItemForPresentDemo(&current.pos, sp8, 0, -1, -1, NULL, NULL);
                 if (field_0x1480 != fpcM_ERROR_PROCESS_ID_e) {
                     s16 r25 = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xff);
-                    dComIfGp_getEvent().reset(this);
+                    dComIfGp_getEvent()->reset(this);
                     fopAcM_orderChangeEventId(this, r25, 1, -1);
                     field_0x9ec = 1;
                     r29 = 1;
@@ -4039,7 +4035,7 @@ BOOL daNpc_grA_c::talk(void*) {
                 }
             } else {
                 if (mType == 0xa && field_0x1486 == 0 && daNpcF_chkEvtBit(0x187)) {
-                    dComIfGp_getEvent().reset(this);
+                    dComIfGp_getEvent()->reset(this);
                     field_0x9ec = 1;
                     mOrderNewEvt = 1;
                     mOrderEvtNo = 0xa;
@@ -4115,7 +4111,7 @@ static actor_method_class daNpc_grA_MethodTable = {
     (process_method_func)daNpc_grA_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_GRA = {
+actor_process_profile_definition g_profile_NPC_GRA = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

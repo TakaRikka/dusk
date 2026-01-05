@@ -183,11 +183,11 @@ int daObjKWheel01_c::Create() {
 }
 
 static void* searchKWheel00(void* param_0, void* i_this) {
-    i_this; // Needed to bring closer to matching debug REL
+    UNUSED(i_this);
     if(param_0 && fopAcM_IsActor(param_0) && fopAcM_GetProfName(param_0) == PROC_Obj_KWheel00) {
         daObjKWheel00_c* const kWheel00 = static_cast<daObjKWheel00_c*>(param_0);
         if(kWheel00->getType() == daObjKWheel00_c::TYPE_LARGE_GOLD) {
-            return kWheel00;
+            return param_0;
         }
     }
 
@@ -335,7 +335,7 @@ static actor_method_class daObjKWheel01_METHODS = {
     (process_method_func)daObjKWheel01_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_KWheel01 = {
+actor_process_profile_definition g_profile_Obj_KWheel01 = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

@@ -188,7 +188,7 @@ static actor_method_class l_daStartAndGoal_Method = {
     (process_method_func)daStartAndGoal_Draw,
 };
 
-extern actor_process_profile_definition g_profile_START_AND_GOAL = {
+actor_process_profile_definition g_profile_START_AND_GOAL = {
     fpcLy_CURRENT_e,
     9,
     fpcPi_CURRENT_e,

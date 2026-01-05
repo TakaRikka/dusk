@@ -17,6 +17,10 @@ ldscript_template: config/Shield/ldscript.tpl
 #   target: buffer__14mDoMtx_stack_c
 #   addend: 0x300
 
+block_relocations:
+- source: .text:0x803f56fc
+- source: .text:0x803f5764
+
 modules:
 - object: files/RELS.arc:rels/mmem/f_pc_profile_lst.rel
   hash: 6fde21e7ca31044cd9f5a94b922ca44535328134

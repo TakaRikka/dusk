@@ -1,6 +1,7 @@
 #ifndef D_MENU_D_MENU_FMAP_H
 #define D_MENU_D_MENU_FMAP_H
 
+#include "JSystem/JHostIO/JORReflexible.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_menu_map_common.h"
 #include "d/d_msg_flow.h"

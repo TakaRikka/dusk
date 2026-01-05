@@ -1,8 +1,8 @@
 #include <revolution/os.h>
 #include <revolution/fs.h>
 #include <revolution/nand.h>
-#include <string.h>
-#include <printf.h>
+#include <cstring>
+#include <cstdio>
 
 static IOSFd s_fd = -255;
 static IOSError s_err = ISFS_ERROR_UNKNOWN;

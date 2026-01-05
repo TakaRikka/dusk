@@ -1,6 +1,6 @@
 #include <dolphin/dolphin.h>
 #include <dolphin/mtx.h>
-#include <math.h>
+#include <sdk_math.h>
 
 void C_QUATAdd(const Quaternion* p, const Quaternion* q, Quaternion* r) {
     ASSERTMSGLINE(77, p, "QUATAdd():  NULL QuaternionPtr 'p' ");

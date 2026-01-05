@@ -525,7 +525,7 @@ BOOL daNpc_zrZ_c::main() {
     attention_info.flags = 0;
 
     if (!daNpc_zrZ_Param_c::m.mTest
-        && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent().isOrderOK())))
+        && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())))
     {
         if (mOrderEvtNo != EVT_NONE) {
             eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
@@ -1030,7 +1030,7 @@ void daNpc_zrZ_c::doNormalAction(BOOL param_0) {
 BOOL daNpc_zrZ_c::doEvent() {
     BOOL ret = false;
 
-    if (dComIfGp_event_runCheck() != false) {
+    if (dComIfGp_event_runCheck()) {
         dEvent_manager_c& event_manager = dComIfGp_getEventManager();
 
         if (eventInfo.checkCommandTalk() || eventInfo.checkCommandDemoAccrpt()) {
@@ -1107,7 +1107,7 @@ BOOL daNpc_zrZ_c::doEvent() {
                     switch (mOrderEvtNo) {
                     case EVT_SEAL_RELEASE:
                         setSkipZev(EVT_SEAL_RELEASE, EVT_SR_SKIP);
-                        dComIfGp_getEvent().onSkipFade();
+                        dComIfGp_getEvent()->onSkipFade();
                         break;
                     }
                 }
@@ -1137,7 +1137,7 @@ BOOL daNpc_zrZ_c::doEvent() {
 
 BOOL daNpc_zrZ_c::setSkipZev(int i_idx1, int i_idx2) {
     if (!strcmp(dComIfGp_getEventManager().getRunEventName(), l_evtNames[i_idx1])) {
-        dComIfGp_getEvent().setSkipZev(this, l_evtNames[i_idx2]);
+        dComIfGp_getEvent()->setSkipZev(this, l_evtNames[i_idx2]);
         return true;
     }
     return false;
@@ -1559,7 +1559,7 @@ BOOL daNpc_zrZ_c::ECut_comeHere(int i_staffID) {
             angle = player->current.angle;
             angle.y = fopAcM_searchPlayerAngleY(this) + 0x8000;
             player->setPlayerPosAndAngle(&player->current.pos, &angle);
-            dComIfGp_getEvent().setPtT(this);
+            dComIfGp_getEvent()->setPtT(this);
             initTalk(8, NULL);
             mIsLeading = true;
             break;
@@ -1659,8 +1659,8 @@ BOOL daNpc_zrZ_c::ECut_clothesGet(int i_staffID) {
         case 10:
             initTalk(9, NULL);
             if (mpGravestoneActor != NULL) {
-                dComIfGp_getEvent().setPtT(mpGravestoneActor);
-                dComIfGp_getEvent().setPt2(mpGravestoneActor);
+                dComIfGp_getEvent()->setPtT(mpGravestoneActor);
+                dComIfGp_getEvent()->setPt2(mpGravestoneActor);
             }
             break;
 
@@ -1687,7 +1687,7 @@ BOOL daNpc_zrZ_c::ECut_clothesGet(int i_staffID) {
 
         case 50:
             if (mpClothActor != NULL) {
-                dComIfGp_getEvent().setPtT(mpClothActor);
+                dComIfGp_getEvent()->setPtT(mpClothActor);
             }
             mEventTimer = 20;
             break;
@@ -1708,7 +1708,7 @@ BOOL daNpc_zrZ_c::ECut_clothesGet(int i_staffID) {
             break;
 
         case 70:
-            dComIfGp_getEvent().setPtT(this);
+            dComIfGp_getEvent()->setPtT(this);
             break;
 
         case 71:
@@ -1925,7 +1925,7 @@ BOOL daNpc_zrZ_c::ECut_sealRelease(int i_staffID) {
         case 0:
             mEventTimer = 20;
             mSealReleased = true;
-            dComIfGp_getEvent().setSkipProc(this, dEv_defaultSkipProc, 0);
+            dComIfGp_getEvent()->setSkipProc(this, dEv_defaultSkipProc, 0);
             mpRockActor->setDemoStart();
             break;
 
@@ -2423,7 +2423,7 @@ static actor_method_class daNpc_zrZ_MethodTable = {
     (process_method_func)daNpc_zrZ_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_ZRZ = {
+actor_process_profile_definition g_profile_NPC_ZRZ = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -594,7 +594,7 @@ static int daObj_Gm_IsDelete(obj_gm_class* i_this) {
     return 1;
 }
 
-static bool l_initHIO;
+static bool hio_set;
 
 static int daObj_Gm_Delete(obj_gm_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
@@ -603,7 +603,7 @@ static int daObj_Gm_Delete(obj_gm_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "OBJ_GM");
 
     if (i_this->mIsFirstSpawn) {
-        l_initHIO = false;
+        hio_set = false;
     }
 
     if (a_this->heap != NULL) {
@@ -663,9 +663,9 @@ static cPhs__Step daObj_Gm_Create(fopAc_ac_c* a_this) {
 
         OS_REPORT("//////////////OBJ_GM SET 2 !!\n");
 
-        if (!l_initHIO) {
+        if (!hio_set) {
             i_this->mIsFirstSpawn = true;
-            l_initHIO = true;
+            hio_set = true;
             l_HIO.id = -1;
         }
 
@@ -726,7 +726,7 @@ static actor_method_class l_daObj_Gm_Method = {
     (process_method_func)daObj_Gm_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_GM = {
+actor_process_profile_definition g_profile_OBJ_GM = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

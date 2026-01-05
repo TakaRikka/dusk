@@ -43,7 +43,7 @@ public:
     /* 0x6A2 */ s16 mTimer[4];
     /* 0x6AA */ s16 mCcDisableTimer;
     /* 0x6AC */ u32 mRiderID;
-    /* 0x6B0 */ u8 field_0x6b0;
+    /* 0x6B0 */ s8 field_0x6b0;
     /* 0x6B1 */ u8 field_0x6b1;
     /* 0x6B2 */ s8 mNoDrawFlag;
     /* 0x6B3 */ s8 mWolfBiteDamageCount;

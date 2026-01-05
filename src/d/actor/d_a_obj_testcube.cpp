@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_testcube.h"
 
-extern actor_process_profile_definition g_profile_Obj_TestCube = {
+actor_process_profile_definition g_profile_Obj_TestCube = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

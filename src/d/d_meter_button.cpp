@@ -1444,7 +1444,7 @@ void dMeterButton_c::screenInitText() {
     JUT_ASSERT(2499, mpTmRoot_c != NULL);
 
 #if VERSION == VERSION_GCN_JPN
-    if (dComIfGs_getOptUnk0() == 0) {
+    if (dComIfGs_getOptRuby() == 0) {
         mpTm_c[0] = new CPaneMgr(mpTextScreen, 'mg_3flin', 0, NULL);
 
         mpTm_c[1] = new CPaneMgr(mpTextScreen, 't3f_s', 0, NULL);

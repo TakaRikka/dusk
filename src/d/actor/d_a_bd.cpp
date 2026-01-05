@@ -45,7 +45,7 @@ static land_pos land_pos127[20] = {
 
 static int wait_bck[3] = {ANM_PITA_LEFTUP, ANM_PITA_RIGHT, ANM_PITA_DOWN};
 
-static u8 l_HIOInit;
+static u8 hio_set;
 static daBd_HIO_c l_HIO;
 
 static cXyz land_sp_pos[4] = {
@@ -281,7 +281,7 @@ static void drop_check(bd_class* i_this) {
 
 
 static void turn_set(bd_class* i_this) {
-    s16 angle_table[3] = {0x8000, 0x4000, -0x4000};
+    s16 angle_table[3] = {-0x8000, 0x4000, -0x4000};
     s16 angle = angle_table[(int)cM_rndF(2.99f)];
     i_this->mTargetAngleY = i_this->enemy.current.angle.y + angle;
 }
@@ -933,7 +933,7 @@ static int daBd_Delete(bd_class* i_this) {
     fopAcM_RegisterDeleteID(i_this, "Bd");
     dComIfG_resDelete(&i_this->mPhase, "Bd");
     if (i_this->field_0x9E8 != 0) {
-        l_HIOInit = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
     if (a_this->heap != 0) {
@@ -989,9 +989,9 @@ static int daBd_Create(fopAc_ac_c* i_act_this) {
             return cPhs_ERROR_e;
         }
         OS_REPORT("//////////////BD SET 2 !!\n");
-        if (l_HIOInit == 0) {
+        if (hio_set == 0) {
             i_this->field_0x9E8 = 1;
-            l_HIOInit = 1;
+            hio_set = 1;
             l_HIO.id = mDoHIO_CREATE_CHILD("小鳥", (JORReflexible*)&l_HIO);
         }
         fopAcM_SetMtx(i_act_this, i_this->mpMorf->getModel()->getBaseTRMtx());
@@ -1003,7 +1003,6 @@ static int daBd_Create(fopAc_ac_c* i_act_this) {
         i_act_this->field_0x560 = 1;
         i_this->mStts.Init(100, 0, i_act_this);
 
-        /* 804DA234-804DA274 0002AC 0040+00 1/1 0/0 0/0 .data            cc_sph_src$4956 */
         static dCcD_SrcSph cc_sph_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x75}},  // mObj
@@ -1054,7 +1053,7 @@ static actor_method_class l_daBd_Method = {
     (process_method_func)daBd_Draw,
 };
 
-extern actor_process_profile_definition g_profile_BD = {
+actor_process_profile_definition g_profile_BD = {
     fpcLy_CURRENT_e,       // mLayerID
     8,                     // mListID
     fpcPi_CURRENT_e,       // mListPrio

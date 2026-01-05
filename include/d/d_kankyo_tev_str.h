@@ -1,8 +1,9 @@
 #ifndef D_D_KANKYO_TEV_STR
 #define D_D_KANKYO_TEV_STR
 
-#include "JSystem/J3DGraphBase/J3DStruct.h"
-#include "m_Do/m_Do_ext.h"
+#include "JSystem/J3DGraphBase/J3DTevs.h"
+#include "SSystem/SComponent/c_xyz.h"
+#include "dolphin/types.h"
 
 class dKy_tevstr_c {
 public:

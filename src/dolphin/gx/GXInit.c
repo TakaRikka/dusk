@@ -1,4 +1,4 @@
-#include <string.h>
+#include <cstring>
 
 #include <dolphin/base/PPCArch.h>
 #include <dolphin/gx.h>

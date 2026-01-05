@@ -385,7 +385,7 @@ int daNpc_grS_c::main() {
     }
 
     if (!mpHIO->m.common.debug_mode_ON) {
-        if (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent().isOrderOK())) {
+        if (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())) {
             if (mOrderEvtNo != 0) {
                 eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
             }
@@ -896,7 +896,7 @@ int daNpc_grS_c::doEvent() {
     int evtCutNo;
     int staffId;
 
-    if (dComIfGp_event_runCheck() != FALSE) {
+    if (dComIfGp_event_runCheck()) {
         eventManager = &dComIfGp_getEventManager();
         if ((eventInfo.checkCommandTalk() || eventInfo.checkCommandDemoAccrpt()) &&
             !mIsSpeaking)
@@ -1187,7 +1187,7 @@ int daNpc_grS_c::talk(void* param_0) {
                     if (mPresentItemId != fpcM_ERROR_PROCESS_ID_e) {
                         s16 eventIdx =
                             dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xff);
-                        dComIfGp_getEvent().reset(this);
+                        dComIfGp_getEvent()->reset(this);
                         fopAcM_orderChangeEventId(this, eventIdx, 1, 0xffff);
                         mIsSpeaking = true;
                         field_0x9ec = true;
@@ -1298,7 +1298,7 @@ static actor_method_class daNpc_grS_MethodTable = {
     (process_method_func)daNpc_grS_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_GRS = {
+actor_process_profile_definition g_profile_NPC_GRS = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

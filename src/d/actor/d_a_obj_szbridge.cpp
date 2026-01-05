@@ -172,7 +172,7 @@ static actor_method_class daObjSZbridge_METHODS = {
     (process_method_func)daObjSZbridge_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SZbridge = {
+actor_process_profile_definition g_profile_Obj_SZbridge = {
     fpcLy_CURRENT_e,          // mLayerID
     3,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

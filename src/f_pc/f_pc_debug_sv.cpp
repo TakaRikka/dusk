@@ -8,7 +8,7 @@ int fpcBs_pc_c__print(base_process_class* i_process) {
 }
 
 void fpcBs_pc_c__fpcDbSv_callbackXX(void* i_process, char* arg1) {
-    arg1;
+    UNUSED(arg1);
     fpcBs_pc_c__print((base_process_class*)i_process);
 }
 

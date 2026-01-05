@@ -6,6 +6,7 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JKernel/JKRAram.h"
 #include "dolphin/gx.h"
+#include <stdint>
 
 JUTCacheFont::JUTCacheFont(ResFONT const* p_fontRes, u32 cacheSize, JKRHeap* p_heap) {
     initialize_state();
@@ -15,12 +16,9 @@ JUTCacheFont::JUTCacheFont(ResFONT const* p_fontRes, u32 cacheSize, JKRHeap* p_h
 }
 
 JUTCacheFont::~JUTCacheFont() {
-    if (isValid()) {
-        deleteMemBlocks_CacheFont();
-        initialize_state();
-
-        deleteMemBlocks_ResFont();
-        JUTResFont::initialize_state();
+    if (mValid) {
+        delete_and_initialize();
+        JUTResFont::delete_and_initialize();
 
         JUTFont::initialize_state();
     }
@@ -31,7 +29,7 @@ void JUTCacheFont::deleteMemBlocks_CacheFont() {
         delete[] mCacheBuffer;
     }
 
-    delete field_0xac;
+    JKRFreeToAram(field_0xac);
     delete mInf1Ptr;
     delete mMemBlocks;
     delete field_0x7c;
@@ -148,10 +146,8 @@ int JUTCacheFont::initiate(ResFONT const* p_fontRes, void* param_1, u32 param_2,
 
 bool JUTCacheFont::internal_initiate(ResFONT const* p_fontRes, void* param_1, u32 param_2,
                                      JKRHeap* param_3) {
-    deleteMemBlocks_CacheFont();
-    initialize_state();
-    deleteMemBlocks_ResFont();
-    JUTResFont::initialize_state();
+    delete_and_initialize();
+    JUTResFont::delete_and_initialize();
     JUTFont::initialize_state();
 
     if (p_fontRes == NULL) {
@@ -173,7 +169,7 @@ bool JUTCacheFont::internal_initiate(ResFONT const* p_fontRes, void* param_1, u3
     return true;
 }
 
-bool JUTCacheFont::allocArea(void* param_0, u32 param_1, JKRHeap* heap) {
+bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
     mInf1Ptr = (ResFONT::INF1*)new (heap, 0) ResFONT();
     if (mInf1Ptr == NULL) {
         return false;
@@ -192,8 +188,7 @@ bool JUTCacheFont::allocArea(void* param_0, u32 param_1, JKRHeap* heap) {
             return false;
         }
 
-        field_0xac = JKRAram::getManager()->mAramHeap->alloc(
-            mTotalGlySize - (mGly1BlockNum * sizeof(ResFONT::GLY1)), JKRAramHeap::HEAD);
+        field_0xac = JKRAllocFromAram(mTotalGlySize - (mGly1BlockNum * sizeof(ResFONT::GLY1)), JKRAramHeap::HEAD);
         if (field_0xac == NULL) {
             return false;
         }
@@ -213,8 +208,9 @@ bool JUTCacheFont::allocArea(void* param_0, u32 param_1, JKRHeap* heap) {
         return false;
     }
 
-    if (param_0 != NULL) {
-        mCacheBuffer = param_0;
+    if (cacheBuffer != NULL) {
+        JUT_ASSERT(352, ( (u32)cacheBuffer & 0x1f ) == 0);
+        mCacheBuffer = cacheBuffer;
         field_0xb0 = 0;
     } else {
         mCacheBuffer = new (heap, 0x20) u8[v1];
@@ -236,18 +232,18 @@ bool JUTCacheFont::allocArray(JKRHeap* param_0) {
 
     void** blocks = mMemBlocks;
     if (mWid1BlockNum) {
-        mpWidthBlocks = (ResFONT::WID1**)blocks;
+        mpWidthBlocks = new (blocks) ResFONT::WID1*[mWid1BlockNum];
         blocks = blocks + mWid1BlockNum;
     }
     if (mGly1BlockNum) {
-        mpGlyphBlocks = (ResFONT::GLY1**)blocks;
+        mpGlyphBlocks = new (blocks) ResFONT::GLY1*[mGly1BlockNum];
         blocks = blocks + mGly1BlockNum;
         for (int i = 0; i < mGly1BlockNum; i++) {
             mpGlyphBlocks[i] = (ResFONT::GLY1*)((u8*)mCacheBuffer + (field_0x94 * i));
         }
-    } 
+    }
     if (mMap1BlockNum) {
-        mpMapBlocks = (ResFONT::MAP1**)blocks;
+        mpMapBlocks = new (blocks) ResFONT::MAP1*[mMap1BlockNum];
     }
     return true;
 }
@@ -264,16 +260,19 @@ void JUTCacheFont::setBlock() {
     const int* pData = (int*)mResFont->data;
 
     for (int i = 0; i < mResFont->numBlocks; i++) {
+        u32 u;
         switch (*pData) {
         case 'INF1':
             memcpy(mInf1Ptr, pData, 0x20);
-            mIsLeadByte = &JUTResFont::saoAboutEncoding_[mInf1Ptr->fontType];
+            u = mInf1Ptr->fontType;
+            JUT_ASSERT(448, u < suAboutEncoding_);
+            mIsLeadByte = &JUTResFont::saoAboutEncoding_[u];
             break;
         case 'WID1':
             memcpy(pWidth, pData, pData[1]);
             mpWidthBlocks[widthNum] = (ResFONT::WID1*)pWidth;
-            pWidth += pData[1];
             widthNum++;
+            pWidth += pData[1];
             break;
         case 'GLY1':
             memcpy(piVar5, pData, 0x20);
@@ -291,7 +290,7 @@ void JUTCacheFont::setBlock() {
             mpGlyphBlocks[gylphNum] = piVar5;
             gylphNum++;
             piVar5++;
-            aramAddress = pData[1] + aramAddress - 0x20;
+            aramAddress += pData[1] - 0x20;
             break;
         case 'MAP1':
             memcpy(pMap, pData, pData[1]);
@@ -312,51 +311,49 @@ void JUTCacheFont::setBlock() {
 }
 
 JUTCacheFont::TGlyphCacheInfo* JUTCacheFont::determineBlankPage() {
-    TGlyphCacheInfo* pVar1 = field_0xa4;
-    if (pVar1 != NULL) {
+    TGlyphCacheInfo* pVar1;
+    if (field_0xa4 != NULL) {
+        pVar1 = field_0xa4;
         field_0xa4 = pVar1->mNext;
-        TGlyphCacheInfo* pVar2 = pVar1->mNext;
-        if (pVar2 == NULL) {
+        if (pVar1->mNext == NULL) {
             field_0xa8 = 0;
         } else {
-            pVar2->mPrev = NULL;
+            pVar1->mNext->mPrev = NULL;
         }
         return pVar1;
     }
 
-    TGlyphCacheInfo* puVar1 = field_0xa0;
-    while (puVar1 != NULL) {
-        TGlyphCacheInfo* prev = puVar1->mPrev;
-        if (puVar1->field_0x1e == 0) {
-            unlink(puVar1);
+    pVar1 = field_0xa0;
+    while (pVar1 != NULL) {
+        TGlyphCacheInfo* prev = pVar1->mPrev;
+        if (pVar1->field_0x1e == 0) {
+            unlink(pVar1);
             field_0xb4++;
-            return puVar1;
+            return pVar1;
         }
-        puVar1 = prev;
+        pVar1 = prev;
     }
 
     return NULL;
 }
 
-/* 802DDBBC-802DDCE4 2D84FC 0128+00 1/1 0/0 0/0 .text
- * getGlyphFromAram__12JUTCacheFontFPQ212JUTCacheFont15TGlyphCacheInfoPQ212JUTCacheFont10TCachePagePiPi
- */
 void JUTCacheFont::getGlyphFromAram(JUTCacheFont::TGlyphCacheInfo* param_0,
                                     JUTCacheFont::TCachePage* pCachePage, int* param_2, int* param_3) {
     TGlyphCacheInfo* pGylphCacheInfo = pCachePage;
+    int* r30 = param_2;
     memcpy(pGylphCacheInfo, param_0, sizeof(TGlyphCacheInfo));
     prepend(pGylphCacheInfo);
     int iVar3 = pGylphCacheInfo->field_0x16 * pGylphCacheInfo->field_0x18;
-    int iVar2 = *param_2 / iVar3;
+    int iVar2 = *r30 / iVar3;
     pGylphCacheInfo->field_0x8 += iVar2 * iVar3;
     u16 local_30 = pGylphCacheInfo->field_0x8 + iVar3 - 1;
     pGylphCacheInfo->field_0xa = pGylphCacheInfo->field_0xa < local_30 ? pGylphCacheInfo->field_0xa : local_30;
     *param_3 = iVar2;
-    *param_2 -= iVar2 * iVar3;
-    u8* addr =
+    *r30 -= iVar2 * iVar3;
+    u8* result =
         JKRAramToMainRam((u32)param_0->mPrev + pGylphCacheInfo->field_0x10 * iVar2, pCachePage->mImage,
                          pGylphCacheInfo->field_0x10, EXPAND_SWITCH_UNKNOWN0, 0, NULL, 0xffffffff, NULL);
-    JUT_ASSERT(624, addr != NULL);
+    JUT_ASSERT(624, result);
     GXInitTexObj(&pCachePage->mTexObj, pCachePage->mImage, pGylphCacheInfo->mWidth, pGylphCacheInfo->mHeight,
                  (GXTexFmt)pGylphCacheInfo->mTexFormat, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&pCachePage->mTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
@@ -378,21 +375,23 @@ void JUTCacheFont::loadImage(int param_0, _GXTexMapID texMapId) {
 
 JUTCacheFont::TCachePage* JUTCacheFont::loadCache_char_subroutine(int* param_0, bool param_1) {
     TCachePage* rv = NULL;
+    int* r29 = param_0;
     for (TCachePage* pCachePage = (TCachePage*)field_0x9c; pCachePage != NULL;
          pCachePage = (TCachePage*)pCachePage->mNext)
     {
-        if (pCachePage->field_0x8 <= *param_0 && *param_0 <= pCachePage->field_0xa) {
+        if (pCachePage->field_0x8 <= *r29 && *r29 <= pCachePage->field_0xa) {
             rv = pCachePage;
-            *param_0 -= pCachePage->field_0x8;
+            *r29 -= pCachePage->field_0x8;
             break;
         }
     }
 
     if (rv == NULL) {
+        rv = NULL;
         int i = 0;
         for (; i < mGly1BlockNum; i++) {
-            if (mpGlyphBlocks[i]->startCode <= *param_0 && *param_0 <= mpGlyphBlocks[i]->endCode) {
-                *param_0 -= mpGlyphBlocks[i]->startCode;
+            if (mpGlyphBlocks[i]->startCode <= *r29 && *r29 <= mpGlyphBlocks[i]->endCode) {
+                *r29 -= mpGlyphBlocks[i]->startCode;
                 break;
             }
         }
@@ -402,7 +401,7 @@ JUTCacheFont::TCachePage* JUTCacheFont::loadCache_char_subroutine(int* param_0, 
                 return NULL;
             }
             int texPageIdx;
-            getGlyphFromAram((JUTCacheFont::TGlyphCacheInfo*)mpGlyphBlocks[i], pBlankPage, param_0,
+            getGlyphFromAram((JUTCacheFont::TGlyphCacheInfo*)mpGlyphBlocks[i], pBlankPage, r29,
                              &texPageIdx);
             mTexPageIdx = texPageIdx;
             field_0x66 = i;
@@ -418,24 +417,13 @@ JUTCacheFont::TCachePage* JUTCacheFont::loadCache_char_subroutine(int* param_0, 
 }
 
 void JUTCacheFont::invalidiateAllCache() {
-    int* piVar3 = (int*)mCacheBuffer;
-    for (int uVar2 = 0; uVar2 < mCachePage; uVar2++) {
-        int iVar1;
-        if (uVar2 == 0) {
-            iVar1 = 0;
-        } else {
-            iVar1 = (int)piVar3 - field_0x94;
-        }
-        *piVar3 = iVar1;
-        if (uVar2 == mCachePage - 1) {
-            iVar1 = 0;
-        } else {
-            iVar1 = (int)piVar3 + field_0x94;
-        }
-        piVar3[1] = iVar1;
-        piVar3 = (int*)((int)piVar3 + field_0x94);
+    int* cacheBuffer = (int*)mCacheBuffer;
+    for (int i = 0; i < mCachePage; i++) {
+        *cacheBuffer = i == 0 ? 0 : (intptr_t)cacheBuffer - field_0x94;
+        cacheBuffer[1] = i == mCachePage - 1 ? 0 : (intptr_t)cacheBuffer + field_0x94;
+        cacheBuffer = (int*)((intptr_t)cacheBuffer + field_0x94);
     }
-    field_0xa8 = (int)piVar3 - field_0x94;
+    field_0xa8 = (intptr_t)cacheBuffer - field_0x94;
     field_0xa4 = (TGlyphCacheInfo*)mCacheBuffer;
     field_0x9c = NULL;
     field_0xa0 = NULL;

@@ -37,7 +37,7 @@ struct Z2StatusMgr : public JASGlobalInstance<Z2StatusMgr> {
     /* 0x01 */ u8 mMinute;
     /* 0x02 */ u8 mWeekday;
     /* 0x03 */ u8 field_0x03;
-    /* 0x04 */ s16 mTime;
+    /* 0x04 */ u16 mTime;
     /* 0x08 */ void* mEventBit;
     /* 0x0C */ u8 mPauseFlag;
     /* 0x10 */ u32 mCameraMapInfo;

@@ -106,7 +106,7 @@ static actor_method_class l_daObjMBox_Method = {
     (process_method_func)daObjMBox_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_MetalBox = {
+actor_process_profile_definition g_profile_Obj_MetalBox = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

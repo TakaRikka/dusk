@@ -651,7 +651,7 @@ bool daNpcPray_c::demo(void*) {
         mActionMode = 2;
         break;
     case 2:
-        if (dComIfGp_event_runCheck() != 0 && !eventInfo.checkCommandTalk()) {
+        if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
             dEvent_manager_c& evtmgr = dComIfGp_getEventManager();
             const int staffID = evtmgr.getMyStaffId(l_myName, NULL, 0);
             if (staffID != -1) {
@@ -824,7 +824,7 @@ static actor_method_class daNpcPray_MethodTable = {
     (process_method_func)daNpcPray_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_PRAYER = {
+actor_process_profile_definition g_profile_NPC_PRAYER = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

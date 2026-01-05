@@ -669,7 +669,7 @@ static actor_method_class l_daObjBossWarp_Method = {
     (process_method_func)daObjBossWarp_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_BossWarp = {
+actor_process_profile_definition g_profile_Obj_BossWarp = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

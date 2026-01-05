@@ -13,12 +13,13 @@ public:
 
     virtual ~JUTGraphFifo();
 
-    void getGpStatus() {
+    static bool* getGpStatus() {
         GXGetGPStatus((GXBool*)&mGpStatus[0], (GXBool*)&mGpStatus[1], (GXBool*)&mGpStatus[2],
                       (GXBool*)&mGpStatus[3], (GXBool*)&mGpStatus[4]);
+        return mGpStatus;
     }
 
-    bool isGPActive() {
+    static bool isGPActive() {
         getGpStatus();
         return mGpStatus[2] == false;
     }

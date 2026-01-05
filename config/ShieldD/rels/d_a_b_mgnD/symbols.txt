@@ -295,5 +295,5 @@ lbl_139_data_440 = .data:0x00000440; // type:object size:0x24
 @123083 = .data:0x0000066C; // type:object size:0x11 scope:local data:string
 @123084 = .data:0x00000694; // type:object size:0xD scope:local data:string
 lbl_139_data_6A1 = .data:0x000006A1; // type:object size:0x93
-l_initHIO = .bss:0x00000000; // type:object size:0x1 scope:local align:1 data:byte
+hio_set = .bss:0x00000000; // type:object size:0x1 scope:local align:1 data:byte
 l_HIO = .bss:0x00000004; // type:object size:0x24 scope:global data:byte

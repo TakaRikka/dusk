@@ -1,0 +1,178 @@
+#ifndef _MSL_COMMON_CTYPE_H
+#define _MSL_COMMON_CTYPE_H
+
+#include "global.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define EOF -1L
+
+#if PLATFORM_GCN
+extern unsigned char __ctype_map[];
+extern unsigned char __lower_map[];
+extern unsigned char __upper_map[];
+
+#define __control_char 0x01
+#define __motion_char 0x02
+#define __space_char 0x04
+#define __punctuation 0x08
+#define __digit 0x10
+#define __hex_digit 0x20
+#define __lower_case 0x40
+#define __upper_case 0x80
+
+#define __letter (__lower_case | __upper_case)
+#define __alphanumeric (__letter | __digit)
+#define __graphic (__alphanumeric | __punctuation)
+#define __printable (__graphic | __space_char)
+#define __whitespace (__motion_char | __space_char)
+#define __control (__motion_char | __control_char)
+#define __zero_fill(c) ((int)(unsigned char)(c))
+
+// added underscore to avoid naming conflicts
+inline int _tolower(int c) { return (c == -1 ? -1 : (int)__lower_map[(unsigned char)c]); }
+#else
+#include <locale>
+
+extern const unsigned char __lower_mapC[0x100];
+extern const unsigned char __upper_mapC[0x100];
+extern const unsigned short __ctype_mapC[0x100];
+
+#define ctype_alpha 0x0001
+#define ctype_blank 0x0002
+#define ctype_cntrl 0x0004
+#define ctype_digit 0x0008
+#define ctype_graph 0x0010
+#define ctype_lower 0x0020
+#define ctype_print 0x0040
+#define ctype_punct 0x0080
+#define ctype_space 0x0100
+#define ctype_upper 0x0200
+#define ctype_xdigit 0x0400
+
+#define ctype_alnum (ctype_alpha | ctype_digit)
+
+#endif
+
+int isalnum(int c);
+int isalpha(int c);
+int isblank(int c);
+int iscntrl(int c);
+int isdigit(int c);
+int isgraph(int c);
+int islower(int c);
+int isprint(int c);
+int ispunct(int c);
+int isupper(int c);
+int isxdigit(int c);
+int isspace(int c);
+int tolower(int c);
+int toupper(int c);
+
+#if MSL_USE_INLINES
+MSL_INLINE int isalnum(int c) {
+    #if !PLATFORM_GCN
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_alnum);
+    #endif
+}
+
+MSL_INLINE int isalpha(int c) {
+    #if PLATFORM_GCN
+    return (int)(__ctype_map[(unsigned char)c] & __letter);
+    #else
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_alpha);
+    #endif
+}
+
+MSL_INLINE int isblank(int c) {
+    #if !PLATFORM_GCN
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_blank);
+    #endif
+}
+
+MSL_INLINE int iscntrl(int c) {
+    #if !PLATFORM_GCN
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_cntrl);
+    #endif
+}
+
+MSL_INLINE int isdigit(int c) {
+    #if PLATFORM_GCN
+    return (int)(__ctype_map[(unsigned char)c] & __digit);
+    #else
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_digit);
+    #endif
+}
+
+MSL_INLINE int isgraph(int c) {
+    #if !PLATFORM_GCN
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_graph);
+    #endif
+}
+
+MSL_INLINE int islower(int c) {
+    #if !PLATFORM_GCN
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_lower);
+    #endif
+}
+
+MSL_INLINE int isprint(int c) {
+    #if !PLATFORM_GCN
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_print);
+    #endif
+}
+
+MSL_INLINE int ispunct(int c) {
+    #if !PLATFORM_GCN
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_punct);
+    #endif
+}
+
+MSL_INLINE int isupper(int c) {
+    #if PLATFORM_GCN
+    return (int)(__ctype_map[(unsigned char)c] & __upper_case);
+    #else
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_upper);
+    #endif
+}
+
+MSL_INLINE int isxdigit(int c) {
+    #if PLATFORM_GCN
+    return (int)(__ctype_map[(unsigned char)c] & __hex_digit);
+    #else
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_xdigit);
+    #endif
+}
+
+MSL_INLINE int isspace(int c) {
+    #if PLATFORM_GCN
+    return (int)(__ctype_map[(unsigned char)c] & __whitespace);
+    #else
+    return (c < 0 || c >= 256) ? 0 : (int)(_current_locale.ctype_cmpt_ptr->ctype_map_ptr[c] & ctype_space);
+    #endif
+}
+
+MSL_INLINE int tolower(int c) {
+    #if PLATFORM_GCN
+    return (c == -1) ? -1 : (int) (__lower_map[(unsigned char)c]);
+    #else
+    return ((c < 0) || (c >= 0x100)) ? c : (int) (_current_locale.ctype_cmpt_ptr->lower_map_ptr[c]);
+    #endif
+}
+
+MSL_INLINE int toupper(int c) {
+    #if PLATFORM_GCN
+    return (c == -1 ? -1 : (int)__upper_map[(unsigned char)c]);
+    #else
+    return (c < 0 || c >= 256) ? c : (int)(&_current_locale)->ctype_cmpt_ptr->upper_map_ptr[c];
+    #endif
+}
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _MSL_COMMON_CTYPE_H */

@@ -1127,7 +1127,7 @@ void daE_OC_c::executeFind() {
     s16 pl_ang = fopAcM_searchPlayerAngleY(this);
     f32 pl_dist = fopAcM_searchPlayerDistance(this);
     if (mOcState < 3 || !setWatchMode()) {
-        if (field_0x6b4 == 2 && dComIfGp_event_runCheck() == FALSE) {
+        if (field_0x6b4 == 2 && !dComIfGp_event_runCheck()) {
             fopAcM_OffStatus(this, 0x4000);
             field_0x6b4 = 0;
         }
@@ -2255,7 +2255,7 @@ void daE_OC_c::executeFindStay() {
             current.angle.y = shape_angle.y;
             if (target_dist < 400.0f && target_dist > 200.0f) {
                 if (abs(shape_angle.y - fopAcM_searchPlayerAngleY(this)) < 0x1000 && checkBeforeFloorBg(100.0f)
-                    && dComIfGp_event_runCheck() == FALSE) {
+                    && !dComIfGp_event_runCheck()) {
                     setActionMode(E_OC_ACTION_ATTACK, 0);
                 }
 
@@ -2353,7 +2353,7 @@ void daE_OC_c::executeMoveOut() {
 
                 if (player_distance < 400.0f && player_distance > 200.0f) {
                     if (abs(shape_angle.y - fopAcM_searchPlayerAngleY(this)) < 0x1000
-                        && dComIfGp_event_runCheck() == FALSE) {
+                        && !dComIfGp_event_runCheck()) {
                         setActionMode(E_OC_ACTION_ATTACK, 0);
                     }
 
@@ -2803,7 +2803,7 @@ static actor_method_class l_daE_OC_Method = {
     (process_method_func)daE_OC_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_OC = {
+actor_process_profile_definition g_profile_E_OC = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

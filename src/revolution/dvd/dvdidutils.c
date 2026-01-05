@@ -1,6 +1,6 @@
 #include <revolution.h>
 #include <revolution/dvd.h>
-#include <string.h>
+#include <cstring>
 
 #include "__dvd.h"
 
@@ -17,7 +17,7 @@ static u32 strnlen(const char* str, u32 maxlen) {
 }
 
 int DVDCompareDiskID(const DVDDiskID* id1, const DVDDiskID* id2) {
-#ifdef DEBUG
+#if DEBUG
     const char* game1;
     const char* game2;
     const char* company1;

@@ -23,7 +23,7 @@ static mDoMtx_stack_c mDoMtx_stack;
 
 static mDoMtx_quatStack_c mDoMtx_quatStack;
 
-extern Mtx g_mDoMtx_identity = {
+Mtx g_mDoMtx_identity = {
     {1.0f, 0.0f, 0.0f, 0.0f},
     {0.0f, 1.0f, 0.0f, 0.0f},
     {0.0f, 0.0f, 1.0f, 0.0f},

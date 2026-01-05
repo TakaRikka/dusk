@@ -114,7 +114,7 @@ static const Vec l_dir_vec[4] = {
     {-1.0f, 0.0f, 0.0f},
 };
 
-static const s16 l_dir_angle[4] = {0x0000, 0x4000, 0x8000, 0xC000};
+static const s16 l_dir_angle[4] = {0x0000, 0x4000, -0x8000, -0x4000};
 
 const static dCcD_SrcCyl l_cyl_src = {
     {
@@ -124,10 +124,12 @@ const static dCcD_SrcCyl l_cyl_src = {
         {0x0},                                               // mGObjCo
     },                                                       // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        180.0f,              // mRadius
-        290.0f               // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            180.0f,              // mRadius
+            290.0f               // mHeight
+        }  // mCyl
+    }
 };
 
 int daObjIceBlk_c::saveCurrentPos() {
@@ -424,7 +426,7 @@ void daObjIceBlk_c::clrCounter() {
 
 void daObjIceBlk_c::mode_proc_call() {
     typedef void (daObjIceBlk_c::*modeProc)(void);
-    static modeProc l_func[] = {&mode_proc_wait, &mode_proc_walk};
+    static modeProc l_func[] = {&daObjIceBlk_c::mode_proc_wait, &daObjIceBlk_c::mode_proc_walk};
 
     if (getSwbit2() != 0xFF && !fopAcM_isSwitch(this, getSwbit2())) {
         mCcCyl.OnAtSPrmBit(1);
@@ -730,7 +732,7 @@ BOOL daObjIceBlk_c::checkFall() {
 
 void daObjIceBlk_c::event_proc_call() {
     typedef void (daObjIceBlk_c::*actionFunc)(void);
-    static actionFunc l_func[] = {&actionWait, &actionOrderEvent, &actionEvent, &actionDead};
+    static actionFunc l_func[] = {&daObjIceBlk_c::actionWait, &daObjIceBlk_c::actionOrderEvent, &daObjIceBlk_c::actionEvent, &daObjIceBlk_c::actionDead};
 
     (this->*l_func[mAction])();
 }
@@ -739,7 +741,7 @@ void daObjIceBlk_c::actionWait() {
     if (mMode == MODE_PROC_WALK_e && mWalkType == WALK_PUSH) {
         setAction(ACTION_ORDER_EVENT_e);
         fopAcM_orderPotentialEvent(this, 2, 0, 0);
-        eventInfo.onCondition(fopAcCnd_NOEXEC_e);
+        eventInfo.onCondition(dEvtCnd_CANDEMO_e);
     }
 }
 
@@ -752,7 +754,7 @@ void daObjIceBlk_c::actionOrderEvent() {
         camera->mCamera.SetTrimSize(1);
     } else if (mMode == MODE_PROC_WALK_e) {
         fopAcM_orderPotentialEvent(this, 2, 0, 0);
-        eventInfo.onCondition(fopAcCnd_NOEXEC_e);
+        eventInfo.onCondition(dEvtCnd_CANDEMO_e);
     } else {
         setAction(ACTION_WAIT_e);
     }
@@ -833,7 +835,7 @@ static actor_method_class daObjIceBlk_METHODS = {
     (process_method_func)daObjIceBlk_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_IceBlock = {
+actor_process_profile_definition g_profile_Obj_IceBlock = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

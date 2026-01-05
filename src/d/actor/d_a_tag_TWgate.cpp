@@ -172,15 +172,15 @@ void daTagTWGate_c::executeDemoFilone1() {
         if (event_manager.getIsAddvance(staffId)) {
             switch (*cutName) {
             case 0x30303031:
-                dComIfGp_getEvent().setSkipProc(this, dEv_noFinishSkipProc, 0);
+                dComIfGp_getEvent()->setSkipProc(this, dEv_noFinishSkipProc, 0);
                 break;
             }
         }
 
         switch (*cutName) {
         case 0x30303031:
-            if (dComIfGp_getEvent().chkFlag2(8)) {
-                dComIfGp_getEvent().onSkipFade();
+            if (dComIfGp_getEvent()->chkFlag2(8)) {
+                dComIfGp_getEvent()->onSkipFade();
                 mActionID = ACT_DEMO_FILONE_2;
                 mAction = ActionTable[mActionID];
                 (this->**mAction)();
@@ -201,14 +201,11 @@ void daTagTWGate_c::executeDemoFilone1() {
 void daTagTWGate_c::initDemoFilone2() {
     fopAcM_onSwitch(this, getSwitch());
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
-    dComIfG_play_c& play = g_dComIfG_gameInfo.play;
-    dEvent_manager_c& mng = play.getEvtManager();
-    mng.setObjectArchive(eventInfo.getArchiveName());
-    mEventID =
-        mng.getEventIdx(this, l_zevParamTbl[mType].mTalkEventName, -1);
+    dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
+    mEventID = dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mTalkEventName, -1);
 
-    if (play.getEvent().mEventStatus != 0) {
-        dComIfGp_getEvent().reset(this);
+    if (dComIfGp_event_runCheck()) {
+        dComIfGp_getEvent()->reset(this);
         fopAcM_orderChangeEventId(this, mEventID, 1, -1);
     } else {
         fopAcM_orderOtherEventId(this, mEventID, -1, -1, 4, 1);
@@ -251,7 +248,7 @@ void daTagTWGate_c::executeDemoFilone2() {
 
         if (eventInfo.checkCommandDemoAccrpt() && mEventID != -1 &&
             dComIfGp_evmng_endCheck(mEventID)) {
-            dComIfGp_getEvent().reset();
+            dComIfGp_getEvent()->reset();
             field_0x5e0 = 0;
             mActionID = ACT_WAIT;
             mAction = ActionTable[mActionID];
@@ -267,7 +264,7 @@ void daTagTWGate_c::initDemoFilone3() {
     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
     mEventID =
         dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mInEventName, -1);
-    dComIfGp_getEvent().reset(this);
+    dComIfGp_getEvent()->reset(this);
     fopAcM_orderChangeEventId(this, mEventID, 1, -1);
 }
 
@@ -282,7 +279,7 @@ void daTagTWGate_c::executeDemoFilone3() {
             case 0x30303031:
                 break;
             case 0x30303032:
-                dComIfGp_getEvent().setSkipProc(this, dEv_noFinishSkipProc, 0);
+                dComIfGp_getEvent()->setSkipProc(this, dEv_noFinishSkipProc, 0);
                 field_0x5e1 = 0;
                 break;
             case 0x30303033:
@@ -305,8 +302,8 @@ void daTagTWGate_c::executeDemoFilone3() {
             break;
         }
         case 0x30303032: {
-            if (dComIfGp_getEvent().chkFlag2(8)) {
-                dComIfGp_getEvent().onSkipFade();
+            if (dComIfGp_getEvent()->chkFlag2(8)) {
+                dComIfGp_getEvent()->onSkipFade();
                 dComIfGp_setNextStage(l_zevParamTbl[mType].mStage, l_zevParamTbl[mType].mPoint,
                                       l_zevParamTbl[mType].mRoomNo, l_zevParamTbl[mType].mLayer);
             }
@@ -333,8 +330,8 @@ void daTagTWGate_c::executeDemoFilone3() {
             break;
         }
         case 0x30303033:
-            if (dComIfGp_getEvent().chkFlag2(8)) {
-                dComIfGp_getEvent().onSkipFade();
+            if (dComIfGp_getEvent()->chkFlag2(8)) {
+                dComIfGp_getEvent()->onSkipFade();
                 dComIfGp_setNextStage(l_zevParamTbl[mType].mStage,
                                       l_zevParamTbl[mType].mPoint,
                                       l_zevParamTbl[mType].mRoomNo,
@@ -349,7 +346,7 @@ void daTagTWGate_c::executeDemoFilone3() {
 
         if (eventInfo.checkCommandDemoAccrpt() && mEventID != -1 &&
             dComIfGp_evmng_endCheck(mEventID)) {
-            dComIfGp_getEvent().reset();
+            dComIfGp_getEvent()->reset();
             field_0x5e0 = 0;
             mActionID = ACT_WAIT;
             mAction = ActionTable[mActionID];
@@ -372,14 +369,14 @@ void daTagTWGate_c::executeDemoOrdin1() {
         if (evtMng.getIsAddvance(staffId)) {
             switch (*cutName) {
             case '0001':
-                dComIfGp_getEvent().startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
                 break;
             }
         }
         switch (*cutName) {
         case '0001':
-            if (dComIfGp_getEvent().checkSkipEdge()) {
-                dComIfGp_getEvent().onSkipFade();
+            if (dComIfGp_getEvent()->checkSkipEdge()) {
+                dComIfGp_getEvent()->onSkipFade();
                 setAction(ACT_DEMO_ORDIN_2);
             }
             evtMng.cutEnd(staffId);
@@ -394,12 +391,10 @@ void daTagTWGate_c::executeDemoOrdin1() {
 void daTagTWGate_c::initDemoOrdin2() {
     fopAcM_onSwitch(this, getSwitch());
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
-    dComIfG_play_c& play = g_dComIfG_gameInfo.play;
-    dEvent_manager_c& mng = play.getEvtManager();
-    mng.setObjectArchive(eventInfo.getArchiveName());
-    mEventID = mng.getEventIdx(this, l_zevParamTbl[mType].mTalkEventName, 0xff);
-    if (play.getEvent().mEventStatus != 0) {
-        dComIfGp_getEvent().reset(this);
+    dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
+    mEventID = dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mTalkEventName, 0xff);
+    if (dComIfGp_event_runCheck()) {
+        dComIfGp_getEvent()->reset(this);
         fopAcM_orderChangeEventId(this, mEventID, 1, 0xffff);
     } else {
         fopAcM_orderOtherEventId(this, mEventID, 0xff, 0xffff, 4, 1);
@@ -457,7 +452,7 @@ void daTagTWGate_c::initDemoOrdin3() {
     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
     mEventID =
         dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mInEventName, -1);
-    dComIfGp_getEvent().reset(this);
+    dComIfGp_getEvent()->reset(this);
     fopAcM_orderChangeEventId(this, mEventID, 1, -1);
 }
 
@@ -473,7 +468,7 @@ void daTagTWGate_c::executeDemoOrdin3() {
         case '0001':
             break;
         case '0002':
-            dComIfGp_getEvent().startCheckSkipEdge(this);
+            dComIfGp_getEvent()->startCheckSkipEdge(this);
             field_0x5e1 = 0;
             break;
         case '0003':
@@ -499,8 +494,8 @@ void daTagTWGate_c::executeDemoOrdin3() {
         }
         break;
     case '0002':
-        if (dComIfGp_getEvent().checkSkipEdge()) {
-            dComIfGp_getEvent().onSkipFade();
+        if (dComIfGp_getEvent()->checkSkipEdge()) {
+            dComIfGp_getEvent()->onSkipFade();
             dComIfGp_setNextStage(l_zevParamTbl[mType].mStage, l_zevParamTbl[mType].mPoint,
                                   l_zevParamTbl[mType].mRoomNo, l_zevParamTbl[mType].mLayer);
         }
@@ -519,8 +514,8 @@ void daTagTWGate_c::executeDemoOrdin3() {
         }
         break;
     case '0003':
-        if (dComIfGp_getEvent().checkSkipEdge()) {
-            dComIfGp_getEvent().onSkipFade();
+        if (dComIfGp_getEvent()->checkSkipEdge()) {
+            dComIfGp_getEvent()->onSkipFade();
             dComIfGp_setNextStage(
                 l_zevParamTbl[mType].mStage,
                 l_zevParamTbl[mType].mPoint,
@@ -557,14 +552,14 @@ void daTagTWGate_c::executeDemoRanail1() {
         if (evtMng.getIsAddvance(staffId)) {
             switch (*cutName) {
             case '0001':
-                dComIfGp_getEvent().startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
                 break;
             }
         }
         switch (*cutName) {
         case '0001':
-            if (dComIfGp_getEvent().checkSkipEdge()) {
-                dComIfGp_getEvent().onSkipFade();
+            if (dComIfGp_getEvent()->checkSkipEdge()) {
+                dComIfGp_getEvent()->onSkipFade();
                 setAction(ACT_DEMO_RANAIL_2);
             }
             evtMng.cutEnd(staffId);
@@ -579,12 +574,10 @@ void daTagTWGate_c::executeDemoRanail1() {
 void daTagTWGate_c::initDemoRanail2() {
     fopAcM_onSwitch(this, getSwitch());
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
-    dComIfG_play_c& play = g_dComIfG_gameInfo.play;
-    dEvent_manager_c& mng = play.getEvtManager();
-    mng.setObjectArchive(eventInfo.getArchiveName());
-    mEventID = mng.getEventIdx(this, l_zevParamTbl[mType].mTalkEventName, 0xff);
-    if (play.getEvent().mEventStatus != 0) {
-        dComIfGp_getEvent().reset(this);
+    dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
+    mEventID = dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mTalkEventName, 0xff);
+    if (dComIfGp_event_runCheck()) {
+        dComIfGp_getEvent()->reset(this);
         fopAcM_orderChangeEventId(this, mEventID, 1, 0xffff);
     } else {
         fopAcM_orderOtherEventId(this, mEventID, 0xff, 0xffff, 4, 1);
@@ -642,7 +635,7 @@ void daTagTWGate_c::initDemoRanail3() {
     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
     mEventID =
         dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mInEventName, -1);
-    dComIfGp_getEvent().reset(this);
+    dComIfGp_getEvent()->reset(this);
     fopAcM_orderChangeEventId(this, mEventID, 1, -1);
     /* dSv_event_flag_c::F_0071 - Twilight Hyrule Field - Cannot warp to Lanayru */
     dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[170]);
@@ -660,7 +653,7 @@ void daTagTWGate_c::executeDemoRanail3() {
         case '0001':
             break;
         case '0002':
-            dComIfGp_getEvent().startCheckSkipEdge(this);
+            dComIfGp_getEvent()->startCheckSkipEdge(this);
             field_0x5e1 = 0;
             break;
         case '0003':
@@ -685,8 +678,8 @@ void daTagTWGate_c::executeDemoRanail3() {
         }
         break;
     case '0002':
-        if (dComIfGp_getEvent().checkSkipEdge()) {
-            dComIfGp_getEvent().onSkipFade();
+        if (dComIfGp_getEvent()->checkSkipEdge()) {
+            dComIfGp_getEvent()->onSkipFade();
             dComIfGp_setNextStage(l_zevParamTbl[mType].mStage, l_zevParamTbl[mType].mPoint,
                                   l_zevParamTbl[mType].mRoomNo, l_zevParamTbl[mType].mLayer);
         }
@@ -705,8 +698,8 @@ void daTagTWGate_c::executeDemoRanail3() {
         }
         break;
     case '0003':
-        if (dComIfGp_getEvent().checkSkipEdge()) {
-            dComIfGp_getEvent().onSkipFade();
+        if (dComIfGp_getEvent()->checkSkipEdge()) {
+            dComIfGp_getEvent()->onSkipFade();
             dComIfGp_setNextStage(
                 l_zevParamTbl[mType].mStage,
                 l_zevParamTbl[mType].mPoint,
@@ -743,14 +736,14 @@ void daTagTWGate_c::executeDemoHyral1() {
         if (evtMng.getIsAddvance(staffId)) {
             switch (*cutName) {
             case '0001':
-                dComIfGp_getEvent().startCheckSkipEdge(this);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
                 break;
             }
         }
         switch (*cutName) {
         case '0001':
-            if (dComIfGp_getEvent().checkSkipEdge()) {
-                dComIfGp_getEvent().onSkipFade();
+            if (dComIfGp_getEvent()->checkSkipEdge()) {
+                dComIfGp_getEvent()->onSkipFade();
                 setAction(ACT_DEMO_HYRAL_2);
             }
             evtMng.cutEnd(staffId);
@@ -765,12 +758,10 @@ void daTagTWGate_c::executeDemoHyral1() {
 void daTagTWGate_c::initDemoHyral2() {
     fopAcM_onSwitch(this, getSwitch());
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
-    dComIfG_play_c& play = g_dComIfG_gameInfo.play;
-    dEvent_manager_c& mng = play.getEvtManager();
-    mng.setObjectArchive(eventInfo.getArchiveName());
-    mEventID = mng.getEventIdx(this, l_zevParamTbl[mType].mTalkEventName, 0xff);
-    if (play.getEvent().mEventStatus != 0) {
-        dComIfGp_getEvent().reset(this);
+    dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
+    mEventID = dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mTalkEventName, 0xff);
+    if (dComIfGp_event_runCheck()) {
+        dComIfGp_getEvent()->reset(this);
         fopAcM_orderChangeEventId(this, mEventID, 1, 0xffff);
     } else {
         fopAcM_orderOtherEventId(this, mEventID, 0xff, 0xffff, 4, 1);
@@ -826,7 +817,7 @@ void daTagTWGate_c::initDemoHyral3() {
     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
     mEventID =
         dComIfGp_getEventManager().getEventIdx(this, l_zevParamTbl[mType].mInEventName, -1);
-    dComIfGp_getEvent().reset(this);
+    dComIfGp_getEvent()->reset(this);
     fopAcM_orderChangeEventId(this, mEventID, 1, -1);
 }
 
@@ -842,7 +833,7 @@ void daTagTWGate_c::executeDemoHyral3() {
         case '0001':
             break;
         case '0002':
-            dComIfGp_getEvent().startCheckSkipEdge(this);
+            dComIfGp_getEvent()->startCheckSkipEdge(this);
             field_0x5e1 = 0x0;
             break;
         case '0003':
@@ -864,8 +855,8 @@ void daTagTWGate_c::executeDemoHyral3() {
         }
         break;
     case '0002':
-        if (dComIfGp_getEvent().checkSkipEdge()) {
-            dComIfGp_getEvent().onSkipFade();
+        if (dComIfGp_getEvent()->checkSkipEdge()) {
+            dComIfGp_getEvent()->onSkipFade();
             dComIfGp_setNextStage(l_zevParamTbl[mType].mStage, l_zevParamTbl[mType].mPoint,
                                   l_zevParamTbl[mType].mRoomNo, l_zevParamTbl[mType].mLayer);
         }
@@ -883,8 +874,8 @@ void daTagTWGate_c::executeDemoHyral3() {
         }
         break;
     case '0003':
-        if (dComIfGp_getEvent().checkSkipEdge()) {
-            dComIfGp_getEvent().onSkipFade();
+        if (dComIfGp_getEvent()->checkSkipEdge()) {
+            dComIfGp_getEvent()->onSkipFade();
             dComIfGp_setNextStage(l_zevParamTbl[mType].mStage, l_zevParamTbl[mType].mPoint,
                                   l_zevParamTbl[mType].mRoomNo, l_zevParamTbl[mType].mLayer);
         }
@@ -1045,7 +1036,7 @@ static actor_method_class l_daTagTWGate_Method = {
     (process_method_func)daTagTWGate_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_TWGate = {
+actor_process_profile_definition g_profile_Tag_TWGate = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

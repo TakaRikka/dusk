@@ -11,7 +11,7 @@
 #include "d/actor/d_a_npc_tk.h"
 #include "d/d_s_play.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include <cmath.h>
+#include <math>
 
 #define PARTS_ALL 0x3FFFF
 #define PART_TOP_LEFT_UNDER     (1 << 0)
@@ -112,14 +112,14 @@ static char* l_kn2_bmdidx[] = {
 };
 
 static s16 dKn2_CarryOffset[] = {
-    0xD07D,
-    0xBA21,
-    0xBA21,
-    0xE37E,
+    -0x2f83,
+    -0x45df,
+    -0x45df,
+    -0x1c82,
     0x1D9F,
-    0xB36C,
-    0xC9C8,
-    0xC66D,
+    -0x4c94,
+    -0x3638,
+    -0x3993,
 };
 
 static struct {
@@ -691,8 +691,7 @@ void daObj_Kanban2_c::setSmokeEffect(cXyz i_pos) {
     fopAcM_effSmokeSet1(&field_0x9e0, &field_0x9e4, &i_pos, NULL, 0.02 * field_0x600, &tevStr, 1);
 }
 
-/* 80585CB5 0003+00 l_initHIO None */
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daObj_Kanban2_HIO_c l_HIO;
 
@@ -910,7 +909,6 @@ void daObj_Kanban2_c::calcNormalSwing() {
     field_0x626 = sp8;
 }
 
-// NONMATCHING - gameinfo mEvent load, equivalent
 void daObj_Kanban2_c::executeNormal() {
     calcNormalSwing();
     mCcSph.OffAtSetBit();
@@ -954,20 +952,9 @@ void daObj_Kanban2_c::executeNormal() {
         break;
     case 1:
         mInvulnerabilityTimer = 3;
-#if VERSION != VERSION_SHIELD_DEBUG
-        // TODO: gameInfo fake match to force reuse of pointer
-        dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-        if (play->getEvent().runCheck() && eventInfo.checkCommandTalk())
-#else
-        if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk())
-#endif
-        {
+        if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk()) {
             if (mMsgFlow.doFlow(this, NULL, 0)) {
-#if VERSION != VERSION_SHIELD_DEBUG
-                play->getEvent().reset();
-#else
                 dComIfGp_event_reset();
-#endif
                 field_0x9fe = 0;
             }
         } else {
@@ -1660,7 +1647,7 @@ int daObj_Kanban2_c::_delete() {
     dComIfG_resDelete(&mPhase, "Obj_kn2");
 
     if (mInitHIO) {
-        l_initHIO = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -1721,8 +1708,8 @@ int daObj_Kanban2_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!l_initHIO) {
-            l_initHIO = true;
+        if (!hio_set) {
+            hio_set = true;
             mInitHIO = true;
             l_HIO.id = mDoHIO_CREATE_CHILD("細切れ看板", &l_HIO);
         }
@@ -1791,7 +1778,7 @@ static actor_method_class l_daObj_Kanban2_Method = {
     (process_method_func)daObj_Kanban2_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_KANBAN2 = {
+actor_process_profile_definition g_profile_OBJ_KANBAN2 = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

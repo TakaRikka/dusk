@@ -74,7 +74,7 @@ void daKiPot_c::modeWait() {
 s32 daKiPot_c::chkEvent() {
     s32 result = 1;
 
-    if (!dComIfGp_getEvent().isOrderOK()) {
+    if (!dComIfGp_getEvent()->isOrderOK()) {
         result = 0;
 
         if (eventInfo.checkCommandCatch()) {
@@ -114,7 +114,7 @@ static actor_method_class l_daKiPot_Method = {
     (process_method_func)daKiPot_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_KiPot = {
+actor_process_profile_definition g_profile_Obj_KiPot = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

@@ -201,7 +201,7 @@ static actor_method_class l_daRfHole_Method = {
     (process_method_func)daRfHole_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_RfHole = {
+actor_process_profile_definition g_profile_Obj_RfHole = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

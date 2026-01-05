@@ -274,7 +274,7 @@ static actor_method_class daShopItemMethodTable = {
     (process_method_func)daShopItem_Draw,
 };
 
-extern actor_process_profile_definition g_profile_ShopItem = {
+actor_process_profile_definition g_profile_ShopItem = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

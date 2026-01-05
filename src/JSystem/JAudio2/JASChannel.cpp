@@ -18,7 +18,7 @@ OSMessage JASChannel::sBankDisposeList[16];
 int JASChannel::sBankDisposeListSize;
 
 JASChannel::JASChannel(Callback i_callback, void* i_callbackData) :
-    mStatus(STATUS_INACTIVE),
+    mStatus(STATUS_STOP),
     mDspCh(NULL),
     mCallback(i_callback),
     mCallbackData(i_callbackData),
@@ -45,6 +45,7 @@ JASChannel::JASChannel(Callback i_callback, void* i_callbackData) :
 
 JASChannel::~JASChannel() {
     if (mDspCh != NULL) {
+        JUT_WARN(62, "%s","~JASChannel:: mDspCh != NULL");
         mDspCh->drop();
     }
     if (mCallback != NULL) {
@@ -61,7 +62,7 @@ int JASChannel::play() {
     }
     mDspCh = channel;
     channel->start();
-    mStatus = STATUS_ACTIVE;
+    mStatus = STATUS_PLAY;
     return 1;
 }
 
@@ -74,12 +75,12 @@ int JASChannel::playForce() {
     }
     mDspCh = channel;
     channel->start();
-    mStatus = STATUS_ACTIVE;
+    mStatus = STATUS_PLAY;
     return 1;
 }
 
 void JASChannel::release(u16 i_directRelease) {
-    if (mStatus == STATUS_ACTIVE) {
+    if (mStatus == STATUS_PLAY) {
         if (i_directRelease != 0) {
             setDirectRelease(i_directRelease);
         }
@@ -88,17 +89,20 @@ void JASChannel::release(u16 i_directRelease) {
                 mOscillators[i].release();
             }
         }
+        JUT_ASSERT(135, mDspCh);
         mDspCh->setPriority(JSUHiByte(mPriority));
         mStatus = STATUS_RELEASE;
     }
 }
 
-void JASChannel::setOscInit(u32 i_index, JASOscillator::Data const* i_data) {
-    mOscillators[i_index].initStart(i_data);
+void JASChannel::setOscInit(u32 oscnum, JASOscillator::Data const* i_data) {
+    JUT_ASSERT(147, oscnum < OSC_NUM);
+    mOscillators[oscnum].initStart(i_data);
 }
 
-void JASChannel::setMixConfig(u32 i_index, u16 i_config) {
-    mMixConfig[i_index].whole = i_config;
+void JASChannel::setMixConfig(u32 bus, u16 i_config) {
+    JUT_ASSERT(153, bus < BUSOUT_CPUCH);
+    mMixConfig[bus].whole = i_config;
 }
 
 f32 JASChannel::calcEffect(JASChannel::PanVector const* i_vector) {
@@ -110,9 +114,10 @@ f32 JASChannel::calcPan(JASChannel::PanVector const* i_vector) {
         + (i_vector->mChannel - 0.5f);
 }
 
-void JASChannel::effectOsc(u32 i_index, JASOscillator::EffectParams* i_params) {
-    f32 value = mOscillators[i_index].getValue();
-    switch (mOscillators[i_index].getTarget()) {
+void JASChannel::effectOsc(u32 oscnum, JASOscillator::EffectParams* i_params) {
+    JUT_ASSERT(176, oscnum < OSC_NUM);
+    f32 value = mOscillators[oscnum].getValue();
+    switch (mOscillators[oscnum].getTarget()) {
     case JASOscillator::TARGET_PITCH:
         i_params->mPitch *= value;
         break;
@@ -135,6 +140,8 @@ void JASChannel::effectOsc(u32 i_index, JASOscillator::EffectParams* i_params) {
     case JASOscillator::TARGET_6:
         i_params->_18 *= value;
         break;
+    default:
+        JUT_WARN(205, "%s", "Invalid osc target");
     }
 }
 
@@ -207,6 +214,8 @@ s32 JASChannel::dspUpdateCallback(u32 i_type, JASDsp::TChannel* i_channel, void*
         _this->mDspCh = NULL;
         delete _this;
         return -1;
+    default:
+        JUT_WARN(323, "Unexpected JASDSPChannel::UpdateStatus %d", i_type);
     }
     return 0;
 }
@@ -221,6 +230,7 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
     }
 
     if (field_0xdc.field_0x4.field_0x20[0] == 0) {
+        JUT_WARN_DEVICE(346, 2, "%s", "Lost wave data while playing");
         mDspCh->free();
         mDspCh = NULL;
         delete this;
@@ -228,6 +238,7 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
     }
     
     if (checkBankDispose()) {
+        JUT_WARN_DEVICE(357, 2, "%s","Lost bank data while playing");
         mDspCh->free();
         mDspCh = NULL;
         delete this;
@@ -290,11 +301,14 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
 }
 
 s32 JASChannel::updateDSPChannel(JASDsp::TChannel* i_channel) {
+    JUT_ASSERT(444, mStatus == STATUS_PLAY || mStatus == STATUS_RELEASE);
+    JUT_ASSERT(445, mDspCh);
     if (mCallback != NULL) {
         mCallback(CB_PLAY, this, i_channel, mCallbackData);
     }
 
     if (field_0xdc.field_0x4.field_0x20[0] == 0) {
+        JUT_WARN_DEVICE(456, 2, "%s","Lost wave data while playing");
         mDspCh->free();
         mDspCh = NULL;
         delete this;
@@ -302,6 +316,7 @@ s32 JASChannel::updateDSPChannel(JASDsp::TChannel* i_channel) {
     }
     
     if (checkBankDispose()) {
+        JUT_WARN_DEVICE(467, 2, "%s", "Lost bank data while playing");
         mDspCh->free();
         mDspCh = NULL;
         delete this;
@@ -368,9 +383,13 @@ void JASChannel::updateAutoMixer(JASDsp::TChannel* i_channel, f32 param_1, f32 p
     if (JASDriver::getOutputMode() == 0) {
         param_1 *= 0.707f;
     }
-    f32 fvar1 = JASCalc::clamp01(param_1);
-    i_channel->setAutoMixer(fvar1 * JASDriver::getChannelLevel_dsp(), param_2 * 127.5f,
-                            param_4 * 127.5f, param_3 * 127.5f, 0);
+    param_1 = JASCalc::clamp01(param_1);
+
+    u16 r31 = param_1 * JASDriver::getChannelLevel_dsp();
+    u8 r30 = param_2 * 127.5f;
+    u8 r29 = param_4 * 127.5f;
+    u8 r28 = param_3 * 127.5f;
+    i_channel->setAutoMixer(r31, r30, r29, r28, 0);
 }
 
 void JASChannel::updateMixer(f32 i_volume, f32 i_pan, f32 i_fxmix, f32 i_dolby, u16* i_volumeOut) {
@@ -461,12 +480,14 @@ void JASChannel::updateMixer(f32 i_volume, f32 i_pan, f32 i_fxmix, f32 i_dolby, 
                 }
             }
 
-            i_volumeOut[i] = JASCalc::clamp01(volume) * JASDriver::getChannelLevel_dsp();
+            volume = JASCalc::clamp01(volume);
+            i_volumeOut[i] = volume * JASDriver::getChannelLevel_dsp();
         }
     }
 }
 
 void JASChannel::free() {
+    JUT_ASSERT(661, mStatus == STATUS_RELEASE || mStatus == STATUS_STOP);
     mCallback = NULL;
     mCallbackData = NULL;
 }

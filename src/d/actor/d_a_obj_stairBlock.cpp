@@ -174,7 +174,7 @@ static actor_method_class l_daStairBlock_Method = {
     (process_method_func)daStairBlock_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_StairBlock = {
+actor_process_profile_definition g_profile_Obj_StairBlock = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

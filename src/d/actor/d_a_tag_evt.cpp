@@ -43,8 +43,7 @@ int daTag_Evt_c::execute() {
     attention_info.position = eyePos;
     fopAcM_SetRoomNo(this, dComIfGp_roomControl_getStayNo());
     if (field_0x5E4 == 0 || field_0x5E4 == 1) {
-        dComIfG_inf_c* pGameInfo = &g_dComIfG_gameInfo;
-        if (dComIfGp_event_runCheck() != 0) {
+        if (dComIfGp_event_runCheck()) {
             bVar = false;
             int iVar1 = dComIfGp_evmng_getMyStaffId(field_0x568, 0, 0);
             if (!eventInfo.checkCommandTalk()) {
@@ -99,8 +98,7 @@ int daTag_Evt_c::execute() {
             }
         }
         if (bVar != 0 && field_0x570 != 0) {
-            field_0x572 =
-                pGameInfo->play.getEvtManager().getEventIdx(this, l_evtNameList[field_0x570], -1);
+            field_0x572 = dComIfGp_getEventManager().getEventIdx(this, l_evtNameList[field_0x570], -1);
             fopAcM_orderOtherEventId(this, field_0x572, -1, -1, 0, 1);
         }
     } else if (field_0x5E4 == 2 && isDelete()) {
@@ -232,10 +230,10 @@ static actor_method_class daTag_Evt_MethodTable = {
     (process_method_func)daTag_Evt_Draw,
 };
 
-extern actor_process_profile_definition g_profile_TAG_EVT = {
+actor_process_profile_definition g_profile_TAG_EVT = {
     fpcLy_CURRENT_e,
     7,
-    fpcLy_CURRENT_e,
+    fpcPi_CURRENT_e,
     PROC_TAG_EVT,
     &g_fpcLf_Method.base,
     sizeof(daTag_Evt_c),

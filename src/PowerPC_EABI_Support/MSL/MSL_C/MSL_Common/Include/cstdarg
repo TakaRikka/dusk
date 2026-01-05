@@ -1,0 +1,6 @@
+#ifndef _MSL_CSTDARG_H_
+#define _MSL_CSTDARG_H_
+
+#include <va_list>
+
+#endif

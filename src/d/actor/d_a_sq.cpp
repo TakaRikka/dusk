@@ -13,7 +13,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-static bool hioInit;
+static bool hio_set;
 
 static daSq_HIO_c l_HIO;
 
@@ -463,7 +463,7 @@ static int daSq_IsDelete(sq_class* i_this) {
 static int daSq_Delete(sq_class* i_this) {
     dComIfG_resDelete(&i_this->mPhaseReq, "Sq");
     if (i_this->mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
     return 1;
 }
@@ -514,9 +514,9 @@ static cPhs__Step daSq_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
         
-        if (!hioInit) {
+        if (!hio_set) {
             _this->mHIOInit = true;
-            hioInit = true;
+            hio_set = true;
             l_HIO.field_0x4 = -1;
         }
         
@@ -583,7 +583,7 @@ static actor_method_class l_daSq_Method = {
     (process_method_func)daSq_Draw,
 };
 
-extern actor_process_profile_definition g_profile_SQ = {
+actor_process_profile_definition g_profile_SQ = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

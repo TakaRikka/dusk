@@ -198,7 +198,7 @@ static void e_bs_appear(e_bs_class* i_this) {
     }
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_BS_HIO_c l_HIO;
 
@@ -783,7 +783,7 @@ static int daE_BS_Delete(e_bs_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "E_BS");
 
     if (i_this->HIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -848,9 +848,9 @@ static int daE_BS_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             a_this->HIOInit = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("ベビースタル", &l_HIO);
         }
 
@@ -928,7 +928,7 @@ static actor_method_class l_daE_BS_Method = {
     (process_method_func)daE_BS_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_BS = {
+actor_process_profile_definition g_profile_E_BS = {
     fpcLy_CURRENT_e,       // mLayerID
     7,                     // mListID
     fpcPi_CURRENT_e,       // mListPrio

@@ -567,7 +567,7 @@ d/d_vib_pattern.cpp:
 
 d/d_vibration.cpp:
 	.text       start:0x8006F1A8 end:0x80070058
-	.sbss       start:0x8044B090 end:0x8044B0A0
+	.sbss       start:0x8044B090 end:0x8044B098
 	.sdata2     start:0x8044C760 end:0x8044C768
 
 d/d_attention.cpp:
@@ -577,6 +577,7 @@ d/d_attention.cpp:
 	.data       start:0x803A3D58 end:0x803A3DD0
 	.bss        start:0x8041EC40 end:0x8041EC60
 	.sdata      start:0x8044A7A0 end:0x8044A7C0
+	.sbss       start:0x8044B098 end:0x8044B0A0
 	.sdata2     start:0x8044C768 end:0x8044C7F8
 
 d/d_att_dist.cpp:
@@ -1839,6 +1840,7 @@ JSystem/JAudio2/JASTrack.cpp:
 	.rodata     start:0x80395138 end:0x80395180
 	.data       start:0x803BFCA8 end:0x803BFCD0
 	.bss        start:0x8042B7E8 end:0x8042BC58
+	.sbss       start:0x8044B370 end:0x8044B378
 	.sdata2     start:0x8044F6C0 end:0x8044F6F8
 
 JSystem/JAudio2/JASTrackPort.cpp:
@@ -2026,12 +2028,14 @@ JSystem/JAudio2/JAISeMgr.cpp:
 	.rodata     start:0x80395A58 end:0x80395A70
 	.data       start:0x803C39F0 end:0x803C3A18
 	.bss        start:0x8042E1B8 end:0x8042E1D8
+	.sbss       start:0x8044B450 end:0x8044B458
 	.sdata2     start:0x8044F8A8 end:0x8044F8B8
 
 JSystem/JAudio2/JAISeq.cpp:
 	.text       start:0x802A2EAC end:0x802A3BB4
 	.data       start:0x803C3A18 end:0x803C3A68
 	.bss        start:0x8042E1D8 end:0x8042E200
+	.sbss       start:0x8044B458 end:0x8044B460
 	.sdata2     start:0x8044F8B8 end:0x8044F8C8
 
 JSystem/JAudio2/JAISeqDataMgr.cpp:
@@ -2042,6 +2046,7 @@ JSystem/JAudio2/JAISeqMgr.cpp:
 	.text       start:0x802A3C44 end:0x802A45C4
 	.data       start:0x803C3A98 end:0x803C3AB0
 	.bss        start:0x8042E200 end:0x8042E220
+	.sbss       start:0x8044B460 end:0x8044B468
 	.sdata2     start:0x8044F8C8 end:0x8044F8D8
 
 JSystem/JAudio2/JAISound.cpp:
@@ -2082,6 +2087,7 @@ JSystem/JAudio2/JAIStreamDataMgr.cpp:
 JSystem/JAudio2/JAIStreamMgr.cpp:
 	.text       start:0x802A5FA8 end:0x802A6684
 	.bss        start:0x8042E230 end:0x8042E250
+	.sbss       start:0x8044B468 end:0x8044B470
 	.sdata2     start:0x8044F920 end:0x8044F930
 
 JSystem/JAudio2/JAUAudioArcInterpreter.cpp:
@@ -2510,7 +2516,7 @@ JSystem/JUtility/JUTException.cpp:
 	.rodata     start:0x803975F0 end:0x80397B00
 	.data       start:0x803C6760 end:0x803C67F8
 	.bss        start:0x8042E6B8 end:0x8042E9B0
-	.sdata      start:0x8044AA30 end:0x8044AA40
+	.sdata      start:0x8044AA30 end:0x8044AA34
 	.sbss       start:0x8044B648 end:0x8044B668
 	.sdata2     start:0x80450170 end:0x80450180
 
@@ -2524,6 +2530,7 @@ JSystem/JUtility/JUTDirectPrint.cpp:
 JSystem/JUtility/JUTAssert.cpp:
 	.text       start:0x802E6DF8 end:0x802E70F0
 	.bss        start:0x8042E9B0 end:0x8042EAF0
+	.sdata      start:0x8044AA38 end:0x8044AA40
 	.sbss       start:0x8044B670 end:0x8044B678
 	.sdata2     start:0x804501D8 end:0x804501F0
 
@@ -2948,7 +2955,7 @@ dolphin/os/OSThread.c:
 	.data       start:0x803CA978 end:0x803CB188
 	.bss        start:0x80445CB8 end:0x804466B0
 	.sdata      start:0x8044AAF8 end:0x8044AB00
-	.sbss       start:0x8044B800 end:0x8044B818
+	.sbss       start:0x8044B800 end:0x8044B810
 
 dolphin/os/OSTime.c:
 	.text       start:0x80344B98 end:0x80345014
@@ -2956,6 +2963,10 @@ dolphin/os/OSTime.c:
 
 dolphin/os/__ppc_eabi_init.cpp:
 	.text       start:0x80345014 end:0x803450A8
+
+dolphin/os/__start.c:
+	.init       start:0x80003100 end:0x80003458
+	.sbss       start:0x8044B810 end:0x8044B818
 
 dolphin/exi/EXIBios.c:
 	.text       start:0x803450A8 end:0x80346A84
@@ -3523,9 +3534,6 @@ TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/notify.c:
 
 TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/flush_cache.c:
 	.text       start:0x803719E4 end:0x80371A1C
-
-dolphin/os/__start.c:
-	.init       start:0x80003100 end:0x80003458
 
 PowerPC_EABI_Support/Runtime/Src/__mem.c:
 	.init       start:0x80003458 end:0x80003590

@@ -1123,7 +1123,7 @@ static actor_method_class l_daE_TH_BALL_Method = {
     (process_method_func)daE_TH_BALL_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_TH_BALL = {
+actor_process_profile_definition g_profile_E_TH_BALL = {
   fpcLy_CURRENT_e,         // mLayerID
   8,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

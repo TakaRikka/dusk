@@ -66,10 +66,12 @@ const dCcD_SrcGObjInf daTurara_c::mCcDObjInfo = {
 dCcD_SrcCyl daTurara_c::mCcDCyl = {
     daTurara_c::mCcDObjInfo, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        0.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            0.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    }
 };
 
 static u32 const l_bmdIdx[2] = {5, 8};
@@ -416,7 +418,7 @@ static actor_method_class l_daTurara_Method = {
     (process_method_func)daTurara_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Turara = {
+actor_process_profile_definition g_profile_Obj_Turara = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

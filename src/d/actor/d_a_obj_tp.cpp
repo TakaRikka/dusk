@@ -316,10 +316,12 @@ static dCcD_SrcCyl cc_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        50.0f, // mRadius
-        360.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            50.0f, // mRadius
+            360.0f // mHeight
+        } // mCyl
+    }
 };
 
 static int useHeapInit(fopAc_ac_c* i_this) {
@@ -488,7 +490,7 @@ static actor_method_class l_daObj_Tp_Method = {
     (process_method_func)daObj_Tp_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_TP = {
+actor_process_profile_definition g_profile_OBJ_TP = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

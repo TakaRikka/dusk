@@ -2,11 +2,16 @@
 #define Z2FXLINEMGR_H
 
 #include "JSystem/JAudio2/JASGadget.h"
+#include "JSystem/JAHostIO/JAHFrameNode.h"
 
 class JKRArchive;
+class JKRExpHeap;
 class JKRHeap;
 
-struct Z2FxLineEditNode {};
+class Z2FxLineEditNode : public JAHFrameNode {
+public:
+    Z2FxLineEditNode(JKRExpHeap*);
+};
 
 struct Z2FxLineConfig {
     /* 0x00 */ u8 field_0x0;

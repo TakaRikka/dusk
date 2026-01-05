@@ -5,7 +5,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "SSystem/SComponent/c_math.h"
-#include <limits.h>
+#include <climits>
 
 #define RESET_FRAME -99
 

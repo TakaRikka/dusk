@@ -1,7 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JUtility/JUTNameTab.h"
-#include "string.h"
+#include <string>
 
 JUTNameTab::JUTNameTab() {
     setResource(NULL);

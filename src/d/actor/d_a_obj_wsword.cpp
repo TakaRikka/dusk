@@ -19,10 +19,12 @@ static dCcD_SrcCyl l_cyl_src = {
         {0x0},                                       // mGObjCo
     },                                               // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        50.0f,               // mRadius
-        150.0f               // mHeight
-    }                        // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            50.0f,               // mRadius
+            150.0f               // mHeight
+        }                        // mCyl
+    }
 };
 
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -112,7 +114,7 @@ static actor_method_class l_daObjWSword_Method = {
     (process_method_func)daObjWSword_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_WoodenSword = {
+actor_process_profile_definition g_profile_Obj_WoodenSword = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

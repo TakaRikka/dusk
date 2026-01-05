@@ -255,21 +255,21 @@ void daObjFan_c::action() {
     }
 }
 
-static Vec l_offset_posM[4] = {
-    {-150.0f, 150.0f, 0.0f},
-    {-150.0f, -150.0f, 0.0f},
-    {150.0f, 150.0f, 0.0f},
-    {150.0f, -150.0f, 0.0f},
-};
-
-static Vec l_offset_posL[4] = {
-    {-300.0f, 300.0f, 0.0f},
-    {-300.0f, -300.0f, 0.0f},
-    {300.0f, 300.0f, 0.0f},
-    {300.0f, -300.0f, 0.0f},
-};
-
 void daObjFan_c::setCollision() {
+    static Vec l_offset_posM[4] = {
+        {-150.0f, 150.0f, 0.0f},
+        {-150.0f, -150.0f, 0.0f},
+        {150.0f, 150.0f, 0.0f},
+        {150.0f, -150.0f, 0.0f},
+    };
+
+    static Vec l_offset_posL[4] = {
+        {-300.0f, 300.0f, 0.0f},
+        {-300.0f, -300.0f, 0.0f},
+        {300.0f, 300.0f, 0.0f},
+        {300.0f, -300.0f, 0.0f},
+    };
+
     if (field_0xad4 == 0) {
         return;
     }
@@ -335,7 +335,7 @@ static actor_method_class daObjFan_METHODS = {
     (process_method_func)daObjFan_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Fan = {
+actor_process_profile_definition g_profile_Obj_Fan = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

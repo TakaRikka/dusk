@@ -10,19 +10,20 @@ JAISoundStarter::~JAISoundStarter() {}
 
 bool JAISoundStarter::startLevelSound(JAISoundID id, JAISoundHandle* handlePtr, const JGeometry::TVec3<f32>* posPtr) {
     JUT_ASSERT(20, handlePtr);
-    if (*handlePtr) {
-        if ((*handlePtr)->getID() == id) {
-            (*handlePtr)->updateLifeTime(1);
+    JAISoundHandle* handlePtr2 = handlePtr;
+    if (*handlePtr2) {
+        if ((*handlePtr2)->getID() == id) {
+            (*handlePtr2)->updateLifeTime(1);
             if (posPtr != NULL) {
-                (*handlePtr)->setPos(*posPtr);
+                (*handlePtr2)->setPos(*posPtr);
             }
             return true;
         }
     }
 
     bool rt = startSound(id, handlePtr, posPtr);
-    if (rt && *handlePtr) {
-        (*handlePtr)->setLifeTime(1, false);
+    if (rt && *handlePtr2) {
+        (*handlePtr2)->setLifeTime(1, false);
     }
     return rt;
 }

@@ -36,7 +36,7 @@ void JAISe::stopTrack_() {
     case JASTrack::STATUS_RUN:
         inner_.track.stopSeq();
         break;
-    case JASTrack::STATUS_STOP:
+    case JASTrack::STATUS_STOPPED:
         break;
     }
 }
@@ -44,7 +44,7 @@ void JAISe::stopTrack_() {
 void JAISe::startTrack_(const JASSoundParams& params) {
     JUT_ASSERT(72, inner_.track.getStatus() != JASTrack::STATUS_RUN);
 
-    if (inner_.track.getStatus() == JASTrack::STATUS_STOP) {
+    if (inner_.track.getStatus() == JASTrack::STATUS_STOPPED) {
         inner_.track.init();
     }
 
@@ -69,7 +69,7 @@ void JAISe::JAISeCategoryMgr_mixOut_(bool param_0, const JASSoundParams& params,
         if (status_.isPlaying()) {
             if (inner_.field_0x26c) {
                 switch (inner_.track.getStatus()) {
-                case JASTrack::STATUS_STOP:
+                case JASTrack::STATUS_STOPPED:
                     if (status_.field_0x1.flags.flag1) {
                         startTrack_(params);
                     } else {
@@ -116,7 +116,7 @@ void JAISe::JAISeCategoryMgr_calc_() {
 bool JAISe::JAISound_tryDie_() {
     switch (inner_.track.getStatus()) {
     case JASTrack::STATUS_FREE:
-    case JASTrack::STATUS_STOP:
+    case JASTrack::STATUS_STOPPED:
         if (inner_.field_0x278) {
             inner_.mSoundStrategyMgr->virtual4(inner_.field_0x278);
             inner_.field_0x278 = NULL;

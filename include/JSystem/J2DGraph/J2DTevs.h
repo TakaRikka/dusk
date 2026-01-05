@@ -256,15 +256,15 @@ public:
 private:
     /* 0x0 */ u32 mFlags;
 
-    GXIndTexStageID getIndStage() const { return (GXIndTexStageID)(mFlags & 0x03); }
-    GXIndTexFormat getIndFormat() const { return (GXIndTexFormat)((mFlags >> 2) & 0x03); }
-    GXIndTexBiasSel getBiasSel() const { return (GXIndTexBiasSel)((mFlags >> 4) & 0x07); }
-    GXIndTexWrap getWrapS() const { return (GXIndTexWrap)((mFlags >> 8) & 0x07); }
-    GXIndTexWrap getWrapT() const { return (GXIndTexWrap)((mFlags >> 11) & 0x07); }
-    GXIndTexMtxID getMtxSel() const { return (GXIndTexMtxID)((mFlags >> 16) & 0x0F); }
-    GXBool getPrev() const { return (GXBool)((mFlags >> 20) & 0x01); }
-    GXBool getLod() const { return (GXBool)((mFlags >> 21) & 0x01); }
-    GXIndTexAlphaSel getAlphaSel() const { return (GXIndTexAlphaSel)((mFlags >> 22) & 0x03); }
+    u8 getIndStage() const { return (mFlags & 0x03); }
+    u8 getIndFormat() const { return (mFlags >> 2) & 0x03; }
+    u8 getBiasSel() const { return (mFlags >> 4) & 0x07; }
+    u8 getWrapS() const { return (mFlags >> 8) & 0x07; }
+    u8 getWrapT() const { return (mFlags >> 11) & 0x07; }
+    u8 getMtxSel() const { return (mFlags >> 16) & 0x0F; }
+    u8 getPrev() const { return (mFlags >> 20) & 0x01; }
+    u8 getLod() const { return (mFlags >> 21) & 0x01; }
+    u8 getAlphaSel() const { return (mFlags >> 22) & 0x03; }
 };
 
 /**

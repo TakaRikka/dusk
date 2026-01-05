@@ -214,7 +214,7 @@ public:
     virtual u32 getType() { return 'CLOF'; }
     virtual void setMatColor(u32 idx, J3DGXColor const* color) {
         J3D_ASSERT_RANGE(0x121, idx >= 0 && idx < ARRAY_SIZEU(mMatColor));
-        J3D_ASSERT_NULLPTR(0x122, color != 0);
+        J3D_ASSERT_NULLPTR(0x122, color != NULL);
         mMatColor[idx] = *color;
     }
     virtual void setMatColor(u32 idx, J3DGXColor color) {
@@ -227,7 +227,7 @@ public:
     }
     virtual void setColorChanNum(u8 num) { mColorChanNum = num; }
     virtual void setColorChanNum(u8 const* num) {
-        J3D_ASSERT_NULLPTR(0x137, num != 0);
+        J3D_ASSERT_NULLPTR(0x137, num != NULL);
         mColorChanNum = *num;
     }
     virtual u8 getColorChanNum() const { return mColorChanNum; }
@@ -237,7 +237,7 @@ public:
     }
     virtual void setColorChan(u32 idx, J3DColorChan const* chan) {
         J3D_ASSERT_RANGE(0x148, idx >= 0 && idx < ARRAY_SIZEU(mColorChan));
-        J3D_ASSERT_NULLPTR(0x149, chan != 0);
+        J3D_ASSERT_NULLPTR(0x149, chan != NULL);
         mColorChan[idx] = *chan;
     }
     virtual J3DColorChan* getColorChan(u32 idx) {
@@ -245,7 +245,7 @@ public:
         return &mColorChan[idx];
     }
     virtual void setCullMode(u8 const* mode) {
-        J3D_ASSERT_NULLPTR(0x154, mode != 0);
+        J3D_ASSERT_NULLPTR(0x154, mode != NULL);
         mCullMode = *mode;
     }
     virtual void setCullMode(u8 mode) { mCullMode = mode; }
@@ -281,7 +281,7 @@ public:
     virtual u32 getType() { return 'CLAB'; }
     virtual void setAmbColor(u32 idx, J3DGXColor const* color) {
         J3D_ASSERT_RANGE(0x1a3, idx >= 0 && idx < ARRAY_SIZEU(mAmbColor));
-        J3D_ASSERT_NULLPTR(0x1a4, color != 0);
+        J3D_ASSERT_NULLPTR(0x1a4, color != NULL);
         mAmbColor[idx] = *color;
     }
     virtual void setAmbColor(u32 idx, J3DGXColor color) {
@@ -322,7 +322,7 @@ public:
     virtual u32 getType() { return 'CLON'; }
     virtual void setMatColor(u32 idx, J3DGXColor const* color) {
         J3D_ASSERT_RANGE(0x1e9, idx >= 0 && idx < ARRAY_SIZEU(mMatColor));
-        J3D_ASSERT_NULLPTR(0x1ea, color != 0);
+        J3D_ASSERT_NULLPTR(0x1ea, color != NULL);
         mMatColor[idx] = *color;
     }
     virtual void setMatColor(u32 idx, J3DGXColor color) {
@@ -335,7 +335,7 @@ public:
     }
     virtual void setAmbColor(u32 idx, J3DGXColor const* color) {
         J3D_ASSERT_RANGE(0x1fc, idx >= 0 && idx < ARRAY_SIZEU(mAmbColor));
-        J3D_ASSERT_NULLPTR(0x1fd, color != 0);
+        J3D_ASSERT_NULLPTR(0x1fd, color != NULL);
         mAmbColor[idx] = *color;
     }
     virtual void setAmbColor(u32 idx, J3DGXColor color) {
@@ -348,7 +348,7 @@ public:
     }
     virtual void setColorChanNum(u8 num) { mColorChanNum = num; }
     virtual void setColorChanNum(u8 const* num) {
-        J3D_ASSERT_NULLPTR(0x212, num != 0);
+        J3D_ASSERT_NULLPTR(0x212, num != NULL);
         mColorChanNum = *num;
     }
     virtual u8 getColorChanNum() const { return mColorChanNum; }
@@ -358,7 +358,7 @@ public:
     }
     virtual void setColorChan(u32 idx, J3DColorChan const* chan) {
         J3D_ASSERT_RANGE(0x223, idx >= 0 && idx < ARRAY_SIZEU(mColorChan));
-        J3D_ASSERT_NULLPTR(0x224, chan != 0);
+        J3D_ASSERT_NULLPTR(0x224, chan != NULL);
         mColorChan[idx] = *chan;
     }
     virtual J3DColorChan* getColorChan(u32 idx) {
@@ -374,7 +374,7 @@ public:
         return mLight[idx];
     }
     virtual void setCullMode(u8 const* mode) {
-        J3D_ASSERT_NULLPTR(0x23b, mode != 0);
+        J3D_ASSERT_NULLPTR(0x23b, mode != NULL);
         mCullMode = *mode;
     }
     virtual void setCullMode(u8 mode) {
@@ -466,14 +466,14 @@ public:
     virtual s32 countDLSize();
     virtual u32 getType() { return 'TGPT'; }
     virtual void setTexGenNum(u32 const* num) {
-        J3D_ASSERT_NULLPTR(0x335, num != 0);
+        J3D_ASSERT_NULLPTR(0x335, num != NULL);
         mTexGenNum = *num;
     }
     virtual void setTexGenNum(u32 num) { mTexGenNum = num; }
     virtual u32 getTexGenNum() const { return mTexGenNum; }
     virtual void setTexCoord(u32 idx, J3DTexCoord const* coord) {
         J3D_ASSERT_RANGE(0x344, idx >= 0 && idx < ARRAY_SIZEU(mTexCoord));
-        J3D_ASSERT_NULLPTR(0x345, coord != 0);
+        J3D_ASSERT_NULLPTR(0x345, coord != NULL);
         mTexCoord[idx] = *coord;
     }
     virtual J3DTexCoord* getTexCoord(u32 idx) {
@@ -515,7 +515,7 @@ public:
     virtual s32 countDLSize();
     virtual u32 getType() { return 'TGB4'; }
     virtual void setNBTScale(J3DNBTScale const* scale) {
-        J3D_ASSERT_NULLPTR(0x393, scale != 0);
+        J3D_ASSERT_NULLPTR(0x393, scale != NULL);
         mNBTScale = *scale;
     }
     virtual void setNBTScale(J3DNBTScale scale) { mNBTScale = scale; }
@@ -542,7 +542,7 @@ public:
     virtual s32 countDLSize();
     virtual u32 getType() { return 'TGBC'; }
     virtual void setNBTScale(J3DNBTScale const* scale) {
-        J3D_ASSERT_NULLPTR(0x3ca, scale != 0);
+        J3D_ASSERT_NULLPTR(0x3ca, scale != NULL);
         mNBTScale = *scale;
     }
     virtual void setNBTScale(J3DNBTScale scale) { mNBTScale = scale; }
@@ -674,7 +674,7 @@ public:
     virtual void indexToPtr() { indexToPtr_private(mTexNoOffset); }
     virtual u32 getType() { return 'TVPT'; }
     virtual void setTevStageNum(u8 const* num) {
-        J3D_ASSERT_NULLPTR(0x52c, num != 0);
+        J3D_ASSERT_NULLPTR(0x52c, num != NULL);
         mTevStageNum = *num;
     }
     virtual void setTevStageNum(u8 num) { mTevStageNum = num; }
@@ -682,7 +682,7 @@ public:
     virtual s32 countDLSize();
     virtual void setTexNo(u32 idx, u16 const* texNo) {
         J3D_ASSERT_RANGE(0x53b, idx >= 0 && idx < ARRAY_SIZEU(mTexNo));
-        J3D_ASSERT_NULLPTR(0x53c, texNo != 0);
+        J3D_ASSERT_NULLPTR(0x53c, texNo != NULL);
         mTexNo[idx] = *texNo;
     }
     virtual void setTexNo(u32 idx, u16 texNo) {
@@ -695,7 +695,7 @@ public:
     }
     virtual void setTevOrder(u32 idx, J3DTevOrder const* order) {
         J3D_ASSERT_RANGE(0x550, idx >= 0 && idx < ARRAY_SIZEU(mTevOrder));
-        J3D_ASSERT_NULLPTR(0x551, order != 0);
+        J3D_ASSERT_NULLPTR(0x551, order != NULL);
         mTevOrder[idx] = *order;
     }
     virtual void setTevOrder(u32 idx, J3DTevOrder order) {
@@ -708,7 +708,7 @@ public:
     }
     virtual void setTevStage(u32 idx, J3DTevStage const* stage) {
         J3D_ASSERT_RANGE(0x563, idx >= 0 && idx < ARRAY_SIZEU(mTevStage));
-        J3D_ASSERT_NULLPTR(0x564, stage != 0);
+        J3D_ASSERT_NULLPTR(0x564, stage != NULL);
         mTevStage[idx] = *stage;
     }
     virtual void setTevStage(u32 idx, J3DTevStage stage) {
@@ -721,7 +721,7 @@ public:
     }
     virtual void setIndTevStage(u32 idx, J3DIndTevStage const* stage) {
         J3D_ASSERT_RANGE(0x576, idx >= 0 && idx < ARRAY_SIZEU(mIndTevStage));
-        J3D_ASSERT_NULLPTR(0x577, stage != 0);
+        J3D_ASSERT_NULLPTR(0x577, stage != NULL);
         mIndTevStage[idx] = *stage;
     }
     virtual void setIndTevStage(u32 idx, J3DIndTevStage stage) {
@@ -734,7 +734,7 @@ public:
     }
     virtual void setTevColor(u32 idx, J3DGXColorS10 const* color) {
         J3D_ASSERT_RANGE(0x589, idx >= 0 && idx < ARRAY_SIZEU(mTevColor));
-        J3D_ASSERT_NULLPTR(0x58a, color != 0);
+        J3D_ASSERT_NULLPTR(0x58a, color != NULL);
         mTevColor[idx] = *color;
     }
     virtual void setTevColor(u32 idx, J3DGXColorS10 color) {
@@ -747,7 +747,7 @@ public:
     }
     virtual void setTevKColor(u32 idx, J3DGXColor const* color) {
         J3D_ASSERT_RANGE(0x59c, idx >= 0 && idx < ARRAY_SIZEU(mTevKColor));
-        J3D_ASSERT_NULLPTR(0x59d, color != 0);
+        J3D_ASSERT_NULLPTR(0x59d, color != NULL);
         mTevKColor[idx] = *color;
     }
     virtual void setTevKColor(u32 idx, J3DGXColor color) {
@@ -760,7 +760,7 @@ public:
     }
     virtual void setTevKColorSel(u32 idx, u8 const* sel) {
         J3D_ASSERT_RANGE(0x5af, idx >= 0 && idx < ARRAY_SIZEU(mTevKColorSel));
-        J3D_ASSERT_NULLPTR(0x5b0, sel != 0);
+        J3D_ASSERT_NULLPTR(0x5b0, sel != NULL);
         mTevKColorSel[idx] = *sel;
     }
     virtual void setTevKColorSel(u32 idx, u8 sel) {
@@ -818,7 +818,7 @@ public:
     virtual s32 countDLSize();
     virtual void setTexNo(u32 idx, u16 const* no) {
         J3D_ASSERT_RANGE(0x618, idx >= 0 && idx < ARRAY_SIZEU(mTexNo));
-        J3D_ASSERT_NULLPTR(0x619, no != 0);
+        J3D_ASSERT_NULLPTR(0x619, no != NULL);
         mTexNo[idx] = *no;
     }
     virtual void setTexNo(u32 idx, u16 no) {
@@ -831,7 +831,7 @@ public:
     }
     virtual void setTevOrder(u32 idx, J3DTevOrder const* order) {
         J3D_ASSERT_RANGE(0x62d, idx >= 0 && idx < ARRAY_SIZEU(mTevOrder));
-        J3D_ASSERT_NULLPTR(0x62e, order != 0);
+        J3D_ASSERT_NULLPTR(0x62e, order != NULL);
         mTevOrder[idx] = *order;
     }
     virtual void setTevOrder(u32 idx, J3DTevOrder order) {
@@ -847,7 +847,7 @@ public:
     virtual u8 getTevStageNum() const { return 1; }
     virtual void setTevStage(u32 idx, J3DTevStage const* stage) {
         J3D_ASSERT_RANGE(0x64b, idx >= 0 && idx < ARRAY_SIZEU(mTevStage));
-        J3D_ASSERT_NULLPTR(0x64c, stage != 0);
+        J3D_ASSERT_NULLPTR(0x64c, stage != NULL);
         mTevStage[idx] = *stage;
     }
     virtual void setTevStage(u32 idx, J3DTevStage stage) {
@@ -860,7 +860,7 @@ public:
     }
     virtual void setIndTevStage(u32 idx, J3DIndTevStage const* stage) {
         J3D_ASSERT_RANGE(0x65e, idx >= 0 && idx < ARRAY_SIZEU(mIndTevStage));
-        J3D_ASSERT_NULLPTR(0x65f, stage != 0);
+        J3D_ASSERT_NULLPTR(0x65f, stage != NULL);
         mIndTevStage[idx] = *stage;
     }
     virtual void setIndTevStage(u32 idx, J3DIndTevStage stage) {
@@ -908,7 +908,7 @@ public:
     virtual s32 countDLSize();
     virtual void setTexNo(u32 idx, u16 const* texNo) {
         J3D_ASSERT_RANGE(0x6b4, idx >= 0 && idx < ARRAY_SIZEU(mTexNo));
-        J3D_ASSERT_NULLPTR(0x6b5, texNo != 0);
+        J3D_ASSERT_NULLPTR(0x6b5, texNo != NULL);
         mTexNo[idx] = *texNo;
     }
     virtual void setTexNo(u32 idx, u16 texNo) {
@@ -921,7 +921,7 @@ public:
     }
     virtual void setTevOrder(u32 idx, J3DTevOrder const* order) {
         J3D_ASSERT_RANGE(0x6c9, idx >= 0 && idx < ARRAY_SIZEU(mTevOrder));
-        J3D_ASSERT_NULLPTR(0x6ca, order != 0);
+        J3D_ASSERT_NULLPTR(0x6ca, order != NULL);
         mTevOrder[idx] = *order;
     }
     virtual void setTevOrder(u32 idx, J3DTevOrder order) {
@@ -934,7 +934,7 @@ public:
     }
     virtual void setTevColor(u32 idx, J3DGXColorS10 const* color) {
         J3D_ASSERT_RANGE(0x6dc, idx >= 0 && idx < ARRAY_SIZEU(mTevColor));
-        J3D_ASSERT_NULLPTR(0x6dd, color != 0);
+        J3D_ASSERT_NULLPTR(0x6dd, color != NULL);
         mTevColor[idx] = *color;
     }
     virtual void setTevColor(u32 idx, J3DGXColorS10 color) {
@@ -947,7 +947,7 @@ public:
     }
     virtual void setTevKColor(u32 idx, J3DGXColor const* color) {
         J3D_ASSERT_RANGE(0x6ef, idx >= 0 && idx < ARRAY_SIZEU(mTevKColor));
-        J3D_ASSERT_NULLPTR(0x6f0, color != 0);
+        J3D_ASSERT_NULLPTR(0x6f0, color != NULL);
         mTevKColor[idx] = *color;
     }
     virtual void setTevKColor(u32 idx, J3DGXColor color) {
@@ -960,7 +960,7 @@ public:
     }
     virtual void setTevKColorSel(u32 idx, u8 const* sel) {
         J3D_ASSERT_RANGE(0x702, idx >= 0 && idx < ARRAY_SIZEU(mTevKColorSel));
-        J3D_ASSERT_NULLPTR(0x703, sel != 0);
+        J3D_ASSERT_NULLPTR(0x703, sel != NULL);
         mTevKColorSel[idx] = *sel;
     }
     virtual void setTevKColorSel(u32 idx, u8 sel) {
@@ -973,7 +973,7 @@ public:
     }
     virtual void setTevKAlphaSel(u32 idx, u8 const* sel) {
         J3D_ASSERT_RANGE(0x715, idx >= 0 && idx < ARRAY_SIZEU(mTevKAlphaSel));
-        J3D_ASSERT_NULLPTR(0x716, sel != 0);
+        J3D_ASSERT_NULLPTR(0x716, sel != NULL);
         mTevKAlphaSel[idx] = *sel;
     }
     virtual void setTevKAlphaSel(u32 idx, u8 sel) {
@@ -985,14 +985,14 @@ public:
         return mTevKAlphaSel[idx];
     }
     virtual void setTevStageNum(u8 const* num) {
-        J3D_ASSERT_NULLPTR(0x727, num != 0);
+        J3D_ASSERT_NULLPTR(0x727, num != NULL);
         mTevStageNum = *num;
     }
     virtual void setTevStageNum(u8 num) { mTevStageNum = num; }
     virtual u8 getTevStageNum() const { return mTevStageNum; }
     virtual void setTevStage(u32 idx, J3DTevStage const* stage) {
         J3D_ASSERT_RANGE(0x736, idx >= 0 && idx < ARRAY_SIZEU(mTevStage));
-        J3D_ASSERT_NULLPTR(0x737, stage != 0);
+        J3D_ASSERT_NULLPTR(0x737, stage != NULL);
         mTevStage[idx] = *stage;
     }
     virtual void setTevStage(u32 idx, J3DTevStage stage) {
@@ -1005,7 +1005,7 @@ public:
     }
     virtual void setTevSwapModeInfo(u32 idx, J3DTevSwapModeInfo const* info) {
         J3D_ASSERT_RANGE(0x749, idx >= 0 && idx < ARRAY_SIZEU(mTevStage));
-        J3D_ASSERT_NULLPTR(0x74a, info != 0);
+        J3D_ASSERT_NULLPTR(0x74a, info != NULL);
         mTevStage[idx].setTevSwapModeInfo(*info);
     }
     virtual void setTevSwapModeInfo(u32 idx, J3DTevSwapModeInfo info) {
@@ -1014,7 +1014,7 @@ public:
     }
     virtual void setTevSwapModeTable(u32 idx, J3DTevSwapModeTable const* table) {
         J3D_ASSERT_RANGE(0x757, idx >= 0 && idx < ARRAY_SIZEU(mTevSwapModeTable));
-        J3D_ASSERT_NULLPTR(0x758, table != 0);
+        J3D_ASSERT_NULLPTR(0x758, table != NULL);
         mTevSwapModeTable[idx] = *table;
     }
     virtual void setTevSwapModeTable(u32 idx, J3DTevSwapModeTable table) {
@@ -1027,7 +1027,7 @@ public:
     }
     virtual void setIndTevStage(u32 idx, J3DIndTevStage const* stage) {
         J3D_ASSERT_RANGE(0x76a, idx >= 0 && idx < ARRAY_SIZEU(mIndTevStage));
-        J3D_ASSERT_NULLPTR(0x76b, stage != 0);
+        J3D_ASSERT_NULLPTR(0x76b, stage != NULL);
         mIndTevStage[idx] = *stage;
     }
     virtual void setIndTevStage(u32 idx, J3DIndTevStage stage) {
@@ -1084,7 +1084,7 @@ public:
     virtual s32 countDLSize();
     virtual void setTexNo(u32 idx, u16 const* texNo) {
         J3D_ASSERT_RANGE(0x7d5, idx >= 0 && idx < ARRAY_SIZEU(mTexNo));
-        J3D_ASSERT_NULLPTR(0x7d6, texNo != 0);
+        J3D_ASSERT_NULLPTR(0x7d6, texNo != NULL);
         mTexNo[idx] = *texNo;
     }
     virtual void setTexNo(u32 idx, u16 texNo) {
@@ -1097,7 +1097,7 @@ public:
     }
     virtual void setTevOrder(u32 idx, J3DTevOrder const* order) {
         J3D_ASSERT_RANGE(0x7ea, idx >= 0 && idx < ARRAY_SIZEU(mTevOrder));
-        J3D_ASSERT_NULLPTR(0x7eb, order != 0);
+        J3D_ASSERT_NULLPTR(0x7eb, order != NULL);
         mTevOrder[idx] = *order;
     }
     virtual void setTevOrder(u32 idx, J3DTevOrder order) {
@@ -1110,7 +1110,7 @@ public:
     }
     virtual void setTevColor(u32 idx, J3DGXColorS10 const* color) {
         J3D_ASSERT_RANGE(0x7fd, idx >= 0 && idx < ARRAY_SIZEU(mTevColor));
-        J3D_ASSERT_NULLPTR(0x7fe, color != 0);
+        J3D_ASSERT_NULLPTR(0x7fe, color != NULL);
         mTevColor[idx] = *color;
     }
     virtual void setTevColor(u32 idx, J3DGXColorS10 color) {
@@ -1123,7 +1123,7 @@ public:
     }
     virtual void setTevKColor(u32 idx, J3DGXColor const* color) {
         J3D_ASSERT_RANGE(0x810, idx >= 0 && idx < ARRAY_SIZEU(mTevKColor));
-        J3D_ASSERT_NULLPTR(0x811, color != 0);
+        J3D_ASSERT_NULLPTR(0x811, color != NULL);
         mTevKColor[idx] = *color;
     }
     virtual void setTevKColor(u32 idx, J3DGXColor color) {
@@ -1136,7 +1136,7 @@ public:
     }
     virtual void setTevKColorSel(u32 idx, u8 const* sel) {
         J3D_ASSERT_RANGE(0x823, idx >= 0 && idx < ARRAY_SIZEU(mTevKColorSel));
-        J3D_ASSERT_NULLPTR(0x824, sel != 0);
+        J3D_ASSERT_NULLPTR(0x824, sel != NULL);
         mTevKColorSel[idx] = *sel;
     }
     virtual void setTevKColorSel(u32 idx, u8 sel) {
@@ -1149,7 +1149,7 @@ public:
     }
     virtual void setTevKAlphaSel(u32 idx, u8 const* sel) {
         J3D_ASSERT_RANGE(0x836, idx >= 0 && idx < ARRAY_SIZEU(mTevKAlphaSel));
-        J3D_ASSERT_NULLPTR(0x837, sel != 0);
+        J3D_ASSERT_NULLPTR(0x837, sel != NULL);
         mTevKAlphaSel[idx] = *sel;
     }
     virtual void setTevKAlphaSel(u32 idx, u8 sel) {
@@ -1161,14 +1161,14 @@ public:
         return mTevKAlphaSel[idx];
     }
     virtual void setTevStageNum(u8 const* num) {
-        J3D_ASSERT_NULLPTR(0x848, num != 0);
+        J3D_ASSERT_NULLPTR(0x848, num != NULL);
         mTevStageNum = *num;
     }
     virtual void setTevStageNum(u8 num) { mTevStageNum = num; }
     virtual u8 getTevStageNum() const { return mTevStageNum; }
     virtual void setTevStage(u32 idx, J3DTevStage const* stage) {
         J3D_ASSERT_RANGE(0x857, idx >= 0 && idx < ARRAY_SIZEU(mTevStage));
-        J3D_ASSERT_NULLPTR(0x858, stage != 0);
+        J3D_ASSERT_NULLPTR(0x858, stage != NULL);
         mTevStage[idx] = *stage;
     }
     virtual void setTevStage(u32 idx, J3DTevStage stage) {
@@ -1181,7 +1181,7 @@ public:
     }
     virtual void setTevSwapModeInfo(u32 idx, J3DTevSwapModeInfo const* info) {
         J3D_ASSERT_RANGE(0x86a, idx >= 0 && idx < ARRAY_SIZEU(mTevStage));
-        J3D_ASSERT_NULLPTR(0x86b, info != 0);
+        J3D_ASSERT_NULLPTR(0x86b, info != NULL);
         mTevStage[idx].setTevSwapModeInfo(*info);
     }
     virtual void setTevSwapModeInfo(u32 idx, J3DTevSwapModeInfo info) {
@@ -1190,7 +1190,7 @@ public:
     }
     virtual void setTevSwapModeTable(u32 idx, J3DTevSwapModeTable const* table) {
         J3D_ASSERT_RANGE(0x878, idx >= 0 && idx < ARRAY_SIZEU(mTevSwapModeTable));
-        J3D_ASSERT_NULLPTR(0x879, table != 0);
+        J3D_ASSERT_NULLPTR(0x879, table != NULL);
         mTevSwapModeTable[idx] = *table;
     }
     virtual void setTevSwapModeTable(u32 idx, J3DTevSwapModeTable table) {
@@ -1203,7 +1203,7 @@ public:
     }
     virtual void setIndTevStage(u32 idx, J3DIndTevStage const* stage) {
         J3D_ASSERT_RANGE(0x88b, idx >= 0 && idx < ARRAY_SIZEU(mIndTevStage));
-        J3D_ASSERT_NULLPTR(0x88c, stage != 0);
+        J3D_ASSERT_NULLPTR(0x88c, stage != NULL);
         mIndTevStage[idx] = *stage;
     }
     virtual void setIndTevStage(u32 idx, J3DIndTevStage stage) {
@@ -1260,7 +1260,7 @@ public:
     virtual s32 countDLSize();
     virtual void setTexNo(u32 idx, u16 const* texNo) {
         J3D_ASSERT_RANGE(0x8f6, idx >= 0 && idx < ARRAY_SIZEU(mTexNo));
-        J3D_ASSERT_NULLPTR(0x8f7, texNo != 0);
+        J3D_ASSERT_NULLPTR(0x8f7, texNo != NULL);
         mTexNo[idx] = *texNo;
     }
     virtual void setTexNo(u32 idx, u16 texNo) {
@@ -1273,7 +1273,7 @@ public:
     }
     virtual void setTevOrder(u32 idx, J3DTevOrder const* order) {
         J3D_ASSERT_RANGE(0x90b, idx >= 0 && idx < ARRAY_SIZEU(mTevOrder));
-        J3D_ASSERT_NULLPTR(0x90c, order != 0);
+        J3D_ASSERT_NULLPTR(0x90c, order != NULL);
         mTevOrder[idx] = *order;
     }
     virtual void setTevOrder(u32 idx, J3DTevOrder order) {
@@ -1286,7 +1286,7 @@ public:
     }
     virtual void setTevColor(u32 idx, J3DGXColorS10 const* color) {
         J3D_ASSERT_RANGE(0x91e, idx >= 0 && idx < ARRAY_SIZEU(mTevColor));
-        J3D_ASSERT_NULLPTR(0x91f, color != 0);
+        J3D_ASSERT_NULLPTR(0x91f, color != NULL);
         mTevColor[idx] = *color;
     }
     virtual void setTevColor(u32 idx, J3DGXColorS10 color) {
@@ -1299,7 +1299,7 @@ public:
     }
     virtual void setTevKColor(u32 idx, J3DGXColor const* color) {
         J3D_ASSERT_RANGE(0x931, idx >= 0 && idx < ARRAY_SIZEU(mTevKColor));
-        J3D_ASSERT_NULLPTR(0x932, color != 0);
+        J3D_ASSERT_NULLPTR(0x932, color != NULL);
         mTevKColor[idx] = *color;
     }
     virtual void setTevKColor(u32 idx, J3DGXColor color) {
@@ -1312,7 +1312,7 @@ public:
     }
     virtual void setTevKColorSel(u32 idx, u8 const* sel) {
         J3D_ASSERT_RANGE(0x944, idx >= 0 && idx < ARRAY_SIZEU(mTevKColorSel));
-        J3D_ASSERT_NULLPTR(0x945, sel != 0);
+        J3D_ASSERT_NULLPTR(0x945, sel != NULL);
         mTevKColorSel[idx] = *sel;
     }
     virtual void setTevKColorSel(u32 idx, u8 sel) {
@@ -1325,7 +1325,7 @@ public:
     }
     virtual void setTevKAlphaSel(u32 idx, u8 const* sel) {
         J3D_ASSERT_RANGE(0x957, idx >= 0 && idx < ARRAY_SIZEU(mTevKAlphaSel));
-        J3D_ASSERT_NULLPTR(0x958, sel != 0);
+        J3D_ASSERT_NULLPTR(0x958, sel != NULL);
         mTevKAlphaSel[idx] = *sel;
     }
     virtual void setTevKAlphaSel(u32 idx, u8 sel) {
@@ -1337,14 +1337,14 @@ public:
         return mTevKAlphaSel[idx];
     }
     virtual void setTevStageNum(u8 const* num) {
-        J3D_ASSERT_NULLPTR(0x969, num != 0);
+        J3D_ASSERT_NULLPTR(0x969, num != NULL);
         mTevStageNum = *num;
     }
     virtual void setTevStageNum(u8 num) { mTevStageNum = num; }
     virtual u8 getTevStageNum() const { return mTevStageNum; }
     virtual void setTevStage(u32 idx, J3DTevStage const* stage) {
         J3D_ASSERT_RANGE(0x978, idx >= 0 && idx < ARRAY_SIZEU(mTevStage));
-        J3D_ASSERT_NULLPTR(0x979, stage != 0);
+        J3D_ASSERT_NULLPTR(0x979, stage != NULL);
         mTevStage[idx] = *stage;
     }
     virtual void setTevStage(u32 idx, J3DTevStage stage) {
@@ -1357,7 +1357,7 @@ public:
     }
     virtual void setTevSwapModeInfo(u32 idx, J3DTevSwapModeInfo const* info) {
         J3D_ASSERT_RANGE(0x98b, idx >= 0 && idx < ARRAY_SIZEU(mTevStage));
-        J3D_ASSERT_NULLPTR(0x98c, info != 0);
+        J3D_ASSERT_NULLPTR(0x98c, info != NULL);
         mTevStage[idx].setTevSwapModeInfo(*info);
     }
     virtual void setTevSwapModeInfo(u32 idx, J3DTevSwapModeInfo info) {
@@ -1366,7 +1366,7 @@ public:
     }
     virtual void setTevSwapModeTable(u32 idx, J3DTevSwapModeTable const* table) {
         J3D_ASSERT_RANGE(0x999, idx >= 0 && idx < ARRAY_SIZEU(mTevSwapModeTable));
-        J3D_ASSERT_NULLPTR(0x99a, table != 0);
+        J3D_ASSERT_NULLPTR(0x99a, table != NULL);
         mTevSwapModeTable[idx] = *table;
     }
     virtual void setTevSwapModeTable(u32 idx, J3DTevSwapModeTable table) {
@@ -1379,7 +1379,7 @@ public:
     }
     virtual void setIndTevStage(u32 idx, J3DIndTevStage const* stage) {
         J3D_ASSERT_RANGE(0x9ac, idx >= 0 && idx < ARRAY_SIZEU(mIndTevStage));
-        J3D_ASSERT_NULLPTR(0x9ad, stage != 0);
+        J3D_ASSERT_NULLPTR(0x9ad, stage != NULL);
         mIndTevStage[idx] = *stage;
     }
     virtual void setIndTevStage(u32 idx, J3DIndTevStage stage) {
@@ -1671,7 +1671,7 @@ public:
     virtual void setIndTexStageNum(u8 num) { mIndTexStageNum = num; }
     virtual u8 getIndTexStageNum() const { return mIndTexStageNum; }
     virtual void setIndTexOrder(u32 idx, J3DIndTexOrder const* order) {
-        J3D_ASSERT_NULLPTR(0xa94, order != 0);
+        J3D_ASSERT_NULLPTR(0xa94, order != NULL);
         J3D_ASSERT_RANGE(0xa95, idx >= 0 && idx < ARRAY_SIZEU(mIndTexOrder));
         mIndTexOrder[idx] = *order;
     }
@@ -1684,7 +1684,7 @@ public:
         return &mIndTexOrder[idx];
     }
     virtual void setIndTexMtx(u32 idx, J3DIndTexMtx const* mtx) {
-        J3D_ASSERT_NULLPTR(0xaa7, mtx != 0);
+        J3D_ASSERT_NULLPTR(0xaa7, mtx != NULL);
         J3D_ASSERT_RANGE(0xaa8, idx >= 0 && idx < ARRAY_SIZEU(mIndTexMtx));
         mIndTexMtx[idx] = *mtx;
     }
@@ -1697,7 +1697,7 @@ public:
         return &mIndTexMtx[idx];
     }
     virtual void setIndTexCoordScale(u32 idx, J3DIndTexCoordScale const* scale) {
-        J3D_ASSERT_NULLPTR(0xaba, scale != 0);
+        J3D_ASSERT_NULLPTR(0xaba, scale != NULL);
         J3D_ASSERT_RANGE(0xabb, idx >= 0 && idx < ARRAY_SIZEU(mIndTexCoordScale));
         mIndTexCoordScale[idx] = *scale;
     }
@@ -1831,31 +1831,31 @@ public:
     virtual s32 countDLSize();
     virtual u32 getType() { return 'PEFG'; }
     virtual void setAlphaComp(J3DAlphaComp const* alphaComp) {
-        J3D_ASSERT_NULLPTR(0xbf9, alphaComp != 0);
+        J3D_ASSERT_NULLPTR(0xbf9, alphaComp != NULL);
         mAlphaComp = *alphaComp;
     }
     virtual void setAlphaComp(J3DAlphaComp const& alphaComp) { mAlphaComp = alphaComp; }
     virtual J3DAlphaComp* getAlphaComp() { return &mAlphaComp; }
     virtual void setBlend(J3DBlend const* blend) {
-        J3D_ASSERT_NULLPTR(0xc07, blend != 0);
+        J3D_ASSERT_NULLPTR(0xc07, blend != NULL);
         mBlend = *blend;
     }
     virtual void setBlend(J3DBlend const& blend) { mBlend = blend; }
     virtual J3DBlend* getBlend() { return &mBlend; }
     virtual void setZMode(J3DZMode const* zMode) {
-        J3D_ASSERT_NULLPTR(0xc15, zMode != 0);
+        J3D_ASSERT_NULLPTR(0xc15, zMode != NULL);
         mZMode = *zMode;
     }
     virtual void setZMode(J3DZMode zMode) { mZMode = zMode; }
     virtual J3DZMode* getZMode() { return &mZMode; }
     virtual void setZCompLoc(u8 const* zCompLoc) {
-        J3D_ASSERT_NULLPTR(0xc23, zCompLoc != 0);
+        J3D_ASSERT_NULLPTR(0xc23, zCompLoc != NULL);
         mZCompLoc = *zCompLoc;
     }
     virtual void setZCompLoc(u8 zCompLoc) { mZCompLoc = zCompLoc; }
     virtual u8 getZCompLoc() const { return mZCompLoc; }
     virtual void setDither(u8 const* dither) {
-        J3D_ASSERT_NULLPTR(0xc31, dither != 0);
+        J3D_ASSERT_NULLPTR(0xc31, dither != NULL);
         mDither = *dither;
     }
     virtual void setDither(u8 dither) { mDither = dither; }
@@ -1892,31 +1892,31 @@ public:
     virtual void setFog(J3DFog* pFog) { mFog.setFogInfo(pFog->getFogInfo()); }
     virtual J3DFog* getFog() { return &mFog; }
     virtual void setAlphaComp(J3DAlphaComp const* alphaComp) {
-        J3D_ASSERT_NULLPTR(0xc7d, alphaComp != 0);
+        J3D_ASSERT_NULLPTR(0xc7d, alphaComp != NULL);
         mAlphaComp = *alphaComp;
     }
     virtual void setAlphaComp(J3DAlphaComp const& alphaComp) { mAlphaComp = alphaComp; }
     virtual J3DAlphaComp* getAlphaComp() { return &mAlphaComp; }
     virtual void setBlend(J3DBlend const* blend) {
-        J3D_ASSERT_NULLPTR(0xc8b, blend != 0);
+        J3D_ASSERT_NULLPTR(0xc8b, blend != NULL);
         mBlend = *blend;
     }
     virtual void setBlend(J3DBlend const& blend) { mBlend = blend; }
     virtual J3DBlend* getBlend() { return &mBlend; }
     virtual void setZMode(J3DZMode const* zMode) {
-        J3D_ASSERT_NULLPTR(0xc99, zMode != 0);
+        J3D_ASSERT_NULLPTR(0xc99, zMode != NULL);
         mZMode = *zMode;
     }
     virtual void setZMode(J3DZMode zMode) { mZMode = zMode; }
     virtual J3DZMode* getZMode() { return &mZMode; }
     virtual void setZCompLoc(u8 const* zCompLoc) {
-        J3D_ASSERT_NULLPTR(0xca7, zCompLoc != 0);
+        J3D_ASSERT_NULLPTR(0xca7, zCompLoc != NULL);
         mZCompLoc = *zCompLoc;
     }
     virtual void setZCompLoc(u8 zCompLoc) { mZCompLoc = zCompLoc; }
     virtual u8 getZCompLoc() const { return mZCompLoc; }
     virtual void setDither(u8 const* dither) {
-        J3D_ASSERT_NULLPTR(0xcb5, dither != 0);
+        J3D_ASSERT_NULLPTR(0xcb5, dither != NULL);
         mDither = *dither;
     }
     virtual void setDither(u8 dither) { mDither = dither; }

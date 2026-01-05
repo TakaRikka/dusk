@@ -18,7 +18,7 @@ public:
     void SetStartEnd(const cXyz&, const cXyz&);
     void SetStartEnd(const Vec&, const Vec&);
     void CalcPos(Vec*, f32) const;
-    void CalcVec(Vec* pOut) const { VECSubtract(&this->mEnd, &this->mStart, pOut); }
+    void CalcVec(Vec* pOut) const { PSVECSubtract(&this->mEnd, &this->mStart, pOut); }
     void SetEnd(const cXyz&);
 
     void set(const Vec& i_start, const Vec& i_end) { SetStartEnd(i_start, i_end); }
@@ -31,6 +31,7 @@ public:
     cXyz& GetEndP(void) { return mEnd; }
     cXyz& GetEnd() { return mEnd; }
     const cXyz& GetEnd() const { return mEnd; }
+    f32 GetLen() const { return PSVECDistance(&mStart, &mEnd); }
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cM3dGLin));

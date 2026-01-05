@@ -148,13 +148,13 @@ static int daObj_Cb_IsDelete(obj_cb_class* param_0) {
     return 1;
 }
 
-static u8 data_80BC58F8;
+static u8 hio_set;
 
 static int daObj_Cb_Delete(obj_cb_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhase, "Obj_cb");
     if (i_this->field_0x978 != 0) {
-        data_80BC58F8 = 0;
+        hio_set = 0;
     }
     if (i_this->mBgW != NULL) {
         dComIfG_Bgsp().Release(i_this->mBgW);
@@ -211,9 +211,9 @@ static int daObj_Cb_Create(fopAc_ac_c* actor) {
                 return cPhs_ERROR_e;
             }
         }
-        if (data_80BC58F8 == 0) {
+        if (hio_set == 0) {
             i_this->field_0x978 = 1;
-            data_80BC58F8 = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
         fopAcM_SetMtx(i_this, i_this->mModel->getBaseTRMtx());
@@ -233,7 +233,7 @@ static actor_method_class l_daObj_Cb_Method = {
     (process_method_func)daObj_Cb_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_CB = {
+actor_process_profile_definition g_profile_OBJ_CB = {
   fpcLy_CURRENT_e,       // mLayerID
   3,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

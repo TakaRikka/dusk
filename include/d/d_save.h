@@ -1,7 +1,7 @@
 #ifndef D_SAVE_D_SAVE_H
 #define D_SAVE_D_SAVE_H
 
-#include "string.h"
+#include <string>
 #include "SSystem/SComponent/c_xyz.h"
 #include <dolphin/os.h>
 #include "global.h"
@@ -506,10 +506,9 @@ public:
     void setVibration(u8 i_status);
     u8 getPalLanguage() const;
 
-    //TODO: placeholder name, actual name is not known
-    u8 getUnk0() { return unk0; }
-    void setUnk0(u8 i_unk0) { unk0 = i_unk0; }
-
+    // Ruby inline names are from TWW debug.
+    u8 getRuby() { return mRuby; }
+    void setRuby(u8 i_ruby) { mRuby = i_ruby; }
     u8 getAttentionType() { return mAttentionType; }
     void setAttentionType(u8 i_mAttentionType) { mAttentionType = i_mAttentionType; }
     u16 getCalibrateDist() { return mCalibrateDist; }
@@ -532,7 +531,7 @@ public:
     };
 
 private:
-    /* 0x0 */ u8 unk0;
+    /* 0x0 */ u8 mRuby;
     /* 0x1 */ u8 mSoundMode;
     /* 0x2 */ u8 mAttentionType;  // Lock-On Type; 0 : hold, 1 : switch
     /* 0x3 */ u8 mVibration;      // Rumble status

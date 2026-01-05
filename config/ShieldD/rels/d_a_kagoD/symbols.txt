@@ -313,5 +313,5 @@ lbl_256_data_530 = .data:0x00000530; // type:object size:0x24
 @125862 = .data:0x00000738; // type:object size:0xC scope:local
 @125863 = .data:0x0000075C; // type:object size:0x11 scope:local data:string
 lbl_256_data_76D = .data:0x0000076D; // type:object size:0xB7
-l_HIOInit = .bss:0x00000000; // type:object size:0x1 data:byte
+hio_set = .bss:0x00000000; // type:object size:0x1 data:byte
 l_HIO = .bss:0x00000004; // type:object size:0x5C scope:global data:byte

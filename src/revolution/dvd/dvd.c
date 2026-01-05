@@ -1,7 +1,7 @@
 #include <revolution.h>
 #include <revolution/os.h>
 #include <revolution/dvd.h>
-#include <string.h>
+#include <cstring>
 
 #include "os/__os.h"
 #include "__dvd.h"

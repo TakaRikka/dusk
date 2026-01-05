@@ -2,7 +2,7 @@
 #define JPAEMITTER_H
 
 #include <dolphin/gx.h>
-#include <stdint.h>
+#include <stdint>
 #include "JSystem/JParticle/JPAResource.h"
 #include "JSystem/JParticle/JPAList.h"
 #include "JSystem/JParticle/JPARandom.h"
@@ -79,8 +79,6 @@ public:
     virtual void executeAfter(JPABaseEmitter*) {}
     virtual void draw(JPABaseEmitter*) {}
     virtual void drawAfter(JPABaseEmitter*) {}
-    
-    //~JPAEmitterCallBack();
 };
 
 enum {
@@ -160,34 +158,16 @@ public:
         mGlobalPScl.y = height;
     }
     void setGlobalParticleScale(const JGeometry::TVec3<f32>& scale) {
-        mGlobalPScl.set(scale.x, scale.y);
+        mGlobalPScl.set((f32)scale.x, (f32)scale.y);
     }
     void setGlobalParticleScale(f32 scaleX, f32 scaleY) {
         mGlobalPScl.set(scaleX, scaleY);
     }
     void getGlobalParticleScale(JGeometry::TVec3<f32>& scale) const {
-        //TODO: Possible fakematch. Debug and Wii indicate TVec3::set, but using it breaks regalloc
-        //      in dPa_gen_b_light8PcallBack::draw on GCN (where the call to set would normally be
-        //      inlined).
-#if PLATFORM_GCN
-        scale.x = mGlobalPScl.x;
-        scale.y = mGlobalPScl.y;
-        scale.z = 1.0f;
-#else
         scale.set(mGlobalPScl.x, mGlobalPScl.y, 1.0f);
-#endif
     }
     void getGlobalParticleScale(JGeometry::TVec3<f32>* scale) const {
-        //TODO: Possible fakematch. Debug and Wii indicate TVec3::set, but using it breaks regalloc
-        //      in dPa_gen_b_light8PcallBack::draw on GCN (where the call to set would normally be
-        //      inlined).
-#if PLATFORM_GCN
-        scale->x = mGlobalPScl.x;
-        scale->y = mGlobalPScl.y;
-        scale->z = 1.0f;
-#else
         scale->set(mGlobalPScl.x, mGlobalPScl.y, 1.0f);
-#endif
     }
     void setGlobalScale(const JGeometry::TVec3<f32>& scale) {
         mGlobalScl.set(scale);

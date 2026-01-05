@@ -347,7 +347,7 @@ static void npc_du_message(npc_du_class* i_this) {
 
     cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mPlayerAngleY, 2, maxStep);
 
-    if (dComIfGp_event_runCheck() == FALSE && i_this->mPlayerDist > 220.0f) {
+    if (!dComIfGp_event_runCheck() && i_this->mPlayerDist > 220.0f) {
         if (i_this->mSwimFlag == 0) {
             i_this->mAction = ACTION_NORMAL;
         } else {
@@ -502,9 +502,7 @@ static BOOL message(npc_du_class* i_this) {
     return FALSE;
 }
 
-static bool l_initHIO;
-
-static u8 lit_3757[12];
+static bool hio_set;
 
 static daNpc_Du_HIO_c l_HIO;
 
@@ -591,7 +589,7 @@ static int daNpc_Du_Delete(npc_du_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Npc_Du");
 
     if (i_this->mIsFirstSpawn) {
-        l_initHIO = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -660,9 +658,9 @@ static cPhs__Step daNpc_Du_Create(fopAc_ac_c* a_this) {
         }
 
         OS_REPORT("//////////////NPC_DU SET 2 !!\n");
-        if (!l_initHIO) {
+        if (!hio_set) {
             i_this->mIsFirstSpawn = 1;
-            l_initHIO = true;
+            hio_set = true;
             l_HIO.id = mDoHIO_CREATE_CHILD("アヒル", &l_HIO);
         }
 
@@ -704,7 +702,7 @@ static actor_method_class l_daNpc_Du_Method = {
     (process_method_func)daNpc_Du_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_DU = {
+actor_process_profile_definition g_profile_NPC_DU = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

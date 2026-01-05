@@ -1,6 +1,6 @@
 #include <dolphin/dolphin.h>
 #include <dolphin/mtx.h>
-#include "fake_tgmath.h"
+#include "sdk_math.h"
 
 void C_MTX44MultVec(const Mtx44 m, const Vec* src, Vec* dst) {
     Vec vTmp;

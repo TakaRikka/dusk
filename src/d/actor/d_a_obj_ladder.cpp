@@ -13,6 +13,8 @@
 #include "d/d_bg_w.h"
 #include "f_op/f_op_actor_mng.h"
 
+namespace daObjLadder {
+namespace {
 struct Attr {
     /* 0x00 */ f32 field_0x00;
     /* 0x04 */ f32 field_0x04;
@@ -40,7 +42,7 @@ inline static const Attr& attr() {
     return L_attr;
 }
 
-char const daObjLadder::Act_c::M_arcname[5] = "Mhsg";
+char const Act_c::M_arcname[5] = "Mhsg";
 
 struct AttrType {
     /* 0x0 */ s16 field_0x0;
@@ -57,18 +59,18 @@ static AttrType L_attr_type[6] = {
     { 0x06, 0x0E, 300.0f},
 };
 
-static inline const AttrType& attr_type(daObjLadder::Act_c::Type_e type) {
+static inline const AttrType& attr_type(Act_c::Type_e type) {
     return L_attr_type[type];
 }
 
-int daObjLadder::Act_c::CreateHeap() {
+int Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr_type(mType).field_0x0);
     JUT_ASSERT(382, model_data != NULL);
     mModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
     return mModel != NULL;
 }
 
-int daObjLadder::Act_c::Create() {
+int Act_c::Create() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     init_mtx();
     fopAcM_setCullSizeBox(this, -55.0f, -1.0f, -10.0f, 55.0f, attr_type(mType).field_0x4 + 41.0f,
@@ -96,7 +98,7 @@ int daObjLadder::Act_c::Create() {
     return 1;
 }
 
-int daObjLadder::Act_c::Mthd_Create() {
+int Act_c::Mthd_Create() {
     fopAcM_ct(this, Act_c);
     int phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -108,39 +110,39 @@ int daObjLadder::Act_c::Mthd_Create() {
     return phase_state;
 }
 
-int daObjLadder::Act_c::Delete() {
+int Act_c::Delete() {
     return 1;
 }
 
-int daObjLadder::Act_c::Mthd_Delete() {
+int Act_c::Mthd_Delete() {
     int rv = MoveBGDelete();
     dComIfG_resDelete(&mPhase, M_arcname);
     return rv;
 }
 
-void daObjLadder::Act_c::demo_end_reset() {
+void Act_c::demo_end_reset() {
     if (mInDemo && dComIfGp_evmng_endCheck(mEventIdx)) {
         dComIfGp_event_reset();
         mInDemo = false;
     }
 }
 
-void daObjLadder::Act_c::mode_wait_init() {
+void Act_c::mode_wait_init() {
     mMode = MODE_WAIT;
 }
 
-void daObjLadder::Act_c::mode_wait() {
+void Act_c::mode_wait() {
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
         mode_demoreq_init();
     }
 }
 
-void daObjLadder::Act_c::mode_demoreq_init() {
+void Act_c::mode_demoreq_init() {
     mMode = MODE_DEMOREQ;
     mInDemo = false;
 }
 
-void daObjLadder::Act_c::mode_demoreq() {
+void Act_c::mode_demoreq() {
     bool isDemo = false;
     if (dComIfGp_evmng_existence(mEventIdx)) {
         if (eventInfo.checkCommandDemoAccrpt()) {
@@ -158,14 +160,14 @@ void daObjLadder::Act_c::mode_demoreq() {
     }
 }
 
-void daObjLadder::Act_c::mode_vib_init() {
+void Act_c::mode_vib_init() {
     mVibrationTimer = attr().vibrationTimer;
     field_0x610 = 0;
     field_0x612 = 0;
     mMode = MODE_VIB;
 }
 
-void daObjLadder::Act_c::mode_vib() {
+void Act_c::mode_vib() {
     field_0x610 += attr().field_0x16;
     field_0x612 += attr().field_0x18;
     field_0x614 = cM_scos(field_0x610) * attr().field_0x1c;
@@ -175,14 +177,14 @@ void daObjLadder::Act_c::mode_vib() {
     }
 }
 
-void daObjLadder::Act_c::mode_drop_init() {
+void Act_c::mode_drop_init() {
     gravity = -5.0f;
     speed.set(cXyz::Zero);
     field_0x5b6 = attr().field_0x10;
     mMode = MODE_DROP;
 }
 
-void daObjLadder::Act_c::mode_drop() {
+void Act_c::mode_drop() {
     daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().field_0x04, attr().field_0x08);
     if (current.pos.y < mHeight) {
         if (field_0x5b6 == attr().field_0x10) {
@@ -214,16 +216,16 @@ void daObjLadder::Act_c::mode_drop() {
     }
 }
 
-void daObjLadder::Act_c::mode_fell_init() {
+void Act_c::mode_fell_init() {
     mMode = MODE_FELL;
 }
 
-void daObjLadder::Act_c::mode_fell() {
+void Act_c::mode_fell() {
 }
 
-Mtx daObjLadder::Act_c::M_tmp_mtx;
+Mtx Act_c::M_tmp_mtx;
 
-void daObjLadder::Act_c::set_mtx() {
+void Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
@@ -231,16 +233,16 @@ void daObjLadder::Act_c::set_mtx() {
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-void daObjLadder::Act_c::init_mtx() {
+void Act_c::init_mtx() {
     mModel->setBaseScale(scale);
     set_mtx();
 }
 
-int daObjLadder::Act_c::Execute(f32 (**param_1)[3][4]) {
-    static const daObjLadder::Act_c::modeProc mode_proc[5] = {
-        &daObjLadder::Act_c::mode_wait, &daObjLadder::Act_c::mode_demoreq,
-        &daObjLadder::Act_c::mode_vib,  &daObjLadder::Act_c::mode_drop,
-        &daObjLadder::Act_c::mode_fell,
+int Act_c::Execute(f32 (**param_1)[3][4]) {
+    static const Act_c::modeProc mode_proc[5] = {
+        &Act_c::mode_wait, &Act_c::mode_demoreq,
+        &Act_c::mode_vib,  &Act_c::mode_drop,
+        &Act_c::mode_fell,
     };
 
     demo_end_reset();
@@ -251,7 +253,7 @@ int daObjLadder::Act_c::Execute(f32 (**param_1)[3][4]) {
     return 1;
 }
 
-int daObjLadder::Act_c::Draw() {
+int Act_c::Draw() {
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mModel, &tevStr);
     dComIfGd_setListBG();
@@ -261,24 +263,24 @@ int daObjLadder::Act_c::Draw() {
     return 1;
 }
 
-static int Mthd_Create(daObjLadder::Act_c* i_this) {
-    return i_this->Mthd_Create();
+static int Mthd_Create(void* i_this) {
+    return ((Act_c*)i_this)->Mthd_Create();
 }
 
-static int Mthd_Delete(daObjLadder::Act_c* i_this) {
-    return i_this->Mthd_Delete();
+static int Mthd_Delete(void* i_this) {
+    return ((Act_c*)i_this)->Mthd_Delete();
 }
 
-static int Mthd_Execute(daObjLadder::Act_c* i_this) {
-    return i_this->MoveBGExecute();
+static int Mthd_Execute(void* i_this) {
+    return ((Act_c*)i_this)->MoveBGExecute();
 }
 
-static int Mthd_Draw(daObjLadder::Act_c* i_this) {
-    return i_this->MoveBGDraw();
+static int Mthd_Draw(void* i_this) {
+    return ((Act_c*)i_this)->MoveBGDraw();
 }
 
-static int Mthd_IsDelete(daObjLadder::Act_c* i_this) {
-    return i_this->MoveBGIsDelete();
+static int Mthd_IsDelete(void* i_this) {
+    return ((Act_c*)i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Table = {
@@ -289,7 +291,10 @@ static actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Ladder = {
+}
+}
+
+actor_process_profile_definition g_profile_Obj_Ladder = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio
@@ -300,7 +305,7 @@ extern actor_process_profile_definition g_profile_Obj_Ladder = {
   0,                      // mParameters
   &g_fopAc_Method.base,   // sub_method
   23,                     // mPriority
-  &Mthd_Table,         // sub_method
+  &daObjLadder::Mthd_Table,         // sub_method
   0x00040100,             // mStatus
   fopAc_ACTOR_e,          // mActorType
   fopAc_CULLBOX_CUSTOM_e, // cullType

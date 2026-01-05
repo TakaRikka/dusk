@@ -171,9 +171,6 @@ void ShopCam_action_c::move() {
     }
 }
 
-/* 80196544-80196608 190E84 00C4+00 0/0 1/1 0/0 .text
- * setCamDataIdx__16ShopCam_action_cFP10fopAc_ac_cP10fopAc_ac_cP10fopAc_ac_cP10fopAc_ac_cP4cXyzP4cXyz
- */
 void ShopCam_action_c::setCamDataIdx(fopAc_ac_c* param_1, fopAc_ac_c* param_2, fopAc_ac_c* param_3,
                                      fopAc_ac_c* param_4, cXyz* param_5, cXyz* param_6) {
     mCamDataIdx = -1;
@@ -205,9 +202,6 @@ void ShopCam_action_c::setCamDataIdx(fopAc_ac_c* param_1, fopAc_ac_c* param_2, f
     _debugSetCamera();
 }
 
-/* 80196608-801966D4 190F48 00CC+00 0/0 1/1 0/0 .text
- * setCamDataIdx2__16ShopCam_action_cFP10fopAc_ac_cP10fopAc_ac_cP10fopAc_ac_cP10fopAc_ac_cP10fopAc_ac_cP10fopAc_ac_cP10fopAc_ac_cP4cXyzP4cXyz
- */
 void ShopCam_action_c::setCamDataIdx2(fopAc_ac_c* param_1, fopAc_ac_c* param_2, fopAc_ac_c* param_3,
                                       fopAc_ac_c* param_4, fopAc_ac_c* param_5, fopAc_ac_c* param_6,
                                       fopAc_ac_c* param_7, cXyz* param_8, cXyz* param_9) {

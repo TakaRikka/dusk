@@ -189,7 +189,7 @@ static void damage_check(e_yd_class* i_this) {
     }
 }
 
-static u8 data_807F7D68;
+static u8 hio_set;
 
 static daE_YD_HIO_c l_HIO;
 
@@ -1300,7 +1300,7 @@ static int daE_YD_IsDelete(e_yd_class* i_this) {
 static int daE_YD_Delete(e_yd_class* i_this) {
     dComIfG_resDelete(&i_this->field_0x5ac, "E_yd");
     if (i_this->field_0x1268 != 0) {
-        data_807F7D68 = 0;
+        hio_set = 0;
     }
     if (i_this->actor.heap != NULL) {
         i_this->mpMorf->stopZelAnime();
@@ -1423,9 +1423,9 @@ static int daE_YD_Create(fopAc_ac_c* i_this) {
 
         OS_REPORT("//////////////E_YD SET 2 !!\n");
 
-        if (data_807F7D68 == 0) {
+        if (hio_set == 0) {
             ((e_yd_class*)i_this)->field_0x1268 = 1;
-            data_807F7D68 = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -1492,7 +1492,7 @@ static actor_method_class l_daE_YD_Method = {
     (process_method_func)daE_YD_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_YD = {
+actor_process_profile_definition g_profile_E_YD = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

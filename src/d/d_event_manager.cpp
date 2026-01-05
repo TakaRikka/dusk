@@ -13,7 +13,7 @@
 #include "d/d_demo.h"
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_counter.h"
-#include <cstring.h>
+#include <string>
 
 #if DEBUG
 static dEvM_HIO_c l_HIO;
@@ -145,13 +145,13 @@ void dEvent_manager_c::debugBfProc() {
             break;
         case 2:
             if (endCheck(id)) {
-                dComIfGp_getEvent().reset();
+                dComIfGp_getEvent()->reset();
                 l_HIO.m_playtest.field_0xA = 0;
             }
             break;
         case 3:
             if (endCheck(id)) {
-                dComIfGp_getEvent().reset();
+                dComIfGp_getEvent()->reset();
                 l_HIO.m_playtest.field_0xA = 0;
             }
             break;
@@ -617,17 +617,17 @@ void dEvent_manager_c::endProc(s16 evId, BOOL isClose) {
     event->mEventState = 0;
     mCurrentEvType = 0;
     mCurrentEvId = -1;
-    dComIfGp_getEvent().setPtD(NULL);
-    dComIfGp_getEvent().setPtI(NULL);
+    dComIfGp_getEvent()->setPtD(NULL);
+    dComIfGp_getEvent()->setPtI(NULL);
 }
 
 void dEvent_manager_c::Sequencer() {
-    dEvt_control_c& evtControl = dComIfGp_getEvent();
+    dEvt_control_c* evtControl = dComIfGp_getEvent();
     dEvDtEvent_c* event = getEventData(mCurrentEvId);
-    dStage_MapEvent_dt_c* mapdata = evtControl.getStageEventDt();
+    dStage_MapEvent_dt_c* mapdata = evtControl->getStageEventDt();
 
     if (event != NULL) {
-        if (evtControl.chkEventFlag(0x100)) {
+        if (evtControl->chkEventFlag(0x100)) {
             char* name = NULL;
             if (mapdata != NULL) {
                 switch (mapdata->type) {
@@ -645,15 +645,15 @@ void dEvent_manager_c::Sequencer() {
                     || l_HIO.m_enable_skip
                     #endif
                     ) &&
-                    !evtControl.chkFlag2(2)) {
+                    !evtControl->chkFlag2(2)) {
                     int scut_type = dStage_MapEvent_dt_c_getEventSCutType(mapdata);
                     if (scut_type == 2) {
-                        evtControl.onSkipFade();
+                        evtControl->onSkipFade();
                     }
 
-                    fopAc_ac_c* actor = evtControl.getPt1();
+                    fopAc_ac_c* actor = evtControl->getPt1();
                     if (actor == NULL) {
-                        actor = evtControl.getPt2();
+                        actor = evtControl->getPt2();
                     }
 
                     if (actor == NULL) {
@@ -663,13 +663,13 @@ void dEvent_manager_c::Sequencer() {
                     if (actor != NULL) {
                         switch (mapdata->type) {
                         case dStage_MapEvent_dt_TYPE_STB:
-                            evtControl.setSkipProc(actor, dEv_defaultSkipStb, 0);
+                            evtControl->setSkipProc(actor, dEv_defaultSkipStb, 0);
                             break;
                         case dStage_MapEvent_dt_TYPE_ZEV:
-                            evtControl.setSkipProc(actor, dEv_defaultSkipZev, 0);
+                            evtControl->setSkipProc(actor, dEv_defaultSkipZev, 0);
                             break;
                         case dStage_MapEvent_dt_TYPE_MAPTOOLCAMERA:
-                            evtControl.setSkipProc(actor, dEv_defaultSkipProc, 0);
+                            evtControl->setSkipProc(actor, dEv_defaultSkipProc, 0);
                             break;
                         }
                     }
@@ -681,12 +681,12 @@ void dEvent_manager_c::Sequencer() {
 
         if (event->finishCheck()) {
             bool bVar1 = false;
-            if (evtControl.chkFlag2(1)) {
+            if (evtControl->chkFlag2(1)) {
                 bVar1 = true;
             }
 
             int exitId = -1;
-            bool iVar5 = evtControl.chkFlag2(2) != 0;
+            bool iVar5 = evtControl->chkFlag2(2) != 0;
 
             if (mapdata != NULL) {
                 int scut_type = dStage_MapEvent_dt_c_getEventSCutType(mapdata);
@@ -731,10 +731,10 @@ void dEvent_manager_c::Sequencer() {
                     if (!bVar1) {
                         if (iVar5 && mapdata->field_0x9 != 0xFF) {
                             exitId = mapdata->field_0x9;
-                            evtControl.sceneChange(exitId);
+                            evtControl->sceneChange(exitId);
                         } else if (mapdata->data.maptool.field_0x17 != 0xFF) {
                             exitId = mapdata->data.maptool.field_0x17;
-                            evtControl.sceneChange(exitId);
+                            evtControl->sceneChange(exitId);
                         }
                     }
 
@@ -744,10 +744,10 @@ void dEvent_manager_c::Sequencer() {
                     if (!bVar1) {
                         if (iVar5 && mapdata->field_0x9 != 0xFF) {
                             exitId = mapdata->field_0x9;
-                            evtControl.sceneChange(exitId);
+                            evtControl->sceneChange(exitId);
                         } else if (mapdata->field_0x7 != 0xFF) {
                             exitId = mapdata->field_0x7;
-                            evtControl.sceneChange(exitId);
+                            evtControl->sceneChange(exitId);
                         }
                     }
                     break;
@@ -755,10 +755,10 @@ void dEvent_manager_c::Sequencer() {
                     if (!bVar1) {
                         if (iVar5 && mapdata->field_0x9 != 0xFF) {
                             exitId = mapdata->field_0x9;
-                            evtControl.sceneChange(exitId);
+                            evtControl->sceneChange(exitId);
                         } else if (mapdata->field_0x7 != 0xFF) {
                             exitId = mapdata->field_0x7;
-                            evtControl.sceneChange(exitId);
+                            evtControl->sceneChange(exitId);
                         }
                     }
                     break;
@@ -768,7 +768,7 @@ void dEvent_manager_c::Sequencer() {
             if (exitId == -1) {
                 getBase().advanceCut(event);
                 closeProc(event);
-                evtControl.reset();
+                evtControl->reset();
             }
         } else {
             if (event->mEventState == dEvDt_State_START_e) {
@@ -780,7 +780,7 @@ void dEvent_manager_c::Sequencer() {
             unk_0x1b8--;
         }
     } else {
-        if (evtControl.chkEventFlag(0x100)) {
+        if (evtControl->chkEventFlag(0x100)) {
             Z2GetAudioMgr()->setDemoName(NULL);
         }
     }
@@ -990,7 +990,7 @@ int dEvent_manager_c::startCheckOld(const char* eventname) {
 }
 
 int dEvent_manager_c::endCheck(s16 eventID) {
-    s16 compositId = dComIfGp_getEvent().runningEventID(eventID);
+    s16 compositId = dComIfGp_getEvent()->runningEventID(eventID);
     dEvDtEvent_c* event = getEventData(compositId);
     if (event == NULL) {
         return 0;
@@ -1014,7 +1014,7 @@ int dEvent_manager_c::getMyStaffId(const char* staffName, fopAc_ac_c* actor, int
     int n_staff;
     int evtIdx = -1;
 
-    if (dComIfGp_getEvent().getMode() == dEvt_mode_WAIT_e) {
+    if (dComIfGp_getEvent()->getMode() == dEvt_mode_WAIT_e) {
         return -1;
     }
 
@@ -1084,7 +1084,7 @@ int dEvent_manager_c::getMyStaffId(const char* staffName, fopAc_ac_c* actor, int
 }
 
 int dEvent_manager_c::getIsAddvance(int staffId) {
-    if (dComIfGp_getEvent().getMode() == dEvt_mode_WAIT_e) {
+    if (dComIfGp_getEvent()->getMode() == dEvt_mode_WAIT_e) {
         if (OREG_F(8)) {
             // "%s: %d: events not running so don't call."
             OS_REPORT("%s: %d: イベント走ってないので呼ばないでください。\n", __FILE__, 1672);
@@ -1122,7 +1122,7 @@ static int dEvmng_strcmp(const char* strA, char* strB) {
 
 int dEvent_manager_c::getMyActIdx(int staffId, const char* const* action, int n_action,
                                   BOOL param_3, BOOL param_4) {
-    if (dComIfGp_getEvent().getMode() == dEvt_mode_WAIT_e) {
+    if (dComIfGp_getEvent()->getMode() == dEvt_mode_WAIT_e) {
         if (OREG_F(8)) {
             // "%s: %d: events not running so don't call."
             OS_REPORT("%s: %d: イベント走ってないので呼ばないでください。\n", __FILE__, 1733);
@@ -1182,7 +1182,7 @@ int dEvent_manager_c::getMyActIdx(int staffId, const char* const* action, int n_
 
 char* dEvent_manager_c::getMyNowCutName(int staffId) {
     dEvDtCut_c* cut;
-    if (dComIfGp_getEvent().getMode() == dEvt_mode_WAIT_e) {
+    if (dComIfGp_getEvent()->getMode() == dEvt_mode_WAIT_e) {
         if (OREG_F(8)) {
             // "%s: %d: events not running so don't call."
             OS_REPORT("%s: %d: イベント走ってないので呼ばないでください。\n", __FILE__, 1856);
@@ -1203,7 +1203,7 @@ dEvDtData_c* dEvent_manager_c::getMyDataP(int staffId, const char* dataname, BOO
     int index;
     dEvDtCut_c* cut;
 
-    if (dComIfGp_getEvent().getMode() == dEvt_mode_WAIT_e) {
+    if (dComIfGp_getEvent()->getMode() == dEvt_mode_WAIT_e) {
         if (OREG_F(8)) {
             // "%s: %d: events not running so don't call."
             OS_REPORT("%s: %d: イベント走ってないので呼ばないでください。\n", __FILE__, 1886);
@@ -1253,7 +1253,7 @@ int dEvent_manager_c::getMySubstanceNum(int staffId, const char* dataname) {
 
 void dEvent_manager_c::cutEnd(int staffId) {
     dEvDtCut_c* cut;
-    if (dComIfGp_getEvent().getMode() == dEvt_mode_WAIT_e) {
+    if (dComIfGp_getEvent()->getMode() == dEvt_mode_WAIT_e) {
         if (OREG_F(8)) {
             // "%s: %d: events not running so don't call."
             OS_REPORT("%s: %d: イベント走ってないので呼ばないでください。\n", __FILE__, 1984);
@@ -1388,8 +1388,8 @@ fopAc_ac_c* dEvent_manager_c::specialCast_Shutter(s16 actorName, BOOL param_1) {
         goal.z += cM_scos(angle) * 100;
         setGoal(&goal);
 
-        dComIfGp_getEvent().setPt2(shutterActor);
-        dComIfGp_getEvent().setPtD(shutterActor);
+        dComIfGp_getEvent()->setPt2(shutterActor);
+        dComIfGp_getEvent()->setPtD(shutterActor);
     }
 
     return shutterActor;
@@ -1416,7 +1416,7 @@ fopAc_ac_c* dEvent_manager_c::specialCast(const char* staffname, BOOL param_1) {
             shutterActor = specialCast_Shutter(PROC_L5BOSS_DOOR, param_1);
         }
         if (shutterActor != NULL) {
-            dComIfGp_getEvent().onEventFlag(0x10);
+            dComIfGp_getEvent()->onEventFlag(0x10);
         }
     }
 
@@ -1457,7 +1457,7 @@ int dEvent_manager_c::ChkPresentEnd() {
 }
 
 int dEvent_manager_c::checkStartDemo() {
-    if (!dComIfGp_getEvent().runCheck()) {
+    if (!dComIfGp_getEvent()->runCheck()) {
         return FALSE;
     }
 

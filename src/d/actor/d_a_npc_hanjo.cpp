@@ -1102,7 +1102,7 @@ int daNpc_Hanjo_c::cutConversation(int param_1) {
             if (iVar6 == 1) {
                 fopAc_ac_c* actor_p =field_0x10c8[0].getActorP();
                 JUT_ASSERT(2650, NULL != actor_p);
-                dComIfGp_getEvent().setPt2(actor_p);
+                dComIfGp_getEvent()->setPt2(actor_p);
             }
             break;
         }
@@ -1163,7 +1163,7 @@ int daNpc_Hanjo_c::cutPursuitBee(int param_1) {
             setAngle(home.angle.y);
             actor_p = field_0x10c8[0].getActorP();
             JUT_ASSERT(2748, NULL != actor_p);
-            dComIfGp_getEvent().setPt2(actor_p);
+            dComIfGp_getEvent()->setPt2(actor_p);
             for (int i = 0; i < 4; i++) {
                 if (mStones[i].chkActive()) {
                     mStones[i].initialize();
@@ -1309,8 +1309,8 @@ int daNpc_Hanjo_c::cutAppearHawker(int param_1) {
             initTalk(0xcf, NULL);
             strcpy(acStack_98, l_evtList[9].eventName);
             strcat(acStack_98, "@");
-            dComIfGp_getEvent().setSkipZev(this, acStack_98);
-            dComIfGp_getEvent().onSkipFade();
+            dComIfGp_getEvent()->setSkipZev(this, acStack_98);
+            dComIfGp_getEvent()->onSkipFade();
             dComIfGp_getVibration().StartShock( 9, 15, cXyz(0.0f, 1.0f, 0.0f));
             break;
         case 1:
@@ -1747,9 +1747,8 @@ int daNpc_Hanjo_c::takayose(void* param_0) {
         }
     case 2: {
         field_0xe2d = 0;
-        dComIfG_play_c& play = g_dComIfG_gameInfo.play;
-        if (play.getEvent().runCheck()) {
-            if (strcmp("toal_enter01", play.getEvtManager().getRunEventName()) == 0) {
+        if (dComIfGp_event_runCheck() != FALSE) {
+            if (strcmp("toal_enter01", dComIfGp_getEventManager().getRunEventName()) == 0) {
                 dComIfGp_event_setTalkPartner(this);
                 field_0xe2d = 1;
             }
@@ -1835,7 +1834,7 @@ int daNpc_Hanjo_c::takayose(void* param_0) {
                                 }
                             }
                         } else {
-                            if (!g_dComIfG_gameInfo.play.getEvent().mEventStatus &&
+                            if (!dComIfGp_event_runCheck() &&
                                 cLib_calcTimer(&field_0x1710) == 0)
                             {
                                 field_0x1714++;
@@ -1932,7 +1931,7 @@ static actor_method_class daNpc_Hanjo_MethodTable = {
     (process_method_func)daNpc_Hanjo_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_HANJO = {
+actor_process_profile_definition g_profile_NPC_HANJO = {
   fpcLy_CURRENT_e,            // mLayerID
   7,                          // mListID
   fpcPi_CURRENT_e,            // mListPrio

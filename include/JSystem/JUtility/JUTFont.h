@@ -2,7 +2,7 @@
 #define JUTFONT_H
 
 #include "JSystem/JUtility/TColor.h"
-#include "string.h"
+#include <string>
 
 /**
 * @ingroup jsystem-jutility
@@ -114,8 +114,8 @@ public:
         drawString_size(posX, posY, str, strlen(str), visible);
     }
 
-    void drawString_size(int posX, int posY, const char* str, u32 len, bool visible) {
-        drawString_size_scale(posX, posY, getWidth(), getHeight(), str, len, visible);
+    s32 drawString_size(int posX, int posY, const char* str, u32 len, bool visible) {
+        return drawString_size_scale(posX, posY, getWidth(), getHeight(), str, len, visible);
     }
 
     void drawString_scale(f32 posX, f32 posY, f32 width, f32 height, const char* str,
@@ -132,6 +132,10 @@ public:
     bool isValid() const { return mValid; }
     bool isFixed() const { return mFixed; }
     int getFixedWidth() const { return mFixedWidth; }
+    void setFixedWidth(bool fixed, int width) {
+        mFixed = fixed;
+        mFixedWidth = width;
+    }
     int getOffset(int i_no) const { 
         JUTFont::TWidth width;
         getWidthEntry(i_no, &width);

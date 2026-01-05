@@ -159,7 +159,7 @@ static actor_method_class daTreeSh_METHODS = {
     (process_method_func)daTreeSh_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_TREESH = {
+actor_process_profile_definition g_profile_TREESH = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

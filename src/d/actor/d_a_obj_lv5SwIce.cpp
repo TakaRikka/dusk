@@ -80,10 +80,12 @@ const dCcD_SrcGObjInf daLv5SwIce_c::mCcDObjInfo = {
 dCcD_SrcCyl daLv5SwIce_c::mCcDCyl = {
     daLv5SwIce_c::mCcDObjInfo,
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,                // mRadius
-        0.0f                 // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,                // mRadius
+            0.0f                 // mHeight
+        }  // mCyl
+    }
 };
 
 void daLv5SwIce_c::procMain() {
@@ -197,7 +199,7 @@ static actor_method_class l_daLv5SwIce_Method = {
     (process_method_func)daLv5SwIce_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv5SwIce = {
+actor_process_profile_definition g_profile_Obj_Lv5SwIce = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

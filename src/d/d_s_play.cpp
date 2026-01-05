@@ -61,10 +61,8 @@ static OSTime resPreLoadTime1;
 
 static dScnPly_preLoad_HIO_c g_preLoadHIO;
 
-/* 80451124 0001+00 data_80451124 None */
 s8 dScnPly_c::pauseTimer;
 
-/* 80451125 0003+00 nextPauseTimer__9dScnPly_c None */
 s8 dScnPly_c::nextPauseTimer;
 
 s8 dScnPly_c::calcPauseTimer() {
@@ -191,7 +189,7 @@ static int dScnPly_Execute(dScnPly_c* i_this) {
     dKy_itudemo_se();
     if (!dComIfGp_isPauseFlag()) {
         dDemo_c::update();
-        dComIfGp_getEvent().Step();
+        dComIfGp_getEvent()->Step();
         dComIfGp_getAttention()->Run();
     }
     return 1;
@@ -732,7 +730,7 @@ static void dScnPly_Create(scene_class* i_this) {
     dComLbG_PhaseHandler(&static_cast<dScnPly_c*>(i_this)->field_0x1c4, l_method, i_this);
 }
 
-static leafdraw_method_class l_dScnPly_Method = {
+static scene_method_class l_dScnPly_Method = {
     (process_method_func)dScnPly_Create,  (process_method_func)dScnPly_Delete,
     (process_method_func)dScnPly_Execute, (process_method_func)dScnPly_IsDelete,
     (process_method_func)dScnPly_Draw,
@@ -748,7 +746,7 @@ scene_process_profile_definition g_profile_PLAY_SCENE = {
     0,                                         // mSizeOther
     0,                                         // mParameters
     &g_fopScn_Method.base,                    // sub_method
-    (process_method_class*)&l_dScnPly_Method,  // mpMtd
+    &l_dScnPly_Method,  // mpMtd
 };
 
 scene_process_profile_definition g_profile_OPENING_SCENE = {
@@ -761,5 +759,5 @@ scene_process_profile_definition g_profile_OPENING_SCENE = {
     0,                                         // mSizeOther
     0,                                         // mParameters
     &g_fopScn_Method.base,                    // sub_method
-    (process_method_class*)&l_dScnPly_Method,  // mpMtd
+    &l_dScnPly_Method,  // mpMtd
 };

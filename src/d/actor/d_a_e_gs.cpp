@@ -47,7 +47,7 @@ static int daE_GS_Draw(e_gs_class* a_this) {
     return 1;
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_GS_HIO_c l_HIO;
 
@@ -158,7 +158,7 @@ static int daE_GS_Delete(e_gs_class* a_this) {
     dComIfG_resDelete(&a_this->phase, "E_gs");
 
     if (a_this->hio_init) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -202,9 +202,9 @@ static int daE_GS_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             a_this->hio_init = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("幽霊兵士", &l_HIO);
         }
 
@@ -232,7 +232,7 @@ static actor_method_class l_daE_GS_Method = {
     (process_method_func)daE_GS_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_GS = {
+actor_process_profile_definition g_profile_E_GS = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

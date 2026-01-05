@@ -2,15 +2,6 @@
 #include "critical_regions.h"
 #include "errno.h"
 
-long ftell(FILE* stream) {
-    int retval;
-
-    __begin_critical_region(stdin_access);
-    retval = (long)_ftell(stream);
-    __end_critical_region(stdin_access);
-    return retval;
-}
-
 int _ftell(FILE* file) {
     int charsInUndoBuffer = 0;
     int position;
@@ -43,12 +34,18 @@ int _ftell(FILE* file) {
     return (position);
 }
 
+long ftell(FILE* stream) {
+    int retval;
+
+    __begin_critical_region(stdin_access);
+    retval = (long)_ftell(stream);
+    __end_critical_region(stdin_access);
+    return retval;
+}
+
 int _fseek(FILE* file, unsigned long offset, int whence) {
     int bufferCode;
     int pos;
-    int adjust;
-    unsigned long state;
-    int buffLen;
 
     unsigned char* ptr;
 
@@ -68,38 +65,7 @@ int _fseek(FILE* file, unsigned long offset, int whence) {
 
     if (whence == SEEK_CUR) {
         whence = SEEK_SET;
-        adjust = 0;
-        if ((file->file_mode.file_kind != 1 && file->file_mode.file_kind != 2) ||
-            file->file_state.error != 0)
-        {
-            errno = 0x28;
-            pos = -1;
-        } else {
-            state = file->file_state.io_state;
-            if (state == 0) {
-                pos = file->position;
-            } else {
-                pos = file->buffer_position;
-                ptr = file->buffer;
-                buffLen = (file->buffer_ptr - ptr);
-                pos += buffLen;
-                if ((state >= 3)) {
-                    adjust = (state - 2);
-                    pos -= adjust;
-                }
-
-                if (file->file_mode.binary_io == 0) {
-                    int i;
-                    for (i = (buffLen - adjust); i != 0; i--) {
-                        unsigned char c = *ptr;
-                        ptr++;
-                        if (c == 10) {
-                            pos++;
-                        }
-                    }
-                }
-            }
-        }
+        pos = _ftell(file);
         offset += pos;
     }
 

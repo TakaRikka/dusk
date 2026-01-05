@@ -202,7 +202,7 @@ static actor_method_class l_daTkraDai_Method = {
     (process_method_func)daTkraDai_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_TakaraDai = {
+actor_process_profile_definition g_profile_Obj_TakaraDai = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

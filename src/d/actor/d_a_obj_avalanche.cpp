@@ -298,7 +298,7 @@ static actor_method_class daObjAvalanche_METHODS = {
     (process_method_func)daObjAvalanche_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Avalanche = {
+actor_process_profile_definition g_profile_Obj_Avalanche = {
     fpcLy_CURRENT_e,          // mLayerID
     3,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

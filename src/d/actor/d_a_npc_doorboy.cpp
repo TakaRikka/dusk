@@ -658,7 +658,7 @@ bool daNpcDoorBoy_c::talk(void* param_1) {
                         field_0xdf0 = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, -1, NULL, NULL);
                         if (field_0xdf0 != fpcM_ERROR_PROCESS_ID_e) {
                             s16 eventIdx = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);
-                            dComIfGp_getEvent().reset(this);
+                            dComIfGp_getEvent()->reset(this);
                             fopAcM_orderChangeEventId(this, eventIdx, 1, 0xFFFF);
                             field_0x9ec = true;
                             setAction(&daNpcDoorBoy_c::wait);
@@ -699,7 +699,7 @@ bool daNpcDoorBoy_c::demo(void* param_1) {
             break;
 
         case 2:
-            if (dComIfGp_event_runCheck() != 0 && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
                 if (staffId != -1) {
@@ -864,7 +864,7 @@ static actor_method_class daNpcDoorBoy_MethodTable = {
     (process_method_func)daNpcDoorBoy_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_DOORBOY = {
+actor_process_profile_definition g_profile_NPC_DOORBOY = {
   fpcLy_CURRENT_e,           // mLayerID
   7,                         // mListID
   fpcPi_CURRENT_e,           // mListPrio

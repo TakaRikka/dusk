@@ -67,10 +67,8 @@ void daPy_boomerangMove_c::initOffset(cXyz const* i_offset) {
 
 daMidna_c* daPy_py_c::m_midnaActor;
 
-/* 8045101C 0002+00 data_8045101C m_dropAngleY__20daPy_boomerangMove_c */
 s16 daPy_boomerangMove_c::m_dropAngleY;
 
-/* 8045101E 0002+00 data_8045101E m_eventKeepFlg__20daPy_boomerangMove_c */
 s16 daPy_boomerangMove_c::m_eventKeepFlg;
 
 int daPy_boomerangMove_c::posMove(cXyz* param_0, s16* param_1, fopAc_ac_c* param_2, s16 param_3) {

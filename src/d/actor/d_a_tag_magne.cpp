@@ -56,7 +56,7 @@ static actor_method_class l_daTagMagne_Method = {
     (process_method_func)NULL,
 };
 
-extern actor_process_profile_definition g_profile_Tag_Magne = {
+actor_process_profile_definition g_profile_Tag_Magne = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

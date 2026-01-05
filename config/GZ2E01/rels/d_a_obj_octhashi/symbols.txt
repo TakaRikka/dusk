@@ -82,4 +82,4 @@ __vt__8cM3dGSph = .data:0x000000B0; // type:object size:0xC scope:global
 __vt__8cM3dGCyl = .data:0x000000BC; // type:object size:0xC scope:global
 __vt__8cM3dGAab = .data:0x000000C8; // type:object size:0xC scope:global
 __vt__15daObjOCTHASHI_c = .data:0x000000D4; // type:object size:0x28 scope:global
-l_cyl_height_init = .bss:0x00000000; // type:object size:0x1 scope:local data:byte
+l_cyl_height_init = .bss:0x00000000; // type:object size:0x1 scope:local align:1 data:byte

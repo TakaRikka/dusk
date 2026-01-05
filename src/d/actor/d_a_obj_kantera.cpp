@@ -23,10 +23,12 @@ const static dCcD_SrcCyl l_cyl_src = {
         {0x0},                                               // mGObjCo
     },                                                       // mObjInf
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        20.0f,               // mRadius
-        40.0f                // mHeight
-    }                        // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            20.0f,               // mRadius
+            40.0f                // mHeight
+        }                        // mCyl
+    }                            // mCylAttr
 };
 
 static f32 Reflect(cXyz* i_xyz, cBgS_PolyInfo const& param_2, f32 param_3) {
@@ -260,7 +262,7 @@ static actor_method_class l_daItemKantera_Method = {
     (process_method_func)daItemKantera_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Kantera = {
+actor_process_profile_definition g_profile_Obj_Kantera = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

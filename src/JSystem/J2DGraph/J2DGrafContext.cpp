@@ -5,6 +5,9 @@
 
 J2DGrafContext::J2DGrafContext(f32 x, f32 y, f32 width, f32 height)
     : mBounds(x, y, x + width, y + height), mScissorBounds(x, y, x + width, y + height) {
+    if (x < 0.0f || y < 0.0f) {
+        OS_REPORT("J2DWarning::ViewPort-Bounds \"Avoid using negative values for left or top.\"\n");
+    }
     JUtility::TColor color(-1);
     setColor(color);
     setLineWidth(6);
@@ -81,13 +84,15 @@ void J2DGrafContext::scissor(JGeometry::TBox2<f32> const& bounds) {
 }
 
 void J2DGrafContext::place(JGeometry::TBox2<f32> const& bounds) {
+    if (bounds.i.x < 0.0f || bounds.i.y < 0.0f) {
+        if (mBounds.i.x >= 0.0f && mBounds.i.y >= 0.0f) {
+            OS_REPORT("J2DWarning::ViewPort-Bounds \"Avoid using negative values for left or top.\"\n");
+        }
+    }
     mBounds = bounds;
     mScissorBounds = bounds;
 }
 
-/* 802E9118-802E9234 2E3A58 011C+00 1/1 4/4 0/0 .text
- * setColor__14J2DGrafContextFQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColorQ28JUtility6TColor
- */
 void J2DGrafContext::setColor(JUtility::TColor colorTL, JUtility::TColor colorTR,
                               JUtility::TColor colorBR, JUtility::TColor colorBL) {
     mColorTL = colorTL;

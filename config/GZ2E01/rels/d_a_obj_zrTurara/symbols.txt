@@ -63,4 +63,4 @@ __vt__14mDoHIO_entry_c = .data:0x00000160; // type:object size:0xC scope:global
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 @3651 = .bss:0x00000008; // type:object size:0xC scope:local
 l_HIO = .bss:0x00000014; // type:object size:0xC scope:global data:byte
-init$1683 = .bss:0x00000020; // type:object size:0x1 data:byte
+init$1683 = .bss:0x00000020; // type:object size:0x1 scope:local align:1 data:byte

@@ -14,7 +14,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
 
-static bool hioInit;
+static bool hio_set;
 
 static daObj_Food_HIO_c l_HIO;
 
@@ -389,7 +389,7 @@ static int daObj_Food_IsDelete(obj_food_class* i_this) {
 static int daObj_Food_Delete(obj_food_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Obj_fd");
     if (i_this->mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
     if (i_this->heap != NULL) {
         i_this->mSound.deleteObject();
@@ -433,9 +433,9 @@ static cPhs__Step daObj_Food_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (!hioInit) {
+        if (!hio_set) {
             _this->mHIOInit = true;
-            hioInit = true;
+            hio_set = true;
             l_HIO.field_0x4 = -1;
         }
 
@@ -502,7 +502,7 @@ static actor_method_class l_daObj_Food_Method = {
     (process_method_func)daObj_Food_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_FOOD = {
+actor_process_profile_definition g_profile_OBJ_FOOD = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

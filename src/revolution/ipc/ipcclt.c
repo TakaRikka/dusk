@@ -2,7 +2,7 @@
 #include <revolution/private/iosrestypes.h>
 #include <revolution/os.h>
 #include <revolution/ipc.h>
-#include <string.h>
+#include <cstring>
 
 /* macro for matching __ipcQueueRequest */
 #define diff(a, b)                                                           \

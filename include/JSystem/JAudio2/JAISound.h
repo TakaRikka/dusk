@@ -6,6 +6,36 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
 
+class JAISound;
+
+/**
+ * @ingroup jsystem-jaudio
+ * 
+ */
+class JAISoundHandle {
+public:
+    JAISoundHandle() {sound_ = NULL;};
+    ~JAISoundHandle() { releaseSound(); }
+
+    bool isSoundAttached() const { return sound_ != NULL; }
+
+    JAISound* getSound() {
+        JUT_ASSERT(41, sound_ != NULL);
+        return sound_;
+    }
+
+    JAISound* operator->() const {
+        JUT_ASSERT(58, sound_ != NULL);
+        return sound_;
+    }
+
+    operator bool() const { return isSoundAttached(); }
+
+    void releaseSound();
+
+    JAISound* sound_;
+};
+
 /**
  * @ingroup jsystem-jaudio
  * 
@@ -63,7 +93,7 @@ struct JAISoundStatus_ {
     bool isMute() const { return field_0x0.flags.mute; }
     bool isPaused() const { return field_0x0.flags.paused; }
     void pauseWhenOut() {
-        field_0x1.flags.flag6 = 1;
+        field_0x1.flags.flag3 = 1;
     }
 
     /* 0x0 */ union {
@@ -319,7 +349,7 @@ public:
         return audible_ != NULL;
     }
 
-    JAISoundFader& getFader() { return fader_; }
+    JAISoundFader* getFader() const { return (JAISoundFader*)&fader_; }
     void fadeIn(u32 maxSteps) { fader_.fadeInFromOut(maxSteps); }
     void fadeOut(u32 maxSteps) { fader_.fadeOut(maxSteps); }
 

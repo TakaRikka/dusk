@@ -251,7 +251,7 @@ JAISoundChild* JAIStream::getChild(int index) {
     if (children_[index] == NULL) {
          children_[index] = new JAISoundChild();
         if (children_[index] == NULL) {
-            JUT_WARN(370, "%s", "JASPoolAllocObject::<JAISoundChild>::operator new failed .")
+            JUT_WARN(370, "%s", "JASPoolAllocObject::<JAISoundChild>::operator new failed .\n")
         }
     }
     return children_[index];

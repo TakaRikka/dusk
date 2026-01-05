@@ -82,4 +82,8 @@ inline u32 JKRDecompExpandSize(u8* pBuf) {
     return (pBuf[4] << 0x18) | (pBuf[5] << 0x10) | (pBuf[6] << 8) | pBuf[7];
 }
 
+inline void JKRDecompress_SendCommand(JKRDecompCommand* command) {
+    JKRDecomp::sendCommand(command);
+}
+
 #endif /* JKRDECOMP_H */

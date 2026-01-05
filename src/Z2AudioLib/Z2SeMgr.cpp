@@ -77,7 +77,7 @@ void Z2SeMgr::modHeightAtCamera(const Vec** param_0) {
             for (i = 0; i < 8; i++) {
                 if (mModY[i] == NULL) {
                     idx = i;
-                    mModY[i] = *param_0;
+                    mModY[idx] = *param_0;
                     break;
                 }
             }
@@ -752,71 +752,77 @@ void Z2SeMgr::messageSePlay(u16 param_0, Vec* param_1, s8 param_2) {
 }
 
 void Z2SeMgr::talkInSe() {
-    if (Z2GetSceneMgr()->isInGame()) {
-        if (Z2GetStatusMgr()->getDemoStatus() == 13) {
-            seMoveVolumeAll(0.0f, 0);
-        }
+    if (!Z2GetSceneMgr()->isInGame()) {
+        return;
+    }
 
-        JAISeMgr* seMgr = Z2GetSoundMgr()->getSeMgr();
-        seMgr->getCategory(0)->getParams()->moveVolume(Z2Param::VOL_SE_SYSTEM_TALKING, 2);
-        seMgr->getCategory(1)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_VOICE_TALKING, 2);
-        seMgr->getCategory(2)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_MOTION_TALKING, 2);
-        seMgr->getCategory(3)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_FOOTNOTE_TALKING, 2);
-        seMgr->getCategory(4)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_TALKING, 2);
-        seMgr->getCategory(5)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_TALKING, 2);
-        seMgr->getCategory(6)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_MOVE_TALKING, 2);
-        seMgr->getCategory(7)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_TALKING, 2);
-        seMgr->getCategory(8)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_TALKING, 2);
+    if (Z2GetStatusMgr()->getDemoStatus() == 13) {
+        seMoveVolumeAll(0.0f, 0);
+    }
 
-        if (Z2GetStatusMgr()->getDemoStatus() != 12) {
-            seMgr->getCategory(9)->getParams()->moveVolume(Z2Param::VOL_SE_ATMOSPHERE_TALKING, 2);
-        }
+    JAISeMgr* seMgr = Z2GetSoundMgr()->getSeMgr();
+    seMgr->getCategory(0)->getParams()->moveVolume(Z2Param::VOL_SE_SYSTEM_TALKING, 2);
+    seMgr->getCategory(1)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_VOICE_TALKING, 2);
+    seMgr->getCategory(2)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_MOTION_TALKING, 2);
+    seMgr->getCategory(3)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_FOOTNOTE_TALKING, 2);
+    seMgr->getCategory(4)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_TALKING, 2);
+    seMgr->getCategory(5)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_TALKING, 2);
+    seMgr->getCategory(6)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_MOVE_TALKING, 2);
+    seMgr->getCategory(7)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_TALKING, 2);
+    seMgr->getCategory(8)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_TALKING, 2);
+
+    if (Z2GetStatusMgr()->getDemoStatus() != 12) {
+        seMgr->getCategory(9)->getParams()->moveVolume(Z2Param::VOL_SE_ATMOSPHERE_TALKING, 2);
     }
 }
 
 void Z2SeMgr::talkOutSe() {
-    if (Z2GetSceneMgr()->isInGame()) {
-        if (Z2GetStatusMgr()->getDemoStatus() == 13) {
-            seMoveVolumeAll(0.0f, 0);
-        }
+    if (!Z2GetSceneMgr()->isInGame()) {
+        return;
+    }
 
-        JAISeMgr* seMgr = Z2GetSoundMgr()->getSeMgr();
-        seMgr->getCategory(0)->getParams()->moveVolume(Z2Param::VOL_SE_SYSTEM_DEFAULT, 2);
-        seMgr->getCategory(1)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_VOICE_DEFAULT, 2);
-        seMgr->getCategory(2)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_MOTION_DEFAULT, 2);
-        seMgr->getCategory(3)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_FOOTNOTE_DEFAULT, 2);
-        seMgr->getCategory(4)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_DEFAULT, 2);
-        seMgr->getCategory(5)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_DEFAULT, 2);
-        seMgr->getCategory(6)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_MOVE_DEFAULT, 2);
-        seMgr->getCategory(7)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_DEFAULT, 2);
-        seMgr->getCategory(8)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_DEFAULT, 2);
+    if (Z2GetStatusMgr()->getDemoStatus() == 13) {
+        seMoveVolumeAll(0.0f, 0);
+    }
 
-        if (Z2GetStatusMgr()->getDemoStatus() != 12) {
-            seMgr->getCategory(9)->getParams()->moveVolume(Z2Param::VOL_SE_ATMOSPHERE_DEFAULT, 2);
-        }
+    JAISeMgr* seMgr = Z2GetSoundMgr()->getSeMgr();
+    seMgr->getCategory(0)->getParams()->moveVolume(Z2Param::VOL_SE_SYSTEM_DEFAULT, 2);
+    seMgr->getCategory(1)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_VOICE_DEFAULT, 2);
+    seMgr->getCategory(2)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_MOTION_DEFAULT, 2);
+    seMgr->getCategory(3)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_FOOTNOTE_DEFAULT, 2);
+    seMgr->getCategory(4)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_DEFAULT, 2);
+    seMgr->getCategory(5)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_DEFAULT, 2);
+    seMgr->getCategory(6)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_MOVE_DEFAULT, 2);
+    seMgr->getCategory(7)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_DEFAULT, 2);
+    seMgr->getCategory(8)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_DEFAULT, 2);
+
+    if (Z2GetStatusMgr()->getDemoStatus() != 12) {
+        seMgr->getCategory(9)->getParams()->moveVolume(Z2Param::VOL_SE_ATMOSPHERE_DEFAULT, 2);
     }
 }
 
 void Z2SeMgr::menuInSe() {
-    if (Z2GetSceneMgr()->isInGame()) {
-        if (Z2GetStatusMgr()->getDemoStatus() == 13) {
-            seMoveVolumeAll(0.0f, 0);
-        }
+    if (!Z2GetSceneMgr()->isInGame()) {
+        return;
+    }
 
-        JAISeMgr* seMgr = Z2GetSoundMgr()->getSeMgr();
-        seMgr->getCategory(0)->getParams()->moveVolume(Z2Param::VOL_SE_SYSTEM_PAUSING, 2);
-        seMgr->getCategory(1)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_VOICE_PAUSING, 2);
-        seMgr->getCategory(2)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_MOTION_PAUSING, 2);
-        seMgr->getCategory(3)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_FOOTNOTE_PAUSING, 2);
-        seMgr->getCategory(4)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_PAUSING, 2);
-        seMgr->getCategory(5)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_PAUSING, 2);
-        seMgr->getCategory(6)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_MOVE_PAUSING, 2);
-        seMgr->getCategory(7)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_PAUSING, 2);
-        seMgr->getCategory(8)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_PAUSING, 2);
+    if (Z2GetStatusMgr()->getDemoStatus() == 13) {
+        seMoveVolumeAll(0.0f, 0);
+    }
 
-        if (Z2GetStatusMgr()->getDemoStatus() != 12) {
-            seMgr->getCategory(9)->getParams()->moveVolume(Z2Param::VOL_SE_ATMOSPHERE_PAUSING, 2);
-        }
+    JAISeMgr* seMgr = Z2GetSoundMgr()->getSeMgr();
+    seMgr->getCategory(0)->getParams()->moveVolume(Z2Param::VOL_SE_SYSTEM_PAUSING, 2);
+    seMgr->getCategory(1)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_VOICE_PAUSING, 2);
+    seMgr->getCategory(2)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_MOTION_PAUSING, 2);
+    seMgr->getCategory(3)->getParams()->moveVolume(Z2Param::VOL_SE_LINK_FOOTNOTE_PAUSING, 2);
+    seMgr->getCategory(4)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_PAUSING, 2);
+    seMgr->getCategory(5)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_PAUSING, 2);
+    seMgr->getCategory(6)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_MOVE_PAUSING, 2);
+    seMgr->getCategory(7)->getParams()->moveVolume(Z2Param::VOL_SE_CHAR_VOICE_PAUSING, 2);
+    seMgr->getCategory(8)->getParams()->moveVolume(Z2Param::VOL_SE_OBJECT_PAUSING, 2);
+
+    if (Z2GetStatusMgr()->getDemoStatus() != 12) {
+        seMgr->getCategory(9)->getParams()->moveVolume(Z2Param::VOL_SE_ATMOSPHERE_PAUSING, 2);
     }
 }
 
@@ -1231,25 +1237,9 @@ void Z2MultiSeMgr::resetMultiSePos() {
 }
 
 f32 Z2MultiSeMgr::getPanPower() {
-    f32 pow_r = getMaxPowR();
-    f32 pow_l = getMaxPowL();
-    if (pow_l + pow_r > 0.0f) {
-        f32 pow_r = getMaxPowR();
-        f32 pow_l = getMaxPowL();
-        return getMaxPowR() / (pow_l + pow_r);
-    } else {
-        return 0.5f;
-    }
+    return getMaxPowL() + getMaxPowR() > 0.0f ? getMaxPowR() / (getMaxPowL() + getMaxPowR()) : 0.5f;
 }
 
 f32 Z2MultiSeMgr::getDolbyPower() {
-    f32 pow_b = getMaxPowB();
-    f32 pow_f = getMaxPowF();
-    if (pow_f + pow_b > 0.0f) {
-        f32 pow_b = getMaxPowB();
-        f32 pow_f = getMaxPowF();
-        return getMaxPowB() / (pow_f + pow_b);
-    } else {
-        return 0.5f;
-    }
+    return getMaxPowF() + getMaxPowB() > 0.0f ? getMaxPowB() / (getMaxPowF() + getMaxPowB()) : 0.5f;
 }

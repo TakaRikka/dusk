@@ -722,7 +722,7 @@ void daNpc_Kkri_c::setCollision() {
     if (!mHide) {
         u32 tg_type = 0xD8FBFDFF;
         u32 tg_sprm = 0x1F;
-        if (dComIfGp_event_runCheck() != 0) {
+        if (dComIfGp_event_runCheck()) {
             tg_type = 0;
             tg_sprm = 0;
         } else if (mTwilight) {
@@ -1219,7 +1219,7 @@ static actor_method_class daNpc_Kkri_MethodTable = {
     (process_method_func)daNpc_Kkri_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_KKRI = {
+actor_process_profile_definition g_profile_NPC_KKRI = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

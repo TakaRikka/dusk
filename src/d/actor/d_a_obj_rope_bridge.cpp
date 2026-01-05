@@ -636,7 +636,7 @@ static actor_method_class daObjRBridge_METHODS = {
     (process_method_func)daObjRBridge_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_RopeBridge = {
+actor_process_profile_definition g_profile_Obj_RopeBridge = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

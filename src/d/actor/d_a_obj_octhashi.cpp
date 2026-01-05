@@ -28,25 +28,27 @@ static char* l_arcName[1] = {
     "Octhashi"
 };
 
-static dCcD_SrcCyl ccCylSrc = {
-    {
-        {0x0, {{0x0, 0x0, 0xd}, {0x104002, 0x1f}, 0x75}}, // mObj
-        {dCcD_SE_STONE, 0x2, 0x0, 0x0, 0x1}, // mGObjAt
-        {dCcD_SE_STONE, 0x2, 0x0, 0x0, 0x1}, // mGObjTg
-        {0x0}, // mGObjCo
-    }, // mObjInf
-    {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        400.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
-};
-
 static s8 l_cyl_height_init = 0;
 
 void daObjOCTHASHI_c::initCcCylinder() {
+    static dCcD_SrcCyl ccCylSrc = {
+        {
+            {0x0, {{0x0, 0x0, 0xd}, {0x104002, 0x1f}, 0x75}}, // mObj
+            {dCcD_SE_STONE, 0x2, 0x0, 0x0, 0x1}, // mGObjAt
+            {dCcD_SE_STONE, 0x2, 0x0, 0x0, 0x1}, // mGObjTg
+            {0x0}, // mGObjCo
+        }, // mObjInf
+        {
+            {
+                {0.0f, 0.0f, 0.0f}, // mCenter
+                400.0f, // mRadius
+                0.0f // mHeight
+            } // mCyl
+        }
+    };
+
     if (l_cyl_height_init == 0) {
-        ccCylSrc.mCyl.mHeight = (f32)(mPieceNum + 1) * 800.0f - 100.f;
+        ccCylSrc.mCylAttr.mCyl.mHeight = (f32)(mPieceNum + 1) * 800.0f - 100.f;
         l_cyl_height_init = 1;
     }
     for (int idx = 0; idx < mPieceNum; ++idx) {
@@ -381,7 +383,7 @@ static actor_method_class l_daObjOCTHASHI_Method = {
     (process_method_func)daObjOCTHASHI_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OCTHASHI = {
+actor_process_profile_definition g_profile_OCTHASHI = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

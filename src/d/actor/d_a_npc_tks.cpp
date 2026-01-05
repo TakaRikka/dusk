@@ -575,7 +575,7 @@ BOOL daNpcTks_c::main() {
         setAction(&daNpcTks_c::demo_appear);
     }
 
-    if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk() && mItemID != fpcM_ERROR_PROCESS_ID_e) {
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && mItemID != fpcM_ERROR_PROCESS_ID_e) {
         dComIfGp_event_setItemPartnerId(mItemID);
         mItemID = fpcM_ERROR_PROCESS_ID_e;
         fopAcM_delete(this);
@@ -1035,7 +1035,7 @@ void daNpcTks_c::waitNude() {
 
             if (fVar1 > -200.0f && fVar1 < 150.0f && fopAcM_searchPlayerDistanceXZ(this) <= 300.0f) {
                 if (!fopAcM_otherBgCheck(this, daPy_getPlayerActorClass())) {
-                    eventInfo.onCondition(dEvtCmd_INTALK_e);
+                    eventInfo.onCondition(dEvtCnd_CANTALK_e);
                     fopAcM_orderSpeakEvent(this, 0, 0);
                 }
             }
@@ -1089,7 +1089,7 @@ void daNpcTks_c::waitLv6() {
 
             if (current.pos.y - fopAcM_GetPosition_p(daPy_getPlayerActorClass())->y < 100.0f && fopAcM_searchPlayerDistanceXZ(this) <= 400.0f) {
                 attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
-                eventInfo.onCondition(dEvtCmd_INTALK_e);
+                eventInfo.onCondition(dEvtCnd_CANTALK_e);
                 fopAcM_orderSpeakEvent(this, 0, 0);
             }
 
@@ -1177,7 +1177,7 @@ void daNpcTks_c::talk() {
                         if (mItemID != fpcM_ERROR_PROCESS_ID_e) {
                             const char* eventName = daPy_py_c::checkNowWolf() ? "WOLF_GET_TKS" : "DEFAULT_GETITEM";
                             s16 eventIdx = dComIfGp_getEventManager().getEventIdx(this, eventName, 0xFF);
-                            dComIfGp_getEvent().reset(this);
+                            dComIfGp_getEvent()->reset(this);
                             fopAcM_orderChangeEventId(this, eventIdx, 1, 0xFFFF);
                         }
                     }
@@ -1531,7 +1531,7 @@ void daNpcTks_c::demo_appear() {
             mMode = 2;
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
                 if (staffId != -1) {
@@ -1648,7 +1648,7 @@ void daNpcTks_c::demo_appear() {
 
                                     if (mItemID != fpcM_ERROR_PROCESS_ID_e) {
                                         s16 eventIdx = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);
-                                        dComIfGp_getEvent().reset(this);
+                                        dComIfGp_getEvent()->reset(this);
                                         fopAcM_orderChangeEventId(this, eventIdx, 1, 0xFFFF);
                                         field_0x9ec = true;
                                     }
@@ -1694,7 +1694,7 @@ void daNpcTks_c::demo_scannon() {
             mMode = 2;
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
 
@@ -1800,7 +1800,7 @@ void daNpcTks_c::demo_Lv6Gate() {
             mMode = 2;
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
 
@@ -1858,7 +1858,7 @@ void daNpcTks_c::demo_Lv6Gate() {
 void daNpcTks_c::demo_farewell() {
     switch (mMode) {
         case 0:
-            if (cLib_calcTimer<int>(&field_0x1370) > 0 || dComIfGp_event_runCheck() != FALSE) {
+            if (cLib_calcTimer<int>(&field_0x1370) > 0 || dComIfGp_event_runCheck()) {
                 return;
             }
 
@@ -1875,7 +1875,7 @@ void daNpcTks_c::demo_farewell() {
             mMode = 2;
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
 
@@ -1885,7 +1885,7 @@ void daNpcTks_c::demo_farewell() {
                     if (eventManager.getIsAddvance(staffId)) {
                         switch (*cutName) {
                             case '0001':
-                                dComIfGp_getEvent().setSkipZev(this, "TKS_FAREWELL_SKIP");
+                                dComIfGp_getEvent()->setSkipZev(this, "TKS_FAREWELL_SKIP");
                                 // fallthrough
                             case '0006':
                             case '0007':
@@ -2059,7 +2059,7 @@ void daNpcTks_c::demo_warpBack() {
             mMode = 2;
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
 
@@ -2187,7 +2187,7 @@ void daNpcTks_c::demo_walkBack() {
             }
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
 
@@ -2292,7 +2292,7 @@ void daNpcTks_c::demo_Lv7Start() {
             mMode = 2;
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
 
@@ -2627,7 +2627,7 @@ void daNpcTks_c::demo_Lv3PickUp() {
             break;
 
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
 
@@ -2758,7 +2758,7 @@ void daNpcTks_c::demo_Lv6PickUp() {
             }
             // fallthrough
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+            if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
                 dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                 s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
 
@@ -3019,7 +3019,7 @@ static actor_method_class daNpcTks_MethodTable = {
     (process_method_func)daNpcTks_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_TKS = {
+actor_process_profile_definition g_profile_NPC_TKS = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -14,7 +14,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daObj_KamHIO_c l_HIO;
 
@@ -693,7 +693,7 @@ int daObjKAM_c::Execute() {
 int daObjKAM_c::Delete() {
     dComIfG_resDelete(&mPhase, "I_Kam");
     if (field_0xa64 != 0) {
-        l_initHIO = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.field_0x4);
     }
     if (heap != NULL) {
@@ -805,8 +805,8 @@ int daObjKAM_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (l_initHIO == FALSE) {
-            l_initHIO = TRUE;
+        if (hio_set == FALSE) {
+            hio_set = TRUE;
             field_0xa64 = 1;
             // Golden Mantis
             l_HIO.field_0x4 = mDoHIO_CREATE_CHILD("黄金蟲(カマキリ)", &l_HIO);
@@ -903,7 +903,7 @@ static actor_method_class l_daObjKAM_Method = {
     (process_method_func)daObjKAM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Kam = {
+actor_process_profile_definition g_profile_Obj_Kam = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

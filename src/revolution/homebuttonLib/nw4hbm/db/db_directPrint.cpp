@@ -3,7 +3,7 @@
 #include "assert.h"
 #include "directPrint.h"
 
-#include <string.h>
+#include <string>
 
 #define ROUND_UP(x, align) (((x) + (align)-1) & (-(align)))
 #define ROUND_DOWN(x, align) ((x) & (~((align) - 1)))

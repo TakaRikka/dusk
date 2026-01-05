@@ -7,6 +7,7 @@
 #include "SSystem/SComponent/c_API_graphic.h"
 #include "d/d_error_msg.h"
 #include "d/d_lib.h"
+#include "f_op/f_op_scene.h"
 #include "f_pc/f_pc_creator.h"
 #include "f_pc/f_pc_deletor.h"
 #include "f_pc/f_pc_draw.h"

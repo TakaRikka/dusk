@@ -1,6 +1,6 @@
 #include <dolphin/dolphin.h>
 #include <dolphin/mtx.h>
-#include <math.h>
+#include <sdk_math.h>
 
 static f32 Unit01[2] = {
     0.0f,

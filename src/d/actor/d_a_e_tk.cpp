@@ -40,7 +40,7 @@ enum Mode {  // Not sure if these are correct...
     /* 0xC */ MODE_TK_WAIT01,
 };
 
-static bool hioInit;
+static bool hio_set;
 
 static daE_TK_HIO_c l_HIO;
 
@@ -650,7 +650,7 @@ static int daE_TK_IsDelete(e_tk_class* i_this) {
 static int daE_TK_Delete(e_tk_class* i_this) {
     dComIfG_resDelete(&i_this->mPhaseReq, "E_tk");
     if (i_this->mInitHIO) {
-        hioInit = false;
+        hio_set = false;
     }
     if (i_this->heap != NULL) {
         i_this->mpMorf->stopZelAnime();
@@ -673,19 +673,19 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-static dCcD_SrcSph cc_sph_src = {
-    {
-        {0x0, {{0x0, 0x0, 0xd}, {0xd8fbfdff, 0x3}, 0x75}},  // mObj
-        {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                 // mGObjAt
-        {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2},                 // mGObjTg
-        {0x0},                                              // mGObjCo
-    },                                                      // mObjInf
-    {
-        {{0.0f, 0.0f, 0.0f}, 40.0f}  // mSph
-    }  // mSphAttr
-};
-
 static int daE_TK_Create(fopAc_ac_c* i_this) {
+    static dCcD_SrcSph cc_sph_src = {
+        {
+            {0x0, {{0x0, 0x0, 0xd}, {0xd8fbfdff, 0x3}, 0x75}},  // mObj
+            {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                 // mGObjAt
+            {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2},                 // mGObjTg
+            {0x0},                                              // mGObjCo
+        },                                                      // mObjInf
+        {
+            {{0.0f, 0.0f, 0.0f}, 40.0f}  // mSph
+        }  // mSphAttr
+    };
+
     fopAcM_ct(i_this, e_tk_class);
     e_tk_class* const a_this = static_cast<e_tk_class*>(i_this);
 
@@ -709,9 +709,9 @@ static int daE_TK_Create(fopAc_ac_c* i_this) {
             a_this->mPathDirection = 0x1;
             a_this->mAction = ACT_TK_PATHSWIM;
         }
-        if (hioInit == false) {
+        if (hio_set == false) {
             a_this->mInitHIO = true;
-            hioInit = true;
+            hio_set = true;
             l_HIO.field_0x04 = -1;
         }
         a_this->attention_info.flags = fopAc_AttnFlag_BATTLE_e;
@@ -747,7 +747,7 @@ static actor_method_class l_daE_TK_Method = {
     (process_method_func)daE_TK_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_TK = {
+actor_process_profile_definition g_profile_E_TK = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

@@ -67,7 +67,7 @@ static actor_method_class l_daE_DB_LEAF_Method = {
     (process_method_func)daE_DB_LEAF_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_DB_LEAF = {
+actor_process_profile_definition g_profile_E_DB_LEAF = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

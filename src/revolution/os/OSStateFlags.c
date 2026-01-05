@@ -1,6 +1,6 @@
 #include <revolution/os.h>
 #include <revolution/nand.h>
-#include <string.h>
+#include <cstring>
 
 static OSStateFlags StateFlags ATTRIBUTE_ALIGN(32);
 

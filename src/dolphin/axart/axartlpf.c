@@ -1,7 +1,7 @@
 #include <dolphin/axart.h>
 #include <dolphin/os.h>
 #include <dolphin/mix.h>
-#include "fake_tgmath.h"
+#include "sdk_math.h"
 
 static u16 __coefs[48] = {
     0x6A09, 0x15F6, 0x6871, 0x178E, 0x6463, 0x1B9C,

@@ -151,9 +151,6 @@ static u32 l_normal[3] = {
     0x00000000, 0x3F800000, 0x00000000,
 };
 
-// /* 8086BF70-8086BF74 000000 0004+00 3/3 0/0 0/0 .bss             None */
-// static u8 data_8086BF70[4];
-
 static u32 l_texCoord[338] = {
     0x00000000, 0x3F6AAAB0, 0x3DAAAA7E, 0x3F6AAAB0,
     0x3DAAAA7E, 0x3F800000, 0x00000000, 0x3F800000,
@@ -811,7 +808,7 @@ static actor_method_class l_daMant_Method = {
     (process_method_func)daMant_Draw,
 };
 
-extern actor_process_profile_definition g_profile_MANT = {
+actor_process_profile_definition g_profile_MANT = {
   fpcLy_CURRENT_e,         // mLayerID
   8,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

@@ -2,8 +2,8 @@
 
 #include "JSystem/J3DGraphBase/J3DShapeDraw.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include <string.h>
-#include <stdint.h>
+#include <string>
+#include <stdint>
 #include <dolphin/gx.h>
 
 u32 J3DShapeDraw::countVertex(u32 stride) {

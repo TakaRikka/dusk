@@ -146,7 +146,7 @@ static actor_method_class l_daObjWCover_Method = {
     (process_method_func)daObjWCover_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_WellCover = {
+actor_process_profile_definition g_profile_Obj_WellCover = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

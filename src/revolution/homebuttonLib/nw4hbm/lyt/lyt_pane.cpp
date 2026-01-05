@@ -3,7 +3,7 @@
 #include "common.h"
 #include "layout.h"
 
-#include <cstring.h>
+#include <string>
 
 namespace {
     // pretend this is nw4hbm::lyt

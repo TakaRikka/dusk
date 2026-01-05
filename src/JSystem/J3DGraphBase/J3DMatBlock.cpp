@@ -5,7 +5,7 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "global.h"
-#include <string.h>
+#include <string>
 
 inline void loadMatColors(const J3DGXColor* color) {
     J3DGDWriteXFCmdHdr(0x100C, 2);
@@ -294,8 +294,6 @@ static u32 SizeOfLoadMatColors = 13;
 static u32 SizeOfLoadAmbColors = 13;
 
 static u32 SizeOfLoadColorChans = 21;
-
-static u8 sdata_padding[4] = {};
 
 static u32 SizeOfJ3DColorBlockLightOffLoad = SizeOfLoadMatColors + SizeOfLoadColorChans;
 

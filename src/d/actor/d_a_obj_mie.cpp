@@ -38,10 +38,12 @@ static dCcD_SrcGObjInf const l_ccDObjData =
 static dCcD_SrcCyl l_ccDCyl = {
     l_ccDObjData, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        0.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            0.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 
 #if DEBUG
@@ -521,7 +523,7 @@ static actor_method_class daObj_Mie_MethodTable = {
     (process_method_func)daObj_Mie_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_MIE = {
+actor_process_profile_definition g_profile_OBJ_MIE = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

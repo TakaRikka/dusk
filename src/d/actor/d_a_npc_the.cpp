@@ -827,7 +827,7 @@ BOOL daNpcThe_c::talk(void* param_0) {
                         if (mItemID != -1) {
                             s16 event_id = dComIfGp_getEventManager().getEventIdx(
                                 this, "DEFAULT_GETITEM", 0xff);
-                            dComIfGp_getEvent().reset(this);
+                            dComIfGp_getEvent()->reset(this);
                             fopAcM_orderChangeEventId(this, event_id, 1, 0xffff);
                             field_0x9ec = true;
                         }
@@ -1126,17 +1126,13 @@ BOOL daNpcThe_c::main() {
         attention_info.flags = 0;
     }
 
-    // TODO: gameInfo fake match to force reuse of pointer
-    dComIfG_inf_c* gameInfo = &g_dComIfG_gameInfo;
     if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && mItemID != -1) {
-        // Fakematch, should be:
-        // dComIfGp_event_setItemPartnerId(mItemID);
-        gameInfo->play.getEvent().setPtI_Id(mItemID);
+        dComIfGp_event_setItemPartnerId(mItemID);
         mItemID = -1;
     }
 
     if (!mpHIO->m.common.debug_mode_ON &&
-        (dComIfGp_event_runCheck() == FALSE || (mOrderNewEvt && dComIfGp_getEvent().isOrderOK())))
+        (dComIfGp_event_runCheck() == FALSE || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())))
     {
         if (mOrderEvtNo != 0 && l_resNames[l_evtGetParamList[mOrderEvtNo]] != NULL) {
             eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo]]);
@@ -1180,7 +1176,7 @@ void daNpcThe_c::setExpressionTalkAfter() {
 
 BOOL daNpcThe_c::doEvent() {
     BOOL ret = false;
-    if (dComIfGp_event_runCheck() != false) {
+    if (dComIfGp_event_runCheck()) {
         dEvent_manager_c& event_manager = dComIfGp_getEventManager();
         if (eventInfo.checkCommandTalk()) {
             if (mTwilight) {
@@ -1195,7 +1191,7 @@ BOOL daNpcThe_c::doEvent() {
                 event_manager.setObjectArchive(eventInfo.getArchiveName());
                 mEventIdx = event_manager.getEventIdx(this, l_evtNames[mOrderEvtNo], 0xff);
                 if (mEventIdx != -1) {
-                    dComIfGp_getEvent().reset(this);
+                    dComIfGp_getEvent()->reset(this);
                     fopAcM_orderChangeEventId(this, mEventIdx, 1, 0xffff);
                 }
             } else if (dComIfGp_event_chkTalkXY()) {
@@ -1220,7 +1216,7 @@ BOOL daNpcThe_c::doEvent() {
                 } else {
                     s16 event_idx =
                         dComIfGp_getEventManager().getEventIdx(this, "NO_RESPONSE", 0xff);
-                    dComIfGp_getEvent().reset(this);
+                    dComIfGp_getEvent()->reset(this);
                     fopAcM_orderChangeEventId(this, event_idx, 1, 0xffff);
                 }
             } else {
@@ -1345,7 +1341,7 @@ static actor_method_class daNpcThe_MethodTable = {
     (process_method_func)daNpcThe_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_THE = {
+actor_process_profile_definition g_profile_NPC_THE = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

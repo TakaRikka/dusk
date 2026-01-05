@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include <dolphin/dolphin.h>
 #include <dolphin/os.h>
 

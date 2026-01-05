@@ -256,7 +256,7 @@ static actor_method_class l_daLv6SzGate_Method = {
     (process_method_func)daLv6SzGate_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv6SzGate = {
+actor_process_profile_definition g_profile_Obj_Lv6SzGate = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

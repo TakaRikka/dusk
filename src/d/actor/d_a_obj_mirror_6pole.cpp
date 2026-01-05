@@ -172,7 +172,7 @@ static actor_method_class l_daObjMirror6Pole_Method = {
     (process_method_func)daObjMirror6Pole_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Mirror6Pole = {
+actor_process_profile_definition g_profile_Obj_Mirror6Pole = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

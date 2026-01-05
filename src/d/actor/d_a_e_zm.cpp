@@ -65,12 +65,11 @@ public:
     /* 0x1A */ s16 stun_time;                           // 麻痺時間 - Stun Time
 };
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_ZM_HIO_c l_HIO;
 
 namespace {
-    /* 80832DFC-80832E40 000038 0044+00 1/1 0/0 0/0 .data            cc_zm_src__22@unnamed@d_a_e_zm_cpp@ */
     static dCcD_SrcCyl cc_zm_src = {
         {
             {0, {{AT_TYPE_0, 0, 0}, {0xD8FBFDFF, 0x43}, 0x45}},
@@ -79,11 +78,12 @@ namespace {
             {0},
         },
         {
-            {0.0f, 0.0f, 0.0f}, 50.0f, 300.0f,
-        },
+            {
+                {0.0f, 0.0f, 0.0f}, 50.0f, 300.0f,
+            },
+        }
     };
 
-    /* 80832E40-80832E80 00007C 0040+00 1/1 0/0 0/0 .data            cc_zm_at_src__22@unnamed@d_a_e_zm_cpp@ */
     static dCcD_SrcSph cc_zm_at_src = {
         {
             {0, {{AT_TYPE_CSTATUE_SWING, 2, 0xD}, {0xD8FBFDFF, 0x43}, 0}},
@@ -872,7 +872,7 @@ int daE_ZM_c::_delete() {
     }
 
     if (field_0xc28) {
-        l_initHIO = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -959,8 +959,8 @@ cPhs__Step daE_ZM_c::create() {
         } else if (arg0 != 20 && !fopAcM_entrySolidHeap(this, useHeapInit, 0xA90)) {
             return cPhs_ERROR_e;
         } else {
-            if (arg0 != 20 && l_initHIO == 0) {
-                l_initHIO = 1;
+            if (arg0 != 20 && hio_set == 0) {
+                hio_set = 1;
                 field_0xc28 = true;
                 l_HIO.id = -1;
             }
@@ -1032,7 +1032,7 @@ static actor_method_class l_daE_ZM_Method = {
     (process_method_func)daE_ZM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_ZM = {
+actor_process_profile_definition g_profile_E_ZM = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

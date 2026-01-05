@@ -1,6 +1,8 @@
 #ifndef D_D_DEMO_H
 #define D_D_DEMO_H
 
+#include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
 #include "JSystem/JStudio/JStudio_JAudio2/control.h"
 #include "JSystem/JStudio/JStudio_JParticle/object-particle.h"
 #include "JSystem/JStudio/JStudio_JStage/object.h"

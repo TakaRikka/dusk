@@ -249,7 +249,7 @@ static actor_method_class daObjLv4Wall_METHODS = {
     (process_method_func)daObjLv4Wall_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv4RailWall = {
+actor_process_profile_definition g_profile_Obj_Lv4RailWall = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

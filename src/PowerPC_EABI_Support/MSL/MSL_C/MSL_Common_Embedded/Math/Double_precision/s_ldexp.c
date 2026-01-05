@@ -11,7 +11,15 @@
  * ====================================================
  */
 
-#include "math.h" /* for isfinite macro */
+#include "global.h"
+
+#if PLATFORM_GCN
+#include <cmath> /* for isfinite macro */
+#else
+#include <fdlibm.h>
+#define isfinite(x) ((__fpclassifyd(x) > 2))
+#endif
+
 static const double
 
     two54

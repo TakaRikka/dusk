@@ -197,7 +197,7 @@ static actor_method_class l_daL7lowDr_Method = {
     (process_method_func)daL7lowDr_Draw,
 };
 
-extern actor_process_profile_definition g_profile_L7lowDr = {
+actor_process_profile_definition g_profile_L7lowDr = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

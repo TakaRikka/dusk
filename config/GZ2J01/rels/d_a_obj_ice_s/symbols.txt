@@ -65,6 +65,6 @@ g_profile_Obj_Ice_s = .data:0x00000024; // type:object size:0x30 scope:global
 __vt__12daObjIce_s_c = .data:0x00000054; // type:object size:0x28 scope:global
 __vt__17daOBJ_ICE_S_HIO_c = .data:0x0000007C; // type:object size:0xC scope:global
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
-l_HIOInit = .bss:0x00000008; // type:object size:0x1 data:byte
+hio_set = .bss:0x00000008; // type:object size:0x1 scope:local align:1 data:byte
 @3639 = .bss:0x0000000C; // type:object size:0xC scope:local
 l_HIO = .bss:0x00000018; // type:object size:0x10 scope:global align:4 data:float

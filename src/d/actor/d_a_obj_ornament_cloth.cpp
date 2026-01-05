@@ -333,7 +333,7 @@ static actor_method_class l_daObjOnCloth_Method = {
     (process_method_func)daObjOnCloth_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_OnCloth = {
+actor_process_profile_definition g_profile_Obj_OnCloth = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

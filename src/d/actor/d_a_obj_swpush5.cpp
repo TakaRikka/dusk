@@ -417,7 +417,7 @@ static actor_method_class l_daObjSw5_Method = {
     (process_method_func)daObjSw5_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Swpush5 = {
+actor_process_profile_definition g_profile_Obj_Swpush5 = {
   fpcLy_CURRENT_e,        // mLayerID
   2,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

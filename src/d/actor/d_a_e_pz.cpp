@@ -40,10 +40,12 @@ static dCcD_SrcCyl cc_pz_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        50.0f, // mRadius
-        300.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            50.0f, // mRadius
+            300.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 
 static dCcD_SrcSph cc_pz_at_src = {
@@ -66,10 +68,12 @@ static dCcD_SrcCyl cc_pz_wp_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        50.0f, // mRadius
-        300.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            50.0f, // mRadius
+            300.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 }
 
@@ -182,13 +186,10 @@ void daE_PZ_c::mEntrySUB(bool param_0) {
     }
 }
 
-/* 80761DFD 0003+00 l_initHIO None */
-static u8 l_initHIO;
+static u8 hio_set;
 
-/* 80761E0C 001C+01 data_80761E0C l_HIO */
 static daE_PZ_HIO_c l_HIO;
 
-/* 80761E29 0003+00 data_80761E29 None */
 static u8 lbl_222_bss_70;
 static u8 lbl_222_bss_71;
 
@@ -506,7 +507,7 @@ void daE_PZ_c::executeOpeningDemo() {
         field_0x7d0 = 2;
         setBck(8, 0, 3.0f, -1.0f);
         mpModelMorf->setFrame(0.0f);
-        dComIfGp_getEvent().startCheckSkipEdge(this);
+        dComIfGp_getEvent()->startCheckSkipEdge(this);
         dComIfGs_onSaveDunSwitch(41);
         mMoveMode++;
         break;
@@ -720,7 +721,7 @@ void daE_PZ_c::executeOpeningDemo() {
                 mMoveMode = 130;
             }
 
-            dComIfGp_getEvent().reset(this);
+            dComIfGp_getEvent()->reset(this);
             fopAcM_orderPotentialEvent(this, 2, 0xFFFF, 3);
         }
         break;
@@ -1149,7 +1150,7 @@ void daE_PZ_c::executeOpeningDemo() {
         camera->mCamera.Set(mDemoCameraCenter, mDemoCameraEye);
     }
 
-    if (((mMoveMode >= 2 && mMoveMode <= 17) || (mMoveMode >= 102 && mMoveMode <= 125)) && dComIfGp_getEvent().checkSkipEdge()) {
+    if (((mMoveMode >= 2 && mMoveMode <= 17) || (mMoveMode >= 102 && mMoveMode <= 125)) && dComIfGp_getEvent()->checkSkipEdge()) {
         cDmr_SkipInfo = 1;
         dStage_changeScene(1, 0.0f, 0, fopAcM_GetRoomNo(this), 0, -1);
         Z2GetAudioMgr()->bgmStreamStop(0x1E);
@@ -1766,8 +1767,8 @@ static const struct {
 };
 
 static const s16 mDBaBa_birthAngle_dt[] = {
-    0x0000, 0x2AAA, 0x5554, 0x7FFE, 0xAAA8, 0xD552,
-    0x1000, 0x3AAA, 0x6554, 0x8FFE, 0xBAA8, 0xE552,
+    0x0000, 0x2AAA, 0x5554, 0x7FFE, -0x5558, -0x2AAE,
+    0x1000, 0x3AAA, 0x6554, -0x7002, -0x4558, -0x1AAE,
 };
 
 static const f32 mDBaBa_birthHani_dt[] = {
@@ -2363,7 +2364,7 @@ int daE_PZ_c::_delete() {
     }
 
     if (mInitHIO != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.no);
     }
 
@@ -2521,8 +2522,8 @@ int daE_PZ_c::create() {
                 }
             }
 
-            if (!l_initHIO) {
-                l_initHIO = true;
+            if (!hio_set) {
+                hio_set = true;
                 mInitHIO = true;
                 l_HIO.no = mDoHIO_CREATE_CHILD("ファントムザント", &l_HIO);
             }
@@ -2655,7 +2656,7 @@ static actor_method_class l_daE_PZ_Method = {
     (process_method_func)daE_PZ_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_PZ = {
+actor_process_profile_definition g_profile_E_PZ = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

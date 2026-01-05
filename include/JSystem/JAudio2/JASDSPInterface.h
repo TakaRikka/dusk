@@ -19,14 +19,14 @@ namespace JASDsp {
     };
 
     typedef struct {
-        s16 field_0x0;
-        s16 field_0x2;
+        u16 field_0x0;
+        u16 field_0x2;
         s16* field_0x4;
-        s16 field_0x8;
+        u16 field_0x8;
         s16 field_0xa;
-        s16 field_0xc;
+        u16 field_0xc;
         s16 field_0xe;
-        s16 field_0x10[8];
+        u16 field_0x10[8];
     } FxBuf;
 
     struct TChannel {
@@ -63,7 +63,7 @@ namespace JASDsp {
         /* 0x00E */ short field_0x00E;
         /* 0x010 */ u16 field_0x010[1][4]; // array size unknown
         /* 0x018 */ u8 field_0x018[0x050 - 0x018];
-        /* 0x050 */ short field_0x050;
+        /* 0x050 */ u16 field_0x050;
         /* 0x052 */ u16 field_0x052;
         /* 0x054 */ u16 field_0x054;
         /* 0x056 */ u16 field_0x056;
@@ -106,11 +106,13 @@ namespace JASDsp {
     void setDSPMixerLevel(f32);
     f32 getDSPMixerLevel();
     TChannel* getDSPHandle(int);
+    TChannel* getDSPHandleNc(int);
     void setFilterTable(s16*, s16*, u32);
     void flushBuffer();
     void invalChannelAll();
     void initBuffer();
     int setFXLine(u8, s16*, JASDsp::FxlineConfig_*);
+    BOOL changeFXLineParam(u8, u8, u32);
 
     extern u8 const DSPADPCM_FILTER[64];
     extern u32 const DSPRES_FILTER[320];

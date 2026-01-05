@@ -35,9 +35,9 @@ char* JSUInputStream::read(char* str) {
 }
 
 s32 JSUInputStream::skip(s32 count) {
-    u8 buffer;
-    s32 skipCount = 0;
-    for (; skipCount < count; skipCount++) {
+    s32 skipCount;
+    for (skipCount = 0; skipCount < count; skipCount++) {
+        u8 buffer;
         if (readData(&buffer, sizeof(buffer)) != sizeof(buffer)) {
             setState(IOS_STATE_1);
             break;

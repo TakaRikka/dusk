@@ -175,7 +175,7 @@ static void* s_lure_sub(void* a, void* b) {
             if (rod->kind == 0 &&
                 rod->action == 4 &&
                 rod->field_0x10a9 == 0 &&
-                rod->field_0x100d != 0) {
+                rod->is_hook_in_water != 0) {
                 return rod;
             }
         }
@@ -189,8 +189,8 @@ static void* s_esa_sub(void* a, void* b) {
             dmg_rod_class* rod = (dmg_rod_class*)a;
             if (rod->kind == 1 &&
                 rod->action != 5 &&
-                rod->field_0x100d != 0 &&
-                rod->actor.current.pos.y < rod->field_0x590 - 20.0f) {
+                rod->is_hook_in_water != 0 &&
+                rod->actor.current.pos.y < rod->water_surface_y - 20.0f) {
                 return rod;
             }
         }
@@ -673,7 +673,7 @@ s32 daMg_Fish_Draw(mg_fish_class* i_this) {
                 i_this->actor.current.pos.z);
             i_this->mShadowId = dComIfGd_setShadow(i_this->mShadowId, 1, i_model, &pos,
                 600.0f * i_this->mJointScale, 0.0f,
-                i_this->actor.current.pos.y, i_this->mAcch.m_ground_h, i_this->mAcch.m_gnd,
+                i_this->actor.current.pos.y, i_this->mAcch.GetGroundH(), i_this->mAcch.m_gnd,
                 &i_this->actor.tevStr, 0, 1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
         }
         if (i_this->mKind2 == 3) {
@@ -1039,7 +1039,7 @@ static void mf_away(mg_fish_class* i_this) {
         break;
     case 5:
         if (i_this->mGedouKind < GEDOU_KIND_BG) {
-            if ((i_this->mAcch.m_flags & (1 << 4)) != 0) {
+            if (i_this->mAcch.ChkWallHit()) {
                 if (i_this->field_0x624[1] == 0) {
                     i_this->mActionPhase = 0;
                     i_this->field_0x624[1] = 40;
@@ -1328,7 +1328,7 @@ static void mf_lure_search(mg_fish_class* i_this) {
     dmg_rod_class* rod = (dmg_rod_class*)fopAcM_SearchByID(i_this->mRodId);
     if (rod == NULL || rod->field_0x1008 != 0) {
         foundLure = true;
-    } else if (rod->field_0x100a != 0 || rod->field_0x100d == 0) {
+    } else if (rod->field_0x100a != 0 || rod->is_hook_in_water == 0) {
         foundLure = true;
     } else if (rod->action != 4) {
         if (rod->action >= 5 &&
@@ -1531,7 +1531,7 @@ static void mf_lure_search(mg_fish_class* i_this) {
             }
         }
 
-        rod->field_0x1410 = 0.0f;
+        rod->camera_morf_rate = 0.0f;
         dKy_Sound_set(i_this->actor.current.pos, 40.0f * i_this->mJointScale,
             fopAcM_GetID(i_this), 5);
         rod->vib_timer = 5;
@@ -1842,22 +1842,22 @@ static void mf_hit(mg_fish_class* i_this) {
         i_this->mCurAction = ACTION_MG_FISH_MF_CATCH;
         i_this->mActionPhase = 0;
         g_dComIfG_gameInfo.play.mVibration.StartShock(4, 1, cXyz(0.0f, 1.0f, 0.0f));
-        Z2AudioMgr::getInterface()->changeBgmStatus(4);
+        Z2GetAudioMgr()->changeBgmStatus(4);
         pvVar5->action = 6;
         pvVar5->play_cam_mode = 10;
         pvVar5->play_cam_timer = 0;
         pvVar5->field_0x14c2 = 0;
         pvVar5->play_cam_fovy = 90.0f;
-        pvVar5->field_0x146d = 0;
+        pvVar5->msg_flow_state = 0;
         pvVar5->field_0x10b0 = 0;
         daPy_py_c* player = daPy_getLinkPlayerActorClass();
         player->onFishingRodGetFish();
         if (pvVar5->lure_type == MG_LURE_SP) {
-            u8 bVar7 = g_dComIfG_gameInfo.info.mSavedata.mEvent.getEventReg(0xf11f);
+            u8 bVar7 = dComIfGs_getEventReg(0xf11f);
             if (bVar7 < 0x1f) {
                 bVar7++;
             }
-            g_dComIfG_gameInfo.info.mSavedata.mEvent.setEventReg(0xf11f, bVar7);
+            dComIfGs_setEventReg(0xf11f, bVar7);
         }
     } else if (iVar1 != 0) {
         if (iVar1 == 2) {
@@ -1982,7 +1982,7 @@ static void mf_jump(mg_fish_class* i_this) {
         i_this->mMaxStep = 0x600;
         i_this->actor.current.pos += i_this->field_0x5e0;
         i_this->field_0x5e0.y = i_this->field_0x5e0.y - 2.0f;
-        if ((i_this->mAcch.m_flags & 0x20) != 0) {
+        if (i_this->mAcch.ChkGroundHit()) {
             i_this->actor.current.pos.x = i_this->actor.old.pos.x;
             i_this->actor.current.pos.y = i_this->actor.old.pos.y;
             i_this->actor.current.pos.z = i_this->actor.old.pos.z;
@@ -2015,7 +2015,7 @@ static void mf_jump(mg_fish_class* i_this) {
             fopAcM_effSmokeSet1(&i_this->field_0xc34, &i_this->field_0xc38, &i_this->actor.current.pos,
                 NULL, 0.6f * i_this->mJointScale, &i_this->actor.tevStr, 1);
 
-            Z2AudioMgr::getInterface()->seStart(Z2SE_OBJ_NIOIMASU_BOUND, (Vec*)&i_this->actor.current,
+            Z2GetAudioMgr()->seStart(Z2SE_OBJ_NIOIMASU_BOUND, &i_this->actor.current.pos,
                 0x14, 0,1.0f, 1.0f,
                 -1.0f, -1.0f, 0);
         }
@@ -2041,8 +2041,7 @@ static void mf_jump(mg_fish_class* i_this) {
             commonXyz2.z += i_this->actor.current.pos.z;
             commonXyz2.y = 10.0f + i_this->mSurfaceY;
             fopAcM_createItem(&commonXyz2, 0, -1, -1, NULL, NULL, 0);
-            g_dComIfG_gameInfo.info.mSavedata.mEvent.onEventBit(
-                dSv_event_flag_c::saveBitLabels[0x1d6]);
+            dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[0x1d6]);
         }
         break;
     }
@@ -2173,7 +2172,7 @@ static void mf_catch(mg_fish_class* i_this) {
             rod->actor.health = 1;
             rod->play_cam_mode = 11;
             rod->play_cam_timer = 0;
-            rod->field_0x146d = 0;
+            rod->msg_flow_state = 0;
             i_this->field_0x740 = cM_rndF(1000.0f) + 3000.0f;
         }
         break;
@@ -2234,7 +2233,7 @@ static void mf_esa_search(mg_fish_class* i_this) {
 
     if (rod_actor == NULL) {
         flag1 = 1;
-    } else if (rod->field_0x100d == 0) {
+    } else if (rod->is_hook_in_water == 0) {
         flag1 = 1;
     } else if (rod->action == 5) {
         flag1 = 1;
@@ -2460,7 +2459,7 @@ static s32 mf_esa_catch(mg_fish_class* i_this) {
         position = i_this->actor.current.pos;
         position.y = i_this->mSurfaceY;
         fopKyM_createWpillar(&position, 0.7f, 0);
-        Z2AudioMgr::getInterface()->changeFishingBgm(4);
+        Z2GetAudioMgr()->changeFishingBgm(4);
         i_this->mActionPhase = 1;
         i_this->mBobAmp = 50.0f;
         i_this->mSound.startCreatureSound(Z2SE_AL_FISH_CATCH, 0, -1);
@@ -3575,8 +3574,8 @@ static int daMg_Fish_Execute(mg_fish_class* i_this) {
         rod->actor.current.pos.x = i_this->field_0x638.x;
         rod->actor.current.pos.y = i_this->field_0x638.y;
         rod->actor.current.pos.z = i_this->field_0x638.z;
-        rod->field_0x1000 = 0;
-        rod->field_0xffc = 0;
+        rod->lure_pitch_offset = 0;
+        rod->lure_yaw_offset = 0;
     }
     if (i_this->field_0x659 != 0) {
         fopAc_ac_c* rod = fopAcM_SearchByID(i_this->mRodId);
@@ -3760,7 +3759,6 @@ static int useHeapImg_fisht(fopAc_ac_c* i_actor) {
 }
 
 static int daMg_Fish_Create(fopAc_ac_c* i_this) {
-    /* 805369FC-80536A40 000558 0044+00 0/1 0/0 0/0 .data            cc_cyl_src$8395 */
     static dCcD_SrcCyl cc_cyl_src = {
         {
             { 0x0, { { 0x0, 0x0, 0x0 }, { 0x0, 0x0 }, 0x75 } }, // mObj
@@ -3769,10 +3767,12 @@ static int daMg_Fish_Create(fopAc_ac_c* i_this) {
             { 0 }, // mGObjCo
         }, // mObjInf
         {
-            { 0.0f, 0.0f, 0.0f }, // mCenter
-            35.0f, // mRadius
-            35.0f // mHeight
-        } // mCyl
+            {
+                { 0.0f, 0.0f, 0.0f }, // mCenter
+                35.0f, // mRadius
+                35.0f // mHeight
+            } // mCyl
+        }
     };
     static f32 fish_max[11] = {
         0.828f,
@@ -3860,7 +3860,7 @@ static int daMg_Fish_Create(fopAc_ac_c* i_this) {
     if (phase == cPhs_COMPLEATE_e) {
         s32 params_0 = fopAcM_GetParam(i_this) >> 24;
         if (params_0 != 0 && params_0 != 0xff &&
-            g_dComIfG_gameInfo.info.isSwitch(params_0, fopAcM_GetRoomNo(i_this)))
+            dComIfGs_isSwitch(params_0, fopAcM_GetRoomNo(i_this)))
         {
             return cPhs_ERROR_e;
         }
@@ -4059,7 +4059,7 @@ static actor_method_class l_daMg_Fish_Method = {
     (process_method_func)daMg_Fish_Draw,
 };
 
-extern actor_process_profile_definition g_profile_MG_FISH = {
+actor_process_profile_definition g_profile_MG_FISH = {
     (uint)fpcLy_CURRENT_e,  // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

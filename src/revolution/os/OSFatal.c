@@ -4,7 +4,7 @@
 #include <revolution/exi.h>
 
 #include "__os.h"
-#include <string.h>
+#include <cstring>
 
 typedef struct OSFatalParam {
     GXColor fg;

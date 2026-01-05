@@ -18,7 +18,7 @@
 #include "d/d_msg_object.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_camera_mng.h"
-#include "types.h"
+#include "dolphin/types.h"
 
 daNpc_Maro_c::actionFunc dummy_lit_3931() {
     return &daNpc_Maro_c::choccai;
@@ -1328,7 +1328,7 @@ int daNpc_Taro_c::cutSwdTutorial(int param_1) {
             break;
         }
     }
-    int local_68[2] = {-1, 0xffffffff};
+    int local_68[2] = {-1, -1};
     switch (local_70) {
     case 0:
         mJntAnm.lookPlayer(0);
@@ -2608,14 +2608,14 @@ int daNpc_Taro_c::cutNotGonnaLet(int param_1) {
             fopAc_ac_c* actor_p = mActors[0].getActorP();
             JUT_ASSERT(5464, NULL != actor_p);
             mJntAnm.lookActor(actor_p, -40.0f, 0);
-            dComIfGp_getEvent().setPt2(actor_p);
+            dComIfGp_getEvent()->setPt2(actor_p);
             break;
         }
         case 7: {
             fopAc_ac_c* actor_p = mActors[2].getActorP();
             JUT_ASSERT(5473, NULL != actor_p);
             mJntAnm.lookActor(actor_p, -40.0f, 0);
-            dComIfGp_getEvent().setPt2(this);
+            dComIfGp_getEvent()->setPt2(this);
             break;
         }
         case 9:
@@ -2648,12 +2648,12 @@ int daNpc_Taro_c::cutNotGonnaLet(int param_1) {
         case 21: {
             fopAc_ac_c* actor_p = mActors[0].getActorP();
             JUT_ASSERT(5517, NULL != actor_p);
-            dComIfGp_getEvent().setPt2(actor_p);
+            dComIfGp_getEvent()->setPt2(actor_p);
             break;
         }
         case 22:
             mJntAnm.lookPlayer(0);
-            dComIfGp_getEvent().setPt2(this);
+            dComIfGp_getEvent()->setPt2(this);
             break;
         case 30:
             daNpcT_getPlayerInfoFromPlayerList(7, fopAcM_GetRoomNo(this), &cStack_30, &cStack_50);
@@ -3382,7 +3382,7 @@ static actor_method_class daNpc_Taro_MethodTable = {
     (process_method_func)daNpc_Taro_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_TARO = {
+actor_process_profile_definition g_profile_NPC_TARO = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

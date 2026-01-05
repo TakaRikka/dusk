@@ -701,7 +701,7 @@ static actor_method_class daNpcClerkt_MethodTable = {
     (process_method_func)daNpcClerkt_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_CLERKT = {
+actor_process_profile_definition g_profile_NPC_CLERKT = {
     fpcLy_CURRENT_e,           // mLayerID
     7,                         // mListID
     fpcPi_CURRENT_e,           // mListPrio

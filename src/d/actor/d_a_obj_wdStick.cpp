@@ -10,7 +10,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_kankyo_mng.h"
-#include <cmath.h>
+#include <math>
 
 static daWdStick_HIO_c l_HIO;
 
@@ -507,7 +507,7 @@ static actor_method_class l_daWdStick_Method = {
     (process_method_func)daWdStick_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_WdStick = {
+actor_process_profile_definition g_profile_Obj_WdStick = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

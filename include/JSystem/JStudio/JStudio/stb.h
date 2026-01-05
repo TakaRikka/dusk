@@ -163,7 +163,7 @@ private:
     /* 0x04 */ u32 _4;
     /* 0x08 */ u32 _8;
     /* 0x0C */ TFactory* pFactory;
-    /* 0x10 */ JGadget::TLinkList<TObject, -12> mObjectContainer;
+    /* 0x10 */ JGadget::TLinkList<TObject, -12> ocObject_;
     /* 0x1C */ u32 mStatus;
     /* 0x20 */ TObject_control mObject_control;
     /* 0x54 */ s32 _54;

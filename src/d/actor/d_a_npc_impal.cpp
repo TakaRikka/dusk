@@ -299,7 +299,7 @@ void daNpcImpal_c::setExpressionTalkAfter() {
 int daNpcImpal_c::step(s16 i_angle, int i_animate) {
     if (mTurnMode == 0) {
         if (i_animate) {
-            if ((s32)fabsf(cM_sht2d((f32)(s16)(i_angle - mCurAngle.y))) > 40) {
+            if ((s32)fabsf(cM_sht2d((s16)(i_angle - mCurAngle.y))) > 40) {
                 setExpression(EXPR_7, -1.0f);
                 setMotion(MOT_6, -1.0f, false);
             }
@@ -727,7 +727,7 @@ bool daNpcImpal_c::wait(void* param_0) {
             }
         }
 
-        if (dComIfGp_event_runCheck() != FALSE) {
+        if (dComIfGp_event_runCheck()) {
             if (eventInfo.checkCommandTalk()) {
                 if (dComIfGp_event_chkTalkXY()) {
                     if (dComIfGp_evmng_ChkPresentEnd() == FALSE) {
@@ -740,7 +740,7 @@ bool daNpcImpal_c::wait(void* param_0) {
                     } else {
                         s16 evt_idx =
                             dComIfGp_getEventManager().getEventIdx(this, "NO_RESPONSE", 0xff);
-                        dComIfGp_getEvent().reset(this);
+                        dComIfGp_getEvent()->reset(this);
                         fopAcM_orderChangeEventId(this, evt_idx, 1, -1);
                     }
                 } else {
@@ -814,7 +814,7 @@ bool daNpcImpal_c::talk(void* param_0) {
                     if (mItemPartnerId != 0xffffffff) {
                         s16 evt_idx =
                             dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xff);
-                        dComIfGp_getEvent().reset(this);
+                        dComIfGp_getEvent()->reset(this);
                         fopAcM_orderChangeEventId(this, evt_idx, 1, -1);
                         field_0x9ec = 1;
                     }
@@ -864,7 +864,7 @@ bool daNpcImpal_c::demo(void* param_0) {
         setMotion(MOT_0, -1.0f, false);
         mMode = 2;
     case 2: {
-        if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk()) {
+        if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
             dEvent_manager_c& event_manager = dComIfGp_getEventManager();
 
             s32 staff_id = dComIfGp_evmng_getMyStaffId(l_myName, NULL, 0);
@@ -975,7 +975,7 @@ BOOL daNpcImpal_c::EvCut_ImpalAppear1(int i_cut_index) {
                 if (mItemPartnerId != 0xffffffff) {
                     s16 evt_idx =
                         dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xff);
-                    dComIfGp_getEvent().reset(this);
+                    dComIfGp_getEvent()->reset(this);
                     fopAcM_orderChangeEventId(this, evt_idx, 1, -1);
                     field_0x9ec = 1;
                     mOrderEvtNo = 2;
@@ -1153,7 +1153,7 @@ BOOL daNpcImpal_c::main() {
         (this->*mpActionFn)(NULL);
     }
 
-    if (mItemPartnerId != -1 && dComIfGp_event_runCheck() != 0 &&
+    if (mItemPartnerId != -1 && dComIfGp_event_runCheck() &&
         !strcmp(dComIfGp_getEventManager().getRunEventName(), "DEFAULT_GETITEM"))
     {
         dComIfGp_event_setItemPartnerId(mItemPartnerId);
@@ -1236,7 +1236,7 @@ static actor_method_class daNpcImpal_MethodTable = {
     (process_method_func)daNpcImpal_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_IMPAL = {
+actor_process_profile_definition g_profile_NPC_IMPAL = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

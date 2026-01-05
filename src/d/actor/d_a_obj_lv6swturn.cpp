@@ -30,7 +30,7 @@ void daObjLv6SwTurn_HIO_c::genMessage(JORMContext* context) {
 
 static fopAc_ac_c* PPCallBack(fopAc_ac_c* actor1, fopAc_ac_c* actor2, s16 param_2,
                               dBgW_Base::PushPullLabel pushPull) {
-    (void)param_2;  // needed to match debug
+    UNUSED(param_2);
     dBgW_Base::PushPullLabel pushPull_3 = cLib_checkBit(pushPull, dBgW_Base::PPLABEL_3);
     daObjLv6SwTurn_c* swTurnActor1 = (daObjLv6SwTurn_c*)actor1;
     daObjLv6SwTurn_c* swTurnActor2 = (daObjLv6SwTurn_c*)actor2;
@@ -351,7 +351,7 @@ static actor_method_class daObjLv6SwTurn_METHODS = {
     (process_method_func)daObjLv6SwTurn_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv6SwTurn = {
+actor_process_profile_definition g_profile_Obj_Lv6SwTurn = {
     fpcLy_CURRENT_e,           // mLayerID
     3,                         // mListID
     fpcPi_CURRENT_e,           // mListPrio

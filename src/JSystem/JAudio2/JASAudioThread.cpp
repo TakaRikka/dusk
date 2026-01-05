@@ -7,8 +7,10 @@
 #include "JSystem/JAudio2/JASDSPInterface.h"
 #include "JSystem/JAudio2/JASHeapCtrl.h"
 #include "JSystem/JAudio2/JASProbe.h"
+#include "JSystem/JAudio2/JASReport.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "dolphin/dsp.h"
+#include <stdint>
 
 JASAudioThread::JASAudioThread(int stackSize, int msgCount, u32 threadPriority)
     : 
@@ -20,9 +22,17 @@ JASAudioThread::JASAudioThread(int stackSize, int msgCount, u32 threadPriority)
 }
 
 void JASAudioThread::create(s32 threadPriority) {
-	JASAudioThread* sAudioThread = new (JASDram, 0) JASAudioThread(threadPriority, 0x10, 0x1400);
-    sAudioThread->setCurrentHeap(JKRGetSystemHeap());
-	sAudioThread->resume();
+#if PLATFORM_GCN
+    const int size = 0x1400;
+#else
+    const int size = 0x2800;
+#endif
+    JASAudioThread* pAudioThread = new (JASDram, 0) JASAudioThread(threadPriority, 0x10, size);
+    JUT_ASSERT(46, pAudioThread);
+    JKRHeap* pCurrentHeap = JKRGetSystemHeap();
+    JUT_ASSERT(48, pCurrentHeap);
+    pAudioThread->setCurrentHeap(pCurrentHeap);
+    pAudioThread->resume();
 }
 
 void JASAudioThread::stop() {
@@ -58,19 +68,27 @@ void* JASAudioThread::run() {
     JASPoolAllocObject_MultiThreaded<JASChannel>::newMemPool(0x48);
     JASDriver::startDMA();
 
+    OSMessage msg;
     while (true) {
-        OSMessage msg = waitMessageBlock();
-        switch ((int)msg) {
+        msg = waitMessageBlock();
+        switch ((intptr_t)msg) {
         case AUDIOMSG_DMA:
             if (sbPauseFlag) {
+                JUT_PANIC(107, "AUDIO THREAD PAUSED\n");
                 JASDriver::stopDMA();
                 OSSleepThread(&sThreadQueue);
             }
+#if DEBUG
+            if (snIntCount != 0) {
+                JASReport("DSP process is over.");
+            }
+#endif
             JASDriver::updateDac();
             JASDriver::updateDacCallback();
-            break;
+            continue;
 
         case AUDIOMSG_DSP:
+            JUT_ASSERT(125, snIntCount != 0);
             snIntCount--;
             if (snIntCount == 0) {
                 JASProbe::stop(7);
@@ -80,31 +98,41 @@ void* JASAudioThread::run() {
                 JASDriver::updateDSP();
                 JASProbe::stop(2);
             }
-            break;
+            continue;
 
         case AUDIOMSG_STOP:
             JASDriver::stopDMA();
             OSExitThread(NULL);
-            break;
+            continue;
+        default:
+            JUT_PANIC(152, "AUDIO THREAD INVALID MESSAGE\n");
         }
     }
 }
 
 void JASAudioThread::DMACallback() {
-    JASAudioThread* thread = getInstance();
+    JASAudioThread* pAudioThread = getInstance();
+    JUT_ASSERT(167, pAudioThread);
 	JASProbe::stop(4);
 	JASProbe::start(4, "UPDATE-DAC");
-	thread->sendMessage((void*)AUDIOMSG_DMA);
+	if (!pAudioThread->sendMessage((void*)AUDIOMSG_DMA)) {
+        JUT_WARN_DEVICE(173, 1, "%s","----- DMACallback : Can\'t send DAC_SYNC message\n");
+    }
 }
 
 void JASAudioThread::DSPCallback(void*) {
-    JASAudioThread* thread = getInstance();
+    JASAudioThread* pAudioThread = getInstance();
+    JUT_ASSERT(184, pAudioThread);
 	while (DSPCheckMailFromDSP() == 0) { }
 
 	u32 mail = DSPReadMailFromDSP();
-	if (mail >> 0x10 == 0xF355) {
+	if (mail >> 0x10 != 0xF355) {
+        JUT_WARN(196, "DSP Mail format error %x\n", mail);
+    } else {
 		if ((mail & 0xFF00) == 0xFF00) {
-            thread->sendMessage((void*)AUDIOMSG_DSP);
+            if (!pAudioThread->sendMessage((void*)AUDIOMSG_DSP)) {
+                JUT_WARN_DEVICE(204, 1, "%s", "----- syncDSP : Send Miss\n");
+            }
 		} else {
 			JASDsp::finishWork(mail);
 		}

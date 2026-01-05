@@ -476,7 +476,7 @@ static actor_method_class l_daOptiLift_Method = {
     (process_method_func)daOptiLift_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv8OptiLift = {
+actor_process_profile_definition g_profile_Obj_Lv8OptiLift = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

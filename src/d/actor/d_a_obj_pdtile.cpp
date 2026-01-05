@@ -193,10 +193,12 @@ static dCcD_SrcCyl cc_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        70.0f, // mRadius
-        100.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            70.0f, // mRadius
+            100.0f // mHeight
+        } // mCyl
+    }
 };
 
 int daObjPDtile_c::Create() {
@@ -520,7 +522,7 @@ static actor_method_class daObjPDtile_METHODS = {
     (process_method_func)daObjPDtile_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_PDtile = {
+actor_process_profile_definition g_profile_Obj_PDtile = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

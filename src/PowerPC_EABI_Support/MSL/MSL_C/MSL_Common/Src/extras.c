@@ -1,13 +1,13 @@
 #include "extras.h"
-#include "ctype.h"
+#include <ctype>
 
 int stricmp(const char* str1, const char* str2) {
 	char a_var;
 	char b_var;
 
 	do {
-		b_var = _tolower(*str1++);
-		a_var = _tolower(*str2++);
+		b_var = tolower(*str1++);
+		a_var = tolower(*str2++);
 
 		if (b_var < a_var) {
 			return -1;

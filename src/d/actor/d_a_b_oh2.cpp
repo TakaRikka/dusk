@@ -299,7 +299,7 @@ static actor_method_class l_daB_OH2_Method = {
     (process_method_func)daB_OH2_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_OH2 = {
+actor_process_profile_definition g_profile_B_OH2 = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

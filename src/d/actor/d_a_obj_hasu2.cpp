@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_hasu2.h"
 
 static void rideCallBack(dBgW* param_0, fopAc_ac_c* param_1, fopAc_ac_c* param_2) {
-    (void)param_0;
+    UNUSED(param_0);
     if (fopAcM_GetName(param_2) == PROC_ALINK) {
         nObjMHasu::daObjMHasu_c* hasu = (nObjMHasu::daObjMHasu_c*)(param_1);
         hasu->setRideFlag(true);
@@ -184,7 +184,7 @@ actor_method_class daObjMHasu_METHODS = {
     (process_method_func)&daObjMHasu_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_MHasu = {
+actor_process_profile_definition g_profile_Obj_MHasu = {
   fpcLy_CURRENT_e,                   // mLayerID
   3,                                 // mListID
   fpcPi_CURRENT_e,                   // mListPrio

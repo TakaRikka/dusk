@@ -4,14 +4,20 @@
 #include "JSystem/JKernel/JKRAramPiece.h"
 #include "JSystem/JSupport/JSUFileStream.h"
 #include "JSystem/JUtility/JUTException.h"
-#include <stdint.h>
+#include <stdint>
+
+#if PLATFORM_GCN
+const u32 stack_size = 0xc00;
+#else
+const u32 stack_size = 0x4000;
+#endif
 
 JKRAramStream* JKRAramStream::sAramStreamObject;
 
 JKRAramStream* JKRAramStream::create(s32 priority) {
     if (!sAramStreamObject) {
         sAramStreamObject = new (JKRGetSystemHeap(), 0) JKRAramStream(priority);
-        setTransBuffer(NULL, 0, NULL);
+        JKRResetAramTransferBuffer();
     }
 
     return sAramStreamObject;
@@ -26,7 +32,7 @@ void* JKRAramStream::sMessageBuffer[4] = {
 
 OSMessageQueue JKRAramStream::sMessageQueue = {0};
 
-JKRAramStream::JKRAramStream(s32 priority) : JKRThread(0xc00, 0x10, priority) {
+JKRAramStream::JKRAramStream(s32 priority) : JKRThread(stack_size, 0x10, priority) {
     resume();
 }
 
@@ -65,12 +71,12 @@ s32 JKRAramStream::writeToAram(JKRAramStreamCommand* command) {
     JKRHeap* heap = command->mHeap;
 
     if (buffer) {
-        bufferSize = (bufferSize) ? bufferSize : 0x8000;
+        bufferSize = bufferSize == 0 ? 0x8000 : bufferSize;
 
         command->mTransferBufferSize = bufferSize;
         command->mAllocatedTransferBuffer = false;
     } else {
-        bufferSize = (bufferSize) ? bufferSize : 0x8000;
+        bufferSize = bufferSize == 0 ? 0x8000 : bufferSize;
 
         if (heap) {
             buffer = (u8*)JKRAllocFromHeap(heap, bufferSize, -0x20);
@@ -107,6 +113,7 @@ s32 JKRAramStream::writeToAram(JKRAramStreamCommand* command) {
 
             JKRAramPcs(0, (uintptr_t)buffer, destination, length, NULL);
             dstSize -= length;
+            offset += length;
             writtenLength += length;
             destination += length;
 
@@ -159,20 +166,15 @@ JKRAramStreamCommand* JKRAramStream::sync(JKRAramStreamCommand* command, BOOL is
     if (isNonBlocking == 0) {
         OSReceiveMessage(&command->mMessageQueue, &message, OS_MESSAGE_BLOCK);
         if (message == NULL) {
-            command = NULL;
-            return command;
+            return NULL;
         } else {
             return command;
         }
     } else {
-        BOOL receiveResult =
-            OSReceiveMessage(&command->mMessageQueue, &message, OS_MESSAGE_NOBLOCK);
-        if (receiveResult == FALSE) {
-            command = NULL;
-            return command;
+        if (OSReceiveMessage(&command->mMessageQueue, &message, OS_MESSAGE_NOBLOCK) == FALSE) {
+            return NULL;
         } else if (message == NULL) {
-            command = NULL;
-            return command;
+            return NULL;
         } else {
             return command;
         }

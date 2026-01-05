@@ -1978,6 +1978,47 @@ void cM3d_CalcVecZAngle(Vec const& param_0, csXyz* param_1) {
     param_1->z = 0;
 }
 
+#ifdef DEBUG
+
+bool cM3d_UpMtx_Base(const Vec& param_1, const Vec& param_2, Mtx param_3) {
+    Vec local_3c;
+    Vec auStack_48;
+    f32 dVar8;
+    f32 angle;
+    
+    if (cM3d_IsZero(PSVECMag(&param_2))) {
+        MTXIdentity(param_3);
+        return false;
+    }
+
+    PSVECNormalize(&param_2, &auStack_48);
+    PSVECCrossProduct(&param_1, &auStack_48, &local_3c);
+
+    if (cM3d_IsZero(PSVECMag(&local_3c))) {
+        local_3c.x = 1.0f;
+        local_3c.y = 0.0f;
+        local_3c.z = 0.0f;
+    }
+
+    dVar8 = PSVECDotProduct(&param_1, &auStack_48);
+    if (dVar8 > 1.0f) {
+        dVar8 = 1.0f;
+    } else if (dVar8 < -1.0f) {
+        dVar8 = -1.0f;
+    }
+
+    angle = acosf(dVar8);
+    C_MTXRotAxisRad(param_3, &local_3c, angle);
+    return true;
+}
+
+static Vec base_y = {0.0f, 1.0f, 0.0f};
+
+bool cM3d_UpMtx(const Vec& param_1, Mtx param_2) {
+    return cM3d_UpMtx_Base(base_y, param_1, param_2);
+}
+
+#endif
 
 void cM3d_PlaneCrossLineProcWork(f32 f1, f32 f2, f32 f3, f32 f4, f32 f5, f32 f6, f32 f7, f32* pF1,
                                  f32* pF2) {

@@ -273,7 +273,7 @@ static actor_method_class l_daKytag08_Method = {
     (process_method_func)daKytag08_Draw,
 };
 
-extern actor_process_profile_definition g_profile_KYTAG08 = {
+actor_process_profile_definition g_profile_KYTAG08 = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

@@ -138,7 +138,7 @@ static actor_method_class daObjLv3saka_METHODS = {
     (process_method_func)daObjLv3saka_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjLv3saka_MoveBGDraw};
 
-extern actor_process_profile_definition g_profile_Obj_Lv3R10Saka = {
+actor_process_profile_definition g_profile_Obj_Lv3R10Saka = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

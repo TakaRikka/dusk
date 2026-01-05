@@ -19,18 +19,6 @@ static char const* l_arcName[7] = {
     "MirrorB",
 };
 
-static char const* l_stageName[9] = {
-    "D_MN05A",
-    "D_MN04A",
-    "D_MN01A",
-    "D_MN10A",
-    "D_MN11A",
-    "D_MN06A",
-    "D_MN07A",
-    "D_MN01A",
-    "D_MN01A",
-};
-
 static int const l_bmdIndex[7] = {4, 4, 4, 9, 9, 10, 11};
 
 static int const l_brkIndex[3] = {7, 7, 7};
@@ -38,6 +26,18 @@ static int const l_brkIndex[3] = {7, 7, 7};
 static int const l_btkIndex[7] = {14, 14, 14, 14, 14, 15, 16};
 
 static int getNowLevel() {
+    static char const* l_stageName[9] = {
+        "D_MN05A",
+        "D_MN04A",
+        "D_MN01A",
+        "D_MN10A",
+        "D_MN11A",
+        "D_MN06A",
+        "D_MN07A",
+        "D_MN01A",
+        "D_MN01A",
+    };
+
     for (int i = 0; i < 9; i++) {
         if (!strcmp(dComIfGp_getStartStageName(), l_stageName[i])) {
             return i + 1;
@@ -293,7 +293,7 @@ static actor_method_class l_daObj_Ystone_Method = {
     (process_method_func)daObj_Ystone_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_YSTONE = {
+actor_process_profile_definition g_profile_OBJ_YSTONE = {
     fpcLy_CURRENT_e,
     8,
     fpcPi_CURRENT_e,

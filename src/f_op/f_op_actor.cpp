@@ -6,8 +6,8 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_alink.h"
+#include "d/actor/d_a_suspend.h"
 #include "d/d_com_inf_actor.h"
-#include "d/d_com_static.h"
 #include "d/d_demo.h"
 #include "d/d_s_play.h"
 #include "f_ap/f_ap_game.h"
@@ -75,7 +75,7 @@ void print_error_check_c::start() {
     mPrintErrors = print_errors;
 
     if (mPrintDisable) {
-        mPrintInit = print_initialized;
+        mPrintInit = __OSReport_disable;
         OSReportDisable();
     } else {
         mPrintInit = -1;
@@ -106,11 +106,11 @@ void print_error_check_c::check() {
     }
 
     if (mPrintInit != -1) {
-        print_initialized = mPrintInit;
+        __OSReport_disable = mPrintInit;
     }
 
     if (mPrintErrors != print_errors) {
-        static char l_name[8];
+        static char l_name[dStage_NAME_LENGTH];
         fopAcM_getNameString(mpActor, l_name);
         OS_REPORT("\x1b[36m↑%s_SUBMETHOD %08x %08x %s %s\n\x1b[m",
             mName, mpActor, mpActor->base.base.name, fpcDbSv_getNameString(mpActor->base.base.name), l_name);
@@ -119,7 +119,7 @@ void print_error_check_c::check() {
     if (mThresholdEnable) {
         OSTick tick_diff = tick - mTick;
         if (mTimeMs != 0 && tick_diff > OSMicrosecondsToTicks(mTimeMs)) {
-            static char l_name[8];
+            static char l_name[dStage_NAME_LENGTH];
             fopAcM_getNameString(mpActor, l_name);
             OSReport_Warning("%s_SUBMETHOD 処理時間ながすぎ %4d us [%s] %s\n",
                 mName, OSTicksToMicroseconds(tick_diff), fpcDbSv_getNameString(mpActor->base.base.name), l_name);
@@ -155,7 +155,7 @@ print_error_check_c::param_s print_error_check_c::sDRAW = {
 class fopac_HIO_c : public JORReflexible {
 public:
     fopac_HIO_c();
-    ~fopac_HIO_c();
+    virtual ~fopac_HIO_c();
 
     void genMessage(JORMContext*);
 
@@ -168,7 +168,6 @@ public:
     /* 0x0C */ u8 mBBtnInfoDisp;
 };
 
-fopac_HIO_c::~fopac_HIO_c() {}
 
 fopac_HIO_c::fopac_HIO_c() {
     mId = -1;
@@ -177,6 +176,8 @@ fopac_HIO_c::fopac_HIO_c() {
     mActorNum = 0;
     mBBtnInfoDisp = false;
 }
+
+fopac_HIO_c::~fopac_HIO_c() {}
 
 static fopac_HIO_c l_HIO;
 
@@ -219,7 +220,7 @@ static int fopAc_Draw(void* i_this) {
     fapGm_HIO_c::startCpuTimer();
 
     if (mDoCPd_c::getTrigB(PAD_1) && l_HIO.mBBtnInfoDisp) {
-        static char l_name[8];
+        static char l_name[dStage_NAME_LENGTH];
         fopAcM_getNameString(actor, l_name);
 
         OSReport("%7s %3d %5d x %10.2f y %10.2f z %10.2f\n",
@@ -228,7 +229,7 @@ static int fopAc_Draw(void* i_this) {
 
     if (l_HIO.mActorNum == fopAcM_GetName(actor) && l_HIO.mStopDraw) {
         if (l_HIO.field_0x8 != l_HIO.mStopDraw) {
-            static char l_name[8];
+            static char l_name[dStage_NAME_LENGTH];
             fopAcM_getNameString(actor, l_name);
             OSReport("<%s> の描画を停止します\n", l_name);
         }
@@ -242,7 +243,7 @@ static int fopAc_Draw(void* i_this) {
 
     if (!dComIfGp_isPauseFlag()) {
         int var_r28 = dComIfGp_event_moveApproval(actor);
-        if ((var_r28 == 2 || (!fopAcM_CheckStatus(actor, fopAc_ac_c::stopStatus) &&
+        if ((var_r28 == 2 || (!fopAcM_CheckStatus(actor, fopAc_ac_c::getStopStatus()) &&
             (!fopAcM_CheckStatus(actor, fopAcStts_CULL_e) || !fopAcM_cullingCheck(actor)))) &&
             !fopAcM_CheckStatus(actor, 0x21000000))
         {
@@ -271,11 +272,11 @@ static int fopAc_Draw(void* i_this) {
     }
 
     #if DEBUG
-    char sp38[40];
-    char sp10[8];
-    fopAcM_getNameString(actor, sp10);
-    sprintf(sp38, "%s（描画処理）", sp10);
-    fapGm_HIO_c::stopCpuTimer(sp38);
+    char message[40];
+    char name[dStage_NAME_LENGTH];
+    fopAcM_getNameString(actor, name);
+    sprintf(message, "%s（描画処理）", name);
+    fapGm_HIO_c::stopCpuTimer(message);
     #endif
 
     return ret;
@@ -290,7 +291,7 @@ static int fopAc_Execute(void* i_this) {
 
     if (l_HIO.mActorNum == fopAcM_GetName(actor) && l_HIO.mStopExecute) {
         if (l_HIO.field_0x7 != l_HIO.mStopExecute) {
-            static char l_name[8];
+            static char l_name[dStage_NAME_LENGTH];
             fopAcM_getNameString(actor, l_name);
             OSReport("<%s> の処理を停止します\n", l_name);
         }
@@ -307,7 +308,7 @@ static int fopAc_Execute(void* i_this) {
 
     if (!(-1.0e32f < actor->current.pos.x && actor->current.pos.x < 1.0e32f && -1.0e32f < actor->current.pos.y && actor->current.pos.y < 1.0e32f && -1.0e32f < actor->current.pos.z && actor->current.pos.z < 1.0e32f))
     {
-        static char l_name[8];
+        static char l_name[dStage_NAME_LENGTH];
         fopAcM_getNameString(actor, l_name);
         OSReport("！！！<%s> が範囲外にいます！！！\n", l_name);
     }
@@ -315,62 +316,60 @@ static int fopAc_Execute(void* i_this) {
     JUT_ASSERT(685, -1.0e32f < actor->current.pos.x && actor->current.pos.x < 1.0e32f && -1.0e32f < actor->current.pos.y && actor->current.pos.y < 1.0e32f && -1.0e32f < actor->current.pos.z && actor->current.pos.z < 1.0e32f);
     #endif
 
-    if (!dComIfGp_isPauseFlag() && dScnPly_c::isPause()) {
-        if (!dComIfA_PauseCheck()) {
-            daSus_c::check(actor);
-            actor->eventInfo.beforeProc();
-            s32 move = dComIfGp_event_moveApproval(i_this);
-            fopAcM_OffStatus(actor, 0x40000000);
+    if (!dComIfGp_isPauseFlag() && !dScnPly_c::isPause() && !dComIfA_PauseCheck()) {
+        daSus_c::check(actor);
+        actor->eventInfo.beforeProc();
+        s32 move = dComIfGp_event_moveApproval(actor);
+        fopAcM_OffStatus(actor, 0x40000000);
 
-            if (!fopAcM_CheckStatus(actor, 0x20000000) &&
-                (move == 2 ||
-                 (move != 0 && !fopAcM_CheckStatus(actor, fopAc_ac_c::stopStatus) &&
-                  (!fopAcM_CheckStatus(actor, fopAcStts_NOEXEC_e) || !fopAcM_CheckCondition(actor, fopAcCnd_NODRAW_e)))))
+        if (!fopAcM_CheckStatus(actor, 0x20000000) &&
+            (move == 2 ||
+                (move != 0 && !fopAcM_CheckStatus(actor, fopAc_ac_c::getStopStatus()) &&
+                (!fopAcM_CheckStatus(actor, fopAcStts_NOEXEC_e) || !fopAcM_CheckCondition(actor, fopAcCnd_NODRAW_e)))))
+        {
+            fopAcM_OffCondition(actor, fopAcCnd_NOEXEC_e);
+            actor->old = actor->current;
+
+            #if DEBUG
             {
-                fopAcM_OffCondition(actor, fopAcCnd_NOEXEC_e);
-                actor->old = actor->current;
+            print_error_check_c error_check(actor, print_error_check_c::sEXECUTE);
+            #endif
 
-                #if DEBUG
-                {
-                print_error_check_c error_check(actor, print_error_check_c::sEXECUTE);
-                #endif
+            ret = fpcMtd_Execute((process_method_class*)actor->sub_method, actor);
 
-                ret = fpcMtd_Execute((process_method_class*)actor->sub_method, actor);
-
-                #if DEBUG
-                }
-                #endif
-            } else {
-                actor->eventInfo.suspendProc(actor);
-                fopAcM_OnCondition(actor, fopAcCnd_NOEXEC_e);
+            #if DEBUG
             }
-
-            if (fopAcM_CheckStatus(actor, 0x20) &&
-                actor->home.pos.y - actor->current.pos.y > 5000.0f)
-            {
-                fopAcM_delete(actor);
-            }
-
-            JUT_ASSERT(750, !isnan(actor->current.pos.x));
-            JUT_ASSERT(751, !isnan(actor->current.pos.y));
-            JUT_ASSERT(752, !isnan(actor->current.pos.z));
-
-            if (actor->current.pos.y < -1e31f) {
-                actor->current.pos.y = -1e31f;
-            }
-
-            JUT_ASSERT(762, -1.0e32f < actor->current.pos.x && actor->current.pos.x < 1.0e32f && -1.0e32f < actor->current.pos.y && actor->current.pos.y < 1.0e32f && -1.0e32f < actor->current.pos.z && actor->current.pos.z < 1.0e32f);
-
-            dKy_depth_dist_set(actor);
+            #endif
+        } else {
+            actor->eventInfo.suspendProc(actor);
+            fopAcM_OnCondition(actor, fopAcCnd_NOEXEC_e);
         }
+
+        if (fopAcM_CheckStatus(actor, 0x20) &&
+            actor->home.pos.y - actor->current.pos.y > 5000.0f)
+        {
+            fopAcM_delete(actor);
+        }
+
+        JUT_ASSERT(750, !isnan(actor->current.pos.x));
+        JUT_ASSERT(751, !isnan(actor->current.pos.y));
+        JUT_ASSERT(752, !isnan(actor->current.pos.z));
+
+        if (actor->current.pos.y < -1e31f) {
+            actor->current.pos.y = -1e31f;
+        }
+
+        JUT_ASSERT(762, -1.0e32f < actor->current.pos.x && actor->current.pos.x < 1.0e32f && -1.0e32f < actor->current.pos.y && actor->current.pos.y < 1.0e32f && -1.0e32f < actor->current.pos.z && actor->current.pos.z < 1.0e32f);
+
+        dKy_depth_dist_set(actor);
     }
 
     #if DEBUG
-    char sp38[40];
-    char sp10[8];
-    fopAcM_getNameString(actor, sp10);
-    sprintf(sp38, "%s（計算処理）", sp10);
-    fapGm_HIO_c::stopCpuTimer(sp38);
+    char message[40];
+    char name[dStage_NAME_LENGTH];
+    fopAcM_getNameString(actor, name);
+    sprintf(message, "%s（計算処理）", name);
+    fapGm_HIO_c::stopCpuTimer(message);
     #endif
 
     return ret;
@@ -400,7 +399,7 @@ static int fopAc_IsDelete(void* i_this) {
 
 static int fopAc_Delete(void* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
-    int ret;
+    int ret = FALSE;
 
     #if DEBUG
     {
@@ -416,7 +415,7 @@ static int fopAc_Delete(void* i_this) {
     if (ret == TRUE) {
         fopAcTg_ActorQTo(&actor->actor_tag);
         fopDwTg_DrawQTo(&actor->draw_tag);
-        fopAcM_DeleteHeap(actor);
+        fopAcM_DeleteHeap((fopAc_ac_c*) i_this);
 
         dDemo_actor_c* demoAc = dDemo_c::getActor(actor->demoActorID);
         if (demoAc != NULL) {
@@ -435,6 +434,7 @@ static int fopAc_Delete(void* i_this) {
     return ret;
 }
 
+// Wii: NONMATCHING, minor temp regalloc
 static int fopAc_Create(void* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
     int ret;
@@ -442,7 +442,7 @@ static int fopAc_Create(void* i_this) {
     if (fpcM_IsFirstCreating(i_this)) {
         actor_process_profile_definition* profile =
             (actor_process_profile_definition*)fpcM_GetProfile(i_this);
-        actor->actor_type = fpcBs_MakeOfType(&g_fopAc_type);
+        actor->actor_type = fpcM_MakeOfType(&g_fopAc_type);
         actor->sub_method = (profile_method_class*)profile->sub_method;
 
         fopAcTg_Init(&actor->actor_tag, actor);
@@ -506,8 +506,9 @@ static int fopAc_Create(void* i_this) {
         }
 
         if (filelist != NULL) {
+            u8 sw;
             if (!dStage_FileList_dt_GetEnemyAppear1Flag(filelist)) {
-                u8 sw = dStage_FileList_dt_GetBitSw(filelist);
+                sw = dStage_FileList_dt_GetBitSw(filelist);
                 if (sw != 0xFF && dComIfGs_isSwitch(sw, actor->home.roomNo) &&
                     profile->group == fopAc_ENEMY_e)
                 {
@@ -515,7 +516,7 @@ static int fopAc_Create(void* i_this) {
                     return cPhs_ERROR_e;
                 }
             } else {
-                u8 sw = dStage_FileList_dt_GetBitSw(filelist);
+                sw = dStage_FileList_dt_GetBitSw(filelist);
                 if (sw != 0xFF && !dComIfGs_isSwitch(sw, actor->home.roomNo) &&
                     profile->group == fopAc_ENEMY_e)
                 {
@@ -629,7 +630,12 @@ void fopEn_enemy_c::drawBallModel(dKy_tevstr_c* i_tevstr) {
     }
 }
 
-extern actor_method_class g_fopAc_Method = {
+#if PLATFORM_WII || VERSION == VERSION_SHIELD
+u8 fopAcM::HeapAdjustEntry;
+u8 fopAcM::HeapAdjustUnk;
+#endif
+
+actor_method_class g_fopAc_Method = {
     (process_method_func)fopAc_Create,  (process_method_func)fopAc_Delete,
     (process_method_func)fopAc_Execute, (process_method_func)fopAc_IsDelete,
     (process_method_func)fopAc_Draw,

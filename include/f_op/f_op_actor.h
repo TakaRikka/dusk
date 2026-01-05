@@ -3,13 +3,16 @@
 
 #include "d/d_kankyo_tev_str.h"
 #include "f_pc/f_pc_leaf.h"
+#include "m_Do/m_Do_audio.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "SSystem/SComponent/c_sxyz.h"
 #include "global.h"
 
 struct actor_method_class {
     /* 0x00 */ leafdraw_method_class base;
     /* 0x14 */ u8 field_0x14[0xC];  // Likely padding
-};
 
+};
 struct actor_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;
     /* 0x24 */ actor_method_class* sub_method;
@@ -119,7 +122,7 @@ enum fopAc_AttentionFlag_e {
     /* 0x00000040 */ fopAc_AttnFlag_JUEL_e   = (1 << fopAc_attn_JUEL_e),
     /* 0x00000080 */ fopAc_AttnFlag_ETC_e    = (1 << fopAc_attn_ETC_e),
 
-    /* 0x00000100 */fopAc_AttnFlag_CHECK_e  = (1 << fopAc_attn_CHECK_e),
+    /* 0x00000100 */ fopAc_AttnFlag_CHECK_e  = (1 << fopAc_attn_CHECK_e),
 
     /* 0x00200000 */ fopAc_AttnFlag_UNK_0x200000   = 0x200000,
     /* 0x00400000 */ fopAc_AttnFlag_UNK_0x400000   = 0x400000,
@@ -275,6 +278,7 @@ public:
     fopAc_ac_c();
     ~fopAc_ac_c();
 
+    static u32 getStopStatus() { return stopStatus; }
     static void setStopStatus(u32 status) { stopStatus = status; }
 
     static u32 stopStatus;

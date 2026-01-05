@@ -100,6 +100,8 @@ public:
 
     ~JSUList() {}
 
+    void initiate() { JSUPtrList::initiate(); }
+
     bool append(JSULink<T>* link) { return this->JSUPtrList::append((JSUPtrLink*)link); }
 
     bool prepend(JSULink<T>* link) { return this->JSUPtrList::prepend((JSUPtrLink*)link); }
@@ -137,7 +139,7 @@ public:
         return *this;
     }
 
-    T* getObject() { return this->mLink->getObject(); }
+    T* getObject() const { return this->mLink->getObject(); }
 
     bool operator==(JSULink<T> const* other) const { return this->mLink == other; }
     bool operator!=(JSULink<T> const* other) const { return this->mLink != other; }
@@ -190,6 +192,8 @@ public:
 
     bool appendChild(JSUTree<T>* child) { return this->append(child); }
 
+    bool prependChild(JSUTree<T>* child) { return this->prepend(child); }
+
     bool removeChild(JSUTree<T>* child) { return this->remove(child); }
 
     bool insertChild(JSUTree<T>* before, JSUTree<T>* child) { return this->insert(before, child); }
@@ -226,11 +230,11 @@ public:
         return *this;
     }
 
-    T* getObject() { return this->mTree->getObject(); }
+    T* getObject() const { return this->mTree->getObject(); }
 
-    bool operator==(JSUTree<T>* other) { return this->mTree == other; }
+    bool operator==(const JSUTree<T>* other) const { return this->mTree == other; }
 
-    bool operator!=(JSUTree<T>* other) { return this->mTree != other; }
+    bool operator!=(const JSUTree<T>* other) const { return this->mTree != other; }
 
     JSUTreeIterator<T> operator++(int) {
         JSUTreeIterator<T> prev = *this;
@@ -243,9 +247,9 @@ public:
         return *this;
     }
 
-    T* operator*() { return this->getObject(); }
+    T* operator*() const { return mTree->getObject(); }
 
-    T* operator->() { return this->getObject(); }
+    T* operator->() const { return mTree->getObject(); }
 
 private:
     JSUTree<T>* mTree;

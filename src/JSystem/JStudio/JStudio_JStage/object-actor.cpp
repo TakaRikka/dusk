@@ -92,9 +92,6 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_ANIMATION(JStudio::data::TEOpera
 } 
 
 
-/* 8028AA48-8028AA5C 285388 0014+00 1/0 0/0 0/0 .text
- * adaptor_do_ANIMATION_MODE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_actor::adaptor_do_ANIMATION_MODE(JStudio::data::TEOperationData operation,
                                                           void const* pContent, u32 uSize) {
     switch (operation) {
@@ -106,17 +103,11 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_ANIMATION_MODE(JStudio::data::TE
     }
 }
 
-/* 8028AA5C-8028AAB4 28539C 0058+00 1/0 0/0 0/0 .text
- * adaptor_do_TEXTURE_ANIMATION__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_actor::adaptor_do_TEXTURE_ANIMATION(JStudio::data::TEOperationData operation,
                                                           void const* param_2, u32 param_3) {
     setJSG_ID_(&JStage::TActor::JSGSetTextureAnimation, operation, param_2, param_3);
 } 
 
-/* 8028AAB4-8028AAC8 2853F4 0014+00 1/0 0/0 0/0 .text
- * adaptor_do_TEXTURE_ANIMATION_MODE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_actor::adaptor_do_TEXTURE_ANIMATION_MODE(
     JStudio::data::TEOperationData operation, void const* pContent, u32 uSize) {
     switch (operation) {
@@ -139,9 +130,6 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT(
     }
 }
 
-/* 8028AB0C-8028AB68 28544C 005C+00 1/0 0/0 0/0 .text
- * adaptor_do_PARENT_NODE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT_NODE(
     JStudio::data::TEOperationData operation, void const* pContent, u32 uSize) {
     switch (operation) {
@@ -158,9 +146,6 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT_NODE(
     }
 }
 
-/* 8028AB68-8028ABF0 2854A8 0088+00 1/0 0/0 0/0 .text
- * adaptor_do_PARENT_ENABLE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT_ENABLE(
     JStudio::data::TEOperationData operation, void const* pContent, u32 uSize) {
     switch (operation) {
@@ -188,9 +173,6 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT_ENABLE(
     }
 }
 
-/* 8028ABF0-8028AC04 285530 0014+00 1/0 0/0 0/0 .text
- * adaptor_do_PARENT_FUNCTION__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_actor::adaptor_do_PARENT_FUNCTION(
     JStudio::data::TEOperationData operation, void const* pContent, u32 uSize) {
     switch (operation) {
@@ -213,9 +195,6 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_RELATION(
     }
 }
 
-/* 8028AC48-8028ACA4 285588 005C+00 1/0 0/0 0/0 .text
- * adaptor_do_RELATION_NODE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_actor::adaptor_do_RELATION_NODE(
     JStudio::data::TEOperationData operation, void const* pContent, u32 uSize) {
     switch (operation) {
@@ -232,9 +211,6 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_RELATION_NODE(
     }
 }
 
-/* 8028ACA4-8028ACFC 2855E4 0058+00 1/0 0/0 0/0 .text
- * adaptor_do_RELATION_ENABLE__Q214JStudio_JStage14TAdaptor_actorFQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_actor::adaptor_do_RELATION_ENABLE(
     JStudio::data::TEOperationData operation, void const* pContent, u32 uSize) {
     switch (operation) {
@@ -246,9 +222,6 @@ void JStudio_JStage::TAdaptor_actor::adaptor_do_RELATION_ENABLE(
     }
 }
 
-/* 8028ACFC-8028AD38 28563C 003C+00 3/3 0/0 0/0 .text
- * setJSG_ID___Q214JStudio_JStage14TAdaptor_actorFMQ26JStage6TActorFPCvPvUl_vQ37JStudio4data15TEOperationDataPCvUl
- */
 void JStudio_JStage::TAdaptor_actor::setJSG_ID_(void (JStage::TActor::*function)(u32),
                                                     JStudio::data::TEOperationData operation,
                                                     void const* pContent, u32 uSize) {

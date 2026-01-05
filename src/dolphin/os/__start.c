@@ -1,6 +1,8 @@
 #include <dolphin/dolphin.h>
 #include "__ppc_eabi_linker.h"
 
+static u8 Debug_BBA;
+
 extern void InitMetroTRK();
 extern void exit(int);
 extern int main(int argc, char* argv[]);

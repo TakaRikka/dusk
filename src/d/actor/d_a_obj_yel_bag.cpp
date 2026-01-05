@@ -29,7 +29,9 @@ static char* l_resNames[] = {"yel_bag"};
 
 dCcD_SrcCyl daObj_YBag_c::mCcDCyl = {
     daNpcT_c::mCcDObjData,
-    {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
+    {
+        {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
+    }
 };
 
 static u16 emttrId[4] = {
@@ -514,7 +516,7 @@ static actor_method_class daObj_YBag_MethodTable = {
     (process_method_func)daObj_YBag_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_YBAG = {
+actor_process_profile_definition g_profile_OBJ_YBAG = {
   fpcLy_CURRENT_e,         // mLayerID
   8,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

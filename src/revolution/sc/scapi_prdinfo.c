@@ -1,6 +1,6 @@
 #include <revolution/sc.h>
 #include <revolution/os.h>
-#include <string.h>
+#include <cstring>
 
 typedef struct {
     s8 area;

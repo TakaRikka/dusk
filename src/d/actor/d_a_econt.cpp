@@ -24,7 +24,7 @@ static void* s_rd_sub(void* i_this, void* param_1) {
 }
 
 static void rider_game(econt_class* i_this) {
-    if (dComIfGs_isSwitch(0x2e,fopAcM_GetRoomNo(i_this)) && dComIfGp_event_runCheck() == 0) {
+    if (dComIfGs_isSwitch(0x2e,fopAcM_GetRoomNo(i_this)) && !dComIfGp_event_runCheck()) {
         data_805197E0[0] = 0;
         fpcM_Search(s_rd_sub,i_this);
 
@@ -79,7 +79,7 @@ static actor_method_class l_daEcont_Method = {
     (process_method_func)daEcont_Draw
 };
 
-extern actor_process_profile_definition g_profile_ECONT = {
+actor_process_profile_definition g_profile_ECONT = {
     fpcLy_CURRENT_e,        // mLayerID   
     8,                      // mListID 
     fpcPi_CURRENT_e,        // mListPrio  

@@ -22,9 +22,6 @@ JGadget::TNodeLinkList::erase(JGadget::TNodeLinkList::iterator it) {
     return erase(it, next);
 }
 
-/* 802DCAA0-802DCB08 2D73E0 0068+00 1/1 0/0 0/0 .text
- * erase__Q27JGadget13TNodeLinkListFQ37JGadget13TNodeLinkList8iteratorQ37JGadget13TNodeLinkList8iterator
- */
 JGadget::TNodeLinkList::iterator JGadget::TNodeLinkList::erase(iterator a, iterator b) {
     TLinkListNode* cur = a.node;
     TLinkListNode* end = b.node;
@@ -38,9 +35,6 @@ JGadget::TNodeLinkList::iterator JGadget::TNodeLinkList::erase(iterator a, itera
     return b;
 }
 
-/* 802DCB08-802DCBA8 2D7448 00A0+00 1/1 0/0 0/0 .text
- * splice__Q27JGadget13TNodeLinkListFQ37JGadget13TNodeLinkList8iteratorRQ27JGadget13TNodeLinkListQ37JGadget13TNodeLinkList8iterator
- */
 void JGadget::TNodeLinkList::splice(iterator it, TNodeLinkList& rSrc, iterator itSrc) {
     iterator itSrcNext = itSrc;
     ++itSrcNext;

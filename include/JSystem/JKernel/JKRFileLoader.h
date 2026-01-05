@@ -14,8 +14,8 @@ public:
     JKRFileLoader(void);
     virtual ~JKRFileLoader();
 
-    bool isMounted() const { return this->mIsMounted; }
-    u32 getVolumeType() const { return this->mVolumeType; }
+    bool isMounted() { return this->mIsMounted; }
+    u32 getVolumeType() { return this->mVolumeType; }
 
 public:
     /* vt[03] */ virtual void unmount(void);

@@ -2,7 +2,7 @@
 #include <dolphin/ax.h>
 #include <dolphin/mix.h>
 #include <dolphin/syn.h>
-#include "fake_tgmath.h"
+#include "sdk_math.h"
 
 #include "__syn.h"
 

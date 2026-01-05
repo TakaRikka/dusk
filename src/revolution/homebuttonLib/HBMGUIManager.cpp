@@ -5,7 +5,7 @@
 #include "nw4hbm/lyt/picture.h"
 #include "nw4hbm/lyt/window.h"
 
-#include "new.h"
+#include <new>
 
 namespace homebutton {
     namespace gui {

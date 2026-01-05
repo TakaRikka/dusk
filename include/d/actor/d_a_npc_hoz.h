@@ -100,7 +100,7 @@ public:
     static cutFunc mCutList[];
 
 private:
-    /* 0xE40 */ u8 field_0xE40[0xE44 - 0xE40];
+    /* 0xE40 */ int field_0xE40;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;
     /* 0xF84 */ daStartAndGoal_c* field_0xf84;

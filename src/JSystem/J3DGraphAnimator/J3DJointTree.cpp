@@ -20,9 +20,6 @@ J3DJointTree::J3DJointTree()
       mWEvlpMixMtxIndex(0), mWEvlpMixWeight(0), mInvJointMtx(NULL), mWEvlpImportantMtxIdx(0),
       field_0x40(0), mJointName(NULL) {}
 
-/* 80325A9C-80325C00 3203DC 0164+00 1/0 2/2 0/0 .text
- * makeHierarchy__12J3DJointTreeFP8J3DJointPPC17J3DModelHierarchyP16J3DMaterialTableP13J3DShapeTable
- */
 void J3DJointTree::makeHierarchy(J3DJoint* pJoint, const J3DModelHierarchy** pHierarchy,
                                  J3DMaterialTable* pMaterialTable, J3DShapeTable* pShapeTable) {
     J3D_ASSERT_NULLPTR(95, pHierarchy != NULL);

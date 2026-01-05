@@ -9,7 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
-#include "cmath.h"
+#include <math>
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
 
@@ -278,7 +278,7 @@ static actor_method_class daObjPDoor_METHODS = {
     (process_method_func)daObjPDoor_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_PushDoor = {
+actor_process_profile_definition g_profile_Obj_PushDoor = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

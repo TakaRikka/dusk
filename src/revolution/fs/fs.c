@@ -1,6 +1,6 @@
 #include <revolution/fs.h>
 #include <revolution/ipc.h>
-#include <string.h>
+#include <cstring>
 
 static IOSFd __fsFd = -1;
 static u32 __fsInitialized = FALSE;

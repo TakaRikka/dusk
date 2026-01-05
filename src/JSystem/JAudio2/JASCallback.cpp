@@ -31,9 +31,12 @@ int JASCallbackMgr::reject(JASCallback* callback, void* argument) {
 
 void JASCallbackMgr::callback() {
 	for (int i = 0; i < NUM_CALLBACKS; i++) {
-		if (callbacks_[i].callback_ && callbacks_[i].callback_(callbacks_[i].arg_) < 0) {
-			callbacks_[i].callback_ = NULL;
-			callbacks_[i].arg_ = NULL;
+		if (callbacks_[i].callback_) {
+			s32 result = callbacks_[i].callback_(callbacks_[i].arg_);
+			if (result < 0) {
+				callbacks_[i].callback_ = NULL;
+				callbacks_[i].arg_ = NULL;
+			}
 		}
 	}
 }

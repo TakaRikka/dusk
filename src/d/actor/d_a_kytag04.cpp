@@ -116,7 +116,7 @@ static int daKytag04_Execute(kytag04_class* i_this) {
             s32 room_no = dComIfGp_roomControl_getStayNo();
 
             if (dComIfGs_isSwitch(i_this->field_0x5b5, room_no) && i_this->field_0x5d0 == 0) {
-                if (dComIfGp_getEvent().isOrderOK() &&
+                if (dComIfGp_getEvent()->isOrderOK() &&
                     fopAcM_orderOtherEvent(i_this, "WITHWARP_OPEN", 0xFFFF, 1, 0))
                 {
                     i_this->field_0x5d1 = 1;
@@ -168,7 +168,7 @@ static int daKytag04_Execute(kytag04_class* i_this) {
                 switch (i_this->field_0x5c4) {
                 case 0:
                     if (!a_this->eventInfo.checkCommandDemoAccrpt()) {
-                        dComIfGp_getEvent().reset(a_this);
+                        dComIfGp_getEvent()->reset(a_this);
                         fopAcM_orderPotentialEvent(a_this, 0x400, 0xFFFF, 0);
                     } else {
                         i_this->field_0x5c5 = 1;
@@ -359,7 +359,7 @@ static actor_method_class l_daKytag04_Method = {
     (process_method_func)daKytag04_Draw,
 };
 
-extern actor_process_profile_definition g_profile_KYTAG04 = {
+actor_process_profile_definition g_profile_KYTAG04 = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

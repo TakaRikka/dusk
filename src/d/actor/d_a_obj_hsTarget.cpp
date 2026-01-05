@@ -94,7 +94,7 @@ static actor_method_class l_daHsTarget_Method = {
     (process_method_func)daHsTarget_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_HsTarget = {
+actor_process_profile_definition g_profile_Obj_HsTarget = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

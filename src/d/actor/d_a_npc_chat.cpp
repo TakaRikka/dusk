@@ -1377,7 +1377,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0x14, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xB, 0, 0xFFEE, 0, 0,
+    0.0f, 0.0f, 0.0f, 0xB, 0, -0x0012, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1411,23 +1411,23 @@ static jntTblMPrm a_jntTbl_M[16] = {
     
     {
     0.0f, -0.3f, 0.0f, 0, 0, 0, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFEC, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFCE, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFBF, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0xFFF6, 5, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0014, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0032, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0041, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, -0x000A, 5, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0x14, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0x46, 0xA, 0x1E, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0x32, 0xFFFB, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0x32, -0x0005, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0xA, 5, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0x14, 0, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xFFBA, 0xA, 0xFFE2, 0, 0,
+    0.0f, 0.0f, 0.0f, -0x0046, 0xA, -0x001E, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0x32, 5, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0xF, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xA, 0, 0xFFE2, 0, 0,
+    0.0f, 0.0f, 0.0f, 0xA, 0, -0x001E, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0xA, 0xB, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xA, 0, 0xFFE2, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0xFFF6, 0xB, 0, 0,
+    0.0f, 0.0f, 0.0f, 0xA, 0, -0x001E, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, -0x000A, 0xB, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
     },
     
@@ -1553,7 +1553,7 @@ static jntTblMPrm a_jntTbl_M[16] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0x14, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xB, 0, 0xFFEE, 0, 0,
+    0.0f, 0.0f, 0.0f, 0xB, 0, -0x0012, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1587,23 +1587,23 @@ static jntTblMPrm a_jntTbl_M[16] = {
     
     {
     0.0f, -0.3f, 0.0f, 0, 0, 0, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFEC, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFCE, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFBF, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0xFFF6, 5, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0014, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0032, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0041, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, -0x000A, 5, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0x14, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0x46, 0xA, 0x1E, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0x32, 0xFFFB, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0x32, -0x0005, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0xA, 5, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0x14, 0, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xFFBA, 0xA, 0xFFE2, 0, 0,
+    0.0f, 0.0f, 0.0f, -0x0046, 0xA, -0x001E, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0x32, 5, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0xF, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xA, 0, 0xFFE2, 0, 0,
+    0.0f, 0.0f, 0.0f, 0xA, 0, -0x001E, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0xA, 0xB, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xA, 0, 0xFFE2, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0xFFF6, 0xB, 0, 0,
+    0.0f, 0.0f, 0.0f, 0xA, 0, -0x001E, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, -0x000A, 0xB, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
     },
     
@@ -1877,10 +1877,10 @@ static jntTblWPrm a_jntTbl_W[14] = {
     
     {
     0.0f, -0.3f, 0.0f, 0, 0, 0, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFEC, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFCE, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFBF, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0xFFF6, 5, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0014, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0032, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0041, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, -0x000A, 5, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0xA, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 8, 0, 0, 0, 0,
@@ -1889,12 +1889,12 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 8, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0xF, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xA, 0, 0xFFE2, 0, 0,
+    0.0f, 0.0f, 0.0f, 0xA, 0, -0x001E, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0xA, 0xB, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xA, 0, 0xFFE2, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0xFFF6, 0xB, 0, 0,
+    0.0f, 0.0f, 0.0f, 0xA, 0, -0x001E, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, -0x000A, 0xB, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
@@ -2045,10 +2045,10 @@ static jntTblWPrm a_jntTbl_W[14] = {
     
     {
     0.0f, -0.3f, 0.0f, 0, 0, 0, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFEC, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFCE, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0, 0xFFBF, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0xFFF6, 5, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0014, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0032, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, 0, -0x0041, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, -0x000A, 5, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0xA, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 8, 0, 0, 0, 0,
@@ -2057,12 +2057,12 @@ static jntTblWPrm a_jntTbl_W[14] = {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 8, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0xF, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xA, 0, 0xFFE2, 0, 0,
+    0.0f, 0.0f, 0.0f, 0xA, 0, -0x01E, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0xA, 0xB, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
-    0.0f, 0.0f, 0.0f, 0xA, 0, 0xFFE2, 0, 0,
-    0.0f, 0.0f, 0.0f, 0, 0xFFF6, 0xB, 0, 0,
+    0.0f, 0.0f, 0.0f, 0xA, 0, -0x001E, 0, 0,
+    0.0f, 0.0f, 0.0f, 0, -0x000A, 0xB, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 1, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     },
@@ -2660,10 +2660,7 @@ inline f32 CylH(int type) {
 }
 
 cPhs__Step daNpcChat_c::Create() {
-    if (!fopAcM_CheckCondition(this, fopAcCnd_INIT_e)) {
-        new (this) daNpcChat_c();
-        fopAcM_OnCondition(this, fopAcCnd_INIT_e);
-    }
+    fopAcM_ct(this, daNpcChat_c);
 
     mTwilight = dKy_darkworld_check();
     mType = getType();
@@ -3872,10 +3869,9 @@ bool daNpcChat_c::wait(void* param_1) {
                     }
                 }
             } else {
-                dComIfG_play_c& play = g_dComIfG_gameInfo.play; // fakematch
-                if (play.getEvent().runCheck()) {
+                if (dComIfGp_event_runCheck()) {
                     if (eventInfo.checkCommandTalk()) {
-                        if (!play.getEvent().chkTalkXY() || dComIfGp_evmng_ChkPresentEnd()) {
+                        if (!dComIfGp_event_chkTalkXY() || dComIfGp_evmng_ChkPresentEnd()) {
                             setAction(&daNpcChat_c::talk);
                         }
                     } else {
@@ -4063,7 +4059,7 @@ bool daNpcChat_c::demo(void* param_1) {
             break;
         
         case 2:
-            if (dComIfGp_event_runCheck() != FALSE) {
+            if (dComIfGp_event_runCheck()) {
                 if (eventInfo.checkCommandTalk() == false) {
                     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
                     s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
@@ -4128,7 +4124,7 @@ static actor_method_class daNpcChat_MethodTable = {
     (process_method_func)daNpcChat_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_CHAT = {
+actor_process_profile_definition g_profile_NPC_CHAT = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

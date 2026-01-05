@@ -70,7 +70,7 @@ static actor_method_class l_daTagMyna2_Method = {
     (process_method_func)daTagMyna2_Execute,
 };
 
-extern actor_process_profile_definition g_profile_TAG_MYNA2 = {
+actor_process_profile_definition g_profile_TAG_MYNA2 = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

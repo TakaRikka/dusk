@@ -161,9 +161,8 @@ int daObjCRVHAHEN_c::Execute() {
 
 int daObjCRVHAHEN_c::Delete() {
     if (mInitialized) {
-        J3DModelData* model_data = (J3DModelData*)dRes_control_c::getRes(
-            l_arcName, "CaravanPiece.bmd", g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x80);
-        dComIfGp_removeSimpleModel(model_data, (int)(char)current.roomNo);
+        J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "CaravanPiece.bmd");
+        dComIfGp_removeSimpleModel(model_data, fopAcM_GetRoomNo(this));
     }
 
     dComIfG_resDelete(&mPhase, l_arcName);
@@ -222,9 +221,8 @@ int daObjCRVHAHEN_c::create() {
         }
         mDrawHahen = 0;
         gravity = -9.0f;
-        J3DModelData* model_data = (J3DModelData*)dRes_control_c::getRes(
-            l_arcName, "CaravanPiece.bmd", g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x80);
-        dComIfGp_addSimpleModel(model_data, (int)(char)current.roomNo, '\0');
+        J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "CaravanPiece.bmd");
+        dComIfGp_addSimpleModel(model_data, fopAcM_GetRoomNo(this), '\0');
         mInitialized = true;
         mGroundHeight = current.pos.y;
         fopAcM_setCullSizeBox(this, -1000.0, -500.0, -1000.0, 1000.0, 500.0, 1000.0);
@@ -243,7 +241,7 @@ static actor_method_class l_daObjCRVHAHEN_Method = {
     (process_method_func)daObjCRVHAHEN_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_CRVHAHEN = {
+actor_process_profile_definition g_profile_Obj_CRVHAHEN = {
     fpcLy_CURRENT_e,          // mLayerID
     3,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

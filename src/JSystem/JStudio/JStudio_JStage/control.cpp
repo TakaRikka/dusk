@@ -9,9 +9,6 @@
 
 JStudio_JStage::TCreateObject::~TCreateObject() {}
 
-/* 80289B60-80289CE4 2844A0 0184+00 1/0 0/0 0/0 .text
- * create__Q214JStudio_JStage13TCreateObjectFPPQ27JStudio7TObjectRCQ47JStudio3stb4data20TParse_TBlock_object
- */
 bool JStudio_JStage::TCreateObject::create(
     JStudio::TObject** ppObject, JStudio::stb::data::TParse_TBlock_object const& rParse) {
     JUT_ASSERT(83, ppObject!=NULL);

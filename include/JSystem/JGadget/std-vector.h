@@ -2,9 +2,9 @@
 #define STD_VECTOR_H
 
 #include "JSystem/JGadget/std-memory.h"
-#include <algorithm.h>
-#include <msl_memory.h>
-#include <stdint.h>
+#include <algorithm>
+#include <memory>
+#include <stdint>
 
 namespace JGadget {
 namespace vector {

@@ -145,10 +145,12 @@ static dCcD_SrcCyl cc_dr_week_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        40.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            40.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 
 static dCcD_SrcSph cc_dr_tail_src = {
@@ -207,10 +209,12 @@ static dCcD_SrcCyl cc_pillar_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        40.0f, // mRadius
-        0.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            40.0f, // mRadius
+            0.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 
 static dCcD_SrcCyl cc_down_src = {
@@ -221,10 +225,12 @@ static dCcD_SrcCyl cc_down_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        50.0f, // mRadius
-        300.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            50.0f, // mRadius
+            300.0f // mHeight
+        } // mCyl
+    } // mCylAttr
 };
 
 static dCcD_SrcSph cc_downSph_src = {
@@ -281,8 +287,7 @@ daB_DR_HIO_c::daB_DR_HIO_c() {
     breath_feint2_OFF = true;
 }
 
-/* 805C78FD 0003+00 l_initHIO None */
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daB_DR_HIO_c l_HIO;
 
@@ -3860,7 +3865,7 @@ int daB_DR_c::execute() {
             fopAc_ac_c* parent;
             if (fopAcM_SearchByID(parentActorID, &parent) != 0 && parent != NULL && parent->argument != 1) {
                 if (dComIfGs_isZoneSwitch(20, fopAcM_GetRoomNo(this))) {
-                    dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+                    dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
                 }
             } else if (!dComIfGs_isZoneSwitch(0, fopAcM_GetRoomNo(this)) && cLib_calcTimer<int>(&mTimer[0]) == 0) {
                 dComIfGs_onZoneSwitch(0, fopAcM_GetRoomNo(this));
@@ -3962,7 +3967,7 @@ int daB_DR_c::_delete() {
     }
 
     if (mInitHIO) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (heap != NULL) {
@@ -4137,8 +4142,8 @@ int daB_DR_c::create() {
             health = 24;
             field_0x560 = 24;
 
-            if (!l_initHIO) {
-                l_initHIO = true;
+            if (!hio_set) {
+                hio_set = true;
                 mInitHIO = true;
                 l_HIO.field_0x4 = mDoHIO_CREATE_CHILD("翼竜", &l_HIO);
             }
@@ -4287,7 +4292,7 @@ static actor_method_class l_daB_DR_Method = {
     (process_method_func)daB_DR_Draw,
 };
 
-extern actor_process_profile_definition g_profile_B_DR = {
+actor_process_profile_definition g_profile_B_DR = {
   fpcLy_CURRENT_e,        // mLayerID
   4,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

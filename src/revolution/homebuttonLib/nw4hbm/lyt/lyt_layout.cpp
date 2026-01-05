@@ -5,7 +5,7 @@
 #include "textBox.h"
 #include "window.h"
 
-#include <new.h>
+#include <new>
 
 #define CONVERT_OFFSET_TO_PTR(type_, ptr_, offset_)                                                \
     reinterpret_cast<type_*>(reinterpret_cast<u32>(ptr_) + offset_)

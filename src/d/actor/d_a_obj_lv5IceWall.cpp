@@ -60,10 +60,12 @@ const dCcD_SrcGObjInf daIceWall_c::mCcDObjInfo = {
 dCcD_SrcCyl daIceWall_c::mCcDCyl = {
     daIceWall_c::mCcDObjInfo,
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,                // mRadius
-        0.0f                 // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,                // mRadius
+            0.0f                 // mHeight
+        }  // mCyl
+    }  // mCylAttr
 };
 
 static const int l_bmdIdx[] = {4, 5};
@@ -293,7 +295,7 @@ static actor_method_class l_daIceWall_Method = {
     (process_method_func)daIceWall_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_IceWall = {
+actor_process_profile_definition g_profile_Obj_IceWall = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

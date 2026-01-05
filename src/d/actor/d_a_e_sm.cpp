@@ -456,15 +456,13 @@ void daE_SM_c::SmDamageCheck() {
     cLib_addCalc2(&field_0x69c, 0.0f, 0.05f, 100.0f);
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_Sm_HIO_c l_HIO;
 
 namespace {
-    /* 807989E0-807989E4 000068 0004+00 3/4 0/0 0/0 .bss             s_Dis__22@unnamed@d_a_e_sm_cpp@ */
     static f32 s_Dis;
 
-    /* 807989E4-807989E8 00006C 0002+02 9/10 0/0 0/0 .bss s_TargetAngle__22@unnamed@d_a_e_sm_cpp@ */
     static s16 s_TargetAngle;
 };
 
@@ -1823,7 +1821,7 @@ int daE_SM_c::Delete() {
     }
 
     if (field_0x115c != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (heap != NULL) {
@@ -1918,8 +1916,8 @@ cPhs__Step daE_SM_c::Create() {
             return cPhs_ERROR_e;
         }
 
-        if (l_initHIO == 0) {
-            l_initHIO = 1;
+        if (hio_set == 0) {
+            hio_set = 1;
             field_0x115c = 1;
             l_HIO.field_0x4 = -1;
         }
@@ -2018,7 +2016,7 @@ static actor_method_class l_daE_SM_Method = {
     (process_method_func)daE_SM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_SM = {
+actor_process_profile_definition g_profile_E_SM = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

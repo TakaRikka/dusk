@@ -224,7 +224,7 @@ static actor_method_class daObjSwSpinner_METHODS = {
     (process_method_func)daObjSwSpinner_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SwSpinner = {
+actor_process_profile_definition g_profile_Obj_SwSpinner = {
     fpcLy_CURRENT_e,           // mLayerID
     3,                         // mListID
     fpcPi_CURRENT_e,           // mListPrio

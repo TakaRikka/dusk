@@ -60,7 +60,7 @@ int daObj_Stick_c::create() {
         mSph.SetStts(&mStts);
         mAcch.CrrPos(dComIfG_Bgsp());
         mGndChk = mAcch.m_gnd;
-        mGroundHeight = mAcch.m_ground_h;
+        mGroundHeight = mAcch.GetGroundH();
 
         if(mGroundHeight != -G_CM3D_F_INF) {
             setEnvTevColor();
@@ -96,7 +96,7 @@ int daObj_Stick_c::Execute() {
     mAcch.CrrPos(dComIfG_Bgsp());
     mGndChk = mAcch.m_gnd;
     
-    mGroundHeight = mAcch.m_ground_h;
+    mGroundHeight = mAcch.GetGroundH();
     if (mGroundHeight != -G_CM3D_F_INF) {
         setEnvTevColor();
         setRoomNo();
@@ -198,7 +198,7 @@ static actor_method_class daObj_Stick_MethodTable = {
     (process_method_func)daObj_Stick_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_STICK = {
+actor_process_profile_definition g_profile_OBJ_STICK = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

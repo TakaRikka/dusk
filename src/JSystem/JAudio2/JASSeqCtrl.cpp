@@ -7,7 +7,6 @@
 JASSeqParser JASSeqCtrl::sDefaultParser;
 
 JASSeqCtrl::JASSeqCtrl() {
-    mReader.init();
     field_0x3c = &sDefaultParser;
     field_0x40 = 0;
     field_0x44 = NULL;
@@ -96,27 +95,35 @@ int JASSeqCtrl::retIntr() {
 }
 
 int JASSeqCtrl::findIntr() {
-    u32 uVar1 = field_0x4e & field_0x4c;
-    for (int i = 0; uVar1 != 0; uVar1 >>= 1, i++) {
+    u32 uVar1 = field_0x4e;
+    uVar1 &= field_0x4c;
+    int i;
+    for (i = 0; uVar1 != 0; i++) {
         if (uVar1 & 1) {
             field_0x4c &= ~(1 << i);
             return i;
         }
+        uVar1 >>= 1;
     }
     return -1;
 }
 
 void JASSeqCtrl::checkIntr() {
-    if (field_0x44) return;
+    if (field_0x44) {
+        return;
+    }
     int intr = findIntr();
 
-    if (intr < 0) return;
+    if (intr < 0) {
+        return;
+    }
 
-    u32 uVar2 = field_0x48;
-    uVar2 += intr * 3;
-    u32 uVar1 = get24(uVar2);
+    u32 vec = field_0x48;
+    JUT_ASSERT(144, vec != 0);
+    vec += intr * 3;
+    vec = get24(vec);
     field_0x44 = mReader.getCur();
-    mReader.jump(uVar1);
+    mReader.jump(vec);
 }
 
 void JASSeqCtrl::timerProcess() {

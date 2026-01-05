@@ -98,11 +98,11 @@ bool JAUAudioArcInterpreter::readCommand_() {
         break;
     }
     case 'sect': {
-        readU8_();
         u8 var1 = readU8_();
         u8 var2 = readU8_();
         u8 var3 = readU8_();
-        readMaxSeCategory(var1, var2, var3);
+        u8 var4 = readU8_();
+        readMaxSeCategory(var2, var3, var4);
         break;
     }
     default:

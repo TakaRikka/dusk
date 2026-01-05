@@ -25,9 +25,9 @@
 #include "d/d_msg_string.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
-#include "string.h"
+#include <string>
 
-#include "stdio.h"
+#include <stdio>
 
 typedef void (dMenu_Ring_c::*initFunc)();
 static initFunc stick_init[] = {

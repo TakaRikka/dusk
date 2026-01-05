@@ -202,7 +202,7 @@ static void damage_check(e_sh_class* i_this) {
     }
 }
 
-static bool l_HIOInit;
+static bool hio_set;
 
 static daE_SH_HIO_c l_HIO;
 
@@ -1114,7 +1114,7 @@ static int daE_SH_Delete(e_sh_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_sh");
 
     if (i_this->mInitState != 0) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.mChild);
     }
 
@@ -1213,9 +1213,9 @@ static int daE_SH_Create(fopAc_ac_c* i_this) {
         }
 
         OS_REPORT("");
-        if (!l_HIOInit) {
+        if (!hio_set) {
             sh->mInitState = 1;
-            l_HIOInit = true;
+            hio_set = true;
             l_HIO.mChild = mDoHIO_CREATE_CHILD("E_sh", &l_HIO);
         }
 
@@ -1262,7 +1262,7 @@ static actor_method_class l_daE_SH_Method = {
     (process_method_func)daE_SH_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_SH = {
+actor_process_profile_definition g_profile_E_SH = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

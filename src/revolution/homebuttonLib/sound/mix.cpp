@@ -1,7 +1,7 @@
 #include "mix.h"
 
 
-#include <string.h>
+#include <string>
 
 #include <revolution/types.h>
 

@@ -10,9 +10,6 @@
 
 JStudio_JParticle::TCreateObject::~TCreateObject() {}
 
-/* 8028E400-8028E474 288D40 0074+00 1/0 1/0 0/0 .text
- * create__Q217JStudio_JParticle13TCreateObjectFPPQ27JStudio7TObjectRCQ47JStudio3stb4data20TParse_TBlock_object
- */
 bool
 JStudio_JParticle::TCreateObject::create(JStudio::TObject** ppObject,
                                          JStudio::stb::data::TParse_TBlock_object const& param_2) {
@@ -41,9 +38,6 @@ void JStudio_JParticle::TCreateObject::emitter_destroy(JPABaseEmitter* pEmitter)
     pJPAEmitterManager_->forceDeleteEmitter(pEmitter);
 }
 
-/* 8028E508-8028E60C 288E48 0104+00 1/1 0/0 0/0 .text
- * createObject_JPA_PARTICLE___Q217JStudio_JParticle13TCreateObjectFRCQ47JStudio3stb4data20TParse_TBlock_objectPQ217JStudio_JParticle13TCreateObject
- */
 JStudio::TObject* JStudio_JParticle::TCreateObject::createObject_JPA_PARTICLE_(
     JStudio::stb::data::TParse_TBlock_object const& param_1,
     JStudio_JParticle::TCreateObject* param_2) {

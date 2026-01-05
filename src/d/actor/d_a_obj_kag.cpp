@@ -40,7 +40,7 @@ public:
     /* 0x0C */ f32 model_scale_male;    // モデルスケール(オス) - Model Scale (Male)
 };
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daObj_KagHIO_c l_HIO;
 
@@ -582,7 +582,7 @@ int daObjKAG_c::_delete() {
     dComIfG_resDelete(&mPhase, "I_Kag");
 
     if (field_0x85f != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -695,8 +695,8 @@ cPhs__Step daObjKAG_c::create() {
 
         OS_REPORT("/////////// I_kag SET OK ///////\n");
 
-        if (l_initHIO == 0) {
-            l_initHIO = 1;
+        if (hio_set == 0) {
+            hio_set = 1;
             field_0x85f = 1;
             l_HIO.id = mDoHIO_CREATE_CHILD("黄金蟲(カゲロウ)", &l_HIO);
         }
@@ -767,7 +767,7 @@ static actor_method_class l_daObjKAG_Method = {
     (process_method_func)daObjKAG_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Kag = {
+actor_process_profile_definition g_profile_Obj_Kag = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

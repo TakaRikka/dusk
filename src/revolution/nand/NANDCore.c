@@ -2,7 +2,7 @@
 #include <revolution/esp.h>
 #include <revolution/fs.h>
 #include <revolution/os.h>
-#include <string.h>
+#include <cstring>
 
 #ifdef SDK_AUG2010
 #define BUILD_DATE "Aug 23 2010"

@@ -29,33 +29,26 @@ public:
     void setActionMode(int);
     f32 setAddCalcSpeedXZ(cXyz&, cXyz const&, f32, f32, f32);
     cXyz chaseTargetPos(cXyz, f32, f32, s16);
-    /* 80B01D84 */
     fopAc_ac_c* getMasterPointer();
     void setMasterShoulder(cXyz*);
     void setAwayAction(int);
     void setFlySE();
     void executeFly();
     void initPerchDemo(int);
-    /* 80B02B5C */
     bool executePerchDemo(int);
     void executePerch();
     void executeHandOn();
-    /* 80B039A8 */
     bool checkWaterSurface(f32);
     void executeAttack();
     void executeAway();
     void setCarryActorMtx();
-    /* 80B04F64 */
     f32 getTakePosY();
-    /* 80B04FA8 */
     f32 getTakeOffPosY();
     void executeBack();
-    /* 80B05BD0 */
     cXyz getHanjoHandPos();
     void executeStayHanjo();
     void executeAttackLink();
     void executeBackHanjo();
-    /* 80B07114 */
     bool checkAttackDemo();
     void executeAttackDemo();
     void executeBackHanjoDemo();
@@ -74,7 +67,6 @@ public:
     void cc_set();
     int execute();
     int _delete();
-    /* 80B0B9AC */
     int ctrlJoint(J3DJoint*, J3DModel*);
     static int JointCallBack(J3DJoint*, int);
     int CreateHeap();

@@ -223,7 +223,7 @@ static actor_method_class l_daE_CR_EGG_Method = {
     (process_method_func)daE_CR_EGG_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_CR_EGG = {
+actor_process_profile_definition g_profile_E_CR_EGG = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

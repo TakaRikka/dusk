@@ -8,6 +8,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_cc_uty.h"
 #include "d/d_path.h"
+#include "m_Do/m_Do_ext.h"
 
 class daKago_c;
 
@@ -49,19 +50,20 @@ public:
 
     void setTagPosP() { mTagPosP = &mTagPos; }
 
-    u8 checkBck(char const*, int);
+    bool checkBck(char const*, int);
     void bckSet(int, u8, f32, f32);
     void bckSetFly(int, u8, f32, f32);
     int draw();
+    void setWaterEffect(); // unused
     void setDigEffect();
     void setElecEffect1();
     void setElecEffect2();
     void setFireEffect();
     bool checkWallCrash();
-    u8 checkWolfBark();
-    u8 checkSurpriseLock();
-    u8 checkRailSurprise();
-    u8 checkSurpriseNear();
+    bool checkWolfBark();
+    bool checkSurpriseLock();
+    bool checkRailSurprise();
+    bool checkSurpriseNear();
     void setNormalCc();
     void setAppear();
     void setMoveSound(int);
@@ -80,17 +82,17 @@ public:
     void executeBack();
     void executeFall();
     void executeAttack();
-    u8 checkAttackEnd();
-    u8 setAttackMotion();
+    bool checkAttackEnd();
+    bool setAttackMotion();
     void executeAttackWall();
     void executeDefense();
-    u8 checkFlyTerritory();
+    bool checkFlyTerritory();
     void initFly();
     void executeFly();
     void setInclination();
     void executeFlyAttack();
     void setNextPathPoint();
-    u8 checkRailDig();
+    bool checkRailDig();
     void executeRail();
     void executeBackRail();
     void checkElectricStart();
@@ -108,8 +110,8 @@ public:
     int execute();
     int _delete();
     int CreateHeap();
-    u8 checkBeforeBg(s16);
-    u8 checkBeforeGround();
+    bool checkBeforeBg(s16);
+    bool checkBeforeGround();
     void checkInitialWall();
     u8 checkWall();
     void setHideType();
@@ -132,7 +134,7 @@ private:
     /* 0x670 */ cXyz mPrevPos;
     /* 0x67C */ cXyz field_0x67c;
     /* 0x688 */ f32 field_0x688;
-    /* 0x68C */ f32 field_0x68c;
+    /* 0x68C */ f32 field_0x68c;    // model size?
     /* 0x690 */ int mAction;
     /* 0x694 */ int mLastAction;
     /* 0x698 */ int mMode;

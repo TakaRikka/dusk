@@ -118,10 +118,12 @@ static int daObj_Tatigi_Create(fopAc_ac_c* a_this) {
             {0x0}, // mGObjCo
         }, // mObjInf
         {
-            {0.0f, 0.0f, 0.0f}, // mCenter
-            35.0f, // mRadius
-            120.0f // mHeight
-        } // mCyl
+            {
+                {0.0f, 0.0f, 0.0f}, // mCenter
+                35.0f, // mRadius
+                120.0f // mHeight
+            } // mCyl
+        }
     };
 
     obj_tatigi_class* i_this = (obj_tatigi_class*)a_this;
@@ -212,7 +214,7 @@ static actor_method_class l_daObj_Tatigi_Method = {
     (process_method_func)daObj_Tatigi_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_TATIGI = {
+actor_process_profile_definition g_profile_OBJ_TATIGI = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

@@ -999,7 +999,8 @@ s32 JASSeqParser::parseRegCommand(JASTrack* param_0, int param_1) {
         r30 <<= 1;
         r28 <<= 2;
     }
-    return parseCommand(param_0, seqCtrl->readByte(), r29);
+    u8 r25 = seqCtrl->readByte();
+    return parseCommand(param_0, r25, r29);
 }
 
 s32 JASSeqParser::parse(JASTrack* param_0) {

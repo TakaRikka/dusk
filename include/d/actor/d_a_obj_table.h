@@ -15,17 +15,17 @@
  */
 class daObjTable_c : public dBgS_MoveBgActor {
 public:
-    int CreateHeap();
-    int Create();
-    int Execute(Mtx**);
-    int Draw();
-    int Delete();
+    inline int CreateHeap();
+    inline int Create();
+    inline int Execute(Mtx**);
+    inline int Draw();
+    inline int Delete();
 
     inline void initBaseMtx();
     inline void setBaseMtx();
     inline int create();
 
-    s16 getMessageNo() { return (s16)fopAcM_GetParamBit(this, 0, 16); }
+    s16 getMessageNo() { return fopAcM_GetParam(this) & 0xFFFF; }
 
 private:
     /* 0x5A0 */ J3DModel* mpModel;

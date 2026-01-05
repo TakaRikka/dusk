@@ -70,12 +70,8 @@ J2DTextBoxEx::J2DTextBoxEx(J2DPane* p_pane, JSURandomInputStream* p_stream, u32 
 
     if (mStringPtr != NULL) {
         mStringLength = strLength;
-        int temp_r0 = (u16)strLength - 1;
-        u16 var_r26_2 = info.field_0x1e;
 
-        if (temp_r0 < var_r26_2) {
-            var_r26_2 = (u16)temp_r0;
-        }
+        u16 var_r26_2 = strLength - 1 < info.field_0x1e ? u16(strLength - 1) : info.field_0x1e;
 
         p_stream->peek(mStringPtr, var_r26_2);
         mStringPtr[var_r26_2] = 0;
@@ -291,7 +287,8 @@ void J2DTextBoxEx::setTevStage(bool param_0) {
         setStage(stage, STAGE_0);
     } else {
         setStage(stage, STAGE_1);
-        setStage(mMaterial->getTevBlock()->getTevStage(1), STAGE_2);
+        stage = mMaterial->getTevBlock()->getTevStage(1);
+        setStage(stage, STAGE_2);
     }
 }
 
@@ -360,12 +357,10 @@ bool J2DTextBoxEx::setBlackWhite(JUtility::TColor param_0, JUtility::TColor para
         return false;
     }
 
-    bool bvar = false;
-    if (param_0 != 0 || param_1 != -1) {
-        bvar = true;
-    }
+    bool bvar = (param_0 != 0) || (param_1 != -1);
 
-    mMaterial->getTevBlock()->setTevStageNum(bvar ? 2 : 1);
+    u8 stageNum = bvar ? 2 : 1;
+    mMaterial->getTevBlock()->setTevStageNum(stageNum);
     setTevOrder(bvar);
     setTevStage(bvar);
 
@@ -396,38 +391,32 @@ bool J2DTextBoxEx::getBlackWhite(JUtility::TColor* param_0, JUtility::TColor* pa
         return false;
     }
 
-    bool tevStageNum = mMaterial->getTevBlock()->getTevStageNum() != 1;
+    u32 tevStageNum = mMaterial->getTevBlock()->getTevStageNum();
+    bool manyTevStages = tevStageNum == 1 ? false : true;
     *param_0 = JUtility::TColor(0);
     *param_1 = JUtility::TColor(0xffffffff);
-    if (tevStageNum) {
-        J2DGXColorS10* local_30 = mMaterial->getTevBlock()->getTevColor(0);
-        s16 color0r = local_30->r;
-        s16 color0g = local_30->g;
-        s16 color0b = local_30->b;
-        s16 color0a = local_30->a;
-        J2DGXColorS10* local_38 = mMaterial->getTevBlock()->getTevColor(1);
-        s16 color1r = local_38->r;
-        s16 color1g = local_38->g;
-        s16 color1b = local_38->b;
-        s16 color1a = local_38->a;
+    if (manyTevStages) {
+        J2DGXColorS10 color0(*mMaterial->getTevBlock()->getTevColor(0));
+        J2DGXColorS10 color1(*mMaterial->getTevBlock()->getTevColor(1));
         *param_0 = JUtility::TColor(
-            (((u8)color0r) << 24) | (((u8)color0g) << 16) | (((u8)color0b) << 8) |
-                ((u8)color0a));
+            (((u8)color0.r) << 24) | (((u8)color0.g) << 16) | (((u8)color0.b) << 8) |
+                ((u8)color0.a));
         *param_1 = JUtility::TColor(
-            (((u8)color1r) << 24) | (((u8)color1g) << 16) | (((u8)color1b) << 8) |
-                ((u8)color1a));
+            (((u8)color1.r) << 24) | (((u8)color1.g) << 16) | (((u8)color1.b) << 8) |
+                ((u8)color1.a));
     }
     return true;
 }
 
 bool J2DTextBoxEx::isSetBlackWhite(JUtility::TColor param_0, JUtility::TColor param_1) const {
-    if ((u32)param_0 == 0 && (u32)param_1 == 0xffffffff) {
+    if (param_0 == 0 && param_1 == 0xffffffff) {
         return 1;
     }
-    mMaterial->getTevBlock()->getTevStageNum();
-    if (mMaterial->getTevBlock()->getMaxStage() == 1) {
+    u32 tevStageNum = mMaterial->getTevBlock()->getTevStageNum();
+    u8 maxStage = mMaterial->getTevBlock()->getMaxStage();
+    if (maxStage == 1) {
         return 0;
-    } 
+    }
     return 1;
 }
 

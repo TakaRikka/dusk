@@ -6,6 +6,8 @@
 
 struct JKRHeap;
 
+const int OSC_MAX = 2;
+
 /**
  * @ingroup jsystem-jaudio
  * 
@@ -46,6 +48,7 @@ struct JASBasicInst : public JASInst {
     struct TKeymap {
         ~TKeymap();
         TKeymap() { mHighKey = -1; }
+        s32 getHighKey() const { return mHighKey; }
         void setHighKey(int key) { mHighKey = key; }
 
         /* 0x0 */ s32 mHighKey;
@@ -59,6 +62,7 @@ struct JASBasicInst : public JASInst {
     void setKeyRegionCount(u32, JKRHeap*);
     void setOsc(int, JASOscillator::Data const*);
     TKeymap* getKeyRegion(int);
+    TKeymap* getKeyRegion(int) const;
 
     virtual ~JASBasicInst();
     virtual bool getParam(int, int, JASInstParam*) const;
@@ -66,10 +70,11 @@ struct JASBasicInst : public JASInst {
 
     void setVolume(f32 volume) { mVolume = volume; }
     void setPitch(f32 pitch) { mPitch = pitch; }
+    u32 getKeyRegionCount() const { return mKeymapCount; }
 
     /* 0x04 */ f32 mVolume;
     /* 0x08 */ f32 mPitch;
-    /* 0x0C */ JASOscillator::Data const* field_0xc[2];
+    /* 0x0C */ JASOscillator::Data const* field_0xc[OSC_MAX];
     /* 0x10 */ u32 mKeymapCount;
     /* 0x14 */ TKeymap* mKeymap;
 };

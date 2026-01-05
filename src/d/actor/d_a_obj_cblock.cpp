@@ -44,10 +44,6 @@ static cXyz l_chainOffset(0.0f, 105.0f, 30.0f);
 
 static cXyz l_smokeSetOffset(0.0f, 0.0f, -200.0f);
 
-#if !DEBUG
-static s32 unused_bss_70 = 0;
-#endif
-
 static cull_box const l_cull_box = {
     {-250.0f, 0.0f, -450.0f},
     {250.0f, 250.0f, 400.0f},
@@ -69,10 +65,12 @@ static dCcD_SrcCyl l_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
+        {
             {0.0f, 0.0f, 0.0f}, // mCenter
             60.0f, // mRadius
             300.0f // mHeight
         } // mCyl
+    }
 };
 
 #if DEBUG
@@ -411,7 +409,7 @@ static actor_method_class l_daObjCBlk_Method = {
     (process_method_func)daObjCBlk_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_ChainBlock = {
+actor_process_profile_definition g_profile_Obj_ChainBlock = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

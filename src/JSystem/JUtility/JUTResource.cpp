@@ -3,11 +3,11 @@
 #include "JSystem/JUtility/JUTResource.h"
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JSupport/JSUInputStream.h"
-#include "string.h"
+#include <string>
 
 void* JUTResReference::getResource(JSUInputStream* stream, u32 resType, JKRArchive* archive) {
-    stream->read(&mType, 1);
-    stream->read(&mNameLength, 1);
+    stream->read(mType);
+    stream->read(mNameLength);
     stream->read(&mName, mNameLength);
 
     if (mType == RESTYPE_Unk2 || mType == RESTYPE_Unk3 || mType == RESTYPE_Unk4) {
@@ -39,13 +39,13 @@ void* JUTResReference::getResource(u32 resType, JKRArchive* archive) {
     case RESTYPE_Unk1:
         break;
     case RESTYPE_Unk2:
-        res = JKRArchive::getGlbResource(resType, mName, archive);
+        res = JKRGetTypeResource(resType, mName, archive);
         break;
     case RESTYPE_Unk3:
-        res = JKRFileLoader::getGlbResource(mName, archive);
+        res = JKRGetNameResource(mName, archive);
         break;
     case RESTYPE_Unk4:
-        res = JKRFileLoader::getGlbResource(mName);
+        res = JKRGetResource(mName);
         break;
     }
 

@@ -75,10 +75,12 @@ dCcD_SrcSph daLv6TogeTrap_c::mCcDSph = {
 dCcD_SrcCyl daLv6TogeTrap_c::mCcDCyl = {
     daLv6TogeTrap_c::mCcDObjInfo2,
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,  // mRadius
-        0.0f  // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,  // mRadius
+            0.0f  // mHeight
+        }  // mCyl
+    }
 };
 
 static char* l_resNameIdx[3] = {
@@ -770,7 +772,7 @@ static actor_method_class l_daLv6TogeTrap_Method = {
     (process_method_func)daLv6TogeTrap_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv6TogeTrap = {
+actor_process_profile_definition g_profile_Obj_Lv6TogeTrap = {
   fpcLy_CURRENT_e,         // mLayerID
   3,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

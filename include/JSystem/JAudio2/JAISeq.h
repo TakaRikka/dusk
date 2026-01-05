@@ -12,7 +12,7 @@ class JAISoundChild;
  * @ingroup jsystem-jaudio
  * 
  */
-class JAISeq : public JASPoolAllocObject<JAISeq>, public JAISound, public JSULink<JAISeq> {
+class JAISeq : public JAISound, public JSULink<JAISeq>, public JASPoolAllocObject<JAISeq> {
 public:
     static const int NUM_CHILDREN = 32;
 
@@ -52,7 +52,8 @@ public:
     void mixOut_(const JASSoundParams& params, JAISoundActivity activity);
     void JAISeqMgr_mixOut_(const JASSoundParams& params, JAISoundActivity activity);
 
-    JAISeqData& getSeqData() { return inner_.mSeqData; }
+    const JAISeqData& getSeqData() const { return inner_.mSeqData; }
+    s32 getCategory() const { return inner_.field_0x39c; }
 
     /* 0x0A8 */ TInner inner_;
     /* 0x3A8 */ JAISoundStrategyMgr__unknown<JAISeq>* field_0x3a8;

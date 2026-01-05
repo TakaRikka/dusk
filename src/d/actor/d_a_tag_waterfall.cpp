@@ -239,7 +239,7 @@ static actor_method_class l_daTagWaterFall_Method = {
     (process_method_func)daTagWaterFall_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_WaterFall = {
+actor_process_profile_definition g_profile_Tag_WaterFall = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

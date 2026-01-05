@@ -199,7 +199,7 @@ static actor_method_class l_daObjDamCps_Method = {
 };
 #endif
 
-extern actor_process_profile_definition g_profile_Obj_DamCps = {
+actor_process_profile_definition g_profile_Obj_DamCps = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

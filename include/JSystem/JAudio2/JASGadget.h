@@ -2,7 +2,7 @@
 #define JASGADGET_H
 
 #include "JSystem/JUtility/JUTAssert.h"
-#include "string.h"
+#include <string>
 
 /**
  * @ingroup jsystem-jaudio

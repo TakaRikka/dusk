@@ -207,7 +207,7 @@ void daObjSCannonTen_c::exeModeActionEvt() {
         dComIfGp_event_reset();
         mMode = MODE_END;
     } else {
-        dComIfGp_getEvent().setSkipProc(this, eventCallBack, 0);
+        dComIfGp_getEvent()->setSkipProc(this, eventCallBack, 0);
         demoExe();
     }
 }
@@ -465,7 +465,7 @@ static actor_method_class daObjSCannonTen_METHODS = {
     (process_method_func)daObjSCannonTen_draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_SCannonTen = {
+actor_process_profile_definition g_profile_Obj_SCannonTen = {
   fpcLy_CURRENT_e,           // mLayerID
   7,                         // mListID
   fpcPi_CURRENT_e,           // mListPrio

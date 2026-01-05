@@ -50,14 +50,13 @@ public:
     static JSUList<JKRAMCommand>& getCommandList() { return sAramCommandList; }
 
     static u8 decideAramGroupId(int groupId) {
-        JKRAramHeap* heap;
         u8 finalGroupId;
-
         if (groupId < 0) {
-            return getAramHeap()->getCurrentGroupID();
+            finalGroupId = getAramHeap()->getCurrentGroupID();
+        } else {
+            finalGroupId = groupId;
         }
-
-        return (u8)groupId;
+        return finalGroupId;
     }
 
     static u32 getSZSBufferSize() { return sSZSBufferSize; }

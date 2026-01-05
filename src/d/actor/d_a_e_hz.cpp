@@ -99,7 +99,7 @@ bool daE_HZ_c::checkBck(int i_index) {
     return false;
 }
 
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daE_HZ_HIO_c l_HIO;
 
@@ -1854,7 +1854,7 @@ int daE_HZ_c::_delete() {
     dComIfG_resDelete(&mPhaseReq2, mpName);
 
     if (mHIOInit) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.enemy_sample);
     }
 
@@ -2043,9 +2043,9 @@ int daE_HZ_c::create() {
             return cPhs_ERROR_e;
         }
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             mHIOInit = true;
-            l_HIOInit = true;
+            hio_set = true;
             l_HIO.enemy_sample = mDoHIO_CREATE_CHILD("Hajiki-san", &l_HIO);
         }
 
@@ -2092,7 +2092,7 @@ static actor_method_class l_daE_HZ_Method = {
     (process_method_func)daE_HZ_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_HZ = {
+actor_process_profile_definition g_profile_E_HZ = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

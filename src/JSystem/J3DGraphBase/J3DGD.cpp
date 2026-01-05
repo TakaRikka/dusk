@@ -335,9 +335,6 @@ static u8 GX2HWFiltConv[6] = {
     0x00, 0x04, 0x01, 0x05, 0x02, 0x06,
 };
 
-/* 8030E438-8030E5D4 308D78 019C+00 0/0 1/1 0/0 .text
- * J3DGDSetTexLookupMode__F11_GXTexMapID14_GXTexWrapMode14_GXTexWrapMode12_GXTexFilter12_GXTexFilterfffUcUc13_GXAnisotropy
- */
 void J3DGDSetTexLookupMode(GXTexMapID id, GXTexWrapMode wrap_s,
                            GXTexWrapMode wrap_t, GXTexFilter min_filt,
                            GXTexFilter mag_filt, f32 min_lod, f32 max_lod,
@@ -435,9 +432,6 @@ void J3DGDSetIndTexMtx(GXIndTexMtxID mtx_id, f32 offset[2][3], s8 scale_exp) {
     ));
 }
 
-/* 8030EE10-8030EF08 309750 00F8+00 0/0 2/2 0/0 .text
- * J3DGDSetIndTexCoordScale__F16_GXIndTexStageID14_GXIndTexScale14_GXIndTexScale14_GXIndTexScale14_GXIndTexScale
- */
 void J3DGDSetIndTexCoordScale(GXIndTexStageID indStageEven, GXIndTexScale scaleS0,
                               GXIndTexScale scaleT0, GXIndTexScale scaleS1,
                               GXIndTexScale scaleT1) {
@@ -451,9 +445,6 @@ void J3DGDSetIndTexCoordScale(GXIndTexStageID indStageEven, GXIndTexScale scaleS
     ));
 }
 
-/* 8030EF08-8030F108 309848 0200+00 0/0 2/2 0/0 .text
- * J3DGDSetIndTexOrder__FUl13_GXTexCoordID11_GXTexMapID13_GXTexCoordID11_GXTexMapID13_GXTexCoordID11_GXTexMapID13_GXTexCoordID11_GXTexMapID
- */
 void J3DGDSetIndTexOrder(u32 count, GXTexCoordID texCoord0, GXTexMapID texMap0,
                          GXTexCoordID texCoord1, GXTexMapID texMap1,
                          GXTexCoordID texCoord2, GXTexMapID texMap2,
@@ -492,9 +483,6 @@ void J3DGDSetIndTexOrder(u32 count, GXTexCoordID texCoord0, GXTexMapID texMap0,
     J3DGDWriteBPCmd(BP_IND_MASK(mask, 0xF));
 }
 
-/* 8030F108-8030F294 309A48 018C+00 0/0 9/9 0/0 .text
- * J3DGDSetTevOrder__F13_GXTevStageID13_GXTexCoordID11_GXTexMapID12_GXChannelID13_GXTexCoordID11_GXTexMapID12_GXChannelID
- */
 void J3DGDSetTevOrder(GXTevStageID evenStage, GXTexCoordID coord0, GXTexMapID map0,
                       GXChannelID color0, GXTexCoordID coord1, GXTexMapID map1,
                       GXChannelID color1) {

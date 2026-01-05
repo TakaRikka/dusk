@@ -392,13 +392,7 @@ void daNpc_grM_c::srchActors() {
 
 BOOL daNpc_grM_c::evtProc() {
     BOOL ret = FALSE;
-#if VERSION != VERSION_SHIELD_DEBUG
-    // TODO: gameInfo fake match to force reuse of pointer
-    dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-    if (play->getEvent().runCheck()) {
-#else
     if (dComIfGp_event_runCheck()) {
-#endif
         if (eventInfo.checkCommandTalk()) {
             if (!checkChangeEvt()) {
                 evtTalk();
@@ -408,11 +402,7 @@ BOOL daNpc_grM_c::evtProc() {
                    dComIfGp_getEventManager().endCheck(mEvtId))
         {
             if (evtEndProc()) {
-#if VERSION != VERSION_SHIELD_DEBUG
-                play->getEvent().reset();
-#else
                 dComIfGp_event_reset();
-#endif
                 mEvtId = -1;
             }
         } else {
@@ -802,7 +792,7 @@ static actor_method_class daNpc_grM_MethodTable = {
     (process_method_func)daNpc_grM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_GRM = {
+actor_process_profile_definition g_profile_NPC_GRM = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

@@ -296,7 +296,7 @@ static actor_method_class l_daObjBmSh_Method = {
     (process_method_func)daObjBmSh_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_BoomShutter = {
+actor_process_profile_definition g_profile_Obj_BoomShutter = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

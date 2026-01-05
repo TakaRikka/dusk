@@ -85,9 +85,6 @@ int dBgS_MoveBgActor::MoveBGCreateHeap() {
     return 1;
 }
 
-/* 800787BC-800788DC 0730FC 0120+00 0/0 0/0 169/169 .text
- * MoveBGCreate__16dBgS_MoveBgActorFPCciPFP4dBgWPvRC13cBgS_PolyInfobP4cXyzP5csXyzP5csXyz_vUlPA3_A4_f
- */
 int dBgS_MoveBgActor::MoveBGCreate(char const* i_arcName, int i_dzb_id,
                                    MoveBGActor_SetFunc i_setFunc, u32 i_heapSize, Mtx* i_bgMtx) {
     if (i_bgMtx == NULL) {

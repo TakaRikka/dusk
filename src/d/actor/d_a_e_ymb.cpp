@@ -11,7 +11,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera_mng.h"
-#include <cmath.h>
+#include <math>
 #include "Z2AudioLib/Z2Instances.h"
 
 struct daE_YMB_HIO_c {
@@ -170,7 +170,6 @@ enum Particle {
 };
 
 namespace {
-    /* 80821B30-80821B70 000020 0040+00 0/1 0/0 0/0 .data cc_ymb_src__23@unnamed@d_a_e_ymb_cpp@ */
     static dCcD_SrcSph cc_ymb_src = {
         {{0x0, {{AT_TYPE_CSTATUE_SWING, 0x2, 0xD}, {0xD8FBFDFF, 0x3}, 0x75}}, // mObj
         {dCcD_SE_METAL, 0x0, 0x1, 0x7, 0x0}, // mGObjAt
@@ -182,7 +181,6 @@ namespace {
         } // mSphAttr
     };
 
-    /* 80821B70-80821BB0 000060 0040+00 0/1 0/0 0/0 .data cc_ymb_at_src__23@unnamed@d_a_e_ymb_cpp@ */
     static dCcD_SrcSph cc_ymb_at_src = {
         {{0x0, {{AT_TYPE_CSTATUE_SWING, 0x2, 0xD}, {0xD8FBFDFF, 0x0}, 0x0}}, // mObj
         {dCcD_SE_METAL, 0x0, 0x1, 0x7, 0x0}, // mGObjAt
@@ -194,7 +192,6 @@ namespace {
         } // mSphAttr
     };
 
-    /* 80821BB0-80821BF0 0000A0 0040+00 0/1 0/0 0/0 .data cc_ymb_eye_src__23@unnamed@d_a_e_ymb_cpp@ */
     static dCcD_SrcSph cc_ymb_eye_src = {
         {{0x0, {{AT_TYPE_0, 0x0, 0x0}, {0x80000000, 0x3}, 0x0}}, // mObj
         {dCcD_SE_METAL, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -206,7 +203,6 @@ namespace {
         } // mSphAttr
     };
 
-    /* 80821BF0-80821C30 0000E0 0040+00 0/1 0/0 0/0 .data cc_ymb_tube_src__23@unnamed@d_a_e_ymb_cpp@ */
     static dCcD_SrcSph cc_ymb_tube_src = {
         {{0x0, {{AT_TYPE_0, 0x0, 0x0}, {0xD8FBFDFF, 0x2}, 0x75}}, // mObj
         {dCcD_SE_METAL, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -217,12 +213,10 @@ namespace {
         } // mSphAttr
     };
 
-    /* 80821C30-80821C48 000120 0018+00 3/4 0/0 0/0 .data YMB_DOWN_ATT_JNT__23@unnamed@d_a_e_ymb_cpp@ */
     static int YMB_DOWN_ATT_JNT[6] = {
         JNT_TUBE_LC2, JNT_TUBE_RA2, JNT_TUBE_LB2, JNT_TUBE_RC2, JNT_TUBE_LA2, JNT_TUBE_RB2,
     };
 
-    /* 80821C48-80821C54 000138 000C+00 0/0 0/0 0/0 .data YMB_DROP_JNT__23@unnamed@d_a_e_ymb_cpp@ */
     static int YMB_DROP_JNT[3] = {
         JNT_TUBE_LC2, JNT_TUBE_RA2, JNT_BODY1,
     };
@@ -507,7 +501,7 @@ void daE_YMB_c::setCameraSwitch() {
     }
 }
 
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_YMB_HIO_c l_HIO;
 
@@ -625,7 +619,6 @@ void daE_YMB_c::setElecEffect2() {
 }
 
 namespace {
-    /* 80821F38-80821FEC 000128 00B4+00 4/5 0/0 0/0 .bss YMB_DOWN_POS__23@unnamed@d_a_e_ymb_cpp@ */
     static cXyz YMB_DOWN_POS[15] = {
         cXyz(-88457.0f, -18786.0f, 42166.0f),
         cXyz(-89307.0f, -18786.0f, 41366.0f),
@@ -2309,7 +2302,7 @@ void daE_YMB_c::executeLakeDemo() {
             break;
 
         case 2:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
             field_0x760 += field_0x762;
             mDemoCamCenter.set(-81000.0f, -17000.0f, 33000.0f);
             sp24.set(0.0f, 0.0f, 1000.0f);
@@ -2327,7 +2320,7 @@ void daE_YMB_c::executeLakeDemo() {
             break;
 
         case 3:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
             cLib_chaseF(&field_0x75c, 300.0f, 10.0f);
             cLib_chaseAngleS(&field_0x762, 0, 0x10);
             field_0x760 += field_0x762;
@@ -2351,7 +2344,7 @@ void daE_YMB_c::executeLakeDemo() {
             break;
 
         case 5:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
 
             if (field_0x6fc != 0) {
                 cXyz sp30(mDemoCamCenter);
@@ -2445,7 +2438,7 @@ void daE_YMB_c::executeStartDemo() {
             break;
 
         case 2:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 1);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 1);
             setBoilEffect(0);
             sp34.set(-89100.0f, player->current.pos.y, 39410.0f);
             player->setPlayerPosAndAngle(&sp34, 0x5400, 0);
@@ -2462,7 +2455,7 @@ void daE_YMB_c::executeStartDemo() {
             break;
 
         case 3:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 1);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 1);
             setBoilEffect(0);
             sp34.set(current.pos.x, field_0x6cc - 120.0f, current.pos.z);
             cLib_chasePos(&mDemoCamCenter, sp34, 1.5f);
@@ -2478,7 +2471,7 @@ void daE_YMB_c::executeStartDemo() {
             break;
 
         case 4:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 1);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 1);
 
             if (field_0x6fc >= 95) {
                 setBoilEffect(1);
@@ -2505,7 +2498,7 @@ void daE_YMB_c::executeStartDemo() {
             break;
 
         case 8:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 1);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 1);
 
             if (field_0x6f0 == 0) {
                 if (current.pos.y >= field_0x6cc) {
@@ -2538,7 +2531,7 @@ void daE_YMB_c::executeStartDemo() {
             break;
 
         case 9:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 1);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 1);
             mSound.startCreatureSoundLevel(Z2SE_EN_YB_FLY, 0, -1);
             sp34.set(-89000.0f, -18583.0f, 39350.0f);
             cLib_chasePos(&mDemoCamEye, sp34, 10.0f);
@@ -2552,7 +2545,7 @@ void daE_YMB_c::executeStartDemo() {
             break;
 
         case 10:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 1);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 1);
             mSound.startCreatureSoundLevel(Z2SE_EN_YB_FLY, 0, -1);
             sp34.set(-89260.0f, -18650.0f, 39500.0f);
             cLib_chasePos(&mDemoCamEye, sp34, 10.0f);
@@ -2566,7 +2559,7 @@ void daE_YMB_c::executeStartDemo() {
             break;
 
         case 11:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 1);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 1);
             mSound.startCreatureSoundLevel(Z2SE_EN_YB_FLY, 0, -1);
             setElecEffect2();
 
@@ -2640,7 +2633,7 @@ void daE_YMB_c::executeBattleDemo() {
             break;
 
         case 2:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 3);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 3);
 
             if (mpModelMorf->checkFrame(30.0f)) {
                 dComIfGp_getVibration().StopQuake(31);
@@ -2682,7 +2675,7 @@ void daE_YMB_c::executeBattleDemo() {
             // fallthrough
         case 4:
         case 5:
-            dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 2);
+            dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 2);
             cLib_chaseF(&mDemoCamCenter.y, current.pos.y - 200.0f, 3.0f);
             sp34.set(current.pos.x, mDemoCamCenter.y, current.pos.z);
             cLib_chasePosXZ(&mDemoCamCenter, sp34, 5.0f);
@@ -3098,7 +3091,7 @@ int daE_YMB_c::_delete() {
     dComIfG_resDelete(&mPhase, "E_YB");
 
     if (field_0x1520 != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (heap != NULL) {
@@ -3190,8 +3183,8 @@ cPhs__Step daE_YMB_c::create() {
 
         mpBgW->SetRideCallback(rideCallBack);
 
-        if (l_initHIO == 0) {
-            l_initHIO = 1;
+        if (hio_set == 0) {
+            hio_set = 1;
             field_0x1520 = 1;
             l_HIO.field_0x4 = -1;
         }
@@ -3252,7 +3245,7 @@ static actor_method_class l_daE_YMB_Method = {
     (process_method_func)daE_YMB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_YMB = {
+actor_process_profile_definition g_profile_E_YMB = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

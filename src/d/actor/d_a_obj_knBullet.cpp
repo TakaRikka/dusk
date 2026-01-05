@@ -202,7 +202,7 @@ static actor_method_class l_daObjKnBullet_Method = {
     (process_method_func)daObjKnBullet_Draw,
 };
 
-extern actor_process_profile_definition g_profile_KN_BULLET = {
+actor_process_profile_definition g_profile_KN_BULLET = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

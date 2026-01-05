@@ -13,6 +13,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/actor/d_a_mirror.h"
+#include "JSystem/JAudio2/JAUSectionHeap.h"
 
 void daNbomb_c::coHitCallback(fopAc_ac_c* i_hitActor) {
     if (fopAcM_GetGroup(i_hitActor) == fopAc_ENEMY_e ||
@@ -1671,6 +1672,8 @@ static int daNbomb_Draw(daNbomb_c* i_this) {
 }
 
 AUDIO_INSTANCES;
+template<>
+JAUSectionHeap* JASGlobalInstance<JAUSectionHeap>::sInstance;
 
 static actor_method_class l_daNbombMethod = {
     (process_method_func)daNbomb_Create,
@@ -1680,7 +1683,7 @@ static actor_method_class l_daNbombMethod = {
     (process_method_func)daNbomb_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NBOMB = {
+actor_process_profile_definition g_profile_NBOMB = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

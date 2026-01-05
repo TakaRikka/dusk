@@ -400,7 +400,7 @@ static actor_method_class l_daNPC_WORM_Method = {
     (process_method_func)daNPC_WORM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_WORM = {
+actor_process_profile_definition g_profile_NPC_WORM = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

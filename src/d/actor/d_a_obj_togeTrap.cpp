@@ -32,10 +32,12 @@ const dCcD_SrcGObjInf daTogeTrap_c::mCcDObjInfo = {
 dCcD_SrcCyl daTogeTrap_c::mCcDCyl = {
     daTogeTrap_c::mCcDObjInfo,
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,                // mRadius
-        0.0f                 // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,                // mRadius
+            0.0f                 // mHeight
+        }  // mCyl
+    }
 };
 
 void daTogeTrap_c::setBaseMtx() {
@@ -299,7 +301,7 @@ static actor_method_class l_daTogeTrap_Method = {
     (process_method_func)daTogeTrap_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_TogeTrap = {
+actor_process_profile_definition g_profile_Obj_TogeTrap = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

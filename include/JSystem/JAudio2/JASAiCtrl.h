@@ -17,6 +17,7 @@ enum JASMixMode {
 namespace JASDriver {
     typedef s16* (*MixCallback)(s32);
     typedef void (*MixFunc)(s16*, u32, MixCallback);
+    typedef void (*DSPBufCallback)(s16*, u32);
 
     void initAI(void (*)(void));
     void startDMA();
@@ -27,6 +28,7 @@ namespace JASDriver {
     void readDspBuffer(s16*, u32);
     void finishDSPFrame();
     void registerMixCallback(MixCallback, JASMixMode);
+    void registDSPBufCallback(DSPBufCallback);
     f32 getDacRate();
     u32 getSubFrames();
     u32 getDacSize();
@@ -48,7 +50,7 @@ namespace JASDriver {
     extern s32 sDspDacWriteBuffer;
     extern s32 sDspDacReadBuffer;
     extern s32 sDspStatus;
-    extern void (*sDspDacCallback)(s16*, u32);
+    extern DSPBufCallback sDspDacCallback;
     extern s16* lastRspMadep;
     extern void (*dacCallbackFunc)(s16*, u32);
     extern MixCallback extMixCallback;

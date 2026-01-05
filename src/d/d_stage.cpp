@@ -17,7 +17,7 @@
 #include "f_op/f_op_scene_mng.h"
 #include "global.h"
 #include "m_Do/m_Do_Reset.h"
-#include "stdio.h"
+#include <stdio>
 
 void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i_layer, s8 i_wipe,
                              u8 i_speed) {
@@ -1471,7 +1471,7 @@ dStage_objectNameInf* dStage_searchName(char const* objName) {
 }
 
 const char* dStage_getName(s16 procName, s8 argument) {
-    static char tmp_name[8];
+    static char tmp_name[dStage_NAME_LENGTH];
 
     dStage_objectNameInf* obj = l_objectName;
     char* tmp = NULL;
@@ -1489,7 +1489,7 @@ const char* dStage_getName(s16 procName, s8 argument) {
     }
 
     if (tmp == NULL) {
-        snprintf(tmp_name, 8, "%d%+0d", procName, argument);
+        snprintf(tmp_name, dStage_NAME_LENGTH, "%d%+0d", procName, argument);
         tmp = tmp_name;
     }
     return tmp;
@@ -1501,16 +1501,12 @@ const char* dStage_getName2(s16 procName, s8 argument) {
 
 u32 dStage_roomControl_c::mProcID;
 
-/* 80450D64 0001+00 data_80450D64 None */
 s8 dStage_roomControl_c::mStayNo;
 
-/* 80450D65 0001+00 data_80450D65 None */
 s8 dStage_roomControl_c::mOldStayNo;
 
-/* 80450D66 0001+00 data_80450D66 None */
 s8 dStage_roomControl_c::mNextStayNo;
 
-/* 80450D67 0001+00 data_80450D67 None */
 u8 dStage_roomControl_c::m_time_pass;
 
 u8 dStage_roomControl_c::mNoChangeRoom;
@@ -2006,8 +2002,8 @@ static int dStage_rppnInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 }
 
 static int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void* param_3) {
-    (void)i_num;
-    (void)param_3;
+    UNUSED(i_num);
+    UNUSED(param_3);
     dStage_dPath_c* pStagePath = (dStage_dPath_c*)((char*)i_data + 4);
     dPath* pPath = pStagePath->m_path;
 
@@ -2087,8 +2083,8 @@ static int dStage_floorInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum
 }
 
 static int dStage_memaInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
-    (void)param_2;
-    (void)param_3;
+    UNUSED(param_2);
+    UNUSED(param_3);
     dStage_MemoryMap_c* pd = (dStage_MemoryMap_c*)((char*)i_data + 4);
     i_stage->setMemoryMap(pd);
 
@@ -2109,8 +2105,8 @@ static int dStage_memaInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, 
 }
 
 static int dStage_mecoInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
-    (void)param_2;
-    (void)param_3;
+    UNUSED(param_2);
+    UNUSED(param_3);
     dStage_MemoryConfig_c* pd = (dStage_MemoryConfig_c*)((char*)i_data + 4);
     i_stage->setMemoryConfig(pd);
 
@@ -2264,8 +2260,8 @@ static int dStage_layerTresureInit(dStage_dt_c* i_stage, void* i_data, int entry
 }
 
 static int dStage_dmapInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
-    (void)entryNum;
-    (void)param_3;
+    UNUSED(entryNum);
+    UNUSED(param_3);
     dStage_DMap_c* dmap = (dStage_DMap_c*)((char*)i_data + 4);
     i_stage->setDMap(dmap);
     return 1;

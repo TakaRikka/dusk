@@ -16,7 +16,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/ai.h"
 #include <dolphin/os.h>
-#include <stdint.h>
+#include <stdint>
 
 s16* JASDriver::sDmaDacBuffer[3];
 
@@ -30,7 +30,7 @@ s32 JASDriver::sDspDacReadBuffer;
 
 s32 JASDriver::sDspStatus;
 
-void (*JASDriver::sDspDacCallback)(s16*, u32);
+JASDriver::DSPBufCallback JASDriver::sDspDacCallback;
 
 s16* JASDriver::lastRspMadep;
 
@@ -140,7 +140,6 @@ void JASDriver::updateDac() {
 }
 
 void JASDriver::updateDSP() {
-    static u32 history[10] = {0x000F4240};
     JASProbe::start(3, "SFR-UPDATE");
     JASDsp::invalChannelAll();
 
@@ -151,6 +150,7 @@ void JASDriver::updateDSP() {
     JASPortCmd::execAllCommand();
     DSPSyncCallback();
     static u32 old_time = 0;
+    static u32 history[10] = {0x000F4240};
     u32 r28 = OSGetTick();
     u32 r27 = r28 - old_time;
     old_time = r28;
@@ -210,15 +210,37 @@ void JASDriver::readDspBuffer(s16* param_0, u32 param_1) {
     JASCalc::imixcopy(endDacBuffer, dacBuffer, param_0, param_1);
 }
 
+u32 sDspUpCount;
+
 void JASDriver::finishDSPFrame() {
+    static u32 waitcount;
     int r30 = sDspDacWriteBuffer + 1;
     if (r30 == data_804507A8) {
         r30 = 0;
     }
     if (r30 == sDspDacReadBuffer) {
         sDspStatus = 0;
+#if DEBUG
+        if (sDspStatus != 0) {
+            waitcount = 0;
+        } else {
+            waitcount++;
+        }
+        if (waitcount != 7) {
+            return;
+        }
+        if (sDspUpCount != 0) {
+            JUT_WARN(0, "forth DSP return\n");
+        }
+        if (sDspUpCount == 0) {
+            sDspUpCount += 1;
+        }
+        JASReport("finishDSPFrame nbuf:%d sWBuf:%d BCount:%d stat:%d", r30, sDspDacWriteBuffer, data_804507A8, sDspStatus);
+#else
         return;
+#endif
     }
+
     sDspDacWriteBuffer = r30;
     JASAudioThread::setDSPSyncCount(getSubFrames());
     JASProbe::start(7, "DSP-MAIN");
@@ -234,6 +256,10 @@ void JASDriver::finishDSPFrame() {
 void JASDriver::registerMixCallback(MixCallback param_0, JASMixMode param_1) {
     extMixCallback = param_0;
     sMixMode = param_1;
+}
+
+void JASDriver::registDSPBufCallback(DSPBufCallback cb) {
+    sDspDacCallback = cb;
 }
 
 f32 JASDriver::getDacRate() {
@@ -254,68 +280,84 @@ u32 JASDriver::getFrameSamples() {
 
 void JASDriver::mixMonoTrack(s16* buffer, u32 param_1, MixCallback param_2) {
     JASProbe::start(5, "MONO-MIX");
-    s16* r31 = param_2(param_1);
-    s16* pTrack = buffer;
-    if (r31 == NULL) {
+    s16* r26 = param_2(param_1);
+    if (r26 == NULL) {
         return;
     }
     JASProbe::stop(5);
+    s16* pTrack = buffer;
+    s16* r28 = r26;
     for (u32 i = param_1; i != 0; i--) {
-        pTrack[0] = JASCalc::clamp<s16, s32>(pTrack[0] + r31[0]);
-        pTrack[1] = JASCalc::clamp<s16, s32>(pTrack[1] + r31[0]);
-        pTrack += 2;
-        r31++;
+        s32 src = pTrack[0];
+        src += r28[0];
+        pTrack[0] = JASCalc::clamp<s16, s32>(src);
+        pTrack++;
+        src = pTrack[0];
+        src += r28[0];
+        pTrack[0] = JASCalc::clamp<s16, s32>(src);
+        pTrack++;
+        r28++;
     }
 }
 
 void JASDriver::mixMonoTrackWide(s16* buffer, u32 param_1, MixCallback param_2) {
     JASProbe::start(5, "MONO(W)-MIX");
-    s16* r31 = param_2(param_1);
-    s16* pTrack = buffer;
-    if (!r31) {
+    s16* r26 = param_2(param_1);
+    if (!r26) {
         return;
     }
     JASProbe::stop(5);
+    s16* pTrack = buffer;
+    s16* r28 = r26;
     for (u32 i = param_1; i != 0; i--) {
-        pTrack[0] = JASCalc::clamp<s16, s32>(pTrack[0] + r31[0]);
-        s32 src = pTrack[1];
-        src -= r31[0];
-        pTrack[1] = JASCalc::clamp<s16, s32>(src);
-        pTrack += 2;
-        r31++;
+        s32 src = pTrack[0];
+        src += r28[0];
+        pTrack[0] = JASCalc::clamp<s16, s32>(src);
+        pTrack++;
+        src = pTrack[0];
+        src -= r28[0];
+        pTrack[0] = JASCalc::clamp<s16, s32>(src);
+        pTrack++;
+        r28++;
     }
 }
 
 void JASDriver::mixExtraTrack(s16* buffer, u32 param_1, MixCallback param_2) {
     JASProbe::start(5, "DSPMIX");
-    s16* r31 = param_2(param_1);
-    if (!r31) {
+    s16* r27 = param_2(param_1);
+    if (!r27) {
         return;
     }
     JASProbe::stop(5);
     JASProbe::start(6, "MIXING");
     s16* pTrack = buffer;
-    s16* r29 = r31 + getFrameSamples();
+    s16* r29 = r27;
+    s16* r28 = r27 + getFrameSamples();
     for (u32 i = param_1; i != 0; i--) {
-        pTrack[0] = JASCalc::clamp<s16, s32>(pTrack[0] + r29[0]);
-        pTrack[1] = JASCalc::clamp<s16, s32>(pTrack[1] + r31[0]);
-        pTrack += 2;
+        s32 r25 = pTrack[0] + r28[0];
+        pTrack[0] = JASCalc::clamp<s16, s32>(r25);
+        pTrack++;
+        r25 = pTrack[0] + r29[0];
+        pTrack[0] = JASCalc::clamp<s16, s32>(r25);
+        pTrack++;
+        r28++;
         r29++;
-        r31++;
     }
     JASProbe::stop(6);
 }
 
 void JASDriver::mixInterleaveTrack(s16* buffer, u32 param_1, MixCallback param_2) {
     s16* r31 = param_2(param_1);
-    if (r31) {
-        s16* pTrack = buffer;
-        s16* r30 = r31;
-        for (u32 i = param_1 * 2; i != 0; i--) {
-            pTrack[0] = JASCalc::clamp<s16, s32>(pTrack[0] + r30[0]);
-            pTrack += 1;
-            r30++;
-        }
+    if (!r31) {
+        return;
+    }
+    s16* pTrack = buffer;
+    s16* r30 = r31;
+    for (u32 i = param_1 * 2; i != 0; i--) {
+        s32 r26 = pTrack[0] + r30[0];
+        pTrack[0] = JASCalc::clamp<s16, s32>(r26);
+        pTrack++;
+        r30++;
     }
 }
 

@@ -56,6 +56,6 @@ __vt__8cM3dGAab = .data:0x00000068; // type:object size:0xC scope:global
 __vt__12dBgS_ObjAcch = .data:0x00000074; // type:object size:0x24 scope:global
 __vt__12daB_GO_HIO_c = .data:0x00000098; // type:object size:0xC scope:global
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
-lbl_146_bss_8 = .bss:0x00000008; // type:object size:0x1 data:byte
+data_80604140 = .bss:0x00000008; // type:object size:0x1 data:byte
 @3641 = .bss:0x0000000C; // type:object size:0xC scope:local
 l_HIO = .bss:0x00000018; // type:object size:0x18 scope:global data:byte

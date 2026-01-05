@@ -1358,7 +1358,6 @@ int daNpc_Fairy_c::cutAppear_10F_01(int i_staffId) {
     return _cutAppear_10F_01_Main(*cutId);
 }
 
-/* 809B46E0-809B48C4 002CC0 01E4+00 1/1 0/0 0/0 .text            _cutAppear_10F_01_Init__13daNpc_Fairy_cFRCi*/
 int daNpc_Fairy_c::_cutAppear_10F_01_Init(int const& i_cutId) {
     int rv = 0;
     
@@ -3063,7 +3062,7 @@ static actor_method_class daNpc_Fairy_MethodTable = {
     (process_method_func)daNpc_Fairy_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_FAIRY = {
+actor_process_profile_definition g_profile_NPC_FAIRY = {
   fpcLy_CURRENT_e,          // mLayerID
   7,                        // mListID
   fpcPi_CURRENT_e,          // mListPrio

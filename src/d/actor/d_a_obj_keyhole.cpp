@@ -253,8 +253,7 @@ static void chain_control3(obj_keyhole_class* i_this, kh_chain_s* i_chain_s, int
     }
 }
 
-/* 80C43CE5 0003+00 data_80C43CE5 None */
-static u8 l_HIOInit;
+static u8 hio_set;
 
 static daObj_Keyhole_HIO_c l_HIO;
 
@@ -634,7 +633,7 @@ static int daObj_Keyhole_Delete(obj_keyhole_class* i_this) {
     dComIfG_resDelete(&i_this->phase, i_this->arcname);
 
     if (i_this->HIOInit) {
-        l_HIOInit = FALSE;
+        hio_set = FALSE;
         mDoHIO_DELETE_CHILD(l_HIO.id);
     }
 
@@ -757,9 +756,9 @@ static int daObj_Keyhole_Create(fopAc_ac_c* a_this) {
             i_this->arg0 = 0;
         }
 
-        if (!l_HIOInit) {
+        if (!hio_set) {
             i_this->HIOInit = TRUE;
-            l_HIOInit = TRUE;
+            hio_set = TRUE;
             l_HIO.id = mDoHIO_CREATE_CHILD("リアル施錠", &l_HIO);
         }
 
@@ -842,7 +841,7 @@ static actor_method_class l_daObj_Keyhole_Method = {
     (process_method_func)daObj_Keyhole_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_KEYHOLE = {
+actor_process_profile_definition g_profile_OBJ_KEYHOLE = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

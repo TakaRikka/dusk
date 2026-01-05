@@ -1410,9 +1410,11 @@ static dCcD_SrcCyl l_windAtCylSrc = {
         {0},
     },
     {
-        {0.0f, 0.0f, 0.0f},
-        150.0f,
-        600.0f,
+        {
+            {0.0f, 0.0f, 0.0f},
+            150.0f,
+            600.0f,
+        }
     }
 };
 
@@ -1494,7 +1496,7 @@ static actor_method_class l_daBoomerang_Method = {
     (process_method_func)daBoomerang_Draw,
 };
 
-extern actor_process_profile_definition g_profile_BOOMERANG = {
+actor_process_profile_definition g_profile_BOOMERANG = {
   fpcLy_CURRENT_e,       // mLayerID
   6,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

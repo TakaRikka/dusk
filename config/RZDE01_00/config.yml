@@ -13,6 +13,10 @@ force_active: [
   _MetroTRK_Has_Framing,
 ]
 
+block_relocations:
+- source: .text:0x80344978
+- source: .text:0x803449f0
+
 modules:
 - object: files/RELS.arc:rels/mmem/f_pc_profile_lst.rel
   hash: 40511841f108b688f4885b19bf8ecf07781aab67

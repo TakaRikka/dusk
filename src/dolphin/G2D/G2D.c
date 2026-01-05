@@ -1,7 +1,7 @@
 #include <dolphin/dolphin.h>
 #include <dolphin/gx.h>
 #include <dolphin/G2D.h>
-#include "fake_tgmath.h"
+#include "sdk_math.h"
 
 static G2DGlob glob;
 

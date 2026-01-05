@@ -1471,7 +1471,7 @@ int daNpc_Pachi_Taro_c::wait(void* param_1) {
                 if (field_0x1004 == 0) {
                     mEvtNo = EVT_TUTRIAL_BEGIN;
                     mPrevEvtNo = mEvtNo;
-                    dComIfGp_getEvent().setSkipProc(this, dEv_defaultSkipProc, 0);
+                    dComIfGp_getEvent()->setSkipProc(this, dEv_defaultSkipProc, 0);
                 } else if (field_0x1004 == 1) {
                     watch_tutrial();
                 }
@@ -1801,7 +1801,7 @@ BOOL daNpc_Pachi_Taro_c::evtEndProc() {
 BOOL daNpc_Pachi_Taro_c::cutTutrialBegin(int i_staffId) {
     field_0x1004 = 1;
 
-    dComIfGp_getEvent().setSkipZev(this, "TUTRIAL_BEGIN_SKIP");
+    dComIfGp_getEvent()->setSkipZev(this, "TUTRIAL_BEGIN_SKIP");
     dEvent_manager_c& eventManager = dComIfGp_getEventManager();
     int* cutId = NULL;
     cutId = dComIfGp_evmng_getMyIntegerP(i_staffId, "cutId");
@@ -2556,7 +2556,7 @@ static actor_method_class daNpc_Pachi_Taro_MethodTable = {
     (process_method_func)daNpc_Pachi_Taro_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_PACHI_TARO = {
+actor_process_profile_definition g_profile_NPC_PACHI_TARO = {
   fpcLy_CURRENT_e,               // mLayerID
   7,                             // mListID
   fpcPi_CURRENT_e,               // mListPrio

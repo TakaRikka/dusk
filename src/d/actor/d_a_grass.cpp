@@ -10,7 +10,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include <string.h>
+#include <string>
 
 #include "d/actor/d_grass.inc" // IWYU pragma: keep
 #include "d/actor/d_flower.inc"
@@ -400,7 +400,7 @@ static actor_method_class daGrass_METHODS = {
     (process_method_func)daGrass_draw,
 };
 
-extern actor_process_profile_definition g_profile_GRASS = {
+actor_process_profile_definition g_profile_GRASS = {
   fpcLy_CURRENT_e,       // mLayerID
   11,                    // mListID
   fpcPi_CURRENT_e,       // mListPrio

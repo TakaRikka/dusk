@@ -1632,12 +1632,12 @@ static leafdraw_method_class l_dTimer_Method = {
     (process_method_func)dTimer_Draw,
 };
 
-extern msg_process_profile_definition g_profile_TIMER = {
+msg_process_profile_definition g_profile_TIMER = {
     fpcLy_CURRENT_e,
     12,
     fpcPi_CURRENT_e,
     PROC_TIMER,
-    (process_method_class*)&g_fpcLf_Method,
+    &g_fpcLf_Method.base,
     sizeof(dTimer_c),
     0,
     0,

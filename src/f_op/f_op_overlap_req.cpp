@@ -80,7 +80,7 @@ static int fopOvlpReq_phase_IsCreated(overlap_request_class* i_overlapReq) {
 static int fopOvlpReq_phase_Create(overlap_request_class* i_overlapReq) {
     fpcLy_SetCurrentLayer(i_overlapReq->layer);
     i_overlapReq->request_id =
-        fpcSCtRq_Request(fpcLy_CurrentLayer(), i_overlapReq->procname, NULL, NULL, NULL);
+        fpcM_Create(i_overlapReq->procname, NULL, NULL);
     return cPhs_NEXT_e;
 }
 
@@ -98,8 +98,7 @@ overlap_request_class* fopOvlpReq_Request(overlap_request_class* i_overlapReq, s
     };
 
     if (i_overlapReq->field_0x4 == 1) {
-        i_overlapReq = NULL;
-        return i_overlapReq;
+        return NULL;
     }
 
     cReq_Command(&i_overlapReq->base, 1);
@@ -116,9 +115,7 @@ overlap_request_class* fopOvlpReq_Request(overlap_request_class* i_overlapReq, s
 }
 
 int fopOvlpReq_Handler(overlap_request_class* i_overlapReq) {
-    int phase_state = cPhs_Do(&i_overlapReq->phase_req, i_overlapReq);
-
-    switch (phase_state) {
+    switch (cPhs_Do(&i_overlapReq->phase_req, i_overlapReq)) {
     case cPhs_NEXT_e:
         return fopOvlpReq_Handler(i_overlapReq);
     case cPhs_INIT_e:
@@ -136,11 +133,17 @@ int fopOvlpReq_Handler(overlap_request_class* i_overlapReq) {
 }
 
 int fopOvlpReq_Cancel(overlap_request_class* i_overlapReq) {
-    return fopOvlpReq_phase_Done(i_overlapReq) == cPhs_NEXT_e ? TRUE : FALSE;
+    if (fopOvlpReq_phase_Done(i_overlapReq) == cPhs_NEXT_e) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 int fopOvlpReq_Is_PeektimeLimit(overlap_request_class* i_overlapReq) {
-    return i_overlapReq->peektime == 0 ? TRUE : FALSE;
+    if (i_overlapReq->peektime == 0) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 void fopOvlpReq_SetPeektime(overlap_request_class* i_overlapReq, u16 i_peektime) {

@@ -77,7 +77,7 @@ static void daAlinkHIO_setReverseAnmGenMessage(daAlinkHIO_anm_c* i_anmP, JORMCon
                    0x18);
 }
 
-// NONMATCHING - regalloc + extra mr instruction
+// DEBUG NONMATCHING - regalloc + extra mr instruction
 void daAlinkHIO_data_c::setStructData(char* param_1) {
     u8* pfVar2;
     u8* pfVar4;
@@ -146,7 +146,7 @@ void daAlinkHIO_data_c::baseCopy() {
     cLib_memCpy(mp_data, mp_src_data, m_len);
 }
 
-// NONMATCHING
+// DEBUG NONMATCHING
 void daAlinkHIO_data_c::update() {
     baseCopy();
     JORMContext* ctx = attachJORMContext(8);
@@ -5764,7 +5764,6 @@ void daAlinkHIO_wolf_c::genMessage(JORMContext* ctx) {
     ctx->genSlider("光雫Ｂ", &m.mLightDropB, -0x40, 0x40, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
 }
 
-// NONMATCHING
 daAlinkHIO_wolf_c::daAlinkHIO_wolf_c()
     : mWlMove(), mWlMoveNoP(), mWlAtnMove(), mWlSideStep(), mWlBackJump(), mWlHowl(), mWlAutoJump(),
       mWlPush(), mWlLie(), mLight(1), mWlWallHang(), mWlDamage(), mWlSlide(), mWlRope(),

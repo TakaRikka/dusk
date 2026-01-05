@@ -207,7 +207,7 @@ static actor_method_class l_daLv7BsGate_Method = {
     (process_method_func)daLv7BsGate_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv7BsGate = {
+actor_process_profile_definition g_profile_Obj_Lv7BsGate = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

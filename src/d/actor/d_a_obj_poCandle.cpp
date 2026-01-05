@@ -249,7 +249,7 @@ static actor_method_class l_daPoCandle_Method = {
     (process_method_func)daPoCandle_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_poCandle = {
+actor_process_profile_definition g_profile_Obj_poCandle = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

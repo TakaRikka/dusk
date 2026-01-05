@@ -196,7 +196,7 @@ static actor_method_class daObjFuta_METHODS = {
     (process_method_func)daObjFuta_MoveBGDraw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Hfuta = {
+actor_process_profile_definition g_profile_Obj_Hfuta = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

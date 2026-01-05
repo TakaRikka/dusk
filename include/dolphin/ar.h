@@ -1,6 +1,9 @@
 #ifndef _DOLPHIN_AR_H_
 #define _DOLPHIN_AR_H_
 
+#ifdef __REVOLUTION_SDK__
+#include <revolution/aralt.h>
+#else
 #include <dolphin/types.h>
 
 #ifdef __cplusplus
@@ -64,8 +67,12 @@ void ARQSetChunkSize(u32 size);
 u32 ARQGetChunkSize(void);
 BOOL ARQCheckInit(void);
 
+u16 __ARGetInterruptStatus(void);
+void __ARClearInterrupt(void);
+
 #ifdef __cplusplus
 }
 #endif
 
+#endif
 #endif

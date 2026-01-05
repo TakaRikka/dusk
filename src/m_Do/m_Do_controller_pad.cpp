@@ -4,7 +4,9 @@
  */
 
 #include "m_Do/m_Do_controller_pad.h"
+#include "JSystem/JAWExtSystem/JAWExtSystem.h"
 #include "SSystem/SComponent/c_lib.h"
+#include "d/d_com_inf_game.h"
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_main.h"
@@ -12,14 +14,14 @@
 JUTGamePad* mDoCPd_c::m_gamePad[4];
 
 interface_of_controller_pad mDoCPd_c::m_cpadInfo[4];
+interface_of_controller_pad mDoCPd_c::m_debugCpadInfo[4];
 
 void mDoCPd_c::create() {
     #if PLATFORM_GCN || PLATFORM_SHIELD
-    JUTGamePad* pad = new JUTGamePad(JUTGamePad::EPort1);
-    m_gamePad[0] = pad;
+    m_gamePad[0] = new JUTGamePad(JUTGamePad::EPort1);
     #endif
 
-    if (mDoMain::developmentMode != 0) {
+    if (DEBUG || mDoMain::developmentMode != 0) {
         #if PLATFORM_WII
         m_gamePad[0] = new JUTGamePad(JUTGamePad::EPort1);
         #endif
@@ -47,10 +49,8 @@ void mDoCPd_c::create() {
 
     interface_of_controller_pad* cpad = &m_cpadInfo[0];
     for (int i = 0; i < 4; i++) {
-        cpad->mTrigLockL = false;
-        cpad->mHoldLockL = false;
-        cpad->mTrigLockR = false;
-        cpad->mHoldLockR = false;
+        cpad->mHoldLockL = cpad->mTrigLockL = false;
+        cpad->mHoldLockR = cpad->mTrigLockR = false;
         cpad++;
     }
 }
@@ -59,15 +59,27 @@ void mDoCPd_c::read() {
     JUTGamePad::read();
 
     if (!mDoRst::isReset() && mDoRst::is3ButtonReset()) {
-        JUTGamePad* pad = JUTGamePad::getGamePad(mDoRst::get3ButtonResetPort());
-
-        if (!pad->isPushing3ButtonReset()) {
+        if (!JUTGamePad::getGamePad(mDoRst::get3ButtonResetPort())->isPushing3ButtonReset()) {
             mDoRst::off3ButtonReset();
         }
     }
 
+#if DEBUG
+    if (m_gamePad[3]) {
+        JAWExtSystem::padProc(*m_gamePad[3]);
+    }
+#endif
+
     JUTGamePad** pad = m_gamePad;
     interface_of_controller_pad* interface = m_cpadInfo;
+#if DEBUG
+    interface_of_controller_pad* interface2 = m_debugCpadInfo;
+    if (dComIfG_isDebugMode()) {
+        interface_of_controller_pad* tmp = interface;
+        interface = interface2;
+        interface2 = tmp;
+    }
+#endif
 
     for (u32 i = 0; i < 4; i++) {
         if (*pad == NULL) {
@@ -76,9 +88,14 @@ void mDoCPd_c::read() {
             convert(interface, *pad);
             LRlockCheck(interface);
         }
-
+#if DEBUG
+        cLib_memSet(interface2, 0, sizeof(interface_of_controller_pad));
+#endif
         pad++;
         interface++;
+#if DEBUG
+        interface2++;
+#endif
     }
 }
 
@@ -103,26 +120,26 @@ void mDoCPd_c::convert(interface_of_controller_pad* pInterface, JUTGamePad* pPad
 }
 
 void mDoCPd_c::LRlockCheck(interface_of_controller_pad* interface) {
-    f32 trig_left = interface->mTriggerLeft;
+    f32 trigger = interface->mTriggerLeft;
     interface->mTrigLockL = false;
     interface->mTrigLockR = false;
 
-    if (trig_left > fapGmHIO_getLROnValue()) {
+    if (trigger > fapGmHIO_getLROnValue()) {
         if (interface->mHoldLockL != true) {
             interface->mTrigLockL = true;
         }
         interface->mHoldLockL = true;
-    } else if (trig_left < fapGmHIO_getLROffValue()) {
+    } else if (trigger < fapGmHIO_getLROffValue()) {
         interface->mHoldLockL = false;
     }
 
-    f32 trig_right = interface->mTriggerRight;
-    if (trig_right > fapGmHIO_getLROnValue()) {
+    trigger = interface->mTriggerRight;
+    if (trigger > fapGmHIO_getLROnValue()) {
         if (interface->mHoldLockR != true) {
             interface->mTrigLockR = true;
         }
         interface->mHoldLockR = true;
-    } else if (trig_right < fapGmHIO_getLROffValue()) {
+    } else if (trigger < fapGmHIO_getLROffValue()) {
         interface->mHoldLockR = false;
     }
 }

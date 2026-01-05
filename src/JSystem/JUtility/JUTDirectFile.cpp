@@ -3,7 +3,7 @@
 #include "JSystem/JUtility/JUTDirectFile.h"
 #include <dolphin/os.h>
 #include "global.h"
-#include <stdint.h>
+#include <stdint>
 
 int JUTDirectFile::fetch32byte() {
 	mToRead = mLength - ALIGN_PREV(mPos, DVD_MIN_TRANSFER_SIZE);
@@ -54,27 +54,33 @@ bool JUTDirectFile::fopen(const char* filename) {
 		return false;
 	}
 
-	int interrupts2 = OSEnableInterrupts();
+	interrupts = OSEnableInterrupts();
 	mLength         = mFileInfo.length;
-	OSRestoreInterrupts(interrupts2);
+	OSRestoreInterrupts(interrupts);
 
 	mPos    = 0;
 	mIsOpen = true;
 	return true;
 }
 
+static void dummy(JUTDirectFile* directFile) {
+	directFile->isOpened();
+}
+
 void JUTDirectFile::fclose() {
-	if (mIsOpen) {
-		int interrupts = OSEnableInterrupts();
-		DVDClose(&mFileInfo);
-		OSRestoreInterrupts(interrupts);
-		mIsOpen = false;
+	if (!isOpened()) {
+		return;
 	}
+
+	int interrupts = OSEnableInterrupts();
+	DVDClose(&mFileInfo);
+	OSRestoreInterrupts(interrupts);
+	mIsOpen = false;
 }
 
 int JUTDirectFile::fgets(void* buf, int len) {
 	// if file isn't open, return error (-1).
-	if (!mIsOpen) {
+	if (!isOpened()) {
 		return -1;
 	}
 
@@ -86,6 +92,7 @@ int JUTDirectFile::fgets(void* buf, int len) {
 	// if desired length to get is 1, return 1.
 	// (final byte gotten is always 0, so len 1 is pointless).
 	if (len == 1) {
+		buf = NULL;
 		return 1;
 	}
 
@@ -99,10 +106,8 @@ int JUTDirectFile::fgets(void* buf, int len) {
 		return -1;
 	}
 
-	int readMax;
 	u8* byteBuf   = (u8*)buf;
 	int readCount = 0;
-	readMax       = len - 1; // desired bytes of data to get (last value is then 0).
 
 	while (mPos < mLength) {
 		// if there's nothing left to read, return error.
@@ -113,14 +118,13 @@ int JUTDirectFile::fgets(void* buf, int len) {
 		// read in each chunk.
 		u32 currPos   = mPos & (JUTDF_BUFSIZE - 1);
 		u32 chunkSize = (mToRead - currPos);
-		if (readCount + chunkSize > readMax) {
+		if (readCount + chunkSize > len - 1) {
 			chunkSize = len - readCount - 1;
 		}
 
 		BOOL isAtEnd = FALSE;
 		for (int i = 0; i < chunkSize; i++) {
-			u8 byte = mSectorStart[currPos];
-			currPos++;
+			u8 byte = mSectorStart[currPos++];
 			*byteBuf++ = byte;
 
 			// if we hit the end of a line, stop reading.
@@ -149,7 +153,7 @@ int JUTDirectFile::fgets(void* buf, int len) {
 		readCount += chunkSize;
 
 		// if we're at (or beyond) our desired length, set final byte to 0 and stop reading.
-		if (readCount >= readMax) {
+		if (readCount >= len - 1) {
 			*byteBuf = 0;
 			break;
 		}

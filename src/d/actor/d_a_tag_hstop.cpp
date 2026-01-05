@@ -105,7 +105,7 @@ int daTagHstop_c::execute() {
             m_msgFlow.init(this, (u16)shape_angle.z, 0, NULL);
             field_0x573 = 3;
         } else if (m_msgFlow.doFlow(this, NULL, 0)) {
-            dComIfGp_getEvent().reset();
+            dComIfGp_getEvent()->reset();
             field_0x573 = 0;
 
             s16 arrow_num = dComIfGp_getItemMaxArrowNumCount();
@@ -177,7 +177,7 @@ static actor_method_class l_daTagHstop_Method = {
     (process_method_func)daTagHstop_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Tag_Hstop = {
+actor_process_profile_definition g_profile_Tag_Hstop = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

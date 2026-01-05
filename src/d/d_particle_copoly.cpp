@@ -178,9 +178,6 @@ void dPaPoT_c::clearTwoAllID() {
     clearCenterID();
 }
 
-/* 800512E8-80051424 04BC28 013C+00 0/0 1/1 1/1 .text
- * setEffectFour__8dPaPoF_cFPC12dKy_tevstr_cPC4cXyzUlUlPC4cXyzPC4cXyzPC4cXyzPC4cXyzPC4cXyzPC5csXyzPC4cXyzScff
- */
 int dPaPoF_c::setEffectFour(dKy_tevstr_c const* param_0, cXyz const* param_1, u32 param_2,
                             u32 param_3, cXyz const* param_4, cXyz const* param_5,
                             cXyz const* param_6, cXyz const* param_7, cXyz const* param_8,

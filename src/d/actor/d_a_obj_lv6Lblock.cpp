@@ -179,7 +179,7 @@ static actor_method_class l_daLv6Lblock_Method = {
     (process_method_func)daLv6Lblock_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv6Lblock = {
+actor_process_profile_definition g_profile_Obj_Lv6Lblock = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

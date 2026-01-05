@@ -78,6 +78,10 @@ struct cCcD_SrcSphAttr {
     cM3dGSphS mSph;
 };
 
+struct cCcD_SrcCylAttr {
+    cM3dGCylS mCyl;
+};
+
 class cCcD_DivideInfo {
 private:
     /* 0x00 */ u32 mXDivInfo;
@@ -214,7 +218,7 @@ public:
     cCcD_Obj* GetHitObj() { return mHitObj; }
     const cCcD_Obj* GetHitObj() const { return mHitObj; }
     u32 MskSPrm(u32 mask) const { return mSPrm & mask; }
-    u32 MskRPrm(u32 mask) { return mRPrm & mask; }
+    u32 MskRPrm(u32 mask) const { return mRPrm & mask; }
     void OnSPrmBit(u32 flag) { mSPrm |= flag; }
     void OffSPrmBit(u32 flag) { mSPrm &= ~flag; }
     u32 ChkSPrm(u32 prm) const { return MskSPrm(prm); }
@@ -228,7 +232,8 @@ STATIC_ASSERT(0x10 == sizeof(cCcD_ObjCommonBase));
 #pragma pack(1)
 class cCcD_ObjAt : public cCcD_ObjCommonBase {
 public:
-    cCcD_ObjAt() { mType = 0; }
+    cCcD_ObjAt() { Ct(); }
+    void Ct() { mType = 0; }
     virtual ~cCcD_ObjAt() {}
     void SetHit(cCcD_Obj*);
     void Set(cCcD_SrcObjAt const&);
@@ -241,7 +246,7 @@ public:
     void SetType(u32 type) { mType = type; }
     void SetAtp(int atp) { mAtp = atp; }
     void ClrSet() { OffSPrmBit(1); }
-    u32 ChkHit() { return MskRPrm(1); }
+    u32 ChkHit() const { return MskRPrm(1); }
 
 protected:
     /* 0x10 */ int mType;
@@ -266,7 +271,7 @@ public:
     u32 GetGrp() const { return MskSPrm(0x1E); }
     bool ChkSet() const { return MskSPrm(1); }
     void ClrSet() { OffSPrmBit(1); }
-    u32 ChkHit() { return MskRPrm(1); }
+    u32 ChkHit() const { return MskRPrm(1); }
 
 private:
     /* 0x10 */ int mType;
@@ -276,6 +281,8 @@ STATIC_ASSERT(0x14 == sizeof(cCcD_ObjTg));
 
 class cCcD_ObjCo : public cCcD_ObjCommonBase {
 public:
+    cCcD_ObjCo() { Ct(); }
+    void Ct() {}
     virtual ~cCcD_ObjCo() {}
     void SetHit(cCcD_Obj*);
     void ClrHit();
@@ -292,7 +299,7 @@ public:
     void OnCoSameActorHit() { OnSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SAME_ACTOR_HIT); }
     void OffCoSameActorHit() { OffSPrmBit(cCcD_ObjCommonBase::CO_SPRM_SAME_ACTOR_HIT); }
     void ClrSet() { OffSPrmBit(1); }
-    u32 ChkHit() { return MskRPrm(1); }
+    u32 ChkHit() const { return MskRPrm(1); }
 
     void Set(cCcD_SrcObjCo const& src) { cCcD_ObjCommonBase::Set(src.mBase); }
 };
@@ -368,12 +375,12 @@ public:
     void ClrAtHit() { mObjAt.ClrHit(); }
     void ClrTgHit() { mObjTg.ClrHit(); }
     void ClrCoHit() { mObjCo.ClrHit(); }
-    u32 ChkAtHit() { return mObjAt.ChkHit(); }
-    u32 ChkTgHit() { return mObjTg.ChkHit(); }
-    u32 ChkCoHit() { return mObjCo.ChkHit(); }
-    cCcD_Obj* GetAtHitObj() { return mObjAt.GetHitObj(); }
-    cCcD_Obj* GetTgHitObj() { return mObjTg.GetHitObj(); }
-    cCcD_Obj* GetCoHitObj() { return mObjCo.GetHitObj(); }
+    u32 ChkAtHit() const { return mObjAt.ChkHit(); }
+    u32 ChkTgHit() const { return mObjTg.ChkHit(); }
+    u32 ChkCoHit() const { return mObjCo.ChkHit(); }
+    cCcD_Obj* GetAtHitObj() const { return (cCcD_Obj*)mObjAt.GetHitObj(); }
+    cCcD_Obj* GetTgHitObj() const { return (cCcD_Obj*)mObjTg.GetHitObj(); }
+    cCcD_Obj* GetCoHitObj() const { return (cCcD_Obj*)mObjCo.GetHitObj(); }
     u32 ChkAtSPrm(u32 prm) { return mObjAt.ChkSPrm(prm); }
     u32 ChkCoSPrm(u32 prm) const { return mObjCo.ChkSPrm(prm); }
     void OnTgNoSlingHitInfSet() { mObjTg.OnSPrmBit(0x40); }
@@ -403,24 +410,24 @@ public:
     virtual bool CrossAtTg(cCcD_ShapeAttr const&, cXyz*) const {
         return false;
     }
-    /*          vt[4] */ virtual bool CrossAtTg(cCcD_PntAttr const&, cXyz*) const = 0;
-    /*          vt[5] */ virtual bool CrossAtTg(cCcD_CpsAttr const&, cXyz*) const = 0;
-    /*          vt[6] */ virtual bool CrossAtTg(cCcD_TriAttr const&, cXyz*) const = 0;
-    /*          vt[7] */ virtual bool CrossAtTg(cCcD_AabAttr const&, cXyz*) const = 0;
-    /*          vt[8] */ virtual bool CrossAtTg(cCcD_CylAttr const&, cXyz*) const = 0;
-    /*          vt[9] */ virtual bool CrossAtTg(cCcD_SphAttr const&, cXyz*) const = 0;
-    /* 802649E0 vt[10]*/ virtual bool CrossCo(cCcD_ShapeAttr const&, f32*) const { return false; }
-    /*          vt[11]*/ virtual bool CrossCo(cCcD_PntAttr const&, f32*) const = 0;
-    /*          vt[12]*/ virtual bool CrossCo(cCcD_CpsAttr const&, f32*) const = 0;
-    /*          vt[13]*/ virtual bool CrossCo(cCcD_TriAttr const&, f32*) const = 0;
-    /*          vt[14]*/ virtual bool CrossCo(cCcD_AabAttr const&, f32*) const = 0;
-    /*          vt[15]*/ virtual bool CrossCo(cCcD_CylAttr const&, f32*) const = 0;
-    /*          vt[16]*/ virtual bool CrossCo(cCcD_SphAttr const&, f32*) const = 0;
-    /* 80084E38 vt[17]*/ virtual const cXyz& GetCoCP() const { return m_virtual_center; }
-    /* 80084E2C vt[18]*/ virtual cXyz& GetCoCP() { return m_virtual_center; }
-    /*          vt[19]*/ virtual void CalcAabBox() = 0;
-    /*          vt[20]*/ virtual bool GetNVec(cXyz const&, cXyz*) const = 0;
-    /* 80263A64 vt[21]*/ virtual void getShapeAccess(cCcD_ShapeAttr::Shape*) const;
+    /* vt[4] */ virtual bool CrossAtTg(cCcD_PntAttr const&, cXyz*) const = 0;
+    /* vt[5] */ virtual bool CrossAtTg(cCcD_CpsAttr const&, cXyz*) const = 0;
+    /* vt[6] */ virtual bool CrossAtTg(cCcD_TriAttr const&, cXyz*) const = 0;
+    /* vt[7] */ virtual bool CrossAtTg(cCcD_AabAttr const&, cXyz*) const = 0;
+    /* vt[8] */ virtual bool CrossAtTg(cCcD_CylAttr const&, cXyz*) const = 0;
+    /* vt[9] */ virtual bool CrossAtTg(cCcD_SphAttr const&, cXyz*) const = 0;
+    /* vt[10]*/ virtual bool CrossCo(cCcD_ShapeAttr const&, f32*) const { return false; }
+    /* vt[11]*/ virtual bool CrossCo(cCcD_PntAttr const&, f32*) const = 0;
+    /* vt[12]*/ virtual bool CrossCo(cCcD_CpsAttr const&, f32*) const = 0;
+    /* vt[13]*/ virtual bool CrossCo(cCcD_TriAttr const&, f32*) const = 0;
+    /* vt[14]*/ virtual bool CrossCo(cCcD_AabAttr const&, f32*) const = 0;
+    /* vt[15]*/ virtual bool CrossCo(cCcD_CylAttr const&, f32*) const = 0;
+    /* vt[16]*/ virtual bool CrossCo(cCcD_SphAttr const&, f32*) const = 0;
+    /* vt[17]*/ virtual const cXyz& GetCoCP() const { return m_virtual_center; }
+    /* vt[18]*/ virtual cXyz& GetCoCP() { return m_virtual_center; }
+    /* vt[19]*/ virtual void CalcAabBox() = 0;
+    /* vt[20]*/ virtual bool GetNVec(cXyz const&, cXyz*) const = 0;
+    /* vt[21]*/ virtual void getShapeAccess(cCcD_ShapeAttr::Shape*) const;
 
     cM3dGAab& GetWorkAab() { return mAab; }
     cM3dGAab const& GetWorkAab() const { return mAab; }
@@ -463,9 +470,9 @@ class cCcD_GObjInf : public cCcD_Obj {
 public:
     cCcD_GObjInf() {}
     virtual ~cCcD_GObjInf() {}
-    virtual void ClrAtHit() { mObjAt.ClrHit(); }
-    virtual void ClrTgHit() { mObjTg.ClrHit(); }
-    virtual void ClrCoHit() { mObjCo.ClrHit(); }
+    virtual void ClrAtHit() { cCcD_ObjHitInf::ClrAtHit(); }
+    virtual void ClrTgHit() { cCcD_ObjHitInf::ClrTgHit(); }
+    virtual void ClrCoHit() { cCcD_ObjHitInf::ClrCoHit(); }
     virtual cCcD_GObjInf const* GetGObjInf() const { return this; }
     virtual cCcD_GObjInf* GetGObjInf() { return this; }
 };
@@ -582,6 +589,7 @@ public:
     virtual void CalcAabBox();
     virtual bool GetNVec(cXyz const&, cXyz*) const;
     virtual void getShapeAccess(cCcD_ShapeAttr::Shape*) const;
+    void Set(const cCcD_SrcCylAttr& src) { cM3dGCyl::Set(src.mCyl); }
 
     const cM3dGCyl* GetShapeP() const { return this; }
 

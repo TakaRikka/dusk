@@ -578,7 +578,7 @@ void daE_HM_c::UpDeathAction() {
     }
 }
 
-static bool l_HIOInit;
+static bool hio_set;
 
 static daE_HM_HIO_c l_HIO;
 
@@ -1361,7 +1361,7 @@ int daE_HM_c::Delete() {
     dComIfG_resDelete(&mPhase,"E_HM");
 
     if (field_0xa84 != 0) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.field_0x04);
     }
 
@@ -1531,8 +1531,8 @@ int daE_HM_c::Create() {
             return cPhs_ERROR_e;
         }
 
-        if (l_HIOInit == 0) {
-            l_HIOInit = true;
+        if (hio_set == 0) {
+            hio_set = true;
             field_0xa84 = 1;
             l_HIO.field_0x04 = mDoHIO_CREATE_CHILD("E_HM", &l_HIO);
         }
@@ -1602,7 +1602,7 @@ static actor_method_class l_daE_HM_Method = {
     (process_method_func)daE_HM_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_HM = {
+actor_process_profile_definition g_profile_E_HM = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

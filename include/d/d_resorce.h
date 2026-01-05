@@ -42,7 +42,9 @@ public:
         return --mCount;
     }
 
+#ifdef __MWERKS__
     static const int NAME_MAX = 9;
+#endif
 
 private:
     /* 0x00 */ char mArchiveName[11];

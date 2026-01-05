@@ -10,9 +10,9 @@
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include "math.h"
-#include "string.h"
-#include <stdint.h>
+#include <math>
+#include <string>
+#include <stdint>
 
 JKRCompArchive::JKRCompArchive(s32 entryNum, JKRArchive::EMountDirection eMountDirection)
     : JKRArchive(entryNum, MOUNT_COMP) {
@@ -32,7 +32,8 @@ JKRCompArchive::~JKRCompArchive() {
     if (mArcInfoBlock != NULL) {
         SDIFileEntry* file = mFiles;
         for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
-            if (!((file->type_flags_and_name_offset >> 0x18) & 0x10) && file->data != NULL) {
+            u32 flags = file->type_flags_and_name_offset >> 24;
+            if ((flags & 16) == 0 && file->data != NULL) {
                 JKRFreeToHeap(mHeap, file->data);
             }
 
@@ -44,7 +45,7 @@ JKRCompArchive::~JKRCompArchive() {
     }
 
     if (mAramPart != NULL) {
-        delete mAramPart;
+        JKRFreeToAram(mAramPart);
     }
 
     if (mExpandedSize != NULL) {
@@ -77,7 +78,8 @@ bool JKRCompArchive::open(s32 entryNum) {
         mMountMode = 0;
         return 0;
     }
-    SArcHeader *arcHeader = (SArcHeader *)JKRAllocFromSysHeap(sizeof(SArcHeader), -32); // NOTE: unconfirmed if this struct is used
+    SArcHeader *arcHeader = NULL;
+    arcHeader = (SArcHeader *)JKRAllocFromSysHeap(sizeof(SArcHeader), -32); // NOTE: unconfirmed if this struct is used
     if(arcHeader == NULL) {
         mMountMode = 0;
     }
@@ -182,7 +184,7 @@ bool JKRCompArchive::open(s32 entryNum) {
             u8 flag = fileEntry->type_flags_and_name_offset >> 0x18;
             if (((flag & 0x1) != 0) && (((flag)&0x10) == 0))
             {
-                compressedFiles = compressedFiles | (flag & 4);
+                compressedFiles |= (flag & 4);
             }
             fileEntry++;
         }
@@ -221,7 +223,7 @@ void* JKRCompArchive::fetchResource(SDIFileEntry *fileEntry, u32 *pSize) {
     JUT_ASSERT(597, isMounted());
     u32 ptrSize;
     u32 size = fileEntry->data_size;
-    int compression = JKRConvertAttrToCompressionType(fileEntry->type_flags_and_name_offset >> 0x18);
+    int compression = JKRConvertAttrToCompressionType(u8(fileEntry->type_flags_and_name_offset >> 0x18));
 
     if(pSize == NULL) {
         pSize = &ptrSize; // this makes barely any sense but ok
@@ -235,7 +237,8 @@ void* JKRCompArchive::fetchResource(SDIFileEntry *fileEntry, u32 *pSize) {
         }
         else if (flag & 0x20) {
             u8 *data;
-            *pSize = JKRAramArchive::fetchResource_subroutine(fileEntry->data_offset + mAramPart->getAddress() - mSizeOfMemPart, size, mHeap, compression, &data);
+            size = JKRAramArchive::fetchResource_subroutine(fileEntry->data_offset + mAramPart->getAddress() - mSizeOfMemPart, size, mHeap, compression, &data);
+            *pSize = size;
             fileEntry->data = data;
             if(compression == COMPRESSION_YAZ0) {
                 setExpandSize(fileEntry, *pSize);
@@ -269,7 +272,7 @@ void *JKRCompArchive::fetchResource(void *data, u32 compressedSize, SDIFileEntry
     u32 fileSize = fileEntry->data_size;
     u32 alignedSize = ALIGN_NEXT(fileSize, 32);
     u32 fileFlag = fileEntry->type_flags_and_name_offset >> 0x18;
-    int compression = JKRConvertAttrToCompressionType(fileFlag);
+    int compression = JKRConvertAttrToCompressionType(u8(fileFlag));
 
     if(fileEntry->data != NULL) {
         if (compression == COMPRESSION_YAZ0) {
@@ -323,6 +326,7 @@ void JKRCompArchive::removeResourceAll() {
                 fileEntry->data = NULL;
             }
         }
+        fileEntry++;
     }
 }
 
@@ -331,7 +335,8 @@ bool JKRCompArchive::removeResource(void* resource) {
     if (!fileEntry)
         return false;
 
-    if (!((fileEntry->type_flags_and_name_offset >> 0x18) & 0x10)) {
+    u32 flags = fileEntry->type_flags_and_name_offset >> 24;
+    if ((flags & 0x10) == 0) {
         JKRFreeToHeap(mHeap, resource);
     }
 
@@ -357,15 +362,14 @@ u32 JKRCompArchive::getExpandedResSize(const void *resource) const
     }
 
     if ((flags & 0x10) != 0) {
-        return JKRDecompExpandSize((u8 *)resource);
+        u32 expandSize = JKRDecompExpandSize((u8*)resource);
+        return expandSize;
     }
 
     u8 buf[64];
     u8 *bufPtr = (u8 *)ALIGN_NEXT((uintptr_t)buf, 32);
     if ((flags & 0x20) != 0) {
-        u32 addr = mAramPart->mAddress;
-        addr = fileEntry->data_offset + addr;
-        JKRAramToMainRam(addr, bufPtr, sizeof(buf) / 2, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL);
+        JKRAramToMainRam(fileEntry->data_offset + mAramPart->getAddress(), bufPtr, sizeof(buf) / 2, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL);
         DCInvalidateRange(bufPtr, sizeof(buf) / 2);
     }
     else if ((flags & 0x40) != 0) {

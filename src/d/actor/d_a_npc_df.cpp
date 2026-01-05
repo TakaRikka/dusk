@@ -135,7 +135,7 @@ static void df_fly(npc_df_class* i_this, df_s* df_p) {
         df_p->field_0x72 = cM_rndF(5.0f) + 5.0f;
 
         if (df_p->field_0x77 == 0 && df_p->field_0x6c > 2000 && lrl != NULL) {
-            if (lrl->field_0x6ac.y < player->eyePos.y + 80.0f) {
+            if (lrl->rod_tip_pos.y < player->eyePos.y + 80.0f) {
                 if (lrl->kind == 0 || (lrl->kind != 0 && lrl->play_cam_mode == 7)) {
                     df_p->field_0x74 = 2;
                     df_p->field_0x75 = 0;
@@ -200,7 +200,7 @@ static void df_rod(npc_df_class* i_this, df_s* df_p) {
             }
 
             if (df_p->field_0x2c.y < 50.0f) {
-                cLib_addCalcAngleS2(&df_p->field_0x44.y, lrl->field_0x6c4 + df_p->field_0x6e, 4, 0x400);
+                cLib_addCalcAngleS2(&df_p->field_0x44.y, lrl->rod_angle_y + df_p->field_0x6e, 4, 0x400);
             } else {
                 if (fabsf(df_p->field_0x2c.x) > 10.0f && fabsf(df_p->field_0x2c.z) > 10.0f) {
                     cLib_addCalcAngleS2(&df_p->field_0x44.y, cM_atan2s(-df_p->field_0x2c.x, -df_p->field_0x2c.z), 4, 0x400);
@@ -214,12 +214,12 @@ static void df_rod(npc_df_class* i_this, df_s* df_p) {
             df_p->field_0x38.z = 0.0f;
             df_p->field_0x38.x = 0.0f;
             df_p->field_0x38.y = 5.0f;
-            cLib_addCalcAngleS2(&df_p->field_0x44.y, lrl->field_0x6c4 + df_p->field_0x6e, 2, 0x800);
+            cLib_addCalcAngleS2(&df_p->field_0x44.y, lrl->rod_angle_y + df_p->field_0x6e, 2, 0x800);
         }
 
         cXyz sp54(lrl->mg_rod.field_0x0[df_p->field_0x7b] + ((lrl->mg_rod.field_0x0[df_p->field_0x7b + 1] - lrl->mg_rod.field_0x0[df_p->field_0x7b]) * df_p->field_0x64));
         
-        if ((i_this->field_0xd34 - lrl->mg_rod.field_0x0[8]).abs() > 5.0f || lrl->field_0x6ac.y > player->eyePos.y + 80.0f) {
+        if ((i_this->field_0xd34 - lrl->mg_rod.field_0x0[8]).abs() > 5.0f || lrl->rod_tip_pos.y > player->eyePos.y + 80.0f) {
             df_p->field_0x74 = 1;
             df_p->field_0x4a.y += (int)cM_rndFX(8192.0f);
             df_p->field_0x44.x = df_p->field_0x4a.x = -8192.0f - cM_rndF(4096.0f);
@@ -421,7 +421,7 @@ static actor_method_class l_daNpc_Df_Method = {
     (process_method_func)daNpc_Df_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_DF = {
+actor_process_profile_definition g_profile_NPC_DF = {
   fpcLy_CURRENT_e,        // mLayerID
   9,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

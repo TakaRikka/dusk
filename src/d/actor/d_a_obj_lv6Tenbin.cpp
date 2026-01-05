@@ -155,7 +155,7 @@ int daTenbin_c::create() {
 }
 
 void daTenbin_c::rideCallBackRight(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c* i_act2) {
-    (void)i_dBgW;
+    UNUSED(i_dBgW);
     daTenbin_c* i_tenbin = (daTenbin_c*)i_act1;
     daPy_py_c* player = dComIfGp_getLinkPlayer();
     if (fopAcM_GetName(i_act2) == PROC_SPINNER) {
@@ -187,7 +187,7 @@ void daTenbin_c::rideCallBackRight(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c*
 }
 
 void daTenbin_c::rideCallBackLeft(dBgW* i_dBgW, fopAc_ac_c* i_act1, fopAc_ac_c* i_act2) {
-    (void)i_dBgW;
+    UNUSED(i_dBgW);
     daTenbin_c* i_tenbin = (daTenbin_c*)i_act1;
     daPy_py_c* player = dComIfGp_getLinkPlayer();
     if (fopAcM_GetName(i_act2) == PROC_SPINNER) {
@@ -355,7 +355,7 @@ static actor_method_class l_daTenbin_Method = {
     (process_method_func)daTenbin_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv6Tenbin = {
+actor_process_profile_definition g_profile_Obj_Lv6Tenbin = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

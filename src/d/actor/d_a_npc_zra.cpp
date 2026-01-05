@@ -910,7 +910,7 @@ BOOL daNpc_zrA_c::main() {
     }
 
     if (!daNpc_zrA_Param_c::m.mTest
-        && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent().isOrderOK())))
+        && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())))
     {
         if (mOrderEvtNo != EVT_NONE) {
             eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
@@ -1983,7 +1983,7 @@ BOOL daNpc_zrA_c::doEvent() {
     BOOL ret = false;
     int staff_id;
 
-    if (dComIfGp_event_runCheck() != FALSE) {
+    if (dComIfGp_event_runCheck()) {
         event_manager = &dComIfGp_getEventManager();
         if (eventInfo.checkCommandTalk() || eventInfo.checkCommandDemoAccrpt()) {
             mOrderNewEvt = false;
@@ -2031,7 +2031,7 @@ BOOL daNpc_zrA_c::doEvent() {
                     } else {
                         s16 event_idx =
                             dComIfGp_getEventManager().getEventIdx(this, "NO_RESPONSE", 0xff);
-                        dComIfGp_getEvent().reset(this);
+                        dComIfGp_getEvent()->reset(this);
                         fopAcM_orderChangeEventId(this, event_idx, 1, 0xffff);
                         field_0x9ec = true;
                     }
@@ -2131,7 +2131,7 @@ BOOL daNpc_zrA_c::doEvent() {
 
 BOOL daNpc_zrA_c::setSkipZev(int i_idx1, int i_idx2) {
     if (!strcmp(dComIfGp_getEventManager().getRunEventName(), l_evtNames[i_idx1])) {
-        dComIfGp_getEvent().setSkipZev(this, l_evtNames[i_idx2]);
+        dComIfGp_getEvent()->setSkipZev(this, l_evtNames[i_idx2]);
         return true;
     }
     return false;
@@ -2319,7 +2319,7 @@ static actor_method_class daNpc_zrA_MethodTable = {
     (process_method_func)daNpc_zrA_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_ZRA = {
+actor_process_profile_definition g_profile_NPC_ZRA = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

@@ -1,7 +1,7 @@
 #ifndef NW4HBM_SND_SOUND_INSTANCE_MANAGER_H
 #define NW4HBM_SND_SOUND_INSTANCE_MANAGER_H
 
-#include <new.h>
+#include <new>
 
 #include <revolution/types.h>
 

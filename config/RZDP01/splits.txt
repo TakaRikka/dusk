@@ -3167,7 +3167,11 @@ revolution/os/OSStateTM.c:
 	.text       start:0x8033A9F0 end:0x8033B0E4
 	.data       start:0x80424FE8 end:0x804250B0
 	.bss        start:0x804D24E0 end:0x804D25A0
-	.sbss       start:0x80521C98 end:0x80521CC0
+	.sbss       start:0x80521C98 end:0x80521CB8
+
+revolution/os/__start.c:
+	.init       start:0x80004000 end:0x800042E0
+	.sbss       start:0x80521CB8 end:0x80521CC0
 
 revolution/os/OSPlayRecord.c:
 	.text       start:0x8033B0E4 end:0x8033B7BC
@@ -3181,6 +3185,7 @@ revolution/os/OSStateFlags.c:
 	.bss        start:0x804D27A0 end:0x804D27C0
 
 revolution/os/__ppc_eabi_init.cpp:
+	.init       start:0x800042E0 end:0x80004338
 	.text       start:0x8033B9B4 end:0x8033BA68
 
 revolution/exi/EXIBios.c:
@@ -3918,6 +3923,7 @@ revolution/gd/GDGeometry.c:
 	.data       start:0x80431088 end:0x804310F0
 
 PowerPC_EABI_Support/Runtime/Src/__mem.c:
+	.init       start:0x80004338 end:0x8000446C
 	.text       start:0x803A89F4 end:0x803A8A10
 
 PowerPC_EABI_Support/Runtime/Src/__va_arg.c:
@@ -4260,6 +4266,7 @@ TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/flush_cache.
 	.text       start:0x803B57D4 end:0x803B580C
 
 TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/mem_TRK.c:
+	.init       start:0x8000446C end:0x800044C0
 	.text       start:0x803B580C end:0x803B58C4
 
 TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/string_TRK.c:
@@ -4280,7 +4287,11 @@ TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/mpc_7xx_603e
 TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Export/mslsupp.c:
 	.text       start:0x803B7690 end:0x803B7808
 
+TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/exception.s:
+	.init       start:0x800044C0 end:0x800063F4
+
 TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/dolphin_trk.c:
+	.init       start:0x800063F4 end:0x80006420
 	.text       start:0x803B7808 end:0x803B7B24
 	.data       start:0x804318C0 end:0x80431900
 	.bss        start:0x8051D960 end:0x8051D968

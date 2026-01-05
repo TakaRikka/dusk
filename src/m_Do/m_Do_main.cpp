@@ -33,7 +33,7 @@
 #include "m_Do/m_Do_printf.h"
 #include "m_Do/m_Do_ext2.h"
 #include "SSystem/SComponent/c_counter.h"
-#include <cstring.h>
+#include <string>
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
@@ -195,14 +195,12 @@ OSTime mDoMain::sPowerOnTime;
 
 OSTime mDoMain::sHungUpTime;
 
-/* 80450B18 0001+00 data_80450B18 None */
 static u8 mDisplayHeapSize;
 
 #if DEBUG
 static u8 mReportDisable;
 #endif
 
-/* 80450B19 0001+00 data_80450B19 None */
 static u8 mSelectHeapBar;
 
 #if DEBUG
@@ -210,7 +208,6 @@ static u8 mVisibleHeapBar;
 static u8 mPrintFrameLine;
 #endif
 
-/* 80450B1A 0002+00 data_80450B1A None */
 static u8 mCheckHeap;
 
 #if DEBUG
@@ -663,6 +660,22 @@ static void debug() {
     }
 }
 
+// linker generated symbols
+extern u8 _f_text[];
+extern u8 _e_text[];
+extern u8 _f_ctors[];
+extern u8 _e_ctors[];
+extern u8 _f_dtors[];
+extern u8 _e_dtors[];
+extern u8 _f_rodata[];
+extern u8 _e_rodata[];
+
+#if VERSION == VERSION_SHIELD_DEBUG
+const int audioHeapSize = 0x169000;
+#else
+const int audioHeapSize = 0x14D800;
+#endif
+
 void main01(void) {
     OS_REPORT("\x1b[m");
 
@@ -670,11 +683,10 @@ void main01(void) {
     mDoMch_Create();
 
     #if DEBUG
-    // not sure how this works. appears to be getting .text, .ctors, .dtors, and .rodata areas
-    FixedMemoryCheck::easyCreate((void*)0x80006880, (s32)0x628F40);
-    FixedMemoryCheck::easyCreate((void*)0x8062F7C0, (s32)0x224);
-    FixedMemoryCheck::easyCreate((void*)0x8062FA00, (s32)0xc);
-    FixedMemoryCheck::easyCreate((void*)0x8062FA20, (s32)0x30568);
+    FixedMemoryCheck* local_20 = FixedMemoryCheck::easyCreate(_f_text, intptr_t(_e_text - _f_text));
+    FixedMemoryCheck* local_24 = FixedMemoryCheck::easyCreate(_f_ctors, intptr_t(_e_ctors - _f_ctors));
+    FixedMemoryCheck* local_28 = FixedMemoryCheck::easyCreate(_f_dtors, intptr_t(_e_dtors - _f_dtors));
+    FixedMemoryCheck* local_2c = FixedMemoryCheck::easyCreate(_f_rodata, intptr_t(_e_rodata - _f_rodata));
     #endif
 
     // setup FrameBuffer and ZBuffer, init display lists
@@ -700,7 +712,8 @@ void main01(void) {
     mDoExt_setCurrentHeap(sp10);
 
     var_r28->dump_sort();
-    OSReport("\x1b[36mHOSTIOヒープ残り %u Bytes\n\x1b[m", var_r28->getTotalFreeSize());
+    s32 local_34 = var_r28->getTotalFreeSize();
+    OSReport("\x1b[36mHOSTIOヒープ残り %u Bytes\n\x1b[m", local_34);
     #endif
 
     JUTConsole* console = JFWSystem::getSystemConsole();
@@ -721,11 +734,6 @@ void main01(void) {
     mDisplayHeapSize = 0;
     cDyl_InitAsync(); // init RELs
 
-    #if VERSION == VERSION_SHIELD_DEBUG
-    const int audioHeapSize = 0x169000;
-    #else
-    const int audioHeapSize = 0x14D800;
-    #endif
     g_mDoAud_audioHeap = JKRCreateSolidHeap(audioHeapSize, JKRGetCurrentHeap(), false);
 
     do {
@@ -867,7 +875,7 @@ void parse_args(int argc, const char* argv[]) {
 
 static u8 mainThreadStack[32768];
 
-static OSThread mainThread;
+OSThread mainThread;
 
 void game_main(int argc, const char* argv[]) {
     OSThread* current_thread = OSGetCurrentThread();

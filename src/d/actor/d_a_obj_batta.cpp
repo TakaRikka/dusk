@@ -47,7 +47,7 @@ daObj_BattaHIO_c::daObj_BattaHIO_c() {
     mModelScaleFemale = 1.4f;
 }
 
-static bool l_HIOInit;
+static bool hio_set;
 
 static daObj_BattaHIO_c l_HIO;
 
@@ -527,7 +527,7 @@ int daObjBATTA_c::_delete() {
     dComIfG_resDelete(&mPhase, "Bat");
 
     if (mIsHIOOwner != 0) {
-        l_HIOInit = false;
+        hio_set = false;
         mDoHIO_DELETE_CHILD(l_HIO.mId);
     }
 
@@ -641,8 +641,8 @@ int daObjBATTA_c::create() {
 
         OS_REPORT("/////////////////// BATTA SET OK /////////////////\n");
         
-        if (!l_HIOInit) {
-            l_HIOInit = true;
+        if (!hio_set) {
+            hio_set = true;
             mIsHIOOwner = true;
             // Golden Bugs
             l_HIO.mId = mDoHIO_CREATE_CHILD("黄金蟲(バッタ)", &l_HIO);
@@ -695,7 +695,7 @@ static actor_method_class l_daObjBATTA_Method = {
     (process_method_func)daObjBATTA_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Batta = {
+actor_process_profile_definition g_profile_Obj_Batta = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -8,7 +8,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRFileCache.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include "stdio.h"
+#include <stdio>
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 

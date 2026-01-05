@@ -181,9 +181,7 @@ static void damage_check(e_bi_class* i_this) {
     }
 }
 
-/* 8068DB1C 0001+00 data_8068DB1C @1009 */
-/* 8068DB1D 0003+00 data_8068DB1D None */
-static u8 l_initHIO;
+static u8 hio_set;
 
 static daE_BI_HIO_c l_HIO;
 
@@ -843,7 +841,7 @@ static int daE_BI_Delete(e_bi_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "E_BI");
     
     if (i_this->hio_init != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (actor->heap != NULL) {
@@ -896,9 +894,9 @@ static cPhs__Step daE_BI_Create(fopAc_ac_c* actor) {
             return phase;
         }
 
-        if (l_initHIO == 0) {
+        if (hio_set == 0) {
             i_this->hio_init = 1;
-            l_initHIO = 1;
+            hio_set = 1;
             l_HIO.no = -1;
         }
 
@@ -917,10 +915,12 @@ static cPhs__Step daE_BI_Create(fopAc_ac_c* actor) {
                 {0x0}, // mGObjCo
             }, // mObjInf
             {
-                {0.0f, 0.0f, 0.0f}, // mCenter
-                30.0f, // mRadius
-                20.0f // mHeight
-            } // mCyl
+                {
+                    {0.0f, 0.0f, 0.0f}, // mCenter
+                    30.0f, // mRadius
+                    20.0f // mHeight
+                } // mCyl
+            }
         };
 
         static dCcD_SrcSph at_sph_src = {
@@ -994,7 +994,7 @@ static actor_method_class l_daE_BI_Method = {
     (process_method_func)daE_BI_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_BI = {
+actor_process_profile_definition g_profile_E_BI = {
   fpcLy_CURRENT_e,        // mLayerID
   9,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -95,7 +95,7 @@ static actor_method_class daTag_Howl_MethodTable = {
 
 };
 
-extern actor_process_profile_definition g_profile_TAG_HOWL = {
+actor_process_profile_definition g_profile_TAG_HOWL = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

@@ -339,7 +339,7 @@ static actor_method_class l_daObjLv5Key_Method = {
     (process_method_func)daObjLv5Key_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_Lv5Key = {
+actor_process_profile_definition g_profile_Obj_Lv5Key = {
     fpcLy_CURRENT_e,         // mLayerID
     7,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

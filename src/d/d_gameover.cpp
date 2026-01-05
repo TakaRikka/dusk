@@ -489,18 +489,24 @@ bool d_GameOver_Delete(fpc_ProcID& i_id) {
     return false;
 }
 
-static void* l_dGameover_Method[5] = {
-    (void*)dGameover_Create,
-    (void*)dGameover_Delete,
-    (void*)dGameover_Execute,
-    (void*)dGameover_IsDelete,
-    (void*)dGameover_Draw,
+static leafdraw_method_class l_dGameover_Method = {
+    (process_method_func)dGameover_Create,
+    (process_method_func)dGameover_Delete,
+    (process_method_func)dGameover_Execute,
+    (process_method_func)dGameover_IsDelete,
+    (process_method_func)dGameover_Draw,
 };
 
-extern void* g_profile_GAMEOVER[10] = {
-    (void*)0xFFFFFFFD, (void*)0x000CFFFD,
-    (void*)0x03170000, (void*)&g_fpcLf_Method,
-    (void*)0x0000011C, (void*)NULL,
-    (void*)NULL,       (void*)&g_fopMsg_Method,
-    (void*)0x03030000, (void*)&l_dGameover_Method,
+msg_process_profile_definition g_profile_GAMEOVER = {
+    fpcLy_CURRENT_e,
+    0x0C,
+    fpcPi_CURRENT_e,
+    PROC_GAMEOVER,
+    &g_fpcLf_Method.base,
+    sizeof(dGameover_c),
+    0,
+    0,
+    &g_fopMsg_Method,
+    0x303,
+    &l_dGameover_Method,
 };

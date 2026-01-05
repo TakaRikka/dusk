@@ -1373,7 +1373,7 @@ static void teduna_ganon_hand_set(J3DModel* i_model, int param_2, int param_3) {
 }
 
 static void ke_control(daDemo00_c* i_this, demo_s1_ke_s* param_2, int param_3, f32 param_4) {
-    param_3;
+    UNUSED(param_3);
     fopAc_ac_c* actor = i_this;
     int i;
     cXyz sp4C, sp40;
@@ -1465,8 +1465,8 @@ static void ke_move(daDemo00_c* i_this, mDoExt_3DlineMat0_c* param_2, demo_s1_ke
 
 static void ke_set(daDemo00_c* i_this) {
     static s16 ke_za[22] = {
-        0xFCE0, 0xFE70, 0, 0x0190, 0x0320, 0xFCE0, 0xFE70, 0, 0x0190, 0x0320, 
-        0xFCE0, 0xFE70, 0, 0x0190, 0x0320, 0x04B0, 0xFCE0, 0xFE70, 0, 
+        -0x0320, -0x0190, 0, 0x0190, 0x0320, -0x0320, -0x0190, 0, 0x0190, 0x0320, 
+        -0x0320, -0x0190, 0, 0x0190, 0x0320, 0x04B0, -0x0320, -0x0190, 0, 
         0x0190, 0x0320, 0x04B0,
     };
 
@@ -1892,7 +1892,7 @@ static actor_method_class l_daDemo00_Method = {
     (process_method_func)daDemo00_Draw,
 };
 
-extern actor_process_profile_definition g_profile_DEMO00 = {
+actor_process_profile_definition g_profile_DEMO00 = {
   fpcLy_CURRENT_e,       // mLayerID
   7,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

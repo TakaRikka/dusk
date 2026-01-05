@@ -27,10 +27,10 @@ static int daObj_Wflag_Draw(obj_wflag_class* i_this) {
     return 1;
 }
 
-static f32 pd[19] = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.2f,
-                     0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f};
-
 static void tail_control(fopAc_ac_c* param_1, wf_tail_s* param_2) {
+    static f32 pd[19] = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.2f,
+                         0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f};
+
     cXyz local_74;
     cXyz cStack_80;
     int i;
@@ -214,7 +214,7 @@ static actor_method_class l_daObj_Wflag_Method = {
     (process_method_func)daObj_Wflag_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_WFLAG = {
+actor_process_profile_definition g_profile_OBJ_WFLAG = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

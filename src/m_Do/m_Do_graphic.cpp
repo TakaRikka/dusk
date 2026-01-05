@@ -7,6 +7,7 @@
 
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DPrint.h"
+#include "JSystem/JAWExtSystem/JAWExtSystem.h"
 #include "JSystem/JFramework/JFWSystem.h"
 #include "JSystem/JParticle/JPADrawInfo.h"
 #include "JSystem/JUtility/JUTConsole.h"
@@ -17,6 +18,8 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_menu_collect.h"
+#include "d/d_jcam_editor.h"
+#include "d/d_jpreviewer.h"
 #include <dolphin/base/PPCArch.h>
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_camera_mng.h"
@@ -266,10 +269,6 @@ GXColor mDoGph_gInf_c::mBackColor = {0, 0, 0, 0};
 
 GXColor mDoGph_gInf_c::mFadeColor = {0, 0, 0, 0};
 
-/* 80450BE4 0001+00 data_80450BE4 None */
-/* 80450BE5 0001+00 data_80450BE5 None */
-/* 80450BE6 0001+00 mFade__13mDoGph_gInf_c None */
-/* 80450BE7 0001+00 data_80450BE7 None */
 u8 mDoGph_gInf_c::mBlureFlag;
 
 u8 mDoGph_gInf_c::mBlureRate;
@@ -387,6 +386,12 @@ GXTexObj mDoGph_gInf_c::mZbufferTexObj;
 mDoGph_gInf_c::bloom_c mDoGph_gInf_c::m_bloom;
 
 Mtx mDoGph_gInf_c::mBlureMtx;
+
+#if DEBUG
+cXyz mDoGph_gInf_c::csr_c::m_nowEffPos(0.0f, 0.0f, 0.0f);
+cXyz mDoGph_gInf_c::csr_c::m_oldEffPos(0.0f, 0.0f, 0.0f);
+cXyz mDoGph_gInf_c::csr_c::m_oldOldEffPos(0.0f, 0.0f, 0.0f);
+#endif
 
 void mDoGph_gInf_c::onBlure(const Mtx m) {
     mBlureFlag = true;
@@ -577,81 +582,85 @@ u8 mDoGph_gInf_c::isWide() {
 }
 
 void mDoGph_gInf_c::setWideZoomProjection(Mtx44& m) {
-    if (isWideZoom()) {
-        f32 sp20 = m[0][0];
-        f32 sp1C = m[0][2];
-        f32 sp18 = m[1][1];
-        f32 sp14 = m[1][2];
-        f32 sp10 = m[2][2];
-        f32 spC = m[2][3];
-        
-        f32 temp_f31 = spC / (sp10 - 1.0f);
-        f32 sp8 = spC / sp10;
-
-        f32 temp_f30 = ((temp_f31 * (1.0f + sp14)) / sp18);
-        f32 temp_f29 = ((temp_f31 * (sp14 - 1.0f)) / sp18);
-        f32 temp_f28 = ((temp_f31 * (sp1C - 1.0f)) / sp20);
-        f32 temp_f27 = ((temp_f31 * (1.0f + sp1C)) / sp20);
-
-        temp_f30 *= getInvScale();
-        temp_f29 *= getInvScale();
-        temp_f28 *= getInvScale();
-        temp_f27 *= getInvScale();
-
-        m[0][0] = (2.0f * temp_f31) / (temp_f27 - temp_f28);
-        m[0][1] = 0.0f;
-        m[0][2] = (temp_f27 + temp_f28) / (temp_f27 - temp_f28);
-        m[0][3] = 0.0f;
-
-        m[1][0] = 0.0f;
-        m[1][1] = (2.0f * temp_f31) / (temp_f30 - temp_f29);
-        m[1][2] = (temp_f30 + temp_f29) / (temp_f30 - temp_f29);
-        m[1][3] = 0.0f;
-
-        m[2][0] = 0.0f;
-        m[2][1] = 0.0f;
-        m[2][2] = -temp_f31 / (sp8 - temp_f31);
-        m[2][3] = -(sp8 * temp_f31) / (sp8 - temp_f31);
-
-        m[3][0] = 0.0f;
-        m[3][1] = 0.0f;
-        m[3][2] = -1.0f;
-        m[3][3] = 0.0f;
+    if (!isWideZoom()) {
+        return;
     }
+
+    f32 sp20 = m[0][0];
+    f32 sp1C = m[0][2];
+    f32 sp18 = m[1][1];
+    f32 sp14 = m[1][2];
+    f32 sp10 = m[2][2];
+    f32 spC = m[2][3];
+
+    f32 temp_f31 = spC / (sp10 - 1.0f);
+    f32 sp8 = spC / sp10;
+
+    f32 temp_f30 = ((temp_f31 * (1.0f + sp14)) / sp18);
+    f32 temp_f29 = ((temp_f31 * (sp14 - 1.0f)) / sp18);
+    f32 temp_f28 = ((temp_f31 * (sp1C - 1.0f)) / sp20);
+    f32 temp_f27 = ((temp_f31 * (1.0f + sp1C)) / sp20);
+
+    temp_f30 *= getInvScale();
+    temp_f29 *= getInvScale();
+    temp_f28 *= getInvScale();
+    temp_f27 *= getInvScale();
+
+    m[0][0] = (2.0f * temp_f31) / (temp_f27 - temp_f28);
+    m[0][1] = 0.0f;
+    m[0][2] = (temp_f27 + temp_f28) / (temp_f27 - temp_f28);
+    m[0][3] = 0.0f;
+
+    m[1][0] = 0.0f;
+    m[1][1] = (2.0f * temp_f31) / (temp_f30 - temp_f29);
+    m[1][2] = (temp_f30 + temp_f29) / (temp_f30 - temp_f29);
+    m[1][3] = 0.0f;
+
+    m[2][0] = 0.0f;
+    m[2][1] = 0.0f;
+    m[2][2] = -temp_f31 / (sp8 - temp_f31);
+    m[2][3] = -(sp8 * temp_f31) / (sp8 - temp_f31);
+
+    m[3][0] = 0.0f;
+    m[3][1] = 0.0f;
+    m[3][2] = -1.0f;
+    m[3][3] = 0.0f;
 }
 
 void mDoGph_gInf_c::setWideZoomLightProjection(Mtx& m) {
-    if (isWideZoom()) {
-        f32 temp_f27 = m[0][0];
-        f32 temp_f26 = m[0][2];
-        f32 temp_f25 = m[1][1];
-        f32 temp_f24 = m[1][2];
-
-        f32 temp_f31 = (1.0f + temp_f24) / temp_f25;
-        f32 temp_f30 = (temp_f24 - 1.0f) / temp_f25;
-        f32 temp_f29 = (temp_f26 - 1.0f) / temp_f27;
-        f32 temp_f28 = (1.0f + temp_f26) / temp_f27;
-
-        temp_f31 *= getInvScale();
-        temp_f30 *= getInvScale();
-        temp_f29 *= getInvScale();
-        temp_f28 *= getInvScale();
-
-        m[0][0] = 2.0f / (temp_f28 - temp_f29);
-        m[0][1] = 0.0f;
-        m[0][2] = (temp_f28 + temp_f29) / (temp_f28 - temp_f29);
-        m[0][3] = 0.0f;
-
-        m[1][0] = 0.0f;
-        m[1][1] = 2.0f / (temp_f31 - temp_f30);
-        m[1][2] = (temp_f31 + temp_f30) / (temp_f31 - temp_f30);
-        m[1][3] = 0.0f;
-
-        m[2][0] = 0.0f;
-        m[2][1] = 0.0f;
-        m[2][2] = -1.0f;
-        m[2][3] = 0.0f;
+    if (!isWideZoom()) {
+        return;
     }
+
+    f32 temp_f27 = m[0][0];
+    f32 temp_f26 = m[0][2];
+    f32 temp_f25 = m[1][1];
+    f32 temp_f24 = m[1][2];
+
+    f32 temp_f31 = (1.0f + temp_f24) / temp_f25;
+    f32 temp_f30 = (temp_f24 - 1.0f) / temp_f25;
+    f32 temp_f29 = (temp_f26 - 1.0f) / temp_f27;
+    f32 temp_f28 = (1.0f + temp_f26) / temp_f27;
+
+    temp_f31 *= getInvScale();
+    temp_f30 *= getInvScale();
+    temp_f29 *= getInvScale();
+    temp_f28 *= getInvScale();
+
+    m[0][0] = 2.0f / (temp_f28 - temp_f29);
+    m[0][1] = 0.0f;
+    m[0][2] = (temp_f28 + temp_f29) / (temp_f28 - temp_f29);
+    m[0][3] = 0.0f;
+
+    m[1][0] = 0.0f;
+    m[1][1] = 2.0f / (temp_f31 - temp_f30);
+    m[1][2] = (temp_f31 + temp_f30) / (temp_f31 - temp_f30);
+    m[1][3] = 0.0f;
+
+    m[2][0] = 0.0f;
+    m[2][1] = 0.0f;
+    m[2][2] = -1.0f;
+    m[2][3] = 0.0f;
 }
 #endif
 
@@ -1006,7 +1015,7 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
 }
 
 static void trimming(view_class* param_0, view_port_class* param_1) {
-    (void)param_0;
+    UNUSED(param_0);
 
     s16 y_orig = (int)param_1->y_orig & ~7;
     s16 y_orig_pos = y_orig < 0 ? 0 : y_orig;
@@ -1275,8 +1284,8 @@ void mDoGph_gInf_c::bloom_c::draw() {
 }
 
 static void retry_captue_frame(view_class* param_0, view_port_class* param_1, int param_2) {
-    (void)param_0;
-    (void)param_2;
+    UNUSED(param_0);
+    UNUSED(param_2);
 
     s16 x_orig = (int)param_1->x_orig & 0xFFFFFFF8;
     s16 y_orig = (int)param_1->y_orig & 0xFFFFFFF8;
@@ -1364,8 +1373,54 @@ static void setLight() {
     GXLoadLightObjImm(&obj, GX_LIGHT0);
 }
 
+#if DEBUG
 static void captureScreenSetProjection(Mtx44& m) {
-    // DEBUG NONMATCHING
+    if (fapGm_HIO_c::isCaptureScreen()) {
+        f32 local_88[7];
+
+        GXGetProjectionv(local_88);
+        if (int(local_88[0]) == 0) {
+            m[0][0] = local_88[1];
+            m[0][1] = 0.0f;
+            m[0][2] = local_88[2];
+            m[0][3] = 0.0f;
+            m[1][0] = 0.0f;
+            m[1][1] = local_88[3];
+            m[1][2] = local_88[4];
+            m[1][3] = 0.0f;
+            m[2][0] = 0.0f;
+            m[2][1] = 0.0f;
+            m[2][2] = local_88[5];
+            m[2][3] = local_88[6];
+            m[3][0] = 0.0f;
+            m[3][1] = 0.0f;
+            m[3][2] = -1.0f;
+            m[3][3] = 0.0f;
+            CPerspDivider divider(m, fapGm_HIO_c::getCaptureScreenDivH(), fapGm_HIO_c::getCaptureScreenDivV());
+            divider.divide(m, fapGm_HIO_c::getCaptureScreenNumH(), fapGm_HIO_c::getCaptureScreenNumV());
+            GXSetProjection(m, GX_PERSPECTIVE);
+        } else {
+            m[0][0] = local_88[1];
+            m[0][1] = 0.0f;
+            m[0][2] = 0.0f;
+            m[0][3] = local_88[2];
+            m[1][0] = 0.0f;
+            m[1][1] = local_88[3];
+            m[1][2] = 0.0f;
+            m[1][3] = local_88[4];
+            m[2][0] = 0.0f;
+            m[2][1] = 0.0f;
+            m[2][2] = local_88[5];
+            m[2][3] = local_88[6];
+            m[3][0] = 0.0f;
+            m[3][1] = 0.0f;
+            m[3][2] = 0.0f;
+            m[3][3] = 1.0f;
+            COrthoDivider divider(m, fapGm_HIO_c::getCaptureScreenDivH(), fapGm_HIO_c::getCaptureScreenDivV());
+            divider.divide(m, fapGm_HIO_c::getCaptureScreenNumH(), fapGm_HIO_c::getCaptureScreenNumV());
+            GXSetProjection(m, GX_ORTHOGRAPHIC);
+        }
+    }
 }
 
 static void captureScreenSetPort() {
@@ -1374,12 +1429,70 @@ static void captureScreenSetPort() {
 }
 
 static void captureScreenSetScissor(scissor_class* scissor) {
-    // DEBUG NONMATCHING
+    if (fapGm_HIO_c::isCaptureScreen()) {
+        scissor->x_orig *= fapGm_HIO_c::getCaptureScreenDivH();
+        scissor->y_orig *= fapGm_HIO_c::getCaptureScreenDivV();
+        scissor->width *= fapGm_HIO_c::getCaptureScreenDivH();
+        scissor->height *= fapGm_HIO_c::getCaptureScreenDivV();
+        f32 f29 = fapGm_HIO_c::getCaptureScreenNumH() * 640;
+        f32 f27 = (fapGm_HIO_c::getCaptureScreenNumH() + 1) * 640;
+        f32 f28 = fapGm_HIO_c::getCaptureScreenNumV() * 456;
+        f32 f26 = (fapGm_HIO_c::getCaptureScreenNumV() + 1) * 456;
+        f32 f31 = scissor->x_orig + scissor->width;
+        if (f31 < f29) {
+            f31 = 0.0f;
+        } else if (f31 > f27) {
+            f31 = 640.0f;
+        } else {
+            f31 -= f29;
+        }
+        if (scissor->x_orig < f29) {
+            scissor->x_orig = 0.0f;
+        } else if (scissor->x_orig > f27) {
+            scissor->x_orig = 640.0f;
+        } else {
+            scissor->x_orig -= f29;
+        }
+        scissor->width = f31 - scissor->x_orig;
+        f32 f30 = scissor->y_orig + scissor->height;
+        if (f30 < f28) {
+            f30 = 0.0f;
+        } else if (f30 > f26) {
+            f30 = 456.0f;
+        } else {
+            f30 -= f28;
+        }
+        if (scissor->y_orig < f28) {
+            scissor->y_orig = 0.0f;
+        } else if (scissor->y_orig > f26) {
+            scissor->y_orig = 456.0f;
+        } else {
+            scissor->y_orig -= f28;
+        }
+        scissor->height = f30 - scissor->y_orig;
+    }
 }
 
-static void captureScreenPerspDrawInfo(JPADrawInfo&) {
-    // DEBUG NONMATCHING
+static void captureScreenPerspDrawInfo(JPADrawInfo& info) {
+    if (fapGm_HIO_c::isCaptureScreen()) {
+        Mtx44 m;
+        info.getPrjMtx(m);
+        m[0][0] *= 2.0f;
+        m[0][2] = 0.0f;
+        m[1][1] *= -2.0f;
+        m[1][2] = 0.0f;
+        m[2][3] = -2.0f;
+        CPerspDivider divider(m, fapGm_HIO_c::getCaptureScreenDivH(), fapGm_HIO_c::getCaptureScreenDivV());
+        divider.divide(m, fapGm_HIO_c::getCaptureScreenNumH(), fapGm_HIO_c::getCaptureScreenNumV());
+        m[0][0] *= 0.5f;
+        m[0][2] = m[0][2] * 0.5f - 0.5f;
+        m[1][1] *= -0.5f;
+        m[1][2] = m[1][2] * -0.5f - 0.5f;
+        m[2][3] = 0.0f;
+        info.setPrjMtx(m);
+    }
 }
+#endif
 
 static void drawItem3D() {
     Mtx item_mtx;
@@ -1613,6 +1726,15 @@ int mDoGph_Painter() {
 
             j3dSys.reinitGX();
             GXSetClipMode(GX_CLIP_ENABLE);
+
+#if DEBUG
+            if (dJcame_c::get()) {
+                dJcame_c::get()->show3D(camera_p->viewMtx);
+            }
+            if (dJprev_c::get()) {
+                dJprev_c::get()->show3D(camera_p->viewMtx);
+            }
+#endif
 
             if (!dComIfGp_isPauseFlag()) {
                 #if DEBUG
@@ -1945,6 +2067,11 @@ int mDoGph_Painter() {
             dComIfGp_particle_draw2Dfore(&draw_info3);
         }
 
+#if DEBUG
+        j3dSys.setViewMtx(m5);
+        dComIfGd_drawListCursor();
+#endif
+
         if (strcmp(dComIfGp_getStartStageName(), "F_SP127") == 0 || (mDoGph_gInf_c::isFade() & 0x80) != 0)
         {
             mDoGph_gInf_c::calcFade();
@@ -1955,8 +2082,15 @@ int mDoGph_Painter() {
     }
 
     #if DEBUG
+    if (dJcame_c::get()) {
+        dJcame_c::get()->show2D();
+    }
+    if (dJprev_c::get()) {
+        dJprev_c::get()->show2D();
+    }
     // "drawing up to 2D-fore particle (Rendering)"
     fapGm_HIO_c::stopCpuTimer("２Ｄ前（？）パーティクル描画まで（レンダリング）");
+    JAWExtSystem::draw();
     #endif
 
     mDoGph_gInf_c::endRender();

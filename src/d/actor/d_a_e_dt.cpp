@@ -156,8 +156,7 @@ dCcD_SrcSph E_DT_n::cc_dt_tongue_src = {
     } // mSphAttr
 };
 
-/* 806B629D 0003+00 data_806B629D None */
-static bool hioInit;
+static bool hio_set;
 
 static daE_DT_HIO_c l_HIO;
 
@@ -1934,8 +1933,8 @@ void daE_DT_c::executeOpening() {
     }
 
     camera->Set(mCamCenter, mCamEye, mCamFovy, mCamBank);
-    dComIfGp_getEvent().onSkipFade();
-    dComIfGp_getEvent().setSkipProc(this, DemoSkipCallBack, 0);
+    dComIfGp_getEvent()->onSkipFade();
+    dComIfGp_getEvent()->setSkipProc(this, DemoSkipCallBack, 0);
 }
 
 void daE_DT_c::calcCamera() {
@@ -2401,7 +2400,7 @@ int daE_DT_c::_delete() {
     dComIfG_resDelete(&mPhase[1], "Dalways");
     dComIfG_resDelete(&mPhase[2], "E_OT");
     if (mHIOInit) {
-        hioInit = false;
+        hio_set = false;
     }
     if (heap != NULL) {
         mSound.deleteObject();
@@ -2485,8 +2484,8 @@ cPhs__Step daE_DT_c::create() {
         return cPhs_ERROR_e;
     }
 
-    if (!hioInit) {
-        hioInit = true;
+    if (!hio_set) {
+        hio_set = true;
         mHIOInit = true;
         l_HIO.field_0x4 = -1;
     }
@@ -2561,7 +2560,7 @@ static actor_method_class l_daE_DT_Method = {
     (process_method_func)daE_DT_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_DT = {
+actor_process_profile_definition g_profile_E_DT = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

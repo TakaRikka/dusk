@@ -19,10 +19,12 @@ const static dCcD_SrcCyl l_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {0.0f, 0.0f, 0.0f}, // mCenter
-        20.0f, // mRadius
-        40.0f // mHeight
-    } // mCyl
+        {
+            {0.0f, 0.0f, 0.0f}, // mCenter
+            20.0f, // mRadius
+            40.0f // mHeight
+        } // mCyl
+    }
 };
 
 static f32 Reflect(cXyz* i_vec, cBgS_PolyInfo const& i_wallpoly, f32 i_scale) {
@@ -507,7 +509,7 @@ static actor_method_class l_daObjLife_Method = {
     (process_method_func)daObjLife_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_LifeContainer = {
+actor_process_profile_definition g_profile_Obj_LifeContainer = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

@@ -4,7 +4,7 @@
  */
 
 #include "SSystem/SComponent/c_lib.h"
-#include "string.h"
+#include <string>
 #include "SSystem/SComponent/c_math.h"
 
 /**
@@ -530,6 +530,6 @@ void MtxPush() {
     MTXCopy(mtx, *calc_mtx);
 }
 
-Mtx* MtxPull() {
-    return calc_mtx--;
+void MtxPull() {
+    calc_mtx--;
 }

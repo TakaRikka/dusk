@@ -522,8 +522,8 @@ static void e_gb_start(e_gb_class* i_this) {
 
 static void kuki_control1(e_gb_class* i_this) {
     static s16 pow_xa[17] = {
-        0xD000, 0xD800, 0xE000,
-        0xE800, 0xF000, 0x0000,
+        -0x3000, -0x2800, -0x2000,
+        -0x1800, -0x1000, 0x0000,
         0x1000, 0x1800, 0x2000,
         0x2800, 0x3000, 0x3800,
         0x3000, 0x2000, 0x1000,
@@ -531,9 +531,9 @@ static void kuki_control1(e_gb_class* i_this) {
     };
 
     static s16 pow_xa_chance[17] = {
-        0xC800, 0xD000, 0xD800,
-        0xE000, 0xE800, 0xF000,
-        0xF800, 0x0000,  0x0000,
+        -0x3800, -0x3000, -0x2800,
+        -0x2000, -0x1800, -0x1000,
+        -0x0800, 0x0000,  0x0000,
         0x0000, 0x0000, 0x0000,
         0x0800, 0x0000, 0x0800,
         0x0000, 0x0800,
@@ -670,7 +670,7 @@ static void kuki_control3(e_gb_class* i_this) {
 }
 
 static void* s_b_sub(void* i_actor, void* i_data) {
-    i_data;
+    UNUSED(i_data);
 
     if (fopAcM_IsActor(i_actor) && dBomb_c::checkBombActor((fopAc_ac_c*)i_actor) && !((dBomb_c*)i_actor)->checkStateExplode()) {
         cXyz sp28 = ((fopAc_ac_c*)i_actor)->current.pos - ((fopAc_ac_c*)i_data)->home.pos;
@@ -1137,7 +1137,7 @@ static void demo_camera(e_gb_class* i_this) {
             i_this->demoCamStepScale = 0.0;
 
             Z2GetAudioMgr()->setBattleBgmOff(true);
-            dComIfGp_getEvent().startCheckSkipEdge(actor);
+            dComIfGp_getEvent()->startCheckSkipEdge(actor);
             swBit = (fopAcM_GetParam(actor) & 0xFF00) >> 8;
             dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(actor));
             // fallthrough
@@ -1290,8 +1290,8 @@ static void demo_camera(e_gb_class* i_this) {
         i_this->demoCounter++;
 
         if (i_this->demoMode < 10) {
-            dComIfGp_getEvent().setSkipProc(i_this, dEv_defaultSkipProc, 0);
-            if (dComIfGp_getEvent().checkSkipEdge()) {
+            dComIfGp_getEvent()->setSkipProc(i_this, dEv_defaultSkipProc, 0);
+            if (dComIfGp_getEvent()->checkSkipEdge()) {
                 i_this->demoMode = 100;
                 cMtx_YrotS(*calc_mtx, player->shape_angle.y);
                 work.x = 0.0;
@@ -1637,10 +1637,12 @@ static cPhs__Step daE_GB_Create(fopAc_ac_c* actor) {
             {0x0}, // mGObjCo
         }, // mObjInf
         {
-            {0.0f, 0.0f, 0.0f}, // mCenter
-            30.0f, // mRadius
-            20.0f // mHeight
-        } // mCyl
+            {
+                {0.0f, 0.0f, 0.0f}, // mCenter
+                30.0f, // mRadius
+                20.0f // mHeight
+            } // mCyl
+        }
     };
 
     e_gb_class* i_this = (e_gb_class*)actor;
@@ -1724,7 +1726,7 @@ static actor_method_class l_daE_GB_Method = {
     (process_method_func)daE_GB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_GB = {
+actor_process_profile_definition g_profile_E_GB = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

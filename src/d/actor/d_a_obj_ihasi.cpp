@@ -221,7 +221,7 @@ static actor_method_class l_daObj_Ihasi_Method = {
     (process_method_func)daObj_Ihasi_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_IHASI = {
+actor_process_profile_definition g_profile_OBJ_IHASI = {
     fpcLy_CURRENT_e,          // mLayerID
     3,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

@@ -24,7 +24,8 @@ bool JAUSeqCollection::getSeqData(int param_0, int param_1, JAISeqData* param_2)
     if (param_0 >= field_0x0) {
         return false;
     }
-    u32* puVar2 = (u32*)((u8*)field_0x8 + field_0x4[param_0]);
+    u32 r29 = field_0x4[param_0];
+    u32* puVar2 = (u32*)((u8*)field_0x8 + r29);
     if (param_1 >= puVar2[0]) {
         return false;
     }
@@ -55,7 +56,8 @@ int JAUSeqDataMgr_SeqCollection::releaseSeqData() {
     if (user_) {
         JAISeqDataRegion region;
         getSeqDataRegion(&region);
-        return user_->releaseSeqData(region);
+        int result = user_->releaseSeqData(region);
+        return result;
     }
     return 2;
 }

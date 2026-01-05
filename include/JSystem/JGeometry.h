@@ -2,8 +2,13 @@
 #define JGEOMETRY_H
 
 #include "dolphin/mtx.h"
-#include "math.h"
+#include <cmath>
 #include "JSystem/JMath/JMath.h"
+
+#ifndef __MWERKS__
+#include <limits>
+#define FLT_EPSILON std::numeric_limits<float>::epsilon()
+#endif
 
 namespace JGeometry {
 
@@ -119,9 +124,9 @@ struct TVec3<s16> {
     }
 
     void set(s16 x_, s16 y_, s16 z_) {
-        x = x_;
-        y = y_;
-        z = z_;
+        x = (s16)x_;
+        y = (s16)y_;
+        z = (s16)z_;
     }
 };
 
@@ -175,17 +180,17 @@ inline void mulInternal(__REGISTER const f32* a, __REGISTER const f32* b, __REGI
 
 template <>
 struct TVec3<f32> : public Vec {
-    inline TVec3(const Vec& i_vec) {
+    TVec3(const Vec& i_vec) {
         setTVec3f(&i_vec.x, &x);
     }
 
-    inline TVec3(const TVec3<f32>& i_vec) {
+    TVec3(const TVec3<f32>& i_vec) {
         setTVec3f(&i_vec.x, &x);
     }
 
     template<class U>
     TVec3(U x, U y, U z) {
-        set(x, y, z);
+        set((U)x, (U)y, (U)z);
     }
 
     TVec3() {}
@@ -195,9 +200,9 @@ struct TVec3<f32> : public Vec {
 
     template<class U>
     void set(const TVec3<U>& other) {
-        x = other.x;
-        y = other.y;
-        z = other.z;
+        x = (U)other.x;
+        y = (U)other.y;
+        z = (U)other.z;
     }
 
     void set(const Vec& other) {
@@ -208,9 +213,9 @@ struct TVec3<f32> : public Vec {
 
     template<class U>
     void set(U x_, U y_, U z_) {
-        x = x_;
-        y = y_;
-        z = z_;
+        x = (U)x_;
+        y = (U)y_;
+        z = (U)z_;
     }
 
     inline void add(const TVec3<f32>& b) {
@@ -359,9 +364,9 @@ struct TVec3<f32> : public Vec {
     }
 
     void cross(const TVec3<f32>& a, const TVec3<f32>& b) {
-        VECCrossProduct(a, b, *this);
+        PSVECCrossProduct(&a, &b, this);
     }
-    
+
     f32 setLength(f32 len) {
         f32 sq = squared();
         if (sq <= TUtil<f32>::epsilon()) {

@@ -11,19 +11,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
 
-static dCcD_SrcSph cc_sph_src = {
-    {
-        {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x0}},  // mObj
-        {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                // mGObjAt
-        {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2},                // mGObjTg
-        {0x0},                                             // mGObjCo
-    },                                                     // mObjInf
-    {
-        {{0.0f, 0.0f, 0.0f}, 40.0f}  // mSph
-    }                                // mSphAttr
-};
-
-static u8 data_80C540E8;
+static u8 hio_set;
 
 static daObj_Lbox_HIO_c l_HIO;
 
@@ -64,7 +52,7 @@ static void action(obj_lbox_class* i_this) {
             i_this->speed.y -= 0.1f;
         }
         i_this->current.pos.y += i_this->speed.y;
-        if (i_this->mObjAcch.m_flags & 0x20) {
+        if (i_this->mObjAcch.ChkGroundHit()) {
             dComIfGp_getVibration().StartShock(5, 15, cXyz(0.0f, 1.0f, 0.0f));
             fopAcM_seStart(i_this, Z2SE_EN_FM_FOOTNOTE, 0);
             i_this->field_0x57a = 2;
@@ -116,7 +104,7 @@ static int daObj_Lbox_Delete(obj_lbox_class* i_this) {
     fopAcM_GetID(i_this);
     dComIfG_resDelete(&i_this->mPhaseReq, "Obj_lbox");
     if (i_this->field_0xa8c != 0) {
-        data_80C540E8 = 0;
+        hio_set = 0;
     }
     dComIfG_Bgsp().Release(i_this->mpBgW);
     return 1;
@@ -147,6 +135,18 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 }
 
 static cPhs__Step daObj_Lbox_Create(fopAc_ac_c* i_this) {
+    static dCcD_SrcSph cc_sph_src = {
+        {
+            {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x0}},  // mObj
+            {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                // mGObjAt
+            {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x2},                // mGObjTg
+            {0x0},                                             // mGObjCo
+        },                                                     // mObjInf
+        {
+            {{0.0f, 0.0f, 0.0f}, 40.0f}  // mSph
+        }                                // mSphAttr
+    };
+
     obj_lbox_class* a_this = static_cast<obj_lbox_class*>(i_this);
     fopAcM_ct(a_this, obj_lbox_class);
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&a_this->mPhaseReq, "Obj_lbox");
@@ -165,9 +165,9 @@ static cPhs__Step daObj_Lbox_Create(fopAc_ac_c* i_this) {
             return cPhs_ERROR_e;
         }
 
-        if (data_80C540E8 == 0) {
+        if (hio_set == 0) {
             a_this->field_0xa8c = 1;
-            data_80C540E8 = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -195,7 +195,7 @@ static actor_method_class l_daObj_Lbox_Method = {
     (process_method_func)daObj_Lbox_Execute, (process_method_func)daObj_Lbox_IsDelete,
     (process_method_func)daObj_Lbox_Draw};
 
-extern actor_process_profile_definition g_profile_OBJ_LBOX = {
+actor_process_profile_definition g_profile_OBJ_LBOX = {
     fpcLy_CURRENT_e,
     3,
     fpcPi_CURRENT_e,

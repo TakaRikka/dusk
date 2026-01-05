@@ -128,7 +128,7 @@ static actor_method_class daObjToaruMaki_METHODS = {
     (process_method_func)daObjToaruMaki_draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_ToaruMaki = {
+actor_process_profile_definition g_profile_Obj_ToaruMaki = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

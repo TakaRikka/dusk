@@ -7,7 +7,7 @@
 #include "JSystem/JUtility/JUTDirectPrint.h"
 #include "JSystem/JUtility/JUTVideo.h"
 #include <dolphin/vi.h>
-#include <stdio.h>
+#include <stdio>
 #include "global.h"
 
 JUTConsoleManager* JUTConsoleManager::sManager;
@@ -61,8 +61,8 @@ JUTConsole::JUTConsole(unsigned int param_0, unsigned int maxLines, bool param_2
     field_0x6b = false;
     mOutput = 1;
 
-    field_0x5c.set(0, 0, 0, 100);
-    field_0x60.set(0, 0, 0, 230);
+    field_0x5c = JUtility::TColor(0, 0, 0, 100);
+    field_0x60 = JUtility::TColor(0, 0, 0, 230);
     field_0x64 = 8;
 }
 
@@ -72,11 +72,13 @@ JUTConsole::~JUTConsole() {
 }
 
 size_t JUTConsole::getObjectSizeFromBufferSize(unsigned int param_0, unsigned int maxLines) {
-    return (param_0 + 2) * maxLines + sizeof(JUTConsole);
+    size_t result = (param_0 + 2) * maxLines + sizeof(JUTConsole);
+    return result;
 }
 
 size_t JUTConsole::getLineFromObjectSize(u32 bufferSize, unsigned int param_1) {
-    return (bufferSize - sizeof(JUTConsole)) / (param_1 + 2);
+    size_t result = (bufferSize - sizeof(JUTConsole)) / (param_1 + 2);
+    return result;
 }
 
 void JUTConsole::clear() {
@@ -104,12 +106,12 @@ void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
             font_yOffset = 2.0f + mFontSizeY;
 
             if (consoleType != CONSOLE_TYPE_2) {
-                if (JUTVideo::getManager() == NULL) {
+                if (JUTGetVideoManager() == NULL) {
                     J2DOrthoGraph ortho(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0f);
                     ortho.setPort();
                 } else {
-                    J2DOrthoGraph ortho(0.0f, 0.0f, JUTVideo::getManager()->getFbWidth(),
-                                        JUTVideo::getManager()->getEfbHeight(), -1.0f, 1.0f);
+                    J2DOrthoGraph ortho(0.0f, 0.0f, JUTGetVideoManager()->getFbWidth(),
+                                        JUTGetVideoManager()->getEfbHeight(), -1.0f, 1.0f);
                     ortho.setPort();
                 }
 
@@ -250,7 +252,7 @@ extern "C" void JUTConsole_print_f_va_(JUTConsole* console, const char* fmt, va_
     JUT_ASSERT(563, console!=NULL);
 
     char buf[1024];
-    vsnprintf(buf, sizeof(buf), fmt, args);
+    int len = vsnprintf(buf, sizeof(buf), fmt, args);
     console->print(buf);
 }
 
@@ -262,13 +264,13 @@ void JUTConsole::dumpToTerminal(unsigned int param_0) {
     int r29 = field_0x34;
     if (param_0 != -1) {
         r29 = field_0x38;
-        for (int i = 0; i != param_0; i++) {
+        for (; param_0; param_0--) {
             int r25 = prevIndex(r29);
             if (getLineAttr(r25) == 0) {
                 break;
             }
             r29 = r25;
-            if (r25 == field_0x34) {
+            if (r29 == field_0x34) {
                 break;
             }
         }
@@ -277,7 +279,7 @@ void JUTConsole::dumpToTerminal(unsigned int param_0) {
     int r27 = 0;
     OS_REPORT("\n:::dump of console[%x]--------------------------------\n", this);
 
-    do {
+    while (true) {
         u8* r28 = getLinePtr(r29);
         u8 r24 = r28[-1];
         if (r24 == 0) {
@@ -290,7 +292,10 @@ void JUTConsole::dumpToTerminal(unsigned int param_0) {
         }
         r29 = nextIndex(r29);
         r27++;
-    } while (r29 != field_0x34);
+        if (r29 == field_0x34) {
+            break;
+        }
+    };
 
     OS_REPORT(":::dump of console[%x] END----------------------------\n", this);
 }
@@ -301,16 +306,13 @@ void JUTConsole::scroll(int scrollAmnt) {
         if (scrollAmnt < -diff) {
             scrollAmnt = -diff;
         }
-    } else {
-        if (scrollAmnt > 0) {
-            int diff = diffIndex(field_0x34, field_0x38);
-            if (diff + 1 <= mHeight) {
-                scrollAmnt = 0;
-            } else {
-                diff = diffIndex(field_0x30, field_0x38);
-                if (scrollAmnt > (int)(diff - mHeight) + 1) {
-                    scrollAmnt = (int)(diff - mHeight) + 1;
-                }
+    } else if (scrollAmnt > 0) {
+        if (diffIndex(field_0x34, field_0x38) + 1 <= mHeight) {
+            scrollAmnt = 0;
+        } else {
+            int r27 = diffIndex(field_0x30, field_0x38) - mHeight + 1;
+            if (scrollAmnt > r27) {
+                scrollAmnt = r27;
             }
         }
     }
@@ -326,11 +328,13 @@ void JUTConsole::scroll(int scrollAmnt) {
 }
 
 int JUTConsole::getUsedLine() const {
-    return diffIndex(field_0x34, field_0x38);
+    int result = diffIndex(field_0x34, field_0x38);
+    return result;
 }
 
 int JUTConsole::getLineOffset() const {
-    return diffIndex(field_0x34, field_0x30);
+    int result = diffIndex(field_0x34, field_0x30);
+    return result;
 }
 
 JUTConsoleManager::JUTConsoleManager() {
@@ -345,9 +349,8 @@ JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
         pHeap = JKRGetCurrentHeap();
     }
 
-    JUTConsoleManager* manager = new (pHeap, 0) JUTConsoleManager();
-    sManager = manager;
-    return manager;
+    sManager = new (pHeap, 0) JUTConsoleManager();
+    return sManager;
 }
 
 void JUTConsoleManager::appendConsole(JUTConsole* console) {
@@ -362,8 +365,8 @@ void JUTConsoleManager::appendConsole(JUTConsole* console) {
 }
 
 void JUTConsoleManager::removeConsole(JUTConsole* console) {
-    JUT_ASSERT(982, sManager != NULL && console != NULL);
-    JUT_ASSERT(985, soLink_.Find( console ) != soLink_.end());
+    JUT_ASSERT(984, sManager != NULL && console != NULL);
+    JUT_ASSERT(987, soLink_.Find( console ) != soLink_.end());
 
     if (mActiveConsole == console) {
         if (soLink_.size() <= 1) {
@@ -402,8 +405,7 @@ void JUTConsoleManager::drawDirect(bool waitRetrace) const {
             u32 retrace_count = VIGetRetraceCount();
             u32 new_count;
             do {
-                new_count = VIGetRetraceCount();
-            } while (retrace_count == new_count);
+            } while (retrace_count == VIGetRetraceCount());
             OSRestoreInterrupts(interrupt_status);
         }
         mDirectConsole->doDraw(JUTConsole::CONSOLE_TYPE_2);
@@ -443,13 +445,15 @@ extern "C" JUTConsole* JUTGetWarningConsole() {
 
 extern "C" void JUTReportConsole_f_va(const char* fmt, va_list args) {
     char buf[256];
+    int len;
 
     if (JUTGetReportConsole() == NULL) {
-        vsnprintf(buf, sizeof(buf), fmt, args);
+        len = vsnprintf(buf, sizeof(buf), fmt, args);
+        OS_REPORT("%s", buf);
     } else if (JUTGetReportConsole()->getOutput() &
                (JUTConsole::OUTPUT_CONSOLE | JUTConsole::OUTPUT_OSREPORT))
     {
-        vsnprintf(buf, sizeof(buf), fmt, args);
+        len = vsnprintf(buf, sizeof(buf), fmt, args);
         JUTGetReportConsole()->print(buf);
     }
 }
@@ -472,14 +476,15 @@ void JUTReportConsole(const char* message) {
 
 void JUTWarningConsole_f_va(const char* fmt, va_list args) {
     char buf[256];
+    int len;
 
     if (JUTGetWarningConsole() == NULL) {
-        vsnprintf(buf, sizeof(buf), fmt, args);
+        len = vsnprintf(buf, sizeof(buf), fmt, args);
         OSReport("%s", buf);
     } else if (JUTGetWarningConsole()->getOutput() &
                (JUTConsole::OUTPUT_CONSOLE | JUTConsole::OUTPUT_OSREPORT))
     {
-        vsnprintf(buf, sizeof(buf), fmt, args);
+        len = vsnprintf(buf, sizeof(buf), fmt, args);
         JUTGetWarningConsole()->print(buf);
     }
 }

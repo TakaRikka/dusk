@@ -154,7 +154,6 @@ void daE_OctBg_c::action() {
     }
 }
 
-/* 8073A13D 0003+00 data_8073A13D None */
 static u8 struct_8073A13D;
 
 int daE_OctBg_c::_delete() {
@@ -172,44 +171,42 @@ static int daE_OctBg_Delete(daE_OctBg_c* i_this) {
     return i_this->_delete();
 }
 
-/* 8073A14C 0024+01 data_8073A14C l_HIO */
-/* 8073A171 0001+00 data_8073A171 None */
-/* 8073A172 0002+00 data_8073A172 None */
-static daE_OctBg_HIO_c struct_8073A14C;
-static u8 struct_8073A14C_field_0x23;
-static u8 struct_8073A14C_field_0x24;
-static u8 struct_8073A14C_field_0x25;
-static u8 struct_8073A14C_field_0x26;
+static daE_OctBg_HIO_c l_HIO;
+
+u8 unk_bss_78;
+u8 unk_bss_79;
+u8 unk_bss_7A;
+u8 unk_bss_7B;
 
 void daE_OctBg_c::cc_set() {
     cXyz cStack_1c;
     cXyz cStack_28;
     J3DModel* model = field_0x5b4->getModel();
     mDoMtx_stack_c::copy(model->getAnmMtx(0));
-    cStack_1c.set(0.0f, struct_8073A14C.field_0x18 * 25.0f, 0.0f);
+    cStack_1c.set(0.0f, l_HIO.field_0x18 * 25.0f, 0.0f);
     mDoMtx_stack_c::multVec(&cStack_1c, &eyePos);
     attention_info.position = eyePos;
-    attention_info.position.y += struct_8073A14C.field_0x18 * 25.0f;
+    attention_info.position.y += l_HIO.field_0x18 * 25.0f;
     mDoMtx_stack_c::copy(model->getAnmMtx(0));
-    cStack_1c.set(0.0f, struct_8073A14C.field_0x18 * 25.0f, 0.0f);
+    cStack_1c.set(0.0f, l_HIO.field_0x18 * 25.0f, 0.0f);
     mDoMtx_stack_c::multVec(&cStack_1c, &cStack_28);
     field_0x8c0.SetC(cStack_28);
-    field_0x8c0.SetR(struct_8073A14C.field_0x18 * 35.0f);
+    field_0x8c0.SetR(l_HIO.field_0x18 * 35.0f);
     dComIfG_Ccsp()->Set(&field_0x8c0);
     mDoMtx_stack_c::copy(model->getAnmMtx(0));
-    cStack_1c.set(0.0f, struct_8073A14C.field_0x18 * 25.0f, struct_8073A14C.field_0x18 * 20.0f);
+    cStack_1c.set(0.0f, l_HIO.field_0x18 * 25.0f, l_HIO.field_0x18 * 20.0f);
     mDoMtx_stack_c::multVec(&cStack_1c, &cStack_28);
     field_0x9f8.SetC(cStack_28);
-    field_0x9f8.SetR(struct_8073A14C.field_0x18 * 20.0f);
+    field_0x9f8.SetR(l_HIO.field_0x18 * 20.0f);
     dComIfG_Ccsp()->Set(&field_0x9f8);
 }
 
 void daE_OctBg_c::mtx_set() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_stack_c::transM(0.0f, struct_8073A14C.field_0x18 * 25.0f, 0.0f);
+    mDoMtx_stack_c::transM(0.0f, l_HIO.field_0x18 * 25.0f, 0.0f);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-    mDoMtx_stack_c::transM(0.0f, struct_8073A14C.field_0x18 * -25.0f, 0.0f);
-    mDoMtx_stack_c::scaleM(struct_8073A14C.field_0x18, struct_8073A14C.field_0x18, struct_8073A14C.field_0x18);
+    mDoMtx_stack_c::transM(0.0f, l_HIO.field_0x18 * -25.0f, 0.0f);
+    mDoMtx_stack_c::scaleM(l_HIO.field_0x18, l_HIO.field_0x18, l_HIO.field_0x18);
     J3DModel* model = field_0x5b4->getModel();
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     for (u16 i = 1; i < model->getModelData()->getJointNum(); i++) {
@@ -223,12 +220,12 @@ void daE_OctBg_c::mtx_set() {
 
 bool daE_OctBg_c::checkNormalAttack() {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    if (dComIfGp_event_runCheck() != 0) {
+    if (dComIfGp_event_runCheck()) {
         return false;
     }
-    if (struct_8073A14C_field_0x25 < struct_8073A14C.field_0x20 &&
-         home.pos.absXZ(player->current.pos) < struct_8073A14C.field_0x08 &&
-        player->current.pos.y < struct_8073A14C.field_0x0c &&
+    if (unk_bss_7A < l_HIO.field_0x20 &&
+         home.pos.absXZ(player->current.pos) < l_HIO.field_0x08 &&
+        player->current.pos.y < l_HIO.field_0x0c &&
           !fopAcM_otherBgCheck(this, player))
     {
         s16 targetAngle = cLib_targetAngleY(&current.pos, &player->current.pos);
@@ -242,12 +239,12 @@ bool daE_OctBg_c::checkNormalAttack() {
 bool daE_OctBg_c::checkChase() {
     if (field_0xbac == 0) {
         return false;
-    } 
+    }
 
     fopAc_ac_c* actor;
     if (fopAcM_SearchByID(fopAcM_GetLinkId(this), &actor) == 0 || actor == NULL) {
         field_0xbac = 0;
-        struct_8073A14C_field_0x24--;
+        unk_bss_79--;
         return false;
     }
     return true;
@@ -290,7 +287,7 @@ void daE_OctBg_c::swim() {
     if (field_0xb70 == 0) {
         field_0xb8c = 0;
         field_0xb82 = 0xc00;
-        if (current.pos.absXZ(home.pos) < (struct_8073A14C.field_0x08 - 100.0f)) {
+        if (current.pos.absXZ(home.pos) < (l_HIO.field_0x08 - 100.0f)) {
             field_0xb96 = current.angle.y - 0x8000 + cM_rndFX(16384.0f);
         } else {
             field_0xb96 = cLib_targetAngleY(&current.pos, &home.pos) + cM_rndFX(8192.0f);
@@ -307,7 +304,7 @@ void daE_OctBg_c::swim() {
         if (checkNormalAttack()) {
             setAction(&daE_OctBg_c::normal_attack);
         } else {
-            if (field_0x660.y > (home.pos.y + struct_8073A14C.field_0x0c) - 100.0f) {
+            if (field_0x660.y > (home.pos.y + l_HIO.field_0x0c) - 100.0f) {
                 field_0x660.y = current.pos.y - cM_rndF(2000.0f);
             }
             cXyz cStack_58(current.pos);
@@ -325,14 +322,14 @@ void daE_OctBg_c::swim() {
             field_0xb8c = field_0xb96 - current.angle.y;
             cLib_addCalcAngleS(&field_0xb80, 0x1000, 0x20, 0x400, 0x80);
             field_0xb7c += field_0xb80;
-            if (struct_8073A14C_field_0x26 != 0 &&
-                struct_8073A14C_field_0x24 < struct_8073A14C_field_0x23 >> 1)
+            if (unk_bss_7B != 0 &&
+                unk_bss_79 < unk_bss_78 >> 1)
             {
                 field_0xbac = 1;
-                struct_8073A14C_field_0x24++;
+                unk_bss_79++;
                 setAction(&daE_OctBg_c::chase_core);
-                if (struct_8073A14C_field_0x24 >= struct_8073A14C_field_0x23 >> 1) {
-                    struct_8073A14C_field_0x26 = 0;
+                if (unk_bss_79 >= unk_bss_78 >> 1) {
+                    unk_bss_7B = 0;
                 }
             } else if (field_0xbac != 0 && !dComIfGp_event_runCheck()) {
                 setAction(&daE_OctBg_c::chase_core);
@@ -354,16 +351,16 @@ bool daE_OctBg_c::checkCoreFishAttack() {
     fopAc_ac_c* actor;
     if (fopAcM_SearchByID(fopAcM_GetLinkId(this), &actor) == 0 || actor == NULL) {
         return false;
-    } 
+    }
     if (fopAcM_CheckStatus(actor, 0x100000) == 0) {
         return false;
-    } 
+    }
     return true;
 }
 
 void daE_OctBg_c::chase_core() {
     if (field_0xb70 == 0) {
-        setChasePos(field_0x660, cM_rndF(struct_8073A14C.field_0x10));
+        setChasePos(field_0x660, cM_rndF(l_HIO.field_0x10));
         field_0xbaf = cM_rndFX(20.0f) + 100.0f;
         field_0xb70++;
     } else if (field_0xb70 != -1) {
@@ -372,9 +369,9 @@ void daE_OctBg_c::chase_core() {
         if (fopAcM_SearchByID(fopAcM_GetLinkId(this), &local_6c) == 0 || local_6c == NULL) {
             setAction(&daE_OctBg_c::swim);
         } else {
-            if (local_6c->current.pos.y < home.pos.y + struct_8073A14C.field_0x14) {
+            if (local_6c->current.pos.y < home.pos.y + l_HIO.field_0x14) {
                 acStack_2c = local_6c->current.pos + field_0x660;
-                acStack_2c.y = (home.pos.y + struct_8073A14C.field_0x14) + cM_rndF(200.0f);
+                acStack_2c.y = (home.pos.y + l_HIO.field_0x14) + cM_rndF(200.0f);
             } else {
                 acStack_2c = local_6c->current.pos + field_0x660;
             }
@@ -383,7 +380,7 @@ void daE_OctBg_c::chase_core() {
             if (abs(current.angle.y - field_0xb96) > 0x4000) {
                 cLib_chaseAngleS(&current.angle.y, field_0xb96, 0x400);
                 cLib_chaseAngleS(&current.angle.x, -cLib_targetAngleX(&current.pos, &acStack_2c), 0x400);
-                if (current.pos.abs(acStack_2c) < struct_8073A14C.field_0x10 - 100.0f) {
+                if (current.pos.abs(acStack_2c) < l_HIO.field_0x10 - 100.0f) {
                     cLib_chaseF(&speedF, cM_scos(current.angle.x) * 8.0f, 0.2f);
                     cLib_chaseF(&speed.y, cM_ssin(current.angle.x) * -8.0f, 0.2f);
                     cLib_addCalcAngleS(&field_0xb80, 0xc00, 0x20, 0x400, 0x80);
@@ -393,7 +390,7 @@ void daE_OctBg_c::chase_core() {
                 cLib_chaseAngleS(&current.angle.x, -cLib_targetAngleX(&current.pos, &acStack_2c),
                                  0x200);
                 ;
-                if (current.pos.abs(acStack_2c) > struct_8073A14C.field_0x10 - 100.0f) {
+                if (current.pos.abs(acStack_2c) > l_HIO.field_0x10 - 100.0f) {
                     cLib_chaseF(&speedF, 18.0f * cM_scos(current.angle.x), 0.4f);
                     cLib_chaseF(&speed.y, (-18.0f * cM_ssin(current.angle.x)), 0.4f);
                     cLib_addCalcAngleS(&field_0xb80, 0x2400, 0x20, 0x400, 0x80);
@@ -405,7 +402,7 @@ void daE_OctBg_c::chase_core() {
             } else if (dComIfGp_event_runCheck()) {
                 setAction(&daE_OctBg_c::swim);
             } else if (field_0xbaf == 0) {
-                setChasePos(field_0x660, cM_rndF(struct_8073A14C.field_0x10));
+                setChasePos(field_0x660, cM_rndF(l_HIO.field_0x10));
                 field_0xbaf = cM_rndFX(20.0f) + 100.0f;
             }
         }
@@ -416,12 +413,12 @@ void daE_OctBg_c::normal_attack() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (field_0xb70 == 0) {
         field_0xb74 = true;
-        struct_8073A14C_field_0x25++;
+        unk_bss_7A++;
         field_0xbae = cM_rndFX(20.0f) + 60.0f;
         field_0xb70++;
     } else if (field_0xb70 == -1) {
         field_0xb74 = false;
-        struct_8073A14C_field_0x25--;
+        unk_bss_7A--;
     } else if (field_0xb70 == 1) {
         cXyz acStack_34;
         acStack_34 = player->current.pos;
@@ -462,7 +459,7 @@ void daE_OctBg_c::normal_attack() {
         field_0xb8c = fopAcM_searchPlayerAngleY(this) - current.angle.y;
         cLib_addCalcAngleS(&field_0xb80, 0x2400, 0x20, 0x400, 0x80);
         field_0xb7c = field_0xb7c + field_0xb80;
-        if (home.pos.absXZ(player->current.pos) >= struct_8073A14C.field_0x08 && player->current.pos.y >= struct_8073A14C.field_0x0c) {
+        if (home.pos.absXZ(player->current.pos) >= l_HIO.field_0x08 && player->current.pos.y >= l_HIO.field_0x0c) {
             setAction(&daE_OctBg_c::swim);
         } else {
             if (dComIfGp_event_runCheck() || field_0xbae == 0) {
@@ -781,10 +778,10 @@ int daE_OctBg_c::CreateHeap() {
     field_0x5b8 = new mDoExt_brkAnm();
     if (field_0x5b8 == NULL) {
         return 0;
-    } 
+    }
     if (!field_0x5b8->init(model->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("E_bg", 13), 1, 0, 1.0f, 0, -1)) {
         return 0;
-    } 
+    }
     return 1;
 }
 
@@ -796,12 +793,12 @@ int daE_OctBg_c::create() {
         OS_REPORT("///////////// E_OctBg ////////////////\n");
         if (fopAcM_entrySolidHeap(this, useHeapInit, 0x10e0) == 0) {
             return cPhs_ERROR_e;
-        } 
+        }
         OS_REPORT("//////////// E_OctBg SET OK //////////\n");
         if (struct_8073A13D == 0) {
             struct_8073A13D = 1;
             field_0xbb3 = 1;
-            struct_8073A14C.field_0x04 = -1;
+            l_HIO.field_0x04 = -1;
         }
         attention_info.flags = fopAc_AttnFlag_BATTLE_e;
         onWolfNoLock();
@@ -810,8 +807,8 @@ int daE_OctBg_c::create() {
         fopAcM_SetMax(this, 50.0f, 50.0f, 50.0f);
         field_0x6ac.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                             &field_0x66c, fopAcM_GetSpeed_p(this), NULL, NULL);
-        field_0x66c.SetWall(struct_8073A14C.field_0x18 * 10.0f,
-                                struct_8073A14C.field_0x18 * 20.0f);
+        field_0x66c.SetWall(l_HIO.field_0x18 * 10.0f,
+                                l_HIO.field_0x18 * 20.0f);
         health = 10;
         field_0x560 = 10;
         field_0x884.Init(100, 0, this);
@@ -827,13 +824,13 @@ int daE_OctBg_c::create() {
         attention_info.distances[fopAc_attn_BATTLE_e] = 4;
         field_0xb74 = false;
         field_0xbac = fopAcM_GetID(this) & 1;
-        struct_8073A14C_field_0x23++;
+        unk_bss_78++;
         if (field_0xbac != 0) {
-            struct_8073A14C_field_0x24++;
+            unk_bss_79++;
         }
         setAction(&daE_OctBg_c::born_swim);
         daE_OctBg_Execute(this);
-        
+
     }
     return rv;
 }
@@ -868,15 +865,15 @@ static int daE_OctBg_Draw(daE_OctBg_c* i_this) {
 }
 
 static int daE_OctBg_IsDelete(daE_OctBg_c* i_this) {
-    struct_8073A14C_field_0x23--;
+    unk_bss_78--;
     if (i_this->getChaseFlag() != 0) {
-        struct_8073A14C_field_0x24--;
-        if (struct_8073A14C_field_0x24 < struct_8073A14C_field_0x23 >> 2) {
-            struct_8073A14C_field_0x26 = 1;
+        unk_bss_79--;
+        if (unk_bss_79 < unk_bss_78 >> 2) {
+            unk_bss_7B = 1;
         }
-    } 
+    }
     if (i_this->checkNormalAttk()) {
-        struct_8073A14C_field_0x25--;
+        unk_bss_7A--;
     }
     return 1;
 }
@@ -889,7 +886,7 @@ static actor_method_class l_daE_OctBg_Method = {
     (process_method_func)daE_OctBg_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_OctBg = {
+actor_process_profile_definition g_profile_E_OctBg = {
     fpcLy_CURRENT_e,          // mLayerID
     7,                        // mListID
     fpcPi_CURRENT_e,          // mListPrio

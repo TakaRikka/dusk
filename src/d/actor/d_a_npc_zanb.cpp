@@ -711,7 +711,7 @@ static actor_method_class daNpc_zanB_MethodTable = {
     (process_method_func)daNpc_zanB_Draw,
 };
 
-extern actor_process_profile_definition g_profile_NPC_ZANB = {
+actor_process_profile_definition g_profile_NPC_ZANB = {
   fpcLy_CURRENT_e,         // mLayerID
   7,                       // mListID
   fpcPi_CURRENT_e,         // mListPrio

@@ -28,7 +28,10 @@ struct JORPropertyEvent : JOREvent {
 };
 
 struct JORGenEvent : JOREvent {};
-struct JORNodeEvent : JOREvent {};
+
+struct JORNodeEvent : JOREvent {
+    /* 0x00 */ u32 field_0x0;
+};
 
 struct JORMContext;
 struct JORServer;
@@ -36,6 +39,7 @@ struct JORServer;
 class JOREventListener {
 public:
 #if DEBUG
+    JOREventListener() {}
     virtual void listenPropertyEvent(const JORPropertyEvent*) = 0;
 #endif
 };
@@ -43,7 +47,7 @@ public:
 class JORReflexible : public JOREventListener {
 public:
 #if DEBUG
-    JORReflexible();
+    JORReflexible() {}
     static JORServer* getJORServer();
     
     virtual void listenPropertyEvent(const JORPropertyEvent*);

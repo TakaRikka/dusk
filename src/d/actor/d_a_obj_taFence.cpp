@@ -116,10 +116,12 @@ const dCcD_SrcGObjInf daTaFence_c::mCcDObjInfo = {
 dCcD_SrcCyl daTaFence_c::mCcDCyl = {
     daTaFence_c::mCcDObjInfo,
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,  // mRadius
-        0.0f  // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,  // mRadius
+            0.0f  // mHeight
+        }  // mCyl
+    }
 };
 
 int daTaFence_c::create() {
@@ -413,7 +415,7 @@ static actor_method_class l_daTaFence_Method = {
     (process_method_func)daTaFence_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_TaFence = {
+actor_process_profile_definition g_profile_Obj_TaFence = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

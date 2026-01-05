@@ -57,7 +57,6 @@ STATIC_ASSERT(sizeof(daLv6SwGate_c) == 0x14f8);
 
 class daLv6SwGate_HIO_c : public fOpAcm_HIO_entry_c {
 public:
-    /* 80C73F0C */
     daLv6SwGate_HIO_c();
 
     void genMessage(JORMContext*);

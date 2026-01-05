@@ -93,7 +93,7 @@ static actor_method_class l_daTagSpring_Method = {
     (process_method_func)NULL,
 };
 
-extern actor_process_profile_definition g_profile_Tag_Spring = {
+actor_process_profile_definition g_profile_Tag_Spring = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

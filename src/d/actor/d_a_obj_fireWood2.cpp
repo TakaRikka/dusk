@@ -31,10 +31,12 @@ const dCcD_SrcGObjInf daFireWood2_c::mCcDObjInfo = {
 dCcD_SrcCyl daFireWood2_c::mCcDCyl = {
     daFireWood2_c::mCcDObjInfo,
     {
-        {0.0f, 0.0f, 0.0f},  // mCenter
-        0.0f,                // mRadius
-        0.0f                 // mHeight
-    }  // mCyl
+        {
+            {0.0f, 0.0f, 0.0f},  // mCenter
+            0.0f,                // mRadius
+            0.0f                 // mHeight
+        }  // mCyl
+    }
 };
 
 static cull_box l_cull_box = {
@@ -272,7 +274,7 @@ static actor_method_class l_daFireWood2_Method = {
     (process_method_func)daFireWood2_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_FireWood2 = {
+actor_process_profile_definition g_profile_Obj_FireWood2 = {
     fpcLy_CURRENT_e,         // mLayerID
     3,                       // mListID
     fpcPi_CURRENT_e,         // mListPrio

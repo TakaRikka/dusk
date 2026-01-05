@@ -59,7 +59,7 @@ static int target_info_count;
 static void* s_ks_sub(void* param_1, void* param_2) {
     if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == 0x60) {
         if (target_info_count < 10) {
-            target_info[target_info_count] = (int)param_1;
+            target_info[target_info_count] = (intptr_t)param_1;
             target_info_count++;
         }
         return param_1;
@@ -220,7 +220,7 @@ static int daObj_Lp_Execute(obj_lp_class* i_this) {
         target_info[i] = 0;
     }
 
-    target_info[0] = (int)dComIfGp_getPlayer(0);
+    target_info[0] = (intptr_t)dComIfGp_getPlayer(0);
     target_info_count = 1;
 
     if (strcmp(dComIfGp_getStartStageName(), "D_MN05") == 0) {
@@ -493,7 +493,7 @@ static actor_method_class l_daObj_Lp_Method = {
     (process_method_func)daObj_Lp_Draw,
 };
 
-extern actor_process_profile_definition g_profile_OBJ_LP = {
+actor_process_profile_definition g_profile_OBJ_LP = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

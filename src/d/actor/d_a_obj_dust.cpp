@@ -250,7 +250,7 @@ static actor_method_class l_daObjDust_Method = {
 };
 
 
-extern actor_process_profile_definition g_profile_Obj_DUST = {
+actor_process_profile_definition g_profile_Obj_DUST = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

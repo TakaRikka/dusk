@@ -236,7 +236,7 @@ static leafdraw_method_class l_dOvlpFd2_Method = {
     (process_method_func)dOvlpFd2_Draw,
 };
 
-extern overlap_process_profile_definition g_profile_OVERLAP2 = {
+overlap_process_profile_definition g_profile_OVERLAP2 = {
     fpcLy_ROOT_e,
     2,
     fpcPi_CURRENT_e,

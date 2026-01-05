@@ -100,32 +100,26 @@ bool daObjTimer::Act_c::_execute() {
 namespace daObjTimer {
 
 namespace {
-    /* 804855A4-804855C0 .text                  daObjTimer::@unnamed@d_a_obj_timer_cpp@::Mthd_Create */
     int Mthd_Create(void* i_this) {
         return static_cast<daObjTimer::Act_c*>(i_this)->_create();
     }
 
-    /* 804855C4-804855E4 .text                  daObjTimer::@unnamed@d_a_obj_timer_cpp@::Mthd_Delete */
     int Mthd_Delete(void* i_this) {
         return static_cast<daObjTimer::Act_c*>(i_this)->_delete();
     }
 
-    /* 804855E8-80485608 .text                  daObjTimer::@unnamed@d_a_obj_timer_cpp@::Mthd_Execute */
     int Mthd_Execute(void* i_this) {
         return static_cast<daObjTimer::Act_c*>(i_this)->_execute();
     }
 
-    /* 8048560C-80485610 .text                      daObjTimer::@unnamed@d_a_obj_timer_cpp@::Mthd_Draw */
     int Mthd_Draw(void* i_this) {
         return 1;
     }
 
-    /* 80485614-80485618 .text                  daObjTimer::@unnamed@d_a_obj_timer_cpp@::Mthd_IsDelete */
     int Mthd_IsDelete(void* i_this) {
         return 1;
     }
 
-    /* 80485698-804856B8 -00001 0020+00 1/0 0/0 0/0 .data Mthd_Table__Q210daObjTimer27@unnamed@d_a_obj_timer_cpp@ */
     actor_method_class l_daTimer_Method = {
         (process_method_func)Mthd_Create,
         (process_method_func)Mthd_Delete,
@@ -137,7 +131,7 @@ namespace {
 
 };  // namespace daObjTimer
 
-extern actor_process_profile_definition g_profile_Obj_Timer = {
+actor_process_profile_definition g_profile_Obj_Timer = {
   fpcLy_CURRENT_e,          // mLayerID
   10,                       // mListID
   fpcPi_CURRENT_e,          // mListPrio

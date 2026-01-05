@@ -126,7 +126,7 @@ int daTagMstop_c::execute() {
     } else if (eventInfo.checkCommandTalk()) {
         if (field_0x56e == 2) {
             if (!midna_p->checkShadowModelDraw() || midna_p->checkShadowReturnEnd()) {
-                dComIfGp_getEvent().reset(this);
+                dComIfGp_getEvent()->reset(this);
                 fopAcM_orderPotentialEvent(this, 0x400, 0x14f, 1);
                 field_0x56e = 3;
             }
@@ -176,7 +176,7 @@ static actor_method_class l_daTagMstop_Method = {
     (process_method_func)daTagMstop_Create, (process_method_func)daTagMstop_Delete,
     (process_method_func)daTagMstop_Execute, NULL, (process_method_func)daTagMstop_Draw};
 
-extern actor_process_profile_definition g_profile_Tag_Mstop = {
+actor_process_profile_definition g_profile_Tag_Mstop = {
     fpcLy_CURRENT_e,        // mLayerID
     7,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

@@ -297,7 +297,7 @@ actor_method_class l_daAmiShutter_Method = {
 };
 
 
-extern actor_process_profile_definition g_profile_Obj_AmiShutter = {
+actor_process_profile_definition g_profile_Obj_AmiShutter = {
     fpcLy_CURRENT_e,        // mLayerID
     3,                      // mListID
     fpcPi_CURRENT_e,        // mListPrio

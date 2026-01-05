@@ -354,8 +354,7 @@ static BOOL other_bg_check2(e_dn_class* i_this, cXyz* i_pos) {
     return FALSE;
 }
 
-/* 804EEF2D 0003+00 data_804EEF2D None */
-u8 l_initHIO;
+u8 hio_set;
 
 daE_DN_HIO_c l_HIO;
 
@@ -3288,7 +3287,7 @@ static int daE_DN_Delete(e_dn_class* i_this) {
     dComIfG_resDelete(&i_this->phase, "E_dn");
 
     if (i_this->hio_init != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
         mDoHIO_DELETE_CHILD(l_HIO.no);
     }
 
@@ -3396,9 +3395,9 @@ static cPhs__Step daE_DN_Create(fopAc_ac_c* actor) {
             return cPhs_ERROR_e;
         }
 
-        if (l_initHIO == 0) {
+        if (hio_set == 0) {
             i_this->hio_init = 1;
-            l_initHIO = 1;
+            hio_set = 1;
             l_HIO.no = mDoHIO_CREATE_CHILD("リザードマン", &l_HIO);
         }
 
@@ -3500,7 +3499,7 @@ static actor_method_class l_daE_DN_Method = {
     (process_method_func)daE_DN_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_DN = {
+actor_process_profile_definition g_profile_E_DN = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

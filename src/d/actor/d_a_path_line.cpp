@@ -8,7 +8,7 @@
 #include "d/actor/d_a_path_line.h"
 #include "f_op/f_op_actor_mng.h"
 
-extern actor_process_profile_definition2 g_profile_PATH_LINE = {
+actor_process_profile_definition2 g_profile_PATH_LINE = {
   fpcLy_CURRENT_e,       // mLayerID
   9,                     // mListID
   fpcPi_CURRENT_e,       // mListPrio

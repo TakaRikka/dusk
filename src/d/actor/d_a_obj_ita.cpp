@@ -53,10 +53,8 @@ f32 daObjIta_c::dummy2() {
 static daObj_ITA_HIO_c l_HIO;
 
 namespace {
-    /* 80C293F4-80C293F8 00002C 0004+00 2/2 0/0 0/0 .bss             e_ymb__25@unnamed@d_a_obj_ita_cpp@ */
     static daE_YMB_c* e_ymb;
 
-    /* 80C293F8-80C293FC 000030 0004+00 2/2 0/0 0/0 .bss e_ymb_Pos__25@unnamed@d_a_obj_ita_cpp@ */
     static cXyz* e_ymb_Pos;
 } // namespace
 
@@ -286,7 +284,7 @@ static actor_method_class l_daObjIta_Method = {
     (process_method_func)daObjIta_Draw,
 };
 
-extern actor_process_profile_definition g_profile_Obj_ITA = {
+actor_process_profile_definition g_profile_Obj_ITA = {
   fpcLy_CURRENT_e,        // mLayerID
   3,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

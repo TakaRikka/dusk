@@ -42,7 +42,7 @@ static actor_method_class daSus_METHODS = {
     (process_method_func)daSus_create, NULL, NULL, NULL, NULL,
 };
 
-extern actor_process_profile_definition g_profile_SUSPEND = {
+actor_process_profile_definition g_profile_SUSPEND = {
     fpcLy_CURRENT_e,
     11,
     fpcPi_CURRENT_e,

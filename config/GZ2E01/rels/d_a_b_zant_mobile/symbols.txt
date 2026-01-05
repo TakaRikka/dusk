@@ -88,6 +88,6 @@ __vt__12J3DFrameCtrl = .data:0x000000F8; // type:object size:0xC scope:global
 __vt__14dBgS_ObjGndChk = .data:0x00000104; // type:object size:0x30 scope:global
 __vt__15daB_ZANTZ_HIO_c = .data:0x00000134; // type:object size:0xC scope:global
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
-lbl_157_bss_8 = .bss:0x00000008; // type:object size:0x1 scope:local data:byte
+hio_set = .bss:0x00000008; // type:object size:0x1 scope:local align:1 data:byte
 @3644 = .bss:0x0000000C; // type:object size:0xC scope:local
 l_HIO = .bss:0x00000018; // type:object size:0xC scope:global data:byte

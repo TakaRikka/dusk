@@ -8,6 +8,7 @@ typedef s32 (*DriverCallback)(void*);
 namespace JASDriver {
     void setDSPLevel(f32);
     u16 getChannelLevel_dsp();
+    f32 getChannelLevel();
     f32 getDSPLevel();
     void setOutputMode(u32);
     u32 getOutputMode();

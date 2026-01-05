@@ -278,7 +278,7 @@ static actor_method_class daYkgrMethodTable = {
     daYkgrDraw,
 };
 
-extern actor_process_profile_definition g_profile_Ykgr = {
+actor_process_profile_definition g_profile_Ykgr = {
     fpcLy_CURRENT_e,
     7,
     fpcPi_CURRENT_e,

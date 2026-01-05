@@ -12,7 +12,7 @@
 #include "d/actor/d_a_tag_magne.h"
 #include "d/actor/d_a_tag_mist.h"
 #include "d/actor/d_a_tag_stream.h"
-#include "stdio.h"
+#include <stdio>
 
 void daSus_c::data_c::set(s8 i_roomNo, cXyz const& param_1, cXyz const& param_2, u8 param_3,
                           u8 param_4, u8 i_type) {
@@ -115,10 +115,8 @@ daSus_c::data_c daSus_c::mData[0x20];
 
 daSus_c::room_c daSus_c::mRoom[0x40];
 
-/* 80450D88 0002+00 data_80450D88 m_count__9daArrow_c */
 s16 daArrow_c::m_count;
 
-/* 80450D8A 0002+00 data_80450D8A mSetTop__7daSus_c */
 s16 daSus_c::mSetTop;
 
 int daSus_c::newData(s8 i_roomNo, cXyz const& param_1, cXyz const& param_2, u8 param_3, u8 param_4,
@@ -247,13 +245,10 @@ void daNpcKakashi_clrSuccessCount() {
     dComIfGs_setTmpReg(0xFEFF, 0);
 }
 
-/* 80450D8C 0001+00 data_80450D8C None */
 bool daYkgr_c::m_flag;
 
-/* 80450D8D 0001+00 data_80450D8D None */
 bool daYkgr_c::m_alpha_flag;
 
-/* 80450D8E 0002+00 data_80450D8E None */
 u8 daYkgr_c::m_alpha;
 
 f32 daYkgr_c::m_aim_rate;
@@ -416,10 +411,8 @@ int daTagMagne_c::checkMagneC() {
     return 0;
 }
 
-/* 80450DC0 0001+00 data_80450DC0 None */
 u8 daTagMist_c::mPlayerNo;
 
-/* 80450DC1 0003+00 data_80450DC1 None */
 bool daObjCarry_c::mSaveFlag;
 
 u8 daTagMist_c::getPlayerNo() {

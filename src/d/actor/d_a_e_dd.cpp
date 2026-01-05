@@ -336,7 +336,7 @@ static BOOL way_bg_check(e_dd_class* i_this, f32 param_2) {
     return FALSE;
 }
 
-u8 l_initHIO;
+u8 hio_set;
 
 static daE_DD_HIO_c l_HIO;
 
@@ -1340,11 +1340,11 @@ static void anm_se_set(e_dd_class* i_this) {
 
     if ((i_this->mAnm == BCK_DD_FIRE_A && i_this->mpModelMorf->getFrame() >= 44.0f) || i_this->mAnm == BCK_DD_FIRE_B) {
         for (int i = 0; i < 4; i++) {
-            static u16 fire_eff_name_0[4] = {
+            static u16 fire_eff_name[4] = {
                 0x846C, 0x846D, 0x846E, 0x846F,
             };
 
-            i_this->field_0xe68[i] = dComIfGp_particle_set(i_this->field_0xe68[i], fire_eff_name_0[i], &a_this->current.pos, NULL, NULL);
+            i_this->field_0xe68[i] = dComIfGp_particle_set(i_this->field_0xe68[i], fire_eff_name[i], &a_this->current.pos, NULL, NULL);
             JPABaseEmitter* fire_emitter = dComIfGp_particle_getEmitter(i_this->field_0xe68[i]);
             if (fire_emitter != NULL) {
                 fire_emitter->setGlobalSRTMatrix(i_this->mpModelMorf->getModel()->getAnmMtx(JNT_NECK));
@@ -1362,11 +1362,11 @@ static void anm_se_set(e_dd_class* i_this) {
 
     if (i_this->mAnm == BCK_DD_FIRE_A) {
         for (int i = 0; i < 2; i++) {
-            static u16 fire_eff_name_1[2] = {
+            static u16 fire_eff_name[2] = {
                 0x8471, 0x8472,
             };
 
-            i_this->field_0xe7c[i] = dComIfGp_particle_set(i_this->field_0xe7c[i], fire_eff_name_1[i], &a_this->current.pos, NULL, NULL);
+            i_this->field_0xe7c[i] = dComIfGp_particle_set(i_this->field_0xe7c[i], fire_eff_name[i], &a_this->current.pos, NULL, NULL);
             JPABaseEmitter* emitter_4 = dComIfGp_particle_getEmitter(i_this->field_0xe7c[i]);
             if (emitter_4 != NULL) {
                 emitter_4->setGlobalSRTMatrix(i_this->mpModelMorf->getModel()->getAnmMtx(i + 10));
@@ -1560,7 +1560,7 @@ static int daE_DD_Delete(e_dd_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "E_dd");
 
     if (i_this->field_0xe90 != 0) {
-        l_initHIO = 0;
+        hio_set = 0;
     }
 
     if (a_this->heap != NULL) {
@@ -1620,15 +1620,15 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
+static s16 ya[5] = {
+    -0x4000, 0x4000, 0x0000, -0x8000, 0x0000,
+};
+
+static s16 xa[5] = {
+    -0x4000, -0x4000, -0x4000, -0x4000, -0x8000,
+};
+
 static int kabe_initial_pos_set(e_dd_class* i_this) {
-    static s16 ya[5] = {
-        -0x4000, 0x4000, 0x0000, 0x8000, 0x0000,
-    };
-
-    static s16 xa[5] = {
-        0xC000, 0xC000, 0xC000, 0xC000, 0x8000,
-    };
-
     fopAc_ac_c* a_this = &i_this->actor;
     dBgS_LinChk lin_chk;
     cXyz sp98, start, end;
@@ -1700,9 +1700,9 @@ static cPhs__Step daE_DD_Create(fopAc_ac_c* a_this) {
             }
         }
 
-        if (l_initHIO == 0) {
+        if (hio_set == 0) {
             i_this->field_0xe90 = 1;
-            l_initHIO = 1;
+            hio_set = 1;
             l_HIO.field_0x4 = -1;
         }
 
@@ -1775,7 +1775,7 @@ static cPhs__Step daE_DD_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-extern actor_method_class l_daE_DD_Method = {
+actor_method_class l_daE_DD_Method = {
     (process_method_func)daE_DD_Create,
     (process_method_func)daE_DD_Delete,
     (process_method_func)daE_DD_Execute,
@@ -1783,7 +1783,7 @@ extern actor_method_class l_daE_DD_Method = {
     (process_method_func)daE_DD_Draw,
 };
 
-extern actor_process_profile_definition g_profile_E_DD = {
+actor_process_profile_definition g_profile_E_DD = {
   fpcLy_CURRENT_e,        // mLayerID
   7,                      // mListID
   fpcPi_CURRENT_e,        // mListPrio

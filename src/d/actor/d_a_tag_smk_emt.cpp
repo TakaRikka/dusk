@@ -83,7 +83,7 @@ static actor_method_class daTagSmkEmt_METHODS = {
     (process_method_func)daTagSmkEmt_draw
 };
 
-extern actor_process_profile_definition g_profile_Tag_SmkEmt = {
+actor_process_profile_definition g_profile_Tag_SmkEmt = {
     fpcLy_CURRENT_e,         // mLayerID    
     7,                       // mListID  
     fpcPi_CURRENT_e,         // mListPrio   

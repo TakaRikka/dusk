@@ -17,4 +17,4 @@ _dtors = .dtors:0x00000000; // type:label scope:global
 @3873 = .rodata:0x0000000C; // type:object size:0x4 scope:local
 l_daEcont_Method = .data:0x00000000; // type:object size:0x20 scope:global
 g_profile_ECONT = .data:0x00000020; // type:object size:0x30 scope:global
-lbl_71_bss_0 = .bss:0x00000000; // type:object size:0x1 data:byte
+data_805197E0 = .bss:0x00000000; // type:object size:0x4 scope:global align:1
