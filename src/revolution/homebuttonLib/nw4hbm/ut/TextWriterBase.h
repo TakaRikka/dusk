@@ -7,7 +7,7 @@
 #include "Rect.h"
 
 #include <string>
-#include <stdio>
+#include <cstdio>
 
 #include "TagProcessorBase.h"
 

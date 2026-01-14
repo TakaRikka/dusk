@@ -9,7 +9,7 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTTexture.h"
-#include <stdio>
+#include <cstdio>
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"

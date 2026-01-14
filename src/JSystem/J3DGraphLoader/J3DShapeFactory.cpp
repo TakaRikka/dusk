@@ -11,21 +11,24 @@
 J3DShapeFactory::J3DShapeFactory(J3DShapeBlock const& block) {
     mShapeInitData = JSUConvertOffsetToPtr<J3DShapeInitData>(&block, (uintptr_t)block.mpShapeInitData);
     mIndexTable = JSUConvertOffsetToPtr<u16>(&block, (uintptr_t)block.mpIndexTable);
-    mVtxDescList = JSUConvertOffsetToPtr<GXVtxDescList>(&block, (uintptr_t)block.mpVtxDescList),
+    mVtxDescList = JSUConvertOffsetToPtr<GXVtxDescList>(&block, (uintptr_t)block.mpVtxDescList);
     mMtxTable = JSUConvertOffsetToPtr<u16>(&block, (uintptr_t)block.mpMtxTable);
-    mDisplayListData = JSUConvertOffsetToPtr<u8>(&block, (uintptr_t)block.mpDisplayListData),
-    mMtxInitData = JSUConvertOffsetToPtr<J3DShapeMtxInitData>(&block, (uintptr_t)block.mpMtxInitData),
-    mDrawInitData = JSUConvertOffsetToPtr<J3DShapeDrawInitData>(&block, (uintptr_t)block.mpDrawInitData),
+    mDisplayListData = JSUConvertOffsetToPtr<u8>(&block, (uintptr_t)block.mpDisplayListData);
+    mMtxInitData = JSUConvertOffsetToPtr<J3DShapeMtxInitData>(&block, (uintptr_t)block.mpMtxInitData);
+    mDrawInitData = JSUConvertOffsetToPtr<J3DShapeDrawInitData>(&block, (uintptr_t)block.mpDrawInitData);
     mVcdVatCmdBuffer = NULL;
 }
 
 J3DShape* J3DShapeFactory::create(int no, u32 flag, GXVtxDescList* vtxDesc) {
     J3DShape* shape = new J3DShape;
+    J3D_ASSERT_ALLOCMEM(67, shape);
     shape->mMtxGroupNum = getMtxGroupNum(no);
     shape->mRadius = getRadius(no);
     shape->mVtxDesc = getVtxDescList(no);
     shape->mShapeMtx = new J3DShapeMtx*[shape->mMtxGroupNum];
+    J3D_ASSERT_ALLOCMEM(74, shape->mShapeMtx);
     shape->mShapeDraw = new J3DShapeDraw*[shape->mMtxGroupNum];
+    J3D_ASSERT_ALLOCMEM(76, shape->mShapeDraw);
     shape->mMin = getMin(no);
     shape->mMax = getMax(no);
     shape->mVcdVatCmd = mVcdVatCmdBuffer + no * J3DShape::kVcdVatDLSize;
@@ -56,7 +59,8 @@ J3DShapeMtx* J3DShapeFactory::newShapeMtx(u32 flag, int shapeNo, int mtxGroupNo)
     const J3DShapeMtxInitData& mtxInitData =
         (&mMtxInitData[shapeInitData.mMtxInitDataIndex])[mtxGroupNo];
 
-    switch (getMdlDataFlag_MtxLoadType(flag)) {
+    u32 mtxLoadType = getMdlDataFlag_MtxLoadType(flag);
+    switch (mtxLoadType) {
     case J3DMdlDataFlag_ConcatView:
         switch (shapeInitData.mShapeMtxType) {
         case J3DShapeMtxType_Mtx:
@@ -94,36 +98,41 @@ J3DShapeMtx* J3DShapeFactory::newShapeMtx(u32 flag, int shapeNo, int mtxGroupNo)
             OSReport("WRONG SHAPE MATRIX TYPE (J3DModelInit.cpp)\n");
             break;
         }
+
         break;
     }
 
+    J3D_ASSERT_ALLOCMEM(167, ret);
     return ret;
 }
 
 J3DShapeDraw* J3DShapeFactory::newShapeDraw(int shapeNo, int mtxGroupNo) const {
+    J3DShapeDraw* shapeDraw = NULL;
     const J3DShapeInitData& shapeInitData = mShapeInitData[mIndexTable[shapeNo]];
     const J3DShapeDrawInitData& drawInitData =
         (&mDrawInitData[shapeInitData.mDrawInitDataIndex])[mtxGroupNo];
-    return new J3DShapeDraw(&mDisplayListData[drawInitData.mDisplayListIndex],
-                            drawInitData.mDisplayListSize);
+    shapeDraw = new J3DShapeDraw(&mDisplayListData[drawInitData.mDisplayListIndex], drawInitData.mDisplayListSize);
+    J3D_ASSERT_ALLOCMEM(193, shapeDraw);
+    return shapeDraw;
 }
 
 void J3DShapeFactory::allocVcdVatCmdBuffer(u32 count) {
     mVcdVatCmdBuffer = new (0x20) u8[J3DShape::kVcdVatDLSize * count];
+    J3D_ASSERT_ALLOCMEM(211, mVcdVatCmdBuffer);
     for (u32 i = 0; i < (J3DShape::kVcdVatDLSize * count) / 4; i++)
         ((u32*)mVcdVatCmdBuffer)[i] = 0;
 }
 
 s32 J3DShapeFactory::calcSize(int shapeNo, u32 flag) {
-    s32 size = 0x68;
+    s32 size = 0;
 
     s32 mtxGroupNo = getMtxGroupNum(shapeNo);
+    size += sizeof(J3DShape);
     size += mtxGroupNo * 4;
     size += mtxGroupNo * 4;
 
     for (u32 i = 0; i < mtxGroupNo; i++) {
-        s32 shapeMtxSize = calcSizeShapeMtx(flag, shapeNo, i);
-        size += shapeMtxSize;
+        size += calcSizeShapeMtx(flag, shapeNo, i);
         size += 0x0C;
     }
 
@@ -135,7 +144,9 @@ s32 J3DShapeFactory::calcSizeVcdVatCmdBuffer(u32 count) {
 }
 
 s32 J3DShapeFactory::calcSizeShapeMtx(u32 flag, int shapeNo, int mtxGroupNo) const {
+    int local_18 = 0;
     const J3DShapeInitData& shapeInitData = mShapeInitData[mIndexTable[shapeNo]];
+    J3DShapeMtxInitData& mtxInitData = (&mMtxInitData[shapeInitData.mMtxInitDataIndex])[mtxGroupNo];
     u32 ret = 0;
 
     u32 mtxLoadType = getMdlDataFlag_MtxLoadType(flag);
@@ -143,16 +154,16 @@ s32 J3DShapeFactory::calcSizeShapeMtx(u32 flag, int shapeNo, int mtxGroupNo) con
     case J3DMdlDataFlag_ConcatView:
         switch (shapeInitData.mShapeMtxType) {
         case J3DShapeMtxType_Mtx:
-            ret = 0x08;
+            ret += sizeof(J3DShapeMtxConcatView);
             break;
         case J3DShapeMtxType_BBoard:
-            ret = 0x08;
+            ret += sizeof(J3DShapeMtxBBoardConcatView);
             break;
         case J3DShapeMtxType_YBBoard:
-            ret = 0x08;
+            ret += sizeof(J3DShapeMtxYBBoardConcatView);
             break;
         case J3DShapeMtxType_Multi:
-            ret = 0x10;
+            ret += sizeof(J3DShapeMtxMultiConcatView);
             break;
         default:
             OSReport("WRONG SHAPE MATRIX TYPE (J3DModelInit.cpp)\n");
@@ -165,10 +176,10 @@ s32 J3DShapeFactory::calcSizeShapeMtx(u32 flag, int shapeNo, int mtxGroupNo) con
         case J3DShapeMtxType_Mtx:
         case J3DShapeMtxType_BBoard:
         case J3DShapeMtxType_YBBoard:
-            ret = 0x08;
+            ret += 0x08;
             break;
         case J3DShapeMtxType_Multi:
-            ret = 0x10;
+            ret += sizeof(J3DShapeMtxMultiConcatView);
             break;
         default:
             OSReport("WRONG SHAPE MATRIX TYPE (J3DModelInit.cpp)\n");

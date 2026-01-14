@@ -397,9 +397,9 @@ void dDemo_actor_c::JSGSetScaling(Vec const& i_scale) {
 }
 
 void dDemo_actor_c::JSGSetRotation(Vec const& i_rotate) {
-    mRotate.x = i_rotate.x * 182.04444885253906f;
-    mRotate.y = i_rotate.y * 182.04444885253906f;
-    mRotate.z = i_rotate.z * 182.04444885253906f;
+    mRotate.x = DEG2S(i_rotate.x);
+    mRotate.y = DEG2S(i_rotate.y);
+    mRotate.z = DEG2S(i_rotate.z);
     onEnable(ENABLE_ROTATE_e);
 }
 
@@ -560,8 +560,8 @@ f32 dDemo_camera_c::JSGGetViewRoll() const {
     if (view == NULL) {
         return 0.0f;
     }
-    
-    return view->bank * 0.0054931640625f;
+
+    return S2DEG(view->bank);
 }
 
 void dDemo_camera_c::JSGSetViewRoll(f32 i_roll) {

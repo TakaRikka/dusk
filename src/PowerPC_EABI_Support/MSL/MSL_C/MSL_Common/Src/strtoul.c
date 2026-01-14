@@ -1,5 +1,5 @@
 #include "strtoul.h"
-#include <ctype>
+#include <cctype>
 #include "errno.h"
 #include <climits>
 #include "scanf.h"

@@ -565,9 +565,8 @@ f32 J3DGetKeyFrameInterpolation(f32 frame, J3DAnmKeyTableBase* pKeyTable, T* pDa
     }
 
     if (pKeyTable->mType == 0) {
-        u32 idx = pKeyTable->mMaxFrame - 1;
-        if (pData[idx * 3] <= frame) {
-            return pData[idx * 3 + 1];
+        if (pData[(pKeyTable->mMaxFrame - 1) * 3] <= frame) {
+            return pData[(pKeyTable->mMaxFrame - 1) * 3 + 1];
         }
 
         u32 uVar7 = pKeyTable->mMaxFrame;
@@ -585,9 +584,8 @@ f32 J3DGetKeyFrameInterpolation(f32 frame, J3DAnmKeyTableBase* pKeyTable, T* pDa
         f32 interpolated = J3DHermiteInterpolation(frame, &pData[0], &pData[1], &pData[2], &pData[3], &pData[4], &pData[5]);
         return interpolated;
     } else {
-        u32 idx = pKeyTable->mMaxFrame - 1;
-        if (pData[idx * 4] <= frame) {
-            return pData[idx * 4 + 1];
+        if (pData[(pKeyTable->mMaxFrame - 1) * 4] <= frame) {
+            return pData[(pKeyTable->mMaxFrame - 1) * 4 + 1];
         }
 
         u32 var_r27 = pKeyTable->mMaxFrame;

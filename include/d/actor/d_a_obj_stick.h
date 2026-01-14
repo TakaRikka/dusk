@@ -5,6 +5,37 @@
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
 
+struct daObj_Stick_HIOParam {
+    f32 attention_offset;
+    f32 gravity;
+    f32 scale;
+    f32 real_shadow_size;
+};
+
+class daObj_Stick_Param_c {
+public:
+    virtual ~daObj_Stick_Param_c() {}
+
+    static const daObj_Stick_HIOParam m;
+};
+
+#if DEBUG
+class daObj_Stick_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_Stick_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_Stick_HIOParam m;
+};
+
+#define OBJ_STICK_HIO_CLASS daObj_Stick_HIO_c
+#else
+#define OBJ_STICK_HIO_CLASS daObj_Stick_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObj_Stick_c
@@ -15,7 +46,7 @@
  */
 class daObj_Stick_c : public fopAc_ac_c {
 private:
-    /* 0x568 */ mDoHIO_entry_c* field_0x568;
+    /* 0x568 */ OBJ_STICK_HIO_CLASS* mpHIO;
     /* 0x56c */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ dBgS_ObjAcch mAcch;
@@ -46,19 +77,5 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daObj_Stick_c) == 0x950);
-
-class daObj_Stick_Param_c {
-public:
-    virtual ~daObj_Stick_Param_c() {};
-
-    struct daObj_Stick_HIOParam {
-        f32 attention_offset;
-        f32 gravity;
-        f32 scale;
-        f32 real_shadow_size;
-    };
-    static const daObj_Stick_HIOParam m;
-};
-
 
 #endif /* D_A_OBJ_STICK_H */

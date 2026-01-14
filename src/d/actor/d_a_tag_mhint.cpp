@@ -55,8 +55,8 @@ int daTagMhint_c::create() {
                                 ->m_entries[field_0x56d]
                                 .m_arrow_idx];
 
-        eyePos.set(arrow_data_p->position.x, arrow_data_p->position.y,
-                    arrow_data_p->position.z);
+        eyePos.set(arrow_data_p->posX, arrow_data_p->posY,
+                    arrow_data_p->posZ);
         attention_info.position = eyePos;
     }
 

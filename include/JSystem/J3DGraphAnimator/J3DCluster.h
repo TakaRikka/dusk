@@ -32,7 +32,10 @@ public:
     }
 
     J3DDeformer* getDeformer() { return mDeformer; }
-    void setDeformer(J3DDeformer* deformer) { mDeformer = deformer; }
+    void setDeformer(J3DDeformer* deformer) {
+        J3D_ASSERT_NULLPTR(111, deformer);
+        mDeformer = deformer;
+    }
 
     /* 0x00 */ f32 mMaxAngle;
     /* 0x04 */ f32 mMinAngle;

@@ -411,13 +411,12 @@ static void action(obj_hb_class* i_this) {
                 if (cc_move_p != NULL) {
                     a_this->current.pos.x += cc_move_p->x * 0.5f;
                     a_this->current.pos.z += cc_move_p->z * 0.5f;
-                    
                     if (fabsf(cc_move_p->x) >= 2.0f || fabsf(cc_move_p->z) >= 2.0f) {
                         cLib_addCalc2(&i_this->field_0x688, NREG_F(5) + 1000.0f, 0.1f, NREG_F(6) + 200.0f);
                         s16 target = fopAcM_searchPlayerAngleY(a_this);
                         s16 angle_delta = i_this->field_0x676.y - target;
                         if (angle_delta > 0x4000 || angle_delta < -0x4000) {
-                            target -= 0x8000;
+                            ADD_ANGLE(target, 0x8000);
                         }
                         cLib_addCalcAngleS2(&i_this->field_0x676.y, target, 4, 0x100);
                     }
@@ -427,7 +426,7 @@ static void action(obj_hb_class* i_this) {
             i_this->mBgc.CrrPos(dComIfG_Bgsp());
             sVar1 = 1;
             break;
-        
+
         case ACTION_FLOAT:
             obj_hb_float(i_this);
             i_this->mBgc.CrrPos(dComIfG_Bgsp());
@@ -449,8 +448,9 @@ static void action(obj_hb_class* i_this) {
         i_this->field_0x6b0 = 0;
         
         if (i_this->mAtInfo.mHitType == HIT_TYPE_LINK_NORMAL_ATTACK) {
-            if (daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_TURN_RIGHT || daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_UNK_9) {
-                a_this->speedF = WREG_F(16) + cM_rndF(10.0f) + 40.0f;
+            if (daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_TURN_RIGHT
+             || daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_UNK_9) {
+                a_this->speedF = cM_rndF(10.0f) + 40.0f + WREG_F(16);
                 i_this->field_0x690 = cM_rndF(2000.0f) + 5500.0f;
                 i_this->field_0x688 = (s16)(cM_rndF(1000.0f) + 5000.0f);
             } else {
@@ -477,8 +477,8 @@ static void action(obj_hb_class* i_this) {
         cLib_addCalcAngleS2(&i_this->field_0x68e, 0, 8, 0x100);
         cLib_addCalcAngleS2(&i_this->field_0x690, 0, 1, WREG_S(6) + 0x96);
     } else {
-        i_this->field_0x68c = i_this->field_0x688 * cM_ssin(i_this->field_0x650 * (NREG_F(3) + 3000));
-        i_this->field_0x68e = i_this->field_0x688 * cM_ssin(i_this->field_0x650 * (NREG_F(4) + 4000));
+        i_this->field_0x68c = i_this->field_0x688 * cM_ssin(i_this->field_0x650 * (NREG_S(3) + 3000));
+        i_this->field_0x68e = i_this->field_0x688 * cM_ssin(i_this->field_0x650 * (NREG_S(4) + 4000));
         cLib_addCalc0(&i_this->field_0x688, 0.1f, NREG_F(1) + 50.0f);
         cLib_addCalcAngleS2(&i_this->field_0x690, 0, 1, WREG_S(5) + 0x32);
     }
@@ -503,7 +503,8 @@ static void action(obj_hb_class* i_this) {
         }
 
         a_this->speedF = 0.0f;
-        cXyz scale(a_this->scale.x, a_this->scale.x, a_this->scale.x);
+        f32 val_scale = a_this->scale.x;
+        cXyz scale(val_scale, val_scale, val_scale);
         cXyz pos(a_this->current.pos);
         pos.y = i_this->mGroundCross;
 
@@ -522,7 +523,8 @@ static void action(obj_hb_class* i_this) {
     if (i_this->field_0x6a4 != 0) {
         i_this->field_0x6a4--;
         if (i_this->field_0x6a4 != 0) {
-            cLib_addCalc2(&a_this->scale.x, i_this->field_0x6a4 * (BREG_F(2) + 0.01f) * cM_ssin(i_this->field_0x6a4 * (KREG_S(3) + 15000)) + 1.0f, 1.0f, 0.2f);
+            f32 reg_f30 = i_this->field_0x6a4 * (BREG_F(2) + 0.01f);
+            cLib_addCalc2(&a_this->scale.x, reg_f30 * cM_ssin(i_this->field_0x6a4 * (KREG_S(3) + 15000)) + 1.0f, 1.0f, 0.2f);
         } else {
             a_this->scale.x = 1.0f;
         }

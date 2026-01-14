@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_sekidoor.h"
-   
+
 
 static struct {
     u32 bmdIdx;
@@ -20,11 +20,33 @@ static struct {
 
 static char* l_resNameList[2] = {"", "SekiDoor"};
 
+static OBJ_SEKIDOOR_HIO_CLASS l_HIO;
+
+const daObj_SekiDoor_HIOParam daObj_SekiDoor_Param_c::m = {0};
+
+static const f32 reference_posy = 460.0f;
+
+static const f32 rising_speed_y = 4.0f;
+
+#if DEBUG
+daObj_SekiDoor_HIO_c::daObj_SekiDoor_HIO_c() {
+    m = daObj_SekiDoor_Param_c::m;
+}
+
+void daObj_SekiDoor_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_SekiDoor_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 int daObj_SekiDoor_c::create() {
     fopAcM_ct(this, daObj_SekiDoor_c);
 
     mBitSW = 0;
-    
+
     cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_resNameList[l_bmdData[mBitSW].resIdx]);
     if (step == cPhs_COMPLEATE_e) {
         if (getBitSW() != 0xff){
@@ -72,17 +94,16 @@ int daObj_SekiDoor_c::Create() {
 }
 
 int daObj_SekiDoor_c::Delete() {
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     dComIfG_resDelete(&mPhaseReq, l_resNameList[l_bmdData[mBitSW].resIdx]);
 
     return 1;
 }
-
-
-const u8 daObj_SekiDoor_Param_c::m = 0;
-
-static const f32 reference_posy = 460.0f;
-
-static const f32 rising_speed_y = 4.0f;
 
 
 int daObj_SekiDoor_c::Execute(Mtx** i_mtx) {
@@ -245,9 +266,6 @@ static int daObj_SekiDoor_Draw(void* i_this) {
 static int daObj_SekiDoor_IsDelete(void* param_0) {
     return 1;
 }
-
-
-static daObj_SekiDoor_Param_c l_HIO;
 
 static actor_method_class daObj_SekiDoor_MethodTable = {
     (process_method_func)daObj_SekiDoor_Create,

@@ -26,7 +26,7 @@ void fpcDtTg_DeleteQTo(delete_tag_class* i_deleteTag) {
     cTg_SingleCut(&i_deleteTag->base);
 }
 
-s32 fpcDtTg_Do(delete_tag_class* i_deleteTag, delete_tag_func i_func) {
+int fpcDtTg_Do(delete_tag_class* i_deleteTag, delete_tag_func i_func) {
     if (i_deleteTag->timer <= 0) {
         fpcDtTg_DeleteQTo(i_deleteTag);
 
@@ -50,7 +50,7 @@ s32 fpcDtTg_Do(delete_tag_class* i_deleteTag, delete_tag_func i_func) {
     }
 }
 
-s32 fpcDtTg_Init(delete_tag_class* i_deleteTag, void* i_data) {
+int fpcDtTg_Init(delete_tag_class* i_deleteTag, void* i_data) {
     cTg_Create(&i_deleteTag->base, i_data);
     return 1;
 }

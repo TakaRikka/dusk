@@ -4,11 +4,11 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDirectPrint.h"
 #include "JSystem/JUtility/JUTDirectFile.h"
-#include <math>
-#include <stdio>
-#include <stdlib>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <dolphin/dolphin.h>
-#include <stdint>
+#include <stdint.h>
 
 OSMessageQueue JUTException::sMessageQueue = {0};
 

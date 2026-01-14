@@ -437,7 +437,7 @@ int daObjSwLight_c::Draw() {
 
 #if DEBUG
     if (l_HIO.mCheckRendering) {
-        mpBgW->CalcPlane();
+        mpBgW->DebugDraw();
     }
 #endif
 

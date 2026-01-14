@@ -21,10 +21,15 @@ J2DPane::J2DPane() : mBounds(), mGlobalBounds(), mClipRect(), mPaneTree(this) {
 
 void J2DPane::initiate() {
     field_0x4 = -1;
-    mRotateOffsetY = mRotateOffsetX = mRotateZ = mRotateY = mRotateX = 0;
+    mRotateX = 0.0f;
+    mRotateY = 0.0f;
+    mRotateZ = 0.0f;
+    mRotateOffsetX = 0.0f;
+    mRotateOffsetY = 0.0f;
     mBasePosition = 0;
     mRotAxis = ROTATE_Z;
-    mScaleY = mScaleX = 1;
+    mScaleX = 1.0f;
+    mScaleY = 1.0f;
     mCullMode = GX_CULL_NONE;
     mAlpha = 255;
     mIsInfluencedAlpha = true;
@@ -98,8 +103,8 @@ J2DPane::J2DPane(J2DPane* p_pane, JSURandomInputStream* p_stream, u8 isEx) : mPa
 
 void J2DPane::makePaneStream(J2DPane* p_pane, JSURandomInputStream* p_stream) {
     u8 unk;
-    p_stream->read(&unk, 1);
-    p_stream->read(&mVisible, 1);
+    p_stream->read(unk);
+    p_stream->read(mVisible);
     p_stream->skip(2);
 
     mInfoTag = p_stream->read32b();
@@ -110,7 +115,7 @@ void J2DPane::makePaneStream(J2DPane* p_pane, JSURandomInputStream* p_stream) {
     f32 y1 = y0 + p_stream->readS16();
     mBounds.set(x0, y0, x1, y1);
 
-    unk -= 6;
+    unk -= u8(6);
     mRotateX = 0;
     mRotateY = 0;
     mRotateZ = 0;
@@ -120,7 +125,8 @@ void J2DPane::makePaneStream(J2DPane* p_pane, JSURandomInputStream* p_stream) {
     }
 
     if (unk != 0) {
-        mBasePosition = p_stream->readU8();
+        u8 r28 = p_stream->readU8();
+        mBasePosition = r28;
         unk--;
     } else {
         mBasePosition = 0;
@@ -159,15 +165,15 @@ void J2DPane::changeUseTrans(J2DPane* p_pane) {
     f32 xOffset = 0;
     f32 yOffset = 0;
     if (mBasePosition % 3 == 1) {
-        xOffset = mBounds.getWidth() / 2;
+        xOffset = getWidth() / 2;
     } else if (mBasePosition % 3 == 2) {
-        xOffset = mBounds.getWidth();
+        xOffset = getWidth();
     }
 
     if (mBasePosition / 3 == 1) {
-        yOffset = mBounds.getHeight() / 2;
+        yOffset = getHeight() / 2;
     } else if (mBasePosition / 3 == 2) {
-        yOffset = mBounds.getHeight();
+        yOffset = getHeight();
     }
 
     mTranslateX = mBounds.i.x + xOffset;
@@ -176,9 +182,7 @@ void J2DPane::changeUseTrans(J2DPane* p_pane) {
     mRotateOffsetX = xOffset;
     mRotateOffsetY = yOffset;
 
-    f32 addX = -mTranslateX;
-    f32 addY = -mTranslateY;
-    mBounds.addPos(addX, addY);
+    mBounds.addPos(JGeometry::TVec2<f32>(-mTranslateX, -mTranslateY));
 
     if (p_pane != NULL) {
         u8 otherBasePos = p_pane->mBasePosition;
@@ -200,10 +204,9 @@ void J2DPane::changeUseTrans(J2DPane* p_pane) {
 }
 
 J2DPane::~J2DPane() {
-    JSUTreeIterator<J2DPane> iterator;
-    for (iterator = mPaneTree.getFirstChild(); iterator != mPaneTree.getEndChild();) {
-        J2DPane* child = (iterator++).getObject();
-        delete child;
+    JSUTreeIterator<J2DPane> iterator = mPaneTree.getFirstChild();
+    for (; iterator != mPaneTree.getEndChild();) {
+        delete (iterator++).getObject();
     }
 }
 
@@ -240,7 +243,7 @@ bool J2DPane::insertChild(J2DPane* p_prev, J2DPane* p_child) {
 }
 
 void J2DPane::draw(f32 x, f32 y, J2DGrafContext const* p_grafCtx, bool isOrthoGraf, bool param_4) {
-    bool unkBool = param_4 && mVisible;
+    param_4 = param_4 && mVisible;
     if (p_grafCtx->getGrafType() != 1) {
         isOrthoGraf = false;
     }
@@ -254,22 +257,36 @@ void J2DPane::draw(f32 x, f32 y, J2DGrafContext const* p_grafCtx, bool isOrthoGr
     if (mBounds.isValid()) {
         mGlobalBounds = mBounds;
 
-        f32 addX = mTranslateX;
-        f32 addY = mTranslateY;
-        mGlobalBounds.addPos(addX, addY);
+        mGlobalBounds.addPos(JGeometry::TVec2<f32>(mTranslateX, mTranslateY));
 
-        if (unkBool) {
+        if (param_4) {
             mClipRect = mBounds;
             rewriteAlpha();
         }
 
         if (parent != NULL) {
-            f32 width = parent->mGlobalBounds.i.x - parent->mBounds.i.x;
-            f32 height = parent->mGlobalBounds.i.y - parent->mBounds.i.y;
-            mGlobalBounds.addPos(width, height);
+            mGlobalBounds.addPos(JGeometry::TVec2<f32>(parent->mGlobalBounds.i.x - parent->mBounds.i.x, parent->mGlobalBounds.i.y - parent->mBounds.i.y));
+#if !PLATFORM_GCN
+            f32 f28 = mPositionMtx[0][0];
+            f32 f27 = mPositionMtx[1][0];
+            f32 f26 = mPositionMtx[2][0];
+            if (getUserInfo() == 'n_43' && p_grafCtx->getGrafType() == 1) {
+                JGeometry::TBox2<f32>* bounds = ((J2DOrthoGraph*)p_grafCtx)->getBounds();
+                const JGeometry::TBox2<f32>* ortho = ((J2DOrthoGraph*)p_grafCtx)->getOrtho();
+                f32 f31 = 608.0f / (ortho->f.x - ortho->i.x);
+                mPositionMtx[0][0] *= f31;
+                mPositionMtx[0][1] *= f31;
+                mPositionMtx[0][2] *= f31;
+            }
+#endif
             MTXConcat(parent->mGlobalMtx, mPositionMtx, mGlobalMtx);
+#if !PLATFORM_GCN
+            mPositionMtx[0][0] = f28;
+            mPositionMtx[1][0] = f27;
+            mPositionMtx[2][0] = f26;
+#endif
 
-            if (unkBool) {
+            if (param_4) {
                 if (isOrthoGraf) {
                     mClipRect = mGlobalBounds;
                     mClipRect.intersect(parent->mClipRect);
@@ -281,19 +298,35 @@ void J2DPane::draw(f32 x, f32 y, J2DGrafContext const* p_grafCtx, bool isOrthoGr
                 }
             }
         } else {
-            mGlobalBounds.addPos(x, y);
+#if !PLATFORM_GCN
+            f32 f25 = mScaleX;
+            f32 f24 = mTranslateX;
+            if (getUserInfo() != 'n_43' && p_grafCtx->getGrafType() == 1) {
+                JGeometry::TBox2<f32>* bounds = ((J2DOrthoGraph*)p_grafCtx)->getBounds();
+                const JGeometry::TBox2<f32>* ortho = ((J2DOrthoGraph*)p_grafCtx)->getOrtho();
+                f32 f30 = (ortho->f.x - ortho->i.x) / 608.0f;
+                f32 f29 = 304.0f;
+                mScaleX *= f30;
+                mTranslateX = f30 * (mTranslateX - f29) + f29;
+            }
+#endif
+            mGlobalBounds.addPos(JGeometry::TVec2<f32>(x, y));
             makeMatrix(mTranslateX + x, mTranslateY + y);
             MTXCopy(mPositionMtx, mGlobalMtx);
             mClipRect = mGlobalBounds;
             mColorAlpha = mAlpha;
+#if !PLATFORM_GCN
+            mScaleX = f25;
+            mTranslateX = f24;
+#endif
         }
 
         JGeometry::TBox2<f32> scissorBounds(0, 0, 0, 0);
-        if (unkBool && isOrthoGraf) {
+        if (param_4 && isOrthoGraf) {
             ((J2DOrthoGraph*)p_grafCtx)->scissorBounds(&scissorBounds, &mClipRect);
         }
 
-        if (unkBool && (mClipRect.isValid() || !isOrthoGraf)) {
+        if (param_4 && (mClipRect.isValid() || !isOrthoGraf)) {
             J2DGrafContext tmpGraf(*p_grafCtx);
             if (isOrthoGraf) {
                 tmpGraf.scissor(scissorBounds);
@@ -303,9 +336,8 @@ void J2DPane::draw(f32 x, f32 y, J2DGrafContext const* p_grafCtx, bool isOrthoGr
             drawSelf(x, y, &tmpGraf.mPosMtx);
         }
 
-        JSUTreeIterator<J2DPane> iter;
-        for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
-            iter.getObject()->draw(0, 0, p_grafCtx, isOrthoGraf, unkBool);
+        for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+            iter->draw(0, 0, p_grafCtx, isOrthoGraf, param_4);
         }
     }
 }
@@ -362,8 +394,8 @@ void J2DPane::place(JGeometry::TBox2<f32> const& box) {
 }
 
 void J2DPane::move(f32 x, f32 y) {
-    f32 width = getWidth();
-    f32 height = getHeight();
+    f32 width = mBounds.getWidth();
+    f32 height = mBounds.getHeight();
     place(JGeometry::TBox2<f32>(x, y, x + width, y + height));
 }
 
@@ -376,16 +408,11 @@ void J2DPane::add(f32 x, f32 y) {
 void J2DPane::resize(f32 x, f32 y) {
     JGeometry::TBox2<f32> box = mBounds;
 
-    f32 tX = mTranslateX;
-    f32 tY = mTranslateY;
-
-    box.addPos(tX, tY);
+    box.addPos(JGeometry::TVec2<f32>(mTranslateX, mTranslateY));
 
     const J2DPane* parent = getParentPane();
     if (parent != NULL) {
-        f32 xAdd = -parent->mBounds.i.x;
-        f32 yAdd = -parent->mBounds.i.y;
-        box.addPos(xAdd, yAdd);
+        box.addPos(JGeometry::TVec2<f32>(-parent->mBounds.i.x, -parent->mBounds.i.y));
     }
 
     box.f.x = box.i.x + x;
@@ -398,16 +425,11 @@ JGeometry::TBox2<f32> J2DPane::static_mBounds(0, 0, 0, 0);
 JGeometry::TBox2<f32>& J2DPane::getBounds() {
     static_mBounds = mBounds;
 
-    f32 tX = mTranslateX;
-    f32 tY = mTranslateY;
-
-    static_mBounds.addPos(tX, tY);
+    static_mBounds.addPos(JGeometry::TVec2<f32>(mTranslateX, mTranslateY));
 
     const J2DPane* parent = getParentPane();
     if (parent != NULL) {
-        f32 xAdd = -parent->mBounds.i.x;
-        f32 yAdd = -parent->mBounds.i.y;
-        static_mBounds.addPos(xAdd, yAdd);
+        static_mBounds.addPos(JGeometry::TVec2<f32>(-parent->mBounds.i.x, -parent->mBounds.i.y));
     }
 
     return static_mBounds;
@@ -443,8 +465,7 @@ J2DPane* J2DPane::search(u64 tag) {
         return this;
     }
 
-    JSUTreeIterator<J2DPane> iter;
-    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
         if (J2DPane* result = iter.getObject()->search(tag)) {
             return result;
         }
@@ -457,8 +478,7 @@ J2DPane* J2DPane::searchUserInfo(u64 tag) {
         return this;
     }
 
-    JSUTreeIterator<J2DPane> iter;
-    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
         if (J2DPane* result = iter.getObject()->searchUserInfo(tag)) {
             return result;
         }
@@ -467,8 +487,7 @@ J2DPane* J2DPane::searchUserInfo(u64 tag) {
 }
 
 bool J2DPane::isUsed(const ResTIMG* p_timg) {
-    JSUTreeIterator<J2DPane> iter;
-    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
         if (iter.getObject()->isUsed(p_timg))
             return true;
     }
@@ -476,8 +495,7 @@ bool J2DPane::isUsed(const ResTIMG* p_timg) {
 }
 
 bool J2DPane::isUsed(const ResFONT* p_font) {
-    JSUTreeIterator<J2DPane> iter;
-    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
         if (iter.getObject()->isUsed(p_font))
             return true;
     }
@@ -502,8 +520,7 @@ void J2DPane::makeMatrix(f32 param_0, f32 param_1, f32 param_2, f32 param_3) {
 void J2DPane::setCullBack(GXCullMode mode) {
     mCullMode = mode;
 
-    JSUTreeIterator<J2DPane> iter;
-    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
         iter.getObject()->setCullBack(mode);
     }
 }
@@ -515,20 +532,16 @@ void J2DPane::setBasePosition(J2DBasePosition position) {
     mRotateOffsetX = 0;
 
     if (position % 3 == 1) {
-        f32 width = getWidth();
-        mRotateOffsetX = width / 2;
+        mRotateOffsetX = getWidth() / 2;
     } else if (position % 3 == 2) {
-        f32 width = getWidth();
-        mRotateOffsetX = width;
+        mRotateOffsetX = getWidth();
     }
 
     mRotateOffsetY = 0;
     if (position / 3 == 1) {
-        f32 height = getHeight();
-        mRotateOffsetY = height / 2;
+        mRotateOffsetY = getHeight() / 2;
     } else if (position / 3 == 2) {
-        f32 height = getHeight();
-        mRotateOffsetY = height;
+        mRotateOffsetY = getHeight();
     }
 
     calcMtx();
@@ -545,7 +558,7 @@ void J2DPane::setInfluencedAlpha(bool influencedAlpha, bool param_1) {
                 break;
             }
             alpha = (((f32)alpha) * parent->getAlpha() / 255);
-            if (!parent->mIsInfluencedAlpha) {
+            if (!parent->isInfluencedAlpha()) {
                 break;
             }
         }
@@ -554,7 +567,7 @@ void J2DPane::setInfluencedAlpha(bool influencedAlpha, bool param_1) {
             if (alpha == 0) {
                 setAlpha(0);
             } else {
-                f32 fAlpha = ((f32)mAlpha) / alpha * 255;
+                f32 fAlpha = ((f32)getAlpha()) / alpha * 255;
 
                 u8 alpha;
                 if (fAlpha > 255) {
@@ -565,7 +578,8 @@ void J2DPane::setInfluencedAlpha(bool influencedAlpha, bool param_1) {
                 setAlpha(alpha);
             }
         } else {
-            setAlpha((f32)(alpha * mAlpha) / 255);
+            f32 fAlpha = f32(alpha * getAlpha()) / 255;
+            setAlpha(fAlpha);
         }
     }
 
@@ -579,25 +593,15 @@ Vec J2DPane::getGlbVtx(u8 param_0) const {
         out.y = 0;
         out.z = 0;
         return out;
-    } else {
-        f32 x, y;
-        if (param_0 & 1) {
-            x = mBounds.f.x;
-        } else {
-            x = mBounds.i.x;
-        }
-
-        if (param_0 & 2) {
-            y = mBounds.f.y;
-        } else {
-            y = mBounds.i.y;
-        }
-
-        out.x = x * mGlobalMtx[0][0] + y * mGlobalMtx[0][1] + mGlobalMtx[0][3];
-        out.y = x * mGlobalMtx[1][0] + y * mGlobalMtx[1][1] + mGlobalMtx[1][3];
-        out.z = x * mGlobalMtx[2][0] + y * mGlobalMtx[2][1] + mGlobalMtx[2][3];
-        return out;
     }
+
+    f32 x = param_0 & 1 ? mBounds.f.x : mBounds.i.x;
+    f32 y = param_0 & 2 ? mBounds.f.y : mBounds.i.y;
+
+    out.x = x * mGlobalMtx[0][0] + y * mGlobalMtx[0][1] + mGlobalMtx[0][3];
+    out.y = x * mGlobalMtx[1][0] + y * mGlobalMtx[1][1] + mGlobalMtx[1][3];
+    out.z = x * mGlobalMtx[2][0] + y * mGlobalMtx[2][1] + mGlobalMtx[2][3];
+    return out;
 }
 
 J2DPane* J2DPane::getFirstChildPane() {
@@ -643,7 +647,7 @@ struct J2DPaneInfo {
 };  // Size: 0x48
 
 void J2DPane::makePaneExStream(J2DPane* p_parent, JSURandomInputStream* p_stream) {
-    p_stream->getPosition();
+    s32 r30 = p_stream->getPosition();
 
     J2DPaneInfo data;
     p_stream->read(&data, sizeof(data));
@@ -696,24 +700,24 @@ void J2DPane::makePaneExStream(J2DPane* p_parent, JSURandomInputStream* p_stream
 s16 J2DPane::J2DCast_F32_to_S16(f32 value, u8 arg2) {
     if (arg2 >= 0xF) {
         return 0;
-    } else {
-        f32 tmpF;
-        tmpF = value;
+    }
+
+    f32 tmpF;
+    tmpF = value;
+    if (value < 0) {
+        tmpF = -tmpF;
+    }
+    int tmp = tmpF * (1 << arg2);
+    if (tmp >= 0x8000) {
         if (value < 0) {
-            tmpF = -value;
-        }
-        int tmp = tmpF * (1 << arg2);
-        if (tmp >= 0x8000) {
-            if (value < 0) {
-                return 0x8000;
-            } else {
-                return 0x7FFF;
-            }
-        } else if (value < 0) {
-            return ~tmp + 1;
+            return 0x8000;
         } else {
-            return tmp;
+            return 0x7FFF;
         }
+    } else if (value < 0) {
+        return ~tmp + 1;
+    } else {
+        return tmp;
     }
 }
 
@@ -753,8 +757,6 @@ void* J2DPane::getPointer(JSURandomInputStream* p_stream, u32 param_1, JKRArchiv
 void J2DPane::setAnimation(J2DAnmBase* p_anm) {
     if (p_anm != NULL) {
         switch (p_anm->getKind()) {
-        default:
-            break;
         case KIND_TRANSFORM:
             setAnimation(static_cast<J2DAnmTransform*>(p_anm));
             break;
@@ -776,6 +778,9 @@ void J2DPane::setAnimation(J2DAnmBase* p_anm) {
         case KIND_TEV_REG:
             setAnimation(static_cast<J2DAnmTevRegKey*>(p_anm));
             break;
+        default:
+            OS_REPORT("J2DPane: this is not a J3D Binary.\n");
+            break;
         }
     }
 }
@@ -790,11 +795,9 @@ void J2DPane::animationTransform() {
 }
 
 void J2DPane::clearAnmTransform() {
-    J2DAnmTransform* none = NULL;
-    setAnimation(none);
+    setAnimation((J2DAnmTransform*)NULL);
 
-    JSUTreeIterator<J2DPane> iter;
-    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
         iter.getObject()->clearAnmTransform();
     }
 }
@@ -804,8 +807,7 @@ const J2DAnmTransform* J2DPane::animationTransform(const J2DAnmTransform* p_tran
     if (mTransform != NULL)
         p = mTransform;
 
-    JSUTreeIterator<J2DPane> iter;
-    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
         iter.getObject()->animationTransform(p);
     }
 
@@ -816,8 +818,7 @@ const J2DAnmTransform* J2DPane::animationTransform(const J2DAnmTransform* p_tran
 void J2DPane::setVisibileAnimation(J2DAnmVisibilityFull* p_visibility) {
     setAnimationVF(p_visibility);
 
-    JSUTreeIterator<J2DPane> iter;
-    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
         iter.getObject()->setVisibileAnimation(p_visibility);
     }
 }
@@ -825,8 +826,7 @@ void J2DPane::setVisibileAnimation(J2DAnmVisibilityFull* p_visibility) {
 void J2DPane::setVtxColorAnimation(J2DAnmVtxColor* p_vtxColor) {
     setAnimationVC(p_vtxColor);
 
-    JSUTreeIterator<J2DPane> iter;
-    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
         iter.getObject()->setVtxColorAnimation(p_vtxColor);
     }
 }
@@ -836,8 +836,7 @@ const J2DAnmTransform* J2DPane::animationPane(const J2DAnmTransform* p_transform
     if (mTransform != NULL)
         p = mTransform;
 
-    JSUTreeIterator<J2DPane> iter;
-    for (iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
+    for (JSUTreeIterator<J2DPane> iter = mPaneTree.getFirstChild(); iter != mPaneTree.getEndChild(); ++iter) {
         iter.getObject()->animationPane(p);
     }
 
@@ -860,42 +859,9 @@ void J2DPane::updateTransform(J2DAnmTransform const* p_anmTransform) {
     }
 }
 
-void J2DPane::drawSelf(f32, f32, f32 (*)[3][4]) {
-    /* empty function */
-}
-
-void J2DPane::rewriteAlpha() {
-    /* empty function */
-}
-
-void J2DPane::setAnimationVF(J2DAnmVisibilityFull* p_visibility) {
-    setAnimation(p_visibility);
-}
-
-void J2DPane::setAnimationVC(J2DAnmVtxColor* p_vtxColor) {
-    setAnimation(p_vtxColor);
-}
-
-void J2DPane::setCullBack(bool cull) {
-    GXCullMode mode;
-
-    if (!cull)
-        mode = GX_CULL_NONE;
-    else
-        mode = GX_CULL_BACK;
-
-    setCullBack(mode);
-}
-
-bool J2DPane::setConnectParent(bool connected) {
-    mConnected = false;
-    return false;
-}
-
-void J2DPane::update() {
-    /* empty function */
-}
-
-void J2DPane::drawSelf(f32, f32) {
-    /* empty function */
+static void dummy(J2DPane* pane) {
+    pane->drawSelf(0.0f, 0.0f);
+    pane->update();
+    pane->setConnectParent(false);
+    pane->setCullBack(false);
 }

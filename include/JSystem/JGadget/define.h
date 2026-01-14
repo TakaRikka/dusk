@@ -55,9 +55,9 @@ private:
         JGadget_outMessage out(JGadget_outMessage::warning, __FILE__, line);  \
         out << msg << (arg1) << (arg2) << (arg3) << (arg4);
 
-#define JGADGET_EXITWARN(cond)                                                                     \
-    if (!(cond)) {                                                                                 \
-        false;                                                                                     \
+#define JGADGET_EXITWARN(line, COND)                                                               \
+    if (!(COND)) {                                                                                 \
+        JGadget_outMessage(JGadget_outMessage::warning, __FILE__, line) << #COND, false;           \
         return false;                                                                              \
     }
 #else
@@ -65,6 +65,7 @@ private:
 #define JGADGET_WARNMSG(line, msg) (void)0
 #define JGADGET_WARNMSG1(line, msg, arg) (void)0
 #define JGADGET_WARNMSG4(line, msg, arg1, arg2, arg3, arg4) (void)0
+#define JGADGET_EXITWARN(line, COND) (void)0
 #endif
 }
 #endif

@@ -2,7 +2,7 @@
 #include <cstdio>
 #include "ansi_fp.h"
 #include <locale>
-#include <ctype>
+#include <cctype>
 #include "float.h"
 #include <cmath>
 #include <climits>

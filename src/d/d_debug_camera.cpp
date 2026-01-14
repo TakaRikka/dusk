@@ -519,26 +519,27 @@ int dDbgCamera_c::moveTool() {
             mKeys[field_0x58] = PlaneKey();
         }
 
-        mRunKey.mCenter = mKeys[field_0x58].mCenter;
+        mRunKey = mKeys[field_0x58];
         break;
     }
 
+    cXyz* sp30;
+    fopAc_ac_c* player;
+
     if (mCmdMode == 3) {
-        fopAc_ac_c* sp2C = dComIfGp_getPlayer(0);
-        /* if (this->unk730 != 0x3E7) {
-            &field_0x704 = &sp2C->unk558
-            this->unk730 = 0x3E7;
+        player = dComIfGp_getPlayer(0);
+        if (*(int*)&field_0x704.field_0x10[2].y != 999) {
+            *(cXyz*)&field_0x704.field_0x0 = player->attention_info.position;
+            *(int*)&field_0x704.field_0x10[2].y = 999;
         } else {
-            (sp15C, (Vec* ) &sp2C->unk558);
-            &mRunKey.mCenter += sp15C
-            &field_0x704 = &sp2C->unk558
-        } */
+            mRunKey.mCenter += player->attention_info.position - *(cXyz*)&field_0x704.field_0x0;
+            *(cXyz*)&field_0x704.field_0x0 = player->attention_info.position;
+        }
     } else {
-        // this->unk730 = 3;
+        *(int*)&field_0x704.field_0x10[2].y = 3;
     }
 
     cXyz* var_r28;
-    cXyz* sp30;
     f32 temp_f31;
     f32 var_f30;
     f32 var_f29;
@@ -634,11 +635,9 @@ int dDbgCamera_c::moveTool() {
         mRunKey.mBank -= cDegree(mCamSetup.FovyTick()) * 0.1f;
         break;
     case 8:
-        s16 temp_r26 = mCamSetup.Rotate(var_f29 * (stick_x * field_0xc14));
-        field_0x44.U(field_0x44.U() + temp_r26);
-
-        temp_r26 = mCamSetup.Rotate(var_f29 * (stick_y * field_0xc14));
-        field_0x44.V(field_0x44.V() + temp_r26);
+        field_0x44.U(field_0x44.U() + mCamSetup.Rotate(var_f29 * (stick_x * field_0xc14)));
+        field_0x44.V(field_0x44.V() + mCamSetup.Rotate(var_f29 * (stick_y * field_0xc14)));
+        break;
     }
 
     if (sp8 != 0) {
@@ -1697,11 +1696,14 @@ int dDbgCamera_c::DrawShape() {
 
     if (mCamSetup.CheckFlag(0x10)) {
         switch (mLchkNum) {
-        case 2:
-            // dComIfG_Bgsp().DrawPoly(mLchk[1], l_color2);
+        case 2: {
+            static GXColor l_color2 = {0xC0, 0x78, 0x0, 0x80};
+            dComIfG_Bgsp().DrawPoly(mLchk[1], l_color2);
             /* fallthrough */
+        }
         case 1:
-            // dComIfG_Bgsp().DrawPoly(mLchk[0], l_color1);
+             static GXColor l_color1 = {0xC0, 0x78, 0x78, 0x80};
+            dComIfG_Bgsp().DrawPoly(mLchk[0], l_color1);
             break;
         }
     }

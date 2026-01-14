@@ -5,6 +5,35 @@
 #include "d/actor/d_a_npc.h"
 #include "d/d_shop_system.h"
 
+struct daNpc_Maro_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+    /* 0x8C */ s16 field_0x8c;
+};
+
+class daNpc_Maro_Param_c {
+public:
+    virtual ~daNpc_Maro_Param_c() {}
+
+    static const daNpc_Maro_HIOParam m;
+};
+
+#if DEBUG
+class daNpc_Maro_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Maro_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Maro_HIOParam m;
+};
+
+#define NPC_MARO_HIO_CLASS daNpc_Maro_HIO_c
+#else
+#define NPC_MARO_HIO_CLASS daNpc_Maro_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_Maro_c
@@ -153,7 +182,7 @@ public:
     }
 
 private:
-    /* 0x0F7C */ int field_0xf7c;
+    /* 0x0F7C */ NPC_MARO_HIO_CLASS* mpHIO;
     /* 0x0F80 */ dCcD_Cyl mCyl1;
     /* 0x10BC */ int field_0x10bc;
     /* 0x10C0 */ u8 mType;
@@ -178,18 +207,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_Maro_c) == 0x1140);
-
-struct daNpc_Maro_HIOParam {
-    /* 0x00 */ daNpcT_HIOParam common;
-    /* 0x8C */ u32 field_0x8c;
-};
-
-class daNpc_Maro_Param_c {
-public:
-    virtual ~daNpc_Maro_Param_c() {}
-
-    static const daNpc_Maro_HIOParam m;
-};
-
 
 #endif /* D_A_NPC_MARO_H */

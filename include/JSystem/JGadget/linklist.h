@@ -10,88 +10,96 @@
 namespace JGadget {
 struct TLinkListNode {
     TLinkListNode() {
-        mNext = NULL;
-        mPrev = NULL;
+        pNext_ = NULL;
+        pPrev_ = NULL;
     }
 
     ~TLinkListNode() {}
 
-    TLinkListNode* getNext() const { return mNext; }
-    TLinkListNode* getPrev() const { return mPrev; }
+    TLinkListNode* getNext() const { return pNext_; }
+    TLinkListNode* getPrev() const { return pPrev_; }
+    void clear_() { pNext_ = NULL; pPrev_ = NULL; }
 
 public:
-    /* 0x0 */ TLinkListNode* mNext;
-    /* 0x4 */ TLinkListNode* mPrev;
+    /* 0x0 */ TLinkListNode* pNext_;
+    /* 0x4 */ TLinkListNode* pPrev_;
 };  // Size: 0x8
 
 struct TNodeLinkList {
-    struct iterator {
-        iterator() { node = NULL; }
-        explicit iterator(TLinkListNode* pNode) { node = pNode; }
-        iterator& operator=(const iterator& other) { node = other.node; return *this; }
+    struct iterator : public std::iterator<std::bidirectional_iterator_tag, TLinkListNode, s32, TLinkListNode*, TLinkListNode&> {
+        iterator() { p_ = NULL; }
+        explicit iterator(TLinkListNode* pNode) { p_ = pNode; }
+        iterator& operator=(const iterator& other) { p_ = other.p_; return *this; }
 
-        iterator& operator++() { node = node->getNext(); return *this; }
-        iterator& operator--() { node = node->getPrev(); return *this; }
+        iterator& operator++() { p_ = p_->getNext(); return *this; }
+        iterator& operator--() { p_ = p_->getPrev(); return *this; }
         iterator operator++(int) { const iterator old(*this); (void)++*this; return old; }
         iterator operator--(int) { const iterator old(*this); (void)--*this; return old; }
-        friend bool operator==(iterator a, iterator b) { return a.node == b.node; }
+        friend bool operator==(iterator a, iterator b) { return a.p_ == b.p_; }
         friend bool operator!=(iterator a, iterator b) { return !(a == b); }
 
-        TLinkListNode* operator->() const { return node; }
-        TLinkListNode& operator*() const { return *node; }
+        TLinkListNode* operator->() const { return p_; }
+        TLinkListNode& operator*() const {
+            JUT_ASSERT(196, p_!=NULL);
+            return *p_;
+        }
 
     public:
-        /* 0x00 */ TLinkListNode* node;
+        /* 0x00 */ TLinkListNode* p_;
     };
 
     struct const_iterator {
-        explicit const_iterator(TLinkListNode* pNode) { node = pNode; }
-        explicit const_iterator(iterator it) { node = it.node; }
+        explicit const_iterator(const TLinkListNode* pNode) { p_ = pNode; }
+        explicit const_iterator(const iterator it) { p_ = it.p_; }
 
-        const_iterator& operator++() { node = node->getNext(); return *this; }
-        const_iterator& operator--() { node = node->getPrev(); return *this; }
+        const_iterator& operator++() { p_ = p_->getNext(); return *this; }
+        const_iterator& operator--() { p_ = p_->getPrev(); return *this; }
         const_iterator operator++(int) { const const_iterator old(*this); (void)++*this; return old; }
         const_iterator operator--(int) { const const_iterator old(*this); (void)--*this; return old; }
-        friend bool operator==(const_iterator a, const_iterator b) { return a.node == b.node; }
+        friend bool operator==(const_iterator a, const_iterator b) { return a.p_ == b.p_; }
         friend bool operator!=(const_iterator a, const_iterator b) { return !(a == b); }
 
-        friend bool operator==(const_iterator a, iterator b) { return a.node == b.node; }
+        friend bool operator==(const_iterator a, iterator b) { return a.p_ == b.p_; }
         friend bool operator!=(const_iterator a, iterator b) { return !(a == b); }
 
-        const TLinkListNode* operator->() const { return node; }
-        const TLinkListNode& operator*() const { return *node; }
+        const TLinkListNode* operator->() const { return p_; }
+        const TLinkListNode& operator*() const { return *p_; }
 
     public:
-        /* 0x00 */ TLinkListNode* node;
+        /* 0x00 */ const TLinkListNode* p_;
     };
 
-    TNodeLinkList() : ocObject_() { Initialize_(); }
+    TNodeLinkList() : oNode_() { Initialize_(); }
     ~TNodeLinkList();
 
     void Initialize_() {
         count = 0;
-        ocObject_.mNext = &ocObject_;
-        ocObject_.mPrev = &ocObject_;
+        oNode_.pNext_ = &oNode_;
+        oNode_.pPrev_ = &oNode_;
     }
 
-    iterator begin() { return iterator(ocObject_.getNext()); }
-    const_iterator begin() const { return const_iterator(ocObject_.getNext()); }
-    iterator end() { return iterator(&ocObject_); }
-    const_iterator end() const { return const_iterator((TLinkListNode*)(&ocObject_)); }
+    iterator begin() { return iterator(oNode_.getNext()); }
+    const_iterator begin() const { return const_iterator(oNode_.getNext()); }
+    iterator end() { return iterator(&oNode_); }
+    const_iterator end() const { return const_iterator((TLinkListNode*)(&oNode_)); }
     u32 size() const { return count; }
     bool empty() const { return size() == 0; }
     iterator pop_front() { return erase(begin()); }
+    void clear() { erase(begin(), end()); }
 
-    iterator erase(JGadget::TNodeLinkList::iterator, JGadget::TNodeLinkList::iterator);
-    iterator erase(JGadget::TNodeLinkList::iterator);
-    void splice(JGadget::TNodeLinkList::iterator, JGadget::TNodeLinkList&,
-                JGadget::TNodeLinkList::iterator);
-    iterator Find(const JGadget::TLinkListNode*);
-    iterator Insert(JGadget::TNodeLinkList::iterator, JGadget::TLinkListNode*);
-    iterator Erase(JGadget::TLinkListNode*);
-    void Remove(JGadget::TLinkListNode*);
+    iterator erase(iterator, iterator);
+    iterator erase(iterator);
+    void splice(iterator, TNodeLinkList&);
+    void splice(iterator, TNodeLinkList&, iterator);
+    void splice(iterator, TNodeLinkList&, iterator, iterator);
+    iterator Find(const TLinkListNode*);
+    iterator Insert(iterator, TLinkListNode*);
+    iterator Erase(TLinkListNode*);
+    void Remove(TLinkListNode*);
+    bool Confirm() const;
+    bool Confirm_iterator(const_iterator) const;
 
-    bool Iterator_isEnd_(const_iterator it) const { return it.node == &ocObject_; }
+    bool Iterator_isEnd_(const_iterator it) const { return it.p_ == &oNode_; }
     template <typename Predicate>
     void Remove_if(Predicate predicate, TNodeLinkList& tList) {
         iterator it = begin();
@@ -115,7 +123,7 @@ struct TNodeLinkList {
 
 public:
     /* 0x00 */ u32 count;
-    /* 0x04 */ TLinkListNode ocObject_;
+    /* 0x04 */ TLinkListNode oNode_;
 };  // Size: 0xC
 
 template <typename T, int I>
@@ -130,7 +138,7 @@ struct TLinkList : TNodeLinkList {
             //TODO: Probably fakematch? Not sure what's going on here exactly
             (TIterator<std::bidirectional_iterator_tag, T, s32, T*, T&>&)*this =
                 (const TIterator<std::bidirectional_iterator_tag, T, s32, T*, T&>&)rhs;
-            this->node = rhs.node;
+            this->p_ = rhs.p_;
             return *this;
         }
 

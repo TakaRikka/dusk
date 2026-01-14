@@ -196,17 +196,7 @@ daNpc_Kolinb_c::cutFunc daNpc_Kolinb_c::mCutList[7] = {
     &daNpc_Kolinb_c::cutThankYou
 };
 
-daNpc_Kolinb_c::~daNpc_Kolinb_c() {
-    if (mpMorf[0] != NULL) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    if (mpBgW != NULL) {
-        dComIfG_Bgsp().Release(mpBgW);
-    }
-
-    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
-}
+static NPC_KOLINB_HIO_CLASS l_HIO;
 
 daNpc_Kolinb_HIOParam const daNpc_Kolinb_Param_c::m = {
     100.0f,
@@ -252,6 +242,38 @@ daNpc_Kolinb_HIOParam const daNpc_Kolinb_Param_c::m = {
     0.0f,
 };
 
+#if DEBUG
+daNpc_Kolinb_HIO_c::daNpc_Kolinb_HIO_c() {
+    m = daNpc_Kolinb_Param_c::m;
+}
+
+void daNpc_Kolinb_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Kolinb_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_Kolinb_c::~daNpc_Kolinb_c() {
+    if (mpMorf[0] != NULL) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+    if (mpBgW != NULL) {
+        dComIfG_Bgsp().Release(mpBgW);
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+}
+
 cPhs__Step daNpc_Kolinb_c::create() {
     daNpcT_ct(this, daNpc_Kolinb_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4, l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -289,11 +311,16 @@ cPhs__Step daNpc_Kolinb_c::create() {
 
         mSound.init(&current.pos, &eyePos, 3, 1);
 
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("寝床コリン");
+#endif
+
         reset();
 
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this),
                   fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Kolinb_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         
         field_0xe44.Set(mCcDCyl);
         field_0xe44.SetStts(&mCcStts);
@@ -461,27 +488,27 @@ void daNpc_Kolinb_c::setParam() {
     selectAction();
     srchActors();
 
-    s16 talk_distance = daNpc_Kolinb_Param_c::m.common.talk_distance;
-    s16 talk_angle = daNpc_Kolinb_Param_c::m.common.talk_angle;
-    s16 attention_distance = daNpc_Kolinb_Param_c::m.common.attention_distance;
-    s16 attention_angle = daNpc_Kolinb_Param_c::m.common.attention_angle;
+    s16 talk_distance = mpHIO->m.common.talk_distance;
+    s16 talk_angle = mpHIO->m.common.talk_angle;
+    s16 attention_distance = mpHIO->m.common.attention_distance;
+    s16 attention_angle = mpHIO->m.common.attention_angle;
     attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(attention_distance, attention_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
     attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(talk_distance, talk_angle);
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
 
-    scale.set(daNpc_Kolinb_Param_c::m.common.scale, daNpc_Kolinb_Param_c::m.common.scale, daNpc_Kolinb_Param_c::m.common.scale);
-    mCcStts.SetWeight(daNpc_Kolinb_Param_c::m.common.weight);
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
 
-    mCylH = daNpc_Kolinb_Param_c::m.common.height;
-    mWallR = daNpc_Kolinb_Param_c::m.common.width;
-    mAttnFovY = daNpc_Kolinb_Param_c::m.common.fov;
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Kolinb_Param_c::m.common.knee_length);
-    mRealShadowSize = daNpc_Kolinb_Param_c::m.common.real_shadow_size;
-    mExpressionMorfFrame = daNpc_Kolinb_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Kolinb_Param_c::m.common.morf_frame;
-    gravity = daNpc_Kolinb_Param_c::m.common.gravity;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_Kolinb_c::checkChangeEvt() {
@@ -568,7 +595,7 @@ void daNpc_Kolinb_c::setAttnPos() {
     mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(getHeadJointNo()));
     mDoMtx_stack_c::multVec(&work, &eyePos);
     work.set(100.0f, 0.0f, 0.0f);
-    work.y = daNpc_Kolinb_Param_c::m.common.attention_offset;
+    work.y = mpHIO->m.common.attention_offset;
     mDoMtx_stack_c::YrotS(mCurAngle.y);
     mDoMtx_stack_c::multVec(&work, &work);
     attention_info.position = current.pos + work;
@@ -591,7 +618,7 @@ int daNpc_Kolinb_c::selectAction() {
     mNextAction = NULL;
 
 #if DEBUG
-    if (daNpc_Kolinb_Param_c::m.common.debug_mode_ON) {
+    if (mpHIO->m.common.debug_mode_ON) {
         mNextAction = &daNpc_Kolinb_c::test;
         return 1;
     }
@@ -906,8 +933,6 @@ static int daNpc_Kolinb_Draw(void* a_this) {
 static int daNpc_Kolinb_IsDelete(void* a_this) {
     return 1;
 }
-
-static daNpc_Kolinb_Param_c l_HIO;
 
 static actor_method_class daNpc_Kolinb_MethodTable = {
     (process_method_func)daNpc_Kolinb_Create,

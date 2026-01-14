@@ -4,6 +4,35 @@
 #include "d/actor/d_a_npc.h"
 #include "d/actor/d_a_startAndGoal.h"
 
+struct daNpc_Hoz_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+    /* 0x8C */ f32 field_0x8c;
+};
+
+class daNpc_Hoz_Param_c {
+public:
+    virtual ~daNpc_Hoz_Param_c() {}
+
+    static const daNpc_Hoz_HIOParam m;
+};
+
+#if DEBUG
+class daNpc_Hoz_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Hoz_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Hoz_HIOParam m;
+};
+
+#define NPC_HOZ_HIO_CLASS daNpc_Hoz_HIO_c
+#else
+#define NPC_HOZ_HIO_CLASS daNpc_Hoz_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_Hoz_c
@@ -100,7 +129,7 @@ public:
     static cutFunc mCutList[];
 
 private:
-    /* 0xE40 */ int field_0xE40;
+    /* 0xE40 */ NPC_HOZ_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;
     /* 0xF84 */ daStartAndGoal_c* field_0xf84;
@@ -121,17 +150,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_Hoz_c) == 0xFC8);
-
-struct daNpc_Hoz_HIOParam {
-    /* 0x00 */ daNpcT_HIOParam common;
-    /* 0x8C */ f32 field_0x8c;
-};
-
-class daNpc_Hoz_Param_c {
-public:
-    virtual ~daNpc_Hoz_Param_c() {}
-
-    static const daNpc_Hoz_HIOParam m;
-};
 
 #endif /* D_A_NPC_HOZ_H */

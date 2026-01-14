@@ -14,7 +14,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-daObj_Kago_Param_c::Data const daObj_Kago_Param_c::m = {
+daObj_Kago_HIOParam const daObj_Kago_Param_c::m = {
     0.0f,
     -5.0f,
     1.0f,
@@ -61,11 +61,33 @@ static dCcD_SrcCyl l_ccDCyl = {
     }
 };
 
+static OBJ_KAGO_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObj_Kago_HIO_c::daObj_Kago_HIO_c() {
+    m = daObj_Kago_Param_c::m;
+}
+
+void daObj_Kago_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_Kago_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daObj_Kago_c::~daObj_Kago_c() {
     OS_REPORT("|%06d:%x|daObj_Kago_c -> デストラクト\n", g_Counter.mCounter0, this);
     if (mType == 0 && daNpcT_chkTmpBit(7)) {
         daNpcT_onEvtBit(0x92);
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
 
     dComIfG_resDelete(&mPhase, l_resNameList[l_bmdData[0][1]]);
 }
@@ -94,6 +116,12 @@ cPhs__Step daObj_Kago_c::create() {
 
         fopAcM_SetMtx(this, field_0x574->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -100.0f, -50.0f, -100.0f, 100.0f, 100.0f, 100.0f);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ウ－リのかご");
+#endif
+
         reset();
 
         if (mType == 0) {
@@ -101,11 +129,11 @@ cPhs__Step daObj_Kago_c::create() {
             health = 1;
         }
 
-        mAcchCir.SetWall(daObj_Kago_Param_c::m.mWallH, daObj_Kago_Param_c::m.mWallR);
+        mAcchCir.SetWall(mpHIO->m.mWallH, mpHIO->m.mWallR);
         mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), 
                   fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mStts.Init(daObj_Kago_Param_c::m.mWeight, 0, this);
-        
+        mStts.Init(mpHIO->m.mWeight, 0, this);
+
         field_0x808[0].Set(l_ccDCyl);
         field_0x808[0].SetStts(&mStts);
         field_0x808[1].Set(l_ccDCyl);
@@ -154,26 +182,26 @@ int daObj_Kago_c::Delete() {
 int daObj_Kago_c::Execute() {
     int iVar1 = 0;
     f32 fVar1;
-    f32 reg_f30 = daObj_Kago_Param_c::m.field_0x28;
+    f32 reg_f30 = mpHIO->m.field_0x28;
     s16 sp_0xc = 0;
     s16 sVar2 = 0;
     int iVar3;
     s16 sp_0x8;
 
-    scale.set(daObj_Kago_Param_c::m.field_0x08 * field_0xb0c, daObj_Kago_Param_c::m.field_0x08 * field_0xb0c, daObj_Kago_Param_c::m.field_0x08 * field_0xb0c);
+    scale.set(mpHIO->m.field_0x08 * field_0xb0c, mpHIO->m.field_0x08 * field_0xb0c, mpHIO->m.field_0x08 * field_0xb0c);
     attention_info.flags = 0;
     fopAcM_OffCarryType(this, fopAcM_CARRY_CHICKEN);
     attention_info.distances[4] = 13;
 
     if (mType == 0) {
-        mStts.SetWeight(daObj_Kago_Param_c::m.mWeight);
-        mAcchCir.SetWall(daObj_Kago_Param_c::m.mWallH, 50.0f);
+        mStts.SetWeight(mpHIO->m.mWeight);
+        mAcchCir.SetWall(mpHIO->m.mWallH, 50.0f);
     } else {
         mStts.SetWeight(0xFF);
-        mAcchCir.SetWall(daObj_Kago_Param_c::m.mWallH, daObj_Kago_Param_c::m.mWallR);
+        mAcchCir.SetWall(mpHIO->m.mWallH, mpHIO->m.mWallR);
     }
 
-    gravity = daObj_Kago_Param_c::m.mGravity;
+    gravity = mpHIO->m.mGravity;
     iVar1 = 0;
     if ((fopAcM_checkCarryNow(this) != 0 || fopAcM_checkHawkCarryNow(this) != 0) || field_0xba2 != 0) {
         iVar1 = 1;
@@ -218,7 +246,7 @@ int daObj_Kago_c::Execute() {
         mObjAcch.ClrGrndNone();
 
         if (field_0xba0 != 0 && cM3d_IsZero(speedF) == 0) {
-            popup(daObj_Kago_Param_c::m.field_0x20, daObj_Kago_Param_c::m.field_0x24, NULL);
+            popup(mpHIO->m.field_0x20, mpHIO->m.field_0x24, NULL);
             if (fopAcM_carryOffRevise(this) != 0) {
                 speed.setall(0.0f);
             }
@@ -454,8 +482,8 @@ int daObj_Kago_c::Execute() {
             dComIfG_Ccsp()->Set(&field_0x808[1]);
         } else {
             field_0x808[0].ClrCoHit();
-            field_0x808[0].SetR(daObj_Kago_Param_c::m.mWallR);
-            field_0x808[0].SetH(daObj_Kago_Param_c::m.field_0x14);
+            field_0x808[0].SetR(mpHIO->m.mWallR);
+            field_0x808[0].SetH(mpHIO->m.field_0x14);
             field_0x808[0].SetC(current.pos);
             dComIfG_Ccsp()->Set(&field_0x808[0]);
         }
@@ -486,7 +514,7 @@ int daObj_Kago_c::Draw() {
             model = field_0x574;
         } else if (mGroundH != -G_CM3D_F_INF) {
             field_0xb78 = dComIfGd_setShadow(field_0xb78, 1, field_0x574, &current.pos,
-                                             daObj_Kago_Param_c::m.field_0x0c, 20.0f,
+                                             mpHIO->m.field_0x0c, 20.0f,
                                              current.pos.y, mGroundH, field_0x7cc, &tevStr,
                                              0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
         }
@@ -577,8 +605,6 @@ int daObj_Kago_c::getWallAngle(s16 param_1, s16* param_2) {
     *param_2 = cM_atan2s(sp5c.x, sp5c.z) + 0x4000;
     return 1;
 }
-
-static daObj_Kago_Param_c l_HIO;
 
 void daObj_Kago_c::setGoalPosAndAngle() {
     static cXyz pos(1593.0f, 659.0f, -334.0f);

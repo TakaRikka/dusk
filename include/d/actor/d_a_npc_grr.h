@@ -3,25 +3,8 @@
 
 #include "d/actor/d_a_npc4.h"
 
-/**
- * @ingroup actors-npcs
- * @class daNpc_grR_c
- * @brief Gor Liggs
- *
- * @details
- *
-*/
-
 struct daNpc_grR_HIOParam {
     /* 0x0 */ daNpcF_HIOParam common;
-};
-
-class daNpc_grR_HIO_c
-#if DEBUG
-: public mDoHIO_entry_c
-#endif
-{
-    /* 0x8 */ daNpc_grR_HIOParam param;
 };
 
 class daNpc_grR_Param_c {
@@ -31,6 +14,31 @@ public:
     static daNpc_grR_HIOParam const m;
 };
 
+#if DEBUG
+class daNpc_grR_HIO_c : public mDoHIO_entry_c {
+public:
+    /* 0x8 */ daNpc_grR_HIOParam m;
+
+    daNpc_grR_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent* event);
+
+    void genMessage(JORMContext* ctx);
+};
+
+#define NPC_GRR_HIO_CLASS daNpc_grR_HIO_c
+#else
+#define NPC_GRR_HIO_CLASS daNpc_grR_Param_c
+#endif
+
+/**
+ * @ingroup actors-npcs
+ * @class daNpc_grR_c
+ * @brief Gor Liggs
+ *
+ * @details
+ *
+*/
 class daNpc_grR_c : public daNpcF_c {
 public:
     typedef int (daNpc_grR_c::*cutFunc)(int);
@@ -83,7 +91,7 @@ private:
     /* 0xBD8 */ daNpcF_MatAnm_c* mpMatAnm;
     /* 0xBDC */ daNpcF_Lookat_c mLookat;
     /* 0xC78 */ daNpcF_ActorMngr_c mActorMngr[2];
-    /* 0xC88 */ daNpc_grR_HIO_c* mHIO;
+    /* 0xC88 */ NPC_GRR_HIO_CLASS* mpHIO;
     /* 0xC8C */ dCcD_Cyl mCyl;
     /* 0xDC8 */ actionFunc mNextAction;
     /* 0xDD4 */ actionFunc mAction;

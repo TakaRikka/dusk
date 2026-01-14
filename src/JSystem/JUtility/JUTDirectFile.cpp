@@ -3,7 +3,7 @@
 #include "JSystem/JUtility/JUTDirectFile.h"
 #include <dolphin/os.h>
 #include "global.h"
-#include <stdint>
+#include <stdint.h>
 
 int JUTDirectFile::fetch32byte() {
 	mToRead = mLength - ALIGN_PREV(mPos, DVD_MIN_TRANSFER_SIZE);

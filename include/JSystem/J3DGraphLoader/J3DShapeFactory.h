@@ -66,7 +66,7 @@ struct J3DShapeFactory {
     /* 0x18 */ J3DShapeDrawInitData* mDrawInitData;
     /* 0x1C */ u8* mVcdVatCmdBuffer;
 
-    u32 getMtxGroupNum(int no) const { return mShapeInitData[mIndexTable[no]].mMtxGroupNum; }
+    u16 getMtxGroupNum(int no) const { return mShapeInitData[mIndexTable[no]].mMtxGroupNum; }
     GXVtxDescList* getVtxDescList(int no) const { return (GXVtxDescList*)((u8*)mVtxDescList + mShapeInitData[mIndexTable[no]].mVtxDescListIndex); }
     f32 getRadius(int no) const { return mShapeInitData[mIndexTable[no]].mRadius; }
     Vec& getMin(int no) const { return mShapeInitData[mIndexTable[no]].mMin; }

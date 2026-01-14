@@ -10,39 +10,49 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s.h"
-#include "d/d_bg_w.h"
 #include "f_op/f_op_actor_mng.h"
 
 namespace daObjLadder {
 namespace {
-struct Attr {
-    /* 0x00 */ f32 field_0x00;
-    /* 0x04 */ f32 field_0x04;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0c;
-    /* 0x10 */ u8 field_0x10;
-    /* 0x11 */ u8 field_0x11;
-    /* 0x12 */ u8 field_0x12;
-    /* 0x13 */ u8 field_0x13;
-    /* 0x14 */ u8 field_0x14;
-    /* 0x16 */ s16 field_0x16;
-    /* 0x18 */ s16 field_0x18;
-    /* 0x1A */ s16 vibrationTimer;
-    /* 0x1C */ f32 field_0x1c;
-    /* 0x20 */ f32 field_0x20;
+struct Attr_c {
+    /* 0x00 */ f32 gravity;
+    /* 0x04 */ f32 viscous_resistance;
+    /* 0x08 */ f32 inertia_resistance;
+    /* 0x0C */ f32 reflectance;
+    /* 0x10 */ u8 num_of_bounces;
+    /* 0x11 */ u8 bound_vol_0;
+    /* 0x12 */ u8 bound_vol_1;
+    /* 0x13 */ u8 bound_vol_2;
+    /* 0x14 */ u8 bound_vol_3;
+    /* 0x16 */ s16 vibration_speed_x;
+    /* 0x18 */ s16 vibration_speed_y;
+    /* 0x1A */ s16 vibration_timer;
+    /* 0x1C */ f32 vibration_amp_x;
+    /* 0x20 */ f32 vibration_amp_y;
 };
 
-static Attr const L_attr = {
-    -3.0f, 0.005f, 0.0005f,
-    0.5f, 0x03, 0x4B, 0x32, 0x2D, 0x28, 0x4E20,
-    0x3CC3, 0x0F, 2.0f, 1.0f,
+static Attr_c const L_attr = {
+    -3.0f,
+    0.005f,
+    0.0005f,
+    0.5f,
+    //
+    3,
+    75,
+    50,
+    45,
+    40,
+    //
+    20000,
+    15555,
+    15,
+    2.0f,
+    1.0f,
 };
 
-inline static const Attr& attr() {
+inline static const Attr_c& attr() {
     return L_attr;
 }
-
-char const Act_c::M_arcname[5] = "Mhsg";
 
 struct AttrType {
     /* 0x0 */ s16 field_0x0;
@@ -59,9 +69,109 @@ static AttrType L_attr_type[6] = {
     { 0x06, 0x0E, 300.0f},
 };
 
-static inline const AttrType& attr_type(Act_c::Type_e type) {
+static inline const AttrType& attr_type(Type_e type) {
     return L_attr_type[type];
 }
+
+#if DEBUG
+class Hio_c : public JORReflexible {
+public:
+    Hio_c();
+    virtual ~Hio_c() {}
+
+    void default_set();
+    void ct();
+    void dt();
+    void listenPropertyEvent(const JORPropertyEvent*);
+    void genMessage(JORMContext*);
+
+    Attr_c attr;
+    int mCount;
+    bool field_0x2c;
+    bool field_0x2d;
+};
+
+Hio_c::Hio_c() {
+    mCount = 0;
+    field_0x2c = false;
+    field_0x2d = false;
+    default_set();
+}
+
+void Hio_c::default_set() {
+    attr = L_attr;
+}
+
+void Hio_c::ct() {
+    if (mCount++ == 0) {
+        // ladder
+        daObj::HioVarious_c::init(this, "はしご");
+    }
+}
+
+void Hio_c::dt() {
+    if (--mCount == 0) {
+        daObj::HioVarious_c::clean(this);
+    }
+}
+
+void Hio_c::genMessage(JORMContext* ctx) {
+    // ladder
+    ctx->genLabel("§ はしご  §\n", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // reset to initial position
+    ctx->genButton("初期位置に", 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    // attack
+    ctx->genButton("アタック", 2, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    // gravity
+    ctx->genSlider("重力", &attr.gravity, -30.0f, 0.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // viscous resistance
+    ctx->genSlider("粘性抵抗", &attr.viscous_resistance, 0.0f, 0.1f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // inertia resistance
+    ctx->genSlider("慣性抵抗", &attr.inertia_resistance, 0.0f, 0.1f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // reflectance
+    ctx->genSlider("反射率", &attr.reflectance, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    //
+    // number of bounces
+    ctx->genSlider("バウンド回数", &attr.num_of_bounces, 0, 10, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // Bound Vol_0, 1, 2, 3
+    ctx->genSlider("バウンド Vol_0", &attr.bound_vol_0, 0, 100, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("バウンド Vol_1", &attr.bound_vol_1, 0, 100, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("バウンド Vol_2", &attr.bound_vol_2, 0, 100, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("バウンド Vol_3", &attr.bound_vol_3, 0, 100, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    //
+    // vibration speed x, y
+    ctx->genSlider("vib 速度 x", &attr.vibration_speed_x, 0, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("vib 速度 y", &attr.vibration_speed_y, 0, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // vibration time
+    ctx->genSlider("vib 時間", &attr.vibration_timer, 0, 50, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    // vibration amplitude x, y
+    ctx->genSlider("vib 振幅 x", &attr.vibration_amp_x, 0.0f, 5.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("vib 振幅 y", &attr.vibration_amp_y, 0.0f, 5.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+}
+
+void Hio_c::listenPropertyEvent(const JORPropertyEvent* property) {
+    JORReflexible::listenPropertyEvent(property);
+
+    switch ((u32)property->id) {
+        case 1: {
+            field_0x2c = true;
+            break;
+        }
+
+        case 2: {
+            field_0x2d = true;
+            break;
+        }
+    }
+    // TODO.
+}
+
+Hio_c L_hio;
+#endif
+
+}
+
+char const Act_c::M_arcname[5] = "Mhsg";
 
 int Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr_type(mType).field_0x0);
@@ -94,7 +204,12 @@ int Act_c::Create() {
     } else {
         mode_wait_init();
     }
-    
+
+    if (mHeight <= -G_CM3D_F_INF) {
+        // "The ladder is falling <%s %d>\n"
+        OS_REPORT_ERROR("はしごは落ちる<%s %d>\n", "d_a_obj_ladder.cpp", 459);
+    }
+
     return 1;
 }
 
@@ -106,6 +221,9 @@ int Act_c::Mthd_Create() {
         phase_state = MoveBGCreate(M_arcname, attr_type(mType).field_0x2,
             dBgS_MoveBGProc_Trans, 0xcb0, NULL);
         JUT_ASSERT(486, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+#if DEBUG
+        L_hio.ct();
+#endif
     }
     return phase_state;
 }
@@ -115,6 +233,9 @@ int Act_c::Delete() {
 }
 
 int Act_c::Mthd_Delete() {
+#if DEBUG
+    L_hio.dt();
+#endif
     int rv = MoveBGDelete();
     dComIfG_resDelete(&mPhase, M_arcname);
     return rv;
@@ -161,17 +282,17 @@ void Act_c::mode_demoreq() {
 }
 
 void Act_c::mode_vib_init() {
-    mVibrationTimer = attr().vibrationTimer;
+    mVibrationTimer = attr().vibration_timer;
     field_0x610 = 0;
     field_0x612 = 0;
     mMode = MODE_VIB;
 }
 
 void Act_c::mode_vib() {
-    field_0x610 += attr().field_0x16;
-    field_0x612 += attr().field_0x18;
-    field_0x614 = cM_scos(field_0x610) * attr().field_0x1c;
-    field_0x618 = cM_scos(field_0x612) * attr().field_0x20;
+    field_0x610 += attr().vibration_speed_x;
+    field_0x612 += attr().vibration_speed_y;
+    field_0x614 = cM_scos(field_0x610) * attr().vibration_amp_x;
+    field_0x618 = cM_scos(field_0x612) * attr().vibration_amp_y;
     if (--mVibrationTimer <= 0) {
         mode_drop_init();
     }
@@ -180,27 +301,27 @@ void Act_c::mode_vib() {
 void Act_c::mode_drop_init() {
     gravity = -5.0f;
     speed.set(cXyz::Zero);
-    field_0x5b6 = attr().field_0x10;
+    field_0x5b6 = attr().num_of_bounces;
     mMode = MODE_DROP;
 }
 
 void Act_c::mode_drop() {
-    daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().field_0x04, attr().field_0x08);
+    daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().viscous_resistance, attr().inertia_resistance);
     if (current.pos.y < mHeight) {
-        if (field_0x5b6 == attr().field_0x10) {
+        if (field_0x5b6 == attr().num_of_bounces) {
             fopAcM_seStart(this, Z2SE_SY_DUMMY, dComIfG_Bgsp().GetMtrlSndId(mGndChk));
             dComIfGp_getVibration().StartShock(4, 0x1f, cXyz(0.0f, 1.0f, 0.0f));
         } else {
             int uVar7;
-            int iVar5 = attr().field_0x10 - field_0x5b6;
+            int iVar5 = attr().num_of_bounces - field_0x5b6;
             if (iVar5 == 1) {
-                uVar7 = attr().field_0x11;
+                uVar7 = attr().bound_vol_0;
             } else if (iVar5 == 2) {
-                uVar7 = attr().field_0x12;
+                uVar7 = attr().bound_vol_1;
             } else if (iVar5 == 3) {
-                uVar7 = attr().field_0x13;
+                uVar7 = attr().bound_vol_2;
             } else {
-                uVar7 = attr().field_0x14;
+                uVar7 = attr().bound_vol_3;
             }
             fopAcM_seStart(this, Z2SE_SY_DUMMY, uVar7);
         }
@@ -263,35 +384,36 @@ int Act_c::Draw() {
     return 1;
 }
 
-static int Mthd_Create(void* i_this) {
-    return ((Act_c*)i_this)->Mthd_Create();
+namespace {
+    static int Mthd_Create(void* i_this) {
+        return ((Act_c*)i_this)->Mthd_Create();
+    }
+
+    static int Mthd_Delete(void* i_this) {
+        return ((Act_c*)i_this)->Mthd_Delete();
+    }
+
+    static int Mthd_Execute(void* i_this) {
+        return ((Act_c*)i_this)->MoveBGExecute();
+    }
+
+    static int Mthd_Draw(void* i_this) {
+        return ((Act_c*)i_this)->MoveBGDraw();
+    }
+
+    static int Mthd_IsDelete(void* i_this) {
+        return ((Act_c*)i_this)->MoveBGIsDelete();
+    }
+
+    static actor_method_class Mthd_Table = {
+        (process_method_func)Mthd_Create, 
+        (process_method_func)Mthd_Delete, 
+        (process_method_func)Mthd_Execute, 
+        (process_method_func)Mthd_IsDelete,
+        (process_method_func)Mthd_Draw,
+    };
 }
 
-static int Mthd_Delete(void* i_this) {
-    return ((Act_c*)i_this)->Mthd_Delete();
-}
-
-static int Mthd_Execute(void* i_this) {
-    return ((Act_c*)i_this)->MoveBGExecute();
-}
-
-static int Mthd_Draw(void* i_this) {
-    return ((Act_c*)i_this)->MoveBGDraw();
-}
-
-static int Mthd_IsDelete(void* i_this) {
-    return ((Act_c*)i_this)->MoveBGIsDelete();
-}
-
-static actor_method_class Mthd_Table = {
-    (process_method_func)Mthd_Create, 
-    (process_method_func)Mthd_Delete, 
-    (process_method_func)Mthd_Execute, 
-    (process_method_func)Mthd_IsDelete,
-    (process_method_func)Mthd_Draw,
-};
-
-}
 }
 
 actor_process_profile_definition g_profile_Obj_Ladder = {

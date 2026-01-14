@@ -27,8 +27,33 @@ static s8 l_tileMoveData[21][4] = {
     0x02, 0x02, -0x1, 0x03, 0x05, 0x02, -0x1, 0x02, 0x04, 0x02, -0x1, 0x01, 0x03, 0x02,
 };
 
+static OBJ_SMTILE_HIO_CLASS l_HIO;
+
+daObj_SMTile_HIOParam const daObj_SMTile_Param_c::m = {600.0f, 20.0f};
+
+#if DEBUG
+daObj_SMTile_HIO_c::daObj_SMTile_HIO_c() {
+    m = daObj_SMTile_Param_c::m;
+}
+
+void daObj_SMTile_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_SMTile_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daObj_SMTile_c::~daObj_SMTile_c() {
     OS_REPORT("|%06d:%x|daObj_SMTile_c -> デストラクト\n", g_Counter.mCounter0, this);
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     dComIfG_resDelete(
         &mPhase,
         l_resNameList[l_bmdData[mType][1]]);
@@ -53,15 +78,17 @@ int daObj_SMTile_c::create() {
         if (fopAcM_entrySolidHeap(this, createHeapCallBack, 0x800) == 0) {
             return cPhs_ERROR_e;
         }
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("石像の間の光るタイル");
+#endif
+
         field_0xb2b = 1;
         Execute();
     }
     return rv;
 }
-
-f32 const daObj_SMTile_Param_c::m[2] = {
-    600.0f, 20.0f,
-};
 
 int daObj_SMTile_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(
@@ -191,8 +218,8 @@ void daObj_SMTile_c::setDstPos() {
         local_2c.x = l_tileMoveData[i][0];
         local_2c.z = l_tileMoveData[i][1];
         local_38 = local_2c;
-        local_38.x *= daObj_SMTile_Param_c::m[0];
-        local_38.z *= daObj_SMTile_Param_c::m[0];
+        local_38.x *= mpHIO->m.field_0x0;
+        local_38.z *= mpHIO->m.field_0x0;
         mDoMtx_stack_c::multVec(&local_38, &field_0x68c[i]);
         switch ((u8)l_tileMoveData[i][3]) {
         case 0:
@@ -209,8 +236,8 @@ void daObj_SMTile_c::setDstPos() {
             break;    
         }
 
-        local_2c.x *= daObj_SMTile_Param_c::m[0];
-        local_2c.z *= daObj_SMTile_Param_c::m[0];
+        local_2c.x *= mpHIO->m.field_0x0;
+        local_2c.z *= mpHIO->m.field_0x0;
         mDoMtx_stack_c::multVec(&local_2c, &field_0x590[i]);
     }
 }
@@ -225,7 +252,7 @@ void daObj_SMTile_c::setPrtcls(int param_1, int param_2) {
                     mDoAud_seStart(Z2SE_OBJ_SEKI_TILE_EMERGE, &field_0x788[i], 0, 0);
                 }
                 field_0x788[i] = current.pos + field_0x68c[i];
-                mParticleTimers[i] = daObj_SMTile_Param_c::m[1];
+                mParticleTimers[i] = mpHIO->m.field_0x4;
                 field_0xa28[i] = param_1;
             }
         }
@@ -254,21 +281,21 @@ void daObj_SMTile_c::touchPrtcls(f32 param_1) {
                 dComIfGp_particle_set(mParticleIds[i], id[field_0xa28[i]], &field_0x788[i], 0, 0);
             JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(mParticleIds[i]);
             if (emitter != NULL) {
-                f32 dVar6 = daObj_SMTile_Param_c::m[1] - mParticleTimers[i];
-                dVar6 /= daObj_SMTile_Param_c::m[1];
+                f32 dVar6 = mpHIO->m.field_0x4 - mParticleTimers[i];
+                dVar6 /= mpHIO->m.field_0x4;
                 local_3c.setall(0.0f);
                 switch ((u8)l_tileMoveData[i][3]) {
                 case 0:
-                    local_3c.z = daObj_SMTile_Param_c::m[0] * dVar6;
+                    local_3c.z = mpHIO->m.field_0x0 * dVar6;
                     break;
                 case 1:
-                    local_3c.x = daObj_SMTile_Param_c::m[0] * dVar6;
+                    local_3c.x = mpHIO->m.field_0x0 * dVar6;
                     break;
                 case 2:
-                    local_3c.x = daObj_SMTile_Param_c::m[0] * dVar6 * -1.0f;
+                    local_3c.x = mpHIO->m.field_0x0 * dVar6 * -1.0f;
                     break;
                 case 3:
-                    local_3c.z = daObj_SMTile_Param_c::m[0] * dVar6 * -1.0f;
+                    local_3c.z = mpHIO->m.field_0x0 * dVar6 * -1.0f;
                     break;
                 }
 
@@ -312,8 +339,6 @@ static int daObj_SMTile_Draw(void* i_this) {
 static int daObj_SMTile_IsDelete(void* i_this) {
     return 1;
 }
-
-static daObj_SMTile_Param_c l_HIO;
 
 static actor_method_class daObj_SMTile_MethodTable = {
     (process_method_func)daObj_SMTile_Create,

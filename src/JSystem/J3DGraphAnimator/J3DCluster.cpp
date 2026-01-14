@@ -252,6 +252,10 @@ void J3DDeformer::deform(J3DVertexBuffer* i_buffer, u16 param_1, f32* i_weights)
     }
 }
 
+static void dummy(J3DDeformData* data) {
+    data->getClusterNum();
+}
+
 void J3DDeformer::normalizeWeight(int i_keyNum, f32* i_weights) {
     f32 totalWeight = 0.0f;
     for (u16 i = 0; i < i_keyNum; i++) {

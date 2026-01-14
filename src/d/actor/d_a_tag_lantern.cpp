@@ -8,7 +8,29 @@
 #include "d/actor/d_a_tag_lantern.h"
 #include "d/d_procname.h"
 
-daTag_Lantern_c::~daTag_Lantern_c() {}
+static TAG_LANTERN_HIO_CLASS l_HIO;
+
+#if DEBUG
+daTag_Lantern_HIO_c::daTag_Lantern_HIO_c() {
+    m = daTag_Lantern_Param_c::m;
+}
+
+void daTag_Lantern_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daTag_Lantern_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daTag_Lantern_c::~daTag_Lantern_c() {
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+}
 
 int daTag_Lantern_c::create() {
     fopAcM_ct(this, daTag_Lantern_c);
@@ -99,8 +121,6 @@ static int daTag_Lantern_Draw(void* i_this) {
 static int daTag_Lantern_IsDelete(void* i_this) {
     return 1;
 }
-
-static daTag_Lantern_Param_c l_HIO;
 
 static actor_method_class daTag_Lantern_MethodTable = {
     (process_method_func)daTag_Lantern_Create,  (process_method_func)daTag_Lantern_Delete,

@@ -4,7 +4,7 @@
 #include "JSystem/JStudio/JStudio/jstudio-control.h"
 #include "global.h"
 #include <limits>
-#include <math>
+#include <cmath>
 
 typedef struct _GXColor GXColor;
 

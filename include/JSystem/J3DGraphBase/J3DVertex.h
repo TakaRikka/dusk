@@ -16,8 +16,10 @@ class J3DVertexBuffer;
 struct J3DVtxColorCalc {
     void calc(J3DModel*);
     virtual void calc(J3DVertexBuffer*);
+    virtual ~J3DVtxColorCalc() {}
 
-    /* 0x0 */ void* vtable;  // inlined vtable?
+    bool checkFlag(u32 flag) { return mFlags & flag ? true : false; }
+
     /* 0x4 */ u32 mFlags;
     /* 0x8 */ J3DAnmVtxColor* mpVtxColor;
 };
@@ -38,6 +40,7 @@ public:
     void* getVtxNBTArray() const { return mVtxNBTArray; }
     u32 getNrmNum() const { return mNrmNum; }
     u32 getVtxNum() const { return mVtxNum; }
+    u32 getColNum() const { return mColNum; }
     GXVtxAttrFmtList* getVtxAttrFmtList() const { return mVtxAttrFmtList; }
     u8 getVtxPosFrac() const { return mVtxPosFrac; }
     u8 getVtxNrmFrac() const { return mVtxNrmFrac; }
@@ -129,12 +132,22 @@ public:
         mVtxNrmArray[1] = temp;
     }
 
+    void swapVtxColArrayPointer() {
+        GXColor* temp = mVtxColArray[0];
+        mVtxColArray[0] = mVtxColArray[1];
+        mVtxColArray[1] = temp;
+    }
+
     void* getVtxPosArrayPointer(int index) {
         return mVtxPosArray[index];
     }
 
     void* getVtxNrmArrayPointer(int index) {
         return mVtxNrmArray[index];
+    }
+
+    GXColor* getVtxColArrayPointer(int index) {
+        return mVtxColArray[index];
     }
 
 private:

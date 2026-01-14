@@ -106,7 +106,7 @@ public:
 
     int calcRunAnime(int);
     void setBck(int, u8, f32, f32);
-    u8 checkBck(int);
+    bool checkBck(int);
     void setEffect();
     bool isChaseCowGame();
     void setCarryStatus();
@@ -181,7 +181,7 @@ public:
     int Execute();
     int CreateHeap();
     static int createHeapCallBack(fopAc_ac_c*);
-    u8 initialize();
+    bool initialize();
     int create();
     int ctrlJoint(J3DJoint*, J3DModel*);
     static int ctrlJointCallBack(J3DJoint*, int);
@@ -205,8 +205,8 @@ public:
     void setNaderuFinish() { mFlags |= Flag_NaderuFinish; }
     void setCrazyReadyDrawOn() { mFlags |= Flag_CrazyReadyDrawOn; }
 
-    bool getCowIn() { return mCowIn; }
-    int getNoNearCheckTimer() const { return mNoNearCheckTimer; }
+    u8 getCowIn() { return mCowIn; }
+    u8 getNoNearCheckTimer() { return mNoNearCheckTimer; }
 
 private:
     /* 0x568 */ u16 mFlags;

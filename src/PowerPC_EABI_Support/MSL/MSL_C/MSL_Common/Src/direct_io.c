@@ -1,6 +1,10 @@
-#include "direct_io.h"
+#include "buffer_io.h"
 #include "critical_regions.h"
+#include "direct_io.h"
+#include "FILE_POS.h"
+#include "misc_io.h"
 #include "wchar_io.h"
+#include <cstring>
 
 size_t fwrite(const void* buffer, size_t size, size_t count, FILE* stream) {
     size_t retval;

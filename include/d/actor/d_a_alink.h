@@ -7435,7 +7435,7 @@ public:
     bool checkHorseRideOn() const { return mProcID == PROC_HORSE_RIDE; }
     bool checkHorseTurnMode() const { return mProcID == PROC_HORSE_TURN; }
     bool checkGrabUp() const { return mProcID == PROC_GRAB_UP; }
-    bool checkSpinnerRideWait() const {
+    s16 checkSpinnerRideWait() const {
         return mProcID == PROC_SPINNER_WAIT && mProcVar2.field_0x300c == 0;
     }
     bool checkCopyRodSwingMode() { return mProcID == PROC_COPY_ROD_SWING; }

@@ -3,6 +3,32 @@
 
 #include "d/actor/d_a_npc4.h"
 
+struct daNpcPray_HIOParam {
+    daNpcF_HIOParam common;
+};
+
+class daNpcPray_Param_c {
+public:
+    virtual ~daNpcPray_Param_c() {}
+
+    static const daNpcPray_HIOParam m;
+};
+
+#if DEBUG
+class daNpcPray_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpcPray_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    daNpcPray_HIOParam m;
+};
+
+#define NPC_PRAY_HIO_CLASS daNpcPray_HIO_c
+#else
+#define NPC_PRAY_HIO_CLASS daNpcPray_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpcPray_c
@@ -58,7 +84,7 @@ private:
     /* 0xBEC */ u8 field_0xBEC[0xBF0 - 0xBEC];
     /* 0xBF0 */ daNpcF_Lookat_c mLookat;
     /* 0xC8C */ daNpcF_ActorMngr_c mActorMngr[2];
-    /* 0xC9C */ u8 field_0xC9C[0xCA0 - 0xC9C];
+    /* 0xC9C */ NPC_PRAY_HIO_CLASS* mpHIO;
     /* 0xCA0 */ dCcD_Cyl mCcCyl;
     /* 0xDDC */ bool (daNpcPray_c::*mAction)(void*);
     /* 0xDE8 */ request_of_phase_process_class mPhase[2];
@@ -73,17 +99,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpcPray_c) == 0xe10);
-
-struct daNpcPray_HIOParam {
-    daNpcF_HIOParam common;
-};
-
-class daNpcPray_Param_c {
-public:
-    virtual ~daNpcPray_Param_c() {}
-
-    static const daNpcPray_HIOParam m;
-};
-
 
 #endif /* D_A_NPC_PRAYER_H */

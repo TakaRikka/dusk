@@ -87,7 +87,7 @@ enum Motion {
     /* 0x8 */ MOT_DASHA,
 };
 
-static daNpc_GWolf_Param_c l_HIO;
+static NPC_GWOLF_HIO_CLASS l_HIO;
 
 static daNpc_GetParam1 l_bmdGetParamList[1] = {
     {BMDR_GW, GWOLF},
@@ -207,18 +207,6 @@ daNpc_GWolf_c::cutFunc daNpc_GWolf_c::mEvtCutList[5] = {
     &daNpc_GWolf_c::ECut_meetGWolf,
 };
 
-daNpc_GWolf_c::daNpc_GWolf_c() {}
-
-daNpc_GWolf_c::~daNpc_GWolf_c() {
-    for (int i = 0; l_loadRes_list[mType][i] >= 0; i++) {
-        dComIfG_resDelete(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
-    }
-
-    if (heap != NULL) {
-        mAnm_p->stopZelAnime();
-    }
-}
-
 daNpc_GWolf_HIOParam const daNpc_GWolf_Param_c::m = {
     30.0f,
     -4.0f,
@@ -262,6 +250,38 @@ daNpc_GWolf_HIOParam const daNpc_GWolf_Param_c::m = {
     0.9f,
     120.0f,
 };
+
+#if DEBUG
+daNpc_GWolf_HIO_c::daNpc_GWolf_HIO_c() {
+    m = daNpc_GWolf_Param_c::m;
+}
+
+void daNpc_GWolf_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_GWolf_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_GWolf_c::daNpc_GWolf_c() {}
+
+daNpc_GWolf_c::~daNpc_GWolf_c() {
+    for (int i = 0; l_loadRes_list[mType][i] >= 0; i++) {
+        dComIfG_resDelete(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
+    }
+
+    if (heap != NULL) {
+        mAnm_p->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+}
 
 cPhs__Step daNpc_GWolf_c::create() {
     fopAcM_ct(this, daNpc_GWolf_c);
@@ -308,17 +328,22 @@ cPhs__Step daNpc_GWolf_c::create() {
 
         mSound.init(&current.pos, &eyePos, 3, 1);
 
-        mAcchCir.SetWall(daNpc_GWolf_Param_c::m.common.width, daNpc_GWolf_Param_c::m.common.knee_length);
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ゴールドウルフ");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_GWolf_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgHitCallback(tgHitCallBack);
         mAcch.CrrPos(dComIfG_Bgsp());
         mGndChk = mAcch.m_gnd;
         mGroundH = mAcch.GetGroundH();
-        
+
         setEnvTevColor();
         setRoomNo();
         reset();
@@ -379,7 +404,7 @@ int daNpc_GWolf_c::Draw() {
     mdlData_p->getMaterialNodePointer(2)->setMaterialAnm(mpMatAnm);
 
     return draw(
-        chkAction(&daNpc_GWolf_c::test), FALSE, daNpc_GWolf_Param_c::m.common.real_shadow_size, NULL, 0
+        chkAction(&daNpc_GWolf_c::test), FALSE, mpHIO->m.common.real_shadow_size, NULL, 0
     );
 }
 
@@ -475,7 +500,7 @@ int daNpc_GWolf_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
         case 1:
         case 3:
         case 4:
-            setLookatMtx(jntNo, i_jointList, daNpc_GWolf_Param_c::m.common.neck_rotation_ratio);
+            setLookatMtx(jntNo, i_jointList, mpHIO->m.common.neck_rotation_ratio);
             break;
     }
 
@@ -540,12 +565,12 @@ void daNpc_GWolf_c::setParam() {
     attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(3, 6);
     attention_info.flags = flag;
     
-    scale.set(daNpc_GWolf_Param_c::m.common.scale, daNpc_GWolf_Param_c::m.common.scale, daNpc_GWolf_Param_c::m.common.scale);
-    mAcchCir.SetWallR(daNpc_GWolf_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpc_GWolf_Param_c::m.common.knee_length);
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
 
     if (!dComIfGp_event_runCheck()) {
-        gravity = daNpc_GWolf_Param_c::m.common.gravity;
+        gravity = mpHIO->m.common.gravity;
     }
 }
 
@@ -558,7 +583,7 @@ BOOL daNpc_GWolf_c::main() {
         attention_info.flags = 0;
     }
 
-    if (!daNpc_GWolf_Param_c::m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()))) {
+    if (!mpHIO->m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()))) {
         if (mOrderEvtNo != EVT_NONE) {
             eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
         }
@@ -625,7 +650,7 @@ void daNpc_GWolf_c::setAttnPos() {
     static cXyz eyeOffset(35.0f, 0.0f, 0.0f);
 
     cXyz sp7c, sp88, sp94, spa0;
-    f32 attention_offset = daNpc_GWolf_Param_c::m.common.attention_offset;
+    f32 attention_offset = mpHIO->m.common.attention_offset;
 
     mDoMtx_stack_c::YrotS(field_0x990);
     cLib_addCalc2(&field_0x984[0], 0.0f, 0.1f, 125.0f);
@@ -691,8 +716,8 @@ void daNpc_GWolf_c::setAttnPos() {
         }
 
         mCyl.SetC(sp7c);
-        mCyl.SetH(daNpc_GWolf_Param_c::m.common.height + fVar1);
-        mCyl.SetR(daNpc_GWolf_Param_c::m.common.width + fVar2);
+        mCyl.SetH(mpHIO->m.common.height + fVar1);
+        mCyl.SetR(mpHIO->m.common.width + fVar2);
         dComIfG_Ccsp()->Set(&mCyl);
     }
 
@@ -922,25 +947,25 @@ void daNpc_GWolf_c::reset() {
 }
 
 void daNpc_GWolf_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {ANM_WAITSIT, daNpc_GWolf_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat0 = {ANM_WAITSIT, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1 = {ANM_AT, daNpc_GWolf_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat1 = {ANM_AT, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[1] = {&dat1};
     daNpcF_anmPlayData dat2a = {ANM_ATTACKAST, 3.0f, 1};
     daNpcF_anmPlayData dat2b = {ANM_ATTACKA, 0.0f, 0};
     daNpcF_anmPlayData* pDat2[2] = {&dat2a, &dat2b};
     daNpcF_anmPlayData dat3a = {ANM_ATTACKAED, 3.0f, 1};
-    daNpcF_anmPlayData dat3b = {ANM_AT, daNpc_GWolf_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat3b = {ANM_AT, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[2] = {&dat3a, &dat3b};
-    daNpcF_anmPlayData dat4 = {ANM_HOWLB, daNpc_GWolf_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat4 = {ANM_HOWLB, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat4[1] = {&dat4};
-    daNpcF_anmPlayData dat5 = {ANM_HOWLC, daNpc_GWolf_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat5 = {ANM_HOWLC, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat5[1] = {&dat5};
     daNpcF_anmPlayData dat6 = {ANM_JUMPAST, 0.0f, 0};
     daNpcF_anmPlayData* pDat6[1] = {&dat6};
     daNpcF_anmPlayData dat7 = {ANM_JUMPA, 0.0f, 0};
     daNpcF_anmPlayData* pDat7[1] = {&dat7};
-    daNpcF_anmPlayData dat8 = {ANM_DASHA, daNpc_GWolf_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat8 = {ANM_DASHA, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat8[1] = {&dat8};
 
     daNpcF_anmPlayData** ppDat[9] = {
@@ -1006,7 +1031,7 @@ BOOL daNpc_GWolf_c::setAction(actionFunc action) {
 BOOL daNpc_GWolf_c::selectAction() {
     mNextAction = NULL;
 
-    if (daNpc_GWolf_Param_c::m.common.debug_mode_ON) {
+    if (mpHIO->m.common.debug_mode_ON) {
         mNextAction = &daNpc_GWolf_c::test;
     } else {
         switch (mType) {
@@ -1033,7 +1058,7 @@ void daNpc_GWolf_c::doNormalAction(int param_1) {
         if (mCutType == daPy_py_c::CUT_TYPE_TURN_RIGHT) {
             damage_time = 20;
         } else {
-            damage_time = daNpc_GWolf_Param_c::m.common.damage_time;
+            damage_time = mpHIO->m.common.damage_time;
         }
 
         setDamage(damage_time, -1, 0);
@@ -1150,14 +1175,14 @@ void daNpc_GWolf_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model = mAnm_p->getModel();
     BOOL i_snap = FALSE;
-    f32 body_angleX_min = daNpc_GWolf_Param_c::m.common.body_angleX_min;
-    f32 body_angleX_max = daNpc_GWolf_Param_c::m.common.body_angleX_max;
-    f32 body_angleY_min = daNpc_GWolf_Param_c::m.common.body_angleY_min;
-    f32 body_angleY_max = daNpc_GWolf_Param_c::m.common.body_angleY_max;
-    f32 head_angleX_min = daNpc_GWolf_Param_c::m.common.head_angleX_min;
-    f32 head_angleX_max = daNpc_GWolf_Param_c::m.common.head_angleX_max;
-    f32 head_angleY_min = daNpc_GWolf_Param_c::m.common.head_angleY_min;
-    f32 head_angleY_max = daNpc_GWolf_Param_c::m.common.head_angleY_max;
+    f32 body_angleX_min = mpHIO->m.common.body_angleX_min;
+    f32 body_angleX_max = mpHIO->m.common.body_angleX_max;
+    f32 body_angleY_min = mpHIO->m.common.body_angleY_min;
+    f32 body_angleY_max = mpHIO->m.common.body_angleY_max;
+    f32 head_angleX_min = mpHIO->m.common.head_angleX_min;
+    f32 head_angleX_max = mpHIO->m.common.head_angleX_max;
+    f32 head_angleY_min = mpHIO->m.common.head_angleY_min;
+    f32 head_angleY_max = mpHIO->m.common.head_angleY_max;
     s16 angle_delta = mCurAngle.y - mOldAngle.y;
     cXyz lookatPos[3] = {mLookatPos[0], mLookatPos[1], mLookatPos[2]};
     csXyz* lookatAngle[3] = {&mLookatAngle[0], &mLookatAngle[1], &mLookatAngle[2]};
@@ -1243,7 +1268,7 @@ BOOL daNpc_GWolf_c::ECut_attackWarp(int i_staffId) {
 
             case 15:
                 mEventTimer = 20;
-                dCam_getBody()->StartBlure(5000, this, daNpc_GWolf_Param_c::m.blur_opacity, daNpc_GWolf_Param_c::m.blur_scale);
+                dCam_getBody()->StartBlure(5000, this, mpHIO->m.blur_opacity, mpHIO->m.blur_scale);
                 break;
 
             case 20:
@@ -1254,8 +1279,8 @@ BOOL daNpc_GWolf_c::ECut_attackWarp(int i_staffId) {
             case 30: {
                 mCyl.OnCoNoCrrBit();
                 mCyl.OnCoNoCoHitInfSet();
-                speedF = daNpc_GWolf_Param_c::m.attack_spd_horizontal;
-                speed.y = daNpc_GWolf_Param_c::m.attack_spd_vertical;
+                speedF = mpHIO->m.attack_spd_horizontal;
+                speed.y = mpHIO->m.attack_spd_vertical;
                 cXyz sp5c(player->current.pos);
                 speed.y += (sp5c.y - current.pos.y) / ((sp5c - current.pos).absXZ() / speedF);
                 break;
@@ -1263,7 +1288,7 @@ BOOL daNpc_GWolf_c::ECut_attackWarp(int i_staffId) {
 
             case 40:
                 f32 fVar3 = 0.5f;
-                speedF = daNpc_GWolf_Param_c::m.attack_spd_horizontal * fVar3;
+                speedF = mpHIO->m.attack_spd_horizontal * fVar3;
                 break;
         }
     }
@@ -1313,7 +1338,7 @@ BOOL daNpc_GWolf_c::ECut_attackWarp(int i_staffId) {
                 }
 
                 f32 fVar1 = (daPy_getPlayerActorClass()->current.pos - current.pos).absXZ();
-                f32 fVar2 = daNpc_GWolf_Param_c::m.warp_start_dist;
+                f32 fVar2 = mpHIO->m.warp_start_dist;
                 if (fVar1 < fVar2) {
                     if (l_appearTmpFlag[mParamMode] != -1) {
                         daNpcT_onTmpBit(l_appearTmpFlag[mParamMode]);
@@ -1380,8 +1405,8 @@ BOOL daNpc_GWolf_c::ECut_attackWarpHorse(int i_staffId) {
             case 30: {
                 mCyl.OnCoNoCrrBit();
                 mCyl.OnCoNoCoHitInfSet();
-                speedF = daNpc_GWolf_Param_c::m.attack_spd_horizontal_horse;
-                speed.y = daNpc_GWolf_Param_c::m.attack_spd_vertical_horse;
+                speedF = mpHIO->m.attack_spd_horizontal_horse;
+                speed.y = mpHIO->m.attack_spd_vertical_horse;
                 cXyz sp54(player->current.pos);
                 speed.y += (sp54.y - current.pos.y) / ((sp54 - current.pos).absXZ() / speedF);
                 break;
@@ -1389,7 +1414,7 @@ BOOL daNpc_GWolf_c::ECut_attackWarpHorse(int i_staffId) {
 
             case 40:
                 f32 fVar3 = 0.5f;
-                speedF = daNpc_GWolf_Param_c::m.attack_spd_horizontal * fVar3;
+                speedF = mpHIO->m.attack_spd_horizontal * fVar3;
                 break;
         }
     }
@@ -1443,7 +1468,7 @@ BOOL daNpc_GWolf_c::ECut_attackWarpHorse(int i_staffId) {
                 }
 
                 f32 fVar1 = (daPy_getPlayerActorClass()->current.pos - current.pos).absXZ();
-                f32 fVar2 = daNpc_GWolf_Param_c::m.warp_start_dist;
+                f32 fVar2 = mpHIO->m.warp_start_dist;
                 if (fVar1 < fVar2) {
                     if (l_appearTmpFlag[mParamMode] != -1) {
                         daNpcT_onTmpBit(l_appearTmpFlag[mParamMode]);
@@ -1670,7 +1695,7 @@ BOOL daNpc_GWolf_c::wait(void* param_1) {
 
             if (!mHide && !daPy_py_c::checkNowWolf() && fabsf(sp30.y - current.pos.y) < 200.0f) {
                 f32 fVar1 = (sp30 - current.pos).absXZ();
-                f32 fVar2 = daNpc_GWolf_Param_c::m.demo_start_dist;
+                f32 fVar2 = mpHIO->m.demo_start_dist;
 
                 if (fVar1 < fVar2) {
                     if (daPy_getPlayerActorClass()->checkHorseRide()) {
@@ -1707,9 +1732,9 @@ BOOL daNpc_GWolf_c::wait(void* param_1) {
 
                 if (home.angle.y == mCurAngle.y) {
                     bVar1 = mActorMngrs[0].getActorP() != NULL;
-                    fopAc_ac_c* actor_p = getAttnActorP(bVar1, srchAttnActor1, daNpc_GWolf_Param_c::m.common.search_distance,
-                                                        daNpc_GWolf_Param_c::m.common.search_height, daNpc_GWolf_Param_c::m.common.search_depth,
-                                                        daNpc_GWolf_Param_c::m.common.fov, shape_angle.y, 0x78, TRUE);
+                    fopAc_ac_c* actor_p = getAttnActorP(bVar1, srchAttnActor1, mpHIO->m.common.search_distance,
+                                                        mpHIO->m.common.search_height, mpHIO->m.common.search_depth,
+                                                        mpHIO->m.common.fov, shape_angle.y, 0x78, TRUE);
                     if (actor_p != NULL) {
                         mActorMngrs[1].entry(actor_p);
                         setLookMode(LOOK_ACTOR);
@@ -1844,8 +1869,8 @@ BOOL daNpc_GWolf_c::test(void* param_1) {
             mMode = 2;
             // fallthrough
         case 2:
-            setMotion(daNpc_GWolf_Param_c::m.common.motion, daNpc_GWolf_Param_c::m.common.morf_frame, 0);
-            setLookMode(daNpc_GWolf_Param_c::m.common.look_mode);
+            setMotion(mpHIO->m.common.motion, mpHIO->m.common.morf_frame, 0);
+            setLookMode(mpHIO->m.common.look_mode);
             mOrderEvtNo = EVT_NONE;
             attention_info.flags = 0;
             break;

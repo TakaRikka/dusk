@@ -12,6 +12,11 @@
 #include "SSystem/SComponent/c_math.h"
 #include "SSystem/SComponent/c_sxyz.h"
 
+#ifndef __MWERKS__
+#include <limits>
+#define FLT_EPSILON std::numeric_limits<float>::epsilon()
+#endif
+
 const f32 G_CM3D_F_ABS_MIN = 32 * FLT_EPSILON;
 
 void cM3d_InDivPos1(const Vec* pVecA, const Vec* pVecB, f32 pF, Vec* pOut) {

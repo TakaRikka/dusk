@@ -365,7 +365,7 @@ int daObjFallObj_c::Draw() {
 
     #if DEBUG
     if (l_HIO.mCheckDisplay) {
-        mpBgW->CalcPlane();
+        mpBgW->DebugDraw();
         daPy_py_c* player = daPy_getPlayerActorClass();
         GXColor color = (GXColor){0xff, 0, 0, 0xff};
         cXyz cStack_1c(attention_info.position);

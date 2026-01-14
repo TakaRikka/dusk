@@ -1,6 +1,7 @@
 #ifndef J3DMODELLOADER_H
 #define J3DMODELLOADER_H
 
+#include "JSystem/J3DGraphBase/J3DSys.h"
 #include "dolphin/mtx.h"
 
 class J3DModelData;
@@ -305,17 +306,6 @@ public:
  * @ingroup jsystem-j3d
  * 
  */
-class J3DModelLoader_v21 : public J3DModelLoader {
-public:
-    ~J3DModelLoader_v21() {}
-    void readMaterial_v21(J3DMaterialBlock_v21 const*, u32);
-    void readMaterialTable_v21(J3DMaterialBlock_v21 const*, u32);
-};
-
-/**
- * @ingroup jsystem-j3d
- * 
- */
 class J3DModelLoader_v26 : public J3DModelLoader {
 public:
     ~J3DModelLoader_v26() {}
@@ -327,11 +317,34 @@ public:
 
 /**
  * @ingroup jsystem-j3d
+ *
+ */
+class J3DModelLoader_v21 : public J3DModelLoader {
+public:
+    ~J3DModelLoader_v21() {}
+    void readMaterial_v21(J3DMaterialBlock_v21 const*, u32);
+    void readMaterialTable_v21(J3DMaterialBlock_v21 const*, u32);
+};
+
+/**
+ * @ingroup jsystem-j3d
  * 
  */
 class J3DModelLoaderDataBase {
 public:
     static J3DModelData* load(void const* i_data, u32 i_flags);
+    static J3DModelData* loadBinaryDisplayList(const void* i_data, u32 flags);
+};
+
+/**
+ * @ingroup jsystem-j3d
+ *
+ */
+struct J3DMtxCalcJ3DSysInitSoftimage {
+    static void init(const Vec& param_0, const Mtx& param_1) {
+        J3DSys::mCurrentS = param_0;
+        MTXCopy(param_1, J3DSys::mCurrentMtx);
+    }
 };
 
 #endif /* J3DMODELLOADER_H */

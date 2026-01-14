@@ -5,8 +5,8 @@
 #include "JSystem/JUtility/JUTException.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JGadget/linklist.h"
-#include <math>
-#include <stdlib>
+#include <cmath>
+#include <cstdlib>
 #include <limits>
 
 namespace JStudio {
@@ -291,7 +291,11 @@ f64 TFunctionValue_composite::composite_index(TVector_pointer<TFunctionValue*> c
         }
         break;
     case 1: {
+#ifdef __MWERKS__
         div_t dt = div(index, size - 1);
+#else
+        div_t dt = div((int)index, (int)size - 1);
+#endif
         index = dt.rem;
         if (index < 0) {
             index = size + index;
@@ -304,7 +308,11 @@ f64 TFunctionValue_composite::composite_index(TVector_pointer<TFunctionValue*> c
             index = 0;
         } else {
             u32 uVar3 = (u32)(size - 2) * 2;
+#ifdef __MWERKS__
             div_t dt2 = div(index, uVar3);
+#else
+            div_t dt2 = div((int)index, (int)uVar3);
+#endif
             index = dt2.rem;
             if (index < 0) {
                 index += uVar3;
@@ -315,8 +323,12 @@ f64 TFunctionValue_composite::composite_index(TVector_pointer<TFunctionValue*> c
         }
         break;
     }
-   
+
+#ifdef __MWERKS__
     std::advance_pointer(local_148, index + 1);
+#else
+    std::advance(local_148, index + 1);
+#endif
     pFront = *local_148;
     return pFront->getValue(param_3);
 }

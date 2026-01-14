@@ -22,6 +22,7 @@ public:
     f32 getWidthPower() { return mBounds.getWidth() / mOrtho.getWidth(); }
     f32 getHeightPower() { return mBounds.getHeight() / mOrtho.getHeight(); }
 
+    const JGeometry::TBox2<f32>* getOrtho() const { return &mOrtho; }
     void setOrtho(f32 x, f32 y, f32 width, f32 height, f32 far, f32 near) {
         JGeometry::TBox2<f32> ortho(x, y, x + width, y + height);
         setOrtho(ortho, far, near);

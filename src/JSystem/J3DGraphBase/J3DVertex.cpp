@@ -210,6 +210,10 @@ s32 J3DVertexBuffer::allocTransformedVtxNrmArray() {
     return kJ3DError_Success;
 }
 
+static void dummy(J3DVertexData* vertexData) {
+    vertexData->getColNum();
+}
+
 J3DDrawMtxData::J3DDrawMtxData() {
     mEntryNum = 0;
     mDrawMtxFlag = NULL;

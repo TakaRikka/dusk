@@ -4,6 +4,34 @@
 #include "d/actor/d_a_npc4.h"
 #include "d/d_particle_copoly.h"
 
+struct daNpc_grC_HIOParam {
+    /* 0x0 */ daNpcF_HIOParam common;
+};
+
+class daNpc_grC_Param_c {
+public:
+    virtual ~daNpc_grC_Param_c() {}
+
+    static daNpc_grC_HIOParam const m;
+};
+
+#if DEBUG
+class daNpc_grC_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_grC_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    /* 0x8 */ daNpc_grC_HIOParam m;
+};
+
+#define NPC_GRC_HIO_CLASS daNpc_grC_HIO_c
+#else
+#define NPC_GRC_HIO_CLASS daNpc_grC_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_grC_c
@@ -12,8 +40,6 @@
  * @details
  *
 */
-
-
 class daNpc_grC_c : public daNpcF_c {
 public:
     typedef BOOL (daNpc_grC_c::*ActionFn)(void*);
@@ -72,7 +98,7 @@ private:
     /* 0xBDC */ daNpcF_Lookat_c mLookat;
     /* 0xC78 */ dPaPo_c mPaPo;
     /* 0xCB0 */ daNpcF_ActorMngr_c mActorMngr[2];
-    /* 0xCC0 */ u8 field_0xcc0[0xcc4 - 0xcc0];
+    /* 0xCC0 */ NPC_GRC_HIO_CLASS* mpHIO;
     /* 0xCC4 */ dCcD_Cyl mCyl;
     /* 0xE00 */ ActionFn mNextAction;
     /* 0xE0C */ ActionFn mAction;
@@ -91,21 +117,6 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_grC_c) == 0xe54);
-
-struct daNpc_grC_HIOParam {
-    /* 0x0 */ daNpcF_HIOParam common;
-};
-
-class daNpc_grC_HIO_c : public mDoHIO_entry_c {
-    /* 0x8 */ daNpc_grC_HIOParam field_0x8;
-};
-
-class daNpc_grC_Param_c {
-public:
-    virtual ~daNpc_grC_Param_c() {}
-
-    static daNpc_grC_HIOParam const m;
-};
 
 
 #endif /* D_A_NPC_GRC_H */

@@ -254,6 +254,22 @@ const daNpc_Hoz_HIOParam daNpc_Hoz_Param_c::m = {
     600.0f,
 };
 
+static NPC_HOZ_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Hoz_HIO_c::daNpc_Hoz_HIO_c() {
+    m = daNpc_Hoz_Param_c::m;
+}
+
+void daNpc_Hoz_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Hoz_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daNpc_Hoz_c::~daNpc_Hoz_c() {
     if (mType == 1) {
         daNpcT_offTmpBit(0x46);
@@ -262,6 +278,12 @@ daNpc_Hoz_c::~daNpc_Hoz_c() {
     if (heap != NULL) {
         mpMorf[0]->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
 
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
@@ -307,6 +329,11 @@ int daNpc_Hoz_c::create() {
 
         mSound.init(&current.pos, &eyePos, 3, 1);
 
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ホズ");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
         mGndChk = mAcch.m_gnd;
@@ -315,7 +342,7 @@ int daNpc_Hoz_c::create() {
         setEnvTevColor();
         setRoomNo();
 
-        mCcStts.Init(daNpc_Hoz_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgHitCallback(tgHitCallBack);
@@ -402,7 +429,7 @@ int daNpc_Hoz_c::Draw() {
 #else
         FALSE,
 #endif
-        FALSE, daNpc_Hoz_Param_c::m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE, FALSE
+        FALSE, mpHIO->m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE, FALSE
     );
 }
 
@@ -515,10 +542,10 @@ void daNpc_Hoz_c::setParam() {
     selectAction();
     srchActors();
 
-    s16 talk_dist = daNpc_Hoz_Param_c::m.common.talk_distance;
-    s16 talk_angle = daNpc_Hoz_Param_c::m.common.talk_angle;
-    s16 attn_dist = daNpc_Hoz_Param_c::m.common.attention_distance;
-    s16 attn_angle = daNpc_Hoz_Param_c::m.common.attention_angle;
+    s16 talk_dist = mpHIO->m.common.talk_distance;
+    s16 talk_angle = mpHIO->m.common.talk_angle;
+    s16 attn_dist = mpHIO->m.common.attention_distance;
+    s16 attn_angle = mpHIO->m.common.attention_angle;
 
     attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(attn_dist, attn_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
@@ -540,23 +567,23 @@ void daNpc_Hoz_c::setParam() {
         attention_info.flags = attn_flags;
     }
 
-    scale.set(daNpc_Hoz_Param_c::m.common.scale, daNpc_Hoz_Param_c::m.common.scale, daNpc_Hoz_Param_c::m.common.scale);
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
 
-    mAcchCir.SetWallR(daNpc_Hoz_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpc_Hoz_Param_c::m.common.knee_length);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
 
-    mCcStts.SetWeight(daNpc_Hoz_Param_c::m.common.weight);
-    mCylH = daNpc_Hoz_Param_c::m.common.height;
-    mWallR = daNpc_Hoz_Param_c::m.common.width;
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
 
     if (mType == 4 || mType == 6) {
         gravity = 0.0f;
     } else {
-        gravity = daNpc_Hoz_Param_c::m.common.gravity;
+        gravity = mpHIO->m.common.gravity;
     }
 
-    mExpressionMorfFrame = daNpc_Hoz_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Hoz_Param_c::m.common.morf_frame;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
 }
 
 void daNpc_Hoz_c::setAfterTalkMotion() {}
@@ -728,11 +755,11 @@ void daNpc_Hoz_c::setAttnPos() {
     cXyz sp34(0.0f, -30.0f, 0.0f);
 
     mJntAnm.setParam(this, mpMorf[0]->getModel(), &sp34, getBackboneJointNo(), getNeckJointNo(), getHeadJointNo(),
-            daNpc_Hoz_Param_c::m.common.body_angleX_min, daNpc_Hoz_Param_c::m.common.body_angleX_max,
-            daNpc_Hoz_Param_c::m.common.body_angleY_min, daNpc_Hoz_Param_c::m.common.body_angleY_max,
-            daNpc_Hoz_Param_c::m.common.head_angleX_min, daNpc_Hoz_Param_c::m.common.head_angleX_max,
-            daNpc_Hoz_Param_c::m.common.head_angleY_min, daNpc_Hoz_Param_c::m.common.head_angleY_max,
-            daNpc_Hoz_Param_c::m.common.neck_rotation_ratio, 0.0f, NULL);
+            mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+            mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+            mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+            mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+            mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
 
     f32 var_f31 = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     mJntAnm.calcJntRad(0.2f, 1.0f, var_f31);
@@ -748,7 +775,7 @@ void daNpc_Hoz_c::setAttnPos() {
     cXyz sp28;
     mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(4));
     mDoMtx_stack_c::multVecZero(&sp28);
-    attention_info.position.set(sp28.x, sp28.y + daNpc_Hoz_Param_c::m.common.attention_offset, sp28.z);
+    attention_info.position.set(sp28.x, sp28.y + mpHIO->m.common.attention_offset, sp28.z);
 }
 
 void daNpc_Hoz_c::setCollision() {
@@ -770,12 +797,12 @@ void daNpc_Hoz_c::setCollision() {
             }
 
             pos.y -= 30.0f;
-            cyl_h = daNpc_Hoz_Param_c::m.common.height;
-            cyl_r = daNpc_Hoz_Param_c::m.common.width;
+            cyl_h = mpHIO->m.common.height;
+            cyl_r = mpHIO->m.common.width;
         } else {
             pos = current.pos;
-            cyl_h = daNpc_Hoz_Param_c::m.common.height;
-            cyl_r = daNpc_Hoz_Param_c::m.common.width;
+            cyl_h = mpHIO->m.common.height;
+            cyl_r = mpHIO->m.common.width;
         }
 
         mCyl.SetH(cyl_h);
@@ -827,9 +854,8 @@ int daNpc_Hoz_c::test(void* i_this) {
         mMode = 2;
         // fall-through
     case 2:
-        // TODO: determine pointer type of field_0xE40
-        mFaceMotionSeqMngr.setNo(field_0xE40, -1.0f, 0, 0);
-        mMotionSeqMngr.setNo(field_0xE40, -1.0f, 0, 0);
+        mFaceMotionSeqMngr.setNo((int)mpHIO, -1.0f, 0, 0);
+        mMotionSeqMngr.setNo((int)mpHIO, -1.0f, 0, 0);
         mJntAnm.lookNone(0);
         attention_info.flags = 0;
     case 3:
@@ -1183,7 +1209,7 @@ int daNpc_Hoz_c::waitBoat1_5(void* param_0) {
             }
         }
 
-        if (field_0xf8a == 0 && (current.pos - daPy_getPlayerActorClass()->current.pos).absXZ() <= daNpc_Hoz_Param_c::m.field_0x8c) {
+        if (field_0xf8a == 0 && (current.pos - daPy_getPlayerActorClass()->current.pos).absXZ() <= mpHIO->m.field_0x8c) {
             mSpeakEvent = 1;
         }
 
@@ -1664,8 +1690,6 @@ static int daNpc_Hoz_Draw(void* i_this) {
 static int daNpc_Hoz_IsDelete(void* i_this) {
     return true;
 }
-
-static daNpc_Hoz_Param_c l_HIO;
 
 static actor_method_class daNpc_Hoz_MethodTable = {
     (process_method_func)daNpc_Hoz_Create,

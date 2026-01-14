@@ -1,7 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JUtility/JUTGamePad.h"
-#include <math>
+#include <cmath>
 
 u32 JUTGamePad::CRumble::sChannelMask[4] = {
     PAD_CHAN0_BIT,

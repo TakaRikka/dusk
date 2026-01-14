@@ -1,9 +1,11 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
+#include "JSystem/J3DGraphAnimator/J3DShapeTable.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/J3DGraphBase/J3DShapeMtx.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
 
 #define J3D_ASSERTMSG(LINE, COND, MSG) JUT_ASSERT_MSG(LINE, (COND) != 0, MSG)
 #define J3D_WARN1(LINE, MSG, ARG1) JUT_WARN(LINE, MSG, ARG1)
@@ -146,8 +148,8 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 mdlFlags) {
         } else {
             if (pModelData->getModelDataType() == 1) {
                 if (mdlFlags & J3DMdlFlag_UseSingleDL) {
-                    matPacket->mpDisplayListObj = materialNode->getSharedDisplayListObj();
-                    matPacket->setDisplayListObj(matPacket->mpDisplayListObj);
+                    J3DDisplayListObj* dlobj = materialNode->getSharedDisplayListObj();
+                    matPacket->setDisplayListObj(dlobj);
                 } else {
                     J3DDisplayListObj* dlobj = materialNode->getSharedDisplayListObj();
                     ret = dlobj->single_To_Double();

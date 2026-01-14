@@ -11,10 +11,10 @@
 #include "f_pc/f_pc_line.h"
 
 
-static s32 fpcLnIt_MethodCall(create_tag_class* i_createTag, method_filter* i_filter) {
+static int fpcLnIt_MethodCall(create_tag_class* i_createTag, method_filter* i_filter) {
     layer_class* layer = static_cast<base_process_class*>(i_createTag->mpTagData)->layer_tag.layer;
     layer_class* save_layer = fpcLy_CurrentLayer();
-    s32 ret;
+    int ret;
 
     fpcLy_SetCurrentLayer(layer);
     ret = cTgIt_MethodCall(i_createTag, i_filter);

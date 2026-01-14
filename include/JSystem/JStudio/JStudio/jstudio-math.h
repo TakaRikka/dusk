@@ -2,7 +2,9 @@
 #define JSTUDIO_MATH_H
 
 #include "dolphin/mtx.h"
-#include <math>
+#include <cmath>
+
+#define m_PI_D 3.141592653589793
 
 namespace JStudio {
 namespace math {

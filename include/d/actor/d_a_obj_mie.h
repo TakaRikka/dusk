@@ -20,26 +20,30 @@ struct daObj_Mie_HIOParam {
     /* 0x28 */ f32 floating_offset;
 };
 
-struct daObj_Mie_Param_c {
+class daObj_Mie_Param_c {
+public:
     virtual ~daObj_Mie_Param_c() {}
+
     static const daObj_Mie_HIOParam m;
 };
 
-class daObj_Mie_HIO_c 
 #if DEBUG
-: public mDoHIO_entry_c
-#endif
+class daObj_Mie_HIO_c : public mDoHIO_entry_c
 {
 public:
-    daObj_Mie_HIO_c() {
-        mParams = daObj_Mie_Param_c::m;
-    }
+    daObj_Mie_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
 
     void genMessage(JORMContext*);
-    virtual ~daObj_Mie_HIO_c() {}
 
-    daObj_Mie_HIOParam mParams;
+    daObj_Mie_HIOParam m;
 };
+
+#define OBJ_MIE_HIO_CLASS daObj_Mie_HIO_c
+#else
+#define OBJ_MIE_HIO_CLASS daObj_Mie_Param_c
+#endif
 
 /**
  * @ingroup actors-objects
@@ -51,7 +55,7 @@ public:
  */
 class daObj_Mie_c : public fopAc_ac_c {
 private:
-    /* 0x568 */ daObj_Mie_HIO_c* mHIO;
+    /* 0x568 */ OBJ_MIE_HIO_CLASS* mpHIO;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mModel;
     /* 0x578 */ dBgS_ObjAcch mAcch;

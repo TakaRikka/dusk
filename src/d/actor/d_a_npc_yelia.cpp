@@ -295,7 +295,7 @@ enum Motion {
     /* 0x21 */ MOTION_KIZUKU_WAIT,
 };
 
-daNpc_Yelia_Param_c::param const daNpc_Yelia_Param_c::m = {
+daNpc_Yelia_HIOParam const daNpc_Yelia_Param_c::m = {
     170.0f,   // mAttnOffsetY
     -3.0f,    // mGravity
     1.0f,     // mScale
@@ -328,6 +328,7 @@ daNpc_Yelia_Param_c::param const daNpc_Yelia_Param_c::m = {
     0,        // mTestMotion
     0,        // mTestLookMode
     false,    // mTest
+    false,
     4.0f,
     0.0f,
     0.0f,
@@ -338,12 +339,33 @@ daNpc_Yelia_Param_c::param const daNpc_Yelia_Param_c::m = {
     0.0f,
 };
 
-static daNpc_Yelia_Param_c l_HIO;
+static NPC_YELIA_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Yelia_HIO_c::daNpc_Yelia_HIO_c() {
+    m = daNpc_Yelia_Param_c::m;
+}
+
+void daNpc_Yelia_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Yelia_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
 
 daNpc_Yelia_c::~daNpc_Yelia_c() {
     if (mpMorf[0] != NULL) {
         mpMorf[0]->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
@@ -374,10 +396,16 @@ cPhs__Step daNpc_Yelia_c::create() {
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0, 200.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("イリア");
+#endif
+
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(l_HIO.m.mCcWeight, 0, this);
+        mCcStts.Init(l_HIO.m.common.weight, 0, this);
         mCcCyl.Set(mCcDCyl);
         mCcCyl.SetStts(&mCcStts);
         mCcCyl.SetTgHitCallback(tgHitCallBack);
@@ -557,10 +585,10 @@ void daNpc_Yelia_c::setParam() {
     selectAction();
     srchActors();
 
-    s16 speak_dist_idx = l_HIO.m.mSpeakDistIdx;
-    s16 speak_angle_idx = l_HIO.m.mSpeakAngleIdx;
-    s16 talk_dist_idx = l_HIO.m.mTalkDistIdx;
-    s16 talk_angle_idx = l_HIO.m.mTalkAngleIdx;
+    s16 speak_dist_idx = l_HIO.m.common.talk_distance;
+    s16 speak_angle_idx = l_HIO.m.common.talk_angle;
+    s16 talk_dist_idx = l_HIO.m.common.attention_distance;
+    s16 talk_angle_idx = l_HIO.m.common.attention_angle;
     if (mType == TYPE_8) {
         speak_dist_idx = 16;
         speak_angle_idx = 6;
@@ -585,20 +613,20 @@ void daNpc_Yelia_c::setParam() {
         daNpcT_getDistTableIdx(speak_dist_idx, speak_angle_idx);
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
 
-    scale.set(l_HIO.m.mScale, l_HIO.m.mScale, l_HIO.m.mScale);
-    mCcStts.SetWeight(l_HIO.m.mCcWeight);
-    mCylH = l_HIO.m.mCylH;
-    mWallR = l_HIO.m.mWallR;
-    mAttnFovY = l_HIO.m.mAttnFovY;
+    scale.set(l_HIO.m.common.scale, l_HIO.m.common.scale, l_HIO.m.common.scale);
+    mCcStts.SetWeight(l_HIO.m.common.weight);
+    mCylH = l_HIO.m.common.height;
+    mWallR = l_HIO.m.common.width;
+    mAttnFovY = l_HIO.m.common.fov;
     if (mType == TYPE_8) {
         mAttnFovY = 135.0f;
     }
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(l_HIO.m.mWallH);
-    mRealShadowSize = l_HIO.m.mShadowDepth;
-    gravity = l_HIO.m.mGravity;
-    mExpressionMorfFrame = l_HIO.m.field_0x6c;
-    mMorfFrames = l_HIO.m.mMorfFrames;
+    mAcchCir.SetWallH(l_HIO.m.common.knee_length);
+    mRealShadowSize = l_HIO.m.common.real_shadow_size;
+    gravity = l_HIO.m.common.gravity;
+    mExpressionMorfFrame = l_HIO.m.common.expression_morf_frame;
+    mMorfFrames = l_HIO.m.common.morf_frame;
     if (mType == TYPE_TWILIGHT || mType == TYPE_AFTER_ESCORT) {
         mAcch.SetGrndNone();
         mAcch.SetWallNone();
@@ -806,14 +834,17 @@ void daNpc_Yelia_c::setAttnPos() {
     if (mType == TYPE_TWILIGHT || mType == TYPE_AFTER_ESCORT) {
         mJntAnm.setParam(this, mpMorf[0]->getModel(), &eye_offset, getBackboneJointNo(),
                          getNeckJointNo(), getHeadJointNo(), 0.0f, 0.0f, 0.0f, 0.0f,
-                         l_HIO.m.mHeadDownAngle, l_HIO.m.mHeadUpAngle, l_HIO.m.mHeadRightAngle,
-                         l_HIO.m.mHeadLeftAngle, l_HIO.m.mNeckAngleScl, angle_diff, &vec);
+                         l_HIO.m.common.head_angleX_min, l_HIO.m.common.head_angleX_max,
+                         l_HIO.m.common.head_angleY_min, l_HIO.m.common.head_angleY_max,
+                         l_HIO.m.common.neck_rotation_ratio, angle_diff, &vec);
     } else {
         mJntAnm.setParam(this, mpMorf[0]->getModel(), &eye_offset, getBackboneJointNo(),
-                         getNeckJointNo(), getHeadJointNo(), l_HIO.m.mBodyDownAngle,
-                         l_HIO.m.mBodyUpAngle, l_HIO.m.mBodyRightAngle, l_HIO.m.mBodyLeftAngle,
-                         l_HIO.m.mHeadDownAngle, l_HIO.m.mHeadUpAngle, l_HIO.m.mHeadRightAngle,
-                         l_HIO.m.mHeadLeftAngle, l_HIO.m.mNeckAngleScl, angle_diff, &vec);
+                         getNeckJointNo(), getHeadJointNo(),
+                         l_HIO.m.common.body_angleX_min, l_HIO.m.common.body_angleX_max,
+                         l_HIO.m.common.body_angleY_min, l_HIO.m.common.body_angleY_max,
+                         l_HIO.m.common.head_angleX_min, l_HIO.m.common.head_angleX_max,
+                         l_HIO.m.common.head_angleY_min, l_HIO.m.common.head_angleY_max,
+                         l_HIO.m.common.neck_rotation_ratio, angle_diff, &vec);
     }
     mJntAnm.calcJntRad(0.2f, 1.0f, angle_diff);
 
@@ -826,7 +857,7 @@ void daNpc_Yelia_c::setAttnPos() {
     if (mType == TYPE_TWILIGHT || mType == TYPE_AFTER_ESCORT) {
         vec.set(0.0f, 150.0f, 20.0f);
     } else {
-        vec.set(0.0f, l_HIO.m.mAttnOffsetY, 10.0f);
+        vec.set(0.0f, l_HIO.m.common.attention_offset, 10.0f);
     }
     mDoMtx_stack_c::YrotS(mCurAngle.y);
     mDoMtx_stack_c::multVec(&vec, &vec);

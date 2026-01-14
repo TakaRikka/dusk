@@ -1,7 +1,30 @@
 #ifndef J3DANMLOADER_H
 #define J3DANMLOADER_H
 
-#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
+class J3DAnmClusterFull;
+struct J3DAnmClusterFullData;
+class J3DAnmClusterKey;
+struct J3DAnmClusterKeyData;
+class J3DAnmColorFull;
+struct J3DAnmColorFullData;
+class J3DAnmColorKey;
+struct J3DAnmColorKeyData;
+class J3DAnmTevRegKey;
+struct J3DAnmTevRegKeyData;
+class J3DAnmTexPattern;
+struct J3DAnmTexPatternFullData;
+class J3DAnmTextureSRTKey;
+struct J3DAnmTextureSRTKeyData;
+class J3DAnmTransformFull;
+struct J3DAnmTransformFullData;
+class J3DAnmTransformKey;
+struct J3DAnmTransformKeyData;
+class J3DAnmVisibilityFull;
+struct J3DAnmVisibilityFullData;
+class J3DAnmVtxColorFull;
+struct J3DAnmVtxColorFullData;
+class J3DAnmVtxColorKey;
+struct J3DAnmVtxColorKeyData;
 
 enum J3DAnmLoaderDataBaseFlag {
     J3DLOADER_UNK_FLAG0,
@@ -28,29 +51,6 @@ public:
     virtual ~J3DAnmLoader() {}
 };
 
-class J3DAnmKeyLoader_v15 : public J3DAnmLoader {
-public:
-    J3DAnmKeyLoader_v15();
-    void readAnmTransform(J3DAnmTransformKeyData const*);
-    void setAnmTransform(J3DAnmTransformKey*, J3DAnmTransformKeyData const*);
-    void readAnmTextureSRT(J3DAnmTextureSRTKeyData const*);
-    void setAnmTextureSRT(J3DAnmTextureSRTKey*, J3DAnmTextureSRTKeyData const*);
-    void readAnmColor(J3DAnmColorKeyData const*);
-    void setAnmColor(J3DAnmColorKey*, J3DAnmColorKeyData const*);
-    void readAnmCluster(J3DAnmClusterKeyData const*);
-    void setAnmCluster(J3DAnmClusterKey*, J3DAnmClusterKeyData const*);
-    void readAnmTevReg(J3DAnmTevRegKeyData const*);
-    void setAnmTevReg(J3DAnmTevRegKey*, J3DAnmTevRegKeyData const*);
-    void readAnmVtxColor(J3DAnmVtxColorKeyData const*);
-    void setAnmVtxColor(J3DAnmVtxColorKey*, J3DAnmVtxColorKeyData const*);
-
-    virtual J3DAnmBase* load(void const*);
-    virtual void setResource(J3DAnmBase*, void const*);
-    virtual ~J3DAnmKeyLoader_v15();
-
-    /* 0x4 */ J3DAnmBase* mAnm;
-};
-
 class J3DAnmFullLoader_v15 : public J3DAnmLoader {
 public:
     J3DAnmFullLoader_v15();
@@ -70,6 +70,29 @@ public:
     virtual J3DAnmBase* load(void const*);
     virtual void setResource(J3DAnmBase*, void const*);
     virtual ~J3DAnmFullLoader_v15();
+
+    /* 0x4 */ J3DAnmBase* mAnm;
+};
+
+class J3DAnmKeyLoader_v15 : public J3DAnmLoader {
+public:
+    J3DAnmKeyLoader_v15();
+    void readAnmTransform(J3DAnmTransformKeyData const*);
+    void setAnmTransform(J3DAnmTransformKey*, J3DAnmTransformKeyData const*);
+    void readAnmTextureSRT(J3DAnmTextureSRTKeyData const*);
+    void setAnmTextureSRT(J3DAnmTextureSRTKey*, J3DAnmTextureSRTKeyData const*);
+    void readAnmColor(J3DAnmColorKeyData const*);
+    void setAnmColor(J3DAnmColorKey*, J3DAnmColorKeyData const*);
+    void readAnmCluster(J3DAnmClusterKeyData const*);
+    void setAnmCluster(J3DAnmClusterKey*, J3DAnmClusterKeyData const*);
+    void readAnmTevReg(J3DAnmTevRegKeyData const*);
+    void setAnmTevReg(J3DAnmTevRegKey*, J3DAnmTevRegKeyData const*);
+    void readAnmVtxColor(J3DAnmVtxColorKeyData const*);
+    void setAnmVtxColor(J3DAnmVtxColorKey*, J3DAnmVtxColorKeyData const*);
+
+    virtual J3DAnmBase* load(void const*);
+    virtual void setResource(J3DAnmBase*, void const*);
+    virtual ~J3DAnmKeyLoader_v15();
 
     /* 0x4 */ J3DAnmBase* mAnm;
 };

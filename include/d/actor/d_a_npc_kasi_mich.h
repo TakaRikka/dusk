@@ -19,13 +19,27 @@ struct daNpcKasiMich_HIOParam {
     /* 0x70 */ f32 escape_spd;          // 逃げる速度 - Escape Speed
 };
 
-class daNpcKasiMich_HIO_c
-#if DEBUG
-: public mDoHIO_entry_c
-#endif
-{
-    /* 0x8 */ daNpcKasiMich_HIOParam param;
+class daNpcKasiMich_Param_c {
+public:
+    virtual ~daNpcKasiMich_Param_c() {}
+
+    static daNpcKasiMich_HIOParam const m;
 };
+
+#if DEBUG
+class daNpcKasiMich_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpcKasiMich_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    /* 0x8 */ daNpcKasiMich_HIOParam m;
+};
+
+#define NPC_KASI_MICH_HIO_CLASS daNpcKasiMich_HIO_c
+#else
+#define NPC_KASI_MICH_HIO_CLASS daNpcKasiMich_Param_c
+#endif
 
 class daNpcKasiMich_c : public daNpcF_c {
 public:
@@ -117,7 +131,7 @@ private:
     /* 0x0BF0 */ daNpcF_Lookat_c mLookat;
     /* 0x0C8C */ daNpcF_ActorMngr_c mActorMngr[1];
     /* 0x0C94 */ daNpcF_Path_c mPath;
-    /* 0x12C4 */ daNpcKasiMich_HIO_c* mHIO;
+    /* 0x12C4 */ NPC_KASI_MICH_HIO_CLASS* mpHIO;
     /* 0x12C8 */ dCcD_Cyl mCyl;
     /* 0x1404 */ s16 mMode;
     /* 0x1408 */ actionFunc mAction;
@@ -142,12 +156,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpcKasiMich_c) == 0x146c);
-
-class daNpcKasiMich_Param_c {
-public:
-    virtual ~daNpcKasiMich_Param_c() {}
-
-    static daNpcKasiMich_HIOParam const m;
-};
 
 #endif /* D_A_NPC_KASI_MICH_H */

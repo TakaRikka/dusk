@@ -49,18 +49,18 @@ typedef struct request_node_class {
 
 void fpcNdRq_RequestQTo(node_create_request* i_request);
 void fpcNdRq_ToRequestQ(node_create_request* i_request);
-s32 fpcNdRq_phase_IsCreated(node_create_request* i_request);
-s32 fpcNdRq_phase_Create(node_create_request* i_request);
-s32 fpcNdRq_phase_IsDeleteTiming(node_create_request* i_request);
-s32 fpcNdRq_phase_IsDeleted(node_create_request* i_request);
-s32 fpcNdRq_phase_Delete(node_create_request* i_request);
-s32 fpcNdRq_DoPhase(node_create_request* i_request);
-s32 fpcNdRq_Execute(node_create_request* i_request);
-s32 fpcNdRq_Delete(node_create_request* i_request);
-s32 fpcNdRq_Cancel(node_create_request* i_request);
-s32 fpcNdRq_Handler();
-s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode);
-s32 fpcNdRq_IsIng(process_node_class* i_procNode);
+int fpcNdRq_phase_IsCreated(node_create_request* i_request);
+int fpcNdRq_phase_Create(node_create_request* i_request);
+int fpcNdRq_phase_IsDeleteTiming(node_create_request* i_request);
+int fpcNdRq_phase_IsDeleted(node_create_request* i_request);
+int fpcNdRq_phase_Delete(node_create_request* i_request);
+int fpcNdRq_DoPhase(node_create_request* i_request);
+int fpcNdRq_Execute(node_create_request* i_request);
+int fpcNdRq_Delete(node_create_request* i_request);
+int fpcNdRq_Cancel(node_create_request* i_request);
+int fpcNdRq_Handler();
+int fpcNdRq_IsPossibleTarget(process_node_class* i_procNode);
+int fpcNdRq_IsIng(process_node_class* i_procNode);
 node_create_request* fpcNdRq_Create(u32 i_requestSize);
 node_create_request* fpcNdRq_ChangeNode(u32 i_requestSize, process_node_class* i_procNode,
                                         s16 i_procName, void* i_data);
@@ -70,7 +70,7 @@ node_create_request*
 fpcNdRq_Request(u32 i_requestSize, int i_reqType,
                 process_node_class* i_procNode, s16 i_procName, void* i_data,
                 node_create_request_method_class* i_create_req_methods);
-s32 fpcNdRq_ReChangeNode(fpc_ProcID i_requestID, s16 i_procName, void* i_data);
-s32 fpcNdRq_ReRequest(fpc_ProcID i_requestID, s16 i_procName, void* i_data);
+int fpcNdRq_ReChangeNode(fpc_ProcID i_requestID, s16 i_procName, void* i_data);
+int fpcNdRq_ReRequest(fpc_ProcID i_requestID, s16 i_procName, void* i_data);
 
 #endif

@@ -81,7 +81,7 @@ void J3DTexMtx::calcTexMtx(const Mtx param_0) {
     };
 
     u32 r28 = mTexMtxInfo.mInfo & 0x3f;
-    u32 r30 = (mTexMtxInfo.mInfo >> 7) & 1;
+    u32 r30 = u32(mTexMtxInfo.mInfo & 0x80) >> 7;
     switch (r28) {
     case 8:
     case 9:
@@ -176,7 +176,7 @@ void J3DTexMtx::calcPostTexMtx(const Mtx param_0) {
     };
 
     u32 r29 = mTexMtxInfo.mInfo & 0x3f;
-    u32 r30 = (mTexMtxInfo.mInfo >> 7) & 1;
+    u32 r30 = u32(mTexMtxInfo.mInfo & 0x80) >> 7;
     switch (r29) {
     case 8:
     case 11:

@@ -6,7 +6,7 @@
 namespace JGadget {
 template <typename T>
 struct TAllocator {
-    T* allocate(u32 count, void *param_2) {
+    T* allocate(u32 count, const void *param_2) {
         return AllocateRaw(count * sizeof(T));
     }
 
@@ -18,7 +18,7 @@ struct TAllocator {
         DeallocateRaw(mem);
     }
 
-    void DeallocateRaw(T* mem) {
+    void DeallocateRaw(void* mem) {
         delete mem;
     }
 

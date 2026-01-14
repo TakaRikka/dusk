@@ -24,7 +24,7 @@
 #include "f_op/f_op_kankyo.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
-#include <stdlib>
+#include <cstdlib>
 
 static void GxXFog_set();
 

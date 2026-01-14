@@ -1,5 +1,5 @@
 #include "scanf.h"
-#include <ctype>
+#include <cctype>
 #include <cmath>
 #include <cstdio>
 #include <cstdint>

@@ -3,7 +3,7 @@
 
 #include "JSystem/JKernel/JKRThread.h"
 #include "JSystem/JUtility/JUTGamePad.h"
-#include <stdarg>
+#include <cstdarg>
 #include <dolphin/gx.h>
 #include <dolphin/os.h>
 #include "global.h"

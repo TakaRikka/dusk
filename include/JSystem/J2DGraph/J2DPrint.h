@@ -2,7 +2,7 @@
 #define J2DPRINT_H
 
 #include "JSystem/J2DGraph/J2DTextBox.h"
-#include <stdarg>
+#include <cstdarg>
 
 class JUTFont;
 class J2DPrint;

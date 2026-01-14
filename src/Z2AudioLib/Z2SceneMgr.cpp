@@ -1,3 +1,5 @@
+#include "d/dolzel.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio2/JASBasicWaveBank.h"
 #include "JSystem/JAudio2/JAUSectionHeap.h"
 #include "JSystem/JAudio2/JAUSoundTable.h"

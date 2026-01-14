@@ -10,7 +10,8 @@
 #include "f_pc/f_pc_searcher.h"
 
 enum {
-    fpcM_ERROR_PROCESS_ID_e = 0xFFFFFFFF
+    fpcM_UNK_PROCESS_ID_e = 0xFFFFFFFE,
+    fpcM_ERROR_PROCESS_ID_e = 0xFFFFFFFF,
 };
 
 typedef int (*FastCreateReqFunc)(void*);
@@ -42,15 +43,15 @@ inline fpc_ProcID fpcM_Create(s16 i_procName, FastCreateReqFunc i_createFunc, vo
                             i_append);
 }
 
-inline s32 fpcM_DrawPriority(const void* i_process) {
-    return (s16)fpcLf_GetPriority((const leafdraw_class*)i_process);
+inline int fpcM_DrawPriority(const void* i_process) {
+    return fpcLf_GetPriority((const leafdraw_class*)i_process);
 }
 
-inline s32 fpcM_ChangeLayerID(void* i_process, int i_layerID) {
+inline int fpcM_ChangeLayerID(void* i_process, int i_layerID) {
     return fpcPi_Change(&((base_process_class*)i_process)->priority, i_layerID, 0xFFFD, 0xFFFD);
 }
 
-inline s32 fpcM_MakeOfType(int* i_type) {
+inline int fpcM_MakeOfType(int* i_type) {
     return fpcBs_MakeOfType(i_type);
 }
 
@@ -95,15 +96,15 @@ inline process_node_class* fpcM_Layer(void* i_process) {
 }
 
 void fpcM_Draw(void* i_process);
-s32 fpcM_DrawIterater(fpcM_DrawIteraterFunc i_drawIterFunc);
-s32 fpcM_Execute(void* i_process);
-s32 fpcM_Delete(void* i_process);
+int fpcM_DrawIterater(fpcM_DrawIteraterFunc i_drawIterFunc);
+int fpcM_Execute(void* i_process);
+int fpcM_Delete(void* i_process);
 BOOL fpcM_IsCreating(fpc_ProcID i_id);
 void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_postExecuteFn);
 void fpcM_Init();
 base_process_class* fpcM_FastCreate(s16 i_procname, FastCreateReqFunc i_createReqFunc,
                                     void* i_createData, void* i_append);
-s32 fpcM_IsPause(void* i_process, u8 i_flag);
+int fpcM_IsPause(void* i_process, u8 i_flag);
 void fpcM_PauseEnable(void* i_process, u8 i_flag);
 void fpcM_PauseDisable(void* i_process, u8 i_flag);
 void* fpcM_JudgeInLayer(fpc_ProcID i_layerID, fpcCtIt_JudgeFunc i_judgeFunc, void* i_data);

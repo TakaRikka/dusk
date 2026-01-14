@@ -22,7 +22,7 @@
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include <math>
+#include <cmath>
 
 class dmg_rod_HIO_c : public JORReflexible {
 public:
@@ -5493,7 +5493,7 @@ static void play_camera_u(dmg_rod_class* i_this) {
         break;
     }
     case 20:
-    case 21:
+    case 21: {
         if (!actor->eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderPotentialEvent(actor, 2, 0xFFFF, 0);
             actor->eventInfo.onCondition(dEvtCnd_CANDEMO_e);
@@ -5647,6 +5647,7 @@ static void play_camera_u(dmg_rod_class* i_this) {
             daAlink_getAlinkActorClass()->changeFishGetFace(0);
         }
         break;
+    }
     case 90:
         sp18 = 1;
         break;

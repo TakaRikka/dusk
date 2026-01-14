@@ -1,5 +1,8 @@
+#include "alloc.h"
+#include "buffer_io.h"
 #include "file_io.h"
-#include <ctype>
+#include "FILE_POS.h"
+#include <cctype>
 
 int fclose(FILE* file) {
     int flush_result, close_result;

@@ -172,7 +172,7 @@ s32 J2DScreen::makeHierarchyPanes(J2DPane* p_basePane, JSURandomInputStream* p_s
 
 J2DPane* J2DScreen::createPane(J2DScrnBlockHeader const& header, JSURandomInputStream* p_stream,
                                J2DPane* p_basePane, u32 param_3, JKRArchive* p_archive) {
-    J2DPane* newPane;
+    J2DPane* newPane = NULL;
 
     switch (header.mTag) {
     case 'PAN1':
@@ -212,6 +212,7 @@ J2DPane* J2DScreen::createPane(J2DScrnBlockHeader const& header, JSURandomInputS
         newPane = new J2DTextBox(p_basePane, p_stream, param_3, mMaterials);
         break;
     default:
+        JUT_WARN(446, "%s", "unknown pane");
         s32 position = p_stream->getPosition();
         s32 size = header.mSize;
         s32 start = size + position;
@@ -280,29 +281,30 @@ void J2DScreen::drawSelf(f32 param_0, f32 param_1, Mtx* param_2) {
     JUtility::TColor color(mColor);
     u8 alpha = (color.a * mAlpha) / 255;
 
-    if (alpha != 0) {
-        JUtility::TColor sp8(alpha | ((u32)color & 0xFFFFFF00));
-        color = sp8;
-
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_SET);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-
-        GXPosition3f32(0.0f, 0.0f, 0.0f);
-        GXColor1u32(color);
-
-        GXPosition3f32(getWidth(), 0.0f, 0.0f);
-        GXColor1u32(color);
-
-        GXPosition3f32(getWidth(), getHeight(), 0.0f);
-        GXColor1u32(color);
-
-        GXPosition3f32(0.0f, getHeight(), 0.0f);
-        GXColor1u32(color);
-
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
-        GXEnd();
+    if (alpha == 0) {
+        return;
     }
+
+    color = JUtility::TColor(alpha | ((u32)color & 0xFFFFFF00));
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_SET);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+    GXPosition3f32(0.0f, 0.0f, 0.0f);
+    GXColor1u32(color);
+
+    GXPosition3f32(getWidth(), 0.0f, 0.0f);
+    GXColor1u32(color);
+
+    GXPosition3f32(getWidth(), getHeight(), 0.0f);
+    GXColor1u32(color);
+
+    GXPosition3f32(0.0f, getHeight(), 0.0f);
+    GXColor1u32(color);
+    GXEnd();
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
 }
 
 J2DResReference* J2DScreen::getResReference(JSURandomInputStream* p_stream, u32 param_1) {
@@ -407,7 +409,7 @@ bool J2DScreen::isUsed(ResFONT const* p_font) {
 J2DDataManage* J2DScreen::mDataManage;
 
 void* J2DScreen::getNameResource(char const* resName) {
-    void* res = JKRFileLoader::getGlbResource(resName, NULL);
+    void* res = JKRGetNameResource(resName, NULL);
 
     if (res == NULL && mDataManage != NULL) {
         res = mDataManage->get(resName);

@@ -32,8 +32,7 @@ struct dCamMapToolData {
     }
 
     void Clr() {
-        mArrowIndex = 0xFF;
-        mCameraIndex = 0xFF;
+        mCameraIndex = mArrowIndex = 0xFF;
         mFlags = 0;
         mpActor = NULL;
         mPathId = 0xFF;
@@ -59,7 +58,7 @@ struct dCamForcusLine {
     /* 0x38 */ cXyz field_0x38;
     /* 0x44 */ GXColor field_0x44;
     /* 0x48 */ u8 field_0x48;
-    /* 0x49 */ u8 field_0x49;
+    /* 0x49 */ bool field_0x49;
     /* 0x4C */ int field_0x4c;
     /* 0x50 */ int field_0x50;
     /* 0x54 */ int field_0x54;
@@ -73,17 +72,11 @@ struct dCamForcusLine {
     /* 0x6C */ f32 field_0x6c;
 };
 
-struct dCamera_FakeAngle_system {
-    /* 0x0 */ u8 field_0x0;
-    /* 0x2 */ cSAngle field_0x2;
-    /* 0x4 */ cSAngle field_0x4;
-};
-
-struct dCamera_monitoring_things {
-    /* 0x00 */ cXyz field_0x0;
-    /* 0x0C */ f32 field_0xc;
-    /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ cXyz field_0x14;
+struct UnkManualCameraParam {
+    f32 r;
+    f32 v;
+    f32 u;
+    f32 fov;
 };
 
 struct dCamera_event_param {
@@ -91,23 +84,6 @@ struct dCamera_event_param {
     /* 0x10 */ int field_0x10;
     /* 0x14 */ int value;
 };
-
-struct dCamera_event_data {
-    /* 0x000 */ u8 field_0x0;
-    /* 0x004 */ int mStaffIdx;
-    /* 0x008 */ int field_0x8;
-    /* 0x00C */ int field_0xc;
-    /* 0x010 */ u8 field_0x10;
-    /* 0x014 */ int field_0x14;
-    /* 0x018 */ int field_0x18;
-    /* 0x01C */ int field_0x1c;
-    /* 0x020 */ int field_0x20;
-    /* 0x024 */ int field_0x24;
-    /* 0x028 */ u8 field_0x28[0x2C - 0x28];
-    /* 0x02C */ dCamera_event_param mEventParams[8];
-    /* 0x0EC */ dStage_MapEvent_dt_c* field_0xec;
-    /* 0x0F0 */ d2DBSplinePath field_0xf0;
-};  // Size: 0x124
 
 struct dCamera_type_data {
     /* 0x00 */ char name[24];
@@ -170,22 +146,46 @@ public:
         /* 0x1C */ _stick mCStick;
     };
 
+    struct dCamera_event_data {
+        /* 0x000 */ u8 field_0x0;
+        /* 0x004 */ int mStaffIdx;
+        /* 0x008 */ int field_0x8;
+        /* 0x00C */ int field_0xc;
+        /* 0x010 */ u8 field_0x10;
+        /* 0x014 */ int field_0x14;
+        /* 0x018 */ int field_0x18;
+        /* 0x01C */ int field_0x1c;
+        /* 0x020 */ int field_0x20;
+        /* 0x024 */ int field_0x24;
+        /* 0x028 */ u8 field_0x28[0x2C - 0x28];
+        /* 0x02C */ dCamera_event_param mEventParams[8];
+        /* 0x0EC */ dStage_MapEvent_dt_c* field_0xec;
+        /* 0x0F0 */ d2DBSplinePath field_0xf0;
+    };  // Size: 0x124
+
+    struct dCamera_monitoring_things {
+        /* 0x00 */ cXyz field_0x0;
+        /* 0x0C */ f32 field_0xc;
+        /* 0x10 */ f32 field_0x10;
+        /* 0x04 */ struct {
+            /* 0x00 */ cXyz field_0x0;
+        } field_0x14;
+    };
+
+    struct dCamera_FakeAngle_system {
+        /* 0x0 */ u8 field_0x0;
+        /* 0x2 */ cSAngle field_0x2;
+        /* 0x4 */ cSAngle field_0x4;
+    };
+
     struct BG {
-        class {
-        public:
+        struct {
             /* 0x00 */ bool field_0x0;
             /* 0x04 */ dBgS_CamGndChk field_0x4;
             /* 0x58 */ f32 field_0x58;
-        } /* 0x000 */ field_0x0;
-        class {
-        public:
-            /* 0x00 */ bool field_0x0;
-            /* 0x04 */ dBgS_CamGndChk field_0x4;
-            /* 0x58 */ f32 field_0x58;
-        } /* 0x05C */ field_0x5c;
+        } /* 0x000 */ field_0x0, field_0x5c;
         /* 0x0B8 */ u8 field_0xb8[0xC0 - 0xB8];
-        class {
-        public:
+        struct {
             /* 0x00 */ u8 field_0x0;
             /* 0x01 */ u8 field_0x1;
             /* 0x04 */ cXyz field_0x4;
@@ -201,8 +201,7 @@ public:
             /* 0x40 */ int field_0x40;
             /* 0x44 */ u8 field_0x44;
         } /* 0x0C0 */ field_0xc0;
-        class {
-        public:
+        struct {
             /* 0x0 */ int field_0x0;
             /* 0x4 */ f32 field_0x4;
             /* 0x8 */ cXyz field_0x8;
@@ -875,6 +874,23 @@ public:
         /* 0xA0 */ fopAc_ac_c* field_0xa0;
     };
 
+    struct ManualData {
+        int field_0x00;
+        cXyz field_0x04;
+        cXyz field_0x10;
+        f32 field_0x1c;
+        f32 field_0x20;
+        int field_0x24;
+        u8 field_0x28;
+        f32 field_0x2c;
+        cSGlobe field_0x30;
+        f32 field_0x38;
+        f32 field_0x3c;
+        int field_0x40;
+        cSAngle field_0x44;
+        f32 field_0x48;
+    };
+
     int StartEventCamera(int, int, ...);
     int EndEventCamera(int);
     int searchEventArgData(char*);
@@ -940,6 +956,7 @@ public:
     void updateMonitor();
     bool checkForceLockTarget();
     void infoReport();
+    void debugDrawInit();
     bool Run();
     bool NotRun();
     s16 V();
@@ -948,6 +965,9 @@ public:
     bool SetTrimTypeForce(s32);
     void CalcTrimSize();
     int Draw();
+    void debugDraw();
+    int debugDrawPoint(cXyz&);
+    int debugDrawLine(cXyz&, cXyz&);
     void setStageMapToolData();
     void setMapToolData();
     void SetTagData(fopAc_ac_c*, s32, u16, u8);
@@ -973,6 +993,10 @@ public:
     bool pointInSight(cXyz*);
     f32 radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*, fopAc_ac_c*);
     f32 radiusActorInSight(fopAc_ac_c*, fopAc_ac_c*, cXyz*, cXyz*, f32, s16, f32);
+    f32 radiusActorInSight(fopAc_ac_c* param_0, fopAc_ac_c* param_1) {
+        return radiusActorInSight(param_0, param_1, &mViewCache.mCenter, &mViewCache.mEye, mFovy,
+                                  mBank, 0.05f);
+    }
     f32 groundHeight(cXyz*);
     bool lineBGCheck(cXyz*, cXyz*, dBgS_LinChk*, u32);
     bool lineBGCheck(cXyz*, cXyz*, u32);
@@ -1046,8 +1070,6 @@ public:
     cXyz talkBasePos(fopAc_ac_c* i_actor) { return i_actor->current.pos; }
     cXyz talkEyePos(fopAc_ac_c* i_actor) { return i_actor->eyePos; }
 
-    void debugDraw();
-
     int CameraID() { return mCameraID; }
 
     bool Active() { return mCurState == 0; }
@@ -1062,7 +1084,7 @@ public:
     u32 setFlag(u32 i_flag) { return mEventFlags |= i_flag; }
     u32 clrFlag(u32 i_flag) { return mEventFlags &= ~i_flag; }
 
-    bool CheckFlag(u32 i_flag) { return mEventFlags & i_flag; }
+    bool CheckFlag(u32 i_flag) { return (mEventFlags & i_flag) != 0 ? true : false; }
 
     void ResetView() { setView(0.0f, 0.0f, FB_WIDTH, FB_HEIGHT); }
 
@@ -1114,12 +1136,25 @@ public:
 
     int Gear() { return mGear; }
 
+    bool HideBGPartsOK() {
+        return chkFlag(0x4);
+    }
+
+    f32 Near4Debug() {
+        return mCamSetup.Near();
+    }
+    f32 Far4Debug() {
+        return mCamSetup.Far();
+    }
+
     static engine_fn engine_tbl[];
 
     /* 0x000 */ camera_class* field_0x0;
 #if DEBUG
     cXyz dbg_field_0x04[16];
-    u8 dbg_field_c4[0xDC - 0xC4];
+    s8 dbg_field_0xc4[0x10];
+    u32 dbg_field_0xd4;
+    int dbg_field_0xd8;
 #endif
     struct {
         /* 0x00 */ int mRoomNo;
@@ -1144,6 +1179,11 @@ public:
         /* 0x14 */ cXyz mEye;
         /* 0x20 */ cSAngle mBank;
         /* 0x24 */ f32 mFovy;
+#if defined(__MWERKS__) && __MWERKS__ < 0x4200
+        // Static data members in an anonymous class are illegal in C++, but MWCC for GC accepts it.
+        // However, MWCC for Wii does not so this was removed for the Shield release.
+        static const int PatternLengthMax = 4;
+#endif
     }
     /* 0x05C */ mViewCache;
     /* 0x084 */ f32 field_0x84;
@@ -1181,7 +1221,8 @@ public:
     /* 0x168 */ u8 field_0x168;
     /* 0x16C */ int field_0x16c;
     /* 0x170 */ u32 field_0x170;
-    /* 0x174 */ u32 mCurCamStyleTimer; // this might be a signed int in ShieldD
+    /* 0x174 */ u32 mCurCamStyleTimer; // something is weird about this field - it's sometimes (but
+                                       // not always) treated as signed in ShieldD specifically
     /* 0x178 */ u32 mCameraID;
     /* 0x17C */ u32 mPadID;
     /* 0x180 */ fopAc_ac_c* mpPlayerActor;
@@ -1205,16 +1246,16 @@ public:
     /* 0x1FC */ int mCStickUpLatch;
     /* 0x200 */ f32 mTriggerLeftLast;
     /* 0x204 */ f32 mTriggerLeftDelta;
-    /* 0x208 */ u8 mHoldLockL;
-    /* 0x209 */ u8 mTrigLockL;
-    /* 0x20A */ u8 mLockLActive;
-    /* 0x20B */ u8 mLockLJustActivated;
+    /* 0x208 */ bool mHoldLockL;
+    /* 0x209 */ bool mTrigLockL;
+    /* 0x20A */ bool mLockLActive;
+    /* 0x20B */ bool mLockLJustActivated;
     /* 0x20C */ f32 mTriggerRightLast;
     /* 0x210 */ f32 mTriggerRightDelta;
-    /* 0x214 */ u8 mHoldLockR;
-    /* 0x215 */ u8 mTrigLockR;
-    /* 0x216 */ u8 mLockRActive;
-    /* 0x217 */ u8 mLockRJustActivated;
+    /* 0x214 */ bool mHoldLockR;
+    /* 0x215 */ bool mTrigLockR;
+    /* 0x216 */ bool mLockRActive;
+    /* 0x217 */ bool mLockRJustActivated;
     /* 0x218 */ bool mHoldX;
     /* 0x219 */ bool mTrigX;
     /* 0x21A */ bool mHoldY;
@@ -1324,9 +1365,6 @@ public:
     /* 0x968 */ f32 field_0x968;
     /* 0x96C */ f32 field_0x96c;
     /* 0x970 */ dCamSetup_c mCamSetup;
-#if DEBUG
-    u8 unk_debug_0xbc4[0x10];
-#endif
     /* 0xAEC */ dCamParam_c mCamParam;
     /* 0xB0C */ u8 field_0xb0c;
     /* 0xB0D */ u8 field_0xb0d[0xd58 - 0xb0d];

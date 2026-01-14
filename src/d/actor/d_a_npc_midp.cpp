@@ -65,14 +65,6 @@ char* daNpc_midP_c::mCutNameList = "";
 
 daNpc_midP_c::cutFunc daNpc_midP_c::mCutList[1] = { 0 };
 
-daNpc_midP_c::~daNpc_midP_c() {
-    OS_REPORT("|%06d:%x|daNpc_midP_c -> デストラクト\n", g_Counter.mCounter0, this);
-    if (heap != 0) {
-        mpMorf[0]->stopZelAnime();
-    }
-    deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
-}
-
 daNpc_midP_HIOParam const daNpc_midP_Param_c::m = {
     210.0f, 
     -3.0f,
@@ -117,6 +109,37 @@ daNpc_midP_HIOParam const daNpc_midP_Param_c::m = {
     0.0f,
 };
 
+static NPC_MIDP_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_midP_HIO_c::daNpc_midP_HIO_c() {
+    m = daNpc_midP_Param_c::m;
+}
+
+void daNpc_midP_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_midP_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_midP_c::~daNpc_midP_c() {
+    OS_REPORT("|%06d:%x|daNpc_midP_c -> デストラクト\n", g_Counter.mCounter0, this);
+    if (heap != 0) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
+}
+
 int daNpc_midP_c::create() {
     daNpcT_ct(this, daNpc_midP_c, &l_faceMotionAnmData, &l_motionAnmData, l_faceMotionSequenceData, 4,
         l_motionSequenceData, 4, l_evtList, l_resNameList);
@@ -147,9 +170,14 @@ int daNpc_midP_c::create() {
 
         mSound.init(&current.pos, &eyePos, 3, 1);
 
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ミドナ姫");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
             fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_midP_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgHitCallback(tgHitCallBack);
@@ -325,27 +353,27 @@ void daNpc_midP_c::setParam() {
     selectAction();
     srchActors();
 
-    s16 sVar1 = daNpc_midP_Param_c::m.common.talk_distance;
-    s16 sVar2 = daNpc_midP_Param_c::m.common.talk_angle;
-    s16 sVar3 = daNpc_midP_Param_c::m.common.attention_distance;
-    s16 sVar4 = daNpc_midP_Param_c::m.common.attention_angle;
+    s16 sVar1 = mpHIO->m.common.talk_distance;
+    s16 sVar2 = mpHIO->m.common.talk_angle;
+    s16 sVar3 = mpHIO->m.common.attention_distance;
+    s16 sVar4 = mpHIO->m.common.attention_angle;
 
     attention_info.distances[0] = daNpcT_getDistTableIdx(sVar3, sVar4);
     attention_info.distances[1] = attention_info.distances[0];
     attention_info.distances[3] = daNpcT_getDistTableIdx(sVar1, sVar2);
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
 
-    scale.setall(daNpc_midP_Param_c::m.common.scale);
-    mCcStts.SetWeight(daNpc_midP_Param_c::m.common.weight);
-    mCylH = daNpc_midP_Param_c::m.common.height;
-    mWallR = daNpc_midP_Param_c::m.common.width;
-    mAttnFovY = daNpc_midP_Param_c::m.common.fov;
+    scale.setall(mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_midP_Param_c::m.common.knee_length);
-    mRealShadowSize = daNpc_midP_Param_c::m.common.real_shadow_size;
-    mExpressionMorfFrame = daNpc_midP_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_midP_Param_c::m.common.morf_frame;
-    gravity = daNpc_midP_Param_c::m.common.gravity;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 void daNpc_midP_c::setAfterTalkMotion() {
@@ -420,11 +448,11 @@ void daNpc_midP_c::setAttnPos() {
     f32 dVar5 = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     J3DModel* model = mpMorf[0]->getModel();
     mJntAnm.setParam(this, model, &sp3c, getBackboneJointNo(), getNeckJointNo(),
-        getHeadJointNo(), daNpc_midP_Param_c::m.common.body_angleX_min, daNpc_midP_Param_c::m.common.body_angleX_max,
-        daNpc_midP_Param_c::m.common.body_angleY_min, daNpc_midP_Param_c::m.common.body_angleY_max,
-        daNpc_midP_Param_c::m.common.head_angleX_min, daNpc_midP_Param_c::m.common.head_angleX_max,
-        daNpc_midP_Param_c::m.common.head_angleY_min, daNpc_midP_Param_c::m.common.head_angleY_max,
-        daNpc_midP_Param_c::m.common.neck_rotation_ratio, dVar5, &sp48);
+        getHeadJointNo(), mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+        mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+        mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+        mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio, dVar5, &sp48);
     mJntAnm.calcJntRad(0.2f, 1.0f, dVar5);
     setMtx();
 
@@ -434,7 +462,7 @@ void daNpc_midP_c::setAttnPos() {
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, 0, 1.0f, 0);
 
     attention_info.position = current.pos;
-    attention_info.position.y += daNpc_midP_Param_c::m.common.attention_offset;
+    attention_info.position.y += mpHIO->m.common.attention_offset;
 }
 
 void daNpc_midP_c::setCollision() {
@@ -608,8 +636,6 @@ static int daNpc_midP_Draw(void* i_this) {
 static int daNpc_midP_IsDelete(void* i_this) {
     return 1;
 }
-
-static daNpc_midP_Param_c l_HIO;
 
 static actor_method_class daNpc_midP_MethodTable = {
     (process_method_func)daNpc_midP_Create,

@@ -233,15 +233,7 @@ int (daNpc_Kkri_c::*daNpc_Kkri_c::mCutList[])(int) = {
     &daNpc_Kkri_c::cutYmLook,
 };
 
-daNpc_Kkri_c::~daNpc_Kkri_c() {
-    OS_REPORT("|%06d:%x|daNpc_Kkri_c -> デストラクト\n", g_Counter.mCounter0, this);
-
-    if (mpMorf[0] != NULL) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
-}
+static NPC_KKRI_HIO_CLASS l_HIO;
 
 const daNpc_Kkri_HIOParam daNpc_Kkri_Param_c::m = {
     180.0f,
@@ -287,6 +279,36 @@ const daNpc_Kkri_HIOParam daNpc_Kkri_Param_c::m = {
     0.0f,
 };
 
+#if DEBUG
+daNpc_Kkri_HIO_c::daNpc_Kkri_HIO_c() {
+    m = daNpc_Kkri_Param_c::m;
+}
+
+void daNpc_Kkri_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Kkri_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_Kkri_c::~daNpc_Kkri_c() {
+    OS_REPORT("|%06d:%x|daNpc_Kkri_c -> デストラクト\n", g_Counter.mCounter0, this);
+
+    if (mpMorf[0] != NULL) {
+        mpMorf[0]->stopZelAnime();
+    }
+    
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+}
+
 int daNpc_Kkri_c::create() {
     daNpcT_ct(this, daNpc_Kkri_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
@@ -321,14 +343,19 @@ int daNpc_Kkri_c::create() {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
-        
+
         mSound.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("キコリ");
+#endif
 
         reset();
 
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-    
-        mCcStts.Init(daNpc_Kkri_Param_c::m.common.weight, 0, this);
+
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
 
         mCcCyl.Set(mCcDCyl);
         mCcCyl.SetStts(&mCcStts);
@@ -418,7 +445,7 @@ int daNpc_Kkri_c::Draw() {
         mdlData_p->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    return draw(FALSE, FALSE, daNpc_Kkri_Param_c::m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE, FALSE);
+    return draw(FALSE, FALSE, mpHIO->m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
 int daNpc_Kkri_c::createHeapCallBack(fopAc_ac_c* i_this) {
@@ -513,10 +540,10 @@ void daNpc_Kkri_c::setParam() {
     srchActors();
 
     u32 attn_flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
-    s16 talk_dist = daNpc_Kkri_Param_c::m.common.talk_distance;
-    s16 talk_angle = daNpc_Kkri_Param_c::m.common.talk_angle;
-    s16 attn_dist = daNpc_Kkri_Param_c::m.common.attention_distance;
-    s16 attn_angle = daNpc_Kkri_Param_c::m.common.attention_angle;
+    s16 talk_dist = mpHIO->m.common.talk_distance;
+    s16 talk_angle = mpHIO->m.common.talk_angle;
+    s16 attn_dist = mpHIO->m.common.attention_distance;
+    s16 attn_angle = mpHIO->m.common.attention_angle;
 
     if (mType == 0) {
         talk_dist = 3;
@@ -551,18 +578,18 @@ void daNpc_Kkri_c::setParam() {
 
     attention_info.flags = attn_flags;
 
-    scale.set(daNpc_Kkri_Param_c::m.common.scale, daNpc_Kkri_Param_c::m.common.scale, daNpc_Kkri_Param_c::m.common.scale);
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
 
-    mCcStts.SetWeight(daNpc_Kkri_Param_c::m.common.weight);
-    mCylH = daNpc_Kkri_Param_c::m.common.height;
-    mWallR = daNpc_Kkri_Param_c::m.common.width;
-    mAttnFovY = daNpc_Kkri_Param_c::m.common.fov;
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Kkri_Param_c::m.common.knee_length);
-    mRealShadowSize = daNpc_Kkri_Param_c::m.common.real_shadow_size;
-    mExpressionMorfFrame = daNpc_Kkri_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Kkri_Param_c::m.common.morf_frame;
-    gravity = daNpc_Kkri_Param_c::m.common.gravity;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 
     if (mType == 0) {
         mAcch.SetGrndNone();
@@ -673,23 +700,23 @@ void daNpc_Kkri_c::setAttnPos() {
         mJntAnm.setParam(this, mpMorf[0]->getModel(), &sp34, getBackboneJointNo(), getNeckJointNo(), getHeadJointNo(),
             0.0f, 0.0f,
             0.0f, 0.0f,
-            daNpc_Kkri_Param_c::m.common.head_angleX_min, daNpc_Kkri_Param_c::m.common.head_angleX_max,
+            mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
             -30.0f, 30.0f,
-            daNpc_Kkri_Param_c::m.common.neck_rotation_ratio, 0.0f, NULL);
+            mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
     } else if (mType == 1) {
         mJntAnm.setParam(this, mpMorf[0]->getModel(), &sp34, getBackboneJointNo(), getNeckJointNo(), getHeadJointNo(),
             0.0f, 0.0f,
             0.0f, 0.0f,
-            daNpc_Kkri_Param_c::m.common.head_angleX_min, daNpc_Kkri_Param_c::m.common.head_angleX_max,
-            daNpc_Kkri_Param_c::m.common.head_angleY_min, daNpc_Kkri_Param_c::m.common.head_angleY_max,
-            daNpc_Kkri_Param_c::m.common.neck_rotation_ratio, 0.0f, NULL);
+            mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+            mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+            mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
     } else {
         mJntAnm.setParam(this, mpMorf[0]->getModel(), &sp34, getBackboneJointNo(), getNeckJointNo(), getHeadJointNo(),
-            daNpc_Kkri_Param_c::m.common.body_angleX_min, daNpc_Kkri_Param_c::m.common.body_angleX_max,
-            daNpc_Kkri_Param_c::m.common.body_angleY_min, daNpc_Kkri_Param_c::m.common.body_angleY_max,
-            daNpc_Kkri_Param_c::m.common.head_angleX_min, daNpc_Kkri_Param_c::m.common.head_angleX_max,
-            daNpc_Kkri_Param_c::m.common.head_angleY_min, daNpc_Kkri_Param_c::m.common.head_angleY_max,
-            daNpc_Kkri_Param_c::m.common.neck_rotation_ratio, 0.0f, NULL);
+            mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+            mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+            mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+            mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+            mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
     }
 
     mJntAnm.calcJntRad(0.2f, 1.0f, var_f31);
@@ -703,7 +730,7 @@ void daNpc_Kkri_c::setAttnPos() {
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, 0, 1.0f, 0);
 
     sp34.set(0.0f, 0.0f, 0.0f);
-    sp34.y = daNpc_Kkri_Param_c::m.common.attention_offset;
+    sp34.y = mpHIO->m.common.attention_offset;
 
     if (mType == 0) {
         sp34.set(0.0f, 160.0f, -20.0f);
@@ -1208,8 +1235,6 @@ static int daNpc_Kkri_Draw(void* i_this) {
 static int daNpc_Kkri_IsDelete(void* i_this) {
     return 1;
 }
-
-static daNpc_Kkri_Param_c l_HIO;
 
 static actor_method_class daNpc_Kkri_MethodTable = {
     (process_method_func)daNpc_Kkri_Create,

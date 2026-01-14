@@ -19,20 +19,9 @@
 #include "d/actor/d_a_npc_hoz.h"
 #include "d/actor/d_a_obj_zraMark.h"
 
-class daNpc_zrA_HIO_c {
-public:
-    daNpc_zrA_Param_c::param m;
-};
+static NPC_ZRA_HIO_CLASS l_HIO;
 
-#if DEBUG
-#define HIO_PARAM(i_this) (i_this->mpHIO->m)
-#else
-#define HIO_PARAM(_) (daNpc_zrA_Param_c::m)
-#endif
-
-static daNpc_zrA_Param_c l_HIO;
-
-daNpc_zrA_Param_c::param const daNpc_zrA_Param_c::m = {
+daNpc_zrA_HIOParam const daNpc_zrA_Param_c::m = {
     230.0f,   // mAttnOffsetY
     -3.0f,    // mGravity
     1.0f,     // mScale
@@ -65,6 +54,7 @@ daNpc_zrA_Param_c::param const daNpc_zrA_Param_c::m = {
     0,        // mTestMotion
     0,        // mTestLookMode
     false,    // mTest
+    false,
     20.0f,    // mSwimSpeed
     0.5f,     // mMinSwimSpeedScale
     0x580,    // mSwimAngleSpeed
@@ -447,6 +437,20 @@ daNpc_zrA_c::EventFn daNpc_zrA_c::mEvtCutList[11] = {
     &daNpc_zrA_c::ECut_talkMulti,
 };
 
+#if DEBUG
+daNpc_zrA_HIO_c::daNpc_zrA_HIO_c() {
+    m = daNpc_zrA_Param_c::m;
+}
+
+void daNpc_zrA_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_zrA_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daNpc_zrA_c::daNpc_zrA_c() {}
 
 daNpc_zrA_c::~daNpc_zrA_c() {
@@ -476,6 +480,12 @@ daNpc_zrA_c::~daNpc_zrA_c() {
     if (heap != NULL) {
         mAnm_p->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
 }
 
 cPhs__Step daNpc_zrA_c::create() {
@@ -547,11 +557,17 @@ cPhs__Step daNpc_zrA_c::create() {
         fopAcM_SetMtx(this, mAnm_p->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 450.0f, 300.0f);
         mCreatureSound.init(&current.pos, &eyePos, 3, 1);
-        mAcchCir.SetWall(daNpc_zrA_Param_c::m.mWallR, daNpc_zrA_Param_c::m.mWallH);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ゾ－ラ");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mPaPo.init(&mAcch, daNpc_zrA_Param_c::m.mCylH, daNpc_zrA_Param_c::m.mCylH);
-        mCcStts.Init(daNpc_zrA_Param_c::m.mCcWeight, 0, this);
+        mPaPo.init(&mAcch, mpHIO->m.common.height, mpHIO->m.common.height);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCcCyl.Set(mCcDCyl);
         mCcCyl.SetStts(&mCcStts);
         mCcCyl.SetTgHitCallback(tgHitCallBack);
@@ -734,7 +750,7 @@ int daNpc_zrA_c::Draw() {
             }
 
             mShadowKey = dComIfGd_setShadow(mShadowKey, 1, model, &current.pos,
-                                            daNpc_zrA_Param_c::m.mShadowDepth, 20.0f,
+                                            mpHIO->m.common.real_shadow_size, 20.0f,
                                             current.pos.y, mGroundH, mGndChk, &tevStr,
                                             0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
             
@@ -794,7 +810,7 @@ int daNpc_zrA_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     case 1:
     case 3:
     case 4:
-        setLookatMtx(jnt_no, lookat_joints, daNpc_zrA_Param_c::m.mNeckAngleScl);
+        setLookatMtx(jnt_no, lookat_joints, mpHIO->m.common.neck_rotation_ratio);
         break;
     }
 
@@ -878,18 +894,18 @@ void daNpc_zrA_c::setParam() {
 
     attention_info.flags = attn_flags;
 
-    scale.set(daNpc_zrA_Param_c::m.mScale,
-              daNpc_zrA_Param_c::m.mScale,
-              daNpc_zrA_Param_c::m.mScale);
+    scale.set(mpHIO->m.common.scale,
+              mpHIO->m.common.scale,
+              mpHIO->m.common.scale);
     if (mSwimMode != SWIM_WAIT) {
         scale *= mScaleFactor;
     }
 
-    mAcchCir.SetWallR(daNpc_zrA_Param_c::m.mWallR);
-    mAcchCir.SetWallH(daNpc_zrA_Param_c::m.mWallH);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
 
     if ((mType == TYPE_WAIT && !in_water) || mType == TYPE_SPA) {
-        gravity = daNpc_zrA_Param_c::m.mGravity;
+        gravity = mpHIO->m.common.gravity;
     }
 }
 
@@ -909,7 +925,7 @@ BOOL daNpc_zrA_c::main() {
         attention_info.flags = 0;
     }
 
-    if (!daNpc_zrA_Param_c::m.mTest
+    if (!mpHIO->m.common.debug_mode_ON
         && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())))
     {
         if (mOrderEvtNo != EVT_NONE) {
@@ -986,7 +1002,7 @@ BOOL daNpc_zrA_c::ctrlBtk() {
 
 void daNpc_zrA_c::setAttnPos() {
     static cXyz eyeOffset(-20.0f, 10.0f, 0.0f);
-    f32 offset = daNpc_zrA_Param_c::m.mAttnOffsetY;
+    f32 offset = mpHIO->m.common.attention_offset;
     cXyz center, vec2, vec3, vec4, vec5;
 
     mDoMtx_stack_c::YrotS(field_0x990);
@@ -1078,7 +1094,7 @@ void daNpc_zrA_c::setAttnPos() {
         } else if (mType == TYPE_SWIM && mPath.getPathInfo() != NULL) {
             extra_height = -150.0f;
         }
-        
+
         center = current.pos;
         attention_info.position.set(center.x, center.y + offset, center.z);
     }
@@ -1114,8 +1130,8 @@ void daNpc_zrA_c::setAttnPos() {
         }
 
         mCcCyl.SetC(center);
-        mCcCyl.SetH(daNpc_zrA_Param_c::m.mCylH + extra_height);
-        mCcCyl.SetR(daNpc_zrA_Param_c::m.mWallR + extra_radius);
+        mCcCyl.SetH(mpHIO->m.common.height + extra_height);
+        mCcCyl.SetR(mpHIO->m.common.width + extra_radius);
         dComIfG_Ccsp()->Set(&mCcCyl);
     }
 
@@ -1665,7 +1681,7 @@ void daNpc_zrA_c::reset() {
     mSpinAngle = 0;
     mSpinTimer = 0;
     mSwimSpeedScale = 1.0f;
-    mSwimSpeedF = mSwimSpeedScale * daNpc_zrA_Param_c::m.mSwimSpeed;
+    mSwimSpeedF = mSwimSpeedScale * mpHIO->m.mSwimSpeed;
     mSwimMode = SWIM_WAIT;
     field_0x1521 = false;
     mWaistAngle.set(0, 0, 0);
@@ -1707,57 +1723,57 @@ void daNpc_zrA_c::reset() {
 }
 
 void daNpc_zrA_c::playExpression() {
-    daNpcF_anmPlayData dat0a = {ANM_F_TALK_NOMAL, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat0b = {ANM_FH_TALK_NOMAL, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat0a = {ANM_F_TALK_NOMAL, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat0b = {ANM_FH_TALK_NOMAL, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[2] = {&dat0a, &dat0b};
-    daNpcF_anmPlayData dat1 = {ANM_FH_SADSIT_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat1 = {ANM_FH_SADSIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[1] = {&dat1};
-    daNpcF_anmPlayData dat2 = {ANM_FH_SADSIT_B, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat2 = {ANM_FH_SADSIT_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[1] = {&dat2};
-    daNpcF_anmPlayData dat3 = {ANM_FH_SADSIT_C, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat3 = {ANM_FH_SADSIT_C, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[1] = {&dat3};
-    daNpcF_anmPlayData dat4 = {ANM_FH_SADSIT_D, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat4 = {ANM_FH_SADSIT_D, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat4[1] = {&dat4};
-    daNpcF_anmPlayData dat5 = {ANM_FH_SADSIT_E, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat5 = {ANM_FH_SADSIT_E, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat5[1] = {&dat5};
-    daNpcF_anmPlayData dat6a = {ANM_F_LOOKING_SP, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat6b = {ANM_FH_LOOKING_SP, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat6a = {ANM_F_LOOKING_SP, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat6b = {ANM_FH_LOOKING_SP, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat6[2] = {&dat6a, &dat6b};
-    daNpcF_anmPlayData dat7a = {ANM_F_LOOKUP, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat7b = {ANM_FH_LOOKUP, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat7a = {ANM_F_LOOKUP, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat7b = {ANM_FH_LOOKUP, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat7[2] = {&dat7a, &dat7b};
-    daNpcF_anmPlayData dat8a = {ANM_F_SPA_TALK_A, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat8b = {ANM_FH_SPA_WAIT_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat8a = {ANM_F_SPA_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat8b = {ANM_FH_SPA_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat8[2] = {&dat8a, &dat8b};
-    daNpcF_anmPlayData dat9a = {ANM_F_SPA_TALK_B, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat9b = {ANM_FH_SPA_WAIT_B, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat9a = {ANM_F_SPA_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat9b = {ANM_FH_SPA_WAIT_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat9[2] = {&dat9a, &dat9b};
-    daNpcF_anmPlayData dat10a = {ANM_F_TALK_SWIM_SP, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat10b = {ANM_NONE, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat10a = {ANM_F_TALK_SWIM_SP, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat10b = {ANM_NONE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat10[2] = {&dat10a, &dat10b};
-    daNpcF_anmPlayData dat11a = {ANM_F_TALK_B_SP, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat11b = {ANM_NONE, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat11a = {ANM_F_TALK_B_SP, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11b = {ANM_NONE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat11[2] = {&dat11a, &dat11b};
-    daNpcF_anmPlayData dat12a = {ANM_F_TALK_A, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat12b = {ANM_NONE, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat12a = {ANM_F_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat12b = {ANM_NONE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat12[2] = {&dat12a, &dat12b};
-    daNpcF_anmPlayData dat13a = {ANM_F_WAIT_SWIM, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat13b = {ANM_NONE, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat13a = {ANM_F_WAIT_SWIM, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat13b = {ANM_NONE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat13[2] = {&dat13a, &dat13b};
-    daNpcF_anmPlayData dat14a = {ANM_F_TALK_A_SP, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat14b = {ANM_NONE, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat14a = {ANM_F_TALK_A_SP, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat14b = {ANM_NONE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat14[2] = {&dat14a, &dat14b};
-    daNpcF_anmPlayData dat15 = {ANM_FH_TALK_NOMAL, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat15 = {ANM_FH_TALK_NOMAL, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat15[1] = {&dat15};
-    daNpcF_anmPlayData dat16 = {ANM_FH_LOOKING_SP, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat16 = {ANM_FH_LOOKING_SP, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat16[1] = {&dat16};
-    daNpcF_anmPlayData dat17 = {ANM_FH_LOOKUP, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat17 = {ANM_FH_LOOKUP, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat17[1] = {&dat17};
-    daNpcF_anmPlayData dat18 = {ANM_FH_SPA_WAIT_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat18 = {ANM_FH_SPA_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat18[1] = {&dat18};
-    daNpcF_anmPlayData dat19 = {ANM_FH_SPA_WAIT_B, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat19 = {ANM_FH_SPA_WAIT_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat19[1] = {&dat19};
-    daNpcF_anmPlayData dat20 = {ANM_NONE, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat20 = {ANM_NONE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat20[1] = {&dat20};
     daNpcF_anmPlayData** ppDat[21] = {
         pDat0, pDat1, pDat2, pDat3, pDat4, pDat5, pDat6, pDat7, pDat8, pDat9, pDat10, pDat11,
@@ -1769,90 +1785,90 @@ void daNpc_zrA_c::playExpression() {
 }
 
 void daNpc_zrA_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {ANM_WAIT_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat0 = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1 = {ANM_WAIT_SWIM, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat1 = {ANM_WAIT_SWIM, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[1] = {&dat1};
-    daNpcF_anmPlayData dat2a = {ANM_SWIM_TALK, daNpc_zrA_Param_c::m.mMorfFrames, 1};
+    daNpcF_anmPlayData dat2a = {ANM_SWIM_TALK, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat2b = {ANM_WAIT_SWIM, 0.0f, 0};
     daNpcF_anmPlayData* pDat2[2] = {&dat2a, &dat2b};
-    daNpcF_anmPlayData dat3 = {ANM_WAIT_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat3 = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[1] = {&dat3};
-    daNpcF_anmPlayData dat4 = {ANM_WAIT_SWIM, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat4 = {ANM_WAIT_SWIM, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat4[1] = {&dat4};
-    daNpcF_anmPlayData dat5a = {ANM_TALK_A, daNpc_zrA_Param_c::m.mMorfFrames, 1};
+    daNpcF_anmPlayData dat5a = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat5b = {ANM_WAIT_A, 0.0f, 0};
     daNpcF_anmPlayData* pDat5[2] = {&dat5a, &dat5b};
-    daNpcF_anmPlayData dat6 = {ANM_SADSIT_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat6 = {ANM_SADSIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat6[1] = {&dat6};
-    daNpcF_anmPlayData dat7 = {ANM_SADSIT_B, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat7 = {ANM_SADSIT_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat7[1] = {&dat7};
-    daNpcF_anmPlayData dat8 = {ANM_SADSIT_C, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat8 = {ANM_SADSIT_C, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat8[1] = {&dat8};
-    daNpcF_anmPlayData dat9 = {ANM_SADSIT_D, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat9 = {ANM_SADSIT_D, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat9[1] = {&dat9};
-    daNpcF_anmPlayData dat10 = {ANM_SADSIT_E, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat10 = {ANM_SADSIT_E, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat10[1] = {&dat10};
-    daNpcF_anmPlayData dat11 = {ANM_LOOKING_SP, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat11 = {ANM_LOOKING_SP, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat11[1] = {&dat11};
-    daNpcF_anmPlayData dat12 = {ANM_LOOKUP, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat12 = {ANM_LOOKUP, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat12[1] = {&dat12};
-    daNpcF_anmPlayData dat13a = {ANM_SPA_TALK_A, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat13b = {ANM_SPA_WAIT_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat13a = {ANM_SPA_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat13b = {ANM_SPA_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat13[2] = {&dat13a, &dat13b};
-    daNpcF_anmPlayData dat14a = {ANM_SPA_TALK_B, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat14b = {ANM_SPA_WAIT_B, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat14a = {ANM_SPA_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat14b = {ANM_SPA_WAIT_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat14[2] = {&dat14a, &dat14b};
-    daNpcF_anmPlayData dat15a = {ANM_TALK_SWIM_SP, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat15b = {ANM_WAIT_SWIM_SP, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat15a = {ANM_TALK_SWIM_SP, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat15b = {ANM_WAIT_SWIM_SP, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat15[2] = {&dat15a, &dat15b};
-    daNpcF_anmPlayData dat16a = {ANM_TALK_B_SP, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat16b = {ANM_WAIT_SP, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat16a = {ANM_TALK_B_SP, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat16b = {ANM_WAIT_SP, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat16[2] = {&dat16a, &dat16b};
-    daNpcF_anmPlayData dat17a = {ANM_TALK_A, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat17b = {ANM_WAIT_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat17a = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat17b = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat17[2] = {&dat17a, &dat17b};
-    daNpcF_anmPlayData dat18 = {ANM_SPA_WAIT_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat18 = {ANM_SPA_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat18[1] = {&dat18};
-    daNpcF_anmPlayData dat19 = {ANM_SPA_WAIT_B, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat19 = {ANM_SPA_WAIT_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat19[1] = {&dat19};
-    daNpcF_anmPlayData dat20 = {ANM_WALK_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat20 = {ANM_WALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat20[1] = {&dat20};
-    daNpcF_anmPlayData dat22 = {ANM_SWIM_A, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat22 = {ANM_SWIM_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat22[1] = {&dat22};
-    daNpcF_anmPlayData dat23 = {ANM_SWIM_B, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat23 = {ANM_SWIM_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat23[1] = {&dat23};
-    daNpcF_anmPlayData dat24a = {ANM_DIVE, daNpc_zrA_Param_c::m.mMorfFrames, 1};
+    daNpcF_anmPlayData dat24a = {ANM_DIVE, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat24b = {ANM_SWIM_A, 0.0f, 0};
     daNpcF_anmPlayData* pDat24[2] = {&dat24a, &dat24b};
     daNpcF_anmPlayData dat25a = {ANM_DIVE_B, 3.0f, 1};
     daNpcF_anmPlayData dat25b = {ANM_SWIM_A, 0.0f, 0};
     daNpcF_anmPlayData* pDat25[2] = {&dat25a, &dat25b};
-    daNpcF_anmPlayData dat26a = {ANM_DIVE, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat26b = {ANM_SWIM_B, daNpc_zrA_Param_c::m.mMorfFrames / 2.0f, 0};
+    daNpcF_anmPlayData dat26a = {ANM_DIVE, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat26b = {ANM_SWIM_B, mpHIO->m.common.morf_frame / 2.0f, 0};
     daNpcF_anmPlayData* pDat26[2] = {&dat26a, &dat26b};
     daNpcF_anmPlayData dat27a = {ANM_DIVE_B, 3.0f, 1};
-    daNpcF_anmPlayData dat27b = {ANM_SWIM_B, daNpc_zrA_Param_c::m.mMorfFrames / 2.0f, 0};
+    daNpcF_anmPlayData dat27b = {ANM_SWIM_B, mpHIO->m.common.morf_frame / 2.0f, 0};
     daNpcF_anmPlayData* pDat27[2] = {&dat27a, &dat27b};
     daNpcF_anmPlayData dat28 = {ANM_STEP, 2.0f, 0};
     daNpcF_anmPlayData* pDat28[1] = {&dat28};
-    daNpcF_anmPlayData dat29a = {ANM_FLOAT, daNpc_zrA_Param_c::m.mMorfFrames, 1};
+    daNpcF_anmPlayData dat29a = {ANM_FLOAT, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat29b = {ANM_WAIT_SWIM, 2.0f, 0};
     daNpcF_anmPlayData* pDat29[2] = {&dat29a, &dat29b};
-    daNpcF_anmPlayData dat30a = {ANM_FLOAT_B, daNpc_zrA_Param_c::m.mMorfFrames, 1};
+    daNpcF_anmPlayData dat30a = {ANM_FLOAT_B, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat30b = {ANM_WAIT_SWIM, 2.0f, 0};
     daNpcF_anmPlayData* pDat30[2] = {&dat30a, &dat30b};
-    daNpcF_anmPlayData dat31a = {ANM_SWIM_TURN, daNpc_zrA_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat31b = {ANM_STILL, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat31a = {ANM_SWIM_TURN, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat31b = {ANM_STILL, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat31[2] = {&dat31a, &dat31b};
-    daNpcF_anmPlayData dat32 = {ANM_TOBIKOMI_S, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat32 = {ANM_TOBIKOMI_S, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat32[1] = {&dat32};
     daNpcF_anmPlayData dat33 = {ANM_TOBIKOMI_T, 0.0f, 0};
     daNpcF_anmPlayData* pDat33[1] = {&dat33};
-    daNpcF_anmPlayData dat34a = {ANM_TOBIKOMI_E, daNpc_zrA_Param_c::m.mMorfFrames, 1};
+    daNpcF_anmPlayData dat34a = {ANM_TOBIKOMI_E, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat34b = {ANM_SWIM_A, 0.0f, 0};
     daNpcF_anmPlayData* pDat34[2] = {&dat34a, &dat34b};
-    daNpcF_anmPlayData dat35 = {ANM_FALLSWIM, daNpc_zrA_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat35 = {ANM_FALLSWIM, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat35[1] = {&dat35};
     daNpcF_anmPlayData** ppDat[36] = {
         pDat0, pDat1, pDat2, pDat3, pDat4, pDat5, pDat6, pDat7, pDat8, pDat9, pDat10, pDat11,
@@ -1884,7 +1900,7 @@ bool daNpc_zrA_c::setAction(ActionFn i_action) {
 
 bool daNpc_zrA_c::selectAction() {
     mpNextActionFn = NULL;
-    if (daNpc_zrA_Param_c::m.mTest) {
+    if (mpHIO->m.common.debug_mode_ON) {
         mpNextActionFn = &daNpc_zrA_c::test;
     } else {
         switch (mType) {
@@ -2147,14 +2163,14 @@ void daNpc_zrA_c::lookat() {
     fopAc_ac_c* attn_actor = NULL;
     J3DModel* model = mAnm_p->getModel();
     BOOL snap = false;
-    f32 body_down_angle = daNpc_zrA_Param_c::m.mBodyDownAngle;
-    f32 body_up_angle = daNpc_zrA_Param_c::m.mBodyUpAngle;
-    f32 body_right_angle = daNpc_zrA_Param_c::m.mBodyRightAngle;
-    f32 body_left_angle = daNpc_zrA_Param_c::m.mBodyLeftAngle;
-    f32 head_down_angle = daNpc_zrA_Param_c::m.mHeadDownAngle;
-    f32 head_up_angle = daNpc_zrA_Param_c::m.mHeadUpAngle;
-    f32 head_right_angle = daNpc_zrA_Param_c::m.mHeadRightAngle;
-    f32 head_left_angle = daNpc_zrA_Param_c::m.mHeadLeftAngle;
+    f32 body_down_angle = mpHIO->m.common.body_angleX_min;
+    f32 body_up_angle = mpHIO->m.common.body_angleX_max;
+    f32 body_right_angle = mpHIO->m.common.body_angleY_min;
+    f32 body_left_angle = mpHIO->m.common.body_angleY_max;
+    f32 head_down_angle = mpHIO->m.common.head_angleX_min;
+    f32 head_up_angle = mpHIO->m.common.head_angleX_max;
+    f32 head_right_angle = mpHIO->m.common.head_angleY_min;
+    f32 head_left_angle = mpHIO->m.common.head_angleY_max;
     s16 angle_delta = mCurAngle.y - mOldAngle.y;
     cXyz lookat_pos[3] = {mLookatPos[0], mLookatPos[1], mLookatPos[2]};
     csXyz* lookat_angle[3] = {&mLookatAngle[0], &mLookatAngle[1], &mLookatAngle[2]};
@@ -2271,11 +2287,11 @@ BOOL daNpc_zrA_c::test(void* param_0) {
         // fallthrough
 
     case 2:
-        if (daNpc_zrA_Param_c::m.mTestExpression != mExpression) {
-            setExpression(daNpc_zrA_Param_c::m.mTestExpression, daNpc_zrA_Param_c::m.mMorfFrames);
+        if (mpHIO->m.common.face_expression != mExpression) {
+            setExpression(mpHIO->m.common.face_expression, mpHIO->m.common.morf_frame);
         }
-        setMotion(daNpc_zrA_Param_c::m.mTestMotion, daNpc_zrA_Param_c::m.mMorfFrames, false);
-        setLookMode(daNpc_zrA_Param_c::m.mTestLookMode);
+        setMotion(mpHIO->m.common.motion, mpHIO->m.common.morf_frame, false);
+        setLookMode(mpHIO->m.common.look_mode);
         mOrderEvtNo = EVT_NONE;
         attention_info.flags = 0;
         break;

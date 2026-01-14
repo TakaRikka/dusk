@@ -95,8 +95,8 @@ int fpcBs_Delete(base_process_class* i_proc) {
             JSUList<Z2SoundObjBase>* allList = Z2GetAudioMgr()->getAllList();
 
             for (JSUListIterator<Z2SoundObjBase> it(allList->getFirst()); it != allList->getEnd(); it++) {
-                static JSULink<Z2SoundObjBase>* DUMMY_FILL_IT = NULL;
-                static Z2SoundObjBase* DUMMY_FILL_P = NULL;
+                static JSULink<Z2SoundObjBase>* DUMMY_FILL_IT = (JSULink<Z2SoundObjBase>*)0xdddddddd;
+                static Z2SoundObjBase* DUMMY_FILL_P = (Z2SoundObjBase*)0xdddddddd;
                 if (it == DUMMY_FILL_IT || it.getObject() == DUMMY_FILL_P) {
                     const char* stageName = dStage_getName2(profname, 0);
                     if (stageName == NULL) {
@@ -154,7 +154,7 @@ int fpcBs_SubCreate(base_process_class* i_proc) {
         i_proc->state.create_phase = cPhs_NEXT_e;
         return cPhs_NEXT_e;
     case cPhs_INIT_e:
-case cPhs_LOADING_e:
+    case cPhs_LOADING_e:
         i_proc->state.init_state = 1;
         i_proc->state.create_phase = cPhs_INIT_e;
         return cPhs_INIT_e;

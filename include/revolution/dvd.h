@@ -3,10 +3,14 @@
 
 #include <revolution/types.h>
 #include <revolution/esp.h>
+#include "global.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define DVD_DEVICE_CODE_READ (1 << 15)
+#define MAKE_DVD_DEVICE_CODE(x) (DVD_DEVICE_CODE_READ | (x))
 
 #define DVD_ASSERTMSGLINE(line, cond, msg) \
     if (!(cond)) \
@@ -181,8 +185,6 @@ typedef struct DVDGameTOC {
     u32 numGamePartitions;
     DVDPartitionInfo* partitionInfos;
 } DVDGameTOC;
-
-#define ROUND(n, a) (((u32)(n) + (a)-1) & ~((a)-1))
 
 typedef struct DVDPartitionParams  DVDPartitionParams;
 

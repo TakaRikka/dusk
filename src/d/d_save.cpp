@@ -13,7 +13,7 @@
 #include "d/d_save.h"
 #include "d/d_save_init.h"
 #include "f_op/f_op_scene_mng.h"
-#include <stdio>
+#include <cstdio>
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>

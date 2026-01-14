@@ -4,6 +4,34 @@
 #include "d/actor/d_a_npc4.h"
 #include "d/actor/d_a_tag_escape.h"
 
+struct daNpcKasiKyu_HIOParam {
+    /* 0x00 */ daNpcF_HIOParam common;
+    /* 0x6C */ s16 escape_time;         // 逃げるまでの時間 - Escape Time
+    /* 0x70 */ f32 escape_spd;          // 逃げる速度 - Escape Speed
+};
+
+class daNpcKasiKyu_Param_c {
+public:
+    virtual ~daNpcKasiKyu_Param_c() {}
+
+    static daNpcKasiKyu_HIOParam const m;
+};
+
+#if DEBUG
+class daNpcKasiKyu_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpcKasiKyu_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    /* 0x8 */ daNpcKasiKyu_HIOParam m;
+};
+
+#define NPC_KASI_KYU_HIO_CLASS daNpcKasiKyu_HIO_c
+#else
+#define NPC_KASI_KYU_HIO_CLASS daNpcKasiKyu_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpcKasiKyu_c
@@ -12,21 +40,6 @@
  * @details
  *
 */
-
-struct daNpcKasiKyu_HIOParam {
-    /* 0x00 */ daNpcF_HIOParam common;
-    /* 0x6C */ s16 escape_time;         // 逃げるまでの時間 - Escape Time
-    /* 0x70 */ f32 escape_spd;          // 逃げる速度 - Escape Speed
-};
-
-class daNpcKasiKyu_HIO_c
-#if DEBUG
-: public mDoHIO_entry_c
-#endif
-{
-    /* 0x8 */ daNpcKasiKyu_HIOParam param;
-};
-
 class daNpcKasiKyu_c : public daNpcF_c {
 public:
     typedef int (daNpcKasiKyu_c::*actionFunc)(int);
@@ -117,7 +130,7 @@ private:
     /* 0x0BF0 */ daNpcF_Lookat_c mLookat;
     /* 0x0C8C */ daNpcF_ActorMngr_c mActorMngr[1];
     /* 0x0C94 */ daNpcF_Path_c mPath;
-    /* 0x12C4 */ daNpcKasiKyu_HIO_c* mHIO;
+    /* 0x12C4 */ NPC_KASI_KYU_HIO_CLASS* mpHIO;
     /* 0x12C8 */ dCcD_Cyl mCyl;
     /* 0x1404 */ s16 mMode;
     /* 0x1408 */ actionFunc mAction;
@@ -142,12 +155,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpcKasiKyu_c) == 0x146c);
-
-class daNpcKasiKyu_Param_c {
-public:
-    virtual ~daNpcKasiKyu_Param_c() {}
-
-    static daNpcKasiKyu_HIOParam const m;
-};
 
 #endif /* D_A_NPC_KASI_KYU_H */

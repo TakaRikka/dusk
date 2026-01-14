@@ -65,12 +65,10 @@ private:
 };
 
 struct mDoMain {
-#if DEBUG
     static int argument;
     static int e3menu_no;
     static u32 archiveHeapSize;
     static u32 gameHeapSize;
-#endif
 
     static char COPYDATE_STRING[18];
     static u32 memMargin;

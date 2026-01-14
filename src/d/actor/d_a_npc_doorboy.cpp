@@ -115,23 +115,11 @@ static char* l_evtNames[1] = {NULL};
 
 static char* l_myName = "DoorBoy";
 
-static daNpcDoorBoy_Param_c l_HIO;
+static NPC_DOORBOY_HIO_CLASS l_HIO;
 
 daNpcDoorBoy_c::EventFn daNpcDoorBoy_c::mEvtSeqList[1] = {
     NULL
 };
-
-daNpcDoorBoy_c::daNpcDoorBoy_c() {}
-
-daNpcDoorBoy_c::~daNpcDoorBoy_c() {
-    for (int i = 0; i < 2; i++) {
-        dComIfG_resDelete(&mPhases[i], l_arcNames[i]);
-    }
-
-    if (heap != NULL) {
-        mAnm_p->stopZelAnime();
-    }
-}
 
 daNpcDoorBoy_HIOParam const daNpcDoorBoy_Param_c::m = {
     55.0f,
@@ -169,6 +157,34 @@ daNpcDoorBoy_HIOParam const daNpcDoorBoy_Param_c::m = {
     false,
 };
 
+#if DEBUG
+daNpcDoorBoy_HIO_c::daNpcDoorBoy_HIO_c() {
+    m = daNpcDoorBoy_Param_c::m;
+}
+
+void daNpcDoorBoy_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpcDoorBoy_c::daNpcDoorBoy_c() {}
+
+daNpcDoorBoy_c::~daNpcDoorBoy_c() {
+    for (int i = 0; i < 2; i++) {
+        dComIfG_resDelete(&mPhases[i], l_arcNames[i]);
+    }
+
+    if (heap != NULL) {
+        mAnm_p->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+}
+
 cPhs__Step daNpcDoorBoy_c::Create() {
     fopAcM_ct(this, daNpcDoorBoy_c);
 
@@ -193,18 +209,23 @@ cPhs__Step daNpcDoorBoy_c::Create() {
         mSound.init(&current.pos, &eyePos, 3, 1);
         mSound.setMdlType(5, false, dKy_darkworld_check());
 
-        mAcchCir.SetWall(daNpcDoorBoy_Param_c::m.common.width, daNpcDoorBoy_Param_c::m.common.knee_length);
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ドアボーイ");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this),
                 fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
-        mCcStts.Init(daNpcDoorBoy_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
 
         field_0xc98.Set(mCcDCyl);
         field_0xc98.SetStts(&mCcStts);
         field_0xc98.SetTgType(0);
         field_0xc98.SetTgSPrm(0);
-        field_0xc98.SetH(daNpcDoorBoy_Param_c::m.common.height);
-        field_0xc98.SetR(daNpcDoorBoy_Param_c::m.common.width);
+        field_0xc98.SetH(mpHIO->m.common.height);
+        field_0xc98.SetR(mpHIO->m.common.width);
 
         mGndChk = mAcch.m_gnd;
         mGroundH = mAcch.GetGroundH();
@@ -257,7 +278,7 @@ int daNpcDoorBoy_c::Execute() {
 }
 
 int daNpcDoorBoy_c::Draw() {
-    draw(FALSE, FALSE, daNpcDoorBoy_Param_c::m.common.real_shadow_size, NULL, FALSE);
+    draw(FALSE, FALSE, mpHIO->m.common.real_shadow_size, NULL, FALSE);
     dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 50.0f, mAcch.m_gnd, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
     return 1;
 }
@@ -281,7 +302,7 @@ int daNpcDoorBoy_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
         case JNT_BACKBONE:
         case JNT_NECK:
         case JNT_HEAD:
-            setLookatMtx(jointNo, i_jointList, daNpcDoorBoy_Param_c::m.common.neck_rotation_ratio);
+            setLookatMtx(jointNo, i_jointList, mpHIO->m.common.neck_rotation_ratio);
     }
 
     i_model->setAnmMtx(jointNo, mDoMtx_stack_c::get());
@@ -374,17 +395,17 @@ BOOL daNpcDoorBoy_c::setAction(actionFunc action) {
 }
 
 inline void daNpcDoorBoy_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {ANM_WAIT_A, daNpcDoorBoy_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat0 = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1 = {ANM_SING, daNpcDoorBoy_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat1 = {ANM_SING, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[1] = {&dat1};
-    daNpcF_anmPlayData dat2 = {ANM_TALK_B, daNpcDoorBoy_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat2 = {ANM_TALK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[1] = {&dat2};
-    daNpcF_anmPlayData dat3 = {ANM_TALK_A, daNpcDoorBoy_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat3 = {ANM_TALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[1] = {&dat3};
-    daNpcF_anmPlayData dat4 = {ANM_TALK_C, daNpcDoorBoy_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat4 = {ANM_TALK_C, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat4[1] = {&dat4};
-    daNpcF_anmPlayData dat5 = {ANM_SIT_TO_WOLF_A, daNpcDoorBoy_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat5 = {ANM_SIT_TO_WOLF_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat5[1] = {&dat5};
     daNpcF_anmPlayData** ppDat[12] = {
         pDat0,
@@ -412,14 +433,14 @@ inline void daNpcDoorBoy_c::lookat() {
     J3DModel* model_p = mAnm_p->getModel();
 
     int iVar1 = 0;
-    f32 body_angleX_min = daNpcDoorBoy_Param_c::m.common.body_angleX_min;
-    f32 body_angleX_max = daNpcDoorBoy_Param_c::m.common.body_angleX_max;
-    f32 body_angleY_min = daNpcDoorBoy_Param_c::m.common.body_angleY_min;
-    f32 body_angleY_max = daNpcDoorBoy_Param_c::m.common.body_angleY_max;
-    f32 head_angleX_min = daNpcDoorBoy_Param_c::m.common.head_angleX_min;
-    f32 head_angleX_max = daNpcDoorBoy_Param_c::m.common.head_angleX_max;
-    f32 head_angleY_min = daNpcDoorBoy_Param_c::m.common.head_angleY_min;
-    f32 head_angleY_max = daNpcDoorBoy_Param_c::m.common.head_angleY_max;
+    f32 body_angleX_min = mpHIO->m.common.body_angleX_min;
+    f32 body_angleX_max = mpHIO->m.common.body_angleX_max;
+    f32 body_angleY_min = mpHIO->m.common.body_angleY_min;
+    f32 body_angleY_max = mpHIO->m.common.body_angleY_max;
+    f32 head_angleX_min = mpHIO->m.common.head_angleX_min;
+    f32 head_angleX_max = mpHIO->m.common.head_angleX_max;
+    f32 head_angleY_min = mpHIO->m.common.head_angleY_min;
+    f32 head_angleY_max = mpHIO->m.common.head_angleY_max;
 
     s16 temp_r26 = mCurAngle.y - mOldAngle.y;
     cXyz sp30[] = {mLookatPos[0], mLookatPos[1], mLookatPos[2]};
@@ -460,7 +481,7 @@ inline void daNpcDoorBoy_c::lookat() {
 
 inline bool daNpcDoorBoy_c::chkFindPlayer() {
     bool rv;
-    if (!chkActorInSight(daPy_getPlayerActorClass(), daNpcDoorBoy_Param_c::m.common.fov)) {
+    if (!chkActorInSight(daPy_getPlayerActorClass(), mpHIO->m.common.fov)) {
         mActorMngr[0].remove();
         return false;
     }
@@ -786,16 +807,16 @@ static int daNpcDoorBoy_IsDelete(void* a_this) {
 }
 
 void daNpcDoorBoy_c::setParam() {
-    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(daNpcDoorBoy_Param_c::m.common.attention_distance,
-                                                                  daNpcDoorBoy_Param_c::m.common.attention_angle);
+    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(mpHIO->m.common.attention_distance,
+                                                                  mpHIO->m.common.attention_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
-    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(daNpcDoorBoy_Param_c::m.common.talk_distance,
-                                                                   daNpcDoorBoy_Param_c::m.common.talk_angle);
+    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(mpHIO->m.common.talk_distance,
+                                                                   mpHIO->m.common.talk_angle);
     attention_info.flags = daPy_py_c::checkNowWolf() ? 0 : (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
-    scale.setall(daNpcDoorBoy_Param_c::m.common.scale);
-    mAcchCir.SetWallR(daNpcDoorBoy_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpcDoorBoy_Param_c::m.common.knee_length);
-    gravity = daNpcDoorBoy_Param_c::m.common.gravity;
+    scale.setall(mpHIO->m.common.scale);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpcDoorBoy_c::main() {
@@ -835,8 +856,8 @@ void daNpcDoorBoy_c::setAttnPos() {
     
     field_0xc98.SetC(sp28);
     #if DEBUG
-    field_0xc98.SetH(daNpcDoorBoy_Param_c::m.common.height);
-    field_0xc98.SetR(daNpcDoorBoy_Param_c::m.common.width);
+    field_0xc98.SetH(mpHIO->m.common.height);
+    field_0xc98.SetR(mpHIO->m.common.width);
     #endif
     dComIfG_Ccsp()->Set(&field_0xc98);
 }

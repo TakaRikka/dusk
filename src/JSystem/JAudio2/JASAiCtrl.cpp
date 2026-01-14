@@ -16,7 +16,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/ai.h"
 #include <dolphin/os.h>
-#include <stdint>
+#include <stdint.h>
 
 s16* JASDriver::sDmaDacBuffer[3];
 

@@ -2260,8 +2260,8 @@ bool dCamera_c::gameOverEvCamera() {
     }
 
     if (!bVar9 && bVar3) {
-        mViewCache.mCenter += mMonitor.field_0x14;
-        mViewCache.mEye += (mMonitor.field_0x14 * 0.98f);
+        mViewCache.mCenter += mMonitor.field_0x14.field_0x0;
+        mViewCache.mEye += (mMonitor.field_0x14.field_0x0 * 0.98f);
     }
 
     mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
@@ -3348,8 +3348,8 @@ bool dCamera_c::possessedEvCamera() {
                     cXyz sp60;
                     mDoLib_project(&mEyePos, &sp60);
                     SetBlurePosition(sp60.x / scissor->width, sp60.y / scissor->height, 0.0f);
-                    SetBlureAlpha((fVar1 * 0.699999988079071f) + 0.5f);
-                    SetBlureScale((fVar1 * 0.09000000357627869f) + 1.1f, 0.98f - (fVar1 * 0.18000000715255737f), 0.0f);
+                    SetBlureAlpha((fVar1 * 0.7f) + 0.5f);
+                    SetBlureScale((fVar1 * 0.09f) + 1.1f, 0.98f - (fVar1 * 0.18f), 0.0f);
                 }
             }
 

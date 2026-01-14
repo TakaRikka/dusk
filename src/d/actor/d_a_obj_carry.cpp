@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_carry.h"
 #include "d/actor/d_a_player.h"
-#include <math>
+#include <cmath>
 #include "d/d_com_inf_game.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_obj_swBallA.h"

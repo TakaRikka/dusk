@@ -1,6 +1,7 @@
 #ifndef D_D_CAM_PARAM_H
 #define D_D_CAM_PARAM_H
 
+#include "JSystem/JHostIO/JORFile.h"
 #include "SSystem/SComponent/c_angle.h"
 
 struct dCamMath {
@@ -11,24 +12,44 @@ struct dCamMath {
     static f32 xyzHorizontalDistance(cXyz&, cXyz&);
 };
 
-class dCstick_c {
+class dCstick_c
+#if DEBUG
+    : public JORReflexible
+#endif
+{
 public:
     dCstick_c();
     bool Shift(u32);
 
     /* 0x0 */ f32 mThresholdLow;
     /* 0x4 */ f32 mThresholdHigh;
-    /* 0x8 */ int mInputSpeed;
-    /* 0xC */ u8 field_0xc[4];
+    /* 0x8 */ s32 mInputSpeed;
+    /* 0xC */ u16 mIsDebugDisplay;
+#if DEBUG
+    /* 0x10 */ s32 mDisplayPosX;
+    /* 0x14 */ s32 mDisplayPosY;
+#endif
 
     virtual ~dCstick_c() {}
+#if DEBUG
+    virtual void genMessage(JORMContext*);
+#endif
+
+    bool CheckFlag(u16 i_flag) {
+        return (i_flag & mIsDebugDisplay) ? true : false;
+    }
 
     f32 SwTHH() { return mThresholdHigh; }
 };
 
-class dCamBGChk_c {
+class dCamBGChk_c
+#if DEBUG
+    : public JORReflexible
+#endif
+{
 public:
     dCamBGChk_c();
+    ~dCamBGChk_c() {}
 
     f32 WallUpDistance() { return mWallUpDistance; }
     f32 FwdDistance(s32 param_0) { return mChkInfo[param_0].mDistance; }
@@ -43,6 +64,10 @@ public:
     f32 CornerCushion() { return mCornerCushion; }
     f32 CornerAngleMax() { return mCornerAngleMax; }
     f32 FloorMargin() { return mFloorMargin; }
+
+#if DEBUG
+    virtual void genMessage(JORMContext*);
+#endif
 
     // name is a guess for now
     struct ChkInfo {
@@ -67,10 +92,10 @@ public:
 
 struct dCamStyleData {
     struct StyleData {
-        /* 0x0 */ u32 field_0x0;
+        /* 0x0 */ s32 field_0x0;
         /* 0x4 */ u16 field_0x4;
-        /* 0x6 */ u16 field_0x6;
-        /* 0x8 */ f32 field_0x8[28];
+        /* 0x6 */ u16 mFlags;
+        /* 0x8 */ f32 mParams[28];
     };  // Size: 0x78
 
     /* 0x0 */ u8 field_0x0[4];
@@ -78,7 +103,11 @@ struct dCamStyleData {
     /* 0x8 */ StyleData* mStyleData;
 };
 
-class dCamParam_c {
+class dCamParam_c
+#if DEBUG
+    : public JORReflexible
+#endif
+{
 public:
     dCamParam_c(s32);
     int Change(s32);
@@ -92,40 +121,56 @@ public:
     void Arg0(u8 val) { mMapToolArg0 = val; }
     void Fovy(u8 val) { mMapToolFovy = val; }
     u8 Fovy() { return mMapToolFovy; }
-    bool CheckFlag(u16 flag) { return (flag & mCurrentStyle->field_0x6) != 0; }
+    bool CheckFlag(u16 flag) { return (flag & mCurrentStyle->mFlags) != 0 ? true : false; }
     f32 Val(s32 param_0, int param_1) {
-        return mCamStyleData[param_0].field_0x8[param_1];
+        return mCamStyleData[param_0].mParams[param_1];
     }
     void SetVal(s32 param_0, int param_1, f32 i_value) {
-        mCamStyleData[param_0].field_0x8[param_1] = i_value;
+        mCamStyleData[param_0].mParams[param_1] = i_value;
     }
 
-    /* 0x00 */ u8 mMapToolFovy;
-    /* 0x01 */ u8 mMapToolArg0;
-    /* 0x02 */ u8 mMapToolArg1;
-    /* 0x04 */ int mMapToolArg2;
-    /* 0x08 */ dCamStyleData::StyleData* mCamStyleData;
-    /* 0x0C */ s32 mStyleNum;
-    /* 0x10 */ dCamStyleData::StyleData* mCurrentStyle;
-    /* 0x14 */ int mStyleID;
-    /* 0x18 */ u8 field_0x18[4];
+    /* 0x02 */ u8 mMapToolFovy;
+    /* 0x03 */ u8 mMapToolArg0;
+    /* 0x04 */ u8 mMapToolArg1;
+    /* 0x08 */ s32 mMapToolArg2;
+    /* 0x0C */ dCamStyleData::StyleData* mCamStyleData;
+    /* 0x10 */ s32 mStyleNum;
+    /* 0x14 */ dCamStyleData::StyleData* mCurrentStyle;
+    /* 0x18 */ s32 mStyleID;
+    /* 0x1C */ u16 field_0x1c;
+    /* 0x1E */ s8 mpHIOChild;
+#if DEBUG
+    /* 0x20 */ JORFile mFile;
+#endif
 
     u32 Id(s32 i_style) { return mCamStyleData[i_style].field_0x0; }
     int Algorythmn(s32 i_style) { return mCamStyleData[i_style].field_0x4; }
     int Algorythmn() { return mCurrentStyle->field_0x4; }
-    u16 Flag(s32 param_0, u16 param_1) { return mCamStyleData[param_0].field_0x6 & param_1; }
-    void SetFlag(u16 i_flag) { mCurrentStyle->field_0x6 |= i_flag; }
+    u16 Flag(s32 param_0, u16 param_1) { return mCamStyleData[param_0].mFlags & param_1; }
+    void SetFlag(u16 i_flag) { mCurrentStyle->mFlags |= i_flag; }
 
     virtual ~dCamParam_c();
+#if DEBUG
+    virtual void genMessage(JORMContext*);
+    virtual void listenPropertyEvent(const JORPropertyEvent*);
+    int writeParamXML();
+    void OpenFile();
+    void PrintFile(char*, ...);
+    void CloseFile();
+#endif
 };
 
-class dCamSetup_c {
+class dCamSetup_c
+#if DEBUG
+    : public JORReflexible
+#endif
+{
 public:
     dCamSetup_c();
     bool CheckLatitudeRange(s16*);
     f32 PlayerHideDist();
 
-    bool CheckFlag2(u16 i_flag) { return (i_flag & mFlags2) != 0; }
+    bool CheckFlag2(u16 i_flag) { return (i_flag & mFlags2) != 0 ? true : false; }
     f32 WaitRollSpeed() { return mWaitRollSpeed; }
     int WaitRollTimer() { return mWaitRollTimer; }
     int ThrowTimer() { return mThrowTimer; }
@@ -155,16 +200,30 @@ public:
     f32 CurveWeight() { return mCurveWeight; }
     s16 MapToolCameraLongTimer() { return mMapToolCamLongTimer; }
     s16 MapToolCameraShortTimer() { return mMapToolCamShortTimer; }
+    void SetTypeTable(void* i_typeTable, s32 i_typeNum) {
+        mTypeTable = i_typeTable;
+        mTypeNum = i_typeNum;
+    }
+    s32 ForceType() { return mForceType; }
+    s32 ModeSwitchType() { return mModeSwitchType; }
+    f32 Far() { return mDrawFar; }
+    f32 Near() { return mDrawNear; }
+
+#if DEBUG
+    virtual ~dCamSetup_c();
+
+    virtual void genMessage(JORMContext*);
+#endif
 
     /* 0x000 */ f32 mDrawNear;
     /* 0x004 */ f32 mDrawFar;
     /* 0x008 */ u16 mDebugFlags;
     /* 0x00A */ u16 mFlags2;
     /* 0x00C */ int field_0xc;
-    /* 0x010 */ int mModeSwitchType;
+    /* 0x010 */ s32 mModeSwitchType;
     /* 0x014 */ void* mTypeTable;
-    /* 0x018 */ int mTypeNum;
-    /* 0x01C */ int mForceType;
+    /* 0x018 */ s32 mTypeNum;
+    /* 0x01C */ s32 mForceType;
     /* 0x020 */ f32 mCusCus;
     /* 0x024 */ f32 field_0x24;
     /* 0x028 */ f32 field_0x28;
@@ -186,7 +245,7 @@ public:
     /* 0x068 */ f32 mTrimCineScopeHeight;
     /* 0x06C */ f32 field_0x6c;
     /* 0x070 */ f32 mForceLockOffDist;
-    /* 0x074 */ int mForceLockOffTimer;
+    /* 0x074 */ s32 mForceLockOffTimer;
     /* 0x078 */ f32 field_0x78;
     /* 0x07C */ f32 field_0x7c;
     /* 0x080 */ f32 field_0x80;
@@ -194,7 +253,7 @@ public:
     /* 0x088 */ f32 mThrowVAngle;
     /* 0x08C */ f32 mThrowCtrOffset;
     /* 0x090 */ f32 mThrowCushion;
-    /* 0x094 */ int mThrowTimer;
+    /* 0x094 */ s32 mThrowTimer;
     /* 0x098 */ f32 mWindShakeCtr;
     /* 0x09C */ f32 field_0x9c;
     /* 0x0A0 */ f32 mWindShakeFvy;
@@ -206,9 +265,9 @@ public:
     /* 0x0B8 */ f32 mManualStartCThreshold;
     /* 0x0BC */ f32 mManualEndVal;
     /* 0x0C0 */ f32 mChargeLatitude;
-    /* 0x0C4 */ int mChargeTimer;
+    /* 0x0C4 */ s32 mChargeTimer;
     /* 0x0C8 */ f32 mChargeBRatio;
-    /* 0x0CC */ int mLockonChangeTimer;
+    /* 0x0CC */ s32 mLockonChangeTimer;
     /* 0x0D0 */ f32 mLockonChangeCushion;
     /* 0x0D4 */ f32 field_0xd4;
     /* 0x0D8 */ f32 field_0xd8;
@@ -223,8 +282,13 @@ public:
     /* 0x0F8 */ f32 field_0xf8;
     /* 0x0FC vtable */
 
+#if !DEBUG
     virtual ~dCamSetup_c();
+#endif
 
+#if DEBUG
+    /* 0x100 */ s8 mpHIOChild;
+#endif
     /* 0x100 */ dCstick_c mCStick;
     /* 0x114 */ dCamBGChk_c mBGChk;
     /* 0x15C */ f32 field_0x15c;
@@ -232,9 +296,9 @@ public:
     /* 0x164 */ int mWaitRollTimer;
     /* 0x168 */ f32 mWaitRollSpeed;
     /* 0x16C */ f32 field_0x16c;
-    /* 0x170 */ int mScreensaverFirstWaitTimer;
-    /* 0x174 */ int mScreensaverWaitTimer;
-    /* 0x178 */ int mScreensaverExecTimer;
+    /* 0x170 */ s32 mScreensaverFirstWaitTimer;
+    /* 0x174 */ s32 mScreensaverWaitTimer;
+    /* 0x178 */ s32 mScreensaverExecTimer;
 };
 
 #endif /* D_D_CAM_PARAM_H */

@@ -51,15 +51,7 @@ daNpc_seiB_c::cutFunc daNpc_seiB_c::mCutList[1] = {
     0,
 };
 
-daNpc_seiB_c::~daNpc_seiB_c() {
-    if (heap != NULL) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
-}
-
-daNpc_seiB_Param_c::Data const daNpc_seiB_Param_c::m = {
+daNpc_seiB_HIOParam const daNpc_seiB_Param_c::m = {
     0.0f,
     0.0f,
     1.0f,
@@ -78,16 +70,22 @@ daNpc_seiB_Param_c::Data const daNpc_seiB_Param_c::m = {
     0.0f,
     0.0f,
     0.0f,
+    0,
+    0,
+    0,
+    0,
     0.0f,
     0.0f,
     0.0f,
     0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     0.0f,
     0.0f,
     0.0f,
@@ -98,6 +96,36 @@ daNpc_seiB_Param_c::Data const daNpc_seiB_Param_c::m = {
     0.0f,
     1200.0f,
 };
+
+static NPC_SEIB_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_seiB_HIO_c::daNpc_seiB_HIO_c() {
+    m = daNpc_seiB_Param_c::m;
+}
+
+void daNpc_seiB_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_seiB_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_seiB_c::~daNpc_seiB_c() {
+    if (heap != NULL) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+}
 
 int daNpc_seiB_c::create() {
     daNpcT_ct(this, daNpc_seiB_c, &l_faceMotionAnmData, l_motionAnmData,
@@ -124,6 +152,12 @@ int daNpc_seiB_c::create() {
 
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         mSound.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("光の精霊ｂ");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
@@ -132,7 +166,7 @@ int daNpc_seiB_c::create() {
         setEnvTevColor();
         setRoomNo();
 
-        mCcStts.Init(mpParam->m.mWeight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         reset();
         mCreating = true;
         Execute();
@@ -227,27 +261,27 @@ void daNpc_seiB_c::setParam() {
     selectAction();
     srchActors();
 
-    dComIfGp_getAttention()->getDistTable(0x28).mDistMax = mpParam->m.mDist;
-    dComIfGp_getAttention()->getDistTable(0x28).mDistMaxRelease = mpParam->m.mDist;
-    dComIfGp_getAttention()->getDistTable(0x27).mDistMax = mpParam->m.mDist;
-    dComIfGp_getAttention()->getDistTable(0x27).mDistMaxRelease = mpParam->m.mDist;
+    dComIfGp_getAttention()->getDistTable(0x28).mDistMax = mpHIO->m.mDist;
+    dComIfGp_getAttention()->getDistTable(0x28).mDistMaxRelease = mpHIO->m.mDist;
+    dComIfGp_getAttention()->getDistTable(0x27).mDistMax = mpHIO->m.mDist;
+    dComIfGp_getAttention()->getDistTable(0x27).mDistMaxRelease = mpHIO->m.mDist;
 
     attention_info.distances[0] = 39;
     attention_info.distances[1] = 39;
     attention_info.distances[3] = 39;
     attention_info.flags = 0;
 
-    scale.set(mpParam->m.mScale, mpParam->m.mScale, mpParam->m.mScale);
-    mCcStts.SetWeight(mpParam->m.mWeight);
-    mCylH = mpParam->m.mCylH;
-    mWallR = mpParam->m.mWallR;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(mpParam->m.mWallH);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
 
-    mRealShadowSize = mpParam->m.field_0xc;
-    gravity = mpParam->m.mGravity;
-    mExpressionMorfFrame = mpParam->m.field_0x6c;
-    mMorfFrames = mpParam->m.mMorfFrames;
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    gravity = mpHIO->m.common.gravity;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
 }
 
 void daNpc_seiB_c::srchActors() {
@@ -522,8 +556,6 @@ static int daNpc_seiB_Draw(void* param_1) {
 static int daNpc_seiB_IsDelete(void* param_1) {
     return 1;
 }
-
-static daNpc_seiB_Param_c l_HIO;
 
 static actor_method_class daNpc_seiB_MethodTable = {
     (process_method_func)daNpc_seiB_Create,  (process_method_func)daNpc_seiB_Delete,

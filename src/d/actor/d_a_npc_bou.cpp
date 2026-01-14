@@ -146,16 +146,42 @@ daNpc_Bou_c::~daNpc_Bou_c() {
     if (mpMorf[0] != 0) {
         mpMorf[0]->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
 }
 
-daNpc_Bou_Param_c::Data const daNpc_Bou_Param_c::m= {
-    210.0f, -3.0f, 1.0f, 600.0f, 255.0f, 200.0f, 35.0f, 40.0f,
-    0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -10.0f, 45.0f, -45.0f,
-    0.6f, 12.0f, 3, 6, 5, 6, 110.0f, 500.0f, 300.0f, -300.0f,
-    60, 8, 0.0f, 0.0f, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-    0.0f, 0.0f, 16.0f, 1000.0f, 500.0f, -500.0f,
+daNpc_Bou_HIOParam const daNpc_Bou_Param_c::m = {
+    {
+        210.0f, -3.0f, 1.0f, 600.0f, 255.0f, 200.0f, 35.0f, 40.0f,
+       0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -10.0f, 45.0f, -45.0f,
+       0.6f, 12.0f, 3, 6, 5, 6, 110.0f, 500.0f, 300.0f, -300.0f,
+       60, 8, 0, 0, 0, 0, 0, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+       0.0f, 0.0f,
+    },
+    16.0f, 1000.0f, 500.0f, -500.0f,
 };
+
+static NPC_BOU_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Bou_HIO_c::daNpc_Bou_HIO_c() {
+    m = daNpc_Bou_Param_c::m;
+}
+
+void daNpc_Bou_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Bou_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
 
 int daNpc_Bou_c::create() {
     static int const heapSize[6] = {15696, 15696, 15696, 15696, 15696, 0};
@@ -180,11 +206,17 @@ int daNpc_Bou_c::create() {
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ボウ");
+#endif
+
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                         &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this),
                         fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Bou_Param_c::m.field_0x10, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl1.Set(mCcDCyl);
         mCyl1.SetStts(&mCcStts);
         mCyl1.SetTgHitCallback(tgHitCallBack);
@@ -394,10 +426,10 @@ void daNpc_Bou_c::setParam() {
     selectAction();
     srchActors();
     u32 uVar7 = (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
-    s16 sVar10 = daNpc_Bou_Param_c::m.field_0x48;
-    s16 sVar9 = daNpc_Bou_Param_c::m.field_0x4a;
-    s16 sVar8 = daNpc_Bou_Param_c::m.field_0x4c;
-    s16 sVar7 = daNpc_Bou_Param_c::m.field_0x4e;
+    s16 sVar10 = mpHIO->m.common.talk_distance;
+    s16 sVar9 = mpHIO->m.common.talk_angle;
+    s16 sVar8 = mpHIO->m.common.attention_distance;
+    s16 sVar7 = mpHIO->m.common.attention_angle;
     if (mType == TYPE_1) {
         field_0xfe0 = 3;
         field_0xfe4 = 6;
@@ -433,18 +465,18 @@ void daNpc_Bou_c::setParam() {
     }
 
     attention_info.flags = uVar7;
-    scale.set(daNpc_Bou_Param_c::m.field_0x08, daNpc_Bou_Param_c::m.field_0x08,
-            daNpc_Bou_Param_c::m.field_0x08);
-    mCcStts.SetWeight(daNpc_Bou_Param_c::m.field_0x10);
-    mCylH = daNpc_Bou_Param_c::m.field_0x14;
-    mWallR = daNpc_Bou_Param_c::m.field_0x1c;
-    mAttnFovY = daNpc_Bou_Param_c::m.field_0x50;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale,
+            mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Bou_Param_c::m.field_0x18);
-    mRealShadowSize = daNpc_Bou_Param_c::m.field_0x0c;
-    mExpressionMorfFrame = daNpc_Bou_Param_c::m.field_0x6c;
-    mMorfFrames = daNpc_Bou_Param_c::m.field_0x44;
-    gravity = daNpc_Bou_Param_c::m.field_0x04;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_Bou_c::checkChangeEvt() {
@@ -606,7 +638,7 @@ void daNpc_Bou_c::action() {
         switch (((daTag_Push_c*) hit_actor)->getId()) {
             case 7: {
                 mEvtNo = 8;
-                if (daNpc_Bou_Param_c::m.field_0x54 < current.pos.absXZ(daPy_getPlayerActorClass()->current.pos)) {
+                if (mpHIO->m.common.search_distance < current.pos.absXZ(daPy_getPlayerActorClass()->current.pos)) {
                     if (daPy_getPlayerActorClass()->checkHorseRide()) {
                         mEvtNo = 9;
                     }
@@ -635,11 +667,12 @@ void daNpc_Bou_c::setAttnPos() {
     f32 dVar8 = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     J3DModel* model = mpMorf[0]->getModel();
     mJntAnm.setParam(this, model, &cStack_3c, getBackboneJointNo(), getNeckJointNo(),
-        getHeadJointNo(), daNpc_Bou_Param_c::m.field_0x24, daNpc_Bou_Param_c::m.field_0x20,
-        daNpc_Bou_Param_c::m.field_0x2c, daNpc_Bou_Param_c::m.field_0x28,
-        daNpc_Bou_Param_c::m.field_0x34, daNpc_Bou_Param_c::m.field_0x30,
-        daNpc_Bou_Param_c::m.field_0x3c, daNpc_Bou_Param_c::m.field_0x38,
-        daNpc_Bou_Param_c::m.field_0x40, dVar8, NULL);
+        getHeadJointNo(),
+        mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+        mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+        mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+        mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio, dVar8, NULL);
     mJntAnm.calcJntRad(0.2f, 1.0f, dVar8);
     setMtx();
     mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(getHeadJointNo()));
@@ -647,7 +680,7 @@ void daNpc_Bou_c::setAttnPos() {
     mJntAnm.setEyeAngleX(eyePos, 1.0f, 0);
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, 1, 1.0f, 0);
     cStack_3c.set(0.0f, 0.0f, 10.0f);
-    cStack_3c.y = daNpc_Bou_Param_c::m.field_0x00;
+    cStack_3c.y = mpHIO->m.common.attention_offset;
     mDoMtx_stack_c::YrotS(mCurAngle.y);
     mDoMtx_stack_c::multVec(&cStack_3c, &cStack_3c);
     attention_info.position = current.pos + cStack_3c;
@@ -1213,7 +1246,7 @@ int daNpc_Bou_c::cutFindWolf(int arg) {
             cLib_chaseS(&shape_angle.y, current.angle.y, 0x800);
             mCurAngle.y = shape_angle.y;
             field_0xd7e.y = mCurAngle.y;
-            cLib_chaseF(&speedF, daNpc_Bou_Param_c::m.field_0x8c, 0.5f);
+            cLib_chaseF(&speedF, mpHIO->m.field_0x8c, 0.5f);
             mAcch.SetWallNone();
             if (!cLib_calcTimer(&mEventTimer)) {
                 ret_val = 1;
@@ -1548,8 +1581,8 @@ int daNpc_Bou_c::talk(void* param_0) {
                     daNpcT_offTmpBit(0x59);
                     daHorse_c* horse_p = dComIfGp_getHorseActor();
                     if (horse_p && !horse_p->checkHorseCallWait()) {
-                        if (chkPointInArea(horse_p->current.pos, current.pos, daNpc_Bou_Param_c::m.field_0x90,
-                                           daNpc_Bou_Param_c::m.field_0x94, daNpc_Bou_Param_c::m.field_0x98, 0)) {
+                        if (chkPointInArea(horse_p->current.pos, current.pos, mpHIO->m.field_0x90,
+                                           mpHIO->m.field_0x94, mpHIO->m.field_0x98, 0)) {
                             daNpcT_onTmpBit(0x59);
                         }
                     }
@@ -1655,5 +1688,3 @@ actor_process_profile_definition g_profile_NPC_BOU = {
   fopAc_NPC_e,            // mActorType
   fopAc_CULLBOX_CUSTOM_e, // cullType
 };
-
-static daNpc_Bou_Param_c l_HIO;

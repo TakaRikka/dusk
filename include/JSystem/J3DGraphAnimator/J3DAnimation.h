@@ -1,6 +1,7 @@
 #ifndef J3DANIMATION_H
 #define J3DANIMATION_H
 
+#include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTNameTab.h"
@@ -637,37 +638,184 @@ public:
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
-class J3DAnmTexPattern : public J3DAnmBase {
+class J3DAnmCluster : public J3DAnmBase {
 public:
-    J3DAnmTexPattern();
-    void getTexNo(u16, u16*) const;
-    void searchUpdateMaterialID(J3DMaterialTable*);
-    void searchUpdateMaterialID(J3DModelData*);
+    J3DAnmCluster(s16 frameMax, f32* pWeight) : J3DAnmBase(frameMax) { mWeight = pWeight; }
 
-    virtual ~J3DAnmTexPattern() {}
-    virtual s32 getKind() const { return 2; }
+    virtual ~J3DAnmCluster() {}
+    virtual s32 getKind() const { return 3; }
+    virtual f32 getWeight(u16) const { return 1.0f; }
 
-    u16 getUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT_RANGE(2288, idx < mUpdateMaterialNum);
-        return mUpdateMaterialID[idx];
+    /* 0x0C */ f32* mWeight;
+};  // Size: 0x10
+
+/**
+ * @ingroup jsystem-j3d
+ *
+ */
+class J3DAnmClusterFull : public J3DAnmCluster {
+public:
+    J3DAnmClusterFull() : J3DAnmCluster(0, NULL) { mAnmTable = NULL; }
+
+    virtual ~J3DAnmClusterFull() {}
+    virtual s32 getKind() const { return 12; }
+    virtual f32 getWeight(u16) const;
+
+    /* 0x10 */ J3DAnmClusterFullTable* mAnmTable;
+};
+
+/**
+ * @ingroup jsystem-j3d
+ *
+ */
+class J3DAnmClusterKey : public J3DAnmCluster {
+public:
+    J3DAnmClusterKey() : J3DAnmCluster(0, NULL) { mAnmTable = NULL; }
+
+    virtual ~J3DAnmClusterKey() {}
+    virtual s32 getKind() const { return 13; }
+    virtual f32 getWeight(u16) const;
+
+    /* 0x10 */ J3DAnmClusterKeyTable* mAnmTable;
+};
+
+/**
+ * @ingroup jsystem-j3d
+ *
+ */
+class J3DAnmVtxColor : public J3DAnmBase {
+public:
+    J3DAnmVtxColor();
+
+    virtual ~J3DAnmVtxColor() {}
+    virtual s32 getKind() const { return 7; }
+    virtual void getColor(u8, u16, GXColor*) const {}
+
+    u16 getAnmTableNum(u8 idx) {
+        J3D_ASSERT_RANGE(1333, idx < 2);
+        return mAnmTableNum[idx];
     }
+
+    J3DAnmVtxColorIndexData* getAnmVtxColorIndexData(u8 p1, u16 p2) {
+        J3D_ASSERT_RANGE(1339, p1 < 2);
+        J3D_ASSERT_RANGE(1340, p2 < mAnmTableNum[p1]);
+        return mAnmVtxColorIndexData[p1] + p2;
+    }
+
+    /* 0x0C */ u16 mAnmTableNum[2];
+    /* 0x10 */ J3DAnmVtxColorIndexData* mAnmVtxColorIndexData[2];
+};  // Size: 0x18
+
+/**
+ * @ingroup jsystem-j3d
+ *
+ */
+class J3DAnmVtxColorFull : public J3DAnmVtxColor {
+public:
+    J3DAnmVtxColorFull();
+
+    virtual ~J3DAnmVtxColorFull() {}
+    virtual s32 getKind() const { return 14; }
+    virtual void getColor(u8, u16, GXColor*) const;
+
+    /* 0x18 */ J3DAnmColorFullTable* mpTable[2];
+    /* 0x20 */ u8* mColorR;
+    /* 0x24 */ u8* mColorG;
+    /* 0x28 */ u8* mColorB;
+    /* 0x2C */ u8* mColorA;
+};
+
+/**
+ * @ingroup jsystem-j3d
+ *
+ */
+class J3DAnmVtxColorKey : public J3DAnmVtxColor {
+public:
+    J3DAnmVtxColorKey();
+
+    virtual ~J3DAnmVtxColorKey() {}
+    virtual s32 getKind() const { return 15; }
+    virtual void getColor(u8, u16, GXColor*) const;
+
+    /* 0x18 */ J3DAnmColorKeyTable* mpTable[2];
+    /* 0x20 */ s16* mColorR;
+    /* 0x24 */ s16* mColorG;
+    /* 0x28 */ s16* mColorB;
+    /* 0x2C */ s16* mColorA;
+};
+
+/**
+ * @ingroup jsystem-j3d
+ *
+ */
+class J3DAnmColor : public J3DAnmBase {
+public:
+    J3DAnmColor();
+    void searchUpdateMaterialID(J3DMaterialTable*);
+
+    virtual ~J3DAnmColor() {}
+    virtual s32 getKind() const { return 1; }
+    virtual void getColor(u16, GXColor*) const {}
+
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
-    J3DAnmTexPatternFullTable* getAnmTable() { return mAnmTable; }
+    u16 getUpdateMaterialID(u16 idx) const {
+        J3D_ASSERT_RANGE(1578, idx < mUpdateMaterialNum);
+        return mUpdateMaterialID[idx];
+    }
 
-    /* 0x0C */ u16* mTextureIndex;
-    /* 0x10 */ J3DAnmTexPatternFullTable* mAnmTable;
-    /* 0x14 */ u16 field_0x14;
-    /* 0x16 */ u16 mUpdateMaterialNum;
+    /* 0x0C */ u16 field_0xc;
+    /* 0x0E */ u16 field_0xe;
+    /* 0x10 */ u16 field_0x10;
+    /* 0x12 */ u16 field_0x12;
+    /* 0x14 */ u16 mUpdateMaterialNum;
     /* 0x18 */ u16* mUpdateMaterialID;
     /* 0x1C */ JUTNameTab mUpdateMaterialName;
 };  // Size: 0x2C
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
+ */
+class J3DAnmColorFull : public J3DAnmColor {
+public:
+    J3DAnmColorFull();
+
+    virtual ~J3DAnmColorFull() {}
+    virtual s32 getKind() const { return 10; }
+    virtual void getColor(u16, GXColor*) const;
+
+    /* 0x2C */ u8* mColorR;
+    /* 0x30 */ u8* mColorG;
+    /* 0x34 */ u8* mColorB;
+    /* 0x38 */ u8* mColorA;
+    /* 0x3C */ J3DAnmColorFullTable* mAnmTable;
+};
+
+/**
+ * @ingroup jsystem-j3d
+ *
+ */
+class J3DAnmColorKey : public J3DAnmColor {
+public:
+    J3DAnmColorKey();
+
+    virtual ~J3DAnmColorKey() {}
+    virtual s32 getKind() const { return 11; }
+    virtual void getColor(u16, GXColor*) const;
+
+    /* 0x2C */ s16* mColorR;
+    /* 0x30 */ s16* mColorG;
+    /* 0x34 */ s16* mColorB;
+    /* 0x38 */ s16* mColorA;
+    /* 0x3C */ J3DAnmColorKeyTable* mAnmTable;
+};
+
+/**
+ * @ingroup jsystem-j3d
+ *
  */
 class J3DAnmTevRegKey : public J3DAnmBase {
 public:
@@ -726,29 +874,30 @@ public:
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
-class J3DAnmColor : public J3DAnmBase {
+class J3DAnmTexPattern : public J3DAnmBase {
 public:
-    J3DAnmColor();
+    J3DAnmTexPattern();
+    void getTexNo(u16, u16*) const;
     void searchUpdateMaterialID(J3DMaterialTable*);
+    void searchUpdateMaterialID(J3DModelData*);
 
-    virtual ~J3DAnmColor() {}
-    virtual s32 getKind() const { return 1; }
-    virtual void getColor(u16, GXColor*) const {}
+    virtual ~J3DAnmTexPattern() {}
+    virtual s32 getKind() const { return 2; }
 
-    u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
-    bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
-    u16 getUpdateMaterialID(u16 idx) const { 
-        J3D_ASSERT_RANGE(1578, idx < mUpdateMaterialNum);
+    u16 getUpdateMaterialID(u16 idx) const {
+        J3D_ASSERT_RANGE(2288, idx < mUpdateMaterialNum);
         return mUpdateMaterialID[idx];
     }
+    u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
+    bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
+    J3DAnmTexPatternFullTable* getAnmTable() { return mAnmTable; }
 
-    /* 0x0C */ u16 field_0xc;
-    /* 0x0E */ u16 field_0xe;
-    /* 0x10 */ u16 field_0x10;
-    /* 0x12 */ u16 field_0x12;
-    /* 0x14 */ u16 mUpdateMaterialNum;
+    /* 0x0C */ u16* mTextureIndex;
+    /* 0x10 */ J3DAnmTexPatternFullTable* mAnmTable;
+    /* 0x14 */ u16 field_0x14;
+    /* 0x16 */ u16 mUpdateMaterialNum;
     /* 0x18 */ u16* mUpdateMaterialID;
     /* 0x1C */ JUTNameTab mUpdateMaterialName;
 };  // Size: 0x2C
@@ -757,146 +906,9 @@ public:
  * @ingroup jsystem-j3d
  * 
  */
-class J3DAnmColorKey : public J3DAnmColor {
-public:
-    J3DAnmColorKey();
-
-    virtual ~J3DAnmColorKey() {}
-    virtual s32 getKind() const { return 11; }
-    virtual void getColor(u16, GXColor*) const;
-
-    /* 0x2C */ s16* mColorR;
-    /* 0x30 */ s16* mColorG;
-    /* 0x34 */ s16* mColorB;
-    /* 0x38 */ s16* mColorA;
-    /* 0x3C */ J3DAnmColorKeyTable* mAnmTable;
-};
-
-/**
- * @ingroup jsystem-j3d
- * 
- */
-class J3DAnmColorFull : public J3DAnmColor {
-public:
-    J3DAnmColorFull();
-
-    virtual ~J3DAnmColorFull() {}
-    virtual s32 getKind() const { return 10; }
-    virtual void getColor(u16, GXColor*) const;
-
-    /* 0x2C */ u8* mColorR;
-    /* 0x30 */ u8* mColorG;
-    /* 0x34 */ u8* mColorB;
-    /* 0x38 */ u8* mColorA;
-    /* 0x3C */ J3DAnmColorFullTable* mAnmTable;
-};
-
-/**
- * @ingroup jsystem-j3d
- * 
- */
-class J3DAnmVtxColor : public J3DAnmBase {
-public:
-    J3DAnmVtxColor();
-
-    virtual ~J3DAnmVtxColor() {}
-    virtual s32 getKind() const { return 7; }
-    virtual void getColor(u8, u16, GXColor*) const {}
-
-    /* 0x0C */ u16 mAnmTableNum[2];
-    /* 0x10 */ J3DAnmVtxColorIndexData* mAnmVtxColorIndexData[2];
-};  // Size: 0x18
-
-/**
- * @ingroup jsystem-j3d
- * 
- */
-class J3DAnmVtxColorKey : public J3DAnmVtxColor {
-public:
-    J3DAnmVtxColorKey();
-
-    virtual ~J3DAnmVtxColorKey() {}
-    virtual s32 getKind() const { return 15; }
-    virtual void getColor(u8, u16, GXColor*) const;
-
-    /* 0x18 */ J3DAnmColorKeyTable* mpTable[2];
-    /* 0x20 */ s16* mColorR;
-    /* 0x24 */ s16* mColorG;
-    /* 0x28 */ s16* mColorB;
-    /* 0x2C */ s16* mColorA;
-};
-
-/**
- * @ingroup jsystem-j3d
- * 
- */
-class J3DAnmVtxColorFull : public J3DAnmVtxColor {
-public:
-    J3DAnmVtxColorFull();
-
-    virtual ~J3DAnmVtxColorFull() {}
-    virtual s32 getKind() const { return 14; }
-    virtual void getColor(u8, u16, GXColor*) const;
-
-    /* 0x18 */ J3DAnmColorFullTable* mpTable[2];
-    /* 0x20 */ u8* mColorR;
-    /* 0x24 */ u8* mColorG;
-    /* 0x28 */ u8* mColorB;
-    /* 0x2C */ u8* mColorA;
-};
-
-/**
- * @ingroup jsystem-j3d
- * 
- */
-class J3DAnmCluster : public J3DAnmBase {
-public:
-    J3DAnmCluster(s16 frameMax, f32* pWeight) : J3DAnmBase(frameMax) { mWeight = pWeight; }
-
-    virtual ~J3DAnmCluster() {}
-    virtual s32 getKind() const { return 3; }
-    virtual f32 getWeight(u16) const { return 1.0f; }
-
-    /* 0x0C */ f32* mWeight;
-};  // Size: 0x10
-
-/**
- * @ingroup jsystem-j3d
- * 
- */
-class J3DAnmClusterFull : public J3DAnmCluster {
-public:
-    J3DAnmClusterFull() : J3DAnmCluster(0, NULL) { mAnmTable = NULL; }
-
-    virtual ~J3DAnmClusterFull() {}
-    virtual s32 getKind() const { return 12; }
-    virtual f32 getWeight(u16) const;
-
-    /* 0x10 */ J3DAnmClusterFullTable* mAnmTable;
-};
-
-/**
- * @ingroup jsystem-j3d
- * 
- */
-class J3DAnmClusterKey : public J3DAnmCluster {
-public:
-    J3DAnmClusterKey() : J3DAnmCluster(0, NULL) { mAnmTable = NULL; }
-
-    virtual ~J3DAnmClusterKey() {}
-    virtual s32 getKind() const { return 13; }
-    virtual f32 getWeight(u16) const;
-
-    /* 0x10 */ J3DAnmClusterKeyTable* mAnmTable;
-};
-
-/**
- * @ingroup jsystem-j3d
- * 
- */
 class J3DAnmVisibilityFull : public J3DAnmBase {
 public:
-    J3DAnmVisibilityFull() : J3DAnmBase(0) {
+    J3DAnmVisibilityFull() : J3DAnmBase() {
         mUpdateMaterialNum = 0;
         field_0xe = 0;
         mAnmTable = NULL;

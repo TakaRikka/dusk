@@ -45,15 +45,23 @@ public:
     }
 
     void* getDrawingXfb() const {
-        if (mDrawingXfbIndex >= 0)
-            return mBuffer[mDrawingXfbIndex];
-        return NULL;
+        void* result;
+        if (mDrawingXfbIndex >= 0) {
+            result = mBuffer[mDrawingXfbIndex];
+        } else {
+            result = NULL;
+        }
+        return result;
     }
 
     void* getDisplayingXfb() const {
-        if (mDisplayingXfbIndex >= 0)
-            return mBuffer[mDisplayingXfbIndex];
-        return NULL;
+        void* xfb;
+        if (mDisplayingXfbIndex >= 0) {
+            xfb = mBuffer[mDisplayingXfbIndex];
+        } else {
+            xfb = NULL;
+        }
+        return xfb;
     }
 
     void setDisplayingXfbIndex(s16 index) { mDisplayingXfbIndex = index; }

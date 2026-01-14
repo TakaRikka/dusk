@@ -6,6 +6,42 @@
 class daGraveStone_c;
 class daObjZraRock_c;
 
+struct daNpc_zrZ_HIOParam {
+    /* 0x00 */ daNpcF_HIOParam common;
+    /* 0x6C */ f32 field_0x6c;
+    /* 0x70 */ f32 mFollowDst;
+    /* 0x74 */ f32 mRestoreDst;
+    /* 0x78 */ f32 mMaxSpeed;
+    /* 0x7C */ f32 mClothesGetDst;
+    /* 0x80 */ f32 field_0x80;
+};
+
+class daNpc_zrZ_Param_c {
+public:
+    virtual ~daNpc_zrZ_Param_c() {}
+
+    static daNpc_zrZ_HIOParam const m;
+};
+
+STATIC_ASSERT(sizeof(daNpc_zrZ_HIOParam) == 0x84);
+
+#if DEBUG
+class daNpc_zrZ_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_zrZ_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_zrZ_HIOParam m;
+};
+
+#define NPC_ZRZ_HIO_CLASS daNpc_zrZ_HIO_c
+#else
+#define NPC_ZRZ_HIO_CLASS daNpc_zrZ_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_zrZ_c
@@ -85,7 +121,7 @@ private:
     /* 0x0BE4 */ daNpcF_Lookat_c mLookat;
     /* 0x0C80 */ daNpcF_ActorMngr_c mActorMngr[2];
     /* 0x0C90 */ daNpcF_Path_c mPath;
-    /* 0x12C0 */ u8 field_0x12c0[4];
+    /* 0x12C0 */ NPC_ZRZ_HIO_CLASS* mpHIO;
     /* 0x12C4 */ dCcD_Cyl mCcCyl;
     /* 0x1400 */ ActionFn mpNextActionFn;
     /* 0x140C */ ActionFn mpActionFn;
@@ -165,55 +201,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_zrZ_c) == 0x14c8);
-
-class daNpc_zrZ_Param_c {
-public:
-    struct param {
-        /* 0x00 */ f32 mAttnOffsetY;
-        /* 0x04 */ f32 mGravity;
-        /* 0x08 */ f32 mScale;
-        /* 0x0C */ f32 mShadowDepth;
-        /* 0x10 */ f32 mCcWeight;
-        /* 0x14 */ f32 mCylH;
-        /* 0x18 */ f32 mWallH;
-        /* 0x1C */ f32 mWallR;
-        /* 0x20 */ f32 mBodyUpAngle;
-        /* 0x24 */ f32 mBodyDownAngle;
-        /* 0x28 */ f32 mBodyLeftAngle;
-        /* 0x2C */ f32 mBodyRightAngle;
-        /* 0x30 */ f32 mHeadUpAngle;
-        /* 0x34 */ f32 mHeadDownAngle;
-        /* 0x38 */ f32 mHeadLeftAngle;
-        /* 0x3C */ f32 mHeadRightAngle;
-        /* 0x40 */ f32 mNeckAngleScl;
-        /* 0x44 */ f32 mMorfFrames;
-        /* 0x48 */ s16 mSpeakDistIdx;
-        /* 0x4A */ s16 mSpeakAngleIdx;
-        /* 0x4C */ s16 mTalkDistIdx;
-        /* 0x4E */ s16 mTalkAngleIdx;
-        /* 0x50 */ f32 mAttnFovY;
-        /* 0x54 */ f32 mAttnRadius;
-        /* 0x58 */ f32 mAttnUpperY;
-        /* 0x5C */ f32 mAttnLowerY;
-        /* 0x60 */ s16 field_0x60;
-        /* 0x62 */ s16 mDamageTimer;
-        /* 0x64 */ s16 mTestExpression;
-        /* 0x66 */ s16 mTestMotion;
-        /* 0x68 */ s16 mTestLookMode;
-        /* 0x6A */ bool mTest;
-        /* 0x6C */ f32 field_0x6c;
-        /* 0x70 */ f32 mFollowDst;
-        /* 0x74 */ f32 mRestoreDst;
-        /* 0x78 */ f32 mMaxSpeed;
-        /* 0x7C */ f32 mClothesGetDst;
-        /* 0x80 */ f32 field_0x80;
-    };
-
-    virtual ~daNpc_zrZ_Param_c() {}
-
-    static param const m;
-};
-
-STATIC_ASSERT(sizeof(daNpc_zrZ_Param_c::param) == 0x84);
 
 #endif /* D_A_NPC_ZRZ_H */

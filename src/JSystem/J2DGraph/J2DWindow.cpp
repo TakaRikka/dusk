@@ -95,23 +95,16 @@ J2DWindow::J2DWindow(J2DPane* param_0, JSURandomInputStream* param_1, J2DMateria
     mWhite = JUtility::TColor(0xffffffff);
 
     if (local_98[0] != NULL && local_98[0]->getTevBlock() != NULL) {
-        if (local_98[0]->getTevBlock()->getTevStageNum() != 1) {
-            J2DGXColorS10* local_c8 = local_98[0]->getTevBlock()->getTevColor(0);
-            s16 blackr = local_c8->r;
-            s16 blackg = local_c8->g;
-            s16 blackb = local_c8->b;
-            s16 blacka = local_c8->a;
-            J2DGXColorS10* local_d0 = local_98[0]->getTevBlock()->getTevColor(1);
-            s16 whiter = local_d0->r;
-            s16 whiteg = local_d0->g;
-            s16 whiteb = local_d0->b;
-            s16 whitea = local_d0->a;
+        u8 tevStageNum = u8(local_98[0]->getTevBlock()->getTevStageNum());
+        if (tevStageNum != 1) {
+            J2DGXColorS10 local_c8 = *local_98[0]->getTevBlock()->getTevColor(0);
+            J2DGXColorS10 local_d0 = *local_98[0]->getTevBlock()->getTevColor(1);
             mBlack = JUtility::TColor(
-                (((u8)blackr) << 24) | (((u8)blackg) << 16) | (((u8)blackb) << 8) |
-                 ((u8)blacka));
+                (((u8)local_c8.r) << 24) | (((u8)local_c8.g) << 16) | (((u8)local_c8.b) << 8) |
+                 ((u8)local_c8.a));
             mWhite = JUtility::TColor(
-                (((u8)whiter) << 24) | (((u8)whiteg) << 16) | (((u8)whiteb) << 8) |
-                 ((u8)whitea));
+                (((u8)local_d0.r) << 24) | (((u8)local_d0.g) << 16) | (((u8)local_d0.b) << 8) |
+                 ((u8)local_d0.a));
         }
     }
 
@@ -122,14 +115,12 @@ J2DWindow::J2DWindow(J2DPane* param_0, JSURandomInputStream* param_1, J2DMateria
         &field_0x10c,
     };
 
-    J2DMaterial * mat;
     for (u32 uVar6 = 0; uVar6 < 4; uVar6++) {
-        mat = local_98[uVar6];
-        if (mat != NULL && mat->getTevBlock() != NULL) {
-            JUTTexture* local_e0 = mat->getTevBlock()->getTexture(0);
+        if (local_98[uVar6] != NULL && local_98[uVar6]->getTevBlock() != NULL) {
+            JUTTexture* local_e0 = local_98[uVar6]->getTevBlock()->getTexture(0);
             if (local_e0 != NULL) {
                 *textures[uVar6] = local_e0;
-                mat->getTevBlock()->setUndeleteFlag(0xfe);
+                local_98[uVar6]->getTevBlock()->setUndeleteFlag(0xfe);
             }
         }
     }
@@ -224,6 +215,7 @@ void J2DWindow::private_readStream(J2DPane* param_0, JSURandomInputStream* param
     r27 -= u8(14);
     field_0x110 = NULL;
     if (r27) {
+        int unused;
         timg = (ResTIMG*)getPointer(param_1, 'TIMG', param_2);
         if (timg) {
             field_0x110 = new JUTTexture(timg, 0);
@@ -334,74 +326,39 @@ void J2DWindow::draw_private(JGeometry::TBox2<f32> const& param_0,
         f32 f27 = f29 + field_0x100->getWidth();
         f32 f26 = f28 + field_0x100->getHeight();
         drawFrameTexture(field_0x100, f29, f28, field_0x144 & 0x80, field_0x144 & 0x40, true);
-        bool r24 = isField0x145Set(1);
+        bool r24 = field_0x145 & 1;
         drawFrameTexture(field_0x104, f31, f28, field_0x144 & 0x20, field_0x144 & 0x10, r24);
-        u16 local_a6;
-        if (field_0x144 & 0x20) {
-            local_a6 = 0x8000;
-        } else {
-            local_a6 = 0;
-        }
-        u16 local_a8;
-        if (field_0x144 & 0x10) {
-            local_a8 = 0;
-        } else {
-            local_a8 = 0x8000;
-        }
-        u16 local_a82 = local_a8 ^ 0x8000;
-        
-        drawFrameTexture(field_0x104, f27, f28, f31 - f27, field_0x104->getHeight(), local_a6,
-                         local_a8, local_a6, local_a82, false);
-        bool isset2 = isField0x145Set(2);
-        drawFrameTexture(field_0x10c, f31, f30, field_0x144 & 2, field_0x144 & 1, isset2);
-        u16 local_aa;
-        if (field_0x144 & 2) {
-            local_aa = 0x8000;
-        } else {
-            local_aa = 0;
-        }
-        u16 local_ac;
-        if (field_0x144 & 1) {
-            local_ac = 0;
-        } else {
-            local_ac = 0x8000;
-        }
-        local_a82 = local_ac ^ 0x8000;
-        drawFrameTexture(field_0x10c, f27, f30, f31 - f27, field_0x10c->getHeight(), local_aa,
-                         local_ac, local_aa, local_a82, false);
-        u16 local_ae;
-        if (field_0x144 & 2) {
-            local_ae = 0;
-        } else {
-            local_ae = 0x8000;
-        }
-        u16 local_ae2 = local_ae ^ 0x8000;
-        u16 local_b0;
-        if (field_0x144 & 1) {
-            local_b0 = 0x8000;
-        } else {
-            local_b0 = 0;
-        }
-        drawFrameTexture(field_0x10c, f31, f26, field_0x10c->getWidth(), f30 - f26, local_ae,
-                         local_b0, local_ae2, local_b0, false);
-        bool isset4 = isField0x145Set(4);
-        drawFrameTexture(field_0x108, f29, f30, field_0x144 & 8, field_0x144 & 4, isset4);
+        u16 r29, r28, r27, r26;
+        r27 = field_0x144 & 0x20 ? u16(0x8000) : u16(0);
+        r29 = r27;
+        r28 = field_0x144 & 0x10 ? u16(0) : u16(0x8000);
+        r26 = r28 ^ 0x8000;
 
-        u16 local_b2;
-        if (field_0x144 & 8) {
-            local_b2 = 0;
-        } else {
-            local_b2 = 0x8000;
-        }
-        u16 local_b22 = local_b2 ^ 0x8000;
-        u16 local_b4;
-        if (field_0x144 & 4) {
-            local_b4 = 0x8000;
-        } else {
-            local_b4 = 0;
-        }
-        drawFrameTexture(field_0x108, f29, f26, field_0x108->getWidth(), f30 - f26, local_b2,
-                         local_b4, local_b22, local_b4, false);
+        drawFrameTexture(field_0x104, f27, f28, f31 - f27, field_0x104->getHeight(), r29,
+                         r28, r27, r26, false);
+        r24 = field_0x145 & 2;
+        drawFrameTexture(field_0x10c, f31, f30, field_0x144 & 2, field_0x144 & 1, r24);
+        r27 = field_0x144 & 2 ? u16(0x8000) : u16(0);
+        r29 = r27;
+        r28 = field_0x144 & 1 ? u16(0) : u16(0x8000);
+        r26 = r28 ^ 0x8000;
+        drawFrameTexture(field_0x10c, f27, f30, f31 - f27, field_0x10c->getHeight(), r29,
+                         r28, r27, r26, false);
+        r29 = field_0x144 & 2 ? u16(0) : u16(0x8000);
+        r27 = r29 ^ 0x8000;
+        r26 = field_0x144 & 1 ? u16(0x8000) : u16(0);
+        r28 = r26;
+        drawFrameTexture(field_0x10c, f31, f26, field_0x10c->getWidth(), f30 - f26, r29,
+                         r28, r27, r26, false);
+        r24 = field_0x145 & 4;
+        drawFrameTexture(field_0x108, f29, f30, field_0x144 & 8, field_0x144 & 4, r24);
+
+        r29 = field_0x144 & 8 ? u16(0) : u16(0x8000);
+        r27 = r29 ^ 0x8000;
+        r26 = field_0x144 & 4 ? u16(0x8000) : u16(0);
+        r28 = r26;
+        drawFrameTexture(field_0x108, f29, f26, field_0x108->getWidth(), f30 - f26, r29,
+                         r28, r27, r26, false);
     }
     GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -670,43 +627,4 @@ bool J2DWindow::isUsed(ResTIMG const* param_0) {
         }
     }
     return J2DPane::isUsed(param_0);
-}
-
-u16 J2DWindow::getTypeID() const {
-    return 17;
-}
-
-void J2DWindow::draw(f32 param_0, f32 param_1, f32 param_2, f32 param_3) {
-    draw(JGeometry::TBox2<f32>(param_0, param_1, param_0 + param_2, param_1 + param_3));
-}
-
-JUTTexture* J2DWindow::getContentsTexture(u8 param_0) const {
-    if (param_0 != 0) {
-        return NULL;
-    }
-    return field_0x110;
-}
-
-void J2DWindow::getMaterial(J2DWindow::TMaterial& param_0) const {
-    param_0.field_0x0 = NULL;
-    param_0.field_0x4 = NULL;
-    param_0.field_0x8 = NULL;
-    param_0.field_0xc = NULL;
-    param_0.field_0x10 = NULL;
-}
-
-J2DMaterial* J2DWindow::getFrameMaterial(u8 param_0) const {
-    return NULL;
-}
-
-J2DMaterial* J2DWindow::getContentsMaterial() const {
-    return NULL;
-}
-
-bool J2DWindow::isUsed(ResFONT const* param_0) {
-    return J2DPane::isUsed(param_0);
-}
-
-void J2DWindow::rewriteAlpha() {
-    /* empty function */
 }

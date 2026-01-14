@@ -3,6 +3,34 @@
 
 #include "d/actor/d_a_npc.h"
 
+struct daNpc_Yelia_HIOParam {
+    daNpcT_HIOParam common;
+};
+
+class daNpc_Yelia_Param_c {
+public:
+    virtual ~daNpc_Yelia_Param_c() {}
+
+    static daNpc_Yelia_HIOParam const m;
+};
+
+#if DEBUG
+class daNpc_Yelia_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Yelia_HIO_c();
+
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+    void genMessage(JORMContext*);
+
+    daNpc_Yelia_HIOParam m;
+};
+
+#define NPC_YELIA_HIO_CLASS daNpc_Yelia_HIO_c
+#else
+#define NPC_YELIA_HIO_CLASS daNpc_Yelia_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_Yelia_c
@@ -77,7 +105,7 @@ public:
     static char* mCutNameList[6];
     static int (daNpc_Yelia_c::*mCutList[6])(int);
 private:
-    /* 0xE40 */ u8 field_0xe40[0xe44 - 0xe40];
+    /* 0xE40 */ NPC_YELIA_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCcCyl;
     /* 0xF80 */ u8 mType;
     /* 0xF84 */ daNpcT_ActorMngr_c mActorMngr[4];
@@ -90,55 +118,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_Yelia_c) == 0xff0);
-
-class daNpc_Yelia_Param_c {
-public:
-    struct param {
-        /* 0x00 */ f32 mAttnOffsetY;
-        /* 0x04 */ f32 mGravity;
-        /* 0x08 */ f32 mScale;
-        /* 0x0C */ f32 mShadowDepth;
-        /* 0x10 */ f32 mCcWeight;
-        /* 0x14 */ f32 mCylH;
-        /* 0x18 */ f32 mWallH;
-        /* 0x1C */ f32 mWallR;
-        /* 0x20 */ f32 mBodyUpAngle;
-        /* 0x24 */ f32 mBodyDownAngle;
-        /* 0x28 */ f32 mBodyLeftAngle;
-        /* 0x2C */ f32 mBodyRightAngle;
-        /* 0x30 */ f32 mHeadUpAngle;
-        /* 0x34 */ f32 mHeadDownAngle;
-        /* 0x38 */ f32 mHeadLeftAngle;
-        /* 0x3C */ f32 mHeadRightAngle;
-        /* 0x40 */ f32 mNeckAngleScl;
-        /* 0x44 */ f32 mMorfFrames;
-        /* 0x48 */ s16 mSpeakDistIdx;
-        /* 0x4A */ s16 mSpeakAngleIdx;
-        /* 0x4C */ s16 mTalkDistIdx;
-        /* 0x4E */ s16 mTalkAngleIdx;
-        /* 0x50 */ f32 mAttnFovY;
-        /* 0x54 */ f32 mAttnRadius;
-        /* 0x58 */ f32 mAttnUpperY;
-        /* 0x5C */ f32 mAttnLowerY;
-        /* 0x60 */ s16 field_0x60;
-        /* 0x62 */ s16 mDamageTimer;
-        /* 0x64 */ s16 mTestExpression;
-        /* 0x66 */ s16 mTestMotion;
-        /* 0x68 */ s16 mTestLookMode;
-        /* 0x6A */ bool mTest;
-        /* 0x6C */ f32 field_0x6c;
-        /* 0x70 */ f32 field_0x70;
-        /* 0x74 */ f32 field_0x74;
-        /* 0x78 */ f32 field_0x78;
-        /* 0x7C */ f32 field_0x7c;
-        /* 0x80 */ f32 field_0x80;
-        /* 0x84 */ f32 field_0x84;
-        /* 0x88 */ f32 field_0x88;
-    };
-
-    virtual ~daNpc_Yelia_Param_c() {}
-
-    static param const m;
-};
 
 #endif /* D_A_NPC_YELIA_H */

@@ -4,7 +4,7 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTVideo.h"
-#include <stdint>
+#include <stdint.h>
 
 JUTProcBar::JUTProcBar() {
     mVisible = true;

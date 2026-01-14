@@ -80,7 +80,7 @@ public:
     int EvCut_BousIntroSumo3(int);
     inline void setParam();
     inline BOOL main();
-                   inline void playExpression();
+    inline void playExpression();
     inline void playMotion();
     inline BOOL ctrlBtk();
     inline void setAttnPos();
@@ -93,22 +93,7 @@ public:
     s16 getMessageNo() { return (fopAcM_GetParam(this) >> 8) & 0xFFFF; }
     s8 getArenaNo() { return fopAcM_GetParam(this) & 0xFF; }
 
-    BOOL chkFindPlayer() {
-        BOOL inArea = FALSE;
-        if (mActorMngrs[0].getActorP() == NULL) {
-            inArea = chkPlayerInSpeakArea(this);
-        } else {
-            inArea = chkPlayerInTalkArea(this);
-        }
-
-        if (inArea) {
-            mActorMngrs[0].entry(daPy_getPlayerActorClass());
-        } else {
-            mActorMngrs[0].remove();
-        }
-
-        return inArea;
-    }
+    inline BOOL chkFindPlayer();
 
     void setLookMode(int i_lookMode) { if (i_lookMode >= 0 && i_lookMode < 4 && i_lookMode != mLookMode) mLookMode = i_lookMode; }
 

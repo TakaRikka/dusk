@@ -61,10 +61,10 @@ fapGm_HIO_c::fapGm_HIO_c() {
 }
 
 #if DEBUG
-static u8 data_8073f6e8 = 1;
-static u8 data_8073f6e9 = 1;
-static u8 data_8073f6ea = 1;
-static u8 data_8073f6eb = 1;
+u8 fapGm_HIO_c::mCaptureMagnification = 1;
+u8 fapGm_HIO_c::mCaptureScreenDivH = 1;
+u8 fapGm_HIO_c::mCaptureScreenDivV = 1;
+u8 fapGm_HIO_c::mPackArchiveMode = 1;
 
 CaptureScreen* fapGm_HIO_c::mCaptureScreen;
 void* fapGm_HIO_c::mCaptureScreenBuffer;
@@ -83,7 +83,7 @@ u8 fapGm_HIO_c::mParticle254Fix;
 void fapGm_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genButton("警告消去", 0x4000020, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genButton("ＢＭＰキャプチャー", 0x4000003, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("ＢＭＰキャプチャー倍率", &data_8073f6e8, 1, 8, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("ＢＭＰキャプチャー倍率", &mCaptureMagnification, 1, 8, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genButton("スナップショット", 0x4000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genButton("ＣＰＵ時間", 0x4000007, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genCheckBox("ホストＩＯ使用", &mUsingHostIO, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
@@ -92,7 +92,7 @@ void fapGm_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genCheckBox("２Ｄ表示", &mDisplay2D, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genCheckBox("パーティクル表示", &mDisplayParticle, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genCheckBox("パーティクル２５４固定", &mParticle254Fix, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("パックアーカイブモード", &data_8073f6eb, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genCheckBox("パックアーカイブモード", &mPackArchiveMode, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
 
     mctx->genLabel("−−−−−−−【プリント】−−−−−−−", 0x4000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
     mctx->genSlider(" 色     Ｒ", &mColor.r, 0, 0xFF, 0x4000010, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
@@ -205,10 +205,10 @@ int dumpTagObject(void* i_object, void*) {
         fopAc_ac_c* a_actor = (fopAc_ac_c*)i_object;
 
         const char* actorname = dStage_getName(profname, -1);
-        fapGm_dataMem::printfTag(fapGm_dataMem::TagAtt_Fixed_e, fapGm_dataMem::TagType_Object_e, 0, profname_str, a_actor, NULL, *actorname == 0 ? NULL : actorname, NULL);
+        fapGm_dataMem::printfTag(fapGm_dataMem::TagAtt_Variable_e, fapGm_dataMem::TagType_Object_e, 0, profname_str, a_actor, NULL, *actorname == 0 ? NULL : actorname, NULL);
 
         if (a_actor->heap != NULL) {
-            fapGm_dataMem::printfTag(fapGm_dataMem::TagAtt_Fixed_e, fapGm_dataMem::TagType_Object_e, 0, profname_str, a_actor->heap, NULL, actorname, NULL);
+            fapGm_dataMem::printfTag(fapGm_dataMem::TagAtt_Variable_e, fapGm_dataMem::TagType_Object_e, 0, profname_str, a_actor->heap, NULL, actorname, NULL);
         }
 
         u32 other_heap_size = 0;
@@ -221,10 +221,10 @@ int dumpTagObject(void* i_object, void*) {
         }
 
         if (other_heap_size != 0) {
-            fapGm_dataMem::printfTag(fapGm_dataMem::TagAtt_Fixed_e, fapGm_dataMem::TagType_Object_e, 6, profname_str, NULL, other_heap_size, NULL, NULL);
+            fapGm_dataMem::printfTag(fapGm_dataMem::TagAtt_Variable_e, fapGm_dataMem::TagType_Object_e, 6, profname_str, NULL, other_heap_size, NULL, NULL);
         }
     } else {
-        fapGm_dataMem::printfTag(fapGm_dataMem::TagAtt_Fixed_e, fapGm_dataMem::TagType_Object_e, 0, profname_str, i_object, NULL, NULL, NULL);
+        fapGm_dataMem::printfTag(fapGm_dataMem::TagAtt_Variable_e, fapGm_dataMem::TagType_Object_e, 0, profname_str, i_object, NULL, NULL, NULL);
     }
 
     return 1;
@@ -410,77 +410,77 @@ int fapGm_dataMem::findParentHeap(void* i_object) {
 void fapGm_dataMem::dumpTag() {
     *mCsv = 0;
 
-    printfTag(TagAtt_Fixed_e, TagType_Heap_e, HeapType_Root_e, NULL, JKRHeap::getRootHeap(), 0, NULL, NULL);
-    printfTag(TagAtt_Fixed_e, TagType_Heap_e, HeapType_System_e, NULL, JKRGetSystemHeap(), 0, NULL, NULL);
-    printfTag(TagAtt_Fixed_e, TagType_Heap_e, HeapType_Zelda_e, NULL, mDoExt_getZeldaHeap(), 0, NULL, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Heap_e, HeapType_Archive_e, NULL, mDoExt_getArchiveHeap(), 0, NULL, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Heap_e, HeapType_J2D_e, NULL, mDoExt_getJ2dHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Variable_e, TagType_Heap_e, HeapType_Root_e, NULL, JKRHeap::getRootHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Variable_e, TagType_Heap_e, HeapType_System_e, NULL, JKRGetSystemHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Variable_e, TagType_Heap_e, HeapType_Zelda_e, NULL, mDoExt_getZeldaHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Heap_e, HeapType_Archive_e, NULL, mDoExt_getArchiveHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Heap_e, HeapType_J2D_e, NULL, mDoExt_getJ2dHeap(), 0, NULL, NULL);
     #if PLATFORM_WII || PLATFORM_SHIELD
-    printfTag(TagAtt_Variable_e, TagType_Heap_e, HeapType_Dynamic_e, NULL, DynamicModuleControlBase::getHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Heap_e, HeapType_Dynamic_e, NULL, DynamicModuleControlBase::getHeap(), 0, NULL, NULL);
     #endif
-    printfTag(TagAtt_Variable_e, TagType_Heap_e, HeapType_Game_e, NULL, mDoExt_getGameHeap(), 0, NULL, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Heap_e, HeapType_Command_e, NULL, mDoExt_getCommandHeap(), 0, NULL, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Heap_e, HeapType_ARAM_e, NULL, NULL, 0, NULL, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Audio_e, 0, "オーディオ", g_mDoAud_audioHeap, 0x169000, NULL, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Particle_e, 0, "パーティクルアーカイブ", g_dComIfG_gameInfo.play.getParticle()->getResHeap(), 0, NULL, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Particle_e, 0, "パーティクル(常駐)", g_dComIfG_gameInfo.play.getParticle()->getHeap(), 0, NULL, NULL);
-    printfTag(TagAtt_Fixed_e, TagType_Particle_e, 0, "パーティクル(ステージ)", g_dComIfG_gameInfo.play.getParticle()->getSceneHeap(), 0, NULL, NULL);
-    printfTag(TagAtt_Variable_e, TagType_System_e, HeapType_System_e, "グラフィックFIFO", NULL, 0xA0000, 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Heap_e, HeapType_Game_e, NULL, mDoExt_getGameHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Heap_e, HeapType_Command_e, NULL, mDoExt_getCommandHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Heap_e, HeapType_ARAM_e, NULL, NULL, 0, NULL, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Audio_e, 0, "オーディオ", g_mDoAud_audioHeap, 0x169000, NULL, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Particle_e, 0, "パーティクルアーカイブ", g_dComIfG_gameInfo.play.getParticle()->getResHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Particle_e, 0, "パーティクル(常駐)", g_dComIfG_gameInfo.play.getParticle()->getHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Variable_e, TagType_Particle_e, 0, "パーティクル(ステージ)", g_dComIfG_gameInfo.play.getParticle()->getSceneHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_System_e, HeapType_System_e, "グラフィックFIFO", NULL, 0xA0000, 0, NULL);
     #if PLATFORM_WII || PLATFORM_SHIELD
-    printfTag(TagAtt_Variable_e, TagType_System_e, 0, "グラフィック関係バッファ", mDoGph_gInf_c::getHeap(), 0, NULL, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_System_e, 0, "グラフィック関係バッファ", mDoGph_gInf_c::getHeap(), 0, NULL, NULL);
     #endif
 
     if (mDoGph_gInf_c::getBloom()->getBuffer() != NULL) {
-        printfTag(TagAtt_Fixed_e, TagType_System_e, 0, "飽和加算用バッファ", mDoGph_gInf_c::getBloom()->getBuffer(), NULL, 0, NULL);
+        printfTag(TagAtt_Variable_e, TagType_System_e, 0, "飽和加算用バッファ", mDoGph_gInf_c::getBloom()->getBuffer(), NULL, 0, NULL);
     }
 
     if (dComIfGp_getSimpleModel() != NULL) {
-        printfTag(TagAtt_Variable_e, TagType_System_e, 0, "シンプルモデルバッファ", dComIfGp_getSimpleModel(), NULL, 0, NULL);
+        printfTag(TagAtt_Fixed_e, TagType_System_e, 0, "シンプルモデルバッファ", dComIfGp_getSimpleModel(), NULL, 0, NULL);
     }
 
     if (dMdl_mng_c::m_myObj != NULL) {
-        printfTag(TagAtt_Variable_e, TagType_System_e, 0, "節約モデルバッファ", dMdl_mng_c::m_myObj, NULL, 0, NULL);
+        printfTag(TagAtt_Fixed_e, TagType_System_e, 0, "節約モデルバッファ", dMdl_mng_c::m_myObj, NULL, 0, NULL);
     }
 
     if (daGrass_c::getGrass() != NULL) {
-        printfTag(TagAtt_Fixed_e, TagType_System_e, 0, "草バッファ", daGrass_c::getGrass(), NULL, 0, NULL);
+        printfTag(TagAtt_Variable_e, TagType_System_e, 0, "草バッファ", daGrass_c::getGrass(), NULL, 0, NULL);
     }
 
     if (daGrass_c::getFlower() != NULL) {
-        printfTag(TagAtt_Fixed_e, TagType_System_e, 0, "花バッファ", daGrass_c::getFlower(), NULL, 0, NULL);
+        printfTag(TagAtt_Variable_e, TagType_System_e, 0, "花バッファ", daGrass_c::getFlower(), NULL, 0, NULL);
     }
 
     if (dTres_c::getTypeGroupData() != NULL) {
-        printfTag(TagAtt_Variable_e, TagType_System_e, 0, "常駐宝箱バッファ", (char*)dTres_c::getTypeGroupData() - 16, NULL, 0, NULL);
+        printfTag(TagAtt_Fixed_e, TagType_System_e, 0, "常駐宝箱バッファ", (char*)dTres_c::getTypeGroupData() - 16, NULL, 0, NULL);
     }
 
     if (dComIfGp_getAttention()->getHeap() != NULL) {
-        printfTag(TagAtt_Variable_e, TagType_System_e, 0, "注目処理用バッファ", dComIfGp_getAttention()->getHeap(), NULL, 0, NULL);
+        printfTag(TagAtt_Fixed_e, TagType_System_e, 0, "注目処理用バッファ", dComIfGp_getAttention()->getHeap(), NULL, 0, NULL);
     }
 
-    printfTag(TagAtt_Variable_e, TagType_2D_e, 0, "2D転送用", dComIfGp_getExpHeap2D(), JKRGetMemBlockSize(NULL, dComIfGp_getExpHeap2D()) + JKRGetMemBlockSize(NULL, dComIfGp_getMsgExpHeap()), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Message_e, 0, "メッセージデータ(常駐)", ((JKRAramArchive*)dComIfGp_getMsgDtArchive())->mBlock, NULL, 0, NULL);
-    printfTag(TagAtt_Fixed_e, TagType_Message_e, 0, "メッセージデータ(ステージ)", ((JKRAramArchive*)dComIfGp_getMsgDtArchive(1))->mBlock, NULL, 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_2D_e, 0, "メーター関係", ((JKRAramArchive*)dComIfGp_getMain2DArchive())->mBlock, NULL, 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_System_e, 0, "アイテム出現テーブル", dComIfGp_getItemTable(), NULL, 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Message_e, HeapType_Zelda_e, "キャッシュフォントバッファ", NULL, JKRGetMemBlockSize(NULL, ((JKRAramArchive*)dComIfGp_getRubyArchive())->mBlock) + 0x1C328, 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Audio_e, HeapType_ARAM_e, "オーディオ", NULL, 0xB00000, 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Player_e, HeapType_ARAM_e, "リンクアニメーション", NULL, ((JKRAramArchive*)dComIfGp_getAnmArchive())->mBlock->getSize(), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_2D_e, HeapType_ARAM_e, "フィールドマップレイアウト", NULL, ((JKRAramArchive*)dComIfGp_getFmapResArchive())->mBlock->getSize(), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_2D_e, HeapType_ARAM_e, "フィールドマップデータ", NULL, ((JKRAramArchive*)dComIfGp_getFieldMapArchive2())->mBlock->getSize(), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_2D_e, HeapType_ARAM_e, "ダンジョンマップレイアウト", NULL, ((JKRAramArchive*)dComIfGp_getDmapResArchive())->mBlock->getSize(), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_2D_e, HeapType_ARAM_e, "コレクト&セーブ&オプション", NULL, ((JKRAramArchive*)dComIfGp_getCollectResArchive())->mBlock->getSize(), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_2D_e, HeapType_ARAM_e, "リングアイテム選択", NULL, ((JKRAramArchive*)dComIfGp_getRingResArchive())->mBlock->getSize(), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_2D_e, HeapType_ARAM_e, "アイテムアイコン", NULL, ((JKRAramArchive*)dComIfGp_getItemIconArchive())->mBlock->getSize(), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_2D_e, HeapType_ARAM_e, "アイテム説明画面", NULL, ((JKRAramArchive*)dComIfGp_getDemoMsgArchive())->mBlock->getSize(), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_2D_e, HeapType_ARAM_e, "強調ボタン表示", NULL, ((JKRAramArchive*)dComIfGp_getMeterButtonArchive())->mBlock->getSize(), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Message_e, HeapType_ARAM_e, "フキダシ共通2Dデータ", NULL, ((JKRAramArchive*)dComIfGp_getMsgCommonArchive())->mBlock->getSize(), 0, NULL);
-    printfTag(TagAtt_Variable_e, TagType_Message_e, HeapType_ARAM_e, "キャッシュフォント", NULL, mDoExt_getAraCacheSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_2D_e, 0, "2D転送用", dComIfGp_getExpHeap2D(), JKRGetMemBlockSize(NULL, dComIfGp_getExpHeap2D()) + JKRGetMemBlockSize(NULL, dComIfGp_getMsgExpHeap()), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Message_e, 0, "メッセージデータ(常駐)", ((JKRAramArchive*)dComIfGp_getMsgDtArchive())->mBlock, NULL, 0, NULL);
+    printfTag(TagAtt_Variable_e, TagType_Message_e, 0, "メッセージデータ(ステージ)", ((JKRAramArchive*)dComIfGp_getMsgDtArchive(1))->mBlock, NULL, 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_2D_e, 0, "メーター関係", ((JKRAramArchive*)dComIfGp_getMain2DArchive())->mBlock, NULL, 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_System_e, 0, "アイテム出現テーブル", dComIfGp_getItemTable(), NULL, 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Message_e, HeapType_Zelda_e, "キャッシュフォントバッファ", NULL, JKRGetMemBlockSize(NULL, ((JKRAramArchive*)dComIfGp_getRubyArchive())->mBlock) + 0x1C328, 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Audio_e, HeapType_ARAM_e, "オーディオ", NULL, 0xB00000, 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Player_e, HeapType_ARAM_e, "リンクアニメーション", NULL, ((JKRAramArchive*)dComIfGp_getAnmArchive())->mBlock->getSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_2D_e, HeapType_ARAM_e, "フィールドマップレイアウト", NULL, ((JKRAramArchive*)dComIfGp_getFmapResArchive())->mBlock->getSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_2D_e, HeapType_ARAM_e, "フィールドマップデータ", NULL, ((JKRAramArchive*)dComIfGp_getFieldMapArchive2())->mBlock->getSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_2D_e, HeapType_ARAM_e, "ダンジョンマップレイアウト", NULL, ((JKRAramArchive*)dComIfGp_getDmapResArchive())->mBlock->getSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_2D_e, HeapType_ARAM_e, "コレクト&セーブ&オプション", NULL, ((JKRAramArchive*)dComIfGp_getCollectResArchive())->mBlock->getSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_2D_e, HeapType_ARAM_e, "リングアイテム選択", NULL, ((JKRAramArchive*)dComIfGp_getRingResArchive())->mBlock->getSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_2D_e, HeapType_ARAM_e, "アイテムアイコン", NULL, ((JKRAramArchive*)dComIfGp_getItemIconArchive())->mBlock->getSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_2D_e, HeapType_ARAM_e, "アイテム説明画面", NULL, ((JKRAramArchive*)dComIfGp_getDemoMsgArchive())->mBlock->getSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_2D_e, HeapType_ARAM_e, "強調ボタン表示", NULL, ((JKRAramArchive*)dComIfGp_getMeterButtonArchive())->mBlock->getSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Message_e, HeapType_ARAM_e, "フキダシ共通2Dデータ", NULL, ((JKRAramArchive*)dComIfGp_getMsgCommonArchive())->mBlock->getSize(), 0, NULL);
+    printfTag(TagAtt_Fixed_e, TagType_Message_e, HeapType_ARAM_e, "キャッシュフォント", NULL, mDoExt_getAraCacheSize(), 0, NULL);
 
     for (int i = 0; i < 6; i++) {
         char label[64];
         sprintf(label, "メッセージ(%d)枠ほか", i);
-        printfTag(TagAtt_Variable_e, TagType_Message_e, HeapType_ARAM_e, label, NULL, ((JKRAramArchive*)dComIfGp_getMsgArchive(i))->mBlock->getSize(), 0, NULL);
+        printfTag(TagAtt_Fixed_e, TagType_Message_e, HeapType_ARAM_e, label, NULL, ((JKRAramArchive*)dComIfGp_getMsgArchive(i))->mBlock->getSize(), 0, NULL);
     }
 
     g_dComIfG_gameInfo.mResControl.dumpTag();
@@ -494,8 +494,8 @@ void fapGm_dataMem::dumpTag() {
     }
 
     if (var_r28 != NULL) {
-        printfTag(TagAtt_Fixed_e, TagType_Stage_e, 0, "ステージメモリーブロック", dStage_roomControl_c::getMemoryBlockHeap(0), var_r28, 0, NULL);
-        printfTag(TagAtt_Fixed_e, TagType_Heap_e, HeapType_Stage_e, NULL, NULL, var_r28, 0, NULL);
+        printfTag(TagAtt_Variable_e, TagType_Stage_e, 0, "ステージメモリーブロック", dStage_roomControl_c::getMemoryBlockHeap(0), var_r28, 0, NULL);
+        printfTag(TagAtt_Variable_e, TagType_Heap_e, HeapType_Stage_e, NULL, NULL, var_r28, 0, NULL);
     }
 
     DynamicModuleControlBase::dumpTag();
@@ -696,6 +696,7 @@ void fapGm_HIO_c::startCpuTimer() {
     }
 
     if (m_CpuTimerOff) {
+        int stackDummy;
         JUT_ASSERT(1302, !m_CpuTimerStart)
         m_CpuTimerStart = TRUE;
         m_CpuTimerTick = OSGetTick();
@@ -754,5 +755,3 @@ void fapGm_Create() {
     #endif
     g_HIO.field_0x04 = mDoHIO_CREATE_CHILD("ゲームシステム", &g_HIO);
 }
-
-fapGm_HIO_c::~fapGm_HIO_c() {}

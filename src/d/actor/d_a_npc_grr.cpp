@@ -121,7 +121,7 @@ enum Event_Cut_Nums {
     /* 0x1 */ NUM_EVT_CUTS_e = 0x1,
 };
 
-static daNpc_grR_Param_c l_HIO;
+static NPC_GRR_HIO_CLASS l_HIO;
 
 static int l_bmdGetParamList[1][2] = {
     {BMDR_GRR, GRR},
@@ -204,24 +204,6 @@ daNpc_grR_c::cutFunc daNpc_grR_c::mEvtCutList[1] = {
     NULL,
 };
 
-daNpc_grR_c::daNpc_grR_c() {}
-
-daNpc_grR_c::~daNpc_grR_c() {
-    for (int i = 0; l_loadRes_list[mType][i] >= 0; i++) {
-        dComIfG_resDelete(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
-    }
-
-    if (heap != NULL) {
-        mAnm_p->stopZelAnime();
-    }
-
-    #if DEBUG
-    if (mHIO != NULL) {
-        mHIO->removeHIO();
-    }
-    #endif
-}
-
 daNpc_grR_HIOParam const daNpc_grR_Param_c::m = {
     60.0f,
     -3.0f,
@@ -257,6 +239,24 @@ daNpc_grR_HIOParam const daNpc_grR_Param_c::m = {
     false,
     false
 };
+
+daNpc_grR_c::daNpc_grR_c() {}
+
+daNpc_grR_c::~daNpc_grR_c() {
+    for (int i = 0; l_loadRes_list[mType][i] >= 0; i++) {
+        dComIfG_resDelete(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
+    }
+
+    if (heap != NULL) {
+        mAnm_p->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+}
 
 cPhs__Step daNpc_grR_c::create() {
     fopAcM_ct(this, daNpc_grR_c);
@@ -300,10 +300,15 @@ cPhs__Step daNpc_grR_c::create() {
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 450.0f, 300.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
 
-        mAcchCir.SetWall(daNpc_grR_Param_c::m.common.width, daNpc_grR_Param_c::m.common.knee_length);
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ラスタ長老ゴロン");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this),
                 fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_grR_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgHitCallback(tgHitCallBack);
@@ -372,7 +377,7 @@ int daNpc_grR_c::Execute() {
 
 int daNpc_grR_c::Draw() {
     mAnm_p->getModel()->getModelData()->getMaterialNodePointer(1)->setMaterialAnm(mpMatAnm);
-    return draw(chkAction(&daNpc_grR_c::test), FALSE, daNpc_grR_Param_c::m.common.real_shadow_size, NULL, FALSE);
+    return draw(chkAction(&daNpc_grR_c::test), FALSE, mpHIO->m.common.real_shadow_size, NULL, FALSE);
 }
 
 int daNpc_grR_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
@@ -394,7 +399,7 @@ int daNpc_grR_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
         case 1:
         case 3:
         case 4:
-            setLookatMtx(jntNo, i_jointList, daNpc_grR_Param_c::m.common.neck_rotation_ratio);
+            setLookatMtx(jntNo, i_jointList, mpHIO->m.common.neck_rotation_ratio);
             break;
     }
 
@@ -453,16 +458,16 @@ void daNpc_grR_c::setParam() {
     field_0xdf8 = 0;
     field_0xdfc = 0;
 
-    s16 talk_distance = daNpc_grR_Param_c::m.common.talk_distance;
-    s16 attention_distance = daNpc_grR_Param_c::m.common.attention_distance;
+    s16 talk_distance = mpHIO->m.common.talk_distance;
+    s16 attention_distance = mpHIO->m.common.attention_distance;
     s16 attention_angle;
     s16 talk_angle;
     if (mType == TYPE_MARO) {
         talk_angle = 6;
         attention_angle = 6;
     } else {
-        talk_angle = daNpc_grR_Param_c::m.common.talk_angle;
-        attention_angle = daNpc_grR_Param_c::m.common.attention_angle;
+        talk_angle = mpHIO->m.common.talk_angle;
+        attention_angle = mpHIO->m.common.attention_angle;
 
         if (mAnm != ANM_AGURA_WAIT && !field_0xe18) {
             uVar1 = 0;
@@ -474,10 +479,10 @@ void daNpc_grR_c::setParam() {
     attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(talk_distance, talk_angle);
     attention_info.flags = uVar1;
 
-    scale.set(daNpc_grR_Param_c::m.common.scale, daNpc_grR_Param_c::m.common.scale, daNpc_grR_Param_c::m.common.scale);
-    mAcchCir.SetWallR(daNpc_grR_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpc_grR_Param_c::m.common.knee_length);
-    gravity = daNpc_grR_Param_c::m.common.gravity;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_grR_c::main() {
@@ -489,7 +494,7 @@ BOOL daNpc_grR_c::main() {
         attention_info.flags = 0;
     }
 
-    if (!daNpc_grR_Param_c::m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()))) {
+    if (!mpHIO->m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()))) {
         if (mOrderEvtNo != 0) {
             eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
         }
@@ -535,7 +540,7 @@ void daNpc_grR_c::setAttnPos() {
     static cXyz eyeOffset(24.0f, 30.0f, 0.0f);
 
     cXyz sp7c, sp88, sp94, spa0;
-    f32 attention_offset = daNpc_grR_Param_c::m.common.attention_offset;
+    f32 attention_offset = mpHIO->m.common.attention_offset;
 
     mDoMtx_stack_c::YrotS(field_0x990);
     cLib_addCalc2(&field_0x984[0], 0.0f, 0.1f, 125.0f);
@@ -600,8 +605,8 @@ void daNpc_grR_c::setAttnPos() {
         }
 
         mCyl.SetC(sp7c);
-        mCyl.SetH(daNpc_grR_Param_c::m.common.height + fVar1);
-        mCyl.SetR(daNpc_grR_Param_c::m.common.width + fVar2);
+        mCyl.SetH(mpHIO->m.common.height + fVar1);
+        mCyl.SetR(mpHIO->m.common.width + fVar2);
         dComIfG_Ccsp()->Set(&mCyl);
     }
 
@@ -887,24 +892,24 @@ void daNpc_grR_c::reset() {
 }
 
 void daNpc_grR_c::playExpression() {
-    daNpcF_anmPlayData dat0 = {ANM_F_TALK_A, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat0 = {ANM_F_TALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1a = {ANM_F_LAUGH, daNpc_grR_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat1a = {ANM_F_LAUGH, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat1b = {ANM_FH_LAUGH, 0.0f, 0};
     daNpcF_anmPlayData* pDat1[2] = {&dat1a, &dat1b};
-    daNpcF_anmPlayData dat2 = {ANM_F_SWING, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat2 = {ANM_F_SWING, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[1] = {&dat2};
-    daNpcF_anmPlayData dat3a = {ANM_F_KEEE, daNpc_grR_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat3a = {ANM_F_KEEE, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat3b = {ANM_FH_KEEE, 0.0f, 0};
     daNpcF_anmPlayData* pDat3[2] = {&dat3a, &dat3b};
-    daNpcF_anmPlayData dat4a = {ANM_F_KEEETALK, daNpc_grR_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat4a = {ANM_F_KEEETALK, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat4b = {ANM_FH_KEEE, 0.0f, 0};
     daNpcF_anmPlayData* pDat4[2] = {&dat4a, &dat4b};
-    daNpcF_anmPlayData dat5 = {ANM_FH_LAUGH, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat5 = {ANM_FH_LAUGH, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat5[1] = {&dat5};
-    daNpcF_anmPlayData dat6 = {ANM_FH_KEEE, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat6 = {ANM_FH_KEEE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat6[1] = {&dat6};
-    daNpcF_anmPlayData dat7 = {ANM_NONE, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat7 = {ANM_NONE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat7[1] = {&dat7};
 
     daNpcF_anmPlayData** ppDat[8] = {
@@ -924,33 +929,33 @@ void daNpc_grR_c::playExpression() {
 }
 
 void daNpc_grR_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {ANM_WAIT_A, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat0 = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1a = {ANM_TALK_A, daNpc_grR_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat1b = {ANM_WAIT_A, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat1a = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat1b = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[2] = {&dat1a, &dat1b};
-    daNpcF_anmPlayData dat2 = {ANM_SWING, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat2 = {ANM_SWING, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[1] = {&dat2};
-    daNpcF_anmPlayData dat3 = {ANM_AGURA_WAIT, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat3 = {ANM_AGURA_WAIT, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[1] = {&dat3};
-    daNpcF_anmPlayData dat4a = {ANM_AGURA_TALK, daNpc_grR_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat4a = {ANM_AGURA_TALK, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat4b = {ANM_AGURA_WAIT, 0.0f, 0};
     daNpcF_anmPlayData* pDat4[2] = {&dat4a, &dat4b};
-    daNpcF_anmPlayData dat5a = {ANM_TO_AGURA, daNpc_grR_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat5a = {ANM_TO_AGURA, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat5b = {ANM_AGURA_WAIT, 0.0f, 0};
     daNpcF_anmPlayData* pDat5[2] = {&dat5a, &dat5b};
-    daNpcF_anmPlayData dat6a = {ANM_AGURA_GETUP, daNpc_grR_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat6a = {ANM_AGURA_GETUP, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat6b = {ANM_WAIT_A, 0.0f, 0};
     daNpcF_anmPlayData* pDat6[2] = {&dat6a, &dat6b};
-    daNpcF_anmPlayData dat7a = {ANM_LAUGH, daNpc_grR_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat7a = {ANM_LAUGH, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat7b = {ANM_WAIT_A, 0.0f, 0};
     daNpcF_anmPlayData* pDat7[2] = {&dat7a, &dat7b};
-    daNpcF_anmPlayData dat8a = {ANM_TALK_B, daNpc_grR_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat8a = {ANM_TALK_B, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat8b = {ANM_WAIT_B, 0.0f, 0};
     daNpcF_anmPlayData* pDat8[2] = {&dat8a, &dat8b};
-    daNpcF_anmPlayData dat9 = {ANM_WAIT_B, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat9 = {ANM_WAIT_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat9[1] = {&dat9};
-    daNpcF_anmPlayData dat10 = {ANM_STEP, daNpc_grR_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat10 = {ANM_STEP, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat10[1] = {&dat10};
 
     daNpcF_anmPlayData** ppDat[11] = {
@@ -1000,7 +1005,7 @@ BOOL daNpc_grR_c::setAction(actionFunc action) {
 BOOL daNpc_grR_c::selectAction() {
     mNextAction = NULL;
 
-    if (daNpc_grR_Param_c::m.common.debug_mode_ON) {
+    if (mpHIO->m.common.debug_mode_ON) {
         mNextAction = &daNpc_grR_c::test;
     } else {
         switch (mType) {
@@ -1024,7 +1029,7 @@ void daNpc_grR_c::doNormalAction(int param_1) {
         if (mCutType == daPy_py_c::CUT_TYPE_TURN_RIGHT) {
             i_timer = 20;
         } else {
-            i_timer = daNpc_grR_Param_c::m.common.damage_time;
+            i_timer = mpHIO->m.common.damage_time;
         }
 
         setDamage(i_timer, 7, 0);
@@ -1124,14 +1129,14 @@ void daNpc_grR_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model = mAnm_p->getModel();
     BOOL i_snap = FALSE;
-    f32 body_angleX_min = daNpc_grR_Param_c::m.common.body_angleX_min;
-    f32 body_angleX_max = daNpc_grR_Param_c::m.common.body_angleX_max;
-    f32 body_angleY_min = daNpc_grR_Param_c::m.common.body_angleY_min;
-    f32 body_angleY_max = daNpc_grR_Param_c::m.common.body_angleY_max;
-    f32 head_angleX_min = daNpc_grR_Param_c::m.common.head_angleX_min;
-    f32 head_angleX_max = daNpc_grR_Param_c::m.common.head_angleX_max;
-    f32 head_angleY_min = daNpc_grR_Param_c::m.common.head_angleY_min;
-    f32 head_angleY_max = daNpc_grR_Param_c::m.common.head_angleY_max;
+    f32 body_angleX_min = mpHIO->m.common.body_angleX_min;
+    f32 body_angleX_max = mpHIO->m.common.body_angleX_max;
+    f32 body_angleY_min = mpHIO->m.common.body_angleY_min;
+    f32 body_angleY_max = mpHIO->m.common.body_angleY_max;
+    f32 head_angleX_min = mpHIO->m.common.head_angleX_min;
+    f32 head_angleX_max = mpHIO->m.common.head_angleX_max;
+    f32 head_angleY_min = mpHIO->m.common.head_angleY_min;
+    f32 head_angleY_max = mpHIO->m.common.head_angleY_max;
     s16 angle_delta = mCurAngle.y - mOldAngle.y;
     cXyz lookatPos[3] = {mLookatPos[0], mLookatPos[1], mLookatPos[2]};
     csXyz* lookatAngle[3] = {&mLookatAngle[0], &mLookatAngle[1], &mLookatAngle[2]};
@@ -1386,12 +1391,12 @@ int daNpc_grR_c::test(void* param_1) {
             mMode = 2;
             // fallthrough
         case 2:
-            if (daNpc_grR_Param_c::m.common.face_expression != mExpression) {
-                setExpression(daNpc_grR_Param_c::m.common.face_expression, daNpc_grR_Param_c::m.common.morf_frame);
+            if (mpHIO->m.common.face_expression != mExpression) {
+                setExpression(mpHIO->m.common.face_expression, mpHIO->m.common.morf_frame);
             }
 
-            setMotion(daNpc_grR_Param_c::m.common.motion, daNpc_grR_Param_c::m.common.morf_frame, 0);
-            setLookMode(daNpc_grR_Param_c::m.common.look_mode);
+            setMotion(mpHIO->m.common.motion, mpHIO->m.common.morf_frame, 0);
+            setLookMode(mpHIO->m.common.look_mode);
             mOrderEvtNo = 0;
             attention_info.flags = 0;
             break;

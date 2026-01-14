@@ -6,6 +6,79 @@
 #include "d/actor/d_a_npc.h"
 #include "SSystem/SComponent/c_counter.h"
 
+//TODO: this might be the same struct that's used in d_a_obj_sekizoa's HIO
+struct daPeru_HIO_inner {
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2C;
+    /* 0x30 */ f32 field_0x30;
+    /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ f32 field_0x38;
+    /* 0x3C */ f32 field_0x3C;
+    /* 0x40 */ f32 field_0x40;
+    /* 0x44 */ f32 field_0x44;
+    /* 0x48 */ s16 field_0x48;
+    /* 0x4A */ s16 field_0x4A;
+    /* 0x4C */ s16 field_0x4C;
+    /* 0x4E */ s16 field_0x4E;
+    /* 0x50 */ f32 field_0x50;
+    /* 0x54 */ f32 field_0x54;
+    /* 0x58 */ f32 field_0x58;
+    /* 0x5C */ f32 field_0x5C;
+    /* 0x60 */ s16 field_0x60;
+    /* 0x62 */ s16 field_0x62;
+    /* 0x64 */ f32 field_0x64;
+    /* 0x68 */ f32 field_0x68;
+    /* 0x6C */ f32 field_0x6C;
+    /* 0x70 */ f32 field_0x70;
+    /* 0x74 */ f32 field_0x74;
+    /* 0x78 */ f32 field_0x78;
+    /* 0x7C */ f32 field_0x7C;
+    /* 0x80 */ f32 field_0x80;
+    /* 0x84 */ f32 field_0x84;
+    /* 0x88 */ f32 field_0x88;
+};
+
+struct daPeru_HIOParam {
+    /* 0x00 */ daPeru_HIO_inner inner;
+    /* 0x8C */ f32 field_0x8c;
+    /* 0x90 */ f32 field_0x90;
+    /* 0x94 */ f32 field_0x94;
+};
+
+class daPeru_Param_c {
+public:
+    virtual ~daPeru_Param_c() {}
+
+    static daPeru_HIOParam const m;
+};
+
+#if DEBUG
+class daPeru_HIO_c : public mDoHIO_entry_c {
+public:
+    daPeru_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daPeru_HIOParam m;
+};
+
+#define PERU_HIO_CLASS daPeru_HIO_c
+#else
+#define PERU_HIO_CLASS daPeru_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daPeru_c
@@ -127,7 +200,7 @@ private:
     /* 0x0E70 */ u8 field_0xe70[0xe7c - 0xe70];
     /* 0x0E7C */ s8 field_0xe7c;
     /* 0x0E80 */ int field_0xe80;
-    /* 0x0E84 */ int field_0xe84;
+    /* 0x0E84 */ PERU_HIO_CLASS* mpHIO;
     /* 0x0E88 */ dCcD_Cyl mCyls[2];
     /* 0x1100 */ daNpcT_Path_c mPath;
     /* 0x1128 */ u8 mType;
@@ -135,20 +208,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daPeru_c) == 0x112c);
-
-struct PeruParams {
-    f32 field_0x00[18];
-    s16 field_0x48[4];
-    f32 field_0x50[4];
-    s16 field_0x60[2];
-    f32 field_0x64[13];
-};
-
-class daPeru_Param_c {
-public:
-    virtual ~daPeru_Param_c() {}
-
-    static PeruParams const m;
-};
 
 #endif /* D_A_PERU_H */

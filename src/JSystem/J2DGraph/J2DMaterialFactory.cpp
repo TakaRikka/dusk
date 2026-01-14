@@ -52,10 +52,7 @@ u32 J2DMaterialFactory::countStages(int param_0) const {
         }
     }
     if ((uVar3 != uVar4 && uVar4 != 0)) {
-        if (uVar3 > uVar4) {
-            return uVar3;
-        }
-        return uVar4;
+        return uVar3 > uVar4 ? uVar3 : uVar4;
     }
     return uVar3;
 }
@@ -64,16 +61,14 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
                                     J2DResReference* param_3, J2DResReference* param_4,
                                     JKRArchive* param_5) const {
     u32 stages = countStages(index);
-    u32 uVar1 = ((param_2 & 0x1f0000) >> 16);
-    u32 r28 = stages > uVar1 ? stages : uVar1;
-
-    u32 r25 = r28 <= 8 ? r28 : 8;
-
-    s32 local_3bc = ((param_2 & 0x1000000) != 0);
-    s32 local_3c0 = (param_2 & 0x1f0000) ? local_3bc : 0;
-    bool temp = (param_2 & 0x1f0000);
-    param_0->mTevBlock = J2DMaterial::createTevBlock((u16)r28, temp);
-    param_0->mIndBlock = J2DMaterial::createIndBlock(local_3c0, temp);
+    u32 local_36c = ((param_2 & 0x1f0000) >> 16);
+    u32 local_370 = stages > local_36c ? stages : local_36c;
+    u32 local_374 = local_370 > 8 ? 8 : local_370;
+    s32 local_378 = (param_2 & 0x1000000) ? 1 : 0;
+    local_378 = (param_2 & 0x1f0000) ? local_378 : 0;
+    bool local_403 = (param_2 & 0x1f0000);
+    param_0->mTevBlock = J2DMaterial::createTevBlock((u16)local_370, local_403);
+    param_0->mIndBlock = J2DMaterial::createIndBlock(local_378, local_403);
     param_0->mIndex = index;
     param_0->field_0x8 = getMaterialMode(index);
     param_0->getColorBlock()->setColorChanNum(newColorChanNum(index));
@@ -86,9 +81,9 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
     param_0->mMaterialAlphaCalc = getMaterialAlphaCalc(index);
 
     JUTResReference aJStack_12c;
-    for (u8 i = 0; i < r25; i++) {
+    for (u8 i = 0; i < local_374; i++) {
         u16 texNo = newTexNo(index, i);
-        s8* local_37c = param_3->getResReference(texNo);
+        char* local_37c = param_3->getResReference(texNo);
         void* local_380 = NULL;
         if (local_37c != NULL) {
             local_380 = aJStack_12c.getResource(local_37c, 'TIMG', param_5);
@@ -107,7 +102,7 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
     u16 fontNo = newFontNo(index);
     param_0->getTevBlock()->setFontNo(fontNo);
     
-    s8* local_384 = param_4->getResReference(param_0->getTevBlock()->getFontNo());
+    char* local_384 = param_4->getResReference(param_0->getTevBlock()->getFontNo());
     void* local_388 = NULL;
     if (local_384 != NULL) {
         local_388 = aJStack_12c.getResource(local_384, 'FONT', param_5);
@@ -122,10 +117,10 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
     }
 
     param_0->getTevBlock()->setFont((ResFONT*)local_388);
-    for (u8 i = 0; i < r28; i++) {
+    for (u8 i = 0; i < local_370; i++) {
         param_0->getTevBlock()->setTevOrder(i, newTevOrder(index, i));
     }
-    for (u8 i = 0; i < r28; i++) {
+    for (u8 i = 0; i < local_370; i++) {
         J2DMaterialInitData* local_38c = &field_0x4[field_0x8[index]];
         param_0->getTevBlock()->setTevStage(i, newTevStage(index, i));
         if (local_38c->field_0xba[i] != 0xffff) {
@@ -157,13 +152,13 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
         param_0->getTexGenBlock()->setTexMtx(i, newTexMtx(index, i));
     }
     J2DMaterialInitData* local_394 = &field_0x4[field_0x8[index]];
-    for (u8 i = 0; i < r28; i++) {
+    for (u8 i = 0; i < local_370; i++) {
         param_0->getTevBlock()->setTevKColorSel(i, local_394->field_0x52[i]);
     }
-    for (u8 i = 0; i < r28; i++) {
+    for (u8 i = 0; i < local_370; i++) {
         param_0->getTevBlock()->setTevKAlphaSel(i, local_394->field_0x62[i]);
     }
-    if (field_0xc != NULL || local_3c0 != 0) {
+    if (field_0xc != NULL || local_378 != 0) {
         u8 local_410 = newIndTexStageNum(index);
         param_0->mIndBlock->setIndTexStageNum(local_410);
         for (u8 i = 0; i < local_410; i++) {
@@ -175,7 +170,7 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
         for (u8 i = 0; i < local_410; i++) {
             param_0->getIndBlock()->setIndTexCoordScale(i, newIndTexCoordScale(index, i));
         }
-        for (u8 i = 0; i < r28; i++) {
+        for (u8 i = 0; i < local_370; i++) {
             param_0->getTevBlock()->setIndTevStage(i, newIndTevStage(index, i));
         }
     }
@@ -183,8 +178,7 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
 }
 
 JUtility::TColor J2DMaterialFactory::newMatColor(int param_0, int param_1) const {
-    GXColor color = {0xff,0xff,0xff,0xff};
-    JUtility::TColor local_20 = GXColor(color);
+    JUtility::TColor local_20 = (GXColor){0xff,0xff,0xff,0xff};
     J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
     if (iVar2->field_0x8[param_1] != 0xffff) {
         return field_0x10[iVar2->field_0x8[param_1]];
@@ -201,6 +195,7 @@ u8 J2DMaterialFactory::newColorChanNum(int param_0) const {
 }
 
 J2DColorChan J2DMaterialFactory::newColorChan(int param_0, int param_1) const {
+    int r29 = 0;
     J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
     if (iVar2->field_0xc[param_1] != 0xffff) {
         return J2DColorChan(field_0x18[iVar2->field_0xc[param_1]]);
@@ -209,6 +204,7 @@ J2DColorChan J2DMaterialFactory::newColorChan(int param_0, int param_1) const {
 }
 
 u32 J2DMaterialFactory::newTexGenNum(int param_0) const {
+    int r30 = 0;
     J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
     if (iVar2->field_0x3 != 0xff) {
         return field_0x1c[iVar2->field_0x3];
@@ -235,6 +231,7 @@ J2DTexMtx* J2DMaterialFactory::newTexMtx(int param_0, int param_1) const {
 }
 
 u8 J2DMaterialFactory::newCullMode(int param_0) const {
+    int r30 = 0;
     J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
     if (iVar2->field_0x1 != 0xff) {
         return field_0x30[iVar2->field_0x1];
@@ -312,12 +309,13 @@ J2DTevSwapModeTable J2DMaterialFactory::newTevSwapModeTable(int param_0, int par
 }
 
 u8 J2DMaterialFactory::newIndTexStageNum(int param_0) const {
+    u8 r31 = 0;
     if (field_0xc != NULL) {
         if (field_0xc[param_0].field_0x0 == 1) {
             return field_0xc[param_0].field_0x1;
         }
     }
-    return 0;
+    return r31;
 }
 
 J2DIndTexOrder J2DMaterialFactory::newIndTexOrder(int param_0, int param_1) const {
@@ -373,7 +371,7 @@ J2DBlend J2DMaterialFactory::newBlend(int param_0) const {
     if (iVar2->field_0xe4 != 0xffff) {
         return J2DBlend(field_0x54[iVar2->field_0xe4]);
     }
-    return J2DBlend();
+    return J2DBlend(j2dDefaultBlendInfo);
 }
 
 u8 J2DMaterialFactory::newDither(int param_0) const {

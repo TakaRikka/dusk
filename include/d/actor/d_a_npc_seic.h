@@ -13,66 +13,34 @@
  */
 
  struct daNpc_seiC_HIOParam {
-    /* 0x00 */ f32 field_0x00;
-    /* 0x04 */ f32 mGravity;
-    /* 0x08 */ f32 mScale;
-    /* 0x0C */ f32 field_0x0c;
-    /* 0x10 */ f32 mSttsWeight;
-    /* 0x14 */ f32 mCylH;
-    /* 0x18 */ f32 mWallH;
-    /* 0x1C */ f32 mWallR;
-    /* 0x20 */ f32 field_0x20;
-    /* 0x24 */ f32 field_0x24;
-    /* 0x28 */ f32 field_0x28;
-    /* 0x2C */ f32 field_0x2c;
-    /* 0x30 */ f32 field_0x30;
-    /* 0x34 */ f32 field_0x34;
-    /* 0x38 */ f32 field_0x38;
-    /* 0x3C */ f32 field_0x3c;
-    /* 0x40 */ f32 field_0x40;
-    /* 0x44 */ f32 mMorfFrames;
-    /* 0x48 */ f32 field_0x48;
-    /* 0x4C */ f32 field_0x4c;
-    /* 0x50 */ f32 field_0x50;
-    /* 0x54 */ f32 field_0x54;
-    /* 0x58 */ f32 field_0x58;
-    /* 0x5C */ f32 field_0x5c;
-    /* 0x60 */ f32 field_0x60;
-    /* 0x64 */ f32 field_0x64;
-    /* 0x68 */ f32 field_0x68;
-    /* 0x6C */ f32 field_0x6c;
-    /* 0x70 */ f32 field_0x70;
-    /* 0x74 */ f32 field_0x74;
-    /* 0x78 */ f32 field_0x78;
-    /* 0x7C */ f32 field_0x7c;
-    /* 0x80 */ f32 field_0x80;
-    /* 0x84 */ f32 field_0x84;
-    /* 0x88 */ f32 field_0x88;
-    /* 0x8C */ f32 field_0x8c;
-    /* 0x90 */ f32 field_0x90;
+    /* 0x00 */ daNpcT_HIOParam common;
+    /* 0x8C */ f32 field_0x8c;  // "強制会話距離" "Forced conversation distance" | Slider
+    /* 0x90 */ f32 field_0x90;  // "会話距離" "Conversation distance" | Slider
 };
 
 class daNpc_seiC_Param_c {
-    public:
-        virtual ~daNpc_seiC_Param_c() {};
+public:
+    virtual ~daNpc_seiC_Param_c() {}
 
-        static const daNpc_seiC_HIOParam m;
+    static const daNpc_seiC_HIOParam m;
 };
 
-class daNpc_seiC_HIO_c
 #if DEBUG
-: public mDoHIO_entry_c 
-#endif
-{
+class daNpc_seiC_HIO_c : public mDoHIO_entry_c {
 public:
+    daNpc_seiC_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
     void genMessage(JORMContext*);
 
-    #if DEBUG
-    /* 0x08 */ daNpc_seiC_HIOParam field_0x8;
-    /* 0x94 */ f32 field_0x94;                  // "強制会話距離" "Forced conversation distance" | Slider
-    /* 0x98 */ f32 field_0x98;                  // "会話距離" "Conversation distance" | Slider
-    #endif
+    /* 0x08 */ daNpc_seiC_HIOParam m;
 };
+
+#define NPC_SEIC_HIO_CLASS daNpc_seiC_HIO_c
+#else
+#define NPC_SEIC_HIO_CLASS daNpc_seiC_Param_c
+#endif
 
 class daNpc_seiC_c : public daNpcT_c {
 public:
@@ -123,7 +91,7 @@ public:
     static cutFunc mCutList[1];
 
 private:
-    /* 0xE40 */ daNpc_seiC_HIO_c* field_0xe40;
+    /* 0xE40 */ NPC_SEIC_HIO_CLASS* mpHIO;
     /* 0xE44 */ u8 mType;
     /* 0xE45 */ u8 field_0xe45[0xe48 - 0xe45];
     /* 0xE48 */ actionFunc mAction;

@@ -11,7 +11,7 @@
 #include "d/actor/d_a_npc_tk.h"
 #include "d/d_s_play.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include <math>
+#include <cmath>
 
 #define PARTS_ALL 0x3FFFF
 #define PART_TOP_LEFT_UNDER     (1 << 0)

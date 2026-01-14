@@ -2,6 +2,7 @@
 #define J3DMTXBUFFER_H
 
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "JSystem/J3DGraphBase/J3DEnum.h"
 
 class J3DModelData;
 

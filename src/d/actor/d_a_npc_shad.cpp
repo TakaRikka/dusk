@@ -2234,7 +2234,7 @@ BOOL daNpcShad_c::EvCut_Disappear(int i_cutIndex) {
                 setExpression(EXPR_H_SURPRISE, -1.0f);
                 setMotion(MOT_RUN_A, -1.0f, FALSE);
                 mTurnMode = 0;
-                speedF = daNpcShad_Param_c::m.traveling_speed;
+                speedF = mpHIO->m.traveling_speed;
                 break;
 
             case '0006':

@@ -9,6 +9,11 @@
 #include "Z2AudioLib/Z2Audience.h"
 #include "JSystem/JAudio2/JAUSoundAnimator.h"
 
+#ifndef __MWERKS__
+#include <limits>
+#define FLT_MAX std::numeric_limits<float>::max()
+#endif
+
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include "Z2AudioLib/Z2AudioCS.h"
 #endif

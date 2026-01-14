@@ -3,6 +3,38 @@
 
 #include "d/actor/d_a_npc.h"
 
+struct daNpc_Bou_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+    /* 0x8C */ f32 field_0x8c; // 16.0f
+    /* 0x90 */ f32 field_0x90; // 1000.0f
+    /* 0x94 */ f32 field_0x94; // 500.0f
+    /* 0x98 */ f32 field_0x98; // -500.0f
+};
+
+ class daNpc_Bou_Param_c {
+public:
+    virtual ~daNpc_Bou_Param_c() {}
+
+    static const daNpc_Bou_HIOParam m;
+ };
+
+#if DEBUG
+class daNpc_Bou_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Bou_HIO_c();
+    virtual ~daNpc_Bou_HIO_c() {}
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Bou_HIOParam m;
+};
+#define NPC_BOU_HIO_CLASS daNpc_Bou_HIO_c
+#else
+#define NPC_BOU_HIO_CLASS daNpc_Bou_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_Bou_c
@@ -11,58 +43,6 @@
  * @details
  *
  */
- class daNpc_Bou_Param_c {
-    public:
-        virtual ~daNpc_Bou_Param_c() {}
-
-        struct Data {
-            /* 0x00 */ f32 field_0x00; // 255.0f
-            /* 0x04 */ f32 field_0x04; // 3.0f
-            /* 0x08 */ f32 field_0x08; // 1.0f
-            /* 0x0C */ f32 field_0x0c; // 600.0f
-            /* 0x10 */ f32 field_0x10; // 255.0f
-            /* 0x14 */ f32 field_0x14; // 200.0f
-            /* 0x18 */ f32 field_0x18; // 35.0f
-            /* 0x1C */ f32 field_0x1c; // 40.0f
-            /* 0x20 */ f32 field_0x20; // 0.0f
-            /* 0x24 */ f32 field_0x24; // 0.0f
-            /* 0x28 */ f32 field_0x28; // 10.0f
-            /* 0x2C */ f32 field_0x2c; // -10.0f
-            /* 0x30 */ f32 field_0x30; // 30.0f
-            /* 0x34 */ f32 field_0x34; // -10.0f
-            /* 0x38 */ f32 field_0x38; // 45.0f
-            /* 0x3C */ f32 field_0x3c; // -45.0f
-            /* 0x40 */ f32 field_0x40; // 0.6f
-            /* 0x44 */ f32 field_0x44; // 12.0f
-            /* 0x48 */ s16 field_0x48; // 3
-            /* 0x4a */ s16 field_0x4a; // 6
-            /* 0x4c */ s16 field_0x4c; // 5
-            /* 0x4e */ s16 field_0x4e; // 6
-            /* 0x50 */ f32 field_0x50; // 110.0f
-            /* 0x54 */ f32 field_0x54; // 500.0f
-            /* 0x58 */ f32 field_0x58; // 300.0f
-            /* 0x5c */ f32 field_0x5c; // -300.0f
-            /* 0x60 */ s16 field_0x60; // 60
-            /* 0x62 */ s16 field_0x62; // 8
-            /* 0x64 */ f32 field_0x64; // 0.0f
-            /* 0x68 */ f32 field_0x68; // 0.0f
-            /* 0x6c */ f32 field_0x6c; // 4.0f
-            /* 0x70 */ f32 field_0x70; // 0.0f
-            /* 0x74 */ f32 field_0x74; // 0.0f
-            /* 0x78 */ f32 field_0x78; // 0.0f
-            /* 0x7c */ f32 field_0x7c; // 0.0f
-            /* 0x80 */ f32 field_0x80; // 0.0f
-            /* 0x84 */ f32 field_0x84; // 0.0f
-            /* 0x88 */ f32 field_0x88; // 0.0f
-            /* 0x8c */ f32 field_0x8c; // 16.0f
-            /* 0x90 */ f32 field_0x90; // 1000.0f
-            /* 0x94 */ f32 field_0x94; // 500.0f
-            /* 0x98 */ f32 field_0x98; // -500.0f
-        };
-
-        static const Data m;
-};
-
 class daNpc_Bou_c : public daNpcT_c {
 public:
     typedef int (daNpc_Bou_c::*cutFunc)(int);
@@ -145,8 +125,9 @@ public:
 
     BOOL chkFindWolf() {
         int iVar1 = daNpcT_getDistTableIdx(field_0xfe0, field_0xfe4);
-        return daNpcT_c::chkFindWolf(mCurAngle.y, iVar1, field_0xfdc, daNpc_Bou_Param_c::m.field_0x54,
-            daNpc_Bou_Param_c::m.field_0x50, daNpc_Bou_Param_c::m.field_0x58, daNpc_Bou_Param_c::m.field_0x5c, 1);
+        return daNpcT_c::chkFindWolf(mCurAngle.y, iVar1, field_0xfdc,
+            mpHIO->m.common.search_distance, mpHIO->m.common.fov,
+            mpHIO->m.common.search_height, mpHIO->m.common.search_depth, 1);
     }
 
     int chkCondition(int i_val) {
@@ -187,7 +168,7 @@ public:
     }
 
 private:
-    /* 0xE40 */ int field_0xe40;
+    /* 0xE40 */ NPC_BOU_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl1;
     /* 0xF80 */ u8 mType;
     /* 0xF84 */ daNpcT_ActorMngr_c mActorMngr[3];

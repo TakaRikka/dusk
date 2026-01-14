@@ -8,8 +8,8 @@
 #include "dolphin/types.h"
 
 void J2DPictureEx::initiate(ResTIMG const* param_0, ResTLUT const* param_1) {
-    J2DTexGenBlock* this_00 = mMaterial->getTexGenBlock();
-    if (this_00->getTexGenNum() == 0 && append(param_0, 1.0f) && param_1 != NULL) {
+    u32 texGenNum = mMaterial->getTexGenBlock()->getTexGenNum();
+    if (texGenNum == 0 && append(param_0, 1.0f) && param_1 != NULL) {
         if (mMaterial->getTevBlock()->getPalette(0) == NULL) {
             mMaterial->getTevBlock()->setPalette(0, param_1);
         }
@@ -102,43 +102,44 @@ void J2DPictureEx::drawTexCoord(f32 param_0, f32 param_1, f32 param_2, f32 param
     f32 dVar11 = param_1 + param_3;
     Mtx auStack_88;
     MTXConcat(*param_12, mGlobalMtx, auStack_88);
-    if (mMaterial == NULL || mMaterial->isVisible()) {
-        GXLoadPosMtxImm(auStack_88, 0);
-        JUtility::TColor TStack_8c = mCornerColor[0];
-        JUtility::TColor TStack_90 = mCornerColor[1];
-        JUtility::TColor TStack_94 = mCornerColor[2];
-        JUtility::TColor TStack_98 = mCornerColor[3];
-        if (mMaterial != NULL) {
-            if (mMaterial->getColorBlock()->getColorChan(1)->getMatSrc() == 1) {
-                if (mMaterial->getMaterialAlphaCalc() == 1) {
-                    TStack_8c.a = TStack_8c.a * mColorAlpha / 255;
-                    TStack_90.a = TStack_90.a * mColorAlpha / 255;
-                    TStack_94.a = TStack_94.a * mColorAlpha / 255;
-                    TStack_98.a = TStack_98.a * mColorAlpha / 255;
-                }
-            } else if (mIsInfluencedAlpha) {
-                GXSetChanMatColor(GX_ALPHA0, JUtility::TColor(mColorAlpha));
-            }
-        }
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA4, 8);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(param_0, param_1, 0.0f);
-        GXColor1u32(TStack_8c);
-        GXTexCoord2s16(param_4, param_5);
-        GXPosition3f32(dVar12, param_1, 0.0f);
-        GXColor1u32(TStack_90);
-        GXTexCoord2s16(param_6, param_7);
-        GXPosition3f32(dVar12, dVar11, 0.0f);
-        GXColor1u32(TStack_98);
-        GXTexCoord2s16(param_10, param_11);
-        GXPosition3f32(param_0, dVar11, 0.0f);
-        GXColor1u32(TStack_94);
-        GXTexCoord2s16(param_8, param_9);
-        GXEnd();
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBX8, 0xf);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
+    if (mMaterial && !mMaterial->isVisible()) {
+        return;
     }
+    GXLoadPosMtxImm(auStack_88, 0);
+    JUtility::TColor TStack_8c = mCornerColor[0];
+    JUtility::TColor TStack_90 = mCornerColor[1];
+    JUtility::TColor TStack_94 = mCornerColor[2];
+    JUtility::TColor TStack_98 = mCornerColor[3];
+    if (mMaterial != NULL) {
+        if (mMaterial->getColorBlock()->getColorChan(1)->getMatSrc() == 1) {
+            if (mMaterial->getMaterialAlphaCalc() == 1) {
+                TStack_8c.a = TStack_8c.a * mColorAlpha / 255;
+                TStack_90.a = TStack_90.a * mColorAlpha / 255;
+                TStack_94.a = TStack_94.a * mColorAlpha / 255;
+                TStack_98.a = TStack_98.a * mColorAlpha / 255;
+            }
+        } else if (mIsInfluencedAlpha) {
+            GXSetChanMatColor(GX_ALPHA0, JUtility::TColor(mColorAlpha));
+        }
+    }
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA4, 8);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(param_0, param_1, 0.0f);
+    GXColor1u32(TStack_8c);
+    GXTexCoord2s16(param_4, param_5);
+    GXPosition3f32(dVar12, param_1, 0.0f);
+    GXColor1u32(TStack_90);
+    GXTexCoord2s16(param_6, param_7);
+    GXPosition3f32(dVar12, dVar11, 0.0f);
+    GXColor1u32(TStack_98);
+    GXTexCoord2s16(param_10, param_11);
+    GXPosition3f32(param_0, dVar11, 0.0f);
+    GXColor1u32(TStack_94);
+    GXTexCoord2s16(param_8, param_9);
+    GXEnd();
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBX8, 0xf);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
 }
 
 
@@ -147,7 +148,8 @@ bool J2DPictureEx::append(ResTIMG const* param_0, JUTPalette* param_1, f32 param
         return false;
     }
 
-    return insert(param_0, param_1, mMaterial->getTexGenBlock()->getTexGenNum(), param_2);
+    u32 texGenNum = mMaterial->getTexGenBlock()->getTexGenNum();
+    return insert(param_0, param_1, texGenNum, param_2);
 }
 
 bool J2DPictureEx::append(char const* param_0, JUTPalette* param_1, f32 param_2) {
@@ -155,7 +157,8 @@ bool J2DPictureEx::append(char const* param_0, JUTPalette* param_1, f32 param_2)
         return false;
     }
 
-    return insert(param_0, param_1, mMaterial->getTexGenBlock()->getTexGenNum(), param_2);
+    u32 texGenNum = mMaterial->getTexGenBlock()->getTexGenNum();
+    return insert(param_0, param_1, texGenNum, param_2);
 }
 
 bool J2DPictureEx::append(JUTTexture* param_0, f32 param_1) {
@@ -163,7 +166,8 @@ bool J2DPictureEx::append(JUTTexture* param_0, f32 param_1) {
         return false;
     }
 
-    return insert(param_0,  mMaterial->getTexGenBlock()->getTexGenNum(), param_1);
+    u32 texGenNum = mMaterial->getTexGenBlock()->getTexGenNum();
+    return insert(param_0,  texGenNum, param_1);
 }
 
 bool J2DPictureEx::insert(ResTIMG const* param_0, JUTPalette* param_1, u8 param_2,
@@ -182,8 +186,7 @@ bool J2DPictureEx::insert(ResTIMG const* param_0, JUTPalette* param_1, u8 param_
 }
 
 bool J2DPictureEx::insert(char const* param_0, JUTPalette* param_1, u8 param_2, f32 param_3) {
-    ResTIMG const* resource = (ResTIMG const*)J2DScreen::getNameResource(param_0);
-    return insert(resource, param_1, param_2, param_3);
+    return insert((ResTIMG*)J2DScreen::getNameResource(param_0), param_1, param_2, param_3);
 }
 
 bool J2DPictureEx::insert(JUTTexture* param_0, u8 param_1, f32 param_2) {
@@ -201,15 +204,14 @@ bool J2DPictureEx::insert(JUTTexture* param_0, u8 param_1, f32 param_2) {
 }
 
 void J2DPictureEx::insertCommon(u8 pos, f32 param_1) {
-    u8 new_tev_stage_num;
     u8 tex_gen_num = mMaterial->getTexGenBlock()->getTexGenNum();
-    mMaterial->getTevBlock()->getMaxStage();
-    int tev_stage_num = mMaterial->getTevBlock()->getTevStageNum();
+    u8 maxStage = mMaterial->getTevBlock()->getMaxStage();
+    u8 tev_stage_num = u8(mMaterial->getTevBlock()->getTevStageNum());
     bool bVar1;
     if (tex_gen_num <= 1) {
-        bVar1 = tev_stage_num != 1;
+        bVar1 = tev_stage_num == 1 ? false : true;
     } else {
-        bVar1 = tev_stage_num != tex_gen_num + 1;
+        bVar1 = int(tev_stage_num) == tex_gen_num + 1 ? false : true;
     }
 
     shiftSetBlendRatio(pos, param_1, true, true);
@@ -228,21 +230,22 @@ void J2DPictureEx::insertCommon(u8 pos, f32 param_1) {
     }
 
     for (int i = tex_gen_num - 1; i > pos; i--) {
-        mMaterial->getTexGenBlock()->setTexMtx((u8)i, mMaterial->getTexGenBlock()->getTexMtx((u8)(i - 1)));
+        J2DTexMtx* texMtx = &mMaterial->getTexGenBlock()->getTexMtx((u8)(i - 1));
+        mMaterial->getTexGenBlock()->setTexMtx((u8)i, *texMtx);
     }
 
     J2DTexMtx tex_mtx;
     mMaterial->getTexGenBlock()->setTexMtx(pos, tex_mtx);
 
     if (tex_gen_num == 1) {
-        new_tev_stage_num = 1;
+        tev_stage_num = 1;
     } else {
-        new_tev_stage_num = tex_gen_num + (bVar1 ? 2 : 1);
+        tev_stage_num = tex_gen_num + (bVar1 ? 2 : 1);
     }
-    mMaterial->getTevBlock()->setTevStageNum(new_tev_stage_num);
+    mMaterial->getTevBlock()->setTevStageNum(tev_stage_num);
 
-    setTevOrder(tex_gen_num, new_tev_stage_num, bVar1);
-    setTevStage(tex_gen_num, new_tev_stage_num, bVar1);
+    setTevOrder(tex_gen_num, tev_stage_num, bVar1);
+    setTevStage(tex_gen_num, tev_stage_num, bVar1);
     setTevKColor(tex_gen_num);
     setTevKColorSel(tex_gen_num);
     setTevKAlphaSel(tex_gen_num);
@@ -265,7 +268,8 @@ bool J2DPictureEx::isInsert(u8 pos) const {
         return false;
     } 
 
-    if (maxStage == mMaterial->getTevBlock()->getTevStageNum() && texGenNum != 0) {
+    u8 tevStageNum = u8(mMaterial->getTevBlock()->getTevStageNum());
+    if (maxStage == tevStageNum && texGenNum != 0) {
         return false;
     }
     
@@ -278,7 +282,7 @@ bool J2DPictureEx::remove(u8 pos) {
     }
 
     u8 tex_gen_num = mMaterial->getTexGenBlock()->getTexGenNum();
-    u8 tev_stage_num = mMaterial->getTevBlock()->getTevStageNum();
+    u8 tev_stage_num = u8(mMaterial->getTevBlock()->getTevStageNum());
     bool bVar1 = tev_stage_num == tex_gen_num + 1 ? false : true;
 
     shiftSetBlendRatio(pos, 0.0f, true, false);
@@ -360,18 +364,17 @@ void J2DPictureEx::draw(f32 param_0, f32 param_1, u8 texNo, bool param_3, bool p
         return;
     }
     
-    if (!isVisible()) {
-        return;
-    }
+    if (isVisible()) {
+        u32 texGenNum = mMaterial->getTexGenBlock()->getTexGenNum();
+        if (texNo >= texGenNum) {
+            return;
+        }
 
-    if (texNo >= mMaterial->getTexGenBlock()->getTexGenNum()) {
-        return;
-    }
-
-    JUTTexture* texture = mMaterial->getTevBlock()->getTexture(texNo);
-    if (texture != NULL) {
-        draw(param_0, param_1, texture->getWidth(), texture->getHeight(),
-                param_3, param_4, param_5);
+        JUTTexture* texture = mMaterial->getTevBlock()->getTexture(texNo);
+        if (texture != NULL) {
+            draw(param_0, param_1, texture->getWidth(), texture->getHeight(),
+                    param_3, param_4, param_5);
+        }
     }
 }
 
@@ -616,8 +619,9 @@ void J2DPictureEx::setTevOrder(u8 param_0, u8 param_1, bool param_2) {
 }
 
 void J2DPictureEx::setTevStage(u8 param_0, u8 param_1, bool param_2) {
+    J2DTevStage* stage;
     if (param_0 == 1) {
-        J2DTevStage* stage = mMaterial->getTevBlock()->getTevStage(0);
+        stage = mMaterial->getTevBlock()->getTevStage(0);
         JUTTexture* texture = mMaterial->getTevBlock()->getTexture(0);
         bool bVar1 = false;
         if (texture != NULL && texture->getTexInfo() != NULL
@@ -634,7 +638,7 @@ void J2DPictureEx::setTevStage(u8 param_0, u8 param_1, bool param_2) {
             setStage(stage, STAGE_4);
         }
     } else if (!param_2) {
-        J2DTevStage* stage = mMaterial->getTevBlock()->getTevStage(0);
+        stage = mMaterial->getTevBlock()->getTevStage(0);
         setStage(stage, STAGE_2);
         for (u8 i = 1; i < param_0; i++) {
             stage = mMaterial->getTevBlock()->getTevStage(i);
@@ -643,7 +647,7 @@ void J2DPictureEx::setTevStage(u8 param_0, u8 param_1, bool param_2) {
         stage = mMaterial->getTevBlock()->getTevStage(param_0);
         setStage(stage, STAGE_4);
     } else {
-        J2DTevStage* stage = mMaterial->getTevBlock()->getTevStage(0);
+        stage = mMaterial->getTevBlock()->getTevStage(0);
         setStage(stage, STAGE_2);
         for (u8 i = 1; i < param_0; i++) {
             stage = mMaterial->getTevBlock()->getTevStage(i);
@@ -812,7 +816,8 @@ void J2DPictureEx::setBlendColorRatio(f32 param_0, f32 param_1) {
         field_0x160[i] = 1.0f;
     }
 
-    setTevKColor(mMaterial->getTexGenBlock()->getTexGenNum());
+    u8 texGenNum = mMaterial->getTexGenBlock()->getTexGenNum();
+    setTevKColor(texGenNum);
 }
 
 
@@ -828,7 +833,8 @@ void J2DPictureEx::setBlendAlphaRatio(f32 param_0, f32 param_1) {
         field_0x178[i] = 1.0f;
     }
 
-    setTevKColor(mMaterial->getTexGenBlock()->getTexGenNum());
+    u8 texGenNum = mMaterial->getTexGenBlock()->getTexGenNum();
+    setTevKColor(texGenNum);
 }
 
 
@@ -862,8 +868,7 @@ const ResTIMG* J2DPictureEx::changeTexture(ResTIMG const* img, u8 param_1) {
 }
 
 const ResTIMG* J2DPictureEx::changeTexture(char const* param_0, u8 param_1) {
-    ResTIMG const* resource = (ResTIMG const*)J2DScreen::getNameResource(param_0);
-    return changeTexture(resource, param_1);
+    return changeTexture((ResTIMG*)J2DScreen::getNameResource(param_0), param_1);
 }
 
 const ResTIMG* J2DPictureEx::changeTexture(ResTIMG const* param_0, u8 param_1, JUTPalette* param_2) {
@@ -884,7 +889,8 @@ const ResTIMG* J2DPictureEx::changeTexture(ResTIMG const* param_0, u8 param_1, J
         const ResTIMG* texInfo = getTexture(param_1)->getTexInfo();
         GXTlut _Var7 = GX_TLUT0;
         if (param_0->indexTexture != 0) {
-            _Var7 = getTlutID(param_0, getUsableTlut(param_1));
+            u8 tlut = getUsableTlut(param_1);
+            _Var7 = getTlutID(param_0, tlut);
         }
         getTexture(param_1)->storeTIMG(param_0, param_2, _Var7);
         return texInfo;
@@ -894,8 +900,7 @@ const ResTIMG* J2DPictureEx::changeTexture(ResTIMG const* param_0, u8 param_1, J
 }
 
 const ResTIMG* J2DPictureEx::changeTexture(char const* param_0, u8 param_1, JUTPalette* param_2) {
-    ResTIMG const* resource = (ResTIMG const*)J2DScreen::getNameResource(param_0);
-    return changeTexture(resource, param_1, param_2);
+    return changeTexture((ResTIMG*)J2DScreen::getNameResource(param_0), param_1, param_2);
 }
 
 JUTTexture* J2DPictureEx::getTexture(u8 param_0) const {
@@ -952,10 +957,7 @@ bool J2DPictureEx::setBlackWhite(JUtility::TColor param_0, JUtility::TColor para
     bool bVar1;
     u8 uVar2;
     u8 texGenNum = mMaterial->getTexGenBlock()->getTexGenNum();
-    bVar1 = true;
-    if ((param_0 == 0) && (param_1 == 0xffffffff)) {
-        bVar1 = false;
-    }
+    bVar1 = (param_0 != 0) || (param_1 != 0xffffffff);
     if (texGenNum == 1) {
         uVar2 = (bVar1) ? 2 : 1;
     } else {

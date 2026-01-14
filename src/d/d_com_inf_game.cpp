@@ -22,7 +22,7 @@
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
-#include <stdio>
+#include <cstdio>
 
 void dComIfG_play_c::ct() {
     mWindowNum = 0;

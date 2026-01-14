@@ -1,16 +1,16 @@
 #ifndef MSL_MEMORY_H_
 #define MSL_MEMORY_H_
 
+#include <new>
+
 namespace std {
 
 template<class ForwardIt, class Size, class T>
-inline ForwardIt uninitialized_fill_n(ForwardIt first, Size count, const T& value) {
+inline void uninitialized_fill_n(ForwardIt first, Size count, const T& value) {
+    ForwardIt r29 = first;
     for (; count--; ++first) {
-        if (first != NULL) {
-            *first = value;
-        }
+        new (first) T(value);
     }
-    return first;
 }
 
 template<class InputIterator, class ForwardIterator>

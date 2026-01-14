@@ -3,9 +3,9 @@
 #include "JSystem/JKernel/JKRThread.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include <stdio>
+#include <cstdio>
 #include "global.h"
-#include <stdint>
+#include <stdint.h>
 
 JSUList<JKRThread> JKRThread::sThreadList(0);
 

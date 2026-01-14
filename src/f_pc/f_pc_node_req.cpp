@@ -27,7 +27,7 @@ void fpcNdRq_ToRequestQ(node_create_request* i_request) {
     fpcLy_CreatingMesg(i_request->layer);
 }
 
-s32 fpcNdRq_phase_IsCreated(node_create_request* i_request) {
+int fpcNdRq_phase_IsCreated(node_create_request* i_request) {
     if (fpcCtRq_IsCreatingByID(i_request->creating_id) == TRUE) {
 #if DEBUG
         if (i_request->unk_0x64-- <= 0) {
@@ -46,7 +46,7 @@ s32 fpcNdRq_phase_IsCreated(node_create_request* i_request) {
     }
 }
 
-s32 fpcNdRq_phase_Create(node_create_request* i_request) {
+int fpcNdRq_phase_Create(node_create_request* i_request) {
     i_request->creating_id =
         fpcSCtRq_Request(i_request->layer, i_request->name,
                          (stdCreateFunc)i_request->create_req_methods->post_method, i_request,
@@ -58,11 +58,11 @@ s32 fpcNdRq_phase_Create(node_create_request* i_request) {
     return cPhs_NEXT_e;
 }
 
-s32 fpcNdRq_phase_IsDeleteTiming(node_create_request* i_request) {
+int fpcNdRq_phase_IsDeleteTiming(node_create_request* i_request) {
     return cPhs_NEXT_e;
 }
 
-s32 fpcNdRq_phase_IsDeleted(node_create_request* i_request) {
+int fpcNdRq_phase_IsDeleted(node_create_request* i_request) {
     if (fpcDt_IsComplete() == FALSE) {
 #if DEBUG
         if (i_request->unk_0x68-- <= 0) {
@@ -78,7 +78,7 @@ s32 fpcNdRq_phase_IsDeleted(node_create_request* i_request) {
     return cPhs_NEXT_e;
 }
 
-s32 fpcNdRq_phase_Delete(node_create_request* i_request) {
+int fpcNdRq_phase_Delete(node_create_request* i_request) {
     if (i_request->node_proc.node != NULL) {
         if (fpcDt_Delete(&i_request->node_proc.node->base) == 0) {
             return cPhs_INIT_e;
@@ -89,16 +89,16 @@ s32 fpcNdRq_phase_Delete(node_create_request* i_request) {
     return cPhs_NEXT_e;
 }
 
-s32 fpcNdRq_DoPhase(node_create_request* i_request) {
-    s32 result = cPhs_Handler(&i_request->phase_request, i_request->phase_handler, i_request);
+int fpcNdRq_DoPhase(node_create_request* i_request) {
+    int result = cPhs_Handler(&i_request->phase_request, i_request->phase_handler, i_request);
     if (result == cPhs_NEXT_e) {
         return fpcNdRq_DoPhase(i_request);
     }
     return result;
 }
 
-s32 fpcNdRq_Execute(node_create_request* i_request) {
-    s32 result = fpcNdRq_DoPhase(i_request);
+int fpcNdRq_Execute(node_create_request* i_request) {
+    int result = fpcNdRq_DoPhase(i_request);
     switch (result) {
     case cPhs_INIT_e:
     case cPhs_LOADING_e:
@@ -113,7 +113,7 @@ s32 fpcNdRq_Execute(node_create_request* i_request) {
     }
 }
 
-s32 fpcNdRq_Delete(node_create_request* i_request) {
+int fpcNdRq_Delete(node_create_request* i_request) {
     fpcNdRq_RequestQTo(i_request);
     if (i_request->create_req_methods != NULL && i_request->create_req_methods->delete_method != NULL &&
         fpcMtd_Method(i_request->create_req_methods->delete_method, i_request) == 0)
@@ -125,7 +125,7 @@ s32 fpcNdRq_Delete(node_create_request* i_request) {
     return 1;
 }
 
-s32 fpcNdRq_Cancel(node_create_request* i_request) {
+int fpcNdRq_Cancel(node_create_request* i_request) {
     if (i_request->create_req_methods != NULL &&
         fpcMtd_Method(i_request->create_req_methods->cancel_method, i_request) == 0)
     {
@@ -137,7 +137,7 @@ s32 fpcNdRq_Cancel(node_create_request* i_request) {
 
 #define NODE_GET_NEXT(pNode) (pNode ? pNode->mpNextNode : NULL)
 
-s32 fpcNdRq_Handler() {
+int fpcNdRq_Handler() {
     node_class* node = l_fpcNdRq_Queue.mpHead;
 
 #if DEBUG
@@ -170,8 +170,8 @@ s32 fpcNdRq_Handler() {
     return 1;
 }
 
-s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
-    fpc_ProcID id = i_procNode->base.id;
+int fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
+    fpc_ProcID id = ((process_node_class*)i_procNode)->base.id;
     request_node_class* req_node = (request_node_class*)l_fpcNdRq_Queue.mpHead;
 
     while (req_node != NULL) {
@@ -187,14 +187,13 @@ s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
     return 1;
 }
 
-s32 fpcNdRq_IsIng(process_node_class* i_procNode) {
+int fpcNdRq_IsIng(process_node_class* i_procNode) {
     request_node_class* req_node;
-    node_create_request* create_req;
-    fpc_ProcID id = i_procNode->base.id;
+    fpc_ProcID id = ((process_node_class*)i_procNode)->base.id;
 
     req_node = (request_node_class*)l_fpcNdRq_Queue.mpHead;
     while (req_node != NULL) {
-        create_req = req_node->node_create_req;
+        node_create_request* create_req = req_node->node_create_req;
         if (create_req->creating_id == id) {
             return 1;
         }
@@ -328,7 +327,7 @@ node_create_request* fpcNdRq_Request(u32 i_requestSize, int i_reqType,
     return req;
 }
 
-s32 fpcNdRq_ReChangeNode(fpc_ProcID i_requestID, s16 i_procName, void* i_data) {
+int fpcNdRq_ReChangeNode(fpc_ProcID i_requestID, s16 i_procName, void* i_data) {
     request_node_class* req_node;
 
     req_node = (request_node_class*)l_fpcNdRq_Queue.mpHead;
@@ -348,6 +347,6 @@ s32 fpcNdRq_ReChangeNode(fpc_ProcID i_requestID, s16 i_procName, void* i_data) {
     return 0;
 }
 
-s32 fpcNdRq_ReRequest(fpc_ProcID i_requestID, s16 i_procName, void* i_data) {
+int fpcNdRq_ReRequest(fpc_ProcID i_requestID, s16 i_procName, void* i_data) {
     return fpcNdRq_ReChangeNode(i_requestID, i_procName, i_data);
 }

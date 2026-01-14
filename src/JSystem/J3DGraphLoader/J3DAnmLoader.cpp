@@ -5,14 +5,16 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
+#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "dolphin/os.h"
 
 J3DAnmBase* J3DAnmLoaderDataBase::load(const void* i_data, J3DAnmLoaderDataBaseFlag flag) {
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
+    J3D_ASSERT_NULLPTR(48, i_data);
     if (!i_data) {
         return NULL;
     }
-    const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
     if (header->mMagic == 'J3D1') {
         switch (header->mType) {
         case 'bck1': {
@@ -89,9 +91,10 @@ J3DAnmBase* J3DAnmLoaderDataBase::load(const void* i_data, J3DAnmLoaderDataBaseF
     return NULL;
 }
 
-void J3DAnmLoaderDataBase::setResource(J3DAnmBase* param_1, const void* param_2) {
-    const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_2;
-    if (!header) {
+void J3DAnmLoaderDataBase::setResource(J3DAnmBase* param_1, const void* i_data) {
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
+    J3D_ASSERT_NULLPTR(188, i_data);
+    if (!i_data) {
         return;
     }
     if (header->mMagic != 'J3D1') {
@@ -100,64 +103,64 @@ void J3DAnmLoaderDataBase::setResource(J3DAnmBase* param_1, const void* param_2)
     switch (header->mType) {
     case 'bck1': {
         J3DAnmKeyLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     case 'bpk1': {
         J3DAnmKeyLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     case 'blk1': {
         J3DAnmKeyLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     case 'btk1': {
         J3DAnmKeyLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     case 'brk1': {
         J3DAnmKeyLoader_v15 loader;
         if (param_1->getKind() == 5) {
-            loader.setResource(param_1, param_2);
+            loader.setResource(param_1, i_data);
         }
         break;
     }
     case 'bxk1': {
         J3DAnmKeyLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     case 'bca1': {
         J3DAnmFullLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     case 'bpa1': {
         J3DAnmFullLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     case 'btp1': {
         J3DAnmFullLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     case 'bla1': {
         J3DAnmFullLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     case 'bxa1': {
         J3DAnmFullLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     case 'bva1': {
         J3DAnmFullLoader_v15 loader;
-        loader.setResource(param_1, param_2);
+        loader.setResource(param_1, i_data);
         break;
     }
     default: {
@@ -175,8 +178,9 @@ J3DAnmKeyLoader_v15::J3DAnmKeyLoader_v15() {}
 
 J3DAnmKeyLoader_v15::~J3DAnmKeyLoader_v15() {}
 
-J3DAnmBase* J3DAnmFullLoader_v15::load(const void* param_1) {
-    const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_1;
+J3DAnmBase* J3DAnmFullLoader_v15::load(const void* i_data) {
+    J3D_ASSERT_NULLPTR(357, i_data);
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
     const JUTDataBlockHeader* block = &header->mFirstBlock;
     for (int i = 0; i < header->mBlockNum; i++) {
         switch (block->mType) {
@@ -202,49 +206,59 @@ J3DAnmBase* J3DAnmFullLoader_v15::load(const void* param_1) {
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
     return mAnm;
 }
 
-void J3DAnmFullLoader_v15::setResource(J3DAnmBase* param_1, const void* param_2) {
-    const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_2;
+void J3DAnmFullLoader_v15::setResource(J3DAnmBase* param_1, const void* i_data) {
+    J3D_ASSERT_NULLPTR(416, i_data);
+    const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
     const JUTDataBlockHeader* block = &header->mFirstBlock;
     for (int i = 0; i < header->mBlockNum; i++) {
         switch (block->mType) {
         case 'ANF1':
+            JUT_ASSERT_MSG(428, param_1->getKind() == 9, "Error: Resource type inconsistency");
             setAnmTransform((J3DAnmTransformFull*)param_1, (const J3DAnmTransformFullData*)block);
             break;
         case 'PAF1':
+            JUT_ASSERT_MSG(435, param_1->getKind() == 10, "Error: Resource type inconsistency");
             setAnmColor((J3DAnmColorFull*)param_1, (const J3DAnmColorFullData*)block);
             break;
         case 'TPT1':
+            JUT_ASSERT_MSG(441, param_1->getKind() == 2, "Error: Resource type inconsistency");
             setAnmTexPattern((J3DAnmTexPattern*)param_1, (const J3DAnmTexPatternFullData*)block);
             break;
         case 'CLF1':
+            JUT_ASSERT_MSG(448, param_1->getKind() == 12, "Error: Resource type inconsistency");
             setAnmCluster((J3DAnmClusterFull*)param_1, (const J3DAnmClusterFullData*)block);
             break;
         case 'VAF1':
+            JUT_ASSERT_MSG(454, param_1->getKind() == 6, "Error: Resource type inconsistency");
             setAnmVisibility((J3DAnmVisibilityFull*)param_1,
                              (const J3DAnmVisibilityFullData*)block);
             break;
         case 'VCF1':
+            JUT_ASSERT_MSG(461, param_1->getKind() == 14, "Error: Resource type inconsistency");
             setAnmVtxColor((J3DAnmVtxColorFull*)param_1, (const J3DAnmVtxColorFullData*)block);
             break;
         default:
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
 }
 
 void J3DAnmFullLoader_v15::readAnmTransform(const J3DAnmTransformFullData* param_1) {
-    setAnmTransform((J3DAnmTransformFull*)mAnm, param_1);
+    J3DAnmTransformFull* anm = (J3DAnmTransformFull*)mAnm;
+    setAnmTransform(anm, param_1);
 }
 
 void J3DAnmFullLoader_v15::setAnmTransform(J3DAnmTransformFull* param_1,
                                            const J3DAnmTransformFullData* param_2) {
+    J3D_ASSERT_NULLPTR(504, param_1);
+    J3D_ASSERT_NULLPTR(505, param_2);
     param_1->field_0x1e = param_2->field_0xc;
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
@@ -258,11 +272,14 @@ void J3DAnmFullLoader_v15::setAnmTransform(J3DAnmTransformFull* param_1,
 
 
 void J3DAnmFullLoader_v15::readAnmColor(const J3DAnmColorFullData* param_1) {
-    setAnmColor((J3DAnmColorFull*)mAnm, param_1);
+    J3DAnmColorFull* anm = (J3DAnmColorFull*)mAnm;
+    setAnmColor(anm, param_1);
 }
 
 void J3DAnmFullLoader_v15::setAnmColor(J3DAnmColorFull* param_1,
                                        const J3DAnmColorFullData* param_2) {
+    J3D_ASSERT_NULLPTR(550, param_1);
+    J3D_ASSERT_NULLPTR(551, param_2);
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
     param_1->mFrame = 0.0f;
@@ -280,11 +297,14 @@ void J3DAnmFullLoader_v15::setAnmColor(J3DAnmColorFull* param_1,
 }
 
 void J3DAnmFullLoader_v15::readAnmTexPattern(const J3DAnmTexPatternFullData* param_1) {
-    setAnmTexPattern((J3DAnmTexPattern*)mAnm, param_1);
+    J3DAnmTexPattern* anm = (J3DAnmTexPattern*)mAnm;
+    setAnmTexPattern(anm, param_1);
 }
 
 void J3DAnmFullLoader_v15::setAnmTexPattern(J3DAnmTexPattern* param_1,
                                             const J3DAnmTexPatternFullData* param_2) {
+    J3D_ASSERT_NULLPTR(603, param_1);
+    J3D_ASSERT_NULLPTR(604, param_2);
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
     param_1->mFrame = 0.0f;
@@ -300,11 +320,14 @@ void J3DAnmFullLoader_v15::setAnmTexPattern(J3DAnmTexPattern* param_1,
 }
 
 void J3DAnmFullLoader_v15::readAnmVisibility(const J3DAnmVisibilityFullData* param_1) {
-    setAnmVisibility((J3DAnmVisibilityFull*)mAnm, param_1);
+    J3DAnmVisibilityFull* anm = (J3DAnmVisibilityFull*)mAnm;
+    setAnmVisibility(anm, param_1);
 }
 
 void J3DAnmFullLoader_v15::setAnmVisibility(J3DAnmVisibilityFull* param_1,
                                             const J3DAnmVisibilityFullData* param_2) {
+    J3D_ASSERT_NULLPTR(654, param_1);
+    J3D_ASSERT_NULLPTR(655, param_2);
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
     param_1->mFrame = 0.0f;
@@ -316,11 +339,14 @@ void J3DAnmFullLoader_v15::setAnmVisibility(J3DAnmVisibilityFull* param_1,
 }
 
 void J3DAnmFullLoader_v15::readAnmCluster(const J3DAnmClusterFullData* param_1) {
-    setAnmCluster((J3DAnmClusterFull*)mAnm, param_1);
+    J3DAnmClusterFull* anm = (J3DAnmClusterFull*)mAnm;
+    setAnmCluster(anm, param_1);
 }
 
 void J3DAnmFullLoader_v15::setAnmCluster(J3DAnmClusterFull* param_1,
                                          const J3DAnmClusterFullData* param_2) {
+    J3D_ASSERT_NULLPTR(697, param_1);
+    J3D_ASSERT_NULLPTR(698, param_2);
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
     param_1->mFrame = 0.0f;
@@ -330,11 +356,14 @@ void J3DAnmFullLoader_v15::setAnmCluster(J3DAnmClusterFull* param_1,
 }
 
 void J3DAnmFullLoader_v15::readAnmVtxColor(const J3DAnmVtxColorFullData* param_1) {
-    setAnmVtxColor((J3DAnmVtxColorFull*)mAnm, param_1);
+    J3DAnmVtxColorFull* anm = (J3DAnmVtxColorFull*)mAnm;
+    setAnmVtxColor(anm, param_1);
 }
 
 void J3DAnmFullLoader_v15::setAnmVtxColor(J3DAnmVtxColorFull* dst,
                                           const J3DAnmVtxColorFullData* data) {
+    J3D_ASSERT_NULLPTR(738, dst);
+    J3D_ASSERT_NULLPTR(739, data);
     dst->mFrameMax = data->mFrameMax;
     dst->mAttribute = data->field_0x8;
     dst->mFrame = 0.0f;
@@ -367,6 +396,7 @@ void J3DAnmFullLoader_v15::setAnmVtxColor(J3DAnmVtxColorFull* dst,
 }
 
 J3DAnmBase* J3DAnmKeyLoader_v15::load(const void* param_1) {
+    J3D_ASSERT_NULLPTR(801, param_1);
     const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_1;
     const JUTDataBlockHeader* block = &header->mFirstBlock;
     for (int i = 0; i < header->mBlockNum; i++) {
@@ -393,48 +423,58 @@ J3DAnmBase* J3DAnmKeyLoader_v15::load(const void* param_1) {
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
     return mAnm;
 }
 
 void J3DAnmKeyLoader_v15::setResource(J3DAnmBase* param_1, const void* param_2) {
+    J3D_ASSERT_NULLPTR(858, param_2);
     const JUTDataFileHeader* header = (const JUTDataFileHeader*)param_2;
     const JUTDataBlockHeader* block = &header->mFirstBlock;
     for (int i = 0; i < header->mBlockNum; i++) {
         switch (block->mType) {
         case 'ANK1':
+            JUT_ASSERT_MSG(870, param_1->getKind() == 8, "Error: Resource type inconsistency");
             setAnmTransform((J3DAnmTransformKey*)param_1, (const J3DAnmTransformKeyData*)block);
             break;
         case 'PAK1':
+            JUT_ASSERT_MSG(876, param_1->getKind() == 11, "Error: Resource type inconsistency");
             setAnmColor((J3DAnmColorKey*)param_1, (const J3DAnmColorKeyData*)block);
             break;
         case 'CLK1':
+            JUT_ASSERT_MSG(883, param_1->getKind() == 13, "Error: Resource type inconsistency");
             setAnmCluster((J3DAnmClusterKey*)param_1, (const J3DAnmClusterKeyData*)block);
             break;
         case 'TTK1':
+            JUT_ASSERT_MSG(888, param_1->getKind() == 4, "Error: Resource type inconsistency");
             setAnmTextureSRT((J3DAnmTextureSRTKey*)param_1, (const J3DAnmTextureSRTKeyData*)block);
             break;
         case 'TRK1':
+            JUT_ASSERT_MSG(894, param_1->getKind() == 5, "Error: Resource type inconsistency");
             setAnmTevReg((J3DAnmTevRegKey*)param_1, (const J3DAnmTevRegKeyData*)block);
             break;
         case 'VCK1':
+            JUT_ASSERT_MSG(901, param_1->getKind() == 15, "Error: Resource type inconsistency");
             setAnmVtxColor((J3DAnmVtxColorKey*)param_1, (const J3DAnmVtxColorKeyData*)block);
             break;
         default:
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
 }
 
 void J3DAnmKeyLoader_v15::readAnmTransform(const J3DAnmTransformKeyData* param_1) {
-    setAnmTransform((J3DAnmTransformKey*)mAnm, param_1);
+    J3DAnmTransformKey* anm = (J3DAnmTransformKey*)mAnm;
+    setAnmTransform(anm, param_1);
 }
 
 void J3DAnmKeyLoader_v15::setAnmTransform(J3DAnmTransformKey* param_1,
                                           const J3DAnmTransformKeyData* param_2) {
+    J3D_ASSERT_NULLPTR(944, param_1);
+    J3D_ASSERT_NULLPTR(945, param_2);
     param_1->field_0x1e = param_2->field_0xc;
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
@@ -449,11 +489,14 @@ void J3DAnmKeyLoader_v15::setAnmTransform(J3DAnmTransformKey* param_1,
 
 
 void J3DAnmKeyLoader_v15::readAnmTextureSRT(const J3DAnmTextureSRTKeyData* param_1) {
-    setAnmTextureSRT((J3DAnmTextureSRTKey*)mAnm, param_1);
+    J3DAnmTextureSRTKey* anm = (J3DAnmTextureSRTKey*)mAnm;
+    setAnmTextureSRT(anm, param_1);
 }
 
 void J3DAnmKeyLoader_v15::setAnmTextureSRT(J3DAnmTextureSRTKey* param_1,
                                            const J3DAnmTextureSRTKeyData* param_2) {
+    J3D_ASSERT_NULLPTR(987, param_1);
+    J3D_ASSERT_NULLPTR(988, param_2);
     param_1->mTrackNum = param_2->field_0xc;
     param_1->mFrameMax = param_2->field_0xa;
     param_1->mAttribute = param_2->field_0x8;
@@ -504,10 +547,13 @@ void J3DAnmKeyLoader_v15::setAnmTextureSRT(J3DAnmTextureSRTKey* param_1,
 
 
 void J3DAnmKeyLoader_v15::readAnmColor(const J3DAnmColorKeyData* param_1) {
-    setAnmColor((J3DAnmColorKey*)mAnm, param_1);
+    J3DAnmColorKey* anm = (J3DAnmColorKey*)mAnm;
+    setAnmColor(anm, param_1);
 }
 
 void J3DAnmKeyLoader_v15::setAnmColor(J3DAnmColorKey* param_1, const J3DAnmColorKeyData* param_2) {
+    J3D_ASSERT_NULLPTR(1097, param_1);
+    J3D_ASSERT_NULLPTR(1098, param_2);
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
     param_1->mFrame = 0.0f;
@@ -530,11 +576,14 @@ void J3DAnmKeyLoader_v15::setAnmColor(J3DAnmColorKey* param_1, const J3DAnmColor
 
 
 void J3DAnmKeyLoader_v15::readAnmCluster(const J3DAnmClusterKeyData* param_1) {
-    setAnmCluster((J3DAnmClusterKey*)mAnm, param_1);
+    J3DAnmClusterKey* anm = (J3DAnmClusterKey*)mAnm;
+    setAnmCluster(anm, param_1);
 }
 
 void J3DAnmKeyLoader_v15::setAnmCluster(J3DAnmClusterKey* param_1,
                                         const J3DAnmClusterKeyData* param_2) {
+    J3D_ASSERT_NULLPTR(1156, param_1);
+    J3D_ASSERT_NULLPTR(1157, param_2);
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
     param_1->mFrame = 0.0f;
@@ -545,11 +594,14 @@ void J3DAnmKeyLoader_v15::setAnmCluster(J3DAnmClusterKey* param_1,
 
 
 void J3DAnmKeyLoader_v15::readAnmTevReg(const J3DAnmTevRegKeyData* param_1) {
-    setAnmTevReg((J3DAnmTevRegKey*)mAnm, param_1);
+    J3DAnmTevRegKey* anm = (J3DAnmTevRegKey*)mAnm;
+    setAnmTevReg(anm, param_1);
 }
 
 void J3DAnmKeyLoader_v15::setAnmTevReg(J3DAnmTevRegKey* param_1,
                                        const J3DAnmTevRegKeyData* param_2) {
+    J3D_ASSERT_NULLPTR(1195, param_1);
+    J3D_ASSERT_NULLPTR(1196, param_2);
     param_1->mFrameMax = param_2->mFrameMax;
     param_1->mAttribute = param_2->field_0x8;
     param_1->mFrame = 0.0f;
@@ -587,11 +639,14 @@ void J3DAnmKeyLoader_v15::setAnmTevReg(J3DAnmTevRegKey* param_1,
 
 
 void J3DAnmKeyLoader_v15::readAnmVtxColor(const J3DAnmVtxColorKeyData* param_1) {
-    setAnmVtxColor((J3DAnmVtxColorKey*)mAnm, param_1);
+    J3DAnmVtxColorKey* anm = (J3DAnmVtxColorKey*)mAnm;
+    setAnmVtxColor(anm, param_1);
 }
 
 void J3DAnmKeyLoader_v15::setAnmVtxColor(J3DAnmVtxColorKey* dst,
                                          const J3DAnmVtxColorKeyData* data) {
+    J3D_ASSERT_NULLPTR(1275, dst);
+    J3D_ASSERT_NULLPTR(1276, data);
     dst->mFrameMax = data->mFrameMax;
     dst->mAttribute = data->field_0x8;
     dst->mFrame = 0.0f;

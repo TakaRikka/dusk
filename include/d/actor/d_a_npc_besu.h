@@ -6,6 +6,35 @@
 #endif
 #include "d/actor/d_a_npc.h"
 
+struct daNpc_Besu_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+    /* 0x8C */ f32 field_0x8c;
+};
+
+class daNpc_Besu_Param_c {
+public:
+    virtual ~daNpc_Besu_Param_c() {}
+
+    static const daNpc_Besu_HIOParam m;
+};
+
+#if DEBUG
+class daNpc_Besu_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Besu_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Besu_HIOParam m;
+};
+
+#define NPC_BESU_HIO_CLASS daNpc_Besu_HIO_c
+#else
+#define NPC_BESU_HIO_CLASS daNpc_Besu_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_Besu_c
@@ -116,7 +145,7 @@ public:
 
 private:
     /* 0x0E40 */ mDoExt_McaMorfSO* mpCupModelMorf;
-    /* 0x0E44 */ u8 field_0xe44[0x0E48 - 0xE44];
+    /* 0x0E44 */ NPC_BESU_HIO_CLASS* mpHIO;
     /* 0x0E48 */ J3DModel* mpClothModel[1];
     /* 0x0E4C */ dCcD_Cyl mCyl1;
     /* 0x0F88 */ dCcD_Cyl mCyl2;
@@ -139,17 +168,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_Besu_c) == 0x1138);
-
-struct daNpc_Besu_HIOParam {
-    /* 0x00 */ daNpcT_HIOParam common;
-    /* 0x8C */ f32 field_0x8c;
-};
-
-class daNpc_Besu_Param_c {
-public:
-    virtual ~daNpc_Besu_Param_c() {}
-
-    static const daNpc_Besu_HIOParam m;
-};
 
 #endif /* D_A_NPC_BESU_H */

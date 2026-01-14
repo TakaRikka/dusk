@@ -1,7 +1,7 @@
 #ifndef FUNCTIONVALUE_H
 #define FUNCTIONVALUE_H
 
-#include <math>
+#include <cmath>
 #include "JSystem/JGadget/std-vector.h"
 #include "JSystem/JGadget/define.h"
 #include "JSystem/JGadget/search.h"

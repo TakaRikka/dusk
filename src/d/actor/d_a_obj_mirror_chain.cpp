@@ -98,7 +98,7 @@ void dScissorBegin_packet_c::draw() {
 
     f32 sp2C = view_p->fovy;
     f32 sp28 = view_p->aspect;
-    f32 sp24 = std::tan(0.017453292f * (0.5f * sp2C));
+    f32 sp24 = std::tan((M_PI / 180.0f) * (0.5f * sp2C));
 
     f32 sp20, sp1C, sp18, sp14;
     view_port_class* viewport_p = dComIfGd_getViewport();

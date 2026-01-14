@@ -1823,7 +1823,7 @@ void daObjBm_c::debugDraw() {
     }
 
     if (CHECK_DRAW) {
-        mpBgW->CalcPlane();
+        mpBgW->DebugDraw();
     }
 }
 #endif

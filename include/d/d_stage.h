@@ -186,8 +186,12 @@ struct stage_camera_class {
 
 // AROB / RARO
 struct stage_arrow_data_class {
-    /* 0x00 */ cXyz position;
-    /* 0x0C */ csXyz angle;
+    /* 0x00 */ f32 posX;
+    /* 0x04 */ f32 posY;
+    /* 0x08 */ f32 posZ;
+    /* 0x0C */ s16 angleX;
+    /* 0x0E */ s16 angleY;
+    /* 0x10 */ s16 angleZ;
     /* 0x12 */ s16 field_0x12;
 };  // Size: 0x14
 
@@ -684,8 +688,8 @@ public:
     /* vt[91] */ virtual void setElst(dStage_Elst_c* i_Elst) { mElst = i_Elst; }
     /* vt[92] */ virtual dStage_Elst_c* getElst(void);
 
-    s16 getWorldRollAngleX() { return (s16)mWorldRollAngleX; }
-    s16 getWorldRollDirAngleY() { return mWorldRollDirAngleY; }
+    s16 getWorldRollAngleX() const { return (s16)mWorldRollAngleX; }
+    s16 getWorldRollDirAngleY() const { return mWorldRollDirAngleY; }
 
 public:
     /* 0x08 */ stage_camera_class* mCamera;

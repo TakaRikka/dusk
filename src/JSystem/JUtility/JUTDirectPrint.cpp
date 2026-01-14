@@ -1,7 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JUtility/JUTDirectPrint.h"
-#include <stdio>
+#include <cstdio>
 #include <dolphin/os.h>
 #include "global.h"
 

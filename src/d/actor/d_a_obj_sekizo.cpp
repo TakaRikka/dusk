@@ -21,6 +21,26 @@ static struct {
 
 static char* l_resNameList[2] = {"", "Sekizo"};
 
+static u8 lit_3800[12];
+
+daObj_Sekizo_HIOParam const daObj_Sekizo_Param_c::m = {};
+
+static OBJ_SEKIZO_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObj_Sekizo_HIO_c::daObj_Sekizo_HIO_c() {
+    m = daObj_Sekizo_Param_c::m;
+}
+
+void daObj_Sekizo_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_Sekizo_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 cPhs__Step daObj_Sekizo_c::create() {
     fopAcM_ct(this, daObj_Sekizo_c);
 
@@ -59,6 +79,12 @@ int daObj_Sekizo_c::Create() {
 }
 
 int daObj_Sekizo_c::Delete() {
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     dComIfG_resDelete(&mPhaseReq, l_resNameList[l_bmdData[field_0x5b0].resIdx]);
     return 1;
 }
@@ -122,10 +148,6 @@ static int daObj_Sekizo_Draw(void* i_this) {
 static int daObj_Sekizo_IsDelete(void* i_this) {
     return 1;
 }
-
-static u8 lit_3800[12];
-
-static daObj_Sekizo_Param_c l_HIO;
 
 static actor_method_class daObj_Sekizo_MethodTable = {
     (process_method_func)daObj_Sekizo_Create, (process_method_func)daObj_Sekizo_Delete,

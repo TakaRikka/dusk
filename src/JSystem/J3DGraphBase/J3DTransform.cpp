@@ -55,18 +55,22 @@ void J3DCalcBBoardMtx(__REGISTER Mtx mtx) {
 
     __REGISTER f32 zero = 0.0f;
 // zero out gaps of zeroes
-#ifdef __MWERKS__ // clang-format off
+#if DEBUG || !defined(__MWERKS__)
+	mtx[0][1] = 0.0f;
+	mtx[0][2] = 0.0f;
+	mtx[2][0] = 0.0f;
+	mtx[2][1] = 0.0f;
+#else // clang-format off
     asm {
         psq_st zero, 0x04(mtx), 0, 0
-      
         psq_st zero, 0x20(mtx), 0, 0
     }
 #endif // clang-format on
 
     mtx[0][0] = x;
-	mtx[1][0] = zero;
+	mtx[1][0] = 0.0f;
 	mtx[1][1] = y;
-	mtx[1][2] = zero;
+	mtx[1][2] = 0.0f;
 	mtx[2][2] = z;
 }
 

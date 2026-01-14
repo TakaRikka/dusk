@@ -176,11 +176,7 @@ daNpc_ykW_c::cutFunc daNpc_ykW_c::mCutList[8] = {
     &daNpc_ykW_c::cutHug,
 };
 
-#if DEBUG
-static daNpc_ykW_HIO_c l_HIO;
-#else
-static daNpc_ykW_Param_c l_HIO;
-#endif
+static NPC_YKW_HIO_CLASS l_HIO;
 
 #if DEBUG
 void daNpc_ykW_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {

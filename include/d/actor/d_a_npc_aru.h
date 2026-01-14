@@ -3,15 +3,6 @@
 
 #include "d/actor/d_a_npc.h"
 
-/**
- * @ingroup actors-npcs
- * @class daNpc_Aru_c
- * @brief Fado
- *
- * @details
- *
-*/
-
 struct daNpc_Aru_HIOParam {
     /* 0x00 */ daNpcT_HIOParam common;
     /* 0x8C */ f32 warning_range;       // 警戒範囲 - Warning Range
@@ -22,11 +13,6 @@ struct daNpc_Aru_HIOParam {
     /* 0x9C */ f32 forward_visibility;  // 前方視界 - Forward Visibility        
 };
 
-class daNpc_Aru_HIO_c : public mDoHIO_entry_c {
-public:
-    /* 0x8 */ daNpc_Aru_HIOParam param;
-};
-
 class daNpc_Aru_Param_c {
 public:
     virtual ~daNpc_Aru_Param_c() {}
@@ -34,6 +20,30 @@ public:
     static daNpc_Aru_HIOParam const m;
 };
 
+#if DEBUG
+class daNpc_Aru_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Aru_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    /* 0x8 */ daNpc_Aru_HIOParam m;
+};
+#define NPC_ARU_HIO_CLASS daNpc_Aru_HIO_c
+#else
+#define NPC_ARU_HIO_CLASS daNpc_Aru_Param_c
+#endif
+
+/**
+ * @ingroup actors-npcs
+ * @class daNpc_Aru_c
+ * @brief Fado
+ *
+ * @details
+ *
+*/
 class daNpc_Aru_c : public daNpcT_c {
 public:
     enum Joint {
@@ -168,7 +178,7 @@ public:
     static cutFunc mCutList[7];
 
 private:
-    /* 0xE40 */ daNpc_Aru_HIO_c* mHIO;
+    /* 0xE40 */ NPC_ARU_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;
     /* 0xF84 */ daNpcT_ActorMngr_c mActorMngrs[4];

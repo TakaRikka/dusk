@@ -10,18 +10,19 @@ s16 fpcLf_GetPriority(const leafdraw_class* i_leaf) {
     return fpcDwPi_Get(&i_leaf->draw_priority);
 }
 
-s32 fpcLf_DrawMethod(leafdraw_method_class* i_methods, void* i_process) {
+int fpcLf_DrawMethod(leafdraw_method_class* i_methods, void* i_process) {
     return fpcMtd_Method(i_methods->draw_method, i_process);
 }
 
-s32 fpcLf_Draw(leafdraw_class* i_leaf) {
-    s32 ret = 0;
-    if (i_leaf->unk_0xBC == 0)
+int fpcLf_Draw(leafdraw_class* i_leaf) {
+    int ret = 0;
+    if (i_leaf->unk_0xBC == 0) {
         ret = fpcLf_DrawMethod(i_leaf->leaf_methods, i_leaf);
+    }
     return ret;
 }
 
-s32 fpcLf_Execute(leafdraw_class* i_leaf) {
+int fpcLf_Execute(leafdraw_class* i_leaf) {
 #if DEBUG
     if (fpcBs_Is_JustOfType(g_fpcLf_type, i_leaf->base.subtype) == 0) {
         if (g_fpcDbSv_service[12] != NULL) {
@@ -33,12 +34,13 @@ s32 fpcLf_Execute(leafdraw_class* i_leaf) {
     return fpcMtd_Execute(&i_leaf->leaf_methods->base, i_leaf);
 }
 
-s32 fpcLf_IsDelete(leafdraw_class* i_leaf) {
+int fpcLf_IsDelete(leafdraw_class* i_leaf) {
     return fpcMtd_IsDelete(&i_leaf->leaf_methods->base, i_leaf);
 }
 
-s32 fpcLf_Delete(leafdraw_class* i_leaf) {
-    s32 ret = fpcMtd_Delete(&i_leaf->leaf_methods->base, i_leaf);
+int fpcLf_Delete(leafdraw_class* i_leaf) {
+    int ret = fpcMtd_Delete(&i_leaf->leaf_methods->base, i_leaf);
+    UNUSED(ret); // possible fakematch? this line fixes debug regalloc
     if (ret == 1) {
         i_leaf->base.subtype = 0;
     }
@@ -47,7 +49,7 @@ s32 fpcLf_Delete(leafdraw_class* i_leaf) {
 
 int g_fpcLf_type;
 
-s32 fpcLf_Create(leafdraw_class* i_leaf) {
+int fpcLf_Create(leafdraw_class* i_leaf) {
     if (i_leaf->base.state.init_state == 0) {
         leaf_process_profile_definition* pprofile = (leaf_process_profile_definition*)i_leaf->base.profile;
         i_leaf->leaf_methods = pprofile->sub_method;

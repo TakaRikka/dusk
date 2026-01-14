@@ -2,7 +2,17 @@
 #define JMATRIGONOMETRIC_H
 
 #include "dolphin/types.h"
+#include <cmath>
 #include <utility>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    extern double asin(double);
+    extern double atan(double);
+#ifdef __cplusplus
+}
+#endif
 
 namespace JMath {
 template<typename T>
@@ -27,6 +37,16 @@ struct TAngleConstant_<f32> {
 template<int N, typename T>
 struct TSinCosTable {
     std::pair<T, T> table[1 << N];
+
+    TSinCosTable() {
+        init();
+    }
+    void init() {
+        for (int i = 0; i < 1 << N; i++) {
+            table[i].first = sin((i * f64(TAngleConstant_<f32>::RADIAN_DEG360())) / (1 << N));
+            table[i].second = cos((i * f64(TAngleConstant_<f32>::RADIAN_DEG360())) / (1 << N));
+        }
+    }
 
     T sinShort(s16 v) const { return table[(u16)v >> (16U - N)].first; }
     T cosShort(s16 v) const { return table[(u16)v >> (16U - N)].second; }
@@ -64,9 +84,23 @@ struct TSinCosTable {
  * @ingroup jsystem-jmath
  * 
  */
+template<int N, typename T>
 struct TAtanTable {
-    f32 table[1025];
+    T table[N + 1];
     u8 pad[0x1C];
+
+    TAtanTable() {
+        init();
+    }
+
+    void init() {
+        // u32 cast needed for cmplwi instead of cmpwi
+        for (int i = 0; i < (u32)N; i++) {
+            table[i] = atan(i / (f64)N);
+        }
+        table[0] = 0.0f;
+        table[N] = TAngleConstant_<T>::RADIAN_DEG180() / 4.0f;
+    }
 };
 
 /**
@@ -75,8 +109,20 @@ struct TAtanTable {
  */
 template<int N, typename T>
 struct TAsinAcosTable {
-    T table[1025];
+    T table[N + 1];
     u8 pad[0x1C];
+
+    TAsinAcosTable() {
+        init();
+    }
+
+    void init() {
+        for (int i = 0; i < 1024; i++) {
+            table[i] = asin(i / (f64)N);
+        }
+        table[0] = 0.0f;
+        table[N] = TAngleConstant_<T>::RADIAN_DEG180() / 4.0f;
+    }
 
     T acos_(T x) const {
         if (x >= 1.0f) {
@@ -96,7 +142,7 @@ struct TAsinAcosTable {
 };
 
 extern TSinCosTable<13, f32> sincosTable_;
-extern TAtanTable atanTable_;
+extern TAtanTable<1024, f32> atanTable_;
 extern TAsinAcosTable<1024, f32> asinAcosTable_;
 
 inline f32 acosDegree(f32 x) {

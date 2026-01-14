@@ -29,6 +29,7 @@ struct JASDSPChannel {
     void drop();
     void setPriority(u8);
     void updateProc();
+    u8 getStatus() const { return mStatus; }
 
     static void initAll();
     static JASDSPChannel* alloc(u8, Callback, void*);

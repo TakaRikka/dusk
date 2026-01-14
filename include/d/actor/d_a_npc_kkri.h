@@ -3,6 +3,34 @@
 
 #include "d/actor/d_a_npc.h"
 
+struct daNpc_Kkri_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+};
+
+class daNpc_Kkri_Param_c {
+public:
+    virtual ~daNpc_Kkri_Param_c() {}
+
+    static const daNpc_Kkri_HIOParam m;
+};
+
+#if DEBUG
+class daNpc_Kkri_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Kkri_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Kkri_HIOParam m;
+};
+
+#define NPC_KKRI_HIO_CLASS daNpc_Kkri_HIO_c
+#else
+#define NPC_KKRI_HIO_CLASS daNpc_Kkri_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_Kkri_c
@@ -94,7 +122,7 @@ public:
     static int (daNpc_Kkri_c::*mCutList[])(int);
 
 private:
-    /* 0xE40 */ u8 field_0xE40[0xE44 - 0xE40];
+    /* 0xE40 */ NPC_KKRI_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCcCyl;
     /* 0xF80 */ u8 mType;
     /* 0xF84 */ daNpcT_ActorMngr_c mActorMng[1];
@@ -111,17 +139,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_Kkri_c) == 0xfdc);
-
-struct daNpc_Kkri_HIOParam {
-    /* 0x00 */ daNpcT_HIOParam common;
-};
-
-class daNpc_Kkri_Param_c {
-public:
-    virtual ~daNpc_Kkri_Param_c() {}
-
-    static const daNpc_Kkri_HIOParam m;
-};
-
 
 #endif /* D_A_NPC_KKRI_H */

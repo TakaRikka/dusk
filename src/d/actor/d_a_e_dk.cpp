@@ -9,7 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include <math>
+#include <cmath>
 
 #define ACTION_MODE_WAIT 0
 #define ACTION_MODE_CHASE 1

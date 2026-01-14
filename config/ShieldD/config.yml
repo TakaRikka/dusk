@@ -19,6 +19,7 @@ block_relocations:
   end: .text:0x8055031C
 - source: .text:0x805b727c
   end: .text:0x805b7284
+- target: .bss:0x80808081
 add_relocations:
 - source: .sdata:0x8073f3f4
   type: abs

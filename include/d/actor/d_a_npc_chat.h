@@ -3,23 +3,8 @@
 
 #include "d/actor/d_a_npc4.h"
 
-/**
- * @ingroup actors-npcs
- * @class daNpcChat_c
- * @brief NPC Chat
- *
- * @details
- *
-*/
-
 struct daNpcChat_HIOParam {
     /* 0x0 */ daNpcF_HIOParam common;
-};
-
-class daNpcChat_HIO_c : public mDoHIO_entry_c {
-    void genMessage(JORMContext*);
-
-    /* 0x8 */ daNpcChat_HIOParam param;
 };
 
 class daNpcChat_Param_c {
@@ -29,6 +14,29 @@ public:
     static daNpcChat_HIOParam const m;
 };
 
+#if DEBUG
+class daNpcChat_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpcChat_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    /* 0x8 */ daNpcChat_HIOParam m;
+};
+
+#define NPC_CHAT_HIO_CLASS daNpcChat_HIO_c
+#else
+#define NPC_CHAT_HIO_CLASS daNpcChat_Param_c
+#endif
+
+/**
+ * @ingroup actors-npcs
+ * @class daNpcChat_c
+ * @brief NPC Chat
+ *
+ * @details
+ *
+*/
 class daNpcChat_c : public daNpcF_c {
 public:
     typedef bool (daNpcChat_c::*actionFunc)(void*);
@@ -102,7 +110,7 @@ private:
     /* 0xBF0 */ J3DModel* mObjModel;
     /* 0xBF4 */ daNpcF_Lookat_c mLookat;
     /* 0xC90 */ daNpcF_ActorMngr_c mActorMngr[1];
-    /* 0xC98 */ daNpcChat_HIO_c* mHIO;
+    /* 0xC98 */ NPC_CHAT_HIO_CLASS* mpHIO;
     /* 0xC9C */ dCcD_Cyl mCyl;
     /* 0xDD8 */ actionFunc mAction;
     /* 0xDE4 */ request_of_phase_process_class mPhase1;

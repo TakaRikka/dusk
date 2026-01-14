@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphBase/J3DFifo.h"
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
+#include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
 
 u16 J3DShapeMtx::sMtxLoadCache[10];
@@ -270,9 +271,7 @@ void J3DDifferedTexMtx::loadExecute(f32 const (*param_0)[4]) {
                     MTXInverse(j3dSys.getViewMtx(), sp_a8);
                     MTXConcat(sp_e8, sp_a8, sp_e8);
                     MTXConcat(sp_e8, param_0, sp_e8);
-                    sp_e8[2][3] = 0.0f;
-                    sp_e8[1][3] = 0.0f;
-                    sp_e8[0][3] = 0.0f;
+                    sp_e8[0][3] = sp_e8[1][3] = sp_e8[2][3] = 0.0f;
                     mtx = &sp_e8;
                     break;
                 }
@@ -414,6 +413,11 @@ void J3DShapeMtxMulti::calcNBTScale(Vec const& param_0, Mtx33* param_1, Mtx33* p
 }
 
 void J3DShapeMtxMultiConcatView::load() const {
+    static u8 mtxCache[20] = {
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    };
+
     sMtxPtrTbl[0] = j3dSys.getModel()->getMtxBuffer()->getUserAnmMtx(0);
     sMtxPtrTbl[1] = j3dSys.getModel()->getWeightAnmMtx(0);
 
@@ -433,8 +437,7 @@ void J3DShapeMtxMultiConcatView::load() const {
 
         int use_mtx_num = mUseMtxNum;
         for (int i = 0; i < use_mtx_num; i++) {
-            u32 current_pipeline = sCurrentPipeline;
-            J3DShapeMtxConcatView_LoadFunc func = sMtxLoadLODPipeline[current_pipeline];
+            J3DShapeMtxConcatView_LoadFunc func = sMtxLoadLODPipeline[sCurrentPipeline];
 
             if (mUseMtxIndexTable[i] != 0xffff) {
                 u16 important_mtx_index = important_mtx_indices[mUseMtxIndexTable[i]];
@@ -545,8 +548,5 @@ void J3DShapeMtxYBBoardConcatView::load() const {
 }
 
 static void dummy() {
-    static u8 mtxCache[20] = {
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-    };
+
 }

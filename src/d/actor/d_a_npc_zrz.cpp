@@ -13,9 +13,9 @@
 #include "d/actor/d_a_obj_zra_rock.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-static daNpc_zrZ_Param_c l_HIO;
+static NPC_ZRZ_HIO_CLASS l_HIO;
 
-daNpc_zrZ_Param_c::param const daNpc_zrZ_Param_c::m = {
+daNpc_zrZ_HIOParam const daNpc_zrZ_Param_c::m = {
     700.0f,   // mAttnOffsetY
     0.0f,     // mGravity
     1.0f,     // mScale
@@ -48,6 +48,7 @@ daNpc_zrZ_Param_c::param const daNpc_zrZ_Param_c::m = {
     0,        // mTestMotion
     0,        // mTestLookMode
     false,    // mTest
+    false,
     1200.0f,
     1000.0f,  // mFollowDst
     3000.0f,  // mRestoreDst
@@ -159,6 +160,20 @@ daNpc_zrZ_c::EventFn daNpc_zrZ_c::mEvtCutList[8] = {
     &daNpc_zrZ_c::ECut_srSkip,
 };
 
+#if DEBUG
+daNpc_zrZ_HIO_c::daNpc_zrZ_HIO_c() {
+    m = daNpc_zrZ_Param_c::m;
+}
+
+void daNpc_zrZ_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_zrZ_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daNpc_zrZ_c::daNpc_zrZ_c() {
     /* empty function */
 }
@@ -171,6 +186,12 @@ daNpc_zrZ_c::~daNpc_zrZ_c() {
     if (heap != NULL) {
         mAnm_p->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
 }
 
 cPhs__Step daNpc_zrZ_c::create() {
@@ -212,10 +233,16 @@ cPhs__Step daNpc_zrZ_c::create() {
         fopAcM_SetMtx(this, mAnm_p->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 800.0f, 300.0f);
         mCreatureSound.init(&current.pos, &eyePos, 3, 1);
-        mAcchCir.SetWall(daNpc_zrZ_Param_c::m.mWallR, daNpc_zrZ_Param_c::m.mWallH);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ゾ－ラ族長");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_zrZ_Param_c::m.mCcWeight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCcCyl.Set(mCcDCyl);
         mCcCyl.SetStts(&mCcStts);
         mCcCyl.SetTgHitCallback(tgHitCallBack);
@@ -295,9 +322,9 @@ int daNpc_zrZ_c::Execute() {
 int daNpc_zrZ_c::Draw() {
     mAnm_p->getModel()->getModelData()->getMaterialNodePointer(1)->setMaterialAnm(mpMatAnm);
     if (mType == 1) {
-        return draw(chkAction(&daNpc_zrZ_c::test), false, daNpc_zrZ_Param_c::m.mShadowDepth, NULL, false);
+        return draw(chkAction(&daNpc_zrZ_c::test), false, mpHIO->m.common.real_shadow_size, NULL, false);
     } else {
-        return daNpcF_c::draw(chkAction(&daNpc_zrZ_c::test), false, daNpc_zrZ_Param_c::m.mShadowDepth,
+        return daNpcF_c::draw(chkAction(&daNpc_zrZ_c::test), false, mpHIO->m.common.real_shadow_size,
                               NULL, false);
     }
 }
@@ -401,7 +428,7 @@ int daNpc_zrZ_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     case 1:   // backbone1
     case 3:   // neck
     case 4:   // head
-        setLookatMtx(jnt_no, lookat_joints, daNpc_zrZ_Param_c::m.mNeckAngleScl);
+        setLookatMtx(jnt_no, lookat_joints, mpHIO->m.common.neck_rotation_ratio);
         break;
     
     case 14:  // armL1
@@ -505,13 +532,13 @@ void daNpc_zrZ_c::setParam() {
     attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(3, 6);
     attention_info.flags = attn_flags;
 
-    scale.set(daNpc_zrZ_Param_c::m.mScale,
-              daNpc_zrZ_Param_c::m.mScale,
-              daNpc_zrZ_Param_c::m.mScale);
+    scale.set(mpHIO->m.common.scale,
+              mpHIO->m.common.scale,
+              mpHIO->m.common.scale);
     
-    mAcchCir.SetWallR(daNpc_zrZ_Param_c::m.mWallR);
-    mAcchCir.SetWallH(daNpc_zrZ_Param_c::m.mWallH);
-    gravity = daNpc_zrZ_Param_c::m.mGravity;
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    gravity = mpHIO->m.common.gravity;
 
     u32 uvar4 = cLib_minMaxLimit<u32>(tevStr.TevColor.a * 100 / 0xff, 1, 100);
     mCreatureSound.startCreatureSoundLevel(Z2SE_ZRZ_MV, uvar4, -1);
@@ -524,7 +551,7 @@ BOOL daNpc_zrZ_c::main() {
 
     attention_info.flags = 0;
 
-    if (!daNpc_zrZ_Param_c::m.mTest
+    if (!mpHIO->m.common.debug_mode_ON
         && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())))
     {
         if (mOrderEvtNo != EVT_NONE) {
@@ -588,7 +615,7 @@ BOOL daNpc_zrZ_c::ctrlBtk() {
 
 void daNpc_zrZ_c::setAttnPos() {
     static cXyz eyeOffset(-10.0f, 10.0f, 0.0f);
-    f32 offset = daNpc_zrZ_Param_c::m.mAttnOffsetY;
+    f32 offset = mpHIO->m.common.attention_offset;
     cXyz center, vec2, vec3, vec4;
 
     mDoMtx_stack_c::YrotS(field_0x990);
@@ -654,8 +681,8 @@ void daNpc_zrZ_c::setAttnPos() {
         }
 
         mCcCyl.SetC(center);
-        mCcCyl.SetH(daNpc_zrZ_Param_c::m.mCylH + extra_height);
-        mCcCyl.SetR(daNpc_zrZ_Param_c::m.mWallR + extra_radius);
+        mCcCyl.SetH(mpHIO->m.common.height + extra_height);
+        mCcCyl.SetR(mpHIO->m.common.width + extra_radius);
         dComIfG_Ccsp()->Set(&mCcCyl);
         mCcCyl.SetCoSPrm(0x69);
     }
@@ -925,7 +952,7 @@ void daNpc_zrZ_c::reset() {
     mpClothActor = NULL;
     mpRockActor = NULL;
     mLimbCalcPos = current.pos;
-    mLimbCalcPos.y -= daNpc_zrZ_Param_c::m.field_0x80;
+    mLimbCalcPos.y -= mpHIO->m.field_0x80;
     mLimbAngle.set(0, 0, 0);
     mClothesObtained = false;
     mMusicSet = false;
@@ -934,10 +961,10 @@ void daNpc_zrZ_c::reset() {
 }
 
 void daNpc_zrZ_c::playExpression() {
-    daNpcF_anmPlayData dat0a = {ANM_F_TALK_A, daNpc_zrZ_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat0b = {ANM_NONE, daNpc_zrZ_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat0a = {ANM_F_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat0b = {ANM_NONE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[2] = {&dat0a, &dat0b};
-    daNpcF_anmPlayData dat1 = {ANM_NONE, daNpc_zrZ_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat1 = {ANM_NONE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[1] = {&dat1};
     daNpcF_anmPlayData** ppDat[2] = {
         pDat0, pDat1,
@@ -948,12 +975,12 @@ void daNpc_zrZ_c::playExpression() {
 }
 
 void daNpc_zrZ_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {ANM_WAIT_GT_A, daNpc_zrZ_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat0 = {ANM_WAIT_GT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1a = {ANM_COMEON, daNpc_zrZ_Param_c::m.mMorfFrames, 1};
-    daNpcF_anmPlayData dat1b = {ANM_WAIT_GT_A, daNpc_zrZ_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat1a = {ANM_COMEON, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat1b = {ANM_WAIT_GT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[2] = {&dat1a, &dat1b};
-    daNpcF_anmPlayData dat2 = {ANM_LEAD, daNpc_zrZ_Param_c::m.mMorfFrames, 0};
+    daNpcF_anmPlayData dat2 = {ANM_LEAD, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[1] = {&dat2};
     daNpcF_anmPlayData** ppDat[3] = {
         pDat0, pDat1, pDat2,
@@ -982,7 +1009,7 @@ BOOL daNpc_zrZ_c::setAction(ActionFn i_action) {
 
 BOOL daNpc_zrZ_c::selectAction() {
     mpNextActionFn = NULL;
-    if (daNpc_zrZ_Param_c::m.mTest) {
+    if (mpHIO->m.common.debug_mode_ON) {
         mpNextActionFn = &daNpc_zrZ_c::test;
     } else {
         switch (mDemoMode) {
@@ -1006,7 +1033,7 @@ void daNpc_zrZ_c::doNormalAction(BOOL param_0) {
         if (mCutType == daPy_py_c::CUT_TYPE_TURN_RIGHT) {
             timer = 20;
         } else {
-            timer = daNpc_zrZ_Param_c::m.mDamageTimer;
+            timer = mpHIO->m.common.damage_time;
         }
         setDamage(timer, EXPR_NONE, MOT_WAIT_GT_A);
         setLookMode(LOOK_RESET);
@@ -1153,14 +1180,14 @@ void daNpc_zrZ_c::lookat() {
     fopAc_ac_c* attn_actor = NULL;
     J3DModel* model = mAnm_p->getModel();
     BOOL snap = false;
-    f32 body_down_angle = daNpc_zrZ_Param_c::m.mBodyDownAngle;
-    f32 body_up_angle = daNpc_zrZ_Param_c::m.mBodyUpAngle;
-    f32 body_right_angle = daNpc_zrZ_Param_c::m.mBodyRightAngle;
-    f32 body_left_angle = daNpc_zrZ_Param_c::m.mBodyLeftAngle;
-    f32 head_down_angle = daNpc_zrZ_Param_c::m.mHeadDownAngle;
-    f32 head_up_angle = daNpc_zrZ_Param_c::m.mHeadUpAngle;
-    f32 head_right_angle = daNpc_zrZ_Param_c::m.mHeadRightAngle;
-    f32 head_left_angle = daNpc_zrZ_Param_c::m.mHeadLeftAngle;
+    f32 body_down_angle = mpHIO->m.common.body_angleX_min;
+    f32 body_up_angle = mpHIO->m.common.body_angleX_max;
+    f32 body_right_angle = mpHIO->m.common.body_angleY_min;
+    f32 body_left_angle = mpHIO->m.common.body_angleY_max;
+    f32 head_down_angle = mpHIO->m.common.head_angleX_min;
+    f32 head_up_angle = mpHIO->m.common.head_angleX_max;
+    f32 head_right_angle = mpHIO->m.common.head_angleY_min;
+    f32 head_left_angle = mpHIO->m.common.head_angleY_max;
     s16 angle_delta = mCurAngle.y - mOldAngle.y;
     cXyz lookat_pos[3] = {mLookatPos[0], mLookatPos[1], mLookatPos[2]};
     csXyz* lookat_angle[3] = {&mLookatAngle[0], &mLookatAngle[1], &mLookatAngle[2]};
@@ -1605,7 +1632,7 @@ BOOL daNpc_zrZ_c::ECut_restoreLink(int i_staffID) {
     if (event_manager.getIsAddvance(i_staffID)) {
         switch (prm) {
         case 0:
-            pullbackPlayer(daNpc_zrZ_Param_c::m.mRestoreDst - 500.0f);
+            pullbackPlayer(mpHIO->m.mRestoreDst - 500.0f);
             setAngle(fopAcM_searchPlayerAngleY(this));
             break;
 
@@ -1970,7 +1997,7 @@ BOOL daNpc_zrZ_c::ECut_sealRelease(int i_staffID) {
         cXyz pos = mPath.getPntPos(mPath.getIdx());
         if (!mPath.chkPassedDst(current.pos)) {
             cLib_chaseS(&tevStr.TevColor.a, 8, 8);
-            cLib_addCalc2(&mSpeed, daNpc_zrZ_Param_c::m.mMaxSpeed, 0.1f, 1.0f);
+            cLib_addCalc2(&mSpeed, mpHIO->m.mMaxSpeed, 0.1f, 1.0f);
             s16 ang_y = cLib_targetAngleY(&current.pos, &pos);
             s16 ang_x = cLib_targetAngleX(&pos, &current.pos);
             cLib_addCalcAngleS2(&mMoveAngle.y, ang_y, 2, 0x800);
@@ -2081,9 +2108,9 @@ BOOL daNpc_zrZ_c::wait(void* param_0) {
             if (home.angle.y == mCurAngle.y) {
                 BOOL player_attn = mActorMngr[0].getActorP() != NULL;
                 fopAc_ac_c* attn_actor = getAttnActorP(
-                    player_attn, srchAttnActor1, daNpc_zrZ_Param_c::m.mAttnRadius,
-                    daNpc_zrZ_Param_c::m.mAttnUpperY, daNpc_zrZ_Param_c::m.mAttnLowerY,
-                    daNpc_zrZ_Param_c::m.mAttnFovY, shape_angle.y, 120, true
+                    player_attn, srchAttnActor1, mpHIO->m.common.search_distance,
+                    mpHIO->m.common.search_height, mpHIO->m.common.search_depth,
+                    mpHIO->m.common.fov, shape_angle.y, 120, true
                 );
                 if (attn_actor != NULL) {
                     mActorMngr[1].entry(attn_actor);
@@ -2130,21 +2157,21 @@ BOOL daNpc_zrZ_c::comeHere(void* param_0) {
         setAngle(mCurAngle.y);
 
         if (!mIsLeading) {
-            if ((pnt_pos - player_pos).absXZ() < daNpc_zrZ_Param_c::m.mFollowDst) {
+            if ((pnt_pos - player_pos).absXZ() < mpHIO->m.mFollowDst) {
                 mActorMngr[0].entry(daPy_getPlayerActorClass());
                 setLookMode(LOOK_PLAYER);
                 setAngle(fopAcM_searchPlayerAngleY(this));
                 setMotion(MOT_LEAD, -1.0f, false);
                 mIsLeading = true;
             } else if (!dComIfGs_isSwitch(mSwitch1, fopAcM_GetRoomNo(this))
-                && (current.pos - player_pos).absXZ() > daNpc_zrZ_Param_c::m.mRestoreDst)
+                && (current.pos - player_pos).absXZ() > mpHIO->m.mRestoreDst)
             {
                 mOrderEvtNo = EVT_RESTORE_LINK;
                 setAngle(fopAcM_searchPlayerAngleY(this));
             }
         } else {
             if (mPath.chkPassedDst(current.pos)) {
-                if ((pnt_pos - player_pos).absXZ() < daNpc_zrZ_Param_c::m.mFollowDst) {
+                if ((pnt_pos - player_pos).absXZ() < mpHIO->m.mFollowDst) {
                     mPath.setNextIdxDst(current.pos);
                     pnt_pos = mPath.getPntPos(mPath.getIdx());
                     mIsMoving = true;
@@ -2166,7 +2193,7 @@ BOOL daNpc_zrZ_c::comeHere(void* param_0) {
             }
 
             if (mIsMoving) {
-                cLib_addCalc2(&mSpeed, daNpc_zrZ_Param_c::m.mMaxSpeed, 0.1f, 1.0f);
+                cLib_addCalc2(&mSpeed, mpHIO->m.mMaxSpeed, 0.1f, 1.0f);
                 s16 angle_y = cLib_targetAngleY(&current.pos, &pnt_pos);
                 s16 angle_x = cLib_targetAngleX(&pnt_pos, &current.pos);
                 cLib_addCalcAngleS2(&mMoveAngle.y, angle_y, 2, 0x800);
@@ -2181,7 +2208,7 @@ BOOL daNpc_zrZ_c::comeHere(void* param_0) {
             current.pos += move_speed;
 
             if (!dComIfGs_isSwitch(mSwitch1, fopAcM_GetRoomNo(this))
-                && (current.pos - player_pos).absXZ() > daNpc_zrZ_Param_c::m.mRestoreDst)
+                && (current.pos - player_pos).absXZ() > mpHIO->m.mRestoreDst)
             {
                 mOrderEvtNo = EVT_RESTORE_LINK;
                 setAngle(fopAcM_searchPlayerAngleY(this));
@@ -2237,13 +2264,13 @@ BOOL daNpc_zrZ_c::comeHere2(void* param_0) {
                 if (mPath.getIdx() == mPath.getNextIdx()) {
                     mIsMoving = false;
                     setMotion(MOT_WAIT_GT_A, -1.0f, false);
-                    if ((current.pos - player_pos).absXZ() < daNpc_zrZ_Param_c::m.mClothesGetDst
+                    if ((current.pos - player_pos).absXZ() < mpHIO->m.mClothesGetDst
                         && player_pos.y > 450.0f)
                     {
                         mClothesObtained = true;
                         mOrderEvtNo = EVT_CLOTHES_GET;
                     }
-                } else if ((pnt_pos - player_pos).absXZ() < daNpc_zrZ_Param_c::m.mFollowDst) {
+                } else if ((pnt_pos - player_pos).absXZ() < mpHIO->m.mFollowDst) {
                     mPath.setNextIdxDst(current.pos);
                     pnt_pos = mPath.getPntPos(mPath.getIdx());
                     mIsMoving = true;
@@ -2266,7 +2293,7 @@ BOOL daNpc_zrZ_c::comeHere2(void* param_0) {
                     cLib_chaseS(&tevStr.TevColor.a, 0xff, 8);
                 }
 
-                cLib_addCalc2(&mSpeed, daNpc_zrZ_Param_c::m.mMaxSpeed, 0.1f, 1.0f);
+                cLib_addCalc2(&mSpeed, mpHIO->m.mMaxSpeed, 0.1f, 1.0f);
                 s16 angle_y = cLib_targetAngleY(&current.pos, &pnt_pos);
                 s16 angle_x = cLib_targetAngleX(&pnt_pos, &current.pos);
                 cLib_addCalcAngleS2(&mMoveAngle.y, angle_y, 2, 0x800);
@@ -2281,7 +2308,7 @@ BOOL daNpc_zrZ_c::comeHere2(void* param_0) {
             mDoMtx_stack_c::multVec(&move_speed, &move_speed);
             current.pos += move_speed;
 
-            if ((current.pos - player_pos).absXZ() > daNpc_zrZ_Param_c::m.mRestoreDst) {
+            if ((current.pos - player_pos).absXZ() > mpHIO->m.mRestoreDst) {
                 mOrderEvtNo = EVT_RESTORE_LINK;
                 setAngle(fopAcM_searchPlayerAngleY(this));
             }
@@ -2356,11 +2383,11 @@ BOOL daNpc_zrZ_c::test(void* param_0) {
         // fallthrough
 
     case 2:
-        if (daNpc_zrZ_Param_c::m.mTestExpression != mExpression) {
-            setExpression(daNpc_zrZ_Param_c::m.mTestExpression, daNpc_zrZ_Param_c::m.mMorfFrames);
+        if (mpHIO->m.common.face_expression != mExpression) {
+            setExpression(mpHIO->m.common.face_expression, mpHIO->m.common.morf_frame);
         }
-        setMotion(daNpc_zrZ_Param_c::m.mTestMotion, daNpc_zrZ_Param_c::m.mMorfFrames, false);
-        setLookMode(daNpc_zrZ_Param_c::m.mTestLookMode);
+        setMotion(mpHIO->m.common.motion, mpHIO->m.common.morf_frame, false);
+        setLookMode(mpHIO->m.common.look_mode);
         mOrderEvtNo = EVT_NONE;
         attention_info.flags = 0;
         break;
@@ -2377,8 +2404,8 @@ void daNpc_zrZ_c::himoCalc() {
     vec1.y += 470.0f;
     cXyz vec2 = mLimbCalcPos - vec1;
     vec2.normalize();
-    vec2 = vec2 * daNpc_zrZ_Param_c::m.field_0x80;
-    cXyz vec3(0.0f, -daNpc_zrZ_Param_c::m.field_0x80, 0.0f);
+    vec2 = vec2 * mpHIO->m.field_0x80;
+    cXyz vec3(0.0f, -mpHIO->m.field_0x80, 0.0f);
     cLib_addCalcPos2(&vec2, vec3, 0.2f, 25.0f);
     mLimbCalcPos = vec2 + vec1;
     

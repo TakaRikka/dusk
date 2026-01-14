@@ -3,7 +3,7 @@
 #include "JSystem/JStudio/JStudio/stb-data-parse.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/os.h"
-#include <stdint>
+#include <stdint.h>
 
 namespace JStudio {
 namespace stb {

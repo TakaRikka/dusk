@@ -88,17 +88,6 @@ int (daNpc_Kakashi_c::*daNpc_Kakashi_c::mCutList[])(int) = {
     &daNpc_Kakashi_c::cutMarosWhisper,
 };
 
-daNpc_Kakashi_c::~daNpc_Kakashi_c() {
-    OS_REPORT("|%06d:%x|daNpc_Kakashi_c -> デストラクト\n", g_Counter.mCounter0, this);
-
-    if (heap != NULL) {
-        mpMorf[0]->stopZelAnime();
-        mSound.deleteObject();
-    }
-
-    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
-}
-
 const daNpc_Kakashi_HIOParam daNpc_Kakashi_Param_c::m = {
     190.0f,
     -6.0f,
@@ -146,6 +135,39 @@ const daNpc_Kakashi_HIOParam daNpc_Kakashi_Param_c::m = {
     27.0f,
 };
 
+static NPC_KAKASHI_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Kakashi_HIO_c::daNpc_Kakashi_HIO_c() {
+    m = daNpc_Kakashi_Param_c::m;
+}
+
+void daNpc_Kakashi_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Kakashi_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_Kakashi_c::~daNpc_Kakashi_c() {
+    OS_REPORT("|%06d:%x|daNpc_Kakashi_c -> デストラクト\n", g_Counter.mCounter0, this);
+
+    if (heap != NULL) {
+        mpMorf[0]->stopZelAnime();
+        mSound.deleteObject();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+}
+
 int daNpc_Kakashi_c::create() {
     daNpcT_ct(this, daNpc_Kakashi_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
@@ -178,11 +200,16 @@ int daNpc_Kakashi_c::create() {
         
         mSound.init(&current.pos, 3);
 
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("かかし");
+#endif
+
         reset();
 
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
     
-        mCcStts.Init(daNpc_Kakashi_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         for (int i = 0; i < 3; i++) {
             mCcSph[i].Set(mCcDSph);
             mCcSph[i].SetStts(&mCcStts);
@@ -404,18 +431,18 @@ void daNpc_Kakashi_c::setParam() {
 
     attention_info.flags = attn_flags;
 
-    scale.setall(daNpc_Kakashi_Param_c::m.common.scale);
+    scale.setall(mpHIO->m.common.scale);
 
-    mCcStts.SetWeight(daNpc_Kakashi_Param_c::m.common.weight);
-    mCylH = daNpc_Kakashi_Param_c::m.common.height;
-    mWallR = daNpc_Kakashi_Param_c::m.common.width;
-    mAttnFovY = daNpc_Kakashi_Param_c::m.common.fov;
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Kakashi_Param_c::m.common.knee_length);
-    mRealShadowSize = daNpc_Kakashi_Param_c::m.common.real_shadow_size;
-    mExpressionMorfFrame = daNpc_Kakashi_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Kakashi_Param_c::m.common.morf_frame;
-    gravity = daNpc_Kakashi_Param_c::m.common.gravity;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 void daNpc_Kakashi_c::srchActors() {}
@@ -501,7 +528,7 @@ void daNpc_Kakashi_c::setAttnPos() {
     cXyz sp14;
     cXyz sp8;
 
-    f32 attn_offset = daNpc_Kakashi_Param_c::m.common.attention_offset;
+    f32 attn_offset = mpHIO->m.common.attention_offset;
 
     if (field_0x1392 == 0) {
         mDoMtx_stack_c::YrotS(field_0x138c);
@@ -553,8 +580,6 @@ void daNpc_Kakashi_c::setAttnPos() {
         attention_info.position.y += 50.0f;
     }
 }
-
-static daNpc_Kakashi_Param_c l_HIO;
 
 void daNpc_Kakashi_c::setCollision() {
     if (!mHide) {
@@ -777,7 +802,7 @@ fopAc_ac_c* daNpc_Kakashi_c::hitChk() {
 void daNpc_Kakashi_c::setStaggerParam(fopAc_ac_c* i_hitActor) {
     csXyz sp14;
     f32 var_f31 = 1.0f;
-    f32 sp28[3] = {daNpc_Kakashi_Param_c::m.field_0x8c, daNpc_Kakashi_Param_c::m.field_0x90, daNpc_Kakashi_Param_c::m.field_0x94};
+    f32 sp28[3] = {mpHIO->m.field_0x8c, mpHIO->m.field_0x90, mpHIO->m.field_0x94};
 
     field_0x138c = 0;
 

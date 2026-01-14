@@ -51,6 +51,122 @@ BOOL daNpcF_chkPassed(cXyz i_pos, dPnt* i_points, u16 i_idx, u16 i_num, BOOL i_i
                       BOOL i_isReversed);
 BOOL daNpcF_chkDoBtnEqSpeak(fopAc_ac_c* i_actor_p);
 
+class daNpcF_SPCurve_c {
+private:
+    /* 0x00 */ u16 mNurbs;
+    /* 0x02 */ u16 field_0x02;
+    /* 0x04 */ u8 mIsReversed;
+    /* 0x05 */ u8 mIsClosed;
+    /* 0x08 */ dPnt mPoints[96];
+
+public:
+    void initialize(dPath*, int);
+
+    daNpcF_SPCurve_c() {
+        initialize(NULL, 0);
+    }
+
+    virtual ~daNpcF_SPCurve_c() {}
+};  // Size: 0x60C
+
+class daNpcF_Path_c {
+protected:
+    /* 0x00 */ u16 mIdx;
+    /* 0x02 */ u8 mIsReversed;
+    /* 0x03 */ u8 mIsClosed;
+    /* 0x04 */ dPath* mPathInfo;
+    /* 0x08 */ f32 mRange;
+    /* 0x0C */ f32 mPosDst;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ cXyz mPosition;
+    /* 0x20 */ daNpcF_SPCurve_c mSPCurve;
+
+public:
+    void initialize();
+    int setPathInfo(u8, s8, u8);
+    BOOL chkPassed(cXyz);
+    BOOL chkPassedDst(cXyz);
+    void reverse();
+    BOOL setNextIdx();
+    int getNextIdx();
+    int getBeforeIdx();
+    BOOL getBeforePos(cXyz&);
+    BOOL getNextPos(cXyz&);
+    BOOL getDstPos(cXyz, cXyz&);
+    void setNextIdxDst(cXyz);
+
+    daNpcF_Path_c() {
+        initialize();
+    }
+
+    virtual ~daNpcF_Path_c() {}
+
+    int getIdx() { return mIdx; };
+    void setIdx(int i_idx) { mIdx = i_idx; }
+    int getArg0() { return mPathInfo->m_points[mIdx].mArg0; }
+    u8 getArg0(int i_idx) { return mPathInfo->m_points[i_idx].mArg0; }
+    Vec getPntPos(int i_idx) { return mPathInfo->m_points[i_idx].m_position; }
+    BOOL chkClose() { return dPath_ChkClose(mPathInfo); }
+    BOOL chkReverse() { return mIsReversed == true; }
+    void onReverse() { mIsReversed = true; }
+    void offReverse() { mIsReversed = false; }
+    dPath* getPathInfo() { return mPathInfo; }
+    void setRange(f32 i_range) { mRange = i_range; }
+    int getNumPnts() { return mPathInfo->m_num; }
+#if DEBUG
+    void drawDbgInfoXyz();
+#endif
+};  // Size: 0x630
+
+class daNpcF_MatAnm_c : public J3DMaterialAnm {
+private:
+    /* 0x0F4 */ mutable f32 field_0xF4;
+    /* 0x0F8 */ mutable f32 field_0xF8;
+    /* 0x0FC */ f32 mNowOffsetX;
+    /* 0x100 */ f32 mNowOffsetY;
+    /* 0x104 */ u8 mEyeMoveFlag;
+    /* 0x105 */ u8 mMorfFrm;
+
+public:
+    daNpcF_MatAnm_c(): J3DMaterialAnm() { initialize(); }
+    void initialize();
+    void calc(J3DMaterial*) const;
+    void setNowOffsetX(float i_nowOffsetX) { mNowOffsetX = i_nowOffsetX; }
+    void setNowOffsetY(float i_nowOffsetY) { mNowOffsetY = i_nowOffsetY; }
+    void onEyeMoveFlag() { mEyeMoveFlag = 1; }
+    void offEyeMoveFlag() { mEyeMoveFlag = 0; }
+};
+
+class daNpcF_Lookat_c {
+private:
+    /* 0x00 */ cXyz mJointPos[4];
+    /* 0x30 */ cXyz* mAttnPos_p;
+    /* 0x34 */ csXyz mAngularMoveDis[4];
+    /* 0x4C */ csXyz mMinAngle[4];
+    /* 0x64 */ csXyz mMaxAngle[4];
+    /* 0x7C */ csXyz mRotAngle[4];
+    /* 0x94 */ bool field_0x94[4];
+    /* 0x98 vtable */
+
+public:
+    void initialize();
+    void setParam(f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, s16,
+                                 cXyz*);
+    void calc(fopAc_ac_c*, Mtx, csXyz**, BOOL, int, BOOL);
+    void adjustMoveDisAngle(s16&, s16, s16, s16);
+    void initCalc(fopAc_ac_c*, Mtx, cXyz*, csXyz*, f32*, cXyz&, BOOL);
+    void update(cXyz*, csXyz*, f32*);
+    void calcMoveDisAngle(int, cXyz*, csXyz*, cXyz, int, BOOL);
+    void setRotAngle();
+    void clrRotAngle();
+
+    daNpcF_Lookat_c() { initialize(); }
+    virtual ~daNpcF_Lookat_c() {}
+
+    cXyz* getAttnPos() { return mAttnPos_p; }
+    void setAttnPos(cXyz* i_attnPos) { mAttnPos_p = i_attnPos; }
+};
+
 class daNpcF_c : public fopAc_ac_c {
 protected:
     /* 0x568 */ mDoExt_McaMorfSO* mAnm_p;
@@ -244,7 +360,7 @@ public:
     virtual ~daNpcF_c() {}
     virtual void setParam() {}
     virtual BOOL main() { return TRUE; }
-    virtual BOOL ctrlBtk() { return FALSE; }
+    inline virtual BOOL ctrlBtk() { return FALSE; }
     virtual void adjustShapeAngle() {}
     virtual void setMtx();
     virtual void setMtx2();
@@ -288,123 +404,6 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daNpcF_c) == 0xB48);
-
-class daNpcF_MatAnm_c : public J3DMaterialAnm {
-private:
-    /* 0x0F4 */ mutable f32 field_0xF4;
-    /* 0x0F8 */ mutable f32 field_0xF8;
-    /* 0x0FC */ f32 mNowOffsetX;
-    /* 0x100 */ f32 mNowOffsetY;
-    /* 0x104 */ u8 mEyeMoveFlag;
-    /* 0x105 */ u8 mMorfFrm;
-
-public:
-    daNpcF_MatAnm_c() { initialize(); }
-    void initialize();
-    void calc(J3DMaterial*) const;
-    ~daNpcF_MatAnm_c() {}
-    void setNowOffsetX(float i_nowOffsetX) { mNowOffsetX = i_nowOffsetX; }
-    void setNowOffsetY(float i_nowOffsetY) { mNowOffsetY = i_nowOffsetY; }
-    void onEyeMoveFlag() { mEyeMoveFlag = 1; }
-    void offEyeMoveFlag() { mEyeMoveFlag = 0; }
-};
-
-class daNpcF_SPCurve_c {
-private:
-    /* 0x00 */ u16 mNurbs;
-    /* 0x02 */ u16 field_0x02;
-    /* 0x04 */ u8 mIsReversed;
-    /* 0x05 */ u8 mIsClosed;
-    /* 0x08 */ dPnt mPoints[96];
-
-public:
-    void initialize(dPath*, int);
-
-    daNpcF_SPCurve_c() {
-        initialize(NULL, 0);
-    }
-
-    virtual ~daNpcF_SPCurve_c() {}
-};  // Size: 0x60C
-
-class daNpcF_Path_c {
-protected:
-    /* 0x00 */ u16 mIdx;
-    /* 0x02 */ u8 mIsReversed;
-    /* 0x03 */ u8 mIsClosed;
-    /* 0x04 */ dPath* mPathInfo;
-    /* 0x08 */ f32 mRange;
-    /* 0x0C */ f32 mPosDst;
-    /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ cXyz mPosition;
-    /* 0x20 */ daNpcF_SPCurve_c mSPCurve;
-
-public:
-    void initialize();
-    int setPathInfo(u8, s8, u8);
-    BOOL chkPassed(cXyz);
-    BOOL chkPassedDst(cXyz);
-    void reverse();
-    BOOL setNextIdx();
-    int getNextIdx();
-    int getBeforeIdx();
-    BOOL getBeforePos(cXyz&);
-    BOOL getNextPos(cXyz&);
-    BOOL getDstPos(cXyz, cXyz&);
-    void setNextIdxDst(cXyz);
-
-    daNpcF_Path_c() {
-        initialize();
-    }
-
-    virtual ~daNpcF_Path_c() {}
-
-    int getIdx() { return mIdx; };
-    void setIdx(int i_idx) { mIdx = i_idx; }
-    int getArg0() { return mPathInfo->m_points[mIdx].mArg0; }
-    u8 getArg0(int i_idx) { return mPathInfo->m_points[i_idx].mArg0; }
-    Vec getPntPos(int i_idx) { return mPathInfo->m_points[i_idx].m_position; }
-    BOOL chkClose() { return dPath_ChkClose(mPathInfo); }
-    BOOL chkReverse() { return mIsReversed == true; }
-    void onReverse() { mIsReversed = true; }
-    void offReverse() { mIsReversed = false; }
-    dPath* getPathInfo() { return mPathInfo; }
-    void setRange(f32 i_range) { mRange = i_range; }
-    int getNumPnts() { return mPathInfo->m_num; }
-#if DEBUG
-    void drawDbgInfoXyz();
-#endif
-};  // Size: 0x630
-
-class daNpcF_Lookat_c {
-private:
-    /* 0x00 */ cXyz mJointPos[4];
-    /* 0x30 */ cXyz* mAttnPos_p;
-    /* 0x34 */ csXyz mAngularMoveDis[4];
-    /* 0x4C */ csXyz mMinAngle[4];
-    /* 0x64 */ csXyz mMaxAngle[4];
-    /* 0x7C */ csXyz mRotAngle[4];
-    /* 0x94 */ bool field_0x94[4];
-    /* 0x98 vtable */
-
-public:
-    void initialize();
-    void setParam(f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, s16,
-                                 cXyz*);
-    void calc(fopAc_ac_c*, Mtx, csXyz**, BOOL, int, BOOL);
-    void adjustMoveDisAngle(s16&, s16, s16, s16);
-    void initCalc(fopAc_ac_c*, Mtx, cXyz*, csXyz*, f32*, cXyz&, BOOL);
-    void update(cXyz*, csXyz*, f32*);
-    void calcMoveDisAngle(int, cXyz*, csXyz*, cXyz, int, BOOL);
-    void setRotAngle();
-    void clrRotAngle();
-
-    daNpcF_Lookat_c() { initialize(); }
-    virtual ~daNpcF_Lookat_c() {}
-
-    cXyz* getAttnPos() { return mAttnPos_p; }
-    void setAttnPos(cXyz* i_attnPos) { mAttnPos_p = i_attnPos; }
-};
 
 class daNpcF_MoveBgActor_c : public daNpcF_c {
 private:

@@ -521,7 +521,7 @@ int daObjTobyHouse_c::Draw() {
 
     #if DEBUG
     if (l_HIO.mDrawCollision) {
-        mpBgW->CalcPlane();
+        mpBgW->DebugDraw();
     }
     #endif
 

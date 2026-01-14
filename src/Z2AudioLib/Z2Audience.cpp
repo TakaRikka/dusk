@@ -309,7 +309,7 @@ void Z2AudioCamera::setCameraState(f32 (*param_0)[4], Vec& pos, Vec& param_2, f3
     } else {
         Vec aTStack_cc = {param_0[0][0], param_0[0][1], param_0[0][2]};
         Mtx rotMtx;
-        MTXRotAxisRad(rotMtx, &aTStack_cc, 0.017453292f * (-1.0f * dVar10));
+        MTXRotAxisRad(rotMtx, &aTStack_cc, (M_PI / 180.0f) * (-1.0f * dVar10));
         JGeometry::TVec3<f32> aTStack_d8;
         MTXMultVec(rotMtx, aTStack_c0, aTStack_d8);
         aTStack_d8.scale(aTStack_c0.y / aTStack_d8.y);

@@ -4,15 +4,8 @@
 #include "JSystem/JAudio2/JASAudioThread.h"
 #include "JSystem/JAudio2/JASCriticalSection.h"
 #include "JSystem/JAudio2/JASDriverIF.h"
+#include "JSystem/JAudio2/JASDSPChannel.h"
 #include "dolphin/types.h"
-
-struct JASDSPChannel {
-    void drop();
-    static JASDSPChannel* getHandle(u32);
-
-    inline u8 getStatus() const { return mStatus; }
-    u32 mStatus;
-};
 
 JASAudioReseter::JASAudioReseter() {
     field_0x0 = 0;
@@ -52,16 +45,15 @@ s32 JASAudioReseter::checkDone() const {
     return mDoneFlag;
 }
 
-
 s32 JASAudioReseter::calc() {
-    if(field_0x0==0) {
-        for(size_t i = 0; i<64; i++) {
+    if (field_0x0==0) {
+        for (size_t i = 0; i<64; i++) {
             JASDSPChannel* handle = JASDSPChannel::getHandle(i);
-            if ((handle->getStatus())==0) {
+            if (handle->getStatus() == 0) {
                 handle->drop();
             }
         }
-        if(mThreadStopFlag!=false) {
+        if (mThreadStopFlag!=false) {
             JASAudioThread* pAudioThread = JASGlobalInstance<JASAudioThread>::getInstance();
             JUT_ASSERT(78, pAudioThread);
             pAudioThread->stop();

@@ -66,9 +66,13 @@ public:
     void setNExtensionName(u16 length) { mNExtensionName = length; }
     void setStatus(s32 status) { mStatus = status; }
 
-    virtual ~JORFile() {}
-    virtual int open(const char* path, u32 flags, const char* extMask, const char* defaultExt, const char*, const char* fileSuffix);
-    virtual int open(u32 flags, const char* extMask, const char* defaultExt, const char*, const char* fileSuffix);
+    virtual ~JORFile() {
+        close();
+    }
+    virtual int open(const char* path, u32 flags, const char* extMask, const char* defaultExt, const char* param_4, const char* fileSuffix);
+    virtual int open(u32 flags, const char* extMask, const char* defaultExt, const char* param_4, const char* fileSuffix) {
+        return open(NULL, flags, extMask, defaultExt, param_4, fileSuffix);
+    }
     virtual void close();
     virtual s32 readData(void* buffer, s32 length);
     virtual s32 writeData(const void* buffer, s32 length);

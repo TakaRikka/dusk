@@ -632,8 +632,8 @@ daNpcKasiHana_c::~daNpcKasiHana_c() {
     }
 
 #if DEBUG
-    if (mHIO) {
-        mHIO->removeHIO();
+    if (mpHIO) {
+        mpHIO->removeHIO();
     }
 #endif
 }
@@ -663,12 +663,12 @@ cPhs__Step daNpcKasiHana_c::Create() {
         fopAcM_setCullSizeBox(this, -60.0f, -10.0f, -60.0f, 60.0f, 160.0f, 60.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
 #if DEBUG
-        mHIO = &l_HIO;
+        mpHIO = &l_HIO;
         // three daughters: Hana:
-        mHIO->entryHIO("三人娘：ハナ");
+        mpHIO->entryHIO("三人娘：ハナ");
 #endif
 
-        mAcchCir.SetWall(mHIO->m.common.width, mHIO->m.common.knee_length);
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this),
                   fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
@@ -677,8 +677,8 @@ cPhs__Step daNpcKasiHana_c::Create() {
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgType(0);
         mCyl.SetTgSPrm(0);
-        mCyl.SetH(mHIO->m.common.height);
-        mCyl.SetR(mHIO->m.common.width);
+        mCyl.SetH(mpHIO->m.common.height);
+        mCyl.SetR(mpHIO->m.common.width);
         mGndChk = mAcch.m_gnd;
         mGroundH = mAcch.GetGroundH();
 
@@ -734,7 +734,7 @@ int daNpcKasiHana_c::Execute() {
 
 int daNpcKasiHana_c::Draw() {
     if (!mEscape) {
-        draw(FALSE, FALSE, mHIO->m.common.real_shadow_size, NULL, FALSE);
+        draw(FALSE, FALSE, mpHIO->m.common.real_shadow_size, NULL, FALSE);
     }
 
     return 1;
@@ -759,7 +759,7 @@ int daNpcKasiHana_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
         case JNT_BACKBONE:
         case JNT_NECK:
         case JNT_HEAD:
-            setLookatMtx(jntNo, i_jointList, mHIO->m.common.neck_rotation_ratio);
+            setLookatMtx(jntNo, i_jointList, mpHIO->m.common.neck_rotation_ratio);
             break;
     }
 
@@ -792,16 +792,16 @@ void daNpcKasiHana_c::setParam() {
         mKasiMng.initPath(getRailNo(), 6);
     }
 
-    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(mHIO->m.common.attention_distance, mHIO->m.common.attention_angle);
+    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
-    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(mHIO->m.common.talk_distance, mHIO->m.common.talk_angle);
+    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(mpHIO->m.common.talk_distance, mpHIO->m.common.talk_angle);
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
 
 #if DEBUG
-    scale.set(mHIO->m.common.scale, mHIO->m.common.scale, mHIO->m.common.scale);
-    mAcchCir.SetWallR(mHIO->m.common.width);
-    mAcchCir.SetWallH(mHIO->m.common.knee_length);
-    gravity = mHIO->m.common.gravity;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    gravity = mpHIO->m.common.gravity;
 #endif
 }
 
@@ -882,7 +882,7 @@ void daNpcKasiHana_c::setAttnPos() {
 
     mHeadAngle.x = cLib_targetAngleX(&mHeadPos, &sp1c);
     mHeadAngle.y = cLib_targetAngleY(&mHeadPos, &sp1c);
-    attention_info.position.set(mHeadPos.x, mHeadPos.y + mHIO->m.common.attention_offset, mHeadPos.z);
+    attention_info.position.set(mHeadPos.x, mHeadPos.y + mpHIO->m.common.attention_offset, mHeadPos.z);
 
     cXyz sp28;
 
@@ -891,8 +891,8 @@ void daNpcKasiHana_c::setAttnPos() {
     sp28.y = current.pos.y;
     mCyl.SetC(sp28);
     #if DEBUG
-    mCyl.SetH(mHIO->m.common.height);
-    mCyl.SetR(mHIO->m.common.width);
+    mCyl.SetH(mpHIO->m.common.height);
+    mCyl.SetR(mpHIO->m.common.width);
     #endif
     dComIfG_Ccsp()->Set(&mCyl);
 }
@@ -974,34 +974,34 @@ void daNpcKasiHana_c::reset() {
 }
 
 void daNpcKasiHana_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {ANM_MICH_KYA_TALK, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat0 = {ANM_MICH_KYA_TALK, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1 = {ANM_MICH_IYAN_WAIT, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat1 = {ANM_MICH_IYAN_WAIT, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[1] = {&dat1};
-    daNpcF_anmPlayData dat2 = {ANM_MICH_OUEN_WAIT_A, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat2 = {ANM_MICH_OUEN_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[1] = {&dat2};
-    daNpcF_anmPlayData dat3 = {ANM_MICH_OUEN_WAIT_B, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat3 = {ANM_MICH_OUEN_WAIT_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[1] = {&dat3};
-    daNpcF_anmPlayData dat4 = {ANM_W_WAIT_A, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat4 = {ANM_W_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat4[1] = {&dat4};
-    daNpcF_anmPlayData dat5 = {ANM_W_TALK_B, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat5 = {ANM_W_TALK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat5[1] = {&dat5};
-    daNpcF_anmPlayData dat6 = {ANM_W_TO_WOLF, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat6 = {ANM_W_TO_WOLF, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat6[1] = {&dat6};
-    daNpcF_anmPlayData dat7 = {ANM_W_WALK_A, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat7 = {ANM_W_WALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat7[1] = {&dat7};
-    daNpcF_anmPlayData dat8 = {ANM_W_LOOK_B, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat8 = {ANM_W_LOOK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat8[1] = {&dat8};
-    daNpcF_anmPlayData dat9 = {ANM_W_RUN_A, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat9 = {ANM_W_RUN_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat9[1] = {&dat9};
-    daNpcF_anmPlayData dat10 = {ANM_W_SURPRISE, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat10 = {ANM_W_SURPRISE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat10[1] = {&dat10};
-    daNpcF_anmPlayData dat11a = {ANM_W_WAIT_A_2, mHIO->m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat11b = {ANM_W_2LADYTALK_B, mHIO->m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat11c = {ANM_W_TALK_A, mHIO->m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat11d = {ANM_W_WAIT_A_2, mHIO->m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat11e = {ANM_W_TALK_B, mHIO->m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat11f = {ANM_W_2NORMALTALK_B, mHIO->m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat11a = {ANM_W_WAIT_A_2, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11b = {ANM_W_2LADYTALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11c = {ANM_W_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11d = {ANM_W_WAIT_A_2, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11e = {ANM_W_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11f = {ANM_W_2NORMALTALK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat11[6] = {&dat11a, &dat11b, &dat11c, &dat11d, &dat11e, &dat11f};
 
     daNpcF_anmPlayData** ppDat[12] = {
@@ -1054,7 +1054,7 @@ void daNpcKasiHana_c::playMotionAnmLoop(daNpcF_c::daNpcF_anmPlayData*** i_data) 
 
             if (mMotionPhase == 0) {
                 if (mMotion == MOT_W_WAIT_A_LOOP) {
-                    i_morf = mHIO->m.common.morf_frame;
+                    i_morf = mpHIO->m.common.morf_frame;
                 } else if (0.0f <= mMotionMorfOverride) {
                     i_morf = mMotionMorfOverride;
                 }
@@ -1095,14 +1095,14 @@ void daNpcKasiHana_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model = mAnm_p->getModel();
     BOOL i_snap = FALSE;
-    f32 body_angleX_min = mHIO->m.common.body_angleX_min;
-    f32 body_angleX_max = mHIO->m.common.body_angleX_max;
-    f32 body_angleY_min = mHIO->m.common.body_angleY_min;
-    f32 body_angleY_max = mHIO->m.common.body_angleY_max;
-    f32 head_angleX_min = mHIO->m.common.head_angleX_min;
-    f32 head_angleX_max = mHIO->m.common.head_angleX_max;
-    f32 head_angleY_min = mHIO->m.common.head_angleY_min;
-    f32 head_angleY_max = mHIO->m.common.head_angleY_max;
+    f32 body_angleX_min = mpHIO->m.common.body_angleX_min;
+    f32 body_angleX_max = mpHIO->m.common.body_angleX_max;
+    f32 body_angleY_min = mpHIO->m.common.body_angleY_min;
+    f32 body_angleY_max = mpHIO->m.common.body_angleY_max;
+    f32 head_angleX_min = mpHIO->m.common.head_angleX_min;
+    f32 head_angleX_max = mpHIO->m.common.head_angleX_max;
+    f32 head_angleY_min = mpHIO->m.common.head_angleY_min;
+    f32 head_angleY_max = mpHIO->m.common.head_angleY_max;
     s16 angle_delta = mCurAngle.y - mOldAngle.y;
     cXyz lookatPos[3] = {mLookatPos[0], mLookatPos[1], mLookatPos[2]};
     csXyz* lookatAngle[3] = {&mLookatAngle[0], &mLookatAngle[1], &mLookatAngle[2]};
@@ -1174,7 +1174,7 @@ BOOL daNpcKasiHana_c::step(s16 i_targetAngle, int param_2) {
 }
 
 BOOL daNpcKasiHana_c::chkFindPlayer() {
-    if (!chkActorInSight(daPy_getPlayerActorClass(), mHIO->m.common.fov)) {
+    if (!chkActorInSight(daPy_getPlayerActorClass(), mpHIO->m.common.fov)) {
         mActorMngr[0].remove();
         return FALSE;
     }
@@ -1250,14 +1250,14 @@ int daNpcKasiHana_c::wait(int param_1) {
                             }
 
                             f32 distFromCenter = mKasiMng.getDistFromCenter();
-                            if (distFromCenter >= 0.0f && distFromCenter < mHIO->m.track_start_dist) {
+                            if (distFromCenter >= 0.0f && distFromCenter < mpHIO->m.track_start_dist) {
                                 field_0x1441 = 1;
                                 mKasiMng.onSygnal(0x200);
                                 setAction(&daNpcKasiHana_c::chace_st);
                                 return 1;
                             }
                         } else if (pl_front_check()) {
-                            if (actorDistance >= mHIO->m.track_stop_dist + 50.0f) {
+                            if (actorDistance >= mpHIO->m.track_stop_dist + 50.0f) {
                                 setAction(&daNpcKasiHana_c::chace);
                                 return 1;
                             }
@@ -1337,7 +1337,7 @@ int daNpcKasiHana_c::chace(int param_1) {
             setMotion(MOT_W_RUN_A, -1.0f, 0);
             setLookMode(LOOK_NONE);
             fopAcM_SetSpeed(this, 0.0f, 0.0f, 0.0f);
-            fopAcM_SetSpeedF(this, mHIO->m.track_spd);
+            fopAcM_SetSpeedF(this, mpHIO->m.track_spd);
             mKasiMng.chgWeightLight();
             mMode = 1;
             break;
@@ -1347,7 +1347,7 @@ int daNpcKasiHana_c::chace(int param_1) {
             _turn_pos(chacePos, 0x800);
 
             if (pl_front_check()) {
-                if (fopAcM_searchActorDistanceXZ(this, daPy_getPlayerActorClass()) < mHIO->m.track_stop_dist) {
+                if (fopAcM_searchActorDistanceXZ(this, daPy_getPlayerActorClass()) < mpHIO->m.track_stop_dist) {
                     setAction(&daNpcKasiHana_c::wait);
                 }
             } else {
@@ -1666,7 +1666,7 @@ int daNpcKasiHana_c::escape(int param_1) {
         case 0:
             setMotion(MOT_W_RUN_A, -1.0f, 0);
             fopAcM_SetSpeed(this, 0.0f, 0.0f, 0.0f);
-            fopAcM_SetSpeedF(this, mHIO->m.escape_spd);
+            fopAcM_SetSpeedF(this, mpHIO->m.escape_spd);
             setEscapePathDir();
             mKasiMng.onSygnal(0x20);
             mSound.startCreatureVoice(Z2SE_HANA_V_FEAR, -1);

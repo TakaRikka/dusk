@@ -115,11 +115,28 @@ static cXyz l_srcPosR(-600.0f, 1000.0f, 1800.0f);
 
 static cXyz l_srcPosL(600.0f, 1000.0f, 1800.0f);
 
-daObj_Sekizoa_Param_c::Data const daObj_Sekizoa_Param_c::m = {
-    600.0, -10.0, 1.0, 1100.0, 255.0, 550.0, 100.0, 70.0, 0.0, 0.0,   30.0, 0.0,   30.0,     -30.0,
-    45.0,  -45.0, 0.6, 8.0,    0x3,   0x6,   0x5,   0x6,  0.0, 0.0,   0.0,  0.0,   0x3C0008, 0.0,
-    0.0,   4.0,   0.0, 0.0,    0.0,   0.0,   0.0,   0.0,  0.0, 600.0, 30.0, 0.004, 0,
+daObj_Sekizoa_HIOParam const daObj_Sekizoa_Param_c::m = {
+    600.0f, -10.0f, 1.0f,   1100.0f, 255.0f,   550.0f, 100.0f, 70.0f, 0.0f, 0.0f, 30.0f,
+    0.0f,   30.0f,  -30.0f, 45.0f,   -45.0f,   0.6f,   8.0f,   0x3,   0x6,  0x5,  0x6,
+    0.0f,   0.0f,   0.0f,   0.0f,    0x3C0008, 0.0f,   0.0f,   4.0f,  0.0f, 0.0f, 0.0f,
+    0.0f,   0.0f,   0.0f,   0.0f,    600.0f,   30.0f,  0.004f, 0,
 };
+
+static OBJ_SEKIZOA_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObj_Sekizoa_HIO_c::daObj_Sekizoa_HIO_c() {
+    m = daObj_Sekizoa_Param_c::m;
+}
+
+void daObj_Sekizoa_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_Sekizoa_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
 
 daObj_Sekizoa_c::~daObj_Sekizoa_c() {
     if (mpMorf[0] != NULL) {
@@ -131,6 +148,13 @@ daObj_Sekizoa_c::~daObj_Sekizoa_c() {
     if (mpMorf[1] != NULL) {
         mpMorf[1]->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     if (mType == TYPE_0) {
         if (daNpcT_chkTmpBit(0x31)) {
             mDoAud_subBgmStop();
@@ -164,11 +188,17 @@ int daObj_Sekizoa_c::create() {
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox2(this, mpModelData);
         mSound.init(&current.pos, &eyePos, 3, 1);
+        
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("石像");
+#endif
+        
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                     &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this),
                     fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daObj_Sekizoa_Param_c::m.field_0x10, 0,
+        mCcStts.Init(mpHIO->m.inner.field_0x10, 0,
                         this);
 
         mCyl.Set(mCcDCyl);
@@ -455,19 +485,19 @@ void daObj_Sekizoa_c::setParam() {
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
     attention_info.distances[fopAc_attn_SPEAK_e] = 0x13;
     attention_info.flags = 0;
-    scale.set(daObj_Sekizoa_Param_c::m.field_0x08, daObj_Sekizoa_Param_c::m.field_0x08,
-              daObj_Sekizoa_Param_c::m.field_0x08);
-    mCcStts.SetWeight(daObj_Sekizoa_Param_c::m.field_0x10);
-    mCylH = daObj_Sekizoa_Param_c::m.field_0x14;
-    mWallR = daObj_Sekizoa_Param_c::m.field_0x1C;
-    mAttnFovY = daObj_Sekizoa_Param_c::m.field_0x50;
+    scale.set(mpHIO->m.inner.field_0x08, mpHIO->m.inner.field_0x08,
+              mpHIO->m.inner.field_0x08);
+    mCcStts.SetWeight(mpHIO->m.inner.field_0x10);
+    mCylH = mpHIO->m.inner.field_0x14;
+    mWallR = mpHIO->m.inner.field_0x1C;
+    mAttnFovY = mpHIO->m.inner.field_0x50;
 
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daObj_Sekizoa_Param_c::m.field_0x18);
-    mRealShadowSize = daObj_Sekizoa_Param_c::m.field_0x0C;
-    mExpressionMorfFrame = daObj_Sekizoa_Param_c::m.field_0x6C;
-    mMorfFrames = daObj_Sekizoa_Param_c::m.field_0x44;
-    gravity = daObj_Sekizoa_Param_c::m.field_0x04;
+    mAcchCir.SetWallH(mpHIO->m.inner.field_0x18);
+    mRealShadowSize = mpHIO->m.inner.field_0x0C;
+    mExpressionMorfFrame = mpHIO->m.inner.field_0x6C;
+    mMorfFrames = mpHIO->m.inner.field_0x44;
+    gravity = mpHIO->m.inner.field_0x04;
 
     if (mType == TYPE_2 || mType == TYPE_3) {
         gravity = 0.0f;
@@ -685,11 +715,11 @@ void daObj_Sekizoa_c::setAttnPos() {
     mStagger.calc(0);
     f32 rad_angle_y = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     mJntAnm.setParam(this, mpMorf[0]->getModel(), &vec_pos, getBackboneJointNo(), getNeckJointNo(),
-                     getHeadJointNo(), daObj_Sekizoa_Param_c::m.field_0x24,
-                     daObj_Sekizoa_Param_c::m.field_0x20, daObj_Sekizoa_Param_c::m.field_0x2C,
-                     daObj_Sekizoa_Param_c::m.field_0x28, daObj_Sekizoa_Param_c::m.field_0x34,
-                     daObj_Sekizoa_Param_c::m.field_0x30, daObj_Sekizoa_Param_c::m.field_0x3C,
-                     daObj_Sekizoa_Param_c::m.field_0x38, daObj_Sekizoa_Param_c::m.field_0x40, 0.0f,
+                     getHeadJointNo(), mpHIO->m.inner.field_0x24,
+                     mpHIO->m.inner.field_0x20, mpHIO->m.inner.field_0x2C,
+                     mpHIO->m.inner.field_0x28, mpHIO->m.inner.field_0x34,
+                     mpHIO->m.inner.field_0x30, mpHIO->m.inner.field_0x3C,
+                     mpHIO->m.inner.field_0x38, mpHIO->m.inner.field_0x40, 0.0f,
                      NULL);
     mJntAnm.calcJntRad(0.2f, 1.0f, rad_angle_y);
     setMtx();
@@ -720,7 +750,7 @@ void daObj_Sekizoa_c::setAttnPos() {
     mJntAnm.setEyeAngleX(eyePos, 1.0f, 0);
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, 1, 1.0f, 0);
     attention_info.position = current.pos;
-    attention_info.position.y += daObj_Sekizoa_Param_c::m.field_0x00;
+    attention_info.position.y += mpHIO->m.inner.field_0x00;
 }
 
 
@@ -1070,19 +1100,19 @@ int daObj_Sekizoa_c::checkMoveDirection() {
     cXyz temp_vec;
     cXyz temp_vec2;
 
-    f32 temp_float_y = daObj_Sekizoa_Param_c::m.field_0x00 * 0.33f;
+    f32 temp_float_y = mpHIO->m.inner.field_0x00 * 0.33f;
     fopAc_ac_c* actor_3 = mActorMngrs[3].getActorP();
-    temp_vec.set(0.0f, 0.0f, daObj_Sekizoa_Param_c::m.field_0x8C);
+    temp_vec.set(0.0f, 0.0f, mpHIO->m.field_0x8C);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::multVec(&temp_vec, &temp_vec2);
-    if (chkPointInArea(actor_3->current.pos, temp_vec2, daObj_Sekizoa_Param_c::m.field_0x8C / 2,
+    if (chkPointInArea(actor_3->current.pos, temp_vec2, mpHIO->m.field_0x8C / 2,
                        300.0f, -300.0f, 0) == false)
     {
         temp_vec2.y += 10.0f;
         mGndChk.SetPos(&temp_vec2);
         if (fabsf(dComIfG_Bgsp().GroundCross(&mGndChk) - current.pos.y) < 0.1f) {
-            temp_vec.set(0.0f, temp_float_y, daObj_Sekizoa_Param_c::m.field_0x8C);
+            temp_vec.set(0.0f, temp_float_y, mpHIO->m.field_0x8C);
             mDoMtx_stack_c::YrotS(current.angle.y);
             mDoMtx_stack_c::multVec(&temp_vec, &temp_vec2);
             temp_vec2 = current.pos + temp_vec2;
@@ -1207,7 +1237,7 @@ void daObj_Sekizoa_c::jump() {
                     break;
                 }
                 mCXyzJump = current.pos;
-                mJumpSpeed = daObj_Sekizoa_Param_c::m.field_0x90;
+                mJumpSpeed = mpHIO->m.field_0x90;
                 return;
             }
         } else {
@@ -1222,27 +1252,27 @@ void daObj_Sekizoa_c::jump() {
                     mSound.startCreatureVoice(Z2SE_SEKI_V_COL2, -1);
                     mSound.startCreatureSound(Z2SE_SEKI_JUMP_COL, 0, -1);
                 }
-                mJumpSpeed = daObj_Sekizoa_Param_c::m.field_0x90;
+                mJumpSpeed = mpHIO->m.field_0x90;
                 mJump = 3;
             }
             if (mJump == 2) {
-                cLib_chaseF(&mJumpHeight, daObj_Sekizoa_Param_c::m.field_0x8C, mJumpSpeed);
+                cLib_chaseF(&mJumpHeight, mpHIO->m.field_0x8C, mJumpSpeed);
             } else {
                 cLib_chaseF(&mJumpHeight, 0.0f, mJumpSpeed);
             }
 
-            f32 var_f31 = daObj_Sekizoa_Param_c::m.field_0x94;
-            f32 var_f29 = var_f31 * ((daObj_Sekizoa_Param_c::m.field_0x8C * 0.5f) *
-                                     (daObj_Sekizoa_Param_c::m.field_0x8C * 0.5f));
-            f32 var_f30 = mJumpHeight - (daObj_Sekizoa_Param_c::m.field_0x8C * 0.5f);
+            f32 var_f31 = mpHIO->m.field_0x94;
+            f32 var_f29 = var_f31 * ((mpHIO->m.field_0x8C * 0.5f) *
+                                     (mpHIO->m.field_0x8C * 0.5f));
+            f32 var_f30 = mJumpHeight - (mpHIO->m.field_0x8C * 0.5f);
 
             temp_vec.set(0.0f, var_f29 + (-var_f31 * (var_f30 * var_f30)), mJumpHeight);
 
             mDoMtx_stack_c::YrotS(current.angle.y);
             mDoMtx_stack_c::multVec(&temp_vec, &temp_vec2);
             current.pos = mCXyzJump + temp_vec2;
-            cLib_chaseF(&mJumpSpeed, daObj_Sekizoa_Param_c::m.field_0x90 * 0.5f, 0.25f);
-            if (mJumpHeight <= 0 || daObj_Sekizoa_Param_c::m.field_0x8C <= mJumpHeight) {
+            cLib_chaseF(&mJumpSpeed, mpHIO->m.field_0x90 * 0.5f, 0.25f);
+            if (mJumpHeight <= 0 || mpHIO->m.field_0x8C <= mJumpHeight) {
                 landing();
                 mJump = 4;
                 return;
@@ -2322,7 +2352,7 @@ int daObj_Sekizoa_c::puzzle(void* param_0) {
                 }
                 if (daPy_getPlayerActorClass()->checkPlayerFly() != 0) {
                     if (mType == TYPE_0) {
-                        mLatencyTime = daObj_Sekizoa_Param_c::m.field_0x98;
+                        mLatencyTime = mpHIO->m.field_0x98;
                         mEvtNo = 5;
                     }
                 } else {
@@ -2409,9 +2439,6 @@ static int daObj_Sekizoa_Draw(void* i_this) {
 static int daObj_Sekizoa_IsDelete(void* i_this) {
     return 1;
 }
-
-
-static daObj_Sekizoa_Param_c l_HIO;
 
 static actor_method_class daObj_Sekizoa_MethodTable = {
     daObj_Sekizoa_Create,   daObj_Sekizoa_Delete, daObj_Sekizoa_Execute,

@@ -237,7 +237,27 @@ daNpc_Taro_c::cutFunc daNpc_Taro_c::mCutList[17] = {
     &daNpc_Taro_c::cutTagPush4,
 };
 
-static daNpc_Taro_Param_c l_HIO;
+static NPC_TARO_HIO_CLASS l_HIO;
+
+daNpc_Taro_HIOParam const daNpc_Taro_Param_c::m = {
+    140.0f, -3.0f,  1.0f,   400.0f, 255.0f, 120.0f, 35.0f, 30.0f, 0.0f, 0.0f, 10.0f,
+    -10.0f, 30.0f,  -10.0f, 45.0f,  -45.0f, 0.6f,   12.0f, 3,     6,    5,    6,
+    110.0f, 0.0f,   0.0f,   0.0f,   60,     8,      0,     0,     0,    0,    0,
+    4.0f,   -15.0f, 0.0f,   -10.0f, 15.0f,  30.0f,  10.0f, 55.0f, 120,  90};
+
+#if DEBUG
+daNpc_Taro_HIO_c::daNpc_Taro_HIO_c() {
+    m = daNpc_Taro_Param_c::m;
+}
+
+void daNpc_Taro_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Taro_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
 
 daNpc_Taro_c::~daNpc_Taro_c() {
     OS_REPORT("|%06d:%x|daNpc_Taro_c -> デストラクト\n", g_Counter.mCounter0, this);
@@ -245,20 +265,14 @@ daNpc_Taro_c::~daNpc_Taro_c() {
         mpMorf[0]->stopZelAnime();
     }
 
-    #if DEBUG
-    if (field_0xe40 != NULL) {
-        field_0xe40->removeHIO();
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
     }
-    #endif
+#endif
 
     deleteRes((l_loadResPtrnList)[mType], (const char**)l_resNameList);
 }
-
-daNpc_Taro_HIOParam const daNpc_Taro_Param_c::m = {
-    140.0f, -3.0f,  1.0f,   400.0f, 255.0f, 120.0f, 35.0f, 30.0f, 0.0f, 0.0f,
-    10.0f,  -10.0f, 30.0f,  -10.0f, 45.0f,  -45.0f, 0.6f, 12.0f, 3,    6,
-    5,      6,      110.0f, 0.0f,   0.0f,   0.0f,   60,    8,     0.0f, 0.0f,
-    4.0f,   -15.0f, 0.0f,   -10.0f, 15.0f,  30.0f,  10.0f, 55.0f, 120,  90};
 
 int daNpc_Taro_c::create() {
     daNpcT_ct(this, daNpc_Taro_c, l_faceMotionAnmData,
@@ -301,15 +315,14 @@ int daNpc_Taro_c::create() {
         field_0x9c0.init(&mAcch, 0.0f, 0.0f);
 
 #if DEBUG
-        // I'm unsure exactly how we're supposed to set + use the param ptr in the debug build...
-        // field_0xe40 = &l_HIO;
-        // field_0xe40->entryHIO("タロ");
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("タロ");
 #endif
 
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                             &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Taro_Param_c::m.mSttsWeight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl1.Set(mCcDCyl);
         mCyl1.SetStts(&mCcStts);
         mCyl1.SetTgHitCallback(tgHitCallBack);
@@ -626,10 +639,10 @@ void daNpc_Taro_c::setParam() {
     selectAction();
     srchActors();
     int attentionFlags = (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
-    s16 sVar7 = daNpc_Taro_Param_c::m.field_0x48;
-    s16 sVar5 = daNpc_Taro_Param_c::m.field_0x4a;
-    s16 sVar6 = daNpc_Taro_Param_c::m.field_0x4c;
-    s16 sVar4 = daNpc_Taro_Param_c::m.field_0x4e;
+    s16 sVar7 = mpHIO->m.common.talk_distance;
+    s16 sVar5 = mpHIO->m.common.talk_angle;
+    s16 sVar6 = mpHIO->m.common.attention_distance;
+    s16 sVar4 = mpHIO->m.common.attention_angle;
 
     if (mType == TYPE_13) {
         sVar5 = 6;
@@ -663,27 +676,27 @@ void daNpc_Taro_c::setParam() {
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
     attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(sVar7, sVar5);
     attention_info.flags = attentionFlags;
-    scale.set(daNpc_Taro_Param_c::m.mScale, daNpc_Taro_Param_c::m.mScale,
-              daNpc_Taro_Param_c::m.mScale);
-    mCcStts.SetWeight(daNpc_Taro_Param_c::m.mSttsWeight);
-    mCylH = daNpc_Taro_Param_c::m.mCylH;
-    mWallR = daNpc_Taro_Param_c::m.mWallR;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale,
+              mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
     if (mTwilight) {
         mCylH = 100.0f;
     }
-    mAttnFovY = daNpc_Taro_Param_c::m.mAttnFovY;
+    mAttnFovY = mpHIO->m.common.fov;
     if (mType == TYPE_13) {
         mAttnFovY = 180.0f;
     }
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Taro_Param_c::m.mWallH);
-    mRealShadowSize = daNpc_Taro_Param_c::m.field_0x0c;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
     if (&daNpc_Taro_c::practice == mAction) {
         mRealShadowSize = 500.0f;
     }
-    mExpressionMorfFrame = daNpc_Taro_Param_c::m.field_0x6c;
-    mMorfFrames = daNpc_Taro_Param_c::m.mMorfFrames;
-    gravity = daNpc_Taro_Param_c::m.mGravity;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_Taro_c::checkChangeEvt() {
@@ -967,11 +980,12 @@ void daNpc_Taro_c::setAttnPos() {
     f32 dVar8 = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     mJntAnm.setParam(
         this, mpMorf[0]->getModel(), &eyeOffset, getBackboneJointNo(), getNeckJointNo(),
-        getHeadJointNo(), daNpc_Taro_Param_c::m.mBodyUpAngle, daNpc_Taro_Param_c::m.mBodyDownAngle,
-        daNpc_Taro_Param_c::m.mBodyLeftAngle, daNpc_Taro_Param_c::m.mBodyRightAngle,
-        daNpc_Taro_Param_c::m.mHeadUpAngle, daNpc_Taro_Param_c::m.mHeadDownAngle,
-        daNpc_Taro_Param_c::m.mHeadLeftAngle, daNpc_Taro_Param_c::m.mHeadRightAngle,
-        daNpc_Taro_Param_c::m.field_0x40, 0.0f, NULL);
+        getHeadJointNo(),
+        mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+        mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+        mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+        mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
     mJntAnm.calcJntRad(0.2f, 1.0f, (float)dVar8);
     setMtx();
     mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(getHeadJointNo()));
@@ -979,7 +993,7 @@ void daNpc_Taro_c::setAttnPos() {
     mJntAnm.setEyeAngleX(eyePos, 1.0f, 0);
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, 1, 1.0f, 0);
     eyeOffset.set(0.0f, 0.0f, 0.0f);
-    eyeOffset.y = daNpc_Taro_Param_c::m.mAttentionPosYOffset;
+    eyeOffset.y = mpHIO->m.common.attention_offset;
     mDoMtx_stack_c::YrotS(mCurAngle.y);
     mDoMtx_stack_c::multVec(&eyeOffset, &eyeOffset);
     attention_info.position = current.pos + eyeOffset;
@@ -2761,7 +2775,7 @@ int daNpc_Taro_c::cutTagPush4(int param_1) {
 
 int daNpc_Taro_c::wait(void* param_0) {
     fopAc_ac_c* actor_p;
-    int iVar10 = daNpc_Taro_Param_c::m.field_0x8e;
+    int iVar10 = mpHIO->m.field_0x8e;
     s16 local_5e = home.angle.y;
 
     switch (mMode) {
@@ -2834,10 +2848,10 @@ int daNpc_Taro_c::wait(void* param_0) {
             daNpc_Len_c* pLen = (daNpc_Len_c*)mActors[22].getActorP();
             if (pLen != NULL &&
                 pLen->checkStartDemo13StbEvt(
-                    this, daNpc_Taro_Param_c::m.field_0x70, daNpc_Taro_Param_c::m.field_0x74,
-                    daNpc_Taro_Param_c::m.field_0x78, daNpc_Taro_Param_c::m.field_0x7c,
-                    daNpc_Taro_Param_c::m.field_0x80, daNpc_Taro_Param_c::m.field_0x84,
-                    daNpc_Taro_Param_c::m.field_0x88))
+                    this, mpHIO->m.common.box_min_x, mpHIO->m.common.box_min_y,
+                    mpHIO->m.common.box_min_z, mpHIO->m.common.box_max_x,
+                    mpHIO->m.common.box_max_y, mpHIO->m.common.box_max_z,
+                    mpHIO->m.common.box_offset))
             {
                 mEvtNo = 12;
                 field_0x11a1 = 1;
@@ -3118,7 +3132,7 @@ int daNpc_Taro_c::swdTutorial(void* param_0) {
 int daNpc_Taro_c::talk_withMaro(void* param_0) {
     daNpc_Maro_c* pMaro = (daNpc_Maro_c*)mActors[0].getActorP();
     fopAc_ac_c* player = daPy_getPlayerActorClass();
-    int choccaiTimer = daNpc_Taro_Param_c::m.mChoccaiTimer;
+    int choccaiTimer = mpHIO->m.mChoccaiTimer;
 
     switch (mMode) {
     case MODE_ENTER:
@@ -3177,7 +3191,7 @@ int daNpc_Taro_c::talk_withMaro(void* param_0) {
 }
 
 int daNpc_Taro_c::practice(void* param_0) {
-    int iVar4 = daNpc_Taro_Param_c::m.field_0x8e;
+    int iVar4 = mpHIO->m.field_0x8e;
     int iVar3 = 0;
 
     switch (mMode) {

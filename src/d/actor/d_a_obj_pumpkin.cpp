@@ -243,6 +243,7 @@ int daObj_Pumpkin_c::Delete() {
 }
 
 int daObj_Pumpkin_c::Execute() {
+    int sp_0x30 = 0;
     f32 var_f29 = mpHIO->m.floating_offset;
     f32 f_scale = mpHIO->m.scale;
     s16 sp_0x14 = 0;
@@ -278,7 +279,7 @@ int daObj_Pumpkin_c::Execute() {
     mAcchCir.SetWallR(mpHIO->m.width * mPumpkinScale);
     mAcchCir.SetWallH(mpHIO->m.knee_length * mPumpkinScale);
     gravity = mpHIO->m.gravity * mPumpkinScale;
-    int sp_0x30 = 0;
+    sp_0x30 = 0;
     if (fopAcM_checkCarryNow(this) || fopAcM_checkHawkCarryNow(this) || field_0xbb3) {
         sp_0x30 = 1;
     }
@@ -449,8 +450,8 @@ int daObj_Pumpkin_c::Execute() {
                                     current.angle.y = cM_atan2s(sp_0x4C.x, sp_0x4C.z);
                                 }
 
-                                sp_0x10 *= streamPower;
-                                cLib_chaseAngleS(&field_0xB38.y, (field_0xB38.y < 0) ? -sp_0x10 : sp_0x10, 0x10);
+                                MULT_ANGLE_2(sp_0x10, streamPower);
+                                cLib_chaseAngleS(&field_0xB38.y, (field_0xB38.y < 0) ? sp_0x10*-1 : sp_0x10, 0x10);
                                 if (field_0xBAB) {
                                     cLib_addCalc2(&speedF, streamPower * 1.55f, 0.15f, 1.0f);
                                 } else {

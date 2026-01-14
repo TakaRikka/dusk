@@ -4,6 +4,79 @@
 #include "d/actor/d_a_npc.h"
 #include "d/actor/d_a_tag_evtarea.h"
 
+//TODO: this might be the same struct that's used in d_a_peru's HIO
+struct daObj_Sekizoa_HIOParam_inner {
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2C;
+    /* 0x30 */ f32 field_0x30;
+    /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ f32 field_0x38;
+    /* 0x3C */ f32 field_0x3C;
+    /* 0x40 */ f32 field_0x40;
+    /* 0x44 */ f32 field_0x44;
+    /* 0x48 */ s16 field_0x48;
+    /* 0x4A */ s16 field_0x4A;
+    /* 0x4C */ s16 field_0x4C;
+    /* 0x4E */ s16 field_0x4E;
+    /* 0x50 */ f32 field_0x50;
+    /* 0x54 */ f32 field_0x54;
+    /* 0x58 */ f32 field_0x58;
+    /* 0x5C */ f32 field_0x5C;
+    /* 0x60 */ int field_0x60;
+    /* 0x64 */ f32 field_0x64;
+    /* 0x68 */ f32 field_0x68;
+    /* 0x6C */ f32 field_0x6C;
+    /* 0x70 */ f32 field_0x70;
+    /* 0x74 */ f32 field_0x74;
+    /* 0x78 */ f32 field_0x78;
+    /* 0x7C */ f32 field_0x7C;
+    /* 0x80 */ f32 field_0x80;
+    /* 0x84 */ f32 field_0x84;
+    /* 0x88 */ f32 field_0x88;
+};
+
+struct daObj_Sekizoa_HIOParam {
+    /* 0x00 */ daObj_Sekizoa_HIOParam_inner inner;
+    /* 0x8C */ f32 field_0x8C;
+    /* 0x90 */ f32 field_0x90;
+    /* 0x94 */ f32 field_0x94;
+    /* 0x98 */ s16 field_0x98;
+};
+
+class daObj_Sekizoa_Param_c {
+public:
+    virtual ~daObj_Sekizoa_Param_c() {}
+
+    static daObj_Sekizoa_HIOParam const m;
+};
+
+#if DEBUG
+class daObj_Sekizoa_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_Sekizoa_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_Sekizoa_HIOParam m;
+};
+
+#define OBJ_SEKIZOA_HIO_CLASS daObj_Sekizoa_HIO_c
+#else
+#define OBJ_SEKIZOA_HIO_CLASS daObj_Sekizoa_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObj_Sekizoa_c
@@ -211,7 +284,7 @@ public:
 
     /* 0x0E40 */ mDoExt_McaMorfSO* mpMcaMorf;
     /* 0x0E44 */ mDoExt_invisibleModel mInvModel;
-    /* 0x0E4C */ u8 field_0x0E4C[4];  // Padding
+    /* 0x0E4C */ OBJ_SEKIZOA_HIO_CLASS* mpHIO;
     /* 0x0E50 */ dCcD_Cyl mCyl;
     /* 0x0F8C */ dCcD_Cyl mCyl2;
     /* 0x10C8 */ u8 mType;
@@ -248,56 +321,6 @@ public:
     /* 0x117A */ u8 mReverseStatues;  // Flag if statue B is on goal tile A at end of puzzle
     /* 0x117B */ u8 field_0x117B;     // Padding
     /* 0x117C */ u8 field_0x117C;
-};
-
-struct daObj_Sekizoa_Param_c {
-    virtual ~daObj_Sekizoa_Param_c() {}
-
-    struct Data {
-        /* 0x00 */ f32 field_0x00;
-        /* 0x04 */ f32 field_0x04;
-        /* 0x08 */ f32 field_0x08;
-        /* 0x0C */ f32 field_0x0C;
-        /* 0x10 */ f32 field_0x10;
-        /* 0x14 */ f32 field_0x14;
-        /* 0x18 */ f32 field_0x18;
-        /* 0x1C */ f32 field_0x1C;
-        /* 0x20 */ f32 field_0x20;
-        /* 0x24 */ f32 field_0x24;
-        /* 0x28 */ f32 field_0x28;
-        /* 0x2C */ f32 field_0x2C;
-        /* 0x30 */ f32 field_0x30;
-        /* 0x34 */ f32 field_0x34;
-        /* 0x38 */ f32 field_0x38;
-        /* 0x3C */ f32 field_0x3C;
-        /* 0x40 */ f32 field_0x40;
-        /* 0x44 */ f32 field_0x44;
-        /* 0x48 */ s16 field_0x48;
-        /* 0x4A */ s16 field_0x4A;
-        /* 0x4C */ s16 field_0x4C;
-        /* 0x4E */ s16 field_0x4E;
-        /* 0x50 */ f32 field_0x50;
-        /* 0x54 */ f32 field_0x54;
-        /* 0x58 */ f32 field_0x58;
-        /* 0x5C */ f32 field_0x5C;
-        /* 0x60 */ int field_0x60;
-        /* 0x64 */ f32 field_0x64;
-        /* 0x68 */ f32 field_0x68;
-        /* 0x6C */ f32 field_0x6C;
-        /* 0x70 */ f32 field_0x70;
-        /* 0x74 */ f32 field_0x74;
-        /* 0x78 */ f32 field_0x78;
-        /* 0x7C */ f32 field_0x7C;
-        /* 0x80 */ f32 field_0x80;
-        /* 0x84 */ f32 field_0x84;
-        /* 0x88 */ f32 field_0x88;
-        /* 0x8C */ f32 field_0x8C;
-        /* 0x90 */ f32 field_0x90;
-        /* 0x94 */ f32 field_0x94;
-        /* 0x98 */ s16 field_0x98;
-    };
-
-    static Data const m;
 };
 
 #endif /* D_A_OBJ_SEKIZOA_H */

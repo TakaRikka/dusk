@@ -6,10 +6,10 @@
 #include "JSystem/JKernel/JKRDvdRipper.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include <math>
+#include <cmath>
 #include <string>
 #include "global.h"
-#include <stdint>
+#include <stdint.h>
 
 JKRDvdArchive::JKRDvdArchive(s32 entryNum, JKRArchive::EMountDirection mountDirection)
     : JKRArchive(entryNum, MOUNT_DVD) {

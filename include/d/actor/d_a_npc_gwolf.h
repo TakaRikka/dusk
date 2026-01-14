@@ -3,15 +3,6 @@
 
 #include "d/actor/d_a_npc4.h"
 
-/**
- * @ingroup actors-npcs
- * @class daNpc_GWolf_c
- * @brief Golden Wolf
- *
- * @details
- *
-*/
-
 struct daNpc_GWolf_HIOParam {
     /* 0x00 */ daNpcF_HIOParam common;
     /* 0x6C */ f32 attack_spd_horizontal;       // 攻撃速度横 - Attack Speed Horizontal
@@ -24,10 +15,6 @@ struct daNpc_GWolf_HIOParam {
     /* 0x88 */ f32 warp_start_dist;             // ワープ開始距離 - Warp Start Distance
 };
 
-class daNpc_GWolf_HIO_c : public mDoHIO_entry_c {
-    /* 0x8 */ daNpc_GWolf_HIOParam param;
-};
-
 class daNpc_GWolf_Param_c {
 public:
     virtual ~daNpc_GWolf_Param_c() {}
@@ -35,6 +22,31 @@ public:
     static daNpc_GWolf_HIOParam const m;
 };
 
+#if DEBUG
+class daNpc_GWolf_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_GWolf_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    /* 0x8 */ daNpc_GWolf_HIOParam m;
+};
+
+#define NPC_GWOLF_HIO_CLASS daNpc_GWolf_HIO_c
+#else
+#define NPC_GWOLF_HIO_CLASS daNpc_GWolf_Param_c
+#endif
+
+/**
+ * @ingroup actors-npcs
+ * @class daNpc_GWolf_c
+ * @brief Golden Wolf
+ *
+ * @details
+ *
+*/
 class daNpc_GWolf_c : public daNpcF_c {
 public:
     typedef BOOL (daNpc_GWolf_c::*actionFunc)(void*);
@@ -100,7 +112,7 @@ private:
     /* 0xBD8 */ daNpcF_MatAnm_c* mpMatAnm;
     /* 0xBDC */ daNpcF_Lookat_c mLookat;
     /* 0xC78 */ daNpcF_ActorMngr_c mActorMngrs[2];
-    /* 0xC88 */ daNpc_GWolf_HIO_c* mHIO;
+    /* 0xC88 */ NPC_GWOLF_HIO_CLASS* mpHIO;
     /* 0xC8C */ dCcD_Cyl mCyl;
     /* 0xDC8 */ actionFunc mNextAction;
     /* 0xDD4 */ actionFunc mAction;

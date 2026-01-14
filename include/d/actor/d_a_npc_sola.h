@@ -3,6 +3,34 @@
 
 #include "d/actor/d_a_npc.h"
 
+struct daNpc_solA_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+};
+
+class daNpc_solA_Param_c {
+public:
+    virtual ~daNpc_solA_Param_c() {}
+
+    static daNpc_solA_HIOParam const m;
+};
+
+#if DEBUG
+class daNpc_solA_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_solA_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_solA_HIOParam m;
+};
+
+#define NPC_SOLA_HIO_CLASS daNpc_solA_HIO_c
+#else
+#define NPC_SOLA_HIO_CLASS daNpc_solA_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_solA_c
@@ -11,7 +39,6 @@
  * @details
  *
  */
-
 class daNpc_solA_c : public daNpcT_c {
 public:
     typedef int (daNpc_solA_c::*cutFunc)(int);
@@ -88,7 +115,7 @@ public:
     static cutFunc mCutList[1];
 
 private:
-    /* 0xE40 */ u8 field_0xe40[0xe44 - 0xe40];
+    /* 0xE40 */ NPC_SOLA_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 field_0xf80;
     /* 0xF84 */ actionFunc mNextAction;
@@ -97,16 +124,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_solA_c) == 0xfa0);
-
-struct daNpc_solA_HIOParam {
-    /* 0x00 */ daNpcT_HIOParam common;
-};
-
-class daNpc_solA_Param_c {
-public:
-    virtual ~daNpc_solA_Param_c() {}
-
-    static daNpc_solA_HIOParam const m;
-};
 
 #endif /* D_A_NPC_SOLA_H */

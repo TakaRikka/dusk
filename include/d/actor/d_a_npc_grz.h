@@ -24,9 +24,29 @@ struct daNpc_Grz_HIOParam {
     /* 0x7C */ f32 demo_start_distance;     // デモ開始距離 - Demo Start Distance    
 };
 
-class daNpc_Grz_HIO_c : public mDoHIO_entry_c {
-    /* 0x8 */ daNpc_Grz_HIOParam param;
+class daNpc_Grz_Param_c {
+public:
+    virtual ~daNpc_Grz_Param_c() {}
+
+    static daNpc_Grz_HIOParam const m;
 };
+
+#if DEBUG
+class daNpc_Grz_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Grz_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent* event);
+
+    void genMessage(JORMContext* ctx);
+
+    /* 0x8 */ daNpc_Grz_HIOParam m;
+};
+
+#define NPC_GRZ_HIO_CLASS daNpc_Grz_HIO_c
+#else
+#define NPC_GRZ_HIO_CLASS daNpc_Grz_Param_c
+#endif
 
 class daNpc_Grz_c : public daNpcF_c {
 public:
@@ -105,7 +125,7 @@ private:
     /* 0x0BDC */ daNpcF_Lookat_c mLookat;
     /* 0x0C78 */ daNpcF_Path_c mPath;
     /* 0x12A8 */ daNpcF_ActorMngr_c mActorMngrs[4];
-    /* 0x12C8 */ daNpc_Grz_HIO_c* mHIO;
+    /* 0x12C8 */ NPC_GRZ_HIO_CLASS* mpHIO;
     /* 0x12CC */ dCcD_Cyl mCyl1;
     /* 0x1408 */ dCcD_Cyl mCyl2;
     /* 0x1544 */ dCcD_Sph mSphs[4];
@@ -132,12 +152,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_Grz_c) == 0x1b08);
-
-class daNpc_Grz_Param_c {
-public:
-    virtual ~daNpc_Grz_Param_c() {}
-
-    static daNpc_Grz_HIOParam const m;
-};
 
 #endif /* D_A_NPC_GRZ_H */

@@ -298,7 +298,7 @@ f_pc/f_pc_layer.cpp:
 f_pc/f_pc_leaf.cpp:
 	.text       start:0x80026A40 end:0x80026B64
 	.data       start:0x803FA470 end:0x803FA488
-	.sbss       start:0x8053A960 end:0x8053A970
+	.sbss       start:0x8053A960 end:0x8053A968
 
 f_pc/f_pc_layer_iter.cpp:
 	.text       start:0x80026B64 end:0x80026CB8
@@ -318,6 +318,7 @@ f_pc/f_pc_load.cpp:
 f_pc/f_pc_manager.cpp:
 	.text       start:0x80027044 end:0x800272FC
 	.bss        start:0x80481338 end:0x804813E0
+	.sbss       start:0x8053A968 end:0x8053A970
 
 f_pc/f_pc_method.cpp:
 	.text       start:0x800272FC end:0x8002733C
@@ -341,7 +342,7 @@ f_pc/f_pc_priority.cpp:
 
 f_pc/f_pc_profile.cpp:
 	.text       start:0x80028140 end:0x80028150
-	.sbss       start:0x8053A980 end:0x8053A990
+	.sbss       start:0x8053A980 end:0x8053A988
 
 f_pc/f_pc_searcher.cpp:
 	.text       start:0x80028150 end:0x80028180
@@ -378,7 +379,7 @@ d/d_stage.cpp:
 	.data       start:0x803FA5A8 end:0x803FDE58
 	.bss        start:0x80481400 end:0x804928C8
 	.sdata      start:0x80537908 end:0x8053793C
-	.sbss       start:0x8053A990 end:0x8053A9B0
+	.sbss       start:0x8053A988 end:0x8053A9B0
 	.sdata2     start:0x8053BD28 end:0x8053BD38
 
 d/d_map.cpp:

@@ -3884,7 +3884,7 @@ static void demo_camera(e_wb_class* i_this) {
         i_this->field_0x1714 = 55.0f + KREG_F(7);
         i_this->field_0x16a0 = 0;
         s16 sp16 = local_194->actor.shape_angle.y +
-                   (local_194->field_0xa0e - local_194->actor.shape_angle.y) / 2;
+                   (local_194->field_0xa0c.y - local_194->actor.shape_angle.y) / 2;
         mDoMtx_stack_c::YrotS(sp16);
         local_3c.x = NREG_F(0);
         local_3c.y = NREG_F(1) + 500.0f;

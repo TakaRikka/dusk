@@ -8,7 +8,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include <stdint>
+#include <stdint.h>
 #include <string>
 
 #if DEBUG

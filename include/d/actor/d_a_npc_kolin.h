@@ -3,15 +3,6 @@
 
 #include "d/actor/d_a_npc.h"
 
-/**
- * @ingroup actors-npcs
- * @class daNpc_Kolin_c
- * @brief Colin
- *
- * @details
- *
-*/
-
 struct daNpc_Kolin_HIOParam {
     /* 0x00 */ daNpcT_HIOParam common;
     /* 0x8C */ f32 start_distance;      // 走りはじめ距離   - Start Distance
@@ -29,6 +20,31 @@ public:
     static daNpc_Kolin_HIOParam const m;
 };
 
+#if DEBUG
+class daNpc_Kolin_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Kolin_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Kolin_HIOParam m;
+};
+
+#define NPC_KOLIN_HIO_CLASS daNpc_Kolin_HIO_c
+#else
+#define NPC_KOLIN_HIO_CLASS daNpc_Kolin_Param_c
+#endif
+
+/**
+ * @ingroup actors-npcs
+ * @class daNpc_Kolin_c
+ * @brief Colin
+ *
+ * @details
+ *
+*/
 class daNpc_Kolin_c : public daNpcT_c {
 public:
     typedef int (daNpc_Kolin_c::*cutFunc)(int);
@@ -146,7 +162,7 @@ public:
     }
 
 private:
-    /* 0x0E40 */ u8 field_0xe40[0xe44 - 0xe40];
+    /* 0x0E40 */ NPC_KOLIN_HIO_CLASS* mpHIO;
     /* 0x0E44 */ J3DModel* mpClothModel;
     /* 0x0E48 */ dCcD_Cyl field_0xe48;
     /* 0x0F84 */ u8 mType;

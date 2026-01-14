@@ -20,9 +20,8 @@ daObjProp_c::~daObjProp_c() {
     dComIfG_resDelete(this, l_arcName);
 }
 
-static const u32 BMD_IDX[] = {3, 4};
-
 bool daObjProp_c::createHeap() {
+    static const u32 BMD_IDX[] = {3, 4};
     u32 nameArg = getNameArg_0();
     u32 bmd = BMD_IDX[nameArg];
     mpModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes(l_arcName, bmd), 0x80000,
@@ -60,9 +59,8 @@ int daObjProp_c::draw() {
     return 1;
 }
 
-static const s16 ADD_ANGLE[] = {0x1800, -0x1800};
-
 int daObjProp_c::execute() {
+    static const s16 ADD_ANGLE[] = {0x1800, -0x1800};
     shape_angle.y += ADD_ANGLE[mArg];
     setModelMtx();
     return 1;

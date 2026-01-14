@@ -14,12 +14,35 @@
 
 static char* l_resName = "KH_Bed";
 
-daObj_Bed_Param_c::params const daObj_Bed_Param_c::m = {NULL, -3.0f, 1.0f, 600.0f};
+static OBJ_BED_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObj_Bed_HIO_c::daObj_Bed_HIO_c() {
+    m = daObj_Bed_Param_c::m;
+}
+
+void daObj_Bed_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_Bed_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daObj_Bed_HIOParam const daObj_Bed_Param_c::m = {NULL, -3.0f, 1.0f, 600.0f};
 
 daObj_Bed_c::~daObj_Bed_c() {
     if (mpCollider != NULL) {
         dComIfG_Bgsp().Release(mpCollider);
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     dComIfG_resDelete(&mPhase, getResName());
 }
 
@@ -41,6 +64,12 @@ cPhs__Step daObj_Bed_c::create() {
         }
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 200.0f, 200.0f);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ベッド");
+#endif
+
         mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir,
                   &speed, &current.angle, &shape_angle);
         mAcch.CrrPos(dComIfG_Bgsp());
@@ -105,7 +134,7 @@ int daObj_Bed_c::Draw() {
     mDoExt_modelUpdateDL(mpModel);
     if (mGroundH != -G_CM3D_F_INF) {
         mShadow = dComIfGd_setShadow(mShadow, 1, mpModel, &current.pos,
-                                     daObj_Bed_Param_c::m.field_0xc, 20.0f,
+                                     mpHIO->m.field_0xc, 20.0f,
                                      current.pos.y, mGroundH, mGndChk, &tevStr, 0,
                                      1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
     }
@@ -169,8 +198,6 @@ static int daObj_Bed_Draw(void* i_this) {
 static int daObj_Bed_IsDelete(void* param_0) {
     return 1;
 }
-
-static daObj_Bed_Param_c l_HIO;
 
 static actor_method_class daObj_Bed_MethodTable = {
     (process_method_func)daObj_Bed_Create,

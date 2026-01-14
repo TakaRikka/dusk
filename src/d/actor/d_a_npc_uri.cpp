@@ -209,10 +209,19 @@ daNpc_Uri_c::cutFunc daNpc_Uri_c::mCutList[7] = {
     &daNpc_Uri_c::cutMeetingAgain,
 };
 
+NPC_URI_HIO_CLASS l_HIO;
+
 daNpc_Uri_c::~daNpc_Uri_c() {
     if (mpMorf[0] != 0) {
         mpMorf[0]->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
 }
 
@@ -242,10 +251,16 @@ int daNpc_Uri_c::create() {
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
         field_0x9c0.init(&mAcch, 0.0f, 0.0f);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ウ－リ");
+#endif
+
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Uri_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgHitCallback(tgHitCallBack);
@@ -705,8 +720,6 @@ void daNpc_Uri_c::beforeMove() {
         attention_info.flags = 0;
     }
 }
-
-NPC_URI_HIO_CLASS l_HIO;
 
 void daNpc_Uri_c::setAttnPos() {
     cXyz acStack_3c(-30.0f, 10.0f, 0.0f);

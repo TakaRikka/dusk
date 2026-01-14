@@ -5,6 +5,36 @@
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 
+struct daObj_AutoMata_HIOParam {
+    f32 field_0x0;
+    f32 field_0x4;
+    f32 field_0x8;
+};
+
+class daObj_AutoMata_Param_c {
+public:
+    virtual ~daObj_AutoMata_Param_c() {}
+
+    static daObj_AutoMata_HIOParam const m;
+};
+
+#if DEBUG
+class daObj_AutoMata_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_AutoMata_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_AutoMata_HIOParam m;
+};
+
+#define OBJ_AUTOMATA_HIO_CLASS daObj_AutoMata_HIO_c
+#else
+#define OBJ_AUTOMATA_HIO_CLASS daObj_AutoMata_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObj_AutoMata_c
@@ -15,7 +45,7 @@
  */
 class daObj_AutoMata_c : public fopAc_ac_c {
 private:
-    /* 0x568 */ int field_0x568;
+    /* 0x568 */ OBJ_AUTOMATA_HIO_CLASS* mpHIO;
     /* 0x56C */ mDoExt_McaMorfSO* mpMorf;
     /* 0x570 */ Z2Creature mCreature;
     /* 0x600 */ mDoExt_btkAnm mBtk;
@@ -57,12 +87,5 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daObj_AutoMata_c) == 0xb38);
-
-class daObj_AutoMata_Param_c {
-public:
-    virtual ~daObj_AutoMata_Param_c() {}
-
-    static f32 const m[3];
-};
 
 #endif /* D_A_OBJ_AUTOMATA_H */

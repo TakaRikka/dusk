@@ -2180,21 +2180,11 @@ static char* l_evtNames[1] = {
 
 static char* l_myName = "Chat";
 
-static daNpcChat_Param_c l_HIO;
+static NPC_CHAT_HIO_CLASS l_HIO;
 
 daNpcChat_c::eventFunc daNpcChat_c::mEvtSeqList[1] = {
     NULL,
 };
-
-daNpcChat_c::daNpcChat_c() {}
-
-daNpcChat_c::~daNpcChat_c() {
-    removeResrc(mType, mObjNum);
-
-    if (heap != NULL) {
-        mAnm_p->stopZelAnime();
-    }
-}
 
 static anmTblPrm const l_objTbl[13] = {
     {"object", BMDR_B_TUBO},
@@ -2263,6 +2253,32 @@ daNpcChat_HIOParam const daNpcChat_Param_c::m = {
     false,
     false,
 };
+
+#if DEBUG
+daNpcChat_HIO_c::daNpcChat_HIO_c() {
+    m = daNpcChat_Param_c::m;
+}
+
+void daNpcChat_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpcChat_c::daNpcChat_c() {}
+
+daNpcChat_c::~daNpcChat_c() {
+    removeResrc(mType, mObjNum);
+
+    if (heap != NULL) {
+        mAnm_p->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+}
 
 BOOL daNpcChat_c::NpcCreate(int type) {
     J3DModelData* a_mdlData_p = getNpcMdlDataP(type);
@@ -2698,15 +2714,15 @@ cPhs__Step daNpcChat_c::Create() {
         mSound.setMdlType(mType, false, mTwilight & 0xFF);
 
         #if DEBUG
-        // mHIO = l_HIO;
-        mHIO->entryHIO("多人数会話NPC");
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("多人数会話NPC");
         #endif
 
         mAcchCir.SetWall(ChkWallH(mType), ChkWallR(mType));
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
-        mCcStts.Init(daNpcChat_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgType(0);
@@ -2789,7 +2805,7 @@ int daNpcChat_c::Execute() {
 }
 
 int daNpcChat_c::Draw() {
-    draw(0, 0, daNpcChat_Param_c::m.common.real_shadow_size, NULL, 0);
+    draw(0, 0, mpHIO->m.common.real_shadow_size, NULL, 0);
     return 1;
 }
 
@@ -2872,15 +2888,15 @@ inline f32 JntTZ(int type, int jnt_no) {
 }
 
 inline s16 JntRX(int type, int jnt_no) {
-    return (type < 16 ? a_jntTbl_M[type].jntPrm[jnt_no].jntR[0] : a_jntTbl_W[type - 16].jntPrm[jnt_no].jntR[0]) * 182.04445f;
+    return DEG2S(type < 16 ? a_jntTbl_M[type].jntPrm[jnt_no].jntR[0] : a_jntTbl_W[type - 16].jntPrm[jnt_no].jntR[0]);
 }
 
 inline s16 JntRY(int type, int jnt_no) {
-    return (type < 16 ? a_jntTbl_M[type].jntPrm[jnt_no].jntR[1] : a_jntTbl_W[type - 16].jntPrm[jnt_no].jntR[1]) * 182.04445f;
+    return DEG2S(type < 16 ? a_jntTbl_M[type].jntPrm[jnt_no].jntR[1] : a_jntTbl_W[type - 16].jntPrm[jnt_no].jntR[1]);
 }
 
 inline s16 JntRZ(int type, int jnt_no) {
-    return (type < 16 ? a_jntTbl_M[type].jntPrm[jnt_no].jntR[2] : a_jntTbl_W[type - 16].jntPrm[jnt_no].jntR[2]) * 182.04445f;
+    return DEG2S(type < 16 ? a_jntTbl_M[type].jntPrm[jnt_no].jntR[2] : a_jntTbl_W[type - 16].jntPrm[jnt_no].jntR[2]);
 }
 
 int daNpcChat_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
@@ -3063,10 +3079,10 @@ void daNpcChat_c::setParam() {
     }
 
     #if DEBUG
-    scale.set(daNpcChat_Param_c::m.common.scale, daNpcChat_Param_c::m.common.scale, daNpcChat_Param_c::m.common.scale);
-    mAcchCir.SetWallR(daNpcChat_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpcChat_Param_c::m.common.knee_length);
-    gravity = daNpcChat_Param_c::m.common.gravity;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    gravity = mpHIO->m.common.gravity;
     #endif
 }
 
@@ -3577,153 +3593,153 @@ void daNpcChat_c::reset() {
 }
 
 void daNpcChat_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat0 = {ANM_TALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1 = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat1 = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[1] = {&dat1};
-    daNpcF_anmPlayData dat2 = {ANM_WAIT_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat2 = {ANM_WAIT_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[1] = {&dat2};
-    daNpcF_anmPlayData dat3 = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat3 = {ANM_TALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[1] = {&dat3};
-    daNpcF_anmPlayData dat4 = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat4 = {ANM_TALK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat4[1] = {&dat4};
-    daNpcF_anmPlayData dat5a = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat5b = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat5c = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat5d = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat5e = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat5f = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat5a = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat5b = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat5c = {ANM_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat5d = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat5e = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat5f = {ANM_TALK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat5[6] = {&dat5a, &dat5b, &dat5c, &dat5d, &dat5e, &dat5f};
-    daNpcF_anmPlayData dat6 = {ANM_TALK_C, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat6 = {ANM_TALK_C, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat6[1] = {&dat6};
-    daNpcF_anmPlayData dat7a = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat7b = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat7c = {ANM_TALK_C, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat7d = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat7a = {ANM_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat7b = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat7c = {ANM_TALK_C, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat7d = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat7[4] = {&dat7a, &dat7b, &dat7c, &dat7d};
-    daNpcF_anmPlayData dat8a = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat8b = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat8c = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat8d = {ANM_WAIT_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat8e = {ANM_TALK_C, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat8a = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat8b = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat8c = {ANM_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat8d = {ANM_WAIT_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat8e = {ANM_TALK_C, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat8[5] = {&dat8a, &dat8b, &dat8c, &dat8d, &dat8e};
-    daNpcF_anmPlayData dat9a = {ANM_BROWSE_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat9b = {ANM_BROWSE_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat9a = {ANM_BROWSE_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat9b = {ANM_BROWSE_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat9[2] = {&dat9a, &dat9b};
-    daNpcF_anmPlayData dat10a = {ANM_BROWSE_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat10b = {ANM_BROWSE_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat10c = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat10d = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat10e = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat10a = {ANM_BROWSE_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat10b = {ANM_BROWSE_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat10c = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat10d = {ANM_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat10e = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat10[5] = {&dat10a, &dat10b, &dat10c, &dat10d, &dat10e};
-    daNpcF_anmPlayData dat11a = {ANM_BROWSE_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat11b = {ANM_BROWSE_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat11c = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat11d = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat11e = {ANM_TALK_C, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat11f = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat11a = {ANM_BROWSE_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11b = {ANM_BROWSE_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11c = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11d = {ANM_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11e = {ANM_TALK_C, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat11f = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat11[6] = {&dat11a, &dat11b, &dat11c, &dat11d, &dat11e, &dat11f};
-    daNpcF_anmPlayData dat12a = {ANM_2LADYTALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat12b = {ANM_2NORMALTALK_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat12a = {ANM_2LADYTALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat12b = {ANM_2NORMALTALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat12[2] = {&dat12a, &dat12b};
-    daNpcF_anmPlayData dat13a = {ANM_2LADYTALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat13b = {ANM_2NORMALTALK_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat13a = {ANM_2LADYTALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat13b = {ANM_2NORMALTALK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat13[2] = {&dat13a, &dat13b};
-    daNpcF_anmPlayData dat14a = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat14b = {ANM_2LADYTALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat14c = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat14d = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat14e = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat14a = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat14b = {ANM_2LADYTALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat14c = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat14d = {ANM_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat14e = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat14[5] = {&dat14a, &dat14b, &dat14c, &dat14d, &dat14e};
-    daNpcF_anmPlayData dat15a = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat15b = {ANM_2LADYTALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat15c = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat15d = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat15e = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat15a = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat15b = {ANM_2LADYTALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat15c = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat15d = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat15e = {ANM_TALK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat15[5] = {&dat15a, &dat15b, &dat15c, &dat15d, &dat15e};
-    daNpcF_anmPlayData dat16a = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat16b = {ANM_2LADYTALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat16c = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat16d = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat16e = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat16f = {ANM_2NORMALTALK_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat16a = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat16b = {ANM_2LADYTALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat16c = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat16d = {ANM_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat16e = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat16f = {ANM_2NORMALTALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat16[6] = {&dat16a, &dat16b, &dat16c, &dat16d, &dat16e, &dat16f};
-    daNpcF_anmPlayData dat17a = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat17b = {ANM_2LADYTALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat17c = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat17d = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat17e = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat17f = {ANM_2NORMALTALK_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat17a = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat17b = {ANM_2LADYTALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat17c = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat17d = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat17e = {ANM_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat17f = {ANM_2NORMALTALK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat17[6] = {&dat17a, &dat17b, &dat17c, &dat17d, &dat17e, &dat17f};
-    daNpcF_anmPlayData dat18a = {ANM_TALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat18b = {ANM_2LADYTALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat18c = {ANM_2LADYTALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat18d = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat18e = {ANM_TALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat18f = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat18g = {ANM_2NORMALTALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat18h = {ANM_2NORMALTALK_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat18a = {ANM_TALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat18b = {ANM_2LADYTALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat18c = {ANM_2LADYTALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat18d = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat18e = {ANM_TALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat18f = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat18g = {ANM_2NORMALTALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat18h = {ANM_2NORMALTALK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat18[8] = {&dat18a, &dat18b, &dat18c, &dat18d, &dat18e, &dat18f, &dat18g, &dat18h};
-    daNpcF_anmPlayData dat19 = {ANM_LOOK_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat19 = {ANM_LOOK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat19[1] = {&dat19};
-    daNpcF_anmPlayData dat20 = {ANM_LOOK_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat20 = {ANM_LOOK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat20[1] = {&dat20};
-    daNpcF_anmPlayData dat21a = {ANM_LOOK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat21b = {ANM_LOOK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat21c = {ANM_WAIT_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat21a = {ANM_LOOK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat21b = {ANM_LOOK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat21c = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat21[3] = {&dat21a, &dat21b, &dat21c};
-    daNpcF_anmPlayData dat22 = {ANM_WAIT_WALL, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat22 = {ANM_WAIT_WALL, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat22[1] = {&dat22};
-    daNpcF_anmPlayData dat23a = {ANM_TALK_WALL, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat23b = {ANM_WAIT_WALL, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat23c = {ANM_TALK_B_WALL, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat23d = {ANM_WAIT_WALL, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat23e = {ANM_TALK_WALL, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat23f = {ANM_TALK_B_WALL, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat23a = {ANM_TALK_WALL, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat23b = {ANM_WAIT_WALL, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat23c = {ANM_TALK_B_WALL, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat23d = {ANM_WAIT_WALL, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat23e = {ANM_TALK_WALL, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat23f = {ANM_TALK_B_WALL, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat23[6] = {&dat23a, &dat23b, &dat23c, &dat23d, &dat23e, &dat23f};
-    daNpcF_anmPlayData dat24 = {ANM_SITWAIT_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat24 = {ANM_SITWAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat24[1] = {&dat24};
-    daNpcF_anmPlayData dat25a = {ANM_SITTALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat25b = {ANM_SITWAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat25c = {ANM_SITTALK_A_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat25d = {ANM_SITWAIT_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat25e = {ANM_SITTALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat25f = {ANM_SITTALK_A_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat25a = {ANM_SITTALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat25b = {ANM_SITWAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat25c = {ANM_SITTALK_A_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat25d = {ANM_SITWAIT_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat25e = {ANM_SITTALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat25f = {ANM_SITTALK_A_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat25[6] = {&dat25a, &dat25b, &dat25c, &dat25d, &dat25e, &dat25f};
-    daNpcF_anmPlayData dat26 = {ANM_SITWAIT_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat26 = {ANM_SITWAIT_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat26[1] = {&dat26};
-    daNpcF_anmPlayData dat27a = {ANM_SITTALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat27b = {ANM_SITWAIT_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat27c = {ANM_SITTALK_B_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat27d = {ANM_SITWAIT_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat27e = {ANM_SITTALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat27f = {ANM_SITTALK_B_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat27a = {ANM_SITTALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat27b = {ANM_SITWAIT_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat27c = {ANM_SITTALK_B_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat27d = {ANM_SITWAIT_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat27e = {ANM_SITTALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat27f = {ANM_SITTALK_B_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat27[6] = {&dat27a, &dat27b, &dat27c, &dat27d, &dat27e, &dat27f};
-    daNpcF_anmPlayData dat28 = {ANM_SING, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat28 = {ANM_SING, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat28[1] = {&dat28};
-    daNpcF_anmPlayData dat29 = {ANM_SITTALK_A, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat29 = {ANM_SITTALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat29[1] = {&dat29};
-    daNpcF_anmPlayData dat30 = {ANM_SITTALK_A_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat30 = {ANM_SITTALK_A_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat30[1] = {&dat30};
-    daNpcF_anmPlayData dat31a = {ANM_SITTALK_A, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat31b = {ANM_SITTALK_A_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat31a = {ANM_SITTALK_A, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat31b = {ANM_SITTALK_A_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat31[2] = {&dat31a, &dat31b};
-    daNpcF_anmPlayData dat32 = {ANM_SITTALK_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat32 = {ANM_SITTALK_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat32[1] = {&dat32};
-    daNpcF_anmPlayData dat33 = {ANM_SITTALK_B_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat33 = {ANM_SITTALK_B_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat33[1] = {&dat33};
-    daNpcF_anmPlayData dat34a = {ANM_SITTALK_B, daNpcChat_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat34b = {ANM_SITTALK_B_B, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat34a = {ANM_SITTALK_B, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat34b = {ANM_SITTALK_B_B, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat34[2] = {&dat34a, &dat34b};
-    daNpcF_anmPlayData dat35 = {ANM_KAMAE, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat35 = {ANM_KAMAE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat35[1] = {&dat35};
-    daNpcF_anmPlayData dat36 = {ANM_KAMAE_C, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat36 = {ANM_KAMAE_C, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat36[1] = {&dat36};
-    daNpcF_anmPlayData dat37 = {ANM_KAMAE_STEP, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat37 = {ANM_KAMAE_STEP, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat37[1] = {&dat37};
-    daNpcF_anmPlayData dat38 = {ANM_SURPRISE, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat38 = {ANM_SURPRISE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat38[1] = {&dat38};
-    daNpcF_anmPlayData dat39 = {ANM_TO_WOLF, daNpcChat_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat39 = {ANM_TO_WOLF, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat39[1] = {&dat39};
 
     daNpcF_anmPlayData** ppDat[40] = {

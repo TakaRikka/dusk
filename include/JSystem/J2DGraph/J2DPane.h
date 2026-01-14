@@ -84,20 +84,33 @@ public:
     /* vt 0x10 */ virtual void move(f32 x, f32 y);
     /* vt 0x14 */ virtual void add(f32 x, f32 y);
     /* vt 0x18 */ virtual void resize(f32 x, f32 y);
-    /* vt 0x1C */ virtual void setCullBack(bool cull);
+    /* vt 0x1C */ virtual void setCullBack(bool cull) {
+        GXCullMode mode;
+
+        if (cull) {
+            mode = GX_CULL_BACK;
+        } else {
+            mode = GX_CULL_NONE;
+        }
+
+        setCullBack(mode);
+    }
     /* vt 0x20 */ virtual void setCullBack(_GXCullMode cmode);
     /* vt 0x24 */ virtual void setAlpha(u8 alpha) {
         mAlpha = alpha;
     };
-    /* vt 0x28 */ virtual bool setConnectParent(bool connected);
+    /* vt 0x28 */ virtual bool setConnectParent(bool connected) {
+        mConnected = false;
+        return false;
+    }
     /* vt 0x2C */ virtual void calcMtx() {
         if (mPaneTree.getParent() != NULL) {
             makeMatrix(mTranslateX, mTranslateY);
         }
     }
-    /* vt 0x30 */ virtual void update();
-    /* vt 0x34 */ virtual void drawSelf(f32 arg1, f32 arg2);
-    /* vt 0x38 */ virtual void drawSelf(f32 arg1, f32 arg2, Mtx* mtx);
+    /* vt 0x30 */ virtual void update() {}
+    /* vt 0x34 */ virtual void drawSelf(f32 arg1, f32 arg2) {}
+    /* vt 0x38 */ virtual void drawSelf(f32 arg1, f32 arg2, Mtx* mtx) {}
     /* vt 0x3C */ virtual J2DPane* search(u64 tag);
     /* vt 0x40 */ virtual J2DPane* searchUserInfo(u64 tag);
     /* vt 0x44 */ virtual void makeMatrix(f32 a, f32 b) {
@@ -107,7 +120,7 @@ public:
     /* vt 0x4C */ virtual bool isUsed(const ResTIMG* timg);
     /* vt 0x50 */ virtual bool isUsed(const ResFONT* font);
     /* vt 0x54 */ virtual void clearAnmTransform();
-    /* vt 0x58 */ virtual void rewriteAlpha();
+    /* vt 0x58 */ virtual void rewriteAlpha() {}
     /* vt 0x5C */ virtual void setAnimation(J2DAnmBase* anm);
     /* vt 0x60 */ virtual void setAnimation(J2DAnmTransform* anm);
     /* vt 0x64 */ virtual void setAnimation(J2DAnmColor* anm) {}
@@ -118,9 +131,13 @@ public:
     /* vt 0x78 */ virtual void setAnimation(J2DAnmVtxColor* anm) {}
     /* vt 0x7C */ virtual const J2DAnmTransform* animationTransform(const J2DAnmTransform* transform);
     /* vt 0x80 */ virtual void setVisibileAnimation(J2DAnmVisibilityFull* visibility);
-    /* vt 0x84 */ virtual void setAnimationVF(J2DAnmVisibilityFull* visibility);
+    /* vt 0x84 */ virtual void setAnimationVF(J2DAnmVisibilityFull* p_visibility) {
+        setAnimation(p_visibility);
+    }
     /* vt 0x88 */ virtual void setVtxColorAnimation(J2DAnmVtxColor* vtx_color);
-    /* vt 0x8C */ virtual void setAnimationVC(J2DAnmVtxColor* vtx_color);
+    /* vt 0x8C */ virtual void setAnimationVC(J2DAnmVtxColor* p_vtxColor) {
+        setAnimation(p_vtxColor);
+    }
     /* vt 0x90 */ virtual const J2DAnmTransform* animationPane(const J2DAnmTransform* transform);
 
     f32 getHeight() const { return mBounds.getHeight(); }
@@ -174,6 +191,7 @@ public:
     void show() { mVisible = true; }
     void hide() { mVisible = false; }
 
+    bool isInfluencedAlpha() const { return mIsInfluencedAlpha; }
     bool isConnectParent() const { return mConnected; }
 
     u64 getUserInfo() const { return mUserInfoTag; }

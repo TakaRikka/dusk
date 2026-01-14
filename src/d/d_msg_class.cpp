@@ -1,7 +1,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_msg_class.h"
-#include <stdio>
+#include <cstdio>
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
 #include "d/d_msg_unit.h"

@@ -14,7 +14,7 @@ enum {
     NUM_EVT_CUTS_e = 5,
 };
 
-static daNpc_myna2_Param_c l_HIO;
+static NPC_MYNA2_HIO_CLASS l_HIO;
 
 static daNpc_GetParam1 l_bmdGetParamList[] = {
     {0x17, 0},
@@ -106,24 +106,6 @@ daNpc_myna2_c::EventFn daNpc_myna2_c::mEvtCutList[] = {
     &daNpc_myna2_c::ECut_gameGoalSuccess,
 };
 
-daNpc_myna2_c::daNpc_myna2_c() {}
-
-daNpc_myna2_c::~daNpc_myna2_c() {
-    OS_REPORT("|%06d:%x|daNpc_myna2_c -> デストラクト%d\n", g_Counter.mCounter0, mType);
-
-    if (mType == 1) {
-        daNpcF_offTmpBit(0x4A);
-    }
-
-    for (int i = 0; l_loadRes_list[mType][i] >= 0; i++) {
-        dComIfG_resDelete(&mPhase[i], l_resNames[l_loadRes_list[mType][i]]);
-    }
-
-    if (heap != NULL) {
-        mAnm_p->stopZelAnime();
-    }
-}
-
 const daNpc_myna2_HIOParam daNpc_myna2_Param_c::m = {
     60.0f,
     0.0f,
@@ -161,6 +143,44 @@ const daNpc_myna2_HIOParam daNpc_myna2_Param_c::m = {
     700.0f,
     2500.0f,
 };
+
+#if DEBUG
+daNpc_myna2_HIO_c::daNpc_myna2_HIO_c() {
+    m = daNpc_myna2_Param_c::m;
+}
+
+void daNpc_myna2_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_myna2_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_myna2_c::daNpc_myna2_c() {}
+
+daNpc_myna2_c::~daNpc_myna2_c() {
+    OS_REPORT("|%06d:%x|daNpc_myna2_c -> デストラクト%d\n", g_Counter.mCounter0, mType);
+
+    if (mType == 1) {
+        daNpcF_offTmpBit(0x4A);
+    }
+
+    for (int i = 0; l_loadRes_list[mType][i] >= 0; i++) {
+        dComIfG_resDelete(&mPhase[i], l_resNames[l_loadRes_list[mType][i]]);
+    }
+
+    if (heap != NULL) {
+        mAnm_p->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+}
 
 int daNpc_myna2_c::create() {
     fopAcM_ct(this, daNpc_myna2_c);
@@ -205,11 +225,16 @@ int daNpc_myna2_c::create() {
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 450.0f, 300.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
 
-        mAcchCir.SetWall(daNpc_myna2_Param_c::m.common.width, daNpc_myna2_Param_c::m.common.knee_length);
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("トリル2");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                   &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
 
-        mCcStts.Init(daNpc_myna2_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgHitCallback(tgHitCallBack);
@@ -266,7 +291,7 @@ int daNpc_myna2_c::Execute() {
 }
 
 int daNpc_myna2_c::Draw() {
-    return draw(chkAction(&daNpc_myna2_c::test), FALSE, daNpc_myna2_Param_c::m.common.real_shadow_size, NULL, 0);
+    return draw(chkAction(&daNpc_myna2_c::test), FALSE, mpHIO->m.common.real_shadow_size, NULL, 0);
 }
 
 int daNpc_myna2_c::createHeapCallBack(fopAc_ac_c* actor) {
@@ -292,10 +317,10 @@ void daNpc_myna2_c::setParam() {
     attention_info.distances[fopAc_attn_SPEAK_e] = 0x50;
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
     
-    scale.set(daNpc_myna2_Param_c::m.common.scale, daNpc_myna2_Param_c::m.common.scale, daNpc_myna2_Param_c::m.common.scale);
-    mAcchCir.SetWallR(daNpc_myna2_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpc_myna2_Param_c::m.common.knee_length);
-    gravity = daNpc_myna2_Param_c::m.common.gravity;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_myna2_c::main() {
@@ -307,7 +332,7 @@ BOOL daNpc_myna2_c::main() {
         attention_info.flags = 0;
     }
 
-    if (!daNpc_myna2_Param_c::m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()))) {
+    if (!mpHIO->m.common.debug_mode_ON && (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK()))) {
         if (mOrderEvtNo != 0) {
             eventInfo.setArchiveName(l_resNames[l_evtGetParamList[mOrderEvtNo].arcIdx]);
         }
@@ -355,7 +380,7 @@ void daNpc_myna2_c::setAttnPos() {
     static cXyz eyeOffset(30.0f, 10.0f, 0.0f);
 
     cXyz sp2C, sp20, sp14, sp18;
-    f32 attention_offset = daNpc_myna2_Param_c::m.common.attention_offset;
+    f32 attention_offset = mpHIO->m.common.attention_offset;
 
     setMtx();
 
@@ -389,8 +414,8 @@ void daNpc_myna2_c::setAttnPos() {
         }
 
         mCyl.SetC(sp2C);
-        mCyl.SetH(daNpc_myna2_Param_c::m.common.height + var_f30);
-        mCyl.SetR(daNpc_myna2_Param_c::m.common.width + var_f29);
+        mCyl.SetH(mpHIO->m.common.height + var_f30);
+        mCyl.SetR(mpHIO->m.common.width + var_f29);
         dComIfG_Ccsp()->Set(&mCyl);
     }
 
@@ -569,31 +594,31 @@ void daNpc_myna2_c::reset() {
 }
 
 void daNpc_myna2_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {0, daNpc_myna2_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat0 = {0, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[] = {&dat0};
 
-    daNpcF_anmPlayData dat1 = {12, daNpc_myna2_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat1 = {12, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[] = {&dat1};
 
-    daNpcF_anmPlayData dat2a = {13, daNpc_myna2_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat2a = {13, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[] = {&dat2a};
 
-    daNpcF_anmPlayData dat3a = {9, daNpc_myna2_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat3b = {12, daNpc_myna2_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat3a = {9, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat3b = {12, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[] = {&dat3a, &dat3b};
 
-    daNpcF_anmPlayData dat4a = {10, daNpc_myna2_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat4b = {13, daNpc_myna2_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat4a = {10, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat4b = {13, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat4[] = {&dat4a, &dat4b};
 
-    daNpcF_anmPlayData dat5a = {11, daNpc_myna2_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData dat5b = {14, daNpc_myna2_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat5a = {11, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat5b = {14, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat5[] = {&dat5a, &dat5b};
 
-    daNpcF_anmPlayData dat6 = {14, daNpc_myna2_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat6 = {14, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat6[] = {&dat6};
 
-    daNpcF_anmPlayData dat7 = {7, daNpc_myna2_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat7 = {7, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat7[] = {&dat7};
 
     daNpcF_anmPlayData** ppDat[8] = {
@@ -636,7 +661,7 @@ int daNpc_myna2_c::setAction(int (daNpc_myna2_c::*i_action)(void*)) {
 int daNpc_myna2_c::selectAction() {
     mNextAction = NULL;
 
-    if (daNpc_myna2_Param_c::m.common.debug_mode_ON) {
+    if (mpHIO->m.common.debug_mode_ON) {
         mNextAction = &daNpc_myna2_c::test;
     } else {
         switch (mType) {
@@ -664,7 +689,7 @@ void daNpc_myna2_c::doNormalAction(int param_0) {
         if (mCutType == daPy_py_c::CUT_TYPE_TURN_RIGHT) {
             damage_time = 20;
         } else {
-            damage_time = daNpc_myna2_Param_c::m.common.damage_time;
+            damage_time = mpHIO->m.common.damage_time;
         }
 
         setLookMode(LOOK_RESET);
@@ -805,7 +830,7 @@ int daNpc_myna2_c::waitHovering(void* param_0) {
         mSound.playSumomoBgm((sp2C - current.pos).abs());
         calcHovering(0, 0);
 
-        if ((sp2C - current.pos).absXZ() >= daNpc_myna2_Param_c::m.field_0x70 && fopAcM_CheckCondition(this, 4)) {
+        if ((sp2C - current.pos).absXZ() >= mpHIO->m.field_0x70 && fopAcM_CheckCondition(this, 4)) {
             dComIfGs_offSwitch(field_0xe0d, fopAcM_GetRoomNo(this));
             daNpcF_offTmpBit(0x4A);
             fopAcM_delete(this);
@@ -813,7 +838,7 @@ int daNpc_myna2_c::waitHovering(void* param_0) {
         }
     
         if (!daNpcF_chkEvtBit(0x11D) && daPy_py_c::checkNowWolf()) {
-            if (((sp2C - current.pos).absXZ() <= daNpc_myna2_Param_c::m.field_0x6c && (home.pos.y - sp2C.y) < 100.0f) && !player->checkPlayerFly() && daPy_getPlayerActorClass()->checkSwimUp()) {
+            if (((sp2C - current.pos).absXZ() <= mpHIO->m.field_0x6c && (home.pos.y - sp2C.y) < 100.0f) && !player->checkPlayerFly() && daPy_getPlayerActorClass()->checkSwimUp()) {
                 mOrderEvtNo = 1;
             }
         }
@@ -956,8 +981,8 @@ int daNpc_myna2_c::test(void* param_0) {
         mMode = 2;
         /* fallthrough */
     case 2:
-        setMotion(daNpc_myna2_Param_c::m.common.motion, daNpc_myna2_Param_c::m.common.morf_frame, 0);
-        setLookMode(daNpc_myna2_Param_c::m.common.look_mode);
+        setMotion(mpHIO->m.common.motion, mpHIO->m.common.morf_frame, 0);
+        setLookMode(mpHIO->m.common.look_mode);
         mOrderEvtNo = 0;
         attention_info.flags = 0;
         break;

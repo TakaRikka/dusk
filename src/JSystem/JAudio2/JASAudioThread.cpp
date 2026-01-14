@@ -10,7 +10,7 @@
 #include "JSystem/JAudio2/JASReport.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "dolphin/dsp.h"
-#include <stdint>
+#include <stdint.h>
 
 JASAudioThread::JASAudioThread(int stackSize, int msgCount, u32 threadPriority)
     : 

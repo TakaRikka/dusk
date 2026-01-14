@@ -11,7 +11,7 @@
 #include "SSystem/SComponent/c_m3d_g_pla.h"
 #include "Z2AudioLib/Z2Instances.h"
 #include "c/c_damagereaction.h"
-#include <math>
+#include <cmath>
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_canoe.h"
 #include "d/actor/d_a_mg_fshop.h"

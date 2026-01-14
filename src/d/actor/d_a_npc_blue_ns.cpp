@@ -37,7 +37,7 @@ static char* l_evtNames[7] = {
 
 static char* l_myName = "Blue_NS";
 
-static daNpcBlueNS_Param_c l_HIO;
+static NPC_BLUE_NS_HIO_CLASS l_HIO;
 
 daNpcBlueNS_c::EventFn daNpcBlueNS_c::mEvtSeqList[] = {
     NULL,
@@ -49,6 +49,16 @@ daNpcBlueNS_c::EventFn daNpcBlueNS_c::mEvtSeqList[] = {
     &daNpcBlueNS_c::_Evt_ChgYami_STNoppo,
 };
 
+#if DEBUG
+daNpcBlueNS_HIO_c::daNpcBlueNS_HIO_c() {
+    m = daNpcBlueNS_Param_c::m;
+}
+
+void daNpcBlueNS_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daNpcBlueNS_c::daNpcBlueNS_c() {}
 
 daNpcBlueNS_c::~daNpcBlueNS_c() {
@@ -59,6 +69,12 @@ daNpcBlueNS_c::~daNpcBlueNS_c() {
     if (heap != NULL) {
         mAnm_p->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
 }
 
 const static dCcD_SrcCyl l_cyl_src = {
@@ -143,18 +159,23 @@ int daNpcBlueNS_c::Create() {
         fopAcM_SetMtx(this, mAnm_p->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeFar(this, 3.0f);
         fopAcM_setCullSizeBox(this, -120.0f, -10.0f, -120.0f, 120.0f, 220.0f, 120.0f);
-        
+
         mSound.init(&current.pos, &eyePos, 3, 1);
 
-        mAcchCir.SetWall(daNpcBlueNS_Param_c::m.common.width, daNpcBlueNS_Param_c::m.common.knee_length);
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("青のナイトストーカー");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
 
-        mCcStts.Init(daNpcBlueNS_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(l_cyl_src);
         mCyl.SetStts(&mCcStts);
-        mCyl.SetH(daNpcBlueNS_Param_c::m.common.height);
-        mCyl.SetR(daNpcBlueNS_Param_c::m.common.width);
+        mCyl.SetH(mpHIO->m.common.height);
+        mCyl.SetR(mpHIO->m.common.width);
         mGndChk = mAcch.m_gnd;
         mGroundH = mAcch.GetGroundH();
 
@@ -353,7 +374,7 @@ BOOL daNpcBlueNS_c::holyball_check_main(fopAc_ac_c* i_actor) {
         break;
     default:
         dist = fopAcM_searchActorDistanceXZ(this, i_actor);
-        range = daNpcBlueNS_Param_c::m.field_0x6c;
+        range = mpHIO->m.field_0x6c;
     }
 
     return dist <= range;
@@ -384,7 +405,7 @@ int daNpcBlueNS_c::Draw() {
         mAnm_p->entryDL();
     }
 
-    mShadowKey = dComIfGd_setShadow(mShadowKey, 1, mdl_p, &current.pos, daNpcBlueNS_Param_c::m.common.real_shadow_size, 20.0f + tREG_F(3), current.pos.y, mGroundH, mGndChk, &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+    mShadowKey = dComIfGd_setShadow(mShadowKey, 1, mdl_p, &current.pos, mpHIO->m.common.real_shadow_size, 20.0f + tREG_F(3), current.pos.y, mGroundH, mGndChk, &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
     return 1;
 }
 
@@ -409,7 +430,7 @@ int daNpcBlueNS_c::ctrlJoint(J3DJoint* param_0, J3DModel* i_model) {
     case 1:
     case 3:
     case 4:
-        setLookatMtx(jnt_no, spC, daNpcBlueNS_Param_c::m.common.neck_rotation_ratio);
+        setLookatMtx(jnt_no, spC, mpHIO->m.common.neck_rotation_ratio);
     }
 
     i_model->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
@@ -436,16 +457,16 @@ int daNpcBlueNS_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
 void daNpcBlueNS_c::setParam() {
     srchActor();
 
-    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(daNpcBlueNS_Param_c::m.common.attention_distance, daNpcBlueNS_Param_c::m.common.attention_angle);
+    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
-    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(daNpcBlueNS_Param_c::m.common.talk_distance, daNpcBlueNS_Param_c::m.common.talk_angle);
+    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(mpHIO->m.common.talk_distance, mpHIO->m.common.talk_angle);
     attention_info.flags = 0;
 
     #if !PLATFORM_GCN
-    scale.set(daNpcBlueNS_Param_c::m.common.scale, daNpcBlueNS_Param_c::m.common.scale, daNpcBlueNS_Param_c::m.common.scale);
-    mAcchCir.SetWallR(daNpcBlueNS_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpcBlueNS_Param_c::m.common.height);
-    gravity = daNpcBlueNS_Param_c::m.common.gravity;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.height);
+    gravity = mpHIO->m.common.gravity;
     #endif
 }
 
@@ -590,7 +611,7 @@ void daNpcBlueNS_c::setAttnPos() {
     mHeadAngle.x = cLib_targetAngleX(&mHeadPos, &sp20);
     mHeadAngle.y = cLib_targetAngleY(&mHeadPos, &sp20);
 
-    attention_info.position.set(mHeadPos.x, mHeadPos.y + daNpcBlueNS_Param_c::m.common.attention_offset, mHeadPos.z);
+    attention_info.position.set(mHeadPos.x, mHeadPos.y + mpHIO->m.common.attention_offset, mHeadPos.z);
 
     cXyz cyl_center;
     mDoMtx_stack_c::copy(mAnm_p->getModel()->getAnmMtx(1));
@@ -691,13 +712,13 @@ void daNpcBlueNS_c::playMotion() {
     daNpcF_anmPlayData anm5_phase1 = {5, 0.0f, 0};
     daNpcF_anmPlayData* anm5[] = {&anm5_phase1};
 
-    daNpcF_anmPlayData anm6_phase1 = {6, daNpcBlueNS_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData anm6_phase1 = {6, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* anm6[] = {&anm6_phase1};
 
-    daNpcF_anmPlayData anm7_phase1 = {7, daNpcBlueNS_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData anm7_phase1 = {7, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* anm7[] = {&anm7_phase1};
 
-    daNpcF_anmPlayData anm8_phase1 = {8, daNpcBlueNS_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData anm8_phase1 = {8, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* anm8[] = {&anm8_phase1};
 
     daNpcF_anmPlayData** anmData_p[] = {
@@ -741,14 +762,14 @@ void daNpcBlueNS_c::lookat() {
     J3DModel* model_p = mAnm_p->getModel();
 
     int var_r28 = 0;
-    f32 body_angleX_min = daNpcBlueNS_Param_c::m.common.body_angleX_min;
-    f32 body_angleX_max = daNpcBlueNS_Param_c::m.common.body_angleX_max;
-    f32 body_angleY_min = daNpcBlueNS_Param_c::m.common.body_angleY_min;
-    f32 body_angleY_max = daNpcBlueNS_Param_c::m.common.body_angleY_max;
-    f32 head_angleX_min = daNpcBlueNS_Param_c::m.common.head_angleX_min;
-    f32 head_angleX_max = daNpcBlueNS_Param_c::m.common.head_angleX_max;
-    f32 head_angleY_min = daNpcBlueNS_Param_c::m.common.head_angleY_min;
-    f32 head_angleY_max = daNpcBlueNS_Param_c::m.common.head_angleY_max;
+    f32 body_angleX_min = mpHIO->m.common.body_angleX_min;
+    f32 body_angleX_max = mpHIO->m.common.body_angleX_max;
+    f32 body_angleY_min = mpHIO->m.common.body_angleY_min;
+    f32 body_angleY_max = mpHIO->m.common.body_angleY_max;
+    f32 head_angleX_min = mpHIO->m.common.head_angleX_min;
+    f32 head_angleX_max = mpHIO->m.common.head_angleX_max;
+    f32 head_angleY_min = mpHIO->m.common.head_angleY_min;
+    f32 head_angleY_max = mpHIO->m.common.head_angleY_max;
 
     s16 temp_r26 = mCurAngle.y - mOldAngle.y;
     cXyz sp30[] = {mLookatPos[0], mLookatPos[1], mLookatPos[2]};
@@ -814,7 +835,7 @@ BOOL daNpcBlueNS_c::step(s16 i_angY, int param_1) {
 }
 
 BOOL daNpcBlueNS_c::chkFindPlayer() {
-    if (!chkActorInSight(daPy_getPlayerActorClass(), daNpcBlueNS_Param_c::m.common.fov)) {
+    if (!chkActorInSight(daPy_getPlayerActorClass(), mpHIO->m.common.fov)) {
         mActorMngr[0].remove();
         return false;
     }

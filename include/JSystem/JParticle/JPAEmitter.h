@@ -2,7 +2,7 @@
 #define JPAEMITTER_H
 
 #include <dolphin/gx.h>
-#include <stdint>
+#include <stdint.h>
 #include "JSystem/JParticle/JPAResource.h"
 #include "JSystem/JParticle/JPAList.h"
 #include "JSystem/JParticle/JPARandom.h"
@@ -151,7 +151,10 @@ public:
     void setAwayFromAxisSpeed(f32 i_speed) { mAwayFromAxisSpeed = i_speed; }
     void setSpread(f32 i_spread) { mSpread = i_spread; }
     void setLocalTranslation(const JGeometry::TVec3<f32>& i_trans) { mLocalTrs.set(i_trans); }
-    void setLocalRotation(const JGeometry::TVec3<s16>& i_rot) { mLocalRot.set(i_rot.x * 0.005493248f, i_rot.y * 0.005493248f, i_rot.z * 0.005493248f); }
+    void setLocalRotation(const JGeometry::TVec3<s16>& i_rot) {
+        mLocalRot.set(i_rot.x * (360.0f / 0xffff), i_rot.y * (360.0f / 0xffff),
+                      i_rot.z * (360.0f / 0xffff));
+    }
     void setRateStep(u8 i_step) { mRateStep = i_step; }
 
     void setGlobalParticleHeightScale(f32 height) {

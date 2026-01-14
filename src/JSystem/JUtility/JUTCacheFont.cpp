@@ -6,7 +6,7 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JKernel/JKRAram.h"
 #include "dolphin/gx.h"
-#include <stdint>
+#include <stdint.h>
 
 JUTCacheFont::JUTCacheFont(ResFONT const* p_fontRes, u32 cacheSize, JKRHeap* p_heap) {
     initialize_state();

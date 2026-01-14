@@ -5,63 +5,33 @@
 #include "d/actor/d_a_npc.h"
 
 struct daNpc_Taro_HIOParam {
-    /* 0x00 */ f32 mAttentionPosYOffset;
-    /* 0x04 */ f32 mGravity;
-    /* 0x08 */ f32 mScale;
-    /* 0x0C */ f32 field_0x0c;
-    /* 0x10 */ f32 mSttsWeight;
-    /* 0x14 */ f32 mCylH;
-    /* 0x18 */ f32 mWallH;
-    /* 0x1C */ f32 mWallR;
-    /* 0x20 */ f32 mBodyDownAngle;
-    /* 0x24 */ f32 mBodyUpAngle;
-    /* 0x28 */ f32 mBodyRightAngle;
-    /* 0x2C */ f32 mBodyLeftAngle;
-    /* 0x30 */ f32 mHeadDownAngle;
-    /* 0x34 */ f32 mHeadUpAngle;
-    /* 0x38 */ f32 mHeadRightAngle;
-    /* 0x3C */ f32 mHeadLeftAngle;
-    /* 0x40 */ f32 field_0x40;
-    /* 0x44 */ f32 mMorfFrames;
-    /* 0x48 */ s16 field_0x48;
-    /* 0x4A */ s16 field_0x4a;
-    /* 0x4C */ s16 field_0x4c;
-    /* 0x4E */ s16 field_0x4e;
-    /* 0x50 */ f32 mAttnFovY;
-    /* 0x54 */ f32 field_0x54;
-    /* 0x58 */ f32 field_0x58;
-    /* 0x5C */ f32 field_0x5c;
-    /* 0x60 */ s16 field_0x60;
-    /* 0x62 */ s16 field_0x62;
-    /* 0x64 */ f32 field_0x64;
-    /* 0x68 */ f32 field_0x68;
-    /* 0x6C */ f32 field_0x6c;
-    /* 0x70 */ f32 field_0x70;
-    /* 0x74 */ f32 field_0x74;
-    /* 0x78 */ f32 field_0x78;
-    /* 0x7C */ f32 field_0x7c;
-    /* 0x80 */ f32 field_0x80;
-    /* 0x84 */ f32 field_0x84;
-    /* 0x88 */ f32 field_0x88;
+    /* 0x00 */ daNpcT_HIOParam common;
     /* 0x8C */ s16 mChoccaiTimer;
     /* 0x8E */ s16 field_0x8e;
 };
 
 class daNpc_Taro_Param_c {
-    public:
-        virtual ~daNpc_Taro_Param_c() {}
-    
-        static daNpc_Taro_HIOParam const m;
-    };
-
-class daNpc_Taro_HIO_c 
-#if DEBUG
-: public mDoHIO_entry_c 
-#endif
-{
 public:
-    void genMessage(JORMContext*);
+    virtual ~daNpc_Taro_Param_c() {}
+
+    static daNpc_Taro_HIOParam const m;
 };
+
+#if DEBUG
+class daNpc_Taro_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Taro_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Taro_HIOParam m;
+};
+#define NPC_TARO_HIO_CLASS daNpc_Taro_HIO_c
+#else
+#define NPC_TARO_HIO_CLASS daNpc_Taro_Param_c
+#endif
 
 /**
  * @ingroup actors-npcs
@@ -191,7 +161,7 @@ public:
     static cutFunc mCutList[17];
 
 private:
-    /* 0x0E40 */ daNpc_Taro_HIO_c* field_0xe40;
+    /* 0x0E40 */ NPC_TARO_HIO_CLASS* mpHIO;
     /* 0x0E44 */ J3DModel* mModels[2];
     /* 0x0E4C */ dCcD_Cyl mCyl1;
     /* 0x0F88 */ dCcD_Cyl mCyl2;

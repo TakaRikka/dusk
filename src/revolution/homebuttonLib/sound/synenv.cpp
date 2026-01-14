@@ -2,7 +2,7 @@
 
 
 #include <climits>
-#include <math>
+#include <cmath>
 
 #include <revolution/types.h>
 

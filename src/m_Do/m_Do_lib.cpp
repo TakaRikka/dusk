@@ -46,7 +46,7 @@ void mDoLib_clipper::setup(f32 fovy, f32 aspect, f32 near, f32 far) {
     mSystemFar = far;
     mClipper.calcViewFrustum();
 
-    s16 tmp = fovy * 182.04444885253906f;
+    s16 tmp = DEG2S(fovy);
 
     mFovyRate = cM_scos(tmp) / cM_ssin(tmp);
 }

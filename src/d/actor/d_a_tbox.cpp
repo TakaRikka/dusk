@@ -9,7 +9,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "SSystem/SComponent/c_math.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include <math>
+#include <cmath>
 
 static const f32 l_cull_size_box[6] = { -150.0f, -10.0f, -150.0f, 150.0f, 300.0f, 100.0f };
 
@@ -1498,8 +1498,8 @@ void daTbox_c::settingDropDemoCamera() {
     cXyz spA0;
     cXyz spAC;
 
-    spA0.x = stage_arrow_data->position.x;
-    spA0.z = stage_arrow_data->position.z;
+    spA0.x = stage_arrow_data->posX;
+    spA0.z = stage_arrow_data->posZ;
     spAC.x = home.pos.x;
     spAC.z = home.pos.z;
     f32 var_f30 = spA0.abs(spAC);
@@ -1510,16 +1510,16 @@ void daTbox_c::settingDropDemoCamera() {
     s16 angle;
     getDropSAngle(&angle);
 
-    spB8.x = stage_arrow_data->position.x;
+    spB8.x = stage_arrow_data->posX;
     spB8.y = 0.0f;
-    spB8.z = stage_arrow_data->position.z;
+    spB8.z = stage_arrow_data->posZ;
     spB8 -= home.pos;
 
     Mtx mtx;
     MTXRotAxisRad(mtx, &spC4, cM_s2rad(angle));
     mDoMtx_multVec(mtx, &spB8, &spB8);
     spB8 += home.pos;
-    spB8.y = stage_arrow_data->position.y;
+    spB8.y = stage_arrow_data->posY;
 
     cXyz cam_eye;
     cXyz cam_center;
@@ -1527,10 +1527,10 @@ void daTbox_c::settingDropDemoCamera() {
     cam_eye = spB8;
     cam_center = home.pos;
 
-    f32 var_f29 = cM_ssin(stage_arrow_data->angle.x);
-    f32 var_f28 = cM_scos(stage_arrow_data->angle.x);
+    f32 var_f29 = cM_ssin(stage_arrow_data->angleX);
+    f32 var_f28 = cM_scos(stage_arrow_data->angleX);
     f32 dist = var_f30 * (var_f29 / var_f28);
-    if (stage_arrow_data->angle.x > 0) {
+    if (stage_arrow_data->angleX > 0) {
         dist = -dist;
     }
 

@@ -37,18 +37,18 @@ void fpcLy_DeletingMesg(layer_class* i_layer);
 BOOL fpcLy_IsCreatingMesg(layer_class* i_layer);
 BOOL fpcLy_IsDeletingMesg(layer_class* i_layer);
 
-s32 fpcLy_IntoQueue(layer_class* i_layer, int i_treeListNo, create_tag_class* i_createTag, int i_no);
-s32 fpcLy_ToQueue(layer_class* i_layer, int treeListIdx, create_tag_class* i_createTag);
-s32 fpcLy_QueueTo(layer_class* i_layer, create_tag_class* i_createTag);
+int fpcLy_IntoQueue(layer_class* i_layer, int i_treeListNo, create_tag_class* i_createTag, int i_no);
+int fpcLy_ToQueue(layer_class* i_layer, int treeListIdx, create_tag_class* i_createTag);
+int fpcLy_QueueTo(layer_class* i_layer, create_tag_class* i_createTag);
 
 int fpcLy_Cancel(layer_class* i_layer);
 BOOL fpcLy_CancelMethod(process_method_tag_class* i_layer);
 
 void fpcLy_CancelQTo(process_method_tag_class* i_methods);
-s32 fpcLy_ToCancelQ(layer_class* i_layer, process_method_tag_class* i_methods);
+int fpcLy_ToCancelQ(layer_class* i_layer, process_method_tag_class* i_methods);
 
 void fpcLy_Create(layer_class* i_layer, void* i_node, node_list_class* i_nodeList, int i_numLists);
 
-s32 fpcLy_Delete(layer_class* i_layer);
+int fpcLy_Delete(layer_class* i_layer);
 
 #endif

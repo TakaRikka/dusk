@@ -3,7 +3,7 @@
 #include "JSystem/JGadget/define.h"
 
 #define MSL_USE_INLINES 1
-#include <ctype>
+#include <cctype>
 
 JGadget_outMessage::JGadget_outMessage(MessageFunc fn, const char* file, int line) {
     mMsgFunc = fn;

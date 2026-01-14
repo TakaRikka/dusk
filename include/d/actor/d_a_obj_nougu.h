@@ -5,6 +5,37 @@
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
 
+struct daObj_Nougu_HIOParam {
+    /* 0x0 */ f32 attention_offset;
+    /* 0x4 */ f32 gravity;
+    /* 0x8 */ f32 scale;
+    /* 0xC */ f32 shadow_size;
+};
+
+class daObj_Nougu_Param_c {
+public:
+    virtual ~daObj_Nougu_Param_c() {}
+
+    static const daObj_Nougu_HIOParam m;
+};
+
+#if DEBUG
+class daObj_Nougu_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_Nougu_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_Nougu_HIOParam m;
+};
+
+#define OBJ_NOUGU_HIO_CLASS daObj_Nougu_HIO_c
+#else
+#define OBJ_NOUGU_HIO_CLASS daObj_Nougu_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObj_Nougu_c
@@ -15,7 +46,7 @@
  */
 class daObj_Nougu_c : public fopAc_ac_c {
 public:
-    /* 0x568 */ u8 field_0x568[0x56C - 0x568];
+    /* 0x568 */ OBJ_NOUGU_HIO_CLASS* mpHIO;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ dBgS_ObjAcch mAcch;
@@ -46,20 +77,6 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daObj_Nougu_c) == 0xe30);
-
-struct daObj_Nougu_HIOParam {
-    /* 0x0 */ f32 attention_offset;
-    /* 0x4 */ f32 gravity;
-    /* 0x8 */ f32 scale;
-    /* 0xC */ f32 shadow_size;
-};
-
-class daObj_Nougu_Param_c {
-public:
-    virtual ~daObj_Nougu_Param_c() {}
-
-    static const daObj_Nougu_HIOParam m;
-};
 
 
 #endif /* D_A_OBJ_NOUGU_H */

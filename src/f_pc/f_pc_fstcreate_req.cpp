@@ -8,7 +8,7 @@
 #include "f_pc/f_pc_layer.h"
 #include "f_pc/f_pc_load.h"
 
-s32 fpcFCtRq_Do(fast_create_request* i_createReq) {
+int fpcFCtRq_Do(fast_create_request* i_createReq) {
     if (i_createReq->create_func != NULL &&
         i_createReq->create_func(i_createReq->base.process, i_createReq->data) == 0)
     {
@@ -18,7 +18,7 @@ s32 fpcFCtRq_Do(fast_create_request* i_createReq) {
     }
 }
 
-s32 fpcFCtRq_Delete(fast_create_request* i_createReq) {
+int fpcFCtRq_Delete(fast_create_request* i_createReq) {
     return 1;
 }
 

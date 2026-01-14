@@ -17,7 +17,7 @@
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "d/d_s_play.h"
-#include <stdio>
+#include <cstdio>
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_graphic.h"

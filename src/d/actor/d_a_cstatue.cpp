@@ -1043,7 +1043,7 @@ void daCstatue_c::initStartBrkBtk() {
     for (int iParticle = 0; iParticle < 2; iParticle++) {
         dComIfGp_particle_set(0x88bb, &mBallPos, &angle, NULL);
         dComIfGp_particle_set(0x88bc, &mBallPos, &angle, NULL);
-        ADD_ANGLE(angle.y, 0x8000);
+        ADD_ANGLE_2(angle.y, 0x8000);
     }
 }
 

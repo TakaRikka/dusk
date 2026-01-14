@@ -2,7 +2,6 @@
 #define J3DJOINT_H
 
 #include "JSystem/J3DGraphBase/J3DTransform.h"
-#include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 
 class J3DAnmTransform;
@@ -143,17 +142,6 @@ public:
     virtual void calc() {
         J3DTransformInfo& transInfo = getJoint()->getTransformInfo();
         A::calcTransform(transInfo);
-    }
-};
-
-/**
- * @ingroup jsystem-j3d
- * 
- */
-struct J3DMtxCalcJ3DSysInitSoftimage {
-    static void init(const Vec& param_0, const Mtx& param_1) {
-        J3DSys::mCurrentS = param_0;
-        MTXCopy(param_1, J3DSys::mCurrentMtx);
     }
 };
 

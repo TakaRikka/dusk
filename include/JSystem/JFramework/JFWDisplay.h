@@ -25,6 +25,7 @@ public:
     void cancelAlarm() { OSCancelAlarm(this); }
     void removeLink() { sList.remove(&mLink); }
     void appendLink() { sList.append(&mLink); }
+    OSAlarm* getAlarm() const { return (OSAlarm*)this; }
     OSThread* getThread() const { return mThread; }
     void setThread(OSThread* thread) { mThread = thread; }
 
@@ -134,7 +135,7 @@ private:
     /* 0x4A */ u8 field_0x4a;
 };
 
-inline void JUTChangeFrameBuffer(void* buffer, u16 height, u16 width) {
+inline void JUTChangeFrameBuffer(void* buffer, u16 width, u16 height) {
     JUTDirectPrint::getManager()->changeFrameBuffer(buffer, width, height);
 }
 

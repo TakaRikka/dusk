@@ -953,6 +953,23 @@ void daNpcBouS_c::lookat() {
     mLookat.calc(this, mdl_p->getBaseTRMtx(), lookatAngle, i_snap, angle_delta, FALSE);
 }
 
+BOOL daNpcBouS_c::chkFindPlayer() {
+    BOOL inArea = FALSE;
+    if (mActorMngrs[0].getActorP() == NULL) {
+        inArea = chkPlayerInSpeakArea(this);
+    } else {
+        inArea = chkPlayerInTalkArea(this);
+    }
+
+    if (inArea) {
+        mActorMngrs[0].entry(daPy_getPlayerActorClass());
+    } else {
+        mActorMngrs[0].remove();
+    }
+
+    return inArea;
+}
+
 BOOL daNpcBouS_c::step(s16 i_turnTargetAngle, int param_2) {
     if (mTurnMode == 0) {
         if (param_2 != 0) {
@@ -1594,7 +1611,7 @@ int daNpcBouS_c::drawDbgInfo() {
     return 0;
 }
 
-void daNpcBouS_c::drawOtherMdls() {}
+inline void daNpcBouS_c::drawOtherMdls() {}
 
 AUDIO_INSTANCES;
 

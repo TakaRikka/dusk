@@ -5,9 +5,13 @@
 
 #include "f_pc/f_pc_manager.h"
 #include "SSystem/SComponent/c_API_graphic.h"
+#include "SSystem/SComponent/c_lib.h"
+#include "Z2AudioLib/Z2SoundMgr.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_error_msg.h"
 #include "d/d_lib.h"
-#include "f_op/f_op_scene.h"
+#include "d/d_particle.h"
+#include "f_ap/f_ap_game.h"
 #include "f_pc/f_pc_creator.h"
 #include "f_pc/f_pc_deletor.h"
 #include "f_pc/f_pc_draw.h"
@@ -15,22 +19,21 @@
 #include "f_pc/f_pc_line.h"
 #include "f_pc/f_pc_pause.h"
 #include "f_pc/f_pc_priority.h"
-#include "f_pc/f_pc_profile.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 void fpcM_Draw(void* i_proc) {
     fpcDw_Execute((base_process_class*)i_proc);
 }
 
-s32 fpcM_DrawIterater(fpcM_DrawIteraterFunc i_drawIterFunc) {
+int fpcM_DrawIterater(fpcM_DrawIteraterFunc i_drawIterFunc) {
     return fpcLyIt_OnlyHere(fpcLy_RootLayer(), (fpcLyIt_OnlyHereFunc)i_drawIterFunc, NULL);
 }
 
-s32 fpcM_Execute(void* i_proc) {
+int fpcM_Execute(void* i_proc) {
     return fpcEx_Execute((base_process_class*)i_proc);
 }
 
-s32 fpcM_Delete(void* i_proc) {
+int fpcM_Delete(void* i_proc) {
     return fpcDt_Delete((base_process_class*)i_proc);
 }
 
@@ -40,7 +43,10 @@ BOOL fpcM_IsCreating(fpc_ProcID i_id) {
 
 void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_postExecuteFn) {
     MtxInit();
-    dComIfGd_peekZdata();
+    if (!fapGm_HIO_c::isCaptureScreen()) {
+        dComIfGd_peekZdata();
+    }
+    fapGm_HIO_c::executeCaptureScreen();
 
     if (!dShutdownErrorMsg_c::execute()) {
         static bool l_dvdError = false;
@@ -72,8 +78,12 @@ void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_p
                 i_preExecuteFn();
             }
 
-            fpcEx_Handler((fpcLnIt_QueueFunc)fpcM_Execute);
-            fpcDw_Handler((fpcDw_HandlerFuncFunc)fpcM_DrawIterater, (fpcDw_HandlerFunc)fpcM_Draw);
+            if (!fapGm_HIO_c::isCaptureScreen()) {
+                fpcEx_Handler((fpcLnIt_QueueFunc)fpcM_Execute);
+            }
+            if (!fapGm_HIO_c::isCaptureScreen() || fapGm_HIO_c::getCaptureScreenDivH() != 1) {
+                fpcDw_Handler((fpcDw_HandlerFuncFunc)fpcM_DrawIterater, (fpcDw_HandlerFunc)fpcM_Draw);
+            }
 
             if (i_postExecuteFn != NULL) {
                 i_postExecuteFn();
@@ -83,7 +93,16 @@ void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_p
         } else if (!l_dvdError) {
             dLib_time_c::stopTime();
             Z2GetSoundMgr()->pauseAllGameSound(true);
-            mDoCPd_c::stopMotorWaveHard(0);
+#if PLATFORM_GCN
+#define FPCM_MANAGEMENT_GAMEPAD_COUNT 1
+#elif PLATFORM_SHIELD && !DEBUG
+#define FPCM_MANAGEMENT_GAMEPAD_COUNT 0
+#else
+#define FPCM_MANAGEMENT_GAMEPAD_COUNT 4
+#endif
+            for (u32 i = 0; i < FPCM_MANAGEMENT_GAMEPAD_COUNT; i++) {
+                mDoCPd_c::stopMotorWaveHard(i);
+            }
             l_dvdError = true;
         }
     }
@@ -103,7 +122,7 @@ base_process_class* fpcM_FastCreate(s16 i_procname, FastCreateReqFunc i_createRe
                             i_createData, i_append);
 }
 
-s32 fpcM_IsPause(void* i_proc, u8 i_flag) {
+int fpcM_IsPause(void* i_proc, u8 i_flag) {
     return fpcPause_IsEnable((base_process_class*)i_proc, i_flag & 0xFF);
 }
 
@@ -127,3 +146,4 @@ void* fpcM_JudgeInLayer(fpc_ProcID i_layerID, fpcCtIt_JudgeFunc i_judgeFunc, voi
 
     return NULL;
 }
+

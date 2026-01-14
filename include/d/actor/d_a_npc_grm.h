@@ -4,6 +4,33 @@
 #include "d/actor/d_a_npc.h"
 #include "d/d_shop_system.h"
 
+struct daNpc_grM_HIOParam {
+    /* 0x0 */ daNpcT_HIOParam common;
+};
+
+class daNpc_grM_Param_c {
+public:
+    virtual ~daNpc_grM_Param_c() {}
+
+    static daNpc_grM_HIOParam const m;
+};
+
+#if DEBUG
+class daNpc_grM_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_grM_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    /* 0x8 */ daNpc_grM_HIOParam m;
+};
+#define NPC_GRM_HIO_CLASS daNpc_grM_HIO_c
+#else
+#define NPC_GRM_HIO_CLASS daNpc_grM_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_grM_c
@@ -108,7 +135,7 @@ public:
     static cutFunc mCutList[2];
 
 private:
-    /* 0x0F7C */ u8 field_0xf7c[0xf80 - 0xf7c];
+    /* 0x0F7C */ NPC_GRM_HIO_CLASS* mpHIO;
     /* 0x0F80 */ dCcD_Cyl mCyl;
     /* 0x10BC */ u8 mType;
     /* 0x10C0 */ actionFunc mNextAction;
@@ -121,21 +148,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_grM_c) == 0x10e4);
-
-struct daNpc_grM_HIOParam {
-    /* 0x0 */ daNpcT_HIOParam common;
-};
-
-class daNpc_grM_HIO_c : public mDoHIO_entry_c {
-public:
-    /* 0x8 */ daNpc_grM_HIOParam param;
-};
-
-class daNpc_grM_Param_c {
-public:
-    virtual ~daNpc_grM_Param_c() {}
-
-    static daNpc_grM_HIOParam const m;
-};
 
 #endif /* D_A_NPC_GRM_H */

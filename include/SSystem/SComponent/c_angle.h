@@ -3,12 +3,30 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 
-#if PLATFORM_SHIELD
 #define ADD_ANGLE(x, y) ((x) += (s16)(y))
+#define SUB_ANGLE(x, y) ((x) -= (s16)(y))
+#define MULT_ANGLE(x, y) ((x) *= (s16)(y))
+
+// There are some angles that weren't sign-extended until the shield version
+#if !PLATFORM_SHIELD
+    #define ADD_ANGLE_2(x, y) ((x) += (y))
+    #define SUB_ANGLE_2(x, y) ((x) -= (y))
+    #define MULT_ANGLE_2(x, y) ((x) *= (y))
 #else
-#define ADD_ANGLE(x, y) ((x) += (y))
+    #define ADD_ANGLE_2(x, y) ADD_ANGLE(x, y)
+    #define SUB_ANGLE_2(x, y) SUB_ANGLE(x, y)
+    #define MULT_ANGLE_2(x, y) MULT_ANGLE(x, y)
 #endif
 
+#define DEG2S_CONSTANT (0x8000 / 180.0f)
+#define S2DEG_CONSTANT (180.0f / 0x8000)
+#define S2RAD_CONSTANT (M_PI / 0x8000)
+#define RAD2S_CONSTANT (0x8000 / M_PI)
+
+#define DEG2S(x) ((s16)((x) * DEG2S_CONSTANT))
+#define S2DEG(x) ((x) * S2DEG_CONSTANT)
+#define S2RAD(x) ((x) * S2RAD_CONSTANT)
+#define RAD2S(x) ((x) * RAD2S_CONSTANT)
 
 class cSAngle {
 private:
@@ -67,13 +85,13 @@ cSAngle operator+(short, const cSAngle&);
 cSAngle operator-(short, const cSAngle&);
 
 struct cAngle {
-    static f32 Radian_to_Degree(f32 rad) { return rad * 57.2957763671875f; }
-    static f32 Degree_to_Radian(f32 deg) { return deg * 0.017453292f; }
-    static s16 Degree_to_SAngle(f32 deg) { return deg * 182.04444885253906f; }
-    static f32 SAngle_to_Degree(s16 angle) { return (360.0f / 65536.0f) * angle; }
-    static f32 SAngle_to_Radian(s16 angle) { return 9.58738E-5f * angle; }
-    static f32 SAngle_to_Normal(s16 angle) { return 3.0517578E-5f * angle; }
-    static s16 Radian_to_SAngle(f32 rad) { return rad * 10430.378f; }
+    static f32 Radian_to_Degree(f32 rad) { return rad * (180.0f / M_PI); }
+    static f32 Degree_to_Radian(f32 deg) { return deg * (M_PI / 180.0f); }
+    static s16 Degree_to_SAngle(f32 deg) { return DEG2S(deg); }
+    static f32 SAngle_to_Degree(s16 angle) { return S2DEG(angle); }
+    static f32 SAngle_to_Radian(s16 angle) { return angle * (M_PI / 0x8000); }
+    static f32 SAngle_to_Normal(s16 angle) { return angle * (1.0f / 0x8000); }
+    static s16 Radian_to_SAngle(f32 rad) { return rad * (0x8000 / M_PI); }
 
     /* Converts Radian value into Degree value */
     static f32 r2d(f32 r) { return Radian_to_Degree(r); }

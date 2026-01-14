@@ -3,22 +3,8 @@
 
 #include "d/actor/d_a_npc.h"
 
-/**
- * @ingroup actors-npcs
- * @class daNpc_Pachi_Besu_c
- * @brief Beth (Slingshot Tutorial)
- *
- * @details
- *
-*/
-
 struct daNpc_Pachi_Besu_HIOParam {
     /* 0x0 */ daNpcT_HIOParam common;
-};
-
-class daNpc_Pachi_Besu_HIO_c : public mDoHIO_entry_c {
-public:
-    /* 0x8 */ daNpc_Pachi_Besu_HIOParam param;
 };
 
 class daNpc_Pachi_Besu_Param_c {
@@ -28,6 +14,31 @@ public:
     static daNpc_Pachi_Besu_HIOParam const m;
 };
 
+#if DEBUG
+class daNpc_Pachi_Besu_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Pachi_Besu_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Pachi_Besu_HIOParam m;
+};
+
+#define NPC_PACHI_BESU_HIO_CLASS daNpc_Pachi_Besu_HIO_c
+#else
+#define NPC_PACHI_BESU_HIO_CLASS daNpc_Pachi_Besu_Param_c
+#endif
+
+/**
+ * @ingroup actors-npcs
+ * @class daNpc_Pachi_Besu_c
+ * @brief Beth (Slingshot Tutorial)
+ *
+ * @details
+ *
+*/
 class daNpc_Pachi_Besu_c : public daNpcT_c {
 public:
     typedef BOOL (daNpc_Pachi_Besu_c::*actionFunc)(void*);
@@ -137,7 +148,7 @@ public:
     static cutFunc mCutList[11];
 
 private:
-    /* 0xE40 */ daNpc_Pachi_Besu_HIO_c* mHIO;
+    /* 0xE40 */ NPC_PACHI_BESU_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;
     /* 0xF81 */ u8 mTalk;

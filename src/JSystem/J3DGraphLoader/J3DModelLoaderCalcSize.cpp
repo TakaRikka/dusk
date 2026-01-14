@@ -5,41 +5,44 @@
 #include "JSystem/J3DGraphLoader/J3DShapeFactory.h"
 #include "JSystem/J3DGraphLoader/J3DMaterialFactory.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "dolphin/os.h"
 #include "global.h"
 
-
 u16 J3DModelLoader::countMaterialNum(const void* stream) {
     const J3DModelFileData* header = (const J3DModelFileData*)stream;
     const J3DModelBlock* block = header->mBlocks;
-    for (int i = 0; i < header->mBlockNum; block = (const J3DModelBlock*)((u8*)block + block->mBlockSize), i++)
+    for (int i = 0; i < header->mBlockNum; i++)
     {
         if (block->mBlockType == 'MAT3') {
-            return ((const J3DMaterialBlock*)block)->mMaterialNum;
+            const J3DMaterialBlock* materialBlock = (const J3DMaterialBlock*)block;
+            return materialBlock->mMaterialNum;
         }
+        block = (const J3DModelBlock*)((u8*)block + block->mBlockSize);
     }
     return 0;
 }
 
+static void dummy() {
+    JUT_PANIC(0, "Error : null pointer.");
+}
+
 u32 J3DModelLoader::calcLoadSize(void const* stream, u32 flags_) {
     int flags = flags_;
-    const J3DModelFileData* header = static_cast<const J3DModelFileData*>(stream);
     size_t size = 0;
-    const J3DModelBlock* nextBlock = header->mBlocks;
-    u32 i = 0;
     // TODO: What sizeof will get us a size of 0xE4?
     size += 0xE4;
-    for (; i < header->mBlockNum; i++) {
+    const J3DModelFileData* header = static_cast<const J3DModelFileData*>(stream);
+    const J3DModelBlock* nextBlock = header->mBlocks;
+    for (u32 i = 0; i < header->mBlockNum; i++) {
         switch (nextBlock->mBlockType) {
         case 'INF1':
             size += calcSizeInformation((const J3DModelInfoBlock*)nextBlock, flags);
             break;
         case 'JNT1':
             size += calcSizeJoint((const J3DJointBlock*)nextBlock);
-            break;
-        case 'MAT2':
             break;
         case 'MAT3':
             size += calcSizeMaterial((const J3DMaterialBlock*)nextBlock, flags);
@@ -58,6 +61,9 @@ u32 J3DModelLoader::calcLoadSize(void const* stream, u32 flags_) {
             break;
         case 'VTX1':
             break;
+        case 'MAT2':
+            JUT_PANIC(282, "Error : version error.");
+            break;
         default:
             OSReport("Unknown data block\n");
             break;
@@ -68,29 +74,26 @@ u32 J3DModelLoader::calcLoadSize(void const* stream, u32 flags_) {
 }
 
 u32 J3DModelLoader::calcLoadMaterialTableSize(const void* stream) {
-    size_t size;
+    u32 flags = J3DMLF_21 | J3DMLF_Material_UseIndirect | J3DMLF_Material_PE_Full | J3DMLF_Material_Color_LightOn;
+    size_t size = 0;
+    // TODO: What sizeof will get us a size of 0x20? Is this just the file header???
+    size += 0x20;
     const J3DModelBlock* nextBlock;
     bool hasTextureTable;
-    u32 i;
     const J3DModelFileData* header = reinterpret_cast<const J3DModelFileData*>(stream);
     nextBlock = header->mBlocks;
     hasTextureTable = false;
-    i = 0;
-    // TODO: What sizeof will get us a size of 0x20? Is this just the file header???
-    size = 0x20;
-    for (; i < header->mBlockNum; i++) {
+    for (u32 i = 0; i < header->mBlockNum; i++) {
         switch (nextBlock->mBlockType) {
-        case 'MAT2':
-            break;
         case 'MAT3':
-            size +=
-                calcSizeMaterialTable((const J3DMaterialBlock*)nextBlock,
-                                      J3DMLF_21 | J3DMLF_Material_UseIndirect |
-                                          J3DMLF_Material_PE_Full | J3DMLF_Material_Color_LightOn);
+            size += calcSizeMaterialTable((const J3DMaterialBlock*)nextBlock, flags);
             break;
         case 'TEX1':
             size += calcSizeTextureTable((const J3DTextureBlock*)nextBlock);
             hasTextureTable = true;
+            break;
+        case 'MAT2':
+            JUT_PANIC(334, "Error : version error.");
             break;
         default:
             OSReport("Unknown data block\n");
@@ -132,8 +135,6 @@ u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* stream, u32 flags)
 		case 'MDL3':
 			size += calcSizeMaterialDL((const J3DMaterialDLBlock*)nextBlock, flags);
 			break;
-		case 'MAT2':
-			break;
 		case 'MAT3': {
 			u32 flags2 = (J3DMLF_21 | J3DMLF_Material_PE_Full | J3DMLF_Material_Color_LightOn);
             flags2 |= (u32)flags & (J3DMLF_Material_UseIndirect | J3DMLF_26);
@@ -156,6 +157,9 @@ u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* stream, u32 flags)
 			break;
 		case 'VTX1':
 			break;
+        case 'MAT2':
+            JUT_PANIC(436, "Error : version error.");
+			break;
 		default:
             OSReport("Unknown data block\n");
 			break;
@@ -166,18 +170,22 @@ u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* stream, u32 flags)
 }
 
 u32 J3DModelLoader::calcSizeInformation(const J3DModelInfoBlock* block, u32 flags) {
+    J3D_ASSERT_NULLPTR(462, block);
 	int size = 0;
-	switch ((flags | block->mFlags) & J3DMLF_MtxTypeMask) {
+    u32 flags2 = flags | block->mFlags;
+    int r27 = 0;
+	switch (flags2 & J3DMLF_MtxTypeMask) {
 	case J3DMLF_None: // Basic
-		size = 4;
+		size += 4;
 		break;
 	case J3DMLF_MtxSoftImageCalc:
-		size = 4;
+		size += 4;
 		break;
 	case J3DMLF_MtxMayaCalc:
-		size = 4;
+		size += 4;
 		break;
 	default:
+        JUT_PANIC(481, "Error : Invalid MtxCalcType.");
 		break;
 	}
 	mpModelHierarchy = JSUConvertOffsetToPtr<J3DModelHierarchy>(block, block->mpHierarchy);
@@ -185,9 +193,10 @@ u32 J3DModelLoader::calcSizeInformation(const J3DModelInfoBlock* block, u32 flag
 }
 
 u32 J3DModelLoader::calcSizeJoint(const J3DJointBlock* block) {
+    J3D_ASSERT_NULLPTR(499, block);
 	int size = 0;
 	if (block->mpNameTable) {
-		size = 0x10;
+		size += 0x10;
 	}
 	size += (block->mJointNum * sizeof(J3DJoint*));
 	size += (block->mJointNum * sizeof(J3DJoint));
@@ -195,23 +204,28 @@ u32 J3DModelLoader::calcSizeJoint(const J3DJointBlock* block) {
 }
 
 u32 J3DModelLoader::calcSizeEnvelope(const J3DEnvelopeBlock* block) {
+    J3D_ASSERT_NULLPTR(522, block);
 	mEnvelopeSize = block->mWEvlpMtxNum;
 	return 0;
 }
 
 u32 J3DModelLoader::calcSizeDraw(const J3DDrawBlock* block) {
-    return (block->mMtxNum - mEnvelopeSize) * 2; 
+    J3D_ASSERT_NULLPTR(538, block);
+    u32 size = 0;
+    size += (block->mMtxNum - mEnvelopeSize) * 2;
+    return size;
 }
 
 u32 J3DModelLoader_v26::calcSizeMaterial(const J3DMaterialBlock* block, u32 flags) {
-	int padding = 0;
+    J3D_ASSERT_NULLPTR(558, block);
+	size_t size = 0;
 	J3DMaterialFactory factory(*block);
 	u32 count       = block->mMaterialNum;
 	int uniqueCount = factory.countUniqueMaterials();
 	if (block->mpNameTable != NULL) {
-		padding = 0x10;
+		size += 0x10;
 	}
-	size_t size = padding + (count * sizeof(J3DMaterial*));
+	size += (count * sizeof(J3DMaterial*));
 	
     if ((flags & J3DMLF_UseUniqueMaterials) != 0) {
 		// calc for allocated materials as well
@@ -229,15 +243,17 @@ u32 J3DModelLoader_v26::calcSizeMaterial(const J3DMaterialBlock* block, u32 flag
 }
 
 u32 J3DModelLoader::calcSizeShape(const J3DShapeBlock* block, u32 flags) {
+    J3D_ASSERT_NULLPTR(616, block);
 	int size = 0;
 	J3DShapeFactory factory(*block);
 	int count = block->mShapeNum;
 	if (block->mpNameTable) {
-		size = 0x10;
+		size += 0x10;
 	}
 	size += count * sizeof(J3DShape*);
 	size += factory.calcSizeVcdVatCmdBuffer(count);
-	for (J3DModelHierarchy* hierarchy = mpModelHierarchy; hierarchy->mType != 0; hierarchy++) {
+    J3DModelHierarchy* hierarchy;
+	for (hierarchy = mpModelHierarchy; hierarchy->mType != 0; hierarchy++) {
 		if (hierarchy->mType == 0x12) {
 			size += factory.calcSize(hierarchy->mValue, flags);
 		}
@@ -246,12 +262,14 @@ u32 J3DModelLoader::calcSizeShape(const J3DShapeBlock* block, u32 flags) {
 }
 
 u32 J3DModelLoader::calcSizeTexture(const J3DTextureBlock* block) {
+    J3D_ASSERT_NULLPTR(663, block);
 	// TODO: use sizeofs here.
-	int padding = 0;
+	int size = 0;
 	if (block->mpNameTable) {
-		padding = 0x10;
+		size += 0x10;
 	}
-	return padding + 0xC;
+    size += 0xC;
+	return size;
 }
 
 u32 J3DModelLoader_v26::calcSizeMaterialTable(const J3DMaterialBlock* block, u32 flags) {
@@ -259,7 +277,7 @@ u32 J3DModelLoader_v26::calcSizeMaterialTable(const J3DMaterialBlock* block, u32
     u32 count = block->mMaterialNum;
     J3DMaterialFactory factory(*block);
     if (block->mpNameTable) {
-        size = 0x10;
+        size += 0x10;
     }
     size += (count * sizeof(J3DMaterial*));
     for (u16 i = 0; i < count; i++) {
@@ -273,13 +291,13 @@ u32 J3DModelLoader::calcSizeTextureTable(const J3DTextureBlock* block) {
 }
 
 u32 J3DModelLoader::calcSizePatchedMaterial(const J3DMaterialBlock* block, u32 flags) {
-    int padding = 0;
+    int size = 0;
     u32 count = block->mMaterialNum;
     J3DMaterialFactory factory(*block);
     if (block->mpNameTable) {
-        padding = 0x10;
+        size += 0x10;
     }
-    u32 size = padding + (count * sizeof(J3DMaterial*));
+    size += (count * sizeof(J3DMaterial*));
     for (u16 i = 0; i < count; i++) {
         size += factory.calcSize(NULL, J3DMaterialFactory::MATERIAL_TYPE_PATCHED, i, flags);
     }
@@ -287,14 +305,14 @@ u32 J3DModelLoader::calcSizePatchedMaterial(const J3DMaterialBlock* block, u32 f
 }
 
 u32 J3DModelLoader::calcSizeMaterialDL(const J3DMaterialDLBlock* block, u32 flags_) {
+    J3D_ASSERT_NULLPTR(758, block);
     int flags = flags_;
 	size_t size = 0;
 	J3DMaterialFactory factory(*block);
-	;
 	if (!field_0x18) {
 		u32 count = block->mMaterialNum;
 		if (block->mpNameTable) {
-			size = 0x10;
+			size += 0x10;
 		}
 		size += count * sizeof(J3DLockedMaterial*);
 		for (u16 i = 0; i < count; i++) {

@@ -1,4 +1,5 @@
 #include "CaptureScreen.h"
+#include "global.h"
 
 CaptureScreen::CaptureScreen(const JFWDisplay* pDisplay) {
     mpDisplay = pDisplay;

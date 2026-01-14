@@ -4,6 +4,32 @@
 #include "d/actor/d_a_npc4.h"
 #include "d/d_msg_object.h"
 
+struct daNpcDoorBoy_HIOParam {
+    /* 0x0 */ daNpcF_HIOParam common;
+};
+
+class daNpcDoorBoy_Param_c {
+public:
+    virtual ~daNpcDoorBoy_Param_c() {}
+
+    static daNpcDoorBoy_HIOParam const m;
+};
+
+#if DEBUG
+class daNpcDoorBoy_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpcDoorBoy_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    daNpcDoorBoy_HIOParam m;
+};
+
+#define NPC_DOORBOY_HIO_CLASS daNpcDoorBoy_HIO_c
+#else
+#define NPC_DOORBOY_HIO_CLASS daNpcDoorBoy_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpcDoorBoy_c
@@ -12,11 +38,6 @@
  * @details
  *
 */
-
-struct daNpcDoorBoy_HIOParam {
-    /* 0x0 */ daNpcF_HIOParam common;
-};
-
 class daNpcDoorBoy_c : public daNpcF_c {
 public:
     typedef bool (daNpcDoorBoy_c::*actionFunc)(void*);
@@ -64,7 +85,7 @@ private:
     /* 0xBEC */ u8 field_0xbec[0xbf0 - 0xbec];
     /* 0xBF0 */ daNpcF_Lookat_c mLookat;
     /* 0xC8C */ daNpcF_ActorMngr_c mActorMngr[1];
-    /* 0xC95 */ u8 field_0xc94[0xc98 - 0xc94];
+    /* 0xC95 */ NPC_DOORBOY_HIO_CLASS* mpHIO;
     /* 0xC98 */ dCcD_Cyl field_0xc98;
     /* 0xDD4 */ actionFunc mAction;
     /* 0xDE0 */ request_of_phase_process_class mPhases[2];
@@ -79,13 +100,6 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpcDoorBoy_c) == 0xe08);
-
-class daNpcDoorBoy_Param_c {
-public:
-    virtual ~daNpcDoorBoy_Param_c() {}
-
-    static daNpcDoorBoy_HIOParam const m;
-};
 
 
 #endif /* D_A_NPC_DOORBOY_H */

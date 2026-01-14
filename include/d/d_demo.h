@@ -10,6 +10,7 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include "Z2AudioLib/Z2SoundStarter.h"
 #include "f_op/f_op_actor_mng.h"
+#include "SSystem/SComponent/c_angle.h"
 
 class J3DModel;
 class dDemo_actor_c;
@@ -118,9 +119,9 @@ public:
         *o_scale = mScale;
     }
     virtual void JSGGetRotation(Vec* param_0) const {
-        param_0->x = mRotate.x * 0.005493164f;
-        param_0->y = mRotate.y * 0.005493164f;
-        param_0->z = mRotate.z * 0.005493164f;
+        param_0->x = S2DEG(mRotate.x);
+        param_0->y = S2DEG(mRotate.y);
+        param_0->z = S2DEG(mRotate.z);
     }
 
     void setModel(J3DModel* p_model) { mModel = p_model; }

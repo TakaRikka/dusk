@@ -64,7 +64,7 @@ int daObjWPndlm_c::Create() {
     if (arg0 == 0 || arg0 == 255) {
         arg0 = 0;
     }
-    field_0x958 = arg0 * 182.04445f;
+    field_0x958 = DEG2S(arg0);
 
     return 1;
 }

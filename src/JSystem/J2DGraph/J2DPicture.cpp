@@ -10,7 +10,7 @@
 #include "dolphin/gx.h"
 
 J2DPicture::J2DPicture() : mPalette(NULL) {
-    for (int i = 0; i < 2; i++) {
+    for (u32 i = 0; i < 2; i++) {
         mTexture[i] = NULL;
     }
 
@@ -67,23 +67,12 @@ J2DPicture::J2DPicture(J2DPane* p_pane, JSURandomInputStream* p_stream, J2DMater
 
     if (material != NULL && material->getTevBlock() != NULL) {
         u8 texgenNum = material->getTexGenBlock()->getTexGenNum();
-        u32 stageNum = material->getTevBlock()->getTevStageNum();
+        u8 stageNum = u8(material->getTevBlock()->getTevStageNum());
 
         if ((texgenNum == 1 && stageNum != 1) || (texgenNum != 1 && (int)stageNum != texgenNum + 1))
         {
-            J2DGXColorS10* color0p = material->getTevBlock()->getTevColor(0);
-            GXColorS10 color0;
-            color0.r = color0p->r;
-            color0.g = color0p->g;
-            color0.b = color0p->b;
-            color0.a = color0p->a;
-
-            J2DGXColorS10* color1p = material->getTevBlock()->getTevColor(1);
-            GXColorS10 color1;
-            color1.r = color1p->r;
-            color1.g = color1p->g;
-            color1.b = color1p->b;
-            color1.a = color1p->a;
+            J2DGXColorS10 color0 = *material->getTevBlock()->getTevColor(0);
+            J2DGXColorS10 color1 = *material->getTevBlock()->getTevColor(1);
 
             mBlack = JUtility::TColor(((u8)color0.r << 0x18) | ((u8)color0.g << 0x10) |
                                       ((u8)color0.b << 8) | (u8)color0.a);
@@ -91,7 +80,7 @@ J2DPicture::J2DPicture(J2DPane* p_pane, JSURandomInputStream* p_stream, J2DMater
                                       ((u8)color1.b << 8) | (u8)color1.a);
         }
 
-        mTextureNum = texgenNum <= 2 ? texgenNum : 2;
+        mTextureNum = texgenNum > 2 ? 2 : texgenNum;
     }
 
     field_0x109 = 0;
@@ -127,7 +116,7 @@ J2DPicture::J2DPicture(J2DPane* p_pane, JSURandomInputStream* p_stream, J2DMater
 }
 
 J2DPicture::J2DPicture(ResTIMG const* p_timg) {
-    for (int i = 0; i < 2; i++) {
+    for (u32 i = 0; i < 2; i++) {
         mTexture[i] = NULL;
     }
 
@@ -145,7 +134,7 @@ J2DPicture::J2DPicture(ResTIMG const* p_timg) {
 J2DPicture::J2DPicture(u64 tag, JGeometry::TBox2<f32> const& bounds, ResTIMG const* p_timg,
                        ResTLUT const* p_tlut)
     : J2DPane(tag, bounds), mPalette(NULL) {
-    for (int i = 0; i < 2; i++) {
+    for (u32 i = 0; i < 2; i++) {
         mTexture[i] = NULL;
     }
 
@@ -169,47 +158,48 @@ void J2DPicture::private_readStream(J2DPane* parent, JSURandomInputStream* strea
 
     ResTIMG* img;
     ResTLUT* lut;
-    u32 var_r27 = 0;
-    u8 var_r26 = stream->readU8();
+    u8 local_172 = 0;
+    u8 local_173 = 0;
+    u8 r29 = stream->readU8();
 
     img = (ResTIMG*)getPointer(stream, 'TIMG', archive);
     lut = (ResTLUT*)getPointer(stream, 'TLUT', archive);
 
-    u8 spA = stream->read8b();
+    local_172 = stream->read8b();
 
-    var_r26 -= 3;
-    if (var_r26 != 0) {
-        var_r27 = stream->read8b();
-        var_r26--;
+    r29 -= 3;
+    if (r29 != 0) {
+        local_173 = stream->read8b();
+        r29--;
     }
 
-    if (var_r26 != 0) {
-        stream->read8b();
-        var_r26--;
+    if (r29 != 0) {
+        u8 local_174 = stream->read8b();
+        r29--;
     }
 
     mBlack = 0;
     mWhite = 0xFFFFFFFF;
 
-    if (var_r26 != 0) {
+    if (r29 != 0) {
         mBlack = stream->readU32();
-        var_r26--;
+        r29--;
     }
 
-    if (var_r26 != 0) {
+    if (r29 != 0) {
         mWhite = stream->readU32();
-        var_r26--;
+        r29--;
     }
 
     setCornerColor(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);
-    for (int i = 0; var_r26 != 0 && i < 4; i++) {
+    for (int i = 0; r29 != 0 && i < 4; i++) {
         mCornerColor[i] = stream->readU32();
-        var_r26--;
+        r29--;
     }
 
     stream->seek(headerPosition + header.mSize, JSUStreamSeekFrom_SET);
 
-    for (int i = 0; i < 2; i++) {
+    for (u32 i = 0; i < 2; i++) {
         mTexture[i] = NULL;
     }
 
@@ -226,7 +216,7 @@ void J2DPicture::private_readStream(J2DPane* parent, JSURandomInputStream* strea
         mTexture[0]->attachPalette(mPalette);
     }
 
-    setTexCoord(mTexture[0], (J2DBinding)spA, (J2DMirror)(var_r27 & 3), (bool)((var_r27 >> 2) & 1));
+    setTexCoord(mTexture[0], J2DBinding(local_172), J2DMirror(local_173 & 3), bool(local_173 & 4));
     setBlendRatio(1.0f, 1.0f);
 }
 
@@ -295,8 +285,7 @@ bool J2DPicture::prepareTexture(u8 param_0) {
         }
 
         if (mTexture[i] == NULL) {
-            JUTTexture* tmp = new JUTTexture();
-            mTexture[i] = tmp;
+            mTexture[i] = new JUTTexture();
 
             if (mTexture[i] == NULL) {
                 return 0;
@@ -337,12 +326,12 @@ bool J2DPicture::insert(ResTIMG const* img, JUTPalette* palette, u8 param_2, f32
     } else {
         var_r31 = mTexture[mTextureNum];
         if (palette == NULL) {
-            mTexture[mTextureNum]->storeTIMG(img, var_r26);
+            var_r31->storeTIMG(img, var_r26);
         } else {
-            mTexture[mTextureNum]->storeTIMG(img, palette);
+            var_r31->storeTIMG(img, palette);
         }
 
-        u8 sp8[2];
+        bool sp8[2];
         for (u8 i = 0; i < 2; i++) {
             sp8[i] = (field_0x109 & (1 << i)) != 0;
         }
@@ -382,8 +371,7 @@ bool J2DPicture::insert(ResTIMG const* img, JUTPalette* palette, u8 param_2, f32
 
 
 bool J2DPicture::insert(char const* resName, JUTPalette* palette, u8 param_2, f32 param_3) {
-    void* resource = J2DScreen::getNameResource(resName);
-    return insert((ResTIMG*)resource, palette, param_2, param_3);
+    return insert((ResTIMG*)J2DScreen::getNameResource(resName), palette, param_2, param_3);
 }
 
 bool J2DPicture::insert(JUTTexture* texture, u8 param_1, f32 param_2) {
@@ -464,8 +452,7 @@ const ResTIMG* J2DPicture::changeTexture(ResTIMG const* img, u8 texIndex) {
 
     const ResTIMG* result;
     if (texIndex < mTextureNum) {
-        JUTTexture* tex = getTexture(texIndex);
-        result = tex->getTexInfo();
+        result = getTexture(texIndex)->getTexInfo();
 
         u8 var_r30 = 0;
         if (img->indexTexture != 0) {
@@ -481,8 +468,7 @@ const ResTIMG* J2DPicture::changeTexture(ResTIMG const* img, u8 texIndex) {
 
 
 const ResTIMG* J2DPicture::changeTexture(char const* resName, u8 param_1) {
-    void* resource = J2DScreen::getNameResource(resName);
-    return changeTexture((ResTIMG*)resource, param_1);
+    return changeTexture((ResTIMG*)J2DScreen::getNameResource(resName), param_1);
 }
 
 static bool dummy_weak_order(JUTTexture* tex) {
@@ -497,12 +483,12 @@ const ResTIMG* J2DPicture::changeTexture(ResTIMG const* img, u8 texIndex, JUTPal
 
     const ResTIMG* result;
     if (texIndex < mTextureNum) {
-        JUTTexture* tex = getTexture(texIndex);
-        result = tex->getTexInfo();
+        result = getTexture(texIndex)->getTexInfo();
 
         GXTlut var_r30 = GX_TLUT0;
         if (img->indexTexture != 0) {
-            var_r30 = getTlutID(img, getUsableTlut(texIndex));
+            u8 tlut = getUsableTlut(texIndex);
+            var_r30 = getTlutID(img, tlut);
         }
         getTexture(texIndex)->storeTIMG(img, palette, var_r30);
         return result;
@@ -514,8 +500,7 @@ const ResTIMG* J2DPicture::changeTexture(ResTIMG const* img, u8 texIndex, JUTPal
 
 
 const ResTIMG* J2DPicture::changeTexture(char const* param_0, u8 param_1, JUTPalette* param_2) {
-    void* resource = J2DScreen::getNameResource(param_0);
-    return changeTexture((ResTIMG*)resource, param_1, param_2);
+    return changeTexture((ResTIMG*)J2DScreen::getNameResource(param_0), param_1, param_2);
 }
 
 void J2DPicture::drawSelf(f32 param_0, f32 param_1) {
@@ -528,7 +513,7 @@ void J2DPicture::drawSelf(f32 param_0, f32 param_1) {
 void J2DPicture::drawSelf(f32 param_0, f32 param_1, Mtx* param_2) {
     if (mTexture[0] != NULL && mTextureNum != 0) {
         drawFullSet(mGlobalBounds.i.x + param_0, mGlobalBounds.i.y + param_1,
-                    mBounds.f.x - mBounds.i.x, mBounds.f.y - mBounds.i.y, param_2);
+                    getWidth(), getHeight(), param_2);
     }
 }
 
@@ -543,6 +528,8 @@ void J2DPicture::drawFullSet(f32 param_0, f32 param_1, f32 param_2, f32 param_3,
 void J2DPicture::draw(f32 x, f32 y, f32 width, f32 height, bool mirrorX, bool mirrorY,
                       bool rotate90) {
     if (isVisible() && mTextureNum != 0 && mTexture[0] != NULL) {
+        f32 x2 = x + width;
+        f32 y2 = y + height;
         for (u8 i = 0; i < mTextureNum; i++) {
             load(i);
         }
@@ -802,6 +789,36 @@ void J2DPicture::swap(f32& lhs, f32& rhs) {
     rhs = tmp;
 }
 
+J2DBinding J2DPicture::getBinding() const {
+    int r30 = J2DBind_None;
+    bool r29 = isTumble();
+    if (field_0x10a[0].x == 0 || field_0x10a[0].x == 256) {
+        r30 |= !r29 ? J2DBind_Left : J2DBind_Top;
+    }
+    if (field_0x10a[0].y == 0 || field_0x10a[0].y == 256) {
+        r30 |= !r29 ? J2DBind_Top : J2DBind_Left;
+    }
+    if (field_0x10a[3].x == 0 || field_0x10a[3].x == 256) {
+        r30 |= !r29 ? J2DBind_Right : J2DBind_Bottom;
+    }
+    if (field_0x10a[3].y == 0 || field_0x10a[3].y == 256) {
+        r30 |= !r29 ? J2DBind_Bottom : J2DBind_Right;
+    }
+    return J2DBinding(r30);
+}
+
+void J2DPicture::setMirror(J2DMirror mirror) {
+    if (getTexture(0)) {
+        J2DBinding binding = getBinding();
+        bool r28 = isTumble();
+        setTexCoord(getTexture(0), binding, mirror, r28);
+    }
+}
+
+bool J2DPicture::isTumble() const {
+    return field_0x10a[1] == JGeometry::TVec2<s16>(s16(field_0x10a[0].x), s16(field_0x10a[3].y));
+}
+
 void J2DPicture::setBlendColorRatio(f32 param_0, f32 param_1) {
     field_0x11c[0] = param_0;
     field_0x11c[1] = param_1;
@@ -822,10 +839,9 @@ void J2DPicture::setBlendKonstColor() {
             tmp += field_0x11c[j];
         }
 
-        f32 tmp2 = tmp + field_0x11c[i];
-        if (tmp2 != 0.0f) {
-            // probably fake match but idk whats happening here
-            uvar3 |= (u8)(255.0f * (1.0f - tmp / tmp2)) << (i - 1) * 8;
+        if (tmp + field_0x11c[i] != 0.0f) {
+            f32 tmp2 = 255.0f * (1.0f - tmp / (tmp + field_0x11c[i]));
+            uvar3 |= (u8)tmp2 << (i - 1) * 8;
         }
     }
     mBlendKonstColor = uvar3;
@@ -839,10 +855,9 @@ void J2DPicture::setBlendKonstAlpha() {
             tmp += field_0x124[j];
         }
 
-        f32 tmp2 = tmp + field_0x124[i];
-        if (tmp2 != 0.0f) {
-            // probably fake match but idk whats happening here
-            uvar3 |= (u8)(255.0f * (1.0f - tmp / tmp2)) << (i - 1) * 8;
+        if (tmp + field_0x124[i] != 0.0f) {
+            f32 tmp2 = 255.0f * (1.0f - tmp / (tmp + field_0x124[i]));
+            uvar3 |= (u8)tmp2 << (i - 1) * 8;
         }
     }
     mBlendKonstAlpha = uvar3;
@@ -875,45 +890,15 @@ void J2DPicture::setTexCoord(JGeometry::TVec2<s16>* param_0, JUTTexture const* p
     bool bindBottom;
 
     if (!rotate90) {
-        if (mirror & J2DMirror_X)
-            bindLeft = binding & J2DBind_Right;
-        else
-            bindLeft = binding & J2DBind_Left;
-
-        if (mirror & J2DMirror_X)
-            bindRight = binding & J2DBind_Left;
-        else
-            bindRight = binding & J2DBind_Right;
-
-        if (mirror & J2DMirror_Y)
-            bindTop = binding & J2DBind_Bottom;
-        else
-            bindTop = binding & J2DBind_Top;
-
-        if (mirror & J2DMirror_Y)
-            bindBottom = binding & J2DBind_Top;
-        else
-            bindBottom = binding & J2DBind_Bottom;
+        bindLeft = mirror & J2DMirror_X ? bool(binding & J2DBind_Right) : bool(binding & J2DBind_Left);
+        bindRight = mirror & J2DMirror_X ? bool(binding & J2DBind_Left) : bool(binding & J2DBind_Right);
+        bindTop = mirror & J2DMirror_Y ? bool(binding & J2DBind_Bottom) : bool(binding & J2DBind_Top);
+        bindBottom = mirror & J2DMirror_Y ? bool(binding & J2DBind_Top) : bool(binding & J2DBind_Bottom);
     } else {
-        if (mirror & J2DMirror_X)
-            bindLeft = binding & J2DBind_Bottom;
-        else
-            bindLeft = binding & J2DBind_Top;
-
-        if (mirror & J2DMirror_X)
-            bindRight = binding & J2DBind_Top;
-        else
-            bindRight = binding & J2DBind_Bottom;
-
-        if (mirror & J2DMirror_Y)
-            bindTop = binding & J2DBind_Left;
-        else
-            bindTop = binding & J2DBind_Right;
-
-        if (mirror & J2DMirror_Y)
-            bindBottom = binding & J2DBind_Right;
-        else
-            bindBottom = binding & J2DBind_Left;
+        bindLeft = mirror & J2DMirror_X ? bool(binding & J2DBind_Bottom) : bool(binding & J2DBind_Top);
+        bindRight = mirror & J2DMirror_X ? bool(binding & J2DBind_Top) : bool(binding & J2DBind_Bottom);
+        bindTop = mirror & J2DMirror_Y ? bool(binding & J2DBind_Left) : bool(binding & J2DBind_Right);
+        bindBottom = mirror & J2DMirror_Y ? bool(binding & J2DBind_Right) : bool(binding & J2DBind_Left);
     }
 
     f32 rectWidth;
@@ -992,7 +977,7 @@ bool J2DPicture::isUsed(ResTIMG const* param_0) {
 }
 
 u8 J2DPicture::getUsableTlut(u8 param_0) {
-    u8 var_r8 = 0;
+    u8 r27 = 0;
 
     for (u8 i = 0; i < mTextureNum; i++) {
         if (i != param_0 && mTexture[i] != NULL) {
@@ -1000,25 +985,32 @@ u8 J2DPicture::getUsableTlut(u8 param_0) {
 
             if (img != NULL && img->indexTexture != 0) {
                 int name = mTexture[i]->getTlutName();
-                int var_r0 = name >= GX_BIGTLUT0 ? GX_BIGTLUT0 : GX_TLUT0;
 
-                u8 temp_r0 = name - var_r0;
-                if (temp_r0 < 2) {
-                    var_r8 |= (1 << temp_r0);
+                GXTlut local_34;
+                (void)&local_34; // force this variable to the stack
+                if (name >= GX_BIGTLUT0) {
+                    local_34 = GX_BIGTLUT0;
+                } else {
+                    local_34 = GX_TLUT0;
+                }
+
+                u8 r24 = name - local_34;
+                if (r24 < 2) {
+                    r27 |= (1 << r24);
                 }
             }
         }
     }
 
-    u8 var_r26 = 0;
+    u8 r23 = 0;
     for (u8 i = 0; i < 2; i++) {
-        if (!(var_r8 & (1 << i))) {
-            var_r26 = i;
+        if (!(r27 & (1 << i))) {
+            r23 = i;
             break;
         }
     }
 
-    return var_r26;
+    return r23;
 }
 
 GXTlut J2DPicture::getTlutID(ResTIMG const* img, u8 param_1) {

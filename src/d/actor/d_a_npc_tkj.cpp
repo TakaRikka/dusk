@@ -73,16 +73,6 @@ int (daNpcTkj_c::*daNpcTkj_c::mCutList[])(int) = {
     &daNpcTkj_c::cutLv7Start,
 };
 
-daNpcTkj_c::~daNpcTkj_c() {
-    OS_REPORT("|%06d:%x|daNpcTkj_c -> デストラクト\n", g_Counter.mCounter0, this);
-
-    if (heap != NULL) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
-}
-
 const daNpc_Tkj_HIOParam daNpc_Tkj_Param_c::m = {
     120.0f,
     -3.0f,
@@ -127,6 +117,38 @@ const daNpc_Tkj_HIOParam daNpc_Tkj_Param_c::m = {
     110.0f,
 };
 
+static NPC_TKJ_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Tkj_HIO_c::daNpc_Tkj_HIO_c() {
+    m = daNpc_Tkj_Param_c::m;
+}
+
+void daNpc_Tkj_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Tkj_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpcTkj_c::~daNpcTkj_c() {
+    OS_REPORT("|%06d:%x|daNpcTkj_c -> デストラクト\n", g_Counter.mCounter0, this);
+
+    if (heap != NULL) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+}
+
 int daNpcTkj_c::create() {
     daNpcT_ct(this, daNpcTkj_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
@@ -161,6 +183,11 @@ int daNpcTkj_c::create() {
         
         mSound.init(&current.pos, &eyePos, 3, 1);
 
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("天空人");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
         mGndChk = mAcch.m_gnd;
@@ -169,7 +196,7 @@ int daNpcTkj_c::create() {
         setEnvTevColor();
         setRoomNo();
 
-        mCcStts.Init(daNpc_Tkj_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCcCyl.Set(mCcDCyl);
         mCcCyl.SetStts(&mCcStts);
         mCcCyl.SetTgHitCallback(tgHitCallBack);
@@ -239,7 +266,7 @@ int daNpcTkj_c::Draw() {
         mdlData_p->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    return draw(FALSE, 0, daNpc_Tkj_Param_c::m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE, FALSE);
+    return draw(FALSE, 0, mpHIO->m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
 int daNpcTkj_c::createHeapCallBack(fopAc_ac_c* i_this) {
@@ -355,11 +382,11 @@ void daNpcTkj_c::setAttnPos() {
     cXyz sp28(0.0f, -30.0f, 0.0f);
 
     mJntAnm.setParam(this, mpMorf[0]->getModel(), &sp28, getBackboneJointNo(), getNeckJointNo(), getHeadJointNo(),
-        daNpc_Tkj_Param_c::m.common.body_angleX_min, daNpc_Tkj_Param_c::m.common.body_angleX_max,
-        daNpc_Tkj_Param_c::m.common.body_angleY_min, daNpc_Tkj_Param_c::m.common.body_angleY_max,
-        daNpc_Tkj_Param_c::m.common.head_angleX_min, daNpc_Tkj_Param_c::m.common.head_angleX_max,
-        daNpc_Tkj_Param_c::m.common.head_angleY_min, daNpc_Tkj_Param_c::m.common.head_angleY_max,
-        daNpc_Tkj_Param_c::m.common.neck_rotation_ratio, 0.0f, NULL);
+        mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+        mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+        mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+        mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
     mJntAnm.calcJntRad(0.2f, 1.0f, cM_s2rad(mCurAngle.y - field_0xd7e.y));
 
     J3DModelData* mdlData_p = mpMorf[0]->getModel()->getModelData();
@@ -377,7 +404,7 @@ void daNpcTkj_c::setAttnPos() {
 
 
     attention_info.position = current.pos;
-    attention_info.position.y += daNpc_Tkj_Param_c::m.common.attention_offset;
+    attention_info.position.y += mpHIO->m.common.attention_offset;
 }
 
 void daNpcTkj_c::setCollision() {
@@ -386,8 +413,8 @@ void daNpcTkj_c::setCollision() {
         mCcCyl.SetCoSPrm(mTwilight == TRUE ? 0x69 : 0x79);
         
         pos = current.pos;
-        f32 height = daNpc_Tkj_Param_c::m.common.height;
-        f32 radius = daNpc_Tkj_Param_c::m.common.width;
+        f32 height = mpHIO->m.common.height;
+        f32 radius = mpHIO->m.common.width;
 
         mCcCyl.SetH(height);
         mCcCyl.SetR(radius);
@@ -618,10 +645,10 @@ void daNpcTkj_c::setParam() {
     selectAction();
     srchActors();
 
-    s16 talk_dist = daNpc_Tkj_Param_c::m.common.talk_distance;
-    s16 talk_angle = daNpc_Tkj_Param_c::m.common.talk_angle;
-    s16 attn_dist = daNpc_Tkj_Param_c::m.common.attention_distance;
-    s16 attn_angle = daNpc_Tkj_Param_c::m.common.attention_angle;
+    s16 talk_dist = mpHIO->m.common.talk_distance;
+    s16 talk_angle = mpHIO->m.common.talk_angle;
+    s16 attn_dist = mpHIO->m.common.attention_distance;
+    s16 attn_angle = mpHIO->m.common.attention_angle;
 
     attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(attn_dist, attn_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[0];
@@ -632,20 +659,20 @@ void daNpcTkj_c::setParam() {
     if (mType == 1) {
         size = 0.7f;
     } else {
-        size = daNpc_Tkj_Param_c::m.common.scale;
+        size = mpHIO->m.common.scale;
     }
 
     scale.setall(size);
 
-    mAcchCir.SetWallR(daNpc_Tkj_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpc_Tkj_Param_c::m.common.knee_length);
-    mCcStts.SetWeight(daNpc_Tkj_Param_c::m.common.weight);
-    mCylH = daNpc_Tkj_Param_c::m.common.height;
-    mWallR = daNpc_Tkj_Param_c::m.common.width;
-    gravity = daNpc_Tkj_Param_c::m.common.gravity;
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    gravity = mpHIO->m.common.gravity;
 
-    mExpressionMorfFrame = daNpc_Tkj_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Tkj_Param_c::m.common.morf_frame;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
 }
 
 void daNpcTkj_c::beforeMove() {
@@ -653,8 +680,6 @@ void daNpcTkj_c::beforeMove() {
         attention_info.flags = 0;
     }
 }
-
-static daNpc_Tkj_Param_c l_HIO;
 
 static actor_method_class daNpc_Tkj_MethodTable = {
     (process_method_func)daNpc_Tkj_Create,

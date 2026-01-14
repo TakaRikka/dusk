@@ -5,12 +5,6 @@
 #include <dolphin/mtx.h>
 #include "JSystem/J3DAssert.h"
 
-// Perhaps move to a new J3DEnum.h?
-enum J3DError {
-    kJ3DError_Success = 0,
-    kJ3DError_Alloc = 4,
-};
-
 enum J3DSysDrawBuf {
     /* 0x0 */ J3DSysDrawBuf_Opa,
     /* 0x1 */ J3DSysDrawBuf_Xlu,

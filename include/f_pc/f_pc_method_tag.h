@@ -12,9 +12,9 @@ typedef struct process_method_tag_class {
     /* 0x18 */ void* data;
 } process_method_tag_class;
 
-s32 fpcMtdTg_Do(process_method_tag_class* i_methodTag);
-s32 fpcMtdTg_ToMethodQ(node_list_class* i_nodelist, process_method_tag_class* i_methodTag);
+int fpcMtdTg_Do(process_method_tag_class* i_methodTag);
+int fpcMtdTg_ToMethodQ(node_list_class* i_nodelist, process_method_tag_class* i_methodTag);
 void fpcMtdTg_MethodQTo(process_method_tag_class* i_methodTag);
-s32 fpcMtdTg_Init(process_method_tag_class* i_methodTag, process_method_tag_func i_method, void* i_data);
+int fpcMtdTg_Init(process_method_tag_class* i_methodTag, process_method_tag_func i_method, void* i_data);
 
 #endif

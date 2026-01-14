@@ -16,16 +16,29 @@ struct daNpc_Raca_HIOParam {
     /* 0x0 */ daNpcT_HIOParam common;
 };
 
-class daNpc_Raca_HIO_c : public mDoHIO_entry_c {
-    /* 0x8 */ daNpc_Raca_HIOParam param;
-};
-
 class daNpc_Raca_Param_c {
 public:
     virtual ~daNpc_Raca_Param_c() {}
 
     static daNpc_Raca_HIOParam const m;
 };
+
+#if DEBUG
+class daNpc_Raca_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Raca_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Raca_HIOParam m;
+};
+
+#define NPC_RACA_HIO_CLASS daNpc_Raca_HIO_c
+#else
+#define NPC_RACA_HIO_CLASS daNpc_Raca_Param_c
+#endif
 
 class daNpc_Raca_c : public daNpcT_c {
 public:
@@ -136,7 +149,7 @@ public:
     static cutFunc mCutList[1];
 
 private:
-    /* 0xE40 */ daNpc_Raca_HIO_c* mHIO;
+    /* 0xE40 */ NPC_RACA_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;
     /* 0xF84 */ daNpcT_ActorMngr_c mActorMngr[1];

@@ -131,14 +131,14 @@ m_Do/m_Do_MemCardRWmng.cpp:
 m_Do/m_Do_machine_exception.cpp:
 	.text       start:0x8002EEA0 end:0x8002F3A0
 	.data       start:0x80664C90 end:0x80664E98
-	.sbss       start:0x8074C450 end:0x8074C464
+	.sbss       start:0x8074C450 end:0x8074C458
 
 c/c_damagereaction.cpp:
 	.text       start:0x8002F3A0 end:0x8002FAF0
 	.ctors      start:0x8062F7E4 end:0x8062F7E8
 	.data       start:0x80664E98 end:0x80664F00
 	.sdata      start:0x8073F688 end:0x8073F698
-	.sbss       start:0x8074C464 end:0x8074C46C
+	.sbss       start:0x8074C458 end:0x8074C468
 	.sdata2     start:0x8074D908 end:0x8074D920
 	.bss        start:0x807762A0 end:0x807762B0
 
@@ -146,15 +146,15 @@ c/c_dylink.cpp:
 	.text       start:0x8002FAF0 end:0x80030690
 	.rodata     start:0x8062FA70 end:0x806311D0
 	.data       start:0x80664F00 end:0x80667F90
-	.sdata      start:0x8073F698 end:0x8073F6EC
-	.sbss       start:0x8074C46C end:0x8074C47C
+	.sdata      start:0x8073F698 end:0x8073F6E8
+	.sbss       start:0x8074C468 end:0x8074C47C
 	.bss        start:0x807762B0 end:0x80776F20
 
 f_ap/f_ap_game.cpp:
 	.text       start:0x80030690 end:0x80034CB0
 	.ctors      start:0x8062F7E8 end:0x8062F7EC
 	.data       start:0x80667F90 end:0x80669130
-	.sdata      start:0x8073F6EC end:0x8073F850
+	.sdata      start:0x8073F6E8 end:0x8073F850
 	.sbss       start:0x8074C47C end:0x8074C4A0
 	.sdata2     start:0x8074D920 end:0x8074D950
 	.bss        start:0x80776F20 end:0x8077EF68
@@ -315,7 +315,7 @@ f_pc/f_pc_layer.cpp:
 f_pc/f_pc_leaf.cpp:
 	.text       start:0x800450A0 end:0x80045330
 	.data       start:0x8066AD78 end:0x8066AD90
-	.sbss       start:0x8074C540 end:0x8074C550
+	.sbss       start:0x8074C540 end:0x8074C548
 
 f_pc/f_pc_layer_iter.cpp:
 	.text       start:0x80045330 end:0x80045560
@@ -336,6 +336,7 @@ f_pc/f_pc_manager.cpp:
 	.text       start:0x800459D0 end:0x80046020
 	.data       start:0x8066ADB0 end:0x8066ADC8
 	.sdata      start:0x8073F9D8 end:0x8073F9E8
+	.sbss       start:0x8074C548 end:0x8074C550
 	.bss        start:0x80782160 end:0x80782208
 
 f_pc/f_pc_method.cpp:

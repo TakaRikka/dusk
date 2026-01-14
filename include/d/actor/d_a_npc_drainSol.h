@@ -3,6 +3,32 @@
 
 #include "d/actor/d_a_npc4.h"
 
+struct daNpcDrSol_HIOParam {
+    /* 0x00 */ daNpcF_HIOParam common;
+};
+
+class daNpcDrSol_Param_c {
+public:
+    virtual ~daNpcDrSol_Param_c() {}
+
+    static const daNpcDrSol_HIOParam m;
+};
+
+#if DEBUG
+class daNpcDrSol_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpcDrSol_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    daNpcDrSol_HIOParam m;
+};
+
+#define NPC_DRSOL_HIO_CLASS daNpcDrSol_HIO_c
+#else
+#define NPC_DRSOL_HIO_CLASS daNpcDrSol_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpcDrSol_c
@@ -44,7 +70,7 @@ public:
 
     /* 0xB48 */ Z2Creature mSound;
     /* 0xBD8 */ J3DModel* field_0xbd8;
-    /* 0xBDC */ u8 field_0xBDC[0xBE0 - 0xBDC];
+    /* 0xBDC */ NPC_DRSOL_HIO_CLASS* mpHIO;
     /* 0xBE0 */ dCcD_Cyl mCyl;
     /* 0xD1C */ bool (daNpcDrSol_c::*mAction)(void*);
     /* 0xD28 */ request_of_phase_process_class mPhase;
@@ -56,17 +82,6 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daNpcDrSol_c) == 0xd3c);
-
-struct daNpcDrSol_HIOParam {
-    /* 0x00 */ daNpcF_HIOParam common;
-};
-
-class daNpcDrSol_Param_c {
-public:
-    virtual ~daNpcDrSol_Param_c() {}
-
-    static const daNpcDrSol_HIOParam m;
-};
 
 
 #endif /* D_A_NPC_DRAINSOL_H */

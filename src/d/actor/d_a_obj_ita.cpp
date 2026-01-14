@@ -15,13 +15,7 @@ public:
     daObj_ITA_HIO_c();
     virtual ~daObj_ITA_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {
-        ctx->genLabel("ヒメクジ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("サーチエリア", &search_area, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("飛ばし方向スピード", &launch_dir_spd, 0.0f, -100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("飛ばし方向Yスピード", &launch_dir_y_spd, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("重力設定", &gravity_settings, 0.0f, -20.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    }
+    void genMessage(JORMContext* ctx);
 
     /* ヒメクジ */
     /* 0x04 */ s8 id;
@@ -31,8 +25,6 @@ public:
     /* 0x14 */ f32 gravity_settings;
 };
 
-static char* l_arcName = "M_Ita";
-
 daObj_ITA_HIO_c::daObj_ITA_HIO_c() {
     id = -1;
     search_area = 600.0f;
@@ -40,6 +32,18 @@ daObj_ITA_HIO_c::daObj_ITA_HIO_c() {
     launch_dir_y_spd = 44.0f;
     gravity_settings = -9.0f;
 }
+
+#if DEBUG
+void daObj_ITA_HIO_c::genMessage(JORMContext* ctx) {
+    ctx->genLabel("ヒメクジ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("サーチエリア", &search_area, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("飛ばし方向スピード", &launch_dir_spd, 0.0f, -100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("飛ばし方向Yスピード", &launch_dir_y_spd, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("重力設定", &gravity_settings, 0.0f, -20.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+}
+#endif
+
+static char* l_arcName = "M_Ita";
 
 static f32 dummy() {
     return 0.0f;
@@ -59,16 +63,15 @@ namespace {
 } // namespace
 
 void daObjIta_c::Search_Ymb() {
-    f32 zero = 0.0f;
+    f32 speed_f = 0.0f;
     cXyz pos(e_ymb_Pos->x - current.pos.x, e_ymb_Pos->y - current.pos.y, e_ymb_Pos->z - current.pos.z);
 
     mDoMtx_stack_c::YrotS(-shape_angle.y);
     mDoMtx_stack_c::multVec(&pos, &pos);
 
     if (pos.x < BREG_F(0) + 750.0f && pos.x > -750.0f - BREG_F(0) && pos.z < 450.0f + BREG_F(1) && pos.z > -450.0f - BREG_F(1) && pos.y < BREG_F(7) + 600.0f) {
-        f32 speed_f = fopAcM_GetSpeedF(e_ymb);
-        zero = 0.0f;
-        if (speed_f > zero) {
+        speed_f = fopAcM_GetSpeedF(e_ymb);
+        if (speed_f > 0.0f) {
             field_0x5b0 = speed_f * (BREG_F(6) + 16.0f) + 256.0f;
             e_ymb->setHitBoardSe();
             field_0x5a0 = speed_f * (BREG_F(5) + 31.0f);
@@ -98,15 +101,21 @@ void daObjIta_c::Search_Ymb() {
 BOOL daObjIta_c::Check_RideOn() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz& pos = fopAcM_GetPosition(player);
+    f32 speed_f = 0.0f;
+    int reg_r26 = 0; // unused
 
     field_0x6c0 = 1;
     cXyz vecTrans(pos.x - current.pos.x, pos.y - current.pos.y, pos.z - current.pos.z);
     mDoMtx_stack_c::YrotS(-shape_angle.y);
     mDoMtx_stack_c::multVec(&vecTrans, &vecTrans);
 
-    if (vecTrans.x < 1000.0f && vecTrans.x > -1000.0f && vecTrans.z < 700.0f && vecTrans.z > -700.0f && fopAcM_GetSpeedF(player) > 0.0f) {
-        cLib_addCalcAngleS(&field_0x5b0, 0x150, 11, 0x100, 0);
-        field_0x5c8 = 0x400;
+    if (vecTrans.x < 1000.0f && vecTrans.x > -1000.0f && vecTrans.z < 700.0f && vecTrans.z > -700.0f) {
+        f32 reg_f30 = 0.0f;
+        speed_f = fopAcM_GetSpeedF(player);
+        if (speed_f > 0.0f) {
+            cLib_addCalcAngleS(&field_0x5b0, 0x150, 11, 0x100, 0);
+            field_0x5c8 = 0x400;
+        }
     }
 
     return FALSE;
@@ -123,16 +132,18 @@ void daObjIta_c::setBaseMtx() {
     mDoMtx_stack_c::XrotM(shape_angle.z);
     mDoMtx_stack_c::ZrotM(shape_angle.x);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
+    cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
 static void rideCallBack(dBgW* param_1, fopAc_ac_c* a_this, fopAc_ac_c* i_player) {
+    UNUSED(param_1);
+    (void) a_this; // it is used, but this is needed for dbg matching
     daObjIta_c* i_this = (daObjIta_c*)a_this;
 
     if (fopAcM_GetName(i_player) == PROC_ALINK) {
         daPy_py_c* player = daPy_getPlayerActorClass();
         if (i_this->field_0x5ac < 0.0f) {
-            i_this->field_0x5a8 = i_this->field_0x5ac * 0.8f;
+            i_this->field_0x5a8 = (0.8f + HREG_F(2)) * i_this->field_0x5ac;
             i_this->field_0x5ac = 0.0f;
         }
 
@@ -148,20 +159,19 @@ static int daObjIta_Execute(daObjIta_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-static int daObjIta_IsDelete(daObjIta_c* i_this) {
+static int daObjIta_IsDelete(daObjIta_c*) {
     return 1;
 }
 
 static int daObjIta_Delete(daObjIta_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "Obj_Ita");
     i_this->MoveBGDelete();
     return 1;
 }
 
-static int daObjIta_Create(fopAc_ac_c* a_this) {
-    daObjIta_c* i_this = (daObjIta_c*)a_this;
-    fpc_ProcID id = fopAcM_GetID(a_this);
-    return i_this->create();
+static int daObjIta_Create(fopAc_ac_c* i_this) {
+    fopAcM_RegisterCreateID(daObjIta_c, i_this, "Obj_Ita");
+    return a_this->create();
 }
 
 int daObjIta_c::CreateHeap() {
@@ -196,7 +206,7 @@ cPhs__Step daObjIta_c::create() {
 
     cXyz pos(current.pos.x, current.pos.y + 300.0f, current.pos.z);
     if (fopAcM_wt_c::waterCheck(&pos)) {
-        current.pos.y = oREG_F(0) + HREG_F(0) + fopAcM_wt_c::getWaterY() + 50.0f;
+        current.pos.y = fopAcM_wt_c::getWaterY() + 50.0f + HREG_F(0) + oREG_F(0);
     }
 
     return phase;
@@ -218,6 +228,7 @@ int daObjIta_c::Execute(Mtx** mtx) {
     }
 
     daPy_py_c* player = daPy_getPlayerActorClass();
+    cXyz& unused_pos = fopAcM_GetPosition(player);
     cXyz& playerSpeed = fopAcM_GetSpeed(player);
 
     if (fopAcM_SearchByName(PROC_E_YMB, (fopAc_ac_c**)&e_ymb) != 0 && e_ymb != NULL) {
@@ -242,7 +253,7 @@ int daObjIta_c::Execute(Mtx** mtx) {
     }
 
     cLib_addCalc(&current.pos.y, field_0x5d4 + (posY + 60.0f + field_0x5a8 * (HREG_F(0) + 5.0f) + cM_ssin(field_0x5cc) * 20.0f), 0.1f, 15.0f, 0.1f);
-    cLib_addCalcAngleS(&shape_angle.x, field_0x5ce.x + (nREG_F(0) + 1.0f) * field_0x5b0 * cM_ssin(field_0x5ca + oREG_F(1) + 0x2000), 2, 0x1000, 1);
+    cLib_addCalcAngleS(&shape_angle.x, field_0x5ce.x + (nREG_F(0) + 1.0f) * field_0x5b0 * cM_ssin(field_0x5ca + oREG_S(1) + 0x2000), 2, 0x1000, 1);
     cLib_addCalcAngleS(&shape_angle.z, field_0x5ce.z + (nREG_F(1) + 1.0f) * field_0x5b0 * cM_ssin(field_0x5cc), 2, 0x1000, 1);
     cLib_addCalc(&field_0x5a4, field_0x5c8, HREG_F(13) + 0.05f, 100.0f, 0.0f);
     cLib_addCalc2(&field_0x5a8, 0.0f, HREG_F(1) + 0.1f, 10.0f);

@@ -2,7 +2,7 @@
 
 #include "d/d_msg_unit.h"
 #include "d/d_com_inf_game.h"
-#include <stdio>
+#include <cstdio>
 #include "d/d_kankyo.h"
 #include "d/d_meter2_info.h"
 

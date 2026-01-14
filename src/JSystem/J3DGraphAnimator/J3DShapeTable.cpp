@@ -1,6 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphAnimator/J3DShapeTable.h"
+#include "JSystem/J3DGraphBase/J3DShape.h"
 
 void J3DShapeTable::hide() {
     u16 shapeNum = mShapeNum;

@@ -36,8 +36,8 @@ public:
         width = (u16)getFbWidth();
         height = (u16)getEfbHeight();
     }
-    u16 getXfbHeight() const { return mRenderObj->xfbHeight; }
-    u32 isAntiAliasing() const { return mRenderObj->aa; }
+    u16 getXfbHeight() const { return u16(mRenderObj->xfbHeight); }
+    u8 isAntiAliasing() const { return u8(mRenderObj->aa); }
     Pattern getSamplePattern() const { return mRenderObj->sample_pattern; }
     u8* getVFilter() const { return mRenderObj->vfilter; }
     OSMessageQueue* getMessageQueue() { return &mMessageQueue; }

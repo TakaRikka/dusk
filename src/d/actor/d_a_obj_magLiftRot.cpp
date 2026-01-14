@@ -242,8 +242,7 @@ void daMagLiftRot_c::init_modeMove() {
 void daMagLiftRot_c::modeMove() {
     cLib_chaseF(&speedF, l_HIO.mMaxSpeed, l_HIO.mAcceleration);
 
-    if (cLib_addCalcAngleS(&current.angle.z, field_0x5e2, 1, fopAcM_GetSpeedF(this) * 182.04445f,
-                           1) == 0)
+    if (cLib_addCalcAngleS(&current.angle.z, field_0x5e2, 1, DEG2S(fopAcM_GetSpeedF(this)), 1) == 0)
     {
         field_0x5e2 += 0x8000;
         field_0x5e4 = 0;

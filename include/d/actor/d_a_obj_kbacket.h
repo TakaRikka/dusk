@@ -8,10 +8,10 @@
 
 struct daObj_KBacket_HIOParam
 {
-    f32 field_0x0;
-    f32 field_0x4;
-    f32 field_0x8;
-    f32 field_0xc;
+    f32 field_0x00;
+    f32 field_0x04;
+    f32 field_0x08;
+    f32 field_0x0c;
     f32 field_0x10;
     f32 field_0x14;
     f32 field_0x18;
@@ -21,25 +21,29 @@ struct daObj_KBacket_HIOParam
     f32 field_0x28;
 };
 
-class daObj_KBacket_HIO_c
-#if DEBUG
-    : public mDoHIO_entry_c
-#endif
-{
-public:
-#if DEBUG
-    void genMessage(JORMContext*);
-
-    daObj_KBacket_HIOParam param;
-#endif
-};
-
 class daObj_KBacket_Param_c {
 public:
     virtual ~daObj_KBacket_Param_c() {}
 
     static const daObj_KBacket_HIOParam m;
 };
+
+#if DEBUG
+class daObj_KBacket_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_KBacket_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_KBacket_HIOParam m;
+};
+
+#define OBJ_KBACKET_HIO_CLASS daObj_KBacket_HIO_c
+#else
+#define OBJ_KBACKET_HIO_CLASS daObj_KBacket_Param_c
+#endif
 
 /**
  * @ingroup actors-objects
@@ -51,7 +55,7 @@ public:
  */
 class daObj_KBacket_c : public fopAc_ac_c {
 public:
-    /* 0x568 */ daObj_KBacket_HIO_c* mHIO;
+    /* 0x568 */ OBJ_KBACKET_HIO_CLASS* mpHIO;
     /* 0x56C */ request_of_phase_process_class field_0x56c;
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ dBgS_ObjAcch mObjAcch;

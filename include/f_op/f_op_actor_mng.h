@@ -802,7 +802,7 @@ inline void fopAcM_OnCarryType(fopAc_ac_c* i_actor, fopAcM_CARRY param_2) {
 }
 
 inline void fopAcM_OffCarryType(fopAc_ac_c* i_actor, fopAcM_CARRY param_2) {
-    i_actor->carryType &= ~param_2;
+    UNSET_FLAG(i_actor->carryType, param_2, u8);
 }
 
 enum fopAcM_FOOD {

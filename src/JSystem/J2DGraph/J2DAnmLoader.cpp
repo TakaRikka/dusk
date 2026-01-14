@@ -9,8 +9,9 @@
 
 J2DAnmBase* J2DAnmLoaderDataBase::load(void const* p_data) {
     const J3DAnmDataHeader* hdr = (const J3DAnmDataHeader*)p_data;
+    J3D_PANIC(38, p_data, "Error : null pointer.");
 
-    if (hdr == NULL) {
+    if (p_data == NULL) {
         return NULL;
     } else if (hdr->mMagic == 'J3D1') {
         switch (hdr->mType) {
@@ -27,6 +28,7 @@ J2DAnmBase* J2DAnmLoaderDataBase::load(void const* p_data) {
             break;
         }
         case 'blk1':
+            OS_REPORT("J2DAnmLoader: this is a J3D Binary that cannot use J2D.\n");
             return NULL;
         case 'btk1': {
             J2DAnmKeyLoader_v15 loader;
@@ -70,17 +72,24 @@ J2DAnmBase* J2DAnmLoaderDataBase::load(void const* p_data) {
             break;
         }
         case 'bla1':
+            OS_REPORT("J2DAnmLoader: this is a J3D Binary that cannot use J2D.\n");
             return NULL;
         case 'bxa1': {
             J2DAnmFullLoader_v15 loader;
             loader.mpResource = new J2DAnmVtxColorFull();
             return (J2DAnmBase*)loader.load(p_data);
         }
+        default:
+            OS_REPORT("J2DAnmLoader: this is not a J3D Binary.\n");
+            return NULL;
         }
-        return NULL;
     } else {
         return NULL;
     }
+}
+
+static void dummy() {
+    OS_REPORT("J3DAnmLoader: this is not a J3D Binary.\n");
 }
 
 J2DAnmKeyLoader_v15::J2DAnmKeyLoader_v15() {}
@@ -88,6 +97,7 @@ J2DAnmKeyLoader_v15::J2DAnmKeyLoader_v15() {}
 J2DAnmKeyLoader_v15::~J2DAnmKeyLoader_v15() {}
 
 void* J2DAnmKeyLoader_v15::load(void const* p_data) {
+    J3D_PANIC(317, p_data, "Error : null pointer.");
     const J3DAnmDataHeader* hdr = (const J3DAnmDataHeader*)p_data;
     const J3DAnmDataBlockHeader* dataPtr = &hdr->mFirst;
 
@@ -108,6 +118,9 @@ void* J2DAnmKeyLoader_v15::load(void const* p_data) {
         case 'TRK1':
             readAnmTevReg((J3DAnmTevRegKeyData*)dataPtr);
             break;
+        default:
+            OS_REPORT("Unknown data block\n");
+            break;
         }
         dataPtr = (J3DAnmDataBlockHeader*)((s32)dataPtr + dataPtr->mNextOffset);
     }
@@ -116,6 +129,7 @@ void* J2DAnmKeyLoader_v15::load(void const* p_data) {
 }
 
 void J2DAnmKeyLoader_v15::setResource(J2DAnmBase* p_anm, void const* p_data) {
+    J3D_PANIC(355, p_data, "Error : null pointer.");
     const J3DAnmDataHeader* hdr = (const J3DAnmDataHeader*)p_data;
     const J3DAnmDataBlockHeader* dataPtr = &hdr->mFirst;
 
@@ -147,17 +161,23 @@ void J2DAnmKeyLoader_v15::setResource(J2DAnmBase* p_anm, void const* p_data) {
                 setAnmVtxColor((J2DAnmVtxColorKey*)p_anm, (J3DAnmVtxColorKeyData*)dataPtr);
             }
             break;
+        default:
+            OS_REPORT("Unknown data block\n");
+            break;
         }
         dataPtr = (J3DAnmDataBlockHeader*)((s32)dataPtr + dataPtr->mNextOffset);
     }
 }
 
 void J2DAnmKeyLoader_v15::readAnmTransform(J3DAnmTransformKeyData const* p_data) {
-    setAnmTransform((J2DAnmTransformKey*)mpResource, p_data);
+    J2DAnmTransformKey* p_anm = (J2DAnmTransformKey*)mpResource;
+    setAnmTransform(p_anm, p_data);
 }
 
 void J2DAnmKeyLoader_v15::setAnmTransform(J2DAnmTransformKey* p_anm,
                                           J3DAnmTransformKeyData const* p_data) {
+    J3D_PANIC(439, p_anm, "Error : null pointer.");
+    J3D_PANIC(440, p_data, "Error : null pointer.");
     p_anm->field_0x22 = p_data->field_0xc;
     p_anm->mFrameMax = p_data->mFrameMax;
     p_anm->field_0x4 = p_data->field_0x8;
@@ -172,11 +192,14 @@ void J2DAnmKeyLoader_v15::setAnmTransform(J2DAnmTransformKey* p_anm,
 }
 
 void J2DAnmKeyLoader_v15::readAnmTextureSRT(J3DAnmTextureSRTKeyData const* p_data) {
-    setAnmTextureSRT((J2DAnmTextureSRTKey*)mpResource, p_data);
+    J2DAnmTextureSRTKey* p_anm = (J2DAnmTextureSRTKey*)mpResource;
+    setAnmTextureSRT(p_anm, p_data);
 }
 
 void J2DAnmKeyLoader_v15::setAnmTextureSRT(J2DAnmTextureSRTKey* p_anm,
                                            J3DAnmTextureSRTKeyData const* p_data) {
+    J3D_PANIC(480, p_anm, "Error : null pointer.");
+    J3D_PANIC(481, p_data, "Error : null pointer.");
     p_anm->mUpdateMaterialNum = p_data->field_0xc;
     p_anm->mFrameMax = p_data->field_0xa;
     p_anm->field_0x4 = p_data->field_0x8;
@@ -226,10 +249,13 @@ void J2DAnmKeyLoader_v15::setAnmTextureSRT(J2DAnmTextureSRTKey* p_anm,
 }
 
 void J2DAnmKeyLoader_v15::readAnmColor(J3DAnmColorKeyData const* p_data) {
-    setAnmColor((J2DAnmColorKey*)mpResource, p_data);
+    J2DAnmColorKey* p_anm = (J2DAnmColorKey*)mpResource;
+    setAnmColor(p_anm, p_data);
 }
 
 void J2DAnmKeyLoader_v15::setAnmColor(J2DAnmColorKey* p_anm, J3DAnmColorKeyData const* p_data) {
+    J3D_PANIC(573, p_anm, "Error : null pointer.");
+    J3D_PANIC(574, p_data, "Error : null pointer.");
     p_anm->mFrameMax = p_data->mFrameMax;
     p_anm->field_0x4 = p_data->field_0x8;
     p_anm->mFrame = 0;
@@ -251,11 +277,14 @@ void J2DAnmKeyLoader_v15::setAnmColor(J2DAnmColorKey* p_anm, J3DAnmColorKeyData 
 }
 
 void J2DAnmKeyLoader_v15::readAnmVtxColor(J3DAnmVtxColorKeyData const* p_data) {
-    setAnmVtxColor((J2DAnmVtxColorKey*)mpResource, p_data);
+    J2DAnmVtxColorKey* p_anm = (J2DAnmVtxColorKey*)mpResource;
+    setAnmVtxColor(p_anm, p_data);
 }
 
 void J2DAnmKeyLoader_v15::setAnmVtxColor(J2DAnmVtxColorKey* p_anm,
                                          J3DAnmVtxColorKeyData const* p_data) {
+    J3D_PANIC(628, p_anm, "Error : null pointer.");
+    J3D_PANIC(629, p_data, "Error : null pointer.");
     p_anm->mFrameMax = p_data->mFrameMax;
     p_anm->field_0x4 = p_data->field_0x8;
     p_anm->mFrame = 0;
@@ -280,6 +309,7 @@ void J2DAnmKeyLoader_v15::setAnmVtxColor(J2DAnmVtxColorKey* p_anm,
 }
 
 void* J2DAnmFullLoader_v15::load(void const* p_data) {
+    J3D_PANIC(670, p_data, "Error : null pointer.");
     const J3DAnmDataHeader* hdr = (const J3DAnmDataHeader*)p_data;
     const J3DAnmDataBlockHeader* dataPtr = &hdr->mFirst;
 
@@ -300,6 +330,9 @@ void* J2DAnmFullLoader_v15::load(void const* p_data) {
         case 'VCF1':
             readAnmVtxColor((J3DAnmVtxColorFullData*)dataPtr);
             break;
+        default:
+            OS_REPORT("Unknown data block\n");
+            break;
         }
         dataPtr = (J3DAnmDataBlockHeader*)((s32)dataPtr + dataPtr->mNextOffset);
     }
@@ -307,6 +340,7 @@ void* J2DAnmFullLoader_v15::load(void const* p_data) {
 }
 
 void J2DAnmFullLoader_v15::setResource(J2DAnmBase* p_anm, void const* p_data) {
+    J3D_PANIC(710, p_data, "Error : null pointer.");
     const J3DAnmDataHeader* hdr = (const J3DAnmDataHeader*)p_data;
     const J3DAnmDataBlockHeader* dataPtr = &hdr->mFirst;
 
@@ -334,6 +368,9 @@ void J2DAnmFullLoader_v15::setResource(J2DAnmBase* p_anm, void const* p_data) {
             if (p_anm->getKind() == KIND_VTX_COLOR)
                 setAnmVtxColor((J2DAnmVtxColorFull*)p_anm, (J3DAnmVtxColorFullData*)dataPtr);
             break;
+        default:
+            OS_REPORT("Unknown data block\n");
+            break;
         }
         dataPtr = (J3DAnmDataBlockHeader*)((s32)dataPtr + dataPtr->mNextOffset);
     }
@@ -344,11 +381,14 @@ J2DAnmFullLoader_v15::J2DAnmFullLoader_v15() {}
 J2DAnmFullLoader_v15::~J2DAnmFullLoader_v15() {}
 
 void J2DAnmFullLoader_v15::readAnmTransform(J3DAnmTransformFullData const* p_data) {
-    setAnmTransform((J2DAnmTransformFull*)mpResource, p_data);
+    J2DAnmTransformFull* p_anm = (J2DAnmTransformFull*)mpResource;
+    setAnmTransform(p_anm, p_data);
 }
 
 void J2DAnmFullLoader_v15::setAnmTransform(J2DAnmTransformFull* p_anm,
                                            J3DAnmTransformFullData const* p_data) {
+    J3D_PANIC(813, p_anm, "Error : null pointer.");
+    J3D_PANIC(814, p_data, "Error : null pointer.");
     p_anm->field_0x22 = p_data->field_0xc;
     p_anm->mFrameMax = p_data->mFrameMax;
     p_anm->field_0x4 = p_data->field_0x8;
@@ -361,10 +401,13 @@ void J2DAnmFullLoader_v15::setAnmTransform(J2DAnmTransformFull* p_anm,
 }
 
 void J2DAnmFullLoader_v15::readAnmColor(J3DAnmColorFullData const* p_data) {
-    setAnmColor((J2DAnmColorFull*)mpResource, p_data);
+    J2DAnmColorFull* p_anm = (J2DAnmColorFull*)mpResource;
+    setAnmColor(p_anm, p_data);
 }
 
 void J2DAnmFullLoader_v15::setAnmColor(J2DAnmColorFull* p_anm, J3DAnmColorFullData const* p_data) {
+    J3D_PANIC(857, p_anm, "Error : null pointer.");
+    J3D_PANIC(858, p_data, "Error : null pointer.");
     p_anm->mFrameMax = p_data->mFrameMax;
     p_anm->field_0x4 = p_data->field_0x8;
     p_anm->mFrame = 0;
@@ -382,11 +425,14 @@ void J2DAnmFullLoader_v15::setAnmColor(J2DAnmColorFull* p_anm, J3DAnmColorFullDa
 }
 
 void J2DAnmFullLoader_v15::readAnmTexPattern(J3DAnmTexPatternFullData const* p_data) {
-    setAnmTexPattern((J2DAnmTexPattern*)mpResource, p_data);
+    J2DAnmTexPattern* p_anm = (J2DAnmTexPattern*)mpResource;
+    setAnmTexPattern(p_anm, p_data);
 }
 
 void J2DAnmFullLoader_v15::setAnmTexPattern(J2DAnmTexPattern* p_anm,
                                             J3DAnmTexPatternFullData const* p_data) {
+    J3D_PANIC(906, p_anm, "Error : null pointer.");
+    J3D_PANIC(907, p_data, "Error : null pointer.");
     p_anm->mFrameMax = p_data->mFrameMax;
     p_anm->field_0x4 = p_data->field_0x8;
     p_anm->mFrame = 0;
@@ -402,10 +448,13 @@ void J2DAnmFullLoader_v15::setAnmTexPattern(J2DAnmTexPattern* p_anm,
 }
 
 void J2DAnmKeyLoader_v15::readAnmTevReg(J3DAnmTevRegKeyData const* p_data) {
-    setAnmTevReg((J2DAnmTevRegKey*)mpResource, p_data);
+    J2DAnmTevRegKey* p_anm = (J2DAnmTevRegKey*)mpResource;
+    setAnmTevReg(p_anm, p_data);
 }
 
 void J2DAnmKeyLoader_v15::setAnmTevReg(J2DAnmTevRegKey* p_anm, J3DAnmTevRegKeyData const* p_data) {
+    J3D_PANIC(955, p_anm, "Error : null pointer.");
+    J3D_PANIC(956, p_data, "Error : null pointer.");
     p_anm->mFrameMax = p_data->mFrameMax;
     p_anm->field_0x4 = p_data->field_0x8;
     p_anm->mFrame = 0;
@@ -442,11 +491,14 @@ void J2DAnmKeyLoader_v15::setAnmTevReg(J2DAnmTevRegKey* p_anm, J3DAnmTevRegKeyDa
 }
 
 void J2DAnmFullLoader_v15::readAnmVisibility(J3DAnmVisibilityFullData const* p_data) {
-    setAnmVisibility((J2DAnmVisibilityFull*)mpResource, p_data);
+    J2DAnmVisibilityFull* p_anm = (J2DAnmVisibilityFull*)mpResource;
+    setAnmVisibility(p_anm, p_data);
 }
 
 void J2DAnmFullLoader_v15::setAnmVisibility(J2DAnmVisibilityFull* p_anm,
                                             J3DAnmVisibilityFullData const* p_data) {
+    J3D_PANIC(1025, p_anm, "Error : null pointer.");
+    J3D_PANIC(1026, p_data, "Error : null pointer.");
     p_anm->mFrameMax = p_data->mFrameMax;
     p_anm->field_0x4 = p_data->field_0x8;
     p_anm->mFrame = 0;
@@ -458,11 +510,14 @@ void J2DAnmFullLoader_v15::setAnmVisibility(J2DAnmVisibilityFull* p_anm,
 }
 
 void J2DAnmFullLoader_v15::readAnmVtxColor(J3DAnmVtxColorFullData const* p_data) {
-    setAnmVtxColor((J2DAnmVtxColorFull*)mpResource, p_data);
+    J2DAnmVtxColorFull* p_anm = (J2DAnmVtxColorFull*)mpResource;
+    setAnmVtxColor(p_anm, p_data);
 }
 
 void J2DAnmFullLoader_v15::setAnmVtxColor(J2DAnmVtxColorFull* p_anm,
                                           J3DAnmVtxColorFullData const* p_data) {
+    J3D_PANIC(1070, p_anm, "Error : null pointer.");
+    J3D_PANIC(1071, p_data, "Error : null pointer.");
     p_anm->mFrameMax = p_data->mFrameMax;
     p_anm->field_0x4 = p_data->field_0x8;
     p_anm->mFrame = 0;

@@ -334,7 +334,7 @@ template <typename T> JASMemPool<T> JASPoolAllocObject<T>::memPool_;
 
 /**
  * @ingroup jsystem-jaudio
- * 
+ *
  */
 template <typename T>
 class JASMemPool_MultiThreaded : public JASGenericMemPool {

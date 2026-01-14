@@ -353,7 +353,7 @@ void daTaFence_c::init_modeMove() {
 
 void daTaFence_c::modeMove() {
     cLib_chaseF(&speedF, mFallSpeed, mFallSpeed / 30.0f);
-    if (cLib_addCalcAngleS(&shape_angle.x, field_0x1384, 1, (182.04445f * fopAcM_GetSpeedF(this)), 1) == 0) {
+    if (cLib_addCalcAngleS(&shape_angle.x, field_0x1384, 1, DEG2S(fopAcM_GetSpeedF(this)), 1) == 0) {
         init_modeMoveEnd();
     }
 }

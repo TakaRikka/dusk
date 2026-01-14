@@ -23,16 +23,6 @@ static char* l_arcNames[2] = {
     "DrainSol2",
 };
 
-daNpcDrSol_c::daNpcDrSol_c() {}
-
-daNpcDrSol_c::~daNpcDrSol_c() {
-    dComIfG_resDelete(&mPhase, l_arcNames[mType]);
-
-    if (heap != NULL) {
-        mAnm_p->stopZelAnime();
-    }
-}
-
 const daNpcDrSol_HIOParam daNpcDrSol_Param_c::m = {
     40.0f,
     0.0f,
@@ -69,6 +59,34 @@ const daNpcDrSol_HIOParam daNpcDrSol_Param_c::m = {
     0,
 };
 
+static NPC_DRSOL_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpcDrSol_HIO_c::daNpcDrSol_HIO_c() {
+    m = daNpcDrSol_Param_c::m;
+}
+
+void daNpcDrSol_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpcDrSol_c::daNpcDrSol_c() {}
+
+daNpcDrSol_c::~daNpcDrSol_c() {
+    dComIfG_resDelete(&mPhase, l_arcNames[mType]);
+
+    if (heap != NULL) {
+        mAnm_p->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+}
+
 int daNpcDrSol_c::Create() {
     fopAcM_ct(this, daNpcDrSol_c);
 
@@ -91,7 +109,12 @@ int daNpcDrSol_c::Create() {
         fopAcM_setCullSizeBox(this, -60.0f, -10.0f, -60.0f, 60.0f, 200.0f, 60.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
 
-        mAcchCir.SetWall(daNpcDrSol_Param_c::m.common.width, daNpcDrSol_Param_c::m.common.knee_length);
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("下水道の兵士");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                   &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
@@ -167,7 +190,7 @@ int daNpcDrSol_c::Execute() {
 }
 
 int daNpcDrSol_c::Draw() {
-    draw(FALSE, FALSE, daNpcDrSol_Param_c::m.common.real_shadow_size, NULL, 0);
+    draw(FALSE, FALSE, mpHIO->m.common.real_shadow_size, NULL, 0);
     return 1;
 }
 
@@ -185,17 +208,17 @@ int daNpcDrSol_c::createHeapCallBack(fopAc_ac_c* actor) {
 }
 
 void daNpcDrSol_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {0, daNpcDrSol_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat0 = {0, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[] = {&dat0};
 
-    daNpcF_anmPlayData dat1 = {1, daNpcDrSol_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat1 = {1, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[] = {&dat1};
 
-    daNpcF_anmPlayData dat2a = {2, daNpcDrSol_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat2a = {2, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat2b = {1, 0.0f, 0};
     daNpcF_anmPlayData* pDat2[] = {&dat2a, &dat2b};
 
-    daNpcF_anmPlayData dat3a = {0, daNpcDrSol_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat3a = {0, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[] = {&dat3a};
 
     daNpcF_anmPlayData** ppDat[5] = {
@@ -236,9 +259,9 @@ void daNpcDrSol_c::reset() {
 
     mTwilight = dKy_darkworld_check();
 
-    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(daNpcDrSol_Param_c::m.common.attention_distance, daNpcDrSol_Param_c::m.common.attention_angle);
+    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
-    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(daNpcDrSol_Param_c::m.common.talk_distance, daNpcDrSol_Param_c::m.common.talk_angle);
+    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(mpHIO->m.common.talk_distance, mpHIO->m.common.talk_angle);
 
     setAction(&daNpcDrSol_c::wait);
 }
@@ -373,12 +396,12 @@ void daNpcDrSol_c::setParam() {
     }
 
     #if PLATFORM_SHIELD
-    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(daNpcDrSol_Param_c::m.common.attention_distance, daNpcDrSol_Param_c::m.common.attention_angle);
+    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
-    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(daNpcDrSol_Param_c::m.common.talk_distance, daNpcDrSol_Param_c::m.common.talk_angle);
+    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(mpHIO->m.common.talk_distance, mpHIO->m.common.talk_angle);
 
-    mAcchCir.SetWallR(daNpcDrSol_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpcDrSol_Param_c::m.common.knee_length);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
     #endif
 }
 
@@ -400,7 +423,7 @@ void daNpcDrSol_c::setAttnPos() {
     mDoMtx_stack_c::multVecZero(&mHeadPos);
     mDoMtx_stack_c::multVec(&sp14, &eyePos);
 
-    attention_info.position.set(mHeadPos.x, mHeadPos.y + daNpcDrSol_Param_c::m.common.attention_offset, mHeadPos.z);
+    attention_info.position.set(mHeadPos.x, mHeadPos.y + mpHIO->m.common.attention_offset, mHeadPos.z);
 
     cXyz sp8;
     mDoMtx_stack_c::copy(mAnm_p->getModel()->getAnmMtx(2));
@@ -408,8 +431,8 @@ void daNpcDrSol_c::setAttnPos() {
     sp8.y = current.pos.y;
 
     mCyl.SetC(sp8);
-    mCyl.SetH(daNpcDrSol_Param_c::m.common.height);
-    mCyl.SetR(daNpcDrSol_Param_c::m.common.width);
+    mCyl.SetH(mpHIO->m.common.height);
+    mCyl.SetR(mpHIO->m.common.width);
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
@@ -429,8 +452,6 @@ void daNpcDrSol_c::setMotionAnm(int i_index, f32 i_morf) {
 BOOL daNpcDrSol_c::drawDbgInfo() {
     return false;
 }
-
-static daNpcDrSol_Param_c l_HIO;
 
 static char* dummyString() {
     return "Shoe";

@@ -9,11 +9,11 @@ u32 JGadget::vector::extend_default(u32 param_0, u32 param_1, u32 param_2) {
 JGadget::TVector_pointer_void::TVector_pointer_void(JGadget::TAllocator<void*> const& param_0) : TVector<void*>(param_0) {
 }
 
-JGadget::TVector_pointer_void::~TVector_pointer_void() {
-}
-
 void dummy_weak_order(JGadget::TVector<void*> vec) {
     vec.insert(NULL, 0, NULL);
+}
+
+JGadget::TVector_pointer_void::~TVector_pointer_void() {
 }
 
 void JGadget::TVector_pointer_void::insert(void** param_0, void* const& param_1) {

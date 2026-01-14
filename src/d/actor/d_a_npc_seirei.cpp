@@ -150,14 +150,6 @@ daNpc_Seirei_c::cutFunc daNpc_Seirei_c::mCutList[2] = {
     &daNpc_Seirei_c::cutConversation,
 };
 
-daNpc_Seirei_c::~daNpc_Seirei_c() {
-    if (mpMorf[0] != NULL) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
-}
-
 daNpc_Seirei_HIOParam const daNpc_Seirei_Param_c::m = {
     600.0f,
     0.0f,
@@ -204,6 +196,36 @@ daNpc_Seirei_HIOParam const daNpc_Seirei_Param_c::m = {
     1200.0f,
 };
 
+static NPC_SEIREI_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Seirei_HIO_c::daNpc_Seirei_HIO_c() {
+    m = daNpc_Seirei_Param_c::m;
+}
+
+void daNpc_Seirei_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Seirei_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_Seirei_c::~daNpc_Seirei_c() {
+    if (mpMorf[0] != NULL) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+}
+
 cPhs__Step daNpc_Seirei_c::create() {
     daNpcT_ct(this, daNpc_Seirei_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
                        l_motionSequenceData, 4, l_evtList, l_resNameList);
@@ -235,9 +257,14 @@ cPhs__Step daNpc_Seirei_c::create() {
             mSound.init(&current.pos, &eyePos, 3, 1);
         }
 
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("光の精霊ａ");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this),
                   fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Seirei_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mAcch.CrrPos(dComIfG_Bgsp());
         mGndChk = mAcch.m_gnd;
         mGroundH = mAcch.GetGroundH();
@@ -362,10 +389,10 @@ void daNpc_Seirei_c::setParam() {
     srchActors();
     dComIfGp_getAttention();
 
-    dComIfGp_getAttention()->getDistTable(0x28).mDistMax = daNpc_Seirei_Param_c::m.talk_dist;
-    dComIfGp_getAttention()->getDistTable(0x28).mDistMaxRelease = daNpc_Seirei_Param_c::m.talk_dist;
-    dComIfGp_getAttention()->getDistTable(0x27).mDistMax = daNpc_Seirei_Param_c::m.talk_dist;
-    dComIfGp_getAttention()->getDistTable(0x27).mDistMaxRelease = daNpc_Seirei_Param_c::m.talk_dist;
+    dComIfGp_getAttention()->getDistTable(0x28).mDistMax = mpHIO->m.talk_dist;
+    dComIfGp_getAttention()->getDistTable(0x28).mDistMaxRelease = mpHIO->m.talk_dist;
+    dComIfGp_getAttention()->getDistTable(0x27).mDistMax = mpHIO->m.talk_dist;
+    dComIfGp_getAttention()->getDistTable(0x27).mDistMaxRelease = mpHIO->m.talk_dist;
 
     attention_info.distances[fopAc_attn_LOCK_e] = 39;
     attention_info.distances[fopAc_attn_TALK_e] = 39;
@@ -377,16 +404,16 @@ void daNpc_Seirei_c::setParam() {
         attention_info.flags = 0;
     }
 
-    mCcStts.SetWeight(daNpc_Seirei_Param_c::m.common.weight);
-    mCylH = daNpc_Seirei_Param_c::m.common.height;
-    mWallR = daNpc_Seirei_Param_c::m.common.width;
-    mAttnFovY = daNpc_Seirei_Param_c::m.common.fov;
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Seirei_Param_c::m.common.knee_length);
-    mRealShadowSize = daNpc_Seirei_Param_c::m.common.real_shadow_size;
-    mExpressionMorfFrame = daNpc_Seirei_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Seirei_Param_c::m.common.morf_frame;
-    gravity = daNpc_Seirei_Param_c::m.common.gravity;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_Seirei_c::checkChangeEvt() {
@@ -464,13 +491,13 @@ void daNpc_Seirei_c::setAttnPos() {
         sp18.set(300.0f, 40.0f, 0.0f);
         mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(JNT_HEAD));
         mDoMtx_stack_c::multVec(&sp18, &eyePos);
-        sp18.set(0.0f, daNpc_Seirei_Param_c::m.common.attention_offset, 800.0f);
+        sp18.set(0.0f, mpHIO->m.common.attention_offset, 800.0f);
         mDoMtx_stack_c::YrotS(mCurAngle.y);
         mDoMtx_stack_c::multVec(&sp18, &attention_info.position);
         attention_info.position += current.pos;
     } else {
         attention_info.position = current.pos;
-        attention_info.position.y += daNpc_Seirei_Param_c::m.common.attention_offset - 350.0f;
+        attention_info.position.y += mpHIO->m.common.attention_offset - 350.0f;
         eyePos = attention_info.position;
     }
 
@@ -786,8 +813,6 @@ static int daNpc_Seirei_Draw(void* a_this) {
 static int daNpc_Seirei_IsDelete(void* a_this) {
     return 1;
 }
-
-static daNpc_Seirei_Param_c l_HIO;
 
 static actor_method_class daNpc_Seirei_MethodTable = {
     (process_method_func)daNpc_Seirei_Create,

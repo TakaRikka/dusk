@@ -9,7 +9,7 @@
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
 #include "d/d_bomb.h"
-#include <math>
+#include <cmath>
 #include "Z2AudioLib/Z2Instances.h"
 
 class daE_SW_HIO_c {

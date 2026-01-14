@@ -1,7 +1,10 @@
 #ifndef JSYSTEM_PCH
 #define JSYSTEM_PCH
 
-#include "JSystem/JSupport/JSUList.h"
+#include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h"
+#include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DShape.h"
+#include "JSystem/JAudio2/JASDSPChannel.h"
+#include "JSystem/JSupport/JSUList.h"
 
 #endif // JSYSTEM_PCH

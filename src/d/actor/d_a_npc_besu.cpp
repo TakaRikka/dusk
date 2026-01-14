@@ -527,6 +527,22 @@ daNpc_Besu_c::cutFunc daNpc_Besu_c::mCutList[15] = {
     &daNpc_Besu_c::cutThankYou,
 };
 
+static NPC_BESU_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Besu_HIO_c::daNpc_Besu_HIO_c() {
+    m = daNpc_Besu_Param_c::m;
+}
+
+void daNpc_Besu_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Besu_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daNpc_Besu_c::~daNpc_Besu_c() {
     // "Destruct":
     OS_REPORT("|%06d:%x|daNpc_Besu_c -> デストラクト\n", g_Counter.mCounter0, this);
@@ -538,11 +554,11 @@ daNpc_Besu_c::~daNpc_Besu_c() {
         mpCupModelMorf->stopZelAnime();
     }
 
-// #if DEBUG
-//     if (field_0xe40 != NULL) {
-//         field_0xe40->removeHIO();
-//     }
-// #endif
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
 
     deleteRes((l_loadResPtrnList)[mType], (const char**)l_resNameList);
 }
@@ -631,16 +647,16 @@ int daNpc_Besu_c::create() {
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
 
-// #if DEBUG
-//         field_0xe40 = &l_HIO;
-//         // "Beth":
-//         field_0xe40->entryHIO("ベス");
-// #endif
+#if DEBUG
+         mpHIO = &l_HIO;
+         // "Beth":
+         mpHIO->entryHIO("ベス");
+ #endif
 
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                             &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Besu_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl1.Set(mCcDCyl);
         mCyl1.SetStts(&mCcStts);
         mCyl1.SetTgHitCallback(tgHitCallBack);
@@ -993,10 +1009,10 @@ void daNpc_Besu_c::setParam() {
     srchActors();
 
     u32 att_flags = (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
-    s16 talk_dist = daNpc_Besu_Param_c::m.common.talk_distance;
-    s16 talk_ang = daNpc_Besu_Param_c::m.common.talk_angle;
-    s16 att_dist = daNpc_Besu_Param_c::m.common.attention_distance;
-    s16 att_ang = daNpc_Besu_Param_c::m.common.attention_angle;
+    s16 talk_dist = mpHIO->m.common.talk_distance;
+    s16 talk_ang = mpHIO->m.common.talk_angle;
+    s16 att_dist = mpHIO->m.common.attention_distance;
+    s16 att_ang = mpHIO->m.common.attention_angle;
     if (daNpcKakashi_chkSwdTutorialStage() & 0xFF) {
         talk_dist = 11;
         talk_ang = 6;
@@ -1038,11 +1054,11 @@ void daNpc_Besu_c::setParam() {
     attention_info.distances[3] = daNpcT_getDistTableIdx(talk_dist, talk_ang);
     attention_info.flags = att_flags;
 
-    scale.set(daNpc_Besu_Param_c::m.common.scale, daNpc_Besu_Param_c::m.common.scale,
-            daNpc_Besu_Param_c::m.common.scale);
-    mCcStts.SetWeight(daNpc_Besu_Param_c::m.common.weight);
-    mCylH = daNpc_Besu_Param_c::m.common.height;
-    mWallR = daNpc_Besu_Param_c::m.common.width;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale,
+            mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
     if (mTwilight) {
         mCylH = 110.0f;
     } else if (mType == 5) {
@@ -1050,21 +1066,21 @@ void daNpc_Besu_c::setParam() {
         mWallR = 60.0f;
     }
 
-    mAttnFovY = daNpc_Besu_Param_c::m.common.fov;
+    mAttnFovY = mpHIO->m.common.fov;
     if (mType == 3 || mType == 4) {
         mAttnFovY = 180.0f;
     }
 
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Besu_Param_c::m.common.knee_length);
-    mRealShadowSize = daNpc_Besu_Param_c::m.common.real_shadow_size;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
     if (chkNurse()) {
         mRealShadowSize = 500.0f;
     }
 
-    mExpressionMorfFrame = daNpc_Besu_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Besu_Param_c::m.common.morf_frame;
-    gravity = daNpc_Besu_Param_c::m.common.gravity;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_Besu_c::checkChangeEvt() {
@@ -1330,22 +1346,22 @@ void daNpc_Besu_c::setAttnPos() {
     if (chkNurse()) {
         mJntAnm.setParam(
             this, mpMorf[0]->getModel(), &eyeOffset, getBackboneJointNo(), getNeckJointNo(),
-            getHeadJointNo(), daNpc_Besu_Param_c::m.common.body_angleX_min, 0.0f,
-            0.0f, 0.0f, -10.0f, daNpc_Besu_Param_c::m.common.head_angleX_max,
-            daNpc_Besu_Param_c::m.common.head_angleY_min, daNpc_Besu_Param_c::m.common.head_angleY_max,
-            daNpc_Besu_Param_c::m.common.neck_rotation_ratio, 0.0f, NULL);
+            getHeadJointNo(), mpHIO->m.common.body_angleX_min, 0.0f,
+            0.0f, 0.0f, -10.0f, mpHIO->m.common.head_angleX_max,
+            mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+            mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
     } else {
         mJntAnm.setParam(
             this, mpMorf[0]->getModel(), &eyeOffset, getBackboneJointNo(), getNeckJointNo(),
-            getHeadJointNo(), daNpc_Besu_Param_c::m.common.body_angleX_min, daNpc_Besu_Param_c::m.common.body_angleX_max,
-            daNpc_Besu_Param_c::m.common.body_angleY_min, daNpc_Besu_Param_c::m.common.body_angleY_max,
-            daNpc_Besu_Param_c::m.common.head_angleX_min, daNpc_Besu_Param_c::m.common.head_angleX_max,
-            daNpc_Besu_Param_c::m.common.head_angleY_min, daNpc_Besu_Param_c::m.common.head_angleY_max,
-            daNpc_Besu_Param_c::m.common.neck_rotation_ratio, 0.0f, NULL);
+            getHeadJointNo(), mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+            mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+            mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+            mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+            mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
     }
 
     mJntAnm.calcJntRad(0.2f, 1.0f, rad_val);
-    mpMorf[0]->setPlaySpeed(daNpc_Besu_Param_c::m.field_0x8c);
+    mpMorf[0]->setPlaySpeed(mpHIO->m.field_0x8c);
     setMtx();
     if (mpCupModelMorf != NULL) {
         mpCupModelMorf->play(0, 0);
@@ -1379,7 +1395,7 @@ void daNpc_Besu_c::setAttnPos() {
         mDoMtx_stack_c::multVec(&eyeOffset, &attention_info.position);
     } else {
         eyeOffset.set(0.0f, 0.0f, 0.0f);
-        eyeOffset.y = daNpc_Besu_Param_c::m.common.attention_offset;
+        eyeOffset.y = mpHIO->m.common.attention_offset;
         mDoMtx_stack_c::YrotS(mCurAngle.y);
         mDoMtx_stack_c::multVec(&eyeOffset, &eyeOffset);
         attention_info.position = current.pos + eyeOffset;
@@ -2612,10 +2628,10 @@ int daNpc_Besu_c::wait(void* param_0) {
                     actor_p = (daNpc_Len_c*) mActorMngr[3].getActorP();
                     if (actor_p != NULL &&
                         ((daNpc_Len_c*) actor_p)->checkStartDemo13StbEvt(
-                            this, daNpc_Besu_Param_c::m.common.box_min_x, daNpc_Besu_Param_c::m.common.box_min_y,
-                            daNpc_Besu_Param_c::m.common.box_min_z, daNpc_Besu_Param_c::m.common.box_max_x,
-                            daNpc_Besu_Param_c::m.common.box_max_y, daNpc_Besu_Param_c::m.common.box_max_z,
-                            daNpc_Besu_Param_c::m.common.box_offset))
+                            this, mpHIO->m.common.box_min_x, mpHIO->m.common.box_min_y,
+                            mpHIO->m.common.box_min_z, mpHIO->m.common.box_max_x,
+                            mpHIO->m.common.box_max_y, mpHIO->m.common.box_max_z,
+                            mpHIO->m.common.box_offset))
                     {
                         mEvtNo = EVENT_DEMO13_STB;
                         field_0x112f = 1;
@@ -2993,9 +3009,6 @@ static int daNpc_Besu_Draw(void* i_this) {
 static int daNpc_Besu_IsDelete(void*) {
     return true;
 }
-
-static daNpc_Besu_Param_c l_HIO;
-
 
 static actor_method_class daNpc_Besu_MethodTable = {
     (process_method_func)daNpc_Besu_Create,

@@ -7,11 +7,11 @@
 #include "f_pc/f_pc_base.h"
 #include "f_pc/f_pc_layer.h"
 
-s32 fpcPi_IsInQueue(process_priority_class* i_procPriority) {
+int fpcPi_IsInQueue(process_priority_class* i_procPriority) {
     return cTg_IsUse(&i_procPriority->base);
 }
 
-s32 fpcPi_QueueTo(process_priority_class* i_procPriority) {
+int fpcPi_QueueTo(process_priority_class* i_procPriority) {
     cTg_SingleCut(&i_procPriority->base);
     fpcLy_CancelQTo(&i_procPriority->method_tag);
     return 1;
@@ -19,7 +19,7 @@ s32 fpcPi_QueueTo(process_priority_class* i_procPriority) {
 
 static node_list_class l_fpcPi_Queue;
 
-s32 fpcPi_ToQueue(process_priority_class* i_procPriority) {
+int fpcPi_ToQueue(process_priority_class* i_procPriority) {
     fpc_ProcID layer = i_procPriority->queue_info.layer_id;
 
     if (cTg_Addition(&l_fpcPi_Queue, &i_procPriority->base)) {
@@ -49,7 +49,7 @@ process_priority_class* fpcPi_GetFromQueue() {
     return NULL;
 }
 
-s32 fpcPi_Delete(process_priority_class* i_procPriority) {
+int fpcPi_Delete(process_priority_class* i_procPriority) {
     static priority_id crear = {
         fpcLy_NONE_e,
         0xFFFF,
@@ -61,14 +61,14 @@ s32 fpcPi_Delete(process_priority_class* i_procPriority) {
     return 1;
 }
 
-s32 fpcPi_IsNormal(fpc_ProcID i_layerID, u16 i_listID, u16 i_priority) {
+int fpcPi_IsNormal(fpc_ProcID i_layerID, u16 i_listID, u16 i_priority) {
     if ((i_layerID < fpcLy_SPECIAL_e) && (i_listID < 0xFFFE) && (i_priority < fpcPi_SPECIAL_e))
         return 1;
 
     return 0;
 }
 
-s32 fpcPi_Change(process_priority_class* i_procPriority, fpc_ProcID i_layerID, u16 i_listID, u16 i_priority) {
+int fpcPi_Change(process_priority_class* i_procPriority, fpc_ProcID i_layerID, u16 i_listID, u16 i_priority) {
     base_process_class* process = (base_process_class*)i_procPriority->base.mpTagData;
     BOOL changed = FALSE;
 
@@ -108,7 +108,7 @@ s32 fpcPi_Change(process_priority_class* i_procPriority, fpc_ProcID i_layerID, u
     return 0;
 }
 
-s32 fpcPi_Handler() {
+int fpcPi_Handler() {
     process_priority_class* i_procPriority;
     while (i_procPriority = fpcPi_GetFromQueue()) {
         base_process_class* process = (base_process_class*)i_procPriority->base.mpTagData;
@@ -128,7 +128,7 @@ s32 fpcPi_Handler() {
     return 1;
 }
 
-s32 fpcPi_Init(process_priority_class* i_procPriority, void* i_data, fpc_ProcID i_layerID, u16 i_listID,
+int fpcPi_Init(process_priority_class* i_procPriority, void* i_data, fpc_ProcID i_layerID, u16 i_listID,
                u16 i_priority) {
     if (!fpcPi_IsNormal(i_layerID, i_listID, i_priority))
         return 0;

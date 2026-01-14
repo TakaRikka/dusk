@@ -3,7 +3,6 @@
 #include "d/d_camera.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "SSystem/SComponent/c_math.h"
-#include <math>
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_boomerang.h"
 #include "d/actor/d_a_horse.h"
@@ -21,7 +20,12 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
-#include <math>
+#include <cmath>
+
+#if DEBUG
+#include "d/d_debug_pad.h"
+#include "d/d_debug_camera.h"
+#endif
 
 namespace {
 
@@ -46,8 +50,10 @@ inline static bool is_player(fopAc_ac_c* actor) {
 static void hideActor(fopAc_ac_c* actor) {
     if (is_player(actor)) {
         dComIfGp_onCameraAttentionStatus(0, 2);
-        if (((daPy_py_c*)actor)->checkHorseRide()) {
-            fopAcM_OnStatus(dComIfGp_getHorseActor(), 0x1000000);
+        daPy_py_c* player = (daPy_py_c*)actor;
+        if (player->checkHorseRide()) {
+            daHorse_c* horse = dComIfGp_getHorseActor();
+            fopAcM_OnStatus(horse, 0x1000000);
         }
     } else {
         fopAcM_OnStatus(actor, 0x1000000);
@@ -55,8 +61,8 @@ static void hideActor(fopAc_ac_c* actor) {
 }
 
 static bool defaultRadius(f32 param_0, f32 param_1, f32* param_2) {
-    f32 var_f30;
     f32 var_f31;
+    f32 var_f30;
 
     if (param_0 < param_1) {
         var_f31 = param_0;
@@ -110,27 +116,28 @@ static bool posInLine2D(cXyz* param_0, cXyz* param_1, cXyz* param_2) {
 static cXyz relationalPos2(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* param_2, f32 param_3,
                            cSAngle param_4) {
     if (i_actor1 == NULL || i_actor2 == NULL) {
+        OS_REPORT("camera: error: actor NULL in relationalPos() \n");
         return cXyz::Zero;
+    } else {
+        cXyz pos1 = i_actor1->attention_info.position;
+        cXyz pos2 = i_actor2->attention_info.position;
+        cXyz pos_diff = pos2 - pos1;
+        cSGlobe diff_globe(pos_diff);
+        pos_diff.normalize();
+        pos1 -= pos_diff * i_actor1->attention_info.field_0xa;
+        pos2 += pos_diff * i_actor2->attention_info.field_0xa;
+        cXyz mid = pos1 + (pos2 - pos1) * 0.5f;
+        cXyz vec = *param_2;
+        cSAngle angle = param_4 - diff_globe.U();
+        if (angle < cSAngle::_0) {
+            vec.x = -vec.x;
+        }
+        cSGlobe globe2(vec);
+        globe2.U(diff_globe.U() + globe2.U());
+        diff_globe.R(0.5f * diff_globe.R() * angle.Cos() * param_3);
+        cXyz ret = mid + diff_globe.Xyz() + globe2.Xyz();
+        return ret;
     }
-
-    cXyz pos1 = i_actor1->attention_info.position;
-    cXyz pos2 = i_actor2->attention_info.position;
-    cXyz pos_diff = pos2 - pos1;
-    cSGlobe diff_globe(pos_diff);
-    pos_diff.normalize();
-    pos1 -= pos_diff * i_actor1->attention_info.field_0xa;
-    pos2 += pos_diff * i_actor2->attention_info.field_0xa;
-    cXyz mid = pos1 + (pos2 - pos1) * 0.5f;
-    cXyz vec = *param_2;
-    cSAngle angle = param_4 - diff_globe.U();
-    if (angle < cSAngle::_0) {
-        vec.x = -vec.x;
-    }
-    cSGlobe globe2(vec);
-    globe2.U(diff_globe.U() + globe2.U());
-    diff_globe.R(0.5f * diff_globe.R() * angle.Cos() * param_3);
-    cXyz ret = mid + diff_globe.Xyz() + globe2.Xyz();
-    return ret;
 }
 
 inline static cSAngle sAngleY(cXyz& i_vec) {
@@ -154,13 +161,13 @@ int dCamMapToolData::Set(s32 param_0, s32 roomNo, fopAc_ac_c* param_2, u16 param
         mFlags = (mCamData.field_0x14 >> 0xE) & 3;
 
         if (param_3 & 0x8000) {
-            mFlags |= 0x10;
+            mFlags |= (u8)0x10;
         }
 
-        if (mCamData.field_0x14 & 0x2000) {
-            mCamData.field_0x14 |= 0xC000;
+        if (mCamData.field_0x14 & (u16)0x2000) {
+            mCamData.field_0x14 |= (u16)0xC000;
         } else {
-            mCamData.field_0x14 &= ~0xC000;
+            mCamData.field_0x14 &= (u16)~0xC000;
         }
 
         mArrowIndex = mCamData.m_arrow_idx;
@@ -318,7 +325,7 @@ inline static void setComStat(u32 param_0) {
     dComIfGp_onCameraAttentionStatus(0, param_0);
 }
 
-inline static bool getComStat(u32 param_0) {
+inline static BOOL getComStat(u32 param_0) {
     return dComIfGp_getCameraAttentionStatus(0) & param_0;
 }
 
@@ -338,10 +345,11 @@ inline static void setComZoomForcus(f32 param_0) {
 
 void dCamera_c::initialize(camera_class* i_camera, fopAc_ac_c* i_player, u32 i_cameraID,
                            u32 i_padID) {
-    char* type_data =
-        (char*)dComIfG_getObjectRes(dComIfGp_getCameraParamFileName(0), "camtype.dat");
-    mCamTypeData = (dCamera_type_data*)(type_data + 8);
-    mCamTypeNum = *(int*)(type_data + 4);
+    const char* fileName = dComIfGp_getCameraParamFileName(0);
+    void* objRes = dComIfG_getObjectRes(fileName, "camtype.dat");
+    char* typeData = (char*)objRes;
+    mCamTypeData = (dCamera_type_data*)(typeData + 8);
+    mCamTypeNum = *(int*)(typeData + 4);
 
     field_0x0 = i_camera;
     field_0x20 = 1;
@@ -417,7 +425,7 @@ void dCamera_c::initialize(camera_class* i_camera, fopAc_ac_c* i_player, u32 i_c
     specialType[CAM_TYPE_PEEP] = GetCameraTypeFromCameraName("Peep");
     field_0x698 = 0xFF;
     field_0x69c = 0;
-    mIsWolf = daPy_py_c::checkNowWolf() != 0;
+    mIsWolf = daPy_py_c::checkNowWolf() != 0 ? TRUE : FALSE;
     mCurMode = 0;
     mEngineHoldState = 0;
     mForcedMode = 11;
@@ -427,29 +435,25 @@ void dCamera_c::initialize(camera_class* i_camera, fopAc_ac_c* i_player, u32 i_c
     mFrameCounter = 0;
     mTicks = cM_rndFX(0x7FFF);
     field_0x84 = 1.0f;
-    field_0x91c = 0.0f;
-
-    mTrimHeight = 0.0f;
+    mTrimHeight = field_0x91c = 0.0f;
     mTrimSize = 0;
     mTrimTypeForce = -1;
     mGear = 0;
     field_0x944 = 0;
     field_0x950 = mGear;
+#if DEBUG
+    dbg_field_0xd8 = 0;
+#endif
 
-    mBG.field_0x5c.field_0x0 = 0;
-    mBG.field_0x0.field_0x0 = 0;
+    mBG.field_0x0.field_0x0 = mBG.field_0x5c.field_0x0 = false;
     mBG.field_0xc0.field_0x3c = 0xFF;
-    mBG.field_0x5c.field_0x58 = -G_CM3D_F_INF;
-    mBG.field_0x0.field_0x58 = -G_CM3D_F_INF;
+    mBG.field_0x0.field_0x58 = mBG.field_0x5c.field_0x58 = -G_CM3D_F_INF;
     mBG.field_0x0.field_0x4.OffNormalGrp();
     mBG.field_0x0.field_0x4.OnWaterGrp();
-    mBG.field_0xc0.field_0x1 = 0;
-    mBG.field_0xc0.field_0x0 = 0;
-    mBG.field_0xc0.field_0x10 = cXyz::Zero;
-    mBG.field_0xc0.field_0x4 = mBG.field_0xc0.field_0x10;
+    mBG.field_0xc0.field_0x0 = mBG.field_0xc0.field_0x1 = 0;
+    mBG.field_0xc0.field_0x4 = mBG.field_0xc0.field_0x10 = cXyz::Zero;
     mBG.field_0xc0.field_0x20 = 0;
-    mBG.field_0xc0.field_0x1e = cSAngle::_0;
-    mBG.field_0xc0.field_0x1c = mBG.field_0xc0.field_0x1e;
+    mBG.field_0xc0.field_0x1c = mBG.field_0xc0.field_0x1e = cSAngle::_0;
     mBG.field_0xc0.field_0x34 = 0;
     mBG.field_0x108.field_0x0 = 0;
     mBG.field_0x108.field_0x4 = 0.0f;
@@ -473,11 +477,7 @@ void dCamera_c::initialize(camera_class* i_camera, fopAc_ac_c* i_player, u32 i_c
 
     dStage_dt_c* stage_dt = dComIfGp_getStage();
     stage_stag_info_class* stag_info;
-    if (stage_dt != NULL) {
-        stag_info = stage_dt->getStagInfo();
-    } else {
-        stag_info = NULL;
-    }
+    stag_info = stage_dt != NULL ? stage_dt->getStagInfo() : NULL;
 
     if (stag_info != NULL && mMapToolType == 0xFF) {
         switch (dStage_stagInfo_GetSTType(stag_info)) {
@@ -540,8 +540,7 @@ void dCamera_c::initialize(camera_class* i_camera, fopAc_ac_c* i_player, u32 i_c
         mControlledYaw = mViewCache.mDirection.U().Inv();
 
         mUp = dComIfGs_getTurnRestart().getCameraUp();
-        mBank = cSAngle::_0;
-        mViewCache.mBank = mBank;
+        mViewCache.mBank = mBank = cSAngle::_0;
 
         mViewCache.mFovy = mFovy = dComIfGs_getTurnRestart().getCameraFvy();
     } else if (daAlink_getAlinkActorClass()->checkStartFall()) {
@@ -561,8 +560,7 @@ void dCamera_c::initialize(camera_class* i_camera, fopAc_ac_c* i_player, u32 i_c
         mEye = mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
 
         mUp = dComIfGs_getTurnRestart().getCameraUp();
-        mBank = cSAngle::_0;
-        mViewCache.mBank = mBank;
+        mViewCache.mBank = mBank = cSAngle::_0;
         mViewCache.mFovy = mFovy = dComIfGs_getTurnRestart().getCameraFvy();
     } else {
         cXyz attn_pos = attentionPos(mpPlayerActor);
@@ -579,21 +577,20 @@ void dCamera_c::initialize(camera_class* i_camera, fopAc_ac_c* i_player, u32 i_c
         mDirection = mViewCache.mDirection;
         mControlledYaw = mViewCache.mDirection.U().Inv();
 
-        mFovy = 60.0f;
-        mViewCache.mFovy = 60.0f;
+        mViewCache.mFovy = mFovy = 60.0f;
         mUp.set(0.0f, 1.0f, 0.0f);
-        mBank = cSAngle::_0;
-        mViewCache.mBank = mBank;
+        mViewCache.mBank = mBank = cSAngle::_0;
     }
 
     mFakeAngleSys.field_0x0 = 0;
-    field_0x674 = 0xFF;
-    field_0x670 = 0xFF;
-    field_0x668 = 0;
-    field_0x66c = 0;
+    field_0x670 = field_0x674 = 0xFF;
+    field_0x66c = field_0x668 = 0;
     field_0x678 = 1;
     mZoomRatio = 0.0f;
     field_0x738 = 85.0f;
+#if DEBUG
+    mCamSetup.SetTypeTable(mCamTypeData, mCamTypeNum);
+#endif
 
     mFastShotState = 0;
     field_0x611 = 0;
@@ -622,6 +619,8 @@ void dCamera_c::initialize(camera_class* i_camera, fopAc_ac_c* i_player, u32 i_c
     mMidnaRidingAndVisible = player->checkMidnaRide() && !midna->checkNoDraw();
     mLastBumpCase = 0;
     field_0x95c = cXyz::Zero;
+    f32 unusedFloat1 = 0.2f;
+    f32 unusedFloat2 = 0.0f;
 }
 
 void dCamera_c::Start() {
@@ -731,7 +730,7 @@ void dCamera_c::initPad() {
 }
 
 void dCamera_c::updatePad() {
-    dComIfGp_getAttention();
+    dAttention_c* attn = dComIfGp_getAttention();
     int var_r30 = mCamParam.Algorythmn(mCamStyle);
 
     f32 var_f31;
@@ -893,8 +892,15 @@ void dCamera_c::updatePad() {
     {
         mCameraInputActive = 1;
     }
-}
 
+#if DEBUG
+    if (mCamSetup.CheckFlag(0x8000) && !dComIfGp_evmng_cameraPlay()) {
+        if (((mGear + 1) & ~0x3) == 0) {
+            dDbVw_Report(20, 235, "%c", "LMH?"[mGear + 1]);
+        }
+    }
+#endif
+}
 
 void dCamera_c::initMonitor() {
     if (mpPlayerActor != NULL) {
@@ -903,43 +909,44 @@ void dCamera_c::initMonitor() {
         mMonitor.field_0x0 = cXyz::Zero;
     }
 
-    field_0x2c0 = 0.0f;
-    mMonitor.field_0x10 = 0.0f;
-    mMonitor.field_0xc = 0.0f;
+    mMonitor.field_0xc = mMonitor.field_0x10 = field_0x2c0 = 0.0f;
     mIdleFrameCount = 0;
     field_0x2c8 = 0.0f;
-    mMonitor.field_0x14 = cXyz::Zero;
+    mMonitor.field_0x14.field_0x0 = cXyz::Zero;
 }
 
 void dCamera_c::updateMonitor() {
-    if (mpPlayerActor != NULL) {
-        cXyz sp24 = positionOf(mpPlayerActor);
-        mMonitor.field_0x14 = sp24 - mMonitor.field_0x0;
-
-        if (mBG.field_0xc0.field_0x1) {
-            dComIfG_Bgsp().MoveBgMatrixCrrPos(mBG.field_0x5c.field_0x4, true, &mMonitor.field_0x0, NULL, NULL);
-        }
-
-        f32 var_f31;
-        if (chkFlag(0x10000)) {
-            var_f31 = cXyz(sp24 - mMonitor.field_0x0).abs();
-        } else {
-            var_f31 = dCamMath::xyzHorizontalDistance(sp24, mMonitor.field_0x0);
-        }
-
-        field_0x2c0 = var_f31 - mMonitor.field_0xc;
-        mMonitor.field_0x10 += (var_f31 - mMonitor.field_0x10) * 0.01f;
-        mMonitor.field_0xc = var_f31;
-        mMonitor.field_0x0 = sp24;
-
-        if (!push_any_key()) {
-            mIdleFrameCount++;
-        } else {
-            mIdleFrameCount = 0;
-        }
-
-        field_0x2c8 = mDirection.R() - field_0x2c8;
+    if (mpPlayerActor == NULL) {
+        return;
     }
+
+    cXyz sp24 = positionOf(mpPlayerActor);
+    mMonitor.field_0x14.field_0x0 = sp24 - mMonitor.field_0x0;
+
+    if (mBG.field_0xc0.field_0x1) {
+        dComIfG_Bgsp().MoveBgMatrixCrrPos(mBG.field_0x5c.field_0x4, true, &mMonitor.field_0x0, NULL,
+                                          NULL);
+    }
+
+    f32 var_f31;
+    if (chkFlag(0x10000)) {
+        var_f31 = cXyz(sp24 - mMonitor.field_0x0).abs();
+    } else {
+        var_f31 = dCamMath::xyzHorizontalDistance(sp24, mMonitor.field_0x0);
+    }
+
+    field_0x2c0 = var_f31 - mMonitor.field_0xc;
+    mMonitor.field_0x10 += (var_f31 - mMonitor.field_0x10) * 0.01f;
+    mMonitor.field_0xc = var_f31;
+    mMonitor.field_0x0 = sp24;
+
+    if (!push_any_key()) {
+        mIdleFrameCount++;
+    } else {
+        mIdleFrameCount = 0;
+    }
+
+    field_0x2c8 = mDirection.R() - field_0x2c8;
 }
 
 bool dCamera_c::checkForceLockTarget() {
@@ -963,6 +970,26 @@ bool dCamera_c::checkForceLockTarget() {
 
 void dCamera_c::infoReport() {
 #if DEBUG
+    int x = 20;
+    int y = 190;
+
+    const char* c1;
+    if (mBG.field_0xc0.field_0x44 != 0) {
+        c1 = " ";
+    } else {
+        c1 = "j";
+    }
+
+    const char* c2;
+    if (mStyleSettle.mFinished != 0) {
+        c2 = "O";
+    } else {
+        c2 = "x";
+    }
+
+    dDbVw_Report(x, y, "%s%s", c2, c1);
+    dDbVw_Report(x, y + 15, "TY%03d MD%03d", mCurType, mCurMode);
+    dDbVw_Report(x, y + 30, "ST%03d AL%03d", mCamStyle, mCamParam.Algorythmn());
 #endif
 }
 
@@ -982,19 +1009,29 @@ inline bool chkCornerCos(f32 param_0) {
 
 }  // namespace
 
+void dCamera_c::debugDrawInit() {
+#if DEBUG
+    dbg_field_0xd4 = 0;
+#endif
+}
+
 bool dCamera_c::Run() {
     daAlink_c* link = daAlink_getAlinkActorClass();
     daMidna_c* midna = daPy_py_c::getMidnaActor();
     mMidnaRidingAndVisible = link->checkMidnaRide() && !midna->checkNoDraw();
-    bool bVar9 = false;
+    bool sp10 = false;
+    bool sp0F = false;
     clrComStat(0x804);
+#if DEBUG
+    debugDrawInit();
+    dDbgCamera.InitlChk();
+#endif
     int iVar8 = mIsWolf;
     mIsWolf = daPy_py_c::checkNowWolf() ? 1 : 0;
     mFocusLine.Off();
     clrFlag(0x10168C21);
     clrFlag(0x10);
-    mpAuxTargetActor2 = NULL;
-    mpAuxTargetActor1 = NULL;
+    mpAuxTargetActor1 = mpAuxTargetActor2 = NULL;
     s32 stay_no = dComIfGp_roomControl_getStayNo();
     if (stay_no != mRoomCtx.mRoomNo) {
         onRoomChange(stay_no);
@@ -1029,12 +1066,12 @@ bool dCamera_c::Run() {
     }
 
     if (dComIfGp_getEvent()->runCheck()) {
-        mPadInfo.mMainStick.mLastValue = 0.0f;
-        mPadInfo.mMainStick.mLastPosY = 0.0f;
-        mPadInfo.mMainStick.mLastPosX = 0.0f;
-        mPadInfo.mCStick.mLastValue = 0.0f;
-        mPadInfo.mCStick.mLastPosY = 0.0f;
-        mPadInfo.mCStick.mLastPosX = 0.0f;
+        mPadInfo.mMainStick.mLastPosX =
+            mPadInfo.mMainStick.mLastPosY =
+            mPadInfo.mMainStick.mLastValue = 0.0f;
+        mPadInfo.mCStick.mLastPosX =
+            mPadInfo.mCStick.mLastPosY =
+            mPadInfo.mCStick.mLastValue = 0.0f;
     }
 
     if (!checkForceLockTarget()) {
@@ -1045,6 +1082,10 @@ bool dCamera_c::Run() {
 
     mNextType = nextType(mCurType);
     if (mNextType != mCurType && onTypeChange(mCurType, mNextType)) {
+        if (mCamSetup.CheckFlag(0x8000)) {
+            OS_REPORT("%06d: camera: type change %d -> %d (%s)\n",
+                mFrameCounter, mCurType, mNextType, mCamTypeData[mNextType].name);
+        }
         mCurType = mNextType;
     }
 
@@ -1058,6 +1099,11 @@ bool dCamera_c::Run() {
         && mCamTypeData[mCurType].field_0x18[mIsWolf][mNextMode] >= 0
         && onModeChange(mCurMode, mNextMode))
     {
+        if (mCamSetup.CheckFlag(0x8000)) {
+            OS_REPORT("%06d: camera: mode change %d -> %d\n",
+                mFrameCounter, mCurMode, mNextMode);
+        }
+
         mCurMode = mNextMode;
         mCurCamStyleTimer = 0;
     }
@@ -1067,6 +1113,13 @@ bool dCamera_c::Run() {
 
     int style = mCamTypeData[mCurType].field_0x18[mIsWolf][mCurMode];
     if (style >= 0 && mCamStyle != style && onStyleChange(mCamStyle, style)) {
+        u32 id = mCamParam.Id(style);
+        if (mCamSetup.CheckFlag(0x8000)) {
+            OS_REPORT("%06d: camera: style change %d -> %d (%c%c%c%c)\n",
+                mFrameCounter, mCamStyle, style,
+                (id >> 24) & 0xff, (id >> 16) & 0xff, (id >> 8) & 0xff, id & 0xff);
+        }
+
         mCamStyle = style;
         mCamParam.Change(mCamStyle);
         setFlag(0x200);
@@ -1096,7 +1149,7 @@ bool dCamera_c::Run() {
             clrFlag(0x200000);
         }
     } else {
-        bVar9 = (this->*engine_tbl[mCamParam.Algorythmn(mCamStyle)])(mCamStyle);
+        sp0F = (this->*engine_tbl[mCamParam.Algorythmn(mCamStyle)])(mCamStyle);
         field_0x170++;
         field_0x160++;
         mCurCamStyleTimer++;
@@ -1104,7 +1157,7 @@ bool dCamera_c::Run() {
 
     mFrameCounter++;
     mTicks++;
-    if (!bVar9) {
+    if (!sp0F) {
         mEngineHoldState = 0;
     }
     defaultTriming();
@@ -1133,10 +1186,15 @@ bool dCamera_c::Run() {
         if (mCamParam.CheckFlag(0x10)) {
             mBumpCheckFlags &= ~0x4000;
         }
-        mBumpCheckFlags &= ~8;
-        if (mCamParam.CheckFlag(4)) {
-            mBumpCheckFlags = 0;
+        mBumpCheckFlags &= ~0x8;
+        if (mCamParam.CheckFlag(0x4)) {
+            mBumpCheckFlags = 0x0;
         }
+#if PLATFORM_WII
+        if (mCurMode == 7 && !dComIfGp_checkPlayerStatus0(mPadID, 0x200000)) {
+            mBumpCheckFlags = 0x2000;
+        }
+#endif
     }
 
     mFovy = mViewCache.mFovy;
@@ -1151,11 +1209,20 @@ bool dCamera_c::Run() {
     }
     if (mFakeAngleSys.field_0x0 != 0) {
         mControlledYaw = getUSOAngle(mPadInfo.mMainStick.mAngle);
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000) && dComIfGp_evmng_cameraPlay() == 0) {
+            int x = 90;
+            int y = 190;
+            dDbVw_Report(x, y, "  F");
+        }
+#endif
     } else {
         mControlledYaw = mDirection.U().Inv();
     }
 
     if (mCamSetup.CheckFlag(0x8000)) {
+        int x = 20;
+        int y = 235;
         infoReport();
     }
 
@@ -1191,7 +1258,7 @@ bool dCamera_c::Run() {
         Z2GetAudioMgr()->setCameraInWaterDepth(0.0f);
     }
 
-    if (mStyleSettle.mFinished) {
+    if (isModeOK()) {
         setComStat(0x10);
     } else {
         clrComStat(0x10);
@@ -1201,16 +1268,82 @@ bool dCamera_c::Run() {
     if (mDirection.R() < hide_dist) {
         if (chkFlag(0x800) & 1) {
             setComStat(2);
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(20, 235, "       H");
+            }
+#endif
         } else if (chkFlag(0x10000000)) {
             setComStat(0x20);
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(20, 235, "       h");
+            }
+#endif
+        } else {
+#if DEBUG
+            if (mCurType != specialType[1] && false) {
+                mDirection.R(hide_dist + 0.1f);
+                mEye = mCenter + mDirection.Xyz();
+
+                if (mCamSetup.CheckFlag(0x8000)) {
+                    dDbVw_Report(20, 235, "       <");
+                }
+            }
+#endif
         }
     }
 
     runEventRecoveryTrans();
+
+#if DEBUG
+    if (mCamSetup.CheckFlag(0x200)) {
+        int x = 20;
+        int y = 320;
+        int yStep = 15;
+        cXyz aPos = attentionPos(mpPlayerActor);
+        cSAngle sp40 = directionOf(mpPlayerActor);
+        dDbVw_Report(x, y, "APOS %11.3f %11.3f %11.3f", aPos.x, aPos.y, aPos.z);
+        dDbVw_Report(x, y += yStep, "iCTR %11.3f %11.3f %11.3f",
+            mViewCache.mCenter.x, mViewCache.mCenter.y, mViewCache.mCenter.z);
+        dDbVw_Report(x, y += yStep, "iEYE %11.3f %11.3f %11.3f",
+            mViewCache.mEye.x, mViewCache.mEye.y, mViewCache.mEye.z);
+
+        dDbVw_Report(x, y += yStep, "iC2E %11.3f %11.3f %11.3f",
+            mViewCache.mDirection.R(), mViewCache.mDirection.V().Degree(),
+            mViewCache.mDirection.U().Degree());
+        dDbVw_Report(x, y += yStep, "CTR  %11.3f %11.3f %11.3f",
+            mCenter.x, mCenter.y, mCenter.z);
+        dDbVw_Report(x, y += yStep, "EYE  %11.3f %11.3f %11.3f",
+            mEye.x, mEye.y, mEye.z);
+
+        dDbVw_Report(x, y += yStep, "C2E  %11.3f %11.3f %11.3f",
+            mDirection.R(), mDirection.V().Degree(), mDirection.U().Degree());
+
+        dDbVw_Report(x, y += yStep, "FVY  %11.3f        AANG %11.3f",
+            mFovy, sp40.Degree());
+    }
+
+    if (mCamSetup.CheckFlag(0x100)) {
+        if (mpPlayerActor != NULL) {
+            cXyz spCC = attentionPos(mpPlayerActor);
+            debugDrawPoint(spCC);
+            if (mpLockonTarget != NULL) {
+                cXyz spC0 = attentionPos(mpLockonTarget);
+                debugDrawPoint(spC0);
+                debugDrawLine(spCC, spC0);
+            }
+        }
+        debugDrawPoint(mCenter);
+    }
+#endif
+
     clrFlag(0x1000);
     mTagCamTool.Clr();
     field_0x89c.Clr();
-    return bVar9;
+    return sp0F;
 }
 
 bool dCamera_c::NotRun() {
@@ -1244,6 +1377,28 @@ bool dCamera_c::NotRun() {
     shakeCamera();
     blureCamera();
     field_0x21 = 0;
+
+#if DEBUG
+    if (mCamSetup.CheckFlag(0x200)) {
+        int x = 20;
+        int y = 320;
+        int yStep = 15;
+
+        dDbVw_Report(x, y, "iCTR %11.3f %11.3f %11.3f",
+            mViewCache.mCenter.x, mViewCache.mCenter.y, mViewCache.mCenter.z);
+        dDbVw_Report(x, y += yStep, "iEYE %11.3f %11.3f %11.3f",
+            mViewCache.mEye.x, mViewCache.mEye.y, mViewCache.mEye.z);
+
+        dDbVw_Report(x, y += yStep, "iC2E %11.3f %11.3f %11.3f",
+            mViewCache.mDirection.R(), mViewCache.mDirection.V().Degree(),
+            mViewCache.mDirection.U().Degree());
+
+        dDbVw_Report(x, y += yStep, "CTR  %11.3f %11.3f %11.3f", mCenter.x, mCenter.y, mCenter.z);
+        dDbVw_Report(x, y += yStep, "EYE  %11.3f %11.3f %11.3f", mEye.x, mEye.y, mEye.z);
+        dDbVw_Report(x, y += yStep, "FVY  %11.3f ", mFovy);
+    }
+#endif
+
     if (mBankOverride != cSAngle::_0) {
         mBank = mBankOverride;
     }
@@ -1299,6 +1454,12 @@ void dCamera_c::CalcTrimSize() {
             mTrimHeight += -mTrimHeight * 0.25f;
             break;
         case 2:
+#if WIDESCREEN_SUPPORT
+            if (mDoGph_gInf_c::isWide() && mDoGph_gInf_c::isWideZoom()) {
+                mTrimHeight += (16.0f - mTrimHeight) * 0.25f;
+                break;
+            }
+#endif
             mTrimHeight += (mCamSetup.CinemaScopeTrimHeight() - mTrimHeight) * 0.25f;
             break;
         case 1:
@@ -1331,6 +1492,58 @@ int dCamera_c::Draw() {
     debugDraw();
 #endif
     mFocusLine.Draw();
+    return 1;
+}
+
+void dCamera_c::debugDraw() {
+#if DEBUG
+    GXColor color;
+    u32 i;
+    for (i = 0; i < dbg_field_0xd4; i++) {
+        color.r = (i & 0x1) != 0 ? 0xff : (i & 0x8) != 0 ? 0xc0 : 0x80;
+        color.g = (i & 0x2) != 0 ? 0xff : (i & 0x8) != 0 ? 0xc0 : 0x80;
+        color.b = (i & 0x4) != 0 ? 0xff : (i & 0x8) != 0 ? 0xc0 : 0x80;
+        color.a = 0x80;
+        if (dbg_field_0xc4[i] == 0) {
+            dDbVw_drawSphereXlu(dbg_field_0x04[i], 20.0f, color, 1);
+        } else if (dbg_field_0xc4[i] == 1) {
+            dDbVw_drawLineXlu(dbg_field_0x04[i], dbg_field_0x04[i + 1], color, 1, 12);
+            i++;
+        }
+    }
+
+    dbg_field_0xd4 = 0;
+#endif
+}
+
+int dCamera_c::debugDrawPoint(cXyz& i_point) {
+#if DEBUG
+    if (dbg_field_0xd4 >= 16) {
+        return 0;
+    }
+
+    dbg_field_0x04[dbg_field_0xd4] = i_point;
+    dbg_field_0xc4[dbg_field_0xd4] = 0;
+    dbg_field_0xd4++;
+#endif
+
+    return 1;
+}
+
+int dCamera_c::debugDrawLine(cXyz& i_point_1, cXyz& i_point_2) {
+#if DEBUG
+    if (dbg_field_0xd4 + 1 >= 16) {
+        return 0;
+    }
+
+    dbg_field_0x04[dbg_field_0xd4] = i_point_1;
+    dbg_field_0xc4[dbg_field_0xd4] = 1;
+    dbg_field_0xd4++;
+    dbg_field_0x04[dbg_field_0xd4] = i_point_2;
+    dbg_field_0xc4[dbg_field_0xd4] = 2;
+    dbg_field_0xd4++;
+#endif
+
     return 1;
 }
 
@@ -1379,19 +1592,49 @@ void dCamera_c::setMapToolData() {
     int var_r26 = 0xFF;
 
     if (mBG.field_0xc0.field_0x40 == 0x1FF && mRoomMapTool.mpActor == NULL) {
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(20, 190, "  k");
+        }
+#endif
+
         return;
     }
 
     if (mBG.field_0xc0.field_0x40 != 0xFF) {
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(20, 190, "  p");
+        }
+#endif
+
         mRoomMapTool.Clr();
         var_r29 = mBG.field_0xc0.field_0x40;
     } else if (field_0x8d8.mCameraIndex != 0xFF) {
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(20, 190, "  e");
+        }
+#endif
+
         mRoomMapTool.Clr();
         var_r29 = field_0x8d8.mCameraIndex;
     } else if (mDefRoomCamTool.mCameraIndex != 0xFF) {
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(20, 190, "  r");
+        }
+#endif
+
         mRoomMapTool = mDefRoomCamTool;
         return;
     } else if (mStageCamTool.mCameraIndex != 0xFF) {
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(20, 190, "  s");
+        }
+#endif
+
         mRoomMapTool = mStageCamTool;
         return;
     } else {
@@ -1402,12 +1645,7 @@ void dCamera_c::setMapToolData() {
 }
 
 void dCamera_c::SetTagData(fopAc_ac_c* param_0, s32 param_1, u16 param_2, u8 param_3) {
-    s32 room_no;
-    if (param_0 != NULL) {
-        room_no = fopAcM_GetRoomNo(param_0);
-    } else {
-        room_no = dComIfGp_roomControl_getStayNo();
-    }
+    int room_no = param_0 != NULL ? fopAcM_GetRoomNo(param_0) : dComIfGp_roomControl_getStayNo();
 
     mTagCamTool.Set(param_1, room_no, param_0, param_2, param_3);
 }
@@ -1425,12 +1663,35 @@ s32 dCamera_c::nextMode(s32 i_curMode) {
         if (mBG.field_0x0.field_0x58 > player_pos.y) {
             field_0x223 = 0;
         }
+
+        switch (i_curMode) {
+        case 1:
+        case 2:
+        case 4:
+        case 7:
+        case 8:
+        default:
+            break;
+        }
+
         if (!link->checkFastShotTime()) {
             mFastShotState = 0;
         }
         if (mForcedMode != 11 && mCamTypeData[mCurType].field_0x18[mIsWolf][mForcedMode] >= 0) {
             next_mode = mForcedMode;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(20, 205, "      MD---");
+            }
+#endif
+#if DEBUG
+        } else if (check_owner_action(mPadID, 0x200000) && attn->LockonTruth()) {
+            next_mode = 2;
+        } else if (check_owner_action(mPadID, 0x200000)) {
+#else
         } else if (check_owner_action(mPadID, 0x200000) && !attn->Lockon()) {
+#endif
             if (check_owner_action(mPadID, 0x25040)) {
                 next_mode = 7;
             } else {
@@ -1530,6 +1791,7 @@ s32 dCamera_c::nextMode(s32 i_curMode) {
 }
 
 bool dCamera_c::onModeChange(s32 i_curMode, s32 i_nextMode) {
+    dAttention_c* unusedAttn = dComIfGp_getAttention();
     field_0x160 = 0;
     field_0x164 = 0;
     field_0x168 = 1;
@@ -1580,106 +1842,152 @@ int dCamera_c::ModeFix(s32 param_0) {
     return 1;
 }
 
+static int l_debugMode;
+
 s32 dCamera_c::nextType(s32 i_curType) {
     s32 next_type = i_curType;
+    int sp30 = 0;
+    s8 var_r28 = 0x20;
 
-    if (mEngineHoldState != 1) {
-        s32 iVar14 = 0xff;
-        if (mTagCamTool.mCameraIndex != 0xff) {
-            s32 type = GetCameraTypeFromToolData(&mTagCamTool.mCamData);
-            if (type != 0xff) {
-                iVar14 = type;
+#if DEBUG
+    if (l_debugMode == true) {
+        next_type = GetCameraTypeFromCameraName("Cheat");
+    } else if (mCamSetup.ForceType() != -1) {
+        next_type = mCamSetup.ForceType();
+    } else
+#endif
+    {
+#if DEBUG
+        if (mEngineHoldState == 0) {
+#else
+        if (mEngineHoldState != 1) {
+#endif
+            s32 iVar14 = 0xff;
+            if (mTagCamTool.mCameraIndex != 0xff) {
+                s32 type = GetCameraTypeFromToolData(&mTagCamTool.mCamData);
+                if (type != 0xff) {
+                    iVar14 = type;
+                }
             }
-        }
 
-        daAlink_c* link = daAlink_getAlinkActorClass();
+            daAlink_c* link = daAlink_getAlinkActorClass();
+            daHorse_c* horse = dComIfGp_getHorseActor();
 
-        bool bVar2 = false;
-        bool bVar1 = false;
-        if (link->checkMagneBootsOn()) {
-            cXyz* top_vec = link->getMagneBootsTopVec();
-            if (cBgW_CheckBRoof(top_vec->y)) {
-                bVar2 = true;
-            } else if (cBgW_CheckBWall(top_vec->y)) {
-                bVar1 = true;
+            bool bVar2 = false;
+            bool bVar1 = false;
+            if (link->checkMagneBootsOn()) {
+                cXyz* top_vec = link->getMagneBootsTopVec();
+                if (cBgW_CheckBRoof(top_vec->y)) {
+                    bVar2 = true;
+                } else if (cBgW_CheckBWall(top_vec->y)) {
+                    bVar1 = true;
+                }
             }
-        }
 
-        bool copy_rod = false;
-        fopAc_ac_c* copyRodCameraActor = link->getCopyRodCameraActor();
-        if (copyRodCameraActor != NULL) {
-            copy_rod = true;
-        }
-
-        if (check_owner_action(mPadID, 0x200000) && ChangeModeOK(4)
-                                                 && !dComIfGp_getAttention()->Lockon()) {
-            next_type = specialType[CAM_TYPE_SCOPE];
-        } else if (iVar14 != 0xff && !(mTagCamTool.mFlags & 0x10)) {
-            next_type = iVar14;
-            mRoomMapTool = mTagCamTool;
-        } else if (link->checkMidnaLockJumpPoint() &&
-                                    (daPy_py_c::getMidnaActor()->checkFlyWaitAnime()
-                                    || daPy_py_c::getMidnaActor()->checkNoInput())) {
-            next_type = specialType[CAM_TYPE_MIDNA_TAG];
-        } else if (daPy_py_c::getMidnaActor()->checkPortalObjCall()) {
-            next_type = specialType[CAM_TYPE_WARP_OBJ];
-        } else if (link->checkGoatStopGame()) {
-            next_type = specialType[CAM_TYPE_GOAT_BATTLE];
-        } else if (chkFlag(0x10000)) {
-            next_type = specialType[CAM_TYPE_GORON_JUMP];
-        } else if (link->checkHorseRide()) {
-            next_type = specialType[CAM_TYPE_HORSE_T];
-        } else if (bVar1) {
-            next_type = specialType[CAM_TYPE_MAGNE_WALL];
-        } else if (bVar2) {
-            next_type = specialType[CAM_TYPE_MAGNE_ROOF];
-        } else if (copy_rod) {
-            next_type = specialType[CAM_TYPE_COPY_ROD_HALL];
-        } else if (link->checkBoarRide()) {
-            next_type = specialType[CAM_TYPE_BOAR];
-        } else if (link->checkCanoeRide()) {
-            next_type = specialType[CAM_TYPE_CANOE];
-        } else if (link->checkBoardRide()) {
-            next_type = specialType[CAM_TYPE_BOARD];
-        } else if (link->checkSpinnerRide()) {
-            next_type = specialType[CAM_TYPE_SPINNER];
-        } else if (check_owner_action1(mPadID, 0x2000000)) {
-            next_type = specialType[CAM_TYPE_HOOK_WALL];
-        } else if (check_owner_action1(mPadID, 0x10000)) {
-            if (link->getHookshotRoofWaitActor() != NULL) {
-                next_type = specialType[CAM_TYPE_HOOK_ACTOR];
-            } else {
-                next_type = specialType[CAM_TYPE_HOOK_ROOF];
+            bool copy_rod = false;
+            fopAc_ac_c* copyRodCameraActor = link->getCopyRodCameraActor();
+            if (copyRodCameraActor != NULL) {
+                copy_rod = true;
             }
-        } else if (check_owner_action1(mPadID, 0x100000)) {
-            next_type = specialType[CAM_TYPE_ROOF_HUNG];
-        } else if (link->checkCokkoGlide()) {
-            next_type = specialType[CAM_TYPE_COCCO_JUMP];
-        } else if (check_owner_action(mPadID, 0x100000)) {
-            if (getComStat(0x800)) {
-                next_type = specialType[CAM_TYPE_WATER_SURF];
-            } else if (mBG.field_0xc0.field_0x3c != 0xff) {
-                setRoomMapToolData(&mRoomMapTool, mBG.field_0xc0.field_0x3c,
-                                   dComIfGp_roomControl_getStayNo());
+
+            if (check_owner_action(mPadID, 0x200000) && ChangeModeOK(4)
+                                                     && !dComIfGp_getAttention()->Lockon()) {
+                next_type = specialType[CAM_TYPE_SCOPE];
+                var_r28 = 0x6f;
+            } else if (iVar14 != 0xff && !(mTagCamTool.mFlags & 0x10)) {
+                next_type = iVar14;
+                mRoomMapTool = mTagCamTool;
+                var_r28 = 0x74;
+            } else if (link->checkMidnaLockJumpPoint() &&
+                                        (daPy_py_c::getMidnaActor()->checkFlyWaitAnime()
+                                        || daPy_py_c::getMidnaActor()->checkNoInput())) {
+                next_type = specialType[CAM_TYPE_MIDNA_TAG];
+                var_r28 = 0x78;
+            } else if (daPy_py_c::getMidnaActor()->checkPortalObjCall()) {
+                next_type = specialType[CAM_TYPE_WARP_OBJ];
+                var_r28 = 0x58;
+            } else if (link->checkGoatStopGame()) {
+                next_type = specialType[CAM_TYPE_GOAT_BATTLE];
+                var_r28 = 0x62;
+            } else if (chkFlag(0x10000)) {
+                next_type = specialType[CAM_TYPE_GORON_JUMP];
+                var_r28 = 0x4a;
+            } else if (link->checkHorseRide()) {
+                next_type = specialType[CAM_TYPE_HORSE_T];
+                var_r28 = 0x48;
+            } else if (bVar1) {
+                next_type = specialType[CAM_TYPE_MAGNE_WALL];
+                var_r28 = 0x75;
+            } else if (bVar2) {
+                next_type = specialType[CAM_TYPE_MAGNE_ROOF];
+                var_r28 = 0x55;
+            } else if (copy_rod) {
+                next_type = specialType[CAM_TYPE_COPY_ROD_HALL];
+                var_r28 = 0x72;
+            } else if (link->checkBoarRide()) {
+                next_type = specialType[CAM_TYPE_BOAR];
+                var_r28 = 0x49;
+            } else if (link->checkCanoeRide()) {
+                next_type = specialType[CAM_TYPE_CANOE];
+                var_r28 = 0x43;
+            } else if (link->checkBoardRide()) {
+                next_type = specialType[CAM_TYPE_BOARD];
+                var_r28 = 0x42;
+            } else if (link->checkSpinnerRide()) {
+                next_type = specialType[CAM_TYPE_SPINNER];
+                var_r28 = 0x40;
+            } else if (check_owner_action1(mPadID, 0x2000000)) {
+                next_type = specialType[CAM_TYPE_HOOK_WALL];
+                var_r28 = 0x3e;
+            } else if (check_owner_action1(mPadID, 0x10000)) {
+                if (link->getHookshotRoofWaitActor() != NULL) {
+                    next_type = specialType[CAM_TYPE_HOOK_ACTOR];
+                    var_r28 = 0x5e;
+                } else {
+                    next_type = specialType[CAM_TYPE_HOOK_ROOF];
+                    var_r28 = 0x5e;
+                }
+            } else if (check_owner_action1(mPadID, 0x100000)) {
+                next_type = specialType[CAM_TYPE_ROOF_HUNG];
+                var_r28 = 0x7e;
+            } else if (link->checkCokkoGlide()) {
+                next_type = specialType[CAM_TYPE_COCCO_JUMP];
+                var_r28 = 0x66;
+            } else if (check_owner_action(mPadID, 0x100000)) {
+                if (getComStat(0x800)) {
+                    next_type = specialType[CAM_TYPE_WATER_SURF];
+                    var_r28 = 0x77;
+                } else if (mBG.field_0xc0.field_0x3c != 0xff) {
+                    s32 stayNo = dComIfGp_roomControl_getStayNo();
+                    setRoomMapToolData(&mRoomMapTool, mBG.field_0xc0.field_0x3c, stayNo);
+                    s32 type = GetCameraTypeFromToolData(&mRoomMapTool.mCamData);
+                    if (type != 0xff) {
+                        next_type = type;
+                        var_r28 = 0x6d;
+                    } else {
+                        next_type = specialType[CAM_TYPE_WATER];
+                        var_r28 = 0x57;
+                    }
+                } else {
+                    next_type = specialType[CAM_TYPE_WATER];
+                    var_r28 = 0x57;
+                }
+            } else if (iVar14 != 0xff) {
+                next_type = iVar14;
+                mRoomMapTool = mTagCamTool;
+                var_r28 = 0x54;
+            } else if (mRoomMapTool.mCameraIndex != 0xff) {
                 s32 type = GetCameraTypeFromToolData(&mRoomMapTool.mCamData);
                 if (type != 0xff) {
                     next_type = type;
-                } else {
-                    next_type = specialType[CAM_TYPE_WATER];
+                    var_r28 = 0x6d;
                 }
-            } else {
-                next_type = specialType[CAM_TYPE_WATER];
+            } else if (mRoomMapTool.mCameraIndex != 0x1ff) {
+                next_type = mMapToolType;
+                var_r28 = 0x44;
             }
-        } else if (iVar14 != 0xff) {
-            next_type = iVar14;
-            mRoomMapTool = mTagCamTool;
-        } else if (mRoomMapTool.mCameraIndex != 0xff) {
-            s32 type = GetCameraTypeFromToolData(&mRoomMapTool.mCamData);
-            if (type != 0xff) {
-                next_type = type;
-            }
-        } else if (mRoomMapTool.mCameraIndex != 0x1ff) {
-            next_type = mMapToolType;
+        } else {
+            var_r28 = 0x3d;
         }
     }
 
@@ -1687,10 +1995,12 @@ s32 dCamera_c::nextType(s32 i_curType) {
     field_0x69c = 0;
     if (mCamTypeData[mCurType].field_0x18[mIsWolf][0] < 0) {
         next_type = mMapToolType;
+        var_r28 = 0x21;
         if (mRoomMapTool.mCameraIndex != 0xff) {
             s32 type = GetCameraTypeFromToolData(&mRoomMapTool.mCamData);
             if (type != 0xff) {
                 next_type = type;
+                var_r28 = 0x5f;
             }
         }
     }
@@ -1711,12 +2021,20 @@ s32 dCamera_c::nextType(s32 i_curType) {
             setComStat(4);
             dComIfGp_getAttention()->LockSoundOff();
         }
+
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(20, 190, "   %c%02x", var_r28, mRoomMapTool.mCameraIndex);
+        }
+#endif
     }
 
     return next_type;
 }
 
 bool dCamera_c::onTypeChange(s32 i_curType, s32 i_nextType) {
+    daAlink_c* unusedPlayer = daAlink_getAlinkActorClass();
+
     if (i_curType == specialType[CAM_TYPE_EVENT]) {
         if (mCamSetup.CheckFlag(0x4000)) {
             mGear = 0;
@@ -1731,7 +2049,9 @@ bool dCamera_c::onTypeChange(s32 i_curType, s32 i_nextType) {
         }
 
         mRecovery.field_0x4 = 0;
+#if PLATFORM_GCN
         field_0x668 = 0;
+#endif
         clearInfo(&mSavedView, 0);
         clearInfo(&mSavedViewStack[0], 0);
         clearInfo(&mSavedViewStack[1], 0);
@@ -1765,7 +2085,9 @@ bool dCamera_c::onTypeChange(s32 i_curType, s32 i_nextType) {
         clrFlag(0x200000);
         pushInfo(&mSavedView, 1);
         mSightFitRadius = 0.0f;
+#if PLATFORM_GCN
         field_0x668 = 0;
+#endif
     }
 
     field_0x170 = 0;
@@ -1803,8 +2125,9 @@ bool dCamera_c::onStyleChange(s32 param_0, s32 param_1) {
         }
         break;
     case 1:
-        mCamParam.Algorythmn(param_1);
-        mCamParam.Algorythmn(param_0);
+        if (mCamParam.Algorythmn(param_0) == mCamParam.Algorythmn(param_1)) {
+            // empty block
+        }
         break;
     case 5:
     case 6:
@@ -1843,18 +2166,27 @@ int dCamera_c::onRoomChange(s32 i_roomNo) {
 fopAc_ac_c* dCamera_c::getParamTargetActor(s32 param_0) {
     daAlink_c* player = daAlink_getAlinkActorClass();
 
-    switch (*(u32*)&mCamTypeData[param_0].name[16]) {
+    fopAc_ac_c* result;
+    u32* name = (u32*)(mCamTypeData[param_0].name + 16);
+    //name += 16;
+    switch (*name) {
     case '@LOC':
-        return dComIfGp_getAttention()->LockonTarget(0);
+        result = dComIfGp_getAttention()->LockonTarget(0);
+        break;
     case '@ACT':
-        return dComIfGp_getAttention()->ActionTarget(0);
+        result = dComIfGp_getAttention()->ActionTarget(0);
+        break;
     case '@CHK':
-        return dComIfGp_getAttention()->CheckObjectTarget(0);
+        result = dComIfGp_getAttention()->CheckObjectTarget(0);
+        break;
     case '@CPY':
-        return player->getCopyRodCameraActor();
+        result = player->getCopyRodCameraActor();
+        break;
+    default:
+        result = fopAcM_searchFromName4Event(mCamTypeData[param_0].name + 16, -1);
+        break;
     }
-
-    return fopAcM_searchFromName4Event(&mCamTypeData[param_0].name[16], -1);
+    return result;
 }
 
 int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
@@ -1879,15 +2211,8 @@ int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
     }
 
     if (param_0 < 0 || camera == NULL || (camera != NULL && param_0 >= camera->num)) {
-        int sp28;
-        if (camera != NULL) {
-            sp28 = camera->num;
-        } else {
-            sp28 = -99;
-        }
-
-        OS_REPORT("camera: bad number %d for map data ID [%x:%d] room %d\n", param_0, camera, sp28,
-                  i_roomNo);
+        OS_REPORT("camera: bad number %d for map data ID [%x:%d] room %d\n", param_0, camera,
+                  camera != NULL ? camera->num : -99, i_roomNo);
         return 0xFF;
     }
 
@@ -1912,9 +2237,9 @@ int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
     mRoomMapTool.mFlags = (mRoomMapTool.mCamData.field_0x14 >> 0xE) & 3;
 
     if (mRoomMapTool.mCamData.field_0x14 & 0x2000) {
-        mRoomMapTool.mCamData.field_0x14 |= 0xC000;
+        mRoomMapTool.mCamData.field_0x14 |= (u16)0xC000;
     } else {
-        mRoomMapTool.mCamData.field_0x14 &= ~0xC000;
+        mRoomMapTool.mCamData.field_0x14 &= (u16)~0xC000;
     }
 
     mRoomMapTool.mArrowIndex = mRoomMapTool.mCamData.m_arrow_idx;
@@ -1953,14 +2278,14 @@ int dCamera_c::GetCameraTypeFromCameraName(char const* i_name) {
 int dCamera_c::GetCameraTypeFromToolData(stage_camera2_data_class* i_data) {
     if (i_data->field_0x16 != 0xFFFF) {
         return i_data->field_0x16;
-    }
+    } else {
+        int type = GetCameraTypeFromCameraName(i_data->m_cam_type);
+        if (type < 0xFFFF) {
+            i_data->field_0x16 = type;
+        }
 
-    int type = GetCameraTypeFromCameraName(i_data->m_cam_type);
-    if (type < 0xFFFF) {
-        i_data->field_0x16 = type;
+        return type;
     }
-
-    return type;
 }
 
 void dCamera_c::pushInfo(dCamera_c::dCamInfo_c* i_info, s16 param_1) {
@@ -1975,13 +2300,34 @@ void dCamera_c::popInfo(dCamera_c::dCamInfo_c* i_info) {
     mCenter = mViewCache.mCenter = i_info->mCenter;
     mEye = mViewCache.mEye = i_info->mEye;
     mFovy = mViewCache.mFovy = i_info->mFovy;
-    mViewCache.mBank = i_info->mBank;
-    mBank = mViewCache.mBank;
+    mBank = mViewCache.mBank = i_info->mBank;
+}
+
+bool limited_range_addition(f32* o_result, f32 i_addend, f32 i_min, f32 i_max) {
+    f32 min = i_min;
+    f32 max = i_max;
+    if (i_min > i_max) {
+        i_addend = -i_addend;
+        min = i_max;
+        max = i_min;
+    }
+
+    *o_result += i_addend;
+    if (*o_result < min) {
+        *o_result = min;
+        return false;
+    }
+    if (*o_result > max) {
+        *o_result = max;
+        return false;
+    }
+    return true;
 }
 
 f32 dCamera_c::heightOf(fopAc_ac_c* i_actor) {
     if (is_player(i_actor)) {
-        return ((daPy_py_c*)i_actor)->getHeight();
+        daPy_py_c* player = (daPy_py_c*)i_actor;
+        return player->getHeight();
     } else {
         return (i_actor->eyePos.y - i_actor->current.pos.y) * 1.1f;
     }
@@ -1989,41 +2335,42 @@ f32 dCamera_c::heightOf(fopAc_ac_c* i_actor) {
 
 cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor, cXyz* i_offset) {
     if (i_actor == NULL) {
+        OS_REPORT("camera: error: actor NULL in relationalPos() \n");
         return cXyz::Zero;
     }
 
-    cXyz offset = dCamMath::xyzRotateY(*i_offset, cSAngle(i_actor->shape_angle.y));
+    cXyz offset;
+    offset = dCamMath::xyzRotateY(*i_offset, cSAngle(i_actor->shape_angle.y));
     return attentionPos(i_actor) + offset;
 }
 
 cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* i_offset,
                               f32 param_3) {
     if (i_actor1 == NULL) {
+        OS_REPORT("camera: error: actor NULL in relationalPos() \n");
         return cXyz::Zero;
-    }
-
-    if (i_actor2 == NULL) {
+    } else if (i_actor2 == NULL) {
         return relationalPos(i_actor1, i_offset);
+    } else {
+        cXyz pos1 = attentionPos(i_actor1);
+        cXyz pos2 = attentionPos(i_actor2);
+        cXyz delta = pos2 - pos1;
+        cSGlobe delta_globe(delta);
+        delta.normalize();
+        pos1 -= delta * i_actor1->attention_info.field_0xa;
+        pos2 += delta * i_actor2->attention_info.field_0xa;
+        cXyz mid = pos1 + (pos2 - pos1) * 0.5f;
+        cXyz offset = *i_offset;
+        cSAngle angle = mViewCache.mDirection.U() - delta_globe.U();
+        if (angle < cSAngle::_0) {
+            offset.x = -offset.x;
+        }
+        cSGlobe offset_globe(offset);
+        offset_globe.U(delta_globe.U() + offset_globe.U());
+        delta_globe.R(0.5f * delta_globe.R() * angle.Cos() * param_3);
+        cXyz ret = mid + delta_globe.Xyz() + offset_globe.Xyz();
+        return ret;
     }
-
-    cXyz pos1 = attentionPos(i_actor1);
-    cXyz pos2 = attentionPos(i_actor2);
-    cXyz delta = pos2 - pos1;
-    cSGlobe delta_globe(delta);
-    delta.normalize();
-    pos1 -= delta * i_actor1->attention_info.field_0xa;
-    pos2 += delta * i_actor2->attention_info.field_0xa;
-    cXyz mid = pos1 + (pos2 - pos1) * 0.5f;
-    cXyz offset = *i_offset;
-    cSAngle angle = mViewCache.mDirection.U() - delta_globe.U();
-    if (angle < cSAngle::_0) {
-        offset.x = -offset.x;
-    }
-    cSGlobe offset_globe(offset);
-    offset_globe.U(delta_globe.U() + offset_globe.U());
-    delta_globe.R(0.5f * delta_globe.R() * angle.Cos() * param_3);
-    cXyz ret = mid + delta_globe.Xyz() + offset_globe.Xyz();
-    return ret;
 }
 
 void dCamera_c::setUSOAngle() {
@@ -2033,16 +2380,23 @@ void dCamera_c::setUSOAngle() {
 }
 
 cSAngle dCamera_c::getUSOAngle(cSAngle param_0) {
+    UNUSED(param_0);
     return mFakeAngleSys.field_0x2;
 }
 
 bool dCamera_c::pointInSight(cXyz* i_point) {
     cXyz proj;
-    dDlst_window_c* window = get_window(field_0x0);
-    scissor_class* scissor = window->getScissor();
+    scissor_class* scissor = get_window(field_0x0)->getScissor();
     f32 scissor_width = scissor->width;
     f32 scissor_height = scissor->height;
     mDoLib_project(i_point, &proj);
+#if DEBUG
+    if (mCamSetup.CheckFlag(0x80)) {
+        dDbVw_Report(100, 250, "VP %11.3f %11.3f %11.3f", proj.x, proj.y, proj.z);
+        OS_REPORT("VP %11.3f %11.3f %11.3f\n", proj.x, proj.y, proj.z);
+        OS_REPORT("VS %11.3f %11.3f\n", scissor_width, scissor_height);
+    }
+#endif
     return (proj.x > 0.0f && proj.x < scissor_width) && (proj.y > 0.0f && proj.y < scissor_height);
 }
 
@@ -2050,11 +2404,12 @@ f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cX
                                    cXyz* i_eye, f32 i_fovY, s16 i_bank, f32 param_6) {
     dDlst_window_c* window = get_window(field_0x0);
     scissor_class* scissor = window->getScissor();
-    f32 dVar3 = cAngle::d2r(i_fovY) * 0.5f;
-    f32 tmp = (scissor->height - mTrimHeight * 2.0f) / FB_HEIGHT * dVar3;
-    f32 fVar8 = tmp * (mTrimHeight < 0.01f ? 0.95f : 1.0f);
-    dVar3 *= mWindowAspect;
-    f32 fVar7 = dVar3 * (scissor->width / FB_WIDTH) * 0.85f;
+    f32 var_f29 = cAngle::d2r(i_fovY) * 0.5f;
+    f32 var_f28 = (scissor->height - mTrimHeight * 2.0f) / FB_HEIGHT;
+    f32 sp34 = var_f29 * var_f28 * (mTrimHeight < 0.01f ? 0.95f : 1.0f);
+    var_f29 *= mWindowAspect;
+    var_f28 = scissor->width / FB_WIDTH;
+    f32 sp30 = var_f29 * var_f28 * 0.85f;
 
     cXyz pos1 = attentionPos(i_actor1);
     pos1.y += (positionOf(i_actor1).y - attentionPos(i_actor1).y) * 0.5f;
@@ -2083,21 +2438,21 @@ f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cX
 
     int bVar2 = 0;
 
-    f32 fVar5 = fabsf(cM_atan2f(pos1.x, -pos1.z));
-    f32 fVar6 = fabsf(cM_atan2f(pos1.y, -pos1.z));
-    if (fVar5 > fVar7) {
+    var_f29 = std::fabsf(cM_atan2f(pos1.x, -pos1.z));
+    var_f28 = std::fabsf(cM_atan2f(pos1.y, -pos1.z));
+    if (var_f29 > sp30) {
         bVar2 |= 1;
     }
-    if (fVar6 > fVar8) {
+    if (var_f28 > sp34) {
         bVar2 |= 2;
     }
 
-    fVar5 = fabsf(cM_atan2f(pos2.x, -pos2.z));
-    fVar6 = fabsf(cM_atan2f(pos2.y, -pos2.z));
-    if (fVar5 > fVar7) {
+    var_f29 = std::fabsf(cM_atan2f(pos2.x, -pos2.z));
+    var_f28 = std::fabsf(cM_atan2f(pos2.y, -pos2.z));
+    if (var_f29 > sp30) {
         bVar2 |= 4;
     }
-    if (fVar6 > fVar8) {
+    if (var_f28 > sp34) {
         bVar2 |= 8;
     }
 
@@ -2110,34 +2465,35 @@ f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cX
     f32 local_12c = 1.0f;
     f32 local_130 = 1.0f;
     if (bVar2 & 5) {
-        local_12c = tanf(fVar7);
+        local_12c = tanf(sp30);
     }
     if (bVar2 & 0xA) {
-        local_130 = tanf(fVar8);
+        local_130 = tanf(sp34);
     }
 
+    f32 var_f31;
     if (bVar2 & 1) {
-        f32 dVar4 = pos1.z + fabsf(pos1.x) / local_12c;
-        if (dVar4 > ret) {
-            ret = dVar4;
+        var_f31 = pos1.z + std::fabsf(pos1.x) / local_12c;
+        if (var_f31 > ret) {
+            ret = var_f31;
         }
     }
     if (bVar2 & 2) {
-        f32 dVar4 = pos1.z + fabsf(pos1.y) / local_130;
-        if (dVar4 > ret) {
-            ret = dVar4;
+        var_f31 = pos1.z + std::fabsf(pos1.y) / local_130;
+        if (var_f31 > ret) {
+            ret = var_f31;
         }
     }
     if (bVar2 & 4) {
-        f32 dVar4 = pos2.z + fabsf(pos2.x) / local_12c;
-        if (dVar4 > ret) {
-            ret = dVar4;
+        var_f31 = pos2.z + std::fabsf(pos2.x) / local_12c;
+        if (var_f31 > ret) {
+            ret = var_f31;
         }
     }
     if (bVar2 & 8) {
-        f32 dVar4 = pos2.z + fabsf(pos2.y) / local_130;
-        if (dVar4 > ret) {
-            ret = dVar4;
+        var_f31 = pos2.z + std::fabsf(pos2.y) / local_130;
+        if (var_f31 > ret) {
+            ret = var_f31;
         }
     }
 
@@ -2153,21 +2509,19 @@ f32 dCamera_c::groundHeight(cXyz* param_0) {
     gndchk_wtr.SetPos(param_0);
     f32 wtr_y = dComIfG_Bgsp().GroundCross(&gndchk_wtr);
 
+    //TODO: unsure if this is an actual version difference or a fakematch, the ternary matches
+    //      for everything except GCN but the if-else matches for GCN and Wii but not ShieldD
+#if PLATFORM_GCN
     f32 height;
     if (gnd_y >= wtr_y) {
         height = gnd_y;
     } else {
         height = wtr_y;
     }
-
-    f32 height_correct;
-    if (height == -G_CM3D_F_INF) {
-        height_correct = param_0->y;
-    } else {
-        height_correct = height;
-    }
-
-    return height_correct;
+#else
+    f32 height = gnd_y >= wtr_y ? gnd_y : wtr_y;
+#endif
+    return height == -G_CM3D_F_INF ? param_0->y : height;
 }
 
 bool dCamera_c::lineBGCheck(cXyz* i_start, cXyz* i_end, dBgS_LinChk* i_linChk, u32 i_flags) {
@@ -2221,8 +2575,9 @@ bool dCamera_c::lineBGCheck(cXyz* i_start, cXyz* i_end, cXyz* o_cross, u32 i_fla
         return true;
     } else {
         *o_cross = *i_end;
-        return false;
     }
+
+    return false;
 }
 
 bool dCamera_c::lineBGCheck(cXyz* i_start, cXyz* i_end, u32 i_flags) {
@@ -2386,10 +2741,14 @@ cSAngle dCamera_c::forwardCheckAngle() {
 }
 
 bool dCamera_c::bumpCheck(u32 i_flags) {
-    int uVar14 = 0;
+    int var_r27 = 0;
+
+#if PLATFORM_GCN
     static int prev_plat1 = 0;
     static int prev_plat2 = 0;
-    int uVar13 = 0;
+#endif
+
+    int var_r28 = 0;
 
     f32 gaze_back_margin = mCamSetup.mBGChk.GazeBackMargin() + 0.5f;
     f32 wall_cushion = mCamSetup.mBGChk.WallCushion();
@@ -2405,7 +2764,8 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
     if (mCamSetup.CheckFlag2(0x100) && dKy_TeachWind_existence_chk()) {
         f32 wind_pow = dKyw_get_wind_pow();
         if (wind_pow > 0.3f) {
-            cSGlobe wind_globe(*dKyw_get_wind_vec());
+            cXyz* spD4 = dKyw_get_wind_vec();
+            cSGlobe wind_globe(*spD4);
             wind_globe.R(mViewCache.mDirection.R() * cM_rndFX(mCamSetup.WindShakeGap4Ctr() * 0.0001f));
             center += wind_globe.Xyz();
             if (wind_pow > 1.0f) {
@@ -2413,12 +2773,17 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
             }
             wind_pow -= 0.3f;
             cSAngle angle = wind_globe.U() - mViewCache.mDirection.U();
-            mFovy += mCamSetup.WindShakeGap4Fvy() * cM_rndFX(wind_pow / 0.7f) * (1.0f - fabsf(angle.Norm()));
+            mFovy += mCamSetup.WindShakeGap4Fvy() * cM_rndFX(wind_pow / 0.7f) * (1.0f - std::fabsf(angle.Norm()));
+
+#if DEBUG
+            dDbVw_Report(300, 180, "wind %f %f", wind_pow, angle.Norm());
+#endif
         }
     }
 
     if (is_player(mpPlayerActor)) {
-        u32 grab_actor_id = static_cast<daPy_py_c*>(mpPlayerActor)->getGrabActorID();
+        fopAc_ac_c* spD0 = mpPlayerActor;
+        u32 grab_actor_id = static_cast<daPy_py_c*>(spD0)->getGrabActorID();
         if (grab_actor_id != -1) {
             fopAc_ac_c* grab_actor = fopAcM_SearchByID(grab_actor_id);
             if (grab_actor != NULL && !fopAcM_CheckCarryType(grab_actor,
@@ -2432,119 +2797,150 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
         }
     }
 
-    f32 fVar1 = mViewCache.mDirection.R() * mViewCache.mDirection.V().Sin();
+    f32 spC4 = mViewCache.mDirection.R() * mViewCache.mDirection.V().Sin();
     if (i_flags & 0x10) {
-        if (fVar1 > wall_up_distance) {
-            wall_up_distance = fVar1;
+        if (spC4 > wall_up_distance) {
+            wall_up_distance = spC4;
         }
     } else {
         clrFlag(0x4000);
     }
 
+    bool sp0E = false;
+
     if (chkFlag(0x2002)) {
         if (mpAuxTargetActor1 != NULL && mpAuxTargetActor2 != NULL) {
             f32 sight_radius = radiusActorInSight(mpPlayerActor, mpAuxTargetActor1, mpAuxTargetActor2);
             if (sight_radius > 0.0f) {
-                f32 fVar17, fVar18;
-                if (chkFlag(2)) {
-                    fVar17 = 0.33f;
-                } else {
-                    fVar17 = 0.08f;
+                f32 spBC = chkFlag(2) ? 0.33f : 0.08f;
+                mSightFitRadius += spBC * (sight_radius - mSightFitRadius);
+                var_r28 |= 0x40;
+
+#if DEBUG
+                if (mCamSetup.CheckFlag(0x8000)) {
+                    dDbVw_Report(20, 235, "      *");
                 }
-                mSightFitRadius += fVar17 * (sight_radius - mSightFitRadius);
-                uVar13 |= 0x40;
-                fVar18 = 1.0f;
+#endif
+
+                f32 spB8 = 1.0f;
                 if (field_0x160 < 10) {
-                    fVar18 = (f32)field_0x160 / 10.0f;
+                    spB8 = (f32)field_0x160 / 10.0f;
                 }
-                direction.R(mSightFitRadius * fVar18 + direction.R());
+                direction.R(mSightFitRadius * spB8 + direction.R());
                 eye = center + direction.Xyz();
             }
         } else if (mpAuxTargetActor1 != NULL) {
-            f32 sight_radius = radiusActorInSight(mpPlayerActor, mpAuxTargetActor1, &mViewCache.mCenter,
-                                                  &mViewCache.mEye, mFovy, mBank, 0.05f);
+            f32 sight_radius = radiusActorInSight(mpPlayerActor, mpAuxTargetActor1);
             if (sight_radius > 0.0f) {
-                f32 fVar17, fVar18;
-                if (chkFlag(2)) {
-                    fVar17 = 0.33f;
-                } else {
-                    fVar17 = 0.08f;
+                f32 spB0 = chkFlag(2) ? 0.33f : 0.08f;
+                mSightFitRadius += spB0 * (sight_radius - mSightFitRadius);
+                var_r28 |= 0x40;
+
+#if DEBUG
+                if (mCamSetup.CheckFlag(0x8000)) {
+                    dDbVw_Report(20, 235, "      +");
                 }
-                mSightFitRadius += fVar17 * (sight_radius - mSightFitRadius);
-                uVar13 |= 0x40;
-                fVar18 = 1.0f;
+#endif
+
+                f32 spAC = 1.0f;
                 if (field_0x160 < 10) {
-                    fVar18 = (f32)field_0x160 / 10.0f;
+                    spAC = (f32)field_0x160 / 10.0f;
                 }
-                direction.R(mSightFitRadius * fVar18 + direction.R());
+                direction.R(mSightFitRadius * spAC + direction.R());
                 eye = center + direction.Xyz();
             }
         }
     }
 
-    if (mSightFitRadius > 0.1f && !(uVar13 & 0x40)) {
+    if (mSightFitRadius > 0.1f && !(var_r28 & 0x40)) {
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(20, 235, "      >");
+        }
+#endif
+
         mSightFitRadius -= mSightFitRadius * 0.08f;
         direction.R(mSightFitRadius + direction.R());
         eye = center + direction.Xyz();
     }
 
     if ((i_flags & 0x80) && mBG.field_0x108.field_0x0 != 0) {
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(20, 235, "    B");
+        }
+#endif
+
         direction.V(mBG.field_0x108.field_0x4 + direction.V().Degree());
         eye = center + direction.Xyz();
-        uVar13 |= 0x20;
+        var_r28 |= 0x20;
     }
 
     dBgS_CamLinChk lin_chk1;
     dBgS_CamLinChk lin_chk2;
     cXyz norm_dir_vec = cXyz(eye - center).norm();
     cXyz vec = eye + norm_dir_vec * gaze_back_margin;
-    cXyz pos, mid;
-    bool bVar8 = false;
+    bool var_r26 = false;
 
     if (i_flags & 0xb7) {
         if (lineBGCheck(&center, &vec, &lin_chk1, i_flags)) {
-            cSGlobe unused1, unused2;
+#if DEBUG
+            dDbgCamera.SetlChk(lin_chk1);
+#endif
+
+            cXyz pos, mid;
+            cXyz sp3E0;
+            cSAngle sp44;
+            cSGlobe sp110, sp108;
             cM3dGPla plane1;
             dComIfG_Bgsp().GetTriPla(lin_chk1, &plane1);
             cM3dGPla plane2;
+            bool sp0D = false;
             cXyz* normal1 = plane1.GetNP();
             if ((i_flags & 1) && normal1->y >= 0.75f) {
-                uVar14 = 4;
+                var_r27 = 4;
             } else if ((i_flags & 4) && normal1->y < -0.5f) {
-                uVar14 = 3;
+                var_r27 = 3;
             } else if (i_flags & 2) {
                 if (!(i_flags & 0x10)) {
-                    uVar14 = 1;
+                    var_r27 = 1;
                 } else if (!(i_flags & 0x20)) {
-                    uVar14 = 2;
+                    var_r27 = 2;
                 } else {
                     if (lineBGCheck(&vec, &center, &lin_chk2, i_flags)) {
-                        cXyz(lin_chk1.GetCross() - lin_chk2.GetCross()).abs();
-                        dComIfG_Bgsp().GetTriPla(lin_chk2, &plane2);
+#if DEBUG
+                        dDbgCamera.SetlChk(lin_chk2);
+#endif
+                        f32 spA4 = cXyz(lin_chk1.GetCross() - lin_chk2.GetCross()).abs();
+                        sp0D = dComIfG_Bgsp().GetTriPla(lin_chk2, &plane2);
                         cXyz* normal2 = plane2.GetNP();
                         cXyz cross;
                         f32 dot = VECDotProduct(normal1, normal2);
                         VECCrossProduct(normal1, normal2, &cross);
-                        if (chkCornerCos(dot) && fabsf(cross.y) > 0.5f
+                        if (chkCornerCos(dot) && std::fabsf(cross.y) > 0.5f
                                               && cBgW_CheckBWall(normal2->y)) {
-                            uVar14 = 5;
-                        } else if (mLastBumpCase != 5 && mLastBumpCase != 6) {
-                            uVar14 = 7;
+                            var_r27 = 5;
                         } else {
-                            uVar14 = 8;
+                            if (mLastBumpCase != 5 && mLastBumpCase != 6) {
+                                var_r27 = 7;
+                            } else {
+                                var_r27 = 8;
+                            }
                         }
-                    } else if (mLastBumpCase == 5 || mLastBumpCase == 8) {
-                        uVar14 = 8;
                     } else {
-                        uVar14 = 2;
+                        if (mLastBumpCase == 5 || mLastBumpCase == 8) {
+                            var_r27 = 8;
+                        } else {
+                            var_r27 = 2;
+                        }
                     }
                 }
             }
 
-            switch (uVar14) {
+            switch (var_r27) {
             case 5:
             case 6: {
-                uVar13 |= 2;
+                var_r28 |= 2;
                 cXyz cross1 = lin_chk1.GetCross();
                 cXyz cross2 = lin_chk2.GetCross();
                 mid = (cross1 + cross2) * 0.5f;
@@ -2570,8 +2966,8 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                                     mWallRecoverStepCount = dist / 1.5f;
                                 }
                             }
-                            f32 tmp = 1.0f / mWallRecoverStepCount;
-                            direction.V(mDirection.V() + (direction.V() - mDirection.V()) * tmp);
+                            f32 sp94 = 1.0f / mWallRecoverStepCount;
+                            direction.V(mDirection.V() + (direction.V() - mDirection.V()) * sp94);
                             vec = center + direction.Xyz();
                             if (--mWallRecoverStepCount == 0) {
                                 clrFlag(0x4000);
@@ -2581,8 +2977,15 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                             vec = lin_chk1.GetCross();
                         }
                         eye = compWallMargin(&vec, &center, gaze_back_margin);
-                        bVar8 = true;
+                        var_r26 = true;
                         setFlag(0x80000);
+
+#if DEBUG
+                        if (mCamSetup.CheckFlag(0x8000)) {
+                            dDbVw_Report(20, 235, "  C");
+                        }
+#endif
+
                         break;
                     }
                 }
@@ -2592,26 +2995,28 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
             case 2:
             case 7:
             case 8: {
-                uVar13 |= 1;
+                var_r28 |= 1;
                 vec = mLastHitPos = lin_chk1.GetCross();
                 if (i_flags & 0x10) {
+                    bool sp0C;
                     switch (mLastBumpCase) {
                     case 2:
                     case 7:
                     case 8:
-                        bVar8 = false;
+                        sp0C = false;
                         break;
                     default:
-                        bVar8 = true;
+                        sp0C = true;
                         break;
                     }
-                    f32 tmp2 = wall_up_distance - (vec.y - center.y);
-                    if (tmp2 < 10.0f) {
-                        tmp2 = 10.0f;
+                    f32 sp90 = vec.y - center.y;
+                    f32 sp8C = wall_up_distance - sp90;
+                    if (sp8C < 10.0f) {
+                        sp8C = 10.0f;
                     }
                     cSGlobe globe(*plane1.GetNP());
                     globe.V(globe.V() + cSAngle::_90);
-                    globe.R(tmp2 * globe.V().Sin());
+                    globe.R(sp8C * globe.V().Sin());
                     cXyz vec2 = vec + globe.Xyz();
                     cXyz vec3 = *plane1.GetNP();
                     vec3.y = 0.0f;
@@ -2619,13 +3024,13 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                         field_0x968 = 1.0f;
                         field_0x96c = 0.0f;
                     }
-                    if (bVar8) {
+                    if (sp0C) {
                         field_0x96c = 0.0f;
                     } else {
                         field_0x96c += (1.0f - field_0x96c) * 0.1f;
                     }
-                    if (bVar8 || !(mMonitor.field_0xc < 5.0f)
-                              || !(fabsf(mPadInfo.mCStick.mLastPosX) < 0.05f)) {
+                    if (sp0C || !(mMonitor.field_0xc < 5.0f)
+                              || !(std::fabsf(mPadInfo.mCStick.mLastPosX) < 0.05f)) {
                         field_0x968 = 0.2f;
                     } else {
                         field_0x968 *= mMonitor.field_0xc / 5.0f;
@@ -2642,9 +3047,16 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                     if (lineBGCheck(&center, &vec, &lin_chk1, i_flags)) {
                         vec = lin_chk1.GetCross();
                     }
+
+#if DEBUG
+                    if (mCamSetup.CheckFlag(0x8000)) {
+                        dDbVw_Report(20, 235, "  U");
+                    }
+#endif
+
                     eye = compWallMargin(&vec, &center, gaze_back_margin);
                     tooNearEscape(&eye);
-                    bVar8 = true;
+                    var_r26 = true;
                     setFlag(0x80);
                     setFlag(0x4000);
                     break;
@@ -2655,19 +3067,44 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
             case 1:
             case 3:
             case 4: {
-                uVar13 |= 4;
+                var_r28 |= 4;
                 setFlag(0x80);
                 vec = mLastHitPos = lin_chk1.GetCross();
                 eye = compWallMargin(&vec, &center, gaze_back_margin);
                 tooNearEscape(&eye);
-                bVar8 = true;
+                var_r26 = true;
+
+#if DEBUG
+                if (mCamSetup.CheckFlag(0x8000)) {
+                    dDbVw_Report(20, 235, "  L");
+                }
+#endif
+
                 break;
+            }
+            default: {
+#if DEBUG
+                if (mCamSetup.CheckFlag(0x8000)) {
+                    dDbVw_Report(20, 235, "  -");
+                }
+#endif
             }
             }
 
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(20, 190, "    !");
+            }
+#endif
         } else {
-            uVar14 = 0;
+            var_r27 = 0;
             if (chkFlag(0x4000)) {
+#if DEBUG
+                if (mCamSetup.CheckFlag(0x8000)) {
+                    dDbVw_Report(20, 235, "  W+");
+                }
+#endif
+
                 if (mWallRecoverStepCount == 0) {
                     f32 dist = cXyz(mEye - mViewCache.mEye).abs();
                     if (dist > 60.0f) {
@@ -2691,73 +3128,90 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                     clrFlag(0x4000);
                 }
             } else {
+#if DEBUG
+                if (mCamSetup.CheckFlag(0x8000)) {
+                    dDbVw_Report(20, 235, "  o");
+                }
+#endif
+
                 vec = eye;
             }
 
             eye = compWallMargin(&vec, &center, gaze_back_margin);
-            bVar8 = true;
+            var_r26 = true;
         }
     }
 
-    mLastBumpCase = uVar14;
+    mLastBumpCase = var_r27;
+    int i;
     if ((i_flags & 0x4000) && mCamSetup.CheckFlag2(0x400)) {
+        i = 0;
         cCcD_ShapeAttr::Shape shape;
-        for (int i = 0; i < 3; i++) {
+        for (i = 0; i < 3; i++) {
             if (!dComIfG_Ccsp()->chkCameraPoint(eye, &shape, mpPlayerActor, NULL)) {
                 break;
             }
             bool bVar9 = false;
             cXyz vec;
-            f32 var_f29, var_f28;
+            f32 sp78, sp74;
 
             switch (shape._0) {
             case 0:
                 vec = shape._4;
                 vec.y -= shape._10;
-                var_f29 = shape._10;
-                var_f28 = var_f29 * 2.0f;
+                sp78 = shape._10;
+                sp74 = shape._10 * 2.0f;
                 bVar9 = true;
                 break;
 
             case 1:
                 vec = shape._4;
-                var_f29 = shape._10;
-                var_f28 = shape._14;
+                sp78 = shape._10;
+                sp74 = shape._14;
                 bVar9 = true;
                 break;
             }
 
-            if (bVar9 && center.y >= vec.y && center.y <= vec.y + var_f28) {
+            if (bVar9 && center.y >= vec.y && center.y <= vec.y + sp74) {
                 cXyz vec2;
                 vec2.x = vec.x - center.x;
                 vec2.y = 0.0f;
                 vec2.z = vec.z - center.z;
-                if (vec2.abs() <= var_f29) {
+                if (vec2.abs() <= sp78) {
                     bVar9 = false;
                 }
             }
 
             if (bVar9) {
-                cM3dGCyl cyl(&vec, var_f29, var_f28);
-                cM3dGLin lin(center, eye);
                 cXyz vec2, vec3, vec4;
-                if (cM3d_Cross_CylLin(&cyl, &lin, &vec2, &vec3)) {
+                cM3dGCyl cyl(&vec, sp78, sp74);
+                cM3dGLin lin(center, eye);
+                int cylLine = cM3d_Cross_CylLin(&cyl, &lin, &vec2, &vec3);
+                if (cylLine) {
                     vec4.x = vec2.x - vec.x;
                     vec4.y = 0.0f;
                     vec4.z = vec2.z - vec.z;
                     vec4.normalize();
                     eye = vec2 + vec4 * 2.0f;
-                    bVar8 = true;
+                    var_r26 = true;
                 }
             }
         }
+
+#if DEBUG
+        if (i != 0 && mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(20, 235, "     C%d", i);
+        }
+#endif
     }
 
     if (i_flags & 0x80) {
         dBgS_GndChk gnd_chk;
         gnd_chk.SetPos(&eye);
+        f32 sp6C = dComIfG_Bgsp().GroundCross(&gnd_chk);
+        f32 sp68 = mBG.field_0x5c.field_0x58;
         cXyz vec1, vec2;
-        if (dComIfG_Bgsp().GroundCross(&gnd_chk) < mBG.field_0x5c.field_0x58 + 40.0f) {
+        if (sp6C < sp68 + 40.0f) {
             vec1 = eye;
             vec2 = center;
             vec2 += (vec1 - vec2) * 0.5f;
@@ -2766,32 +3220,55 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
             vec1 = center;
             vec1 += (vec2 - vec1) * 0.5f;
         }
-        if (mBG.field_0xc0.field_0x44 && (lineCollisionCheckBush(&vec1, &vec2) & 6) != 0) {
-            cXyz mass_cam_top_pos;
-            dComIfG_Ccsp()->GetMassCamTopPos(&mass_cam_top_pos);
-            if (eye.y < mass_cam_top_pos.y) {
-                eye.y = mEye.y + (mass_cam_top_pos.y - mEye.y) * 0.2f;
-                bVar8 = true;
+
+        f32 sp64 = 0.0f;
+        if (mBG.field_0xc0.field_0x44) {
+            int sp60 = lineCollisionCheckBush(&vec1, &vec2) & 6;
+            if (sp60 != 0) {
+                cXyz mass_cam_top_pos;
+                dComIfG_Ccsp()->GetMassCamTopPos(&mass_cam_top_pos);
+                if (eye.y < mass_cam_top_pos.y) {
+                    eye.y = mEye.y + (mass_cam_top_pos.y - mEye.y) * 0.2f;
+                    var_r26 = true;
+
+#if DEBUG
+                    if (mCamSetup.CheckFlag(0x8000)) {
+                        dDbVw_Report(20, 235, "    B");
+                    }
+#endif
+                }
             }
         }
     } else if (i_flags & 0xb7) {
         f32 fVar1 = eye.y - mBG.field_0x0.field_0x58;
         if (fVar1 >= 0.0f && fVar1 < 3.0f) {
             eye.y = mBG.field_0x0.field_0x58 + 3.0f;
-            bVar8 = true;
+            var_r26 = true;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(20, 235, "    W");
+            }
+#endif
         } else if (fVar1 <= 0.0f && fVar1 > -3.0f) {
             eye.y = mBG.field_0x0.field_0x58 - 3.0f;
-            bVar8 = true;
+            var_r26 = true;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(20, 235, "    W");
+            }
+#endif
         }
     }
 
     mCenter = center;
     mEye = eye;
-    if (bVar8) {
+    if (var_r26) {
         direction.Val(eye - center);
     }
     mDirection = direction;
-    return uVar13 != 0 ? true : false;
+    return var_r28 != 0 ? true : false;
 }
 
 bool dCamera_c::lineBGCheckBoth(cXyz* i_start, cXyz* i_end, dBgS_LinChk* i_linchk,
@@ -2834,11 +3311,12 @@ BOOL dCamera_c::jutOutCheck(cXyz* param_0, f32 param_1) {
 }
 
 void dCamera_c::tooNearEscape(cXyz* param_0) {
+    f32 maxDist = 40.0f;
     cXyz sp2C = attentionPos(mpPlayerActor);
     cSGlobe sp58(*param_0 - sp2C);
 
-    if (sp58.R() < 40.0f) {
-        sp58.R(40.0f);
+    if (sp58.R() < maxDist) {
+        sp58.R(maxDist);
         *param_0 = sp2C + sp58.Xyz();
     }
 }
@@ -2876,6 +3354,7 @@ void dCamera_c::checkGroundInfo() {
     }
 
     cXyz roof_chk_pos = gnd_chk_pos;
+    int var_r24 = 0;
     gnd_chk_pos.y += 20.0f;
     dBgS_RoofChk roof_chk;
     roof_chk.SetUnderwaterRoof();
@@ -2917,7 +3396,8 @@ void dCamera_c::checkGroundInfo() {
     } else if (player->checkSpinnerRide()) {
         mBG.field_0xc0.field_0x44 = 1;
     } else if (player->checkMagneBootsOn()) {
-        if (!cBgW_CheckBWall(player->getMagneBootsTopVec()->y)) {
+        Vec* bootsTopVec = player->getMagneBootsTopVec();
+        if (!cBgW_CheckBWall(bootsTopVec->y)) {
             mBG.field_0xc0.field_0x44 = 1;
         }
     } else if (footHeightOf(mpPlayerActor) - mBG.field_0x5c.field_0x58 > mCamSetup.mBGChk.FloorMargin()) {
@@ -3016,6 +3496,12 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     f32 val23 = mCamParam.Val(param_0, 23);
     f32 val24 = mCamParam.Val(param_0, 24);
 
+#if WIDESCREEN_SUPPORT
+    if (mDoGph_gInf_c::isWide()) {
+        val22 *= WideTurnSaving;
+    }
+#endif
+
     cSAngle ang1 = -75.0f;
     cSAngle ang2 = 75.0f;
     f32 dVar52 = 0.25f;
@@ -3083,14 +3569,21 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     }
     if (player->checkMagneBootsOn()) {
         bVar7 = true;
-        if (cBgW_CheckBWall(player->getMagneBootsTopVec()->y)) {
+        Vec* bootsTopVec = player->getMagneBootsTopVec();
+        if (cBgW_CheckBWall(bootsTopVec->y)) {
             bVar2 = true;
         }
     }
     cSAngle player_angle_delta = player_direction - mViewCache.mDirection.U();
     field_0x944 = 1;
 
-    if (mRoomMapTool.mCameraIndex != 0xff && mCamParam.Flag(param_0, 0x200)) {
+    if (mRoomMapTool.mCameraIndex != 0xff && mCamParam.Flag(param_0, 0x200) &&
+#if DEBUG
+        mCamSetup.ForceType() == -1
+#else
+        true
+#endif
+        ) {
         if (mRoomMapTool.mCameraIndex != chase->field_0x9c) {
             mCamParam.Fovy(mRoomMapTool.mCamData.field_0x11);
             mCamParam.Arg0(mRoomMapTool.mCamData.field_0x12);
@@ -3134,19 +3627,20 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         val17 = val18 = val19;
     }
 
-    bool bVar10, bVar8;
-    bool bVar9 = false;
-    bool bVar3 = false;
-    bool bVar1 = false;
+    bool sp1E = true;
+    bool sp1D = false;
+    bool sp1C = false;
+    bool sp1B = false;
     if (mIsWolf == 0) {
         if (isPlayerCharging(mPadID)) {
-            bVar1 = true;
+            sp1B = true;
         }
 
         if (check_owner_action(mPadID, 0x8000000)) {
-            bVar3 = true;
+            sp1C = true;
         }
 
+        f32 sp1E0;
         if (check_owner_action1(mPadID, 0x2000000)) {
             clrFlag(0x80);
             cXyz* left_foot_pos = player->getLeftFootPosP();
@@ -3155,37 +3649,37 @@ bool dCamera_c::chaseCamera(s32 param_0) {
                 val0 = -val0;
             }
         } else if (mThrowTimer != 0 && !chkFlag(0x100000)) {
-            f32 throw_ctr_adjust = mCamSetup.ThrowCtrAdjust();
-            val2 += throw_ctr_adjust;
-            val3 += throw_ctr_adjust;
-            f32 throw_v_angle = mCamSetup.ThrowVAngle();
-            if (val12 < throw_v_angle) {
-                val12 = throw_v_angle;
+            sp1E0 = mCamSetup.ThrowCtrAdjust();
+            val2 += sp1E0;
+            val3 += sp1E0;
+            sp1E0 = mCamSetup.ThrowVAngle();
+            if (val12 < sp1E0) {
+                val12 = sp1E0;
             }
-            if (val13 < throw_v_angle) {
-                val13 = throw_v_angle;
+            if (val13 < sp1E0) {
+                val13 = sp1E0;
             }
-            f32 throw_cushion = mCamSetup.ThrowCushion();
-            val16 = throw_cushion;
-            val5 = throw_cushion;
+            sp1E0 = mCamSetup.ThrowCushion();
+            val16 = sp1E0;
+            val5 = sp1E0;
             mForwardTiltOffset = cSAngle::_0;
             chase->field_0x94 = true;
         } else if ((player->getGrabActorID() != fpcM_ERROR_PROCESS_ID_e || mThrowTimer != 0)
                                                 && chkFlag(0x100000)) {
-            val9 = mCamSetup.ThrowCtrAdjust();
+            sp1E0 = mCamSetup.ThrowCtrAdjust();
             if (mThrowTimer != 0) {
-                val9 *= (f32)mThrowTimer / mCamSetup.ThrowTimer();
+                sp1E0 *= (f32)mThrowTimer / mCamSetup.ThrowTimer();
             }
-            val2 += val9;
-            val3 += val9;
+            val2 += sp1E0;
+            val3 += sp1E0;
         } else if (player->checkCanoeRideTandem()) {
             val1 -= 100.0f;
         } else if (check_owner_action(mPadID, 0x100000)) {
-            val9 = mMonitor.field_0x10 / 22.0f;
-            if (val9 > 1.0f) {
-                val9 = 1.0f;
+            sp1E0 = mMonitor.field_0x10 / 22.0f;
+            if (sp1E0 > 1.0f) {
+                sp1E0 = 1.0f;
             }
-            val1 *= val9;
+            val1 *= sp1E0;
         }
 
         if (chase->field_0x94) {
@@ -3193,22 +3687,22 @@ bool dCamera_c::chaseCamera(s32 param_0) {
                 chase->field_0x94 = false;
             }
             if (mThrowTimer == 0) {
-                bVar9 = true;
+                sp1D = true;
             }
         } else if (chase->field_0x92 && chase->field_0x1a > 14) {
-            f32 min = 550.0f;
-            if (val8 < min) {
-                val8 = min;
+            sp1E0 = 550.0f;
+            if (val8 < sp1E0) {
+                val8 = sp1E0;
             }
-            min *= 1.1f;
-            if (val7 < min) {
-                val7 = min;
+            sp1E0 *= 1.1f;
+            if (val7 < sp1E0) {
+                val7 = sp1E0;
             }
         }
 
     } else {
         if (isPlayerCharging(mPadID)) {
-            bVar1 = true;
+            sp1B = true;
         }
 
         if (mMidnaRidingAndVisible != 0) {
@@ -3227,8 +3721,9 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         }
 
         if ((check_owner_action1(mPadID, 0x800000) || chase->field_0x73) && !chkFlag(0x100000)) {
-            val2 = val3 = val1 = -70.0f;
-            bVar1 = true;
+            val1 = -70.0f;
+            val2 = val3 = -70.0f;
+            sp1B = true;
             f32 search_ball_scale = player->getSearchBallScale();
             search_ball_scale *= 1.5f;
             if (val8 < search_ball_scale) {
@@ -3247,6 +3742,12 @@ bool dCamera_c::chaseCamera(s32 param_0) {
                 val16 = val13 = 1.0f;
             }
             val17 = val18 = 90.0f / mWindowAspect;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(90, 190, " W");
+            }
+#endif
         }
 
         if (chase->field_0x73) {
@@ -3254,6 +3755,12 @@ bool dCamera_c::chaseCamera(s32 param_0) {
             val16 = 0.0001f;
             val10 = 0.0001f;
             val21 = 0.0001f;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(90, 190, " A");
+            }
+#endif
         }
 
         if (mCurMode == 1 && val8 < 300.0f && val7 > 300.0f) {
@@ -3271,15 +3778,18 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         val16 = 0.25f;
     }
 
-    bool bVar33 = false;
+    bool sp1A = false;
     if (check_owner_action1(mPadID, 0x10000)) {
         cXyz hs_sub_chain_top_pos = daAlink_getAlinkActorClass()->getHsSubChainTopPos();
         if (hs_sub_chain_top_pos.y - attentionPos(mpPlayerActor).y > 100.0f) {
-            bVar33 = true;
+            sp1A = true;
         }
     }
 
     if (check_owner_action(mPadID, 0x100)) {
+#if DEBUG
+        val6 = 0.25f;
+#endif
         val7 -= 50.0f;
         val8 -= 50.0f;
         if (mIsWolf == 1) {
@@ -3304,6 +3814,12 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         }
         val6 = 0.05f;
         val16 = 0.15f;
+
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(90, 190, " H");
+        }
+#endif
     } else if (check_owner_action(mPadID, 0x2000208)) {
         val1 -= 50.0f;
         val6 = 0.25f;
@@ -3319,7 +3835,19 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         }
         mForwardTiltOffset = cSAngle::_0;
         val16 = 0.15f;
-    } else if (bVar33) {
+
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(90, 190, " L");
+        }
+#endif
+    } else if (sp1A) {
+#if DEBUG
+        if (mCamSetup.CheckFlag(0x8000)) {
+            dDbVw_Report(90, 190, " R");
+        }
+#endif
+
         mForwardTiltOffset = cSAngle::_0;
         mBG.field_0xc0.field_0x44 = 0;
     }
@@ -3331,11 +3859,22 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         if (val3 < -30.0f) {
             val3 = -30.0f;
         }
+        if (val4 < -30.0f) {
+            val4 = -30.0f;
+        }
     }
 
     cXyz player_attention_pos = attentionPos(mpPlayerActor);
-    lineBGCheck(&player_attention_pos, &mViewCache.mEye, 0x40b7);
+    f32 sp1CC;
+    if (lineBGCheck(&player_attention_pos, &mViewCache.mEye, 0x40b7)) {
+        if (val4 > 20.0f) {
+            val4 = 20.0f;
+        } else if (val4 < -40.0f) {
+            val4 = -40.0f;
+        }
+    }
 
+    sp1CC = 0.05f;
     if (mCurCamStyleTimer == 0) {
         chase->field_0x38 = val0;
     } else if (chkFlag(0x100000) && !check_owner_action1(mPadID, 0x2000000)
@@ -3347,30 +3886,23 @@ bool dCamera_c::chaseCamera(s32 param_0) {
             chase->field_0x71 = false;
         }
 
-        f32 tmp;
-        if (chase->field_0x71) {
-            tmp = -45.0f;
-        } else {
-            tmp = 45.0f;
-        }
-        chase->field_0x38 += (tmp - chase->field_0x38) * 0.04f;
+        chase->field_0x38 += ((chase->field_0x71 ? -45.0f : 45.0f) - chase->field_0x38) * 0.04f;
     } else {
         chase->field_0x38 += (val0 - chase->field_0x38) * 0.06f;
     }
 
+    f32 sp1C8;
     if (mGear == 1 || val7 <= val8) {
         chase->field_0xa4 = 0.0f;
     } else if (!mCamParam.Flag(param_0, 0x400)) {
-        val14 = mViewCache.mDirection.R();
-        if (val14 < val8) {
-            val9 = val8;
-        } else if (val14 > val7) {
-            val9 = val7;
-        } else {
-            val9 = val14;
+        sp1C8 = mViewCache.mDirection.R();
+        if (sp1C8 < val8) {
+            sp1C8 = val8;
+        } else if (sp1C8 > val7) {
+            sp1C8 = val7;
         }
 
-        f32 tmp = (val7 - val9) / (val7 - val8);
+        f32 tmp = (val7 - sp1C8) / (val7 - val8);
         if (mCurCamStyleTimer == 0) {
             chase->field_0xa4 = tmp;
         } else {
@@ -3398,12 +3930,9 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0x10 = 30;
         chase->field_0x28 = val8;
         chase->field_0x2c = val7;
-        chase->field_0x18 = 0;
-        chase->field_0x1a = 0;
-        chase->field_0x14 = 0;
+        chase->field_0x14 = chase->field_0x1a = chase->field_0x18 = 0;
         chase->field_0x54 = 0.01f;
-        chase->field_0x7c = 0.01f;
-        chase->field_0x78 = 0.01f;
+        chase->field_0x78 = chase->field_0x7c = 0.01f;
         chase->field_0x80 = 0.01f;
         chase->field_0x74 = 0.01f;
         chase->field_0x84 = val6;
@@ -3420,8 +3949,9 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0x4c = 1.0f;
         chase->field_0xa8 = 0;
 
+        f32 sp1BC = 0.0f;
+        int timer;
         if (dComIfGp_evmng_cameraPlay()) {
-            int timer;
             getEvIntData(&timer, "Timer", 20);
             chase->field_0x4 = timer != 0 ? timer : 1;
             chase->field_0x95 = true;
@@ -3443,7 +3973,7 @@ bool dCamera_c::chaseCamera(s32 param_0) {
             }
 
             cSAngle ang;
-            if ((chkFlag(0x100000) || bVar3 || bVar6) && std::fabsf(mPadInfo.mCStick.mLastPosX) < 0.05f) {
+            if ((chkFlag(0x100000) || sp1C || bVar6) && std::fabsf(mPadInfo.mCStick.mLastPosX) < 0.05f) {
                 ang.Val(directionOf(mpPlayerActor).Inv());
             } else {
                 ang.Val(mViewCache.mDirection.U());
@@ -3452,27 +3982,22 @@ bool dCamera_c::chaseCamera(s32 param_0) {
             cXyz pos3 = pos + globe2.Xyz();
             f32 dist1 = cXyz(mEye - pos3).abs() * 2.5f;
 
+            f32 sp1AC;
+
             dist = val3 + (val2 - val3) * chase->field_0xa4;
             pos3 = pos;
             pos.y += dist;
-            f32 dist2 = cXyz(mCenter - pos3).abs() * 8.0f;
-            f32 abs_dist_max = std::fabsf(dist1 > dist2 ? dist1 : dist2);
+            sp1AC = cXyz(mCenter - pos3).abs() * 8.0f;
+            sp1BC = std::fabsf(dist1 > sp1AC ? dist1 : sp1AC);
 
-            f32 tmp2 = val18 + (val17 - val18) * chase->field_0xa4;
-            f32 fovy_diff = std::fabsf(mFovy - tmp2);
-            f32 sin = cSAngle(mFovy > tmp2 ? mFovy : tmp2).Sin();
-            f32 tmp3 = 100.0f * (sin * sin) * fovy_diff;
-            f32 tmp5;
-            if (abs_dist_max > tmp3) {
-                tmp5 = abs_dist_max;
-            } else {
-                tmp5 = tmp3;
-            }
-            f32 tmp6 = std::fabsf(tmp5);
-            tmp6 *= 1.2f;
-            tmp6 *= 0.00625f;
-            val3 = JMAFastSqrt(tmp6);
-            chase->field_0x4 = (int)(val3 * 2.2f) + 1;
+            dist1 = val18 + (val17 - val18) * chase->field_0xa4;
+            sp1AC = std::fabsf(mFovy - dist1);
+            f32 sin = cSAngle(mFovy > dist1 ? mFovy : dist1).Sin();
+            sp1AC = 100.0f * (sin * sin) * sp1AC;
+            sp1BC = std::fabsf(sp1BC > sp1AC ? sp1BC : sp1AC);
+            sp1BC *= 1.2f;
+            sp1BC *= 0.00625f;
+            chase->field_0x4 = (int)(JMAFastSqrt(sp1BC) * 2.2f) + 1;
             if (chase->field_0x4 < 5) {
                 chase->field_0x4 = 5;
             }
@@ -3483,13 +4008,14 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         } else if (mCurType == specialType[CAM_TYPE_LV9_GZELDA_TRI]) {
             chase->field_0x4 = 45;
         } else if (chkFlag(0x20)) {
-            int tmp2 = chase->field_0x4;
-            int tmp = tmp2 / 6;
-            chase->field_0x4 = tmp2 + (tmp > 15 ? 15 : tmp < 5 ? 5 : tmp);
+            int sp1A4 = chase->field_0x4 / 6;
+            sp1A4 = sp1A4 > 15 ? 15 : sp1A4 < 5 ? 5 : sp1A4;
+            chase->field_0x4 = chase->field_0x4 + sp1A4;
         } else if (player->checkMagneBootsOn()) {
             cXyz* magne_boots_top_vec = player->getMagneBootsTopVec();
             cXyz vec2 = mDirection.Xyz().norm();
-            if (VECDotProduct(magne_boots_top_vec, &vec2) < -0.1f) {
+            f32 sp19C = VECDotProduct(magne_boots_top_vec, &vec2);
+            if (sp19C < -0.1f) {
                 vec2 = (vec2 + *magne_boots_top_vec) * 0.5f;
                 mViewCache.mDirection.Val(vec2);
                 mViewCache.mDirection.R(val8);
@@ -3515,9 +4041,7 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0x64 = mViewCache.mEye;
         chase->field_0x34 = mViewCache.mFovy;
         if (chkFlag(0x200)) {
-            f32 dist = mViewCache.mDirection.R();
-            chase->field_0x2c = dist;
-            chase->field_0x28 = dist;
+            chase->field_0x28 = chase->field_0x2c = mViewCache.mDirection.R();
         }
         chase->field_0x8 = chase->field_0x4 * (chase->field_0x4 + 1) >> 1;
         chase->field_0xc = 0.0f;
@@ -3529,9 +4053,11 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     cXyz pos = relationalPos(mpPlayerActor, &vec);
 
     fopAc_ac_c* copy_rod_camera = player->getCopyRodCameraActor();
+    bool sp19 = false;
     if (copy_rod_camera != NULL) {
         cXyz attention_pos = attentionPos(mpPlayerActor);
         if (!lineBGCheck(&attention_pos, &mViewCache.mEye, 0x40b7)) {
+            sp19 = true;
             mpAuxTargetActor1 = copy_rod_camera;
             setFlag(0x2000);
         }
@@ -3540,8 +4066,12 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     if (player->checkHorseRide()) {
         pos.y -= 100.0f;
     }
-    jutOutCheck(&pos, 5.0f);
 
+    if (!DEBUG || sp1E) {
+        jutOutCheck(&pos, 5.0f);
+    }
+
+    bool sp18 = false;
     cXyz vec2(0.0f, 0.0f, mMonitor.field_0xc * 10.0f);
     cXyz vec3 = attentionPos(mpPlayerActor) + dCamMath::xyzRotateY(vec2, player_direction);
     dBgS_CamLinChk lin_chk;
@@ -3560,6 +4090,7 @@ bool dCamera_c::chaseCamera(s32 param_0) {
                                               &chase->field_0x58, NULL, NULL);
         }
         chase->field_0xc = chase->field_0x4 - (int)mCurCamStyleTimer;
+        f32 sp194;
         f32 rate = chase->field_0xc / chase->field_0x8;
         chase->field_0x58 = pos;
         if (chase->field_0x95) {
@@ -3583,16 +4114,16 @@ bool dCamera_c::chaseCamera(s32 param_0) {
             }
         }
 
-        f32 dVar43 = limitf(mViewCache.mDirection.R(), val8, val7);
+        sp194 = limitf(mViewCache.mDirection.R(), val8, val7);
         cSAngle ang = val12 + chase->field_0xa4 * (val13 - val12);
         if (!chase->field_0x95) {
             ang += mForwardTiltOffset;
         }
         chase->field_0x50 = ang.Degree();
-        cSGlobe globe(dVar43, ang, cSAngle(mControlledYaw.Inv()));
+        cSGlobe globe(sp194, ang, cSAngle(mControlledYaw.Inv()));
         mViewCache.mDirection.R(mViewCache.mDirection.R() + (globe.R() - mViewCache.mDirection.R()) * rate);
         mViewCache.mDirection.V(mViewCache.mDirection.V() + (globe.V() - mViewCache.mDirection.V()) * rate);
-        if (chkFlag(0x100000) || bVar3 || bVar6) {
+        if (chkFlag(0x100000) || sp1C || bVar6) {
             mViewCache.mDirection.U(mViewCache.mDirection.U() + (chase->field_0x96 - mViewCache.mDirection.U()) * rate);
         }
         chase->field_0x64 = mViewCache.mCenter + mViewCache.mDirection.Xyz();
@@ -3603,7 +4134,8 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         }
 
         chase->field_0x28 = chase->field_0x2c = mViewCache.mDirection.R();
-        mViewCache.mFovy += (val17 + chase->field_0xa4 * (val18 - val17) - mViewCache.mFovy) * rate;
+        f32 sp188 = val17 + chase->field_0xa4 * (val18 - val17);
+        mViewCache.mFovy += (sp188 - mViewCache.mFovy) * rate;
         chase->field_0x8 -= chase->field_0xc;
         chase->field_0x8c = 0;
         chase->field_0x90 = false;
@@ -3616,7 +4148,8 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0xa0 = mGear;
     }
     if (chase->field_0x1c != 0) {
-        dVar52 = dCamMath::rationalBezierRatio(1.0f - (chase->field_0x1c - 1) / 20.0f, 0.5f);
+        f32 sp184 = 1.0f - (chase->field_0x1c - 1) / 20.0f;
+        dVar52 = dCamMath::rationalBezierRatio(sp184, 0.5f);
     }
 
     if (player->checkThrowDamage()) {
@@ -3630,28 +4163,27 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0x91 = false;
     }
 
-    bVar10 = false;
-    bool bVar11 = false;
-    bool bVar34 = false;
+    bool sp17 = false;
+    bool sp16 = false;
+    bool sp15 = false;
     cXyz player_pos = positionOf(mpPlayerActor);
     player_pos.y += 10.0f;
-    groundHeight(&player_pos);
-    footHeightOf(mpPlayerActor);
+    f32 sp17C = footHeightOf(mpPlayerActor) - groundHeight(&player_pos);
 
     if (mBG.field_0xc0.field_0x44 != 0 && !check_owner_action(mPadID, 0x200)) {
         chase->field_0x20 = 0.0f;
         chase->field_0x10 = 0;
     } else if (chase->field_0x10 < 30) {
-        bVar10 = true;
+        sp17 = true;
         chase->field_0x10++;
         chase->field_0x20 += (JumpCushion - chase->field_0x20) * dCamMath::rationalBezierRatio(chase->field_0x10 / 30.0f, 1.25f);
     } else if (!bVar2) {
-        bVar11 = true;
+        sp16 = true;
         if (mBG.field_0x5c.field_0x0 && dComIfG_Bgsp().GetGroundCode(mBG.field_0x5c.field_0x4) == 4) {
-            bVar34 = true;
+            sp15 = true;
         } else if (player->checkCokkoGlide()) {
-            bVar10 = true;
-            bVar11 = false;
+            sp17 = true;
+            sp16 = false;
         }
         val10 = 0.01f;
         chase->field_0x20 += (1.0f - chase->field_0x20) * 0.1f;
@@ -3680,9 +4212,16 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     }
 
     if (chase->field_0x91) {
+        if (val2 < -10.0f) {
+            val2 = -10.0f;
+        }
+        if (val3 < -10.0f) {
+            val3 = -10.0f;
+        }
         chase->field_0x88 = 0.25f;
-    } else if (bVar10 || bVar11) {
-        chase->field_0x88 = val5 * 0.1f + (0.9f - val5 * 0.1f) * chase->field_0x20;
+    } else if (sp17 || sp16) {
+        f32 sp178 = val5 * 0.1f;
+        chase->field_0x88 = sp178 + (0.9f - sp178) * chase->field_0x20;
         if (chkFlag(0x100000) && chase->field_0x84 > 0.25f) {
             chase->field_0x84 = chase->field_0x20 * 0.75f + 0.25f;
         }
@@ -3698,24 +4237,25 @@ bool dCamera_c::chaseCamera(s32 param_0) {
 
     cXyz vec4(chase->field_0x84, chase->field_0x88, chase->field_0x84);
 
-    bVar8 = false;
-    bool bVar5 = false;
-    if (chkFlag(0x80) && mDirection.R() < val8) {
-        bVar5 = true;
+    bool sp14 = false;
+    bool sp13 = true;
+    bool sp12 = chkFlag(0x80) && mDirection.R() < val8;
+
+    if (chkFlag(0x100000) ||
+        check_owner_action(mPadID, 0x2800108) ||
+        isPlayerCharging(mPadID) ||
+        sp17) {
+        sp13 = false;
     }
 
-    if (!chkFlag(0x100000) && !check_owner_action(mPadID, 0x2800108)) {
-        isPlayerCharging(mPadID);
-    }
-
-    if (bVar5 && mMonitor.field_0xc < 0.1f && !chkFlag(0x100000)
+    if (sp12 && mMonitor.field_0xc < 0.1f && !chkFlag(0x100000)
         && !check_owner_action(mPadID, 0x2800108) && !check_owner_action1(mPadID, 0x2110000))
     {
-        bVar8 = true;
+        sp14 = true;
     }
 
     if (mCamParam.Flag(param_0, 0x1000)) {
-        f32 fVar55 = 0.0f;
+        f32 sp174 = 0.0f;
         if (push_any_key()) {
             chase->field_0x8c = 0;
             chase->field_0x90 = false;
@@ -3731,15 +4271,15 @@ bool dCamera_c::chaseCamera(s32 param_0) {
                 if (std::fabsf(vec5.y) < 200.0f) {
                     vec5.y = 0.0f;
                     vec5.x *= 0.5f;
-                    f32 tmp = vec5.abs();
-                    if (tmp < 500.0f) {
-                        fVar55 = -delta.x * 0.55f * (1.0f - tmp / 500.0f);
+                    f32 sp16C = vec5.abs();
+                    if (sp16C < 500.0f) {
+                        sp174 = -delta.x * 0.55f * (1.0f - sp16C / 500.0f);
                     }
                 }
             }
         }
 
-        chase->field_0x40 += (fVar55 - chase->field_0x40) * 0.01f;
+        chase->field_0x40 += (sp174 - chase->field_0x40) * 0.01f;
         cSGlobe globe(chase->field_0x40, mViewCache.mDirection.V(), mViewCache.mDirection.U() + cSAngle::_270);
         pos += globe.Xyz();
     }
@@ -3747,19 +4287,21 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     mViewCache.mCenter += (pos - mViewCache.mCenter) * vec4;
     cSGlobe globe = mViewCache.mEye - mViewCache.mCenter;
 
+    f32 sp168;
     if (chase->field_0x1a > 0 && chase->field_0x1a <= 14) {
-        f32 tmp = chase->field_0x1a / 14.0f;
-        if (tmp > 1.0f) {
-            tmp = 1.0f;
+        sp168 = chase->field_0x1a / 14.0f;
+        if (sp168 > 1.0f) {
+            sp168 = 1.0f;
         }
-        f32 rate = dCamMath::rationalBezierRatio(tmp, charge_b_ratio);
+        f32 rate = dCamMath::rationalBezierRatio(sp168, charge_b_ratio);
         chase->field_0x70 = true;
         chase->field_0x48 = (1.0f - chase->field_0x48) * rate;
     } else if (bVar6) {
+        f32 sp160 = 0.2f;
         f32 target = 1.0f;
-        f32 tmp = dCamMath::rationalBezierRatio(mPadInfo.mMainStick.mLastPosX, val23);
+        sp168 = dCamMath::rationalBezierRatio(mPadInfo.mMainStick.mLastPosX, val23);
         if (!mDoCPd_c::getHoldA(mPadID)) {
-            target = 1.0f - ((1.0f - val24) + val24 * cSAngle(tmp * 180.0f).Cos());
+            target = 1.0f - ((1.0f - val24) + val24 * cSAngle(sp168 * 180.0f).Cos());
             target *= mPadInfo.mMainStick.mLastValue;
         }
         chase->field_0x24 += (target - chase->field_0x24) * 0.4f;
@@ -3767,24 +4309,24 @@ bool dCamera_c::chaseCamera(s32 param_0) {
             chase->field_0x48 = 0.05f;
         }
         chase->field_0x70 = false;
-        chase->field_0x48 += (val24 * chase->field_0x24 - chase->field_0x48) * 0.2f;
-    } else if (chkFlag(0x100000) || bVar3) {
+        chase->field_0x48 += (val24 * chase->field_0x24 - chase->field_0x48) * sp160;
+    } else if (chkFlag(0x100000) || sp1C) {
+        f32 sp158 = 0.2f;
         if (chase->field_0x70) {
             chase->field_0x48 = 0.05f;
         }
         chase->field_0x70 = false;
-        f32 tmp = 0.2f;
-        chase->field_0x48 += (1.0f - chase->field_0x48) * tmp;
+        chase->field_0x48 += (1.0f - chase->field_0x48) * sp158;
     } else {
         chase->field_0x70 = true;
         if (mFakeAngleSys.field_0x0 != 0) {
             chase->field_0x48 = 0.0f;
         } else if (mPadInfo.mMainStick.mLastPosY >= 0.0f) {
-            f32 tmp = dCamMath::rationalBezierRatio(mPadInfo.mMainStick.mLastPosX, val23);
-            chase->field_0x48 = 1.0f - (1.0f - val24 + val24 * cSAngle(tmp * 180.0f).Cos());
+            sp168 = dCamMath::rationalBezierRatio(mPadInfo.mMainStick.mLastPosX, val23);
+            chase->field_0x48 = 1.0f - (1.0f - val24 + val24 * cSAngle(sp168 * 180.0f).Cos());
         } else {
-            f32 tmp = dCamMath::rationalBezierRatio(mPadInfo.mMainStick.mLastPosX, val23 * 2.0f);
-            chase->field_0x48 = 1.0f - (1.0f - val24 + val24 * cSAngle(tmp * 180.0f).Cos());
+            sp168 = dCamMath::rationalBezierRatio(mPadInfo.mMainStick.mLastPosX, val23 * 2.0f);
+            chase->field_0x48 = 1.0f - (1.0f - val24 + val24 * cSAngle(sp168 * 180.0f).Cos());
         }
         chase->field_0x48 *= mPadInfo.mMainStick.mLastValue;
         chase->field_0x48 *= val22;
@@ -3797,13 +4339,18 @@ bool dCamera_c::chaseCamera(s32 param_0) {
                 } else {
                     chase->field_0x14 = -1;
                 }
-            } else if (chase->field_0x14 < 0) {
-                chase->field_0x14--;
-            } else if (chase->field_0x14 < 30) {
-                chase->field_0x48 = chase->field_0x14 / 30.0f * 0.5f;
-                chase->field_0x14++;
             } else {
-                chase->field_0x48 = 0.5f;
+                int sp154 = 32;
+                int sp150 = 30;
+                f32 sp14C = 0.5f;
+                if (chase->field_0x14 < 0) {
+                    chase->field_0x14--;
+                } else if (chase->field_0x14 < sp150) {
+                    chase->field_0x48 = chase->field_0x14 / (f32)sp150 * sp14C;
+                    chase->field_0x14++;
+                } else {
+                    chase->field_0x48 = sp14C;
+                }
             }
         } else {
             chase->field_0x14 = 0;
@@ -3811,23 +4358,24 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     }
 
     cSAngle ang3;
-    f32 dVar39 = chase->field_0x48 * globe.V().Cos();
+    f32 sp148 = chase->field_0x48 * globe.V().Cos();
 
     if (chkFlag(0x80000)) {
         cXyz vec5 = mLastHitPos;
         cSGlobe globe = vec5 - mViewCache.mCenter;
         ang3 = globe.U();
-        dVar39 = sAngleX(mCornerNormalSum).Cos() * 0.3f + 0.35f;
+        sp148 = sAngleX(mCornerNormalSum).Cos() * 0.3f + 0.35f;
     } else if (chase->field_0x90) {
         ang3 = player_direction.Inv();
-        dVar39 = mCamSetup.WaitRollSpeed();
-    } else if (bVar8) {
+        sp148 = mCamSetup.WaitRollSpeed();
+    } else if (sp14) {
         ang3 = mViewCache.mDirection.U();
-    } else if (bVar3) {
+    } else if (sp1C) {
         ang3 = player_direction.Inv();
     } else if (chkFlag(0x100000) || bVar6) {
         if (player->checkChainBlockPushPull()) {
-            cSGlobe globe = mViewCache.mCenter - attentionPos(player->getChainGrabActor());
+            fopAc_ac_c* sp144 = player->getChainGrabActor();
+            cSGlobe globe = mViewCache.mCenter - attentionPos(sp144);
             ang3 = globe.U();
         } else if ((mIsWolf != 1 || mCurMode != 1) && !mCamParam.Flag(param_0, 0x100)) {
             ang3 = player_direction.Inv();
@@ -3838,15 +4386,20 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         ang3 = player_direction.Inv();
     }
 
+    bool sp11 = false;
+    f32 sp140 = 0.05f;
     f32 last_pos_x = mPadInfo.mCStick.mLastPosX;
-    std::fabsf(last_pos_x);
-    std::fabsf(mPadInfo.mCStick.mLastPosY);
+    f32 sp138 = std::fabsf(last_pos_x);
+    f32 sp134 = mPadInfo.mCStick.mLastPosY;
+    f32 sp130 = std::fabsf(sp134);
+    f32 sp12C = 8.0f;
+    f32 sp128 = 12.0f;
     chase->field_0x93 = false;
 
-    if (!mCamParam.Flag(param_0, 0x40) && std::fabsf(last_pos_x) > 0.05f) {
-        chase->field_0xac += (dCamMath::rationalBezierRatio(last_pos_x, 0.5f) * 8.0f - chase->field_0xac) * chase->field_0x4c;
+    if (sp11 || (!mCamParam.Flag(param_0, 0x40) && std::fabsf(last_pos_x) > sp140)) {
+        chase->field_0xac += (dCamMath::rationalBezierRatio(last_pos_x, 0.5f) * sp12C - chase->field_0xac) * chase->field_0x4c;
         ang3 = globe.U() + cSAngle(chase->field_0xac);
-        dVar39 = std::fabsf(last_pos_x) - 0.05f;
+        sp148 = std::fabsf(last_pos_x) - 0.05f;
         if (mCamSetup.CheckFlag(0x1000) && mFakeAngleSys.field_0x0 == 0) {
             setUSOAngle();
         }
@@ -3873,18 +4426,24 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0x93 = true;
     }
 
+    if (sp18) {
+        sp148 *= 0.6f;
+    }
+
     if (chase->field_0x93) {
         mViewCache.mDirection.U(chase->field_0x9a);
     } else {
-        mViewCache.mDirection.U(globe.U() + (ang3 - globe.U()) * dVar39);
+        mViewCache.mDirection.U(globe.U() + (ang3 - globe.U()) * sp148);
     }
 
     cSAngle ang4;
+    f32 sp124 = chase->field_0x78;
 
-    if (bVar1 && !bVar7) {
+    if (sp1B && !bVar7) {
         chase->field_0x50 = charge_latitude;
         if (chase->field_0x1a < 14) {
-            chase->field_0x78 = dCamMath::rationalBezierRatio(chase->field_0x1a / 14.0f, charge_b_ratio);
+            f32 sp120 = chase->field_0x1a / 14.0f;
+            chase->field_0x78 = dCamMath::rationalBezierRatio(sp120, charge_b_ratio);
             setFlag(0x4000000);
             chase->field_0x1a++;
         } else {
@@ -3903,25 +4462,27 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         }
         chase->field_0x1a = 0;
         if (mCurMode == 1) {
-            f32 tmp = val12 + (val13 - val12) * chase->field_0xa4;
+            f32 sp11C = val12 + (val13 - val12) * chase->field_0xa4;
             chase->field_0x78 = 0.5f;
-            chase->field_0x50 += (tmp - chase->field_0x50) * chase->field_0x48;
+            chase->field_0x50 += (sp11C - chase->field_0x50) * chase->field_0x48;
         } else {
-            check_owner_action1(mPadID, 0x800000);
-            if (check_owner_action1(mPadID, 0x1000000) || chase->field_0x73) {
+            if (check_owner_action1(mPadID, 0x800000) && false) {
+                chase->field_0x78 = 0.25f;
+                chase->field_0x50 = val12;
+            } else if (check_owner_action1(mPadID, 0x1000000) || chase->field_0x73) {
                 chase->field_0x78 = 0.75f;
                 chase->field_0x50 = val12;
             } else if (chkFlag(0x10000)) {
                 chase->field_0x50 += (val12 - chase->field_0x50) * chase->field_0x20;
                 chase->field_0x78 = val16;
-            } else if (chkFlag(0x80000) || bVar8 || bVar9) {
+            } else if (chkFlag(0x80000) || sp14 || sp1D) {
                 chase->field_0x78 = 0.0f;
                 chase->field_0x50 = mViewCache.mDirection.V().Degree();
-            } else if ((!bVar10 && !bVar11 && (!bVar2 || mCurMode != 0 || mGear != 0)) || bVar12) {
-                f32 tmp = val12 + (val13 - val12) * chase->field_0xa4;
-                tmp += mForwardTiltOffset.Degree();
-                chase->field_0x50 += (tmp - chase->field_0x50) * val16;
-                chase->field_0x78 += (JumpCushion - chase->field_0x78) * 0.05f;
+            } else if ((!sp17 && !sp16 && (!bVar2 || mCurMode != 0 || mGear != 0)) || bVar12) {
+                f32 sp118 = val12 + (val13 - val12) * chase->field_0xa4;
+                sp118 += mForwardTiltOffset.Degree();
+                chase->field_0x50 += (sp118 - chase->field_0x50) * val16;
+                chase->field_0x78 += (JumpCushion - chase->field_0x78) * sp1CC;
             } else if (bVar2) {
                 chase->field_0x50 = globe.V().Degree();
                 chase->field_0x78 = 0.95f;
@@ -3965,14 +4526,15 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     if (chase->field_0x1c != 0) {
         val11 = 1.0f;
     }
+    f32 sp110 = chase->field_0x2c;
     chase->field_0x28 += (val8 - chase->field_0x28) * val11;
     chase->field_0x2c += (val7 - chase->field_0x2c) * val11;
 
     bool bVar6a = false;
     bool bVar2a = false;
-    if (bVar11 && !check_owner_action(mPadID, 0x100000)) {
+    if (sp16 && !check_owner_action(mPadID, 0x100000)) {
         fVar55 = mViewCache.mDirection.R() + (fVar55 - mViewCache.mDirection.R()) * 0.4f;
-        if (!bVar34 && fVar55 > val7 * 1.5f) {
+        if (!sp15 && fVar55 > val7 * 1.5f) {
             fVar55 = val7 * 1.5f;
         }
     } else if (fVar55 < chase->field_0x28) {
@@ -3983,9 +4545,9 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         bVar2a = true;
     }
 
-    if (bVar10) {
+    if (sp17) {
         chase->field_0x74 += (chase->field_0x20 - chase->field_0x74) * 0.01f;
-    } else if (bVar11) {
+    } else if (sp16) {
         chase->field_0x74 += (chase->field_0x20 - chase->field_0x74) * 0.01f;
     } else if (chase->field_0x1c != 0) {
         chase->field_0x74 = dVar52;
@@ -3997,7 +4559,7 @@ bool dCamera_c::chaseCamera(s32 param_0) {
         chase->field_0x74 = 1.0f;
     }
 
-    mViewCache.mDirection.R();
+    sp110 = mViewCache.mDirection.R();
     mViewCache.mDirection.R(mViewCache.mDirection.R() + (fVar55 - mViewCache.mDirection.R()) * chase->field_0x74);
     chase->field_0x64 = mViewCache.mCenter + mViewCache.mDirection.Xyz();
     mViewCache.mEye = chase->field_0x64;
@@ -4007,12 +4569,13 @@ bool dCamera_c::chaseCamera(s32 param_0) {
     } else {
         chase->field_0x80 += (val21 - chase->field_0x80) * 0.01f;
     }
-    mViewCache.mFovy += ((val17 + (val18 - val17) * chase->field_0xa4) - mViewCache.mFovy) * chase->field_0x80;
+    f32 sp10C = val17 + (val18 - val17) * chase->field_0xa4;
+    mViewCache.mFovy += (sp10C - mViewCache.mFovy) * chase->field_0x80;
 
     if (chase->field_0x1c != 0) {
         chase->field_0x1c--;
     }
-    return 1;
+    return true;
 }
 
 bool dCamera_c::lockonCamera(s32 param_0) {
@@ -4020,7 +4583,7 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     cSAngle charge_latitude = cSAngle(mCamSetup.ChargeLatitude());
     f32 charge_b_ratio = mCamSetup.ChargeBRatio();
     int lockon_change_timer = mCamSetup.LockonChangeTimer();
-    f32 unkFloatConst1 = 0.15f;
+    f32 sp200 = 0.15f;
     f32 val1 = mCamParam.Val(param_0, 1);
     f32 val5 = mCamParam.Val(param_0, 5);
     f32 val6 = mCamParam.Val(param_0, 6);
@@ -4069,8 +4632,7 @@ bool dCamera_c::lockonCamera(s32 param_0) {
         if (mViewCache.mCenter.x == attention_pos.x && mViewCache.mCenter.z == attention_pos.z) {
             lockon->field_0x34.U(directionOf(mpPlayerActor));
         }
-        lockon->field_0x58 = 0.0f;
-        lockon->field_0x54 = 0.0f;
+        lockon->field_0x54 = lockon->field_0x58 = 0.0f;
         lockon->field_0x5c = mCamSetup.Cushion4Base();
         lockon->field_0x60 = 1.0f;
         lockon->field_0x14 = 0;
@@ -4210,8 +4772,8 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     cSGlobe globe;
     f32 curveWeight = mCamSetup.CurveWeight();
     f32 lockon_release_distance = attention->LockonReleaseDistanse();
+    f32 sp1A0;
     f32 sp19C = 10000.0f;
-    f32 fVar42;
 
     if (mpLockonTarget != NULL) {
         cXyz target_attention_pos = attentionPos(mpLockonTarget);
@@ -4224,8 +4786,8 @@ bool dCamera_c::lockonCamera(s32 param_0) {
 
 #if DEBUG
         if (mCamSetup.CheckFlag(0x8000)) {
-            char name[dStage_NAME_LENGTH];
-            fopAcM_getNameString(mpPlayerActor, name);
+            char name[16];
+            fopAcM_getNameString(mpLockonTarget, name);
             dDbVw_Report(0x1e0, 0x109, "%s", name);
         }
 #endif
@@ -4237,20 +4799,20 @@ bool dCamera_c::lockonCamera(s32 param_0) {
 
         globe.Val(target_attention_pos - player_attention_pos);
         globe.R(globe.R() + mpLockonTarget->attention_info.field_0xa);
-        fVar42 = globe.R() / lockon_release_distance;
-        if (fVar42 > 1.0f) {
-            fVar42 = 1.0f;
+        sp1A0 = globe.R() / lockon_release_distance;
+        if (sp1A0 > 1.0f) {
+            sp1A0 = 1.0f;
         }
 
         sp19C = dCamMath::xyzHorizontalDistance(target_attention_pos, player_attention_pos);
     } else {
         OS_REPORT("NULL TARGET&&&&&&&&&&&&& \n");
         globe.Val(mCamSetup.ParallelDist(), cSAngle::_0, directionOf(mpPlayerActor));
-        fVar42 = 1.0f;
+        sp1A0 = 1.0f;
     }
 
     cSAngle ang1 = globe.U();
-    cSAngle ang2 = rangef(val23, val24, fVar42);
+    cSAngle ang2 = rangef(val23, val24, sp1A0);
 
     if (player->checkHorseRide()) {
         ang1.Val(directionOf(mpPlayerActor));
@@ -4273,13 +4835,13 @@ bool dCamera_c::lockonCamera(s32 param_0) {
         }
     }
 
-    f32 fVar14;
+    f32 sp194;
     if (mCurCamStyleTimer < lockon_change_timer && !lockon->field_0x2a) {
-        fVar14 = dCamMath::rationalBezierRatio((f32)mCurCamStyleTimer / lockon_change_timer, 0.5f);
-        ang2 *= fVar14;
+        sp194 = dCamMath::rationalBezierRatio((f32)mCurCamStyleTimer / lockon_change_timer, 0.5f);
+        ang2 *= sp194;
     } else if (mCurCamStyleTimer >= lockon_change_timer) {
         lockon->field_0x2a = true;
-        fVar14 = 1.0f;
+        sp194 = 1.0f;
     }
 
     cSAngle ang3(mViewCache.mDirection.U().Inv() - ang1);
@@ -4301,19 +4863,18 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     }
 
     cXyz attention_pos = attentionPos(mpPlayerActor);
-    bool bVar4 = false;
-    if (bVar4) {
-        f32 sp31c = positionOf(mpPlayerActor).x;
-        f32 sp324 = positionOf(mpPlayerActor).x;
+    if (mIsWolf == 1 && false) {
+        attention_pos.x = positionOf(mpPlayerActor).x;
+        attention_pos.z = positionOf(mpPlayerActor).z;
     }
-    u8 unusedByte1 = 0;
+    bool sp0C = false;
     if (chkFlag(0x80080)) {
         cXyz attention_pos = attentionPos(mpPlayerActor);
         if (!pointInSight(&attention_pos)) {
             if (lockon->field_0x14 == 0) {
                 lockon->field_0x30 = lockon->field_0x2c == 1 ? 0 : 1;
             }
-            bVar4 = true;
+            sp0C = true;
             lockon->field_0x14 = 30;
         }
     }
@@ -4323,10 +4884,10 @@ bool dCamera_c::lockonCamera(s32 param_0) {
         if (lockon->field_0x14 == 0 && mPadInfo.mMainStick.mLastValue <= 0.1f) {
             lockon->field_0x14 = 1;
         }
-        bVar4 = true;
+        sp0C = true;
     }
 
-    f32 fVar43 = 1.0f - fabsf(mPadInfo.mCStick.mLastPosY);
+    f32 fVar43 = 1.0f - std::fabsf(mPadInfo.mCStick.mLastPosY);
     f32 fVar44;
 
     if (bVar1) {
@@ -4337,7 +4898,7 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     } else if (mBG.field_0xc0.field_0x44 == 0) {
         fVar44 = mCamSetup.Cushion4Jump();
     } else {
-        fVar44 = fVar14 * mCamSetup.Cushion4Base();
+        fVar44 = sp194 * mCamSetup.Cushion4Base();
     }
 
     lockon->field_0x5c += (fVar44 - lockon->field_0x5c) * mCamSetup.CusCus();
@@ -4345,10 +4906,10 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     lockon->field_0x1c.z = attention_pos.z;
 
     f32 dVar37;
-    if (bVar4) {
-        dVar37 = rangef(val25, val26, fVar42) + 25.0f;
+    if (sp0C) {
+        dVar37 = rangef(val25, val26, sp1A0) + 25.0f;
     } else {
-        dVar37 = rangef(val25, val26, fVar42);
+        dVar37 = rangef(val25, val26, sp1A0);
     }
     lockon->field_0x1c.y +=
         ((attention_pos.y + dVar37) - lockon->field_0x1c.y) * lockon->field_0x5c;
@@ -4358,23 +4919,24 @@ bool dCamera_c::lockonCamera(s32 param_0) {
         lockon->field_0x34.Val(mViewCache.mCenter - vec);
         if (mViewCache.mCenter.x == vec.x && mViewCache.mCenter.z == vec.z) {
             lockon->field_0x34.U(directionOf(mpPlayerActor));
-            f32 sp180 = globe.R() * 0.05f;
         }
     }
 
-    f32 fVar44a;
+    f32 sp184;
+    f32 sp180 = globe.R() * 0.05f;
+    f32 r;
     if (mpLockonTarget != NULL) {
-        f32 dVar28 = ang3.Cos();
-        f32 dVar37 = cSAngle(globe.V()).Cos();
-        if (dVar28 < 0.0f) {
-            dVar37 = -dVar37;
+        f32 sp178 = ang3.Cos();
+        f32 sp174 = cSAngle(globe.V()).Cos();
+        if (sp178 < 0.0f) {
+            sp174 = -sp174;
         }
-        f32 tmp = std::fabs(dVar28) < std::fabs(dVar37) ? dVar28 : dVar37;
-        tmp *= val4 < 0.5f ? val4 : 1.0f - val4;
-        fVar44a = val4 * globe.R() - tmp * globe.R() * val1;
+        f32 sp170 = std::fabs(sp178) < std::fabs(sp174) ? sp178 : sp174;
+        r = sp170 * (val4 < 0.5f ? val4 : 1.0f - val4);
+        sp184 = val4 * globe.R() - r * globe.R() * val1;
     } else {
-        fVar44a = globe.R() * 0.5f;
-        fVar44a += fVar44a * ang3.Cos();
+        f32 sp16C = globe.R() * 0.5f;
+        sp184 = sp16C +  sp16C * ang3.Cos();
     }
 
     cSAngle ang4 = globe.U();
@@ -4383,15 +4945,13 @@ bool dCamera_c::lockonCamera(s32 param_0) {
 
     cSAngle u, v;
     cSAngle ang5 = globe.V() - lockon->field_0x34.V();
-    f32 r;
-    if (bVar4) {
-        r = lockon->field_0x34.R();
-        r = r * 0.75f * fabsf(ang5.Cos());
+    if (sp0C) {
+        r = lockon->field_0x34.R() * 0.75f * std::fabsf(ang5.Cos());
         u.Val(lockon->field_0x34.U() + (ang4 - lockon->field_0x34.U()) * lockon->field_0x58);
         v.Val(lockon->field_0x34.V() + ang5 * 0.05f);
     } else {
-        r = lockon->field_0x34.R();
-        r = r + (fVar44a - r) * lockon->field_0x54 * fabsf(ang5.Cos());
+        r = lockon->field_0x34.R() + (sp184 - lockon->field_0x34.R()) *
+            lockon->field_0x54 * std::fabsf(ang5.Cos());
         u.Val(lockon->field_0x34.U() + (ang4 - lockon->field_0x34.U()) * lockon->field_0x58);
         v.Val(lockon->field_0x34.V() + ang5 * lockon->field_0x58);
     }
@@ -4424,11 +4984,13 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     cSAngle u2 = mViewCache.mDirection.U();
     cSAngle v2 = mViewCache.mDirection.V();
     f32 r2 = mViewCache.mDirection.R();
+    f32 sp160;
     cSAngle ang6 = ang3 - ang2;
-    f32 curve_weight = mCamSetup.CurveWeight();
-    f32 fVar47 = mPadInfo.mCStick.mLastPosX;
+    curveWeight = mCamSetup.CurveWeight();
+    f32 sp15C;
+    f32 sp158 = mPadInfo.mCStick.mLastPosX;
     if (mCamParam.Flag(param_0, 0x40)) {
-        fVar47 = 0.0f;
+        sp158 = 0.0f;
     }
 
     if (mPadInfo.mCStick.mLastPosY > mCamSetup.mCStick.SwTHH()) {
@@ -4442,10 +5004,9 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     }
 
     bool bVar3 = false;
-    f32 fVar31;
-    if (fabsf(fVar47) > 0.05f) {
-        cSAngle ang = globe2.U() + cSAngle(dCamMath::rationalBezierRatio(fVar47, 0.5f) * 7.5f);
-        fVar31 = fabsf(fVar47) - 0.05f;
+    if (std::fabsf(sp158) > 0.05f) {
+        cSAngle ang = globe2.U() + cSAngle(dCamMath::rationalBezierRatio(sp158, 0.5f) * 7.5f);
+        sp15C = std::fabsf(sp158) - 0.05f;
         lockon->field_0x42 = ang;
         lockon->field_0x4c = 0.0f;
         bVar3 = true;
@@ -4460,7 +5021,7 @@ bool dCamera_c::lockonCamera(s32 param_0) {
             ang1.Val(directionOf(mpPlayerActor));
         }
     } else if (lockon->field_0x40) {
-        fVar31 = 1.0f;
+        sp15C = 1.0f;
         lockon->field_0x4c = 1.0f;
     } else {
         lockon->field_0x40 = false;
@@ -4468,8 +5029,8 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     }
 
     if (lockon->field_0x40 || bVar3) {
-        u2 = globe2.U() + (lockon->field_0x42 - globe2.U()) * fVar31;
-    } else if (bVar4) {
+        u2 = globe2.U() + (lockon->field_0x42 - globe2.U()) * sp15C;
+    } else if (sp0C) {
         cSAngle ang;
         if (lockon->field_0x30 == 1) {
             ang.Val(15.0f);
@@ -4480,37 +5041,39 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     } else if (check_owner_action1(mPadID, 0x1200000)) {
         u2 = globe2.U();
     } else {
+        f32 sp154;
         if (mpLockonTarget == NULL) {
-            fVar31 = fVar14 * 0.15f;
+            sp15C = sp200 * sp194;
         } else if (ang3 < ang2) {
-            f32 ratio = dCamMath::rationalBezierRatio(-((f32)ang6.Val() / ang2.Val()), curve_weight);
-            fVar31 = val27 * ratio;
+            sp154 = (f32)ang6.Val() / ang2.Val();
+            sp15C = val27 * dCamMath::rationalBezierRatio(-sp154, curveWeight);
         } else {
             cSAngle ang = ang2 + (cSAngle::_180 - ang2) * 0.5f;
             if (ang6 > ang) {
                 ang6 = cSAngle::_180 - ang6;
                 ang = cSAngle::_180 - ang;
             }
-            fVar31 = val27 + (val22 - val27) * dCamMath::rationalBezierRatio((f32)ang6.Val() / ang.Val(), curve_weight);
+            sp154 = (f32)ang6.Val() / ang.Val();
+            sp15C = val27 + (val22 - val27) * dCamMath::rationalBezierRatio(sp154, curveWeight);
         }
 
         if (!lockon->field_0x2a) {
-            int iVar27 = lockon_change_timer >> 1;
-            if (mCurCamStyleTimer < iVar27) {
-                fVar31 = lockon_change_cushion * ((f32)mCurCamStyleTimer / iVar27);
+            f32 sp150;
+            int sp14C = lockon_change_timer >> 1;
+            if (mCurCamStyleTimer < sp14C) {
+                sp150 = (f32)mCurCamStyleTimer / sp14C;
+                sp15C = lockon_change_cushion * sp150;
             } else {
-                fVar31 = fVar31 * ((f32)(mCurCamStyleTimer - iVar27) / iVar27)
-                    + lockon_change_cushion * (1.0f - (f32)(mCurCamStyleTimer - iVar27) / iVar27);
+                sp150 = (f32)(mCurCamStyleTimer - sp14C) / sp14C;
+                sp15C = sp15C * sp150 + lockon_change_cushion * (1.0f - sp150);
             }
         }
 
         ang6 = ang1.Inv() - mViewCache.mDirection.U();
-        fabsf(ang6.Degree()) < 2.0f;
-        bool temp2 = false;
-        if (temp2) {
+        if (std::fabsf(ang6.Degree()) < 2.0f && false) {
             lockon->field_0x2a = true;
         }
-        u2 += ang6 * fVar31 * lockon->field_0x4c;
+        u2 += ang6 * sp15C * lockon->field_0x4c;
     }
 
     if (sp0E) {
@@ -4535,14 +5098,14 @@ bool dCamera_c::lockonCamera(s32 param_0) {
     } else {
         lockon->field_0xc = 0;
         if (!mBG.field_0xc0.field_0x44 && !bVar1) {
-            v2 += (globe2.V() - v2) * fVar43 * fabsf(mViewCache.mDirection.V().Cos());
+            v2 += (globe2.V() - v2) * fVar43 * std::fabsf(mViewCache.mDirection.V().Cos());
         } else {
             cSAngle ang7 = lockon->field_0x34.V();
             ang7 *= cSAngle(lockon->field_0x34.U() - mViewCache.mDirection.U()).Cos();
             ang7 *= val13;
-            cSAngle ang8 = rangef(val15, val16, fVar42);
+            cSAngle ang8 = rangef(val15, val16, sp1A0);
             ang8 *= 1.0f - val13;
-            v2 += ((ang7 + ang8) - v2) * 0.15f * fVar14;
+            v2 += ((ang7 + ang8) - v2) * sp200 * sp194;
         }
         s16 val = v2.Val();
         if (!mCamSetup.CheckLatitudeRange(&val)) {
@@ -4550,22 +5113,20 @@ bool dCamera_c::lockonCamera(s32 param_0) {
         }
     }
 
-    if (bVar4) {
+    if (sp0C) {
         r2 += (280.0f - r2) * 0.05f;
     } else {
-        f32 radius = globe2.R();
-        if (defaultRadius(val10, val11, &radius)) {
-            f32 radius2 = radius;
-            f32 range = rangef(val10, val11, fVar42) - radius2;
-            r2 = radius2 + (range) * 0.02f;
+        sp160 = globe2.R();
+        if (defaultRadius(val10, val11, &sp160)) {
+            r2 = sp160 + (rangef(val10, val11, sp1A0) - sp160) * 0.02f;
         } else {
-            r2 += (radius - r2) * 0.4f * fVar14;
+            r2 += (sp160 - r2) * 0.4f * sp194;
         }
     }
 
     mViewCache.mDirection.Val(r2, v2, u2);
     mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
-    mViewCache.mFovy += (rangef(val20, val21, fVar42) - mViewCache.mFovy) * 0.15f * fVar14;
+    mViewCache.mFovy += (rangef(val20, val21, sp1A0) - mViewCache.mFovy) * 0.15f * sp194;
 
     if (mpLockonTarget != NULL) {
         setFlag(0x2000);
@@ -4591,16 +5152,30 @@ bool dCamera_c::lockonCamera(s32 param_0) {
 fopAc_ac_c* dCamera_c::getMsgCmdSpeaker() {
     dComIfG_MesgCamInfo_c* info = dComIfGp_getMesgCameraInfo();
     fopAc_ac_c* actor = NULL;
+    int idx = 0;
+    char var_r28 = '\0';
+    int sp10 = 0;
 
     if (info->mBasicID >= 1 && info->mBasicID <= 10) {
-        int idx = info->mBasicID - 1;
+        idx = info->mBasicID - 1;
         actor = info->mActor[idx];
+        var_r28 = 'A';
     }
 
     if (info->mID >= 1 && info->mID <= 10) {
-        int idx = info->mID - 1;
+        idx = info->mID - 1;
         actor = info->mActor[idx];
+        var_r28 = 'T';
     }
+
+#if DEBUG
+    int sp0C;
+    if (mCamSetup.CheckFlag(0x8000)) {
+        if (actor != NULL) {
+            dDbVw_Report(20, 280, "ACT %c%02d", var_r28, var_r28 == 'a' ? idx + 1 : idx + 1);
+        }
+    }
+#endif
 
     return actor;
 }
@@ -4608,15 +5183,16 @@ fopAc_ac_c* dCamera_c::getMsgCmdSpeaker() {
 s32 dCamera_c::getMsgCmdCut(s32 param_0) {
     dComIfG_MesgCamInfo_c* info = dComIfGp_getMesgCameraInfo();
 
+    s32 retval = param_0;
     if (!(info->mBasicID >= 1 && info->mBasicID <= 10) && info->mBasicID > 0) {
-        param_0 = info->mBasicID;
+        retval = info->mBasicID;
     }
 
     if (!(info->mID >= 1 && info->mID <= 10) && info->mID > 0) {
-        param_0 = info->mID;
+        retval = info->mID;
     }
 
-    return param_0;
+    return retval;
 }
 
 bool dCamera_c::talktoCamera(s32 param_0) {
@@ -4635,14 +5211,15 @@ bool dCamera_c::talktoCamera(s32 param_0) {
     f32 val17 = mCamParam.Val(param_0, 17);
     f32 val18 = mCamParam.Val(param_0, 18);
 
-    f32 fVar21 = 300.0f;
-    fopAc_ac_c* ride_actor = NULL;
-
-    TalkData* talk = (TalkData*)mWork;
-
+    f32 sp480 = 300.0f;
     s32 zero = 0;
-    bool uVar18 = true;
+    fopAc_ac_c* listener;
+    fopAc_ac_c* speaker;
+    TalkData* talk = (TalkData*)mWork;
+    fopAc_ac_c* ride_actor = NULL;
+    bool sp5D = true;
     daAlink_c* player = (daAlink_c*)mpPlayerActor;
+    int val;
 
     if (mCurCamStyleTimer == 0) {
         talk->field_0x0 = 'TALK';
@@ -4658,20 +5235,18 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         talk->field_0x89 = false;
         talk->field_0x88 = false;
         talk->field_0x8c = mBumpCheckFlags;
-        mBumpCheckFlags &= ~8;
+        mBumpCheckFlags &= ~0x8;
 
         if (!dComIfGp_evmng_cameraPlay()) {
             talk->field_0x84 = 0;
             talk->field_0x86 = 0;
             talk->field_0x54 = val7;
             talk->field_0x64 = val8;
-            talk->field_0x68 = val17;
-            talk->field_0x58 = val17;
+            talk->field_0x58 = talk->field_0x68 = val17;
             talk->field_0x6c = val18;
             talk->field_0x70 = mpPlayerActor;
             talk->field_0x74 = mpLockonTarget;
         } else {
-            int val;
             getEvIntData(&val, "Smoothless", 0);
             talk->field_0x84 = val;
             getEvIntData(&val, "Mode", 0);
@@ -4697,12 +5272,10 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         talk->field_0x80 = val2;
     }
 
-    fopAc_ac_c* speaker;
-    fopAc_ac_c* listener;
-    fopAc_ac_c* msg_speaker = getMsgCmdSpeaker();
-    if (msg_speaker != NULL) {
+    fopAc_ac_c* msg_speaker_sp464 = getMsgCmdSpeaker();
+    if (msg_speaker_sp464 != NULL) {
         listener = talk->field_0x70;
-        speaker = msg_speaker;
+        speaker = msg_speaker_sp464;
     } else if (dComIfGp_evmng_cameraPlay()) {
         listener = talk->field_0x70;
         speaker = talk->field_0x74;
@@ -4711,9 +5284,13 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         speaker = mpLockonTarget;
     }
 
+#if DEBUG
+    JUT_ASSERT(7287, listener != speaker);
+#else
     if (listener == speaker) {
         speaker = NULL;
     }
+#endif
 
     if (listener == NULL || speaker == NULL) {
         mStyleSettle.mFinished = true;
@@ -4723,97 +5300,132 @@ bool dCamera_c::talktoCamera(s32 param_0) {
     if (talk->field_0x78 != speaker) {
         mCurCamStyleTimer = 0;
         mStyleSettle.mFinished = false;
+#if DEBUG
+        char name1[16];
+        char name2[16];
+        fopAcM_getNameString(talk->field_0x78, name1);
+        fopAcM_getNameString(speaker, name2);
+        OS_REPORT("camera: speaker change %s -> %s\n", name1, name2);
+#endif
         talk->field_0x44 = 0;
         talk->field_0x78 = speaker;
     }
 
-    bool bVar3 = false;
+    bool sp5C = false;
     if (fopAcM_GetName(speaker) == PROC_NI || fopAcM_GetName(speaker) == PROC_BD
         || fopAcM_GetName(speaker) == PROC_SQ || fopAcM_GetName(speaker) == PROC_FR
         || fopAcM_GetName(speaker) == PROC_DO || fopAcM_GetName(speaker) == PROC_NPC_NE)
     {
-        bVar3 = true;
+        sp5C = true;
         talk->field_0x54 = 260.0f;
         talk->field_0x64 = 210.0f;
-        talk->field_0x68 = 45.0f;
-        talk->field_0x58 = 45.0f;
+        talk->field_0x58 = talk->field_0x68 = 45.0f;
         talk->field_0x6c = 48.0f;
         val24 = 80.0f;
         val23 = 40.0f;
     }
 
-    if (fopAcM_GetName(speaker) == PROC_Tag_Mwait && ((daTagMwait_c*)speaker)->checkEndMessage()) {
-        talk->field_0x3c = 35;
-        speaker = daPy_py_c::getMidnaActor();
+    if (fopAcM_GetName(speaker) == PROC_Tag_Mwait) {
+        daTagMwait_c* tagMwait = (daTagMwait_c*)speaker;
+        if (tagMwait->checkEndMessage()) {
+            talk->field_0x3c = 35;
+            speaker = daPy_py_c::getMidnaActor();
+        }
     }
 
     if (talk->field_0x86 != 0) {
         talk->field_0x3c = talk->field_0x86;
     }
     talk->field_0x3c = getMsgCmdCut(talk->field_0x3c);
+
+#if DEBUG
+    if (mCamSetup.ModeSwitchType() > 0) {
+        talk->field_0x3c = mCamSetup.ModeSwitchType();
+    }
+
+    if (mCamSetup.CheckFlag(0x8000)) {
+        char name[16];
+        int x = 20;
+        int y = 190;
+        fopAcM_getNameString(speaker, name);
+        dDbVw_Report(x, y + 75, "%s", name);
+        dDbVw_Report(x + 70, y, "CUT%02d", talk->field_0x3c);
+    }
+
+    if (mCamSetup.CheckFlag(0x100)) {
+        cXyz speakerAttnPos = attentionPos(speaker);
+        cXyz listenerAttnPos = attentionPos(listener);
+        debugDrawPoint(speakerAttnPos);
+        debugDrawPoint(listenerAttnPos);
+        debugDrawLine(speakerAttnPos, listenerAttnPos);
+    }
+#endif
+
     if (talk->field_0x3c != talk->field_0x40) {
+        OS_REPORT("%06d: talk cut change %d \n", mFrameCounter, talk->field_0x3c);
+
         talk->field_0x44 = 0;
         talk->field_0x40 = talk->field_0x3c;
     }
 
-    cSAngle stack_134c = val16;
-    cSAngle stack_1350 = val15;
-    cSAngle stack_1354 = val24;
-    cSAngle stack_1358 = val23;
+    cSAngle sp298 = val16;
+    cSAngle sp294 = val15;
+    cSAngle sp290 = val24;
+    cSAngle sp28C = val23;
 
     if (mCurCamStyleTimer == 0) {
-        cSAngle stack_135c;
-        cXyz stack_13c;
-        cSGlobe stack_12c0 = positionOf(speaker) - positionOf(listener);
-        cXyz stack_148;
-        cXyz stack_154;
+        cSAngle sp288;
+        cXyz sp15BC;
+        cSGlobe sp540 = positionOf(speaker) - positionOf(listener);
+        cXyz sp15B0;
+        cXyz sp15A4;
 
         if (mCamParam.Flag(param_0, 0x400) || player->checkCanoeRide()
             || player->checkHorseRide() || check_owner_action(mPadID, 0x100000))
         {
-            stack_148 = attentionPos(listener);
-            stack_154 = attentionPos(speaker);
+            sp15B0 = attentionPos(listener);
+            sp15A4 = attentionPos(speaker);
             if (player->checkCanoeRide() && listener == mpPlayerActor) {
-                stack_148.y += 40.0f;
+                sp15B0.y += 40.0f;
             }
         } else {
-            stack_13c = attentionPos(listener) - positionOf(listener);
-            stack_135c.Val(stack_12c0.U() - directionOf(listener));
-            stack_148 = positionOf(listener) + dCamMath::xyzRotateY(stack_13c, stack_135c);
-            stack_13c = attentionPos(speaker) - positionOf(speaker);
-            stack_135c.Val(stack_12c0.U().Inv() - directionOf(speaker));
-            stack_154 = positionOf(speaker) + dCamMath::xyzRotateY(stack_13c, stack_135c);
+            sp15BC = attentionPos(listener) - positionOf(listener);
+            sp288.Val(sp540.U() - directionOf(listener));
+            sp15B0 = positionOf(listener) + dCamMath::xyzRotateY(sp15BC, sp288);
+            sp15BC = attentionPos(speaker) - positionOf(speaker);
+            sp288.Val(sp540.U().Inv() - directionOf(speaker));
+            sp15A4 = positionOf(speaker) + dCamMath::xyzRotateY(sp15BC, sp288);
         }
 
         if (mIsWolf == 1) {
             if (listener == mpPlayerActor) {
-                stack_148.y += 80.0f;
+                sp15B0.y += 80.0f;
             }
             if (speaker == mpPlayerActor) {
-                stack_154.y += 80.0f;
+                sp15A4.y += 80.0f;
             }
         }
 
         talk->field_0x28 = mViewCache.mDirection;
-        talk->field_0xb4 = stack_148 - stack_154;
+        talk->field_0xb4 = sp15B0 - sp15A4;
         talk->field_0x30.Val(talk->field_0xb4);
         talk->field_0xb4.normalize();
-        stack_148 += talk->field_0xb4 * listener->attention_info.field_0xa;
-        stack_154 -= talk->field_0xb4 * speaker->attention_info.field_0xa;
+        sp15B0 += talk->field_0xb4 * listener->attention_info.field_0xa;
+        sp15A4 -= talk->field_0xb4 * speaker->attention_info.field_0xa;
         if (talk->field_0x30.R() < 88.0f) {
             talk->field_0x30.R(88.0f);
         }
-        f32 dVar25 = dCamMath::xyzHorizontalDistance(stack_148, stack_154);
-        f32 fVar1 = dVar25 - 88.0f;
-        fVar21 -= 88.0f;
-        talk->field_0x7c = fVar1 > fVar21 ? 1.0f : fVar1 / fVar21;
+        f32 sp454 = dCamMath::xyzHorizontalDistance(sp15B0, sp15A4);
+        f32 sp450 = sp454 - 88.0f;
+        sp480 -= 88.0f;
+        talk->field_0x7c = sp450 > sp480 ? 1.0f : sp450 / sp480;
         talk->field_0x80 = val3 + (val2 - val3) * talk->field_0x7c;
         cXyz stack_160(val0, talk->field_0x80, val1);
-        f32 dVar21 = talk->field_0x64 + (talk->field_0x54 - talk->field_0x64) * talk->field_0x7c;
-        if (dVar21 < dVar25) {
-            dVar21 = dVar25;
+        f32 sp44C = talk->field_0x64 + (talk->field_0x54 - talk->field_0x64) * talk->field_0x7c;
+        if (sp44C < sp454) {
+            sp44C = sp454;
         }
-        talk->field_0x28.R(dVar21);
+        talk->field_0x28.R(sp44C);
 
         if (talk->field_0x84 != 0) {
             talk->field_0x48 = 1;
@@ -4828,103 +5440,108 @@ bool dCamera_c::talktoCamera(s32 param_0) {
             talk->field_0x48 += 8;
         }
 
-        cSAngle stack_1360;
-        cSAngle stack_1364;
+        cSAngle sp284;
+        cSAngle sp280;
 
         if (talk->field_0x5c >= -180.0f && talk->field_0x5c <= 360.0f) {
-            stack_1360.Val(talk->field_0x5c);
-            stack_1364 = stack_1360 - talk->field_0x30.U();
-            talk->field_0x28.U(stack_1360);
+            sp284.Val(talk->field_0x5c);
+            sp280 = sp284 - talk->field_0x30.U();
+            talk->field_0x28.U(sp284);
         } else if (fopAcM_GetName(speaker) == PROC_OBJ_KANBAN2
                     || fopAcM_GetName(speaker) == PROC_TAG_KMSG
                     || fopAcM_GetName(speaker) == PROC_KNOB20
                     || fopAcM_GetName(speaker) == PROC_Obj_NamePlate) {
-            stack_1360.Val(directionOf(speaker));
-            stack_1364 = stack_1360 - talk->field_0x30.U();
-            talk->field_0x28.U(stack_1360);
+            sp284.Val(directionOf(speaker));
+            sp280 = sp284 - talk->field_0x30.U();
+            talk->field_0x28.U(sp284);
         } else {
-            stack_1360.Val(mViewCache.mDirection.U());
-            stack_1364 = stack_1360 - talk->field_0x30.U();
-            if (stack_1364 > cSAngle::_90) {
-                stack_1364 = cSAngle::_90 - (stack_1364 - cSAngle::_90);
+            sp284.Val(mViewCache.mDirection.U());
+            sp280 = sp284 - talk->field_0x30.U();
+            if (sp280 > cSAngle::_90) {
+                sp280 = cSAngle::_90 - (sp280 - cSAngle::_90);
             }
-            if (stack_1364 < cSAngle::_270) {
-                stack_1364 = cSAngle::_270 - (stack_1364 - cSAngle::_270);
+            if (sp280 < cSAngle::_270) {
+                sp280 = cSAngle::_270 - (sp280 - cSAngle::_270);
             }
-            if (stack_1364 > stack_1354) {
-                stack_1364 = stack_1354;
+            if (sp280 > sp290) {
+                sp280 = sp290;
             }
-            if (stack_1364 > cSAngle::_0 && stack_1364 < stack_1358) {
-                stack_1364 = stack_1358;
+            if (sp280 > cSAngle::_0 && sp280 < sp28C) {
+                sp280 = sp28C;
             }
-            if (stack_1364 < -stack_1354) {
-                stack_1364 = -stack_1354;
+            if (sp280 < -sp290) {
+                sp280 = -sp290;
             }
-            if (stack_1364 < cSAngle::_0 && stack_1364 > -stack_1358) {
-                stack_1364 = -stack_1358;
+            if (sp280 < cSAngle::_0 && sp280 > -sp28C) {
+                sp280 = -sp28C;
             }
-            talk->field_0x28.U(talk->field_0x30.U() + stack_1364);
+            talk->field_0x28.U(talk->field_0x30.U() + sp280);
         }
+
+        fopAc_ac_c* sp448 = listener;
+        fopAc_ac_c* sp444 = speaker;
+        f32 sp440 = 0.25f;
 
         {
-            cSAngle stack_1368 = talk->field_0x28.U();
-            cXyz stack_16c = stack_148;
-            cXyz stack_178 = stack_154;
-            cXyz stack_184 = stack_178 - stack_16c;
-            cSGlobe stack_12c8 = stack_184;
-            stack_184.normalize();
-            stack_16c -= stack_184 * listener->attention_info.field_0xa;
-            stack_178 += stack_184 * speaker->attention_info.field_0xa;
+            cSAngle sp27C = talk->field_0x28.U();
+            cXyz sp158C = sp15B0;
+            cXyz sp1580 = sp15A4;
+            cXyz sp1574 = sp1580 - sp158C;
+            cSGlobe sp538 = sp1574;
+            sp1574.normalize();
+            sp158C -= sp1574 * listener->attention_info.field_0xa;
+            sp1580 += sp1574 * sp444->attention_info.field_0xa;
 
-            cXyz stack_190;
-            cXyz stack_19c = stack_178 - stack_16c;
-            if (lineBGCheck(&stack_16c, &stack_178, &stack_190, 0x40b7)) {
-                stack_178 = stack_190 - stack_19c.norm() * 10.0f;
-                stack_19c = stack_178 - stack_16c;
+            cXyz sp1568;
+            cXyz sp15CC = sp1580 - sp158C;
+            if (lineBGCheck(&sp158C, &sp1580, &sp1568, 0x40b7)) {
+                sp1580 = sp1568 - sp15CC.norm() * 10.0f;
+                sp15CC = sp1580 - sp158C;
             }
 
-            cXyz stack_1a8 = stack_16c + stack_19c * 0.5f;
-            cXyz stack_1b4 = stack_160;
-            cSAngle stack_136c = stack_1368 - stack_12c8.U();
-            if (stack_136c < cSAngle::_0) {
-                stack_1b4.x = -stack_1b4.x;
+            cXyz sp1550 = sp158C + sp15CC * 0.5f;
+            cXyz sp1544 = stack_160;
+            cSAngle sp278 = sp27C - sp538.U();
+            if (sp278 < cSAngle::_0) {
+                sp1544.x = -sp1544.x;
             }
-            cSGlobe stack_12d0 = stack_1b4;
-            stack_12d0.U(stack_12c8.U() + stack_12d0.U());
-            stack_12c8.R(stack_12c8.R() * 0.5f * stack_136c.Cos() * 0.25f);
-            talk->field_0x4 = stack_1a8 + stack_12c8.Xyz() + stack_12d0.Xyz();
-            talk->field_0xc0 = stack_178;
+            cSGlobe sp530 = sp1544;
+            sp530.U(sp538.U() + sp530.U());
+            sp538.R(sp538.R() * 0.5f * sp278.Cos() * sp440);
+            talk->field_0x4 = sp1550 + sp538.Xyz() + sp530.Xyz();
+            talk->field_0xc0 = sp1580;
         }
 
-        cSAngle stack_1370;
+        cSAngle sp274;
         if (talk->field_0x60 != 999.9f) {
-            stack_1370.Val(talk->field_0x60);
+            sp274.Val(talk->field_0x60);
         } else {
-            stack_1370 = talk->field_0x30.V() * (stack_1364.Cos() + 0.1f) * val6 + cSAngle(val12);
-            if (stack_1370 > stack_134c) {
-                stack_1370 = stack_134c;
+            sp274 = talk->field_0x30.V() * (sp280.Cos() + 0.1f) * val6 + cSAngle(val12);
+            if (sp274 > sp298) {
+                sp274 = sp298;
             }
-            if (stack_1370 < stack_1350) {
-                stack_1370 = stack_1350;
+            if (sp274 < sp294) {
+                sp274 = sp294;
             }
         }
-        talk->field_0x28.V(stack_1370);
+        talk->field_0x28.V(sp274);
 
-        cSAngle stack_1374;
+        cSAngle sp270;
         if (player->checkRide()) {
             ride_actor = player->getRideActor();
         }
 
         if (talk->field_0x30.U() - talk->field_0x28.U() > cSAngle::_0) {
-            stack_1374 = cSAngle(10.0f);
+            sp270 = cSAngle(10.0f);
         } else {
-            stack_1374 = cSAngle(-10.0f);
+            sp270 = cSAngle(-10.0f);
         }
 
         talk->field_0x10 = talk->field_0x4 + talk->field_0x28.Xyz();
         talk->field_0x58 = talk->field_0x6c + (talk->field_0x68 - talk->field_0x6c) * talk->field_0x7c;
 
-        bool bVar13 = false;
+        bool sp5B = false;
+        int i = 0;
         if (fopAcM_GetName(speaker) == PROC_MIDNA && mMidnaRidingAndVisible) {
             talk->field_0x4 = attentionPos(speaker);
             talk->field_0x4.y -= 35.0f;
@@ -4936,10 +5553,10 @@ bool dCamera_c::talktoCamera(s32 param_0) {
             talk->field_0x48 = 16;
             talk->field_0x58 = 55.0f;
             talk->field_0x88 = true;
-            bVar13 = true;
+            sp5B = true;
         }
 
-        if (bVar3) {
+        if (sp5C) {
             talk->field_0x4.y = attentionPos(speaker).y - 10.0f;
         }
 
@@ -4947,17 +5564,16 @@ bool dCamera_c::talktoCamera(s32 param_0) {
             talk->field_0x28.U(mViewCache.mDirection.U());
         }
 
-        cSAngle stack_1378;
-        int i;
-        bool bVar2 = false;
-        cXyz stack_1c0 = cXyz::Zero;
+        cSAngle sp26C;
+        bool sp5A = false;
+        cXyz sp1538 = cXyz::Zero;
 
         for (i = 0; i < 36; i++) {
-            stack_1378 = talk->field_0x28.U() - talk->field_0x30.U();
-            if (std::fabsf(stack_1378.Degree()) < 10.0f) {
-                talk->field_0x28.U(talk->field_0x28.U() + stack_1374);
+            sp26C = talk->field_0x28.U() - talk->field_0x30.U();
+            if (std::fabsf(sp26C.Degree()) < 10.0f) {
+                talk->field_0x28.U(talk->field_0x28.U() + sp270);
             } else {
-                if (!bVar13) {
+                if (!sp5B) {
                     f32 radius = radiusActorInSight(listener, speaker, &talk->field_0x4,
                                                     &talk->field_0x10, talk->field_0x58,
                                                     0, 0.1f);
@@ -4967,36 +5583,36 @@ bool dCamera_c::talktoCamera(s32 param_0) {
                     }
                 }
 
-                if (!lineBGCheck(&stack_148, &talk->field_0x10, talk->field_0x8c)
+                if (!lineBGCheck(&sp15B0, &talk->field_0x10, talk->field_0x8c)
                     && !lineBGCheck(&talk->field_0x4, &talk->field_0x10, talk->field_0x8c)
-                    && !lineCollisionCheck(stack_148, talk->field_0x10, listener, speaker, ride_actor))
+                    && !lineCollisionCheck(sp15B0, talk->field_0x10, listener, speaker, ride_actor))
                 {
-                    if (!lineBGCheck(&stack_154, &talk->field_0x10, talk->field_0x8c)
-                        && !lineCollisionCheck(stack_154, talk->field_0x10, listener, speaker, ride_actor))
+                    if (!lineBGCheck(&sp15A4, &talk->field_0x10, talk->field_0x8c)
+                        && !lineCollisionCheck(sp15A4, talk->field_0x10, listener, speaker, ride_actor))
                     {
-                        bVar2 = true;
+                        sp5A = true;
                         break;
                     }
-                    stack_1c0 = talk->field_0x10;
+                    sp1538 = talk->field_0x10;
                 }
 
-                talk->field_0x28.U(talk->field_0x28.U() + stack_1374);
+                talk->field_0x28.U(talk->field_0x28.U() + sp270);
 
                 if (talk->field_0x60 != 999.9f) {
-                    stack_1370.Val(talk->field_0x60);
+                    sp274.Val(talk->field_0x60);
                 } else {
-                    stack_1370 = talk->field_0x30.V()
+                    sp274 = talk->field_0x30.V()
                         * (cSAngle(talk->field_0x30.U() - talk->field_0x28.U()).Cos() + 0.1f)
                         * val6 + cSAngle(val12);
-                    if (stack_1370 > stack_134c) {
-                        stack_1370 = stack_134c;
+                    if (sp274 > sp298) {
+                        sp274 = sp298;
                     }
-                    if (stack_1370 < stack_1350) {
-                        stack_1370 = stack_1350;
+                    if (sp274 < sp294) {
+                        sp274 = sp294;
                     }
                 }
 
-                talk->field_0x28.V(stack_1370);
+                talk->field_0x28.V(sp274);
 
                 if (!talk->field_0x88) {
                     talk->field_0x4 = relationalPos2(listener, speaker, &stack_160, 0.25f,
@@ -5006,16 +5622,16 @@ bool dCamera_c::talktoCamera(s32 param_0) {
             }
         }
 
-        if (!bVar2) {
-            stack_1c0.set(0.0f, 15.0f, -20.0f);
-            talk->field_0x4 = relationalPos(mpPlayerActor, &stack_1c0);
-            stack_1c0.set(60.0f, 70.0f, -200.0f);
-            talk->field_0x10 = relationalPos(mpPlayerActor, &stack_1c0);
+        if (!sp5A) {
+            sp1538.set(0.0f, 15.0f, -20.0f);
+            talk->field_0x4 = relationalPos(mpPlayerActor, &sp1538);
+            sp1538.set(60.0f, 70.0f, -200.0f);
+            talk->field_0x10 = relationalPos(mpPlayerActor, &sp1538);
             talk->field_0x28.Val(talk->field_0x10 - talk->field_0x4);
         }
 
-        talk->field_0xcc = stack_148;
-        talk->field_0xd8 = stack_154;
+        talk->field_0xcc = sp15B0;
+        talk->field_0xd8 = sp15A4;
         talk->field_0x4c = talk->field_0x48 * (talk->field_0x48 + 1) >> 1;
 
         if (talk->field_0x38 == -1) {
@@ -5030,13 +5646,13 @@ bool dCamera_c::talktoCamera(s32 param_0) {
     if ((fopAcM_GetName(speaker) == PROC_Tag_Mhint && ((daTagMhint_c*)speaker)->checkNoAttention())
         || (fopAcM_GetName(speaker) == PROC_Tag_Mstop && ((daTagMstop_c*)speaker)->checkNoAttention()))
     {
-        bool bVar13 = false;
+        bool sp59 = false;
         if (mIsWolf == 1 && check_owner_action(mPadID, 0x100000)) {
-            bVar13 = true;
+            sp59 = true;
         }
 
         if (mCurCamStyleTimer == 0) {
-            if (!bVar13) {
+            if (!sp59) {
                 talk->field_0x28.U(cSAngle(15.0f) + directionOf(listener));
                 talk->field_0x28.V(cSAngle(5.0f));
                 talk->field_0x28.R(140.0f);
@@ -5052,425 +5668,462 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         }
 
         talk->field_0x4 = positionOf(listener);
-        if (!bVar13) {
+        if (!sp59) {
             talk->field_0x4.y += 110.0f;
         } else {
             talk->field_0x4.y += 10.0f;
         }
     }
 
-    cXyz stack_1cc = cXyz::Zero;
-    bool bVar13 = false;
+    cXyz sp152C = cXyz::Zero;
+    bool sp58 = false;
     if (is_player(listener) && mIsWolf == 1) {
-        cXyz stack_1d8(0.0f, 0.0f, 45.0f);
-        stack_1cc = dCamMath::xyzRotateY(stack_1d8, directionOf(listener));
-        bVar13 = true;
+        cXyz sp1520(0.0f, 0.0f, 45.0f);
+        sp152C = dCamMath::xyzRotateY(sp1520, directionOf(listener));
+        sp58 = true;
     }
 
-    cXyz stack_1e4;
-    cXyz stack_1f0;
-    cXyz stack_1fc;
-    cXyz stack_208;
-    fopAc_ac_c* actor1;
-    fopAc_ac_c* actor2;
-    int iVar5 = talk->field_0x3c;
+    cXyz sp1514;
+    cXyz sp1508;
+    cXyz sp14FC;
+    cXyz sp14F0;
+    int sp430 = talk->field_0x3c;
 
-    switch (iVar5) {
+    switch (sp430) {
     case 0:
         break;
 
     case 50:
         talk->field_0x48 = 1;
         talk->field_0x4c = 1.0f;
-        iVar5 = 0;
+        sp430 = 0;
         break;
 
     case 20:
     case 21:
-    case 62:
-        if (iVar5 != 20) {
-            actor1 = listener;
-            stack_1e4 = talkEyePos(listener);
-            stack_1f0 = talkEyePos(speaker);
-            stack_1fc = talkBasePos(listener);
-            stack_208 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_1f0.y = attentionPos(speaker).y;
+    case 62: {
+        fopAc_ac_c* actor1_sp42C;
+        fopAc_ac_c* actor2_sp428;
+
+        if (sp430 != 20) {
+            actor1_sp42C = speaker;
+            actor2_sp428 = listener;
+            sp1514 = talkEyePos(actor2_sp428);
+            sp1508 = talkEyePos(actor1_sp42C);
+            sp14FC = talkBasePos(actor2_sp428);
+            sp14F0 = talkBasePos(actor1_sp42C);
+            if (sp5C) {
+                sp1508.y = attentionPos(speaker).y;
             }
             if (fopAcM_GetName(speaker) == PROC_NPC_KKRI) {
-                stack_1f0.y = attentionPos(speaker).y - 40.0f;
+                sp1508.y = attentionPos(speaker).y - 40.0f;
             }
-            if (bVar13) {
-                stack_1fc += stack_1cc;
+            if (sp58) {
+                sp14FC += sp152C;
             }
         } else {
-            actor1 = speaker;
-            stack_1e4 = talkEyePos(speaker);
-            stack_1f0 = talkEyePos(listener);
-            stack_1fc = talkBasePos(speaker);
-            stack_208 = talkBasePos(listener);
-            if (bVar3) {
-                stack_1e4.y = attentionPos(speaker).y;
+            actor1_sp42C = listener;
+            actor2_sp428 = speaker;
+            sp1514 = talkEyePos(actor2_sp428);
+            sp1508 = talkEyePos(actor1_sp42C);
+            sp14FC = talkBasePos(actor2_sp428);
+            sp14F0 = talkBasePos(actor1_sp42C);
+            if (sp5C) {
+                sp1514.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_208 += stack_1cc;
+            if (sp58) {
+                sp14F0 += sp152C;
             }
         }
 
-        mViewCache.mCenter = stack_208;
+        mViewCache.mCenter = sp14F0;
 
         if (talk->field_0x44 == 0) {
-            cXyz stack_214 = stack_1fc;
-            stack_214.y = stack_1e4.y;
-            cXyz stack_220 = stack_208;
-            stack_220.y = stack_1f0.y;
-            mViewCache.mDirection.Val(stack_214 - stack_220);
-            if (iVar5 == 62) {
+            cXyz sp14E4 = sp14FC;
+            sp14E4.y = sp1514.y;
+            cXyz sp14D8 = sp14F0;
+            sp14D8.y = sp1508.y;
+            mViewCache.mDirection.Val(sp14E4 - sp14D8);
+            if (sp430 == 62) {
                 mViewCache.mDirection.U(directionOf(speaker));
             }
             mViewCache.mDirection.R(125.0f);
-            talk->field_0x1c.y = stack_1f0.y - 25.0f - stack_208.y;
+            talk->field_0x1c.y = sp1508.y - 25.0f - sp14F0.y;
             mStyleSettle.mFinished = true;
         }
 
-        mViewCache.mCenter.y = stack_208.y + talk->field_0x1c.y;
+        mViewCache.mCenter.y = sp14F0.y + talk->field_0x1c.y;
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
         mViewCache.mFovy = 60.0f;
-        hideActor(actor1);
+        hideActor(actor2_sp428);
         break;
+    }
 
     case 39:
     case 40:
-    case 64:
-        if (iVar5 != 39) {
-            actor1 = speaker;
-            actor2 = listener;
+    case 64: {
+        fopAc_ac_c* actor1_sp424;
+        fopAc_ac_c* actor2_sp420;
+
+        if (sp430 != 39) {
+            actor1_sp424 = speaker;
+            actor2_sp420 = listener;
         } else {
-            actor1 = listener;
-            actor2 = speaker;
+            actor1_sp424 = listener;
+            actor2_sp420 = speaker;
         }
 
         if (talk->field_0x44 == 0) {
-            if (iVar5 != 39) {
-                stack_1e4 = talkEyePos(actor2);
-                stack_1f0 = talkEyePos(actor1);
-                stack_1fc = talkBasePos(actor2);
-                stack_208 = talkBasePos(actor1);
-                if (bVar3) {
-                    stack_1f0.y = attentionPos(speaker).y;
+            if (sp430 != 39) {
+                sp1514 = talkEyePos(actor2_sp420);
+                sp1508 = talkEyePos(actor1_sp424);
+                sp14FC = talkBasePos(actor2_sp420);
+                sp14F0 = talkBasePos(actor1_sp424);
+                if (sp5C) {
+                    sp1508.y = attentionPos(speaker).y;
                 }
-                if (bVar13) {
-                    stack_1fc += stack_1cc;
+                if (sp58) {
+                    sp14FC += sp152C;
                 }
             } else {
-                stack_1e4 = talkEyePos(actor2);
-                stack_1f0 = talkEyePos(actor1);
-                stack_1fc = talkBasePos(actor2);
-                stack_208 = talkBasePos(actor1);
-                if (bVar3) {
-                    stack_1e4.y = attentionPos(speaker).y;
+                sp1514 = talkEyePos(actor2_sp420);
+                sp1508 = talkEyePos(actor1_sp424);
+                sp14FC = talkBasePos(actor2_sp420);
+                sp14F0 = talkBasePos(actor1_sp424);
+                if (sp5C) {
+                    sp1514.y = attentionPos(speaker).y;
                 }
-                if (bVar13) {
-                    stack_208 += stack_1cc;
+                if (sp58) {
+                    sp14F0 += sp152C;
                 }
             }
 
-            mViewCache.mCenter = stack_208;
-            cXyz stack_22c = stack_1fc;
-            stack_22c.y = stack_1e4.y;
-            cXyz stack_238 = stack_208;
-            stack_238.y = stack_1f0.y;
-            mViewCache.mDirection.Val(stack_22c - stack_238);
-            if (iVar5 == 64) {
+            mViewCache.mCenter = sp14F0;
+            cXyz sp14CC = sp14FC;
+            sp14CC.y = sp1514.y;
+            cXyz sp14C0 = sp14F0;
+            sp14C0.y = sp1508.y;
+            mViewCache.mDirection.Val(sp14CC - sp14C0);
+            if (sp430 == 64) {
                 mViewCache.mDirection.U(directionOf(speaker));
             }
             mViewCache.mDirection.R(125.0f);
             mViewCache.mDirection.V(cSAngle(35.0f));
-            talk->field_0x1c.y = stack_1f0.y - 25.0f - stack_208.y;
+            talk->field_0x1c.y = sp1508.y - 25.0f - sp14F0.y;
             mStyleSettle.mFinished = true;
-            mViewCache.mCenter.y = stack_208.y + talk->field_0x1c.y;
+            mViewCache.mCenter.y = sp14F0.y + talk->field_0x1c.y;
             mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
             mViewCache.mFovy = 60.0f;
         }
 
-        hideActor(actor2);
+        hideActor(actor2_sp420);
         break;
+    }
 
     case 16:
     case 17:
-    case 61:
-        if (iVar5 != 16) {
-            actor1 = listener;
-            stack_1e4 = talkEyePos(listener);
-            stack_1f0 = talkEyePos(speaker);
-            stack_1fc = talkBasePos(listener);
-            stack_208 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_1f0.y = attentionPos(speaker).y;
+    case 61: {
+        fopAc_ac_c* actor1_sp41C;
+        fopAc_ac_c* actor2_sp418;
+
+        if (sp430 != 16) {
+            actor1_sp41C = speaker;
+            actor2_sp418 = listener;
+            sp1514 = talkEyePos(actor2_sp418);
+            sp1508 = talkEyePos(actor1_sp41C);
+            sp14FC = talkBasePos(actor2_sp418);
+            sp14F0 = talkBasePos(actor1_sp41C);
+            if (sp5C) {
+                sp1508.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_1fc += stack_1cc;
+            if (sp58) {
+                sp14FC += sp152C;
             }
         } else {
-            actor1 = speaker;
-            stack_1e4 = talkEyePos(speaker);
-            stack_1f0 = talkEyePos(listener);
-            stack_1fc = talkBasePos(speaker);
-            stack_208 = talkBasePos(listener);
-            if (bVar3) {
-                stack_1e4.y = attentionPos(speaker).y;
+            actor1_sp41C = listener;
+            actor2_sp418 = speaker;
+            sp1514 = talkEyePos(actor2_sp418);
+            sp1508 = talkEyePos(actor1_sp41C);
+            sp14FC = talkBasePos(actor2_sp418);
+            sp14F0 = talkBasePos(actor1_sp41C);
+            if (sp5C) {
+                sp1514.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_208 += stack_1cc;
+            if (sp58) {
+                sp14F0 += sp152C;
             }
         }
 
-        mViewCache.mCenter = stack_208;
+        mViewCache.mCenter = sp14F0;
 
         if (talk->field_0x44 == 0) {
-            cXyz stack_244 = stack_1fc;
-            stack_244.y = stack_1e4.y;
-            cXyz stack_250 = stack_208;
-            stack_250.y = stack_1f0.y;
-            mViewCache.mDirection.Val(stack_244 - stack_250);
-            if (iVar5 == 61) {
+            cXyz sp14B4 = sp14FC;
+            sp14B4.y = sp1514.y;
+            cXyz sp14A8 = sp14F0;
+            sp14A8.y = sp1508.y;
+            mViewCache.mDirection.Val(sp14B4 - sp14A8);
+            if (sp430 == 61) {
                 mViewCache.mDirection.U(directionOf(speaker));
             }
             mViewCache.mDirection.R(76.0f);
-            talk->field_0x1c.y = stack_1f0.y - 10.0f - stack_208.y;
+            talk->field_0x1c.y = sp1508.y - 10.0f - sp14F0.y;
             mStyleSettle.mFinished = true;
         }
 
-        mViewCache.mCenter.y = stack_208.y + talk->field_0x1c.y;
+        mViewCache.mCenter.y = sp14F0.y + talk->field_0x1c.y;
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
         mViewCache.mFovy = 50.0f;
-        hideActor(actor1);
+        hideActor(actor2_sp418);
         break;
+    }
 
     case 22:
     case 23:
-    case 63:
-        if (iVar5 != 22) {
-            actor1 = listener;
-            stack_1e4 = talkEyePos(listener);
-            stack_1f0 = talkEyePos(speaker);
-            stack_1fc = talkBasePos(listener);
-            stack_208 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_1f0.y = attentionPos(speaker).y;
+    case 63: {
+        fopAc_ac_c* actor1_sp414;
+        fopAc_ac_c* actor2_sp410;
+
+        if (sp430 != 22) {
+            actor1_sp414 = speaker;
+            actor2_sp410 = listener;
+            sp1514 = talkEyePos(actor2_sp410);
+            sp1508 = talkEyePos(actor1_sp414);
+            sp14FC = talkBasePos(actor2_sp410);
+            sp14F0 = talkBasePos(actor1_sp414);
+            if (sp5C) {
+                sp1508.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_1fc += stack_1cc;
+            if (sp58) {
+                sp14FC += sp152C;
             }
         } else {
-            actor1 = speaker;
-            stack_1e4 = talkEyePos(speaker);
-            stack_1f0 = talkEyePos(listener);
-            stack_1fc = talkBasePos(speaker);
-            stack_208 = talkBasePos(listener);
-            if (bVar3) {
-                stack_1e4.y = attentionPos(speaker).y;
+            actor1_sp414 = listener;
+            actor2_sp410 = speaker;
+            sp1514 = talkEyePos(actor2_sp410);
+            sp1508 = talkEyePos(actor1_sp414);
+            sp14FC = talkBasePos(actor2_sp410);
+            sp14F0 = talkBasePos(actor1_sp414);
+            if (sp5C) {
+                sp1514.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_208 += stack_1cc;
+            if (sp58) {
+                sp14F0 += sp152C;
             }
         }
 
-        mViewCache.mCenter = stack_208;
+        mViewCache.mCenter = sp14F0;
 
         if (talk->field_0x44 == 0) {
-            cXyz stack_25c = stack_1fc;
-            stack_25c.y = stack_1e4.y;
-            cXyz stack_268 = stack_1f0;
-            stack_268.y = stack_1f0.y;
-            mViewCache.mDirection.Val(stack_25c - stack_268);
-            if (iVar5 == 63) {
+            cXyz sp149C = sp14FC;
+            sp149C.y = sp1514.y;
+            cXyz sp1490 = sp1508;
+            sp1490.y = sp1508.y;
+            mViewCache.mDirection.Val(sp149C - sp1490);
+            if (sp430 == 63) {
                 mViewCache.mDirection.U(directionOf(speaker));
             }
             mViewCache.mDirection.R(125.0f);
-            talk->field_0x1c.y = stack_1f0.y - 15.0f - stack_208.y;
+            talk->field_0x1c.y = sp1508.y - 15.0f - sp14F0.y;
             mStyleSettle.mFinished = true;
         }
 
-        mViewCache.mCenter.y = stack_208.y + talk->field_0x1c.y;
+        mViewCache.mCenter.y = sp14F0.y + talk->field_0x1c.y;
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
         mViewCache.mFovy = 45.0f;
-        hideActor(actor1);
+        hideActor(actor2_sp410);
         break;
+    }
 
     case 41:
     case 42:
     case 65: {
-        if (iVar5 != 41) {
-            actor1 = speaker;
-            actor2 = listener;
-            stack_1e4 = talkEyePos(listener);
-            stack_1f0 = talkEyePos(speaker);
-            stack_1fc = talkBasePos(listener);
-            stack_208 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_1f0.y = attentionPos(speaker).y;
+        fopAc_ac_c* actor1_sp40C;
+        fopAc_ac_c* actor2_sp408;
+
+        if (sp430 != 41) {
+            actor1_sp40C = speaker;
+            actor2_sp408 = listener;
+            sp1514 = talkEyePos(actor2_sp408);
+            sp1508 = talkEyePos(actor1_sp40C);
+            sp14FC = talkBasePos(actor2_sp408);
+            sp14F0 = talkBasePos(actor1_sp40C);
+            if (sp5C) {
+                sp1508.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_1fc += stack_1cc;
+            if (sp58) {
+                sp14FC += sp152C;
             }
         } else {
-            actor1 = listener;
-            actor2 = speaker;
-            stack_1e4 = talkEyePos(speaker);
-            stack_1f0 = talkEyePos(listener);
-            stack_1fc = talkBasePos(speaker);
-            stack_208 = talkBasePos(listener);
-            if (bVar3) {
-                stack_1e4.y = attentionPos(speaker).y;
+            actor1_sp40C = listener;
+            actor2_sp408 = speaker;
+            sp1514 = talkEyePos(actor2_sp408);
+            sp1508 = talkEyePos(actor1_sp40C);
+            sp14FC = talkBasePos(actor2_sp408);
+            sp14F0 = talkBasePos(actor1_sp40C);
+            if (sp5C) {
+                sp1514.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_208 += stack_1cc;
+            if (sp58) {
+                sp14F0 += sp152C;
             }
         }
 
-        talk->field_0x90 = stack_208;
+        talk->field_0x90 = sp14F0;
 
         if (talk->field_0x44 == 0) {
-            cXyz stack_274 = stack_1fc;
-            stack_274.y = stack_1e4.y;
-            cXyz stack_280 = stack_1f0;
-            stack_280.y = stack_1f0.y;
-            talk->field_0xa8.Val(stack_274 - stack_280);
+            cXyz sp1484 = sp14FC;
+            sp1484.y = sp1514.y;
+            cXyz sp1478 = sp1508;
+            sp1478.y = sp1508.y;
+            talk->field_0xa8.Val(sp1484 - sp1478);
             talk->field_0xa8.R(190.0f);
-            if (iVar5 == 0x41) {
+            if (sp430 == 0x41) {
                 talk->field_0xa8.U(directionOf(speaker));
             }
-            talk->field_0x1c.y = stack_1f0.y - 40.0f - stack_208.y;
+            talk->field_0x1c.y = sp1508.y - 40.0f - sp14F0.y;
             mStyleSettle.mFinished = true;
         }
 
-        talk->field_0x90.y = stack_208.y + talk->field_0x1c.y;
+        talk->field_0x90.y = sp14F0.y + talk->field_0x1c.y;
         talk->field_0x9c = talk->field_0x90 + talk->field_0xa8.Xyz();
         talk->field_0xb0 = 45.0f;
 
-        cXyz stack_28c = attentionPos(actor1);
-        if (lineBGCheck(&stack_28c, &talk->field_0x9c, talk->field_0x8c)
-            || lineCollisionCheck(stack_28c, talk->field_0x9c, listener, speaker, NULL))
+        cXyz sp146C = attentionPos(actor1_sp40C);
+        if (lineBGCheck(&sp146C, &talk->field_0x9c, talk->field_0x8c)
+            || lineCollisionCheck(sp146C, talk->field_0x9c, listener, speaker, NULL))
         {
-            iVar5 = 0;
+            sp430 = 0;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(90, 190, "-----");
+            }
+#endif
         } else {
             mViewCache.mCenter = talk->field_0x90;
             mViewCache.mEye = talk->field_0x9c;
             mViewCache.mDirection = talk->field_0xa8;
             mViewCache.mFovy = talk->field_0xb0;
-            hideActor(actor2);
+            hideActor(actor2_sp408);
         }
         break;
     }
 
     case 14:
     case 15: {
-        if (iVar5 == 14) {
-            actor1 = speaker;
-            actor2 = listener;
-            stack_1e4 = talkEyePos(listener);
-            stack_1f0 = talkEyePos(speaker);
-            cSGlobe stack_12d8 = talk->field_0x30;
-            stack_1fc = talkBasePos(listener);
-            stack_208 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_1f0.y = attentionPos(speaker).y;
+        fopAc_ac_c* actor1_sp404;
+        fopAc_ac_c* actor2_sp400;
+
+        if (sp430 == 14) {
+            actor1_sp404 = speaker;
+            actor2_sp400 = listener;
+            sp1514 = talkEyePos(actor2_sp400);
+            sp1508 = talkEyePos(actor1_sp404);
+            cSGlobe sp528 = talk->field_0x30;
+            sp14FC = talkBasePos(actor2_sp400);
+            sp14F0 = talkBasePos(actor1_sp404);
+            if (sp5C) {
+                sp1508.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_1fc += stack_1cc;
+            if (sp58) {
+                sp14FC += sp152C;
             }
         } else {
-            actor1 = listener;
-            actor2 = speaker;
-            stack_1e4 = talkEyePos(speaker);
-            stack_1f0 = talkEyePos(listener);
-            stack_1fc = talkBasePos(speaker);
-            stack_208 = talkBasePos(listener);
-            if (bVar3) {
-                stack_1e4.y = attentionPos(speaker).y;
+            actor1_sp404 = listener;
+            actor2_sp400 = speaker;
+            sp1514 = talkEyePos(actor2_sp400);
+            sp1508 = talkEyePos(actor1_sp404);
+            sp14FC = talkBasePos(actor2_sp400);
+            sp14F0 = talkBasePos(actor1_sp404);
+            if (sp5C) {
+                sp1514.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_208 += stack_1cc;
+            if (sp58) {
+                sp14F0 += sp152C;
             }
         }
 
-        mViewCache.mCenter = stack_208;
-        mViewCache.mCenter.y = stack_1f0.y - 10.0f - talk->field_0x7c * 10.0f;
+        mViewCache.mCenter = sp14F0;
+        mViewCache.mCenter.y = sp1508.y - 10.0f - talk->field_0x7c * 10.0f;
 
         if (talk->field_0x44 == 0) {
-            mViewCache.mDirection.Val(stack_1e4 - stack_1f0);
+            mViewCache.mDirection.Val(sp1514 - sp1508);
             mViewCache.mDirection.R(mViewCache.mDirection.R() - 5.0f);
             mStyleSettle.mFinished = true;
         }
 
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
-        f32 tmp1 = 35.0f;
-        f32 tmp2 = 85.0f;
-        mViewCache.mFovy = tmp2 + (tmp1 - tmp2) * talk->field_0x7c;
-        cXyz stack_298 = attentionPos(actor1);
-        hideActor(actor2);
+        f32 sp3FC = 85.0f;
+        f32 sp3F8 = 35.0f;
+        mViewCache.mFovy = sp3FC + (sp3F8 - sp3FC) * talk->field_0x7c;
+        cXyz sp404 = attentionPos(actor1_sp404);
+        hideActor(actor2_sp400);
         break;
     }
 
     case 18:
     case 19: {
-        int uVar17;
-        if (iVar5 == 18) {
-            actor1 = listener;
-            uVar17 = talk->field_0x38;
-            stack_1e4 = talkEyePos(speaker);
-            stack_1f0 = talkEyePos(listener);
-            stack_1fc = talkBasePos(speaker);
-            stack_208 = talkBasePos(listener);
-            if (bVar3) {
-                stack_1e4.y = attentionPos(speaker).y;
+        fopAc_ac_c* actor1_sp3F4;
+        fopAc_ac_c* actor2_sp3F0;
+
+        int sp3EC;
+        if (sp430 == 18) {
+            actor1_sp3F4 = listener;
+            actor2_sp3F0 = speaker;
+            sp3EC = talk->field_0x38;
+            sp1514 = talkEyePos(actor2_sp3F0);
+            sp1508 = talkEyePos(actor1_sp3F4);
+            sp14FC = talkBasePos(actor2_sp3F0);
+            sp14F0 = talkBasePos(actor1_sp3F4);
+            if (sp5C) {
+                sp1514.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_208 += stack_1cc;
+            if (sp58) {
+                sp14F0 += sp152C;
             }
         } else {
-            actor1 = speaker;
-            uVar17 = talk->field_0x38 ? 0 : 1;
-            stack_1e4 = talkEyePos(listener);
-            stack_1f0 = talkEyePos(speaker);
-            stack_1fc = talkBasePos(listener);
-            stack_208 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_1f0.y = attentionPos(speaker).y;
+            actor1_sp3F4 = speaker;
+            actor2_sp3F0 = listener;
+            sp3EC = talk->field_0x38 ? 0 : 1;
+            sp1514 = talkEyePos(actor2_sp3F0);
+            sp1508 = talkEyePos(actor1_sp3F4);
+            sp14FC = talkBasePos(actor2_sp3F0);
+            sp14F0 = talkBasePos(actor1_sp3F4);
+            if (sp5C) {
+                sp1508.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_1fc += stack_1cc;
+            if (sp58) {
+                sp14FC += sp152C;
             }
         }
 
         if (talk->field_0x44 == 0) {
             mStyleSettle.mFinished = true;
-            cXyz stack_2a4(0.0f, -15.0f, 15.0f);
-            cSGlobe stack_12e0 = stack_1e4 - attentionPos(actor1);
-            cSGlobe stack_12e8 = stack_2a4;
-            stack_12e8.U(stack_12e8.U() + stack_12e0.U());
-            talk->field_0x1c = stack_208 + stack_12e8.Xyz();
-            talk->field_0x1c.y += stack_1f0.y - stack_208.y;
-            f32 fVar36;
-            if (uVar17) {
-                fVar36 = -80.0f;
-            } else {
-                fVar36 = 75.0f;
-            }
-            cSAngle stack_137c = fVar36;
+            cXyz sp1454(0.0f, -15.0f, 15.0f);
+            cSGlobe sp520 = sp1514 - attentionPos(actor1_sp3F4);
+            cSGlobe sp518 = sp1454;
+            sp518.U(sp518.U() + sp520.U());
+            talk->field_0x1c = sp14F0 + sp518.Xyz();
+            talk->field_0x1c.y += sp1508.y - sp14F0.y;
+            cSAngle sp268 = sp3EC ? -80.0f : 75.0f;
             talk->field_0x90 = talk->field_0x1c;
-            talk->field_0xa8.Val(120.0f, cSAngle::_0, stack_137c + directionOf(actor1));
+            talk->field_0xa8.Val(120.0f, cSAngle::_0, sp268 + directionOf(actor1_sp3F4));
         }
 
         talk->field_0x9c = talk->field_0x90 + talk->field_0xa8.Xyz();
         talk->field_0xb0 = 50.0f;
 
-        cXyz stack_2b0 = attentionPos(actor1);
-        if (lineBGCheck(&stack_2b0, &talk->field_0x9c, talk->field_0x8c)
-            || lineCollisionCheck(stack_2b0, talk->field_0x9c, listener, speaker, NULL))
+        cXyz sp1448 = attentionPos(actor1_sp3F4);
+        if (lineBGCheck(&sp1448, &talk->field_0x9c, talk->field_0x8c)
+            || lineCollisionCheck(sp1448, talk->field_0x9c, listener, speaker, NULL))
         {
-            iVar5 = 0;
+            sp430 = 0;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(90, 190, "-----");
+            }
+#endif
         } else {
             mViewCache.mCenter = talk->field_0x90;
             mViewCache.mEye = talk->field_0x9c;
@@ -5482,61 +6135,66 @@ bool dCamera_c::talktoCamera(s32 param_0) {
 
     case 24:
     case 25: {
-        int uVar17;
-        if (iVar5 == 24) {
-            actor1 = listener;
-            uVar17 = talk->field_0x38;
-            stack_1e4 = talkEyePos(speaker);
-            stack_1f0 = talkEyePos(listener);
-            stack_1fc = talkBasePos(speaker);
-            stack_208 = talkBasePos(listener);
-            if (bVar3) {
-                stack_1e4.y = attentionPos(speaker).y;
+        fopAc_ac_c* actor1_sp3E8;
+        fopAc_ac_c* actor2_sp3E4;
+
+        int sp3E0;
+        if (sp430 == 24) {
+            actor1_sp3E8 = listener;
+            actor2_sp3E4 = speaker;
+            sp3E0 = talk->field_0x38;
+            sp1514 = talkEyePos(actor2_sp3E4);
+            sp1508 = talkEyePos(actor1_sp3E8);
+            sp14FC = talkBasePos(actor2_sp3E4);
+            sp14F0 = talkBasePos(actor1_sp3E8);
+            if (sp5C) {
+                sp1514.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_208 += stack_1cc;
+            if (sp58) {
+                sp14F0 += sp152C;
             }
         } else {
-            actor1 = speaker;
-            uVar17 = talk->field_0x38 ? 0 : 1;
-            stack_1e4 = talkEyePos(listener);
-            stack_1f0 = talkEyePos(speaker);
-            stack_1fc = talkBasePos(listener);
-            stack_208 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_1f0.y = attentionPos(speaker).y;
+            actor1_sp3E8 = speaker;
+            actor2_sp3E4 = listener;
+            sp3E0 = talk->field_0x38 ? 0 : 1;
+            sp1514 = talkEyePos(actor2_sp3E4);
+            sp1508 = talkEyePos(actor1_sp3E8);
+            sp14FC = talkBasePos(actor2_sp3E4);
+            sp14F0 = talkBasePos(actor1_sp3E8);
+            if (sp5C) {
+                sp1508.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_1fc += stack_1cc;
+            if (sp58) {
+                sp14FC += sp152C;
             }
         }
 
         if (talk->field_0x44 == 0) {
             mStyleSettle.mFinished = true;
-            cXyz stack_2bc(0.0f, -10.0f, 20.0f);
-            cSGlobe stack_12f0 = stack_1e4 - attentionPos(actor1);
-            cSGlobe stack_12f8 = stack_2bc;
-            stack_12f8.U(stack_12f8.U() + stack_12f0.U());
-            talk->field_0x1c = stack_1f0 + stack_12f8.Xyz();
-            f32 fVar36;
-            if (uVar17) {
-                fVar36 = -45.0f;
-            } else {
-                fVar36 = 45.0f;
-            }
-            cSAngle stack_1380 = fVar36;
+            cXyz sp143C(0.0f, -10.0f, 20.0f);
+            cSGlobe sp510 = sp1514 - attentionPos(actor1_sp3E8);
+            cSGlobe sp508 = sp143C;
+            sp508.U(sp508.U() + sp510.U());
+            talk->field_0x1c = sp1508 + sp508.Xyz();
+            cSAngle sp264 = sp3E0 ? -45.0f : 45.0f;
             talk->field_0x90 = talk->field_0x1c;
-            talk->field_0xa8.Val(120.0f, cSAngle(25.0f), stack_1380 + directionOf(actor1));
+            talk->field_0xa8.Val(120.0f, cSAngle(25.0f), sp264 + directionOf(actor1_sp3E8));
         }
 
         talk->field_0x9c = talk->field_0x90 + talk->field_0xa8.Xyz();
         talk->field_0xb0 = 45.0f;
 
-        cXyz stack_2c8 = attentionPos(actor1);
-        if (lineBGCheck(&stack_2c8, &talk->field_0x9c, talk->field_0x8c)
-            || lineCollisionCheck(stack_2c8, talk->field_0x9c, listener, speaker, NULL))
+        cXyz sp3E8 = attentionPos(actor1_sp3E8);
+        if (lineBGCheck(&sp3E8, &talk->field_0x9c, talk->field_0x8c)
+            || lineCollisionCheck(sp3E8, talk->field_0x9c, listener, speaker, NULL))
         {
-            iVar5 = 0;
+            sp430 = 0;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(90, 190, "-----");
+            }
+#endif
         } else {
             mViewCache.mCenter = talk->field_0x90;
             mViewCache.mEye = talk->field_0x9c;
@@ -5548,72 +6206,70 @@ bool dCamera_c::talktoCamera(s32 param_0) {
 
     case 26:
     case 27: {
-        int uVar17;
-        if (iVar5 != 26) {
-            actor1 = listener;
-            actor2 = speaker;
-            uVar17 = talk->field_0x38;
-            stack_1e4 = talkEyePos(speaker);
-            stack_1f0 = talkEyePos(listener);
-            stack_1fc = talkBasePos(speaker);
-            stack_208 = talkBasePos(listener);
-            if (bVar3) {
-                stack_1e4.y = attentionPos(speaker).y;
+        fopAc_ac_c* actor1_sp3DC;
+        fopAc_ac_c* actor2_sp3D8;
+
+        int sp3D4;
+        if (sp430 != 26) {
+            actor1_sp3DC = listener;
+            actor2_sp3D8 = speaker;
+            sp3D4 = talk->field_0x38;
+            sp1514 = talkEyePos(actor2_sp3D8);
+            sp1508 = talkEyePos(actor1_sp3DC);
+            sp14FC = talkBasePos(actor2_sp3D8);
+            sp14F0 = talkBasePos(actor1_sp3DC);
+            if (sp5C) {
+                sp1514.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_208 += stack_1cc;
+            if (sp58) {
+                sp14F0 += sp152C;
             }
         } else {
-            actor1 = speaker;
-            actor2 = listener;
-            uVar17 = talk->field_0x38 ? 0 : 1;
-            stack_1e4 = talkEyePos(listener);
-            stack_1f0 = talkEyePos(speaker);
-            stack_1fc = talkBasePos(listener);
-            stack_208 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_1f0.y = attentionPos(speaker).y;
+            actor1_sp3DC = speaker;
+            actor2_sp3D8 = listener;
+            sp3D4 = talk->field_0x38 ? 0 : 1;
+            sp1514 = talkEyePos(actor2_sp3D8);
+            sp1508 = talkEyePos(actor1_sp3DC);
+            sp14FC = talkBasePos(actor2_sp3D8);
+            sp14F0 = talkBasePos(actor1_sp3DC);
+            if (sp5C) {
+                sp1508.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_1fc += stack_1cc;
+            if (sp58) {
+                sp14FC += sp152C;
             }
         }
 
         if (talk->field_0x44 == 0) {
             mStyleSettle.mFinished = true;
-            cXyz stack_2d4(0.0f, -30.0f, 20.0f);
-            if (bVar3 && iVar5 == 27) {
-                stack_2d4.y = -5.0f;
+            cXyz sp1424(0.0f, -30.0f, 20.0f);
+            if (sp5C && sp430 == 27) {
+                sp1424.y = -5.0f;
             }
-            cSGlobe stack_1300 = attentionPos(actor2) - attentionPos(actor1);
-            cSGlobe stack_1308 = stack_2d4;
-            stack_1308.U(stack_1308.U() + stack_1300.U());
-            talk->field_0x1c = stack_1f0 + stack_1308.Xyz();
-            f32 fVar36;
-            if (uVar17) {
-                fVar36 = -30.0f;
-            } else {
-                fVar36 = 35.0f;
-            }
-            cSAngle stack_1384 = fVar36;
-            if (bVar3) {
-                fVar36 = 0.0f;
-            } else {
-                fVar36 = -35.0f;
-            }
-            cSAngle stack_1388 = fVar36;
+            cSGlobe sp500 = attentionPos(actor2_sp3D8) - attentionPos(actor1_sp3DC);
+            cSGlobe sp4F8 = sp1424;
+            sp4F8.U(sp4F8.U() + sp500.U());
+            talk->field_0x1c = sp1508 + sp4F8.Xyz();
+            cSAngle sp260 = sp3D4 ? -30.0f : 35.0f;
+            cSAngle sp25C = sp5C ? 0.0f : -35.0f;
             talk->field_0x90 = talk->field_0x1c;
-            talk->field_0xa8.Val(90.0f, cSAngle(-35.0f), stack_1384 + directionOf(actor1));
+            talk->field_0xa8.Val(90.0f, cSAngle(-35.0f), sp260 + directionOf(actor1_sp3DC));
         }
 
         talk->field_0x9c = talk->field_0x90 + talk->field_0xa8.Xyz();
         talk->field_0xb0 = 55.0f;
 
-        cXyz stack_2e0 = attentionPos(actor1);
-        if (lineBGCheck(&stack_2e0, &talk->field_0x9c, talk->field_0x8c)
-            || lineCollisionCheck(stack_2e0, talk->field_0x9c, listener, speaker, NULL))
+        cXyz sp1418 = attentionPos(actor1_sp3DC);
+        if (lineBGCheck(&sp1418, &talk->field_0x9c, talk->field_0x8c)
+            || lineCollisionCheck(sp1418, talk->field_0x9c, listener, speaker, NULL))
         {
-            iVar5 = 0;
+            sp430 = 0;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(90, 190, "-----");
+            }
+#endif
         } else {
             mViewCache.mCenter = talk->field_0x90;
             mViewCache.mEye = talk->field_0x9c;
@@ -5627,69 +6283,79 @@ bool dCamera_c::talktoCamera(s32 param_0) {
     case 12:
     case 30:
     case 31: {
-        fopAc_ac_c* actor;
-        int uVar17;
-        if (iVar5 != 11 && iVar5 != 30) {
-            actor = speaker;
-            uVar17 = talk->field_0x38;
-            stack_1e4 = talkEyePos(listener);
-            stack_1f0 = talkEyePos(speaker);
-            stack_1fc = talkBasePos(listener);
-            stack_208 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_1f0.y = attentionPos(speaker).y;
+        fopAc_ac_c* actor1_sp3D0;
+        fopAc_ac_c* actor2_sp3CC;
+        int sp3C8;
+        if (sp430 != 11 && sp430 != 30) {
+            actor1_sp3D0 = speaker;
+            actor2_sp3CC = listener;
+            sp3C8 = talk->field_0x38;
+            sp1514 = talkEyePos(actor2_sp3CC);
+            sp1508 = talkEyePos(actor1_sp3D0);
+            sp14FC = talkBasePos(actor2_sp3CC);
+            sp14F0 = talkBasePos(actor1_sp3D0);
+            if (sp5C) {
+                sp1508.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_1fc += stack_1cc;
+            if (sp58) {
+                sp14FC += sp152C;
             }
         } else {
-            actor = listener;
-            uVar17 = talk->field_0x38 ? 0 : 1;
-            stack_1e4 = talkEyePos(speaker);
-            stack_1f0 = talkEyePos(listener);
-            stack_1fc = talkBasePos(speaker);
-            stack_208 = talkBasePos(listener);
-            if (bVar3) {
-                stack_1e4.y = attentionPos(speaker).y;
+            actor1_sp3D0 = listener;
+            actor2_sp3CC = speaker;
+            sp3C8 = talk->field_0x38 ? 0 : 1;
+            sp1514 = talkEyePos(actor2_sp3CC);
+            sp1508 = talkEyePos(actor1_sp3D0);
+            sp14FC = talkBasePos(actor2_sp3CC);
+            sp14F0 = talkBasePos(actor1_sp3D0);
+            if (sp5C) {
+                sp1514.y = attentionPos(speaker).y;
             }
-            if (bVar13) {
-                stack_208 += stack_1cc;
+            if (sp58) {
+                sp14F0 += sp152C;
             }
         }
 
         if (talk->field_0x44 == 0) {
-            f32 fVar36 = (stack_1f0.y - talkBasePos(actor).y) * 1.2f;
-            f32 fVar37 = (stack_1e4.y - stack_1f0.y) * 0.45f;
-            f32 fVar38 = fVar36 * 0.7f + fVar37;
-            cXyz stack_2ec(25.0f, 10.0f, talk->field_0x30.R() * 0.45f);
-            cXyz stack_2f8(75.0f, fVar37, -75.0f);
-            if (uVar17) {
-                stack_2ec.x = -stack_2ec.x;
-                stack_2f8.x = -stack_2f8.x;
+            f32 sp3C4 = 0.45f;
+            f32 sp3C0 = (sp1508.y - talkBasePos(actor1_sp3D0).y) * 1.2f;
+            f32 sp3BC = (sp1514.y - sp1508.y) * sp3C4;
+            f32 sp3B8 = sp3C0 * 0.7f + sp3BC;
+            cXyz sp140C(25.0f, 10.0f, talk->field_0x30.R() * sp3C4);
+            cXyz sp1400(75.0f, sp3BC, -75.0f);
+            if (sp3C8) {
+                sp140C.x = -sp140C.x;
+                sp1400.x = -sp1400.x;
             }
-            cSGlobe stack_1310 = stack_1e4 - stack_1f0;
-            cSGlobe stack_1318 = stack_2ec;
-            stack_1318.U(stack_1318.U() + stack_1310.U());
-            talk->field_0x90 = attentionPos(actor) + stack_1318.Xyz();
-            talk->field_0x90.y = stack_208.y + fVar38;
-            stack_1318.Val(stack_2f8);
-            stack_1318.U(stack_1318.U() + stack_1310.U().Inv());
-            stack_1318.V(stack_1318.V() * 0.25f + stack_1310.V() * 0.75f);
-            talk->field_0x9c = stack_1e4 + stack_1318.Xyz();
+            cSGlobe sp4F0 = sp1514 - sp1508;
+            cSGlobe sp4E8 = sp140C;
+            sp4E8.U(sp4E8.U() + sp4F0.U());
+            talk->field_0x90 = attentionPos(actor1_sp3D0) + sp4E8.Xyz();
+            talk->field_0x90.y = sp14F0.y + sp3B8;
+            sp4E8.Val(sp1400);
+            sp4E8.U(sp4E8.U() + sp4F0.U().Inv());
+            sp4E8.V(sp4E8.V() * 0.25f + sp4F0.V() * 0.75f);
+            talk->field_0x9c = sp1514 + sp4E8.Xyz();
             talk->field_0xa8.Val(talk->field_0x9c - talk->field_0x90);
             mStyleSettle.mFinished = true;
-            if (iVar5 == 11 || iVar5 == 12) {
+            if (sp430 == 11 || sp430 == 12) {
                 talk->field_0xb0 = 55.0f;
             } else {
                 talk->field_0xb0 = 65.0f;
             }
         }
 
-        cXyz stack_304 = attentionPos(actor);
-        if (lineBGCheck(&stack_304, &talk->field_0x9c, talk->field_0x8c)
-            || lineCollisionCheck(stack_304, talk->field_0x9c, listener, speaker, NULL))
+        cXyz sp13F4 = attentionPos(actor1_sp3D0);
+        if (lineBGCheck(&sp13F4, &talk->field_0x9c, talk->field_0x8c)
+            || lineCollisionCheck(sp13F4, talk->field_0x9c, listener, speaker, NULL))
         {
-            iVar5 = 0;
+            sp430 = 0;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(90, 190, "-----");
+            }
+#endif
         } else {
             mViewCache.mCenter = talk->field_0x90;
             mViewCache.mEye = talk->field_0x9c;
@@ -5705,31 +6371,32 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         }
         mViewCache.mCenter = talk->field_0x4;
         mViewCache.mDirection.Val(400.0f, cSAngle(35.0f), talk->field_0x28.U());
-        if (mViewCache.mDirection.V() > stack_134c) {
-            mViewCache.mDirection.V(stack_134c);
+        if (mViewCache.mDirection.V() > sp298) {
+            mViewCache.mDirection.V(sp298);
         }
-        if (mViewCache.mDirection.V() < stack_1350) {
-            mViewCache.mDirection.V(stack_1350);
+        if (mViewCache.mDirection.V() < sp294) {
+            mViewCache.mDirection.V(sp294);
         }
-        cXyz stack_310 = attentionPos(listener);
-        cXyz stack_31c = attentionPos(speaker);
-        cSAngle stack_138c;
+        cXyz sp13E8 = attentionPos(listener);
+        cXyz sp13DC = attentionPos(speaker);
+        cSAngle sp258;
         if (talk->field_0x38) {
-            stack_138c = 20.0f;
+            sp258 = 20.0f;
         } else {
-            stack_138c = -20.0f;
+            sp258 = -20.0f;
         }
 
-        for (int i = 0; i < 18; i++) {
+        int i = 0;
+        for (i = 0; i < 18; i++) {
             mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
-            if (!lineBGCheck(&stack_310, &mViewCache.mEye, talk->field_0x8c)
-                && !lineBGCheck(&stack_31c, &mViewCache.mEye, talk->field_0x8c)
-                && !lineCollisionCheck(stack_310, mViewCache.mEye, listener, speaker, NULL)
-                && !lineCollisionCheck(stack_31c, mViewCache.mEye, listener, speaker, NULL))
+            if (!lineBGCheck(&sp13E8, &mViewCache.mEye, talk->field_0x8c)
+                && !lineBGCheck(&sp13DC, &mViewCache.mEye, talk->field_0x8c)
+                && !lineCollisionCheck(sp13E8, mViewCache.mEye, listener, speaker, NULL)
+                && !lineCollisionCheck(sp13DC, mViewCache.mEye, listener, speaker, NULL))
             {
                 break;
             }
-            mViewCache.mDirection.U(mViewCache.mDirection.U() + stack_138c);
+            mViewCache.mDirection.U(mViewCache.mDirection.U() + sp258);
         }
 
         mViewCache.mFovy = 60.0f;
@@ -5740,37 +6407,38 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         if (talk->field_0x44 == 0) {
             mStyleSettle.mFinished = true;
             mViewCache.mCenter = talk->field_0x4;
-            cSAngle stack_1390;
+            cSAngle sp254;
             if (talk->field_0x38) {
-                stack_1390 = talk->field_0x30.U() + cSAngle::_90;
+                sp254 = talk->field_0x30.U() + cSAngle::_90;
             } else {
-                stack_1390 = talk->field_0x30.U() + cSAngle::_270;
+                sp254 = talk->field_0x30.U() + cSAngle::_270;
             }
-            mViewCache.mDirection.Val(400.0f, cSAngle(15.0f), stack_1390);
-            if (mViewCache.mDirection.V() > stack_134c) {
-                mViewCache.mDirection.V(stack_134c);
+            mViewCache.mDirection.Val(400.0f, cSAngle(15.0f), sp254);
+            if (mViewCache.mDirection.V() > sp298) {
+                mViewCache.mDirection.V(sp298);
             }
-            if (mViewCache.mDirection.V() < stack_1350) {
-                mViewCache.mDirection.V(stack_1350);
+            if (mViewCache.mDirection.V() < sp294) {
+                mViewCache.mDirection.V(sp294);
             }
-            cXyz stack_328 = attentionPos(listener);
-            cXyz stack_334 = attentionPos(speaker);
-            cSAngle stack_1394 = cSAngle::_0;
+            cXyz sp13D0 = attentionPos(listener);
+            cXyz sp13C4 = attentionPos(speaker);
+            cSAngle sp250 = cSAngle::_0;
 
-            for (int i = 0; i < 18; i++) {
+            int i = 0;
+            for (i = 0; i < 18; i++) {
                 mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
-                if (!lineBGCheck(&stack_328, &mViewCache.mEye, talk->field_0x8c)
-                    && !lineBGCheck(&stack_334, &mViewCache.mEye, talk->field_0x8c)
-                    && !lineCollisionCheck(stack_328, mViewCache.mEye, listener, speaker, NULL)
-                    && !lineCollisionCheck(stack_334, mViewCache.mEye, listener, speaker, NULL))
+                if (!lineBGCheck(&sp13D0, &mViewCache.mEye, talk->field_0x8c)
+                    && !lineBGCheck(&sp13C4, &mViewCache.mEye, talk->field_0x8c)
+                    && !lineCollisionCheck(sp13D0, mViewCache.mEye, listener, speaker, NULL)
+                    && !lineCollisionCheck(sp13C4, mViewCache.mEye, listener, speaker, NULL))
                 {
                     break;
                 }
                 if ((i & 1) == 0) {
-                    stack_1394 += cSAngle(20.0f);
-                    mViewCache.mDirection.U(stack_1390 + stack_1394);
+                    sp250 += cSAngle(20.0f);
+                    mViewCache.mDirection.U(sp254 + sp250);
                 } else {
-                    mViewCache.mDirection.U(stack_1390 - stack_1394);
+                    mViewCache.mDirection.U(sp254 - sp250);
                 }
             }
 
@@ -5782,31 +6450,37 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         if (talk->field_0x44 == 0) {
             mStyleSettle.mFinished = true;
         }
-        cXyz stack_340 = talkBasePos(speaker);
-        cXyz stack_34c = talkBasePos(listener);
-        cXyz stack_358 = stack_340 - stack_34c;
-        cSGlobe stack_1320 = stack_358;
-        cSAngle stack_1398;
-        f32 dVar21 = dCamMath::xyzHorizontalDistance(stack_340, stack_34c) * 2.0f * 0.5f;
-        cDegree stack_1348 = mWindowAspect * 60.0f * 0.5f;
-        dVar21 /= stack_1348.Tan();
+        cXyz sp13B8 = talkBasePos(speaker);
+        cXyz sp13AC = talkBasePos(listener);
+        cXyz sp13A0 = sp13B8 - sp13AC;
+        cSGlobe sp4E0 = sp13A0;
+        cSAngle sp24C;
+        f32 sp3AC = dCamMath::xyzHorizontalDistance(sp13B8, sp13AC) * 2.0f * 0.5f;
+        cDegree sp3A8 = mWindowAspect * 60.0f * 0.5f;
+        f32 sp3A4 = sp3AC / sp3A8.Tan();
         if (talk->field_0x38) {
-            stack_1398 = cSAngle::_270;
+            sp24C = cSAngle::_270;
         } else {
-            stack_1398 = cSAngle::_90;
+            sp24C = cSAngle::_90;
         }
-        talk->field_0x90 = talkBasePos(listener) + stack_358 * 0.5f;
+        talk->field_0x90 = talkBasePos(listener) + sp13A0 * 0.5f;
         talk->field_0x90.y = (talkEyePos(speaker).y + talkEyePos(listener).y) * 0.5f - 30.0f;
-        talk->field_0xa8.Val(dVar21, cSAngle::_0, stack_1320.U() + stack_1398);
+        talk->field_0xa8.Val(sp3A4, cSAngle::_0, sp4E0.U() + sp24C);
         talk->field_0x9c = talk->field_0x90 + talk->field_0xa8.Xyz();
         talk->field_0xb0 = 60.0f;
 
-        if (lineBGCheck(&stack_340, &talk->field_0x9c, talk->field_0x8c)
-            || lineBGCheck(&stack_34c, &talk->field_0x9c, talk->field_0x8c)
-            || lineCollisionCheck(stack_340, talk->field_0x9c, listener, speaker, NULL)
-            || lineCollisionCheck(stack_34c, talk->field_0x9c, listener, speaker, NULL))
+        if (lineBGCheck(&sp13B8, &talk->field_0x9c, talk->field_0x8c)
+            || lineBGCheck(&sp13AC, &talk->field_0x9c, talk->field_0x8c)
+            || lineCollisionCheck(sp13B8, talk->field_0x9c, listener, speaker, NULL)
+            || lineCollisionCheck(sp13AC, talk->field_0x9c, listener, speaker, NULL))
         {
-            iVar5 = 0;
+            sp430 = 0;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(90, 190, "-----");
+            }
+#endif
         } else {
             mViewCache.mCenter = talk->field_0x90;
             mViewCache.mEye = talk->field_0x9c;
@@ -5817,31 +6491,40 @@ bool dCamera_c::talktoCamera(s32 param_0) {
     }
 
     case 29: {
-        talk->field_0x90 = talkBasePos(speaker);
+        fopAc_ac_c* actor1_sp3A0 = speaker;
+        fopAc_ac_c* actor2_sp39C = listener;
+
+        talk->field_0x90 = talkBasePos(actor1_sp3A0);
 
         if (talk->field_0x44 == 0) {
-            cXyz stack_364 = talkBasePos(listener);
-            stack_364.y = talkEyePos(listener).y;
-            cXyz stack_370 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_370.y = attentionPos(speaker).y;
+            cXyz sp1394 = talkBasePos(actor2_sp39C);
+            sp1394.y = talkEyePos(actor2_sp39C).y;
+            cXyz sp1388 = talkBasePos(actor1_sp3A0);
+            if (sp5C) {
+                sp1388.y = attentionPos(actor1_sp3A0).y;
             }
-            stack_370.y = talkEyePos(speaker).y;
-            talk->field_0xa8.Val(stack_364 - stack_370);
+            sp1388.y = talkEyePos(actor1_sp3A0).y;
+            talk->field_0xa8.Val(sp1394 - sp1388);
             talk->field_0xa8.R(200.0f);
-            talk->field_0x1c.y = attentionPos(speaker).y - 68.0f - talkBasePos(speaker).y;
+            talk->field_0x1c.y = attentionPos(actor1_sp3A0).y - 68.0f - talkBasePos(actor1_sp3A0).y;
             mStyleSettle.mFinished = true;
         }
 
-        talk->field_0x90.y = talk->field_0x1c.y + talkBasePos(speaker).y;
+        talk->field_0x90.y = talk->field_0x1c.y + talkBasePos(actor1_sp3A0).y;
         talk->field_0x9c = talk->field_0x90 + talk->field_0xa8.Xyz();
         talk->field_0xb0 = 55.0f;
 
-        cXyz stack_37c = attentionPos(speaker);
-        if (lineBGCheck(&stack_37c, &talk->field_0x9c, talk->field_0x8c)
-            || lineCollisionCheck(stack_37c, talk->field_0x9c, listener, speaker, NULL))
+        cXyz sp137C = attentionPos(actor1_sp3A0);
+        if (lineBGCheck(&sp137C, &talk->field_0x9c, talk->field_0x8c)
+            || lineCollisionCheck(sp137C, talk->field_0x9c, listener, actor1_sp3A0, NULL))
         {
-            iVar5 = 0;
+            sp430 = 0;
+
+#if DEBUG
+            if (mCamSetup.CheckFlag(0x8000)) {
+                dDbVw_Report(90, 190, "-----");
+            }
+#endif
         } else {
             mViewCache.mCenter = talk->field_0x90;
             mViewCache.mEye = talk->field_0x9c;
@@ -5854,51 +6537,54 @@ bool dCamera_c::talktoCamera(s32 param_0) {
 
     case 37:
         if (talk->field_0x44 == 0) {
-            stack_1e4 = talkEyePos(listener);
-            stack_1f0 = talkEyePos(speaker);
-            stack_1fc = talkBasePos(listener);
-            stack_208 = talkBasePos(speaker);
-            if (bVar3) {
-                stack_1f0.y = attentionPos(speaker).y;
+            fopAc_ac_c* actor1_sp398 = speaker;
+            fopAc_ac_c* actor2_sp394 = listener;
+
+            sp1514 = talkEyePos(actor2_sp394);
+            sp1508 = talkEyePos(actor1_sp398);
+            sp14FC = talkBasePos(actor2_sp394);
+            sp14F0 = talkBasePos(actor1_sp398);
+            if (sp5C) {
+                sp1508.y = attentionPos(actor1_sp398).y;
             }
-            if (bVar13) {
-                stack_1fc += stack_1cc;
+            if (sp58) {
+                sp14FC += sp152C;
             }
-            mViewCache.mCenter = stack_208;
-            cXyz stack_388 = stack_1fc;
-            stack_388.y = stack_1e4.y;
-            cXyz stack_394 = stack_208;
-            stack_394.y = stack_1f0.y;
-            mViewCache.mDirection.Val(stack_388 - stack_394);
+            mViewCache.mCenter = sp14F0;
+            cXyz sp1370 = sp14FC;
+            sp1370.y = sp1514.y;
+            cXyz sp1364 = sp14F0;
+            sp1364.y = sp1508.y;
+            mViewCache.mDirection.Val(sp1370 - sp1364);
             mViewCache.mDirection.V(mViewCache.mDirection.V() + cSAngle(5.0f));
             mViewCache.mDirection.R(750.0f);
-            talk->field_0x1c.y = stack_1f0.y - stack_208.y;
+            talk->field_0x1c.y = sp1508.y - sp14F0.y;
             mStyleSettle.mFinished = true;
-            mViewCache.mCenter.y = stack_208.y + talk->field_0x1c.y;
+            mViewCache.mCenter.y = sp14F0.y + talk->field_0x1c.y;
 
-            cXyz stack_3a0 = attentionPos(listener);
-            cXyz stack_3ac = attentionPos(speaker);
-            cSAngle stack_139c;
+            cXyz sp1358 = attentionPos(actor2_sp394);
+            cXyz sp134C = attentionPos(actor1_sp398);
+            cSAngle sp248;
             if (talk->field_0x38) {
                 mViewCache.mDirection.U(mViewCache.mDirection.U() + cSAngle(10.0f));
-                stack_139c = 20.0f;
+                sp248 = 20.0f;
             } else {
                 mViewCache.mDirection.U(mViewCache.mDirection.U() - cSAngle(10.0f));
-                stack_139c = -20.0f;
+                sp248 = -20.0f;
             }
 
-            int i;
+            int i = 0;
             fopAc_ac_c* midna = daPy_py_c::getMidnaActor();
             for (i = 0; i < 18; i++) {
                 mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
-                if (!lineBGCheck(&stack_3a0, &mViewCache.mEye, talk->field_0x8c)
-                    && !lineBGCheck(&stack_3ac, &mViewCache.mEye, talk->field_0x8c)
-                    && !lineCollisionCheck(stack_3a0, mViewCache.mEye, listener, midna, NULL)
-                    && !lineCollisionCheck(stack_3ac, mViewCache.mEye, listener, midna, NULL))
+                if (!lineBGCheck(&sp1358, &mViewCache.mEye, talk->field_0x8c)
+                    && !lineBGCheck(&sp134C, &mViewCache.mEye, talk->field_0x8c)
+                    && !lineCollisionCheck(sp1358, mViewCache.mEye, actor2_sp394, midna, NULL)
+                    && !lineCollisionCheck(sp134C, mViewCache.mEye, actor2_sp394, midna, NULL))
                 {
                     break;
                 }
-                mViewCache.mDirection.U(mViewCache.mDirection.U() + stack_139c);
+                mViewCache.mDirection.U(mViewCache.mDirection.U() + sp248);
             }
 
             mViewCache.mFovy = 60.0f;
@@ -5906,51 +6592,61 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         break;
 
     case 38: {
-        stack_1e4 = talkEyePos(listener);
-        stack_1f0 = talkEyePos(speaker);
-        cSGlobe stack_1328 = stack_1e4 - stack_1f0;
+        fopAc_ac_c* actor1_sp388 = speaker;
+        fopAc_ac_c* actor2_sp384 = listener;
+
+        sp1514 = talkEyePos(actor2_sp384);
+        sp1508 = talkEyePos(actor1_sp388);
+        cSGlobe sp4D8 = sp1514 - sp1508;
 
         if (talk->field_0x44 == 0) {
             mStyleSettle.mFinished = true;
-            cSGlobe stack_1330 = stack_1328;
-            stack_1330.R(stack_1328.R() * 0.5f);
-            mViewCache.mCenter = stack_1f0 + stack_1330.Xyz();
-            mViewCache.mCenter.y = stack_1f0.y - 20.0f - talk->field_0x7c * 10.0f;
+            cSGlobe sp4D0 = sp4D8;
+            sp4D0.R(sp4D8.R() * 0.5f);
+            mViewCache.mCenter = sp1508 + sp4D0.Xyz();
+            mViewCache.mCenter.y = sp1508.y - 20.0f - talk->field_0x7c * 10.0f;
+            f32 sp380 = 1.0f - talk->field_0x7c;
             if (talk->field_0x38) {
-                stack_1330.Val(cXyz(-45.0f + talk->field_0x7c * 20.0f, 5.0f, -80.0f - talk->field_0x7c * 40.0f));
+                sp4D0.Val(cXyz(-45.0f + talk->field_0x7c * 20.0f, 5.0f, -80.0f - talk->field_0x7c * 40.0f));
             } else {
-                stack_1330.Val(cXyz(65.0f - talk->field_0x7c * 20.0f, 5.0f, -80.0f - talk->field_0x7c * 40.0f));
+                sp4D0.Val(cXyz(65.0f - talk->field_0x7c * 20.0f, 5.0f, -80.0f - talk->field_0x7c * 40.0f));
             }
-            stack_1330.U(stack_1330.U() + directionOf(listener));
-            stack_1330.V(stack_1330.V() + stack_1328.V());
-            mViewCache.mEye = stack_1e4 + stack_1330.Xyz();
+            sp4D0.U(sp4D0.U() + directionOf(actor2_sp384));
+            sp4D0.V(sp4D0.V() + sp4D8.V());
+            mViewCache.mEye = sp1514 + sp4D0.Xyz();
             mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
-            f32 tmp1 = 25.0f;
-            f32 tmp2 = 40.0f;
-            mViewCache.mFovy = tmp2 + (tmp1 - tmp2) * talk->field_0x7c;
+            f32 sp37C = 25.0f;
+            f32 sp378 = 40.0f;
+            mViewCache.mFovy = sp378 + (sp37C - sp378) * talk->field_0x7c;
         }
         break;
     }
 
     case 33: {
-        cXyz stack_3b8(0.0f, 25.0f, -70.0f);
-        cSGlobe stack_1338 = stack_3b8;
-        stack_1338.U(stack_1338.U() + directionOf(listener));
-        mViewCache.mCenter = attentionPos(listener) + stack_1338.Xyz();
-        mViewCache.mDirection.Val(140.0f, cSAngle(-20.0f), cSAngle(-40.0f) + directionOf(listener));
+        fopAc_ac_c* actor1_sp374 = listener;
+        fopAc_ac_c* actor2_sp370 = speaker;
+
+        cXyz sp1340(0.0f, 25.0f, -70.0f);
+        cSGlobe sp4C8 = sp1340;
+        sp4C8.U(sp4C8.U() + directionOf(actor1_sp374));
+        mViewCache.mCenter = attentionPos(actor1_sp374) + sp4C8.Xyz();
+        mViewCache.mDirection.Val(140.0f, cSAngle(-20.0f), cSAngle(-40.0f) + directionOf(actor1_sp374));
         mStyleSettle.mFinished = true;
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
         mViewCache.mFovy = 58.0f;
         break;
     }
 
-    case 34:
-        mViewCache.mCenter = talkBasePos(listener);
+    case 34: {
+        fopAc_ac_c* actor1_sp36C = listener;
+        fopAc_ac_c* actor2_sp368 = speaker;
+
+        mViewCache.mCenter = talkBasePos(actor1_sp36C);
 
         if (talk->field_0x44 == 0) {
             mViewCache.mDirection.V(cSAngle(20.0f));
             mViewCache.mDirection.R(160.0f);
-            mViewCache.mDirection.U(directionOf(listener).Inv());
+            mViewCache.mDirection.U(directionOf(actor1_sp36C).Inv());
             talk->field_0x1c.y = 95.0f;
             mStyleSettle.mFinished = true;
         }
@@ -5959,47 +6655,62 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
         mViewCache.mFovy = 58.0f;
         break;
+    }
 
     case 35:
     case 36: {
-        stack_1e4 = attentionPos(speaker);
-        stack_1f0 = attentionPos(listener);
-        stack_1fc = talkBasePos(speaker);
-        stack_208 = talkBasePos(listener);
+        fopAc_ac_c* actor1_sp364 = listener;
+        fopAc_ac_c* actor2_sp360 = speaker;
+        int sp35C = talk->field_0x38;
+
+        sp1514 = attentionPos(actor2_sp360);
+        sp1508 = attentionPos(actor1_sp364);
+        sp14FC = talkBasePos(actor2_sp360);
+        sp14F0 = talkBasePos(actor1_sp364);
+        // first condition might not be correct as it's not actually present in assembly
+        if (sp35C && false) {
+            sp14F0 += sp152C;
+        }
 
         if (talk->field_0x44 == 0) {
             mStyleSettle.mFinished = true;
         }
 
-        cXyz stack_3c4(0.0f, 10.0f, -60.0f);
-        cSGlobe stack_1340 = stack_3c4;
-        stack_1340.U(stack_1340.U() + directionOf(listener));
-        talk->field_0x90 = stack_1f0 + stack_1340.Xyz();
-        cSAngle stack_13a0;
+        cXyz sp1334(0.0f, 10.0f, -60.0f);
+        cSGlobe sp4C0 = sp1334;
+        sp4C0.U(sp4C0.U() + directionOf(actor1_sp364));
+        talk->field_0x90 = sp1508 + sp4C0.Xyz();
+        cSAngle sp98;
 
-        if (iVar5 == 36) {
-            stack_13a0.Val(-150.0f);
-            talk->field_0xa8.Val(200.0f, cSAngle::_0, stack_13a0 + directionOf(listener));
+        if (sp430 == 36) {
+            sp98.Val(-150.0f);
+            talk->field_0xa8.Val(200.0f, cSAngle::_0, sp98 + directionOf(actor1_sp364));
         } else {
-            stack_13a0.Val(-35.0f);
-            talk->field_0xa8.Val(160.0f, cSAngle::_0, stack_13a0 + directionOf(listener));
+            sp98.Val(-35.0f);
+            talk->field_0xa8.Val(160.0f, cSAngle::_0, sp98 + directionOf(actor1_sp364));
         }
 
         talk->field_0xb0 = 60.0f;
         talk->field_0x9c = talk->field_0x90 + talk->field_0xa8.Xyz();
 
-        cXyz stack_3d0 = attentionPos(listener);
-        if (lineBGCheck(&stack_3d0, &talk->field_0x9c, talk->field_0x8c)
-            || lineCollisionCheck(stack_3d0, talk->field_0x9c, listener, speaker, NULL))
+        cXyz sp1328 = attentionPos(actor1_sp364);
+        if (lineBGCheck(&sp1328, &talk->field_0x9c, talk->field_0x8c)
+            || lineCollisionCheck(sp1328, talk->field_0x9c, listener, speaker, NULL))
         {
             talk->field_0x90.y -= 20.0f;
-            talk->field_0xa8.Val(180.0f, cSAngle(35.0f), stack_13a0 + directionOf(listener));
+            talk->field_0xa8.Val(180.0f, cSAngle(35.0f), sp98 + directionOf(actor1_sp364));
             talk->field_0x9c = talk->field_0x90 + talk->field_0xa8.Xyz();
 
-            if (lineBGCheck(&stack_3d0, &talk->field_0x9c, talk->field_0x8c)
-                || lineCollisionCheck(stack_3d0, talk->field_0x9c, listener, speaker, NULL))
+            if (lineBGCheck(&sp1328, &talk->field_0x9c, talk->field_0x8c)
+                || lineCollisionCheck(sp1328, talk->field_0x9c, listener, speaker, NULL))
             {
-                iVar5 = 0;
+                sp430 = 0;
+
+#if DEBUG
+                if (mCamSetup.CheckFlag(0x8000)) {
+                    dDbVw_Report(90, 190, "-----");
+                }
+#endif
             } else {
                 mViewCache.mCenter = talk->field_0x90;
                 mViewCache.mEye = talk->field_0x9c;
@@ -6015,16 +6726,18 @@ bool dCamera_c::talktoCamera(s32 param_0) {
         break;
     }
 
-    default:
-        iVar5 = 0;
+    default: {
+        OS_REPORT("camera: WARNING: talk: unknown cut(%d)!\n", sp430);
+        sp430 = 0;
         break;
+    }
     }
 
     if (talk->field_0x84 != 0) {
         mStyleSettle.mFinished = true;
     }
 
-    if (iVar5 == 0) {
+    if (sp430 == 0) {
         if (mStyleSettle.mFinished) {
             mViewCache.mCenter = talk->field_0x4;
             mViewCache.mDirection = talk->field_0x28;
@@ -6032,26 +6745,26 @@ bool dCamera_c::talktoCamera(s32 param_0) {
             mViewCache.mFovy = talk->field_0x58;
         } else {
             talk->field_0x50 = (f32)(talk->field_0x44 + 1) / talk->field_0x48;
-            f32 dVar21 = dCamMath::rationalBezierRatio(talk->field_0x50, 0.28f);
-            mViewCache.mCenter += (talk->field_0x4 - mViewCache.mCenter) * dVar21;
+            f32 sp358 = dCamMath::rationalBezierRatio(talk->field_0x50, 0.28f);
+            mViewCache.mCenter += (talk->field_0x4 - mViewCache.mCenter) * sp358;
             mViewCache.mDirection.R(mViewCache.mDirection.R()
-                                + (talk->field_0x28.R() - mViewCache.mDirection.R()) * dVar21);
+                                + (talk->field_0x28.R() - mViewCache.mDirection.R()) * sp358);
             mViewCache.mDirection.V(mViewCache.mDirection.V()
-                                + (talk->field_0x28.V() - mViewCache.mDirection.V()) * dVar21);
+                                + (talk->field_0x28.V() - mViewCache.mDirection.V()) * sp358);
             mViewCache.mDirection.U(mViewCache.mDirection.U()
-                                + (talk->field_0x28.U() - mViewCache.mDirection.U()) * dVar21);
+                                + (talk->field_0x28.U() - mViewCache.mDirection.U()) * sp358);
             mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
-            mViewCache.mFovy += (talk->field_0x58 - mViewCache.mFovy) * dVar21;
+            mViewCache.mFovy += (talk->field_0x58 - mViewCache.mFovy) * sp358;
             talk->field_0x4c -= talk->field_0x50;
             if (talk->field_0x44 >= talk->field_0x48 - 1) {
                 mStyleSettle.mFinished = true;
             }
-            uVar18 = false;
+            sp5D = false;
         }
     }
 
     talk->field_0x44++;
-    return uVar18;
+    return sp5D;
 }
 
 bool dCamera_c::CalcSubjectAngle(s16* param_0, s16* param_1) {
@@ -6092,12 +6805,12 @@ bool dCamera_c::subjectCamera(s32 param_0) {
 
     SubjectData* subject = (SubjectData*)mWork;
 
-    bool bVar13 = check_owner_action(mPadID, 0x1040) != 0;
-    bool bVar14 = check_owner_action(mPadID, 0x4000) != 0;
-    bool bVar15 = check_owner_action(mPadID, 0x400) != 0;
+    bool sp14 = check_owner_action(mPadID, 0x1040) != 0;
+    bool sp13 = check_owner_action(mPadID, 0x4000) != 0;
+    bool sp12 = check_owner_action(mPadID, 0x400) != 0;
     bool magne_boots_on = player->checkMagneBootsOn() != 0;
-    check_owner_action(mPadID, 0x80080);
-    bool bVar16 = check_owner_action(mPadID, 0x40) != 0;
+    bool sp10 = check_owner_action(mPadID, 0x80080) != 0;
+    bool sp0F = check_owner_action(mPadID, 0x40) != 0;
 
     if (mCurCamStyleTimer == 0) {
         subject->field_0x0 = 'SUBN';
@@ -6115,10 +6828,10 @@ bool dCamera_c::subjectCamera(s32 param_0) {
         subject->field_0x20 = 0.0f;
         subject->field_0x1d = false;
 
-        if (bVar13 || bVar15) {
+        if (sp14 || sp12) {
             subject->field_0x1d = directionOf(mpPlayerActor) - mViewCache.mDirection.U() > cSAngle::_0;
-        } else if (bVar14) {
-            subject->field_0x1d = player->getHookshotLeft();
+        } else if (sp13) {
+            subject->field_0x1d = player->getHookshotLeft() != 0;
         }
     }
 
@@ -6141,27 +6854,28 @@ bool dCamera_c::subjectCamera(s32 param_0) {
         stack_448 = directionOf(mpPlayerActor);
     }
 
-    cXyz stack_1c8, stack_1d4, stack_1e0;
+    cXyz sp2D0, sp1D4, sp2B8;
     s16 bow_angle_x, bow_angle_y;
     cSAngle angle_x = player->getCameraAngleX();
     cSAngle angle_y = player->getCameraAngleY();
     cXyz* bow_pos = player->checkBowCameraArrowPosP(&bow_angle_x, &bow_angle_y);
+    bool sp0E = false;
 
     if (check_owner_action(mPadID, 0x200000) && bow_pos != NULL) {
-        stack_1c8 = *bow_pos;
+        sp2D0 = *bow_pos;
         angle_x.Val(bow_angle_x);
         angle_y.Val(bow_angle_y);
-    } else if (bVar14) {
+    } else if (sp13) {
         if (player->getHookshotLeft()) {
-            stack_1c8 = player->getLeftHandPos();
+            sp2D0 = player->getLeftHandPos();
         } else {
-            stack_1c8 = player->getRightHandPos();
+            sp2D0 = player->getRightHandPos();
         }
     } else if (player->checkIronBallThrowReturnMode()) {
-        stack_1c8 = attentionPos(mpPlayerActor);
+        sp2D0 = attentionPos(mpPlayerActor);
         cXyz* iron_ball_pos = player->getIronBallCenterPos();
-        cSGlobe globe = stack_1c8 - *iron_ball_pos;
-        f32 tmp = cXyz(*iron_ball_pos - stack_1c8).abs();
+        cSGlobe globe = sp2D0 - *iron_ball_pos;
+        f32 tmp = cXyz(*iron_ball_pos - sp2D0).abs();
         if (tmp > 200.0f) {
             angle_x = globe.V();
             angle_y = globe.U().Inv();
@@ -6170,17 +6884,21 @@ bool dCamera_c::subjectCamera(s32 param_0) {
             angle_y = subject->field_0x2a;
         }
         angle_x += cSAngle(5.0f);
-    } else if (bVar15) {
-        stack_1c8 = attentionPos(mpPlayerActor);
+    } else if (sp12) {
+        sp2D0 = attentionPos(mpPlayerActor);
         subject->field_0x28 = angle_x;
         subject->field_0x2a = angle_y;
         angle_x += cSAngle(5.0f);
     } else {
-        stack_1c8 = *player->getSubjectEyePos();
+        sp2D0 = *player->getSubjectEyePos();
     }
 
-    subject->field_0x2e = angle_x;
-    subject->field_0x2c = angle_y;
+    if (!sp0E) {
+        subject->field_0x2e = angle_x;
+        subject->field_0x2c = angle_y;
+    }
+
+    bool sp0D = false;
 
     if (magne_boots_on) {
         cXyz player_pos = positionOf(mpPlayerActor);
@@ -6201,9 +6919,15 @@ bool dCamera_c::subjectCamera(s32 param_0) {
         field_0x738 = val16;
     }
 
-    bool bVar17 = false;
+    bool sp0C = false;
+    bool sp0B = false;
+    bool sp0A;
+    f32 spA4 = 1.0f;
     if (mGear == -1) {
-        bVar17 = true;
+        sp0B = true;
+        sp0C = true;
+    } else {
+        sp0A = false;
     }
 
     if (mCurType == specialType[CAM_TYPE_SCOPE]) {
@@ -6221,41 +6945,41 @@ bool dCamera_c::subjectCamera(s32 param_0) {
         } else {
             mCStickYState = 0;
         }
-    } else if (bVar15 || player->checkIronBallThrowReturnMode()) {
+    } else if (sp12 || player->checkIronBallThrowReturnMode()) {
         val0 = 0.0f;
         val2 = 40.0f;
         val1 = 50.0f;
         val7 = 270.0f;
         val17 = 70.0f;
-    } else if (bVar14 || bVar13) {
+    } else if (sp13 || sp14) {
+        f32 spA0 = mCamSetup.mCStick.SwTHH();
+        f32 sp9C = mPadInfo.mCStick.mLastPosX;
+
         if (mGear == -1) {
-            bVar17 = true;
+            sp0C = true;
         }
 
-        if (bVar17) {
-            val16 = subject->field_0x20;
-            subject->field_0x20 = val16 + (1.0f - val16) * 0.3f;
+        if (sp0C) {
+            subject->field_0x20 += (1.0f - subject->field_0x20) * 0.3f;
         } else {
-            val16 = subject->field_0x20;
-            subject->field_0x20 = val16 + (0.0f - val16) * 0.3f;
+            subject->field_0x20 += (0.0f - subject->field_0x20) * 0.3f;
         }
 
         subject->field_0x20 = 1.0f;
         mCamParam.SetFlag(0x10);
         mCamParam.SetFlag(4);
 
-        if (bVar14) {
-            val20 = player->getHookshotLeft() ? val20 : -val20;
-            val0 += (val20 - val0) * subject->field_0x20;
+        if (sp13) {
+            val0 += ((player->getHookshotLeft() ? val20 : -val20) - val0) * subject->field_0x20;
             val2 += (val19 - val2) * subject->field_0x20;
             val1 += (val21 - val1) * subject->field_0x20;
             val7 += (val10 - val7) * subject->field_0x20;
-        } else if (bVar16) {
+        } else if (sp0F) {
             val0 += (19.0f - val0) * subject->field_0x20;
             val2 += (0.0f - val2) * subject->field_0x20;
             val1 += (val26 - val1) * subject->field_0x20;
             val7 += (val10 - val7) * subject->field_0x20;
-        } else if (bVar13) {
+        } else if (sp14) {
             val0 += (val25 - val0) * subject->field_0x20;
             val2 += (val4 - val2) * subject->field_0x20;
             val1 += (val26 - val1) * subject->field_0x20;
@@ -6282,72 +7006,77 @@ bool dCamera_c::subjectCamera(s32 param_0) {
         setFlag(0x10000000);
     }
 
-    cXyz stack_1f8(val0, val2, val1);
-    stack_1d4 = dCamMath::xyzRotateX(stack_1f8, angle_x);
-    stack_1f8 = dCamMath::xyzRotateY(stack_1d4, angle_y);
-    f32 tmp = bVar15 ? 40.0f : 0.0f;
-    cXyz stack_204(0.0f, tmp, -val7);
-    stack_1d4 = dCamMath::xyzRotateX(stack_204, angle_x);
-    stack_204 = dCamMath::xyzRotateY(stack_1d4, angle_y);
+    cXyz sp1E0(val0, val2, val1);
+    sp1D4 = dCamMath::xyzRotateX(sp1E0, angle_x);
+    sp1E0 = dCamMath::xyzRotateY(sp1D4, angle_y);
+    f32 sp6C = sp12 ? 40.0f : 0.0f;
+    cXyz sp294(0.0f, sp6C, -val7);
+    sp1D4 = dCamMath::xyzRotateX(sp294, angle_x);
+    sp294 = dCamMath::xyzRotateY(sp1D4, angle_y);
 
     if (magne_boots_on) {
-        mDoMtx_multVecSR(mtx, &stack_1f8, &stack_1f8);
-        mDoMtx_multVecSR(mtx, &stack_204, &stack_204);
+        mDoMtx_multVecSR(mtx, &sp1E0, &sp1E0);
+        mDoMtx_multVecSR(mtx, &sp294, &sp294);
     }
 
-    f32 fVar1 = 1.0f;
+    f32 sp94 = 1.0f;
+    f32 sp90 = 1.0f;
     if (player->checkIronBallThrowReturnMode()) {
-        fVar1 = 0.1f;
+        sp94 = sp90 = 0.1f;
     } else if (player->checkHorseRide() || player->checkCanoeRide()) {
-        fVar1 = 1.0f;
+        sp94 = sp90 = 1.0f;
     }
 
-    cXyz stack_210 = stack_1c8 + stack_1f8;
+    cXyz sp288 = sp2D0 + sp1E0;
     dBgS_CamLinChk lin_chk;
     if (mIsWolf == 1) {
-        cXyz stack_21c = positionOf(mpPlayerActor);
-        stack_21c.y = stack_1c8.y;
-        if (lineBGCheck(&stack_21c, &stack_210, &lin_chk, 0x40b7)) {
+        cXyz sp27C = positionOf(mpPlayerActor);
+        sp27C.y = sp2D0.y;
+        if (lineBGCheck(&sp27C, &sp288, &lin_chk, 0x40b7)) {
             cM3dGPla plane;
             dComIfG_Bgsp().GetTriPla(lin_chk, &plane);
-            stack_210 = lin_chk.GetCross();
-            stack_210 += *plane.GetNP() * 5.0f;
+            sp288 = lin_chk.GetCross();
+            sp288 += *plane.GetNP() * 5.0f;
         }
+    } else if (mCurMode == 7) {
+        // empty block
     }
 
-    stack_210 = mViewCache.mCenter + (stack_210 - mViewCache.mCenter) * fVar1;
-    cXyz stack_228 = stack_210 + stack_204;
-    stack_228 = mViewCache.mEye + (stack_228 - mViewCache.mEye) * fVar1;
+    sp288 = mViewCache.mCenter + (sp288 - mViewCache.mCenter) * sp94;
+    cXyz sp270 = sp288 + sp294;
+    sp270 = mViewCache.mEye + (sp270 - mViewCache.mEye) * sp90;
 
     if (magne_boots_on) {
         setFlag(0x10);
-        stack_1e0 = stack_1bc;
+        sp2B8 = stack_1bc;
     } else {
-        stack_1e0 = cXyz::BaseY;
+        sp2B8 = cXyz::BaseY;
     }
 
-    cXyz stack_234 = stack_228 - stack_210;
+#if PLATFORM_GCN
+    cXyz stack_234 = sp270 - sp288;
     cXyz stack_240, stack_24c;
     stack_234.normalize();
-    stack_240 = stack_210 + stack_234 * 40.0f;
-    if (lineBGCheck(&stack_240, &stack_210, &stack_24c, 0x40b7)) {
-        stack_228 = stack_24c + stack_234 * 10.0f;
+    stack_240 = sp288 + stack_234 * 40.0f;
+    if (lineBGCheck(&stack_240, &sp288, &stack_24c, 0x40b7)) {
+        sp270 = stack_24c + stack_234 * 10.0f;
     }
+#endif
 
     if (mStyleSettle.mFinished) {
-        mViewCache.mCenter = stack_210;
-        mViewCache.mEye = stack_228;
+        mViewCache.mCenter = sp288;
+        mViewCache.mEye = sp270;
     } else {
-        cSGlobe stack_43c = stack_228 - stack_210;
+        cSGlobe stack_43c = sp270 - sp288;
         f32 tmp = 1.0f / (subject->field_0x14 - subject->field_0x10);
-        mViewCache.mCenter += (stack_210 - mViewCache.mCenter) * tmp;
+        mViewCache.mCenter += (sp288 - mViewCache.mCenter) * tmp;
         mViewCache.mDirection.R(mViewCache.mDirection.R() + (stack_43c.R() - mViewCache.mDirection.R()) * tmp);
         mViewCache.mDirection.V(mViewCache.mDirection.V() + (stack_43c.V() - mViewCache.mDirection.V()) * tmp);
         mViewCache.mDirection.U(mViewCache.mDirection.U() + (stack_43c.U() - mViewCache.mDirection.U()) * tmp);
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
         mViewCache.mFovy += (val17 - mViewCache.mFovy) * tmp;
-        subject->field_0x3c += (stack_1e0 - subject->field_0x3c) * tmp;
-        stack_1e0 = subject->field_0x3c.norm();
+        subject->field_0x3c += (sp2B8 - subject->field_0x3c) * tmp;
+        sp2B8 = subject->field_0x3c.norm();
 
         if (subject->field_0x10 == subject->field_0x14 - 1) {
             mStyleSettle.mFinished = true;
@@ -6358,7 +7087,7 @@ bool dCamera_c::subjectCamera(s32 param_0) {
             mUpOverride.field_0x0 = mViewCache.mCenter;
             mUpOverride.field_0xc = mViewCache.mEye;
             mUpOverride.field_0x24 = mViewCache.mDirection;
-            mUpOverride.field_0x18 = stack_1e0;
+            mUpOverride.field_0x18 = sp2B8;
         }
 
         return true;
@@ -6368,44 +7097,43 @@ bool dCamera_c::subjectCamera(s32 param_0) {
     mUpOverride.field_0x0 = mViewCache.mCenter;
     mUpOverride.field_0xc = mViewCache.mEye;
     mUpOverride.field_0x24 = mViewCache.mDirection;
-    mUpOverride.field_0x18 = stack_1e0;
+    mUpOverride.field_0x18 = sp2B8;
 
     if (mCamParam.Flag(param_0, 0x400)) {
-        f32 dVar17 = 0.0f;
-        f32 dVar16 = 0.0f;
-        int iVar2 = 0;
+        f32 sp88 = 0.0f;
+        f32 sp84 = 0.0f;
+        int sp80 = 0;
         if (mPadInfo.mCStick.mLastPosY > 0.01f) {
-            dVar17 = dCamMath::rationalBezierRatio(mPadInfo.mCStick.mLastPosY, mCamSetup.CurveWeight());
-            iVar2 = -1;
+            sp88 = dCamMath::rationalBezierRatio(mPadInfo.mCStick.mLastPosY, mCamSetup.CurveWeight());
+            sp80 = -1;
         } else if (mPadInfo.mCStick.mLastPosY < -0.01f) {
-            dVar16 = dCamMath::rationalBezierRatio(-mPadInfo.mCStick.mLastPosY, mCamSetup.CurveWeight());
-            iVar2 = 1;
+            sp84 = dCamMath::rationalBezierRatio(-mPadInfo.mCStick.mLastPosY, mCamSetup.CurveWeight());
+            sp80 = 1;
         }
-        f32 tmp = subject->mZoomRatio + val18 * (dVar17 - dVar16) * 0.1f;
+        f32 sp7C = subject->mZoomRatio + val18 * (sp88 - sp84) * 0.1f;
 
-        if (tmp < 0.0f) {
+        if (sp7C < 0.0f) {
             subject->mZoomRatio = 0.0f;
-        } else if (tmp > 1.0f) {
+        } else if (sp7C > 1.0f) {
             subject->mZoomRatio = 1.0f;
         } else {
-            subject->mZoomRatio = tmp;
-            if (iVar2 == -1) {
+            subject->mZoomRatio = sp7C;
+            if (sp80 == -1) {
                 mDoAud_seStartLevel(Z2SE_AL_HAWK_EYE_ZOOMIN, NULL, 0, 0);
-            } else if (iVar2 == 1) {
+            } else if (sp80 == 1) {
                 mDoAud_seStartLevel(Z2SE_AL_HAWK_EYE_ZOOMOUT, NULL, 0, 0);
             }
         }
 
         if (subject->mZoomRatio == 0.0f || subject->mZoomRatio == 0.5f || subject->mZoomRatio == 1.0f) {
-            dVar17 = 0.0f;
-            dVar16 = 0.0f;
+            sp84 = sp88 = 0.0f;
         }
 
         f32 tmp2 = subject->mZoomRatio * 8.0f + 1.0f;
         f32 zoom_fovy = dCamMath::zoomFovy(val17 * 0.5f, tmp2) * 2.0f;
         mViewCache.mFovy += (zoom_fovy - mViewCache.mFovy) * val22;
         setComZoomScale(tmp2);
-        setComZoomForcus(1.0f - fabsf(dVar17 - dVar16) * -511.0f);
+        setComZoomForcus(1.0f - std::fabsf(sp88 - sp84) * -511.0f);
         if (check_owner_action(mPadID, 0x200000)) {
             setComStat(8);
         }
@@ -6433,22 +7161,23 @@ bool dCamera_c::magneCamera(s32 param_0) {
     f32 val17 = mCamParam.Val(param_0, 17);
     f32 val18 = mCamParam.Val(param_0, 18);
     f32 val21 = mCamParam.Val(param_0, 21);
-    daAlink_c* player = (daAlink_c*)mpPlayerActor;
 
     MagneData* magne = (MagneData*)mWork;
+    daAlink_c* player = (daAlink_c*)mpPlayerActor;
 
     mStyleSettle.mFinished = mCurCamStyleTimer != 0;
 
-    cSAngle stack_234;
+    bool sp08 = false;
+    cSAngle sp54;
     MtxP mtx, inv_mtx;
     if (player->checkMagneBootsOn()) {
         mtx = player->getMagneBootsMtx();
         inv_mtx = player->getMagneBootsInvMtx();
-        stack_234 = player->getMagneBootsModelShapeAngle();
+        sp54 = player->getMagneBootsModelShapeAngle();
     } else {
         mtx = mDoMtx_getIdentity();
         inv_mtx = mDoMtx_getIdentity();
-        stack_234 = directionOf(mpPlayerActor);
+        sp54 = directionOf(mpPlayerActor);
     }
 
     cXyz player_pos = positionOf(mpPlayerActor);
@@ -6464,19 +7193,20 @@ bool dCamera_c::magneCamera(s32 param_0) {
         magne->field_0x1c.Val(magne->field_0x10 - magne->field_0x4);
     }
 
-    f32 fVar1 = (magne->field_0x1c.R() - val8) / (val7 - val8);
-    if (fVar1 > 1.0f) {
-        fVar1 = 1.0f;
-    } else if (fVar1 < 0.0f) {
-        fVar1 = 0.0f;
+    f32 var_f31 = (magne->field_0x1c.R() - val8) / (val7 - val8);
+    if (var_f31 > 1.0f) {
+        var_f31 = 1.0f;
+    } else if (var_f31 < 0.0f) {
+        var_f31 = 0.0f;
     }
 
-    cXyz stack_12c(val0, val3 + (val2 - val3) * fVar1, val1);
-    stack_12c = dCamMath::xyzRotateY(stack_12c, stack_234);
-    cXyz stack_138 = attentionPos(mpPlayerActor) - player_pos;
-    mDoMtx_multVecSR(inv_mtx, &stack_138, &stack_138);
-    stack_138 += player_pos;
-    magne->field_0x4 += ((stack_138 + stack_12c) - magne->field_0x4) * val5;
+    f32 sp74 = val3 + (val2 - val3) * var_f31;
+    cXyz sp18C(val0, sp74, val1);
+    sp18C = dCamMath::xyzRotateY(sp18C, sp54);
+    cXyz sp180 = attentionPos(mpPlayerActor) - player_pos;
+    mDoMtx_multVecSR(inv_mtx, &sp180, &sp180);
+    sp180 += player_pos;
+    magne->field_0x4 += ((sp180 + sp18C) - magne->field_0x4) * val5;
     cSGlobe stack_230 = magne->field_0x10 - magne->field_0x4;
 
     f32 fVar2 = stack_230.R();
@@ -6493,19 +7223,18 @@ bool dCamera_c::magneCamera(s32 param_0) {
 
     cSAngle stack_238;
     if (mCurMode == 1) {
-        stack_238 = stack_234.Inv();
-    } else if (fabsf(cstick_x) > 0.05f) {
-        f32 tmp = dCamMath::rationalBezierRatio(cstick_x, 0.5f) * 10.0f;
-        stack_238 = magne->field_0x1c.U() + cSAngle(tmp);
+        stack_238 = sp54.Inv();
+    } else if (std::fabsf(cstick_x) > 0.05f) {
+        stack_238 = magne->field_0x1c.U() + cSAngle(dCamMath::rationalBezierRatio(cstick_x, 0.5f) * 10.0f);
     } else {
-        cSAngle stack_23c = stack_234.Inv() - stack_230.U();
+        cSAngle stack_23c = sp54.Inv() - stack_230.U();
         f32 sin = stack_23c.Sin();
-        f32 tmp = fabsf(sin * mPadInfo.mMainStick.mLastValue);
+        f32 tmp = std::fabsf(sin * mPadInfo.mMainStick.mLastValue);
         f32 tmp2 = stack_23c.Cos() > 0.0f ? 8.0f : 4.0f;
         stack_238 = stack_230.U() + cSAngle(sin * tmp2 * dCamMath::rationalBezierRatio(tmp, 1.0f));
     }
 
-    cSAngle stack_240 = val13 + (val12 - val13) * fVar1;
+    cSAngle stack_240 = val13 + (val12 - val13) * var_f31;
     magne->field_0x1c.Val(fVar2, stack_240, stack_238);
     magne->field_0x10 = magne->field_0x4 + magne->field_0x1c.Xyz();
     cXyz stack_144 = magne->field_0x4 - player_pos;
@@ -6523,7 +7252,8 @@ bool dCamera_c::magneCamera(s32 param_0) {
     mViewCache.mDirection.U(mViewCache.mDirection.U()
                     + (stack_230.U() - mViewCache.mDirection.U()) * val24 * stack_230.V().Cos());
     mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
-    mViewCache.mFovy += ((val18 + (val17 - val18) * fVar1) - mViewCache.mFovy) * val21;
+    f32 sp5C = val18 + (val17 - val18) * var_f31;
+    mViewCache.mFovy += (sp5C - mViewCache.mFovy) * val21;
     return true;
 }
 
@@ -6560,9 +7290,9 @@ bool dCamera_c::colosseumCamera(s32 param_0) {
         colosseum->field_0x14 = 0.0f;
         colosseum->field_0x18 = 40;
         if (mRoomMapTool.mCameraIndex != 0xff && mCamParam.Flag(param_0, 0x200)) {
-            colosseum->field_0x8.x = mRoomMapTool.mArrowData.position.x;
-            colosseum->field_0x8.y = mRoomMapTool.mArrowData.position.y;
-            colosseum->field_0x8.z = mRoomMapTool.mArrowData.position.z;
+            colosseum->field_0x8.x = mRoomMapTool.mArrowData.posX;
+            colosseum->field_0x8.y = mRoomMapTool.mArrowData.posY;
+            colosseum->field_0x8.z = mRoomMapTool.mArrowData.posZ;
         } else if (mCamParam.Flag(param_0, 0x2000)) {
             fopAc_ac_c* target = getParamTargetActor(mCurType);
             colosseum->field_0x8.x = positionOf(target).x;
@@ -6589,29 +7319,34 @@ bool dCamera_c::colosseumCamera(s32 param_0) {
     stack_100 += attentionPos(mpPlayerActor);
     cSGlobe stack_1bc = stack_100 - stack_e8;
 
-    f32 tmp;
+    f32 var_f31;
     if (stack_1bc.R() < val10) {
-        tmp = 0.0f;
+        var_f31 = 0.0f;
         stack_1bc.R(val10);
     } else if (stack_1bc.R() > val11) {
-        tmp = 1.0f;
+        var_f31 = 1.0f;
         stack_1bc.R(val11);
     } else {
-        tmp = (stack_1bc.R() - val10) / (val11 - val10);
-        stack_1bc.R(val10 + (val11 - val10) * tmp);
+        var_f31 = (stack_1bc.R() - val10) / (val11 - val10);
+        stack_1bc.R(val10 + (val11 - val10) * var_f31);
     }
 
     static f32 Dsp[5] = {0.0f, 0.0f, 0.25f, 1.0f, 1.0f};
-    f32 dVar7 = mEventData.field_0xf0.Spot(Dsp, tmp);
+    f32 sp3C = mEventData.field_0xf0.Spot(Dsp, var_f31);
+
+#if DEBUG
+    dDbVw_Report(180, 320, "D %6.3f (%6.3f)", sp3C, var_f31);
+#endif
+    var_f31 = sp3C;
 
     cXyz stack_10c;
     stack_10c = stack_e8 + stack_1bc.Xyz();
     if (!mCamParam.Flag(param_0, 0x800)) {
         stack_10c.y = 0.0f;
     }
-    stack_10c.y += val3 + (val2 - val3) * dVar7;
-    f32 fVar8 = val8 + (val7 - val8) * dVar7;
-    cSAngle stack_1c0 = val13 + (val12 - val13) * dVar7;
+    stack_10c.y += val3 + (val2 - val3) * var_f31;
+    f32 fVar8 = val8 + (val7 - val8) * var_f31;
+    cSAngle stack_1c0 = val13 + (val12 - val13) * var_f31;
     if (mCamParam.Flag(param_0, 0x1000)) {
         stack_1c0 += stack_1bc.V();
     }
@@ -6631,7 +7366,7 @@ bool dCamera_c::colosseumCamera(s32 param_0) {
     }
 
     mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
-    f32 fVar9 = val18 + (val17 - val18) * dVar7;
+    f32 fVar9 = val18 + (val17 - val18) * var_f31;
     mViewCache.mFovy += (fVar9 - mViewCache.mFovy) * colosseum->field_0x14;
     return true;
 }
@@ -6646,9 +7381,11 @@ bool dCamera_c::test2Camera(s32 param_0) {
 
 bool dCamera_c::towerCamera(s32 param_0) {
     cSAngle stack_444 = cSAngle(mCamSetup.ChargeLatitude());
+    f32 sp224 = mCamSetup.ChargeBRatio();
     cSAngle stack_448 = 80.0f;
     cSAngle stack_44c = -60.0f;
     cSAngle stack_450 = 60.0f;
+    f32 sp220 = 8.0f;
     f32 unkFloatConst1 = 0.9f;
     f32 val0 = mCamParam.Val(param_0, 0);
     f32 val2 = mCamParam.Val(param_0, 2);
@@ -6677,8 +7414,6 @@ bool dCamera_c::towerCamera(s32 param_0) {
     f32 val14 = mCamParam.Val(param_0, 14);
     f32 val19 = mCamParam.Val(param_0, 19);
 
-    TowerData* tower = (TowerData*)mWork;
-
     if (mGear == 1) {
         val7 = val9;
         val8 = val9 * 0.9f;
@@ -6687,14 +7422,16 @@ bool dCamera_c::towerCamera(s32 param_0) {
         val17 = val18 = val19;
     }
 
+    TowerData* tower = (TowerData*)mWork;
+
     daAlink_c* player = (daAlink_c*)mpPlayerActor;
-    dComIfGp_getAttention();
+    dAttention_c* sp1B4 = dComIfGp_getAttention();
 
     if (mCurCamStyleTimer == 0) {
-        tower->field_0x54.x = mRoomMapTool.mArrowData.position.x;
-        tower->field_0x54.y = mRoomMapTool.mArrowData.position.y;
-        tower->field_0x54.z = mRoomMapTool.mArrowData.position.z;
-        tower->field_0x60 = mRoomMapTool.mArrowData.angle.y;
+        tower->field_0x54.x = mRoomMapTool.mArrowData.posX;
+        tower->field_0x54.y = mRoomMapTool.mArrowData.posY;
+        tower->field_0x54.z = mRoomMapTool.mArrowData.posZ;
+        tower->field_0x60 = mRoomMapTool.mArrowData.angleY;
         tower->field_0x64 = stack_454 <= cSAngle::_90 ? 1 : 0;
     }
 
@@ -6717,9 +7454,9 @@ bool dCamera_c::towerCamera(s32 param_0) {
     }
 
     cSGlobe stack_41c = attentionPos(mpPlayerActor) - tower->field_0x54;
-    cSAngle stack_45c = directionOf(mpPlayerActor);
+    cSAngle sp11C = directionOf(mpPlayerActor);
     bool uVar2 = stack_41c.U() - mViewCache.mDirection.U() > cSAngle::_0;
-    bool uVar1 = stack_41c.U() - stack_45c > cSAngle::_0;
+    bool uVar1 = stack_41c.U() - sp11C > cSAngle::_0;
 
     if (mCurCamStyleTimer == 0) {
         tower->field_0x0 = 'TOWR';
@@ -6806,12 +7543,12 @@ bool dCamera_c::towerCamera(s32 param_0) {
             tower->field_0x4 = 1;
         } else {
             cXyz stack_21c = relationalPos(mpPlayerActor, &stack_210);
-            f32 fVar19 = cXyz(mEye - stack_21c).abs() - val7;
-            f32 fVar18 = cXyz(mCenter - stack_21c).abs() - val7;
-            f32 fVar17 = fabsf(fVar19 > fVar18 ? fVar19 : fVar18);
-            f32 player_height = heightOf(mpPlayerActor);
-            f32 tmp = fVar17 / (player_height < 10.0f ? 10.0f : player_height);
-            tower->field_0x4 = (int)(JMAFastSqrt(tmp) * 8.0f) + 1;
+            f32 sp1A8 = cXyz(mEye - stack_21c).abs() - val7;
+            f32 sp1A4 = cXyz(mCenter - stack_21c).abs() - val7;
+            f32 sp1A0 = std::fabsf(sp1A8 > sp1A4 ? sp1A8 : sp1A4);
+            sp1A8 = heightOf(mpPlayerActor);
+            sp1A0 /= (sp1A8 < 10.0f ? 10.0f : sp1A8);
+            tower->field_0x4 = (int)(JMAFastSqrt(sp1A0) * sp220) + 1;
         }
 
         tower->field_0x8 = tower->field_0x4 * (tower->field_0x4 + 1) >> 1;
@@ -6836,7 +7573,7 @@ bool dCamera_c::towerCamera(s32 param_0) {
         stack_228 = attentionPos(mpPlayerActor) + stack_424.Xyz();
     }
 
-    cXyz stack_234;
+    cXyz sp40C;
 
     if (!mStyleSettle.mFinished) {
         if (mBG.field_0xc0.field_0x1) {
@@ -6845,35 +7582,35 @@ bool dCamera_c::towerCamera(s32 param_0) {
         }
 
         tower->field_0xc = tower->field_0x4 - (int)mCurCamStyleTimer;
-        f32 fVar18;
+        f32 sp19C;
         f32 ratio = tower->field_0xc / tower->field_0x8;
         tower->field_0x48 += (stack_228 - tower->field_0x48) * ratio;
         mViewCache.mCenter += (tower->field_0x48 - mViewCache.mCenter) * val6;
 
-        stack_234 = attentionPos(mpPlayerActor);
-        stack_234.y -= 15.0f;
+        sp40C = attentionPos(mpPlayerActor);
+        sp40C.y -= 15.0f;
         dBgS_CamLinChk lin_chk;
-        if (lineBGCheck(&stack_234, &mViewCache.mCenter, &lin_chk, 0x40b7)) {
+        if (lineBGCheck(&sp40C, &mViewCache.mCenter, &lin_chk, 0x40b7)) {
             cM3dGPla plane;
             dComIfG_Bgsp().GetTriPla(lin_chk, &plane);
             mViewCache.mCenter = lin_chk.GetCross();
             mViewCache.mCenter += *plane.GetNP();
         }
 
-        fVar18 = limitf(mViewCache.mDirection.R(), val8, val7);
-        cSAngle stack_468;
-        stack_468 = mViewCache.mDirection.V();
+        sp19C = limitf(mViewCache.mDirection.R(), val8, val7);
+        cSAngle sp110;
+        sp110 = mViewCache.mDirection.V();
         if (bVar5) {
-            stack_468 = cSAngle(val12);
+            sp110 = cSAngle(val12);
         }
-        if (stack_468 < stack_44c) {
-            stack_468 = stack_44c;
+        if (sp110 < stack_44c) {
+            sp110 = stack_44c;
         }
-        if (stack_468 > stack_450) {
-            stack_468 = stack_450;
+        if (sp110 > stack_450) {
+            sp110 = stack_450;
         }
 
-        cSGlobe stack_42c(fVar18, stack_468, cSAngle(mControlledYaw.Inv()));
+        cSGlobe stack_42c(sp19C, sp110, cSAngle(mControlledYaw.Inv()));
         mViewCache.mDirection.R(mViewCache.mDirection.R()
                                 + (stack_42c.R() - mViewCache.mDirection.R()) * ratio);
         mViewCache.mDirection.V(mViewCache.mDirection.V()
@@ -6891,9 +7628,9 @@ bool dCamera_c::towerCamera(s32 param_0) {
         return true;
     }
 
-    cXyz stack_240 = positionOf(mpPlayerActor);
-    stack_240.y += 10.0f;
-    f32 heightOffGround = footHeightOf(mpPlayerActor) - groundHeight(&stack_240);
+    cXyz sp408 = positionOf(mpPlayerActor);
+    sp408.y += 10.0f;
+    f32 heightOffGround = footHeightOf(mpPlayerActor) - groundHeight(&sp408);
     if (mBG.field_0xc0.field_0x44) {
         tower->field_0x18 = 0.0f;
         tower->field_0x10 = 0;
@@ -6903,12 +7640,12 @@ bool dCamera_c::towerCamera(s32 param_0) {
                             * dCamMath::rationalBezierRatio(tower->field_0x10 / 80.0f, 1.25f);
     }
 
-    cSAngle stack_46c = stack_45c - mViewCache.mDirection.U();
-    cXyz stack_24c(tower->field_0x80, tower->field_0x84, tower->field_0x80);
-    mViewCache.mCenter += (stack_228 - mViewCache.mCenter) * stack_24c;
-    stack_234 = attentionPos(mpPlayerActor);
-    stack_234.y -= 15.0f;
-    cSGlobe stack_434 = mViewCache.mEye - mViewCache.mCenter;
+    cSAngle sp10C = sp11C - mViewCache.mDirection.U();
+    cXyz sp3F4(tower->field_0x80, tower->field_0x84, tower->field_0x80);
+    mViewCache.mCenter += (stack_228 - mViewCache.mCenter) * sp3F4;
+    sp40C = attentionPos(mpPlayerActor);
+    sp40C.y -= 15.0f;
+    cSGlobe sp238 = mViewCache.mEye - mViewCache.mCenter;
 
     f32 fVar18 = 1.0f;
     if (val7 > val8) {
@@ -6923,20 +7660,20 @@ bool dCamera_c::towerCamera(s32 param_0) {
 
     bool spinner_path_move_temp = player->checkSpinnerPathMove();
     bool spinner_path_move = spinner_path_move_temp;
-    val6 = mPadInfo.mCStick.mLastPosX;
-    val3 = spinner_path_move ? 1.0f : mPadInfo.mMainStick.mLastValue;
-    f32 unkFloatConst2 = 0.05f;
-    f32 unkFloatConst3 = 8.0f;
-    cSAngle stack_470;
-    cSAngle stack_474 = stack_454 + (stack_454 - stack_458) * val3;
+    f32 sp18C = mPadInfo.mCStick.mLastPosX;
+    f32 sp188 = spinner_path_move ? 1.0f : mPadInfo.mMainStick.mLastValue;
+    f32 sp184 = 0.05f;
+    f32 sp180 = 8.0f;
+    cSAngle sp108;
+    cSAngle sp104 = stack_454 + (stack_454 - stack_458) * sp188;
 
-    if (!mCamParam.Flag(param_0, 0x40) && fabsf(val6) > unkFloatConst2) {
-        cSAngle stack_478 = mViewCache.mDirection.U() + cSAngle(dCamMath::rationalBezierRatio(val6, 0.5f) * unkFloatConst3);
-        f32 tmp2 = fabsf(val6) - unkFloatConst2;
-        stack_470.Val(mViewCache.mDirection.U() + (stack_478 - mViewCache.mDirection.U()) * tmp2);
+    if (!mCamParam.Flag(param_0, 0x40) && std::fabsf(sp18C) > sp184) {
+        cSAngle sp100 = mViewCache.mDirection.U() + cSAngle(dCamMath::rationalBezierRatio(sp18C, 0.5f) * sp180);
+        f32 sp17C = std::fabsf(sp18C) - sp184;
+        sp108.Val(mViewCache.mDirection.U() + (sp100 - mViewCache.mDirection.U()) * sp17C);
         tower->field_0x6a = true;
         tower->field_0x78 += (0.8f - tower->field_0x78) * 0.05f;
-        tower->field_0x28 = stack_470;
+        tower->field_0x28 = sp108;
 
     } else {
         if (tower->field_0x6a) {
@@ -6965,33 +7702,33 @@ bool dCamera_c::towerCamera(s32 param_0) {
             tower->field_0x78 += (0.5f - tower->field_0x78) * 0.05f;
 
             if (tower->field_0x64 == 0) {
-                cSAngle stack_480 = cSAngle::_180 - stack_474;
+                cSAngle stack_480 = cSAngle::_180 - sp104;
                 tower->field_0x28 = stack_41c.U().Inv() - stack_480 * tower->field_0x44;
             } else {
-                cSAngle stack_484 = stack_474;
+                cSAngle stack_484 = sp104;
                 tower->field_0x28 = stack_41c.U() - stack_484 * tower->field_0x44;
             }
 
         } else if (mCamParam.Flag(param_0, 0x100)) {
             if (!uVar2) {
-                cSAngle stack_488 = stack_434.U() - stack_41c.U();
+                cSAngle stack_488 = sp238.U() - stack_41c.U();
                 f32 tmp = dCamMath::rationalBezierRatio(fVar18, val20);
-                if (stack_488 > stack_474) {
+                if (stack_488 > sp104) {
                     tmp = 1.0f;
                 }
-                stack_470.Val(stack_434.U() + ((stack_41c.U() + stack_474) - stack_434.U()) * tmp);
+                sp108.Val(sp238.U() + ((stack_41c.U() + sp104) - sp238.U()) * tmp);
             } else {
-                cSAngle stack_48c = stack_41c.U() - stack_434.U();
+                cSAngle stack_48c = stack_41c.U() - sp238.U();
                 f32 tmp = dCamMath::rationalBezierRatio(fVar18, val20);
-                if (stack_48c > stack_474) {
+                if (stack_48c > sp104) {
                     tmp = 1.0f;
                 }
-                stack_470.Val(stack_434.U() + ((stack_41c.U() - stack_474) - stack_434.U()) * tmp);
+                sp108.Val(sp238.U() + ((stack_41c.U() - sp104) - sp238.U()) * tmp);
             }
 
-            tower->field_0x28 += (stack_470 - tower->field_0x28) * 0.33f;
+            tower->field_0x28 += (sp108 - tower->field_0x28) * 0.33f;
 
-            f32 var_f15 = val3;
+            f32 var_f15 = sp188;
             if (check_owner_action(mPadID, 0x2000108)) {
                 var_f15 = 0.0f;
             }
@@ -6999,18 +7736,21 @@ bool dCamera_c::towerCamera(s32 param_0) {
 
         } else {
             if (uVar1) {
-                stack_470.Val(stack_434.U() + ((stack_41c.U() + stack_474) - stack_434.U()) * 1.0f);
+                f32 sp168 = 1.0f;
+                sp108.Val(sp238.U() + ((stack_41c.U() + sp104) - sp238.U()) * sp168);
             } else {
-                f32 oneF = 1.0f;
-                stack_470.Val(stack_434.U() + ((stack_41c.U() - stack_474) - stack_434.U()) * oneF);
+                f32 sp164 = 1.0f;
+                sp108.Val(sp238.U() + ((stack_41c.U() - sp104) - sp238.U()) * sp164);
             }
 
-            tower->field_0x28 += (stack_470 - tower->field_0x28) * 0.33f;
+            tower->field_0x28 += (sp108 - tower->field_0x28) * 0.33f;
+            f32 sp160 = sp188;
 
             if (check_owner_action(mPadID, 0x2000108) || tower->field_0x69 != uVar1) {
                 tower->field_0x78 = 0.0f;
             } else {
-                tower->field_0x78 += ((val27 + val22 * val3) - tower->field_0x78) * 0.05f;
+                f32 sp15C = val27 + val22 * sp160;
+                tower->field_0x78 += (sp15C - tower->field_0x78) * 0.05f;
             }
         }
     }
@@ -7030,7 +7770,7 @@ bool dCamera_c::towerCamera(s32 param_0) {
         stack_490.Val(tower->field_0x24 + mForwardTiltOffset.Degree());
         tower->field_0x74 += (val16 - tower->field_0x74) * 0.01f;
     } else {
-        stack_490 = stack_434.V();
+        stack_490 = sp238.V();
         tower->field_0x24 = stack_490.Degree();
         tower->field_0x74 = dCamMath::rationalBezierRatio(tower->field_0x18, 0.7f);
     }
@@ -7043,7 +7783,7 @@ bool dCamera_c::towerCamera(s32 param_0) {
 
     mViewCache.mDirection.V(mViewCache.mDirection.V()
                                 + (stack_490 - mViewCache.mDirection.V()) * tower->field_0x74);
-    f32 dVar20 = stack_434.R();
+    f32 dVar20 = sp238.R();
     tower->field_0x1c += (val8 - tower->field_0x1c) * val11;
     tower->field_0x20 += (val7 - tower->field_0x20) * val11;
 
@@ -7094,8 +7834,6 @@ bool dCamera_c::hookshotCamera(s32 param_0) {
     f32 val23 = mCamParam.Val(param_0, 23);
     f32 val17 = mCamParam.Val(param_0, 17);
 
-    HookshotData* hookshot = (HookshotData*)mWork;
-
     cXyz stack_9c[4] = {
         cXyz(180.0f, 20.0f, -160.0f),
         cXyz(160.0f, 60.0f, -200.0f),
@@ -7108,6 +7846,10 @@ bool dCamera_c::hookshotCamera(s32 param_0) {
         cXyz(80.0f, -50.0f, 200.0f),
         cXyz(40.0f, -80.0f, -160.0f),
     };
+
+    int var_r23 = 8;
+    HookshotData* hookshot = (HookshotData*)mWork;
+
     cXyz stack_d8;
     cXyz stack_e4(val0, val2, val1);
 
@@ -7159,7 +7901,7 @@ bool dCamera_c::hookshotCamera(s32 param_0) {
     }
 
     f32 fovy;
-    if (hookshot->field_0x20 && mCurCamStyleTimer > 8 && mCamParam.Flag(param_0, 0x800)) {
+    if (hookshot->field_0x20 && mCurCamStyleTimer > var_r23 && mCamParam.Flag(param_0, 0x800)) {
         stack_d8 = hookshot->field_0x14;
         fovy = val17;
         val23 = 1.0f;
@@ -7204,7 +7946,7 @@ bool dCamera_c::railCamera(s32 param_0) {
     f32 searchRadius = mCamParam.Val(param_0, 11);
     f32 influenceDistMax = mCamParam.Val(param_0, 9);
 #if DEBUG
-    influenceDistMax = mCamParam.Val(param_0, 12);
+    f32 val12 = mCamParam.Val(param_0, 12);
 #endif
     f32 val27 = mCamParam.Val(param_0, 27);
     f32 fovFar = mCamParam.Val(param_0, 17);
@@ -7236,7 +7978,8 @@ bool dCamera_c::railCamera(s32 param_0) {
         return false;
     }
 
-    dPath* roomPath = dPath_GetRoomPath(mRoomMapTool.mPathId, fopAcM_GetRoomNo(this->mpPlayerActor));
+    s8 roomNo = fopAcM_GetRoomNo(this->mpPlayerActor);
+    dPath* roomPath = dPath_GetRoomPath(mRoomMapTool.mPathId, roomNo);
     if (roomPath == NULL) {
         OS_REPORT("camera: rail data not found!\n");
         return false;
@@ -7248,6 +7991,7 @@ bool dCamera_c::railCamera(s32 param_0) {
     }
 
     s32 roomPathLen = roomPath->m_num;
+    f32 bestHorDist = 0.0f;
     if (mCurCamStyleTimer == 0) {
         rail->field_0x00 = 'RAIL';
         mStyleSettle.mFinished = true;
@@ -7255,7 +7999,7 @@ bool dCamera_c::railCamera(s32 param_0) {
         rail->field_0x14 = attentionPos(this->mpPlayerActor);
         if (mCamParam.Flag(param_0, 0x800)) {
             rail->field_0x08 = getParamTargetActor(mCurType);
-            if (rail->field_0x00 == NULL) {
+            if (rail->field_0x08 == NULL) {
                 OS_REPORT("camera: target %s actor not found!\n", &mCamTypeData[mCurType].name[16]);
             }
         }
@@ -7264,9 +8008,9 @@ bool dCamera_c::railCamera(s32 param_0) {
 
     if (rail->field_0x0d != mRoomMapTool.mPathId) {
         rail->field_0x0d = mRoomMapTool.mPathId;
-        rail->field_0x20.x = mRoomMapTool.mArrowData.position.x;
-        rail->field_0x20.y = mRoomMapTool.mArrowData.position.y;
-        rail->field_0x20.z = mRoomMapTool.mArrowData.position.z;
+        rail->field_0x20.x = mRoomMapTool.mArrowData.posX;
+        rail->field_0x20.y = mRoomMapTool.mArrowData.posY;
+        rail->field_0x20.z = mRoomMapTool.mArrowData.posZ;
         if (mCamParam.Flag(param_0, 0x800)) {
             cXyz attnPos = attentionPos(mpPlayerActor);
             cXyz curPointPos = roomPath->m_points->m_position;
@@ -7367,12 +8111,12 @@ bool dCamera_c::railCamera(s32 param_0) {
 
     mViewCache.mCenter += (desiredCenter - mViewCache.mCenter) * centerLerpGainVec;
 
-    f32 proximityEase = dCamMath::rationalBezierRatio(proximityRatio, proximityEaseBias);
+    proximityRatio = dCamMath::rationalBezierRatio(proximityRatio, proximityEaseBias);
 
     cM3dGSph searchSphere;
     searchSphere.Set(mViewCache.mCenter, searchRadius);
 
-    f32 bestHorDist = 0.0f;
+    bestHorDist = 0.0f;
     cXyz bestEyePos = mViewCache.mEye;
     s32 intersectCount = 0;
     if (mCamParam.Flag(param_0, 0x800)) {
@@ -7384,12 +8128,12 @@ bool dCamera_c::railCamera(s32 param_0) {
     cXyz crossPosB;
     cM3dGLin segLine;
 
+    f32 horDist;
     for (i = 0; i < roomPathLen - 1; i++) {
         segStart.set(roomPath->m_points[i].m_position);
         segEnd.set(roomPath->m_points[i + 1].m_position);
         segLine.set(segStart, segEnd);
 
-        f32 horDist;
         switch (cM3d_Cross_LinSph_CrossPos(searchSphere, segLine, &crossPosA, &crossPosB)) {
         case 2:
             if (posInLine2D(&segStart, &segEnd, &crossPosB) != 0) {
@@ -7418,7 +8162,6 @@ bool dCamera_c::railCamera(s32 param_0) {
         segEnd.set(roomPath->m_points->m_position);
         segLine.set(segStart, segEnd);
 
-        f32 horDist;
         switch (cM3d_Cross_LinSph_CrossPos(searchSphere, segLine, &crossPosA, &crossPosB)) {
         case 2:
             if (posInLine2D(&segStart, &segEnd, &crossPosB) != 0) {
@@ -7444,6 +8187,10 @@ bool dCamera_c::railCamera(s32 param_0) {
         roomPathLen++;
     }
 
+    if (intersectCount == 0) {
+        // empty block
+    }
+
     cSGlobe eyeFromCenter = bestEyePos - mViewCache.mCenter;
     cSAngle unkAngle1 = eyeFromCenter.U() - mViewCache.mDirection.U();
 
@@ -7456,7 +8203,7 @@ bool dCamera_c::railCamera(s32 param_0) {
     if (mCamParam.Flag(param_0, 0x1000)) {
         desiredRadius = eyeFromCenter.R();
     } else {
-        desiredRadius = targetRadiusFar - proximityEase * (targetRadiusFar - targetRadiusNear);
+        desiredRadius = targetRadiusFar - proximityRatio * (targetRadiusFar - targetRadiusNear);
     }
 
     mViewCache.mDirection.R(mViewCache.mDirection.R() +
@@ -7467,7 +8214,8 @@ bool dCamera_c::railCamera(s32 param_0) {
                  (eyeFromCenter.V() - mViewCache.mDirection.V()) * rail->field_0x10);
 
     mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
-    mViewCache.mFovy += responseGain * (fovFar - proximityEase * (fovFar - fovNear) - mViewCache.mFovy);
+    f32 sp28 = fovFar - proximityRatio * (fovFar - fovNear);
+    mViewCache.mFovy += responseGain * (sp28 - mViewCache.mFovy);
 
     return true;
 }
@@ -8250,7 +8998,7 @@ bool dCamera_c::rideCamera(s32 param_0) {
         case 5:
             sp1E4 = 8;
             var_f31 = 1.0f / (f32)(s32)(sp1E4 - mCurCamStyleTimer);
-            mViewCache.mCenter += mMonitor.field_0x14;
+            mViewCache.mCenter += mMonitor.field_0x14.field_0x0;
             mViewCache.mCenter += (wk->field_0x3c - mViewCache.mCenter) * var_f31;
             sp128 = sp260.V();
             if (wk->field_0x9c != NULL && mCamParam.Flag(param_0, 0x100) && mGear != 1) {
@@ -8382,7 +9130,7 @@ bool dCamera_c::rideCamera(s32 param_0) {
         }
     }
 
-    if (wk->field_0x98 != 0 && wk->field_0x91 != 0 && mMonitor.field_0x14.y < -1.0f) {
+    if (wk->field_0x98 != 0 && wk->field_0x91 != 0 && mMonitor.field_0x14.field_0x0.y < -1.0f) {
         sp15C = 0.9f;
     } else {
         if (wk->field_0x91 != 0) {
@@ -8426,12 +9174,265 @@ bool dCamera_c::rideCamera(s32 param_0) {
 }
 
 bool dCamera_c::manualCamera(s32 param_0) {
+#if DEBUG
+    f32 val0 = mCamParam.Val(param_0, 0);
+    f32 val1 = mCamParam.Val(param_0, 1);
+    f32 val6 = mCamParam.Val(param_0, 6);
+    f32 val5 = mCamParam.Val(param_0, 5);
+    f32 val27 = mCamParam.Val(param_0, 27);
+    f32 val22 = mCamParam.Val(param_0, 22);
+    f32 val26 = mCamParam.Val(param_0, 26);
+    f32 val3 = mCamParam.Val(param_0, 3);
+    f32 val4 = mCamParam.Val(param_0, 4);
+    f32 val11 = mCamParam.Val(param_0, 11);
+    f32 val8 = mCamParam.Val(param_0, 8);
+    f32 val9 = mCamParam.Val(param_0, 9);
+    f32 val24 = mCamParam.Val(param_0, 24);
+    f32 val16 = mCamParam.Val(param_0, 16);
+    f32 val13 = mCamParam.Val(param_0, 13);
+    f32 val14 = mCamParam.Val(param_0, 14);
+    f32 val21 = mCamParam.Val(param_0, 21);
+    f32 val18 = mCamParam.Val(param_0, 18);
+    f32 val19 = mCamParam.Val(param_0, 19);
+
+    ManualData* manual = (ManualData*)mWork;
+
+    bool sp09 = dComIfGp_getAttention()->LockonTruth() != 0;
+    if (mCurCamStyleTimer == 0) {
+        manual->field_0x00 = 'MAN_';
+        mStyleSettle.mFinished = true;
+        if (sp09 && mpLockonTarget != NULL) {
+            manual->field_0x1c = 1.0f;
+        } else {
+            manual->field_0x1c = 0.0f;
+        }
+        cXyz attnPos = attentionPos(mpPlayerActor);
+        manual->field_0x20 = mViewCache.mCenter.y - attnPos.y;
+        manual->field_0x2c = val8;
+        mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+        if (isPlayerCharging(mPadID)) {
+            manual->field_0x28 = 1;
+        } else {
+            manual->field_0x28 = 0;
+        }
+        manual->field_0x30 = mViewCache.mDirection;
+        manual->field_0x04 = cXyz::Zero;
+        manual->field_0x40 = 0;
+        manual->field_0x44 = mViewCache.mDirection.U();
+        manual->field_0x48 = mPadInfo.mCStick.mLastPosX;
+        if (mCamParam.Flag(param_0, 0x100)) {
+            s16 sp24 = ((s16)mViewCache.mDirection.U() >> 0xe) & 0x3;
+            if (manual->field_0x48 > 0.0f) {
+                manual->field_0x48 = -0.8f;
+            } else {
+                manual->field_0x48 = 0.8f;
+            }
+        }
+    }
+    if (check_owner_action(mPadID, 0x8000000)) {
+        if (val13 < 4.0f) {
+            val13 = 4.0f;
+        }
+        if (val3 < -10.0f) {
+            val3 = -10.0f;
+        }
+    } else if (check_owner_action(mPadID, 0x2800108)) {
+        if (check_owner_action(mPadID, 0x2000000)) {
+            val13 = -58.0f;
+        } else {
+            val13 = -70.0f;
+        }
+        val14 = 70.0f;
+        val16 = 4.0f;
+        val6 = 0.45f;
+        if (val9 > 500.0f) {
+            val9 = 500.0f;
+        }
+    }
+
+    f32 sp98[2];
+    if (mPadInfo.mCStick.mLastPosX >= 0.75f) {
+        sp98[0] = 1.0f;
+    } else if (mPadInfo.mCStick.mLastPosX <= -0.75f) {
+        sp98[0] = -1.0f;
+    } else {
+        sp98[0] = dCamMath::rationalBezierRatio(mPadInfo.mCStick.mLastPosX * 1.3333334f, 2.0f);
+    }
+    if (mPadInfo.mCStick.mLastPosY >= 0.75f) {
+        sp98[1] = 1.0f;
+    } else if (mPadInfo.mCStick.mLastPosY <= -0.75f) {
+        sp98[1] = -1.0f;
+    } else {
+        sp98[1] = dCamMath::rationalBezierRatio(mPadInfo.mCStick.mLastPosY * 1.3333334f, 2.0f);
+    }
+
+    UnkManualCameraParam sp188;
+    sp188.r = sp188.v = sp188.fov = sp188.u = val27;
+    if (check_owner_action(mPadID, 0x2800008) && mFakeAngleSys.field_0x0 == 0) {
+        setUSOAngle();
+    }
+
+    f32 sp48 = manual->field_0x20;
+    if (!limited_range_addition(&sp48, -sp98[1] * val26, val3, val4))
+    {
+        sp188.fov = val22;
+    }
+    manual->field_0x20 += sp188.fov * (sp48 - manual->field_0x20);
+
+    if (check_owner_action(mPadID, 0x100) != 0) {
+        if (val1 > -10.0f) {
+            val1 = -10.0f;
+        }
+        if (manual->field_0x20 < 30.0f) {
+            manual->field_0x20 = 30.0f;
+        }
+    }
+
+    cXyz sp94(val0, manual->field_0x20, val1);
+    bool sp08 = false;
+    if (sp09 && mpLockonTarget != NULL) {
+        manual->field_0x10 = relationalPos(mpPlayerActor, mpLockonTarget, &sp94, 0.5f);
+        cXyz sp178 = relationalPos(mpPlayerActor, &sp94);
+        dBgS_CamLinChk sp2B0;
+        dBgS_CamLinChk sp240;
+        if (lineBGCheck(&sp178, &manual->field_0x10, &sp2B0, 0x40b7) &&
+           lineBGCheckBoth(&mEye, &sp178, &sp240, 0x40b7) != 0) {
+            cM3dGPla cStack_198;
+            dComIfG_Bgsp().GetTriPla(sp240, &cStack_198);
+        } else {
+            manual->field_0x04 = manual->field_0x10 - sp178;
+            if (manual->field_0x1c < 1.0f) {
+                manual->field_0x1c += 0.05f;
+                manual->field_0x10 = sp178 + manual->field_0x04 * manual->field_0x1c;
+            } else if (manual->field_0x1c > 1.0f) {
+                manual->field_0x1c = 1.0f;
+            }
+        }
+    } else {
+        sp08 = true;
+    }
+
+    if (sp08) {
+        manual->field_0x10 = relationalPos(mpPlayerActor, &sp94);
+        if (manual->field_0x1c > 0.0f) {
+            manual->field_0x1c -= 0.05f;
+            manual->field_0x10 = manual->field_0x10 + manual->field_0x04 * manual->field_0x1c;
+        } else if (manual->field_0x1c < 0.0f) {
+            manual->field_0x1c = 0.0f;
+        }
+    }
+
+    f32 sp44;
+    f32 sp40;
+    if (mCurCamStyleTimer == 0) {
+        sp44 = cXyz(manual->field_0x10 - mViewCache.mCenter).abs();
+        sp40 = sp44 > 100.0f ? 0.0f : 1.0f - sp44 / 100.0f;
+        manual->field_0x38 = val6 * sp40;
+        manual->field_0x3c = val5 * sp40;
+    } else {
+        manual->field_0x38 += (val6 - manual->field_0x38) * 0.05f;
+        manual->field_0x3c += (val5 - manual->field_0x3c) * 0.05f;
+    }
+
+    cXyz sp160(manual->field_0x38, manual->field_0x3c, manual->field_0x38);
+    mViewCache.mCenter += (manual->field_0x10 - mViewCache.mCenter) * sp160;
+    if (mpLockonTarget == NULL) {
+        cXyz sp154 = attentionPos(mpPlayerActor);
+        if (check_owner_action(mPadID, 0x8100100)) {
+            sp154.y = eyePos(mpPlayerActor).y + 30.0f;
+        } else {
+            sp154.y -= 15.0f;
+        }
+
+        dBgS_CamLinChk sp158;
+        if (lineBGCheck(&sp154, &mViewCache.mCenter, &sp158, 0x40b7)) {
+            cM3dGPla sp1A4;
+            dComIfG_Bgsp().GetTriPla(sp158, &sp1A4);
+            mViewCache.mCenter = sp158.GetCross();
+            mViewCache.mCenter += *sp1A4.GetNP();
+        }
+    }
+
+    f32 sp3C = manual->field_0x30.R();
+    if (!limited_range_addition(&sp3C, (-sp98[1] * val11), val8, val9)) {
+        sp188.r = val22;
+    }
+
+    f32 sp38 = manual->field_0x30.V().Degree();
+    if (!limited_range_addition(&sp38, -sp98[1] * val16, val13, val14)) {
+        sp188.v = val22;
+    }
+
+    f32 sp34;
+    if (!mCamParam.Flag(param_0, 0x100)) {
+        sp34 = manual->field_0x30.U().Degree();
+        sp34 += sp98[0] * val24;
+    }
+    manual->field_0x30.Val(sp3C, cAngle::d2s(sp38), cAngle::d2s(sp34));
+
+    if (sp09 && mpLockonTarget != NULL) {
+        setFlag(0x2000);
+        mpAuxTargetActor1 = mpLockonTarget;
+    }
+
+    mViewCache.mDirection.R(mViewCache.mDirection.R() +
+                            (manual->field_0x30.R() - mViewCache.mDirection.R()) * sp188.r);
+    mViewCache.mDirection.V(mViewCache.mDirection.V() +
+                            (manual->field_0x30.V() - mViewCache.mDirection.V()) * sp188.v);
+    mViewCache.mDirection.U(mViewCache.mDirection.U() +
+                            (manual->field_0x30.U() - mViewCache.mDirection.U()) * sp188.u);
+    mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+    f32 sp30 = mViewCache.mFovy;
+    if (!limited_range_addition(&sp30, -sp98[1] * val21, val18, val19)) {
+        sp188.fov = mCamParam.Val(param_0, 22);
+    }
+
+    mViewCache.mFovy += sp188.fov * (sp30 - mViewCache.mFovy);
+
+    int sp2C = manual->field_0x40;
+    if (mPadInfo.mMainStick.mLastValue > 0.01f ||
+        dComIfGp_getAttention()->LockonTruth() ||
+        check_owner_action(mPadID, 0x100000)) {
+        sp2C = 0;
+    } else {
+        switch (manual->field_0x40) {
+        default:
+            sp2C = 0;
+        case 0:
+            if (sp3C < val8 * 1.0001f) {
+                setComStat(0x400);
+                if (sp98[1] < 0.3f) {
+                    sp2C = 1;
+                }
+            }
+            break;
+        case 1:
+            if (sp98[1] < -0.01f) {
+                sp2C = 0;
+            } else if (sp98[1] > 0.9f) {
+                sp2C = 2;
+                setComStat(0x1000);
+                setComStat(0x400);
+            } else {
+                setComStat(0x400);
+            }
+            break;
+        case 2:
+            if (sp98[1] < 0.9f) {
+                sp2C = 0;
+            }
+            break;
+        }
+    }
+
+    manual->field_0x40 = sp2C;
+#endif
+
     return true;
 }
 
 bool dCamera_c::observeCamera(s32 param_0) {
-
-    f32 dVar8 = mCamSetup.CurveWeight();
+    f32 curveWeight = mCamSetup.CurveWeight();
     f32 val0 = mCamParam.Val(param_0, 0);
     f32 val17 = mCamParam.Val(param_0, 17);
     cSAngle val16 = mCamParam.Val(param_0, 16);
@@ -8444,10 +9445,10 @@ bool dCamera_c::observeCamera(s32 param_0) {
         mStyleSettle.mFinished = true;
         if (mRoomMapTool.mCameraIndex != 0xff && mCamParam.Flag(param_0, 0x200) != 0)
         {
-            mCamParam.Fovy((mRoomMapTool).mCamData.field_0x11);
-            mCamParam.Arg0((mRoomMapTool).mCamData.field_0x12);
-            mCamParam.Arg1((mRoomMapTool).mCamData.field_0x13);
-            mCamParam.Arg2((mRoomMapTool).mCamData.field_0x14);
+            mCamParam.Fovy(mRoomMapTool.mCamData.field_0x11);
+            mCamParam.Arg0(mRoomMapTool.mCamData.field_0x12);
+            mCamParam.Arg1(mRoomMapTool.mCamData.field_0x13);
+            mCamParam.Arg2(mRoomMapTool.mCamData.field_0x14);
             if (param_0 == mCamTypeData[mCurType].field_0x18[mIsWolf][mCurMode]) {
                 mCamParam.Change(param_0);
             }
@@ -8461,15 +9462,15 @@ bool dCamera_c::observeCamera(s32 param_0) {
             }
         }
         if (mRoomMapTool.mArrowIndex != 0xff) {
-            observe->field_0x04 = cXyz(mRoomMapTool.mArrowData.position.x, mRoomMapTool.mArrowData.position.y,
-                           mRoomMapTool.mArrowData.position.z);
-            cSGlobe cStack_c0(50.0f, -mRoomMapTool.mArrowData.angle.x,
-                              mRoomMapTool.mArrowData.angle.y);
-            observe->field_0x28 = observe->field_0x04 + cStack_c0.Xyz();
+            observe->field_0x04 = cXyz(mRoomMapTool.mArrowData.posX, mRoomMapTool.mArrowData.posY,
+                           mRoomMapTool.mArrowData.posZ);
+            cSGlobe sp60(50.0f, -mRoomMapTool.mArrowData.angleX,
+                              mRoomMapTool.mArrowData.angleY);
+            observe->field_0x28 = observe->field_0x04 + sp60.Xyz();
         } else {
             observe->field_0x04 = mViewCache.mEye;
-            cSGlobe cStack_c8(50.0f, mViewCache.mDirection.V().Inv(), mViewCache.mDirection.U().Inv());
-            observe->field_0x28 = observe->field_0x04 + cStack_c8.Xyz();
+            cSGlobe sp58(50.0f, mViewCache.mDirection.V().Inv(), mViewCache.mDirection.U().Inv());
+            observe->field_0x28 = observe->field_0x04 + sp58.Xyz();
         }
         observe->field_0x10.Val(observe->field_0x04 - observe->field_0x28);
         mViewCache.mCenter = observe->field_0x28;
@@ -8479,43 +9480,45 @@ bool dCamera_c::observeCamera(s32 param_0) {
 
     if (mCamParam.Flag(param_0, 0x200)) {
         if (mCamParam.Fovy() != 0xff) {
-            val17 = (s32)(s8)mCamParam.Fovy();
+            val17 = (s8)mCamParam.Fovy();
         }
         if (mCamParam.Arg0() != 0xff) {
-            val16 = (f32)(s32)(s8)mCamParam.Arg0();
+            val16 = (f32)(s8)mCamParam.Arg0();
         }
         if (mCamParam.Arg1() != 0xff) {
-            val24 = (f32)(s32)(s8)mCamParam.Arg1();
+            val24 = (f32)(s8)mCamParam.Arg1();
         }
     }
 
-    f32 sp54;
-    f32 sp50;
+    // not sure how else to get these on the stack instead of in registers, this seems plausible
+    // given they're used quite a bit and it makes sense for the compiler to not want to spill them
+    // otherwise
+    f32 sp50[2];
     int zero = 0;
     if (zero == 0) {
         if (mPadInfo.mMainStick.mLastPosX >= 0.75f) {
-            sp50 = 1.0f;
+            sp50[0] = 1.0f;
         } else if (mPadInfo.mMainStick.mLastPosX <= -0.75f) {
-            sp50 = -1.0f;
+            sp50[0] = -1.0f;
         } else {
-            sp50 = dCamMath::rationalBezierRatio(mPadInfo.mMainStick.mLastPosX * 1.3333334f, dVar8);
+            sp50[0] = dCamMath::rationalBezierRatio(mPadInfo.mMainStick.mLastPosX * (4.0f / 3.0f), curveWeight);
         }
 
         if (mPadInfo.mMainStick.mLastPosY >= 0.75f) {
-            sp54 = 1.0f;
+            sp50[1] = 1.0f;
         } else if (mPadInfo.mMainStick.mLastPosY <= -0.75f) {
-            sp54 = -1.0f;
+            sp50[1] = -1.0f;
         } else {
-            sp54 = dCamMath::rationalBezierRatio(mPadInfo.mMainStick.mLastPosY * 1.3333334f, dVar8);
+            sp50[1] = dCamMath::rationalBezierRatio(mPadInfo.mMainStick.mLastPosY * (4.0f / 3.0f), curveWeight);
         }
 
         if (dComIfGs_getOptCameraControl() != 0) {
-            sp54 = -sp54;
+            sp50[1] = -sp50[1];
         }
     }
 
     cSAngle sp40;
-    cSAngle sp3C = mViewCache.mDirection.V() + (cSAngle)(val0 * sp54);
+    cSAngle sp3C = mViewCache.mDirection.V() + (cSAngle)(val0 * sp50[1]);
     sp40 = sp3C - observe->field_0x10.V();
     if (sp40 > val16) {
         sp3C = observe->field_0x10.V() + val16;
@@ -8524,7 +9527,7 @@ bool dCamera_c::observeCamera(s32 param_0) {
     }
 
     mViewCache.mDirection.V(sp3C);
-    cSAngle sp38 = mViewCache.mDirection.U() - (cSAngle)(val0 * sp50);
+    cSAngle sp38 = mViewCache.mDirection.U() - (cSAngle)(val0 * sp50[0]);
     sp40 = sp38 - observe->field_0x10.U();
     if (sp40 > val24) {
         sp38 = observe->field_0x10.U() + val24;
@@ -8562,11 +9565,11 @@ bool dCamera_c::fixedFrameCamera(s32 param_0) {
 
     if (mCurCamStyleTimer == 0) {
         fixedFrame->field_0x00 = 'FIXF';
-        fixedFrame->field_0x04 = cXyz(mRoomMapTool.mArrowData.position.x, mRoomMapTool.mArrowData.position.y,
-                        mRoomMapTool.mArrowData.position.z);
+        fixedFrame->field_0x04 = cXyz(mRoomMapTool.mArrowData.posX, mRoomMapTool.mArrowData.posY,
+                        mRoomMapTool.mArrowData.posZ);
 
-        cSGlobe spFC(100000.0f, -mRoomMapTool.mArrowData.angle.x,
-                           mRoomMapTool.mArrowData.angle.y);
+        cSGlobe spFC(100000.0f, -mRoomMapTool.mArrowData.angleX,
+                           mRoomMapTool.mArrowData.angleY);
         fixedFrame->field_0x2c = fixedFrame->field_0x38 = fixedFrame->field_0x04 + spFC.Xyz();
 
         cM3dGLin sp14C(fixedFrame->field_0x2c, fixedFrame->field_0x04);
@@ -8577,8 +9580,8 @@ bool dCamera_c::fixedFrameCamera(s32 param_0) {
             fixedFrame->field_0x2c = sp120;
         } else {
             f32 temp = cXyz(fixedFrame->field_0x04 - attentionPos(mpPlayerActor)).abs();
-            spFC.Val(temp, -mRoomMapTool.mArrowData.angle.x,
-                           mRoomMapTool.mArrowData.angle.y);
+            spFC.Val(temp, -mRoomMapTool.mArrowData.angleX,
+                           mRoomMapTool.mArrowData.angleY);
             fixedFrame->field_0x2c = fixedFrame->field_0x04 + spFC.Xyz();
         }
 
@@ -8621,7 +9624,7 @@ bool dCamera_c::fixedFrameCamera(s32 param_0) {
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
         mViewCache.mFovy = mViewCache.mFovy + fVar11 * (fixedFrame->field_0x24 - mViewCache.mFovy);
 
-        if (mCurCamStyleTimer >= fixedFrame->field_0x18 - 1) {
+        if (mCurCamStyleTimer >= (u32)fixedFrame->field_0x18 - 1) {
             mStyleSettle.mFinished = true;
         }
     }
@@ -8672,9 +9675,9 @@ bool dCamera_c::fixedPositionCamera(s32 param_0) {
             fixedPosition->field_0x30 = mRoomMapTool.mCameraIndex;
         }
 
-        anchorPos.x = mRoomMapTool.mArrowData.position.x;
-        anchorPos.y = mRoomMapTool.mArrowData.position.y;
-        anchorPos.z = mRoomMapTool.mArrowData.position.z;
+        anchorPos.x = mRoomMapTool.mArrowData.posX;
+        anchorPos.y = mRoomMapTool.mArrowData.posY;
+        anchorPos.z = mRoomMapTool.mArrowData.posZ;
         if (fixedPosition->field_0x1c != anchorPos) {
             setUSOAngle();
         }
@@ -8750,7 +9753,7 @@ bool dCamera_c::fixedPositionCamera(s32 param_0) {
         mViewCache.mCenter += (fixedPosition->field_0x10 - mViewCache.mCenter) * centerLerpGain;
         cSGlobe targetDirection = anchorPos - mViewCache.mCenter;
         if (mCamParam.Flag(param_0, 0x20)) {
-            targetDirection.V((s16)-mRoomMapTool.mArrowData.angle.x);
+            targetDirection.V((s16)-mRoomMapTool.mArrowData.angleX);
         }
 
         if (targetDirection.R() < targetRadiusMin) {
@@ -8778,7 +9781,7 @@ bool dCamera_c::fixedPositionCamera(s32 param_0) {
     mViewCache.mCenter += (targetCenter - mViewCache.mCenter) * centerLerpGain;
     cSGlobe cStack_1a8 = anchorPos - mViewCache.mCenter;
     if (mCamParam.Flag(param_0, 0x20)) {
-        cStack_1a8.V((s16)-mRoomMapTool.mArrowData.angle.x);
+        cStack_1a8.V((s16)-mRoomMapTool.mArrowData.angleX);
     }
     if (cStack_1a8.R() < targetRadiusMin) {
         cStack_1a8.R(targetRadiusMin);
@@ -8800,7 +9803,6 @@ bool dCamera_c::fixedPositionCamera(s32 param_0) {
 }
 
 bool dCamera_c::oneSideCamera(s32 param_1) {
-    f32 unkRatio;
 
     f32 focusOffsetX = mCamParam.Val(param_1, 0);
     f32 focusOffsetY = mCamParam.Val(param_1, 2);
@@ -8833,6 +9835,7 @@ bool dCamera_c::oneSideCamera(s32 param_1) {
 
     oneSide->field_0x28 = 0;
     cSAngle unkAngle1;
+    f32 fovY;
     if (mCamParam.Flag(param_1, 0x200) && mRoomMapTool.mArrowIndex != 0xff) {
         if (mRoomMapTool.mCameraIndex != oneSide->field_0x34) {
             mCamParam.Fovy(mRoomMapTool.mCamData.field_0x11);
@@ -8844,13 +9847,14 @@ bool dCamera_c::oneSideCamera(s32 param_1) {
             }
             oneSide->field_0x34 = mRoomMapTool.mCameraIndex;
         }
-        arrowPos.x = mRoomMapTool.mArrowData.position.x;
-        arrowPos.y = mRoomMapTool.mArrowData.position.y;
-        arrowPos.z = mRoomMapTool.mArrowData.position.z;
+        arrowPos.x = mRoomMapTool.mArrowData.posX;
+        arrowPos.y = mRoomMapTool.mArrowData.posY;
+        arrowPos.z = mRoomMapTool.mArrowData.posZ;
         if (oneSide->field_0x1c != arrowPos) {
             setUSOAngle();
         }
         oneSide->field_0x1c = arrowPos;
+
 
         if (mCamParam.Fovy() != 0xff) {
             f32 fovY = mCamParam.Fovy();
@@ -8876,18 +9880,13 @@ bool dCamera_c::oneSideCamera(s32 param_1) {
     focusPosOffset = dCamMath::xyzRotateY(focusPosOffset, directionOf(mpPlayerActor));
     cXyz focusPosWithOffset = attentionPos(mpPlayerActor) + focusPosOffset;
     cSGlobe focusGlobe = focusPosWithOffset - arrowPos;
-    if (focusGlobe.R() >= angle180) {
-        unkRatio = 1.0f;
-    } else {
-        f32 ratio = focusGlobe.R() / angle180;
-        unkRatio = ratio;
-    }
+    f32 unkRatio = focusGlobe.R() >= angle180 ? 1.0f : focusGlobe.R() / angle180;
 
     if (!mCamParam.Flag(param_1, 0x800)) {
-        focusGlobe.V((s16)-mRoomMapTool.mArrowData.angle.x);
+        focusGlobe.V((s16)-mRoomMapTool.mArrowData.angleX);
     }
 
-    cSAngle arrowAngle = (s16)(s32)mRoomMapTool.mArrowData.angle.y;
+    cSAngle arrowAngle = (s16)(s32)mRoomMapTool.mArrowData.angleY;
     cSAngle unkAngle2 = focusGlobe.U() - arrowAngle;
     cSAngle unkAngle3;
     cSAngle unkAngle4 = unkAngle2 * val24;
@@ -8912,7 +9911,7 @@ bool dCamera_c::oneSideCamera(s32 param_1) {
     mViewCache.mCenter = center;
     mViewCache.mEye = arrowPos;
     mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
-    f32 fovY = val17;
+    fovY = val17;
     mViewCache.mFovy = fovY;
 
     return true;
@@ -9117,8 +10116,10 @@ bool dCamera_c::eventCamera(s32 param_0) {
     int sp0C;
 
     if (mCurCamStyleTimer == 0) {
+#if DEBUG
         OS_REPORT("camera: event: cut [%s]\n",
                               ActionNames[var_r29]);
+#endif
 
         if (getEvFloatData(&sp28, "KeepDist") != 0 && mViewCache.mDirection.R() < sp28)
         {
@@ -9342,11 +10343,22 @@ void dCamera_c::setEventRecoveryTrans(s16 param_0) {
 
 s16 dCamera_c::runEventRecoveryTrans() {
     if (mRecovery.field_0x8.field_0x1e > 0) {
+#if PLATFORM_GCN
         field_0x668++;
+#endif
+#if PLATFORM_GCN
         if (field_0x668 >= mRecovery.field_0x8.field_0x1e) {
+#else
+        if ((int)field_0x170 >= mRecovery.field_0x8.field_0x1e) {
+#endif
             mRecovery.field_0x8.field_0x1e = 0;
         } else {
-            f32 ratio = dCamMath::rationalBezierRatio(1.0f - (f32)field_0x668 / (f32)mRecovery.field_0x8.field_0x1e, 1.0f);
+#if PLATFORM_GCN
+            f32 var_f30 = (f32)field_0x668 / (f32)mRecovery.field_0x8.field_0x1e;
+#else
+            f32 var_f30 = (f32)field_0x170 / (f32)mRecovery.field_0x8.field_0x1e;
+#endif
+            f32 ratio = dCamMath::rationalBezierRatio(1.0f - var_f30, 1.0f);
             mCenter = mViewCache.mCenter + (mRecovery.field_0x8.mCenter - mViewCache.mCenter) * ratio;
             cXyz attPos = attentionPos(mpPlayerActor);
             dBgS_CamLinChk lin_chk;
@@ -9489,12 +10501,20 @@ f32 dCamera_c::shakeCamera() {
     return var_f31;
 }
 
-// supposed to be some anonymous static class member or something?
-static const int PatternLengthMax[] = {0x00000004};  // array to make it go in correct section
-
 int dCamera_c::StartShake(s32 i_length, u8* i_pattern, s32 i_flags, cXyz i_pos) {
-    if (i_length < 0 || i_length > (PatternLengthMax[0] << 3)) {
-        i_length = (PatternLengthMax[0] << 3);
+    // This function originally used a constant defined as a static data member in one of
+    // dCamera_c's anonymous classes, but this is illegal in C++ and is not accepted by
+    // MWCC for Wii. It seems this was resolved for the Shield release by hardcoding the constant
+    // (or possibly using a define).
+#if defined(__MWERKS__) && __MWERKS__ < 0x4200
+#define PATTERN_LENGTH_MAX mViewCache.PatternLengthMax
+#else
+#define PATTERN_LENGTH_MAX 4
+#endif
+
+    if (i_length < 0 || i_length > PATTERN_LENGTH_MAX << 3) {
+        OS_REPORT("camera: shake: too long data\n");
+        i_length = PATTERN_LENGTH_MAX << 3;
     }
 
     mShake.m_length = i_length;
@@ -9504,23 +10524,24 @@ int dCamera_c::StartShake(s32 i_length, u8* i_pattern, s32 i_flags, cXyz i_pos) 
         mBlure.field_0x4 = mBlure.field_0x14;
     }
 
-    int var_r31;
+    int i;
     int var_r28 = i_length >> 3;
-    for (var_r31 = 0; var_r31 < PatternLengthMax[0]; var_r31++) {
-        mShake.field_0x0[var_r31] = mShake.field_0x4[var_r31] = 0;
+
+    for (i = 0; i < PATTERN_LENGTH_MAX; i++) {
+        mShake.field_0x0[i] = mShake.field_0x4[i] = 0;
     }
 
-    for (var_r31 = 0; var_r31 < var_r28; var_r31++) {
-        mShake.field_0x0[var_r31] = mShake.field_0x4[var_r31] = i_pattern[var_r31];
+    for (i = 0; i < var_r28; i++) {
+        mShake.field_0x0[i] = mShake.field_0x4[i] = i_pattern[i];
     }
 
     var_r28 = i_length & 7;
-    mShake.field_0x0[var_r31] = (0xFF << (8 - var_r28)) & i_pattern[var_r31];
+    mShake.field_0x0[i] = (0xFF << (8 - var_r28)) & i_pattern[i];
 
-    if (i_length == (PatternLengthMax[0] << 3)) {
-        mShake.field_0x4[var_r31] = mShake.field_0x0[var_r31] | (i_pattern[0] >> var_r28);
+    if (i_length == PATTERN_LENGTH_MAX << 3) {
+        mShake.field_0x4[i] = mShake.field_0x0[i] | (i_pattern[0] >> var_r28);
     } else {
-        mShake.field_0x4[var_r31] = mShake.field_0x0[var_r31];
+        mShake.field_0x4[i] = mShake.field_0x0[i];
     }
 
     mShake.m_pos = i_pos.norm();
@@ -9555,6 +10576,12 @@ void dCamera_c::StartBlure(int param_0, fopAc_ac_c* i_actor, f32 i_alpha, f32 i_
     mBlure.field_0x8.y = 0;
     mBlure.field_0x8.z = 0;
     mBlure.field_0x4 = param_0;
+
+#if DEBUG
+    if (mCamSetup.CheckFlag(0x8000)) {
+        OS_REPORT("camera: start blure: timer %d, type %d\n", param_0, mCurType);
+    }
+#endif
 }
 
 void dCamera_c::ResetBlure() {
@@ -9600,8 +10627,7 @@ void dCamera_c::SetBlureActor(fopAc_ac_c* i_actor) {
 int dCamera_c::blureCamera() {
     if (mBlure.field_0x4 > 0) {
         if (mBlure.mpActor != NULL) {
-            dDlst_window_c* window = get_window(field_0x0);
-            scissor_class* scissor = window->getScissor();
+            scissor_class* scissor = get_window(field_0x0)->getScissor();
             cXyz eyePosition = eyePos(mBlure.mpActor);
             cXyz res;
 
@@ -9612,8 +10638,8 @@ int dCamera_c::blureCamera() {
         }
         mBlure.field_0x4--;
 
-        cXyz xyz;
         f32 mult = (f32)mBlure.field_0x4 / (f32)mBlure.field_0x14;
+        cXyz xyz;
         xyz.x = mBlure.mScale.x + (1.0f - mBlure.mScale.x) * mult;
         xyz.y = mBlure.mScale.y + (1.0f - mBlure.mScale.y) * mult;
         xyz.z = 0.0f;
@@ -9639,7 +10665,13 @@ int dCamera_c::blureCamera() {
 
 void dCamera_c::onHorseDush() {
     dComIfGp_getVibration().StartShock(VIBMODE_S_POWER2, 1, cXyz(0.0f, 1.0f, 0.0f));
-    StartBlure(55, mpPlayerActor, 0.75f, 1.0f);
+    // debug indicates this function somehow has scoped declarations, so we add a useless block here
+    {
+        int var_r30 = 55;
+        f32 alpha = 0.75f;
+        f32 scale = 1.0f;
+        StartBlure(var_r30, mpPlayerActor, alpha, scale);
+    }
 }
 
 fopAc_ac_c* dCamera_c::GetForceLockOnActor() {
@@ -9692,12 +10724,14 @@ camera_class* dCam_getCamera() {
 }
 
 dCamera_c* dCam_getBody() {
-    return &dCam_getCamera()->mCamera;
+    camera_class* camera = dCam_getCamera();
+    return &camera->mCamera;
 }
 
 static void preparation(camera_process_class* i_this) {
+    camera_process_class* process = i_this;
     camera_class* a_this = (camera_class*)i_this;
-    dCamera_c* camera = &a_this->mCamera;
+    dCamera_c* camera = &((camera_class*)i_this)->mCamera;
 
     int camera_id = get_camera_id(a_this);
     dDlst_window_c* window = get_window(camera_id);
@@ -9705,7 +10739,7 @@ static void preparation(camera_process_class* i_this) {
     f32 aspect = mDoGph_gInf_c::getAspect();
 
     camera->SetWindow(viewport->width, viewport->height);
-    fopCamM_SetAspect(a_this, aspect);
+    fopCamM_SetAspect((camera_class*)i_this, aspect);
 
     if (!daAlink_c::getE3Zhint()) {
         dComIfGp_offCameraAttentionStatus(camera_id, 0x1002B);
@@ -9730,27 +10764,38 @@ static void view_setup(camera_process_class* i_this) {
     dComIfGd_setView(view);
 
     f32 far;
+    f32 var_f30;
     if (getComStat(8)) {
         far = view->far;
     } else {
-        far = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());
+#if DEBUG
+        if (g_envHIO.mOther.mAdjustCullFar != 0) {
+            var_f30 = g_envHIO.mOther.mCullFarValue;
+        } else
+#endif
+        {
+            var_f30 = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());
+        }
+        far = var_f30;
     }
 
     mDoLib_clipper::setup(view->fovy, view->aspect, view->near, far);
 }
 
 static void store(camera_process_class* i_camera) {
-    camera_class* a_camera = (camera_class*)i_camera;
-    dCamera_c* dCamera = &a_camera->mCamera;
-    int camera_id = get_camera_id(a_camera);
+    camera_process_class* process = (camera_process_class*)i_camera;
+    camera_class* camera = (camera_class*)i_camera;
+    dCamera_c* dCamera = &((camera_class*)i_camera)->mCamera;
+    int camera_id = get_camera_id(camera);
     dDlst_window_c* window = get_window(camera_id);
     view_port_class* viewport = window->getViewPort();
     bool error = false;
-    cXyz center(*fopCamM_GetCenter_p(a_camera));
-    cXyz eye(*fopCamM_GetEye_p(a_camera));
-    cXyz up(*fopCamM_GetUp_p(a_camera));
-    cSAngle angle(fopCamM_GetBank(a_camera));
-    f32 fovy = fopCamM_GetFovy(a_camera);
+
+    cXyz center(*fopCamM_GetCenter_p(camera));
+    cXyz eye(*fopCamM_GetEye_p(camera));
+    cXyz up(*fopCamM_GetUp_p(camera));
+    cSAngle angle(fopCamM_GetBank(camera));
+    f32 fovy = fopCamM_GetFovy(camera);
 
     dDemo_camera_c* demoCamera = dDemo_c::getCamera();
     if (demoCamera != NULL && !dComIfGp_getPEvtManager()->cameraPlay()) {
@@ -9769,6 +10814,22 @@ static void store(camera_process_class* i_camera) {
         if (demoCamera->checkEnable(dDemo_camera_c::ENABLE_PROJ_FOVY_e)) {
             fovy = demoCamera->getFovy();
         }
+#if DEBUG
+    } else if (dDebugPad.Enable(0) && dCamera->CameraID() == 0) {
+        if (dDbgCamera.Playing()) {
+            center = dCamera->Center();
+            eye = dCamera->Eye();
+            up = dCamera->Up();
+            angle = dCamera->Bank();
+            fovy = dCamera->Fovy();
+        } else {
+            center = dDbgCamera.Center();
+            eye = dDbgCamera.Eye();
+            up = dDbgCamera.Up();
+            angle = dDbgCamera.Bank();
+            fovy = dDbgCamera.Fovy();
+        }
+#endif
     } else if (!dCamera->CheckFlag(1)) {
         center = dCamera->Center();
         eye = dCamera->Eye();
@@ -9795,33 +10856,43 @@ static void store(camera_process_class* i_camera) {
     }
 
     if (!error) {
-        fopCamM_SetCenter(a_camera, center.x, center.y, center.z);
-        fopCamM_SetEye(a_camera, eye.x, eye.y, eye.z);
-        fopCamM_SetUp(a_camera, up.x, up.y, up.z);
-        fopCamM_SetBank(a_camera, angle);
-        fopCamM_SetFovy(a_camera, fovy);
+        fopCamM_SetCenter(camera, center.x, center.y, center.z);
+        fopCamM_SetEye(camera, eye.x, eye.y, eye.z);
+        fopCamM_SetUp(camera, up.x, up.y, up.z);
+        fopCamM_SetBank(camera, angle);
+        fopCamM_SetFovy(camera, fovy);
     }
 
     dStage_dt_c* stage = (dStage_dt_c*)dComIfGp_getStage();
 
-    if (a_camera->mCamera.mCamSetup.CheckFlag(0x400)) {
-        //TODO
+#if DEBUG
+    if (dCamera->mCamSetup.CheckFlag(0x400)) {
+        fopCamM_SetNear(camera, dCamera->Near4Debug());
+        fopCamM_SetFar(camera, dCamera->Far4Debug());
+    } else if (stage != NULL) {
+        if (dComIfGp_getCameraAttentionStatus(camera_id) & 0x8) {
+            fopCamM_SetNear(camera, 30.0f);
+        } else {
+            fopCamM_SetNear(camera, stage->getStagInfo()->mNear);
+        }
+        fopCamM_SetFar(camera, stage->getStagInfo()->mFar);
     }
-
-    if (dComIfGp_getCameraAttentionStatus(camera_id) & 8) {
-        fopCamM_SetNear(a_camera, 30.0f);
+#else
+    if (dComIfGp_getCameraAttentionStatus(camera_id) & 0x8) {
+        fopCamM_SetNear(camera, 30.0f);
     } else {
         if (stage != NULL) {
-            fopCamM_SetNear(a_camera, stage->getStagInfo()->mNear);
+            fopCamM_SetNear(camera, stage->getStagInfo()->mNear);
         }
     }
     if (stage != NULL) {
-        fopCamM_SetFar(a_camera, stage->getStagInfo()->mFar);
+        fopCamM_SetFar(camera, stage->getStagInfo()->mFar);
     }
+#endif
 
     cSGlobe globe(eye - center);
-    fopCamM_SetAngleY(a_camera, globe.U().Inv());
-    fopCamM_SetAngleX(a_camera, globe.V());
+    fopCamM_SetAngleY(camera, globe.U().Inv());
+    fopCamM_SetAngleX(camera, globe.V());
 }
 
 cXyz dCamera_c::Up() {
@@ -9841,52 +10912,102 @@ cXyz dCamera_c::Center() {
 }
 
 static int camera_execute(camera_process_class* i_this) {
-    camera_class* a_this = (camera_class*)i_this;
-    preparation(i_this);
+    // this variable is likely fake as it doesn't exist in debug,
+    // but directly casting the parameter on each use breaks retail
+    camera_class* camera = (camera_class*)i_this;
+    preparation(camera);
 
     if (dDemo_c::getCamera() != NULL) {
-        a_this->mCamera.ResetView();
+        camera->mCamera.ResetView();
     }
 
     dComIfGp_offCameraAttentionStatus(0, 0x40);
 
-    if (a_this->mCamera.Active()) {
-        a_this->mCamera.Run();
+    if (camera->mCamera.Active()) {
+        camera->mCamera.Run();
     } else {
-        a_this->mCamera.NotRun();
+        camera->mCamera.NotRun();
     }
 
-    a_this->mCamera.CalcTrimSize();
+    camera->mCamera.CalcTrimSize();
 
-    store(i_this);
-    view_setup(i_this);
+    store(camera);
+    view_setup(camera);
     return 1;
 }
 
 static int camera_draw(camera_process_class* i_this) {
     camera_class* a_this = (camera_class*)i_this;
     dCamera_c* body = &((camera_class*)i_this)->mCamera;
-
     dDlst_window_c* window = get_window(a_this);
     view_port_class* viewport = window->getViewPort();
+    camera_process_class* process = i_this;
     int camera_id = get_camera_id(a_this);
+
+#if DEBUG
+    if (dDebugPad.Enable(0) && body->CameraID() == 0) {
+        if (dDebugPad.Trigger() != 0) {
+            dDbgCamera.Reset(body);
+        }
+
+        dDbgCamera.Run();
+
+        cXyz center;
+        cXyz eye;
+        cXyz up;
+        cSAngle bank;
+        f32 fovY;
+
+        if (dDebugPad.Trigger() == 0) {
+            if (dDbgCamera.Playing()) {
+                center = body->Center();
+                eye = body->Eye();
+                up = body->Up();
+                bank = body->Bank();
+                fovY = body->Fovy();
+            } else {
+                center = dDbgCamera.Center();
+                eye = dDbgCamera.Eye();
+                up = dDbgCamera.Up();
+                bank = dDbgCamera.Bank();
+                fovY = dDbgCamera.Fovy();
+
+                dDbgCamera.DrawShape();
+            }
+
+            body->U2(cSGlobe(eye - center).U().Inv());
+
+            fopCamM_SetCenter(a_this, center.x, center.y, center.z);
+            fopCamM_SetEye(a_this, eye.x, eye.y, eye.z);
+            fopCamM_SetUp(a_this, up.x, up.y, up.z);
+            fopCamM_SetBank(a_this, bank);
+            fopCamM_SetFovy(a_this, fovY);
+            fopCamM_SetAngleY(a_this, body->U());
+            fopCamM_SetAngleX(a_this, body->V());
+        }
+    }
+#endif
 
     int trim_height = body->TrimHeight();
     window->setScissor(0.0f, trim_height, FB_WIDTH, FB_HEIGHT - trim_height * 2.0f);
-    C_MTXPerspective(i_this->projMtx, i_this->fovy, i_this->aspect, i_this->near, i_this->far);
-    mDoMtx_lookAt(i_this->viewMtx, &i_this->lookat.eye, &i_this->lookat.center,
-                  &i_this->lookat.up, i_this->bank);
+    C_MTXPerspective(process->projMtx, process->fovy, process->aspect, process->near, process->far);
+    mDoMtx_lookAt(process->viewMtx, &process->lookat.eye, &process->lookat.center,
+                  &process->lookat.up, process->bank);
 
-    j3dSys.setViewMtx(i_this->viewMtx);
-    cMtx_inverse(i_this->viewMtx, i_this->invViewMtx);
+#if WIDESCREEN_SUPPORT
+    mDoGph_gInf_c::setWideZoomProjection(process->projMtx);
+#endif
 
-    Z2GetAudience()->setAudioCamera(i_this->viewMtx, i_this->lookat.eye, i_this->lookat.center,
-                                    i_this->fovy, i_this->aspect, getComStat(0x80), camera_id,
+    j3dSys.setViewMtx(process->viewMtx);
+    cMtx_inverse(process->viewMtx, process->invViewMtx);
+
+    Z2GetAudience()->setAudioCamera(process->viewMtx, process->lookat.eye, process->lookat.center,
+                                    process->fovy, process->aspect, getComStat(0x80), camera_id,
                                     false);
 
     dBgS_GndChk gndchk;
     gndchk.OnWaterGrp();
-    gndchk.SetPos(&i_this->lookat.eye);
+    gndchk.SetPos(&process->lookat.eye);
 
     f32 cross = dComIfG_Bgsp().GroundCross(&gndchk);
     if (cross != -G_CM3D_F_INF) {
@@ -9898,26 +11019,27 @@ static int camera_draw(camera_process_class* i_this) {
 
         mDoAud_setCameraGroupInfo(dComIfG_Bgsp().GetGrpSoundId(gndchk));
         Vec spDC;
-        spDC.x = i_this->lookat.eye.x;
+        spDC.x = process->lookat.eye.x;
         spDC.y = cross;
-        spDC.z = i_this->lookat.eye.z;
+        spDC.z = process->lookat.eye.z;
 
         Z2AudioMgr::getInterface()->setCameraPolygonPos(&spDC);
     } else {
         Z2AudioMgr::getInterface()->setCameraPolygonPos(NULL);
     }
 
-    MTXCopy(i_this->viewMtx, i_this->viewMtxNoTrans);
-    i_this->viewMtxNoTrans[0][3] = 0.0f;
-    i_this->viewMtxNoTrans[1][3] = 0.0f;
-    i_this->viewMtxNoTrans[2][3] = 0.0f;
-    cMtx_concatProjView(i_this->projMtx, i_this->viewMtx, i_this->projViewMtx);
+    MTXCopy(process->viewMtx, process->viewMtxNoTrans);
+    process->viewMtxNoTrans[0][3] = 0.0f;
+    process->viewMtxNoTrans[1][3] = 0.0f;
+    process->viewMtxNoTrans[2][3] = 0.0f;
+    cMtx_concatProjView(process->projMtx, process->viewMtx, process->projViewMtx);
 
     body->Draw();
     return 1;
 }
 
 static int init_phase1(camera_class* i_this) {
+    camera_class* camera = i_this;
     int camera_id = get_camera_id(i_this);
 
     dComIfGp_setCamera(camera_id, i_this);
@@ -9928,13 +11050,13 @@ static int init_phase1(camera_class* i_this) {
 
     i_this->field_0x238 = 0;
     i_this->field_0x22f = 71;
-    i_this->mCamera.field_0xb0c = 0;
+    camera->mCamera.field_0xb0c = 0;
     return cPhs_NEXT_e;
 }
 
 static int init_phase2(camera_class* i_this) {
-    camera_process_class* a_this = (camera_process_class*)i_this;
-    dCamera_c* body = &i_this->mCamera;
+    camera_class* camera = (camera_class*)i_this;
+    dCamera_c* body = &camera->mCamera;
     int camera_id = get_camera_id(i_this);
     i_this->field_0x238++;
 
@@ -9969,31 +11091,43 @@ static int init_phase2(camera_class* i_this) {
 
     new (body) dCamera_c(i_this);
 
+    f32 var_f31 = 0.0f;
     f32 var_f30 = 160000.0f;
 
     if (dComIfGp_getStage()->getStagInfo() != NULL) {
         dStage_dt_c* stage_dt = dComIfGp_getStage();
-        stage_dt->getStagInfo();
-
+        var_f31 = stage_dt->getStagInfo()->mNear;
         var_f30 = stage_dt->getStagInfo()->mFar;
     }
 
-    get_window(camera_id)->getViewPort();
+    dDlst_window_c* window = get_window(camera_id);
+    view_port_class* viewport = window->getViewPort();
 
-    fopCamM_SetNear(i_this, 1.0f);
+    var_f31 = 1.0f;
+    fopCamM_SetNear(i_this, var_f31);
     fopCamM_SetFar(i_this, var_f30);
     fopCamM_SetFovy(i_this, 30.0f);
     fopCamM_SetAspect(i_this, mDoGph_gInf_c::getAspect());
     fopCamM_SetCenter(i_this, player->current.pos.x, player->current.pos.y, player->current.pos.z);
     fopCamM_SetBank(i_this, 0);
 
-    store(a_this);
-    view_setup(a_this);
+    store(camera);
+    view_setup(camera);
 
-    i_this->mCamera.field_0xb0c = 1;
+    camera->mCamera.field_0xb0c = 1;
+    if (body->CameraID() == 0) {
+#if DEBUG
+        dDbgCamera.Init(body);
+#endif
+    }
     i_this->field_0x238 = 0;
     dComIfGp_getAttention()->Init(player, PAD_1);
     return cPhs_NEXT_e;
+}
+
+static void dummy() {
+    const char* s1 = "Create -> Camera\n";
+    const char* s2 = "Delete -> Camera\n";
 }
 
 static int camera_create(camera_class* i_this) {
@@ -10003,15 +11137,17 @@ static int camera_create(camera_class* i_this) {
         (request_of_phase_process_fn)NULL,
     };
 
-    return dComLbG_PhaseHandler(&i_this->phase_request, l_method, i_this);
+    camera_class* camera = i_this;
+    return dComLbG_PhaseHandler(&camera->phase_request, l_method, i_this);
 }
 
 static int camera_delete(camera_process_class* i_this) {
     dCamera_c* camera = &((camera_class*)i_this)->mCamera;
 
     if (camera->CameraID() == 0) {
-        // not implemented
-        //dDbgCamera.Finish();
+#if DEBUG
+        dDbgCamera.Finish();
+#endif
     }
 
     camera->~dCamera_c();
@@ -10057,8 +11193,8 @@ void dCamForcusLine::Draw() {
 }
 
 bool dCamForcusLine::Off() {
-    field_0x49 = 0;
-    return field_0x49 == 0;
+    field_0x49 = false;
+    return field_0x49 == false;
 }
 
 static leafdraw_method_class method = {

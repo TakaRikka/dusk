@@ -3,23 +3,10 @@
 
 #include "d/actor/d_a_npc.h"
 
-/**
- * @ingroup actors-npcs
- * @class daNpc_Seirei_c
- * @brief Light Spirit Ordona
- *
- * @details
- *
-*/
-
 struct daNpc_Seirei_HIOParam {
     /* 0x00 */ daNpcT_HIOParam common;
     /* 0x8C */ f32 force_talk_dist;     // 強制会話距離 - Force Talk Distance
     /* 0x90 */ f32 talk_dist;           // 会話距離 - Talk Distance
-};
-
-class daNpc_Seirei_HIO_c : public mDoHIO_entry_c {
-    /* 0x8 */ daNpc_Seirei_HIOParam param;
 };
 
 class daNpc_Seirei_Param_c {
@@ -29,6 +16,31 @@ public:
     static daNpc_Seirei_HIOParam const m;
 };
 
+#if DEBUG
+class daNpc_Seirei_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Seirei_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Seirei_HIOParam m;
+};
+
+#define NPC_SEIREI_HIO_CLASS daNpc_Seirei_HIO_c
+#else
+#define NPC_SEIREI_HIO_CLASS daNpc_Seirei_Param_c
+#endif
+
+/**
+ * @ingroup actors-npcs
+ * @class daNpc_Seirei_c
+ * @brief Light Spirit Ordona
+ *
+ * @details
+ *
+*/
 class daNpc_Seirei_c : public daNpcT_c {
 public:
     typedef int (daNpc_Seirei_c::*actionFunc)(void*);
@@ -91,7 +103,7 @@ public:
     static cutFunc mCutList[2];
 
 private:
-    /* 0xE40 */ daNpc_Seirei_HIO_c* mHIO;
+    /* 0xE40 */ NPC_SEIREI_HIO_CLASS* mpHIO;
     /* 0xE44 */ u8 mType;
     /* 0xE45 */ u8 arg0;
     /* 0xE48 */ actionFunc mNextAction;

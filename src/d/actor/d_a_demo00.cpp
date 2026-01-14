@@ -1174,14 +1174,15 @@ inline int daDemo00_c::execute() {
 
     if (field_0x6ae != 0) {
         f32 cutoff = 90.0f;
-        cutoff = shape_angle.z / 182.04445f;
+        // converting from short to degrees
+        cutoff = shape_angle.z / DEG2S_CONSTANT;
         GXColor color;
         color.r = scale.x;
         color.g = scale.y;
         color.b = scale.z;
         color.a = 0xFF;
-        f32 f30 = shape_angle.x / 182.04445f;
-        f32 f29 = shape_angle.y / 182.04445f;
+        f32 f30 = shape_angle.x / DEG2S_CONSTANT;
+        f32 f29 = shape_angle.y / DEG2S_CONSTANT;
         dKy_BossSpotLight_set(&current.pos, f30, f29 - 90.0f, 
                               cutoff, &color, gravity, field_0x6b0, field_0x6af);
     }

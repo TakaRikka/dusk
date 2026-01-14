@@ -11,12 +11,6 @@
 #include "d/actor/d_a_hozelda.h"
 #include "d/d_debug_viewer.h"
 
-#if DEBUG
-#define HIO_PARAM(i_this) (i_this->mHIO->param)
-#else
-#define HIO_PARAM(_) (daNpc_Zelda_Param_c::m)
-#endif
-
 static u32 l_bmdData[2] = { 11, 1 };
 
 static daNpcT_evtData_c l_evtList[2] = {
@@ -61,19 +55,15 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
 const char* daNpc_Zelda_c::mCutNameList = "";
 daNpc_Zelda_c::cutFunc daNpc_Zelda_c::mCutList[1] = { 0 };
 
-#if DEBUG
-static daNpc_Zelda_HIO_c l_HIO;
-#else
-static daNpc_Zelda_Param_c l_HIO;
-#endif
+static NPC_ZELDA_HIO_CLASS l_HIO;
 
 #if DEBUG
 daNpc_Zelda_HIO_c::daNpc_Zelda_HIO_c() {
-    param = daNpc_Zelda_Param_c::m;
+    m = daNpc_Zelda_Param_c::m;
 }
 
 void daNpc_Zelda_HIO_c::genMessage(JORMContext* ctx) {
-    daNpcT_cmnGenMessage(ctx, &param.common);
+    daNpcT_cmnGenMessage(ctx, &m.common);
     ctx->genButton
               ("ファイル書き出し",0x40000002,0,NULL,0xffff,0xffff,0x200,0x18);
 }
@@ -89,7 +79,7 @@ void daNpc_Zelda_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
         if (aJStack_910.open(6, "", NULL, NULL, NULL) != 0) {
             memset(auStack_7e0, 0, 2000);
             int retval = 0;
-            daNpcT_cmnListenPropertyEvent(auStack_7e0, &retval, &param.common);
+            daNpcT_cmnListenPropertyEvent(auStack_7e0, &retval, &m.common);
             aJStack_910.writeData(auStack_7e0, retval);
             aJStack_910.close();
             OS_REPORT("write append success!::%6d\n", retval);
@@ -109,8 +99,8 @@ daNpc_Zelda_c::~daNpc_Zelda_c() {
     }
 
 #if DEBUG
-    if (mHIO != NULL) {
-        mHIO->removeHIO();
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
     }
 #endif
 
@@ -201,9 +191,9 @@ int daNpc_Zelda_c::create() {
         mSound.init(&current.pos, &eyePos, 3, 1);
 
 #if DEBUG
-        mHIO = &l_HIO;
+        mpHIO = &l_HIO;
         // Zelda
-        mHIO->entryHIO("ゼルダ");
+        mpHIO->entryHIO("ゼルダ");
 #endif
 
         reset();
@@ -212,7 +202,7 @@ int daNpc_Zelda_c::create() {
             &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this),
             fopAcM_GetShapeAngle_p(this));
 
-        mCcStts.Init(HIO_PARAM(this).common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
 
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
@@ -434,26 +424,26 @@ void daNpc_Zelda_c::setParam() {
     srchActors();
 
     s32 attnFlag = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
-    s16 talkDist = HIO_PARAM(this).common.talk_distance;
-    s16 talkAngle = HIO_PARAM(this).common.talk_angle;
-    s16 attnDist = HIO_PARAM(this).common.attention_distance;
-    s16 attnAngle = HIO_PARAM(this).common.attention_angle;
+    s16 talkDist = mpHIO->m.common.talk_distance;
+    s16 talkAngle = mpHIO->m.common.talk_angle;
+    s16 attnDist = mpHIO->m.common.attention_distance;
+    s16 attnAngle = mpHIO->m.common.attention_angle;
     attention_info.distances[fopAc_attn_LOCK_e] =
         daNpcT_getDistTableIdx(attnDist, attnAngle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
     attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(talkDist, talkAngle);
     attention_info.flags = attnFlag;
-    scale.set(HIO_PARAM(this).common.scale, HIO_PARAM(this).common.scale, HIO_PARAM(this).common.scale);
-    mCcStts.SetWeight(HIO_PARAM(this).common.weight);
-    mCylH = HIO_PARAM(this).common.height;
-    mWallR = HIO_PARAM(this).common.width;
-    mAttnFovY = HIO_PARAM(this).common.fov;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(HIO_PARAM(this).common.knee_length);
-    mRealShadowSize = HIO_PARAM(this).common.real_shadow_size;
-    mExpressionMorfFrame = HIO_PARAM(this).common.expression_morf_frame;
-    mMorfFrames = HIO_PARAM(this).common.morf_frame;
-    gravity = HIO_PARAM(this).common.gravity;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
     if (field_0xf80 == 0) {
         mAcch.SetGrndNone();
         mAcch.SetWallNone();
@@ -540,15 +530,15 @@ void daNpc_Zelda_c::setAttnPos() {
         getBackboneJointNo(),
         getNeckJointNo(),
         getHeadJointNo(),
-        HIO_PARAM(this).common.body_angleX_min,
-        HIO_PARAM(this).common.body_angleX_max,
-        HIO_PARAM(this).common.body_angleY_min,
-        HIO_PARAM(this).common.body_angleY_max,
-        HIO_PARAM(this).common.head_angleX_min,
-        HIO_PARAM(this).common.head_angleX_max,
-        HIO_PARAM(this).common.head_angleY_min,
-        HIO_PARAM(this).common.head_angleY_max,
-        HIO_PARAM(this).common.neck_rotation_ratio,
+        mpHIO->m.common.body_angleX_min,
+        mpHIO->m.common.body_angleX_max,
+        mpHIO->m.common.body_angleY_min,
+        mpHIO->m.common.body_angleY_max,
+        mpHIO->m.common.head_angleX_min,
+        mpHIO->m.common.head_angleX_max,
+        mpHIO->m.common.head_angleY_min,
+        mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio,
         0.0f,
         NULL);
     mJntAnm.calcJntRad(0.2f, 1.0f, dVar6);
@@ -560,7 +550,7 @@ void daNpc_Zelda_c::setAttnPos() {
     mJntAnm.setEyeAngleX(eyePos, 1.0f, 0);
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, 0, 1.0f, 0);
     acStack_3c.set(0.0f, 0.0f, 0.0f);
-    acStack_3c.y = HIO_PARAM(this).common.attention_offset;
+    acStack_3c.y = mpHIO->m.common.attention_offset;
     if (field_0xf80 == 0) {
         acStack_3c.set(0.0f, 170.0f, 10.0f);
     }
@@ -621,7 +611,7 @@ void daNpc_Zelda_c::setCollision() {
 int daNpc_Zelda_c::drawDbgInfo() {
 #if DEBUG
     const daNpc_Zelda_HIOParam* m = &daNpc_Zelda_Param_c::m;
-    if (HIO_PARAM(this).common.debug_info_ON != 0) {
+    if (mpHIO->m.common.debug_info_ON != 0) {
         f32 distMax1 = dComIfGp_getAttention()->getDistTable(
             attention_info.distances[fopAc_attn_JUEL_e]).mDistMax;
         f32 distMax2 = dComIfGp_getAttention()->getDistTable(

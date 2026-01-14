@@ -4,7 +4,7 @@
 #include "JSystem/JGadget/linklist.h"
 #include "JSystem/JKernel/JKRDisposer.h"
 #include "JSystem/JUtility/JUTFont.h"
-#include <stdarg>
+#include <cstdarg>
 
 /**
 * @ingroup jsystem-jutility

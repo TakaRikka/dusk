@@ -6,6 +6,44 @@
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
 
+struct daObj_Kago_HIOParam {
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 mGravity;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0c;
+    /* 0x10 */ f32 mWeight;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 mWallH;
+    /* 0x1C */ f32 mWallR;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+};
+
+class daObj_Kago_Param_c {
+public:
+    virtual ~daObj_Kago_Param_c() {}
+
+    static const daObj_Kago_HIOParam m;
+};
+
+#if DEBUG
+class daObj_Kago_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_Kago_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_Kago_HIOParam m;
+};
+
+#define OBJ_KAGO_HIO_CLASS daObj_Kago_HIO_c
+#else
+#define OBJ_KAGO_HIO_CLASS daObj_Kago_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObj_Kago_c
@@ -34,10 +72,10 @@ public:
     void setHamonPrtcl();
 
     u8 getType() {
-        int iVar1 = fopAcM_GetParam(this) & 0xFF;
-        u8 rv;
+        u8 adj_arg = argument & 0x7F;
+        u8 iVar1 = fopAcM_GetParam(this) & 0xFF;
 
-        switch ((argument & 127)) {
+        switch (adj_arg) {
             case 0:
                 switch (iVar1) {
                     case 0:
@@ -88,7 +126,7 @@ public:
     }
     
 private:
-    /* 0x568 */ u8 field_0x568[0x56c - 0x568];
+    /* 0x568 */ OBJ_KAGO_HIO_CLASS* mpHIO;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* field_0x574;
     /* 0x578 */ dBgS_ObjAcch mObjAcch;
@@ -138,26 +176,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daObj_Kago_c) == 0xba8);
-
-class daObj_Kago_Param_c {
-public:
-    virtual ~daObj_Kago_Param_c() {}
-
-    struct Data {
-        /* 0x00 */ f32 field_0x00;
-        /* 0x04 */ f32 mGravity;
-        /* 0x08 */ f32 field_0x08;
-        /* 0x0C */ f32 field_0x0c;
-        /* 0x10 */ f32 mWeight;
-        /* 0x14 */ f32 field_0x14;
-        /* 0x18 */ f32 mWallH;
-        /* 0x1C */ f32 mWallR;
-        /* 0x20 */ f32 field_0x20;
-        /* 0x24 */ f32 field_0x24;
-        /* 0x28 */ f32 field_0x28;
-    };
-    static const Data m;
-};
-
 
 #endif /* D_A_OBJ_KAGO_H */

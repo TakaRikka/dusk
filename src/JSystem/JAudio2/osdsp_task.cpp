@@ -151,8 +151,8 @@ static void Dsp_Update_Request() {
     }
 }
 
-bool Dsp_Running_Check() {
-    return struct_80451308 == 1;
+int Dsp_Running_Check() {
+    return struct_80451308 == 1 ? TRUE : FALSE;
 }
 
 void Dsp_Running_Start() {

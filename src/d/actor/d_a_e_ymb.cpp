@@ -11,7 +11,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera_mng.h"
-#include <math>
+#include <cmath>
 #include "Z2AudioLib/Z2Instances.h"
 
 struct daE_YMB_HIO_c {

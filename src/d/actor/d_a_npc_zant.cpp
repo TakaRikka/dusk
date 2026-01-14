@@ -56,7 +56,28 @@ daNpc_Zant_c::cutFunc daNpc_Zant_c::mCutList[1] = {
     NULL
 };
 
-static daNpc_Zant_Param_c l_HIO;
+static NPC_ZANT_HIO_CLASS l_HIO;
+
+daNpc_Zant_HIOParam const daNpc_Zant_Param_c::m  = {
+    270.0f, -3.0f, 1.0f, 500.0f, 255.0f, 250.0f, 35.0f, 50.0f,
+    0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -10.0f, 45.0f, -45.0f,
+    0.6f, 12.0f, 3, 6, 5, 6, 110.0f, 0.0f, 0.0f, 0.0f, 60, 8,
+    0, 0, 0, 0, 0, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+};
+
+#if DEBUG
+daNpc_Zant_HIO_c::daNpc_Zant_HIO_c() {
+    m = daNpc_Zant_Param_c::m;
+}
+
+void daNpc_Zant_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Zant_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
 
 daNpc_Zant_c::~daNpc_Zant_c() {
     OS_REPORT("|%06d:%x|daNpc_Zant_c -> デストラクト\n", g_Counter.mCounter0, this);
@@ -64,15 +85,14 @@ daNpc_Zant_c::~daNpc_Zant_c() {
         mpMorf[0]->stopZelAnime();
     }
 
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     deleteRes(l_loadResPtrnList[mType], (const char **)l_resNameList);
 }
-
-daNpc_Zant_Param_c::Data const daNpc_Zant_Param_c::m  = {
-    270.0f, -3.0f, 1.0f, 500.0f, 255.0f, 250.0f, 35.0f, 50.0f,
-    0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -10.0f, 45.0f, -45.0f,
-    0.6f, 12.0f, 3, 6, 5, 6, 110.0f, 0.0f, 0.0f, 0.0f, 60, 8,
-    0, 0, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
-};
 
 int daNpc_Zant_c::create() {
     int rv;
@@ -96,9 +116,15 @@ int daNpc_Zant_c::create() {
             fopAcM_OnStatus(this, 0x8000000);
 
             mSound.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+            mpHIO = &l_HIO;
+            mpHIO->entryHIO("ザント");
+#endif
+
             mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
-            mCcStts.Init(daNpc_Zant_Param_c::m.field_0x10, 0, this);
-            
+            mCcStts.Init(mpHIO->m.common.weight, 0, this);
+
             mCyl.Set(mCcDCyl);
             mCyl.SetStts(&mCcStts);
             mCyl.SetTgHitCallback(tgHitCallBack);
@@ -233,29 +259,29 @@ void daNpc_Zant_c::setParam() {
     selectAction();
     srchActors();
 
-    s16 sVar1 = daNpc_Zant_Param_c::m.field_0x48;
-    s16 sVar2 = daNpc_Zant_Param_c::m.field_0x4a;
-    attention_info.distances[0] = daNpcT_getDistTableIdx(daNpc_Zant_Param_c::m.field_0x4c, daNpc_Zant_Param_c::m.field_0x4e);
+    s16 sVar1 = mpHIO->m.common.talk_distance;
+    s16 sVar2 = mpHIO->m.common.talk_angle;
+    attention_info.distances[0] = daNpcT_getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
     attention_info.distances[1] = attention_info.distances[0];
     attention_info.distances[3] = daNpcT_getDistTableIdx(sVar1, sVar2);
 
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
 
-    scale.setall(daNpc_Zant_Param_c::m.field_0x8);
+    scale.setall(mpHIO->m.common.scale);
 
-    mCcStts.SetWeight(daNpc_Zant_Param_c::m.field_0x10);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
 
-    mCylH = daNpc_Zant_Param_c::m.field_0x14;
-    mWallR = daNpc_Zant_Param_c::m.field_0x1c;
-    mAttnFovY = daNpc_Zant_Param_c::m.field_0x50;
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
 
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Zant_Param_c::m.field_0x18);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
 
-    mRealShadowSize = daNpc_Zant_Param_c::m.field_0xc;
-    gravity = daNpc_Zant_Param_c::m.field_0x4;
-    mExpressionMorfFrame = daNpc_Zant_Param_c::m.field_0x6c;
-    mMorfFrames = daNpc_Zant_Param_c::m.field_0x44;
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    gravity = mpHIO->m.common.gravity;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
 }
 
 void daNpc_Zant_c::setAfterTalkMotion() {
@@ -333,12 +359,12 @@ void daNpc_Zant_c::setAttnPos() {
     f32 fVar1 = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     J3DModel* model = mpMorf[0]->getModel();
     mJntAnm.setParam(this, model, &cStack1, getBackboneJointNo(),
-        getNeckJointNo(), getHeadJointNo(), daNpc_Zant_Param_c::m.field_0x24,
-        daNpc_Zant_Param_c::m.field_0x20, daNpc_Zant_Param_c::m.field_0x2c,
-        daNpc_Zant_Param_c::m.field_0x28, daNpc_Zant_Param_c::m.field_0x34,
-        daNpc_Zant_Param_c::m.field_0x30, daNpc_Zant_Param_c::m.field_0x3c,
-        daNpc_Zant_Param_c::m.field_0x38, daNpc_Zant_Param_c::m.field_0x40,
-        fVar1, NULL);
+        getNeckJointNo(), getHeadJointNo(),
+        mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+        mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+        mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+        mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio, fVar1, NULL);
     
     mJntAnm.calcJntRad(0.2f, 1.0f, fVar1);
     setMtx();
@@ -346,7 +372,7 @@ void daNpc_Zant_c::setAttnPos() {
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, 1, 1.0f, 0);
 
     attention_info.position = current.pos;
-    attention_info.position.y += daNpc_Zant_Param_c::m.field_0x0;
+    attention_info.position.y += mpHIO->m.common.attention_offset;
     eyePos = attention_info.position;
 }
 

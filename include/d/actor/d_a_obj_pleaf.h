@@ -4,6 +4,37 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
+struct daObj_Pleaf_HIOParam {
+    f32 field_0x0;
+    f32 field_0x4;
+    f32 field_0x8;
+    f32 field_0xc;
+};
+
+class daObj_Pleaf_Param_c {
+public:
+    virtual ~daObj_Pleaf_Param_c() {}
+
+    static daObj_Pleaf_HIOParam const m;
+};
+
+#if DEBUG
+class daObj_Pleaf_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_Pleaf_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_Pleaf_HIOParam m;
+};
+
+#define OBJ_PLEAF_HIO_CLASS daObj_Pleaf_HIO_c
+#else
+#define OBJ_PLEAF_HIO_CLASS daObj_Pleaf_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObj_Pleaf_c
@@ -14,7 +45,7 @@
  */
 class daObj_Pleaf_c : public fopAc_ac_c {
 private:
-    /* 0x568*/ u8 field_0x568[0x56C - 0x568];
+    /* 0x568 */ OBJ_PLEAF_HIO_CLASS* mpHIO;
     /* 0x56C */ request_of_phase_process_class mPhaseReq;
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ dBgS_ObjAcch mObjAcch;
@@ -44,19 +75,5 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daObj_Pleaf_c) == 0x950);
-
-class daObj_Pleaf_Param_c {
-public:
-    virtual ~daObj_Pleaf_Param_c() {}
-
-    struct params {
-        f32 field_0x0;
-        f32 field_0x4;
-        f32 field_0x8;
-        f32 field_0xc;
-    };
-
-    static daObj_Pleaf_Param_c::params const m;
-};
 
 #endif /* D_A_OBJ_PLEAF_H */

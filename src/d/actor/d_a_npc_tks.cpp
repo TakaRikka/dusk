@@ -133,7 +133,7 @@ enum RES_Name {
     /* 0x2 */ K_TUBO02,
 };
 
-static daNpcTks_Param_c l_HIO;
+static NPC_TKS_HIO_CLASS l_HIO;
 
 static daNpc_GetParam3 l_bckGetParamList[22] = {
     {-1, J3DFrameCtrl::EMode_LOOP},
@@ -201,22 +201,6 @@ static char* l_arcName = "TKS";
 
 static char* l_myName = "Tks";
 
-daNpcTks_c::daNpcTks_c() {}
-
-daNpcTks_c::~daNpcTks_c() {
-    for (int i = 0; l_loadRes_list[mTksTsubo.mTsuboType][i] >= 0; i++) {
-        dComIfG_resDelete(&mPhases[i], l_arcNames[l_loadRes_list[mTksTsubo.mTsuboType][i]]);
-    }
-
-    if (heap != NULL) {
-        mAnm_p->stopZelAnime();
-    }
-
-    if (parentActorID != fpcM_ERROR_PROCESS_ID_e) {
-        fopAcM_delete(parentActorID);
-    }
-}
-
 daNpcTks_HIOParam const daNpcTks_Param_c::m = {
     90.0f,
     -3.0f,
@@ -264,6 +248,42 @@ daNpcTks_HIOParam const daNpcTks_Param_c::m = {
     5.0f,
 };
 
+#if DEBUG
+daNpcTks_HIO_c::daNpcTks_HIO_c() {
+    m = daNpcTks_Param_c::m;
+}
+
+void daNpcTks_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpcTks_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpcTks_c::daNpcTks_c() {}
+
+daNpcTks_c::~daNpcTks_c() {
+    for (int i = 0; l_loadRes_list[mTksTsubo.mTsuboType][i] >= 0; i++) {
+        dComIfG_resDelete(&mPhases[i], l_arcNames[l_loadRes_list[mTksTsubo.mTsuboType][i]]);
+    }
+
+    if (heap != NULL) {
+        mAnm_p->stopZelAnime();
+    }
+
+    if (parentActorID != fpcM_ERROR_PROCESS_ID_e) {
+        fopAcM_delete(parentActorID);
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+}
+
 cPhs__Step daNpcTks_c::Create() {
     fopAcM_ct(this, daNpcTks_c);
 
@@ -309,7 +329,12 @@ cPhs__Step daNpcTks_c::Create() {
         mSound.init(&current.pos, &eyePos, 3, 1);
         mTksTsubo.mSound.init(&mTksTsubo.mPos, &mTksTsubo.mPos, 3, 1);
 
-        mAcchCir.SetWall(daNpcTks_Param_c::m.common.width, daNpcTks_Param_c::m.common.knee_length);
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("はぐれ天空人");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.SetRoofNone();
@@ -317,13 +342,13 @@ cPhs__Step daNpcTks_c::Create() {
         mGndChk = mAcch.m_gnd;
         mGroundH = mAcch.GetGroundH();
 
-        mCcStts.Init(daNpcTks_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgType(0);
         mCyl.SetTgSPrm(0);
-        mCyl.SetH(daNpcTks_Param_c::m.common.height);
-        mCyl.SetR(daNpcTks_Param_c::m.common.width);
+        mCyl.SetH(mpHIO->m.common.height);
+        mCyl.SetR(mpHIO->m.common.width);
         mTksTsubo.mCyl.Set(mCcDCyl);
         mTksTsubo.mCyl.SetStts(&mCcStts);
         mTksTsubo.mCyl.SetTgType(0xD8FBFDFF);
@@ -400,7 +425,7 @@ int daNpcTks_c::Execute() {
 
 int daNpcTks_c::Draw() {
     mAnm_p->getModel()->getModelData()->getMaterialNodePointer(2)->setMaterialAnm(mpMatAnm);
-    draw(FALSE, FALSE, daNpcTks_Param_c::m.common.real_shadow_size, NULL, FALSE);
+    draw(FALSE, FALSE, mpHIO->m.common.real_shadow_size, NULL, FALSE);
     return 1;
 }
 
@@ -423,7 +448,7 @@ int daNpcTks_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
         case JNT_NECK1:
         case JNT_NECK2:
         case JNT_HEAD:
-            setLookatMtx(jntNo, i_jointList, daNpcTks_Param_c::m.common.neck_rotation_ratio);
+            setLookatMtx(jntNo, i_jointList, mpHIO->m.common.neck_rotation_ratio);
             break;
     }
 
@@ -611,7 +636,7 @@ void daNpcTks_c::reset() {
     mMode = 0;
     field_0x138a = true;
     mPlayerArea = -1;
-    scale.setall(daNpcTks_Param_c::m.common.scale);
+    scale.setall(mpHIO->m.common.scale);
 
     dKy_tevstr_init(&mTksTsubo.mTevStr, fopAcM_GetRoomNo(this), 0xFF);
     setAngle(shape_angle.y);
@@ -754,8 +779,8 @@ BOOL daNpcTks_c::setAction(actionFunc action) {
 
 int daNpcTks_c::getPlayerArea() {
     f32 fVar3, fVar2, fVar1;
-    fVar1 = std::pow(daNpcTks_Param_c::m.area_a_dist, 2.0f);
-    fVar2 = std::pow(daNpcTks_Param_c::m.area_b_dist, 2.0f);
+    fVar1 = std::pow(mpHIO->m.area_a_dist, 2.0f);
+    fVar2 = std::pow(mpHIO->m.area_b_dist, 2.0f);
     fVar3 = fopAcM_searchPlayerDistanceXZ2(this);
 
     if (fVar3 > 0.0f && fVar3 <= fVar2) {
@@ -770,9 +795,9 @@ int daNpcTks_c::getPlayerArea() {
 };
 
 void daNpcTks_c::playExpression() {
-    daNpcF_anmPlayData dat0 = {ANM_F_TALK_A, daNpcTks_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat0 = {ANM_F_TALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1 = {ANM_NONE, daNpcTks_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat1 = {ANM_NONE, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[1] = {&dat1};
 
     daNpcF_anmPlayData** ppDat[2] = {
@@ -786,13 +811,13 @@ void daNpcTks_c::playExpression() {
 };
 
 void daNpcTks_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {ANM_WAIT_A, daNpcTks_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat0 = {ANM_WAIT_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1 = {ANM_SWIM, daNpcTks_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat1 = {ANM_SWIM, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[1] = {&dat1};
-    daNpcF_anmPlayData dat2 = {ANM_RUN, daNpcTks_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat2 = {ANM_RUN, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[1] = {&dat2};
-    daNpcF_anmPlayData dat3 = {ANM_WALK_A, daNpcTks_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData dat3 = {ANM_WALK_A, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[1] = {&dat3};
     daNpcF_anmPlayData dat4a = {ANM_JUMP_S, 4.0f, 1};
     daNpcF_anmPlayData dat4b = {ANM_FLY, 0.0f, 0};
@@ -825,14 +850,14 @@ void daNpcTks_c::lookat() {
     daPy_py_c* player = NULL;
     J3DModel* model = mAnm_p->getModel();
     BOOL i_snap = FALSE;
-    f32 body_angleX_min = daNpcTks_Param_c::m.common.body_angleX_min;
-    f32 body_angleX_max = daNpcTks_Param_c::m.common.body_angleX_max;
-    f32 body_angleY_min = daNpcTks_Param_c::m.common.body_angleY_min;
-    f32 body_angleY_max = daNpcTks_Param_c::m.common.body_angleY_max;
-    f32 head_angleX_min = field_0x138a ? 0.0f : daNpcTks_Param_c::m.common.head_angleX_min;
-    f32 head_angleX_max = field_0x138a ? 0.0f : daNpcTks_Param_c::m.common.head_angleX_max;
-    f32 head_angleY_min = daNpcTks_Param_c::m.common.head_angleY_min;
-    f32 head_angleY_max = daNpcTks_Param_c::m.common.head_angleY_max;
+    f32 body_angleX_min = mpHIO->m.common.body_angleX_min;
+    f32 body_angleX_max = mpHIO->m.common.body_angleX_max;
+    f32 body_angleY_min = mpHIO->m.common.body_angleY_min;
+    f32 body_angleY_max = mpHIO->m.common.body_angleY_max;
+    f32 head_angleX_min = field_0x138a ? 0.0f : mpHIO->m.common.head_angleX_min;
+    f32 head_angleX_max = field_0x138a ? 0.0f : mpHIO->m.common.head_angleX_max;
+    f32 head_angleY_min = mpHIO->m.common.head_angleY_min;
+    f32 head_angleY_max = mpHIO->m.common.head_angleY_max;
     s16 angle_delta = mCurAngle.y - mOldAngle.y;
     cXyz lookatPos[3] = {mLookatPos[0], mLookatPos[1], mLookatPos[2]};
     csXyz* lookatAngle[3] = {&mLookatAngle[0], &mLookatAngle[1], &mLookatAngle[2]};
@@ -903,7 +928,7 @@ void daNpcTks_c::playTsuboAnm() {
 };
 
 BOOL daNpcTks_c::checkFindPlayer() {
-    f32 fVar1 = pow(daNpcTks_Param_c::m.area_a_dist, 2.0);
+    f32 fVar1 = pow(mpHIO->m.area_a_dist, 2.0);
     f32 fVar2 = fopAcM_searchPlayerDistanceXZ2(this);
     mActorMngr[0].remove();
 
@@ -984,7 +1009,7 @@ void daNpcTks_c::setMotionAnm(int i_index, f32 i_morf) {
         mMotionLoops = 0;
 
         if (i_index == ANM_RUN) {
-            mAnm_p->setPlaySpeed(speedF / daNpcTks_Param_c::m.walk_spd);
+            mAnm_p->setPlaySpeed(speedF / mpHIO->m.walk_spd);
         } else {
             mAnm_p->setPlaySpeed(1.0f);
         }
@@ -1224,7 +1249,7 @@ void daNpcTks_c::hide() {
         case 0:
             setMotionAnm(ANM_HIDE, 0.0f);
             field_0x138a = true;
-            field_0x1370 = cLib_getRndValue<int>(daNpcTks_Param_c::m.hide_time_1, daNpcTks_Param_c::m.hide_time_2 - daNpcTks_Param_c::m.hide_time_1);
+            field_0x1370 = cLib_getRndValue<int>(mpHIO->m.hide_time_1, mpHIO->m.hide_time_2 - mpHIO->m.hide_time_1);
             speedF = 0.0f;
             mMode = 2;
             break;
@@ -1321,7 +1346,7 @@ void daNpcTks_c::showUpWait() {
         case 0:
             setMotionAnm(ANM_SHOW_UP_WAIT, 0.0f);
             field_0x138a = true;
-            field_0x1370 = cLib_getRndValue<int>(daNpcTks_Param_c::m.show_up_wait_time_1, daNpcTks_Param_c::m.show_up_wait_time_2 - daNpcTks_Param_c::m.show_up_wait_time_1);
+            field_0x1370 = cLib_getRndValue<int>(mpHIO->m.show_up_wait_time_1, mpHIO->m.show_up_wait_time_2 - mpHIO->m.show_up_wait_time_1);
             speedF = 0.0f;
             mMode = 2;
             break;
@@ -1499,7 +1524,7 @@ void daNpcTks_c::broken() {
             mTksTsubo.field_0x586 = 0;
             fopAcM_onSwitch(this, getSwitchNo());
             speedF = 0.0f;
-            speed.y = daNpcTks_Param_c::m.launch_spd;
+            speed.y = mpHIO->m.launch_spd;
             mMode = 2;
             break;
         
@@ -1572,8 +1597,8 @@ void daNpcTks_c::demo_appear() {
                                 cLib_offBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
                                 field_0x138a = false;
                                 mTksTsubo.field_0x586 = 0;
-                                speedF = daNpcTks_Param_c::m.movement_spd;
-                                speed.y = daNpcTks_Param_c::m.launch_spd;
+                                speedF = mpHIO->m.movement_spd;
+                                speed.y = mpHIO->m.launch_spd;
                                 break;
 
                             case '0004':
@@ -2882,9 +2907,9 @@ static int daNpcTks_IsDelete(void* a_this) {
 }
 
 void daNpcTks_c::setParam() {
-    mAcchCir.SetWallR(daNpcTks_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpcTks_Param_c::m.common.knee_length);
-    gravity = fopAcM_checkCarryNow(this) != 0 ? 0.0f: daNpcTks_Param_c::m.common.gravity;
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    gravity = fopAcM_checkCarryNow(this) != 0 ? 0.0f: mpHIO->m.common.gravity;
     maxFallSpeed = -50.0f;
 }
 
@@ -2945,14 +2970,14 @@ void daNpcTks_c::setAttnPos() {
         mEyeAngle.x = 0;
     }
 
-    attention_info.position.set(current.pos.x, current.pos.y + daNpcTks_Param_c::m.common.attention_offset, current.pos.z);
+    attention_info.position.set(current.pos.x, current.pos.y + mpHIO->m.common.attention_offset, current.pos.z);
 
     if (!fopAcM_checkCarryNow(this)) {
         if (!field_0x138a) {
             mCyl.SetC(current.pos);
             #if DEBUG
-            mCyl.SetH(daNpcTks_Param_c::m.common.height);
-            mCyl.SetR(daNpcTks_Param_c::m.common.width);
+            mCyl.SetH(mpHIO->m.common.height);
+            mCyl.SetR(mpHIO->m.common.width);
             #endif
             dComIfG_Ccsp()->Set(&mCyl);
         }
@@ -3005,7 +3030,7 @@ void daNpcTks_c::drawOtherMdls() {
         }
 
         mTksTsubo.mShadowKey = dComIfGd_setShadow(mTksTsubo.mShadowKey, 1, model,
-                                                  pcVar1, daNpcTks_Param_c::m.common.real_shadow_size,
+                                                  pcVar1, mpHIO->m.common.real_shadow_size,
                                                   30.0f, pcVar1->y, fVar1, *polyBase, &mTksTsubo.mTevStr, 0, 1.0f,
                                                   dDlst_shadowControl_c::getSimpleTex());
     }

@@ -1,5 +1,5 @@
 #include <locale>
-#include <ctype>
+#include <cctype>
 #include <wctype_api.h>
 #include <mbstring.h>
 

@@ -11,7 +11,7 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
-#include <math>
+#include <cmath>
 
 static u32 const l_bmd[2] = {
     4, 4,

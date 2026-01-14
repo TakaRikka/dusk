@@ -775,7 +775,7 @@ void dMap_c::changeTextureSize(int param_1, int param_2, int param_3) {
     mTexSizeH = param_2 >> param_3;
 
     u32 imageSize = GXGetTexBufferSize(mTexSizeW, mTexSizeH, 9, 0, 0);
-    OS_REPORT("imageSize<%d> <%d kbyte>mTexSizeW<%d>mTexSizeH<%d>\n", imageSize, imageSize * 0.0009765625f, mTexSizeW, mTexSizeH);
+    OS_REPORT("imageSize<%d> <%d kbyte>mTexSizeW<%d>mTexSizeH<%d>\n", imageSize, imageSize * (1.0f / 1024.f), mTexSizeW, mTexSizeH);
 
     JUT_ASSERT(2682, mImage_p != NULL);
     

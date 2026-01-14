@@ -155,19 +155,6 @@ daNpc_Maro_c::cutFunc daNpc_Maro_c::mCutList[17] = {
     &daNpc_Maro_c::cutTalkToKakashi,
 };
 
-daNpc_Maro_c::~daNpc_Maro_c() {
-    deleteObject();
-    if (field_0x10bc != 0xFFFFFFFF) {
-        dComIfG_TimerDeleteRequest(0);
-    }
-
-    if (mpMorf[0] != 0) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
-}
-
 const daNpc_Maro_HIOParam daNpc_Maro_Param_c::m = {
     100.0f,
     -3.0f,
@@ -210,8 +197,43 @@ const daNpc_Maro_HIOParam daNpc_Maro_Param_c::m = {
     30.0f,
     15.0f,
     30.0f,
-    0x00780000,
+    0x0078,
 };
+
+static NPC_MARO_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Maro_HIO_c::daNpc_Maro_HIO_c() {
+    m = daNpc_Maro_Param_c::m;
+}
+
+void daNpc_Maro_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Maro_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_Maro_c::~daNpc_Maro_c() {
+    deleteObject();
+    if (field_0x10bc != 0xFFFFFFFF) {
+        dComIfG_TimerDeleteRequest(0);
+    }
+
+    if (mpMorf[0] != 0) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
+}
 
 int daNpc_Maro_c::create() {
     static int const heapSize[17] = {
@@ -246,11 +268,17 @@ int daNpc_Maro_c::create() {
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("マロ");
+#endif
+
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                         &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this),
                         fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Maro_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl1.Set(mCcDCyl);
         mCyl1.SetStts(&mCcStts);
         mCyl1.SetTgHitCallback(tgHitCallBack);
@@ -603,10 +631,10 @@ void daNpc_Maro_c::setParam() {
 
     srchActors();
     u32 uVar7 = (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
-    s16 sVar10 = daNpc_Maro_Param_c::m.common.talk_distance;
-    s16 sVar9 = daNpc_Maro_Param_c::m.common.talk_angle;
-    s16 sVar8 = daNpc_Maro_Param_c::m.common.attention_distance;
-    s16 sVar7 = daNpc_Maro_Param_c::m.common.attention_angle;
+    s16 sVar10 = mpHIO->m.common.talk_distance;
+    s16 sVar9 = mpHIO->m.common.talk_angle;
+    s16 sVar8 = mpHIO->m.common.attention_distance;
+    s16 sVar7 = mpHIO->m.common.attention_angle;
     if (&daNpc_Maro_c::swdTutorial == field_0x110c) {
         sVar10 = 11;
         sVar9 = 6;
@@ -646,18 +674,18 @@ void daNpc_Maro_c::setParam() {
     attention_info.distances[3] = daNpcT_getDistTableIdx(sVar10, sVar9);
 
     attention_info.flags = uVar7;
-    scale.set(daNpc_Maro_Param_c::m.common.scale, daNpc_Maro_Param_c::m.common.scale,
-            daNpc_Maro_Param_c::m.common.scale);
-    mCcStts.SetWeight(daNpc_Maro_Param_c::m.common.weight);
-    mCylH = daNpc_Maro_Param_c::m.common.height;
-    mWallR = daNpc_Maro_Param_c::m.common.width;
-    mAttnFovY = daNpc_Maro_Param_c::m.common.fov;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale,
+            mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Maro_Param_c::m.common.knee_length);
-    mRealShadowSize = daNpc_Maro_Param_c::m.common.real_shadow_size;
-    mExpressionMorfFrame = daNpc_Maro_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Maro_Param_c::m.common.morf_frame;
-    gravity = daNpc_Maro_Param_c::m.common.gravity;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_Maro_c::checkChangeEvt() {
@@ -975,11 +1003,11 @@ void daNpc_Maro_c::setAttnPos() {
     f32 dVar8 = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     mJntAnm.setParam(
         this, mpMorf[0]->getModel(), &eyeOffset, getBackboneJointNo(), getNeckJointNo(),
-        getHeadJointNo(), daNpc_Maro_Param_c::m.common.body_angleX_min, daNpc_Maro_Param_c::m.common.body_angleX_max,
-        daNpc_Maro_Param_c::m.common.body_angleY_min, daNpc_Maro_Param_c::m.common.body_angleY_max,
-        daNpc_Maro_Param_c::m.common.head_angleX_min, daNpc_Maro_Param_c::m.common.head_angleX_max,
-        daNpc_Maro_Param_c::m.common.head_angleY_min, daNpc_Maro_Param_c::m.common.head_angleY_max,
-        daNpc_Maro_Param_c::m.common.neck_rotation_ratio, 0.0f, NULL);
+        getHeadJointNo(), mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+        mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+        mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+        mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
     mJntAnm.calcJntRad(0.2f, 1.0f, (float)dVar8);
     setMtx();
     mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(getHeadJointNo()));
@@ -987,7 +1015,7 @@ void daNpc_Maro_c::setAttnPos() {
     mJntAnm.setEyeAngleX(eyePos, 1.0f, 0);
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, 0, 1.0f, 0);
     eyeOffset.set(0.0f, 0.0f, 0.0f);
-    eyeOffset.y = daNpc_Maro_Param_c::m.common.attention_offset;
+    eyeOffset.y = mpHIO->m.common.attention_offset;
     mDoMtx_stack_c::YrotS(mCurAngle.y);
     mDoMtx_stack_c::multVec(&eyeOffset, &eyeOffset);
     attention_info.position = current.pos + eyeOffset;
@@ -2861,10 +2889,10 @@ int daNpc_Maro_c::wait(void* param_0) {
                     actor_p = (daNpc_Len_c*)mActorMngr[8].getActorP();
                     if (actor_p != NULL &&
                         ((daNpc_Len_c*) actor_p)->checkStartDemo13StbEvt(
-                            this, daNpc_Maro_Param_c::m.common.box_min_x, daNpc_Maro_Param_c::m.common.box_min_y,
-                            daNpc_Maro_Param_c::m.common.box_min_z, daNpc_Maro_Param_c::m.common.box_max_x,
-                            daNpc_Maro_Param_c::m.common.box_max_y, daNpc_Maro_Param_c::m.common.box_max_z,
-                            daNpc_Maro_Param_c::m.common.box_offset))
+                            this, mpHIO->m.common.box_min_x, mpHIO->m.common.box_min_y,
+                            mpHIO->m.common.box_min_z, mpHIO->m.common.box_max_x,
+                            mpHIO->m.common.box_max_y, mpHIO->m.common.box_max_z,
+                            mpHIO->m.common.box_offset))
                     {
                         mEvtNo = 7;
                         field_0x1133 = 1;
@@ -3380,8 +3408,6 @@ static int daNpc_Maro_Draw(void* i_this) {
 static int daNpc_Maro_IsDelete(void* i_this) {
     return 1;
 }
-
-static daNpc_Maro_Param_c l_HIO;
 
 static actor_method_class daNpc_Maro_MethodTable = {
     (process_method_func)daNpc_Maro_Create,

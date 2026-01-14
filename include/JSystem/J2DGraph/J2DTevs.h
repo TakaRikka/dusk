@@ -103,6 +103,7 @@ public:
         mInfo = info;
         return *this;
     }
+    void setIndTexOrderInfo(const J2DIndTexOrderInfo& info) { mInfo = info; }
     void load(u8);
 
 private:
@@ -147,6 +148,7 @@ public:
         mIndTexMtxInfo = info;
         return *this;
     }
+    void setIndTexMtxInfo(const J2DIndTexMtxInfo& info) { mIndTexMtxInfo = info; }
     void load(u8);
     void load(u32);
     void calc();
@@ -191,6 +193,7 @@ public:
         mInfo = info;
         return *this;
     }
+    void setIndTexCoordScaleInfo(const J2DIndTexCoordScaleInfo& info) { mInfo = info; }
     void load(u8);
 
 private:
@@ -426,7 +429,7 @@ public:
     }
 
     void setTexSel(u8 param_0) {
-        field_0x7 = (field_0x7 & ~0x0c) | (param_0 * 4);
+        field_0x7 = (field_0x7 & ~0x0c) | (param_0 << 2);
     }
 
     void setRasSel(u8 param_0) {
@@ -631,6 +634,10 @@ public:
     }
 
     u8 getMatSrc() const { return mColorChan & 1; }
+
+    void operator=(const J2DColorChan& other) {
+        mColorChan = other.mColorChan;
+    }
 
 private:
     /* 0x0 */ u16 mColorChan;

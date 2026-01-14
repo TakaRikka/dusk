@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "SSystem/SComponent/c_m3d_g_pla.h"
+#include "dolphin/gx.h"
 #include "f_pc/f_pc_base.h"
 
 class cBgS_GndChk;
@@ -103,6 +104,12 @@ public:
     virtual void MatrixCrrPos(cBgS_PolyInfo const&, void*, bool, cXyz*, csXyz*, csXyz*) = 0;
     virtual void CallRideCallBack(fopAc_ac_c*, fopAc_ac_c*);
     virtual void CallArrowStickCallBack(fopAc_ac_c*, fopAc_ac_c*, cXyz&);
+
+    #if DEBUG
+    virtual void DebugDraw() {}
+    virtual void DrawPoly(cBgS_PolyInfo const& param_0, GXColor const& param_1) {}
+    virtual void DebugBox() {}
+    #endif
 
     PushPull_CallBack GetPushPullCallback() const { return m_pushPull_Callback; }
     s16 GetDiffShapeAngleY() { return m_diff_ShapeAngleY; }

@@ -9,39 +9,44 @@
 #include "d/d_procname.h"
 
 void daCowdoor_c::setBaseMtx() {
-    MTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::transS( current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
-    MTXCopy(mDoMtx_stack_c::now, field_0x5a8->mBaseTransformMtx);
-    MTXCopy(mDoMtx_stack_c::now, mBgMtx);
+    field_0x5a8->setBaseTRMtx(mDoMtx_stack_c::get());
+    MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
 int daCowdoor_c::Create() {
     setBaseMtx();
-    cullMtx = field_0x5a8->mBaseTransformMtx;
+
+    fopAcM_SetMtx(this, field_0x5a8->getBaseTRMtx());
     fopAcM_setCullSizeBox2(this, field_0x5a8->getModelData());
-    cullSizeFar = 5.0f;
-    return 1;
+    fopAcM_setCullSizeFar(this, 5.0f);
+    return TRUE;
 }
 
 static const char* l_arcName = "A_UHDoor";
 
 static const char* l_bmdName = "A_UHDoor.bmd";
 
-int daCowdoor_c::CreateHeap() {
-    field_0x5a8 = mDoExt_J3DModel__create(
-        (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmdName), 0x80000, 0x11000084);
-    return (field_0x5a8 != NULL) ? 1 : 0;
-}
-
 static const char* l_dzbName = "A_UHDoor.dzb";
+
+int daCowdoor_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmdName);
+    JUT_ASSERT(140, modelData != NULL);
+    field_0x5a8 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
+    if (field_0x5a8 == NULL) {
+        return FALSE;
+    }
+    return TRUE;
+}
 
 int daCowdoor_c::create() {
     fopAcM_ct(this, daCowdoor_c);
     int phase = dComIfG_resLoad(&field_0x5a0, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
-        phase =
-            MoveBGCreate(l_arcName, dComIfG_getObjctResName2Index(l_arcName, l_dzbName),
-                         dBgS_MoveBGProc_TypicalRotY, 0x4000, NULL);
+        int dzb_id = dComIfG_getObjctResName2Index(l_arcName, l_dzbName);
+        JUT_ASSERT(169, dzb_id != -1);
+        phase = MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0x4000, NULL);
         if (phase == cPhs_ERROR_e) {
             return phase;
         }
@@ -52,7 +57,7 @@ int daCowdoor_c::create() {
 int daCowdoor_c::Execute(Mtx** param_0) {
     *param_0 = &mBgMtx;
     setBaseMtx();
-    return 1;
+    return TRUE;
 }
 
 int daCowdoor_c::Draw() {
@@ -61,28 +66,33 @@ int daCowdoor_c::Draw() {
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(field_0x5a8);
     dComIfGd_setList();
-    return 1;
+    return TRUE;
 }
 
 int daCowdoor_c::Delete() {
     dComIfG_resDelete(&field_0x5a0, l_arcName);
-    return 1;
+    return TRUE;
 }
 
 static int daCowdoor_Draw(daCowdoor_c* i_this) {
-    return static_cast<dBgS_MoveBgActor*>(i_this)->Draw();
+    return i_this->MoveBGDraw();
 }
 
 static int daCowdoor_Execute(daCowdoor_c* i_this) {
-    return static_cast<dBgS_MoveBgActor*>(i_this)->MoveBGExecute();
+    return i_this->MoveBGExecute();
 }
 
 static int daCowdoor_Delete(daCowdoor_c* i_this) {
-    return static_cast<dBgS_MoveBgActor*>(i_this)->MoveBGDelete();
+    fpc_ProcID id = fopAcM_GetID(i_this);
+    (void)"Delete -> Cowdoor(id=%d)\n";
+    return i_this->MoveBGDelete();
 }
 
 static int daCowdoor_Create(fopAc_ac_c* i_this) {
-    return static_cast<daCowdoor_c*>(i_this)->create();
+    daCowdoor_c* cowDoor = (daCowdoor_c*)i_this;
+    fpc_ProcID id = fopAcM_GetID(i_this);
+    (void)"Create -> Cowdoor(id=%d)\n";
+    return cowDoor->create();
 }
 
 static actor_method_class l_daCowdoor_Method = {

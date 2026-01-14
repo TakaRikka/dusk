@@ -117,7 +117,7 @@ void dKyr_lenzflare_move() {
     dKyr_get_vectle_calc(&center, &proj, &vect);
 
     lenz_packet->field_0x94 = cM_atan2s(vect.x, vect.y);
-    lenz_packet->field_0x94 *= 0.0054931640625f;  // Maybe 45 / 8192
+    lenz_packet->field_0x94 *= S2DEG_CONSTANT;  // convert from short angle to degrees
     lenz_packet->field_0x94 += 180.0f;
 
     dKyr_get_vectle_calc(&camera->lookat.eye, &camera->lookat.center, &camFwd);

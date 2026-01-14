@@ -5,7 +5,8 @@
 #include <string>
 
 void* J2DDataManage::get(char const* name) {
-    for (J2DataManageLink* link = mList; link != NULL; link = link->mNext) {
+    J2DataManageLink* link;
+    for (link = mList; link != NULL; link = link->mNext) {
         if (strcmp(link->mName, name) == 0) {
             return link->mData;
         }
@@ -19,26 +20,26 @@ void* J2DDataManage::get(JSUInputStream* inputStream) {
 
     if (nameLen == 0) {
         return NULL;
-    } else {
-        char nameBuffer[257];
-        inputStream->read(&nameBuffer, nameLen);
-        nameBuffer[nameLen] = 0;
-        return this->get(nameBuffer);
     }
+
+    char nameBuffer[257];
+    inputStream->read(&nameBuffer, nameLen);
+    nameBuffer[nameLen] = 0;
+    return this->get(nameBuffer);
 }
 
-s8* J2DResReference::getResReference(u16 idx) const {
+char* J2DResReference::getResReference(u16 idx) const {
     if (mCount <= idx || idx == 0xFFFF) {
         return NULL;
-    } else {
-        return (((s8*)this) + mOffsets[idx]);
     }
+    u16 offset = mOffsets[idx];
+    return ((char*)this) + offset;
 }
 
 char* J2DResReference::getName(u16 idx) const {
     static char p_name[257];
 
-    s8* resRef = this->getResReference(idx);
+    char* resRef = (char*)this->getResReference(idx);
 
     if (resRef == NULL) {
         p_name[0] = 0;

@@ -8,7 +8,7 @@
 #include "JSystem/JAudio2/JASCalc.h"
 #include "JSystem/JAudio2/JASMutex.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include <stdio>
+#include <cstdio>
 
 static OSMutex sMutex;
 

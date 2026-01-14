@@ -12,7 +12,7 @@
 #include "d/actor/d_a_tag_magne.h"
 #include "d/actor/d_a_tag_mist.h"
 #include "d/actor/d_a_tag_stream.h"
-#include <stdio>
+#include <cstdio>
 
 void daSus_c::data_c::set(s8 i_roomNo, cXyz const& param_1, cXyz const& param_2, u8 param_3,
                           u8 param_4, u8 i_type) {

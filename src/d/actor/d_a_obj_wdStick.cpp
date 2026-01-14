@@ -10,7 +10,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_kankyo_mng.h"
-#include <math>
+#include <cmath>
 
 static daWdStick_HIO_c l_HIO;
 

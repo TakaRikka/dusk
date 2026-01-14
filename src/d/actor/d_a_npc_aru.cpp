@@ -257,14 +257,6 @@ daNpc_Aru_c::cutFunc daNpc_Aru_c::mCutList[7] = {
     &daNpc_Aru_c::cutNoEntrance,
 };
 
-daNpc_Aru_c::~daNpc_Aru_c() {
-    if (mpMorf[0] != NULL) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
-}
-
 const daNpc_Aru_HIOParam daNpc_Aru_Param_c::m = {
     220.0f,
     -3.0f,
@@ -315,6 +307,36 @@ const daNpc_Aru_HIOParam daNpc_Aru_Param_c::m = {
     45.0f,
 };
 
+static NPC_ARU_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Aru_HIO_c::daNpc_Aru_HIO_c() {
+    m = daNpc_Aru_Param_c::m;
+}
+
+void daNpc_Aru_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Aru_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_Aru_c::~daNpc_Aru_c() {
+    if (mpMorf[0] != NULL) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+}
+
 cPhs__Step daNpc_Aru_c::create() {
     daNpcT_ct(this, daNpc_Aru_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4, l_evtList, l_resNameList);
@@ -349,9 +371,14 @@ cPhs__Step daNpc_Aru_c::create() {
         mSound.init(&current.pos, &eyePos, 3, 1);
         field_0x9c0.init(&mAcch, 0.0f, 0.0f);
 
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ファド");
+#endif
+
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Aru_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgHitCallback(tgHitCallBack);
@@ -482,14 +509,14 @@ BOOL daNpc_Aru_c::chkThrust(fopAc_ac_c* actor_p) {
             f32 fVar2 = fopAcM_searchActorDistance(this, actor_p);
             s16 sVar1 = cM_atan2s(actor_p->speed.x, actor_p->speed.z) - fopAcM_searchActorAngleY(actor_p, this);
 
-            if (fVar2 < daNpc_Aru_Param_c::m.warning_range) {
+            if (fVar2 < mpHIO->m.warning_range) {
                 if (abs(sVar1) < cM_deg2s(35.0f)) {
                     return TRUE;
                 }
             }
         }
 
-        if (fopAcM_GetName(actor_p) == PROC_ALINK && daPy_py_c::checkNowWolf() && actorDistance < daNpc_Aru_Param_c::m.warning_range) {
+        if (fopAcM_GetName(actor_p) == PROC_ALINK && daPy_py_c::checkNowWolf() && actorDistance < mpHIO->m.warning_range) {
             return TRUE;
         }
     }
@@ -701,10 +728,10 @@ void daNpc_Aru_c::setParam() {
     selectAction();
     srchActors();
     u32 attnFlag = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
-    s16 talk_distance = daNpc_Aru_Param_c::m.common.talk_distance;
-    s16 talk_angle = daNpc_Aru_Param_c::m.common.talk_angle;
-    s16 attention_distance = daNpc_Aru_Param_c::m.common.attention_distance;
-    s16 attention_angle = daNpc_Aru_Param_c::m.common.attention_angle;
+    s16 talk_distance = mpHIO->m.common.talk_distance;
+    s16 talk_angle = mpHIO->m.common.talk_angle;
+    s16 attention_distance = mpHIO->m.common.attention_distance;
+    s16 attention_angle = mpHIO->m.common.attention_angle;
 
     if (daPy_getPlayerActorClass()->checkHorseRide()) {
         if (talk_distance < 7) {
@@ -726,17 +753,17 @@ void daNpc_Aru_c::setParam() {
 
     attention_info.flags = attnFlag;
 
-    scale.set(daNpc_Aru_Param_c::m.common.scale, daNpc_Aru_Param_c::m.common.scale, daNpc_Aru_Param_c::m.common.scale);
-    mCcStts.SetWeight(daNpc_Aru_Param_c::m.common.weight);
-    mCylH = daNpc_Aru_Param_c::m.common.height;
-    mWallR = daNpc_Aru_Param_c::m.common.width;
-    mAttnFovY = daNpc_Aru_Param_c::m.common.fov;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Aru_Param_c::m.common.knee_length);
-    mRealShadowSize = daNpc_Aru_Param_c::m.common.real_shadow_size;
-    mExpressionMorfFrame = daNpc_Aru_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Aru_Param_c::m.common.morf_frame;
-    gravity = daNpc_Aru_Param_c::m.common.gravity;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_Aru_c::checkChangeEvt() {
@@ -908,8 +935,6 @@ void daNpc_Aru_c::beforeMove() {
     }
 }
 
-static daNpc_Aru_Param_c l_HIO;
-
 void daNpc_Aru_c::setAttnPos() {
     cXyz sp40(-30.0f, 10.0f, 0.0f);
     cXyz sp4c(0.0f, 10.0f, 0.0f);
@@ -918,11 +943,11 @@ void daNpc_Aru_c::setAttnPos() {
     f32 rad = cM_s2rad((s16)(mCurAngle.y - field_0xd7e.y));
 
     mJntAnm.setParam(this, mpMorf[0]->getModel(), &sp40, getBackboneJointNo(), getNeckJointNo(), getHeadJointNo(),
-                     daNpc_Aru_Param_c::m.common.body_angleX_min, daNpc_Aru_Param_c::m.common.body_angleX_max,
-                     daNpc_Aru_Param_c::m.common.body_angleY_min, daNpc_Aru_Param_c::m.common.body_angleY_max,
-                     daNpc_Aru_Param_c::m.common.head_angleX_min, daNpc_Aru_Param_c::m.common.head_angleX_max,
-                     daNpc_Aru_Param_c::m.common.head_angleY_min, daNpc_Aru_Param_c::m.common.head_angleY_max,
-                     daNpc_Aru_Param_c::m.common.neck_rotation_ratio, rad, &sp4c);
+                     mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+                     mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+                     mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+                     mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+                     mpHIO->m.common.neck_rotation_ratio, rad, &sp4c);
     mJntAnm.calcJntRad(0.2f, 1.0f, rad);
     
     setMtx();
@@ -932,7 +957,7 @@ void daNpc_Aru_c::setAttnPos() {
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y + field_0xd8a.y, TRUE, 1.0f, 0);
 
     sp40.set(0.0f, 0.0f, 20.0f);
-    sp40.y = daNpc_Aru_Param_c::m.common.attention_offset;
+    sp40.y = mpHIO->m.common.attention_offset;
     mDoMtx_stack_c::YrotS(mCurAngle.y);
     mDoMtx_stack_c::multVec(&sp40, &sp40);
     attention_info.position = current.pos + sp40;
@@ -1080,7 +1105,7 @@ s16 daNpc_Aru_c::srchActorDirection(fopAc_ac_c* actor_p) {
     s16 rv;
     s16 sVar1 = fopAcM_searchActorAngleY(this, actor_p) - mCurAngle.y;
     s16 sVar2 = abs(sVar1);
-    s16 sVar3 = cM_deg2s(daNpc_Aru_Param_c::m.forward_visibility);
+    s16 sVar3 = cM_deg2s(mpHIO->m.forward_visibility);
     
     if (sVar2 < sVar3) {
         if (sVar1 > 0) {
@@ -1112,7 +1137,7 @@ void daNpc_Aru_c::adjustMoveDir() {
     s16 sVar3[3];
 
     sp84 = current.pos;
-    sp84.y += daNpc_Aru_Param_c::m.common.knee_length;
+    sp84.y += mpHIO->m.common.knee_length;
 
     for (int i = 0; i < 3; i++) {
         bVar1[i] = 0;
@@ -1144,7 +1169,7 @@ void daNpc_Aru_c::adjustMoveDir() {
     }
 
     if (bVar1[1] != 0 && bVar1[2] != 0) {
-        mTimer = daNpc_Aru_Param_c::m.no_turn_time;
+        mTimer = mpHIO->m.no_turn_time;
 
         switch (field_0xfca) {
             case 1:
@@ -1198,7 +1223,7 @@ void daNpc_Aru_c::adjustMoveDir() {
             case 1:
             case 7:
                 field_0xfca = 6;
-                mTimer = daNpc_Aru_Param_c::m.no_turn_time;
+                mTimer = mpHIO->m.no_turn_time;
                 break;
             
             case 2:
@@ -1218,7 +1243,7 @@ void daNpc_Aru_c::adjustMoveDir() {
             case 1:
             case 7:
                 field_0xfca = 2;
-                mTimer = daNpc_Aru_Param_c::m.no_turn_time;
+                mTimer = mpHIO->m.no_turn_time;
                 break;
 
             case 6:
@@ -1260,7 +1285,7 @@ void daNpc_Aru_c::adjustMoveDir() {
 
 int daNpc_Aru_c::duck(int param_1) {
     fopAc_ac_c* cow_p;
-    int iVar1 = daNpc_Aru_Param_c::m.avoid_time;
+    int iVar1 = mpHIO->m.avoid_time;
     cow_p = getCowP(param_1);
 
     if (cow_p != NULL) {
@@ -1307,7 +1332,7 @@ int daNpc_Aru_c::duck(int param_1) {
             cLib_addCalcAngleS2(&current.angle.y, sVar1, MREG_S(0) + 6, MREG_S(1) + 0x800);
             shape_angle.y = current.angle.y;
             mCurAngle.y = shape_angle.y;
-            cLib_chaseF(&speedF, daNpc_Aru_Param_c::m.run_speed, 1.5f);
+            cLib_chaseF(&speedF, mpHIO->m.run_speed, 1.5f);
             speedF *= cM_scos(mGroundAngle);
 
             if (mGroundAngle < 0) {
@@ -2027,8 +2052,8 @@ int daNpc_Aru_c::test(void* param_1) {
         mMode = 2;
         // fallthrough
     case 2:
-        mFaceMotionSeqMngr.setNo(mHIO->param.common.face_expression, -1.0f, 0, 0);
-        mMotionSeqMngr.setNo(mHIO->param.common.motion, -1.0f, 0, 0);
+        mFaceMotionSeqMngr.setNo(mpHIO->m.common.face_expression, -1.0f, 0, 0);
+        mMotionSeqMngr.setNo(mpHIO->m.common.motion, -1.0f, 0, 0);
         mJntAnm.lookNone(0);
         attention_info.flags = 0;
         break;

@@ -13,6 +13,8 @@ enum dDbgCam_KeyAction {
 
 class dDbgCamera_c;
 
+extern dDbgCamera_c dDbgCamera;
+
 class dDbgCamKey_c {
 public:
     dDbgCamKey_c() {}
@@ -161,7 +163,7 @@ public:
     public:
         /* 0x000 */ int field_0x0;
         /* 0x004 */ int field_0x4;
-        /* 0x008 */ u8 field_0x8[0x010 - 0x008];
+        /* 0x008 */ int field_0x8[2];
         /* 0x010 */ cXyz field_0x10[32];
         /* 0x190 */ cXyz field_0x190[32];
     } /* 0x704 */ field_0x704;

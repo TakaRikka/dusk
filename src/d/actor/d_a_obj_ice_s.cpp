@@ -12,7 +12,7 @@
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
-#include <math>
+#include <cmath>
 
 class daOBJ_ICE_S_HIO_c : public JORReflexible {
 public:

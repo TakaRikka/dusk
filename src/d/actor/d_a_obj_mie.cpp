@@ -46,29 +46,39 @@ static dCcD_SrcCyl l_ccDCyl = {
     } // mCylAttr
 };
 
+static OBJ_MIE_HIO_CLASS l_HIO;
+
 #if DEBUG
+daObj_Mie_HIO_c::daObj_Mie_HIO_c() {
+    m = daObj_Mie_Param_c::m;
+}
+
+void daObj_Mie_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
 void daObj_Mie_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genSlider("注目オフセット  ", &mParams.focus_offset, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
+    ctx->genSlider("注目オフセット  ", &m.focus_offset, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
                    0x200, 0x18);
-    ctx->genSlider("重力            ", &mParams.gravity, -100.0f, 100.0f, 0, NULL, 0xffff,
+    ctx->genSlider("重力            ", &m.gravity, -100.0f, 100.0f, 0, NULL, 0xffff,
                    0xffff, 0x200, 0x18);
-    ctx->genSlider("スケ−ル        ", &mParams.scale, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff,
+    ctx->genSlider("スケ−ル        ", &m.scale, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff,
                    0x200, 0x18);
-    ctx->genSlider("リアル影サイズ  ", &mParams.real_shadow_size, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
+    ctx->genSlider("リアル影サイズ  ", &m.real_shadow_size, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
                    0x200, 0x18);
-    ctx->genSlider("体重            ", &mParams.weight, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff,
+    ctx->genSlider("体重            ", &m.weight, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff,
                    0x200, 0x18);
-    ctx->genSlider("高さ            ", &mParams.height, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
+    ctx->genSlider("高さ            ", &m.height, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
                    0x200, 0x18);
-    ctx->genSlider("ひざ丈          ", &mParams.knee_length, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
+    ctx->genSlider("ひざ丈          ", &m.knee_length, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
                    0x200, 0x18);
-    ctx->genSlider("幅              ", &mParams.width, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
+    ctx->genSlider("幅              ", &m.width, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
                    0x200, 0x18);
-    ctx->genSlider("発射速度        ", &mParams.firing_rate, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
+    ctx->genSlider("発射速度        ", &m.firing_rate, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
                    0x200, 0x18);
-    ctx->genSlider("発射角度        ", &mParams.launch_angle, 0.0f, 90.0f, 0, NULL, 0xffff, 0xffff,
+    ctx->genSlider("発射角度        ", &m.launch_angle, 0.0f, 90.0f, 0, NULL, 0xffff, 0xffff,
                    0x200, 0x18);
-    ctx->genSlider("浮きオフセット  ", &mParams.floating_offset, -100.0f, 100.0f, 0, NULL, 0xffff,
+    ctx->genSlider("浮きオフセット  ", &m.floating_offset, -100.0f, 100.0f, 0, NULL, 0xffff,
                    0xffff, 0x200, 0x18);
     ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
 }
@@ -78,8 +88,8 @@ daObj_Mie_c::~daObj_Mie_c() {
     OS_REPORT("|%06d:%x|daObj_Mie_c -> デストラクト\n", g_Counter.mCounter0, this);
 
     #if DEBUG
-    if (mHIO) {
-        mHIO->removeHIO();
+    if (mpHIO) {
+        mpHIO->removeHIO();
     }
     #endif
 
@@ -95,7 +105,7 @@ int daObj_Mie_c::create() {
             return cPhs_ERROR_e;
         }
         OS_REPORT("\t(%s:%d) <%08x>\n", fopAcM_getProcNameString(this), getType(), fopAcM_GetParam(this));
-        
+
         // @bug - seems like this returns cPhs_ERROR_e no matter what
         if (mType == TYPE_0 && dComIfGs_getPohSpiritNum() >= 50) {
             return cPhs_ERROR_e;
@@ -125,14 +135,14 @@ int daObj_Mie_c::Delete() {
 int daObj_Mie_c::Execute() {
     BOOL local_a8 = fopAcM_checkCarryNow(this) != 0;
     s16 local_b6;
-    f32 dVar16 = daObj_Mie_Param_c::m.floating_offset;
-    scale.set(daObj_Mie_Param_c::m.scale, daObj_Mie_Param_c::m.scale,
-              daObj_Mie_Param_c::m.scale);
+    f32 dVar16 = mpHIO->m.floating_offset;
+    scale.set(mpHIO->m.scale, mpHIO->m.scale,
+              mpHIO->m.scale);
     attention_info.flags = 0;
     attention_info.distances[fopAc_attn_CARRY_e] = 6;
-    mAcchCir.SetWallR(daObj_Mie_Param_c::m.width);
-    mAcchCir.SetWallH(daObj_Mie_Param_c::m.knee_length);
-    gravity = daObj_Mie_Param_c::m.gravity;
+    mAcchCir.SetWallR(mpHIO->m.width);
+    mAcchCir.SetWallH(mpHIO->m.knee_length);
+    gravity = mpHIO->m.gravity;
     if ((s32)local_a8 || field_0xa40) {
         mAcch.ClrWallHit();
         mAcch.ClrGroundHit();
@@ -149,13 +159,13 @@ int daObj_Mie_c::Execute() {
         field_0xa44 = 0;
         field_0xa47 = 0;
     } else {
-        mStts.SetWeight(daObj_Mie_Param_c::m.weight);
+        mStts.SetWeight(mpHIO->m.weight);
         mAcch.ClrWallNone();
         mAcch.ClrGrndNone();
         if (field_0xa46 != 0 && cM3d_IsZero(speedF) == 0) {
             fopAcM_carryOffRevise(this);
-            popup(daObj_Mie_Param_c::m.firing_rate,
-                  daObj_Mie_Param_c::m.launch_angle, NULL);
+            popup(mpHIO->m.firing_rate,
+                  mpHIO->m.launch_angle, NULL);
         } else {
             fopAcM_getWaterY(&current.pos, &field_0xa04);
             if (field_0xa04 != -G_CM3D_F_INF && dVar16 < field_0xa04 - field_0xa00 &&
@@ -335,13 +345,13 @@ int daObj_Mie_c::Execute() {
     }
 
     attention_info.position = current.pos;
-    attention_info.position.y += daObj_Mie_Param_c::m.focus_offset;
+    attention_info.position.y += mpHIO->m.focus_offset;
     eyePos = current.pos;
     setMtx();
     field_0xa14 = calcRollAngle(field_0xa14, 0x10000);
     if (field_0xa45 == 0 && field_0xa41 == 0) {
-        mCyl.SetR(daObj_Mie_Param_c::m.width);
-        mCyl.SetH(daObj_Mie_Param_c::m.height);
+        mCyl.SetR(mpHIO->m.width);
+        mCyl.SetH(mpHIO->m.height);
         mCyl.SetC(current.pos);
         dComIfG_Ccsp()->Set(&mCyl);
     }
@@ -472,8 +482,6 @@ void daObj_Mie_c::setSmokePrtcl() {
     dComIfGp_particle_levelEmitterOnEventMove(field_0xa38);
     dComIfGp_particle_levelEmitterOnEventMove(field_0xa3c);
 }
-
-static daObj_Mie_Param_c l_HIO;
 
 void daObj_Mie_c::setWaterPrtcl() {
     static u16 emttrId[4] = {

@@ -7,7 +7,7 @@
 #include "JSystem/JKernel/JKRDvdFile.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include <math>
+#include <cmath>
 #include <string>
 
 JKRAramArchive::JKRAramArchive() {}

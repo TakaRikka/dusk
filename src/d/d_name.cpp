@@ -6,7 +6,7 @@
 #include "d/d_lib.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include <stdio>
+#include <cstdio>
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
 #include "f_op/f_op_msg_mng.h"
 

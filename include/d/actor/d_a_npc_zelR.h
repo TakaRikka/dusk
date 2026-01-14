@@ -16,16 +16,29 @@ struct daNpc_ZelR_HIOParam {
     /* 0x0 */ daNpcT_HIOParam common;
 };
 
-class daNpc_ZelR_HIO_c : public mDoHIO_entry_c {
-    /* 0x8 */ daNpc_ZelR_HIOParam param;
-};
-
 class daNpc_ZelR_Param_c {
 public:
     virtual ~daNpc_ZelR_Param_c() {};
 
     static const daNpc_ZelR_HIOParam m;
 };
+
+#if DEBUG
+class daNpc_ZelR_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_ZelR_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_ZelR_HIOParam m;
+};
+
+#define NPC_ZELR_HIO_CLASS daNpc_ZelR_HIO_c
+#else
+#define NPC_ZELR_HIO_CLASS daNpc_ZelR_Param_c
+#endif
 
 class daNpc_ZelR_c : public daNpcT_c {
 public:
@@ -84,7 +97,7 @@ public:
     static EventFn mCutList[1];
 
 private:
-    /* 0xE40 */ u8 field_0xe40[0xe44 - 0xe40];
+    /* 0xE40 */ NPC_ZELR_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;
     /* 0xF84 */ ActionFn field_0xf84;

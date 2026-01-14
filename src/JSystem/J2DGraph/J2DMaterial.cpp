@@ -67,9 +67,7 @@ J2DTevBlock* J2DMaterial::createTevBlock(int block_type, bool noAlign) {
             block = new (-4) J2DTevBlock16();
         }
     }
-    if (!block) {
-        OS_PANIC(101, "Error : allocate memory.");
-    }
+    ASSERTMSGLINE(101, block, "Error : allocate memory.");
 
     return block;
 }
@@ -90,9 +88,7 @@ J2DIndBlock* J2DMaterial::createIndBlock(int block_type, bool noAlign) {
             block = new (-4) J2DIndBlockNull();
         }
     }
-    if (!block) {
-        OS_PANIC(133, "Error : allocate memory.");
-    }
+    ASSERTMSGLINE(133, block, "Error : allocate memory.");
 
     return block;
 }
@@ -148,9 +144,7 @@ void J2DMaterial::setAnimation(J2DAnmColor* anm) {
             u16 index = getIndex();
 
             for (u16 i = 0; i < matNum; i++) {
-                u16 matID = anm->getUpdateMaterialID(i);
-
-                if (index == matID) {
+                if (index == anm->getUpdateMaterialID(i)) {
                     mAnmPointer->mColorIds = i;
                     return;
                 }
@@ -219,9 +213,7 @@ void J2DMaterial::setAnimation(J2DAnmTevRegKey* anm) {
             u16 index = getIndex();
 
             for (u16 i = 0; i < matNum; i++) {
-                u16 matID = anm->getCRegUpdateMaterialID(i);
-
-                if (index == matID) {
+                if (index == anm->getCRegUpdateMaterialID(i)) {
                     J3DAnmCRegKeyTable* anmTbl = anm->getAnmCRegKeyTable();
                     mAnmPointer->mTevCRegIds[anmTbl[i].mColorId] = i;
                 }
@@ -237,9 +229,7 @@ void J2DMaterial::setAnimation(J2DAnmTevRegKey* anm) {
             u16 index = getIndex();
 
             for (u16 i = 0; i < matNum; i++) {
-                u16 matID = anm->getKRegUpdateMaterialID(i);
-
-                if (index == matID) {
+                if (index == anm->getKRegUpdateMaterialID(i)) {
                     J3DAnmKRegKeyTable* anmTbl = anm->getAnmKRegKeyTable();
                     mAnmPointer->mTevKRegIds[anmTbl[i].mColorId] = i;
                 }

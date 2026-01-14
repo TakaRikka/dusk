@@ -9,7 +9,7 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "SSystem/SComponent/c_math.h"
 #include "c/c_damagereaction.h"
-#include <math>
+#include <cmath>
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"

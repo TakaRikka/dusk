@@ -209,8 +209,8 @@ void dDvdErrorMsg_c::draw(s32 status) {
     JFWDisplay::getManager()->resetFader();
 }
 
-u8 dDvdErrorMsg_c::execute() {
-    static u8 l_dvdError;
+bool dDvdErrorMsg_c::execute() {
+    static bool l_dvdError;
 
     s32 drive_status = DVDGetDriveStatus();
     if (drive_status != DVD_STATE_END && drive_status != DVD_STATE_BUSY && !l_dvdError) {

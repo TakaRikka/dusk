@@ -387,7 +387,7 @@ int daObjSmgDoor_c::Draw() {
 
 #if DEBUG
     if (l_HIO.field_0x6 != 0) {
-        mpBgW->CalcPlane();
+        mpBgW->DebugDraw();
     }
 #endif
 

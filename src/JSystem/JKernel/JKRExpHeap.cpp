@@ -9,7 +9,7 @@
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTException.h"
-#include <stdlib>
+#include <cstdlib>
 
 JKRExpHeap* JKRExpHeap::createRoot(int maxHeaps, bool errorFlag) {
     JKRExpHeap* heap = NULL;

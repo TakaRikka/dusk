@@ -10,7 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_math.h"
-#include <math>
+#include <cmath>
 
 int daB_ZANTM_c::draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);

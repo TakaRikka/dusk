@@ -10,7 +10,7 @@
 #include "d/d_s_play.h"
 #include "d/d_s_room.h"
 #include "m_Do/m_Do_Reset.h"
-#include <stdio>
+#include <cstdio>
 
 static int dScnRoom_Draw(room_of_scene_class* i_this) {
     return 1;

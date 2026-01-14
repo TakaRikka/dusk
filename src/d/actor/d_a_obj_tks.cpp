@@ -51,6 +51,12 @@ daObjTks_c::~daObjTks_c() {
     if (parentActorID != fpcM_ERROR_PROCESS_ID_e) {
         fopAcM_delete(parentActorID);
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
 }
 
 const daObjTks_HIOParam daObjTks_Param_c::m = {
@@ -94,6 +100,18 @@ const daObjTks_HIOParam daObjTks_Param_c::m = {
     0.8f,
 };
 
+static OBJ_TKS_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObjTks_HIO_c::daObjTks_HIO_c() {
+    m = daObjTks_Param_c::m;
+}
+
+void daObjTks_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 int daObjTks_c::Create() {
     fopAcM_ct(this, daObjTks_c);
 
@@ -109,12 +127,18 @@ int daObjTks_c::Create() {
 
         mSound.init(&current.pos, &eyePos, 3, 1);
 
-        mAcchCir.SetWall(daObjTks_Param_c::m.common.width, daObjTks_Param_c::m.common.knee_length);
-        mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("おばちゃんアイテム");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
+        mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
+                  fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.OffClrSpeedY();
         mAcch.SetWallNone();
     
-        mCcStts.Init(daObjTks_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCcCyl.Set(mCcDCyl);
         mCcCyl.SetStts(&mCcStts);
         mCcCyl.SetTgType(0);
@@ -122,8 +146,8 @@ int daObjTks_c::Create() {
         mCcCyl.SetCoIGrp(8);
         mCcCyl.SetCoVsGrp(0x40);
 
-        mCcCyl.SetH(daObjTks_Param_c::m.common.height);
-        mCcCyl.SetR(daObjTks_Param_c::m.common.width);
+        mCcCyl.SetH(mpHIO->m.common.height);
+        mCcCyl.SetR(mpHIO->m.common.width);
 
         mAcch.CrrPos(dComIfG_Bgsp());
 
@@ -209,7 +233,7 @@ int daObjTks_c::Draw() {
     }
 
     mAnm_p->getModel()->getModelData()->getMaterialNodePointer(2)->setMaterialAnm(mpMatAnm);
-    draw(FALSE, FALSE, daObjTks_Param_c::m.common.real_shadow_size, NULL, FALSE);
+    draw(FALSE, FALSE, mpHIO->m.common.real_shadow_size, NULL, FALSE);
     return 1;
 }
 
@@ -234,7 +258,7 @@ int daObjTks_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     case 15:
     case 16:
     case 17:
-        setLookatMtx(jnt_no, spC, daObjTks_Param_c::m.common.neck_rotation_ratio);
+        setLookatMtx(jnt_no, spC, mpHIO->m.common.neck_rotation_ratio);
         break;
     }
 
@@ -369,7 +393,7 @@ void daObjTks_c::reset() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     mDoMtx_stack_c::transS(*fopAcM_GetPosition_p(player));
     mDoMtx_stack_c::YrotM(fopAcM_GetAngle_p(player)->y);
-    mDoMtx_stack_c::transM(daObjTks_Param_c::m.offset_x, daObjTks_Param_c::m.offset_y, daObjTks_Param_c::m.offset_z);
+    mDoMtx_stack_c::transM(mpHIO->m.offset_x, mpHIO->m.offset_y, mpHIO->m.offset_z);
     mDoMtx_stack_c::multVecZero(&home.pos);
     old.pos = home.pos;
     current.pos = home.pos;
@@ -432,10 +456,10 @@ void daObjTks_c::setExpression(int i_expression, f32 i_morf) {
 }
 
 void daObjTks_c::playExpression() {
-    daNpcF_anmPlayData anm0_phase1 = {1, daObjTks_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData anm0_phase1 = {1, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* anm0_m[] = {&anm0_phase1};
 
-    daNpcF_anmPlayData anm1_phase1 = {0, daObjTks_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData anm1_phase1 = {0, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* anm1_m[] = {&anm1_phase1};
 
     daNpcF_anmPlayData** anmData_p[] = {anm0_m, anm1_m};
@@ -446,16 +470,16 @@ void daObjTks_c::playExpression() {
 }
 
 void daObjTks_c::playMotion() {
-    daNpcF_anmPlayData anm0_phase1 = {2, daObjTks_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData anm0_phase1 = {2, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* anm0_m[] = {&anm0_phase1};
 
-    daNpcF_anmPlayData anm1_phase1 = {3, daObjTks_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData anm1_phase1 = {3, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData* anm1_m[] = {&anm1_phase1, NULL};
 
-    daNpcF_anmPlayData anm2_phase1 = {4, daObjTks_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData anm2_phase1 = {4, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* anm2_m[] = {&anm2_phase1};
 
-    daNpcF_anmPlayData anm3_phase1 = {5, daObjTks_Param_c::m.common.morf_frame, 1};
+    daNpcF_anmPlayData anm3_phase1 = {5, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData* anm3_m[] = {&anm3_phase1, NULL};
 
     daNpcF_anmPlayData** anmData_p[] = {anm0_m, anm1_m, anm2_m, anm3_m};
@@ -470,14 +494,14 @@ void daObjTks_c::lookat() {
     J3DModel* model_p = mAnm_p->getModel();
 
     int var_r28 = 0;
-    f32 body_angleX_min = daObjTks_Param_c::m.common.body_angleX_min;
-    f32 body_angleX_max = daObjTks_Param_c::m.common.body_angleX_max;
-    f32 body_angleY_min = daObjTks_Param_c::m.common.body_angleY_min;
-    f32 body_angleY_max = daObjTks_Param_c::m.common.body_angleY_max;
-    f32 head_angleX_min = daObjTks_Param_c::m.common.head_angleX_min;
-    f32 head_angleX_max = daObjTks_Param_c::m.common.head_angleX_max;
-    f32 head_angleY_min = daObjTks_Param_c::m.common.head_angleY_min;
-    f32 head_angleY_max = daObjTks_Param_c::m.common.head_angleY_max;
+    f32 body_angleX_min = mpHIO->m.common.body_angleX_min;
+    f32 body_angleX_max = mpHIO->m.common.body_angleX_max;
+    f32 body_angleY_min = mpHIO->m.common.body_angleY_min;
+    f32 body_angleY_max = mpHIO->m.common.body_angleY_max;
+    f32 head_angleX_min = mpHIO->m.common.head_angleX_min;
+    f32 head_angleX_max = mpHIO->m.common.head_angleX_max;
+    f32 head_angleY_min = mpHIO->m.common.head_angleY_min;
+    f32 head_angleY_max = mpHIO->m.common.head_angleY_max;
 
     s16 temp_r26 = mCurAngle.y - mOldAngle.y;
     cXyz sp30[] = {mLookatPos[0], mLookatPos[1], mLookatPos[2]};
@@ -723,7 +747,7 @@ void daObjTks_c::warp() {
                 if (eventMgr.getIsAddvance(staff_id)) {
                     switch (*(u32*)cut_name) {
                     case '0002':
-                        gravity = daObjTks_Param_c::m.common.gravity;
+                        gravity = mpHIO->m.common.gravity;
                         break;
                     case '0001':
                         JUT_ASSERT(1419, FALSE);
@@ -790,8 +814,8 @@ void daObjTks_c::setParam() {
     scale.setall(field_0xdcc);
 
     #if DEBUG
-    mAcchCir.SetWallR(daObjTks_Param_c::m.common.width);
-    mAcchCir.SetWallH(daObjTks_Param_c::m.common.height);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.height);
     #endif
 }
 
@@ -854,13 +878,13 @@ void daObjTks_c::setAttnPos() {
         mEyeAngle.x = 0;
     }
 
-    attention_info.position.set(current.pos.x, current.pos.y + daObjTks_Param_c::m.common.attention_offset, current.pos.z);
+    attention_info.position.set(current.pos.x, current.pos.y + mpHIO->m.common.attention_offset, current.pos.z);
 
     if (!fopAcM_checkCarryNow(this)) {
         mCcCyl.SetC(current.pos);
         #if DEBUG
-        mCcCyl.SetH(daObjTks_Param_c::m.common.height);
-        mCcCyl.SetR(daObjTks_Param_c::m.common.width);
+        mCcCyl.SetH(mpHIO->m.common.height);
+        mCcCyl.SetR(mpHIO->m.common.width);
         #endif
         dComIfG_Ccsp()->Set(&mCcCyl);
     }
@@ -871,8 +895,6 @@ BOOL daObjTks_c::drawDbgInfo() {
 }
 
 void daObjTks_c::drawOtherMdls() {}
-
-static daObjTks_Param_c l_HIO;
 
 static actor_method_class daObjTks_MethodTable = {
     (process_method_func)daObjTks_Create,

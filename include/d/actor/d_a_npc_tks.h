@@ -27,20 +27,29 @@ struct daNpcTks_HIOParam {
     /* 0x94 */ f32 run_spd;             // 走行速度 - Run Speed
 };
 
-class daNpcTks_HIO_c
-#if DEBUG
-: public mDoHIO_entry_c
-#endif
-{
-    /* 0x8 */ daNpcTks_HIOParam param;
-};
-
 class daNpcTks_Param_c {
 public:
     virtual ~daNpcTks_Param_c() {}
 
     static daNpcTks_HIOParam const m;
 };
+
+#if DEBUG
+class daNpcTks_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpcTks_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpcTks_HIOParam m;
+};
+
+#define NPC_TKS_HIO_CLASS daNpcTks_HIO_c
+#else
+#define NPC_TKS_HIO_CLASS daNpcTks_Param_c
+#endif
 
 class daNpcTksTsubo_c {
 public:
@@ -132,7 +141,7 @@ private:
     /* 0x1164 */ daNpcF_Lookat_c mLookat;
     /* 0x1200 */ daNpcF_ActorMngr_c mActorMngr[1];
     /* 0x1208 */ fopAc_ac_c* field_0x1208;
-    /* 0x120C */ daNpcTks_HIO_c* mHIO;
+    /* 0x120C */ NPC_TKS_HIO_CLASS* mpHIO;
     /* 0x1210 */ dCcD_Cyl mCyl;
     /* 0x134C */ actionFunc mAction;
     /* 0x1358 */ request_of_phase_process_class mPhases[2];

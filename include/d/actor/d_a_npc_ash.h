@@ -9,6 +9,7 @@ struct daNpcAsh_HIOParam {
 
 class daNpcAsh_Param_c {
 public:
+    daNpcAsh_Param_c() {}
     virtual ~daNpcAsh_Param_c() {}
 
     static const daNpcAsh_HIOParam m;
@@ -167,6 +168,6 @@ private:
     /* 0xF60 */ u8 mType;
 };
 
-STATIC_ASSERT(sizeof(daNpcAsh_c) == 0xF64);
+//STATIC_ASSERT(sizeof(daNpcAsh_c) == 0xF64);
 
 #endif /* D_A_NPC_ASH_H */

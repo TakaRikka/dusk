@@ -20,6 +20,23 @@ public:
     static const daObjTks_HIOParam m;
 };
 
+#if DEBUG
+class daObjTks_HIO_c : public mDoHIO_entry_c {
+
+public:
+    daObjTks_HIO_c();
+    virtual ~daObjTks_HIO_c() {}
+
+    void genMessage(JORMContext*);
+
+    daObjTks_HIOParam m;
+};
+
+#define OBJ_TKS_HIO_CLASS daObjTks_HIO_c
+#else
+#define OBJ_TKS_HIO_CLASS daObjTks_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObjTks_c
@@ -28,7 +45,6 @@ public:
  * @details
  *
 */
-
 class daObjTks_c : public daNpcF_c {
 public:
     daObjTks_c();
@@ -64,7 +80,8 @@ public:
     virtual inline void drawOtherMdls();
 
     void calcSpringF(f32* param_0, f32 param_1, f32* param_2) {
-        *param_2 = daObjTks_Param_c::m.spring_atten * (*param_2 + (daObjTks_Param_c::m.spring_factor * (*param_0 - param_1)));
+        f32 var_f31 = mpHIO->m.spring_factor * (*param_0 - param_1);
+        *param_2 = mpHIO->m.spring_atten * (*param_2 + var_f31);
         *param_0 += *param_2;
     }
 
@@ -89,7 +106,7 @@ public:
     /* 0xB48 */ Z2Creature mSound;
     /* 0xBD8 */ daNpcF_MatAnm_c* mpMatAnm;
     /* 0xBDC */ daNpcF_Lookat_c mLookat;
-    /* 0xC78 */ u8 field_0xC78[0xC7C - 0xC78];
+    /* 0xC78 */ OBJ_TKS_HIO_CLASS* mpHIO;
     /* 0xC7C */ dCcD_Cyl mCcCyl;
     /* 0xDB8 */ void (daObjTks_c::*mAction)();
     /* 0xDC4 */ request_of_phase_process_class mPhase;

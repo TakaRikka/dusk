@@ -61,27 +61,38 @@ public:
     void setTevMode(JUTTexture*, JUtility::TColor, JUtility::TColor);
 
     virtual ~J2DWindow();
-    virtual u16 getTypeID() const;
-    virtual void resize(f32, f32);
-    virtual void drawSelf(f32, f32);
-    virtual void drawSelf(f32, f32, Mtx*);
-    virtual bool isUsed(ResTIMG const*);
-    virtual bool isUsed(ResFONT const*);
-    virtual void rewriteAlpha();
-    virtual void draw(JGeometry::TBox2<f32> const&);
-    virtual void draw(JGeometry::TBox2<f32> const&, JGeometry::TBox2<f32> const&);
-    virtual void draw(f32, f32, f32, f32);
-    virtual bool setBlack(JUtility::TColor);
-    virtual bool setWhite(JUtility::TColor);
-    virtual bool setBlackWhite(JUtility::TColor, JUtility::TColor);
-    virtual JUtility::TColor getBlack() const;
-    virtual JUtility::TColor getWhite() const;
-    virtual JUTTexture* getFrameTexture(u8, u8) const;
-    virtual JUTTexture* getContentsTexture(u8) const;
-    virtual void getMaterial(J2DWindow::TMaterial&) const;
-    virtual J2DMaterial* getFrameMaterial(u8) const;
-    virtual J2DMaterial* getContentsMaterial() const;
-    virtual void drawContents(JGeometry::TBox2<f32> const&);
+    /* vt 0x0C */ virtual u16 getTypeID() const { return 17; }
+    /* vt 0x18 */ virtual void resize(f32, f32);
+    /* vt 0x34 */ virtual void drawSelf(f32, f32);
+    /* vt 0x38 */ virtual void drawSelf(f32, f32, Mtx*);
+    /* vt 0x94 */ virtual void draw(JGeometry::TBox2<f32> const&);
+    /* vt 0x98 */ virtual void draw(JGeometry::TBox2<f32> const&, JGeometry::TBox2<f32> const&);
+    /* vt 0x9C */ virtual void draw(f32 left, f32 top, f32 width, f32 height) { draw(JGeometry::TBox2<f32>(left, top, left + width, top + height)); }
+    /* vt 0xA0 */ virtual bool setBlack(JUtility::TColor);
+    /* vt 0xA4 */ virtual bool setWhite(JUtility::TColor);
+    /* vt 0xA8 */ virtual bool setBlackWhite(JUtility::TColor, JUtility::TColor);
+    /* vt 0xAC */ virtual JUtility::TColor getBlack() const;
+    /* vt 0xB0 */ virtual JUtility::TColor getWhite() const;
+    /* vt 0xB4 */ virtual JUTTexture* getFrameTexture(u8, u8) const;
+    /* vt 0xB8 */ virtual JUTTexture* getContentsTexture(u8 param_1) const {
+        if (param_1 != 0) {
+            return NULL;
+        }
+        return field_0x110;
+    }
+    /* vt 0xBC */ virtual void getMaterial(J2DWindow::TMaterial& mat) const {
+        mat.field_0x0 = NULL;
+        mat.field_0x4 = NULL;
+        mat.field_0x8 = NULL;
+        mat.field_0xc = NULL;
+        mat.field_0x10 = NULL;
+    }
+    /* vt 0xC0 */ virtual J2DMaterial* getFrameMaterial(u8) const { return NULL; }
+    /* vt 0xC4 */ virtual J2DMaterial* getContentsMaterial() const { return NULL; }
+    /* vt 0xC8 */ virtual void drawContents(JGeometry::TBox2<f32> const&);
+    /* vt 0x4C */ virtual bool isUsed(const ResTIMG*);
+    /* vt 0x50 */ virtual bool isUsed(const ResFONT* font) { return J2DPane::isUsed(font); }
+    /* vt 0x58 */ virtual void rewriteAlpha() {}
 
     bool isField0x145Set(u8 flag) { return field_0x145 & flag; }
 

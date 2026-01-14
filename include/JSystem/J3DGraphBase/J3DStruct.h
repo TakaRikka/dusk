@@ -11,6 +11,7 @@
  * 
  */
 struct J3DLightInfo {
+    bool operator==(J3DLightInfo& other) const;
     J3DLightInfo& operator=(J3DLightInfo const&);
 
     /* 0x00 */ Vec mLightPosition;
@@ -31,6 +32,7 @@ struct J3DTextureSRTInfo {
     /* 0x0C */ f32 mTranslationX;
     /* 0x10 */ f32 mTranslationY;
 
+    bool operator==(J3DTextureSRTInfo&) const;
     inline void operator=(J3DTextureSRTInfo const& other) {
 #ifdef __MWERKS__
         __REGISTER const f32* src = &other.mScaleX;
@@ -74,6 +76,7 @@ enum J3DTexMtxMode {
  * 
  */
 struct J3DTexMtxInfo {
+    bool operator==(J3DTexMtxInfo& other) const;
     J3DTexMtxInfo& operator=(J3DTexMtxInfo const&);
     void setEffectMtx(Mtx);
 
@@ -93,7 +96,7 @@ struct J3DTexMtxInfo {
 struct J3DIndTexMtxInfo {
     J3DIndTexMtxInfo& operator=(J3DIndTexMtxInfo const&);
     /* 0x00 */ Mtx23 field_0x0;
-    /* 0x18 */ u8 field_0x18;
+    /* 0x18 */ s8 field_0x18;
 };  // Size: 0x1C
 
 /**
@@ -101,7 +104,8 @@ struct J3DIndTexMtxInfo {
  * 
  */
 struct J3DFogInfo {
-    J3DFogInfo& operator=(J3DFogInfo const&);
+    bool operator==(J3DFogInfo&) const;
+    J3DFogInfo& operator=(const J3DFogInfo&);
 
     /* 0x00 */ u8 mType;
     /* 0x01 */ u8 mAdjEnable;
@@ -119,7 +123,8 @@ struct J3DFogInfo {
  * 
  */
 struct J3DNBTScaleInfo {
-    J3DNBTScaleInfo& operator=(J3DNBTScaleInfo const&);
+    bool operator==(const J3DNBTScaleInfo& other) const;
+    J3DNBTScaleInfo& operator=(const J3DNBTScaleInfo&);
 
     /* 0x0 */ u8 mbHasScale;
     /* 0x4 */ Vec mScale;

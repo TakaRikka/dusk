@@ -335,14 +335,6 @@ daNpc_Kolin_c::cutFunc daNpc_Kolin_c::mCutList[11] = {
     &daNpc_Kolin_c::cutThankYou
 };
 
-daNpc_Kolin_c::~daNpc_Kolin_c() {
-    if (mpMorf[0] != NULL) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
-}
-
 daNpc_Kolin_HIOParam const daNpc_Kolin_Param_c::m = {
     140.0f,
     -3.0f,
@@ -393,6 +385,36 @@ daNpc_Kolin_HIOParam const daNpc_Kolin_Param_c::m = {
     2.0f,
 };
 
+static NPC_KOLIN_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Kolin_HIO_c::daNpc_Kolin_HIO_c() {
+    m = daNpc_Kolin_Param_c::m;
+}
+
+void daNpc_Kolin_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Kolin_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_Kolin_c::~daNpc_Kolin_c() {
+    if (mpMorf[0] != NULL) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+}
+
 cPhs__Step daNpc_Kolin_c::create() {
     daNpcT_ct(this, daNpc_Kolin_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4, l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -431,11 +453,16 @@ cPhs__Step daNpc_Kolin_c::create() {
         mSound.init(&current.pos, &eyePos, 3, 1);
         field_0x9c0.init(&mAcch, 0.0f, 0.0f);
 
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("コリン");
+#endif
+
         reset();
 
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this),
                   fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Kolin_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
 
         field_0xe48.Set(mCcDCyl);
         field_0xe48.SetStts(&mCcStts);
@@ -732,10 +759,10 @@ void daNpc_Kolin_c::setParam() {
     selectAction();
     srchActors();
 
-    s16 talk_distance = daNpc_Kolin_Param_c::m.common.talk_distance;
-    s16 talk_angle = daNpc_Kolin_Param_c::m.common.talk_angle;
-    s16 attention_distance = daNpc_Kolin_Param_c::m.common.attention_distance;
-    s16 attention_angle = daNpc_Kolin_Param_c::m.common.attention_angle;
+    s16 talk_distance = mpHIO->m.common.talk_distance;
+    s16 talk_angle = mpHIO->m.common.talk_angle;
+    s16 attention_distance = mpHIO->m.common.attention_distance;
+    s16 attention_angle = mpHIO->m.common.attention_angle;
 
     if (mType == 3) {
         talk_distance = 7;
@@ -770,22 +797,22 @@ void daNpc_Kolin_c::setParam() {
         fopAcM_OffStatus(this, fopAcM_STATUS_UNK_0x100);
     }
 
-    scale.set(daNpc_Kolin_Param_c::m.common.scale, daNpc_Kolin_Param_c::m.common.scale, daNpc_Kolin_Param_c::m.common.scale);
-    mCcStts.SetWeight(daNpc_Kolin_Param_c::m.common.weight);
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
 
     if (&daNpc_Kolin_c::follow == mNextAction) {
         mCcStts.SetWeight(109);
     }
 
-    mCylH = daNpc_Kolin_Param_c::m.common.height;
-    mWallR = daNpc_Kolin_Param_c::m.common.width;
-    mAttnFovY = daNpc_Kolin_Param_c::m.common.fov;
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Kolin_Param_c::m.common.knee_length);
-    mRealShadowSize = daNpc_Kolin_Param_c::m.common.real_shadow_size;
-    mExpressionMorfFrame = daNpc_Kolin_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Kolin_Param_c::m.common.morf_frame;
-    gravity = daNpc_Kolin_Param_c::m.common.gravity;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_Kolin_c::checkChangeEvt() {
@@ -956,8 +983,6 @@ void daNpc_Kolin_c::beforeMove() {
     }
 }
 
-static daNpc_Kolin_Param_c l_HIO;
-
 void daNpc_Kolin_c::setAttnPos() {
     cXyz sp3c(5.0f, 30.0f, 0.0f);
 
@@ -968,11 +993,11 @@ void daNpc_Kolin_c::setAttnPos() {
     mStagger.calc(FALSE);
     f32 rad_val = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     mJntAnm.setParam(this, mpMorf[0]->getModel(), &sp3c, getBackboneJointNo(), getNeckJointNo(), getHeadJointNo(),
-                     daNpc_Kolin_Param_c::m.common.body_angleX_min, daNpc_Kolin_Param_c::m.common.body_angleX_max,
-                     daNpc_Kolin_Param_c::m.common.body_angleY_min, daNpc_Kolin_Param_c::m.common.body_angleY_max,
-                     daNpc_Kolin_Param_c::m.common.head_angleX_min, daNpc_Kolin_Param_c::m.common.head_angleX_max,
-                     daNpc_Kolin_Param_c::m.common.head_angleY_min, daNpc_Kolin_Param_c::m.common.head_angleY_max,
-                     daNpc_Kolin_Param_c::m.common.neck_rotation_ratio, rad_val, NULL);
+                     mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+                     mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+                     mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+                     mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+                     mpHIO->m.common.neck_rotation_ratio, rad_val, NULL);
     mJntAnm.calcJntRad(0.2f, 1.0f, rad_val);
     
     setMtx();
@@ -982,10 +1007,10 @@ void daNpc_Kolin_c::setAttnPos() {
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, FALSE, 1.0f, 0);
 
     sp3c.set(0.0f, 0.0f, 0.0f);
-    sp3c.y = daNpc_Kolin_Param_c::m.common.attention_offset;
+    sp3c.y = mpHIO->m.common.attention_offset;
     if (mType == 10) {
         sp3c.set(26.54f, 0.0f, -97.77f);
-        sp3c.y = daNpc_Kolin_Param_c::m.common.attention_offset;
+        sp3c.y = mpHIO->m.common.attention_offset;
     }
 
     mDoMtx_stack_c::YrotS(mCurAngle.y);
@@ -1091,7 +1116,7 @@ int daNpc_Kolin_c::selectAction() {
     mNextAction = NULL;
 
 #if DEBUG
-    if (daNpc_Kolin_Param_c::m.common.debug_mode_ON) {
+    if (mpHIO->m.common.debug_mode_ON) {
         mNextAction = &daNpc_Kolin_c::test;
         return 1;
     }
@@ -1150,8 +1175,8 @@ void daNpc_Kolin_c::calcFollowSpeedAndAngle(fopAc_ac_c* actor, int param_2, int 
 
         if (param_3 != 0) {
             f32 fVar1;
-            if (daNpc_Kolin_Param_c::m.follow_distance <= actor_distance) {
-                fVar1 = actor_distance - daNpc_Kolin_Param_c::m.follow_distance;
+            if (mpHIO->m.follow_distance <= actor_distance) {
+                fVar1 = actor_distance - mpHIO->m.follow_distance;
             } else {
                 fVar1 = 0.0f;
             }
@@ -1164,7 +1189,7 @@ void daNpc_Kolin_c::calcFollowSpeedAndAngle(fopAc_ac_c* actor, int param_2, int 
         }
 
         if (mMotionSeqMngr.getNo() == MOT_RUN) {
-            cLib_chaseF(&speedF, daNpc_Kolin_Param_c::m.run_speed, 0.5f);
+            cLib_chaseF(&speedF, mpHIO->m.run_speed, 0.5f);
         } else if (mFootLOffset.y < mFootROffset.y) {
             speedF = (mFootLOffset - mOldFootLOffset).absXZ();
         } else {
@@ -1236,7 +1261,7 @@ void daNpc_Kolin_c::followPlayer(int param_1) {
             mMotionSeqMngr.setNo(MOT_WAIT_A, -1.0f, FALSE, 0);
         }
     } else if (mMotionSeqMngr.getNo() != MOT_RUN) {
-        if (fopAcM_searchActorDistanceXZ(this, daPy_getPlayerActorClass()) < daNpc_Kolin_Param_c::m.start_distance) {
+        if (fopAcM_searchActorDistanceXZ(this, daPy_getPlayerActorClass()) < mpHIO->m.start_distance) {
             if (mMotionSeqMngr.getNo() != MOT_WALK_B) {
                 mMotionSeqMngr.setNo(MOT_WALK_B, 4.0f, FALSE, 0);
             }
@@ -1848,10 +1873,10 @@ int daNpc_Kolin_c::wait(void* param_1) {
             if (mType == 4) {
                 actor_p = mActorMngr[4].getActorP();
                 if (actor_p != NULL &&
-                    ((daNpc_Len_c*)actor_p)->checkStartDemo13StbEvt(this, daNpc_Kolin_Param_c::m.common.box_min_x, daNpc_Kolin_Param_c::m.common.box_min_y,
-                                                    daNpc_Kolin_Param_c::m.common.box_min_z, daNpc_Kolin_Param_c::m.common.box_max_x,
-                                                    daNpc_Kolin_Param_c::m.common.box_max_y, daNpc_Kolin_Param_c::m.common.box_max_z,
-                                                    daNpc_Kolin_Param_c::m.common.box_offset)) {
+                    ((daNpc_Len_c*)actor_p)->checkStartDemo13StbEvt(this, mpHIO->m.common.box_min_x, mpHIO->m.common.box_min_y,
+                                                    mpHIO->m.common.box_min_z, mpHIO->m.common.box_max_x,
+                                                    mpHIO->m.common.box_max_y, mpHIO->m.common.box_max_z,
+                                                    mpHIO->m.common.box_offset)) {
                     mEvtNo = 7;
                     field_0x1015 = 1;
                 }
@@ -1980,8 +2005,8 @@ int daNpc_Kolin_c::wait(void* param_1) {
 int daNpc_Kolin_c::timidWalk(void* param_1) {
     fopAc_ac_c* actor_p;
     cXyz work;
-    int shy_walk_time = daNpc_Kolin_Param_c::m.shy_walk_time;
-    int sulk_time = daNpc_Kolin_Param_c::m.sulk_time;
+    int shy_walk_time = mpHIO->m.shy_walk_time;
+    int sulk_time = mpHIO->m.sulk_time;
 
     switch (mMode) {
         case 0:
@@ -2107,7 +2132,7 @@ int daNpc_Kolin_c::follow(void* param_1) {
 }
 
 int daNpc_Kolin_c::clothWait(void* param_1) {
-    int sulk_time = daNpc_Kolin_Param_c::m.sulk_time;
+    int sulk_time = mpHIO->m.sulk_time;
 
     switch (mMode) {
         case 0:

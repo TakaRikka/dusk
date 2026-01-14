@@ -26,12 +26,6 @@ const daNpc_grA_HIOParam daNpc_grA_Param_c::m = {
     1.35f,
 };
 
-#if DEBUG
-#define GET_HIO(x) mpHio->mHioParams.x
-#else
-#define GET_HIO(x) daNpc_grA_Param_c::m.x
-#endif
-
 static int l_bmdGetParamList[][2] = {
     3, 1,
     3, 2,
@@ -131,7 +125,7 @@ static int l_evtGetParamList[][2] = {
 
 #if DEBUG
 daNpc_grA_HIO_c::daNpc_grA_HIO_c() {
-    mHioParams = daNpc_grA_Param_c::m;
+    m = daNpc_grA_Param_c::m;
 }
 #endif
 
@@ -256,20 +250,20 @@ void daNpc_grA_HIO_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
         if (file.open(6, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL)) {
             memset(buff, 0, sizeof(buff));
             len = 0;
-            daNpcF_commonListenPropertyEvent(buff, &len, &this->mHioParams.mNpcFParams);
-            sprintf(buff + len, "%d,   \t//  お辞儀タイマー\n", this->mHioParams.mBowTimer);
+            daNpcF_commonListenPropertyEvent(buff, &len, &m.common);
+            sprintf(buff + len, "%d,   \t//  お辞儀タイマー\n", m.mBowTimer);
             len = strlen(buff);
-            sprintf(buff + len, "%3.3f,   \t//  回転移動速度係数\n", this->mHioParams.mRotationalSpeed);
+            sprintf(buff + len, "%3.3f,   \t//  回転移動速度係数\n", m.mRotationalSpeed);
             len = strlen(buff);
-            sprintf(buff + len, "%3.3f,   \t//  歩き移動速度\n", this->mHioParams.mWalkingSpeed);
+            sprintf(buff + len, "%3.3f,   \t//  歩き移動速度\n", m.mWalkingSpeed);
             len = strlen(buff);
-            sprintf(buff + len, "%3.3f,   \t//  歩きアニメ速度\n", this->mHioParams.mWalkingAnimationSpeed);
+            sprintf(buff + len, "%3.3f,   \t//  歩きアニメ速度\n", m.mWalkingAnimationSpeed);
             len = strlen(buff);
-            sprintf(buff + len, "%d,   \t//  歩行回転速度\n", this->mHioParams.mWalkingRotationSpeed);
+            sprintf(buff + len, "%d,   \t//  歩行回転速度\n", m.mWalkingRotationSpeed);
             len = strlen(buff);
-            sprintf(buff + len, "%d,   \t//  歩行回転分割数\n", this->mHioParams.mWalkingRotationDivisions);
+            sprintf(buff + len, "%d,   \t//  歩行回転分割数\n", m.mWalkingRotationDivisions);
             len = strlen(buff);
-            sprintf(buff + len, "%3.3f,   \t//  パーティクルサイズ\n", this->mHioParams.mParticleSize);
+            sprintf(buff + len, "%3.3f,   \t//  パーティクルサイズ\n", m.mParticleSize);
             // @BUG: should update len here, otherwise the final length won't include the final sprintf
             file.writeData(buff, len);
             file.close();
@@ -281,14 +275,14 @@ void daNpc_grA_HIO_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
 }
 
 void daNpc_grA_HIO_c::genMessage(JORMContext* context) {
-    daNpcF_commonGenMessage(context, &mHioParams.mNpcFParams);
-    context->genSlider("お辞儀タイマー  ", &mHioParams.mBowTimer, 0, 1000, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("回転移動速度係数", &mHioParams.mRotationalSpeed, 0.0f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("歩き移動速度    ", &mHioParams.mWalkingSpeed, 0.0f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("歩きアニメ速度  ", &mHioParams.mWalkingAnimationSpeed, 0.0f, 10.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("歩行回転角度    ", &mHioParams.mWalkingRotationSpeed, 0, 0x7fff, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("歩行回転分割数  ", &mHioParams.mWalkingRotationDivisions, 0, 0x100, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("エフェクトサイズ", &mHioParams.mParticleSize, 0.0f, 10.0f, 0, NULL, -1, -1, 0x200, 0x18);
+    daNpcF_commonGenMessage(context, &m.common);
+    context->genSlider("お辞儀タイマー  ", &m.mBowTimer, 0, 1000, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genSlider("回転移動速度係数", &m.mRotationalSpeed, 0.0f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genSlider("歩き移動速度    ", &m.mWalkingSpeed, 0.0f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genSlider("歩きアニメ速度  ", &m.mWalkingAnimationSpeed, 0.0f, 10.0f, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genSlider("歩行回転角度    ", &m.mWalkingRotationSpeed, 0, 0x7fff, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genSlider("歩行回転分割数  ", &m.mWalkingRotationDivisions, 0, 0x100, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genSlider("エフェクトサイズ", &m.mParticleSize, 0.0f, 10.0f, 0, NULL, -1, -1, 0x200, 0x18);
     context->genButton("ファイル書き出し", 0x40000002, 0, NULL, -1, -1, 0x200, 0x18);
 }
 #endif
@@ -336,8 +330,8 @@ daNpc_grA_c::~daNpc_grA_c() {
     }
 
 #if DEBUG
-    if (mpHio != NULL) {
-        mpHio->removeHIO();
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
     }
 #endif
 }
@@ -381,21 +375,21 @@ BOOL daNpc_grA_c::create() {
         mCreature.init(&current.pos, &eyePos, 3, 1);
 
 #if DEBUG
-        mpHio = &l_HIO;
-        mpHio->entryHIO("ゴロン一般");
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ゴロン一般");
 #endif
 
         f32 v;
         if (mType == 2) {
             v = 120.0f;
         } else {
-            v = GET_HIO(mNpcFParams.width);
+            v = mpHIO->m.common.width;
         }
-        mAcchCir.SetWall(v, GET_HIO(mNpcFParams.knee_length));
+        mAcchCir.SetWall(v, mpHIO->m.common.knee_length);
 
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(GET_HIO(mNpcFParams.weight), 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
 
         field_0xC98.Set(mCcDCyl);
         field_0xC98.SetStts(&mCcStts);
@@ -503,7 +497,7 @@ BOOL daNpc_grA_c::Execute() {
 }
 
 BOOL daNpc_grA_c::Draw() {
-    return draw(chkAction(&daNpc_grA_c::test), 0, GET_HIO(mNpcFParams.real_shadow_size), NULL, 0);
+    return draw(chkAction(&daNpc_grA_c::test), 0, mpHIO->m.common.real_shadow_size, NULL, 0);
 }
 
 BOOL daNpc_grA_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
@@ -525,7 +519,7 @@ BOOL daNpc_grA_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     case 1:
     case 3:
     case 4:
-        setLookatMtx(jntNo, arr, GET_HIO(mNpcFParams.neck_rotation_ratio));
+        setLookatMtx(jntNo, arr, mpHIO->m.common.neck_rotation_ratio);
     }
 
     if (jntNo == 1) {
@@ -719,10 +713,10 @@ void daNpc_grA_c::setParam() {
     } else {
         field_0x145C = 0;
         field_0x1460 = 0;
-        talkDistance = GET_HIO(mNpcFParams.talk_distance);
-        talkAngle = GET_HIO(mNpcFParams.talk_angle);
-        attnDistance = GET_HIO(mNpcFParams.attention_distance);
-        attnAngle = GET_HIO(mNpcFParams.attention_angle);
+        talkDistance = mpHIO->m.common.talk_distance;
+        talkAngle = mpHIO->m.common.talk_angle;
+        attnDistance = mpHIO->m.common.attention_distance;
+        attnAngle = mpHIO->m.common.attention_angle;
     }
 
     if (mType == 5)
@@ -745,17 +739,17 @@ void daNpc_grA_c::setParam() {
             attention_info.flags = flags;
         }
     }
-    scale.set(GET_HIO(mNpcFParams.scale), GET_HIO(mNpcFParams.scale), GET_HIO(mNpcFParams.scale));
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
     f32 width;
     if (mType == 2) {
         width = 120.0f;
     } else {
-        width = GET_HIO(mNpcFParams.width);
+        width = mpHIO->m.common.width;
     }
     mAcchCir.SetWallR(width);
-    mAcchCir.SetWallH(GET_HIO(mNpcFParams.knee_length));
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
     if (mType != 6) {
-        gravity = GET_HIO(mNpcFParams.gravity);
+        gravity = mpHIO->m.common.gravity;
     }
 }
 
@@ -764,7 +758,7 @@ BOOL daNpc_grA_c::main() {
     JUT_ASSERT(1367, mAnm_p != NULL); // TODO: update "mAnm_p" to "mAnm_p"
     if (doEvent() == 0) {
         if (hitChk2(&field_0xC98, TRUE, FALSE)) {
-            setDamage(GET_HIO(mNpcFParams.damage_time), 0x17, 0);
+            setDamage(mpHIO->m.common.damage_time, 0x17, 0);
             setLookMode(1);
         } else if (mIsDamaged && mDamageTimer == 0) {
             field_0x1472 = 0;
@@ -783,7 +777,7 @@ BOOL daNpc_grA_c::main() {
     if (checkHide()) {
         attention_info.flags = 0;
     }
-    if (GET_HIO(mNpcFParams.debug_mode_ON) == 0 &&
+    if (mpHIO->m.common.debug_mode_ON == 0 &&
         (!dComIfGp_event_runCheck() || (mOrderNewEvt && dComIfGp_getEvent()->isOrderOK())))
     {
         u16 j = 1;
@@ -820,7 +814,7 @@ void daNpc_grA_c::setAttnPos() {
     cXyz viewVector, offset, o_pos;
     f32 attnOffset = 0.0f;
     if (mOrderEvtNo != 1) {
-        attnOffset = GET_HIO(mNpcFParams.attention_offset);
+        attnOffset = mpHIO->m.common.attention_offset;
     }
     mDoMtx_stack_c::YrotS(field_0x990);
     cLib_addCalc2(&field_0x984[0], 0.0f, 0.1f, 125.0f);
@@ -893,12 +887,12 @@ void daNpc_grA_c::setAttnPos() {
             }
         }
         f32 width = 0.0f;
-        f32 height = GET_HIO(mNpcFParams.height);
+        f32 height = mpHIO->m.common.height;
         if (mType == 2) {
             width = 120.0f;
             height = 215.0f;
         } else {
-            width = GET_HIO(mNpcFParams.width);
+            width = mpHIO->m.common.width;
         }
         if (chkAction(&daNpc_grA_c::waitSpaWater)) {
             cXyz center(0.0f, 0.0f, -80.0f);
@@ -1179,7 +1173,7 @@ void daNpc_grA_c::setMotion(int i_motion, f32 i_MorfOverride, int param_2) {
 
 BOOL daNpc_grA_c::drawDbgInfo() {
 #if DEBUG
-    if (GET_HIO(mNpcFParams.debug_info_ON) != 0) {
+    if (mpHIO->m.common.debug_info_ON != 0) {
         cXyz o_pos;
         f32 maxSpeakDist = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_SPEAK_e]).mDistMax;
         f32 maxTalkDist = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_TALK_e]).mDistMax;
@@ -1191,23 +1185,23 @@ BOOL daNpc_grA_c::drawDbgInfo() {
         dDbVw_drawCircleOpa(attention_info.position, maxTalkDist, (GXColor){0xc8, 0, 0, 0xff}, 1,
                             12);
 
-        if (GET_HIO(mNpcFParams.fov) != 180.0f) {
-            cXyz offset(0.0f, 0.0f, GET_HIO(mNpcFParams.search_distance));
+        if (mpHIO->m.common.fov != 180.0f) {
+            cXyz offset(0.0f, 0.0f, mpHIO->m.common.search_distance);
             mDoMtx_stack_c::transS(attention_info.position);
             mDoMtx_stack_c::YrotM(mHeadAngle.y);
-            mDoMtx_stack_c::YrotM(cM_deg2s(-GET_HIO(mNpcFParams.fov)));
+            mDoMtx_stack_c::YrotM(cM_deg2s(-mpHIO->m.common.fov));
             mDoMtx_stack_c::multVec(&offset, &o_pos);
 
             dDbVw_drawLineOpa(attention_info.position, o_pos, (GXColor){0, 0, 0xc8, 0xff}, 1, 12);
 
             mDoMtx_stack_c::transS(attention_info.position);
             mDoMtx_stack_c::YrotM(mHeadAngle.y);
-            mDoMtx_stack_c::YrotM(cM_deg2s(GET_HIO(mNpcFParams.fov)));
+            mDoMtx_stack_c::YrotM(cM_deg2s(mpHIO->m.common.fov));
             mDoMtx_stack_c::multVec(&offset, &o_pos);
 
             dDbVw_drawLineOpa(attention_info.position, o_pos, (GXColor){0, 0, 0xc8, 0xff}, 1, 12);
         }
-        dDbVw_drawCircleOpa(attention_info.position, GET_HIO(mNpcFParams.search_distance),
+        dDbVw_drawCircleOpa(attention_info.position, mpHIO->m.common.search_distance,
                             (GXColor){0, 0, 0xc8, 0xff}, 1, 12);
 
         dDbVw_drawSphereXlu(eyePos, 18.f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
@@ -1456,82 +1450,82 @@ void daNpc_grA_c::reset() {
 }
 
 void daNpc_grA_c::playExpression() {
-    daNpcF_anmPlayData dat0 = {1, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat0_ = {0, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat0 = {1, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat0_ = {0, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[] = {&dat0, &dat0_};
  
-    daNpcF_anmPlayData dat1 = {2, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat1_ = {0, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat1 = {2, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat1_ = {0, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[] = {&dat1, &dat1_};
  
-    daNpcF_anmPlayData dat2 = {7, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat2_ = {6, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat2 = {7, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat2_ = {6, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[] = {&dat2, &dat2_ };
     
-    daNpcF_anmPlayData dat3 = {5, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat3_ = {4, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat3 = {5, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat3_ = {4, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat3[] = {&dat3, &dat3_};
  
-    daNpcF_anmPlayData dat5 = {15, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat5_ = {12, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat5 = {15, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat5_ = {12, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat5[] = {&dat5, &dat5_};
     
-    daNpcF_anmPlayData dat6 = {13, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat6_ = {14, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat6 = {13, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat6_ = {14, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat6[] = {&dat6, &dat6_};
  
-    daNpcF_anmPlayData dat7 = {0x13, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat7_ = {0x17, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat7 = {0x13, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat7_ = {0x17, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat7[] = {&dat7, &dat7_};
     
-    daNpcF_anmPlayData dat8 = {0x14, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat8_ = {0x17, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat8 = {0x14, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat8_ = {0x17, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat8[] = {&dat8, &dat8_};
  
-    daNpcF_anmPlayData dat9 = {0x15, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat9_ = {0xe, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat9 = {0x15, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat9_ = {0xe, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat9[] = {&dat9, &dat9_};
 
-    daNpcF_anmPlayData dat11 = {8, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat11 = {8, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat11[] = {&dat11};
 
-    daNpcF_anmPlayData dat12 = {9, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat12_ = {8, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat12 = {9, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat12_ = {8, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat12[] = {&dat12, &dat12_};
 
-    daNpcF_anmPlayData dat13 = {10, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat13 = {10, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat13[] = {&dat13};
 
-    daNpcF_anmPlayData dat14 = {0xb, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat14_ = {0xa, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat14 = {0xb, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat14_ = {0xa, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat14[] = {&dat14, &dat14_};
 
-    daNpcF_anmPlayData dat15 = {6, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat15 = {6, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat15[] = {&dat15};
 
-    daNpcF_anmPlayData dat16 = {4, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat16 = {4, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat16[] = {&dat16};
 
-    daNpcF_anmPlayData dat17 = {0xc, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat17 = {0xc, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat17[] = {&dat17};
 
-    daNpcF_anmPlayData dat18 = {0xe, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat18 = {0xe, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat18[] = {&dat18};
 
-    daNpcF_anmPlayData dat19 = {16, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat19 = {16, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat19[] = {&dat19};
 
-    daNpcF_anmPlayData dat20 = {17, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat20 = {17, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat20[] = {&dat20};
 
-    daNpcF_anmPlayData dat21 = {18, GET_HIO(mNpcFParams.morf_frame), 1};
+    daNpcF_anmPlayData dat21 = {18, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat21_ = {0xe, 0.0f, 0};
     daNpcF_anmPlayData* pDat21[] = {&dat21, &dat21_};
     
-    daNpcF_anmPlayData dat22 = {12, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat22 = {12, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat22[] = {&dat22};
 
-    daNpcF_anmPlayData dat23 = {0, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat23 = {0, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat23[] = {&dat23};
     
     daNpcF_anmPlayData** ppDat[24] = {  
@@ -1567,81 +1561,81 @@ void daNpc_grA_c::playExpression() {
 }
 
 void daNpc_grA_c::playMotion() {
-    daNpcF_anmPlayData dat0 = {0x16, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat0 = {0x16, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat0[] = {&dat0};
 
-    daNpcF_anmPlayData dat1 = {0x18, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat1 = {0x18, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat1[] = {&dat1};
 
-    daNpcF_anmPlayData dat2 = {0x27, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat2 = {0x27, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat2[] = {&dat2};
 
-    daNpcF_anmPlayData dat3 = {0x1D, GET_HIO(mNpcFParams.morf_frame), 1};
+    daNpcF_anmPlayData dat3 = {0x1D, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat3_ = {0x16, 0.0f, 0};
     daNpcF_anmPlayData* pDat3[] = {&dat3, &dat3_};
 
-    daNpcF_anmPlayData dat4 = {0x1e, GET_HIO(mNpcFParams.morf_frame), 1};
+    daNpcF_anmPlayData dat4 = {0x1e, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat4_ = {0x16, 0.0f, 0};
     daNpcF_anmPlayData* pDat4[] = {&dat4, &dat4_};
 
-    daNpcF_anmPlayData dat5 = {0x17, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat5 = {0x17, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat5[] = {&dat5};
 
-    daNpcF_anmPlayData dat6 = {0x28, GET_HIO(mNpcFParams.morf_frame), 1};
+    daNpcF_anmPlayData dat6 = {0x28, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat6_ = {0x29, 0.0f, 0};
     daNpcF_anmPlayData* pDat6[] = {&dat6, &dat6_};
 
-    daNpcF_anmPlayData dat7 = {0x29, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat7 = {0x29, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat7[] = {&dat7};
 
-    daNpcF_anmPlayData dat8 = {0x2a, GET_HIO(mNpcFParams.morf_frame), 1};
+    daNpcF_anmPlayData dat8 = {0x2a, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat8_ = {0x2b, 0.0f, 0};
     daNpcF_anmPlayData* pDat8[] = {&dat8, &dat8_};
 
-    daNpcF_anmPlayData dat9 = {0x2b, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat9 = {0x2b, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat9[] = {&dat9};
 
-    daNpcF_anmPlayData dat10 = {0x2f, GET_HIO(mNpcFParams.morf_frame), 1};
+    daNpcF_anmPlayData dat10 = {0x2f, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat10_ = {0x16, 0.0f, 0};
     daNpcF_anmPlayData* pDat10[] = {&dat10, &dat10_};
 
-    daNpcF_anmPlayData dat11 = {0x22, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat11 = {0x22, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat11[] = {&dat11};
 
-    daNpcF_anmPlayData dat12 = {0x23, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat12_ = {0x22, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat12 = {0x23, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat12_ = {0x22, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat12[] = {&dat12, &dat12_};
 
-    daNpcF_anmPlayData dat13 = {0x24, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat13 = {0x24, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat13[] = {&dat13};
 
-    daNpcF_anmPlayData dat14 = {0x25, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat14_ = {0x24, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat14 = {0x25, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat14_ = {0x24, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat14[] = {&dat14, &dat14_};
 
-    daNpcF_anmPlayData dat15 = {0x32, GET_HIO(mNpcFParams.morf_frame), 1};
+    daNpcF_anmPlayData dat15 = {0x32, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat15_ = {0x30, 0.0f, 0};
     daNpcF_anmPlayData* pDat15[] = {&dat15, &dat15_};
 
-    daNpcF_anmPlayData dat16 = {0x30, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat16 = {0x30, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat16[] = {&dat16};
 
-    daNpcF_anmPlayData dat17 = {0x31, GET_HIO(mNpcFParams.morf_frame), 1};
+    daNpcF_anmPlayData dat17 = {0x31, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat17_ = {0x30, 0.0f, 0};
     daNpcF_anmPlayData* pDat17[] = {&dat17, &dat17_};
 
-    daNpcF_anmPlayData dat18 = {0x1b, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat18 = {0x1b, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat18[] = {&dat18};
 
-    daNpcF_anmPlayData dat19 = {0x1a, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat19 = {0x1a, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat19[] = {&dat19};
 
-    daNpcF_anmPlayData dat20 = {0x19, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat20_ = {0x16, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat20 = {0x19, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat20_ = {0x16, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat20[] = {&dat20, &dat20_};
 
-    daNpcF_anmPlayData dat21 = {0x1f, GET_HIO(mNpcFParams.morf_frame), 1};
-    daNpcF_anmPlayData dat21_ = {0x16, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat21 = {0x1f, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat21_ = {0x16, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat21[] = {&dat21, &dat21_};
 
     daNpcF_anmPlayData dat22 = {0x1c, 4.0f, 0};
@@ -1653,17 +1647,17 @@ void daNpc_grA_c::playMotion() {
     daNpcF_anmPlayData dat24 = {0x21, 2.0f, 0};
     daNpcF_anmPlayData* pDat24[] = {&dat24};
 
-    daNpcF_anmPlayData dat25 = {0x2c, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat25 = {0x2c, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat25[] = {&dat25};
 
-    daNpcF_anmPlayData dat26 = {0x2d, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat26 = {0x2d, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat26[] = {&dat26};
 
-    daNpcF_anmPlayData dat27 = {0x2e, GET_HIO(mNpcFParams.morf_frame), 1};
+    daNpcF_anmPlayData dat27 = {0x2e, mpHIO->m.common.morf_frame, 1};
     daNpcF_anmPlayData dat27_ = {0x29, 0.0f, 0};
     daNpcF_anmPlayData* pDat27[] = {&dat27, &dat27_};
 
-    daNpcF_anmPlayData dat28 = {38, GET_HIO(mNpcFParams.morf_frame), 0};
+    daNpcF_anmPlayData dat28 = {38, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat28[] = {&dat28};
 
     daNpcF_anmPlayData** ppDat[29] = {  
@@ -1722,7 +1716,7 @@ BOOL daNpc_grA_c::setAction(daNpc_grA_c_Action i_action) {
 
 BOOL daNpc_grA_c::selectAction() {
     mAction2 = NULL;
-    if (GET_HIO(mNpcFParams.debug_mode_ON)) {
+    if (mpHIO->m.common.debug_mode_ON) {
         mAction2 = &daNpc_grA_c::test;
     } else {
         switch (mType) {
@@ -1906,14 +1900,14 @@ void daNpc_grA_c::lookat() {
     fopAc_ac_c* player = NULL;
     J3DModel* model = mAnm_p->getModel();
     BOOL r27 = FALSE;
-    f32 bodyAngleXMin = GET_HIO(mNpcFParams.body_angleX_min);
-    f32 bodyAngleXMax = GET_HIO(mNpcFParams.body_angleX_max);
-    f32 bodyAngleYMin = GET_HIO(mNpcFParams.body_angleY_min);
-    f32 bodyAngleYMax = GET_HIO(mNpcFParams.body_angleY_max);
-    f32 headAngleXMin = GET_HIO(mNpcFParams.head_angleX_min);
-    f32 headAngleXMan = GET_HIO(mNpcFParams.head_angleX_max);
-    f32 headAnglyMin = GET_HIO(mNpcFParams.head_angleY_min);
-    f32 headAngleYMax = GET_HIO(mNpcFParams.head_angleY_max);
+    f32 bodyAngleXMin = mpHIO->m.common.body_angleX_min;
+    f32 bodyAngleXMax = mpHIO->m.common.body_angleX_max;
+    f32 bodyAngleYMin = mpHIO->m.common.body_angleY_min;
+    f32 bodyAngleYMax = mpHIO->m.common.body_angleY_max;
+    f32 headAngleXMin = mpHIO->m.common.head_angleX_min;
+    f32 headAngleXMan = mpHIO->m.common.head_angleX_max;
+    f32 headAnglyMin = mpHIO->m.common.head_angleY_min;
+    f32 headAngleYMax = mpHIO->m.common.head_angleY_max;
     s16 diffInAngle = mCurAngle.y - mOldAngle.y;
     cXyz pLookPositions[] = {
         mLookatPos[0],
@@ -2233,7 +2227,7 @@ BOOL daNpc_grA_c::ECut_grDSRoll(int i_staffID) {
             break;
         case 0x50:
             setLookMode(2);
-            mEventTimer = GET_HIO(mBowTimer);
+            mEventTimer = mpHIO->m.mBowTimer;
             break;
         case 0x2d:
             break;
@@ -2282,7 +2276,7 @@ BOOL daNpc_grA_c::ECut_grDSRoll(int i_staffID) {
                 field_0x14D4 += 0.2f;
             }
             mAnm_p->setPlaySpeed(field_0x14D4);
-            speedF = field_0x14D4 * GET_HIO(mRotationalSpeed);
+            speedF = field_0x14D4 * mpHIO->m.mRotationalSpeed;
         }
         r28 = 1;
         break;
@@ -2291,7 +2285,7 @@ BOOL daNpc_grA_c::ECut_grDSRoll(int i_staffID) {
             if (field_0x14D4 > 1.0f) {
                 field_0x14D4 -= 0.25f;
                 mAnm_p->setPlaySpeed(field_0x14D4);
-                speedF = field_0x14D4 * GET_HIO(mRotationalSpeed);
+                speedF = field_0x14D4 * mpHIO->m.mRotationalSpeed;
             } else {
                 if (mAnm_p->getFrame() >= 0.0f && mAnm_p->getFrame() <= 5.0f) {
                     setMotion(0x14, -1.0f, 0);
@@ -2550,8 +2544,8 @@ BOOL daNpc_grA_c::ECut_kickOut(int i_staffID) {
         case 0x14:
             setExpression(0x17, -1.0f);
             setMotion(1, -1.0f, 0);
-            speedF = GET_HIO(mWalkingSpeed);
-            mAnm_p->setPlaySpeed(GET_HIO(mWalkingSpeed) * GET_HIO(mWalkingAnimationSpeed));
+            speedF = mpHIO->m.mWalkingSpeed;
+            mAnm_p->setPlaySpeed(mpHIO->m.mWalkingSpeed * mpHIO->m.mWalkingAnimationSpeed);
             break;
         case 0x1e:
             Z2GetAudioMgr()->seStart(0x600b2, &current.pos, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -2574,8 +2568,8 @@ BOOL daNpc_grA_c::ECut_kickOut(int i_staffID) {
         }
         break;
     case 0x14:
-        speedF = GET_HIO(mWalkingSpeed);
-        mAnm_p->setPlaySpeed(GET_HIO(mWalkingSpeed) * GET_HIO(mWalkingAnimationSpeed));
+        speedF = mpHIO->m.mWalkingSpeed;
+        mAnm_p->setPlaySpeed(mpHIO->m.mWalkingSpeed * mpHIO->m.mWalkingAnimationSpeed);
         r28 = 1;
         break;
     case 0x1e:
@@ -3128,7 +3122,7 @@ BOOL daNpc_grA_c::ECut_rollRockCrash(int i_staffID) {
         if (field_0x14D4 >= 1.0f) {
             f32 f31 = 1.0f;
             if (sp24 >= 0x3c) {
-                f31 = GET_HIO(mParticleSize);
+                f31 = mpHIO->m.mParticleSize;
             }
             setRollPrtcl(current.pos, f31);
         }
@@ -3454,7 +3448,7 @@ BOOL daNpc_grA_c::waitKickOut(void*) {
         {
             mOrderEvtNo = 3;
         } else if (daPy_getPlayerActorClass()->checkWolfRopeHang() &&
-                   chkActorInSight(daPy_getPlayerActorClass(), GET_HIO(mNpcFParams.fov)))
+                   chkActorInSight(daPy_getPlayerActorClass(), mpHIO->m.common.fov))
         {
             mOrderEvtNo = 3;
         } else if (field_0xDD4.getPathInfo() != NULL) {
@@ -3472,9 +3466,9 @@ BOOL daNpc_grA_c::waitKickOut(void*) {
                 } else {
                     s16 r27 = cLib_targetAngleY(&current.pos, &c);
                     speedF = 5.0f;
-                    mAnm_p->setPlaySpeed(speedF * GET_HIO(mWalkingAnimationSpeed));
-                    cLib_addCalcAngleS2(&current.angle.y, r27, GET_HIO(mWalkingRotationDivisions),
-                                        GET_HIO(mWalkingRotationSpeed));
+                    mAnm_p->setPlaySpeed(speedF * mpHIO->m.mWalkingAnimationSpeed);
+                    cLib_addCalcAngleS2(&current.angle.y, r27, mpHIO->m.mWalkingRotationDivisions,
+                                        mpHIO->m.mWalkingRotationSpeed);
                     setAngle(current.angle.y);
                 }
             } else if (cLib_calcTimer(&field_0x1694) == 0) {
@@ -3860,7 +3854,7 @@ BOOL daNpc_grA_c::crashRollWait(void*) {
                 mDoMtx_stack_c::YrotS(shape_angle.y);
                 mDoMtx_stack_c::multVec(&c, &c);
                 c += current.pos;
-                setRollPrtcl(c, GET_HIO(mParticleSize));
+                setRollPrtcl(c, mpHIO->m.mParticleSize);
             }
             f32 a = cLib_minMaxLimit(fabsf(field_0x14D4) * 20.0f, 1.0f, 127.0f);
             u32 b = a;
@@ -4069,11 +4063,11 @@ BOOL daNpc_grA_c::test(void*) {
         // fallthrough
 
     case 2:
-        if (GET_HIO(mNpcFParams.face_expression) != mExpression) {
-            setExpression(GET_HIO(mNpcFParams.face_expression), GET_HIO(mNpcFParams.morf_frame));
+        if (mpHIO->m.common.face_expression != mExpression) {
+            setExpression(mpHIO->m.common.face_expression, mpHIO->m.common.morf_frame);
         }
-        setMotion(GET_HIO(mNpcFParams.motion), GET_HIO(mNpcFParams.morf_frame), 0);
-        setLookMode(GET_HIO(mNpcFParams.look_mode));
+        setMotion(mpHIO->m.common.motion, mpHIO->m.common.morf_frame, 0);
+        setLookMode(mpHIO->m.common.look_mode);
         mOrderEvtNo = 0;
         attention_info.flags = 0;
     case 1:

@@ -14,7 +14,7 @@
 
 static const char* dummyString() { return ""; }
 
-f32 const daObj_BouMato_Param_c::m[7] = {
+daObj_BouMato_HIOParam const daObj_BouMato_Param_c::m = {
     0.0f, -3.0f, 1.0f, 400.0f, 300.0f, 4.0f, 20.0f,
 };
 
@@ -39,8 +39,35 @@ static dCcD_SrcCyl l_ccDCyl = {
 
 static char* l_resName = "H_BouMato";
 
+static daArrow_c* l_findActorPtrs[100];
+
+static u32 l_findCount;
+
+static OBJ_BOUMATO_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObj_BouMato_HIO_c::daObj_BouMato_HIO_c() {
+    m = daObj_BouMato_Param_c::m;
+}
+
+void daObj_BouMato_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_BouMato_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daObj_BouMato_c::~daObj_BouMato_c() {
     OS_REPORT("|%06d:%x|daObj_BouMato_c -> デストラクト\n", g_Counter.mCounter0, this);
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     dComIfG_resDelete(&mPhase, getResName());
 }
 
@@ -58,6 +85,12 @@ int daObj_BouMato_c::create() {
         mModel->getModelData();
         fopAcM_SetMtx(this, mModel->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 450.0f, 300.0f);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("棒的");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                             &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
@@ -178,12 +211,12 @@ int daObj_BouMato_c::Execute() {
     cLib_addCalc2(field_0xa18 + 2, 0, 0.125f, 125.0f);
     setMtx();
     attention_info.position = current.pos;
-    attention_info.position.y += daObj_BouMato_Param_c::m[0];
+    attention_info.position.y += mpHIO->m.field_0x00;
     eyePos = attention_info.position;
     if (field_0xa38 == 0) {
         mCyl.SetC(current.pos);
-        mCyl.SetH(daObj_BouMato_Param_c::m[4]);
-        mCyl.SetR(daObj_BouMato_Param_c::m[5]);
+        mCyl.SetH(mpHIO->m.field_0x10);
+        mCyl.SetR(mpHIO->m.field_0x14);
         dComIfG_Ccsp()->Set(&mCyl);
     }
     mCyl.ClrTgHit();
@@ -197,7 +230,7 @@ int daObj_BouMato_c::Draw() {
         mDoExt_modelUpdateDL(mModel);
         if (mGroundH != -G_CM3D_F_INF) {
             mShadowId =
-                dComIfGd_setShadow(mShadowId, 1, mModel, &current.pos, daObj_BouMato_Param_c::m[3],
+                dComIfGd_setShadow(mShadowId, 1, mModel, &current.pos, mpHIO->m.field_0x0c,
                                    20.0f, current.pos.y, mGroundH, mGndChk, &tevStr, 0, 1.0f,
                                    dDlst_shadowControl_c::getSimpleTex());
         }
@@ -221,10 +254,6 @@ void daObj_BouMato_c::tgHitCallBack(fopAc_ac_c* param_1, dCcD_GObjInf* param_2,
     }
     static_cast<daObj_BouMato_c*>(param_1)->setCutType(cutType);
 }
-
-static daArrow_c* l_findActorPtrs[100];
-
-static u32 l_findCount;
 
 void* daObj_BouMato_c::srchArrow(void* param_1, void* param_2) {
     if (l_findCount < 100 && param_1 != NULL && param_1 != param_2) {
@@ -255,7 +284,7 @@ char* daObj_BouMato_c::getResName() {
 
 void daObj_BouMato_c::setSwayParam(fopAc_ac_c* param_1) {
     f32 dVar7 = 1.0f;
-    f32 local_48[3] = {0.0f, 0.0f, daObj_BouMato_Param_c::m[6]};;
+    f32 local_48[3] = {0.0f, 0.0f, mpHIO->m.field_0x18};
     field_0xa2a = (fopAcM_searchActorAngleY(this, param_1) - shape_angle.y) + 0x8000;
     field_0xa10 = 8;
     mIsCurTurnRight = false;
@@ -329,8 +358,6 @@ static int daObj_BouMato_Draw(void* i_this) {
 static int daObj_BouMato_IsDelete(void* i_this) {
     return 1;
 }
-
-static daObj_BouMato_Param_c l_HIO;
 
 static actor_method_class daObj_BouMato_MethodTable = {
     (process_method_func)daObj_BouMato_Create,

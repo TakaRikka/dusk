@@ -326,29 +326,11 @@ static void* s_b_sub(void* i_actor, void* i_data) {
 
 static int target_bgc[10];
 
+// FIXME: possible fakematch?
 #if DEBUG
-
-// fakematch to get proper casting
-#define NPC_KS_18DEG_ROT (s16) 0x800
-#define NPC_KS_36DEG_ROT (s16) 0x1600
-#define NPC_KS_45DEG_ROT (s16) 0x2000
-#define NPC_KS_90DEG_ROT (s16) 0x4000
-#define NPC_KS_180DEG_ROT (s16) 0x8000
-#define NPC_KS_NEG_180DEG_ROT (s16) -0x8000
-
 #define NPC_KS_FABSF fabsf
-
 #else
-
-#define NPC_KS_18DEG_ROT 0x800
-#define NPC_KS_36DEG_ROT 0x1600
-#define NPC_KS_45DEG_ROT 0x2000
-#define NPC_KS_90DEG_ROT 0x4000
-#define NPC_KS_180DEG_ROT 0x8000
-#define NPC_KS_NEG_180DEG_ROT -0x8000
-
 #define NPC_KS_FABSF std::fabsf
-
 #endif
 
 static fopAc_ac_c* search_bomb(npc_ks_class* i_this, int param_2) {
@@ -706,7 +688,7 @@ static int npc_ks_ori(npc_ks_class* i_this) {
             if (i_this->timer[0] == 1) {
                 anm_init(i_this, 32, 2.0f, 0, 1.0f);
                 if (fopAcM_GetRoomNo(actor) == 11) {
-                    actor->current.angle.y += NPC_KS_36DEG_ROT;
+                    ADD_ANGLE_2(actor->current.angle.y, 0x1600);
                 }
             }
 
@@ -854,7 +836,7 @@ static int npc_ks_ori2(npc_ks_class* i_this) {
             break;
 
         case 2:
-            sVar1 += NPC_KS_NEG_180DEG_ROT;
+            ADD_ANGLE_2(sVar1, -0x8000);
             if (i_this->timer[0] == 0) {
                 if (cage_p->partBreak()) {
                     anm_init(i_this, 22, 5.0f, 2, 1.0f);
@@ -926,7 +908,7 @@ static int npc_ks_ori2(npc_ks_class* i_this) {
         case 6:
             i_this->field_0x5fc = 0;
             fVar1 = -20.0f;
-            sVar1 += NPC_KS_45DEG_ROT;
+            ADD_ANGLE_2(sVar1, 0x2000);
             if (i_this->model->isStop()) {
                 anm_init(i_this, 33, 1.0f, 0, 1.0f);
                 actor->speedF = 40.0f;
@@ -941,7 +923,7 @@ static int npc_ks_ori2(npc_ks_class* i_this) {
 
         case 7:
             i_this->field_0x5fc = 0;
-            sVar1 += NPC_KS_90DEG_ROT;
+            ADD_ANGLE_2(sVar1, 0x4000);
             actor->gravity = -5.0f;
             break;
 
@@ -1115,7 +1097,7 @@ static path move_path_02[5] = {
 
 static int npc_ks_demo_02(npc_ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    fopAc_ac_c* unused_p = dComIfGp_getPlayer(0);
+    fopAc_ac_c* unused_pla_p = dComIfGp_getPlayer(0);
     cXyz mae, ato;
     f32 speed = 0.0f;
     int rv = 1;
@@ -2187,7 +2169,7 @@ static void npc_ks_hang_s(npc_ks_class* i_this) {
     s16 sVar2 = i_this->field_0x602;
     cLib_addCalcAngleS2(&i_this->field_0x602, i_this->field_0x60c * cM_ssin(i_this->field_0x5fa), 4, 0x1000);
     i_this->field_0x604 = i_this->field_0x602 - sVar2;
-    i_this->field_0x5fa += NPC_KS_18DEG_ROT;
+    ADD_ANGLE_2(i_this->field_0x5fa, 0x800);
     actor->current.angle.z = -(i_this->field_0x602 / 4);
 
     if (i_this->field_0x620 != 2) {
@@ -2267,7 +2249,7 @@ static void npc_ks_e_hang(npc_ks_class* i_this) {
 
     actor->current.pos = sw_p->field_0x920[i_this->field_0x630];
     cLib_addCalcAngleS2(&i_this->field_0x602, i_this->field_0x60c * cM_ssin(i_this->field_0x5fa), 4, 0x1000);
-    i_this->field_0x5fa += NPC_KS_18DEG_ROT;
+    ADD_ANGLE_2(i_this->field_0x5fa, 0x800);
     actor->current.angle.z = -(i_this->field_0x602 / 4);
     cLib_addCalc0(&i_this->field_0x60c, 0.5f, 100.0f + TREG_F(3));
 }
@@ -3229,8 +3211,10 @@ static void demo_camera(npc_ks_class* i_this) {
             if (midna_p->checkShadowReturnEnd() != 0) {
                 i_this->demo_mode = 100;
             }
-            break;
         }
+        // fallthrough intentional
+        default:
+            break;
 
         case 300:
             if (!actor->eventInfo.checkCommandDemoAccrpt()) {
@@ -3439,14 +3423,15 @@ static void demo_camera(npc_ks_class* i_this) {
             i_this->msg_flow.doFlow(actor, NULL, 0);
             break;
 
-        case 363:
+        case 363: {
+            int _; // force b asm at end of case in dbg asm
             cam_3d_morf(i_this, 0.1f + BREG_F(17));
             cLib_addCalc2(&i_this->field_0xbc4, 0.3f + BREG_F(18), 1.0f, 0.01f + BREG_F(19));
             if (i_this->msg_flow.doFlow(actor, NULL, 0) != 0) {
                 i_this->demo_mode = 100;
             }
             break;
-
+        }
     }
 
     if (i_this->demo_mode == 99 || i_this->demo_mode == 98) {
@@ -3899,7 +3884,7 @@ static int npc_ks_option(npc_ks_class* i_this) {
 
         case 30:
             target_speed = l_HIO.holding_speed_h;
-            i_this->current_angle.y += NPC_KS_180DEG_ROT;
+            ADD_ANGLE_2(i_this->current_angle.y, 0x8000);
             if (fVar2 > 400.0f) {
                 i_this->mode = 31;
                 anm_init(i_this, 51, 5.0f, 2, 1.0f);
@@ -3920,8 +3905,7 @@ static int npc_ks_option(npc_ks_class* i_this) {
             anm_init(i_this, 39, 5.0f, 2, 1.0f);
             i_this->mode = 41;
             i_this->timer[0] = cM_rndF(80.0f) + 100.0f;
-            // ditto.
-            i_this->current_angle.y += NPC_KS_180DEG_ROT;
+            ADD_ANGLE_2(i_this->current_angle.y, 0x8000);
             break;
 
         case 41:
@@ -4247,7 +4231,7 @@ static int npc_ks_guide_00(npc_ks_class* i_this) {
             actor->speedF = 0.0f;
             // fallthrough
         case 1:
-            if (i_this->dis > 700.0f || guide_path_00[i_this->path_no].field_0x0 < 0) {
+            if (i_this->dis > 700.0f + YREG_F(16) || guide_path_00[i_this->path_no].field_0x0 < 0) {
                 if ((call_pt & 1) != 0) {
                     anm_init(i_this, 8, 5.0f, 2, 1.0f);
                 } else {
@@ -4285,7 +4269,7 @@ static int npc_ks_guide_00(npc_ks_class* i_this) {
                 i_this->current_angle.y = i_this->target_angle;
             }
 
-            if (i_this->dis < 550.0f && guide_path_00[i_this->path_no].field_0x0 >= 0) {
+            if (i_this->dis < 550.0f + YREG_F(17) && guide_path_00[i_this->path_no].field_0x0 >= 0) {
                 i_this->mode = 1;
             } else {
                 if (i_this->dis < 150.0f && i_this->res_id != 51) {
@@ -4301,7 +4285,7 @@ static int npc_ks_guide_00(npc_ks_class* i_this) {
                     mae.y = player->current.pos.y - (i_this->child_no->field_0x904[0].y - 450.0f);
                     mae.z = player->current.pos.z - i_this->child_no->field_0x904[0].z;
 
-                    if (mae.abs() < 300.0f) {
+                    if (mae.abs() < 300.0f + YREG_F(11)) {
                         i_this->field_0xbd9 = 1;
                         i_this->action = 20;
                         i_this->mode = 0;
@@ -4390,6 +4374,7 @@ static int npc_ks_guide_00(npc_ks_class* i_this) {
 
 static int npc_ks_guide_00_2(npc_ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
+    fopAc_ac_c* unused_pla_p = dComIfGp_getPlayer(0);
     cXyz mae, ato;
     int rv = 1;
     int frame = i_this->model->getFrame();
@@ -4402,7 +4387,7 @@ static int npc_ks_guide_00_2(npc_ks_class* i_this) {
             actor->speedF = 0.0f;
             // fallthrough
         case 1:
-            if (i_this->dis > 900.0f || guide_path_00_2[i_this->path_no].field_0x0 < 0) {
+            if (i_this->dis > 900.0f + YREG_F(16) || guide_path_00_2[i_this->path_no].field_0x0 < 0) {
                 if ((call_pt & 1) != 0) {
                     anm_init(i_this, 8, 5.0f, 2, 1.0f);
                 } else {
@@ -4444,7 +4429,7 @@ static int npc_ks_guide_00_2(npc_ks_class* i_this) {
                 i_this->current_angle.y = i_this->target_angle + 0x8000;
             }
 
-            if (i_this->dis < 750.0f && guide_path_00_2[i_this->path_no].field_0x0 >= 0) {
+            if (i_this->dis < 750.0f + YREG_F(17) && guide_path_00_2[i_this->path_no].field_0x0 >= 0) {
                 i_this->mode = 1;
             }
     }
@@ -4468,6 +4453,8 @@ static int npc_ks_guide_00_2(npc_ks_class* i_this) {
 
 static int npc_ks_guide_00_3(npc_ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
+    fopAc_ac_c* unused_pla_p = dComIfGp_getPlayer(0);
+
     cXyz mae, ato;
     int rv = 1;
     int frame = i_this->model->getFrame();
@@ -4480,7 +4467,7 @@ static int npc_ks_guide_00_3(npc_ks_class* i_this) {
             actor->speedF = 0.0f;
             // fallthrough
         case 1:
-            if (i_this->dis > 500.0f || guide_path_00_3[i_this->path_no].field_0x0 < 0) {
+            if (i_this->dis > 500.0f + YREG_F(16) || guide_path_00_3[i_this->path_no].field_0x0 < 0) {
                 if ((call_pt & 1) != 0) {
                     anm_init(i_this, 8, 5.0f, 2, 1.0f);
                 } else {
@@ -4505,7 +4492,7 @@ static int npc_ks_guide_00_3(npc_ks_class* i_this) {
             mae.x = i_this->guide_path.x - actor->current.pos.x;
             mae.z = i_this->guide_path.z - actor->current.pos.z;
             i_this->current_angle.y = cM_atan2s(mae.x, mae.z);
-            if (JMAFastSqrt(mae.x * mae.x + mae.z * mae.z) < actor->speedF * 1.2f) {
+            if (JMAFastSqrt(mae.x * mae.x + mae.z * mae.z) < actor->speedF * (1.2f + JREG_F(12))) {
                 i_this->path_no++;
                 i_this->mode = 1;
             }
@@ -4518,7 +4505,7 @@ static int npc_ks_guide_00_3(npc_ks_class* i_this) {
                 i_this->current_angle.y = i_this->target_angle;
             }
 
-            if (i_this->dis < 400.0f && guide_path_00_3[i_this->path_no].field_0x0 >= 0) {
+            if (i_this->dis < 400.0f + YREG_F(17) && guide_path_00_3[i_this->path_no].field_0x0 >= 0) {
                 i_this->mode = 1;
             } else {
                 if (i_this->dis < 150.0f && i_this->res_id != 51) {
@@ -4599,6 +4586,7 @@ static int npc_ks_guide_00_3(npc_ks_class* i_this) {
 
 static int npc_ks_guide_01(npc_ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
+    fopAc_ac_c* unused_pla_p = dComIfGp_getPlayer(0);
     cXyz mae, ato;
     int rv = 1;
     int frame = i_this->model->getFrame();
@@ -4617,7 +4605,7 @@ static int npc_ks_guide_01(npc_ks_class* i_this) {
             // fallthrough
         case 1:
         case 101:
-            if (i_this->mode == 1 && (i_this->dis > 900.0f || guide_path_01[i_this->path_no].field_0x0 < 0)) {
+            if (i_this->mode == 1 && (i_this->dis > 900.0f + YREG_F(16) || guide_path_01[i_this->path_no].field_0x0 < 0)) {
                 if ((call_pt & 1) != 0) {
                     anm_init(i_this, 8, 5.0f, 2, 1.0f);
                 } else {
@@ -4651,7 +4639,7 @@ static int npc_ks_guide_01(npc_ks_class* i_this) {
             rv = 2;
             if (i_this->res_id == 32 && i_this->model->isStop()) {
                 anm_init(i_this, 33, 1.0f, 0, 1.0f);
-                actor->speedF = 40.0f;
+                actor->speedF = 40.0f + TREG_F(9);
                 i_this->sound.startCreatureVoice(Z2SE_KOSARU_V_JUMP, -1);
                 i_this->sound.startCreatureSound(Z2SE_KOSARU_JUMP_START, 0, -1);
                 i_this->sound.startCreatureSound(Z2SE_KOSARU_JUMP_WIND, 0, -1);
@@ -4687,7 +4675,7 @@ static int npc_ks_guide_01(npc_ks_class* i_this) {
             }
 
             if (guide_path_01[i_this->path_no].field_0x0 >= 0) {
-                if (i_this->dis < 600.0f) {
+                if (i_this->dis < 600.0f + YREG_F(17)) {
                     i_this->mode = 1;
                 }
 
@@ -4703,7 +4691,7 @@ static int npc_ks_guide_01(npc_ks_class* i_this) {
             } else if (i_this->dis < 150.0f) {
                 i_this->action = 100;
                 i_this->mode = 0;
-                return 1;
+                return rv;
             }
             break;
 
@@ -4871,7 +4859,8 @@ static int npc_ks_guide_02(npc_ks_class* i_this) {
                 i_this->current_angle.y = i_this->target_angle + 0x8000;
             }
 
-            if (((player->current.pos.y - actor->current.pos.y) > 10.0f || i_this->dis < (fVar1 - 150.0f)) && guide_path_02[i_this->path_no].field_0x0 >= 0) {
+            if (((player->current.pos.y - actor->current.pos.y) > 10.0f || i_this->dis < (fVar1 - 150.0f + YREG_F(7)))
+                && guide_path_02[i_this->path_no].field_0x0 >= 0) {
                 i_this->mode = 1;
             }
 
@@ -4937,6 +4926,7 @@ static path guide_path_22[6] = {
 
 static int npc_ks_guide_22(npc_ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
+    fopAc_ac_c* unused_pla_p = dComIfGp_getPlayer(0);
     i_this->dis = fopAcM_searchPlayerDistance(actor);
     cXyz mae, ato;
     int rv = 1;
@@ -4950,7 +4940,7 @@ static int npc_ks_guide_22(npc_ks_class* i_this) {
             actor->speedF = 0.0f;
             // fallthrough
         case 1:
-            if (i_this->dis > 500.0f || guide_path_22[i_this->path_no].field_0x0 < 0) {
+            if (i_this->dis > 500.0f + YREG_F(16) || guide_path_22[i_this->path_no].field_0x0 < 0) {
                 if ((call_pt & 1) != 0) {
                     anm_init(i_this, 8, 5.0f, 2, 1.0f);
                 } else {
@@ -5008,7 +4998,7 @@ static int npc_ks_guide_22(npc_ks_class* i_this) {
             mae.z = i_this->guide_path.z - actor->current.pos.z;
             i_this->current_angle.y = cM_atan2s(mae.x, mae.z);
 
-            if (JMAFastSqrt(mae.x * mae.x + mae.z * mae.z) < actor->speedF * 1.2f) {
+            if (JMAFastSqrt(mae.x * mae.x + mae.z * mae.z) < actor->speedF * (1.2f + JREG_F(12))) {
                 i_this->path_no++;
                 i_this->mode = 1;
             }
@@ -5021,7 +5011,7 @@ static int npc_ks_guide_22(npc_ks_class* i_this) {
                 i_this->current_angle.y = i_this->target_angle;
             }
 
-            if (i_this->dis < 300.0f && guide_path_22[i_this->path_no].field_0x0 >= 0) {
+            if (i_this->dis < 300.0f + YREG_F(17) && guide_path_22[i_this->path_no].field_0x0 >= 0) {
                 i_this->mode = 1;
             }
 
@@ -5121,7 +5111,7 @@ static int npc_ks_guide_09(npc_ks_class* i_this) {
     cXyz mae, ato;
     int rv = 1;
     int frame = i_this->model->getFrame();
-    f32 fVar1 = 0.0f;
+    f32 fVar1 = 0.0f; // used but not changed
 
     switch (i_this->mode) {
         case 0:
@@ -5131,7 +5121,7 @@ static int npc_ks_guide_09(npc_ks_class* i_this) {
             actor->speedF = 0.0f;
             // fallthrough
         case 1:
-            if (i_this->dis > 900.0f || guide_path_09[i_this->path_no].field_0x0 < 0) {
+            if (i_this->dis > 900.0f + YREG_F(16) || guide_path_09[i_this->path_no].field_0x0 < 0) {
                 if ((call_pt & 1) != 0) {
                     anm_init(i_this, 8, 5.0f, 2, 1.0f);
                 } else {
@@ -5166,7 +5156,7 @@ static int npc_ks_guide_09(npc_ks_class* i_this) {
             rv = 2;
             if (i_this->res_id == 32 && i_this->model->isStop()) {
                 anm_init(i_this, 33, 1.0f, 0, 1.0f);
-                actor->speedF = 40.0f;
+                actor->speedF = 40.0f + TREG_F(9);
                 i_this->sound.startCreatureVoice(Z2SE_KOSARU_V_JUMP, -1);
                 i_this->sound.startCreatureSound(Z2SE_KOSARU_JUMP_START, 0, -1);
                 i_this->sound.startCreatureSound(Z2SE_KOSARU_JUMP_WIND, 0, -1);
@@ -5202,14 +5192,14 @@ static int npc_ks_guide_09(npc_ks_class* i_this) {
             }
 
             if (guide_path_09[i_this->path_no].field_0x0 >= 0) {
-                if (i_this->dis < 600.0f) {
+                if (i_this->dis < 600.0f + YREG_F(17)) {
                     i_this->mode = 1;
                 }
             } else {
                 if (i_this->dis < 150.0f && i_this->res_id != 51) {
                     anm_init(i_this, 51, 5.0f, 2, 1.0f);
                 }
-                
+
                 if (i_this->res_id == 51) {
                     i_this->field_0x5fc = 1;
                 }
@@ -5249,7 +5239,7 @@ static int npc_ks_guide_09(npc_ks_class* i_this) {
             } 
     }
 
-        cLib_addCalcAngleS2(&actor->current.angle.x, 0, 1, 0x800);
+    cLib_addCalcAngleS2(&actor->current.angle.x, 0, 1, 0x800);
 
     if (checkDoorDemo()) {
         i_this->action = 100;
@@ -5266,7 +5256,7 @@ static int npc_ks_guide_09(npc_ks_class* i_this) {
     }
 
     if (i_this->mode >= 40 && i_this->mode <= 41) {
-        fopAc_ac_c* enemy_p = enemy_check(i_this, 700.0f);
+        fopAc_ac_c* enemy_p = enemy_check(i_this, 700.0f + fVar1);
         if (enemy_p == NULL) {
             i_this->mode = 42;
             i_this->timer[0] = 30;
@@ -5275,7 +5265,7 @@ static int npc_ks_guide_09(npc_ks_class* i_this) {
             mae.z = enemy_p->current.pos.z - actor->current.pos.z;
             i_this->current_angle.y = cM_atan2s(mae.x, mae.z) + 0x8000;
         }
-    } else if (enemy_view_check(i_this, 600.0f) != NULL) {
+    } else if (enemy_view_check(i_this, 600.0f + fVar1) != NULL) {
         i_this->mode = 40;
         actor->speedF = 0.0f;
     }
@@ -5299,6 +5289,7 @@ static int npc_ks_demo_12(npc_ks_class* i_this) {
     cXyz mae, ato;
     int rv = 1;
     int frame = i_this->model->getFrame();
+    f32 reg_f31 = 0.0f; // unused
 
     switch (i_this->mode) {
         case 0:
@@ -5337,7 +5328,7 @@ static int npc_ks_demo_12(npc_ks_class* i_this) {
             rv = 2;
             if (i_this->res_id == 32 && i_this->model->isStop()) {
                 anm_init(i_this, 33, 1.0f, 0, 1.0f);
-                actor->speedF = 40.0f;
+                actor->speedF = 40.0f + TREG_F(9);
                 i_this->sound.startCreatureVoice(Z2SE_KOSARU_V_JUMP, -1);
                 i_this->sound.startCreatureSound(Z2SE_KOSARU_JUMP_START, 0, -1);
                 i_this->sound.startCreatureSound(Z2SE_KOSARU_JUMP_WIND, 0, -1);
@@ -5399,7 +5390,7 @@ static path guide_path_0409[5] = {
 static int npc_ks_guide_0409(npc_ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    cXyz mae;
+    cXyz mae, unused_vec;
     int rv = 1;
     int frame = i_this->model->getFrame();
 
@@ -5411,7 +5402,8 @@ static int npc_ks_guide_0409(npc_ks_class* i_this) {
             actor->speedF = 0.0f;
             // fallthrough
         case 1:
-            if (player->current.pos.z > actor->current.pos.z && (i_this->dis > 700.0f || guide_path_0409[i_this->path_no].field_0x0 < 0)) {
+            if (player->current.pos.z > actor->current.pos.z
+                && (i_this->dis > 700.0f + YREG_F(16) || guide_path_0409[i_this->path_no].field_0x0 < 0)) {
                 if ((call_pt & 1) != 0) {
                     anm_init(i_this, 8, 5.0f, 2, 1.0f);
                 } else {
@@ -5451,7 +5443,7 @@ static int npc_ks_guide_0409(npc_ks_class* i_this) {
                 i_this->current_angle.y = i_this->target_angle;
             }
 
-            if ((i_this->dis < 550.0f || player->current.pos.z < actor->current.pos.z)
+            if ((i_this->dis < 550.0f + YREG_F(17) || player->current.pos.z < actor->current.pos.z)
                 && guide_path_0409[i_this->path_no].field_0x0 >= 0) {
                 i_this->mode = 1;
             } else {
@@ -5492,7 +5484,8 @@ static int path_search(npc_ks_class* i_this) {
     while (path_index < 255) {
         dPath* path_p = dPath_GetRoomPath(path_index, fopAcM_GetRoomNo(actor));
         if (path_p != NULL) {
-            cXyz sp28 = actor->current.pos - path_p->m_points->m_position;
+            dPnt* pnt_p = path_p->m_points;
+            cXyz sp28 = actor->current.pos - pnt_p->m_position;
             if (sp28.abs() < 200.0f) {
                 OS_REPORT("  サルがが%d番のレール発見しました。\n", path_index);
                 i_this->field_0xc18 = path_p;
@@ -5524,7 +5517,7 @@ static int npc_ks_mori(npc_ks_class* i_this) {
                 if (!dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[226])) {
                     i_this->mode = 302;
                     i_this->field_0xc17 = 3;
-                    dComIfGp_setItemOilCount(-(dComIfGs_getMaxOil() & 0xFFFF));
+                    dComIfGp_setItemOilCount(-dComIfGs_getMaxOil());
                 }
             } else {
                 i_this->field_0xaec = 1;
@@ -5546,7 +5539,7 @@ static int npc_ks_mori(npc_ks_class* i_this) {
 
                     mae.set(-27426.0f, player->current.pos.y, -20000.0f);
                     mae -= player->current.pos;
-                    if (mae.abs() < 7500.0f) {
+                    if (mae.abs() < 7500.0f + NREG_F(17)) {
                         i_this->mode = 1;
                         i_this->timer[0] = 10;
                     }
@@ -5571,8 +5564,8 @@ static int npc_ks_mori(npc_ks_class* i_this) {
         case 2:
             cMtx_YrotS(*calc_mtx, player->shape_angle.y);
             mae.x = i_this->field_0xbb4;
-            mae.y = 0.0f;
-            mae.z = 100.0f;
+            mae.y = AREG_F(1);
+            mae.z = 100.0f + AREG_F(2);
             MtxPosition(&mae, &ato);
             actor->current.pos = player->current.pos + ato;
             actor->current.angle.y = player->shape_angle.y - 0x4000;
@@ -5681,7 +5674,7 @@ static int npc_ks_mori(npc_ks_class* i_this) {
 
             mae.x = -30900.0f - player->current.pos.x;
             mae.z = -15756.0f - player->current.pos.z;
-            if (JMAFastSqrt(mae.x * mae.x + mae.z * mae.z) < 1300.0f || i_this->dis < fVar1) {
+            if (JMAFastSqrt(mae.x * mae.x + mae.z * mae.z) < 1300.0f + YREG_F(13) || i_this->dis < fVar1) {
                 i_this->demo_mode = 300;
                 i_this->mode = 300;
             }
@@ -5879,7 +5872,7 @@ static int npc_ks_fsdemo(npc_ks_class* i_this) {
                 if (i_this->path_no == 0) {
                     anm_init(i_this, 45, 3.0f, 0, 1.0f);
                     i_this->mode = 3;
-                    i_this->current_angle.y += 0x8000;
+                    ADD_ANGLE_2(i_this->current_angle.y, 0x8000);
                     actor->speedF = 0.0f;
                 } else {
                     i_this->mode = 1;
@@ -5892,7 +5885,7 @@ static int npc_ks_fsdemo(npc_ks_class* i_this) {
 
         case 3:
             if (i_this->model->isStop()) {
-                i_this->current_angle.y += 0x8000;
+                ADD_ANGLE_2(i_this->current_angle.y, 0x8000);
                 i_this->mode = 1;
             }
             break;
@@ -5941,9 +5934,10 @@ static int npc_ks_fsdemo(npc_ks_class* i_this) {
                 i_this->mode = 22;
                 i_this->sound.startCreatureVoice(Z2SE_KOSARU_V_WALK, -1);
             }
-
-            break;
         }
+        // falthrough intentional
+        default:
+            break;
 
         case 22:
             sVar1 = 0x800;
@@ -6025,6 +6019,8 @@ static int npc_ks_fsdemo(npc_ks_class* i_this) {
 
 static void npc_ks_kago(npc_ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
+    fopAc_ac_c* unused_pla_p = dComIfGp_getPlayer(0);
+    cXyz unused_xyz_0, unused_xyz_1;
 
     i_this->field_0x5fc = 0;
 
@@ -6179,7 +6175,7 @@ static void anm_se_set(npc_ks_class* i_this) {
         }
     } else if (i_this->res_id == 34) {
         if (i_this->model->checkFrame(1.0f)) {
-            f32 fVar1 = i_this->dis * 0.0215f;
+            f32 fVar1 = i_this->dis * (0.0215f + XREG_F(17));
             if (fVar1 > 127.0f) {
                 fVar1 = 127.0f;
             }
@@ -6599,6 +6595,7 @@ static void action(npc_ks_class* i_this) {
 }
 
 static void* s_kago_sub(void* i_actor, void* i_data) {
+    UNUSED(i_data);
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_OBJ_KAGO) {
         if (((daObj_Kago_c*)i_actor)->getType() == 0) {
             return i_actor;
@@ -6715,9 +6712,9 @@ static int daNpc_Ks_Execute(npc_ks_class* i_this) {
         f32 fVar1 = mae.abs();
         mae = i_this->field_0x91c - actor->current.pos;
         f32 fVar2 = mae.abs();
-        f32 fVar3 = fVar1 * 0.2f;
-        if (fVar3 > 200.0f) {
-            fVar3 = 200.0f;
+        f32 fVar3 = fVar1 * (0.2f + BREG_F(19));
+        if (fVar3 > 200.0f + BREG_F(18)) {
+            fVar3 = 200.0f + BREG_F(18);
         }
         i_this->field_0x908 = fVar3 * cM_ssin((fVar2 / fVar1) * 32768.0f);
         i_this->field_0x90c = 0;
@@ -6726,8 +6723,8 @@ static int daNpc_Ks_Execute(npc_ks_class* i_this) {
     }
 
     mDoMtx_stack_c::transS(actor->current.pos.x, actor->current.pos.y + i_this->field_0x908, actor->current.pos.z);
-    mDoMtx_stack_c::YrotM(actor->shape_angle.y);
-    mDoMtx_stack_c::XrotM(actor->shape_angle.x);
+    mDoMtx_stack_c::YrotM(s16(actor->shape_angle.y));
+    mDoMtx_stack_c::XrotM(s16(actor->shape_angle.x));
     mDoMtx_stack_c::ZrotM(actor->shape_angle.z);
     mDoMtx_stack_c::transM(0.0f, i_this->field_0x928, 0.0f);
     mDoMtx_stack_c::scaleM(l_HIO.basic_size, l_HIO.basic_size, l_HIO.basic_size);
@@ -6749,13 +6746,13 @@ static int daNpc_Ks_Execute(npc_ks_class* i_this) {
         daObj_Kago_c* kago = (daObj_Kago_c*)fpcM_Search(s_kago_sub, i_this);
         if (kago != NULL) {
             MTXCopy(i_this->model->getModel()->getAnmMtx(14), mDoMtx_stack_c::get());
-            mDoMtx_stack_c::YrotM(-2000);
-            mDoMtx_stack_c::XrotM(-0x3638);
-            mDoMtx_stack_c::ZrotM(-0x2E68);
-            mDoMtx_stack_c::transM(-60.0f, 0.0f, 0.0f);
-            mDoMtx_stack_c::YrotM(0);
-            mDoMtx_stack_c::XrotM(0);
-            mDoMtx_stack_c::ZrotM(0);
+            mDoMtx_stack_c::YrotM(VREG_S(0) - 2000);
+            mDoMtx_stack_c::XrotM(VREG_S(1) - 13880);
+            mDoMtx_stack_c::ZrotM(VREG_S(2) - 11880);
+            mDoMtx_stack_c::transM(-60.0f + VREG_F(7), VREG_F(8), VREG_F(9));
+            mDoMtx_stack_c::YrotM(s16(VREG_S(3)));
+            mDoMtx_stack_c::XrotM(s16(VREG_S(4)));
+            mDoMtx_stack_c::ZrotM(s16(VREG_S(5)));
             
             kago->setMtx(mDoMtx_stack_c::get());
             if (fopAcM_checkHawkCarryNow(kago) != 0) {
@@ -6780,11 +6777,11 @@ static int daNpc_Ks_Execute(npc_ks_class* i_this) {
     }
 
     MTXCopy(model->getAnmMtx(10), *calc_mtx);
-    mae.set(30.0f, 0.0f, 0.0f);
+    mae.set(30.0f + BREG_F(0), BREG_F(1), BREG_F(2));
     MtxPosition(&mae, &i_this->field_0x614);
 
     MTXCopy(model->getAnmMtx(14), *calc_mtx);
-    mae.set(30.0f, -0.0f, 0.0f);
+    mae.set(30.0f + BREG_F(0), -BREG_F(1), BREG_F(2));
     MtxPosition(&mae, &ato);
     i_this->field_0x614 += (ato - i_this->field_0x614) * 0.5f;
 
@@ -6797,7 +6794,7 @@ static int daNpc_Ks_Execute(npc_ks_class* i_this) {
             mae.z = obj_pos.z - i_this->field_0x614.z;
             if ((mae.x * mae.x + mae.z * mae.z) <= 15.0f) {
                 i_this->field_0x620 = 2;
-                i_this->field_0x621 = 10;
+                i_this->field_0x621 = 10 + AREG_S(9);
                 leader->field_0x92c = 0;
                 dComIfGp_getVibration().StartShock(2, 31, cXyz(0.0f, 1.0f, 0.0f));
             }
@@ -6808,7 +6805,7 @@ static int daNpc_Ks_Execute(npc_ks_class* i_this) {
         }
 
         i_this->field_0x638 += i_this->field_0x634;
-        i_this->field_0x634 += -3.0f;
+        i_this->field_0x634 += -3.0f + BREG_F(11);
 
         if (i_this->field_0x638 < 0.0f) {
             i_this->field_0x638 = 0.0f;
@@ -6828,10 +6825,10 @@ static int daNpc_Ks_Execute(npc_ks_class* i_this) {
             }
 
             player->changeDemoParam0(1);
-            cLib_addCalcAngleS2(&i_this->field_0x610, i_this->field_0x602 << 1, 1, 4000);
+            cLib_addCalcAngleS2(&i_this->field_0x610, i_this->field_0x602 << 1, 1, 4000 + TREG_S(7));
         } else {
             player->changeDemoParam0(0);
-            cLib_addCalcAngleS2(&i_this->field_0x610, 10000, 4, 4000);
+            cLib_addCalcAngleS2(&i_this->field_0x610, 10000 + TREG_S(6), 4, 4000 + TREG_S(7));
         }
 
         if (i_this->field_0x620 != 0) {

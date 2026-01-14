@@ -4,15 +4,6 @@
 #include "d/actor/d_a_npc.h"
 #include "d/d_bg_w.h"
 
-/**
- * @ingroup actors-npcs
- * @class daNpc_Kolinb_c
- * @brief Colin (Bedridden) / Ralis (Bedridden)
- *
- * @details
- *
-*/
-
 struct daNpc_Kolinb_HIOParam {
     /* 0x00 */ daNpcT_HIOParam common;
 };
@@ -24,6 +15,31 @@ public:
     static daNpc_Kolinb_HIOParam const m;
 };
 
+#if DEBUG
+class daNpc_Kolinb_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Kolinb_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Kolinb_HIOParam m;
+};
+
+#define NPC_KOLINB_HIO_CLASS daNpc_Kolinb_HIO_c
+#else
+#define NPC_KOLINB_HIO_CLASS daNpc_Kolinb_Param_c
+#endif
+
+/**
+ * @ingroup actors-npcs
+ * @class daNpc_Kolinb_c
+ * @brief Colin (Bedridden) / Ralis (Bedridden)
+ *
+ * @details
+ *
+*/
 class daNpc_Kolinb_c : public daNpcT_c {
 public:
     enum Joint {
@@ -151,7 +167,7 @@ public:
     u32 getModelType() { return fopAcM_GetParam(this) >> 28; }
 
 private:
-    /* 0xE40 */ u8 field_0xe40[0xe44 - 0xe40];
+    /* 0xE40 */ NPC_KOLINB_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl field_0xe44;
     /* 0xF80 */ Mtx mMtx;
     /* 0xFB0 */ dBgW* mpBgW;

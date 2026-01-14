@@ -19,7 +19,7 @@ static char* l_resNameList[2] = {
     "AutoMata",
 };
 
-f32 const daObj_AutoMata_Param_c::m[3] = {
+daObj_AutoMata_HIOParam const daObj_AutoMata_Param_c::m = {
     220.0f, 80.0f, 40.0f,
 };
 
@@ -49,11 +49,34 @@ static dCcD_SrcSph l_ccDSph = {
     } // mSphAttr
 };
 
+static OBJ_AUTOMATA_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObj_AutoMata_HIO_c::daObj_AutoMata_HIO_c() {
+    m = daObj_AutoMata_Param_c::m;
+}
+
+void daObj_AutoMata_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_AutoMata_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daObj_AutoMata_c::~daObj_AutoMata_c() {
     OS_REPORT("|%06d:%x|daObj_AutoMata_c -> デストラクト\n", g_Counter.mCounter0, this);
     if (mpMorf != NULL) {
         mpMorf->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     dComIfG_resDelete(&mPhase, l_resNameList[l_bmdData[field_0xb30][1]]);
 }
 
@@ -70,6 +93,12 @@ int daObj_AutoMata_c::create() {
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
         mCreature.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("オ－トマタ");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &field_0x834,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mStts.Init(0xff, 0, this);
@@ -143,10 +172,10 @@ int daObj_AutoMata_c::Execute() {
             mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(3));
             mDoMtx_stack_c::multVec(&cStack_28, &sphCenter);
             mSph.SetC(sphCenter);
-            mSph.SetR(daObj_AutoMata_Param_c::m[2]);
+            mSph.SetR(mpHIO->m.field_0x8);
             dComIfG_Ccsp()->Set(&mSph);
-            mCyl.SetH(daObj_AutoMata_Param_c::m[0]);
-            mCyl.SetR(daObj_AutoMata_Param_c::m[1]);
+            mCyl.SetH(mpHIO->m.field_0x0);
+            mCyl.SetR(mpHIO->m.field_0x4);
             mCyl.SetC(current.pos);
             dComIfG_Ccsp()->Set(&mCyl);
         }
@@ -300,8 +329,6 @@ static int daObj_AutoMata_Draw(void* i_this) {
 static int daObj_AutoMata_IsDelete(void* i_this) {
     return 1;
 }
-
-static daObj_AutoMata_Param_c l_HIO;
 
 static actor_method_class daObj_AutoMata_MethodTable = {
     (process_method_func)daObj_AutoMata_Create,

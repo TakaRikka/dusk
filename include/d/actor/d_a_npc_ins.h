@@ -3,22 +3,9 @@
 
 #include "d/actor/d_a_npc4.h"
 
-/**
- * @ingroup actors-npcs
- * @class daNpcIns_c
- * @brief Agitha
- *
- * @details
- *
-*/
-
 struct daNpcIns_HIOParam {
     /* 0x00 */ daNpcF_HIOParam common;
     /* 0x70 */ f32 walk_speed;          // 歩行速度 - Walking Speed
-};
-
-class daNpcIns_HIO_c : public mDoHIO_entry_c {
-    /* 0x8 */ daNpcIns_HIOParam param;
 };
 
 class daNpcIns_Param_c {
@@ -28,6 +15,21 @@ public:
     static daNpcIns_HIOParam const m;
 };
 
+#if DEBUG
+class daNpcIns_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpcIns_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    /* 0x8 */ daNpcIns_HIOParam m;
+};
+
+#define NPC_INS_HIO_CLASS daNpcIns_HIO_c
+#else
+#define NPC_INS_HIO_CLASS daNpcIns_Param_c
+#endif
+
 struct insect_param_data {
     int evt_bit_no;
     s16 msg_no;
@@ -35,6 +37,14 @@ struct insect_param_data {
     u8 field_0x7;
 };
 
+/**
+ * @ingroup actors-npcs
+ * @class daNpcIns_c
+ * @brief Agitha
+ *
+ * @details
+ *
+*/
 class daNpcIns_c : public daNpcF_c {
 public:
     typedef int (daNpcIns_c::*actionFunc)(void*);
@@ -118,7 +128,7 @@ private:
     /* 0xBE0 */ daNpcF_MatAnm_c* mpMatAnm;
     /* 0xBE4 */ daNpcF_Lookat_c mLookat;
     /* 0xC80 */ daNpcF_ActorMngr_c mActorMngr[1];
-    /* 0xC88 */ daNpcIns_HIO_c* mHIO;
+    /* 0xC88 */ NPC_INS_HIO_CLASS* mpHIO;
     /* 0xC8C */ dCcD_Cyl mCyl;
     /* 0xDC8 */ actionFunc mAction;
     /* 0xDD4 */ actionFunc mPrevAction;

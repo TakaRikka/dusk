@@ -55,11 +55,10 @@ int daTagMstop_c::create() {
 
     if (!checkNoAttention()) {
         s32 room = fopAcM_GetRoomNo(this);
-        cXyz* pos = &dComIfGp_getRoomArrow(room)
-                         ->m_entries[dComIfGp_getRoomCamera(room)->m_entries[idx].m_arrow_idx]
-                         .position;
+        stage_arrow_data_class* arrowData = &dComIfGp_getRoomArrow(room)
+                         ->m_entries[dComIfGp_getRoomCamera(room)->m_entries[idx].m_arrow_idx];
 
-        eyePos.set(pos->x, pos->y, pos->z);
+        eyePos.set(arrowData->posX, arrowData->posY, arrowData->posZ);
         attention_info.position = eyePos;
     }
 

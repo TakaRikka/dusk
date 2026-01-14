@@ -683,7 +683,7 @@ static BOOL way_check(e_rdy_class* i_this) {
             dBgS_LinChk lin_chk;
             lin_chk.Set(&start, &end, _this);
             if (dComIfG_Bgsp().LineCross(&lin_chk)) {
-                ADD_ANGLE(angle, 0x1000);
+                ADD_ANGLE_2(angle, 0x1000);
             } else {
                 i_this->mTargetAngleY = angle;
                 return TRUE;
@@ -1165,7 +1165,7 @@ static void e_rdy_bow_run(e_rdy_class* i_this) {
 
     case 1:
         target_speed = run_speed;
-        ADD_ANGLE(target_angle, 0x8000);
+        ADD_ANGLE_2(target_angle, 0x8000);
         if (i_this->mPlayerDist > l_HIO.field_0x28 || i_this->mTimer[0] == 0
             || i_this->mAcch.ChkWallHit())
         {
@@ -1933,7 +1933,7 @@ static void e_rdy_bomb_action(e_rdy_class* i_this) {
                 break;
             }
         }
-        ADD_ANGLE(target_angle, 0x8000);
+        ADD_ANGLE_2(target_angle, 0x8000);
         target_speed = l_HIO.mRunSpeed;
         if (JMAFastSqrt(vec1.x * vec1.x + vec1.z * vec1.z) > 600.0f) {
             i_this->mMode = 3;
@@ -2171,7 +2171,7 @@ static void e_rdy_damage(e_rdy_class* i_this) {
                 i_this->mMode = 10;
                 a_this->speed.y = 0.0f;
                 i_this->field_0xabc *= 0.2f;
-                ADD_ANGLE(i_this->field_0xadc.y, 0x8000);
+                ADD_ANGLE_2(i_this->field_0xadc.y, 0x8000);
                 i_this->field_0xbc0 = 5 + BREG_S(7);
                 i_this->field_0xaf4 = 100.0f + BREG_F(4);
                 i_this->field_0xafc = 100.0f + BREG_F(5);

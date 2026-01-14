@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_digsnow.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include <math>
+#include <cmath>
 
 void daObjDigSnow_c::initBaseMtx() {
     mpModel->setBaseScale(scale);

@@ -73,7 +73,7 @@ public:
     virtual u32 getType() = 0;
     virtual u8 getMaxStage() = 0;
     virtual void setTexNo(u32, u16) {}
-    virtual u32 getTexNo(u32) const { return 0xFFFF; }
+    virtual u16 getTexNo(u32) const { return 0xFFFF; }
     virtual void setFontNo(u16) {}
     virtual u16 getFontNo() const { return 0xFFFF; }
     virtual void setTevOrder(u32, J2DTevOrder) {}
@@ -127,46 +127,84 @@ public:
     virtual void loadTexture(_GXTexMapID, u32);
     virtual u32 getType() { return 'TVB1'; }
     virtual u8 getMaxStage() { return 1; }
-    virtual void setTexNo(u32 index, u16 texNo) { mTexNo[index] = texNo; }
-    virtual u32 getTexNo(u32 index) const { return mTexNo[index]; }
+    virtual void setTexNo(u32 index, u16 texNo) {
+        J3D_PANIC(241, index < 1, "Error : range over.");
+        mTexNo[index] = texNo;
+    }
+    virtual u16 getTexNo(u32 index) const {
+        J3D_PANIC(242, index < 1, "Error : range over.");
+        return mTexNo[index];
+    }
     virtual void setFontNo(u16 fontNo) { mFontNo = fontNo; }
     virtual u16 getFontNo() const { return mFontNo; }
     virtual void setTevOrder(u32 index, J2DTevOrder order) {
+        J3D_PANIC(247, index < 1, "Error : range over.");
         mTevOrder[index] = order;
     }
-    virtual J2DTevOrder* getTevOrder(u32 index) { return &mTevOrder[index]; }
+    virtual J2DTevOrder* getTevOrder(u32 index) {
+        J3D_PANIC(248, index < 1, "Error : range over.");
+        return &mTevOrder[index];
+    }
     virtual void setTevColor(u32 index, J2DGXColorS10 color) {
         J3D_PANIC(250, index < 4, "Error : range over.");
         mTevColor[index] = color;
     }
-    virtual J2DGXColorS10* getTevColor(u32 index) { return &mTevColor[index]; }
+    virtual J2DGXColorS10* getTevColor(u32 index) {
+        J3D_PANIC(251, index < 4, "Error : range over.");
+        return &mTevColor[index];
+    }
     virtual void setTevKColor(u32 index, JUtility::TColor color) {
+        J3D_PANIC(253, index < 4, "Error : range over.");
         mTevKColor[index] = color;
     }
-    virtual JUtility::TColor* getTevKColor(u32 index) { return &mTevKColor[index]; }
-    virtual void setTevKColorSel(u32 index, u8 sel) { mTevKColorSel[index] = sel; }
-    virtual u8 getTevKColorSel(u32 index) { return mTevKColorSel[index]; }
-    virtual void setTevKAlphaSel(u32 index, u8 sel) { mTevKAlphaSel[index] = sel; }
-    virtual u8 getTevKAlphaSel(u32 index) { return mTevKAlphaSel[index]; }
+    virtual JUtility::TColor* getTevKColor(u32 index) {
+        J3D_PANIC(254, index < 4, "Error : range over.");
+        return &mTevKColor[index];
+    }
+    virtual void setTevKColorSel(u32 index, u8 sel) {
+        J3D_PANIC(256, index < 1, "Error : range over.");
+        mTevKColorSel[index] = sel;
+    }
+    virtual u8 getTevKColorSel(u32 index) {
+        J3D_PANIC(257, index < 1, "Error : range over.");
+        return mTevKColorSel[index];
+    }
+    virtual void setTevKAlphaSel(u32 index, u8 sel) {
+        J3D_PANIC(259, index < 1, "Error : range over.");
+        mTevKAlphaSel[index] = sel;
+    }
+    virtual u8 getTevKAlphaSel(u32 index) {
+        J3D_PANIC(260, index < 1, "Error : range over.");
+        return mTevKAlphaSel[index];
+    }
     virtual void setTevStageNum(u8 num) {}
     virtual u8 getTevStageNum() const { return 1; }
     virtual void setTevStage(u32 index, J2DTevStage stage) {
+        J3D_PANIC(265, index < 1, "Error : range over.");
         mTevStage[index] = stage;
     }
-    virtual J2DTevStage* getTevStage(u32 index) { return &mTevStage[index]; }
+    virtual J2DTevStage* getTevStage(u32 index) {
+        J3D_PANIC(266, index < 1, "Error : range over.");
+        return &mTevStage[index];
+    }
     virtual void setTevSwapModeInfo(u32 index, J2DTevSwapModeInfo info) {
+        J3D_PANIC(268, index < 1, "Error : range over.");
         mTevStage[index].setTevSwapModeInfo(info);
     }
     virtual void setTevSwapModeTable(u32 index, J2DTevSwapModeTable table) {
+        J3D_PANIC(270, index < 4, "Error : range over.");
         mTevSwapModeTable[index] = table;
     }
     virtual J2DTevSwapModeTable* getTevSwapModeTable(u32 index) {
+        J3D_PANIC(271, index < 4, "Error : range over.");
         return &mTevSwapModeTable[index];
     }
     virtual void setIndTevStage(u32 index, J2DIndTevStage stage) {
+        J3D_PANIC(273, index < 1, "Error : range over.");
         mIndTevStage[index] = stage;
     }
     virtual J2DIndTevStage* getIndTevStage(u32 index) {
+        J3D_PANIC(274, index < 1, "Error : range over.");
         return &mIndTevStage[index];
     }
     virtual bool insertTexture(u32 index, ResTIMG const* p_timg) {
@@ -182,14 +220,20 @@ public:
     virtual bool setPalette(u32, ResTLUT const*);
     virtual bool prepareTexture(u8);
     virtual JUTTexture* getTexture(u32 index) {
-        return index >= 1 ? NULL : mTexture[index];
+        if (index >= 1) {
+            return NULL;
+        }
+        return mTexture[index];
     }
     virtual JUTPalette* getPalette(u32 index) {
-        return index >= 1 ? NULL : mPalette[index];
+        if (index >= 1) {
+            return NULL;
+        }
+        return mPalette[index];
     }
     virtual JUTFont* getFont() { return mFont; }
     virtual void shiftDeleteFlag(u8, bool);
-    virtual void setUndeleteFlag(u8 flag) { mUndeleteFlag &= flag; }
+    virtual void setUndeleteFlag(u8 flag) { mUndeleteFlag = mUndeleteFlag & flag; }
     virtual void setFontUndeleteFlag() { mUndeleteFlag &= 0x7F; }
     virtual ~J2DTevBlock1();
 
@@ -223,46 +267,84 @@ public:
     virtual void loadTexture(_GXTexMapID, u32);
     virtual u32 getType() { return 'TVB2'; }
     virtual u8 getMaxStage() { return 2; }
-    virtual void setTexNo(u32 index, u16 texNo) { mTexNo[index] = texNo; }
-    virtual u32 getTexNo(u32 index) const { return mTexNo[index]; }
+    virtual void setTexNo(u32 index, u16 texNo) {
+        J3D_PANIC(351, index < 2, "Error : range over.");
+        mTexNo[index] = texNo;
+    }
+    virtual u16 getTexNo(u32 index) const {
+        J3D_PANIC(352, index < 2, "Error : range over.");
+        return mTexNo[index];
+    }
     virtual void setFontNo(u16 fontNo) { mFontNo = fontNo; }
     virtual u16 getFontNo() const { return mFontNo; }
     virtual void setTevOrder(u32 index, J2DTevOrder order) {
+        J3D_PANIC(357, index < 2, "Error : range over.");
         mTevOrder[index] = order;
     }
-    virtual J2DTevOrder* getTevOrder(u32 index) { return &mTevOrder[index]; }
+    virtual J2DTevOrder* getTevOrder(u32 index) {
+        J3D_PANIC(358, index < 2, "Error : range over.");
+        return &mTevOrder[index];
+    }
     virtual void setTevColor(u32 index, J2DGXColorS10 color) {
         J3D_PANIC(360, index < 4, "Error : range over.");
         mTevColor[index] = color;
     }
-    virtual J2DGXColorS10* getTevColor(u32 index) { return &mTevColor[index]; }
+    virtual J2DGXColorS10* getTevColor(u32 index) {
+        J3D_PANIC(361, index < 4, "Error : range over.");
+        return &mTevColor[index];
+    }
     virtual void setTevKColor(u32 index, JUtility::TColor color) {
+        J3D_PANIC(363, index < 4, "Error : range over.");
         mTevKColor[index] = color;
     }
-    virtual JUtility::TColor* getTevKColor(u32 index) { return &mTevKColor[index]; }
-    virtual void setTevKColorSel(u32 index, u8 sel) { mTevKColorSel[index] = sel; }
-    virtual u8 getTevKColorSel(u32 index) { return mTevKColorSel[index]; }
-    virtual void setTevKAlphaSel(u32 index, u8 sel) { mTevKAlphaSel[index] = sel; }
-    virtual u8 getTevKAlphaSel(u32 index) { return mTevKAlphaSel[index]; }
+    virtual JUtility::TColor* getTevKColor(u32 index) {
+        J3D_PANIC(364, index < 4, "Error : range over.");
+        return &mTevKColor[index];
+    }
+    virtual void setTevKColorSel(u32 index, u8 sel) {
+        J3D_PANIC(366, index < 2, "Error : range over.");
+        mTevKColorSel[index] = sel;
+    }
+    virtual u8 getTevKColorSel(u32 index) {
+        J3D_PANIC(367, index < 2, "Error : range over.");
+        return mTevKColorSel[index];
+    }
+    virtual void setTevKAlphaSel(u32 index, u8 sel) {
+        J3D_PANIC(369, index < 2, "Error : range over.");
+        mTevKAlphaSel[index] = sel;
+    }
+    virtual u8 getTevKAlphaSel(u32 index) {
+        J3D_PANIC(370, index < 2, "Error : range over.");
+        return mTevKAlphaSel[index];
+    }
     virtual void setTevStageNum(u8 num) { mTevStageNum = num; }
     virtual u8 getTevStageNum() const { return mTevStageNum; }
     virtual void setTevStage(u32 index, J2DTevStage stage) {
+        J3D_PANIC(375, index < 2, "Error : range over.");
         mTevStage[index] = stage;
     }
-    virtual J2DTevStage* getTevStage(u32 index) { return &mTevStage[index]; }
+    virtual J2DTevStage* getTevStage(u32 index) {
+        J3D_PANIC(376, index < 2, "Error : range over.");
+        return &mTevStage[index];
+    }
     virtual void setTevSwapModeInfo(u32 index, J2DTevSwapModeInfo info) {
+        J3D_PANIC(378, index < 2, "Error : range over.");
         mTevStage[index].setTevSwapModeInfo(info);
     }
     virtual void setTevSwapModeTable(u32 index, J2DTevSwapModeTable table) {
+        J3D_PANIC(380, index < 4, "Error : range over.");
         mTevSwapModeTable[index] = table;
     }
     virtual J2DTevSwapModeTable* getTevSwapModeTable(u32 index) {
+        J3D_PANIC(381, index < 4, "Error : range over.");
         return &mTevSwapModeTable[index];
     }
     virtual void setIndTevStage(u32 index, J2DIndTevStage stage) {
+        J3D_PANIC(383, index < 2, "Error : range over.");
         mIndTevStage[index] = stage;
     }
     virtual J2DIndTevStage* getIndTevStage(u32 index) {
+        J3D_PANIC(384, index < 2, "Error : range over.");
         return &mIndTevStage[index];
     }
     virtual bool insertTexture(u32 index, ResTIMG const* p_timg) {
@@ -278,14 +360,20 @@ public:
     virtual bool setPalette(u32, ResTLUT const*);
     virtual bool prepareTexture(u8);
     virtual JUTTexture* getTexture(u32 index) {
-        return index >= 2 ? NULL : mTexture[index];
+        if (index >= 2) {
+            return NULL;
+        }
+        return mTexture[index];
     }
     virtual JUTPalette* getPalette(u32 index) {
-        return index >= 2 ? NULL : mPalette[index];
+        if (index >= 2) {
+            return NULL;
+        }
+        return mPalette[index];
     }
     virtual JUTFont* getFont() { return mFont; }
     virtual void shiftDeleteFlag(u8, bool);
-    virtual void setUndeleteFlag(u8 flag) { mUndeleteFlag &= flag; }
+    virtual void setUndeleteFlag(u8 flag) { mUndeleteFlag = mUndeleteFlag & flag; }
     virtual void setFontUndeleteFlag() { mUndeleteFlag &= 0x7F; }
     virtual ~J2DTevBlock2();
 
@@ -321,46 +409,84 @@ public:
     virtual void loadTexture(_GXTexMapID, u32);
     virtual u32 getType() { return 'TVB4'; }
     virtual u8 getMaxStage() { return 4; }
-    virtual void setTexNo(u32 index, u16 texNo) { mTexNo[index] = texNo; }
-    virtual u32 getTexNo(u32 index) const { return mTexNo[index]; }
+    virtual void setTexNo(u32 index, u16 texNo) {
+        J3D_PANIC(459, index < 4, "Error : range over.");
+        mTexNo[index] = texNo;
+    }
+    virtual u16 getTexNo(u32 index) const {
+        J3D_PANIC(460, index < 4, "Error : range over.");
+        return mTexNo[index];
+    }
     virtual void setFontNo(u16 fontNo) { mFontNo = fontNo; }
     virtual u16 getFontNo() const { return mFontNo; }
     virtual void setTevOrder(u32 index, J2DTevOrder order) {
+        J3D_PANIC(465, index < 4, "Error : range over.");
         mTevOrder[index] = order;
     }
-    virtual J2DTevOrder* getTevOrder(u32 index) { return &mTevOrder[index]; }
+    virtual J2DTevOrder* getTevOrder(u32 index) {
+        J3D_PANIC(466, index < 4, "Error : range over.");
+        return &mTevOrder[index];
+    }
     virtual void setTevColor(u32 index, J2DGXColorS10 color) {
         J3D_PANIC(468, index < 4, "Error : range over.");
         mTevColor[index] = color;
     }
-    virtual J2DGXColorS10* getTevColor(u32 index) { return &mTevColor[index]; }
+    virtual J2DGXColorS10* getTevColor(u32 index) {
+        J3D_PANIC(469, index < 4, "Error : range over.");
+        return &mTevColor[index];
+    }
     virtual void setTevKColor(u32 index, JUtility::TColor color) {
+        J3D_PANIC(471, index < 4, "Error : range over.");
         mTevKColor[index] = color;
     }
-    virtual JUtility::TColor* getTevKColor(u32 index) { return &mTevKColor[index]; }
-    virtual void setTevKColorSel(u32 index, u8 sel) { mTevKColorSel[index] = sel; }
-    virtual u8 getTevKColorSel(u32 index) { return mTevKColorSel[index]; }
-    virtual void setTevKAlphaSel(u32 index, u8 sel) { mTevKAlphaSel[index] = sel; }
-    virtual u8 getTevKAlphaSel(u32 index) { return mTevKAlphaSel[index]; }
+    virtual JUtility::TColor* getTevKColor(u32 index) {
+        J3D_PANIC(472, index < 4, "Error : range over.");
+        return &mTevKColor[index];
+    }
+    virtual void setTevKColorSel(u32 index, u8 sel) {
+        J3D_PANIC(474, index < 4, "Error : range over.");
+        mTevKColorSel[index] = sel;
+    }
+    virtual u8 getTevKColorSel(u32 index) {
+        J3D_PANIC(475, index < 4, "Error : range over.");
+        return mTevKColorSel[index];
+    }
+    virtual void setTevKAlphaSel(u32 index, u8 sel) {
+        J3D_PANIC(477, index < 4, "Error : range over.");
+        mTevKAlphaSel[index] = sel;
+    }
+    virtual u8 getTevKAlphaSel(u32 index) {
+        J3D_PANIC(478, index < 4, "Error : range over.");
+        return mTevKAlphaSel[index];
+    }
     virtual void setTevStageNum(u8 num) { mTevStageNum = num; }
     virtual u8 getTevStageNum() const { return mTevStageNum; }
     virtual void setTevStage(u32 index, J2DTevStage stage) {
+        J3D_PANIC(483, index < 4, "Error : range over.");
         mTevStage[index] = stage;
     }
-    virtual J2DTevStage* getTevStage(u32 index) { return &mTevStage[index]; }
+    virtual J2DTevStage* getTevStage(u32 index) {
+        J3D_PANIC(484, index < 4, "Error : range over.");
+        return &mTevStage[index];
+    }
     virtual void setTevSwapModeInfo(u32 index, J2DTevSwapModeInfo info) {
+        J3D_PANIC(486, index < 4, "Error : range over.");
         mTevStage[index].setTevSwapModeInfo(info);
     }
     virtual void setTevSwapModeTable(u32 index, J2DTevSwapModeTable table) {
+        J3D_PANIC(488, index < 4, "Error : range over.");
         mTevSwapModeTable[index] = table;
     }
     virtual J2DTevSwapModeTable* getTevSwapModeTable(u32 index) {
+        J3D_PANIC(489, index < 4, "Error : range over.");
         return &mTevSwapModeTable[index];
     }
     virtual void setIndTevStage(u32 index, J2DIndTevStage stage) {
+        J3D_PANIC(491, index < 4, "Error : range over.");
         mIndTevStage[index] = stage;
     }
     virtual J2DIndTevStage* getIndTevStage(u32 index) {
+        J3D_PANIC(492, index < 4, "Error : range over.");
         return &mIndTevStage[index];
     }
     virtual bool insertTexture(u32 index, ResTIMG const* p_timg) {
@@ -376,14 +502,20 @@ public:
     virtual bool setPalette(u32, ResTLUT const*);
     virtual bool prepareTexture(u8);
     virtual JUTTexture* getTexture(u32 index) {
-        return index >= 4 ? NULL : mTexture[index];
+        if (index >= 4) {
+            return NULL;
+        }
+        return mTexture[index];
     }
     virtual JUTPalette* getPalette(u32 index) {
-        return index >= 4 ? NULL : mPalette[index];
+        if (index >= 4) {
+            return NULL;
+        }
+        return mPalette[index];
     }
     virtual JUTFont* getFont() { return mFont; }
     virtual void shiftDeleteFlag(u8, bool);
-    virtual void setUndeleteFlag(u8 flag) { mUndeleteFlag &= flag; }
+    virtual void setUndeleteFlag(u8 flag) { mUndeleteFlag = mUndeleteFlag & flag; }
     virtual void setFontUndeleteFlag() { mUndeleteFlag &= 0x7F; }
     virtual ~J2DTevBlock4();
 
@@ -419,46 +551,84 @@ public:
     virtual void loadTexture(_GXTexMapID, u32);
     virtual u32 getType() { return 'TVB8'; }
     virtual u8 getMaxStage() { return 8; }
-    virtual void setTexNo(u32 index, u16 texNo) { mTexNo[index] = texNo; }
-    virtual u32 getTexNo(u32 index) const { return mTexNo[index]; }
+    virtual void setTexNo(u32 index, u16 texNo) {
+        J3D_PANIC(570, index < 8, "Error : range over.");
+        mTexNo[index] = texNo;
+    }
+    virtual u16 getTexNo(u32 index) const {
+        J3D_PANIC(571, index < 8, "Error : range over.");
+        return mTexNo[index];
+    }
     virtual void setFontNo(u16 fontNo) { mFontNo = fontNo; }
     virtual u16 getFontNo() const { return mFontNo; }
     virtual void setTevOrder(u32 index, J2DTevOrder order) {
+        J3D_PANIC(576, index < 8, "Error : range over.");
         mTevOrder[index] = order;
     }
-    virtual J2DTevOrder* getTevOrder(u32 index) { return &mTevOrder[index]; }
+    virtual J2DTevOrder* getTevOrder(u32 index) {
+        J3D_PANIC(577, index < 8, "Error : range over.");
+        return &mTevOrder[index];
+    }
     virtual void setTevColor(u32 index, J2DGXColorS10 color) {
         J3D_PANIC(579, index < 4, "Error : range over.");
         mTevColor[index] = color;
     }
-    virtual J2DGXColorS10* getTevColor(u32 index) { return &mTevColor[index]; }
+    virtual J2DGXColorS10* getTevColor(u32 index) {
+        J3D_PANIC(580, index < 4, "Error : range over.");
+        return &mTevColor[index];
+    }
     virtual void setTevKColor(u32 index, JUtility::TColor color) {
+        J3D_PANIC(582, index < 4, "Error : range over.");
         mTevKColor[index] = color;
     }
-    virtual JUtility::TColor* getTevKColor(u32 index) { return &mTevKColor[index]; }
-    virtual void setTevKColorSel(u32 index, u8 sel) { mTevKColorSel[index] = sel; }
-    virtual u8 getTevKColorSel(u32 index) { return mTevKColorSel[index]; }
-    virtual void setTevKAlphaSel(u32 index, u8 sel) { mTevKAlphaSel[index] = sel; }
-    virtual u8 getTevKAlphaSel(u32 index) { return mTevKAlphaSel[index]; }
+    virtual JUtility::TColor* getTevKColor(u32 index) {
+        J3D_PANIC(583, index < 4, "Error : range over.");
+        return &mTevKColor[index];
+    }
+    virtual void setTevKColorSel(u32 index, u8 sel) {
+        J3D_PANIC(585, index < 8, "Error : range over.");
+        mTevKColorSel[index] = sel;
+    }
+    virtual u8 getTevKColorSel(u32 index) {
+        J3D_PANIC(586, index < 8, "Error : range over.");
+        return mTevKColorSel[index];
+    }
+    virtual void setTevKAlphaSel(u32 index, u8 sel) {
+        J3D_PANIC(588, index < 8, "Error : range over.");
+        mTevKAlphaSel[index] = sel;
+    }
+    virtual u8 getTevKAlphaSel(u32 index) {
+        J3D_PANIC(589, index < 8, "Error : range over.");
+        return mTevKAlphaSel[index];
+    }
     virtual void setTevStageNum(u8 num) { mTevStageNum = num; }
     virtual u8 getTevStageNum() const { return mTevStageNum; }
     virtual void setTevStage(u32 index, J2DTevStage stage) {
+        J3D_PANIC(594, index < 8, "Error : range over.");
         mTevStage[index] = stage;
     }
-    virtual J2DTevStage* getTevStage(u32 index) { return &mTevStage[index]; }
+    virtual J2DTevStage* getTevStage(u32 index) {
+        J3D_PANIC(595, index < 8, "Error : range over.");
+        return &mTevStage[index];
+    }
     virtual void setTevSwapModeInfo(u32 index, J2DTevSwapModeInfo info) {
+        J3D_PANIC(597, index < 8, "Error : range over.");
         mTevStage[index].setTevSwapModeInfo(info);
     }
     virtual void setTevSwapModeTable(u32 index, J2DTevSwapModeTable table) {
+        J3D_PANIC(599, index < 4, "Error : range over.");
         mTevSwapModeTable[index] = table;
     }
     virtual J2DTevSwapModeTable* getTevSwapModeTable(u32 index) {
+        J3D_PANIC(600, index < 4, "Error : range over.");
         return &mTevSwapModeTable[index];
     }
     virtual void setIndTevStage(u32 index, J2DIndTevStage stage) {
+        J3D_PANIC(602, index < 8, "Error : range over.");
         mIndTevStage[index] = stage;
     }
     virtual J2DIndTevStage* getIndTevStage(u32 index) {
+        J3D_PANIC(603, index < 8, "Error : range over.");
         return &mIndTevStage[index];
     }
     virtual bool insertTexture(u32 index, ResTIMG const* p_timg) {
@@ -474,14 +644,20 @@ public:
     virtual bool setPalette(u32, ResTLUT const*);
     virtual bool prepareTexture(u8);
     virtual JUTTexture* getTexture(u32 index) {
-        return index >= 8 ? NULL : mTexture[index];
+        if (index >= 8) {
+            return NULL;
+        }
+        return mTexture[index];
     }
     virtual JUTPalette* getPalette(u32 index) {
-        return index >= 8 ? NULL : mPalette[index];
+        if (index >= 8) {
+            return NULL;
+        }
+        return mPalette[index];
     }
     virtual JUTFont* getFont() { return mFont; }
     virtual void shiftDeleteFlag(u8, bool);
-    virtual void setUndeleteFlag(u8 flag) { mUndeleteFlag &= flag; }
+    virtual void setUndeleteFlag(u8 flag) { mUndeleteFlag = mUndeleteFlag & flag; }
     virtual void setFontUndeleteFlag() { mFontUndeleteFlag = false; }
     virtual ~J2DTevBlock8();
 
@@ -518,46 +694,84 @@ public:
     virtual void loadTexture(_GXTexMapID, u32);
     virtual u32 getType() { return 'TV16'; }
     virtual u8 getMaxStage() { return 16; }
-    virtual void setTexNo(u32 index, u16 texNo) { mTexNo[index] = texNo; }
-    virtual u32 getTexNo(u32 index) const { return mTexNo[index]; }
+    virtual void setTexNo(u32 index, u16 texNo) {
+        J3D_PANIC(682, index < 8, "Error : range over.");
+        mTexNo[index] = texNo;
+    }
+    virtual u16 getTexNo(u32 index) const {
+        J3D_PANIC(683, index < 8, "Error : range over.");
+        return mTexNo[index];
+    }
     virtual void setFontNo(u16 fontNo) { mFontNo = fontNo; }
     virtual u16 getFontNo() const { return mFontNo; }
     virtual void setTevOrder(u32 index, J2DTevOrder order) {
+        J3D_PANIC(688, index < 16, "Error : range over.");
         mTevOrder[index] = order;
     }
-    virtual J2DTevOrder* getTevOrder(u32 index) { return &mTevOrder[index]; }
+    virtual J2DTevOrder* getTevOrder(u32 index) {
+        J3D_PANIC(689, index < 16, "Error : range over.");
+        return &mTevOrder[index];
+    }
     virtual void setTevColor(u32 index, J2DGXColorS10 color) {
         J3D_PANIC(691, index < 4, "Error : range over.");
         mTevColor[index] = color;
     }
-    virtual J2DGXColorS10* getTevColor(u32 index) { return &mTevColor[index]; }
+    virtual J2DGXColorS10* getTevColor(u32 index) {
+        J3D_PANIC(692, index < 4, "Error : range over.");
+        return &mTevColor[index];
+    }
     virtual void setTevKColor(u32 index, JUtility::TColor color) {
+        J3D_PANIC(694, index < 4, "Error : range over.");
         mTevKColor[index] = color;
     }
-    virtual JUtility::TColor* getTevKColor(u32 index) { return &mTevKColor[index]; }
-    virtual void setTevKColorSel(u32 index, u8 sel) { mTevKColorSel[index] = sel; }
-    virtual u8 getTevKColorSel(u32 index) { return mTevKColorSel[index]; }
-    virtual void setTevKAlphaSel(u32 index, u8 sel) { mTevKAlphaSel[index] = sel; }
-    virtual u8 getTevKAlphaSel(u32 index) { return mTevKAlphaSel[index]; }
+    virtual JUtility::TColor* getTevKColor(u32 index) {
+        J3D_PANIC(695, index < 4, "Error : range over.");
+        return &mTevKColor[index];
+    }
+    virtual void setTevKColorSel(u32 index, u8 sel) {
+        J3D_PANIC(697, index < 16, "Error : range over.");
+        mTevKColorSel[index] = sel;
+    }
+    virtual u8 getTevKColorSel(u32 index) {
+        J3D_PANIC(698, index < 16, "Error : range over.");
+        return mTevKColorSel[index];
+    }
+    virtual void setTevKAlphaSel(u32 index, u8 sel) {
+        J3D_PANIC(700, index < 16, "Error : range over.");
+        mTevKAlphaSel[index] = sel;
+    }
+    virtual u8 getTevKAlphaSel(u32 index) {
+        J3D_PANIC(701, index < 16, "Error : range over.");
+        return mTevKAlphaSel[index];
+    }
     virtual void setTevStageNum(u8 num) { mTevStageNum = num; }
     virtual u8 getTevStageNum() const { return mTevStageNum; }
     virtual void setTevStage(u32 index, J2DTevStage stage) {
+        J3D_PANIC(706, index < 16, "Error : range over.");
         mTevStage[index] = stage;
     }
-    virtual J2DTevStage* getTevStage(u32 index) { return &mTevStage[index]; }
+    virtual J2DTevStage* getTevStage(u32 index) {
+        J3D_PANIC(707, index < 16, "Error : range over.");
+        return &mTevStage[index];
+    }
     virtual void setTevSwapModeInfo(u32 index, J2DTevSwapModeInfo info) {
+        J3D_PANIC(709, index < 16, "Error : range over.");
         mTevStage[index].setTevSwapModeInfo(info);
     }
     virtual void setTevSwapModeTable(u32 index, J2DTevSwapModeTable table) {
+        J3D_PANIC(711, index < 4, "Error : range over.");
         mTevSwapModeTable[index] = table;
     }
     virtual J2DTevSwapModeTable* getTevSwapModeTable(u32 index) {
+        J3D_PANIC(712, index < 4, "Error : range over.");
         return &mTevSwapModeTable[index];
     }
     virtual void setIndTevStage(u32 index, J2DIndTevStage stage) {
+        J3D_PANIC(714, index < 16, "Error : range over.");
         mIndTevStage[index] = stage;
     }
     virtual J2DIndTevStage* getIndTevStage(u32 index) {
+        J3D_PANIC(715, index < 16, "Error : range over.");
         return &mIndTevStage[index];
     }
     virtual bool insertTexture(u32 index, ResTIMG const* p_timg) {
@@ -573,14 +787,20 @@ public:
     virtual bool setPalette(u32, ResTLUT const*);
     virtual bool prepareTexture(u8);
     virtual JUTTexture* getTexture(u32 index) {
-        return index >= 8 ? NULL : mTexture[index];
+        if (index >= 8) {
+            return NULL;
+        }
+        return mTexture[index];
     }
     virtual JUTPalette* getPalette(u32 index) {
-        return index >= 8 ? NULL : mPalette[index];
+        if (index >= 8) {
+            return NULL;
+        }
+        return mPalette[index];
     }
     virtual JUTFont* getFont() { return mFont; }
     virtual void shiftDeleteFlag(u8, bool);
-    virtual void setUndeleteFlag(u8 flag) { mUndeleteFlag &= flag; }
+    virtual void setUndeleteFlag(u8 flag) { mUndeleteFlag = mUndeleteFlag & flag; }
     virtual void setFontUndeleteFlag() { mFontUndeleteFlag = false; }
     virtual ~J2DTevBlock16();
 
@@ -619,8 +839,8 @@ struct J2DAlphaCompInfo {
     /* 0x7 */ u8 field_0x7;
 };
 
-inline u16 J2DCalcAlphaCmp(s32 param_1, u32 param_2, u32 param_3) {
-    return ((param_1) << 5) | ((param_2 & 0xff) << 3) | (param_3 & 0xff);
+inline u16 J2DCalcAlphaCmp(u8 param_1, u8 param_2, u8 param_3) {
+    return (param_1 << 5) | (param_2 << 3) | param_3;
 }
 
 /**
@@ -643,11 +863,11 @@ struct J2DAlphaComp {
         mRef0 = other.mRef0;
         mRef1 = other.mRef1;
     }
-    u8 getComp0() { return mAlphaCmp >> 5 & 7; }
-    u8 getRef0() { return mRef0; }
-    u8 getOp() { return mAlphaCmp >> 3 & 3; }
-    u8 getComp1() { return mAlphaCmp & 7; }
-    u8 getRef1() { return mRef1; }
+    u8 getComp0() const { return mAlphaCmp >> 5 & 7; }
+    u8 getRef0() const { return mRef0; }
+    u8 getOp() const { return mAlphaCmp >> 3 & 3; }
+    u8 getComp1() const { return mAlphaCmp & 7; }
+    u8 getRef1() const { return mRef1; }
 
     /* 0x0 */ u16 mAlphaCmp;
     /* 0x2 */ u8 mRef0;
@@ -682,10 +902,10 @@ struct J2DBlend {
     J2DBlend() { mBlendInfo = j2dDefaultBlendInfo; }
     J2DBlend(const J2DBlendInfo& info) { mBlendInfo = info; }
     void setBlendInfo(const J2DBlendInfo& info) { mBlendInfo = info; }
-    u8 getType() { return mBlendInfo.mType; }
-    u8 getSrcFactor() { return mBlendInfo.mSrcFactor; }
-    u8 getDstFactor() { return mBlendInfo.mDstFactor; }
-    u8 getOp() { return mBlendInfo.mOp; }
+    u8 getType() const { return mBlendInfo.mType; }
+    u8 getSrcFactor() const { return mBlendInfo.mSrcFactor; }
+    u8 getDstFactor() const { return mBlendInfo.mDstFactor; }
+    u8 getOp() const { return mBlendInfo.mOp; }
 
     /* 0x0 */ J2DBlendInfo mBlendInfo;
 };
@@ -697,6 +917,7 @@ struct J2DBlend {
 class J2DPEBlock {
 public:
     J2DPEBlock() { initialize(); }
+    ~J2DPEBlock() {}
 
     void initialize();
     void setGX();
@@ -744,19 +965,27 @@ public:
     virtual void setIndTexStageNum(u8 num) { mIndTexStageNum = num; }
     virtual u8 getIndTexStageNum() const { return mIndTexStageNum; }
     virtual void setIndTexOrder(u32 index, J2DIndTexOrder order) {
+        J3D_PANIC(856, index < 4, "Error : range over.");
         mIndTexOrder[index] = order;
     }
     virtual J2DIndTexOrder* getIndTexOrder(u32 index) {
+        J3D_PANIC(857, index < 4, "Error : range over.");
         return &mIndTexOrder[index];
     }
     virtual void setIndTexMtx(u32 index, J2DIndTexMtx mtx) {
+        J3D_PANIC(859, index < 3, "Error : range over.");
         mIndTexMtx[index] = mtx;
     }
-    virtual J2DIndTexMtx* getIndTexMtx(u32 index) { return &mIndTexMtx[index]; }
+    virtual J2DIndTexMtx* getIndTexMtx(u32 index) {
+        J3D_PANIC(860, index < 3, "Error : range over.");
+        return &mIndTexMtx[index];
+    }
     virtual void setIndTexCoordScale(u32 index, J2DIndTexCoordScale scale) {
+        J3D_PANIC(862, index < 4, "Error : range over.");
         mTexCoordScale[index] = scale;
     }
     virtual J2DIndTexCoordScale* getIndTexCoordScale(u32 index) {
+        J3D_PANIC(863, index < 4, "Error : range over.");
         return &mTexCoordScale[index];
     }
     virtual ~J2DIndBlockFull() {}
@@ -801,11 +1030,27 @@ public:
 
     u32 getTexGenNum() const { return mTexGenNum; }
     void setTexGenNum(u32 num) { mTexGenNum = num; }
-    void setTexCoord(u32 i, J2DTexCoord coord) { mTexGenCoord[i] = coord; }
-    void setTexCoord(u32 i, const J2DTexCoord* coord) { mTexGenCoord[i] = *coord; }
-    void setTexMtx(u32 i, J2DTexMtx* mtx) { mTexMtx[i] = mtx; }
-    J2DTexMtx& getTexMtx(u32 i) { return *mTexMtx[i]; }
-    J2DTexCoord& getTexCoord(u32 i) { return mTexGenCoord[i]; }
+    void setTexCoord(u32 i, J2DTexCoord coord) {
+        J3D_PANIC(101, i < 8, "Error : range over.");
+        mTexGenCoord[i] = coord;
+    }
+    void setTexCoord(u32 i, const J2DTexCoord* coord) {
+        J3D_PANIC(98, i < 8, "Error : range over.");
+        J3D_PANIC(99, coord, "Error : null pointer.");
+        mTexGenCoord[i] = *coord;
+    }
+    void setTexMtx(u32 i, J2DTexMtx* mtx) {
+        J3D_PANIC(120, i < 8, "Error : range over.");
+        mTexMtx[i] = mtx;
+    }
+    J2DTexMtx& getTexMtx(u32 i) {
+        J3D_PANIC(108, i < 8, "Error : range over.");
+        return *mTexMtx[i];
+    }
+    J2DTexCoord& getTexCoord(u32 i) {
+        J3D_PANIC(102, i < 8, "Error : range over.");
+        return mTexGenCoord[i];
+    }
 
     virtual ~J2DTexGenBlock();
 };  // Size: 0x48
@@ -829,12 +1074,24 @@ public:
 
     virtual ~J2DColorBlock() {}
 
-    JUtility::TColor* getMatColor(u32 i) { return &mMatColor[i]; }
-    J2DColorChan* getColorChan(u32 i) { return &mColorChan[i]; }
+    JUtility::TColor* getMatColor(u32 i) {
+        J3D_PANIC(49, i < 2, "Error : range over.");
+        return &mMatColor[i];
+    }
+    J2DColorChan* getColorChan(u32 i) {
+        J3D_PANIC(55, i < 4, "Error : range over.");
+        return &mColorChan[i];
+    }
     void setCullMode(u8 mode) { mCullMode = mode; }
     void setColorChanNum(u8 num) { mColorChanNum = num; }
-    void setMatColor(u32 i, JUtility::TColor color) { mMatColor[i] = color; }
-    void setColorChan(u32 i, const J2DColorChan& color) { mColorChan[i] = color; }
+    void setMatColor(u32 i, JUtility::TColor color) {
+        J3D_PANIC(48, i < 2, "Error : range over.");
+        mMatColor[i] = color;
+    }
+    void setColorChan(u32 i, const J2DColorChan& color) {
+        J3D_PANIC(54, i < 4, "Error : range over.");
+        mColorChan[i] = color;
+    }
 };
 
 #endif /* J2DMATBLOCK_H */
