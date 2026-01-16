@@ -16,6 +16,11 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstdio>
 
+#ifndef __MWERKS__
+#include <string>
+#include "dusk/extras.h"
+#endif
+
 dRes_info_c::dRes_info_c() {
     mCount = 0;
     mDMCommand = NULL;

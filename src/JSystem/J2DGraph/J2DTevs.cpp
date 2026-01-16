@@ -6,7 +6,11 @@
 
 #include "JSystem/J2DGraph/J2DTevs.h"
 #include "JSystem/J2DGraph/J2DMaterial.h"
+#ifdef __MWERKS__
 #include <cmath>
+#else
+#include "dusk/math.h"
+#endif
 #include "dolphin/gx.h"
 
 void J2DTexMtx::load(u32 mtxIdx) {

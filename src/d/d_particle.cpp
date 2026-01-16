@@ -25,6 +25,10 @@
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_math.h"
 
+#ifndef __MWERKS__
+#include "dusk/math.h"
+#endif
+
 #if DEBUG
 //#pragma nosyminline on
 #endif

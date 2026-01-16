@@ -7,4 +7,8 @@
 #include "d/dolzel.pch"
 #endif
 
+#ifndef __MWERKS__
+#include "dusk/math.h"
+#endif
+
 #endif // dolzel.h

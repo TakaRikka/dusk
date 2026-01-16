@@ -9,8 +9,8 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter -fPIC")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-register -fPIC")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter -fPIC -Wno-error -Wno-c++11-narrowing")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++ -Wno-register -fPIC -Wno-error -Wno-c++11-narrowing")
     set(CMAKE_PREFIX_PATH /usr)
     set(CMAKE_LIBRARY_ARCHITECTURE x86_64-linux-gnu)
     set(CMAKE_LIBRARY_PATH "/usr/lib64" "/usr/lib/x86_64-linux-gnu" CACHE PATH "")
@@ -1337,8 +1337,9 @@ set(REL_FILES
     )
 
 set(DUSK_FILES
-    src/dusk/imgui.cpp
-    src/dusk/stubs.c
+    #src/dusk/imgui.cpp
+    #src/dusk/stubs.c
+    src/dusk/extras.c
     )
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES})
@@ -1348,7 +1349,7 @@ add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${J
 target_compile_definitions(game PRIVATE TARGET_PC VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
 # TODO: version handling for res includes
 set(DUSK_TP_VERSION GZ2E01)
-target_include_directories(game PRIVATE include src assets/${DUSK_TP_VERSION} ${CMAKE_BINARY_DIR}/../${DUSK_TP_VERSION}/include src/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/Include src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Include)
+target_include_directories(game PRIVATE include src assets/${DUSK_TP_VERSION} ${CMAKE_BINARY_DIR}/../${DUSK_TP_VERSION}/include)
 target_link_libraries(game PRIVATE aurora::core aurora::gx aurora::si aurora::vi aurora::pad)
 
 add_executable(dusk src/dusk/main.cpp)

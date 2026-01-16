@@ -14,6 +14,10 @@
 #include "dolphin/gf/GFLight.h"
 #include "m_Do/m_Do_lib.h"
 
+#ifndef __MWERKS__
+#include "dusk/math.h"
+#endif
+
 static BOOL daMirror_c_createHeap(fopAc_ac_c* i_this) {
     return ((daMirror_c*)i_this)->createHeap();
 }

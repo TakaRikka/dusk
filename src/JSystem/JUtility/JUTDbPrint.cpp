@@ -5,6 +5,9 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTVideo.h"
 #include <cstdio>
+#ifndef __MWERKS__
+#include <cstdarg>
+#endif
 
 JUTDbPrint::JUTDbPrint(JUTFont* pFont, JKRHeap* pHeap) {
     mFont = pFont;

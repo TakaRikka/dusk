@@ -2,6 +2,7 @@
 #define MSL_CMATH_H_
 
 #include <float.h>
+//#include <cmath>
 
 #define NAN (*(float*) __float_nan)
 #define HUGE_VALF (*(float*) __float_huge)

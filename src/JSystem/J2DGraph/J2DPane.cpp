@@ -6,6 +6,9 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "JSystem/JUtility/JUTResource.h"
+#ifndef __MWERKS__
+#include "dusk/math.h"
+#endif
 
 J2DPane::J2DPane() : mBounds(), mGlobalBounds(), mClipRect(), mPaneTree(this) {
     mTransform = NULL;
