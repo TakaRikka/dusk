@@ -774,9 +774,16 @@ void main01(void) {
     } while (true);
 }
 
+#if !__MWERKS__
+template<typename T>
+JHIComPortManager<T>* JHIComPortManager<T>::instance = nullptr;
+
+template<>
+JHIComPortManager<JHICmnMem>* JHIComPortManager<JHICmnMem>::instance = nullptr;
+#endif
+
 #if DEBUG
 JHIComPortManager<JHICmnMem>* JHIComPortManager<JHICmnMem>:: instance;
-
 // DEBUG NONMATCHING
 void parse_args(int argc, const char* argv[]) {
     int i;

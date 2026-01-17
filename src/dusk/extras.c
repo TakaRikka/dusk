@@ -1,5 +1,8 @@
 #include "dusk/extras.h"
 #include <ctype.h>
+#include <string.h>
+#include <strings.h>
+#include <stdint.h>
 
 int stricmp(const char* str1, const char* str2) {
 	char a_var;
@@ -42,4 +45,13 @@ int strnicmp(const char* str1, const char* str2, int n) {
     }
 
     return 0;
+}
+
+
+void *_memcpy(void* dest, void const* src, int n) {
+    return memcpy(dest, src, n);
+}
+
+void DCZeroRange(void* addr, uint32_t nBytes) {
+    bzero(addr, nBytes);
 }
