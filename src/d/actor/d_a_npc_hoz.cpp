@@ -854,8 +854,8 @@ int daNpc_Hoz_c::test(void* i_this) {
         mMode = 2;
         // fall-through
     case 2:
-        mFaceMotionSeqMngr.setNo((int)mpHIO, -1.0f, 0, 0);
-        mMotionSeqMngr.setNo((int)mpHIO, -1.0f, 0, 0);
+        mFaceMotionSeqMngr.setNo(mpHIO->m.common.face_expression, -1.0f, 0, 0);
+        mMotionSeqMngr.setNo(mpHIO->m.common.motion, -1.0f, 0, 0);
         mJntAnm.lookNone(0);
         attention_info.flags = 0;
     case 3:

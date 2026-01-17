@@ -1338,8 +1338,13 @@ set(REL_FILES
 
 set(DUSK_FILES
     #src/dusk/imgui.cpp
-    #src/dusk/stubs.c
+    src/dusk/stubs.cpp
     src/dusk/extras.c
+    src/dusk/extras.cpp
+    src/dusk/globals.cpp
+    src/dusk/mtx.cpp
+    src/dusk/J3DTransforms_C.cpp
+    src/dusk/m_Do_ext_dusk.cpp
     )
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES})
@@ -1350,7 +1355,7 @@ target_compile_definitions(game PRIVATE TARGET_PC VERSION=0 NDEBUG=1 NDEBUG_DEFI
 # TODO: version handling for res includes
 set(DUSK_TP_VERSION GZ2E01)
 target_include_directories(game PRIVATE include src assets/${DUSK_TP_VERSION} ${CMAKE_BINARY_DIR}/../${DUSK_TP_VERSION}/include)
-target_link_libraries(game PRIVATE aurora::core aurora::gx aurora::si aurora::vi aurora::pad)
+target_link_libraries(game PRIVATE aurora::core aurora::gx aurora::si aurora::vi aurora::pad aurora::mtx)
 
 add_executable(dusk src/dusk/main.cpp)
 target_compile_definitions(dusk PRIVATE TARGET_PC VERSION=0)
