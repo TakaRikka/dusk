@@ -6,8 +6,12 @@
 #include "JSystem/JMath/JMath.h"
 
 #ifndef __MWERKS__
-#include <limits>
+#ifdef _MSVC_LANG
+#include <float.h>
+#else
+#include<limits>
 #define FLT_EPSILON std::numeric_limits<float>::epsilon()
+#endif
 #endif
 
 namespace JGeometry {

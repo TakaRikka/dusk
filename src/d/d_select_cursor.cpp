@@ -100,12 +100,12 @@ dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2)
     }
 
     switch(mNameIdx) {
-        case 0:
-            mpPaneMgr = new CPaneMgr(mpScreen, 'n_all', 2, NULL);
+    case 0: {
+            mpPaneMgr = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
             mpPaneMgr->hide();
             mpPaneMgr->setAlpha(0);
 
-            static u64 const corner_tag[4] = {'l_u_null', 'l_d_null', 'r_u_null', 'r_d_null'};
+            static u64 const corner_tag[4] = {MULTI_CHAR('l_u_null'), MULTI_CHAR('l_d_null'), MULTI_CHAR('r_u_null'), MULTI_CHAR('r_d_null')};
             for (int i = 0; i< 4; i++) {
                 field_0x1C[i] = new CPaneMgr(mpScreen, corner_tag[i], 0, NULL);
                 field_0x94[i] = mpScreen->search(corner_tag[i])->getTranslateX();
@@ -117,15 +117,15 @@ dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2)
             mpPaneMgr->scale(param_1, param_1);
             field_0x14 = NULL;
             field_0x18 = NULL;
-            break;
+    } break;
         case 1:
-            mpPaneMgr = new CPaneMgr(mpScreen, 'n_all', 2, NULL);
+            mpPaneMgr = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
             mpPaneMgr->hide();
             mpPaneMgr->setAlpha(0);
             mpPaneMgr->scale(param_1, param_1);
-            field_0x14 = new CPaneMgr(mpScreen, 'sel_po00', 0, NULL);
+            field_0x14 = new CPaneMgr(mpScreen, MULTI_CHAR('sel_po00'), 0, NULL);
             field_0x14->hide();
-            field_0x18 = new CPaneMgr(mpScreen, 'n_all2', 2, NULL);
+            field_0x18 = new CPaneMgr(mpScreen, MULTI_CHAR('n_all2'), 2, NULL);
             break;
         case 2:
             mpPaneMgr = new CPaneMgr(mpScreen, 'Null', 2, NULL);
@@ -136,7 +136,7 @@ dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2)
             field_0x18 = NULL;
             break;
         case 3:
-            mpPaneMgr = new CPaneMgr(mpScreen, 'batsu', 2, NULL);
+            mpPaneMgr = new CPaneMgr(mpScreen, MULTI_CHAR('batsu'), 2, NULL);
             mpPaneMgr->hide();
             mpPaneMgr->setAlpha(0);
             mpPaneMgr->scale(param_1, param_1);
@@ -180,8 +180,8 @@ dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2)
     field_0x40 = 0.0f;
     switch(mNameIdx) {
         case 1:
-            field_0x50 = mpScreen->search('ssel_ico')->getTranslateX();
-            field_0x54 = mpScreen->search('ssel_ico')->getTranslateY();
+            field_0x50 = mpScreen->search(MULTI_CHAR('ssel_ico'))->getTranslateX();
+            field_0x54 = mpScreen->search(MULTI_CHAR('ssel_ico'))->getTranslateY();
             break;
         case 0:
         case 2:
@@ -394,8 +394,8 @@ void dSelect_cursor_c::setScale(f32 i_scale) {
 
     switch (mNameIdx) {
     case 1:
-        field_0x50 = mpScreen->search('ssel_ico')->getTranslateX();
-        field_0x54 = mpScreen->search('ssel_ico')->getTranslateY();
+        field_0x50 = mpScreen->search(MULTI_CHAR('ssel_ico'))->getTranslateX();
+        field_0x54 = mpScreen->search(MULTI_CHAR('ssel_ico'))->getTranslateY();
         break;
     case 0:
     case 2:
@@ -466,14 +466,14 @@ void dSelect_cursor_c::setBpkAnimation(J2DAnmColor* param_0) {
         break;
     }
     case 2:
-        mpScreen->search('light')->setAnimation(param_0);
-        mpScreen->search('back_l')->setAnimation(param_0);
+        mpScreen->search(MULTI_CHAR('light'))->setAnimation(param_0);
+        mpScreen->search(MULTI_CHAR('back_l'))->setAnimation(param_0);
         break;
     case 3:
-        mpScreen->search('batsu')->setAnimation(param_0);
+        mpScreen->search(MULTI_CHAR('batsu'))->setAnimation(param_0);
         break;
     default:
-        mpScreen->search('light00')->setAnimation(param_0);
+        mpScreen->search(MULTI_CHAR('light00'))->setAnimation(param_0);
         break;
     }
 }
@@ -482,7 +482,7 @@ void dSelect_cursor_c::setBtk0Animation(J2DAnmTextureSRTKey* param_0) {
     switch (mNameIdx) {
     case 0: {
         static u64 const tag_4197[8] = {
-            'i_c_ld1', 'i_c_ld2', 'i_c_lu1', 'i_c_lu2', 'i_c_rd1', 'i_c_rd2', 'i_c_ru1', 'i_c_ru2', 
+            MULTI_CHAR('i_c_ld1'), MULTI_CHAR('i_c_ld2'), MULTI_CHAR('i_c_lu1'), MULTI_CHAR('i_c_lu2'), MULTI_CHAR('i_c_rd1'), MULTI_CHAR('i_c_rd2'), MULTI_CHAR('i_c_ru1'), MULTI_CHAR('i_c_ru2'), 
         };
         for (int i = 0; i < 8; i++) {
             mpScreen->search(tag_4197[i])->setAnimation(param_0);
@@ -490,14 +490,14 @@ void dSelect_cursor_c::setBtk0Animation(J2DAnmTextureSRTKey* param_0) {
         break;
     }
     case 1: {
-        static u64 const tag_4204[2] = {'gold01', 'gold02'};
+        static u64 const tag_4204[2] = {MULTI_CHAR('gold01'), MULTI_CHAR('gold02')};
         for (int i = 0; i < 2; i++) {
             mpScreen->search(tag_4204[i])->setAnimation(param_0);
         }
         break;
     }
     default:
-        mpScreen->search('gold01')->setAnimation(param_0);
+        mpScreen->search(MULTI_CHAR('gold01'))->setAnimation(param_0);
         break;
     }
 }
@@ -526,15 +526,15 @@ void dSelect_cursor_c::setCursorAnimation() {
         field_0x84[i] = mParam2 * (field_0xa4[i] * ((1.0f - param3) + fVar2 * param3));
     }
 
-    moveCenter(mpScreen->search('l_u_null'), field_0x74[0], field_0x84[0]);
-    moveCenter(mpScreen->search('l_d_null'), field_0x74[1], field_0x84[1]);
-    moveCenter(mpScreen->search('r_u_null'), field_0x74[2], field_0x84[2]);
-    moveCenter(mpScreen->search('r_d_null'), field_0x74[3], field_0x84[3]);
+    moveCenter(mpScreen->search(MULTI_CHAR('l_u_null')), field_0x74[0], field_0x84[0]);
+    moveCenter(mpScreen->search(MULTI_CHAR('l_d_null')), field_0x74[1], field_0x84[1]);
+    moveCenter(mpScreen->search(MULTI_CHAR('r_u_null')), field_0x74[2], field_0x84[2]);
+    moveCenter(mpScreen->search(MULTI_CHAR('r_d_null')), field_0x74[3], field_0x84[3]);
 }
 
 
 void dSelect_cursor_c::setBckAnimation(J2DAnmTransformKey* param_0) {
-    mpScreen->search('ssel_ico')->setAnimation((J2DAnmTransform*)param_0);
+    mpScreen->search(MULTI_CHAR('ssel_ico'))->setAnimation((J2DAnmTransform*)param_0);
 }
 
 void dSelect_cursor_c::moveCenter(J2DPane* i_pane, f32 i_x, f32 i_y) {

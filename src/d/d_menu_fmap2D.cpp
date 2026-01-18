@@ -177,10 +177,10 @@ dMenu_Fmap2DBack_c::dMenu_Fmap2DBack_c() {
     mpBaseRoot = new CPaneMgrAlphaMorf(mpBaseScreen, 'ROOT', 2, NULL);
     JUT_ASSERT(264, mpBaseRoot != NULL);
 
-    mpMapArea = new CPaneMgr(mpBaseScreen, 'center_n', 0, NULL);
+    mpMapArea = new CPaneMgr(mpBaseScreen, MULTI_CHAR('center_n'), 0, NULL);
     JUT_ASSERT(269, mpMapArea != NULL);
 
-    mpMapBlack = new CPaneMgr(mpBaseScreen, 'map_blak', 0, NULL);
+    mpMapBlack = new CPaneMgr(mpBaseScreen, MULTI_CHAR('map_blak'), 0, NULL);
     JUT_ASSERT(273, mpMapBlack != NULL);
 
     mpMeterHaihai = new dMeterHaihai_c(1);
@@ -203,12 +203,12 @@ dMenu_Fmap2DBack_c::dMenu_Fmap2DBack_c() {
 
     dPaneClass_showNullPane(mpPointScreen);
 
-    mpPointParent = new CPaneMgr(mpPointScreen, 'f_po_n', 2, NULL);
+    mpPointParent = new CPaneMgr(mpPointScreen, MULTI_CHAR('f_po_n'), 2, NULL);
     JUT_ASSERT(301, mpPointParent != NULL);
 
     mpPointParent->scale(g_fmapHIO.mCursorScale, g_fmapHIO.mCursorScale);
 
-    static const u64 cur_tag[4] = {'f_po_ru', 'f_po_rd', 'f_po_ld', 'f_po_lu'};
+    static const u64 cur_tag[4] = {MULTI_CHAR('f_po_ru'), MULTI_CHAR('f_po_rd'), MULTI_CHAR('f_po_ld'), MULTI_CHAR('f_po_lu')};
 
     for (int i = 0; i < 4; i++) {
         J2DPicture* picture = static_cast<J2DPicture*>(mpPointScreen->search(cur_tag[i]));
@@ -389,7 +389,7 @@ void dMenu_Fmap2DBack_c::draw() {
         if (g_fmapHIO.mCursorDebugON) {
             mpPointParent->scale(g_fmapHIO.mCursorScale, g_fmapHIO.mCursorScale);
 
-            static const u64 cur_tag[4] = {'f_po_ru', 'f_po_rd', 'f_po_ld', 'f_po_lu'};
+            static const u64 cur_tag[4] = {MULTI_CHAR('f_po_ru'), MULTI_CHAR('f_po_rd'), MULTI_CHAR('f_po_ld'), MULTI_CHAR('f_po_lu')};
 
             for (int i = 0; i < 4; i++) {
                 J2DPicture* picture = static_cast<J2DPicture*>(mpPointScreen->search(cur_tag[i]));
@@ -1813,8 +1813,8 @@ void dMenu_Fmap2DBack_c::btkAnimeLoop(f32 i_step) {
         mAnmFrame = 0.0f;
     }
 
-    mpBaseScreen->search('gold00_0')->setAnimation(mpBaseAnm);
-    mpBaseScreen->search('gold00_1')->setAnimation(mpBaseAnm);
+    mpBaseScreen->search(MULTI_CHAR('gold00_0'))->setAnimation(mpBaseAnm);
+    mpBaseScreen->search(MULTI_CHAR('gold00_1'))->setAnimation(mpBaseAnm);
     mpBaseScreen->animation();
 }
 
@@ -2186,46 +2186,46 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
     mpAnalogStickAlpha = NULL;
     mpAnalogStick = NULL;
     mpDpad = NULL;
-    mpTitleScreen->search('tri_Null')->hide();
+    mpTitleScreen->search(MULTI_CHAR('tri_Null'))->hide();
 #endif
 #if PLATFORM_GCN
-    mpArrowLAlpha[0] = new CPaneMgrAlpha(mpTitleScreen, 'yaji_04', 0, NULL);
-    mpArrowLAlpha[1] = new CPaneMgrAlpha(mpTitleScreen, 'yaji_05', 0, NULL);
-    mpArrowRAlpha[0] = new CPaneMgrAlpha(mpTitleScreen, 'yaji_06', 0, NULL);
-    mpArrowRAlpha[1] = new CPaneMgrAlpha(mpTitleScreen, 'yaji_07', 0, NULL);
+    mpArrowLAlpha[0] = new CPaneMgrAlpha(mpTitleScreen, MULTI_CHAR('yaji_04'), 0, NULL);
+    mpArrowLAlpha[1] = new CPaneMgrAlpha(mpTitleScreen, MULTI_CHAR('yaji_05'), 0, NULL);
+    mpArrowRAlpha[0] = new CPaneMgrAlpha(mpTitleScreen, MULTI_CHAR('yaji_06'), 0, NULL);
+    mpArrowRAlpha[1] = new CPaneMgrAlpha(mpTitleScreen, MULTI_CHAR('yaji_07'), 0, NULL);
     
-    mpDpadAlpha = new CPaneMgrAlpha(mpTitleScreen, 'juji_c_n', 2, NULL);
+    mpDpadAlpha = new CPaneMgrAlpha(mpTitleScreen, MULTI_CHAR('juji_c_n'), 2, NULL);
     mpDpadAlpha->setAlphaRate(0.0f);
     mpAnalogStickAlpha = new CPaneMgrAlpha(mpTitleScreen, 'as_n', 2, NULL);
     mpAnalogStickAlpha->setAlphaRate(0.0f);
     mpAnalogStick = new CPaneMgr(mpTitleScreen, 'as_n', 0, NULL);
-    mpDpad = new CPaneMgr(mpTitleScreen, 'juji_c_n', 0, NULL);
+    mpDpad = new CPaneMgr(mpTitleScreen, MULTI_CHAR('juji_c_n'), 0, NULL);
 #endif
 #if PLATFORM_SHIELD
-    mpButtonA = new CPaneMgr(mpTitleScreen, 'abtn_n', 2, NULL);
+    mpButtonA = new CPaneMgr(mpTitleScreen, MULTI_CHAR('abtn_n'), 2, NULL);
     JUT_ASSERT(3935, mpButtonA != NULL);
-    mpButtonB = new CPaneMgr(mpTitleScreen, 'bbtn_n', 2, NULL);
+    mpButtonB = new CPaneMgr(mpTitleScreen, MULTI_CHAR('bbtn_n'), 2, NULL);
     JUT_ASSERT(3938, mpButtonB != NULL);
-    mpButtonZ = new CPaneMgr(mpTitleScreen, 'j_scal_n', 2, NULL);
+    mpButtonZ = new CPaneMgr(mpTitleScreen, MULTI_CHAR('j_scal_n'), 2, NULL);
     JUT_ASSERT(3941, mpButtonZ != NULL);
-    mpButtonTextA = new CPaneMgr(mpTitleScreen, 'a_text_n', 2, NULL);
+    mpButtonTextA = new CPaneMgr(mpTitleScreen, MULTI_CHAR('a_text_n'), 2, NULL);
     JUT_ASSERT(3953, mpButtonTextA != NULL);
-    mpButtonTextB = new CPaneMgr(mpTitleScreen, 'b_text_n', 2, NULL);
+    mpButtonTextB = new CPaneMgr(mpTitleScreen, MULTI_CHAR('b_text_n'), 2, NULL);
     JUT_ASSERT(3956, mpButtonTextB != NULL);
-    mpButtonTextZ = new CPaneMgr(mpTitleScreen, 'z_text_n', 2, NULL);
+    mpButtonTextZ = new CPaneMgr(mpTitleScreen, MULTI_CHAR('z_text_n'), 2, NULL);
     JUT_ASSERT(3959, mpButtonTextZ != NULL);
 #else
-    mpButtonA = new CPaneMgr(mpTitleScreen, 'abtn_n1', 2, NULL);
+    mpButtonA = new CPaneMgr(mpTitleScreen, MULTI_CHAR('abtn_n1'), 2, NULL);
     JUT_ASSERT(3935, mpButtonA != NULL);
-    mpButtonB = new CPaneMgr(mpTitleScreen, 'bbtn_n1', 2, NULL);
+    mpButtonB = new CPaneMgr(mpTitleScreen, MULTI_CHAR('bbtn_n1'), 2, NULL);
     JUT_ASSERT(3938, mpButtonB != NULL);
-    mpButtonZ = new CPaneMgr(mpTitleScreen, 'zbtn_n1', 2, NULL);
+    mpButtonZ = new CPaneMgr(mpTitleScreen, MULTI_CHAR('zbtn_n1'), 2, NULL);
     JUT_ASSERT(3941, mpButtonZ != NULL);
-    mpButtonTextA = new CPaneMgr(mpTitleScreen, 'a_text_n', 2, NULL);
+    mpButtonTextA = new CPaneMgr(mpTitleScreen, MULTI_CHAR('a_text_n'), 2, NULL);
     JUT_ASSERT(3953, mpButtonTextA != NULL);
-    mpButtonTextB = new CPaneMgr(mpTitleScreen, 'b_text_n', 2, NULL);
+    mpButtonTextB = new CPaneMgr(mpTitleScreen, MULTI_CHAR('b_text_n'), 2, NULL);
     JUT_ASSERT(3956, mpButtonTextB != NULL);
-    mpButtonTextZ = new CPaneMgr(mpTitleScreen, 'z_text_n', 2, NULL);
+    mpButtonTextZ = new CPaneMgr(mpTitleScreen, MULTI_CHAR('z_text_n'), 2, NULL);
     JUT_ASSERT(3959, mpButtonTextZ != NULL);
 #endif
     mpButtonA->setAlphaRate(0.0f);
@@ -2235,16 +2235,16 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
     mpButtonTextB->setAlphaRate(0.0f);
     mpButtonTextZ->setAlphaRate(0.0f);
 
-    mpNamePane = new CPaneMgr(mpTitleScreen, 'name_n', 0, NULL);
+    mpNamePane = new CPaneMgr(mpTitleScreen, MULTI_CHAR('name_n'), 0, NULL);
     JUT_ASSERT(3970, mpNamePane != NULL);
-    mpSubPane = new CPaneMgr(mpTitleScreen, 'sub_n_n', 0, NULL);
+    mpSubPane = new CPaneMgr(mpTitleScreen, MULTI_CHAR('sub_n_n'), 0, NULL);
     JUT_ASSERT(3974, mpSubPane != NULL);
 
     if (dMeter2Info_getMapStatus() == 9) {
         mpNamePane->hide();
         mpSubPane->hide();
     }
-    mpContPane = new CPaneMgr(mpTitleScreen, 'cont_n', 0, NULL);
+    mpContPane = new CPaneMgr(mpTitleScreen, MULTI_CHAR('cont_n'), 0, NULL);
     JUT_ASSERT(3984, mpContPane != NULL);
 
     mTitlePosX = mTitlePosY = 0.0f;
@@ -2270,8 +2270,8 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
 
     mAnmFrame = 0.0f;
 
-    static const u64 area_name[3] = {'i_name_s', 'i_name' ,'i_name1'};
-    static const u64 farea_name[3] = {'f_name_1', 'f_name3', 'f_name2'};
+    static const u64 area_name[3] = {MULTI_CHAR('i_name_s'), MULTI_CHAR('i_name') ,MULTI_CHAR('i_name1')};
+    static const u64 farea_name[3] = {MULTI_CHAR('f_name_1'), MULTI_CHAR('f_name3'), MULTI_CHAR('f_name2')};
     for (int i = 0; i < 3; i++) {
 #if VERSION == VERSION_GCN_JPN
         static_cast<J2DTextBox*>(mpTitleScreen->search(area_name[i]))
@@ -2287,17 +2287,17 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
     }
 #if PLATFORM_GCN
     static const u64 sfont_name[7] = {
-        'sfont00', 'sfontl0', 'sfontl1', 'sfontl2', 'sfontb0', 'sfontb1', 'sfontb2'
+        MULTI_CHAR('sfont00'), MULTI_CHAR('sfontl0'), MULTI_CHAR('sfontl1'), MULTI_CHAR('sfontl2'), MULTI_CHAR('sfontb0'), MULTI_CHAR('sfontb1'), MULTI_CHAR('sfontb2')
     };
     static const u64 ffont_name[7] = {
-        'ffont00', 'ffontl0', 'ffontl1', 'ffontl2', 'ffontb0', 'ffontb3', 'ffontb4'
+        MULTI_CHAR('ffont00'), MULTI_CHAR('ffontl0'), MULTI_CHAR('ffontl1'), MULTI_CHAR('ffontl2'), MULTI_CHAR('ffontb0'), MULTI_CHAR('ffontb3'), MULTI_CHAR('ffontb4')
     };
 #else
     static const u64 sfont_name[7] = {
-        'sfont00', 'sfontl0', 'sfontl1', 'sfontl2', 'sfontb0', 'sfontb1', 'sfontb2'
+        MULTI_CHAR('sfont00'), MULTI_CHAR('sfontl0'), MULTI_CHAR('sfontl1'), MULTI_CHAR('sfontl2'), MULTI_CHAR('sfontb0'), MULTI_CHAR('sfontb1'), MULTI_CHAR('sfontb2')
     };
     static const u64 ffont_name[7] = {
-        'ffont01', 'ffontl3', 'ffontl4', 'ffontl5', 'ffontb3', 'ffontb4', 'ffontb5'
+        MULTI_CHAR('ffont01'), MULTI_CHAR('ffontl3'), MULTI_CHAR('ffontl4'), MULTI_CHAR('ffontl5'), MULTI_CHAR('ffontb3'), MULTI_CHAR('ffontb4'), MULTI_CHAR('ffontb5')
     };
 #endif
     for (int i = 0; i < 7; i++) {
@@ -2315,8 +2315,8 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
     }
     setTitleNameString(0x3e0);
 
-    static const u64 cont_zt[5] = {'cont_zt', 'cont_zt1', 'cont_zt2', 'cont_zt3', 'cont_zt4'};
-    static const u64 font_zt[5] = {'font_zt1', 'font_zt2', 'font_zt3', 'font_zt4', 'font_zt5'};
+    static const u64 cont_zt[5] = {MULTI_CHAR('cont_zt'), MULTI_CHAR('cont_zt1'), MULTI_CHAR('cont_zt2'), MULTI_CHAR('cont_zt3'), MULTI_CHAR('cont_zt4')};
+    static const u64 font_zt[5] = {MULTI_CHAR('font_zt1'), MULTI_CHAR('font_zt2'), MULTI_CHAR('font_zt3'), MULTI_CHAR('font_zt4'), MULTI_CHAR('font_zt5')};
     for (int i = 0; i < 5; i++) {
 #if VERSION == VERSION_GCN_JPN
         static_cast<J2DTextBox*>(mpTitleScreen->search(cont_zt[i]))
@@ -2332,11 +2332,11 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
     }
     setZButtonString(0x529, 0xff);
 #if PLATFORM_GCN
-    static const u64 cont_bt[5] = {'cont_bt1', 'cont_bt2', 'cont_bt3', 'cont_bt4', 'cont_bt'};
-    static const u64 font_bt[5] = {'font_bt1', 'font_bt2', 'font_bt3', 'font_bt4', 'font_bt5'};
+    static const u64 cont_bt[5] = {MULTI_CHAR('cont_bt1'), MULTI_CHAR('cont_bt2'), MULTI_CHAR('cont_bt3'), MULTI_CHAR('cont_bt4'), MULTI_CHAR('cont_bt')};
+    static const u64 font_bt[5] = {MULTI_CHAR('font_bt1'), MULTI_CHAR('font_bt2'), MULTI_CHAR('font_bt3'), MULTI_CHAR('font_bt4'), MULTI_CHAR('font_bt5')};
 #else
-    static const u64 cont_bt[5] = {'cont_bt1', 'cont_bt2', 'cont_bt3', 'cont_bt4', 'cont_bt8'};
-    static const u64 font_bt[5] = {'font_bt1', 'font_bt2', 'font_bt3', 'font_bt4', 'font_bt5'};
+    static const u64 cont_bt[5] = {MULTI_CHAR('cont_bt1'), MULTI_CHAR('cont_bt2'), MULTI_CHAR('cont_bt3'), MULTI_CHAR('cont_bt4'), MULTI_CHAR('cont_bt8')};
+    static const u64 font_bt[5] = {MULTI_CHAR('font_bt1'), MULTI_CHAR('font_bt2'), MULTI_CHAR('font_bt3'), MULTI_CHAR('font_bt4'), MULTI_CHAR('font_bt5')};
 #endif
     for (int i = 0; i < 5; i++) {
 #if VERSION == VERSION_GCN_JPN
@@ -2353,8 +2353,8 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
     }
     setBButtonString(0x522, 0xff);
 
-    static const u64 cont_at[5] = {'cont_at', 'cont_at1', 'cont_at2', 'cont_at3', 'cont_at4'};
-    static const u64 font_at[5] = {'font_at1', 'font_at2', 'font_at3', 'font_at4', 'font_at5'};
+    static const u64 cont_at[5] = {MULTI_CHAR('cont_at'), MULTI_CHAR('cont_at1'), MULTI_CHAR('cont_at2'), MULTI_CHAR('cont_at3'), MULTI_CHAR('cont_at4')};
+    static const u64 font_at[5] = {MULTI_CHAR('font_at1'), MULTI_CHAR('font_at2'), MULTI_CHAR('font_at3'), MULTI_CHAR('font_at4'), MULTI_CHAR('font_at5')};
     for (int i = 0; i < 5; i++) {
 #if VERSION == VERSION_GCN_JPN
         static_cast<J2DTextBox*>(mpTitleScreen->search(cont_at[i]))
@@ -2371,8 +2371,8 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
     setAButtonString(0x527, 0xff);
 
 #if PLATFORM_GCN
-    static const u64 juji_c[5] = {'juji_c00', 'juji_c01', 'juji_c02', 'juji_c03', 'juji_c04'};
-    static const u64 fuji_c[5] = {'fuji_c00', 'fuji_c01', 'fuji_c02', 'fuji_c03', 'fuji_c04'};
+    static const u64 juji_c[5] = {MULTI_CHAR('juji_c00'), MULTI_CHAR('juji_c01'), MULTI_CHAR('juji_c02'), MULTI_CHAR('juji_c03'), MULTI_CHAR('juji_c04')};
+    static const u64 fuji_c[5] = {MULTI_CHAR('fuji_c00'), MULTI_CHAR('fuji_c01'), MULTI_CHAR('fuji_c02'), MULTI_CHAR('fuji_c03'), MULTI_CHAR('fuji_c04')};
     for (int i = 0; i < 5; i++) {
 #if VERSION == VERSION_GCN_JPN
         static_cast<J2DTextBox*>(mpTitleScreen->search(juji_c[i]))
@@ -2388,8 +2388,8 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
     }
     setCrossLRString(0x3f9);
 
-    static const u64 ast_c[5] = {'ast_00', 'ast_01', 'ast_02', 'ast_03', 'ast_04'};
-    static const u64 fst_c[5] = {'fst_00', 'fst_01', 'fst_02', 'fst_03', 'fst_04'};
+    static const u64 ast_c[5] = {MULTI_CHAR('ast_00'), MULTI_CHAR('ast_01'), MULTI_CHAR('ast_02'), MULTI_CHAR('ast_03'), MULTI_CHAR('ast_04')};
+    static const u64 fst_c[5] = {MULTI_CHAR('fst_00'), MULTI_CHAR('fst_01'), MULTI_CHAR('fst_02'), MULTI_CHAR('fst_03'), MULTI_CHAR('fst_04')};
     for (int i = 0; i < 5; i++) {
 #if VERSION == VERSION_GCN_JPN
         static_cast<J2DTextBox*>(mpTitleScreen->search(ast_c[i]))
@@ -2574,28 +2574,28 @@ void dMenu_Fmap2DTop_c::btkAnimeLoop(J2DAnmTextureSRTKey* i_anm, f32 i_delta) {
         mAnmFrame = 0.0f;
     }
 
-    mpTitleScreen->search('spot_0')->setAnimation(i_anm);
+    mpTitleScreen->search(MULTI_CHAR('spot_0'))->setAnimation(i_anm);
     mpTitleScreen->animation();
 }
 
 void dMenu_Fmap2DTop_c::setMoyaAlpha(u8 i_alpha) {
-    mpTitleScreen->search('spot_0')->setAlpha(i_alpha);
+    mpTitleScreen->search(MULTI_CHAR('spot_0'))->setAlpha(i_alpha);
 }
 
 void dMenu_Fmap2DTop_c::setTitleNameString(u32 param_0) {
 #if VERSION == VERSION_GCN_JPN
     static const u64 sfont_name[7] = {
-        'sfont00', 'sfontl0', 'sfontl1', 'sfontl2', 'sfontb0', 'sfontb1', 'sfontb2'
+        MULTI_CHAR('sfont00'), MULTI_CHAR('sfontl0'), MULTI_CHAR('sfontl1'), MULTI_CHAR('sfontl2'), MULTI_CHAR('sfontb0'), MULTI_CHAR('sfontb1'), MULTI_CHAR('sfontb2')
     };
 #define setTitleNameString_font_name sfont_name
 #elif PLATFORM_GCN
     static const u64 ffont_name[7] = {
-        'ffont00', 'ffontl0', 'ffontl1', 'ffontl2', 'ffontb0', 'ffontb3', 'ffontb4'
+        MULTI_CHAR('ffont00'), MULTI_CHAR('ffontl0'), MULTI_CHAR('ffontl1'), MULTI_CHAR('ffontl2'), MULTI_CHAR('ffontb0'), MULTI_CHAR('ffontb3'), MULTI_CHAR('ffontb4')
     };
 #define setTitleNameString_font_name ffont_name
 #else
     static const u64 ffont_name[7] = {
-        'ffont01', 'ffontl3', 'ffontl4', 'ffontl5', 'ffontb3', 'ffontb4', 'ffontb5'
+        MULTI_CHAR('ffont01'), MULTI_CHAR('ffontl3'), MULTI_CHAR('ffontl4'), MULTI_CHAR('ffontl5'), MULTI_CHAR('ffontb3'), MULTI_CHAR('ffontb4'), MULTI_CHAR('ffontb5')
     };
 #define setTitleNameString_font_name ffont_name
 #endif
@@ -2616,10 +2616,10 @@ void dMenu_Fmap2DTop_c::setTitleNameString(u32 param_0) {
 
 void dMenu_Fmap2DTop_c::setAreaNameString(u32 param_0) {
 #if VERSION == VERSION_GCN_JPN
-    static const u64 iarea_name[3] = {'i_name_s', 'i_name', 'i_name1'};
+    static const u64 iarea_name[3] = {MULTI_CHAR('i_name_s'), MULTI_CHAR('i_name'), MULTI_CHAR('i_name1')};
 #define setAreaNameString_area_name iarea_name
 #else
-    static const u64 farea_name[3] = {'f_name_1', 'f_name3', 'f_name2'};
+    static const u64 farea_name[3] = {MULTI_CHAR('f_name_1'), MULTI_CHAR('f_name3'), MULTI_CHAR('f_name2')};
 #define setAreaNameString_area_name farea_name
 #endif
     for (int i = 0; i < 3; i++) {
@@ -2643,10 +2643,10 @@ void dMenu_Fmap2DTop_c::setZButtonString(u32 param_0, u8 i_alpha) {
     }
 
 #if VERSION == VERSION_GCN_JPN
-    static const u64 cont_zt[5] = {'cont_zt', 'cont_zt1', 'cont_zt2', 'cont_zt3', 'cont_zt4'};
+    static const u64 cont_zt[5] = {MULTI_CHAR('cont_zt'), MULTI_CHAR('cont_zt1'), MULTI_CHAR('cont_zt2'), MULTI_CHAR('cont_zt3'), MULTI_CHAR('cont_zt4')};
     #define setZButtonString_font_zt cont_zt
 #else
-    static const u64 font_zt[5] = {'font_zt1', 'font_zt2', 'font_zt3', 'font_zt4', 'font_zt5'};
+    static const u64 font_zt[5] = {MULTI_CHAR('font_zt1'), MULTI_CHAR('font_zt2'), MULTI_CHAR('font_zt3'), MULTI_CHAR('font_zt4'), MULTI_CHAR('font_zt5')};
     #define setZButtonString_font_zt font_zt
 #endif
     if (param_0 == 0 || !isWarpAccept()) {
@@ -2677,10 +2677,10 @@ void dMenu_Fmap2DTop_c::setZButtonString(u32 param_0, u8 i_alpha) {
 
 void dMenu_Fmap2DTop_c::setBButtonString(u32 param_0, u8 i_alpha) {
 #if VERSION == VERSION_GCN_JPN
-    static const u64 cont_bt[5] = {'cont_bt1', 'cont_bt2', 'cont_bt3', 'cont_bt4', 'cont_bt'};
+    static const u64 cont_bt[5] = {MULTI_CHAR('cont_bt1'), MULTI_CHAR('cont_bt2'), MULTI_CHAR('cont_bt3'), MULTI_CHAR('cont_bt4'), MULTI_CHAR('cont_bt')};
 #define setBButtonString_font_bt cont_bt
 #else
-    static const u64 font_bt[5] = {'font_bt1', 'font_bt2', 'font_bt3', 'font_bt4', 'font_bt5'};
+    static const u64 font_bt[5] = {MULTI_CHAR('font_bt1'), MULTI_CHAR('font_bt2'), MULTI_CHAR('font_bt3'), MULTI_CHAR('font_bt4'), MULTI_CHAR('font_bt5')};
 #define setBButtonString_font_bt font_bt
 #endif
     if (param_0 == 0) {
@@ -2703,10 +2703,10 @@ void dMenu_Fmap2DTop_c::setBButtonString(u32 param_0, u8 i_alpha) {
 
 void dMenu_Fmap2DTop_c::setAButtonString(u32 param_0, u8 i_alpha) {
 #if VERSION == VERSION_GCN_JPN
-    static const u64 cont_at[5] = {'cont_at', 'cont_at1', 'cont_at2', 'cont_at3', 'cont_at4'};
+    static const u64 cont_at[5] = {MULTI_CHAR('cont_at'), MULTI_CHAR('cont_at1'), MULTI_CHAR('cont_at2'), MULTI_CHAR('cont_at3'), MULTI_CHAR('cont_at4')};
 #define setAButtonString_font_at cont_at
 #else
-    static const u64 font_at[5] = {'font_at1', 'font_at2', 'font_at3', 'font_at4', 'font_at5'};
+    static const u64 font_at[5] = {MULTI_CHAR('font_at1'), MULTI_CHAR('font_at2'), MULTI_CHAR('font_at3'), MULTI_CHAR('font_at4'), MULTI_CHAR('font_at5')};
 #define setAButtonString_font_at font_at
 #endif
     if (param_0 == 0) {
@@ -2730,23 +2730,23 @@ void dMenu_Fmap2DTop_c::setAButtonString(u32 param_0, u8 i_alpha) {
 void dMenu_Fmap2DTop_c::setCrossLRString(u32 param_0) {
 #if PLATFORM_GCN || (VERSION == VERSION_SHIELD)
 #if VERSION == VERSION_GCN_JPN
-    static const u64 juji_c[5] = {'juji_c00', 'juji_c01', 'juji_c02', 'juji_c03', 'juji_c04'};
+    static const u64 juji_c[5] = {MULTI_CHAR('juji_c00'), MULTI_CHAR('juji_c01'), MULTI_CHAR('juji_c02'), MULTI_CHAR('juji_c03'), MULTI_CHAR('juji_c04')};
 #else
-    static const u64 juji_c[5] = {'fuji_c00', 'fuji_c01', 'fuji_c02', 'fuji_c03', 'fuji_c04'};
+    static const u64 juji_c[5] = {MULTI_CHAR('fuji_c00'), MULTI_CHAR('fuji_c01'), MULTI_CHAR('fuji_c02'), MULTI_CHAR('fuji_c03'), MULTI_CHAR('fuji_c04')};
 #endif
     if (param_0 == 0) {
         for (int i = 0; i < 5; i++) {
             J2DTextBox* text_box = static_cast<J2DTextBox*>(mpTitleScreen->search(juji_c[i]));
             strcpy(text_box->getStringPtr(), "");
         }
-        mpTitleScreen->search('juy_sha0')->show();
+        mpTitleScreen->search(MULTI_CHAR('juy_sha0'))->show();
         mAlphaDpad = 1;
     } else {
         for (int i = 0; i < 5; i++) {
             J2DTextBox* text_box = static_cast<J2DTextBox*>(mpTitleScreen->search(juji_c[i]));
             dMeter2Info_getStringKanji(param_0, text_box->getStringPtr(), NULL);
         }
-        mpTitleScreen->search('juy_sha0')->show();
+        mpTitleScreen->search(MULTI_CHAR('juy_sha0'))->show();
         mAlphaDpad = 2;
     }
 #endif
@@ -2755,23 +2755,23 @@ void dMenu_Fmap2DTop_c::setCrossLRString(u32 param_0) {
 void dMenu_Fmap2DTop_c::set3DStickString(u32 param_0) {
 #if PLATFORM_GCN || (VERSION == VERSION_SHIELD)
 #if VERSION == VERSION_GCN_JPN
-    static const u64 ast_c[5] = {'ast_00', 'ast_01', 'ast_02', 'ast_03', 'ast_04'};
+    static const u64 ast_c[5] = {MULTI_CHAR('ast_00'), MULTI_CHAR('ast_01'), MULTI_CHAR('ast_02'), MULTI_CHAR('ast_03'), MULTI_CHAR('ast_04')};
 #else
-    static const u64 ast_c[5] = {'fst_00', 'fst_01', 'fst_02', 'fst_03', 'fst_04'};
+    static const u64 ast_c[5] = {MULTI_CHAR('fst_00'), MULTI_CHAR('fst_01'), MULTI_CHAR('fst_02'), MULTI_CHAR('fst_03'), MULTI_CHAR('fst_04')};
 #endif
     if (param_0 == 0) {
         for (int i = 0; i < 5; i++) {
             J2DTextBox* text_box = static_cast<J2DTextBox*>(mpTitleScreen->search(ast_c[i]));
             strcpy(text_box->getStringPtr(), "");
         }
-        mpTitleScreen->search('as_sha0')->show();
+        mpTitleScreen->search(MULTI_CHAR('as_sha0'))->show();
         mAlphaAnalogStick = 1;
     } else {
         for (int i = 0; i < 5; i++) {
             J2DTextBox* text_box = static_cast<J2DTextBox*>(mpTitleScreen->search(ast_c[i]));
             dMeter2Info_getStringKanji(param_0, text_box->getStringPtr(), NULL);
         }
-        mpTitleScreen->search('as_sha0')->show();
+        mpTitleScreen->search(MULTI_CHAR('as_sha0'))->show();
         mAlphaAnalogStick = 2;
     }
 #endif

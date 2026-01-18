@@ -74,7 +74,12 @@ public:
         /* 0x0 */ char mStageName[8];
         /* 0x8 */ u16 mAreaName;
         /* 0xA */ u8 mCount;
+#ifdef _MSVC_LANG
+        u8* __get_mRoomNos() const { return (u8*)(this + 1); }
+        __declspec(property(get = __get_mRoomNos)) u8* mRoomNos;
+#else
         /* 0xB */ u8 mRoomNos[0];
+#endif
     };
 
     /* 0x0 */ u8 mCount;

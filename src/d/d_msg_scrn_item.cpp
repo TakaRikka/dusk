@@ -146,10 +146,10 @@ dMsgScrnItem_c::dMsgScrnItem_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     } else {
         dVar18 = 1.0f;
     }
-    field_0x178 = field_0x0e0[0]->width * mpScreen->search('set_it_n')->getWidth() / 48.0f;
-    field_0x17c = field_0x0e0[0]->height * mpScreen->search('set_it_n')->getHeight() / 48.0f;
-    field_0x170 = mpScreen->search('set_it_n')->getWidth();
-    field_0x174 = mpScreen->search('set_it_n')->getHeight();
+    field_0x178 = field_0x0e0[0]->width * mpScreen->search(MULTI_CHAR('set_it_n'))->getWidth() / 48.0f;
+    field_0x17c = field_0x0e0[0]->height * mpScreen->search(MULTI_CHAR('set_it_n'))->getHeight() / 48.0f;
+    field_0x170 = mpScreen->search(MULTI_CHAR('set_it_n'))->getWidth();
+    field_0x174 = mpScreen->search(MULTI_CHAR('set_it_n'))->getHeight();
     for (int i = 0; i < 3; i++) {
         if (mpItemPane[i] != NULL) {
             mpItemPane[i]->resize(field_0x178 * dVar18, field_0x17c * dVar18);
@@ -166,19 +166,19 @@ dMsgScrnItem_c::dMsgScrnItem_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     JUT_ASSERT(291, mpBuf != NULL);
     memset(mpBuf, 0, 0x106a);
     mCharInfoPtr = (CharInfo_c*)mpBuf;
-    field_0x160 = mpScreen->search('n_all')->getBounds().i.x;
-    field_0x164 = mpScreen->search('n_all')->getBounds().i.y;
+    field_0x160 = mpScreen->search(MULTI_CHAR('n_all'))->getBounds().i.x;
+    field_0x164 = mpScreen->search(MULTI_CHAR('n_all'))->getBounds().i.y;
     field_0x180 = 0.0f;
     field_0x184 = 0.0f;
     for (int i = 0; i < 3; i++) {
         field_0x188[i] = g_MsgObject_HIO_c.mBoxPos[i][3];
     }
     field_0x194 = 0.0f;
-    mpArw_c = new CPaneMgr(mpScreen, 'set_ya_n', 0, NULL);
+    mpArw_c = new CPaneMgr(mpScreen, MULTI_CHAR('set_ya_n'), 0, NULL);
     JUT_ASSERT(306, mpArw_c != NULL);
-    mpMg_c[0] = new CPaneMgr(mpScreen, 'mg_null', 0, NULL);
+    mpMg_c[0] = new CPaneMgr(mpScreen, MULTI_CHAR('mg_null'), 0, NULL);
     JUT_ASSERT(309, mpMg_c[0] != NULL);
-    mpMg_c[1] = new CPaneMgr(mpTxScreen, 'mg_null', 0, NULL);
+    mpMg_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_null'), 0, NULL);
     JUT_ASSERT(312, mpMg_c[1] != NULL);
     OSInitFastCast();
     fukiPosCalc(param_1);
@@ -192,55 +192,55 @@ dMsgScrnItem_c::dMsgScrnItem_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     field_0x12c[1]->searchUpdateMaterialID(mpScreen);
     field_0x154[1] = 0.0f;
     field_0x19d = false;
-    mpPmP_c = new CPaneMgr(mpScreen, 'n_all', 3, NULL);
+    mpPmP_c = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 3, NULL);
     JUT_ASSERT(389, mpPmP_c != NULL);
 
     mpPmP_c->scale(g_MsgObject_HIO_c.mBoxItemScaleX, g_MsgObject_HIO_c.mBoxItemScaleY);
 
 #if VERSION == VERSION_GCN_JPN
     if (dComIfGs_getOptRuby() == 0) {
-        mpTm_c[0] = new CPaneMgr(mpTxScreen, 'mg_3flin', 0, NULL);
+        mpTm_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
         JUT_ASSERT(407, mpTm_c[0] != NULL);
 
-        mpTm_c[1] = new CPaneMgr(mpTxScreen, 't3f_s', 0, NULL);
+        mpTm_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s'), 0, NULL);
         JUT_ASSERT(410, mpTm_c[1] != NULL);
 
-        mpTm_c[2] = new CPaneMgr(mpTxScreen, 't3f_w', 0, NULL);
+        mpTm_c[2] = new CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_w'), 0, NULL);
         JUT_ASSERT(413, mpTm_c[2] != NULL);
 
-        mpTmr_c[0] = new CPaneMgr(mpTxScreen, 'mg_3f', 0, NULL);
+        mpTmr_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f'), 0, NULL);
         JUT_ASSERT(416, mpTmr_c[0] != NULL);
 
-        mpTmr_c[1] = new CPaneMgr(mpTxScreen, 'mg_3f_s', 0, NULL);
+        mpTmr_c[1] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
         JUT_ASSERT(419, mpTmr_c[1] != NULL);
 
-        mpTmr_c[2] = new CPaneMgr(mpTxScreen, 'mg_3f_w', 0, NULL);
+        mpTmr_c[2] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_w'), 0, NULL);
         JUT_ASSERT(422, mpTmr_c[2] != NULL);
 
-        mpTxScreen->search('n_3line')->hide();
-        mpTxScreen->search('n_3fline')->show();
-        mpTxScreen->search('n_e4line')->hide();
+        mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
+        mpTxScreen->search(MULTI_CHAR('n_3fline'))->show();
+        mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
     } else {
-        mpTm_c[0] = new CPaneMgr(mpTxScreen, 'mg_3line', 0, NULL);
+        mpTm_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
         JUT_ASSERT(407, mpTm_c[0] != NULL);
         mpTm_c[1] = new CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
         JUT_ASSERT(410, mpTm_c[1] != NULL);
         mpTm_c[2] = new CPaneMgr(mpTxScreen, 't3_w', 0, NULL);
         JUT_ASSERT(413, mpTm_c[2] != NULL);
-        mpTxScreen->search('n_3line')->show();
-        mpTxScreen->search('n_3fline')->hide();
-        mpTxScreen->search('n_e4line')->hide();
+        mpTxScreen->search(MULTI_CHAR('n_3line'))->show();
+        mpTxScreen->search(MULTI_CHAR('n_3fline'))->hide();
+        mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
     }
 #else
-    mpTm_c[0] = new CPaneMgr(mpTxScreen, 'mg_e4lin', 0, NULL);
+    mpTm_c[0] = new CPaneMgr(mpTxScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
     JUT_ASSERT(407, mpTm_c[0] != NULL);
     mpTm_c[1] = new CPaneMgr(mpTxScreen, 't4_s', 0, NULL);
     JUT_ASSERT(410, mpTm_c[1] != NULL);
     mpTm_c[2] = new CPaneMgr(mpTxScreen, 't4_w', 0, NULL);
     JUT_ASSERT(413, mpTm_c[2] != NULL);
-    mpTxScreen->search('n_3line')->hide();
-    mpTxScreen->search('n_3fline')->hide();
-    mpTxScreen->search('n_e4line')->show();
+    mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
+    mpTxScreen->search(MULTI_CHAR('n_3fline'))->hide();
+    mpTxScreen->search(MULTI_CHAR('n_e4line'))->show();
 #endif
 
     for (int i = 0; i < 3; i++) {
@@ -475,10 +475,10 @@ void dMsgScrnItem_c::drawSelf() {
                 texScale = 1.0f;
             };
 
-            mpItemPane[i]->draw(mpScreen->search('set_it_n')->getGlbBounds().i.x +
+            mpItemPane[i]->draw(mpScreen->search(MULTI_CHAR('set_it_n'))->getGlbBounds().i.x +
                                     0.5f * (field_0x170 - (field_0x178 * texScale)) +
                                     g_MsgObject_HIO_c.mBoxItemPosX,
-                                mpScreen->search('set_it_n')->getGlbBounds().i.y +
+                                mpScreen->search(MULTI_CHAR('set_it_n'))->getGlbBounds().i.y +
                                     0.5f * (field_0x174 - (field_0x17c * texScale)) +
                                     g_MsgObject_HIO_c.mBoxItemPosY,
                                 field_0x178 * texScale, field_0x17c * texScale, field_0x19e, false,
@@ -600,14 +600,14 @@ void dMsgScrnItem_c::fukiPosCalc(u8 param_1) {
     switch(field_0x19c) {
     case 1:
         yOffset = g_MsgObject_HIO_c.mBoxPos[2][3];
-        field_0x180 = 105.0f - (mpScreen->search('n_all')->getBounds().i.y +
-                              mpScreen->search('n_all')->getBounds().f.y) / 2;
+        field_0x180 = 105.0f - (mpScreen->search(MULTI_CHAR('n_all'))->getBounds().i.y +
+                              mpScreen->search(MULTI_CHAR('n_all'))->getBounds().f.y) / 2;
         mpSelect_c->translate(486.0f, 230.0f);
         break;
     case 2:
         yOffset = g_MsgObject_HIO_c.mBoxPos[1][3];
-        field_0x180 = 235.0f - (mpScreen->search('n_all')->getBounds().i.y +
-                                mpScreen->search('n_all')->getBounds().f.y) / 2;
+        field_0x180 = 235.0f - (mpScreen->search(MULTI_CHAR('n_all'))->getBounds().i.y +
+                                mpScreen->search(MULTI_CHAR('n_all'))->getBounds().f.y) / 2;
         mpSelect_c->translate(486.0f, 355.0f);
         break;
     default:
@@ -617,7 +617,7 @@ void dMsgScrnItem_c::fukiPosCalc(u8 param_1) {
     }
     field_0x184 = yOffset;
     setTextBoxPosOffsetY(field_0x180 + yOffset);
-    mpScreen->search('n_all')->move(field_0x160, yOffset + (field_0x164 + field_0x180));
+    mpScreen->search(MULTI_CHAR('n_all'))->move(field_0x160, yOffset + (field_0x164 + field_0x180));
     if (mpPmP_c != NULL) {
         mpPmP_c->reinit();
         mpArrow_c->setPos(mpArw_c->getGlobalPosX() + (0.5f * mpArw_c->getSizeX()),
@@ -639,8 +639,8 @@ void dMsgScrnItem_c::fukiPosCalc(u8 param_1) {
 }
 
 void dMsgScrnItem_c::setBtk0Animation(J2DAnmTextureSRTKey* param_1) {
-    mpScreen->search('gold00')->setAnimation(param_1);
-    mpScreen->search('gold01')->setAnimation(param_1);
+    mpScreen->search(MULTI_CHAR('gold00'))->setAnimation(param_1);
+    mpScreen->search(MULTI_CHAR('gold01'))->setAnimation(param_1);
 }
 
 void dMsgScrnItem_c::setBpk0Animation(J2DAnmColor* param_0) {
@@ -648,7 +648,7 @@ void dMsgScrnItem_c::setBpk0Animation(J2DAnmColor* param_0) {
 }
 
 void dMsgScrnItem_c::setBpk1Animation(J2DAnmColor* param_0) {
-    mpScreen->search('moyou_1')->setAnimation(param_0);
+    mpScreen->search(MULTI_CHAR('moyou_1'))->setAnimation(param_0);
 }
 
 bool dMsgScrnItem_c::isOugiID() {

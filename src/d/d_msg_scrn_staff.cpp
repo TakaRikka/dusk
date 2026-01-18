@@ -13,7 +13,7 @@
 
 dMsgScrnStaff_c::dMsgScrnStaff_c(u8 unused) {
     static u64 t_tag[6] = {
-        'right_s', 'right', 'center_s', 'center', 'left_s', 'left',
+        MULTI_CHAR('right_s'), MULTI_CHAR('right'), MULTI_CHAR('center_s'), MULTI_CHAR('center'), MULTI_CHAR('left_s'), 'left',
     };
 
     init();
@@ -26,8 +26,8 @@ dMsgScrnStaff_c::dMsgScrnStaff_c(u8 unused) {
     dPaneClass_showNullPane(mpScreen);
 
     mpPmP_c = new CPaneMgr(mpScreen, 'ROOT', 2, NULL);
-    mpScreen->search('left_n')->hide();
-    mpScreen->search('right_n')->hide();
+    mpScreen->search(MULTI_CHAR('left_n'))->hide();
+    mpScreen->search(MULTI_CHAR('right_n'))->hide();
 
     for (int i = 0; i < 6; i++) {
         mpTm_c[i] = new CPaneMgr(mpScreen, t_tag[i], NULL, NULL);

@@ -50,7 +50,7 @@ dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     JUT_ASSERT(0, fg != false);
     dPaneClass_showNullPane(mpScreen);
 
-    mpScreen->search('ju_ring5')->hide();
+    mpScreen->search(MULTI_CHAR('ju_ring5'))->hide();
     field_0x73c = 0.0f;
 
     for (int i = 0; i < 2; i++) {
@@ -71,10 +71,10 @@ dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     JUT_ASSERT(0, fg != false);
     dPaneClass_showNullPane(mpPikariScreen);
 
-    mpPikariParent = new CPaneMgr(mpPikariScreen, 'pika_n', 0, NULL);
+    mpPikariParent = new CPaneMgr(mpPikariScreen, MULTI_CHAR('pika_n'), 0, NULL);
     JUT_ASSERT(0, mpPikariParent != NULL);
-    mPikariBlack = static_cast<J2DPicture*>(mpPikariScreen->search('pika00'))->getBlack();
-    mPikariWhite = static_cast<J2DPicture*>(mpPikariScreen->search('pika00'))->getWhite();
+    mPikariBlack = static_cast<J2DPicture*>(mpPikariScreen->search(MULTI_CHAR('pika00')))->getBlack();
+    mPikariWhite = static_cast<J2DPicture*>(mpPikariScreen->search(MULTI_CHAR('pika00')))->getWhite();
 
     OSInitFastCast();
     void* pikari_bck = JKRGetNameResource("zelda_icon_pikari.bck", dComIfGp_getMain2DArchive());
@@ -86,14 +86,14 @@ dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     mPikariBpk->searchUpdateMaterialID(mpPikariScreen);
     playPikariBpkAnimation(1.0f);
 
-    mpParent = new CPaneMgr(mpScreen, 'n_all', 2, NULL);
+    mpParent = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
     JUT_ASSERT(0, mpParent != NULL);
 
-    static u64 const a_tag[] = {'cont_at1', 'cont_at2', 'cont_at3', 'cont_at4', 'cont_at'};
-    static u64 const b_tag[] = {'cont_bt1', 'cont_bt2', 'cont_bt3', 'cont_bt4', 'cont_bt'};
-    static u64 const z_tag[] = {'cont_zt1', 'cont_zt2', 'cont_zt3', 'cont_zt4', 'cont_rt'};
-    static u64 const x_tag[] = {'cont_xt1', 'cont_xt2', 'cont_xt3', 'cont_xt4', 'cont_xt5'};
-    static u64 const y_tag[] = {'cont_yt1', 'cont_yt2', 'cont_yt3', 'cont_yt4', 'cont_yt5'};
+    static u64 const a_tag[] = {MULTI_CHAR('cont_at1'), MULTI_CHAR('cont_at2'), MULTI_CHAR('cont_at3'), MULTI_CHAR('cont_at4'), MULTI_CHAR('cont_at')};
+    static u64 const b_tag[] = {MULTI_CHAR('cont_bt1'), MULTI_CHAR('cont_bt2'), MULTI_CHAR('cont_bt3'), MULTI_CHAR('cont_bt4'), MULTI_CHAR('cont_bt')};
+    static u64 const z_tag[] = {MULTI_CHAR('cont_zt1'), MULTI_CHAR('cont_zt2'), MULTI_CHAR('cont_zt3'), MULTI_CHAR('cont_zt4'), MULTI_CHAR('cont_rt')};
+    static u64 const x_tag[] = {MULTI_CHAR('cont_xt1'), MULTI_CHAR('cont_xt2'), MULTI_CHAR('cont_xt3'), MULTI_CHAR('cont_xt4'), MULTI_CHAR('cont_xt5')};
+    static u64 const y_tag[] = {MULTI_CHAR('cont_yt1'), MULTI_CHAR('cont_yt2'), MULTI_CHAR('cont_yt3'), MULTI_CHAR('cont_yt4'), MULTI_CHAR('cont_yt5')};
 
     for (int i = 0; i < 5; i++) {
         mpAText[i] = new CPaneMgr(mpScreen, a_tag[i], 0, NULL);
@@ -721,36 +721,36 @@ void dMeter2Draw_c::initLife() {
     }
 
     static u64 const life_tag[] = {
-        'hpb_00', 'hpb_01', 'hpb_02', 'hpb_03', 'hpb_04', 'hpb_05', 'hpb_06',
-        'hpb_07', 'hpb_08', 'hpb_09', 'hpb_10', 'hpb_11', 'hpb_12', 'hpb_13',
-        'hpb_14', 'hpb_15', 'hpb_16', 'hpb_17', 'hpb_18', 'hpb_19',
+        MULTI_CHAR('hpb_00'), MULTI_CHAR('hpb_01'), MULTI_CHAR('hpb_02'), MULTI_CHAR('hpb_03'), MULTI_CHAR('hpb_04'), MULTI_CHAR('hpb_05'), MULTI_CHAR('hpb_06'),
+        MULTI_CHAR('hpb_07'), MULTI_CHAR('hpb_08'), MULTI_CHAR('hpb_09'), MULTI_CHAR('hpb_10'), MULTI_CHAR('hpb_11'), MULTI_CHAR('hpb_12'), MULTI_CHAR('hpb_13'),
+        MULTI_CHAR('hpb_14'), MULTI_CHAR('hpb_15'), MULTI_CHAR('hpb_16'), MULTI_CHAR('hpb_17'), MULTI_CHAR('hpb_18'), MULTI_CHAR('hpb_19'),
     };
 
     static u64 const mark_tag[] = {
-        'heartn00', 'heartn01', 'heartn02', 'heartn03', 'heartn04', 'heartn05', 'heartn06',
-        'heartn07', 'heartn08', 'heartn09', 'heartn10', 'heartn11', 'heartn12', 'heartn13',
-        'heartn14', 'heartn15', 'heartn16', 'heartn17', 'heartn18', 'heartn19',
+        MULTI_CHAR('heartn00'), MULTI_CHAR('heartn01'), MULTI_CHAR('heartn02'), MULTI_CHAR('heartn03'), MULTI_CHAR('heartn04'), MULTI_CHAR('heartn05'), MULTI_CHAR('heartn06'),
+        MULTI_CHAR('heartn07'), MULTI_CHAR('heartn08'), MULTI_CHAR('heartn09'), MULTI_CHAR('heartn10'), MULTI_CHAR('heartn11'), MULTI_CHAR('heartn12'), MULTI_CHAR('heartn13'),
+        MULTI_CHAR('heartn14'), MULTI_CHAR('heartn15'), MULTI_CHAR('heartn16'), MULTI_CHAR('heartn17'), MULTI_CHAR('heartn18'), MULTI_CHAR('heartn19'),
     };
 
     static u64 const base_tag[] = {
-        'h_ba_n00', 'h_ba_n01', 'h_ba_n02', 'h_ba_n03', 'h_ba_n04', 'h_ba_n05', 'h_ba_n06',
-        'h_ba_n07', 'h_ba_n08', 'h_ba_n09', 'h_ba_n10', 'h_ba_n11', 'h_ba_n12', 'h_ba_n13',
-        'h_ba_n14', 'h_ba_n15', 'h_ba_n16', 'h_ba_n17', 'h_ba_n18', 'h_ba_n19',
+        MULTI_CHAR('h_ba_n00'), MULTI_CHAR('h_ba_n01'), MULTI_CHAR('h_ba_n02'), MULTI_CHAR('h_ba_n03'), MULTI_CHAR('h_ba_n04'), MULTI_CHAR('h_ba_n05'), MULTI_CHAR('h_ba_n06'),
+        MULTI_CHAR('h_ba_n07'), MULTI_CHAR('h_ba_n08'), MULTI_CHAR('h_ba_n09'), MULTI_CHAR('h_ba_n10'), MULTI_CHAR('h_ba_n11'), MULTI_CHAR('h_ba_n12'), MULTI_CHAR('h_ba_n13'),
+        MULTI_CHAR('h_ba_n14'), MULTI_CHAR('h_ba_n15'), MULTI_CHAR('h_ba_n16'), MULTI_CHAR('h_ba_n17'), MULTI_CHAR('h_ba_n18'), MULTI_CHAR('h_ba_n19'),
     };
 
     static u64 const lifet1_tag[] = {
-        'hear_00s', 'hear_01s', 'hear_02s', 'hear_03s', 'hear_04s', 'hear_05s', 'hear_06s',
-        'hear_07s', 'hear_08s', 'hear_09s', 'hear_10s', 'hear_11s', 'hear_12s', 'hear_13s',
-        'hear_14s', 'hear_15s', 'hear_16s', 'hear_17s', 'hear_18s', 'hear_19s',
+        MULTI_CHAR('hear_00s'), MULTI_CHAR('hear_01s'), MULTI_CHAR('hear_02s'), MULTI_CHAR('hear_03s'), MULTI_CHAR('hear_04s'), MULTI_CHAR('hear_05s'), MULTI_CHAR('hear_06s'),
+        MULTI_CHAR('hear_07s'), MULTI_CHAR('hear_08s'), MULTI_CHAR('hear_09s'), MULTI_CHAR('hear_10s'), MULTI_CHAR('hear_11s'), MULTI_CHAR('hear_12s'), MULTI_CHAR('hear_13s'),
+        MULTI_CHAR('hear_14s'), MULTI_CHAR('hear_15s'), MULTI_CHAR('hear_16s'), MULTI_CHAR('hear_17s'), MULTI_CHAR('hear_18s'), MULTI_CHAR('hear_19s'),
     };
 
     static u64 const lifet2_tag[] = {
-        'hear_00', 'hear_01', 'hear_02', 'hear_03', 'hear_04', 'hear_05', 'hear_06',
-        'hear_07', 'hear_08', 'hear_09', 'hear_10', 'hear_11', 'hear_12', 'hear_13',
-        'hear_14', 'hear_15', 'hear_16', 'hear_17', 'hear_18', 'hear_19',
+        MULTI_CHAR('hear_00'), MULTI_CHAR('hear_01'), MULTI_CHAR('hear_02'), MULTI_CHAR('hear_03'), MULTI_CHAR('hear_04'), MULTI_CHAR('hear_05'), MULTI_CHAR('hear_06'),
+        MULTI_CHAR('hear_07'), MULTI_CHAR('hear_08'), MULTI_CHAR('hear_09'), MULTI_CHAR('hear_10'), MULTI_CHAR('hear_11'), MULTI_CHAR('hear_12'), MULTI_CHAR('hear_13'),
+        MULTI_CHAR('hear_14'), MULTI_CHAR('hear_15'), MULTI_CHAR('hear_16'), MULTI_CHAR('hear_17'), MULTI_CHAR('hear_18'), MULTI_CHAR('hear_19'),
     };
 
-    mpLifeParent = new CPaneMgr(mpScreen, 'heart_n', 2, NULL);
+    mpLifeParent = new CPaneMgr(mpScreen, MULTI_CHAR('heart_n'), 2, NULL);
     JUT_ASSERT(0, mpLifeParent != NULL);
 
     for (int i = 0; i < 20; i++) {
@@ -770,7 +770,7 @@ void dMeter2Draw_c::initLife() {
         JUT_ASSERT(0, mpLifeTexture[i][1] != NULL);
     }
 
-    mpBigHeart = new CPaneMgr(mpScreen, 'bigh_n', 2, NULL);
+    mpBigHeart = new CPaneMgr(mpScreen, MULTI_CHAR('bigh_n'), 2, NULL);
     JUT_ASSERT(0, mpBigHeart != NULL);
 
     mpLifeParent->setAlphaRate(0.0f);
@@ -791,20 +791,20 @@ void dMeter2Draw_c::initMagic() {
     field_0x550 = 0.0f;
     field_0x554 = 0.0f;
 
-    mpMagicParent = new CPaneMgr(mpKanteraScreen, 'magic_n', 2, NULL);
+    mpMagicParent = new CPaneMgr(mpKanteraScreen, MULTI_CHAR('magic_n'), 2, NULL);
     JUT_ASSERT(0, mpMagicParent != NULL);
 
-    mpMagicBase = new CPaneMgr(mpKanteraScreen, 'mm_base', 0, NULL);
+    mpMagicBase = new CPaneMgr(mpKanteraScreen, MULTI_CHAR('mm_base'), 0, NULL);
     JUT_ASSERT(0, mpMagicBase != NULL);
 
-    mpMagicFrameL = new CPaneMgr(mpKanteraScreen, 'm_w_l_n', 2, NULL);
+    mpMagicFrameL = new CPaneMgr(mpKanteraScreen, MULTI_CHAR('m_w_l_n'), 2, NULL);
     JUT_ASSERT(0, mpMagicFrameL != NULL);
 
     mpMagicFrameR =
-        new CPaneMgr(mpKanteraScreen, 'm_w_r_n', 2, NULL);
+        new CPaneMgr(mpKanteraScreen, MULTI_CHAR('m_w_r_n'), 2, NULL);
     JUT_ASSERT(0, mpMagicFrameR != NULL);
 
-    mpMagicMeter = new CPaneMgr(mpKanteraScreen, 'mm_00', 0, NULL);
+    mpMagicMeter = new CPaneMgr(mpKanteraScreen, MULTI_CHAR('mm_00'), 0, NULL);
     JUT_ASSERT(0, mpMagicMeter != NULL);
 
     OSInitFastCast();
@@ -851,7 +851,7 @@ void dMeter2Draw_c::initMagic() {
 }
 
 void dMeter2Draw_c::initLightDrop() {
-    mpLightDropParent = new CPaneMgr(mpScreen, 's_tuta_n', 2, NULL);
+    mpLightDropParent = new CPaneMgr(mpScreen, MULTI_CHAR('s_tuta_n'), 2, NULL);
     JUT_ASSERT(0, mpLightDropParent != NULL);
 
     static u64 const tuta_0[] = {
@@ -860,13 +860,13 @@ void dMeter2Draw_c::initLightDrop() {
     };
 
     static u64 const tuta_1[] = {
-        'sl_00', 'sl_01', 'sl_02', 'sl_03', 'sl_04', 'sl_05', 'sl_06', 'sl_07',
-        'sl_08', 'sl_09', 'sl_10', 'sl_11', 'sl_12', 'sl_13', 'sl_14', 'sl_15',
+        MULTI_CHAR('sl_00'), MULTI_CHAR('sl_01'), MULTI_CHAR('sl_02'), MULTI_CHAR('sl_03'), MULTI_CHAR('sl_04'), MULTI_CHAR('sl_05'), MULTI_CHAR('sl_06'), MULTI_CHAR('sl_07'),
+        MULTI_CHAR('sl_08'), MULTI_CHAR('sl_09'), MULTI_CHAR('sl_10'), MULTI_CHAR('sl_11'), MULTI_CHAR('sl_12'), MULTI_CHAR('sl_13'), MULTI_CHAR('sl_14'), MULTI_CHAR('sl_15'),
     };
 
     static u64 const tuta_2[] = {
-        'scp_00', 'scp_01', 'scp_02', 'scp_03', 'scp_04', 'scp_05', 'scp_06', 'scp_07',
-        'scp_08', 'scp_09', 'scp_10', 'scp_11', 'scp_12', 'scp_13', 'scp_14', 'scp_15',
+        MULTI_CHAR('scp_00'), MULTI_CHAR('scp_01'), MULTI_CHAR('scp_02'), MULTI_CHAR('scp_03'), MULTI_CHAR('scp_04'), MULTI_CHAR('scp_05'), MULTI_CHAR('scp_06'), MULTI_CHAR('scp_07'),
+        MULTI_CHAR('scp_08'), MULTI_CHAR('scp_09'), MULTI_CHAR('scp_10'), MULTI_CHAR('scp_11'), MULTI_CHAR('scp_12'), MULTI_CHAR('scp_13'), MULTI_CHAR('scp_14'), MULTI_CHAR('scp_15'),
     };
 
     for (int i = 0; i < 16; i++) {
@@ -880,10 +880,10 @@ void dMeter2Draw_c::initLightDrop() {
         JUT_ASSERT(0, mpSIParts[i][2] != NULL);
     }
 
-    mpSIParent[0] = new CPaneMgr(mpScreen, 'tuta_n', 2, NULL);
+    mpSIParent[0] = new CPaneMgr(mpScreen, MULTI_CHAR('tuta_n'), 2, NULL);
     JUT_ASSERT(0, mpSIParent[0] != NULL);
 
-    mpSIParent[1] = new CPaneMgr(mpScreen, 's_null', 2, NULL);
+    mpSIParent[1] = new CPaneMgr(mpScreen, MULTI_CHAR('s_null'), 2, NULL);
     JUT_ASSERT(0, mpSIParent[1] != NULL);
 
     mpLightDropParent->setAlphaRate(0.0f);
@@ -907,12 +907,12 @@ void dMeter2Draw_c::initLightDrop() {
 }
 
 void dMeter2Draw_c::initRupeeKey() {
-    mpRupeeKeyParent = new CPaneMgr(mpScreen, 'r_k_n', 2, NULL);
+    mpRupeeKeyParent = new CPaneMgr(mpScreen, MULTI_CHAR('r_k_n'), 2, NULL);
     JUT_ASSERT(0, mpRupeeKeyParent != NULL);
     field_0x718 = 1.0f;
 
-    static u64 const rupeet1_tag[] = {'r_n_1_s', 'r_n_2_s', 'r_n_3_s', 'r_n_4_s'};
-    static u64 const rupeet2_tag[] = {'r_n_1', 'r_n_2', 'r_n_3', 'r_n_4'};
+    static u64 const rupeet1_tag[] = {MULTI_CHAR('r_n_1_s'), MULTI_CHAR('r_n_2_s'), MULTI_CHAR('r_n_3_s'), MULTI_CHAR('r_n_4_s')};
+    static u64 const rupeet2_tag[] = {MULTI_CHAR('r_n_1'), MULTI_CHAR('r_n_2'), MULTI_CHAR('r_n_3'), MULTI_CHAR('r_n_4')};
 
     for (int i = 0; i < 4; i++) {
         mpRupeeTexture[i][0] = new CPaneMgr(mpScreen, rupeet1_tag[i], 0, NULL);
@@ -924,20 +924,20 @@ void dMeter2Draw_c::initRupeeKey() {
         mpRupeeTexture[i][1]->getPanePtr()->setBasePosition(J2DBasePosition_4);
     }
 
-    mpRupeeParent[0] = new CPaneMgr(mpScreen, 'rupi_n', 2, NULL);
+    mpRupeeParent[0] = new CPaneMgr(mpScreen, MULTI_CHAR('rupi_n'), 2, NULL);
     JUT_ASSERT(0, mpRupeeParent[0] != NULL);
 
-    mpRupeeParent[1] = new CPaneMgr(mpScreen, 'moyou_rn', 2, NULL);
+    mpRupeeParent[1] = new CPaneMgr(mpScreen, MULTI_CHAR('moyou_rn'), 2, NULL);
     JUT_ASSERT(0, mpRupeeParent[1] != NULL);
 
-    mpRupeeParent[2] = new CPaneMgr(mpScreen, 'moyou_ln', 2, NULL);
+    mpRupeeParent[2] = new CPaneMgr(mpScreen, MULTI_CHAR('moyou_ln'), 2, NULL);
     JUT_ASSERT(0, mpRupeeParent[2] != NULL);
 
     mpRupeeParent[0]->setAlphaRate(0.0f);
     mpRupeeParent[1]->setAlphaRate(0.0f);
     mpRupeeParent[2]->setAlphaRate(0.0f);
 
-    static u64 const key_tag[] = {'key_nul', 'k_n_1_n', 'k_n_2_n', 'k_n_3_n', 'k_n_4_n'};
+    static u64 const key_tag[] = {MULTI_CHAR('key_nul'), MULTI_CHAR('k_n_1_n'), MULTI_CHAR('k_n_2_n'), MULTI_CHAR('k_n_3_n'), MULTI_CHAR('k_n_4_n')};
 
     for (int i = 0; i < 5; i++) {
         mpKeyTexture[i] = new CPaneMgr(mpScreen, key_tag[i], 0, NULL);
@@ -946,7 +946,7 @@ void dMeter2Draw_c::initRupeeKey() {
         mpKeyTexture[i]->hide();
     }
 
-    mpKeyParent = new CPaneMgr(mpScreen, 'key_n', 2, NULL);
+    mpKeyParent = new CPaneMgr(mpScreen, MULTI_CHAR('key_n'), 2, NULL);
     JUT_ASSERT(0, mpKeyParent != NULL);
     mpKeyParent->setAlphaRate(0.0f);
 
@@ -988,7 +988,7 @@ void dMeter2Draw_c::initButton() {
         }
     }
 
-    mpItemB = new CPaneMgr(mpScreen, 'b_itm_p', 0, NULL);
+    mpItemB = new CPaneMgr(mpScreen, MULTI_CHAR('b_itm_p'), 0, NULL);
     JUT_ASSERT(0, mpItemB != NULL);
     mpItemB->getPanePtr()->setBasePosition(J2DBasePosition_4);
     mpItemB->show();
@@ -1003,19 +1003,19 @@ void dMeter2Draw_c::initButton() {
     field_0x771 = dComIfGs_getBButtonItemKey();
 
     mpItemBPane = new J2DPicture(
-        'b_itm_pp',
+        MULTI_CHAR('b_itm_pp'),
         JGeometry::TBox2<f32>(0.0f, 0.0f, mpItemB->getInitSizeX(), mpItemB->getInitSizeY()),
         static_cast<J2DPicture*>(mpItemB->getPanePtr())->getTexture(0)->getTexInfo(), NULL);
     JUT_ASSERT(0, mpItemBPane != NULL);
     mpItemBPane->setBasePosition(J2DBasePosition_4);
     mpItemB->getPanePtr()->appendChild(mpItemBPane);
 
-    mpItemXY[0] = new CPaneMgr(mpScreen, 'x_itm_p', 0, NULL);
+    mpItemXY[0] = new CPaneMgr(mpScreen, MULTI_CHAR('x_itm_p'), 0, NULL);
     JUT_ASSERT(0, mpItemXY[0] != NULL);
     mpItemXY[0]->getPanePtr()->setBasePosition(J2DBasePosition_4);
     dMeter2Info_setMeterItemPanePtr(0, mpItemXY[0]);
 
-    mpItemXY[1] = new CPaneMgr(mpScreen, 'y_itm_p', 0, NULL);
+    mpItemXY[1] = new CPaneMgr(mpScreen, MULTI_CHAR('y_itm_p'), 0, NULL);
     JUT_ASSERT(0, mpItemXY[1] != NULL);
     mpItemXY[1]->getPanePtr()->setBasePosition(J2DBasePosition_4);
     dMeter2Info_setMeterItemPanePtr(1, mpItemXY[1]);
@@ -1024,7 +1024,7 @@ void dMeter2Draw_c::initButton() {
     mpBTextA = NULL;
 
     mpItemXYPane[0] = new J2DPicture(
-        'x_itm_pp',
+        MULTI_CHAR('x_itm_pp'),
         JGeometry::TBox2<f32>(0.0f, 0.0f, mpItemXY[0]->getInitSizeX(), mpItemXY[0]->getInitSizeY()),
         static_cast<J2DPicture*>(mpItemXY[0]->getPanePtr())->getTexture(0)->getTexInfo(), NULL);
     JUT_ASSERT(0, mpItemXYPane[0] != NULL);
@@ -1032,84 +1032,84 @@ void dMeter2Draw_c::initButton() {
     mpItemXY[0]->getPanePtr()->appendChild(mpItemXYPane[0]);
 
     mpItemXYPane[1] = new J2DPicture(
-        'y_itm_pp',
+        MULTI_CHAR('y_itm_pp'),
         JGeometry::TBox2<f32>(0.0f, 0.0f, mpItemXY[1]->getInitSizeX(), mpItemXY[1]->getInitSizeY()),
         static_cast<J2DPicture*>(mpItemXY[1]->getPanePtr())->getTexture(0)->getTexInfo(), NULL);
     JUT_ASSERT(0, mpItemXYPane[1] != NULL);
     mpItemXYPane[1]->setBasePosition(J2DBasePosition_4);
     mpItemXY[1]->getPanePtr()->appendChild(mpItemXYPane[1]);
 
-    mpItemR = new CPaneMgr(mpScreen, 'r_itm_p', 0, NULL);
+    mpItemR = new CPaneMgr(mpScreen, MULTI_CHAR('r_itm_p'), 0, NULL);
     JUT_ASSERT(0, mpItemR != NULL);
     mpItemR->getPanePtr()->setBasePosition(J2DBasePosition_4);
     dMeter2Info_setMeterItemPanePtr(2, mpItemR);
 
     mpItemXYPane[2] = new J2DPicture(
-        'r_itm_pp',
+        MULTI_CHAR('r_itm_pp'),
         JGeometry::TBox2<f32>(0.0f, 0.0f, mpItemR->getInitSizeX(), mpItemR->getInitSizeY()),
         static_cast<J2DPicture*>(mpItemR->getPanePtr())->getTexture(0)->getTexInfo(), NULL);
     JUT_ASSERT(0, mpItemXYPane[2] != NULL);
     mpItemXYPane[2]->setBasePosition(J2DBasePosition_4);
     mpItemR->getPanePtr()->appendChild(mpItemXYPane[2]);
 
-    mpLightB = new CPaneMgr(mpScreen, 'b_light', 0, NULL);
+    mpLightB = new CPaneMgr(mpScreen, MULTI_CHAR('b_light'), 0, NULL);
     JUT_ASSERT(0, mpLightB != NULL);
     mpLightB->getPanePtr()->setBasePosition(J2DBasePosition_4);
     field_0x72c = 1.0f;
     mpLightB->hide();
 
-    mpLightXY[0] = new CPaneMgr(mpScreen, 'x_light', 0, NULL);
+    mpLightXY[0] = new CPaneMgr(mpScreen, MULTI_CHAR('x_light'), 0, NULL);
     JUT_ASSERT(0, mpLightXY[0] != NULL);
     mpLightXY[0]->getPanePtr()->setBasePosition(J2DBasePosition_4);
     mpLightXY[0]->hide();
 
-    mpLightXY[1] = new CPaneMgr(mpScreen, 'y_light', 0, NULL);
+    mpLightXY[1] = new CPaneMgr(mpScreen, MULTI_CHAR('y_light'), 0, NULL);
     JUT_ASSERT(0, mpLightXY[1] != NULL);
     mpLightXY[1]->getPanePtr()->setBasePosition(J2DBasePosition_4);
     mpLightXY[1]->hide();
 
-    mpLightXY[2] = new CPaneMgr(mpScreen, 'r_light', 0, NULL);
+    mpLightXY[2] = new CPaneMgr(mpScreen, MULTI_CHAR('r_light'), 0, NULL);
     JUT_ASSERT(0, mpLightXY[2] != NULL);
     mpLightXY[2]->getPanePtr()->setBasePosition(J2DBasePosition_4);
     mpLightXY[2]->hide();
 
-    mpBTextA = new CPaneMgr(mpScreen, 'b_text_a', 0, NULL);
+    mpBTextA = new CPaneMgr(mpScreen, MULTI_CHAR('b_text_a'), 0, NULL);
     JUT_ASSERT(0, mpBTextA != NULL);
 
-    mpBTextB = new CPaneMgr(mpScreen, 'b_text_b', 0, NULL);
+    mpBTextB = new CPaneMgr(mpScreen, MULTI_CHAR('b_text_b'), 0, NULL);
     JUT_ASSERT(0, mpBTextB != NULL);
 
-    mpBTextXY[0] = new CPaneMgr(mpScreen, 'b_text_x', 0, NULL);
+    mpBTextXY[0] = new CPaneMgr(mpScreen, MULTI_CHAR('b_text_x'), 0, NULL);
     JUT_ASSERT(0, mpBTextXY[0] != NULL);
 
-    mpBTextXY[1] = new CPaneMgr(mpScreen, 'b_text_y', 0, NULL);
+    mpBTextXY[1] = new CPaneMgr(mpScreen, MULTI_CHAR('b_text_y'), 0, NULL);
     JUT_ASSERT(0, mpBTextXY[1] != NULL);
 
     mpBTextXY[2] = NULL;
 
-    mpTextA = new CPaneMgr(mpScreen, 'a_text_n', 0, NULL);
+    mpTextA = new CPaneMgr(mpScreen, MULTI_CHAR('a_text_n'), 0, NULL);
     JUT_ASSERT(0, mpTextA != NULL);
 
-    mpTextB = new CPaneMgr(mpScreen, 'b_text_n', 0, NULL);
+    mpTextB = new CPaneMgr(mpScreen, MULTI_CHAR('b_text_n'), 0, NULL);
     JUT_ASSERT(0, mpTextB != NULL);
 
-    mpTextXY[2] = new CPaneMgr(mpScreen, 'z_text_n', 0, NULL);
+    mpTextXY[2] = new CPaneMgr(mpScreen, MULTI_CHAR('z_text_n'), 0, NULL);
     JUT_ASSERT(0, mpTextXY[2] != NULL);
 
-    mpTextXY[0] = new CPaneMgr(mpScreen, 'x_text_n', 0, NULL);
+    mpTextXY[0] = new CPaneMgr(mpScreen, MULTI_CHAR('x_text_n'), 0, NULL);
     JUT_ASSERT(0, mpTextXY[0] != NULL);
 
-    mpTextXY[1] = new CPaneMgr(mpScreen, 'y_text_n', 0, NULL);
+    mpTextXY[1] = new CPaneMgr(mpScreen, MULTI_CHAR('y_text_n'), 0, NULL);
     JUT_ASSERT(0, mpTextXY[1] != NULL);
 
-    mpTextI = new CPaneMgr(mpScreen, 'i_text_n', 2, NULL);
+    mpTextI = new CPaneMgr(mpScreen, MULTI_CHAR('i_text_n'), 2, NULL);
     JUT_ASSERT(0, mpTextI != NULL);
 
-    mpTextM = new CPaneMgr(mpScreen, 'm_text_n', 2, NULL);
+    mpTextM = new CPaneMgr(mpScreen, MULTI_CHAR('m_text_n'), 2, NULL);
     JUT_ASSERT(0, mpTextM != NULL);
 
-    static u64 const juji_i_tag[] = {'ju_ring4', 'yaji_00', 'yaji_01', 'ju_ring2', 'ju_ring4'};
-    static u64 const juji_m_tag[] = {'ju_ring3', 'yaji_02', 'yaji_03', 'ju_ring3', 0};
+    static u64 const juji_i_tag[] = {MULTI_CHAR('ju_ring4'), MULTI_CHAR('yaji_00'), MULTI_CHAR('yaji_01'), MULTI_CHAR('ju_ring2'), MULTI_CHAR('ju_ring4')};
+    static u64 const juji_m_tag[] = {MULTI_CHAR('ju_ring3'), MULTI_CHAR('yaji_02'), MULTI_CHAR('yaji_03'), MULTI_CHAR('ju_ring3'), 0};
 
     for (int i = 0; i < 5; i++) {
         if (juji_i_tag[i] != 0) {
@@ -1130,33 +1130,33 @@ void dMeter2Draw_c::initButton() {
     mpTextXY[0]->hide();
     mpTextXY[1]->hide();
 
-    mpButtonParent = new CPaneMgr(mpScreen, 'cont_n', 2, NULL);
+    mpButtonParent = new CPaneMgr(mpScreen, MULTI_CHAR('cont_n'), 2, NULL);
     JUT_ASSERT(0, mpButtonParent != NULL);
 
-    mpButtonA = new CPaneMgr(mpScreen, 'abtn_n', 2, NULL);
+    mpButtonA = new CPaneMgr(mpScreen, MULTI_CHAR('abtn_n'), 2, NULL);
     JUT_ASSERT(0, mpButtonA != NULL);
 
-    mpButtonB = new CPaneMgr(mpScreen, 'bbtn_n', 2, NULL);
+    mpButtonB = new CPaneMgr(mpScreen, MULTI_CHAR('bbtn_n'), 2, NULL);
     JUT_ASSERT(0, mpButtonB != NULL);
     field_0x730 = 1.0f;
 
-    mpButtonMidona = new CPaneMgr(mpScreen, 'midona_n', 2, NULL);
+    mpButtonMidona = new CPaneMgr(mpScreen, MULTI_CHAR('midona_n'), 2, NULL);
     JUT_ASSERT(0, mpButtonMidona != NULL);
     mButtonZAlpha = 0.0f;
     field_0x724 = 0.0f;
     field_0x738 = 0.0f;
     field_0x740 = 0;
 
-    mpButtonXY[0] = new CPaneMgr(mpScreen, 'xbtn_n', 2, NULL);
+    mpButtonXY[0] = new CPaneMgr(mpScreen, MULTI_CHAR('xbtn_n'), 2, NULL);
     JUT_ASSERT(0, mpButtonXY[0] != NULL);
 
-    mpButtonXY[1] = new CPaneMgr(mpScreen, 'ybtn_n', 2, NULL);
+    mpButtonXY[1] = new CPaneMgr(mpScreen, MULTI_CHAR('ybtn_n'), 2, NULL);
     JUT_ASSERT(0, mpButtonXY[1] != NULL);
 
-    mpButtonXY[2] = new CPaneMgr(mpScreen, 'zbtn_n', 2, NULL);
+    mpButtonXY[2] = new CPaneMgr(mpScreen, MULTI_CHAR('zbtn_n'), 2, NULL);
     JUT_ASSERT(0, mpButtonXY[2] != NULL);
 
-    mpUzu = new CPaneMgrAlpha(mpScreen, 'uzu_n', 2, NULL);
+    mpUzu = new CPaneMgrAlpha(mpScreen, MULTI_CHAR('uzu_n'), 2, NULL);
     JUT_ASSERT(0, mpUzu != NULL);
 
     ResTIMG* timg = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource(
@@ -1208,54 +1208,54 @@ void dMeter2Draw_c::initButton() {
 }
 
 void dMeter2Draw_c::initButtonCross() {
-    mpButtonCrossParent = new CPaneMgr(mpScreen, 'juji_n', 2, NULL);
+    mpButtonCrossParent = new CPaneMgr(mpScreen, MULTI_CHAR('juji_n'), 2, NULL);
     JUT_ASSERT(0, mpButtonCrossParent != NULL);
 
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju0'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju1'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju2'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju3'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju4'))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju0')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju1')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju2')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju3')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju4')))->setFont(mDoExt_getMesgFont());
 
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju0'))->setString(0x40, "");
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju1'))->setString(0x40, "");
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju2'))->setString(0x40, "");
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju3'))->setString(0x40, "");
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju4'))->setString(0x40, "");
-
-    dMeter2Info_getString(
-        0x61, static_cast<J2DTextBox*>(mpScreen->search('cont_ju0'))->getStringPtr(), NULL);
-    dMeter2Info_getString(
-        0x61, static_cast<J2DTextBox*>(mpScreen->search('cont_ju1'))->getStringPtr(), NULL);
-    dMeter2Info_getString(
-        0x61, static_cast<J2DTextBox*>(mpScreen->search('cont_ju2'))->getStringPtr(), NULL);
-    dMeter2Info_getString(
-        0x61, static_cast<J2DTextBox*>(mpScreen->search('cont_ju3'))->getStringPtr(), NULL);
-    dMeter2Info_getString(
-        0x61, static_cast<J2DTextBox*>(mpScreen->search('cont_ju4'))->getStringPtr(), NULL);
-
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju5'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju6'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju7'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju8'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju9'))->setFont(mDoExt_getMesgFont());
-
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju5'))->setString(0x40, "");
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju6'))->setString(0x40, "");
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju7'))->setString(0x40, "");
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju8'))->setString(0x40, "");
-    static_cast<J2DTextBox*>(mpScreen->search('cont_ju9'))->setString(0x40, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju0')))->setString(0x40, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju1')))->setString(0x40, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju2')))->setString(0x40, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju3')))->setString(0x40, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju4')))->setString(0x40, "");
 
     dMeter2Info_getString(
-        0x62, static_cast<J2DTextBox*>(mpScreen->search('cont_ju5'))->getStringPtr(), NULL);
+        0x61, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju0')))->getStringPtr(), NULL);
     dMeter2Info_getString(
-        0x62, static_cast<J2DTextBox*>(mpScreen->search('cont_ju6'))->getStringPtr(), NULL);
+        0x61, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju1')))->getStringPtr(), NULL);
     dMeter2Info_getString(
-        0x62, static_cast<J2DTextBox*>(mpScreen->search('cont_ju7'))->getStringPtr(), NULL);
+        0x61, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju2')))->getStringPtr(), NULL);
     dMeter2Info_getString(
-        0x62, static_cast<J2DTextBox*>(mpScreen->search('cont_ju8'))->getStringPtr(), NULL);
+        0x61, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju3')))->getStringPtr(), NULL);
     dMeter2Info_getString(
-        0x62, static_cast<J2DTextBox*>(mpScreen->search('cont_ju9'))->getStringPtr(), NULL);
+        0x61, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju4')))->getStringPtr(), NULL);
+
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju5')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju6')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju7')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju8')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju9')))->setFont(mDoExt_getMesgFont());
+
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju5')))->setString(0x40, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju6')))->setString(0x40, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju7')))->setString(0x40, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju8')))->setString(0x40, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju9')))->setString(0x40, "");
+
+    dMeter2Info_getString(
+        0x62, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju5')))->getStringPtr(), NULL);
+    dMeter2Info_getString(
+        0x62, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju6')))->getStringPtr(), NULL);
+    dMeter2Info_getString(
+        0x62, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju7')))->getStringPtr(), NULL);
+    dMeter2Info_getString(
+        0x62, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju8')))->getStringPtr(), NULL);
+    dMeter2Info_getString(
+        0x62, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju9')))->getStringPtr(), NULL);
 
     mpButtonCrossParent->setAlphaRate(0.0f);
     drawButtonCross(g_drawHIO.mButtonCrossOFFPosX, g_drawHIO.mButtonCrossOFFPosY);
@@ -1269,9 +1269,9 @@ void dMeter2Draw_c::playPikariBckAnimation(f32 i_frame) {
 }
 
 void dMeter2Draw_c::setPikariBpkAnimation(J2DAnmColor* i_bpk) {
-    mpPikariScreen->search('pika00')->setAnimation(i_bpk);
-    mpPikariScreen->search('moya00')->setAnimation(i_bpk);
-    mpPikariScreen->search('moyabs')->setAnimation(i_bpk);
+    mpPikariScreen->search(MULTI_CHAR('pika00'))->setAnimation(i_bpk);
+    mpPikariScreen->search(MULTI_CHAR('moya00'))->setAnimation(i_bpk);
+    mpPikariScreen->search(MULTI_CHAR('moyabs'))->setAnimation(i_bpk);
 }
 
 void dMeter2Draw_c::playPikariBpkAnimation(f32 i_frame) {
@@ -1283,18 +1283,18 @@ void dMeter2Draw_c::playPikariBpkAnimation(f32 i_frame) {
 
 void dMeter2Draw_c::playOxygenBpkAnimation(J2DAnmColor* i_bpk) {
     if (i_bpk == NULL || mpMagicMeter->getAlpha() == 0) {
-        mpKanteraScreen->search('mm_00')->setAnimation((J2DAnmColor*)NULL);
+        mpKanteraScreen->search(MULTI_CHAR('mm_00'))->setAnimation((J2DAnmColor*)NULL);
     } else {
         field_0x558++;
         if (field_0x558 >= i_bpk->getFrameMax()) {
             field_0x558 -= i_bpk->getFrameMax();
         }
 
-        mpKanteraScreen->search('mm_00')->setAnimation(i_bpk);
+        mpKanteraScreen->search(MULTI_CHAR('mm_00'))->setAnimation(i_bpk);
         i_bpk->setFrame(field_0x558);
         mpKanteraScreen->animation();
 
-        mpKanteraScreen->search('mm_00')->setAnimation((J2DAnmColor*)NULL);
+        mpKanteraScreen->search(MULTI_CHAR('mm_00'))->setAnimation((J2DAnmColor*)NULL);
     }
 }
 
@@ -1315,20 +1315,20 @@ void dMeter2Draw_c::drawPikari(f32 i_posX, f32 i_posY, f32* i_framep, f32 i_scal
 
     if (param_9 == 4) {
         var_f31 = 24.0f;
-        if (mpPikariScreen->search('moya00')->isVisible()) {
-            mpPikariScreen->search('moya00')->hide();
+        if (mpPikariScreen->search(MULTI_CHAR('moya00'))->isVisible()) {
+            mpPikariScreen->search(MULTI_CHAR('moya00'))->hide();
         }
 
-        if (mpPikariScreen->search('moyabs')->isVisible()) {
-            mpPikariScreen->search('moyabs')->hide();
+        if (mpPikariScreen->search(MULTI_CHAR('moyabs'))->isVisible()) {
+            mpPikariScreen->search(MULTI_CHAR('moyabs'))->hide();
         }
     } else {
-        if (!mpPikariScreen->search('moya00')->isVisible()) {
-            mpPikariScreen->search('moya00')->show();
+        if (!mpPikariScreen->search(MULTI_CHAR('moya00'))->isVisible()) {
+            mpPikariScreen->search(MULTI_CHAR('moya00'))->show();
         }
 
-        if (!mpPikariScreen->search('moyabs')->isVisible()) {
-            mpPikariScreen->search('moyabs')->show();
+        if (!mpPikariScreen->search(MULTI_CHAR('moyabs'))->isVisible()) {
+            mpPikariScreen->search(MULTI_CHAR('moyabs'))->show();
         }
     }
 
@@ -1357,21 +1357,21 @@ void dMeter2Draw_c::drawPikari(f32 i_posX, f32 i_posY, f32* i_framep, f32 i_scal
         mpPikariParent->scale(i_scale * mpPikariParent->getScaleX(),
                               i_scale * mpPikariParent->getScaleY());
 
-        if (mpPikariScreen->search('moya00')->isVisible()) {
-            static_cast<J2DPicture*>(mpPikariScreen->search('moya00'))
+        if (mpPikariScreen->search(MULTI_CHAR('moya00'))->isVisible()) {
+            static_cast<J2DPicture*>(mpPikariScreen->search(MULTI_CHAR('moya00')))
                 ->setBlackWhite(i_moyaBlack, i_moyaWhite);
         }
 
-        if (mpPikariScreen->search('moyabs')->isVisible()) {
-            static_cast<J2DPicture*>(mpPikariScreen->search('moyabs'))
+        if (mpPikariScreen->search(MULTI_CHAR('moyabs'))->isVisible()) {
+            static_cast<J2DPicture*>(mpPikariScreen->search(MULTI_CHAR('moyabs')))
                 ->setBlackWhite(i_moyabsBlack, i_moyabsWhite);
         }
 
         if (param_9 != 4) {
-            static_cast<J2DPicture*>(mpPikariScreen->search('pika00'))
+            static_cast<J2DPicture*>(mpPikariScreen->search(MULTI_CHAR('pika00')))
                 ->setBlackWhite(mPikariBlack, mPikariBlack);
         } else {
-            static_cast<J2DPicture*>(mpPikariScreen->search('pika00'))
+            static_cast<J2DPicture*>(mpPikariScreen->search(MULTI_CHAR('pika00')))
                 ->setBlackWhite(g_MsgObject_HIO_c.mPikariPikaR1, g_MsgObject_HIO_c.mPikariPikaR0);
         }
 
@@ -1390,9 +1390,9 @@ void dMeter2Draw_c::drawPikariHakusha(f32 i_posX, f32 i_posY, f32 i_frame, f32 i
     mpPikariParent->scale(i_scale * mpPikariParent->getScaleX(),
                           i_scale * mpPikariParent->getScaleY());
 
-    static_cast<J2DPicture*>(mpPikariScreen->search('moya00'))
+    static_cast<J2DPicture*>(mpPikariScreen->search(MULTI_CHAR('moya00')))
         ->setBlackWhite(i_moyaBlack, i_moyaWhite);
-    static_cast<J2DPicture*>(mpPikariScreen->search('moyabs'))
+    static_cast<J2DPicture*>(mpPikariScreen->search(MULTI_CHAR('moyabs')))
         ->setBlackWhite(i_moyabsBlack, i_moyabsWhite);
 
     mpPikariScreen->draw(0.0f, 0.0f, dComIfGp_getCurrentGrafPort());
@@ -1407,7 +1407,7 @@ void dMeter2Draw_c::changeTextureLife(int i_no, bool param_1, u8 i_quarterNum) {
             mpLifeTexture[i_no][0]->hide();
             mpLifeTexture[i_no][1]->hide();
 
-            static u64 const tag_bigh[] = {'bigh_00', 'bigh_01', 'bigh_02', 'bigh_03'};
+            static u64 const tag_bigh[] = {MULTI_CHAR('bigh_00'), MULTI_CHAR('bigh_01'), MULTI_CHAR('bigh_02'), MULTI_CHAR('bigh_03')};
 
             for (int i = 0; i < 4; i++) {
                 if (i == i_quarterNum) {
@@ -1417,7 +1417,7 @@ void dMeter2Draw_c::changeTextureLife(int i_no, bool param_1, u8 i_quarterNum) {
                 }
             }
 
-            static u64 const tag_du[] = {'heart_ln', 'heart_un'};
+            static u64 const tag_du[] = {MULTI_CHAR('heart_ln'), MULTI_CHAR('heart_un')};
 
             mpBigHeart->translate(mpLifeParts[i_no]->getTranslateX() +
                                       (mpScreen->search(tag_du[i_no / 10])->getTranslateX() -
@@ -2295,7 +2295,7 @@ void dMeter2Draw_c::drawButtonB(u8 i_action, bool param_1, f32 i_posX, f32 i_pos
     }
 
     if (i_action == 0x26 || i_action == 0x2E) {
-        mpScreen->search('item_b_n')->show();
+        mpScreen->search(MULTI_CHAR('item_b_n'))->show();
         var_r31 = 1;
 
         if (mButtonBItem != dComIfGs_getSelectEquipSword()) {
@@ -2309,17 +2309,17 @@ void dMeter2Draw_c::drawButtonB(u8 i_action, bool param_1, f32 i_posX, f32 i_pos
                 changeTextureItemB(mButtonBItem);
                 break;
             default:
-                mpScreen->search('item_b_n')->hide();
+                mpScreen->search(MULTI_CHAR('item_b_n'))->hide();
                 var_r31 = 0;
             }
         }
     } else if (param_1 == true && i_action == 0x4F) {
-        mpScreen->search('item_b_n')->show();
+        mpScreen->search(MULTI_CHAR('item_b_n'))->show();
         mButtonBItem = fpcNm_ITEM_LURE_ROD;
         changeTextureItemB(fpcNm_ITEM_LURE_ROD);
         var_r31 = 2;
     } else {
-        mpScreen->search('item_b_n')->hide();
+        mpScreen->search(MULTI_CHAR('item_b_n'))->hide();
     }
 
     mpItemB->getPanePtr()->rotate(mpItemB->getSizeX() * 0.5f, mpItemB->getSizeY() * 0.5f, ROTATE_Z,
@@ -2344,7 +2344,7 @@ void dMeter2Draw_c::drawButtonB(u8 i_action, bool param_1, f32 i_posX, f32 i_pos
 }
 
 void dMeter2Draw_c::drawButtonR(u8 unused0, u8 i_action, bool unused1, bool unused2) {
-    mpScreen->search('item_r_n')->hide();
+    mpScreen->search(MULTI_CHAR('item_r_n'))->hide();
     mpTextXY[2]->show();
 
     getActionString(i_action, 1, &field_0x768[2]);
@@ -2431,7 +2431,7 @@ void dMeter2Draw_c::drawButtonBin(u8 i_action) {
 void dMeter2Draw_c::drawButtonXY(int i_no, u8 i_itemNo, u8 i_action, bool param_3, bool param_4) {
     JUT_ASSERT(0, i_no < SELECT_MAX_e);
 
-    static u64 const tag[] = {'item_x_n', 'item_y_n'};
+    static u64 const tag[] = {MULTI_CHAR('item_x_n'), MULTI_CHAR('item_y_n')};
 
     if (!param_3) {
         mpScreen->search(tag[i_no])->hide();
@@ -3926,7 +3926,7 @@ s16 dMeter2Draw_c::getButtonTimer() {
 
 // unused
 static u64 const tag_7759[] = {
-    'item_x_n',
-    'item_y_n',
-    'item_j_n',
+    MULTI_CHAR('item_x_n'),
+    MULTI_CHAR('item_y_n'),
+    MULTI_CHAR('item_j_n'),
 };

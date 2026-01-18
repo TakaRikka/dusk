@@ -1,6 +1,7 @@
 #ifndef Z2STATUSMGR_H
 #define Z2STATUSMGR_H
 
+#include <global.h>
 #include "JSystem/JAudio2/JASGadget.h"
 #include <dolphin/mtx.h>
 

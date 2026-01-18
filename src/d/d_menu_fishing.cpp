@@ -219,54 +219,54 @@ void dMenu_Fishing_c::wait_move() {
 
 void dMenu_Fishing_c::screenSetBase() {
     static const u64 fish_n[6] = {
-        'fish_n_6', 'fish_n_5', 'fish_n_3', 'fish_n_1', 'fish_n_2', 'fish_n_4',
+        MULTI_CHAR('fish_n_6'), MULTI_CHAR('fish_n_5'), MULTI_CHAR('fish_n_3'), MULTI_CHAR('fish_n_1'), MULTI_CHAR('fish_n_2'), MULTI_CHAR('fish_n_4'),
     };
 
     static const u64 fish_p0[6] = {
-        'fi_pa_6n', 'fi_pa_5n', 'fi_pa_3n', 'fi_pa_1n', 'fi_pa_2n', 'fi_pa_4n',
+        MULTI_CHAR('fi_pa_6n'), MULTI_CHAR('fi_pa_5n'), MULTI_CHAR('fi_pa_3n'), MULTI_CHAR('fi_pa_1n'), MULTI_CHAR('fi_pa_2n'), MULTI_CHAR('fi_pa_4n'),
     };
 
     static const u64 fish_p1[6] = {
-        'fi_na_6n', 'fi_na_5n', 'fi_na_3n', 'fi_na_1n', 'fi_na_2n', 'fi_na_4n',
+        MULTI_CHAR('fi_na_6n'), MULTI_CHAR('fi_na_5n'), MULTI_CHAR('fi_na_3n'), MULTI_CHAR('fi_na_1n'), MULTI_CHAR('fi_na_2n'), MULTI_CHAR('fi_na_4n'),
     };
 
-    static const u64 fish_p2[6] = {'fi_li_6n', 'fi_li_5n', 'fi_li_3n',
-                                   'fi_li_1n', 'fi_li_2n', 'fi_li_4n'};
+    static const u64 fish_p2[6] = {MULTI_CHAR('fi_li_6n'), MULTI_CHAR('fi_li_5n'), MULTI_CHAR('fi_li_3n'),
+                                   MULTI_CHAR('fi_li_1n'), MULTI_CHAR('fi_li_2n'), MULTI_CHAR('fi_li_4n')};
 
     static const u64 fish_p3[6] = {
-        'b_box_6n', 'b_box_5n', 'b_box_3n', 'b_box_1n', 'b_box_2n', 'b_box_4n',
+        MULTI_CHAR('b_box_6n'), MULTI_CHAR('b_box_5n'), MULTI_CHAR('b_box_3n'), MULTI_CHAR('b_box_1n'), MULTI_CHAR('b_box_2n'), MULTI_CHAR('b_box_4n'),
     };
 
     static const u64 fish_p4[6] = {
-        'r_box_6n', 'r_box_5n', 'r_box_3n', 'r_box_1n', 'r_box_2n', 'r_box_4n',
+        MULTI_CHAR('r_box_6n'), MULTI_CHAR('r_box_5n'), MULTI_CHAR('r_box_3n'), MULTI_CHAR('r_box_1n'), MULTI_CHAR('r_box_2n'), MULTI_CHAR('r_box_4n'),
     };
 
     static const u64 fish_p5[6] = {
-        'info_6_n', 'info_5_n', 'info_3_n', 'info_1_n', 'info_2_n', 'info_4_n',
+        MULTI_CHAR('info_6_n'), MULTI_CHAR('info_5_n'), MULTI_CHAR('info_3_n'), MULTI_CHAR('info_1_n'), MULTI_CHAR('info_2_n'), MULTI_CHAR('info_4_n'),
     };
 
     static const u64 size_1[6] = {
-        'size_t_6', 'size_t_5', 'size_t_3', 'size_t_1', 'size_t_2', 'size_t_4',
+        MULTI_CHAR('size_t_6'), MULTI_CHAR('size_t_5'), MULTI_CHAR('size_t_3'), MULTI_CHAR('size_t_1'), MULTI_CHAR('size_t_2'), MULTI_CHAR('size_t_4'),
     };
 
     static const u64 size_unit_1[6] = {
-        'cm_t_6', 'cm_t_5', 'cm_t_3', 'cm_t_1', 'cm_t_2', 'cm_t_4',
+        MULTI_CHAR('cm_t_6'), MULTI_CHAR('cm_t_5'), MULTI_CHAR('cm_t_3'), MULTI_CHAR('cm_t_1'), MULTI_CHAR('cm_t_2'), MULTI_CHAR('cm_t_4'),
     };
 
     static const u64 count_1[6] = {
-        'count_t6', 'count_t5', 'count_t3', 'count_t1', 'count_t2', 'count_t4',
+        MULTI_CHAR('count_t6'), MULTI_CHAR('count_t5'), MULTI_CHAR('count_t3'), MULTI_CHAR('count_t1'), MULTI_CHAR('count_t2'), MULTI_CHAR('count_t4'),
     };
 
     static const u64 count_unit_1[6] = {
-        'cou_t_6', 'cou_t_5', 'cou_t_3', 'cou_t_1', 'cou_t_2', 'cou_t_4',
+        MULTI_CHAR('cou_t_6'), MULTI_CHAR('cou_t_5'), MULTI_CHAR('cou_t_3'), MULTI_CHAR('cou_t_1'), MULTI_CHAR('cou_t_2'), MULTI_CHAR('cou_t_4'),
     };
 
     static const u64 name_0[6] = {
-        'name_6', 'name_5', 'name_3', 'name_1', 'name_2', 'name_4',
+        MULTI_CHAR('name_6'), MULTI_CHAR('name_5'), MULTI_CHAR('name_3'), MULTI_CHAR('name_1'), MULTI_CHAR('name_2'), MULTI_CHAR('name_4'),
     };
 
     static const u64 fname_0[6] = {
-        'f_name_6', 'f_name_5', 'f_name_3', 'f_name_1', 'f_name_2', 'f_name_4',
+        MULTI_CHAR('f_name_6'), MULTI_CHAR('f_name_5'), MULTI_CHAR('f_name_3'), MULTI_CHAR('f_name_1'), MULTI_CHAR('f_name_2'), MULTI_CHAR('f_name_4'),
     };
 
     static const u32 name_id[6] = {
@@ -280,7 +280,7 @@ void dMenu_Fishing_c::screenSetBase() {
     mpScreen = new J2DScreen();
     mpScreen->setPriority("zelda_fish_window.blo", 0x20000, mpArchive);
     dPaneClass_showNullPane(mpScreen);
-    mpParent = new CPaneMgr(mpScreen, 'n_all', 2, NULL);
+    mpParent = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
     mpParent->setAlphaRate(0.0f);
     for (int i = 0; i < MAX_FINDABLE_FISHES; i++) {
         mpFishParent[i] = new CPaneMgr(mpScreen, fish_n[i], 0, NULL);
@@ -291,15 +291,15 @@ void dMenu_Fishing_c::screenSetBase() {
         mpFishParts[4][i] = new CPaneMgr(mpScreen, fish_p4[i], 0, NULL);
         mpFishParts[5][i] = new CPaneMgr(mpScreen, fish_p5[i], 0, NULL);
     }
-    mpFishInfoParent[0] = new CPaneMgr(mpScreen, 'info_blu', 0, NULL);
-    mpFishInfoParent[1] = new CPaneMgr(mpScreen, 'info_red', 0, NULL);
+    mpFishInfoParent[0] = new CPaneMgr(mpScreen, MULTI_CHAR('info_blu'), 0, NULL);
+    mpFishInfoParent[1] = new CPaneMgr(mpScreen, MULTI_CHAR('info_red'), 0, NULL);
 
     #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
-    J2DTextBox* textBox = (J2DTextBox*)mpScreen->search('t_t00');
-    mpScreen->search('f_t00')->hide();
+    J2DTextBox* textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('t_t00'));
+    mpScreen->search(MULTI_CHAR('f_t00'))->hide();
     #else
-    J2DTextBox* textBox = (J2DTextBox*)mpScreen->search('f_t00');
-    mpScreen->search('t_t00')->hide();
+    J2DTextBox* textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('f_t00'));
+    mpScreen->search(MULTI_CHAR('t_t00'))->hide();
     #endif
 
     textBox->setFont(mDoExt_getSubFont());
@@ -328,8 +328,8 @@ void dMenu_Fishing_c::screenSetBase() {
         mpFishNameString[i]->setString(0x20, "");
         dMeter2Info_getStringKanji(name_id[i], mpFishNameString[i]->getStringPtr(), NULL);
     }
-    mpInfoLargestString = (J2DTextBox*)mpScreen->search('inf_size');
-    mpInfoNumCaughtString = (J2DTextBox*)mpScreen->search('inf_cou');
+    mpInfoLargestString = (J2DTextBox*)mpScreen->search(MULTI_CHAR('inf_size'));
+    mpInfoNumCaughtString = (J2DTextBox*)mpScreen->search(MULTI_CHAR('inf_cou'));
     mpInfoLargestString->setFont(mDoExt_getMesgFont());
     mpInfoNumCaughtString->setFont(mDoExt_getMesgFont());
     mpInfoLargestString->setString(0x20, "");
@@ -339,8 +339,8 @@ void dMenu_Fishing_c::screenSetBase() {
 }
 
 void dMenu_Fishing_c::screenSetDoIcon() {
-    static const u64 text_a_tag[5] = {'atext1_1', 'atext1_2', 'atext1_3', 'atext1_4', 'atext1_5'};
-    static const u64 text_b_tag[5] = {'btext1_1', 'btext1_2', 'btext1_3', 'btext1_4', 'btext1_5'};
+    static const u64 text_a_tag[5] = {MULTI_CHAR('atext1_1'), MULTI_CHAR('atext1_2'), MULTI_CHAR('atext1_3'), MULTI_CHAR('atext1_4'), MULTI_CHAR('atext1_5')};
+    static const u64 text_b_tag[5] = {MULTI_CHAR('btext1_1'), MULTI_CHAR('btext1_2'), MULTI_CHAR('btext1_3'), MULTI_CHAR('btext1_4'), MULTI_CHAR('btext1_5')};
 
     mpIconScreen = new J2DScreen();
     mpIconScreen->setPriority("zelda_collect_soubi_do_icon_parts.blo", 0x20000, mpArchive);

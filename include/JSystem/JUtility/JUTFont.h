@@ -52,7 +52,12 @@ struct ResFONT {
         /* 0x1A */ u16 textureWidth;
         /* 0x1C */ u16 textureHeight;
         /* 0x1E */ u16 padding;
+#ifdef _MSVC_LANG
+        u8* __get_data() const { return (u8*)(this + 1); }
+        __declspec(property(get = __get_data)) u8* data;
+#else
         /* 0x20 */ u8 data[];
+#endif
     };
 
     /* 0x00 */ u64 magic;

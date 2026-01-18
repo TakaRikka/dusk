@@ -92,13 +92,13 @@ dMenu_Option_c::~dMenu_Option_c() {}
 static const u32 dMo_soundMode[3] = {0, 1, 2};
 
 void dMenu_Option_c::_create() {
-    static const u64 text_a_tag[5] = {'atext1_1', 'atext1_2', 'atext1_3', 'atext1_4', 'atext1_5'};
-    static const u64 text_b_tag[5] = {'btext1_1', 'btext1_2', 'btext1_3', 'btext1_4', 'btext1_5'};
-    static const u64 l_tagName012[2] = {'w_no_n', 'w_yes_n'};
-    static const u64 l_tagName013[2] = {'w_no_t', 'w_yes_t'};
-    static const u64 l_tagName9[2] = {'w_no_m', 'w_yes_m'};
-    static const u64 l_tagName10[2] = {'w_no_g', 'w_yes_g'};
-    static const u64 l_tagName11[2] = {'w_no_gr', 'w_yes_gr'};
+    static const u64 text_a_tag[5] = {MULTI_CHAR('atext1_1'), MULTI_CHAR('atext1_2'), MULTI_CHAR('atext1_3'), MULTI_CHAR('atext1_4'), MULTI_CHAR('atext1_5')};
+    static const u64 text_b_tag[5] = {MULTI_CHAR('btext1_1'), MULTI_CHAR('btext1_2'), MULTI_CHAR('btext1_3'), MULTI_CHAR('btext1_4'), MULTI_CHAR('btext1_5')};
+    static const u64 l_tagName012[2] = {MULTI_CHAR('w_no_n'), MULTI_CHAR('w_yes_n')};
+    static const u64 l_tagName013[2] = {MULTI_CHAR('w_no_t'), MULTI_CHAR('w_yes_t')};
+    static const u64 l_tagName9[2] = {MULTI_CHAR('w_no_m'), MULTI_CHAR('w_yes_m')};
+    static const u64 l_tagName10[2] = {MULTI_CHAR('w_no_g'), MULTI_CHAR('w_yes_g')};
+    static const u64 l_tagName11[2] = {MULTI_CHAR('w_no_gr'), MULTI_CHAR('w_yes_gr')};
     static const u8 l_msgNum2[2] = {8, 7};
 
     mpFont = mDoExt_getMesgFont();
@@ -116,14 +116,14 @@ void dMenu_Option_c::_create() {
     bool fg = mpScreen->setPriority("zelda_option_select_menu.blo", 0x20000, mpArchive);
     JUT_ASSERT(210, fg != false);
 
-    mpScreen->search('base_a_n')->hide();
-    mpScreen->search('y_set_p4')->hide();
-    mpScreen->search('y_set_p3')->hide();
-    mpScreen->search('y_set_p2')->hide();
-    mpScreen->search('y_set_p1')->hide();
-    mpScreen->search('y_set_p0')->hide();
-    field_0x254[0] = (J2DTextBox*)mpScreen->search('cont_ts');
-    field_0x254[1] = (J2DTextBox*)mpScreen->search('cont_t');
+    mpScreen->search(MULTI_CHAR('base_a_n'))->hide();
+    mpScreen->search(MULTI_CHAR('y_set_p4'))->hide();
+    mpScreen->search(MULTI_CHAR('y_set_p3'))->hide();
+    mpScreen->search(MULTI_CHAR('y_set_p2'))->hide();
+    mpScreen->search(MULTI_CHAR('y_set_p1'))->hide();
+    mpScreen->search(MULTI_CHAR('y_set_p0'))->hide();
+    field_0x254[0] = (J2DTextBox*)mpScreen->search(MULTI_CHAR('cont_ts'));
+    field_0x254[1] = (J2DTextBox*)mpScreen->search(MULTI_CHAR('cont_t'));
     for (int i = 0; i < 2; i++) {
         field_0x254[i]->setFont(mDoExt_getMesgFont());
         field_0x254[i]->setString(0x20, "");
@@ -132,8 +132,8 @@ void dMenu_Option_c::_create() {
     JUT_ASSERT(246, mpBackScreen != NULL);
     fg = mpBackScreen->setPriority("zelda_option_base.blo", 0x20000, mpArchive);
     JUT_ASSERT(251, fg != false);
-    mpBackScreen->search('wi_btn_n')->hide();
-    field_0x27c = mpBackScreen->search('let_area');
+    mpBackScreen->search(MULTI_CHAR('wi_btn_n'))->hide();
+    field_0x27c = mpBackScreen->search(MULTI_CHAR('let_area'));
 
     mpClipScreen = new J2DScreen();
     JUT_ASSERT(265, mpClipScreen != NULL);
@@ -147,7 +147,7 @@ void dMenu_Option_c::_create() {
     fg = mpShadowScreen->setPriority("zelda_option_menu_shadow.blo", 0x20000, mpArchive);
     JUT_ASSERT(278, fg != false);
     dPaneClass_showNullPane(mpShadowScreen);
-    mpShadowScreen->search('mw_n_5')->hide();
+    mpShadowScreen->search(MULTI_CHAR('mw_n_5'))->hide();
 
     mpTVScreen = new J2DScreen();
     JUT_ASSERT(287, mpTVScreen != NULL);
@@ -155,12 +155,12 @@ void dMenu_Option_c::_create() {
     JUT_ASSERT(291, fg != false);
     dPaneClass_showNullPane(mpTVScreen);
 
-    mpTVButtonAB = new CPaneMgr(mpTVScreen, 'g_abtn_n', 0, NULL);
+    mpTVButtonAB = new CPaneMgr(mpTVScreen, MULTI_CHAR('g_abtn_n'), 0, NULL);
     JUT_ASSERT(295, mpTVButtonAB != NULL);
     
-    mpTVButtonText = new CPaneMgr(mpTVScreen, 'a_text_n', 0, NULL);
+    mpTVButtonText = new CPaneMgr(mpTVScreen, MULTI_CHAR('a_text_n'), 0, NULL);
     JUT_ASSERT(298, mpTVButtonText != NULL);
-    mpTVScreen->search('g_abtn_n')->hide();
+    mpTVScreen->search(MULTI_CHAR('g_abtn_n'))->hide();
 
     mpScreenIcon = new J2DScreen();
     JUT_ASSERT(325, mpScreenIcon != NULL);
@@ -1289,141 +1289,141 @@ void dMenu_Option_c::menuHide(int index) {
 
 void dMenu_Option_c::screenSet() {
     static const u64 tag_frame[6] = {
-        'flame_00', 'flame_01', 'flame_02', 'flame_03', 'flame_04', 'flame_05',
+        MULTI_CHAR('flame_00'), MULTI_CHAR('flame_01'), MULTI_CHAR('flame_02'), MULTI_CHAR('flame_03'), MULTI_CHAR('flame_04'), MULTI_CHAR('flame_05'),
     };
 #if VERSION == VERSION_GCN_JPN
     static const u64 tag_menu0[6] = {
-        'menu_t0', 'menu_t1', 'menu_t2', 'menu_t3', 'menu_t4', 'menu_t5',
+        MULTI_CHAR('menu_t0'), MULTI_CHAR('menu_t1'), MULTI_CHAR('menu_t2'), MULTI_CHAR('menu_t3'), MULTI_CHAR('menu_t4'), MULTI_CHAR('menu_t5'),
     };
 #else
     static const u64 tag_menu0[6] = {
-        'fenu_t0', 'fenu_t1', 'fenu_t2', 'fenu_t3', 'fenu_t4', 'fenu_t5',
+        MULTI_CHAR('fenu_t0'), MULTI_CHAR('fenu_t1'), MULTI_CHAR('fenu_t2'), MULTI_CHAR('fenu_t3'), MULTI_CHAR('fenu_t4'), MULTI_CHAR('fenu_t5'),
     };
 #endif
     static const u64 let_n[6] = {
-        'let_00_n', 'let_01_n', 'let_02_n', 'let_03_n', 'let_04_n', 'let_05_n',
+        MULTI_CHAR('let_00_n'), MULTI_CHAR('let_01_n'), MULTI_CHAR('let_02_n'), MULTI_CHAR('let_03_n'), MULTI_CHAR('let_04_n'), MULTI_CHAR('let_05_n'),
     };
     static const u64 let2_n[6] = {
-        'let_00_n', 'let_01_n', 'let_02_n', 'let_03_n', 'let_04_n',
+        MULTI_CHAR('let_00_n'), MULTI_CHAR('let_01_n'), MULTI_CHAR('let_02_n'), MULTI_CHAR('let_03_n'), MULTI_CHAR('let_04_n'),
     };
     static const u64 menu_n[6] = {
-        'menu_n0', 'menu_n1', 'menu_n2', 'menu_n3', 'menu_n4', 'menu_n5',
+        MULTI_CHAR('menu_n0'), MULTI_CHAR('menu_n1'), MULTI_CHAR('menu_n2'), MULTI_CHAR('menu_n3'), MULTI_CHAR('menu_n4'), MULTI_CHAR('menu_n5'),
     };
     static const u64 menu2_n[6] = {
-        'mw_n_0', 'mw_n_1', 'mw_n_2', 'mw_n_3', 'mw_n_4',
+        MULTI_CHAR('mw_n_0'), MULTI_CHAR('mw_n_1'), MULTI_CHAR('mw_n_2'), MULTI_CHAR('mw_n_3'), MULTI_CHAR('mw_n_4'),
     };
     static const u64 al0_n[6] = {
-        's_grr_00', 's_grr_01', 's_grr_02', 's_grr_03', 's_grr_04', 's_grr_05',
+        MULTI_CHAR('s_grr_00'), MULTI_CHAR('s_grr_01'), MULTI_CHAR('s_grr_02'), MULTI_CHAR('s_grr_03'), MULTI_CHAR('s_grr_04'), MULTI_CHAR('s_grr_05'),
     };
     static const u64 al1_n[6] = {
-        'c_grr_00', 'c_grr_01', 'c_grr_02', 'c_grr_03', 'c_grr_04', 'c_grr_05',
+        MULTI_CHAR('c_grr_00'), MULTI_CHAR('c_grr_01'), MULTI_CHAR('c_grr_02'), MULTI_CHAR('c_grr_03'), MULTI_CHAR('c_grr_04'), MULTI_CHAR('c_grr_05'),
     };
     static const u64 al2_n[6] = {
-        's_grl_00', 's_grl_01', 's_grl_02', 's_grl_03', 's_grl_04', 's_grl_05',
+        MULTI_CHAR('s_grl_00'), MULTI_CHAR('s_grl_01'), MULTI_CHAR('s_grl_02'), MULTI_CHAR('s_grl_03'), MULTI_CHAR('s_grl_04'), MULTI_CHAR('s_grl_05'),
     };
     static const u64 al3_n[6] = {
-        'c_grl_00', 'c_grl_01', 'c_grl_02', 'c_grl_03', 'c_grl_04', 'c_grl_05',
+        MULTI_CHAR('c_grl_00'), MULTI_CHAR('c_grl_01'), MULTI_CHAR('c_grl_02'), MULTI_CHAR('c_grl_03'), MULTI_CHAR('c_grl_04'), MULTI_CHAR('c_grl_05'),
     };
     static const u64 haihail_n[5] = {
-        'y_set_l0', 'y_set_l1', 'y_set_l2', 'y_set_l3', 'y_set_l4',
+        MULTI_CHAR('y_set_l0'), MULTI_CHAR('y_set_l1'), MULTI_CHAR('y_set_l2'), MULTI_CHAR('y_set_l3'), MULTI_CHAR('y_set_l4'),
     };
     static const u64 haihair_n[5] = {
-        'y_set_r0', 'y_set_r1', 'y_set_r2', 'y_set_r3', 'y_set_r4',
+        MULTI_CHAR('y_set_r0'), MULTI_CHAR('y_set_r1'), MULTI_CHAR('y_set_r2'), MULTI_CHAR('y_set_r3'), MULTI_CHAR('y_set_r4'),
     };
     static const u64 menu3_n[6] = {
-        'menuapn0', 'menuapn1', 'menuapn2', 'menuapn3', 'menuapn4',
+        MULTI_CHAR('menuapn0'), MULTI_CHAR('menuapn1'), MULTI_CHAR('menuapn2'), MULTI_CHAR('menuapn3'), MULTI_CHAR('menuapn4'),
     };
     static const u64 tv_btnA[5] = {
-        'cont_at1', 'cont_at2', 'cont_at3', 'cont_at4', 'cont_at',
+        MULTI_CHAR('cont_at1'), MULTI_CHAR('cont_at2'), MULTI_CHAR('cont_at3'), MULTI_CHAR('cont_at4'), MULTI_CHAR('cont_at'),
     };
     static const u64 ftv_btnA[5] = {
-        'font_a1', 'font_at2', 'font_at3', 'font_at4', 'font_at',
+        MULTI_CHAR('font_a1'), MULTI_CHAR('font_at2'), MULTI_CHAR('font_at3'), MULTI_CHAR('font_at4'), MULTI_CHAR('font_at'),
     };
 #if VERSION == VERSION_GCN_JPN
-    static const u64 fenu_t0[2] = {'fenu_t0s', 'fenu_t0'};
-    static const u64 menu_t0[2] = {'menu_t0s', 'menu_t0'};
-    static const u64 fenu_t1[2] = {'fenu_t1s', 'fenu_t1'};
-    static const u64 menu_t1[2] = {'menu_t1s', 'menu_t1'};
-    static const u64 fenu_t2[2] = {'fenu_t2s', 'fenu_t2'};
-    static const u64 menu_t2[2] = {'menu_t2s', 'menu_t2'};
-    static const u64 fenu_t3[2] = {'fenu_t3s', 'fenu_t3'};
-    static const u64 menu_t3[2] = {'menu_t3s', 'menu_t3'};
-    static const u64 fenu_t4[2] = {'fenu_t4s', 'fenu_t4'};
-    static const u64 menu_t4[2] = {'menu_t4s', 'menu_t4'};
-    static const u64 fenu_t5[2] = {'fenu_t5s', 'fenu_t5'};
-    static const u64 menu_t5[2] = {'menu_t5s', 'menu_t5'};
+    static const u64 fenu_t0[2] = {MULTI_CHAR('fenu_t0s'), MULTI_CHAR('fenu_t0')};
+    static const u64 menu_t0[2] = {MULTI_CHAR('menu_t0s'), MULTI_CHAR('menu_t0')};
+    static const u64 fenu_t1[2] = {MULTI_CHAR('fenu_t1s'), MULTI_CHAR('fenu_t1')};
+    static const u64 menu_t1[2] = {MULTI_CHAR('menu_t1s'), MULTI_CHAR('menu_t1')};
+    static const u64 fenu_t2[2] = {MULTI_CHAR('fenu_t2s'), MULTI_CHAR('fenu_t2')};
+    static const u64 menu_t2[2] = {MULTI_CHAR('menu_t2s'), MULTI_CHAR('menu_t2')};
+    static const u64 fenu_t3[2] = {MULTI_CHAR('fenu_t3s'), MULTI_CHAR('fenu_t3')};
+    static const u64 menu_t3[2] = {MULTI_CHAR('menu_t3s'), MULTI_CHAR('menu_t3')};
+    static const u64 fenu_t4[2] = {MULTI_CHAR('fenu_t4s'), MULTI_CHAR('fenu_t4')};
+    static const u64 menu_t4[2] = {MULTI_CHAR('menu_t4s'), MULTI_CHAR('menu_t4')};
+    static const u64 fenu_t5[2] = {MULTI_CHAR('fenu_t5s'), MULTI_CHAR('fenu_t5')};
+    static const u64 menu_t5[2] = {MULTI_CHAR('menu_t5s'), MULTI_CHAR('menu_t5')};
 #else
-    static const u64 fenu_t0[2] = {'fenu_t0s', 'fenu_t0'};
-    static const u64 menu_t0[2] = {'menu_t0s', 'menu_t0'};
-    static const u64 fenu_t2[2] = {'fenu_t1s', 'fenu_t1'};
-    static const u64 menu_t2[2] = {'menu_t1s', 'menu_t1'};
-    static const u64 fenu_t3[2] = {'fenu_t2s', 'fenu_t2'};
-    static const u64 menu_t3[2] = {'menu_t2s', 'menu_t2'};
-    static const u64 fenu_t4[2] = {'fenu_t3s', 'fenu_t3'};
-    static const u64 menu_t4[2] = {'menu_t3s', 'menu_t3'};
-    static const u64 fenu_t1[2] = {'fenu_t4s', 'fenu_t4'};
-    static const u64 menu_t1[2] = {'menu_t4s', 'menu_t4'};
-    static const u64 fenu_t5[2] = {'fenu_t5s', 'fenu_t5'};
-    static const u64 menu_t5[2] = {'menu_t5s', 'menu_t5'};
+    static const u64 fenu_t0[2] = {MULTI_CHAR('fenu_t0s'), MULTI_CHAR('fenu_t0')};
+    static const u64 menu_t0[2] = {MULTI_CHAR('menu_t0s'), MULTI_CHAR('menu_t0')};
+    static const u64 fenu_t2[2] = {MULTI_CHAR('fenu_t1s'), MULTI_CHAR('fenu_t1')};
+    static const u64 menu_t2[2] = {MULTI_CHAR('menu_t1s'), MULTI_CHAR('menu_t1')};
+    static const u64 fenu_t3[2] = {MULTI_CHAR('fenu_t2s'), MULTI_CHAR('fenu_t2')};
+    static const u64 menu_t3[2] = {MULTI_CHAR('menu_t2s'), MULTI_CHAR('menu_t2')};
+    static const u64 fenu_t4[2] = {MULTI_CHAR('fenu_t3s'), MULTI_CHAR('fenu_t3')};
+    static const u64 menu_t4[2] = {MULTI_CHAR('menu_t3s'), MULTI_CHAR('menu_t3')};
+    static const u64 fenu_t1[2] = {MULTI_CHAR('fenu_t4s'), MULTI_CHAR('fenu_t4')};
+    static const u64 menu_t1[2] = {MULTI_CHAR('menu_t4s'), MULTI_CHAR('menu_t4')};
+    static const u64 fenu_t5[2] = {MULTI_CHAR('fenu_t5s'), MULTI_CHAR('fenu_t5')};
+    static const u64 menu_t5[2] = {MULTI_CHAR('menu_t5s'), MULTI_CHAR('menu_t5')};
 #endif
     static const u64 menut_0[6] = {
-        'menut0as', 'menut0a', 'menut0a2', 'menut0a1', 'menut0a4', 'menut0a3',
+        MULTI_CHAR('menut0as'), MULTI_CHAR('menut0a'), MULTI_CHAR('menut0a2'), MULTI_CHAR('menut0a1'), MULTI_CHAR('menut0a4'), MULTI_CHAR('menut0a3'),
     };
     static const u64 fenut_0[6] = {
-        'menut010', 'menut0a9', 'menut0a8', 'menut0a7', 'menut0a6', 'menut0a5',
+        MULTI_CHAR('menut010'), MULTI_CHAR('menut0a9'), MULTI_CHAR('menut0a8'), MULTI_CHAR('menut0a7'), MULTI_CHAR('menut0a6'), MULTI_CHAR('menut0a5'),
     };
     static const u64 menut_1[6] = {
-        'menut1as', 'menut1a', 'menut1a2', 'menut1a1', 'menut1a4', 'menut1a3',
+        MULTI_CHAR('menut1as'), MULTI_CHAR('menut1a'), MULTI_CHAR('menut1a2'), MULTI_CHAR('menut1a1'), MULTI_CHAR('menut1a4'), MULTI_CHAR('menut1a3'),
     };
     static const u64 fenut_1[6] = {
-        'menut110', 'menut1a9', 'menut1a8', 'menut1a7', 'menut1a6', 'menut1a5',
+        MULTI_CHAR('menut110'), MULTI_CHAR('menut1a9'), MULTI_CHAR('menut1a8'), MULTI_CHAR('menut1a7'), MULTI_CHAR('menut1a6'), MULTI_CHAR('menut1a5'),
     };
     static const u64 menut_2[6] = {
-        'menut2as', 'menut2a', 'menut2a2', 'menut2a1', 'menut2a4', 'menut2a3',
+        MULTI_CHAR('menut2as'), MULTI_CHAR('menut2a'), MULTI_CHAR('menut2a2'), MULTI_CHAR('menut2a1'), MULTI_CHAR('menut2a4'), MULTI_CHAR('menut2a3'),
     };
     static const u64 fenut_2[6] = {
-        'menut210', 'menut2a9', 'menut2a8', 'menut2a7', 'menut2a6', 'menut2a5',
+        MULTI_CHAR('menut210'), MULTI_CHAR('menut2a9'), MULTI_CHAR('menut2a8'), MULTI_CHAR('menut2a7'), MULTI_CHAR('menut2a6'), MULTI_CHAR('menut2a5'),
     };
     static const u64 menut_3[6] = {
-        'menut3a5', 'menut3a6', 'menut3a7', 'menut3a8', 'menut3a9', 'menut310',
+        MULTI_CHAR('menut3a5'), MULTI_CHAR('menut3a6'), MULTI_CHAR('menut3a7'), MULTI_CHAR('menut3a8'), MULTI_CHAR('menut3a9'), MULTI_CHAR('menut310'),
     };
     static const u64 fenut_3[6] = {
-        'menut315', 'menut314', 'menut313', 'menut312', 'menut311', 'menut001',
+        MULTI_CHAR('menut315'), MULTI_CHAR('menut314'), MULTI_CHAR('menut313'), MULTI_CHAR('menut312'), MULTI_CHAR('menut311'), MULTI_CHAR('menut001'),
     };
     static const u64 menut_4[6] = {
-        'menut3as', 'menut3a', 'menut3a2', 'menut3a1', 'menut3a4', 'menut3a3',
+        MULTI_CHAR('menut3as'), MULTI_CHAR('menut3a'), MULTI_CHAR('menut3a2'), MULTI_CHAR('menut3a1'), MULTI_CHAR('menut3a4'), MULTI_CHAR('menut3a3'),
     };
     static const u64 fenut_4[6] = {
-        'menut321', 'menut320', 'menut319', 'menut318', 'menut317', 'menut316',
+        MULTI_CHAR('menut321'), MULTI_CHAR('menut320'), MULTI_CHAR('menut319'), MULTI_CHAR('menut318'), MULTI_CHAR('menut317'), MULTI_CHAR('menut316'),
     };
 #if VERSION == VERSION_GCN_JPN
     static const u64 tx[6] = {
-        'wps_text', 'w_p_text', 'g_ps_tx3', 'g_p_tex3', 'wps_tex1', 'w_p_tex1',
+        MULTI_CHAR('wps_text'), MULTI_CHAR('w_p_text'), MULTI_CHAR('g_ps_tx3'), MULTI_CHAR('g_p_tex3'), MULTI_CHAR('wps_tex1'), MULTI_CHAR('w_p_tex1'),
     };
 #else
     static const u64 tx[6] = {
-        'w_p_tex5', 'w_p_tex6', 'w_p_tex3', 'w_p_tex4', 'fps_tex1', 'f_p_tex1',
+        MULTI_CHAR('w_p_tex5'), MULTI_CHAR('w_p_tex6'), MULTI_CHAR('w_p_tex3'), MULTI_CHAR('w_p_tex4'), MULTI_CHAR('fps_tex1'), MULTI_CHAR('f_p_tex1'),
     };
 #endif
     static const u64 op_tx[4] = {
-        'w_text_n', 'w_btn_n', 'w_k_t_n', 'w_abtn_n',
+        MULTI_CHAR('w_text_n'), MULTI_CHAR('w_btn_n'), MULTI_CHAR('w_k_t_n'), MULTI_CHAR('w_abtn_n'),
     };
     static const u64 z_tx[3] = {
-        'z_gc_n', 0, 0,
+        MULTI_CHAR('z_gc_n'), 0, 0,
     };
 #if VERSION == VERSION_GCN_JPN
     static const u64 txTV[10] = {
-        'menu_t6s', 'menu_t6',  'menu_t9s', 'menu_t9',  'menut10s',
-        'menu_t10', 'menu_t7s', 'menu_t7',  'menu_t8s', 'menu_t8',
+        MULTI_CHAR('menu_t6s'), MULTI_CHAR('menu_t6'),  MULTI_CHAR('menu_t9s'), MULTI_CHAR('menu_t9'),  MULTI_CHAR('menut10s'),
+        MULTI_CHAR('menu_t10'), MULTI_CHAR('menu_t7s'), MULTI_CHAR('menu_t7'),  MULTI_CHAR('menu_t8s'), MULTI_CHAR('menu_t8'),
     };
 #else
     static const u64 txTV[10] = {
-        'menu_t61', 'menu_t2',  'menu_t91', 'menu_t1',  'menut101',
-        'menu_t01', 'menu_t71', 'menu_t3',  'menu_t81', 'menu_t4',
+        MULTI_CHAR('menu_t61'), MULTI_CHAR('menu_t2'),  MULTI_CHAR('menu_t91'), MULTI_CHAR('menu_t1'),  MULTI_CHAR('menut101'),
+        MULTI_CHAR('menu_t01'), MULTI_CHAR('menu_t71'), MULTI_CHAR('menu_t3'),  MULTI_CHAR('menu_t81'), MULTI_CHAR('menu_t4'),
     };
 #endif
 
-    mpTitle = new CPaneMgr(mpBackScreen, 'title_n', 0, NULL);
+    mpTitle = new CPaneMgr(mpBackScreen, MULTI_CHAR('title_n'), 0, NULL);
     Vec pos = mpTitle->getGlobalVtxCenter(mpTitle->mPane, false, 0);
     mpWarning->mPosY = pos.y + g_drawHIO.mOptionScreen.mBackgroundPosY;
     for (int i = 0; i < 6; i++) {
@@ -1445,11 +1445,11 @@ void dMenu_Option_c::screenSet() {
     mpDrawCursor->setScale(0.0f);
     mpDrawCursor->setParam(1.01f, 0.85f, 0.02f, 0.5f, 0.5f);
     mpDrawCursor->offPlayAnime(0);
-    mpParent[0] = new CPaneMgr(mpScreen, 'n_all', 2, NULL);
-    mpParent[1] = new CPaneMgr(mpClipScreen, 'n_all', 2, NULL);
+    mpParent[0] = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent[1] = new CPaneMgr(mpClipScreen, MULTI_CHAR('n_all'), 2, NULL);
     mpParent[2] = new CPaneMgr(mpShadowScreen, 'nall', 2, NULL);
-    mpParent[3] = new CPaneMgr(mpTVScreen, 'n_all', 2, NULL);
-    mpParent[4] = new CPaneMgr(mpBackScreen, 'n_all', 2, NULL);
+    mpParent[3] = new CPaneMgr(mpTVScreen, MULTI_CHAR('n_all'), 2, NULL);
+    mpParent[4] = new CPaneMgr(mpBackScreen, MULTI_CHAR('n_all'), 2, NULL);
     for (int i = 0; i < 6; i++) {
         mpMenuNull[i] = new CPaneMgr(mpScreen, let_n[i], 0, NULL);
         mpMenuPane[i] = new CPaneMgr(mpScreen, menu_n[i], 0, NULL);
@@ -1496,19 +1496,19 @@ void dMenu_Option_c::screenSet() {
         }
     }
 #if VERSION == VERSION_GCN_JPN
-    field_0x270[0] = (J2DTextBox*)mpBackScreen->search('t_t00');
-    field_0x270[1] = (J2DTextBox*)mpBackScreen->search('t_t01');
-    mpBackScreen->search('f_t00')->hide();
-    mpBackScreen->search('t_t01')->hide();
-    field_0x270[2] = (J2DTextBox*)mpTVScreen->search('t_t00');
-    mpTVScreen->search('f_t00')->hide();
+    field_0x270[0] = (J2DTextBox*)mpBackScreen->search(MULTI_CHAR('t_t00'));
+    field_0x270[1] = (J2DTextBox*)mpBackScreen->search(MULTI_CHAR('t_t01'));
+    mpBackScreen->search(MULTI_CHAR('f_t00'))->hide();
+    mpBackScreen->search(MULTI_CHAR('t_t01'))->hide();
+    field_0x270[2] = (J2DTextBox*)mpTVScreen->search(MULTI_CHAR('t_t00'));
+    mpTVScreen->search(MULTI_CHAR('f_t00'))->hide();
 #else
-    field_0x270[0] = (J2DTextBox*)mpBackScreen->search('f_t00');
-    field_0x270[1] = (J2DTextBox*)mpBackScreen->search('t_t01');
-    mpBackScreen->search('t_t00')->hide();
-    mpBackScreen->search('t_t01')->hide();
-    field_0x270[2] = (J2DTextBox*)mpTVScreen->search('f_t00');
-    mpTVScreen->search('t_t00')->hide();
+    field_0x270[0] = (J2DTextBox*)mpBackScreen->search(MULTI_CHAR('f_t00'));
+    field_0x270[1] = (J2DTextBox*)mpBackScreen->search(MULTI_CHAR('t_t01'));
+    mpBackScreen->search(MULTI_CHAR('t_t00'))->hide();
+    mpBackScreen->search(MULTI_CHAR('t_t01'))->hide();
+    field_0x270[2] = (J2DTextBox*)mpTVScreen->search(MULTI_CHAR('f_t00'));
+    mpTVScreen->search(MULTI_CHAR('t_t00'))->hide();
 #endif
     for (int i = 0; i < 3; i++) {
         field_0x270[i]->setFont(mDoExt_getRubyFont());
@@ -1697,11 +1697,11 @@ void dMenu_Option_c::screenSet() {
     field_0x3b4 = 0.0f;
     menuVisible();
 #if VERSION == VERSION_GCN_JPN
-    mpBackScreen->search('jpn_n')->show();
-    mpBackScreen->search('foregn_n')->hide();
+    mpBackScreen->search(MULTI_CHAR('jpn_n'))->show();
+    mpBackScreen->search(MULTI_CHAR('foregn_n'))->hide();
 #else
-    mpBackScreen->search('jpn_n')->hide();
-    mpBackScreen->search('foregn_n')->show();
+    mpBackScreen->search(MULTI_CHAR('jpn_n'))->hide();
+    mpBackScreen->search(MULTI_CHAR('foregn_n'))->show();
 #endif
     for (int i = 0; i < 6; i++) {
         J2DTextBox* backScreen = (J2DTextBox*)mpBackScreen->search(tx[i]);
@@ -1715,7 +1715,7 @@ void dMenu_Option_c::screenSet() {
             mpString->getString(0x556, backScreen, NULL, NULL, NULL, 0);
         }
     }
-    mpBackScreen->search('wi_btn_n')->hide();
+    mpBackScreen->search(MULTI_CHAR('wi_btn_n'))->hide();
     for (int i = 0; i < 4; i++) {
         field_0x1c0[i] = 0;
     }
@@ -2075,14 +2075,14 @@ void dMenu_Option_c::changeTVCheck() {
 
 static void dummy() {
 #if VERSION == VERSION_GCN_JPN
-    static const u64 txTVhide[5] = {'fmenu_6n', 'fmenu_9n', 'fmenu_10', 'fmenu_7n', 'fmenu_8n'};
+    static const u64 txTVhide[5] = {MULTI_CHAR('fmenu_6n'), MULTI_CHAR('fmenu_9n'), MULTI_CHAR('fmenu_10'), MULTI_CHAR('fmenu_7n'), MULTI_CHAR('fmenu_8n')};
 #else
-    static const u64 txTVhide[5] = {'menu_6n', 'menu_9n', 'menu_10n', 'menu_7n', 'menu_8n'};
+    static const u64 txTVhide[5] = {MULTI_CHAR('menu_6n'), MULTI_CHAR('menu_9n'), MULTI_CHAR('menu_10n'), MULTI_CHAR('menu_7n'), MULTI_CHAR('menu_8n')};
 #endif
 }
 
 void dMenu_Option_c::setAButtonString(u16 i_stringID) {
-    static const u64 text_a_tag[5] = {'atext1_1', 'atext1_2', 'atext1_3', 'atext1_4', 'atext1_5'};
+    static const u64 text_a_tag[5] = {MULTI_CHAR('atext1_1'), MULTI_CHAR('atext1_2'), MULTI_CHAR('atext1_3'), MULTI_CHAR('atext1_4'), MULTI_CHAR('atext1_5')};
     u32 stringId = i_stringID;
     if (stringId != field_0x3dc) {
         field_0x3dc = i_stringID;
@@ -2101,7 +2101,7 @@ void dMenu_Option_c::setAButtonString(u16 i_stringID) {
 }
 
 void dMenu_Option_c::setBButtonString(u16 i_stringID) {
-    static const u64 text_b_tag[5] = {'btext1_1', 'btext1_2', 'btext1_3', 'btext1_4', 'btext1_5'};
+    static const u64 text_b_tag[5] = {MULTI_CHAR('btext1_1'), MULTI_CHAR('btext1_2'), MULTI_CHAR('btext1_3'), MULTI_CHAR('btext1_4'), MULTI_CHAR('btext1_5')};
     u32 stringId = i_stringID;
     if (stringId != field_0x3de) {
         field_0x3de = i_stringID;

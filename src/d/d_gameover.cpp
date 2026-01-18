@@ -368,14 +368,14 @@ dDlst_GameOverScrnDraw_c::dDlst_GameOverScrnDraw_c(JKRArchive* i_archive) {
     mFadeColor.set(0, 0, 0, 0);
 
     if (dMeter2Info_getGameOverType() != 0) {
-        mpScreen->search('n_base')->hide();
+        mpScreen->search(MULTI_CHAR('n_base'))->hide();
 
         if (mDoGph_gInf_c::getFadeRate() == 1.0f) {
             mFadeColor = mDoGph_gInf_c::getFadeColor();
         }
     }
 
-    mpScreen->search('base_b')->hide();
+    mpScreen->search(MULTI_CHAR('base_b'))->hide();
 
     JUtility::TColor img_white(mFadeColor);
     JUtility::TColor img_black(mFadeColor);
@@ -384,10 +384,10 @@ dDlst_GameOverScrnDraw_c::dDlst_GameOverScrnDraw_c(JKRArchive* i_archive) {
 
     ResTIMG* img = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
     mpBackImg =
-        new J2DPicture('PICT01', JGeometry::TBox2<f32>(0.0f, 486.0f, 0.0f, 660.0f), img, NULL);
+        new J2DPicture(MULTI_CHAR('PICT01'), JGeometry::TBox2<f32>(0.0f, 486.0f, 0.0f, 660.0f), img, NULL);
     mpBackImg->setBlackWhite(img_white, img_black);
 
-    J2DTextBox* gold_tbox = (J2DTextBox*)mpScreen->search('gold_00');
+    J2DTextBox* gold_tbox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('gold_00'));
     gold_tbox->setFont(mDoExt_getSubFont());
 
     char string[64];

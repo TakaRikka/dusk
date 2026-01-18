@@ -254,25 +254,25 @@ static u8 const lit_3778[12] = {
 };
 
 void dMenu_Collect2D_c::screenSet() {
-    static const u64 text_sv[3] = {'sav_0', 'sav_1', 'sav_2'};
-    static const u64 text_op[3] = {'opt_0', 'opt_1', 'opt_2',};
-    static const u64 ftext_sv[3] = {'f_sav_0', 'f_sav_1', 'f_sav_2'};
-    static const u64 ftext_op[3] = {'f_opt_0', 'f_opt_1', 'f_opt_2'};
-    static const u64 text_a_tag[5] = {'atext1_1', 'atext1_2', 'atext1_3', 'atext1_4', 'atext1_5'};
-    static const u64 text_b_tag[5] = {'btext1_1', 'btext1_2', 'btext1_3', 'btext1_4', 'btext1_5'};
+    static const u64 text_sv[3] = {MULTI_CHAR('sav_0'), MULTI_CHAR('sav_1'), MULTI_CHAR('sav_2')};
+    static const u64 text_op[3] = {MULTI_CHAR('opt_0'), MULTI_CHAR('opt_1'), MULTI_CHAR('opt_2'),};
+    static const u64 ftext_sv[3] = {MULTI_CHAR('f_sav_0'), MULTI_CHAR('f_sav_1'), MULTI_CHAR('f_sav_2')};
+    static const u64 ftext_op[3] = {MULTI_CHAR('f_opt_0'), MULTI_CHAR('f_opt_1'), MULTI_CHAR('f_opt_2')};
+    static const u64 text_a_tag[5] = {MULTI_CHAR('atext1_1'), MULTI_CHAR('atext1_2'), MULTI_CHAR('atext1_3'), MULTI_CHAR('atext1_4'), MULTI_CHAR('atext1_5')};
+    static const u64 text_b_tag[5] = {MULTI_CHAR('btext1_1'), MULTI_CHAR('btext1_2'), MULTI_CHAR('btext1_3'), MULTI_CHAR('btext1_4'), MULTI_CHAR('btext1_5')};
 
 #if REGION_JPN
-    static_cast<J2DTextBox*>(mpScreen->search('t_t00'))->setFont(mDoExt_getRubyFont());
-    static_cast<J2DTextBox*>(mpScreen->search('t_t00'))->setString(0x20, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('t_t00')))->setFont(mDoExt_getRubyFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('t_t00')))->setString(0x20, "");
     dMeter2Info_getStringKanji(
-        0x3E1, static_cast<J2DTextBox*>(mpScreen->search('t_t00'))->getStringPtr(), NULL);
-    mpScreen->search('f_t00')->hide();
+        0x3E1, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('t_t00')))->getStringPtr(), NULL);
+    mpScreen->search(MULTI_CHAR('f_t00'))->hide();
 #else
-    static_cast<J2DTextBox*>(mpScreen->search('f_t00'))->setFont(mDoExt_getRubyFont());
-    static_cast<J2DTextBox*>(mpScreen->search('f_t00'))->setString(0x20, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_t00')))->setFont(mDoExt_getRubyFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_t00')))->setString(0x20, "");
     dMeter2Info_getStringKanji(
-        0x3E1, static_cast<J2DTextBox*>(mpScreen->search('f_t00'))->getStringPtr(), NULL);
-    mpScreen->search('t_t00')->hide();
+        0x3E1, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_t00')))->getStringPtr(), NULL);
+    mpScreen->search(MULTI_CHAR('t_t00'))->hide();
 #endif
 
     for (int i = 0; i < 3; i++) {
@@ -311,45 +311,45 @@ void dMenu_Collect2D_c::screenSet() {
     }
 
 #if REGION_JPN
-    static_cast<J2DTextBox*>(mpScreen->search('item_n00'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('item_n01'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('item_n02'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('item_n03'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('item_n00'))->setString(0x20, "");
-    static_cast<J2DTextBox*>(mpScreen->search('item_n01'))->setString(0x20, "");
-    static_cast<J2DTextBox*>(mpScreen->search('item_n02'))->setString(0x20, "");
-    static_cast<J2DTextBox*>(mpScreen->search('item_n03'))->setString(0x20, "");
-    static_cast<J2DTextBox*>(mpScreen->search('i_text1'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('i_text0'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('i_text1'))->setString(0x100, "");
-    static_cast<J2DTextBox*>(mpScreen->search('i_text0'))->setString(0x100, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n00')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n01')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n02')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n03')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n00')))->setString(0x20, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n01')))->setString(0x20, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n02')))->setString(0x20, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n03')))->setString(0x20, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')))->setString(0x100, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')))->setString(0x100, "");
 
-    mpScreen->search('item_n04')->hide();
-    mpScreen->search('item_n05')->hide();
-    mpScreen->search('item_n06')->hide();
-    mpScreen->search('item_n07')->hide();
-    mpScreen->search('f_text1')->hide();
-    mpScreen->search('f_text0')->hide();
+    mpScreen->search(MULTI_CHAR('item_n04'))->hide();
+    mpScreen->search(MULTI_CHAR('item_n05'))->hide();
+    mpScreen->search(MULTI_CHAR('item_n06'))->hide();
+    mpScreen->search(MULTI_CHAR('item_n07'))->hide();
+    mpScreen->search(MULTI_CHAR('f_text1'))->hide();
+    mpScreen->search(MULTI_CHAR('f_text0'))->hide();
 #else
-    static_cast<J2DTextBox*>(mpScreen->search('item_n04'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('item_n05'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('item_n06'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('item_n07'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('item_n04'))->setString(0x20, "");
-    static_cast<J2DTextBox*>(mpScreen->search('item_n05'))->setString(0x20, "");
-    static_cast<J2DTextBox*>(mpScreen->search('item_n06'))->setString(0x20, "");
-    static_cast<J2DTextBox*>(mpScreen->search('item_n07'))->setString(0x20, "");
-    static_cast<J2DTextBox*>(mpScreen->search('f_text1'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('f_text0'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('f_text1'))->setString(0x100, "");
-    static_cast<J2DTextBox*>(mpScreen->search('f_text0'))->setString(0x100, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n04')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n05')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n06')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n07')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n04')))->setString(0x20, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n05')))->setString(0x20, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n06')))->setString(0x20, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n07')))->setString(0x20, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')))->setString(0x100, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')))->setString(0x100, "");
 
-    mpScreen->search('item_n00')->hide();
-    mpScreen->search('item_n01')->hide();
-    mpScreen->search('item_n02')->hide();
-    mpScreen->search('item_n03')->hide();
-    mpScreen->search('i_text1')->hide();
-    mpScreen->search('i_text0')->hide();
+    mpScreen->search(MULTI_CHAR('item_n00'))->hide();
+    mpScreen->search(MULTI_CHAR('item_n01'))->hide();
+    mpScreen->search(MULTI_CHAR('item_n02'))->hide();
+    mpScreen->search(MULTI_CHAR('item_n03'))->hide();
+    mpScreen->search(MULTI_CHAR('i_text1'))->hide();
+    mpScreen->search(MULTI_CHAR('i_text0'))->hide();
 #endif
 
     field_0x22d[0][0] = 0;
@@ -364,13 +364,13 @@ void dMenu_Collect2D_c::screenSet() {
 
     if (field_0x22d[3][0] != 0) {
         if (dComIfGs_isItemFirstBit(0x28)) {
-            mpScreen->search('ken_00')->hide();
-            mpScreen->search('ken_01')->show();
+            mpScreen->search(MULTI_CHAR('ken_00'))->hide();
+            mpScreen->search(MULTI_CHAR('ken_01'))->show();
         } else if (dComIfGs_isItemFirstBit(0x3F)
                        /* dSv_event_flag_c::F_0026 - Ordon Village - gave wooden sword to talo on 3rd day */
                    && !dComIfGs_isEventBit(0x302)) {
-            mpScreen->search('ken_00')->show();
-            mpScreen->search('ken_01')->hide();
+            mpScreen->search(MULTI_CHAR('ken_00'))->show();
+            mpScreen->search(MULTI_CHAR('ken_01'))->hide();
         }
     }
 
@@ -390,11 +390,11 @@ void dMenu_Collect2D_c::screenSet() {
         dComIfGs_isItemFirstBit(0x2B) || dComIfGs_isItemFirstBit(0x2A) ? true : false;
     if (field_0x22d[3][1] != 0) {
         if (dComIfGs_isItemFirstBit(0x2B)) {
-            mpScreen->search('tate_00')->show();
-            mpScreen->search('tate_01')->hide();
+            mpScreen->search(MULTI_CHAR('tate_00'))->show();
+            mpScreen->search(MULTI_CHAR('tate_01'))->hide();
         } else if (dComIfGs_isItemFirstBit(0x2A)) {
-            mpScreen->search('tate_00')->hide();
-            mpScreen->search('tate_01')->show();
+            mpScreen->search(MULTI_CHAR('tate_00'))->hide();
+            mpScreen->search(MULTI_CHAR('tate_01'))->show();
         }
     }
     field_0x22d[4][1] = dComIfGs_isItemFirstBit(0x2C);
@@ -661,14 +661,14 @@ void dMenu_Collect2D_c::screenSet() {
         mCursorX = i_copy;
         mCursorY = j_copy;
     }
-    mpLinkPm = new CPaneMgr(mpScreen, 'linki_n', 0, NULL);
+    mpLinkPm = new CPaneMgr(mpScreen, MULTI_CHAR('linki_n'), 0, NULL);
     mLinkGlobalCenterPos.x = mpLinkPm->getInitGlobalCenterPosX();
     mLinkGlobalCenterPos.y = mpLinkPm->getInitGlobalCenterPosY();
     mLinkGlobalCenterPos.z = -1000.0f;
-    mpMaskPm = new CPaneMgr(mpScreen, 'kamen_n', 0, NULL);
-    mpModelBg = new CPaneMgr(mpScreen, 'modelbgn', 2, NULL);
-    mpHeartParent = new CPaneMgr(mpScreen, 'heart_n', 0, NULL);
-    mpHeartPiece = new CPaneMgr(mpScreen, 'heart_kn', 0, NULL);
+    mpMaskPm = new CPaneMgr(mpScreen, MULTI_CHAR('kamen_n'), 0, NULL);
+    mpModelBg = new CPaneMgr(mpScreen, MULTI_CHAR('modelbgn'), 2, NULL);
+    mpHeartParent = new CPaneMgr(mpScreen, MULTI_CHAR('heart_n'), 0, NULL);
+    mpHeartPiece = new CPaneMgr(mpScreen, MULTI_CHAR('heart_kn'), 0, NULL);
     setAButtonString(mCurrentAString);
     setBButtonString(mCurrentBString);
     setItemNameString(mCursorX, mCursorY);
@@ -701,12 +701,12 @@ void dMenu_Collect2D_c::btkAnimeLoop0(J2DAnmTextureSRTKey* i_SRTKey) {
     } else {
         mFrame = 0.0f;
     }
-    static_cast<J2DTextBox*>(mpScreen->search('modelbg0'))->setAnimation(i_SRTKey);
-    static_cast<J2DTextBox*>(mpScreen->search('modelbg1'))->setAnimation(i_SRTKey);
-    static_cast<J2DTextBox*>(mpScreen->search('modelbg2'))->setAnimation(i_SRTKey);
-    static_cast<J2DTextBox*>(mpScreen->search('modelbg3'))->setAnimation(i_SRTKey);
-    static_cast<J2DTextBox*>(mpScreen->search('modelbg4'))->setAnimation(i_SRTKey);
-    static_cast<J2DTextBox*>(mpScreen->search('modelbg5'))->setAnimation(i_SRTKey);
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('modelbg0')))->setAnimation(i_SRTKey);
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('modelbg1')))->setAnimation(i_SRTKey);
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('modelbg2')))->setAnimation(i_SRTKey);
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('modelbg3')))->setAnimation(i_SRTKey);
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('modelbg4')))->setAnimation(i_SRTKey);
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('modelbg5')))->setAnimation(i_SRTKey);
 }
 
 void dMenu_Collect2D_c::setBackAlpha() {
@@ -1125,24 +1125,24 @@ void dMenu_Collect2D_c::changeClothe() {
 void dMenu_Collect2D_c::setArrowMaxNum(u8 param_0) {
     switch (param_0) {
     case 0:
-        mpScreen->search('item_0_0')->hide();
-        mpScreen->search('item_0_1')->hide();
-        mpScreen->search('item_0_2')->hide();
+        mpScreen->search(MULTI_CHAR('item_0_0'))->hide();
+        mpScreen->search(MULTI_CHAR('item_0_1'))->hide();
+        mpScreen->search(MULTI_CHAR('item_0_2'))->hide();
         break;
     case 30:
-        mpScreen->search('item_0_0')->show();
-        mpScreen->search('item_0_1')->hide();
-        mpScreen->search('item_0_2')->hide();
+        mpScreen->search(MULTI_CHAR('item_0_0'))->show();
+        mpScreen->search(MULTI_CHAR('item_0_1'))->hide();
+        mpScreen->search(MULTI_CHAR('item_0_2'))->hide();
         break;
     case 60:
-        mpScreen->search('item_0_0')->hide();
-        mpScreen->search('item_0_1')->show();
-        mpScreen->search('item_0_2')->hide();
+        mpScreen->search(MULTI_CHAR('item_0_0'))->hide();
+        mpScreen->search(MULTI_CHAR('item_0_1'))->show();
+        mpScreen->search(MULTI_CHAR('item_0_2'))->hide();
         break;
     case 100:
-        mpScreen->search('item_0_0')->hide();
-        mpScreen->search('item_0_1')->hide();
-        mpScreen->search('item_0_2')->show();
+        mpScreen->search(MULTI_CHAR('item_0_0'))->hide();
+        mpScreen->search(MULTI_CHAR('item_0_1'))->hide();
+        mpScreen->search(MULTI_CHAR('item_0_2'))->show();
         break;
     }
 }
@@ -1150,26 +1150,26 @@ void dMenu_Collect2D_c::setArrowMaxNum(u8 param_0) {
 void dMenu_Collect2D_c::setWalletMaxNum(u16 i_walletSize) {
     switch (i_walletSize) {
     case 300:
-        mpScreen->search('item_1_0')->show();
-        mpScreen->search('item_1_1')->hide();
-        mpScreen->search('item_1_2')->hide();
+        mpScreen->search(MULTI_CHAR('item_1_0'))->show();
+        mpScreen->search(MULTI_CHAR('item_1_1'))->hide();
+        mpScreen->search(MULTI_CHAR('item_1_2'))->hide();
         break;
     case 600:
-        mpScreen->search('item_1_0')->hide();
-        mpScreen->search('item_1_1')->show();
-        mpScreen->search('item_1_2')->hide();
+        mpScreen->search(MULTI_CHAR('item_1_0'))->hide();
+        mpScreen->search(MULTI_CHAR('item_1_1'))->show();
+        mpScreen->search(MULTI_CHAR('item_1_2'))->hide();
         break;
     case 1000:
-        mpScreen->search('item_1_0')->hide();
-        mpScreen->search('item_1_1')->hide();
-        mpScreen->search('item_1_2')->show();
+        mpScreen->search(MULTI_CHAR('item_1_0'))->hide();
+        mpScreen->search(MULTI_CHAR('item_1_1'))->hide();
+        mpScreen->search(MULTI_CHAR('item_1_2'))->show();
         break;
     }
 }
 
 void dMenu_Collect2D_c::setSmellType() {
     static const u64 smell_tag[5] = {
-        'wolf_med', 'wolf_chi', 'wolf_fis', 'wolf_iri', 'wolf_pou',
+        MULTI_CHAR('wolf_med'), MULTI_CHAR('wolf_chi'), MULTI_CHAR('wolf_fis'), MULTI_CHAR('wolf_iri'), MULTI_CHAR('wolf_pou'),
     };
     s32 smellType = -1;
     switch (dComIfGs_getCollectSmell()) {
@@ -1200,10 +1200,10 @@ void dMenu_Collect2D_c::setSmellType() {
 
 void dMenu_Collect2D_c::setHeartPiece() {
     static const u64 heart_tag[4] = {
-        'heart_1n',
-        'heart_2n',
-        'heart_3n',
-        'heart_4n',
+        MULTI_CHAR('heart_1n'),
+        MULTI_CHAR('heart_2n'),
+        MULTI_CHAR('heart_3n'),
+        MULTI_CHAR('heart_4n'),
     };
     s32 life = dComIfGs_getMaxLife() % 5;
     for (int i = 0; i < MAX_VISIBLE_HEARTPIECES; i++) {
@@ -1227,10 +1227,10 @@ void dMenu_Collect2D_c::setPohMaxNum(u8 i_pohNum) {
             JKRArchive* archive = dComIfGp_getMain2DArchive();
             const char* textureName = dMeter2Info_getNumberTextureName(div);
             ResTIMG* timg = (ResTIMG*)archive->getResource('TIMG', textureName);
-            static_cast<J2DPicture*>(mpScreen->search('item2_3'))->changeTexture(timg, 0);
+            static_cast<J2DPicture*>(mpScreen->search(MULTI_CHAR('item2_3')))->changeTexture(timg, 0);
             check = 1;
         } else {
-            mpScreen->search('item2_3')->hide();
+            mpScreen->search(MULTI_CHAR('item2_3'))->hide();
         }
         div = index / 10;
         index = index % 10;
@@ -1238,25 +1238,25 @@ void dMenu_Collect2D_c::setPohMaxNum(u8 i_pohNum) {
             JKRArchive* archive = dComIfGp_getMain2DArchive();
             const char* textureName2 = dMeter2Info_getNumberTextureName(div);
             ResTIMG* timg2 = (ResTIMG*)archive->getResource('TIMG', textureName2);
-            static_cast<J2DPicture*>(mpScreen->search('item2_2'))->changeTexture(timg2, 0);
+            static_cast<J2DPicture*>(mpScreen->search(MULTI_CHAR('item2_2')))->changeTexture(timg2, 0);
         } else {
-            mpScreen->search('item2_2')->hide();
+            mpScreen->search(MULTI_CHAR('item2_2'))->hide();
         }
         JKRArchive* archive = dComIfGp_getMain2DArchive();
         const char* textureName3 = dMeter2Info_getNumberTextureName(index);
         ResTIMG* timg3 = (ResTIMG*)archive->getResource('TIMG', textureName3);
-        static_cast<J2DPicture*>(mpScreen->search('item2_1'))->changeTexture(timg3, 0);
+        static_cast<J2DPicture*>(mpScreen->search(MULTI_CHAR('item2_1')))->changeTexture(timg3, 0);
     } else {
-        mpScreen->search('item2_3')->hide();
-        mpScreen->search('item2_2')->hide();
-        mpScreen->search('item2_1')->hide();
+        mpScreen->search(MULTI_CHAR('item2_3'))->hide();
+        mpScreen->search(MULTI_CHAR('item2_2'))->hide();
+        mpScreen->search(MULTI_CHAR('item2_1'))->hide();
     }
 }
 
 void dMenu_Collect2D_c::setEquipItemFrameColorSword(int i_frame) {
     static const u64 tag[2] = {
-        'ken_g_0',
-        'ken_g_1',
+        MULTI_CHAR('ken_g_0'),
+        MULTI_CHAR('ken_g_1'),
     };
 
     if (i_frame == -1) {
@@ -1312,8 +1312,8 @@ void dMenu_Collect2D_c::setEquipItemFrameColorSword(int i_frame) {
 
 void dMenu_Collect2D_c::setEquipItemFrameColorShield(int i_frame) {
     static const u64 tag[2] = {
-        'tate_g_0',
-        'tate_g_1',
+        MULTI_CHAR('tate_g_0'),
+        MULTI_CHAR('tate_g_1'),
     };
 
     if (i_frame == -1) {
@@ -1360,9 +1360,9 @@ void dMenu_Collect2D_c::setEquipItemFrameColorShield(int i_frame) {
 
 void dMenu_Collect2D_c::setEquipItemFrameColorClothes(int i_frame) {
     static const u64 tag[3] = {
-        'fuku_g_0',
-        'fuku_g_1',
-        'fuku_g_2',
+        MULTI_CHAR('fuku_g_0'),
+        MULTI_CHAR('fuku_g_1'),
+        MULTI_CHAR('fuku_g_2'),
     };
 
     if (i_frame == -1) {
@@ -1412,7 +1412,7 @@ void dMenu_Collect2D_c::setEquipItemFrameColorClothes(int i_frame) {
 
 void dMenu_Collect2D_c::setHIO(bool i_useHIO) {
     static const u64 kaz_n[9] = {
-        'uzu_00', 'uzu_01', 'uzu_02', 'uzu_03', 'uzu_04', 'uzu_05', 'uzu_06', 'uzu_07', 'hishi',
+        MULTI_CHAR('uzu_00'), MULTI_CHAR('uzu_01'), MULTI_CHAR('uzu_02'), MULTI_CHAR('uzu_03'), MULTI_CHAR('uzu_04'), MULTI_CHAR('uzu_05'), MULTI_CHAR('uzu_06'), MULTI_CHAR('uzu_07'), MULTI_CHAR('hishi'),
     };
 
     if (mBlueSmokePosX != g_drawHIO.mCollectScreen.mBlueSmokePosX ||
@@ -1460,7 +1460,7 @@ void dMenu_Collect2D_c::setHIO(bool i_useHIO) {
     }
 
     if (g_drawHIO.mCollectScreen.mColorDebugON) {
-        J2DPicture* basePicture = (J2DPicture*)mpScreen->search('nht_base');
+        J2DPicture* basePicture = (J2DPicture*)mpScreen->search(MULTI_CHAR('nht_base'));
         basePicture->setBlackWhite(g_drawHIO.mCollectScreen.mVesselBack[0],
                                    g_drawHIO.mCollectScreen.mVesselFront[0]);
 
@@ -1501,29 +1501,29 @@ void dMenu_Collect2D_c::setHIO(bool i_useHIO) {
 
 u64 dMenu_Collect2D_c::getItemTag(int i_tag1, int i_tag2, bool param_3) {
     static const u64 itemTag[6][7] = {
-        {0, 0, 0, 'ken_n0', 'ken_n1', 'heart_kn', 'kamen_n'},
-        {0, 0, 0, 'tate_n0', 'tate_n1'},
+        {0, 0, 0, MULTI_CHAR('ken_n0'), MULTI_CHAR('ken_n1'), MULTI_CHAR('heart_kn'), MULTI_CHAR('kamen_n')},
+        {0, 0, 0, MULTI_CHAR('tate_n0'), MULTI_CHAR('tate_n1')},
         {
             0,
             0,
             0,
-            'fuku_n0',
-            'fuku_n1',
-            'fuku_n2',
+            MULTI_CHAR('fuku_n0'),
+            MULTI_CHAR('fuku_n1'),
+            MULTI_CHAR('fuku_n2'),
         },
         {
-            'item_1_n',
-            'item_0_n',
-            'kabu_6n',
-            'maki_5_n',
+            MULTI_CHAR('item_1_n'),
+            MULTI_CHAR('item_0_n'),
+            MULTI_CHAR('kabu_6n'),
+            MULTI_CHAR('maki_5_n'),
         },
         {
-            'wolf_n',
-            'item_2_n',
-            'fish_3_n',
-            'lett_4_n',
+            MULTI_CHAR('wolf_n'),
+            MULTI_CHAR('item_2_n'),
+            MULTI_CHAR('fish_3_n'),
+            MULTI_CHAR('lett_4_n'),
         },
-        {'save_n', 'option_n'},
+        {MULTI_CHAR('save_n'), MULTI_CHAR('option_n')},
     };
 
     if (i_tag2 == 5 && !param_3) {
@@ -2033,37 +2033,37 @@ void dMenu_Collect2D_c::_draw() {
 
     if (mItemNameString == 0) {
 #if REGION_JPN
-        char* stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search('i_text1'))->getStringPtr();
+        char* stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')))->getStringPtr();
 #else
-        char* stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search('f_text1'))->getStringPtr();
+        char* stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')))->getStringPtr();
 #endif
         strcpy(stringPtr1, "");
 
 #if REGION_JPN
-        char* stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search('i_text0'))->getStringPtr();
+        char* stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')))->getStringPtr();
 #else
-        char* stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search('f_text0'))->getStringPtr();
+        char* stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')))->getStringPtr();
 #endif
         strcpy(stringPtr0, "");
     } else {
 #if REGION_JPN
-        J2DTextBox* textBox1 = static_cast<J2DTextBox*>(mpScreen->search('i_text1'));
+        J2DTextBox* textBox1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')));
 #else
-        J2DTextBox* textBox1 = static_cast<J2DTextBox*>(mpScreen->search('f_text1'));
+        J2DTextBox* textBox1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')));
 #endif
         mpString->getString(mItemNameString, textBox1, NULL, NULL, NULL, 0);
 
 #if REGION_JPN
-        J2DTextBox* textBox0 = static_cast<J2DTextBox*>(mpScreen->search('i_text0'));
+        J2DTextBox* textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')));
 #else
-        J2DTextBox* textBox0 = static_cast<J2DTextBox*>(mpScreen->search('f_text0'));
+        J2DTextBox* textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')));
 #endif
         mpString->getString(mItemNameString, textBox0, NULL, NULL, NULL, 0);
 
 #if REGION_JPN
-        textBox0 = static_cast<J2DTextBox*>(mpScreen->search('i_text0'));
+        textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')));
 #else
-        textBox0 = static_cast<J2DTextBox*>(mpScreen->search('f_text0'));
+        textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')));
 #endif
         mpString->drawOutFontLocal(textBox0, -1.0f);
     }
@@ -2087,7 +2087,7 @@ bool dMenu_Collect2D_c::isOutCheck() {
 
 void dMenu_Collect2D_c::setAButtonString(u16 i_stringID) {
     static const u64 text_a_tag[5] = {
-        'atext1_1', 'atext1_2', 'atext1_3', 'atext1_4', 'atext1_5',
+        MULTI_CHAR('atext1_1'), MULTI_CHAR('atext1_2'), MULTI_CHAR('atext1_3'), MULTI_CHAR('atext1_4'), MULTI_CHAR('atext1_5'),
     };
 
     if (i_stringID != mCurrentAString) {
@@ -2111,7 +2111,7 @@ void dMenu_Collect2D_c::setAButtonString(u16 i_stringID) {
 
 void dMenu_Collect2D_c::setBButtonString(u16 i_stringID) {
     static const u64 text_b_tag[5] = {
-        'btext1_1', 'btext1_2', 'btext1_3', 'btext1_4', 'btext1_5',
+        MULTI_CHAR('btext1_1'), MULTI_CHAR('btext1_2'), MULTI_CHAR('btext1_3'), MULTI_CHAR('btext1_4'), MULTI_CHAR('btext1_5'),
     };
 
     if (i_stringID != mCurrentBString) {
@@ -2145,23 +2145,23 @@ void dMenu_Collect2D_c::setItemNameString(u8 param_0, u8 param_1) {
         } else {
 #if REGION_JPN
             char* stringPtr =
-                static_cast<J2DTextBox*>(mpScreen->search('item_n00'))->getStringPtr();
+                static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n00')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
-            stringPtr = static_cast<J2DTextBox*>(mpScreen->search('item_n01'))->getStringPtr();
+            stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n01')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
-            stringPtr = static_cast<J2DTextBox*>(mpScreen->search('item_n02'))->getStringPtr();
+            stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n02')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
-            stringPtr = static_cast<J2DTextBox*>(mpScreen->search('item_n03'))->getStringPtr();
+            stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n03')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
 #else
             char* stringPtr =
-                static_cast<J2DTextBox*>(mpScreen->search('item_n04'))->getStringPtr();
+                static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n04')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
-            stringPtr = static_cast<J2DTextBox*>(mpScreen->search('item_n05'))->getStringPtr();
+            stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n05')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
-            stringPtr = static_cast<J2DTextBox*>(mpScreen->search('item_n06'))->getStringPtr();
+            stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n06')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
-            stringPtr = static_cast<J2DTextBox*>(mpScreen->search('item_n07'))->getStringPtr();
+            stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n07')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
 #endif
         }
@@ -2171,21 +2171,21 @@ void dMenu_Collect2D_c::setItemNameString(u8 param_0, u8 param_1) {
 void dMenu_Collect2D_c::setItemNameStringNull() {
     mItemNameString = 0;
 #if REGION_JPN
-    J2DTextBox* textBox = (J2DTextBox*)mpScreen->search('item_n00');
+    J2DTextBox* textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n00'));
     strcpy(textBox->getStringPtr(), "");
-    textBox = (J2DTextBox*)mpScreen->search('item_n01');
+    textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n01'));
     strcpy(textBox->getStringPtr(), "");
-    textBox = (J2DTextBox*)mpScreen->search('item_n02');
+    textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n02'));
     strcpy(textBox->getStringPtr(), "");
-    textBox = (J2DTextBox*)mpScreen->search('item_n03');
+    textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n03'));
 #else
-    J2DTextBox* textBox = (J2DTextBox*)mpScreen->search('item_n04');
+    J2DTextBox* textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n04'));
     strcpy(textBox->getStringPtr(), "");
-    textBox = (J2DTextBox*)mpScreen->search('item_n05');
+    textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n05'));
     strcpy(textBox->getStringPtr(), "");
-    textBox = (J2DTextBox*)mpScreen->search('item_n06');
+    textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n06'));
     strcpy(textBox->getStringPtr(), "");
-    textBox = (J2DTextBox*)mpScreen->search('item_n07');
+    textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n07'));
 #endif
     strcpy(textBox->getStringPtr(), "");
 }

@@ -149,8 +149,7 @@ public:
             int i_faceMotionStepNum,
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData,
             int i_motionStepNum,
-            daNpcT_evtData_c const* i_evtData,
-            char** i_arcNames)
+            daNpcT_evtData_c const* i_evtData, char** i_arcNames)
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
         i_arcNames) {}

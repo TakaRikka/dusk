@@ -1682,7 +1682,7 @@ int daObjCarry_c::execute() {
             cLib_chaseF(&field_0xe20, 2.0f, 0.05f + KREG_F(1));
         }
 
-        GXColor color = (GXColor){0x5F, 0x5F, 0x5F, 0xFF};
+        GXColor color = COMPOUND_LITERAL(GXColor){0x5F, 0x5F, 0x5F, 0xFF};
         int var_r27 = dKy_BossLight_set(&current.pos, &color, field_0xe20 + KREG_F(0), 0);
         if (!var_r27) {
             OS_REPORT_ERROR("光球：ライト登録できませんでした\n");

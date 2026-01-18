@@ -35,24 +35,24 @@ void dFile_info_c::screenSet() {
 
     mFileInfo.Scr->setPriority("zelda_file_select_info_text.blo", 0x1100000, mArchive);
     mFileInfo.mFont = mDoExt_getMesgFont();
-    mFileInfo.Scr->search('w_cp_ef1')->hide();
-    mFileInfo.field_0x10 = mFileInfo.Scr->search('w_dat_i1');
-    mDatBase = new CPaneMgrAlpha(mFileInfo.Scr, 'w_dat_i1', 2, NULL);
-    mNoDatBase = new CPaneMgrAlpha(mFileInfo.Scr, 'w_nda_i1', 2, NULL);
+    mFileInfo.Scr->search(MULTI_CHAR('w_cp_ef1'))->hide();
+    mFileInfo.field_0x10 = mFileInfo.Scr->search(MULTI_CHAR('w_dat_i1'));
+    mDatBase = new CPaneMgrAlpha(mFileInfo.Scr, MULTI_CHAR('w_dat_i1'), 2, NULL);
+    mNoDatBase = new CPaneMgrAlpha(mFileInfo.Scr, MULTI_CHAR('w_nda_i1'), 2, NULL);
 
     J2DTextBox* info_text[4];
     
 
     #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
-    info_text[0] = (J2DTextBox*)mFileInfo.Scr->search('w_s_t_01');
-    info_text[1] = (J2DTextBox*)mFileInfo.Scr->search('w_p_t_01');
-    mFileInfo.Scr->search('f_s_t_02')->hide();
-    mFileInfo.Scr->search('f_p_t_02')->hide();
+    info_text[0] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_s_t_01'));
+    info_text[1] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_p_t_01'));
+    mFileInfo.Scr->search(MULTI_CHAR('f_s_t_02'))->hide();
+    mFileInfo.Scr->search(MULTI_CHAR('f_p_t_02'))->hide();
     #else
-    info_text[0] = (J2DTextBox*)mFileInfo.Scr->search('f_s_t_02');
-    info_text[1] = (J2DTextBox*)mFileInfo.Scr->search('f_p_t_02');
-    mFileInfo.Scr->search('w_s_t_01')->hide();
-    mFileInfo.Scr->search('w_p_t_01')->hide();
+    info_text[0] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('f_s_t_02'));
+    info_text[1] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('f_p_t_02'));
+    mFileInfo.Scr->search(MULTI_CHAR('w_s_t_01'))->hide();
+    mFileInfo.Scr->search(MULTI_CHAR('w_p_t_01'))->hide();
     #endif
 
     for (int i = 0; i < 2; i++) {
@@ -63,19 +63,19 @@ void dFile_info_c::screenSet() {
     dMeter2Info_getString(0x3D1, info_text[1]->getStringPtr(), NULL);  // Total play time
 
     #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
-    info_text[0] = (J2DTextBox*)mFileInfo.Scr->search('w_name01');
-    info_text[1] = (J2DTextBox*)mFileInfo.Scr->search('w_new_1');
-    mFileInfo.Scr->search('f_name01')->hide();
-    mFileInfo.Scr->search('f_new_1')->hide();
+    info_text[0] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_name01'));
+    info_text[1] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_new_1'));
+    mFileInfo.Scr->search(MULTI_CHAR('f_name01'))->hide();
+    mFileInfo.Scr->search(MULTI_CHAR('f_new_1'))->hide();
     #else
-    info_text[0] = (J2DTextBox*)mFileInfo.Scr->search('f_name01');
-    info_text[1] = (J2DTextBox*)mFileInfo.Scr->search('f_new_1');
-    mFileInfo.Scr->search('w_name01')->hide();
-    mFileInfo.Scr->search('w_new_1')->hide();
+    info_text[0] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('f_name01'));
+    info_text[1] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('f_new_1'));
+    mFileInfo.Scr->search(MULTI_CHAR('w_name01'))->hide();
+    mFileInfo.Scr->search(MULTI_CHAR('w_new_1'))->hide();
     #endif
 
-    info_text[2] = (J2DTextBox*)mFileInfo.Scr->search('w_time01');
-    info_text[3] = (J2DTextBox*)mFileInfo.Scr->search('w_ptim01');
+    info_text[2] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_time01'));
+    info_text[3] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_ptim01'));
 
     for (int i = 0; i < 4; i++) {
         info_text[i]->setFont(mFileInfo.mFont);
@@ -119,9 +119,9 @@ int dFile_info_c::setSaveData(dSv_save_c* i_savedata, BOOL i_validChksum, u8 i_d
 
 void dFile_info_c::setHeartCnt(dSv_save_c* i_savedata) {
     static u64 l_htag[] = {
-        'hear_20', 'hear_21', 'hear_22', 'hear_23', 'hear_24', 'hear_25', 'hear_26',
-        'hear_27', 'hear_28', 'hear_29', 'hear_30', 'hear_31', 'hear_32', 'hear_33',
-        'hear_34', 'hear_35', 'hear_36', 'hear_37', 'hear_38', 'hear_39',
+        MULTI_CHAR('hear_20'), MULTI_CHAR('hear_21'), MULTI_CHAR('hear_22'), MULTI_CHAR('hear_23'), MULTI_CHAR('hear_24'), MULTI_CHAR('hear_25'), MULTI_CHAR('hear_26'),
+        MULTI_CHAR('hear_27'), MULTI_CHAR('hear_28'), MULTI_CHAR('hear_29'), MULTI_CHAR('hear_30'), MULTI_CHAR('hear_31'), MULTI_CHAR('hear_32'), MULTI_CHAR('hear_33'),
+        MULTI_CHAR('hear_34'), MULTI_CHAR('hear_35'), MULTI_CHAR('hear_36'), MULTI_CHAR('hear_37'), MULTI_CHAR('hear_38'), MULTI_CHAR('hear_39'),
     };
 
     static const char* amariheartTex[] = {
@@ -215,7 +215,7 @@ void dDlst_FileInfo_c::draw() {
         MTXScale(m, mBasePane->getWidth() / field_0x10->getWidth(),
                  mBasePane->getHeight() / field_0x10->getHeight(), 1.0f);
         MTXConcat(glb_mtx, m, glb_mtx);
-        Scr->search('Nm_02')->setMtx(glb_mtx);
+        Scr->search(MULTI_CHAR('Nm_02'))->setMtx(glb_mtx);
     }
 
     Scr->draw(0.0f, 0.0f, graf_ctx);

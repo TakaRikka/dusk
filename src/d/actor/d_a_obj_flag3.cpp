@@ -250,8 +250,8 @@ inline void FlagCloth2_c::draw() {
     GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
     dKy_Global_amb_set(&mTevStr);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, 0xff});
-    GXSetTevKColor(GX_KCOLOR0, (GXColor){0, 0, 0, 0xff});
+    GXSetTevColor(GX_TEVREG0, COMPOUND_LITERAL(GXColor){0, 0, 0, 0xff});
+    GXSetTevKColor(GX_KCOLOR0, COMPOUND_LITERAL(GXColor){0, 0, 0, 0xff});
     GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_KONST, GX_CC_TEXC, GX_CC_RASC, GX_CC_C0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_4, GX_TRUE, GX_TEVPREV);

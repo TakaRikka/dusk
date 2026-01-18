@@ -14,7 +14,7 @@
 
 dMsgScrnPlace_c::dMsgScrnPlace_c() {
     static u64 t_tag[7] = {
-        'sfontb0', 'sfontb1', 'sfontb2', 'sfontl0', 'sfontl1', 'sfontl2', 'sfont00',
+        MULTI_CHAR('sfontb0'), MULTI_CHAR('sfontb1'), MULTI_CHAR('sfontb2'), MULTI_CHAR('sfontl0'), MULTI_CHAR('sfontl1'), MULTI_CHAR('sfontl2'), MULTI_CHAR('sfont00'),
     };
     init();
 
@@ -35,16 +35,16 @@ dMsgScrnPlace_c::dMsgScrnPlace_c() {
 #endif
     dPaneClass_showNullPane(mpScreen);
 
-    mpPmP_c = new CPaneMgr(mpScreen, 'n_all', 2, NULL);
+    mpPmP_c = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 2, NULL);
     mpPmP_c->scale(g_MsgObject_HIO_c.mStageTitleScaleX, g_MsgObject_HIO_c.mStageTitleScaleY);
 
-    mpFontParent = new CPaneMgr(mpScreen, 's_font_n', 0, NULL);
+    mpFontParent = new CPaneMgr(mpScreen, MULTI_CHAR('s_font_n'), 0, NULL);
     mpFontParent->scale(g_MsgObject_HIO_c.mStageTitleCharSizeX,
                         g_MsgObject_HIO_c.mStageTitleCharSizeY);
     mpFontParent->paneTrans(g_MsgObject_HIO_c.mStageTitleCharPosX,
                             g_MsgObject_HIO_c.mStageTitleCharPosY - mScaleX);
 
-    mpBaseParent = new CPaneMgr(mpScreen, 'base_n', 2, NULL);
+    mpBaseParent = new CPaneMgr(mpScreen, MULTI_CHAR('base_n'), 2, NULL);
     mpBaseParent->scale(g_MsgObject_HIO_c.mStageTitleBaseSizeX,
                         g_MsgObject_HIO_c.mStageTitleBaseSizeY);
     mpBaseParent->paneTrans(g_MsgObject_HIO_c.mStageTitleBasePosX,

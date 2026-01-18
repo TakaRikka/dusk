@@ -182,12 +182,12 @@ void daTitle_c::loadWait_proc() {
         mTitle.Scr->setPriority("zelda_press_start.blo", 0x100000, mpMount->getArchive());
 
         J2DTextBox* text[7];
-        text[0] = (J2DTextBox*)mTitle.Scr->search('t_s_00');
-        text[1] = (J2DTextBox*)mTitle.Scr->search('t_s_01');
-        text[2] = (J2DTextBox*)mTitle.Scr->search('t_s_02');
-        text[3] = (J2DTextBox*)mTitle.Scr->search('t_s_03');
-        text[4] = (J2DTextBox*)mTitle.Scr->search('t_s_04');
-        text[5] = (J2DTextBox*)mTitle.Scr->search('t_s_05');
+        text[0] = (J2DTextBox*)mTitle.Scr->search(MULTI_CHAR('t_s_00'));
+        text[1] = (J2DTextBox*)mTitle.Scr->search(MULTI_CHAR('t_s_01'));
+        text[2] = (J2DTextBox*)mTitle.Scr->search(MULTI_CHAR('t_s_02'));
+        text[3] = (J2DTextBox*)mTitle.Scr->search(MULTI_CHAR('t_s_03'));
+        text[4] = (J2DTextBox*)mTitle.Scr->search(MULTI_CHAR('t_s_04'));
+        text[5] = (J2DTextBox*)mTitle.Scr->search(MULTI_CHAR('t_s_05'));
         text[6] = (J2DTextBox*)mTitle.Scr->search('t_o');
 
         for (int i = 0; i < 7; i++) {
@@ -196,9 +196,9 @@ void daTitle_c::loadWait_proc() {
             fopMsgM_messageGet(text[i]->getStringPtr(), 100);
         }
 
-        field_0x600 = new CPaneMgrAlpha(mTitle.Scr, 'n_all', 2, NULL);
+        field_0x600 = new CPaneMgrAlpha(mTitle.Scr, MULTI_CHAR('n_all'), 2, NULL);
         field_0x600->setAlpha(0);
-        J2DPane* pane = mTitle.Scr->search('n_all');
+        J2DPane* pane = mTitle.Scr->search(MULTI_CHAR('n_all'));
         pane->translate(g_daTitHIO.mPSPosX, g_daTitHIO.mPSPosY);
         pane->scale(g_daTitHIO.mPSScaleX, g_daTitHIO.mPSScaleY);
         mpHeap->becomeCurrentHeap();

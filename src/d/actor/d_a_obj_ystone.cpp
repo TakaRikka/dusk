@@ -111,11 +111,10 @@ static void action(obj_ystone_class* i_this) {
         J3DAnmTransform* anm;
         J3DAnmTextureSRTKey* btk_anm;
         switch (i_this->mMirrorMode) {
-        case 0:
+        case 0: {
             g_env_light.settingTevStruct(0, &i_this->current.pos, &i_this->tevStr);
-            static u16 mirror_effect_id[10] = {
-                0x89A0, 0x89A1, 0x89A2, 0x89A5, 0x89A6, 0x89A7, 0x89A8, 0x89A9, 0x89AA, 0x89AB
-            };
+            static u16 mirror_effect_id[10] = {0x89A0, 0x89A1, 0x89A2, 0x89A5, 0x89A6,
+                                               0x89A7, 0x89A8, 0x89A9, 0x89AA, 0x89AB};
             for (int i = 0; i < 10; i++) {
                 dComIfGp_particle_set(mirror_effect_id[i], &i_this->current.pos, &i_this->tevStr,
                                       &i_this->shape_angle, NULL);
@@ -125,8 +124,7 @@ static void action(obj_ystone_class* i_this) {
             anm = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName[i_this->mLevel], 5);
             i_this->mpMorf->setAnm(anm, 0, 0.0f, 0.0f, 0.0f, -1.0f);
             i_this->mpMorf->setFrame(1.0f);
-            break;
-
+        } break;
         case 1:
             if (i_this->mTimer == 0) {
                 i_this->mMirrorMode = 2;

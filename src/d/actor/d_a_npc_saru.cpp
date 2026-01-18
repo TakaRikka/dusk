@@ -308,7 +308,7 @@ int daNpc_Saru_c::create() {
     };
 
     daNpcT_ct(this, daNpc_Saru_c, l_faceMotionAnmData, l_motionAnmData, 
-                       l_faceMotionSequenceData, 4, l_motionSequenceData, 4, l_evtList, (char**)l_resNameList);
+                       l_faceMotionSequenceData, 4, l_motionSequenceData, 4, l_evtList, l_resNameList);
     
     mType = getType();
     mFlowNodeNo = getFlowNodeNo();

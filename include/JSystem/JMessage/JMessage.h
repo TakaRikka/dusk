@@ -35,7 +35,12 @@ typedef struct str1_entry_t {
 
 typedef struct str1_section_t {
     /* 0x00 */ bmg_section_t header;  // section header
+#ifdef _MSVC_LANG
+    str1_entry_t* __get_entries() const { return (str1_entry_t*)(this + 1); }
+    __declspec(property(get = __get_entries)) str1_entry_t* entries;
+#else
     /* 0x08 */ str1_entry_t entries[0];
+#endif
 } str1_section_t;
 
 #endif /* JMESSAGE_H */

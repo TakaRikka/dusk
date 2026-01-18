@@ -39,18 +39,18 @@ static dMsgScrnHowl_cFunc process[5] = {
 
 dMsgScrnHowl_c::dMsgScrnHowl_c() {
     static u64 ylinen_tag[3] = {
-        'ylinen00',
-        'ylinen02',
-        'ylinen04',
+        MULTI_CHAR('ylinen00'),
+        MULTI_CHAR('ylinen02'),
+        MULTI_CHAR('ylinen04'),
     };
     static u64 tlinen_tag[7] = {
-        'tlinen00', 'tlinen01', 'tlinen02', 'tlinen03', 'tlinen04', 'tlinen05', 'tlinen06',
+        MULTI_CHAR('tlinen00'), MULTI_CHAR('tlinen01'), MULTI_CHAR('tlinen02'), MULTI_CHAR('tlinen03'), MULTI_CHAR('tlinen04'), MULTI_CHAR('tlinen05'), MULTI_CHAR('tlinen06'),
     };
     static u64 tline_tag[7] = {
-        'tline00', 'tline01', 'tline02', 'tline03', 'tlinen04', 'tline05', 'tline06',
+        MULTI_CHAR('tline00'), MULTI_CHAR('tline01'), MULTI_CHAR('tline02'), MULTI_CHAR('tline03'), MULTI_CHAR('tlinen04'), MULTI_CHAR('tline05'), MULTI_CHAR('tline06'),
     };
     static u64 tlines_tag[7] = {
-        'tlines00', 'tlines01', 'tlines02', 'tlines03', 'tlines04', 'tlines05', 'tlines06',
+        MULTI_CHAR('tlines00'), MULTI_CHAR('tlines01'), MULTI_CHAR('tlines02'), MULTI_CHAR('tlines03'), MULTI_CHAR('tlines04'), MULTI_CHAR('tlines05'), MULTI_CHAR('tlines06'),
     };
 
     init();
@@ -59,31 +59,31 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
     bool fg = mpScreen->setPriority("zelda_wolf_howl.blo", 0x20000, dComIfGp_getMsgArchive(5));
     JUT_ASSERT(73, fg != false);
     dPaneClass_showNullPane(mpScreen);
-    mpScreen->search('line00')->hide();
-    mpPmP_c = new CPaneMgr(mpScreen, 'n_all', 3, NULL);
+    mpScreen->search(MULTI_CHAR('line00'))->hide();
+    mpPmP_c = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 3, NULL);
     JUT_ASSERT(79, mpPmP_c != NULL);
     mpScreen->search('ag_n')->hide();
     field_0x1994 = 0.0f;
     field_0x1998 = 0.0f;
-    mpScreen->search('wi_btn_n')->hide();
-    mpButtonIcon[0] = new CPaneMgr(mpScreen, 'cbtn_n', 2, NULL);
+    mpScreen->search(MULTI_CHAR('wi_btn_n'))->hide();
+    mpButtonIcon[0] = new CPaneMgr(mpScreen, MULTI_CHAR('cbtn_n'), 2, NULL);
     JUT_ASSERT(91, mpButtonIcon[0] != NULL);
-    mpButtonText[0] = new CPaneMgr(mpScreen, 'g_ltxt_n', 2, NULL);
+    mpButtonText[0] = new CPaneMgr(mpScreen, MULTI_CHAR('g_ltxt_n'), 2, NULL);
     JUT_ASSERT(93, mpButtonText[0] != NULL);
-    mpButtonIcon[1] = new CPaneMgr(mpScreen, 'abt_n', 2, NULL);
+    mpButtonIcon[1] = new CPaneMgr(mpScreen, MULTI_CHAR('abt_n'), 2, NULL);
     JUT_ASSERT(96, mpButtonIcon[1] != NULL);
-    mpButtonText[1] = new CPaneMgr(mpScreen, 'gr_txt_n', 2, NULL);
+    mpButtonText[1] = new CPaneMgr(mpScreen, MULTI_CHAR('gr_txt_n'), 2, NULL);
     JUT_ASSERT(98, mpButtonText[1] != NULL);
 #if VERSION == VERSION_GCN_JPN
-    J2DTextBox* piStack_19c = (J2DTextBox*)mpScreen->search('g_l_info');
-    J2DTextBox* piStack_1a0 = (J2DTextBox*)mpScreen->search('g_r_info');
-    mpScreen->search('fgr_info')->hide();
-    mpScreen->search('fgl_info')->hide();
+    J2DTextBox* piStack_19c = (J2DTextBox*)mpScreen->search(MULTI_CHAR('g_l_info'));
+    J2DTextBox* piStack_1a0 = (J2DTextBox*)mpScreen->search(MULTI_CHAR('g_r_info'));
+    mpScreen->search(MULTI_CHAR('fgr_info'))->hide();
+    mpScreen->search(MULTI_CHAR('fgl_info'))->hide();
 #else
-    J2DTextBox* piStack_19c = (J2DTextBox*)mpScreen->search('fgl_info');
-    J2DTextBox* piStack_1a0 = (J2DTextBox*)mpScreen->search('fgr_info');
-    mpScreen->search('g_l_info')->hide();
-    mpScreen->search('g_r_info')->hide();
+    J2DTextBox* piStack_19c = (J2DTextBox*)mpScreen->search(MULTI_CHAR('fgl_info'));
+    J2DTextBox* piStack_1a0 = (J2DTextBox*)mpScreen->search(MULTI_CHAR('fgr_info'));
+    mpScreen->search(MULTI_CHAR('g_l_info'))->hide();
+    mpScreen->search(MULTI_CHAR('g_r_info'))->hide();
 #endif
     piStack_19c->setString(0x40, "");
     piStack_19c->setFont(mDoExt_getMesgFont());
@@ -138,9 +138,9 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
     field_0x2136 = (350.0f / field_0x1980);
     field_0x2138 = 0;
     field_0x1984 = 255.0f / field_0x2136;
-    mpABase = new CPaneMgr(mpScreen, 'a_base', 0, NULL);
+    mpABase = new CPaneMgr(mpScreen, MULTI_CHAR('a_base'), 0, NULL);
     JUT_ASSERT(218, mpABase != NULL);
-    mpLineAll = new CPaneMgr(mpScreen, 'line_all', 0, NULL);
+    mpLineAll = new CPaneMgr(mpScreen, MULTI_CHAR('line_all'), 0, NULL);
     JUT_ASSERT(221, mpLineAll != NULL);
     f32 in_f31;
     for (int i = 0; i < 7; i++) {
@@ -184,7 +184,7 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
     res = (ResTIMG const*)dComIfGp_getMsgArchive(5)->getResource('TIMG', "tt_black_32.bti");
     mpGuideDot = new J2DPicture(res);
     JUT_ASSERT(280, mpGuideDot != NULL);
-    mpGuideDot->setBlackWhite(((J2DPicture*)mpScreen->search('line00'))->getBlack(), ((J2DPicture*)mpScreen->search('line00'))->getWhite());
+    mpGuideDot->setBlackWhite(((J2DPicture*)mpScreen->search(MULTI_CHAR('line00')))->getBlack(), ((J2DPicture*)mpScreen->search(MULTI_CHAR('line00')))->getWhite());
     res = (ResTIMG const*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_iastarRR.bti");
     mpTopBall = new J2DPicture(res);
     JUT_ASSERT(287, mpTopBall != NULL);
@@ -197,8 +197,8 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
         mpTopBallTail[i]->setBlackWhite(g_MsgObject_HIO_c.mHowlHIO.mDotBlack, g_MsgObject_HIO_c.mHowlHIO.mDotWhite);
     }
     field_0x2134 = 0;
-    field_0x1988 = mpScreen->search('line00')->getWidth();
-    field_0x198c = mpScreen->search('line00')->getHeight();
+    field_0x1988 = mpScreen->search(MULTI_CHAR('line00'))->getWidth();
+    field_0x198c = mpScreen->search(MULTI_CHAR('line00'))->getHeight();
     field_0x2194 = daAlink_getAlinkActorClass()->getCorrectCurveID();
     mCorrectLineMax = 0;
     field_0x2197 = 0;
@@ -674,7 +674,7 @@ void dMsgScrnHowl_c::drawGuide() {
             }
             if (dVar16 > 0.0f) {
                 mpGuideDot->setAlpha(
-                    dVar16 * (mpScreen->search('line00')->getAlpha() * mpPmP_c->getAlphaRate()));
+                    dVar16 * (mpScreen->search(MULTI_CHAR('line00'))->getAlpha() * mpPmP_c->getAlphaRate()));
                 mpGuideDot->draw((2.0f + (local_f0 - local_f8 / 2)), (local_f4 - local_fc / 2),
                                  local_f8, local_fc, false, false, false);
             }
@@ -771,7 +771,7 @@ void dMsgScrnHowl_c::drawGuide2() {
             }
             if (guideAlpha > 0.0f && local_94 > 0.0f) {
                 mpGuideDot->setAlpha(local_94 *
-                                     (guideAlpha * (mpScreen->search('line00')->getAlpha() *
+                                     (guideAlpha * (mpScreen->search(MULTI_CHAR('line00'))->getAlpha() *
                                                     mpPmP_c->getAlphaRate())));
                 mpGuideDot->draw(2.0f + (local_a0 - local_a8 / 2), local_a4 - local_ac / 2,
                                  local_a8, local_ac, false, false, false);
@@ -810,7 +810,7 @@ void dMsgScrnHowl_c::drawEffect() {
         12.0f + ((vec2.x - vec1.x) / (mDoGph_gInf_c::getWidthF() / FB_WIDTH)), field_0x2120);
     grafContext->setScissor();
     u8 timer = daAlink_getAlinkActorClass()->getWolfHowlMgrP()->getReleaseTimer();
-    u8 screenAlpha = mpScreen->search('line00')->getAlpha();
+    u8 screenAlpha = mpScreen->search(MULTI_CHAR('line00'))->getAlpha();
     mpWaveTex->setAlpha((screenAlpha * mpPmP_c->getAlphaRate()) * ((30 - timer) / 30.0f));
     f32 fVar2 = field_0x2128 * field_0x1980;
     f32 fVar3 = mpLineH[0]->getGlobalPosX() - field_0x27a8;

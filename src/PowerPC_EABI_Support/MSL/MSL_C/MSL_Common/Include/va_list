@@ -1,6 +1,13 @@
 #ifndef MSL_VA_LIST_H
 #define MSL_VA_LIST_H
 
+#ifdef _MSVC_LANG
+    #include <vadefs.h>
+    #define va_start __crt_va_start_a
+    #define va_end __crt_va_end
+    #define va_arg __crt_va_arg
+#else
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -37,6 +44,8 @@ void* __va_arg(_va_list_struct*, int);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
 
 #endif /* __VA_ARG_H */

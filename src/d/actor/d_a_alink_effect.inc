@@ -2013,10 +2013,10 @@ BOOL daAlink_lockCursor_c::create() {
         return false;
     }
 
-    field_0xc = mScrn->search('n_all');
-    mCursor0 = mScrn->search('cursor0');
-    mCursor1 = mScrn->search('cursor1');
-    mCursor2 = mScrn->search('cursor2');
+    field_0xc = mScrn->search(MULTI_CHAR('n_all'));
+    mCursor0 = mScrn->search(MULTI_CHAR('cursor0'));
+    mCursor1 = mScrn->search(MULTI_CHAR('cursor1'));
+    mCursor2 = mScrn->search(MULTI_CHAR('cursor2'));
 
     field_0x28->searchUpdateMaterialID(mScrn);
     field_0xc->setAnimation(field_0x28);
@@ -2029,7 +2029,7 @@ BOOL daAlink_lockCursor_c::create() {
     mCursor0->setAnimation(field_0x24);
     mCursor1->setAnimation(field_0x24);
     mCursor2->setAnimation(field_0x24);
-    mScrn->search('flash')->setAnimation(field_0x24);
+    mScrn->search(MULTI_CHAR('flash'))->setAnimation(field_0x24);
     field_0x24->setFrame(0.0f);
 
     field_0x1c->searchUpdateMaterialID(mScrn);

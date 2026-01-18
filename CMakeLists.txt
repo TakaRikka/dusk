@@ -23,6 +23,7 @@ elseif (APPLE)
     set(CMAKE_BUILD_RPATH "$ORIGIN")
 elseif (MSVC)
     add_compile_options(/bigobj)
+    add_compile_options(/Zc:strictStrings-)
 endif ()
 
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)

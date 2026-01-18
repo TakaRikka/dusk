@@ -158,10 +158,10 @@ static const u32 l_lockSeFlg[BOOMERANG_LOCK_MAX] = {
 };
 
 void daBoomerang_sight_c::initialize() {
-    m_cursorYellowAllPane = m_cursorYellowScrn->search('n_all');
-    m_cursorYellow0Pane = m_cursorYellowScrn->search('cursor0');
-    m_cursorYellow1Pane = m_cursorYellowScrn->search('cursor1');
-    m_cursorYellow2Pane = m_cursorYellowScrn->search('cursor2');
+    m_cursorYellowAllPane = m_cursorYellowScrn->search(MULTI_CHAR('n_all'));
+    m_cursorYellow0Pane = m_cursorYellowScrn->search(MULTI_CHAR('cursor0'));
+    m_cursorYellow1Pane = m_cursorYellowScrn->search(MULTI_CHAR('cursor1'));
+    m_cursorYellow2Pane = m_cursorYellowScrn->search(MULTI_CHAR('cursor2'));
 
     m_cursorYellowBck->searchUpdateMaterialID(m_cursorYellowScrn);
     m_cursorYellowAllPane->setAnimation(m_cursorYellowBck);
@@ -174,7 +174,7 @@ void daBoomerang_sight_c::initialize() {
     m_cursorYellow0Pane->setAnimation(m_cursorYellowBpk);
     m_cursorYellow1Pane->setAnimation(m_cursorYellowBpk);
     m_cursorYellow2Pane->setAnimation(m_cursorYellowBpk);
-    m_cursorYellowScrn->search('flash')->setAnimation(m_cursorYellowBpk);
+    m_cursorYellowScrn->search(MULTI_CHAR('flash'))->setAnimation(m_cursorYellowBpk);
     m_cursorYellowBpk->setFrame(0.0f);
 
     m_cursorYellow2Brk->searchUpdateMaterialID(m_cursorYellowScrn);
@@ -192,10 +192,10 @@ void daBoomerang_sight_c::initialize() {
     m_cursorYellowScrn->setUserInfo('n_43');
     m_cursorYellowAllPane->setUserInfo(' ');
 
-    m_cursorRedAllPane = m_cursorRedScrn->search('n_all');
-    m_cursorRed0Pane = m_cursorRedScrn->search('cursor0');
-    m_cursorRed1Pane = m_cursorRedScrn->search('cursor1');
-    m_cursorRed2Pane = m_cursorRedScrn->search('cursor2');
+    m_cursorRedAllPane = m_cursorRedScrn->search(MULTI_CHAR('n_all'));
+    m_cursorRed0Pane = m_cursorRedScrn->search(MULTI_CHAR('cursor0'));
+    m_cursorRed1Pane = m_cursorRedScrn->search(MULTI_CHAR('cursor1'));
+    m_cursorRed2Pane = m_cursorRedScrn->search(MULTI_CHAR('cursor2'));
 
     m_cursorRedAllPane->setAnimation(m_cursorYellowBck);
     m_cursorRed0Pane->setAnimation(m_cursorYellowBck);
@@ -204,7 +204,7 @@ void daBoomerang_sight_c::initialize() {
     m_cursorRed0Pane->setAnimation(m_cursorYellowBpk);
     m_cursorRed1Pane->setAnimation(m_cursorYellowBpk);
     m_cursorRed2Pane->setAnimation(m_cursorYellowBpk);
-    m_cursorRedScrn->search('flash')->setAnimation(m_cursorYellowBpk);
+    m_cursorRedScrn->search(MULTI_CHAR('flash'))->setAnimation(m_cursorYellowBpk);
 
     m_cursorRed2Brk->searchUpdateMaterialID(m_cursorRedScrn);
     m_cursorRedBrk->searchUpdateMaterialID(m_cursorRedScrn);
@@ -221,10 +221,10 @@ void daBoomerang_sight_c::initialize() {
     m_cursorRedScrn->setUserInfo('n_43');
     m_cursorRedAllPane->setUserInfo(' ');
 
-    m_cursorOrangeAllPane = m_cursorOrangeScrn->search('n_all');
-    m_cursorOrange0Pane = m_cursorOrangeScrn->search('cursor0');
-    m_cursorOrange1Pane = m_cursorOrangeScrn->search('cursor1');
-    m_cursorOrange2Pane = m_cursorOrangeScrn->search('cursor2');
+    m_cursorOrangeAllPane = m_cursorOrangeScrn->search(MULTI_CHAR('n_all'));
+    m_cursorOrange0Pane = m_cursorOrangeScrn->search(MULTI_CHAR('cursor0'));
+    m_cursorOrange1Pane = m_cursorOrangeScrn->search(MULTI_CHAR('cursor1'));
+    m_cursorOrange2Pane = m_cursorOrangeScrn->search(MULTI_CHAR('cursor2'));
 
     m_cursorOrangeAllPane->setAnimation(m_cursorYellowBck);
     m_cursorOrange0Pane->setAnimation(m_cursorYellowBck);
@@ -233,7 +233,7 @@ void daBoomerang_sight_c::initialize() {
     m_cursorOrange0Pane->setAnimation(m_cursorYellowBpk);
     m_cursorOrange1Pane->setAnimation(m_cursorYellowBpk);
     m_cursorOrange2Pane->setAnimation(m_cursorYellowBpk);
-    m_cursorOrangeScrn->search('flash')->setAnimation(m_cursorYellowBpk);
+    m_cursorOrangeScrn->search(MULTI_CHAR('flash'))->setAnimation(m_cursorYellowBpk);
 
     m_cursorOrange2Brk->searchUpdateMaterialID(m_cursorOrangeScrn);
     m_cursorOrangeBrk->searchUpdateMaterialID(m_cursorOrangeScrn);

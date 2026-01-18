@@ -12,6 +12,12 @@
 #include "d/d_drawlist.h"
 #include "d/actor/d_a_alink.h"
 
+#ifdef __MWERKS__
+#define LOAD_4BYTE_STRING_LITERAL(x) (*(u32*)(x))
+#else
+#define LOAD_4BYTE_STRING_LITERAL(x) read_big_endian_u32(x)
+#endif
+
 namespace {
     static bool isStageEvent(int param_0) {
         dStage_MapEventInfo_c* info = dComIfGp_getStage()->getMapEventInfo();
@@ -400,19 +406,19 @@ fopAc_ac_c* dCamera_c::getEvActor(char* i_event) {
     }
 
     fopAc_ac_c* actor;
-    if (*(u32*)string == '@PLA') {
+    if (LOAD_4BYTE_STRING_LITERAL(string) == '@PLA') {
         actor = mpPlayerActor;
-    } else if (*(u32*)string == '@STA') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == '@STA') {
         actor = dComIfGp_event_getPt1();
-    } else if (*(u32*)string == '@PAR') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == '@PAR') {
         actor = dComIfGp_event_getPt2();
-    } else if (*(u32*)string == '@TAL') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == '@TAL') {
         actor = dComIfGp_event_getTalkPartner();
-    } else if (*(u32*)string == '@DOO') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == '@DOO') {
         actor = dComIfGp_event_getDoorPartner();
-    } else if (*(u32*)string == '@TAR' || *(u32*)string == '@ITE') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == '@TAR' || LOAD_4BYTE_STRING_LITERAL(string) == '@ITE') {
         actor = dComIfGp_event_getItemPartner();
-    } else if (*(u32*)string == 'Link') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == 'Link') {
         actor = dComIfGp_getLinkPlayer();
     } else {
         actor = fopAcM_searchFromName4Event(string, -1);
@@ -440,19 +446,19 @@ fopAc_ac_c* dCamera_c::getEvActor(char* i_event, char* param_1) {
     char* name_str = string;
 
     fopAc_ac_c* actor;
-    if (*(u32*)string == '@PLA') {
+    if (LOAD_4BYTE_STRING_LITERAL(string) == '@PLA') {
         actor = mpPlayerActor;
-    } else if (*(u32*)string == '@STA') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == '@STA') {
         actor = dComIfGp_event_getPt1();
-    } else if (*(u32*)string == '@PAR') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == '@PAR') {
         actor = dComIfGp_event_getPt2();
-    } else if (*(u32*)string == '@TAL') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == '@TAL') {
         actor = dComIfGp_event_getTalkPartner();
-    } else if (*(u32*)string == '@DOO') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == '@DOO') {
         actor = dComIfGp_event_getDoorPartner();
-    } else if (*(u32*)string == '@TAR' || *(u32*)string == '@ITE') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == '@TAR' || LOAD_4BYTE_STRING_LITERAL(string) == '@ITE') {
         actor = dComIfGp_event_getItemPartner();
-    } else if (*(u32*)string == 'Link') {
+    } else if (LOAD_4BYTE_STRING_LITERAL(string) == 'Link') {
         actor = dComIfGp_getLinkPlayer();
     } else {
         actor = fopAcM_searchFromName4Event(name_str, -1);
@@ -1925,7 +1931,8 @@ bool dCamera_c::styleEvCamera() {
         field_0x160 = 0;
     }
 
-    s32 style = mCamParam.SearchStyle(*(u32*)getEvStringPntData("Name", "FN01"));
+    s32 style =
+        mCamParam.SearchStyle(LOAD_4BYTE_STRING_LITERAL(getEvStringPntData("Name", "FN01")));
     (this->*engine_tbl[mCamParam.Algorythmn(style)])(style);
     return isModeOK();
 }

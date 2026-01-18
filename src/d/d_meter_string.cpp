@@ -57,19 +57,19 @@ int dMeterString_c::_create() {
     mpGetInBck = (J2DAnmTransformKey*)J2DAnmLoaderDataBase::load(
         JKRGetNameResource("zelda_game_image_cow_get_in.bck", mpMapArchive));
 
-    mpParentPane = new CPaneMgr(mpScreen, 'get_in_n', 2, NULL);
+    mpParentPane = new CPaneMgr(mpScreen, MULTI_CHAR('get_in_n'), 2, NULL);
     JUT_ASSERT(0, mpParentPane != NULL);
 
-    mpRootPane = new CPaneMgr(mpScreen, 'n_all', 0, NULL);
+    mpRootPane = new CPaneMgr(mpScreen, MULTI_CHAR('n_all'), 0, NULL);
     JUT_ASSERT(0, mpRootPane != NULL);
 
-    mpTextPane = new CPaneMgr(mpScreen, 'get_in', 0, NULL);
+    mpTextPane = new CPaneMgr(mpScreen, MULTI_CHAR('get_in'), 0, NULL);
     JUT_ASSERT(0, mpTextPane != NULL);
 
-    static_cast<J2DTextBox*>(mpScreen->search('get_in_s'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('get_in'))->setFont(mDoExt_getMesgFont());
-    static_cast<J2DTextBox*>(mpScreen->search('get_in_s'))->setString(0x100, "");
-    static_cast<J2DTextBox*>(mpScreen->search('get_in'))->setString(0x100, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in_s')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in')))->setFont(mDoExt_getMesgFont());
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in_s')))->setString(0x100, "");
+    static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in')))->setString(0x100, "");
 
     mAnimFrame = 0.0f;
     mPikariAnimFrame = 0.0f;
@@ -165,8 +165,8 @@ int dMeterString_c::_delete() {
 int dMeterString_c::createString(int i_stringID) {
     char str_buf[32];
     dMeter2Info_getString(i_stringID, str_buf, NULL);
-    strcpy(static_cast<J2DTextBox*>(mpScreen->search('get_in_s'))->getStringPtr(), str_buf);
-    strcpy(static_cast<J2DTextBox*>(mpScreen->search('get_in'))->getStringPtr(), str_buf);
+    strcpy(static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in_s')))->getStringPtr(), str_buf);
+    strcpy(static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in')))->getStringPtr(), str_buf);
 
     mAnimFrame = 40.0f;
     mPikariAnimFrame = -1.0f;

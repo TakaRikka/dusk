@@ -4,6 +4,10 @@
 #include "dolphin/mtx.h"
 #include <cmath>
 
+#ifdef _MSVC_LANG
+#define M_PI 3.14159265358979323846f
+#endif
+
 struct cXyz : Vec {
     static const cXyz Zero;
     static const cXyz BaseX;

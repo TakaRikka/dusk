@@ -149,28 +149,28 @@ void dMenu_save_c::_create() {
 }
 
 void dMenu_save_c::screenSet() {
-    static u64 l_tagName0[3] = {'w_sel_00', 'w_sel_01', 'w_sel_02'};
-    static u64 l_tagName000[2] = {'w_no_t', 'w_yes_t'};
-    static u64 l_tagName000U[2] = {'f_no_t', 'f_yes_t'};
-    static u64 l_tagName00[2] = {'w_modo', 'w_kete'};
-    static u64 l_tagName00U[2] = {'f_modo', 'f_kete'};
-    static u64 l_tagName3[3] = {'w_moyo00', 'w_moyo01', 'w_moyo02'};
-    static u64 l_tagName4[3] = {'w_gold00', 'w_gold01', 'w_gold02'};
-    static u64 l_tagName5[3] = {'w_go2_00', 'w_go2_01', 'w_go2_02'};
-    static u64 l_tagName9[2] = {'w_no_m', 'w_yes_m'};
-    static u64 l_tagName10[2] = {'w_no_g', 'w_yes_g'};
-    static u64 l_tagName11[2] = {'w_no_gr', 'w_yes_gr'};
-    static u64 l_tagName12[3] = {'w_bk_l00', 'w_bk_l01', 'w_bk_l02'};
+    static u64 l_tagName0[3] = {MULTI_CHAR('w_sel_00'), MULTI_CHAR('w_sel_01'), MULTI_CHAR('w_sel_02')};
+    static u64 l_tagName000[2] = {MULTI_CHAR('w_no_t'), MULTI_CHAR('w_yes_t')};
+    static u64 l_tagName000U[2] = {MULTI_CHAR('f_no_t'), MULTI_CHAR('f_yes_t')};
+    static u64 l_tagName00[2] = {MULTI_CHAR('w_modo'), MULTI_CHAR('w_kete')};
+    static u64 l_tagName00U[2] = {MULTI_CHAR('f_modo'), MULTI_CHAR('f_kete')};
+    static u64 l_tagName3[3] = {MULTI_CHAR('w_moyo00'), MULTI_CHAR('w_moyo01'), MULTI_CHAR('w_moyo02')};
+    static u64 l_tagName4[3] = {MULTI_CHAR('w_gold00'), MULTI_CHAR('w_gold01'), MULTI_CHAR('w_gold02')};
+    static u64 l_tagName5[3] = {MULTI_CHAR('w_go2_00'), MULTI_CHAR('w_go2_01'), MULTI_CHAR('w_go2_02')};
+    static u64 l_tagName9[2] = {MULTI_CHAR('w_no_m'), MULTI_CHAR('w_yes_m')};
+    static u64 l_tagName10[2] = {MULTI_CHAR('w_no_g'), MULTI_CHAR('w_yes_g')};
+    static u64 l_tagName11[2] = {MULTI_CHAR('w_no_gr'), MULTI_CHAR('w_yes_gr')};
+    static u64 l_tagName12[3] = {MULTI_CHAR('w_bk_l00'), MULTI_CHAR('w_bk_l01'), MULTI_CHAR('w_bk_l02')};
 #if VERSION == VERSION_GCN_JPN
-    static u64 l_tagName21[2] = {'w_tabi_s', 'w_tabi_x'};
-    static u64 l_tagName20[2] = {'w_er_msg', 'w_er_msR'};
+    static u64 l_tagName21[2] = {MULTI_CHAR('w_tabi_s'), MULTI_CHAR('w_tabi_x')};
+    static u64 l_tagName20[2] = {MULTI_CHAR('w_er_msg'), MULTI_CHAR('w_er_msR')};
 #else
-    static u64 l_tagName21[2] = {'t_for', 't_for1'};
-    static u64 l_tagName211[10] = {'tmoyou00', 'tmoyou01', 'tmoyou02', 'tmoyou03', 'tmoyou04',
-                                'tmoyou05', 'tmoyou06', 'tmoyou07', 'tmoyou08', 'tmoyou09'};
-    static u64 l_tagName20[2] = {'er_for0', 'er_for1'};
+    static u64 l_tagName21[2] = {MULTI_CHAR('t_for'), MULTI_CHAR('t_for1')};
+    static u64 l_tagName211[10] = {MULTI_CHAR('tmoyou00'), MULTI_CHAR('tmoyou01'), MULTI_CHAR('tmoyou02'), MULTI_CHAR('tmoyou03'), MULTI_CHAR('tmoyou04'),
+                                MULTI_CHAR('tmoyou05'), MULTI_CHAR('tmoyou06'), MULTI_CHAR('tmoyou07'), MULTI_CHAR('tmoyou08'), MULTI_CHAR('tmoyou09')};
+    static u64 l_tagName20[2] = {MULTI_CHAR('er_for0'), MULTI_CHAR('er_for1')};
 #endif
-    static u64 l_tagName13[3] = {'w_dat_i0', 'w_dat_i1', 'w_dat_i2'};
+    static u64 l_tagName13[3] = {MULTI_CHAR('w_dat_i0'), MULTI_CHAR('w_dat_i1'), MULTI_CHAR('w_dat_i2')};
     static u8 l_msgNum0[2] = {0x08, 0x07};
     static u8 l_msgNum[2] = {0x54, 0x55};
 
@@ -192,15 +192,15 @@ void dMenu_save_c::screenSet() {
     field_0x48->searchUpdateMaterialID(mSaveSel.Scr);
     field_0x4c->searchUpdateMaterialID(mSaveSel.Scr);
 
-    mpSelectMoveBase = new CPaneMgr(mSaveSel.Scr, 'w_move_n', 0, NULL);
-    field_0xa0 = mSaveSel.Scr->search('wmenu_n');
+    mpSelectMoveBase = new CPaneMgr(mSaveSel.Scr, MULTI_CHAR('w_move_n'), 0, NULL);
+    field_0xa0 = mSaveSel.Scr->search(MULTI_CHAR('wmenu_n'));
 
     for (int i = 0; i < 3; i++) {
         mpSelData[i] = new CPaneMgr(mSaveSel.Scr, l_tagName0[i], 0, NULL);
     }
 
-    mpNoYes[0] = new CPaneMgr(mSaveSel.Scr, 'w_no_n', 0, NULL);
-    mpNoYes[1] = new CPaneMgr(mSaveSel.Scr, 'w_yes_n', 0, NULL);
+    mpNoYes[0] = new CPaneMgr(mSaveSel.Scr, MULTI_CHAR('w_no_n'), 0, NULL);
+    mpNoYes[1] = new CPaneMgr(mSaveSel.Scr, MULTI_CHAR('w_yes_n'), 0, NULL);
 
     for (int i = 0; i < 2; i++) {
 #if VERSION == VERSION_GCN_JPN
@@ -217,17 +217,17 @@ void dMenu_save_c::screenSet() {
         ((J2DTextBox*)mpNoYesTxt[i]->getPanePtr())->setString(message);
     }
 
-    mSaveSel.Scr->search('Wi_btn_n')->hide();
-    mSaveSel.Scr->search('GC_btn_n')->show();
+    mSaveSel.Scr->search(MULTI_CHAR('Wi_btn_n'))->hide();
+    mSaveSel.Scr->search(MULTI_CHAR('GC_btn_n'))->show();
 
-    mpBBtnIcon = new CPaneMgrAlpha(mSaveSel.Scr, 'w_nbbtn', 2, NULL);
-    mpABtnIcon = new CPaneMgrAlpha(mSaveSel.Scr, 'w_nabtn', 2, NULL);
+    mpBBtnIcon = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_nbbtn'), 2, NULL);
+    mpABtnIcon = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_nabtn'), 2, NULL);
 #if VERSION == VERSION_GCN_JPN
-    mpBackTxt = new CPaneMgrAlpha(mSaveSel.Scr, 'w_modo', 2, NULL);
-    mpConfirmTxt = new CPaneMgrAlpha(mSaveSel.Scr, 'w_kete', 2, NULL);
+    mpBackTxt = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_modo'), 2, NULL);
+    mpConfirmTxt = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('w_kete'), 2, NULL);
 #else
-    mpBackTxt = new CPaneMgrAlpha(mSaveSel.Scr, 'f_modo', 2, NULL);
-    mpConfirmTxt = new CPaneMgrAlpha(mSaveSel.Scr, 'f_kete', 2, NULL);
+    mpBackTxt = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('f_modo'), 2, NULL);
+    mpConfirmTxt = new CPaneMgrAlpha(mSaveSel.Scr, MULTI_CHAR('f_kete'), 2, NULL);
 #endif
 
     mpBackTxt->setAlpha(0);
@@ -313,11 +313,11 @@ void dMenu_save_c::screenSet() {
     }
 
 #if VERSION == VERSION_GCN_JPN
-    mSaveSel.Scr->search('t_for')->hide();
-    mSaveSel.Scr->search('t_for1')->hide();
+    mSaveSel.Scr->search(MULTI_CHAR('t_for'))->hide();
+    mSaveSel.Scr->search(MULTI_CHAR('t_for1'))->hide();
 #else
-    mSaveSel.Scr->search('w_tabi_s')->hide();
-    mSaveSel.Scr->search('w_tabi_x')->hide();
+    mSaveSel.Scr->search(MULTI_CHAR('w_tabi_s'))->hide();
+    mSaveSel.Scr->search(MULTI_CHAR('w_tabi_x'))->hide();
 
     for (int i = 0; i < 10; i++) {
         mSaveSel.Scr->search(l_tagName211[i])->hide();
@@ -345,13 +345,13 @@ void dMenu_save_c::screenSet() {
     mpHeaderTxtPane[1]->setAlpha(0);
     mHeaderTxtType = 0;
 
-    field_0xb4 = mSaveSel.Scr->search('w_er_n');
+    field_0xb4 = mSaveSel.Scr->search(MULTI_CHAR('w_er_n'));
 #if VERSION == VERSION_GCN_JPN
-    mSaveSel.Scr->search('er_for0')->hide();
-    mSaveSel.Scr->search('er_for1')->hide();
+    mSaveSel.Scr->search(MULTI_CHAR('er_for0'))->hide();
+    mSaveSel.Scr->search(MULTI_CHAR('er_for1'))->hide();
 #else
-    mSaveSel.Scr->search('w_er_msg')->hide();
-    mSaveSel.Scr->search('w_er_msR')->hide();
+    mSaveSel.Scr->search(MULTI_CHAR('w_er_msg'))->hide();
+    mSaveSel.Scr->search(MULTI_CHAR('w_er_msR'))->hide();
 #endif
 
     for (int i = 0; i < 2; i++) {
@@ -390,7 +390,7 @@ void dMenu_save_c::screenSet() {
     mSelIcon->setPos(pos.x, pos.y, mpSelData[mSelectedFile]->getPanePtr(), true);
     mSelIcon->setAlphaRate(0.0f);
 
-    J2DPane* pane = mSaveSel.Scr->search('Nm_02');
+    J2DPane* pane = mSaveSel.Scr->search(MULTI_CHAR('Nm_02'));
     pane->setAnimation(field_0x40);
     field_0x64 = 0;
     field_0x50 = 1;
@@ -793,7 +793,7 @@ void dMenu_save_c::saveQuestion() {
         if (mYesNoCursor == CURSOR_YES) {
             field_0x1c0 = 1;
 
-            J2DPane* pane = mSaveSel.Scr->search('Nm_02');
+            J2DPane* pane = mSaveSel.Scr->search(MULTI_CHAR('Nm_02'));
             pane->setAnimation(field_0x40);
 
             field_0xd2 = 0;

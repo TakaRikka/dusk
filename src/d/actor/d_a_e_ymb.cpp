@@ -1117,7 +1117,7 @@ void daE_YMB_c::executeFlyAttack() {
             setInclination();
             break;
 
-        case 5:
+        case 5: {
             setElecEffect2();
             field_0x704 = 3;
             field_0x712 = 1;
@@ -1141,7 +1141,9 @@ void daE_YMB_c::executeFlyAttack() {
             }
 
             static s16 ymb_chance_time[3] = {
-                110, 80, 50,
+                110,
+                80,
+                50,
             };
             if (field_0x6fc == 0) {
                 mMode = 9;
@@ -1151,7 +1153,7 @@ void daE_YMB_c::executeFlyAttack() {
             }
 
             setInclination();
-            break;
+        } break;
 
         case 9:
         case 10:

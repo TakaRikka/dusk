@@ -58,7 +58,7 @@ static s32 MenuSelEndFrameTbl[3] = {
     898,
 };
 
-static u64 l_tagName13[3] = {'w_dat_i0', 'w_dat_i1', 'w_dat_i2'};
+static u64 l_tagName13[3] = {MULTI_CHAR('w_dat_i0'), MULTI_CHAR('w_dat_i1'), MULTI_CHAR('w_dat_i2')};
 
 dFs_HIO_c::dFs_HIO_c() {
     base_effect_appear_frames = 5;
@@ -806,15 +806,15 @@ void dFile_select_c::dataSelectStart() {
         yesnoMenuMoveAnmInitSet(0x473, 0x47d);
         selectWakuAlpahAnmInit(mSelectNum, 0xff, 0, g_fsHIO.select_box_appear_frames);
 
-        mSelDt.ScrDt->search('ken_00')->hide();
-        mSelDt.ScrDt->search('ken_01')->hide();
-        mSelDt.ScrDt->search('ken_02')->hide();
-        mSelDt.ScrDt->search('tate_00')->hide();
-        mSelDt.ScrDt->search('tate_01')->hide();
-        mSelDt.ScrDt->search('tate_02')->hide();
-        mSelDt.ScrDt->search('fuku_00')->hide();
-        mSelDt.ScrDt->search('fuku_01')->hide();
-        mSelDt.ScrDt->search('fuku_02')->hide();
+        mSelDt.ScrDt->search(MULTI_CHAR('ken_00'))->hide();
+        mSelDt.ScrDt->search(MULTI_CHAR('ken_01'))->hide();
+        mSelDt.ScrDt->search(MULTI_CHAR('ken_02'))->hide();
+        mSelDt.ScrDt->search(MULTI_CHAR('tate_00'))->hide();
+        mSelDt.ScrDt->search(MULTI_CHAR('tate_01'))->hide();
+        mSelDt.ScrDt->search(MULTI_CHAR('tate_02'))->hide();
+        mSelDt.ScrDt->search(MULTI_CHAR('fuku_00'))->hide();
+        mSelDt.ScrDt->search(MULTI_CHAR('fuku_01'))->hide();
+        mSelDt.ScrDt->search(MULTI_CHAR('fuku_02'))->hide();
         mpFileSelect3d->drawOff();
 
         mDataSelProc = DATASELPROC_SELECT_DATA_OPENERASE_MOVE;
@@ -1001,8 +1001,8 @@ void dFile_select_c::dataSelectMoveAnime() {
 void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     dSv_save_c* pSave = (dSv_save_c*)&mSaveData[i_dataNo];
 
-    J2DPane* ken0 = mSelDt.ScrDt->search('ken_00');
-    J2DPane* ken1 = mSelDt.ScrDt->search('ken_01');
+    J2DPane* ken0 = mSelDt.ScrDt->search(MULTI_CHAR('ken_00'));
+    J2DPane* ken1 = mSelDt.ScrDt->search(MULTI_CHAR('ken_01'));
     ken0->hide();
     ken1->hide();
 
@@ -1016,7 +1016,7 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
         ken1->hide();
     }
 
-    J2DPane* ken2 = mSelDt.ScrDt->search('ken_02');
+    J2DPane* ken2 = mSelDt.ScrDt->search(MULTI_CHAR('ken_02'));
     if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_MASTER_SWORD) ||
         pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_LIGHT_SWORD))
     {
@@ -1025,8 +1025,8 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
         ken2->hide();
     }
 
-    J2DPane* tate0 = mSelDt.ScrDt->search('tate_00');
-    J2DPane* tate1 = mSelDt.ScrDt->search('tate_01');
+    J2DPane* tate0 = mSelDt.ScrDt->search(MULTI_CHAR('tate_00'));
+    J2DPane* tate1 = mSelDt.ScrDt->search(MULTI_CHAR('tate_01'));
     tate0->hide();
     tate1->hide();
 
@@ -1038,28 +1038,28 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
         tate1->show();
     }
 
-    J2DPane* tate2 = mSelDt.ScrDt->search('tate_02');
+    J2DPane* tate2 = mSelDt.ScrDt->search(MULTI_CHAR('tate_02'));
     if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_HYLIA_SHIELD)) {
         tate2->show();
     } else {
         tate2->hide();
     }
 
-    J2DPane* fuku0 = mSelDt.ScrDt->search('fuku_00');
+    J2DPane* fuku0 = mSelDt.ScrDt->search(MULTI_CHAR('fuku_00'));
     if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_WEAR_KOKIRI)) {
         fuku0->show();
     } else {
         fuku0->hide();
     }
 
-    J2DPane* fuku1 = mSelDt.ScrDt->search('fuku_01');
+    J2DPane* fuku1 = mSelDt.ScrDt->search(MULTI_CHAR('fuku_01'));
     if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_WEAR_ZORA)) {
         fuku1->show();
     } else {
         fuku1->hide();
     }
 
-    J2DPane* fuku2 = mSelDt.ScrDt->search('fuku_02');
+    J2DPane* fuku2 = mSelDt.ScrDt->search(MULTI_CHAR('fuku_02'));
     if (pSave->getPlayer().getGetItem().isFirstBit(fpcNm_ITEM_ARMOR)) {
         fuku2->show();
     } else {
@@ -1658,7 +1658,7 @@ void dFile_select_c::copySelMoveAnmInitSet(int param_0, int param_1) {
 }
 
 void dFile_select_c::setSaveDataForCopySel() {
-    static u64 l_tagName101[2] = {'w_nun01', 'w_nun02'};
+    static u64 l_tagName101[2] = {MULTI_CHAR('w_nun01'), MULTI_CHAR('w_nun02')};
     static char* l_numTex[3] = {"tt_1_metal_40x40.bti", "tt_2_metal_40x40.bti",
                                 "tt_3_metal_40x40.bti"};
     SaveDataBuf* pSave = mSaveData;
@@ -2900,31 +2900,31 @@ void dFile_select_c::cardToNandDataCopyErrDisp3() {
 #endif
 
 void dFile_select_c::screenSet() {
-    static u64 l_tagName0[3] = {'w_sel_00', 'w_sel_01', 'w_sel_02'};
-    static u64 l_tagName3[3] = {'w_moyo00', 'w_moyo01', 'w_moyo02'};
-    static u64 l_tagName4[3] = {'w_gold00', 'w_gold01', 'w_gold02'};
-    static u64 l_tagName5[3] = {'w_go2_00', 'w_go2_01', 'w_go2_02'};
-    static u64 l_tagName12[3] = {'w_bk_l00', 'w_bk_l01', 'w_bk_l02'};
-    static u64 l_nouseTag[15] = {'w_mcheck', 'w_tabi1',  'w_tabi2',  'w_tabi3', 'w_doko_c',
-                                 'w_uwa_c',  'w_cp_chu', 'w_cpsita', 'w_cp_x',  'w_de',
-                                 'w_de_chu', 'w_desita', 'w_de_x',   'w_name',  'w_h_name'};
+    static u64 l_tagName0[3] = {MULTI_CHAR('w_sel_00'), MULTI_CHAR('w_sel_01'), MULTI_CHAR('w_sel_02')};
+    static u64 l_tagName3[3] = {MULTI_CHAR('w_moyo00'), MULTI_CHAR('w_moyo01'), MULTI_CHAR('w_moyo02')};
+    static u64 l_tagName4[3] = {MULTI_CHAR('w_gold00'), MULTI_CHAR('w_gold01'), MULTI_CHAR('w_gold02')};
+    static u64 l_tagName5[3] = {MULTI_CHAR('w_go2_00'), MULTI_CHAR('w_go2_01'), MULTI_CHAR('w_go2_02')};
+    static u64 l_tagName12[3] = {MULTI_CHAR('w_bk_l00'), MULTI_CHAR('w_bk_l01'), MULTI_CHAR('w_bk_l02')};
+    static u64 l_nouseTag[15] = {MULTI_CHAR('w_mcheck'), MULTI_CHAR('w_tabi1'),  MULTI_CHAR('w_tabi2'),  MULTI_CHAR('w_tabi3'), MULTI_CHAR('w_doko_c'),
+                                 MULTI_CHAR('w_uwa_c'),  MULTI_CHAR('w_cp_chu'), MULTI_CHAR('w_cpsita'), MULTI_CHAR('w_cp_x'),  'w_de',
+                                 MULTI_CHAR('w_de_chu'), MULTI_CHAR('w_desita'), MULTI_CHAR('w_de_x'),   MULTI_CHAR('w_name'),  MULTI_CHAR('w_h_name')};
 
 #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
-    static u64 l_tagName21[2] = {'w_tabi_s', 'w_tabi_x'};
+    static u64 l_tagName21[2] = {MULTI_CHAR('w_tabi_s'), MULTI_CHAR('w_tabi_x')};
 #else
-    static u64 l_tagName21[2] = {'t_for', 't_for1'};
+    static u64 l_tagName21[2] = {MULTI_CHAR('t_for'), MULTI_CHAR('t_for1')};
 #endif
 
-    static u64 l_tagName18[3] = {'w_de_ef0', 'w_de_ef1', 'w_de_ef2'};
-    static u64 l_tagName19[3] = {'w_cp_ef0', 'w_cp_ef1', 'w_cp_ef2'};
+    static u64 l_tagName18[3] = {MULTI_CHAR('w_de_ef0'), MULTI_CHAR('w_de_ef1'), MULTI_CHAR('w_de_ef2')};
+    static u64 l_tagName19[3] = {MULTI_CHAR('w_cp_ef0'), MULTI_CHAR('w_cp_ef1'), MULTI_CHAR('w_cp_ef2')};
 
 #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
-    static u64 l_tagName20[2] = {'w_er_msg', 'w_er_msR'};
+    static u64 l_tagName20[2] = {MULTI_CHAR('w_er_msg'), MULTI_CHAR('w_er_msR')};
 #else
-    static u64 l_tagName20[2] = {'er_for0', 'er_for1'};
+    static u64 l_tagName20[2] = {MULTI_CHAR('er_for0'), MULTI_CHAR('er_for1')};
 #endif
 
-    static u64 l_tagName131[3] = {'N_sel_00', 'N_sel_01', 'N_sel_02'};
+    static u64 l_tagName131[3] = {MULTI_CHAR('N_sel_00'), MULTI_CHAR('N_sel_01'), MULTI_CHAR('N_sel_02')};
 
     fileSel.Scr = new J2DScreen();
     JUT_ASSERT(4917, fileSel.Scr != NULL);
@@ -2943,27 +2943,27 @@ void dFile_select_c::screenSet() {
     field_0x0090->searchUpdateMaterialID(fileSel.Scr);
     field_0x009c->searchUpdateMaterialID(fileSel.Scr);
 
-    mBaseMovePane = new CPaneMgr(fileSel.Scr, 'w_move_n', 0, NULL);
-    mBaseSubPane = fileSel.Scr->search('w_sub_n');
+    mBaseMovePane = new CPaneMgr(fileSel.Scr, MULTI_CHAR('w_move_n'), 0, NULL);
+    mBaseSubPane = fileSel.Scr->search(MULTI_CHAR('w_sub_n'));
 
     for (int i = 0; i < 3; i++) {
         mSelFilePanes[i] = new CPaneMgr(fileSel.Scr, l_tagName0[i], 1, NULL);
     }
 
-    fileSel.Scr->search('Wi_btn_n')->hide();
-    mBbtnPane = new CPaneMgrAlpha(fileSel.Scr, 'w_n_bbtn', 2, NULL);
-    mAbtnPane = new CPaneMgrAlpha(fileSel.Scr, 'w_n_abtn', 2, NULL);
+    fileSel.Scr->search(MULTI_CHAR('Wi_btn_n'))->hide();
+    mBbtnPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_n_bbtn'), 2, NULL);
+    mAbtnPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_n_abtn'), 2, NULL);
 
 #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
-    mModoruTxtPane = new CPaneMgrAlpha(fileSel.Scr, 'w_modo', 2, NULL);
-    mKetteiTxtPane = new CPaneMgrAlpha(fileSel.Scr, 'w_kete', 2, NULL);
-    fileSel.Scr->search('f_modo')->hide();
-    fileSel.Scr->search('f_kete')->hide();
+    mModoruTxtPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_modo'), 2, NULL);
+    mKetteiTxtPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_kete'), 2, NULL);
+    fileSel.Scr->search(MULTI_CHAR('f_modo'))->hide();
+    fileSel.Scr->search(MULTI_CHAR('f_kete'))->hide();
 #else
-    mModoruTxtPane = new CPaneMgrAlpha(fileSel.Scr, 'f_modo', 2, NULL);
-    mKetteiTxtPane = new CPaneMgrAlpha(fileSel.Scr, 'f_kete', 2, NULL);
-    fileSel.Scr->search('w_modo')->hide();
-    fileSel.Scr->search('w_kete')->hide();
+    mModoruTxtPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('f_modo'), 2, NULL);
+    mKetteiTxtPane = new CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('f_kete'), 2, NULL);
+    fileSel.Scr->search(MULTI_CHAR('w_modo'))->hide();
+    fileSel.Scr->search(MULTI_CHAR('w_kete'))->hide();
 #endif
 
     ((J2DTextBox*)mModoruTxtPane->getPanePtr())->setFont(fileSel.font[0]);
@@ -3031,13 +3031,13 @@ void dFile_select_c::screenSet() {
     }
 
 #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
-    fileSel.Scr->search('t_for')->hide();
-    fileSel.Scr->search('t_for1')->hide();
+    fileSel.Scr->search(MULTI_CHAR('t_for'))->hide();
+    fileSel.Scr->search(MULTI_CHAR('t_for1'))->hide();
 #else
-    fileSel.Scr->search('w_tabi_s')->hide();
-    fileSel.Scr->search('w_tabi_x')->hide();
-    fileSel.Scr->search('w_mgn1')->hide();
-    fileSel.Scr->search('w_mgn2')->hide();
+    fileSel.Scr->search(MULTI_CHAR('w_tabi_s'))->hide();
+    fileSel.Scr->search(MULTI_CHAR('w_tabi_x'))->hide();
+    fileSel.Scr->search(MULTI_CHAR('w_mgn1'))->hide();
+    fileSel.Scr->search(MULTI_CHAR('w_mgn2'))->hide();
 #endif
 
     for (int i = 0; i < 2; i++) {
@@ -3084,17 +3084,17 @@ void dFile_select_c::screenSet() {
 
     field_0x0208 = 0;
     field_0x0209 = 0;
-    mErrorMsgPane = fileSel.Scr->search('w_er_n');
+    mErrorMsgPane = fileSel.Scr->search(MULTI_CHAR('w_er_n'));
 
 #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
-    fileSel.Scr->search('er_for0')->hide();
-    fileSel.Scr->search('er_for1')->hide();
+    fileSel.Scr->search(MULTI_CHAR('er_for0'))->hide();
+    fileSel.Scr->search(MULTI_CHAR('er_for1'))->hide();
 #else
-    fileSel.Scr->search('w_er_msg')->hide();
-    fileSel.Scr->search('w_er_msR')->hide();
+    fileSel.Scr->search(MULTI_CHAR('w_er_msg'))->hide();
+    fileSel.Scr->search(MULTI_CHAR('w_er_msR'))->hide();
 #endif
 
-    fileSel.Scr->search('w_er_msE')->hide();
+    fileSel.Scr->search(MULTI_CHAR('w_er_msE'))->hide();
 
     for (int i = 0; i < 2; i++) {
         mErrorMsgTxtPane[i] = new CPaneMgrAlpha(fileSel.Scr, l_tagName20[i], 0, NULL);
@@ -3131,7 +3131,7 @@ void dFile_select_c::screenSet() {
     mSelIcon->setPos(vtxCenter.x, vtxCenter.y, mSelFilePanes[mSelectNum]->getPanePtr(), true);
     mSelIcon->setAlphaRate(0.0f);
 
-    J2DPane* basePane = fileSel.Scr->search('Nm_02');
+    J2DPane* basePane = fileSel.Scr->search(MULTI_CHAR('Nm_02'));
     basePane->setAnimation(mBaseMoveAnm);
 
     setWakuAnm();
@@ -3160,11 +3160,11 @@ void dFile_select_c::screenSet() {
         mFileInfoNoDatBasePane[i] = mFileInfo[i]->getNoDatBase();
     }
 
-    mNameBasePane = fileSel.Scr->search('name_n');
+    mNameBasePane = fileSel.Scr->search(MULTI_CHAR('name_n'));
     mpName = new dName_c(mNameBasePane);
     field_0x0128 = false;
     mpFileWarning = new dFile_warning_c(mpArchive, 0);
-    mSelDt.mpPane = fileSel.Scr->search('w_moyo03');
+    mSelDt.mpPane = fileSel.Scr->search(MULTI_CHAR('w_moyo03'));
 
     #if PLATFORM_GCN
     JUtility::TColor black = mDoGph_gInf_c::getFadeColor();
@@ -3173,7 +3173,7 @@ void dFile_select_c::screenSet() {
     white.a = 0xff;
 
     ResTIMG* timg = (ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "tt_block8x8.bti");
-    mpFadePict = new J2DPicture('PICT01', JGeometry::TBox2<f32>(0.0f, FB_WIDTH, 0.0f, FB_HEIGHT),
+    mpFadePict = new J2DPicture(MULTI_CHAR('PICT01'), JGeometry::TBox2<f32>(0.0f, FB_WIDTH, 0.0f, FB_HEIGHT),
                                 timg, NULL);
     mpFadePict->setBlackWhite(black, white);
     mpFadePict->setAlpha(0);
@@ -3181,20 +3181,20 @@ void dFile_select_c::screenSet() {
 }
 
 void dFile_select_c::screenSetCopySel() {
-    static u64 l_tagName000[2] = {'w_sel_01', 'w_sel_02'};
-    static u64 l_tagName001[2] = {'w_moyo01', 'w_moyo02'};
-    static u64 l_tagName002[2] = {'w_gold01', 'w_gold02'};
-    static u64 l_tagName003[2] = {'w_go2_01', 'w_go2_02'};
-    static u64 l_tagName004[2] = {'w_bk_l01', 'w_bk_l02'};
-    static u64 l_tagName005[2] = {'w_cp_ef1', 'w_cp_ef2'};
+    static u64 l_tagName000[2] = {MULTI_CHAR('w_sel_01'), MULTI_CHAR('w_sel_02')};
+    static u64 l_tagName001[2] = {MULTI_CHAR('w_moyo01'), MULTI_CHAR('w_moyo02')};
+    static u64 l_tagName002[2] = {MULTI_CHAR('w_gold01'), MULTI_CHAR('w_gold02')};
+    static u64 l_tagName003[2] = {MULTI_CHAR('w_go2_01'), MULTI_CHAR('w_go2_02')};
+    static u64 l_tagName004[2] = {MULTI_CHAR('w_bk_l01'), MULTI_CHAR('w_bk_l02')};
+    static u64 l_tagName005[2] = {MULTI_CHAR('w_cp_ef1'), MULTI_CHAR('w_cp_ef2')};
 
     mCpSel.Scr = new J2DScreen();
 
     JUT_ASSERT(5286, mCpSel.Scr != NULL);
     mCpSel.Scr->setPriority("zelda_file_select_copy_select.blo", 0x1100000, mpArchive);
     dPaneClass_showNullPane(mCpSel.Scr);
-    mCpSel.mpPane2 = mCpSel.Scr->search('name_n');
-    mCpSel.mpPane1 = fileSel.Scr->search('name_n');
+    mCpSel.mpPane2 = mCpSel.Scr->search(MULTI_CHAR('name_n'));
+    mCpSel.mpPane1 = fileSel.Scr->search(MULTI_CHAR('name_n'));
 
     void* bck = JKRGetNameResource("zelda_file_select_copy_select.bck", mpArchive);
     mCpSelBck = (J2DAnmTransform*)J2DAnmLoaderDataBase::load(bck);
@@ -3248,7 +3248,7 @@ void dFile_select_c::screenSetCopySel() {
         mCpSel.Scr->search(l_tagName005[i])->hide();
     }
 
-    J2DPane* namePane = mCpSel.Scr->search('name_n');
+    J2DPane* namePane = mCpSel.Scr->search(MULTI_CHAR('name_n'));
     namePane->setAnimation(mCpSelBck);
     mCpSelBck->setFrame(0.0f);
     namePane->animationTransform();
@@ -3270,15 +3270,15 @@ void dFile_select_c::screenSetCopySel() {
 }
 
 void dFile_select_c::screenSetYesNo() {
-    static u64 l_tagName012[2] = {'w_no_n', 'w_yes_n'};
-    static u64 l_tagName013[2] = {'w_no_t', 'w_yes_t'};
-    static u64 l_tagName013U[2] = {'f_no_t', 'f_yes_t'};
-    static u64 l_tagName9[2] = {'w_no_m', 'w_yes_m'};
+    static u64 l_tagName012[2] = {MULTI_CHAR('w_no_n'), MULTI_CHAR('w_yes_n')};
+    static u64 l_tagName013[2] = {MULTI_CHAR('w_no_t'), MULTI_CHAR('w_yes_t')};
+    static u64 l_tagName013U[2] = {MULTI_CHAR('f_no_t'), MULTI_CHAR('f_yes_t')};
+    static u64 l_tagName9[2] = {MULTI_CHAR('w_no_m'), MULTI_CHAR('w_yes_m')};
     static u64 l_tagName10[2] = {
-        'w_no_g',
-        'w_yes_g',
+        MULTI_CHAR('w_no_g'),
+        MULTI_CHAR('w_yes_g'),
     };
-    static u64 l_tagName11[2] = {'w_no_gr', 'w_yes_gr'};
+    static u64 l_tagName11[2] = {MULTI_CHAR('w_no_gr'), MULTI_CHAR('w_yes_gr')};
     static u8 l_msgNum2[2] = {0x08, 0x07};
 
     mYnSel.ScrYn = new J2DScreen();
@@ -3336,12 +3336,12 @@ void dFile_select_c::screenSetYesNo() {
 }
 
 void dFile_select_c::screenSet3Menu() {
-    static u64 l_tagName6[3] = {'w_sat_mo', 'w_del_mo', 'w_cop_mo'};
-    static u64 l_tagName7[3] = {'w_sat_g', 'w_del_g', 'w_cop_g'};
-    static u64 l_tagName8[3] = {'w_sat_gr', 'w_del_gr', 'w_cop_gr'};
-    static u64 l_tagName1[3] = {'w_sta_n', 'w_del_n', 'w_cop_n'};
-    static u64 l_tagName011[3] = {'w_sta', 'w_del', 'w_cop_t'};
-    static u64 l_tagName011U[3] = {'f_sta', 'f_del', 'f_cop_t'};
+    static u64 l_tagName6[3] = {MULTI_CHAR('w_sat_mo'), MULTI_CHAR('w_del_mo'), MULTI_CHAR('w_cop_mo')};
+    static u64 l_tagName7[3] = {MULTI_CHAR('w_sat_g'), MULTI_CHAR('w_del_g'), MULTI_CHAR('w_cop_g')};
+    static u64 l_tagName8[3] = {MULTI_CHAR('w_sat_gr'), MULTI_CHAR('w_del_gr'), MULTI_CHAR('w_cop_gr')};
+    static u64 l_tagName1[3] = {MULTI_CHAR('w_sta_n'), MULTI_CHAR('w_del_n'), MULTI_CHAR('w_cop_n')};
+    static u64 l_tagName011[3] = {MULTI_CHAR('w_sta'), MULTI_CHAR('w_del'), MULTI_CHAR('w_cop_t')};
+    static u64 l_tagName011U[3] = {MULTI_CHAR('f_sta'), MULTI_CHAR('f_del'), MULTI_CHAR('f_cop_t')};
     static u8 l_msgNum[3] = {0x57, 0x58, 0x56};
 
     m3mSel.Scr3m = new J2DScreen();
@@ -3367,7 +3367,7 @@ void dFile_select_c::screenSet3Menu() {
     m3mBtk->searchUpdateMaterialID(m3mSel.Scr3m);
     m3mBtkFrame = 0;
 
-    m3mMenuPane = m3mSel.Scr3m->search('wmenu_n');
+    m3mMenuPane = m3mSel.Scr3m->search(MULTI_CHAR('wmenu_n'));
     m3mMenuPane->setAnimation(m3mBck);
     m3mBck->setFrame(799.0f);
     m3mMenuPane->animationTransform();
@@ -3411,13 +3411,13 @@ void dFile_select_c::screenSetDetail() {
     mSelDt.ScrDt->setAnimation(mSelDtBtk);
     mSelDtBtkFrame = 0;
 
-    mSelDt.mpPane2 = mSelDt.ScrDt->search('n_all');
-    mSelDtPane_mset = new CPaneMgr(mSelDt.ScrDt, 'mset_p_n', 0, NULL);
+    mSelDt.mpPane2 = mSelDt.ScrDt->search(MULTI_CHAR('n_all'));
+    mSelDtPane_mset = new CPaneMgr(mSelDt.ScrDt, MULTI_CHAR('mset_p_n'), 0, NULL);
 
     mpFileSelect3d->setBasePane(mSelDtPane_mset);
-    mpFileSelect3d->setBase2Pane(fileSel.Scr->search('w_sub_n'));
+    mpFileSelect3d->setBase2Pane(fileSel.Scr->search(MULTI_CHAR('w_sub_n')));
 
-    mSelDt.ScrDt->search('d_win_n')->setUserInfo('n_43');
+    mSelDt.ScrDt->search(MULTI_CHAR('d_win_n'))->setUserInfo('n_43');
 }
 
 void dFile_select_c::setWakuAnm() {

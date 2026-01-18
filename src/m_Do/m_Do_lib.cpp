@@ -120,11 +120,11 @@ void mDoLib_pos2camera(Vec* src, Vec* dst) {
 
 static void dummy() {
     J3DAlphaComp* alphaComp = NULL;
-    alphaComp->setAlphaCompInfo((J3DAlphaCompInfo){});
+    alphaComp->setAlphaCompInfo(COMPOUND_LITERAL(J3DAlphaCompInfo){});
     J3DPEBlock* peBlock = NULL;
-    peBlock->getZMode()->setZModeInfo((J3DZModeInfo){});
+    peBlock->getZMode()->setZModeInfo(COMPOUND_LITERAL(J3DZModeInfo){});
     dComIfGd_getInvViewMtx();
     J3DMaterial* mat = NULL;
     mat->getTevKColor(0);
-    mDoLib_clipper::clip(j3dSys.getViewMtx(), (Vec){}, 0.0f);
+    mDoLib_clipper::clip(j3dSys.getViewMtx(), COMPOUND_LITERAL(Vec){}, 0.0f);
 }
