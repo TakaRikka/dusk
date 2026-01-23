@@ -463,9 +463,9 @@ void daNpc_Hanjo_c::setParam() {
             sVar4 = 9;
         }
     }
-    attention_info.distances[0] = daNpcT_getDistTableIdx(sVar4, sVar1);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] = daNpcT_getDistTableIdx(sVar6, sVar5);
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(sVar4, sVar1);
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(sVar6, sVar5);
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
     scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale,
               mpHIO->m.common.scale);

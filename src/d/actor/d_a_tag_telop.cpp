@@ -52,12 +52,15 @@ static int daTag_Telop_IsDelete(daTag_Telop_c* i_this) {
 }
 
 static int daTag_Telop_Delete(daTag_Telop_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTag_Telop_c();
     return 1;
 }
 
 static int daTag_Telop_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTag_Telop_c*>(i_this)->create();
+    daTag_Telop_c* telop = static_cast<daTag_Telop_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return telop->create();
 }
 
 static actor_method_class l_daTag_Telop_Method = {

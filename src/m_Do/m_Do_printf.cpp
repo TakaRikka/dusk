@@ -214,57 +214,63 @@ void OSReport_FatalError(const char* fmt, ...) {
 
 void OSReport_Error(const char* fmt, ...) {
     print_errors++;
-    if (!__OSReport_Error_disable) {
-        #if DEBUG
-        OSThread* thread = mDoExt_GetCurrentRunningThread();
-        if (thread != NULL) {
-            OSLockMutex(&print_mutex);
-        }
-        #endif
-
-        va_list args;
-        va_start(args, fmt);
-        OSReportForceEnableOn();
-        my_PutString("\x1B[41;37m[ERROR]");
-        OSVReport(fmt, args);
-        my_PutString("\x1B[m");
-        OSReportForceEnableOff();
-        fflush(stdout);
-        va_end(args);
-
-        #if DEBUG
-        if (thread != NULL) {
-            OSUnlockMutex(&print_mutex);
-        }
-        #endif
+    if (__OSReport_Error_disable) {
+        return;
     }
+
+    #if DEBUG
+    OSThread* thread = mDoExt_GetCurrentRunningThread();
+    if (thread != NULL) {
+        OSLockMutex(&print_mutex);
+    }
+    #endif
+
+    va_list args;
+    va_start(args, fmt);
+    OSReportForceEnableOn();
+    my_PutString("\x1B[41;37m[ERROR]");
+    OSVReport(fmt, args);
+    my_PutString("\x1B[m");
+    OSReportForceEnableOff();
+    fflush(stdout);
+    va_end(args);
+
+    #if DEBUG
+    if (thread != NULL) {
+        OSUnlockMutex(&print_mutex);
+    }
+    #endif
 }
 
 void OSReport_Warning(const char* fmt, ...) {
     print_warings++;
-    if (!__OSReport_Warning_disable) {
-        va_list args;
-        va_start(args, fmt);
-        OSReportForceEnableOn();
-        my_PutString("\x1B[43;30m[WARN]");
-        OSVAttention(fmt, args);
-        my_PutString("\x1B[m");
-        OSReportForceEnableOff();
-        fflush(stdout);
-        va_end(args);
+    if (__OSReport_Warning_disable) {
+        return;
     }
+
+    va_list args;
+    va_start(args, fmt);
+    OSReportForceEnableOn();
+    my_PutString("\x1B[43;30m[WARN]");
+    OSVAttention(fmt, args);
+    my_PutString("\x1B[m");
+    OSReportForceEnableOff();
+    fflush(stdout);
+    va_end(args);
 }
 
 void OSReport_System(const char* fmt, ...) {
     print_systems++;
-    if (!__OSReport_System_disable) {
-        va_list args;
-        va_start(args, fmt);
-        OSReportForceEnableOn();
-        OSVAttention(fmt, args);
-        OSReportForceEnableOff();
-        va_end(args);
+    if (__OSReport_System_disable) {
+        return;
     }
+
+    va_list args;
+    va_start(args, fmt);
+    OSReportForceEnableOn();
+    OSVAttention(fmt, args);
+    OSReportForceEnableOff();
+    va_end(args);
 }
 
 void OSPanic(const char* file, int line, const char* fmt, ...) {
@@ -286,6 +292,6 @@ void OSPanic(const char* file, int line, const char* fmt, ...) {
 
     // force a crash by writing to an invalid address
     tmp = (u32*)0x1234567;
-    *tmp = 0x1234567;
+    *tmp = (uintptr_t)tmp;
     PPCHalt();
 }

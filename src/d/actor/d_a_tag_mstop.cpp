@@ -14,7 +14,7 @@
 int daTagMstop_c::create() {
     fopAcM_ct(this, daTagMstop_c);
 
-    field_0x56b = fopAcM_GetParam(this) >> 16;
+    field_0x56b = (fopAcM_GetParam(this) >> 16) & 0xFF;
     field_0x56a = (fopAcM_GetParam(this) >> 24) & 0xF;
 
     if (field_0x56a == 1 || field_0x56a == 2) {
@@ -40,23 +40,17 @@ int daTagMstop_c::create() {
         field_0x572 = 0xFFFF;
     }
 
-    f32 tmp = scale.x;
-    tmp *= 10000.0f * scale.x;
-
-    field_0x5c0 = tmp;
+    field_0x5c0 = scale.x * (scale.x * 10000.0f);
     field_0x5c4 = current.pos.y + scale.y * 100.0f;
 
+    u16 param = fopAcM_GetParam(this);
     csXyz pos_angle;
-
-    daNpcF_getPlayerInfoFromPlayerList(fopAcM_GetParam(this) & 0xFFFF, fopAcM_GetRoomNo(this),
-                                       field_0x5c8, pos_angle);
-
-    u8 idx = field_0x56b;
+    daNpcF_getPlayerInfoFromPlayerList(param, fopAcM_GetRoomNo(this), field_0x5c8, pos_angle);
 
     if (!checkNoAttention()) {
-        s32 room = fopAcM_GetRoomNo(this);
-        stage_arrow_data_class* arrowData = &dComIfGp_getRoomArrow(room)
-                         ->m_entries[dComIfGp_getRoomCamera(room)->m_entries[idx].m_arrow_idx];
+        stage_arrow_data_class* arrowData = &dComIfGp_getRoomArrow(fopAcM_GetRoomNo(this))->
+                m_entries[dComIfGp_getRoomCamera(fopAcM_GetRoomNo(this))->
+                                m_entries[field_0x56b].m_arrow_idx];
 
         eyePos.set(arrowData->posX, arrowData->posY, arrowData->posZ);
         attention_info.position = eyePos;
@@ -67,12 +61,15 @@ int daTagMstop_c::create() {
 }
 
 static int daTagMstop_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagMstop_c*>(i_this)->create();
+    daTagMstop_c* mstop = static_cast<daTagMstop_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return mstop->create();
 }
 
 daTagMstop_c::~daTagMstop_c() {}
 
 static int daTagMstop_Delete(daTagMstop_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagMstop_c();
     return 1;
 }

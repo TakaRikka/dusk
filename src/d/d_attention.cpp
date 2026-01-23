@@ -97,38 +97,38 @@ dAttParam_c::~dAttParam_c() {
 
 #if DEBUG
 void dAttParam_c::genMessage(JORMContext* mctx) {
-    mctx->genCheckBox(" リスト表示", &mFlags, 0x4000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox(" 有効", &mFlags, 4, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox(" ホールドモード", &mFlags, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox(" 矢印表示OFF", &mFlags, 0x10, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("カーソル", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("選択時", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("スケールＸ", &mSelCursorScaleX, 1.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("スケールＹ", &mSelCursorScaleY, 1.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("Y Pos Offset", &mSelCursorOffsetY, -100.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("注目時", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("スケールＸ", &mAttnCursorScaleX, 1.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("スケールＹ", &mAttnCursorScaleY, 1.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("Y Pos Offset", &mAttnCursorOffsetY, -100.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("出現フレーム", &mAttnCursorAppearFrames, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("消去フレーム", &mAttnCursorDisappearFrames, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("アニメーションスピード", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("選択時", &field_0x38, 1.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("注目時", &field_0x3c, 1.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" SW Mode 解除", &mSWModeDisable, -1.0f, 0.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox(" 表示デバック", &mFlags, 2, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" 警告ＢＧＭ距離", &mDangerBGMDistance, 0.0f, 8000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("     + マージン", &mBGMDistMargin, 0.0f, 8000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox(" デバッグ表示", &mFlags, 0x8000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("   表示位置 Ｘ", &mDebugDispPosX, 0, 0x280, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("            Ｙ", &mDebugDispPosY, 0, 0x1e0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox(" KEEP挙動", &mFlags, 8, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genCheckBox(" リスト表示", &mFlags, 0x4000);
+    mctx->genLabel("-", 0);
+    mctx->genCheckBox(" 有効", &mFlags, 0x4);
+    mctx->genCheckBox(" ホールドモード", &mFlags, 0x1);
+    mctx->genCheckBox(" 矢印表示OFF", &mFlags, 0x10);
+    mctx->genLabel("カーソル", 0);
+    mctx->genLabel("選択時", 0);
+    mctx->genSlider("スケールＸ", &mSelCursorScaleX, 1.0f, 100.0f);
+    mctx->genSlider("スケールＹ", &mSelCursorScaleY, 1.0f, 100.0f);
+    mctx->genSlider("Y Pos Offset", &mSelCursorOffsetY, -100.0f, 100.0f);
+    mctx->genLabel("注目時", 0);
+    mctx->genSlider("スケールＸ", &mAttnCursorScaleX, 1.0f, 100.0f);
+    mctx->genSlider("スケールＹ", &mAttnCursorScaleY, 1.0f, 100.0f);
+    mctx->genSlider("Y Pos Offset", &mAttnCursorOffsetY, -100.0f, 100.0f);
+    mctx->genSlider("出現フレーム", &mAttnCursorAppearFrames, 0, 0xff);
+    mctx->genSlider("消去フレーム", &mAttnCursorDisappearFrames, 0, 0xff);
+    mctx->genLabel("アニメーションスピード", 0);
+    mctx->genSlider("選択時", &field_0x38, 1.0f, 100.0f);
+    mctx->genSlider("注目時", &field_0x3c, 1.0f, 100.0f);
+    mctx->genLabel("-", 0);
+    mctx->genSlider(" SW Mode 解除", &mSWModeDisable, -1.0f, 0.0f);
+    mctx->genLabel("-", 0);
+    mctx->genCheckBox(" 表示デバック", &mFlags, 0x2);
+    mctx->genLabel("-", 0);
+    mctx->genSlider(" 警告ＢＧＭ距離", &mDangerBGMDistance, 0.0f, 8000.0f);
+    mctx->genSlider("     + マージン", &mBGMDistMargin, 0.0f, 8000.0f);
+    mctx->genLabel("-", 0);
+    mctx->genCheckBox(" デバッグ表示", &mFlags, 0x8000);
+    mctx->genSlider("   表示位置 Ｘ", &mDebugDispPosX, 0, 0x280);
+    mctx->genSlider("            Ｙ", &mDebugDispPosY, 0, 0x1e0);
+    mctx->genCheckBox(" KEEP挙動", &mFlags, 0x8);
+    mctx->genLabel("-", 0);
 }
 #endif
 
@@ -139,8 +139,8 @@ dAttDrawParam_c::dAttDrawParam_c() {
 
 #if DEBUG
 void dAttDrawParam_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("カーソル", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("距離", &mCursorDistance, 0.0f, 500000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("カーソル", 0);
+    mctx->genSlider("距離", &mCursorDistance, 0.0f, 500000.0f);
 }
 #endif
 

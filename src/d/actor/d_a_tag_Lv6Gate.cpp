@@ -10,29 +10,32 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
 
-static int createSolidHeap(fopAc_ac_c* i_this) {
-    return static_cast<daTagLv6Gate_c*>(i_this)->createHeap();
-}
-
 static f32 const l_minRelative[] = {-700.0f, -300.0f, -2000.0f};
 
 static f32 const l_maxRelative[] = {700.0f, 0.0f, 1000.0f};
 
 static char* l_arcName = "Lv6Gate";
 
-int daTagLv6Gate_c::createHeap() {
+static int createSolidHeap(fopAc_ac_c* i_this) {
+    daTagLv6Gate_c* gate = static_cast<daTagLv6Gate_c*>(i_this);
+    return gate->createHeap();
+}
+
+inline int daTagLv6Gate_c::createHeap() {
     J3DAnmTextureSRTKey* btk;
 
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 15);
-    mpModel[0] = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000284);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 15);
+    JUT_ASSERT(92, modelData != NULL);
+    mpModel[0] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000284);
     if (mpModel[0] == NULL) {
         return 0;
     }
 
     btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 19);
+    JUT_ASSERT(100, btk != NULL);
     mpBtk[0] = new mDoExt_btkAnm();
     if (mpBtk[0] == NULL ||
-        !mpBtk[0]->init(model_data, btk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1))
+        !mpBtk[0]->init(modelData, btk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1))
     {
         return 0;
     }
@@ -42,15 +45,17 @@ int daTagLv6Gate_c::createHeap() {
     }
 
     btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 20);
+    JUT_ASSERT(108, btk != NULL);
     mpBtk[1] = new mDoExt_btkAnm();
     if (mpBtk[1] == NULL ||
-        !mpBtk[1]->init(model_data, btk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1))
+        !mpBtk[1]->init(modelData, btk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1))
     {
         return 0;
     }
 
-    model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 16);
-    mpModel[1] = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 16);
+    JUT_ASSERT(115, modelData != NULL);
+    mpModel[1] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
     if (mpModel[1] == NULL) {
         return 0;
     }
@@ -68,7 +73,9 @@ int daTagLv6Gate_c::createHeap() {
 }
 
 static int daTagLv6Gate_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagLv6Gate_c*>(i_this)->create();
+    daTagLv6Gate_c* gate = static_cast<daTagLv6Gate_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return gate->create();
 }
 
 void daTagLv6Gate_c::initBaseMtx() {
@@ -76,13 +83,13 @@ void daTagLv6Gate_c::initBaseMtx() {
 
     mDoMtx_stack_c::transS(0.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::YrotM(0);
-    MTXCopy(mDoMtx_stack_c::get(), field_0x6f8[0]);
+    cMtx_copy(mDoMtx_stack_c::get(), field_0x6f8[0]);
     mpModel[0]->setBaseTRMtx(mDoMtx_stack_c::get());
     mBgW[0].Move();
 
     mDoMtx_stack_c::transS(0.0f, 2887.0f, -8330.0f);
     mDoMtx_stack_c::YrotM(0);
-    MTXCopy(mDoMtx_stack_c::get(), field_0x6f8[1]);
+    cMtx_copy(mDoMtx_stack_c::get(), field_0x6f8[1]);
     mpModel[1]->setBaseTRMtx(mDoMtx_stack_c::get());
     mBgW[1].Move();
 }
@@ -159,27 +166,25 @@ inline int daTagLv6Gate_c::execute() {
                     actor1 = NULL;
                     fopAcM_SearchByID(parentActorID, &actor1);
 
-                    if (actor1 == NULL) {
-                        break;
+                    if (actor1 != NULL) {
+                        fopAcM_GetOldPosition_p(actor1)->set(pos);
+                        fopAcM_GetPosition_p(actor1)->set(pos);
+
+#if PLATFORM_GCN
+                        actor2 = NULL;
+                        fopAcM_SearchByName(PROC_NPC_TKC, &actor2);
+
+                        if (actor2 == NULL) {
+                            break;
+                        }
+
+                        *fopAcM_GetOldPosition_p(actor2) = pos;
+                        *fopAcM_GetPosition_p(actor2) = pos;
+#endif
                     }
-
-                    fopAcM_GetOldPosition_p(actor1)->set(pos);
-                    fopAcM_GetPosition_p(actor1)->set(pos);
-
-                    #if VERSION != VERSION_SHIELD_DEBUG
-
-                    actor2 = NULL;
-                    fopAcM_SearchByName(PROC_NPC_TKC, &actor2);
-
-                    if (actor2 == NULL) {
-                        break;
-                    }
-
-                    *fopAcM_GetOldPosition_p(actor2) = pos;
-                    *fopAcM_GetPosition_p(actor2) = pos;
-                    #endif
-                    break;
                 }
+                case '0005':
+                    break;
                 case '0006':
                     fopAcM_onSwitch(this, getSwitchNo2());
                     mpBtk[0]->setFrame(mpBtk[0]->getEndFrame());
@@ -189,7 +194,9 @@ inline int daTagLv6Gate_c::execute() {
                     fopAcM_delete(parentActorID);
                     break;
                 default:
+                    int unused; // debug: force extra b instruction at end of case
                     JUT_ASSERT(332, FALSE);
+                    break;
                 }
             }
 
@@ -333,8 +340,8 @@ int daTagLv6Gate_c::draw() {
     }
 
     for (u16 i = 0; i < 2; i++) {
-        J3DModelData* model_data = mpModel[1]->getModelData();
-        model_data->getMaterialNodePointer(i)->getTevKColor(3)->a = field_0x760[i];
+        J3DMaterial* material = mpModel[1]->getModelData()->getMaterialNodePointer(i);
+        material->getTevKColor(3)->a = field_0x760[i];
     }
 
     g_env_light.setLightTevColorType_MAJI(mpModel[1], &tevStr);
@@ -360,6 +367,7 @@ daTagLv6Gate_c::~daTagLv6Gate_c() {
 }
 
 static int daTagLv6Gate_Delete(daTagLv6Gate_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagLv6Gate_c();
     return 1;
 }

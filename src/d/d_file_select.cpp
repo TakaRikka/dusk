@@ -84,26 +84,26 @@ dFs_HIO_c::dFs_HIO_c() {
 
 #if DEBUG
 void dFs_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("\n*****タイトルメッセージチェック*****\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("ＯＮ", &title_mesg_check, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("\n*****タイトルメッセージチェック*****\n", 0);
+    mctx->genCheckBox("ＯＮ", &title_mesg_check, 0x1);
 
-    mctx->genLabel("\n*****エラーメッセージチェック*****\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("ＯＮ", &error_mesg_check, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("\n*****エラーメッセージチェック*****\n", 0);
+    mctx->genCheckBox("ＯＮ", &error_mesg_check, 0x1);
 
-    mctx->genLabel("\n*****出現　表示調整*****\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("表示待ちフレーム", &appear_display_wait_frames, 0, 120, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("カード待ちフレーム", &card_wait_frames, 0, 120, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("本エフェクト出現フレーム", &base_effect_appear_frames, 0, 120, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字切り替えフレーム", &char_switch_frames, 0, 120, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("選択アイコン", &select_icon_appear_frames, 0, 120, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("選択枠", &select_box_appear_frames, 0, 120, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("\n*****出現　表示調整*****\n", 0);
+    mctx->genSlider("表示待ちフレーム", &appear_display_wait_frames, 0, 120);
+    mctx->genSlider("カード待ちフレーム", &card_wait_frames, 0, 120);
+    mctx->genSlider("本エフェクト出現フレーム", &base_effect_appear_frames, 0, 120);
+    mctx->genSlider("文字切り替えフレーム", &char_switch_frames, 0, 120);
+    mctx->genSlider("選択アイコン", &select_icon_appear_frames, 0, 120);
+    mctx->genSlider("選択枠", &select_box_appear_frames, 0, 120);
 
-    mctx->genLabel("\nコピー、消去エフェクト出現、消去\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("フレーム数", &copy_erase_frames, 0, 120, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("\nコピー、消去エフェクト出現、消去\n", 0);
+    mctx->genSlider("フレーム数", &copy_erase_frames, 0, 120);
 
-    mctx->genLabel("\n***** 鏡、仮面表示テスト *****\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("ＯＮ", &mask_mirror_test_display, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->startComboBox("仮面", &test_mask_display, 0, NULL, 0xFFFF, 0xFFFF, 0x100, 0x1a);
+    mctx->genLabel("\n***** 鏡、仮面表示テスト *****\n", 0);
+    mctx->genCheckBox("ＯＮ", &mask_mirror_test_display, 0x1);
+    mctx->startComboBox("仮面", &test_mask_display);
     mctx->genComboBoxItem("０", 0);
     mctx->genComboBoxItem("１", 1);
     mctx->genComboBoxItem("２", 2);
@@ -111,7 +111,7 @@ void dFs_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("４", 4);
     mctx->endComboBox();
 
-    mctx->startComboBox("鏡", &test_mirror_display, 0, NULL, 0xFFFF, 0xFFFF, 0x100, 0x1a);
+    mctx->startComboBox("鏡", &test_mirror_display);
     mctx->genComboBoxItem("０", 0);
     mctx->genComboBoxItem("１", 1);
     mctx->genComboBoxItem("２", 2);
@@ -119,10 +119,10 @@ void dFs_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("４", 4);
     mctx->endComboBox();
 
-    mctx->genLabel("\n*****テスト調整*****\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("フレーム１", &test_frame_counts[0], 1.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("フレーム２", &test_frame_counts[1], 1.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("フレーム３", &test_frame_counts[2], 1.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("\n*****テスト調整*****\n", 0);
+    mctx->genSlider("フレーム１", &test_frame_counts[0], 1.0f, 5.0f);
+    mctx->genSlider("フレーム２", &test_frame_counts[1], 1.0f, 5.0f);
+    mctx->genSlider("フレーム３", &test_frame_counts[2], 1.0f, 5.0f);
 }
 #endif
 

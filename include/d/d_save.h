@@ -523,11 +523,11 @@ public:
     void setPointer(bool i_mPointer) { mPointer = i_mPointer; }
 
     enum dSv_config_language {
-        LANGAUGE_ENGLISH,
-        LANGAUGE_GERMAN,
-        LANGAUGE_FRENCH,
-        LANGAUGE_SPANISH,
-        LANGAUGE_ITALIAN,
+        LANGUAGE_ENGLISH,
+        LANGUAGE_GERMAN,
+        LANGUAGE_FRENCH,
+        LANGUAGE_SPANISH,
+        LANGUAGE_ITALIAN,
     };
 
 private:
@@ -819,7 +819,7 @@ public:
     u32 getLastMode() const { return mLastMode; }
     s8 getRoomNo() const { return mRoomNo; }
     u32 getRoomParam() const { return mRoomParam; }
-    cXyz& getRoomPos() { return mRoomPos; }
+    const cXyz& getRoomPos() const { return mRoomPos; }
     s16 getRoomAngleY() const { return mRoomAngleY; }
     s16 getLastAngleY() const { return mLastAngleY; }
     f32 getLastSpeedF() const { return mLastSpeedF; }
@@ -848,7 +848,7 @@ public:
     void set(const cXyz& i_position, s16 i_angleY, s8, u32 i_param);
 
     u32 getParam() const { return mParam; }
-    cXyz& getPos() { return mPosition; }
+    const cXyz& getPos() const { return mPosition; }
     s16 getAngleY() const { return mAngleY; }
     s8 getRoomNo() const { return unk18; }
 
@@ -996,7 +996,7 @@ public:
 
 #if DEBUG
     /* 0x000 */ u8 unk_0x0;
-    /* 0x001 */ u8 unk_0x1;
+    /* 0x001 */ char unk_0x1;
     /* 0x000 */ u8 unk_0x2[0x48 - 0x2];
 #endif
     /* 0x000 */ dSv_save_c mSavedata;

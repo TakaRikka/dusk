@@ -69,21 +69,21 @@ daE_HZ_HIO_c::daE_HZ_HIO_c() {
 
 #if DEBUG
 void daE_HZ_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("  敵サンプル", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("基本サイズ", &basic_size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genCheckBox("PL発見半径表示", &pl_detection_radius_display, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("PL発見半径（内）", &pl_detection_radius_in, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("PL発見半径（外）", &pl_detection_radius_outside, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("逃げ速度", &escape_speed, 0.0f, 200.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("ぴより時間", &piyori_time, 0.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("巻き込み回転速度", &reeling_rotation_speed, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("巻き込みＹ位置", &y_position_wrap, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("伸び溜め時間", &extension_time, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("伸びアニメ速度", &stretch_anim_speed, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("伸び前の溜め時間", &retention_time_before_stretch, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genLabel("カメラ用タイマー", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("オンタイマー", &camera_on_timer, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("オフタイマー", &camera_off_timer, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genLabel("  敵サンプル", 0x80000001);
+    ctx->genSlider("基本サイズ", &basic_size, 0.0f, 5.0f);
+    ctx->genCheckBox("PL発見半径表示", &pl_detection_radius_display, 0x1);
+    ctx->genSlider("PL発見半径（内）", &pl_detection_radius_in, 0.0f, 5000.0f);
+    ctx->genSlider("PL発見半径（外）", &pl_detection_radius_outside, 0.0f, 5000.0f);
+    ctx->genSlider("逃げ速度", &escape_speed, 0.0f, 200.0f);
+    ctx->genSlider("ぴより時間", &piyori_time, 0.0f, 500.0f);
+    ctx->genSlider("巻き込み回転速度", &reeling_rotation_speed, 0.0f, 10000.0f);
+    ctx->genSlider("巻き込みＹ位置", &y_position_wrap, 0.0f, 1000.0f);
+    ctx->genSlider("伸び溜め時間", &extension_time, 0.0f, 100.0f);
+    ctx->genSlider("伸びアニメ速度", &stretch_anim_speed, 0.0f, 1.0f);
+    ctx->genSlider("伸び前の溜め時間", &retention_time_before_stretch, 0.0f, 100.0f);
+    ctx->genLabel("カメラ用タイマー", 0x80000001);
+    ctx->genSlider("オンタイマー", &camera_on_timer, 0.0f, 100.0f);
+    ctx->genSlider("オフタイマー", &camera_off_timer, 0.0f, 100.0f);
 }
 #endif
 
@@ -1634,7 +1634,7 @@ void daE_HZ_c::action() {
         setActionMode(ACTION_WATER_DEATH);
     }
 
-    attention_info.flags = 4;
+    attention_info.flags = fopAc_AttnFlag_BATTLE_e;
     field_0x566 = 1;
 
     switch (mAction) {
@@ -1870,7 +1870,7 @@ int daE_HZ_c::_delete() {
 }
 
 static int daE_HZ_Delete(daE_HZ_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_HZ");
     return i_this->_delete();
 }
 

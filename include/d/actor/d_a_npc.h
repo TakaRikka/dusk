@@ -817,6 +817,12 @@ STATIC_ASSERT(sizeof(daNpcT_c) == 0xE40);
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e); \
     }
 
+#if DEBUG
+    #define NpcT_CHK_ACTION(ClassName) chkAction(&ClassName::test)
+#else
+    #define NpcT_CHK_ACTION(ClassName) FALSE
+#endif
+
 BOOL daNpcT_chkEvtBit(u32 i_idx);
 BOOL daNpcT_chkPointInArea(cXyz param_0, cXyz param_1, cXyz param_2, s16 param_3, BOOL param_4);
 u8 daNpcT_getDistTableIdx(int param_0, int param_1);

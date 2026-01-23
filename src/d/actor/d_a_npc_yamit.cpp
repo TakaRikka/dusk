@@ -235,7 +235,7 @@ int daNpc_yamiT_c::CreateHeap() {
 }
 
 int daNpc_yamiT_c::Delete() {
-    fpc_ProcID reg_r30 = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_YAMIT");
     this->~daNpc_yamiT_c();
     return 1;
 }

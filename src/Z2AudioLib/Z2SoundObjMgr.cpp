@@ -143,7 +143,7 @@ void Z2SoundObjMgr::searchEnemy() {
         Z2Calc::CURVE_POSITIVE);
     f32 veryFarDist = 5000.0f;
 
-    for (JSULink<Z2CreatureEnemy>* i = getFirst(); i != NULL; i = i->getNext()) {
+    for (JSULink<Z2CreatureEnemy>* i = field_0x0.getFirst(); i != NULL; i = i->getNext()) {
         Z2CreatureEnemy* enemy = i->getObject();
         if (enemy == NULL) {
             JUT_WARN_DEVICE(100, 1, "%s", "[Z2SoundObjMgr::searchEnemy] remain remove enemy\n");
@@ -349,7 +349,7 @@ u8 Z2SoundObjMgr::getEnemyID(const char* enemyName, JSULink<Z2CreatureEnemy>* en
     if (enemyName != NULL) {
         for (u8 i = 0; i < ARRAY_SIZEU(mEnemyInfo); i++) {
             if (strcmp(enemyName, mEnemyInfo[(u32)i].mName) == 0) {
-                append(enemyLink);
+                field_0x0.append(enemyLink);
                 return i;
             }
         }
@@ -379,7 +379,7 @@ void Z2SoundObjMgr::deleteEnemyAll() {
     JSULink<Z2CreatureEnemy>* i;
 
     // not moving the pointer forward looks like a bug, but deleteObject() actually unlinks the enemy from its owning list
-    while (i = getFirst(), i != NULL) {
+    while (i = field_0x0.getFirst(), i != NULL) {
         Z2CreatureEnemy* enemy = i->getObject();
         if (enemy == NULL) {
             JUT_WARN_DEVICE(367, 1, "%s", "[Z2SoundObjMgr::searchEnemy] remain remove enemy\n");
@@ -399,7 +399,7 @@ bool Z2SoundObjMgr::removeEnemy(JSULink<Z2CreatureEnemy>* enemyLink) {
         field_0x18--;
     }
 
-    bool result = remove(enemyLink);
+    bool result = field_0x0.remove(enemyLink);
     return result;
 }
 

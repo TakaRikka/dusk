@@ -277,13 +277,7 @@ int daNpc_ZelRo_c::Draw() {
         mdlData_p->getMaterialNodePointer(getEyeballRMaterialNo())->setMaterialAnm(mpMatAnm[1]);
     }
 
-    return draw(
-#if DEBUG
-        chkAction(&daNpc_ZelRo_c::test),
-#else
-        FALSE,
-#endif
-        TRUE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE
+    return draw(NpcT_CHK_ACTION(daNpc_ZelRo_c), TRUE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE
     );
 }
 

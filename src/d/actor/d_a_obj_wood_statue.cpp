@@ -22,11 +22,10 @@ public:
 
     void genMessage(JORMContext* context) {
         // Wooden Statue
-        context->genLabel("木彫りの像", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+        context->genLabel("木彫りの像", 0);
 
         // Respawn timer
-        context->genSlider("全滅後の出現タイマー", &mRespawnTimer, 0, 200, 0, NULL, 0xffff, 0xffff,
-                           0x200, 0x18);
+        context->genSlider("全滅後の出現タイマー", &mRespawnTimer, 0, 200);
     }
 
     u8 mRespawnTimer;
@@ -447,21 +446,22 @@ int daObjWStatue_c::_delete() {
     return 1;
 }
 
-static int daObjWStatue_Draw(daObjWStatue_c * i_this) {
+static int daObjWStatue_Draw(daObjWStatue_c* i_this) {
     return i_this->draw();
 }
 
-static int daObjWStatue_Execute(daObjWStatue_c * i_this) {
+static int daObjWStatue_Execute(daObjWStatue_c* i_this) {
     return i_this->execute();
 }
 
-static int daObjWStatue_Delete(daObjWStatue_c * i_this) {
+static int daObjWStatue_Delete(daObjWStatue_c* i_this) {
     fopAcM_RegisterDeleteID(i_this, "ObjLife");
     return i_this->_delete();
 }
 
-static int daObjWStatue_Create(fopAc_ac_c * i_this) {
-    fopAcM_RegisterCreateID(daObjWStatue_c, i_this, "ObjLife");
+static int daObjWStatue_Create(fopAc_ac_c* i_this) {
+    daObjWStatue_c* a_this = (daObjWStatue_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "ObjLife");
     return a_this->create();
 }
 

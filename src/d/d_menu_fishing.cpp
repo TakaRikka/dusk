@@ -129,7 +129,7 @@ bool dMenu_Fishing_c::isSync() {
 void dMenu_Fishing_c::init() {
     #if VERSION == VERSION_GCN_PAL
     BOOL isEnglish = FALSE;
-    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_ENGLISH) {
+    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
         isEnglish = TRUE;
     }
     #endif

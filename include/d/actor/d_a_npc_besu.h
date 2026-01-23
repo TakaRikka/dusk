@@ -104,6 +104,7 @@ public:
     int nurse(void*);
     int giveHotWater(void*);
     int talk(void*);
+    BOOL test(void* param_0);
     daNpc_Besu_c(
             daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
             daNpcT_motionAnmData_c const* i_motionAnmData,

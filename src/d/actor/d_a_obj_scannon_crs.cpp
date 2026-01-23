@@ -87,8 +87,8 @@ int daSCannonCrs_c::create() {
                               -500.0f, -100.0f, -500.0f,
                               500.0f, 2500.0f, 500.0f);
 
-        attention_info.distances[1] = 54;
-        attention_info.distances[3] = 54;
+        attention_info.distances[fopAc_attn_TALK_e] = 54;
+        attention_info.distances[fopAc_attn_SPEAK_e] = 54;
 
         eventInfo.setArchiveName(l_arcName);
         mEvtIdx = dComIfGp_getEventManager().getEventIdx(this, l_eventName, 0xFF);

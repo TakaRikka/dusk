@@ -5,11 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
+#include "d/actor/d_a_horse.h"
 #include "d/actor/d_a_tag_hstop.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_debug_viewer.h"
 #include "d/d_meter2_info.h"
+#include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/actor/d_a_horse.h"
 
 int daTagHstop_c::create() {
     fopAcM_ct(this, daTagHstop_c);
@@ -42,16 +44,16 @@ int daTagHstop_c::create() {
 
     if (mPrm1 == 2) {
         if (daPy_py_c::checkRoomRestartStart()) {
-            if (!dComIfGs_isSwitch(0x8A, fopAcM_GetHomeRoomNo(this))) {
-                dComIfGs_onSwitch(0x8A, fopAcM_GetHomeRoomNo(this));
-            } else if (!dComIfGs_isSwitch(0x8B, fopAcM_GetHomeRoomNo(this))) {
-                dComIfGs_onSwitch(0x8B, fopAcM_GetHomeRoomNo(this));
-            } else if (!dComIfGs_isSwitch(0x8C, fopAcM_GetHomeRoomNo(this))) {
-                dComIfGs_onSwitch(0x8C, fopAcM_GetHomeRoomNo(this));
+            if (!fopAcM_isSwitch(this, 0x8A)) {
+                fopAcM_onSwitch(this, 0x8A);
+            } else if (!fopAcM_isSwitch(this, 0x8B)) {
+                fopAcM_onSwitch(this, 0x8B);
+            } else if (!fopAcM_isSwitch(this, 0x8C)) {
+                fopAcM_onSwitch(this, 0x8C);
             }
         }
 
-        if (dComIfGs_isSwitch(0x8C, fopAcM_GetHomeRoomNo(this))) {
+        if (fopAcM_isSwitch(this, 0x8C)) {
             field_0x574 = 0;
         } else {
             field_0x574 = 1200;
@@ -64,7 +66,9 @@ int daTagHstop_c::create() {
 }
 
 static int daTagHstop_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagHstop_c*>(i_this)->create();
+    daTagHstop_c* hStop = static_cast<daTagHstop_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return hStop->create();
 }
 
 daTagHstop_c::~daTagHstop_c() {
@@ -82,14 +86,15 @@ daTagHstop_c::~daTagHstop_c() {
 }
 
 static int daTagHstop_Delete(daTagHstop_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     static_cast<daTagHstop_c*>(i_this)->~daTagHstop_c();
     return 1;
 }
 
 void daTagHstop_c::setActive() {
     if (mPrm0 == 0xFF || mPrm1 == 2 ||
-        (mPrm1 == 0 && dComIfGs_isSwitch(mPrm0, fopAcM_GetHomeRoomNo(this))) ||
-        (mPrm1 == 1 && !dComIfGs_isSwitch(mPrm0, fopAcM_GetHomeRoomNo(this))))
+        (mPrm1 == 0 && fopAcM_isSwitch(this, mPrm0)) ||
+        (mPrm1 == 1 && !fopAcM_isSwitch(this, mPrm0)))
     {
         mActive = true;
     } else {
@@ -105,19 +110,18 @@ int daTagHstop_c::execute() {
             m_msgFlow.init(this, (u16)shape_angle.z, 0, NULL);
             field_0x573 = 3;
         } else if (m_msgFlow.doFlow(this, NULL, 0)) {
-            dComIfGp_getEvent()->reset();
+            dComIfGp_event_reset();
             field_0x573 = 0;
 
-            s16 arrow_num = dComIfGp_getItemMaxArrowNumCount();
-            dComIfGp_setItemArrowNumCount(arrow_num);
-            dComIfGs_onSwitch(0x8D, fopAcM_GetHomeRoomNo(this));
+            dComIfGp_setItemArrowNumCount(dComIfGp_getItemMaxArrowNumCount());
+            fopAcM_onSwitch(this, 0x8D);
         }
     } else {
         if (field_0x574 != 0) {
-            if (dComIfGs_isSwitch(0x8F, fopAcM_GetHomeRoomNo(this))) {
+            if (fopAcM_isSwitch(this, 0x8F)) {
                 field_0x574 = 0;
-            } else if (dComIfGp_getLinkPlayer()->checkSingleBoarBattleSecondBowReady()) {
-                dComIfGs_onSwitch(0x8F, fopAcM_GetHomeRoomNo(this));
+            } else if (daPy_getLinkPlayerActorClass()->checkSingleBoarBattleSecondBowReady()) {
+                fopAcM_onSwitch(this, 0x8F);
                 field_0x574 = 0;
             } else {
                 field_0x574--;
@@ -127,35 +131,35 @@ int daTagHstop_c::execute() {
         setActive();
 
         if (field_0x573) {
-            daHorse_c* horse_p = dComIfGp_getHorseActor();
+            daHorse_c* horse_p = (daHorse_c*)dComIfGp_getHorseActor();
 
             if (mPrm1 != 2 || dComIfGs_getArrowNum() != 0 || horse_p == NULL) {
                 field_0x573 = 0;
             } else if (field_0x573 == 1) {
-                if (dComIfGp_getHorseActor()->checkTurnStand() &&
-                    !dComIfGp_getHorseActor()->checkTurnStandCamera())
+                if (horse_p->checkTurnStand() &&
+                    !horse_p->checkTurnStandCamera())
                 {
                     field_0x573 = 2;
                 }
-            } else if (field_0x573 == 2 && !dComIfGp_getHorseActor()->checkTurnStand()) {
+            } else if (field_0x573 == 2 && !horse_p->checkTurnStand()) {
                 fopAcM_orderSpeakEvent(this, 0, 0);
                 eventInfo.onCondition(dEvtCnd_CANTALK_e);
             }
         } else if (mPrm1 == 2 && !dComIfGp_event_runCheck()) {
-            if (dComIfGs_getArrowNum() == 0 && !dComIfGs_isSwitch(0x8D, fopAcM_GetHomeRoomNo(this)))
+            if (dComIfGs_getArrowNum() == 0 && !fopAcM_isSwitch(this, 0x8D))
             {
-                dComIfGs_onSwitch(0x8D, fopAcM_GetHomeRoomNo(this));
+                fopAcM_onSwitch(this, 0x8D);
                 dMeter2Info_setFloatingFlow(43, 90, true);
 
-                if (!dComIfGs_isSwitch(0x8F, fopAcM_GetHomeRoomNo(this))) {
+                if (!fopAcM_isSwitch(this, 0x8F)) {
                     field_0x574 = 1200;
-                    dComIfGs_offSwitch(0x8A, fopAcM_GetHomeRoomNo(this));
-                    dComIfGs_offSwitch(0x8B, fopAcM_GetHomeRoomNo(this));
-                    dComIfGs_offSwitch(0x8C, fopAcM_GetHomeRoomNo(this));
+                    fopAcM_offSwitch(this, 0x8A);
+                    fopAcM_offSwitch(this, 0x8B);
+                    fopAcM_offSwitch(this, 0x8C);
                 }
-            } else if (field_0x574 == 0 && !dComIfGs_isSwitch(0x8F, fopAcM_GetHomeRoomNo(this))) {
-                dComIfGs_onSwitch(0x8F, fopAcM_GetHomeRoomNo(this));
-                dComIfGs_onSwitch(0x8E, fopAcM_GetHomeRoomNo(this));
+            } else if (field_0x574 == 0 && !fopAcM_isSwitch(this, 0x8F)) {
+                fopAcM_onSwitch(this, 0x8F);
+                fopAcM_onSwitch(this, 0x8E);
             }
         }
     }
@@ -167,7 +171,31 @@ static int daTagHstop_Execute(daTagHstop_c* i_this) {
     return i_this->execute();
 }
 
-static int daTagHstop_Draw(daTagHstop_c*) {
+static int daTagHstop_Draw(daTagHstop_c* i_this) {
+#if DEBUG
+    if (UREG_S(9) != 0) {
+        cXyz sp08[8];
+        sp08[0].set(-i_this->scale.x, i_this->scale.y, -i_this->scale.z);
+        sp08[1].set(i_this->scale.x, sp08[0].y, sp08[0].z);
+        sp08[2].set(sp08[0].x, sp08[0].y, i_this->scale.z);
+        sp08[3].set(sp08[1].x, sp08[0].y, sp08[2].z);
+        sp08[4].set(sp08[0].x, 0.0f, sp08[0].z);
+        sp08[5].set(sp08[1].x, 0.0f, sp08[1].z);
+        sp08[6].set(sp08[2].x, 0.0f, sp08[2].z);
+        sp08[7].set(sp08[3].x, 0.0f, sp08[3].z);
+
+        mDoMtx_stack_c::transS(i_this->current.pos);
+        mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
+
+        for (int i = 0; i < 8; i++) {
+            mDoMtx_stack_c::multVec(&sp08[i], &sp08[i]);
+        }
+
+        static GXColor color = {0xff, 0, 0xff, 0x80};
+        dDbVw_drawCube8pXlu(sp08, color);
+    }
+#endif
+
     return 1;
 }
 

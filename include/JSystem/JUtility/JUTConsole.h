@@ -6,6 +6,20 @@
 #include "JSystem/JUtility/JUTFont.h"
 #include <cstdarg>
 
+class JUTConsole;
+
+extern "C" void JUTConsole_print_f_va_(JUTConsole*, const char*, va_list);
+extern "C" void JUTSetReportConsole(JUTConsole*);
+extern "C" JUTConsole* JUTGetReportConsole();
+extern "C" void JUTSetWarningConsole(JUTConsole*);
+extern "C" JUTConsole* JUTGetWarningConsole();
+extern "C" void JUTWarningConsole_f_va(const char*, va_list);
+extern "C" void JUTReportConsole_f_va(const char*, va_list);
+extern "C" void JUTReportConsole_f(const char*, ...);
+extern "C" void JUTWarningConsole(const char* message);
+extern "C" void JUTWarningConsole_f(const char* message, ...);
+extern "C" void JUTReportConsole(const char* message);
+
 /**
 * @ingroup jsystem-jutility
 * 
@@ -95,6 +109,7 @@ public:
 
     void scrollToLastLine() { scroll(mMaxLines); }
     void scrollToFirstLine() { scroll(-mMaxLines); }
+    void print_f_va(const char* fmt, va_list args) { JUTConsole_print_f_va_(this, fmt, args); }
 
     /* 0x18 */ JGadget::TLinkListNode mListNode;
     /* 0x20 */ unsigned int field_0x20;
@@ -153,17 +168,5 @@ private:
     /* 0x0C */ JUTConsole* mActiveConsole;
     /* 0x10 */ JUTConsole* mDirectConsole;
 };  // Size: 0x14
-
-extern "C" void JUTConsole_print_f_va_(JUTConsole*, const char*, va_list);
-extern "C" void JUTSetReportConsole(JUTConsole*);
-extern "C" JUTConsole* JUTGetReportConsole();
-extern "C" void JUTSetWarningConsole(JUTConsole*);
-extern "C" JUTConsole* JUTGetWarningConsole();
-extern "C" void JUTWarningConsole_f_va(const char*, va_list);
-extern "C" void JUTReportConsole_f_va(const char*, va_list);
-extern "C" void JUTReportConsole_f(const char*, ...);
-extern "C" void JUTWarningConsole(const char* message);
-extern "C" void JUTWarningConsole_f(const char* message, ...);
-extern "C" void JUTReportConsole(const char* message);
 
 #endif /* JUTCONSOLE_H */

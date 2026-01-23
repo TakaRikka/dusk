@@ -86,8 +86,8 @@ daNpc_Du_HIO_c::daNpc_Du_HIO_c() {
 
 #if DEBUG
 void daNpc_Du_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("　アヒル", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("基本大きさ", &base_size, 0.0f, 3.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genLabel("　アヒル", 0x80000001);
+    ctx->genSlider("基本大きさ", &base_size, 0.0f, 3.0f);
 }
 #endif
 
@@ -584,7 +584,7 @@ static int daNpc_Du_IsDelete(npc_du_class* i_this) {
 
 static int daNpc_Du_Delete(npc_du_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "Npc_Du");
 
     dComIfG_resDelete(&i_this->mPhase, "Npc_Du");
 

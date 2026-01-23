@@ -119,6 +119,7 @@ void mDoLib_pos2camera(Vec* src, Vec* dst) {
 }
 
 static void dummy() {
+    std::tan(0.0f);
     J3DAlphaComp* alphaComp = NULL;
     alphaComp->setAlphaCompInfo((J3DAlphaCompInfo){});
     J3DPEBlock* peBlock = NULL;

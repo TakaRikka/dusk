@@ -6,7 +6,7 @@
 
 class daTagLv6Gate_c : public fopAc_ac_c {
 public:
-    int createHeap();
+    inline int createHeap();
     int create();
     inline int execute();
     int draw();

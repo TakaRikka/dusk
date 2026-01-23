@@ -71,21 +71,19 @@ daE_NZ_HIO_c::daE_NZ_HIO_c() {
 #if DEBUG
 void daE_NZ_HIO_c::genMessage(JORMContext* ctx) {
     // Ghost Rat
-    ctx->genLabel("  幽霊ネズミ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("  幽霊ネズミ", 0x80000001);
     // Basic Size
-    ctx->genSlider("基本サイズ", &mBasicSize, 0.0f, 5.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("基本サイズ", &mBasicSize, 0.0f, 5.0f);
     // Basic Speed
-    ctx->genSlider("移動速度", &mSpeed, 0.0f, 30.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("移動速度", &mSpeed, 0.0f, 30.0f);
     // Attack Speed
-    ctx->genSlider("攻撃速度", &mAttackSpeed, 0.0f, 60.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("攻撃速度", &mAttackSpeed, 0.0f, 60.0f);
     // Attack Wait Time
-    ctx->genSlider("出現タイムラグ", &mWaitTime, 0, 0x23, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("出現タイムラグ", &mWaitTime, 0, 0x23);
     // Current alpha speed
-    ctx->genSlider("現α速度", &mCurrentAlphaSpeed, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider("現α速度", &mCurrentAlphaSpeed, 0.0f, 255.0f);
     // Vanishing alpha speed
-    ctx->genSlider("消α速度", &mVanishingAlphaSpeed, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider("消α速度", &mVanishingAlphaSpeed, 0.0f, 255.0f);
 }
 #endif
 

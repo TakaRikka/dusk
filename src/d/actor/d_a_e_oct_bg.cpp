@@ -684,7 +684,7 @@ void daE_OctBg_c::damage_check() {
             field_0x9f8.ChkAtHit())
         {
             if (field_0x9f8.ChkAtShieldHit()) {
-                if (daPy_getPlayerActorClass()->getCutType() == 41) {
+                if (daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_GUARD_ATTACK) {
                     setAction(&daE_OctBg_c::damage);
                     return;
                 }

@@ -10,10 +10,36 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
 
+class daTagCsw_HIO_c : public mDoHIO_entry_c {
+public:
+    daTagCsw_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    f32 field_0x8;
+};
+
 static const char* l_arcName = "Lv6Warp";
 
-#pragma push
-#pragma force_active on
+static int const l_bmd_idx[2] = {5, 6};
+
+static int const l_brk_idx[2] = {9, 10};
+
+static int const l_dbz_idx[2] = {13, 14};
+
+#if DEBUG
+static daTagCsw_HIO_c l_HIO;
+
+daTagCsw_HIO_c::daTagCsw_HIO_c() {
+    field_0x8 = 5.0f;
+}
+
+void daTagCsw_HIO_c::genMessage(JORMContext* ctx) {
+    ctx->genLabel("石像ワープ", 0);
+    ctx->genSlider("上昇速度", &field_0x8, 0.0f, 30.0f);
+}
+#endif
+
 static dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xffffffff, 0x0}, 0x19}}, // mObj
@@ -22,17 +48,14 @@ static dCcD_SrcCyl l_cyl_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {
-            {0.0f, 0.0f, 0.0f}, // mCenter
-            300.0f, // mRadius
-            600.0f // mHeight
-        } // mCyl
+            {
+                {0.0f, 0.0f, 0.0f}, // mCenter
+                300.0f, // mRadius
+                600.0f // mHeight
+            } // mCyl
     } // mCylAttr
 };
-#pragma pop
 
-#pragma push
-#pragma force_active on
 static dCcD_SrcCyl l_tg_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x400000, 0x11}, 0x0}}, // mObj
@@ -41,28 +64,15 @@ static dCcD_SrcCyl l_tg_src = {
         {0x0}, // mGObjCo
     }, // mObjInf
     {
-        {
-            {0.0f, 0.0f, 0.0f}, // mCenter
-            300.0f, // mRadius
-            600.0f // mHeight
-        } // mCyl
+            {
+                {0.0f, 0.0f, 0.0f}, // mCenter
+                300.0f, // mRadius
+                600.0f // mHeight
+            } // mCyl
     } // mCylAttr
 };
-#pragma pop
 
 daTagCsw_c::~daTagCsw_c() {}
-
-static u8 const l_bmd_idx[8] = {
-    0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x06,
-};
-
-static u8 const l_brk_idx[8] = {
-    0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0A,
-};
-
-static u8 const l_dbz_idx[8] = {
-    0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0E,
-};
 
 void daTagCsw_c::setMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
@@ -164,14 +174,13 @@ static int daTagCsw_c_createHeap(fopAc_ac_c* i_this) {
 
 int daTagCsw_c::chkInsideStatueStart() {
     bool rv = false;
+    bool var_r29;
     if (fopAcM_isSwitch(this, getSw())) {
-        bool bVar1 = true;
-        if (getSw() != 10) {
-            if (fopAcM_isSwitch(this, getSw() + 1)) {
-                bVar1 = false;
-            }
+        var_r29 = true;
+        if (getSw() != 10 && fopAcM_isSwitch(this, getSw() + 1)) {
+            var_r29 = false;
         }
-        if (bVar1) {
+        if (var_r29) {
             rv = true;
         }
     }
@@ -180,6 +189,14 @@ int daTagCsw_c::chkInsideStatueStart() {
 
 int daTagCsw_c::create() {
     fopAcM_ct(this, daTagCsw_c);
+
+    if (getSw() < 0 || getSw() > 10) {
+        // "Stone statue warp tag: Switch bit is out of range:
+        //  Please use a save bit within the range (%d~%d)"
+        OS_REPORT_ERROR("石像ワープタグ：スイッチビットが範囲外:%dセーブビット(%d～%d)でお願いします。\n",
+                        getSw(), 0, 10);
+    }
+
     field_0x570 = getType();
     int rv = dComIfG_resLoad(this, l_arcName);
     if (rv == cPhs_COMPLEATE_e) {
@@ -191,7 +208,11 @@ int daTagCsw_c::create() {
             field_0x624 = 500.0f;
         } else if (chkInsideStatueStart()) {
             field_0x624 = 0.0f;
+#if DEBUG
+            field_0x628 = l_HIO.field_0x8;
+#else
             field_0x628 = 5.0f;
+#endif
             if (getSw2() != 0xff) {
                 fopAcM_onSwitch(this, getSw2());
             }
@@ -225,24 +246,27 @@ int daTagCsw_c::create() {
     return rv;
 }
 
-static void* searchTagCswOut(void* param_1, void* param_2) {
-    if (param_1 != NULL && fopAcM_IsActor(param_1) && fopAcM_GetProfName(param_1) == PROC_TAG_CSW &&
-        static_cast<daTagCsw_c*>(param_1)->getType() == 1)
-    {
-        if (static_cast<daTagCsw_c*>(param_1)->getSw() ==
-            static_cast<daTagCsw_c*>(param_2)->getSw())
-        {
-            return param_1;
+static void* searchTagCswOut(void* param_0, void* param_1) {
+    UNUSED(param_1);
+    if (param_0 != NULL && fopAcM_IsActor(param_0) && fopAcM_GetProfName(param_0) == PROC_TAG_CSW) {
+        daTagCsw_c* csw1 = static_cast<daTagCsw_c*>(param_0);
+        daTagCsw_c* csw2 = static_cast<daTagCsw_c*>(param_1);
+        if (csw1->getType() == 1) {
+            if (csw1->getSw() == csw2->getSw()) {
+                return param_0;
+            }
         }
     }
     return NULL;
 }
 
-static void* searchCStatue(void* param_1, void* param_2) {
-    if (param_1 != NULL && fopAcM_IsActor(param_1) && fopAcM_GetProfName(param_1) == PROC_CSTATUE &&
-        static_cast<daCstatue_c*>(param_1)->checkNormalType())
-    {
-        return param_1;
+static void* searchCStatue(void* param_0, void* param_1) {
+    UNUSED(param_1);
+    if (param_0 != NULL && fopAcM_IsActor(param_0) && fopAcM_GetProfName(param_0) == PROC_CSTATUE) {
+        daCstatue_c* cstatue = static_cast<daCstatue_c*>(param_0);
+        if (cstatue->checkNormalType()) {
+            return param_0;
+        }
     }
     return NULL;
 }
@@ -283,11 +307,14 @@ void daTagCsw_c::offLight() {
 int daTagCsw_c::execute() {
     bool bVar3 = false;
     daCstatue_c* statue = (daCstatue_c*)fopAcM_Search(searchCStatue, this);
-    if (statue != NULL && statue->current.pos.absXZ(current.pos) < 75.0f &&
-        statue->current.pos.y > current.pos.y - 30.0f &&
-        statue->current.pos.y < current.pos.y + 200.0f)
-    {
-        bVar3 = true;
+    if (statue != NULL) {
+        f32 dist = statue->current.pos.absXZ(current.pos);
+        if (dist < 75.0f &&
+            statue->current.pos.y > current.pos.y - 30.0f &&
+            statue->current.pos.y < current.pos.y + 200.0f)
+        {
+            bVar3 = true;
+        }
     }
     if (field_0x570 == 0) {
         if (bVar3) {
@@ -302,7 +329,11 @@ int daTagCsw_c::execute() {
                     if (cM3d_IsZero(field_0x628) && getSw2() != 0xff) {
                         fopAcM_onSwitch(this, getSw2());
                     }
+#if DEBUG
+                    field_0x628 = -l_HIO.field_0x8;
+#else
                     field_0x628 = -5.0f;
+#endif
                     if (!field_0x588->ChkUsed()) {
                         dComIfG_Bgsp().Regist(field_0x588, this);
                         field_0x5ec = 0;
@@ -342,14 +373,14 @@ int daTagCsw_c::execute() {
             }
         }
         if (field_0x570 == 0 && getSw() == 6 && field_0x8e2 != 0) {
-            s16 angleDiff = (current.angle.y - statue->current.angle.y);
-            s16 sVar4 = angleDiff / field_0x8e2;
-            if (sVar4 > 0x800) {
-                statue->current.angle.y += 0x800;
-            } else if (sVar4 < -0x800) {
-                statue->current.angle.y -= 0x800;
+            s16 sp0A = current.angle.y - statue->current.angle.y;
+            sp0A /= field_0x8e2;
+            if (sp0A > 0x800) {
+                statue->current.angle.y += (s16)0x800;
+            } else if (sp0A < -0x800) {
+                statue->current.angle.y -= (s16)0x800;
             } else {
-                statue->current.angle.y += sVar4;
+                statue->current.angle.y += sp0A;
             }
             statue->shape_angle.y = statue->current.angle.y;
             onLight();
@@ -357,7 +388,11 @@ int daTagCsw_c::execute() {
         }
         if (!bVar3 && field_0x624 == 0.0f) {
             if (fopAcM_isSwitch(this, getSw())) {
+#if DEBUG
+                field_0x628 = l_HIO.field_0x8;
+#else
                 field_0x628 = 5.0f;
+#endif
             }
         }
     } else {
@@ -365,7 +400,11 @@ int daTagCsw_c::execute() {
             if (getSw2() != 0xff) {
                 fopAcM_onSwitch(this, getSw2());
             }
+#if DEBUG
+            field_0x628 = l_HIO.field_0x8;
+#else
             field_0x628 = 5.0f;
+#endif
             onLight();
         }
         else if (field_0x624 == 500.0f) {
@@ -498,7 +537,8 @@ static int daTagCsw_Delete(daTagCsw_c* i_this) {
 }
 
 static int daTagCsw_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagCsw_c*>(i_this)->create();
+    daTagCsw_c* csw = static_cast<daTagCsw_c*>(i_this);
+    return csw->create();
 }
 
 static actor_method_class l_daTagCsw_Method = {

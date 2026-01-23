@@ -95,7 +95,9 @@ JKRHeap::JKRFreeCallback JKRHeap::sFreeCallback;
 bool JKRHeap::initArena(char** memory, u32* size, int maxHeaps) {
     void* arenaLo = OSGetArenaLo();
     void* arenaHi = OSGetArenaHi();
-    OS_REPORT("original arenaLo = %p arenaHi = %p\n", arenaLo, arenaHi);
+#if !PLATFORM_GCN
+    OSReport("original arenaLo = %p arenaHi = %p\n", arenaLo, arenaHi);
+#endif
     if (arenaLo == arenaHi)
         return false;
 
@@ -123,7 +125,9 @@ bool JKRHeap::initArena(char** memory, u32* size, int maxHeaps) {
 bool JKRHeap::initArena2(char** memory, u32* size, int maxHeaps) {
     void* arenaLo = OSGetMEM2ArenaLo();
     void* arenaHi = OSGetMEM2ArenaHi();
-    OS_REPORT("original arenaLo = %p arenaHi = %p\n", arenaLo, arenaHi);
+#if !PLATFORM_GCN
+    OSReport("original arenaLo = %p arenaHi = %p\n", arenaLo, arenaHi);
+#endif
     if (arenaLo == arenaHi) {
         return false;
     }

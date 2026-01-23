@@ -1511,7 +1511,7 @@ int daNpc_Uri_c::wait(void* param_0) {
                     && !daNpcT_chkEvtBit(0x92))
                 {
                     cXyz acStack_70 = getAttnPos(daPy_getPlayerActorClass());
-                    int dist_index = attention_info.distances[1];
+                    int dist_index = attention_info.distances[fopAc_attn_TALK_e];
                     f32 fVar2 = dComIfGp_getAttention()->getDistTable(dist_index).mLowerY * -1.0f;
                     f32 fVar3 = dComIfGp_getAttention()->getDistTable(dist_index).mUpperY * -1.0f;
                     if (chkPointInArea(acStack_70, attention_info.position, 200.0f, fVar2, fVar3,

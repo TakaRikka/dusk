@@ -28,9 +28,9 @@ daObjSmgDoor_HIO_c::daObjSmgDoor_HIO_c() {
 
 void daObjSmgDoor_HIO_c::genMessage(JORMContext* ctx) {
     // Present & Past Door
-    ctx->genLabel("現在＆過去の扉", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genLabel("現在＆過去の扉", 0);
     // Check Display
-    ctx->genCheckBox("チェック表示", &field_0x6, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genCheckBox("チェック表示", &field_0x6, 0x1);
 }
 #endif
 

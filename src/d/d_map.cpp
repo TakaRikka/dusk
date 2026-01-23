@@ -17,17 +17,17 @@
 dMap_HIO_c g_dMap_HIO;
 
 void dMap_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("エリアマップ パスマップ 調整項目", 0, 0, NULL, -1, -1, 512, 24);
-    mctx->genLabel("初期化等は 下位フォルダ[パレット]込み です", 0, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("初期化", 0x4000003, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("HOSTIO順テキストファイル書き出し", 0x4000004, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("バイナリ順テキスト書き出し", 0x4000005, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("バイナリファイル書き出し", 0x4000006, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("バイナリファイル読み込み", 0x4000007, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("バイナリダンプ", 0x4000008, 0, NULL, -1, -1, 512, 24);
+    mctx->genLabel("エリアマップ パスマップ 調整項目", 0);
+    mctx->genLabel("初期化等は 下位フォルダ[パレット]込み です", 0);
+    mctx->genButton("初期化", 0x4000003);
+    mctx->genButton("HOSTIO順テキストファイル書き出し", 0x4000004);
+    mctx->genButton("バイナリ順テキスト書き出し", 0x4000005);
+    mctx->genButton("バイナリファイル書き出し", 0x4000006);
+    mctx->genButton("バイナリファイル読み込み", 0x4000007);
+    mctx->genButton("バイナリダンプ", 0x4000008);
     mList.gen(mctx);
-    mctx->genButton("ID_INFO_ROOM_MAX_TEXEL", 0x4000009, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("ID_INFO_SWITCH", 0x400000a, 0, NULL, -1, -1, 512, 24);
+    mctx->genButton("ID_INFO_ROOM_MAX_TEXEL", 0x4000009);
+    mctx->genButton("ID_INFO_SWITCH", 0x400000a);
 }
 
 dMap_HIO_c::dMap_HIO_c() {

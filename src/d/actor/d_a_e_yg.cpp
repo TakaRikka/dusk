@@ -109,12 +109,12 @@ daE_YG_HIO_c::daE_YG_HIO_c() {
 
 #if DEBUG
 void daE_YG_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("  グース", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("基本サイズ", &basic_size, 0.0f, 3.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("移動速度", &movement_spd, 0.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("攻撃速度", &attack_spd, 0.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("泳ぎ速度", &swim_spd, 0.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("ＰＬ認識距離", &pl_recognition_dist, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genLabel("  グース", 0x80000001);
+    ctx->genSlider("基本サイズ", &basic_size, 0.0f, 3.0f);
+    ctx->genSlider("移動速度", &movement_spd, 0.0f, 50.0f);
+    ctx->genSlider("攻撃速度", &attack_spd, 0.0f, 50.0f);
+    ctx->genSlider("泳ぎ速度", &swim_spd, 0.0f, 50.0f);
+    ctx->genSlider("ＰＬ認識距離", &pl_recognition_dist, 0.0f, 2000.0f);
 }
 #endif
 
@@ -1299,7 +1299,7 @@ static int daE_YG_IsDelete(e_yg_class* i_this) {
 
 static int daE_YG_Delete(e_yg_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_YG");
 
     dComIfG_resDelete(&i_this->mPhase, "E_YG");
 

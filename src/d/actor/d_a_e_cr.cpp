@@ -443,7 +443,7 @@ static int daE_CR_IsDelete(e_cr_class* a_this) {
 
 static int daE_CR_Delete(e_cr_class* a_this) {
     fopEn_enemy_c* actor = &a_this->enemy;
-    fpc_ProcID id = fopAcM_GetID(a_this);
+    fopAcM_RegisterDeleteID(a_this, "E_CR");
     dComIfG_resDelete(&a_this->phase, "E_CR");
 
     if (a_this->HIOInit) {

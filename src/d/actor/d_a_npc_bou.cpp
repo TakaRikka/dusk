@@ -449,14 +449,14 @@ void daNpc_Bou_c::setParam() {
         }
     }
 
-    attention_info.distances[0] = daNpcT_getDistTableIdx(sVar8, sVar7);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] = daNpcT_getDistTableIdx(sVar10, sVar9);
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(sVar8, sVar7);
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(sVar10, sVar9);
     if (mType == TYPE_1) {
         uVar7 |= fopAc_AttnFlag_UNK_0x800000;
         field_0xfdc = getActorDistance(daPy_getPlayerActorClass(), 
                     daNpcT_getDistTableIdx(field_0xfe0, field_0xfe4), 
-                    attention_info.distances[1]);
+                    attention_info.distances[fopAc_attn_TALK_e]);
         if (field_0xfdc < 4) {
             g_meter2_info.mBlinkButton |= 1;
         }

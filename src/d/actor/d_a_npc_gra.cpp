@@ -276,14 +276,14 @@ void daNpc_grA_HIO_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
 
 void daNpc_grA_HIO_c::genMessage(JORMContext* context) {
     daNpcF_commonGenMessage(context, &m.common);
-    context->genSlider("お辞儀タイマー  ", &m.mBowTimer, 0, 1000, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("回転移動速度係数", &m.mRotationalSpeed, 0.0f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("歩き移動速度    ", &m.mWalkingSpeed, 0.0f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("歩きアニメ速度  ", &m.mWalkingAnimationSpeed, 0.0f, 10.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("歩行回転角度    ", &m.mWalkingRotationSpeed, 0, 0x7fff, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("歩行回転分割数  ", &m.mWalkingRotationDivisions, 0, 0x100, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("エフェクトサイズ", &m.mParticleSize, 0.0f, 10.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genButton("ファイル書き出し", 0x40000002, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genSlider("お辞儀タイマー  ", &m.mBowTimer, 0, 1000);
+    context->genSlider("回転移動速度係数", &m.mRotationalSpeed, 0.0f, 100.0f);
+    context->genSlider("歩き移動速度    ", &m.mWalkingSpeed, 0.0f, 100.0f);
+    context->genSlider("歩きアニメ速度  ", &m.mWalkingAnimationSpeed, 0.0f, 10.0f);
+    context->genSlider("歩行回転角度    ", &m.mWalkingRotationSpeed, 0, 0x7fff);
+    context->genSlider("歩行回転分割数  ", &m.mWalkingRotationDivisions, 0, 0x100);
+    context->genSlider("エフェクトサイズ", &m.mParticleSize, 0.0f, 10.0f);
+    context->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 

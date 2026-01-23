@@ -18,48 +18,48 @@ enum {
 };
 
 void daAlink_c::hsChainShape_c::draw() {
-    daAlink_c* temp_r3 = (daAlink_c*)getUserArea();
-    J3DModelData* sp60 = temp_r3->getItemModelData();
-    J3DMaterial* sp5C = sp60->getMaterialNodePointer(0);
-    daAlink_hsChainLight_c* temp_r29 = (daAlink_hsChainLight_c*)&temp_r3->tevStr;
+    daAlink_c* alink = (daAlink_c*)getUserArea();
+    J3DModelData* modelData = alink->getItemModelData();
+    J3DMaterial* material = modelData->getMaterialNodePointer(0);
+    daAlink_hsChainLight_c* chainLight = (daAlink_hsChainLight_c*)&alink->tevStr;
 
-    j3dSys.setVtxPos(sp60->getVtxPosArray());
-    j3dSys.setVtxNrm(sp60->getVtxNrmArray());
-    j3dSys.setVtxCol(sp60->getVtxColorArray(0));
+    j3dSys.setVtxPos(modelData->getVtxPosArray());
+    j3dSys.setVtxNrm(modelData->getVtxNrmArray());
+    j3dSys.setVtxCol(modelData->getVtxColorArray(0));
     J3DShape::resetVcdVatCache();
 
-    sp5C->loadSharedDL();
-    sp5C->getShape()->loadPreDrawSetting();
+    material->loadSharedDL();
+    material->getShape()->loadPreDrawSetting();
 
-    GXColor sp58;
-    sp58.r = temp_r29->AmbCol.r;
-    sp58.g = temp_r29->AmbCol.g;
-    sp58.b = temp_r29->AmbCol.b;
-    sp58.a = temp_r29->AmbCol.a;
+    GXColor ambColor;
+    ambColor.r = chainLight->AmbCol.r;
+    ambColor.g = chainLight->AmbCol.g;
+    ambColor.b = chainLight->AmbCol.b;
+    ambColor.a = chainLight->AmbCol.a;
 
-    GXSetChanAmbColor(GX_COLOR0A0, sp58);
+    GXSetChanAmbColor(GX_COLOR0A0, ambColor);
     GXSetChanMatColor(GX_COLOR0A0, g_whiteColor);
 
     dKy_setLight_again();
-    dKy_GxFog_tevstr_set(temp_r29);
-    GXLoadLightObjImm(temp_r29->getLightObj(), GX_LIGHT0);
+    dKy_GxFog_tevstr_set(chainLight);
+    GXLoadLightObjImm(chainLight->getLightObj(), GX_LIGHT0);
 
-    if (temp_r3->checkIronBallEquip()) {
-        cXyz* sp54 = temp_r3->getIronBallChainPos();
-        csXyz* sp50 = temp_r3->getIronBallChainAngle();
-        sp54++;
-        sp50++;
+    if (alink->checkIronBallEquip()) {
+        cXyz* ppos = alink->getIronBallChainPos();
+        csXyz* pangle = alink->getIronBallChainAngle();
+        ppos++;
+        pangle++;
 
-        for (int i = 0; i < 101; i++, sp54++, sp50++) {
+        for (int i = 0; i < 101; i++, ppos++, pangle++) {
             mDoMtx_stack_c::copy(j3dSys.getViewMtx());
-            mDoMtx_stack_c::transM(*sp54);
-            mDoMtx_stack_c::ZXYrotM(*sp50);
+            mDoMtx_stack_c::transM(*ppos);
+            mDoMtx_stack_c::ZXYrotM(*pangle);
             mDoMtx_stack_c::scaleM(2.0f, 2.0f, 2.0f);
 
             GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
             GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
 
-            sp5C->getShape()->simpleDrawCache();
+            material->getShape()->simpleDrawCache();
         }
 
         cXyz spC8;
@@ -75,19 +75,19 @@ void daAlink_c::hsChainShape_c::draw() {
             s16 spE;
 
             if (i == 0) {
-                sp48 = temp_r3->getIronBallChainPos() + temp_r3->getIronBallHandChainNum();
-                spC8 = temp_r3->getIronBallChainHandRootPos() - *sp48;
+                sp48 = alink->getIronBallChainPos() + alink->getIronBallHandChainNum();
+                spC8 = alink->getIronBallChainHandRootPos() - *sp48;
 
-                sp44 = temp_r3->getIronBallChainAngle() + temp_r3->getIronBallHandChainNum();
+                sp44 = alink->getIronBallChainAngle() + alink->getIronBallHandChainNum();
                 spE = 0x3000;
             } else {
-                sp48 = temp_r3->getIronBallChainPos();
-                mDoMtx_stack_c::transS(*(temp_r3->getIronBallChainPos() + 1));
-                mDoMtx_stack_c::ZXYrotM(*(temp_r3->getIronBallChainAngle() + 1));
+                sp48 = alink->getIronBallChainPos();
+                mDoMtx_stack_c::transS(*(alink->getIronBallChainPos() + 1));
+                mDoMtx_stack_c::ZXYrotM(*(alink->getIronBallChainAngle() + 1));
                 mDoMtx_stack_c::multVec(&l_ironBallChainVec, &spC8);
                 spC8 -= *sp48;
 
-                sp44 = temp_r3->getIronBallChainAngle() + 1;
+                sp44 = alink->getIronBallChainAngle() + 1;
                 spE = -0x3000;
             }
 
@@ -98,7 +98,8 @@ void daAlink_c::hsChainShape_c::draw() {
             spBC = *sp48;
 
             if (var_f29 > 5.0f) {
-                if (spC8.absXZ() >= 1.0f) {
+                f32 sp40 = spC8.absXZ();
+                if (sp40 >= 1.0f) {
                     sp10 = spC8.atan2sX_Z();
                 }
 
@@ -114,7 +115,7 @@ void daAlink_c::hsChainShape_c::draw() {
                     GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
                     GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
 
-                    sp5C->getShape()->simpleDrawCache();
+                    material->getShape()->simpleDrawCache();
 
                     spBC += spB0;
                     var_f29 -= 10.0f;
@@ -123,8 +124,8 @@ void daAlink_c::hsChainShape_c::draw() {
             }
         }
     } else {
-        const cXyz& chainRootPos = temp_r3->getHsChainRootPos();
-        const cXyz& chainTopPos = temp_r3->getHsChainTopPos();
+        const cXyz& chainRootPos = alink->getHsChainRootPos();
+        const cXyz& chainTopPos = alink->getHsChainTopPos();
         cXyz maxDistance = chainRootPos - chainTopPos;
 
         f32 maxDistanceF = maxDistance.abs();
@@ -148,8 +149,8 @@ void daAlink_c::hsChainShape_c::draw() {
             f32 var_f26 = 0.0f;
             f32 var_f28;
 
-            var_f28 = 2.5f * temp_r3->getHookshotStopTime();
-            if (temp_r3->getHookshotStopTime() & 1) {
+            var_f28 = 2.5f * alink->getHookshotStopTime();
+            if (alink->getHookshotStopTime() & 1) {
                 var_f28 *= -1.0f;
             }
 
@@ -169,7 +170,7 @@ void daAlink_c::hsChainShape_c::draw() {
                 GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
                 GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
 
-                sp5C->getShape()->simpleDrawCache();
+                material->getShape()->simpleDrawCache();
 
                 sp64.z += 0x3000;
 
@@ -178,16 +179,16 @@ void daAlink_c::hsChainShape_c::draw() {
             }
         }
 
-        const cXyz& sp30 = temp_r3->getHsSubChainRootPos();
-        const cXyz& sp2C = temp_r3->getHsSubChainTopPos();
-        maxDistance = sp30 - sp2C;
+        const cXyz& subChainRootPos = alink->getHsSubChainRootPos();
+        const cXyz& subChainTopPos = alink->getHsSubChainTopPos();
+        maxDistance = subChainRootPos - subChainTopPos;
 
         f32 temp_f1 = maxDistance.abs();
         if (temp_f1 > 1.0f) {
             maxDistance *= (1.0f / temp_f1);
             var_f30 = 0.0f;
             
-            sp98 = sp2C;
+            sp98 = subChainTopPos;
             sp6C.set(maxDistance.atan2sY_XZ(), maxDistance.atan2sX_Z(), 0);
 
             while (temp_f1 > var_f30) {
@@ -198,7 +199,7 @@ void daAlink_c::hsChainShape_c::draw() {
                 GXLoadPosMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
                 GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
 
-                sp5C->getShape()->simpleDrawCache();
+                material->getShape()->simpleDrawCache();
 
                 sp98 += maxDistance * 5.0f;
                 sp6C.z += 0x3000;
@@ -276,15 +277,21 @@ bool daAlink_c::checkLv7BossRoom() {
     return checkStageName("D_MN07A");
 }
 
-BOOL daAlink_c::checkHookshotStickBG(cBgS_PolyInfo& i_poly) {
-    if (dComIfG_Bgsp().ChkPolyHSStick(i_poly)) {
-        dBgW_Base* bgw_p = dComIfG_Bgsp().GetBgWBasePointer(i_poly);
+BOOL daAlink_c::checkHookshotStickBG(cBgS_PolyInfo& i_polyinfo) {
+    #if DEBUG
+    if (mpHIO->mItem.mHookshot.m.mForceStick) {
+        return TRUE;
+    }
+    #endif
+
+    if (dComIfG_Bgsp().ChkPolyHSStick(i_polyinfo)) {
+        dBgW_Base* bgw_p = dComIfG_Bgsp().GetBgWBasePointer(i_polyinfo);
         if (bgw_p != NULL && bgw_p->ChkPushPullOk()) {
-            return true;
+            return TRUE;
         }
     }
 
-    return false;
+    return FALSE;
 }
 
 void daAlink_c::cancelHookshotCarry() {
@@ -296,13 +303,13 @@ void daAlink_c::cancelHookshotCarry() {
 
 void daAlink_c::changeHookshotDrawModel() {
     if (mEquipItem == fpcNm_ITEM_HOOKSHOT && field_0x3020 == 1) {
-        J3DModel* old_item = mHeldItemModel;
+        J3DModel* tmp = mHeldItemModel;
         mHeldItemModel = field_0x0710;
-        field_0x0710 = old_item;
+        field_0x0710 = tmp;
 
-        J3DModel* old_item2 = mpHookTipModel;
+        tmp = mpHookTipModel;
         mpHookTipModel = field_0x0714;
-        field_0x0714 = old_item2;
+        field_0x0714 = tmp;
     }
 }
 
@@ -346,15 +353,17 @@ BOOL daAlink_c::checkHookshotWait() const {
 
 void daAlink_c::setHookshotCatchNow() {
     field_0x3026 = 5;
-    dComIfGp_getVibration().StartShock(4, 1, cXyz(0.0f, 1.0f, 0.0f));
+    dComIfGp_getVibration().StartShock(VIBMODE_S_POWER4, 1, cXyz(0.0f, 1.0f, 0.0f));
 }
 
 
 bool daAlink_c::setHookshotCarryOffset(fpc_ProcID i_carryActorID, cXyz const* i_posOffset) {
-    if (dComIfGp_checkPlayerStatus1(0, 0x10000)) {
-        fopAc_ac_c* carryActor_p = mCargoCarryAcKeep.getActor();
+    fopAc_ac_c* actor;
 
-        if (carryActor_p != NULL && fopAcM_checkHookCarryNow(carryActor_p) &&
+    if (dComIfGp_checkPlayerStatus1(0, 0x10000)) {
+        actor = mCargoCarryAcKeep.getActor();
+
+        if (actor != NULL && fopAcM_checkHookCarryNow(actor) &&
             i_carryActorID == mCargoCarryAcKeep.getID())
         {
             field_0x37c8 = *i_posOffset;
@@ -362,8 +371,8 @@ bool daAlink_c::setHookshotCarryOffset(fpc_ProcID i_carryActorID, cXyz const* i_
         }
     }
 
-    fopAc_ac_c* hookTargetAc_p = mHookTargetAcKeep.getActor();
-    if (hookTargetAc_p != NULL && fopAcM_checkHookCarryNow(hookTargetAc_p) &&
+    actor = mHookTargetAcKeep.getActor();
+    if (actor != NULL && fopAcM_checkHookCarryNow(actor) &&
         i_carryActorID == mHookTargetAcKeep.getID())
     {
         mIronBallCenterPos = *i_posOffset;
@@ -374,20 +383,19 @@ bool daAlink_c::setHookshotCarryOffset(fpc_ProcID i_carryActorID, cXyz const* i_
 }
 
 void daAlink_c::setHookshotModel() {
-    J3DAnmTransform* bck = (J3DAnmTransform*)mAnmHeap9.loadDataIdx(0x17E);
+    J3DAnmTransform* bck = (J3DAnmTransform*)mAnmHeap9.loadDataIdx(dRes_ID_ALANM_BCK_HS_SPIN_e);
 
     JKRHeap* heap = setItemHeap();
-    mItemBck.init(bck, 0, 2, 1.0f, 0, -1, false);
+    if (!mItemBck.init(bck, FALSE, 2, 1.0f, 0, -1, false)) {
+        JUT_ASSERT(676, FALSE);
+    }
 
-    J3DModelData* hookModelData = loadAramBmd(0x316, 0x5C00);
-    mHeldItemModel = initModel(hookModelData, 0x80000, 0);
+    mHeldItemModel = initModel(loadAramBmd(dRes_ID_ALANM_BMD_AL_HS_e, 0x5C00), 0);
+    mpHookTipModel = initModel(loadAramBmd(dRes_ID_ALANM_BMD_AL_HS_TIP_e, 0x3800), 0);
+    field_0x0710 = initModel(mHeldItemModel->getModelData(), 0);
+    field_0x0714 = initModel(mpHookTipModel->getModelData(), 0);
 
-    J3DModelData* hookTipModelData = loadAramBmd(0x318, 0x3800);
-    mpHookTipModel = initModel(hookTipModelData, 0x80000, 0);
-    field_0x0710 = initModel(mHeldItemModel->getModelData(), 0x80000, 0);
-    field_0x0714 = initModel(mpHookTipModel->getModelData(), 0x80000, 0);
-
-    mpItemModelData = loadAramBmd(0x317, 0x1000);
+    mpItemModelData = loadAramBmd(dRes_ID_ALANM_BMD_AL_HS_KUSARI_e, 0x1000);
     mpHookChain = new hsChainShape_c();
     mpHookSound = new Z2SoundObjSimple();
 
@@ -395,8 +403,11 @@ void daAlink_c::setHookshotModel() {
     mpHookshotLinChk->OffFullGrp();
     mpHookshotLinChk->OnWaterGrp();
 
-    J3DAnmTransform* bck2 = (J3DAnmTransform*)loadAram(dRes_ID_ALANM_BCK_HS_TIP_OPEN_e, 0x800);
-    mHookTipBck.init(bck2, 0, 2, 1.0f, 0, -1, false);
+    bck = (J3DAnmTransform*)loadAram(dRes_ID_ALANM_BCK_HS_TIP_OPEN_e, 0x800);
+    if (!mHookTipBck.init(bck, FALSE, 2, 1.0f, 0, -1, false)) {
+        JUT_ASSERT(701, FALSE);
+    }
+
     mDoExt_setCurrentHeap(heap);
 
     resetHookshotMode();
@@ -424,14 +435,14 @@ void daAlink_c::setHookshotModel() {
 
 void daAlink_c::setHookshotSight() {
     cXyz sight_pos;
-    f32 length;
+    f32 max_length;
     if (checkLv7BossRoom()) {
-        length = mpHIO->mItem.mHookshot.m.mBossMaxLength;
+        max_length = mpHIO->mItem.mHookshot.m.mBossMaxLength;
     } else {
-        length = mpHIO->mItem.mHookshot.m.mMaxLength;
+        max_length = mpHIO->mItem.mHookshot.m.mMaxLength;
     }
 
-    BOOL line_cross = checkSightLine(length, &sight_pos);
+    BOOL line_cross = checkSightLine(max_length, &sight_pos);
 
     if (mHookTargetAcKeep.getActor() != NULL) {
         mSight.setPos(&mHookTargetAcKeep.getActor()->eyePos);
@@ -450,8 +461,7 @@ void daAlink_c::setHookshotSight() {
             if (mHookTargetAcKeep.getActor() != NULL &&
                 fopAcM_GetName(mHookTargetAcKeep.getActor()) == PROC_B_DR)
             {
-                daB_DR_c* dr_p = (daB_DR_c*)mHookTargetAcKeep.getActor();
-                dr_p->onTarget();
+                ((daB_DR_c*)mHookTargetAcKeep.getActor())->onTarget();
             }
         } else {
             mSight.offLockFlg();
@@ -463,7 +473,6 @@ void daAlink_c::setHookshotSight() {
     mHookTargetAcKeep.clearData();
     field_0x3494 = -1.0f;
 }
-
 
 void daAlink_c::cancelHookshotShot() {
     if (checkHookshotItem(mEquipItem) &&
@@ -480,7 +489,7 @@ void daAlink_c::cancelHookshotShot() {
 bool daAlink_c::cancelHookshotMove() {
     if (mFastShotTime == 0 && mItemMode == HS_MODE_NONE_e) {
         if (checkHookshotAnime() &&
-            (mTargetedActor == NULL && !checkAttentionLock() || !itemButton()))
+            ((mTargetedActor == NULL && !checkAttentionLock()) || !itemButton()))
         {
             resetUpperAnime(UPPER_2, -1.0f);
             return 1;
@@ -489,7 +498,6 @@ bool daAlink_c::cancelHookshotMove() {
 
     return 0;
 }
-
 
 BOOL daAlink_c::checkHookshotReadyMaterialOffMode() const {
     return mProcID == PROC_HOOKSHOT_WALL_SHOOT || mProcID == PROC_HORSE_HOOKSHOT_SUBJECT ||
@@ -511,13 +519,12 @@ void daAlink_c::setHookshotReadyMaterial() {
     }
 }
 
-int daAlink_c::initHookshotUpperAnimeSpeed(int param_0) {
+int daAlink_c::initHookshotUpperAnimeSpeed(BOOL param_0) {
     if (checkHookshotWait()) {
         if (param_0) {
-            f32 tmp_0 = 0.0f;
-            mUpperFrameCtrl[2].setRate(tmp_0);
-            mUpperFrameCtrl[2].setFrame(tmp_0);
-            getNowAnmPackUpper(UPPER_2)->setFrame(tmp_0);
+            mUpperFrameCtrl[2].setRate(0.0f);
+            mUpperFrameCtrl[2].setFrame(0.0f);
+            getNowAnmPackUpper(UPPER_2)->setFrame(0.0f);
         } else {
             setWaterInAnmRate(&mUpperFrameCtrl[2], mpHIO->mItem.mHookshot.m.mWaitAnmSpeed);
         }
@@ -531,26 +538,27 @@ int daAlink_c::initHookshotUpperAnimeSpeed(int param_0) {
 void daAlink_c::initHookshotReady() {
     mItemMode = HS_MODE_READY_e;
 
-    f32 tmp_0 = 0.0f;
-    field_0x33e0 = tmp_0;
+    field_0x33e0 = 0.0f;
 
-    dComIfGp_getVibration().StartShock(1, 1, cXyz(tmp_0, 1.0f, tmp_0));
+    dComIfGp_getVibration().StartShock(VIBMODE_S_POWER1, 1, cXyz(0.0f, 1.0f, 0.0f));
 
     mItemVar0.field_0x3018 = 3;
     field_0x3494 = -1.0f;
 }
 
 void daAlink_c::setHookshotReadyAnime() {
-    f32 speed;
-    if (!checkAttentionLock() && mFastShotTime == 0) {
-        speed = 0.0f;
-    } else {
-        speed = mpHIO->mItem.mHookshot.m.mWaitAnmSpeed;
-    }
+    {
+        f32 speed;
+        if (!checkAttentionLock() && mFastShotTime == 0) {
+            speed = 0.0f;
+        } else {
+            speed = mpHIO->mItem.mHookshot.m.mWaitAnmSpeed;
+        }
 
-    setUpperAnimeBaseSpeed(dRes_INDEX_ALANM_BCK_HSWAIT_e, speed, 3.0f);
-    field_0x3020 = 0;
-    initHookshotReady();
+        setUpperAnimeBaseSpeed(dRes_ID_ALANM_BCK_HSWAIT_e, speed, 3.0f);
+        field_0x3020 = 0;
+        initHookshotReady();
+    }
 }
 
 int daAlink_c::checkUpperItemActionHookshot() {
@@ -589,33 +597,33 @@ int daAlink_c::checkUpperItemActionHookshot() {
                     mNormalSpeed = 0.0f;
                 }
             } else {
-                f32 tmp_0 = 0.0f;
-                mUpperFrameCtrl[2].setRate(tmp_0);
-                mUpperFrameCtrl[2].setFrame(tmp_0);
-                getNowAnmPackUpper(UPPER_2)->setFrame(tmp_0);
+                mUpperFrameCtrl[2].setRate(0.0f);
+                mUpperFrameCtrl[2].setFrame(0.0f);
+                getNowAnmPackUpper(UPPER_2)->setFrame(0.0f);
 
-                mNormalSpeed = tmp_0;
+                mNormalSpeed = 0.0f;
                 onModeFlg(1);
-                mSpeedModifier = tmp_0;
-                mNowAnmPackUpper[2].setRatio(tmp_0);
+                mSpeedModifier = 0.0f;
+                mNowAnmPackUpper[2].setRatio(0.0f);
 
                 setSingleAnimeParam(ANM_HOOKSHOT_SHOOT, &mpHIO->mItem.mHookshot.m.mShootAnm);
             }
 
             if (!checkNoResetFlg3(FLG3_UNK_4)) {
-                f32 tmp_0 = 0.0f;
-                dComIfGp_getVibration().StartQuake(1, 1, cXyz(tmp_0, 1.0f, tmp_0));
+                dComIfGp_getVibration().StartQuake(VIBMODE_Q_POWER1, 1, cXyz(0.0f, 1.0f, 0.0f));
                 onNoResetFlg3(FLG3_UNK_4);
             }
 
             return 1;
         }
     } else if (mItemMode == HS_MODE_NONE_e) {
+        #if PLATFORM_GCN
         if (checkModeFlg(0x400) && checkAttentionLock() && mTargetedActor == NULL) {
             resetUpperAnime(UPPER_2, 3.0f);
             dComIfGp_clearPlayerStatus0(0, 0x4000);
             return 1;
         }
+        #endif
 
         if (checkReadyItem() && itemButton()) {
             initHookshotReady();
@@ -700,19 +708,19 @@ void daAlink_c::setHookshotReturnEnd() {
         mNowAnmPackUpper[2].setRatio(1.0f);
         field_0x2060->initOldFrameMorf(3.0f, field_0x30a8, field_0x30aa);
     } else if (checkHookshotShootAnime()) {
-        setUpperAnimeBaseSpeed(
-            0x18D, checkAttentionLock() ? mpHIO->mItem.mHookshot.m.mWaitAnmSpeed : 0.0f, 3.0f);
+        int _;
+        setUpperAnimeBaseSpeed(dRes_ID_ALANM_BCK_HSWAIT_e, checkAttentionLock() ? mpHIO->mItem.mHookshot.m.mWaitAnmSpeed : 0.0f, 3.0f);
     }
 
     mFastShotTime = 0;
 }
 
 int daAlink_c::setHookshotHangMoveBGCollect() {
-    cBgS_PolyInfo* poly;
-    if (mItemMode == 4) {
-        poly = &mPolyInfo3;
+    cBgS_PolyInfo* polyinfo;
+    if (mItemMode == HS_MODE_FLY_e) {
+        polyinfo = &mPolyInfo3;
     } else {
-        poly = &mPolyInfo2;
+        polyinfo = &mPolyInfo2;
     }
 
     fopAc_ac_c* carry_actor = mCargoCarryAcKeep.getActor();
@@ -727,28 +735,28 @@ int daAlink_c::setHookshotHangMoveBGCollect() {
         shape_angle.y += (s16)(mProcVar0.field_0x3008 - carry_actor->shape_angle.y);
         current.angle.y = shape_angle.y;
         mProcVar0.field_0x3008 = carry_actor->shape_angle.y;
-    } else if (dComIfG_Bgsp().ChkPolySafe(*poly)) {
-        if (!checkHookshotStickBG(*poly)) {
+    } else if (dComIfG_Bgsp().ChkPolySafe(*polyinfo)) {
+        if (!checkHookshotStickBG(*polyinfo)) {
             return 0;
         }
 
-        if (dComIfG_Bgsp().ChkMoveBG(*poly)) {
-            dComIfG_Bgsp().MoveBgTransPos(*poly, 1, &current.pos, &current.angle, &shape_angle);
+        if (dComIfG_Bgsp().ChkMoveBG(*polyinfo)) {
+            dComIfG_Bgsp().MoveBgTransPos(*polyinfo, 1, &current.pos, &current.angle, &shape_angle);
             
             csXyz sp8(0, field_0x3022, 0);
-            dComIfG_Bgsp().MoveBgTransPos(*poly, 1, &mIronBallBgChkPos, NULL, &sp8);
+            dComIfG_Bgsp().MoveBgTransPos(*polyinfo, 1, &mIronBallBgChkPos, NULL, &sp8);
             field_0x3022 = sp8.y;
 
-            s16 movebg_name = getMoveBGActorName(*poly, 1);
+            s16 movebg_name = getMoveBGActorName(*polyinfo, 1);
             if (movebg_name == PROC_Obj_SwHang) {
-                daObjSwHang_c* var_r26 = (daObjSwHang_c*)dComIfG_Bgsp().GetActorPointer(*poly);
-                var_r26->setHangPlayer();
+                daObjSwHang_c* swhang = (daObjSwHang_c*)dComIfG_Bgsp().GetActorPointer(*polyinfo);
+                swhang->setHangPlayer();
 
                 f32 prev_y = mIronBallBgChkPos.y;
-                mIronBallBgChkPos.y = var_r26->getHangPos().y;
+                mIronBallBgChkPos.y = swhang->getHangPos().y;
                 current.pos.y += mIronBallBgChkPos.y - prev_y;
             } else if (movebg_name == PROC_Obj_Chandelier) {
-                ((daObjChandelier_c*)dComIfG_Bgsp().GetActorPointer(*poly))->moveHookOn();
+                ((daObjChandelier_c*)dComIfG_Bgsp().GetActorPointer(*polyinfo))->moveHookOn();
             }
         }
     } else {
@@ -784,7 +792,7 @@ void daAlink_c::setHookshotTopPosFly() {
 static cXyz l_hookSnowSandHitScale(0.5f, 0.5f, 0.5f);
 
 void daAlink_c::setHookshotPos() {
-    mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(field_0x30c0));
+    mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(mLeftItemJntNo));
     mDoMtx_stack_c::transM(-2.0f, 1.0f, 1.0f);
     mDoMtx_stack_c::XYZrotM(cM_deg2s(5.7f), cM_deg2s(162.0f), 0);
 
@@ -796,7 +804,7 @@ void daAlink_c::setHookshotPos() {
     }
     var_r27->setBaseTRMtx(mDoMtx_stack_c::get());
 
-    mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(field_0x30c2));
+    mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(mRightItemJntNo));
     mDoMtx_stack_c::transM(-2.0f, 0.0f, 1.0f);
     mDoMtx_stack_c::XYZrotM(cM_deg2s(-78.0f), cM_deg2s(182.0f), cM_deg2s(-99.0f));
 
@@ -807,8 +815,6 @@ void daAlink_c::setHookshotPos() {
         var_r27_2 = mHeldItemModel;
     }
     var_r27_2->setBaseTRMtx(mDoMtx_stack_c::get());
-
-    cXyz sp134;
 
     if (mItemMode == 2 || mItemMode == HS_MODE_SHOOT_e) {
         field_0x33dc += 1.0f;
@@ -861,15 +867,15 @@ void daAlink_c::setHookshotPos() {
     fopAc_ac_c* targetAc_p = mHookTargetAcKeep.getActor();
     f32 return_speed;
     f32 shoot_speed;
-    f32 length;
+    f32 max_length;
     if (checkLv7BossRoom()) {
         return_speed = mpHIO->mItem.mHookshot.m.mBossReturnSpeed;
         shoot_speed = mpHIO->mItem.mHookshot.m.mBossShootSpeed;
-        length = mpHIO->mItem.mHookshot.m.mBossMaxLength;
+        max_length = mpHIO->mItem.mHookshot.m.mBossMaxLength;
     } else {
         return_speed = mpHIO->mItem.mHookshot.m.mReturnSpeed;
         shoot_speed = mpHIO->mItem.mHookshot.m.mShootSpeed;
-        length = mpHIO->mItem.mHookshot.m.mMaxLength;
+        max_length = mpHIO->mItem.mHookshot.m.mMaxLength;
     }
 
     if (mItemMode == HS_MODE_RETURN_e) {
@@ -996,11 +1002,11 @@ void daAlink_c::setHookshotPos() {
                     } else {
                         mHookTargetAcKeep.clearData();
                         mItemMode = HS_MODE_RETURN_e;
-                        dComIfGp_getVibration().StartShock(1, 1, cXyz(0.0f, 1.0f, 0.0f));
+                        dComIfGp_getVibration().StartShock(VIBMODE_S_POWER1, 1, cXyz(0.0f, 1.0f, 0.0f));
                     }
                 } else {
                     mItemMode = HS_MODE_RETURN_e;
-                    dComIfGp_getVibration().StartShock(1, 1, cXyz(0.0f, 1.0f, 0.0f));
+                    dComIfGp_getVibration().StartShock(VIBMODE_S_POWER1, 1, cXyz(0.0f, 1.0f, 0.0f));
                 }
             } else {
                 if (checkChaseHookshot()) {
@@ -1023,14 +1029,15 @@ void daAlink_c::setHookshotPos() {
                 f32 temp_f1 = sp17C.abs();
                 sp17C *= 1.0f / temp_f1;
 
-                if (temp_f1 >= length - 15.0f) {
-                    mHookshotTopPos = mHeldItemRootPos + (sp17C * (length - 15.0f));
+                f32 temp_f26 = max_length - 15.0f;
+                if (temp_f1 >= temp_f26) {
+                    mHookshotTopPos = mHeldItemRootPos + (sp17C * temp_f26);
                     mItemMode = HS_MODE_RETURN_e;
                 }
 
                 cXyz sp170;
                 if (field_0x3828.abs2(mHeldItemRootPos) > 400.0f ||
-                    current.pos.abs2(field_0x3798) > 1.0f || shape_angle.y != field_0x2fe6)
+                    current.pos.abs2(field_0x3798) > 1.0f || shape_angle.y != mPrevAngleY)
                 {
                     field_0x3028 = 1;
                 }
@@ -1069,49 +1076,48 @@ void daAlink_c::setHookshotPos() {
                         }
                     } else {
                         int poly_att0 = dComIfG_Bgsp().GetPolyAtt0(mRopeLinChk);
-                        dComIfGp_getVibration().StartShock(1, 1, cXyz(0.0f, 1.0f, 0.0f));
+                        dComIfGp_getVibration().StartShock(VIBMODE_S_POWER1, 1, cXyz(0.0f, 1.0f, 0.0f));
                         mItemMode = HS_MODE_RETURN_e;
                         hit_se = Z2SE_HIT_HOOKSHOT_REBOUND;
 
-                        cM3dGPla poly;
-                        dComIfG_Bgsp().GetTriPla(mRopeLinChk, &poly);
+                        cM3dGPla tripla;
+                        dComIfG_Bgsp().GetTriPla(mRopeLinChk, &tripla);
 
                         csXyz sp30;
                         if (poly_att0 == 0xD || poly_att0 == 3) {
                             u16 particle_id;
                             if (poly_att0 == 0xD) {
-                                particle_id = 0x881F;
+                                particle_id = dPa_RM(ID_ZI_S_DOWNSNOW_A);
                             } else {
-                                particle_id = 0x881E;
+                                particle_id = dPa_RM(ID_ZI_S_DOWNSAND_A);
                             }
 
-                            sp30.set(cM_atan2s(poly.mNormal.absXZ(), poly.mNormal.y),
-                                     poly.mNormal.atan2sX_Z(), 0);
+                            sp30.set(cM_atan2s(tripla.mNormal.absXZ(), tripla.mNormal.y),
+                                     tripla.mNormal.atan2sX_Z(), 0);
 
                             dComIfGp_particle_setPolyColor(
                                 particle_id, mRopeLinChk, mRopeLinChk.GetCrossP(), &tevStr, &sp30,
                                 (cXyz*)&l_hookSnowSandHitScale, 0, NULL, -1, NULL);
                             if (poly_att0 == 0xD) {
                                 dComIfGp_particle_setPolyColor(
-                                    0x8820, mRopeLinChk, mRopeLinChk.GetCrossP(), &tevStr, &sp30,
+                                    dPa_RM(ID_ZI_S_DOWNSNOW_B), mRopeLinChk, mRopeLinChk.GetCrossP(), &tevStr, &sp30,
                                     (cXyz*)&l_hookSnowSandHitScale, 0, NULL, -1, NULL);
                             }
                         } else {
-                            sp30.set(cM_atan2s(poly.mNormal.y, poly.mNormal.absXZ()),
-                                     cM_atan2s(-poly.mNormal.x, -poly.mNormal.z), 0);
+                            sp30.set(cM_atan2s(tripla.mNormal.y, tripla.mNormal.absXZ()),
+                                     cM_atan2s(-tripla.mNormal.x, -tripla.mNormal.z), 0);
                             dComIfGp_setHitMark(9, NULL, mRopeLinChk.GetCrossP(), &sp30, NULL, 0);
                         }
                     }
 
                     mHookshotTopPos = mRopeLinChk.GetCross() - (mIronBallCenterPos * 15.0f);
 
-                    cM3dGPla poly;
-                    dComIfG_Bgsp().GetTriPla(mRopeLinChk, &poly);
-                    field_0x316c.set(cM_atan2s(poly.mNormal.y, poly.mNormal.absXZ()),
-                                     cM_atan2s(-poly.mNormal.x, -poly.mNormal.z), 0);
+                    cM3dGPla tripla;
+                    dComIfG_Bgsp().GetTriPla(mRopeLinChk, &tripla);
+                    field_0x316c.set(cM_atan2s(tripla.mNormal.y, tripla.mNormal.absXZ()),
+                                     cM_atan2s(-tripla.mNormal.x, -tripla.mNormal.z), 0);
 
-                    mZ2Link.startHitItemSE(hit_se, dKy_pol_sound_get(&mRopeLinChk), mpHookSound,
-                                           -1.0f);
+                    mZ2Link.startHitItemSE(hit_se, dKy_pol_sound_get(&mRopeLinChk), mpHookSound, -1.0f);
                 } else {
                     seStartOnlyReverbLevel(Z2SE_LK_HS_CHAIN);
                 }
@@ -1125,7 +1131,7 @@ void daAlink_c::setHookshotPos() {
         if (dComIfG_Bgsp().LineCross(mpHookshotLinChk) &&
             dComIfG_Bgsp().GetPolyAtt0(*mpHookshotLinChk) != 6)
         {
-            fopKyM_createWpillar(mpHookshotLinChk->GetCrossP(), 0.5f, 0);
+            fpc_ProcID id = fopKyM_createWpillar(mpHookshotLinChk->GetCrossP(), 0.5f, 0);
             mDoAud_seStart(Z2SE_CM_BODYFALL_WATER_S, mpHookshotLinChk->GetCrossP(), 0,
                            mVoiceReverbIntensity);
         }
@@ -1159,9 +1165,7 @@ void daAlink_c::setHookshotPos() {
 
         if (field_0x3024 == 0) {
             mDoMtx_stack_c::copy(field_0x0710->getBaseTRMtx());
-
             mDoMtx_stack_c::transM(cXyz(hookRoot));
-
             mIronBallBgChkPos = field_0x3810;
         }
         bck_frame = 0.0f;
@@ -1206,14 +1210,14 @@ void daAlink_c::setHookshotWallWaitAnime() {
 }
 
 void daAlink_c::hookshotRoofTurn() {
-    BOOL play_sound = false;
+    BOOL is_play_sound = false;
     if (!dComIfGp_checkPlayerStatus0(0, 0x2000)) {
         f32 max_rise_y = (mIronBallBgChkPos.y + 15.0f) - 1.5f;
         f32 min_descend_y = mIronBallBgChkPos.y - mpHIO->mItem.mHookshot.m.mMaxLength;
 
         if (checkInputOnR()) {
             int stick_direction = getDirectionFromAngle(mStickAngle);
-            int angle = (int)(1024.0f * field_0x33ac * field_0x33ac);
+            int angle = (int)(1024.0f * mMoveValue * mMoveValue);
 
             if (stick_direction == DIR_LEFT) {
                 shape_angle.y += angle;
@@ -1223,15 +1227,15 @@ void daAlink_c::hookshotRoofTurn() {
             current.angle.y = shape_angle.y;
 
             if (stick_direction == DIR_FORWARD) {
-                current.pos.y += mpHIO->mItem.mHookshot.m.mRoofHangRiseSpeed * field_0x33a8;
+                current.pos.y += mpHIO->mItem.mHookshot.m.mRoofHangRiseSpeed * mStickValue;
                 if (current.pos.y > max_rise_y) {
                     current.pos.y = max_rise_y;
                 } else {
                     seStartOnlyReverbLevel(Z2SE_AL_HS_HANGING_UP);
-                    play_sound = true;
+                    is_play_sound = true;
                 }
             } else if (stick_direction == DIR_BACKWARD) {
-                f32 descend_speed = mpHIO->mItem.mHookshot.m.mRoofHangDecendSpeed * field_0x33ac;
+                f32 descend_speed = mpHIO->mItem.mHookshot.m.mRoofHangDecendSpeed * mMoveValue;
                 if (checkBootsOrArmorHeavy()) {
                     descend_speed *= 1.5f;
                 }
@@ -1241,7 +1245,7 @@ void daAlink_c::hookshotRoofTurn() {
                     current.pos.y = min_descend_y;
                 } else {
                     seStartOnlyReverbLevel(Z2SE_AL_HS_HANGING_DOWN);
-                    play_sound = true;
+                    is_play_sound = true;
                 }
             }
         }
@@ -1260,7 +1264,7 @@ void daAlink_c::hookshotRoofTurn() {
         }
     }
 
-    if (play_sound) {
+    if (is_play_sound) {
         if (!checkNoResetFlg3(FLG3_UNK_4)) {
             dComIfGp_getVibration().StartQuake(1, 1, cXyz(0.0f, 1.0f, 0.0f));
             onNoResetFlg3(FLG3_UNK_4);
@@ -1304,7 +1308,7 @@ int daAlink_c::checkNextHookPoint() {
     } else if (dComIfGp_checkPlayerStatus1(0, 0x10000) && checkHookshotRoofLv7Boss()) {
         if (!fopAcM_checkHookCarryNow(mCargoCarryAcKeep.getActor())) {
             field_0x3102 = shape_angle.y;
-            return procCoLargeDamageInit(-6, 1, 0, 0, NULL, 0);
+            return procCoLargeDamageInit(-6, TRUE, 0, 0, NULL, 0);
         }
     }
 
@@ -1340,9 +1344,7 @@ int daAlink_c::commonHookshotRoofWait() {
     setJumpMode();
     if (mProcVar4.field_0x3010 != 0) {
         mCargoCarryAcKeep.setActor();
-        fopAc_ac_c* carryAc_p = mCargoCarryAcKeep.getActor();
-
-        if (carryAc_p == NULL || !fopAcM_checkHookCarryNow(carryAc_p)) {
+        if (mCargoCarryAcKeep.getActor() == NULL || !fopAcM_checkHookCarryNow(mCargoCarryAcKeep.getActor())) {
             return checkNextHookPoint();
         }
     }
@@ -1367,7 +1369,12 @@ int daAlink_c::commonHookshotRoofWait() {
 
 int daAlink_c::commonHookshotWallWait() {
     setJumpMode();
-    return checkLandHookshotHang() ? TRUE : FALSE;
+    
+    if (checkLandHookshotHang()) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 int daAlink_c::procHookshotSubjectInit() {
@@ -1388,10 +1395,9 @@ int daAlink_c::procHookshotSubjectInit() {
     return 1;
 }
 
-
 int daAlink_c::procHookshotSubject() {
     if (checkHookshotWait()) {
-        setDoStatus(0x12);
+        setDoStatus(BUTTON_STATUS_BACK);
     }
 
     setShapeAngleToAtnActor(0);
@@ -1461,7 +1467,7 @@ int daAlink_c::procHookshotFlyInit() {
     commonProcInit(PROC_HOOKSHOT_FLY);
 
     if (!checkNoResetFlg0(FLG0_SWIM_UP)) {
-        onNoResetFlg0(FLG0_UNDERWATER);
+        onNoResetFlg0(FLG0_WATER_IN_MOVE);
     }
 
     daAlink_ANM anm;
@@ -1500,7 +1506,6 @@ int daAlink_c::procHookshotFlyInit() {
     return 1;
 }
 
-
 int daAlink_c::procHookshotFly() {
     fopAc_ac_c* targetAc_p = mHookTargetAcKeep.getActor();
 
@@ -1511,11 +1516,11 @@ int daAlink_c::procHookshotFly() {
         targetAc_name = PROC_ALINK;
     }
 
-    BOOL var_r29 = 0;
+    BOOL var_r29 = FALSE;
     if (targetAc_name == PROC_Obj_SwHang) {
         int swhang_type = static_cast<daObjSwHang_c*>(targetAc_p)->getType();
         if (swhang_type == 3 || swhang_type == 4) {
-            var_r29 = 1;
+            var_r29 = TRUE;
         }
     }
 
@@ -1556,20 +1561,20 @@ int daAlink_c::procHookshotFly() {
             dComIfGp_getVibration().StartShock(1, 1, cXyz(0.0f, 1.0f, 0.0f));
             return procBossBodyHangInit(targetAc_p);
         } else {
-            cM3dGPla poly;
-            BOOL var_r28 = 0;
-            BOOL var_r27 = 0;
-            BOOL force_fall = checkStageName("D_MN10") && fopAcM_GetRoomNo(this) == 4;
+            cM3dGPla tripla;
+            BOOL var_r28 = FALSE;
+            BOOL var_r27 = FALSE;
+            BOOL is_force_fall = checkStageName("D_MN10") && fopAcM_GetRoomNo(this) == 4;
 
             if (mProcVar2.field_0x300c == 4 && dComIfG_Bgsp().ChkPolySafe(mPolyInfo2)) {
-                var_r28 = dComIfG_Bgsp().GetTriPla(mPolyInfo2, &poly);
-                var_r27 = cBgW_CheckBRoof(poly.mNormal.y);
+                var_r28 = dComIfG_Bgsp().GetTriPla(mPolyInfo2, &tripla);
+                var_r27 = cBgW_CheckBRoof(tripla.mNormal.y);
                 if (!checkHookshotStickBG(mPolyInfo2)) {
-                    var_r28 = 0;
+                    var_r28 = FALSE;
                 }
             }
 
-            if (!force_fall && !mLinkAcch.ChkGroundHit() && !var_r27 && checkFrontWallTypeAction())
+            if (!is_force_fall && !mLinkAcch.ChkGroundHit() && !var_r27 && checkFrontWallTypeAction())
             {
                 voiceStart(Z2SE_AL_V_CLIMB);
                 dComIfGp_getVibration().StartShock(1, 1, cXyz(0.0f, 1.0f, 0.0f));
@@ -1587,23 +1592,22 @@ int daAlink_c::procHookshotFly() {
                 }
 
                 if (var_r28 && !var_r27) {
-                    cXyz sp94(mHookshotTopPos.x + poly.mNormal.x * 35.0f, mHookshotTopPos.y + 5.0f,
-                              mHookshotTopPos.z + poly.mNormal.z * 35.0f);
+                    cXyz sp94(mHookshotTopPos.x + tripla.mNormal.x * 35.0f, mHookshotTopPos.y + 5.0f,
+                              mHookshotTopPos.z + tripla.mNormal.z * 35.0f);
                     mLinkGndChk.SetPos(&sp94);
 
-                    if (dComIfG_Bgsp().GroundCross(&mLinkGndChk) > mHookshotTopPos.y - 150.0f ||
-                        force_fall)
-                    {
+                    f32 temp_f29 = dComIfG_Bgsp().GroundCross(&mLinkGndChk);
+                    if (temp_f29 > mHookshotTopPos.y - 150.0f || is_force_fall) {
                         current.pos.x = sp94.x;
                         current.pos.z = sp94.z;
-                        force_fall = true;
+                        is_force_fall = true;
                     }
                 }
 
                 setJumpMode();
                 if (mLinkAcch.ChkGroundHit()) {
                     checkNextAction(0);
-                } else if (force_fall) {
+                } else if (is_force_fall) {
                     procFallInit(1, 5.0f);
                     field_0x2f99 = 0x70;
                 } else if (targetAc_name == PROC_E_PH || targetAc_name == PROC_B_DR || var_r29) {
@@ -1617,8 +1621,8 @@ int daAlink_c::procHookshotFly() {
                     procRoofHangStartInit(mPolyInfo2, sp88, 0);
                 } else if (var_r28 && var_r27) {
                     procHookshotRoofWaitInit(1, NULL, mProcVar5.field_0x3012);
-                } else if (var_r28 && field_0x2f91 != 3 && fabsf(poly.mNormal.y) < 0.05f) {
-                    procHookshotWallWaitInit(1, poly.mNormal.atan2sX_Z(), mProcVar5.field_0x3012);
+                } else if (var_r28 && field_0x2f91 != 3 && fabsf(tripla.mNormal.y) < 0.05f) {
+                    procHookshotWallWaitInit(1, tripla.mNormal.atan2sX_Z(), mProcVar5.field_0x3012);
                 } else {
                     procFallInit(1, 5.0f);
                     field_0x2f99 = 0x70;
@@ -1641,8 +1645,7 @@ int daAlink_c::procHookshotFly() {
     return 1;
 }
 
-
-int daAlink_c::procHookshotRoofWaitInit(int param_0, fopAc_ac_c* param_1, int param_2) {
+int daAlink_c::procHookshotRoofWaitInit(BOOL param_0, fopAc_ac_c* param_1, int param_2) {
     commonProcInit(PROC_HOOKSHOT_ROOF_WAIT);
 
     if (param_0) {
@@ -1687,14 +1690,13 @@ int daAlink_c::procHookshotRoofWaitInit(int param_0, fopAc_ac_c* param_1, int pa
     mProcVar5.field_0x3012 = param_2;
 
     dComIfGp_setPlayerStatus1(0, 0x10000);
-    field_0x814.SetWeight(255);
+    mCcStts.SetWeight(255);
     return 1;
 }
 
-
 int daAlink_c::procHookshotRoofWait() {
     if (dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x80)) {
-        if (checkSubjectEnd(1)) {
+        if (checkSubjectEnd(TRUE)) {
             dComIfGp_clearPlayerStatus0(0, 0x2000);
             mBodyAngle.y = 0;
             mBodyAngle.x = 0;
@@ -1718,7 +1720,7 @@ int daAlink_c::procHookshotRoofWait() {
     }
 
     if (!checkHookshotRoofLv7Boss() || !checkBootsOrArmorHeavy()) {
-        setDoStatusEmphasys(1);
+        setDoStatusEmphasys(BUTTON_STATUS_LET_GO);
 
         if (doTrigger()) {
             return procFallInit(1, 5.0f);
@@ -1735,7 +1737,7 @@ int daAlink_c::procHookshotRoofWait() {
         }
 
         daPy_frameCtrl_c* frameCtrl_p = mUnderFrameCtrl;
-        if (frameCtrl_p->checkAnmEnd() ||
+        if (checkAnmEnd(frameCtrl_p) ||
             ((checkInputOnR() || mProcVar5.field_0x3012 != 0 || checkHookshotRoofLv7Boss()) &&
              frameCtrl_p->getFrame() > mpHIO->mItem.mHookshot.m.mRoofHangAnm.mCancelFrame))
         {
@@ -1751,7 +1753,6 @@ int daAlink_c::procHookshotRoofWait() {
 
     return 1;
 }
-
 
 int daAlink_c::procHookshotRoofShootInit(fopAc_ac_c* param_0) {
     commonProcInit(PROC_HOOKSHOT_ROOF_SHOOT);
@@ -1776,16 +1777,15 @@ int daAlink_c::procHookshotRoofShootInit(fopAc_ac_c* param_0) {
     dComIfGp_setPlayerStatus1(0, 0x10000);
     dComIfGp_setPlayerStatus0(0, 0x4000);
 
-    field_0x814.SetWeight(255);
+    mCcStts.SetWeight(255);
     mProcVar2.field_0x300c = 0;
     mProcVar3.field_0x300e = mBodyAngle.x;
     return 1;
 }
 
-
 int daAlink_c::procHookshotRoofShoot() {
     if (checkHookshotWait()) {
-        setDoStatus(0x12);
+        setDoStatus(BUTTON_STATUS_BACK);
     }
 
     if (commonHookshotRoofWait()) {
@@ -1846,7 +1846,6 @@ int daAlink_c::procHookshotRoofShoot() {
     return 1;
 }
 
-
 int daAlink_c::procHookshotRoofBootsInit(fopAc_ac_c* param_0) {
     commonProcInit(PROC_HOOKSHOT_ROOF_BOOTS);
 
@@ -1869,10 +1868,9 @@ int daAlink_c::procHookshotRoofBootsInit(fopAc_ac_c* param_0) {
 
     dComIfGp_setPlayerStatus1(0, 0x10000);
 
-    field_0x814.SetWeight(255);
+    mCcStts.SetWeight(255);
     return 1;
 }
-
 
 int daAlink_c::procHookshotRoofBoots() {
     if (commonHookshotRoofWait()) {
@@ -1880,7 +1878,7 @@ int daAlink_c::procHookshotRoofBoots() {
     }
 
     if (!checkHookshotRoofLv7Boss() || !checkBootsOrArmorHeavy()) {
-        setDoStatusEmphasys(1);
+        setDoStatusEmphasys(BUTTON_STATUS_LET_GO);
 
         if (doTrigger()) {
             return procFallInit(1, 5.0f);
@@ -1888,7 +1886,7 @@ int daAlink_c::procHookshotRoofBoots() {
     }
 
     daPy_frameCtrl_c* frameCtrl_p = mUnderFrameCtrl;
-    if (frameCtrl_p->checkAnmEnd()) {
+    if (checkAnmEnd(frameCtrl_p)) {
         return procHookshotRoofWaitInit(0, mCargoCarryAcKeep.getActor(), 0);
     }
 
@@ -1901,13 +1899,13 @@ int daAlink_c::procHookshotRoofBoots() {
     return 1;
 }
 
-
 int daAlink_c::procHookshotWallWaitInit(int param_0, s16 param_1, int param_2) {
     commonProcInit(PROC_HOOKSHOT_WALL_WAIT);
 
     if (param_0) {
-        cXyz sp28;
         setOldRootQuaternion(0, -0x8000, 0);
+
+        cXyz sp28;
         mDoMtx_stack_c::ZXYrotS(field_0x301c, field_0x301e, 0);
         mDoMtx_stack_c::multVec(&cXyz::BaseZ, &sp28);
         current.pos = mHookshotTopPos + (sp28 * 15.0f);
@@ -1952,10 +1950,9 @@ int daAlink_c::procHookshotWallWaitInit(int param_0, s16 param_1, int param_2) {
     return 1;
 }
 
-
 int daAlink_c::procHookshotWallWait() {
     if (dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x80)) {
-        if (checkSubjectEnd(1)) {
+        if (checkSubjectEnd(TRUE)) {
             dComIfGp_clearPlayerStatus0(0, 0x2000);
             mBodyAngle.x = 0;
             offModeFlg(0x60000000);
@@ -1963,12 +1960,12 @@ int daAlink_c::procHookshotWallWait() {
             s16 old_angle = shape_angle.y;
             shape_angle.y = field_0x310c;
             setBodyAngleToCamera();
-
             shape_angle.y = old_angle;
 
-            if ((s16)(field_0x310c - shape_angle.y) > 0x4000) {
+            old_angle = field_0x310c - shape_angle.y;
+            if (old_angle > 0x4000) {
                 field_0x310c = shape_angle.y + 0x4000;
-            } else if ((s16)(field_0x310c - shape_angle.y) < -0x4000) {
+            } else if (old_angle < -0x4000) {
                 field_0x310c = shape_angle.y - 0x4000;
             }
         }
@@ -1987,7 +1984,7 @@ int daAlink_c::procHookshotWallWait() {
         return 1;
     }
 
-    setDoStatusEmphasys(1);
+    setDoStatusEmphasys(BUTTON_STATUS_LET_GO);
 
     if (doTrigger()) {
         return procFallInit(1, 5.0f);
@@ -2001,7 +1998,7 @@ int daAlink_c::procHookshotWallWait() {
         }
 
         daPy_frameCtrl_c* frameCtrl_p = mUnderFrameCtrl;
-        if (frameCtrl_p->checkAnmEnd() ||
+        if (checkAnmEnd(frameCtrl_p) ||
             ((checkInputOnR() || mProcVar5.field_0x3012 != 0) &&
              frameCtrl_p->getFrame() > mpHIO->mItem.mHookshot.m.mWallHangAnm.mCancelFrame))
         {
@@ -2014,7 +2011,6 @@ int daAlink_c::procHookshotWallWait() {
 
     return 1;
 }
-
 
 int daAlink_c::procHookshotWallShootInit() {
     commonProcInit(PROC_HOOKSHOT_WALL_SHOOT);
@@ -2044,10 +2040,9 @@ int daAlink_c::procHookshotWallShootInit() {
     return 1;
 }
 
-
 int daAlink_c::procHookshotWallShoot() {
     if (checkHookshotWait()) {
-        setDoStatus(0x12);
+        setDoStatus(BUTTON_STATUS_BACK);
     }
 
     if (commonHookshotWallWait()) {
@@ -2102,9 +2097,10 @@ int daAlink_c::procHookshotWallShoot() {
             mProcVar2.field_0x300c = 0;
         }
 
-        if ((s16)(shape_angle.y - old_angle) > 0x4000) {
+        s16 var_r27 = shape_angle.y - old_angle;
+        if (var_r27 > 0x4000) {
             shape_angle.y = old_angle + 0x4000;
-        } else if ((s16)(shape_angle.y - old_angle) < -0x4000) {
+        } else if (var_r27 < -0x4000) {
             shape_angle.y = old_angle - 0x4000;
         }
 

@@ -82,7 +82,10 @@ public:
     const attributes* attr() const { return &M_attr; }
     int getType() { return argument & 0x7F; }
     u8 getPathID() { return fopAcM_GetParam(this); }
-    bool isPlayerCorrect() { return (s8)(u8)(fopAcM_GetParam(this) >> 8) > 0; }
+    bool isPlayerCorrect() {
+        s8 var_r31 = (fopAcM_GetParam(this) >> 8) & 0xFF;
+        return var_r31 > 0;
+    }
 
 private:
     /* 0x568 */ J3DModel* mpActiveModel;

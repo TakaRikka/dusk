@@ -369,12 +369,8 @@ int daNpcChin_c::CreateHeap() {
     return 1;
 }
 
-static void dummy() {
-    OS_REPORT("Delete -> NPC_CHIN(id=%d)\n");
-}
-
 int daNpcChin_c::Delete() {
-    fpc_ProcID unusedId = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_CHIN");
     OS_REPORT("----------------------daNpcChin_c::Delete!!\n");
     this->~daNpcChin_c();
     return 1;

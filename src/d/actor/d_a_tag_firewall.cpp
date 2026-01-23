@@ -5,12 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_tag_firewall.h"
 #include <cmath>
 #include "d/actor/d_a_player.h"
-#include "d/d_com_inf_game.h"
+#include "d/actor/d_a_tag_firewall.h"
 #include "d/d_bomb.h"
 #include "d/d_camera.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
 
 struct Tag_FWall_n {
     static dCcD_SrcSph cc_sph_src;
@@ -42,6 +43,7 @@ static u8 fire_num;
 int daTag_FWall_c::execute() {
     cXyz cam_eye = dCam_getBody()->Eye();
     cXyz pos;
+    u8 target_alpha = 0xff;
 
     if (mSetGameoverEff) {
         pos.set(0.0f, 0.0f, 0.0f);
@@ -108,8 +110,9 @@ int daTag_FWall_c::execute() {
                 mCcSphs[i].OnAtSetBit();
 
                 pos = mWallPos[i];
+                pos.y += nREG_F(17);
                 mCcSphs[i].SetC(pos);
-                mCcSphs[i].SetR(90.0f);
+                mCcSphs[i].SetR(90.0f + nREG_F(16));
                 dComIfG_Ccsp()->Set(&mCcSphs[i]);
             }
 
@@ -120,8 +123,7 @@ int daTag_FWall_c::execute() {
             if (emitter != NULL) {
                 pos = cam_eye - mWallPos[i];
 
-                u8 target_alpha;
-                if (pos.absXZ() < 250.0f && std::abs(pos.y) < 250.0f) {
+                if (pos.absXZ() < 250.0f + nREG_F(18) && std::abs(pos.y) < 250.0f + nREG_F(19)) {
                     target_alpha = 0;
                 } else {
                     target_alpha = 0xFF;
@@ -163,11 +165,14 @@ static int daTag_FWall_IsDelete(daTag_FWall_c* i_this) {
 }
 
 static int daTag_FWall_Delete(daTag_FWall_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return 1;
 }
 
 int daTag_FWall_c::create() {
     fopAcM_ct(this, daTag_FWall_c);
+
+    OS_REPORT("Tag_FWall PARAM %x %d \n", fopAcM_GetParam(this), fire_num);
 
     if (fire_num == 0) {
         field_0x568 = 0xFF;
@@ -175,11 +180,11 @@ int daTag_FWall_c::create() {
         mCcStts.Init(0xFF, 0, this);
     }
 
-    fire_leader->mWallTimer[fire_num] = (fopAcM_GetParam(this) >> 8) & 0xFFFF;
+    fire_leader->mWallTimer[fire_num] = (fopAcM_GetParam(this) & 0xFFFF00) >> 8;
     fire_leader->mExplodeTime[fire_num] = current.angle.x & 0xFFFF;
     fire_leader->field_0x65c[fire_num] = fopAcM_GetParam(this);
 
-    u8 temp_r0 = fopAcM_GetParam(this) >> 0x18;
+    u8 temp_r0 = (fopAcM_GetParam(this) & 0xFF000000) >> 24;
     if (temp_r0 == 0xFF) {
         temp_r0 = 0;
     }
@@ -194,12 +199,12 @@ int daTag_FWall_c::create() {
         fire_leader->mWallMode[fire_num] = 1;
     }
 
-    if (++fire_num > 1) {
+    fire_num++;
+    if (fire_num > 1) {
         return cPhs_ERROR_e;
     }
 
-    shape_angle.x = 0;
-    current.angle.x = 0;
+    current.angle.x = shape_angle.x = 0;
     return cPhs_COMPLEATE_e;
 }
 

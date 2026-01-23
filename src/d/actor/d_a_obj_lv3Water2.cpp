@@ -34,7 +34,7 @@ daLv3Water2_HIO_c::daLv3Water2_HIO_c() {
 
 #if DEBUG
 void daLv3Water2_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genSlider("wait time", &mLevelControlWaitFrames, 0, 255, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("wait time", &mLevelControlWaitFrames, 0, 255);
 }
 #endif
 

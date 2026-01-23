@@ -7,7 +7,7 @@
 
 struct daNpc_Maro_HIOParam {
     /* 0x00 */ daNpcT_HIOParam common;
-    /* 0x8C */ s16 field_0x8c;
+    /* 0x8C */ s16 tease_interval;
 };
 
 class daNpc_Maro_Param_c {
@@ -125,6 +125,7 @@ public:
     int arrowTutorial(void*);
     int talk(void*);
     int shop(void*);
+    BOOL test(void*);
     daNpc_Maro_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
@@ -169,16 +170,21 @@ public:
     static char* mCutNameList[17];
     static cutFunc mCutList[17];
 
+    u8 getGroupId() {
+        return (fopAcM_GetParam(this) & 0xF0000000) >> 28;
+    }
+
+    u8 getPathID() {
+        return (fopAcM_GetParam(this) & 0xFF00) >> 8;
+    }
+
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;
-        if (nodeNo == 0xffff) {
-            return -1;
-        }
-        return nodeNo;
+        return (nodeNo == 0xFFFF) ? -1 : nodeNo;
     }
 
     u8 getMaxNumItem() {
-        return (fopAcM_GetParam(this) & 0xf000000) >> 0x18;
+        return (fopAcM_GetParam(this) & 0xF000000) >> 24;
     }
 
 private:

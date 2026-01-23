@@ -14,6 +14,10 @@
 #include "d/d_meter2_info.h"
 #include "d/actor/d_a_horse.h"
 #include "Z2AudioLib/Z2Instances.h"
+#if DEBUG
+#include "JSystem/JHostIO/JORFile.h"
+#include "d/d_debug_viewer.h"
+#endif
 
 enum Aru_RES_File_ID {
     /* BCK */
@@ -136,6 +140,109 @@ enum Type {
     /* 0x4 */ TYPE_4,
 };
 
+const daNpc_Aru_HIOParam daNpc_Aru_Param_c::m = {
+    220.0f,
+    -3.0f,
+    1.0f,
+    600.0f,
+    255.0f,
+    210.0f,
+    35.0f,
+    40.0f,
+    0.0f,
+    0.0f,
+    10.0f,
+    -10.0f,
+    30.0f,
+    -10.0f,
+    45.0f,
+    -45.0f,
+    0.6f,
+    12.0f,
+    6,
+    6,
+    9,
+    6,
+    110.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    60,
+    8,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    1500.0f,
+    24.0f,
+    4.0f,
+    10,
+    20,
+    45.0f,
+};
+
+#if DEBUG
+daNpc_Aru_HIO_c::daNpc_Aru_HIO_c() {
+    m = daNpc_Aru_Param_c::m;
+}
+
+void daNpc_Aru_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    char msg_buffer[2000];
+
+    JORReflexible::listenPropertyEvent(event);
+
+    JORFile aJStack_910;
+    int len;
+    switch ((u32)event->id) {
+    case 0x40000002:
+        if (aJStack_910.open(6, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL) != 0) {
+            memset(msg_buffer, 0, 2000);
+            len = 0;
+            daNpcT_cmnListenPropertyEvent(msg_buffer, &len, &m.common);
+            sprintf(msg_buffer + len, "%.3ff,\t//  警戒範囲\n", m.warning_range);
+            len = strlen(msg_buffer);
+            sprintf(msg_buffer + len, "%.3ff,\t//  走る速度\n", m.run_speed);
+            len = strlen(msg_buffer);
+            sprintf(msg_buffer + len, "%.3ff,\t//  歩き速度\n", m.walk_speed);
+            len = strlen(msg_buffer);
+            sprintf(msg_buffer + len, "%d,   \t//  旋回禁止時間\n", m.no_turn_time);
+            len = strlen(msg_buffer);
+            sprintf(msg_buffer + len, "%d,   \t//  避け時間\n", m.avoid_time);
+            len = strlen(msg_buffer);
+            sprintf(msg_buffer + len, "%.3ff,\t//  前方視界\n", m.forward_visibility);
+            len = strlen(msg_buffer);
+            aJStack_910.writeData(msg_buffer, len);
+            aJStack_910.close();
+            OS_REPORT("write append success!::%6d\n", len);
+        } else {
+            OS_REPORT("write append failure!\n");
+        }
+        break;
+    }
+}
+
+void daNpc_Aru_HIO_c::genMessage(JORMContext* ctx) {
+    daNpcT_cmnGenMessage(ctx, &m.common);
+    ctx->genSlider("警戒範囲        ", &m.warning_range, 0.0f, 10000.0f);
+    ctx->genSlider("走る速度        ", &m.run_speed, 0.0f, 10000.0f);
+    ctx->genSlider("歩く速度        ", &m.walk_speed, 0.0f, 10000.0f);
+    ctx->genSlider("旋回禁止時間    ", &m.no_turn_time, 0, 10000);
+    ctx->genSlider("避け時間        ", &m.avoid_time, 0, 10000);
+    ctx->genSlider("前方視界        ", &m.forward_visibility, 0.0f, 180.0f);
+    // export file:
+    ctx->genButton("ファイル書き出し", 0x40000002);
+}
+#endif
+
 static int l_bmdData[1][2] = {
     {BMDR_ARU, ARU},
 };
@@ -257,73 +364,11 @@ daNpc_Aru_c::cutFunc daNpc_Aru_c::mCutList[7] = {
     &daNpc_Aru_c::cutNoEntrance,
 };
 
-const daNpc_Aru_HIOParam daNpc_Aru_Param_c::m = {
-    220.0f,
-    -3.0f,
-    1.0f,
-    600.0f,
-    255.0f,
-    210.0f,
-    35.0f,
-    40.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    -10.0f,
-    30.0f,
-    -10.0f,
-    45.0f,
-    -45.0f,
-    0.6f,
-    12.0f,
-    6,
-    6,
-    9,
-    6,
-    110.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    60,
-    8,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    1500.0f,
-    24.0f,
-    4.0f,
-    10,
-    20,
-    45.0f,
-};
-
 static NPC_ARU_HIO_CLASS l_HIO;
 
-#if DEBUG
-daNpc_Aru_HIO_c::daNpc_Aru_HIO_c() {
-    m = daNpc_Aru_Param_c::m;
-}
-
-void daNpc_Aru_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
-    // NONMATCHING
-}
-
-void daNpc_Aru_HIO_c::genMessage(JORMContext* ctx) {
-    // NONMATCHING
-}
-#endif
-
 daNpc_Aru_c::~daNpc_Aru_c() {
+    // destruct
+    OS_REPORT("|%06d:%x|daNpc_Aru_c -> デストラクト\n", g_Counter.mCounter0, this);
     if (mpMorf[0] != NULL) {
         mpMorf[0]->stopZelAnime();
     }
@@ -347,7 +392,8 @@ cPhs__Step daNpc_Aru_c::create() {
 
     cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
-        OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x<%08x> ", fopAcM_getProcNameString(this), mType, mFlowNodeNo, (getPathID() >> 32) & 0xFF, fopAcM_GetParam(this));
+        OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x<%08x> ", fopAcM_getProcNameString(this),
+                  mType, mFlowNodeNo, getPathID(), fopAcM_GetParam(this));
 
         if (isDelete()) {
             OS_REPORT("===>isDelete:TRUE\n");
@@ -365,6 +411,7 @@ cPhs__Step daNpc_Aru_c::create() {
             return cPhs_ERROR_e;
         }
 
+        J3DModelData* modelData = mpMorf[0]->getModel()->getModelData(); // unused
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
 
@@ -406,17 +453,24 @@ cPhs__Step daNpc_Aru_c::create() {
 }
 
 int daNpc_Aru_c::CreateHeap() {
-    J3DModelData* mdlData_p = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_resNameList[l_bmdData[0][1]], l_bmdData[0][0]));
+    J3DModelData* mdlData_p = NULL;
+    J3DModel* model = NULL;
+    int bmdIdx = FALSE;
+    int res_name_idx = l_bmdData[bmdIdx][1];
+    int my_bmd = l_bmdData[bmdIdx][0];
+    mdlData_p = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_resNameList[res_name_idx], my_bmd));
     if (mdlData_p == NULL) {
         return 1;
     }
 
-    mpMorf[0] = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000, 0x11020284);
+    u32 sp_0x18 = 0x11020284;
+    mpMorf[0] = new mDoExt_McaMorfSO(mdlData_p, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
+                                     sp_0x18);
     if (mpMorf[0] == NULL || mpMorf[0]->getModel() == NULL) {
         return 0;
     }
 
-    J3DModel* model = mpMorf[0]->getModel();
+    model = mpMorf[0]->getModel();
     for (u16 i = 0; i < mdlData_p->getJointNum(); i++) {
         mdlData_p->getJointNodePointer(i)->setCallBack(ctrlJointCallBack);
     }
@@ -435,6 +489,8 @@ int daNpc_Aru_c::CreateHeap() {
 }
 
 int daNpc_Aru_c::Delete() {
+    OS_REPORT("|%06d:%x|daNpc_Aru_c -> Delete\n", g_Counter.mCounter0, this);
+    fopAcM_RegisterDeleteID(this, "NPC_ARU");
     this->~daNpc_Aru_c();
     return 1;
 }
@@ -449,25 +505,20 @@ int daNpc_Aru_c::Draw() {
         mdlData_p->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    return draw(
-#if DEBUG
-        chkAction(&daNpc_Aru_c::test),
-#else
-        FALSE,
-#endif
-        FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE
-    );
+    return draw(NpcT_CHK_ACTION(daNpc_Aru_c), FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
-int daNpc_Aru_c::createHeapCallBack(fopAc_ac_c* a_this) {
-    return static_cast<daNpc_Aru_c*>(a_this)->CreateHeap();
+int daNpc_Aru_c::createHeapCallBack(fopAc_ac_c* i_this) {
+    daNpc_Aru_c* a_this = static_cast<daNpc_Aru_c*>(i_this);
+    return a_this->CreateHeap();
 }
 
 int daNpc_Aru_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
     if (param_2 == 0) {
-        daNpc_Aru_c* i_this = (daNpc_Aru_c*)j3dSys.getModel()->getUserArea();
+        J3DModel* model = j3dSys.getModel();
+        daNpc_Aru_c* i_this = (daNpc_Aru_c*) model->getUserArea();
         if (i_this != NULL) {
-            i_this->ctrlJoint(i_joint, j3dSys.getModel());
+            i_this->ctrlJoint(i_joint, model);
         }
     }
 
@@ -475,9 +526,10 @@ int daNpc_Aru_c::ctrlJointCallBack(J3DJoint* i_joint, int param_2) {
 }
 
 void* daNpc_Aru_c::srchCow(void* i_actor, void* i_data) {
+    fopAc_ac_c* data_p = (fopAc_ac_c*) i_data;
     if (mFindCount < 50) {
-        fopAc_ac_c* actor_p = (fopAc_ac_c*)i_actor;
-        if (actor_p != NULL && actor_p != i_data) {
+        fopAc_ac_c* actor_p = (fopAc_ac_c*) i_actor;
+        if (actor_p != NULL && actor_p != data_p) {
             if (fopAcM_IsExecuting(fopAcM_GetID(actor_p)) && fopAcM_GetName(actor_p) == PROC_COW && !((daCow_c*)actor_p)->isGuardFad()) {
                 mFindActorPtrs[mFindCount] = actor_p;
                 mFindCount++;
@@ -489,10 +541,14 @@ void* daNpc_Aru_c::srchCow(void* i_actor, void* i_data) {
 }
 
 void* daNpc_Aru_c::srchUDoor(void* i_actor, void* i_data) {
-    if (mFindCount < 50 && i_actor != NULL && i_actor != i_data) {
-        if (fopAcM_IsExecuting(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_OBJ_UDOOR) {
-            mFindActorPtrs[mFindCount] = (fopAc_ac_c*)i_actor;
-            mFindCount++;
+    fopAc_ac_c* data_p = (fopAc_ac_c*) i_data;
+    if (mFindCount < 50) {
+        fopAc_ac_c* actor_p = (fopAc_ac_c*) i_actor;
+        if (actor_p != NULL && actor_p != data_p) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor_p)) && fopAcM_GetName(actor_p) == PROC_OBJ_UDOOR) {
+                mFindActorPtrs[mFindCount] = (fopAc_ac_c*) actor_p;
+                mFindCount++;
+            }
         }
     }
 
@@ -500,17 +556,18 @@ void* daNpc_Aru_c::srchUDoor(void* i_actor, void* i_data) {
 }
 
 BOOL daNpc_Aru_c::chkThrust(fopAc_ac_c* actor_p) {
-    cM_atan2s(actor_p->speed.x, actor_p->speed.z);
-    fopAcM_searchActorAngleY(actor_p, this);
+    s16 reg_r27 = cM_atan2s(actor_p->speed.x, actor_p->speed.z); // unused
+    reg_r27 = reg_r27 - fopAcM_searchActorAngleY(actor_p, this);
     f32 actorDistance = fopAcM_searchActorDistance(this, actor_p);
 
     if (actor_p != NULL) {
         if (cM3d_IsZero(actor_p->speedF) <= 0 && (cM3d_IsZero(actor_p->speed.x) <= 0 || cM3d_IsZero(actor_p->speed.z) <= 0)) {
             f32 fVar2 = fopAcM_searchActorDistance(this, actor_p);
-            s16 sVar1 = cM_atan2s(actor_p->speed.x, actor_p->speed.z) - fopAcM_searchActorAngleY(actor_p, this);
+            s16 reg_r28 = cM_atan2s(actor_p->speed.x, actor_p->speed.z);
+            reg_r28 = reg_r28 - fopAcM_searchActorAngleY(actor_p, this);
 
             if (fVar2 < mpHIO->m.warning_range) {
-                if (abs(sVar1) < cM_deg2s(35.0f)) {
+                if (abs(reg_r28) < cM_deg2s(35.0f)) {
                     return TRUE;
                 }
             }
@@ -525,6 +582,7 @@ BOOL daNpc_Aru_c::chkThrust(fopAc_ac_c* actor_p) {
 }
 
 fopAc_ac_c* daNpc_Aru_c::getCowP(int param_1) {
+    int i = 0;
     mFindCount = 0;
 
     if (daPy_py_c::checkNowWolf()) {
@@ -550,7 +608,7 @@ fopAc_ac_c* daNpc_Aru_c::getCowP(int param_1) {
         return NULL;
     }
 
-    for (int i = 0; i < mFindCount; i++) {
+    for (i = 0; i < mFindCount; i++) {
         if (chkThrust(mFindActorPtrs[i])) {
             return mFindActorPtrs[i];
         }
@@ -594,13 +652,14 @@ fopAc_ac_c* daNpc_Aru_c::getUDoor_r_P() {
 }
 
 u8 daNpc_Aru_c::getType() {
-    switch (fopAcM_GetParam(this) & 0xFF) {
+    u8 prm = fopAcM_GetParam(this);
+    switch (prm & 0xFF) {
         case 0:
             return 0;
 
         case 1:
             return 1;
-        
+
         case 2:
             return 2;
 
@@ -778,6 +837,17 @@ BOOL daNpc_Aru_c::checkChangeEvt() {
 
             return TRUE;
         }
+
+#if DEBUG
+        switch (mType) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            break;
+        }
+#endif
     }
 
     return FALSE;
@@ -790,7 +860,7 @@ void daNpc_Aru_c::setAfterTalkMotion() {
         case FACE_NORMAL:
             i_index = FACE_H_NORMAL;
             break;
-        
+
         case FACE_GRUMPY:
             i_index = FACE_H_GRUMPY;
             break;
@@ -899,7 +969,8 @@ BOOL daNpc_Aru_c::evtCutProc() {
 }
 
 void daNpc_Aru_c::action() {
-    fopAc_ac_c* actor_p = hitChk(&mCyl, 0xFFFFFFFF);
+    fopAc_ac_c* actor_p = NULL;
+    actor_p = hitChk(&mCyl, 0xFFFFFFFF);
 
     if (actor_p != NULL && mCyl.GetTgHitObj()->ChkAtType(AT_TYPE_THROW_OBJ)) {
         mStagger.setParam(this, actor_p, mCurAngle.y);
@@ -964,13 +1035,14 @@ void daNpc_Aru_c::setAttnPos() {
 
     static cXyz prtclScl(1.0f, 1.0f, 1.0f);
     setFootPos();
-    setFootPrtcl(&prtclScl, 0.0f, 0.0f);
+    setFootPrtcl(&prtclScl, MREG_F(19), 0.0f);
 }
 
 void daNpc_Aru_c::setCollision() {
     cXyz pos;
 
     if (!mHide) {
+        u32 co_sprm = 0x79;
         u32 tgType = 0xD8FBFDFF;
         u32 tgSPrm = 0x1F;
 
@@ -982,7 +1054,7 @@ void daNpc_Aru_c::setCollision() {
             tgSPrm = 0;
         }
 
-        mCyl.SetCoSPrm(0x79);
+        mCyl.SetCoSPrm(co_sprm);
         mCyl.SetTgType(tgType);
         mCyl.SetTgSPrm(tgSPrm);
         mCyl.OnTgNoHitMark();
@@ -1005,11 +1077,37 @@ void daNpc_Aru_c::setCollision() {
 }
 
 int daNpc_Aru_c::drawDbgInfo() {
-    return 0;
+#if DEBUG
+    if (mpHIO->m.common.debug_info_ON) {
+        f32 dist_max_speak = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_SPEAK_e]).mDistMax;
+        f32 dist_max_talk = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_TALK_e]).mDistMax;
+        dDbVw_drawCircleOpa(attention_info.position, dist_max_speak, (GXColor){0x00, 0xC8, 0x00, 0xFF}, 1, 12);
+        dDbVw_drawCircleOpa(attention_info.position, dist_max_talk, (GXColor){0xC8, 0x00, 0x00, 0xFF}, 1, 12);
+        dDbVw_drawSphereXlu(eyePos, 18.0f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
+        dDbVw_drawSphereXlu(attention_info.position, 9.0f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
+        cXyz vec_0x2c = mFootLPos;
+        cXyz vec_0x20 = vec_0x2c;
+        vec_0x20.y -= MREG_F(19);
+        dDbVw_drawLineOpa(vec_0x2c, vec_0x20, (GXColor){0x80, 0x80, 0x00, 0xA0}, 1, 12);
+        vec_0x2c = mFootRPos;
+        vec_0x20 = vec_0x2c;
+        vec_0x20.y -= MREG_F(19);
+        dDbVw_drawLineOpa(vec_0x2c, vec_0x20, (GXColor){0x80, 0x80, 0x00, 0xA0}, 1, 12);
+        return TRUE;
+    }
+#endif
+
+    return FALSE;
 }
 
 BOOL daNpc_Aru_c::selectAction() {
     mNextAction = NULL;
+#if DEBUG
+    if (mpHIO->m.common.debug_mode_ON) {
+        mNextAction = &daNpc_Aru_c::test;
+        return 1;
+    }
+#endif
 
     switch (mType) {
         case TYPE_0:
@@ -1025,7 +1123,7 @@ BOOL daNpc_Aru_c::selectAction() {
 
             mNextAction = &daNpc_Aru_c::wait;
             break;
-        
+
         case TYPE_2:
             if (chkBullRunningStage()) {
                 mNextAction = &daNpc_Aru_c::bullRunning;
@@ -1078,35 +1176,27 @@ BOOL daNpc_Aru_c::setAction(actionFunc action) {
 }
 
 BOOL daNpc_Aru_c::chkBullRunningStage() {
-    BOOL rv;
-
     if (strcmp(dComIfGp_getStartStageName(), "F_SP00") == 0) {
-        rv = dComIfG_play_c::getLayerNo(0) == 4 || dComIfG_play_c::getLayerNo(0) == 5;
+        return dComIfG_play_c::getLayerNo(0) == 4 || dComIfG_play_c::getLayerNo(0) == 5;
     } else {
-        rv = FALSE;
+        return FALSE;
     }
-
-    return rv;
 }
 
 BOOL daNpc_Aru_c::chkSkipFenceStage() {
-    BOOL rv;
-
     if (strcmp(dComIfGp_getStartStageName(), "F_SP00") == 0) {
-        rv = dComIfG_play_c::getLayerNo(0) == 6 || dComIfG_play_c::getLayerNo(0) == 7;
+        return dComIfG_play_c::getLayerNo(0) == 6 || dComIfG_play_c::getLayerNo(0) == 7;
     } else {
-        rv = FALSE;
+        return FALSE;
     }
-
-    return rv;
 }
 
 s16 daNpc_Aru_c::srchActorDirection(fopAc_ac_c* actor_p) {
-    s16 rv;
     s16 sVar1 = fopAcM_searchActorAngleY(this, actor_p) - mCurAngle.y;
     s16 sVar2 = abs(sVar1);
     s16 sVar3 = cM_deg2s(mpHIO->m.forward_visibility);
-    
+    s16 rv = 0;
+
     if (sVar2 < sVar3) {
         if (sVar1 > 0) {
             rv = 7;
@@ -1132,23 +1222,24 @@ void daNpc_Aru_c::adjustMoveDir() {
     cM3dGPla planes[3];
     cXyz sp84, sp90, sp9c;
     s16 sVar1[3] = {0, -0x2000, 0x2000};
-    bool bVar1[3];
+    u8 bVar1[3];
     f32 fVar1[3];
     s16 sVar3[3];
 
     sp84 = current.pos;
     sp84.y += mpHIO->m.common.knee_length;
+    f32 reg_f31 = 400.0f;
 
     for (int i = 0; i < 3; i++) {
         bVar1[i] = 0;
         sp90 = sp84;
 
         if (i != 0) {
-            sp90.x += cM_ssin(mCurAngle.y + sVar1[i]) * 280.0f;
-            sp90.z += cM_scos(mCurAngle.y + sVar1[i]) * 280.0f;
+            sp90.x += 0.7f * reg_f31 * cM_ssin(mCurAngle.y + sVar1[i]);
+            sp90.z += 0.7f * reg_f31 * cM_scos(mCurAngle.y + sVar1[i]);
         } else {
-            sp90.x += cM_ssin(mCurAngle.y + sVar1[i]) * 400.0f;
-            sp90.z += cM_scos(mCurAngle.y + sVar1[i]) * 400.0f;
+            sp90.x += cM_ssin(mCurAngle.y + sVar1[i]) * reg_f31;
+            sp90.z += cM_scos(mCurAngle.y + sVar1[i]) * reg_f31;
         }
 
         mLinChk.Set(&sp84, &sp90, this);
@@ -1156,9 +1247,7 @@ void daNpc_Aru_c::adjustMoveDir() {
         if (dComIfG_Bgsp().LineCross(&mLinChk)) {
             bVar1[i] = dComIfG_Bgsp().GetTriPla(mLinChk, &planes[i]);
             f32 fVar2 = cM_ssin(0x6000);
-            f32 fVar3 = std::abs(planes[i].mNormal.y);
-
-            if (fVar3 <= fVar2) {
+            if (std::abs(planes[i].mNormal.y) <= fVar2) {
                 sp9c = current.pos - mLinChk.GetCross();
                 fVar1[i] = sp9c.absXZ();
                 sVar3[i] = cM_atan2s(planes[i].mNormal.x, planes[i].mNormal.z);
@@ -1225,7 +1314,7 @@ void daNpc_Aru_c::adjustMoveDir() {
                 field_0xfca = 6;
                 mTimer = mpHIO->m.no_turn_time;
                 break;
-            
+
             case 2:
                 field_0xfca = 7;
                 break;
@@ -1263,11 +1352,11 @@ void daNpc_Aru_c::adjustMoveDir() {
             case 7:
                 field_0xfca = 2;
                 break;
-                
+
             case 1:
                 field_0xfca = 6;
                 break;
-            
+
             case 6:
                 field_0xfca = 1;
                 break;
@@ -1284,8 +1373,9 @@ void daNpc_Aru_c::adjustMoveDir() {
 }
 
 int daNpc_Aru_c::duck(int param_1) {
-    fopAc_ac_c* cow_p;
+    fopAc_ac_c* cow_p = NULL;
     int iVar1 = mpHIO->m.avoid_time;
+    int weight = 37;
     cow_p = getCowP(param_1);
 
     if (cow_p != NULL) {
@@ -1304,7 +1394,7 @@ int daNpc_Aru_c::duck(int param_1) {
         if (cLib_calcTimer(&field_0xfc4) != 0) {
             cow_p = mActorMngrs[2].getActorP();
             if (cow_p != NULL) {
-                mActorDirection = srchActorDirection(cow_p);
+                mActorDirection = (s16) srchActorDirection(cow_p);
             }
 
             adjustMoveDir();
@@ -1312,19 +1402,19 @@ int daNpc_Aru_c::duck(int param_1) {
 
             switch (field_0xfca) {
                 case 1:
-                    sVar1 -= 0x1000;
+                    sVar1 -= (s16) 0x1000;
                     break;
 
                 case 7:
-                    sVar1 += 0x1000;
+                    sVar1 += (s16) 0x1000;
                     break;
-                
+
                 case 2:
-                    sVar1 -= 0x4000;
+                    sVar1 -= (s16) 0x4000;
                     break;
-                
+
                 case 6:
-                    sVar1 += 0x4000;
+                    sVar1 += (s16) 0x4000;
                     break;
             }
 
@@ -1339,7 +1429,7 @@ int daNpc_Aru_c::duck(int param_1) {
                 speedF *= 0.85f;
             }
 
-            mCcStts.SetWeight(37);
+            mCcStts.SetWeight(weight);
             return 1;
         }
 
@@ -1352,6 +1442,7 @@ int daNpc_Aru_c::duck(int param_1) {
 }
 
 int daNpc_Aru_c::lookround(s16 param_1) {
+    s16 reg_30, reg_29;
     if (field_0xfd1) {
         cLib_addCalcAngleS2(&current.angle.y, param_1, MREG_S(0) + 4, MREG_S(1) + 0x800);
         shape_angle.y = current.angle.y;
@@ -1360,15 +1451,21 @@ int daNpc_Aru_c::lookround(s16 param_1) {
         if (mMotionSeqMngr.getNo() != MOT_STEP_R) {
             mMotionSeqMngr.setNo(MOT_STEP_R, -1.0f, FALSE, 0);
         } else if (mMotionSeqMngr.checkEndSequence()) {
-            if (cM_deg2s(4.0f) >= (s16)abs((s16)(param_1 - mCurAngle.y))) {
+            reg_30 = param_1 - mCurAngle.y;
+            reg_29 = abs(reg_30);
+            if (reg_29 <= cM_deg2s(4.0f)) {
                 mMotionSeqMngr.setNo(MOT_WAIT_A, -1.0f, FALSE, 0);
                 field_0xfd1 = false;
             } else {
                 mMotionSeqMngr.setNo(MOT_STEP_R, 0.0f, TRUE, 0);
             }
         }
-    } else if (cM_deg2s(90.0f) < (s16)abs((s16)(param_1 - mCurAngle.y))) {
-        field_0xfd1 = true;
+    } else {
+        reg_30 = param_1 - mCurAngle.y;
+        reg_29 = abs(reg_30);
+        if (cM_deg2s(90.0f) < reg_29) {
+            field_0xfd1 = true;
+        }
     }
 
     return 1;
@@ -1376,8 +1473,9 @@ int daNpc_Aru_c::lookround(s16 param_1) {
 
 int daNpc_Aru_c::cutRideOnHorse(int i_staffID) {
     int rv = 0;
+    int* piVar1 = NULL;
     int prm = -1;
-    int* piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
+    piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
     if (piVar1 != NULL) {
         prm = *piVar1;
     }
@@ -1387,7 +1485,7 @@ int daNpc_Aru_c::cutRideOnHorse(int i_staffID) {
             case 0:
                 initTalk(mFlowNodeNo, NULL);
                 break;
-            
+
             case 1:
                 mFaceMotionSeqMngr.setNo(FACE_NONE, -1.0f, FALSE, 0);
                 mMotionSeqMngr.setNo(MOT_WAIT_A, -1.0f, FALSE, 0);
@@ -1418,8 +1516,9 @@ int daNpc_Aru_c::cutRideOnHorse(int i_staffID) {
 
 int daNpc_Aru_c::cutGotoBullRunningStage(int i_staffID) {
     int rv = 0;
+    int* piVar1 = NULL;
     int prm = -1;
-    int* piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
+    piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
     if (piVar1 != NULL) {
         prm = *piVar1;
     }
@@ -1433,7 +1532,7 @@ int daNpc_Aru_c::cutGotoBullRunningStage(int i_staffID) {
                     mStepMode = 0;
                 }
                 break;
-            
+
             case 1:
                 mFaceMotionSeqMngr.setNo(FACE_NONE, -1.0f, FALSE, 0);
                 mMotionSeqMngr.setNo(MOT_WAIT_A, -1.0f, FALSE, 0);
@@ -1461,8 +1560,9 @@ int daNpc_Aru_c::cutGotoBullRunningStage(int i_staffID) {
 
 int daNpc_Aru_c::cutEndBullRunning(int i_staffID) {
     int rv = 0;
+    int* piVar1 = NULL;
     int prm = -1;
-    int* piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
+    piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
     if (piVar1 != NULL) {
         prm = *piVar1;
     }
@@ -1475,7 +1575,7 @@ int daNpc_Aru_c::cutEndBullRunning(int i_staffID) {
             case 1:
                 mDoAud_subBgmStop();
                 break;
-            
+
             case 2:
                 if (daNpcT_chkTmpBit(181)) { // dSv_event_tmp_flag_c::T_0181 - Ordon Ranch - Started Goat herding Ⅱ
                     daNpcT_onTmpBit(182); // dSv_event_tmp_flag_c::T_0182 - Ordon Ranch - Finished Goat herding Ⅱ
@@ -1510,14 +1610,18 @@ int daNpc_Aru_c::cutEndBullRunning(int i_staffID) {
             break;
 
         case 1:
-            if (dComIfG_getTimerPtr() != NULL && dComIfG_getTimerMode() == 2 && !dComIfG_TimerDeleteCheck(2)) {
-                dComIfG_TimerDeleteRequest(2);
+            if (dComIfG_getTimerPtr() != NULL && dComIfG_getTimerMode() == 2) {
+                if (!dComIfG_TimerDeleteCheck(2)) {
+                    dComIfG_TimerDeleteRequest(2);
+                }
+            } else {
+                rv = 1; // useless statement, as rv set to 1 below
             }
 
             action();
             rv = 1;
             break;
-        
+
         case 2:
             action();
             rv = 1;
@@ -1551,8 +1655,9 @@ int daNpc_Aru_c::cutEndBullRunning(int i_staffID) {
 
 int daNpc_Aru_c::cutGotoSkipFenceStage(int i_staffID) {
     int rv = 0;
+    int* piVar1 = NULL;
     int prm = -1;
-    int* piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
+    piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
     if (piVar1 != NULL) {
         prm = *piVar1;
     }
@@ -1561,7 +1666,7 @@ int daNpc_Aru_c::cutGotoSkipFenceStage(int i_staffID) {
         switch (prm) {
             case 0:
                 break;
-            
+
             case 1:
                 mDoAud_subBgmStop();
                 break;
@@ -1573,7 +1678,7 @@ int daNpc_Aru_c::cutGotoSkipFenceStage(int i_staffID) {
             action();
             rv = 1;
             break;
-        
+
         case 1:
             if (dComIfG_getTimerPtr() != NULL && dComIfG_getTimerMode() == 2) {
                 if (!dComIfG_TimerDeleteCheck(2)) {
@@ -1592,8 +1697,9 @@ int daNpc_Aru_c::cutGotoSkipFenceStage(int i_staffID) {
 
 int daNpc_Aru_c::cutSpeakTo(int i_staffID) {
     int rv = 0;
+    int* piVar1 = NULL;
     int prm = -1;
-    int* piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
+    piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
     if (piVar1 != NULL) {
         prm = *piVar1;
     }
@@ -1667,11 +1773,13 @@ int daNpc_Aru_c::cutSpeakTo(int i_staffID) {
 }
 
 int daNpc_Aru_c::cutNoEntrance(int i_staffID) {
+    fopAc_ac_c* actor_p = NULL;
     cXyz work;
     csXyz angle;
     int rv = 0;
+    int* piVar1 = NULL;
     int prm = -1;
-    int* piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
+    piVar1 = dComIfGp_evmng_getMyIntegerP(i_staffID, "prm");
     if (piVar1 != NULL) {
         prm = *piVar1;
     }
@@ -1679,7 +1787,7 @@ int daNpc_Aru_c::cutNoEntrance(int i_staffID) {
     if (dComIfGp_getEventManager().getIsAddvance(i_staffID)) {
         switch (prm) {
             case 0: {
-                fopAc_ac_c* actor_p = mActorMngrs[3].getActorP();
+                actor_p = mActorMngrs[3].getActorP();
 
                 JUT_ASSERT(3279, NULL != actor_p);
 
@@ -1710,7 +1818,7 @@ int daNpc_Aru_c::cutNoEntrance(int i_staffID) {
                 setAngle(cLib_targetAngleY(&current.pos, &work));
                 break;
             }
-            
+
             case 1:
                 initTalk(54, NULL);
                 break;
@@ -1721,7 +1829,7 @@ int daNpc_Aru_c::cutNoEntrance(int i_staffID) {
         case 0:
             rv = 1;
             break;
-        
+
         case 1:
             if (talkProc(NULL, FALSE, NULL, FALSE) && mFlow.checkEndFlow()) {
                 rv = 1;
@@ -1732,15 +1840,22 @@ int daNpc_Aru_c::cutNoEntrance(int i_staffID) {
     return rv;
 }
 
-int daNpc_Aru_c::wait(void* param_1) {
-    fopAc_ac_c* actor_p;
+int daNpc_Aru_c::wait(void*) {
+    fopAc_ac_c* actor_p = NULL;
+    int reg_29 = 0; // used but not set
 
     switch (mMode) {
         case MODE_ENTER:
         case MODE_INIT:
             if (!mStagger.checkStagger()) {
-                mFaceMotionSeqMngr.setNo(FACE_NONE, -1.0f, FALSE, 0);
-                mMotionSeqMngr.setNo(MOT_WAIT_A, -1.0f, FALSE, 0);
+                if (mType == TYPE_1 && reg_29 > 0) {
+                    // cannot enter here
+                    mFaceMotionSeqMngr.setNo(FACE_H_WORRY, -1.0f, FALSE, 0);
+                    mMotionSeqMngr.setNo(MOT_TALK_D, -1.0f, FALSE, 0);
+                } else {
+                    mFaceMotionSeqMngr.setNo(FACE_NONE, -1.0f, FALSE, 0);
+                    mMotionSeqMngr.setNo(MOT_WAIT_A, -1.0f, FALSE, 0);
+                }
                 field_0xfd1 = false;
                 mMode = MODE_RUN;
             }
@@ -1758,7 +1873,7 @@ int daNpc_Aru_c::wait(void* param_1) {
                         }
                     }
                     break;
-                
+
                 case TYPE_2:
                     if (field_0xfcf) {
                         mSpeakEvent = true;
@@ -1813,8 +1928,8 @@ int daNpc_Aru_c::wait(void* param_1) {
                     if (checkStep()) {
                         mStepMode = 0;
                     }
-                } else if (mType == TYPE_0 || mType == TYPE_2 &&
-                           daNpcT_chkTmpBit(182)) { // dSv_event_tmp_flag_c::T_0182 - Ordon Ranch - Finished Goat herding Ⅱ
+                } else if (mType == TYPE_0 || (mType == TYPE_2 && daNpcT_chkTmpBit(182))) {
+                    // dSv_event_tmp_flag_c::T_0182 - Ordon Ranch - Finished Goat herding Ⅱ
                     mJntAnm.lookPlayer(0);
                     lookround(fopAcM_searchPlayerAngleY(this));
                 } else {
@@ -1822,8 +1937,7 @@ int daNpc_Aru_c::wait(void* param_1) {
                         mPlayerActorMngr.remove();
                     }
 
-                    fopAc_ac_c* actor_p = mPlayerActorMngr.getActorP();
-                    if (actor_p != NULL) {
+                    if (mPlayerActorMngr.getActorP() != NULL) {
                         mJntAnm.lookPlayer(0);
                         if (!chkActorInSight(mPlayerActorMngr.getActorP(), mAttnFovY, mCurAngle.y)) {
                             mJntAnm.lookNone(0);
@@ -1851,7 +1965,10 @@ int daNpc_Aru_c::wait(void* param_1) {
                         }
                     }
 
-                    mJntAnm.getMode();
+                    switch (mJntAnm.getMode()) {
+                    case 0:
+                        break;
+                    }
                 }
             }
             break;
@@ -1863,7 +1980,8 @@ int daNpc_Aru_c::wait(void* param_1) {
     return 1;
 }
 
-int daNpc_Aru_c::bullRunning(void* param_1) {
+int daNpc_Aru_c::bullRunning(void*) {
+    int reg_r30 = 0; // unused
     switch (mMode) {
         case MODE_ENTER:
         case MODE_INIT:
@@ -1875,7 +1993,7 @@ int daNpc_Aru_c::bullRunning(void* param_1) {
             }
             // fallthrough
         case MODE_RUN:
-            if (dMeter2Info_getNowCount() == (u32)dMeter2Info_getMaxCount() && field_0xfd3) {
+            if (dMeter2Info_getNowCount() == dMeter2Info_getMaxCount() && field_0xfd3) {
                 mDoAud_subBgmStart(Z2BGM_MINIGAME_WIN01);
 
                 if (dComIfG_getTimerPtr() != NULL) {
@@ -1967,13 +2085,14 @@ int daNpc_Aru_c::skipFence(void* param_1) {
     return 1;
 }
 
-int daNpc_Aru_c::talk(void* param_1) {
+int daNpc_Aru_c::talk(void*) {
+    daHorse_c* horse_p = NULL;
     switch (mMode) {
         case MODE_ENTER:
         case MODE_INIT:
             if (!mStagger.checkStagger()) {
                 daNpcT_offTmpBit(90); // dSv_event_tmp_flag_c::T_0090 - Ordon Ranch - Epona is at the range (used in goat herding game)
-                daHorse_c* horse_p = dComIfGp_getHorseActor();
+                horse_p = dComIfGp_getHorseActor();
                 if (horse_p != NULL && !horse_p->checkHorseCallWait()) {
                     daNpcT_onTmpBit(90); // dSv_event_tmp_flag_c::T_0090 - Ordon Ranch - Epona is at the range (used in goat herding game)
                 }

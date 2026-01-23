@@ -19,13 +19,13 @@ daLv6SwGate_HIO_c::daLv6SwGate_HIO_c() {
 #if DEBUG
 void daLv6SwGate_HIO_c::genMessage(JORMContext* context)
 {
-    context->genLabel("--- 開く ---", 0, 0, 0, -1, -1, 0x200, 0x18);
-    context->genSlider("速度", &this->mSpeed, 0.1f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genLabel("\n--- 閉まる ---", 0, 0, 0, -1, -1, 0x200, 0x18);
-    context->genSlider("最大速度", &this->mMaximumSpeed, 0.1f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("加速度", &this->mAcceleration, 0.1f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genLabel("\n------", 0, 0, 0, -1, -1, 0x200, 0x18);
-    context->genSlider("移動量", &this->mMovementAmount, 0.1f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genLabel("--- 開く ---", 0);
+    context->genSlider("速度", &this->mSpeed, 0.1f, 100.0f);
+    context->genLabel("\n--- 閉まる ---", 0);
+    context->genSlider("最大速度", &this->mMaximumSpeed, 0.1f, 100.0f);
+    context->genSlider("加速度", &this->mAcceleration, 0.1f, 100.0f);
+    context->genLabel("\n------", 0);
+    context->genSlider("移動量", &this->mMovementAmount, 0.1f, 100.0f);
 }
 #endif
 

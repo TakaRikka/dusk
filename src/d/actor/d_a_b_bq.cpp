@@ -2306,7 +2306,7 @@ static int daB_BQ_Execute(b_bq_class* i_this) {
     dComIfG_Ccsp()->Set(&i_this->mCcCoreSph);
 
     sp50 = a_this->eyePos;
-    if (daPy_getPlayerActorClass()->getCutType() != 0x27 && i_this->mAction >= ACTION_DAMAGE) {
+    if (daPy_getPlayerActorClass()->getCutType() != daPy_py_c::CUT_TYPE_DOWN && i_this->mAction >= ACTION_DAMAGE) {
         sp50.y = player->current.pos.y + 70.0f + KREG_F(7);
     } else {
         sp50.x -= 20000.0f;

@@ -511,7 +511,7 @@ static void* s_subRock(void* i_proc, void* i_this) {
 
 void daNpc_zrZ_c::setParam() {
     ActionFn action = mpNextActionFn;
-    u32 attn_flags = 10;
+    u32 attn_flags = fopAc_AttnFlag_TALK_e | fopAc_AttnFlag_SPEAK_e;
     selectAction();
 
     if (!mTwilight && daPy_py_c::checkNowWolf()) {

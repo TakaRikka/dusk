@@ -42,28 +42,28 @@ daObjKLift00_HIO_c::daObjKLift00_HIO_c() {
 
 void daObjKLift00_HIO_c::genMessage(JORMContext* ctx) {
     // "Foothold"
-    ctx->genLabel("足場", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("足場", 0);
 
     // "Chain gravity"
-    ctx->genSlider("チェイン重力", &mChainGravity, -40.0, 0.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("チェイン重力", &mChainGravity, -40.0, 0.0);
 
     // "Ride parameters"
-    ctx->genSlider("Ride パラメータ", &mRideParameters, 0.0, 0.1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("Ride パラメータ", &mRideParameters, 0.0, 0.1);
 
     // "Wind effect occurence rate"
-    ctx->genSlider("風影響発生率", &mWindSwayOccuranceFactor, 0.0, 0.5, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("風影響発生率", &mWindSwayOccuranceFactor, 0.0, 0.5);
 
     // "Chain・Wind"
-    ctx->genSlider("鎖・風", &mWindMagnitudeChain, 0.0, 1000.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("鎖・風", &mWindMagnitudeChain, 0.0, 1000.0);
 
     // "Foundation・Wind"
-    ctx->genSlider("土台・風", &mWindMagnitudeFoundation, 0.0, 1000.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("土台・風", &mWindMagnitudeFoundation, 0.0, 1000.0);
 
     // "Chain hit speed"
-    ctx->genSlider("鎖ヒット速度", &mChainHitSpeed, 0.0, 50.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("鎖ヒット速度", &mChainHitSpeed, 0.0, 50.0);
 
     // "Hammer adjustment"
-    ctx->genSlider("ハンマー調整", &field_0x1C, 0.0, 10.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("ハンマー調整", &field_0x1C, 0.0, 10.0);
 }
 #endif
 

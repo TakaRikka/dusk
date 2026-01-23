@@ -91,20 +91,20 @@ enum Joint {
 
 #if DEBUG
 void daMidna_hio_c::genMessage(JORMContext* ctx) {
-    ctx->genSlider("スケール", &m.scale, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genCheckBox("強制表示", &m.forced_display, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("Ｙ位置", &m.y_pos, -1000.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("Ｚ位置", &m.z_pos, -1000.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genCheckBox("ＨＩＯ優先", &m.hio_priority, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("髪カラー１Ｒ", &m.hair_color_1r, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("髪カラー１Ｇ", &m.hair_color_1g, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("髪カラー１Ｂ", &m.hair_color_1b, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("髪Ｋカラー１Ｒ", &m.hair_k_color_1r, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("髪Ｋカラー１Ｇ", &m.hair_k_color_1g, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("髪Ｋカラー１Ｂ", &m.hair_k_color_1b, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("髪Ｋカラー２Ｒ", &m.hair_k_color_2r, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("髪Ｋカラー２Ｇ", &m.hair_k_color_2g, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("髪Ｋカラー２Ｂ", &m.hair_k_color_2b, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("スケール", &m.scale, 0.0f, 5.0f);
+    ctx->genCheckBox("強制表示", &m.forced_display, 0x1);
+    ctx->genSlider("Ｙ位置", &m.y_pos, -1000.0f, 1000.0f);
+    ctx->genSlider("Ｚ位置", &m.z_pos, -1000.0f, 1000.0f);
+    ctx->genCheckBox("ＨＩＯ優先", &m.hio_priority, 0x1);
+    ctx->genSlider("髪カラー１Ｒ", &m.hair_color_1r, 0, 0xFF);
+    ctx->genSlider("髪カラー１Ｇ", &m.hair_color_1g, 0, 0xFF);
+    ctx->genSlider("髪カラー１Ｂ", &m.hair_color_1b, 0, 0xFF);
+    ctx->genSlider("髪Ｋカラー１Ｒ", &m.hair_k_color_1r, 0, 0xFF);
+    ctx->genSlider("髪Ｋカラー１Ｇ", &m.hair_k_color_1g, 0, 0xFF);
+    ctx->genSlider("髪Ｋカラー１Ｂ", &m.hair_k_color_1b, 0, 0xFF);
+    ctx->genSlider("髪Ｋカラー２Ｒ", &m.hair_k_color_2r, 0, 0xFF);
+    ctx->genSlider("髪Ｋカラー２Ｇ", &m.hair_k_color_2g, 0, 0xFF);
+    ctx->genSlider("髪Ｋカラー２Ｂ", &m.hair_k_color_2b, 0, 0xFF);
 }
 #endif
 
@@ -664,9 +664,9 @@ cPhs__Step daMidna_c::create() {
 }
 
 static cPhs__Step daMidna_Create(fopAc_ac_c* i_this) {
-    daMidna_c* actor = (daMidna_c*)i_this;
-    fpc_ProcID id = fopAcM_GetID(i_this);
-    return actor->create();
+    daMidna_c* a_this = (daMidna_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "MIDNA");
+    return a_this->create();
 }
 
 void daMidna_c::allAnimePlay() {
@@ -3578,7 +3578,7 @@ daMidna_c::~daMidna_c() {
 }
 
 static int daMidna_Delete(daMidna_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "MIDNA");
     i_this->~daMidna_c();
     return 1;
 }

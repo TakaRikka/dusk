@@ -259,7 +259,7 @@ int daNpc_grS_c::CreateHeap() {
 }
 
 int daNpc_grS_c::Delete() {
-    fpc_ProcID unusedId = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_GRS");
     this->~daNpc_grS_c();
     return 1;
 }
@@ -360,7 +360,7 @@ void daNpc_grS_c::setParam() {
     unkInt1 = 5;
     unkInt2 = 6;
     attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(unkInt1, unkInt2);
-    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[0];
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
     attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(unkInt3, unkInt4);
     attention_info.flags = flags;
 

@@ -18,9 +18,9 @@
 #include <revolution/sc.h>
 #endif
 
-bool mDoAud_zelAudio_c::mInitFlag;
+u8 mDoAud_zelAudio_c::mInitFlag;
 
-bool mDoAud_zelAudio_c::mResetFlag;
+u8 mDoAud_zelAudio_c::mResetFlag;
 
 bool mDoAud_zelAudio_c::mBgmSet;
 

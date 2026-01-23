@@ -28,8 +28,8 @@ static dCcD_SrcCyl l_cylSrc = {
 int daTagSppath_c::create() {
     fopAcM_ct(this, daTagSppath_c);
 
-    mSwNo1 = fopAcM_GetParamBit(this, 8, 8);
-    mSwNo2 = fopAcM_GetParamBit(this, 16, 8);
+    mSwNo1 = (fopAcM_GetParam(this) >> 8) & 0xFF;
+    mSwNo2 = (fopAcM_GetParam(this) >> 16) & 0xFF;
     s32 pathIndex = fopAcM_GetParam(this) & 0xff;
 
     if (pathIndex == 0xff ||
@@ -53,53 +53,65 @@ int daTagSppath_c::create() {
 }
 
 static int daTagSppath_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagSppath_c*>(i_this)->create();
+    daTagSppath_c* spPath = static_cast<daTagSppath_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return spPath->create();
 }
 
 daTagSppath_c::~daTagSppath_c() {}
 
 static int daTagSppath_Delete(daTagSppath_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagSppath_c();
     return 1;
 }
 
 int daTagSppath_c::getNearPathPos(cXyz* i_result, dPath* i_path) {
-    daPy_py_c* py = daPy_getPlayerActorClass();
-    cXyz* pyCurPos = &py->current.pos;
+    cXyz* pyCurPos = &daPy_getPlayerActorClass()->current.pos;
     dPnt* curPnt = i_path->m_points;
     f32 bestDist = FLT_MAX;
 
-    int bestNo;
+    f32 distToSeg;
     BOOL isValid;
     cM3dGLin line;
     cXyz nearestPointOnSeg;
     cXyz pntDiff;
-    f32 distToSeg;
+    int bestNo;
+    f32 flatness;
+    f32 segLen;
+    dPnt* adjPnt;
 
     for (int i = 0; i < i_path->m_num; i++, curPnt++) {
         if (i != i_path->m_num - 1) {
             line.set(curPnt[0].m_position, curPnt[1].m_position);
             if (!dPath_ChkClose(i_path)) {
+                adjPnt = curPnt + 1;
                 if (i == 0) {
-                    pntDiff.set(curPnt[1].m_position.x - curPnt[0].m_position.x,
-                                curPnt[1].m_position.y - curPnt[0].m_position.y,
-                                curPnt[1].m_position.z - curPnt[0].m_position.z);
-                    f32 segLen = pntDiff.abs();
+                    pntDiff.set(adjPnt->m_position.x - curPnt->m_position.x,
+                                adjPnt->m_position.y - curPnt->m_position.y,
+                                adjPnt->m_position.z - curPnt->m_position.z);
+                    segLen = pntDiff.abs();
                     pntDiff.normalizeZP();
-                    f32 flatness = pntDiff.absXZ();
-                    if (flatness > 0.001f && segLen > 30.0f / flatness) {
-                        line.GetStartP() = line.GetStart() + pntDiff * (30.0f / flatness);
+                    flatness = pntDiff.absXZ();
+                    if (flatness > 0.001f) {
+                        flatness = 30.0f / flatness;
+                        if (segLen > flatness) {
+                            line.GetStartP() = line.GetStart() + pntDiff * flatness;
+                        }
                     }
                 }
                 if (i == i_path->m_num - 2) {
-                    pntDiff.set(curPnt[0].m_position.x - curPnt[1].m_position.x,
-                                curPnt[0].m_position.y - curPnt[1].m_position.y,
-                                curPnt[0].m_position.z - curPnt[1].m_position.z);
-                    f32 segLen = pntDiff.abs();
+                    pntDiff.set(curPnt->m_position.x - adjPnt->m_position.x,
+                                curPnt->m_position.y - adjPnt->m_position.y,
+                                curPnt->m_position.z - adjPnt->m_position.z);
+                    segLen = pntDiff.abs();
                     pntDiff.normalizeZP();
-                    f32 flatness = pntDiff.absXZ();
-                    if (flatness > 0.001f && segLen > 30.0f / flatness) {
-                        line.GetEndP() = line.GetEnd() + pntDiff * (30.0f / flatness);
+                    flatness = pntDiff.absXZ();
+                    if (flatness > 0.001f) {
+                        flatness = 30.0f / flatness;
+                        if (segLen > flatness) {
+                            line.GetEndP() = line.GetEnd() + pntDiff * flatness;
+                        }
                     }
                 }
             }
@@ -117,7 +129,6 @@ int daTagSppath_c::getNearPathPos(cXyz* i_result, dPath* i_path) {
         if (isValid == 0) {
             nearestPointOnSeg = curPnt->m_position;
             if (!dPath_ChkClose(i_path) && ((i == 0 || (i == i_path->m_num - 1)))) {
-                dPnt* adjPnt;
                 if (i == 0) {
                     adjPnt = curPnt + 1;
                 } else {
@@ -127,11 +138,14 @@ int daTagSppath_c::getNearPathPos(cXyz* i_result, dPath* i_path) {
                 pntDiff.set(adjPnt->m_position.x - curPnt->m_position.x,
                             adjPnt->m_position.y - curPnt->m_position.y,
                             adjPnt->m_position.z - curPnt->m_position.z);
-                f32 segLen = pntDiff.abs();
+                segLen = pntDiff.abs();
                 pntDiff.normalizeZP();
-                f32 flatness = pntDiff.absXZ();
-                if (flatness > 0.001f && segLen > 30.0f / flatness) {
-                    nearestPointOnSeg += pntDiff * (30.0f / flatness);
+                flatness = pntDiff.absXZ();
+                if (flatness > 0.001f) {
+                    flatness = 30.0f / flatness;
+                    if (segLen > flatness) {
+                        nearestPointOnSeg += pntDiff * flatness;
+                    }
                 }
             }
         }
@@ -157,12 +171,14 @@ int daTagSppath_c::execute() {
     }
 
     dPath* path = mpInitPath;
+    cXyz nearestPointOnPath;
     f32 bestDist = FLT_MAX;
+    f32 dist;
+    int no;
 
     for (; path != NULL; path = dPath_GetNextRoomPath(path, fopAcM_GetRoomNo(this))) {
-        cXyz nearestPointOnPath;
-        int no = getNearPathPos(&nearestPointOnPath, path);
-        f32 dist = nearestPointOnPath.abs2(py->current.pos);
+        no = getNearPathPos(&nearestPointOnPath, path);
+        dist = nearestPointOnPath.abs2(py->current.pos);
         if (dist < bestDist) {
             bestDist = dist;
             current.pos = nearestPointOnPath;
@@ -172,8 +188,7 @@ int daTagSppath_c::execute() {
     }
 
     if (mpBestPath->field_0x4 == 0) {
-        u32 swNo = mpBestPath->field_0x6;
-        if (swNo == 0xff || fopAcM_isSwitch(this, swNo) == 0) {
+        if (mpBestPath->field_0x6 == 0xff || fopAcM_isSwitch(this, mpBestPath->field_0x6) == 0) {
             field_0x6e8 = 1;
         } else {
             field_0x6e8 = 2;
@@ -182,7 +197,8 @@ int daTagSppath_c::execute() {
         field_0x6e8 = 0;
     }
 
-    mCyl.SetC(cXyz(current.pos.x, current.pos.y - mHeight * 0.5f, current.pos.z));
+    cXyz sp10(current.pos.x, current.pos.y - mHeight * 0.5f, current.pos.z);
+    mCyl.SetC(sp10);
     dComIfG_Ccsp()->Set(&mCyl);
 
     return 1;

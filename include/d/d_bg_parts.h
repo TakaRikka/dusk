@@ -9,6 +9,8 @@ public:
     void draw(fopAc_ac_c*);
     int execute(bool);
     void releaseBg();
+
+    static void setPointer(void*);
 };
 
 #endif /* D_D_BG_PARTS */

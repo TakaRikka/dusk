@@ -11,6 +11,8 @@
 #include "SSystem/SComponent/c_math.h"
 
 static fopAc_ac_c* daAlink_searchTagKandelaar(fopAc_ac_c* i_actor, void* i_data) {
+    UNUSED(i_data);
+
     if (fopAcM_GetName(i_actor) == PROC_TAG_LANTERN) {
         return i_actor;
     }
@@ -19,10 +21,11 @@ static fopAc_ac_c* daAlink_searchTagKandelaar(fopAc_ac_c* i_actor, void* i_data)
 }
 
 static fopAc_ac_c* daAlink_searchTagKtOnFire(fopAc_ac_c* i_actor, void* i_data) {
+    UNUSED(i_data);
     daAlink_c* player_p = daAlink_getAlinkActorClass();
 
     if (fopAcM_GetName(i_actor) == PROC_Tag_KtOnFire &&
-        i_actor->current.pos.abs2(player_p->current.pos) < 22500.0f &&
+        i_actor->current.pos.abs2(player_p->current.pos) < SQUARE(150.0f) &&
         fopAcM_seenActorAngleY(player_p, i_actor) < 0x3000)
     {
         return i_actor;
@@ -34,7 +37,7 @@ static fopAc_ac_c* daAlink_searchTagKtOnFire(fopAc_ac_c* i_actor, void* i_data) 
 void daAlink_c::setKandelaarMtx(Mtx i_mtx, int param_1, int param_2) {
     if (mpKanteraModel != NULL) {
         if (checkNoResetFlg2(FLG2_UNK_1)) {
-            deleteEquipItem(0, 1);
+            deleteEquipItem(FALSE, TRUE);
         }
 
         onEndResetFlg1(ERFLG1_UNK_4);
@@ -51,7 +54,6 @@ void daAlink_c::setKandelaarMtx(Mtx i_mtx, int param_1, int param_2) {
 }
 
 BOOL daAlink_c::checkWaterInKandelaarOffset(f32 param_0) {
-    f32 tmp_65 = 65.0f;  // tmp can be removed with literals
     f32 base_y_pos;
     if (checkModeFlg(0x40)) {
         base_y_pos = mRightFootPos.y;
@@ -59,7 +61,7 @@ BOOL daAlink_c::checkWaterInKandelaarOffset(f32 param_0) {
         base_y_pos = current.pos.y;
     }
 
-    return param_0 > tmp_65 + base_y_pos;
+    return param_0 > 65.0f + base_y_pos;
 }
 
 void daAlink_c::checkWaterInKandelaar(f32 param_0) {
@@ -74,7 +76,7 @@ void daAlink_c::checkWaterInKandelaar(f32 param_0) {
 }
 
 void daAlink_c::offKandelaarModel() {
-    offNoResetFlg2(FLG2_UNK_10000001);
+    offNoResetFlg2(daPy_FLG2(FLG2_KANDELAAR_LIGHT_OFF | FLG2_UNK_1));
     mZ2Link.setKanteraState(0);
 }
 
@@ -111,7 +113,7 @@ int daAlink_c::kandelaarModelCallBack() {
     mDoMtx_stack_c::multVec(&sp38, &sp38);
 
     s16 var_r28 = cLib_minMaxLimit<s16>(cM_atan2s(-sp38.z, -sp38.y), -0x1800, 0x1800);
-    s16 var_r27 = cLib_minMaxLimit<s16>(cM_atan2s(sp38.x, JMAFastSqrt((sp38.y * sp38.y) + (sp38.z * sp38.z))), -0x1800, 0x1800);
+    s16 var_r27 = cLib_minMaxLimit<s16>(cM_atan2s(sp38.x, JMAFastSqrt(SQUARE(sp38.y) + SQUARE(sp38.z))), -0x1800, 0x1800);
 
     mDoMtx_stack_c::transS(sp44);
     if (mProcID != PROC_OPEN_TREASURE && (mProcID != PROC_GET_ITEM || mProcVar4.field_0x3010 == 0)) {
@@ -124,10 +126,10 @@ int daAlink_c::kandelaarModelCallBack() {
     field_0x3618 = (mKandelaarFlamePos - field_0x3624) * 0.9f;
 
     if (!checkEndResetFlg1(ERFLG1_UNK_8)) {
-        f32 temp_f31 = JMAFastSqrt((J3DSys::mCurrentMtx[0][0] * J3DSys::mCurrentMtx[0][0]) + (J3DSys::mCurrentMtx[1][0] * J3DSys::mCurrentMtx[1][0]) + (J3DSys::mCurrentMtx[2][0] * J3DSys::mCurrentMtx[2][0]));
+        f32 scale = JMAFastSqrt(SQUARE(J3DSys::mCurrentMtx[0][0]) + SQUARE(J3DSys::mCurrentMtx[1][0]) + SQUARE(J3DSys::mCurrentMtx[2][0]));
         mDoMtx_stack_c::transS(J3DSys::mCurrentMtx[0][3], J3DSys::mCurrentMtx[1][3], J3DSys::mCurrentMtx[2][3]);
         mDoMtx_stack_c::ZXYrotM(var_r28, var_r29, var_r27);
-        mDoMtx_stack_c::scaleM(temp_f31, temp_f31, temp_f31);
+        mDoMtx_stack_c::scaleM(scale, scale, scale);
 
         mpKanteraModel->setAnmMtx(1, mDoMtx_stack_c::get());
         cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
@@ -136,7 +138,9 @@ int daAlink_c::kandelaarModelCallBack() {
     return 1;
 }
 
-static int daAlink_kandelaarModelCallBack(J3DJoint* param_0, int param_1) {
+static int daAlink_kandelaarModelCallBack(J3DJoint* i_joint, int param_1) {
+    UNUSED(i_joint);
+
     daAlink_c* player_p = (daAlink_c*)j3dSys.getModel()->getUserArea();
 
     if (param_1 == 0) {
@@ -147,7 +151,7 @@ static int daAlink_kandelaarModelCallBack(J3DJoint* param_0, int param_1) {
 }
 
 cXyz* daAlink_c::getKandelaarFlamePos() {
-    if ((!checkNoResetFlg2((daPy_FLG2)0x20001) && !checkEndResetFlg1(ERFLG1_UNK_4)) ||
+    if ((!checkNoResetFlg2(daPy_FLG2(FLG2_UNK_20000 | FLG2_UNK_1)) && !checkEndResetFlg1(ERFLG1_UNK_4)) ||
         checkWolf() || !checkNoResetFlg1(FLG1_UNK_80))
     {
         return NULL;
@@ -157,7 +161,7 @@ cXyz* daAlink_c::getKandelaarFlamePos() {
 }
 
 BOOL daAlink_c::checkKandelaarEquipAnime() const {
-    return checkUpperAnime(0x264) || checkUpperAnime(0x268);
+    return checkUpperAnime(dRes_ID_ALANM_BCK_WAITHK_e) || checkUpperAnime(dRes_ID_ALANM_BCK_WAITK_e);
 }
 
 void daAlink_c::preKandelaarDraw() {
@@ -179,14 +183,14 @@ void daAlink_c::preKandelaarDraw() {
     mDoLib_project(&mKandelaarFlamePos, &proj);
 
     camera_class* camera_p = dComIfGp_getCamera(0);
-    f32 var_f3;
+    f32 trimHeight;
     if (camera_p != NULL) {
-        var_f3 = camera_p->mCamera.TrimHeight();
+        trimHeight = camera_p->mCamera.TrimHeight();
     } else {
-        var_f3 = 0.0f;
+        trimHeight = 0.0f;
     }
 
-    if (proj.x > 0.0f && proj.x < FB_WIDTH && proj.y > var_f3 && proj.y < FB_HEIGHT - var_f3) {
+    if (proj.x > 0.0f && proj.x < FB_WIDTH && proj.y > trimHeight && proj.y < FB_HEIGHT - trimHeight) {
         dComIfGd_peekZ(proj.x, proj.y, &field_0x32c8);
     } else {
         field_0x32c8 = 0;
@@ -210,7 +214,7 @@ void daAlink_c::setKandelaarModel() {
     if (!checkNoResetFlg2(FLG2_UNK_1)) {
         onNoResetFlg2(FLG2_UNK_1);
 
-        mDoMtx_multVecZero(mpLinkModel->getAnmMtx(field_0x30c0), &mKandelaarFlamePos);
+        mDoMtx_multVecZero(mpLinkModel->getAnmMtx(mLeftItemJntNo), &mKandelaarFlamePos);
         mKandelaarFlamePos.y -= 30.0f;
 
         field_0x3630 = field_0x3624;
@@ -226,7 +230,6 @@ void daAlink_c::setKandelaarModel() {
 
     mZ2Link.setKanteraState(1);
 }
-
 
 void daAlink_c::resetOilBottleModel() {
     deleteEquipItem(FALSE, TRUE);
@@ -270,7 +273,7 @@ int daAlink_c::commonKandelaarPour(int param_0) {
         current_anm = mUnderAnmHeap[0].getIdx();
     }
 
-    onNoResetFlg2(FLG2_UNK_10000000);
+    onNoResetFlg2(FLG2_KANDELAAR_LIGHT_OFF);
 
     if (current_anm == getMainBckData(ANM_OIL_BOTTLE_POUR_START)->m_underID) {
         if (checkAnmEnd(frameCtrl_p)) {
@@ -310,13 +313,12 @@ int daAlink_c::commonKandelaarPour(int param_0) {
 
         resetOilBottleModel();
         resetSpecialEvent();
-        offNoResetFlg2(FLG2_UNK_10000000);
+        offNoResetFlg2(FLG2_KANDELAAR_LIGHT_OFF);
         return 1;
     }
 
     return 0;
 }
-
 
 void daAlink_c::initKandelaarSwing() {
     if (mEquipItem == fpcNm_ITEM_KANTERA) {
@@ -328,19 +330,19 @@ void daAlink_c::initKandelaarSwing() {
     }
 
     voiceStart(Z2SE_AL_V_SWING_BOTTLE);
-    field_0xFB8.ResetAtHit();
+    mAtSph.ResetAtHit();
 
     if (!checkEventRun()) {
         dComIfGp_setItemOilCount(-mpHIO->mItem.mLantern.m.mShakeOilLoss);
     }
 
-    field_0xFB8.OffAtSetBit();
-    field_0xFB8.SetR(50.0f);
-    field_0xFB8.SetAtType(AT_TYPE_LANTERN_SWING);
-    field_0xFB8.SetAtHitMark(0);
-    field_0xFB8.SetAtSe(dCcD_SE_NONE);
-    field_0xFB8.SetAtAtp(0);
-    field_0xFB8.SetAtMtrl(dCcD_MTRL_FIRE);
+    mAtSph.OffAtSetBit();
+    mAtSph.SetR(50.0f);
+    mAtSph.SetAtType(AT_TYPE_LANTERN_SWING);
+    mAtSph.SetAtHitMark(0);
+    mAtSph.SetAtSe(dCcD_SE_NONE);
+    mAtSph.SetAtAtp(0);
+    mAtSph.SetAtMtrl(dCcD_MTRL_FIRE);
 }
 
 int daAlink_c::procKandelaarSwingInit() {
@@ -383,17 +385,16 @@ int daAlink_c::procKandelaarSwingInit() {
     return 1;
 }
 
-
 int daAlink_c::procKandelaarSwing() {
     daPy_frameCtrl_c* frameCtrl_p = mUnderFrameCtrl;
 
-    if (frameCtrl_p->checkAnmEnd()) {
-        if (mDemo.getDemoMode() == 0x27) {
+    if (checkAnmEnd(frameCtrl_p)) {
+        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_KANDELAAR_SWING_e) {
             dComIfGp_evmng_cutEnd(mAlinkStaffId);
         } else {
             checkNextAction(0);
         }
-    } else if (frameCtrl_p->getFrame() > field_0x3478 && mDemo.getDemoMode() != 0x27) {
+    } else if (frameCtrl_p->getFrame() > field_0x3478 && mDemo.getDemoMode() != daPy_demo_c::DEMO_KANDELAAR_SWING_e) {
         onModeFlg(4);
         checkNextAction(1);
     }
@@ -402,7 +403,7 @@ int daAlink_c::procKandelaarSwing() {
 }
 
 int daAlink_c::procKandelaarPourInit() {
-    if (!dComIfGp_event_compulsory(this, 0, 0xFBFF)) {
+    if (!dComIfGp_event_compulsory(this, NULL, 0xFBFF)) {
         return 0;
     }
 

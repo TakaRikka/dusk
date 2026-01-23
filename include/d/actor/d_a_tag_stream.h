@@ -5,7 +5,7 @@
 
 class daTagStream_c : public fopAc_ac_c {
 public:
-    u8 getPriority() {
+    u8 getPriority() const {
         return mPriority;
     }
 

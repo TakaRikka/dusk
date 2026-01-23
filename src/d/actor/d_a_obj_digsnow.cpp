@@ -27,7 +27,7 @@ int daObjDigSnow_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox2(this, mpModel->getModelData());
 
-    attention_info.distances[0x07] = 31;
+    attention_info.distances[fopAc_attn_ETC_e] = 31;
 
     mode_init_wait();
 

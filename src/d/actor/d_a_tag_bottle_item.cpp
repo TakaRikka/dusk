@@ -5,34 +5,32 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
+#include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_bottle_item.h"
 #include "d/d_item.h"
-#include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
+#include "d/d_s_play.h"
 
-s32 daTag_BottleItem_c::create() {
-    s32 ret;
-
+int daTag_BottleItem_c::create() {
     fopAcM_ct(this, daTag_BottleItem_c);
     setTypeFromParam();
 
     if (!isBottleItem(mBottleItemType)) {
-        ret = cPhs_ERROR_e;
-    } else {
-        initialize();
-        ret = cPhs_COMPLEATE_e;
+        return cPhs_ERROR_e;
     }
 
-    return ret;
+    initialize();
+    return cPhs_COMPLEATE_e;
 }
 
 
-s32 daTag_BottleItem_c::Delete() {
+int daTag_BottleItem_c::Delete() {
     return 1;
 }
 
-s32 daTag_BottleItem_c::Execute() {
-    if (chkEvent()) {
+int daTag_BottleItem_c::Execute() {
+    int eventResult = chkEvent();
+    if (eventResult) {
         if (mProcessFunc) {
             (this->*mProcessFunc)(0);
         }
@@ -43,7 +41,7 @@ s32 daTag_BottleItem_c::Execute() {
     return 1;
 }
 
-s32 daTag_BottleItem_c::Draw() {
+int daTag_BottleItem_c::Draw() {
     return 1;
 }
 
@@ -72,26 +70,26 @@ int daTag_BottleItem_c::checkProcess(ProcessFunc i_processFunc) {
 }
 
 int daTag_BottleItem_c::setProcess(ProcessFunc i_processFunc) {
-    int uVar3 = 0;
+    int retval = 0;
 
     if (checkProcess(i_processFunc)) {
-        return 0;
+        return retval;
     } else {
         mEventType = 2;
 
         if (mProcessFunc) {
-            uVar3 = (this->*mProcessFunc)(0);
+            retval = (this->*mProcessFunc)(0);
         }
 
         mEventType = 0;
         mProcessFunc = i_processFunc;
 
         if (mProcessFunc) {
-            uVar3 = (this->*mProcessFunc)(0);
+            retval = (this->*mProcessFunc)(0);
         }
         mEventType = 1;
     }
-    return uVar3;
+    return retval;
 }
 
 void daTag_BottleItem_c::setAttnPos() {
@@ -99,8 +97,8 @@ void daTag_BottleItem_c::setAttnPos() {
     eyePos = current.pos;
 }
 
-s32 daTag_BottleItem_c::chkEvent() {
-    s32 uVar2 = 1;
+int daTag_BottleItem_c::chkEvent() {
+    int uVar2 = 1;
   
     if (!dComIfGp_getEvent()->isOrderOK()) {
         uVar2 = 0;
@@ -112,7 +110,7 @@ s32 daTag_BottleItem_c::chkEvent() {
     return uVar2;
 }
 
-s32 daTag_BottleItem_c::orderEvent() {
+int daTag_BottleItem_c::orderEvent() {
     makeSoup();
 
     if (!daPy_py_c::checkNowWolf() && mBottleItemType != fpcNm_ITEM_EMPTY_BOTTLE) {
@@ -150,8 +148,9 @@ int daTag_BottleItem_c::wait(void* param_0) {
         if (eventInfo.checkCommandCatch() == 0){
             fopAc_ac_c* player = dComIfGp_getPlayer(0);
             cXyz pos = attention_info.position - player->attention_info.position;
-        
-            dComIfGp_att_CatchRequest(this,mBottleItemType,140.0f,pos.y+100.0f,pos.y-100.0f,0x2000,1);
+
+            dComIfGp_att_CatchRequest(this, mBottleItemType, 140.0f + YREG_F(4), pos.y + 100.0f,
+                                      pos.y - 100.0f, 0x2000 + YREG_S(5), 1);
             eventInfo.onCondition(dEvtCnd_40_e);
         }
     case 2:
@@ -162,23 +161,23 @@ int daTag_BottleItem_c::wait(void* param_0) {
     return 1;
 }
 
-static s32 daTag_BottleItem_Create(void* i_this) {
+static int daTag_BottleItem_Create(void* i_this) {
     return static_cast<daTag_BottleItem_c*>(i_this)->create();
 }
 
-static s32 daTag_BottleItem_Delete(void* i_this) {
+static int daTag_BottleItem_Delete(void* i_this) {
     return static_cast<daTag_BottleItem_c*>(i_this)->Delete();
 }
 
-static s32 daTag_BottleItem_Execute(void* i_this) {
+static int daTag_BottleItem_Execute(void* i_this) {
     return static_cast<daTag_BottleItem_c*>(i_this)->Execute();
 }
 
-static s32 daTag_BottleItem_Draw(void* i_this) {
+static int daTag_BottleItem_Draw(void* i_this) {
     return static_cast<daTag_BottleItem_c*>(i_this)->Draw();
 }
 
-static s32 daTag_BottleItem_IsDelete(void* i_this) {
+static int daTag_BottleItem_IsDelete(void* i_this) {
     return 1;
 }
 

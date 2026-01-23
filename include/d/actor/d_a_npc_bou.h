@@ -152,8 +152,7 @@ public:
     BOOL speakTo() {
         if (mType == 4) {
             if (current.pos.absXZ(daPy_getPlayerActorClass()->current.pos) < 1100.0f && strlen(mpEvtData[5].eventName) != 0) {
-                u32 len = strlen(mpArcNames[mpEvtData[5].num]);
-                if (len != 0) {
+                if (strlen(mpArcNames[mpEvtData[5].num]) != 0) {
                     eventInfo.setArchiveName(mpArcNames[mpEvtData[5].num]);
                     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
                 }

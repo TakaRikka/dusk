@@ -64,19 +64,15 @@ public:
 
 #if DEBUG
 void l_HIO::genMessage(JORMContext* mctx) {
-    mctx->genLabel("アクターソリッドヒープ用プリント表示制御", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("HeapAdjustEntry(ぴったりサイズで格納しようとします)", &fopAcM::HeapAdjustEntry, 1, 0,
-                      NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("HeapAdjustVerbose(アジャストの情報を表示します)", &fopAcM::HeapAdjustVerbose, 1, 0, NULL,
-                      0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("HeapAdjustQuiet(アジャストの情報を表示しません)", &fopAcM::HeapAdjustQuiet, 1, 0, NULL,
-                      0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("HeapDummyCreate(調査のため、ダミー領域に一度格納します)", &fopAcM::HeapDummyCreate, 1,
-                      0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("アクターソリッドヒープ用プリント表示制御", 0);
+    mctx->genCheckBox("HeapAdjustEntry(ぴったりサイズで格納しようとします)", &fopAcM::HeapAdjustEntry, 0x1);
+    mctx->genCheckBox("HeapAdjustVerbose(アジャストの情報を表示します)", &fopAcM::HeapAdjustVerbose, 0x1);
+    mctx->genCheckBox("HeapAdjustQuiet(アジャストの情報を表示しません)", &fopAcM::HeapAdjustQuiet, 0x1);
+    mctx->genCheckBox("HeapDummyCreate(調査のため、ダミー領域に一度格納します)", &fopAcM::HeapDummyCreate, 0x1);
     mctx->genCheckBox("mDoExt::HeapAdjustVerbose(mDoExtのほうでアジャストの情報を表示します)",
-                      &mDoExt::HeapAdjustVerbose, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                      &mDoExt::HeapAdjustVerbose, 0x1);
     mctx->genCheckBox("mDoExt::HeapAdjustQuiet(mDoExtのほうでアジャストの情報を表示しません)",
-                      &mDoExt::HeapAdjustQuiet, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                      &mDoExt::HeapAdjustQuiet, 0x1);
 }
 
 void l_HIO::listenPropertyEvent(const JORPropertyEvent* property) {

@@ -545,9 +545,9 @@ void daNpc_Saru_c::setParam() {
     s16 sVar3 = mpHIO->m.common.attention_distance;
     s16 sVar4 = mpHIO->m.common.attention_angle;
 
-    attention_info.distances[0] = daNpcT_getDistTableIdx(sVar3, sVar4);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] = daNpcT_getDistTableIdx(sVar1, sVar2);
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(sVar3, sVar4);
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(sVar1, sVar2);
 
     if (mType == 2) {
         uVar1 = 0;

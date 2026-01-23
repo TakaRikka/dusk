@@ -603,10 +603,10 @@ daNpcKasiHana_HIO_c::daNpcKasiHana_HIO_c() {
 }
 
 void daNpcKasiHana_HIO_c::genMessage(JORMContext* ctext) {
-    ctext->genSlider("追跡開始距離", &m.track_start_dist, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("追跡停止距離", &m.track_stop_dist, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("追跡速度", &m.track_spd, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("逃げる速度", &m.escape_spd, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("追跡開始距離", &m.track_start_dist, 0.0f, 5000.0f);
+    ctext->genSlider("追跡停止距離", &m.track_stop_dist, 0.0f, 5000.0f);
+    ctext->genSlider("追跡速度", &m.track_spd, 0.0f, 100.0f);
+    ctext->genSlider("逃げる速度", &m.escape_spd, 0.0f, 100.0f);
     daNpcF_commonGenMessage(ctext, &m.common);
 }
 #endif

@@ -356,7 +356,8 @@ static int daItemShield_Delete(daItemShield_c* i_this) {
 }
 
 static int daItemShield_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daItemShield_c, i_this, "ObjSShield");
+    daItemShield_c* a_this = (daItemShield_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "ObjSShield");
     return a_this->create();
 }
 

@@ -514,55 +514,55 @@ const daNpcWrestler_HIOParam daNpcWrestler_Param_c::m = {
 #if DEBUG
 void daNpcWrestler_HIO_Node_c::genMessage(JORMContext* ctext) {
     // Real shadow size
-    ctext->genSlider("リアル影サイズ", &field_0x4->real_shadow_size, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("リアル影サイズ", &field_0x4->real_shadow_size, 0.0f, 1000.0f);
     // reasonable distance
-    ctext->genSlider("見合う距離", &field_0x4->reasonable_distance, 0.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("見合う距離", &field_0x4->reasonable_distance, 0.0f, 500.0f);
     // grappling distance
-    ctext->genSlider("組み合い距離", &field_0x4->grapple_distance, 0.0f, 200.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("組み合い距離", &field_0x4->grapple_distance, 0.0f, 200.0f);
     // reconfig distance
-    ctext->genSlider("再配置距離", &field_0x4->reconfig_distance, 0.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("再配置距離", &field_0x4->reconfig_distance, 0.0f, 500.0f);
     // lateral movement time
-    ctext->genSlider("横移動時間", &field_0x4->lateral_movement_time, 0, 150, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("横移動時間", &field_0x4->lateral_movement_time, 0, 150);
     // lateral movement speed
-    ctext->genSlider("横移動速度", &field_0x4->horizontal_movement_speed, 0, 0x1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("横移動速度", &field_0x4->horizontal_movement_speed, 0, 0x1000);
     // wandering time
-    ctext->genSlider("ふらふら時間", &field_0x4->stagger_time, 0, 300, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("ふらふら時間", &field_0x4->stagger_time, 0, 300);
     // waiting time
-    ctext->genSlider("待ち時間", &field_0x4->wait_time, 0, 300, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("待ち時間", &field_0x4->wait_time, 0, 300);
     // "§ ↓Please set it so that the total sum is 100↓ §"
-    ctext->genLabel("§ ↓全部足して100になるように設定してください↓ §", 0, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genLabel("§ ↓全部足して100になるように設定してください↓ §", 0);
     // "§ Practice Use §"
-    ctext->genLabel("§ 練習用 §", 0, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genLabel("§ 練習用 §", 0);
     // lateral movement probability
     ctext->genSlider(" 横移動 の確率", &field_0x4->chances[0].lateral_movement_chance,
-                     0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+                     0.0f, 100.0f);
     // slap probability
     ctext->genSlider(" 張り手 の確率", &field_0x4->chances[0].hit_chance,
-                     0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+                     0.0f, 100.0f);
     // tackle probability
     ctext->genSlider("タックルの確率", &field_0x4->chances[0].tackle_chance,
-                     0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+                     0.0f, 100.0f);
     // waiting probability
     ctext->genSlider(" 待  機 の確率", &field_0x4->chances[0].wait_chance,
-                     0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+                     0.0f, 100.0f);
     // "§ For production use §"
-    ctext->genLabel("§ 本番用 §", 0, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genLabel("§ 本番用 §", 0);
     // lateral movement probability
     ctext->genSlider(" 横移動 の確率", &field_0x4->chances[1].lateral_movement_chance,
-                     0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+                     0.0f, 100.0f);
     // slap probability
     ctext->genSlider(" 張り手 の確率", &field_0x4->chances[1].hit_chance,
-                     0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+                     0.0f, 100.0f);
     // tackle probability
     ctext->genSlider("タックルの確率", &field_0x4->chances[1].tackle_chance,
-                     0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+                     0.0f, 100.0f);
     // waiting probability
     ctext->genSlider(" 待  機 の確率", &field_0x4->chances[1].wait_chance,
-                     0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+                     0.0f, 100.0f);
     // "§ ↑Please set it so that the total sum is 100↑ §"
-    ctext->genLabel("§ ↑全部足して100になるように設定してください↑ §", 0, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genLabel("§ ↑全部足して100になるように設定してください↑ §", 0);
     // bending limit
-    ctext->genSlider("曲がり限界", &field_0x4->bending_limit, 0, 0x1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("曲がり限界", &field_0x4->bending_limit, 0, 0x1000);
 }
 
 daNpcWrestler_HIO_c::daNpcWrestler_HIO_c() {
@@ -598,11 +598,11 @@ void daNpcWrestler_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 void daNpcWrestler_HIO_c::genMessage(JORMContext* ctext) {
     // TODO
     // Horizontal speed
-    ctext->genSlider("水平速度", &m.horizontal_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("水平速度", &m.horizontal_speed, 0.0f, 100.0f);
     // vertical velocity
-    ctext->genSlider("垂直速度", &m.vertical_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("垂直速度", &m.vertical_speed, 0.0f, 100.0f);
     // --- AI action ---
-    ctext->startComboBox("AI行動", &m.ai_action, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    ctext->startComboBox("AI行動", &m.ai_action);
     // no specification
     ctext->genComboBoxItem("指定無し", 0);
     // lateral movement
@@ -615,9 +615,9 @@ void daNpcWrestler_HIO_c::genMessage(JORMContext* ctext) {
     ctext->genComboBoxItem("待ち", 4);
     ctext->endComboBox();
     // rotating share
-    ctext->genSlider("回転割り", &m.rotation, 0, 30, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("回転割り", &m.rotation, 0, 30);
     // Slap hit impact
-    ctext->startComboBox("張り手Hit衝撃", &m.slap_hit_impact, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    ctext->startComboBox("張り手Hit衝撃", &m.slap_hit_impact);
     ctext->genComboBoxItem("VIBMODE_Q_POWER1", 1);
     ctext->genComboBoxItem("VIBMODE_Q_POWER2", 2);
     ctext->genComboBoxItem("VIBMODE_Q_POWER3", 3);
@@ -628,15 +628,15 @@ void daNpcWrestler_HIO_c::genMessage(JORMContext* ctext) {
     ctext->genComboBoxItem("VIBMODE_Q_POWER8", 8);
     ctext->endComboBox();
     // Ready? Appearance time
-    ctext->genSlider("Ready? 出現時間", &m.ready_appearance_time, 0, 300, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("Ready? 出現時間", &m.ready_appearance_time, 0, 300);
     // Fight! Appearance time
-    ctext->genSlider("Fight! 出現時間", &m.fight_appearance_time, 0, 300, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("Fight! 出現時間", &m.fight_appearance_time, 0, 300);
     // camera rotation angle
-    ctext->genSlider("カメラ回転角", &m.camera_rotation_angle, 0.0f, 2.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("カメラ回転角", &m.camera_rotation_angle, 0.0f, 2.0f);
     // sound at the edge of the ring
-    ctext->genSlider("音 土俵際距離", &m.ring_edge_sound, 0.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("音 土俵際距離", &m.ring_edge_sound, 0.0f, 500.0f);
     // movement at the edge of the ring
-    ctext->genSlider("動 土俵際距離", &m.ring_edge_movement, 0.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("動 土俵際距離", &m.ring_edge_movement, 0.0f, 500.0f);
     daNpcF_commonGenMessage(ctext, &m.common);
     // Bo
     ctext->genNode("ボウ", &field_0x19c[0], 0, 0);

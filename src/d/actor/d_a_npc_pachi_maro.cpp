@@ -359,7 +359,7 @@ void daNpc_Pachi_Maro_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) 
 
 void daNpc_Pachi_Maro_HIO_c::genMessage(JORMContext* ctx) {
     daNpcT_cmnGenMessage(ctx, &m.common);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -651,7 +651,7 @@ int daNpc_Pachi_Maro_c::CreateHeap() {
 
 int daNpc_Pachi_Maro_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Pachi_Maro_c -> Delete\n", g_Counter.mCounter0, this);
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_Pachi_MARO");
     this->~daNpc_Pachi_Maro_c();
     return 1;
 }
@@ -666,15 +666,7 @@ int daNpc_Pachi_Maro_c::Draw() {
         modelData->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    return draw(
-#if DEBUG
-        chkAction(&daNpc_Pachi_Maro_c::test),
-#else
-        FALSE,
-#endif
-        FALSE,
-        mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE
-    );
+    return draw(NpcT_CHK_ACTION(daNpc_Pachi_Maro_c), FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
 int daNpc_Pachi_Maro_c::createHeapCallBack(fopAc_ac_c* i_this) {

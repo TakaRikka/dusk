@@ -1837,7 +1837,8 @@ static int daDemo00_Delete(daDemo00_c* i_this) {
 }
 
 static int daDemo00_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daDemo00_c, i_this, "Demo00");
+    daDemo00_c* a_this = (daDemo00_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "Demo00");
     fopAcM_ct(a_this, daDemo00_c);
 
     a_this->field_0x6a2 = 0;

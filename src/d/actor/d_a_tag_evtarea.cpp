@@ -9,6 +9,8 @@
 #include "d/d_procname.h"
 
 cPhs__Step daTag_EvtArea_c::create() {
+    int var_r28 = 0;
+
     fopAcM_ct(this, daTag_EvtArea_c);
 
     switch (getType()) {
@@ -149,20 +151,19 @@ BOOL daTag_EvtArea_c::isDelete() {
 }
 
 BOOL daTag_EvtArea_c::chkPointInArea(cXyz i_point, cXyz i_addSize) {
-    cXyz area_vtx[4];
-    cXyz size, center, player_to_home, point_to_current;
-
     if (field_0x56c == 0) {
         if ((getOnEvtBit() != -1 && daNpcT_chkEvtBit(getOnEvtBit())) ||
             (getBitSW() != 0xff && dComIfGs_isSwitch(getBitSW(), fopAcM_GetRoomNo(this))) ||
             (getOnEvtBit() == -1 && getBitSW() == 0xFF))
         {
-            size = scale + i_addSize;
+            cXyz size = scale + i_addSize;
+            cXyz center;
 
             if (getType() == 15 || getType() == 16) {
-                player_to_home = daPy_getPlayerActorClass()->current.pos;
+                cXyz area_vtx[4];
+                cXyz player_to_home = daPy_getPlayerActorClass()->current.pos;
                 player_to_home -= home.pos;
-                mDoMtx_YrotS(mDoMtx_stack_c::now, -current.angle.y);
+                mDoMtx_stack_c::YrotS(-current.angle.y);
                 mDoMtx_stack_c::multVec(&player_to_home, &player_to_home);
 
                 // bottom left
@@ -184,7 +185,7 @@ BOOL daTag_EvtArea_c::chkPointInArea(cXyz i_point, cXyz i_addSize) {
                 if (area_vtx[0].x < player_to_home.x && area_vtx[0].z < player_to_home.z &&
                     area_vtx[2].x > player_to_home.x && area_vtx[2].z > player_to_home.z)
                 {
-                    point_to_current = i_point - current.pos;
+                    cXyz point_to_current = i_point - current.pos;
                     if (0 <= (int)point_to_current.y && (int)point_to_current.y < (int)size.y) {
                         return true;
                     }

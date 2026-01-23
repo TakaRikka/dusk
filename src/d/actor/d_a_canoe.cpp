@@ -168,7 +168,7 @@ int daCanoe_c::create() {
 
 static int daCanoe_Create(fopAc_ac_c* i_this) {
     daCanoe_c* a_this = (daCanoe_c*)i_this;
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterCreateID(i_this, "Canoe");
     return a_this->create();
 }
 
@@ -178,7 +178,7 @@ daCanoe_c::~daCanoe_c() {
 }
 
 static int daCanoe_Delete(daCanoe_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "Canoe");
     i_this->~daCanoe_c();
     return 1;
 }

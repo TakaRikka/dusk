@@ -83,16 +83,14 @@ static int daCowdoor_Execute(daCowdoor_c* i_this) {
 }
 
 static int daCowdoor_Delete(daCowdoor_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
-    (void)"Delete -> Cowdoor(id=%d)\n";
+    fopAcM_RegisterDeleteID(i_this, "Cowdoor");
     return i_this->MoveBGDelete();
 }
 
 static int daCowdoor_Create(fopAc_ac_c* i_this) {
-    daCowdoor_c* cowDoor = (daCowdoor_c*)i_this;
-    fpc_ProcID id = fopAcM_GetID(i_this);
-    (void)"Create -> Cowdoor(id=%d)\n";
-    return cowDoor->create();
+    daCowdoor_c* a_this = (daCowdoor_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "Cowdoor");
+    return a_this->create();
 }
 
 static actor_method_class l_daCowdoor_Method = {

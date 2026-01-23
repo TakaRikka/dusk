@@ -43,10 +43,12 @@ static int daTagSetBall_Execute(daTagSetBall_c* i_this) {
 }
 
 static int daTagSetBall_Delete(daTagSetBall_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
 static int daTagSetBall_Create(daTagSetBall_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->create();
 }
 

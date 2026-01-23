@@ -950,9 +950,9 @@ static void action(npc_tkj2_class* i_this) {
     }
 
     if (bVar1) {
-        cLib_onBit<u32>(a_this->attention_info.flags, 0x10);
+        cLib_onBit<u32>(a_this->attention_info.flags, fopAc_AttnFlag_CARRY_e);
     } else {
-        cLib_offBit<u32>(a_this->attention_info.flags, 0x10);
+        cLib_offBit<u32>(a_this->attention_info.flags, fopAc_AttnFlag_CARRY_e);
     }
 }
 

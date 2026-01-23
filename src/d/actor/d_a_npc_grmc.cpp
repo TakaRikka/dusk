@@ -346,14 +346,7 @@ int daNpc_grMC_c::Execute() {
 }
 
 int daNpc_grMC_c::Draw() {
-    return draw(
-        #if DEBUG
-        chkAction(&daNpc_grMC_c::test),
-        #else
-        FALSE,
-        #endif
-        FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE
-    );
+    return draw(NpcT_CHK_ACTION(daNpc_grMC_c), FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
 int daNpc_grMC_c::createHeapCallBack(fopAc_ac_c* a_this) {

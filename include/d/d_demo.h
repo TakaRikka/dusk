@@ -84,7 +84,7 @@ public:
     fopAc_ac_c* getActor();
     void setActor(fopAc_ac_c*);
     f32 getPrm_Morf();
-    int getDemoIDData(int*, int*, int*, u16*, u8*);
+    int getDemoIDData(int* o_arg0, int* o_arg1, int* o_arg2, u16* o_resID, u8*);
     
     virtual ~dDemo_actor_c();
     virtual void JSGSetData(u32, void const*, u32);
@@ -381,13 +381,17 @@ public:
     static s16 getBranchNum() { return m_branchNum; }
     static jmessage_tControl* getMesgControl() { return m_mesgControl; }
 
+    static void setBranchNum(u16 num) {
+        m_branchNum = num;
+    }
+
     static dDemo_camera_c* getCamera() {
         JUT_ASSERT(0, m_object != NULL);
         return m_object->getActiveCamera();
     }
 
     static s16 m_branchId;
-    static s16 m_branchNum;
+    static u16 m_branchNum;
     static dDemo_system_c* m_system;
     static JStudio::TControl* m_control;
     static JStudio_JStage::TCreateObject* m_stage;

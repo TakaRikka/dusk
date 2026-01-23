@@ -153,18 +153,18 @@ static int daE_Ga_IsDelete(e_ga_class* a_this) {
 
 static u8 hio_set;
 
-static int daE_Ga_Delete(e_ga_class* a_this) {
-    fopAc_ac_c* actor = &a_this->actor;
-    fpc_ProcID id = fopAcM_GetID(actor);
+static int daE_Ga_Delete(e_ga_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
+    fopAcM_RegisterDeleteID(i_this, "E_Ga");
 
-    if (a_this->initialized) {
+    if (i_this->initialized) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_ga", 3);
         dComIfGp_removeSimpleModel(modelData, fopAcM_GetRoomNo(actor));
     }
 
-    dComIfG_resDelete(&a_this->phase, "E_ga");
+    dComIfG_resDelete(&i_this->phase, "E_ga");
 
-    if (a_this->HIOInit) {
+    if (i_this->HIOInit) {
         hio_set = FALSE;
     }
 

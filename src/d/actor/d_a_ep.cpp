@@ -937,7 +937,7 @@ static int daEp_Create(fopAc_ac_c* a_this) {
     }
 
     i_this->field_0xa5c = -1;
-    i_this->attention_info.distances[4] = 7;
+    i_this->attention_info.distances[fopAc_attn_CARRY_e] = 7;
     fopAcM_OnCarryType(i_this, fopAcM_CARRY_UNK_30);
 
     i_this->mSph2.Set(at_sph_src);

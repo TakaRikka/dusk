@@ -4,14 +4,134 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_tag_qs.h"
+#include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_obj_carry.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_cc_d.h"
+#include "d/actor/d_a_tag_qs.h"
 #include "d/d_a_item_static.h"
-#include "d/d_save.h"
+#include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
-#include "SSystem/SComponent/c_math.h"
+#include "d/d_debug_viewer.h"
+#include "d/d_save.h"
+
+class daObjTagQs_HIO_c : public mDoHIO_entry_c {
+public:
+    daObjTagQs_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    /* 0x08 */ f32 powerOutsideRadius;
+    /* 0x0C */ f32 safeArea;
+    /* 0x10 */ f32 powerInsideRadius;
+    /* 0x14 */ f32 powerCenter;
+    /* 0x18 */ f32 sinkholePowerOutsideRadius;
+    /* 0x1C */ f32 sinkholeSafeArea;
+    /* 0x20 */ f32 sinkholePowerInsideRadius;
+    /* 0x24 */ f32 sinkholePowerCenter;
+    /* 0x28 */ s16 startMorfFrame;
+    /* 0x2A */ s16 stopMorfFrame;
+    /* 0x2C */ f32 centralSinkSpeed;
+    /* 0x30 */ u16 flags;
+};
+
+#if DEBUG
+daObjTagQs_HIO_c l_HIO;
+#endif
+
+#define TAG_QS_DEF_POWER_OUTSIDE_RADIUS 4.0f
+#define TAG_QS_DEF_SAFE_AREA 0.8f
+#define TAG_QS_DEF_POWER_INSIDE_RADIUS 6.0f
+#define TAG_QS_DEF_POWER_CENTER 12.0f
+#define TAG_QS_DEF_SINKHOLE_POWER_OUTSIDE_RADIUS 5.0f
+#define TAG_QS_DEF_SINKHOLE_SAFE_AREA 0.5f
+#define TAG_QS_DEF_SINKHOLE_POWER_INSIDE_RADIUS 10.0f
+#define TAG_QS_DEF_SINKHOLE_POWER_CENTER 20.0f
+#define TAG_QS_DEF_START_MORF_FRAME 30
+#define TAG_QS_DEF_STOP_MORF_FRAME 30
+#define TAG_QS_DEF_CENTRAL_SINK_SPEED 0.5f
+#define TAG_QS_DEF_FLAGS 0
+
+#if DEBUG
+#define TAG_QS_POWER_OUTSIDE_RADIUS l_HIO.powerOutsideRadius
+#define TAG_QS_SAFE_AREA l_HIO.safeArea
+#define TAG_QS_POWER_INSIDE_RADIUS l_HIO.powerInsideRadius
+#define TAG_QS_POWER_CENTER l_HIO.powerCenter
+#define TAG_QS_SINKHOLE_POWER_OUTSIDE_RADIUS l_HIO.sinkholePowerOutsideRadius
+#define TAG_QS_SINKHOLE_SAFE_AREA l_HIO.sinkholeSafeArea
+#define TAG_QS_SINKHOLE_POWER_INSIDE_RADIUS l_HIO.sinkholePowerInsideRadius
+#define TAG_QS_SINKHOLE_POWER_CENTER l_HIO.sinkholePowerCenter
+#define TAG_QS_START_MORF_FRAME l_HIO.startMorfFrame
+#define TAG_QS_STOP_MORF_FRAME l_HIO.stopMorfFrame
+#define TAG_QS_CENTRAL_SINK_SPEED l_HIO.centralSinkSpeed
+#define TAG_QS_FLAGS l_HIO.flags
+#else
+#define TAG_QS_POWER_OUTSIDE_RADIUS TAG_QS_DEF_POWER_OUTSIDE_RADIUS
+#define TAG_QS_SAFE_AREA TAG_QS_DEF_SAFE_AREA
+#define TAG_QS_POWER_INSIDE_RADIUS TAG_QS_DEF_POWER_INSIDE_RADIUS
+#define TAG_QS_POWER_CENTER TAG_QS_DEF_POWER_CENTER
+#define TAG_QS_SINKHOLE_POWER_OUTSIDE_RADIUS TAG_QS_DEF_SINKHOLE_POWER_OUTSIDE_RADIUS
+#define TAG_QS_SINKHOLE_SAFE_AREA TAG_QS_DEF_SINKHOLE_SAFE_AREA
+#define TAG_QS_SINKHOLE_POWER_INSIDE_RADIUS TAG_QS_DEF_SINKHOLE_POWER_INSIDE_RADIUS
+#define TAG_QS_SINKHOLE_POWER_CENTER TAG_QS_DEF_SINKHOLE_POWER_CENTER
+#define TAG_QS_START_MORF_FRAME TAG_QS_DEF_START_MORF_FRAME
+#define TAG_QS_STOP_MORF_FRAME TAG_QS_DEF_STOP_MORF_FRAME
+#define TAG_QS_CENTRAL_SINK_SPEED TAG_QS_DEF_CENTRAL_SINK_SPEED
+#define TAG_QS_FLAGS TAG_QS_DEF_FLAGS
+#endif
+
+#if DEBUG
+daObjTagQs_HIO_c::daObjTagQs_HIO_c() {
+    powerOutsideRadius = TAG_QS_DEF_POWER_OUTSIDE_RADIUS;
+    safeArea = TAG_QS_DEF_SAFE_AREA;
+    powerInsideRadius = TAG_QS_DEF_POWER_INSIDE_RADIUS;
+    powerCenter = TAG_QS_DEF_POWER_CENTER;
+    sinkholePowerOutsideRadius = TAG_QS_DEF_SINKHOLE_POWER_OUTSIDE_RADIUS;
+    sinkholeSafeArea = TAG_QS_DEF_SINKHOLE_SAFE_AREA;
+    sinkholePowerInsideRadius = TAG_QS_DEF_SINKHOLE_POWER_INSIDE_RADIUS;
+    sinkholePowerCenter = TAG_QS_DEF_SINKHOLE_POWER_CENTER;
+    startMorfFrame = TAG_QS_DEF_START_MORF_FRAME;
+    stopMorfFrame = TAG_QS_DEF_STOP_MORF_FRAME;
+    flags = TAG_QS_DEF_FLAGS;
+    centralSinkSpeed = TAG_QS_DEF_CENTRAL_SINK_SPEED;
+}
+
+void daObjTagQs_HIO_c::genMessage(JORMContext* ctx) {
+    // "Quicksand"
+    ctx->genLabel("流砂", 0);
+    // "Power (outside safety radius)"
+    ctx->genSlider("パワー(安全半径外)", &powerOutsideRadius, 0.0f, 100.0f);
+    // "Safety radius adjust"
+    ctx->genSlider("安全半径変更", &safeArea, 0.0f, 1.0f);
+    // "Power (inside safety radius)"
+    ctx->genSlider("パワー(安全半径)", &powerInsideRadius, 0.0f, 100.0f);
+    // "Power (center)"
+    ctx->genSlider("パワー(中心)", &powerCenter, 0.0f, 100.0f);
+
+    // "Quicksand (10x)" (sinkhole?)
+    ctx->genLabel("流砂(10倍)", 0);
+    // "Power (outside safety radius)"
+    ctx->genSlider("パワー（安全半径外）", &sinkholePowerOutsideRadius, 0.0f, 100.0f);
+    // "Safety radius adjust"
+    ctx->genSlider("安全半径変更", &sinkholeSafeArea, 0.0f, 1.0f);
+    // "Power (inside safety radius)"
+    ctx->genSlider("パワー(安全半径)", &sinkholePowerInsideRadius, 0.0f, 100.0f);
+    // "Power (center)"
+    ctx->genSlider("パワー(中心)", &sinkholePowerCenter, 0.0f, 100.0f);
+
+    // "Others"
+    ctx->genLabel("その他", 0);
+    // "Start interpolation frame"
+    ctx->genSlider("スタート補間フレーム", &startMorfFrame, 0, 120);
+    // "Stop interpolation frame"
+    ctx->genSlider("ストップ補間フレーム", &stopMorfFrame, 0, 120);
+    // "Draw"
+    ctx->genCheckBox("描画", &flags, 0x1);
+    // "Stop"
+    ctx->genCheckBox("停止", &flags, 0x2);
+    // "Central sink speed"
+    ctx->genSlider("中心沈み速度", &centralSinkSpeed, 0.0f, 10.0f);
+}
+#endif
 
 static dCcD_SrcCyl l_cc_cyl_src = {
     {
@@ -33,6 +153,12 @@ daTagQs_c::~daTagQs_c() {}
 
 int daTagQs_c::create() {
     fopAcM_ct(this, daTagQs_c);
+
+#if DEBUG
+    // "Quicksand"
+    l_HIO.entryHIO("流砂");
+#endif
+
     f32 typeScale;
     if (getType() == 0) {
         typeScale = 1.0f;
@@ -50,137 +176,170 @@ int daTagQs_c::create() {
 }
 
 f32 daTagQs_c::getPower() {
-    return getType() == 0 ? 4.0f : 5.0f;
+    if (getType() == 0) {
+        return TAG_QS_POWER_OUTSIDE_RADIUS;
+    } else {
+        return TAG_QS_SINKHOLE_POWER_OUTSIDE_RADIUS;
+    }
 }
 
 f32 daTagQs_c::getSafeArea() {
-    return getType() == 0 ? 0.8f : 0.5f;
+    if (getType() == 0) {
+        return TAG_QS_SAFE_AREA;
+    } else {
+        return TAG_QS_SINKHOLE_SAFE_AREA;
+    }
 }
 
 f32 daTagQs_c::getPower80() {
-    return getType() == 0 ? 6.0f : 10.0f;
+    if (getType() == 0) {
+        return TAG_QS_POWER_INSIDE_RADIUS;
+    } else {
+        return TAG_QS_SINKHOLE_POWER_INSIDE_RADIUS;
+    }
 }
 
 f32 daTagQs_c::getCenterPower() {
-    return getType() == 0 ? 12.0f : 20.0f;
+    if (getType() == 0) {
+        return TAG_QS_POWER_CENTER;
+    } else {
+        return TAG_QS_SINKHOLE_POWER_CENTER;
+    }
 }
 
 f32 daTagQs_c::calcPower(f32 param_1, f32 param_2) {
     f32 dVar12 = 1.0f;
     if (getSwNo() != 0xff) {
         if (fopAcM_isSwitch(this, getSwNo())) {
-            dVar12 = field_0x570 / 30.0f;
+            dVar12 = field_0x570 / (f32)TAG_QS_START_MORF_FRAME;
         } else {
-            dVar12 = (30 - field_0x574) / 30.0f;
+            dVar12 = (TAG_QS_STOP_MORF_FRAME - field_0x574) / (f32)TAG_QS_STOP_MORF_FRAME;
         }
     }
-    if (param_2 > (param_1 * 0.8f)) {
+    if (param_2 > param_1 * TAG_QS_SAFE_AREA) {
         return dVar12 * getPower();
     }
 
     return dVar12 *
-           ((1.0f - (param_2 / (param_1 * getSafeArea()))) * (getCenterPower() - getPower80()) +
+           ((1.0f - param_2 / (param_1 * getSafeArea())) * (getCenterPower() - getPower80()) +
             getPower80());
 }
 
 static int hikiyose(cXyz* param_1, cXyz* param_2, cXyz* param_3, f32 param_4) {
-    cXyz cStack_44 = *param_1 - *param_2;
-    cXyz cStack_50(cStack_44);
-    cStack_50.y = 0.0f;
-    f32 dVar6 = fabsf(cStack_50.getSquareMag());
-    if (dVar6 < 4.0f) {
+    cXyz posDiff;
+    posDiff = *param_1 - *param_2;
+    cXyz posDiffLat(posDiff);
+    posDiffLat.y = 0.0f;
+    f32 dist;
+    if (fabsf(posDiffLat.getSquareMag()) < 4.0f) {
         param_2->x = param_1->x + cM_rndFX(1.0f);
-        param_2->y -= 0.5f;
+        param_2->y -= TAG_QS_CENTRAL_SINK_SPEED;
         param_2->z = param_1->z + cM_rndFX(1.0f);
         param_3->y = param_2->y;
         if (param_2->y < param_1->y - 100.0f) {
             return 2;
         }
         return 1;
-    } else if (cStack_44.abs() < param_4) {
-        param_2->x = param_1->x;
-        param_2->y = param_1->y;
-        param_2->z = param_1->z;
     } else {
-        cStack_44.normalize();
-        cStack_44 *= param_4;
-        *param_2 += cStack_44;
+        dist = posDiff.abs();
+        if (dist < param_4) {
+            param_2->x = param_1->x;
+            param_2->y = param_1->y;
+            param_2->z = param_1->z;
+        } else {
+            posDiff.normalize();
+            posDiff *= param_4;
+            *param_2 += posDiff;
+        }
     }
     return 0;
 }
 
 static void* search(void* param_1, void* param_2) {
+    UNUSED(param_2);
+
     if (param_1 == NULL || !fopAcM_IsActor(param_1)) {
         return NULL;
     }
-    fopAc_ac_c* actor1 = (fopAc_ac_c*) param_1;
-    daTagQs_c* actor2 = (daTagQs_c*) param_2;
-    f32 dVar9 = actor2->current.pos.absXZ(actor1->current.pos);
-    if (dVar9 > actor2->field_0x568) {
+
+    daTagQs_c* qs = (daTagQs_c*)param_2;
+    fopAc_ac_c* target = (fopAc_ac_c*)param_1;
+
+    f32 latDist = qs->current.pos.absXZ(target->current.pos);
+    if (latDist > qs->field_0x568) {
         return NULL;
     }
-    if (actor2->current.pos.y - 110.0f > actor1->current.pos.y ||
-        actor2->current.pos.y + actor2->field_0x56c < actor1->current.pos.y)
+
+    if (qs->current.pos.y - 110.0f > target->current.pos.y ||
+        qs->current.pos.y + qs->field_0x56c < target->current.pos.y)
     {
         return NULL;
     }
-    if (actor1->current.pos.y >
-        actor2->current.pos.y + (actor2->field_0x56c * dVar9) / (actor2->field_0x568 * 0.9f) + 20.0f)
+
+    if (target->current.pos.y >
+        qs->current.pos.y + qs->field_0x56c * latDist / (qs->field_0x568 * 0.9f) + 20.0f)
     {
         return NULL;
     }
+
     if (fopAcM_GetProfName(param_1) == PROC_ITEM) {
-        daItem_c* item = (daItem_c*)param_1;
-        item->getItemNo();
-        if (item->getItemNo() <= 3) {
-            int iVar3 = hikiyose(&actor2->current.pos, &actor1->current.pos, &actor1->old.pos,
-                                 actor2->calcPower(actor2->field_0x568, dVar9));
-            if (iVar3 == 1) {
+        daItem_c* item = (daItem_c*)target;
+        // somehow this condition is supposed to produce a double `li r0, 0x1` instruction,
+        // this only produces one and is likely a fakematch anyway
+        if (((u8)item->getItemNo(), true) && item->getItemNo() <= 3) {
+            int sp14 = hikiyose(&qs->current.pos, &item->current.pos, &item->old.pos,
+                                qs->calcPower(qs->field_0x568, latDist));
+            if (sp14 == 1) {
                 item->startCtrl();
-            } else if (iVar3 == 2) {
-                fopAcM_delete(actor1);
+            } else if (sp14 == 2) {
+                fopAcM_delete(item);
             }
         }
         return NULL;
     }
+
     if (fopAcM_GetProfName(param_1) == PROC_Obj_Carry) {
-        daObjCarry_c* carry = (daObjCarry_c*)param_1;
+        daObjCarry_c* carry = (daObjCarry_c*)target;
         if (carry->getType() == 7 || carry->getType() == 1 || carry->getType() == 5) {
-            int iVar3 = hikiyose(&actor2->current.pos, &carry->current.pos, &carry->old.pos, actor2->calcPower(actor2->field_0x568, dVar9));
-            if (iVar3 == 1) {
+            int sp10 = hikiyose(&qs->current.pos, &carry->current.pos, &carry->old.pos,
+                                qs->calcPower(qs->field_0x568, latDist));
+            if (sp10 == 1) {
                 carry->startCtrl();
-            } else if (iVar3 == 2) {
+            } else if (sp10 == 2) {
                 fopAcM_delete(carry);
             }
         }
         return NULL;
     }
+
     if (param_1 == daPy_getPlayerActorClass()) {
         daPy_py_c* player = daPy_getPlayerActorClass();
-        cXyz local_58 = actor2->current.pos - player->current.pos;
-        if (local_58.getSquareMag() >= actor2->getPower()) {
-            s16 sVar6 = cM_atan2s(local_58.x, local_58.z);
+        cXyz posDiff = qs->current.pos - player->current.pos;
+        if (posDiff.getSquareMag() >= qs->getPower()) {
+            s16 yaw = cM_atan2s(posDiff.x, posDiff.z);
             if (!player->checkPlayerFly()) {
-                player->setOutPower(actor2->calcPower(actor2->field_0x568, dVar9), sVar6, 0);
+                player->setOutPower(qs->calcPower(qs->field_0x568, latDist), yaw, 0);
             }
         }
         return NULL;
     }
-    
+
     return NULL;
 }
 
 int daTagQs_c::execute() {
-    fopAcM_Search(search, this);
+    if ((TAG_QS_FLAGS & 0x2) == 0) {
+        fopAcM_Search(search, this);
+    }
     if (getSwNo() != 0xff) {
-        int bossLife;
+        int bossLife = 0;
         if (fopAcM_isSwitch(this, getSwNo())) {
             field_0x570++;
-            if (field_0x570 > 30) {
-                field_0x570 = 30;
+            if (field_0x570 > TAG_QS_START_MORF_FRAME) {
+                field_0x570 = TAG_QS_START_MORF_FRAME;
             }
             field_0x574 = 0;
-            bossLife = (field_0x570 * 100.0f) / 30.0f;
+            bossLife = (field_0x570 * 100.0f) / (f32)TAG_QS_START_MORF_FRAME;
             if (getType() == 0) {
                 Z2GetAudioMgr()->seStartLevel(Z2SE_ENV_QUICKSAND_LOOP, &current.pos, 0,
                                               dComIfGp_getReverb(fopAcM_GetRoomNo(this)), 1.0f,
@@ -188,11 +347,11 @@ int daTagQs_c::execute() {
             }
         } else {
             field_0x574++;
-            if (field_0x574 > 30) {
-                field_0x574 = 30;
+            if (field_0x574 > TAG_QS_STOP_MORF_FRAME) {
+                field_0x574 = TAG_QS_STOP_MORF_FRAME;
             }
             field_0x570 = 0;
-            bossLife = 100.0f - field_0x574 * 100.0f / 30.0f;
+            bossLife = 100.0f - field_0x574 * 100.0f / (f32)TAG_QS_STOP_MORF_FRAME;
         }
         dComIfGs_BossLife_public_Set(bossLife);
     } else {
@@ -206,6 +365,15 @@ int daTagQs_c::execute() {
 }
 
 int daTagQs_c::draw() {
+    if (TAG_QS_FLAGS & 0x1) {
+        GXColor color;
+        color.r = 0xff;
+        color.g = 0;
+        color.b = 0xff;
+        color.a = 0x80;
+        dDbVw_drawCylinderXlu(current.pos, field_0x568, field_0x56c, color, 1);
+    }
+
     return 1;
 }
 
@@ -218,6 +386,10 @@ static int daTagQs_Execute(daTagQs_c* i_this) {
 }
 
 static int daTagQs_IsDelete(daTagQs_c* i_this) {
+    UNUSED(i_this);
+#if DEBUG
+    l_HIO.removeHIO();
+#endif
     return 1;
 }
 
@@ -227,7 +399,8 @@ static int daTagQs_Delete(daTagQs_c* i_this) {
 }
 
 static int daTagQs_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagQs_c*>(i_this)->create();
+    daTagQs_c* qs = static_cast<daTagQs_c*>(i_this);
+    return qs->create();
 }
 
 static actor_method_class l_daTagQs_Method = {

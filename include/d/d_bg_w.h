@@ -219,7 +219,7 @@ public:
     MtxP GetBaseMtxP() { return pm_base; }
     bool ChkNoCalcVtx() { return mFlags & NO_CALC_VTX_e; }
     bool ChkFlush() { return field_0x91 & 8; }
-    void SetLock() { mFlags |= LOCK_e; }
+    void SetLock() { mFlags |= (u8)LOCK_e; }
     void OffRoofRegist() { field_0x91 |= 0x4; }
     void OnRoofRegist() { field_0x91 &= ~0x04; }
     bool ChkRoofRegist() { return field_0x91 & 4;}

@@ -9,6 +9,7 @@
 #define mDoDvd_MOUNT_DIRECTION_HEAD 0
 #define mDoDvd_MOUNT_DIRECTION_TAIL 1
 
+class JKRAramArchive;
 class JKRHeap;
 class JKRMemArchive;
 
@@ -26,23 +27,6 @@ public:
     virtual s32 execute() = 0;
 };  // Size = 0x14
 
-class mDoDvdThd_toMainRam_c : public mDoDvdThd_command_c {
-public:
-    mDoDvdThd_toMainRam_c(u8);
-    static mDoDvdThd_toMainRam_c* create(char const*, u8, JKRHeap*);
-    virtual ~mDoDvdThd_toMainRam_c();
-    virtual s32 execute();
-
-    void* getMemAddress() const { return mData; }
-
-private:
-    /* 0x14 */ u8 mMountDirection;
-    /* 0x18 */ s32 mEntryNum;
-    /* 0x1C */ void* mData;
-    /* 0x20 */ s32 mDataSize;
-    /* 0x24 */ JKRHeap* mHeap;
-};  // Size = 0x28
-
 class mDoDvdThd_param_c {
 public:
     mDoDvdThd_param_c();
@@ -59,6 +43,46 @@ private:
     /* 0x24 */ node_list_class mNodeList;
     /* 0x30 */ OSMutex mMutext;
 };  // Size = 0x48
+
+class mDoDvdThd_callback_c : public mDoDvdThd_command_c {
+public:
+    virtual ~mDoDvdThd_callback_c();
+    mDoDvdThd_callback_c(mDoDvdThd_callback_func, void*);
+    static mDoDvdThd_callback_c* create(mDoDvdThd_callback_func, void*);
+    virtual s32 execute();
+
+private:
+    /* 0x14 */ mDoDvdThd_callback_func mFunction;
+    /* 0x18 */ void* mData;
+    /* 0x1C */ void* mResult;
+};
+
+class mDoDvdThd_mountArchive_c : public mDoDvdThd_command_c {
+public:
+    virtual ~mDoDvdThd_mountArchive_c();
+    mDoDvdThd_mountArchive_c(u8);
+    static mDoDvdThd_mountArchive_c* create(char const*, u8, JKRHeap*);
+    virtual s32 execute();
+
+    JKRMemArchive* getArchive() const { return mArchive; }
+    JKRHeap* getHeap() const { return mHeap; }
+
+private:
+    /* 0x14 */ u8 mMountDirection;
+    /* 0x18 */ s32 mEntryNumber;
+    /* 0x1C */ JKRMemArchive* mArchive;
+    /* 0x20 */ JKRHeap* mHeap;
+};  // Size = 0x24
+
+class mDoDvdThd_mountAramArchive_c : public mDoDvdThd_command_c {
+public:
+    virtual ~mDoDvdThd_mountAramArchive_c();
+    virtual s32 execute();
+
+    /* 0x14 */ u8 mMountDirection;
+    /* 0x18 */ s32 mEntryNum;
+    /* 0x1C */ JKRAramArchive* mArchive;
+};
 
 class mDoDvdThd_mountXArchive_c : public mDoDvdThd_command_c {
 public:
@@ -78,35 +102,31 @@ private:
     /* 0x24 */ JKRHeap* mHeap;
 };  // Size = 0x28
 
-class mDoDvdThd_mountArchive_c : public mDoDvdThd_command_c {
-public:
-    virtual ~mDoDvdThd_mountArchive_c();
-    mDoDvdThd_mountArchive_c(u8);
-    static mDoDvdThd_mountArchive_c* create(char const*, u8, JKRHeap*);
+class mDoDvdThd_getResource_c : public mDoDvdThd_command_c {
+    virtual ~mDoDvdThd_getResource_c();
     virtual s32 execute();
 
-    JKRMemArchive* getArchive() const { return mArchive; }
-    JKRHeap* getHeap() const { return mHeap; }
+    /* 0x14 */ void* mResource;
+    /* 0x18 */ JKRArchive* mArchive;
+    /* 0x1C */ u16 mResourceId;
+};
+
+class mDoDvdThd_toMainRam_c : public mDoDvdThd_command_c {
+public:
+    mDoDvdThd_toMainRam_c(u8);
+    static mDoDvdThd_toMainRam_c* create(char const*, u8, JKRHeap*);
+    virtual ~mDoDvdThd_toMainRam_c();
+    virtual s32 execute();
+
+    void* getMemAddress() const { return mData; }
 
 private:
     /* 0x14 */ u8 mMountDirection;
-    /* 0x18 */ s32 mEntryNumber;
-    /* 0x1C */ JKRMemArchive* mArchive;
-    /* 0x20 */ JKRHeap* mHeap;
-};  // Size = 0x24
-
-class mDoDvdThd_callback_c : public mDoDvdThd_command_c {
-public:
-    virtual ~mDoDvdThd_callback_c();
-    mDoDvdThd_callback_c(mDoDvdThd_callback_func, void*);
-    static mDoDvdThd_callback_c* create(mDoDvdThd_callback_func, void*);
-    virtual s32 execute();
-
-private:
-    /* 0x14 */ mDoDvdThd_callback_func mFunction;
-    /* 0x18 */ void* mData;
-    /* 0x1C */ void* mResult;
-};
+    /* 0x18 */ s32 mEntryNum;
+    /* 0x1C */ void* mData;
+    /* 0x20 */ s32 mDataSize;
+    /* 0x24 */ JKRHeap* mHeap;
+};  // Size = 0x28
 
 struct mDoDvdThdStack {
     u8 stack[4096];
@@ -126,5 +146,28 @@ struct mDoDvdThd {
     static bool SyncWidthSound;
     static u8 Report_DVDRead;
 };
+
+namespace mDoDvdHack {
+    typedef struct FSTEntry {
+        /* 0x00 */ uint isDirAndStringOff;
+        /* 0x04 */ uint parentOrPosition;
+        /* 0x08 */ uint nextEntryOrLength;
+    } FSTEntry;
+
+    extern OSBootInfo* BootInfo;
+    extern FSTEntry* FstStart;
+    extern const char* FstStringStart;
+    extern u32 MaxEntryNum;
+
+    void __DVDFSInit();
+    const char* EntryToName(s32 entry);
+    const char* ConvertEntrynumToName(s32 entry);
+
+    class Manager {
+    public:
+        Manager() { __DVDFSInit(); }
+        static Manager sManager;
+    };
+}
 
 #endif /* M_DO_M_DO_DVD_THREAD_H */

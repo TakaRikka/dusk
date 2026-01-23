@@ -4,12 +4,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_tag_TWgate.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_tag_TWgate.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_debug_viewer.h"
 #include "d/d_msg_object.h"
 #include "f_op/f_op_actor_mng.h"
-#include "JSystem/JUtility/JUTAssert.h"
 
 struct daTagTWGate_zevParam {
     /* 0x00 */ char* mArcName;
@@ -23,13 +24,11 @@ struct daTagTWGate_zevParam {
     /* 0x1B */ s8 mLayer;
 };
 
-void daTagTWGate_c::initWait() {
-    mEventID = -1;
-}
+daTagTWGate_Attr_c const daTagTWGate_c::mAttr = {};
 
-u8 const daTagTWGate_c::mAttr[1] = {
-    0x00,
-};
+#if DEBUG
+daTagTWGate_Hio_c daTagTWGate_c::mHio;
+#endif
 
 static daTagTWGate_zevParam const l_zevParamTbl[4] = {
     {
@@ -80,7 +79,7 @@ static daTagTWGate_zevParam const l_zevParamTbl[4] = {
 
 static const char* l_myName = "Gate";
 
-actionFunc daTagTWGate_c::ActionTable[13][2] = {
+const actionFunc daTagTWGate_c::ActionTable[][2] = {
     {&daTagTWGate_c::initWait, &daTagTWGate_c::executeWait},
     {&daTagTWGate_c::initDemoFilone1, &daTagTWGate_c::executeDemoFilone1},
     {&daTagTWGate_c::initDemoFilone2, &daTagTWGate_c::executeDemoFilone2},
@@ -96,59 +95,117 @@ actionFunc daTagTWGate_c::ActionTable[13][2] = {
     {&daTagTWGate_c::initDemoHyral3, &daTagTWGate_c::executeDemoHyral3},
 };
 
-void daTagTWGate_c::executeWait() {
-    f32 radius = pow(scale.x * 100.0f, 2.0f);
-    f32 distance = fopAcM_searchActorDistanceXZ2(this, (fopAc_ac_c*)dComIfGp_getPlayer(0));
+#if DEBUG
+daTagTWGate_Hio_c::daTagTWGate_Hio_c() {
+    field_0x8 = 0;
+    default_set();
+}
 
-    if (distance < radius) {
+void daTagTWGate_Hio_c::ct() {
+    if (field_0x8++ == 0) {
+        // "Twilight Gate tag"
+        entryHIO("トワイライトゲートタグ");
+    }
+}
+
+void daTagTWGate_Hio_c::dt() {
+    if (--field_0x8 == 0) {
+        removeHIO();
+    }
+}
+
+void daTagTWGate_Hio_c::default_set() {
+    attr = daTagTWGate_c::mAttr;
+}
+
+void daTagTWGate_Hio_c::genMessage(JORMContext* ctx) {
+    // "Twilight Gate tag parameter settings"
+    ctx->genLabel("§ トワイライトゲートタグ パラメータ設定  §\n", 0);
+    // "Draw range"
+    ctx->genCheckBox("範囲描画", &attr.show_range, 1);
+}
+#endif
+
+inline daTagTWGate_c::~daTagTWGate_c() {
+    dComIfG_resDelete(&mPhaseZevArc, l_zevParamTbl[mType].mArcName);
+
+    if (mPhaseMdRes.id != cPhs_INIT_e) {
+        dComIfG_resDelete(&mPhaseMdRes, "TWGate_Md");
+    }
+
+    if (mPhasePyRes.id != cPhs_INIT_e) {
+        dComIfG_resDelete(&mPhasePyRes, mIsWolf ? "TWGate_Wf" : "TWGate_Lk");
+    }
+
+#if DEBUG
+    mHio.dt();
+#endif
+}
+
+void daTagTWGate_c::initWait() {
+    mEventID = -1;
+}
+
+void daTagTWGate_c::setAction(Mode_e i_action) {
+    JUT_ASSERT(233, i_action < MODE_MAX_e);
+    int oldActionID = mActionID;
+    mActionID = i_action;
+    mAction = ActionTable[mActionID];
+    callInit();
+}
+
+void daTagTWGate_c::callInit() {
+    JUT_ASSERT(289, mAction != NULL);
+    (this->*(*mAction))();
+}
+
+void daTagTWGate_c::callExecute() {
+    JUT_ASSERT(302, mAction != NULL);
+    (this->*mAction[1])();
+    Z2GetAudioMgr()->seStartLevel(Z2SE_OBJ_DARK_GATE, &current.pos,
+                                  0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+}
+
+void daTagTWGate_c::executeWait() {
+    f32 radius = std::pow(scale.x * 100.0f, 2.0f);
+
+    if (fopAcM_searchPlayerDistanceXZ2(this) < radius) {
         if (field_0x5de == 0) {
             field_0x5de = 1;
 
             switch (mType) {
             case TYPE_FILONE:
                 if (fopAcM_isSwitch(this, getSwitch())) {
-                    mActionID = ACT_DEMO_FILONE_2;
-                    mAction = &ActionTable[mActionID][0];
-                    (this->**mAction)();
+                    setAction(ACT_DEMO_FILONE_2);
                 } else {
-                    mActionID = ACT_DEMO_FILONE_1;
-                    mAction = &ActionTable[mActionID][0];
-                    (this->**mAction)();
+                    setAction(ACT_DEMO_FILONE_1);
                 }
                 break;
             case TYPE_ORDIN:
                 if (fopAcM_isSwitch(this, getSwitch())) {
-                    mActionID = ACT_DEMO_ORDIN_2;
-                    mAction = &ActionTable[mActionID][0];
-                    (this->**mAction)();
+                    setAction(ACT_DEMO_ORDIN_2);
                 } else {
-                    mActionID = ACT_DEMO_ORDIN_1;
-                    mAction = &ActionTable[mActionID][0];
-                    (this->**mAction)();
+                    setAction(ACT_DEMO_ORDIN_1);
                 }
                 break;
             case TYPE_RANAIL:
                 if (fopAcM_isSwitch(this, getSwitch())) {
-                    mActionID = ACT_DEMO_RANAIL_2;
-                    mAction = &ActionTable[mActionID][0];
-                    (this->**mAction)();
+                    setAction(ACT_DEMO_RANAIL_2);
                 } else {
-                    mActionID = ACT_DEMO_RANAIL_1;
-                    mAction = &ActionTable[mActionID][0];
-                    (this->**mAction)();
+                    setAction(ACT_DEMO_RANAIL_1);
                 }
                 break;
             case TYPE_HYRAL:
                 if (fopAcM_isSwitch(this, getSwitch())) {
-                    mActionID = ACT_DEMO_HYRAL_2;
-                    mAction = &ActionTable[mActionID][0];
-                    (this->**mAction)();
+                    setAction(ACT_DEMO_HYRAL_2);
                 } else {
-                    mActionID = ACT_DEMO_HYRAL_1;
-                    mAction = &ActionTable[mActionID][0];
-                    (this->**mAction)();
+                    setAction(ACT_DEMO_HYRAL_1);
                 }
                 break;
+            default:
+                // "Twilight Gate demo tag   argument 0 error   Type=%d
+                OS_REPORT("\nトワイライトゲートデモタグ 引数0エラー Type=%d\n\n", mType);
+                JUT_ASSERT(344, FALSE);
             }
         }
     } else {
@@ -166,34 +223,36 @@ void daTagTWGate_c::executeDemoFilone1() {
     dEvent_manager_c& event_manager = dComIfGp_getEventManager();
     int staffId = event_manager.getMyStaffId(l_myName, NULL, 0);
 
+    int* cutName;
     if (staffId != -1) {
-        int* cutName = (int*)event_manager.getMyNowCutName(staffId);
+        cutName = (int*)event_manager.getMyNowCutName(staffId);
 
         if (event_manager.getIsAddvance(staffId)) {
             switch (*cutName) {
             case 0x30303031:
-                dComIfGp_getEvent()->setSkipProc(this, dEv_noFinishSkipProc, 0);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
                 break;
+            default:
+                JUT_ASSERT(395, FALSE);
             }
         }
 
         switch (*cutName) {
         case 0x30303031:
-            if (dComIfGp_getEvent()->chkFlag2(8)) {
+            if (dComIfGp_getEvent()->checkSkipEdge()) {
                 dComIfGp_getEvent()->onSkipFade();
-                mActionID = ACT_DEMO_FILONE_2;
-                mAction = ActionTable[mActionID];
-                (this->**mAction)();
+                setAction(ACT_DEMO_FILONE_2);
             }
             event_manager.cutEnd(staffId);
+            break;
+        default:
+            JUT_ASSERT(407, FALSE);
         }
 
         if (eventInfo.checkCommandDemoAccrpt() && mEventID != -1 &&
             event_manager.endCheck(mEventID))
         {
-            mActionID = ACT_DEMO_FILONE_2;
-            mAction = ActionTable[mActionID];
-            (this->**mAction)();
+            setAction(ACT_DEMO_FILONE_2);
         }
     }
 }
@@ -213,12 +272,13 @@ void daTagTWGate_c::initDemoFilone2() {
 }
 
 void daTagTWGate_c::executeDemoFilone2() {
-    s32 staffId = dComIfGp_evmng_getMyStaffId(l_myName, NULL, 0);
+    dEvent_manager_c& eventManager = dComIfGp_getEventManager();
+    s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
 
     if (staffId != -1) {
-        int* cutName = (int*)dComIfGp_getEventManager().getMyNowCutName(staffId);
+        int* cutName = (int*)eventManager.getMyNowCutName(staffId);
 
-        if (dComIfGp_evmng_getIsAddvance(staffId)) {
+        if (eventManager.getIsAddvance(staffId)) {
             switch (*cutName) {
             case '0002':
                 initTalk(0xBC1, NULL);
@@ -226,40 +286,43 @@ void daTagTWGate_c::executeDemoFilone2() {
             case '0001':
             case '0003':
                 break;
+            default:
+                JUT_ASSERT(480, FALSE);
             }
         }
 
         switch (*cutName) {
         case '0001':
         case '0003':
-            dComIfGp_evmng_cutEnd(staffId);
+            eventManager.cutEnd(staffId);
             break;
         case '0002':
             if (talkProc(NULL, 1, NULL)) {
-                if (mMsgFlow.getChoiceNo() == 0) {
-                    mActionID = ACT_DEMO_FILONE_3;
-                    mAction = ActionTable[mActionID];
-                    (this->**mAction)();
+                int choiceNo = mMsgFlow.getChoiceNo();
+                // "Two-way branch %s" / "Yes" / "No"
+                OS_REPORT("二択分岐 %s\n", choiceNo == 0 ? "はい" : "いいえ");
+                if (choiceNo == 0) {
+                    setAction(ACT_DEMO_FILONE_3);
                 }
-                dComIfGp_evmng_cutEnd(staffId);
+                eventManager.cutEnd(staffId);
             }
             break;
+        default:
+            JUT_ASSERT(497, FALSE);
         }
 
         if (eventInfo.checkCommandDemoAccrpt() && mEventID != -1 &&
-            dComIfGp_evmng_endCheck(mEventID)) {
-            dComIfGp_getEvent()->reset();
+            eventManager.endCheck(mEventID)) {
+            dComIfGp_event_reset();
             field_0x5e0 = 0;
-            mActionID = ACT_WAIT;
-            mAction = ActionTable[mActionID];
-            (this->**mAction)();
+            setAction(ACT_WAIT);
         }
     }
 }
 
 void daTagTWGate_c::initDemoFilone3() {
     field_0x5de = 1;
-    mIsWolf = (dComIfGp_getLinkPlayer()->mNoResetFlg1 >> 25) & 1;  // checking if wolf?
+    mIsWolf = daPy_py_c::checkNowWolf() ? TRUE : FALSE;
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
     mEventID =
@@ -269,17 +332,18 @@ void daTagTWGate_c::initDemoFilone3() {
 }
 
 void daTagTWGate_c::executeDemoFilone3() {
-    s32 staffId = dComIfGp_evmng_getMyStaffId(l_myName, NULL, 0);
+    dEvent_manager_c& eventManager = dComIfGp_getEventManager();
+    s32 staffId = eventManager.getMyStaffId(l_myName, NULL, 0);
 
     if (staffId != -1) {
-        int* cutName = (int*)dComIfGp_getEventManager().getMyNowCutName(staffId);
+        int* cutName = (int*)eventManager.getMyNowCutName(staffId);
 
-        if (dComIfGp_evmng_getIsAddvance(staffId)) {
+        if (eventManager.getIsAddvance(staffId)) {
             switch (*cutName) {
             case 0x30303031:
                 break;
             case 0x30303032:
-                dComIfGp_getEvent()->setSkipProc(this, dEv_noFinishSkipProc, 0);
+                dComIfGp_getEvent()->startCheckSkipEdge(this);
                 field_0x5e1 = 0;
                 break;
             case 0x30303033:
@@ -287,50 +351,46 @@ void daTagTWGate_c::executeDemoFilone3() {
                 mpMorf->setPlaySpeed(1.0f);
                 field_0x5e0 = 1;
                 break;
+            default:
+                JUT_ASSERT(560, FALSE);
             }
         }
 
         switch (*cutName) {
-        case 0x30303031: {
+        case 0x30303031:
             int modelSts = downloadModels();
             if (modelSts == 1) {
-                dComIfGp_evmng_cutEnd(staffId);
+                eventManager.cutEnd(staffId);
             } else if (modelSts == -1) {
                 dComIfGp_setNextStage(l_zevParamTbl[mType].mStage, l_zevParamTbl[mType].mPoint,
                                       l_zevParamTbl[mType].mRoomNo, l_zevParamTbl[mType].mLayer);
             }
             break;
-        }
-        case 0x30303032: {
-            if (dComIfGp_getEvent()->chkFlag2(8)) {
+        case 0x30303032:
+            if (dComIfGp_getEvent()->checkSkipEdge()) {
                 dComIfGp_getEvent()->onSkipFade();
                 dComIfGp_setNextStage(l_zevParamTbl[mType].mStage, l_zevParamTbl[mType].mPoint,
                                       l_zevParamTbl[mType].mRoomNo, l_zevParamTbl[mType].mLayer);
             }
 
-            u8 old_5e1 = field_0x5e1;
-            field_0x5e1++;
-
-            if (old_5e1 == 43) {
+            if (field_0x5e1++ == 43) {
                 daPy_py_c* player = daPy_getPlayerActorClass();
-                csXyz sxyz(0, player->shape_angle.y + 0x8000, 0);
+                cXyz pos;
+                csXyz sxyz(0, fopAcM_GetShapeAngle_p(player)->y + 0x8000, 0);
 
-                mDoMtx_stack_c::transS(player->current.pos);
+                mDoMtx_stack_c::transS(fopAcM_GetPosition(player));
                 mDoMtx_stack_c::YrotM(sxyz.y);
                 mDoMtx_stack_c::transM(0.0f, 240.0f, -710.0f);
 
-                cXyz pos;
-                pos.x = mDoMtx_stack_c::get()[0][3];
-                pos.y = mDoMtx_stack_c::get()[1][3];
-                pos.z = mDoMtx_stack_c::get()[2][3];
+                mDoMtx_stack_c::multVecZero(&pos);
                 dComIfGp_particle_set(0x86C5, &pos, &sxyz, NULL);
-                mDoAud_seStart(Z2SE_OBJ_DARK_GATE_RIPPLE, &pos, 0, 0);
-                dComIfGp_evmng_cutEnd(staffId);
+                Z2GetAudioMgr()->seStart(Z2SE_OBJ_DARK_GATE_RIPPLE, &pos,
+                                         0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                eventManager.cutEnd(staffId);
             }
             break;
-        }
         case 0x30303033:
-            if (dComIfGp_getEvent()->chkFlag2(8)) {
+            if (dComIfGp_getEvent()->checkSkipEdge()) {
                 dComIfGp_getEvent()->onSkipFade();
                 dComIfGp_setNextStage(l_zevParamTbl[mType].mStage,
                                       l_zevParamTbl[mType].mPoint,
@@ -339,18 +399,19 @@ void daTagTWGate_c::executeDemoFilone3() {
             }
 
             if (mpMorf->isStop()) {
-                dComIfGp_evmng_cutEnd(staffId);
+                eventManager.cutEnd(staffId);
             }
+            break;
+        default:
+            JUT_ASSERT(621, FALSE);
             break;
         }
 
         if (eventInfo.checkCommandDemoAccrpt() && mEventID != -1 &&
-            dComIfGp_evmng_endCheck(mEventID)) {
-            dComIfGp_getEvent()->reset();
+            eventManager.endCheck(mEventID)) {
+            dComIfGp_event_reset();
             field_0x5e0 = 0;
-            mActionID = ACT_WAIT;
-            mAction = ActionTable[mActionID];
-            (this->**mAction)();
+            setAction(ACT_WAIT);
         }
     }
 }
@@ -364,13 +425,16 @@ void daTagTWGate_c::initDemoOrdin1() {
 void daTagTWGate_c::executeDemoOrdin1() {
     dEvent_manager_c& evtMng = dComIfGp_getEventManager();
     int staffId = evtMng.getMyStaffId(l_myName, NULL, 0);
+    int* cutName;
     if (staffId != -1) {
-        int* cutName = (int*)evtMng.getMyNowCutName(staffId);
+        cutName = (int*)evtMng.getMyNowCutName(staffId);
         if (evtMng.getIsAddvance(staffId)) {
             switch (*cutName) {
             case '0001':
                 dComIfGp_getEvent()->startCheckSkipEdge(this);
                 break;
+            default:
+                JUT_ASSERT(674, FALSE);
             }
         }
         switch (*cutName) {
@@ -380,6 +444,9 @@ void daTagTWGate_c::executeDemoOrdin1() {
                 setAction(ACT_DEMO_ORDIN_2);
             }
             evtMng.cutEnd(staffId);
+            break;
+        default:
+            JUT_ASSERT(686, FALSE);
             break;
         }
         if (eventInfo.checkCommandDemoAccrpt() && mEventID != -1 && evtMng.endCheck(mEventID)) {
@@ -417,22 +484,29 @@ void daTagTWGate_c::executeDemoOrdin2() {
             break;
         case '0003':
             break;
+        default:
+            JUT_ASSERT(749, FALSE);
+            break;
         }
     }
-    int choiceNo;
-    switch(*cutName) {
+    switch (*cutName) {
     case '0001':
     case '0003':
         evtMng.cutEnd(staffId);
         break;
     case '0002':
         if (talkProc(NULL, 1, NULL)) {
-            choiceNo = mMsgFlow.getChoiceNo();
+            int choiceNo = mMsgFlow.getChoiceNo();
+            // "Two-way branch %s" / "Yes" / "No"
+            OS_REPORT("二択分岐 %s\n", choiceNo == 0 ? "はい" : "いいえ");
             if (choiceNo == 0) {
                 setAction(ACT_DEMO_ORDIN_3);
             }
             evtMng.cutEnd(staffId);
         }
+        break;
+    default:
+        JUT_ASSERT(766, FALSE);
         break;
     }
 
@@ -447,7 +521,7 @@ void daTagTWGate_c::executeDemoOrdin2() {
 
 void daTagTWGate_c::initDemoOrdin3() {
     field_0x5de = 1;
-    mIsWolf = (dComIfGp_getLinkPlayer()->mNoResetFlg1 >> 25) & 1;  // checking if wolf?
+    mIsWolf = daPy_py_c::checkNowWolf() ? TRUE : FALSE;
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
     mEventID =
@@ -477,7 +551,7 @@ void daTagTWGate_c::executeDemoOrdin3() {
             field_0x5e0 = 1;
             break;
         default:
-            JUT_PANIC(829, "0");
+            JUT_ASSERT(829, FALSE);
             break;
         }
 
@@ -527,7 +601,7 @@ void daTagTWGate_c::executeDemoOrdin3() {
         }
         break;
     default:
-        JUT_PANIC(890, "0");
+        JUT_ASSERT(890, FALSE);
         break;
     }
 
@@ -547,12 +621,16 @@ void daTagTWGate_c::initDemoRanail1() {
 void daTagTWGate_c::executeDemoRanail1() {
     dEvent_manager_c& evtMng = dComIfGp_getEventManager();
     int staffId = evtMng.getMyStaffId(l_myName, NULL, 0);
+    int* cutName;
     if (staffId != -1) {
-        int* cutName = (int*)evtMng.getMyNowCutName(staffId);
+        cutName = (int*)evtMng.getMyNowCutName(staffId);
         if (evtMng.getIsAddvance(staffId)) {
             switch (*cutName) {
             case '0001':
                 dComIfGp_getEvent()->startCheckSkipEdge(this);
+                break;
+            default:
+                JUT_ASSERT(943, FALSE);
                 break;
             }
         }
@@ -563,6 +641,9 @@ void daTagTWGate_c::executeDemoRanail1() {
                 setAction(ACT_DEMO_RANAIL_2);
             }
             evtMng.cutEnd(staffId);
+            break;
+        default:
+            JUT_ASSERT(955, FALSE);
             break;
         }
         if (eventInfo.checkCommandDemoAccrpt() && mEventID != -1 && evtMng.endCheck(mEventID)) {
@@ -600,22 +681,29 @@ void daTagTWGate_c::executeDemoRanail2() {
             break;
         case '0003':
             break;
+        default:
+            JUT_ASSERT(1018, FALSE);
+            break;
         }
     }
-    int choiceNo;
-    switch(*cutName) {
+    switch (*cutName) {
     case '0001':
     case '0003':
         evtMng.cutEnd(staffId);
         break;
     case '0002':
         if (talkProc(NULL, 1, NULL)) {
-            choiceNo = mMsgFlow.getChoiceNo();
+            int choiceNo = mMsgFlow.getChoiceNo();
+            // "Two-way branch" / "Yes" / "No"
+            OS_REPORT("二択分岐 %s\n", choiceNo == 0 ? "はい" : "いいえ");
             if (choiceNo == 0) {
                 setAction(ACT_DEMO_RANAIL_3);
             }
             evtMng.cutEnd(staffId);
         }
+        break;
+    default:
+        JUT_ASSERT(1035, FALSE);
         break;
     }
 
@@ -630,7 +718,7 @@ void daTagTWGate_c::executeDemoRanail2() {
 
 void daTagTWGate_c::initDemoRanail3() {
     field_0x5de = 1;
-    mIsWolf = (dComIfGp_getLinkPlayer()->mNoResetFlg1 >> 25) & 1;  // checking if wolf?
+    mIsWolf = daPy_py_c::checkNowWolf() ? TRUE : FALSE;
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
     mEventID =
@@ -662,7 +750,7 @@ void daTagTWGate_c::executeDemoRanail3() {
             field_0x5e0 = 1;
             break;
         default:
-            JUT_PANIC(1099, "0");
+            JUT_ASSERT(1099, FALSE);
             break;
         }
     }
@@ -711,7 +799,7 @@ void daTagTWGate_c::executeDemoRanail3() {
         }
         break;
     default:
-        JUT_PANIC(1160, "0");
+        JUT_ASSERT(1160, FALSE);
         break;
     }
 
@@ -731,13 +819,16 @@ void daTagTWGate_c::initDemoHyral1() {
 void daTagTWGate_c::executeDemoHyral1() {
     dEvent_manager_c& evtMng = dComIfGp_getEventManager();
     int staffId = evtMng.getMyStaffId(l_myName, NULL, 0);
+    int* cutName;
     if (staffId != -1) {
-        int* cutName = (int*)evtMng.getMyNowCutName(staffId);
+        cutName = (int*)evtMng.getMyNowCutName(staffId);
         if (evtMng.getIsAddvance(staffId)) {
             switch (*cutName) {
             case '0001':
                 dComIfGp_getEvent()->startCheckSkipEdge(this);
                 break;
+            default:
+                JUT_ASSERT(1213, FALSE);
             }
         }
         switch (*cutName) {
@@ -747,6 +838,9 @@ void daTagTWGate_c::executeDemoHyral1() {
                 setAction(ACT_DEMO_HYRAL_2);
             }
             evtMng.cutEnd(staffId);
+            break;
+        default:
+            JUT_ASSERT(1225, FALSE);
             break;
         }
         if (eventInfo.checkCommandDemoAccrpt() && mEventID != -1 && evtMng.endCheck(mEventID)) {
@@ -783,22 +877,27 @@ void daTagTWGate_c::executeDemoHyral2() {
         case '0002':
             initTalk(0xbc1, NULL);
             break;
+        default:
+            JUT_ASSERT(1288, FALSE);
         }
     }
-    int choiceNo;
-    switch(*piVar3) {
+    switch (*piVar3) {
     case '0001':
     case '0003':
         eventMgr.cutEnd(staffId);
         break;
     case '0002':
         if (talkProc(NULL, 1, NULL)) {
-            choiceNo = mMsgFlow.getChoiceNo();
+            int choiceNo = mMsgFlow.getChoiceNo();
+            OS_REPORT("二択分岐 %s\n", choiceNo == 0 ? "はい" : "いいえ");
             if (choiceNo == 0) {
                 setAction(ACT_DEMO_HYRAL_3);
             }
             eventMgr.cutEnd(staffId);
         }
+        break;
+    default:
+        JUT_ASSERT(1305, FALSE);
         break;
     }
     if (eventInfo.checkCommandDemoAccrpt() && mEventID != -1 &&
@@ -812,7 +911,7 @@ void daTagTWGate_c::executeDemoHyral2() {
 
 void daTagTWGate_c::initDemoHyral3() {
     field_0x5de = 1;
-    mIsWolf = (dComIfGp_getLinkPlayer()->mNoResetFlg1 >> 25) & 1;  // checking if wolf?
+    mIsWolf = daPy_py_c::checkNowWolf() ? TRUE : FALSE;
     eventInfo.setArchiveName(l_zevParamTbl[mType].mArcName);
     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
     mEventID =
@@ -841,6 +940,8 @@ void daTagTWGate_c::executeDemoHyral3() {
             mpMorf->setPlaySpeed(1.0f);
             field_0x5e0 = 1;
             break;
+        default:
+            JUT_ASSERT(1368, FALSE);
         }
     }
     switch(*piVar3) {
@@ -883,6 +984,9 @@ void daTagTWGate_c::executeDemoHyral3() {
             eventMgr.cutEnd(staffId);
         }
         break;
+    default:
+        JUT_ASSERT(1417, FALSE);
+        break;
     }
     if (eventInfo.checkCommandDemoAccrpt() && mEventID != -1 &&
         eventMgr.endCheck(mEventID))
@@ -894,17 +998,15 @@ void daTagTWGate_c::executeDemoHyral3() {
 }
 
 void daTagTWGate_c::initBaseMtx() {
-    cullMtx = mpMorf->getModel()->getBaseTRMtx();
-    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
+    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+    fopAc_ac_c* player = daPy_getPlayerActorClass();
 
-    shape_angle.y = player->shape_angle.y + 0x8000;
-    mDoMtx_stack_c::transS(player->current.pos);
+    shape_angle.y = fopAcM_GetShapeAngle_p(player)->y + 0x8000;
+    mDoMtx_stack_c::transS(fopAcM_GetPosition(player));
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::transM(0.0f, 250.0f, -840.0f);
 
-    current.pos.x = mDoMtx_stack_c::get()[0][3];
-    current.pos.y = mDoMtx_stack_c::get()[1][3];
-    current.pos.z = mDoMtx_stack_c::get()[2][3];
+    mDoMtx_stack_c::multVecZero(&current.pos);
 
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -917,14 +1019,18 @@ int daTagTWGate_c::downloadModels() {
     }
 
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, createHeapCallBack, 0x3140)) {
-            return 1;
-        } else {
+        if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x3140)) {
             return -1;
+        } else {
+            return 1;
         }
     }
 
-    return phase_state == cPhs_ERROR_e ? -1 : 0;
+    if (phase_state == cPhs_ERROR_e) {
+        return -1;
+    } else {
+        return 0;
+    }
 }
 
 void daTagTWGate_c::initTalk(int param_0, fopAc_ac_c** param_1) {
@@ -957,13 +1063,17 @@ bool daTagTWGate_c::talkProc(int* param_1, int param_2, fopAc_ac_c** param_3) {
 }
 
 int daTagTWGate_c::createHeapCallBack(fopAc_ac_c* i_actor) {
-    return ((daTagTWGate_c*)i_actor)->CreateHeap();
+    daTagTWGate_c* gate = static_cast<daTagTWGate_c*>(i_actor);
+    return gate->CreateHeap();
 }
 
 int daTagTWGate_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("TWGate_Md", 7));
+    J3DModelData* mdlData_p = NULL;
+    int var_r27 = 0;
+    mdlData_p = static_cast<J3DModelData*>(dComIfG_getObjectRes("TWGate_Md", 7));
+    JUT_ASSERT(1685, NULL != mdlData_p);
     mpMorf =
-        new mDoExt_McaMorfSO(modelData, NULL, NULL,
+        new mDoExt_McaMorfSO(mdlData_p, NULL, NULL,
                              static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("TWGate_Md", 4)),
                              0, 0.0f, 0, -1, NULL, 0, 0x11000084);
 
@@ -986,7 +1096,7 @@ int daTagTWGate_c::create() {
 
     int phase_state;
     if (dComIfGs_isDarkClearLV(l_zevParamTbl[mType].mLv)) {
-        phase_state = cPhs_ERROR_e;
+        return cPhs_ERROR_e;
     } else {
         phase_state = dComIfG_resLoad(&mPhaseZevArc, l_zevParamTbl[mType].mArcName);
         if (phase_state == cPhs_COMPLEATE_e) {
@@ -997,36 +1107,59 @@ int daTagTWGate_c::create() {
     return phase_state;
 }
 
-static int daTagTWGate_Create(fopAc_ac_c* i_actor) {
-    return ((daTagTWGate_c*)i_actor)->create();
-}
-
-inline daTagTWGate_c::~daTagTWGate_c() {
-    dComIfG_resDelete(&mPhaseZevArc, l_zevParamTbl[mType].mArcName);
-
-    if (mPhaseMdRes.id != cPhs_INIT_e) {
-        dComIfG_resDelete(&mPhaseMdRes, "TWGate_Md");
+int daTagTWGate_c::draw() {
+    if (field_0x5e0 != 0) {
+        mpMorf->entryDL();
     }
 
-    if (mPhasePyRes.id != cPhs_INIT_e) {
-        dComIfG_resDelete(&mPhasePyRes, mIsWolf ? "TWGate_Wf" : "TWGate_Lk");
+#if DEBUG
+    if (attr().show_range) {
+        dDbVw_drawCylinderOpa(current.pos, scale.x * 100.0f, scale.y * 100.0f, (GXColor){0xff, 0xff, 0xff, 0xff}, 1);
     }
-}
+#endif
 
-static int daTagTWGate_Delete(daTagTWGate_c* i_gate) {
-    i_gate->~daTagTWGate_c();
     return 1;
 }
 
-static int daTagTWGate_Execute(daTagTWGate_c* i_gate) {
-    return i_gate->execute();
+void daTagTWGate_c::create_init() {
+#if DEBUG
+    mHio.ct();
+#endif
+    field_0x5e0 = 0;
+    setAction(ACT_WAIT);
 }
 
-static int daTagTWGate_Draw(daTagTWGate_c* i_gate) {
-    return i_gate->draw();
+static int daTagTWGate_Create(fopAc_ac_c* i_this) {
+    daTagTWGate_c* gate = static_cast<daTagTWGate_c*>(i_this);
+    fopAcM_RegisterCreateID(i_this, "Tag_TWGate");
+    return gate->create();
 }
 
-static int daTagTWGate_IsDelete(daTagTWGate_c*) {
+static int daTagTWGate_Delete(daTagTWGate_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this, "Tag_TWGate");
+    i_this->~daTagTWGate_c();
+    return 1;
+}
+
+int daTagTWGate_c::execute() {
+    callExecute();
+
+    if (field_0x5e0 != 0) {
+        mpMorf->play(0, 0);
+        mpMorf->modelCalc();
+    }
+    return 1;
+}
+
+static int daTagTWGate_Execute(daTagTWGate_c* i_this) {
+    return i_this->execute();
+}
+
+static int daTagTWGate_Draw(daTagTWGate_c* i_this) {
+    return i_this->draw();
+}
+
+static int daTagTWGate_IsDelete(daTagTWGate_c* i_this) {
     return 1;
 }
 

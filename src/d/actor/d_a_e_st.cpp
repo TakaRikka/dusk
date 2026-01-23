@@ -244,12 +244,12 @@ daE_ST_HIO_c::daE_ST_HIO_c() {
 #if DEBUG
 void daE_ST_HIO_c::genMessage(JORMContext* ctext) {
     // "stalchura" - a.k.a. skultula
-    ctext->genLabel("  スタルチュラ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("基本サイズ", &basic_size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("PL認識距離", &pl_recognize_dist, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("戦闘開始距離", &combat_start_dist, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("攻撃前間", &time_before_attack, 0, 50, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("ダウン時間", &down_time, 0, 300, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genLabel("  スタルチュラ", 0x80000001);
+    ctext->genSlider("基本サイズ", &basic_size, 0.0f, 5.0f);
+    ctext->genSlider("PL認識距離", &pl_recognize_dist, 0.0f, 5000.0f);
+    ctext->genSlider("戦闘開始距離", &combat_start_dist, 0.0f, 1000.0f);
+    ctext->genSlider("攻撃前間", &time_before_attack, 0, 50);
+    ctext->genSlider("ダウン時間", &down_time, 0, 300);
 }
 #endif
 

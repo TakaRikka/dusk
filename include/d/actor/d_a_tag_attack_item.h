@@ -16,6 +16,7 @@ public:
     void action();
     BOOL checkHit();
     void createItem();
+    int draw();
     int _delete();
 
     virtual ~daTagAtkItem_c() {}

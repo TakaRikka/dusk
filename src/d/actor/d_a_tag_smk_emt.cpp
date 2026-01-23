@@ -33,19 +33,19 @@ int daTagSmkEmt_c::execute() {
     return 1;
 }
 
-static u16 const PARTICLE_NAME[3] = {
-    0x87E7,
-    0x87E8,
-    0x87E9
-};
-
 void daTagSmkEmt_c::createSmkEmt() {
+    static u16 const PARTICLE_NAME[3] = {
+        dPa_RM(ID_ZF_S_L5CHIMSMK00),
+        dPa_RM(ID_ZF_S_L5CHIMSMK01),
+        dPa_RM(ID_ZF_S_L5CHIMSMK02),
+    };
+
     cXyz pos(current.pos);
     csXyz angle(0,0,0);
-    cXyz pos2(1.0f,1.0f,1.0f);
+    cXyz pos2(1.0f, 1.0f, 1.0f);
 
     for (int i = 0; i < 3; i++) {
-        mParticles[i] = dComIfGp_particle_set(PARTICLE_NAME[i],&pos,&angle,&pos2);
+        mParticles[i] = dComIfGp_particle_set(PARTICLE_NAME[i], &pos, &angle, &pos2);
     }
 }
 

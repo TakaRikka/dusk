@@ -5,8 +5,9 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/d_msg_object.h"
+#include "d/d_procname.h"
+#include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
 
@@ -28,7 +29,7 @@ int daTagKagoFall_c::create() {
         mExitID = 2;
         mStartPoint = 0;
 
-        mDoMtx_trans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::YrotM(shape_angle.y);
         mDoMtx_inverse(mDoMtx_stack_c::get(), mMtx);
 
@@ -84,7 +85,7 @@ void daTagKagoFall_c::actionWaitRiver() {
                     return;
                 }
             } else {
-                mNoCarryTimer = 150;
+                mNoCarryTimer = 150 + nREG_S(5);
             }
         }
 
@@ -99,7 +100,7 @@ void daTagKagoFall_c::actionWaitRiver() {
                 mRestartPos = dCam_getBody()->Eye();
                 mActionState = 1;
                 mTimer = 30;
-                player->onNoResetFlg0(daPy_py_c::FLG0_UNK_10000);
+                player->onDemoStreamAccept();
                 mRiverTimer = 60;
             }
         }
@@ -111,7 +112,7 @@ void daTagKagoFall_c::actionWaitRiver() {
         }
 
         if (mRiverTimer == 0) {
-            Z2GetAudioMgr()->seStart(Z2SE_FORCE_BACK, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            mDoAud_seStart(Z2SE_FORCE_BACK, NULL, 0, 0);
             mDoGph_gInf_c::fadeOut(0.05f, static_cast<JUtility::TColor&>(g_blackColor));
             mRiverTimer = 20;
             mActionState = 2;
@@ -122,7 +123,7 @@ void daTagKagoFall_c::actionWaitRiver() {
 
     case 2:
         if (mRiverTimer == 0) {
-            daPy_getPlayerActorClass()->offNoResetFlg0(daPy_py_c::FLG0_UNK_10000);
+            daPy_getPlayerActorClass()->offDemoStreamAccept();
             mActionState = 3;
             mTimer = 40;
         }
@@ -136,25 +137,21 @@ void daTagKagoFall_c::actionWaitRiver() {
         }
         break;
 
-    case 4: {
-        daPy_getPlayerActorClass()->offNoResetFlg0(daPy_py_c::FLG0_UNK_10000);
+    case 4:
+        daPy_getPlayerActorClass()->offDemoStreamAccept();
 
-        int msg = mMsgFlow.doFlow(this, NULL, 0);
-        if (msg != 0) {
+        if (mMsgFlow.doFlow(this, NULL, 0) != 0) {
             if (dMsgObject_getSelectCursorPos() != 0) {
                 dStage_changeScene(mExitID, 0.0f, 0, fopAcM_GetRoomNo(this), 0, -1);
             } else {
-                int room = dStage_roomControl_c::mStayNo;
-                dComIfGp_setNextStage("F_SP112", mStartPoint, room, dComIfG_play_c::getLayerNo(0),
-                                      0.0f, 10, 1, 0, 0, 1, 0);
+                dComIfGp_setNextStage("F_SP112", mStartPoint, dComIfGp_roomControl_getStayNo(),
+                                      dComIfG_play_c::getLayerNo(0), 0.0f, 10, 1, 0, 0, 1, 0);
             }
             mActionState = 5;
         }
         break;
-    }
 
     case 5:
-        // Maybe contained some stripped out debug code?
         break;
     }
 }
@@ -179,7 +176,7 @@ void daTagKagoFall_c::actionWaitFall() {
                     mActionState = 1;
                 }
             } else {
-                mNoCarryTimer = 150;
+                mNoCarryTimer = 150 + nREG_S(5);
             }
         }
         break;
@@ -188,9 +185,8 @@ void daTagKagoFall_c::actionWaitFall() {
         if (dComIfGs_getLife() == 0) {
             player->onSceneChangeAreaJump(mExitID, -1, NULL);
 
-            if (player->checkNoResetFlg2(daPy_py_c::FLG2_SCN_CHG_START) && !mPlayedSceneChangeSfx)
-            {
-                Z2GetAudioMgr()->seStart(Z2SE_FORCE_BACK, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            if (player->checkSceneChangeAreaStart() && !mPlayedSceneChangeSfx) {
+                mDoAud_seStart(Z2SE_FORCE_BACK, NULL, 0, 0);
                 player->voiceStart(Z2SE_WL_V_FALL_TO_RESTART);
                 mPlayedSceneChangeSfx = true;
             }
@@ -202,7 +198,7 @@ void daTagKagoFall_c::actionWaitFall() {
             mDoGph_gInf_c::fadeOut(0.05f, static_cast<JUtility::TColor&>(g_blackColor));
             mTimer = 60;
             mActionState = 2;
-            Z2GetAudioMgr()->seStart(Z2SE_FORCE_BACK, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            mDoAud_seStart(Z2SE_FORCE_BACK, NULL, 0, 0);
             player->voiceStart(Z2SE_WL_V_FALL_TO_RESTART);
         }
         break;
@@ -236,14 +232,12 @@ void daTagKagoFall_c::actionWaitFall() {
 
     case 3: {
         player->setPlayerPosAndAngle(&mRestartPos, 0, 0);
-        int msg = mMsgFlow.doFlow(this, NULL, 0);
-        if (msg != 0) {
+        if (mMsgFlow.doFlow(this, NULL, 0) != 0) {
             if (dMsgObject_getSelectCursorPos() != 0) {
                 dStage_changeScene(mExitID, 0.0f, 0, fopAcM_GetRoomNo(this), 0, -1);
             } else {
-                int room = dStage_roomControl_c::mStayNo;
-                dComIfGp_setNextStage("F_SP112", mStartPoint, room, dComIfG_play_c::getLayerNo(0),
-                                      0.0f, 10, 1, 0, 0, 1, 0);
+                dComIfGp_setNextStage("F_SP112", mStartPoint, dComIfGp_roomControl_getStayNo(),
+                                      dComIfG_play_c::getLayerNo(0), 0.0f, 10, 1, 0, 0, 1, 0);
             }
             mActionState = 10;
         }
@@ -265,10 +259,12 @@ static int daTagKagoFall_Execute(daTagKagoFall_c* i_this) {
 }
 
 static int daTagKagoFall_Delete(daTagKagoFall_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
 static int daTagKagoFall_Create(daTagKagoFall_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->create();
 }
 

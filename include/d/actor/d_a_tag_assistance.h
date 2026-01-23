@@ -5,21 +5,9 @@
 
 class daTagAssist_c : public fopAc_ac_c {
 public:
-    void create_init() {
-        attention_info.flags = 0;
-        field_0x570 = -1;
-    }
-
-    int create() {
-        fopAcM_ct(this, daTagAssist_c);
-        create_init();
-        return cPhs_COMPLEATE_e;
-    }
-
-    int execute() {
-        fopAcM_searchPlayerDistanceXZ(this);
-        return 1;
-    }
+    inline void create_init();
+    inline int create();
+    inline int execute();
 
     u8 field_0x568[8];
     s16 field_0x570;

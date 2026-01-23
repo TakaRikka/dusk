@@ -229,45 +229,34 @@ public:
     }
 
     u8 getType() {
-        int prm = fopAcM_GetParam(this) >> 0x1C;
+        int prm = (fopAcM_GetParam(this) & 0xF0000000) >> 28;
 
-        u8 type;
         switch (argument) {
         case 0:
             switch (prm) {
             case 1:
-                type = 2;
-                break;
+                return 2;
             case 2:
-                type = 4;
-                break;
+                return 4;
             case 3:
-                type = 6;
-                break;
+                return 6;
             default:
-                type = 0;
-                break;
+                return 0;
             }
             break;
         case 1:
             switch (prm) {
             case 1:
-                type = 3;
-                break;
+                return 3;
             case 2:
-                type = 5;
-                break;
+                return 5;
             default:
-                type = 1;
-                break;
+                return 1;
             }
             break;
         default:
-            type = 0;
-            break;
+            return 0;
         }
-
-        return type;
     }
 
     u8 getBitSW() { return fopAcM_GetParam(this) & 0xff; }
@@ -304,11 +293,11 @@ public:
     /* 0x1124 */ daNpcT_Path_c mPath;
     /* 0x114C */ cXyz mCXyzJump;
     /* 0x1158 */ int mLatencyTime;
-    /* 0x115C */ float mJumpHeight;
-    /* 0x1160 */ float mJumpSpeed;
-    /* 0x1164 */ float mColsetBlend;
-    /* 0x1168 */ float mGoalStatueTurnSpeed;
-    /* 0x116C */ float mGoalStatueAngle;
+    /* 0x115C */ f32 mJumpHeight;
+    /* 0x1160 */ f32 mJumpSpeed;
+    /* 0x1164 */ f32 mColsetBlend;
+    /* 0x1168 */ f32 mGoalStatueTurnSpeed;
+    /* 0x116C */ f32 mGoalStatueAngle;
     /* 0x1170 */ s16 mPlayerDirection;
     /* 0x1172 */ u8 mReset;
     /* 0x1173 */ u8 mSetWolfHowling;

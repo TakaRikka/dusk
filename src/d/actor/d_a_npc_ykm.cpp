@@ -296,23 +296,23 @@ void daNpc_ykM_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
 void daNpc_ykM_HIO_c::genMessage(JORMContext* ctx) {
     daNpcT_cmnGenMessage(ctx, &m.common);
-    ctx->genSlider("ステップの速さ  ", &m.step_speed, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("注目距離        ", &m.attention_dist, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("会話距離        ", &m.conversation_dist, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("飛び出し速度    ", &m.jump_speed, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("飛び出し角度    ", &m.push_out_angle, 0.0f, 90.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("飛ばしフレ－ム  ", &m.skip_frame, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("飛ばし速度      ", &m.fly_speed, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("飛ばし角度      ", &m.fly_angle, 0.0f, 90.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("ジャンプ初速    ", &m.jump_init_speed, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("滑り加速        ", &m.slide_acceleration, 0.0f, 8.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("滑り速度        ", &m.slide_speed, 0.0f, 128.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("ウエイト時間    ", &m.wait_time, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("走り速度        ", &m.run_speed, 0.0f, 64.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("競争パラメ－タａ", &m.competition_prm_a, -100.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("競争パラメ－タｂ", &m.competition_prm_b, 1.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("競争パラメ－タｃ", &m.competition_prm_c, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("ステップの速さ  ", &m.step_speed, 0.0f, 100.0f);
+    ctx->genSlider("注目距離        ", &m.attention_dist, 0.0f, 10000.0f);
+    ctx->genSlider("会話距離        ", &m.conversation_dist, 0.0f, 10000.0f);
+    ctx->genSlider("飛び出し速度    ", &m.jump_speed, 0.0f, 100.0f);
+    ctx->genSlider("飛び出し角度    ", &m.push_out_angle, 0.0f, 90.0f);
+    ctx->genSlider("飛ばしフレ－ム  ", &m.skip_frame, 0.0f, 100.0f);
+    ctx->genSlider("飛ばし速度      ", &m.fly_speed, 0.0f, 100.0f);
+    ctx->genSlider("飛ばし角度      ", &m.fly_angle, 0.0f, 90.0f);
+    ctx->genSlider("ジャンプ初速    ", &m.jump_init_speed, 0.0f, 100.0f);
+    ctx->genSlider("滑り加速        ", &m.slide_acceleration, 0.0f, 8.0f);
+    ctx->genSlider("滑り速度        ", &m.slide_speed, 0.0f, 128.0f);
+    ctx->genSlider("ウエイト時間    ", &m.wait_time, 0.0f, 10000.0f);
+    ctx->genSlider("走り速度        ", &m.run_speed, 0.0f, 64.0f);
+    ctx->genSlider("競争パラメ－タａ", &m.competition_prm_a, -100.0f, 100.0f);
+    ctx->genSlider("競争パラメ－タｂ", &m.competition_prm_b, 1.0f, 100.0f);
+    ctx->genSlider("競争パラメ－タｃ", &m.competition_prm_c, 0.0f, 10.0f);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -750,13 +750,9 @@ int daNpc_ykM_c::CreateHeap() {
 
 int daNpc_ykM_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_ykM_c -> Delete\n", g_Counter.mCounter0, this);
-    fpc_ProcID unusedId = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_YKM");
     this->~daNpc_ykM_c();
     return 1;
-}
-
-static void dummy_string() {
-    OS_REPORT("Delete -> NPC_YKM(id=%d)\n", 0);
 }
 
 int daNpc_ykM_c::Execute() {
@@ -775,14 +771,7 @@ int daNpc_ykM_c::Draw() {
         mdlData_p->getMaterialNodePointer(3)->getShape()->hide();
     }
 
-    rv = draw(
-        #if DEBUG
-        chkAction(&daNpc_ykM_c::test),
-        #else
-        FALSE,
-        #endif
-        FALSE, mRealShadowSize, NULL, 0.0f, FALSE, field_0x1581 == 1, FALSE
-    );
+    rv = draw(NpcT_CHK_ACTION(daNpc_ykM_c), FALSE, mRealShadowSize, NULL, 0.0f, FALSE, field_0x1581 == 1, FALSE);
 
     if (field_0x157a != 0) {
         mdlData_p->getMaterialNodePointer(3)->getShape()->show();
@@ -1577,8 +1566,8 @@ void daNpc_ykM_c::setCollision() {
 int daNpc_ykM_c::drawDbgInfo() {
 #if DEBUG
     if (mpHIO->m.common.debug_info_ON != 0) {
-        f32 fVar1 = dComIfGp_getAttention()->getDistTable(attention_info.distances[6]).mDistMax;
-        f32 fVar2 = dComIfGp_getAttention()->getDistTable(attention_info.distances[1]).mDistMax;
+        f32 fVar1 = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_SPEAK_e]).mDistMax;
+        f32 fVar2 = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_TALK_e]).mDistMax;
         dDbVw_drawCircleOpa(attention_info.position, fVar1, (GXColor){0x0, 0xc8, 0x0, 0xff}, 1, 12);
         dDbVw_drawCircleOpa(attention_info.position, fVar2, (GXColor){0xc8, 0x0, 0x0, 0xff}, 1, 12);
         dDbVw_drawSphereXlu(eyePos, 18.0f, (GXColor){0x80, 0x80, 0x80, 0xa0}, 1);

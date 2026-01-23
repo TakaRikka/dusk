@@ -106,25 +106,25 @@ void daObj_Pumpkin_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 }
 
 void daObj_Pumpkin_HIO_c::genMessage(JORMContext* ctext) {
-    ctext->genSlider("注目オフセット  ", &m.featured_offset, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("重力            ", &m.gravity, -100.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("スケ－ル        ", &m.scale, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("リアル影サイズ  ", &m.real_shadow_size, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("体重            ", &m.weight, 0.0f, 255.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("高さ            ", &m.height, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("ひざ丈          ", &m.knee_length, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("幅              ", &m.width, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("発射速度        ", &m.fire_rate, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("注目オフセット  ", &m.featured_offset, 0.0f, 1000.0f);
+    ctext->genSlider("重力            ", &m.gravity, -100.0f, 100.0f);
+    ctext->genSlider("スケ－ル        ", &m.scale, 0.0f, 100.0f);
+    ctext->genSlider("リアル影サイズ  ", &m.real_shadow_size, 0.0f, 10000.0f);
+    ctext->genSlider("体重            ", &m.weight, 0.0f, 255.0f);
+    ctext->genSlider("高さ            ", &m.height, 0.0f, 1000.0f);
+    ctext->genSlider("ひざ丈          ", &m.knee_length, 0.0f, 1000.0f);
+    ctext->genSlider("幅              ", &m.width, 0.0f, 1000.0f);
+    ctext->genSlider("発射速度        ", &m.fire_rate, 0.0f, 1000.0f);
     // fire angle:
-    ctext->genSlider("発射角度        ", &m.launch_angle, 0.0f, 90.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("浮きオフセット  ", &m.floating_offset, -100.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("発射角度        ", &m.launch_angle, 0.0f, 90.0f);
+    ctext->genSlider("浮きオフセット  ", &m.floating_offset, -100.0f, 100.0f);
     // stand strong:
-    ctext->genSlider("ふんばり        ", &m.hold_on, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("引き抜き音遅延  ", &m.pull_sound_delay, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("成長時間１      ", &m.growth_time_1, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("成長時間２      ", &m.growth_time_2, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("ふんばり        ", &m.hold_on, 0, 1000);
+    ctext->genSlider("引き抜き音遅延  ", &m.pull_sound_delay, 0, 1000);
+    ctext->genSlider("成長時間１      ", &m.growth_time_1, 0, 1000);
+    ctext->genSlider("成長時間２      ", &m.growth_time_2, 0, 1000);
     // export file:
-    ctext->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctext->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 

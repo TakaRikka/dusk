@@ -18,7 +18,7 @@ daObjThDoor_HIO_c::daObjThDoor_HIO_c() {
 
 void daObjThDoor_HIO_c::genMessage(JORMContext* ctx) {
     // Telma's door
-    ctx->genLabel("テルマの家のドア", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("テルマの家のドア", 0);
 }
 
 static daObjThDoor_HIO_c l_HIO;

@@ -3300,8 +3300,8 @@ static void demo_camera(b_gnd_class* i_this) {
         sp114.y = 0.0f;
         sp114.z = 135.0f;
         MtxPosition(&sp114, &sp108);
-        a_this->current.pos.x = sp108.x + player->field_0x5f8.x;
-        a_this->current.pos.z = sp108.z + player->field_0x5f8.z;
+        a_this->current.pos.x = sp108.x + player->mViewerCurrentPos.x;
+        a_this->current.pos.z = sp108.z + player->mViewerCurrentPos.z;
         a_this->current.angle.y = player->shape_angle.y + 0x8000;
 
         spF0 = a_this->current.pos + ((*player->getViewerCurrentPosP() - a_this->current.pos) * 0.5f);
@@ -4787,7 +4787,7 @@ static int daB_GND_Create(fopAc_ac_c* a_this) {
             l_HIO.no = mDoHIO_CREATE_CHILD("ガノンドロフ", &l_HIO);
         }
 
-        a_this->attention_info.distances[2] = 36;
+        a_this->attention_info.distances[fopAc_attn_BATTLE_e] = 36;
 
         fopAcM_SetMtx(a_this, i_this->mpModelMorf->getModel()->getBaseTRMtx());
         fopAcM_SetMin(a_this, -400.0f, -200.0f, -400.0f);

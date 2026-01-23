@@ -3232,7 +3232,7 @@ static int daMg_Fish_Execute(mg_fish_class* i_this) {
 #if VERSION == VERSION_GCN_JPN
     lit_1008 = 0;
 #elif VERSION == VERSION_GCN_PAL
-    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_ENGLISH) {
+    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
         lit_1008 = 2;
     } else {
         lit_1008 = 0;
@@ -3845,7 +3845,7 @@ static int daMg_Fish_Create(fopAc_ac_c* i_this) {
 #if VERSION == VERSION_GCN_JPN
     lit_1008 = 0;
 #elif VERSION == VERSION_GCN_PAL
-    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_ENGLISH) {
+    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
         lit_1008 = 2;
     } else {
         lit_1008 = 0;

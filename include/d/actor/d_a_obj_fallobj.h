@@ -44,9 +44,11 @@ public:
     int Draw();
     int Delete();
 
-    u32 getTime() { return fopAcM_GetParamBit(this, 8, 8); }
-    u32 getPos() { return fopAcM_GetParamBit(this, 0x14, 8); }
-    static BOOL checkFallStart(fopAc_ac_c* actor) { return actor->speed.y != 0.0f; }
+    u8 getTime() { return fopAcM_GetParamBit(this, 8, 8); }
+    u8 getPos() { return fopAcM_GetParamBit(this, 0x14, 8); }
+    bool checkFallStart() {
+        return this->speed.y != 0.0f;
+    };
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhaseReq;

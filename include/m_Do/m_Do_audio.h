@@ -23,16 +23,16 @@ public:
 #endif
 
     static void onInitFlag() { mInitFlag = true; }
-    static bool isInitFlag() { return mInitFlag; }
-    static bool isResetFlag() { return mResetFlag; }
+    static u8 isInitFlag() { return mInitFlag; }
+    static u8 isResetFlag() { return mResetFlag; }
     static void onResetFlag() { mResetFlag = true; }
     static void offResetFlag() { mResetFlag = false; }
     static bool isBgmSet() { return mBgmSet; }
     static void onBgmSet() { mBgmSet = true; }
     static void offBgmSet() { mBgmSet = false; }
 
-    static bool mInitFlag;
-    static bool mResetFlag;
+    static u8 mInitFlag;
+    static u8 mResetFlag;
     static bool mBgmSet;
 };
 

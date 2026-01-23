@@ -45,9 +45,9 @@ public:
     }
     
     int getType() {
-        int param = fopAcM_GetParam(this) >> 0x18;
-        int type;
+        u32 param = (fopAcM_GetParam(this) & 0xFF000000) >> 0x18;
 
+        int type;
         if (param == 0xFF) {
             type = 0;
         } else {

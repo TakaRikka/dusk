@@ -10,8 +10,8 @@ public:
     int Execute();
     int Draw();
     bool setTurnOnOffChange();
-    u32 getTurnOnTime();
-    u32 getTurnOffTime();
+    u8 getTurnOnTime();
+    u8 getTurnOffTime();
     void initialize();
 
     virtual ~daTag_MynaLight_c();

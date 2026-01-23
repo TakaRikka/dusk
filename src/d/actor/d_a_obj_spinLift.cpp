@@ -32,11 +32,11 @@ daSpinLift_HIO_c::daSpinLift_HIO_c() {
 #if DEBUG
 void daSpinLift_HIO_c::genMessage(JORMContext* ctx) {
     // === Ascent ===
-    ctx->genLabel("\n=== 上昇 ===", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("\n=== 上昇 ===", 0);
     // Initial Speed
-    ctx->genSlider("初速", &mInitialSpeed, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("初速", &mInitialSpeed, 0.0f, 100.0f);
     // Vibration
-    ctx->startComboBox("振動", &mVibration, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    ctx->startComboBox("振動", &mVibration);
     // Strength 1 - 8
     ctx->genComboBoxItem("強さ１", 1);
     ctx->genComboBoxItem("強さ２", 2);
@@ -262,14 +262,14 @@ static int daSpinLift_Execute(daSpinLift_c* i_this) {
 }
 
 static int daSpinLift_Delete(daSpinLift_c* i_this) {
-    fpc_ProcID proc_id = fopAcM_GetID(i_this);
+    fopAcM_RegisterCreateID(i_this, "daSpinLift");
     return i_this->MoveBGDelete();
 }
 
-static int daSpinLift_Create(fopAc_ac_c* a_this) {
-    daSpinLift_c* i_this = (daSpinLift_c*)a_this;
-    fpc_ProcID proc_id = fopAcM_GetID(a_this);
-    return i_this->create();
+static int daSpinLift_Create(fopAc_ac_c* i_this) {
+    daSpinLift_c* a_this = (daSpinLift_c*)i_this;
+    fopAcM_RegisterDeleteID(i_this, "daSpinLift");
+    return a_this->create();
 }
 
 static actor_method_class l_daSpinLift_Method = {

@@ -38,13 +38,13 @@ daObjKWheel01_HIO_c::daObjKWheel01_HIO_c() {
 
 void daObjKWheel01_HIO_c::genMessage(JORMContext* ctx) {
     // "Pulley"
-    ctx->genLabel("滑車", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("滑車", 0);
 
     // "Rotational speed"
-    ctx->genSlider("回転速度", &mTargetYAngularSpeed, 0, 0x2000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("回転速度", &mTargetYAngularSpeed, 0, 0x2000);
 
     // "Rotational acceleration"
-    ctx->genSlider("回転加速度", &mYAngularAcceleration, 0, 0x20, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("回転加速度", &mYAngularAcceleration, 0, 0x20);
 }
 #endif
 

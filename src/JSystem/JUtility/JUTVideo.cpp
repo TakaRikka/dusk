@@ -56,9 +56,11 @@ JUTVideo::~JUTVideo() {
 }
 
 void JUTVideo::preRetraceProc(u32 retrace_count) {
+#if PLATFORM_GCN
     if (!sManager) {
         return;
     }
+#endif
 
     if (sManager->mPreCallback) {
         (*sManager->mPreCallback)(retrace_count);
@@ -166,9 +168,11 @@ void JUTVideo::drawDoneCallback() {
 }
 
 void JUTVideo::postRetraceProc(u32 retrace_count) {
+#if PLATFORM_GCN
     if (!sManager) {
         return;
     }
+#endif
 
     if (sManager->mPostCallback != NULL) {
         sManager->mPostCallback(retrace_count);

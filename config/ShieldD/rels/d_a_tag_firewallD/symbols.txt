@@ -30,4 +30,4 @@ game_over_eff_name__11Tag_FWall_n = .data:0x00000040; // type:object size:0x8 sc
 l_daTag_FWall_Method = .data:0x00000060; // type:object size:0x20 scope:global
 g_profile_Tag_FWall = .data:0x00000080; // type:object size:0x30 scope:global
 fire_leader = .bss:0x00000000; // type:object size:0x4 scope:global
-lbl_708_bss_4 = .bss:0x00000004; // type:object size:0x1 data:byte
+fire_num = .bss:0x00000004; // type:object size:0x1 data:byte

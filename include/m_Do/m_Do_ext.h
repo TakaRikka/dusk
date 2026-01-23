@@ -297,6 +297,8 @@ struct mDoExt_MtxCalcAnmBlendTbl
     mDoExt_MtxCalcAnmBlendTbl(int num, mDoExt_AnmRatioPack* anmRatio) {
         mNum = num;
         mAnmRatio = anmRatio;
+
+        f32 var_f31 = 0.0f;
         for (int i = 0; i < mNum; i++) {
             if (!mAnmRatio[i].getAnmTransform()) {
                 mAnmRatio[i].setRatio(0.0f);
@@ -597,7 +599,7 @@ private:
     /* 0x38 */ mDoExt_3Dline_c* mpLines;
 };
 
-class mDoExt_3DlineMat2_c : public mDoExt_3DlineMat_c {
+class mDoExt_3DlineMat2_c : public mDoExt_3DlineMat1_c {
 public:
     int getMaterialID() { return 2; }
     void setMaterial();

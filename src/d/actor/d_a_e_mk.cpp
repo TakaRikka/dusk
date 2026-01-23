@@ -48,17 +48,17 @@ daE_MK_HIO_c::daE_MK_HIO_c() {
 
 #if DEBUG
 void daE_MK_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("  ブーメラン猿", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("基本サイズ", &size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("ブーメラン比率", &boomerang_ratio, 0.0f, 2.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("PL投max距離", &pl_throw_dist_max, 0.0f, 4000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genLabel("        ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genCheckBox("動作停止", &halt_action, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genLabel("        ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genLabel("王冠位置補正", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("　X", &crown_pos_adjust.x, -50.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("　Y", &crown_pos_adjust.y, -50.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("　Z", &crown_pos_adjust.z, -50.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genLabel("  ブーメラン猿", 0x80000001);
+    ctx->genSlider("基本サイズ", &size, 0.0f, 5.0f);
+    ctx->genSlider("ブーメラン比率", &boomerang_ratio, 0.0f, 2.0f);
+    ctx->genSlider("PL投max距離", &pl_throw_dist_max, 0.0f, 4000.0f);
+    ctx->genLabel("        ", 0x80000001);
+    ctx->genCheckBox("動作停止", &halt_action, 0x1);
+    ctx->genLabel("        ", 0x80000001);
+    ctx->genLabel("王冠位置補正", 0x80000001);
+    ctx->genSlider("　X", &crown_pos_adjust.x, -50.0f, 50.0f);
+    ctx->genSlider("　Y", &crown_pos_adjust.y, -50.0f, 50.0f);
+    ctx->genSlider("　Z", &crown_pos_adjust.z, -50.0f, 50.0f);
 }
 #endif
 
@@ -2774,7 +2774,7 @@ static int daE_MK_IsDelete(e_mk_class* i_this) {
 
 static int daE_MK_Delete(e_mk_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_MK");
 
     dComIfG_resDelete(&i_this->phase, "E_mk");
     if (i_this->hioInit != 0) {
@@ -2886,7 +2886,7 @@ static int daE_MK_Create(fopAc_ac_c* i_actor) {
         mk->sound.init(&i_actor->current.pos, &i_actor->eyePos, 3, 1);
         mk->atInfo.mpSound = &mk->sound;
 
-        i_actor->attention_info.distances[2] = 4;
+        i_actor->attention_info.distances[fopAc_attn_BATTLE_e] = 4;
 
         mk->stts.Init(0xFF, 0, i_actor);
         mk->tgSph.Set(cc_sph_src);

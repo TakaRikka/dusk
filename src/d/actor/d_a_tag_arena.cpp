@@ -9,10 +9,12 @@
 
 static int daTagArena_Create(fopAc_ac_c* i_this) {
     daTagArena_c* arena_tag = (daTagArena_c*)i_this;
+    int id = fopAcM_GetID(i_this);
     return arena_tag->create();
 }
 
 static int daTagArena_Delete(daTagArena_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagArena_c();
     return 1;
 }

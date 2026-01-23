@@ -193,8 +193,8 @@ u16 dDemo_c::m_branchType;
 const u8* dDemo_c::m_branchData;
 
 
-int dDemo_actor_c::getDemoIDData(int* param_0, int* param_1, int* param_2, u16* param_3,
-                                      u8* param_4) {
+int dDemo_actor_c::getDemoIDData(int* o_arg0, int* o_arg1, int* o_arg2, u16* o_resID,
+                                 u8* param_4) {
     JStudio::stb::TParseData_fixed<51, TValueIterator_misaligned<u32> > data(getPrm()->getData());
 
     static JStudio::stb::TParseData_fixed<51, TValueIterator_misaligned<u32> > dummy;
@@ -210,10 +210,10 @@ int dDemo_actor_c::getDemoIDData(int* param_0, int* param_1, int* param_2, u16* 
     }
 
     u32 var_r31 = *it;
-    *param_0 = var_r31 >> 0x1E;
-    *param_1 = (var_r31 >> 0x18) & 0xF;
-    *param_2 = (var_r31 >> 0x10) & 0xF;
-    *param_3 = var_r31 & 0xFFFF;
+    *o_arg0 = var_r31 >> 0x1E;
+    *o_arg1 = (var_r31 >> 0x18) & 0xF;
+    *o_arg2 = (var_r31 >> 0x10) & 0xF;
+    *o_resID = var_r31 & 0xFFFF;
 
     if (param_4 != NULL) {
         *param_4 = (var_r31 >> 0x17) & 1;
@@ -224,7 +224,7 @@ int dDemo_actor_c::getDemoIDData(int* param_0, int* param_1, int* param_2, u16* 
 }
 
 #if DEBUG
-s16 dDemo_c::m_branchNum = 0;
+u16 dDemo_c::m_branchNum = 0;
 #endif
 
 static void* dDemo_getJaiPointer(char const* arcName, u32 anmID, int param_2, u16* param_3) {

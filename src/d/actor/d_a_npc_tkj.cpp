@@ -251,7 +251,7 @@ int daNpcTkj_c::CreateHeap() {
 
 int daNpcTkj_c::Delete() {
     OS_REPORT("|%06d:%x|daNpcTkj_c -> Delete\n", g_Counter.mCounter0, this);
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_TKJ");
     this->~daNpcTkj_c();
     return 1;
 }
@@ -651,7 +651,7 @@ void daNpcTkj_c::setParam() {
     s16 attn_angle = mpHIO->m.common.attention_angle;
 
     attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(attn_dist, attn_angle);
-    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[0];
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
     attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(talk_dist, talk_angle);
     attention_info.flags = attn_flags;
 

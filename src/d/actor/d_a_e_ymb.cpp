@@ -2752,9 +2752,9 @@ void daE_YMB_c::action() {
     }
 
     if (mAction != 5) {
-        attention_info.distances[2] = 24;
+        attention_info.distances[fopAc_attn_BATTLE_e] = 24;
     } else {
-        attention_info.distances[2] = 25;
+        attention_info.distances[fopAc_attn_BATTLE_e] = 25;
     }
 
     field_0x712 = 0;

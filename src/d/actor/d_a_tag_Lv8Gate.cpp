@@ -11,7 +11,8 @@
 static char* l_arcName = "Lv8Gate";
 
 static int createSolidHeap(fopAc_ac_c* i_this) {
-    return static_cast<daTagLv8Gate_c*>(i_this)->createHeap();
+    daTagLv8Gate_c* gate = static_cast<daTagLv8Gate_c*>(i_this);
+    return gate->createHeap();
 }
 
 daTagLv8Gate_c::~daTagLv8Gate_c() {
@@ -43,21 +44,20 @@ inline int daTagLv8Gate_c::create() {
     fopAcM_ct(this, daTagLv8Gate_c);
 
     cPhs__Step step;
-         /* dSv_event_flag_c::F_0354 - Cutscene - [cutscene] Mirror complete */
+    /* dSv_event_flag_c::F_0354 - Cutscene - [cutscene] Mirror complete */
     if (!dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[354])) {
-        step = cPhs_ERROR_e;
+        return cPhs_ERROR_e;
     } else {
         step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
         if (step == cPhs_COMPLEATE_e) {
             if (!fopAcM_entrySolidHeap(this, createSolidHeap, 0x1600)) {
-                step = cPhs_ERROR_e;
+                return cPhs_ERROR_e;
             } else {
                 create_init();
             }
         }
+        return step;
     }
-
-    return step;
 }
 
 inline int daTagLv8Gate_c::draw() {
@@ -81,18 +81,24 @@ inline int daTagLv8Gate_c::draw() {
         dComIfGd_setList();
 
         if (mpBck != NULL) {
-            mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+            mpBck->remove(mpModel->getModelData());
         }
     }
     return TRUE;
 }
 
+// this function and ::execute seem to be inline, but somehow both this function's .data and .rodata
+// are supposed to be placed before ::execute's (.data order is reversed for inline functions but
+// .rodata order is not)
+// retail function order also suggests that this function comes first
 int daTagLv8Gate_c::createHeap() {
     if (strcmp(dComIfGp_getStartStageName(), "D_MN08") == 0) {
-        J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 8);
-        mpModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000084);
+        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 8);
+        JUT_ASSERT(275, modelData != NULL);
+        mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
 
         J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 5);
+        JUT_ASSERT(283, bck != NULL);
         mpBck = new mDoExt_bckAnm();
         if (mpBck == NULL ||
             !mpBck->init(bck, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false))
@@ -105,15 +111,16 @@ int daTagLv8Gate_c::createHeap() {
 }
 
 static int daTagLv8Gate_Create(fopAc_ac_c* i_this) {
-    daTagLv8Gate_c* a_this = static_cast<daTagLv8Gate_c*>(i_this);
-    return a_this->create();
+    daTagLv8Gate_c* gate = static_cast<daTagLv8Gate_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return gate->create();
 }
 
 static int daTagLv8Gate_Execute(daTagLv8Gate_c* i_this) {
     return i_this->execute();
 }
 
-inline int daTagLv8Gate_c::execute() {
+int daTagLv8Gate_c::execute() {
     if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
         dEvent_manager_c& eventManager = dComIfGp_getEventManager();
         s32 cut_index = eventManager.getMyStaffId(l_arcName, NULL, 0);
@@ -132,8 +139,8 @@ inline int daTagLv8Gate_c::execute() {
                     if (mirror_table != NULL) {
                         static_cast<daObjMirrorTable_c*>(mirror_table)->setEffect();
                     }
-                    break;
                 }
+                    break;
                 case '0002':
                     dStage_changeScene(getSceneNo(), 0.0f, 0, fopAcM_GetRoomNo(this), 0, -1);
                     break;
@@ -215,6 +222,7 @@ static int daTagLv8Gate_IsDelete(daTagLv8Gate_c* i_this) {
 }
 
 static int daTagLv8Gate_Delete(daTagLv8Gate_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagLv8Gate_c();
     return TRUE;
 }

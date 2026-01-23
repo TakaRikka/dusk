@@ -35,33 +35,33 @@ daE_SB_HIO_c::daE_SB_HIO_c() {
 #if DEBUG
 void daE_SB_HIO_c::genMessage(JORMContext* ctext) {
     // "Shell Blade"
-    ctext->genLabel("シェルブレイド", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genLabel("シェルブレイド", 0x80000001);
     // "Search Area"
-    ctext->genSlider("サーチエリア", &search_area, 0.0f, 3000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("サーチエリア", &search_area, 0.0f, 3000.0f);
     // "Distance home"
-    ctext->genSlider("お家に帰る距離", &distance_home, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("お家に帰る距離", &distance_home, 0.0f, 1000.0f);
     // "Jump XZ axis speed"
-    ctext->genSlider("ジャンプXZ軸スピード", &jump_xz_axis_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("ジャンプXZ軸スピード", &jump_xz_axis_speed, 0.0f, 100.0f);
     // "Jump Y-axis speed"
-    ctext->genSlider("ジャンプY軸スピード", &jump_y_axis_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("ジャンプY軸スピード", &jump_y_axis_speed, 0.0f, 100.0f);
     // "Attack jump XZ axis speed"
-    ctext->genSlider("攻撃ジャンプXZ軸スピード", &atk_jump_xz_axis_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("攻撃ジャンプXZ軸スピード", &atk_jump_xz_axis_speed, 0.0f, 100.0f);
     // "Attack Y-axis speed"
-    ctext->genSlider("攻撃Y軸スピード", &atk_y_axis_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("攻撃Y軸スピード", &atk_y_axis_speed, 0.0f, 100.0f);
     // "Magne On Attack Y-axis Speed"
-    ctext->genSlider("マグネOn攻撃Y軸スピード", &magne_on_atk_y_axis_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("マグネOn攻撃Y軸スピード", &magne_on_atk_y_axis_speed, 0.0f, 100.0f);
     // "Gravity reduction rate"
-    ctext->genSlider("重力の減る比率", &grav_reduct_rate, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("重力の減る比率", &grav_reduct_rate, 0.0f, 1.0f);
     // "Other animation speed"
-    ctext->genSlider("その他アニメーションスピード", &other_anm_speed, 0.0f, 10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("その他アニメーションスピード", &other_anm_speed, 0.0f, 10.0f);
     // "Shield attack animation speed"
-    ctext->genSlider("盾攻撃アニメーションスピード", &shield_atk_anm_speed, 0.0f, 10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("盾攻撃アニメーションスピード", &shield_atk_anm_speed, 0.0f, 10.0f);
     // "DEATH animation speed"
-    ctext->genSlider("DEATHアニメーションスピード", &death_anm_speed, 0.0f, 10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("DEATHアニメーションスピード", &death_anm_speed, 0.0f, 10.0f);
     // "Size"
-    ctext->genSlider("大きさ", &size, 0.0f, 10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("大きさ", &size, 0.0f, 10.0f);
     // "Attack start range"
-    ctext->genSlider("攻撃開始範囲", &atk_start_range, 0.0f, 3000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("攻撃開始範囲", &atk_start_range, 0.0f, 3000.0f);
 }
 #endif
 
@@ -607,7 +607,7 @@ void daE_SB_c::ActionCheck() {
         if ( (s16) (shape_angle.y - tgt_ang) > -0x3000 && (s16) (shape_angle.y - tgt_ang) < 0x3000) {
             if (temp_r27 > 1U) {
                 Hit();
-            } else if (temp_r29 == 1 || temp_r29 == 10 || temp_r29 == 0x29 || dComIfGp_checkPlayerStatus0(0, 0x4000U)) {
+            } else if (temp_r29 == daPy_py_c::CUT_TYPE_NM_VERTICAL || temp_r29 == daPy_py_c::CUT_TYPE_JUMP || temp_r29 == daPy_py_c::CUT_TYPE_GUARD_ATTACK || dComIfGp_checkPlayerStatus0(0, 0x4000U)) {
                 Hanekaeri();
             } else {
                 Hit();
@@ -1115,7 +1115,7 @@ cPhs__Step daE_SB_c::Create() {
         }
 
         attention_info.flags = fopAc_AttnFlag_BATTLE_e;
-        attention_info.distances[2] = 0x24;
+        attention_info.distances[fopAc_attn_BATTLE_e] = 0x24;
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         fopAcM_SetMin(this, -200.0f, 0.0f, -200.0f);
         fopAcM_SetMax(this, 200.0f, 200.0f, 200.0f);

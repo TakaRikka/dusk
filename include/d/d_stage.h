@@ -535,6 +535,10 @@ public:
     /* vt[86] */ virtual stage_tgsc_class* getDrTg(void) const = 0;
     /* vt[87] */ virtual void setDoor(stage_tgsc_class*) = 0;
     /* vt[88] */ virtual stage_tgsc_class* getDoor(void) const = 0;
+#if DEBUG
+    virtual void setUnit(void*) = 0;
+    virtual void* getUnit() = 0;
+#endif
     /* vt[89] */ virtual void setMapPath(void*) = 0;
     /* vt[90] */ virtual void* getMapPath(void) = 0;
     /* vt[91] */ virtual void setElst(dStage_Elst_c*) = 0;
@@ -546,194 +550,6 @@ private:
 
 void dStage_SetErrorStage();
 void dStage_SetErrorRoom();
-
-class dStage_stageDt_c : public dStage_dt_c {
-public:
-    dStage_stageDt_c() {}
-
-    /* vt[ 2] */ virtual void init(void);
-    /* vt[ 3] */ virtual void setCamera(stage_camera_class* i_Camera) { mCamera = i_Camera; }
-    /* vt[ 4] */ virtual stage_camera_class* getCamera(void) const { return mCamera; }
-    /* vt[ 5] */ virtual void setArrow(stage_arrow_class* i_Arrow) { mArrow = i_Arrow; }
-    /* vt[ 6] */ virtual stage_arrow_class* getArrow(void) const { return mArrow; }
-    /* vt[ 7] */ virtual void setPlayer(stage_actor_class* i_Player) { mPlayer = i_Player; }
-    /* vt[ 8] */ virtual stage_actor_class* getPlayer(void) const { return mPlayer; }
-    /* vt[ 9] */ virtual void setPlayerNum(u16 i_PlayerNum) { mPlayerNum = i_PlayerNum; }
-    /* vt[10] */ virtual u16 getPlayerNum(void) const { return mPlayerNum; }
-    /* vt[11] */ virtual void setRoom(roomRead_class* i_Room) { mRoom = i_Room; }
-    /* vt[12] */ virtual roomRead_class* getRoom(void) const { return mRoom; }
-    /* vt[13] */ virtual void setMapInfo(stage_map_info_class* i_MapInfo) { mMapInfo = i_MapInfo; }
-    /* vt[14] */ virtual stage_map_info_class* getMapInfo(void) const { return mMapInfo; }
-    /* vt[15] */ virtual stage_map_info_class* getMapInfo2(int) const;
-    /* vt[16] */ virtual void setMapInfoBase(stage_map_info_dummy_class* i_MapInfoBase) { mMapInfoBase = i_MapInfoBase; }
-    /* vt[17] */ virtual stage_map_info_dummy_class* getMapInfoBase(void) const { return mMapInfoBase; }
-    /* vt[18] */ virtual void setPaletteInfo(stage_palette_info_class* i_PaletteInfo) { mPaletteInfo = i_PaletteInfo; }
-    /* vt[19] */ virtual stage_palette_info_class* getPaletteInfo(void) const { return mPaletteInfo; }
-    /* vt[20] */ virtual void setPselectInfo(stage_pselect_info_class* i_PselectInfo) { mPselectInfo = i_PselectInfo; }
-    /* vt[21] */ virtual stage_pselect_info_class* getPselectInfo(void) const { return mPselectInfo; }
-    /* vt[22] */ virtual void setEnvrInfo(stage_envr_info_class* i_EnvrInfo) { mEnvrInfo = i_EnvrInfo; }
-    /* vt[23] */ virtual stage_envr_info_class* getEnvrInfo(void) const { return mEnvrInfo; }
-    /* vt[24] */ virtual void setVrboxInfo(stage_vrbox_info_class* i_VrboxInfo) { mVrboxInfo = i_VrboxInfo; }
-    /* vt[25] */ virtual stage_vrbox_info_class* getVrboxInfo(void) const { return mVrboxInfo; }
-    /* vt[26] */ virtual void setVrboxcolInfo(stage_vrboxcol_info_class* i_VrboxcolInfo) { mVrboxcolInfo = i_VrboxcolInfo; }
-    /* vt[27] */ virtual stage_vrboxcol_info_class* getVrboxcolInfo(void) const { return mVrboxcolInfo; }
-    /* vt[28] */ virtual void setPlightInfo(stage_plight_info_class* i_PlightInfo) { mPlightInfo = i_PlightInfo; }
-    /* vt[29] */ virtual stage_plight_info_class* getPlightInfo(void) const { return mPlightInfo; }
-    /* vt[30] */ virtual void setPaletteNumInfo(int i_PaletteNumInfo) { mPaletteNumInfo = i_PaletteNumInfo; }
-    /* vt[31] */ virtual int getPaletteNumInfo(void) const { return mPaletteNumInfo; }
-    /* vt[32] */ virtual void setPselectNumInfo(int i_PselectNumInfo) { mPselectNumInfo = i_PselectNumInfo; }
-    /* vt[33] */ virtual int getPselectNumInfo(void) const { return mPselectNumInfo; }
-    /* vt[34] */ virtual void setEnvrNumInfo(int i_EnvrNumInfo) { mEnvrNumInfo = i_EnvrNumInfo; }
-    /* vt[35] */ virtual int getEnvrNumInfo(void) const { return mEnvrNumInfo; }
-    /* vt[36] */ virtual void setVrboxNumInfo(int i_VrboxNumInfo) { mVrboxNumInfo = i_VrboxNumInfo; }
-    /* vt[37] */ virtual int getVrboxNumInfo(void) const { return mVrboxNumInfo; }
-    /* vt[38] */ virtual void setVrboxcolNumInfo(int i_VrboxcolNumInfo) { mVrboxcolNumInfo = i_VrboxcolNumInfo; }
-    /* vt[39] */ virtual int getVrboxcolNumInfo(void) const { return mVrboxcolNumInfo; }
-    /* vt[42] */ virtual void setLightVecInfo(stage_pure_lightvec_info_class* i_LightVecInfo) {
-        UNUSED(i_LightVecInfo);
-        dStage_SetErrorStage();
-        OSReport("stage non LightVec data !!\n");
-        JUT_ASSERT(3003, FALSE);
-    }
-    /* vt[43] */ virtual stage_pure_lightvec_info_class* getLightVecInfo(void) const {
-        OSReport("stage non LightVec data !!\n");
-        JUT_ASSERT(3007, FALSE);
-        return NULL;
-    }
-    /* vt[44] */ virtual void setLightVecInfoNum(int i_LightVecInfoNum) { 
-        UNUSED(i_LightVecInfoNum);
-        dStage_SetErrorStage();
-        OSReport("stage non LightVecNum data !!\n");
-        JUT_ASSERT(3014, FALSE);
-    }
-    /* vt[45] */ virtual int getLightVecInfoNum(void) const {
-        OSReport("stage non LightVecNum data !!\n");
-        JUT_ASSERT(3018, FALSE);
-        return NULL;
-    }
-    /* vt[40] */ virtual void setPlightNumInfo(int i_PlightNumInfo) { mPlightNumInfo = i_PlightNumInfo; }
-    /* vt[41] */ virtual int getPlightNumInfo(void) const { return mPlightNumInfo; }
-    /* vt[46] */ virtual void setStagInfo(stage_stag_info_class* i_StagInfo) { mStagInfo = i_StagInfo; }
-    /* vt[47] */ virtual stage_stag_info_class* getStagInfo(void) const { return mStagInfo; }
-    /* vt[48] */ virtual void setSclsInfo(stage_scls_info_dummy_class* i_SclsInfo) { mSclsInfo = i_SclsInfo; }
-    /* vt[49] */ virtual stage_scls_info_dummy_class* getSclsInfo(void) const { return mSclsInfo; }
-    /* vt[50] */ virtual void setPntInfo(dStage_dPnt_c* i_PntInfo) { mPntInfo = i_PntInfo; }
-    /* vt[51] */ virtual dStage_dPnt_c* getPntInf(void) const { return mPntInfo; }
-    /* vt[52] */ virtual void setPathInfo(dStage_dPath_c* i_PathInfo) { mPathInfo = i_PathInfo; }
-    /* vt[53] */ virtual dStage_dPath_c* getPathInf(void) const { return mPathInfo; }
-    /* vt[54] */ virtual void setPnt2Info(dStage_dPnt_c* i_Pnt2Info) { mPnt2Info = i_Pnt2Info; }
-    /* vt[55] */ virtual dStage_dPnt_c* getPnt2Inf(void) const { return mPnt2Info; }
-    /* vt[56] */ virtual void setPath2Info(dStage_dPath_c* i_Path2Info) { mPath2Info = i_Path2Info; }
-    /* vt[57] */ virtual dStage_dPath_c* getPath2Inf(void) const { return mPath2Info; }
-    /* vt[58] */ virtual void setSoundInf(dStage_SoundInfo_c* i_SoundInf) { mSoundInf = i_SoundInf; }
-    /* vt[59] */ virtual dStage_SoundInfo_c* getSoundInf(void) const { return mSoundInf; }
-    /* vt[60] */ virtual void setSoundInfCL(dStage_SoundInfo_c* i_SoundInfCL) { mSoundInfCL = i_SoundInfCL; }
-    /* vt[61] */ virtual dStage_SoundInfo_c* getSoundInfCL(void) const { return mSoundInfCL; }
-    /* vt[62] */ virtual void setMapEventInfo(dStage_MapEventInfo_c* i_MapEventInfo) { mMapEventInfo = i_MapEventInfo; }
-    /* vt[63] */ virtual dStage_MapEventInfo_c* getMapEventInfo(void) const { return mMapEventInfo; }
-    /* vt[64] */ virtual void setFileList2Info(dStage_FileList2_dt_c* list) {
-        UNUSED(list);
-        dStage_SetErrorStage();
-        OSReport("stage non filelist2 data!\n");
-        JUT_ASSERT(3123, FALSE);
-    }
-    /* vt[65] */ virtual dStage_FileList2_dt_c* getFileList2Info(void) const {
-        OSReport("stage non filelist2 data!\n");
-        JUT_ASSERT(3127, FALSE);
-        return NULL;
-    }
-    /* vt[66] */ virtual void setFileListInfo(dStage_FileList_dt_c* list) {
-        UNUSED(list);
-        dStage_SetErrorStage();
-        OSReport("stage non filelist data!\n");
-        JUT_ASSERT(3138, FALSE);
-    }
-    /* vt[67] */ virtual dStage_FileList_dt_c* getFileListInfo(void) const {
-        OSReport("stage non filelist data!\n");
-        JUT_ASSERT(3142, FALSE);
-        return NULL;
-    }
-    /* vt[68] */ virtual void setFloorInfo(dStage_FloorInfo_c* i_FloorInfo) { mFloorInfo = i_FloorInfo; }
-    /* vt[69] */ virtual dStage_FloorInfo_c* getFloorInfo(void) const { return mFloorInfo; }
-    /* vt[70] */ virtual void setMemoryConfig(dStage_MemoryConfig_c* i_MemoryConfig) { mMemoryConfig = i_MemoryConfig; }
-    /* vt[71] */ virtual dStage_MemoryConfig_c* getMemoryConfig(void) const { return mMemoryConfig; }
-    /* vt[72] */ virtual void setMemoryMap(dStage_MemoryMap_c* i_MemoryMap) { mMemoryMap = i_MemoryMap; }
-    /* vt[73] */ virtual dStage_MemoryMap_c* getMemoryMap(void) const { return mMemoryMap; }
-    /* vt[74] */ virtual void setMulti(dStage_Multi_c* i_Multi) { mMulti = i_Multi; }
-    /* vt[75] */ virtual dStage_Multi_c* getMulti(void) const { return mMulti; }
-    /* vt[76] */ virtual void setOldMulti(void);
-    /* vt[77] */ virtual void resetOldMulti(void);
-    /* vt[78] */ virtual dStage_Multi_c* getOldMulti(void) const { return mOldMulti; }
-    /* vt[79] */ virtual void setLbnk(dStage_Lbnk_c* lbnk) {
-        UNUSED(lbnk);
-        dStage_SetErrorStage();
-        OSReport("stage non Lbnk data!\n");
-        JUT_ASSERT(3231, FALSE);
-    }
-    /* vt[80] */ virtual dStage_Lbnk_c* getLbnk(void) const {
-        OSReport("stage non Lbnk data!\n");
-        JUT_ASSERT(3238, FALSE);
-        return NULL;
-    }
-    /* vt[81] */ virtual void setTresure(stage_tresure_class* i_Tresure) { mTresure = i_Tresure; }
-    /* vt[82] */ virtual stage_tresure_class* getTresure(void) const { return mTresure; }
-    /* vt[83] */ virtual void setDMap(dStage_DMap_c* i_DMap) { mDMap = i_DMap; }
-    /* vt[84] */ virtual dStage_DMap_c* getDMap(void) const { return mDMap; }
-    /* vt[85] */ virtual void setDrTg(stage_tgsc_class* i_DrTg) { mDrTg = i_DrTg; }
-    /* vt[86] */ virtual stage_tgsc_class* getDrTg(void) const { return mDrTg; }
-    /* vt[87] */ virtual void setDoor(stage_tgsc_class* i_Door) { mDoor = i_Door; }
-    /* vt[88] */ virtual stage_tgsc_class* getDoor(void) const { return mDoor; }
-    /* vt[89] */ virtual void setMapPath(void* i_MapPath) { return; }
-    /* vt[90] */ virtual void* getMapPath(void) { return NULL; }
-    /* vt[91] */ virtual void setElst(dStage_Elst_c* i_Elst) { mElst = i_Elst; }
-    /* vt[92] */ virtual dStage_Elst_c* getElst(void);
-
-    s16 getWorldRollAngleX() const { return (s16)mWorldRollAngleX; }
-    s16 getWorldRollDirAngleY() const { return mWorldRollDirAngleY; }
-
-public:
-    /* 0x08 */ stage_camera_class* mCamera;
-    /* 0x0C */ stage_arrow_class* mArrow;
-    /* 0x10 */ stage_actor_class* mPlayer;
-    /* 0x14 */ roomRead_class* mRoom;
-    /* 0x18 */ stage_map_info_class* mMapInfo;
-    /* 0x1C */ stage_map_info_dummy_class* mMapInfoBase;
-    /* 0x20 */ stage_palette_info_class* mPaletteInfo;
-    /* 0x24 */ stage_pselect_info_class* mPselectInfo;
-    /* 0x28 */ stage_envr_info_class* mEnvrInfo;
-    /* 0x2C */ stage_vrbox_info_class* mVrboxInfo;
-    /* 0x30 */ stage_vrboxcol_info_class* mVrboxcolInfo;
-    /* 0x34 */ stage_plight_info_class* mPlightInfo;
-    /* 0x38 */ dStage_MapEventInfo_c* mMapEventInfo;
-    /* 0x3C */ u32 mPaletteNumInfo;
-    /* 0x40 */ u32 mPselectNumInfo;
-    /* 0x44 */ u32 mEnvrNumInfo;
-    /* 0x48 */ u32 mVrboxNumInfo;
-    /* 0x4C */ int mVrboxcolNumInfo;
-    /* 0x50 */ u32 mPlightNumInfo;
-    /* 0x54 */ u16 mPlayerNum;
-    /* 0x56 */ s16 mWorldRollAngleX;
-    /* 0x58 */ s16 mWorldRollDirAngleY;
-    /* 0x5A */ u16 field_0x5a;
-    /* 0x5C */ stage_stag_info_class* mStagInfo;
-    /* 0x60 */ stage_scls_info_dummy_class* mSclsInfo;
-    /* 0x64 */ dStage_dPnt_c* mPntInfo;
-    /* 0x68 */ dStage_dPath_c* mPathInfo;
-    /* 0x6C */ dStage_dPnt_c* mPnt2Info;
-    /* 0x70 */ dStage_dPath_c* mPath2Info;
-    /* 0x74 */ dStage_SoundInfo_c* mSoundInf;
-    /* 0x78 */ dStage_SoundInfo_c* mSoundInfCL;
-    /* 0x7C */ dStage_FloorInfo_c* mFloorInfo;
-    /* 0x80 */ dStage_MemoryConfig_c* mMemoryConfig;
-    /* 0x84 */ dStage_MemoryMap_c* mMemoryMap;
-    /* 0x88 */ dStage_Multi_c* mMulti;
-    /* 0x8C */ dStage_Multi_c* mOldMulti;
-    /* 0x90 */ stage_tresure_class* mTresure;
-    /* 0x94 */ dStage_DMap_c* mDMap;
-    /* 0x98 */ stage_tgsc_class* mDrTg;
-    /* 0x9C */ stage_tgsc_class* mDoor;
-    /* 0xA0 */ dStage_Elst_c* mElst;
-};
 
 class dStage_roomDt_c : public dStage_dt_c {
 public:
@@ -977,6 +793,10 @@ public:
     virtual stage_tgsc_class* getDrTg(void) const { return mDrTg; }
     virtual void setDoor(stage_tgsc_class* i_Door) { mDoor = i_Door; }
     virtual stage_tgsc_class* getDoor(void) const { return mDoor; }
+#if DEBUG
+    virtual void setUnit(void* i_Unit) { mUnit = i_Unit; }
+    virtual void* getUnit() { return mUnit; }
+#endif
     virtual void setMapPath(void* i_MapPath) {
         UNUSED(i_MapPath);
         OSReport("stage non 2d map path data !!\n");
@@ -1023,13 +843,213 @@ public:
     /* 0x58 */ stage_tgsc_class* mDoor;
     /* 0x5C */ dStage_FloorInfo_c* mFloorInfo;
 #if DEBUG
-    /* 0x60 */ int field_0x60;
+    /* 0x60 */ void* mUnit;
 #endif
     /* 0x60 */ u16 mPlayerNum;
     /* 0x62 */ u16 field_0x62;
     /* 0x64 */ int mVrboxNumInfo;
     /* 0x68 */ int mVrboxcolNumInfo;
 };  // Size: 0x6C
+
+class dStage_stageDt_c : public dStage_dt_c {
+public:
+    dStage_stageDt_c() {}
+
+    /* vt[ 2] */ virtual void init(void);
+    /* vt[ 3] */ virtual void setCamera(stage_camera_class* i_Camera) { mCamera = i_Camera; }
+    /* vt[ 4] */ virtual stage_camera_class* getCamera(void) const { return mCamera; }
+    /* vt[ 5] */ virtual void setArrow(stage_arrow_class* i_Arrow) { mArrow = i_Arrow; }
+    /* vt[ 6] */ virtual stage_arrow_class* getArrow(void) const { return mArrow; }
+    /* vt[ 7] */ virtual void setPlayer(stage_actor_class* i_Player) { mPlayer = i_Player; }
+    /* vt[ 8] */ virtual stage_actor_class* getPlayer(void) const { return mPlayer; }
+    /* vt[ 9] */ virtual void setPlayerNum(u16 i_PlayerNum) { mPlayerNum = i_PlayerNum; }
+    /* vt[10] */ virtual u16 getPlayerNum(void) const { return mPlayerNum; }
+    /* vt[11] */ virtual void setRoom(roomRead_class* i_Room) { mRoom = i_Room; }
+    /* vt[12] */ virtual roomRead_class* getRoom(void) const { return mRoom; }
+    /* vt[13] */ virtual void setMapInfo(stage_map_info_class* i_MapInfo) { mMapInfo = i_MapInfo; }
+    /* vt[14] */ virtual stage_map_info_class* getMapInfo(void) const { return mMapInfo; }
+    /* vt[15] */ virtual stage_map_info_class* getMapInfo2(int) const;
+    /* vt[16] */ virtual void setMapInfoBase(stage_map_info_dummy_class* i_MapInfoBase) { mMapInfoBase = i_MapInfoBase; }
+    /* vt[17] */ virtual stage_map_info_dummy_class* getMapInfoBase(void) const { return mMapInfoBase; }
+    /* vt[18] */ virtual void setPaletteInfo(stage_palette_info_class* i_PaletteInfo) { mPaletteInfo = i_PaletteInfo; }
+    /* vt[19] */ virtual stage_palette_info_class* getPaletteInfo(void) const { return mPaletteInfo; }
+    /* vt[20] */ virtual void setPselectInfo(stage_pselect_info_class* i_PselectInfo) { mPselectInfo = i_PselectInfo; }
+    /* vt[21] */ virtual stage_pselect_info_class* getPselectInfo(void) const { return mPselectInfo; }
+    /* vt[22] */ virtual void setEnvrInfo(stage_envr_info_class* i_EnvrInfo) { mEnvrInfo = i_EnvrInfo; }
+    /* vt[23] */ virtual stage_envr_info_class* getEnvrInfo(void) const { return mEnvrInfo; }
+    /* vt[24] */ virtual void setVrboxInfo(stage_vrbox_info_class* i_VrboxInfo) { mVrboxInfo = i_VrboxInfo; }
+    /* vt[25] */ virtual stage_vrbox_info_class* getVrboxInfo(void) const { return mVrboxInfo; }
+    /* vt[26] */ virtual void setVrboxcolInfo(stage_vrboxcol_info_class* i_VrboxcolInfo) { mVrboxcolInfo = i_VrboxcolInfo; }
+    /* vt[27] */ virtual stage_vrboxcol_info_class* getVrboxcolInfo(void) const { return mVrboxcolInfo; }
+    /* vt[28] */ virtual void setPlightInfo(stage_plight_info_class* i_PlightInfo) { mPlightInfo = i_PlightInfo; }
+    /* vt[29] */ virtual stage_plight_info_class* getPlightInfo(void) const { return mPlightInfo; }
+    /* vt[30] */ virtual void setPaletteNumInfo(int i_PaletteNumInfo) { mPaletteNumInfo = i_PaletteNumInfo; }
+    /* vt[31] */ virtual int getPaletteNumInfo(void) const { return mPaletteNumInfo; }
+    /* vt[32] */ virtual void setPselectNumInfo(int i_PselectNumInfo) { mPselectNumInfo = i_PselectNumInfo; }
+    /* vt[33] */ virtual int getPselectNumInfo(void) const { return mPselectNumInfo; }
+    /* vt[34] */ virtual void setEnvrNumInfo(int i_EnvrNumInfo) { mEnvrNumInfo = i_EnvrNumInfo; }
+    /* vt[35] */ virtual int getEnvrNumInfo(void) const { return mEnvrNumInfo; }
+    /* vt[36] */ virtual void setVrboxNumInfo(int i_VrboxNumInfo) { mVrboxNumInfo = i_VrboxNumInfo; }
+    /* vt[37] */ virtual int getVrboxNumInfo(void) const { return mVrboxNumInfo; }
+    /* vt[38] */ virtual void setVrboxcolNumInfo(int i_VrboxcolNumInfo) { mVrboxcolNumInfo = i_VrboxcolNumInfo; }
+    /* vt[39] */ virtual int getVrboxcolNumInfo(void) const { return mVrboxcolNumInfo; }
+    /* vt[42] */ virtual void setLightVecInfo(stage_pure_lightvec_info_class* i_LightVecInfo) {
+        UNUSED(i_LightVecInfo);
+        dStage_SetErrorStage();
+        OSReport("stage non LightVec data !!\n");
+        JUT_ASSERT(3003, FALSE);
+    }
+    /* vt[43] */ virtual stage_pure_lightvec_info_class* getLightVecInfo(void) const {
+        OSReport("stage non LightVec data !!\n");
+        JUT_ASSERT(3007, FALSE);
+        return NULL;
+    }
+    /* vt[44] */ virtual void setLightVecInfoNum(int i_LightVecInfoNum) { 
+        UNUSED(i_LightVecInfoNum);
+        dStage_SetErrorStage();
+        OSReport("stage non LightVecNum data !!\n");
+        JUT_ASSERT(3014, FALSE);
+    }
+    /* vt[45] */ virtual int getLightVecInfoNum(void) const {
+        OSReport("stage non LightVecNum data !!\n");
+        JUT_ASSERT(3018, FALSE);
+        return NULL;
+    }
+    /* vt[40] */ virtual void setPlightNumInfo(int i_PlightNumInfo) { mPlightNumInfo = i_PlightNumInfo; }
+    /* vt[41] */ virtual int getPlightNumInfo(void) const { return mPlightNumInfo; }
+    /* vt[46] */ virtual void setStagInfo(stage_stag_info_class* i_StagInfo) { mStagInfo = i_StagInfo; }
+    /* vt[47] */ virtual stage_stag_info_class* getStagInfo(void) const { return mStagInfo; }
+    /* vt[48] */ virtual void setSclsInfo(stage_scls_info_dummy_class* i_SclsInfo) { mSclsInfo = i_SclsInfo; }
+    /* vt[49] */ virtual stage_scls_info_dummy_class* getSclsInfo(void) const { return mSclsInfo; }
+    /* vt[50] */ virtual void setPntInfo(dStage_dPnt_c* i_PntInfo) { mPntInfo = i_PntInfo; }
+    /* vt[51] */ virtual dStage_dPnt_c* getPntInf(void) const { return mPntInfo; }
+    /* vt[52] */ virtual void setPathInfo(dStage_dPath_c* i_PathInfo) { mPathInfo = i_PathInfo; }
+    /* vt[53] */ virtual dStage_dPath_c* getPathInf(void) const { return mPathInfo; }
+    /* vt[54] */ virtual void setPnt2Info(dStage_dPnt_c* i_Pnt2Info) { mPnt2Info = i_Pnt2Info; }
+    /* vt[55] */ virtual dStage_dPnt_c* getPnt2Inf(void) const { return mPnt2Info; }
+    /* vt[56] */ virtual void setPath2Info(dStage_dPath_c* i_Path2Info) { mPath2Info = i_Path2Info; }
+    /* vt[57] */ virtual dStage_dPath_c* getPath2Inf(void) const { return mPath2Info; }
+    /* vt[58] */ virtual void setSoundInf(dStage_SoundInfo_c* i_SoundInf) { mSoundInf = i_SoundInf; }
+    /* vt[59] */ virtual dStage_SoundInfo_c* getSoundInf(void) const { return mSoundInf; }
+    /* vt[60] */ virtual void setSoundInfCL(dStage_SoundInfo_c* i_SoundInfCL) { mSoundInfCL = i_SoundInfCL; }
+    /* vt[61] */ virtual dStage_SoundInfo_c* getSoundInfCL(void) const { return mSoundInfCL; }
+    /* vt[62] */ virtual void setMapEventInfo(dStage_MapEventInfo_c* i_MapEventInfo) { mMapEventInfo = i_MapEventInfo; }
+    /* vt[63] */ virtual dStage_MapEventInfo_c* getMapEventInfo(void) const { return mMapEventInfo; }
+    /* vt[64] */ virtual void setFileList2Info(dStage_FileList2_dt_c* list) {
+        UNUSED(list);
+        dStage_SetErrorStage();
+        OSReport("stage non filelist2 data!\n");
+        JUT_ASSERT(3123, FALSE);
+    }
+    /* vt[65] */ virtual dStage_FileList2_dt_c* getFileList2Info(void) const {
+        OSReport("stage non filelist2 data!\n");
+        JUT_ASSERT(3127, FALSE);
+        return NULL;
+    }
+    /* vt[66] */ virtual void setFileListInfo(dStage_FileList_dt_c* list) {
+        UNUSED(list);
+        dStage_SetErrorStage();
+        OSReport("stage non filelist data!\n");
+        JUT_ASSERT(3138, FALSE);
+    }
+    /* vt[67] */ virtual dStage_FileList_dt_c* getFileListInfo(void) const {
+        OSReport("stage non filelist data!\n");
+        JUT_ASSERT(3142, FALSE);
+        return NULL;
+    }
+    /* vt[68] */ virtual void setFloorInfo(dStage_FloorInfo_c* i_FloorInfo) { mFloorInfo = i_FloorInfo; }
+    /* vt[69] */ virtual dStage_FloorInfo_c* getFloorInfo(void) const { return mFloorInfo; }
+    /* vt[70] */ virtual void setMemoryConfig(dStage_MemoryConfig_c* i_MemoryConfig) { mMemoryConfig = i_MemoryConfig; }
+    /* vt[71] */ virtual dStage_MemoryConfig_c* getMemoryConfig(void) const { return mMemoryConfig; }
+    /* vt[72] */ virtual void setMemoryMap(dStage_MemoryMap_c* i_MemoryMap) { mMemoryMap = i_MemoryMap; }
+    /* vt[73] */ virtual dStage_MemoryMap_c* getMemoryMap(void) const { return mMemoryMap; }
+    /* vt[74] */ virtual void setMulti(dStage_Multi_c* i_Multi) { mMulti = i_Multi; }
+    /* vt[75] */ virtual dStage_Multi_c* getMulti(void) const { return mMulti; }
+    /* vt[76] */ virtual void setOldMulti(void) { mOldMulti = mMulti; }
+    /* vt[77] */ virtual void resetOldMulti(void) { mOldMulti = NULL; }
+    /* vt[78] */ virtual dStage_Multi_c* getOldMulti(void) const { return mOldMulti; }
+    /* vt[79] */ virtual void setLbnk(dStage_Lbnk_c* lbnk) {
+        UNUSED(lbnk);
+        dStage_SetErrorStage();
+        OSReport("stage non Lbnk data!\n");
+        JUT_ASSERT(3231, FALSE);
+    }
+    /* vt[80] */ virtual dStage_Lbnk_c* getLbnk(void) const {
+        OSReport("stage non Lbnk data!\n");
+        JUT_ASSERT(3238, FALSE);
+        return NULL;
+    }
+    /* vt[81] */ virtual void setTresure(stage_tresure_class* i_Tresure) { mTresure = i_Tresure; }
+    /* vt[82] */ virtual stage_tresure_class* getTresure(void) const { return mTresure; }
+    /* vt[83] */ virtual void setDMap(dStage_DMap_c* i_DMap) { mDMap = i_DMap; }
+    /* vt[84] */ virtual dStage_DMap_c* getDMap(void) const { return mDMap; }
+    /* vt[85] */ virtual void setDrTg(stage_tgsc_class* i_DrTg) { mDrTg = i_DrTg; }
+    /* vt[86] */ virtual stage_tgsc_class* getDrTg(void) const { return mDrTg; }
+    /* vt[87] */ virtual void setDoor(stage_tgsc_class* i_Door) { mDoor = i_Door; }
+    /* vt[88] */ virtual stage_tgsc_class* getDoor(void) const { return mDoor; }
+#if DEBUG
+    virtual void setUnit(void* i_Unit) {
+        UNUSED(i_Unit);
+        OSReport("stage non unit list data !!\n");
+        JUT_ASSERT(3321, 0);
+    }
+    virtual void* getUnit() {
+        OSReport("stage non unit list data !!\n");
+        JUT_ASSERT(3325, 0);
+        return NULL;
+    }
+#endif
+    /* vt[89] */ virtual void setMapPath(void* i_MapPath) { return; }
+    /* vt[90] */ virtual void* getMapPath(void) { return NULL; }
+    /* vt[91] */ virtual void setElst(dStage_Elst_c* i_Elst) { mElst = i_Elst; }
+    /* vt[92] */ virtual dStage_Elst_c* getElst(void);
+
+    s16 getWorldRollAngleX() const { return (s16)mWorldRollAngleX; }
+    s16 getWorldRollDirAngleY() const { return mWorldRollDirAngleY; }
+
+public:
+    /* 0x08 */ stage_camera_class* mCamera;
+    /* 0x0C */ stage_arrow_class* mArrow;
+    /* 0x10 */ stage_actor_class* mPlayer;
+    /* 0x14 */ roomRead_class* mRoom;
+    /* 0x18 */ stage_map_info_class* mMapInfo;
+    /* 0x1C */ stage_map_info_dummy_class* mMapInfoBase;
+    /* 0x20 */ stage_palette_info_class* mPaletteInfo;
+    /* 0x24 */ stage_pselect_info_class* mPselectInfo;
+    /* 0x28 */ stage_envr_info_class* mEnvrInfo;
+    /* 0x2C */ stage_vrbox_info_class* mVrboxInfo;
+    /* 0x30 */ stage_vrboxcol_info_class* mVrboxcolInfo;
+    /* 0x34 */ stage_plight_info_class* mPlightInfo;
+    /* 0x38 */ dStage_MapEventInfo_c* mMapEventInfo;
+    /* 0x3C */ u32 mPaletteNumInfo;
+    /* 0x40 */ u32 mPselectNumInfo;
+    /* 0x44 */ u32 mEnvrNumInfo;
+    /* 0x48 */ u32 mVrboxNumInfo;
+    /* 0x4C */ int mVrboxcolNumInfo;
+    /* 0x50 */ u32 mPlightNumInfo;
+    /* 0x54 */ u16 mPlayerNum;
+    /* 0x56 */ s16 mWorldRollAngleX;
+    /* 0x58 */ s16 mWorldRollDirAngleY;
+    /* 0x5A */ u16 field_0x5a;
+    /* 0x5C */ stage_stag_info_class* mStagInfo;
+    /* 0x60 */ stage_scls_info_dummy_class* mSclsInfo;
+    /* 0x64 */ dStage_dPnt_c* mPntInfo;
+    /* 0x68 */ dStage_dPath_c* mPathInfo;
+    /* 0x6C */ dStage_dPnt_c* mPnt2Info;
+    /* 0x70 */ dStage_dPath_c* mPath2Info;
+    /* 0x74 */ dStage_SoundInfo_c* mSoundInf;
+    /* 0x78 */ dStage_SoundInfo_c* mSoundInfCL;
+    /* 0x7C */ dStage_FloorInfo_c* mFloorInfo;
+    /* 0x80 */ dStage_MemoryConfig_c* mMemoryConfig;
+    /* 0x84 */ dStage_MemoryMap_c* mMemoryMap;
+    /* 0x88 */ dStage_Multi_c* mMulti;
+    /* 0x8C */ dStage_Multi_c* mOldMulti;
+    /* 0x90 */ stage_tresure_class* mTresure;
+    /* 0x94 */ dStage_DMap_c* mDMap;
+    /* 0x98 */ stage_tgsc_class* mDrTg;
+    /* 0x9C */ stage_tgsc_class* mDoor;
+    /* 0xA0 */ dStage_Elst_c* mElst;
+};
 
 class dBgW_Base;
 
@@ -1113,7 +1133,10 @@ public:
 
     static int getStayNo() { return mStayNo; }
     static u8 getRegionNo(int i_roomNo) { return mStatus[i_roomNo].mRegionNo; }
-    static s8 getMemoryBlockID(int i_roomNo) { return mStatus[i_roomNo].mMemBlockID; }
+    static int getMemoryBlockID(int i_roomNo) {
+        JUT_ASSERT(2757, 0 <= i_roomNo && i_roomNo < 64);
+        return mStatus[i_roomNo].mMemBlockID;
+    }
     dKy_tevstr_c* getTevStr(int i_roomNo) {
         JUT_ASSERT(2675, 0 <= i_roomNo && i_roomNo < 64);
         return &mStatus[i_roomNo].mKyTevStr;
@@ -1122,9 +1145,13 @@ public:
         JUT_ASSERT(2679, 0 <= i_roomNo && i_roomNo < 64);
         mStatus[i_roomNo].mFlag = flag;
     }
-    static void onStatusDraw(int i_roomNo) { mStatus[i_roomNo].mDraw = true; }
+    static void onStatusDraw(int i_roomNo) {
+        JUT_ASSERT(2725, 0 <= i_roomNo && i_roomNo < 64);
+        mStatus[i_roomNo].mDraw = true;
+    }
     static dStage_FileList2_dt_c* getFileList2(int i_roomNo) {
-        return mStatus[i_roomNo].mRoomDt.mFileList2Info;
+        JUT_ASSERT(2715, 0 <= i_roomNo && i_roomNo < 64);
+        return mStatus[i_roomNo].mRoomDt.getFileList2Info();
     }
     static char* getDemoArcName() { return mDemoArcName; }
     static nameData* getArcBankName() { return mArcBankName; }
@@ -1266,6 +1293,33 @@ struct FuncTable {
     dStage_Func function;
 };
 
+enum dStage_SaveTbl {
+    dStage_SaveTbl_ORDON,
+    dStage_SaveTbl_PRISON,
+    dStage_SaveTbl_FARON,
+    dStage_SaveTbl_ELDIN,
+    dStage_SaveTbl_LANAYRU,
+    dStage_SaveTbl_FIELD = 6,
+    dStage_SaveTbl_GROVE,
+    dStage_SaveTbl_SNOWPEAK,
+    dStage_SaveTbl_CASTLE_TOWN,
+    dStage_SaveTbl_DESERT,
+    dStage_SaveTbl_FISHING_POND,
+
+    dStage_SaveTbl_LV1 = 16,
+    dStage_SaveTbl_LV2,
+    dStage_SaveTbl_LV3,
+    dStage_SaveTbl_LV4,
+    dStage_SaveTbl_LV5,
+    dStage_SaveTbl_LV6,
+    dStage_SaveTbl_LV7,
+    dStage_SaveTbl_LV8,
+    dStage_SaveTbl_LV9,
+    dStage_SaveTbl_CAVE1,
+    dStage_SaveTbl_CAVE2,
+    dStage_SaveTbl_GROTTO,
+};
+
 const char* dStage_getName2(s16, s8);
 dStage_objectNameInf* dStage_searchName(const char*);
 static int dStage_stageKeepTresureInit(dStage_dt_c*, void*, int, void*);
@@ -1352,7 +1406,7 @@ inline s32 dStage_roomRead_dt_c_GetTimePass(roomRead_data_class& data) {
     return data.field_0x2 & 3;
 }
 
-inline u8 dStage_roomRead_dt_c_GetLoadRoomIndex(u8 param_0) {
+inline int dStage_roomRead_dt_c_GetLoadRoomIndex(u8 param_0) {
     return param_0 & 0x3f;
 }
 
@@ -1417,7 +1471,7 @@ inline u32 dStage_stagInfo_ChkKeyDisp(stage_stag_info_class* pstag) {
     return pstag->field_0x09 & 1;
 }
 
-inline u8 dStage_stagInfo_GetWolfDashType(stage_stag_info_class* pstag) {
+inline int dStage_stagInfo_GetWolfDashType(stage_stag_info_class* pstag) {
     return (pstag->field_0x09 >> 6) & 3;
 }
 

@@ -26,7 +26,7 @@ public:
     int getHitmarkPosAndAngle(cXyz const*, csXyz const*, cXyz*, csXyz*, int) const;
     void setArrowPosAndAngle(cXyz const*, cXyz const*, int, cXyz*, csXyz*);
 
-    bool checkPassNum(int bit) { return field_0xc & (1 << bit); }
+    BOOL checkPassNum(int bit) { return field_0xc & (1 << bit); }
     void onPassNum(int num) { field_0xc |= (1 << num); }
     void offPassNum(int num) { field_0xc &= ~(1 << num); }
     bool checkShieldType(int i) { return getType(i) == 3; }

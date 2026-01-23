@@ -8,6 +8,26 @@
 class daTagTWGate_c;
 typedef void (daTagTWGate_c::*actionFunc)();
 
+struct daTagTWGate_Attr_c {
+    /* 0x00 */ u8 show_range;
+};
+
+class daTagTWGate_Hio_c : public mDoHIO_entry_c {
+public:
+    daTagTWGate_Hio_c();
+
+    inline void ct();
+
+    inline void dt();
+
+    void default_set();
+
+    inline void genMessage(JORMContext*);
+
+    /* 0x08 */ int field_0x8;
+    /* 0x0C */ daTagTWGate_Attr_c attr;
+};
+
 class daTagTWGate_c : public fopAc_ac_c {
 public:
     enum EType {
@@ -31,6 +51,7 @@ public:
         /* 0x0A */ ACT_DEMO_HYRAL_1,
         /* 0x0B */ ACT_DEMO_HYRAL_2,
         /* 0x0C */ ACT_DEMO_HYRAL_3,
+        /* 0x0D */ MODE_MAX_e,
     };
 
     inline ~daTagTWGate_c();
@@ -62,65 +83,47 @@ public:
     void initDemoHyral3();
     void executeDemoHyral3();
     void initBaseMtx();
-    int downloadModels();
+    inline int downloadModels();
     void initTalk(int, fopAc_ac_c**);
     bool talkProc(int*, int, fopAc_ac_c**);
     static int createHeapCallBack(fopAc_ac_c*);
     int CreateHeap();
 
-    u8 getSwitch() { return fopAcM_GetParam(this) >> 8; }
+    u8 getSwitch() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }
     u8 getType() { return fopAcM_GetParam(this); }
 
     inline int create();
 
-    void create_init() {
-        field_0x5e0 = 0;
-        mActionID = 0;
-        mAction = &ActionTable[mActionID][0];
-        (this->**mAction)();
+    inline void create_init();
+
+    inline void callExecute();
+
+    inline int execute();
+
+    inline int draw();
+
+#if DEBUG
+    daTagTWGate_Attr_c& attr() const {
+        return mHio.attr;
     }
+#endif
 
-    void callExecute() {
-        (this->*mAction[1])();
-        mDoAud_seStartLevel(Z2SE_OBJ_DARK_GATE, &current.pos, 0, 0);
-    }
+    inline void callInit();
 
-    int execute() {
-        callExecute();
+    inline void setAction(Mode_e i_action);
 
-        if (field_0x5e0 != 0) {
-            mpMorf->play(0, 0);
-            mpMorf->modelCalc();
-        }
-        return 1;
-    }
-
-    int draw() {
-        if (field_0x5e0 != 0) {
-            mpMorf->entryDL();
-        }
-        return 1;
-    }
-
-    void callInit() {
-        (this->*(*mAction))();
-    }
-
-    void setAction(Mode_e action) {
-        mActionID = action;
-        mAction = ActionTable[mActionID];
-        callInit();
-    }
-
-    static u8 const mAttr[1];
-    static actionFunc ActionTable[13][2];
+    static daTagTWGate_Attr_c const mAttr;
+#if DEBUG
+    static daTagTWGate_Hio_c mHio;
+#endif
+    static const actionFunc ActionTable[][2];
 
 private:
     /* 0x568 */ mDoExt_McaMorfSO* mpMorf;
     /* 0x56C */ request_of_phase_process_class mPhaseZevArc;
     /* 0x574 */ request_of_phase_process_class mPhaseMdRes;
     /* 0x57C */ request_of_phase_process_class mPhasePyRes;
-    /* 0x584 */ actionFunc* mAction;
+    /* 0x584 */ const actionFunc* mAction;
     /* 0x588 */ int mActionID;
     /* 0x58C */ dMsgFlow_c mMsgFlow;
     /* 0x5D8 */ u8 field_0x5d8[4];

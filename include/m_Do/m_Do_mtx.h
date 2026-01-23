@@ -91,7 +91,7 @@ inline void cMtx_multVec(const Mtx mtx, const Vec* src, Vec* dst) {
     mDoMtx_multVec(mtx, src, dst);
 }
 
-inline void cMtx_multVecSR(Mtx mtx, const Vec* src, Vec* dst) {
+inline void cMtx_multVecSR(const Mtx mtx, const Vec* src, Vec* dst) {
     mDoMtx_multVecSR(mtx, src, dst);
 }
 

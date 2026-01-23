@@ -87,12 +87,12 @@ void daObj_ItaMato_HIO_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
 }
 
 void daObj_ItaMato_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genSlider("注目オフセット　", &mAttr.attn_offset, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("重力　　　　　　", &mAttr.gravity, -100.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("スケ−ル　　　　", &mAttr.scale, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("リアル影サイズ　", &mAttr.real_shadow_size, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("揺れパワ−　　　", &mAttr.shake_pow, 0.0f, 90.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("注目オフセット　", &mAttr.attn_offset, 0.0f, 1000.0f);
+    ctx->genSlider("重力　　　　　　", &mAttr.gravity, -100.0f, 100.0f);
+    ctx->genSlider("スケ−ル　　　　", &mAttr.scale, 0.0f, 100.0f);
+    ctx->genSlider("リアル影サイズ　", &mAttr.real_shadow_size, 0.0f, 10000.0f);
+    ctx->genSlider("揺れパワ−　　　", &mAttr.shake_pow, 0.0f, 90.0f);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 

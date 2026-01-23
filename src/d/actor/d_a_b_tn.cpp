@@ -1121,7 +1121,7 @@ u32 daB_TN_c::getCutType() {
     case daPy_py_c::CUT_TYPE_NM_RIGHT:
     case daPy_py_c::CUT_TYPE_FINISH_LEFT:
     case daPy_py_c::CUT_TYPE_FINISH_VERTICAL:
-    case daPy_py_c::CUT_TYPE_DASH_UNK_26:
+    case daPy_py_c::CUT_TYPE_DASH_RIGHT:
         return rv | 0x12;
 
     case daPy_py_c::CUT_TYPE_NM_STAB:
@@ -1129,7 +1129,7 @@ u32 daB_TN_c::getCutType() {
         return rv | 0x02;
 
     case daPy_py_c::CUT_TYPE_NM_LEFT:
-    case daPy_py_c::CUT_TYPE_DASH_UNK_25:
+    case daPy_py_c::CUT_TYPE_DASH_LEFT:
         return rv | 0x21;
 
     case daPy_py_c::CUT_TYPE_COMBO_STAB:
@@ -1344,8 +1344,8 @@ void daB_TN_c::damage_check() {
         if (cut_type == daPy_py_c::CUT_TYPE_LARGE_JUMP_FINISH) {
             return;
         } else if (mActionMode1 < 8) {
-            if (cut_type == daPy_py_c::CUT_TYPE_DASH_UNK_25 ||
-                cut_type == daPy_py_c::CUT_TYPE_DASH_UNK_26 ||
+            if (cut_type == daPy_py_c::CUT_TYPE_DASH_LEFT ||
+                cut_type == daPy_py_c::CUT_TYPE_DASH_RIGHT ||
                 mAtInfo.mpCollider->ChkAtType(AT_TYPE_UNK))
             {
                 setShieldEffect(&dStack_160);
@@ -1403,8 +1403,8 @@ void daB_TN_c::damage_check() {
 
                 if (mTimer10 != 0 ||
                     abs((s16)(fopAcM_searchPlayerAngleY(this) - shape_angle.y)) < 0x3000 ||
-                    cut_type == daPy_py_c::CUT_TYPE_DASH_UNK_25 ||
-                    cut_type == daPy_py_c::CUT_TYPE_DASH_UNK_26)
+                    cut_type == daPy_py_c::CUT_TYPE_DASH_LEFT ||
+                    cut_type == daPy_py_c::CUT_TYPE_DASH_RIGHT)
                 {
                     field_0xaa8 = false;
                     setShieldEffect(&dStack_160);

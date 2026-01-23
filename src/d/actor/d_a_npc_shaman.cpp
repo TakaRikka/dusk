@@ -39,7 +39,7 @@ void daNpc_Sha_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
 void daNpc_Sha_HIO_c::genMessage(JORMContext* ctx) {
     daNpcT_cmnGenMessage(ctx, &m.common);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -328,7 +328,7 @@ int daNpc_Sha_c::CreateHeap() {
 
 int daNpc_Sha_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Sha_c -> コンストラクト\n", g_Counter.mCounter0, this);
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_SHAMAN");
     this->~daNpc_Sha_c();
     return 1;
 }
@@ -343,11 +343,7 @@ int daNpc_Sha_c::Draw() {
         mdlData_p->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    #if DEBUG
-    return draw(chkAction(&daNpc_Sha_c::test), FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
-    #else
-    return draw(FALSE, FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
-    #endif
+    return draw(NpcT_CHK_ACTION(daNpc_Sha_c), FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
 int daNpc_Sha_c::createHeapCallBack(fopAc_ac_c* i_this) {

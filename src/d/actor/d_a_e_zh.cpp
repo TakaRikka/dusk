@@ -814,7 +814,7 @@ void daE_ZH_c::executeWait() {
 
     switch (mMoveMode) {
         case 0:
-            attention_info.distances[2] = 3;
+            attention_info.distances[fopAc_attn_BATTLE_e] = 3;
             fopAcM_OnStatus(this, 0);
             attention_info.flags |= fopAc_AttnFlag_BATTLE_e;
             setBck(BCK_ZH_WAIT01, 0, 3.0f, 1.0f);
@@ -871,7 +871,7 @@ void daE_ZH_c::executeBallWait() {
             if (bitSw != 0xFF && fopAcM_isSwitch(this, bitSw) && mStartFlag != 0) {
                 fopAcM_OnStatus(this, 0);
                 attention_info.flags |= fopAc_AttnFlag_BATTLE_e;
-                attention_info.distances[2] = 3;
+                attention_info.distances[fopAc_attn_BATTLE_e] = 3;
                 mMoveMode = 10;
             }
             break;
@@ -1498,7 +1498,7 @@ void daE_ZH_c::executeCatchFlyMove() {
         case 12:
             fopAcM_OffStatus(this, 0);
             attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
-            attention_info.distances[2] = 0;
+            attention_info.distances[fopAc_attn_BATTLE_e] = 0;
 
             for (int i = 0; i < 3; i++) {
                 field_0x764[i] = 0.0f;
@@ -1639,7 +1639,7 @@ void daE_ZH_c::executeFlyDelete() {
         case 0:
             fopAcM_OffStatus(this, 0);
             attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
-            attention_info.distances[2] = 0;
+            attention_info.distances[fopAc_attn_BATTLE_e] = 0;
 
             if (bitSw != 0xFF && fopAcM_isSwitch(this, bitSw)) {
                 fopAcM_offSwitch(this, bitSw);
@@ -1662,7 +1662,7 @@ void daE_ZH_c::executeFlyDelete() {
                 if (fabsf(current.pos.y - (fopAcM_rc_c::getRoofY() + 200.0f)) < 20.0f) {
                     fopAcM_OffStatus(this, 0);
                     attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
-                    attention_info.distances[2] = 0;
+                    attention_info.distances[fopAc_attn_BATTLE_e] = 0;
 
                     if (arg0 == 0) {
                         setActionMode(ACTION_EXECUTE_WAIT, 0);
@@ -2191,7 +2191,7 @@ cPhs__Step daE_ZH_c::create() {
         if (arg0 == 2) {
             fopAcM_OffStatus(this, 0);
             attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
-            attention_info.distances[2] = 0;
+            attention_info.distances[fopAc_attn_BATTLE_e] = 0;
             fopAcM_SetGroup(this, 0);
             fopAcM_SetMin(this, -2000.0f, -2000.0f, -2000.0f);
             fopAcM_SetMax(this, 2000.0f, 2000.0f, 2000.0f);
@@ -2255,7 +2255,7 @@ cPhs__Step daE_ZH_c::create() {
 
             shape_angle.z = 0;
             shape_angle.x = 0;
-            attention_info.distances[2] = 3;
+            attention_info.distances[fopAc_attn_BATTLE_e] = 3;
             fopAcM_OffStatus(this, 0);
             attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
 
@@ -2283,7 +2283,7 @@ cPhs__Step daE_ZH_c::create() {
 
                         setBck(BCK_ZH_WAIT01, 0, 3.0f, 1.0f);
                         field_0x78c = 0;
-                        attention_info.distances[2] = 3;
+                        attention_info.distances[fopAc_attn_BATTLE_e] = 3;
                         fopAcM_OffStatus(this, 0);
                         attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
 
@@ -2300,7 +2300,7 @@ cPhs__Step daE_ZH_c::create() {
                     setActionMode(ACTION_EXECUTE_DEAD_STOP, 0);
                 }
             } else {
-                attention_info.distances[2] = 0;
+                attention_info.distances[fopAc_attn_BATTLE_e] = 0;
                 field_0x764[0] = 255.0f;
                 field_0x764[2] = 50.0f;
                 mStartFlag = 0;

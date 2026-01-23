@@ -63,38 +63,39 @@ int daAlink_c::checkSubjectAction() {
     return 0;
 }
 
-s16 daAlink_c::checkBodyAngleX(s16 param_0) {
+s16 daAlink_c::checkBodyAngleX(s16 i_angle) {
     if (checkWolf() || mProcID == PROC_PEEP_SUBJECTIVITY || mProcID == PROC_HOOKSHOT_WALL_SHOOT) {
-        return param_0;
+        return i_angle;
     }
 
     Vec sp2C = { 0.0f, 0.0f, 0.0f };
-    sp2C.y = 0.5f * field_0x598;
+    f32 var_f31 = 0.5f * mHeight;
+    sp2C.y = var_f31;
 
-    cXyz sp20;
-    mDoMtx_multVecZero(mpLinkModel->getAnmMtx(1), &sp20);
-    cXyz sp14;
+    cXyz backbone1_pos;
+    mDoMtx_multVecZero(mpLinkModel->getAnmMtx(1), &backbone1_pos);
+    cXyz check_pos;
 
-    if (param_0 >= 0) {
+    if (i_angle >= 0) {
         sp2C.z = 25.0f;
     } else {
         sp2C.z = -25.0f;
     }
 
-    mDoMtx_stack_c::transS(sp20);
+    mDoMtx_stack_c::transS(backbone1_pos);
     concatMagneBootMtx();
-    mDoMtx_stack_c::ZXYrotM(param_0, shape_angle.y, 0);
-    mDoMtx_stack_c::multVec(&sp2C, &sp14);
+    mDoMtx_stack_c::ZXYrotM(i_angle, shape_angle.y, 0);
+    mDoMtx_stack_c::multVec(&sp2C, &check_pos);
 
-    if (commonLineCheck(&sp20, &sp14)) {
-        cXyz sp8 = sp14 - mLinkLinChk.GetCross();
-        multVecMagneBootInvMtx(&sp8);
+    if (commonLineCheck(&backbone1_pos, &check_pos)) {
+        cXyz dist = check_pos - mLinkLinChk.GetCross();
+        multVecMagneBootInvMtx(&dist);
 
-        current.pos.x -= sp8.x;
-        current.pos.z -= sp8.z;
+        current.pos.x -= dist.x;
+        current.pos.z -= dist.z;
     }
 
-    return param_0;
+    return i_angle;
 }
 
 BOOL daAlink_c::setBodyAngleToCamera() {
@@ -105,7 +106,7 @@ BOOL daAlink_c::setBodyAngleToCamera() {
 
         s16 sp8;
         if (checkInputOnR()) {
-            f32 var_f31 = 512.0f * field_0x33ac * field_0x33ac;
+            f32 var_f31 = 512.0f * mMoveValue * mMoveValue;
             if (checkWolfEyeUp()) {
                 var_f31 *= 0.6f;
             }
@@ -160,11 +161,11 @@ BOOL daAlink_c::subjectCancelTrigger() {
     return false;
 }
 
-int daAlink_c::checkSubjectEnd(BOOL i_playSound) {
-    setDoStatus(0x12);
+BOOL daAlink_c::checkSubjectEnd(BOOL i_isPlaySe) {
+    setDoStatus(BUTTON_STATUS_BACK);
 
     if (checkEventRun() || checkEquipAnime() || doTrigger() || checkSetItemTrigger(fpcNm_ITEM_HAWK_EYE) || subjectCancelTrigger() || checkEndResetFlg0(ERFLG0_FORCE_SUBJECT_CANCEL) || dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x2000)) {
-        if (i_playSound) {
+        if (i_isPlaySe) {
             seStartSystem(Z2SE_SUBJ_VIEW_OUT);
         }
 
@@ -180,7 +181,8 @@ void daAlink_c::searchPeepObj(fopAc_ac_c* i_actor, void* i_data) {
         f32 var_f31 = current.pos.abs2(i_actor->current.pos);
         if (var_f31 < field_0x3478) {
             field_0x3478 = var_f31;
-            *(fopAc_ac_c**)i_data = i_actor;
+            fopAc_ac_c** var_r29 = (fopAc_ac_c**)i_data;
+            *var_r29 = i_actor;
         }
     }
 }
@@ -195,7 +197,7 @@ int daAlink_c::procCoSubjectivityInit() {
     mNormalSpeed = 0.0f;
 
     setSubjectMode();
-    field_0x2fe6 = shape_angle.y;
+    mPrevAngleY = shape_angle.y;
 
     if (checkWolf()) {
         setSingleAnimeWolfBaseSpeed(WANM_WAIT, 0.0f, 3.0f);
@@ -310,7 +312,7 @@ int daAlink_c::procCoPeepSubjectivity() {
             mPeepExitID = peep->getSceneListID();
         }
 
-        if (dComIfGp_event_compulsory(this, 0, 0xFFFF)) {
+        if (dComIfGp_event_compulsory(this, NULL, 0xFFFF)) {
             startPeepChange();
         }
     }
@@ -319,45 +321,45 @@ int daAlink_c::procCoPeepSubjectivity() {
 }
 
 u32 daAlink_c::checkBoardRide() const {
-    return mRideStatus == 4;
+    return mRideStatus == RIDETYPE_BOARD;
 }
 
 u32 daAlink_c::checkCanoeRide() const {
-    return mRideStatus == 3;
+    return mRideStatus == RIDETYPE_CANOE;
 }
 
 u32 daAlink_c::checkHorseRide() const {
-    return mRideStatus == 1;
+    return mRideStatus == RIDETYPE_HORSE;
 }
 
 MtxP daAlink_c::getLeftItemMatrix() {
-    return mpLinkModel->getAnmMtx(field_0x30c0);
+    return mpLinkModel->getAnmMtx(mLeftItemJntNo);
 }
 
 u32 daAlink_c::checkBoarRide() const {
-    return mRideStatus == 2;
+    return mRideStatus == RIDETYPE_BOAR;
 }
 
 u32 daAlink_c::checkSpinnerRide() const {
-    return mRideStatus == 5;
+    return mRideStatus == RIDETYPE_SPINNER;
 }
 
 MtxP daAlink_c::getLeftHandMatrix() {
-    return mpLinkModel->getAnmMtx(field_0x30b8);
+    return mpLinkModel->getAnmMtx(mLeftHandJntNo);
 }
 
 MtxP daAlink_c::getRightHandMatrix() {
-    return mpLinkModel->getAnmMtx(field_0x30ba);
+    return mpLinkModel->getAnmMtx(mRightHandJntNo);
 }
 
-void daAlink_c::onSceneChangeArea(u8 exitID, u8 exitDirection, fopAc_ac_c* scexAc) {
-    mExitID = exitID;
-    mExitDirection = exitDirection;
-    mpScnChg = (daScex_c*)scexAc;
+void daAlink_c::onSceneChangeArea(u8 i_exitID, u8 i_exitDirection, fopAc_ac_c* i_scexAc) {
+    mExitID = i_exitID;
+    mExitDirection = i_exitDirection;
+    mpScnChg = (daScex_c*)i_scexAc;
 }
 
 MtxP daAlink_c::getRightItemMatrix() {
-    return mpLinkModel->getAnmMtx(field_0x30c2);
+    return mpLinkModel->getAnmMtx(mRightItemJntNo);
 }
 
 u32 daAlink_c::checkPlayerNoDraw() {
@@ -366,5 +368,10 @@ u32 daAlink_c::checkPlayerNoDraw() {
 }
 
 daAlink_c::daAlink_c()
-    : mAnmHeap3(0), mAnmHeap4(0), mFaceBtpHeap(0x800), mFaceBtkHeap(0x400), mFaceBckHeap(0xC00),
-      mAnmHeap9(0x800) {}
+    : mAnmHeap3(0),
+      mAnmHeap4(0),
+      mFaceBtpHeap(0x800),
+      mFaceBtkHeap(0x400),
+      mFaceBckHeap(0xC00),
+      mAnmHeap9(0x800)
+      {}

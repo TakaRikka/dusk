@@ -3265,7 +3265,7 @@ static int daCow_Draw(void* actor) {
 }
 
 int daCow_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "COW");
     dComIfG_resDelete(&mPhase, "Cow");
 
     if (heap != NULL) {

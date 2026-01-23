@@ -42,11 +42,11 @@ daE_SM2_HIO_c::daE_SM2_HIO_c() {
 
 #if DEBUG
 void daE_SM2_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genCheckBox("合体しない", &merge_OFF, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genCheckBox("色調整する", &color_debug_ON, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("色調整R", &color_debug_R, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("色調整G", &color_debug_G, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("色調整B", &color_debug_B, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genCheckBox("合体しない", &merge_OFF, 0x1);
+    ctx->genCheckBox("色調整する", &color_debug_ON, 0x1);
+    ctx->genSlider("色調整R", &color_debug_R, 0, 0xFF);
+    ctx->genSlider("色調整G", &color_debug_G, 0, 0xFF);
+    ctx->genSlider("色調整B", &color_debug_B, 0, 0xFF);
 }
 #endif
 
@@ -1399,7 +1399,7 @@ static int daE_SM2_IsDelete(e_sm2_class* i_this) {
 
 static int daE_SM2_Delete(e_sm2_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
-    fpc_ProcID id = fopAcM_GetID(&i_this->enemy);
+    fopAcM_RegisterDeleteID(&i_this->enemy, "E_SM2");
 
     #if DEBUG
     l_HIO.removeHIO(i_this->enemy);

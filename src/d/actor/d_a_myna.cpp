@@ -133,39 +133,39 @@ public:
 #if DEBUG
     void genMessage(JORMContext* ctext) {
         // scale:
-        ctext->genSlider("スケール", &scale, 0.0f, 2.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genLabel("**********", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("スケール", &scale, 0.0f, 2.0f);
+        ctext->genLabel("**********", 0);
         // turn angle add value
-        ctext->genSlider("振向角加算値", &turn_angle_add_val, -0x8000, 0x7fff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("振向角加算値", &turn_angle_add_val, -0x8000, 0x7fff);
         // max vibration angle
-        ctext->genSlider("振向角最大", &max_vibration_angle, -0x8000, 0x7fff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("振向角最大", &max_vibration_angle, -0x8000, 0x7fff);
         // min vibration angle
-        ctext->genSlider("振向角最小", &min_vibration_angle, -0x8000, 0x7fff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genLabel("**********", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("振向角最小", &min_vibration_angle, -0x8000, 0x7fff);
+        ctext->genLabel("**********", 0);
         // jump anime
-        ctext->genSlider("Jumpアニメ", &jump_anime, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("Jumpアニメ", &jump_anime, 0.0f, 5.0f);
         // jump speed
-        ctext->genSlider("Jumpスピード", &jump_speed, 0.0f, 2.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("Jumpスピード", &jump_speed, 0.0f, 2.0f);
         // side walking speed
-        ctext->genSlider("側歩スピード", &side_walking_speed, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genLabel("**********", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("側歩スピード", &side_walking_speed, 0.0f, 5.0f);
+        ctext->genLabel("**********", 0);
         // approach dist to streetlights?
-        ctext->genSlider("外灯接近距離 ", &streetlight_approach_dist, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("外灯接近距離 ", &streetlight_approach_dist, 0.0f, 100.0f);
         // return approach dist
-        ctext->genSlider("戻り接近距離", &return_approach_dist, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("戻り接近距離", &return_approach_dist, 0.0f, 100.0f);
         // annihilation return wait
-        ctext->genSlider("全滅戻りウエイト", &annihilation_return_wait, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genLabel("**********", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("全滅戻りウエイト", &annihilation_return_wait, 0, 1000);
+        ctext->genLabel("**********", 0);
         // link attack height
-        ctext->genSlider("リンク攻撃高さ", &link_attack_height, -100.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("リンク攻撃高さ", &link_attack_height, -100.0f, 100.0f);
         // link approach dist
-        ctext->genSlider("リンク接近距離", &link_approach_dist, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("リンク接近距離", &link_approach_dist, 0.0f, 100.0f);
         // up and down movement
-        ctext->genSlider("上下揺れ具合", &up_and_down_movement, 0, 100, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("上下揺れ具合", &up_and_down_movement, 0, 100);
         // heaving speed
-        ctext->genSlider("上下揺れ速度", &heaving_speed, 0, 0x7fff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("上下揺れ速度", &heaving_speed, 0, 0x7fff);
         // damage timer
-        ctext->genSlider("ダメージタイマー", &damage_timer, 10, 500, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("ダメージタイマー", &damage_timer, 10, 500);
     }
 #endif
 

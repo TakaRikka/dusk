@@ -204,8 +204,8 @@ int daNpcMsg_setEvtNum(u8 iEvtNum) {
     return 1;
 }
 
-u8 daNpcKakashi_chkSwdTutorialStage() {
-    return strcmp(dComIfGp_getStartStageName(), "F_SP103") == 0 && dComIfG_play_c::getLayerNo(0) == 8;
+bool daNpcKakashi_chkSwdTutorialStage() {
+    return bool(strcmp(dComIfGp_getStartStageName(), "F_SP103") == 0 && dComIfG_play_c::getLayerNo(0) == 8);
 }
 
 void daNpcKakashi_setSwdTutorialStep(u8 iEvtNum) {

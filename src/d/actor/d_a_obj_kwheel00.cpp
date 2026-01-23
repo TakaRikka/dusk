@@ -27,13 +27,13 @@ daObjKWheel00_HIO_c::daObjKWheel00_HIO_c() {
 
 void daObjKWheel00_HIO_c::genMessage(JORMContext* ctx) {
     // "Water wheel"
-    ctx->genLabel("水車", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genLabel("水車", 0);
 
     // "Rotational speed(short)"
-    ctx->genSlider("回転速度(short)",&mTargetZAngularSpeed, 0, 0x4000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("回転速度(short)",&mTargetZAngularSpeed, 0, 0x4000);
 
     // "Rotational acceleration(short)"
-    ctx->genSlider("回転加速度(short)",&mZAngularAcceleration, 0, 32, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("回転加速度(short)",&mZAngularAcceleration, 0, 32);
 }
 #endif
 

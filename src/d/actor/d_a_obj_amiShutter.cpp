@@ -33,14 +33,10 @@ daAmiShutter_HIO_c::daAmiShutter_HIO_c() {
 
 #if DEBUG
 void daAmiShutter_HIO_c::genMessage(JORMContext* i_ctx) {
-    i_ctx->genSlider("open速度", &mMaxOpenSpeed, 0.1f, 1000.0f, 
-        0, NULL, 0xffff, 0xffff, 512, 24);
-    i_ctx->genSlider("close速度", &mMaxCloseSpeed, 0.1f, 1000.0f, 
-        0, NULL, 0xffff, 0xffff, 512, 24);
-    i_ctx->genSlider("range", &mRange, 0.1f, 1000.0f, 
-        0, NULL, 0xffff, 0xffff, 512, 24);
-    i_ctx->genSlider("waitTime", &mWaitTime, 0, 255, 
-        0, NULL, 0xffff, 0xffff, 512, 24);
+    i_ctx->genSlider("open速度", &mMaxOpenSpeed, 0.1f, 1000.0f);
+    i_ctx->genSlider("close速度", &mMaxCloseSpeed, 0.1f, 1000.0f);
+    i_ctx->genSlider("range", &mRange, 0.1f, 1000.0f);
+    i_ctx->genSlider("waitTime", &mWaitTime, 0, 255);
 }
 #endif
 

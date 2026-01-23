@@ -5,8 +5,7 @@
 
 class daTagEscape_c : public fopAc_ac_c {
 public:
-    daTagEscape_c() {}
-    ~daTagEscape_c() {}
+    inline int create();
     
     u8 getPathID() { return fopAcM_GetParam(this) & 0xff; }
 };

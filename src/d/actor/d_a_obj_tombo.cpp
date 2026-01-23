@@ -22,16 +22,13 @@ public:
     #if DEBUG
     void genMessage(JORMContext* context) {
         // Golden dragonfly
-        context->genLabel("黄金蟲(トンボ)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+        context->genLabel("黄金蟲(トンボ)", 0x80000001);
         // Model Scale (male)
-        context->genSlider("モデルスケール(オス)", &mFemaleModelScale, 0.1f, 4.0f, 0, NULL, 0xffff, 0xffff,
-                           0x200, 0x18);
+        context->genSlider("モデルスケール(オス)", &mFemaleModelScale, 0.1f, 4.0f);
         // Model Scale (female)
-        context->genSlider("モデルスケール(メス)", &mMaleModelScale, 0.1f, 4.0f, 0, NULL, 0xffff, 0xffff,
-                           0x200, 0x18);
+        context->genSlider("モデルスケール(メス)", &mMaleModelScale, 0.1f, 4.0f);
         // btk speed
-        context->genSlider("btkスピード", &mBtkSpeed, 0.0f, 4.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                           0x18);
+        context->genSlider("btkスピード", &mBtkSpeed, 0.0f, 4.0f);
     }
     #endif
 

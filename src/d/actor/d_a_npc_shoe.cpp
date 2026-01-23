@@ -655,10 +655,10 @@ static bool daNpcShoe_IsDelete(void* param_0) {
 }
 
 void daNpcShoe_c::setParam() {
-    attention_info.distances[0] =
+    attention_info.distances[fopAc_attn_LOCK_e] =
         getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] =
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] =
         getDistTableIdx(mpHIO->m.common.talk_distance, mpHIO->m.common.talk_angle);
 
     attention_info.flags =

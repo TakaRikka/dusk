@@ -21,7 +21,7 @@ public:
     void endParticle();
     BOOL checkStartDemo();
     BOOL checkOnEffect();
-    s32 getLetterCount();
+    int getLetterCount();
     int draw();
     int _delete();
 
@@ -38,7 +38,7 @@ private:
     /* 0x596 */ u8 mMapToolId;
     /* 0x597 */ u8 mSkyCharacterEventBitIdIndex;
     /* 0x598 */ s16 mEventId;
-    /* 0x59C */ u32 mTreasureDemoItemId;
+    /* 0x59C */ u32 mItemId;
     /* 0x5A0 */ s32 mOwlStatueId;
 
     enum Action_e {
@@ -63,18 +63,22 @@ private:
         TAG_LOCATION_RUINED_THEATRE
     };
 
-    void setAction(Action_e action) {
+    void setAction(u8 action) {
         mCurrentAction = action;
     }
 
 
-    u32 getSwbit() {
+    u8 getSwbit() {
         return fopAcM_GetParamBit(this, 0, 8);
     }
 
     // Returns whether player has obtained a Sky Character from the tag
-    u32 getSwbit2() {
+    u8 getSwbit2() {
         return fopAcM_GetParamBit(this, 12, 8);
+    }
+
+    u8 getType() {
+        return fopAcM_GetParamBit(this, 8, 4);
     }
 };
 

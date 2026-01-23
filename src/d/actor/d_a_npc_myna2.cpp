@@ -281,7 +281,7 @@ int daNpc_myna2_c::CreateHeap() {
 }
 
 int daNpc_myna2_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_MYNA2");
     this->~daNpc_myna2_c();
     return 1;
 }

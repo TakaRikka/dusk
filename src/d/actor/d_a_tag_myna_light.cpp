@@ -25,18 +25,15 @@ int daTag_MynaLight_c::Delete() {
 }
 
 int daTag_MynaLight_c::Execute() {
-    u8 uVar1 = (int)(dComIfGs_getTime() * 0.06666667f) & 0xFF;
-    u8 turn_on_time = getTurnOnTime() & 0xFF;
-    u8 turn_off_time = getTurnOffTime() & 0xFF;
-
-    if (turn_off_time > turn_on_time) {
-        if (uVar1 >= (getTurnOnTime() & 0xFF) && uVar1 < (getTurnOffTime() & 0xFF)) {
+    u8 var_r30 = (int)(dComIfGs_getTime() * 0.06666667f);
+    if (getTurnOffTime() > getTurnOnTime()) {
+        if (var_r30 >= getTurnOnTime() && var_r30 < getTurnOffTime()) {
             field_0x578 = true;
         } else {
             field_0x578 = false;
         }
     } else {
-        if (uVar1 >= (getTurnOffTime() & 0xFF) && uVar1 < (getTurnOnTime() & 0xFF)) {
+        if (var_r30 >= getTurnOffTime() && var_r30 < getTurnOnTime()) {
             field_0x578 = false;
         } else {
             field_0x578 = true;
@@ -45,10 +42,10 @@ int daTag_MynaLight_c::Execute() {
 
     if (mTurnOnFlag) {
         if (dComIfGp_roomControl_getStayNo() != 0) {
-            mDoAud_seStartLevel(Z2SE_OBJ_MYNA_LIGHT_BURNING, (Vec*)&current.pos, 0,
-                                  dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
+            mDoAud_seStartLevel(Z2SE_OBJ_MYNA_LIGHT_BURNING, &current.pos, 0,
+                                dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
         } else {
-            mDoAud_seStartLevel(Z2SE_OBJ_MYNA_LIGHT_BURNING, (Vec*)&current.pos, 0, 0);
+            mDoAud_seStartLevel(Z2SE_OBJ_MYNA_LIGHT_BURNING, &current.pos, 0, 0);
         }
     }
     return 1;
@@ -110,12 +107,14 @@ bool daTag_MynaLight_c::setTurnOnOffChange() {
     return mTurnOnFlag;
 }
 
-u32 daTag_MynaLight_c::getTurnOnTime() {
-    return fopAcM_GetParamBit(this, 0, 5);
+u8 daTag_MynaLight_c::getTurnOnTime() {
+    u8 param = fopAcM_GetParam(this) & 0x1F;
+    return param;
 }
 
-u32 daTag_MynaLight_c::getTurnOffTime() {
-    return fopAcM_GetParamBit(this, 5, 5);
+u8 daTag_MynaLight_c::getTurnOffTime() {
+    u8 param = (fopAcM_GetParam(this) & 0x3E0) >> 5;
+    return param;
 }
 
 void daTag_MynaLight_c::initialize() {

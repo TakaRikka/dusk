@@ -401,11 +401,13 @@ static int message(sq_class* i_this) {
 
     if (i_this->mMessageState == 2 && i_this->mFlowID != -1 && daPy_py_c::checkNowWolf()) {
         fopAcM_OnStatus(i_this, 0);
-        cLib_onBit<u32>(i_this->attention_info.flags, 0xa);
+        cLib_onBit<u32>(i_this->attention_info.flags,
+                        fopAc_AttnFlag_TALK_e | fopAc_AttnFlag_SPEAK_e);
         i_this->eventInfo.onCondition(1);
     } else {
         fopAcM_OffStatus(i_this, 0);
-        cLib_offBit<u32>(i_this->attention_info.flags, 0xa);
+        cLib_offBit<u32>(i_this->attention_info.flags,
+                         fopAc_AttnFlag_TALK_e | fopAc_AttnFlag_SPEAK_e);
     }
 
     return 0;

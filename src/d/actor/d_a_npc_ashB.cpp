@@ -87,7 +87,7 @@ daNpcAshB_HIO_c::daNpcAshB_HIO_c() {
 
 void daNpcAshB_HIO_c::genMessage(JORMContext* ctext) {
     // Post-conversation follow-up distance
-    ctext->genSlider("会話後追従距離", &m.field_0x6c, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("会話後追従距離", &m.field_0x6c, 0.0f, 2000.0f);
     daNpcF_commonGenMessage(ctext, &m.common);
 }
 #endif
@@ -1089,10 +1089,10 @@ static bool daNpcAshB_IsDelete(void* param_0) {
 void daNpcAshB_c::setParam() {
     attention_info.flags =
         daPy_py_c::checkNowWolf() ? 0 : (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
-    attention_info.distances[0] =
+    attention_info.distances[fopAc_attn_LOCK_e] =
         getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] =
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] =
         getDistTableIdx(mpHIO->m.common.talk_distance, mpHIO->m.common.talk_angle);
 }
 

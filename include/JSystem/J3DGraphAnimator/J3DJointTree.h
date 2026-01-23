@@ -1,6 +1,7 @@
 #ifndef J3DJOINTTREE_H
 #define J3DJOINTTREE_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
 
 class J3DJoint;

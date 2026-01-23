@@ -163,15 +163,15 @@ daE_WW_HIO_c::daE_WW_HIO_c() {
 
 #if DEBUG
 void daE_WW_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("ホワイトウルフォス", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("モデルサイズ", &model_size, 0.0f, 10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("攻撃間隔", &attack_interval, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("走りアニメーション", &run_anm, 0.0f, 10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("歩きアニメーション", &walk_anm, 0.0f, 10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("走る速度", &run_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("狼から逃亡速度", &wolf_escape_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("リンクから逃亡速度", &link_escape_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genCheckBox("移動範囲デバック表示", &move_range_debug_display, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    mctx->genLabel("ホワイトウルフォス", 0x80000001);
+    mctx->genSlider("モデルサイズ", &model_size, 0.0f, 10.0f);
+    mctx->genSlider("攻撃間隔", &attack_interval, 0.0f, 2000.0f);
+    mctx->genSlider("走りアニメーション", &run_anm, 0.0f, 10.0f);
+    mctx->genSlider("歩きアニメーション", &walk_anm, 0.0f, 10.0f);
+    mctx->genSlider("走る速度", &run_speed, 0.0f, 100.0f);
+    mctx->genSlider("狼から逃亡速度", &wolf_escape_speed, 0.0f, 100.0f);
+    mctx->genSlider("リンクから逃亡速度", &link_escape_speed, 0.0f, 100.0f);
+    mctx->genCheckBox("移動範囲デバック表示", &move_range_debug_display, 0x1);
 }
 #endif
 

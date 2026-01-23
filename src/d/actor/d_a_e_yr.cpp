@@ -93,50 +93,33 @@ public:
 #if DEBUG
 void e_yrHIO_c::genMessage(JORMContext* ctx) {
     // "Kagarok"
-    ctx->genLabel("\u3000闇カーゴロック", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genCheckBox("不死身", &mInvulnerable, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genCheckBox("静止", &mStationary, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genCheckBox("いきなり攻撃", &mSuddenAttack, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("旋回半径", &mTurningRadius, 0.0, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("モデルスケール", &mModelScale, 0.0, 10.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("Ａ攻時間（最短）", &mAttackAMinTime, 0, 15000, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("Ａ攻時間（最長）", &mAttackAMaxTime, 0, 15000, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("Ｂ攻時間（最短）", &mAttackBMinTime, 0, 15000, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("Ｂ攻時間（最長）", &mAttackBMaxTime, 0, 15000, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("攻撃移動速度", &mAttackMoveSpeed, 0.0, 2.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("攻撃頻度", &mAttackFrequency, 0.0, 10.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("fly再生速度", &mFlyPlaybackSpeed, 0.0, 3.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("hovering再生速度", &mHoveringPlaybackSpeed, 0.0, 3.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("atack再生速度", &mAttackPlaybackSpeed, 0.0, 3.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("chance再生速度", &mChancePlaybackSpeed, 0.0, 3.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("chance時間", &mChanceTime, 0, 200, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("brake開始距離", &mBrakeStartDist, 0, 3000, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("大ダメージ力", &mLargeDamage, 0.0, 150.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("小ダメージ力", &mSmallDamage, 0.0, 150.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("ＨＩＴ発生フレーム", &mHitOccurrenceFrame, 0, 5, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("プ認距離（空）", &mDetectDistSky, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("プ認高さ（空）", &mDetectHeightSky, 0.0f, 5000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("プ認角度（空）", &mDetectAngleSky, 0, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("プ認距離（地）", &mDetectDistGround, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("プ認高さ（地）", &mDetectHeightGround, 0.0f, 5000.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("プ認角度（地）", &mDetectAngleGround, 0, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genLabel("\u3000闇カーゴロック", 0x80000001);
+    ctx->genCheckBox("不死身", &mInvulnerable, 0x1);
+    ctx->genCheckBox("静止", &mStationary, 0x1);
+    ctx->genCheckBox("いきなり攻撃", &mSuddenAttack, 0x1);
+    ctx->genSlider("旋回半径", &mTurningRadius, 0.0, 10000.0f);
+    ctx->genSlider("モデルスケール", &mModelScale, 0.0, 10.0f);
+    ctx->genSlider("Ａ攻時間（最短）", &mAttackAMinTime, 0, 15000);
+    ctx->genSlider("Ａ攻時間（最長）", &mAttackAMaxTime, 0, 15000);
+    ctx->genSlider("Ｂ攻時間（最短）", &mAttackBMinTime, 0, 15000);
+    ctx->genSlider("Ｂ攻時間（最長）", &mAttackBMaxTime, 0, 15000);
+    ctx->genSlider("攻撃移動速度", &mAttackMoveSpeed, 0.0, 2.0f);
+    ctx->genSlider("攻撃頻度", &mAttackFrequency, 0.0, 10.0f);
+    ctx->genSlider("fly再生速度", &mFlyPlaybackSpeed, 0.0, 3.0f);
+    ctx->genSlider("hovering再生速度", &mHoveringPlaybackSpeed, 0.0, 3.0f);
+    ctx->genSlider("atack再生速度", &mAttackPlaybackSpeed, 0.0, 3.0f);
+    ctx->genSlider("chance再生速度", &mChancePlaybackSpeed, 0.0, 3.0f);
+    ctx->genSlider("chance時間", &mChanceTime, 0, 200);
+    ctx->genSlider("brake開始距離", &mBrakeStartDist, 0, 3000);
+    ctx->genSlider("大ダメージ力", &mLargeDamage, 0.0, 150.0f);
+    ctx->genSlider("小ダメージ力", &mSmallDamage, 0.0, 150.0f);
+    ctx->genSlider("ＨＩＴ発生フレーム", &mHitOccurrenceFrame, 0, 5);
+    ctx->genSlider("プ認距離（空）", &mDetectDistSky, 0.0f, 10000.0f);
+    ctx->genSlider("プ認高さ（空）", &mDetectHeightSky, 0.0f, 5000.0f);
+    ctx->genSlider("プ認角度（空）", &mDetectAngleSky, 0, 0x7fff);
+    ctx->genSlider("プ認距離（地）", &mDetectDistGround, 0.0f, 10000.0f);
+    ctx->genSlider("プ認高さ（地）", &mDetectHeightGround, 0.0f, 5000.0f);
+    ctx->genSlider("プ認角度（地）", &mDetectAngleGround, 0, 0x7fff);
 }
 #endif
 

@@ -1,23 +1,25 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
+#include "d/actor/d_a_horse.h"
 #include "d/actor/d_a_tag_event.h"
 #include "d/d_com_inf_game.h"
-#include "d/actor/d_a_horse.h"
+#include "d/d_debug_viewer.h"
+#include "d/d_s_play.h"
 
 static fopAc_ac_c* daTag_getBk(u32 param_0) {
     return fopAcM_searchFromName("Bk", 0xF, param_0);
 }
 
 u8 daTag_Event_c::getEventNo() {
-    return fopAcM_GetParam(this) >> 0x18;
+    return (fopAcM_GetParam(this) & 0xff000000) >> 24;
 }
 
 u8 daTag_Event_c::getSwbit() {
-    return fopAcM_GetParam(this) >> 0x8;
+    return (fopAcM_GetParam(this) & 0xff00) >> 8;
 }
 
 u8 daTag_Event_c::getSwbit2() {
-    return fopAcM_GetParam(this) >> 0x10;
+    return (fopAcM_GetParam(this) & 0xff0000) >> 16;
 }
 
 u8 daTag_Event_c::getType() {
@@ -103,10 +105,8 @@ int daTag_Event_c::create() {
         setActio(ACTION_WAIT);
     }
 
-    shape_angle.z = 0;
-    shape_angle.x = 0;
-    current.angle.z = 0;
-    current.angle.x = 0;
+    shape_angle.x = shape_angle.z = 0;
+    current.angle.x = current.angle.z = 0;
 
     scale.x *= 100.0f;
     scale.y *= 100.0f;
@@ -131,8 +131,9 @@ int daTag_Event_c::actionNext() {
         mEventIdx = mMapEventIdx;
         mMapEventIdx = -1;
 
+        int roomNo = fopAcM_GetRoomNo(this);
         dStage_MapEvent_dt_c* event_data =
-            dEvt_control_c::searchMapEventData(mMapToolId, fopAcM_GetRoomNo(this));
+            dEvt_control_c::searchMapEventData(mMapToolId, roomNo);
         if (event_data != NULL) {
             mMapToolId = event_data->field_0x5;
             mMapEventIdx = dComIfGp_getEventManager().getEventIdx(this, mMapToolId);
@@ -231,6 +232,10 @@ int daTag_Event_c::actionHunt() {
     if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACTION_WAIT);
     } else if (arrivalTerms() && checkArea()) {
+#if DEBUG
+        mEventIdx = dComIfGp_getEventManager().getEventIdx(this, getEventNo());
+#endif
+
         setActio(ACTION_READY);
         fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
     }
@@ -299,6 +304,36 @@ int daTag_Event_c::execute() {
 }
 
 int daTag_Event_c::draw() {
+#if DEBUG
+    static GXColor color = {0x00, 0x00, 0xFF, 0xFF};
+
+    if (g_envHIO.mOther.mDisplayTransparentCyl != 0) {
+        if (getAreaType() == 0x8000) {
+            cXyz sp30[8];
+            cXyz sp20(current.pos.x - scale.x * 0.5f,
+                         current.pos.y,
+                         current.pos.z - scale.z * 0.5f);
+            cXyz sp14(current.pos.x + scale.x * 0.5f,
+                         current.pos.y + scale.y,
+                         current.pos.z + scale.z * 0.5f);
+            sp30[0].set(sp20.x, sp20.y, sp20.z);
+            sp30[1].set(sp20.x, sp20.y, sp14.z);
+            sp30[2].set(sp14.x, sp20.y, sp14.z);
+            sp30[3].set(sp14.x, sp20.y, sp20.z);
+            sp30[4].set(sp20.x, sp14.y, sp20.z);
+            sp30[5].set(sp20.x, sp14.y, sp14.z);
+            sp30[6].set(sp14.x, sp14.y, sp14.z);
+            sp30[7].set(sp14.x, sp14.y, sp20.z);
+            dDbVw_drawCube8pXlu(sp30, color);
+        } else {
+            cXyz sp08(current.pos);
+            sp08.y -= scale.y;
+            dDbVw_drawCylinderXlu(
+                sp08, scale.x, scale.y * 2.0f,
+                color, 1);
+        }
+    }
+#endif
     return 1;
 }
 
@@ -316,12 +351,16 @@ static int daTag_Event_IsDelete(daTag_Event_c* i_this) {
 }
 
 static int daTag_Event_Delete(daTag_Event_c* i_this) {
+    u32 actorId = fopAcM_GetID(i_this);
     i_this->~daTag_Event_c();
     return 1;
 }
 
 static int daTag_Event_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTag_Event_c*>(i_this)->create();
+    daTag_Event_c* event = static_cast<daTag_Event_c*>(i_this);
+    u32 actorId = fopAcM_GetID(i_this);
+    int result = event->create();
+    return result;
 }
 
 static actor_method_class l_daTag_Event_Method = {

@@ -932,7 +932,7 @@ int daE_DK_c::_delete() {
 }
 
 static int daE_DK_Delete(daE_DK_c* i_this) {
-    fpc_ProcID unusedId = fopAcM_GetID(i_this); // debug match
+    fopAcM_RegisterDeleteID(i_this, "E_DK");
     return i_this->_delete();
 }
 

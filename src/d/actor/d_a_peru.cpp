@@ -341,7 +341,7 @@ int daPeru_c::isDelete() {
 void daPeru_c::reset() {
     initialize();
     attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(mpHIO->m.inner.field_0x4C, mpHIO->m.inner.field_0x4E);
-    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[0];
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
     attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(mpHIO->m.inner.field_0x48, mpHIO->m.inner.field_0x4A);
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
     scale.setall(mpHIO->m.inner.field_0x08);
@@ -376,7 +376,7 @@ void daPeru_c::setParam() {
         attention_info.flags = 0;
     }
     attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(mpHIO->m.inner.field_0x4C, mpHIO->m.inner.field_0x4E);
-    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[0];
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
     attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(mpHIO->m.inner.field_0x48, mpHIO->m.inner.field_0x4A);
     scale.setall(mpHIO->m.inner.field_0x08);
     mCcStts.SetWeight(mpHIO->m.inner.field_0x10);

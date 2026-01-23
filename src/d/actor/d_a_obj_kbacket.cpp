@@ -156,7 +156,7 @@ int daObj_KBacket_c::Execute() {
 
     attention_info.flags = 0;
 
-    attention_info.distances[4] = 6;
+    attention_info.distances[fopAc_attn_CARRY_e] = 6;
 
     mAcchCir.SetWallR(mpHIO->m.field_0x1c);
     mAcchCir.SetWallH(mpHIO->m.field_0x18);

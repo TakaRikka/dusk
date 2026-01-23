@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
+#include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_myna2.h"
 #include "d/d_procname.h"
 
@@ -17,27 +18,25 @@ s32 daTagMyna2_c::create() {
 }
 
 s32 daTagMyna2_c::execute() {
-    if (!dComIfGp_event_runCheck()) {
-        if (!dComIfGs_isSwitch(mSwitchNo,fopAcM_GetRoomNo(this))) {
-            if ((dComIfGp_getPlayer(0)->current.pos - current.pos).absXZ() < getExtent()) {
-                s16 angle_y = (s16)fopAcM_searchPlayerAngleY(this);
-                csXyz actor_angle(0x1e,angle_y,0);
-                cXyz actor_pos = current.pos;
-                actor_pos.y += 1000.0f;
+    if (!dComIfGp_event_runCheck() &&
+        !dComIfGs_isSwitch(mSwitchNo,fopAcM_GetRoomNo(this)) &&
+        (daPy_getPlayerActorClass()->current.pos - current.pos).absXZ() < getExtent()) {
+        csXyz actor_angle(30, (s16)fopAcM_searchPlayerAngleY(this), 0);
+        cXyz actor_pos = current.pos;
+        actor_pos.y += 1000.0f;
 
-                if (fopAcM_gc_c::gndCheck(&actor_pos) != 0) {
-                    actor_pos.y = fopAcM_gc_c::getGroundY();
-                } else {
-                    actor_pos = current.pos;
-                }
+        if (fopAcM_gc_c::gndCheck(&actor_pos) != 0) {
+            actor_pos.y = fopAcM_gc_c::getGroundY();
+        } else {
+            actor_pos = current.pos;
+        }
 
-                if (mTimer == 0) {
-                    s32 actor_create = fopAcM_create(PROC_MYNA2, (mSwitchNo << 8 | 0xffff0001), &actor_pos, fopAcM_GetRoomNo(this), &actor_angle, 0, 0xffffffff);
-
-                    if (actor_create != 0xFFFFFFFF) {
-                        dComIfGs_onSwitch(mSwitchNo,fopAcM_GetRoomNo(this));
-                    }
-                }
+        u32 var_r29 = 0xffff0001;
+        if (mTimer == 0) {
+            if (fopAcM_create(PROC_MYNA2, var_r29 | mSwitchNo << 8, &actor_pos,
+                              fopAcM_GetRoomNo(this), &actor_angle, 0, -1)
+                != fpcM_ERROR_PROCESS_ID_e) {
+                dComIfGs_onSwitch(mSwitchNo,fopAcM_GetRoomNo(this));
             }
         }
     }
@@ -52,7 +51,9 @@ s32 daTagMyna2_c::execute() {
 }
 
 static s32 daTagMyna2_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagMyna2_c*>(i_this)->create();
+    daTagMyna2_c* myna2 = static_cast<daTagMyna2_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return myna2->create();
 }
 
 static s32 daTagMyna2_Execute(daTagMyna2_c* i_this) {
@@ -60,6 +61,7 @@ static s32 daTagMyna2_Execute(daTagMyna2_c* i_this) {
 }
 
 static s32 daTagMyna2_Delete(daTagMyna2_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagMyna2_c();
     return 1;
 }

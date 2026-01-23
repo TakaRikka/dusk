@@ -311,7 +311,7 @@ int daNpc_SoldierA_c::CreateHeap() {
 }
 
 int daNpc_SoldierA_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_SOLDIERa");
     this->~daNpc_SoldierA_c();
     return 1;
 }

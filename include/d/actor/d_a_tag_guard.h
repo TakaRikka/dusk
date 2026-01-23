@@ -9,7 +9,7 @@ public:
     int getAppearPoint(Vec*);
     void createGuard(u32);
 
-    u8 getPathID() { return fopAcM_GetParam(this) >> 8; }
+    u8 getPathID() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }
     inline int create();
     inline void create_init();
 

@@ -206,7 +206,7 @@ int daObjTks_c::CreateHeap() {
 }
 
 int daObjTks_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "OBJ_TKS");
     this->~daObjTks_c();
     return 1;
 }

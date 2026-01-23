@@ -38,14 +38,20 @@ int daTag_Evt_c::destroy() {
 }
 
 int daTag_Evt_c::execute() {
+    cXyz sp14;
+    int var_r29 = 0;
     BOOL bVar = true;
+    u16 eventId;
+    int iVar1;
+    int actIdx;
+
     eyePos.set(current.pos.x, current.pos.y + 100.0f, current.pos.z);
     attention_info.position = eyePos;
     fopAcM_SetRoomNo(this, dComIfGp_roomControl_getStayNo());
     if (field_0x5E4 == 0 || field_0x5E4 == 1) {
         if (dComIfGp_event_runCheck()) {
             bVar = false;
-            int iVar1 = dComIfGp_evmng_getMyStaffId(field_0x568, 0, 0);
+            iVar1 = dComIfGp_evmng_getMyStaffId(field_0x568, 0, 0);
             if (!eventInfo.checkCommandTalk()) {
                 if (eventInfo.checkCommandDemoAccrpt()) {
                     if (dComIfGp_getEventManager().endCheck(field_0x572)) {
@@ -55,20 +61,20 @@ int daTag_Evt_c::execute() {
                         bVar = true;
                     } else {
                         if (iVar1 != -1) {
-                            int actIdx = dComIfGp_getEventManager().getMyActIdx(
+                            actIdx = dComIfGp_getEventManager().getMyActIdx(
                                 iVar1, mEvtCutList, 3, 0, 0);
-                            int iVar2 = 0;
+                            var_r29 = 0;
                             switch (actIdx) {
                             case 0:
-                                iVar2 = doEvtCutWait(iVar1);
+                                var_r29 = doEvtCutWait(iVar1);
                                 break;
                             case 1:
-                                iVar2 = doEvtCutTalk(iVar1);
+                                var_r29 = doEvtCutTalk(iVar1);
                                 break;
                             case 2:
-                                iVar2 = doEvtCutNext(iVar1);
+                                var_r29 = doEvtCutNext(iVar1);
                             }
-                            if (iVar2 != 0) {
+                            if (var_r29 != 0) {
                                 dComIfGp_getEventManager().cutEnd(iVar1);
                             }
                         }
@@ -77,7 +83,7 @@ int daTag_Evt_c::execute() {
             } else if (field_0x5DC != 0) {
                 if (mMsgFlow.doFlow(this, NULL, 0) != 0) {
                     dComIfGp_event_reset();
-                    u16 eventId = mMsgFlow.getEventId(NULL);
+                    eventId = mMsgFlow.getEventId(NULL);
                     if (eventId != 0) {
                         daNpcMsg_setEvtNum(eventId);
                         field_0x570 = 1;
@@ -92,8 +98,8 @@ int daTag_Evt_c::execute() {
             }
         }
         if (!isDelete() && cLib_calcTimer(&field_0x5D0) == 0) {
-            cXyz var1 = daPy_getPlayerActorClass()->current.pos - current.pos;
-            if (var1.absXZ() < scale.x && -scale.y < var1.y && var1.y < scale.y) {
+            sp14 = daPy_getPlayerActorClass()->current.pos - current.pos;
+            if (sp14.absXZ() < scale.x && -scale.y < sp14.y && sp14.y < scale.y) {
                 field_0x570 = 1;
             }
         }
@@ -113,16 +119,16 @@ int daTag_Evt_c::draw() {
 
 int daTag_Evt_c::getParam() {
     field_0x5E0 = fopAcM_GetParam(this) & 0xFFF;
-    field_0x5E2 = (fopAcM_GetParam(this) >> 0xC) & 0xFFF;
+    field_0x5E2 = (fopAcM_GetParam(this) & 0xFFF000) >> 12;
     if ((fopAcM_GetParam(this) & 0xF000000) != 0xF000000) {
-        field_0x5D8 = (fopAcM_GetParam(this) & 0xF000000) >> 0x18;
+        field_0x5D8 = (fopAcM_GetParam(this) & 0xF000000) >> 24;
     } else {
         field_0x5D8 = -1;
     }
 
-    field_0x5E4 = fopAcM_GetParam(this) >> 0x1E;
+    field_0x5E4 = (fopAcM_GetParam(this) & 0xC0000000) >> 30;
     field_0x5DD = home.angle.x;
-    field_0x5DE = (u16)home.angle.x >> 8;
+    field_0x5DE = (home.angle.x & 0xFF00) >> 8;
     field_0x5D4 = home.angle.z & 0xFF;
     if ((home.angle.z & 0xFF00) != 0xFF00) {
         field_0x5D0 = ((home.angle.z & 0xFF00) >> 8) * 0x1E;
@@ -175,16 +181,19 @@ int daTag_Evt_c::isDelete() {
 }
 
 int daTag_Evt_c::doEvtCutWait(int param_0) {
+    int* pTimer = NULL;
     if (dComIfGp_getEventManager().getIsAddvance(param_0)) {
-        int* pTimer = dComIfGp_evmng_getMyIntegerP(param_0, "timer");
-        mTimer = (pTimer == NULL ? 0 : *pTimer);
+        pTimer = dComIfGp_evmng_getMyIntegerP(param_0, "timer");
+        mTimer = pTimer == NULL ? 0 : *pTimer;
     }
     return cLib_calcTimer(&mTimer) == 0;
 }
 
 int daTag_Evt_c::doEvtCutTalk(int param_0) {
+    int* pTimer = NULL;
     if (dComIfGp_getEventManager().getIsAddvance(param_0)) {
-        mMsgFlow.init(this, *dComIfGp_evmng_getMyIntegerP(param_0, "flowNodeNo"), 0, NULL);
+        pTimer = dComIfGp_evmng_getMyIntegerP(param_0, "flowNodeNo");
+        mMsgFlow.init(this, *pTimer, 0, NULL);
         return 0;
     } else {
         return mMsgFlow.doFlow(this, NULL, 0);
@@ -192,6 +201,7 @@ int daTag_Evt_c::doEvtCutTalk(int param_0) {
 }
 
 int daTag_Evt_c::doEvtCutNext(int param_0) {
+    int* pTimer = NULL;
     if (dComIfGp_getEventManager().getIsAddvance(param_0)) {
         if ((field_0x5E4 == 0 || field_0x5E4 == 1) && field_0x5DE != 0xFF) {
             dComIfGs_onSwitch(field_0x5DE, fopAcM_GetRoomNo(this));

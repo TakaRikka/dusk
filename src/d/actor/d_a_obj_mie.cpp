@@ -58,29 +58,18 @@ void daObj_Mie_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 }
 
 void daObj_Mie_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genSlider("注目オフセット  ", &m.focus_offset, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("重力            ", &m.gravity, -100.0f, 100.0f, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    ctx->genSlider("スケ−ル        ", &m.scale, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("リアル影サイズ  ", &m.real_shadow_size, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("体重            ", &m.weight, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("高さ            ", &m.height, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("ひざ丈          ", &m.knee_length, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("幅              ", &m.width, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("発射速度        ", &m.firing_rate, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("発射角度        ", &m.launch_angle, 0.0f, 90.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("浮きオフセット  ", &m.floating_offset, -100.0f, 100.0f, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("注目オフセット  ", &m.focus_offset, 0.0f, 1000.0f);
+    ctx->genSlider("重力            ", &m.gravity, -100.0f, 100.0f);
+    ctx->genSlider("スケ−ル        ", &m.scale, 0.0f, 100.0f);
+    ctx->genSlider("リアル影サイズ  ", &m.real_shadow_size, 0.0f, 10000.0f);
+    ctx->genSlider("体重            ", &m.weight, 0.0f, 255.0f);
+    ctx->genSlider("高さ            ", &m.height, 0.0f, 1000.0f);
+    ctx->genSlider("ひざ丈          ", &m.knee_length, 0.0f, 1000.0f);
+    ctx->genSlider("幅              ", &m.width, 0.0f, 1000.0f);
+    ctx->genSlider("発射速度        ", &m.firing_rate, 0.0f, 1000.0f);
+    ctx->genSlider("発射角度        ", &m.launch_angle, 0.0f, 90.0f);
+    ctx->genSlider("浮きオフセット  ", &m.floating_offset, -100.0f, 100.0f);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 

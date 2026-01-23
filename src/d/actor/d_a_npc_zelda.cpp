@@ -65,7 +65,7 @@ daNpc_Zelda_HIO_c::daNpc_Zelda_HIO_c() {
 void daNpc_Zelda_HIO_c::genMessage(JORMContext* ctx) {
     daNpcT_cmnGenMessage(ctx, &m.common);
     ctx->genButton
-              ("ファイル書き出し",0x40000002,0,NULL,0xffff,0xffff,0x200,0x18);
+              ("ファイル書き出し",0x40000002);
 }
 
 void daNpc_Zelda_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
@@ -285,7 +285,7 @@ int daNpc_Zelda_c::CreateHeap() {
 
 int daNpc_Zelda_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Zelda_c -> Delete\n", g_Counter.mCounter0, this);
-    fpc_ProcID unusedId = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_ZELDA");
     this->~daNpc_Zelda_c();
     return 1;
 }

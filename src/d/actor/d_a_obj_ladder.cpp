@@ -117,36 +117,36 @@ void Hio_c::dt() {
 
 void Hio_c::genMessage(JORMContext* ctx) {
     // ladder
-    ctx->genLabel("§ はしご  §\n", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("§ はしご  §\n", 0);
     // reset to initial position
-    ctx->genButton("初期位置に", 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genButton("初期位置に", 1);
     // attack
-    ctx->genButton("アタック", 2, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genButton("アタック", 2);
     // gravity
-    ctx->genSlider("重力", &attr.gravity, -30.0f, 0.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("重力", &attr.gravity, -30.0f, 0.0f);
     // viscous resistance
-    ctx->genSlider("粘性抵抗", &attr.viscous_resistance, 0.0f, 0.1f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("粘性抵抗", &attr.viscous_resistance, 0.0f, 0.1f);
     // inertia resistance
-    ctx->genSlider("慣性抵抗", &attr.inertia_resistance, 0.0f, 0.1f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("慣性抵抗", &attr.inertia_resistance, 0.0f, 0.1f);
     // reflectance
-    ctx->genSlider("反射率", &attr.reflectance, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("反射率", &attr.reflectance, 0.0f, 1.0f);
     //
     // number of bounces
-    ctx->genSlider("バウンド回数", &attr.num_of_bounces, 0, 10, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("バウンド回数", &attr.num_of_bounces, 0, 10);
     // Bound Vol_0, 1, 2, 3
-    ctx->genSlider("バウンド Vol_0", &attr.bound_vol_0, 0, 100, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("バウンド Vol_1", &attr.bound_vol_1, 0, 100, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("バウンド Vol_2", &attr.bound_vol_2, 0, 100, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("バウンド Vol_3", &attr.bound_vol_3, 0, 100, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("バウンド Vol_0", &attr.bound_vol_0, 0, 100);
+    ctx->genSlider("バウンド Vol_1", &attr.bound_vol_1, 0, 100);
+    ctx->genSlider("バウンド Vol_2", &attr.bound_vol_2, 0, 100);
+    ctx->genSlider("バウンド Vol_3", &attr.bound_vol_3, 0, 100);
     //
     // vibration speed x, y
-    ctx->genSlider("vib 速度 x", &attr.vibration_speed_x, 0, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("vib 速度 y", &attr.vibration_speed_y, 0, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("vib 速度 x", &attr.vibration_speed_x, 0, 0x7fff);
+    ctx->genSlider("vib 速度 y", &attr.vibration_speed_y, 0, 0x7fff);
     // vibration time
-    ctx->genSlider("vib 時間", &attr.vibration_timer, 0, 50, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("vib 時間", &attr.vibration_timer, 0, 50);
     // vibration amplitude x, y
-    ctx->genSlider("vib 振幅 x", &attr.vibration_amp_x, 0.0f, 5.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("vib 振幅 y", &attr.vibration_amp_y, 0.0f, 5.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("vib 振幅 x", &attr.vibration_amp_x, 0.0f, 5.0f);
+    ctx->genSlider("vib 振幅 y", &attr.vibration_amp_y, 0.0f, 5.0f);
 }
 
 void Hio_c::listenPropertyEvent(const JORPropertyEvent* property) {

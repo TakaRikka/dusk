@@ -759,13 +759,14 @@ static bool daMant_IsDelete(mant_class* i_this) {
 }
 
 static int daMant_Delete(mant_class* i_this) {
+    fopAcM_RegisterDeleteID(i_this, "Mant");
     return 1;
 }
 
 static int daMant_Create(fopAc_ac_c* i_this) {
     mant_class* m_this = (mant_class*)i_this;
 
-    fpc_ProcID unusedId = fopAcM_GetID(m_this);
+    fopAcM_RegisterCreateID(m_this, "Mant");
 
     fopAcM_ct(m_this, mant_class);
     //m_this->field_0x0570.field_0x74 = 0;

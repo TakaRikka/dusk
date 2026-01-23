@@ -5,8 +5,9 @@
 
 #include "d/actor/d_a_alink.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
+#include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
-static int daAlink_modelCallBack(J3DJoint* p_joint, int param_1);
+static int daAlink_modelCallBack(J3DJoint* i_joint, int param_1);
 static int daAlink_headModelCallBack(J3DJoint* i_joint, int param_1);
 static int daAlink_wolfModelCallBack(J3DJoint* i_joint, int param_1);
 
@@ -24,14 +25,6 @@ void daAlink_c::setArcName(BOOL i_isWolf) {
     }
 }
 
-inline bool checkCarvingWoodShieldEquip() {
-    return dComIfGs_getSelectEquipShield() == fpcNm_ITEM_WOOD_SHIELD;
-}
-
-inline bool checkShopWoodShieldEquip() {
-    return dComIfGs_getSelectEquipShield() == fpcNm_ITEM_SHIELD;
-}
-
 void daAlink_c::setShieldArcName() {
     if (checkCarvingWoodShieldEquip() || !checkShieldGet()) {
         mShieldArcName = l_cWShdArcName;
@@ -44,8 +37,13 @@ void daAlink_c::setShieldArcName() {
 
 void daAlink_c::setOriginalHeap(JKRExpHeap** i_ppheap, u32 i_size) {
     if (*i_ppheap == NULL) {
-        *i_ppheap =
-            JKRExpHeap::create(ROUND(i_size, 0x10) + 0xA0, mDoExt_getGameHeap(), true);
+        u32 var_r29 = 0x90;
+        u32 var_r28 = 0x10;
+        u32 size = ROUND(i_size, 16);
+        JKRHeap* parent = mDoExt_getGameHeap();
+
+        JKRExpHeap* heap = JKRExpHeap::create(size + (var_r29 + var_r28), parent, true);
+        *i_ppheap = heap;
     }
 }
 
@@ -91,7 +89,8 @@ int daAlink_c::loadModelDVD() {
                 mClothesChangeWaitTimer = 0;
                 changeLink(1);
             } else {
-                if (dComIfG_resLoad(&mPhaseReq, mArcName, mpArcHeap) == cPhs_COMPLEATE_e) {
+                int phase_state = dComIfG_resLoad(&mPhaseReq, mArcName, mpArcHeap);
+                if (phase_state == cPhs_COMPLEATE_e) {
                     mClothesChangeWaitTimer = 0;
 
                     if (mProcID == PROC_METAMORPHOSE || mProcID == PROC_METAMORPHOSE_ONLY) {
@@ -134,8 +133,8 @@ int daAlink_c::loadShieldModelDVD() {
             mpShieldArcHeap->freeAll();
             setShieldArcName();
         } else if (mShieldChangeWaitTimer == 1) {
-            if (dComIfG_resLoad(&mShieldPhaseReq, mShieldArcName, mpShieldArcHeap) == cPhs_COMPLEATE_e)
-            {
+            int phase_state = dComIfG_resLoad(&mShieldPhaseReq, mShieldArcName, mpShieldArcHeap);
+            if (phase_state == cPhs_COMPLEATE_e) {
                 mShieldChangeWaitTimer = 0;
                 setShieldModel();
             } else {
@@ -151,6 +150,7 @@ int daAlink_c::loadShieldModelDVD() {
 
 void daAlink_c::changeModelDataDirect(int param_0) {
     u16 i;
+    J3DModelData* modelData;
 
     field_0x064C = mpLinkModel->getModelData();
     field_0x06c0 = mpLinkFaceModel->getModelData();
@@ -164,14 +164,14 @@ void daAlink_c::changeModelDataDirect(int param_0) {
             field_0x064C->getJointNodePointer(i)->setCallBack(daAlink_modelCallBack);
         }
 
-        J3DModelData* head_modelData = mpLinkHatModel->getModelData();
-        for (i = 1; i < head_modelData->getJointNum(); i++) {
-            head_modelData->getJointNodePointer(i)->setCallBack(daAlink_headModelCallBack);
+        modelData = mpLinkHatModel->getModelData();
+        for (i = 1; i < modelData->getJointNum(); i++) {
+            modelData->getJointNodePointer(i)->setCallBack(daAlink_headModelCallBack);
         }
 
         if (param_0) {
-            if (field_0x2154 != NULL) {
-                field_0x06c0->entryTexNoAnimator(field_0x2154);
+            if (mpFaceBtp != NULL) {
+                field_0x06c0->entryTexNoAnimator(mpFaceBtp);
             }
 
             if (mpFaceBtk != NULL) {
@@ -188,14 +188,14 @@ void daAlink_c::changeModelDataDirect(int param_0) {
             field_0x064C->getJointNodePointer(i)->setCallBack(NULL);
         }
 
-        J3DModelData* head_modelData = mpLinkHatModel->getModelData();
-        for (i = 1; i < head_modelData->getJointNum(); i++) {
-            head_modelData->getJointNodePointer(i)->setCallBack(NULL);
+        modelData = mpLinkHatModel->getModelData();
+        for (i = 1; i < modelData->getJointNum(); i++) {
+            modelData->getJointNodePointer(i)->setCallBack(NULL);
         }
 
         if (!checkNoResetFlg2(daPy_FLG2(FLG2_UNK_100000 | FLG2_UNK_80000))) {
             for (i = 6; i < 8; i++) {
-                head_modelData->getJointNodePointer(i)->setCallBack(daAlink_headModelCallBack);
+                modelData->getJointNodePointer(i)->setCallBack(daAlink_headModelCallBack);
             }
         }
     }
@@ -217,8 +217,8 @@ void daAlink_c::changeModelDataDirectWolf(int param_0) {
         }
 
         if (param_0) {
-            if (field_0x2154 != NULL) {
-                field_0x06c0->entryTexNoAnimator(field_0x2154);
+            if (mpFaceBtp != NULL) {
+                field_0x06c0->entryTexNoAnimator(mpFaceBtp);
             }
 
             if (mpFaceBtk != NULL) {
@@ -240,61 +240,61 @@ void daAlink_c::initStatusWindow() {
     onNoResetFlg2(FLG2_STATUS_WINDOW_DRAW);
     
     void* tmpBuffer = new (0x20) void*[0x500];
-    JUT_ASSERT(0x18A, tmpBuffer);
+    JUT_ASSERT(394, tmpBuffer);
 
-    u16 var_r28, var_r31, var_r30;
+    u16 bckResIdx, btpResIdx, btkResIdx;
     if (checkWolf()) {
-        var_r28 = 0x2FF;
-        var_r31 = 0x408;
-        var_r30 = 0x3A7;
+        bckResIdx = dRes_ID_ALANM_BCK_WL_WAITA_e;
+        btpResIdx = dRes_ID_ALANM_BTP_WL_FA_e;
+        btkResIdx = dRes_ID_ALANM_BTK_WL_FA_e;
         changeModelDataDirectWolf(0);
     } else {
-        var_r28 = 0x26A;
-        var_r31 = 0x3AF;
-        var_r30 = 0x32C;
+        bckResIdx = dRes_ID_ALANM_BCK_WAITS_e;
+        btpResIdx = dRes_ID_ALANM_BTP_FA_e;
+        btkResIdx = dRes_ID_ALANM_BTK_FA_e;
 
         if (checkZoraWearAbility() && !checkZoraWearMaskDraw()) {
             field_0x06f0->hide();
         }
+
         changeModelDataDirect(0);
     }
 
-    JKRReadIdxResource(tmpBuffer, 0x1400, var_r28, dComIfGp_getAnmArchive());
+    JKRReadIdxResource(tmpBuffer, 0x1400, bckResIdx, dComIfGp_getAnmArchive());
     m_sWindowBck = new mDoExt_bckAnm();
-    JUT_ASSERT(0x1AC, m_sWindowBck);
+    JUT_ASSERT(428, m_sWindowBck);
 
-    J3DAnmTransform* bck = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(tmpBuffer, J3DLOADER_UNK_FLAG0);
-    if (!m_sWindowBck->init(bck, 1, 2, 1.0f, 0, -1, false)) {
+    if (!m_sWindowBck->init((J3DAnmTransform*)J3DAnmLoaderDataBase::load(tmpBuffer), TRUE, 2, 1.0f, 0, -1, false)) {
         JUT_ASSERT(433, FALSE);
     }
 
     tmpBuffer = new (0x20) void*[0x100];
-    JUT_ASSERT(0x1B5, tmpBuffer);
+    JUT_ASSERT(437, tmpBuffer);
 
-    JKRReadIdxResource(tmpBuffer, 0x400, var_r31, dComIfGp_getAnmArchive());
+    JKRReadIdxResource(tmpBuffer, 0x400, btpResIdx, dComIfGp_getAnmArchive());
     J3DAnmTexPattern* btp = (J3DAnmTexPattern*)J3DAnmLoaderDataBase::load(tmpBuffer, J3DLOADER_UNK_FLAG0);
     btp->setFrame(0.0f);
     btp->searchUpdateMaterialID(field_0x06c0);
     field_0x06c0->entryTexNoAnimator(btp);
 
     tmpBuffer = new (0x20) void*[0x100];
-    JUT_ASSERT(0x1C1, tmpBuffer);
+    JUT_ASSERT(449, tmpBuffer);
 
-    JKRReadIdxResource(tmpBuffer, 0x400, var_r30, dComIfGp_getAnmArchive());
+    JKRReadIdxResource(tmpBuffer, 0x400, btkResIdx, dComIfGp_getAnmArchive());
     J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)J3DAnmLoaderDataBase::load(tmpBuffer, J3DLOADER_UNK_FLAG0);
     btk->setFrame(0.0f);
     btk->searchUpdateMaterialID(field_0x06c0);
     field_0x06c0->entryTexMtxAnimator(btk);
 }
 
-
 void daAlink_c::statusWindowExecute(const cXyz* i_pos, s16 i_angle) {
     if (loadModelDVD()) {
         if (mSwordChangeWaitTimer != 0) {
             mSwordChangeWaitTimer--;
         }
+
         loadShieldModelDVD();
-        setSelectEquipItem(1);
+        setSelectEquipItem(TRUE);
         
         if (mSwordChangeWaitTimer >= 30) {
             mSwordChangeWaitTimer = 0;
@@ -367,7 +367,7 @@ void daAlink_c::resetStatusWindow() {
     setMatrix();
     mpLinkModel->calc();
     onNoResetFlg2(FLG2_STATUS_WINDOW_DRAW);
-    setSelectEquipItem(0);
+    setSelectEquipItem(FALSE);
 
     if (checkWolf()) {
         setWolfItemMatrix();

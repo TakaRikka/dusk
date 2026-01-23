@@ -103,7 +103,8 @@ int daObjCrope_c::create() {
 }
 
 static int daObjCrope_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daObjCrope_c, i_this, "Obj_Crope");
+    daObjCrope_c* a_this = (daObjCrope_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "Obj_Crope");
     return static_cast<daObjCrope_c*>(i_this)->create();
 }
 

@@ -323,8 +323,8 @@ static int daNpc_Df_IsDelete(npc_df_class* i_this) {
 }
 
 static int daNpc_Df_Delete(npc_df_class* i_this) {
-    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    fpc_ProcID id = fopAcM_GetID(actor);
+    fopAc_ac_c* actor = &i_this->actor;
+    fopAcM_RegisterDeleteID(&i_this->actor, "Npc_Df");
 
     if (i_this->field_0x573) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Npc_df", 3);

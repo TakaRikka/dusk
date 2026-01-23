@@ -231,52 +231,52 @@ daE_RD_HIO_c::daE_RD_HIO_c() {
 #if DEBUG
 void daE_RD_HIO_c::genMessage(JORMContext* ctext) {
     // Rider (a.k.a. Bulblins)
-    ctext->genLabel("  ライダー", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genLabel("  ライダー", 0x80000001);
     // basic size
-    ctext->genSlider("基本サイズ", &model_size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("基本サイズ", &model_size, 0.0f, 5.0f);
     // leader size ratio
-    ctext->genSlider("リーダーサイズ比", &leader_size_ratio, 0.0f, 2.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("リーダーサイズ比", &leader_size_ratio, 0.0f, 2.0f);
     // movement speed
-    ctext->genSlider("移動速度", &movement_speed, 0.0f, 20.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("移動速度", &movement_speed, 0.0f, 20.0f);
     // ~~ In the case of a club-wielding soldier ~~
-    ctext->genLabel(" ～～  こん棒兵の場合  ～～", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genLabel(" ～～  こん棒兵の場合  ～～", 0x80000001);
     // speed rush
-    ctext->genSlider("突進速度", &dash_speed, 0.0f, 40.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("突進速度", &dash_speed, 0.0f, 40.0f);
     // combat start range
-    ctext->genSlider("戦闘開始範囲", &battle_init_range, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("戦闘開始範囲", &battle_init_range, 0.0f, 2000.0f);
     // attack range
-    ctext->genSlider("攻撃開始範囲", &attack_init_range, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("攻撃開始範囲", &attack_init_range, 0.0f, 1000.0f);
     // swing speed
-    ctext->genSlider("振り速さ", &swing_speed, 0.0f, 3.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genLabel("  ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("振り速さ", &swing_speed, 0.0f, 3.0f);
+    ctext->genLabel("  ", 0x80000001);
     // ~~ In the case of archers ~~
-    ctext->genLabel(" ～～  矢兵の場合  ～～", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genLabel(" ～～  矢兵の場合  ～～", 0x80000001);
     // Command → Ready stance
-    ctext->genSlider("号令→構えの間", &command_to_ready_stance, 0, 200, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("号令→構えの間", &command_to_ready_stance, 0, 200);
     // attack range
-    ctext->genSlider("攻撃範囲", &attack_range, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("攻撃範囲", &attack_range, 0.0f, 2000.0f);
     // riding firing distance
-    ctext->genSlider("騎乗発射距離", &mounted_launch_distance, 0.0f, 3000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("騎乗発射距離", &mounted_launch_distance, 0.0f, 3000.0f);
     // wolf takedown power Y
-    ctext->genSlider("狼倒れ力Y", &wolf_falling_power_y, 0.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("狼倒れ力Y", &wolf_falling_power_y, 0.0f, 50.0f);
     // wolf takedown power Z
-    ctext->genSlider("狼倒れ力Z", &wolf_falling_power_z, 0.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("狼倒れ力Z", &wolf_falling_power_z, 0.0f, 50.0f);
     // flying Z (Rider suspended)
-    ctext->genSlider("飛びＺ（騎乗停止）", &jump_z_suspended, 0.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("飛びＺ（騎乗停止）", &jump_z_suspended, 0.0f, 50.0f);
     // flying Z
-    ctext->genSlider("飛びＺ", &jump_z, 0.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("飛びＺ", &jump_z, 0.0f, 50.0f);
     // flying y
-    ctext->genSlider("飛びＹ", &jump_y, 0.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("飛びＹ", &jump_y, 0.0f, 50.0f);
     // jump g
-    ctext->genSlider("飛びＧ", &jump_g, 0.0f, 20.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("飛びＧ", &jump_g, 0.0f, 20.0f);
     // invincible
-    ctext->genCheckBox("不死身", &invulnerable, 1, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genCheckBox("不死身", &invulnerable, 0x1);
     // eye polygons
-    ctext->genCheckBox("目ポリゴン", &eye_polygon, 1, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genCheckBox("目ポリゴン", &eye_polygon, 0x1);
     // one-hit kill
-    ctext->genCheckBox("一撃必殺", &one_hit_kill, 1, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genCheckBox("一撃必殺", &one_hit_kill, 0x1);
     // ikki (da) size
-    ctext->genSlider("一騎（ダ）サイズ", &field_0x3c, 0.0f, 150.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("一騎（ダ）サイズ", &field_0x3c, 0.0f, 150.0f);
 }
 #endif
 
@@ -5237,7 +5237,7 @@ static void action(e_rd_class* i_this) {
 
 
     if (i_this->field_0x9bc == 0) {
-        a_this->attention_info.distances[2] = 3;
+        a_this->attention_info.distances[fopAc_attn_BATTLE_e] = 3;
         if (i_this->field_0x9ec) {
             cMtx_YrotS(*calc_mtx, i_this->field_0xa0c.y);
             if (i_this->field_0xaf0 == 0) {

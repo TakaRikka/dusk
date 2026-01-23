@@ -138,23 +138,23 @@ dCstick_c::dCstick_c() {
 #if DEBUG
 void dCstick_c::genMessage(JORMContext* ctx) {
     // "- Switch"
-    ctx->genLabel("- スイッチ", 0, 0, NULL, -1, -1, 0x200);
+    ctx->genLabel("- スイッチ", 0);
     // " Threshold: Low"
-    ctx->genSlider(" しきい値 低", &mThresholdLow, 0.0f, 1.0f, 0, NULL, -1, -1, 0x200);
+    ctx->genSlider(" しきい値 低", &mThresholdLow, 0.0f, 1.0f);
     // "          High"
-    ctx->genSlider("          高", &mThresholdHigh, 0.0f, 1.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider("          高", &mThresholdHigh, 0.0f, 1.0f);
     // " Input speed"
-    ctx->genSlider(" 入力スピード", &mInputSpeed, 0x0, 0x50, 0, 0, -1);
+    ctx->genSlider(" 入力スピード", &mInputSpeed, 0x0, 0x50);
 
-    ctx->genLabel("-", 0, 0, NULL, -1, -1, 0x200);
+    ctx->genLabel("-", 0);
     // " Debug display"
-    ctx->genCheckBox(" デバッグ表示", &mIsDebugDisplay, -0x8000, 0, 0, -1, -1);
+    ctx->genCheckBox(" デバッグ表示", &mIsDebugDisplay, 0x8000);
     // "   Display position X"
-    ctx->genSlider("   表示位置 Ｘ", &mDisplayPosX, 0x0, 0x280, 0, 0, -1);
+    ctx->genSlider("   表示位置 Ｘ", &mDisplayPosX, 0x0, 0x280);
     // "            Y"
-    ctx->genSlider("            Ｙ", &mDisplayPosY, 0x0, 0x1e0, 0, 0, -1);
+    ctx->genSlider("            Ｙ", &mDisplayPosY, 0x0, 0x1e0);
 
-    ctx->genLabel("-", 0, 0, NULL, -1, -1, 0x200);
+    ctx->genLabel("-", 0);
 }
 #endif
 
@@ -193,51 +193,51 @@ dCamBGChk_c::dCamBGChk_c() {
 
 #if DEBUG
 void dCamBGChk_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("-", 0, 0, 0, -1, -1, 0x200);
+    ctx->genLabel("-", 0);
     // "- Floor check"
-    ctx->genLabel("- 床チェック", 0, 0, 0, -1, -1, 0x200);
+    ctx->genLabel("- 床チェック", 0);
     // " Margin"
-    ctx->genSlider(" マージン", &mFloorMargin, 0.0f, 1000.0f, 0, 0, -1, -1, 0x200);
-    ctx->genLabel("-",  0, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" マージン", &mFloorMargin, 0.0f, 1000.0f);
+    ctx->genLabel("-",  0);
     // "- Forward check"
-    ctx->genLabel("- 前方チェック", 0, 0, 0, -1, -1, 0x200);
+    ctx->genLabel("- 前方チェック", 0);
     // " [0]Angle"
-    ctx->genSlider(" [0]角度", &mChkInfo[0].mChkAngle, 1.0f, 90.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" [0]角度", &mChkInfo[0].mChkAngle, 1.0f, 90.0f);
     // " [0]Length (height X)"
-    ctx->genSlider(" [0]長さ(身長Ｘ)", &mChkInfo[0].mDistance, 1.0f, 25.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" [0]長さ(身長Ｘ)", &mChkInfo[0].mDistance, 1.0f, 25.0f);
     // " [0]Weight+"
-    ctx->genSlider(" [0]ウエイト＋", &mChkInfo[0].mWeightH, 0.0f, 1.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" [0]ウエイト＋", &mChkInfo[0].mWeightH, 0.0f, 1.0f);
     // " [0]Weight-"
-    ctx->genSlider(" [0]ウエイト－", &mChkInfo[0].mWeightL, 0.0f, 1.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" [0]ウエイト－", &mChkInfo[0].mWeightL, 0.0f, 1.0f);
     // " [1]Angle"
-    ctx->genSlider(" [1]角度", &mChkInfo[1].mChkAngle, 1.0f, 90.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" [1]角度", &mChkInfo[1].mChkAngle, 1.0f, 90.0f);
     // " [1]Length (height X)"
-    ctx->genSlider(" [1]長さ(身長Ｘ)", &mChkInfo[1].mDistance, 1.0f, 25.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" [1]長さ(身長Ｘ)", &mChkInfo[1].mDistance, 1.0f, 25.0f);
     // " [1]Weight+"
-    ctx->genSlider(" [1]ウエイト＋", &mChkInfo[1].mWeightH, 0.0f, 1.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" [1]ウエイト＋", &mChkInfo[1].mWeightH, 0.0f, 1.0f);
     // " [1]Weight-"
-    ctx->genSlider(" [1]ウエイト－", &mChkInfo[1].mWeightL, 0.0f, 1.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" [1]ウエイト－", &mChkInfo[1].mWeightL, 0.0f, 1.0f);
     // " Margin"
-    ctx->genSlider(" マージン", &mFwdBackMargin, 0.0f, 1000.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" マージン", &mFwdBackMargin, 0.0f, 1000.0f);
     // " Cusion"
-    ctx->genSlider(" クッション", &mFwdCushion, 0.0f, 1.0f, 0, 0, -1, -1, 0x200);
-    ctx->genLabel("-", 0, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" クッション", &mFwdCushion, 0.0f, 1.0f);
+    ctx->genLabel("-", 0);
     // "- Per camera"
-    ctx->genLabel("- カメラあたり", 0, 0, 0, -1, -1, 0x200);
+    ctx->genLabel("- カメラあたり", 0);
     // " Margin"
-    ctx->genSlider(" マージン", &mGazeBackMargin, 0.0f, 1000.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" マージン", &mGazeBackMargin, 0.0f, 1000.0f);
     // BUG: second parameter should be &mCornerAngleMax
     // " Corner wall detection angle"
-    ctx->genSlider(" 角壁判別角度", &mCornerCushion, 0.0f, 180.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" 角壁判別角度", &mCornerCushion, 0.0f, 180.0f);
     // " Corner cushion"
-    ctx->genSlider(" 角クッション", &mCornerCushion, 0.0f, 1.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" 角クッション", &mCornerCushion, 0.0f, 1.0f);
     // " Wall cushion"
-    ctx->genSlider(" 壁クッション", &mWallCushion, 0.0f, 1.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" 壁クッション", &mWallCushion, 0.0f, 1.0f);
     // " Wall up distance"
-    ctx->genSlider(" 壁上がり距離", &mWallUpDistance, 0.0f, 1000.0f, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" 壁上がり距離", &mWallUpDistance, 0.0f, 1000.0f);
     // " Wall back cushion"
-    ctx->genSlider(" 壁戻クッション", &mWallBackCushion, 0.0f, 1.0f, 0, 0, -1, -1, 0x200);
-    ctx->genLabel("-", 0, 0, 0, -1, -1, 0x200);
+    ctx->genSlider(" 壁戻クッション", &mWallBackCushion, 0.0f, 1.0f);
+    ctx->genLabel("-", 0);
 }
 #endif
 
@@ -300,179 +300,135 @@ int dCamParam_c::SearchStyle(u32 param_0) {
 
 #if DEBUG
 void dCamParam_c::genMessage(JORMContext* ctx) {
-    ctx->genSlider(" STYLE ID", &mStyleID, 0, mStyleNum, 0x40000000, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" STYLE ID", &mStyleID, 0, mStyleNum, 0x40000000);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "Origin C"
-    ctx->genLabel("- 原点Ｃ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 原点Ｃ", 0);
     // "Front/back (GAPZ)"
-    ctx->genSlider(" 前後(GAPZ)", &mCurrentStyle->mParams[CAM_PARAM_GAPZ], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 前後(GAPZ)", &mCurrentStyle->mParams[CAM_PARAM_GAPZ], -10000.0f, 10000.0f);
     // "Left/right (GAPX)"
-    ctx->genSlider(" 左右(GAPX)", &mCurrentStyle->mParams[CAM_PARAM_GAPX], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 左右(GAPX)", &mCurrentStyle->mParams[CAM_PARAM_GAPX], -10000.0f, 10000.0f);
     // "Distance (CDST)"
-    ctx->genSlider(" 距離(CDST)", &mCurrentStyle->mParams[CAM_PARAM_CDST], -1.0f, 1.0f, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 距離(CDST)", &mCurrentStyle->mParams[CAM_PARAM_CDST], -1.0f, 1.0f);
     // "Angle (CANG)"
-    ctx->genSlider(" 角度(CANG)", &mCurrentStyle->mParams[CAM_PARAM_CANG], -1.0f, 1.0f, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 角度(CANG)", &mCurrentStyle->mParams[CAM_PARAM_CANG], -1.0f, 1.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Origin point high"
-    ctx->genLabel("- 原点高", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 原点高", 0);
     // "Standard (HBAS)"
-    ctx->genSlider(" 標準(HBAS)", &mCurrentStyle->mParams[CAM_PARAM_HBAS], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 標準(HBAS)", &mCurrentStyle->mParams[CAM_PARAM_HBAS], -10000.0f, 10000.0f);
     // "Minimum (HMIN)"
-    ctx->genSlider(" 最小(HMIN)", &mCurrentStyle->mParams[CAM_PARAM_HMIN], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最小(HMIN)", &mCurrentStyle->mParams[CAM_PARAM_HMIN], -10000.0f, 10000.0f);
     // "Maximum (HMAX)"
-    ctx->genSlider(" 最大(HMAX)", &mCurrentStyle->mParams[CAM_PARAM_HMAX], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最大(HMAX)", &mCurrentStyle->mParams[CAM_PARAM_HMAX], -10000.0f, 10000.0f);
     // "Nearest (HNAR)"
-    ctx->genSlider(" 最近(HNAR)", &mCurrentStyle->mParams[CAM_PARAM_HNAR], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最近(HNAR)", &mCurrentStyle->mParams[CAM_PARAM_HNAR], -10000.0f, 10000.0f);
     // "Farthest (HFAR)"
-    ctx->genSlider(" 最遠(HFAR)", &mCurrentStyle->mParams[CAM_PARAM_HFAR], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最遠(HFAR)", &mCurrentStyle->mParams[CAM_PARAM_HFAR], -10000.0f, 10000.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Distance"
-    ctx->genLabel("- 距離", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider(" 標準(RBAS)", &mCurrentStyle->mParams[CAM_PARAM_RBAS], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider(" 最小(RMIN)", &mCurrentStyle->mParams[CAM_PARAM_RMIN], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider(" 最大(RMAX)", &mCurrentStyle->mParams[CAM_PARAM_RMAX], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider(" 最近(RNAR)", &mCurrentStyle->mParams[CAM_PARAM_RNAR], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider(" 最遠(RFAR)", &mCurrentStyle->mParams[CAM_PARAM_RFAR], -10000.0f, 10000.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 距離", 0);
+    ctx->genSlider(" 標準(RBAS)", &mCurrentStyle->mParams[CAM_PARAM_RBAS], -10000.0f, 10000.0f);
+    ctx->genSlider(" 最小(RMIN)", &mCurrentStyle->mParams[CAM_PARAM_RMIN], -10000.0f, 10000.0f);
+    ctx->genSlider(" 最大(RMAX)", &mCurrentStyle->mParams[CAM_PARAM_RMAX], -10000.0f, 10000.0f);
+    ctx->genSlider(" 最近(RNAR)", &mCurrentStyle->mParams[CAM_PARAM_RNAR], -10000.0f, 10000.0f);
+    ctx->genSlider(" 最遠(RFAR)", &mCurrentStyle->mParams[CAM_PARAM_RFAR], -10000.0f, 10000.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genLabel("- 縦角", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
+    ctx->genLabel("- 縦角", 0);
     // "Standard (VBAS)"
-    ctx->genSlider(" 標準(VBAS)", &mCurrentStyle->mParams[CAM_PARAM_VBAS], -180.0f, 180.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 標準(VBAS)", &mCurrentStyle->mParams[CAM_PARAM_VBAS], -180.0f, 180.0f);
     // "Minimuum (VMIN)"
-    ctx->genSlider(" 最小(VMIN)", &mCurrentStyle->mParams[CAM_PARAM_VMIN], -180.0f, 180.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最小(VMIN)", &mCurrentStyle->mParams[CAM_PARAM_VMIN], -180.0f, 180.0f);
     // "Maximum (VMAX)"
-    ctx->genSlider(" 最大(VMAX)", &mCurrentStyle->mParams[CAM_PARAM_VMAX], -180.0f, 180.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最大(VMAX)", &mCurrentStyle->mParams[CAM_PARAM_VMAX], -180.0f, 180.0f);
     // "Nearest (VNAR)"
-    ctx->genSlider(" 最近(VNAR)", &mCurrentStyle->mParams[CAM_PARAM_VNAR], -180.0f, 180.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最近(VNAR)", &mCurrentStyle->mParams[CAM_PARAM_VNAR], -180.0f, 180.0f);
     // "Farthest (VFAR)"
-    ctx->genSlider(" 最遠(VFAR)", &mCurrentStyle->mParams[CAM_PARAM_VFAR], -180.0f, 180.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最遠(VFAR)", &mCurrentStyle->mParams[CAM_PARAM_VFAR], -180.0f, 180.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Horizontal angle"
-    ctx->genLabel("- 横角", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 横角", 0);
     // "Rotation speed (UTRN)"
-    ctx->genSlider(" 回速(UTRN)", &mCurrentStyle->mParams[CAM_PARAM_UTRN], -1.0f, 1.0f, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 回速(UTRN)", &mCurrentStyle->mParams[CAM_PARAM_UTRN], -1.0f, 1.0f);
     // "Lap behind (USLW)"
-    ctx->genSlider(" 回遅(USLW)", &mCurrentStyle->mParams[CAM_PARAM_USLW], -1.0f, 1.0f, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 回遅(USLW)", &mCurrentStyle->mParams[CAM_PARAM_USLW], -1.0f, 1.0f);
     // "Nearest (UNAR)"
-    ctx->genSlider(" 最近(UNAR)", &mCurrentStyle->mParams[CAM_PARAM_UNAR], -180.0f, 180.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最近(UNAR)", &mCurrentStyle->mParams[CAM_PARAM_UNAR], -180.0f, 180.0f);
     // "Farthest (UFAR)"
-    ctx->genSlider(" 最遠(UFAR)", &mCurrentStyle->mParams[CAM_PARAM_UFAR], -180.0f, 180.0f, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最遠(UFAR)", &mCurrentStyle->mParams[CAM_PARAM_UFAR], -180.0f, 180.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Field of view"
-    ctx->genLabel("- 画角", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 画角", 0);
     // "Standard (FBAS)"
-    ctx->genSlider(" 標準(FBAS)", &mCurrentStyle->mParams[CAM_PARAM_FBAS], -30.0f, 90.0f, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 標準(FBAS)", &mCurrentStyle->mParams[CAM_PARAM_FBAS], -30.0f, 90.0f);
     // "Minimum (FMIN)"
-    ctx->genSlider(" 最小(FMIN)", &mCurrentStyle->mParams[CAM_PARAM_FMIN], -30.0f, 90.0f, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最小(FMIN)", &mCurrentStyle->mParams[CAM_PARAM_FMIN], -30.0f, 90.0f);
     // "Maximum (FMAX)"
-    ctx->genSlider(" 最大(FMAX)", &mCurrentStyle->mParams[CAM_PARAM_FMAX], -30.0f, 90.0f, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最大(FMAX)", &mCurrentStyle->mParams[CAM_PARAM_FMAX], -30.0f, 90.0f);
     // "Nearest (FNAR)"
-    ctx->genSlider(" 最近(FNAR)", &mCurrentStyle->mParams[CAM_PARAM_FNAR], -30.0f, 90.0f, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最近(FNAR)", &mCurrentStyle->mParams[CAM_PARAM_FNAR], -30.0f, 90.0f);
     // "Farthest (FFAR)"
-    ctx->genSlider(" 最遠(FFAR)", &mCurrentStyle->mParams[CAM_PARAM_FFAR], -30.0f, 90.0f, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 最遠(FFAR)", &mCurrentStyle->mParams[CAM_PARAM_FFAR], -30.0f, 90.0f);
+    ctx->genLabel("-", 0);
 
     // "- Flag"
-    ctx->genLabel("- フラグ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- フラグ", 0);
     // "BG check (BGCHECK)"
-    ctx->genCheckBox(" ＢＧチェック(BGCHECK)", &mCurrentStyle->mFlags, 0x1, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" ＢＧチェック(BGCHECK)", &mCurrentStyle->mFlags, 0x1);
     // "BG check light (BGCHKLIGHT)"
-    ctx->genCheckBox(" ＢＧチェック軽(BGCHKLIGHT)", &mCurrentStyle->mFlags, 0x2, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" ＢＧチェック軽(BGCHKLIGHT)", &mCurrentStyle->mFlags, 0x2);
     // "Grass check (BUSHCHECK)"
-    ctx->genCheckBox(" 草チェック(BUSHCHECK)", &mCurrentStyle->mFlags, 0x8, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" 草チェック(BUSHCHECK)", &mCurrentStyle->mFlags, 0x8);
     // "Front check (FWDCHECK)"
-    ctx->genCheckBox(" 前方チェック(FWDCHECK)", &mCurrentStyle->mFlags, 0x4000, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" 前方チェック(FWDCHECK)", &mCurrentStyle->mFlags, 0x4000);
     // "CO check prohibited (COCHKOFF)"
-    ctx->genCheckBox(" ＣＯチェック禁止(COCHKOFF)", &mCurrentStyle->mFlags, 0x10, 0, NULL,
-                     0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" ＣＯチェック禁止(COCHKOFF)", &mCurrentStyle->mFlags, 0x10);
     // "R button zoom (RZOOM)"
-    ctx->genCheckBox(" Ｒボタンズーム(RZOOM)", &mCurrentStyle->mFlags, 0x400, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" Ｒボタンズーム(RZOOM)", &mCurrentStyle->mFlags, 0x400);
     // "Stick direct value (DIRECTSTK)"
-    ctx->genCheckBox(" スティック直値(DIRECTSTK)", &mCurrentStyle->mFlags, 0x100, 0, NULL,
-                     0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" スティック直値(DIRECTSTK)", &mCurrentStyle->mFlags, 0x100);
     // "Use map tool (USEMAPTOOL)"
-    ctx->genCheckBox(" マップツール使用(USEMAPTOOL)", &mCurrentStyle->mFlags, 0x200, 0, NULL,
-                     0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" マップツール使用(USEMAPTOOL)", &mCurrentStyle->mFlags, 0x200);
     // "No BG check (BGCHECKOFF)"
-    ctx->genCheckBox(" ＢＧチェック無(BGCHECKOFF)", &mCurrentStyle->mFlags, 0x4, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" ＢＧチェック無(BGCHECKOFF)", &mCurrentStyle->mFlags, 0x4);
     // "Forward check distance (FWDCHECKH)"
-    ctx->genCheckBox(" 前方チェック遠(FWDCHECKH)", &mCurrentStyle->mFlags, 0x20, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" 前方チェック遠(FWDCHECKH)", &mCurrentStyle->mFlags, 0x20);
     // "C-axis rotation prohibited (ROLLOFF)"
-    ctx->genCheckBox(" Ｃ回転禁止(ROLLOFF)", &mCurrentStyle->mFlags, 0x40, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" Ｃ回転禁止(ROLLOFF)", &mCurrentStyle->mFlags, 0x40);
     // "C pulling prohibited (HIGHOFF)"
-    ctx->genCheckBox(" Ｃ引き禁止(HIGHOFF)", &mCurrentStyle->mFlags, 0x80, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" Ｃ引き禁止(HIGHOFF)", &mCurrentStyle->mFlags, 0x80);
     // "General purpose 1 (WIDEUSE1)"
-    ctx->genCheckBox(" 汎用１(WIDEUSE1)", &mCurrentStyle->mFlags, 0x800, 0, NULL, 0xffff, 0xffff,
-                     0x200, 0x18);
+    ctx->genCheckBox(" 汎用１(WIDEUSE1)", &mCurrentStyle->mFlags, 0x800);
     // "General purpose 2 (WIDEUSE2)"
-    ctx->genCheckBox(" 汎用２(WIDEUSE2)", &mCurrentStyle->mFlags, 0x1000, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" 汎用２(WIDEUSE2)", &mCurrentStyle->mFlags, 0x1000);
     // "Target specification (TARGETUSE)"
-    ctx->genCheckBox(" 対象指定(TARGETUSE)", &mCurrentStyle->mFlags, 0x2000, 0, NULL, 0xffff,
-                     0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" 対象指定(TARGETUSE)", &mCurrentStyle->mFlags, 0x2000);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Map tools"
-    ctx->genLabel("- マップツール", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- マップツール", 0);
     // "Field of view"
-    ctx->genSlider(" 画角　", &mMapToolFovy, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 画角　", &mMapToolFovy, 0, 0xff);
     // "Argument 0"
-    ctx->genSlider(" 引数０", &mMapToolArg0, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 引数０", &mMapToolArg0, 0, 0xff);
     // "Argument 1"
-    ctx->genSlider(" 引数１", &mMapToolArg1, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 引数１", &mMapToolArg1, 0, 0xff);
     // "Argument 2"
-    ctx->genSlider(" 引数２", &mMapToolArg2, 0, 0xffff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 引数２", &mMapToolArg2, 0, 0xffff);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Output file"
-    ctx->genLabel("- ファイル出力", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- ファイル出力", 0);
     // "Save"
-    ctx->genButton(" 保存 ", 0x12d, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genButton(" 保存 ", 0x12d);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
 }
 
 void dCamParam_c::listenPropertyEvent(const JORPropertyEvent* event) {
@@ -674,24 +630,23 @@ f32 dCamSetup_c::PlayerHideDist() {
 void dCamSetup_c::genMessage(JORMContext* ctx) {
     int i;
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Debug"
-    ctx->genLabel("- デバッグ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- デバッグ", 0);
     // "Camera information display"
-    ctx->genCheckBox(" カメラ情報表示", &mDebugFlags, 0x8000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" カメラ情報表示", &mDebugFlags, 0x8000);
     // "Event information display"
-    ctx->genCheckBox(" イベント情報表示", &mDebugFlags, 0x40, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" イベント情報表示", &mDebugFlags, 0x40);
     // "Player 2D position"
-    ctx->genCheckBox(" プレイヤ２Ｄ位置", &mDebugFlags, 0x80, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" プレイヤ２Ｄ位置", &mDebugFlags, 0x80);
     // "Imaginary line"
-    ctx->genCheckBox(" イマジナリライン", &mDebugFlags, 0x100, 0, NULL, 0xffff, 0xffff, 0x200,
-                     0x18);
+    ctx->genCheckBox(" イマジナリライン", &mDebugFlags, 0x100);
     // "Location information"
-    ctx->genCheckBox(" 位置情報", &mDebugFlags, 0x200, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" 位置情報", &mDebugFlags, 0x200);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "Camera type switching"
-    ctx->startComboBox("カメラタイプ切替", &mForceType, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    ctx->startComboBox("カメラタイプ切替", &mForceType);
     // "Unused"
     ctx->genComboBoxItem("未使用", -1);
     for (i = 0; i < mTypeNum; i++) {
@@ -699,33 +654,30 @@ void dCamSetup_c::genMessage(JORMContext* ctx) {
     }
     ctx->endComboBox();
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
+    ctx->genLabel("-", 0);
     // "- Wolf special attack"
-    ctx->genLabel("- 狼特殊攻撃", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 狼特殊攻撃", 0);
     // "Return timer"
-    ctx->genSlider(" もどりタイマー", &mChargeTimer, 1, 3000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" もどりタイマー", &mChargeTimer, 1, 3000);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Screensaver"
-    ctx->genLabel("- スクリーンセーバー", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- スクリーンセーバー", 0);
     // "Enabled"
-    ctx->genCheckBox(" 有効", &mFlags2, 0x800, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" 有効", &mFlags2, 0x800);
     // "Initial wait time (s)"
-    ctx->genSlider(" 待ち時間最初(s)", &mScreensaverFirstWaitTimer, 1, 0xe10, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    ctx->genSlider(" 待ち時間最初(s)", &mScreensaverFirstWaitTimer, 1, 0xe10);
     // "Wait time"
-    ctx->genSlider(" 待ち時間(s)", &mScreensaverWaitTimer, 1, 0xe10, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" 待ち時間(s)", &mScreensaverWaitTimer, 1, 0xe10);
     // "Execution time"
-    ctx->genSlider(" 実行時間(s)", &mScreensaverExecTimer, 1, 0xe10, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" 実行時間(s)", &mScreensaverExecTimer, 1, 0xe10);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Event"
-    ctx->genLabel("- イベント", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- イベント", 0);
     // "Conversation cut switching"
-    ctx->startComboBox("会話カット切替", &mModeSwitchType, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    ctx->startComboBox("会話カット切替", &mModeSwitchType);
     // "Unused"
     ctx->genComboBoxItem("未使用", -1);
     // "00. Default"
@@ -808,103 +760,92 @@ void dCamSetup_c::genMessage(JORMContext* ctx) {
     ctx->genComboBoxItem("65.話し手腰上Ｂ", 65);
     ctx->endComboBox();
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "Short connection"
-    ctx->genSlider(" 短つなぎ", &mMapToolCamShortTimer, 0, 3000, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" 短つなぎ", &mMapToolCamShortTimer, 0, 3000);
     // "Long connection"
-    ctx->genSlider(" 長つなぎ", &mMapToolCamLongTimer, 0, 3000, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" 長つなぎ", &mMapToolCamLongTimer, 0, 3000);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Attention"
-    ctx->genLabel("- 注目", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 注目", 0);
     // "Switching timer"
-    ctx->genSlider(" 切替タイマー", &mLockonChangeTimer, 0, 400, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" 切替タイマー", &mLockonChangeTimer, 0, 400);
     // "Switching cushion"
-    ctx->genSlider(" 切替クッション", &mLockonChangeCushion, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
+    ctx->genSlider(" 切替クッション", &mLockonChangeCushion, 0.0f, 1.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Subject"
-    ctx->genLabel("- 主観", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 主観", 0);
     // "Distance to cull the link"
-    ctx->genSlider(" リンク消す距離", &mSubjLinkCullDist, 0.0f, 400.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
+    ctx->genSlider(" リンク消す距離", &mSubjLinkCullDist, 0.0f, 400.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Manual"
-    ctx->genLabel("- マニュアル", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- マニュアル", 0);
     // "Start C threshold"
-    ctx->genSlider(" 開始Ｃしきい", &mManualStartCThreshold, 0.0f, 400.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
+    ctx->genSlider(" 開始Ｃしきい", &mManualStartCThreshold, 0.0f, 400.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "Trimming"
-    ctx->genLabel("- トリミング", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- トリミング", 0);
     // "Vista"
-    ctx->genSlider(" ビスタ", &mTrimVistaHeight, 0.0f, 200.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" ビスタ", &mTrimVistaHeight, 0.0f, 200.0f);
     // "Cinemascope"
-    ctx->genSlider(" シネスコ", &mTrimCineScopeHeight, 0.0f, 200.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" シネスコ", &mTrimCineScopeHeight, 0.0f, 200.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Fake angle system"
-    ctx->genLabel("- 嘘アングルシステム", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 嘘アングルシステム", 0);
     // "Value"
-    ctx->genSlider(" 値", &mFalseValue, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 値", &mFalseValue, 0.0f, 1.0f);
     // "Angle"
-    ctx->genSlider(" 角度", &mFalseAngle, 0.0f, 180.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 角度", &mFalseAngle, 0.0f, 180.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Forced attention"
-    ctx->genLabel("- 強制注目", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 強制注目", 0);
     // "Limit distance"
-    ctx->genSlider(" 限界距離", &mForceLockOffDist, 0.0, 100000.0, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" 限界距離", &mForceLockOffDist, 0.0, 100000.0);
     // "Timer"
-    ctx->genSlider(" タイマー", &mForceLockOffTimer, 0, 100000, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" タイマー", &mForceLockOffTimer, 0, 100000);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "Object avoidance"
-    ctx->genLabel("- オブジェクト避け", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- オブジェクト避け", 0);
     // "Valid"
-    ctx->genCheckBox(" 有効", &mFlags2, 0x400, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" 有効", &mFlags2, 0x400);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Windstorm shaking experiment"
-    ctx->genLabel("- 暴風揺れ実験", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 暴風揺れ実験", 0);
     // "Valid"
-    ctx->genCheckBox(" 有効", &mFlags2, 0x100, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" 有効", &mFlags2, 0x100);
     // "Focal point"
-    ctx->genSlider(" 注視点", &mWindShakeCtr, 0.0, 100.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 注視点", &mWindShakeCtr, 0.0, 100.0);
     // "Angle of view"
-    ctx->genSlider(" 画角", &mWindShakeFvy, 0.0, 10.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 画角", &mWindShakeFvy, 0.0, 10.0);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- After throwing"
-    ctx->genLabel("- 投げ後", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 投げ後", 0);
     // "Angle"
-    ctx->genSlider(" 角度", &mThrowVAngle, -180.0f, 180.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" 角度", &mThrowVAngle, -180.0f, 180.0f);
     // "Height (relative)"
-    ctx->genSlider(" 高さ(相対)", &mThrowCtrOffset, -180.0f, 180.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider(" 高さ(相対)", &mThrowCtrOffset, -180.0f, 180.0f);
     // "Timer"
-    ctx->genSlider(" タイマー", &mThrowTimer, 1, 3000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" タイマー", &mThrowTimer, 1, 3000);
     // "Cushion"
-    ctx->genSlider(" クッション", &mThrowCushion, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider(" クッション", &mThrowCushion, 0.0f, 1.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
     // "- Drawing settings"
-    ctx->genLabel("- 描画設定", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("- 描画設定", 0);
     // "Valid"
-    ctx->genCheckBox(" 有効", &mDebugFlags, 0x400, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider(" near", &mDrawNear, 0.0f, 1000000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider(" far", &mDrawFar, 0.0f, 1000000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox(" 有効", &mDebugFlags, 0x400);
+    ctx->genSlider(" near", &mDrawNear, 0.0f, 1000000.0f);
+    ctx->genSlider(" far", &mDrawFar, 0.0f, 1000000.0f);
 
-    ctx->genLabel("-", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-", 0);
 }
 #endif

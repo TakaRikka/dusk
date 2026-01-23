@@ -29,6 +29,8 @@
 
 #define JORM_DEFAULT_WIDTH 0x200
 #define JORM_DEFAULT_HEIGHT 0x18
+#define JORM_DEFAULT_COMBOBOX_WIDTH 0x100
+#define JORM_DEFAULT_COMBOBOX_HEIGHT 0x1a
 
 #define DEFINE_GEN_CHECKBOX(T, kind)                                                               \
     void genCheckBox(const char* label, T* pSrc, T mask, u32 style = 0,                            \
@@ -65,7 +67,8 @@
 #define DEFINE_START_COMBO_BOX(T, kind)                                                            \
     void startComboBox(const char* label, T* pSrc, u32 style = 0,                                  \
                        JOREventListener* pListener = NULL, u16 posX = -1, u16 posY = -1,           \
-                       u16 width = JORM_DEFAULT_WIDTH, u16 height = JORM_DEFAULT_HEIGHT) {         \
+                       u16 width = JORM_DEFAULT_COMBOBOX_WIDTH,                                    \
+                       u16 height = JORM_DEFAULT_COMBOBOX_HEIGHT) {                                \
         startSelectorSub('CMBX', kind, label, (uintptr_t)pSrc, style, *pSrc, pListener, posX,      \
                          posY, width, height);                                                     \
     }

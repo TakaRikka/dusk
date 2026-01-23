@@ -45,15 +45,12 @@ void daObjItaRope_Hio_c::dt() {
 }
 
 void daObjItaRope_Hio_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("§ 牧場のカラカラ板用紐パラメータ設定  §\n", 0, 0, NULL, 0xffff, 0xffff, 0x200,
-                  0x18);
-    ctx->genSlider("重力", &mAttr.mGravity, -200.0f, 0.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("紐の重さ", &mAttr.mStringWeight, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("windRate", &mAttr.mWindRate, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("speedRate", &mAttr.mSpeedRate, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("offsetRate", &mAttr.mOffsetRate, -5.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genLabel("§ 牧場のカラカラ板用紐パラメータ設定  §\n", 0);
+    ctx->genSlider("重力", &mAttr.mGravity, -200.0f, 0.0f);
+    ctx->genSlider("紐の重さ", &mAttr.mStringWeight, 0, 0xff);
+    ctx->genSlider("windRate", &mAttr.mWindRate, 0.0f, 1.0f);
+    ctx->genSlider("speedRate", &mAttr.mSpeedRate, 0.0f, 1.0f);
+    ctx->genSlider("offsetRate", &mAttr.mOffsetRate, -5.0f, 1.0f);
 }
 
 #endif
@@ -373,9 +370,10 @@ int daObjItaRope_c::create() {
     return rv;
 }
 
-static int daObjItaRope_Create(fopAc_ac_c* i_actor) {
-    fopAcM_RegisterCreateID(daObjItaRope_c, i_actor, "Obj_ItaRope");
-    return static_cast<daObjItaRope_c*>(i_actor)->create();
+static int daObjItaRope_Create(fopAc_ac_c* i_this) {
+    daObjItaRope_c* a_this = (daObjItaRope_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "Obj_ItaRope");
+    return a_this->create();
 }
 
 static actor_method_class l_daObjItaRope_Method = {

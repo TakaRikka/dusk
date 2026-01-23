@@ -17,10 +17,100 @@
 #include "d/d_com_static.h"
 #include "d/d_item.h"
 #include "d/d_timer.h"
+#if DEBUG
+#include "d/d_debug_viewer.h"
+#endif
 
+const daNpc_Maro_HIOParam daNpc_Maro_Param_c::m = {
+    100.0f,
+    -3.0f,
+    1.0f,
+    400.0f,
+    255.0f,
+    80.0f,
+    35.0f,
+    30.0f,
+    0.0f,
+    0.0f,
+    10.0f,
+    -10.0f,
+    30.0f,
+    -10.0f,
+    30.0f,
+    -30.0f,
+    0.6f,
+    12.0f,
+    3,
+    6,
+    5,
+    6,
+    110.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    60,
+    8,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4.0f,
+    -15.0f,
+    0.0f,
+    -15.0f,
+    15.0f,
+    30.0f,
+    15.0f,
+    30.0f,
+    0x0078,
+};
+
+#if VERSION != VERSION_WII_USA_R0 && VERSION != VERSION_SHIELD
 daNpc_Maro_c::actionFunc dummy_lit_4085() {
     return &daNpc_Maro_c::choccai;
 }
+#endif
+
+#if DEBUG
+daNpc_Maro_HIO_c::daNpc_Maro_HIO_c() {
+    m = daNpc_Maro_Param_c::m;
+}
+
+void daNpc_Maro_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    char msg_buffer[2000];
+
+    JORReflexible::listenPropertyEvent(event);
+
+    JORFile aJStack_910;
+    int len;
+    switch ((u32)event->id) {
+    case 0x40000002:
+        if (aJStack_910.open(6, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL) != 0) {
+            memset(msg_buffer, 0, 2000);
+            len = 0;
+            daNpcT_cmnListenPropertyEvent(msg_buffer, &len, &m.common);
+            // Interval between interactions
+            sprintf(msg_buffer + len, "%d,   \t//  ちょっかい間隔\n", m.tease_interval);
+            len = strlen(msg_buffer);
+            aJStack_910.writeData(msg_buffer, len);
+            aJStack_910.close();
+            OS_REPORT("write append success!::%6d\n", len);
+        } else {
+            OS_REPORT("write append failure!\n");
+        }
+        break;
+    }
+}
+
+void daNpc_Maro_HIO_c::genMessage(JORMContext* ctx) {
+    daNpcT_cmnGenMessage(ctx, &m.common);
+    // teasing interval
+    ctx->genSlider("ちょっかい間隔  ", &m.tease_interval, 1, 0x400);
+    // export file:
+    ctx->genButton("ファイル書き出し", 0x40000002);
+}
+#endif
 
 static int l_bmdData[2][2] = {
     {11, 1}, {5, 2},
@@ -155,68 +245,11 @@ daNpc_Maro_c::cutFunc daNpc_Maro_c::mCutList[17] = {
     &daNpc_Maro_c::cutTalkToKakashi,
 };
 
-const daNpc_Maro_HIOParam daNpc_Maro_Param_c::m = {
-    100.0f,
-    -3.0f,
-    1.0f,
-    400.0f,
-    255.0f,
-    80.0f,
-    35.0f,
-    30.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    -10.0f,
-    30.0f,
-    -10.0f,
-    30.0f,
-    -30.0f,
-    0.6f,
-    12.0f,
-    3,
-    6,
-    5,
-    6,
-    110.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    60,
-    8,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4.0f,
-    -15.0f,
-    0.0f,
-    -15.0f,
-    15.0f,
-    30.0f,
-    15.0f,
-    30.0f,
-    0x0078,
-};
-
 static NPC_MARO_HIO_CLASS l_HIO;
 
-#if DEBUG
-daNpc_Maro_HIO_c::daNpc_Maro_HIO_c() {
-    m = daNpc_Maro_Param_c::m;
-}
-
-void daNpc_Maro_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
-    // NONMATCHING
-}
-
-void daNpc_Maro_HIO_c::genMessage(JORMContext* ctx) {
-    // NONMATCHING
-}
-#endif
-
 daNpc_Maro_c::~daNpc_Maro_c() {
+    // destruct
+    OS_REPORT("|%06d:%x|daNpc_Maro_c -> デストラクト\n", g_Counter.mCounter0, this);
     deleteObject();
     if (field_0x10bc != 0xFFFFFFFF) {
         dComIfG_TimerDeleteRequest(0);
@@ -244,8 +277,8 @@ int daNpc_Maro_c::create() {
         0,
     };
     daNpcT_ct(this, daNpc_Maro_c, l_faceMotionAnmData, l_motionAnmData,
-                       l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
-                       l_evtList, l_resNameList
+              l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
+              l_evtList, l_resNameList
     );
     mType = getType();
     mFlowNodeNo = getFlowNodeNo();
@@ -256,9 +289,14 @@ int daNpc_Maro_c::create() {
 
     int rv = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (rv == cPhs_COMPLEATE_e) {
+        OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x, BitSW:%02x, MaxItem:%d, group:%d<%08x> ", fopAcM_getProcNameString(this),
+                  mType, mFlowNodeNo, getPathID(), getBitSW(), getMaxNumItem(), getGroupId(), fopAcM_GetParam(this));
         if (isDelete()) {
+            OS_REPORT("===>isDelete:TRUE\n");
             return cPhs_ERROR_e;
         }
+
+        OS_REPORT("\n");
 
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, heapSize[mType])) {
             return cPhs_ERROR_e;
@@ -299,26 +337,24 @@ int daNpc_Maro_c::create() {
 }
 
 int daNpc_Maro_c::CreateHeap() {
-    int bmd_get_idx;
-    if (mTwilight == 1) {
-        bmd_get_idx = 1;
-    } else {
-        bmd_get_idx = 0;
-    }
-
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(
-        l_resNameList[l_bmdData[bmd_get_idx][1]], l_bmdData[bmd_get_idx][0]));
+    J3DModelData* modelData = NULL;
+    J3DModel* model = NULL;
+    int bmdIdx = mTwilight == true ? TRUE : FALSE;
+    int res_name_idx = l_bmdData[bmdIdx][1];
+    int my_bmd = l_bmdData[bmdIdx][0];
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_resNameList[res_name_idx], my_bmd));
     if (modelData == NULL) {
         return 0;
     }
 
-    mpMorf[0] = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound,
-        0x80000, 0x11020284);
+    u32 sp_0x1c = 0x11020284;
+    mpMorf[0] = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, &mSound, 0x80000,
+                                     sp_0x1c);
     if (mpMorf[0] == NULL || mpMorf[0]->getModel() == NULL) {
         return 0;
     }
 
-    J3DModel* model = mpMorf[0]->getModel();
+    model = mpMorf[0]->getModel();
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         modelData->getJointNodePointer(i)->setCallBack(ctrlJointCallBack);
     }
@@ -337,7 +373,8 @@ int daNpc_Maro_c::CreateHeap() {
 }
 
 int daNpc_Maro_c::Delete() {
-    fopAcM_GetID(this);
+    OS_REPORT("|%06d:%x|daNpc_Maro_c -> Delete\n", g_Counter.mCounter0, this);
+    fopAcM_RegisterDeleteID(this, "NPC_MARO");
     this->~daNpc_Maro_c();
     return 1;
 }
@@ -366,11 +403,12 @@ int daNpc_Maro_c::Draw() {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
         modelData->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
-    return daNpcT_c::draw(0, 0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
+    return daNpcT_c::draw(NpcT_CHK_ACTION(daNpc_Maro_c), 0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
 int daNpc_Maro_c::createHeapCallBack(fopAc_ac_c* i_this) {
-    return static_cast<daNpc_Maro_c*>(i_this)->CreateHeap();
+    daNpc_Maro_c* a_this = static_cast<daNpc_Maro_c*>(i_this);
+    return a_this->CreateHeap();
 }
 
 int daNpc_Maro_c::ctrlJointCallBack(J3DJoint* param_0, int param_1) {
@@ -385,11 +423,15 @@ int daNpc_Maro_c::ctrlJointCallBack(J3DJoint* param_0, int param_1) {
     return 1;
 }
 
-void* daNpc_Maro_c::srchArrow(void* param_1, void* param_2) {
-    if (mFindCount < 50 && param_1 != NULL && param_1 != param_2) {
-        if (fopAcM_IsExecuting(fopAcM_GetID(param_1)) && fopAcM_GetName(param_1) == PROC_ARROW) {
-            mFindActorPtrs[mFindCount] = (fopAc_ac_c*)param_1;
-            mFindCount++;
+void* daNpc_Maro_c::srchArrow(void* arg0, void* arg1) {
+    fopAc_ac_c* fop1 = (fopAc_ac_c*) arg1;
+    if (mFindCount < 50) {
+        fopAc_ac_c* fop0 = (fopAc_ac_c*) arg0;
+        if (fop0 != NULL && fop0 != fop1) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(fop0)) && fopAcM_GetName(fop0) == PROC_ARROW) {
+                mFindActorPtrs[mFindCount] = fop0;
+                mFindCount++;
+            }
         }
     }
     return NULL;
@@ -413,10 +455,13 @@ fopAc_ac_c* daNpc_Maro_c::getArrowP() {
 
 void* daNpc_Maro_c::srchItaMato(void* arg0, void* arg1) {
     fopAc_ac_c* fop1 = (fopAc_ac_c*) arg1;
-    if (mFindCount < 50 && arg0 != NULL && arg0 != fop1) {
-        if (fopAcM_IsExecuting(fopAcM_GetID(arg0)) && fopAcM_GetName(arg0) == PROC_OBJ_ITAMATO) {
-            mFindActorPtrs[mFindCount] = (fopAc_ac_c*)arg0;
-            mFindCount++;
+    if (mFindCount < 50) {
+        fopAc_ac_c* fop0 = (fopAc_ac_c*) arg0;
+        if (fop0 != NULL && fop0 != fop1) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(fop0)) && fopAcM_GetName(fop0) == PROC_OBJ_ITAMATO) {
+                mFindActorPtrs[mFindCount] = fop0;
+                mFindCount++;
+            }
         }
     }
     return NULL;
@@ -594,11 +639,13 @@ void daNpc_Maro_c::reset() {
     }
 
     field_0x10bc = -1;
+#if VERSION != VERSION_WII_USA_R0
     daNpcT_offTmpBit(0x3C);
     daNpcT_offTmpBit(0x3F);
     daNpcT_offTmpBit(0x40);
     daNpcT_offTmpBit(0x41);
     daNpcT_offTmpBit(0x42);
+#endif
     daNpcT_offTmpBit(0x64);
     setAngle(acStack_20);
 }
@@ -669,9 +716,9 @@ void daNpc_Maro_c::setParam() {
         }
     }
 
-    attention_info.distances[0] = daNpcT_getDistTableIdx(sVar8, sVar7);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] = daNpcT_getDistTableIdx(sVar10, sVar9);
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(sVar8, sVar7);
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(sVar10, sVar9);
 
     attention_info.flags = uVar7;
     scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale,
@@ -778,37 +825,37 @@ void daNpc_Maro_c::srchActors() {
     switch (mType) {
         case TYPE_0: {
             if (mActorMngr[0].getActorP() == NULL) {
-                mActorMngr[0].entry(getNearestActorP(0x241));
+                mActorMngr[0].entry(getNearestActorP(PROC_NPC_KAKASHI));
             }
 
             if (mActorMngr[1].getActorP() == NULL) {
-                mActorMngr[1].entry(getNearestActorP(0x26E));
+                mActorMngr[1].entry(getNearestActorP(PROC_NPC_TARO));
             }
 
             if (mActorMngr[2].getActorP() == NULL) {
-                mActorMngr[2].entry(getNearestActorP(0x245));
+                mActorMngr[2].entry(getNearestActorP(PROC_NPC_BESU));
             }
 
             if (mActorMngr[3].getActorP() == NULL) {
-                mActorMngr[3].entry(getNearestActorP(0x25D));
+                mActorMngr[3].entry(getNearestActorP(PROC_NPC_KOLIN));
             }
             break;
         }
 
         case TYPE_1: {
             if (mActorMngr[0].getActorP() == NULL) {
-                mActorMngr[0].entry(getNearestActorP(0x241));
+                mActorMngr[0].entry(getNearestActorP(PROC_NPC_KAKASHI));
             }
 
             if (mActorMngr[1].getActorP() == NULL) {
-                mActorMngr[1].entry(getNearestActorP(0x26E));
+                mActorMngr[1].entry(getNearestActorP(PROC_NPC_TARO));
             }
             break;
         }
 
         case TYPE_3: {
             if (mActorMngr[8].getActorP() == NULL) {
-                mActorMngr[8].entry(getNearestActorP(0x250));
+                mActorMngr[8].entry(getNearestActorP(PROC_NPC_LEN));
             }
 
             break;
@@ -818,7 +865,7 @@ void daNpc_Maro_c::srchActors() {
         case TYPE_7: {
             if (&daNpc_Maro_c::arrowTutorial == field_0x110c) {
                 if (mActorMngr[1].getActorP() == NULL) {
-                    mActorMngr[1].entry(getNearestActorP(0x26E));
+                    mActorMngr[1].entry(getNearestActorP(PROC_NPC_TARO));
                 }
 
                 if (mActorMngr[6].getActorP() == NULL) {
@@ -835,7 +882,7 @@ void daNpc_Maro_c::srchActors() {
 
         case TYPE_10: {
             if (mActorMngr[2].getActorP() == NULL) {
-                mActorMngr[2].entry(getNearestActorP(0x245));
+                mActorMngr[2].entry(getNearestActorP(PROC_NPC_BESU));
             }
 
             break;
@@ -843,34 +890,34 @@ void daNpc_Maro_c::srchActors() {
 
         case TYPE_12: {
             if (mActorMngr[1].getActorP() == NULL) {
-                mActorMngr[1].entry(getNearestActorP(0x26E));
+                mActorMngr[1].entry(getNearestActorP(PROC_NPC_TARO));
             }
 
             if (mActorMngr[3].getActorP() == NULL) {
-                mActorMngr[3].entry(getNearestActorP(0x25d));
+                mActorMngr[3].entry(getNearestActorP(PROC_NPC_KOLIN));
             }
 
             if (mActorMngr[7].getActorP() == NULL) {
-                mActorMngr[7].entry(getNearestActorP(0x264));
+                mActorMngr[7].entry(getNearestActorP(PROC_NPC_SARU));
             }
             break;
         }
 
         case TYPE_13: {
             if (mActorMngr[0].getActorP() == NULL) {
-                mActorMngr[0].entry(getNearestActorP(0x241));
+                mActorMngr[0].entry(getNearestActorP(PROC_NPC_KAKASHI));
             }
 
             if (mActorMngr[1].getActorP() == NULL) {
-                mActorMngr[1].entry(getNearestActorP(0x26E));
+                mActorMngr[1].entry(getNearestActorP(PROC_NPC_TARO));
             }
 
             if (mActorMngr[2].getActorP() == NULL) {
-                mActorMngr[2].entry(getNearestActorP(0x245));
+                mActorMngr[2].entry(getNearestActorP(PROC_NPC_BESU));
             }
 
             if (mActorMngr[3].getActorP() == NULL) {
-                mActorMngr[3].entry(getNearestActorP(0x25D));
+                mActorMngr[3].entry(getNearestActorP(PROC_NPC_KOLIN));
             }
             break;
         }
@@ -1024,6 +1071,7 @@ void daNpc_Maro_c::setAttnPos() {
 void daNpc_Maro_c::setCollision() {
     cXyz cStack_48;
     if (!mHide) {
+        u32 co_sprm = 0x79;
         int tgType = 0xd8fbfdff;
         int tgSPrm = 0x1f;
         if (mTwilight) {
@@ -1033,7 +1081,7 @@ void daNpc_Maro_c::setCollision() {
             tgType = 0;
             tgSPrm = 0;
         }
-        mCyl1.SetCoSPrm(0x79);
+        mCyl1.SetCoSPrm(co_sprm);
         mCyl1.SetTgType(tgType);
         mCyl1.SetTgSPrm(tgSPrm);
         mCyl1.OnTgNoHitMark();
@@ -1054,6 +1102,17 @@ void daNpc_Maro_c::setCollision() {
 }
 
 BOOL daNpc_Maro_c::drawDbgInfo() {
+#if DEBUG
+    if (mpHIO->m.common.debug_info_ON) {
+        f32 dist_max_speak = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_SPEAK_e]).mDistMax;
+        f32 dist_max_talk = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_TALK_e]).mDistMax;
+        dDbVw_drawCircleOpa(attention_info.position, dist_max_speak, (GXColor){0x00, 0xC8, 0x00, 0xFF}, 1, 12);
+        dDbVw_drawCircleOpa(attention_info.position, dist_max_talk, (GXColor){0xC8, 0x00, 0x00, 0xFF}, 1, 12);
+        dDbVw_drawSphereXlu(eyePos, 18.0f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
+        dDbVw_drawSphereXlu(attention_info.position, 9.0f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
+    }
+#endif
+
     return FALSE;
 }
 
@@ -1087,6 +1146,13 @@ void daNpc_Maro_c::drawOtherMdl() {
 
 int daNpc_Maro_c::selectAction() {
     field_0x110c = NULL;
+#if DEBUG
+    if (mpHIO->m.common.debug_mode_ON) {
+        field_0x110c = &daNpc_Maro_c::test;
+        return 1;
+    }
+#endif
+
     switch (mType) {
         case 7: {
             field_0x110c = &daNpc_Maro_c::tend;
@@ -1384,7 +1450,7 @@ int daNpc_Maro_c::cutFindMonkey(int arg0) {
             mJntAnm.lookNone(0);
             if (mEventTimer == 0) {
                 actor_p = dComIfGp_getHorseActor();
-                JUT_ASSERT(0xA99, NULL != actor_p);
+                JUT_ASSERT(2713, NULL != actor_p);
                 my_vec_0 = actor_p->current.pos;
                 if (50.0f < current.pos.absXZ(my_vec_0)) {
                     cLib_addCalcAngleS2(&current.angle.y, cLib_targetAngleY(&current.pos, &my_vec_0), 4, 0x800);
@@ -1464,7 +1530,7 @@ int daNpc_Maro_c::cutGiveMeWoodSwd(int arg0) {
 
         case 1: {
             actor_p = mActorMngr[3].getActorP();
-            JUT_ASSERT(0xB00, NULL != actor_p);
+            JUT_ASSERT(2816, NULL != actor_p);
             mJntAnm.lookActor(actor_p, -40.0f, 0);
             retval = 1;
             break;
@@ -1568,7 +1634,7 @@ int daNpc_Maro_c::cutGetWoodSwd(int arg0) {
 
         case 1: {
             actor_p = mActorMngr[3].getActorP();
-            JUT_ASSERT(0xB79, NULL != actor_p);
+            JUT_ASSERT(2937, NULL != actor_p);
             mJntAnm.lookActor(actor_p, -40.0f, 0);
             retval = 1;
             break;
@@ -1577,7 +1643,7 @@ int daNpc_Maro_c::cutGetWoodSwd(int arg0) {
         case 2:
         case 3: {
             actor_p = mActorMngr[1].getActorP();
-            JUT_ASSERT(0xB81, NULL != actor_p);
+            JUT_ASSERT(2945, NULL != actor_p);
             mJntAnm.lookActor(actor_p, -40.0f, 0);
             retval = 1;
             break;
@@ -1585,7 +1651,7 @@ int daNpc_Maro_c::cutGetWoodSwd(int arg0) {
 
         case 4: {
             actor_p = mActorMngr[1].getActorP();
-            JUT_ASSERT(0xB81, NULL != actor_p);
+            JUT_ASSERT(2952, NULL != actor_p);
             mJntAnm.lookActor(actor_p, -40.0f, 0);
             if (mEventTimer == 0) {
                 my_vec_0.set(0.0f, 0.0f, 1600.0f);
@@ -1628,7 +1694,6 @@ int daNpc_Maro_c::cutGetWoodSwd(int arg0) {
 
 int daNpc_Maro_c::cutConversationWithMaro(int arg0) {
     fopAc_ac_c* actor_p = NULL;
-    cXyz my_vec_0;
     int retval = 0;
     int* param_p = NULL;
     int prm_val = -1;
@@ -1637,11 +1702,19 @@ int daNpc_Maro_c::cutConversationWithMaro(int arg0) {
         prm_val = *param_p;
     }
 
-    dComIfGp_getEventManager().getIsAddvance(arg0);
+    if (dComIfGp_getEventManager().getIsAddvance(arg0)) {
+#if DEBUG
+        switch (prm_val) {
+        case 0:
+            break;
+        }
+#endif
+    }
+
     switch (prm_val) {
         case 0: {
             actor_p = mActorMngr[1].getActorP();
-            JUT_ASSERT(0xB81, NULL != actor_p);
+            JUT_ASSERT(3040, NULL != actor_p);
             mJntAnm.lookActor(actor_p, -40.0f, 0);
             retval = 1;
             break;
@@ -1675,6 +1748,7 @@ int daNpc_Maro_c::cutCacaricoConversation(int arg0) {
         }
     }
 
+    int dummy_vals[2] = {-1, -1}; // unused
     switch (prm_val) {
         case 0: {
             mJntAnm.lookPlayer(0);
@@ -1748,11 +1822,6 @@ int daNpc_Maro_c::cutSurprise(int arg0) {
     return retval;
 }
 
-int dummy_lit_6272(int arg) {
-    int dummy_vals[2] = {-1, -1};
-    return dummy_vals[arg];
-}
-
 int daNpc_Maro_c::cutArrowTutorial(int arg0) {
     fopAc_ac_c* actor_p = NULL;
     cXyz my_vec_0, temp, my_vec_2;
@@ -1797,7 +1866,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
             case 0: {
                 mActorMngr[4].entry(getItaMatoP(1));
                 actor_p = mActorMngr[4].getActorP();
-                JUT_ASSERT(0xCC3, NULL != actor_p);
+                JUT_ASSERT(3267, NULL != actor_p);
                 dComIfGp_getEvent()->setPtI(actor_p);
                 break;
             }
@@ -1810,7 +1879,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
             case 2:
             case 4: {
                 actor_p = mActorMngr[4].getActorP();
-                JUT_ASSERT(0xCCE, NULL != actor_p);
+                JUT_ASSERT(3278, NULL != actor_p);
                 dComIfGp_getEvent()->setPt2(actor_p);
                 break;
             }
@@ -1866,7 +1935,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
                 dComIfGp_getEvent()->setPtT(this);
                 mActorMngr[4].entry(getItaMatoP(1));
                 actor_p = mActorMngr[4].getActorP();
-                JUT_ASSERT(0xD0B, NULL != actor_p);
+                JUT_ASSERT(3339, NULL != actor_p);
                 dComIfGp_getEvent()->setPtI(actor_p);
                 break;
             }
@@ -1885,7 +1954,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
             case 32: {
                 mActorMngr[4].entry(getItaMatoP(2));
                 actor_p = mActorMngr[4].getActorP();
-                JUT_ASSERT(0xD1E, NULL != actor_p);
+                JUT_ASSERT(3358, NULL != actor_p);
                 dComIfGp_getEvent()->setPtI(actor_p);
                 dComIfGp_getEvent()->setPt2(actor_p);
             }
@@ -1901,7 +1970,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
                 mEventTimer = timer_val;
                 mActorMngr[4].entry(getItaMatoP(2));
                 actor_p = mActorMngr[4].getActorP();
-                JUT_ASSERT(0xD2E, NULL != actor_p);
+                JUT_ASSERT(3374, NULL != actor_p);
                 dComIfGp_getEvent()->setPtI(actor_p);
                 dComIfGp_getEvent()->setPt2(actor_p);
                 break;
@@ -1937,7 +2006,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
 
             case 65: {
                 actor_p = mActorMngr[1].getActorP();
-                JUT_ASSERT(0xD2E, NULL != actor_p);
+                JUT_ASSERT(3415, NULL != actor_p);
                 dComIfGp_getEvent()->setPt2(actor_p);
                 break;
             }
@@ -2007,7 +2076,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
                     mDoMtx_stack_c::multVec(&my_vec_0, &temp);
                     mGndChk.SetPos(&temp);
                     temp.y = dComIfG_Bgsp().GroundCross(&mGndChk);
-                    JUT_ASSERT(0xDA9, -G_CM3D_F_INF != temp.y);
+                    JUT_ASSERT(3497, -G_CM3D_F_INF != temp.y);
                     dComIfGp_evmng_setGoal(&temp);
                 }
 
@@ -2017,7 +2086,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
             case 34: {
                 mActorMngr[4].entry(getItaMatoP(2));
                 actor_p = mActorMngr[4].getActorP();
-                JUT_ASSERT(0xDB3, NULL != actor_p);
+                JUT_ASSERT(3507, NULL != actor_p);
                 dComIfGp_getEvent()->setPtI(actor_p);
                 dComIfGp_getEvent()->setPt2(actor_p);
             }
@@ -2029,7 +2098,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
 
             case 44: {
                 actor_p = mActorMngr[1].getActorP();
-                JUT_ASSERT(0xDBD, NULL != actor_p);
+                JUT_ASSERT(3517, NULL != actor_p);
                 dComIfGp_getEvent()->setPt2(actor_p);
                 break;
             }
@@ -2072,7 +2141,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
 
             if (prm_val == 1 && retval != 0) {
                 actor_p = mActorMngr[4].getActorP();
-                JUT_ASSERT(0xDF0, NULL != actor_p);
+                JUT_ASSERT(3568, NULL != actor_p);
                 dComIfGp_getEvent()->setPt2(actor_p);
             }
 
@@ -2084,7 +2153,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
         case 5: {
             if (prm_val != 5) {
                 actor_p = mActorMngr[4].getActorP();
-                JUT_ASSERT(0xDFA, NULL != actor_p);
+                JUT_ASSERT(3578, NULL != actor_p);
                 mJntAnm.lookActor(actor_p, 0.0f, 0);
             }
 
@@ -2166,7 +2235,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
 
         case 30: {
             actor_p = mActorMngr[4].getActorP();
-            JUT_ASSERT(0xE48, NULL != actor_p);
+            JUT_ASSERT(3656, NULL != actor_p);
             mJntAnm.lookActor(actor_p, 0.0f, 0);
             if (cLib_calcTimer(&mEventTimer) == 0) {
                 retval = 1;
@@ -2178,7 +2247,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
         case 32:
         case 91: {
             actor_p = mActorMngr[4].getActorP();
-            JUT_ASSERT(0xE48, NULL != actor_p);
+            JUT_ASSERT(3666, NULL != actor_p);
             mJntAnm.lookActor(actor_p, 0.0f, 0);
             my_vals[0] = msgNo_val;
             if (talkProc(my_vals, send_val, local_4c, false)) {
@@ -2209,7 +2278,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
 
         case 40: {
             actor_p = mActorMngr[4].getActorP();
-            JUT_ASSERT(0xE48, NULL != actor_p);
+            JUT_ASSERT(3697, NULL != actor_p);
             mJntAnm.lookActor(actor_p, 0.0f, 0);
             if (cLib_calcTimer(&mEventTimer) == 0) {
                 retval = 1;
@@ -2220,7 +2289,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
 
         case 41: {
             actor_p = mActorMngr[4].getActorP();
-            JUT_ASSERT(0xE48, NULL != actor_p);
+            JUT_ASSERT(3706, NULL != actor_p);
             mJntAnm.lookActor(actor_p, 0.0f, 0);
             my_vals[0] = msgNo_val;
             if (talkProc(my_vals, 0, local_4c, false)) {
@@ -2235,7 +2304,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
 
             if (retval != 0) {
                 actor_p = mActorMngr[1].getActorP();
-                JUT_ASSERT(0xE48, NULL != actor_p);
+                JUT_ASSERT(3721, NULL != actor_p);
                 dComIfGp_getEvent()->setPt2(actor_p);
             }
 
@@ -2246,7 +2315,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
         case 43:
         case 92: {
             actor_p = mActorMngr[1].getActorP();
-            JUT_ASSERT(0xE48, NULL != actor_p);
+            JUT_ASSERT(3730, NULL != actor_p);
             mJntAnm.lookActor(actor_p, -40.0f, 0);
             my_vals[0] = msgNo_val;
             if (talkProc(my_vals, send_val, local_4c, false)) {
@@ -2437,7 +2506,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
 
         case 34: {
             actor_p = mActorMngr[4].getActorP();
-            JUT_ASSERT(0xE48, NULL != actor_p);
+            JUT_ASSERT(3927, NULL != actor_p);
             mJntAnm.lookActor(actor_p, 0.0f, 0);
             my_vals[0] = msgNo_val;
             if (talkProc(my_vals, send_val, local_4c, 0)) {
@@ -2468,7 +2537,7 @@ int daNpc_Maro_c::cutArrowTutorial(int arg0) {
 
         case 44: {
             actor_p = mActorMngr[1].getActorP();
-            JUT_ASSERT(0xE48, NULL != actor_p);
+            JUT_ASSERT(3958, NULL != actor_p);
             mJntAnm.lookActor(actor_p, -40.0f, 0);
             my_vals[0] = msgNo_val;
             if (talkProc(my_vals, send_val, local_4c, 0)) {
@@ -2560,7 +2629,7 @@ int daNpc_Maro_c::cutMarosWhisper(int arg0) {
             case 0: {
                 endChoccai();
                 actor_p = mActorMngr[0].getActorP();
-                JUT_ASSERT(0xFF8, NULL != actor_p);
+                JUT_ASSERT(4088, NULL != actor_p);
                 angle_y = fopAcM_searchActorAngleY(daPy_getPlayerActorClass(), actor_p);
                 daPy_getPlayerActorClass()->setPlayerPosAndAngle(&daPy_getPlayerActorClass()->current.pos, 
                                                                 angle_y, 0);
@@ -2622,6 +2691,7 @@ int daNpc_Maro_c::cutMarosWhisper(int arg0) {
 }
 
 int daNpc_Maro_c::cutTagPush1(int arg0) {
+    int retval = 0;
     int* param_p = NULL;
     int prm_val = -1;
     param_p = dComIfGp_evmng_getMyIntegerP(arg0, "prm");
@@ -2648,15 +2718,22 @@ int daNpc_Maro_c::cutTagPush1(int arg0) {
         case 0: {
             action();
             mEvtNo = 0;
-            return 1;
+            retval = 1;
+            break;
         }
 
         case 1: {
-            return 1;
+            retval = 1;
+            break;
+        }
+
+        default: {
+            retval = 1;
+            break;
         }
     }
 
-    return 1;
+    return retval;
 }
 
 int daNpc_Maro_c::cutNotGonnaLet(int arg0) {
@@ -2682,7 +2759,7 @@ int daNpc_Maro_c::cutNotGonnaLet(int arg0) {
                 mFaceMotionSeqMngr.setNo(9, 0.0f, 0, 0);
                 mMotionSeqMngr.setNo(4, 0.0f, 0, 0);
                 actor_p = mActorMngr[3].getActorP();
-                JUT_ASSERT(0x108E, NULL != actor_p);
+                JUT_ASSERT(4238, NULL != actor_p);
                 mJntAnm.lookActor(actor_p, -40.0f, 0);
                 my_vec_0.set(-718.0f, 1331.0f, -2139.0f);
                 setPos(my_vec_0);
@@ -2711,7 +2788,7 @@ int daNpc_Maro_c::cutNotGonnaLet(int arg0) {
                 mFaceMotionSeqMngr.setNo(9, 0.0f, 0, 0);
                 mMotionSeqMngr.setNo(0, 0.0f, 0, 0);
                 actor_p = mActorMngr[3].getActorP();
-                JUT_ASSERT(0x10B0, NULL != actor_p);
+                JUT_ASSERT(4272, NULL != actor_p);
                 mJntAnm.lookActor(actor_p, -40.0f, 0);
                 my_vec_0.set(-718.0f, 1331.0f, -2139.0f);
                 setPos(my_vec_0);
@@ -2819,7 +2896,7 @@ int daNpc_Maro_c::cutTalkToKakashi(int arg0) {
                 mDoMtx_stack_c::multVec(&my_vec_0, &temp);
                 mGndChk.SetPos(&temp);
                 temp.y = dComIfG_Bgsp().GroundCross(&mGndChk);
-                JUT_ASSERT(0xDA9, -G_CM3D_F_INF != temp.y);
+                JUT_ASSERT(4393, -G_CM3D_F_INF != temp.y);
                 angle_y = cLib_targetAngleY(&temp, &current.pos);
                 daPy_getPlayerActorClass()->setPlayerPosAndAngle(&temp, angle_y, 0);
                 break;
@@ -2829,7 +2906,7 @@ int daNpc_Maro_c::cutTalkToKakashi(int arg0) {
                 mFaceMotionSeqMngr.setNo(9, 0.0f, 0, 0);
                 mMotionSeqMngr.setNo(0, 0.0f, 0, 0);
                 actor_p = mActorMngr[0].getActorP();
-                JUT_ASSERT(0x1133, NULL != actor_p);
+                JUT_ASSERT(4403, NULL != actor_p);
                 mJntAnm.lookActor(actor_p, -40.0f, 1);
                 initTalk(mFlowNodeNo, NULL);
                 break;
@@ -2862,7 +2939,7 @@ int daNpc_Maro_c::cutTalkToKakashi(int arg0) {
     return retval;
 }
 
-int daNpc_Maro_c::wait(void* param_0) {
+int daNpc_Maro_c::wait(void*) {
     fopAc_ac_c* actor_p = NULL;
     switch (mMode) {
         case 0:
@@ -3302,7 +3379,7 @@ int daNpc_Maro_c::arrowTutorial(void* ) {
     return 1;
 }
 
-int daNpc_Maro_c::talk(void* param_0) {
+int daNpc_Maro_c::talk(void*) {
     switch (mMode) {
         case 0:
         case 1: {
@@ -3352,7 +3429,7 @@ int daNpc_Maro_c::talk(void* param_0) {
     return 0;
 }
 
-int daNpc_Maro_c::shop(void* param_0) {
+int daNpc_Maro_c::shop(void*) {
     int retval = 0;
     switch (mMode) {
         case 0:
@@ -3389,6 +3466,26 @@ int daNpc_Maro_c::shop(void* param_0) {
     return retval;
 }
 
+BOOL daNpc_Maro_c::test(void*) {
+    switch(mMode) {
+    case 0:
+    case 1:
+        speedF = 0.0f;
+        speed.setall(0.0f);
+        mMode = 2;
+        // fallthrough
+    case 2:
+        mFaceMotionSeqMngr.setNo(mpHIO->m.common.face_expression, -1.0f, 0, 0);
+        mMotionSeqMngr.setNo(mpHIO->m.common.motion, -1.0f, 0, 0);
+        mJntAnm.lookNone(0);
+        attention_info.flags = 0;
+        break;
+    case 3:
+        break;
+    }
+    return 1;
+}
+
 static int daNpc_Maro_Create(void* i_this) {
     return static_cast<daNpc_Maro_c*>(i_this)->create();
 }
@@ -3405,7 +3502,7 @@ static int daNpc_Maro_Draw(void* i_this) {
     return static_cast<daNpc_Maro_c*>(i_this)->Draw();
 }
 
-static int daNpc_Maro_IsDelete(void* i_this) {
+static int daNpc_Maro_IsDelete(void*) {
     return 1;
 }
 

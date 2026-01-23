@@ -37,21 +37,25 @@ public:
     cXyz& getJumpAimPos() { return eyePos; }
     cXyz& getTopPos() { return mTopPos; }
     cXyz& getRoofPos() { return mRoofPos; }
-    f32 getPullLength() { return mPullLength; }
+    f32 getPullLength() const { return mPullLength; }
     void setPullLength(f32 i_length) { mPullLength = i_length; }
-    f32 getInitOutLength() { return mInitOutLength; }
+    f32 getInitOutLength() const { return mInitOutLength; }
     f32 getRealRoofY() { return mRealRoofY; }
     f32 getMoveDisRate() { return mPullLength * 0.01f; }
-    f32 getLastOffset() { return 6.0f; }
-    f32 getDownOffset() { return 100.0f; }
-    f32 getSwitchOffset() { return 94.0f; }
+    static f32 getLastOffset() { return 6.0f; }
+    static f32 getDownOffset() { return 100.0f; }
+    static f32 getSwitchOffset() { return 94.0f; }
     u8 getSwitchNum() { return mSw; }
     void onRide() { mRide = true; }
     void offRide() { mRide = false; }
     bool checkRideFlg() { return mRide; }
     void onEndFlg() { mEnd = true; }
     bool getEndFlg() { return mEnd; }
-    void onNowSwitchFlg() { mDown = mNowSwitch = true; }
+
+    void onNowSwitchFlg() {
+        mNowSwitch = true;
+        mDown = true;
+    }
 
 private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;

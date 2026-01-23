@@ -81,32 +81,31 @@ u8 fapGm_HIO_c::mParticle254Fix;
 
 #if DEBUG
 void fapGm_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genButton("警告消去", 0x4000020, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ＢＭＰキャプチャー", 0x4000003, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("ＢＭＰキャプチャー倍率", &mCaptureMagnification, 1, 8, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("スナップショット", 0x4000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ＣＰＵ時間", 0x4000007, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("ホストＩＯ使用", &mUsingHostIO, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("メーター表示(JUTProcBar)", &mDisplayMeter, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("プリント表示(JUTDbPrint)", &mDisplayPrint, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("２Ｄ表示", &mDisplay2D, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("パーティクル表示", &mDisplayParticle, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("パーティクル２５４固定", &mParticle254Fix, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("パックアーカイブモード", &mPackArchiveMode, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genButton("警告消去", 0x4000020);
+    mctx->genButton("ＢＭＰキャプチャー", 0x4000003);
+    mctx->genSlider("ＢＭＰキャプチャー倍率", &mCaptureMagnification, 1, 8);
+    mctx->genButton("スナップショット", 0x4000002);
+    mctx->genButton("ＣＰＵ時間", 0x4000007);
+    mctx->genCheckBox("ホストＩＯ使用", &mUsingHostIO, 0x1);
+    mctx->genCheckBox("メーター表示(JUTProcBar)", &mDisplayMeter, 0x1);
+    mctx->genCheckBox("プリント表示(JUTDbPrint)", &mDisplayPrint, 0x1);
+    mctx->genCheckBox("２Ｄ表示", &mDisplay2D, 0x1);
+    mctx->genCheckBox("パーティクル表示", &mDisplayParticle, 0x1);
+    mctx->genCheckBox("パーティクル２５４固定", &mParticle254Fix, 0x1);
+    mctx->genCheckBox("パックアーカイブモード", &mPackArchiveMode, 0x1);
 
-    mctx->genLabel("−−−−−−−【プリント】−−−−−−−", 0x4000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" 色     Ｒ", &mColor.r, 0, 0xFF, 0x4000010, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("        Ｇ", &mColor.g, 0, 0xFF, 0x4000011, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("        Ｂ", &mColor.b, 0, 0xFF, 0x4000012, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("        Ａ", &mColor.a, 0, 0xFF, 0x4000013, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("−−−−−−−【プリント】−−−−−−−", 0x4000001);
+    mctx->genSlider(" 色     Ｒ", &mColor.r, 0, 0xFF, 0x4000010);
+    mctx->genSlider("        Ｇ", &mColor.g, 0, 0xFF, 0x4000011);
+    mctx->genSlider("        Ｂ", &mColor.b, 0, 0xFF, 0x4000012);
+    mctx->genSlider("        Ａ", &mColor.a, 0, 0xFF, 0x4000013);
 
-    mctx->genLabel("−−−−−−−【情報関係】−−−−−−−", 0x4000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("空きメモリ", 0x4000005, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("プロセスＩＤ表示", &mDisplayProcessID, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("トラップフィルター", &mTrapFilter, 1, 0, NULL, 0xFFFF, 0xFFFF,
-                      0x200, 0x18);
+    mctx->genLabel("−−−−−−−【情報関係】−−−−−−−", 0x4000001);
+    mctx->genButton("空きメモリ", 0x4000005);
+    mctx->genCheckBox("プロセスＩＤ表示", &mDisplayProcessID, 0x1);
+    mctx->genCheckBox("トラップフィルター", &mTrapFilter, 0x1);
 
-    mctx->startComboBox("ガンマ補正係数", &mGammaCorrection, 0, NULL, 0xFFFF, 0xFFFF, 0x100, 0x1a);
+    mctx->startComboBox("ガンマ補正係数", &mGammaCorrection);
     mctx->genComboBoxItem("0.1", 1);
     mctx->genComboBoxItem("0.2", 2);
     mctx->genComboBoxItem("0.3", 3);
@@ -139,59 +138,53 @@ void fapGm_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("3.0", 30);
     mctx->endComboBox();
 
-    mctx->genLabel("−−−−−−−【肩ボタン】−−−−−−−", 0x4000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" しきい値  オン", &g_HIO.mLROnValue, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF,
-                    0x200, 0x18);
-    mctx->genSlider("           オフ", &g_HIO.mLROffValue, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF,
-                    0x200, 0x18);
+    mctx->genLabel("−−−−−−−【肩ボタン】−−−−−−−", 0x4000001);
+    mctx->genSlider(" しきい値  オン", &g_HIO.mLROnValue, 0.0f, 1.0f);
+    mctx->genSlider("           オフ", &g_HIO.mLROffValue, 0.0f, 1.0f);
     
-    mctx->genLabel("−−−−−−−【デバッグ用】−−−−−−", 0x4000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("メモリーブロックＯＦＦ", &mMemBlockOff, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("−−−−−−−【デバッグ用】−−−−−−", 0x4000001);
+    mctx->genCheckBox("メモリーブロックＯＦＦ", &mMemBlockOff, 0x1);
     
-    mctx->genLabel("−−−−−−−【システムレジスタ】−−−", 0x4000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("レジスタ０", &mRegister0, -0x8000, 0x7fff, 0, NULL, 0xFFFF, 0xFFFF,
-                    0x200, 0x18);
-    mctx->genSlider("レジスタ１", &mRegister1, -0x8000, 0x7fff, 0, NULL, 0xFFFF, 0xFFFF,
-                    0x200, 0x18);
-    mctx->genSlider("レジスタ２", &mRegister2, -0x8000, 0x7fff, 0, NULL, 0xFFFF, 0xFFFF,
-                    0x200, 0x18);
-    mctx->genSlider("レジスタ３", &mRegister3, -0x8000, 0x7fff, 0, NULL, 0xFFFF, 0xFFFF,
-                    0x200, 0x18);
+    mctx->genLabel("−−−−−−−【システムレジスタ】−−−", 0x4000001);
+    mctx->genSlider("レジスタ０", &mRegister0, -0x8000, 0x7fff);
+    mctx->genSlider("レジスタ１", &mRegister1, -0x8000, 0x7fff);
+    mctx->genSlider("レジスタ２", &mRegister2, -0x8000, 0x7fff);
+    mctx->genSlider("レジスタ３", &mRegister3, -0x8000, 0x7fff);
 
-    mctx->genLabel("−−−−−−−【ＢＤＬファイルへの変換】", 0x4000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("変換", 0x4000014, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("−−−−−−−【ＢＤＬファイルへの変換】", 0x4000001);
+    mctx->genButton("変換", 0x4000014);
     
-    mctx->genLabel("−−−−−−−【メモリファイル】−", 0x4000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("出力", 0x4000016, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("−−−−−−−【メモリファイル】−", 0x4000001);
+    mctx->genButton("出力", 0x4000016);
     
-    mctx->genLabel("−−−−−−−【エラーメッセージ】−", 0x4000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色上ｒ", &mLetterTopColor.r, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色上ｇ", &mLetterTopColor.g, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色上ｂ", &mLetterTopColor.b, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色上α", &mLetterTopColor.a, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("−−−−−−−【エラーメッセージ】−", 0x4000001);
+    mctx->genSlider("文字色上ｒ", &mLetterTopColor.r, 0, 0xFF);
+    mctx->genSlider("文字色上ｇ", &mLetterTopColor.g, 0, 0xFF);
+    mctx->genSlider("文字色上ｂ", &mLetterTopColor.b, 0, 0xFF);
+    mctx->genSlider("文字色上α", &mLetterTopColor.a, 0, 0xFF);
 
-    mctx->genSlider("文字色下ｒ", &mLetterBottomColor.r, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色下ｇ", &mLetterBottomColor.g, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色下ｂ", &mLetterBottomColor.b, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色下α", &mLetterBottomColor.a, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("文字色下ｒ", &mLetterBottomColor.r, 0, 0xFF);
+    mctx->genSlider("文字色下ｇ", &mLetterBottomColor.g, 0, 0xFF);
+    mctx->genSlider("文字色下ｂ", &mLetterBottomColor.b, 0, 0xFF);
+    mctx->genSlider("文字色下α", &mLetterBottomColor.a, 0, 0xFF);
 
-    mctx->genSlider("文字位置Ｘ", &mLetterPositionX, -300, 300, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字位置Ｙ", &mLetterPositionY, -300, 300, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字行間", &mLineSpacing, -10, 10, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字字間", &mLetterSpacing, -10, 10, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字フォントサイズ", &mLetterFontSize, 0, 0x32, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("文字位置Ｘ", &mLetterPositionX, -300, 300);
+    mctx->genSlider("文字位置Ｙ", &mLetterPositionY, -300, 300);
+    mctx->genSlider("文字行間", &mLineSpacing, -10, 10);
+    mctx->genSlider("文字字間", &mLetterSpacing, -10, 10);
+    mctx->genSlider("文字フォントサイズ", &mLetterFontSize, 0, 0x32);
 
-    mctx->genSlider("文字色影上ｒ", &mLetterTopShadowColor.r, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色影上ｇ", &mLetterTopShadowColor.g, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色影上ｂ", &mLetterTopShadowColor.b, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色影上α", &mLetterTopShadowColor.a, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("文字色影上ｒ", &mLetterTopShadowColor.r, 0, 0xFF);
+    mctx->genSlider("文字色影上ｇ", &mLetterTopShadowColor.g, 0, 0xFF);
+    mctx->genSlider("文字色影上ｂ", &mLetterTopShadowColor.b, 0, 0xFF);
+    mctx->genSlider("文字色影上α", &mLetterTopShadowColor.a, 0, 0xFF);
 
-    mctx->genSlider("文字色影下ｒ", &mLetterBottomShadowColor.r, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色影下ｇ", &mLetterBottomShadowColor.g, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色影下ｂ", &mLetterBottomShadowColor.b, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("文字色影下α", &mLetterBottomShadowColor.a, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("文字色影下ｒ", &mLetterBottomShadowColor.r, 0, 0xFF);
+    mctx->genSlider("文字色影下ｇ", &mLetterBottomShadowColor.g, 0, 0xFF);
+    mctx->genSlider("文字色影下ｂ", &mLetterBottomShadowColor.b, 0, 0xFF);
+    mctx->genSlider("文字色影下α", &mLetterBottomShadowColor.a, 0, 0xFF);
 
-    mctx->genSlider("背景α", &mBackgroundAlpha, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("背景α", &mBackgroundAlpha, 0, 0xFF);
 }
 
 char fapGm_dataMem::mCsv[0x8000];

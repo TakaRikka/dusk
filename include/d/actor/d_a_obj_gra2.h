@@ -228,11 +228,11 @@ public:
     cXyz getAttentionPos(fopAc_ac_c*);
     int standWaitJump(void*);
 
-    bool checkNpcObjGra() { return mMode == 1; }
-    void setCrazyDash() { field_0xa48 |= 4; }
-    void setCrazyCatch() { field_0xa48 |= 2; }
-    void setCrazyThrowLeft() { field_0xa48 |= 8; }
-    void setCrazyThrowRight() { field_0xa48 |= 0x10; }
+    u8 checkNpcObjGra() { return mMode == 1; }
+    void setCrazyDash() { field_0xa48 |= (u16)4; }
+    void setCrazyCatch() { field_0xa48 |= (u16)2; }
+    void setCrazyThrowLeft() { field_0xa48 |= (u16)8; }
+    void setCrazyThrowRight() { field_0xa48 |= (u16)0x10; }
 
     static MotionFunc mBaseMotionList[22];
     static MotionFunc mFaceMotionList[14];

@@ -140,7 +140,7 @@ static int daE_CR_EGG_IsDelete(e_cr_egg_class* a_this) {
 static int daE_CR_EGG_Delete(e_cr_egg_class* a_this) {
     fopAc_ac_c* actor = &a_this->enemy;
 
-    fpc_ProcID id = fopAcM_GetID(actor);
+    fopAcM_RegisterDeleteID(actor, "E_CR_EGG");
     dComIfG_resDelete(&a_this->phase, "E_CR");
     a_this->sound.stopAnime();
     return 1;
@@ -162,7 +162,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
 static int daE_CR_EGG_Create(fopAc_ac_c* i_this) {
     e_cr_egg_class* a_this = (e_cr_egg_class*)i_this;
-    fopAcM_ct(i_this, e_cr_egg_class);
+    fopAcM_ct(&a_this->enemy, e_cr_egg_class);
 
     int phase_state = dComIfG_resLoad(&a_this->phase, "E_CR");
     if (phase_state == cPhs_COMPLEATE_e) {

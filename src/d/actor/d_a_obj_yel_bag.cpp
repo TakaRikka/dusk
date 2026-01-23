@@ -152,7 +152,7 @@ int daObj_YBag_c::Execute() {
     int local_8c = fopAcM_checkCarryNow(this) != 0;
     scale.set(mpHIO->m.field_0x08, mpHIO->m.field_0x08, mpHIO->m.field_0x08);
     attention_info.flags = 0;
-    attention_info.distances[4] = 6;
+    attention_info.distances[fopAc_attn_CARRY_e] = 6;
     mAcchCir.SetWallR(mpHIO->m.field_0x1c);
     mAcchCir.SetWallH(mpHIO->m.field_0x18);
     gravity = mpHIO->m.field_0x04;

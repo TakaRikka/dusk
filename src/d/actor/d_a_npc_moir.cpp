@@ -251,9 +251,9 @@ daNpcMoiR_HIO_c::daNpcMoiR_HIO_c() {
 }
 
 void daNpcMoiR_HIO_c::genMessage(JORMContext* ctext) {
-    ctext->genSlider("目玉横可動範囲", &m.horizontal_eye_movement_range, 0, 0x7fff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("デモ開始距離", &m.demo_start_dist, 200.0f, 600.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genCheckBox("デモ開始エリア", &m.demo_start_area, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctext->genSlider("目玉横可動範囲", &m.horizontal_eye_movement_range, 0, 0x7fff);
+    ctext->genSlider("デモ開始距離", &m.demo_start_dist, 200.0f, 600.0f);
+    ctext->genCheckBox("デモ開始エリア", &m.demo_start_area, 0x1);
     daNpcF_commonGenMessage(ctext, &m.common);
 }
 #endif

@@ -35,84 +35,84 @@ public:
 
     void genMessage(JORMContext* ctext) {
         // featured offset
-        ctext->genSlider("注目オフセット  ", &m.field_0x00, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("注目オフセット  ", &m.field_0x00, 0.0f, 100.0f);
         // gravity
-        ctext->genSlider("重力            ", &m.mGravity, -99.0f, 99.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("重力            ", &m.mGravity, -99.0f, 99.0f);
         // scale
-        ctext->genSlider("スケ－ル        ", &m.field_0x08, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("スケ－ル        ", &m.field_0x08, 0.0f, 100.0f);
         // interpolated frames
-        ctext->genSlider("補間フレ－ム    ", &m.field_0x0c, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("補間フレ－ム    ", &m.field_0x0c, 0.0f, 100.0f);
         // height
-        ctext->genSlider("高さ            ", &m.field_0x14, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("高さ            ", &m.field_0x14, 0.0f, 999.0f);
         // knee-length
-        ctext->genSlider("ひざ丈          ", &m.mWallR, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("ひざ丈          ", &m.mWallR, 0.0f, 999.0f);
         // width
-        ctext->genSlider("幅              ", &m.mWallH, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("幅              ", &m.mWallH, 0.0f, 999.0f);
         // weight
-        ctext->genSlider("体重            ", &m.mWeight, 0.0f, 255.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("体重            ", &m.mWeight, 0.0f, 255.0f);
         // back upper x angle
-        ctext->genSlider("背のＸ角上限    ", &m.field_0x24, -90.0f, 90.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("背のＸ角上限    ", &m.field_0x24, -90.0f, 90.0f);
         // back lower x angle
-        ctext->genSlider("背のＸ角下限    ", &m.field_0x28, -90.0f, 90.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("背のＸ角下限    ", &m.field_0x28, -90.0f, 90.0f);
         // back upper y angle
-        ctext->genSlider("背のＹ角上限    ", &m.field_0x2c, -180.0f, 179.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("背のＹ角上限    ", &m.field_0x2c, -180.0f, 179.0f);
         // --- TODO ---
-        ctext->genSlider("", &m.field_0x30, -180.0f, 179.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x34, -90.0f, 90.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x38, -90.0f, 90.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x3c, -180.0f, 179.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x40, -180.0f, 179.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x44, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x48, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x4c, 0.0f, 180.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x50, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x54, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x56, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x58, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x5a, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x5c, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x60, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x64, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x68, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("", &m.field_0x30, -180.0f, 179.0f);
+        ctext->genSlider("", &m.field_0x34, -90.0f, 90.0f);
+        ctext->genSlider("", &m.field_0x38, -90.0f, 90.0f);
+        ctext->genSlider("", &m.field_0x3c, -180.0f, 179.0f);
+        ctext->genSlider("", &m.field_0x40, -180.0f, 179.0f);
+        ctext->genSlider("", &m.field_0x44, 0.0f, 1.0f);
+        ctext->genSlider("", &m.field_0x48, 0.0f, 999.0f);
+        ctext->genSlider("", &m.field_0x4c, 0.0f, 180.0f);
+        ctext->genSlider("", &m.field_0x50, 0.0f, 999.0f);
+        ctext->genSlider("", &m.field_0x54, 0, 1000);
+        ctext->genSlider("", &m.field_0x56, 0, 1000);
+        ctext->genSlider("", &m.field_0x58, 0, 1000);
+        ctext->genSlider("", &m.field_0x5a, 0, 1000);
+        ctext->genSlider("", &m.field_0x5c, 0, 1000);
+        ctext->genSlider("", &m.field_0x60, 0.0f, 999.0f);
+        ctext->genSlider("", &m.field_0x64, 0.0f, 999.0f);
+        ctext->genSlider("", &m.field_0x68, 0, 1000);
         // Goron Soldier Guard
-        ctext->genLabel("\n-----------------------【見張りゴロン兵】", 0, 0, NULL, -1, -1, 0x200, 0x18);
-        ctext->genSlider("", &m.field_0x70, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x74, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x84, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0xa8, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x78, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x9c, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0x9a, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genLabel("\n-----------------------【見張りゴロン兵】", 0);
+        ctext->genSlider("", &m.field_0x70, 0.0f, 1.0f);
+        ctext->genSlider("", &m.field_0x74, 0.0f, 1.0f);
+        ctext->genSlider("", &m.field_0x84, 0.0f, 1.0f);
+        ctext->genSlider("", &m.field_0xa8, 0.0f, 1.0f);
+        ctext->genSlider("", &m.field_0x78, 0.0f, 1.0f);
+        ctext->genSlider("", &m.field_0x9c, 0, 1000);
+        ctext->genSlider("", &m.field_0x9a, 0, 1000);
         // Rolling attack start demo parameters
-        ctext->genLabel("\n○転がり攻撃開始デモ用パラメータ", 0, 0, NULL, -1, -1, 0x200, 0x18);
-        ctext->genSlider("", &m.field_0xac, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0xae, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0xb0, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0xb2, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0xb4, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0xb8, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genSlider("", &m.field_0xbc, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genLabel("\n○転がり攻撃開始デモ用パラメータ", 0);
+        ctext->genSlider("", &m.field_0xac, 0, 1000);
+        ctext->genSlider("", &m.field_0xae, 0, 1000);
+        ctext->genSlider("", &m.field_0xb0, 0, 1000);
+        ctext->genSlider("", &m.field_0xb2, 0, 1000);
+        ctext->genSlider("", &m.field_0xb4, 0, 1000);
+        ctext->genSlider("", &m.field_0xb8, 0.0f, 999.0f);
+        ctext->genSlider("", &m.field_0xbc, 0.0f, 999.0f);
         // Goron Regular Soldier
-        ctext->genLabel("\n-----------------------【ゴロン一般兵】", 0, 0, NULL, -1, -1, 0x200, 0x18);
+        ctext->genLabel("\n-----------------------【ゴロン一般兵】", 0);
         // search radius (10)
-        ctext->genSlider("サ－チ半径(10)  ", &m.field_0x6c, 0.0f, 9999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("サ－チ半径(10)  ", &m.field_0x6c, 0.0f, 9999.0f);
         // turning speed
-        ctext->genSlider("旋回速度        ", &m.field_0x88, 0, 0x4000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("旋回速度        ", &m.field_0x88, 0, 0x4000);
         // walking speed
-        ctext->genSlider("歩く速度        ", &m.field_0x90, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("歩く速度        ", &m.field_0x90, 0.0f, 999.0f);
         // punch start distance
-        ctext->genSlider("パンチ開始距離  ", &m.field_0x94, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("パンチ開始距離  ", &m.field_0x94, 0.0f, 999.0f);
         // post attack wait time
-        ctext->genSlider("攻撃後待ち時間  ", &m.field_0x98, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("攻撃後待ち時間  ", &m.field_0x98, 0, 1000);
         // attack hand radius
-        ctext->genSlider("攻撃時の手の半径", &m.field_0x8c, 0.0f, 999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+        ctext->genSlider("攻撃時の手の半径", &m.field_0x8c, 0.0f, 999.0f);
         // return speed
-        ctext->genSlider("戻る速度        ", &m.field_0xa0, 0.0f, 9999.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-        ctext->genLabel("\n", 0, 0, NULL, -1, -1, 0x200, 0x18);
+        ctext->genSlider("戻る速度        ", &m.field_0xa0, 0.0f, 9999.0f);
+        ctext->genLabel("\n", 0);
         // debug draw ON
-        ctext->genCheckBox("デバグ描画ＯＮ  ", &m.field_0x8a, true, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+        ctext->genCheckBox("デバグ描画ＯＮ  ", &m.field_0x8a, 0x1);
         // Export File
-        ctext->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+        ctext->genButton("ファイル書き出し", 0x40000002);
     }
 
     void listenPropertyEvent(const JORPropertyEvent*) {
@@ -953,9 +953,9 @@ void daObj_GrA_c::setParam() {
     } else if (mMode == 1) {
         if (checkProcess(&daObj_GrA_c::standWaitJump)) {
             attnSttsOn(1, 1);
-            attention_info.distances[0] = getDistTableIdx(6, 6);
-            attention_info.distances[1] = attention_info.distances[0];
-            attention_info.distances[3] = getDistTableIdx(4, 6);
+            attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(6, 6);
+            attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+            attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(4, 6);
         } else {
             attention_info.flags = 0;
         }

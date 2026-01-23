@@ -320,7 +320,7 @@ void daNpc_grO_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
 void daNpc_grO_HIO_c::genMessage(JORMContext* ctx) {
     daNpcF_commonGenMessage(ctx, &m.common);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -518,7 +518,7 @@ int daNpc_grO_c::CreateHeap() {
 }
 
 int daNpc_grO_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_GRO");
     this->~daNpc_grO_c();
     return 1;
 }

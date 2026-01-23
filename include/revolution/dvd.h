@@ -247,6 +247,7 @@ s32 DVDCancel(DVDCommandBlock* block);
 int DVDCancelAllAsync(DVDCBCallback callback);
 s32 DVDCancelAll(void);
 DVDDiskID* DVDGetCurrentDiskID(void);
+BOOL DVDCheckDiskAsync(DVDCommandBlock* block, DVDCBCallback callback);
 BOOL DVDCheckDisk(void);
 
 // DVD FATAL

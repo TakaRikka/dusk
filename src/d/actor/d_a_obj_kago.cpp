@@ -191,7 +191,7 @@ int daObj_Kago_c::Execute() {
     scale.set(mpHIO->m.field_0x08 * field_0xb0c, mpHIO->m.field_0x08 * field_0xb0c, mpHIO->m.field_0x08 * field_0xb0c);
     attention_info.flags = 0;
     fopAcM_OffCarryType(this, fopAcM_CARRY_CHICKEN);
-    attention_info.distances[4] = 13;
+    attention_info.distances[fopAc_attn_CARRY_e] = 13;
 
     if (mType == 0) {
         mStts.SetWeight(mpHIO->m.mWeight);

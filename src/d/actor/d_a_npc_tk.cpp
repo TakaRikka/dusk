@@ -22,7 +22,9 @@ public:
     daNPC_TK_HIO_c();
     virtual ~daNPC_TK_HIO_c() {}
 
-    void genMessage(JORMContext*) {}
+#if DEBUG
+    void genMessage(JORMContext* context);
+#endif
 
     s8 field_0x4;
     f32 field_0x8;
@@ -58,6 +60,38 @@ daNPC_TK_HIO_c::daNPC_TK_HIO_c() {
     field_0x38 = 4096.0f;
     field_0x3c = 1;
 }
+
+#if DEBUG
+void daNPC_TK_HIO_c::genMessage(JORMContext* context) {
+    context->genLabel("  鷹匠", 0x80000001);
+    context->genSlider("基本サイズ", &field_0x8, 0.0f, 5.0f);
+    context->genLabel("  ", 0x80000001);
+    context->genLabel("  ", 0x80000001);
+    context->genLabel("↓鷹着腕時、アニメーション開始タイミング調整", 0x80000001);
+    context->genSlider("breaking_bck", &field_0xc, 0.0f, 200.0f);
+    context->genSlider("hovering_bck", &field_0x10, 0.0f, 200.0f);
+    context->genSlider("land_bck", &field_0x14, 0.0f, 200.0f);
+    context->genLabel("  ", 0x80000001);
+    context->genLabel("  ", 0x80000001);
+    context->genLabel("↓カメラデモ時", 0x80000001);
+    context->genSlider("旋回注目時間", &field_0x18, 0.0f, 200.0f);
+    context->genSlider("旋回下降時間", &field_0x1c, 0.0f, 200.0f);
+    context->genSlider("旋回下降速度", &field_0x20, 0.0f, 200.0f);
+    context->genSlider("旋回飛行速度", &field_0x24, 0.0f, 200.0f);
+    context->genCheckBox("パス開始点ランダム", &field_0x3c, 0x1);
+    context->genLabel("  ", 0x80000001);
+    context->genLabel("  ", 0x80000001);
+    context->genLabel("↓極秘！！獲物ゲット時", 0x80000001);
+    context->genSlider("獲物発見距離", &field_0x34, 0.0f, 2000.0f);
+    context->genSlider("獲物発見角度", &field_0x38, 0.0f, 10000.0f);
+    context->genLabel("  ", 0x80000001);
+    context->genLabel("  ", 0x80000001);
+    context->genLabel("↓通常動作時", 0x80000001);
+    context->genSlider("攻撃速度", &field_0x28, 0.0f, 200.0f);
+    context->genSlider("飛行速度", &mFlySpeed, 0.0f, 200.0f);
+    context->genSlider("飛行回転速度", &field_0x30, 0.0f, 10000.0f);
+}
+#endif
 
 void daNPC_TK_c::setBck(int param_0, u8 param_1, f32 param_2, f32 param_3) {
     mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Npc_tk", param_0), param_1, param_2,
@@ -285,6 +319,7 @@ static void* s_obj_sub(void* param_0, void* param_1) {
 }
 
 static void* s_hanjo(void* param_0, void* param_1) {
+    UNUSED(param_1);
     if (fopAcM_IsActor(param_0) != 0 && fopAcM_GetName(param_0) == PROC_NPC_HANJO) {
         return param_0;
     } else {
@@ -326,7 +361,8 @@ void daNPC_TK_c::executeFly() {
         }
 
         if ((home.pos - current.pos).absXZ() > 2000.0f) {
-            s16 angleDiff = cLib_targetAngleY(&current.pos, &home.pos) - shape_angle.y;
+            s16 angleDiff = cLib_targetAngleY(&current.pos, &home.pos);
+            angleDiff = angleDiff - shape_angle.y;
             if (angleDiff < 0) {
                 field_0x698 = 1;
             } else {
@@ -339,7 +375,7 @@ void daNPC_TK_c::executeFly() {
         } else {
             cLib_chaseS(&field_0x69c, -l_HIO.field_0x30, 0x10);
         }
-        shape_angle.y = current.angle.y = current.angle.y + field_0x69c;
+        shape_angle.y = current.angle.y += field_0x69c;
         speedF = l_HIO.mFlySpeed;
 
         break;
@@ -364,30 +400,30 @@ void daNPC_TK_c::executeFly() {
 }
 
 void daNPC_TK_c::initPerchDemo(int param_0) {
+    cXyz commonXyz1;
+
     s16 masterAngleY2;
     s16 masterAngleY = getMasterPointer()->shape_angle.y;
     masterAngleY2 = masterAngleY;
     if (masterAngleY > -0x2000 && masterAngleY < 0x7000) {
-        if (masterAngleY < 0x2800) {
+        if (masterAngleY2 < 0x2800) {
             masterAngleY2 = -0x2000;
         } else {
             masterAngleY2 = 0x7000;
         }
     }
 
-    cXyz commonXyz1;
-    s16 targetAngleY;
     switch (param_0) {
     case 0:
-        speedF = 0.0f;
-        speed.y = 0.0f;
+        speed.y = speedF = 0.0f;
         if (mpPath1 == NULL) {
             current.pos = getMasterPointer()->current.pos;
             current.pos.y += 2000.0f;
             current.pos.z += 2000.0f;
         } else {
             mPathStep2 = 0;
-            current.pos = dPath_GetPnt(mpPath1, mPathStep2)->m_position;
+            dPnt* pnt = dPath_GetPnt(mpPath1, mPathStep2);
+            current.pos = pnt->m_position;
         }
 
         break;
@@ -395,10 +431,8 @@ void daNPC_TK_c::initPerchDemo(int param_0) {
         field_0x698 = 0;
         field_0x67c = 0.0f;
         field_0x6c2 = 0;
-        shape_angle.z = 0;
-        shape_angle.x = 0;
-        speedF = 0.0f;
-        speed.y = 0.0f;
+        shape_angle.x = shape_angle.z = 0;
+        speed.y = speedF = 0.0f;
         field_0x694 = 0;
         commonXyz1.set(0.0f, 3000.0f, -5000.0f);
 
@@ -412,8 +446,7 @@ void daNPC_TK_c::initPerchDemo(int param_0) {
             commonXyz1.set(-350.0f, 0.0f, -600.0f);
             cLib_offsetPos(&current.pos, &field_0x604, masterAngleY2, &commonXyz1);
 
-            current.angle.y = (s32)masterAngleY2 + 0x4000;
-            shape_angle.y = masterAngleY2 + 0x4000;
+            shape_angle.y = current.angle.y = (s32)masterAngleY2 + 0x4000;
             field_0x69e = 0;
             field_0x6b4 = 40;
             field_0x678 = 5.0f;
@@ -423,7 +456,7 @@ void daNPC_TK_c::initPerchDemo(int param_0) {
                 mPathStep2 = cM_rndFX(5.0f);
 
                 if (mPathStep2 < 0) {
-                    mPathStep2 += mpPath1->m_num;
+                    ADD_S8_2(mPathStep2, mpPath1->m_num);
                 }
 
                 if (mPathStep2 >= mpPath1->m_num || mPathStep2 < 0) {
@@ -433,7 +466,8 @@ void daNPC_TK_c::initPerchDemo(int param_0) {
                 mPathStep2 = 0;
             }
 
-            current.pos = dPath_GetPnt(mpPath1, mPathStep2)->m_position;
+            dPnt* pnt = dPath_GetPnt(mpPath1, mPathStep2);
+            current.pos = pnt->m_position;
             mPathStep2++;
 
             if (mPathStep2 >= mpPath1->m_num) {
@@ -441,9 +475,7 @@ void daNPC_TK_c::initPerchDemo(int param_0) {
             }
 
             commonXyz1 = dPath_GetPnt(mpPath1, mPathStep2)->m_position;
-            targetAngleY = cLib_targetAngleY(&current.pos, &commonXyz1);
-            current.angle.y = targetAngleY;
-            shape_angle.y = targetAngleY;
+            shape_angle.y = current.angle.y = cLib_targetAngleY(&current.pos, &commonXyz1);
 
             field_0x6b4 = 180;
             field_0x6b0 = field_0x6b4 + l_HIO.field_0x18;
@@ -468,9 +500,7 @@ void daNPC_TK_c::initPerchDemo(int param_0) {
 
         shape_angle.set(0, 0, 0);
 
-        targetAngleY = cLib_targetAngleY(&current.pos, &field_0x604);
-        current.angle.y = targetAngleY;
-        shape_angle.y = targetAngleY;
+        shape_angle.y = current.angle.y = cLib_targetAngleY(&current.pos, &field_0x604);
 
         break;
     case 3:
@@ -489,7 +519,7 @@ bool daNPC_TK_c::executePerchDemo(int param_0) {
     cXyz pathPos;
     cXyz masterPos;
 
-    fopAc_ac_c* unusedMaster = getMasterPointer();
+    s16 unused_angle = getMasterPointer()->shape_angle.y;
 
     field_0x698 = field_0x698 + 1;
 
@@ -536,8 +566,9 @@ bool daNPC_TK_c::executePerchDemo(int param_0) {
             }
 
             current.pos.y = current.pos.y + field_0x67c;
-
-            pathPos = dPath_GetPnt(mpPath1, mPathStep2)->m_position;
+            
+            dPnt* pnt = dPath_GetPnt(mpPath1, mPathStep2);
+            pathPos = pnt->m_position;
             cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &pathPos), 0x20,
                                0x100, 0x40);
 
@@ -691,7 +722,8 @@ void daNPC_TK_c::executeHandOn() {
         field_0x698 = 1;
     }
 
-    shape_angle.y = current.angle.y = daPy_getPlayerActorClass()->shape_angle.y - 0x2800;
+    s16 ang =  daPy_getPlayerActorClass()->shape_angle.y - 0x2800;
+    shape_angle.y = current.angle.y = ang;
     field_0x6a4 = daPy_getPlayerActorClass()->getBodyAngleX();
 
     switch (field_0x694) {
@@ -736,7 +768,8 @@ void daNPC_TK_c::executeHandOn() {
 
 bool daNPC_TK_c::checkWaterSurface(f32 param_0) {
     dBgS_ObjGndChk_Spl gndChk;
-    cXyz pos = current.pos;
+    Vec pos;
+    pos = current.pos;
     pos.y += 500.0f;
     gndChk.SetPos((Vec*)&pos);
     field_0x684 = dComIfG_Bgsp().GroundCross(&gndChk);
@@ -763,7 +796,6 @@ void daNPC_TK_c::executeAttack() {
     };
 
     field_0x6bd = 1;
-
     switch (field_0x694) {
     case 0: {
         if (eventInfo.checkCommandDemoAccrpt() == 0) {
@@ -883,84 +915,82 @@ void daNPC_TK_c::executeAttack() {
             }
         }
 
-        if ((field_0x604 - current.pos).abs() >= taka_attack_dist[field_0x719] + nREG_F(18) &&
-            mAcch.ChkWallHit() == 0 && mAcch.ChkGroundHit() == 0)
-        {
+        bool b = (field_0x604 - current.pos).abs() >= taka_attack_dist[field_0x719] + nREG_F(18);
+        if (b && mAcch.ChkWallHit() == 0 && mAcch.ChkGroundHit() == 0) {
             this->field_0x698 = 2;
 
             setActionMode(4);
+            break;
+        }
+
+        if (mAcch.ChkWallHit() != 0) {
+            setAwayAction(0);
+
+            shape_angle.y = mCircle.GetWallAngleY() + 0x8000;
+            current.angle.y = shape_angle.y;
+
+            field_0x6c3 = 0;
         } else {
-            if (mAcch.ChkWallHit() != 0) {
+            if (mAcch.ChkGroundHit() != 0) {
                 setAwayAction(0);
 
-                shape_angle.y = mCircle.GetWallAngleY() + 0x8000;
-                current.angle.y = shape_angle.y;
+                field_0x6c3 = 1;
+            } else {
+                if (checkWaterSurface(50.0f) != 0) {
+                    setAwayAction(0);
+
+                    field_0x6c3 = 2;
+                }
+            }
+        }
+
+        if (mSphere.ChkAtHit() != 0) {
+            fopAc_ac_c* local_118 = dCc_GetAc(mSphere.GetAtHitObj()->GetAc());
+            if (fopAcM_GetName(local_118) != PROC_ALINK &&
+                fopAcM_GetName(local_118) != PROC_E_ARROW)
+            {
+                setAwayAction(0);
 
                 field_0x6c3 = 0;
-            } else {
-                if (mAcch.ChkGroundHit() != 0) {
-                    setAwayAction(0);
-
-                    field_0x6c3 = 1;
-                } else {
-                    if (checkWaterSurface(50.0f) != 0) {
-                        setAwayAction(0);
-
-                        field_0x6c3 = 2;
-                    }
-                }
             }
-            if (mSphere.ChkAtHit() != 0) {
-                fopAc_ac_c* local_118 = dCc_GetAc(mSphere.GetAtHitObj()->GetAc());
-                if (fopAcM_GetName(local_118) != PROC_ALINK &&
-                    fopAcM_GetName(local_118) != PROC_E_ARROW)
-                {
-                    setAwayAction(0);
+        }
 
-                    field_0x6c3 = 0;
-                }
-            }
-
-            cXyz unkXyz4(field_0x628);
-            cXyz unkXyz5(current.pos);
+        // this extra scope affects destructor placement for linChk, probably a fakematch
+        if (true) {
+            cXyz unkXyz4 = field_0x628;
+            cXyz unkXyz5 = current.pos;
             unkXyz4.y += 40.0f;
             unkXyz5.y += 40.0f;
 
-            // this extra scope affects destructor placement for linChk, probably a fakematch
-            {
-                dBgS_LinChk linChk;
-                linChk.Set(&unkXyz4, &unkXyz5, NULL);
-                if (dComIfG_Bgsp().LineCross(&linChk) != 0) {
-                    setAwayAction(0);
+            dBgS_LinChk linChk;
+            linChk.Set(&unkXyz4, &unkXyz5, NULL);
+            if (dComIfG_Bgsp().LineCross(&linChk) != 0) {
+                setAwayAction(0);
 
-                    field_0x6c3 = 0;
-                }
-            }
-
-            m_near_angle = 0x2000;
-            m_near_actor = NULL;
-
-            fpcM_Search(s_obj_sub, this);
-
-            field_0x634 = m_near_actor;
-            if (field_0x634 != 0 && current.pos.abs(field_0x634->current.pos) < l_HIO.field_0x34) {
-                if (fopAcM_GetName(field_0x634) == PROC_NI) {
-                    mCarryType = 0;
-                } else {
-                    if (fopAcM_GetName(field_0x634) == PROC_OBJ_KAGO) {
-                        mCarryType = 2;
-                    } else {
-                        if (fopAcM_GetName(field_0x634) == PROC_OBJ_PUMPKIN) {
-                            mCarryType = 1;
-                        }
-                    }
-                }
-
-                setActionMode(5);
+                field_0x6c3 = 0;
             }
         }
-        break;
-    }
+
+        m_near_angle = 0x2000;
+        m_near_actor = NULL;
+
+        fpcM_Search(s_obj_sub, this);
+
+        field_0x634 = m_near_actor;
+        if (field_0x634 != 0 && current.pos.abs(field_0x634->current.pos) < l_HIO.field_0x34) {
+            if (fopAcM_GetName(field_0x634) == PROC_NI) {
+                mCarryType = 0;
+            } else if (fopAcM_GetName(field_0x634) == PROC_OBJ_KAGO) {
+                mCarryType = 2;
+            } else if (fopAcM_GetName(field_0x634) == PROC_OBJ_PUMPKIN) {
+                mCarryType = 1;
+            }
+
+            setActionMode(5);
+        } else {
+            break; // needed to match debug
+        }
+    } break;
     case 2: {
         mAcch.SetGroundUpY(fabsf(cM_ssin(shape_angle.x) * 30.0f));
 
@@ -1000,14 +1030,13 @@ void daNPC_TK_c::executeAttack() {
 
             mAcch.SetGroundUpY(0.0f);
         }
-        break;
-    }
+    } break;
     }
 }
 
 void daNPC_TK_c::executeAway() {
     field_0x6bd = 1;
-
+    u32 bgCheckRv;
     switch (field_0x694) {
     case 0: {
         if (field_0x698 == 0 || field_0x698 == 2) {
@@ -1020,8 +1049,7 @@ void daNPC_TK_c::executeAway() {
             field_0x694 = 1;
 
             if (field_0x698 == 0) {
-                field_0x67c = 0.0f;
-                field_0x678 = 0.0f;
+                field_0x678 = field_0x67c = 0.0f;
             }
         } else {
             setBck(6, 2, 3.0f, 2.0f);
@@ -1052,7 +1080,7 @@ void daNPC_TK_c::executeAway() {
                 setActionMode(0);
             }
         } else {
-            u32 bgCheckRv = checkBeforeBg();
+            bgCheckRv = checkBeforeBg();
             if ((bgCheckRv & 1) != 0) {
                 cLib_chaseF(&speedF, 0.0f, 3.0f);
             } else {
@@ -1072,7 +1100,7 @@ void daNPC_TK_c::executeAway() {
         break;
     }
     case 2: {
-        u32 bgCheckRv = checkBeforeBg();
+        bgCheckRv = checkBeforeBg();
         if ((bgCheckRv & 1) != 0) {
             cLib_chaseF(&speedF, 0.0f, 3.0f);
         } else {
@@ -1100,36 +1128,37 @@ void daNPC_TK_c::executeAway() {
 }
 
 void daNPC_TK_c::setCarryActorMtx() {
-    field_0x6a8 += 0x6bc;
+    field_0x6a8 += (s16)0x6bc;
     field_0x6a6 = cM_ssin(field_0x6a8) * 2048.0f + 4096.0f;
-    if (field_0x634 != NULL) {
-        cXyz unkXyz1;
-        switch (mCarryType) {
-        case 0:
-            mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0));
-            mDoMtx_stack_c::multVecZero(&unkXyz1);
-            mDoMtx_stack_c::transS(unkXyz1);
-            mDoMtx_stack_c::ZXYrotM(-shape_angle.x, shape_angle.y - 0x8000, shape_angle.z);
-            mDoMtx_stack_c::transM(nREG_F(19), -60.0f + nREG_F(18), 30.0f + nREG_F(17));
-            ((ni_class*)field_0x634)->setMtx(mDoMtx_stack_c::get());
-            break;
-        case 2:
-            mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0));
-            mDoMtx_stack_c::multVecZero(&unkXyz1);
-            mDoMtx_stack_c::transS(unkXyz1);
-            mDoMtx_stack_c::ZXYrotM(shape_angle.z, shape_angle.y - 0x4000, -shape_angle.x / 2);
-            mDoMtx_stack_c::transM(-40.0f, -85.0f, 0.0f);
-            mDoMtx_stack_c::transM(20.0f, 60.0f, 0.0f);
-            mDoMtx_stack_c::ZXYrotM(0, 0, field_0x6a6);
-            mDoMtx_stack_c::transM(-20.0f, -60.0f, 0.0f);
-            ((daObj_Kago_c*)field_0x634)->setMtx(mDoMtx_stack_c::get());
-            break;
-        case 1:
-            mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0));
-            mDoMtx_stack_c::transM(-35.0f, -45.0f, 0.0f);
-            ((daObj_Pumpkin_c*)field_0x634)->setMtx(mDoMtx_stack_c::get());
-            break;
-        }
+    if (field_0x634 == NULL) {
+        return;
+    }
+    cXyz unkXyz1;
+    switch (mCarryType) {
+    case 0:
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0));
+        mDoMtx_stack_c::multVecZero(&unkXyz1);
+        mDoMtx_stack_c::transS(unkXyz1);
+        mDoMtx_stack_c::ZXYrotM(-shape_angle.x, shape_angle.y - 0x8000, shape_angle.z);
+        mDoMtx_stack_c::transM(nREG_F(19), -60.0f + nREG_F(18), 30.0f + nREG_F(17));
+        ((ni_class*)field_0x634)->setMtx(mDoMtx_stack_c::get());
+        break;
+    case 2:
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0));
+        mDoMtx_stack_c::multVecZero(&unkXyz1);
+        mDoMtx_stack_c::transS(unkXyz1);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.z, shape_angle.y - 0x4000, -shape_angle.x / 2);
+        mDoMtx_stack_c::transM(-40.0f, -85.0f, 0.0f);
+        mDoMtx_stack_c::transM(20.0f, 60.0f, 0.0f);
+        mDoMtx_stack_c::ZXYrotM(0, 0, field_0x6a6);
+        mDoMtx_stack_c::transM(-20.0f, -60.0f, 0.0f);
+        ((daObj_Kago_c*)field_0x634)->setMtx(mDoMtx_stack_c::get());
+        break;
+    case 1:
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0));
+        mDoMtx_stack_c::transM(-35.0f, -45.0f, 0.0f);
+        ((daObj_Pumpkin_c*)field_0x634)->setMtx(mDoMtx_stack_c::get());
+        break;
     }
 }
 
@@ -1151,11 +1180,11 @@ f32 daNPC_TK_c::getTakeOffPosY() {
     cXyz unusedXyz;  // debug match
 
     if (mCarryType == 0) {
-        return 210.0f + nREG_F(15);
+        return 210.0f + nREG_F(14);
     } else if (mCarryType == 2) {
-        return 250.0f + nREG_F(15);
+        return 250.0f + nREG_F(14);
     } else if (mCarryType == 1) {
-        return 200.0f + nREG_F(15);
+        return 200.0f + nREG_F(14);
     } else {
         return -1.0f;
     }
@@ -1176,8 +1205,7 @@ void daNPC_TK_c::executeBack() {
 
         switch (field_0x694) {
         case 0: {
-            speed.y = 0.0f;
-            speedF = 0.0f;
+            speedF = speed.y = 0.0f;
 
             field_0x694 = 1;
 
@@ -1273,24 +1301,24 @@ void daNPC_TK_c::executeBack() {
                     mSound.startCreatureVoice(Z2SE_HAWK_V_TAKE_OFF, -1);
                     field_0x6a8 = 0;
                 }
+                break;
             }
             break;
         }
         case 2: {
             field_0x6c6 = 1;
 
-            shape_angle.y = shape_angle.y + field_0x69e;
+            shape_angle.y += field_0x69e;
             current.angle.y = shape_angle.y;
 
-            shape_angle.x = shape_angle.x - (0x300 + nREG_S(0));
+            shape_angle.x -= (s16)(0x300 + nREG_S(0));
 
             if (shape_angle.x < -0x3000) {
                 shape_angle.x = -0x3000;
                 field_0x694 = 3;
                 field_0x69c = 0;
-                s16 targetAngleY =
-                    cLib_targetAngleY(&current.pos, &field_0x63c[2]) - current.angle.y;
-                field_0x69e = abs(targetAngleY);
+                field_0x69e =
+                    abs((s16)(cLib_targetAngleY(&current.pos, &field_0x63c[2]) - current.angle.y));
             }
 
             cLib_chaseF(&field_0x678, 18.0f, 1.0f);
@@ -1308,7 +1336,7 @@ void daNPC_TK_c::executeBack() {
 
             current.angle.y = shape_angle.y;
 
-            if (fabsf(current.pos.y - unkXyz1.y) > 500.0f) {
+            if (std::abs(current.pos.y - unkXyz1.y) > 500.0f) {
                 if (current.pos.y > unkXyz1.y) {
                     cLib_chaseAngleS(&shape_angle.x, 0x2000, 0x400);
                 } else {
@@ -1325,8 +1353,8 @@ void daNPC_TK_c::executeBack() {
             speedF = field_0x678 * cM_scos(-shape_angle.x);
             speed.y = field_0x678 * cM_ssin(-shape_angle.x);
 
-            s16 targetAngleY = cLib_targetAngleY(&current.pos, &field_0x63c[2]) - current.angle.y;
-            s16 targetAngleYAbs = abs(targetAngleY);
+            s16 targetAngleYAbs =
+                abs((s16)(cLib_targetAngleY(&current.pos, &field_0x63c[2]) - current.angle.y));
             if (targetAngleYAbs >= field_0x69e) {
                 field_0x694 = 10;
             } else {
@@ -1343,11 +1371,11 @@ void daNPC_TK_c::executeBack() {
             field_0x6c6 = 1;
             unkXyz1 = playerPos;
 
-            s16 targetAngleY = cLib_targetAngleY(&current.pos, &unkXyz1);
-            cLib_addCalcAngleS(&shape_angle.y, targetAngleY, 8, 0x800, 0x40);
+            cLib_addCalcAngleS(&shape_angle.y, cLib_targetAngleY(&current.pos, &unkXyz1), 8, 0x800,
+                               0x40);
             current.angle.y = shape_angle.y;
 
-            if (fabsf(current.pos.y - unkXyz1.y) > 500.0f) {
+            if (std::abs(current.pos.y - unkXyz1.y) > 500.0f) {
                 if (current.pos.y > unkXyz1.y) {
                     cLib_chaseAngleS(&shape_angle.x, 0x2000, 0x400);
                 } else {
@@ -1399,8 +1427,7 @@ void daNPC_TK_c::executeBack() {
             }
 
             if (mAcch.ChkWallHit() != 0) {
-                s16 angleDiffOpp = mCircle.GetWallAngleY() + 0x8000 - current.angle.y;
-                if (abs(angleDiffOpp) < 0x3000) {
+                if (abs((s16)(mCircle.GetWallAngleY() + 0x8000 - current.angle.y)) < 0x3000) {
                     setAwayAction(0);
 
                     shape_angle.y = mCircle.GetWallAngleY() + 0x8000;
@@ -1493,7 +1520,8 @@ void daNPC_TK_c::executeStayHanjo() {
 }
 
 void daNPC_TK_c::executeAttackLink() {
-    cXyz playerPos = dComIfGp_getPlayer(0)->current.pos;
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    cXyz playerPos = player->current.pos;
 
     field_0x6bd = 1;
     field_0x71a = 1;
@@ -1576,7 +1604,7 @@ void daNPC_TK_c::executeAttackLink() {
         field_0x6ae = 1;
         if (mSphere.ChkAtHit() != 0) {
             if (fopAcM_GetName(dCc_GetAc(mSphere.GetAtHitObj()->GetAc())) == PROC_ALINK) {
-                field_0x6c7 = field_0x6c7 + 1;
+                field_0x6c7++;
                 mSphere.ClrAtHit();
                 field_0x694 = 4;
             } else {
@@ -1603,7 +1631,7 @@ void daNPC_TK_c::executeAttackLink() {
         current.angle.y = shape_angle.y;
         f32 yDiff = playerPos.y - current.pos.y;
         f32 targetSpeedY = 0.0f;
-        if (fabsf(yDiff) >= 10.0f) {
+        if (std::abs(yDiff) >= 10.0f) {
             if (yDiff < 0.0f) {
                 targetSpeedY = -10.0f;
             } else {
@@ -1645,89 +1673,92 @@ void daNPC_TK_c::executeAttackLink() {
 void daNPC_TK_c::executeBackHanjo() {
     mpMaster = (daNpc_Hanjo_c*)fpcM_Search(s_hanjo, this);
 
-    if (mpMaster != NULL) {
-        cXyz cStack_20;
-        cXyz auStack_2c = getHanjoHandPos();
-        if (!checkAttackDemo()) {
-            if (field_0x698 == 0) {
-                switch (field_0x694) {
-                case 0: {
-                    mSphere.OffAtSetBit();
-                    cStack_20.set(800.0f, 300.0f, -800.0f);
-                    cLib_offsetPos(&field_0x604, &auStack_2c, mpMaster->shape_angle.y, &cStack_20);
-                    field_0x678 = 30.0f;
-                    break;
-                }
-                case 1: {
-                    cStack_20.set(200.0f, 0.0f, -150.0f);
-                    cLib_offsetPos(&field_0x604, &auStack_2c, mpMaster->shape_angle.y, &cStack_20);
-                    break;
-                }
-                case 2: {
-                    cStack_20.set(100.0f, 50.0f, -70.0f);
-                    cLib_offsetPos(&field_0x604, &auStack_2c, mpMaster->shape_angle.y, &cStack_20);
-                    setBck(5, 2, 5.0f, 1.0f);
-                    break;
-                }
-                case 3: {
-                    field_0x604 = getHanjoHandPos();
-                    setBck(9, 2, 5.0f, 1.0f);
-                    mSound.startCreatureVoice(Z2SE_HAWK_V_LANDING, -1);
-                    break;
-                }
-                }
-                field_0x698 = field_0x698 + 1;
-            }
+    if (mpMaster == NULL) {
+        return;
+    }
+    cXyz cStack_20;
+    cXyz auStack_2c = getHanjoHandPos();
+    if (checkAttackDemo()) {
+        return;
+    }
 
-            cXyz cStack_38 = field_0x604 - current.pos;
-            s16 sVar4 = (s16)cM_atan2s(cStack_38.absXZ(), cStack_38.y);
-            s16 sVar5 = cLib_targetAngleY(&current.pos, &field_0x604);
-            switch (field_0x694) {
-            case 1:
-                cLib_chaseF(&field_0x678, 20.0f, 1.0f);
-            case 0:
-                cLib_addCalcAngleS(&shape_angle.y, sVar5, 8, 0x1000, 0x100);
-                current.angle.y = shape_angle.y;
+    if (field_0x698 == 0) {
+        switch (field_0x694) {
+        case 0: {
+            mSphere.OffAtSetBit();
+            cStack_20.set(800.0f, 300.0f, -800.0f);
+            cLib_offsetPos(&field_0x604, &auStack_2c, mpMaster->shape_angle.y, &cStack_20);
+            field_0x678 = 30.0f;
+            break;
+        }
+        case 1: {
+            cStack_20.set(200.0f, 0.0f, -150.0f);
+            cLib_offsetPos(&field_0x604, &auStack_2c, mpMaster->shape_angle.y, &cStack_20);
+            break;
+        }
+        case 2: {
+            cStack_20.set(100.0f, 50.0f, -70.0f);
+            cLib_offsetPos(&field_0x604, &auStack_2c, mpMaster->shape_angle.y, &cStack_20);
+            setBck(5, 2, 5.0f, 1.0f);
+            break;
+        }
+        case 3: {
+            field_0x604 = getHanjoHandPos();
+            setBck(9, 2, 5.0f, 1.0f);
+            mSound.startCreatureVoice(Z2SE_HAWK_V_LANDING, -1);
+            break;
+        }
+        }
+        field_0x698 = field_0x698 + 1;
+    }
 
-                cLib_chaseF(&speed.y, field_0x678 * cM_scos(sVar4), 3.0f);
-                cLib_chaseF(&speedF, field_0x678 * cM_ssin(sVar4), 3.0f);
+    cXyz cStack_38 = field_0x604 - current.pos;
+    s16 sVar4 = (s16)cM_atan2s(cStack_38.absXZ(), cStack_38.y);
+    s16 sVar5 = cLib_targetAngleY(&current.pos, &field_0x604);
+    switch (field_0x694) {
+    case 1:
+        cLib_chaseF(&field_0x678, 20.0f, 1.0f);
+    case 0:
+        cLib_addCalcAngleS(&shape_angle.y, sVar5, 8, 0x1000, 0x100);
+        current.angle.y = shape_angle.y;
 
-                if (cStack_38.abs() < 100.0f) {
-                    field_0x694 = field_0x694 + 1;
+        cLib_chaseF(&speed.y, field_0x678 * cM_scos(sVar4), 3.0f);
+        cLib_chaseF(&speedF, field_0x678 * cM_ssin(sVar4), 3.0f);
+
+        if (cStack_38.abs() < 100.0f) {
+            field_0x694 = field_0x694 + 1;
+            field_0x698 = 0;
+        }
+
+        break;
+    case 2:
+    case 3:
+        cLib_chaseF(&field_0x678, 5.0f, 1.0f);
+
+        cLib_addCalcAngleS(&shape_angle.y, sVar5, 8, 0x1000, 0x100);
+        current.angle.y = shape_angle.y;
+
+        cLib_chaseF(&speed.y, field_0x678 * cM_scos(sVar4), 3.0f);
+        cLib_chaseF(&speedF, field_0x678 * cM_ssin(sVar4), 3.0f);
+
+        if (field_0x694 == 2) {
+            if (cStack_38.abs() < 100.0f + nREG_F(15)) {
+                if (checkBck(7) == 0) {
+                    setBck(7, 2, 5.0f, 1.0f);
+                }
+
+                if (cStack_38.abs() < 30.0f) {
+                    field_0x694 = 3;
                     field_0x698 = 0;
                 }
-
-                break;
-            case 2:
-            case 3:
-                cLib_chaseF(&field_0x678, 5.0f, 1.0f);
-
-                cLib_addCalcAngleS(&shape_angle.y, sVar5, 8, 0x1000, 0x100);
-                current.angle.y = shape_angle.y;
-
-                cLib_chaseF(&speed.y, field_0x678 * cM_scos(sVar4), 3.0f);
-                cLib_chaseF(&speedF, field_0x678 * cM_ssin(sVar4), 3.0f);
-
-                if (field_0x694 == 2) {
-                    if (cStack_38.abs() < 100.0f + nREG_F(15)) {
-                        if (checkBck(7) == 0) {
-                            setBck(7, 2, 5.0f, 1.0f);
-                        }
-
-                        if (cStack_38.abs() < 30.0f) {
-                            field_0x694 = 3;
-                            field_0x698 = 0;
-                        }
-                    }
-                    break;
-                }
-
-                if (cStack_38.abs() <= 5.0f) {
-                    setActionMode(6);
-                }
-                break;
             }
+            break;
         }
+
+        if (cStack_38.abs() <= 5.0f) {
+            setActionMode(6);
+        }
+        break;
     }
 }
 
@@ -1743,19 +1774,17 @@ bool daNPC_TK_c::checkAttackDemo() {
 }
 
 void daNPC_TK_c::executeAttackDemo() {
-    daPy_py_c* player = daPy_getPlayerActorClass();
-
-    cXyz posWithOffset = player->current.pos;
+    cXyz posWithOffset = daPy_getPlayerActorClass()->current.pos;
     posWithOffset.y += 50.0f;
     cXyz vecToPlayer = posWithOffset - current.pos;
 
-    s32 pitch;
     switch (field_0x694) {
     case 0:
         field_0x694 = 1;
         setBck(8, 2, 10.0f, 1.0f);
         mSphere.ClrAtHit();
-    case 1:
+    case 1: {
+        s32 pitch;
         mSphere.OnAtSetBit();
         mSphere.SetAtSpl(dCcG_At_Spl_UNK_1);
         mSphere.SetAtSPrm(5);
@@ -1791,13 +1820,12 @@ void daNPC_TK_c::executeAttackDemo() {
                 mSphere.ClrAtHit();
             }
         }
-        break;
+    } break;
     }
 }
 
 void daNPC_TK_c::executeBackHanjoDemo() {
     s16 angleY;
-    s32 pitch;
     cXyz unkXyz1;
 
     cXyz offset;
@@ -1810,14 +1838,13 @@ void daNPC_TK_c::executeBackHanjoDemo() {
     if (field_0x698 == 0) {
         switch (field_0x694) {
         case 0: {
-            offset.set(0.0f, 3400.0f + nREG_F(19), -2000.0f);
-            angleY = getMasterPointer()->shape_angle.y - 0x2000;
+            offset.set(0.0f, 3400.0f + nREG_F(1), -2000.0f);
+            angleY = (s16)(getMasterPointer()->shape_angle.y - 0x2000);
             cLib_offsetPos(&current.pos, &getMasterPointer()->current.pos, angleY, &offset);
 
             shape_angle.y = current.angle.y = angleY;
 
-            speed.y = 0.0f;
-            speedF = 0.0f;
+            speedF = speed.y = 0.0f;
 
             mSphere.OffAtSetBit();
 
@@ -1857,7 +1884,7 @@ void daNPC_TK_c::executeBackHanjoDemo() {
 
     unkXyz1 = field_0x604 - current.pos;
     s16 sVar4 = cLib_targetAngleY(&current.pos, &field_0x604);
-    cM_atan2s(unkXyz1.absXZ(), unkXyz1.y);
+    angleY = (s16)cM_atan2s(unkXyz1.absXZ(), unkXyz1.y);
 
     switch (field_0x694) {
     case 1: {
@@ -1872,9 +1899,9 @@ void daNPC_TK_c::executeBackHanjoDemo() {
         current.angle.y = shape_angle.y;
 
         if (field_0x6b0 == 0) {
-            pitch = cM_atan2s(unkXyz1.absXZ(), unkXyz1.y);
-            cLib_chaseF(&speed.y, field_0x678 * cM_scos(pitch), 1.0f);
-            cLib_chaseF(&speedF, field_0x678 * cM_ssin(pitch), 1.0f);
+            angleY = (s16)cM_atan2s(unkXyz1.absXZ(), unkXyz1.y);
+            cLib_chaseF(&speed.y, field_0x678 * cM_scos(angleY), 1.0f);
+            cLib_chaseF(&speedF, field_0x678 * cM_ssin(angleY), 1.0f);
 
             if (unkXyz1.abs() < 100.0f) {
                 field_0x694++;
@@ -1890,9 +1917,9 @@ void daNPC_TK_c::executeBackHanjoDemo() {
         cLib_addCalcAngleS(&shape_angle.y, sVar4, 8, 0x1000, 0x100);
         current.angle.y = shape_angle.y;
 
-        pitch = cM_atan2s(unkXyz1.absXZ(), unkXyz1.y);
-        cLib_chaseF(&speed.y, field_0x678 * cM_scos(pitch), 1.0f);
-        cLib_chaseF(&speedF, field_0x678 * cM_ssin(pitch), 1.0f);
+        angleY = (s16)cM_atan2s(unkXyz1.absXZ(), unkXyz1.y);
+        cLib_chaseF(&speed.y, field_0x678 * cM_scos(angleY), 1.0f);
+        cLib_chaseF(&speedF, field_0x678 * cM_ssin(angleY), 1.0f);
 
         if (field_0x694 == 2) {
             if (unkXyz1.abs() < 100.0f + nREG_F(15)) {
@@ -1957,7 +1984,7 @@ void daNPC_TK_c::calcWolfDemoCam2() {
 void daNPC_TK_c::executeWolfPerch() {
     dCamera_c* camera = dCam_getBody();
     cXyz playerPos = daPy_getPlayerActorClass()->current.pos;
-    daPy_getPlayerActorClass();  // debug match
+    s16 angleY = daPy_getPlayerActorClass()->shape_angle.y;  // debug match
     cXyz posOffset;
     cXyz pathPnt1;
     cXyz pathPnt2;
@@ -2001,7 +2028,7 @@ void daNPC_TK_c::executeWolfPerch() {
         daPy_getPlayerActorClass()->setPlayerPosAndAngle(
             &playerPos, cLib_targetAngleY(&pathPnt1, &playerPos), 0);
 
-        s16 angleY = cLib_targetAngleY(&pathPnt1, &playerPos);
+        angleY = cLib_targetAngleY(&pathPnt1, &playerPos);
 
         setBck(8, 2, 3.0f, 1.0f);
 
@@ -2076,9 +2103,7 @@ void daNPC_TK_c::executeWolfPerch() {
         calcWolfDemoCam();
 
         cLib_addCalcAngleS(&shape_angle.x, 0, 8, 0x100, 0x10);
-
-        s16 angleY = fopAcM_searchPlayerAngleY(this);
-        cLib_addCalcAngleS(&shape_angle.y, angleY, 8, 0x800, 0x100);
+        cLib_addCalcAngleS(&shape_angle.y, fopAcM_searchPlayerAngleY(this), 8, 0x800, 0x100);
 
         cLib_chaseF(&speedF, 0.0f, 0.5f + nREG_F(7));
         if (cLib_chaseF(&speed.y, 0.0f, 0.5f + nREG_F(9)) != 0) {
@@ -2229,11 +2254,15 @@ void daNPC_TK_c::executeWolfPerch() {
                                0x400, 0x10);
         } else {
             s16 unkUnused1 = current.pos.abs(pathPnt2) / 100.0f - 2.0f;
-            cLib_addCalcAngleS(&shape_angle.y, cLib_targetAngleY(&current.pos, &pathPnt2), 8, 0x400,
-                               0x80);
+            if (unkUnused1 < 0) {
+                unkUnused1 = 0;
+            }
+            unkUnused1 = 8;
+            cLib_addCalcAngleS(&shape_angle.y, cLib_targetAngleY(&current.pos, &pathPnt2),
+                               unkUnused1, 0x400, 0x80);
             current.angle.y = shape_angle.y;
-            cLib_addCalcAngleS(&shape_angle.x, -cLib_targetAngleX(&current.pos, &pathPnt2), 8,
-                               0x400, 0x80);
+            cLib_addCalcAngleS(&shape_angle.x, -cLib_targetAngleX(&current.pos, &pathPnt2),
+                               unkUnused1, 0x400, 0x80);
         }
 
         speedF = field_0x678 * cM_scos(-shape_angle.x);
@@ -2283,8 +2312,8 @@ void daNPC_TK_c::executeWolfPerch() {
         current.angle.y = shape_angle.y;
         shape_angle.x = cM_atan2s(speedF, speed.y) - 0x4000;
 
-        cLib_chaseF(&speedF, 0.0f, nREG_F(6) + 1.0f);
-        if (cLib_chaseF(&speed.y, nREG_F(0x11) + 12.0f, nREG_F(7) + 1.0f) != 0) {
+        cLib_chaseF(&speedF, 0.0f, NREG_F(6) + 1.0f);
+        if (cLib_chaseF(&speed.y, NREG_F(0x11) + 12.0f, NREG_F(7) + 1.0f) != 0) {
             field_0x6c5 = 14;
             setBck(7, 2, 5.0f, 1.0f);
         }
@@ -2301,10 +2330,10 @@ void daNPC_TK_c::executeWolfPerch() {
                            0x100);
         current.angle.y = shape_angle.y;
 
-        cLib_chasePos(&current.pos, pathPnt2, 1.0f + nREG_F(5));
-        cLib_chaseF(&speedF, 0.0f, 1.0f + nREG_F(8));
+        cLib_chasePos(&current.pos, pathPnt2, 1.0f + NREG_F(5));
+        cLib_chaseF(&speedF, 0.0f, 1.0f + NREG_F(8));
 
-        if (cLib_chaseF(&speed.y, -5.0f, 0.7f + nREG_F(9)) != 0) {
+        if (cLib_chaseF(&speed.y, -5.0f, 0.7f + NREG_F(9)) != 0) {
             field_0x6c5 = 15;
             field_0x6b0 = 15;
         }
@@ -2320,13 +2349,12 @@ void daNPC_TK_c::executeWolfPerch() {
         cLib_addCalcAngleS(&shape_angle.y, cLib_targetAngleY(&current.pos, &pathPnt2), 8, 0x800,
                            0x100);
 
-        cLib_chasePos(&current.pos, pathPnt2, (nREG_F(5) + 1.0f));
+        cLib_chasePos(&current.pos, pathPnt2, (NREG_F(5) + 1.0f));
         cLib_chaseF(&speedF, 0.0f, 0.5f + nREG_F(7));
-        if (cLib_chaseF(&speed.y, 0.0f, 0.5f + nREG_F(10)) != 0) {
+        if (cLib_chaseF(&speed.y, 0.0f, 0.5f + NREG_F(10)) != 0) {
             field_0x6c5 = 6;
             field_0x6b4 = 120;
-            speed.y = 0.0f;
-            speedF = 0.0f;
+            speedF = speed.y = 0.0f;
             field_0x6c5 = 16;
             field_0x6b0 = 10;
             field_0x678 = 2.0f;
@@ -2390,36 +2418,37 @@ void daNPC_TK_c::executeWolfPerch() {
         }
         break;
     }
-    case 20: {
-        field_0x714 = field_0x678 + 3.0f;
+    case 20:
+        int unused;
+        {
+            field_0x714 = field_0x678 + 3.0f;
 
-        posOffset.set(0.0f, 0.0f, 200.0f);
-        cLib_offsetPos(&pathPnt1, &current.pos, shape_angle.y, &posOffset);
+            posOffset.set(0.0f, 0.0f, 200.0f);
+            cLib_offsetPos(&pathPnt1, &current.pos, shape_angle.y, &posOffset);
 
-        cLib_addCalcPos2(&field_0x6fc, pathPnt1, 0.2f, field_0x714);
+            cLib_addCalcPos2(&field_0x6fc, pathPnt1, 0.2f, field_0x714);
 
-        cLib_chaseF(&field_0x678, 30.0f, 1.0f);
+            cLib_chaseF(&field_0x678, 30.0f, 1.0f);
 
-        cLib_addCalcAngleS(&shape_angle.x, ~0x5fff, 8, 0x200, 0x10);
-        speedF = field_0x678 * cM_scos(-shape_angle.x);
-        speed.y = field_0x678 * cM_ssin(-shape_angle.x);
+            cLib_addCalcAngleS(&shape_angle.x, ~0x5fff, 8, 0x200, 0x10);
+            speedF = field_0x678 * cM_scos(-shape_angle.x);
+            speed.y = field_0x678 * cM_ssin(-shape_angle.x);
 
-        if (field_0x6b0 == 0) {
-            dComIfGs_onSwitch(field_0x6ea, fopAcM_GetRoomNo(this));
+            if (field_0x6b0 == 0) {
+                dComIfGs_onSwitch(field_0x6ea, fopAcM_GetRoomNo(this));
 
-            camera->Reset(field_0x6fc, field_0x6f0);
-            camera->Start();
-            camera->SetTrimSize(0);
+                camera->Reset(field_0x6fc, field_0x6f0);
+                camera->Start();
+                camera->SetTrimSize(0);
 
-            dComIfGp_event_reset();
+                dComIfGp_event_reset();
 
-            field_0x698 = 2;
+                field_0x698 = 2;
 
-            setActionMode(4);
-
-            break;
+                setActionMode(4);
+            }
         }
-    }
+        break;
     }
 
     camera->Set(field_0x6fc, field_0x6f0, field_0x708, 0);
@@ -2437,9 +2466,8 @@ void daNPC_TK_c::executeResistanceDemo() {
     cXyz basePos(-5191.0f, 2000.0f, 5246.0f);
 
     s16 unkInt1 = -0x1faf;
-    s16 targetAngle;
     switch (field_0x694) {
-    case 0:
+    case 0: {
         field_0x6a2 = field_0x6a0 = 0;
 
         offset.set(-700.0f + nREG_F(0), 400.0f + nREG_F(1), 700.0f + nREG_F(2));
@@ -2457,14 +2485,16 @@ void daNPC_TK_c::executeResistanceDemo() {
         field_0x6b0 = 0x1e;
 
         setBck(6, 2, 3.0f, 1.0f);
-    case 1:
+    }
+    // fallthrough
+    case 1:s16 targetAngle; {
         if (field_0x6b0 == 0) {
             cLib_chaseAngleS(&field_0x69c, 0x400, 0x10);
             shape_angle.y -= field_0x69c;
             current.angle.y = shape_angle.y;
         }
 
-        speedF = field_0x678 * fabsf(cM_scos(current.angle.x));
+        speedF = field_0x678 * std::abs(cM_scos(current.angle.x));
         speed.y = field_0x678 * cM_ssin(current.angle.x);
 
         targetAngle = cLib_targetAngleY(&current.pos, &basePos);
@@ -2472,9 +2502,9 @@ void daNPC_TK_c::executeResistanceDemo() {
             field_0x694 = 2;
             setBck(8, 2, 10.0f, 1.0f);
         }
+    } break;
 
-        break;
-    case 2:
+    case 2: {
         offset.set(700.0f + nREG_F(3), 200.0f + nREG_F(4), 200.0f + nREG_F(5));
         cLib_offsetPos(&posWithOffset, &basePos, unkInt1, &offset);
 
@@ -2488,7 +2518,7 @@ void daNPC_TK_c::executeResistanceDemo() {
 
         cLib_chaseF(&field_0x678, 50.0f, 0.1f);
 
-        speedF = field_0x678 * fabsf(cM_scos(current.angle.x));
+        speedF = field_0x678 * std::abs(cM_scos(current.angle.x));
         speed.y = field_0x678 * cM_ssin(current.angle.x);
 
         if (posWithOffset.abs(current.pos) < 500.0f) {
@@ -2497,9 +2527,9 @@ void daNPC_TK_c::executeResistanceDemo() {
             field_0x610.set(-4058.0f, 549.0f, 7530.0f);
             field_0x604.set(-4107.0f, 163.0f, 8046.0f);
         }
+    } break;
 
-        break;
-    case 3:
+    case 3: {
         posWithOffset = field_0x610;
 
         cLib_chaseAngleS(&field_0x69c, 0x400, 0x20);
@@ -2514,7 +2544,7 @@ void daNPC_TK_c::executeResistanceDemo() {
 
         cLib_chaseF(&field_0x678, 50.0f, 1.0f);
 
-        speedF = field_0x678 * fabsf(cM_scos(current.angle.x));
+        speedF = field_0x678 * std::abs(cM_scos(current.angle.x));
         speed.y = field_0x678 * cM_ssin(current.angle.x);
 
         if (posWithOffset.abs(current.pos) < 150.0f) {
@@ -2523,9 +2553,9 @@ void daNPC_TK_c::executeResistanceDemo() {
             field_0x678 = 0.0f;
             field_0x69c = 0;
         }
+    } break;
 
-        break;
-    case 4:
+    case 4: {
         posWithOffset = field_0x604;
 
         cLib_chaseAngleS(&field_0x69c, 0x400, 0x40);
@@ -2541,9 +2571,9 @@ void daNPC_TK_c::executeResistanceDemo() {
         if (cLib_chaseF(&speed.y, 6.0f, 1.4f) != 0) {
             field_0x694 = 5;
         }
+    } break;
 
-        break;
-    case 5:
+    case 5: {
         posWithOffset = field_0x604;
 
         cLib_addCalcAngleS(&current.angle.y, cLib_targetAngleY(&current.pos, &posWithOffset), 8,
@@ -2561,9 +2591,9 @@ void daNPC_TK_c::executeResistanceDemo() {
             setBck(9, 0, 10.0f, 1.0f);
             field_0x678 = 0.0f;
         }
+    } break;
 
-        break;
-    case 6:
+    case 6: {
         posWithOffset = field_0x604;
         cLib_chaseF(&speedF, 0.0f, 0.5f);
 
@@ -2582,13 +2612,17 @@ void daNPC_TK_c::executeResistanceDemo() {
             speedF = speed.y = 0.0f;
             mSound.startCreatureVoice(Z2SE_HAWK_V_LANDING, -1);
         }
-
+    }
         return;
-    case 7:
+
+    case 7: {
         if (mpMorf->isStop() != 0) {
             setBck(0xc, 2, 3.0f, 1.0f);
         }
-    case 8:
+    }
+    // fallthrough
+
+    case 8: {
         cLib_addCalcAngleS2(&field_0x6a2, 0xffffdc00, 8, 0x200);
         cLib_addCalcAngleS2(&field_0x6a0, 0x1000, 8, 0x200);
         cLib_addCalcAngleS2(&field_0x6aa, 0x2000, 8, 0x200);
@@ -2602,7 +2636,7 @@ void daNPC_TK_c::executeResistanceDemo() {
         shape_angle.y = current.angle.y = npcMoiR->shape_angle.y + 0x2800 + XREG_S(6);
         shape_angle.x = XREG_S(7);
         shape_angle.z = -0x400 + XREG_S(8);
-
+    }
         return;
     }
 
@@ -2660,7 +2694,6 @@ void daNPC_TK_c::calcDemoCamera() {
     cXyz playerPos = daPy_getPlayerActorClass()->current.pos;
     playerPos.y += 150.0f;
 
-    f32 unkFloat;
     switch (field_0x710) {
     case 1: {
         field_0x6fc = camera->Center();
@@ -2676,7 +2709,7 @@ void daNPC_TK_c::calcDemoCamera() {
         } else {
             if (field_0x6ec == this) {
                 pos = field_0x6ec->current.pos + offset;
-                unkFloat = field_0x6f0.abs(pos);
+                f32 unkFloat = field_0x6f0.abs(pos);
 
                 if (mActionType == 3) {
                     if (field_0x694 == 1) {
@@ -2708,7 +2741,7 @@ void daNPC_TK_c::calcDemoCamera() {
                         cLib_chaseF(&field_0x714, 30.0f, 5.0f);
                         cLib_chasePos(&field_0x6f0, pos, field_0x714);
                     } else if (field_0x694 == 2) {
-                        unkFloat = field_0x678 - 5.0f;
+                        f32 unkFloat = field_0x678 - 5.0f;
                         if (unkFloat < 0.0f) {
                             unkFloat = 0.0f;
                         }
@@ -2724,8 +2757,7 @@ void daNPC_TK_c::calcDemoCamera() {
                         if (field_0x718 == 0) {
                             cLib_chaseF(&field_0x714, 5.0f, 1.0f);
                             pos.set(field_0x6f0.x, current.pos.y, field_0x6f0.z);
-                            unkFloat = field_0x6f0.abs(current.pos);
-                            if (unkFloat > 600.0f + nREG_F(11)) {
+                            if (field_0x6f0.abs(current.pos) > 600.0f + nREG_F(11)) {
                                 field_0x718 = 1;
                             }
                             cLib_chasePos(&field_0x6f0, pos, field_0x714);
@@ -2746,9 +2778,9 @@ void daNPC_TK_c::calcDemoCamera() {
 
                 dBgS_GndChk gndChk;
                 gndChk.SetPos(&field_0x6f0);
-                unkFloat = dComIfG_Bgsp().GroundCross(&gndChk);
-                if (field_0x6f0.y < unkFloat + 50.0f) {
-                    cLib_chaseF(&(field_0x6f0).y, unkFloat + 50.0f, 10.0f);
+                f32 unkFloat1 = dComIfG_Bgsp().GroundCross(&gndChk);
+                if (field_0x6f0.y < unkFloat1 + 50.0f) {
+                    cLib_chaseF(&(field_0x6f0).y, unkFloat1 + 50.0f, 10.0f);
                 }
             } else {
                 offset.set(0.0f, 50.0f, 0.0f);
@@ -2811,59 +2843,57 @@ void daNPC_TK_c::calcDemoCamera() {
 }
 
 void daNPC_TK_c::checkActionSet() {
-    cXyz acStack_24;
-
     if (mFlags == 0) {
         return;
     }
 
     if (mFlags & 0x1) {
-        field_0x69e = -fopCamM_GetAngleX(dComIfGp_getCamera(0));
+        camera_class* cam = dComIfGp_getCamera(0);
+        field_0x69e = -fopCamM_GetAngleX(cam);
         setActionMode(3);
-        mFlags ^= 0x1;
+        mFlags ^= (u16)0x1;
     } else if (mFlags & 0x2) {
         field_0x698 = 0;
         mSound.startCreatureVoice(Z2SE_HAWK_V_TAKE_OFF, -1);
         setActionMode(4);
-        mFlags ^= 0x2;
+        mFlags ^= (u16)0x2;
     } else if (mFlags & 0x4) {
         setAwayAction(1);
-        mFlags ^= 0x4;
+        mFlags ^= (u16)0x4;
     } else if (mFlags & 0x8) {
         setActionMode(1);
-        mFlags ^= 0x8;
+        mFlags ^= (u16)0x8;
         mpMaster = NULL;
     } else if (mFlags & 0x10) {
         if (mActionType == 6 || mActionType == 8) {
             setActionMode(7);
         }
 
-        mFlags ^= 0x10;
+        mFlags ^= (u16)0x10;
     } else if (mFlags & 0x20) {
         if (mActionType == 7 && field_0x694 != 0 && field_0x6b4 == 0) {
             field_0x698 = 0;
             setActionMode(8);
         }
 
-        mFlags ^= 0x20;
+        mFlags ^= (u16)0x20;
     } else if (mFlags & 0x40) {
         field_0x698 = 0;
         setActionMode(10);
 
-        mFlags ^= 0x40;
+        mFlags ^= (u16)0x40;
     } else if (mFlags & 0x80) {
-        mFlags ^= 0x80;
+        mFlags ^= (u16)0x80;
 
         setActionMode(11);
         mpMaster = NULL;
     } else if (mFlags & 0x100) {
-        mFlags ^= 0x100;
+        mFlags ^= (u16)0x100;
 
         setActionMode(13);
     } else if (mFlags & 0x200) {
         if (mActionType == 0 || mActionType == 10) {
-            current.pos = getHanjoHandPos();
-            old.pos = current.pos;
+            old.pos = current.pos = getHanjoHandPos();
 
             mSphere.OffAtSetBit();
 
@@ -2872,7 +2902,7 @@ void daNPC_TK_c::checkActionSet() {
 
             setActionMode(7);
         }
-        mFlags ^= 0x200;
+        mFlags ^= (u16)0x200;
     }
 }
 
@@ -3019,12 +3049,14 @@ void daNPC_TK_c::mtx_set() {
     }
 
     mDoMtx_stack_c::scaleM(l_HIO.field_0x8, l_HIO.field_0x8, l_HIO.field_0x8);
-    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    J3DModel* model = mpMorf->getModel();
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->modelCalc();
 }
 
 void daNPC_TK_c::cc_set() {
-    MTXCopy(mpMorf->getModel()->getAnmMtx(0), mDoMtx_stack_c::get());
+    J3DModel* model = mpMorf->getModel();
+    MTXCopy(model->getAnmMtx(0), mDoMtx_stack_c::get());
     mDoMtx_stack_c::multVecZero(&eyePos);
     attention_info.position = eyePos;
     attention_info.position.y += 30.0f;
@@ -3090,6 +3122,10 @@ int daNPC_TK_c::_delete() {
     dComIfG_resDelete(&mPhase, "Npc_tk");
     if (field_0xb40) {
         hio_set = 0;
+
+#if DEBUG
+        mDoHIO_deleteChild(l_HIO.field_0x4);
+#endif
     }
 
     if (heap != NULL) {
@@ -3100,11 +3136,13 @@ int daNPC_TK_c::_delete() {
 }
 
 static int daNPC_TK_Delete(daNPC_TK_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this, "NPC_TK");
     return i_this->_delete();
 }
 
 int daNPC_TK_c::ctrlJoint(J3DJoint* param_0, J3DModel* param_1) {
-    s32 jntNo = param_0->getJntNo();
+    J3DJoint* joint = param_0;
+    s32 jntNo = joint->getJntNo();
     mDoMtx_stack_c::copy(param_1->getAnmMtx(jntNo));
 
     MtxP pMVar2 = mDoMtx_stack_c::get();
@@ -3154,12 +3192,11 @@ int daNPC_TK_c::ctrlJoint(J3DJoint* param_0, J3DModel* param_1) {
 }
 
 int daNPC_TK_c::JointCallBack(J3DJoint* param_0, int param_1) {
-    J3DJoint* joint = param_0;
     if (param_1 == 0) {
         J3DModel* model = j3dSys.getModel();
         daNPC_TK_c* npcTk = (daNPC_TK_c*)model->getUserArea();
         if (npcTk != NULL) {
-            npcTk->ctrlJoint(joint, model);
+            npcTk->ctrlJoint(param_0, model);
         }
     }
 
@@ -3168,7 +3205,7 @@ int daNPC_TK_c::JointCallBack(J3DJoint* param_0, int param_1) {
 
 int daNPC_TK_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Npc_tk", "tk.bmd");
-    JUT_ASSERT_MSG(0xf4f, modelData != NULL, "  鷹匠");  // falconer
+    JUT_ASSERT(0xf4f, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                   (J3DAnmTransform*)dComIfG_getObjectRes("Npc_tk", 6), 0, 1.0f, 0,
@@ -3190,7 +3227,8 @@ int daNPC_TK_c::CreateHeap() {
 }
 
 static int useHeapInit(fopAc_ac_c* i_this) {
-    return ((daNPC_TK_c*)i_this)->CreateHeap();
+    daNPC_TK_c* this_tk = (daNPC_TK_c*)i_this;
+    return this_tk->CreateHeap();
 }
 
 int daNPC_TK_c::create() {
@@ -3211,6 +3249,7 @@ int daNPC_TK_c::create() {
     int loadRes = dComIfG_resLoad(&mPhase, "Npc_tk");
     eventInfo.setArchiveName("Npc_tk");
     if (loadRes == cPhs_COMPLEATE_e) {
+        int unused;
         OS_REPORT("NPC_TK PARAM %x\n", fopAcM_GetParam(this));
 
         if (!fopAcM_entrySolidHeap(this, useHeapInit, 0x2540)) {

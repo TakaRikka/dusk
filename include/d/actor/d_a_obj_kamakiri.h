@@ -99,13 +99,11 @@ public:
     virtual ~daObj_KamHIO_c() {}
     void genMessage(JORMContext* context) {
         // Golden insect (stag beetle)
-        context->genLabel("黄金蟲(カブト)", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
+        context->genLabel("黄金蟲(カブト)", 0x80000001);
         // Model scale (male)
-        context->genSlider("モデルスケール(オス)", &mModelScaleMale, 0.1f, 4.0f, 0, NULL, -1, -1, 0x200,
-                           0x18);
+        context->genSlider("モデルスケール(オス)", &mModelScaleMale, 0.1f, 4.0f);
         // Model scale (female)
-        context->genSlider("モデルスケール(メス)", &mModelScaleFemale, 0.1f, 4.0f, 0, NULL, -1, -1, 0x200,
-                           0x18);
+        context->genSlider("モデルスケール(メス)", &mModelScaleFemale, 0.1f, 4.0f);
     }
 
     s8 field_0x4;

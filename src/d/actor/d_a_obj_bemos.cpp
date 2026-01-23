@@ -171,24 +171,24 @@ daObjBm_HIO_c::daObjBm_HIO_c() {
 }
 
 void daObjBm_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("ビーモス", 0, 0, NULL, -1, -1, 512, 24);
-    ctx->genCheckBox("デバッグ描画", &debug_draw, 1, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("サーチ距離", &search_dist, 100.0f, 5000.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("サーチ角度", &search_angle, 0.0f, 32767.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("発見角度", &detection_angle, 0.0f, 32767.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("巡回回転速度", &patrol_rot_spd, 0.0f, 1000.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("攻撃回転速度", &attack_rot_spd, 0.0f, 1000.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("ビーム発射・下距離", &beam_lower_dist, 0.0f, 1000.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("ビーム発射・中距離", &beam_middle_dist, 0.0f, 1000.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("目標オフセット距離", &target_offset_dist, 0.0f, 500.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("ＳＷ起動後サーチ無し時間", &after_switch_activate_no_search_time, 0.0f, 1000.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("発音位置移動速度", &sound_pos_move_spd, 0.0f, 1000.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("サーチ無し攻撃時間", &no_search_attack_time, 0.0f, 100.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("発見時のサーチ速度", &search_spd_on_detect, 0.0f, 10000.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("本体スケール", &body_scale, 0.1f, 5.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("ビームＸスケール", &beam_scale.x, 0.1f, 10.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genSlider("ビームＹスケール", &beam_scale.y, 0.1f, 10.0f, 0, NULL, -1, -1, 512, 24);
-    ctx->genCheckBox("チェック描画", &check_draw, 1, 0, NULL, -1, -1, 512, 24);
+    ctx->genLabel("ビーモス", 0);
+    ctx->genCheckBox("デバッグ描画", &debug_draw, 0x1);
+    ctx->genSlider("サーチ距離", &search_dist, 100.0f, 5000.0f);
+    ctx->genSlider("サーチ角度", &search_angle, 0.0f, 32767.0f);
+    ctx->genSlider("発見角度", &detection_angle, 0.0f, 32767.0f);
+    ctx->genSlider("巡回回転速度", &patrol_rot_spd, 0.0f, 1000.0f);
+    ctx->genSlider("攻撃回転速度", &attack_rot_spd, 0.0f, 1000.0f);
+    ctx->genSlider("ビーム発射・下距離", &beam_lower_dist, 0.0f, 1000.0f);
+    ctx->genSlider("ビーム発射・中距離", &beam_middle_dist, 0.0f, 1000.0f);
+    ctx->genSlider("目標オフセット距離", &target_offset_dist, 0.0f, 500.0f);
+    ctx->genSlider("ＳＷ起動後サーチ無し時間", &after_switch_activate_no_search_time, 0.0f, 1000.0f);
+    ctx->genSlider("発音位置移動速度", &sound_pos_move_spd, 0.0f, 1000.0f);
+    ctx->genSlider("サーチ無し攻撃時間", &no_search_attack_time, 0.0f, 100.0f);
+    ctx->genSlider("発見時のサーチ速度", &search_spd_on_detect, 0.0f, 10000.0f);
+    ctx->genSlider("本体スケール", &body_scale, 0.1f, 5.0f);
+    ctx->genSlider("ビームＸスケール", &beam_scale.x, 0.1f, 10.0f);
+    ctx->genSlider("ビームＹスケール", &beam_scale.y, 0.1f, 10.0f);
+    ctx->genCheckBox("チェック描画", &check_draw, 0x1);
 }
 #define BEAM_SCALE_X l_HIO.beam_scale.x
 #define BEAM_SCALE_Y l_HIO.beam_scale.y

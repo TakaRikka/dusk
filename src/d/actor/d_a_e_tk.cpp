@@ -720,7 +720,7 @@ static int daE_TK_Create(fopAc_ac_c* i_this) {
         fopAcM_SetMin(a_this, -100.0f, -100.0f, -100.0f);
         fopAcM_SetMax(a_this, 100.0f, 100.0f, 100.0f);
 
-        a_this->attention_info.distances[2] = 0x04;
+        a_this->attention_info.distances[fopAc_attn_BATTLE_e] = 0x04;
         a_this->health = 10;
         a_this->field_0x560 = 10;
 

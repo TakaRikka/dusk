@@ -71,26 +71,22 @@ public:
     #if DEBUG
     void genMessage(JORMContext* ctx) {
         // Speed
-        ctx->genLabel("--- 速 出現時---", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+        ctx->genLabel("--- 速 出現時---", 0);
         // Initial speed
-        ctx->genSlider("初速", &mInitialSpeed, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                       0x18);
+        ctx->genSlider("初速", &mInitialSpeed, 0.0f, 10000.0f);
         // Max
-        ctx->genSlider("最大", &mMaxSpeed, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+        ctx->genSlider("最大", &mMaxSpeed, 0.0f, 10000.0f);
         // Speed when pulling
-        ctx->genLabel("--- 速度 引っ込み時---", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-        ctx->genSlider("初速", &mInitialDownSpeed, 0.0, 10000.0, 0, NULL, 0xffff, 0xffff, 0x200,
-                       0x18);
+        ctx->genLabel("--- 速度 引っ込み時---", 0);
+        ctx->genSlider("初速", &mInitialDownSpeed, 0.0, 10000.0);
         // Max
-        ctx->genSlider("最大", &mMaxDownSpeed, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                       0x18);
+        ctx->genSlider("最大", &mMaxDownSpeed, 0.0f, 10000.0f);
         // Range
-        ctx->genSlider("範囲", &mRange, 0.1f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+        ctx->genSlider("範囲", &mRange, 0.1f, 1000.0f);
         // Spinner speed
-        ctx->genSlider("スピナｰ速度", &mSpinnerSpeed, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                       0x18);
+        ctx->genSlider("スピナｰ速度", &mSpinnerSpeed, 0.0f, 100.0f);
         // Vibration
-        ctx->startComboBox("振動", &mVibration, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+        ctx->startComboBox("振動", &mVibration);
         // Strength 1-8
         ctx->genComboBoxItem("強さ１", 1);
         ctx->genComboBoxItem("強さ２", 2);

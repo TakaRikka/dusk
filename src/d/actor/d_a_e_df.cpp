@@ -25,8 +25,8 @@ STATIC_ASSERT(sizeof(daE_DF_HIO_c) == 0xC);
 
 #if DEBUG
 inline void daE_DF_HIO_c::genMessage(JORMContext* i_ctx) {
-    i_ctx->genLabel("デクレシア", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("速度", &field_0x8, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    i_ctx->genLabel("デクレシア", 0x80000001);
+    i_ctx->genSlider("速度", &field_0x8, 0.0f, 100.0f);
 }
 #endif
 
@@ -642,7 +642,7 @@ static int daE_DF_IsDelete(daE_DF_c* i_this) {
 }
 
 static int daE_DF_Delete(daE_DF_c* i_this) {
-    fpc_ProcID proc_id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_DF");
     return i_this->Delete();
 }
 
@@ -655,7 +655,7 @@ int daE_DF_c::Create() {
         mArg0 = (u8)fopAcM_GetParam(this);
 
         if (mArg0 != 0xff && dComIfGs_isSwitch(mArg0, fopAcM_GetRoomNo(this))) {
-            OS_REPORT("E_WS やられ後なので再セットしません");
+            OS_REPORT("E_WS やられ後なので再セットしません\n");
             return cPhs_ERROR_e;
         }
 
@@ -706,7 +706,7 @@ int daE_DF_c::Create() {
 
 static int daE_DF_Create(fopAc_ac_c* i_this) {
     daE_DF_c* a_this = (daE_DF_c*)i_this;
-    fpc_ProcID proc_id = fopAcM_GetID(i_this);
+    fopAcM_RegisterCreateID(i_this, "E_DF");
     return a_this->Create();
 }
 

@@ -1,7 +1,6 @@
 #ifndef J3DANIMATION_H
 #define J3DANIMATION_H
 
-#include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTNameTab.h"
@@ -977,53 +976,5 @@ public:
     /* 0x0C */ f32 mRate;
     /* 0x10 */ f32 mFrame;
 };  // Size: 0x14
-
-struct J3DMtxCalcAnmBase: public J3DMtxCalc {
-    J3DMtxCalcAnmBase(J3DAnmTransform* pAnmTransform) { mAnmTransform = pAnmTransform; }
-    ~J3DMtxCalcAnmBase() {}
-    J3DAnmTransform* getAnmTransform() { return mAnmTransform; }
-    void setAnmTransform(J3DAnmTransform* pAnmTransform) { mAnmTransform = pAnmTransform; }
-
-    J3DAnmTransform* mAnmTransform;
-};
-
-struct J3DMtxCalcAnimationAdaptorBase {
-    J3DMtxCalcAnimationAdaptorBase() {}
-    void change(J3DAnmTransform*) {}
-};
-
-template <typename A0>
-struct J3DMtxCalcAnimationAdaptorDefault : public J3DMtxCalcAnimationAdaptorBase {
-    J3DMtxCalcAnimationAdaptorDefault(J3DAnmTransform* pAnmTransform) {}
-
-    void calc(J3DMtxCalcAnmBase* pMtxCalc) {
-        J3DTransformInfo transform;
-        J3DTransformInfo* transform_p;
-        if (pMtxCalc->getAnmTransform() != NULL) {
-            pMtxCalc->getAnmTransform()->getTransform(J3DMtxCalc::getJoint()->getJntNo(), &transform);
-            transform_p = &transform;
-        } else {
-            transform_p = &J3DMtxCalc::getJoint()->getTransformInfo();
-        }
-
-        A0::calcTransform(*transform_p);
-    }
-};
-
-template <typename A0, typename B0>
-struct J3DMtxCalcAnimation : public J3DMtxCalcAnmBase {
-    J3DMtxCalcAnimation(J3DAnmTransform* pAnmTransform) : J3DMtxCalcAnmBase(pAnmTransform), field_0x8(pAnmTransform) {}
-    ~J3DMtxCalcAnimation() {}
-
-    void setAnmTransform(J3DAnmTransform* pAnmTransform) {
-        mAnmTransform = pAnmTransform;
-        field_0x8.change(pAnmTransform);
-    }
-
-    void init(const Vec& param_0, const Mtx& param_1) { B0::init(param_0, param_1); }
-    void calc() { field_0x8.calc(this); }
-
-    A0 field_0x8;
-};
 
 #endif /* J3DANIMATION_H */

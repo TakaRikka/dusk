@@ -73,7 +73,7 @@ int daWdStick_c::create() {
         mSph2.SetStts(&mStts);
         fopAcM_OnCarryType(this, fopAcM_CARRY_UNK_30);
         cLib_onBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
-        attention_info.distances[4] = 59;
+        attention_info.distances[fopAc_attn_CARRY_e] = 59;
         misCarrying = fopAcM_checkCarryNow(this);
         mode_init_wait();
     }

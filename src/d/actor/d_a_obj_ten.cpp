@@ -706,7 +706,7 @@ int daObjTEN_c::create() {
         } else {
             mDraw = true;
         }
-        attention_info.distances[4] = 0x5d;
+        attention_info.distances[fopAc_attn_CARRY_e] = 0x5d;
         mSex = (fopAcM_GetParam(this) & 0x10) >> 4;
         setItemNo(l_ten_itemno[mSex]);
         setSaveBitNo(l_musiya_num[mSex]);

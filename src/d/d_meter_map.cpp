@@ -58,66 +58,66 @@ dMeter_map_HIO_c::dMeter_map_HIO_c() {
 }
 
 void dMeter_map_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("■デバック用マップ拡大■",0,0,(JOREventListener *)0x0,0xffff, 0xffff,0x200,0x18);
-    ctx->genCheckBox("ONで拡大", &mDebugMapExpansion,'\x01',0,(JOREventListener *)0x0,0xffff ,0xffff,0x200,0x18);
-    ctx->genLabel("■マップ表示位置■",0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200, 0x18);
-    ctx->genCheckBox("ONで調整有効", &mMapDisplayLocation,'\x01',0,(JOREventListener *)0x0 ,0xffff,0xffff,0x200,0x18);
-    ctx->genLabel("*Wide(16:9)",0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genSlider("左下X", &mWideBottomLeftX,-200,0x280,0,(JOREventListener *)0x0,0xffff, 0xffff,0x200,0x18);
-    ctx->genSlider("    Y", &mWideY,0,0x1e0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200, 0x18);
-    ctx->genLabel("*Normal(4:3)",0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genSlider("左下X", &mNormalBottomLeftX,-200,0x280,0,(JOREventListener *)0x0,0xffff ,0xffff,0x200,0x18);
-    ctx->genSlider("    Y", &mNormalY,0,0x1e0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200, 0x18);
-    ctx->genLabel("*GC(4:3) WiiでMAPアイコン無しの場合のY座標にも使用します", 0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genSlider("左下X", &mGcBottomLeftX,-200,0x280,0,(JOREventListener *)0x0,0xffff, 0xffff,0x200,0x18);
-    ctx->genSlider("    Y", &mGcY,0,0x1e0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18)
-  ;
-    ctx->genSlider("隠右X", &mHiddenRightX,-600,800,0,(JOREventListener *)0x0,0xffff,0xffff ,0x200,0x18);
-    ctx->genLabel("■マップ表示サイズ■",0,0,(JOREventListener *)0x0,0xffff,0xffff, 0x200,0x18);
-    ctx->genCheckBox("・ON変更", &mMapDisplaySize,'\x01',0,(JOREventListener *)0x0,0xffff, 0xffff,0x200,0x18);
-    ctx->genSlider("", &field_0x2a,1,400,0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genLabel("■マップサイズ■",0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genCheckBox( "・サイズタイプの変更<サイズ変更後はテクスチャーサイズ変更をして下さい>" , &mSizeTypeChange,'\x01',0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->startRadioButton("", &field_0x18,1,(JOREventListener *)0x0,0xffff,0xffff,0x100,0xffff);
-    ctx->genRadioButtonItem("中",1,0,0xffff,0xffff,0x80,0x10);
-    ctx->genRadioButtonItem("大",2,0,0xffff,0xffff,0x80,0x10);
-    ctx->genRadioButtonItem("小",3,0,0xffff,0xffff,0x80,0x10);
+    ctx->genLabel("■デバック用マップ拡大■", 0);
+    ctx->genCheckBox("ONで拡大", &mDebugMapExpansion, 0x1);
+    ctx->genLabel("■マップ表示位置■", 0);
+    ctx->genCheckBox("ONで調整有効", &mMapDisplayLocation, 0x1);
+    ctx->genLabel("*Wide(16:9)", 0);
+    ctx->genSlider("左下X", &mWideBottomLeftX, -200, 640);
+    ctx->genSlider("    Y", &mWideY, 0, 480);
+    ctx->genLabel("*Normal(4:3)", 0);
+    ctx->genSlider("左下X", &mNormalBottomLeftX, -200, 640);
+    ctx->genSlider("    Y", &mNormalY, 0, 480);
+    ctx->genLabel("*GC(4:3) WiiでMAPアイコン無しの場合のY座標にも使用します", 0);
+    ctx->genSlider("左下X", &mGcBottomLeftX, -200, 640);
+    ctx->genSlider("    Y", &mGcY, 0, 480);
+    ctx->genSlider("隠右X", &mHiddenRightX, -600, 800);
+    ctx->genLabel("■マップ表示サイズ■", 0);
+    ctx->genCheckBox("・ON変更", &mMapDisplaySize, 0x1);
+    ctx->genSlider("", &field_0x2a, 1, 400);
+    ctx->genLabel("■マップサイズ■", 0);
+    ctx->genCheckBox("・サイズタイプの変更<サイズ変更後はテクスチャーサイズ変更をして下さい>",
+                     &mSizeTypeChange, 0x1);
+    ctx->startRadioButton("", &field_0x18, 1, NULL, 0xffff, 0xffff, 0x100, 0xffff);
+    ctx->genRadioButtonItem("中", 1, 0, 0xffff, 0xffff, 0x80, 0x10);
+    ctx->genRadioButtonItem("大", 2, 0, 0xffff, 0xffff, 0x80, 0x10);
+    ctx->genRadioButtonItem("小", 3, 0, 0xffff, 0xffff, 0x80, 0x10);
     ctx->endRadioButton();
-    ctx->genLabel( "・各サイズ<サイズ変更後はテクスチャーサイズ変更をして下さい>" ,0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genLabel("・中",0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genSlider("横", &mMediumHorizontal,1,0x90,0,(JOREventListener *)0x0,0xffff,0xffff, 0x200,0x18);
-    ctx->genSlider("縦", &mMediumVertical,1,0x90,0,(JOREventListener *)0x0,0xffff,0xffff, 0x200,0x18);
-    ctx->genLabel("・大",0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genSlider("横", &mBigHorizontal,1,0xd8,0,(JOREventListener *)0x0,0xffff,0xffff, 0x200,0x18);
-    ctx->genSlider("縦", &mBigVertical,1,0xd8,0,(JOREventListener *)0x0,0xffff,0xffff,0x200, 0x18);
-    ctx->genLabel("・小",0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genSlider("横", &mSmallHorizontal,1,0x90,0,(JOREventListener *)0x0,0xffff,0xffff, 0x200,0x18);
-    ctx->genSlider("縦", &mSmallVertical,1,0x90,0,(JOREventListener *)0x0,0xffff,0xffff, 0x200,0x18);
-    ctx->genCheckBox("・テクスチャー解像度半分", &mTextureResolutionHalved,'\x01',0 ,(JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genButton("テクスチャーサイズ変更",0x4000001,0,(JOREventListener *)0x0,0xffff, 0xffff,0x200,0x18);
-    ctx->genLabel("■マップアルファ■",0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200, 0x18);
-    ctx->genCheckBox("マップアルファテストONで有効", &mMapAlphaTest,'\x01',0, (JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
-    ctx->genSlider("アルファ", &mAlpha,'\0',0xff,0,(JOREventListener *)0x0,0xffff,0xffff, 0x200,0x18);
+    ctx->genLabel("・各サイズ<サイズ変更後はテクスチャーサイズ変更をして下さい>", 0);
+    ctx->genLabel("・中", 0);
+    ctx->genSlider("横", &mMediumHorizontal, 1, 0x90);
+    ctx->genSlider("縦", &mMediumVertical, 1, 0x90);
+    ctx->genLabel("・大", 0);
+    ctx->genSlider("横", &mBigHorizontal, 1, 0xd8);
+    ctx->genSlider("縦", &mBigVertical, 1, 0xd8);
+    ctx->genLabel("・小", 0);
+    ctx->genSlider("横", &mSmallHorizontal, 1, 0x90);
+    ctx->genSlider("縦", &mSmallVertical, 1, 0x90);
+    ctx->genCheckBox("・テクスチャー解像度半分", &mTextureResolutionHalved, 0x1);
+    ctx->genButton("テクスチャーサイズ変更", 0x4000001);
+    ctx->genLabel("■マップアルファ■", 0);
+    ctx->genCheckBox("マップアルファテストONで有効", &mMapAlphaTest, 0x1);
+    ctx->genSlider("アルファ", &mAlpha, 0, 0xff);
 
     if (dStage_stagInfo_GetUpButton(dComIfGp_getStage()->getStagInfo()) == 1 && field_0x18 != 1) {
         field_0x18 = 1;
         update();
     }
-    
-    ctx->genLabel("■強制マップ上端変更■",0,0,(JOREventListener *)0x0,0xffff,0xffff, 0x200,0x18);
-    ctx->genCheckBox("ONで有効", &mForcedMapTopEdgeChange,'\x01',0,(JOREventListener *)0x0, 0xffff,0xffff,0x200,0x18);
-    ctx->genSlider("", &field_0x30,-1,0x1e0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200, 0x18);
-    ctx->genLabel("ONからOFFにする場合は-1にしてからOFFにして下さい",0,0, (JOREventListener *)0x0,0xffff,0xffff,0x200,0x18);
+
+    ctx->genLabel("■強制マップ上端変更■", 0);
+    ctx->genCheckBox("ONで有効", &mForcedMapTopEdgeChange, 0x1);
+    ctx->genSlider("", &field_0x30, -1, 480);
+    ctx->genLabel("ONからOFFにする場合は-1にしてからOFFにして下さい", 0);
 
     mAreaMap = dMap_HIO_c::mMySelfPointer;
     if (mAreaMap != NULL) {
-        ctx->genNode("エリアマップ",this->mAreaMap,0,0);
+        ctx->genNode("エリアマップ", this->mAreaMap, 0, 0);
     }
 
-    ctx->genLabel("■マップ表示禁止■",0,0,(JOREventListener *)0x0,0xffff,0xffff,0x200, 0x18);
-    ctx->genCheckBox("ONで有効", &mMapDisplayProhibited,'\x01',0,(JOREventListener *)0x0, 0xffff,0xffff,0x200,0x18);
-    ctx->genLabel("■マップレンダリング禁止■",0,0,(JOREventListener *)0x0,0xffff, 0xffff,0x200,0x18);
-    ctx->genCheckBox("ONで有効", &mMapRenderingProhibited,'\x01',0,(JOREventListener *)0x0, 0xffff,0xffff,0x200,0x18);
+    ctx->genLabel("■マップ表示禁止■", 0);
+    ctx->genCheckBox("ONで有効", &mMapDisplayProhibited, 0x1);
+    ctx->genLabel("■マップレンダリング禁止■", 0);
+    ctx->genCheckBox("ONで有効", &mMapRenderingProhibited, 0x1);
 }
 
 void dMeter_map_HIO_c::listenPropertyEvent(const JORPropertyEvent* evt) {

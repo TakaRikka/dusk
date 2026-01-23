@@ -72,7 +72,7 @@ void daNpc_yamiD_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
 void daNpc_yamiD_HIO_c::genMessage(JORMContext* ctext) {
     daNpcT_cmnGenMessage(ctext, &m.common);
-    ctext->genButton("ファイル書き出し",0x40000002,0,NULL,0xffff,0xffff,0x200,0x18);
+    ctext->genButton("ファイル書き出し",0x40000002);
 }
 #endif
 
@@ -297,7 +297,7 @@ int daNpc_yamiD_c::CreateHeap() {
 
 int daNpc_yamiD_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_yamiD_c -> Delete\n", g_Counter.mCounter0, this);
-    fpc_ProcID reg_r30 = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_YAMID");
     this->~daNpc_yamiD_c();
     return 1;
 }

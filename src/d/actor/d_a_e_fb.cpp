@@ -32,29 +32,29 @@ daE_FB_HIO_c::daE_FB_HIO_c() {
 #if DEBUG
 void daE_FB_HIO_c::genMessage(JORMContext* ctext) {
     // "Frizzard (large)"
-    ctext->genLabel("フリザド（大）", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genLabel("フリザド（大）", 0x80000001);
     // "Model size"
-    ctext->genSlider("モデルサイズ", &model_size, 0.0f, 10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("モデルサイズ", &model_size, 0.0f, 10.0f);
     // "Player detection range"
-    ctext->genSlider("プレイヤー発見距離", &player_detection_range, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("プレイヤー発見距離", &player_detection_range, 0.0f, 10000.0f);
     // "Next attack wait time"
-    ctext->genSlider("次回攻撃待ち時間", &next_attack_waiting_time, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("次回攻撃待ち時間", &next_attack_waiting_time, 0, 1000);
     // "Maximum rotation width"
-    ctext->genSlider("最大回転幅", &maximum_rotation_width, 0, 10000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("最大回転幅", &maximum_rotation_width, 0, 10000);
     // "Minimum turning range"
-    ctext->genSlider("最小回転幅", &minimum_turning_range, 0, 10000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("最小回転幅", &minimum_turning_range, 0, 10000);
     // "Stage rotation amplitude (speed)"
-    ctext->genSlider("階段用回転幅（速度）", &rotation_width_stairs, 0, 10000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("階段用回転幅（速度）", &rotation_width_stairs, 0, 10000);
     // "Color Regi 1R"
-    ctext->genSlider("カラレジ１Ｒ", &color_register_1r, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("カラレジ１Ｒ", &color_register_1r, 0, 0xFF);
     // "Color Regi 1G"
-    ctext->genSlider("カラレジ１Ｇ", &color_register_1g, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("カラレジ１Ｇ", &color_register_1g, 0, 0xFF);
     // "Color Regi 1B"
-    ctext->genSlider("カラレジ１Ｂ", &color_register_1b, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("カラレジ１Ｂ", &color_register_1b, 0, 0xFF);
     // "Color Regi 1α "
-    ctext->genSlider("カラレジ１α　", &color_register_1a, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("カラレジ１α　", &color_register_1a, 0, 0xFF);
     // "Maximum rotation width"
-    ctext->genSlider("最大回転幅", &maximum_rotation_width_2, 0, 180, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("最大回転幅", &maximum_rotation_width_2, 0, 180);
 }
 #endif
 
@@ -817,12 +817,6 @@ void daE_FB_c::dead_eff_set() {
     }
 }
 
-#if DEBUG
-static char* dummy_117771() {
-    return "Delete -> E_FB(id=%d)\n";
-}
-#endif
-
 int daE_FB_c::execute() {
     if (field_0x69c != 0) {
         --field_0x69c;
@@ -869,7 +863,7 @@ int daE_FB_c::_delete() {
 }
 
 static int daE_FB_Delete(daE_FB_c* i_this) {
-    int id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_FB");
     return static_cast<daE_FB_c*>(i_this)->_delete();
 }
 

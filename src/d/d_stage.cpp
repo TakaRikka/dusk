@@ -12,6 +12,7 @@
 #include "d/d_path.h"
 #include "d/d_save_HIO.h"
 #include "d/d_stage.h"
+#include "f_ap/f_ap_game.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_scene_mng.h"
@@ -25,6 +26,11 @@ void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i
         enabled = true;
         wipe = i_wipe;
         wipe_speed = i_speed;
+#if DEBUG
+        if (g_kankyoHIO.navy.fade_test_speed) {
+            wipe_speed = g_kankyoHIO.navy.fade_test_speed;
+        }
+#endif
         dStage_startStage_c::set(i_stage, i_roomId, i_point, i_layer);
         if (!strcmp(i_stage, "OPENING")) {
             mDoRst::onReset();
@@ -35,11 +41,13 @@ void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i
 void dStage_SetErrorRoom() {
     // "Room information might be corrupted. \nPlease try to re-convert. \n"
     OSReport_Error("部屋情報が、多分ですが壊れています。\n変換し直してみてください。\n");
+    OS_REPORT("または、ステージの情報が部屋にあります。↓を参考に。\n");
 }
 
 void dStage_SetErrorStage() {
     // "Stage information might be corrupted. \nPlease try to re-convert. "
     OSReport_Error("ステージ情報が、多分ですが壊れています。\n変換し直してみてください。");
+    OS_REPORT("または、部屋の情報がステージにあります。↓を参考に。\n");
 }
 
 static dStage_KeepDoorInfo DoorInfo;
@@ -48,14 +56,20 @@ dStage_KeepDoorInfo* dStage_GetKeepDoorInfo() {
     return &DoorInfo;
 }
 
-static u8 dStage_isBossStage(dStage_dt_c* i_stage) {
+static bool dStage_isBossStage(dStage_dt_c* i_stage) {
     stage_stag_info_class* pstag = i_stage->getStagInfo();
+    JUT_ASSERT(127, pstag != 0);
 
     if (pstag == NULL) {
         return false;
     }
 
-    return dStage_stagInfo_GetSTType(pstag) == ST_BOSS_ROOM;
+    u32 stType = dStage_stagInfo_GetSTType(pstag);
+    if (stType == ST_BOSS_ROOM) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 static void dStage_KeepDoorInfoInit(dStage_dt_c* i_stage) {
@@ -65,6 +79,7 @@ static void dStage_KeepDoorInfoInit(dStage_dt_c* i_stage) {
 }
 
 static void dStage_KeepDoorInfoProc(dStage_dt_c* i_stage, stage_tgsc_class* i_drtg) {
+    UNUSED(i_stage);
     if (i_drtg == NULL) {
         DoorInfo.mNum = 0;
         return;
@@ -79,8 +94,10 @@ static void dStage_KeepDoorInfoProc(dStage_dt_c* i_stage, stage_tgsc_class* i_dr
     }
     stage_tgsc_data_class* pSrcEntry = i_drtg->m_entries;
     stage_tgsc_data_class* pDstEntry = DoorInfo.mDrTgData;
-    for (int i = 0; i < DoorInfo.mNum; pDstEntry++, pSrcEntry++, i++) {
+    for (int i = 0; i < DoorInfo.mNum; i++) {
         *pDstEntry = *pSrcEntry;
+        pDstEntry++;
+        pSrcEntry++;
     }
 }
 
@@ -95,7 +112,10 @@ static void dStage_initRoomKeepDoorInfo() {
 }
 
 static void dStage_RoomKeepDoorInfoProc(dStage_dt_c* i_stage, stage_tgsc_class* param_2) {
-    if (param_2 == NULL || param_2->num + l_RoomKeepDoorInfo.mNum >= 0x40 || param_2->num < 0) {
+    if (param_2 == NULL) {
+        return;
+    }
+    if (param_2->num + l_RoomKeepDoorInfo.mNum >= 0x40 || param_2->num < 0) {
         return;
     }
     if (param_2->num == 0) {
@@ -117,7 +137,10 @@ static void dStage_RoomKeepDoorInfoProc(dStage_dt_c* i_stage, stage_tgsc_class* 
 
 static int dStage_RoomKeepDoorInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
                                    void* param_3) {
-    dStage_RoomKeepDoorInfoProc(i_stage, (stage_tgsc_class*)((char*)i_data + 4));
+    UNUSED(entryNum);
+    UNUSED(param_3);
+    stage_tgsc_class* tgsc = (stage_tgsc_class*)((char*)i_data + 4);
+    dStage_RoomKeepDoorInfoProc(i_stage, tgsc);
     return 1;
 }
 
@@ -137,9 +160,15 @@ void dStage_roomControl_c::init() {
     mNoChangeRoom = 0;
     mRoomReadId = -1;
 
+#if PLATFORM_GCN
     if (dComIfGp_getStartStagePoint() >= 0 || dComIfGp_getStartStagePoint() == -4) {
         initZone();
     }
+#else
+    if (dComIfGp_getStartStagePoint() >= 0) {
+        dComIfGs_initZone();
+    }
+#endif
 
     dStage_roomStatus_c* status = mStatus;
     for (int i = 0; i < 0x40; i++) {
@@ -148,7 +177,9 @@ void dStage_roomControl_c::init() {
         setStatusFlag(i, 0);
         status->mDraw = false;
 
-        if (status->mZoneNo >= 0) {
+        if (!PLATFORM_GCN && dComIfGp_getStartStagePoint() >= 0) {
+            status->mZoneNo = -1;
+        } else if (status->mZoneNo >= 0) {
             dComIfGs_clearRoomSwitch(status->mZoneNo);
             dComIfGs_clearRoomItem(status->mZoneNo);
         }
@@ -162,8 +193,17 @@ void dStage_roomControl_c::init() {
     mArcBankData = (dStage_roomControl_c::bankData*)dComIfG_getStageRes("bank.bin");
 
     if (mArcBankName == NULL) {
+        JUT_ASSERT(449, mArcBankData == NULL);
+        mArcBankData = NULL;
+    } else {
+        JUT_ASSERT(452, mArcBankData != NULL);
+    }
+#if DEBUG
+    if (mNoArcBank) {
+        mArcBankName = NULL;
         mArcBankData = NULL;
     }
+#endif
 }
 
 void dStage_roomControl_c::initZone() {
@@ -178,9 +218,266 @@ void dStage_roomControl_c::initZone() {
 
 dStage_roomDt_c* dStage_roomControl_c::getStatusRoomDt(int i_statusIdx) {
     if (i_statusIdx < 0 || i_statusIdx >= 0x40) {
+        OS_REPORT_ERROR("getStatusRoomDt():部屋番号範囲外:%d(0～%d)\n", i_statusIdx, 0x40);
         return NULL;
     }
     return &mStatus[i_statusIdx].mRoomDt;
+}
+
+JKRExpHeap* dStage_roomControl_c::getMemoryBlock(int i_roomNo) {
+    int blockId = getMemoryBlockID(i_roomNo);
+
+    if (blockId < 0) {
+        return NULL;
+    }
+    return mMemoryBlock[blockId];
+}
+
+void dStage_roomControl_c::setStayNo(int i_roomNo) {
+    mOldStayNo = mStayNo;
+    mStayNo = i_roomNo;
+    mNextStayNo = mStayNo;
+
+    if (mStayNo < 0) {
+        return;
+    }
+
+    onStatusDraw(mStayNo);
+}
+
+void dStage_roomControl_c::setNextStayNo(int nextStayNo) {
+    mNextStayNo = nextStayNo;
+}
+
+static int stayRoomCheck(int param_0, u8* param_1, int param_2) {
+    for (int i = 0; i < param_0; i++) {
+        if (param_2 == dStage_roomRead_dt_c_GetLoadRoomIndex(param_1[i])) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+static int createRoomScene(int param_0) {
+    int* ptr = (int*)JKRAlloc(4, -4);
+
+    if (ptr == NULL) {
+        return 0;
+    }
+    *ptr = param_0;
+
+    if (!fopScnM_CreateReq(PROC_ROOM_SCENE, 0x7FFF, 0, (uintptr_t)ptr)) {
+        JKRFree(ptr);
+        return 0;
+    }
+
+    return 1;
+}
+
+BOOL dStage_roomControl_c::checkRoomDisp(int i_roomNo) const {
+    if (checkStatusFlag(i_roomNo, 8)) {
+        return 0;
+    }
+
+    if (checkStatusFlag(i_roomNo, 16)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms, bool param_2) {
+    if (mRoomReadId < 0 && mNoChangeRoom != 0) {
+        return 0;
+    }
+
+    for (int roomNo = 0; roomNo < ARRAY_SIZE(mStatus); roomNo++) {
+        if (checkStatusFlag(roomNo, 0x02 | 0x04)) {
+            return 0;
+        }
+    }
+    
+    BOOL r26 = TRUE;
+    for (int roomNo = 0; roomNo < ARRAY_SIZE(mStatus); roomNo++) {
+        if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
+            if (!stayRoomCheck(roomCount, rooms, roomNo)) {
+                onStatusFlag(roomNo, 0xc);
+                OS_REPORT("kill !!<%d>\n", roomNo);
+                r26 = FALSE;
+            }
+        }
+    }
+    if (!r26) {
+        return FALSE;
+    }
+    
+    for (int i = 0; i < roomCount; i++) {
+        int roomNo = dStage_roomRead_dt_c_GetLoadRoomIndex(rooms[i]);
+        dStage_roomControl_c::setZoneCount(roomNo, 2);
+        if (!checkStatusFlag(roomNo, 0x01)) {
+            if (param_2) {
+                if (dStage_roomRead_dt_c_ChkBg(rooms[i]) && createRoomScene(roomNo)) {
+                    onStatusFlag(roomNo, 2);
+                }
+            } else {
+                if (createRoomScene(roomNo)) {
+                    int flag;
+                    if (dStage_roomRead_dt_c_ChkBg(rooms[i])) {
+                        flag = 0x02;
+                    } else {
+                        flag = 0x4A;
+                    }
+                    onStatusFlag(roomNo, flag);
+                }
+                return TRUE;
+            }
+        } else {
+            if (dStage_roomRead_dt_c_ChkBg(rooms[i])) {
+                if (checkStatusFlag(roomNo, 0x40)) {
+                    offStatusFlag(roomNo, 0x48);
+                }
+            } else {
+                if (!checkStatusFlag(roomNo, 0x60)) {
+                    onStatusFlag(roomNo, 0x48);
+                } else {
+                    onStatusFlag(roomNo, 0x40);
+                }
+            }
+        }
+    }
+    
+    return TRUE;
+}
+
+void dStage_roomControl_c::zoneCountCheck(int i_roomNo) const {
+    dStage_roomStatus_c* status = mStatus;
+    for (int i = 0; i < 0x40; i++) {
+        if (status->mZoneNo >= 0 && status->mZoneCount > 0) {
+            dComIfGs_clearRoomSwitch(status->mZoneNo);
+            dComIfGs_clearRoomItem(status->mZoneNo);
+
+            if (dStage_stagInfo_GetSTType(dComIfGp_getStage()->getStagInfo()) != ST_FIELD &&
+                i_roomNo != mOldStayNo)
+            {
+                if (--status->mZoneCount == 0) {
+                    dComIfGs_removeZone(status->mZoneNo);
+                    status->mZoneNo = -1;
+                }
+            }
+        }
+        status++;
+    }
+
+    setStayNo(i_roomNo);
+}
+
+static void dummy1(dStage_roomControl_c* roomControl) {
+    roomControl->getFileList2(0);
+}
+
+JKRExpHeap* dStage_roomControl_c::createMemoryBlock(int i_blockIdx, u32 i_heapSize) {
+    if (mMemoryBlock[i_blockIdx] == NULL) {
+        mMemoryBlock[i_blockIdx] = JKRCreateExpHeap(i_heapSize, mDoExt_getArchiveHeap(), false);
+    }
+
+    return mMemoryBlock[i_blockIdx];
+}
+
+void dStage_roomControl_c::destroyMemoryBlock() {
+    for (int i = 0; i < MEMORY_BLOCK_MAX; i++) {
+        if (mMemoryBlock[i] != NULL) {
+            mDoExt_destroyExpHeap(mMemoryBlock[i]);
+            mMemoryBlock[i] = NULL;
+        }
+    }
+}
+
+void dStage_roomControl_c::setArcBank(int i_bank, char const* bankName) {
+    JUT_ASSERT(1053, 0 <= i_bank && i_bank < 32);
+    strncpy(&mArcBank[i_bank][0], bankName, 9);
+}
+
+char* dStage_roomControl_c::getArcBank(int i_bank) {
+    JUT_ASSERT(1067, 0 <= i_bank && i_bank < 32);
+    return mArcBank[i_bank];
+}
+
+bool dStage_roomControl_c::resetArchiveBank(int i_bank) {
+    for (int i = i_bank; i < 32; i++) {
+        char* bank = getArcBank(i);
+
+        if (strcmp(bank, "")) {
+            s32 syncStatus = dComIfG_syncObjectRes(bank);
+            if (syncStatus < 0) {
+                OSReport_Error("Bank[%d] : %s.arc Sync Read Error !!\n", i, bank);
+            } else {
+                if (syncStatus > 0) {
+                    return 0;
+                }
+                OS_REPORT(">>>>>>>>>>> delete Bank[%d] : %s\n", i, bank);
+                dComIfG_deleteObjectResMain(bank);
+                setArcBank(i, "");
+            }
+        }
+    }
+    return 1;
+}
+
+void dStage_roomControl_c::roomDzs_c::create(u8 i_num) {
+    JUT_ASSERT(1112, !m_num && 0 < i_num && i_num < 64);
+    m_dzs = new (mDoExt_getArchiveHeap(), -4) void*[i_num];
+    JUT_ASSERT(1114, m_dzs != NULL);
+
+    if (m_dzs != NULL) {
+        u32** dzs = (u32**)m_dzs;
+        for (u8 i = 0; i < i_num; i++) {
+            *dzs = NULL;
+            dzs++;
+        }
+        m_num = i_num;
+    }
+}
+
+void dStage_roomControl_c::roomDzs_c::remove() {
+    if (m_num != 0) {
+        u32** dzs = (u32**)m_dzs;
+        for (u8 i = 0; i < m_num; i++) {
+            if (*dzs != NULL) {
+                mDoExt_getArchiveHeap()->free(*dzs);
+            }
+            dzs++;
+        }
+        delete[] m_dzs;
+        m_num = 0;
+    }
+}
+
+void* dStage_roomControl_c::roomDzs_c::add(u8 i_no, u8 roomNo) {
+    if (m_num == 0) {
+        return NULL;
+    }
+
+    JUT_ASSERT(1160, i_no < m_num);
+    void** dzs = m_dzs + i_no;
+    if (*dzs == NULL) {
+        char dzsName[20];
+        sprintf(dzsName, "%s/room%d.dzs", dComIfGp_getStartStageName(), roomNo);
+        JUT_ASSERT(1167, strlen(dzsName) <= sizeof(dzsName));
+
+        u32 expandSize =
+            dLib_getExpandSizeFromAramArchive(dComIfGp_getFieldMapArchive2(), (const char*)dzsName);
+        JUT_ASSERT(1172, expandSize);
+        OS_REPORT("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ <%s> <%d>\n", dzsName, expandSize);
+        *dzs = mDoExt_getArchiveHeap()->alloc(expandSize, -0x20);
+        JUT_ASSERT(1179, *dzs != NULL);
+
+        if (*dzs != NULL) {
+            u32 readSize = dComIfGp_getFieldMapArchive2()->readResource(*dzs, expandSize, dzsName);
+            JUT_ASSERT(1186, readSize <= expandSize);
+        }
+    }
+
+    return *dzs;
 }
 
 // clang-format off
@@ -1093,7 +1390,7 @@ static dStage_objectNameInf l_objectName[] = {
     OBJNAME("mvbg_a",  PROC_BG_OBJ,            -1),
     OBJNAME("burnBox", PROC_Obj_BurnBox,       -1),
     OBJNAME("stnMark", PROC_Obj_StoneMark,     -1),
-#if !DEBUG
+#if PLATFORM_GCN
     OBJNAME("Passer",  PROC_NPC_PASSER,        -1),
 #endif
     OBJNAME("Passer2", PROC_NPC_PASSER2,       -1),
@@ -1111,258 +1408,6 @@ static dStage_objectNameInf l_objectName[] = {
     OBJNAME("EndCode", PROC_PLAY_SCENE,        -1),
 };
 // clang-format on
-
-JKRExpHeap* dStage_roomControl_c::getMemoryBlock(int i_roomNo) {
-    int blockId = getMemoryBlockID(i_roomNo);
-
-    if (blockId < 0) {
-        return NULL;
-    }
-    return mMemoryBlock[blockId];
-}
-
-void dStage_roomControl_c::setStayNo(int i_roomNo) {
-    mOldStayNo = mStayNo;
-    mStayNo = i_roomNo;
-    mNextStayNo = mStayNo;
-
-    if (mStayNo < 0) {
-        return;
-    }
-
-    onStatusDraw(mStayNo);
-}
-
-void dStage_roomControl_c::setNextStayNo(int nextStayNo) {
-    mNextStayNo = nextStayNo;
-}
-
-static int stayRoomCheck(int param_0, u8* param_1, int param_2) {
-    for (; param_0 > 0; param_0--) {
-        if (param_2 == dStage_roomRead_dt_c_GetLoadRoomIndex(*param_1)) {
-            return 1;
-        }
-        param_1++;
-    }
-    return 0;
-}
-
-static int createRoomScene(int param_0) {
-    int* ptr = (int*)JKRHeap::alloc(4, -4, NULL);
-
-    if (ptr == NULL) {
-        return 0;
-    }
-    *ptr = param_0;
-
-    if (!fopScnM_CreateReq(PROC_ROOM_SCENE, 0x7FFF, 0, (uintptr_t)ptr)) {
-        JKRHeap::free(ptr, NULL);
-        return 0;
-    }
-
-    return 1;
-}
-
-BOOL dStage_roomControl_c::checkRoomDisp(int i_roomNo) const {
-    if (checkStatusFlag(i_roomNo, 8)) {
-        return 0;
-    }
-
-    return checkStatusFlag(i_roomNo, 16) ? 1 : 0;
-}
-
-int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms, bool param_2) {
-    if (mRoomReadId < 0 && mNoChangeRoom != 0) {
-        return 0;
-    }
-
-    for (int roomNo = 0; roomNo < ARRAY_SIZEU(mStatus); roomNo++) {
-        if (checkStatusFlag(roomNo, 0x02 | 0x04)) {
-            return 0;
-        }
-    }
-    
-    BOOL r26 = TRUE;
-    for (int roomNo = 0; roomNo < ARRAY_SIZE(mStatus); roomNo++) {
-        if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
-            if (!stayRoomCheck(roomCount, rooms, roomNo)) {
-                onStatusFlag(roomNo, 0xc);
-                r26 = FALSE;
-            }
-        }
-    }
-    if (!r26) {
-        return FALSE;
-    }
-    
-    for (int i = 0; i < roomCount; i++) {
-        u8 roomNo = dStage_roomRead_dt_c_GetLoadRoomIndex(rooms[i]);
-        dStage_roomControl_c::setZoneCount(roomNo, 2);
-        if (!checkStatusFlag(roomNo, 0x01)) {
-            if (param_2) {
-                if (dStage_roomRead_dt_c_ChkBg(rooms[i]) && createRoomScene(roomNo)) {
-                    onStatusFlag(roomNo, 2);
-                }
-            } else {
-                if (createRoomScene(roomNo)) {
-                    int flag;
-                    if (dStage_roomRead_dt_c_ChkBg(rooms[i])) {
-                        flag = 0x02;
-                    } else {
-                        flag = 0x4A;
-                    }
-                    onStatusFlag(roomNo, flag);
-                }
-                return TRUE;
-            }
-        } else {
-            if (dStage_roomRead_dt_c_ChkBg(rooms[i])) {
-                if (checkStatusFlag(roomNo, 0x40)) {
-                    offStatusFlag(roomNo, 0x48);
-                }
-            } else {
-                if (!checkStatusFlag(roomNo, 0x60)) {
-                    onStatusFlag(roomNo, 0x48);
-                } else {
-                    onStatusFlag(roomNo, 0x40);
-                }
-            }
-        }
-    }
-    
-    return TRUE;
-}
-
-void dStage_roomControl_c::zoneCountCheck(int i_roomNo) const {
-    dStage_roomStatus_c* status = mStatus;
-    for (int i = 0; i < 0x40; i++) {
-        if (status->mZoneNo >= 0 && status->mZoneCount > 0) {
-            dComIfGs_clearRoomSwitch(status->mZoneNo);
-            dComIfGs_clearRoomItem(status->mZoneNo);
-
-            if (dStage_stagInfo_GetSTType(dComIfGp_getStage()->getStagInfo()) != ST_FIELD &&
-                i_roomNo != mOldStayNo)
-            {
-                if (--status->mZoneCount == 0) {
-                    dComIfGs_removeZone(status->mZoneNo);
-                    status->mZoneNo = -1;
-                }
-            }
-        }
-        status++;
-    }
-
-    setStayNo(i_roomNo);
-}
-
-static void dummy1() {
-    ((dStage_stageDt_c*)dComIfGp_getStage())->getStagInfo();
-}
-
-JKRExpHeap* dStage_roomControl_c::createMemoryBlock(int i_blockIdx, u32 i_heapSize) {
-    if (mMemoryBlock[i_blockIdx] == NULL) {
-        mMemoryBlock[i_blockIdx] = JKRCreateExpHeap(i_heapSize, mDoExt_getArchiveHeap(), false);
-    }
-
-    return mMemoryBlock[i_blockIdx];
-}
-
-void dStage_roomControl_c::destroyMemoryBlock() {
-    for (int i = 0; i < MEMORY_BLOCK_MAX; i++) {
-        if (mMemoryBlock[i] != NULL) {
-            mDoExt_destroyExpHeap(mMemoryBlock[i]);
-            mMemoryBlock[i] = NULL;
-        }
-    }
-}
-
-void dStage_roomControl_c::setArcBank(int i_bank, char const* bankName) {
-    JUT_ASSERT(1053, 0 <= i_bank && i_bank < 32);
-    strncpy(&mArcBank[i_bank][0], bankName, 9);
-}
-
-char* dStage_roomControl_c::getArcBank(int i_bank) {
-    JUT_ASSERT(1067, 0 <= i_bank && i_bank < 32);
-    return mArcBank[i_bank];
-}
-
-bool dStage_roomControl_c::resetArchiveBank(int i_bank) {
-    for (int i = i_bank; i < 32; i++) {
-        char* bank = getArcBank(i);
-
-        if (strcmp(bank, "")) {
-            s32 syncStatus = dComIfG_syncObjectRes(bank);
-            if (syncStatus < 0) {
-                OSReport_Error("Bank[%d] : %s.arc Sync Read Error !!\n", i, bank);
-            } else {
-                if (syncStatus > 0) {
-                    return 0;
-                }
-                OS_REPORT(">>>>>>>>>>> delete Bank[%d] : %s\n", i, bank);
-                dComIfG_deleteObjectResMain(bank);
-                setArcBank(i, "");
-            }
-        }
-    }
-    return 1;
-}
-
-void dStage_roomControl_c::roomDzs_c::create(u8 i_num) {
-    JUT_ASSERT(1112, !m_num && 0 < i_num && i_num < 64);
-    m_dzs = new (mDoExt_getArchiveHeap(), -4) void*[i_num];
-    JUT_ASSERT(1114, m_dzs != NULL);
-
-    if (m_dzs != NULL) {
-        u32** dzs = (u32**)m_dzs;
-        for (u8 i = 0; i < i_num; i++) {
-            *dzs = NULL;
-            dzs++;
-        }
-        m_num = i_num;
-    }
-}
-
-void dStage_roomControl_c::roomDzs_c::remove() {
-    if (m_num != 0) {
-        u32** dzs = (u32**)m_dzs;
-        for (u8 i = 0; i < m_num; i++) {
-            if (*dzs != NULL) {
-                mDoExt_getArchiveHeap()->free(*dzs);
-            }
-            dzs++;
-        }
-        delete[] m_dzs;
-        m_num = 0;
-    }
-}
-
-void* dStage_roomControl_c::roomDzs_c::add(u8 i_no, u8 roomNo) {
-    if (m_num == 0) {
-        return NULL;
-    }
-
-    JUT_ASSERT(1160, i_no < m_num);
-    void** dzs = m_dzs + i_no;
-    if (*dzs == NULL) {
-        char dzsName[20];
-        sprintf(dzsName, "%s/room%d.dzs", dComIfGp_getStartStageName(), roomNo);
-        JUT_ASSERT(1167, strlen(dzsName) <= sizeof(dzsName));
-
-        u32 expandSize =
-            dLib_getExpandSizeFromAramArchive(dComIfGp_getFieldMapArchive2(), (const char*)dzsName);
-        JUT_ASSERT(1172, expandSize);
-        OS_REPORT("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ <%s> <%d>\n", dzsName, expandSize);
-        *dzs = mDoExt_getArchiveHeap()->alloc(expandSize, -0x20);
-        JUT_ASSERT(1179, *dzs != NULL);
-
-        if (*dzs != NULL) {
-            u32 readSize = dComIfGp_getFieldMapArchive2()->readResource(*dzs, expandSize, dzsName);
-            JUT_ASSERT(1186, readSize <= expandSize);
-        }
-    }
-
-    return *dzs;
-}
 
 void dStage_stageDt_c::init() {
     mCamera = NULL;
@@ -1433,7 +1478,7 @@ void dStage_roomDt_c::init() {
     mDoor = NULL;
     mFloorInfo = NULL;
 #if DEBUG
-    field_0x60 = 0;
+    mUnit = NULL;
 #endif
 }
 
@@ -1499,6 +1544,12 @@ const char* dStage_getName2(s16 procName, s8 argument) {
     return dStage_getName(procName, argument);
 }
 
+u8 data_8074C568_debug;
+u8 data_8074C569_debug;
+u8 data_8074C56A_debug;
+u8 data_8074C56B_debug;
+u8 data_8074C56C_debug;
+
 u32 dStage_roomControl_c::mProcID;
 
 s8 dStage_roomControl_c::mStayNo;
@@ -1515,7 +1566,10 @@ dStage_roomControl_c::nameData* dStage_roomControl_c::mArcBankName;
 
 dStage_roomControl_c::bankData* dStage_roomControl_c::mArcBankData;
 
-s8 dStage_roomControl_c::mRoomReadId = -1;
+dStage_roomControl_c::roomDzs_c dStage_roomControl_c::m_roomDzs;
+#if DEBUG
+u8 dStage_roomControl_c::mNoArcBank;
+#endif
 
 static void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm) {
     dStage_objectNameInf* actorInf = dStage_searchName(i_actorData->name);
@@ -1534,7 +1588,7 @@ static void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_c
             return;
         }
 
-        fopAcM_create(actorInf->procname, NULL, i_actorPrm);
+        fopAcM_Create(actorInf->procname, NULL, i_actorPrm);
     }
 }
 
@@ -1566,6 +1620,7 @@ static void dummy2() {
 }
 
 static int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* param_3) {
+    UNUSED(param_3);
     stage_actor_class* player = (stage_actor_class*)((int*)i_data + 1);
     stage_actor_data_class* player_data = player->m_entries;
     i_stage->setPlayer(player);
@@ -1641,24 +1696,35 @@ static int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* 
 }
 
 static int dStage_cameraInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
+    UNUSED(param_2);
+    UNUSED(param_3);
     stage_camera_class* camera = (stage_camera_class*)((char*)i_data + 4);
+    int r30 = 0;
     i_stage->setCamera(camera);
-    dStage_cameraCreate(camera->m_entries, 0, 0);
+    stage_camera2_data_class* camera2 = &camera->m_entries[r30];
+    dStage_cameraCreate(camera2, 0, 0);
     return 1;
 }
 
 static int dStage_RoomCameraInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
-    i_stage->setCamera((stage_camera_class*)((char*)i_data + 4));
+    UNUSED(param_2);
+    UNUSED(param_3);
+    stage_camera_class* camera = (stage_camera_class*)((char*)i_data + 4);
+    i_stage->setCamera(camera);
     return 1;
 }
 
 static int dStage_arrowInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
-    i_stage->setArrow((stage_arrow_class*)((char*)i_data + 4));
+    UNUSED(param_2);
+    UNUSED(param_3);
+    stage_arrow_class* arrow = (stage_arrow_class*)((char*)i_data + 4);
+    i_stage->setArrow(arrow);
     return 1;
 }
 
 stage_map_info_class* dStage_roomDt_c::getMapInfo2(int param_0) const {
-    stage_map_info_dummy_class* map_info_p = getMapInfoBase();
+    stage_map_info_dummy_class* map_info_p = NULL;
+    map_info_p = getMapInfoBase();
 
     if (map_info_p == NULL || map_info_p->num == 0 || map_info_p->m_entries == NULL) {
         return NULL;
@@ -1682,7 +1748,8 @@ static void dummy3() {
 }
 
 stage_map_info_class* dStage_stageDt_c::getMapInfo2(int param_0) const {
-    stage_map_info_dummy_class* map_info_p = getMapInfoBase();
+    stage_map_info_dummy_class* map_info_p = NULL;
+    map_info_p = getMapInfoBase();
 
     if (map_info_p == NULL || map_info_p->num == 0 || map_info_p->m_entries == NULL) {
         return NULL;
@@ -1706,20 +1773,32 @@ static void dummy4() {
 }
 
 static int dStage_paletteInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
+    UNUSED(param_3);
     dStage_nodeHeader* pal_info = (dStage_nodeHeader*)(i_data);
     i_stage->setPaletteInfo((stage_palette_info_class*)pal_info->m_offset);
+#if DEBUG
+    i_stage->setPaletteNumInfo(param_2);
+#endif
     return 1;
 }
 
 static int dStage_pselectInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
+    UNUSED(param_3);
     dStage_nodeHeader* psel_info = (dStage_nodeHeader*)(i_data);
     i_stage->setPselectInfo((stage_pselect_info_class*)psel_info->m_offset);
+#if DEBUG
+    i_stage->setPselectNumInfo(param_2);
+#endif
     return 1;
 }
 
 static int dStage_envrInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
+    UNUSED(param_3);
     dStage_nodeHeader* envr_info = (dStage_nodeHeader*)(i_data);
     i_stage->setEnvrInfo((stage_envr_info_class*)envr_info->m_offset);
+#if DEBUG
+    i_stage->setEnvrNumInfo(param_2);
+#endif
     return 1;
 }
 
@@ -1746,10 +1825,10 @@ static int dStage_fieldMapFiliInfo2Init(dStage_dt_c* i_stage, void* i_data, int 
 }
 
 static int dStage_filiInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
+    dStage_nodeHeader* fili_info = (dStage_nodeHeader*)(i_data);
     if (entryNum == 0) {
         i_stage->setFileListInfo(NULL);
     } else {
-        dStage_nodeHeader* fili_info = (dStage_nodeHeader*)(i_data);
         i_stage->setFileListInfo((dStage_FileList_dt_c*)fili_info->m_offset);
     }
 
@@ -1757,15 +1836,23 @@ static int dStage_filiInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 }
 
 static int dStage_vrboxInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
+    UNUSED(param_3);
     dStage_nodeHeader* vrbox_info = (dStage_nodeHeader*)(i_data);
     i_stage->setVrboxInfo((stage_vrbox_info_class*)vrbox_info->m_offset);
+#if DEBUG
+    i_stage->setVrboxNumInfo(entryNum);
+#endif
     return 1;
 }
 
 static int dStage_vrboxcolInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
                                    void* param_3) {
+    UNUSED(param_3);
     dStage_nodeHeader* vrcol_info = (dStage_nodeHeader*)(i_data);
     i_stage->setVrboxcolInfo((stage_vrboxcol_info_class*)vrcol_info->m_offset);
+#if DEBUG
+    i_stage->setVrboxcolNumInfo(entryNum);
+#endif
     return 1;
 }
 
@@ -1795,6 +1882,8 @@ u32 dStage_stagInfo_GetParticleNo(stage_stag_info_class* p_info, int layer) {
 }
 
 static int dStage_stagInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
+    UNUSED(entryNum);
+    UNUSED(param_3);
     dStage_nodeHeader* stag_info = (dStage_nodeHeader*)(i_data);
     i_stage->setStagInfo((stage_stag_info_class*)stag_info->m_offset);
 
@@ -1806,13 +1895,21 @@ static int dStage_stagInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
     int stageNo = dStage_stagInfo_GetSaveTbl(i_stage->getStagInfo());
     dComIfGs_getSave(stageNo);
     g_save_bit_HIO.init();
+#if DEBUG
+    OS_REPORT("Save StageNo=%d sizeof(dSv_save_c)=%d\n", stageNo, sizeof(dSv_save_c));
+    char* r30 = &dComIfGs_getSaveInfo()->unk_0x1;
+    if (dComIfGs_getSaveInfo()->unk_0x0 && *r30 && !strcmp(r30, dComIfGp_getStartStageName())) {
+        OS_REPORT("stage: keep dungeon save data\n");
+    } else {
+        OS_REPORT("stage: clear dungeon save data\n");
+    }
+#endif
     dComIfGs_initDan(stageNo);
+#if DEBUG
+    dComIfGs_getSaveInfo()->unk_0x0 = 0;
+#endif
     dStage_KeepDoorInfoInit(i_stage);
     return 1;
-}
-
-void dStage_stageDt_c::resetOldMulti() {
-    mOldMulti = NULL;
 }
 
 static int dStage_sclsInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
@@ -1822,6 +1919,8 @@ static int dStage_sclsInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 
 static int dStage_actorCommonLayerInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
                                        void* param_3) {
+    UNUSED(entryNum);
+    UNUSED(param_3);
     stage_actor_class* actor = (stage_actor_class*)((int*)i_data + 1);
     stage_actor_data_class* actor_data = actor->m_entries;
 
@@ -1845,6 +1944,8 @@ static int dStage_actorCommonLayerInit(dStage_dt_c* i_stage, void* i_data, int e
 
 static int dStage_tgscCommonLayerInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
                                       void* param_3) {
+    UNUSED(entryNum);
+    UNUSED(param_3);
     stage_tgsc_class* actor = (stage_tgsc_class*)((int*)i_data + 1);
     stage_tgsc_data_class* tgsc_data = actor->m_entries;
 
@@ -1867,6 +1968,8 @@ static int dStage_tgscCommonLayerInit(dStage_dt_c* i_stage, void* i_data, int en
 }
 
 static int dStage_actorInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
+    UNUSED(entryNum);
+    UNUSED(param_3);
     stage_actor_class* actor = (stage_actor_class*)((int*)i_data + 1);
     stage_actor_data_class* actor_data = actor->m_entries;
 
@@ -1890,6 +1993,8 @@ static int dStage_actorInit(dStage_dt_c* i_stage, void* i_data, int entryNum, vo
 
 static int dStage_actorInit_always(dStage_dt_c* i_stage, void* i_data, int entryNum,
                                    void* param_3) {
+    UNUSED(entryNum);
+    UNUSED(param_3);
     stage_actor_class* actor = (stage_actor_class*)((int*)i_data + 1);
     stage_actor_data_class* actor_data = actor->m_entries;
 
@@ -1910,6 +2015,8 @@ static int dStage_actorInit_always(dStage_dt_c* i_stage, void* i_data, int entry
 }
 
 static int dStage_tgscInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
+    UNUSED(entryNum);
+    UNUSED(param_3);
     stage_tgsc_class* actor = (stage_tgsc_class*)((int*)i_data + 1);
     stage_tgsc_data_class* tgsc_data = actor->m_entries;
 
@@ -1932,6 +2039,8 @@ static int dStage_tgscInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 }
 
 static int dStage_doorInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
+    UNUSED(entryNum);
+    UNUSED(param_3);
     stage_tgsc_class* actor = (stage_tgsc_class*)((int*)i_data + 1);
     stage_tgsc_data_class* tgsc_data = actor->m_entries;
 
@@ -1952,6 +2061,7 @@ static int dStage_doorInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 }
 
 static int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
+    UNUSED(param_2);
     roomRead_class* p_node = (roomRead_class*)((int*)i_data + 1);
     roomRead_data_class** rtbl = p_node->m_entries;
 
@@ -1972,15 +2082,21 @@ s8 dStage_roomRead_dt_c_GetReverbStage(roomRead_class& room, int index) {
         index = 0;
     }
 
-    return dStage_roomRead_dt_c_GetReverb(*room.m_entries[index]);
+    roomRead_data_class* data = room.m_entries[index];
+    return dStage_roomRead_dt_c_GetReverb(*data);
 }
 
 static int dStage_ppntInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
-    i_stage->setPntInfo((dStage_dPnt_c*)((char*)i_data + 4));
+    UNUSED(entryNum);
+    UNUSED(param_3);
+    dStage_dPnt_c* pnt = (dStage_dPnt_c*)((char*)i_data + 4);
+    i_stage->setPntInfo(pnt);
     return 1;
 }
 
 static int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
+    UNUSED(entryNum);
+    UNUSED(param_3);
     dStage_dPath_c* path_c = (dStage_dPath_c*)((char*)i_data + 4);
     dPath* path = path_c->m_path;
 
@@ -1997,7 +2113,10 @@ static int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 }
 
 static int dStage_rppnInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
-    i_stage->setPnt2Info((dStage_dPnt_c*)((char*)i_data + 4));
+    UNUSED(entryNum);
+    UNUSED(param_3);
+    dStage_dPnt_c* pnt = (dStage_dPnt_c*)((char*)i_data + 4);
+    i_stage->setPnt2Info(pnt);
     return 1;
 }
 
@@ -2018,23 +2137,24 @@ static int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, vo
 }
 
 static int dStage_soundInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
-    i_stage->setSoundInf((dStage_SoundInfo_c*)((char*)i_data + 4));
+    UNUSED(entryNum);
+    UNUSED(param_3);
+    dStage_SoundInfo_c* soundInfo = (dStage_SoundInfo_c*)((char*)i_data + 4);
+    i_stage->setSoundInf(soundInfo);
     return 1;
 }
 
 static int dStage_soundInfoInitCL(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
-    i_stage->setSoundInfCL((dStage_SoundInfo_c*)((char*)i_data + 4));
+    UNUSED(entryNum);
+    UNUSED(param_3);
+    dStage_SoundInfo_c* soundInfo = (dStage_SoundInfo_c*)((char*)i_data + 4);
+    i_stage->setSoundInfCL(soundInfo);
     return 1;
 }
 
 static void dStage_setLayerTagName(FuncTable* funcTbl, int tblSize, int i_layerNo) {
-    char layerTag;
-    if (i_layerNo < 10) {
-        layerTag = '0';
-    } else {
-        layerTag = 'W';
-    }
-    layerTag = i_layerNo + layerTag;
+    JUT_ASSERT(3007, 0 <= i_layerNo && i_layerNo < 15);
+    char layerTag = i_layerNo + (i_layerNo < 10 ? '0' : 'W');
 
     for (int i = 0; i < tblSize; i++) {
         funcTbl->identifier[3] = layerTag;
@@ -2045,20 +2165,22 @@ static void dStage_setLayerTagName(FuncTable* funcTbl, int tblSize, int i_layerN
 static void dStage_dt_c_decode(void* i_data, dStage_dt_c* i_stage, FuncTable* funcTbl,
                                int tblSize) {
     if (i_data != NULL) {
+        dStage_fileHeader* file = (dStage_fileHeader*)i_data;
+        dStage_nodeHeader* node1 = file->m_nodes;
         for (int i = 0; i < tblSize; i++) {
-            dStage_fileHeader* file = (dStage_fileHeader*)i_data;
-            dStage_nodeHeader* p_tno = file->m_nodes;
+            node1 = file->m_nodes;
 
             FuncTable* nodeFunc = funcTbl + i;
 
             for (int j = 0; j < file->m_chunkCount; j++) {
-                if ((int)p_tno->m_tag == *(int*)nodeFunc->identifier) {
-                    if (nodeFunc->function != NULL) {
-                        nodeFunc->function(i_stage, p_tno, p_tno->m_entryNum, i_data);
+                dStage_nodeHeader* node2 = node1;
+                if ((int)node2->m_tag == *(int*)nodeFunc->identifier) {
+                    if (funcTbl[i].function != NULL) {
+                        funcTbl[i].function(i_stage, node1, node1->m_entryNum, i_data);
                     }
                     break;
                 }
-                p_tno++;
+                node1++;
             }
         }
     } else {
@@ -2067,18 +2189,26 @@ static void dStage_dt_c_decode(void* i_data, dStage_dt_c* i_stage, FuncTable* fu
 }
 
 static int dStage_stEventInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
-    i_stage->setMapEventInfo((dStage_MapEventInfo_c*)((char*)i_data + 4));
+    UNUSED(entryNum);
+    UNUSED(param_3);
+    dStage_MapEventInfo_c* mapEvent = (dStage_MapEventInfo_c*)((char*)i_data + 4);
+    i_stage->setMapEventInfo(mapEvent);
+    OS_REPORT("\nステージイベントデータ初期化！！ %d %x\n\n", mapEvent->num, mapEvent->m_entries);
     return 1;
 }
 
 static int dStage_mapEventInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
                                    void* param_3) {
-    i_stage->setMapEventInfo((dStage_MapEventInfo_c*)((char*)i_data + 4));
+    dStage_MapEventInfo_c* mapEvent = (dStage_MapEventInfo_c*)((char*)i_data + 4);
+    i_stage->setMapEventInfo(mapEvent);
     return 1;
 }
 
 static int dStage_floorInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
-    i_stage->setFloorInfo((dStage_FloorInfo_c*)((char*)i_data + 4));
+    UNUSED(entryNum);
+    UNUSED(param_3);
+    dStage_FloorInfo_c* floorInfo = (dStage_FloorInfo_c*)((char*)i_data + 4);
+    i_stage->setFloorInfo(floorInfo);
     return 1;
 }
 
@@ -2086,6 +2216,11 @@ static int dStage_memaInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, 
     UNUSED(param_2);
     UNUSED(param_3);
     dStage_MemoryMap_c* pd = (dStage_MemoryMap_c*)((char*)i_data + 4);
+#if DEBUG
+    if (fapGmHIO_getMemoryBlockOff()) {
+        pd = NULL;
+    }
+#endif
     i_stage->setMemoryMap(pd);
 
     if (pd != NULL) {
@@ -2108,6 +2243,11 @@ static int dStage_mecoInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, 
     UNUSED(param_2);
     UNUSED(param_3);
     dStage_MemoryConfig_c* pd = (dStage_MemoryConfig_c*)((char*)i_data + 4);
+#if DEBUG
+    if (fapGmHIO_getMemoryBlockOff()) {
+        pd = NULL;
+    }
+#endif
     i_stage->setMemoryConfig(pd);
 
     if (pd != NULL) {
@@ -2177,8 +2317,6 @@ static int dStage_fieldMapMapPathInit(dStage_dt_c* i_stage, void* i_data, int pa
     return 1;
 }
 
-dStage_roomControl_c::roomDzs_c dStage_roomControl_c::m_roomDzs;
-
 static void readMult(dStage_dt_c* i_stage, dStage_Multi_c* multi, bool useOldRes) {
     static FuncTable l_roomFuncTable[] = {
         {"TRES", dStage_stageKeepTresureInit},
@@ -2199,7 +2337,7 @@ static void readMult(dStage_dt_c* i_stage, dStage_Multi_c* multi, bool useOldRes
         if (dStage_stagInfo_GetUpButton(dComIfGp_getStage()->getStagInfo()) == 0 ||
             dStage_stagInfo_GetUpButton(dComIfGp_getStage()->getStagInfo()) == 6)
         {
-            dStage_roomControl_c::m_roomDzs.create(multi->num);
+            dStage_roomControl_c::createRoomDzs(multi->num);
         }
 
         for (s8 i = 0; i < multi->num; i++) {
@@ -2208,12 +2346,15 @@ static void readMult(dStage_dt_c* i_stage, dStage_Multi_c* multi, bool useOldRes
             if (dzs == NULL) {
                 char dzsName[11];
                 sprintf(dzsName, "room%d.dzs", info->mRoomNo);
+                JUT_ASSERT(3548, strlen(dzsName) <= sizeof(dzsName));
 
                 if (useOldRes) {
                     dzs = dComIfG_getOldStageRes(dzsName);
                 } else {
                     dzs = dComIfG_getStageRes(dzsName);
                 }
+            } else {
+                OS_REPORT("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Field Map Dzs Find !!\n");
             }
 
             if (dzs != NULL) {
@@ -2231,7 +2372,10 @@ static void readMult(dStage_dt_c* i_stage, dStage_Multi_c* multi, bool useOldRes
 }
 
 static int dStage_multInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
-    i_stage->setMulti((dStage_Multi_c*)((char*)i_data + 4));
+    UNUSED(entryNum);
+    UNUSED(param_3);
+    dStage_Multi_c* multi = (dStage_Multi_c*)((char*)i_data + 4);
+    i_stage->setMulti(multi);
     dStage_initRoomKeepDoorInfo();
 
     readMult(i_stage, i_stage->getMulti(), false);
@@ -2242,7 +2386,10 @@ static int dStage_multInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 }
 
 static int dStage_lbnkInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum, void* param_3) {
-    i_stage->setLbnk((dStage_Lbnk_c*)((char*)i_data + 4));
+    UNUSED(entryNum);
+    UNUSED(param_3);
+    dStage_Lbnk_c* lbnk = (dStage_Lbnk_c*)((char*)i_data + 4);
+    i_stage->setLbnk(lbnk);
     return 1;
 }
 
@@ -2269,20 +2416,32 @@ static int dStage_dmapInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
 
 static int dStage_stageDrtgInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
                                     void* param_3) {
-    i_stage->setDrTg((stage_tgsc_class*)((char*)i_data + 4));
+    stage_tgsc_class* tgsc = (stage_tgsc_class*)((char*)i_data + 4);
+    i_stage->setDrTg(tgsc);
     dStage_tgscInfoInit(i_stage, i_data, entryNum, param_3);
-    dStage_KeepDoorInfoProc(i_stage, (stage_tgsc_class*)((char*)i_data + 4));
+    dStage_KeepDoorInfoProc(i_stage, tgsc);
     return 1;
 }
 
 static int dStage_roomDrtgInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
                                    void* param_3) {
-    i_stage->setDrTg((stage_tgsc_class*)((char*)i_data + 4));
+    stage_tgsc_class* tgsc = (stage_tgsc_class*)((char*)i_data + 4);
+    i_stage->setDrTg(tgsc);
     dStage_doorInfoInit(i_stage, i_data, entryNum, param_3);
     return 1;
 }
 
+#if DEBUG
+static int dStage_unitInit(dStage_dt_c* i_stage, void* i_data, int, void*) {
+    void* unit = (void*)((char*)i_data + 4);
+    dBgp_c::setPointer(unit);
+    i_stage->setUnit(unit);
+    return 1;
+}
+#endif
+
 static int dStage_elstInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
+    UNUSED(param_3);
     dStage_Elst_c* elst = (dStage_Elst_c*)((char*)i_data + 4);
 
     if (param_2 == 0) {
@@ -2302,6 +2461,7 @@ static void dKankyo_create() {
 }
 
 static void layerMemoryInfoLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
+    UNUSED(param_2);
     static FuncTable l_layerFuncTable[] = {
         {"MEM0", dStage_memaInfoInit},
         {"MEC0", dStage_mecoInfoInit},
@@ -2313,15 +2473,58 @@ static void layerMemoryInfoLoader(void* i_data, dStage_dt_c* i_stage, int param_
 static void dStage_dt_c_stageInitLoader(void* i_data, dStage_dt_c* i_stage) {
     static FuncTable l_funcTable[] = {"STAG", dStage_stagInfoInit};
 
+    JUT_ASSERT(3959, i_data != NULL);
+    JUT_ASSERT(3960, i_stage != NULL);
+
     dStage_dt_c_offsetToPtr(i_data);
     i_stage->init();
     dStage_dt_c_decode(i_data, i_stage, l_funcTable, ARRAY_SIZEU(l_funcTable));
     layerMemoryInfoLoader(i_data, i_stage, -1);
 }
 
-static void layerTableLoader(void* i_data, dStage_dt_c* i_stage, int roomNo) {
-    static FuncTable l_layerFuncTableA[] = {"SON0", dStage_soundInfoInit};
+#if DEBUG
+static void dStage_DebugDisp() {
+    if (data_8074C569_debug) {
+        JUTReport(30, 270, "envLayerSet: EnvRoom None");
+    }
+    if (data_8074C56A_debug) {
+        JUTReport(30, 300, "envLayerSet: Color None");
+    }
+    if (data_8074C56B_debug) {
+        JUTReport(30, 330, "envLayerSet: Palette None");
+    }
+    if (data_8074C56C_debug) {
+        JUTReport(30, 360, "envLayerSet: Vrbox None");
+    }
+}
+#endif
 
+static void layerTableLoader(void* i_data, dStage_dt_c* i_stage, int roomNo) {
+#if DEBUG
+    static FuncTable l_layer0FuncTableA[] = {{"SON0", dStage_soundInfoInit}, {"UNI0", dStage_unitInit}, {"UNI1", dStage_unitInit}};
+    static FuncTable l_layer1FuncTableA[] = {{"SON1", dStage_soundInfoInit}, {"UNI0", dStage_unitInit}, {"UNI1", dStage_unitInit}};
+    static FuncTable l_layer2FuncTableA[] = {{"SON2", dStage_soundInfoInit}, {"UNI2", dStage_unitInit}, {"UNI3", dStage_unitInit}};
+    static FuncTable l_layer3FuncTableA[] = {{"SON3", dStage_soundInfoInit}, {"UNI2", dStage_unitInit}, {"UNI3", dStage_unitInit}};
+    static FuncTable l_layer4FuncTableA[] = {{"SON4", dStage_soundInfoInit}, {"UNI0", dStage_unitInit}, {"UNI1", dStage_unitInit}};
+    static FuncTable l_layer5FuncTableA[] = {{"SON5", dStage_soundInfoInit}, {"UNI0", dStage_unitInit}, {"UNI1", dStage_unitInit}};
+    static FuncTable l_layer6FuncTableA[] = {{"SON6", dStage_soundInfoInit}, {"UNI2", dStage_unitInit}, {"UNI3", dStage_unitInit}};
+    static FuncTable l_layer7FuncTableA[] = {{"SON7", dStage_soundInfoInit}, {"UNI2", dStage_unitInit}, {"UNI3", dStage_unitInit}};
+    static FuncTable l_layer8FuncTableA[] = {{"SON8", dStage_soundInfoInit}, {"UNI0", dStage_unitInit}, {"UNI1", dStage_unitInit}};
+    static FuncTable l_layer9FuncTableA[] = {{"SON9", dStage_soundInfoInit}, {"UNI0", dStage_unitInit}, {"UNI1", dStage_unitInit}};
+    static FuncTable l_layerAFuncTableA[] = {{"SONa", dStage_soundInfoInit}, {"UNI2", dStage_unitInit}, {"UNI3", dStage_unitInit}};
+    static FuncTable l_layerBFuncTableA[] = {{"SONb", dStage_soundInfoInit}, {"UNI2", dStage_unitInit}, {"UNI3", dStage_unitInit}};
+    static FuncTable l_layerCFuncTableA[] = {{"SONc", dStage_soundInfoInit}, {"UNI0", dStage_unitInit}, {"UNI1", dStage_unitInit}};
+    static FuncTable l_layerDFuncTableA[] = {{"SONd", dStage_soundInfoInit}, {"UNI0", dStage_unitInit}, {"UNI1", dStage_unitInit}};
+    static FuncTable l_layerEFuncTableA[] = {{"SONe", dStage_soundInfoInit}, {"UNI2", dStage_unitInit}, {"UNI3", dStage_unitInit}};
+    static FuncTable* l_layerFuncTableA_p[] = {
+        l_layer0FuncTableA, l_layer1FuncTableA, l_layer2FuncTableA, l_layer3FuncTableA,
+        l_layer4FuncTableA, l_layer5FuncTableA, l_layer6FuncTableA, l_layer7FuncTableA,
+        l_layer8FuncTableA, l_layer9FuncTableA, l_layerAFuncTableA, l_layerBFuncTableA,
+        l_layerCFuncTableA, l_layerDFuncTableA, l_layerEFuncTableA,
+    };
+#else
+    static FuncTable l_layerFuncTableA[] = {"SON0", dStage_soundInfoInit};
+#endif
     static FuncTable l_envLayerFuncTable[] = {
         {"LGT0", dStage_lgtvInfoInit},     {"Env0", dStage_envrInfoInit},
         {"Col0", dStage_pselectInfoInit},  {"PAL0", dStage_paletteInfoInit},
@@ -2335,17 +2538,41 @@ static void layerTableLoader(void* i_data, dStage_dt_c* i_stage, int roomNo) {
         newRoomNo = dComIfGp_getStartStageRoomNo();
     }
 
+#if DEBUG
+    dStage_dt_c_decode(i_data, i_stage, l_layerFuncTableA_p[dComIfG_play_c::getLayerNo(0)], ARRAY_SIZE(l_layer0FuncTableA));
+#else
     dStage_setLayerTagName(l_layerFuncTableA, ARRAY_SIZEU(l_layerFuncTableA),
                            dComIfG_play_c::getLayerNo(0));
     dStage_dt_c_decode(i_data, i_stage, l_layerFuncTableA, ARRAY_SIZEU(l_layerFuncTableA));
+#endif
+
 
     dStage_Elst_c* elst = dComIfGp_getStage()->getElst();
     if (elst != NULL && newRoomNo >= 0 && elst->m_entryNum > newRoomNo) {
         dStage_Elst_dt_c* d = elst->m_entries;
-        int layer = dComIfG_play_c::getLayerNo(0);
-        dStage_setLayerTagName(l_envLayerFuncTable, ARRAY_SIZEU(l_envLayerFuncTable),
-                               d[newRoomNo].m_layerTable[layer]);
+        int l = dComIfG_play_c::getLayerNo(0);
+        JUT_ASSERT(4174, 0 <= l && l < 15);
+        int env_layer = d[newRoomNo].m_layerTable[l];
+        JUT_ASSERT(4182, 0 <= env_layer && env_layer < 15);
+        dStage_setLayerTagName(l_envLayerFuncTable, ARRAY_SIZEU(l_envLayerFuncTable), env_layer);
         dStage_dt_c_decode(i_data, i_stage, l_envLayerFuncTable, ARRAY_SIZEU(l_envLayerFuncTable));
+#if DEBUG
+        if (roomNo != -1 && !i_stage->getLightVecInfo()) {
+            data_8074C568_debug = true;
+        }
+        if (roomNo == -1 && !i_stage->getEnvrInfo()) {
+            data_8074C569_debug = true;
+        }
+        if (roomNo == -1 && !i_stage->getPselectInfo()) {
+            data_8074C56A_debug = true;
+        }
+        if (roomNo == -1 && !i_stage->getPaletteInfo()) {
+            data_8074C56B_debug = true;
+        }
+        if (roomNo == -1 && !i_stage->getVrboxcolInfo()) {
+            data_8074C56C_debug = true;
+        }
+#endif
     } else {
         dStage_setLayerTagName(l_envLayerFuncTable, ARRAY_SIZEU(l_envLayerFuncTable), 0);
         dStage_dt_c_decode(i_data, i_stage, l_envLayerFuncTable, ARRAY_SIZEU(l_envLayerFuncTable));
@@ -2355,18 +2582,24 @@ static void layerTableLoader(void* i_data, dStage_dt_c* i_stage, int roomNo) {
 dStage_Elst_c* dStage_stageDt_c::getElst(void) { return mElst; }
 
 static void layerActorLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
+    UNUSED(param_2);
     static FuncTable l_layerFuncTable[] = {
+#if PLATFORM_GCN
         {"Doo0", dStage_roomDrtgInfoInit},
+#endif
         {"SCO0", dStage_tgscInfoInit},
         {"ACT0", dStage_actorInit},
         {"TRE0", dStage_layerTresureInit},
+#if !PLATFORM_GCN
+        {"Doo0", dStage_roomDrtgInfoInit},
+#endif
     };
 
     dStage_setLayerTagName(l_layerFuncTable, 4, dComIfG_play_c::getLayerNo(0));
     dStage_dt_c_decode(i_data, i_stage, l_layerFuncTable, ARRAY_SIZEU(l_layerFuncTable));
 }
 
-static void dStage_dt_c_stageLoader(void* i_data, dStage_dt_c* i_stage) {
+void dStage_dt_c_stageLoader(void* i_data, dStage_dt_c* i_stage) {
     static FuncTable l_funcTable[] = {
         {"EVLY", dStage_elstInfoInit},      {"RPPN", dStage_rppnInfoInit},
         {"RPAT", dStage_rpatInfoInit},      {"MULT", dStage_multInfoInit},
@@ -2407,10 +2640,19 @@ void dStage_dt_c_roomLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
 
 void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
     static FuncTable l_funcTable[] = {
-        {"Door", dStage_roomDrtgInfoInit},     {"ACTR", dStage_actorCommonLayerInit},
-        {"TGOB", dStage_actorCommonLayerInit}, {"TRES", dStage_roomTresureInit},
-        {"TGSC", dStage_tgscCommonLayerInit},  {"SCOB", dStage_tgscCommonLayerInit},
-        {"TGDR", dStage_tgscInfoInit},         {"REVT", dStage_mapEventInfoInit},
+#if PLATFORM_GCN
+        {"Door", dStage_roomDrtgInfoInit},
+#endif
+        {"ACTR", dStage_actorCommonLayerInit},
+        {"TGOB", dStage_actorCommonLayerInit},
+        {"TRES", dStage_roomTresureInit},
+        {"TGSC", dStage_tgscCommonLayerInit},
+        {"SCOB", dStage_tgscCommonLayerInit},
+#if !PLATFORM_GCN
+        {"Door", dStage_roomDrtgInfoInit},
+#endif
+        {"TGDR", dStage_tgscInfoInit},
+        {"REVT", dStage_mapEventInfoInit},
     };
 
     dStage_dt_c_decode(i_data, i_stage, l_funcTable, ARRAY_SIZEU(l_funcTable));
@@ -2451,6 +2693,13 @@ char dStage_roomControl_c::mDemoArcName[10];
 void dStage_Create() {
     void* stageRsrc = dComIfG_getStageRes("stage.dzs");
     JUT_ASSERT(4451, stageRsrc != NULL);
+#if DEBUG
+    data_8074C568_debug = false;
+    data_8074C569_debug = false;
+    data_8074C56A_debug = false;
+    data_8074C56B_debug = false;
+    data_8074C56C_debug = false;
+#endif
     dStage_dt_c_stageLoader(stageRsrc, dComIfGp_getStage());
     daSus_c::execute();
 
@@ -2507,9 +2756,7 @@ void dStage_Delete() {
     dComIfGp_getStage()->init();
 }
 
-void dStage_stageDt_c::setOldMulti() {
-    mOldMulti = mMulti;
-}
+s8 dStage_roomControl_c::mRoomReadId = -1;
 
 int dStage_RoomCheck(cBgS_GndChk* gndChk) {
     int roomReadId = dStage_roomControl_c::getRoomReadId();
@@ -2638,6 +2885,10 @@ int dStage_changeScene4Event(int i_exitId, s8 room_no, int i_wipe, bool param_3,
                           speed, mode, 1, wipe == 15 ? 0 : wipe, angle, param_3 ? 1 : 0,
                           wipe_time);
     return 1;
+}
+
+static void dummy6() {
+    dComIfGs_getStartPoint();
 }
 
 void dStage_restartRoom(u32 roomParam, u32 mode, int param_2) {
