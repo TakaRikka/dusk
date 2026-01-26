@@ -20,7 +20,7 @@ public:
     bool checkHitWaterFallCamera();
     int execute();
     int _delete();
-    cPhs__Step create();
+    cPhs_Step create();
 
 private:
     /* 0x568 */ f32 mCylinderRadiusA;

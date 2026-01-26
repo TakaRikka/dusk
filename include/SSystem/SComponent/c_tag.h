@@ -2,7 +2,7 @@
 #define C_TAG_H
 
 #include "SSystem/SComponent/c_node.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 typedef struct node_list_class node_list_class;
 typedef struct node_lists_tree_class node_lists_tree_class;

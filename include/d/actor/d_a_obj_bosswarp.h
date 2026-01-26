@@ -32,7 +32,7 @@ public:
     void setBaseMtx();
     int Create();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     void appear(int);
     void set_appear();
     void disappear(int);

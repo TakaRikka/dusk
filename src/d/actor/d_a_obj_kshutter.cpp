@@ -304,7 +304,7 @@ void daObjKshtr_c::initKey() {
     }
 }
 
-cPhs__Step daObjKshtr_c::phase_0() {
+cPhs_Step daObjKshtr_c::phase_0() {
     if (!field_0x619) {
         mHomeAngleZ = home.angle.z;
         mHomeAngleX = home.angle.x;
@@ -334,17 +334,17 @@ cPhs__Step daObjKshtr_c::phase_0() {
     }
     #endif
 
-    cPhs__Step phase;
+    cPhs_Step phase;
     if (l_anmArcName[mType] != NULL) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhase2, l_anmArcName[mType]);
+        phase = dComIfG_resLoad(&mPhase2, l_anmArcName[mType]);
         if (phase != cPhs_COMPLEATE_e) {
                 return phase;
         }
     }
 
-    phase = (cPhs__Step)dComIfG_resLoad(&mPhase1, l_arcName[mType]);
+    phase = dComIfG_resLoad(&mPhase1, l_arcName[mType]);
     if (phase == cPhs_COMPLEATE_e) {
-        phase = (cPhs__Step)MoveBGCreate(l_arcName[mType], l_dzb[mType], NULL, l_heap_size[mType], NULL);
+        phase = MoveBGCreate(l_arcName[mType], l_dzb[mType], NULL, l_heap_size[mType], NULL);
         if (phase == cPhs_ERROR_e) {
             return phase;
         }
@@ -356,7 +356,7 @@ cPhs__Step daObjKshtr_c::phase_0() {
     return phase;
 }
 
-cPhs__Step daObjKshtr_c::phase_1() {
+cPhs_Step daObjKshtr_c::phase_1() {
     if (mKeyHoleId != fpcM_ERROR_PROCESS_ID_e) {
         obj_keyhole_class* keyhole_p = (obj_keyhole_class*)fopAcM_SearchByID(mKeyHoleId);
 
@@ -376,11 +376,11 @@ cPhs__Step daObjKshtr_c::phase_1() {
     return cPhs_INIT_e;
 }
 
-cPhs__Step daObjKshtr_c::phase_2() {
+cPhs_Step daObjKshtr_c::phase_2() {
     return cPhs_COMPLEATE_e;
 }
 
-cPhs__Step daObjKshtr_c::create1st() {
+cPhs_Step daObjKshtr_c::create1st() {
     static daObjKshtr_c::PhaseFunc l_ct_func[3] = {
         &daObjKshtr_c::phase_0,
         &daObjKshtr_c::phase_1,

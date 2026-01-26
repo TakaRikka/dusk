@@ -45,11 +45,11 @@ int daObjKWheel00_c::create1st() {
     m_type = static_cast<Type_e>(getType());
     JUT_ASSERT(118, m_type == 0 || m_type == 1);
 
-    cPhs__Step phase = static_cast<cPhs__Step>(dComIfG_resLoad(this, l_arcName[m_type]));
+    cPhs_Step phase = static_cast<cPhs_Step>(dComIfG_resLoad(this, l_arcName[m_type]));
     if(phase == cPhs_COMPLEATE_e) {
         setMtx();
 
-        phase = static_cast<cPhs__Step>(MoveBGCreate(l_arcName[m_type], l_dzbidx[m_type], NULL, 0x4000, &mNewBgMtx));
+        phase = static_cast<cPhs_Step>(MoveBGCreate(l_arcName[m_type], l_dzbidx[m_type], NULL, 0x4000, &mNewBgMtx));
 
         if(phase == cPhs_ERROR_e)
             return phase;

@@ -632,11 +632,11 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-static cPhs__Step daNpc_Du_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daNpc_Du_Create(fopAc_ac_c* a_this) {
     npc_du_class* i_this = (npc_du_class*)a_this;
     fopAcM_ct(a_this, npc_du_class);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "Npc_Du");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "Npc_Du");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("NPC_DU PARAM %x\n", fopAcM_GetParam(a_this));
         i_this->arg0 = fopAcM_GetParam(a_this);

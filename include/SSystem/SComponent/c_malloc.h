@@ -1,7 +1,7 @@
 #ifndef C_MALLOC_H
 #define C_MALLOC_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JKRHeap;
 

@@ -1739,11 +1739,11 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-static cPhs__Step daE_SF_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daE_SF_Create(fopAc_ac_c* a_this) {
     e_sf_class* i_this = (e_sf_class*)a_this;
     fopAcM_ct(a_this, e_sf_class);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "E_sf");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "E_sf");
     if (phase == cPhs_COMPLEATE_e) {
         i_this->mSwBit = a_this->current.angle.z & 0xFF;
         if (i_this->mSwBit != 0xFF) {

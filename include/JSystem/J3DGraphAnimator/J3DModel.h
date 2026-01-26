@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 enum J3DMdlFlag {
     J3DMdlFlag_None                           = 0x0,

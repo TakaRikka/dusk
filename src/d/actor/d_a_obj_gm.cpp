@@ -629,11 +629,11 @@ static int useHeapInit(fopAc_ac_c* a_this) {
 
 static daObj_Gm_HIO_c l_HIO;
 
-static cPhs__Step daObj_Gm_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daObj_Gm_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, obj_gm_class);
     obj_gm_class* i_this = (obj_gm_class*)a_this;
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "OBJ_GM");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "OBJ_GM");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("OBJ_GM PARAM %x\n", fopAcM_GetParam(a_this));
         a_this->field_0x565 = fopAcM_GetParam(a_this);

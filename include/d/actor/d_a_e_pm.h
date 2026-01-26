@@ -77,7 +77,7 @@ public:
     void setGakkiBaseMtx();
     void setLampBaseMtx();
     void SkipChk();
-    cPhs__Step Create();
+    cPhs_Step Create();
 
     void AppearSet() { mAppear = true; }
     u8 ActionChk() { return mPuppetDelete; }

@@ -63,12 +63,12 @@ int daAmiShutter_c::CreateHeap() {
 }
 
 
-cPhs__Step daAmiShutter_c::create() {
+cPhs_Step daAmiShutter_c::create() {
     fopAcM_ct(this, daAmiShutter_c);
-    cPhs__Step phaseStep = (cPhs__Step) dComIfG_resLoad(&mPhaseReq, "S_Zami");
+    cPhs_Step phaseStep = dComIfG_resLoad(&mPhaseReq, "S_Zami");
 
     if (phaseStep == cPhs_COMPLEATE_e) {
-        cPhs__Step res = (cPhs__Step) MoveBGCreate("S_Zami", 7, 
+        cPhs_Step res = MoveBGCreate("S_Zami", 7, 
             dBgS_MoveBGProc_Typical, 0x1a00, NULL);
 
         if (res == cPhs_ERROR_e) {

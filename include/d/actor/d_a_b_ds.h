@@ -175,7 +175,7 @@ public:
     int execute();
     int _delete();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     daB_DS_c();
 
     cXyz getHandPosR();

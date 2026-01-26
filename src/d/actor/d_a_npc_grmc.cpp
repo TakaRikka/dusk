@@ -230,7 +230,7 @@ void daNpc_grMC_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-cPhs__Step daNpc_grMC_c::create() {
+cPhs_Step daNpc_grMC_c::create() {
     daNpcT_ct(this, daNpc_grMC_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
                        l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -238,7 +238,7 @@ cPhs__Step daNpc_grMC_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x35D0)) {
             return cPhs_ERROR_e;

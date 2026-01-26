@@ -15,7 +15,7 @@
 
 class daObjKshtr_c : public dBgS_MoveBgActor {
 public:
-    typedef cPhs__Step (daObjKshtr_c::*PhaseFunc)();
+    typedef cPhs_Step (daObjKshtr_c::*PhaseFunc)();
     typedef void (daObjKshtr_c::*ActionFunc)();
     typedef BOOL (daObjKshtr_c::*DemoFunc)();
 
@@ -25,10 +25,10 @@ public:
     void offDzb();
     int CreateHeap();
     void initKey();
-    cPhs__Step phase_0();
-    cPhs__Step phase_1();
-    cPhs__Step phase_2();
-    cPhs__Step create1st();
+    cPhs_Step phase_0();
+    cPhs_Step phase_1();
+    cPhs_Step phase_2();
+    cPhs_Step create1st();
     void event_proc_call();
     void event_proc_call2();
     int Execute(Mtx**);

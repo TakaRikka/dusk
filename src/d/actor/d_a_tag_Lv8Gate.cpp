@@ -43,12 +43,12 @@ inline void daTagLv8Gate_c::create_init() {
 inline int daTagLv8Gate_c::create() {
     fopAcM_ct(this, daTagLv8Gate_c);
 
-    cPhs__Step step;
+    cPhs_Step step;
     /* dSv_event_flag_c::F_0354 - Cutscene - [cutscene] Mirror complete */
     if (!dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[354])) {
         return cPhs_ERROR_e;
     } else {
-        step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
+        step = dComIfG_resLoad(&mPhaseReq, l_arcName);
         if (step == cPhs_COMPLEATE_e) {
             if (!fopAcM_entrySolidHeap(this, createSolidHeap, 0x1600)) {
                 return cPhs_ERROR_e;

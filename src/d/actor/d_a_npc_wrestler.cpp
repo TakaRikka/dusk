@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_npc_wrestler.h"
 #include "d/d_timer.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "d/actor/d_a_tag_arena.h"
 #include "d/actor/d_a_npc_gra.h"
 #include "d/actor/d_a_npc_bouS.h"
@@ -672,16 +672,16 @@ daNpcWrestler_c::~daNpcWrestler_c() {
 #endif
 }
 
-cPhs__Step daNpcWrestler_c::Create() {
+cPhs_Step daNpcWrestler_c::Create() {
     fopAcM_ct(this, daNpcWrestler_c);
 
     mType = getType();
     mMsgNo = getMessageNo();
     field_0xe04 = l_anmList[mType];
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_resALink);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_resALink);
     if (phase == cPhs_COMPLEATE_e) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhase2, l_resName[mType]);
+        phase = dComIfG_resLoad(&mPhase2, l_resName[mType]);
     }
 
     if (phase == cPhs_COMPLEATE_e) {

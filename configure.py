@@ -621,7 +621,7 @@ config.libs = [
             Object(MatchingFor(ALL), "f_op/f_op_overlap.cpp"),
             Object(MatchingFor(ALL_GCN, ALL_WII, "Shield"), "f_op/f_op_overlap_mng.cpp"),
             Object(MatchingFor(ALL_GCN, ALL_WII, "ShieldD"), "f_op/f_op_overlap_req.cpp"),
-            Object(MatchingFor(ALL_GCN, ALL_WII, "Shield"), "f_op/f_op_scene.cpp"),
+            Object(MatchingFor(ALL), "f_op/f_op_scene.cpp"),
             Object(MatchingFor(ALL_GCN, "ShieldD"), "f_op/f_op_scene_iter.cpp"),
             Object(MatchingFor(ALL), "f_op/f_op_scene_mng.cpp"),
             Object(MatchingFor(ALL), "f_op/f_op_scene_req.cpp"),

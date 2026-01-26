@@ -1,7 +1,7 @@
 #ifndef Z2PARAM_H
 #define Z2PARAM_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 struct Z2Param {
     static f32 DISTANCE_MAX;

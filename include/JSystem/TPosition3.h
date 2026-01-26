@@ -1,7 +1,7 @@
 #ifndef TPOSITION3_H
 #define TPOSITION3_H
 
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/JGeometry.h"
 

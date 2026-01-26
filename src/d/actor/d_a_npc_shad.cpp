@@ -340,7 +340,7 @@ daNpcShad_c::~daNpcShad_c() {
     }
 }
 
-cPhs__Step daNpcShad_c::Create() {
+cPhs_Step daNpcShad_c::Create() {
     fopAcM_ct(this, daNpcShad_c);
 
     if (strcmp(dComIfGp_getStartStageName(), "R_SP116") == 0 && dComIfG_play_c::getLayerNo(0) == 4) {
@@ -410,9 +410,9 @@ cPhs__Step daNpcShad_c::Create() {
     field_0xe14 = sVar1;
     field_0xe16 = field_0xe14;
 
-    cPhs__Step phase = cPhs_ERROR_e;
+    cPhs_Step phase = cPhs_ERROR_e;
     for (int i = 0; l_loadRes_list[mMode][i] >= 0; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[l_loadRes_list[mMode][i]]);
+        phase = dComIfG_resLoad(&mPhases[i], l_arcNames[l_loadRes_list[mMode][i]]);
 
         if (phase != cPhs_COMPLEATE_e) {
             return phase;

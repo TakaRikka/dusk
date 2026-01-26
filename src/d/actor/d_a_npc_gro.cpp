@@ -390,7 +390,7 @@ daNpc_grO_HIOParam const daNpc_grO_Param_c::m = {
     false,
 };
 
-cPhs__Step daNpc_grO_c::create() {
+cPhs_Step daNpc_grO_c::create() {
     fopAcM_ct(this, daNpc_grO_c);
 
     mType = getTypeFromParam();
@@ -405,11 +405,11 @@ cPhs__Step daNpc_grO_c::create() {
         return cPhs_ERROR_e;
     }
 
-    cPhs__Step phase;
+    cPhs_Step phase;
     int res = 0;
     int i = 0;
     for (; l_loadRes_list[mType][i] >= 0; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
+        phase = dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
         if (phase == cPhs_ERROR_e || phase == cPhs_UNK3_e) {
             return cPhs_ERROR_e;
         }

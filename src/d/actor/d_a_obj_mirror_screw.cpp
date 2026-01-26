@@ -142,7 +142,7 @@ static int daObjMirrorScrew_Delete(daObjMirrorScrew_c* i_this) {
     return 1;
 }
 
-cPhs__Step daObjMirrorScrew_c::create() {
+cPhs_Step daObjMirrorScrew_c::create() {
     fopAcM_ct(this, daObjMirrorScrew_c);
     if (fopAcM_isSwitch(this, getSwitchNo()) ||
         /* dSv_event_flag_c::F_0361 - Arbiter's Grounds - Spun the spinning pillars */
@@ -153,9 +153,9 @@ cPhs__Step daObjMirrorScrew_c::create() {
         return cPhs_ERROR_e;
     }
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (step == cPhs_COMPLEATE_e) {
-        step = (cPhs__Step)MoveBGCreate(l_arcName, 7, dBgS_MoveBGProc_TypicalRotY, 0xc760, NULL);
+        step = MoveBGCreate(l_arcName, 7, dBgS_MoveBGProc_TypicalRotY, 0xc760, NULL);
         if (step == cPhs_ERROR_e) {
             return step;
         }
@@ -164,7 +164,7 @@ cPhs__Step daObjMirrorScrew_c::create() {
     return step;
 }
 
-static cPhs__Step daObjMirrorScrew_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObjMirrorScrew_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return static_cast<daObjMirrorScrew_c*>(i_this)->create();
 }

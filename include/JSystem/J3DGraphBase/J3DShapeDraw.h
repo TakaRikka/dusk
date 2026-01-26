@@ -1,7 +1,7 @@
 #ifndef J3DSHAPEDRAW_H
 #define J3DSHAPEDRAW_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 /**
  * @ingroup jsystem-j3d

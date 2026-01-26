@@ -62,7 +62,7 @@ int daObjGrzRock_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjGrzRock_c::create() {
+cPhs_Step daObjGrzRock_c::create() {
     fopAcM_ct(this, daObjGrzRock_c);
 
     if (dComIfGs_isSwitch((fopAcM_GetParam(this) >> 8) & 0xFF, fopAcM_GetRoomNo(this))) {
@@ -71,9 +71,9 @@ cPhs__Step daObjGrzRock_c::create() {
 
     int dzb_id = 0;
     int i = 0;
-    cPhs__Step phase;
+    cPhs_Step phase;
     for (; i < 1; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhase[i], l_arcName);
+        phase = dComIfG_resLoad(&mPhase[i], l_arcName);
         if (phase == cPhs_ERROR_e || phase == cPhs_UNK3_e) {
             return cPhs_ERROR_e;
         }
@@ -87,7 +87,7 @@ cPhs__Step daObjGrzRock_c::create() {
         dzb_id = dComIfG_getObjctResName2Index(l_arcName, "grZRock.dzb");
         JUT_ASSERT(302, dzb_id != -1);
 
-        phase = (cPhs__Step)MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0x1030, NULL);
+        phase = MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0x1030, NULL);
         if (phase == cPhs_ERROR_e) {
             return phase;
         }

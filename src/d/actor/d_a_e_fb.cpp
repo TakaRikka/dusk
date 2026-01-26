@@ -907,7 +907,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return a_this->CreateHeap();
 }
 
-cPhs__Step daE_FB_c::create() {
+cPhs_Step daE_FB_c::create() {
     fopAcM_ct(this, daE_FB_c);
     mType = fopAcM_GetParam(this);
     swBit0 = (fopAcM_GetParam(this) & 0xFF00) >> 8;
@@ -916,7 +916,7 @@ cPhs__Step daE_FB_c::create() {
         mType = 0;
     }
 
-    cPhs__Step phase = (cPhs__Step) dComIfG_resLoad(&mPhaseReq, "E_FL");
+    cPhs_Step phase = dComIfG_resLoad(&mPhaseReq, "E_FL");
     if (phase == cPhs_COMPLEATE_e) {
         if (mType == 10 || mType == 11) {
             fopAcM_OffStatus(this, 0);

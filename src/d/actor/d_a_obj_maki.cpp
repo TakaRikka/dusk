@@ -19,7 +19,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 daObj_Maki_HIO_c::daObj_Maki_HIO_c() {
     field_0x4 = -1;
@@ -178,7 +178,7 @@ int useHeapInit(fopAc_ac_c* i_this) {
 
 daObj_Maki_HIO_c l_HIO;
 
-cPhs__Step daObj_Maki_Create(fopAc_ac_c* i_this) {
+cPhs_Step daObj_Maki_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_maki_class);
     obj_maki_class* a_this = (obj_maki_class*)i_this;
     static dCcD_SrcSph cc_sph_src = {
@@ -193,7 +193,7 @@ cPhs__Step daObj_Maki_Create(fopAc_ac_c* i_this) {
         }  // mSphAttr
     };
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&a_this->mPhase, "Obj_maki");
+    cPhs_Step phase = dComIfG_resLoad(&a_this->mPhase, "Obj_maki");
     if (phase == cPhs_COMPLEATE_e) {
         a_this->field_0x57c = (u8)fopAcM_GetParam(a_this);
         u32 cVar3 = fopAcM_GetParam(a_this) >> 0x18;

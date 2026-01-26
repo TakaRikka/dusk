@@ -5,7 +5,7 @@
 #include "d/d_msg_flow.h"
 #include "d/d_menu_map_common.h"
 #include "d/d_map_path_dmap.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class CPaneMgr;
 struct CSTControl;

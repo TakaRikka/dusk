@@ -2672,7 +2672,7 @@ static int daNpc_Henna_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, npc_henna_class);
     npc_henna_class* a_this = (npc_henna_class*)i_this;
 
-    cPhs__Step loadResult = (cPhs__Step)dComIfG_resLoad(&a_this->phase, "Henna");
+    cPhs_Step loadResult = dComIfG_resLoad(&a_this->phase, "Henna");
     if (loadResult == cPhs_COMPLEATE_e) {
         OS_REPORT("NPC_HENNA PARAM %x\n", fopAcM_GetParam(i_this));
         a_this->arg0 = fopAcM_GetParam(i_this);

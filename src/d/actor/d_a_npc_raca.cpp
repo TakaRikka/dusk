@@ -229,7 +229,7 @@ daNpc_Raca_c::~daNpc_Raca_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-cPhs__Step daNpc_Raca_c::create() {
+cPhs_Step daNpc_Raca_c::create() {
     daNpcT_ct(this, daNpc_Raca_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
                        l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -237,7 +237,7 @@ cPhs__Step daNpc_Raca_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = dKy_darkworld_check();
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x3A10)) {
             return cPhs_ERROR_e;

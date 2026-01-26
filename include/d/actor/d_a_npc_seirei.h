@@ -47,7 +47,7 @@ public:
     typedef BOOL (daNpc_Seirei_c::*cutFunc)(int);
 
     ~daNpc_Seirei_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

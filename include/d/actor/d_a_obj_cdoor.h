@@ -29,7 +29,7 @@ public:
 
     virtual ~daObjCdoor_c();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     void setMatrix();
     int Execute(Mtx**);
     void execCdoor();

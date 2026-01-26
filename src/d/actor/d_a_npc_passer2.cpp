@@ -201,7 +201,7 @@ static int daNpcPasser2_Create(void* i_this) {
     return static_cast<daNpcPasser2_c*>(i_this)->create();
 }
 
-cPhs__Step daNpcPasser2_c::create() {
+cPhs_Step daNpcPasser2_c::create() {
     fopAcM_ct(this, daNpcPasser2_c);
 
     mIsDarkWorld = dKy_darkworld_check();
@@ -235,7 +235,7 @@ cPhs__Step daNpcPasser2_c::create() {
         return cPhs_ERROR_e;
     }
 
-    cPhs__Step phase = (cPhs__Step)loadResrc(m_type, m_objNum);
+    cPhs_Step phase = loadResrc(m_type, m_objNum);
     if (phase == cPhs_COMPLEATE_e) {
         u32 i_size = 0;
         #if DEBUG

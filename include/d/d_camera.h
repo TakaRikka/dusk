@@ -1136,7 +1136,7 @@ public:
 
     int Gear() { return mGear; }
 
-    bool HideBGPartsOK() {
+    bool HideBGPartsOk() {
         return chkFlag(0x4);
     }
 

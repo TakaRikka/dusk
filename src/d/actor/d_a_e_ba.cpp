@@ -989,7 +989,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     }
 }
 
-static cPhs__Step daE_BA_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daE_BA_Create(fopAc_ac_c* i_this) {
     static char* arc_name[3] = {"E_ba", "E_fb", "E_ib"};
 
     static dCcD_SrcSph cc_sph_src = {
@@ -1013,7 +1013,7 @@ static cPhs__Step daE_BA_Create(fopAc_ac_c* i_this) {
     }
     _this->mArcName = arc_name[_this->mType];
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhase, _this->mArcName);
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhase, _this->mArcName);
 
     if (step == cPhs_COMPLEATE_e) {
         int sw = fopAcM_GetParam(_this) >> 24;

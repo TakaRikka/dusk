@@ -152,7 +152,7 @@ static int daObj_Ihasi_Create(fopAc_ac_c* i_actor) {
     obj_ihasi_class* i_this = static_cast<obj_ihasi_class*>(i_actor);
     fopAcM_ct(i_this, obj_ihasi_class);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&i_this->mPhaseReq, "Obj_ihasi");
+    cPhs_Step step = dComIfG_resLoad(&i_this->mPhaseReq, "Obj_ihasi");
 
     if (step == cPhs_COMPLEATE_e) {
         OS_REPORT("OBJ_IHASI PARAM %x\n", fopAcM_GetParam(i_actor));

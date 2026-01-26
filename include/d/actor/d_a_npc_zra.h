@@ -265,7 +265,7 @@ public:
 
     daNpc_zrA_c();
     ~daNpc_zrA_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

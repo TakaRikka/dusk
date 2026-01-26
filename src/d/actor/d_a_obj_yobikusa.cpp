@@ -380,7 +380,7 @@ static int daObjYobikusa_Delete(daObjYobikusa_c* i_this) {
     return TRUE;
 }
 
-cPhs__Step daObjYobikusa_c::create() {
+cPhs_Step daObjYobikusa_c::create() {
     fopAcM_ct(this, daObjYobikusa_c);
 
     switch (getType()) {
@@ -396,7 +396,7 @@ cPhs__Step daObjYobikusa_c::create() {
         break;
     }
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, mResName);
+    cPhs_Step step = dComIfG_resLoad(&mPhase, mResName);
     if (step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createSolidHeap, 0x1080)) {
             step = cPhs_ERROR_e;

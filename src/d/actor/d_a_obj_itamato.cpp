@@ -126,11 +126,11 @@ daObj_ItaMato_c::~daObj_ItaMato_c() {
     dComIfG_resDelete(&mPhase, getResName());
 }
 
-cPhs__Step daObj_ItaMato_c::create() {
+cPhs_Step daObj_ItaMato_c::create() {
     fopAcM_ct(this, daObj_ItaMato_c);
 
     mType = getType();
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, getResName());
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, getResName());
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) no:%d, SWBit:%02x, SWBit2:%02x<%08x> -> roomNo.%d", fopAcM_getProcNameString(this), getType(), getNo(),
                   getBitSW(), getBitSW2(), fopAcM_GetParam(this), fopAcM_GetRoomNo(this));

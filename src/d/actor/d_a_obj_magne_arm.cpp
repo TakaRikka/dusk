@@ -332,20 +332,20 @@ int daObjMarm_c::CreateHeap() {
     return TRUE;
 }
 
-cPhs__Step daObjMarm_c::phase_0() {
+cPhs_Step daObjMarm_c::phase_0() {
     mMoveType = getMoveType();
     int phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         phase = MoveBGCreate(l_arcName, 21, dBgS_MoveBGProc_Typical, 0x6000, NULL);
         if (phase == cPhs_ERROR_e) {
-            return (cPhs__Step)phase;
+            return phase;
         }
         mPhaseIndex++;
     }
     return cPhs_INIT_e;
 }
 
-cPhs__Step daObjMarm_c::phase_1() {
+cPhs_Step daObjMarm_c::phase_1() {
     cXyz scale(1.0f, 1.0f, 1.0f);
     mID = fopAcM_create(PROC_Obj_MHole, 0x12FF, &current.pos, fopAcM_GetRoomNo(this),
                         &current.angle, &scale, -1);
@@ -357,7 +357,7 @@ cPhs__Step daObjMarm_c::phase_1() {
     return cPhs_INIT_e;
 }
 
-cPhs__Step daObjMarm_c::phase_2() {
+cPhs_Step daObjMarm_c::phase_2() {
     daObjMHole_c* m_hole_actor = (daObjMHole_c*)fopAcM_SearchByID(mID);
     if (m_hole_actor != NULL) {
         csXyz angle(0, 0, 0);
@@ -375,7 +375,7 @@ cPhs__Step daObjMarm_c::phase_2() {
 }
 
 int daObjMarm_c::create1st() {
-    typedef cPhs__Step (daObjMarm_c::*daObjMarm_func)();
+    typedef cPhs_Step (daObjMarm_c::*daObjMarm_func)();
     static daObjMarm_func l_ct_func[] = {
         &daObjMarm_c::phase_0,
         &daObjMarm_c::phase_1,

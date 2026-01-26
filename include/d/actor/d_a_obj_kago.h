@@ -54,7 +54,7 @@ public:
  */
 class daObj_Kago_c : public fopAc_ac_c {
 public:
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

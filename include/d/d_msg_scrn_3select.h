@@ -54,6 +54,7 @@ public:
     bool isAnimeUpdate(int param_0) { return (field_0x114 & (u8)(1 << param_0)) ? TRUE : FALSE; }
     void onAnimeUpdate(int param_0) { field_0x114 |= (u8)(1 << param_0); }
     void offAnimeUpdate(int param_0) { field_0x114 &= ~(u8)(1 << param_0); }
+    u8 getDPDPoint() { return mDPDPoint; }
 
 private:
     /* 0x004 */ J2DScreen* mpScreen;
@@ -72,6 +73,9 @@ private:
     /* 0x0A0 */ CPaneMgr* mpSelPo_c[3];
     /* 0x0AC */ CPaneMgr* mpKahen_c[3];
     /* 0x0B8 */ CPaneMgr* mpCursor_c[3];
+    #if !PLATFORM_GCN
+    /* 0x0C4 */ CPaneMgr* mpTouchArea[3];
+    #endif
     /* 0x0C4 */ JUtility::TColor mSelMsgCol;
     /* 0x0C8 */ JUtility::TColor mSelMsgInactiveCol;
     /* 0x0CC */ Vec mCursorPos[3];
@@ -91,7 +95,7 @@ private:
     /* 0x112 */ u8 field_0x112;
     /* 0x113 */ u8 mProcess;
     /* 0x114 */ u8 field_0x114;
-    /* 0x115 */ u8 field_0x115;
+    /* 0x115 */ u8 mDPDPoint;
     /* 0x116 */ u8 field_0x116;
     /* 0x117 */ u8 field_0x117;
 };  // Size: 0x118

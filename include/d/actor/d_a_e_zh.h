@@ -52,7 +52,7 @@ public:
     int execute();
     int _delete();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     daE_ZH_c();
 
     /* 0x5AC */ request_of_phase_process_class mPhase;

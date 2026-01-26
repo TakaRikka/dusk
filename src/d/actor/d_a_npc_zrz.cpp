@@ -194,7 +194,7 @@ daNpc_zrZ_c::~daNpc_zrZ_c() {
 #endif
 }
 
-cPhs__Step daNpc_zrZ_c::create() {
+cPhs_Step daNpc_zrZ_c::create() {
     fopAcM_ct(this, daNpc_zrZ_c);
 
     mType = getTypeFromParam();
@@ -215,7 +215,7 @@ cPhs__Step daNpc_zrZ_c::create() {
     int res_count = 0;
     int i;
     for (i = 0; l_loadRes_list[mType][i] >= 0; i++) {
-        cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase[i],
+        cPhs_Step step = dComIfG_resLoad(&mPhase[i],
                                                       l_resNames[l_loadRes_list[mType][i]]);
         if (step == cPhs_ERROR_e || step == cPhs_UNK3_e) {
             return cPhs_ERROR_e;
@@ -2420,7 +2420,7 @@ void daNpc_zrZ_c::himoCalc() {
     mLimbAngle.z = cM_atan2s(mLimbCalcRelPos.z, mLimbCalcRelPos.x);
 }
 
-static cPhs__Step daNpc_zrZ_Create(void* i_this) {
+static cPhs_Step daNpc_zrZ_Create(void* i_this) {
     return static_cast<daNpc_zrZ_c*>(i_this)->create();
 }
 

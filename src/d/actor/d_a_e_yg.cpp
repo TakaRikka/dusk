@@ -1332,12 +1332,12 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-static cPhs__Step daE_YG_Create(fopAc_ac_c* actor) {
+static cPhs_Step daE_YG_Create(fopAc_ac_c* actor) {
     e_yg_class* i_this = (e_yg_class*)actor;
 
     fopAcM_ct(&i_this->actor, e_yg_class);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "E_YG");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "E_YG");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_YG PARAM %x\n", fopAcM_GetParam(actor));
 

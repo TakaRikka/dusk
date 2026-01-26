@@ -105,7 +105,7 @@ static int daObj_Rock_Create(fopAc_ac_c* i_this) {
     obj_rock_class* a_this = static_cast<obj_rock_class*>(i_this);
     fopAcM_ct(a_this, obj_rock_class);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&a_this->mPhaseReq, "Obj_rock");
+    cPhs_Step step = dComIfG_resLoad(&a_this->mPhaseReq, "Obj_rock");
     if (step == cPhs_COMPLEATE_e) {
         a_this->mPatchRockNum = fopAcM_GetParam(a_this);
         a_this->mRockSpacing = fopAcM_GetParamBit(a_this, 8, 8);

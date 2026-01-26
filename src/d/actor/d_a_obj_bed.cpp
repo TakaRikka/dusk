@@ -46,10 +46,10 @@ daObj_Bed_c::~daObj_Bed_c() {
     dComIfG_resDelete(&mPhase, getResName());
 }
 
-cPhs__Step daObj_Bed_c::create() {
+cPhs_Step daObj_Bed_c::create() {
     fopAcM_ct(this, daObj_Bed_c);
     mType = getType();
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, getResName());
+    cPhs_Step step = dComIfG_resLoad(&mPhase, getResName());
     if (step == cPhs_COMPLEATE_e) {
         if (isDelete()) {
             return cPhs_ERROR_e;
@@ -179,7 +179,7 @@ void daObj_Bed_c::setMtx() {
 }
 
 
-static cPhs__Step daObj_Bed_Create(void* i_this) {
+static cPhs_Step daObj_Bed_Create(void* i_this) {
     return static_cast<daObj_Bed_c*>(i_this)->create();
 }
 

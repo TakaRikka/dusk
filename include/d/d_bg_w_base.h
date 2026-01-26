@@ -4,7 +4,7 @@
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "SSystem/SComponent/c_m3d_g_pla.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 #include "f_pc/f_pc_base.h"
 
 class cBgS_GndChk;

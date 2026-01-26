@@ -45,7 +45,7 @@ public:
     typedef int (daNpc_grR_c::*actionFunc)(void*);
     daNpc_grR_c();
     ~daNpc_grR_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

@@ -4,7 +4,7 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 
 void JPACalcScaleX(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
     JPAExtraShape* esp = work->mpRes->getEsp();

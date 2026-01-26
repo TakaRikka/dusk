@@ -323,10 +323,10 @@ int daObjCRVFENCE_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjCRVFENCE_c::create() {
+cPhs_Step daObjCRVFENCE_c::create() {
     fopAcM_ct(this, daObjCRVFENCE_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("Obj_Fence PARAM %x\n", fopAcM_GetParam(this));
 
@@ -349,7 +349,7 @@ cPhs__Step daObjCRVFENCE_c::create() {
             JUT_ASSERT(783, dzb_id != -1)
         }
 
-        phase = (cPhs__Step)MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0x1CA0, NULL);
+        phase = MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0x1CA0, NULL);
         if (phase == cPhs_ERROR_e) {
             return phase;
         }

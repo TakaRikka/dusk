@@ -59,10 +59,10 @@ public:
     };
 
     daTbox_ModelInfo* getModelInfo();
-    cPhs__Step commonShapeSet();
-    cPhs__Step effectShapeSet();
-    cPhs__Step envShapeSet();
-    cPhs__Step bgCheckSet();
+    cPhs_Step commonShapeSet();
+    cPhs_Step effectShapeSet();
+    cPhs_Step envShapeSet();
+    cPhs_Step bgCheckSet();
     void lightReady();
     void setLightPos();
     int checkEnv();
@@ -121,7 +121,7 @@ public:
     void mode_proc_call();
     void mode_exec_wait();
     void mode_exec();
-    cPhs__Step create1st();
+    cPhs_Step create1st();
     int Execute(Mtx**);
     int Draw();
     int Delete();

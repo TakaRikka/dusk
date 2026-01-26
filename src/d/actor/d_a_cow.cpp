@@ -15,7 +15,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_meter2_info.h"
 #include "d/d_timer.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_ext.h"

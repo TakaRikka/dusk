@@ -3,7 +3,7 @@
 #include "JSystem/JParticle/JPAExTexShape.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JParticle/JPAEmitter.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 void JPALoadExTex(JPAEmitterWorkData* work) {
     JPAExTexShape* ets = work->mpRes->getEts();

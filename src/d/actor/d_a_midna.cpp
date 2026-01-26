@@ -541,9 +541,9 @@ daMidna_hio_c::daMidna_hio_c() {
 }
 #endif
 
-cPhs__Step daMidna_c::create() {
+cPhs_Step daMidna_c::create() {
     fopAcM_ct(this, daMidna_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step step = dComIfG_resLoad(&mPhase, l_arcName);
 
     if (step == cPhs_COMPLEATE_e) {
         if (dStage_roomControl_c::getDemoArcName()[0] != '\0' &&
@@ -663,7 +663,7 @@ cPhs__Step daMidna_c::create() {
     return step;
 }
 
-static cPhs__Step daMidna_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daMidna_Create(fopAc_ac_c* i_this) {
     daMidna_c* a_this = (daMidna_c*)i_this;
     fopAcM_RegisterCreateID(i_this, "MIDNA");
     return a_this->create();

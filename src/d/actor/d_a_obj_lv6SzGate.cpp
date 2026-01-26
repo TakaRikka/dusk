@@ -76,10 +76,10 @@ int daLv6SzGate_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daLv6SzGate_c::create() {
+cPhs_Step daLv6SzGate_c::create() {
     fopAcM_ct(this, daLv6SzGate_c);
 
-    cPhs__Step phase = static_cast<cPhs__Step>(dComIfG_resLoad(&mPhase, "L6SzGate"));
+    cPhs_Step phase = static_cast<cPhs_Step>(dComIfG_resLoad(&mPhase, "L6SzGate"));
     if (phase == cPhs_COMPLEATE_e) {
         if (MoveBGCreate("L6SzGate", 15, dBgS_MoveBGProc_TypicalRotY, 0x1d80, NULL) == cPhs_ERROR_e)
         {

@@ -180,7 +180,7 @@ int daObj_Pumpkin_c::create() {
     fopAcM_ct(this, daObj_Pumpkin_c);
 
     mType = getType();
-    cPhs__Step phase = (cPhs__Step) dComIfG_resLoad(&mPhaseReq, l_resNameList[l_bmdData[0][1]]);
+    cPhs_Step phase = dComIfG_resLoad(&mPhaseReq, l_resNameList[l_bmdData[0][1]]);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) ItemTableNo:%d, ProcType:%d<%08x> -> roomNo.%d", fopAcM_getProcNameString(this),
                   getType(), getItemTableNo(), getProcType(), fopAcM_GetParam(this), fopAcM_GetRoomNo(this));

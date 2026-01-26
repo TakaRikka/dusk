@@ -1,7 +1,7 @@
 #ifndef JASDVDTHREAD_H
 #define JASDVDTHREAD_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JASTaskThread;
 

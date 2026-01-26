@@ -6,7 +6,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
 #include "d/d_com_inf_actor.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 dComIfAc_info_c g_dComIfAc_gameInfo = {
     0,      // field_0x0

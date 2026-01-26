@@ -904,10 +904,10 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return static_cast<daE_ZM_c*>(a_this)->CreateHeap();
 }
 
-cPhs__Step daE_ZM_c::create() {
+cPhs_Step daE_ZM_c::create() {
     fopAcM_ct(this, daE_ZM_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_ZM");
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, "E_ZM");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_ZM PARAM %x\n", fopAcM_GetParam(this));
 

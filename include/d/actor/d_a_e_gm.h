@@ -51,7 +51,7 @@ public:
     int execute();
     int _delete();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
 
     void InstantKill() { field_0xa76 = 1; }
     u8 CheckDeath() { return field_0xa68; }

@@ -245,7 +245,7 @@ public:
     void calcHorsePath();
     int draw();
     ~daNpcCoach_c();
-    cPhs__Step create();
+    cPhs_Step create();
     void create_init();
     inline void initCollision();
     void initBaseMtx();

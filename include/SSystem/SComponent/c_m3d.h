@@ -2,7 +2,7 @@
 #define C_M3D_H_
 
 #include <cmath>
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 
 class cM3dGAab;
 class cM3dGCps;

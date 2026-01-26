@@ -1,7 +1,7 @@
 #ifndef STB_DATA_H
 #define STB_DATA_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 namespace JStudio {
 namespace stb {

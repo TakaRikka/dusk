@@ -1661,11 +1661,11 @@ static int kabe_initial_pos_set(e_dd_class* i_this) {
     return 0;
 }
 
-static cPhs__Step daE_DD_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daE_DD_Create(fopAc_ac_c* a_this) {
     e_dd_class* i_this = (e_dd_class*)a_this;
     fopAcM_ct(a_this, e_dd_class);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "E_dd");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "E_dd");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_DD PARAM %x\n", fopAcM_GetParam(a_this));
 

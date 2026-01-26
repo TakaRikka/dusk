@@ -15,7 +15,7 @@ class daSmWStone_c : public fopAc_ac_c, public request_of_phase_process_class {
 public:
     daSmWStone_c();
     virtual ~daSmWStone_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int execute();
     int draw();
     int Delete();

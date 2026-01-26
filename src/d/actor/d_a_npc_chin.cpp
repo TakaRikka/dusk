@@ -243,7 +243,7 @@ int daNpcChin_c::Create() {
     int i = 0;
     while (*idx >= 0) {
         OS_REPORT("--- arc : %s\n", l_arcNames[*idx]);
-        phase_state = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[*idx]);
+        phase_state = dComIfG_resLoad(&mPhases[i], l_arcNames[*idx]);
         if (phase_state != cPhs_COMPLEATE_e) {
             return phase_state;
         }

@@ -1,7 +1,7 @@
 #ifndef D_A_NPC_TOBY_H
 #define D_A_NPC_TOBY_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "d/actor/d_a_npc.h"
 
 struct daNpc_Toby_HIOParam {

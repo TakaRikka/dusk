@@ -2009,10 +2009,10 @@ static int daNpcCoach_Create(fopAc_ac_c* a_this) {
     return i_this->create();
 }
 
-cPhs__Step daNpcCoach_c::create() {
+cPhs_Step daNpcCoach_c::create() {
     fopAcM_ct(this, daNpcCoach_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createSolidHeap, 0x7D60)) {
             return cPhs_ERROR_e;

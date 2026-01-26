@@ -278,7 +278,7 @@ static int daTagWaterFall_Delete(daTagWaterFall_c* i_this) {
     return i_this->_delete();
 }
 
-cPhs__Step daTagWaterFall_c::create() {
+cPhs_Step daTagWaterFall_c::create() {
     fopAcM_ct(this, daTagWaterFall_c);
 
     OS_REPORT("Tag_WaterFall PARAM %x %x %x \n", fopAcM_GetParam(this), current.angle.x, current.angle.y);

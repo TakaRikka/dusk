@@ -3854,8 +3854,8 @@ static int daMg_Fish_Create(fopAc_ac_c* i_this) {
     lit_1008 = 1;
 #endif
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&a_this->mPhaseReq, a_this->mResName);
-    cPhs__Step retval = phase;
+    cPhs_Step phase = dComIfG_resLoad(&a_this->mPhaseReq, a_this->mResName);
+    cPhs_Step retval = phase;
 
     if (phase == cPhs_COMPLEATE_e) {
         s32 params_0 = fopAcM_GetParam(i_this) >> 24;

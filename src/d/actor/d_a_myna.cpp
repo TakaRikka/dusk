@@ -333,7 +333,7 @@ daMyna_c::BaseMotionFunc daMyna_c::mBaseMotionTBL[] = {
 
 int daMyna_c::create() {
     fopAcM_ct(this, daMyna_c);
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "Npc_myna");
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, "Npc_myna");
     if (phase != cPhs_COMPLEATE_e) {
         return phase;
     }

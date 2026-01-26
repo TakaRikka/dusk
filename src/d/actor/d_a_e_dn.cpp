@@ -3358,12 +3358,12 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-static cPhs__Step daE_DN_Create(fopAc_ac_c* actor) {
+static cPhs_Step daE_DN_Create(fopAc_ac_c* actor) {
     e_dn_class* i_this = (e_dn_class*)actor;
 
     fopAcM_ct(actor, e_dn_class);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->phase, "E_dn");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->phase, "E_dn");
     if (phase == cPhs_COMPLEATE_e) {
         int swBit = (fopAcM_GetParam(actor) & 0xFF000000) >> 24;
         if (swBit != 0xFF) {

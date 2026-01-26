@@ -18,7 +18,7 @@ class daLv2Candle_c : public fopAc_ac_c {
 public:
     void setBaseMtx();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     u8 isSwitch();
     static int createHeapCallBack(fopAc_ac_c*);
     static void* searchDemoTagAct(void*, void*);

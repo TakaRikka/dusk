@@ -801,12 +801,12 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-static cPhs__Step daE_Bug_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daE_Bug_Create(fopAc_ac_c* a_this) {
     e_bug_class* i_this = (e_bug_class*)a_this;
 
     fopAcM_ct(a_this, e_bug_class);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "E_bug");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "E_bug");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_BUG PARAM %x\n", fopAcM_GetParam(a_this));
         i_this->field_0x570 = fopAcM_GetParam(a_this);

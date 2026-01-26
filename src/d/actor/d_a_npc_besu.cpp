@@ -653,7 +653,7 @@ int daNpc_Besu_c::create() {
         mTwilight = false;
     }
 
-    cPhs__Step rv = (cPhs__Step) loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step rv = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (rv == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x, BitSW:%02x<%08x> ",
                   fopAcM_getProcNameString(this), mType, mFlowNodeNo, getPathID(),

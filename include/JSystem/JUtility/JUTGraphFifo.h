@@ -1,7 +1,7 @@
 #ifndef JUTGRAPHFIFO_H
 #define JUTGRAPHFIFO_H
 
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 /**
 * @ingroup jsystem-jutility

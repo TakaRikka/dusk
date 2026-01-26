@@ -102,7 +102,7 @@ public:
     static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
     daObj_GrA_c();
     ~daObj_GrA_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute(Mtx**);

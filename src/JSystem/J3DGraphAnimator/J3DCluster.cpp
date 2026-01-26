@@ -4,7 +4,7 @@
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JMath/JMATrigonometric.h"
-#include "dolphin/base/PPCArch.h"
+#include <dolphin/base/PPCArch.h>
 
 J3DDeformData::J3DDeformData() {
     mClusterNum = 0;

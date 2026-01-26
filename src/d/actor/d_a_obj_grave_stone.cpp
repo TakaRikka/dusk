@@ -156,12 +156,12 @@ int daGraveStone_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daGraveStone_c::create() {
+cPhs_Step daGraveStone_c::create() {
     fopAcM_ct(this, daGraveStone_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step step = dComIfG_resLoad(&mPhase, l_arcName);
     if (step == cPhs_COMPLEATE_e) {
         int dzb_id = dComIfG_getObjctResName2Index(l_arcName, "H_Haka.dzb");
-        step = (cPhs__Step)MoveBGCreate(l_arcName, dzb_id,
+        step = MoveBGCreate(l_arcName, dzb_id,
                                         dBgS_MoveBGProc_TypicalRotY, 0x29A0, NULL);
         if (step == cPhs_ERROR_e) {
             return step;
@@ -211,7 +211,7 @@ static int daGraveStone_Delete(daGraveStone_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-static cPhs__Step daGraveStone_create(fopAc_ac_c* i_this) {
+static cPhs_Step daGraveStone_create(fopAc_ac_c* i_this) {
     return static_cast<daGraveStone_c*>(i_this)->create();
 }
 

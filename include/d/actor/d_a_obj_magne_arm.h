@@ -49,9 +49,9 @@ public:
     void setBaseMtx();
     int Create();
     int CreateHeap();
-    cPhs__Step phase_0();
-    cPhs__Step phase_1();
-    cPhs__Step phase_2();
+    cPhs_Step phase_0();
+    cPhs_Step phase_1();
+    cPhs_Step phase_2();
     int create1st();
     int Execute(Mtx**);
     void action();

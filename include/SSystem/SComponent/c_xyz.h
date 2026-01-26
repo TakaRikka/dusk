@@ -1,7 +1,7 @@
 #ifndef C_XYZ_H
 #define C_XYZ_H
 
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 #include <cmath>
 
 struct cXyz : Vec {

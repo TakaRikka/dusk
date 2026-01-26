@@ -8,7 +8,7 @@
 #include "d/actor/d_a_npc.h"
 #include "d/d_procname.h"
 
-cPhs__Step daTag_EvtArea_c::create() {
+cPhs_Step daTag_EvtArea_c::create() {
     int var_r28 = 0;
 
     fopAcM_ct(this, daTag_EvtArea_c);
@@ -205,7 +205,7 @@ BOOL daTag_EvtArea_c::chkPointInArea(cXyz i_point, cXyz i_addSize) {
     return false;
 }
 
-static cPhs__Step daTag_EvtArea_Create(void* i_this) {
+static cPhs_Step daTag_EvtArea_Create(void* i_this) {
     return static_cast<daTag_EvtArea_c*>(i_this)->create();
 }
 

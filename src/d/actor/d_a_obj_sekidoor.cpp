@@ -47,7 +47,7 @@ int daObj_SekiDoor_c::create() {
 
     mBitSW = 0;
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_resNameList[l_bmdData[mBitSW].resIdx]);
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, l_resNameList[l_bmdData[mBitSW].resIdx]);
     if (step == cPhs_COMPLEATE_e) {
         if (getBitSW() != 0xff){
             if (dComIfGs_isSwitch(getBitSW(), fopAcM_GetRoomNo(this))) {
@@ -55,7 +55,7 @@ int daObj_SekiDoor_c::create() {
             }
         }
 
-        step = (cPhs__Step)MoveBGCreate(l_resNameList[l_dzbData[mBitSW].resIdx], 
+        step = MoveBGCreate(l_resNameList[l_dzbData[mBitSW].resIdx], 
             l_dzbData[mBitSW].dzbIdx, dBgS_MoveBGProc_TypicalRotY, 0xc20, NULL
         );
 

@@ -5048,9 +5048,9 @@ int daB_TN_c::create() {
         }
     }
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq1, "B_tn");
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq1, "B_tn");
     if (step == cPhs_COMPLEATE_e) {
-        step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq2, mArcName);
+        step = dComIfG_resLoad(&mPhaseReq2, mArcName);
 
         if (step == cPhs_COMPLEATE_e) {
             mBrkAnmFrame = fopAcM_GetParamBit(this, 16, 16);

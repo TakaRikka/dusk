@@ -2,7 +2,6 @@
 #define D_D_STAGE_H
 
 #include "SSystem/SComponent/c_lib.h"
-#include "d/d_bg_parts.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_data.h"
 #include "f_op/f_op_actor_mng.h"
@@ -1071,6 +1070,7 @@ public:
 
 STATIC_ASSERT(sizeof(dStage_roomStatus_c) == 0x404);
 
+class dBgp_c;
 class dStage_roomControl_c {
 public:
     class roomDzs_c {
@@ -1206,6 +1206,10 @@ public:
     }
 
     static JKRExpHeap* getMemoryBlockHeap(int i_no) { return mMemoryBlock[i_no]; }
+
+    #if DEBUG
+    static void setBgp(int, void*);
+    #endif
 
     static const int MEMORY_BLOCK_MAX = 19;
 
@@ -1539,11 +1543,11 @@ inline u16 dStage_FileList_dt_GetMsg(dStage_FileList_dt_c* p_fList) {
     return p_fList->mMsg;
 }
 
-inline f32 dStage_FileList2_dt_GetLeftRmX(dStage_FileList2_dt_c* p_fList2) {
+inline f32 dStage_FileList2_dt_GetLeftRmX(const dStage_FileList2_dt_c* p_fList2) {
     return p_fList2->mLeftRmX;
 }
 
-inline f32 dStage_FileList2_dt_GetRightRmX(dStage_FileList2_dt_c* p_fList2) {
+inline f32 dStage_FileList2_dt_GetRightRmX(const dStage_FileList2_dt_c* p_fList2) {
     return p_fList2->mRightRmX;
 }
 

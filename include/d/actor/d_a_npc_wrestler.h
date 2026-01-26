@@ -131,7 +131,7 @@ public:
     typedef BOOL (daNpcWrestler_c::*EventFn)(int);
 
     daNpcWrestler_c();
-    cPhs__Step Create();
+    cPhs_Step Create();
     int CreateHeap();
     int Delete();
     int Execute();

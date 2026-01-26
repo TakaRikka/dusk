@@ -2,7 +2,7 @@
 // __ppc_eabi_init
 //
 
-#include "dolphin/base/PPCArch.h"
+#include <dolphin/base/PPCArch.h>
 
 #ifdef __cplusplus
 extern "C" {

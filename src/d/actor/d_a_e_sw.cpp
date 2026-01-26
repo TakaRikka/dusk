@@ -1638,7 +1638,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return i_this->CreateHeap();
 }
 
-cPhs__Step daE_SW_c::create() {
+cPhs_Step daE_SW_c::create() {
     fopAcM_ct(this, daE_SW_c);
 
     field_0x68c = fopAcM_GetParam(this) & 15;
@@ -1682,7 +1682,7 @@ cPhs__Step daE_SW_c::create() {
         field_0x696 = 0xFF;
     }
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_SW");
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, "E_SW");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_SW PARAM %x %d %d\n", fopAcM_GetParam(this), field_0x696, fopAcM_GetID(this));
         shape_angle.x = 0;

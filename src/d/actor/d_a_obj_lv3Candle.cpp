@@ -47,7 +47,7 @@ int daLv3Candle_c::CreateHeap() {
     return TRUE;
 }
 
-cPhs__Step daLv3Candle_c::create() {
+cPhs_Step daLv3Candle_c::create() {
     fopAcM_ct(this, daLv3Candle_c);
 
     mType = getType();
@@ -55,7 +55,7 @@ cPhs__Step daLv3Candle_c::create() {
         mType = 0;
     }
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_resNameIdx[mType]);
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, l_resNameIdx[mType]);
     if (step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x900)) {
             return cPhs_ERROR_e;

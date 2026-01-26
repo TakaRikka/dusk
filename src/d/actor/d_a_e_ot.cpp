@@ -741,10 +741,10 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return static_cast<daE_OT_c*>(i_this)->CreateHeap();
 }
 
-cPhs__Step daE_OT_c::create() {
+cPhs_Step daE_OT_c::create() {
     fopAcM_ct(this, daE_OT_c);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_OT");
+    cPhs_Step step = dComIfG_resLoad(&mPhase, "E_OT");
     if (step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, useHeapInit, 0x1f40)) {
             return cPhs_ERROR_e;
@@ -825,7 +825,7 @@ cPhs__Step daE_OT_c::create() {
     return step;
 }
 
-static cPhs__Step daE_OT_Create(daE_OT_c* i_this) {
+static cPhs_Step daE_OT_Create(daE_OT_c* i_this) {
     return i_this->create();
 }
 

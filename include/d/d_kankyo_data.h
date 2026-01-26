@@ -1,7 +1,7 @@
 #ifndef D_KANKYO_D_KANKYO_DATA_H
 #define D_KANKYO_D_KANKYO_DATA_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 struct color_RGB_class {
     /* 0x0 */ u8 r;

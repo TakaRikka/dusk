@@ -88,15 +88,6 @@ struct J3DSys {
     void setDrawModeOpaTexEdge() { mDrawMode = J3DSysDrawMode_OpaTexEdge; }
     void setDrawModeXlu() { mDrawMode = J3DSysDrawMode_Xlu; }
 
-    void* getVtxPos() { return mVtxPos; }
-    void setVtxPos(void* pVtxPos) { mVtxPos = pVtxPos; }
-
-    void* getVtxNrm() { return mVtxNrm; }
-    void setVtxNrm(void* pVtxNrm) { mVtxNrm = pVtxNrm; }
-
-    void* getVtxCol() { return mVtxCol; }
-    void setVtxCol(GXColor* pVtxCol) { mVtxCol = pVtxCol; }
-
     void setDrawBuffer(J3DDrawBuffer* buffer, int type) {
         J3D_ASSERT_RANGE(114, type >= 0 && type < J3DSysDrawBuf_MAX);
         J3D_ASSERT_NULLPTR(115, buffer);
@@ -159,6 +150,19 @@ struct J3DSys {
         mModelNrmMtx = pMtxArr;
         GXSetArray(GX_NRM_MTX_ARRAY, mModelNrmMtx, sizeof(*mModelNrmMtx));
     }
+
+    void* getVtxPos() { return mVtxPos; }
+
+    void setVtxPos(void* pVtxPos) {
+        J3D_ASSERT_NULLPTR(252, pVtxPos != NULL);
+        mVtxPos = pVtxPos;
+    }
+
+    void* getVtxNrm() { return mVtxNrm; }
+    void setVtxNrm(void* pVtxNrm) { mVtxNrm = pVtxNrm; }
+
+    void* getVtxCol() { return mVtxCol; }
+    void setVtxCol(GXColor* pVtxCol) { mVtxCol = pVtxCol; }
 
     Mtx& getModelDrawMtx(u16 no) { return mModelDrawMtx[no]; }
     J3DShapePacket* getShapePacket() { return mShapePacket; }

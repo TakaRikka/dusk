@@ -27,7 +27,7 @@ public:
     inline int Execute(Mtx**);
     inline int Draw();
     inline int Delete();
-    inline cPhs__Step create();
+    inline cPhs_Step create();
 
     /* 0x5A0 */ u8 field_0x5a0;
     /* 0x5A1 */ u8 field_0x5a1;

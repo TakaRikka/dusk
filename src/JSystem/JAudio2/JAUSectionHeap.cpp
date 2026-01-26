@@ -14,7 +14,7 @@
 #include "JSystem/JAudio2/JAUSoundTable.h"
 #include "JSystem/JAudio2/JAUStreamFileTable.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
-#include "dolphin/dvd.h"
+#include <dolphin/dvd.h>
 
 namespace {
     class TPushCurrentHeap {

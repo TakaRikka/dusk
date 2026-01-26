@@ -248,10 +248,10 @@ static int daObjKaisou_Execute(daObjKaisou_c* i_this) {
     return i_this->Execute();
 }
 
-cPhs__Step daObjKaisou_c::create() {
+cPhs_Step daObjKaisou_c::create() {
     fopAcM_ct(this, daObjKaisou_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         if (dComIfGs_isStageBossEnemy() && dComIfGp_getStartStageRoomNo() == 50) {
             if (strcmp("D_MN01A", dComIfGp_getStartStageName()) == 0) {

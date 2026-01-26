@@ -118,10 +118,10 @@ int daObjFallObj_c::CreateHeap() {
 
 int daObjFallObj_c::create1st() {
     field_0x5d8 = 1;
-    cPhs__Step phase = (cPhs__Step) dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         phase =
-            (cPhs__Step) MoveBGCreate(l_arcName, 7, dBgS_MoveBGProc_Typical, 0x2700, NULL);
+            MoveBGCreate(l_arcName, 7, dBgS_MoveBGProc_Typical, 0x2700, NULL);
         if (phase == cPhs_ERROR_e) {
             return phase;
         }

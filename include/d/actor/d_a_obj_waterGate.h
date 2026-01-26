@@ -19,7 +19,7 @@ class daWtGate_c : public dBgS_MoveBgActor {
 public:
     void setBaseMtx();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     int Execute(Mtx**);
     void move();
     void init_modeWait();

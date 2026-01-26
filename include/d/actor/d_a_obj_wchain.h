@@ -21,7 +21,7 @@ public:
 class daObjWchain_c : public fopAc_ac_c {
 public:
     int createHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     ~daObjWchain_c();
     void setMatrix();
     s16 getChainAngleZ(cXyz*, int);

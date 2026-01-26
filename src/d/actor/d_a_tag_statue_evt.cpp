@@ -108,7 +108,7 @@ void daTagStatue_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-cPhs__Step daTagStatue_c::Create() {
+cPhs_Step daTagStatue_c::Create() {
     if (fopAcM_isSwitch(this, getSwbit2())) {
         // Player already obtained Sky Character from this tag
         setAction(ACTION_DEAD_e);
@@ -180,7 +180,7 @@ int daTagStatue_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daTagStatue_c::create() {
+cPhs_Step daTagStatue_c::create() {
     fopAcM_ct(this, daTagStatue_c);
 
     mSkyCharacterEventBitIdIndex = getType();
@@ -190,7 +190,7 @@ cPhs__Step daTagStatue_c::create() {
         phase = dComIfG_resLoad(&mEvArcPhase, l_evArcName[mSkyCharacterEventBitIdIndex]); 
 
         if (phase != cPhs_COMPLEATE_e) {
-            return static_cast<cPhs__Step>(phase);
+            return static_cast<cPhs_Step>(phase);
         }
     }
 
@@ -210,7 +210,7 @@ cPhs__Step daTagStatue_c::create() {
 #endif
     }
 
-    return static_cast<cPhs__Step>(phase);
+    return static_cast<cPhs_Step>(phase);
 }
 
 int daTagStatue_c::execute() {

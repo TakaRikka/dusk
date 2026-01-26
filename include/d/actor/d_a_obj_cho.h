@@ -43,7 +43,7 @@ public:
     int Delete();
     void setBaseMtx();
     bool CreateChk();
-    cPhs__Step create();
+    cPhs_Step create();
     inline int Draw();
 
 private:

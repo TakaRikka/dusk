@@ -1,7 +1,7 @@
 #ifndef JGEOMETRY_H
 #define JGEOMETRY_H
 
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 #include <cmath>
 #include "JSystem/JMath/JMath.h"
 

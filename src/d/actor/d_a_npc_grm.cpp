@@ -169,7 +169,7 @@ daNpc_grM_c::~daNpc_grM_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-cPhs__Step daNpc_grM_c::create() {
+cPhs_Step daNpc_grM_c::create() {
     daNpcT_ct(this, daNpc_grM_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
               l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -177,7 +177,7 @@ cPhs__Step daNpc_grM_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x3730)) {
             return cPhs_ERROR_e;
@@ -791,7 +791,7 @@ int daNpc_grM_c::shop(void* param_0) {
     return 0;
 }
 
-static cPhs__Step daNpc_grM_Create(void* param_0) {
+static cPhs_Step daNpc_grM_Create(void* param_0) {
     return static_cast<daNpc_grM_c*>(param_0)->create();
 }
 

@@ -369,7 +369,7 @@ daNpc_Yelia_c::~daNpc_Yelia_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-cPhs__Step daNpc_Yelia_c::create() {
+cPhs_Step daNpc_Yelia_c::create() {
     daNpcT_ct(this, daNpc_Yelia_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
                                    l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -380,7 +380,7 @@ cPhs__Step daNpc_Yelia_c::create() {
         mTwilight = true;
     }
 
-    cPhs__Step step = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step step = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 
     if (step == cPhs_COMPLEATE_e) {
         if (isDelete()) {
@@ -1559,7 +1559,7 @@ BOOL daNpc_Yelia_c::talk(void* param_0) {
     return FALSE;
 }
 
-static cPhs__Step daNpc_Yelia_Create(void* i_this) {
+static cPhs_Step daNpc_Yelia_Create(void* i_this) {
     return static_cast<daNpc_Yelia_c*>(i_this)->create();
 }
 

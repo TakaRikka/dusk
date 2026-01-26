@@ -41,14 +41,14 @@ void daObj_Sekizo_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-cPhs__Step daObj_Sekizo_c::create() {
+cPhs_Step daObj_Sekizo_c::create() {
     fopAcM_ct(this, daObj_Sekizo_c);
 
     field_0x5b0 = 0;
-    cPhs__Step step =
-        (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_resNameList[l_bmdData[field_0x5b0].resIdx]);
+    cPhs_Step step =
+        dComIfG_resLoad(&mPhaseReq, l_resNameList[l_bmdData[field_0x5b0].resIdx]);
     if (step == cPhs_COMPLEATE_e) {
-        step = (cPhs__Step)MoveBGCreate(l_resNameList[l_dzbData[field_0x5b0].resIdx],
+        step = MoveBGCreate(l_resNameList[l_dzbData[field_0x5b0].resIdx],
                                         l_dzbData[field_0x5b0].dzbIdx, dBgS_MoveBGProc_TypicalRotY,
                                         0x4000, NULL);
         if (step == cPhs_ERROR_e) {

@@ -5,7 +5,7 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "f_op/f_op_actor_mng.h"
 
 /**

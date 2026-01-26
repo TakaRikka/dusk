@@ -4,8 +4,8 @@
 #include "SSystem/SComponent/c_m3d_g_aab.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "d/d_bg_w_base.h"
-#include "dolphin/mtx.h"
-#include "dolphin/types.h"
+#include <dolphin/mtx.h>
+#include <dolphin/types.h>
 
 class cBgS_GrpPassChk;
 class cBgS_PolyPassChk;
@@ -228,6 +228,7 @@ public:
     void ClrNoCalcVtx() { mFlags &= ~NO_CALC_VTX_e; }
     void SetBaseMtxP(MtxP mtx) { pm_base = mtx; }
     void SetNoCalcVtx() { mFlags |= NO_CALC_VTX_e; }
+    cBgD_t* GetBgd() const { return pm_bgd; }
 
 public:
     /* 0x18 */ MtxP pm_base;  // Model Matrix

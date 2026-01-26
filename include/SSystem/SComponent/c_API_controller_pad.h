@@ -1,7 +1,7 @@
 #ifndef C_API_CONTROLLER_PAD_
 #define C_API_CONTROLLER_PAD_
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 struct interface_of_controller_pad {
     /* 0x00 */ f32 mMainStickPosX;

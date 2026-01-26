@@ -99,6 +99,10 @@ public:
         mShapeTable.hide();
     }
 
+    const void* getBinary() {
+        return mpRawData;
+    }
+
 private:
     friend class J3DModelLoader;
 

@@ -3156,7 +3156,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return i_this->CreateHeap();
 }
 
-cPhs__Step daE_YMB_c::create() {
+cPhs_Step daE_YMB_c::create() {
     fopAcM_ct(this, daE_YMB_c);
 
     mSwitchBit = fopAcM_GetParam(this);
@@ -3168,7 +3168,7 @@ cPhs__Step daE_YMB_c::create() {
         }
     }
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_YB");
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, "E_YB");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_YMB PARAM %x\n", fopAcM_GetParam(this));
         if (!fopAcM_entrySolidHeap(this, useHeapInit, 0x5200)) {

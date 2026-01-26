@@ -96,11 +96,11 @@ int daLv3Water2_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daLv3Water2_c::create() {
+cPhs_Step daLv3Water2_c::create() {
     fopAcM_ct(this, daLv3Water2_c);
     mResourceIndex = getParam(0, 4);
 
-    cPhs__Step resPhase = static_cast<cPhs__Step>(dComIfG_resLoad(&mPhase, l_resNameIdx[mResourceIndex]));
+    cPhs_Step resPhase = static_cast<cPhs_Step>(dComIfG_resLoad(&mPhase, l_resNameIdx[mResourceIndex]));
     if(resPhase == cPhs_COMPLEATE_e) {
         if(MoveBGCreate(l_resNameIdx[mResourceIndex], l_dzbIdx[mResourceIndex], NULL, 0x2D00, NULL) == cPhs_ERROR_e)
             return cPhs_ERROR_e;

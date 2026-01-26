@@ -287,10 +287,10 @@ static int daObjOnCloth_Delete(daObjOnCloth_c* i_this) {
 
 ClothJoint_c::~ClothJoint_c() {}
 
-cPhs__Step daObjOnCloth_c::create() {
+cPhs_Step daObjOnCloth_c::create() {
     fopAcM_ct(this, daObjOnCloth_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createSolidHeap, 0x9A0)) {
             return cPhs_ERROR_e;
@@ -303,7 +303,7 @@ cPhs__Step daObjOnCloth_c::create() {
     return phase;
 }
 
-static cPhs__Step daObjOnCloth_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daObjOnCloth_Create(fopAc_ac_c* a_this) {
     return static_cast<daObjOnCloth_c*>(a_this)->create();
 }
 

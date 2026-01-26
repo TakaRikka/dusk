@@ -21,7 +21,7 @@ public:
     inline void setBaseMtx();
     int execute();
     inline ~daObjMirrorTable_c();
-    cPhs__Step create();
+    cPhs_Step create();
     void create_init();
     void initBaseMtx();
 

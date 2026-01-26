@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DGraphBase/J3DShape.h"
 #include "JSystem/J3DAssert.h"
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 
 class J3DTexMtx;
 class J3DTexGenBlock;

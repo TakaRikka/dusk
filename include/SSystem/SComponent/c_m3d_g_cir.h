@@ -1,7 +1,7 @@
 #ifndef C_M3D_G_CIR_H
 #define C_M3D_G_CIR_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class cM2dGCir {
 public:

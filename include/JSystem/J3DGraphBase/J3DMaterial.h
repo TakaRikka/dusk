@@ -69,6 +69,7 @@ public:
     BOOL isDrawModeOpaTexEdge() { return (mMaterialMode & 3) ? 1 : 0; }
     J3DPEBlock* getPEBlock() { return mPEBlock; }
     void onInvalid() { mInvalid = 1; }
+    u32 getInvalid() { return mInvalid; }
     u32 getTexGenNum() const { return mTexGenBlock->getTexGenNum(); }
     u8 getTevStageNum() const { return mTevBlock->getTevStageNum(); }
     J3DTexCoord* getTexCoord(u32 idx) { return mTexGenBlock->getTexCoord(idx); }

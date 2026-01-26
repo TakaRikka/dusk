@@ -572,14 +572,14 @@ daNpc_ykM_c::~daNpc_ykM_c() {
     daNpcT_offTmpBit(0x54); // dSv_event_tmp_flag_c::T_0084 - Snowpeak mountain - Racing with Yeto
 }
 
-cPhs__Step daNpc_ykM_c::create() {
+cPhs_Step daNpc_ykM_c::create() {
     daNpcT_ct(this, daNpc_ykM_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData,
                                                   4, l_motionSequenceData, 4, l_evtList, l_resNameList);
     mType = getType();
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x, BitTRB:%02x<%08x> ", fopAcM_getProcNameString(this), mType, mFlowNodeNo,
                   getPathID(), getBitTRB() & 0xFF, fopAcM_GetParam(this));

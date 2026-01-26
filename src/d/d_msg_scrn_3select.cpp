@@ -210,7 +210,7 @@ dMsgScrn3Select_c::dMsgScrn3Select_c() {
     field_0x10c = 0;
     field_0x112 = 0;
     mProcess = PROC_MAX_e;
-    field_0x115 = 0xFF;
+    mDPDPoint = 0xFF;
     field_0x116 = 0xFF;
     field_0x117 = 0;
 

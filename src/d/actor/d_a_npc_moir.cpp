@@ -284,7 +284,7 @@ daNpcMoiR_c::~daNpcMoiR_c() {
 #endif
 }
 
-cPhs__Step daNpcMoiR_c::Create() {
+cPhs_Step daNpcMoiR_c::Create() {
     fopAcM_ct(this, daNpcMoiR_c);
 
     if (strcmp(dComIfGp_getStartStageName(), "R_SP116") == 0 && dComIfG_play_c::getLayerNo(0) == 4) {
@@ -315,9 +315,9 @@ cPhs__Step daNpcMoiR_c::Create() {
     }
 
     mMsgNo = getMessageNo();
-    cPhs__Step phase = cPhs_ERROR_e;
+    cPhs_Step phase = cPhs_ERROR_e;
     for (int i = 0; l_loadRes_list[mMode][i] >= 0; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhase[i], l_arcNames[l_loadRes_list[mMode][i]]);
+        phase = dComIfG_resLoad(&mPhase[i], l_arcNames[l_loadRes_list[mMode][i]]);
         if (phase != cPhs_COMPLEATE_e) {
             return phase;
         }

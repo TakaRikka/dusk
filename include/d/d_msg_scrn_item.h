@@ -1,7 +1,7 @@
 #ifndef MSG_SCRN_D_MSG_SCRN_ITEM_H
 #define MSG_SCRN_D_MSG_SCRN_ITEM_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "d/d_msg_scrn_base.h"
 
 class dMsgScrnArrow_c;

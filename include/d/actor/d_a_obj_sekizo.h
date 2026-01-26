@@ -40,7 +40,7 @@ public:
  */
 class daObj_Sekizo_c : public dBgS_MoveBgActor {
 public:
-    cPhs__Step create();
+    cPhs_Step create();
 
     int CreateHeap();
     int Create();

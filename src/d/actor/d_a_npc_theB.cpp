@@ -234,10 +234,10 @@ daNpcTheB_HIOParam const daNpcTheB_Param_c::m = {
     false,
 };
 
-cPhs__Step daNpcTheB_c::create() {
+cPhs_Step daNpcTheB_c::create() {
     fopAcM_ct(this, daNpcTheB_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x2CB0)) {
             return cPhs_ERROR_e;

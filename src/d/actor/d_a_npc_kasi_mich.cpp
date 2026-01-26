@@ -210,15 +210,15 @@ daNpcKasiMich_c::~daNpcKasiMich_c() {
 #endif
 }
 
-cPhs__Step daNpcKasiMich_c::Create() {
+cPhs_Step daNpcKasiMich_c::Create() {
     fopAcM_ct(this, daNpcKasiMich_c);
 
     mType = getType();
     mMessageNo = getMessageNo();
 
-    cPhs__Step phase = cPhs_ERROR_e;
+    cPhs_Step phase = cPhs_ERROR_e;
     for (int i = 0; i < 3; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
+        phase = dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
 
         if (phase != cPhs_COMPLEATE_e) {
             return phase;

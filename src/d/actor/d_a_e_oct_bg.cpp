@@ -4,7 +4,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 #include "d/actor/d_a_e_oct_bg.h"
 #include "f_op/f_op_actor_mng.h"

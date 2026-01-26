@@ -1614,7 +1614,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-static cPhs__Step daE_GB_Create(fopAc_ac_c* actor) {
+static cPhs_Step daE_GB_Create(fopAc_ac_c* actor) {
     static dCcD_SrcSph head_cc_sph_src = {
         {
             {0x0, {{AT_TYPE_CSTATUE_SWING, 0x2, 0xd}, {0xd8fbfdff, 0x3}, 0x75}}, // mObj
@@ -1646,7 +1646,7 @@ static cPhs__Step daE_GB_Create(fopAc_ac_c* actor) {
     e_gb_class* i_this = (e_gb_class*)actor;
     fopAcM_ct(&i_this->actor, e_gb_class);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->phase, "E_gb");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->phase, "E_gb");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_gb PARAM %x\n", fopAcM_GetParam(actor));
         u8 sw_bit = (fopAcM_GetParam(actor) & 0xFF0000) >> 16;

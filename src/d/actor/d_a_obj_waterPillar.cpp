@@ -119,9 +119,9 @@ dCcD_SrcCps daWtPillar_c::mCcDCps = {
 
 dCcD_SrcCyl daWtPillar_c::mCcDCyl = {daWtPillar_c::mCcDObjCoInfo};
 
-cPhs__Step daWtPillar_c::create() {
+cPhs_Step daWtPillar_c::create() {
     fopAcM_ct(this, daWtPillar_c);
-    const cPhs__Step phase = static_cast<cPhs__Step>(dComIfG_resLoad(&mPhase, "efWater"));
+    const cPhs_Step phase = static_cast<cPhs_Step>(dComIfG_resLoad(&mPhase, "efWater"));
 
     if(phase == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x2000))

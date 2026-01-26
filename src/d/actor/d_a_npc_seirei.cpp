@@ -226,7 +226,7 @@ daNpc_Seirei_c::~daNpc_Seirei_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-cPhs__Step daNpc_Seirei_c::create() {
+cPhs_Step daNpc_Seirei_c::create() {
     daNpcT_ct(this, daNpc_Seirei_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
                        l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -235,7 +235,7 @@ cPhs__Step daNpc_Seirei_c::create() {
     mTwilight = false;
     arg0 = fopAcM_GetParam(this) >> 28;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         if (arg0 != 0 && !fopAcM_entrySolidHeap(this, createHeapCallBack, 0)) {
             return cPhs_ERROR_e;

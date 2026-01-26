@@ -9,9 +9,9 @@
 #ifdef __MWERKS__
 #include <cmath>
 #else
-#include "dusk/math.h"
+#include <dusk/math.h>
 #endif
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 void J2DTexMtx::load(u32 mtxIdx) {
     GXLoadTexMtxImm(mTexMtx, mtxIdx * 3 + GX_TEXMTX0, (GXTexMtxType)mInfo.mTexMtxType);

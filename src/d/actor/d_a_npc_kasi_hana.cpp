@@ -638,15 +638,15 @@ daNpcKasiHana_c::~daNpcKasiHana_c() {
 #endif
 }
 
-cPhs__Step daNpcKasiHana_c::Create() {
+cPhs_Step daNpcKasiHana_c::Create() {
     fopAcM_ct(this, daNpcKasiHana_c);
 
     mMessageNo = getMessageNo();
     mType = getType();
 
-    cPhs__Step phase = cPhs_ERROR_e;
+    cPhs_Step phase = cPhs_ERROR_e;
     for (int i = 0; i < 3; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
+        phase = dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
 
         if (phase != cPhs_COMPLEATE_e) {
             return phase;

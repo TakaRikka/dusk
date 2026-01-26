@@ -218,7 +218,7 @@ daNpc_zrC_c::~daNpc_zrC_c() {
 #endif
 }
 
-cPhs__Step daNpc_zrC_c::create() {
+cPhs_Step daNpc_zrC_c::create() {
     fopAcM_ct(this, daNpc_zrC_c);
 
     mType = getTypeFromParam();
@@ -240,7 +240,7 @@ cPhs__Step daNpc_zrC_c::create() {
         if (res_idx == 3 && mTwilight) {
             res_idx = 4;
         }
-        cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase[i], l_resNames[res_idx]);
+        cPhs_Step step = dComIfG_resLoad(&mPhase[i], l_resNames[res_idx]);
         if (step == cPhs_ERROR_e || step == cPhs_UNK3_e) {
             return cPhs_ERROR_e;
         }
@@ -1766,7 +1766,7 @@ BOOL daNpc_zrC_c::ECut_earringGet(int i_staffID) {
     return ret;
 }
 
-static cPhs__Step daNpc_zrC_Create(void* i_this) {
+static cPhs_Step daNpc_zrC_Create(void* i_this) {
     return static_cast<daNpc_zrC_c*>(i_this)->create();
 }
 

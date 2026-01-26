@@ -385,7 +385,7 @@ daNpc_Post_HIOParam const daNpc_Post_Param_c::m = {
     60,
 };
 
-cPhs__Step daNpc_Post_c::create() {
+cPhs_Step daNpc_Post_c::create() {
     daNpcT_ct(this, daNpc_Post_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData,
               4, l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -393,7 +393,7 @@ cPhs__Step daNpc_Post_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = dKy_darkworld_check();
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d, BitSW:%02x<%08x> ", fopAcM_getProcNameString(this), mType, mFlowNodeNo,
                   getBitSW(), fopAcM_GetParam(this));

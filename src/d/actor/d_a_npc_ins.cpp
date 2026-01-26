@@ -383,7 +383,7 @@ daNpcIns_c::~daNpcIns_c() {
 #endif
 }
 
-cPhs__Step daNpcIns_c::Create() {
+cPhs_Step daNpcIns_c::Create() {
     fopAcM_ct(this, daNpcIns_c);
 
     mType = TYPE_0;
@@ -412,9 +412,9 @@ cPhs__Step daNpcIns_c::Create() {
         }
     }
 
-    cPhs__Step phase = cPhs_ERROR_e;
+    cPhs_Step phase = cPhs_ERROR_e;
     for (int i = 0; l_loadRes_list[mType][i] >= 0; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[l_loadRes_list[mType][i]]);
+        phase = dComIfG_resLoad(&mPhases[i], l_arcNames[l_loadRes_list[mType][i]]);
 
         if (phase != cPhs_COMPLEATE_e) {
             return phase;

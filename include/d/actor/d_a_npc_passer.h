@@ -29,7 +29,7 @@ public:
 
     ~daNpcPasser_c();
     int createHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     int execute();
     int draw();
     void setAction(daNpcPasser_c::Mode_e);

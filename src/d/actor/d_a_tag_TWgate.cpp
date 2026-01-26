@@ -356,9 +356,16 @@ void daTagTWGate_c::executeDemoFilone3() {
             }
         }
 
+#ifndef __MWERKS__
+        int modelSts;
+#endif
         switch (*cutName) {
         case 0x30303031:
+#ifndef __MWERKS__
+            modelSts = downloadModels();
+#else
             int modelSts = downloadModels();
+#endif
             if (modelSts == 1) {
                 eventManager.cutEnd(staffId);
             } else if (modelSts == -1) {

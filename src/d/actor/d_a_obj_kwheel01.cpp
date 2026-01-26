@@ -53,7 +53,7 @@ static Vec l_pos[4] = {
     {-930.0f, -165.0f, 0.0f}, {0.0f, -165.0f, -930.0f}
 };
 
-cPhs__Step daObjKWheel01_c::create1st() {
+cPhs_Step daObjKWheel01_c::create1st() {
     bool atLeastOneKLiftExists = false;
     s8 debugStackVar;
 
@@ -78,13 +78,13 @@ cPhs__Step daObjKWheel01_c::create1st() {
         }
     }
 
-    cPhs__Step phase = static_cast<cPhs__Step>(dComIfG_resLoad(this, l_arcName));
+    cPhs_Step phase = static_cast<cPhs_Step>(dComIfG_resLoad(this, l_arcName));
     if(phase == cPhs_COMPLEATE_e) {
         mYAngularVelocity = 0;
         setMtx();
 
 
-        phase = static_cast<cPhs__Step>(MoveBGCreate(l_arcName, (getOut() ? l_dzbidx[2] : l_dzbidx[0]), dBgS_MoveBGProc_TypicalRotY, 0x5D98, &mNewBgMtx));
+        phase = static_cast<cPhs_Step>(MoveBGCreate(l_arcName, (getOut() ? l_dzbidx[2] : l_dzbidx[0]), dBgS_MoveBGProc_TypicalRotY, 0x5D98, &mNewBgMtx));
         if(phase == cPhs_ERROR_e)
             return phase;
 

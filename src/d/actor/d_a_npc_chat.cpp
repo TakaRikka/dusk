@@ -2494,38 +2494,38 @@ bool daNpcChat_c::isM_() {
     return a_jntNum == JntM_NUM_e;
 }
 
-cPhs__Step daNpcChat_c::loadResrc(int idx, int param_2) {
-    cPhs__Step rv = cPhs_COMPLEATE_e;
+cPhs_Step daNpcChat_c::loadResrc(int idx, int param_2) {
+    cPhs_Step rv = cPhs_COMPLEATE_e;
     if (mTwilight) {
-        rv = (cPhs__Step)dComIfG_resLoad(&mPhase1, l_resNameTbl[idx][1]);
+        rv = dComIfG_resLoad(&mPhase1, l_resNameTbl[idx][1]);
         if (rv != cPhs_COMPLEATE_e) {
             return rv;
         }
     } else {
-        rv = (cPhs__Step)dComIfG_resLoad(&mPhase1, l_resNameTbl[idx][0]);
+        rv = dComIfG_resLoad(&mPhase1, l_resNameTbl[idx][0]);
         if (rv != cPhs_COMPLEATE_e) {
             return rv;
         }
     }
 
-    rv = (cPhs__Step)dComIfG_resLoad(&mPhase2, l_resNameTbl[idx][2]);
+    rv = dComIfG_resLoad(&mPhase2, l_resNameTbl[idx][2]);
     if (rv != cPhs_COMPLEATE_e) {
         return rv;
     }
     
     if (param_2 != 0 || field_0xe51 == 1) {
-        rv = (cPhs__Step)dComIfG_resLoad(&mPhase3, l_resNameTbl[idx][3]);
+        rv = dComIfG_resLoad(&mPhase3, l_resNameTbl[idx][3]);
         if (rv != cPhs_COMPLEATE_e) {
             return rv;
         }
 
         if (mTwilight) {
-            rv = (cPhs__Step)dComIfG_resLoad(&mPhase4, l_resNameTbl[idx][5]);
+            rv = dComIfG_resLoad(&mPhase4, l_resNameTbl[idx][5]);
             if (rv != cPhs_COMPLEATE_e) {
                 return rv;
             }
         } else {
-            rv = (cPhs__Step)dComIfG_resLoad(&mPhase4, l_resNameTbl[idx][4]);
+            rv = dComIfG_resLoad(&mPhase4, l_resNameTbl[idx][4]);
             if (rv != cPhs_COMPLEATE_e) {
                 return rv;
             }
@@ -2675,7 +2675,7 @@ inline f32 CylH(int type) {
     return (f32)(type < 16 ? a_prmTbl_M[type].field_0x30 : a_prmTbl_W[type - 16].field_0x30);
 }
 
-cPhs__Step daNpcChat_c::Create() {
+cPhs_Step daNpcChat_c::Create() {
     fopAcM_ct(this, daNpcChat_c);
 
     mTwilight = dKy_darkworld_check();
@@ -2701,7 +2701,7 @@ cPhs__Step daNpcChat_c::Create() {
 
     mMsgNo = getMessageNo();
 
-    cPhs__Step phase = loadResrc(mType, mObjNum);
+    cPhs_Step phase = loadResrc(mType, mObjNum);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x800022E0)) {
             return cPhs_ERROR_e;

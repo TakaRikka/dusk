@@ -1,7 +1,7 @@
 #ifndef D_D_EYE_HL_H
 #define D_D_EYE_HL_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class J3DModelData;
 struct ResTIMG;

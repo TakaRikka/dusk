@@ -1,7 +1,7 @@
 #ifndef JSULIST_H
 #define JSULIST_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 template <typename T>
 class JSUList;

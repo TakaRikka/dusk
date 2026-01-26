@@ -284,7 +284,7 @@ daNpcTks_c::~daNpcTks_c() {
 #endif
 }
 
-cPhs__Step daNpcTks_c::Create() {
+cPhs_Step daNpcTks_c::Create() {
     fopAcM_ct(this, daNpcTks_c);
 
     if (dComIfGs_isStageBossEnemy()) {
@@ -311,9 +311,9 @@ cPhs__Step daNpcTks_c::Create() {
 
     mMessageNo = getMessageNo();
 
-    cPhs__Step phase = cPhs_ERROR_e;
+    cPhs_Step phase = cPhs_ERROR_e;
     for (int i = 0; l_loadRes_list[mTksTsubo.mTsuboType][i] >= 0; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[l_loadRes_list[mTksTsubo.mTsuboType][i]]);
+        phase = dComIfG_resLoad(&mPhases[i], l_arcNames[l_loadRes_list[mTksTsubo.mTsuboType][i]]);
         if (phase != cPhs_COMPLEATE_e) {
             return phase;
         }

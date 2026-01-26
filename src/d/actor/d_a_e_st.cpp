@@ -3005,11 +3005,11 @@ static BOOL roof_initial_pos_set(e_st_class* i_this) {
     return FALSE;
 }
 
-static cPhs__Step daE_ST_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daE_ST_Create(fopAc_ac_c* a_this) {
     e_st_class* i_this = (e_st_class*)a_this;
     fopAcM_ct(&i_this->actor, e_st_class);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "E_st");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "E_st");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_st PARAM %x\n", fopAcM_GetParam(a_this));
         i_this->arg0 = fopAcM_GetParam(a_this) & 0xF;

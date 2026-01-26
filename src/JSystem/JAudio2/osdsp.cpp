@@ -2,7 +2,7 @@
 
 #include "JSystem/JAudio2/osdsp.h"
 #include "JSystem/JAudio2/osdsp_task.h"
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 #include <dolphin/dsp.h>
 
 extern "C" void __DSP_insert_task(DSPTaskInfo*);

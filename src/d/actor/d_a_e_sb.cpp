@@ -1094,9 +1094,9 @@ static int daE_SB_Delete(daE_SB_c* i_this) {
     return i_this->Delete();
 }
 
-cPhs__Step daE_SB_c::Create() {
+cPhs_Step daE_SB_c::Create() {
     fopAcM_ct(this, daE_SB_c);
-    cPhs__Step phase = (cPhs__Step) dComIfG_resLoad(&mPhaseReq, "E_SB");
+    cPhs_Step phase = dComIfG_resLoad(&mPhaseReq, "E_SB");
     if (phase == cPhs_COMPLEATE_e) {
         field_0x61a = fopAcM_GetParam(this);
         if (field_0x61a != 0xFF && dComIfGs_isSwitch(field_0x61a, fopAcM_GetRoomNo(this))) {

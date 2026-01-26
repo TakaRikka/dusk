@@ -2165,10 +2165,10 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return i_this->CreateHeap();
 }
 
-cPhs__Step daE_ZH_c::create() {
+cPhs_Step daE_ZH_c::create() {
     fopAcM_ct(this, daE_ZH_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_ZH");
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, "E_ZH");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_ZH PARAM %x\n", fopAcM_GetParam(this));
         arg0 = fopAcM_GetParam(this);

@@ -35,14 +35,14 @@ static int daNpcFgd_Create(void* a_this) {
     return static_cast<daNpcFgd_c*>(a_this)->create();
 }
 
-cPhs__Step daNpcFgd_c::create() {
+cPhs_Step daNpcFgd_c::create() {
     fopAcM_ct(this, daNpcFgd_c);
 
     mIsDarkWorld = dKy_darkworld_check();
     m_type = getType();
     mObjNum = getObjNum();
 
-    cPhs__Step phase = (cPhs__Step)loadResrc(m_type, mObjNum);
+    cPhs_Step phase = loadResrc(m_type, mObjNum);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x1910)) {
             OS_REPORT("隊列兵士アクター生成失敗しました！\n"); // Failed to generate the squad soldier actor!

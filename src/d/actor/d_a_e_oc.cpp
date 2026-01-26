@@ -2669,7 +2669,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return a_this->CreateHeap();
 }
 
-cPhs__Step daE_OC_c::create() {
+cPhs_Step daE_OC_c::create() {
     fopAcM_ct(this, daE_OC_c);
     field_0x6b4 = fopAcM_GetParam(this) & 0xFF;
     if (field_0x6b4 == 0xFF) {
@@ -2706,9 +2706,9 @@ cPhs__Step daE_OC_c::create() {
         mName = "E_OC2";
     }
 
-    cPhs__Step phase = (cPhs__Step) dComIfG_resLoad(&mPhaseReqs[0], mName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhaseReqs[0], mName);
     if (phase == cPhs_COMPLEATE_e) {
-        phase = (cPhs__Step) dComIfG_resLoad(&mPhaseReqs[1], "E_ocb");
+        phase = dComIfG_resLoad(&mPhaseReqs[1], "E_ocb");
         if (phase == cPhs_COMPLEATE_e) {
             OS_REPORT("E_OC PARAM %x\n", fopAcM_GetParam(this));
             if (!fopAcM_entrySolidHeap(this, useHeapInit, 0x2e40)) {

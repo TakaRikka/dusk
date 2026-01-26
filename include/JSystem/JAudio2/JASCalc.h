@@ -1,7 +1,7 @@
 #ifndef JASCALC_H
 #define JASCALC_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 /**
  * @ingroup jsystem-jaudio

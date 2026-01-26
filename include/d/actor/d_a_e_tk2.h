@@ -5,6 +5,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_cc_uty.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_ext.h"
 
 /**
  * @ingroup actors-enemies
@@ -54,17 +55,18 @@ public:
 
 STATIC_ASSERT(sizeof(e_tk2_class) == 0xA50);
 
-class daE_TK2_HIO_c {
+class daE_TK2_HIO_c : public JORReflexible {
 public:
     daE_TK2_HIO_c();
     virtual ~daE_TK2_HIO_c() {};
+    void genMessage(JORMContext *);
 
-    /* 0x04 */ s8 field_0x04;
-    /* 0x08 */ f32 mRadiusScale;
-    /* 0x0C */ f32 mPlayerRange1;
-    /* 0x10 */ f32 mPlayerRange2;
-    /* 0x14 */ f32 mSpeedModifier1; /* Unused */
-    /* 0x18 */ f32 mSpeedModifier2; /* Unused */
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ f32 mBaseSize;
+    /* 0x0C */ f32 mPlayerDetectionDistanceNear;
+    /* 0x10 */ f32 mPlayerDetectionDistanceFar;
+    /* 0x14 */ f32 mSwimSpeedModifier; /* Unused */
+    /* 0x18 */ f32 mFleeSpeedModifier; /* Unused */
 };
 
 STATIC_ASSERT(sizeof(daE_TK2_HIO_c) == 0x1C);

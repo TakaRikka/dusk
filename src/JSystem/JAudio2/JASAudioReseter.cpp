@@ -5,7 +5,7 @@
 #include "JSystem/JAudio2/JASCriticalSection.h"
 #include "JSystem/JAudio2/JASDriverIF.h"
 #include "JSystem/JAudio2/JASDSPChannel.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 JASAudioReseter::JASAudioReseter() {
     field_0x0 = 0;

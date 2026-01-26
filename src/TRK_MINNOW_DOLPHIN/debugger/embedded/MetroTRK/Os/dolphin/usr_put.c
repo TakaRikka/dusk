@@ -4,7 +4,7 @@
  */
 
 #include "TRK_MINNOW_DOLPHIN/Os/dolphin/usr_put.h"
-// #include "dolphin/os.h"
+// #include <dolphin/os.h>
 
 // void OSReport(char* fmt, ...) causes extra crclr instruction.
 // look into issue later

@@ -2,7 +2,7 @@
 #ifndef F_PC_PROFILE_H_
 #define F_PC_PROFILE_H_
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 typedef struct nodedraw_method_class nodedraw_method_class;
 typedef struct leafdraw_method_class leafdraw_method_class;

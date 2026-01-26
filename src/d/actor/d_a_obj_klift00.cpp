@@ -114,16 +114,16 @@ void dummy() {
     delete (dCcD_Cyl*)NULL;
 }
 
-cPhs__Step daObjKLift00_c::create1st() {
+cPhs_Step daObjKLift00_c::create1st() {
     mNumChainModels = getArg0();
     mNumChains = mNumChainModels + 1;
 
-    cPhs__Step phase = static_cast<cPhs__Step>(dComIfG_resLoad(this, l_arcName));
+    cPhs_Step phase = static_cast<cPhs_Step>(dComIfG_resLoad(this, l_arcName));
     if(phase == cPhs_COMPLEATE_e) {
         #if DEBUG
-        phase = static_cast<cPhs__Step>(MoveBGCreate(l_arcName, l_dzbidx[0], dBgS_MoveBGProc_TypicalRotY, 0x2000, NULL));
+        phase = static_cast<cPhs_Step>(MoveBGCreate(l_arcName, l_dzbidx[0], dBgS_MoveBGProc_TypicalRotY, 0x2000, NULL));
         #else
-        phase = static_cast<cPhs__Step>(MoveBGCreate(l_arcName, 9, dBgS_MoveBGProc_TypicalRotY, 0x2000, NULL));
+        phase = static_cast<cPhs_Step>(MoveBGCreate(l_arcName, 9, dBgS_MoveBGProc_TypicalRotY, 0x2000, NULL));
         #endif
         if(phase == cPhs_ERROR_e)
             return phase;

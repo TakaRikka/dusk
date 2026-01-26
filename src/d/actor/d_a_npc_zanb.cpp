@@ -138,7 +138,7 @@ daNpc_zanB_HIOParam const daNpc_zanB_Param_c::m = {
 
 static NPC_ZANB_HIO_CLASS l_HIO;
 
-cPhs__Step daNpc_zanB_c::create() {
+cPhs_Step daNpc_zanB_c::create() {
     daNpcT_ct(this, daNpc_zanB_c, l_faceMotionAnmData,
                        l_motionAnmData, l_faceMotionSequenceData, 4,
                        l_motionSequenceData, 4, l_evtList, l_resNameList);
@@ -147,7 +147,7 @@ cPhs__Step daNpc_zanB_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d<%08x> ", fopAcM_getProcNameString(this), mType, mFlowNodeNo, fopAcM_GetParam(this));
 

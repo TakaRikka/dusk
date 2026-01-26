@@ -250,13 +250,13 @@ daObj_GrA_c::~daObj_GrA_c() {
 #endif
 }
 
-cPhs__Step daObj_GrA_c::create() {
+cPhs_Step daObj_GrA_c::create() {
     int uVar1 = 0;
     fopAcM_ct(this, daObj_GrA_c);
 
     mMode = getMode();
     int i;
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, getResName());
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, getResName());
     if (phase == cPhs_ERROR_e || phase == cPhs_UNK3_e) {
         return cPhs_ERROR_e;
     }
@@ -266,7 +266,7 @@ cPhs__Step daObj_GrA_c::create() {
     }
 
     for (i = 0; l_exloadRes_list[mMode][i] >= 0; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_resNames[l_exloadRes_list[mMode][i]]);
+        phase = dComIfG_resLoad(&mPhases[i], l_resNames[l_exloadRes_list[mMode][i]]);
         if (phase == cPhs_ERROR_e || phase == cPhs_UNK3_e) {
             return cPhs_ERROR_e;
         }

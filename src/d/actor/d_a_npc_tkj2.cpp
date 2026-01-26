@@ -1076,11 +1076,11 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-static cPhs__Step daNpc_Tkj2_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daNpc_Tkj2_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, npc_tkj2_class);
     npc_tkj2_class* i_this = (npc_tkj2_class*)a_this;
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "Tkj2");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "Tkj2");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("NPC_TKJ2 PARAM %x\n", fopAcM_GetParam(a_this));
 

@@ -18,7 +18,7 @@ public:
     void initBaseMtx();
     void setBaseMtx();
     int Create();
-    cPhs__Step create();
+    cPhs_Step create();
     int actionWait();
     int initActionOrderGetDemo();
     int actionOrderGetDemo();

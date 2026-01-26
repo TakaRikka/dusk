@@ -210,15 +210,15 @@ daNpcKasiKyu_c::~daNpcKasiKyu_c() {
 #endif
 }
 
-cPhs__Step daNpcKasiKyu_c::Create() {
+cPhs_Step daNpcKasiKyu_c::Create() {
     fopAcM_ct(this, daNpcKasiKyu_c);
 
     mType = getType();
     mMessageNo = getMessageNo();
 
-    cPhs__Step phase = cPhs_ERROR_e;
+    cPhs_Step phase = cPhs_ERROR_e;
     for (int i = 0; i < 3; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
+        phase = dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
 
         if (phase != cPhs_COMPLEATE_e) {
             return phase;

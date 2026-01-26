@@ -109,7 +109,7 @@ dCcD_SrcGObjInf const daSyRock_c::mCcDObjInfo = {
     {},  // mGObjCo
 };
 
-cPhs__Step daSyRock_c::create() {
+cPhs_Step daSyRock_c::create() {
     fopAcM_ct(this, daSyRock_c);
 
     if(getArg0() == TRUE) {
@@ -119,9 +119,9 @@ cPhs__Step daSyRock_c::create() {
             return cPhs_INIT_e;
     }
 
-    const cPhs__Step requestedPhaseProcess = static_cast<cPhs__Step>(dComIfG_resLoad(&mPhase, "syourock"));
+    const cPhs_Step requestedPhaseProcess = static_cast<cPhs_Step>(dComIfG_resLoad(&mPhase, "syourock"));
     if(requestedPhaseProcess == cPhs_COMPLEATE_e) {
-        const cPhs__Step bgCreatePhaseProcess = static_cast<cPhs__Step>(MoveBGCreate("syourock", 0x8, dBgS_MoveBGProc_TypicalRotY, 0x2100, NULL));
+        const cPhs_Step bgCreatePhaseProcess = static_cast<cPhs_Step>(MoveBGCreate("syourock", 0x8, dBgS_MoveBGProc_TypicalRotY, 0x2100, NULL));
         if(bgCreatePhaseProcess == cPhs_ERROR_e)
             return cPhs_ERROR_e;
 

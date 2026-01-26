@@ -642,11 +642,11 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-static cPhs__Step daOBJ_HB_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daOBJ_HB_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, obj_hb_class);
     obj_hb_class* i_this = (obj_hb_class*)a_this;
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "E_HB");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "E_HB");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("OBJ_HB PARAM %x\n", fopAcM_GetParam(a_this));
         i_this->arg0 = fopAcM_GetParam(a_this);

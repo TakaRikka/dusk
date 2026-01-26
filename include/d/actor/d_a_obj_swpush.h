@@ -107,8 +107,8 @@ namespace daObjSwpush {
         bool is_switch2() const;
         static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap();
-        cPhs__Step create_res_load();
-        cPhs__Step Mthd_Create();
+        cPhs_Step create_res_load();
+        cPhs_Step Mthd_Create();
         int Mthd_Delete();
         void set_mtx();
         void init_mtx();

@@ -1,7 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 J2DOrthoGraph::J2DOrthoGraph() : J2DGrafContext(0, 0, 0, 0) {
     this->setLookat();

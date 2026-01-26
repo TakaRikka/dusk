@@ -34,11 +34,11 @@ nObjMHasu::daObjMHasu_c::daObjMHasu_c() :
 }
 
 int nObjMHasu::daObjMHasu_c::create1st() {
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(this, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(this, l_arcName);
     if (phase == cPhs_COMPLEATE_e)
     {
         setMtx();
-        phase = (cPhs__Step)MoveBGCreate(l_arcName, l_dzbidx, dBgS_MoveBGProc_TypicalRotY, 0x1450, &mMtx);
+        phase = MoveBGCreate(l_arcName, l_dzbidx, dBgS_MoveBGProc_TypicalRotY, 0x1450, &mMtx);
         if (phase == cPhs_ERROR_e)
         {
             return phase;

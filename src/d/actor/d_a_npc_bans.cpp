@@ -372,7 +372,7 @@ daNpc_Bans_c::~daNpc_Bans_c() {
 
 static NPC_BANS_HIO_CLASS l_HIO;
 
-cPhs__Step daNpc_Bans_c::create() {
+cPhs_Step daNpc_Bans_c::create() {
     daNpcT_ct(this, daNpc_Bans_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
                        l_evtList, l_resNameList);
@@ -380,7 +380,7 @@ cPhs__Step daNpc_Bans_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = dKy_darkworld_check();
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x, MaxItem:%d, group:%d<%08x> ", fopAcM_getProcNameString(this), mType, mFlowNodeNo,
                   getPathID(), getMaxNumItem(), getGroupId(), fopAcM_GetParam(this));

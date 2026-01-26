@@ -107,8 +107,8 @@ bool daObjSwpush::Act_c::create_heap() {
     return rv;
 }
 
-cPhs__Step daObjSwpush::Act_c::create_res_load() {
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, M_arcname[mMdl]);
+cPhs_Step daObjSwpush::Act_c::create_res_load() {
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, M_arcname[mMdl]);
     if (phase != cPhs_COMPLEATE_e) {
         return phase;
     }
@@ -199,7 +199,7 @@ daObjSwpush::Hio_c::Attr_c const daObjSwpush::Act_c::M_attr[5] = {
 
 u8 const daObjSwpush::Act_c::M_op_vtx[4] = {0x0D, 0x0B, 0x0A, 0x0C};
 
-cPhs__Step daObjSwpush::Act_c::Mthd_Create() {
+cPhs_Step daObjSwpush::Act_c::Mthd_Create() {
     fopAcM_ct(this, daObjSwpush::Act_c);
 
     prmZ_init();
@@ -212,7 +212,7 @@ cPhs__Step daObjSwpush::Act_c::Mthd_Create() {
         mMdl = 0;
     }
 
-    cPhs__Step phase = create_res_load();
+    cPhs_Step phase = create_res_load();
     if (phase == cPhs_COMPLEATE_e) {
         scale.x *= attr().scale;
         scale.z *= attr().scale;
@@ -832,7 +832,7 @@ int daObjSwpush::Act_c::Mthd_Draw() {
 
 namespace daObjSwpush {
 namespace {
-    cPhs__Step Mthd_Create(void* i_this) {
+    cPhs_Step Mthd_Create(void* i_this) {
         return static_cast<Act_c*>(i_this)->Mthd_Create();
     }
 

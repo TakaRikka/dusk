@@ -29,8 +29,8 @@
 #include "DynamicLink.h"
 
 #if !PLATFORM_GCN
-#include "revolution/sc.h"
-#include "revolution/wpad.h"
+#include <revolution/sc.h>
+#include <revolution/wpad.h>
 #endif
 
 #if PLATFORM_GCN

@@ -2,7 +2,7 @@
 #define JKRDVDFILE_H
 
 #include "JSystem/JKernel/JKRFile.h"
-#include "dolphin/dvd.h"
+#include <dolphin/dvd.h>
 #include <dolphin/os.h>
 #include <dolphin/os.h>
 

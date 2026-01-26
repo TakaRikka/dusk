@@ -73,7 +73,7 @@ public:
 
     inline int createHeap();
     inline int draw();
-    inline cPhs__Step create();
+    inline cPhs_Step create();
     inline ~daObjYobikusa_c();
 
     static attributes const M_attr;

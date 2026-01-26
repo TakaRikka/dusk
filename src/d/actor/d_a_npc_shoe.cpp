@@ -117,8 +117,8 @@ daNpcShoe_c::~daNpcShoe_c() {
     }
 }
 
-cPhs__Step daNpcShoe_c::Create() {
-    cPhs__Step step;
+cPhs_Step daNpcShoe_c::Create() {
+    cPhs_Step step;
 
     fopAcM_ct(this, daNpcShoe_c);
 
@@ -126,7 +126,7 @@ cPhs__Step daNpcShoe_c::Create() {
 
     step = cPhs_ERROR_e;
     for (int i = 0; i < 3; i++) {
-        step = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
+        step = dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
         if (step != cPhs_COMPLEATE_e) {
             return step;
         }
@@ -634,7 +634,7 @@ bool daNpcShoe_c::demo(void* param_0) {
     return 1;
 }
 
-static cPhs__Step daNpcShoe_Create(void* i_this) {
+static cPhs_Step daNpcShoe_Create(void* i_this) {
     return static_cast<daNpcShoe_c*>(i_this)->Create();
 }
 

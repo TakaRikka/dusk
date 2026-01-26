@@ -3242,9 +3242,9 @@ static int useHeapInit2(fopAc_ac_c* i_this) {
     return static_cast<daB_YO_c*>(i_this)->CreateHeap2();
 }
 
-cPhs__Step daB_YO_c::create() {
+cPhs_Step daB_YO_c::create() {
     fopAcM_ct(this, daB_YO_c);
-    cPhs__Step step;
+    cPhs_Step step;
 
     mSwNo = fopAcM_GetParam(this) & 0xff;
     mSwNo2 = (fopAcM_GetParam(this) >> 8) & 0xff;
@@ -3258,7 +3258,7 @@ cPhs__Step daB_YO_c::create() {
     mIsInactive2 = mIsInactive;
 
     if (mIsInactive == 1) {
-        step = (cPhs__Step)dComIfG_resLoad(&mPhase2, "L5_R50");
+        step = dComIfG_resLoad(&mPhase2, "L5_R50");
 
         if (step == cPhs_COMPLEATE_e) {
             if (!daMirror_c::remove()) {
@@ -3292,11 +3292,11 @@ cPhs__Step daB_YO_c::create() {
         return step;
 
     } else {
-        if ((step = (cPhs__Step)dComIfG_resLoad(&mPhase1, "B_YO"), step == cPhs_COMPLEATE_e)
-            && (step = (cPhs__Step)dComIfG_resLoad(&mPhase2, "L5_R50"), step == cPhs_COMPLEATE_e)
-            && (step = (cPhs__Step)dComIfG_resLoad(&mPhase3, "ykW"), step == cPhs_COMPLEATE_e)
-            && (step = (cPhs__Step)dComIfG_resLoad(&mPhase4, "ykW1"), step == cPhs_COMPLEATE_e)
-            && (step = (cPhs__Step)dComIfG_resLoad(&mPhase5, "E_FZ"), step == cPhs_COMPLEATE_e))
+        if ((step = dComIfG_resLoad(&mPhase1, "B_YO"), step == cPhs_COMPLEATE_e)
+            && (step = dComIfG_resLoad(&mPhase2, "L5_R50"), step == cPhs_COMPLEATE_e)
+            && (step = dComIfG_resLoad(&mPhase3, "ykW"), step == cPhs_COMPLEATE_e)
+            && (step = dComIfG_resLoad(&mPhase4, "ykW1"), step == cPhs_COMPLEATE_e)
+            && (step = dComIfG_resLoad(&mPhase5, "E_FZ"), step == cPhs_COMPLEATE_e))
         {
             if (cDmr_SkipInfo != 0 && !daMirror_c::remove()) {
                 return cPhs_INIT_e;
@@ -3412,7 +3412,7 @@ cPhs__Step daB_YO_c::create() {
     }
 }
 
-static cPhs__Step daB_YO_Create(daB_YO_c* i_this) {
+static cPhs_Step daB_YO_Create(daB_YO_c* i_this) {
     return i_this->create();
 }
 

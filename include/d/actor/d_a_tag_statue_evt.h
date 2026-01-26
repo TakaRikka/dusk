@@ -7,9 +7,9 @@ class daTagStatue_c : public fopAc_ac_c {
 public:
     void initBaseMtx();
     void setBaseMtx();
-    cPhs__Step Create();
+    cPhs_Step Create();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     int execute();
     void event_proc_call();
     void actionWait();

@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_wind_stone.h"
 #include "d/actor/d_a_alink.h"
 #include "d/d_meter2_info.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 static int daWindStone_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daWindStone_c*>(i_this)->createHeap();

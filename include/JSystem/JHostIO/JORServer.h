@@ -187,4 +187,8 @@ inline void JORReleaseMContext(JORMContext* mctx) {
     JORServer::getInstance()->releaseMCTX(mctx);
 }
 
+inline void JOR_ENABLEEVENTCALLBACKLIST(bool enable) {
+    JORServer::getInstance()->enableEventCallbackList(enable);
+}
+
 #endif /* JORSERVER_H */

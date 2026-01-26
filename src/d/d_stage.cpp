@@ -12,6 +12,7 @@
 #include "d/d_path.h"
 #include "d/d_save_HIO.h"
 #include "d/d_stage.h"
+#include "d/d_bg_parts.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_msg_mng.h"

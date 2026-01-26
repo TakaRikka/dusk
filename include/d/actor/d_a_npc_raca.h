@@ -84,7 +84,7 @@ public:
     typedef int (daNpc_Raca_c::*cutFunc)(int);
 
     ~daNpc_Raca_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

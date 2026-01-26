@@ -52,12 +52,12 @@ static void* daObjCdoor_searchChain(fopAc_ac_c* i_actor, void* i_this) {
     return NULL;
 }
 
-cPhs__Step daObjCdoor_c::create() {
+cPhs_Step daObjCdoor_c::create() {
     fopAcM_ct(this, daObjCdoor_c);
     mType = (fopAcM_GetParam(this) >> 8) & 0xf;
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName[mType]);
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, l_arcName[mType]);
     if (step == cPhs_COMPLEATE_e) {
-        step = (cPhs__Step)MoveBGCreate(l_arcName[mType], l_dzbIdx[mType], NULL, 0xc00, NULL);
+        step = MoveBGCreate(l_arcName[mType], l_dzbIdx[mType], NULL, 0xc00, NULL);
         if (step == cPhs_ERROR_e) {
             return cPhs_ERROR_e;
         }
@@ -102,7 +102,7 @@ cPhs__Step daObjCdoor_c::create() {
     return step;
 }
 
-static cPhs__Step daObjCdoor_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObjCdoor_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjCdoor_c*>(i_this)->create();
 }
 

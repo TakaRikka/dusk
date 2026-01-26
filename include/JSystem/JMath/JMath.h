@@ -1,7 +1,7 @@
 #ifndef JMATH_H
 #define JMATH_H
 
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 #include <cmath>
 
 void JMAMTXApplyScale(const Mtx, Mtx, f32, f32, f32);

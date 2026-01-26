@@ -1,7 +1,7 @@
 #ifndef C_COUNTER_H
 #define C_COUNTER_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 struct counter_class {
     u32 mCounter0;

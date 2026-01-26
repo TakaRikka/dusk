@@ -134,7 +134,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daObj_Lbox_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObj_Lbox_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph cc_sph_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x0}},  // mObj
@@ -149,7 +149,7 @@ static cPhs__Step daObj_Lbox_Create(fopAc_ac_c* i_this) {
 
     obj_lbox_class* a_this = static_cast<obj_lbox_class*>(i_this);
     fopAcM_ct(a_this, obj_lbox_class);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&a_this->mPhaseReq, "Obj_lbox");
+    cPhs_Step step = dComIfG_resLoad(&a_this->mPhaseReq, "Obj_lbox");
 
     if (step == cPhs_COMPLEATE_e) {
         a_this->mParam = fopAcM_GetParam(i_this);

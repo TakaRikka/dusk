@@ -5,7 +5,7 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "JSystem/JUtility/JUTTexture.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 void J2DPictureEx::initiate(ResTIMG const* param_0, ResTLUT const* param_1) {
     u32 texGenNum = mMaterial->getTexGenBlock()->getTexGenNum();

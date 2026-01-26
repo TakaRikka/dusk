@@ -7274,7 +7274,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-static cPhs__Step daE_RD_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daE_RD_Create(fopAc_ac_c* a_this) {
     e_rd_class* i_this = (e_rd_class*)a_this;
 
     fopAcM_ct(&i_this->actor, e_rd_class);
@@ -7302,7 +7302,7 @@ static cPhs__Step daE_RD_Create(fopAc_ac_c* a_this) {
         i_this->mResName = "E_RD";
     }
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, i_this->mResName);
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, i_this->mResName);
     if (phase == cPhs_COMPLEATE_e) {
         if (strcmp(dComIfGp_getStartStageName(), "F_SP124") == 0) {
             // Gerudo Desert

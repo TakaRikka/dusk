@@ -17,7 +17,7 @@ public:
     daObjSnowSoup_c();
     virtual ~daObjSnowSoup_c();
     int createHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     int Delete();
     int draw();
     int execute();

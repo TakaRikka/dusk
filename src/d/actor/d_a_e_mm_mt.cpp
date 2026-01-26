@@ -750,7 +750,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 }
 
 static int daE_MM_MT_Create(fopAc_ac_c* i_this) {
-    cPhs__Step cVar1;
+    cPhs_Step cVar1;
     bool bVar2;
     f32 fVar3;
     

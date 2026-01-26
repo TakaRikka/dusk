@@ -416,11 +416,11 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daObj_Food_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObj_Food_Create(fopAc_ac_c* i_this) {
     obj_food_class* _this = static_cast<obj_food_class*>(i_this);
     fopAcM_ct(i_this, obj_food_class);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhase, "Obj_fd");
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhase, "Obj_fd");
     if (step == cPhs_COMPLEATE_e) {
         _this->mType = (u8)fopAcM_GetParam(_this);
         _this->mParam1 = (u8)(fopAcM_GetParam(_this) >> 8);

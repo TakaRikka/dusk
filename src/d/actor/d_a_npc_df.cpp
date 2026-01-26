@@ -359,11 +359,11 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daNpc_Df_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daNpc_Df_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, npc_df_class);
     npc_df_class* actor = (npc_df_class*)i_this;
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&actor->mPhase, "Npc_df");
+    cPhs_Step phase = dComIfG_resLoad(&actor->mPhase, "Npc_df");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("NPC_DF PARAM %x\n", fopAcM_GetParam(i_this));
         actor->field_0x570 = fopAcM_GetParam(i_this);

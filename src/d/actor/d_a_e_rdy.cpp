@@ -4869,7 +4869,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daE_RDY_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daE_RDY_Create(fopAc_ac_c* i_this) {
     e_rdy_class* _this = (e_rdy_class*)i_this;
     fopAcM_ct(&_this->actor, e_rdy_class);
 
@@ -4881,7 +4881,7 @@ static cPhs__Step daE_RDY_Create(fopAc_ac_c* i_this) {
     }
 
     _this->mpArcName = "E_rdy";
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhase, _this->mpArcName);
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhase, _this->mpArcName);
     if (step == cPhs_COMPLEATE_e) {
         OS_REPORT("E_RDY PARAM %x\n", fopAcM_GetParam(i_this));
         if (_this->field_0x5b8 != 3) {

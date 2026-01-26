@@ -142,7 +142,7 @@ const daNpc_yamiT_HIOParam daNpc_yamiT_Param_c::m = {
 
 static NPC_YAMIT_HIO_CLASS l_HIO;
 
-cPhs__Step daNpc_yamiT_c::create() {
+cPhs_Step daNpc_yamiT_c::create() {
     daNpcT_ct(this, daNpc_yamiT_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData,
               4, l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -150,7 +150,7 @@ cPhs__Step daNpc_yamiT_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x3850)) {
             return cPhs_ERROR_e;

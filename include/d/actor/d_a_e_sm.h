@@ -55,7 +55,7 @@ public:
     int Delete();
     int CreateHeap();
     void initCoSph();
-    cPhs__Step Create();
+    cPhs_Step Create();
     daE_SM_c();
 
     /* 0x05AC */ request_of_phase_process_class mPhase;

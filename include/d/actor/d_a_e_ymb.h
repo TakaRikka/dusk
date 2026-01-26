@@ -78,7 +78,7 @@ public:
     int execute();
     int _delete();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
 
     int getMaxLockAttack() { return 6; }
     u8 getSwitchBit() { return mSwitchBit; }

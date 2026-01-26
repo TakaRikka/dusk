@@ -330,14 +330,14 @@ daNpcBouS_HIOParam const daNpcBouS_Param_c::m = {
     0,
 };
 
-cPhs__Step daNpcBouS_c::Create() {
+cPhs_Step daNpcBouS_c::Create() {
     fopAcM_ct(this, daNpcBouS_c);
 
     mMsgNo = getMessageNo();
 
-    cPhs__Step phase = cPhs_ERROR_e;
+    cPhs_Step phase = cPhs_ERROR_e;
     for (int i = 0; i < 2; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
+        phase = dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
 
         if (phase != cPhs_COMPLEATE_e) {
             return phase;

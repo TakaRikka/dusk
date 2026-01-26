@@ -490,11 +490,11 @@ int daObjBm_c::create1st() {
         mCreateFirstFlag = 1;
     }
 
-    cPhs__Step phase_state = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase_state = dComIfG_resLoad(&mPhase, l_arcName);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state =
-            (cPhs__Step)MoveBGCreate(l_arcName, 0x1E, dBgS_MoveBGProc_TypicalRotY, 0x5500, NULL);
+            MoveBGCreate(l_arcName, 0x1E, dBgS_MoveBGProc_TypicalRotY, 0x5500, NULL);
         if (phase_state == cPhs_ERROR_e) {
             return phase_state;
         }

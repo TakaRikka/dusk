@@ -649,7 +649,7 @@ static int daE_DF_Delete(daE_DF_c* i_this) {
 int daE_DF_c::Create() {
     fopAcM_ct(this, daE_DF_c);
 
-    cPhs__Step rv = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, "E_DF");
+    cPhs_Step rv = dComIfG_resLoad(&mPhaseReq, "E_DF");
     if (rv == cPhs_COMPLEATE_e) {
         OS_REPORT("E_DF PARAM %x\n", fopAcM_GetParam(this));
         mArg0 = (u8)fopAcM_GetParam(this);

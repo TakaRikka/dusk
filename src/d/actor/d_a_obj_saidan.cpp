@@ -34,10 +34,10 @@ int daSaidan_c::CreateHeap() {
     return TRUE;
 }
 
-cPhs__Step daSaidan_c::create() {
+cPhs_Step daSaidan_c::create() {
     fopAcM_ct(this, daSaidan_c);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, "H_Saidan");
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, "H_Saidan");
     if (step == cPhs_COMPLEATE_e) {
         if (MoveBGCreate("H_Saidan", 7, dBgS_MoveBGProc_TypicalRotY, 0x21b0, NULL) == cPhs_ERROR_e)
         {

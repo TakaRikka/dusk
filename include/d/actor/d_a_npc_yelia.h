@@ -42,7 +42,7 @@ public:
 class daNpc_Yelia_c : public daNpcT_c {
 public:
     ~daNpc_Yelia_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

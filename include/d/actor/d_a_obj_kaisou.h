@@ -24,7 +24,7 @@ public:
     int Execute();
     int Delete();
     void setBaseMtx();
-    cPhs__Step create();
+    cPhs_Step create();
     inline int CreateHeap();
     inline int Draw();
 

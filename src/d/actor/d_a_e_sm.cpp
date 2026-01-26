@@ -1895,10 +1895,10 @@ void daE_SM_c::initCoSph() {
     mCoCore.OnTgNoHitMark();
 }
 
-cPhs__Step daE_SM_c::Create() {
+cPhs_Step daE_SM_c::Create() {
     fopAcM_ct(this, daE_SM_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_SM");
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, "E_SM");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_SM PARAM %x\n", fopAcM_GetParam(this));
 

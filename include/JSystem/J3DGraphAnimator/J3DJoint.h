@@ -1,6 +1,7 @@
 #ifndef J3DJOINT_H
 #define J3DJOINT_H
 
+#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 

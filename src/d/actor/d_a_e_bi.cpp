@@ -864,11 +864,11 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-static cPhs__Step daE_BI_Create(fopAc_ac_c* actor) {
+static cPhs_Step daE_BI_Create(fopAc_ac_c* actor) {
     fopAcM_ct(actor, e_bi_class);
     e_bi_class* i_this = (e_bi_class*)actor;
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->phase, "E_BI");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->phase, "E_BI");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_BI PARAM %x\n", fopAcM_GetParam(actor));
 

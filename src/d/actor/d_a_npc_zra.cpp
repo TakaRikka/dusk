@@ -488,7 +488,7 @@ daNpc_zrA_c::~daNpc_zrA_c() {
 #endif
 }
 
-cPhs__Step daNpc_zrA_c::create() {
+cPhs_Step daNpc_zrA_c::create() {
     fopAcM_ct(this, daNpc_zrA_c);
 
     mType = getTypeFromArgument();
@@ -508,7 +508,7 @@ cPhs__Step daNpc_zrA_c::create() {
     }
 
     int res_count = 0;
-    cPhs__Step step;
+    cPhs_Step step;
     int i;
     for (i = 0; l_loadRes_list[mType][i] >= 0; i++) {
         int res_no = l_loadRes_list[mType][i];
@@ -522,7 +522,7 @@ cPhs__Step daNpc_zrA_c::create() {
             }
         }
         
-        step = (cPhs__Step)dComIfG_resLoad(&mPhase[i], l_resNames[res_no]);
+        step = dComIfG_resLoad(&mPhase[i], l_resNames[res_no]);
 
         if (step == cPhs_ERROR_e || step == cPhs_UNK3_e) {
             return cPhs_ERROR_e;
@@ -534,9 +534,9 @@ cPhs__Step daNpc_zrA_c::create() {
 
     if (mSoldierType != SOLDIER_NONE) {
         if (mTwilight) {
-            step = (cPhs__Step)dComIfG_resLoad(&mPhase[i], l_resNames[10]);
+            step = dComIfG_resLoad(&mPhase[i], l_resNames[10]);
         } else {
-            step = (cPhs__Step)dComIfG_resLoad(&mPhase[i], l_resNames[7]);
+            step = dComIfG_resLoad(&mPhase[i], l_resNames[7]);
         }
 
         if (step == cPhs_ERROR_e || step == cPhs_UNK3_e) {
@@ -2303,7 +2303,7 @@ BOOL daNpc_zrA_c::test(void* param_0) {
     return true;
 }
 
-static cPhs__Step daNpc_zrA_Create(void* i_this) {
+static cPhs_Step daNpc_zrA_Create(void* i_this) {
     return static_cast<daNpc_zrA_c*>(i_this)->create();
 }
 

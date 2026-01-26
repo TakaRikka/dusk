@@ -1,7 +1,7 @@
 #ifndef JFWSYSTEM_H
 #define JFWSYSTEM_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "JSystem/JUtility/JUTAssert.h"
 
 typedef struct _GXRenderModeObj GXRenderModeObj;
