@@ -33,6 +33,7 @@
 #include <dolphin/os/OSMessage.h>
 #include <dolphin/os/OSReboot.h>
 #include <dolphin/base/PPCArch.h>
+#include <dolphin/vi/vifuncs.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -1241,4 +1242,24 @@ f32 PSVECSquareMag(const Vec* v) {
 
 void PSVECSubtract(const Vec* a, const Vec* b, Vec* a_b) {
   puts("PSVECSubtract is a stub");
+}
+
+void* VIGetCurrentFrameBuffer(void) {
+  puts("VIGetCurrentFrameBuffer is a stub");
+  return NULL;
+}
+
+u32 VIGetDTVStatus(void) {
+  puts("VIGetDTVStatus is a stub");
+  return 0;
+}
+
+void* VIGetNextFrameBuffer(void) {
+  puts("VIGetNextFrameBuffer is a stub");
+  return NULL;
+}
+
+VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback cb) {
+  puts("VISetPreRetraceCallback is a stub");
+  return NULL;
 }

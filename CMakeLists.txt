@@ -34,7 +34,7 @@ set(DOLZEL_FILES
     src/m_Do/m_Do_printf.cpp
     src/m_Do/m_Do_audio.cpp
     src/m_Do/m_Do_controller_pad.cpp
-    src/m_Do/m_Re_controller_pad.cpp
+    #src/m_Do/m_Re_controller_pad.cpp
     src/m_Do/m_Do_graphic.cpp
     src/m_Do/m_Do_machine.cpp
     src/m_Do/m_Do_mtx.cpp
