@@ -11,6 +11,15 @@
 #include <dolphin/dsp.h>
 #include <dolphin/dvd.h>
 #include <dolphin/gd/GDBase.h>
+#include <dolphin/gx/GXGeometry.h>
+#include <dolphin/gx/GXFifo.h>
+#include <dolphin/gx/GXFrameBuffer.h>
+#include <dolphin/gx/GXGet.h>
+#include <dolphin/gx/GXTexture.h>
+#include <dolphin/gx/GXCpu2Efb.h>
+#include <dolphin/gx/GXPerf.h>
+#include <dolphin/gx/GXCull.h>
+#include <dolphin/gx/GXPixel.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -757,4 +766,100 @@ void GDSetArrayRaw(GXAttr attr, u32 base_ptr_raw, u8 stride) {
 
 void GDSetVtxDescv(const GXVtxDescList* attrPtr) {
   puts("GDSetVtxDescv is a stub");
+}
+
+void GXAbortFrame(void) {
+  puts("GXAbortFrame is a stub");
+}
+
+void GXEnableTexOffsets(GXTexCoordID coord, GXBool line_enable, GXBool point_enable) {
+  puts("GXEnableTexOffsets is a stub");
+}
+
+OSThread* GXGetCurrentGXThread(void) {
+  puts("GXGetCurrentGXThread is a stub");
+  return NULL;
+}
+
+void* GXGetFifoBase(const GXFifoObj* fifo) {
+  puts("GXGetFifoBase is a stub");
+  return NULL;
+}
+
+u32 GXGetFifoSize(const GXFifoObj* fifo) {
+  puts("GXGetFifoSize is a stub");
+  return 0;
+}
+
+u16 GXGetNumXfbLines(u16 efbHeight, f32 yScale) {
+  puts("GXGetNumXfbLines is a stub");
+  return 0;
+}
+
+void GXGetScissor(u32* left, u32* top, u32* wd, u32* ht) {
+  puts("GXGetScissor is a stub");
+}
+
+u32 GXGetTexObjTlut(const GXTexObj* tex_obj) {
+  puts("GXGetTexObjTlut is a stub");
+  return 0;
+}
+
+f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight) {
+  puts("GXGetYScaleFactor is a stub");
+  return 0.f;
+}
+
+void GXInitTexCacheRegion(GXTexRegion* region, GXBool is_32b_mipmap, u32 tmem_even, GXTexCacheSize size_even,
+                          u32 tmem_odd, GXTexCacheSize size_odd) {
+  puts("GXInitTexCacheRegion is a stub");
+}
+
+GXRenderModeObj GXNtsc480Int = {
+    0, 640, 480, 480, 40, 0, 640, 480, 1, 0, 0, { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 }, { 0, 0, 21, 22, 21, 0, 0 }
+};
+
+void GXPeekZ(u16 x, u16 y, u32* z) {
+  puts("GXPeekZ is a stub");
+}
+
+void GXReadXfRasMetric(u32* xf_wait_in, u32* xf_wait_out, u32* ras_busy, u32* clocks) {
+  puts("GXReadXfRasMetric is a stub");
+}
+
+void GXSetClipMode(GXClipMode mode) {
+  puts("GXSetClipMode is a stub");
+}
+
+void GXSetCoPlanar(GXBool enable) {
+  puts("GXSetCoPlanar is a stub");
+}
+
+void GXSetCopyClamp(GXFBClamp clamp) {
+  puts("GXSetCopyClamp is a stub");
+}
+
+OSThread* GXSetCurrentGXThread(void) {
+  puts("GXSetCurrentGXThread is a stub");
+  return NULL;
+}
+
+void GXSetFogRangeAdj(GXBool enable, u16 center, const GXFogAdjTable* table) {
+  puts("GXSetFogRangeAdj is a stub");
+}
+
+void GXSetMisc(GXMiscToken token, u32 val) {
+  puts("GXSetMisc is a stub");
+}
+
+void GXSetPointSize(u8 pointSize, GXTexOffset texOffsets) {
+  puts("GXSetPointSize is a stub");
+}
+
+void GXSetProjectionv(const f32* ptr) {
+  puts("GXSetProjectionv is a stub");
+}
+
+void GXSetVtxAttrFmtv(GXVtxFmt vtxfmt, const GXVtxAttrFmtList* list) {
+  puts("GXSetVtxAttrFmtv is a stub");
 }
