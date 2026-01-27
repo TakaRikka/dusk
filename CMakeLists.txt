@@ -1339,7 +1339,7 @@ set(REL_FILES
     )
 
 set(DUSK_FILES
-    #src/dusk/imgui.cpp
+    src/dusk/imgui.cpp
     src/dusk/stubs.c
     src/dusk/extras.c
     )
