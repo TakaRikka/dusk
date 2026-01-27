@@ -7,6 +7,8 @@
 #include <dolphin/ar.h>
 #include <dolphin/card.h>
 #include <dolphin/mtx.h>
+#include <dolphin/os/OSCache.h>
+#include <dolphin/dsp.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -619,4 +621,35 @@ void C_VECHalfAngle(const Vec* a, const Vec* b, Vec* half) {
 
 void C_VECReflect(const Vec* src, const Vec* normal, Vec* dst) {
   puts("C_VECReflect is a stub");
+}
+
+void DCZeroRange(void* addr, u32 nBytes) {
+  puts("C_VECReflect is a stub");
+}
+
+void DSPAssertInt(void) {
+  puts("DSPAssertInt is a stub");
+}
+
+u32 DSPCheckMailFromDSP(void) {
+  puts("DSPCheckMailFromDSP is a stub");
+  return 0;
+}
+
+u32 DSPCheckMailToDSP(void) {
+  puts("DSPCheckMailToDSP is a stub");
+  return 0;
+}
+
+void DSPInit(void) {
+  puts("DSPInit is a stub");
+}
+
+u32 DSPReadMailFromDSP(void) {
+  puts("DSPReadMailFromDSP is a stub");
+  return 0;
+}
+
+void DSPSendMailToDSP(u32 mail) {
+  puts("DSPSendMailToDSP is a stub");
 }
