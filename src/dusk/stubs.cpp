@@ -34,6 +34,10 @@
 #include <dolphin/os/OSReboot.h>
 #include <dolphin/base/PPCArch.h>
 #include <dolphin/vi/vifuncs.h>
+#include <dolphin/gf/GFPixel.h>
+#include <dolphin/gf/GFGeometry.h>
+#include <dolphin/gf/GFTev.h>
+#include <dolphin/gf/GFLight.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -770,6 +774,8 @@ void GDPadCurr32(void) {
   puts("GDPadCurr32 is a stub");
 }
 
+extern "C" {
+
 void GDSetArray(GXAttr attr, void* base_ptr, u8 stride) {
   puts("GDSetArray is a stub");
 }
@@ -780,6 +786,8 @@ void GDSetArrayRaw(GXAttr attr, u32 base_ptr_raw, u8 stride) {
 
 void GDSetVtxDescv(const GXVtxDescList* attrPtr) {
   puts("GDSetVtxDescv is a stub");
+}
+
 }
 
 void GXAbortFrame(void) {
@@ -830,7 +838,7 @@ void GXInitTexCacheRegion(GXTexRegion* region, GXBool is_32b_mipmap, u32 tmem_ev
 }
 
 GXRenderModeObj GXNtsc480Int = {
-    0, 640, 480, 480, 40, 0, 640, 480, 1, 0, 0, { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 }, { 0, 0, 21, 22, 21, 0, 0 }
+    (VITVMode)0, 640, 480, 480, 40, 0, 640, 480, (VIXFBMode)1, 0, 0, { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 }, { 0, 0, 21, 22, 21, 0, 0 }
 };
 
 void GXPeekZ(u16 x, u16 y, u32* z) {
@@ -876,14 +884,6 @@ void GXSetProjectionv(const f32* ptr) {
 
 void GXSetVtxAttrFmtv(GXVtxFmt vtxfmt, const GXVtxAttrFmtList* list) {
   puts("GXSetVtxAttrFmtv is a stub");
-}
-
-void KPADDisableDPD(s32) {
-  puts("KPADDisableDPD is a stub");
-}
-
-void KPADEnableDPD(s32) {
-  puts("KPADEnableDPD is a stub");
 }
 
 void LCDisable(void) {
@@ -1261,5 +1261,54 @@ void* VIGetNextFrameBuffer(void) {
 
 VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback cb) {
   puts("VISetPreRetraceCallback is a stub");
+  return NULL;
+}
+
+void GFSetZMode(u8 compare_enable, GXCompare func, u8 update_enable) {
+  puts("GFSetZMode is a stub");
+}
+
+void GFSetGenMode2(u8 nTexGens, u8 nChans, u8 nTevs, u8 nInds, GXCullMode cm) {
+  puts("GFSetGenMode2 is a stub");
+}
+
+void OSSwitchFiberEx(u32 a, u32 b, u32 c, u32 d, u32 e, u32 f) {
+  puts("OSSwitchFiberEx is a stub");
+}
+
+void GFSetTevColorS10(GXTevRegID reg, GXColorS10 color) {
+  puts("GFSetTevColorS10 is a stub");
+}
+
+void GFSetBlendModeEtc(GXBlendMode type, GXBlendFactor src_factor,
+                       GXBlendFactor dst_factor, GXLogicOp logic_op,
+                       u8 color_update_enable, u8 alpha_update_enable,
+                       u8 dither_enable) {
+  puts("GFSetBlendModeEtc is a stub");
+}
+
+void GFSetChanAmbColor(GXChannelID chan, GXColor color) {
+  puts("GFSetChanAmbColor is a stub");
+}
+
+void J3DPSMtxArrayConcat(f32 (*a)[4], f32 (*b)[4], f32 (*c)[4], u32 d) {
+  puts("J3DPSMtxArrayConcat is a stub");
+}
+
+void __dcbz(void* a, int b) {
+  puts("__dcbz is a stub");
+}
+
+void GFSetFog(GXFogType type, f32 startz, f32 endz, f32 nearz, f32 farz, GXColor color) {
+  puts("GFSetFog is a stub");
+}
+
+int __cntlzw(unsigned int a) {
+  puts("__cntlzw is a stub");
+  return 0;
+}
+
+void* __memcpy(void* a, const void* b, int c) {
+  puts("__cntlzw is a stub");
   return NULL;
 }
