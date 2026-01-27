@@ -7,6 +7,7 @@
 #include <dolphin/ar.h>
 #include <dolphin/card.h>
 #include <dolphin/mtx.h>
+#include <dolphin/os.h>
 #include <dolphin/os/OSCache.h>
 #include <dolphin/dsp.h>
 #include <dolphin/dvd.h>
@@ -20,6 +21,17 @@
 #include <dolphin/gx/GXPerf.h>
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXPixel.h>
+#include <dolphin/os/OSAlarm.h>
+#include <dolphin/os/OSRtc.h>
+#include <dolphin/os/OSContext.h>
+#include <dolphin/os/OSReset.h>
+#include <dolphin/os/OSResetSW.h>
+#include <dolphin/os/OSAlloc.h>
+#include <dolphin/os/OSMutex.h>
+#include <dolphin/os/OSModule.h>
+#include <dolphin/os/OSMemory.h>
+#include <dolphin/os/OSMessage.h>
+#include <dolphin/os/OSReboot.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -862,4 +874,246 @@ void GXSetProjectionv(const f32* ptr) {
 
 void GXSetVtxAttrFmtv(GXVtxFmt vtxfmt, const GXVtxAttrFmtList* list) {
   puts("GXSetVtxAttrFmtv is a stub");
+}
+
+void KPADDisableDPD(s32) {
+  puts("KPADDisableDPD is a stub");
+}
+
+void KPADEnableDPD(s32) {
+  puts("KPADEnableDPD is a stub");
+}
+
+void LCDisable(void) {
+  puts("LCDisable is a stub");
+}
+
+void LCQueueWait(u32 len) {
+  puts("LCQueueWait is a stub");
+}
+
+u32 LCStoreData(void* destAddr, void* srcAddr, u32 nBytes) {
+  puts("LCStoreData is a stub");
+  return 0;
+}
+
+void* OSAllocFromArenaLo(u32 size, u32 align) {
+  puts("OSAllocFromArenaLo is a stub");
+  return NULL;
+}
+
+void OSCancelAlarm(OSAlarm *alarm) {
+  puts("OSCancelAlarm is a stub");
+}
+
+void OSCancelThread(OSThread* thread) {
+  puts("OSCancelThread is a stub");
+}
+
+s32 OSCheckActiveThreads(void) {
+  puts("OSCheckActiveThreads is a stub");
+  return 0;
+}
+
+void OSCreateAlarm(OSAlarm* alarm) {
+  puts("OSCreateAlarm is a stub");
+}
+
+int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param, void* stack, u32 stackSize, OSPriority priority, u16 attr) {
+  puts("OSCreateThread is a stub");
+  return 0;
+}
+
+void OSDetachThread(OSThread* thread) {
+  puts("OSDetachThread is a stub");
+}
+
+s32 OSDisableScheduler(void) {
+  puts("OSDisableScheduler is a stub");
+  return 0;
+}
+
+BOOL OSEnableInterrupts(void) {
+  puts("OSEnableInterrupts is a stub");
+  return FALSE;
+}
+
+s32 OSEnableScheduler(void) {
+  puts("OSEnableScheduler is a stub");
+  return 0;
+}
+
+void OSExitThread(void* val) {
+  puts("OSExitThread is a stub");
+}
+
+void OSFillFPUContext(OSContext* context) {
+  puts("OSFillFPUContext is a stub");
+}
+
+void* OSGetArenaHi(void) {
+  puts("OSGetArenaHi is a stub");
+  return NULL;
+}
+
+void* OSGetArenaLo(void) {
+  puts("OSGetArenaLo is a stub");
+  return NULL;
+}
+
+OSContext* OSGetCurrentContext(void) {
+  puts("OSGetCurrentContext is a stub");
+  return NULL;
+}
+
+u32 OSGetProgressiveMode(void) {
+  puts("OSGetProgressiveMode is a stub");
+  return 0;
+}
+
+u32 OSGetResetCode() {
+  puts("OSGetResetCode is a stub");
+  return 0;
+}
+
+BOOL OSGetResetSwitchState(void) {
+  puts("OSGetResetSwitchState is a stub");
+  return FALSE;
+}
+
+s32 OSGetThreadPriority(OSThread* thread) {
+  puts("OSGetThreadPriority is a stub");
+  return 0;
+}
+
+OSTick OSGetTick(void) {
+  puts("OSGetTick is a stub");
+  return 0;
+}
+
+OSTime OSGetTime(void) {
+  puts("OSGetTime is a stub");
+  return 0;
+}
+
+void OSInit(void) {
+  puts("OSInit is a stub");
+}
+
+void* OSInitAlloc(void* arenaStart, void* arenaEnd, int maxHeaps) {
+  puts("OSInitAlloc is a stub");
+  return NULL;
+}
+
+void OSInitCond(OSCond* cond) {
+  puts("OSInitCond is a stub");
+}
+
+void OSInitMessageQueue(OSMessageQueue* mq, void* msgArray, s32 msgCount) {
+  puts("OSInitMessageQueue is a stub");
+}
+
+void OSInitMutex(OSMutex* mutex) {
+  puts("OSInitMutex is a stub");
+}
+
+void OSInitThreadQueue(OSThreadQueue* queue) {
+  puts("OSInitThreadQueue is a stub");
+}
+
+BOOL OSIsThreadTerminated(OSThread* thread) {
+  puts("OSIsThreadTerminated is a stub");
+  return FALSE;
+}
+
+int OSJamMessage(OSMessageQueue* mq, void* msg, s32 flags) {
+  puts("OSJamMessage is a stub");
+  return 0;
+}
+
+BOOL OSLinkFixed(OSModuleInfo* newModule, void* bss) {
+  puts("OSLinkFixed is a stub");
+  return FALSE;
+}
+
+void OSLockMutex(OSMutex* mutex) {
+  puts("OSLockMutex is a stub");
+}
+
+void OSProtectRange(u32 chan, void* addr, u32 nBytes, u32 control) {
+  puts("OSProtectRange is a stub");
+}
+
+int OSReceiveMessage(OSMessageQueue* mq, void* msg, s32 flags) {
+  puts("OSReceiveMessage is a stub");
+  return 0;
+}
+
+int OSSendMessage(OSMessageQueue* mq, void* msg, s32 flags) {
+  puts("OSSendMessage is a stub");
+  return 0;
+}
+
+void OSSetAlarm(OSAlarm* alarm, OSTime tick, OSAlarmHandler handler) {
+  puts("OSSetAlarm is a stub");
+}
+
+void OSSetArenaHi(void* newHi) {
+  puts("OSSetArenaHi is a stub");
+}
+
+void OSSetArenaLo(void* newLo) {
+  puts("OSSetArenaLo is a stub");
+}
+
+OSErrorHandler OSSetErrorHandler(OSError error, OSErrorHandler handler) {
+  puts("OSSetErrorHandler is a stub");
+  return NULL;
+}
+
+void OSSetPeriodicAlarm(OSAlarm* alarm, OSTime start, OSTime period, OSAlarmHandler handler) {
+  puts("OSSetPeriodicAlarm is a stub");
+}
+
+void OSSetProgressiveMode(u32 on) {
+  puts("OSSetProgressiveMode is a stub");
+}
+
+void OSSetSaveRegion(void* start, void* end) {
+  puts("OSSetSaveRegion is a stub");
+}
+
+OSSwitchThreadCallback OSSetSwitchThreadCallback(OSSwitchThreadCallback callback) {
+  puts("OSSetSwitchThreadCallback is a stub");
+  return NULL;
+}
+
+int OSSetThreadPriority(OSThread* thread, OSPriority priority) {
+  puts("OSSetThreadPriority is a stub");
+  return 0;
+}
+
+void OSSignalCond(OSCond* cond) {
+  puts("OSSignalCond is a stub");
+}
+
+void OSSleepThread(OSThreadQueue* queue) {
+  puts("OSSleepThread is a stub");
+}
+
+BOOL OSTryLockMutex(OSMutex* mutex) {
+  puts("OSTryLockMutex is a stub");
+  return FALSE;
+}
+
+void OSUnlockMutex(OSMutex* mutex) {
+  puts("OSUnlockMutex is a stub");
+}
+
+void OSWaitCond(OSCond* cond, OSMutex* mutex) {
+  puts("OSWaitCond is a stub");
+}
+
+void OSYieldThread(void) {
+  puts("OSYieldThread is a stub");
 }
