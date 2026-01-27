@@ -5,6 +5,8 @@
 #include <dolphin/gx/GXManage.h>
 #include <dolphin/ai.h>
 #include <dolphin/ar.h>
+#include <dolphin/card.h>
+#include <dolphin/mtx.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -570,4 +572,51 @@ u32 ARInit(u32* stack_index_addr, u32 num_entries) {
 
 void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, u32 source, u32 dest, u32 length, ARQCallback callback) {
   puts("ARQPostRequest is a stub");
+}
+
+int CARDProbe(s32 chan) {
+  puts("CARDProbe is a stub");
+  return 0;
+}
+
+void C_MTXLightOrtho(Mtx m, f32 t, f32 b, f32 l, f32 r, f32 scaleS, f32 scaleT, f32 transS,
+                     f32 transT) {
+  puts("C_MTXLightOrtho is a stub");
+}
+
+void C_MTXLightPerspective(Mtx m, f32 fovY, f32 aspect, f32 scaleS, f32 scaleT, f32 transS,
+                           f32 transT) {
+  puts("C_MTXLightPerspective is a stub");
+}
+
+void C_MTXLookAt(Mtx m, const Point3d* camPos, const Vec* camUp, const Point3d* target) {
+  puts("C_MTXLookAt is a stub");
+}
+
+void C_MTXOrtho(Mtx44 m, f32 t, f32 b, f32 l, f32 r, f32 n, f32 f) {
+  puts("C_MTXOrtho is a stub");
+}
+
+void C_MTXPerspective(Mtx44 m, f32 fovY, f32 aspect, f32 n, f32 f) {
+  puts("C_MTXPerspective is a stub");
+}
+
+void C_MTXRotAxisRad(Mtx m, const Vec* axis, f32 rad) {
+  puts("C_MTXRotAxisRad is a stub");
+}
+
+void C_QUATRotAxisRad(Quaternion* r, const Vec* axis, f32 rad) {
+  puts("C_QUATRotAxisRad is a stub");
+}
+
+void C_QUATSlerp(const Quaternion* p, const Quaternion* q, Quaternion* r, f32 t) {
+  puts("C_QUATSlerp is a stub");
+}
+
+void C_VECHalfAngle(const Vec* a, const Vec* b, Vec* half) {
+  puts("C_VECHalfAngle is a stub");
+}
+
+void C_VECReflect(const Vec* src, const Vec* normal, Vec* dst) {
+  puts("C_VECReflect is a stub");
 }
