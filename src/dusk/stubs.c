@@ -32,6 +32,7 @@
 #include <dolphin/os/OSMemory.h>
 #include <dolphin/os/OSMessage.h>
 #include <dolphin/os/OSReboot.h>
+#include <dolphin/base/PPCArch.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -1116,4 +1117,128 @@ void OSWaitCond(OSCond* cond, OSMutex* mutex) {
 
 void OSYieldThread(void) {
   puts("OSYieldThread is a stub");
+}
+
+u32 PPCMfhid2() {
+  puts("PPCMfhid2 is a stub");
+  return 0;
+}
+
+u32 PPCMfmsr() {
+  puts("PPCMfmsr is a stub");
+  return 0;
+}
+
+void PPCMtmsr(u32 newMSR) {
+  puts("PPCMtmsr is a stub");
+}
+
+void PSMTXConcat(const Mtx a, const Mtx b, Mtx ab) {
+  puts("PSMTXConcat is a stub");
+}
+
+void PSMTXCopy(const Mtx src, Mtx dst) {
+  puts("PSMTXCopy is a stub");
+}
+
+void PSMTXIdentity(Mtx m) {
+  puts("PSMTXIdentity is a stub");
+}
+
+u32 PSMTXInverse(const Mtx src, Mtx inv) {
+  puts("PSMTXInverse is a stub");
+  return 0;
+}
+
+void PSMTXMultVec(const Mtx m, const Vec* src, Vec* dst) {
+  puts("PSMTXMultVec is a stub");
+}
+
+void PSMTXMultVecArray(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 count) {
+  puts("PSMTXMultVecArray is a stub");
+}
+
+void PSMTXMultVecArraySR(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 count) {
+  puts("PSMTXMultVecArraySR is a stub");
+}
+
+void PSMTXMultVecSR(const Mtx m, const Vec* src, Vec* dst) {
+  puts("PSMTXMultVecSR is a stub");
+}
+
+void PSMTXQuat(Mtx m, const Quaternion* q) {
+  puts("PSMTXQuat is a stub");
+}
+
+void PSMTXRotAxisRad(Mtx m, const Vec* axis, f32 rad) {
+  puts("PSMTXRotAxisRad is a stub");
+}
+
+void PSMTXRotRad(Mtx m, char axis, f32 rad) {
+  puts("PSMTXRotRad is a stub");
+}
+
+void PSMTXScale(Mtx m, f32 xS, f32 yS, f32 zS) {
+  puts("PSMTXScale is a stub");
+}
+
+void PSMTXScaleApply(const Mtx src, Mtx dst, f32 xS, f32 yS, f32 zS) {
+  puts("PSMTXScaleApply is a stub");
+}
+
+void PSMTXTrans(Mtx m, f32 xT, f32 yT, f32 zT) {
+  puts("PSMTXTrans is a stub");
+}
+
+void PSMTXTransApply(const Mtx src, Mtx dst, f32 xT, f32 yT, f32 zT) {
+  puts("PSMTXTransApply is a stub");
+}
+
+void PSQUATMultiply(const Quaternion* p, const Quaternion* q, Quaternion* pq) {
+  puts("PSQUATMultiply is a stub");
+}
+
+void PSVECAdd(const Vec* a, const Vec* b, Vec* ab) {
+  puts("PSVECAdd is a stub");
+}
+
+void PSVECCrossProduct(const Vec* a, const Vec* b, Vec* axb) {
+  puts("PSVECCrossProduct is a stub");
+}
+
+f32 PSVECDistance(const Vec* a, const Vec* b) {
+  puts("PSVECDistance is a stub");
+  return 0.f;
+}
+
+f32 PSVECDotProduct(const Vec* a, const Vec* b) {
+  puts("PSVECDotProduct is a stub");
+  return 0.f;
+}
+
+f32 PSVECMag(const Vec* v) {
+  puts("PSVECMag is a stub");
+  return 0.f;
+}
+
+void PSVECNormalize(const Vec* src, Vec* unit) {
+  puts("PSVECNormalize is a stub");
+}
+
+void PSVECScale(const Vec* src, Vec* dst, f32 scale) {
+  puts("PSVECScale is a stub");
+}
+
+f32 PSVECSquareDistance(const Vec* a, const Vec* b) {
+  puts("PSVECSquareDistance is a stub");
+  return 0.f;
+}
+
+f32 PSVECSquareMag(const Vec* v) {
+  puts("PSVECSquareMag is a stub");
+  return 0.f;
+}
+
+void PSVECSubtract(const Vec* a, const Vec* b, Vec* a_b) {
+  puts("PSVECSubtract is a stub");
 }
