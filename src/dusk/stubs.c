@@ -10,6 +10,7 @@
 #include <dolphin/os/OSCache.h>
 #include <dolphin/dsp.h>
 #include <dolphin/dvd.h>
+#include <dolphin/gd/GDBase.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -728,4 +729,32 @@ int DVDReadDir(DVDDir* dir, DVDDirEntry* dirent) {
 s32 DVDReadPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, s32 prio) {
   puts("DVDReadPrio is a stub");
   return 0;
+}
+
+void GDFlushCurrToMem(void) {
+  puts("GDFlushCurrToMem is a stub");
+}
+
+void GDInitGDLObj(GDLObj* dl, void* start, u32 length) {
+  puts("GDInitGDLObj is a stub");
+}
+
+void GDOverflowed(void) {
+  puts("GDOverflowed is a stub");
+}
+
+void GDPadCurr32(void) {
+  puts("GDPadCurr32 is a stub");
+}
+
+void GDSetArray(GXAttr attr, void* base_ptr, u8 stride) {
+  puts("GDSetArray is a stub");
+}
+
+void GDSetArrayRaw(GXAttr attr, u32 base_ptr_raw, u8 stride) {
+  puts("GDSetArrayRaw is a stub");
+}
+
+void GDSetVtxDescv(const GXVtxDescList* attrPtr) {
+  puts("GDSetVtxDescv is a stub");
 }
