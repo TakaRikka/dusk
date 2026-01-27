@@ -1,5 +1,8 @@
-#include <dolphin.h>
+//#include <dolphin/dolphin.h>
+#include <dolphin/card.h>
+#include <dolphin/mtx.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXManage.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -151,13 +154,13 @@ s32 CARDUnmount(s32 chan) {
   return 0;
 }
 
-s32 CARDWrite(CARDFileInfo *fileInfo, const void *addr, s32 length,
+s32 CARDWrite(CARDFileInfo *fileInfo, void *addr, s32 length,
               s32 offset) {
   puts("CARDWrite is a stub");
   return 0;
 }
 
-s32 CARDWriteAsync(CARDFileInfo *fileInfo, const void *addr, s32 length,
+s32 CARDWriteAsync(CARDFileInfo *fileInfo, void *addr, s32 length,
                    s32 offset, CARDCallback callback) {
   puts("CARDWriteAsync is a stub");
   return 0;
@@ -187,18 +190,20 @@ void DCStoreRangeNoSync(void *addr, u32 nBytes) {
   // puts("DCStoreRangeNoSync is a stub");
 }
 
-s32 DVDCancel(DVDCommandBlock *block) {
+s32 DVDCancel(volatile DVDCommandBlock *block) {
   puts("DVDCancel is a stub");
   return 0;
 }
 
-void DVDReadAbsAsyncForBS(void *a, struct bb2struct *b, int c, int d,
-                          void (*e)()) {
+int DVDReadAbsAsyncForBS(DVDCommandBlock *block, void *addr, s32 length, s32 offset,
+                          DVDCBCallback callback) {
   puts("DVDReadAbsAsyncForBS is a stub");
+  return 0;
 }
 
-void DVDReadDiskID(void *a, DVDDiskID *b, void (*c)()) {
+int DVDReadDiskID(DVDCommandBlock* block, DVDDiskID* diskID, DVDCBCallback callback) {
   puts("DVDReadDiskID is a stub");
+  return 0;
 }
 
 void DVDReset() { puts("DVDReset is a stub"); }
@@ -259,12 +264,12 @@ u16 OSGetFontEncode() {
   return 0;
 }
 
-char *OSGetFontTexture(char *string, void **image, s32 *x, s32 *y, s32 *width) {
+char *OSGetFontTexture(const char* string, void** image, s32* x, s32* y, s32* width) {
   puts("OSGetFontTexture is a stub");
   return 0;
 }
 
-char *OSGetFontWidth(char *string, s32 *width) {
+char *OSGetFontWidth(const char* string, s32* width) {
   puts("OSGetFontWidth is a stub");
   return 0;
 }
@@ -309,7 +314,7 @@ void OSSetCurrentContext(OSContext *context) {
   puts("OSSetCurrentContext is a stub");
 }
 
-void OSSetStringTable(const void *stringTable) {
+void OSSetStringTable(void* stringTable) {
   puts("OSSetStringTable is a stub");
 }
 

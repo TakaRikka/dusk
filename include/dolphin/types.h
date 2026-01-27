@@ -88,7 +88,11 @@ typedef unsigned int uint;
 #define __REGISTER
 #endif
 
+#ifdef __MWERKS__
 #include <cstddef>
+#else
+#include <stddef.h>
+#endif
 
 #endif
 #endif
