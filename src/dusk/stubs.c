@@ -3,6 +3,8 @@
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXManage.h>
+#include <dolphin/ai.h>
+#include <dolphin/ar.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -520,3 +522,52 @@ void GXGetViewportv(f32 *vp) {
 }
 
 void OSSetSoundMode(u32 mode) {}
+
+u32 AIGetDSPSampleRate(void) {
+  puts("AIGetDSPSampleRate is a stub");
+  return 0;
+}
+
+void AIInit(u8* stack) {
+  puts("AIInit is a stub");
+}
+
+void AIInitDMA(u32 start_addr, u32 length) {
+  puts("AIInitDMA is a stub");
+}
+
+AIDCallback AIRegisterDMACallback(AIDCallback callback) {
+  puts("AIRegisterDMACallback is a stub");
+  return NULL;
+}
+
+void AISetDSPSampleRate(u32 rate) {
+  puts("AISetDSPSampleRate is a stub");
+}
+
+void AIStartDMA(void) {
+  puts("AIStartDMA is a stub");
+}
+
+void AIStopDMA(void) {
+  puts("AIStopDMA is a stub");
+}
+
+u32 ARAlloc(u32 length) {
+  puts("ARAlloc is a stub");
+  return 0;
+}
+
+u32 ARGetSize(void) {
+  puts("ARGetSize is a stub");
+  return 0;
+}
+
+u32 ARInit(u32* stack_index_addr, u32 num_entries) {
+  puts("ARInit is a stub");
+  return 0;
+}
+
+void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, u32 source, u32 dest, u32 length, ARQCallback callback) {
+  puts("ARQPostRequest is a stub");
+}
