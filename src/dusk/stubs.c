@@ -9,6 +9,7 @@
 #include <dolphin/mtx.h>
 #include <dolphin/os/OSCache.h>
 #include <dolphin/dsp.h>
+#include <dolphin/dvd.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -652,4 +653,79 @@ u32 DSPReadMailFromDSP(void) {
 
 void DSPSendMailToDSP(u32 mail) {
   puts("DSPSendMailToDSP is a stub");
+}
+
+BOOL DVDChangeDir(const char* dirName) {
+  puts("DVDChangeDir is a stub");
+  return FALSE;
+}
+
+BOOL DVDCheckDisk(void) {
+  puts("DVDCheckDisk is a stub");
+  return FALSE;
+}
+
+BOOL DVDClose(DVDFileInfo* fileInfo) {
+  puts("DVDClose is a stub");
+  return FALSE;
+}
+
+int DVDCloseDir(DVDDir* dir) {
+  puts("DVDCloseDir is a stub");
+  return 0;
+}
+
+s32 DVDConvertPathToEntrynum(const char* pathPtr) {
+  puts("DVDConvertPathToEntrynum is a stub");
+  return 0;
+}
+
+BOOL DVDFastOpen(s32 entrynum, DVDFileInfo* fileInfo) {
+  puts("DVDFastOpen is a stub");
+  return FALSE;
+}
+
+s32 DVDGetCommandBlockStatus(const DVDCommandBlock* block) {
+  puts("DVDGetCommandBlockStatus is a stub");
+  return 0;
+}
+
+DVDDiskID* DVDGetCurrentDiskID(void) {
+  puts("DVDGetCurrentDiskID is a stub");
+  return NULL;
+}
+
+s32 DVDGetDriveStatus(void) {
+  puts("DVDGetDriveStatus is a stub");
+  return 0;
+}
+
+void DVDInit(void) {
+  puts("DVDInit is a stub");
+}
+
+BOOL DVDOpen(const char* fileName, DVDFileInfo* fileInfo) {
+  puts("DVDOpen is a stub");
+  return FALSE;
+}
+
+int DVDOpenDir(const char* dirName, DVDDir* dir) {
+  puts("DVDOpenDir is a stub");
+  return 0;
+}
+
+BOOL DVDReadAsyncPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset,
+                      DVDCallback callback, s32 prio) {
+  puts("DVDReadAsyncPrio is a stub");
+  return FALSE;
+}
+
+int DVDReadDir(DVDDir* dir, DVDDirEntry* dirent) {
+  puts("DVDReadDir is a stub");
+  return 0;
+}
+
+s32 DVDReadPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, s32 prio) {
+  puts("DVDReadPrio is a stub");
+  return 0;
 }
