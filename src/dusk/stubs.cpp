@@ -38,6 +38,8 @@
 #include <dolphin/gf/GFGeometry.h>
 #include <dolphin/gf/GFTev.h>
 #include <dolphin/gf/GFLight.h>
+#include <revolution/hio2.h>
+#include <dolphin/hio.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -1311,4 +1313,44 @@ int __cntlzw(unsigned int a) {
 void* __memcpy(void* a, const void* b, int c) {
   puts("__cntlzw is a stub");
   return NULL;
+}
+
+BOOL HIO2Close(s32 handle) {
+  puts("HIO2Close is a stub");
+  return FALSE;
+}
+
+BOOL HIO2EnumDevices(HIO2EnumCallback callback) {
+  puts("HIO2EnumDevices is a stub");
+  return FALSE;
+}
+
+BOOL HIO2Init(void) {
+  puts("HIO2Init is a stub");
+  return FALSE;
+}
+
+s32 HIO2Open(HIO2DeviceType type, HIO2UnkCallback exiCb, HIO2DisconnectCallback disconnectCb) {
+  puts("HIO2Open is a stub");
+  return 0;
+}
+
+BOOL HIO2Read(s32 handle, u32 addr, void* buffer, s32 size) {
+  puts("HIO2Read is a stub");
+  return FALSE;
+}
+
+BOOL HIO2Write(s32 handle, u32 addr, void* buffer, s32 size) {
+  puts("HIO2Write is a stub");
+  return FALSE;
+}
+
+BOOL HIORead(u32 addr, void* buffer, s32 size) {
+  puts("HIORead is a stub");
+  return FALSE;
+}
+
+BOOL HIOWrite(u32 addr, void* buffer, s32 size) {
+  puts("HIOWrite is a stub");
+  return FALSE;
 }

@@ -32,6 +32,7 @@ JOREventCallbackListNode::~JOREventCallbackListNode() {
     JORRemove();
 }
 
+#if DEBUG
 void JORReflexible::listen(u32 command, const JOREvent* event) {
     switch (command) {
     case JORServer::ECommand_GenObjInfo:
@@ -110,6 +111,7 @@ void JORReflexible::listenPropertyEvent(const JORPropertyEvent* pEvent) {
         return;
     }
 }
+#endif
 
 JORServer* JORServer::instance;
 
@@ -195,9 +197,11 @@ void JORServer::receive(const char* pBuffer, s32 length) {
         JORNodeEvent* pEvent = (JORNodeEvent*)(pBuffer + stream.getPosition());
         stream.skip(4);
 
+#if DEBUG
         if (stream.isGood()) {
             reinterpret_cast<JORReflexible*>(obj_addr)->listen(command, pEvent);
         }
+#endif
     }
     break;
     case ECommand_PropertyEvent: {
@@ -210,18 +214,21 @@ void JORServer::receive(const char* pBuffer, s32 length) {
             stream.skip(pEvent->field_0x14);
         }
 
+#if DEBUG
         if (stream.isGood()) {
             reinterpret_cast<JORReflexible*>(obj_addr)->listen(command, pEvent);
         }
+#endif
     }
     break;
     case ECommand_GenObjInfo: {
         u32 obj_addr;
         stream.read(obj_addr);
-
+#if DEBUG
         if (stream.isGood()) {
             reinterpret_cast<JORReflexible*>(obj_addr)->listen(command, NULL);
         }
+#endif
     }
     break;
     case ECommand_FIO:

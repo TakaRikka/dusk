@@ -576,6 +576,11 @@ set(JSYSTEM_FILES
     src/JSystem/JMath/JMath.cpp
     src/JSystem/JMath/random.cpp
     src/JSystem/JMath/JMATrigonometric.cpp
+    src/JSystem/JHostIO/JORHostInfo.cpp
+    src/JSystem/JHostIO/JORServer.cpp
+    src/JSystem/JHostIO/JHIhioASync.cpp
+    src/JSystem/JHostIO/JHIRMcc.cpp
+    src/JSystem/JHostIO/JHIMccBuf.cpp
     )
 
 set(REL_FILES
