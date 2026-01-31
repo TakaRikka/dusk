@@ -3,7 +3,7 @@
 #include "d/d_menu_save.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
-#include <stdio>
+#include <cstdio>
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
 #include "d/d_select_cursor.h"

@@ -60,18 +60,37 @@ daNpc_FairySeirei_c::cutFunc daNpc_FairySeirei_c::mCutList[1] = {
     NULL,
 };
 
+
+const daNpc_FairySeirei_HIOParam daNpc_FairySeirei_Param_c::m = {
+    600.0f, 0.0f, 1.0f, 4000.0f, 255.0f, 200.0f, 0.0f, 60.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f,   0.0f, 0.0f, 0.0f,    0,      0,      0,    0,     0.0f, 0.0f, 0.0f, 0.0f, 0,    0,
+    0,      0,    0,    0,       0,      0.0f,   0.0f, 0.0f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    600.0f,
+};
+
+static NPC_FAIRY_SEIREI_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_FairySeirei_HIO_c::daNpc_FairySeirei_HIO_c() {
+    m = daNpc_FairySeirei_Param_c::m;
+}
+
+void daNpc_FairySeirei_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daNpc_FairySeirei_c::~daNpc_FairySeirei_c() {
     if (heap != NULL) {
         mpMorf[0]->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
 }
-
-
-const f32 daNpc_FairySeirei_Param_c::m[37] = {
-    600.0f, 0.0f, 1.0f, 4000.0f, 255.0f, 200.0f, 0.0f, 60.0f, 0.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-    0.0f,   0.0f, 0.0f, 0.0f,    0.0f,   0.0f,   0.0f, 0.0f,  0.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-    0.0f,   0.0f, 0.0f, 0.0f,    0.0f,   0.0f,   0.0f, 0.0f,  0.0f, 0.0f, 600.0f,
-};
 
 int daNpc_FairySeirei_c::create() {
     daNpcT_ct(this, daNpc_FairySeirei_c, &l_faceMotionAnmData, l_motionAnmData,
@@ -83,9 +102,15 @@ int daNpc_FairySeirei_c::create() {
     if (isDelete()) {
         return cPhs_ERROR_e;
     }
+
+#if DEBUG
+    mpHIO = &l_HIO;
+    mpHIO->entryHIO("大妖精の残留思念");
+#endif
+
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
               fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-    mCcStts.Init(daNpc_FairySeirei_Param_c::m[4], 0, this);
+    mCcStts.Init(mpHIO->m.common.weight, 0, this);
     mCyl.Set(mCcDCyl);
     mCyl.SetStts(&mCcStts);
     mAcch.CrrPos(dComIfG_Bgsp());
@@ -140,24 +165,24 @@ void daNpc_FairySeirei_c::reset() {
 void daNpc_FairySeirei_c::setParam() {
     selectAction();
     srchActors();
-    dComIfGp_getAttention()->getDistTable(0x28).mDistMax = daNpc_FairySeirei_Param_c::m[36];
-    dComIfGp_getAttention()->getDistTable(0x28).mDistMaxRelease = daNpc_FairySeirei_Param_c::m[36];
-    dComIfGp_getAttention()->getDistTable(0x27).mDistMax = daNpc_FairySeirei_Param_c::m[36];
-    dComIfGp_getAttention()->getDistTable(0x27).mDistMaxRelease = daNpc_FairySeirei_Param_c::m[36];
+    dComIfGp_getAttention()->getDistTable(0x28).mDistMax = mpHIO->m.field_0x90;
+    dComIfGp_getAttention()->getDistTable(0x28).mDistMaxRelease = mpHIO->m.field_0x90;
+    dComIfGp_getAttention()->getDistTable(0x27).mDistMax = mpHIO->m.field_0x90;
+    dComIfGp_getAttention()->getDistTable(0x27).mDistMaxRelease = mpHIO->m.field_0x90;
     attention_info.distances[fopAc_attn_LOCK_e] = 0x27;
     attention_info.distances[fopAc_attn_TALK_e] = 0x27;
     attention_info.distances[fopAc_attn_SPEAK_e] = 0x27;
     attention_info.flags = fopAc_AttnFlag_SPEAK_e;
-    mCcStts.SetWeight(daNpc_FairySeirei_Param_c::m[4]);
-    mCylH = daNpc_FairySeirei_Param_c::m[5];
-    mWallR = daNpc_FairySeirei_Param_c::m[7];
-    mAttnFovY = daNpc_FairySeirei_Param_c::m[20];
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_FairySeirei_Param_c::m[6]);
-    mRealShadowSize = daNpc_FairySeirei_Param_c::m[3];
-    mExpressionMorfFrame = daNpc_FairySeirei_Param_c::m[27];
-    mMorfFrames = daNpc_FairySeirei_Param_c::m[17];
-    gravity = daNpc_FairySeirei_Param_c::m[1];
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 void daNpc_FairySeirei_c::srchActors() {
@@ -245,7 +270,7 @@ void daNpc_FairySeirei_c::setCollision() {
 
 void daNpc_FairySeirei_c::setAttnPos() {
     attention_info.position = current.pos;
-    attention_info.position.y += daNpc_FairySeirei_Param_c::m[0] - 350.0f;
+    attention_info.position.y += mpHIO->m.common.attention_offset - 350.0f;
     eyePos = attention_info.position;
     setPrtcls();
     ptcl_se();
@@ -385,9 +410,6 @@ static int daNpc_FairySeirei_Draw(void* i_this) {
 static int daNpc_FairySeirei_IsDelete(void* i_this) {
     return 1;
 }
-
-
-static daNpc_FairySeirei_Param_c l_HIO;
 
 static actor_method_class daNpc_FairySeirei_MethodTable = {
     daNpc_FairySeirei_Create,   daNpc_FairySeirei_Delete, daNpc_FairySeirei_Execute,

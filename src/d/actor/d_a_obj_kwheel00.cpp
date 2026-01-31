@@ -27,13 +27,13 @@ daObjKWheel00_HIO_c::daObjKWheel00_HIO_c() {
 
 void daObjKWheel00_HIO_c::genMessage(JORMContext* ctx) {
     // "Water wheel"
-    ctx->genLabel("水車", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genLabel("水車", 0);
 
     // "Rotational speed(short)"
-    ctx->genSlider("回転速度(short)",&mTargetZAngularSpeed, 0, 0x4000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("回転速度(short)",&mTargetZAngularSpeed, 0, 0x4000);
 
     // "Rotational acceleration(short)"
-    ctx->genSlider("回転加速度(short)",&mZAngularAcceleration, 0, 32, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("回転加速度(short)",&mZAngularAcceleration, 0, 32);
 }
 #endif
 
@@ -45,11 +45,11 @@ int daObjKWheel00_c::create1st() {
     m_type = static_cast<Type_e>(getType());
     JUT_ASSERT(118, m_type == 0 || m_type == 1);
 
-    cPhs__Step phase = static_cast<cPhs__Step>(dComIfG_resLoad(this, l_arcName[m_type]));
+    cPhs_Step phase = static_cast<cPhs_Step>(dComIfG_resLoad(this, l_arcName[m_type]));
     if(phase == cPhs_COMPLEATE_e) {
         setMtx();
 
-        phase = static_cast<cPhs__Step>(MoveBGCreate(l_arcName[m_type], l_dzbidx[m_type], NULL, 0x4000, &mNewBgMtx));
+        phase = static_cast<cPhs_Step>(MoveBGCreate(l_arcName[m_type], l_dzbidx[m_type], NULL, 0x4000, &mNewBgMtx));
 
         if(phase == cPhs_ERROR_e)
             return phase;

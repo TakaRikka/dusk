@@ -38,8 +38,9 @@ void JMAQuatLerp(__REGISTER const Quaternion* p, __REGISTER const Quaternion* q,
         ps_sum0     dp, dp, dp, dp
     }
 #endif // clang-format on
-
-    if (dp < 0.0) {
+    f32 local_78 = dp;
+    if (local_78 < 0.0) {
+        int unused;
         dst->x = -t * (p->x + q->x) + p->x;
         dst->y = -t * (p->y + q->y) + p->y;
         dst->z = -t * (p->z + q->z) + p->z;
@@ -73,7 +74,7 @@ void JMAFastVECNormalize(__REGISTER const Vec* src, __REGISTER Vec* dst) {
 void JMAVECScaleAdd(__REGISTER const Vec* vec1, __REGISTER const Vec* vec2, __REGISTER Vec* dst,
                     __REGISTER f32 scale) {
     __REGISTER f32 v1xy;
-    __REGISTER f32 v2xy = scale;
+    __REGISTER f32 v2xy;
     __REGISTER f32 rxy, v1z, v2z, rz;
 #ifdef __MWERKS__  // clang-format off
 	asm {

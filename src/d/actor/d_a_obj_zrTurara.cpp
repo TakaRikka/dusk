@@ -75,11 +75,11 @@ int daZrTurara_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daZrTurara_c::create() {
+cPhs_Step daZrTurara_c::create() {
     fopAcM_ct(this, daZrTurara_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, "M_DrpRock");
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, "M_DrpRock");
     if (step == cPhs_COMPLEATE_e) {
-        cPhs__Step bg_step = (cPhs__Step)MoveBGCreate("M_DrpRock", 9, dBgS_MoveBGProc_TypicalRotY,
+        cPhs_Step bg_step = MoveBGCreate("M_DrpRock", 9, dBgS_MoveBGProc_TypicalRotY,
                                                       0x2800, NULL);
         if (bg_step == cPhs_ERROR_e) {
             return cPhs_ERROR_e;
@@ -248,7 +248,7 @@ static int daZrTurara_Delete(daZrTurara_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-static cPhs__Step daZrTurara_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daZrTurara_Create(fopAc_ac_c* i_this) {
     return static_cast<daZrTurara_c*>(i_this)->create();
 }
 

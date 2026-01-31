@@ -20,7 +20,7 @@ public:
     BOOL Check_RideOn();
     void initBaseMtx();
     void setBaseMtx();
-    inline cPhs__Step create();
+    inline cPhs_Step create();
     inline int CreateHeap();
     inline int Create();
     inline int Execute(Mtx**);

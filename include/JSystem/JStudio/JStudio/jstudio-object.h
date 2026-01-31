@@ -4,7 +4,7 @@
 #include "JSystem/JStudio/JStudio/jstudio-control.h"
 #include "global.h"
 #include <limits>
-#include <math>
+#include <cmath>
 
 typedef struct _GXColor GXColor;
 
@@ -120,6 +120,12 @@ public:
     virtual void do_data(void const*, u32, void const*, u32);
 
     TAdaptor* getAdaptor() const { return mpAdaptor; }
+
+    void setAdaptor(TAdaptor* pAdaptor) {
+        mpAdaptor = pAdaptor;
+        prepareAdaptor();
+    }
+
     TControl* getControl() { return (TControl*)stb::TObject::getControl(); }
     const TControl* getControl() const { return (const TControl*)stb::TObject::getControl(); }
 

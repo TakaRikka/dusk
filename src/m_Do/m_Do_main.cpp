@@ -276,39 +276,34 @@ void debugDisplay() {
 }
 
 void my_genCheckBox(JORMContext* mctx, const char* label, u8* pSrc, u8 mask) {
-    mctx->genCheckBox(label, pSrc, mask, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genCheckBox(label, pSrc, mask);
 }
 
 #if DEBUG
 void mDoMain_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genSlider("コード破壊チェックフレーム", &memorycheck_check_frame, 0, 0xFF, 0, NULL, 0xFFFF,
-                    0xFFFF, 0x200, 0x18);
-    mctx->genButton("コード破壊チェックcheck", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("コード破壊チェックsave", 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("コード破壊チェックdiff", 2, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("デバッグフィル", &mDoMch::mDebugFill, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("ヒープ破壊チェックフレーム", &fillcheck_check_frame, 0, 0xFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ヒープ破壊チェック", 3, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ヒープFree領域フィル", 4, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("浮動小数点例外を(再び)有効にする", 5, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("◎無効演算", &mDoMch::FpscrEnableBits, 0x80, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("○オーバー", &mDoMch::FpscrEnableBits, 0x40, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("△アンダー", &mDoMch::FpscrEnableBits, 0x20, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("○ゼロ除算", &mDoMch::FpscrEnableBits, 0x10, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("▲不正確  ", &mDoMch::FpscrEnableBits, 0x8, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("コード破壊チェックフレーム", &memorycheck_check_frame, 0, 0xFF);
+    mctx->genButton("コード破壊チェックcheck", 0);
+    mctx->genButton("コード破壊チェックsave", 1);
+    mctx->genButton("コード破壊チェックdiff", 2);
+    mctx->genCheckBox("デバッグフィル", &mDoMch::mDebugFill, 0x1);
+    mctx->genSlider("ヒープ破壊チェックフレーム", &fillcheck_check_frame, 0, 0xFF);
+    mctx->genButton("ヒープ破壊チェック", 3);
+    mctx->genButton("ヒープFree領域フィル", 4);
+    mctx->genButton("浮動小数点例外を(再び)有効にする", 5);
+    mctx->genCheckBox("◎無効演算", &mDoMch::FpscrEnableBits, 0x80);
+    mctx->genCheckBox("○オーバー", &mDoMch::FpscrEnableBits, 0x40);
+    mctx->genCheckBox("△アンダー", &mDoMch::FpscrEnableBits, 0x20);
+    mctx->genCheckBox("○ゼロ除算", &mDoMch::FpscrEnableBits, 0x10);
+    mctx->genCheckBox("▲不正確  ", &mDoMch::FpscrEnableBits, 0x8);
 
-    mctx->genLabel("ソースファイル：m_Do_main.cpp", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("OSReport 表示しない", &mReportDisable, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                      0x18);
-    mctx->genCheckBox("OSReport 優先度最高", &print_highPriority, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                      0x18);
-    mctx->genCheckBox("OSReport スレッド表示", &print_threadID, 1, 0, NULL, 0xFFFF, 0xFFFF,
-                      0x200, 0x18);
-    mctx->genCheckBox("OSReport CallerPC表示", &print_callerPC, 1, 0, NULL, 0xFFFF, 0xFFFF,
-                      0x200, 0x18);
-    mctx->genSlider("レベル", &print_callerPCLevel, 3, 10, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("ソースファイル：m_Do_main.cpp", 0);
+    mctx->genCheckBox("OSReport 表示しない", &mReportDisable, 0x1);
+    mctx->genCheckBox("OSReport 優先度最高", &print_highPriority, 0x1);
+    mctx->genCheckBox("OSReport スレッド表示", &print_threadID, 0x1);
+    mctx->genCheckBox("OSReport CallerPC表示", &print_callerPC, 0x1);
+    mctx->genSlider("レベル", &print_callerPCLevel, 3, 10);
 
-    mctx->startComboBox("簡易ヒープ表示", &mHeapBriefType, 0, NULL, 0xFFFF, 0xFFFF, 0x100, 0x1a);
+    mctx->startComboBox("簡易ヒープ表示", &mHeapBriefType);
     mctx->genComboBoxItem("なし", 0);
     mctx->genComboBoxItem("合計空き・最大空き", 1);
     mctx->genComboBoxItem("最大使用量・ヒープサイズ元使用量", 2);
@@ -317,54 +312,47 @@ void mDoMain_HIO_c::genMessage(JORMContext* mctx) {
     mctx->endComboBox();
 
     my_genCheckBox(mctx, "ヒープサイズ表示を行う", &mDisplayHeapSize, 1);
-    mctx->genCheckBox("ヒープバーを表示する", &mVisibleHeapBar, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genCheckBox("ヒープバーを表示する", &mVisibleHeapBar, 0x1);
 
-    mctx->startComboBox("ヒープバーの種類", &mSelectHeapBar, 0, NULL, 0xFFFF, 0xFFFF, 0x100, 0x1a);
+    mctx->startComboBox("ヒープバーの種類", &mSelectHeapBar);
     mctx->genComboBoxItem("カレント", 0);
     for (int i = 0; i < 8; i++) {
         mctx->genComboBoxItem(HeapCheckTable[i]->getJName(), i + 1);
     }
     mctx->endComboBox();
 
-    mctx->genCheckBox("ヒープチェック", &mCheckHeap, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("フレームバー表示", &mPrintFrameLine, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genCheckBox("ヒープチェック", &mCheckHeap, 0x1);
+    mctx->genCheckBox("フレームバー表示", &mPrintFrameLine, 0x1);
 
-    mctx->startComboBox("GX警告レベル", &mDoMch::GXWarningLevel, 0, NULL, 0xFFFF, 0xFFFF, 0x100, 0x1a);
+    mctx->startComboBox("GX警告レベル", &mDoMch::GXWarningLevel);
     mctx->genComboBoxItem("エラー＆警告なし", 0);
     mctx->genComboBoxItem("致命的なエラー", 1);
     mctx->genComboBoxItem("中警告と全エラー", 2);
     mctx->genComboBoxItem("すべての警告", 3);
     mctx->endComboBox();
 
-    mctx->genButton("GX警告を１フレームだけ実行", 9, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ダイナミックリンク状況をダンプ", 7, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ダイナミックリンクカウンタをリセット", 8, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ARAMヒープをダンプ", 10, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ゲームリソースをダンプ", 11, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RES_CONTROLをダンプ", 12, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ルートヒープをダンプ", 13, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("システムヒープをダンプ", 14, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ゼルダヒープをダンプ", 15, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ゲームヒープをダンプ", 16, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("アーカイブヒープをダンプ", 17, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("J2Dヒープをダンプ", 18, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("ホストIOヒープをダンプ", 19, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("コマンドヒープをダンプ", 20, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genButton("GX警告を１フレームだけ実行", 9);
+    mctx->genButton("ダイナミックリンク状況をダンプ", 7);
+    mctx->genButton("ダイナミックリンクカウンタをリセット", 8);
+    mctx->genButton("ARAMヒープをダンプ", 10);
+    mctx->genButton("ゲームリソースをダンプ", 11);
+    mctx->genButton("RES_CONTROLをダンプ", 12);
+    mctx->genButton("ルートヒープをダンプ", 13);
+    mctx->genButton("システムヒープをダンプ", 14);
+    mctx->genButton("ゼルダヒープをダンプ", 15);
+    mctx->genButton("ゲームヒープをダンプ", 16);
+    mctx->genButton("アーカイブヒープをダンプ", 17);
+    mctx->genButton("J2Dヒープをダンプ", 18);
+    mctx->genButton("ホストIOヒープをダンプ", 19);
+    mctx->genButton("コマンドヒープをダンプ", 20);
 
-    mctx->genCheckBox("ダイナミックリンク冗長表示", &DynamicModuleControlBase::verbose, 1, 0, NULL, 0xFFFF, 0xFFFF,
-                      0x200, 0x18);
-    mctx->genCheckBox("ヒープコールバック冗長表示", &mDoMch::myHeapVerbose, 1, 0, NULL, 0xFFFF, 0xFFFF,
-                      0x200, 0x18);
-    mctx->genCheckBox("ヒープコールバックチェック", &mDoMch::myHeapCallbackCheck, 1, 0, NULL, 0xFFFF, 0xFFFF,
-                      0x200, 0x18);
-    mctx->genCheckBox("mDoDvdThd::verbose冗長表示", &mDoDvdThd::verbose, 1, 0, NULL, 0xFFFF, 0xFFFF,
-                      0x200, 0x18);
-    mctx->genCheckBox("mDoDvdThd::DVDRead冗長表示", &mDoDvdThd::Report_DVDRead, 1, 0, NULL, 0xFFFF, 0xFFFF,
-                      0x200, 0x18);
-    mctx->genCheckBox("mDoDvdThd::DVDログモード", &mDoDvdThd::DVDLogoMode, 1, 0, NULL, 0xFFFF, 0xFFFF,
-                      0x200, 0x18);
-    mctx->genCheckBox("fopMsg::MemCheck ヒープチェック", &fopMsg::MemCheck, 1, 0, NULL, 0xFFFF,
-                      0xFFFF, 0x200, 0x18);
+    mctx->genCheckBox("ダイナミックリンク冗長表示", &DynamicModuleControlBase::verbose, 0x1);
+    mctx->genCheckBox("ヒープコールバック冗長表示", &mDoMch::myHeapVerbose, 0x1);
+    mctx->genCheckBox("ヒープコールバックチェック", &mDoMch::myHeapCallbackCheck, 0x1);
+    mctx->genCheckBox("mDoDvdThd::verbose冗長表示", &mDoDvdThd::verbose, 0x1);
+    mctx->genCheckBox("mDoDvdThd::DVDRead冗長表示", &mDoDvdThd::Report_DVDRead, 0x1);
+    mctx->genCheckBox("mDoDvdThd::DVDログモード", &mDoDvdThd::DVDLogoMode, 0x1);
+    mctx->genCheckBox("fopMsg::MemCheck ヒープチェック", &fopMsg::MemCheck, 0x1);
 }
 
 void mDoMain_HIO_c::listenPropertyEvent(const JORPropertyEvent* property) {
@@ -805,7 +793,7 @@ void parse_args(int argc, const char* argv[]) {
             dStage_roomControl_c::onNoArcBank();
             OS_REPORT("\x1b[33mアーカイブバンクを無効にしました\n\x1b[m");
         } else if (strcmp(argv[i], "--particle254") == 0) {
-            // data_8074c494 = 1;
+            fapGm_HIO_c::mParticle254Fix = 1;
             OSReport_Warning("パーティクル２５４固定にしました\n");
         } else if (strncmp(argv[i], "--menu=", sizeof("--menu=") - 1) == 0) {
             char* var_r27 = strchr(argv[i] + 7, ',');
@@ -822,15 +810,15 @@ void parse_args(int argc, const char* argv[]) {
                     if (spC != NULL) {
                         *spC = 0;
                         spC++;
-                        sscanf(spC, "%d", dScnMenu_c::cursolPoint);
+                        sscanf(spC, "%d", &dScnMenu_c::cursolPoint);
                         dScnMenu_c::m_error_flags |= (u8)8;
                     }
 
-                    sscanf(var_r26, "%d", dScnMenu_c::cursolLayer);
+                    sscanf(var_r26, "%d", &dScnMenu_c::cursolLayer);
                     dScnMenu_c::m_error_flags |= (u8)4;
                 }
 
-                sscanf(var_r27, "%d", dScnMenu_c::cursolRoomNo);
+                sscanf(var_r27, "%d", &dScnMenu_c::cursolRoomNo);
                 dScnMenu_c::m_error_flags |= (u8)2;
             }
 

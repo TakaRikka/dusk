@@ -6,23 +6,23 @@
 class daTagLv7Gate_c : public fopAc_ac_c {
 public:
     int create();
-    void create_init();
-    int execute();
+    inline void create_init();
+    inline int execute();
     void calcFly();
 
     inline ~daTagLv7Gate_c();
 
     inline int createHeap();
-    inline void setPath(u8 i_path_ID);
+    inline int setPath(int i_path_ID);
     inline void initBaseMtx();
     inline void setBaseMtx();
     inline void flyAnime();
-    inline bool checkPoint(f32 i_speed);
+    inline bool checkPoint(cXyz& i_point, f32 i_speed);
     inline bool setNextPoint();
     inline int draw();
 
-    u8 getPathID() { return fopAcM_GetParam(this) >> 0x10; }
-    u16 getFlowNodeNo() { return fopAcM_GetParam(this); }
+    u8 getPathID() { return (fopAcM_GetParam(this) >> 16) & 0xFF; }
+    s16 getFlowNodeNo() { return (u16)fopAcM_GetParam(this); }
 
     /* 0x568 */ J3DModel* mpModel;
     /* 0x56C */ mDoExt_bckAnm* mpBck;

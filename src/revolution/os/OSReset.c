@@ -175,7 +175,7 @@ static void KillThreads(void) {
     }
 }
 
-void OSShutdownSystem(BOOL reset, u32 resetCode, BOOL forceMenu) {
+void OSShutdownSystem() {
     SCIdleModeInfo idleModeInfo;
     OSIOSRev iosRev;
     OSStateFlags state;

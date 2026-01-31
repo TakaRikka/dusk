@@ -91,38 +91,47 @@ enum fopAc_attention_type {
     /* 0x2 */ fopAc_attn_BATTLE_e,
 
 #if !PLATFORM_GCN
-    fopAc_attn_UNK_3,
-    fopAc_attn_UNK_4,
-    fopAc_attn_UNK_5,
+    /* 0x3 */ fopAc_attn_UNK_3,
+    /* 0x4 */ fopAc_attn_UNK_4,
+    /* 0x5 */ fopAc_attn_UNK_5,
 #endif
 
-    /* 0x3 */ fopAc_attn_SPEAK_e,
-    /* 0x4 */ fopAc_attn_CARRY_e,
-    /* 0x5 */ fopAc_attn_DOOR_e,
-    /* 0x6 */ fopAc_attn_JUEL_e,
+    /* 0x3 (0x6) */ fopAc_attn_SPEAK_e,
+    /* 0x4 (0x7) */ fopAc_attn_CARRY_e,
+    /* 0x5 (0x8) */ fopAc_attn_DOOR_e,
+    /* 0x6 (0x9) */ fopAc_attn_JUEL_e,
 
 #if !PLATFORM_GCN
-    fopAc_attn_UNK_10,
+    /* 0xA */ fopAc_attn_UNK_10,
 #endif
 
-    /* 0x7 */ fopAc_attn_ETC_e,
-    /* 0x8 */ fopAc_attn_CHECK_e,
+    /* 0x7 (0xB) */ fopAc_attn_ETC_e,
+    /* 0x8 (0xC) */ fopAc_attn_CHECK_e,
 
     fopAc_attn_MAX_e,
 };
 
 enum fopAc_AttentionFlag_e {
-    /* 0x00000001 */ fopAc_AttnFlag_LOCK_e   = (1 << fopAc_attn_LOCK_e),
-    /* 0x00000002 */ fopAc_AttnFlag_TALK_e   = (1 << fopAc_attn_TALK_e),
-    /* 0x00000004 */ fopAc_AttnFlag_BATTLE_e = (1 << fopAc_attn_BATTLE_e),
+    /* 0x00000001 */ fopAc_AttnFlag_LOCK_e      = (1 << fopAc_attn_LOCK_e),
+    /* 0x00000002 */ fopAc_AttnFlag_TALK_e      = (1 << fopAc_attn_TALK_e),
+    /* 0x00000004 */ fopAc_AttnFlag_BATTLE_e    = (1 << fopAc_attn_BATTLE_e),
 
-    /* 0x00000008 */ fopAc_AttnFlag_SPEAK_e  = (1 << fopAc_attn_SPEAK_e),
-    /* 0x00000010 */ fopAc_AttnFlag_CARRY_e  = (1 << fopAc_attn_CARRY_e),
-    /* 0x00000020 */ fopAc_AttnFlag_DOOR_e   = (1 << fopAc_attn_DOOR_e),
-    /* 0x00000040 */ fopAc_AttnFlag_JUEL_e   = (1 << fopAc_attn_JUEL_e),
-    /* 0x00000080 */ fopAc_AttnFlag_ETC_e    = (1 << fopAc_attn_ETC_e),
+#if !PLATFORM_GCN
+    /* 0x00000008 */ fopAc_AttnFlag_UNK_3_e     = (1 << fopAc_attn_UNK_3),
+    /* 0x00000010 */ fopAc_AttnFlag_UNK_4_e     = (1 << fopAc_attn_UNK_4),
+    /* 0x00000020 */ fopAc_AttnFlag_UNK_5_e     = (1 << fopAc_attn_UNK_5),
+#endif
 
-    /* 0x00000100 */ fopAc_AttnFlag_CHECK_e  = (1 << fopAc_attn_CHECK_e),
+    /* 0x00000008 (0x00000040) */ fopAc_AttnFlag_SPEAK_e    = (1 << fopAc_attn_SPEAK_e),
+    /* 0x00000010 (0x00000080) */ fopAc_AttnFlag_CARRY_e    = (1 << fopAc_attn_CARRY_e),
+    /* 0x00000020 (0x00000100) */ fopAc_AttnFlag_DOOR_e     = (1 << fopAc_attn_DOOR_e),
+    /* 0x00000040 (0x00000200) */ fopAc_AttnFlag_JUEL_e     = (1 << fopAc_attn_JUEL_e),
+#if !PLATFORM_GCN
+    /* 0x00000400 */ fopAc_AttnFlag_UNK_10_e                = (1 << fopAc_attn_UNK_10),
+#endif
+    /* 0x00000080 (0x00000800) */ fopAc_AttnFlag_ETC_e      = (1 << fopAc_attn_ETC_e),
+
+    /* 0x00000100 (0x00001000) */ fopAc_AttnFlag_CHECK_e    = (1 << fopAc_attn_CHECK_e),
 
     /* 0x00200000 */ fopAc_AttnFlag_UNK_0x200000   = 0x200000,
     /* 0x00400000 */ fopAc_AttnFlag_UNK_0x400000   = 0x400000,
@@ -155,6 +164,7 @@ enum dEvt_Condition_e {
     dEvtCnd_CANDEMO_e = 0x0002,
     dEvtCnd_CANDOOR_e = 0x0004,
     dEvtCnd_CANGETITEM_e = 0x0008,
+    dEvtCnd_10_e = 0x0010,
     dEvtCnd_CANTALKITEM_e = 0x0020,
     dEvtCnd_40_e = 0x0040,
     dEvtCnd_DUMMY = 0x8000,
@@ -328,10 +338,10 @@ public:
     cXyz& getDownPos() { return mDownPos; }
     cXyz& getHeadLockPos() { return mHeadLockPos; }
 
-    void onCutDownHitFlg() { mFlags |= fopEn_flag_CutDownHit; }
-    void onWolfBiteDamage() { mFlags |= fopEn_flag_WolfBiteDamage; }
-    void onWolfDownStartFlg() { mFlags |= (fopEn_flag_WolfDownPull | fopEn_flag_WolfDownStart); }
-    void onWolfDownPullEndFlg() { mFlags |= fopEn_flag_WolfDownPullEnd; }
+    void onCutDownHitFlg() { mFlags |= (u16)fopEn_flag_CutDownHit; }
+    void onWolfBiteDamage() { mFlags |= (u16)fopEn_flag_WolfBiteDamage; }
+    void onWolfDownStartFlg() { mFlags |= (u16)(fopEn_flag_WolfDownPull | fopEn_flag_WolfDownStart); }
+    void onWolfDownPullEndFlg() { mFlags |= (u16)fopEn_flag_WolfDownPullEnd; }
     void onWolfNoLock() { mFlags |= (u16)fopEn_flag_WolfNoLock; }
     void onDownFlg() { mFlags |= (u16)fopEn_flag_Down; }
     void onHeadLockFlg() { mFlags |= (u16)fopEn_flag_HeadLock; }
@@ -356,10 +366,10 @@ public:
 
     void setMidnaBindMode(u8 i_bindMode) { mMidnaBindMode = i_bindMode; }
     void setMidnaBindID(u8 i_idx, u32 i_bindID) { mMidnaBindID[i_idx] = i_bindID; }
-    void setThrowModeCatch() { mThrowMode |= fopEn_throwMode_Catch; }
-    void setThrowModeDash() { mThrowMode |= fopEn_throwMode_Dash; }
-    void setThrowModeThrowRight() { mThrowMode |= fopEn_throwMode_ThrowRight; }
-    void setThrowModeThrowLeft() { mThrowMode |= fopEn_throwMode_ThrowLeft; }
+    void setThrowModeCatch() { mThrowMode |= (u8)fopEn_throwMode_Catch; }
+    void setThrowModeDash() { mThrowMode |= (u8)fopEn_throwMode_Dash; }
+    void setThrowModeThrowRight() { mThrowMode |= (u8)fopEn_throwMode_ThrowRight; }
+    void setThrowModeThrowLeft() { mThrowMode |= (u8)fopEn_throwMode_ThrowLeft; }
     void setDownPos(const cXyz* i_pos) { mDownPos = *i_pos; }
     void setHeadLockPos(const cXyz* i_pos) { mHeadLockPos = *i_pos; }
 

@@ -85,7 +85,7 @@ daNpcImpal_HIO_c::daNpcImpal_HIO_c() {
 
 void daNpcImpal_HIO_c::genMessage(JORMContext* ctext) {
     // Ancient Document Demo Start Distance:
-    ctext->genSlider("古文書デモ開始距離", &m.demo_start_dist, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("古文書デモ開始距離", &m.demo_start_dist, 0.0f, 5000.0f);
     daNpcF_commonGenMessage(ctext, &m.common);
 }
 #endif
@@ -1130,10 +1130,10 @@ static int daNpcImpal_IsDelete(void* i_this) {
 }
 
 void daNpcImpal_c::setParam() {
-    attention_info.distances[0] =
+    attention_info.distances[fopAc_attn_LOCK_e] =
         getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] =
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] =
         getDistTableIdx(mpHIO->m.common.talk_distance, mpHIO->m.common.talk_angle);
 
     if (field_0xde9) {

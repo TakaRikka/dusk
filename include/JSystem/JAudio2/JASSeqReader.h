@@ -1,7 +1,7 @@
 #ifndef JASSEQREADER_H
 #define JASSEQREADER_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 /**
  * @ingroup jsystem-jaudio

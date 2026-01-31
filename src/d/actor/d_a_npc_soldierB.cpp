@@ -164,7 +164,7 @@ daNpc_SoldierB_HIOParam const daNpc_SoldierB_Param_c::m = {
     false,    // debug_info_ON
 };
 
-cPhs__Step daNpc_SoldierB_c::create() {
+cPhs_Step daNpc_SoldierB_c::create() {
     mTwilight = dKy_darkworld_check();
 
     fopAcM_ct(this, daNpc_SoldierB_c);
@@ -184,8 +184,8 @@ cPhs__Step daNpc_SoldierB_c::create() {
     int res_count = 0;
     int i = 0;
     for (; l_loadRes_list[mType][i] >= 0; i++) {
-        cPhs__Step phase =
-            (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
+        cPhs_Step phase =
+            dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
         if (phase == cPhs_ERROR_e || phase == cPhs_UNK3_e) {
             return cPhs_ERROR_e;
         }
@@ -273,7 +273,7 @@ int daNpc_SoldierB_c::CreateHeap() {
 }
 
 int daNpc_SoldierB_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_SOLDIERb");
     this->~daNpc_SoldierB_c();
     return 1;
 }

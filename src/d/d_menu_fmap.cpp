@@ -5,7 +5,7 @@
 #include "JSystem/JKernel/JKRAramArchive.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
-#include <stdio>
+#include <cstdio>
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
@@ -102,14 +102,14 @@ dMf_HIO_c::dMf_HIO_c() {
 
 #if DEBUG
 void dMf_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("\n■枠BTKアニメフレーム", 0, 0, NULL, -1, -1, 512, 24);
-    mctx->genSlider("フレーム数", &mBackAnimeStep, 0.0, 10.0, 0, NULL, -1, -1, 512, 24);
-    mctx->genLabel("\n■枠の明度", 0, 0, NULL, -1, -1, 512, 24);
-    mctx->genSlider("アルファ", &mBaseBackAlpha, 0, 255, 0, NULL, -1, -1, 512, 24);
-    mctx->genLabel("\n■もやもやBTKアニメフレーム", 0, 0, NULL, -1, -1, 512, 24);
-    mctx->genSlider("フレーム数", &mTopAnimeStep, 0.0, 10.0, 0, NULL, -1, -1, 512, 24);
-    mctx->genLabel("\n■もやもやの明度", 0, 0, NULL, -1, -1, 512, 24);
-    mctx->genSlider("アルファ", &mMoyaAlpha, 0, 255, 0, NULL, -1, -1, 512, 24);
+    mctx->genLabel("\n■枠BTKアニメフレーム", 0);
+    mctx->genSlider("フレーム数", &mBackAnimeStep, 0.0, 10.0);
+    mctx->genLabel("\n■枠の明度", 0);
+    mctx->genSlider("アルファ", &mBaseBackAlpha, 0, 255);
+    mctx->genLabel("\n■もやもやBTKアニメフレーム", 0);
+    mctx->genSlider("フレーム数", &mTopAnimeStep, 0.0, 10.0);
+    mctx->genLabel("\n■もやもやの明度", 0);
+    mctx->genSlider("アルファ", &mMoyaAlpha, 0, 255);
 }
 #endif
 
@@ -1020,7 +1020,7 @@ void dMenu_Fmap_c::portal_warp_map_proc() {
                 }
             } else if (mPortalNo == 3) {
                 if ((dMeter2Info_getMapStatus() == 3
-                                && dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 2
+                                && dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_FARON
                                 && dComIfGs_isOneZoneSwitch(0xf, -1))
                        /* dSv_event_flag_c::M_018 - Main Event - Brought Kakariko bridge back to original location */
                     || dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x33]))

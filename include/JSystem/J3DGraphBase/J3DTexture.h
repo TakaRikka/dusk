@@ -5,7 +5,7 @@
 #include "JSystem/J3DAssert.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "global.h"
-#include <stdint>
+#include <stdint.h>
 
 /**
  * @ingroup jsystem-j3d
@@ -18,7 +18,9 @@ private:
     /* 0x4 */ ResTIMG* mpRes;
 
 public:
-    J3DTexture(u16 num, ResTIMG* res) : mNum(num), unk_0x2(0), mpRes(res) {}
+    J3DTexture(u16 num, ResTIMG* res) : mNum(num), unk_0x2(0), mpRes(res) {
+        J3D_ASSERT_NULLPTR(52, res && num);
+    }
 
     void loadGX(u16, GXTexMapID) const;
     void entryNum(u16);
@@ -29,11 +31,11 @@ public:
 
     ResTIMG* getResTIMG(u16 index) const {
         J3D_ASSERT_RANGE(72, index < mNum);
-        return &mpRes[index];   
+        return &mpRes[index];
     }
 
     void setResTIMG(u16 index, const ResTIMG& timg) {
-        JUT_ASSERT_MSG(81, (bool)(index < mNum), "Error : range over.");
+        J3D_ASSERT_RANGE(81, index < mNum);
         mpRes[index] = timg;
         mpRes[index].imageOffset = ((mpRes[index].imageOffset + (uintptr_t)&timg - (uintptr_t)(mpRes + index)));
         mpRes[index].paletteOffset = ((mpRes[index].paletteOffset + (uintptr_t)&timg - (uintptr_t)(mpRes + index)));

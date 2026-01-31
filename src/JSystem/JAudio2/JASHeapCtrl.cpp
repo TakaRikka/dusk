@@ -6,7 +6,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/ar.h"
+#include <dolphin/ar.h>
 
 JASHeap::JASHeap(JASDisposer* disposer) : mTree(this) {
     mDisposer = disposer;

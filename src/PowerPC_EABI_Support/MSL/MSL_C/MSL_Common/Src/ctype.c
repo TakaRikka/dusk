@@ -7,7 +7,7 @@
 #undef MSL_INLINE
 #define MSL_INLINE __declspec(weak)
 
-#include <ctype>
+#include <cctype>
 
 #if PLATFORM_GCN
 #define ctrl __control_char

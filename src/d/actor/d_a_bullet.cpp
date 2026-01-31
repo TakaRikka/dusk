@@ -12,7 +12,7 @@ static char* l_resFileNameList[] = {"Hanjo1"};
 
 static char* l_bmdFileNameList[] = {"hanjo_stone.bmd"};
 
-static daBullet_Param_c l_HIO;
+static BULLET_HIO_CLASS l_HIO;
 
 const dCcD_SrcGObjInf daBullet_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0x0, 0x0}, {0x79}}},
@@ -28,8 +28,28 @@ dCcD_SrcSph daBullet_c::mCcDSph = {
     }  // mSphAttr
 };
 
+#if DEBUG
+daBullet_HIO_c::daBullet_HIO_c() {
+    m = daBullet_HIO_c::m;
+}
+
+void daBullet_HIO_c::listenPropertyEvent(const JORPropertyEvent*) {
+    // NONMATCHING
+}
+
+void daBullet_HIO_c::genMessage(JORMContext*) {
+    // NONMATCHING
+}
+#endif
+
 daBullet_c::~daBullet_c() {
     dComIfG_resDelete(&mPhase, getResName());
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
 }
 
 int daBullet_c::create() {
@@ -71,7 +91,7 @@ daBullet_HIOParam const daBullet_Param_c::m = {
 };
 
 int daBullet_c::Execute() {
-    gravity = daBullet_Param_c::m.gravity;
+    gravity = mpHIO->m.gravity;
 
     if (field_0x957 == 0) {
         if (mProcess != NULL) {
@@ -155,10 +175,15 @@ void daBullet_c::initialize() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -10.0f, -10.0f, -10.0f, 10.0f, 10.0f, 10.0f);
 
-    mAcchCir.SetWall(daBullet_Param_c::m.width, daBullet_Param_c::m.knee_height);
+#if DEBUG
+    mpHIO = &l_HIO;
+    mpHIO->entryHIO("弾");
+#endif
+
+    mAcchCir.SetWall(mpHIO->m.width, mpHIO->m.knee_height);
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
 
-    mCcStts.Init(daBullet_Param_c::m.weight, 0, this);
+    mCcStts.Init(mpHIO->m.weight, 0, this);
     mCcSph.Set(mCcDSph);
     mCcSph.SetStts(&mCcStts);
     mAcch.CrrPos(dComIfG_Bgsp());
@@ -166,7 +191,7 @@ void daBullet_c::initialize() {
     mGroundY = mAcch.GetGroundH();
 
     setProcess(&daBullet_c::wait);
-    mLifetime = daBullet_Param_c::m.lifetime;
+    mLifetime = mpHIO->m.lifetime;
     Execute();
 }
 

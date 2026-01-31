@@ -5,6 +5,33 @@
 #include "d/actor/d_a_tag_yami.h"
 #include "d/actor/d_a_obj_carry.h"
 
+struct daNpcBlueNS_HIOParam {
+    /* 0x00 */ daNpcF_HIOParam common;
+    /* 0x6C */ f32 field_0x6c;
+};
+
+class daNpcBlueNS_Param_c {
+public:
+    virtual ~daNpcBlueNS_Param_c() {}
+
+    static const daNpcBlueNS_HIOParam m;
+};
+
+#if DEBUG
+class daNpcBlueNS_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpcBlueNS_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    daNpcBlueNS_HIOParam m;
+};
+
+#define NPC_BLUE_NS_HIO_CLASS daNpcBlueNS_HIO_c
+#else
+#define NPC_BLUE_NS_HIO_CLASS daNpcBlueNS_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpcBlueNS_c
@@ -103,7 +130,7 @@ public:
     /* 0xBD8 */ u8 field_0xBD8[0xBDC - 0xBD8];
     /* 0xBDC */ daNpcF_Lookat_c mLookat;
     /* 0xC78 */ daNpcF_ActorMngr_c mActorMngr[1];
-    /* 0xC80 */ u8 field_0xC80[0xC84 - 0xC80];
+    /* 0xC80 */ NPC_BLUE_NS_HIO_CLASS* mpHIO;
     /* 0xC84 */ dCcD_Cyl mCyl;
     /* 0xDC0 */ u16 field_0xdc0;
     /* 0xDC4 */ int (daNpcBlueNS_c::*mAction)(int);
@@ -129,18 +156,6 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daNpcBlueNS_c) == 0xe14);
-
-struct daNpcBlueNS_HIOParam {
-    /* 0x00 */ daNpcF_HIOParam common;
-    /* 0x6C */ f32 field_0x6c;
-};
-
-class daNpcBlueNS_Param_c {
-public:
-    virtual ~daNpcBlueNS_Param_c() {}
-
-    static const daNpcBlueNS_HIOParam m;
-};
 
 
 #endif /* D_A_NPC_BLUE_NS_H */

@@ -1,9 +1,12 @@
 #ifndef J3DPACKET_H
 #define J3DPACKET_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
-#include "dolphin/gd/GDBase.h"
-#include <stdint>
+#include "JSystem/J3DGraphBase/J3DEnum.h"
+#include <dolphin/gd/GDBase.h>
+#include <dolphin/mtx.h>
+#include <stdint.h>
 
 class J3DMatPacket;
 
@@ -131,6 +134,34 @@ public:
     /* 0x8 */ u32 mSize;
     /* 0xC */ u32 mMaxSize;
 };  // Size: 0x10
+
+/**
+ * @ingroup jsystem-j3d
+ * 
+ */
+class J3DTexMtxObj {
+public:
+    Mtx& getMtx(u16 idx) {
+        J3D_ASSERT_RANGE(275, idx < mTexMtxNum);
+        return mpTexMtx[idx];
+    }
+
+    void setMtx(u16 idx, const Mtx mtx) {
+        J3D_ASSERT_RANGE(288, idx < mTexMtxNum);
+        MTXCopy(mtx, mpTexMtx[idx]);
+    }
+
+    Mtx44& getEffectMtx(u16 idx) {
+        J3D_ASSERT_RANGE(293, idx < mTexMtxNum);
+        return mpEffectMtx[idx];
+    }
+
+    u16 getNumTexMtx() const { return mTexMtxNum; }
+
+    /* 0x00 */ Mtx* mpTexMtx;
+    /* 0x04 */ Mtx44* mpEffectMtx;
+    /* 0x08 */ u16 mTexMtxNum;
+};
 
 /**
  * @ingroup jsystem-j3d

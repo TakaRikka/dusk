@@ -54,22 +54,6 @@ daNpc_seiD_c::cutFunc daNpc_seiD_c::mCutList[1] = {
     0
 };
 
-daNpc_seiD_c::~daNpc_seiD_c() {
-    OS_REPORT("|%06d:%x|daNpc_seiD_c -> デストラクト\n", g_Counter.mCounter0, this);
-
-    if (heap != NULL) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    #if DEBUG
-    if (field_0xe40 != NULL) {
-        field_0xe40->removeHIO();
-    }
-    #endif
-
-    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
-}
-
 daNpc_seiD_HIOParam const daNpc_seiD_Param_c::m = {
     0.0f,
     0.0f,
@@ -89,15 +73,21 @@ daNpc_seiD_HIOParam const daNpc_seiD_Param_c::m = {
     0.0f,
     0.0f,
     0.0f,
+    0,
+    0,
+    0,
+    0,
     0.0f,
     0.0f,
     0.0f,
     0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     0.0f,
     0.0f,
     0.0f,
@@ -110,7 +100,37 @@ daNpc_seiD_HIOParam const daNpc_seiD_Param_c::m = {
     1200.0f,
 };
 
-static daNpc_seiD_Param_c l_HIO;
+static NPC_SEID_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_seiD_HIO_c::daNpc_seiD_HIO_c() {
+    m = daNpc_seiD_Param_c::m;
+}
+
+void daNpc_seiD_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_seiD_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_seiD_c::~daNpc_seiD_c() {
+    OS_REPORT("|%06d:%x|daNpc_seiD_c -> デストラクト\n", g_Counter.mCounter0, this);
+
+    if (heap != NULL) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+}
 
 int daNpc_seiD_c::create() {
     daNpcT_ct(this, daNpc_seiD_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 
@@ -138,8 +158,8 @@ int daNpc_seiD_c::create() {
         mSound.init(&current.pos, &eyePos, 3, 1);
 
 #if DEBUG
-        //field_0xe40->field_0x8 = &l_HIO;
-        field_0xe40->entryHIO("光の精霊ｄ"); // Spirit of Light d
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("光の精霊ｄ"); // Spirit of Light d
 #endif
 
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, 
@@ -150,7 +170,7 @@ int daNpc_seiD_c::create() {
         setEnvTevColor();
         setRoomNo();
 
-        mCcStts.Init(daNpc_seiD_Param_c::m.mSttsWeight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
 
         reset();
         mCreating = true;
@@ -247,26 +267,26 @@ void daNpc_seiD_c::setParam() {
     selectAction();
     srchActors();
     
-    dComIfGp_getAttention()->getDistTable(0x28).mDistMax = daNpc_seiD_Param_c::m.field_0x90;
-    dComIfGp_getAttention()->getDistTable(0x28).mDistMaxRelease = daNpc_seiD_Param_c::m.field_0x90;
-    dComIfGp_getAttention()->getDistTable(0x27).mDistMax = daNpc_seiD_Param_c::m.field_0x90;
-    dComIfGp_getAttention()->getDistTable(0x27).mDistMaxRelease = daNpc_seiD_Param_c::m.field_0x90;
+    dComIfGp_getAttention()->getDistTable(0x28).mDistMax = mpHIO->m.field_0x90;
+    dComIfGp_getAttention()->getDistTable(0x28).mDistMaxRelease = mpHIO->m.field_0x90;
+    dComIfGp_getAttention()->getDistTable(0x27).mDistMax = mpHIO->m.field_0x90;
+    dComIfGp_getAttention()->getDistTable(0x27).mDistMaxRelease = mpHIO->m.field_0x90;
 
-    attention_info.distances[0] = 39;
-    attention_info.distances[1] = 39;
-    attention_info.distances[3] = 39;
+    attention_info.distances[fopAc_attn_LOCK_e] = 39;
+    attention_info.distances[fopAc_attn_TALK_e] = 39;
+    attention_info.distances[fopAc_attn_SPEAK_e] = 39;
     attention_info.flags = 0;
 
-    scale.set(daNpc_seiD_Param_c::m.mScale, daNpc_seiD_Param_c::m.mScale, daNpc_seiD_Param_c::m.mScale);
-    mCcStts.SetWeight(daNpc_seiD_Param_c::m.mSttsWeight);
-    mCylH = daNpc_seiD_Param_c::m.mCylH;
-    mWallR = daNpc_seiD_Param_c::m.mWallR;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_seiD_Param_c::m.mWallH);
-    mRealShadowSize = daNpc_seiD_Param_c::m.field_0x0c;
-    gravity = daNpc_seiD_Param_c::m.mGravity;
-    mExpressionMorfFrame = daNpc_seiD_Param_c::m.field_0x6c;
-    mMorfFrames = daNpc_seiD_Param_c::m.mMorfFrames;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    gravity = mpHIO->m.common.gravity;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
 }
 
 void daNpc_seiD_c::srchActors() {

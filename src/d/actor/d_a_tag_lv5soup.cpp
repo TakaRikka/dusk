@@ -42,7 +42,8 @@ int daTag_Lv5Soup_c::Draw() {
 }
 
 bool daTag_Lv5Soup_c::isAreaCheck() {
-    cXyz dist = daPy_getPlayerActorClass()->current.pos - current.pos;
+    cXyz dist;
+    dist = daPy_getPlayerActorClass()->current.pos - current.pos;
     f32 boundX = scale.x * 100.0f;
     f32 boundY = scale.y * 100.0f;
 

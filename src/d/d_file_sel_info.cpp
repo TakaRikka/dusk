@@ -11,7 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_meter2_info.h"
 #include "d/d_pane_class_alpha.h"
-#include <stdio>
+#include <cstdio>
 
 dFile_info_c::dFile_info_c(JKRArchive* i_archive, u8 param_1) {
     mArchive = i_archive;
@@ -170,7 +170,7 @@ void dFile_info_c::setSaveDate(dSv_save_c* i_savedata) {
     sprintf(mSaveDate, "%d.%02d.%02d %02d:%02d", time.year, time.mon + 1, time.mday,
             time.hour, time.min);
     #elif VERSION == VERSION_GCN_PAL
-    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_ENGLISH) {
+    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
         sprintf(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mon + 1, time.mday, time.year, time.hour,
                 time.min);
     } else {

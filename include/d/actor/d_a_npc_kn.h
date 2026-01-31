@@ -217,6 +217,8 @@ public:
     s8 getActionMode() { return mActionMode; }
 
     void setTalkFlag(u8 i_flag) { field_0x15bd = i_flag; }
+
+    bool checkBattleMode() { return true; }
     
     int create();
     int CreateHeap();

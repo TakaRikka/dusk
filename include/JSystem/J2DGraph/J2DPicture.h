@@ -17,6 +17,7 @@ enum J2DMirror {
 };
 
 enum J2DBinding {
+    /* 0 */ J2DBind_None = 0,
     /* 1 */ J2DBind_Bottom = (1 << 0),
     /* 2 */ J2DBind_Top = (1 << 1),
     /* 4 */ J2DBind_Right = (1 << 2),
@@ -189,6 +190,9 @@ public:
     void initinfo();
     void setTevMode();
     static void swap(f32&, f32&);
+    J2DBinding getBinding() const;
+    void setMirror(J2DMirror);
+    bool isTumble() const;
     void setBlendKonstColor();
     void setBlendKonstAlpha();
     void getNewColor(JUtility::TColor*);

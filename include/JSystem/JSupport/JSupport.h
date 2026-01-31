@@ -2,7 +2,7 @@
 #define JSUPPORT_H
 
 #include <dolphin/dolphin.h>
-#include <stdint>
+#include <stdint.h>
 
 /**
 * @ingroup jsystem-jsupport

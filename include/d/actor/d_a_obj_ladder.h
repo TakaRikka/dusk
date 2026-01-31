@@ -13,6 +13,15 @@
  *
  */
 namespace daObjLadder {
+    enum Type_e {
+        TYPE_0,
+        TYPE_1,
+        TYPE_2,
+        TYPE_3,
+        TYPE_4,
+        TYPE_5,
+    };
+
     class Act_c : public dBgS_MoveBgActor {
     public:
         enum Prm_e {
@@ -20,15 +29,6 @@ namespace daObjLadder {
             PRM_3 = 3,
             PRM_8 = 8,
             PRM_16 = 16,
-        };
-
-        enum Type_e {
-            TYPE_0,
-            TYPE_1,
-            TYPE_2,
-            TYPE_3,
-            TYPE_4,
-            TYPE_5,
         };
 
         enum Mode {
@@ -62,15 +62,15 @@ namespace daObjLadder {
         int Execute(Mtx**);
         int Draw();
 
-        u8 prm_get_evId() {
+        u8 prm_get_evId() const {
             return daObj::PrmAbstract(this, PRM_8, PRM_16);
         }
 
-        int prm_get_swSave() {
+        int prm_get_swSave() const {
             return daObj::PrmAbstract(this,PRM_8, PRM_8);
         }
 
-        Type_e prm_get_type() {
+        Type_e prm_get_type() const {
             return(Type_e)daObj::PrmAbstract(this,PRM_3, PRM_0);
         }
 

@@ -48,23 +48,21 @@ daPoFire_HIO_c::daPoFire_HIO_c() {
 #if DEBUG
 /* daPoFire_HIO_c::genMessage (JORMContext *) */
 void daPoFire_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genSlider("捕まえ範囲", &mPickupRange, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genLabel("\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("周期", &mWaitPeriod, 0.1f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("上下幅", &mWaitVertRange, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("上下速度", &mWaitVertSpeed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genLabel("\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("周期", &mMovePeriod1, 0.1f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("移動速度", &mMoveSpeed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("揺らぎ速度", &mMoveSwingSpeed1, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                    24);
-    mctx->genLabel("\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("周期", &mMovePeriod2, 0.1f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("揺らぎ速度", &mMoveSwingSpeed2, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                    24);
-    mctx->genSlider("揺らぎ幅", &mMoveSwingRange, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genLabel("\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("Fire Wait", &mFireWaitTime, 0, 0xFFU, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    mctx->genSlider("捕まえ範囲", &mPickupRange, 0.0f, 1000.0f);
+    mctx->genLabel("\n", 0);
+    mctx->genSlider("周期", &mWaitPeriod, 0.1f, 100.0f);
+    mctx->genSlider("上下幅", &mWaitVertRange, 0.0f, 100.0f);
+    mctx->genSlider("上下速度", &mWaitVertSpeed, 0.0f, 100.0f);
+    mctx->genLabel("\n", 0);
+    mctx->genSlider("周期", &mMovePeriod1, 0.1f, 100.0f);
+    mctx->genSlider("移動速度", &mMoveSpeed, 0.0f, 100.0f);
+    mctx->genSlider("揺らぎ速度", &mMoveSwingSpeed1, 0.0f, 100.0f);
+    mctx->genLabel("\n", 0);
+    mctx->genSlider("周期", &mMovePeriod2, 0.1f, 100.0f);
+    mctx->genSlider("揺らぎ速度", &mMoveSwingSpeed2, 0.0f, 100.0f);
+    mctx->genSlider("揺らぎ幅", &mMoveSwingRange, 0.0f, 100.0f);
+    mctx->genLabel("\n", 0);
+    mctx->genSlider("Fire Wait", &mFireWaitTime, 0, 0xFFU);
 }
 #endif
 
@@ -428,7 +426,8 @@ static int daPoFire_Delete(daPoFire_c* i_this) {
 }
 
 static int daPoFire_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daPoFire_c, i_this, "daPoFire");
+    daPoFire_c* a_this = (daPoFire_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "daPoFire");
     return a_this->create();
 }
 

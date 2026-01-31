@@ -27,8 +27,12 @@ enum J2DAnmKind {
 class J2DAnmBase {
 public:
     J2DAnmBase() {
-        mFrame = 0;
+        mFrame = 0.0f;
         mFrameMax = 0;
+    }
+    J2DAnmBase(s16 frameMax) {
+        mFrame = 0.0f;
+        mFrameMax = frameMax;
     }
     virtual ~J2DAnmBase() {}
     virtual void searchUpdateMaterialID(J2DScreen*) {}
@@ -54,10 +58,10 @@ class J2DAnmVtxColor : public J2DAnmBase {
 public:
     J2DAnmVtxColor() {
         mKind = KIND_VTX_COLOR;
-        for (s32 i = 0; i < ARRAY_SIZEU(mAnmTableNum); i++) {
+        for (int i = 0; i < ARRAY_SIZE(mAnmTableNum); i++) {
             mAnmTableNum[i] = NULL;
         }
-        for (s32 i = 0; i < ARRAY_SIZEU(mVtxColorIndexData); i++) {
+        for (int i = 0; i < ARRAY_SIZE(mVtxColorIndexData); i++) {
             mVtxColorIndexData[i] = NULL;
         }
     }
@@ -92,7 +96,7 @@ struct J3DTextureSRTInfo;
 class J2DAnmVtxColorKey : public J2DAnmVtxColor {
 public:
     J2DAnmVtxColorKey() {
-        for (s32 i = 0; i < ARRAY_SIZEU(mInfoTable); i++) {
+        for (int i = 0; i < ARRAY_SIZE(mInfoTable); i++) {
             mInfoTable[i] = NULL;
         }
     }
@@ -113,7 +117,7 @@ public:
 class J2DAnmVtxColorFull : public J2DAnmVtxColor {
 public:
     J2DAnmVtxColorFull() {
-        for (s32 i = 0; i < ARRAY_SIZEU(mInfoTable); i++) {
+        for (int i = 0; i < ARRAY_SIZE(mInfoTable); i++) {
             mInfoTable[i] = NULL;
         }
     }
@@ -155,7 +159,7 @@ public:
  */
 class J2DAnmTransform : public J2DAnmBase {
 public:
-    J2DAnmTransform(f32* pScaleValues, s16* pRotationValues, f32* pTranslateValues) {
+    J2DAnmTransform(s16 frameMax, f32* pScaleValues, s16* pRotationValues, f32* pTranslateValues) : J2DAnmBase(frameMax) {
         mScaleValues = pScaleValues;
         mRotationValues = pRotationValues;
         mTranslateValues = pTranslateValues;
@@ -175,18 +179,18 @@ public:
  */
 class J2DAnmTransformKey : public J2DAnmTransform {
 public:
-    J2DAnmTransformKey() : J2DAnmTransform(NULL, NULL, NULL) {
+    J2DAnmTransformKey() : J2DAnmTransform(0, NULL, NULL, NULL) {
         field_0x24 = 0;
         mInfoTable = NULL;
     }
     virtual ~J2DAnmTransformKey() {}
     virtual void getTransform(u16 p1, J3DTransformInfo* pInfo) const {
-        this->calcTransform(getFrame(), p1, pInfo);
+        this->calcTransform(mFrame, p1, pInfo);
     }
     virtual void calcTransform(f32, u16, J3DTransformInfo*) const;
 
     /* 0x1C */ u8 field_0x1c[6];
-    /* 0x22 */ s16 field_0x22;
+    /* 0x22 */ u16 field_0x22;
     /* 0x24 */ u32 field_0x24;
     /* 0x28 */ J3DAnmTransformKeyTable* mInfoTable;
 };
@@ -197,7 +201,7 @@ public:
  */
 class J2DAnmTransformFull : public J2DAnmTransform {
 public:
-    J2DAnmTransformFull() : J2DAnmTransform(NULL, NULL, NULL) { mTableInfo = NULL; }
+    J2DAnmTransformFull() : J2DAnmTransform(0, NULL, NULL, NULL) { mTableInfo = NULL; }
     virtual ~J2DAnmTransformFull() {}
     virtual void getTransform(u16, J3DTransformInfo*) const;
 
@@ -214,21 +218,13 @@ class J2DAnmTextureSRTKey : public J2DAnmBase {
 public:
     J2DAnmTextureSRTKey() {
         field_0x10 = 0;
-        field_0x1e = 0;
-        field_0x1c = 0;
-        field_0x1a = 0;
-        mUpdateMaterialNum = 0;
+        mUpdateMaterialNum = field_0x1a = field_0x1c = field_0x1e = 0;
         mInfoTable = NULL;
-        mTranslationValues = NULL;
-        mScaleValues = NULL;
+        mScaleValues = mTranslationValues = NULL;
         mRotationValues = NULL;
-        field_0x4c = 0;
-        field_0x4a = 0;
-        field_0x48 = 0;
-        field_0x4e = 0;
+        field_0x4e = field_0x48 = field_0x4a = field_0x4c = 0;
         field_0x5c = NULL;
-        field_0x58 = NULL;
-        field_0x50 = NULL;
+        field_0x50 = field_0x58 = NULL;
         field_0x54 = NULL;
         field_0x7c = 0;
         mKind = KIND_TEXTURE_SRT;
@@ -238,9 +234,15 @@ public:
     virtual ~J2DAnmTextureSRTKey() {}
     virtual void searchUpdateMaterialID(J2DScreen*);
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum / 3; }
-    u16 getUpdateMaterialID(u16 i) const { return mUpdateMaterialID[i]; }
-    u8 getUpdateTexMtxID(u16 i) const { return mUpdateTexMtxID[i]; }
-    void getTransform(u16 param_1, J3DTextureSRTInfo* param_2) {
+    u16 getUpdateMaterialID(u16 i) const {
+        J3D_PANIC(514, i < mUpdateMaterialNum / 3 && i >= 0, "Error : range over.");
+        return mUpdateMaterialID[i];
+    }
+    u8 getUpdateTexMtxID(u16 i) const {
+        J3D_PANIC(513, i < mUpdateMaterialNum / 3 && i >= 0, "Error : range over.");
+        return mUpdateTexMtxID[i];
+    }
+    void getTransform(u16 param_1, J3DTextureSRTInfo* param_2) const {
         calcTransform(mFrame, param_1, param_2);
     }
 
@@ -279,8 +281,13 @@ public:
 class J2DAnmTexPattern : public J2DAnmBase {
 public:
     struct J2DAnmTexPatternTIMGPointer {
-        J2DAnmTexPatternTIMGPointer();
-        ~J2DAnmTexPatternTIMGPointer();
+        J2DAnmTexPatternTIMGPointer() {
+            mRes = NULL;
+            mPalette = NULL;
+        }
+        ~J2DAnmTexPatternTIMGPointer() {
+            delete mPalette;
+        }
 
         /* 0x0 */ ResTIMG* mRes;
         /* 0x4 */ JUTPalette* mPalette;
@@ -302,7 +309,10 @@ public:
     virtual ~J2DAnmTexPattern() { delete[] mTIMGPtrArray; }
     virtual void searchUpdateMaterialID(J2DScreen*);
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
-    u16 getUpdateMaterialID(u16 i) const { return mUpdateMaterialID[i]; }
+    u16 getUpdateMaterialID(u16 i) const {
+        J3D_PANIC(619, i < mUpdateMaterialNum, "Error : range over.");
+        return mUpdateMaterialID[i];
+    }
     J3DAnmTexPatternFullTable* getAnmTable() const { return mAnmTable; }
 
     /* 0x10 */ u16* mValues;
@@ -321,39 +331,31 @@ public:
 class J2DAnmTevRegKey : public J2DAnmBase {
 public:
     J2DAnmTevRegKey() {
-        mKRegUpdateMaterialNum = 0;
-        mCRegUpdateMaterialNum = 0;
-        field_0x1a = 0;
-        field_0x18 = 0;
-        field_0x16 = 0;
-        field_0x14 = 0;
-        field_0x22 = 0;
-        field_0x20 = 0;
-        field_0x1e = 0;
-        field_0x1c = 0;
-        mKRegUpdateMaterialID = NULL;
-        mCRegUpdateMaterialID = NULL;
-        mCAValues = NULL;
-        mCBValues = NULL;
-        mCGValues = NULL;
-        mCRValues = NULL;
-        mKAValues = NULL;
-        mKBValues = NULL;
-        mKGValues = NULL;
-        mKRValues = NULL;
+        mCRegUpdateMaterialNum = mKRegUpdateMaterialNum = 0;
+        field_0x14 = field_0x16 = field_0x18 = field_0x1a = 0;
+        field_0x1c = field_0x1e = field_0x20 = field_0x22 = 0;
+        mCRegUpdateMaterialID = mKRegUpdateMaterialID = NULL;
+        mCRValues = mCGValues = mCBValues = mCAValues = NULL;
+        mKRValues = mKGValues = mKBValues = mKAValues = NULL;
         mKind = KIND_TEV_REG;
     }
-    void getTevColorReg(u16, _GXColorS10*) const;
-    void getTevKonstReg(u16, _GXColor*) const;
+    void getTevColorReg(u16, GXColorS10*) const;
+    void getTevKonstReg(u16, GXColor*) const;
 
     virtual ~J2DAnmTevRegKey() {}
     virtual void searchUpdateMaterialID(J2DScreen* pScreen);
 
     u16 getCRegUpdateMaterialNum() const { return mCRegUpdateMaterialNum; }
-    u16 getCRegUpdateMaterialID(u16 i) const { return mCRegUpdateMaterialID[i]; }
+    u16 getCRegUpdateMaterialID(u16 i) const {
+        J3D_PANIC(770, i < mCRegUpdateMaterialNum, "Error : range over.");
+        return mCRegUpdateMaterialID[i];
+    }
 
     u16 getKRegUpdateMaterialNum() const { return mKRegUpdateMaterialNum; }
-    u16 getKRegUpdateMaterialID(u16 i) const { return mKRegUpdateMaterialID[i]; }
+    u16 getKRegUpdateMaterialID(u16 i) const {
+        J3D_PANIC(778, i < mKRegUpdateMaterialNum, "Error : range over.");
+        return mKRegUpdateMaterialID[i];
+    }
 
     J3DAnmCRegKeyTable* getAnmCRegKeyTable() const { return mAnmCRegKeyTable; }
     J3DAnmKRegKeyTable* getAnmKRegKeyTable() const { return mAnmKRegKeyTable; }
@@ -391,10 +393,7 @@ public:
 class J2DAnmColor : public J2DAnmBase {
 public:
     J2DAnmColor() {
-        field_0x16 = 0;
-        field_0x14 = 0;
-        field_0x12 = 0;
-        field_0x10 = 0;
+        field_0x10 = field_0x12 = field_0x14 = field_0x16 = 0;
         mUpdateMaterialNum = 0;
         mUpdateMaterialID = NULL;
         mKind = KIND_COLOR;
@@ -403,7 +402,10 @@ public:
     virtual void searchUpdateMaterialID(J2DScreen*);
     virtual void getColor(u16, _GXColor*) const {}
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
-    u16 getUpdateMaterialID(u16 i) const { return mUpdateMaterialID[i]; }
+    u16 getUpdateMaterialID(u16 i) const {
+        J3D_PANIC(224, i < mUpdateMaterialNum, "Error : range over.");
+        return mUpdateMaterialID[i];
+    }
 
     /* 0x10 */ u16 field_0x10;
     /* 0x12 */ u16 field_0x12;
@@ -475,17 +477,12 @@ public:
     /* 0x40 */ J3DAnmColorFullTable* mInfoTable;
 };
 
-template <typename T>
-inline f32 J2DHermiteInterpolation(f32, T*, T*, T*, T*, T*, T*);
-
-template <>
-inline f32 J2DHermiteInterpolation<f32>(f32 f1, f32* f2, f32* f3, f32* f4, f32* f5, f32* f6,
-                                        f32* f7) {
+inline f32 J2DHermiteInterpolation(f32 f1, const f32* f2, const f32* f3, const f32* f4, const f32* f5, const f32* f6,
+                                        const f32* f7) {
     return JMAHermiteInterpolation(f1, *f2, *f3, *f4, *f5, *f6, *f7);
 }
 
-template <>
-inline f32 J2DHermiteInterpolation<s16>(__REGISTER f32 pp1, __REGISTER s16* pp2, __REGISTER s16* pp3,
+inline f32 J2DHermiteInterpolation(__REGISTER f32 pp1, __REGISTER s16* pp2, __REGISTER s16* pp3,
                                         __REGISTER s16* pp4, __REGISTER s16* pp5, __REGISTER s16* pp6,
                                         __REGISTER s16* pp7) {
 #ifdef __MWERKS__

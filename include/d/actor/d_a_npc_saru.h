@@ -15,24 +15,31 @@
 struct daNpc_Saru_HIOParam {
     /* 0x00 */ daNpcT_HIOParam common;
     /* 0x8C */ s16 scared_time;          // 怯える時間       - Scared Time
-    /* 0x8E */ s16 field_0x8e;
 };
 
-class daNpc_Saru_Param_c : public JORReflexible {
+class daNpc_Saru_Param_c {
 public:
     virtual ~daNpc_Saru_Param_c() {}
-
-#if DEBUG
-    void genMessage(JORMContext*);
-#endif
 
     static const daNpc_Saru_HIOParam m;
 };
 
+#if DEBUG
 class daNpc_Saru_HIO_c : public mDoHIO_entry_c {
 public:
-    daNpc_Saru_HIOParam param;
+    daNpc_Saru_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Saru_HIOParam m;
 };
+
+#define NPC_SARU_HIO_CLASS daNpc_Saru_HIO_c
+#else
+#define NPC_SARU_HIO_CLASS daNpc_Saru_Param_c
+#endif
 
 class daNpc_Saru_c : public daNpcT_c {
 public:
@@ -129,10 +136,7 @@ public:
     static char* mCutNameList[4];
     static cutFunc mCutList[4];
 private:
-    #if DEBUG
-    /* 0xE90 */ daNpc_Saru_HIO_c* field_0xe90;
-    #endif
-    /* 0xE40 */ u8 field_0xe40[0xe44 - 0xe40];
+    /* 0xE40 */ NPC_SARU_HIO_CLASS* mpHIO;
     /* 0xE44 */ J3DModel* mpRoseModels[2];
     /* 0xE4C */ dCcD_Cyl field_0xe4c;
     /* 0xF88 */ u8 mType;

@@ -815,7 +815,7 @@ static inline s16 Cd2_HIO_jntRZ(int param_1, int param_2) {
     } else {
         rv = l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x004[param_2].field_0x04.field_0x0C[2];
     }
-    return 182.04444885253906f * rv;
+    return DEG2S(rv);
 }
 
 static inline s16 Cd2_HIO_jntRY(int param_1, int param_2) {
@@ -825,7 +825,7 @@ static inline s16 Cd2_HIO_jntRY(int param_1, int param_2) {
     } else {
         rv = l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x004[param_2].field_0x04.field_0x0C[1];
     }
-    return 182.04444885253906f * rv;
+    return DEG2S(rv);
 }
 
 static inline s16 Cd2_HIO_jntRX(int param_1, int param_2) {
@@ -835,7 +835,7 @@ static inline s16 Cd2_HIO_jntRX(int param_1, int param_2) {
     } else {
         rv = l_Cd2_HIO.field_0x20c4[param_1 - 16].field_0x004[param_2].field_0x04.field_0x0C[0];
     }
-    return 182.04444885253906f * rv;
+    return DEG2S(rv);
 }
 
 int daNpcCd2_c::jntNodeCB(J3DJoint* param_1, J3DModel* param_2) {

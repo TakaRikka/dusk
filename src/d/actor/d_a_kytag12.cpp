@@ -30,7 +30,7 @@ static BOOL d_kytag12_cut_normal_check() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     BOOL var_r3 = true;
     if (player != NULL &&
-        (player->getCutType() == 0x28 || player->getCutType() == daPy_py_c::CUT_TYPE_GUARD_ATTACK))
+        (player->getCutType() == daPy_py_c::CUT_TYPE_UNK_28 || player->getCutType() == daPy_py_c::CUT_TYPE_GUARD_ATTACK))
     {
         var_r3 = false;
     }

@@ -10,10 +10,11 @@ public:
     int Create();
     int create();
     int execute();
-    u8 checkArea();
+    bool checkArea();
+    int draw();
     int _delete();
 
-    u32 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
+    u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
 
     /* 0x568 */ u8 mTimer;
 };  // Size: 0x56C

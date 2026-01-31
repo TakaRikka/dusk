@@ -3,6 +3,34 @@
 
 #include "d/actor/d_a_npc.h"
 
+struct daNpc_FairySeirei_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+    /* 0x8C */ f32 field_0x8c;
+    /* 0x90 */ f32 field_0x90;
+};
+
+class daNpc_FairySeirei_Param_c {
+public:
+    virtual ~daNpc_FairySeirei_Param_c() {}
+
+    static daNpc_FairySeirei_HIOParam const m;
+};
+
+#if DEBUG
+class daNpc_FairySeirei_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_FairySeirei_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    daNpc_FairySeirei_HIOParam m;
+};
+
+#define NPC_FAIRY_SEIREI_HIO_CLASS daNpc_FairySeirei_HIO_c
+#else
+#define NPC_FAIRY_SEIREI_HIO_CLASS daNpc_FairySeirei_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_FairySeirei_c
@@ -66,7 +94,7 @@ public:
     static cutFunc mCutList[1];
 
 private:
-    /* 0xE40 */ u8 field_0xE40[4];
+    /* 0xE40 */ NPC_FAIRY_SEIREI_HIO_CLASS* mpHIO;
     /* 0xE44 */ u8 mType;
     /* 0xE48 */ dCcD_Cyl mCyl;
     /* 0xF84 */ actionFunc mInitFunc;
@@ -78,12 +106,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_FairySeirei_c) == 0xfb0);
-
-class daNpc_FairySeirei_Param_c {
-public:
-    virtual ~daNpc_FairySeirei_Param_c() {}
-
-    static f32 const m[37];
-};
 
 #endif /* D_A_NPC_FAIRY_SEIREI_H */

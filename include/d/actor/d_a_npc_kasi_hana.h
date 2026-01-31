@@ -123,7 +123,7 @@ public:
 
     daNpcKasiHana_c();
     ~daNpcKasiHana_c();
-    cPhs__Step Create();
+    cPhs_Step Create();
     int CreateHeap();
     int Delete();
     int Execute();
@@ -211,7 +211,7 @@ private:
     /* 0x0BF0 */ daNpcF_Lookat_c mLookat;
     /* 0x0C8C */ daNpcF_ActorMngr_c mActorMngr[1];
     /* 0x0C94 */ daNpcF_Path_c mPath;
-    /* 0x12C4 */ NPC_KASI_HANA_HIO_CLASS* mHIO;
+    /* 0x12C4 */ NPC_KASI_HANA_HIO_CLASS* mpHIO;
     /* 0x12C8 */ dCcD_Cyl mCyl;
     /* 0x1404 */ s8 mType;
     /* 0x1405 */ u8 field_0x1405;

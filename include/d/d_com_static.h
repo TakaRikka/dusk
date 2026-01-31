@@ -6,7 +6,7 @@
 u8 daNpcKakashi_getSwdTutorialStep();
 void daNpcKakashi_setSwdTutorialStep(u8 iEvtNum);
 bool daNpcKakashi_getSwdTutorialResult();
-u8 daNpcKakashi_chkSwdTutorialStage();
+bool daNpcKakashi_chkSwdTutorialStage();
 u8 daNpcKakashi_getSuccessCount();
 void daNpcKakashi_clrSuccessCount();
 void daNpcKakashi_setSwdTutorialResult(bool param_0);

@@ -14,6 +14,7 @@ public:
     int CreateHeap();
     int create();
     int execute();
+    int draw();
     int _delete();
     f32 GetR() { return mRadius; }
 };

@@ -10,7 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_msg_object.h"
 
-#include <math>
+#include <cmath>
 
 #include "d/actor/d_a_balloon_2D.h"
 #include "d/actor/d_a_e_ym.h"
@@ -95,50 +95,50 @@ daKago_HIO_c::daKago_HIO_c() {
 #if DEBUG
 void daKago_HIO_c::genMessage(JORMContext* ctx) {
     // friendly Kargarok (literally, "Kargarok (good guy)")
-    ctx->genLabel("カーゴロック（いい奴）", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel(" ", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel(" ", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel(" ", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
+    ctx->genLabel("カーゴロック（いい奴）", 0x80000001);
+    ctx->genLabel(" ", 0x80000001);
+    ctx->genLabel(" ", 0x80000001);
+    ctx->genLabel(" ", 0x80000001);
     // Revocon processing (Revolution controller?)
-    ctx->genLabel("レボコン処理", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel(" ", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("レボコン上下", &mRevoconUpDown, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("レボコン上下Max", &mRevoconUpDownMax, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("レボコン左右", &mRevoconLeftRight, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("レボコン左右Max", &mRevoconLeftRightMax, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel(" ", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel(" ", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel(" ", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("基本サイズ", &mBasicSize, 0.0f, 5.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("飛行速度", &mFlightSpeed, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("飛行地面高度", &mFlightGroundAltitude, 0.0f, 20000.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("飛行天井高度", &mFlightCeilingAltitude, 0.0f, 20000.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("下降速度加算値", &mDescentRateIncrement, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("上昇速度減速値", &mAscentRateDecel, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("影の濃さ", &mShadowDensity, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("壁かすり後無敵時間", &mWallHitInvulnTime, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("ダッシュ時間", &mDashTime, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("ダッシュ溜め時間(当社比X倍)", &mDashTimeMultiplier, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("ダッシュ無効時間", &mDashCooldownTime, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel("-", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel("---------------------------------------", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
+    ctx->genLabel("レボコン処理", 0x80000001);
+    ctx->genLabel(" ", 0x80000001);
+    ctx->genSlider("レボコン上下", &mRevoconUpDown, 0.0f, 10000.0f);
+    ctx->genSlider("レボコン上下Max", &mRevoconUpDownMax, 0.0f, 10000.0f);
+    ctx->genSlider("レボコン左右", &mRevoconLeftRight, 0.0f, 10000.0f);
+    ctx->genSlider("レボコン左右Max", &mRevoconLeftRightMax, 0.0f, 10000.0f);
+    ctx->genLabel(" ", 0x80000001);
+    ctx->genLabel(" ", 0x80000001);
+    ctx->genLabel(" ", 0x80000001);
+    ctx->genSlider("基本サイズ", &mBasicSize, 0.0f, 5.0f);
+    ctx->genSlider("飛行速度", &mFlightSpeed, 0.0f, 100.0f);
+    ctx->genSlider("飛行地面高度", &mFlightGroundAltitude, 0.0f, 20000.0f);
+    ctx->genSlider("飛行天井高度", &mFlightCeilingAltitude, 0.0f, 20000.0f);
+    ctx->genSlider("下降速度加算値", &mDescentRateIncrement, 0.0f, 100.0f);
+    ctx->genSlider("上昇速度減速値", &mAscentRateDecel, 0.0f, 100.0f);
+    ctx->genSlider("影の濃さ", &mShadowDensity, 0.0f, 10.0f);
+    ctx->genSlider("壁かすり後無敵時間", &mWallHitInvulnTime, 0.0f, 100.0f);
+    ctx->genSlider("ダッシュ時間", &mDashTime, 0.0f, 100.0f);
+    ctx->genSlider("ダッシュ溜め時間(当社比X倍)", &mDashTimeMultiplier, 0.0f, 10.0f);
+    ctx->genSlider("ダッシュ無効時間", &mDashCooldownTime, 0.0f, 1000.0f);
+    ctx->genLabel("-", 0x80000001);
+    ctx->genLabel("---------------------------------------", 0x80000001);
     // "Below this are experimental parameters"
-    ctx->genLabel("これより下は効果線エフェクト実験パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel("-", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("Ｚオフセット", &mZOffset, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("Ｚオフセット(横)", &mZOffsetHori, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genCheckBox("角度追従モード", &mAngleTrackingMode, 1, 0, NULL, 0xffff, 0xffff, 512, 24);
+    ctx->genLabel("これより下は効果線エフェクト実験パラメータ", 0x80000001);
+    ctx->genLabel("-", 0x80000001);
+    ctx->genSlider("Ｚオフセット", &mZOffset, 0.0f, 10000.0f);
+    ctx->genSlider("Ｚオフセット(横)", &mZOffsetHori, 0.0f, 10000.0f);
+    ctx->genCheckBox("角度追従モード", &mAngleTrackingMode, 0x1);
     // check OFF to track camera speed
-    ctx->genLabel(".....チェックＯＦＦでカメラの速度追従", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
+    ctx->genLabel(".....チェックＯＦＦでカメラの速度追従", 0x80000001);
     // check ON to track Kargarok angle
-    ctx->genLabel(".....チェックＯＮでカーゴの角度追従", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel("-", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
+    ctx->genLabel(".....チェックＯＮでカーゴの角度追従", 0x80000001);
+    ctx->genLabel("-", 0x80000001);
     // "Secret ripple effect parameters"
-    ctx->genLabel("こっそりさざ波エフェクトパラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genLabel("-", 0x80000001, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("水面からのYオフセット", &mYOffsetFromWaterSurface, -1000.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("着水時飛沫発生時間", &mWaterSplashTime, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
-    ctx->genSlider("ダッシュ時飛沫発生時間", &mSplashGenTimeDuringDash, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 512, 24);
+    ctx->genLabel("こっそりさざ波エフェクトパラメータ", 0x80000001);
+    ctx->genLabel("-", 0x80000001);
+    ctx->genSlider("水面からのYオフセット", &mYOffsetFromWaterSurface, -1000.0f, 1000.0f);
+    ctx->genSlider("着水時飛沫発生時間", &mWaterSplashTime, 0.0f, 100.0f);
+    ctx->genSlider("ダッシュ時飛沫発生時間", &mSplashGenTimeDuringDash, 0.0f, 100.0f);
 }
 #endif
 
@@ -3712,7 +3712,7 @@ int daKago_c::_delete() {
 }
 
 static int daKago_Delete(daKago_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "Kago");
     return i_this->_delete();
 }
 

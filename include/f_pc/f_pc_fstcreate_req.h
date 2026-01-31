@@ -14,8 +14,8 @@ typedef struct fast_create_request {
     /* 0x4C */ void* data;
 } fast_create_request;  // Size: 0x50
 
-s32 fpcFCtRq_Do(fast_create_request* i_createReq);
-s32 fpcFCtRq_Delete(fast_create_request* i_createReq);
+int fpcFCtRq_Do(fast_create_request* i_createReq);
+int fpcFCtRq_Delete(fast_create_request* i_createReq);
 base_process_class* fpcFCtRq_Request(layer_class* i_layer, s16 i_procname,
                                      fstCreateFunc i_createFunc, void* i_createData, void* i_append);
 

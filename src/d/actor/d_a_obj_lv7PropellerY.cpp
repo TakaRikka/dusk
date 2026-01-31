@@ -199,7 +199,7 @@ void daPropY_c::init_modeMove2() {
 
 void daPropY_c::modeMove2() {
     cLib_chaseF(&speedF, l_HIO.max_rot_speed, l_HIO.rot_accel);
-    s16 temp_r30 = cLib_addCalcAngleS(&shape_angle.y, field_0x5b6, 1, (182.04445f * fopAcM_GetSpeedF(this)), 1);
+    s16 temp_r30 = cLib_addCalcAngleS(&shape_angle.y, field_0x5b6, 1, DEG2S(fopAcM_GetSpeedF(this)), 1);
     field_0x5c4 = 127.0f * (speedF / l_HIO.max_rot_speed);
     mDoAud_seStartLevel(Z2SE_OBJ_AMI_ROLL, &current.pos, field_0x5c4, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
@@ -240,7 +240,7 @@ void daPropY_c::modeStop() {
     if (mTurnType == 0) {
         var_r30 = cLib_addCalcAngleS(&shape_angle.y, field_0x5b6, 16, fopAcM_GetSpeedF(this), cM_deg2s(0.1f));
     } else {
-        var_r30 = cLib_addCalcAngleS(&shape_angle.y, field_0x5b6, 1, (182.04445f * fopAcM_GetSpeedF(this)), 1);
+        var_r30 = cLib_addCalcAngleS(&shape_angle.y, field_0x5b6, 1, DEG2S(fopAcM_GetSpeedF(this)), 1);
     }
 
     // probably not a real version difference - GCN has fsub for some reason instead of fsubs

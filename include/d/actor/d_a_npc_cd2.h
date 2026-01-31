@@ -5,7 +5,7 @@
 #include "d/actor/d_a_tag_escape.h"
 #include "d/d_npc_lib.h"
 #include "d/d_path.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 enum {
     MdlMANa_e = 0,

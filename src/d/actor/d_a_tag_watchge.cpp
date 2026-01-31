@@ -54,6 +54,7 @@ static int daTagWatchGe_IsDelete(daTagWatchGe_c* i_this) {
 }
 
 static int daTagWatchGe_Delete(daTagWatchGe_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this, "Tag_WatchGe");
     return 1;
 }
 

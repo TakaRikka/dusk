@@ -151,6 +151,7 @@ public:
     u32 GetMtrlSndId(const cBgS_PolyInfo& param_0) { return dKy_pol_sound_get(&param_0); }
     void DebugDrawPoly(dBgW_Base *param_1) {}
     void DebugDrawPoly(dBgW_Base const& param_1) {}
+    void DrawPoly(cBgS_PolyInfo const& param_0, GXColor const& param_1);
     fopAc_ac_c* GetActorPointer(cBgS_PolyInfo const& param_0) const { return cBgS::GetActorPointer(param_0); }
     bool LineCross(cBgS_LinChk* i_linChk) {
         #if DEBUG

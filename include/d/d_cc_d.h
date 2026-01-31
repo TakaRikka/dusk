@@ -146,7 +146,7 @@ public:
     u32 GetRPrm() const { return mRPrm; }
     u32 MskSPrm(u32 mask) const { return mGFlag & mask; }
     u32 MskRPrm(u32 mask) const { return mRPrm & mask; }
-    bool ChkSPrm(u32 mask) const { return MskSPrm(mask); }
+    bool ChkSPrm(u32 mask) { return MskSPrm(mask); }
     void OnSPrm(u32 flag) { mGFlag |= flag; }
     void OnRPrm(u32 flag) { mRPrm |= flag; }
     void OffSPrm(u32 flag) { mGFlag &= ~flag; }
@@ -169,7 +169,7 @@ public:
     void SetHitMark(u8 mark) { mHitMark = mark; }
     void SetSe(u8 se) { mSe = se; }
     void SetMtrl(u8 mtrl) { mMtrl = mtrl; }
-    void SetAtSpl(dCcG_At_Spl spl) { mSpl = spl; }
+    void SetSpl(dCcG_At_Spl spl) { mSpl = spl; }
     u8 GetSe() { return mSe; }
     dCcG_At_Spl GetSpl() { return (dCcG_At_Spl)mSpl; }
     u8 GetMtrl() { return mMtrl; }
@@ -311,7 +311,7 @@ public:
 
     void SetAtVec(cXyz& vec) { mGObjAt.SetVec(vec); }
     void SetTgVec(cXyz& vec) { mGObjTg.SetVec(vec); }
-    bool ChkAtNoMass() const { return mGObjAt.ChkSPrm(8); }
+    bool ChkAtNoMass() { return mGObjAt.ChkSPrm(8); }
     void OnAtNoHitMark() { mGObjAt.OnSPrm(2); }
     void OffAtNoHitMark() { mGObjAt.OffSPrm(2); }
     void OnTgNoHitMark() { mGObjTg.OnSPrm(4); }
@@ -331,7 +331,7 @@ public:
     bool ChkAtShieldHit() { return mGObjAt.ChkRPrm(1); }
     cXyz* GetAtVecP() { return mGObjAt.GetVecP(); }
     cXyz* GetTgVecP() { return mGObjTg.GetVecP(); }
-    void SetAtSpl(dCcG_At_Spl spl) { mGObjAt.SetAtSpl(spl); }
+    void SetAtSpl(dCcG_At_Spl spl) { mGObjAt.SetSpl(spl); }
     void SetAtHitCallback(dCcD_HitCallback callback) { mGObjAt.SetHitCallback(callback); }
     void SetTgHitCallback(dCcD_HitCallback callback) { mGObjTg.SetHitCallback(callback); }
     void SetCoHitCallback(dCcD_HitCallback callback) { mGObjCo.SetHitCallback(callback); }
@@ -415,7 +415,7 @@ public:
     void SetTgHitPos(cXyz& pos) { mGObjTg.SetHitPos(pos); }
     void SetAtHitPos(cXyz& pos) { mGObjAt.SetHitPos(pos); }
     u8 GetTgSe() { return mGObjTg.GetSe(); }
-    u32 GetTgHitObjHitSeID(int i_soundID) { return getHitSeID(GetTgHitObjSe(),i_soundID); }
+    u32 GetTgHitObjHitSeID(BOOL i_isRebound) { return getHitSeID(GetTgHitObjSe(), i_isRebound); }
     cXyz* GetAtHitPosP() { return mGObjAt.GetHitPosP(); }
     cXyz* GetTgHitPosP() { return mGObjTg.GetHitPosP(); }
     cXyz* GetTgRVecP() { return mGObjTg.GetRVecP(); }

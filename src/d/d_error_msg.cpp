@@ -53,13 +53,13 @@ static void messageSet(u32 status, bool i_drawBg) {
     const char* msg_p;
 
     #if VERSION == VERSION_GCN_PAL
-    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_GERMAN) {
+    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
         inf1 = (BMG_INF1*)&msg_data_ge[0x20];
-    } else if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_FRENCH) {
+    } else if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_FRENCH) {
         inf1 = (BMG_INF1*)&msg_data_fr[0x20];
-    } else if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_SPANISH) {
+    } else if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_SPANISH) {
         inf1 = (BMG_INF1*)&msg_data_sp[0x20];
-    } else if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_ITALIAN) {
+    } else if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ITALIAN) {
         inf1 = (BMG_INF1*)&msg_data_it[0x20];
     } else {
         inf1 = (BMG_INF1*)&msg_data[0x20];
@@ -165,7 +165,7 @@ static void messageSet(u32 status, bool i_drawBg) {
     }
 
     #if VERSION == VERSION_GCN_PAL
-    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_ENGLISH) {
+    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
         spane.draw(x + 2.0f, y + 10.0f + 2.0f, FB_WIDTH, HBIND_LEFT);
         tpane.draw(x, y + 10.0f, FB_WIDTH, HBIND_LEFT);
     } else {
@@ -209,8 +209,8 @@ void dDvdErrorMsg_c::draw(s32 status) {
     JFWDisplay::getManager()->resetFader();
 }
 
-u8 dDvdErrorMsg_c::execute() {
-    static u8 l_dvdError;
+bool dDvdErrorMsg_c::execute() {
+    static bool l_dvdError;
 
     s32 drive_status = DVDGetDriveStatus();
     if (drive_status != DVD_STATE_END && drive_status != DVD_STATE_BUSY && !l_dvdError) {

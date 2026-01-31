@@ -102,15 +102,7 @@ daPeru_c::cutAppearFunc daPeru_c::mCutList[3] = {
     &daPeru_c::cutAppear_skip,
 };
 
-daPeru_c::~daPeru_c() {
-    OS_REPORT("|%06d:%x|daPeru_c -> デストラクト\n", g_Counter.mCounter0, this);
-    if (heap != NULL) {
-        mpMorf[0]->stopZelAnime();
-    }
-    deleteRes(l_loadResPtrnList[mType], (const char**) l_resNameList);
-}
-
-PeruParams const daPeru_Param_c::m = {
+daPeru_HIOParam const daPeru_Param_c::m = {
     60.0f,
     -3.0f,
     1.0f,
@@ -154,6 +146,37 @@ PeruParams const daPeru_Param_c::m = {
     0.0f,
 };
 
+static PERU_HIO_CLASS l_HIO;
+
+#if DEBUG
+daPeru_HIO_c::daPeru_HIO_c() {
+    m = daPeru_Param_c::m;
+}
+
+void daPeru_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daPeru_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daPeru_c::~daPeru_c() {
+    OS_REPORT("|%06d:%x|daPeru_c -> デストラクト\n", g_Counter.mCounter0, this);
+    if (heap != NULL) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (const char**) l_resNameList);
+}
+
 int daPeru_c::create() {
     daNpcT_ct(this, daPeru_c, (daNpcT_faceMotionAnmData_c*)l_faceMotionAnmData, (daNpcT_motionAnmData_c*)l_motionAnmData, (daNpcT_MotionSeqMngr_c::sequenceStepData_c*)l_faceMotionSequenceData, 4, (daNpcT_MotionSeqMngr_c::sequenceStepData_c*)l_motionSequenceData, 4, l_evtList, l_resNameList);
     OS_REPORT("------------ ルイーズ生成処理開始\n");
@@ -182,9 +205,15 @@ int daPeru_c::create() {
                                               -300.0f, 300.0f,
                                               450.0f, 300.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ルイーズ");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                          &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daPeru_Param_c::m.field_0x00[4], 0, this);
+        mCcStts.Init(mpHIO->m.inner.field_0x10, 0, this);
         for (int i = 0; i < 2; i++) {
             mCyls[i].Set(mCcDCyl);
             mCyls[i].SetStts(&mCcStts);
@@ -279,7 +308,7 @@ int daPeru_c::Draw() {
         u16 eyeballMat = getEyeballMaterialNo();
         modelData->getMaterialNodePointer(eyeballMat)->setMaterialAnm(matAnm);
     }
-    return draw(0, 0, daPeru_Param_c::m.field_0x00[3], NULL, 100.0f, 0, field_0xe80, 0);
+    return draw(0, 0, mpHIO->m.inner.field_0x0C, NULL, 100.0f, 0, field_0xe80, 0);
 }
 
 int daPeru_c::createHeapCallBack(fopAc_ac_c* i_this) {
@@ -311,20 +340,20 @@ int daPeru_c::isDelete() {
 
 void daPeru_c::reset() {
     initialize();
-    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(daPeru_Param_c::m.field_0x48[2], daPeru_Param_c::m.field_0x48[3]);
-    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[0];
-    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(daPeru_Param_c::m.field_0x48[0], daPeru_Param_c::m.field_0x48[1]);
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(mpHIO->m.inner.field_0x4C, mpHIO->m.inner.field_0x4E);
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(mpHIO->m.inner.field_0x48, mpHIO->m.inner.field_0x4A);
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
-    scale.setall(daPeru_Param_c::m.field_0x00[2]);
-    mCcStts.SetWeight(daPeru_Param_c::m.field_0x00[4]);
-    mCylH = daPeru_Param_c::m.field_0x00[5];
-    mWallR = daPeru_Param_c::m.field_0x00[7];
+    scale.setall(mpHIO->m.inner.field_0x08);
+    mCcStts.SetWeight(mpHIO->m.inner.field_0x10);
+    mCylH = mpHIO->m.inner.field_0x14;
+    mWallR = mpHIO->m.inner.field_0x1C;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daPeru_Param_c::m.field_0x00[6]);
-    mRealShadowSize = daPeru_Param_c::m.field_0x00[3];
-    gravity = daPeru_Param_c::m.field_0x00[1];
-    mExpressionMorfFrame = daPeru_Param_c::m.field_0x64[2];
-    mMorfFrames = daPeru_Param_c::m.field_0x00[17];
+    mAcchCir.SetWallH(mpHIO->m.inner.field_0x18);
+    mRealShadowSize = mpHIO->m.inner.field_0x0C;
+    gravity = mpHIO->m.inner.field_0x04;
+    mExpressionMorfFrame = mpHIO->m.inner.field_0x6C;
+    mMorfFrames = mpHIO->m.inner.field_0x44;
     mActionFunc = NULL;
     if (mpMatAnm[0] != NULL) {
         mpMatAnm[0]->initialize();
@@ -346,19 +375,19 @@ void daPeru_c::setParam() {
     if (mType == 0 && !daNpcT_chkEvtBit(0x127)) {
         attention_info.flags = 0;
     }
-    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(daPeru_Param_c::m.field_0x48[2], daPeru_Param_c::m.field_0x48[3]);
-    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[0];
-    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(daPeru_Param_c::m.field_0x48[0], daPeru_Param_c::m.field_0x48[1]);
-    scale.setall(daPeru_Param_c::m.field_0x00[2]);
-    mCcStts.SetWeight(daPeru_Param_c::m.field_0x00[4]);
-    mCylH = daPeru_Param_c::m.field_0x00[5];
-    mWallR = daPeru_Param_c::m.field_0x00[7];
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(mpHIO->m.inner.field_0x4C, mpHIO->m.inner.field_0x4E);
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(mpHIO->m.inner.field_0x48, mpHIO->m.inner.field_0x4A);
+    scale.setall(mpHIO->m.inner.field_0x08);
+    mCcStts.SetWeight(mpHIO->m.inner.field_0x10);
+    mCylH = mpHIO->m.inner.field_0x14;
+    mWallR = mpHIO->m.inner.field_0x1C;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daPeru_Param_c::m.field_0x00[6]);
-    mRealShadowSize = daPeru_Param_c::m.field_0x00[3];
-    gravity = daPeru_Param_c::m.field_0x00[1];
-    mExpressionMorfFrame = daPeru_Param_c::m.field_0x64[2];
-    mMorfFrames = daPeru_Param_c::m.field_0x00[17];
+    mAcchCir.SetWallH(mpHIO->m.inner.field_0x18);
+    mRealShadowSize = mpHIO->m.inner.field_0x0C;
+    gravity = mpHIO->m.inner.field_0x04;
+    mExpressionMorfFrame = mpHIO->m.inner.field_0x6C;
+    mMorfFrames = mpHIO->m.inner.field_0x44;
 }
 
 void daPeru_c::setAfterTalkMotion() {
@@ -418,11 +447,11 @@ void daPeru_c::setAttnPos() {
     f32 dVar9 = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     mJntAnm.setParam(
         this, mpMorf[0]->getModel(), &acStack_3c, getBackboneJointNo(), getNeckJointNo(),
-        getHeadJointNo(), daPeru_Param_c::m.field_0x00[9], daPeru_Param_c::m.field_0x00[8],
-        daPeru_Param_c::m.field_0x00[11], daPeru_Param_c::m.field_0x00[10],
-        daPeru_Param_c::m.field_0x00[13], daPeru_Param_c::m.field_0x00[12],
-        daPeru_Param_c::m.field_0x00[15], daPeru_Param_c::m.field_0x00[14],
-        daPeru_Param_c::m.field_0x00[16], dVar9, NULL);
+        getHeadJointNo(), mpHIO->m.inner.field_0x24, mpHIO->m.inner.field_0x20,
+        mpHIO->m.inner.field_0x2C, mpHIO->m.inner.field_0x28,
+        mpHIO->m.inner.field_0x34, mpHIO->m.inner.field_0x30,
+        mpHIO->m.inner.field_0x3C, mpHIO->m.inner.field_0x38,
+        mpHIO->m.inner.field_0x40, dVar9, NULL);
     mJntAnm.calcJntRad(0.2f, 1.0f, dVar9);
     setMtx();
     mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(getHeadJointNo()));
@@ -430,7 +459,7 @@ void daPeru_c::setAttnPos() {
     mJntAnm.setEyeAngleX(eyePos, 1.0f, 0);
     mJntAnm.setEyeAngleY(eyePos,
         mCurAngle.y, 0, 1.0f, 0);
-    cXyz cStack_48(0.0f, daPeru_Param_c::m.field_0x00[0], 30.0f);
+    cXyz cStack_48(0.0f, mpHIO->m.inner.field_0x00, 30.0f);
     mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getBaseTRMtx());
     mDoMtx_stack_c::multVec(&cStack_48, &attention_info.position);
 }
@@ -502,7 +531,7 @@ int daPeru_c::wait(int param_0) {
         if (!mStagger.checkStagger()) {
             if (mPlayerActorMngr.getActorP() != NULL && !mTwilight) {
                 mJntAnm.lookNone(0);
-                if (chkActorInSight(mPlayerActorMngr.getActorP(), daPeru_Param_c::m.field_0x50[0],
+                if (chkActorInSight(mPlayerActorMngr.getActorP(), mpHIO->m.inner.field_0x50,
                                     mCurAngle.y))
                 {
                     mJntAnm.lookPlayer(0);
@@ -903,8 +932,6 @@ int daPeru_c::cutAppear(int param_1) {
     }
     return _cutAppear_Main(*pCutId);
 }
-
-static daPeru_Param_c l_HIO;
 
 int daPeru_c::_cutAppear_Init(int const& param_1) {
     switch(param_1) {

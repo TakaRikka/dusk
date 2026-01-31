@@ -11,7 +11,7 @@
 #include "d/d_resorce.h"
 #include "d/d_s_play.h"
 
-#include <math>
+#include <cmath>
 
 /**
  * @ingroup actors-objects

@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_digsnow.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include <math>
+#include <cmath>
 
 void daObjDigSnow_c::initBaseMtx() {
     mpModel->setBaseScale(scale);
@@ -27,7 +27,7 @@ int daObjDigSnow_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox2(this, mpModel->getModelData());
 
-    attention_info.distances[0x07] = 31;
+    attention_info.distances[fopAc_attn_ETC_e] = 31;
 
     mode_init_wait();
 
@@ -53,9 +53,9 @@ int daObjDigSnow_c::create1st() {
         return cPhs_ERROR_e;
     }
 
-    cPhs__Step phase_state = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step phase_state = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = (cPhs__Step)MoveBGCreate(l_arcName, 7, dBgS_MoveBGProc_TypicalRotY, 0x1000, NULL);
+        phase_state = MoveBGCreate(l_arcName, 7, dBgS_MoveBGProc_TypicalRotY, 0x1000, NULL);
         if (phase_state == cPhs_ERROR_e) {
             return phase_state;
         }

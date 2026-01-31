@@ -28,10 +28,10 @@ int daGoGate_c::CreateHeap() {
     return mpModel ? 1 : 0;
 }
 
-cPhs__Step daGoGate_c::create() {
+cPhs_Step daGoGate_c::create() {
     fopAcM_ct(this, daGoGate_c);
 
-    cPhs__Step phase = static_cast<cPhs__Step>(dComIfG_resLoad(&mPhase, "P_Ggate"));
+    cPhs_Step phase = static_cast<cPhs_Step>(dComIfG_resLoad(&mPhase, "P_Ggate"));
     if (phase == cPhs_COMPLEATE_e) {
         if (MoveBGCreate("P_Ggate", 7, dBgS_MoveBGProc_TypicalRotY, 0x1c00, NULL) == cPhs_ERROR_e) {
             return cPhs_ERROR_e;

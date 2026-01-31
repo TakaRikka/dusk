@@ -71,15 +71,13 @@ daBd_HIO_c::daBd_HIO_c() {
 #if DEBUG
 /* daBd_HIO_c::genMessage (JORMContext *) */
 void daBd_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("小鳥", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("基本大きさ", &mBasicSize, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("飛行速度", &mFlightSpeed, 0.0f, 50.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("地上速度", &mGroundSpeed, 0.0f, 20.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    mctx->genSlider("飛行時間（およそ）", &mFlightTime, 0, 30000, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                    24);
-    mctx->genSlider("リンク認識距離", &mLinkDetectRange, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF,
-                    0x200, 24);
-    mctx->genSlider("羽LevelSE鳴る距離", &mChirpDist, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    mctx->genLabel("小鳥", 0x80000001);
+    mctx->genSlider("基本大きさ", &mBasicSize, 0.0f, 5.0f);
+    mctx->genSlider("飛行速度", &mFlightSpeed, 0.0f, 50.0f);
+    mctx->genSlider("地上速度", &mGroundSpeed, 0.0f, 20.0f);
+    mctx->genSlider("飛行時間（およそ）", &mFlightTime, 0, 30000);
+    mctx->genSlider("リンク認識距離", &mLinkDetectRange, 0.0f, 2000.0f);
+    mctx->genSlider("羽LevelSE鳴る距離", &mChirpDist, 0, 1000);
 }
 #endif
 

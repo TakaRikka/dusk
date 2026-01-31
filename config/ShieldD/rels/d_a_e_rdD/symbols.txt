@@ -506,6 +506,7 @@ lbl_68_bss_68 = .bss:0x00000068; // type:object size:0x1 data:byte
 lbl_68_bss_69 = .bss:0x00000069; // type:object size:0x7 data:byte
 target_info = .bss:0x00000070; // type:object size:0x28 scope:global data:4byte
 target_info_count = .bss:0x00000098; // type:object size:0x4 scope:global data:4byte
+data_80519230 = .bss:0x0000009C; // type:object size:0x1 data:byte
 @LOCAL@path_check__FP10e_rd_class@check_index = .bss:0x000000A0; // type:object size:0xFF scope:local
 rd_count = .bss:0x000001A0; // type:object size:0x4 scope:global data:4byte
 lbl_68_bss_1A4 = .bss:0x000001A4; // type:object size:0x1 data:byte

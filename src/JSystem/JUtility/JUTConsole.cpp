@@ -7,7 +7,7 @@
 #include "JSystem/JUtility/JUTDirectPrint.h"
 #include "JSystem/JUtility/JUTVideo.h"
 #include <dolphin/vi.h>
-#include <stdio>
+#include <cstdio>
 #include "global.h"
 
 JUTConsoleManager* JUTConsoleManager::sManager;

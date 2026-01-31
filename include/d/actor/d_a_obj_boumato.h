@@ -7,6 +7,40 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_cc_d.h"
 
+struct daObj_BouMato_HIOParam {
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0c;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+};
+
+class daObj_BouMato_Param_c {
+public:
+    virtual ~daObj_BouMato_Param_c() {}
+
+    static daObj_BouMato_HIOParam const m;
+};
+
+#if DEBUG
+class daObj_BouMato_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_BouMato_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_BouMato_HIOParam m;
+};
+
+#define OBJ_BOUMATO_HIO_CLASS daObj_BouMato_HIO_c
+#else
+#define OBJ_BOUMATO_HIO_CLASS daObj_BouMato_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObj_BouMato_c
@@ -17,7 +51,7 @@
  */
 class daObj_BouMato_c : public fopAc_ac_c {
 private:
-    /* 0x568 */ int field_0x568;
+    /* 0x568 */ OBJ_BOUMATO_HIO_CLASS* mpHIO;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mModel;
     /* 0x578 */ dBgS_ObjAcch mAcch;
@@ -92,13 +126,6 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daObj_BouMato_c) == 0xa40);
-
-class daObj_BouMato_Param_c {
-public:
-    virtual ~daObj_BouMato_Param_c() {}
-
-    static f32 const m[7];
-};
 
 
 #endif /* D_A_OBJ_BOUMATO_H */

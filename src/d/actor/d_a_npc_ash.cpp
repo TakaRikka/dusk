@@ -218,8 +218,8 @@ daNpcAsh_c::~daNpcAsh_c() {
     }
 }
 
-cPhs__Step daNpcAsh_c::Create() {
-    cPhs__Step step;
+cPhs_Step daNpcAsh_c::Create() {
+    cPhs_Step step;
 
     fopAcM_ct(this, daNpcAsh_c);
 
@@ -249,7 +249,7 @@ cPhs__Step daNpcAsh_c::Create() {
     u32 i = 0;
     int arcIndex;
     while (arcIndex = l_loadRes_list[mType][i], arcIndex >= 0) {
-        step = (cPhs__Step)dComIfG_resLoad(&mPhase[i], l_arcNames[arcIndex]);
+        step = dComIfG_resLoad(&mPhase[i], l_arcNames[arcIndex]);
         if (step != cPhs_COMPLEATE_e) {
             return step;
         }
@@ -1195,7 +1195,7 @@ BOOL daNpcAsh_c::EvCut_WiretapEntrant(int i_staffID) {
     return true;
 }
 
-static cPhs__Step daNpcAsh_Create(void* i_this) {
+static cPhs_Step daNpcAsh_Create(void* i_this) {
     return static_cast<daNpcAsh_c*>(i_this)->Create();
 }
 

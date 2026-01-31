@@ -120,8 +120,9 @@ int daObjMirror6Pole_c::create() {
 }
 
 static int daObjMirror6Pole_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daObjMirror6Pole_c, i_this, "Obj_Mirror6Pole");
-    return static_cast<daObjMirror6Pole_c*>(i_this)->create();
+    daObjMirror6Pole_c* a_this = (daObjMirror6Pole_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "Obj_Mirror6Pole");
+    return a_this->create();
 }
 
 daObjMirror6Pole_c::~daObjMirror6Pole_c() {

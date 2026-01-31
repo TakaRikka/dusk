@@ -34,14 +34,14 @@ int daObjSword_c::Create() {
     return 1;
 }
 
-cPhs__Step daObjSword_c::create() {
+cPhs_Step daObjSword_c::create() {
     fopAcM_ct(this, daObjSword_c);
     m_itemNo = 0x28;
     if (fopAcM_isItem(this, getItemBit())) {
         return cPhs_ERROR_e;
     }
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, dItem_data::getFieldArc(m_itemNo));
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, dItem_data::getFieldArc(m_itemNo));
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckFieldItemCreateHeap, 0x4000)) {
             return cPhs_ERROR_e;

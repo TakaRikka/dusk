@@ -129,7 +129,7 @@ int daObjARI_c::CreateHeap() {
     return 1;
 }
 
-static cPhs__Step daObjARI_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObjARI_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return static_cast<daObjARI_c*>(i_this)->create();
 }
@@ -605,9 +605,9 @@ bool daObjARI_c::CreateChk() {
     return true;
 }
 
-cPhs__Step daObjARI_c::create() {
+cPhs_Step daObjARI_c::create() {
     fopAcM_ct(this, daObjARI_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, "I_Ari");
+    cPhs_Step step = dComIfG_resLoad(&mPhase, "I_Ari");
 
     if (step == cPhs_COMPLEATE_e) {
         mLocation = fopAcM_GetParam(this) & 0xf;

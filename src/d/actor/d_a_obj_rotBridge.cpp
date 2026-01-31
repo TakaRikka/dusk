@@ -210,7 +210,7 @@ void daRotBridge_c::moveBridge() {
 int daRotBridge_c::Draw() {
 #if DEBUG
     if (l_HIO.draw_wall_collision && mpBgW2 != NULL) {
-        mpBgW2->CalcPlane();
+        mpBgW2->DebugDraw();
     }
 #endif
 

@@ -4,7 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DShape.h"
-#include <stdint>
+#include <stdint.h>
 
 class J3DJoint;
 class J3DMaterialAnm;
@@ -66,9 +66,10 @@ public:
     J3DFog* getFog() { return mPEBlock->getFog(); }
     J3DTexMtx* getTexMtx(u32 idx) { return mTexGenBlock->getTexMtx(idx); }
     u16 getIndex() { return mIndex; }
-    bool isDrawModeOpaTexEdge() { return (mMaterialMode & 3) == 0; }
+    BOOL isDrawModeOpaTexEdge() { return (mMaterialMode & 3) ? 1 : 0; }
     J3DPEBlock* getPEBlock() { return mPEBlock; }
     void onInvalid() { mInvalid = 1; }
+    u32 getInvalid() { return mInvalid; }
     u32 getTexGenNum() const { return mTexGenBlock->getTexGenNum(); }
     u8 getTevStageNum() const { return mTevBlock->getTevStageNum(); }
     J3DTexCoord* getTexCoord(u32 idx) { return mTexGenBlock->getTexCoord(idx); }

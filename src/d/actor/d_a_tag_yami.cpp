@@ -55,8 +55,8 @@ int daTagYami_c::create() {
         } else {
             on_CoHit();
         }
-        break;
     }
+        break;
     default:
         return cPhs_ERROR_e;
     }
@@ -72,7 +72,8 @@ int daTagYami_c::Execute() {
 
 void daTagYami_c::calcCoC(cXyz& i_dst) {
     cXyz base(0.0f, 0.0f, 430.0f);
-    mDoMtx_stack_c::ZXYrotS(csXyz(0, -0x7f96, 0));
+    csXyz sp10(0, -0x7f96, 0);
+    mDoMtx_stack_c::ZXYrotS(sp10);
     mDoMtx_stack_c::multVec(&base, &base);
     i_dst = home.pos + base;
 }
@@ -87,14 +88,12 @@ u32 daTagYami_c::chk_CoHit() {
     }
 
     f32 coR = getCoR();
-    f32 plDist = getPlDist();
-    return plDist < coR;
+    return getPlDist() < coR;
 }
 
 f32 daTagYami_c::getPlDist() {
     cXyz coC(mCoC);
-    daPy_py_c* py = daPy_getPlayerActorClass();
-    cXyz pyPos = fopAcM_GetPosition((fopAc_ac_c*)py);
+    cXyz pyPos = *fopAcM_GetPosition_p(daPy_getPlayerActorClass());
     cXyz diff = pyPos - coC;
     return diff.absXZ();
 }
@@ -109,14 +108,19 @@ void daTagYami_c::offMidnaTagSw2() {
 }
 
 int daTagYami_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagYami_c*>(i_this)->create();
+    daTagYami_c* yami = static_cast<daTagYami_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return yami->create();
 }
 
 int daTagYami_Execute(fopAc_ac_c* i_this) {
-    return static_cast<daTagYami_c*>(i_this)->Execute();
+    daTagYami_c* yami = static_cast<daTagYami_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return yami->Execute();
 }
 
 int daTagYami_Delete(daTagYami_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagYami_c();
     return 1;
 }

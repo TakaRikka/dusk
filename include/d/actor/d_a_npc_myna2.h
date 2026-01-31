@@ -3,6 +3,36 @@
 
 #include "d/actor/d_a_npc4.h"
 
+struct daNpc_myna2_HIOParam {
+    /* 0x00 */ daNpcF_HIOParam common;
+    /* 0x6C */ f32 field_0x6c;
+    /* 0x70 */ f32 field_0x70;
+};
+
+class daNpc_myna2_Param_c {
+public:
+    virtual ~daNpc_myna2_Param_c() {}
+
+    static const daNpc_myna2_HIOParam m;
+};
+
+#if DEBUG
+class daNpc_myna2_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_myna2_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_myna2_HIOParam m;
+};
+
+#define NPC_MYNA2_HIO_CLASS daNpc_myna2_HIO_c
+#else
+#define NPC_MYNA2_HIO_CLASS daNpc_myna2_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_myna2_c
@@ -64,7 +94,7 @@ public:
     /* 0xB4C */ daNpcF_Lookat_c mLookat;
     /* 0xBE8 */ Z2CreatureSumomo mSound;
     /* 0xC78 */ daNpcF_ActorMngr_c mActorMgrs[1];
-    /* 0xC80 */ u8 field_0xC80[0xC84 - 0xC80];
+    /* 0xC80 */ NPC_MYNA2_HIO_CLASS* mpHIO;
     /* 0xC84 */ dCcD_Cyl mCyl;
     /* 0xDC0 */ ActionFn mNextAction;
     /* 0xDCC */ ActionFn mAction;
@@ -87,19 +117,5 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daNpc_myna2_c) == 0xe34);
-
-struct daNpc_myna2_HIOParam {
-    /* 0x00 */ daNpcF_HIOParam common;
-    /* 0x6C */ f32 field_0x6c;
-    /* 0x70 */ f32 field_0x70;
-};
-
-class daNpc_myna2_Param_c {
-public:
-    virtual ~daNpc_myna2_Param_c() {}
-
-    static const daNpc_myna2_HIOParam m;
-};
-
 
 #endif /* D_A_NPC_MYNA2_H */

@@ -24,7 +24,7 @@ public:
     void DrawChk1();
     void DrawChk2();
     void setBaseMtx();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Create();
     int Execute(Mtx**);

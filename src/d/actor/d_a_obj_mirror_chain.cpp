@@ -98,7 +98,7 @@ void dScissorBegin_packet_c::draw() {
 
     f32 sp2C = view_p->fovy;
     f32 sp28 = view_p->aspect;
-    f32 sp24 = std::tan(0.017453292f * (0.5f * sp2C));
+    f32 sp24 = std::tan((M_PI / 180.0f) * (0.5f * sp2C));
 
     f32 sp20, sp1C, sp18, sp14;
     view_port_class* viewport_p = dComIfGd_getViewport();
@@ -477,10 +477,10 @@ void daObjMirrorChain_c::create_init() {
     initBaseMtx();
 }
 
-cPhs__Step daObjMirrorChain_c::create() {
+cPhs_Step daObjMirrorChain_c::create() {
     fopAcM_ct(this, daObjMirrorChain_c);
 
-    cPhs__Step phase_state = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step phase_state = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createSolidHeap, 0x71b0)) {
             return cPhs_ERROR_e;
@@ -491,7 +491,7 @@ cPhs__Step daObjMirrorChain_c::create() {
     return phase_state;
 }
 
-static cPhs__Step daObjMirrorChain_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObjMirrorChain_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return ((daObjMirrorChain_c*)i_this)->create();
 }

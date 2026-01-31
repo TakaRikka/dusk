@@ -2,7 +2,7 @@
 
 #include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JUtility/JUTPalette.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 JUTTexture::~JUTTexture() {
     if (getCaptureFlag()) {

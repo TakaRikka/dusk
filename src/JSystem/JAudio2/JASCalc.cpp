@@ -1,7 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JAudio2/JASCalc.h"
-#include <math>
+#include <cmath>
 #include <limits>
 
 void JASCalc::imixcopy(const s16* s1, const s16* s2, s16* dst, u32 n) {

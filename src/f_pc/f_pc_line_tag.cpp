@@ -7,7 +7,7 @@
 #include "f_pc/f_pc_line.h"
 
 
-s32 fpcLnTg_Move(line_tag* i_lineTag, int i_newListID) {
+int fpcLnTg_Move(line_tag* i_lineTag, int i_newListID) {
     if (i_lineTag->list_id != i_newListID) {
         fpcLnTg_QueueTo(i_lineTag);
         return fpcLnTg_ToQueue(i_lineTag, i_newListID);
@@ -21,7 +21,7 @@ void fpcLnTg_QueueTo(line_tag* i_lineTag) {
     i_lineTag->list_id = -1;
 }
 
-s32 fpcLnTg_ToQueue(line_tag* i_lineTag, int lineListID) {
+int fpcLnTg_ToQueue(line_tag* i_lineTag, int lineListID) {
     if (cTg_AdditionToTree(&g_fpcLn_Queue, lineListID, &i_lineTag->base)) {
         i_lineTag->list_id = lineListID;
         return 1;

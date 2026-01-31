@@ -2,8 +2,8 @@
 
 #include "d/actor/d_a_tag_allmato.h"
 #include "d/actor/d_a_npc4.h"
-#include "d/actor/d_a_obj_itamato.h"
 #include "d/actor/d_a_obj_boumato.h"
+#include "d/actor/d_a_obj_itamato.h"
 #include "d/actor/d_a_arrow.h"
 #include "f_op/f_op_camera_mng.h"
 
@@ -268,10 +268,14 @@ static fopAc_ac_c* l_findActorPtrs[100];
 static u32 l_findCount;
 
 void* daTag_AllMato_c::srchBouMato(void* i_actor, void* i_data) {
-    if (l_findCount < 100 && i_actor != NULL && i_actor != i_data) {
-        if (fopAcM_IsExecuting(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_OBJ_BOUMATO) {
-            l_findActorPtrs[l_findCount] = (fopAc_ac_c*)i_actor;
-            l_findCount++;
+    void* data = i_data;
+    if (l_findCount < 100) {
+        fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
+        if (actor != NULL && actor != data) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor)) && fopAcM_GetName(i_actor) == PROC_OBJ_BOUMATO) {
+                l_findActorPtrs[l_findCount] = actor;
+                l_findCount++;
+            }
         }
     }
 
@@ -279,10 +283,14 @@ void* daTag_AllMato_c::srchBouMato(void* i_actor, void* i_data) {
 }
 
 void* daTag_AllMato_c::srchItaMato(void* i_actor, void* i_data) {
-    if (l_findCount < 100 && i_actor != NULL && i_actor != i_data) {
-        if (fopAcM_IsExecuting(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_OBJ_ITAMATO) {
-            l_findActorPtrs[l_findCount] = (fopAc_ac_c*)i_actor;
-            l_findCount++;
+    void* data = i_data;
+    if (l_findCount < 100) {
+        fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
+        if (actor != NULL && actor != data) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor)) && fopAcM_GetName(i_actor) == PROC_OBJ_ITAMATO) {
+                l_findActorPtrs[l_findCount] = actor;
+                l_findCount++;
+            }
         }
     }
 
@@ -290,10 +298,14 @@ void* daTag_AllMato_c::srchItaMato(void* i_actor, void* i_data) {
 }
 
 void* daTag_AllMato_c::srchTaro(void* i_actor, void* i_data) {
-    if (l_findCount < 100 && i_actor != NULL && i_actor != i_data) {
-        if (fopAcM_IsExecuting(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_NPC_TARO) {
-            l_findActorPtrs[l_findCount] = (fopAc_ac_c*)i_actor;
-            l_findCount++;
+    void* data = i_data;
+    if (l_findCount < 100) {
+        fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
+        if (actor != NULL && actor != data) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor)) && fopAcM_GetName(i_actor) == PROC_NPC_TARO) {
+                l_findActorPtrs[l_findCount] = actor;
+                l_findCount++;
+            }
         }
     }
 
@@ -301,10 +313,14 @@ void* daTag_AllMato_c::srchTaro(void* i_actor, void* i_data) {
 }
 
 void* daTag_AllMato_c::srchArrow(void* i_actor, void* i_data) {
-    if (l_findCount < 100 && i_actor != NULL && i_actor != i_data) {
-        if (fopAcM_IsExecuting(fopAcM_GetID(i_actor)) && fopAcM_GetName(i_actor) == PROC_ARROW) {
-            l_findActorPtrs[l_findCount] = (fopAc_ac_c*)i_actor;
-            l_findCount++;
+    void* data = i_data;
+    if (l_findCount < 100) {
+        fopAc_ac_c* actor = (fopAc_ac_c*)i_actor;
+        if (actor != NULL && actor != data) {
+            if (fopAcM_IsExecuting(fopAcM_GetID(actor)) && fopAcM_GetName(i_actor) == PROC_ARROW) {
+                l_findActorPtrs[l_findCount] = actor;
+                l_findCount++;
+            }
         }
     }
 
@@ -436,11 +452,12 @@ fopAc_ac_c* daTag_AllMato_c::getTaroActorP() {
             fopAc_ac_c* boumato_actor_p = NULL;
             fopAc_ac_c* itamato_actor_p = NULL;
 
+            int sp14 = 0;
             for (int i = 0; i < 499; i++) {
                 for (int j = 0; j < mBouMatoActorNum; j++) {
                     boumato_actor_p = mBouMatoActorMngr[j].getActorP();
                     if (boumato_actor_p != NULL) {
-                        int sp14 = ((daObj_BouMato_c*)boumato_actor_p)->checkCrs(arrow_p, field_0x590[i], field_0x590[i + 1], sp94.abs() + arrow_p->getArrowOutLength());
+                        sp14 = ((daObj_BouMato_c*)boumato_actor_p)->checkCrs(arrow_p, field_0x590[i], field_0x590[i + 1], sp94.abs() + arrow_p->getArrowOutLength());
                         if (sp14 != 0) {
                             mBrkMatoActorMngr.entry(mBouMatoActorMngr[j].getActorP());
                             return sp14;
@@ -451,7 +468,7 @@ fopAc_ac_c* daTag_AllMato_c::getTaroActorP() {
                 for (int j = 0; j < mItaMatoActorNum; j++) {
                     itamato_actor_p = mItaMatoActorMngr[j].getActorP();
                     if (itamato_actor_p != NULL) {                        
-                        int sp14 = ((daObj_ItaMato_c*)itamato_actor_p)->checkCrs(arrow_p, field_0x590[i], field_0x590[i + 1], sp94.abs() + arrow_p->getArrowOutLength());
+                        sp14 = ((daObj_ItaMato_c*)itamato_actor_p)->checkCrs(arrow_p, field_0x590[i], field_0x590[i + 1], sp94.abs() + arrow_p->getArrowOutLength());
                         if (sp14 != 0) {
                             mBrkMatoActorMngr.entry(mItaMatoActorMngr[j].getActorP());
                             return sp14;
@@ -466,7 +483,7 @@ fopAc_ac_c* daTag_AllMato_c::getTaroActorP() {
 }
 
 int daTag_AllMato_c::checkCrsMato2() {
-    fopAc_ac_c* sp28;
+    fopAc_ac_c* sp28 = NULL;
     getArrowActorP();
 
     for (int i = 0; i < (int)l_findCount; i++) {
@@ -499,13 +516,13 @@ int daTag_AllMato_c::checkCrsMato2() {
             }
 
             fopAc_ac_c* sp18 = NULL;
-            fopAc_ac_c* sp14 = NULL;
+            int sp14 = NULL;
 
             for (int i = 0; i < 499; i++) {
                 for (int j = 0; j < mBouMatoActorNum; j++) {
                     sp18 = mBouMatoActorMngr[j].getActorP();
                     if (sp18 != NULL) {
-                        int sp14 = ((daObj_BouMato_c*)sp18)->checkCrs(arrow_p, field_0x590[i], field_0x590[i + 1], sp80.abs() + arrow_p->getArrowOutLength());
+                        sp14 = ((daObj_BouMato_c*)sp18)->checkCrs(arrow_p, field_0x590[i], field_0x590[i + 1], sp80.abs() + arrow_p->getArrowOutLength());
                         if (sp14 != 0) {
                             mBrkMatoActorMngr.entry(mBouMatoActorMngr[j].getActorP());
                             return sp14;
@@ -520,10 +537,11 @@ int daTag_AllMato_c::checkCrsMato2() {
 }
 
 int daTag_AllMato_c::checkBrkMato() {
+    daObj_ItaMato_c* actor_p = NULL;
     int rt = 0;
 
     for (int i = 0; i < mItaMatoActorNum; i++) {
-        daObj_ItaMato_c* actor_p = (daObj_ItaMato_c*)mItaMatoActorMngr[i].getActorP();
+        actor_p = (daObj_ItaMato_c*)mItaMatoActorMngr[i].getActorP();
         rt = actor_p->checkBrk();
         if (rt != 0) {
             mBrkMatoActorMngr.entry(mItaMatoActorMngr[i].getActorP());

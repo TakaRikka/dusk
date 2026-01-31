@@ -22,25 +22,27 @@ public:
 
 class JAWWindow {
 public:
-    class TJ2DWindowDraw : public J2DWindow {
-    public:
-        TJ2DWindowDraw(u32, const JGeometry::TBox2<f32>&, const char*);
-
-        void drawPane(int x, int y, const J2DGrafContext* p_grafCtx) {
-            J2DPane::draw(x, y, p_grafCtx, true, true);
-            calcMtx();
-        }
-    };
-
     class TWindowText : public J2DPane {
     public:
         TWindowText(JAWWindow*);
+        virtual ~TWindowText();
         virtual void drawSelf(f32, f32);
         virtual void drawSelf(f32, f32, Mtx*);
 
         /* 0x0FC */ JAWGraphContext field_0xfc;
         /* 0x118 */ JAWWindow* m_pParent;
         /* 0x11C */ JUTPoint field_0x11c;
+    };
+
+    class TJ2DWindowDraw : public J2DWindow {
+    public:
+        TJ2DWindowDraw(u32 param_1, const JGeometry::TBox2<f32>& param_2, const char* param_3) : J2DWindow(param_1, param_2, param_3, TEXTUREBASE_0, NULL) {}
+        virtual ~TJ2DWindowDraw() {}
+
+        void drawPane(int x, int y, const J2DGrafContext* p_grafCtx) {
+            J2DPane::draw(x, y, p_grafCtx, true, true);
+            calcMtx();
+        }
     };
 
     JAWWindow(const char*, int, int);

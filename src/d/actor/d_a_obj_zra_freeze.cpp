@@ -51,14 +51,14 @@ static int createSolidHeap(fopAc_ac_c* i_this) {
     return static_cast<daZraFreeze_c*>(i_this)->CreateHeap();
 }
 
-cPhs__Step daZraFreeze_c::Create() {
+cPhs_Step daZraFreeze_c::Create() {
     fopAcM_ct(this, daZraFreeze_c);
     field_0x5b0 = (fopAcM_GetParam(this) >> 8) & 0xff;
     field_0x5b1 = (fopAcM_GetParam(this) >> 0x10) & 0xff;
     field_0x5b2 = (fopAcM_GetParam(this) >> 0x18) & 0xff;
     mMapToolId = fopAcM_GetParam(this) & 0xff;
     mEventId = -1;
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createSolidHeap, 0x1540)) {
             return cPhs_ERROR_e;
@@ -187,7 +187,7 @@ static int daZraFreeze_Delete(daZraFreeze_c* i_this) {
     return i_this->Delete();
 }
 
-static cPhs__Step daZraFreeze_create(fopAc_ac_c* i_this) {
+static cPhs_Step daZraFreeze_create(fopAc_ac_c* i_this) {
     return static_cast<daZraFreeze_c*>(i_this)->Create();
 }
 

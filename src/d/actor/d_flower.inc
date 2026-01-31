@@ -365,7 +365,7 @@ void dFlower_data_c::WorkAt(fopAc_ac_c* i_hitActor, u32 i_massFlg, int i_roomNo,
                 }
             } 
             
-            if ((daPy_getPlayerActorClass()->getCutType() >= 3) && (daPy_getPlayerActorClass()->getCutType() <= 7)) {
+            if ((daPy_getPlayerActorClass()->getCutType() >= daPy_py_c::CUT_TYPE_NM_RIGHT) && (daPy_getPlayerActorClass()->getCutType() <= daPy_py_c::CUT_TYPE_FINISH_VERTICAL)) {
                 if (m_pos.abs(temp_r26->current.pos) > 128.0f) {
                     if (m_pos.abs(temp_r26->current.pos) < 200.0f) {
                         WorkAt_NoCutAnim(i_hitActor, i_massFlg, i_roomNo, i_hitinf, hitobj_p);

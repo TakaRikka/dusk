@@ -72,7 +72,7 @@ void daNpc_yamiD_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
 void daNpc_yamiD_HIO_c::genMessage(JORMContext* ctext) {
     daNpcT_cmnGenMessage(ctext, &m.common);
-    ctext->genButton("ファイル書き出し",0x40000002,0,NULL,0xffff,0xffff,0x200,0x18);
+    ctext->genButton("ファイル書き出し",0x40000002);
 }
 #endif
 
@@ -190,7 +190,7 @@ daNpc_yamiD_HIOParam const daNpc_yamiD_Param_c::m = {
 
 static NPC_YAMID_HIO_CLASS l_HIO;
 
-cPhs__Step daNpc_yamiD_c::create() {
+cPhs_Step daNpc_yamiD_c::create() {
     daNpcT_ct(this, daNpc_yamiD_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
                        l_evtList, l_resNameList);
@@ -199,7 +199,7 @@ cPhs__Step daNpc_yamiD_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x3710)) {
             return cPhs_ERROR_e;
@@ -297,7 +297,7 @@ int daNpc_yamiD_c::CreateHeap() {
 
 int daNpc_yamiD_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_yamiD_c -> Delete\n", g_Counter.mCounter0, this);
-    fpc_ProcID reg_r30 = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_YAMID");
     this->~daNpc_yamiD_c();
     return 1;
 }

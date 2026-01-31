@@ -55,7 +55,7 @@ public:
     int execute();
     int _delete();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     void d_setAction(void (daE_SW_c::*)());
     void d_checkFall();
     void d_damage_check();

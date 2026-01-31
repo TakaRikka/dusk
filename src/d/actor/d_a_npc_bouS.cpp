@@ -249,14 +249,14 @@ void daNpcBouS_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 }
 
 void daNpcBouS_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genSlider("興奮度", &m.excitement_level, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("会話距離", &m.talk_dist, 0.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("目線 X", &m.gaze_x, -500.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("目線 Y", &m.gaze_y, -500.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("目線 Z", &m.gaze_z, -500.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("Eye 距離", &m.eye_dist, 0.0f, 3000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("Eye 角度X", &m.eye_angle_x, -0x8000, 0x7FFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("Eye 角度Y", &m.eye_angle_y, -0x8000, 0x7FFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("興奮度", &m.excitement_level, 0.0f, 1.0f);
+    ctx->genSlider("会話距離", &m.talk_dist, 0.0f, 500.0f);
+    ctx->genSlider("目線 X", &m.gaze_x, -500.0f, 500.0f);
+    ctx->genSlider("目線 Y", &m.gaze_y, -500.0f, 500.0f);
+    ctx->genSlider("目線 Z", &m.gaze_z, -500.0f, 500.0f);
+    ctx->genSlider("Eye 距離", &m.eye_dist, 0.0f, 3000.0f);
+    ctx->genSlider("Eye 角度X", &m.eye_angle_x, -0x8000, 0x7FFF);
+    ctx->genSlider("Eye 角度Y", &m.eye_angle_y, -0x8000, 0x7FFF);
 }
 #endif
 
@@ -330,14 +330,14 @@ daNpcBouS_HIOParam const daNpcBouS_Param_c::m = {
     0,
 };
 
-cPhs__Step daNpcBouS_c::Create() {
+cPhs_Step daNpcBouS_c::Create() {
     fopAcM_ct(this, daNpcBouS_c);
 
     mMsgNo = getMessageNo();
 
-    cPhs__Step phase = cPhs_ERROR_e;
+    cPhs_Step phase = cPhs_ERROR_e;
     for (int i = 0; i < 2; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
+        phase = dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
 
         if (phase != cPhs_COMPLEATE_e) {
             return phase;
@@ -416,7 +416,7 @@ int daNpcBouS_c::CreateHeap() {
 }
 
 int daNpcBouS_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_BOU_S");
     this->~daNpcBouS_c();
     return 1;
 }
@@ -951,6 +951,23 @@ void daNpcBouS_c::lookat() {
     mLookat.setParam(body_angleX_min, body_angleX_max, body_angleY_min, body_angleY_max, 0.0f, 0.0f, 0.0f, 0.0f, 
                      head_angleX_min, head_angleX_max, head_angleY_min, head_angleY_max, mCurAngle.y, lookatPos);
     mLookat.calc(this, mdl_p->getBaseTRMtx(), lookatAngle, i_snap, angle_delta, FALSE);
+}
+
+BOOL daNpcBouS_c::chkFindPlayer() {
+    BOOL inArea = FALSE;
+    if (mActorMngrs[0].getActorP() == NULL) {
+        inArea = chkPlayerInSpeakArea(this);
+    } else {
+        inArea = chkPlayerInTalkArea(this);
+    }
+
+    if (inArea) {
+        mActorMngrs[0].entry(daPy_getPlayerActorClass());
+    } else {
+        mActorMngrs[0].remove();
+    }
+
+    return inArea;
 }
 
 BOOL daNpcBouS_c::step(s16 i_turnTargetAngle, int param_2) {
@@ -1594,7 +1611,7 @@ int daNpcBouS_c::drawDbgInfo() {
     return 0;
 }
 
-void daNpcBouS_c::drawOtherMdls() {}
+inline void daNpcBouS_c::drawOtherMdls() {}
 
 AUDIO_INSTANCES;
 

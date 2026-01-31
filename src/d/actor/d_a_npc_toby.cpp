@@ -9,6 +9,7 @@
 #include "Z2AudioLib/Z2Instances.h"
 #if DEBUG
 #include "JSystem/JHostIO/JORFile.h"
+#include "d/d_debug_viewer.h"
 #endif
 #include "d/actor/d_a_obj_automata.h"
 #include "d/d_msg_object.h"
@@ -106,15 +107,15 @@ void daNpc_Toby_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 void daNpc_Toby_HIO_c::genMessage(JORMContext* ctext) {
     daNpcT_cmnGenMessage(ctext, &m.common);
     // Performance speed:
-    ctext->genSlider("演奏速度        ", &m.performance_speed, 1.0f, 16.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("演奏速度        ", &m.performance_speed, 1.0f, 16.0f);
     // playing speed up:
-    ctext->genSlider("演奏加速        ", &m.speedup_performance, 0.0f, 16.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("演奏加速        ", &m.speedup_performance, 0.0f, 16.0f);
     // playing initial velocity:
-    ctext->genSlider("演奏初速        ", &m.init_play_speed, 1.0f, 16.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("演奏初速        ", &m.init_play_speed, 1.0f, 16.0f);
     // switching speed:
-    ctext->genSlider("切り替え速度    ", &m.switching_speed, 0.0f, 16.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("切り替え速度    ", &m.switching_speed, 0.0f, 16.0f);
     // export file:
-    ctext->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctext->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -414,14 +415,7 @@ int daNpc_Toby_c::Draw() {
         modelData->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    return daNpcT_c::draw(
-#if DEBUG
-        chkAction(&daNpc_Toby_c::test),
-#else
-        FALSE,
-#endif
-        FALSE, mRealShadowSize, NULL, 100.0f, 0, 0, 0
-    );
+    return daNpcT_c::draw(NpcT_CHK_ACTION(daNpc_Toby_c), FALSE, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
 int daNpc_Toby_c::createHeapCallBack(fopAc_ac_c* i_this) {
@@ -442,9 +436,10 @@ int daNpc_Toby_c::ctrlJointCallBack(J3DJoint* i_joint, int i_int) {
 }
 
 void* daNpc_Toby_c::srchToby(void* i_actor, void* i_data) {
+    fopAc_ac_c* o_actor = (fopAc_ac_c*) i_data;
     if (mFindCount < 50) {
         fopAc_ac_c* actor_p = (fopAc_ac_c*)i_actor;
-        if (actor_p != NULL && actor_p != i_data) {
+        if (actor_p != NULL && actor_p != o_actor) {
             if (fopAcM_IsExecuting(fopAcM_GetID(actor_p)) && fopAcM_GetName(actor_p) == PROC_NPC_TOBY) {
                 mFindActorPtrs[mFindCount] = actor_p;
                 mFindCount++;
@@ -888,41 +883,19 @@ void daNpc_Toby_c::setCollision() {
 }
 
 int daNpc_Toby_c::drawDbgInfo() {
+#if DEBUG
+    if (mpHIO->m.common.debug_info_ON) {
+        f32 dist_max_speak = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_SPEAK_e]).mDistMax;
+        f32 dist_max_talk = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_TALK_e]).mDistMax;
+        dDbVw_drawCircleOpa(attention_info.position, dist_max_speak, (GXColor){0x00, 0xC8, 0x00, 0xFF}, 1, 12);
+        dDbVw_drawCircleOpa(attention_info.position, dist_max_talk, (GXColor){0xC8, 0x00, 0x00, 0xFF}, 1, 12);
+        dDbVw_drawSphereXlu(eyePos, 18.0f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
+        dDbVw_drawSphereXlu(attention_info.position, 9.0f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
+    }
+#endif
+
     return FALSE;
 }
-
-#if DEBUG
-// I have 0 clue what these are about, but I saw them in npc_moir as well.
-static s16 dummy_lit_122993(int sel) {
-    const s16 arr[2] = {0x00C8, 0x00FF};
-    return arr[sel];
-}
-
-static s16 dummy_lit_122996(int sel) {
-    const s16 arr[2] = {0xC800, 0x00FF};
-    return arr[sel];
-}
-
-static s16 dummy_lit_122999(int sel) {
-    const s16 arr[2] = {0x8080, 0x80A0};
-    return arr[sel];
-}
-
-static s16 dummy_lit_123002(int sel) {
-    const s16 arr[2] = {0x8080, 0x80A0};
-    return arr[sel];
-}
-
-static s16 dummy_lit_123016(int sel) {
-    const s16 arr[2] = {0x4190, 0x0000};
-    return arr[sel];
-}
-
-static s16 dummy_lit_123017(int sel) {
-    const s16 arr[2] = {0x4110, 0x0000};
-    return arr[sel];
-}
-#endif
 
 void daNpc_Toby_c::drawOtherMdl() {
     J3DModel* model = mpMorf[0]->getModel();
@@ -2034,7 +2007,7 @@ int daNpc_Toby_c::walk(void*) {
     return 1;
 }
 
-int daNpc_Toby_c::play(void* param_0) {
+int daNpc_Toby_c::play(void*) {
     daObj_AutoMata_c* actor_p = (daObj_AutoMata_c*) mActorMngr[1].getActorP();
     int reg_r29 = 1;
     if (actor_p != NULL) {
@@ -2183,7 +2156,7 @@ int daNpc_Toby_c::talk(void*) {
     return 0;
 }
 
-int daNpc_Toby_c::test(void* param_0) {
+BOOL daNpc_Toby_c::test(void*) {
     switch(mMode) {
     case 0:
     case 1:
@@ -2219,7 +2192,7 @@ static int daNpc_Toby_Draw(void* i_this) {
     return static_cast<daNpc_Toby_c*>(i_this)->Draw();
 }
 
-static int daNpc_Toby_IsDelete(void* i_this) {
+static int daNpc_Toby_IsDelete(void*) {
     return true;
 }
 

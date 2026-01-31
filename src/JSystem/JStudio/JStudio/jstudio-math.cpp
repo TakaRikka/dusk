@@ -3,7 +3,7 @@
 #include "JSystem/JStudio/JStudio/jstudio-math.h"
 #include "JSystem/JGeometry.h"
 #include "JSystem/TPosition3.h"
-#include <math>
+#include <cmath>
 
 void JStudio::math::getRotation_xyz(MtxP param_1, f32 x, f32 y, f32 z) {
     f32 cosx = cosf(DEG_TO_RAD(x));
@@ -62,7 +62,7 @@ void JStudio::math::getFromTransformation_SRxyzT(Vec* param_1, Vec* param_2, Vec
                    param_4[1][0] * dVar9, param_4[1][1] * dVar8, param_4[1][2] * dVar7,
                    param_4[2][0] * dVar9, param_4[2][1] * dVar8, param_4[2][2] * dVar7);
     aTStack_88.getEulerXYZ(&local_a0);
-    local_a0 *= 57.29577951308232;
+    local_a0 *= 180.0 / m_PI_D;
     param_2->x = local_a0.x;
     param_2->y = local_a0.y;
     param_2->z = local_a0.z;

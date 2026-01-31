@@ -102,7 +102,7 @@ u16 cc_pl_cut_bit_get() {
     } else if (player_p->getCutType() == daPy_py_c::CUT_TYPE_FINISH_VERTICAL) {
         bit = 0x40;
     } else if (player_p->getCutType() == daPy_py_c::CUT_TYPE_TURN_RIGHT ||
-               player_p->getCutType() == 9 || player_p->getCutType() == daPy_py_c::CUT_TYPE_HORSE_TURN ||
+               player_p->getCutType() == daPy_py_c::CUT_TYPE_UNK_9 || player_p->getCutType() == daPy_py_c::CUT_TYPE_HORSE_TURN ||
                player_p->getCutType() == daPy_py_c::CUT_TYPE_LARGE_TURN_RIGHT)
     {
         bit = 0x80;

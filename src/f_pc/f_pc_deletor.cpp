@@ -16,7 +16,7 @@ BOOL fpcDt_IsComplete() {
     return fpcDtTg_IsEmpty();
 }
 
-s32 fpcDt_deleteMethod(base_process_class* i_proc) {
+int fpcDt_deleteMethod(base_process_class* i_proc) {
     fpc_ProcID id = i_proc->id;
     layer_class* layer = i_proc->delete_tag.layer;
     s16 profname = i_proc->profname;
@@ -42,7 +42,7 @@ void fpcDt_Handler() {
     cLsIt_Method(&g_fpcDtTg_Queue, (cNdIt_MethodFunc)fpcDtTg_Do, (void*)fpcDt_deleteMethod);
 }
 
-s32 fpcDt_ToQueue(base_process_class* i_proc) {
+int fpcDt_ToQueue(base_process_class* i_proc) {
     if (i_proc->unk_0xA != 1 && fpcBs_IsDelete(i_proc) == 1) {
         if (fpcPi_IsInQueue(&i_proc->priority) == 1) {
             fpcPi_Delete(&i_proc->priority);
@@ -51,13 +51,16 @@ s32 fpcDt_ToQueue(base_process_class* i_proc) {
         i_proc->delete_tag.layer = i_proc->layer_tag.layer;
         fpcDtTg_ToDeleteQ(&i_proc->delete_tag);
         fpcLy_DeletingMesg(i_proc->layer_tag.layer);
+#if DEBUG
+        i_proc->delete_tag.unk_0x1c = 60;
+#endif
         return 1;
     }
 
     return 0;
 }
 
-s32 fpcDt_ToDeleteQ(base_process_class* i_proc) {
+int fpcDt_ToDeleteQ(base_process_class* i_proc) {
     if (i_proc->unk_0xA == 1) {
         return 0;
     }
@@ -97,39 +100,37 @@ s32 fpcDt_ToDeleteQ(base_process_class* i_proc) {
         i_proc->state.init_state = 3;
         return 1;
     }
-    
+
     return 0;
 }
 
-s32 fpcDt_Delete(void* i_proc) {
-    base_process_class* proc = (base_process_class*)i_proc;
-    
-    if (proc != NULL) {
+int fpcDt_Delete(void* i_proc) {
+    if (i_proc != NULL) {
 #if DEBUG
-        if (!fpcBs_Is_JustOfType(g_fpcBs_type, proc->type)) {
+        if (!fpcBs_Is_JustOfType(g_fpcBs_type, ((base_process_class*)i_proc)->type)) {
             if (g_fpcDbSv_service[12] != NULL) {
-                g_fpcDbSv_service[12](proc);
+                g_fpcDbSv_service[12](i_proc);
             }
-            
+
             return 0;
         }
 #endif
-        if (fpcCt_IsDoing(proc) == TRUE)
+        if (fpcCt_IsDoing((base_process_class*)i_proc) == TRUE)
             return 0;
 
-        if (proc->state.init_state == 3)
+        if (((base_process_class*)i_proc)->state.init_state == 3)
             return 0;
 
-        int ret = fpcDt_ToDeleteQ(proc);
+        int ret = fpcDt_ToDeleteQ((base_process_class*)i_proc);
 #if DEBUG
         if (ret == 0) {
             if (g_fpcDbSv_service[5] != NULL) {
-                g_fpcDbSv_service[5](proc);
+                g_fpcDbSv_service[5](i_proc);
             }
         }
 #endif
         return ret;
     }
-    
+
     return 1;
 }

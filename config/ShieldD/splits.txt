@@ -103,18 +103,19 @@ m_Do/m_Do_Reset.cpp:
 	.text       start:0x8002BAE0 end:0x8002BE60
 	.data       start:0x806641F0 end:0x80664238
 	.sdata      start:0x8073F628 end:0x8073F630
-	.sbss       start:0x8074C428 end:0x8074C434
+	.sbss       start:0x8074C428 end:0x8074C430
 
 m_Do/m_Do_dvd_thread.cpp:
 	.text       start:0x8002BE60 end:0x8002D590
 	.ctors      start:0x8062F7DC end:0x8062F7E0
 	.data       start:0x80664238 end:0x80664A10
 	.sdata      start:0x8073F630 end:0x8073F688
-	.sbss       start:0x8074C434 end:0x8074C450
+	.sbss       start:0x8074C430 end:0x8074C448
 	.bss        start:0x80756800 end:0x80758B80
 
 m_Do/m_Do_DVDError.cpp:
 	.text       start:0x8002D590 end:0x8002D740
+	.sbss       start:0x8074C448 end:0x8074C450
 	.bss        start:0x80758B80 end:0x8075AEE0
 
 m_Do/m_Do_MemCard.cpp:
@@ -131,14 +132,14 @@ m_Do/m_Do_MemCardRWmng.cpp:
 m_Do/m_Do_machine_exception.cpp:
 	.text       start:0x8002EEA0 end:0x8002F3A0
 	.data       start:0x80664C90 end:0x80664E98
-	.sbss       start:0x8074C450 end:0x8074C464
+	.sbss       start:0x8074C450 end:0x8074C458
 
 c/c_damagereaction.cpp:
 	.text       start:0x8002F3A0 end:0x8002FAF0
 	.ctors      start:0x8062F7E4 end:0x8062F7E8
 	.data       start:0x80664E98 end:0x80664F00
 	.sdata      start:0x8073F688 end:0x8073F698
-	.sbss       start:0x8074C464 end:0x8074C46C
+	.sbss       start:0x8074C458 end:0x8074C468
 	.sdata2     start:0x8074D908 end:0x8074D920
 	.bss        start:0x807762A0 end:0x807762B0
 
@@ -146,16 +147,16 @@ c/c_dylink.cpp:
 	.text       start:0x8002FAF0 end:0x80030690
 	.rodata     start:0x8062FA70 end:0x806311D0
 	.data       start:0x80664F00 end:0x80667F90
-	.sdata      start:0x8073F698 end:0x8073F6EC
-	.sbss       start:0x8074C46C end:0x8074C47C
+	.sdata      start:0x8073F698 end:0x8073F6E8
+	.sbss       start:0x8074C468 end:0x8074C47C
 	.bss        start:0x807762B0 end:0x80776F20
 
 f_ap/f_ap_game.cpp:
 	.text       start:0x80030690 end:0x80034CB0
 	.ctors      start:0x8062F7E8 end:0x8062F7EC
 	.data       start:0x80667F90 end:0x80669130
-	.sdata      start:0x8073F6EC end:0x8073F850
-	.sbss       start:0x8074C47C end:0x8074C4A0
+	.sdata      start:0x8073F6E8 end:0x8073F850
+	.sbss       start:0x8074C47C end:0x8074C498
 	.sdata2     start:0x8074D920 end:0x8074D950
 	.bss        start:0x80776F20 end:0x8077EF68
 
@@ -164,7 +165,7 @@ f_op/f_op_actor.cpp:
 	.ctors      start:0x8062F7EC end:0x8062F7F0
 	.data       start:0x80669130 end:0x80669848
 	.sdata      start:0x8073F850 end:0x8073F8B8
-	.sbss       start:0x8074C4A0 end:0x8074C4E0
+	.sbss       start:0x8074C498 end:0x8074C4D8
 	.sdata2     start:0x8074D950 end:0x8074D998
 	.bss        start:0x8077EF68 end:0x8077EF78
 
@@ -184,7 +185,7 @@ f_op/f_op_actor_mng.cpp:
 	.rodata     start:0x806311D0 end:0x80631200
 	.data       start:0x80669848 end:0x8066AA10
 	.sdata      start:0x8073F8B8 end:0x8073F970
-	.sbss       start:0x8074C4E0 end:0x8074C4F8
+	.sbss       start:0x8074C4D8 end:0x8074C4F8
 	.sdata2     start:0x8074D998 end:0x8074D9F0
 	.bss        start:0x8077EF88 end:0x8077F148
 
@@ -315,7 +316,7 @@ f_pc/f_pc_layer.cpp:
 f_pc/f_pc_leaf.cpp:
 	.text       start:0x800450A0 end:0x80045330
 	.data       start:0x8066AD78 end:0x8066AD90
-	.sbss       start:0x8074C540 end:0x8074C550
+	.sbss       start:0x8074C540 end:0x8074C548
 
 f_pc/f_pc_layer_iter.cpp:
 	.text       start:0x80045330 end:0x80045560
@@ -336,6 +337,7 @@ f_pc/f_pc_manager.cpp:
 	.text       start:0x800459D0 end:0x80046020
 	.data       start:0x8066ADB0 end:0x8066ADC8
 	.sdata      start:0x8073F9D8 end:0x8073F9E8
+	.sbss       start:0x8074C548 end:0x8074C550
 	.bss        start:0x80782160 end:0x80782208
 
 f_pc/f_pc_method.cpp:
@@ -3449,7 +3451,7 @@ JSystem/JUtility/JUTResFont.cpp:
 
 JSystem/JUtility/JUTDbPrint.cpp:
 	.text       start:0x8051C3E0 end:0x8051CB70
-	.sbss       start:0x8074CF90 end:0x8074CF9C
+	.sbss       start:0x8074CF90 end:0x8074CF98
 	.sdata2     start:0x80752718 end:0x80752728
 
 JSystem/JUtility/JUTGamePad.cpp:
@@ -3457,7 +3459,7 @@ JSystem/JUtility/JUTGamePad.cpp:
 	.ctors      start:0x8062F9C8 end:0x8062F9CC
 	.data       start:0x8070FC90 end:0x8070FD50
 	.sdata      start:0x8074ADA8 end:0x8074ADD8
-	.sbss       start:0x8074CF9C end:0x8074CFD0
+	.sbss       start:0x8074CF98 end:0x8074CFD0
 	.sdata2     start:0x80752728 end:0x80752748
 	.bss        start:0x807E20B8 end:0x807E2258
 

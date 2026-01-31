@@ -1,6 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
+#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include <string>
@@ -673,6 +674,25 @@ void J3DSkinDeform::deform(J3DVertexBuffer* pVtxBuffer, J3DMtxBuffer* pMtxBuffer
 void J3DVtxColorCalc::calc(J3DModel* pModel) {
     J3D_ASSERT_NULLPTR(1351, pModel != NULL);
     calc(pModel->getVertexBuffer());
+}
+
+void J3DVtxColorCalc::calc(J3DVertexBuffer* buffer) {
+    J3D_ASSERT_NULLPTR(1366, buffer != NULL);
+    if (checkFlag(1) && mpVtxColor) {
+        buffer->swapVtxColArrayPointer();
+        u16 anmTableNum = mpVtxColor->getAnmTableNum(0);
+        GXColor* colorArray = buffer->getVtxColArrayPointer(0);
+        for (u32 i = 0; i < anmTableNum; i++) {
+            GXColor color;
+            mpVtxColor->getColor(0, i, &color);
+            J3DAnmVtxColorIndexData* r28 = mpVtxColor->getAnmVtxColorIndexData(0, i);
+            for (u32 j = 0; j < r28->mNum; j++) {
+                colorArray[((u16*)r28->mpData)[j]] = color;
+            }
+        }
+        DCStoreRange(colorArray, buffer->getVertexData()->getColNum() * 4);
+        buffer->setCurrentVtxCol(colorArray);
+    }
 }
 
 J3DSkinDeform::~J3DSkinDeform() {}

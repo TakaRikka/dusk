@@ -56,5 +56,5 @@ __vt__13daE_TK2_HIO_c = .data:0x000000D0; // type:object size:0xC scope:global
 @110028 = .data:0x000000DC; // type:object size:0xE scope:local data:string
 @110029 = .data:0x000000EC; // type:object size:0xC scope:local
 __RTTI__13daE_TK2_HIO_c = .data:0x000000F8; // type:object size:0x8 scope:global
-lbl_237_bss_0 = .bss:0x00000000; // type:object size:0x1 data:byte
+hio_set = .bss:0x00000000; // type:object size:0x1 data:byte
 l_HIO = .bss:0x00000004; // type:object size:0x1C scope:global align:4 data:float

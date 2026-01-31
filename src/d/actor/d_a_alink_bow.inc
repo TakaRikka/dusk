@@ -8,7 +8,7 @@
 #include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_horse.h"
 
-void daAlink_c::getArrowFlyData(f32* o_distance, f32* o_speed, int i_forceCharge) const {
+void daAlink_c::getArrowFlyData(f32* o_distance, f32* o_speed, BOOL i_forceCharge) const {
     if (mEquipItem == fpcNm_ITEM_PACHINKO) {
         *o_distance = mpHIO->mItem.mBow.m.mSlingshotDistance;
         *o_speed = mpHIO->mItem.mBow.m.mSlingshotSpeed;
@@ -53,43 +53,45 @@ BOOL daAlink_c::checkBowAndSlingItem(int i_itemNo) {
 }
 
 void daAlink_c::setSlingModel() {
-    J3DAnmTransform* bck = (J3DAnmTransform*)mAnmHeap9.loadDataIdx(0x1F9);
+    J3DAnmTransform* bck = (J3DAnmTransform*)mAnmHeap9.loadDataIdx(dRes_ID_ALANM_BCK_PWAIT_e);
     JKRHeap* prev_heap = setItemHeap();
 
-    J3DModelData* model_data = loadAramBmd(0x319, 0x2C00);
-    mHeldItemModel = initModel(model_data, 0);
-    mItemBck.init(bck, 0, 2, 1.0f, 0, -1, false);
+    mHeldItemModel = initModel(loadAramBmd(dRes_ID_ALANM_BMD_AL_PACHI_e, 0x2C00), 0);
+    
+    if (!mItemBck.init(bck, FALSE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false)) {
+        JUT_ASSERT(108, 0);
+    }
 
     mDoExt_setCurrentHeap(prev_heap);
     field_0x2f95 = 5;
     field_0x2f94 = 103;
 }
 
-cXyz* daAlink_c::checkBowCameraArrowPosP(s16* param_0, s16* param_1) {
+cXyz* daAlink_c::checkBowCameraArrowPosP(s16* o_angleX, s16* o_angleY) {
     if (!checkBowAnime() || mEquipItem == fpcNm_ITEM_PACHINKO) {
         return NULL;
     }
 
-    s16 var_28;
+    s16 angle_y;
     if (checkHorseRide() && checkBoarSingleBattle() && dComIfGp_getHorseActor() != NULL) {
-        var_28 = dComIfGp_getHorseActor()->shape_angle.y;
+        angle_y = dComIfGp_getHorseActor()->shape_angle.y;
     } else if (checkMagneBootsOn()) {
-        var_28 = field_0x3118;
+        angle_y = field_0x3118;
     } else {
-        var_28 = shape_angle.y;
+        angle_y = shape_angle.y;
     }
 
-    var_28 += mBodyAngle.y;
+    angle_y += mBodyAngle.y;
 
     mDoMtx_stack_c::transS(field_0x3834);
     concatMagneBootMtx();
-    mDoMtx_stack_c::ZXYrotM(mBodyAngle.x, var_28, 0);
+    mDoMtx_stack_c::ZXYrotM(mBodyAngle.x, angle_y, 0);
 
-    static Vec const localPos = {3.45f, 45.32f, -7.0f};
+    static const Vec localPos = {3.45f, 45.32f, -7.0f};
     mDoMtx_stack_c::multVec(&localPos, &mHeldItemRootPos);
 
-    *param_0 = mBodyAngle.x;
-    *param_1 = var_28;
+    *o_angleX = mBodyAngle.x;
+    *o_angleY = angle_y;
     return &mHeldItemRootPos;
 }
 
@@ -111,8 +113,13 @@ void daAlink_c::makeArrow() {
             field_0x301e = 0;
         }
 
-        fopAc_ac_c* arrow_p = daArrow_c::makeArrow(this, field_0x301e);
-        mItemAcKeep.setData(arrow_p);
+        mItemAcKeep.setData(daArrow_c::makeArrow(this, field_0x301e));
+
+        if (mItemAcKeep.getActor() == NULL) {
+            // "Not enough memory to create item!!"
+            OS_REPORT("メモリが足りなくてアイテム発生できません！！\n");
+            JUT_ASSERT(221, 0);
+        }
     }
 
     mItemVar0.field_0x3018 = 0;
@@ -152,7 +159,7 @@ void daAlink_c::changeArrowType() {
         return;
     }
 
-    setItemActionButtonStatus(0x11);
+    setItemActionButtonStatus(BUTTON_STATUS_SWITCH);
 
     if (arrowChangeTrigger()) {
         if (mEquipItem == fpcNm_ITEM_HAWK_ARROW) {
@@ -179,14 +186,13 @@ void daAlink_c::changeArrowType() {
     }
 }
 
-
 BOOL daAlink_c::cancelBowMoveRideNotAtn() {
     return checkModeFlg(0x400) && checkAttentionLock() && mTargetedActor == NULL;
 }
 
 BOOL daAlink_c::cancelBowMove() {
     if (mTargetedActor == NULL && !checkAttentionLock() && mFastShotTime == 0 &&
-        !checkBowReadyAnime() && (!checkBowShootAnime() || mUpperFrameCtrl[2].checkAnmEnd()))
+        !checkBowReadyAnime() && (!checkBowShootAnime() || checkAnmEnd(&mUpperFrameCtrl[2])))
     {
         resetUpperAnime(UPPER_2, -1.0f);
         return true;
@@ -208,7 +214,7 @@ void daAlink_c::setBowReadyAnime() {
         }
     }
 
-    setUpperAnimeBase(0xD);
+    setUpperAnimeBase(dRes_ID_ALANM_BCK_ASHOOTWAIT_e);
 
     if (checkResetFlg0(RFLG0_UNK_80)) {
         mItemMode = 0;
@@ -220,23 +226,23 @@ void daAlink_c::setBowReadyAnime() {
     field_0x2f96 = 4;
 
     if (mEquipItem == fpcNm_ITEM_PACHINKO) {
-        changeItemBck(0x1F1, -1.0f);
+        changeItemBck(dRes_ID_ALANM_BCK_PSHOOT_e, -1.0f);
     } else {
-        changeItemBck(0x43, -1.0f);
+        changeItemBck(dRes_ID_ALANM_BCK_BASHOOT_e, -1.0f);
     }
 }
 
 void daAlink_c::setBowReloadAnime() {
-    setUpperAnimeParam(9, UPPER_2, &mpHIO->mItem.mBow.m.mLoadAnm);
-    setFacePriTexture(FTANM_UNK_8);
-    setFacePriBck(0xE5);
+    setUpperAnimeParam(dRes_ID_ALANM_BCK_ARELORD_e, UPPER_2, &mpHIO->mItem.mBow.m.mLoadAnm);
+    setFacePriTexture(FTANM_FINISHA);
+    setFacePriBck(dRes_ID_ALANM_BCK_FARELORD_e);
 
     if (mEquipItem == fpcNm_ITEM_PACHINKO) {
-        changeItemBck(0x1F0, mpHIO->mItem.mBow.m.mLoadAnm.mStartFrame);
+        changeItemBck(dRes_ID_ALANM_BCK_PRELORD_e, mpHIO->mItem.mBow.m.mLoadAnm.mStartFrame);
         field_0x2f97 = 5;
         seStartOnlyReverb(Z2SE_AL_PACHINKO_DRAW);
     } else {
-        changeItemBck(0x41, mpHIO->mItem.mBow.m.mLoadAnm.mStartFrame);
+        changeItemBck(dRes_ID_ALANM_BCK_BARELORD_e, mpHIO->mItem.mBow.m.mLoadAnm.mStartFrame);
         field_0x2f97 = 7;
         seStartOnlyReverb(Z2SE_AL_DRAW_BOW);
     }
@@ -249,7 +255,7 @@ BOOL daAlink_c::checkUpperItemActionBow() {
     daPy_frameCtrl_c* frameCtrl_p = &mUpperFrameCtrl[2];
 
     if (mEquipItem == fpcNm_ITEM_PACHINKO) {
-        static Vec const slingLocalPos = {10.0f, 10.0f, 0.0f};
+        static const Vec slingLocalPos = {10.0f, 10.0f, 0.0f};
         mDoMtx_multVec(getLeftItemMatrix(), &slingLocalPos, &mHeldItemRootPos);
     }
 
@@ -273,29 +279,29 @@ BOOL daAlink_c::checkUpperItemActionBow() {
 
         if (checkReadyItem()) {
             if (mItemVar0.field_0x3018 != 0) {
-                setUpperAnimeParam(0xC, UPPER_2, &mpHIO->mItem.mBow.m.mShootAnm);
-                setFacePriBck(0xE8);
+                setUpperAnimeParam(dRes_ID_ALANM_BCK_ASHOOT_e, UPPER_2, &mpHIO->mItem.mBow.m.mShootAnm);
+                setFacePriBck(dRes_ID_ALANM_BCK_FAT_e);
                 field_0x2f96 = 0;
 
-                u16 var_r29;
+                u16 bck_res_id;
                 if (mEquipItem == fpcNm_ITEM_PACHINKO) {
-                    var_r29 = 0x1F1;
+                    bck_res_id = dRes_ID_ALANM_BCK_PSHOOT_e;
                     if (dComIfGs_getPachinkoNum() != 0 &&
                         daArrow_c::makeSlingStone(this, &mHeldItemRootPos) != NULL)
                     {
                         dComIfGp_setItemPachinkoNumCount(-1);
                     }
                 } else if (field_0x301c != 0) {
-                    var_r29 = 0x43;
+                    bck_res_id = dRes_ID_ALANM_BCK_BASHOOT_e;
                 } else {
-                    var_r29 = 0x44;
+                    bck_res_id = dRes_ID_ALANM_BCK_BASHOOTTAME_e;
                 }
 
-                changeItemBck(var_r29, mpHIO->mItem.mBow.m.mShootAnm.mStartFrame);
+                changeItemBck(bck_res_id, mpHIO->mItem.mBow.m.mShootAnm.mStartFrame);
                 mItemVar0.field_0x3018 = 0;
             } else if (mEquipItem == fpcNm_ITEM_PACHINKO) {
                 if (!itemButton()) {
-                    dComIfGp_getVibration().StartShock(1, 1, cXyz(0.0f, 1.0f, 0.0f));
+                    dComIfGp_getVibration().StartShock(VIBMODE_S_POWER1, 1, cXyz(0.0f, 1.0f, 0.0f));
                     seStartOnlyReverb(Z2SE_AL_PACHINKO_SHOT);
                     mItemVar0.field_0x3018 = 1;
                     resetFacePriAnime();
@@ -303,11 +309,11 @@ BOOL daAlink_c::checkUpperItemActionBow() {
             } else if (!itemButton()) {
                 if (arrow_p != NULL) {
                     u32 sound;
-                    int shock_strength;
+                    int vibmode;
 
                     if (field_0x301c != 0) {
                         arrow_p->setShoot();
-                        shock_strength = 1;
+                        vibmode = VIBMODE_S_POWER1;
 
                         if (arrow_p->checkBombArrow()) {
                             sound = Z2SE_OBJ_ARROWBOMB_SHOT;
@@ -316,7 +322,7 @@ BOOL daAlink_c::checkUpperItemActionBow() {
                         }
                     } else {
                         arrow_p->setChargeShoot();
-                        shock_strength = 2;
+                        vibmode = VIBMODE_S_POWER2;
 
                         if (arrow_p->checkBombArrow()) {
                             sound = Z2SE_OBJ_ARROWBOMB_SHOTGAIN;
@@ -325,7 +331,7 @@ BOOL daAlink_c::checkUpperItemActionBow() {
                         }
                     }
 
-                    dComIfGp_getVibration().StartShock(shock_strength, 1, cXyz(0.0f, 1.0f, 0.0f));
+                    dComIfGp_getVibration().StartShock(vibmode, 1, cXyz(0.0f, 1.0f, 0.0f));
                     seStartOnlyReverb(sound);
 
                     if (field_0x301e == 1) {
@@ -352,13 +358,13 @@ BOOL daAlink_c::checkUpperItemActionBow() {
         }
     } else if (checkBowReloadAnime()) {
         if (checkAnmEnd(frameCtrl_p)) {
-            setUpperAnimeBaseSpeed(10, 0.0f, -1.0f);
-            setFacePriTexture(FTANM_UNK_9);
-            setFacePriBck(0xE6);
+            setUpperAnimeBaseSpeed(dRes_ID_ALANM_BCK_ARELORDTAME_e, 0.0f, -1.0f);
+            setFacePriTexture(FTANM_ARELORD);
+            setFacePriBck(dRes_ID_ALANM_BCK_FARELORDTAME_e);
 
             if (mEquipItem != fpcNm_ITEM_PACHINKO) {
-                changeItemBck(0x42, 0.0f);
-                dComIfGp_getVibration().StartQuake(1, 1, cXyz(0.0f, 1.0f, 0.0f));
+                changeItemBck(dRes_ID_ALANM_BCK_BARELORDTAME_e, 0.0f);
+                dComIfGp_getVibration().StartQuake(VIBMODE_Q_POWER1, 1, cXyz(0.0f, 1.0f, 0.0f));
                 onNoResetFlg3(FLG3_UNK_4);
             }
         }
@@ -423,7 +429,6 @@ BOOL daAlink_c::checkUpperItemActionBow() {
     return cancelUpperItemReadyAnime(0);
 }
 
-
 void daAlink_c::checkUpperItemActionBowFly() {
     if (checkBowAnime()) {
         checkUpperItemActionBow();
@@ -439,7 +444,7 @@ int daAlink_c::checkNextActionBow() {
         mFastShotTime--;
     }
 
-    BOOL var_r31 = false;
+    BOOL is_hawk_arrow = false;
     if (!checkBowAnime()) {
         setBowReadyAnime();
         setFastShotTimer();
@@ -452,7 +457,7 @@ int daAlink_c::checkNextActionBow() {
         mItemVar0.field_0x3018 = 1;
 
         if (mEquipItem == fpcNm_ITEM_HAWK_ARROW) {
-            var_r31 = true;
+            is_hawk_arrow = true;
             mFastShotTime = 0;
         }
 
@@ -471,7 +476,7 @@ int daAlink_c::checkNextActionBow() {
         }
     }
 
-    BOOL rt;
+    BOOL rt = FALSE;
     if (!checkAttentionLock() && mFastShotTime == 0) {
         if (checkModeFlg(0x400)) {
             if (checkCanoeRide()) {
@@ -494,7 +499,7 @@ int daAlink_c::checkNextActionBow() {
         }
     }
 
-    if (rt && var_r31) {
+    if (rt && is_hawk_arrow) {
         dComIfGp_setPlayerStatus0(0, 0x200000);
         seStartSystem(Z2SE_AL_HAWK_EYE_PUTON);
     }
@@ -502,20 +507,21 @@ int daAlink_c::checkNextActionBow() {
     return rt;
 }
 
-
 void daAlink_c::setBowModel() {
-    J3DAnmTransform* bck = (J3DAnmTransform*)mAnmHeap9.loadDataIdx(0x59);
-    JKRHeap* old_heap = setItemHeap();
+    J3DAnmTransform* bck = (J3DAnmTransform*)mAnmHeap9.loadDataIdx(dRes_ID_ALANM_BCK_BVJMPCL_e);
+    JKRHeap* heap = setItemHeap();
 
-    mHeldItemModel = initModel(loadAramBmd(0x314, 0x4C00), 0);
-    mItemBck.init(bck, FALSE, 2, 1.0f, 0, -1, false);
+    mHeldItemModel = initModel(loadAramBmd(dRes_ID_ALANM_BMD_AL_BOW_e, 0x4C00), 0);
+    
+    if (!mItemBck.init(bck, FALSE, 2, 1.0f, 0, -1, false)) {
+        JUT_ASSERT(894, 0);
+    }
 
-    mDoExt_setCurrentHeap(old_heap);
+    mDoExt_setCurrentHeap(heap);
     field_0x33dc = mItemBck.getBckAnm()->getFrameMax() - 0.001f;
     field_0x2f95 = 5;
     field_0x2f94 = 0x67;
 }
-
 
 bool daAlink_c::checkBowGrabLeftHand() const {
     return checkReinRide() && !checkBowAnime();
@@ -523,15 +529,15 @@ bool daAlink_c::checkBowGrabLeftHand() const {
 
 void daAlink_c::setBowHangAnime() {
     if (checkBowItem(mEquipItem)) {
-        changeItemBck(0x58, 0.0f);
+        changeItemBck(dRes_ID_ALANM_BCK_BVJMPCH_e, 0.0f);
     }
 }
 
 void daAlink_c::setBowNormalAnime() {
     if (checkBowItem(mEquipItem)) {
-        changeItemBck(0x59, -1.0f);
+        changeItemBck(dRes_ID_ALANM_BCK_BVJMPCL_e, -1.0f);
     } else if (mEquipItem == fpcNm_ITEM_PACHINKO) {
-        changeItemBck(0x1F9, -1.0f);
+        changeItemBck(dRes_ID_ALANM_BCK_PWAIT_e, -1.0f);
     }
 }
 
@@ -563,7 +569,7 @@ int daAlink_c::procBowSubjectInit() {
 }
 
 int daAlink_c::procBowSubject() {
-    setDoStatus(0x12);
+    setDoStatus(BUTTON_STATUS_BACK);
     if (!checkNextAction(0) && setBodyAngleToCamera()) {
         setBowSight();
     }
@@ -597,21 +603,21 @@ int daAlink_c::procBowMove() {
     onEndResetFlg0(ERFLG0_UNK_8000000);
 
     if (!checkNextAction(0)) {
-        f32 var_f31 = -1.0f;
+        f32 morf = -1.0f;
 
         if (checkZeroSpeedF()) {
             onModeFlg(1);
 
             if (field_0x2f98 != 3) {
                 field_0x2f98 = 3;
-                var_f31 = mpHIO->mBasic.m.mBasicInterpolation;
+                morf = mpHIO->mBasic.m.mBasicInterpolation;
             }
             current.angle.y = shape_angle.y - 0x4000;
         } else {
             offModeFlg(1);
         }
 
-        setBlendAtnMoveAnime(var_f31);
+        setBlendAtnMoveAnime(morf);
         setBodyAngleXReadyAnime(0);
     }
 

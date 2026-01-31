@@ -12,7 +12,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
-#include <math>
+#include <cmath>
 
 f32 dummyLiteral() {
     return 0.0f;

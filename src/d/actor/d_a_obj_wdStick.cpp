@@ -10,7 +10,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_kankyo_mng.h"
-#include <math>
+#include <cmath>
 
 static daWdStick_HIO_c l_HIO;
 
@@ -73,7 +73,7 @@ int daWdStick_c::create() {
         mSph2.SetStts(&mStts);
         fopAcM_OnCarryType(this, fopAcM_CARRY_UNK_30);
         cLib_onBit<u32>(attention_info.flags, fopAc_AttnFlag_CARRY_e);
-        attention_info.distances[4] = 59;
+        attention_info.distances[fopAc_attn_CARRY_e] = 59;
         misCarrying = fopAcM_checkCarryNow(this);
         mode_init_wait();
     }

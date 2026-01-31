@@ -69,7 +69,7 @@ J3DSys::J3DSys() {
 }
 
 void J3DSys::loadPosMtxIndx(int addr, u16 indx) const {
-    // J3DFifoLoadPosMtxIndx(indx, addr * 3);  // matches debug, not retail
+    //J3DFifoLoadPosMtxIndx(indx, addr * 3);  // matches debug, not retail
     J3DFifoLoadIndx(GX_LOAD_INDX_A, indx, 0xB000 | ((u16)(addr * 0x0C)));
 }
 

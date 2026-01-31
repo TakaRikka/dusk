@@ -7,8 +7,27 @@
 
 #include "d/actor/d_a_tag_assistance.h"
 
+void daTagAssist_c::create_init() {
+    attention_info.flags = 0;
+    field_0x570 = -1;
+}
+
+int daTagAssist_c::create() {
+    fopAcM_ct(this, daTagAssist_c);
+    create_init();
+    return cPhs_COMPLEATE_e;
+}
+
+int daTagAssist_c::execute() {
+    if (fopAcM_searchPlayerDistanceXZ(this) < scale.x * 100.0f) {
+        // empty block
+    }
+    return 1;
+}
+
 static int daTagAssist_Create(fopAc_ac_c* i_this) {
     daTagAssist_c* tag_assist = (daTagAssist_c*)i_this;
+    int id = fopAcM_GetID(i_this);
     return tag_assist->create();
 }
 
@@ -21,6 +40,7 @@ static int daTagAssist_IsDelete(daTagAssist_c* i_this) {
 }
 
 static int daTagAssist_Delete(daTagAssist_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagAssist_c();
     return 1;
 }

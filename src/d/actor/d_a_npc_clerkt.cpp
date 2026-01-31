@@ -201,7 +201,7 @@ int daNpcClerkT_c::CreateHeap() {
 }
 
 int daNpcClerkT_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_CLERKT");
     this->~daNpcClerkT_c();
     return 1;
 }

@@ -7,7 +7,7 @@
 #include "JSystem/JAudio2/JAUSeqDataBlockMgr.h"
 #include "JSystem/JAudio2/JAUSoundInfo.h"
 #include "JSystem/JAudio2/JASResArcLoader.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 JAUSeqDataBlock::JAUSeqDataBlock() : field_0x0(this) {}
 

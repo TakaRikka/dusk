@@ -38,7 +38,7 @@ public:
     int execute();
     int _delete();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
 
     int getChildNo() { return mChildNo; }
     int getActionMode() { return mAction; }

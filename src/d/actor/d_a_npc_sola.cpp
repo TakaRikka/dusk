@@ -65,20 +65,42 @@ daNpc_solA_c::cutFunc daNpc_solA_c::mCutList[1] = {
     NULL,
 };
 
-daNpc_solA_c::~daNpc_solA_c() {
-    if (heap != NULL) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    deleteRes(l_loadResPtrnList[field_0xf80], (const char**)l_resNameList);
-}
-
 daNpc_solA_HIOParam const daNpc_solA_Param_c::m = {
     220.0f, -3.0f, 1.0f,   400.0f, 255.0f, 200.0f, 35.0f, 30.0f, 0.0f, 0.0f,  10.0f,
     -10.0f, 30.0f, -10.0f, 45.0f,  -45.0f, 0.6f,   12.0f, 3,     6,    5,     6,
     0.0f,   0.0f,  0.0f,   0.0f,   60,     8,      0,     0,     0,    false, false,
     4.0f,   0.0f,  0.0f,   0.0f,   0.0f,   0.0f,   0.0f,  0.0f,
 };
+
+static NPC_SOLA_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_solA_HIO_c::daNpc_solA_HIO_c() {
+    m = daNpc_solA_Param_c::m;
+}
+
+void daNpc_solA_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_solA_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_solA_c::~daNpc_solA_c() {
+    if (heap != NULL) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[field_0xf80], (const char**)l_resNameList);
+}
 
 int daNpc_solA_c::create() {
     daNpcT_ct(this, daNpc_solA_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4,
@@ -101,6 +123,12 @@ int daNpc_solA_c::create() {
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 450.0f, 300.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ハイリア兵");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
@@ -109,7 +137,7 @@ int daNpc_solA_c::create() {
         setEnvTevColor();
         setRoomNo();
 
-        mCcStts.Init(daNpc_solA_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgHitCallback(tgHitCallBack);
@@ -170,7 +198,7 @@ void daNpc_solA_c::Draw() {
         J3DModelData* mdlData_p = mpMorf[0]->getModel()->getModelData();
         mdlData_p->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
-    draw(FALSE, FALSE, daNpc_solA_Param_c::m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE,
+    draw(FALSE, FALSE, mpHIO->m.common.real_shadow_size, NULL, 100.0f, FALSE, FALSE,
          FALSE);
     return;
 }
@@ -224,27 +252,27 @@ void daNpc_solA_c::setParam() {
     selectAction();
     srchActors();
 
-    s16 talk_distance = daNpc_solA_Param_c::m.common.talk_distance;
-    s16 talk_angle = daNpc_solA_Param_c::m.common.talk_angle;
+    s16 talk_distance = mpHIO->m.common.talk_distance;
+    s16 talk_angle = mpHIO->m.common.talk_angle;
 
     attention_info.distances[fopAc_attn_LOCK_e] =
-        daNpcT_getDistTableIdx(daNpc_solA_Param_c::m.common.attention_distance,
-                               daNpc_solA_Param_c::m.common.attention_angle);
+        daNpcT_getDistTableIdx(mpHIO->m.common.attention_distance,
+                               mpHIO->m.common.attention_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
     attention_info.distances[fopAc_attn_SPEAK_e] =
         daNpcT_getDistTableIdx(talk_distance, talk_angle);
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
 
-    scale.set(daNpc_solA_Param_c::m.common.scale, daNpc_solA_Param_c::m.common.scale,
-              daNpc_solA_Param_c::m.common.scale);
-    mAcchCir.SetWallR(daNpc_solA_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpc_solA_Param_c::m.common.knee_length);
-    mCcStts.SetWeight(daNpc_solA_Param_c::m.common.weight);
-    mCylH = daNpc_solA_Param_c::m.common.height;
-    mWallR = daNpc_solA_Param_c::m.common.width;
-    gravity = daNpc_solA_Param_c::m.common.gravity;
-    mExpressionMorfFrame = daNpc_solA_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_solA_Param_c::m.common.morf_frame;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale,
+              mpHIO->m.common.scale);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    gravity = mpHIO->m.common.gravity;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
 }
 
 void daNpc_solA_c::setAfterTalkMotion() {
@@ -309,12 +337,12 @@ void daNpc_solA_c::setAttnPos() {
     cXyz local_38(30.0f, 0.0f, 0.0f);
     mJntAnm.setParam(
         this, mpMorf[0]->getModel(), &local_38, getBackboneJointNo(), getNeckJointNo(),
-        getHeadJointNo(), daNpc_solA_Param_c::m.common.body_angleX_min,
-        daNpc_solA_Param_c::m.common.body_angleX_max, daNpc_solA_Param_c::m.common.body_angleY_min,
-        daNpc_solA_Param_c::m.common.body_angleY_max, daNpc_solA_Param_c::m.common.head_angleX_min,
-        daNpc_solA_Param_c::m.common.head_angleX_max, daNpc_solA_Param_c::m.common.head_angleY_min,
-        daNpc_solA_Param_c::m.common.head_angleY_max,
-        daNpc_solA_Param_c::m.common.neck_rotation_ratio, 0.0f, NULL);
+        getHeadJointNo(), mpHIO->m.common.body_angleX_min,
+        mpHIO->m.common.body_angleX_max, mpHIO->m.common.body_angleY_min,
+        mpHIO->m.common.body_angleY_max, mpHIO->m.common.head_angleX_min,
+        mpHIO->m.common.head_angleX_max, mpHIO->m.common.head_angleY_min,
+        mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
 
     f32 fVar1 = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     mJntAnm.calcJntRad(0.2f, 1.0f, fVar1);
@@ -325,7 +353,7 @@ void daNpc_solA_c::setAttnPos() {
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, FALSE, 1.0f, 0);
 
     attention_info.position = current.pos;
-    attention_info.position.y += daNpc_solA_Param_c::m.common.attention_offset;
+    attention_info.position.y += mpHIO->m.common.attention_offset;
 }
 
 void daNpc_solA_c::setCollision() {
@@ -335,8 +363,8 @@ void daNpc_solA_c::setCollision() {
         mCyl.SetCoSPrm(prm);
 
         pos = current.pos;
-        f32 height = daNpc_solA_Param_c::m.common.height;
-        f32 width = daNpc_solA_Param_c::m.common.width;
+        f32 height = mpHIO->m.common.height;
+        f32 width = mpHIO->m.common.width;
         mCyl.SetH(height);
         mCyl.SetR(width);
         mCyl.SetC(pos);
@@ -459,8 +487,6 @@ static void daNpc_solA_Draw(void* param_0) {
 static bool daNpc_solA_IsDelete(void* param_0) {
     return true;
 }
-
-static daNpc_solA_Param_c l_HIO;
 
 static actor_method_class daNpc_solA_MethodTable = {
     (process_method_func)daNpc_solA_Create,  (process_method_func)daNpc_solA_Delete,

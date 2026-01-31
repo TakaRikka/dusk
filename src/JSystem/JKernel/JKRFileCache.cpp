@@ -6,7 +6,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-#include <ctype>
+#include <cctype>
 #include <string>
 #include "global.h"
 

@@ -12,7 +12,7 @@
 int daTagMwait_c::create() {
     fopAcM_ct(this, daTagMwait_c);
 
-    mEnterSw = fopAcM_GetParam(this) >> 8;
+    mEnterSw = (fopAcM_GetParam(this) >> 8) & 0xFF;
 
     if (fopAcM_isSwitch(this, mEnterSw)) {
         return cPhs_ERROR_e;
@@ -39,12 +39,12 @@ int daTagMwait_c::create() {
 
     scale *= 100.0f;
 
-    u32 wait_y_offset = (fopAcM_GetParam(this) >> 0x18) & 0xFF;
-    if (wait_y_offset == 0 || wait_y_offset == 0xFF) {
-        wait_y_offset = 0;
+    prm = (fopAcM_GetParam(this) >> 0x18) & 0xFF; // wait Y offset
+    if (prm == 0 || prm == 0xFF) {
+        prm = 0;
     }
 
-    mWaitPosition.set(current.pos.x, current.pos.y + (wait_y_offset * 10.0f), current.pos.z);
+    mWaitPosition.set(current.pos.x, current.pos.y + (prm * 10.0f), current.pos.z);
     attention_info.position.set(mWaitPosition.x, mWaitPosition.y + 220.0f, mWaitPosition.z);
     eyePos.set(mWaitPosition.x, mWaitPosition.y + 150.0f, mWaitPosition.z);
 
@@ -54,12 +54,15 @@ int daTagMwait_c::create() {
 }
 
 static int daTagMwait_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagMwait_c*>(i_this)->create();
+    daTagMwait_c* mWait = static_cast<daTagMwait_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return mWait->create();
 }
 
 daTagMwait_c::~daTagMwait_c() {}
 
 static int daTagMwait_Delete(daTagMwait_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagMwait_c();
     return 1;
 }

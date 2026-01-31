@@ -31,7 +31,7 @@ public:
     int CreateHeap();
     void calcMtx();
     int CreateInit();
-    cPhs__Step create();
+    cPhs_Step create();
     int getDemoAction();
     void demoProc();
     void calcGoal(cXyz*, int);

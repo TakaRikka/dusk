@@ -1,7 +1,7 @@
 #ifndef NW4HBM_LYT_TYPES_H
 #define NW4HBM_LYT_TYPES_H
 
-#include "revolution/types.h"
+#include <revolution/types.h>
 
 #include <revolution/gx.h>
 

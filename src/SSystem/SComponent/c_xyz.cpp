@@ -7,6 +7,11 @@
 #include "SSystem/SComponent/c_math.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
+#ifndef __MWERKS__
+#include <limits>
+#define FLT_EPSILON std::numeric_limits<float>::epsilon()
+#endif
+
 cXyz cXyz::operator+(const Vec& vec) const {
     Vec ret;
     PSVECAdd(this, &vec, &ret);

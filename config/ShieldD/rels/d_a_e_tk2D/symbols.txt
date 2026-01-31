@@ -104,5 +104,5 @@ lbl_231_data_238 = .data:0x00000238; // type:object size:0x24
 @118843 = .data:0x00000410; // type:object size:0xE scope:local data:string
 @118844 = .data:0x00000420; // type:object size:0xC scope:local
 @118845 = .data:0x00000444; // type:object size:0x11 scope:local data:string
-lbl_231_bss_0 = .bss:0x00000000; // type:object size:0x1 data:byte
+hio_set = .bss:0x00000000; // type:object size:0x1 data:byte
 l_HIO = .bss:0x00000004; // type:object size:0x1C scope:global data:byte

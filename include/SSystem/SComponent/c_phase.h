@@ -1,11 +1,13 @@
 #ifndef C_PHASE_H
 #define C_PHASE_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 typedef int (*cPhs__Handler)(void*);
 
-enum cPhs__Step {
+typedef int cPhs_Step;
+
+enum {
     /* 0x0 */ cPhs_INIT_e,
     /* 0x1 */ cPhs_LOADING_e,
     /* 0x2 */ cPhs_NEXT_e,

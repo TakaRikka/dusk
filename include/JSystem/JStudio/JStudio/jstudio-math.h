@@ -1,8 +1,13 @@
 #ifndef JSTUDIO_MATH_H
 #define JSTUDIO_MATH_H
 
-#include "dolphin/mtx.h"
-#include <math>
+#include <dolphin/mtx.h>
+#include <cmath>
+
+#define m_PI_D 3.141592653589793
+#ifndef __MWERKS__
+#include "dusk/math.h"
+#endif
 
 namespace JStudio {
 namespace math {

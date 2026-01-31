@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_set_bgobj.h"
-#include <stdio>
+#include <cstdio>
 #include "f_op/f_op_actor_mng.h"
 
 static const char l_specName[] = "spec.dat";

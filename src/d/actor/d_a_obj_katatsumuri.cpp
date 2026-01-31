@@ -708,7 +708,7 @@ int daObjKAT_c::create() {
             mDraw = true;
         }
 
-        attention_info.distances[4] = 93;
+        attention_info.distances[fopAc_attn_CARRY_e] = 93;
         mSex = (u8)((fopAcM_GetParam(this) & 0x10) >> 4);
         setItemNo(l_kat_itemno[mSex]);
         setSaveBitNo(l_musiya_num[mSex]);

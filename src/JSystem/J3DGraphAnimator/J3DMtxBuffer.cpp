@@ -1,5 +1,6 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
+#include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "JSystem/J3DGraphAnimator/J3DMtxBuffer.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
@@ -408,7 +409,10 @@ void J3DMtxBuffer::calcDrawMtx(u32 mdlFlag, Vec const& param_1, Mtx const& param
 
     MtxP viewMtx;
     Mtx viewBaseMtx;
-    u16 fullWgtNum;
+    u16 fullWgtNum; // r25
+    u16 local_68;
+    u16 local_6a;
+    u16 local_6c;
 
     switch (mdlFlag) {
     case 0:
@@ -423,19 +427,19 @@ void J3DMtxBuffer::calcDrawMtx(u32 mdlFlag, Vec const& param_1, Mtx const& param
         }
         return;
     case 1:
-        fullWgtNum = mJointTree->getDrawFullWgtMtxNum();
-        for (u16 i = 0; i < fullWgtNum; i++) {
+        local_68 = mJointTree->getDrawFullWgtMtxNum();
+        for (u16 i = 0; i < local_68; i++) {
             MTXCopy(getAnmMtx(mJointTree->getDrawMtxIndex(i)), *getDrawMtx(i));
         }
-        fullWgtNum = mJointTree->getDrawFullWgtMtxNum();
-        for (u16 i = 0; i < fullWgtNum; i++) {
+        local_6a = mJointTree->getDrawFullWgtMtxNum();
+        for (u16 i = 0; i < local_6a; i++) {
             MTXCopy(getWeightAnmMtx(i), *getDrawMtx(mJointTree->getDrawFullWgtMtxNum() + i));
         }
         break;
     case 2:
         J3DCalcViewBaseMtx(j3dSys.getViewMtx(), param_1, param_2, viewBaseMtx);
-        fullWgtNum = mJointTree->getDrawFullWgtMtxNum();
-        for (u16 i = 0; i < fullWgtNum; i++) {
+        local_6c = mJointTree->getDrawFullWgtMtxNum();
+        for (u16 i = 0; i < local_6c; i++) {
             MTXConcat(viewBaseMtx, getAnmMtx(mJointTree->getDrawMtxIndex(i)), *getDrawMtx(i));
         }
         if (mJointTree->getDrawMtxNum() > mJointTree->getDrawFullWgtMtxNum()) {

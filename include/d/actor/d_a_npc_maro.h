@@ -5,6 +5,35 @@
 #include "d/actor/d_a_npc.h"
 #include "d/d_shop_system.h"
 
+struct daNpc_Maro_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+    /* 0x8C */ s16 tease_interval;
+};
+
+class daNpc_Maro_Param_c {
+public:
+    virtual ~daNpc_Maro_Param_c() {}
+
+    static const daNpc_Maro_HIOParam m;
+};
+
+#if DEBUG
+class daNpc_Maro_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Maro_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Maro_HIOParam m;
+};
+
+#define NPC_MARO_HIO_CLASS daNpc_Maro_HIO_c
+#else
+#define NPC_MARO_HIO_CLASS daNpc_Maro_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_Maro_c
@@ -96,6 +125,7 @@ public:
     int arrowTutorial(void*);
     int talk(void*);
     int shop(void*);
+    BOOL test(void*);
     daNpc_Maro_c(
         daNpcT_faceMotionAnmData_c const* i_faceMotionAnmData,
         daNpcT_motionAnmData_c const* i_motionAnmData,
@@ -140,20 +170,25 @@ public:
     static char* mCutNameList[17];
     static cutFunc mCutList[17];
 
+    u8 getGroupId() {
+        return (fopAcM_GetParam(this) & 0xF0000000) >> 28;
+    }
+
+    u8 getPathID() {
+        return (fopAcM_GetParam(this) & 0xFF00) >> 8;
+    }
+
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;
-        if (nodeNo == 0xffff) {
-            return -1;
-        }
-        return nodeNo;
+        return (nodeNo == 0xFFFF) ? -1 : nodeNo;
     }
 
     u8 getMaxNumItem() {
-        return (fopAcM_GetParam(this) & 0xf000000) >> 0x18;
+        return (fopAcM_GetParam(this) & 0xF000000) >> 24;
     }
 
 private:
-    /* 0x0F7C */ int field_0xf7c;
+    /* 0x0F7C */ NPC_MARO_HIO_CLASS* mpHIO;
     /* 0x0F80 */ dCcD_Cyl mCyl1;
     /* 0x10BC */ int field_0x10bc;
     /* 0x10C0 */ u8 mType;
@@ -178,18 +213,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_Maro_c) == 0x1140);
-
-struct daNpc_Maro_HIOParam {
-    /* 0x00 */ daNpcT_HIOParam common;
-    /* 0x8C */ u32 field_0x8c;
-};
-
-class daNpc_Maro_Param_c {
-public:
-    virtual ~daNpc_Maro_Param_c() {}
-
-    static const daNpc_Maro_HIOParam m;
-};
-
 
 #endif /* D_A_NPC_MARO_H */

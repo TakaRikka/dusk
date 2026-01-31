@@ -51,20 +51,6 @@ const daNpc_Kyury_HIOParam daNpc_Kyury_Param_c::m = {
     0.0f,    // box_offset
 };
 
-#if DEBUG
-daNpc_Kyury_HIO_c::daNpc_Kyury_HIO_c() {
-    m = daNpc_Kyury_Param_c::m;
-}
-
-void daNpc_Kyury_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
-    // TODO
-}
-
-void daNpc_Kyury_HIO_c::genMessage(JORMContext* ctext) {
-    // TODO
-}
-#endif
-
 static int l_bmdData[3][2] = {
     {41, 1},
     {42, 1},
@@ -150,10 +136,33 @@ daNpc_Kyury_c::cutFunc daNpc_Kyury_c::mCutList[2] = {
     &daNpc_Kyury_c::cutConversation,
 };
 
+NPC_KYURY_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Kyury_HIO_c::daNpc_Kyury_HIO_c() {
+    m = daNpc_Kyury_Param_c::m;
+}
+
+void daNpc_Kyury_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Kyury_HIO_c::genMessage(JORMContext* ctext) {
+    // NONMATCHING
+}
+#endif
+
 daNpc_Kyury_c::~daNpc_Kyury_c() {
     if (mpMorf[0] != 0) {
         mpMorf[0]->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
 }
 
@@ -177,10 +186,16 @@ int daNpc_Kyury_c::create() {
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("キュリ－");
+#endif
+
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Kyury_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgHitCallback(tgHitCallBack);
@@ -867,8 +882,6 @@ static int daNpc_Kyury_Draw(void* i_this) {
 static int daNpc_Kyury_IsDelete(void* i_this) {
     return 1;
 }
-
-NPC_KYURY_HIO_CLASS l_HIO;
 
 static actor_method_class daNpc_Kyury_MethodTable = {
     (process_method_func)daNpc_Kyury_Create,  (process_method_func)daNpc_Kyury_Delete,

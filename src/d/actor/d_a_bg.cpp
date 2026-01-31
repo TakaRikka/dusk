@@ -10,6 +10,7 @@
 #include "d/d_com_static.h"
 #include "d/actor/d_a_grass.h"
 #include "d/d_bg_w.h"
+#include "d/d_bg_parts.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/d_demo.h"
 #include "JSystem/JKernel/JKRExpHeap.h"

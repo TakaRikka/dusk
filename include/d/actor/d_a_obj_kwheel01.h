@@ -18,7 +18,7 @@ public:
     daObjKWheel01_c() : dEvLib_callback_c(this) {}
     ~daObjKWheel01_c() {};
 
-    cPhs__Step create1st();
+    cPhs_Step create1st();
     void setMtx();
     int CreateHeap();
     int Create();

@@ -30,7 +30,8 @@ public:
         }
 
         void end() {
-            mCost = ((OSGetTick() - mTick) * 8) / ((*(u32*)0x800000F8 / 4) / 125000);
+            OSTick diff = OSGetTick() - mTick;
+            mCost = OSTicksToMicroseconds(diff);
             if (mCost == 0) {
                 mCost = 1;
             }
@@ -94,7 +95,7 @@ public:
     void wholeLoopEnd() { mWholeLoop.end(); }
     void idleStart() { mIdle.start(255, 129, 30); }
     void idleEnd() { mIdle.end(); }
-    void setCostFrame(int frame) { mCostFrame = frame; }
+    void setCostFrame(int frame) { sManager->mCostFrame = frame; }
     void setVisible(bool visible) { mVisible = visible; }
     void setVisibleHeapBar(bool visible) { mHeapBarVisible = visible; }
     void setWatchHeap(JKRHeap* pHeap) { mWatchHeap = pHeap; }

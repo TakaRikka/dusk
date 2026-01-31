@@ -1,7 +1,7 @@
 #ifndef JSGOBJECT_H
 #define JSGOBJECT_H
 
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 
 namespace JStage {
     /**

@@ -789,6 +789,17 @@ fopAc_ac_c* dBgS::PushPullCallBack(cBgS_PolyInfo const& param_0, fopAc_ac_c* i_p
                                        i_label);
 }
 
+#if DEBUG
+
+void dBgS::DrawPoly(cBgS_PolyInfo const& polyInfo, GXColor const& color) {
+    dBgW_Base* pdBgw = dComIfG_Bgsp().GetBgWBasePointer(polyInfo);
+    if (pdBgw != NULL) {
+        pdBgw->DrawPoly(polyInfo, color);
+    }
+}
+
+#endif
+
 bool dBgS_CheckBWallPoly(cBgS_PolyInfo const& poly) {
     cM3dGPla pla;
 

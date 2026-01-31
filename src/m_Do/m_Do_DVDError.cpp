@@ -10,31 +10,38 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_Reset.h"
 
+#if PLATFORM_GCN
+const int stack_size = 3072;
+#else
+const int stack_size = 8192;
+#endif
+
+
 bool mDoDvdErr_initialized;
 
 static OSThread DvdErr_thread;
 
 #pragma push
 #pragma force_active on
-static u8 DvdErr_stack[3072] ATTRIBUTE_ALIGN(16);
+static u8 DvdErr_stack[stack_size] ATTRIBUTE_ALIGN(16);
 #pragma pop
 
 static OSAlarm Alarm;
 
 void mDoDvdErr_ThdInit() {
-    if (!mDoDvdErr_initialized) {
-        OSTime time = OSGetTime();
-        OSThread* curThread = OSGetCurrentThread();
-        s32 priority = OSGetThreadPriority(curThread);
-
-        OSCreateThread(&DvdErr_thread, (void*(*)(void*))mDoDvdErr_Watch, NULL, DvdErr_stack + sizeof(DvdErr_stack),
-                       sizeof(DvdErr_stack), priority - 3, 1);
-        OSResumeThread(&DvdErr_thread);
-        OSCreateAlarm(&Alarm);
-        OSSetPeriodicAlarm(&Alarm, time, OS_BUS_CLOCK / 4, AlarmHandler);
-
-        mDoDvdErr_initialized = true;
+    if (mDoDvdErr_initialized) {
+        return;
     }
+
+    OSTime time = OSGetTime();
+
+    OSCreateThread(&DvdErr_thread, (void*(*)(void*))mDoDvdErr_Watch, NULL, DvdErr_stack + sizeof(DvdErr_stack),
+                    sizeof(DvdErr_stack), OSGetThreadPriority(OSGetCurrentThread()) - 3, 1);
+    OSResumeThread(&DvdErr_thread);
+    OSCreateAlarm(&Alarm);
+    OSSetPeriodicAlarm(&Alarm, time, OS_BUS_CLOCK / 4, AlarmHandler);
+
+    mDoDvdErr_initialized = true;
 }
 
 void mDoDvdErr_ThdCleanup() {
@@ -46,13 +53,17 @@ void mDoDvdErr_ThdCleanup() {
 }
 
 static void mDoDvdErr_Watch(void*) {
+#if PLATFORM_GCN
     OSDisableInterrupts();
-    { JKRThread thread(OSGetCurrentThread(), 0); }
+#endif
+    JKRThread(OSGetCurrentThread(), 0);
 
-    mDoExt_getAssertHeap()->becomeCurrentHeap();
+    JKRSetCurrentHeap(mDoExt_getAssertHeap());
 
+    s32 status;
     do {
-        if (DVDGetDriveStatus() == DVD_STATE_FATAL_ERROR) {
+        status = DVDGetDriveStatus();
+        if (status == DVD_STATE_FATAL_ERROR) {
             mDoDvdThd::suspend();
         }
         OSSuspendThread(&DvdErr_thread);

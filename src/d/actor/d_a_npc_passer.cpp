@@ -42,7 +42,7 @@ static int createHeapCallBack(fopAc_ac_c* i_this) {
     return actor->createHeap();
 }
 
-cPhs__Step daNpcPasser_c::create() {
+cPhs_Step daNpcPasser_c::create() {
     fopAcM_ct(this, daNpcPasser_c);
 
     mIsDarkWorld = dKy_darkworld_check();
@@ -74,7 +74,7 @@ cPhs__Step daNpcPasser_c::create() {
         return cPhs_ERROR_e;
     }
 
-    cPhs__Step phase = (cPhs__Step)loadResrc(m_type, m_objNum);
+    cPhs_Step phase = loadResrc(m_type, m_objNum);
     if (phase == cPhs_COMPLEATE_e) {
         u32 i_size = 0;
         #if DEBUG

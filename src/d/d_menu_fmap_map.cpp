@@ -287,14 +287,14 @@ dMfm_HIO_c::dMfm_HIO_c() {
 
 void dMfm_HIO_c::genMessage(JORMContext* mctx) {
     // DEBUG NONMATCHING
-    mctx->genLabel("フィールドマップ パスマップ 調整項目", 0, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("初期化", 0x4000005, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("HOSTIO順テキストファイル書き出し", 0x4000006, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("バイナリ順テキスト書き出し", 0x4000007, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("バイナリファイル書き出し", 0x4000008, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("バイナリファイル読み込み", 0x4000009, 0, NULL, -1, -1, 512, 24);
-    mctx->genButton("バイナリダンプ", 0x400000a, 0, NULL, -1, -1, 512, 24);
-    mctx->genLabel("■■リソースに入らない調整項目■■", 0, 0, NULL, -1, -1, 512, 24);
+    mctx->genLabel("フィールドマップ パスマップ 調整項目", 0);
+    mctx->genButton("初期化", 0x4000005);
+    mctx->genButton("HOSTIO順テキストファイル書き出し", 0x4000006);
+    mctx->genButton("バイナリ順テキスト書き出し", 0x4000007);
+    mctx->genButton("バイナリファイル書き出し", 0x4000008);
+    mctx->genButton("バイナリファイル読み込み", 0x4000009);
+    mctx->genButton("バイナリダンプ", 0x400000a);
+    mctx->genLabel("■■リソースに入らない調整項目■■", 0);
     field_0xc.gen(mctx);
 }
 

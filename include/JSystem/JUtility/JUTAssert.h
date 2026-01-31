@@ -1,7 +1,7 @@
 #ifndef JUTASSERT_H
 #define JUTASSERT_H
 
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 
 #if DEBUG
 #define JUT_SHOW_ASSERT(LINE, COND) JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, #COND)
@@ -23,7 +23,7 @@
 
 #define JUT_PANIC_F(LINE, MSG, ...)                                                               \
     JUTAssertion::showAssert_f(JUTAssertion::getSDevice(), __FILE__, LINE, MSG, __VA_ARGS__);        \
-    OSPanic(__FILE__, LINE, MSG, __VA_ARGS__);
+    OSPanic(__FILE__, LINE, "Halt");
 
 #define JUT_WARN_DEVICE(LINE, DEVICE, ...)                                                                        \
     JUTAssertion::setWarningMessage_f(DEVICE, __FILE__, LINE, __VA_ARGS__);    \
@@ -63,7 +63,7 @@ namespace JUTAssertion {
 
     u32 getSDevice();
     void showAssert_f(u32 device, const char* file, int line, const char* msg, ...);
-    void showAssert_f_va(u32 device, const char* file, int line, const char* msg, __va_list args);
+    void showAssert_f_va(u32 device, const char* file, int line, const char* msg, va_list args);
     void setWarningMessage_f(u32 device, char * file, int line, const char * fmt, ...);
     void setWarningMessage_f_va(u32 device, const char* file, int line, const char* msg, va_list args);
     void setLogMessage_f(u32 device, char* file, int line, const char* fmt, ...);

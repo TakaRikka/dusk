@@ -639,12 +639,12 @@ static u16 const l_musiya_num[2] = {
     0x01A8
 };
 
-cPhs__Step daObjKAG_c::create() {
+cPhs_Step daObjKAG_c::create() {
     u8 uVar1 = (fopAcM_GetParam(this) & 0xF00) >> 8;
 
     fopAcM_ct(this, daObjKAG_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "I_Kag");
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, "I_Kag");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("KAG PARAM %x\n", fopAcM_GetParam(this));
         

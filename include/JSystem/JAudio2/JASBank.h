@@ -1,7 +1,7 @@
 #ifndef JASBANK_H
 #define JASBANK_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JASChannel;
 class JASInstParam;

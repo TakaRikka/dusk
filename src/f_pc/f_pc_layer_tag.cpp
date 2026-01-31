@@ -6,7 +6,7 @@
 #include "f_pc/f_pc_layer_tag.h"
 #include "f_pc/f_pc_layer.h"
 
-s32 fpcLyTg_ToQueue(layer_management_tag_class* i_layer_tag, fpc_ProcID i_layerID, u16 i_listID,
+int fpcLyTg_ToQueue(layer_management_tag_class* i_layer_tag, fpc_ProcID i_layerID, u16 i_listID,
                     u16 i_listPriority) {
     if (i_layer_tag->layer == NULL && i_layerID == fpcLy_NONE_e) {
         return 0;
@@ -17,7 +17,7 @@ s32 fpcLyTg_ToQueue(layer_management_tag_class* i_layer_tag, fpc_ProcID i_layerI
     }
 
     if (i_layerID == fpcLy_NONE_e || i_layerID == fpcLy_CURRENT_e) {
-        s32 result = fpcLy_ToQueue(i_layer_tag->layer, i_listID, &i_layer_tag->create_tag);
+        int result = fpcLy_ToQueue(i_layer_tag->layer, i_listID, &i_layer_tag->create_tag);
         if (result != 0) {
             i_layer_tag->node_list_id = i_listID;
             i_layer_tag->node_list_priority = result - 1;
@@ -34,7 +34,7 @@ s32 fpcLyTg_ToQueue(layer_management_tag_class* i_layer_tag, fpc_ProcID i_layerI
     return 0;
 }
 
-s32 fpcLyTg_QueueTo(layer_management_tag_class* i_layer_tag) {
+int fpcLyTg_QueueTo(layer_management_tag_class* i_layer_tag) {
     if (fpcLy_QueueTo(i_layer_tag->layer, &i_layer_tag->create_tag) == 1) {
         i_layer_tag->layer = NULL;
         i_layer_tag->node_list_id = 0xFFFF;
@@ -45,7 +45,7 @@ s32 fpcLyTg_QueueTo(layer_management_tag_class* i_layer_tag) {
     return 0;
 }
 
-s32 fpcLyTg_Move(layer_management_tag_class* i_layer_tag, fpc_ProcID i_layerID, u16 i_listID,
+int fpcLyTg_Move(layer_management_tag_class* i_layer_tag, fpc_ProcID i_layerID, u16 i_listID,
                  u16 i_listPriority) {
     layer_class* layer = fpcLy_Layer(i_layerID);
     if (layer == NULL) {
@@ -58,7 +58,7 @@ s32 fpcLyTg_Move(layer_management_tag_class* i_layer_tag, fpc_ProcID i_layerID, 
     }
 }
 
-s32 fpcLyTg_Init(layer_management_tag_class* i_layer_tag, fpc_ProcID i_id, void* i_data) {
+int fpcLyTg_Init(layer_management_tag_class* i_layer_tag, fpc_ProcID i_id, void* i_data) {
     static layer_management_tag_class crear = {
         NULL, NULL, NULL, NULL, 0, NULL, 0xFFFF, 0xFFFF,
     };

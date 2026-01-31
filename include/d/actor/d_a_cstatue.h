@@ -5,22 +5,6 @@
 #include "d/d_particle_copoly.h"
 #include "f_op/f_op_actor.h"
 
-enum daCstatue_FLG0 {
-    daCstatue_FLG0_1 = 0x1,
-    daCstatue_FLG0_2 = 0x2,
-    daCstatue_FLG0_4 = 0x4,
-    daCstatue_FLG0_8 = 0x8,
-    daCstatue_FLG0_10 = 0x10,
-    daCstatue_FLG0_20 = 0x20,
-    daCstatue_FLG0_Demo = 0x40,
-    daCstatue_FLG0_80 = 0x80,
-    daCstatue_FLG0_100 = 0x100,
-    daCstatue_FLG0_200 = 0x200,
-    daCstatue_FLG0_400 = 0x400,
-    daCstatue_FLG0_800 = 0x800,
-    daCstatue_FLG0_1000 = 0x1000,
-};
-
 enum daCstatue_MoveMode {
     daCstatue_MoveMode_0,
     daCstatue_MoveMode_1,
@@ -58,6 +42,22 @@ enum daCstatueType {
  *
  */
 class daCstatue_c : public fopAc_ac_c {
+    enum daCstatue_FLG0 {
+        daCstatue_FLG0_1 = 0x1,
+        daCstatue_FLG0_2 = 0x2,
+        daCstatue_FLG0_4 = 0x4,
+        daCstatue_FLG0_8 = 0x8,
+        daCstatue_FLG0_10 = 0x10,
+        daCstatue_FLG0_20 = 0x20,
+        daCstatue_FLG0_Demo = 0x40,
+        daCstatue_FLG0_80 = 0x80,
+        daCstatue_FLG0_100 = 0x100,
+        daCstatue_FLG0_200 = 0x200,
+        daCstatue_FLG0_400 = 0x400,
+        daCstatue_FLG0_800 = 0x800,
+        daCstatue_FLG0_1000 = 0x1000,
+    };
+
 public:
     void atHitCallback(fopAc_ac_c*);
     int createHeap();

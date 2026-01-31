@@ -10,16 +10,16 @@
 
 void J3DMtxCalcJ3DSysInitBasic::init(Vec const& scale, Mtx const& mtx) {
     J3DSys::mCurrentS = scale;
-    J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
-    JMAMTXApplyScale(mtx, J3DSys::mCurrentMtx, J3DSys::mCurrentS.x, J3DSys::mCurrentS.y,
-                     J3DSys::mCurrentS.z);
+    Vec init = {1.0f, 1.0f, 1.0f};
+    J3DSys::mParentS = init;
+    JMAMTXApplyScale(mtx, J3DSys::mCurrentMtx, scale.x, scale.y, scale.z);
 }
 
 void J3DMtxCalcJ3DSysInitMaya::init(Vec const& scale, Mtx const& mtx) {
-    J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+    Vec init = {1.0f, 1.0f, 1.0f};
+    J3DSys::mParentS = init;
     J3DSys::mCurrentS = scale;
-    JMAMTXApplyScale(mtx, J3DSys::mCurrentMtx, J3DSys::mCurrentS.x, J3DSys::mCurrentS.y,
-                     J3DSys::mCurrentS.z);
+    JMAMTXApplyScale(mtx, J3DSys::mCurrentMtx, scale.x, scale.y, scale.z);
 }
 
 J3DMtxBuffer* J3DMtxCalc::mMtxBuffer;
@@ -35,8 +35,9 @@ inline s32 checkScaleOne(const Vec& param_0) {
 }
 
 void J3DMtxCalcCalcTransformBasic::calcTransform(J3DTransformInfo const& transInfo) {
+    J3DJoint* joint = J3DMtxCalc::getJoint();
     J3DMtxBuffer* mtxBuf = J3DMtxCalc::getMtxBuffer();
-    u16 jntNo = J3DMtxCalc::getJoint()->getJntNo();
+    u16 jntNo = joint->getJntNo();
 
     MtxP anmMtx = mtxBuf->getAnmMtx(jntNo);
 
@@ -58,8 +59,9 @@ void J3DMtxCalcCalcTransformBasic::calcTransform(J3DTransformInfo const& transIn
 }
 
 void J3DMtxCalcCalcTransformSoftimage::calcTransform(J3DTransformInfo const& transInfo) {
+    J3DJoint* joint = J3DMtxCalc::getJoint();
     J3DMtxBuffer* mtxBuf = J3DMtxCalc::getMtxBuffer();
-    u16 jntNo = J3DMtxCalc::getJoint()->getJntNo();
+    u16 jntNo = joint->getJntNo();
 
     MtxP anmMtx = mtxBuf->getAnmMtx(jntNo);
 
@@ -104,20 +106,22 @@ void J3DMtxCalcCalcTransformMaya::calcTransform(J3DTransformInfo const& transInf
                          transInfo.mScale.z);
     }
 
-    if (joint->getScaleCompensate() == 1) {
-        f32 invX = JMath::fastReciprocal(J3DSys::mParentS.x);
-        f32 invY = JMath::fastReciprocal(J3DSys::mParentS.y);
-        f32 invZ = JMath::fastReciprocal(J3DSys::mParentS.z);
+    u8 scaleCompensate = joint->getScaleCompensate();
+    if (scaleCompensate == 1) {
+        Vec inv;
+        inv.x = JMath::fastReciprocal(J3DSys::mParentS.x);
+        inv.y = JMath::fastReciprocal(J3DSys::mParentS.y);
+        inv.z = JMath::fastReciprocal(J3DSys::mParentS.z);
 
-        anmMtx[0][0] *= invX;
-        anmMtx[0][1] *= invX;
-        anmMtx[0][2] *= invX;
-        anmMtx[1][0] *= invY;
-        anmMtx[1][1] *= invY;
-        anmMtx[1][2] *= invY;
-        anmMtx[2][0] *= invZ;
-        anmMtx[2][1] *= invZ;
-        anmMtx[2][2] *= invZ;
+        anmMtx[0][0] *= inv.x;
+        anmMtx[0][1] *= inv.x;
+        anmMtx[0][2] *= inv.x;
+        anmMtx[1][0] *= inv.y;
+        anmMtx[1][1] *= inv.y;
+        anmMtx[1][2] *= inv.y;
+        anmMtx[2][0] *= inv.z;
+        anmMtx[2][1] *= inv.z;
+        anmMtx[2][2] *= inv.z;
     }
 
     MTXConcat(J3DSys::mCurrentMtx, anmMtx, J3DSys::mCurrentMtx);
@@ -131,13 +135,13 @@ void J3DMtxCalcCalcTransformMaya::calcTransform(J3DTransformInfo const& transInf
 void J3DJoint::appendChild(J3DJoint* pChild) {
     if (mChild == NULL) {
         mChild = pChild;
-    } else {
-        J3DJoint* curChild = mChild;
-        while (curChild->getYounger() != NULL) {
-            curChild = curChild->getYounger();
-        }
-        curChild->setYounger(pChild);
+        return;
     }
+    J3DJoint* curChild = mChild;
+    while (curChild->getYounger() != NULL) {
+        curChild = curChild->getYounger();
+    }
+    curChild->setYounger(pChild);
 }
 
 J3DJoint::J3DJoint() {
@@ -149,7 +153,8 @@ J3DJoint::J3DJoint() {
     mJntNo = 0;
     mKind = 1;
     mScaleCompensate = false;
-    __memcpy(&mTransformInfo, &j3dDefaultTransformInfo, sizeof(J3DTransformInfo));
+    J3DTransformInfo* r30 = &mTransformInfo;
+    void* r29 = __memcpy(r30, &j3dDefaultTransformInfo, sizeof(J3DTransformInfo));
     mBoundingSphereRadius = 0.0f;
     mMtxCalc = NULL;
     mMesh = NULL;
@@ -173,16 +178,16 @@ void J3DJoint::entryIn() {
                 j3dSys.getModel()->getShapePacket(mesh->getShape()->getIndex());
             if (!matPacket->isLocked()) {
                 if (mesh->getMaterialAnm()) {
-                    J3DMaterialAnm* piVar8 = mesh->getMaterialAnm();
-                    piVar8->calc(mesh);
+                    mesh->getMaterialAnm()->calc(mesh);
                 }
                 mesh->calc(anmMtx);
             }
             mesh->setCurrentMtx();
             matPacket->setMaterialAnmID(mesh->getMaterialAnm());
             matPacket->setShapePacket(shapePacket);
-            J3DDrawBuffer* drawBuffer = j3dSys.getDrawBuffer(mesh->isDrawModeOpaTexEdge());
-            if ((u8)matPacket->entry(drawBuffer)) {
+            bool isDrawModeOpaTexEdge = mesh->isDrawModeOpaTexEdge() == FALSE;
+            u8 r24 = matPacket->entry(j3dSys.getDrawBuffer(isDrawModeOpaTexEdge));
+            if (r24) {
                 j3dSys.setMatPacket(matPacket);
                 J3DDrawBuffer::entryNum++;
                 mesh->makeDisplayList();
@@ -197,18 +202,18 @@ J3DMtxCalc* J3DJoint::mCurrentMtxCalc;
 void J3DJoint::recursiveCalc() {
     J3DMtxCalc* prevMtxCalc = NULL;
     Mtx prevCurrentMtx;
-    mDoMtx_copy(J3DSys::mCurrentMtx, prevCurrentMtx);
-    f32 currentX = J3DSys::mCurrentS.x;
-    f32 currentY = J3DSys::mCurrentS.y;
-    f32 currentZ = J3DSys::mCurrentS.z;
-    f32 parentX = J3DSys::mParentS.x;
-    f32 parentY = J3DSys::mParentS.y;
-    f32 parentZ = J3DSys::mParentS.z;
+    MTXCopy(J3DSys::mCurrentMtx, prevCurrentMtx);
+    Vec current, parent;
+    current = J3DSys::mCurrentS;
+    parent = J3DSys::mParentS;
     if (getMtxCalc() != NULL) {
         prevMtxCalc = getCurrentMtxCalc();
         J3DMtxCalc* piVar2 = this->getMtxCalc();
         setCurrentMtxCalc(piVar2);
         J3DMtxCalc::setJoint(this);
+#if DEBUG
+        J3DMtxCalc::setMtxBuffer(J3DMtxCalc::getMtxBuffer());
+#endif
         piVar2->calc();
     } else {
         if (getCurrentMtxCalc() != NULL) {
@@ -223,18 +228,14 @@ void J3DJoint::recursiveCalc() {
         (*jointCallback)(this, 0);
     }
 
-    J3DJoint* child = getChild();
-    if (child != NULL) {
-        child->recursiveCalc();
+    J3DJoint* joint = getChild();
+    if (joint != NULL) {
+        joint->recursiveCalc();
     }
-    mDoMtx_copy(prevCurrentMtx, J3DSys::mCurrentMtx);
+    MTXCopy(prevCurrentMtx, J3DSys::mCurrentMtx);
 
-    J3DSys::mCurrentS.x = currentX;
-    J3DSys::mCurrentS.y = currentY;
-    J3DSys::mCurrentS.z = currentZ;
-    J3DSys::mParentS.x = parentX;
-    J3DSys::mParentS.y = parentY;
-    J3DSys::mParentS.z = parentZ;
+    J3DSys::mCurrentS = current;
+    J3DSys::mParentS = parent;
 
     if (prevMtxCalc != NULL) {
         setCurrentMtxCalc(prevMtxCalc);
@@ -243,8 +244,8 @@ void J3DJoint::recursiveCalc() {
         (*jointCallback)(this, 1);
     }
 
-    J3DJoint* younger = getYounger();
-    if (younger != NULL) {
-        younger->recursiveCalc();
+    joint = getYounger();
+    if (joint != NULL) {
+        joint->recursiveCalc();
     }
 }

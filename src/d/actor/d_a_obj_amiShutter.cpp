@@ -33,14 +33,10 @@ daAmiShutter_HIO_c::daAmiShutter_HIO_c() {
 
 #if DEBUG
 void daAmiShutter_HIO_c::genMessage(JORMContext* i_ctx) {
-    i_ctx->genSlider("open速度", &mMaxOpenSpeed, 0.1f, 1000.0f, 
-        0, NULL, 0xffff, 0xffff, 512, 24);
-    i_ctx->genSlider("close速度", &mMaxCloseSpeed, 0.1f, 1000.0f, 
-        0, NULL, 0xffff, 0xffff, 512, 24);
-    i_ctx->genSlider("range", &mRange, 0.1f, 1000.0f, 
-        0, NULL, 0xffff, 0xffff, 512, 24);
-    i_ctx->genSlider("waitTime", &mWaitTime, 0, 255, 
-        0, NULL, 0xffff, 0xffff, 512, 24);
+    i_ctx->genSlider("open速度", &mMaxOpenSpeed, 0.1f, 1000.0f);
+    i_ctx->genSlider("close速度", &mMaxCloseSpeed, 0.1f, 1000.0f);
+    i_ctx->genSlider("range", &mRange, 0.1f, 1000.0f);
+    i_ctx->genSlider("waitTime", &mWaitTime, 0, 255);
 }
 #endif
 
@@ -67,12 +63,12 @@ int daAmiShutter_c::CreateHeap() {
 }
 
 
-cPhs__Step daAmiShutter_c::create() {
+cPhs_Step daAmiShutter_c::create() {
     fopAcM_ct(this, daAmiShutter_c);
-    cPhs__Step phaseStep = (cPhs__Step) dComIfG_resLoad(&mPhaseReq, "S_Zami");
+    cPhs_Step phaseStep = dComIfG_resLoad(&mPhaseReq, "S_Zami");
 
     if (phaseStep == cPhs_COMPLEATE_e) {
-        cPhs__Step res = (cPhs__Step) MoveBGCreate("S_Zami", 7, 
+        cPhs_Step res = MoveBGCreate("S_Zami", 7, 
             dBgS_MoveBGProc_Typical, 0x1a00, NULL);
 
         if (res == cPhs_ERROR_e) {

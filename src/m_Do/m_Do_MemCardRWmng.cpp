@@ -8,7 +8,7 @@
 #include "JSystem/JUtility/JUTTexture.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_save.h"
-#include <stdio>
+#include <cstdio>
 
 #if VERSION == VERSION_GCN_JPN
 #define HEADER_TITLE   "ゼルダの伝説 ﾄﾜｲﾗｲﾄﾌﾟﾘﾝｾｽ"
@@ -319,19 +319,19 @@ static void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
 
 #if VERSION == VERSION_GCN_PAL
     switch (dComIfGs_getPalLanguage()) {
-    case dSv_player_config_c::LANGAUGE_ENGLISH:
+    case dSv_player_config_c::LANGUAGE_ENGLISH:
         snprintf(header->mComment, sizeof(header->mComment), "%d/%d Save Data", time.mon + 1, time.mday);
         break;
-    case dSv_player_config_c::LANGAUGE_GERMAN:
+    case dSv_player_config_c::LANGUAGE_GERMAN:
         snprintf(header->mComment, sizeof(header->mComment), "%d/%d Spielstand", time.mday, time.mon + 1);
         break;
-    case dSv_player_config_c::LANGAUGE_FRENCH:
+    case dSv_player_config_c::LANGUAGE_FRENCH:
         snprintf(header->mComment, sizeof(header->mComment), "Donn%ces de jeu %d/%d", 0xE9, time.mday, time.mon + 1);
         break;
-    case dSv_player_config_c::LANGAUGE_SPANISH:
+    case dSv_player_config_c::LANGUAGE_SPANISH:
         snprintf(header->mComment, sizeof(header->mComment), "Datos guardados el %d/%d", time.mday, time.mon + 1);
         break;
-    case dSv_player_config_c::LANGAUGE_ITALIAN:
+    case dSv_player_config_c::LANGUAGE_ITALIAN:
         snprintf(header->mComment, sizeof(header->mComment), "Dati salvati: %d/%d", time.mday, time.mon + 1);
         break;
     }
@@ -411,45 +411,42 @@ static BOOL mDoMemCdRWm_CheckCardStat(CARDFileInfo* file) {
 }
 
 static u32 mDoMemCdRWm_CalcCheckSum(void* data, u32 size) {
-    u16 high;
-    u16 low;
-
-    low = 0;
-    high = 0;
-    
-    u16* d = (u16*)data;
-    for (int i = 0; i < size / 2; i++) {    
+    int i;
+    u16 high, low;
+    high = low = 0;
+    u16* d;
+    for (i = 0, d = (u16*)data; i < size / 2; i++, d++) {
         high += *d;
         low += ~*d;
-        d++;
     }
 
     return high << 16 | low;
 }
 
 static u64 mDoMemCdRWm_CalcCheckSumGameData(void* data, u32 size) {
-    u32 high;
-    u32 low;
+    int i;
+    u32 high, low;
+    high = low = 0;
 
-    low = 0;
-    high = 0;
-
-    u8* d = (u8*)data;
-    for (int i = 0; i < size; i++) {
+    u8* d;
+    for (i = 0, d = (u8*)data; i < size; i++, d++) {
         high += *d;
         low += ~*d;
-        d++;
     }
 
-    return (u64)high << 32 | low;
+    u64 tmp = high;
+    return tmp << 32 | low;
 }
 
 BOOL mDoMemCdRWm_TestCheckSumGameData(void* data) {
-    u64 checksum = mDoMemCdRWm_CalcCheckSumGameData(data, (SAVEDATA_SIZE - sizeof(u64)));
-    return checksum == *(u64*)((u8*)data + (SAVEDATA_SIZE - sizeof(u64)));
+    u64 checksum;
+    u8* file_ptr = (u8*)data;
+    checksum = mDoMemCdRWm_CalcCheckSumGameData(data, (SAVEDATA_SIZE - sizeof(u64)));
+    return checksum == *(u64*)(file_ptr + (SAVEDATA_SIZE - sizeof(u64)));
 }
 
 void mDoMemCdRWm_SetCheckSumGameData(u8* data, u8 dataNum) {
     u8* file_ptr = data + (dataNum * SAVEDATA_SIZE);
-    *(u64*)(file_ptr + (SAVEDATA_SIZE - sizeof(u64))) = mDoMemCdRWm_CalcCheckSumGameData(file_ptr, (SAVEDATA_SIZE - sizeof(u64)));
+    u64 checksum = mDoMemCdRWm_CalcCheckSumGameData(file_ptr, (SAVEDATA_SIZE - sizeof(u64)));
+    *(u64*)(file_ptr + (SAVEDATA_SIZE - sizeof(u64))) = checksum;
 }

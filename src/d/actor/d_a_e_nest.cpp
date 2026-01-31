@@ -959,11 +959,11 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daE_Nest_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daE_Nest_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, e_nest_class);
     e_nest_class* _this = static_cast<e_nest_class*>(i_this);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhase, "E_nest");
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhase, "E_nest");
     if (step == cPhs_COMPLEATE_e) {
         _this->mBrokenSwitch = (u8)((u16)_this->current.angle.z >> 8);
         _this->shape_angle.z = 0;

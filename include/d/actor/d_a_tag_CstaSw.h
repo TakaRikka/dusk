@@ -14,7 +14,7 @@ public:
     int Draw();
     int Delete();
 
-    u8 getSw() { return fopAcM_GetParamBit(this, 0, 8); }
+    u32 getSw() { return fopAcM_GetParamBit(this, 0, 8); }
 
 private:
     /* 0x568 */ u8 mSwitch;
@@ -25,11 +25,11 @@ private:
 class daTagCstaSw_HIO_c : public mDoHIO_entry_c {
 public:
     daTagCstaSw_HIO_c();
-    virtual ~daTagCstaSw_HIO_c();
+    virtual ~daTagCstaSw_HIO_c() {}
 
     void genMessage(JORMContext*);
 
-    u8 unk_0x4;
+    u8 show_range;
 };
 
 #endif /* D_A_TAG_CSTASW_H */

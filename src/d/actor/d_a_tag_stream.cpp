@@ -5,18 +5,25 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_tag_stream.h"
 #include "SSystem/SComponent/c_math.h"
+#include "d/actor/d_a_tag_stream.h"
+
+#include "d/d_debug_viewer.h"
 #include "d/d_procname.h"
+#include "d/d_s_play.h"
 
 int daTagStream_c::create() {
     fopAcM_ct(this, daTagStream_c);
 
-    mPriority = fopAcM_GetParam(this) >> 8;
+    mPriority = (fopAcM_GetParam(this) >> 8) & 0xFF;
     mPower = fopAcM_GetParam(this);
-    field_0x56b = fopAcM_GetParam(this) >> 16;
+    field_0x56b = (fopAcM_GetParam(this) >> 16) & 0xFF;
 
-    fopAcM_GetParam(this) >> 24 != 0 ? mParameters = 0 : mParameters = 1;
+    if ((fopAcM_GetParam(this) >> 24) != 0) {
+        mParameters = 0;
+    } else {
+        mParameters = 1;
+    }
 
     scale.x *= 100.0f;
     scale.y *= 100.0f;
@@ -49,18 +56,17 @@ int daTagStream_c::create() {
     } else {
         m_top = this;
     }
-    
-    f32 float1 =  cM_scos(shape_angle.y) * cM_scos(shape_angle.x);
-    f32 float2 = -cM_ssin(shape_angle.x);
-    f32 float3 = cM_ssin(shape_angle.y) * cM_scos(shape_angle.x);
 
-    speed.set(float3,float2,float1);
+    speed.set(cM_ssin(shape_angle.y) * cM_scos(shape_angle.x), -cM_ssin(shape_angle.x),
+              cM_scos(shape_angle.y) * cM_scos(shape_angle.x));
 
     return cPhs_COMPLEATE_e;
 }
 
 static int daTagStream_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagStream_c*>(i_this)->create();
+    daTagStream_c* stream = static_cast<daTagStream_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return stream->create();
 }
 
 daTagStream_c::~daTagStream_c() {
@@ -78,6 +84,7 @@ daTagStream_c::~daTagStream_c() {
 };
 
 static int daTagStream_Delete(daTagStream_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagStream_c();
     return 1;
 }
@@ -96,8 +103,33 @@ static int daTagStream_Execute(daTagStream_c* i_this) {
     return i_this->execute();
 }
 
-static bool daTagStream_Draw(daTagStream_c* param_0) {
-    return true;
+static int daTagStream_Draw(daTagStream_c* i_this) {
+#if DEBUG
+    if (UREG_S(9) != 0 && i_this->checkStreamOn()) {
+        cXyz vertices[8];
+        vertices[0].set(-i_this->scale.x, i_this->scale.y, -i_this->scale.z);
+        vertices[1].set(i_this->scale.x, vertices[0].y, vertices[0].z);
+        vertices[2].set(vertices[0].x, vertices[0].y, i_this->scale.z);
+        vertices[3].set(vertices[1].x, vertices[0].y, vertices[2].z);
+        vertices[4].set(vertices[0].x, 0.0f, vertices[0].z);
+        vertices[5].set(vertices[1].x, 0.0f, vertices[1].z);
+        vertices[6].set(vertices[2].x, 0.0f, vertices[2].z);
+        vertices[7].set(vertices[3].x, 0.0f, vertices[3].z);
+
+        mDoMtx_stack_c::transS(i_this->current.pos);
+        mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
+
+        for (int i = 0; i < ARRAY_SIZE(vertices); i++) {
+            mDoMtx_stack_c::multVec(&vertices[i], &vertices[i]);
+        }
+
+        static GXColor color = {0xff, 0, 0xff, 0x80};
+
+        dDbVw_drawCube8pXlu(vertices, color);
+    }
+#endif
+
+    return 1;
 }
 
 static actor_method_class l_daTagStream_Method = {

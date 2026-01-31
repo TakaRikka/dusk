@@ -261,11 +261,11 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daNPC_LF_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daNPC_LF_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, npc_lf_class);
     npc_lf_class* a_this = static_cast<npc_lf_class*>(i_this);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&a_this->mPhase, "NPC_LF");
+    cPhs_Step phase = dComIfG_resLoad(&a_this->mPhase, "NPC_LF");
 
     if (phase == cPhs_COMPLEATE_e) {
         a_this->mParam1 = fopAcM_GetParam(a_this);

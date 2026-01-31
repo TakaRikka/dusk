@@ -387,7 +387,7 @@ mDoGph_gInf_c::bloom_c mDoGph_gInf_c::m_bloom;
 
 Mtx mDoGph_gInf_c::mBlureMtx;
 
-#if DEBUG
+#if !PLATFORM_GCN
 cXyz mDoGph_gInf_c::csr_c::m_nowEffPos(0.0f, 0.0f, 0.0f);
 cXyz mDoGph_gInf_c::csr_c::m_oldEffPos(0.0f, 0.0f, 0.0f);
 cXyz mDoGph_gInf_c::csr_c::m_oldOldEffPos(0.0f, 0.0f, 0.0f);
@@ -2104,6 +2104,10 @@ int mDoGph_Painter() {
 #if DEBUG
 mDoGph_HIO_c mDoGph_HIO;
 #endif
+
+static void dummy() {
+    OS_REPORT("mDoGph_Create():Initial of Graphic \n");
+}
 
 int mDoGph_Create() {
     JKRSolidHeap* heap = mDoExt_createSolidHeapToCurrent(0, NULL, 0);

@@ -97,7 +97,7 @@ int daObjCHO_c::CreateHeap() {
     return 1;
 }
 
-static cPhs__Step daObjCHO_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObjCHO_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjCHO_c*>(i_this)->create();
 }
 
@@ -528,9 +528,9 @@ bool daObjCHO_c::CreateChk() {
     return true;
 }
 
-cPhs__Step daObjCHO_c::create() {
+cPhs_Step daObjCHO_c::create() {
     fopAcM_ct(this, daObjCHO_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, "I_Cho");
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, "I_Cho");
 
     if (step == cPhs_COMPLEATE_e) {
         mLocation = fopAcM_GetParam(this) & 0xf;

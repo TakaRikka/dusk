@@ -28,7 +28,7 @@ public:
     void executePath();
     void setAngle();
     void pathMoveF();
-    cPhs__Step create();
+    cPhs_Step create();
     void create_init();
     inline ~daNpcPasser2_c();
 

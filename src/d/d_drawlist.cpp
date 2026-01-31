@@ -1544,7 +1544,7 @@ int dDlst_shadowControl_c::setReal(u32 param_1, s8 param_2, J3DModel* param_3, c
     };
 
     f32 fVar1;
-    f32 dVar16 = (param_2 == 0) ? 1.0f : (1.0f - 0.003000000026077032f * param_6);
+    f32 dVar16 = (param_2 == 0) ? 1.0f : (1.0f - 0.003f * param_6);
     if (dVar16 <= 0.0f) {
         return 0;
     }
@@ -1558,8 +1558,7 @@ int dDlst_shadowControl_c::setReal(u32 param_1, s8 param_2, J3DModel* param_3, c
     }
     f32 dVar17 = acStack_94.z + param_5;
     if (dVar17 < -1000.0f) {
-        f32 fVar1 = 0.0010000000474974513f *
-                (-1000.0f - dVar17);
+        f32 fVar1 = 0.001f * (-1000.0f - dVar17);
         if (fVar1 >= 1.0f) {
             return 0;
         }

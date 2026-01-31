@@ -38,6 +38,22 @@ static u16 emttrId[4] = {
     0x01B8, 0x01B9, 0x01BA, 0x01BB,
 };
 
+static OBJ_YBAG_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObj_YBag_HIO_c::daObj_YBag_HIO_c() {
+    m = daObj_YBag_Param_c::m;
+}
+
+void daObj_YBag_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_YBag_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daObj_YBag_c::daObj_YBag_c() {
 }
 
@@ -45,6 +61,12 @@ daObj_YBag_c::~daObj_YBag_c() {
     for (int i = 0; l_loadRes_list[mType][i] >= 0; i++) {
         dComIfG_resDelete(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
 }
 
 const dCcD_SrcGObjInf daObj_YBag_c::mCcDObjInfo = {
@@ -54,7 +76,7 @@ const dCcD_SrcGObjInf daObj_YBag_c::mCcDObjInfo = {
     {0},
 };
 
-f32 const daObj_YBag_Param_c::m[11] = {
+daObj_YBag_HIOParam const daObj_YBag_Param_c::m = {
     0.0f, -4.0f, 1.0f, 400.0f, 255.0f, 10.0f, 4.0f, 10.0f, 
     41.0f, 32.0f, 3.0f,
 };
@@ -82,10 +104,16 @@ int daObj_YBag_c::create() {
         }
         fopAcM_SetMtx(this, mModel->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -300.0, -50.0f, -300.0, 300.0f, 450.0f, 300.0f);
-        mAcchCir.SetWall(daObj_YBag_Param_c::m[7], daObj_YBag_Param_c::m[6]);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("イリアのバッグ");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.field_0x1c, mpHIO->m.field_0x18);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
-        mStts.Init(daObj_YBag_Param_c::m[4], 0, this);
+        mStts.Init(mpHIO->m.field_0x10, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mStts);
         mAcch.CrrPos(dComIfG_Bgsp());
@@ -122,12 +150,12 @@ int daObj_YBag_c::Delete() {
 
 int daObj_YBag_c::Execute() {
     int local_8c = fopAcM_checkCarryNow(this) != 0;
-    scale.set(daObj_YBag_Param_c::m[2], daObj_YBag_Param_c::m[2], daObj_YBag_Param_c::m[2]);
+    scale.set(mpHIO->m.field_0x08, mpHIO->m.field_0x08, mpHIO->m.field_0x08);
     attention_info.flags = 0;
-    attention_info.distances[4] = 6;
-    mAcchCir.SetWallR(daObj_YBag_Param_c::m[7]);
-    mAcchCir.SetWallH(daObj_YBag_Param_c::m[6]);
-    gravity = daObj_YBag_Param_c::m[1];
+    attention_info.distances[fopAc_attn_CARRY_e] = 6;
+    mAcchCir.SetWallR(mpHIO->m.field_0x1c);
+    mAcchCir.SetWallH(mpHIO->m.field_0x18);
+    gravity = mpHIO->m.field_0x04;
     if (local_8c != 0) {
         mAcch.ClrWallHit();
         mAcch.ClrGroundHit();
@@ -145,17 +173,17 @@ int daObj_YBag_c::Execute() {
         mAcch.ClrGrndNone();
         if (field_0xa34 != 0 && cM3d_IsZero(speedF) == false) {
             fopAcM_carryOffRevise(this);
-            s16 sVar11 = cM_deg2s(daObj_YBag_Param_c::m[9]);
+            s16 sVar11 = cM_deg2s(mpHIO->m.field_0x24);
             speed.setall(0.0f);
             speed.y =
-                daObj_YBag_Param_c::m[8] * cM_ssin(sVar11);
+                mpHIO->m.field_0x20 * cM_ssin(sVar11);
             speedF =
-                daObj_YBag_Param_c::m[8] * cM_scos(sVar11);
+                mpHIO->m.field_0x20 * cM_scos(sVar11);
             field_0xa04 = 0x4000;
             field_0xa33 = 1;
         } else {
             fopAcM_getWaterY(&current.pos, &field_0x9f4);
-            if (field_0x9f4 != -G_CM3D_F_INF && daObj_YBag_Param_c::m[10] < field_0x9f4 - field_0x9f0 &&
+            if (field_0x9f4 != -G_CM3D_F_INF && mpHIO->m.field_0x28 < field_0x9f4 - field_0x9f0 &&
                 current.pos.y <= field_0x9f4 && field_0xa32 == 0)
             {
                 if (field_0xa33 != 0) {
@@ -177,7 +205,7 @@ int daObj_YBag_c::Execute() {
                     cLib_addCalc(&speed.y, 2.0f, 0.5f, 0.5f, 0.5f);
                 }
                 if (field_0x9f4 <
-                    current.pos.y + daObj_YBag_Param_c::m[10])
+                    current.pos.y + mpHIO->m.field_0x28)
                 {
                     field_0x9dc.y = 0x100;
                     mAcch.ClrGroundHit();
@@ -205,7 +233,7 @@ int daObj_YBag_c::Execute() {
                     } else {
                         cLib_chaseF(&speedF, 0.0f, 0.1f);
                     }
-                    cLib_addCalc2(&current.pos.y, field_0x9f4 - daObj_YBag_Param_c::m[10], 0.5f,
+                    cLib_addCalc2(&current.pos.y, field_0x9f4 - mpHIO->m.field_0x28, 0.5f,
                                   2.0f);
                     speed.y = 0.0f;
                     setHamonPrtcl();
@@ -313,13 +341,13 @@ int daObj_YBag_c::Execute() {
         setRoomNo();
     }
     attention_info.position = current.pos;
-    attention_info.position.y += daObj_YBag_Param_c::m[0];
+    attention_info.position.y += mpHIO->m.field_0x00;
     eyePos = current.pos;
     setMtx();
     field_0xa04 = calcRollAngle(field_0xa04, 0x10000);
     mCyl.ClrCoHit();
-    mCyl.SetR(daObj_YBag_Param_c::m[7]);
-    mCyl.SetH(daObj_YBag_Param_c::m[5]);
+    mCyl.SetR(mpHIO->m.field_0x1c);
+    mCyl.SetH(mpHIO->m.field_0x14);
     mCyl.SetC(current.pos);
     dComIfG_Ccsp()->Set(&mCyl);
     field_0xa34 = local_8c != 0;
@@ -344,7 +372,7 @@ int daObj_YBag_c::Draw() {
         } else {
             ;
             mShadowId = dComIfGd_setShadow(mShadowId, 1, mModel, &current.pos,
-                daObj_YBag_Param_c::m[3], 20.0f,
+                mpHIO->m.field_0x0c, 20.0f,
                 current.pos.y, field_0x9f0, mGndChk,
                 &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
         }
@@ -469,8 +497,6 @@ void daObj_YBag_c::setSmokePrtcl() {
     dComIfGp_particle_levelEmitterOnEventMove(field_0xa10);
     dComIfGp_particle_levelEmitterOnEventMove(field_0xa14);
 }
-
-static daObj_YBag_Param_c l_HIO;
 
 void daObj_YBag_c::setWaterPrtcl() {
     static const cXyz scl(0.4f, 0.4f, 0.4f);

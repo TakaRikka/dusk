@@ -5,9 +5,13 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J2DGraph/J2DTevs.h"
-#include "JSystem/J2DGraph/J2DMatBlock.h"
-#include <math>
-#include "dolphin/gx.h"
+#include "JSystem/J2DGraph/J2DMaterial.h"
+#ifdef __MWERKS__
+#include <cmath>
+#else
+#include <dusk/math.h>
+#endif
+#include <dolphin/gx.h>
 
 void J2DTexMtx::load(u32 mtxIdx) {
     GXLoadTexMtxImm(mTexMtx, mtxIdx * 3 + GX_TEXMTX0, (GXTexMtxType)mInfo.mTexMtxType);
@@ -76,22 +80,33 @@ void J2DIndTexOrder::load(u8 indTexStage) {
     GXSetIndTexOrder((GXIndTexStageID)indTexStage, (GXTexCoordID)mInfo.mTexCoordID, (GXTexMapID)mInfo.mTexMapID);
 }
 
-static void dummyVirtual(J2DTevBlock* block, J2DIndBlock* indBlock) {
+static void dummyVirtual(J2DMaterial* material) {
+    J2DIndBlock* indBlock = material->getIndBlock();
     indBlock->getIndTexStageNum();
     indBlock->getIndTexOrder(0);
     indBlock->getIndTexStageNum();
     indBlock->getIndTexOrder(0);
     indBlock->getIndTexMtx(0);
     indBlock->getIndTexCoordScale(0);
+    J2DColorBlock* colorBlock = material->getColorBlock();
+    J2DTexGenBlock* texGenBlock = material->getTexGenBlock();
+    texGenBlock->getTexGenNum();
+    J2DTevBlock* block = material->getTevBlock();
     block->getIndTevStage(0);
     block->getTevStageNum();
+    material->getPEBlock();
+    material->getMaterialAlphaCalc();
+    colorBlock->getMatColor(0);
+    colorBlock->getColorChan(0);
+    texGenBlock->getTexCoord(0);
+    texGenBlock->getTexMtx(0).getTexMtxInfo();
     block->getTexNo(0);
     block->getFontNo();
     block->getTevKColor(0);
     block->getTevKColorSel(0);
     block->getTevKAlphaSel(0);
     block->getTevOrder(0);
-    block->getTevColor(0);
+    J2DGXColorS10 color(*block->getTevColor(0));
     block->getTevStage(0);
     block->getTevSwapModeTable(0);
 }

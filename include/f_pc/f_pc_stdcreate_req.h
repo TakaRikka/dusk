@@ -19,14 +19,14 @@ typedef struct standard_create_request_class {
 #endif
 } standard_create_request_class;
 
-s32 fpcSCtRq_phase_CreateProcess(standard_create_request_class* i_request);
-s32 fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_request);
-s32 fpcSCtRq_phase_IsComplete(standard_create_request_class* i_request);
-s32 fpcSCtRq_phase_PostMethod(standard_create_request_class* i_request);
-s32 fpcSCtRq_phase_Done(standard_create_request_class* i_request);
-s32 fpcSCtRq_Handler(standard_create_request_class* i_request);
-s32 fpcSCtRq_Delete(standard_create_request_class* i_request);
-s32 fpcSCtRq_Cancel(standard_create_request_class* i_request);
+int fpcSCtRq_phase_CreateProcess(standard_create_request_class* i_request);
+int fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_request);
+int fpcSCtRq_phase_IsComplete(standard_create_request_class* i_request);
+int fpcSCtRq_phase_PostMethod(standard_create_request_class* i_request);
+int fpcSCtRq_phase_Done(standard_create_request_class* i_request);
+int fpcSCtRq_Handler(standard_create_request_class* i_request);
+int fpcSCtRq_Delete(standard_create_request_class* i_request);
+int fpcSCtRq_Cancel(standard_create_request_class* i_request);
 fpc_ProcID fpcSCtRq_Request(layer_class* i_layer, s16 i_procName, stdCreateFunc i_createFunc,
                             void* param_4, void* i_append);
 

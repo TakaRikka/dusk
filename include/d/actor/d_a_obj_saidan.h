@@ -23,7 +23,7 @@ public:
 
     void setBaseMtx();
     virtual int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     virtual int Execute(Mtx**);
     void moveProc();
     void init_modeWait();

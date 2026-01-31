@@ -592,12 +592,12 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-static cPhs__Step daObj_Ito_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daObj_Ito_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, obj_ito_class);
     obj_ito_class* i_this = (obj_ito_class*)a_this;
     a_this = &i_this->actor;
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "OBJ_ITO");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "OBJ_ITO");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("OBJ_ITO PARAM %x\n", fopAcM_GetParam(a_this));
 

@@ -3,7 +3,7 @@
 
 #include "JSystem/JGeometry.h"
 #include "JSystem/JUtility/TColor.h"
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 
 /**
  * @ingroup jsystem-j2d
@@ -48,6 +48,8 @@ public:
     virtual void setScissor();
     virtual s32 getGrafType() const { return 0; }
     virtual void setLookat() {}
+
+    JGeometry::TBox2<f32>* getBounds() { return &mBounds; }
 
 public:
     /* 0x04 */ JGeometry::TBox2<f32> mBounds;

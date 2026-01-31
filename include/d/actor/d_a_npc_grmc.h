@@ -26,6 +26,12 @@ struct daNpc_grMC_HIOParam {
 class daNpc_grMC_HIO_c : public mDoHIO_entry_c {
 public:
     /* 0x8 */ daNpc_grMC_HIOParam m;
+
+    daNpc_grMC_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
 };
 
 class daNpc_grMC_Param_c {
@@ -68,7 +74,7 @@ public:
     typedef int (daNpc_grMC_c::*actionFunc)(void*);
 
     ~daNpc_grMC_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();
@@ -122,7 +128,7 @@ public:
     static cutFunc mCutList[1];
 
 private:
-    /* 0x0F7C */ NPC_GRMC_HIO_CLASS* mHIO;
+    /* 0x0F7C */ NPC_GRMC_HIO_CLASS* mpHIO;
     /* 0x0F80 */ dCcD_Cyl mCyl;
     /* 0x10BC */ u8 mType;
     /* 0x10C0 */ actionFunc mNextAction;

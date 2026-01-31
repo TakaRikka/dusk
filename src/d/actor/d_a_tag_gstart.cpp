@@ -14,30 +14,33 @@ int daTagGstart_c::create() {
     fopAcM_ct(this, daTagGstart_c);
 
     mSwNo = fopAcM_GetParam(this);
-    mSwNo2 = fopAcM_GetParam(this) >> 8;
-    field_0x56a = fopAcM_GetParam(this) >> 0x10;
+    mSwNo2 = (fopAcM_GetParam(this) >> 8) & 0xFF;
+    field_0x56a = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
     mType = (fopAcM_GetParam(this) >> 0x18) & 0xF;
 
     return cPhs_COMPLEATE_e;
 }
 
 static int daTagGstart_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagGstart_c*>(i_this)->create();
+    daTagGstart_c* gStart = static_cast<daTagGstart_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return gStart->create();
 }
 
 daTagGstart_c::~daTagGstart_c() {}
 
 static int daTagGstart_Delete(daTagGstart_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagGstart_c();
     return 1;
 }
 
 int daTagGstart_c::execute() {
-    if ((mSwNo == 0xFF || dComIfGs_isSwitch(mSwNo, fopAcM_GetHomeRoomNo(this))) &&
-        (mSwNo2 == 0xFF || !dComIfGs_isSwitch(mSwNo2, fopAcM_GetHomeRoomNo(this))))
+    if ((mSwNo == 0xFF || fopAcM_isSwitch(this, mSwNo)) &&
+        (mSwNo2 == 0xFF || !fopAcM_isSwitch(this, mSwNo2)))
     {
-        if (mType != 0 || dComIfGp_getLinkPlayer()->checkWolf()) {
-            dComIfGp_getLinkPlayer()->onSceneChangeDead(field_0x56a, fopAcM_GetRoomNo(this));
+        if (mType != 0 || daPy_py_c::checkNowWolf()) {
+            daPy_getLinkPlayerActorClass()->onSceneChangeDead(field_0x56a, fopAcM_GetRoomNo(this));
         }
     }
 

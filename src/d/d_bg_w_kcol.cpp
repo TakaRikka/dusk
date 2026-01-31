@@ -6,7 +6,7 @@
 #include "d/d_bg_s_cap_poly.h"
 
 #include <algorithm>
-#include <math>
+#include <cmath>
 
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "SSystem/SComponent/c_m2d.h"

@@ -5,6 +5,39 @@
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
 
+struct daBullet_HIOParam {
+    /* 0x00 */ f32 gravity;
+    /* 0x04 */ f32 weight;
+    /* 0x08 */ f32 height;
+    /* 0x0C */ f32 knee_height;
+    /* 0x10 */ f32 width;
+    /* 0x14 */ s16 lifetime;
+};
+
+class daBullet_Param_c {
+public:
+    virtual ~daBullet_Param_c() {}
+
+    static daBullet_HIOParam const m;
+};
+
+#if DEBUG
+class daBullet_HIO_c : public mDoHIO_entry_c {
+public:
+    daBullet_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daBullet_HIOParam m;
+};
+
+#define BULLET_HIO_CLASS daBullet_HIO_c
+#else
+#define BULLET_HIO_CLASS daBullet_Param_c
+#endif
+
 /**
  * @ingroup actors-unsorted
  * @class daBullet_c
@@ -24,7 +57,7 @@ public:
     /* 0x788 */ dBgS_AcchCir mAcchCir;
     /* 0x7C8 */ dCcD_Sph mCcSph;
     /* 0x900 */ cBgS_GndChk mGndChk;
-    /* 0x93C */ u8 field_0x93C[0x940 - 0x93C];
+    /* 0x93C */ BULLET_HIO_CLASS* mpHIO;
     /* 0x940 */ f32 mGroundY;
     /* 0x944 */ processFn mProcess;
     /* 0x950 */ int mLifetime;
@@ -52,22 +85,5 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daBullet_c) == 0x95c);
-
-struct daBullet_HIOParam {
-    /* 0x00 */ f32 gravity;
-    /* 0x04 */ f32 weight;
-    /* 0x08 */ f32 height;
-    /* 0x0C */ f32 knee_height;
-    /* 0x10 */ f32 width;
-    /* 0x14 */ s16 lifetime;
-};
-
-class daBullet_Param_c {
-public:
-    virtual ~daBullet_Param_c() {}
-
-    static daBullet_HIOParam const m;
-};
-
 
 #endif /* D_A_BULLET_H */

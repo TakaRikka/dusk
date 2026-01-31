@@ -2,7 +2,7 @@
 #define JKREXPHEAP_H
 
 #include "JSystem/JKernel/JKRHeap.h"
-#include <stdint>
+#include <stdint.h>
 
 /**
  * @ingroup jsystem-jkernel

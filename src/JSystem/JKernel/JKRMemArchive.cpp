@@ -7,7 +7,7 @@
 #include "JSystem/JUtility/JUTException.h"
 #include <string>
 #include "global.h"
-#include <stdint>
+#include <stdint.h>
 
 JKRMemArchive::JKRMemArchive(s32 entryNum, JKRArchive::EMountDirection mountDirection)
     : JKRArchive(entryNum, MOUNT_MEM) {

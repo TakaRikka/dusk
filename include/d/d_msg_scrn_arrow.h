@@ -1,7 +1,7 @@
 #ifndef MSG_SCRN_D_MSG_SCRN_ARROW_H
 #define MSG_SCRN_D_MSG_SCRN_ARROW_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class J2DScreen;
 class J2DAnmTransform;

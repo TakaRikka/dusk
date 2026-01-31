@@ -1487,6 +1487,8 @@ static void action(e_s1_class* i_this) {
     if (can_bibiri && (daPy_getPlayerActorClass()->checkWolfBark() || daPy_getPlayerActorClass()->checkWolfThreat()) && pl_at_check(i_this, l_HIO.mReactionDist)) {     
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
         s16 angle_to_player = player->shape_angle.y - (fopAcM_searchPlayerAngleY(a_this) + 0x8000);
+        // 182.04 is close to the degree -> short constant, but not quite,
+        // maybe someone calculated it on their own and rounded it off?
         s16 bibiri_angle = 182.04f * l_HIO.mReactionAngle;
 
         if (angle_to_player < bibiri_angle && angle_to_player > (s16)-bibiri_angle) {

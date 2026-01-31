@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_drop.h"
 #include "SSystem/SComponent/c_math.h"
-#include <math>
+#include <cmath>
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_camera.h"

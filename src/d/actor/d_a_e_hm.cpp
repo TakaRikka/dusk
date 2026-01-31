@@ -43,13 +43,13 @@ daE_HM_HIO_c::daE_HM_HIO_c() {
 void daE_HM_HIO_c::genMessage(JORMContext* ctx) {
     // "Himekuji"
     // appears to be a portmanteau - "ヒメ" = small (prefix), "ナメクジ" = slug)
-    ctx->genLabel("ヒメクジ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("サーチエリア", &searchArea, 0.0f, 2000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("飛ばし方向スピード", &flyDirSpeed, 0.0f, -100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("飛ばし方向Yスピード", &flyDirYSpeed, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("重力設定", &gravity, 0.0f, -20.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("攻撃範囲", &attackRange, -1.0f, 20.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("疾風受け時間", &galeStunTime, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("ヒメクジ", 0x80000001);
+    ctx->genSlider("サーチエリア", &searchArea, 0.0f, 2000.0f);
+    ctx->genSlider("飛ばし方向スピード", &flyDirSpeed, 0.0f, -100.0f);
+    ctx->genSlider("飛ばし方向Yスピード", &flyDirYSpeed, 0.0f, 100.0f);
+    ctx->genSlider("重力設定", &gravity, 0.0f, -20.0f);
+    ctx->genSlider("攻撃範囲", &attackRange, -1.0f, 20.0f);
+    ctx->genSlider("疾風受け時間", &galeStunTime, 0.0f, 1000.0f);
 }
 #endif
 
@@ -1301,7 +1301,7 @@ int daE_HM_c::Execute() {
     cXyz bindEffectSize(1.0f, 1.0f, 1.0f);
 
     u32 cutType = daPy_getPlayerActorClass()->getCutType();
-    if (cutType == 0x36 && mSph.ChkAtSet() != 0) {
+    if (cutType == daPy_py_c::CUT_TYPE_WOLF_LOCK && mSph.ChkAtSet() != 0) {
         mSph.OffAtSetBit();
         field_0x5ac = 1;
     } else if (field_0x5ac != 0) {
@@ -1393,7 +1393,7 @@ static int daE_HM_IsDelete(daE_HM_c* i_this) {
 }
 
 static int daE_HM_Delete(daE_HM_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_HM");
     return i_this->Delete();
 }
 

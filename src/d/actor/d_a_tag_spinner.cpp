@@ -6,7 +6,33 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_tag_spinner.h"
+
+#include "d/d_debug_viewer.h"
 #include "d/d_procname.h"
+
+class daTagSpinner_HIO_c : public mDoHIO_entry_c {
+public:
+    daTagSpinner_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    u8 enable_debug_display;
+};
+
+#if DEBUG
+daTagSpinner_HIO_c l_HIO;
+
+daTagSpinner_HIO_c::daTagSpinner_HIO_c() {
+    enable_debug_display = FALSE;
+}
+
+void daTagSpinner_HIO_c::genMessage(JORMContext* ctx) {
+    // "Spinner suction tag"
+    ctx->genLabel("スピンナー吸い込みタグ", 0);
+    // "Debug display"
+    ctx->genCheckBox("デバッグ表示", &enable_debug_display, 0x1);
+}
+#endif
 
 static int CheckCreateHeap(fopAc_ac_c* param_0) {
     daTagSpinner_c* tag = (daTagSpinner_c*)param_0;
@@ -17,12 +43,15 @@ static void* search_spinner_sub(void* tag_0, void* tag_1) {
     fopAc_ac_c* actor = (fopAc_ac_c*)tag_0;
     daTagSpinner_c* actor2 = (daTagSpinner_c*)tag_1;
 
-    if ((actor != NULL) && (fopAcM_IsActor(actor) != NULL) && (fopAcM_GetProfName(actor) == 0xF2)) {
-        if ((actor->current.pos.absXZ(actor2->current.pos)) < (actor2->GetR())) {
+    if (actor != NULL &&
+        fopAcM_IsActor(actor) != NULL &&
+        fopAcM_GetProfName(actor) == PROC_SPINNER) {
+        f32 latDist = actor->current.pos.absXZ(actor2->current.pos);
+        if (latDist < actor2->GetR()) {
             return actor;
         }
     }
-    return 0;
+    return NULL;
 }
 
 void daTagSpinner_c::initBaseMtx() {
@@ -30,8 +59,8 @@ void daTagSpinner_c::initBaseMtx() {
 }
 
 void daTagSpinner_c::setBaseMtx() {
-    MTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::now, shape_angle.x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
 }
 
 int daTagSpinner_c::Create() {
@@ -46,21 +75,27 @@ int daTagSpinner_c::CreateHeap() {
 }
 
 int daTagSpinner_c::create() {
-    int iVar1;
-    int iVar2;
     fopAcM_ct(this, daTagSpinner_c);
 
-    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0)) {
-        iVar2 = 5;
-    } else {
-        iVar1 = Create();
-        if (iVar1 == NULL) {
-            iVar2 = 5;
-        } else {
-            iVar2 = 4;
+    int var_r29 = cPhs_COMPLEATE_e;
+    if (var_r29 == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0)) {
+            return cPhs_ERROR_e;
         }
+
+        if (!Create()) {
+            return cPhs_ERROR_e;
+        }
+
+        OS_REPORT("TAG_SPINNER PARAM:%x\n", fopAcM_GetParam(this));
+
+#if DEBUG
+        // "Spinner suction tag"
+        l_HIO.entryHIO("スピンナー吸い込みタグ");
+#endif
     }
-    return iVar2;
+
+    return var_r29;
 }
 
 int daTagSpinner_c::execute() {
@@ -76,26 +111,55 @@ int daTagSpinner_c::execute() {
     return 1;
 }
 
-int daTagSpinner_c::_delete() {
+int daTagSpinner_c::draw() {
+#if DEBUG
+    GXColor color = (GXColor){0, 0, 0x80, 0x80};
+
+    if (l_HIO.enable_debug_display) {
+        dDbVw_drawCylinderXlu(current.pos, mRadius, field_0x56c, color, 1);
+    }
+#endif
+
     return 1;
 }
 
-static int daTagSpinner_Execute(daTagSpinner_c* tag) {
-    return tag->execute();
+int daTagSpinner_c::_delete() {
+#if DEBUG
+    l_HIO.removeHIO();
+#endif
+
+    return 1;
+}
+
+static int daTagSpinner_Execute(daTagSpinner_c* i_this) {
+    return i_this->execute();
+}
+
+static int daTagSpinner_Draw(daTagSpinner_c* i_this) {
+    return i_this->draw();
 }
 
 static int daTagSpinner_Delete(daTagSpinner_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
-static int daTagSpinner_Create(fopAc_ac_c* tag) {
-    return static_cast<daTagSpinner_c*>(tag)->create();
+static int daTagSpinner_Create(fopAc_ac_c* i_this) {
+    daTagSpinner_c* spinner = static_cast<daTagSpinner_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return spinner->create();
 }
 
 static actor_method_class l_daTagSpinner_Method = {
     (process_method_func)daTagSpinner_Create,
     (process_method_func)daTagSpinner_Delete,
     (process_method_func)daTagSpinner_Execute,
+    (process_method_func)NULL,
+#if DEBUG
+    (process_method_func)daTagSpinner_Draw,
+#else
+    (process_method_func)NULL,
+#endif
 
 };
 

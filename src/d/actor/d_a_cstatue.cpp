@@ -321,7 +321,7 @@ int daCstatue_c::create() {
                 dComIfGs_onTbox(20);
             }
         }
-        attention_info.distances[4] = 8;
+        attention_info.distances[fopAc_attn_CARRY_e] = 8;
         fopAcM_SetMtx(this, mModel->getBaseTRMtx());
         int acchTblSize;
         if (mType == daCstatueType_Normal || mType == daCstatueType_Normal2) {
@@ -376,7 +376,7 @@ int daCstatue_c::create() {
             }
             mSph->SetTgType(0xd97afddf);
             mControlDistanceOffset = JMAFastSqrt(650000.0f);
-            attention_info.distances[0] = 92;
+            attention_info.distances[fopAc_attn_LOCK_e] = 92;
             cLib_onBit<u32>(attention_info.flags, fopAc_AttnFlag_LOCK_e);
             mTargetFrame = 35.0f;
         }
@@ -1043,7 +1043,7 @@ void daCstatue_c::initStartBrkBtk() {
     for (int iParticle = 0; iParticle < 2; iParticle++) {
         dComIfGp_particle_set(0x88bb, &mBallPos, &angle, NULL);
         dComIfGp_particle_set(0x88bc, &mBallPos, &angle, NULL);
-        ADD_ANGLE(angle.y, 0x8000);
+        ADD_ANGLE_2(angle.y, 0x8000);
     }
 }
 

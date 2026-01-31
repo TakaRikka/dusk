@@ -1813,7 +1813,7 @@ void daB_DR_c::executeWeekHit() {
             dComIfGp_particle_set(0x8999, &sp50, NULL, NULL);
             dComIfGp_particle_set(0x899A, &sp50, NULL, NULL);
 
-            if (health <= 0 || player->getCutType() == 0x20) {
+            if (health <= 0 || player->getCutType() == daPy_py_c::CUT_TYPE_FINISH_STAB) {
                 health = 0;
                 mSound.startCollisionSE(Z2SE_HIT_SWORD, 0x20);
 

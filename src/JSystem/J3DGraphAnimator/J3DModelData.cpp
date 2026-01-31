@@ -5,9 +5,10 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
-#include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
 
 void J3DModelData::clear() {
     mpRawData = 0;

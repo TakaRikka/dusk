@@ -48,34 +48,27 @@ void daObjKznkarm_Hio_c::dt() {
 }
 
 void daObjKznkarm_Hio_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("§ 風見ネコの風受けパラメータ設定  §\n", 0, 0, NULL, 0xffff, 0xffff, 0x200,
-                            0x18);
-    ctx->genSlider("重力", &mAttr.gravity, -50.0f, 0.0f, 0,
-                             NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("最高落下速度", &mAttr.maximum_falling_speed, -200.0f, 0.0f, 0,
-                             NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("水抵抗", &mAttr.water_drag, 0.0f, 1.0f, 0,
-                             NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("跳ね返り係数", &mAttr.bounce_coeff, 0.0f, 1.0f, 0,
-                             NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("§ 風見ネコの風受けパラメータ設定  §\n", 0);
+    ctx->genSlider("重力", &mAttr.gravity, -50.0f, 0.0f);
+    ctx->genSlider("最高落下速度", &mAttr.maximum_falling_speed, -200.0f, 0.0f);
+    ctx->genSlider("水抵抗", &mAttr.water_drag, 0.0f, 1.0f);
+    ctx->genSlider("跳ね返り係数", &mAttr.bounce_coeff, 0.0f, 1.0f);
     ctx->genSlider("回転角速度X", &mAttr.angular_speed.x, -0x4000,
-                             0x3fff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                             0x3fff);
     ctx->genSlider("回転角速度Y", &mAttr.angular_speed.y, -0x4000,
-                             0x3fff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                             0x3fff);
     ctx->genSlider("回転角速度Z", &mAttr.angular_speed.z, -0x4000,
-                             0x3fff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                             0x3fff);
     ctx->genSlider("置き位置X", &mAttr.position.x, -200.0f,
-                             200.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                             200.0f);
     ctx->genSlider("置き位置Y", &mAttr.position.y, -200.0f,
-                             200.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                             200.0f);
     ctx->genSlider("置き位置Z", &mAttr.position.z, -200.0f,
-                             200.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("初期投げ力", &mAttr.initial_throwing_force, 0.0f, 300.0f,
-                             0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("初期投げ上げ力", &mAttr.initial_throwing_upward_force, 0.0f, 300.0f,
-                             0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                             200.0f);
+    ctx->genSlider("初期投げ力", &mAttr.initial_throwing_force, 0.0f, 300.0f);
+    ctx->genSlider("初期投げ上げ力", &mAttr.initial_throwing_upward_force, 0.0f, 300.0f);
     ctx->genSlider("投げ回転角速度", &mAttr.throw_angular_speed, -0x8000,
-                             0x7fff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                             0x7fff);
 }
 
 #endif
@@ -439,7 +432,8 @@ inline int daObjKznkarm_c::create() {
 }
 
 static int daObjKznkarm_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daObjKznkarm_c, i_this, "KznkArm");
+    daObjKznkarm_c* a_this = (daObjKznkarm_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "KznkArm");
     return a_this->create();
 }
 

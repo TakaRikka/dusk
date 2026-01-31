@@ -1,9 +1,11 @@
 #ifndef J3DSHAPETABLE_H
 #define J3DSHAPETABLE_H
 
-#include "JSystem/J3DGraphBase/J3DShape.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
+class J3DVertexData;
+struct J3DDrawMtxData;
+class J3DShape;
 class JUTNameTab;
 
 /**

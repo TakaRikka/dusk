@@ -1,7 +1,7 @@
 #ifndef D_D_ITEM_H
 #define D_D_ITEM_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class dEnemyItem_c {
 public:

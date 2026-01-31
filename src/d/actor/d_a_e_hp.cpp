@@ -85,15 +85,12 @@ daE_HP_HIO_c::daE_HP_HIO_c() {
 #if DEBUG
 void daE_HP_HIO_c::genMessage(JORMContext* ctx) {
     // General-purpose Poe
-    ctx->genLabel("汎用ポゥ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("モデルサイズ", &modelSize, 0.0, 10.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("攻撃終了後待ち時間", &waitTimeAfterAttack, 0, 1000, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("復活時間", &resurrectionTime, 0, 1000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("接近後攻撃しない時間", &attackDelayOnApproach, 0, 0xfe, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genCheckBox("範囲表示(FINALでは不可)", &rangeDisplay, 1, 0, NULL, 0xffff, 0xffff, 0x200,
-                     0x18);
+    ctx->genLabel("汎用ポゥ", 0x80000001);
+    ctx->genSlider("モデルサイズ", &modelSize, 0.0, 10.0);
+    ctx->genSlider("攻撃終了後待ち時間", &waitTimeAfterAttack, 0, 1000);
+    ctx->genSlider("復活時間", &resurrectionTime, 0, 1000);
+    ctx->genSlider("接近後攻撃しない時間", &attackDelayOnApproach, 0, 0xfe);
+    ctx->genCheckBox("範囲表示(FINALでは不可)", &rangeDisplay, 0x1);
 }
 #endif
 
@@ -1132,14 +1129,14 @@ int daE_HP_c::_delete() {
 }
 
 static int daE_HP_Delete(daE_HP_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_HP");
     return i_this->_delete();
 }
 
 int daE_HP_c::CreateHeap() {
-    J3DModelData* modeldata = (J3DModelData*)dComIfG_getObjectRes("E_HP", 19);
-    JUT_ASSERT(0x764, modeldata != NULL);
-    mpMorfSO = new mDoExt_McaMorfSO(modeldata, NULL, NULL,
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("E_HP", 19);
+    JUT_ASSERT(0x764, modelData != NULL);
+    mpMorfSO = new mDoExt_McaMorfSO(modelData, NULL, NULL,
                                     (J3DAnmTransform*)dComIfG_getObjectRes("E_HP", 13), 2, 1.0f, 0,
                                     -1, &mSound1, 0x80000, 0x11000084);
     if (mpMorfSO == NULL || mpMorfSO->getModel() == NULL) {
@@ -1159,10 +1156,10 @@ int daE_HP_c::CreateHeap() {
         }
     }
 
-    modeldata = (J3DModelData*)dComIfG_getObjectRes("E_HP", 20);
-    JUT_ASSERT(0x78b, modeldata != NULL);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("E_HP", 20);
+    JUT_ASSERT(0x78b, modelData != NULL);
 
-    mpModel = mDoExt_J3DModel__create(modeldata, 0x80000, 0x11000084);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
     if (mpModel == NULL) {
         return 0;
     }
@@ -1174,9 +1171,9 @@ int daE_HP_c::CreateHeap() {
         }
     }
 
-    modeldata = (J3DModelData*)dComIfG_getObjectRes("E_HP", 18);
+    modelData = (J3DModelData*)dComIfG_getObjectRes("E_HP", 18);
     mpMorf =
-        new mDoExt_McaMorf(modeldata, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_HP", 4),
+        new mDoExt_McaMorf(modelData, NULL, NULL, (J3DAnmTransform*)dComIfG_getObjectRes("E_HP", 4),
                            2, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000084);
 
     if (mpMorf == NULL || mpMorf->getModel() == 0) {

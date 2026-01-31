@@ -55,13 +55,11 @@ static daObj_BattaHIO_c l_HIO;
 
 void daObj_BattaHIO_c::genMessage(JORMContext* ctx) {
     // Golden bugs
-    ctx->genLabel("黄金蟲(バッタ)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("黄金蟲(バッタ)", 0x80000001);
     // Model scale (Male)
-    ctx->genSlider("モデルスケール(オス)", &mModelScaleMale, 0.1f, 4.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
+    ctx->genSlider("モデルスケール(オス)", &mModelScaleMale, 0.1f, 4.0f);
     // Model scale (Female)
-    ctx->genSlider("モデルスケール(メス)", &mModelScaleFemale, 0.1f, 4.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
+    ctx->genSlider("モデルスケール(メス)", &mModelScaleFemale, 0.1f, 4.0f);
 }
 
 #endif

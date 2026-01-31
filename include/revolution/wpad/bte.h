@@ -1,7 +1,7 @@
 #ifndef CONTEXT_BTE_H
 #define CONTEXT_BTE_H
 
-#include <stdint>
+#include <stdint.h>
 
 // taken from https://github.com/doldecomp/sdk_2009-12-11/blob/main/include/context_bte.h
 

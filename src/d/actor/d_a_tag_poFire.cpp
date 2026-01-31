@@ -12,6 +12,12 @@ daTagPoFire_HIO_c::daTagPoFire_HIO_c() {
     unk_0x4 = 0x14;
 }
 
+#if DEBUG
+void daTagPoFire_HIO_c::genMessage(JORMContext* ctx) {
+    // empty function
+}
+#endif
+
 void daTagPoFire_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
@@ -48,11 +54,14 @@ static int daTagPoFire_Execute(daTagPoFire_c* i_this) {
 }
 
 static int daTagPoFire_Delete(daTagPoFire_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->Delete();
 }
 
 static int daTagPoFire_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagPoFire_c*>(i_this)->create();
+    daTagPoFire_c* poFire = static_cast<daTagPoFire_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return poFire->create();
 }
 
 daTagPoFire_HIO_c::~daTagPoFire_HIO_c() {}

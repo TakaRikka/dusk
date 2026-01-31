@@ -116,7 +116,7 @@ public:
     void offStateFlg0(daBoomerang_FLG0 flag) { m_stateFlg0 &= ~flag; }
     u32 getReturnFlg() const { return checkStateFlg0(FLG0_1); }
     void onWindCatch() { onStateFlg0(WIND_CATCH); }
-    bool checkForceDelete() const { return m_forceDelete; }
+    u8 checkForceDelete() const { return m_forceDelete; }
     void onForceDelete() { m_forceDelete = true; }
     bool checkCharge() const { return true; }
     void setThrow() { fopAcM_SetParam(this, 1); }

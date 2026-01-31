@@ -51,9 +51,9 @@ int daLv1Cdl01_c::CreateHeap() {
     return true;
 }
 
-cPhs__Step daLv1Cdl01_c::create() {
+cPhs_Step daLv1Cdl01_c::create() {
     fopAcM_ct(this, daLv1Cdl01_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, "lv1cdl01");
+    cPhs_Step step = dComIfG_resLoad(&mPhase, "lv1cdl01");
     if (step == cPhs_COMPLEATE_e) {
         if (MoveBGCreate("lv1cdl01", -1, NULL, 0x820, NULL) == cPhs_ERROR_e) {
             return cPhs_ERROR_e;
@@ -217,7 +217,7 @@ static int daLv1Cdl01_Delete(daLv1Cdl01_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-static cPhs__Step daLv1Cdl01_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daLv1Cdl01_Create(fopAc_ac_c* i_this) {
     return static_cast<daLv1Cdl01_c*>(i_this)->create();
 }
 

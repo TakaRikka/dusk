@@ -9,8 +9,12 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_s_room.h"
+#include "d/d_bg_parts.h"
 #include "m_Do/m_Do_Reset.h"
-#include <stdio>
+#include <cstdio>
+#ifndef __MWERKS__
+#include "dusk/extras.h"
+#endif
 
 static int dScnRoom_Draw(room_of_scene_class* i_this) {
     return 1;
@@ -342,20 +346,32 @@ static int phase_1(room_of_scene_class* i_this) {
 
 static int phase_2(room_of_scene_class* i_this) {
     const char* arcName = setArcName(i_this);
-    int phase = dComIfG_syncStageRes(arcName);
+    int rt = dComIfG_syncStageRes(arcName);
 
-    if (phase < 0) {
+    if (rt < 0) {
         #if VERSION == VERSION_WII_USA_R0
         dStage_escapeRestart();
         #endif
         return cPhs_ERROR_e;
     }
 
-    if (phase != 0) {
+    JUT_ASSERT(750, rt >= 0);
+    if (rt != 0) {
         return cPhs_INIT_e;
     }
 
     int roomNo = fopScnM_GetParam(i_this);
+
+    #if DEBUG
+    JKRExpHeap* block = dStage_roomControl_c::getMemoryBlock(roomNo);
+    OS_REPORT("*************************************** room%d <%x> <%x : %x>\n",
+                roomNo,
+                block,
+                block != NULL ? block->getTotalFreeSize() : 0,
+                block != NULL ? block->getFreeSize() : 0
+                );
+    #endif
+
     if (dComIfGp_roomControl_getZoneNo(roomNo) < 0) {
         dComIfGp_roomControl_setZoneNo(roomNo, dComIfGs_createZone(roomNo));
     }
@@ -374,6 +390,17 @@ static int phase_2(room_of_scene_class* i_this) {
     if (heap != NULL) {
         old_heap = mDoExt_setCurrentHeap(heap);
     }
+
+    #if DEBUG
+    void* mpat = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getMapPath();
+    if (mpat != NULL) {
+        dBgp_c* bgp = new dBgp_c();
+        JUT_ASSERT(786, bgp != NULL);
+        
+        bgp->create(roomNo, mpat);
+        dStage_roomControl_c::setBgp(roomNo, bgp);
+    }
+    #endif
 
     if (old_heap != NULL) {
         mDoExt_setCurrentHeap(old_heap);

@@ -589,123 +589,75 @@ static int daBalloon2D_draw(daBalloon2D_c* i_this) {
 
 #if DEBUG
 void daBalloon2D_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genCheckBox("調整ＯＮ", &m.mAdjustmentToggle, 1, 0, NULL, 0xffff,
-                               0xffff, 0x200, 0x18);
-    ctx->genSlider("スコア", &m.mScore, 0, 99999, 0, NULL, 0xffff, 0xffff, 0x200,
-                             0x18);
-    ctx->genSlider("コンボ数", &m.mComboCount, 0, 99, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->startComboBox("風船のサイズ", &m.mBalloonSize, 0, NULL, 0xffff, 0xffff, 0x100,
-                                 0x1a);
+    ctx->genCheckBox("調整ＯＮ", &m.mAdjustmentToggle, 0x1);
+    ctx->genSlider("スコア", &m.mScore, 0, 99999);
+    ctx->genSlider("コンボ数", &m.mComboCount, 0, 99);
+    ctx->startComboBox("風船のサイズ", &m.mBalloonSize);
     ctx->genComboBoxItem("大", 0); // large
     ctx->genComboBoxItem("中", 1); // medium
     ctx->genComboBoxItem("小", 2); // small
     ctx->endComboBox();
-    ctx->genCheckBox("頭上スコアＯＮ", &m.mOverheadScoreToggle, 1, 0, NULL, 0xffff, 0xffff,
-                               0x200, 0x18);
-    ctx->genSlider("頭上スコア", &m.mOverheadScore, 0, 99999, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genLabel("*****「SCORE」（score_tn）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("位置Ｘ", &m.mScorePosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.mScorePosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズ", &m.mScoreSize, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
+    ctx->genCheckBox("頭上スコアＯＮ", &m.mOverheadScoreToggle, 0x1);
+    ctx->genSlider("頭上スコア", &m.mOverheadScore, 0, 99999);
+    ctx->genLabel("*****「SCORE」（score_tn）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.mScorePosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.mScorePosY, -300.0, 300.0);
+    ctx->genSlider("サイズ", &m.mScoreSize, 0.0, 3.0);
     // 5-digit number
-    ctx->genLabel("*****５ケタの数字（suji_n）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("位置Ｘ", &m.m5DNumberPosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.m5DNumberPosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズＸ", &m.m5DNumberSizeX, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズＹ", &m.m5DNumberSizeY, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("アルファ", &m.m5DNumberAlpha, 0.0, 1.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
+    ctx->genLabel("*****５ケタの数字（suji_n）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.m5DNumberPosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.m5DNumberPosY, -300.0, 300.0);
+    ctx->genSlider("サイズＸ", &m.m5DNumberSizeX, 0.0, 3.0);
+    ctx->genSlider("サイズＹ", &m.m5DNumberSizeY, 0.0, 3.0);
+    ctx->genSlider("アルファ", &m.m5DNumberAlpha, 0.0, 1.0);
     // "SCORE" & 5-digit number
-    ctx->genLabel("*****「SCORE」＆５ケタの数字（suji_n）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("位置Ｘ", &m.m5DNumber2PosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.m5DNumber2PosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズ", &m.m5DNumber2Size, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genLabel("*****「＋」（tas_n）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("位置Ｘ", &m.mUnkPosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.mUnkPosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズ", &m.mUnkSize, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genLabel("*****「COMBO」\u3000（combo_tn）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("位置Ｘ", &m.mComboPosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.mComboPosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズ", &m.mComboSize, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genLabel("*****２ケタの数字（num_n）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("位置Ｘ", &m.m2DNumberPosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.m2DNumberPosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズＸ", &m.m2DNumberSizeX, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズＹ", &m.m2DNumberSizeY, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
+    ctx->genLabel("*****「SCORE」＆５ケタの数字（suji_n）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.m5DNumber2PosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.m5DNumber2PosY, -300.0, 300.0);
+    ctx->genSlider("サイズ", &m.m5DNumber2Size, 0.0, 3.0);
+    ctx->genLabel("*****「＋」（tas_n）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.mUnkPosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.mUnkPosY, -300.0, 300.0);
+    ctx->genSlider("サイズ", &m.mUnkSize, 0.0, 3.0);
+    ctx->genLabel("*****「COMBO」\u3000（combo_tn）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.mComboPosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.mComboPosY, -300.0, 300.0);
+    ctx->genSlider("サイズ", &m.mComboSize, 0.0, 3.0);
+    ctx->genLabel("*****２ケタの数字（num_n）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.m2DNumberPosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.m2DNumberPosY, -300.0, 300.0);
+    ctx->genSlider("サイズＸ", &m.m2DNumberSizeX, 0.0, 3.0);
+    ctx->genSlider("サイズＹ", &m.m2DNumberSizeY, 0.0, 3.0);
     // "+" & 2-digit number & "COMBO"
-    ctx->genLabel("*****「＋」＆２ケタの数字＆「COMBO」（co_set_n）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("位置Ｘ", &m.m2DNumberComboPosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.m2DNumberComboPosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズ", &m.m2DNumberComboSize, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("アルファ", &m.m2DNumberComboAlpha, 0.0, 1.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
+    ctx->genLabel("*****「＋」＆２ケタの数字＆「COMBO」（co_set_n）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.m2DNumberComboPosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.m2DNumberComboPosY, -300.0, 300.0);
+    ctx->genSlider("サイズ", &m.m2DNumberComboSize, 0.0, 3.0);
+    ctx->genSlider("アルファ", &m.m2DNumberComboAlpha, 0.0, 1.0);
     // balloon "large"
-    ctx->genLabel("*****風船「大」（bal_1_n）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("位置Ｘ", &m.mBalloonLargePosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.mBalloonLargePosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズ", &m.mBalloonLargeSize, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("アルファ", &m.mBalloonLargeAlpha, 0.0, 1.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
+    ctx->genLabel("*****風船「大」（bal_1_n）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.mBalloonLargePosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.mBalloonLargePosY, -300.0, 300.0);
+    ctx->genSlider("サイズ", &m.mBalloonLargeSize, 0.0, 3.0);
+    ctx->genSlider("アルファ", &m.mBalloonLargeAlpha, 0.0, 1.0);
     // balloon "medium"
-    ctx->genLabel("*****風船「中」（bal_2_n）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("位置Ｘ", &m.mBalloonMedPosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.mBalloonMedPosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズ", &m.mBalloonMedSize, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("アルファ", &m.mBalloonMedAlpha, 0.0, 1.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
+    ctx->genLabel("*****風船「中」（bal_2_n）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.mBalloonMedPosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.mBalloonMedPosY, -300.0, 300.0);
+    ctx->genSlider("サイズ", &m.mBalloonMedSize, 0.0, 3.0);
+    ctx->genSlider("アルファ", &m.mBalloonMedAlpha, 0.0, 1.0);
     // balloon "small"
-    ctx->genLabel("*****風船「小」（bal_3_n）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("位置Ｘ", &m.mBalloonSmallPosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.mBalloonSmallPosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズ", &m.mBalloonSmallSize, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("アルファ", &m.mBalloonSmallAlpha, 0.0, 1.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
+    ctx->genLabel("*****風船「小」（bal_3_n）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.mBalloonSmallPosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.mBalloonSmallPosY, -300.0, 300.0);
+    ctx->genSlider("サイズ", &m.mBalloonSmallSize, 0.0, 3.0);
+    ctx->genSlider("アルファ", &m.mBalloonSmallAlpha, 0.0, 1.0);
     // "Balloon" & "+" & two-digit number & "COMBO"
-    ctx->genLabel("*****「風船」＆「＋」＆２ケタの数字＆「COMBO」（ba_com_n）*****", 0, 0, NULL, 0xffff, 0xffff, 0x200,
-                            0x18);
-    ctx->genSlider("位置Ｘ", &m.m2DNumberCombo2PosX, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｘ(4:3)", &m.m2DNumberCombo2PosX43, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("位置Ｙ", &m.m2DNumberCombo2PosY, -300.0, 300.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
-    ctx->genSlider("サイズ", &m.m2DNumberCombo2Size, 0.0, 3.0, 0, NULL, 0xffff, 0xffff,
-                             0x200, 0x18);
+    ctx->genLabel("*****「風船」＆「＋」＆２ケタの数字＆「COMBO」（ba_com_n）*****", 0);
+    ctx->genSlider("位置Ｘ", &m.m2DNumberCombo2PosX, -300.0, 300.0);
+    ctx->genSlider("位置Ｘ(4:3)", &m.m2DNumberCombo2PosX43, -300.0, 300.0);
+    ctx->genSlider("位置Ｙ", &m.m2DNumberCombo2PosY, -300.0, 300.0);
+    ctx->genSlider("サイズ", &m.m2DNumberCombo2Size, 0.0, 3.0);
 }
 #endif
 

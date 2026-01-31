@@ -87,47 +87,32 @@ daE_WB_HIO_c::daE_WB_HIO_c() {
 
 #if DEBUG
 void daE_WB_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("  イノシシ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("基本サイズ", &base_size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("リーダーサイズ比", &leader_size_ratio, 0.0f, 5.0, 0, NULL, 0xFFFF, 0xFFFF, 512,
-                   24);
-    ctx->genSlider("移動速度", &movement_speed, 0.0f, 20.0f, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("PL認識距離", &player_recognition_dist, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF,
-                   512, 24);
-    ctx->genSlider("最速度", &max_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("騎馬戦最速", &cavalry_battle_max_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF,
-                   512, 24);
-    ctx->genSlider("歩き速（リ）", &leader_walking_speed, 0.0f, 30.0f, 0, NULL, 0xFFFF, 0xFFFF, 512,
-                   24);
-    ctx->genSlider("最速度（リ）", &leader_max_speed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 512,
-                   24);
-    ctx->genSlider("騎馬戦最（リ）", &leader_cavalry_battle_max_speed, 0.0f, 100.0f, 0, NULL,
-                   0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("通常速（車）", &normal_speed_vi, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 512,
-                   24);
-    ctx->genSlider("中速度（車）", &medium_speed_vi, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 512,
-                   24);
-    ctx->genSlider("最速度（車）", &mMaxSpeedVi, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("一騎速", &mSingleRiderSpeed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genCheckBox("手綱ナシ", &mNoReins, 1, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genLabel("  ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genLabel("    プレイヤー騎乗時", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("最大速度", &mPlayerMountedMaxSpeed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 512,
-                   24);
-    ctx->genSlider("モーション再生速度", &mPlayerMountedMotionPlaybackSpeed, 0.0f, 5.0f, 0, NULL,
-                   0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("ダッシュ時間", &mPlayerMountedDashTime, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF,
-                   512, 24);
-    ctx->genLabel("  ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genLabel("    以下 一騎討ち用", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("サーチ無視距離(１)", &mSearchIgnoreDistance1, 0.0f, 5000.0f, 0, NULL, 0xFFFF,
-                   0xFFFF, 512, 24);
-    ctx->genSlider("サーチ無視距離(２)", &mSearchIgnoreDistance2, 0.0f, 5000.0f, 0, NULL, 0xFFFF,
-                   0xFFFF, 512, 24);
-    ctx->genSlider("案内表示距離(１)", &mGuidanceDisplayDistance1, 0.0f, 5000.0f, 0, NULL, 0xFFFF,
-                   0xFFFF, 512, 24);
-    ctx->genSlider("案内表示距離(２)", &mGuidanceDisplayDistance2, 0.0f, 5000.0f, 0, NULL, 0xFFFF,
-                   0xFFFF, 512, 24);
+    ctx->genLabel("  イノシシ", 0x80000001);
+    ctx->genSlider("基本サイズ", &base_size, 0.0f, 5.0f);
+    ctx->genSlider("リーダーサイズ比", &leader_size_ratio, 0.0f, 5.0);
+    ctx->genSlider("移動速度", &movement_speed, 0.0f, 20.0f);
+    ctx->genSlider("PL認識距離", &player_recognition_dist, 0.0f, 2000.0f);
+    ctx->genSlider("最速度", &max_speed, 0.0f, 100.0f);
+    ctx->genSlider("騎馬戦最速", &cavalry_battle_max_speed, 0.0f, 100.0f);
+    ctx->genSlider("歩き速（リ）", &leader_walking_speed, 0.0f, 30.0f);
+    ctx->genSlider("最速度（リ）", &leader_max_speed, 0.0f, 100.0f);
+    ctx->genSlider("騎馬戦最（リ）", &leader_cavalry_battle_max_speed, 0.0f, 100.0f);
+    ctx->genSlider("通常速（車）", &normal_speed_vi, 0.0f, 100.0f);
+    ctx->genSlider("中速度（車）", &medium_speed_vi, 0.0f, 100.0f);
+    ctx->genSlider("最速度（車）", &mMaxSpeedVi, 0.0f, 100.0f);
+    ctx->genSlider("一騎速", &mSingleRiderSpeed, 0.0f, 100.0f);
+    ctx->genCheckBox("手綱ナシ", &mNoReins, 0x1);
+    ctx->genLabel("  ", 0x80000001);
+    ctx->genLabel("    プレイヤー騎乗時", 0x80000001);
+    ctx->genSlider("最大速度", &mPlayerMountedMaxSpeed, 0.0f, 100.0f);
+    ctx->genSlider("モーション再生速度", &mPlayerMountedMotionPlaybackSpeed, 0.0f, 5.0f);
+    ctx->genSlider("ダッシュ時間", &mPlayerMountedDashTime, 0.0f, 2000.0f);
+    ctx->genLabel("  ", 0x80000001);
+    ctx->genLabel("    以下 一騎討ち用", 0x80000001);
+    ctx->genSlider("サーチ無視距離(１)", &mSearchIgnoreDistance1, 0.0f, 5000.0f);
+    ctx->genSlider("サーチ無視距離(２)", &mSearchIgnoreDistance2, 0.0f, 5000.0f);
+    ctx->genSlider("案内表示距離(１)", &mGuidanceDisplayDistance1, 0.0f, 5000.0f);
+    ctx->genSlider("案内表示距離(２)", &mGuidanceDisplayDistance2, 0.0f, 5000.0f);
 }
 #endif
 
@@ -3884,7 +3869,7 @@ static void demo_camera(e_wb_class* i_this) {
         i_this->field_0x1714 = 55.0f + KREG_F(7);
         i_this->field_0x16a0 = 0;
         s16 sp16 = local_194->actor.shape_angle.y +
-                   (local_194->field_0xa0e - local_194->actor.shape_angle.y) / 2;
+                   (local_194->field_0xa0c.y - local_194->actor.shape_angle.y) / 2;
         mDoMtx_stack_c::YrotS(sp16);
         local_3c.x = NREG_F(0);
         local_3c.y = NREG_F(1) + 500.0f;
@@ -5470,7 +5455,7 @@ static int daE_WB_IsDelete(e_wb_class* i_this) {
 
 static int daE_WB_Delete(e_wb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    fpc_ProcID unused = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_WB");
     dComIfG_resDelete(&i_this->mPhase, i_this->mResName);
     if (i_this->field_0x17e0 != 0) {
         hio_set = false;

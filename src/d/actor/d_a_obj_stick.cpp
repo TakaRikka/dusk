@@ -11,7 +11,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_npc.h"
 
-const daObj_Stick_Param_c::daObj_Stick_HIOParam daObj_Stick_Param_c::m = {
+const daObj_Stick_HIOParam daObj_Stick_Param_c::m = {
     0.0f, -3.0f, 1.0f, 100.0f
 };
 
@@ -24,7 +24,29 @@ dCcD_SrcSph daObj_Stick_c::mCcDSph = {
 
 static char* l_resName = "Taro6";
 
+static OBJ_STICK_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObj_Stick_HIO_c::daObj_Stick_HIO_c() {
+    m = daObj_Stick_Param_c::m;
+}
+
+void daObj_Stick_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_Stick_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
 daObj_Stick_c::~daObj_Stick_c() {
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     dComIfG_resDelete(&mPhase, getResName());
 }
 
@@ -47,6 +69,12 @@ int daObj_Stick_c::create() {
         modelData = mpModel->getModelData();
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -50.0, -50.0, -75.0, 50.0, 50.0, 75.0);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("タロの棒");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), 
             fopAcM_GetOldPosition_p(this), 
             this, 
@@ -105,7 +133,7 @@ int daObj_Stick_c::Execute() {
     setMtx();
     mSph.ClrCoHit();
     attention_info.position = current.pos;
-    attention_info.position.y += daObj_Stick_Param_c::m.attention_offset;
+    attention_info.position.y += mpHIO->m.attention_offset;
     eyePos = attention_info.position;
     attention_info.flags = 0;
     
@@ -122,7 +150,7 @@ int daObj_Stick_c::Draw() {
             1, 
             mpModel, 
             &current.pos, 
-            daObj_Stick_Param_c::m.real_shadow_size, 
+            mpHIO->m.real_shadow_size,
             20.0f, 
             current.pos.y,
             mGroundHeight, 
@@ -214,5 +242,3 @@ actor_process_profile_definition g_profile_OBJ_STICK = {
   fopAc_ACTOR_e,            // mActorType
   fopAc_CULLBOX_CUSTOM_e,   // cullType
 };
-
-static daObj_Stick_Param_c l_HIO;

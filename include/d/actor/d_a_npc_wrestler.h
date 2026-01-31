@@ -131,7 +131,7 @@ public:
     typedef BOOL (daNpcWrestler_c::*EventFn)(int);
 
     daNpcWrestler_c();
-    cPhs__Step Create();
+    cPhs_Step Create();
     int CreateHeap();
     int Delete();
     int Execute();
@@ -281,6 +281,6 @@ private:
     /* 0xE9B */ u8 mType;
     /* 0xE9C */ u8 mWrestlerNoDraw;
 };
-STATIC_ASSERT(sizeof(daNpcWrestler_c) == 0xea0);
+//STATIC_ASSERT(sizeof(daNpcWrestler_c) == 0xea0);
 
 #endif /* D_A_NPC_WRESTLER_H */

@@ -26,7 +26,7 @@ public:
     inline int Draw();
     inline int Delete();
 
-    inline cPhs__Step create();
+    inline cPhs_Step create();
 
     /* 0x5A0 */ f32 field_0x5a0;
     /* 0x5A4 */ f32 field_0x5a4;

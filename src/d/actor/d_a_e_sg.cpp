@@ -1163,7 +1163,7 @@ static int daE_SG_Create(fopAc_ac_c* i_this) {
     e_sg_class* a_this = static_cast<e_sg_class*>(i_this);
     fopAcM_ct(i_this, e_sg_class);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&a_this->mPhaseReq, "E_sg");
+    cPhs_Step step = dComIfG_resLoad(&a_this->mPhaseReq, "E_sg");
 
     if (step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 4000)) {

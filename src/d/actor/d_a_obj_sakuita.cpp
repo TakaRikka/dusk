@@ -27,26 +27,19 @@ void daObjSakuita_Hio_c::ct() {
 }
 
 void daObjSakuita_Hio_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("§ カラカラ板パラメータ設定  §\n", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("重力", &mAttr.mGravity, 0.0f, 200.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("円柱半径", &mAttr.mCylR, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("円柱高さ", &mAttr.mCylH, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("オフセット", &mAttr.mOffset, -300.0f, 0.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("板の重さ", &mAttr.mBoardWeight, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("吊り下げ位置", &mAttr.mHangingPosition, -50.0f, 0.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("windRate", &mAttr.mWindRate, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("speedRate", &mAttr.mSpeedRate, 0.0f, 5.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("風震動", &mAttr.mWindShake, 0.0f, 30000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("Y震動", &mAttr.mYVibration, 0.0f, 30000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("Y収束", &mAttr.mYConvergence, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("Y周期", &mAttr.mYPeriod, -0x4000, 0x3fff, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genLabel("§ カラカラ板パラメータ設定  §\n", 0);
+    ctx->genSlider("重力", &mAttr.mGravity, 0.0f, 200.0f);
+    ctx->genSlider("円柱半径", &mAttr.mCylR, 0.0f, 1000.0f);
+    ctx->genSlider("円柱高さ", &mAttr.mCylH, 0.0f, 1000.0f);
+    ctx->genSlider("オフセット", &mAttr.mOffset, -300.0f, 0.0f);
+    ctx->genSlider("板の重さ", &mAttr.mBoardWeight, 0, 0xff);
+    ctx->genSlider("吊り下げ位置", &mAttr.mHangingPosition, -50.0f, 0.0f);
+    ctx->genSlider("windRate", &mAttr.mWindRate, 0.0f, 1.0f);
+    ctx->genSlider("speedRate", &mAttr.mSpeedRate, 0.0f, 5.0f);
+    ctx->genSlider("風震動", &mAttr.mWindShake, 0.0f, 30000.0f);
+    ctx->genSlider("Y震動", &mAttr.mYVibration, 0.0f, 30000.0f);
+    ctx->genSlider("Y収束", &mAttr.mYConvergence, 0.0f, 1000.0f);
+    ctx->genSlider("Y周期", &mAttr.mYPeriod, -0x4000, 0x3fff);
 }
 
 void daObjSakuita_Hio_c::dt() {

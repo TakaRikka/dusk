@@ -181,78 +181,72 @@ static int search_actor(fopAc_ac_c* actor, void* data) {
 }
 
 void dDbgCamSetup_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("- カメラ位置表示", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox(" 現在位置", &mFlag, 4, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox(" (補正前)", &mFlag, 8, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("- カメラ位置表示", 0);
+    mctx->genCheckBox(" 現在位置", &mFlag, 0x4);
+    mctx->genCheckBox(" (補正前)", &mFlag, 0x8);
 
-    mctx->genLabel("- ヒットポリゴン表示", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox(" 壁あたり", &mFlag, 0x10, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("- ヒットポリゴン表示", 0);
+    mctx->genCheckBox(" 壁あたり", &mFlag, 0x10);
 
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("- 移動", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" スピード", &mMoveSpeed, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("     最大", &mMoveMax, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" ターボ", &mMoveTurbo, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("     最大", &mUnkMax, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" 平行移動", &mMoveParallelShift, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" 加速度", &mTransAccel, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("-", 0);
+    mctx->genLabel("- 移動", 0);
+    mctx->genSlider(" スピード", &mMoveSpeed, 0.0f, 5000.0f);
+    mctx->genSlider("     最大", &mMoveMax, 0.0f, 5000.0f);
+    mctx->genSlider(" ターボ", &mMoveTurbo, 0.0f, 5000.0f);
+    mctx->genSlider("     最大", &mUnkMax, 0.0f, 5000.0f);
+    mctx->genSlider(" 平行移動", &mMoveParallelShift, 0.0f, 5000.0f);
+    mctx->genSlider(" 加速度", &mTransAccel, 0.0f, 1.0f);
 
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("- 回転", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" スピード", &mRotateSpeed, 0.0f, 90.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("     最大", &mRotateMax, 0.0f, 90.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" 加速度", &mRotAccel, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("-", 0);
+    mctx->genLabel("- 回転", 0);
+    mctx->genSlider(" スピード", &mRotateSpeed, 0.0f, 90.0f);
+    mctx->genSlider("     最大", &mRotateMax, 0.0f, 90.0f);
+    mctx->genSlider(" 加速度", &mRotAccel, 0.0f, 1.0f);
 
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("- 画角", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" スピード", &mFovyTick, 0.0f, 90.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("-", 0);
+    mctx->genLabel("- 画角", 0);
+    mctx->genSlider(" スピード", &mFovyTick, 0.0f, 90.0f);
 
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("- センターマーカ", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" 線の長さ", &mCenterCross, 0.0f, 4000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider(" 球の大きさ", &mCenterBall, 0.0f, 4000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("-", 0);
+    mctx->genLabel("- センターマーカ", 0);
+    mctx->genSlider(" 線の長さ", &mCenterCross, 0.0f, 4000.0f);
+    mctx->genSlider(" 球の大きさ", &mCenterBall, 0.0f, 4000.0f);
     mctx->startRadioButton("表示", &mCenterMarker, 0, NULL, 0xFFFF, 0xFFFF, 0x100, 0xFFFF);
     mctx->genRadioButtonItem("常に表示", 3, 0, 0xFFFF, 0xFFFF, 0x80, 0x10);
     mctx->genRadioButtonItem("動くと表示", 1, 0, 0xFFFF, 0xFFFF, 0x80, 0x10);
     mctx->genRadioButtonItem("常に非表示", 0, 0, 0xFFFF, 0xFFFF, 0x80, 0x10);
     mctx->endRadioButton();
 
-    mctx->genLabel("- 情報表示", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox(" 有効", &mFlag, 0x8000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("   表示位置 Ｘ", &mPosX, 0, FB_WIDTH, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("            Ｙ", &mPosY, 0, 480, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("- 情報表示", 0);
+    mctx->genCheckBox(" 有効", &mFlag, 0x8000);
+    mctx->genSlider("   表示位置 Ｘ", &mPosX, 0, FB_WIDTH);
+    mctx->genSlider("            Ｙ", &mPosY, 0, 480);
 
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("- 座標系", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("-", 0);
+    mctx->genLabel("- 座標系", 0);
     mctx->startRadioButton("基準", &mActorSrchType, 0, NULL, 0xFFFF, 0xFFFF, 0x100, 0xFFFF);
     mctx->genRadioButtonItem("絶対座標", 0, 0, 0xFFFF, 0xFFFF, 0x80, 0x10);
     mctx->genRadioButtonItem("プレイヤー相対座標", 1, 0, 0xFFFF, 0xFFFF, 0x80, 0x10);
     mctx->genRadioButtonItem("指定アクター相対座標", 2, 0, 0xFFFF, 0xFFFF, 0x80, 0x10);
     mctx->endRadioButton();
-    mctx->genButton(" 更新 ", 0x66, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genButton(" 更新 ", 0x66);
 
-    mctx->genLabel("- イベント", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton(" 保存 ", 0x68, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("- イベント", 0);
+    mctx->genButton(" 保存 ", 0x68);
 
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("- 座標指定", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("   注視点 Ｘ", &mGazePoint.x, -100000.0f, 100000.0f, 0, NULL, 0xFFFF, 0xFFFF,
-                    0x200, 0x18);
-    mctx->genSlider("   　　　 Ｙ", &mGazePoint.y, -100000.0f, 100000.0f, 0, NULL, 0xFFFF,
-                    0xFFFF, 0x200, 0x18);
-    mctx->genSlider("   　　　 Ｚ", &mGazePoint.z, -100000.0f, 100000.0f, 0, NULL, 0xFFFF,
-                    0xFFFF, 0x200, 0x18);
-    mctx->genButton(" 更新 ", 0x69, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("  視点 　 Ｘ", &mPerspective.x, -100000.0f, 100000.0f, 0, NULL, 0xFFFF,
-                    0xFFFF, 0x200, 0x18);
-    mctx->genSlider("   　　　 Ｙ", &mPerspective.y, -100000.0f, 100000.0f, 0, NULL,
-                    0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("   　　　 Ｚ", &mPerspective.z, -100000.0f, 100000.0f, 0, NULL,
-                    0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton(" 更新 ", 0x6A, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("   画角 　　", &mAngle, 0.0f, 180.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton(" 更新 ", 0x6B, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("-", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("-", 0);
+    mctx->genLabel("- 座標指定", 0);
+    mctx->genSlider("   注視点 Ｘ", &mGazePoint.x, -100000.0f, 100000.0f);
+    mctx->genSlider("   　　　 Ｙ", &mGazePoint.y, -100000.0f, 100000.0f);
+    mctx->genSlider("   　　　 Ｚ", &mGazePoint.z, -100000.0f, 100000.0f);
+    mctx->genButton(" 更新 ", 0x69);
+    mctx->genSlider("  視点 　 Ｘ", &mPerspective.x, -100000.0f, 100000.0f);
+    mctx->genSlider("   　　　 Ｙ", &mPerspective.y, -100000.0f, 100000.0f);
+    mctx->genSlider("   　　　 Ｚ", &mPerspective.z, -100000.0f, 100000.0f);
+    mctx->genButton(" 更新 ", 0x6A);
+    mctx->genSlider("   画角 　　", &mAngle, 0.0f, 180.0f);
+    mctx->genButton(" 更新 ", 0x6B);
+    mctx->genLabel("-", 0);
 }
 
 void dDbgCamera_c::InitlChk() {
@@ -519,26 +513,27 @@ int dDbgCamera_c::moveTool() {
             mKeys[field_0x58] = PlaneKey();
         }
 
-        mRunKey.mCenter = mKeys[field_0x58].mCenter;
+        mRunKey = mKeys[field_0x58];
         break;
     }
 
+    cXyz* sp30;
+    fopAc_ac_c* player;
+
     if (mCmdMode == 3) {
-        fopAc_ac_c* sp2C = dComIfGp_getPlayer(0);
-        /* if (this->unk730 != 0x3E7) {
-            &field_0x704 = &sp2C->unk558
-            this->unk730 = 0x3E7;
+        player = dComIfGp_getPlayer(0);
+        if (*(int*)&field_0x704.field_0x10[2].y != 999) {
+            *(cXyz*)&field_0x704.field_0x0 = player->attention_info.position;
+            *(int*)&field_0x704.field_0x10[2].y = 999;
         } else {
-            (sp15C, (Vec* ) &sp2C->unk558);
-            &mRunKey.mCenter += sp15C
-            &field_0x704 = &sp2C->unk558
-        } */
+            mRunKey.mCenter += player->attention_info.position - *(cXyz*)&field_0x704.field_0x0;
+            *(cXyz*)&field_0x704.field_0x0 = player->attention_info.position;
+        }
     } else {
-        // this->unk730 = 3;
+        *(int*)&field_0x704.field_0x10[2].y = 3;
     }
 
     cXyz* var_r28;
-    cXyz* sp30;
     f32 temp_f31;
     f32 var_f30;
     f32 var_f29;
@@ -634,11 +629,9 @@ int dDbgCamera_c::moveTool() {
         mRunKey.mBank -= cDegree(mCamSetup.FovyTick()) * 0.1f;
         break;
     case 8:
-        s16 temp_r26 = mCamSetup.Rotate(var_f29 * (stick_x * field_0xc14));
-        field_0x44.U(field_0x44.U() + temp_r26);
-
-        temp_r26 = mCamSetup.Rotate(var_f29 * (stick_y * field_0xc14));
-        field_0x44.V(field_0x44.V() + temp_r26);
+        field_0x44.U(field_0x44.U() + mCamSetup.Rotate(var_f29 * (stick_x * field_0xc14)));
+        field_0x44.V(field_0x44.V() + mCamSetup.Rotate(var_f29 * (stick_y * field_0xc14)));
+        break;
     }
 
     if (sp8 != 0) {
@@ -1697,11 +1690,14 @@ int dDbgCamera_c::DrawShape() {
 
     if (mCamSetup.CheckFlag(0x10)) {
         switch (mLchkNum) {
-        case 2:
-            // dComIfG_Bgsp().DrawPoly(mLchk[1], l_color2);
+        case 2: {
+            static GXColor l_color2 = {0xC0, 0x78, 0x0, 0x80};
+            dComIfG_Bgsp().DrawPoly(mLchk[1], l_color2);
             /* fallthrough */
+        }
         case 1:
-            // dComIfG_Bgsp().DrawPoly(mLchk[0], l_color1);
+             static GXColor l_color1 = {0xC0, 0x78, 0x78, 0x80};
+            dComIfG_Bgsp().DrawPoly(mLchk[0], l_color1);
             break;
         }
     }

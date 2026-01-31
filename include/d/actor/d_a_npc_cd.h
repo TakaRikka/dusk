@@ -119,7 +119,7 @@ inline s16 HIO_jntRX(int param_1, int param_2) {
     } else {
         rv = l_Cd_HIO.field_0x1648[param_1 - 16].field_0x4[param_2].jntR.x;
     }
-    return 182.04444885253906f * rv;
+    return DEG2S(rv);
 }
 
 inline s16 HIO_jntRY(int param_1, int param_2) {
@@ -129,7 +129,7 @@ inline s16 HIO_jntRY(int param_1, int param_2) {
     } else {
         rv = l_Cd_HIO.field_0x1648[param_1 - 16].field_0x4[param_2].jntR.y;
     }
-    return 182.04444885253906f * rv;
+    return DEG2S(rv);
 }
 
 inline s16 HIO_jntRZ(int param_1, int param_2) {
@@ -139,7 +139,7 @@ inline s16 HIO_jntRZ(int param_1, int param_2) {
     } else {
         rv = l_Cd_HIO.field_0x1648[param_1 - 16].field_0x4[param_2].jntR.z;
     }
-    return 182.04444885253906f * rv;
+    return DEG2S(rv);
 }
 
 static inline f32 HIO_jntTX(int param_1, int param_2) {

@@ -72,9 +72,11 @@ void J3DShape::addTexMtxIndexInVcd(GXAttr attr) {
     GXVtxDescList* vtxDesc = getVtxDesc();
     s32 attrCount = 0;
 
-    for (; vtxDesc->attr != GX_VA_NULL; attrCount++, vtxDesc++) {
-        if (vtxDesc->attr == GX_VA_PNMTXIDX)
+    for (; vtxDesc->attr != GX_VA_NULL; vtxDesc++) {
+        if (vtxDesc->attr == GX_VA_PNMTXIDX) {
             attrIdx = stride;
+        }
+        attrCount++;
     }
 
     if (attrIdx == -1)
@@ -85,7 +87,7 @@ void J3DShape::addTexMtxIndexInVcd(GXAttr attr) {
 
     vtxDesc = getVtxDesc();
     GXVtxDescList* dst = newVtxDesc;
-    for (; vtxDesc->attr != GX_VA_NULL; dst++, vtxDesc++) {
+    for (; vtxDesc->attr != GX_VA_NULL; vtxDesc++) {
         if ((attr < vtxDesc->attr) && !inserted) {
             dst->attr = attr;
             dst->type = GX_DIRECT;
@@ -98,6 +100,7 @@ void J3DShape::addTexMtxIndexInVcd(GXAttr attr) {
         dst->attr = vtxDesc->attr;
         dst->type = vtxDesc->type;
         stride = stride + kSize[vtxDesc->type];
+        dst++;
     }
 
     dst->attr = GX_VA_NULL;

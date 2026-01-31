@@ -30,7 +30,7 @@ struct J3DJointFactory {
     J3DJointInitData* mJointInitData;
     u16* mIndexTable;
 
-    u16 getKind(int no) const { return mJointInitData[mIndexTable[no]].mKind; }
+    u8 getKind(int no) const { return mJointInitData[mIndexTable[no]].mKind; }
     u8 getScaleCompensate(int no) const { return mJointInitData[mIndexTable[no]].mScaleCompensate; }
     const J3DTransformInfo& getTransformInfo(int no) const {
         return mJointInitData[mIndexTable[no]].mTransformInfo;

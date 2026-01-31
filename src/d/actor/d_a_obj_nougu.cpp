@@ -18,17 +18,40 @@ dCcD_SrcSph daObj_Nougu_c::mCcDSph = {
 
 static char* l_resName = "Jagar4";
 
-daObj_Nougu_c::~daObj_Nougu_c() {
-    OS_REPORT("|%06d:%x|daObj_Nougu_c -> デストラクト\n", g_Counter.mCounter0, this);
-    dComIfG_resDelete(&mPhase, getResName());
-}
-
 const daObj_Nougu_HIOParam daObj_Nougu_Param_c::m = {
     0.0f,
     -3.0f,
     1.0f,
     200.0f
 };
+
+static OBJ_NOUGU_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObj_Nougu_HIO_c::daObj_Nougu_HIO_c() {
+    m = daObj_Nougu_Param_c::m;
+}
+
+void daObj_Nougu_HIO_c::listenPropertyEvent(const JORPropertyEvent*) {
+    // NONMATCHING
+}
+
+void daObj_Nougu_HIO_c::genMessage(JORMContext*) {
+    // NONMATCHING
+}
+#endif
+
+daObj_Nougu_c::~daObj_Nougu_c() {
+    OS_REPORT("|%06d:%x|daObj_Nougu_c -> デストラクト\n", g_Counter.mCounter0, this);
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    dComIfG_resDelete(&mPhase, getResName());
+}
 
 int daObj_Nougu_c::create() {
     fopAcM_ct(this, daObj_Nougu_c);
@@ -43,15 +66,20 @@ int daObj_Nougu_c::create() {
             OS_REPORT("===>isDelete:TRUE\n");
             return cPhs_ERROR_e;
         }
-    
+
         OS_REPORT("\n");
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x800)) {
             return cPhs_ERROR_e;
         }
-    
+
         mpModel->getModelData();
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -75.0f, -50.0f, -100.0f, 75.0f, 50.0f, 100.0f);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("農具");
+#endif
 
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
 
@@ -128,7 +156,7 @@ int daObj_Nougu_c::Execute() {
     }
 
     attention_info.position = current.pos;
-    attention_info.position.y += daObj_Nougu_Param_c::m.attention_offset;
+    attention_info.position.y += mpHIO->m.attention_offset;
     eyePos = attention_info.position;
     attention_info.flags = 0;
     return 1;
@@ -140,7 +168,7 @@ int daObj_Nougu_c::Draw() {
     mDoExt_modelUpdateDL(mpModel);
 
     if (-G_CM3D_F_INF != mGroundH) {
-        mShadowId = dComIfGd_setShadow(mShadowId, 1, mpModel, &current.pos, daObj_Nougu_Param_c::m.shadow_size, 20.0f, current.pos.y, mGroundH, mGndChk, &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+        mShadowId = dComIfGd_setShadow(mShadowId, 1, mpModel, &current.pos, mpHIO->m.shadow_size, 20.0f, current.pos.y, mGroundH, mGndChk, &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
     }
 
     return 1;
@@ -198,8 +226,6 @@ static int daObj_Nougu_Draw(void* i_this) {
 static int daObj_Nougu_IsDelete(void* i_this) {
     return 1;
 }
-
-static daObj_Nougu_Param_c l_HIO;
 
 static actor_method_class daObj_Nougu_MethodTable = {
     (process_method_func)daObj_Nougu_Create,

@@ -134,7 +134,7 @@ static void e_mm_mt_normal(e_mm_mt_class* i_this) {
             fopAcM_SetGroup(actor, 3);
             fopAcM_OffStatus(actor, 0);
             actor->attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
-            actor->attention_info.distances[2] = 0;
+            actor->attention_info.distances[fopAc_attn_BATTLE_e] = 0;
             fopAcM_OnStatus(actor, 0x400);
             s16 actor_angle = player->shape_angle.y + 0x4000;
             s16 angle = actor->shape_angle.y - actor_angle;
@@ -372,7 +372,7 @@ static void e_mm_mt_drop(e_mm_mt_class* i_this) {
         i_this->enemy.attention_info.position = i_this->enemy.current.pos;
         cLib_addCalcAngleS2(&i_this->m_rotation.z, (TREG_S(6)+0x10000)-0x8000, 1, 0x1000);
         cLib_onBit<u32>(i_this->enemy.attention_info.flags, fopAc_AttnFlag_CARRY_e);
-        i_this->enemy.attention_info.distances[4] = 7;
+        i_this->enemy.attention_info.distances[fopAc_attn_CARRY_e] = 7;
         i_this->m_rotation.y += i_this->m_spin;
         if (i_this->enemy.speedF >= 20.0f) {
             i_this->m_sphere.OnAtSetBit();
@@ -595,10 +595,10 @@ static void action(e_mm_mt_class* i_this) {
                 fopAc_ac_c* local_a4 = at_power_check(&i_this->m_atInfo);
 
                 if (i_this->m_atInfo.mHitType == 1) {
-                    if (daPy_getPlayerActorClass()->getCutType() == 8 ||
-                        daPy_getPlayerActorClass()->getCutType() == 9 ||
-                        daPy_getPlayerActorClass()->getCutType() == 23 ||
-                        daPy_getPlayerActorClass()->getCutType() == 24) {
+                    if (daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_TURN_RIGHT ||
+                        daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_UNK_9 ||
+                        daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_LARGE_TURN_LEFT ||
+                        daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_LARGE_TURN_RIGHT) {
                         actor->speedF = cM_rndF(10.0f) + 40.0f +  TREG_F(16);
                         i_this->m_spin = (s16)(cM_rndF(2000.0f) + 5500.0f);
                         i_this->field_0x69C = (s16)(cM_rndF(1000.0f) + 5000.0f);
@@ -750,7 +750,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 }
 
 static int daE_MM_MT_Create(fopAc_ac_c* i_this) {
-    cPhs__Step cVar1;
+    cPhs_Step cVar1;
     bool bVar2;
     f32 fVar3;
     

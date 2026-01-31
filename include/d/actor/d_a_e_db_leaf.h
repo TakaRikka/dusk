@@ -2,7 +2,7 @@
 #define D_A_E_DB_LEAF_H
 
 #include "d/d_com_inf_game.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 /**
  * @ingroup actors-enemies

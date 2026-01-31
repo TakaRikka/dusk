@@ -11,7 +11,7 @@
 #include "d/d_cc_uty.h"
 #include "d/actor/d_a_player.h"
 #include "SSystem/SComponent/c_math.h"
-#include <math>
+#include <cmath>
 
 namespace {
 dCcD_SrcSph cc_zant_src = {

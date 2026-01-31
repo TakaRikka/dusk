@@ -4,7 +4,7 @@
  */
 
 #include "TRK_MINNOW_DOLPHIN/MetroTRK/Portable/mem_TRK.h"
-#include <stdint>
+#include <stdint.h>
 
 #pragma dont_inline on
 void TRK_fill_mem(void* dst, int val, u32 n) {

@@ -10,46 +10,28 @@
 #include "f_pc/f_pc_executor.h"
 #include "f_pc/f_pc_manager.h"
 
-static cPhs__Step fopScnRq_phase_ClearOverlap(scene_request_class* i_sceneReq) {
-    cPhs__Step rv;
-    if (fopOvlpM_ClearOfReq() == 1) {
-        rv = cPhs_NEXT_e;
-    } else {
-        rv = cPhs_INIT_e;
-    }
-    return rv;
+static cPhs_Step fopScnRq_phase_ClearOverlap(scene_request_class* i_sceneReq) {
+    return fopOvlpM_ClearOfReq() == 1 ? cPhs_NEXT_e : cPhs_INIT_e;
     UNUSED(i_sceneReq);
 }
 
-static cPhs__Step fopScnRq_phase_Execute(scene_request_class* i_sceneReq) {
-    return (cPhs__Step)fpcNdRq_Execute(&i_sceneReq->create_request);
+static cPhs_Step fopScnRq_phase_Execute(scene_request_class* i_sceneReq) {
+    return fpcNdRq_Execute(&i_sceneReq->create_request);
 }
 
-static cPhs__Step fopScnRq_phase_IsDoingOverlap(scene_request_class* i_sceneReq) {
-    cPhs__Step rv;
-    if (fopOvlpM_IsDoingReq() == 1) {
-        rv = cPhs_NEXT_e;
-    } else {
-        rv = cPhs_INIT_e;
-    }
-    return rv;
+static cPhs_Step fopScnRq_phase_IsDoingOverlap(scene_request_class* i_sceneReq) {
+    return fopOvlpM_IsDoingReq() == 1 ? cPhs_NEXT_e : cPhs_INIT_e;
     UNUSED(i_sceneReq);
 }
 
-static cPhs__Step fopScnRq_phase_IsDoneOverlap(scene_request_class* i_sceneReq) {
-    cPhs__Step rv;
-    if (fopOvlpM_IsDone() == 1) {
-        rv = cPhs_NEXT_e;
-    } else {
-        rv = cPhs_INIT_e;
-    }
-    return rv;
+static cPhs_Step fopScnRq_phase_IsDoneOverlap(scene_request_class* i_sceneReq) {
+    return fopOvlpM_IsDone() == 1 ? cPhs_NEXT_e : cPhs_INIT_e;
     UNUSED(i_sceneReq);
 }
 
 static BOOL l_fopScnRq_IsUsingOfOverlap;
 
-static cPhs__Step fopScnRq_phase_Done(scene_request_class* i_sceneReq) {
+static cPhs_Step fopScnRq_phase_Done(scene_request_class* i_sceneReq) {
     
     if (i_sceneReq->create_request.parameters != 1) {
         scene_class* scene = (scene_class*)fpcM_SearchByID(i_sceneReq->create_request.creating_id);
@@ -61,8 +43,8 @@ static cPhs__Step fopScnRq_phase_Done(scene_request_class* i_sceneReq) {
     return cPhs_NEXT_e;
 }
 
-static cPhs__Step fopScnRq_Execute(scene_request_class* i_sceneReq) {
-    cPhs__Step phase_state = (cPhs__Step)cPhs_Do(&i_sceneReq->phase_request, i_sceneReq);
+static cPhs_Step fopScnRq_Execute(scene_request_class* i_sceneReq) {
+    cPhs_Step phase_state = cPhs_Do(&i_sceneReq->phase_request, i_sceneReq);
 
     switch (phase_state) {
     case cPhs_NEXT_e:

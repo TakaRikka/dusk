@@ -2794,9 +2794,9 @@ void daE_PM_c::SkipChk() {
     }
 }
 
-cPhs__Step daE_PM_c::Create() {
+cPhs_Step daE_PM_c::Create() {
     fopAcM_ct(this, daE_PM_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_PM");
+    cPhs_Step step = dComIfG_resLoad(&mPhase, "E_PM");
 
     if (step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, useHeapInit, 0x45E0)) {
@@ -2855,7 +2855,7 @@ cPhs__Step daE_PM_c::Create() {
     return step;
 }
 
-static cPhs__Step daE_PM_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daE_PM_Create(fopAc_ac_c* i_this) {
     return static_cast<daE_PM_c*>(i_this)->Create();
 }
 

@@ -58,8 +58,7 @@ public:
         mDoMtx_stack_c::multVecZero(&newPos);
         current.pos = newPos;
         old.pos = current.pos;
-        speed.y = 0.0f;
-        speedF = 0.0f;
+        speedF = speed.y = 0.0f;
         mpMorf->getModel()->setBaseTRMtx(mtx);
     }
 

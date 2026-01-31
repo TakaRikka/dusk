@@ -1,8 +1,8 @@
 #ifndef C_M3D_H_
 #define C_M3D_H_
 
-#include <math>
-#include "dolphin/mtx.h"
+#include <cmath>
+#include <dolphin/mtx.h>
 
 class cM3dGAab;
 class cM3dGCps;

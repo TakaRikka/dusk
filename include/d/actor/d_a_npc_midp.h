@@ -16,16 +16,29 @@ struct daNpc_midP_HIOParam {
     /* 0x0 */ daNpcT_HIOParam common;
 };
 
-class daNpc_midP_HIO_c : public mDoHIO_entry_c {
-    /* 0x8 */ daNpc_midP_HIOParam param;
-};
-
 class daNpc_midP_Param_c {
 public:
     virtual ~daNpc_midP_Param_c() {}
 
     static const daNpc_midP_HIOParam m;
 };
+
+#if DEBUG
+class daNpc_midP_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_midP_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_midP_HIOParam m;
+};
+
+#define NPC_MIDP_HIO_CLASS daNpc_midP_HIO_c
+#else
+#define NPC_MIDP_HIO_CLASS daNpc_midP_Param_c
+#endif
 
 class daNpc_midP_c : public daNpcT_c {
 public:
@@ -139,10 +152,9 @@ public:
     static cutFunc mCutList[1];
 
 private:
-    /* 0xE40 */ u8 field_0xE40[0xe44 - 0xe40];
+    /* 0xE40 */ NPC_MIDP_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;
-    /* 0xF81 */ u8 field_0xf81[0xf84-0xf81];
     /* 0xF84 */ actionFunc field_0xf84;
     /* 0xF90 */ actionFunc field_0xf90;
     /* 0xF9C */ int field_0xf9c;

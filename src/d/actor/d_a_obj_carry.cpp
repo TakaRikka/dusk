@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_carry.h"
 #include "d/actor/d_a_player.h"
-#include <math>
+#include <cmath>
 #include "d/d_com_inf_game.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_obj_swBallA.h"
@@ -1297,13 +1297,13 @@ int daObjCarry_c::create() {
 
         switch (mType) {
         case TYPE_BALL_S:
-            create_phase = (cPhs__Step)checkCreate_LightBallA();
+            create_phase = checkCreate_LightBallA();
             break;
         case TYPE_BALL_S_2:
-            create_phase = (cPhs__Step)checkCreate_LightBallB();
+            create_phase = checkCreate_LightBallB();
             break;
         case TYPE_LV8_BALL:
-            create_phase = (cPhs__Step)checkCreate_Lv8Ball();
+            create_phase = checkCreate_Lv8Ball();
             break;
         }
 

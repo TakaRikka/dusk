@@ -4,7 +4,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <math>
+#include <cmath>
 #include "d/d_com_inf_game.h"
 #include "d/d_map_path_dmap.h"
 #include "d/d_menu_dmap.h"

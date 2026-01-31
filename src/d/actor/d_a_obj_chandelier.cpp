@@ -37,11 +37,11 @@ int daObjChandelier_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjChandelier_c::create1st() {
+cPhs_Step daObjChandelier_c::create1st() {
     fopAcM_ct(this, daObjChandelier_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(this, l_arcName);
+    cPhs_Step step = dComIfG_resLoad(this, l_arcName);
     if (step == cPhs_COMPLEATE_e) {
-        step = (cPhs__Step)MoveBGCreate(l_arcName, 7, dBgS_MoveBGProc_TypicalRotY, 0x4500, &mMtx);
+        step = MoveBGCreate(l_arcName, 7, dBgS_MoveBGProc_TypicalRotY, 0x4500, &mMtx);
         if (step == cPhs_ERROR_e) {
             return step;
         }
@@ -231,7 +231,7 @@ void daObjChandelier_c::hookSwingInitParm() {
     field_0x5f8 = 5.0f;
 }
 
-static cPhs__Step daObjChandelier_create1st(daObjChandelier_c* i_this) {
+static cPhs_Step daObjChandelier_create1st(daObjChandelier_c* i_this) {
     fopAcM_ct(i_this, daObjChandelier_c);
     return i_this->create1st();
 }

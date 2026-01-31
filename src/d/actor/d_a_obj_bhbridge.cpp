@@ -11,7 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/actor/d_a_player.h"
-#include <math>
+#include <cmath>
 
 void daObjBhbridge_c::RideOn_Angle(s16& param_1, f32 param_2, s16 param_3, f32 param_4) {
     cLib_addCalcAngleS(&param_1, param_3 * (param_2 / param_4), 1, 0x100, 1);

@@ -1,7 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JAudio2/JASSimpleWaveBank.h"
-#include <stdint>
+#include <stdint.h>
 
 JASSimpleWaveBank::JASSimpleWaveBank() {
     mWaveTable = NULL;

@@ -29,25 +29,24 @@ daTenbin_HIO_c::daTenbin_HIO_c() {
 
 #if DEBUG
 void daTenbin_HIO_c::genMessage(JORMContext* context) {
-    context->genSlider("台の間隔", &mPlateSpacing, 0.0f, 10000.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("下がる量", &mFallAmount, 0.0f, 1000.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("皿のYangle", &mPlateYAngle, 0.0f, 90.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("WaitTime", &mWaitTime, 0, 255, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genLabel("\n====揺れ====", 0, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genLabel("--- Ｘ，Ｚ回転 ---", 0, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("振幅Ｘ", &mXAmplitude, 0.0f, 180.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("振幅Ｚ", &mZAmplitude, 0.0f, 180.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("揺れ強さ", &mShakeStrength, 0.0f, 10000.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("揺れ減衰", &mShakeDamping, 0.0f, 1.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("最大減衰量", &mXZMaximumChange, 0.0f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("最小減衰量", &mXZMinimumChange, 0.0f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genLabel("--- Ｙ移動 ---", 0, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("振幅Ｙ", &mYAmplitude, 0.0f, 180.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("移動強さ", &mMovementStrength, 0.0f, 10000.0f, 0, NULL, -1, -1, 0x200,
-                       0x18);
-    context->genSlider("揺れ減衰", &mRotationDamping, 0.0f, 1.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("最大減衰量", &mYMaximumChange, 0.0f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("最小減衰量", &mYMinimumChange, 0.0f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genSlider("台の間隔", &mPlateSpacing, 0.0f, 10000.0f);
+    context->genSlider("下がる量", &mFallAmount, 0.0f, 1000.0f);
+    context->genSlider("皿のYangle", &mPlateYAngle, 0.0f, 90.0f);
+    context->genSlider("WaitTime", &mWaitTime, 0, 255);
+    context->genLabel("\n====揺れ====", 0);
+    context->genLabel("--- Ｘ，Ｚ回転 ---", 0);
+    context->genSlider("振幅Ｘ", &mXAmplitude, 0.0f, 180.0f);
+    context->genSlider("振幅Ｚ", &mZAmplitude, 0.0f, 180.0f);
+    context->genSlider("揺れ強さ", &mShakeStrength, 0.0f, 10000.0f);
+    context->genSlider("揺れ減衰", &mShakeDamping, 0.0f, 1.0f);
+    context->genSlider("最大減衰量", &mXZMaximumChange, 0.0f, 100.0f);
+    context->genSlider("最小減衰量", &mXZMinimumChange, 0.0f, 100.0f);
+    context->genLabel("--- Ｙ移動 ---", 0);
+    context->genSlider("振幅Ｙ", &mYAmplitude, 0.0f, 180.0f);
+    context->genSlider("移動強さ", &mMovementStrength, 0.0f, 10000.0f);
+    context->genSlider("揺れ減衰", &mRotationDamping, 0.0f, 1.0f);
+    context->genSlider("最大減衰量", &mYMaximumChange, 0.0f, 100.0f);
+    context->genSlider("最小減衰量", &mYMinimumChange, 0.0f, 100.0f);
 }
 #endif
 

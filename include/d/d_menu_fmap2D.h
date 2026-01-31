@@ -7,7 +7,7 @@
 #include "d/d_menu_map_common.h"
 #include "d/d_meter_haihai.h"
 #include "d/d_pane_class.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class dMsgScrnExplain_c;
 

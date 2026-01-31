@@ -22,8 +22,6 @@ JAWWindow::JAWWindow(const char* param_1, int param_2, int param_3) :
     field_0x38.appendChild(&field_0x2b0);
 }
 
-JAWWindow::TJ2DWindowDraw::TJ2DWindowDraw(u32 param_1, const JGeometry::TBox2<f32>& param_2, const char* param_3) : J2DWindow(param_1, param_2, param_3, TEXTUREBASE_0, NULL) {}
-
 JAWWindow::~JAWWindow() {}
 
 BOOL JAWWindow::initIf() {
@@ -194,6 +192,8 @@ JAWWindow::TWindowText::TWindowText(JAWWindow* window) :
     field_0x11c(0, 0) {
 }
 
+JAWWindow::TWindowText::~TWindowText() {}
+
 void JAWWindow::TWindowText::drawSelf(f32 param_1, f32 param_2) {
     Mtx mtx;
     MTXIdentity(mtx);
@@ -210,4 +210,8 @@ void JAWWindow::TWindowText::drawSelf(f32, f32, Mtx* param_3) {
     JUT_ASSERT(209, m_pParent != NULL);
     m_pParent->setMatrix(stack_48);
     m_pParent->onDraw(&field_0xfc);
+}
+
+static void dummy(J2DPane* pane, J2DWindow* window) {
+    pane->rewriteAlpha();
 }

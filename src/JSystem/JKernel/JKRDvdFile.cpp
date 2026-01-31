@@ -3,7 +3,7 @@
 #include "JSystem/JKernel/JKRDvdFile.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include <stdint>
+#include <stdint.h>
 
 JSUList<JKRDvdFile> JKRDvdFile::sDvdList;
 

@@ -36,6 +36,43 @@ void dMpath_n::dTexObjAggregate_c::remove() {
     }
 }
 
+void dMpath_ColorCnv_n::convertRGB5A3_To_GXColor(_GXColor& color32, const dMpath_RGB5A3_s& color16) {
+    int r, g, b, a;
+    u16 color = color16.color;
+    if (color & 0x8000) {
+        r = color16.color >> 7 & 0xf8;
+        r |= r >> 5;
+        g = color16.color >> 2 & 0xf8;
+        g |= g >> 5;
+        b = color16.color << 3 & 0xf8;
+        b |= b >> 5;
+        a = 255;
+    } else {
+        r = color16.color >> 4 & 0xf0;
+        r |= r >> 4;
+        g = color16.color & 0xf0;
+        g |= g >> 4;
+        b = color16.color << 4 & 0xf0;
+        b |= b >> 4;
+        a = color16.color >> 7 & 0xe0;
+        a |= a >> 3 | a >> 6;
+    }
+    color32.r = r;
+    color32.g = g;
+    color32.b = b;
+    color32.a = a;
+}
+
+void dMpath_RGBA_c::setGXColor(const GXColor& color) {
+    mColor = color;
+}
+
+void dMpath_RGBA_c::setRGB5A3_palDt(const dMpath_RGB5A3_palDt_s& pal_data) {
+    GXColor color;
+    dMpath_ColorCnv_n::convertRGB5A3_To_GXColor(color, pal_data.field_0x0);
+    setGXColor(color);
+}
+
 #if DEBUG
 void dMpath_HIO_n::hioList_c::gen(JORMContext* mctx) {
     static const char* number[] = {
@@ -381,7 +418,7 @@ void dRenderingFDAmap_c::preRenderingMap() {
     Mtx44 matrix;
     C_MTXOrtho(matrix, top, -top, -right, right, 0.0f, 10000.0f);
     GXSetProjection(matrix, GX_ORTHOGRAPHIC);
-    GXLoadPosMtxImm(g_mDoMtx_identity, GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(0);
     drawBack();
 }
@@ -418,7 +455,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0);
     GXSetNumTevStages(1);
-    GXLoadTexObj(dMpath_n::m_texObjAgg.mp_texObj[6], GX_TEXMAP0);
+    GXLoadTexObj(dMpath_n::m_texObjAgg.getTexObjPointer(6), GX_TEXMAP0);
 
     u16* data_p = p_line->mpData;
     s32 data_num = p_line->mDataNum;
@@ -429,7 +466,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
     lineColor.r = lineColor.r - 4;
     GXSetTevColor(GX_TEVREG1, lineColor);
 
-    for (int i = 0; i < data_num; data_p++, i++) {
+    for (int i = 0; i < data_num; i++) {
 #ifndef HYRULE_FIELD_SPEEDHACK
         if (i < data_num - 1) {
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
@@ -443,6 +480,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
             GXTexCoord2f32(0, 0);
             GXPosition1x16(data_p[1]);
             GXTexCoord2f32(0, 0);
+            GXEnd();
         }
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_KONST, GX_CC_TEXC, GX_CC_C1);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -453,6 +491,7 @@ void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_li
         GXPosition1x16(data_p[0]);
         GXTexCoord2f32(0, 0);
         GXEnd();
+        data_p++;
     }
 
     setTevSettingNonTextureDirectColor();

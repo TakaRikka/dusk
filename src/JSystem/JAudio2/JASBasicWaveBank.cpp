@@ -4,7 +4,7 @@
 #include "JSystem/JAudio2/JASMutex.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include <stdint>
+#include <stdint.h>
 
 JASBasicWaveBank::JASBasicWaveBank() {
     mWaveTable = NULL;

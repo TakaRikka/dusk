@@ -1,7 +1,7 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 namespace JMath {
     

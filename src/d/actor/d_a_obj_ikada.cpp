@@ -98,15 +98,15 @@ int daObjIkada_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjIkada_c::create() {
+cPhs_Step daObjIkada_c::create() {
     fopAcM_ct(this, daObjIkada_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         int dzb_id = dComIfG_getObjctResName2Index(l_arcName, "M_Ikada.dzb");
         JUT_ASSERT(108, dzb_id != -1);
         
-        phase = (cPhs__Step)MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0xC00, NULL);
+        phase = MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0xC00, NULL);
         if (phase == cPhs_ERROR_e) {
             return phase;
         }

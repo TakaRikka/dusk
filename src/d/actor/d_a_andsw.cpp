@@ -16,8 +16,8 @@ daAndsw_HIO_c::daAndsw_HIO_c() {
 }
 
 void daAndsw_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("ＳＷ監視", 0, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genCheckBox("ＳＷ状態出力", &field_0x6, 0x01, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
+    ctx->genLabel("ＳＷ監視", 0);
+    ctx->genCheckBox("ＳＷ状態出力", &field_0x6, 0x01);
 }
 #endif
 
@@ -99,7 +99,8 @@ static int daAndsw_Delete(daAndsw_c* i_this) {
 }
 
 static int daAndsw_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daAndsw_c, i_this, "Andsw");
+    daAndsw_c* a_this = (daAndsw_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "Andsw");
     return a_this->create();
 }
 

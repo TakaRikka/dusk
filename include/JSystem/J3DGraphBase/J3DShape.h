@@ -189,7 +189,7 @@ public:
     J3DMaterial* getMaterial() const { return mMaterial; }
     u16 getIndex() const { return mIndex; }
     u32 getTexMtxLoadType() const { return mFlags & 0xF000; }
-    u32 getMtxGroupNum() const { return mMtxGroupNum; }
+    u16 getMtxGroupNum() const { return mMtxGroupNum; }
     J3DShapeDraw* getShapeDraw(u16 idx) { return mShapeDraw[idx]; }
     J3DShapeMtx* getShapeMtx(u16 idx) { return mShapeMtx[idx]; }
     Vec* getMin() { return &mMin; }

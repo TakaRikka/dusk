@@ -1,6 +1,9 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JKernel/JKRAssertHeap.h"
+#ifndef __MWERKS__
+#include <new>
+#endif
 
 JKRAssertHeap::JKRAssertHeap(void* data, u32 size, JKRHeap* parent, bool errorFlag)
     : JKRHeap(data, size, parent, errorFlag) {}

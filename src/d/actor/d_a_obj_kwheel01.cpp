@@ -38,13 +38,13 @@ daObjKWheel01_HIO_c::daObjKWheel01_HIO_c() {
 
 void daObjKWheel01_HIO_c::genMessage(JORMContext* ctx) {
     // "Pulley"
-    ctx->genLabel("滑車", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("滑車", 0);
 
     // "Rotational speed"
-    ctx->genSlider("回転速度", &mTargetYAngularSpeed, 0, 0x2000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("回転速度", &mTargetYAngularSpeed, 0, 0x2000);
 
     // "Rotational acceleration"
-    ctx->genSlider("回転加速度", &mYAngularAcceleration, 0, 0x20, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("回転加速度", &mYAngularAcceleration, 0, 0x20);
 }
 #endif
 
@@ -53,7 +53,7 @@ static Vec l_pos[4] = {
     {-930.0f, -165.0f, 0.0f}, {0.0f, -165.0f, -930.0f}
 };
 
-cPhs__Step daObjKWheel01_c::create1st() {
+cPhs_Step daObjKWheel01_c::create1st() {
     bool atLeastOneKLiftExists = false;
     s8 debugStackVar;
 
@@ -78,13 +78,13 @@ cPhs__Step daObjKWheel01_c::create1st() {
         }
     }
 
-    cPhs__Step phase = static_cast<cPhs__Step>(dComIfG_resLoad(this, l_arcName));
+    cPhs_Step phase = static_cast<cPhs_Step>(dComIfG_resLoad(this, l_arcName));
     if(phase == cPhs_COMPLEATE_e) {
         mYAngularVelocity = 0;
         setMtx();
 
 
-        phase = static_cast<cPhs__Step>(MoveBGCreate(l_arcName, (getOut() ? l_dzbidx[2] : l_dzbidx[0]), dBgS_MoveBGProc_TypicalRotY, 0x5D98, &mNewBgMtx));
+        phase = static_cast<cPhs_Step>(MoveBGCreate(l_arcName, (getOut() ? l_dzbidx[2] : l_dzbidx[0]), dBgS_MoveBGProc_TypicalRotY, 0x5D98, &mNewBgMtx));
         if(phase == cPhs_ERROR_e)
             return phase;
 

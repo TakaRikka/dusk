@@ -5,7 +5,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JParticle/JPABaseShape.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 JPAEmitterCallBack::~JPAEmitterCallBack() {
 }

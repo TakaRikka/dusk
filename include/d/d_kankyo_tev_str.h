@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class dKy_tevstr_c {
 public:

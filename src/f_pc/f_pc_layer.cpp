@@ -11,7 +11,7 @@ void fpcLy_CancelQTo(process_method_tag_class* i_methods) {
     fpcMtdTg_MethodQTo(i_methods);
 }
 
-s32 fpcLy_ToCancelQ(layer_class* i_layer, process_method_tag_class* i_methods) {
+int fpcLy_ToCancelQ(layer_class* i_layer, process_method_tag_class* i_methods) {
     return fpcMtdTg_ToMethodQ(&i_layer->cancel_list, i_methods);
 }
 
@@ -23,17 +23,17 @@ BOOL fpcLy_CancelMethod(process_method_tag_class* i_layer) {
     }
 }
 
-s32 fpcLy_IntoQueue(layer_class* i_layer, int i_treeListNo, create_tag_class* i_createTag, int i_no) {
+int fpcLy_IntoQueue(layer_class* i_layer, int i_treeListNo, create_tag_class* i_createTag, int i_no) {
     int ret = cTg_InsertToTree(&i_layer->node_tree, i_treeListNo, i_createTag, i_no);
     return ret;
 }
 
-s32 fpcLy_ToQueue(layer_class* i_layer, int i_treeListNo, create_tag_class* i_createTag) {
+int fpcLy_ToQueue(layer_class* i_layer, int i_treeListNo, create_tag_class* i_createTag) {
     int ret = cTg_AdditionToTree(&i_layer->node_tree, i_treeListNo, i_createTag);
     return ret;
 }
 
-s32 fpcLy_QueueTo(layer_class* i_layer, create_tag_class* i_createTag) {
+int fpcLy_QueueTo(layer_class* i_layer, create_tag_class* i_createTag) {
     UNUSED(i_layer);
 
     int ret = cTg_SingleCutFromTree(i_createTag);
@@ -132,7 +132,7 @@ void fpcLy_Regist(layer_class* i_layer) {
     cLs_Addition(&l_fpcLy_LayerList, (node_class*)i_layer);
 }
 
-s32 fpcLy_Delete(layer_class* i_layer) {
+int fpcLy_Delete(layer_class* i_layer) {
     if (i_layer->node_tree.mpLists->mSize == 0 && i_layer->cancel_list.mSize == 0) {
         cLs_SingleCut((node_class*)i_layer);
         *i_layer = l_fpcLy_Crear;

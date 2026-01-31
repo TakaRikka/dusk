@@ -1,7 +1,7 @@
 #ifndef JASDSPINTERFACE_H
 #define JASDSPINTERFACE_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 struct JASWaveInfo;
 

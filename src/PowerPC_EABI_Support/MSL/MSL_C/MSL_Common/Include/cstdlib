@@ -5,4 +5,18 @@
 #include <arith.h>
 #include <strtoul.h>
 
+#ifdef __cplusplus
+extern "C" {
+namespace std {
+    using ::strtol;
+    using ::strtoul;
+    using ::div;
+    using ::exit;
+    using ::abort;
+    using ::atoi;
+    using ::atof;
+}
+};
+#endif
+
 #endif

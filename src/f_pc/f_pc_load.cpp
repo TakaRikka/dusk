@@ -21,7 +21,7 @@ void fpcLd_Free(s16 i_procName) {
     cDyl_Unlink((s16)i_procName);
 }
 
-s32 fpcLd_Load(s16 i_procName) {
+int fpcLd_Load(s16 i_procName) {
     switch (cDyl_LinkASync((s16)i_procName)) {
     case cPhs_COMPLEATE_e:
         return cPhs_COMPLEATE_e;

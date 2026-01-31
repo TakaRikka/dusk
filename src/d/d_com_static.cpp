@@ -12,7 +12,7 @@
 #include "d/actor/d_a_tag_magne.h"
 #include "d/actor/d_a_tag_mist.h"
 #include "d/actor/d_a_tag_stream.h"
-#include <stdio>
+#include <cstdio>
 
 void daSus_c::data_c::set(s8 i_roomNo, cXyz const& param_1, cXyz const& param_2, u8 param_3,
                           u8 param_4, u8 i_type) {
@@ -204,8 +204,8 @@ int daNpcMsg_setEvtNum(u8 iEvtNum) {
     return 1;
 }
 
-u8 daNpcKakashi_chkSwdTutorialStage() {
-    return strcmp(dComIfGp_getStartStageName(), "F_SP103") == 0 && dComIfG_play_c::getLayerNo(0) == 8;
+bool daNpcKakashi_chkSwdTutorialStage() {
+    return bool(strcmp(dComIfGp_getStartStageName(), "F_SP103") == 0 && dComIfG_play_c::getLayerNo(0) == 8);
 }
 
 void daNpcKakashi_setSwdTutorialStep(u8 iEvtNum) {

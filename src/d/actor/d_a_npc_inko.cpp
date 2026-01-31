@@ -407,7 +407,7 @@ static int daNpc_Inko_IsDelete(npc_inko_class* i_this) {
 
 static int daNpc_Inko_Delete(npc_inko_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "Npc_Inko");
     dComIfG_resDelete(&i_this->phase, "Npc_inko");
 
     if (actor->heap != NULL) {

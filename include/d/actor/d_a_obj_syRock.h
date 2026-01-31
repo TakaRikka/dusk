@@ -20,7 +20,7 @@ public:
 
     void setBaseMtx();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     void setFallStat();
     int Execute(Mtx**);
     void move();

@@ -63,20 +63,20 @@ daE_YM_HIO_c::daE_YM_HIO_c() {
 #if DEBUG
 void daE_YM_HIO_c::genMessage(JORMContext* ctext) {
     // 'yami mushi', a.k.a. dark insect
-    ctext->genLabel("  闇虫", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genLabel("  闇虫", 0x80000001);
     // basic size
-    ctext->genSlider("基本サイズ", &mModelSize, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("放電無敵延長時間", &mElectricInvincibilityTimeExtension, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("基本サイズ", &mModelSize, 0.0f, 5.0f);
+    ctext->genSlider("放電無敵延長時間", &mElectricInvincibilityTimeExtension, 0.0f, 100.0f);
     // hovering speed
-    ctext->genSlider("徘徊速度", &mMoveSpeed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("徘徊速度", &mMoveSpeed, 0.0f, 100.0f);
     // surprising distance
-    ctext->genSlider("びっくり距離", &mSurpriseDistance, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("びっくり距離", &mSurpriseDistance, 0.0f, 1000.0f);
     // movement radius
-    ctext->genSlider("移動半径", &mMoveRange, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("移動半径", &mMoveRange, 0.0f, 1000.0f);
     // flight speed
-    ctext->genSlider("飛行移動速度", &mFlyMoveSpeed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("飛行移動速度", &mFlyMoveSpeed, 0.0f, 100.0f);
     // flight attack speed
-    ctext->genSlider("飛行攻撃速度", &mFlyAttackSpeed, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("飛行攻撃速度", &mFlyAttackSpeed, 0.0f, 100.0f);
 }
 #endif
 
@@ -562,7 +562,7 @@ void daE_YM_c::setAppear() {
         mType = 0;
     }
 
-    field_0x714 = 4;
+    field_0x714 = fopAc_AttnFlag_BATTLE_e;
 }
 
 void daE_YM_c::setMoveSound(int param_0) {
@@ -689,7 +689,7 @@ void daE_YM_c::executeWait() {
                 case 1:
                     field_0x718 = 1;
                     if (field_0x6d4) {
-                        field_0x714 = 4;
+                        field_0x714 = fopAc_AttnFlag_BATTLE_e;
                     } else {
                         field_0x714 = 0;
                     }
@@ -727,13 +727,13 @@ void daE_YM_c::executeWait() {
 
         case 4: {
             if (field_0x6d4) {
-                field_0x714 = 4;
+                field_0x714 = fopAc_AttnFlag_BATTLE_e;
             } else {
                 field_0x714 = 0;
             }
 
             if (dComIfGs_isSwitch(field_0x6a3, fopAcM_GetRoomNo(this)) && mType == 1) {
-                field_0x714 = 4;
+                field_0x714 = fopAc_AttnFlag_BATTLE_e;
                 if (mTagPosP != NULL) {
                     setActionMode(ACT_FLY);
                 } else {
@@ -2259,7 +2259,7 @@ void daE_YM_c::executeRail() {
         case 0: {
             mIsHide = 1;
             field_0x6a6 = 4;
-            field_0x714 |= 4;
+            field_0x714 |= fopAc_AttnFlag_BATTLE_e;
             field_0x6dc = -70.0f;
             dPnt* point_p = dPath_GetPnt(mpPath, mCurrentPntNo);
             current.pos = old.pos = point_p->m_position;
@@ -2361,14 +2361,14 @@ void daE_YM_c::executeBackRail() {
                     field_0x6a5 = 0;
                     mSphCc.SetCoSPrm(0x145);
                     mSphCc.SetTgType(0x10000);
-                    field_0x714 &= ~0x4;
+                    field_0x714 &= ~fopAc_AttnFlag_BATTLE_e;
                     bckSet(0x10, 2, 3.0f, 0.0f);
                 } else {
                     if (field_0x6a5 == 2) {
                         field_0x6f0 = 0xf;
                         mSphCc.SetCoSPrm(0x145);
                         mSphCc.SetTgType(0x10000);
-                        field_0x714 &= ~0x4;
+                        field_0x714 &= ~fopAc_AttnFlag_BATTLE_e;
                     } else {
                         field_0x6f0 = 7;
                     }
@@ -2413,7 +2413,7 @@ void daE_YM_c::executeBackRail() {
             // following needed for both (a) dbg stack reg to use r31, and (b) force b instruction in asm:
             int _;
             if (field_0x6f0 == 0) {
-                field_0x714 |= 4;
+                field_0x714 |= fopAc_AttnFlag_BATTLE_e;
                 setActionMode(ACT_RAIL);
             }
 
@@ -2499,7 +2499,7 @@ void daE_YM_c::executeSwitch() {
             mIsHide = 1;
             if (mpPath != NULL) {
                 if (mpPath->field_0x4 == 1) {
-                    field_0x714 = 4;
+                    field_0x714 = fopAc_AttnFlag_BATTLE_e;
                 } else {
                     field_0x714 = 0;
                     field_0x6cf = 0;
@@ -2627,7 +2627,7 @@ void daE_YM_c::executeFire() {
                 }
             }
             if (field_0x6d4) {
-                field_0x714 = 4;
+                field_0x714 = fopAc_AttnFlag_BATTLE_e;
             } else {
                 field_0x714 = 0;
             }
@@ -2655,7 +2655,7 @@ void daE_YM_c::executeFire() {
                 field_0x6cc = 1;
             }
             if (mpMorf->checkFrame(14.0f)) {
-                attention_info.distances[2] = 0x2e;
+                attention_info.distances[fopAc_attn_BATTLE_e] = 0x2e;
                 gravity = 0.0f;
                 fopAcM_SearchByName(0x1f7, &field_0x660);
                 if (field_0x660 != NULL) {
@@ -2751,7 +2751,7 @@ void daE_YM_c::executeFire() {
 
 void daE_YM_c::setRiverAttention() {
     cXyz player_pos = daPy_getPlayerActorClass()->current.pos;
-    attention_info.distances[2] = 60;
+    attention_info.distances[fopAc_attn_BATTLE_e] = 60;
     field_0x714 = 0;
     if (current.pos.abs(mpKago->current.pos) > 2000.0f) {
         return;
@@ -2764,7 +2764,7 @@ void daE_YM_c::setRiverAttention() {
     mDoMtx_stack_c::multVecZero(&my_vec_0);
     my_vec_1.set(my_vec_0.x, my_vec_0.z, my_vec_0.y);
     if (abs(cM_atan2s(my_vec_1.y, my_vec_1.absXZ()) - 0x4000) < 0x2000) {
-        field_0x714 = 4;
+        field_0x714 = fopAc_AttnFlag_BATTLE_e;
     }
 }
 
@@ -2862,7 +2862,7 @@ void daE_YM_c::executeRiver() {
             next_path = mpKago->checkNextPath(current.pos);
             if (mpKago->isFlying()) {
                 if (field_0x6f2) {
-                    field_0x714 = 4;
+                    field_0x714 = fopAc_AttnFlag_BATTLE_e;
                     if (next_path < 200.0f) {
                         cLib_chaseF(&field_0x6ec, 70.0f, 1.0f);
                     } else if (next_path > 1000.0f) {
@@ -2994,7 +2994,7 @@ void daE_YM_c::checkFrinedSamePos() {
 
 void daE_YM_c::action() {
     int reg_r27 = 0; // set but not used
-    if (daPy_getPlayerActorClass()->getCutType() == 0x36) {
+    if (daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_WOLF_LOCK) {
         reg_r27 = 1;
         field_0x700 = 0;
     }
@@ -3602,7 +3602,7 @@ int daE_YM_c::create() {
             l_HIO.field_0x4 = mDoHIO_CREATE_CHILD("闇の虫", &l_HIO);
         }
 
-        field_0x714 = 4;
+        field_0x714 = fopAc_AttnFlag_BATTLE_e;
         attention_info.distances[fopAc_attn_BATTLE_e] = 58;
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         fopAcM_SetMin(this, -200.0f, -100.0f, -200.0f);

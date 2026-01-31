@@ -4,6 +4,34 @@
 #include "d/actor/d_a_npc.h"
 #include "d/d_shop_system.h"
 
+struct daNpc_Seira_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+};
+
+class daNpc_Seira_Param_c {
+public:
+    virtual ~daNpc_Seira_Param_c() {}
+
+    static const daNpc_Seira_HIOParam m;
+};
+
+#if DEBUG
+class daNpc_Seira_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Seira_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Seira_HIOParam m;
+};
+
+#define NPC_SEIRA_HIO_CLASS daNpc_Seira_HIO_c
+#else
+#define NPC_SEIRA_HIO_CLASS daNpc_Seira_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_Seira_c
@@ -91,7 +119,7 @@ public:
 
 private:
     /* 0x0F7C */ mDoExt_McaMorfSO* mpSeiraMorf;
-    /* 0x0F80 */ int field_0x0F80;
+    /* 0x0F80 */ NPC_SEIRA_HIO_CLASS* mpHIO;
     /* 0x0F80 */ dCcD_Cyl mCyl1;
     /* 0x10C0 */ u8 mChkBottle;
     /* 0x10C1 */ u8 mType;
@@ -110,17 +138,6 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_Seira_c) == 0x1108);
-
-struct daNpc_Seira_HIOParam {
-    /* 0x00 */ daNpcT_HIOParam common;
-};
-
-class daNpc_Seira_Param_c {
-public:
-    virtual ~daNpc_Seira_Param_c() {}
-
-    static const daNpc_Seira_HIOParam m;
-};
 
 
 #endif /* D_A_NPC_SEIRA_H */

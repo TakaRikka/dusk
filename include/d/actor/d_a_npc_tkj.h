@@ -3,6 +3,34 @@
 
 #include "d/actor/d_a_npc.h"
 
+struct daNpc_Tkj_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+};
+
+class daNpc_Tkj_Param_c {
+public:
+    virtual ~daNpc_Tkj_Param_c() {}
+
+    static const daNpc_Tkj_HIOParam m;
+};
+
+#if DEBUG
+class daNpc_Tkj_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Tkj_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Tkj_HIOParam m;
+};
+
+#define NPC_TKJ_HIO_CLASS daNpc_Tkj_HIO_c
+#else
+#define NPC_TKJ_HIO_CLASS daNpc_Tkj_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpcTkj_c
@@ -70,7 +98,7 @@ public:
     static int (daNpcTkj_c::*mCutList[])(int);
 
 private:
-    /* 0xE40 */ u8 field_0xE40[0xE44 - 0xE40];
+    /* 0xE40 */ NPC_TKJ_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCcCyl;
     /* 0xF80 */ u8 mType;
     /* 0xF84 */ ActionFunc field_0xf84;
@@ -80,15 +108,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpcTkj_c) == 0xfa4);
-
-struct daNpc_Tkj_HIOParam {
-    /* 0x00 */ daNpcT_HIOParam common;
-};
-class daNpc_Tkj_Param_c {
-public:
-    virtual ~daNpc_Tkj_Param_c() {}
-
-    static const daNpc_Tkj_HIOParam m;
-};
 
 #endif /* D_A_NPC_TKJ_H */

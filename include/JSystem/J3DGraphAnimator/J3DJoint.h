@@ -1,8 +1,8 @@
 #ifndef J3DJOINT_H
 #define J3DJOINT_H
 
+#include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
-#include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 
 class J3DAnmTransform;
@@ -146,15 +146,52 @@ public:
     }
 };
 
-/**
- * @ingroup jsystem-j3d
- * 
- */
-struct J3DMtxCalcJ3DSysInitSoftimage {
-    static void init(const Vec& param_0, const Mtx& param_1) {
-        J3DSys::mCurrentS = param_0;
-        MTXCopy(param_1, J3DSys::mCurrentMtx);
+struct J3DMtxCalcAnmBase: public J3DMtxCalc {
+    J3DMtxCalcAnmBase(J3DAnmTransform* pAnmTransform) { mAnmTransform = pAnmTransform; }
+    ~J3DMtxCalcAnmBase() {}
+    J3DAnmTransform* getAnmTransform() { return mAnmTransform; }
+    void setAnmTransform(J3DAnmTransform* pAnmTransform) { mAnmTransform = pAnmTransform; }
+
+    J3DAnmTransform* mAnmTransform;
+};
+
+struct J3DMtxCalcAnimationAdaptorBase {
+    J3DMtxCalcAnimationAdaptorBase() {}
+    void change(J3DAnmTransform*) {}
+};
+
+template <typename A0>
+struct J3DMtxCalcAnimationAdaptorDefault : public J3DMtxCalcAnimationAdaptorBase {
+    J3DMtxCalcAnimationAdaptorDefault(J3DAnmTransform* pAnmTransform) {}
+
+    void calc(J3DMtxCalcAnmBase* pMtxCalc) {
+        J3DTransformInfo transform;
+        J3DTransformInfo* transform_p;
+        if (pMtxCalc->getAnmTransform() != NULL) {
+            pMtxCalc->getAnmTransform()->getTransform(J3DMtxCalc::getJoint()->getJntNo(), &transform);
+            transform_p = &transform;
+        } else {
+            transform_p = &J3DMtxCalc::getJoint()->getTransformInfo();
+        }
+
+        A0::calcTransform(*transform_p);
     }
+};
+
+template <typename A0, typename B0>
+struct J3DMtxCalcAnimation : public J3DMtxCalcAnmBase {
+    J3DMtxCalcAnimation(J3DAnmTransform* pAnmTransform) : J3DMtxCalcAnmBase(pAnmTransform), field_0x8(pAnmTransform) {}
+    ~J3DMtxCalcAnimation() {}
+
+    void setAnmTransform(J3DAnmTransform* pAnmTransform) {
+        mAnmTransform = pAnmTransform;
+        field_0x8.change(pAnmTransform);
+    }
+
+    void init(const Vec& param_0, const Mtx& param_1) { B0::init(param_0, param_1); }
+    void calc() { field_0x8.calc(this); }
+
+    A0 field_0x8;
 };
 
 /**

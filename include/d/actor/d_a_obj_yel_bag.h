@@ -6,6 +6,44 @@
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
 
+struct daObj_YBag_HIOParam {
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0c;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1c;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+};
+
+class daObj_YBag_Param_c {
+public:
+    virtual ~daObj_YBag_Param_c() {}
+
+    static daObj_YBag_HIOParam const m;
+};
+
+#if DEBUG
+class daObj_YBag_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_YBag_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_YBag_HIOParam m;
+};
+
+#define OBJ_YBAG_HIO_CLASS daObj_YBag_HIO_c
+#else
+#define OBJ_YBAG_HIO_CLASS daObj_YBag_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObj_YBag_c
@@ -18,7 +56,7 @@ class daObj_YBag_c : public fopAc_ac_c {
 private:
     /* 0x568 */ request_of_phase_process_class mPhases[3];
     /* 0x580 */ J3DModel* mModel;
-    /* 0x584 */ int field_0x584;
+    /* 0x584 */ OBJ_YBAG_HIO_CLASS* mpHIO;
     /* 0x588 */ dBgS_ObjAcch mAcch;
     /* 0x760 */ dCcD_Stts mStts;
     /* 0x79C */ dBgS_AcchCir mAcchCir;
@@ -76,13 +114,6 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daObj_YBag_c) == 0xa3c);
-
-class daObj_YBag_Param_c {
-public:
-    virtual ~daObj_YBag_Param_c() {}
-
-    static f32 const m[11];
-};
 
 
 #endif /* D_A_OBJ_YEL_BAG_H */

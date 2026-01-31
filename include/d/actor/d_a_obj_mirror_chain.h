@@ -42,7 +42,7 @@ public:
     int execute();
     inline ~daObjMirrorChain_c();
     inline void create_init();
-    inline cPhs__Step create();
+    inline cPhs_Step create();
 
     u8 getSwitchNo() { return (fopAcM_GetParam(this) >> 8) & 0xff; }
     void setAnmSpeed(f32 speed) { mpBckAnm->setPlaySpeed(speed); }

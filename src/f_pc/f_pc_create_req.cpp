@@ -13,8 +13,8 @@
 #include "f_pc/f_pc_debug_sv.h"
 
 BOOL fpcCtRq_isCreatingByID(create_tag* i_createTag, fpc_ProcID* i_id) {
-    create_request* req = (create_request*)i_createTag->base.mpTagData;
-    if (req->id == *i_id) {
+    fpc_ProcID id = ((create_request*)i_createTag->base.mpTagData)->id;
+    if (id == *i_id) {
         return TRUE;
     } else {
         return FALSE;

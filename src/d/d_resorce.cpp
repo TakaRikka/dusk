@@ -14,7 +14,12 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_graphic.h"
-#include <stdio>
+#include <cstdio>
+
+#ifndef __MWERKS__
+#include <string>
+#include "dusk/extras.h"
+#endif
 
 dRes_info_c::dRes_info_c() {
     mCount = 0;

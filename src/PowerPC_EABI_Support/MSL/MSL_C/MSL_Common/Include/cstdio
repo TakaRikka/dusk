@@ -13,4 +13,24 @@
 #define stdout (&__files._stdout)
 #define stderr (&__files._stderr)
 
+#ifdef __cplusplus
+#include <stdarg>
+
+extern "C" {
+namespace std {
+    using ::fputs;
+    using ::fflush;
+    using ::fclose;
+    using ::fprintf;
+    using ::printf;
+    using ::sprintf;
+    using ::snprintf;
+    using ::vsnprintf;
+    using ::vprintf;
+    using ::vswprintf;
+    using ::sscanf;
+}
+};
+#endif
+
 #endif

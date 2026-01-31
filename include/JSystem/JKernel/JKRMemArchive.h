@@ -32,7 +32,7 @@ public:
     static u32 fetchResource_subroutine(u8*, u32, u8*, u32, JKRCompression);
     SArcHeader* getArcHeader() { return mArcHeader; }
 
-private:
+public:
     /* 0x00 */  // vtable
     /* 0x04 */  // JKRArchive
     /* 0x64 */ SArcHeader* mArcHeader;

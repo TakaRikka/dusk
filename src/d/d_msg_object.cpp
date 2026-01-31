@@ -22,7 +22,7 @@
 #include "d/d_meter2.h"
 #include "d/actor/d_a_midna.h"
 #include "f_op/f_op_msg_mng.h"
-#include <stdio>
+#include <cstdio>
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
@@ -1606,16 +1606,16 @@ void dMsgObject_c::readMessageGroupLocal(mDoDvdThd_mountXArchive_c** p_arcMount)
     int msgGroup = dStage_stagInfo_GetMsgGroup(dComIfGp_getStage()->getStagInfo());
     #if REGION_PAL
     switch (dComIfGs_getPalLanguage()) {
-    case dSv_player_config_c::LANGAUGE_GERMAN:
+    case dSv_player_config_c::LANGUAGE_GERMAN:
         sprintf(arcName, "/res/Msgde/bmgres%d.arc", msgGroup);
         break;
-    case dSv_player_config_c::LANGAUGE_FRENCH:
+    case dSv_player_config_c::LANGUAGE_FRENCH:
         sprintf(arcName, "/res/Msgfr/bmgres%d.arc", msgGroup);
         break;
-    case dSv_player_config_c::LANGAUGE_SPANISH:
+    case dSv_player_config_c::LANGUAGE_SPANISH:
         sprintf(arcName, "/res/Msgsp/bmgres%d.arc", msgGroup);
         break;
-    case dSv_player_config_c::LANGAUGE_ITALIAN:
+    case dSv_player_config_c::LANGUAGE_ITALIAN:
         sprintf(arcName, "/res/Msgit/bmgres%d.arc", msgGroup);
         break;
     default:

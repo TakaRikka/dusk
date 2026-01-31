@@ -1,5 +1,5 @@
 #include <dolphin/exi.h>
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 
 typedef void (*MTRCallbackType)(int);
 

@@ -1,10 +1,11 @@
 #ifndef STD_VECTOR_H
 #define STD_VECTOR_H
 
+#include "JSystem/JGadget/define.h"
 #include "JSystem/JGadget/std-memory.h"
 #include <algorithm>
 #include <memory>
-#include <stdint>
+#include <stdint.h>
 
 namespace JGadget {
 namespace vector {
@@ -33,7 +34,9 @@ struct TVector {
     typedef const T* const_iterator;
 
     TVector(Allocator const& allocator) {
+#if PLATFORM_GCN
         mAllocator = allocator;
+#endif
         pBegin_ = NULL;
         pEnd_ = pBegin_;
         mCapacity = 0;
@@ -41,48 +44,52 @@ struct TVector {
     }
 
     ~TVector() {
+#if DEBUG
+        Confirm();
+#endif
         clear();
+        JGADGET_ASSERTWARN(250, size()==0);
         mAllocator.deallocate(pBegin_, 0);
     }
 
     void insert(T* pos, u32 count, const T& val) {
-        if (count != 0) {
-            T* ptr = Insert_raw(pos, count);
-            if (ptr == end()) {
-                /* JGadget_outMessage sp120(JGadget_outMessage::warning, __FILE__, 0x141);
-                sp120 << "can't allocate memory"; */
-            } else {
-                std::uninitialized_fill_n(ptr, count, val);
-            }
+        if (count == 0) {
+            return;
+        }
+
+        T* ptr = Insert_raw(pos, count);
+        if (ptr == end()) {
+            JGADGET_WARNMSG(321, "can't allocate memory");
+        } else {
+            std::uninitialized_fill_n(ptr, count, val);
         }
     }
 
-    T* Insert_raw(T* pIt, u32 pCount) {
-        JUT_ASSERT(446, (pBegin_ <= pIt) && (pIt <= pEnd_));
-
-        T* const pFirst = pIt;
+    T* Insert_raw(T* pFirst, u32 pCount) {
+        T* const pIt = pFirst;
+        JUT_ASSERT(446, (pBegin_<=pIt)&&(pIt<=pEnd_));
 
         if (pCount == 0) {
-            return pIt;
+            return pFirst;
         }
 
         if (pCount + size() <= mCapacity) {
-            void** newEnd = pFirst + pCount;
+            void** newEnd = pIt + pCount;
 
             if (newEnd < pEnd_) {
                 void** pOverwrittenValues = pEnd_ - pCount;
                 std::uninitialized_copy(pOverwrittenValues, pEnd_, pEnd_);
-                std::copy_backward(pFirst, pOverwrittenValues, pEnd_);
-                DestroyElement_(pFirst, newEnd);
+                std::copy_backward(pIt, pOverwrittenValues, pEnd_);
+                DestroyElement_(pIt, newEnd);
 
                 pEnd_ += pCount;
-                return pIt;
+                return pFirst;
             } else {
-                std::uninitialized_copy(pFirst, pEnd_, newEnd);
-                DestroyElement_(pFirst, pEnd_);
+                std::uninitialized_copy(pIt, pEnd_, newEnd);
+                DestroyElement_(pIt, pEnd_);
 
                 pEnd_ += pCount;
-                return pIt;
+                return pFirst;
             }
         }
 
@@ -95,8 +102,8 @@ struct TVector {
 
         TDestructed_deallocate_ destructionDeallocator(mAllocator, newDataPointer);
 
-        void** const endOfCopy = std::uninitialized_copy(pBegin_, pFirst, newDataPointer);
-        std::uninitialized_copy(pFirst, pEnd_, endOfCopy + pCount);
+        void** const endOfCopy = std::uninitialized_copy(pBegin_, pIt, newDataPointer);
+        std::uninitialized_copy(pIt, pEnd_, endOfCopy + pCount);
 
         DestroyElement_all_();
         destructionDeallocator.set(pBegin_);
@@ -126,10 +133,18 @@ struct TVector {
         return (int)((uintptr_t)pEnd_ - (uintptr_t)pBegin_) / 4;
     }
 
-    u32 capacity() { return mCapacity; }
+    u32 capacity() const { return mCapacity; }
 
-    u32 GetSize_extend_(u32 count) {
-        JUT_ASSERT(0x22B, pfnExtend_!=NULL);
+    bool Confirm() const {
+        if (size() > mCapacity) {
+            JGADGET_WARNMSG(507, "illegal size");
+            return false;
+        }
+        return true;
+    }
+
+    u32 GetSize_extend_(u32 count) const {
+        JUT_ASSERT(555, pfnExtend_!=NULL);
 
         u32 oldSize = size();
         u32 neededNewSpace = oldSize + count;
@@ -138,20 +153,28 @@ struct TVector {
         return neededNewSpace > extendedSize ? neededNewSpace : extendedSize;
     }
 
-    void DestroyElement_(T* start, T* end) {
-        for (; start != end; start++) {
-            mAllocator.destroy(start);
+    void DestroyElement_(T* pFirst, T* pLast) {
+        JUT_ASSERT(536, (pBegin_<=pFirst)&&(pFirst<=pEnd_));
+        JUT_ASSERT(537, (pBegin_<=pLast)&&(pLast<=pEnd_));
+        T* it = pFirst;
+        for (; it != pLast; it++) {
+            mAllocator.destroy(it);
         }
     }
 
     void DestroyElement_all_() { DestroyElement_(pBegin_, pEnd_); }
 
-    T* erase(T* start, T* end) {
-        T* vectorEnd = pEnd_;
-        T* ppvVar3 = std::copy(end, vectorEnd, start);
+    T* erase(T* pFirst, T* pLast) {
+        iterator pItFirst = pFirst;
+        iterator pItLast = pLast;
+        JUT_ASSERT(347, (pBegin_<=pItFirst)&&(pItFirst<=pEnd_))
+        JUT_ASSERT(348, (pBegin_<=pItLast)&&(pItLast<=pEnd_));
+        JUT_ASSERT(349, pItFirst<=pItLast);
+        T* vectorEnd = pEnd_; // DEBUG NONMATCHING
+        T* ppvVar3 = std::copy(pItLast, vectorEnd, pItFirst);
         DestroyElement_(ppvVar3, pEnd_);
         pEnd_ = ppvVar3;
-        return start;
+        return pFirst;
     }
 
     void clear() { erase(begin(), end()); }

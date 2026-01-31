@@ -62,15 +62,7 @@ daNpc_ZelR_c::EventFn daNpc_ZelR_c::mCutList[1] = {
     NULL
 };
 
-daNpc_ZelR_c::~daNpc_ZelR_c() {
-    OS_REPORT("|%06d:%x|daNpc_ZelR_c -> デストラクト\n", g_Counter.mCounter0, this);
-    if (heap) {
-        mpMorf[0]->stopZelAnime();
-    }
-    deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
-}
-
-static daNpc_ZelR_Param_c l_HIO;
+static NPC_ZELR_HIO_CLASS l_HIO;
 
 daNpc_ZelR_HIOParam const daNpc_ZelR_Param_c::m = {
     190.0f,
@@ -116,6 +108,35 @@ daNpc_ZelR_HIOParam const daNpc_ZelR_Param_c::m = {
     0.0f,
 };
 
+#if DEBUG
+daNpc_ZelR_HIO_c::daNpc_ZelR_HIO_c() {
+    m = daNpc_ZelR_Param_c::m;
+}
+
+void daNpc_ZelR_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_ZelR_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_ZelR_c::~daNpc_ZelR_c() {
+    OS_REPORT("|%06d:%x|daNpc_ZelR_c -> デストラクト\n", g_Counter.mCounter0, this);
+    if (heap) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
+}
+
 int daNpc_ZelR_c::create() {
     daNpcT_ct(this, daNpc_ZelR_c, l_faceMotionAnmData,
         &l_motionAnmData, l_faceMotionSequenceData, 4,
@@ -145,6 +166,11 @@ int daNpc_ZelR_c::create() {
 
         mSound.init(&current.pos, &eyePos, 3, 1);
 
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("フ－ド付きロ－ブゼルダ");
+#endif
+
         mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
         mAcch.CrrPos(dComIfG_Bgsp());
         mGndChk = mAcch.m_gnd;
@@ -153,7 +179,7 @@ int daNpc_ZelR_c::create() {
         setEnvTevColor();
         setRoomNo();
 
-        mCcStts.Init(daNpc_ZelR_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl.Set(mCcDCyl);
         mCyl.SetStts(&mCcStts);
         mCyl.SetTgHitCallback(tgHitCallBack);
@@ -345,9 +371,9 @@ void daNpc_ZelR_c::setParam() {
     s16 sVar2 = l_HIO.m.common.talk_angle;
     s16 sVar3 = l_HIO.m.common.attention_distance;
     s16 sVar4 = l_HIO.m.common.attention_angle;
-    attention_info.distances[0] = daNpcT_getDistTableIdx(sVar3, sVar4);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] = daNpcT_getDistTableIdx(sVar1, sVar2);
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(sVar3, sVar4);
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(sVar1, sVar2);
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
     scale.setall(l_HIO.m.common.scale);
     mCcStts.SetWeight(l_HIO.m.common.weight);
@@ -440,10 +466,11 @@ void daNpc_ZelR_c::setAttnPos() {
     mStagger.calc(FALSE);
 
     mJntAnm.setParam(this, mpMorf[0]->getModel(), &sp38, getBackboneJointNo(), getNeckJointNo(), getHeadJointNo(),
-        l_HIO.m.common.body_angleX_min, l_HIO.m.common.body_angleX_max, l_HIO.m.common.body_angleY_min, 
-        l_HIO.m.common.body_angleY_max, l_HIO.m.common.head_angleX_min, l_HIO.m.common.head_angleX_max, 
-        l_HIO.m.common.head_angleY_min, l_HIO.m.common.head_angleY_max, l_HIO.m.common.neck_rotation_ratio,
-        0.0f, NULL);
+        mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+        mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+        mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+        mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
 
     mJntAnm.calcJntRad(0.2f, 1.0f, cM_s2rad(mCurAngle.y - field_0xd7e.y));
 
@@ -455,7 +482,7 @@ void daNpc_ZelR_c::setAttnPos() {
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, 0, 1.0f, 0);
 
     attention_info.position = current.pos;
-    attention_info.position.y += l_HIO.m.common.attention_offset;
+    attention_info.position.y += mpHIO->m.common.attention_offset;
 }
 
 void daNpc_ZelR_c::setCollision() {

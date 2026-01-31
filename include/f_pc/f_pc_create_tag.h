@@ -11,7 +11,7 @@ typedef struct create_tag {
 
 void fpcCtTg_ToCreateQ(create_tag* i_createTag);
 void fpcCtTg_CreateQTo(create_tag* i_createTag);
-s32 fpcCtTg_Init(create_tag* i_createTag, void* i_data);
+int fpcCtTg_Init(create_tag* i_createTag, void* i_data);
 
 extern node_list_class g_fpcCtTg_Queue;
 

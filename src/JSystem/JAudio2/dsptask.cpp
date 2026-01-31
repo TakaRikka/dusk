@@ -9,7 +9,7 @@ static void DspHandShake(void* param_0);
 static int DspStartWork(u32 param_0, void (*param_1)(u16));
 
 extern int Dsp_Running_Check();
-extern int Dsp_Running_Start();
+extern void Dsp_Running_Start();
 
 void DspHandShake(void*) {
     OS_REPORT("DSP InitCallback \n");

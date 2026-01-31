@@ -4,7 +4,7 @@
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JMath/JMATrigonometric.h"
-#include "dolphin/base/PPCArch.h"
+#include <dolphin/base/PPCArch.h>
 
 J3DDeformData::J3DDeformData() {
     mClusterNum = 0;
@@ -250,6 +250,10 @@ void J3DDeformer::deform(J3DVertexBuffer* i_buffer, u16 param_1, f32* i_weights)
             }
         }
     }
+}
+
+static void dummy(J3DDeformData* data) {
+    data->getClusterNum();
 }
 
 void J3DDeformer::normalizeWeight(int i_keyNum, f32* i_weights) {

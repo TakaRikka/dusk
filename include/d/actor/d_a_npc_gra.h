@@ -7,7 +7,7 @@
 
 class daNpc_grA_HIOParam {
 public:
-    /* 0x00 */ daNpcF_HIOParam mNpcFParams;
+    /* 0x00 */ daNpcF_HIOParam common;
     /* 0x6C */ s16 mBowTimer;
     /* 0x70 */ f32 mRotationalSpeed;
     /* 0x74 */ f32 mWalkingSpeed;
@@ -19,7 +19,7 @@ public:
 
 class daNpc_grA_Param_c {
 public:
-    virtual ~daNpc_grA_Param_c(){};
+    virtual ~daNpc_grA_Param_c() {}
 
     static daNpc_grA_HIOParam const m;
 };
@@ -28,19 +28,14 @@ public:
 class daNpc_grA_HIO_c : public mDoHIO_entry_c {
 public:
     daNpc_grA_HIO_c();
-#if DEBUG
     void listenPropertyEvent(const JORPropertyEvent*);
     void genMessage(JORMContext*);
-#endif
-    daNpc_grA_HIOParam mHioParams;
+    daNpc_grA_HIOParam m;
 };
 
 #define NPC_GRA_HIO_CLASS daNpc_grA_HIO_c
-
 #else
-
 #define NPC_GRA_HIO_CLASS daNpc_grA_Param_c
-
 #endif
 
 /**
@@ -155,7 +150,7 @@ private:
     /* 0x0BDC */ int field_0xBDC;
     /* 0x0BE0 */ daNpcF_Lookat_c mNpcfLookAt;
     /* 0x0C7C */ daNpcF_ActorMngr_c mNpcfActorManager[3];
-    /* 0x0C94 */ NPC_GRA_HIO_CLASS* mpHio;
+    /* 0x0C94 */ NPC_GRA_HIO_CLASS* mpHIO;
     /* 0x0C98 */ dCcD_Cyl field_0xC98;
     /* 0x0DD4 */ daNpcF_Path_c field_0xDD4;
     /* 0x1404 */ daNpc_grA_c_Action mAction2;

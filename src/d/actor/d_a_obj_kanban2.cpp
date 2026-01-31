@@ -11,7 +11,7 @@
 #include "d/actor/d_a_npc_tk.h"
 #include "d/d_s_play.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include <math>
+#include <cmath>
 
 #define PARTS_ALL 0x3FFFF
 #define PART_TOP_LEFT_UNDER     (1 << 0)
@@ -332,7 +332,7 @@ int daObj_Kanban2_c::getKanbanCutType() {
     case daPy_py_c::CUT_TYPE_NM_VERTICAL:
     case daPy_py_c::CUT_TYPE_NM_RIGHT:
     case daPy_py_c::CUT_TYPE_FINISH_LEFT:
-    case daPy_py_c::CUT_TYPE_DASH_UNK_26:
+    case daPy_py_c::CUT_TYPE_DASH_RIGHT:
         if (angle_to_player < 0x3800) {
             return DAMAGE_TLBR_DIAGONAL;
         }
@@ -351,7 +351,7 @@ int daObj_Kanban2_c::getKanbanCutType() {
         }
         return DAMAGE_HORIZONTAL_SPLIT;
     case daPy_py_c::CUT_TYPE_NM_LEFT:
-    case daPy_py_c::CUT_TYPE_DASH_UNK_25:
+    case daPy_py_c::CUT_TYPE_DASH_LEFT:
         return DAMAGE_HORIZONTAL_SPLIT;
     case daPy_py_c::CUT_TYPE_TURN_RIGHT:
     case daPy_py_c::CUT_TYPE_LARGE_JUMP_INIT:

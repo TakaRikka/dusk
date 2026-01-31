@@ -9,7 +9,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include <math>
+#include <cmath>
 
 #define ACTION_MODE_WAIT 0
 #define ACTION_MODE_CHASE 1
@@ -932,7 +932,7 @@ int daE_DK_c::_delete() {
 }
 
 static int daE_DK_Delete(daE_DK_c* i_this) {
-    fpc_ProcID unusedId = fopAcM_GetID(i_this); // debug match
+    fopAcM_RegisterDeleteID(i_this, "E_DK");
     return i_this->_delete();
 }
 

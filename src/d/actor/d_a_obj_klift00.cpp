@@ -42,28 +42,28 @@ daObjKLift00_HIO_c::daObjKLift00_HIO_c() {
 
 void daObjKLift00_HIO_c::genMessage(JORMContext* ctx) {
     // "Foothold"
-    ctx->genLabel("足場", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("足場", 0);
 
     // "Chain gravity"
-    ctx->genSlider("チェイン重力", &mChainGravity, -40.0, 0.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("チェイン重力", &mChainGravity, -40.0, 0.0);
 
     // "Ride parameters"
-    ctx->genSlider("Ride パラメータ", &mRideParameters, 0.0, 0.1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("Ride パラメータ", &mRideParameters, 0.0, 0.1);
 
     // "Wind effect occurence rate"
-    ctx->genSlider("風影響発生率", &mWindSwayOccuranceFactor, 0.0, 0.5, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("風影響発生率", &mWindSwayOccuranceFactor, 0.0, 0.5);
 
     // "Chain・Wind"
-    ctx->genSlider("鎖・風", &mWindMagnitudeChain, 0.0, 1000.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("鎖・風", &mWindMagnitudeChain, 0.0, 1000.0);
 
     // "Foundation・Wind"
-    ctx->genSlider("土台・風", &mWindMagnitudeFoundation, 0.0, 1000.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("土台・風", &mWindMagnitudeFoundation, 0.0, 1000.0);
 
     // "Chain hit speed"
-    ctx->genSlider("鎖ヒット速度", &mChainHitSpeed, 0.0, 50.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("鎖ヒット速度", &mChainHitSpeed, 0.0, 50.0);
 
     // "Hammer adjustment"
-    ctx->genSlider("ハンマー調整", &field_0x1C, 0.0, 10.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("ハンマー調整", &field_0x1C, 0.0, 10.0);
 }
 #endif
 
@@ -114,16 +114,16 @@ void dummy() {
     delete (dCcD_Cyl*)NULL;
 }
 
-cPhs__Step daObjKLift00_c::create1st() {
+cPhs_Step daObjKLift00_c::create1st() {
     mNumChainModels = getArg0();
     mNumChains = mNumChainModels + 1;
 
-    cPhs__Step phase = static_cast<cPhs__Step>(dComIfG_resLoad(this, l_arcName));
+    cPhs_Step phase = static_cast<cPhs_Step>(dComIfG_resLoad(this, l_arcName));
     if(phase == cPhs_COMPLEATE_e) {
         #if DEBUG
-        phase = static_cast<cPhs__Step>(MoveBGCreate(l_arcName, l_dzbidx[0], dBgS_MoveBGProc_TypicalRotY, 0x2000, NULL));
+        phase = static_cast<cPhs_Step>(MoveBGCreate(l_arcName, l_dzbidx[0], dBgS_MoveBGProc_TypicalRotY, 0x2000, NULL));
         #else
-        phase = static_cast<cPhs__Step>(MoveBGCreate(l_arcName, 9, dBgS_MoveBGProc_TypicalRotY, 0x2000, NULL));
+        phase = static_cast<cPhs_Step>(MoveBGCreate(l_arcName, 9, dBgS_MoveBGProc_TypicalRotY, 0x2000, NULL));
         #endif
         if(phase == cPhs_ERROR_e)
             return phase;

@@ -120,20 +120,7 @@ daNpc_Seira_c::cutFunc daNpc_Seira_c::mCutList[2] = {
     &daNpc_Seira_c::cutConversationAboutSaru,
 };
 
-static daNpc_Seira_Param_c l_HIO;
-
-daNpc_Seira_c::~daNpc_Seira_c() {
-    deleteObject();
-    if (mpMorf[0] != 0) {
-        mpMorf[0]->stopZelAnime();
-    }
-
-    if (mpSeiraMorf != NULL) {
-        mpSeiraMorf->stopZelAnime();
-    }
-
-    deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
-}
+static NPC_SEIRA_HIO_CLASS l_HIO;
 
 const daNpc_Seira_HIOParam daNpc_Seira_Param_c::m = {
     210.0f,
@@ -179,6 +166,39 @@ const daNpc_Seira_HIOParam daNpc_Seira_Param_c::m = {
     0.0f,
 };
 
+#if DEBUG
+daNpc_Seira_HIO_c::daNpc_Seira_HIO_c() {
+    m = daNpc_Seira_Param_c::m;
+}
+
+void daNpc_Seira_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Seira_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpc_Seira_c::~daNpc_Seira_c() {
+    deleteObject();
+    if (mpMorf[0] != 0) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+    if (mpSeiraMorf != NULL) {
+        mpSeiraMorf->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
+}
+
 int daNpc_Seira_c::create() {
     daNpcT_ct(this, daNpc_Seira_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
@@ -206,6 +226,12 @@ int daNpc_Seira_c::create() {
         fopAcM_SetMtx(this, mpMorf[0]->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 450.0f, 300.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("セ－ラ");
+#endif
+
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                         &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this),
                         fopAcM_GetShapeAngle_p(this));
@@ -214,7 +240,7 @@ int daNpc_Seira_c::create() {
         mGroundH = mAcch.GetGroundH();
         setEnvTevColor();
         setRoomNo();
-        mCcStts.Init(daNpc_Seira_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl1.Set(mCcDCyl);
         mCyl1.SetStts(&mCcStts);
         mCyl1.SetTgHitCallback(tgHitCallBack);
@@ -445,10 +471,10 @@ void daNpc_Seira_c::setParam() {
     srchActors();
 
     u32 att_flags = (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
-    s16 talk_dist = daNpc_Seira_Param_c::m.common.talk_distance;
-    s16 talk_ang = daNpc_Seira_Param_c::m.common.talk_angle;
-    s16 att_dist = daNpc_Seira_Param_c::m.common.attention_distance;
-    s16 att_ang = daNpc_Seira_Param_c::m.common.attention_angle;
+    s16 talk_dist = mpHIO->m.common.talk_distance;
+    s16 talk_ang = mpHIO->m.common.talk_angle;
+    s16 att_dist = mpHIO->m.common.attention_distance;
+    s16 att_ang = mpHIO->m.common.attention_angle;
 
     if (checkStageIsSeirasShop()) {
         talk_dist = 4;
@@ -463,19 +489,19 @@ void daNpc_Seira_c::setParam() {
     attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(talk_dist, talk_ang);
     attention_info.flags = att_flags;
 
-    scale.set(daNpc_Seira_Param_c::m.common.scale, daNpc_Seira_Param_c::m.common.scale,
-            daNpc_Seira_Param_c::m.common.scale);
-    mCcStts.SetWeight(daNpc_Seira_Param_c::m.common.weight);
-    mCylH = daNpc_Seira_Param_c::m.common.height;
-    mWallR = daNpc_Seira_Param_c::m.common.width;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale,
+            mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
 
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Seira_Param_c::m.common.knee_length);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
 
-    mRealShadowSize = daNpc_Seira_Param_c::m.common.real_shadow_size;
-    gravity = daNpc_Seira_Param_c::m.common.gravity;
-    mExpressionMorfFrame = daNpc_Seira_Param_c::m.common.expression_morf_frame;
-    mMorfFrames = daNpc_Seira_Param_c::m.common.morf_frame;
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    gravity = mpHIO->m.common.gravity;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
 }
 
 BOOL daNpc_Seira_c::checkChangeEvt() {
@@ -630,11 +656,11 @@ void daNpc_Seira_c::setAttnPos() {
     mStagger.calc(0);
     mJntAnm.setParam(
         this, mpMorf[0]->getModel(), &eyeOffset, getBackboneJointNo(), getNeckJointNo(), getHeadJointNo(),
-        daNpc_Seira_Param_c::m.common.body_angleX_min, daNpc_Seira_Param_c::m.common.body_angleX_max,
-        daNpc_Seira_Param_c::m.common.body_angleY_min, daNpc_Seira_Param_c::m.common.body_angleY_max,
-        daNpc_Seira_Param_c::m.common.head_angleX_min, daNpc_Seira_Param_c::m.common.head_angleX_max,
-        daNpc_Seira_Param_c::m.common.head_angleY_min, daNpc_Seira_Param_c::m.common.head_angleY_max,
-        daNpc_Seira_Param_c::m.common.neck_rotation_ratio, 0.0f, NULL);
+        mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+        mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+        mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+        mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio, 0.0f, NULL);
 
     f32 rad_val = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     mJntAnm.calcJntRad(0.2f, 1.0f, rad_val);
@@ -662,7 +688,7 @@ void daNpc_Seira_c::setAttnPos() {
         mDoMtx_stack_c::multVec(&eyeOffset, &attention_info.position);
     } else {
         attention_info.position = current.pos;
-        attention_info.position.y += daNpc_Seira_Param_c::m.common.attention_offset;
+        attention_info.position.y += mpHIO->m.common.attention_offset;
     }
 }
 

@@ -1,8 +1,8 @@
 #ifndef NW4HBM_MATH_TRIANGULAR_H
 #define NW4HBM_MATH_TRIANGULAR_H
 
-#include <math>
-#include <math>
+#include <cmath>
+#include <cmath>
 
 #include <revolution/types.h>
 

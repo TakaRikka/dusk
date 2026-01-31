@@ -3,8 +3,36 @@
 
 #include "d/actor/d_a_npc.h"
 
-class daNpc_Zelda_HIO_c;
-class daNpc_Zelda_c;
+class daNpc_Zelda_HIOParam {
+public:
+    /* 0x00 */ daNpcT_HIOParam common;
+};
+
+STATIC_ASSERT(sizeof(daNpc_Zelda_HIOParam) == 0x8c);
+
+class daNpc_Zelda_Param_c {
+public:
+    virtual ~daNpc_Zelda_Param_c() {}
+
+    static const daNpc_Zelda_HIOParam m;
+};
+
+#if DEBUG
+class daNpc_Zelda_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Zelda_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext* ctx);
+
+    daNpc_Zelda_HIOParam m;
+};
+
+#define NPC_ZELDA_HIO_CLASS daNpc_Zelda_HIO_c
+#else
+#define NPC_ZELDA_HIO_CLASS daNpc_Zelda_Param_c
+#endif
 
 /**
  * @ingroup actors-npcs
@@ -76,7 +104,7 @@ public:
     static cutFunc mCutList[1];
 
 private:
-    /* 0xE40 */ daNpc_Zelda_HIO_c* mHIO;
+    /* 0xE40 */ NPC_ZELDA_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 field_0xf80;
     /* 0xF84 */ actionFunc mAction1;
@@ -85,35 +113,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_Zelda_c) == 0xfa0);
-
-class daNpc_Zelda_HIOParam {
-public:
-    /* 0x00 */ daNpcT_HIOParam common;
-};
-
-STATIC_ASSERT(sizeof(daNpc_Zelda_HIOParam) == 0x8c);
-
-class daNpc_Zelda_Param_c {
-public:
-    virtual ~daNpc_Zelda_Param_c() {}
-
-    static const daNpc_Zelda_HIOParam m;
-};
-
-class daNpc_Zelda_HIO_c
-#if DEBUG
-    : public mDoHIO_entry_c
-#endif
-{
-public:
-    daNpc_Zelda_HIO_c();
-
-    void genMessage(JORMContext* ctx);
-    void listenPropertyEvent(const JORPropertyEvent*);
-
-#if DEBUG
-    daNpc_Zelda_HIOParam param;
-#endif
-};
 
 #endif /* D_A_NPC_ZELDA_H */

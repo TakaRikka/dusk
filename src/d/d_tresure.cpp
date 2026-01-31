@@ -235,18 +235,21 @@ u8 const dTres_c::typeToTypeGroup[17][2] = {
     {0x83, 0x0C}, {0x84, 0x0D}, {0x85, 0x0E}, {0x87, 0x0F}, {0x88, 0x10},
 };
 
-int dTres_c::getTypeGroupNoToType(u8 i_typeGroupNo) {
+u8 dTres_c::getTypeGroupNoToType(u8 i_typeGroupNo) {
+    JUT_ASSERT(651, i_typeGroupNo < TYPE_GROUP_ENUM_NUMBER);
     return typeToTypeGroup[i_typeGroupNo][0];
 }
 
 u8 dTres_c::getTypeToTypeGroupNo(u8 i_type) {
-    int groupNo = 17;
+    int rt = 17;
     for (int i = 0; i < 17; i++) {
         if (i_type == typeToTypeGroup[i][0]) {
-            groupNo = typeToTypeGroup[i][1];
+            rt = typeToTypeGroup[i][1];
             break;
         }
     }
 
-    return groupNo;
+    JUT_ASSERT(674, rt < TYPE_GROUP_ENUM_NUMBER);
+
+    return rt;
 }

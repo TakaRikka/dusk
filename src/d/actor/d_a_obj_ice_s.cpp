@@ -12,7 +12,7 @@
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
-#include <math>
+#include <cmath>
 
 class daOBJ_ICE_S_HIO_c : public JORReflexible {
 public:
@@ -37,11 +37,9 @@ daOBJ_ICE_S_HIO_c::daOBJ_ICE_S_HIO_c() {
 #if DEBUG
 
 void daOBJ_ICE_S_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("氷の足場小", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("傾きの大きさ", &mSlopeMagnitude, 0.0f, 50000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("沈みの量", &mSinkingAmount, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genLabel("氷の足場小", 0x80000001);
+    ctx->genSlider("傾きの大きさ", &mSlopeMagnitude, 0.0f, 50000.0f);
+    ctx->genSlider("沈みの量", &mSinkingAmount, 0.0f, 1000.0f);
 }
 
 #endif
@@ -176,7 +174,8 @@ static int daObjIce_s_Delete(daObjIce_s_c* i_this) {
 }
 
 static int daObjIce_s_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daObjIce_s_c, i_this, "Obj_Ice_s");
+    daObjIce_s_c* a_this = (daObjIce_s_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "Obj_Ice_s");
     return a_this->create();
 }
 

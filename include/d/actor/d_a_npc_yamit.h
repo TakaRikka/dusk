@@ -45,7 +45,7 @@ public:
     typedef int (daNpc_yamiT_c::*actionFunc)(void*);
 
     ~daNpc_yamiT_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

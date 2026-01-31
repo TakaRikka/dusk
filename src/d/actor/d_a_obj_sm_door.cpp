@@ -14,7 +14,7 @@
 
 static char* l_arcName = "sm_door";
 
-static cPhs__Step daObjSM_DOOR_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObjSM_DOOR_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjSM_DOOR_c*>(i_this)->create();
 }
 
@@ -174,9 +174,9 @@ inline int daObjSM_DOOR_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjSM_DOOR_c::create() {
+cPhs_Step daObjSM_DOOR_c::create() {
     fopAcM_ct(this, daObjSM_DOOR_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step step = dComIfG_resLoad(&mPhase, l_arcName);
 
     if (step == cPhs_COMPLEATE_e) {
         gravity = -9.0f;
@@ -202,7 +202,7 @@ cPhs__Step daObjSM_DOOR_c::create() {
 
         mSwBit = fopAcM_GetParam(this) >> 8;
 
-        step = (cPhs__Step)MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY,
+        step = MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY,
                                         0x1F20, NULL);
         if (step == cPhs_ERROR_e) {
             return step;

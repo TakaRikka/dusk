@@ -9,7 +9,7 @@
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
 #include "d/d_bomb.h"
-#include <math>
+#include <cmath>
 #include "Z2AudioLib/Z2Instances.h"
 
 class daE_SW_HIO_c {
@@ -1638,7 +1638,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return i_this->CreateHeap();
 }
 
-cPhs__Step daE_SW_c::create() {
+cPhs_Step daE_SW_c::create() {
     fopAcM_ct(this, daE_SW_c);
 
     field_0x68c = fopAcM_GetParam(this) & 15;
@@ -1682,7 +1682,7 @@ cPhs__Step daE_SW_c::create() {
         field_0x696 = 0xFF;
     }
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_SW");
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, "E_SW");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_SW PARAM %x %d %d\n", fopAcM_GetParam(this), field_0x696, fopAcM_GetID(this));
         shape_angle.x = 0;
@@ -1755,10 +1755,10 @@ cPhs__Step daE_SW_c::create() {
         if (field_0x694 == 0) {
             mBgc.OnLineCheck();
             field_0x698 = 2;
-            attention_info.distances[2] = 3;
+            attention_info.distances[fopAc_attn_BATTLE_e] = 3;
             d_setAction(&daE_SW_c::d_wait);
         } else {
-            attention_info.distances[2] = 4;
+            attention_info.distances[fopAc_attn_BATTLE_e] = 4;
 
             if (field_0x6dc > 1.0f) {
                 field_0x98c.SetAtSpl((dCcG_At_Spl)1);

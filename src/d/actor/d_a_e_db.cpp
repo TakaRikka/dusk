@@ -2015,7 +2015,7 @@ static int daE_DB_IsDelete(e_db_class* i_this) {
 
 static int daE_DB_Delete(e_db_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_DB");
     dComIfG_resDelete(&i_this->phase, "E_db");
 
     if (i_this->HIOInit) {

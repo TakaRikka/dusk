@@ -2025,25 +2025,25 @@ void daNpcF_commonListenPropertyEvent(char* param_1, int* param_2, daNpcF_HIOPar
 }
 
 void daNpcF_commonGenMessage(JORMContext* i_ctx, daNpcF_HIOParam* i_hio) {
-    i_ctx->genSlider("注目オフセット  ", &i_hio->attention_offset, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("重力            ", &i_hio->gravity, -100.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("スケ−ル        ", &i_hio->scale, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("リアル影サイズ  ", &i_hio->real_shadow_size, 0.0f, 10000.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("体重            ", &i_hio->weight, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff,0x200, 0x18);
-    i_ctx->genSlider("高さ            ", &i_hio->height, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,0x200, 0x18);
-    i_ctx->genSlider("ひざ丈          ", &i_hio->knee_length, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,0x200, 0x18);
-    i_ctx->genSlider("幅              ", &i_hio->width, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,0x200, 0x18);
-    i_ctx->genSlider("腰のＸ角上限    ", &i_hio->body_angleX_max, -90.0f, 90.0f, 0, NULL, 0xffff,0xffff, 0x200, 0x18);
-    i_ctx->genSlider("腰のＸ角下限    ", &i_hio->body_angleX_min, -90.0f, 90.0f, 0, NULL, 0xffff,0xffff, 0x200, 0x18);
-    i_ctx->genSlider("腰のＹ角上限    ", &i_hio->body_angleY_max, -180.0, 179.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("腰のＹ角下限    ", &i_hio->body_angleY_min, -180.0, 179.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("頭のＸ角上限    ", &i_hio->head_angleX_max, -90.0f, 90.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("頭のＸ角下限    ", &i_hio->head_angleX_min, -90.0f, 90.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("頭のＹ角上限    ", &i_hio->head_angleY_max, -180.0f, 179.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("頭のＹ角下限    ", &i_hio->head_angleY_min, -180.0f, 179.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("首の回転比率    ", &i_hio->neck_rotation_ratio, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("補間フレ－ム    ", &i_hio->morf_frame, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->startComboBox("会話距離        ", &i_hio->talk_distance, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    i_ctx->genSlider("注目オフセット  ", &i_hio->attention_offset, 0.0f, 1000.0f);
+    i_ctx->genSlider("重力            ", &i_hio->gravity, -100.0f, 100.0f);
+    i_ctx->genSlider("スケ−ル        ", &i_hio->scale, 0.0f, 100.0f);
+    i_ctx->genSlider("リアル影サイズ  ", &i_hio->real_shadow_size, 0.0f, 10000.0);
+    i_ctx->genSlider("体重            ", &i_hio->weight, 0.0f, 255.0f);
+    i_ctx->genSlider("高さ            ", &i_hio->height, 0.0f, 1000.0f);
+    i_ctx->genSlider("ひざ丈          ", &i_hio->knee_length, 0.0f, 1000.0f);
+    i_ctx->genSlider("幅              ", &i_hio->width, 0.0f, 1000.0f);
+    i_ctx->genSlider("腰のＸ角上限    ", &i_hio->body_angleX_max, -90.0f, 90.0f);
+    i_ctx->genSlider("腰のＸ角下限    ", &i_hio->body_angleX_min, -90.0f, 90.0f);
+    i_ctx->genSlider("腰のＹ角上限    ", &i_hio->body_angleY_max, -180.0, 179.0);
+    i_ctx->genSlider("腰のＹ角下限    ", &i_hio->body_angleY_min, -180.0, 179.0);
+    i_ctx->genSlider("頭のＸ角上限    ", &i_hio->head_angleX_max, -90.0f, 90.0f);
+    i_ctx->genSlider("頭のＸ角下限    ", &i_hio->head_angleX_min, -90.0f, 90.0f);
+    i_ctx->genSlider("頭のＹ角上限    ", &i_hio->head_angleY_max, -180.0f, 179.0f);
+    i_ctx->genSlider("頭のＹ角下限    ", &i_hio->head_angleY_min, -180.0f, 179.0f);
+    i_ctx->genSlider("首の回転比率    ", &i_hio->neck_rotation_ratio, 0.0f, 1.0f);
+    i_ctx->genSlider("補間フレ－ム    ", &i_hio->morf_frame, 0.0f, 100.0f);
+    i_ctx->startComboBox("会話距離        ", &i_hio->talk_distance);
     i_ctx->genComboBoxItem("  50", 0);
     i_ctx->genComboBoxItem(" 100", 1);
     i_ctx->genComboBoxItem(" 150", 2);
@@ -2065,7 +2065,7 @@ void daNpcF_commonGenMessage(JORMContext* i_ctx, daNpcF_HIOParam* i_hio) {
     i_ctx->genComboBoxItem(" 950", 18);
     i_ctx->genComboBoxItem("1000", 19);
     i_ctx->endComboBox();
-    i_ctx->startComboBox("会話角度        ", &i_hio->talk_angle, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    i_ctx->startComboBox("会話角度        ", &i_hio->talk_angle);
     i_ctx->genComboBoxItem("  30", 0);
     i_ctx->genComboBoxItem("  45", 1);
     i_ctx->genComboBoxItem("  60", 2);
@@ -2074,7 +2074,7 @@ void daNpcF_commonGenMessage(JORMContext* i_ctx, daNpcF_HIOParam* i_hio) {
     i_ctx->genComboBoxItem(" 135", 5);
     i_ctx->genComboBoxItem(" 180", 6);
     i_ctx->endComboBox();
-    i_ctx->startComboBox("注目距離        ", &i_hio->attention_distance, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    i_ctx->startComboBox("注目距離        ", &i_hio->attention_distance);
     i_ctx->genComboBoxItem("  50", 0);
     i_ctx->genComboBoxItem(" 100", 1);
     i_ctx->genComboBoxItem(" 150", 2);
@@ -2096,7 +2096,7 @@ void daNpcF_commonGenMessage(JORMContext* i_ctx, daNpcF_HIOParam* i_hio) {
     i_ctx->genComboBoxItem(" 950", 18);
     i_ctx->genComboBoxItem("1000", 19);
     i_ctx->endComboBox();
-    i_ctx->startComboBox("注目角度        ", &i_hio->attention_angle, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    i_ctx->startComboBox("注目角度        ", &i_hio->attention_angle);
     i_ctx->genComboBoxItem("  30", 0);
     i_ctx->genComboBoxItem("  45", 1);
     i_ctx->genComboBoxItem("  60", 2);
@@ -2105,17 +2105,17 @@ void daNpcF_commonGenMessage(JORMContext* i_ctx, daNpcF_HIOParam* i_hio) {
     i_ctx->genComboBoxItem(" 135", 5);
     i_ctx->genComboBoxItem(" 180", 6);
     i_ctx->endComboBox();
-    i_ctx->genSlider("視界            ", &i_hio->fov, 0.0f, 180.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("サ－チ距離      ", &i_hio->search_distance, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("サ－チ高さ      ", &i_hio->search_height, -10000.0,10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("サ－チ低さ      ", &i_hio->search_depth, -10000.0,10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("注目時間        ", &i_hio->attention_time, 0, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("ダメ－ジ期間    ", &i_hio->damage_time, 0,10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("表情            ", &i_hio->face_expression, 0,10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("動作            ", &i_hio->motion, 0, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genSlider("注視モ－ド      ", &i_hio->look_mode, 0, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genCheckBox("デバグモ－ドＯＮ", &i_hio->debug_mode_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    i_ctx->genCheckBox("デバグ情報ＯＮ  ", &i_hio->debug_info_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    i_ctx->genSlider("視界            ", &i_hio->fov, 0.0f, 180.0f);
+    i_ctx->genSlider("サ－チ距離      ", &i_hio->search_distance, 0.0f, 10000.0f);
+    i_ctx->genSlider("サ－チ高さ      ", &i_hio->search_height, -10000.0,10000.0f);
+    i_ctx->genSlider("サ－チ低さ      ", &i_hio->search_depth, -10000.0,10000.0f);
+    i_ctx->genSlider("注目時間        ", &i_hio->attention_time, 0, 10000.0f);
+    i_ctx->genSlider("ダメ－ジ期間    ", &i_hio->damage_time, 0,10000.0f);
+    i_ctx->genSlider("表情            ", &i_hio->face_expression, 0,10000.0f);
+    i_ctx->genSlider("動作            ", &i_hio->motion, 0, 10000.0f);
+    i_ctx->genSlider("注視モ－ド      ", &i_hio->look_mode, 0, 10000.0f);
+    i_ctx->genCheckBox("デバグモ－ドＯＮ", &i_hio->debug_mode_ON, 0x1);
+    i_ctx->genCheckBox("デバグ情報ＯＮ  ", &i_hio->debug_info_ON, 0x1);
 }
 #endif
 

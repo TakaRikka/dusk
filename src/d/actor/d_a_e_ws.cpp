@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_e_ws.h"
 #include "d/actor/d_a_obj_carry.h"
-#include <math>
+#include <cmath>
 #include "f_op/f_op_actor_enemy.h"
 
 class daE_WS_HIO_c : public JORReflexible {

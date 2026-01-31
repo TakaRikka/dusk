@@ -18,7 +18,7 @@ f32 daAlink_c::getHangMoveAnmSpeed() {
 }
 
 int daAlink_c::getHangDirectionFromAngle() {
-    s16 angle = field_0x2fe2 - shape_angle.y;
+    s16 angle = mMoveAngle - shape_angle.y;
     if (abs(angle) > 0x78E4) {
         return DIR_BACKWARD;
     }
@@ -40,7 +40,7 @@ BOOL daAlink_c::hangMoveBgCheck(s16 param_0, cXyz* param_1) {
 
     f32 var_f31;
     if (checkModeFlg(0x10000)) {
-        var_f31 = current.pos.y + field_0x598;
+        var_f31 = current.pos.y + mHeight;
     } else {
         var_f31 = current.pos.y;
     }
@@ -68,7 +68,8 @@ BOOL daAlink_c::hangMoveBgCheck(s16 param_0, cXyz* param_1) {
     cXyz sp9C;
     for (int i = 0; i < 3; i++) {
         static f32 const underOffsetY[3] = {15.0f, 90.0f, 150.0f};
-        sp90.y = sp84.y = var_f31 - underOffsetY[i];
+        sp84.y = var_f31 - underOffsetY[i];
+        sp90.y = sp84.y;
 
         if (commonLineCheck(&sp84, &sp90)) {
             dComIfG_Bgsp().GetTriPla(mLinkLinChk, &sp78);
@@ -92,15 +93,14 @@ BOOL daAlink_c::hangMoveBgCheck(s16 param_0, cXyz* param_1) {
     return rt;
 }
 
-
 BOOL daAlink_c::changeHangMoveProc(int i_direction) {
     if (!mLinkAcch.ChkGroundHit() || !dComIfG_Bgsp().ChkPolySafe(mLinkAcch.m_gnd)) {
         return false;
     }
 
-    cM3dGPla sp58;
-    dComIfG_Bgsp().GetTriPla(mLinkAcch.m_gnd, &sp58);
-    if (sp58.mNormal.y < 0.9986f) {
+    cM3dGPla tripla;
+    dComIfG_Bgsp().GetTriPla(mLinkAcch.m_gnd, &tripla);
+    if (tripla.mNormal.y < 0.9986f) {
         return false;
     }
 
@@ -132,7 +132,8 @@ BOOL daAlink_c::changeHangMoveProc(int i_direction) {
     }
 
     mLinkGndChk.SetPos(&sp70);
-    if (fabsf(dComIfG_Bgsp().GroundCross(&mLinkGndChk) - current.pos.y) > 5.0f) {
+    f32 var_f30 = fabsf(dComIfG_Bgsp().GroundCross(&mLinkGndChk) - current.pos.y);
+    if (var_f30 > 5.0f) {
         cXyz sp7C;
         cXyz sp88;
         sp7C.set(sp70.x, current.pos.y - 5.0f, sp70.z);
@@ -142,8 +143,8 @@ BOOL daAlink_c::changeHangMoveProc(int i_direction) {
             return false;
         }
 
-        dComIfG_Bgsp().GetTriPla(mLinkLinChk, &sp58);
-        if (cLib_distanceAngleS(sp58.mNormal.atan2sX_Z(), shape_angle.y) < 0x549F) {
+        dComIfG_Bgsp().GetTriPla(mLinkLinChk, &tripla);
+        if (cLib_distanceAngleS(tripla.mNormal.atan2sX_Z(), shape_angle.y) < 0x549F) {
             return false;
         }
     }
@@ -151,19 +152,17 @@ BOOL daAlink_c::changeHangMoveProc(int i_direction) {
     return hangMoveBgCheck(var_r29, NULL) == false;
 }
 
-
 bool daAlink_c::checkHangFootWall() {
     f32 var_f31 = cM_ssin(shape_angle.y);
     f32 var_f30 = cM_scos(shape_angle.y);
-    cXyz sp4C(current.pos.x - var_f31 * 30.0f, current.pos.y - 120.0f,
-              current.pos.z - var_f30 * 30.0f);
-    cXyz sp58(current.pos.x + var_f31, sp4C.y, current.pos.z + var_f30);
+    cXyz line_start(current.pos.x - var_f31 * 30.0f, current.pos.y - 120.0f, current.pos.z - var_f30 * 30.0f);
+    cXyz line_end(current.pos.x + var_f31, line_start.y, current.pos.z + var_f30);
 
-    if (commonLineCheck(&sp4C, &sp58)) {
-        cM3dGPla sp40;
-        dComIfG_Bgsp().GetTriPla(mLinkLinChk, &sp40);
+    if (commonLineCheck(&line_start, &line_end)) {
+        cM3dGPla tripla;
+        dComIfG_Bgsp().GetTriPla(mLinkLinChk, &tripla);
 
-        if (fabsf(sp40.mNormal.y) <= 0.05f) {
+        if (fabsf(tripla.mNormal.y) <= 0.05f) {
             onNoResetFlg2(FLG2_UNK_2000);
             return true;
         }
@@ -172,7 +171,6 @@ bool daAlink_c::checkHangFootWall() {
     offNoResetFlg2(FLG2_UNK_2000);
     return false;
 }
-
 
 void daAlink_c::setHangGroundY() {
     cXyz pos;
@@ -185,7 +183,6 @@ void daAlink_c::setHangGroundY() {
     field_0x33d8 = dComIfG_Bgsp().GroundCross(&mLinkGndChk);
 }
 
-
 int daAlink_c::changeHangEndProc() {
     setHangGroundY();
 
@@ -196,7 +193,7 @@ int daAlink_c::changeHangEndProc() {
         return procLandInit(0.0f);
     }
 
-    setDoStatus(0x33);
+    setDoStatus(BUTTON_STATUS_DROP_DOWN);
 
     if (doTrigger()) {
         speed.y = 0.0f;
@@ -224,17 +221,17 @@ void daAlink_c::checkHangStartSideWall(s16 param_0) {
 
     cXyz sp7C;
     cXyz sp88;
-    cM3dGPla sp70;
+    cM3dGPla tripla;
 
     sp7C.set(var_f31 + (current.pos.x + (cM_ssin(param_0) * 4.5f)),
-             current.pos.y - field_0x598 * 0.5f,
+             current.pos.y - mHeight * 0.5f,
              var_f30 + (current.pos.z + (cM_scos(param_0) * 4.5f)));
     sp88.set(sp7C.x - var_f31 * 2.0f, sp7C.y, sp7C.z - var_f30 * 2.0f);
 
     for (int i = 0; i < 2; i++) {
         if (commonLineCheck(&sp7C, &sp88)) {
-            dComIfG_Bgsp().GetTriPla(mLinkLinChk, &sp70);
-            if (cLib_distanceAngleS(sp70.mNormal.atan2sX_Z(), var_r27) < 0x549F) {
+            dComIfG_Bgsp().GetTriPla(mLinkLinChk, &tripla);
+            if (cLib_distanceAngleS(tripla.mNormal.atan2sX_Z(), var_r27) < 0x549F) {
                 current.pos.x += var_f31;
                 current.pos.z += var_f30;
                 break;
@@ -242,18 +239,18 @@ void daAlink_c::checkHangStartSideWall(s16 param_0) {
         }
 
         if (commonLineCheck(&sp88, &sp7C)) {
-            dComIfG_Bgsp().GetTriPla(mLinkLinChk, &sp70);
-            if (cLib_distanceAngleS(sp70.mNormal.atan2sX_Z(), var_r27) < 0x549F) {
+            dComIfG_Bgsp().GetTriPla(mLinkLinChk, &tripla);
+            if (cLib_distanceAngleS(tripla.mNormal.atan2sX_Z(), var_r27) < 0x549F) {
                 current.pos.x -= var_f31;
                 current.pos.z -= var_f30;
                 break;
             }
         }
 
-        sp88.y = sp7C.y = current.pos.y - 5.0f;
+        sp7C.y = current.pos.y - 5.0f;
+        sp88.y = sp7C.y;
     }
 }
-
 
 int daAlink_c::procHangStartInit() {
     cXyz sp2C = field_0x34ec - current.pos;
@@ -273,13 +270,13 @@ int daAlink_c::procHangStartInit() {
         return 0;
     }
 
-    BOOL hang_ready = mProcID == PROC_HANG_READY;
+    BOOL is_prev_hangReady = mProcID == PROC_HANG_READY;
     commonProcInit(PROC_HANG_START);
     current.pos = sp38;
     offNoResetFlg2(FLG2_UNK_2000);
 
     if (checkHangFootWall()) {
-        if (!hang_ready && cM_rnd() < 0.7f) {
+        if (!is_prev_hangReady && cM_rnd() < 0.7f) {
             setSingleAnimeParam(ANM_CLIMB_HANG_MISS, &mpHIO->mLadder.m.mWallAttachMissAnm);
             field_0x3478 = mpHIO->mLadder.m.mWallAttachMissAnm.mCancelFrame;
             voiceStart(Z2SE_AL_V_FOOT_MISS);
@@ -289,8 +286,8 @@ int daAlink_c::procHangStartInit() {
             voiceStart(Z2SE_AL_V_JUMP_HANG);
         }
 
-        field_0x2f92 = 0xFE;
-        field_0x2f93 = 0xFE;
+        mLeftHandIndex = 0xFE;
+        mRightHandIndex = 0xFE;
     } else {
         setSingleAnimeParam(ANM_HANG_READY, &mpHIO->mWallHang.mWallCatch.m.mGrabAAnm);
         field_0x3478 = mpHIO->mWallHang.mWallCatch.m.mGrabAAnm.mCancelFrame;
@@ -301,14 +298,12 @@ int daAlink_c::procHangStartInit() {
     shape_angle.y = field_0x306e + 0x8000;
     current.angle.y = shape_angle.y;
 
-    f32 tmp_0 = 0.0f;
-    mNormalSpeed = tmp_0;
-    speed.y = tmp_0;
+    mNormalSpeed = 0.0f;
+    speed.y = 0.0f;
     dComIfGp_setPlayerStatus0(0, 0x100);
     setHangGroundY();
     return 1;
 }
-
 
 int daAlink_c::procHangStart() {
     daPy_frameCtrl_c* frame_ctrl = mUnderFrameCtrl;
@@ -319,10 +314,11 @@ int daAlink_c::procHangStart() {
 
     if (checkAnmEnd(frame_ctrl)) {
         procHangWaitInit();
-    } else if (frame_ctrl->getFrame() > field_0x3478 && checkInputOnR() &&
-               getDirectionFromShapeAngle() == DIR_FORWARD)
-    {
-        procHangClimbInit(mpHIO->mWallHang.mWallCatch.m.mClimbAnm.mStartFrame);
+    } else if (frame_ctrl->getFrame() > field_0x3478 && checkInputOnR()) {
+        int direction = getDirectionFromShapeAngle();
+        if (direction == DIR_FORWARD) {
+            procHangClimbInit(mpHIO->mWallHang.mWallCatch.m.mClimbAnm.mStartFrame);
+        }
     }
 
     return 1;
@@ -338,8 +334,7 @@ int daAlink_c::procHangFallStartInit(cM3dGPla* param_0) {
     cXyz sp58(current.pos.x, current.pos.y + 50.0f, current.pos.z);
     mLinkGndChk.SetPos(&sp58);
 
-    f32 cross = dComIfG_Bgsp().GroundCross(&mLinkGndChk);
-    sp58.y = cross;
+    sp58.y = dComIfG_Bgsp().GroundCross(&mLinkGndChk);
     if (sp58.y != -G_CM3D_F_INF) {
         if (sp58.y < current.pos.y + l_autoDownHeight) {
             return 0;
@@ -356,14 +351,12 @@ int daAlink_c::procHangFallStartInit(cM3dGPla* param_0) {
     sp58.z += var_f30;
 
     mLinkGndChk.SetPos(&sp58);
-    cross = dComIfG_Bgsp().GroundCross(&mLinkGndChk);
-    if (cross < current.pos.y - 50.0f) {
+    if (dComIfG_Bgsp().GroundCross(&mLinkGndChk) < current.pos.y - 50.0f) {
         sp58.x = current.pos.x - var_f31;
         sp58.z = current.pos.z - var_f30;
         mLinkGndChk.SetPos(&sp58);
 
-        cross = dComIfG_Bgsp().GroundCross(&mLinkGndChk);
-        sp58.y = cross;
+        sp58.y = dComIfG_Bgsp().GroundCross(&mLinkGndChk);
         if (sp58.y < current.pos.y - 50.0f) {
             return 0;
         }
@@ -397,7 +390,6 @@ int daAlink_c::procHangFallStartInit(cM3dGPla* param_0) {
     return 1;
 }
 
-
 int daAlink_c::procHangFallStart() {
     daPy_frameCtrl_c* frame_ctrl = mUnderFrameCtrl;
 
@@ -415,8 +407,7 @@ int daAlink_c::procHangFallStart() {
     }
 
     if (frame_ctrl->checkPass(5.0f)) {
-        f32 tmp_0 = 0.0f;
-        dComIfGp_getVibration().StartShock(1, 1, cXyz(tmp_0, 1.0f, tmp_0));
+        dComIfGp_getVibration().StartShock(1, 1, cXyz(0.0f, 1.0f, 0.0f));
     }
 
     if (bvar) {
@@ -465,15 +456,14 @@ int daAlink_c::procHangUp() {
     return 1;
 }
 
-
 int daAlink_c::procHangWaitInit() {
     commonProcInit(PROC_HANG_WAIT);
 
     if (checkNoResetFlg2(FLG2_UNK_2000) && checkHangFootWall()) {
         setSingleAnime(ANM_CLIMB_HANG, 0.0f, mpHIO->mLadder.m.mWallAttachAnm.mEndFrame,
                        mpHIO->mLadder.m.mWallAttachAnm.mEndFrame, 5.0f);
-        field_0x2f92 = 0xFE;
-        field_0x2f93 = 0xFE;
+        mLeftHandIndex = 0xFE;
+        mRightHandIndex = 0xFE;
     } else {
         setSingleAnime(ANM_HANG_READY, 0.0f, mpHIO->mWallHang.mWallCatch.m.mGrabAAnm.mEndFrame,
                        mpHIO->mWallHang.mWallCatch.m.mGrabAAnm.mEndFrame, 5.0f);
@@ -488,8 +478,9 @@ int daAlink_c::procHangWaitInit() {
     return 1;
 }
 
-
 int daAlink_c::procHangWait() {
+    daPy_frameCtrl_c* framectrl = mUnderFrameCtrl;
+
     if (changeHangEndProc()) {
         return 1;
     }
@@ -517,13 +508,11 @@ int daAlink_c::procHangWait() {
     return 1;
 }
 
-
 int daAlink_c::procHangMoveInit(int param_0) {
     commonProcInit(PROC_HANG_MOVE);
 
+    daAlink_ANM anm;
     if (checkNoResetFlg2(FLG2_UNK_2000) && checkHangFootWall()) {
-        daAlink_ANM anm;
-
         if (param_0 == 2) {
             anm = ANM_CLIMB_SLIDE_LEFT;
             field_0x33f0 = 1.0f;
@@ -535,11 +524,9 @@ int daAlink_c::procHangMoveInit(int param_0) {
         }
 
         setSingleAnimeBaseSpeed(anm, getClimbMoveSideAnmSpeed(), 3.0f);
-        field_0x2f92 = 0xFE;
-        field_0x2f93 = 0xFE;
+        mLeftHandIndex = 0xFE;
+        mRightHandIndex = 0xFE;
     } else {
-        daAlink_ANM anm;
-
         if (param_0 == 2) {
             anm = ANM_HANG_MOVE_LEFT;
         } else {
@@ -563,7 +550,6 @@ int daAlink_c::procHangMoveInit(int param_0) {
     setHangGroundY();
     return 1;
 }
-
 
 int daAlink_c::procHangMove() {
     int direction = getHangDirectionFromAngle();
@@ -672,13 +658,12 @@ int daAlink_c::procHangMove() {
     return 1;
 }
 
-
 int daAlink_c::procHangClimbInit(f32 param_0) {
-    if (mLinkAcch.ChkRoofHit() || field_0x3174 == 6) {
+    if (mLinkAcch.ChkRoofHit() || mGroundCode == 6) {
         return 0;
     }
 
-    BOOL wall_catch = mProcID == PROC_HANG_WALL_CATCH;
+    BOOL is_prev_wallCatch = mProcID == PROC_HANG_WALL_CATCH;
     commonProcInit(PROC_HANG_CLIMB);
     setSingleAnime(ANM_HANG_CLIMB_TOP, mpHIO->mWallHang.mWallCatch.m.mClimbAnm.mSpeed, param_0,
                    mpHIO->mWallHang.mWallCatch.m.mClimbAnm.mEndFrame,
@@ -692,14 +677,13 @@ int daAlink_c::procHangClimbInit(f32 param_0) {
     mNormalSpeed = 0.0f;
     current.angle.y = shape_angle.y;
 
-    if (!wall_catch) {
+    if (!is_prev_wallCatch) {
         voiceStart(Z2SE_AL_V_CLIMB);
     }
 
     setHangGroundY();
     return 1;
 }
-
 
 int daAlink_c::procHangClimb() {
     daPy_frameCtrl_c* frameCtrl = mUnderFrameCtrl;
@@ -715,12 +699,10 @@ int daAlink_c::procHangClimb() {
 
     if (frameCtrl->checkPass(9.0f)) {
         daAlink_footData_c* footdata = mFootData2;
-
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++, footdata++) {
             footdata->field_0x6 = 0;
             footdata->field_0x4 = 0;
             footdata->field_0x2 = 0;
-            footdata++;
         }
     }
 
@@ -737,7 +719,6 @@ int daAlink_c::procHangClimb() {
 
     return 1;
 }
-
 
 int daAlink_c::procHangWallCatchInit() {
     cXyz sp2C = field_0x34ec - current.pos;
@@ -776,7 +757,6 @@ int daAlink_c::procHangWallCatchInit() {
     return 1;
 }
 
-
 int daAlink_c::procHangWallCatch() {
     setHangGroundY();
 
@@ -795,7 +775,7 @@ int daAlink_c::procHangWallCatch() {
 
 int daAlink_c::procHangReadyInit() {
     if (field_0x2f91 == 3 && mEquipItem != fpcNm_ITEM_NONE) {
-        return procPreActionUnequipInit(0x5C, NULL);
+        return procPreActionUnequipInit(PROC_HANG_READY, NULL);
     } else if (mProcID == PROC_PREACTION_UNEQUIP) {
         setFrontWallType();
 
@@ -809,9 +789,8 @@ int daAlink_c::procHangReadyInit() {
     mProcVar2.field_0x300c = field_0x306e + 0x8000;
     field_0x3198 = field_0x2f91;
 
-    f32 tmp_0 = 0.0f;
-    mNormalSpeed = tmp_0;
-    speed.y = tmp_0;
+    mNormalSpeed = 0.0f;
+    speed.y = 0.0f;
     return 1;
 }
 
@@ -851,9 +830,8 @@ int daAlink_c::procHangLeverDownInit() {
     mProcVar2.field_0x300c = field_0x27f4->shape_angle.y + 0x8000;
     field_0x3198 = ANM_CLIMB_JUMP;
 
-    f32 tmp_0 = 0.0f;
-    speed.y = tmp_0;
-    mNormalSpeed = tmp_0;
+    speed.y = 0.0f;
+    mNormalSpeed = 0.0f;
     return 1;
 }
 
@@ -892,18 +870,17 @@ int daAlink_c::procHangLeverDown() {
     } else if (checkAnmEnd(frameCtrl)) {
         checkNextAction(0);
     } else if (frameCtrl->getFrame() >= 33.0f) {
-        field_0x2f92 = 4;
+        mLeftHandIndex = 4;
     } else if (frameCtrl->getFrame() >= 31.0f) {
-        field_0x2f93 = 10;
+        mRightHandIndex = 10;
     }
 
     return 1;
 }
 
-
-void daAlink_c::changeDragonActor(fopAc_ac_c* param_0) {
+void daAlink_c::changeDragonActor(fopAc_ac_c* i_actor) {
     if (field_0x280c.getActor() != NULL && fopAcM_GetName(field_0x280c.getActor()) == PROC_B_DR) {
-        field_0x280c.setData(param_0);
+        field_0x280c.setData(i_actor);
     }
 }
 
@@ -933,7 +910,6 @@ int daAlink_c::setDragonHangPos() {
     return 1;
 }
 
-
 int daAlink_c::setOctaIealHangPos() {
     b_ob_class* boss = (b_ob_class*)field_0x280c.getActor();
     if (boss == NULL) {
@@ -955,10 +931,10 @@ int daAlink_c::setBossBodyHangPos() {
     }
 }
 
-int daAlink_c::procBossBodyHangInit(fopAc_ac_c* param_0) {
+int daAlink_c::procBossBodyHangInit(fopAc_ac_c* i_actor) {
     commonProcInit(PROC_BOSS_BODY_HANG);
 
-    if (fopAcM_GetName(param_0) == PROC_B_DR) {
+    if (fopAcM_GetName(i_actor) == PROC_B_DR) {
         field_0x32cc = 1;
         setSingleAnimeBase(ANM_DRAGON_HANG);
         setJumpMode();
@@ -970,9 +946,8 @@ int daAlink_c::procBossBodyHangInit(fopAc_ac_c* param_0) {
     field_0x3198 = 0x169;
     deleteEquipItem(TRUE, FALSE);
 
-    f32 tmp_0 = 0.0f;
-    mNormalSpeed = tmp_0;
-    setSpecialGravity(tmp_0, maxFallSpeed, 0);
+    mNormalSpeed = 0.0f;
+    setSpecialGravity(0.0f, maxFallSpeed, 0);
     speed.y = 0.0f;
 
     mProcVar2.field_0x300c = 0;
@@ -982,10 +957,10 @@ int daAlink_c::procBossBodyHangInit(fopAc_ac_c* param_0) {
     mProcVar5.field_0x3012 = 0;
     field_0x3080 = 0;
 
-    field_0x280c.setData(param_0);
+    field_0x280c.setData(i_actor);
     setBossBodyHangPos();
 
-    onEndResetFlg1(ERFLG1_GANON_FINISH);
+    onEndResetFlg1(ERFLG1_SHIELD_BACKBONE);
     return 1;
 }
 
@@ -1002,7 +977,7 @@ int daAlink_c::procBossBodyHang() {
                 return procBackJumpInit(0);
             } else {
                 field_0x3102 = shape_angle.y;
-                return procCoLargeDamageInit(-6, 1, 0, 0, NULL, 0);
+                return procCoLargeDamageInit(-6, TRUE, 0, 0, NULL, 0);
             }
         } else {
             field_0x3408 = 0.0f;
@@ -1013,7 +988,7 @@ int daAlink_c::procBossBodyHang() {
         }
     } else {
         if (boss->checkDownFlg() && mProcVar2.field_0x300c != 0) {
-            setDoStatusEmphasys(0x30);
+            setDoStatusEmphasys(BUTTON_STATUS_FINISH);
         }
 
         daPy_frameCtrl_c* frameCtrl = mUnderFrameCtrl;
@@ -1053,13 +1028,13 @@ int daAlink_c::procBossBodyHang() {
         }
 
         if (mProcVar2.field_0x300c != 0 &&
-            ((dComIfGp_getDoStatus() == 0x30 && doTrigger()) || swordSwingTrigger()))
+            ((dComIfGp_getDoStatus() == BUTTON_STATUS_FINISH && doTrigger()) || swordSwingTrigger()))
         {
             if (mEquipItem != 0x103) {
                 setSwordModel();
             }
 
-            if (dComIfGp_getDoStatus() == 0x30 && doTrigger()) {
+            if (dComIfGp_getDoStatus() == BUTTON_STATUS_FINISH && doTrigger()) {
                 if (field_0x32cc != 0) {
                     setSingleAnimeBaseMorf(ANM_DRAGON_CUT_FINAL, 3.0f);
                 } else {
@@ -1120,19 +1095,19 @@ int daAlink_c::procBossBodyHang() {
                 dComIfGp_setHitMark(mProcVar1.field_0x300a, NULL, &mLeftHandPos, &sp38, NULL, 0);
             } else if (field_0x3198 == 0x16D) {
                 if (frameCtrl->getFrame() >= 59.0f) {
-                    field_0x2f93 = 9;
+                    mRightHandIndex = 9;
                 } else if (frameCtrl->getFrame() >= 51.0f) {
-                    field_0x2f93 = 10;
+                    mRightHandIndex = 10;
                 } else if (frameCtrl->getFrame() >= 3.0f) {
-                    field_0x2f93 = 5;
+                    mRightHandIndex = 5;
                 }
             } else if (field_0x3198 == 0x16E) {
                 if (frameCtrl->getFrame() >= 148.0f) {
-                    field_0x2f93 = 9;
+                    mRightHandIndex = 9;
                 } else if (frameCtrl->getFrame() >= 136.0f) {
-                    field_0x2f93 = 10;
+                    mRightHandIndex = 10;
                 } else if (frameCtrl->getFrame() >= 32.0f) {
-                    field_0x2f93 = 5;
+                    mRightHandIndex = 5;
                 }
 
                 if (frameCtrl->getFrame() >= 117.0f) {
@@ -1146,10 +1121,9 @@ int daAlink_c::procBossBodyHang() {
         }
     }
 
-    onEndResetFlg1(ERFLG1_GANON_FINISH);
+    onEndResetFlg1(ERFLG1_SHIELD_BACKBONE);
     return 1;
 }
-
 
 int daAlink_c::getLadderUnitCount() const {
     return (current.pos.y - field_0x34ec.y) * 0.026666667f;
@@ -1173,7 +1147,6 @@ int daAlink_c::setLadderInit() {
 
     return procLadderUpStartInit();
 }
-
 
 void daAlink_c::setLadderPosInit() {
     cXyz sp20;
@@ -1221,7 +1194,6 @@ void daAlink_c::setLadderPosInit() {
     }
 }
 
-
 void daAlink_c::setLadderPos(int param_0) {
     f32 var_f31 = cM_ssin(field_0x306e);
     f32 var_f30 = cM_scos(field_0x306e);
@@ -1232,7 +1204,6 @@ void daAlink_c::setLadderPos(int param_0) {
                     (field_0x34ec.y + (f32)param_0 * 37.5f) - 5.5f,
                     field_0x34ec.z + var_f30 * 38.0f);
 }
-
 
 f32 daAlink_c::getLadderMoveAnmSpeed() {
     return getAnmSpeedStickRate(mpHIO->mLadder.m.mMoveMinASpeed,
@@ -1249,7 +1220,8 @@ int daAlink_c::changeLadderMoveProc(int param_0) {
     }
 
     if (checkInputOnR()) {
-        int temp_r3 = abs((s16)(field_0x2fe2 - shape_angle.y));
+        s16 var_r26 = mMoveAngle - shape_angle.y;
+        int temp_r3 = abs(var_r26);
         if (temp_r3 > 0x3000 && temp_r3 < 0x5000) {
             return 0;
         }
@@ -1261,7 +1233,7 @@ int daAlink_c::changeLadderMoveProc(int param_0) {
 
         BOOL var_r30;
         if (temp_r3 < 0x4000) {
-            sp2C.y = current.pos.y + field_0x598 + 37.5f;
+            sp2C.y = current.pos.y + mHeight + 37.5f;
             var_r30 = false;
         } else {
             sp2C.y = (current.pos.y - 37.5f) - 15.0f;
@@ -1290,7 +1262,6 @@ int daAlink_c::changeLadderMoveProc(int param_0) {
     return 0;
 }
 
-
 int daAlink_c::setMoveBGLadderCorrect() {
     if (dComIfG_Bgsp().ChkPolySafe(mPolyInfo1) && dComIfG_Bgsp().ChkMoveBG(mPolyInfo1)) {
         dComIfG_Bgsp().MoveBgTransPos(mPolyInfo1, true, &current.pos, &current.angle, &shape_angle);
@@ -1309,9 +1280,8 @@ int daAlink_c::setMoveBGLadderCorrect() {
     return 0;
 }
 
-
 int daAlink_c::checkLadderFall() {
-    setDoStatus(0x33);
+    setDoStatus(BUTTON_STATUS_DROP_DOWN);
 
     if (doTrigger()) {
         field_0x2f99 = 0;
@@ -1357,34 +1327,39 @@ int daAlink_c::procLadderUpStartInit() {
     return 1;
 }
 
-
 int daAlink_c::procLadderUpStart() {
     if (setMoveBGLadderCorrect()) {
         return 1;
     }
 
+    daPy_frameCtrl_c* framectrl = mUnderFrameCtrl;
     field_0x2f99 = 6;
 
-    if (checkAnmEnd(mUnderFrameCtrl) && !checkLadderFall()) {
+    if (checkAnmEnd(framectrl) && !checkLadderFall()) {
         changeLadderMoveProc(1);
     }
 
     return 1;
 }
 
-int daAlink_c::procLadderUpEndInit(int param_0) {
+int daAlink_c::procLadderUpEndInit(BOOL param_0) {
     commonProcInit(PROC_LADDER_UP_END);
 
-    daAlink_ANM anm_id = param_0 != 0 ? ANM_LADDER_UP_END_LEFT : ANM_LADDER_UP_END_RIGHT;
+    daAlink_ANM anm_id;
+    if (param_0) {
+        anm_id = ANM_LADDER_UP_END_LEFT;
+    } else {
+        anm_id = ANM_LADDER_UP_END_RIGHT;
+    }
+
     setSingleAnimeBaseSpeed(anm_id, mpHIO->mLadder.m.mClimbUpEndASpeed,
                             mpHIO->mLadder.m.mClimbUpEndInterp);
     field_0x2f99 = 14;
     setSpecialGravity(0.0f, maxFallSpeed, 0);
 
-    f32 tmp_0 = 0.0f;
-    speed.y = tmp_0;
-    mNormalSpeed = tmp_0;
-    speedF = tmp_0;
+    speed.y = 0.0f;
+    mNormalSpeed = 0.0f;
+    speedF = 0.0f;
 
     field_0x30a0 = -0x0800;
     field_0x33f4 = -1.0f;
@@ -1462,7 +1437,6 @@ int daAlink_c::procLadderDownStartInit() {
     return 1;
 }
 
-
 int daAlink_c::procLadderDownStart() {
     if (setMoveBGLadderCorrect()) {
         return 1;
@@ -1483,10 +1457,16 @@ int daAlink_c::procLadderDownStart() {
     return 1;
 }
 
-int daAlink_c::procLadderDownEndInit(int param_0) {
+int daAlink_c::procLadderDownEndInit(BOOL param_0) {
     commonProcInit(PROC_LADDER_DOWN_END);
 
-    daAlink_ANM anm_id = param_0 != 0 ? ANM_LADDER_DOWN_END_LEFT : ANM_LADDER_DOWN_END_RIGHT;
+    daAlink_ANM anm_id;
+    if (param_0) {
+        anm_id = ANM_LADDER_DOWN_END_LEFT;
+    } else {
+        anm_id = ANM_LADDER_DOWN_END_RIGHT;
+    }
+
     setSingleAnimeBaseSpeed(anm_id, mpHIO->mLadder.m.mClimbDownEndASpeed,
                             mpHIO->mLadder.m.mClimbDownEndInterp);
     field_0x2f99 = 14;
@@ -1523,8 +1503,14 @@ int daAlink_c::procLadderDownEnd() {
     return 1;
 }
 
-int daAlink_c::procLadderMoveInit(int param_0, int param_1, cXyz* param_2) {
-    BOOL var_r28 = checkModeFlg(2) ? true : false;
+int daAlink_c::procLadderMoveInit(BOOL param_0, BOOL param_1, cXyz* param_2) {
+    BOOL var_r28;
+    if (checkModeFlg(2)) {
+        var_r28 = TRUE;
+    } else {
+        var_r28 = FALSE;
+    }
+
     f32 anm_speed = getLadderMoveAnmSpeed();
 
     commonProcInit(PROC_LADDER_MOVE);
@@ -1588,7 +1574,6 @@ int daAlink_c::procLadderMoveInit(int param_0, int param_1, cXyz* param_2) {
     return 1;
 }
 
-
 int daAlink_c::procLadderMove() {
     if (setMoveBGLadderCorrect()) {
         return 1;
@@ -1623,10 +1608,10 @@ f32 daAlink_c::getClimbMoveSideAnmSpeed() {
                                 mpHIO->mLadder.m.mWallHorizontalMaxAnmSpeed);
 }
 
-BOOL daAlink_c::checkClimbCode(cBgS_PolyInfo& i_poly) {
-    dBgW_Base* bgw_p = dComIfG_Bgsp().GetBgWBasePointer(i_poly);
+BOOL daAlink_c::checkClimbCode(cBgS_PolyInfo& i_polyinfo) {
+    dBgW_Base* bgw_p = dComIfG_Bgsp().GetBgWBasePointer(i_polyinfo);
 
-    return ((dComIfG_Bgsp().GetWallCode(i_poly) == 1 && fabsf(dBgS_GetNY(i_poly)) <= 0.05f) &&
+    return ((dComIfG_Bgsp().GetWallCode(i_polyinfo) == 1 && fabsf(dBgS_GetNY(i_polyinfo)) <= 0.05f) &&
             bgw_p != NULL) &&
            bgw_p->ChkPushPullOk();
 }
@@ -1657,7 +1642,7 @@ void daAlink_c::setClimbShapeOffset() {
     sp6C.z = current.pos.z;
 
     if (checkModeFlg(0x10000)) {
-        sp6C.y = current.pos.y + field_0x598 * 0.5f;
+        sp6C.y = current.pos.y + mHeight * 0.5f;
     } else {
         sp6C.y = current.pos.y - 10.0f;
     }
@@ -1693,9 +1678,8 @@ void daAlink_c::setClimbShapeOffset() {
     }
 }
 
-
 int daAlink_c::getClimbDirectionFromAngle() {
-    s16 angle = field_0x2fe2 - shape_angle.y;
+    s16 angle = mMoveAngle - shape_angle.y;
     if (abs(angle) > 0x7000) {
         return DIR_BACKWARD;
     }
@@ -1717,7 +1701,7 @@ void daAlink_c::changeClimbMoveProc(int param_0) {
     if (checkInputOnR()) {
         field_0x2f98 = getClimbDirectionFromAngle();
         if (field_0x2f98 == DIR_FORWARD || field_0x2f98 == DIR_BACKWARD) {
-            cXyz sp44(current.pos.x - cM_ssin(shape_angle.y) * 15.0f, current.pos.y + field_0x598,
+            cXyz sp44(current.pos.x - cM_ssin(shape_angle.y) * 15.0f, current.pos.y + mHeight,
                       current.pos.z - cM_scos(shape_angle.y) * 15.0f);
             mLinkRoofChk.SetPos(sp44);
 
@@ -1739,7 +1723,6 @@ void daAlink_c::changeClimbMoveProc(int param_0) {
     field_0x308c = temp_r29;
 }
 
-
 BOOL daAlink_c::checkClimbMoveUpDownProc(int i_direction) {
     f32 var_f31 = cM_ssin(shape_angle.y);
     f32 var_f30 = cM_scos(shape_angle.y);
@@ -1748,7 +1731,7 @@ BOOL daAlink_c::checkClimbMoveUpDownProc(int i_direction) {
         return true;
     }
 
-    cXyz sp38(current.pos.x - var_f31 * 30.0f, current.pos.y + field_0x598 + 30.0f + 5.0f,
+    cXyz sp38(current.pos.x - var_f31 * 30.0f, current.pos.y + mHeight + 30.0f + 5.0f,
               current.pos.z - var_f30 * 30.0f);
     cXyz sp44(sp38.x + var_f31 * 80.0f, sp38.y, sp38.z + var_f30 * 80.0f);
 
@@ -1768,37 +1751,35 @@ BOOL daAlink_c::checkClimbMoveUpDownProc(int i_direction) {
     return true;
 }
 
-
 BOOL daAlink_c::checkClimbMoveSideProc(int i_direction) {
     f32 var_f31 = cM_ssin(shape_angle.y);
     f32 var_f30 = cM_scos(shape_angle.y);
 
-    cXyz sp40(current.pos.x - var_f31 * 30.0f, current.pos.y + field_0x598 * 0.5f,
+    cXyz line_start(current.pos.x - var_f31 * 30.0f, current.pos.y + mHeight * 0.5f,
               current.pos.z - var_f30 * 30.0f);
 
     if (i_direction == DIR_LEFT) {
-        sp40.x += var_f30 * 40.0f;
-        sp40.z -= var_f31 * 40.0f;
+        line_start.x += var_f30 * 40.0f;
+        line_start.z -= var_f31 * 40.0f;
     } else {
-        sp40.x -= var_f30 * 40.0f;
-        sp40.z += var_f31 * 40.0f;
+        line_start.x -= var_f30 * 40.0f;
+        line_start.z += var_f31 * 40.0f;
     }
 
-    cXyz sp4C(sp40.x + var_f31 * 230.0f, sp40.y, sp40.z + var_f30 * 230.0f);
+    cXyz line_end(line_start.x + var_f31 * 230.0f, line_start.y, line_start.z + var_f30 * 230.0f);
 
-    if (!commonLineCheck(&sp40, &sp4C) || !checkClimbCode(mLinkLinChk)) {
+    if (!commonLineCheck(&line_start, &line_end) || !checkClimbCode(mLinkLinChk)) {
         return false;
     }
 
-    cXyz sp58(current.pos);
+    cXyz prev_pos(current.pos);
     if (checkBgClimbMove(i_direction)) {
-        current.pos = sp58;
+        current.pos = prev_pos;
         return false;
     }
 
     return true;
 }
-
 
 int daAlink_c::setMoveBGClimbCorrect() {
     if (dComIfG_Bgsp().ChkPolySafe(mPolyInfo1) && dComIfG_Bgsp().ChkMoveBG(mPolyInfo1)) {
@@ -1816,7 +1797,7 @@ int daAlink_c::setMoveBGClimbCorrect() {
     f32 var_f31 = cM_ssin(shape_angle.y);
     f32 var_f30 = cM_scos(shape_angle.y);
 
-    cXyz sp50(current.pos.x - var_f31 * 30.0f, current.pos.y + field_0x598 * 0.5f,
+    cXyz sp50(current.pos.x - var_f31 * 30.0f, current.pos.y + mHeight * 0.5f,
               current.pos.z - var_f30 * 30.0f);
     cXyz sp5C(current.pos.x + var_f31 * 200.0f, sp50.y, current.pos.z + var_f30 * 200.0f);
     cXyz sp68(current.pos.x - var_f31 * 30.0f, current.pos.y, current.pos.z - var_f30 * 30.0f);
@@ -1824,13 +1805,15 @@ int daAlink_c::setMoveBGClimbCorrect() {
     mLinkGndChk.SetPos(&sp68);
 
     if (mProcID == PROC_CLIMB_MOVE_UPDOWN) {
-        sp5C.y = sp50.y = current.pos.y + field_0x598 * 0.9f;
+        sp50.y = current.pos.y + mHeight * 0.9f;
+        sp5C.y = sp50.y;
 
         if (!commonLineCheck(&sp50, &sp5C) || !checkClimbCode(mLinkLinChk)) {
             return procClimbWaitInit(1, 0);
         }
 
-        sp5C.y = sp50.y = current.pos.y + field_0x598 * 0.5f;
+        sp50.y = current.pos.y + mHeight * 0.5f;
+        sp5C.y = sp50.y;
     }
 
     if (!commonLineCheck(&sp50, &sp5C) || !checkClimbCode(mLinkLinChk) ||
@@ -1838,28 +1821,28 @@ int daAlink_c::setMoveBGClimbCorrect() {
          current.pos.y - 15.0f < dComIfG_Bgsp().GroundCross(&mLinkGndChk)))
     {
         return procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);
+    } else {
+        cM3dGPla tripla;
+        dComIfG_Bgsp().GetTriPla(mLinkLinChk, &tripla);
+
+        s16 temp_r29 = tripla.mNormal.atan2sX_Z();
+        if (cLib_distanceAngleS(temp_r29, shape_angle.y) <= 0x549F) {
+            return procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);
+        }
+
+        s16 temp_r28 = shape_angle.y;
+        shape_angle.y = temp_r29 + 0x8000;
+
+        current.pos.x = mLinkLinChk.GetCross().x;
+        current.pos.z = mLinkLinChk.GetCross().z;
+        current.angle.y += (s16)(shape_angle.y - temp_r28);
+        field_0x308c += (s16)(temp_r28 - shape_angle.y);
+
+        mPolyInfo1.SetPolyInfo(mLinkLinChk);
     }
 
-    cM3dGPla sp44;
-    dComIfG_Bgsp().GetTriPla(mLinkLinChk, &sp44);
-
-    s16 temp_r29 = sp44.mNormal.atan2sX_Z();
-    if (cLib_distanceAngleS(temp_r29, shape_angle.y) <= 0x549F) {
-        return procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);
-    }
-
-    s16 temp_r28 = shape_angle.y;
-    shape_angle.y = temp_r29 + 0x8000;
-
-    current.pos.x = mLinkLinChk.GetCross().x;
-    current.pos.z = mLinkLinChk.GetCross().z;
-    current.angle.y += (s16)(shape_angle.y - temp_r28);
-    field_0x308c += (s16)(temp_r28 - shape_angle.y);
-
-    mPolyInfo1.SetPolyInfo(mLinkLinChk);
     return 0;
 }
-
 
 int daAlink_c::checkBgCorrectClimbMove(cXyz* i_startPos, cXyz* i_endPos) {
     if (commonLineCheck(i_startPos, i_endPos)) {
@@ -1877,21 +1860,18 @@ int daAlink_c::checkBgCorrectClimbMove(cXyz* i_startPos, cXyz* i_endPos) {
     return 0;
 }
 
-
 BOOL daAlink_c::checkClimbRoof(f32 param_0) {
     cXyz sp44(current.pos.x - cM_ssin(shape_angle.y) * 30.0f, param_0 - 30.0f,
               current.pos.z - cM_scos(shape_angle.y) * 30.0f);
     mLinkRoofChk.SetPos(sp44);
 
-    if (dComIfG_Bgsp().RoofChk(&mLinkRoofChk) < param_0 + 30.0f &&
-        dComIfG_Bgsp().GetMonkeyBarsCode(mLinkRoofChk))
-    {
+    f32 var_f31 = dComIfG_Bgsp().RoofChk(&mLinkRoofChk);
+    if (var_f31 < param_0 + 30.0f && dComIfG_Bgsp().GetMonkeyBarsCode(mLinkRoofChk)) {
         return true;
     }
 
     return false;
 }
-
 
 int daAlink_c::checkClimbGround(cXyz* param_0, f32 param_1) {
     f32 var_f30 = cM_ssin(shape_angle.y);
@@ -1917,7 +1897,6 @@ int daAlink_c::checkClimbGround(cXyz* param_0, f32 param_1) {
 
     return 0;
 }
-
 
 BOOL daAlink_c::checkBgClimbMove(int i_direction) {
     f32 var_r28 = cM_ssin(shape_angle.y);
@@ -1945,7 +1924,7 @@ BOOL daAlink_c::checkBgClimbMove(int i_direction) {
         }
     }
 
-    sp98.y += field_0x598;
+    sp98.y += mHeight;
 
     if (i_direction != DIR_RIGHT) {
         sp8C.set(sp98.x + var_f31, sp98.y, sp98.z + var_f30);
@@ -1969,7 +1948,7 @@ BOOL daAlink_c::checkBgClimbMove(int i_direction) {
              var_f25 + (current.pos.z + var_f30));
     mLinkRoofChk.SetPos(sp8C);
 
-    f32 var_f29 = dComIfG_Bgsp().RoofChk(&mLinkRoofChk) - field_0x598;
+    f32 var_f29 = dComIfG_Bgsp().RoofChk(&mLinkRoofChk) - mHeight;
     if (var_f29 < current.pos.y) {
         current.pos.y = var_f29;
     }
@@ -1978,7 +1957,7 @@ BOOL daAlink_c::checkBgClimbMove(int i_direction) {
              var_f25 + (current.pos.z - var_f30));
     mLinkRoofChk.SetPos(sp8C);
 
-    var_f29 = dComIfG_Bgsp().RoofChk(&mLinkRoofChk) - field_0x598;
+    var_f29 = dComIfG_Bgsp().RoofChk(&mLinkRoofChk) - mHeight;
     if (var_f29 < current.pos.y) {
         current.pos.y = var_f29;
     }
@@ -1992,7 +1971,7 @@ BOOL daAlink_c::checkBgClimbMove(int i_direction) {
 
         if (checkClimbGround(&sp8C, sp98.y)) {
             current.pos = sp8C;
-            onResetFlg0(RFLG0_UNK_40000);
+            onResetFlg0(RFLG0_CLIMB_END_HANG);
             return procHangClimbInit(mpHIO->mWallHang.mWallCatch.m.mClimbAnm.mStartFrame);
         } else {
             current.pos.y -= 30.0f;
@@ -2003,15 +1982,14 @@ BOOL daAlink_c::checkBgClimbMove(int i_direction) {
     return false;
 }
 
-
 int daAlink_c::setClimbStartNotGround() {
     if (mProcID == PROC_HOOKSHOT_FLY) {
         current.pos.y = mHookshotTopPos.y;
         mLinkGndChk.SetPos(&current.pos);
 
         f32 gnd_y = dComIfG_Bgsp().GroundCross(&mLinkGndChk);
-        if (gnd_y < current.pos.y - field_0x598) {
-            current.pos.y -= field_0x598;
+        if (gnd_y < current.pos.y - mHeight) {
+            current.pos.y -= mHeight;
         } else {
             current.pos.y = gnd_y + 5.0f;
             return 0;
@@ -2019,7 +1997,7 @@ int daAlink_c::setClimbStartNotGround() {
 
         f32 var_f29 = cM_ssin(field_0x306e);
         f32 var_f28 = cM_scos(field_0x306e);
-        f32 temp_f1 = (field_0x598 + 5.0f) - 60.0f;
+        f32 temp_f1 = (mHeight + 5.0f) - 60.0f;
         cXyz sp6C(mHookshotTopPos.x + var_f29 * 30.0f, current.pos.y + 60.0f,
                   mHookshotTopPos.z + var_f28 * 30.0f);
         cXyz sp78(mHookshotTopPos.x - var_f29 * 200.0f, sp6C.y,
@@ -2032,7 +2010,8 @@ int daAlink_c::setClimbStartNotGround() {
             }
 
             var_f31 += 15.0f;
-            sp78.y = sp6C.y += 15.0f;
+            sp6C.y += 15.0f;
+            sp78.y = sp6C.y;
         }
 
         current.pos.y += var_f31;
@@ -2043,7 +2022,6 @@ int daAlink_c::setClimbStartNotGround() {
     procClimbUpStartInit(0);
     return 1;
 }
-
 
 int daAlink_c::procClimbUpStartInit(int param_0) {
     setFrontWallType();
@@ -2101,7 +2079,6 @@ int daAlink_c::procClimbUpStartInit(int param_0) {
     return 1;
 }
 
-
 int daAlink_c::procClimbUpStart() {
     if (setMoveBGClimbCorrect()) {
         return 1;
@@ -2125,7 +2102,6 @@ int daAlink_c::procClimbUpStart() {
 
     return 1;
 }
-
 
 int daAlink_c::procClimbDownStartInit(s16 param_0) {
     onNoResetFlg3(FLG3_UNK_400000);
@@ -2162,7 +2138,6 @@ int daAlink_c::procClimbDownStartInit(s16 param_0) {
     return 1;
 }
 
-
 int daAlink_c::procClimbDownStart() {
     if (setMoveBGClimbCorrect()) {
         return 1;
@@ -2177,7 +2152,7 @@ int daAlink_c::procClimbDownStart() {
         mProcVar3.field_0x300e = 1;
     }
 
-    if (field_0x33a8 < 0.2f) {
+    if (mStickValue < 0.2f) {
         mProcVar0.field_0x3008 = 0;
     }
 
@@ -2193,7 +2168,6 @@ int daAlink_c::procClimbDownStart() {
 
     return 1;
 }
-
 
 int daAlink_c::procClimbMoveUpDownInit(int param_0) {
     commonProcInit(PROC_CLIMB_MOVE_UPDOWN);
@@ -2252,7 +2226,6 @@ int daAlink_c::procClimbMoveUpDownInit(int param_0) {
     return 1;
 }
 
-
 int daAlink_c::procClimbMoveUpDown() {
     if (setMoveBGClimbCorrect()) {
         return 1;
@@ -2293,7 +2266,6 @@ int daAlink_c::procClimbMoveUpDown() {
 
     return 1;
 }
-
 
 int daAlink_c::procClimbMoveSideInit() {
     f32 anm_speed = getClimbMoveSideAnmSpeed();
@@ -2336,7 +2308,6 @@ int daAlink_c::procClimbMoveSideInit() {
     voiceStart(Z2SE_AL_V_CLIMB_WALL);
     return 1;
 }
-
 
 int daAlink_c::procClimbMoveSide() {
     f32 var_f30 = current.pos.y;
@@ -2383,7 +2354,6 @@ int daAlink_c::procClimbMoveSide() {
     return 1;
 }
 
-
 int daAlink_c::procClimbWaitInit(int param_0, int param_1) {
     if (!commonProcInitNotSameProc(PROC_CLIMB_WAIT)) {
         return 0;
@@ -2425,7 +2395,6 @@ int daAlink_c::procClimbWaitInit(int param_0, int param_1) {
     return 1;
 }
 
-
 int daAlink_c::procClimbWait() {
     if (setMoveBGClimbCorrect()) {
         return 1;
@@ -2465,16 +2434,14 @@ int daAlink_c::procClimbWait() {
     return 1;
 }
 
-
 int daAlink_c::procClimbToRoofInit() {
     commonProcInit(PROC_CLIMB_TO_ROOF);
     setSingleAnimeBase(ANM_ROOF_UP);
     setSpecialGravity(0.0f, maxFallSpeed, 0);
 
-    f32 tmp_0 = 0.0f;
-    speed.y = tmp_0;
-    mNormalSpeed = tmp_0;
-    speedF = tmp_0;
+    speed.y = 0.0f;
+    mNormalSpeed = 0.0f;
+    speedF = 0.0f;
     field_0x2f99 = 10;
     dComIfGp_setPlayerStatus0(0, 8);
     return 1;
@@ -2492,7 +2459,7 @@ int daAlink_c::procClimbToRoof() {
     if (checkAnmEnd(frameCtrl)) {
         shape_angle.y += 0x8000;
         current.angle.y = shape_angle.y;
-        field_0x2fe6 = shape_angle.y;
+        mPrevAngleY = shape_angle.y;
         setOldRootQuaternion(0, 0x8000, 0);
         field_0x2060->getOldFrameTransInfo(0)->mTranslate.z *= -1.0f;
 
@@ -2511,7 +2478,6 @@ int daAlink_c::procClimbToRoof() {
     return 1;
 }
 
-
 f32 daAlink_c::getRoofHangFMoveAnmSpeed() const {
     return getAnmSpeedStickRate(mpHIO->mRoofHang.m.mVertMoveMinASpeed,
                                 mpHIO->mRoofHang.m.mVertMoveMaxASpeed);
@@ -2523,10 +2489,13 @@ f32 daAlink_c::getRoofHangSMoveAnmSpeed() const {
 }
 
 void daAlink_c::setRoofHangHandOnSE(cBgS_PolyInfo* unused) {
-    daPy_frameCtrl_c* frame_ctrl = mUnderFrameCtrl;
+    UNUSED(unused);
 
-    if (!frame_ctrl->checkPass(field_0x3478)) {
-        frame_ctrl->checkPass(field_0x347c);
+    daPy_frameCtrl_c* frame_ctrl = mUnderFrameCtrl;
+    if (frame_ctrl->checkPass(field_0x3478)) {
+        return;
+    } else if (frame_ctrl->checkPass(field_0x347c)) {
+
     }
 }
 
@@ -2548,7 +2517,8 @@ int daAlink_c::checkRoofHangMovePos() {
               current.pos.z + cM_scos(angle) * 60.0f);
     mLinkRoofChk.SetPos(sp38);
 
-    if (dComIfG_Bgsp().RoofChk(&mLinkRoofChk) < sp38.y + 50.0f) {
+    f32 var_f31 = dComIfG_Bgsp().RoofChk(&mLinkRoofChk);
+    if (var_f31 < sp38.y + 50.0f) {
         if (dComIfG_Bgsp().GetMonkeyBarsCode(mLinkRoofChk)) {
             return true;
         }
@@ -2557,13 +2527,12 @@ int daAlink_c::checkRoofHangMovePos() {
     return false;
 }
 
-
 int daAlink_c::commonRoofHangProc() {
     if (dComIfG_Bgsp().ChkPolySafe(mPolyInfo2) && dComIfG_Bgsp().ChkMoveBG(mPolyInfo2)) {
         dComIfG_Bgsp().MoveBgTransPos(mPolyInfo2, true, &current.pos, &current.angle, &shape_angle);
     }
 
-    setDoStatus(0x33);
+    setDoStatus(BUTTON_STATUS_DROP_DOWN);
 
     if (doTrigger()) {
         return procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);
@@ -2585,13 +2554,12 @@ int daAlink_c::commonRoofHangProc() {
     return 0;
 }
 
-
 int daAlink_c::checkNextActionRoofHang() {
     if (checkInputOnR()) {
         field_0x2f98 = getDirectionFromShapeAngle();
 
         if (checkAttentionLock()) {
-            if (field_0x2f98 == 2 || field_0x2f98 == 3) {
+            if (field_0x2f98 == DIR_LEFT || field_0x2f98 == DIR_RIGHT) {
                 if (checkRoofHangMovePos()) {
                     procRoofHangSideMoveInit();
                 } else {
@@ -2601,11 +2569,11 @@ int daAlink_c::checkNextActionRoofHang() {
                 return 1;
             }
         } else {
-            if (field_0x2f98 == 1) {
+            if (field_0x2f98 == DIR_BACKWARD) {
                 return procRoofHangTurnInit();
             }
 
-            field_0x2f98 = 0;
+            field_0x2f98 = DIR_FORWARD;
         }
 
         if (checkRoofHangMovePos()) {
@@ -2620,9 +2588,10 @@ int daAlink_c::checkNextActionRoofHang() {
     return 1;
 }
 
-
 int daAlink_c::procRoofHangStartInit(cBgS_PolyInfo const& param_0, cXyz const& param_1,
                                      int param_2) {
+    bool prev_is_climbToRoof = mProcID == PROC_CLIMB_TO_ROOF;
+
     commonProcInit(PROC_ROOF_HANG_START);
     setSingleAnimeParam(ANM_ROOF_HANG, &mpHIO->mRoofHang.m.mRoofHangAnm);
     mPolyInfo2.SetPolyInfo(param_0);
@@ -2634,9 +2603,8 @@ int daAlink_c::procRoofHangStartInit(cBgS_PolyInfo const& param_0, cXyz const& p
     deleteEquipItem(TRUE, FALSE);
     setSpecialGravity(0.0f, maxFallSpeed, 0);
 
-    f32 tmp_0 = 0.0f;
-    mNormalSpeed = tmp_0;
-    speed.y = tmp_0;
+    mNormalSpeed = 0.0f;
+    speed.y = 0.0f;
     field_0x2f99 = 0x50;
     mProcVar0.field_0x3008 = param_2;
     return 1;
@@ -2647,7 +2615,7 @@ int daAlink_c::procRoofHangStart() {
         return 1;
     }
 
-    if (field_0x33a8 < 0.2f) {
+    if (mStickValue < 0.2f) {
         mProcVar0.field_0x3008 = 0;
     }
 
@@ -2700,7 +2668,7 @@ int daAlink_c::procRoofHangWait() {
         return 1;
     }
 
-    if (field_0x33a8 < 0.2f) {
+    if (mStickValue < 0.2f) {
         mProcVar0.field_0x3008 = 0;
     }
 
@@ -2746,7 +2714,6 @@ int daAlink_c::procRoofHangFrontMoveInit() {
     return 1;
 }
 
-
 int daAlink_c::procRoofHangFrontMove() {
     if (commonRoofHangProc()) {
         return 1;
@@ -2758,7 +2725,7 @@ int daAlink_c::procRoofHangFrontMove() {
         checkNextActionRoofHang();
     } else {
         if (!checkAttentionLock()) {
-            cLib_addCalcAngleS(&current.angle.y, field_0x2fe2, mpHIO->mRoofHang.m.mTurnAngleRate,
+            cLib_addCalcAngleS(&current.angle.y, mMoveAngle, mpHIO->mRoofHang.m.mTurnAngleRate,
                                mpHIO->mRoofHang.m.mMaxTurnAngle,
                                mpHIO->mRoofHang.m.mMinTurnAngle);
 
@@ -2798,12 +2765,13 @@ int daAlink_c::procRoofHangFrontMove() {
                       sp7C.z + temp_f29 * cM_scos(shape_angle.y));
 
             if (commonLineCheck(&sp7C, &sp88) && checkClimbCode(mLinkLinChk)) {
-                cM3dGPla sp70;
-                dComIfG_Bgsp().GetTriPla(mLinkLinChk, &sp70);
+                cM3dGPla tripla;
+                dComIfG_Bgsp().GetTriPla(mLinkLinChk, &tripla);
 
-                if (cLib_distanceAngleS(sp70.mNormal.atan2sX_Z(), shape_angle.y) > 0x6000) {
-                    current.pos.x = sp70.mNormal.x * 15.0f + mLinkLinChk.GetCross().x;
-                    current.pos.z = sp70.mNormal.z * 15.0f + mLinkLinChk.GetCross().z;
+                s16 var_r28 = tripla.mNormal.atan2sX_Z();
+                if (cLib_distanceAngleS(var_r28, shape_angle.y) > 0x6000) {
+                    current.pos.x = tripla.mNormal.x * 15.0f + mLinkLinChk.GetCross().x;
+                    current.pos.z = tripla.mNormal.z * 15.0f + mLinkLinChk.GetCross().z;
                     return procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);
                 }
             }
@@ -2818,7 +2786,6 @@ int daAlink_c::procRoofHangFrontMove() {
 
     return 1;
 }
-
 
 int daAlink_c::procRoofHangSideMoveInit() {
     commonProcInit(PROC_ROOF_HANG_SIDE_MOVE);
@@ -2836,9 +2803,8 @@ int daAlink_c::procRoofHangSideMoveInit() {
                             mpHIO->mRoofHang.m.mHorizMoveInterp);
     setSpecialGravity(0.0f, maxFallSpeed, 0);
 
-    f32 tmp_0 = 0.0f;
-    mNormalSpeed = tmp_0;
-    speed.y = tmp_0;
+    mNormalSpeed = 0.0f;
+    speed.y = 0.0f;
     field_0x3478 = 15.0f;
     field_0x347c = 28.0f;
 
@@ -2873,19 +2839,19 @@ int daAlink_c::procRoofHangTurnInit() {
     commonProcInit(PROC_ROOF_HANG_TURN);
 
     f32 anm_speed;
-    if ((s16)(field_0x2fe2 - shape_angle.y) < 0) {
+    if ((s16)(mMoveAngle - shape_angle.y) < 0) {
         anm_speed = -mpHIO->mRoofHang.m.mInvertASpeed;
         mProcVar0.field_0x3008 = 1;
         shape_angle.y += 0x8000;
         setOldRootQuaternion(0, -0x8000, 0);
         field_0x2060->getOldFrameTransInfo(0)->mTranslate.z = -8.899365425109863f;
-        mProcVar2.field_0x300c = field_0x2fe2;
+        mProcVar2.field_0x300c = mMoveAngle;
         field_0x3478 = 0.0f;
         field_0x347c = 10.0f;
     } else {
         anm_speed = mpHIO->mRoofHang.m.mInvertASpeed;
         mProcVar0.field_0x3008 = 0;
-        mProcVar2.field_0x300c = field_0x2fe2 + 0x8000;
+        mProcVar2.field_0x300c = mMoveAngle + 0x8000;
         field_0x3478 = 10.0f;
         field_0x347c = 18.5f;
     }
@@ -2894,16 +2860,15 @@ int daAlink_c::procRoofHangTurnInit() {
     setSingleAnimeBaseSpeed(ANM_ROOF_HANG_TURN, anm_speed, mpHIO->mRoofHang.m.mInvertInterp);
 
     if (mProcVar0.field_0x3008 != 0) {
-        setFaceBasicTexture(FTANM_UNK_4);
+        setFaceBasicTexture(FTANM_MABA01_L);
     } else {
-        setFaceBasicTexture(FTANM_UNK_3);
+        setFaceBasicTexture(FTANM_MABA03);
     }
 
     field_0x2f98 = 4;
     setSpecialGravity(0.0f, maxFallSpeed, 0);
-    f32 tmp_0 = 0.0f;
-    mNormalSpeed = tmp_0;
-    speed.y = tmp_0;
+    mNormalSpeed = 0.0f;
+    speed.y = 0.0f;
     dComIfGp_setPlayerStatus1(0, 0x100000);
     return 1;
 }
@@ -2942,23 +2907,23 @@ void daAlink_c::setRoofHangSwitch() {
     swhang_p->setHangPlayer();
 }
 
-int daAlink_c::procRoofSwitchHangInit(fopAc_ac_c* param_0) {
+int daAlink_c::procRoofSwitchHangInit(fopAc_ac_c* i_actor) {
     commonProcInit(PROC_ROOF_SWITCH_HANG);
     deleteEquipItem(TRUE, FALSE);
     setSingleAnimeParam(ANM_ROOF_HANG, &mpHIO->mRoofHang.m.mRoofHangAnm);
 
     setSpecialGravity(0.0f, maxFallSpeed, 0);
-    f32 tmp_0 = 0.0f;
-    speed.y = tmp_0;
-    mNormalSpeed = tmp_0;
+    speed.y = 0.0f;
+    mNormalSpeed = 0.0f;
 
-    field_0x280c.setData(param_0);
+    field_0x280c.setData(i_actor);
     setRoofHangSwitch();
 
-    if (cLib_distanceAngleS(param_0->shape_angle.y, shape_angle.y) > 0x4000) {
-        current.angle.y = param_0->shape_angle.y + 0x8000;
+    daObjSwHang_c* swhang = (daObjSwHang_c*)i_actor;
+    if (cLib_distanceAngleS(swhang->getAngleY(), shape_angle.y) > 0x4000) {
+        current.angle.y = swhang->getAngleY() + 0x8000;
     } else {
-        current.angle.y = param_0->shape_angle.y;
+        current.angle.y = swhang->getAngleY();
     }
 
     setOldRootQuaternion(0, current.angle.y - shape_angle.y, 0);
@@ -2980,7 +2945,7 @@ int daAlink_c::procRoofSwitchHang() {
                                 mpHIO->mRoofHang.m.mStandbyInterp);
         mProcVar2.field_0x300c = 1;
     } else if (mProcVar2.field_0x300c != 0) {
-        setDoStatus(0x33);
+        setDoStatus(BUTTON_STATUS_DROP_DOWN);
 
         if (doTrigger()) {
             procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);

@@ -20,13 +20,12 @@ public:
     virtual void listenPropertyEvent(const JORPropertyEvent*);
     virtual void genMessage(JORMContext*);
     #endif
-    virtual ~fapGm_HIO_c();
+    virtual ~fapGm_HIO_c() {}
 
-    #if DEBUG
     static void startCpuTimer();
     static void stopCpuTimer(const char*);
     static void printCpuTimer(const char*);
-    static void executeCaptureScreen();
+    static void executeCaptureScreen() {}
 
     static void createCaptureScreen() {
         mCaptureScreen = new CaptureScreen(JFWDisplay::getManager());
@@ -34,7 +33,11 @@ public:
     }
 
     static bool isCaptureScreen() {
+#if DEBUG
         return mCaptureScreenFlag;
+#else
+        return false;
+#endif
     }
 
     static void onCpuTimer() {
@@ -50,9 +53,7 @@ public:
 
     static u8 getCaptureScreenDivH() { return mCaptureScreenDivH; }
     static u8 getCaptureScreenDivV() { return mCaptureScreenDivV; }
-    #endif
 
-    #if DEBUG
     static u8 m_CpuTimerOn;
     static u8 m_CpuTimerOff;
     static u8 m_CpuTimerStart;
@@ -70,9 +71,12 @@ public:
 
     static u8 mParticle254Fix;
 
+    static u8 mCaptureMagnification;
+
     static u8 mCaptureScreenDivH;
     static u8 mCaptureScreenDivV;
-    #endif
+
+    static u8 mPackArchiveMode;
 
     /* 0x04 */ s8 field_0x04;
     /* 0x05 */ u8 field_0x03[3];
@@ -180,6 +184,10 @@ inline u8 fapGmHIO_getGamma() {
     return g_HIO.mGammaCorrection;
 }
 #endif
+
+inline u8 fapGmHIO_getMemoryBlockOff() {
+    return g_HIO.mMemBlockOff;
+}
 
 struct fapGm_dataMem {
     enum HeapType_e {

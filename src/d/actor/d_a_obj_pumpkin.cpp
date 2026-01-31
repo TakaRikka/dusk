@@ -106,25 +106,25 @@ void daObj_Pumpkin_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 }
 
 void daObj_Pumpkin_HIO_c::genMessage(JORMContext* ctext) {
-    ctext->genSlider("注目オフセット  ", &m.featured_offset, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("重力            ", &m.gravity, -100.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("スケ－ル        ", &m.scale, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("リアル影サイズ  ", &m.real_shadow_size, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("体重            ", &m.weight, 0.0f, 255.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("高さ            ", &m.height, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("ひざ丈          ", &m.knee_length, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("幅              ", &m.width, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("発射速度        ", &m.fire_rate, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("注目オフセット  ", &m.featured_offset, 0.0f, 1000.0f);
+    ctext->genSlider("重力            ", &m.gravity, -100.0f, 100.0f);
+    ctext->genSlider("スケ－ル        ", &m.scale, 0.0f, 100.0f);
+    ctext->genSlider("リアル影サイズ  ", &m.real_shadow_size, 0.0f, 10000.0f);
+    ctext->genSlider("体重            ", &m.weight, 0.0f, 255.0f);
+    ctext->genSlider("高さ            ", &m.height, 0.0f, 1000.0f);
+    ctext->genSlider("ひざ丈          ", &m.knee_length, 0.0f, 1000.0f);
+    ctext->genSlider("幅              ", &m.width, 0.0f, 1000.0f);
+    ctext->genSlider("発射速度        ", &m.fire_rate, 0.0f, 1000.0f);
     // fire angle:
-    ctext->genSlider("発射角度        ", &m.launch_angle, 0.0f, 90.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("浮きオフセット  ", &m.floating_offset, -100.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("発射角度        ", &m.launch_angle, 0.0f, 90.0f);
+    ctext->genSlider("浮きオフセット  ", &m.floating_offset, -100.0f, 100.0f);
     // stand strong:
-    ctext->genSlider("ふんばり        ", &m.hold_on, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("引き抜き音遅延  ", &m.pull_sound_delay, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("成長時間１      ", &m.growth_time_1, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("成長時間２      ", &m.growth_time_2, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("ふんばり        ", &m.hold_on, 0, 1000);
+    ctext->genSlider("引き抜き音遅延  ", &m.pull_sound_delay, 0, 1000);
+    ctext->genSlider("成長時間１      ", &m.growth_time_1, 0, 1000);
+    ctext->genSlider("成長時間２      ", &m.growth_time_2, 0, 1000);
     // export file:
-    ctext->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctext->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -180,7 +180,7 @@ int daObj_Pumpkin_c::create() {
     fopAcM_ct(this, daObj_Pumpkin_c);
 
     mType = getType();
-    cPhs__Step phase = (cPhs__Step) dComIfG_resLoad(&mPhaseReq, l_resNameList[l_bmdData[0][1]]);
+    cPhs_Step phase = dComIfG_resLoad(&mPhaseReq, l_resNameList[l_bmdData[0][1]]);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) ItemTableNo:%d, ProcType:%d<%08x> -> roomNo.%d", fopAcM_getProcNameString(this),
                   getType(), getItemTableNo(), getProcType(), fopAcM_GetParam(this), fopAcM_GetRoomNo(this));
@@ -243,6 +243,7 @@ int daObj_Pumpkin_c::Delete() {
 }
 
 int daObj_Pumpkin_c::Execute() {
+    int sp_0x30 = 0;
     f32 var_f29 = mpHIO->m.floating_offset;
     f32 f_scale = mpHIO->m.scale;
     s16 sp_0x14 = 0;
@@ -278,7 +279,7 @@ int daObj_Pumpkin_c::Execute() {
     mAcchCir.SetWallR(mpHIO->m.width * mPumpkinScale);
     mAcchCir.SetWallH(mpHIO->m.knee_length * mPumpkinScale);
     gravity = mpHIO->m.gravity * mPumpkinScale;
-    int sp_0x30 = 0;
+    sp_0x30 = 0;
     if (fopAcM_checkCarryNow(this) || fopAcM_checkHawkCarryNow(this) || field_0xbb3) {
         sp_0x30 = 1;
     }
@@ -449,8 +450,8 @@ int daObj_Pumpkin_c::Execute() {
                                     current.angle.y = cM_atan2s(sp_0x4C.x, sp_0x4C.z);
                                 }
 
-                                sp_0x10 *= streamPower;
-                                cLib_chaseAngleS(&field_0xB38.y, (field_0xB38.y < 0) ? -sp_0x10 : sp_0x10, 0x10);
+                                MULT_ANGLE_2(sp_0x10, streamPower);
+                                cLib_chaseAngleS(&field_0xB38.y, (field_0xB38.y < 0) ? sp_0x10*-1 : sp_0x10, 0x10);
                                 if (field_0xBAB) {
                                     cLib_addCalc2(&speedF, streamPower * 1.55f, 0.15f, 1.0f);
                                 } else {

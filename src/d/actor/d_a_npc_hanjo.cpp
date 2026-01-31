@@ -140,19 +140,10 @@ dCcD_SrcSph daNpc_Hanjo_c::mStoneCcDSph = {
     daNpc_Hanjo_c::mStoneCcDObjInfo, {}
 };
 
-
-daNpc_Hanjo_c::~daNpc_Hanjo_c() {
-    OS_REPORT("|%06d:%x|daNpc_Hanjo_c -> デストラクト\n", g_Counter.mCounter0, this);
-    if (mpMorf[0] != 0) {
-        mpMorf[0]->stopZelAnime();
-    }
-    deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
-}
-
-daNpc_Hanjo_Param_c::Data const daNpc_Hanjo_Param_c::m = {
+daNpc_Hanjo_HIOParam const daNpc_Hanjo_Param_c::m = {
     160.0f, -3.0f, 1.0f, 400.0f, 
     255.0f, 160.0f, 35.0f, 30.0f, 0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -10.0f, 45.0f,
-    -45.0f, 0.6f, 12.0f, 3, 6, 5, 6, 110.0f, 500.0f, 300.0f, -300.0f, 60, 8, 0, 0, 
+    -45.0f, 0.6f, 12.0f, 3, 6, 5, 6, 110.0f, 500.0f, 300.0f, -300.0f, 60, 8, 0, 0, 0, 0, 0,
     4.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 24.0f, 16.0f, 4.0f,
      80.0f, 65.0f, 4.0f, 600.0f, 136.0f, 0x500, 90, 90, 2,
@@ -164,6 +155,38 @@ dCcD_SrcGObjInf const daNpc_Hanjo_c::mStoneCcDObjInfo = {
     {0, 0, 0, 0, {0}},
     {{0}},
 };
+
+static NPC_HANJO_HIO_CLASS l_HIO;
+
+#if DEBUG
+daNpc_Hanjo_HIO_c::daNpc_Hanjo_HIO_c() {
+    m = daNpc_Hanjo_Param_c::m;
+}
+
+void daNpc_Hanjo_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daNpc_Hanjo_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+
+daNpc_Hanjo_c::~daNpc_Hanjo_c() {
+    OS_REPORT("|%06d:%x|daNpc_Hanjo_c -> デストラクト\n", g_Counter.mCounter0, this);
+    if (mpMorf[0] != 0) {
+        mpMorf[0]->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
+}
 
 int daNpc_Hanjo_c::create() {
     static int const heapSize[5] = {0x61B0, 0x41D0, 0x39D0, 0x39C0, 0};
@@ -191,11 +214,17 @@ int daNpc_Hanjo_c::create() {
         fopAcM_setCullSizeBox2(this, modelData);
         mSound.init(&current.pos, &eyePos, 3, 1);
         field_0x9c0.init(&mAcch, 60.0f, 0.0f);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("ハンジョ－");
+#endif
+
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                         &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this),
                         fopAcM_GetShapeAngle_p(this));
-        mCcStts.Init(daNpc_Hanjo_Param_c::m.field_0x10, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCyl1.Set(mCcDCyl);
         mCyl1.SetStts(&mCcStts);
         mCyl1.SetTgHitCallback(tgHitCallBack);
@@ -414,10 +443,10 @@ void daNpc_Hanjo_c::afterJntAnm(int param_1) {
 void daNpc_Hanjo_c::setParam() {
     selectAction();
     srchActors();
-    s16 sVar6 = daNpc_Hanjo_Param_c::m.field_0x48;
-    s16 sVar5 = daNpc_Hanjo_Param_c::m.field_0x4a;
-    s16 sVar4 = daNpc_Hanjo_Param_c::m.field_0x4c;
-    s16 sVar1 = daNpc_Hanjo_Param_c::m.field_0x4e;
+    s16 sVar6 = mpHIO->m.common.talk_distance;
+    s16 sVar5 = mpHIO->m.common.talk_angle;
+    s16 sVar4 = mpHIO->m.common.attention_distance;
+    s16 sVar1 = mpHIO->m.common.attention_angle;
     if (field_0x1721 != 0) {
         sVar6 = 6;
         sVar5 = 6;
@@ -434,22 +463,22 @@ void daNpc_Hanjo_c::setParam() {
             sVar4 = 9;
         }
     }
-    attention_info.distances[0] = daNpcT_getDistTableIdx(sVar4, sVar1);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] = daNpcT_getDistTableIdx(sVar6, sVar5);
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(sVar4, sVar1);
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(sVar6, sVar5);
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
-    scale.set(daNpc_Hanjo_Param_c::m.field_0x08, daNpc_Hanjo_Param_c::m.field_0x08,
-              daNpc_Hanjo_Param_c::m.field_0x08);
-    mCcStts.SetWeight(daNpc_Hanjo_Param_c::m.field_0x10);
-    mCylH = daNpc_Hanjo_Param_c::m.field_0x14;
-    mWallR = daNpc_Hanjo_Param_c::m.field_0x1c;
-    mAttnFovY = daNpc_Hanjo_Param_c::m.field_0x50;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale,
+              mpHIO->m.common.scale);
+    mCcStts.SetWeight(mpHIO->m.common.weight);
+    mCylH = mpHIO->m.common.height;
+    mWallR = mpHIO->m.common.width;
+    mAttnFovY = mpHIO->m.common.fov;
     mAcchCir.SetWallR(mWallR);
-    mAcchCir.SetWallH(daNpc_Hanjo_Param_c::m.field_0x18);
-    mRealShadowSize = daNpc_Hanjo_Param_c::m.field_0x0c;
-    mExpressionMorfFrame = daNpc_Hanjo_Param_c::m.field_0x6c;
-    mMorfFrames = daNpc_Hanjo_Param_c::m.field_0x44;
-    gravity = daNpc_Hanjo_Param_c::m.field_0x04;
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    mRealShadowSize = mpHIO->m.common.real_shadow_size;
+    mExpressionMorfFrame = mpHIO->m.common.expression_morf_frame;
+    mMorfFrames = mpHIO->m.common.morf_frame;
+    gravity = mpHIO->m.common.gravity;
 }
 
 BOOL daNpc_Hanjo_c::checkChangeEvt() {
@@ -651,8 +680,6 @@ void daNpc_Hanjo_c::afterMoved() {
     }
 }
 
-static daNpc_Hanjo_Param_c l_HIO;
-
 void daNpc_Hanjo_c::setAttnPos() {
     cXyz cStack_38(-10.0f, 10.0f, 0.0f);
     cXyz cStack_44;
@@ -660,11 +687,12 @@ void daNpc_Hanjo_c::setAttnPos() {
     f32 dVar8 = cM_s2rad(mCurAngle.y - field_0xd7e.y);
     J3DModel* model = mpMorf[0]->getModel();
     mJntAnm.setParam(this, model, &cStack_38, getBackboneJointNo(), getNeckJointNo(),
-        getHeadJointNo(), daNpc_Hanjo_Param_c::m.field_0x24, daNpc_Hanjo_Param_c::m.field_0x20,
-        daNpc_Hanjo_Param_c::m.field_0x2c, daNpc_Hanjo_Param_c::m.field_0x28,
-        daNpc_Hanjo_Param_c::m.field_0x34, daNpc_Hanjo_Param_c::m.field_0x30,
-        daNpc_Hanjo_Param_c::m.field_0x3c, daNpc_Hanjo_Param_c::m.field_0x38,
-        daNpc_Hanjo_Param_c::m.field_0x40, dVar8, NULL);
+        getHeadJointNo(),
+        mpHIO->m.common.body_angleX_min, mpHIO->m.common.body_angleX_max,
+        mpHIO->m.common.body_angleY_min, mpHIO->m.common.body_angleY_max,
+        mpHIO->m.common.head_angleX_min, mpHIO->m.common.head_angleX_max,
+        mpHIO->m.common.head_angleY_min, mpHIO->m.common.head_angleY_max,
+        mpHIO->m.common.neck_rotation_ratio, dVar8, NULL);
     mJntAnm.calcJntRad(0.2f, 1.0f, dVar8);
     setMtx();
     mDoMtx_stack_c::copy(mpMorf[0]->getModel()->getAnmMtx(getHeadJointNo()));
@@ -672,7 +700,7 @@ void daNpc_Hanjo_c::setAttnPos() {
     mJntAnm.setEyeAngleX(eyePos, 1.0f, 0);
     mJntAnm.setEyeAngleY(eyePos, mCurAngle.y, 1, 1.0f, 0);
     cStack_38.set(0.0f, 0.0f, 20.0f);
-    cStack_38.y = daNpc_Hanjo_Param_c::m.field_0x00;
+    cStack_38.y = mpHIO->m.common.attention_offset;
     if (field_0x1721 != 0) {
         cStack_38.set(0.0f, 170.0f, -10.0f);
     } else if (mMotionSeqMngr.getNo() == 2) {
@@ -859,8 +887,8 @@ void daNpc_Hanjo_c::initShoot(int param_1) {
 
 int daNpc_Hanjo_c::shoot(int param_1) {
     csXyz cStack_60;
-    f32 dVar13 = daNpc_Hanjo_Param_c::m.field_0x98;
-    s16 sVar9 = cM_deg2s(daNpc_Hanjo_Param_c::m.field_0x9c);
+    f32 dVar13 = mpHIO->m.field_0x98;
+    s16 sVar9 = cM_deg2s(mpHIO->m.field_0x9c);
     if (mMotionSeqMngr.getNo() == 16 || mMotionSeqMngr.getNo() == 15) {
         switch(mMotionSeqMngr.getStepNo()) {
         case 0:
@@ -875,7 +903,7 @@ int daNpc_Hanjo_c::shoot(int param_1) {
                     mStones[i].initialize();
                     mStones[i].setTmr(0x708);
                     cStack_60 = current.angle;
-                    cStack_60.y += daNpc_Hanjo_Param_c::m.field_0xac;
+                    cStack_60.y += mpHIO->m.field_0xac;
                     mStones[i].setAngle(cStack_60);
                     field_0x170c = i;
                 }
@@ -907,7 +935,7 @@ int daNpc_Hanjo_c::shoot(int param_1) {
 void daNpc_Hanjo_c::initDive() {
     mFaceMotionSeqMngr.setNo(6, -1.0f, 0, 0);
     mMotionSeqMngr.setNo(18, -1.0f, 0, 0);
-    speed.y = daNpc_Hanjo_Param_c::m.field_0x8c;
+    speed.y = mpHIO->m.field_0x8c;
     field_0x1721 = 1;
 }
 
@@ -929,7 +957,7 @@ void daNpc_Hanjo_c::dive() {
                         cLib_addCalc(&speed.y, 2.0f, 0.5f, 5.5f, 0.5f);
                     }
                 }
-                if (0.0f < speed.y && local_34 < current.pos.y + daNpc_Hanjo_Param_c::m.field_0xa8)
+                if (0.0f < speed.y && local_34 < current.pos.y + mpHIO->m.field_0xa8)
                 {
                     field_0x171f = 1;
                     if (mMotionSeqMngr.getNo() == 18) {
@@ -953,7 +981,7 @@ void daNpc_Hanjo_c::dive() {
                     dComIfGp_particle_set(0xffffffff, 0x8364, &cStack_30, 0, 0);
                     dComIfGp_particle_set(0xffffffff, 0x8365, &cStack_30, 0, 0);
                 }
-                current.pos.y = local_34 - daNpc_Hanjo_Param_c::m.field_0xa8;
+                current.pos.y = local_34 - mpHIO->m.field_0xa8;
                 current.pos.y += dVar7 * -20.0f;
             }
             cLib_chaseF(&speedF, 0.0f, 0.3f);
@@ -1220,7 +1248,7 @@ int daNpc_Hanjo_c::cutPursuitBee(int param_1) {
                     fopAc_ac_c* hitActor = mStones[i].getSphP()->GetCoHitObj()->GetAc();
                     fopAc_ac_c* hitActor2 = dCc_GetAc(hitActor);
                     if (hitActor2 != NULL && fopAcM_GetName(hitActor2) == PROC_E_NEST) {
-                        mEventTimer = daNpc_Hanjo_Param_c::m.field_0xb0;
+                        mEventTimer = mpHIO->m.field_0xb0;
                     }
                     mStones[i].initialize();
                 }
@@ -1243,7 +1271,7 @@ int daNpc_Hanjo_c::cutPursuitBee(int param_1) {
         shape_angle.y = current.angle.y;
         mCurAngle.y = current.angle.y;
         field_0xd7e.y = mCurAngle.y;
-        cLib_chaseF(&speedF, daNpc_Hanjo_Param_c::m.field_0x90, 0.5f);
+        cLib_chaseF(&speedF, mpHIO->m.field_0x90, 0.5f);
         if (mEventTimer != 0 &&
             mCyl1.ChkCoHit())
         {
@@ -1491,7 +1519,7 @@ int daNpc_Hanjo_c::cutDive(int param_1) {
         cStack_2c.y = attention_info.position.y;
         mGndChk.SetPos(&cStack_2c);
         f32 dVar7 = dComIfG_Bgsp().GroundCross(&mGndChk);
-        if ((dVar7 - mGroundH) < -daNpc_Hanjo_Param_c::m.field_0x18) {
+        if ((dVar7 - mGroundH) < -mpHIO->m.common.knee_length) {
             rv = 1;
         }
         if (mType == TYPE_1) {
@@ -1507,7 +1535,7 @@ int daNpc_Hanjo_c::cutDive(int param_1) {
         cLib_addCalcAngleS2(&current.angle.y, cStack_34.y, 4, 0x800);
         shape_angle.y = current.angle.y;
         mCurAngle.y = current.angle.y;
-        cLib_chaseF(&speedF, daNpc_Hanjo_Param_c::m.field_0x90, 1.0f);
+        cLib_chaseF(&speedF, mpHIO->m.field_0x90, 1.0f);
         break;
     }
     case 3:
@@ -1554,8 +1582,7 @@ int daNpc_Hanjo_c::wait(void* param_0) {
         switch(mType) {
         case TYPE_0:
             if (chkPointInArea(daPy_getPlayerActorClass()->current.pos, current.pos,
-                                                daNpc_Hanjo_Param_c::m.field_0x54, 150.0f,
-                                                -150.0f, 0)) {
+                               mpHIO->m.common.search_distance, 150.0f, -150.0f, 0)) {
                 if (daPy_getPlayerActorClass()->checkBeeChildDrink()) {
                     mSpeakEvent = 1;
                     field_0x1723 = 1;
@@ -1646,7 +1673,7 @@ int daNpc_Hanjo_c::wait(void* param_0) {
 }
 
 int daNpc_Hanjo_c::throwStone(void* param_0) {
-    int sVar4 = daNpc_Hanjo_Param_c::m.field_0xae;
+    int sVar4 = mpHIO->m.field_0xae;
     switch(mMode) {
     case 0:
     case 1:
@@ -1664,7 +1691,7 @@ int daNpc_Hanjo_c::throwStone(void* param_0) {
     case 2:
         if (daNpcT_chkEvtBit(0x8b) && !daNpcT_chkEvtBit(0xad) && !daNpcT_chkEvtBit(0xb7)) {
             if (chkPointInArea(daPy_getPlayerActorClass()->current.pos, current.pos,
-                               daNpc_Hanjo_Param_c::m.field_0xa4, 1000.0f, -1000.0f, 0) == false)
+                               mpHIO->m.field_0xa4, 1000.0f, -1000.0f, 0) == false)
             {
                 mEvtNo = 8;
             }
@@ -1717,7 +1744,7 @@ int daNpc_Hanjo_c::throwStone(void* param_0) {
 }
 
 int daNpc_Hanjo_c::takayose(void* param_0) {
-    f32 dVar8 = daNpc_Hanjo_Param_c::m.field_0xae;
+    f32 dVar8 = mpHIO->m.field_0xae;
     cXyz cStack_50;
     cXyz cStack_5c;
     switch (mMode) {

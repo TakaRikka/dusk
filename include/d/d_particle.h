@@ -436,8 +436,15 @@ public:
     }
 
     static void onStatus(u8 status) { mStatus |= status; }
-    static void offStatus(u8 status) { mStatus &= ~status; }
-    static bool isStatus(u8 status) { return mStatus & status; }
+    static void offStatus(u8 status) {
+        //TODO: reconcile this
+#if DEBUG
+        mStatus &= (u8)~status;
+#else
+        mStatus &= ~status;
+#endif
+    }
+    static BOOL isStatus(u8 status) { return mStatus & status; }
 
     static dPa_selectTexEcallBack* getTsuboSelectTexEcallBack(int idx) {
         return &mTsubo[idx];

@@ -18,8 +18,8 @@ public:
     void search_arrow();
     void initBaseMtx();
     void setBaseMtx();
-    cPhs__Step Create();
-    cPhs__Step create();
+    cPhs_Step Create();
+    cPhs_Step create();
     int execute();
     void push_player();
     int draw();

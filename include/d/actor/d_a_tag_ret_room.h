@@ -13,7 +13,7 @@ public:
     int draw();
     int execute();
     void init();
-    u8 chkPlyrInTag();
+    bool chkPlyrInTag();
 
     /* 0x56C */ f32 field_0x56c;
     /* 0x570 */ f32 field_0x570;

@@ -4,7 +4,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 #include "d/actor/d_a_e_oct_bg.h"
 #include "f_op/f_op_actor_mng.h"
@@ -684,7 +684,7 @@ void daE_OctBg_c::damage_check() {
             field_0x9f8.ChkAtHit())
         {
             if (field_0x9f8.ChkAtShieldHit()) {
-                if (daPy_getPlayerActorClass()->getCutType() == 41) {
+                if (daPy_getPlayerActorClass()->getCutType() == daPy_py_c::CUT_TYPE_GUARD_ATTACK) {
                     setAction(&daE_OctBg_c::damage);
                     return;
                 }

@@ -1,8 +1,8 @@
 #ifndef JMATH_H
 #define JMATH_H
 
-#include "dolphin/mtx.h"
-#include <math>
+#include <dolphin/mtx.h>
+#include <cmath>
 
 void JMAMTXApplyScale(const Mtx, Mtx, f32, f32, f32);
 void JMAEulerToQuat(s16 param_0, s16 param_1, s16 param_2, Quaternion* param_3);
@@ -197,14 +197,15 @@ namespace JMathInlineVEC {
     #ifdef __MWERKS__
         __REGISTER f32 axy;
         __REGISTER f32 bxy;
+        __REGISTER f32 sumab;
         __REGISTER f32 az;
-        __REGISTER f32 sumz;
         __REGISTER f32 bz;
+        __REGISTER f32 sumz;
         asm {
             psq_l axy, 0(a), 0, 0
             psq_l bxy, 0(b), 0, 0
-            ps_add bxy, axy, bxy
-            psq_st bxy, 0(ab), 0, 0
+            ps_add sumab, axy, bxy
+            psq_st sumab, 0(ab), 0, 0
             psq_l az, 8(a), 1, 0
             psq_l bz, 8(b), 1, 0
             ps_add sumz, az, bz

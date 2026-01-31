@@ -1,7 +1,7 @@
 #ifndef D_PARTICLE_D_PARTICLE_NAME_H
 #define D_PARTICLE_D_PARTICLE_NAME_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 // Room scenes use a bit to specify an ID is from a room particle pack, not the common particle pack
 #define dPa_RM(id) (0x8000 | (id))

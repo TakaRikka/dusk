@@ -133,7 +133,7 @@ public:
     J2DBlend newBlend(int) const;
     u8 newDither(int) const;
 
-    u32 getMaterialMode(int idx) const {
+    u8 getMaterialMode(int idx) const {
         return field_0x4[field_0x8[idx]].field_0x0;
     }
 

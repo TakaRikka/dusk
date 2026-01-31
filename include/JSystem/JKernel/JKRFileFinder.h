@@ -1,7 +1,7 @@
 #ifndef JKRFILEFINDER_H
 #define JKRFILEFINDER_H
 
-#include "dolphin/dvd.h"
+#include <dolphin/dvd.h>
 
 /**
  * @ingroup jsystem-jkernel

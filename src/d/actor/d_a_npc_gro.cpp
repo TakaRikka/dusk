@@ -320,7 +320,7 @@ void daNpc_grO_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
 void daNpc_grO_HIO_c::genMessage(JORMContext* ctx) {
     daNpcF_commonGenMessage(ctx, &m.common);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -390,7 +390,7 @@ daNpc_grO_HIOParam const daNpc_grO_Param_c::m = {
     false,
 };
 
-cPhs__Step daNpc_grO_c::create() {
+cPhs_Step daNpc_grO_c::create() {
     fopAcM_ct(this, daNpc_grO_c);
 
     mType = getTypeFromParam();
@@ -405,11 +405,11 @@ cPhs__Step daNpc_grO_c::create() {
         return cPhs_ERROR_e;
     }
 
-    cPhs__Step phase;
+    cPhs_Step phase;
     int res = 0;
     int i = 0;
     for (; l_loadRes_list[mType][i] >= 0; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
+        phase = dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
         if (phase == cPhs_ERROR_e || phase == cPhs_UNK3_e) {
             return cPhs_ERROR_e;
         }
@@ -518,7 +518,7 @@ int daNpc_grO_c::CreateHeap() {
 }
 
 int daNpc_grO_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_GRO");
     this->~daNpc_grO_c();
     return 1;
 }

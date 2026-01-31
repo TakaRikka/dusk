@@ -6,6 +6,34 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
+struct daObj_SekiDoor_HIOParam {
+    /* 0x00 */ u8 field_0x0;
+};
+
+class daObj_SekiDoor_Param_c {
+public:
+    virtual ~daObj_SekiDoor_Param_c() {};
+
+    static daObj_SekiDoor_HIOParam const m;
+};
+
+#if DEBUG
+class daObj_SekiDoor_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_SekiDoor_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_SekiDoor_HIOParam m;
+};
+
+#define OBJ_SEKIDOOR_HIO_CLASS daObj_SekiDoor_HIO_c
+#else
+#define OBJ_SEKIDOOR_HIO_CLASS daObj_SekiDoor_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObj_SekiDoor_c
@@ -32,7 +60,7 @@ public:
     bool chkDestroy() { return (mDestroyed == true); }
 
 private:
-    /* 0x5A0 */ s32 field_0x5A0;
+    /* 0x5A0 */ OBJ_SEKIDOOR_HIO_CLASS* mpHIO;
     /* 0x5A4 */ request_of_phase_process_class mPhaseReq;
     /* 0x5AC */ J3DModel* mpModel;
     /* 0x5B0 */ csXyz mRotation;
@@ -46,13 +74,6 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daObj_SekiDoor_c) == 0x5d8);
-
-class daObj_SekiDoor_Param_c {
-public:
-    virtual ~daObj_SekiDoor_Param_c() {};
-
-    static u8 const m;
-};
 
 
 #endif /* D_A_OBJ_SEKIDOOR_H */

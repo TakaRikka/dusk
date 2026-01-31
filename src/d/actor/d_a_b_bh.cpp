@@ -55,11 +55,11 @@ daB_BH_HIO_c::daB_BH_HIO_c() {
 
 #if DEBUG
 void daB_BH_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("  ボスデグババ手", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("本体サイズ", &model_size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("攻撃頻度\x87\x40", &attack_freq_a, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("攻撃頻度\x87\x41", &attack_freq_b, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("ダウン→復活時間", &down_revive_time, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
+    ctx->genLabel("  ボスデグババ手", 0x80000001);
+    ctx->genSlider("本体サイズ", &model_size, 0.0f, 5.0f);
+    ctx->genSlider("攻撃頻度\x87\x40", &attack_freq_a, 0, 1000);
+    ctx->genSlider("攻撃頻度\x87\x41", &attack_freq_b, 0, 1000);
+    ctx->genSlider("ダウン→復活時間", &down_revive_time, 0, 1000);
 }
 #endif
 
@@ -1409,7 +1409,7 @@ static int daB_BH_IsDelete(b_bh_class* i_this) {
 
 static int daB_BH_Delete(b_bh_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    fpc_ProcID id = fopAcM_GetID(a_this);
+    fopAcM_RegisterDeleteID(a_this, "B_BH");
     
     dComIfG_resDelete(&i_this->mPhase, "B_BH");
     if (i_this->mInitHIO) {

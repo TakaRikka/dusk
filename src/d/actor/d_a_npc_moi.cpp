@@ -244,10 +244,19 @@ enum Motion {
     /* 0x2F */ MOT_UNK_47 = 47,
 };
 
+NPC_MOI_HIO_CLASS l_HIO;
+
 daNpc_Moi_c::~daNpc_Moi_c() {
     if (mpMorf[0] != 0) {
         mpMorf[0]->stopZelAnime();
     }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
     deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
 }
 
@@ -277,6 +286,12 @@ int daNpc_Moi_c::create() {
         fopAcM_setCullSizeBox(this, -200.0f, -100.0f, -200.0f, 200.0f, 300.0f, 200.0f);
         mSound.init(&current.pos, &eyePos, 3, 1);
         field_0x9c0.init(&mAcch, 0.0f, 0.0f);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("モイ");
+#endif
+
         reset();
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                   fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
@@ -784,8 +799,6 @@ void daNpc_Moi_c::beforeMove() {
     }
 }
 
-NPC_MOI_HIO_CLASS l_HIO;
-
 void daNpc_Moi_c::setAttnPos() {
     cXyz acStack_3c(-30.0f, 10.0f, 0.0f);
 
@@ -1259,7 +1272,7 @@ int daNpc_Moi_c::injuryWalk() {
 }
 
 int daNpc_Moi_c::poise() {
-    int iVar13 = daNpc_Moi_Param_c::m.field_0x98;
+    int iVar13 = mpHIO->m.field_0x98;
 
     if (field_0x1669 != 0) {
         if (field_0x166c != 0) {

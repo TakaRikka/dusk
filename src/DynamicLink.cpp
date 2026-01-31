@@ -8,7 +8,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRFileCache.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include <stdio>
+#include <cstdio>
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 
@@ -474,14 +474,14 @@ extern "C" void ModuleUnresolved() {
     OSReport_Error("\n");
 }
 
-extern "C" void ModuleConstructorsX(void (**ctors)()) {
+extern "C" void ModuleConstructorsX(void (*const *ctors)()) {
     while (*ctors != 0) {
         (**ctors)();
         ctors++;
     }
 }
 
-extern "C" void ModuleDestructorsX(void (**dtors)()) {
+extern "C" void ModuleDestructorsX(void (*const *dtors)()) {
     while (*dtors != 0) {
         (**dtors)();
         dtors++;

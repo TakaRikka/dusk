@@ -87,7 +87,7 @@ daNpcAshB_HIO_c::daNpcAshB_HIO_c() {
 
 void daNpcAshB_HIO_c::genMessage(JORMContext* ctext) {
     // Post-conversation follow-up distance
-    ctext->genSlider("会話後追従距離", &m.field_0x6c, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("会話後追従距離", &m.field_0x6c, 0.0f, 2000.0f);
     daNpcF_commonGenMessage(ctext, &m.common);
 }
 #endif
@@ -115,8 +115,8 @@ daNpcAshB_c::~daNpcAshB_c() {
 #endif
 }
 
-cPhs__Step daNpcAshB_c::Create() {
-    cPhs__Step step;
+cPhs_Step daNpcAshB_c::Create() {
+    cPhs_Step step;
 
     fopAcM_ct(this, daNpcAshB_c);
 
@@ -132,7 +132,7 @@ cPhs__Step daNpcAshB_c::Create() {
         step = cPhs_ERROR_e;
 
         for (int i = 0; i < 1; i++) {
-            step = (cPhs__Step)dComIfG_resLoad(&mPhase[i], l_arcNames[i]);
+            step = dComIfG_resLoad(&mPhase[i], l_arcNames[i]);
             if (step != cPhs_COMPLEATE_e) {
                 return step;
             }
@@ -1066,7 +1066,7 @@ BOOL daNpcAshB_c::EvCut_Appear(int i_staffID) {
     return FALSE;
 }
 
-static cPhs__Step daNpcAshB_Create(void* i_this) {
+static cPhs_Step daNpcAshB_Create(void* i_this) {
     return static_cast<daNpcAshB_c*>(i_this)->Create();
 }
 
@@ -1089,10 +1089,10 @@ static bool daNpcAshB_IsDelete(void* param_0) {
 void daNpcAshB_c::setParam() {
     attention_info.flags =
         daPy_py_c::checkNowWolf() ? 0 : (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
-    attention_info.distances[0] =
+    attention_info.distances[fopAc_attn_LOCK_e] =
         getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] =
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] =
         getDistTableIdx(mpHIO->m.common.talk_distance, mpHIO->m.common.talk_angle);
 }
 

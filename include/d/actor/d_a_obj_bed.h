@@ -4,9 +4,39 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_bg_s_acch.h"
 #include "f_op/f_op_actor.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class dBgW;
+
+struct daObj_Bed_HIOParam {
+    /* 0x0 */ f32 field_0x0;
+    /* 0x4 */ f32 field_0x4;
+    /* 0x8 */ f32 field_0x8;
+    /* 0xC */ f32 field_0xc;
+};
+
+class daObj_Bed_Param_c {
+public:
+    virtual ~daObj_Bed_Param_c() {}
+
+    static daObj_Bed_HIOParam const m;
+};
+
+#if DEBUG
+class daObj_Bed_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_Bed_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_Bed_HIOParam m;
+};
+#define OBJ_BED_HIO_CLASS daObj_Bed_HIO_c
+#else
+#define OBJ_BED_HIO_CLASS daObj_Bed_Param_c
+#endif
 
 /**
  * @ingroup actors-objects
@@ -18,7 +48,7 @@ class dBgW;
  */
 class daObj_Bed_c : public fopAc_ac_c {
 public:
-    /* 0x568 */ u8 field_0x568[4];
+    /* 0x568 */ OBJ_BED_HIO_CLASS* mpHIO;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ dBgS_ObjAcch mAcch;
@@ -34,7 +64,7 @@ public:
     /* 0x840 */ /* vtable */
 
     virtual ~daObj_Bed_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();
@@ -49,19 +79,5 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daObj_Bed_c) == 0x844);
-
-class daObj_Bed_Param_c {
-public:
-    virtual ~daObj_Bed_Param_c() {}
-
-    struct params {
-        /* 0x0 */ f32 field_0x0;
-        /* 0x4 */ f32 field_0x4;
-        /* 0x8 */ f32 field_0x8;
-        /* 0xC */ f32 field_0xc;
-    };
-
-    static daObj_Bed_Param_c::params const m;
-};
 
 #endif /* D_A_OBJ_BED_H */

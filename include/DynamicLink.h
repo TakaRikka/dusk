@@ -44,10 +44,8 @@ struct DynamicModuleControlBase {
     inline DynamicModuleControlBase* getNextClass() { return mNext; }
     bool isLinked() const { return mLinkCount != 0; }
 
-    #if DEBUG
     static void resetDoLinkCount() {} // TODO
     static void dumpTag() {} // TODO
-    #endif
 
     static DynamicModuleControlBase* mFirst;
     static DynamicModuleControlBase* mLast;

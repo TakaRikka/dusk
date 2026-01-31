@@ -106,7 +106,7 @@ int daObjKABUTO_c::CreateHeap() {
     return 1;
 }
 
-static cPhs__Step daObjKABUTO_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObjKABUTO_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjKABUTO_c*>(i_this)->create();
 }
 
@@ -723,9 +723,9 @@ bool daObjKABUTO_c::CreateChk() {
     return true;
 }
 
-cPhs__Step daObjKABUTO_c::create() {
+cPhs_Step daObjKABUTO_c::create() {
     fopAcM_ct(this, daObjKABUTO_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, "Kab_m");
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, "Kab_m");
 
     if (step == cPhs_COMPLEATE_e) {
         mLocation = fopAcM_GetParam(this) & 0xf;

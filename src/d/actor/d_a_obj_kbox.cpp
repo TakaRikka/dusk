@@ -18,9 +18,9 @@ daObj_Kbox_HIO_c::daObj_Kbox_HIO_c() {
 #if DEBUG
 void daObj_Kbox_HIO_c::genMessage(JORMContext* ctx) {
     // Skull fish wooden box
-    ctx->genLabel("　スカル魚木箱　", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("　スカル魚木箱　", 0x80000001);
     // Width
-    ctx->genSlider("横幅", &mWidth, 0.0f, 3.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("横幅", &mWidth, 0.0f, 3.0f);
 }
 #endif
 

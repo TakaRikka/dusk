@@ -10,8 +10,8 @@
 #include "JSystem/JUtility/JUTException.h"
 #include <string>
 #include <dolphin/os.h>
-#include "dolphin/vi.h"
-#include <stdint>
+#include <dolphin/vi.h>
+#include <stdint.h>
 
 static int JKRDecompressFromDVD(JKRDvdFile*, void*, u32, u32, u32, u32, u32*);
 static int decompSZS_subroutine(u8*, u8*);

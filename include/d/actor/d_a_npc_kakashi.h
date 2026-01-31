@@ -3,6 +3,37 @@
 
 #include "d/actor/d_a_npc.h"
 
+struct daNpc_Kakashi_HIOParam {
+    /* 0x00 */ daNpcT_HIOParam common;
+    /* 0x8C */ f32 field_0x8c;
+    /* 0x90 */ f32 field_0x90;
+    /* 0x94 */ f32 field_0x94;
+};
+
+class daNpc_Kakashi_Param_c {
+public:
+    virtual ~daNpc_Kakashi_Param_c() {}
+
+    static const daNpc_Kakashi_HIOParam m;
+};
+
+#if DEBUG
+class daNpc_Kakashi_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Kakashi_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daNpc_Kakashi_HIOParam m;
+};
+
+#define NPC_KAKASHI_HIO_CLASS daNpc_Kakashi_HIO_c
+#else
+#define NPC_KAKASHI_HIO_CLASS daNpc_Kakashi_Param_c
+#endif
+
 /**
  * @ingroup actors-npcs
  * @class daNpc_Kakashi_c
@@ -86,7 +117,7 @@ public:
     static int (daNpc_Kakashi_c::*mCutList[])(int);
 
 private:
-    /* 0x0E40 */ u8 field_0xE40[0xE44 - 0xE40];
+    /* 0x0E40 */ NPC_KAKASHI_HIO_CLASS* mpHIO;
     /* 0x0E44 */ Z2SoundObjSimple mSound;
     /* 0x0E64 */ dCcD_Cyl mCcCyl;
     /* 0x0FA0 */ dCcD_Sph mCcSph[3];
@@ -108,20 +139,5 @@ private:
 };
 
 STATIC_ASSERT(sizeof(daNpc_Kakashi_c) == 0x1398);
-
-struct daNpc_Kakashi_HIOParam {
-    /* 0x00 */ daNpcT_HIOParam common;
-    /* 0x8C */ f32 field_0x8c;
-    /* 0x90 */ f32 field_0x90;
-    /* 0x94 */ f32 field_0x94;
-};
-
-class daNpc_Kakashi_Param_c {
-public:
-    virtual ~daNpc_Kakashi_Param_c() {}
-
-    static const daNpc_Kakashi_HIOParam m;
-};
-
 
 #endif /* D_A_NPC_KAKASHI_H */

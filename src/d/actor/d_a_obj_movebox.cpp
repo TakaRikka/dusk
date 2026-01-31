@@ -102,7 +102,7 @@ void daObjMovebox::Hio_c::dt() {
 
 void daObjMovebox::Hio_c::genMessage(JORMContext* context) {
     context->genLabel("§ 押引パラメータ設定  §\n", 0);
-    context->genCheckBox("bgc", &M_flag_bgc[mType], 1);
+    context->genCheckBox("bgc", &M_flag_bgc[mType], 0x1);
     context->genLabel("\n【地表】", 1);
     context->genSlider("押し停止時間初回", &mAttr.mFirstPushStopTime, 0, 100);
     context->genSlider("押し停止時間連続",  &mAttr.mRepeatPushStopTime, 0, 100);

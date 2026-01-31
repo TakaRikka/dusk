@@ -5,52 +5,60 @@
 #include "d/d_procname.h"
 
 void* daTag_Push_c::srchActor(void* param_0, void* param_1) {
+    daTag_Push_c* push = (daTag_Push_c*)param_0;
     BOOL bVar1 = false;
-    if (param_0 != NULL && fopAcM_IsActor(param_0)) {
+    if (push != NULL && fopAcM_IsActor(push)) {
         if (fopAcM_IsExecuting(fopAcM_GetID(param_0))) {
-            switch (((daTag_Push_c*)param_1)->getId()) {
+            int id = ((daTag_Push_c*)param_1)->getId();
+            switch (id) {
             case 1:
-                bVar1 = fopAcM_GetName(param_0) == PROC_NPC_TARO;
+                bVar1 = fopAcM_GetName(push) == PROC_NPC_TARO;
                 break;
             case 2:
-                bVar1 = fopAcM_GetName(param_0) == PROC_NPC_JAGAR;
+                bVar1 = fopAcM_GetName(push) == PROC_NPC_JAGAR;
                 break;
             case 3:
-                bVar1 = fopAcM_GetName(param_0) == PROC_NPC_LEN;
+                bVar1 = fopAcM_GetName(push) == PROC_NPC_LEN;
                 break;
             case 4:
-                bVar1 = fopAcM_GetName(param_0) == PROC_NPC_TARO;
+                bVar1 = fopAcM_GetName(push) == PROC_NPC_TARO;
                 break;
             case 5:
-                bVar1 = fopAcM_GetName(param_0) == PROC_NPC_MARO;
+                bVar1 = fopAcM_GetName(push) == PROC_NPC_MARO;
                 break;
             case 6:
-                bVar1 = fopAcM_GetName(param_0) == PROC_NPC_BESU;
+                bVar1 = fopAcM_GetName(push) == PROC_NPC_BESU;
                 break;
             case 7:
-                bVar1 = fopAcM_GetName(param_0) == PROC_NPC_BOU;
+                bVar1 = fopAcM_GetName(push) == PROC_NPC_BOU;
                 break;
             case 8:
-                bVar1 = fopAcM_GetName(param_0) == PROC_NPC_GRS;
+                bVar1 = fopAcM_GetName(push) == PROC_NPC_GRS;
                 break;
             case 9:
-                bVar1 = fopAcM_GetName(param_0) == PROC_NPC_GRO;
+                bVar1 = fopAcM_GetName(push) == PROC_NPC_GRO;
                 break;
             }
         }
     }
 
     if (!bVar1) {
-        param_0 = NULL;
+        push = NULL;
     }
-    return param_0;
+    return push;
 }
 
 int daTag_Push_c::create() {
+    int var_r29 = 0;
     fopAcM_ct(this, daTag_Push_c);
     scale.x *= 100.0f;
     scale.y *= 100.0f;
     scale.z = scale.x;
+
+    OS_REPORT("\t(%s:%d) PlayerNo:%d, BitSW:%02x, BitSW2:%02x, flowNo:%d<%08x>\n",
+              fopAcM_getProcNameString(this), getId(), getPlayerListNo(), getBitSW(), getBitSW2(),
+              getFlowNodeNo(), fopAcM_GetParam(this));
+
     if (isDelete()) {
         return cPhs_ERROR_e;
     } else {
@@ -146,7 +154,7 @@ static int daTag_Push_Draw(void* i_this) {
     return static_cast<daTag_Push_c*>(i_this)->Draw();
 }
 
-static int daTag_Push_IsDelete(void* i_this) {
+static int daTag_Push_IsDelete(void*) {
     return 1;
 }
 

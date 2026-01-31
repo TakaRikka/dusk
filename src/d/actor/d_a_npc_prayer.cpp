@@ -8,7 +8,7 @@
 #include "d/actor/d_a_npc_prayer.h"
 #include "d/d_com_inf_game.h"
 
-static daNpcPray_Param_c l_HIO;
+static NPC_PRAY_HIO_CLASS l_HIO;
 
 static struct {
     int resIdx;
@@ -47,24 +47,6 @@ daNpcPray_c::EvtSeq daNpcPray_c::mEvtSeqList[] = {
     &daNpcPray_c::_Evt_GetHeart,
 };
 
-daNpcPray_c::daNpcPray_c() {}
-
-daNpcPray_c::~daNpcPray_c() {
-    for (int i = 0; i < 2; i++) {
-        dComIfG_resDelete(&mPhase[i], l_arcNames[i]);
-    }
-
-    fopAc_ac_c* actor = mActorMngr[1].getActorP();
-    if (actor != NULL) {
-        fopAcM_delete(actor);
-        mActorMngr[1].remove();
-    }
-
-    if (heap != NULL) {
-        mAnm_p->stopZelAnime();
-    }
-}
-
 const daNpcPray_HIOParam daNpcPray_Param_c::m = {
     55.0f,
     -3.0f,
@@ -101,6 +83,40 @@ const daNpcPray_HIOParam daNpcPray_Param_c::m = {
     false,
 };
 
+#if DEBUG
+daNpcPray_HIO_c::daNpcPray_HIO_c() {
+    m = daNpcPray_Param_c::m;
+}
+
+void daNpcPray_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daNpcPray_c::daNpcPray_c() {}
+
+daNpcPray_c::~daNpcPray_c() {
+    for (int i = 0; i < 2; i++) {
+        dComIfG_resDelete(&mPhase[i], l_arcNames[i]);
+    }
+
+    fopAc_ac_c* actor = mActorMngr[1].getActorP();
+    if (actor != NULL) {
+        fopAcM_delete(actor);
+        mActorMngr[1].remove();
+    }
+
+    if (heap != NULL) {
+        mAnm_p->stopZelAnime();
+    }
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+}
+
 int daNpcPray_c::Create() {
     fopAcM_ct(this, daNpcPray_c);
 
@@ -126,17 +142,22 @@ int daNpcPray_c::Create() {
         mSound.init(&current.pos, &eyePos, 3, 1);
         mSound.setMdlType(25, 0, 0);
 
-        mAcchCir.SetWall(daNpcPray_Param_c::m.common.width, daNpcPray_Param_c::m.common.knee_length);
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("祈祷師");
+#endif
+
+        mAcchCir.SetWall(mpHIO->m.common.width, mpHIO->m.common.knee_length);
         mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.CrrPos(dComIfG_Bgsp());
 
-        mCcStts.Init(daNpcPray_Param_c::m.common.weight, 0, this);
+        mCcStts.Init(mpHIO->m.common.weight, 0, this);
         mCcCyl.Set(mCcDCyl);
         mCcCyl.SetStts(&mCcStts);
         mCcCyl.SetTgType(0);
         mCcCyl.SetTgSPrm(0);
-        mCcCyl.SetH(daNpcPray_Param_c::m.common.height);
-        mCcCyl.SetR(daNpcPray_Param_c::m.common.width);
+        mCcCyl.SetH(mpHIO->m.common.height);
+        mCcCyl.SetR(mpHIO->m.common.width);
 
         mGndChk = mAcch.m_gnd;
         mGroundH = mAcch.GetGroundH();
@@ -190,7 +211,7 @@ int daNpcPray_c::Execute() {
 }
 
 int daNpcPray_c::Draw() {
-    draw(FALSE, FALSE, daNpcPray_Param_c::m.common.real_shadow_size, NULL, FALSE);
+    draw(FALSE, FALSE, mpHIO->m.common.real_shadow_size, NULL, FALSE);
     return 1;
 }
 
@@ -215,7 +236,7 @@ int daNpcPray_c::ctrlJoint(J3DJoint* i_joint, J3DModel* i_model) {
     case 1:
     case 2:
     case 3:
-        setLookatMtx(jnt_no, spC, daNpcPray_Param_c::m.common.neck_rotation_ratio);
+        setLookatMtx(jnt_no, spC, mpHIO->m.common.neck_rotation_ratio);
         break;
     }
 
@@ -241,16 +262,16 @@ int daNpcPray_c::ctrlJointCallBack(J3DJoint* i_joint, int param_1) {
 }
 
 void daNpcPray_c::setParam() {
-    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(daNpcPray_Param_c::m.common.attention_distance, daNpcPray_Param_c::m.common.attention_angle);
+    attention_info.distances[fopAc_attn_LOCK_e] = getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
     attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
-    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(daNpcPray_Param_c::m.common.talk_distance, daNpcPray_Param_c::m.common.talk_angle);
+    attention_info.distances[fopAc_attn_SPEAK_e] = getDistTableIdx(mpHIO->m.common.talk_distance, mpHIO->m.common.talk_angle);
     attention_info.flags = (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
 
 #if DEBUG
-    scale.set(daNpcPray_Param_c::m.common.scale, daNpcPray_Param_c::m.common.scale, daNpcPray_Param_c::m.common.scale);
-    mAcchCir.SetWallR(daNpcPray_Param_c::m.common.width);
-    mAcchCir.SetWallH(daNpcPray_Param_c::m.common.knee_length);
-    gravity = daNpcPray_Param_c::m.common.gravity;
+    scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);
+    mAcchCir.SetWallR(mpHIO->m.common.width);
+    mAcchCir.SetWallH(mpHIO->m.common.knee_length);
+    gravity = mpHIO->m.common.gravity;
 #endif
 }
 
@@ -283,7 +304,7 @@ void daNpcPray_c::setAttnPos() {
 
     mHeadAngle.x = cLib_targetAngleX(&mHeadPos, &sp14);
     mHeadAngle.y = cLib_targetAngleY(&mHeadPos, &sp14);
-    attention_info.position.set(mHeadPos.x, mHeadPos.y + daNpcPray_Param_c::m.common.attention_offset, mHeadPos.z);
+    attention_info.position.set(mHeadPos.x, mHeadPos.y + mpHIO->m.common.attention_offset, mHeadPos.z);
 
     cXyz cyl_center;
     mDoMtx_stack_c::copy(mAnm_p->getModel()->getAnmMtx(1));
@@ -292,8 +313,8 @@ void daNpcPray_c::setAttnPos() {
 
     mCcCyl.SetC(cyl_center);
 #if DEBUG
-    mCcCyl.SetH(daNpcPray_Param_c::m.common.height);
-    mCcCyl.SetR(daNpcPray_Param_c::m.common.width);
+    mCcCyl.SetH(mpHIO->m.common.height);
+    mCcCyl.SetR(mpHIO->m.common.width);
 #endif
     dComIfG_Ccsp()->Set(&mCcCyl);
 }
@@ -357,18 +378,18 @@ void daNpcPray_c::reset() {
 }
 
 void daNpcPray_c::playMotion() {
-    daNpcF_anmPlayData wait_phase1 = {2, daNpcPray_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData wait_phase1 = {2, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* wait_m[] = {&wait_phase1};
     
-    daNpcF_anmPlayData pray_phase1 = {0, daNpcPray_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData pray_phase2 = {2, daNpcPray_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData pray_phase1 = {0, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData pray_phase2 = {2, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pray_m[] = {&pray_phase1, &pray_phase2};
 
-    daNpcF_anmPlayData praytalk_phase1 = {1, daNpcPray_Param_c::m.common.morf_frame, 1};
-    daNpcF_anmPlayData praytalk_phase2 = {2, daNpcPray_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData praytalk_phase1 = {1, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData praytalk_phase2 = {2, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* praytalk_m[] = {&praytalk_phase1, &praytalk_phase2};
 
-    daNpcF_anmPlayData wolf_phase1 = {5, daNpcPray_Param_c::m.common.morf_frame, 0};
+    daNpcF_anmPlayData wolf_phase1 = {5, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* wolf_m[] = {&wolf_phase1};
 
     daNpcF_anmPlayData** anmData_p[] = {wait_m, pray_m, praytalk_m, wolf_m};
@@ -406,14 +427,14 @@ void daNpcPray_c::lookat() {
     J3DModel* model_p = mAnm_p->getModel();
 
     int var_r28 = 0;
-    f32 body_angleX_min = daNpcPray_Param_c::m.common.body_angleX_min;
-    f32 body_angleX_max = daNpcPray_Param_c::m.common.body_angleX_max;
-    f32 body_angleY_min = daNpcPray_Param_c::m.common.body_angleY_min;
-    f32 body_angleY_max = daNpcPray_Param_c::m.common.body_angleY_max;
-    f32 head_angleX_min = daNpcPray_Param_c::m.common.head_angleX_min;
-    f32 head_angleX_max = daNpcPray_Param_c::m.common.head_angleX_max;
-    f32 head_angleY_min = daNpcPray_Param_c::m.common.head_angleY_min;
-    f32 head_angleY_max = daNpcPray_Param_c::m.common.head_angleY_max;
+    f32 body_angleX_min = mpHIO->m.common.body_angleX_min;
+    f32 body_angleX_max = mpHIO->m.common.body_angleX_max;
+    f32 body_angleY_min = mpHIO->m.common.body_angleY_min;
+    f32 body_angleY_max = mpHIO->m.common.body_angleY_max;
+    f32 head_angleX_min = mpHIO->m.common.head_angleX_min;
+    f32 head_angleX_max = mpHIO->m.common.head_angleX_max;
+    f32 head_angleY_min = mpHIO->m.common.head_angleY_min;
+    f32 head_angleY_max = mpHIO->m.common.head_angleY_max;
 
     s16 temp_r26 = mCurAngle.y - mOldAngle.y;
     cXyz sp30[] = {mLookatPos[0], mLookatPos[1], mLookatPos[2]};
@@ -480,7 +501,7 @@ bool daNpcPray_c::step(s16 i_targetAngle, int) {
 }
 
 bool daNpcPray_c::chkFindPlayer() {
-    if (!chkActorInSight(daPy_getPlayerActorClass(), daNpcPray_Param_c::m.common.fov)) {
+    if (!chkActorInSight(daPy_getPlayerActorClass(), mpHIO->m.common.fov)) {
         mActorMngr[0].remove();
         return 0;
     }

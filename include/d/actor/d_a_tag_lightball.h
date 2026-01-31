@@ -13,8 +13,8 @@ public:
     int draw();
     int _delete();
 
-    u8 getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
-    u32 getType() { return fopAcM_GetParamBit(this, 8, 4); }
+    u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
+    u8 getType() { return fopAcM_GetParamBit(this, 8, 4); }
 
     /* 0x568 */ DALKMIST_INFLUENCE mInfluence;
     /* 0x57C */ u8 field_0x57c;

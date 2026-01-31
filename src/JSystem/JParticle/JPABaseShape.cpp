@@ -6,8 +6,8 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JMath/JMATrigonometric.h"
-#include "dolphin/mtx.h"
-#include "dolphin/gx.h"
+#include <dolphin/mtx.h>
+#include <dolphin/gx.h>
 
 void JPASetPointSize(JPAEmitterWorkData* work) {
     GXSetPointSize((u8)(25.0f * work->mGlobalPtclScl.x), GX_TO_ONE);

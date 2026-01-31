@@ -11,6 +11,15 @@ class dMsgString_c;
 
 class dMsgScrnExplain_c {
 public:
+    enum Status_e {
+        STATUS_WAIT_e,
+        STATUS_OPEN_REQ_e,
+        STATUS_OPEN_e,
+        STATUS_MOVE_e,
+        STATUS_MOVE_SELECT_e,
+        STATUS_CLOSE_e,
+    };
+
     dMsgScrnExplain_c(STControl*, u8, bool, u8);
     void move();
     void draw(J2DOrthoGraph*);
@@ -43,7 +52,7 @@ public:
 private:
     /* 0x04 */ dMsgString_c* mpString_c;
     /* 0x08 */ CPaneMgr* mpTm_c[2];
-    /* 0x10 */ CPaneMgr* field_0x10[2];
+    /* 0x10 */ CPaneMgr* mpTmr_c[2];
     /* 0x18 */ CPaneMgr* mpMg_c[2];
     /* 0x20 */ CPaneMgr* mpRoot_c[2];
     /* 0x28 */ CPaneMgr* mpArw_c;
@@ -57,8 +66,8 @@ private:
     /* 0x48 */ f32 field_0x48;
     /* 0x4C */ f32 field_0x4c;
     /* 0x50 */ f32 field_0x50;
-    /* 0x54 */ u32 field_0x54;
-    /* 0x58 */ u8 field_0x58;
+    /* 0x54 */ u32 mOpenMsgId;
+    /* 0x58 */ bool field_0x58;
     /* 0x5A */ s16 field_0x5a;
     /* 0x5C */ s16 field_0x5c;
     /* 0x5E */ s16 mKeyWaitTimer;

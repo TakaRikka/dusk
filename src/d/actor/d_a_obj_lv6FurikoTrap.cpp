@@ -17,8 +17,8 @@ daLv6FurikoTrap_HIO_c::daLv6FurikoTrap_HIO_c() {
 
 #if DEBUG
 void daLv6FurikoTrap_HIO_c::genMessage(JORMContext* context) {
-    context->genSlider("周期（秒）", &mIntervalSeconds, 0.1f, 100.0f, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("最大角度", &mMaxAngle, 0.1f, 90.0f, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genSlider("周期（秒）", &mIntervalSeconds, 0.1f, 100.0f);
+    context->genSlider("最大角度", &mMaxAngle, 0.1f, 90.0f);
 }
 #endif
 

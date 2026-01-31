@@ -38,21 +38,27 @@ static dCcD_SrcCyl l_ccDCyl = {
     }
 };
 
-static daObj_KBacket_Param_c l_HIO;
+static OBJ_KBACKET_HIO_CLASS l_HIO;
 
-static inline const daObj_KBacket_HIOParam* get_params(daObj_KBacket_c* i_this) {
 #if DEBUG
-    return &i_this->mHIO->param;
-#else
-    return &daObj_KBacket_Param_c::m;
-#endif
+daObj_KBacket_HIO_c::daObj_KBacket_HIO_c() {
+    m = daObj_KBacket_Param_c::m;
 }
+
+void daObj_KBacket_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_KBacket_HIO_c::genMessage(JORMContext*) {
+    // NONMATCHING
+}
+#endif
 
 daObj_KBacket_c::~daObj_KBacket_c() {
     OS_REPORT("|%06d:%x|daObj_KBacket_c -> デストラクト\n", g_Counter.mCounter0, this);
 #if DEBUG
-    if (mHIO != NULL) {
-        mHIO->removeHIO();
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
     }
 #endif
     dComIfG_resDelete(&field_0x56c, l_resNameList[l_bmdData[field_0x9d0 * 2 + 1]]);
@@ -79,8 +85,8 @@ int daObj_KBacket_c::create() {
         fopAcM_setCullSizeBox(this, -50.0f, -50.0f, -50.0f, 50.0f, 50.0f, 50.0f);
 
 #if DEBUG
-        //TODO: init mHIO
-        mHIO->entryHIO("カカシのバケツ");
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("カカシのバケツ");
 #endif
 
         reset();
@@ -92,7 +98,7 @@ int daObj_KBacket_c::create() {
         mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1,
                         &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this),
                         fopAcM_GetShapeAngle_p(this));
-        mStts.Init(get_params(this)->field_0x10, 0, this);
+        mStts.Init(mpHIO->m.field_0x10, 0, this);
         mCyl.Set(l_ccDCyl);
         mCyl.SetStts(&mStts);
         mObjAcch.CrrPos(dComIfG_Bgsp());
@@ -143,19 +149,19 @@ int daObj_KBacket_c::Delete() {
 
 int daObj_KBacket_c::Execute() {
 
-    f32 movePMag = get_params(this)->field_0x28;
-    f32 scaleFactor = get_params(this)->field_0x8;
+    f32 movePMag = mpHIO->m.field_0x28;
+    f32 scaleFactor = mpHIO->m.field_0x08;
     s16 wallAngle = 0;
     scale.set(scaleFactor, scaleFactor, scaleFactor);
 
     attention_info.flags = 0;
 
-    attention_info.distances[4] = 6;
+    attention_info.distances[fopAc_attn_CARRY_e] = 6;
 
-    mAcchCir.SetWallR(get_params(this)->field_0x1c);
-    mAcchCir.SetWallH(get_params(this)->field_0x18);
+    mAcchCir.SetWallR(mpHIO->m.field_0x1c);
+    mAcchCir.SetWallH(mpHIO->m.field_0x18);
 
-    gravity = get_params(this)->field_0x4;
+    gravity = mpHIO->m.field_0x04;
 
     BOOL isCarry = FALSE;
     if (fopAcM_checkCarryNow(this) != 0) {
@@ -200,14 +206,14 @@ int daObj_KBacket_c::Execute() {
     } else {
         s16 wallAngleDiff; // needs to be declared up here for regalloc
 
-        mStts.SetWeight(get_params(this)->field_0x10);
+        mStts.SetWeight(mpHIO->m.field_0x10);
         mObjAcch.ClrWallNone();
         mObjAcch.ClrGrndNone();
         if (field_0xa49 != 0 && cM3d_IsZero(speedF) == FALSE) {
-            s16 angle = cM_deg2s(get_params(this)->field_0x24);
+            s16 angle = cM_deg2s(mpHIO->m.field_0x24);
             speed.setall(0.0f);
-            speed.y = get_params(this)->field_0x20 * cM_ssin(angle);
-            speedF = get_params(this)->field_0x20 * cM_scos(angle);
+            speed.y = mpHIO->m.field_0x20 * cM_ssin(angle);
+            speedF = mpHIO->m.field_0x20 * cM_scos(angle);
 
             field_0xa18 = 0x4000;
 
@@ -494,8 +500,8 @@ int daObj_KBacket_c::Execute() {
         field_0xa18 = calcRollAngle(field_0xa18, 0x10000);
     }
 
-    mCyl.SetR(get_params(this)->field_0x1c);
-    mCyl.SetH(get_params(this)->field_0x14);
+    mCyl.SetR(mpHIO->m.field_0x1c);
+    mCyl.SetH(mpHIO->m.field_0x14);
     mCyl.SetC(current.pos);
 
     dComIfG_Ccsp()->Set(&mCyl);

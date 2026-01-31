@@ -8,15 +8,15 @@
 #include "SSystem/SComponent/c_tree_iter.h"
 #include "f_pc/f_pc_layer.h"
 
-s32 fpcLyIt_OnlyHere(layer_class* i_layer, fpcLyIt_OnlyHereFunc i_func, void* i_data) {
+int fpcLyIt_OnlyHere(layer_class* i_layer, fpcLyIt_OnlyHereFunc i_func, void* i_data) {
     layer_iter iter;
     iter.func = (void*)i_func;
     iter.data = i_data;
     return cTrIt_Method(&i_layer->node_tree, (cNdIt_MethodFunc)cTgIt_MethodCall, &iter);
 }
 
-s32 fpcLyIt_OnlyHereLY(layer_class* i_layer, fpcLyIt_OnlyHereFunc i_func, void* i_data) {
-    s32 result;
+int fpcLyIt_OnlyHereLY(layer_class* i_layer, fpcLyIt_OnlyHereFunc i_func, void* i_data) {
+    int result;
     layer_class* save_layer = fpcLy_CurrentLayer();
 
     fpcLy_SetCurrentLayer(i_layer);
@@ -26,7 +26,7 @@ s32 fpcLyIt_OnlyHereLY(layer_class* i_layer, fpcLyIt_OnlyHereFunc i_func, void* 
     return result;
 }
 
-s32 fpcLyIt_All(fpcLyIt_OnlyHereFunc i_func, void* i_data) {
+int fpcLyIt_All(fpcLyIt_OnlyHereFunc i_func, void* i_data) {
     int ret = 1;
 
     layer_iter iter;

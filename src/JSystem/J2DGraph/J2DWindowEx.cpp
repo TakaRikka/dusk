@@ -81,6 +81,10 @@ J2DWindowEx::J2DWindowEx(J2DPane* param_0, JSURandomInputStream* param_1, u32 pa
     setMinSize();
 }
 
+static void dummy(J2DTexGenBlock* block) {
+    block->setTexCoord(0, J2DTexCoord());
+}
+
 void J2DWindowEx::setMinSize() {
     field_0x140 = 1;
     field_0x142 = 1;

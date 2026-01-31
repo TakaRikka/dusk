@@ -125,7 +125,8 @@ static int daObjVGnd_Delete(daObjVGnd_c* i_this) {
 }
 
 static int daObjVGnd_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daObjVGnd_c, i_this, "Sample");
+    daObjVGnd_c* a_this = (daObjVGnd_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "Sample");
     return a_this->create();
 }
 

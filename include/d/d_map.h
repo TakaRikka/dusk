@@ -4,33 +4,45 @@
 #include "d/d_map_path_dmap.h"
 #include "JSystem/JHostIO/JORReflexible.h"
 
-struct dMap_HIO_prm_res_src_s {
-
-};
-
-class dMap_HIO_list_c : public dMpath_HIO_n::hioList_c {
-public:
-    virtual void copySrcToHio();
-    virtual void copyHioToDst();
-    virtual void copyBufToHio(const char*);
-};
-
-class dMap_HIO_c : public dMpath_HIO_file_base_c  {
-public:
-    dMap_HIO_c();
-    virtual void listenPropertyEvent(const JORPropertyEvent*);
-    virtual void genMessage(JORMContext*);
-    virtual u32 addString(char*, u32, u32);
-    virtual u32 addData(char*, u32, u32);
-    virtual void copyReadBufToData(const char*, s32);
-    virtual u32 addStringBinary(char*, u32, u32);
-
-    /* 0x04 */ u8 field_0x4[0x08 - 0x04];
-    /* 0x08 */ dMap_HIO_list_c mList;
-
-    static dMap_HIO_c* mMySelfPointer;
-    static dMpath_HIO_n::list_s l_list;
-    static dMap_HIO_prm_res_src_s* m_res_src_p;
+struct dMap_HIO_prm_other_s {
+    /* 0x00 */ u8 field_0x0;
+    /* 0x04 */ f32 field_0x4;
+    /* 0x08 */ u8 field_0x8;
+    /* 0x0C */ f32 field_0xc;
+    /* 0x10 */ u8 field_0x10;
+    /* 0x11 */ u8 field_0x11;
+    /* 0x12 */ u8 field_0x12;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ u8 field_0x1c;
+    /* 0x1D */ u8 field_0x1d;
+    /* 0x1E */ u8 field_0x1e;
+    /* 0x1F */ u8 field_0x1f;
+    /* 0x20 */ u8 field_0x20;
+    /* 0x21 */ u8 field_0x21;
+    /* 0x22 */ u8 field_0x22;
+    /* 0x23 */ u8 field_0x23;
+    /* 0x24 */ u8 field_0x24[0x2C - 0x24];
+    /* 0x2C */ u8 field_0x2c;
+    /* 0x30 */ f32 field_0x30;
+    /* 0x34 */ u8 field_0x34;
+    /* 0x35 */ u8 field_0x35;
+    /* 0x36 */ s16 field_0x36;
+    /* 0x38 */ u8 field_0x38;
+    /* 0x38 */ s16 field_0x3a;
+    /* 0x3C */ u8 field_0x3c;
+    /* 0x3D */ u8 field_0x3d;
+    /* 0x3E */ s16 field_0x3e;
+    /* 0x40 */ u8 field_0x40;
+    /* 0x41 */ u8 field_0x41[0x44 - 0x41];
+    /* 0x44 */ f32 field_0x44[17];
+    /* 0x88 */ u8 field_0x88;
+    /* 0x89 */ u8 field_0x89;
+    /* 0x8A */ u8 field_0x8a;
+    /* 0x8C */ f32 field_0x8c[17];
+    /* 0xD0 */ u8 field_0xd0[0x114 - 0xD0];
+    /* 0x114 */ dTres_c::typeGroupData_c field_0x114[1];
+    /* 0x130 */ u8 field_0x130[0x2f0 - 0x130];
 };
 
 struct dMap_prm_res_s {
@@ -63,8 +75,19 @@ struct dMap_prm_res_s {
     /* 0x1B8 */ f32 cursor_size;
 };
 
+struct dMap_prm_hio_s {
+    /* 0x00 */ GXColor field_0x0[51];
+    /* 0xCC */ u8 field_0xcc[0x24];
+    /* 0xF0 */ dMap_HIO_prm_other_s field_0xf0;
+};
+
+struct dMap_HIO_prm_res_src_s {
+    static const u8 m_other[0x2f0];
+};
+
 struct dMap_HIO_prm_res_dst_s {
     static dMap_prm_res_s* m_res;
+    static dMap_HIO_prm_other_s m_other;
 };
 
 class renderingAmap_c : public renderingPlusDoorAndCursor_c {
@@ -104,7 +127,11 @@ public:
     virtual void setAmapPaletteColor(int, u8, u8, u8, u8) = 0;
     virtual bool isSpecialOutline() = 0;
 
+#if DEBUG
+    static const int PALETTE_NUMBER = 51;
+#else
     static const int PALETTE_NUMBER = 50;
+#endif
 
 private:
     /* 0x34 */ s32 m_outSideBlackLineCnt;
@@ -130,7 +157,12 @@ public:
     void _move(f32, f32, int, f32);
     void _draw();
 
-    virtual ~dMap_c() { _remove(); }
+    virtual ~dMap_c() {
+#if DEBUG
+        m_mySelfPointer = NULL;
+#endif
+        _remove();
+    }
     virtual bool isDrawType(int);
     virtual const GXColor* getColor(int);
     virtual bool isRendAllRoom() const;
@@ -143,6 +175,11 @@ public:
     virtual void setAmapPaletteColor(int, u8, u8, u8, u8);
     virtual bool isSpecialOutline();
 
+#if DEBUG
+    virtual bool isSwitch(const dDrawPath_c::group_class*);
+    virtual void beforeDrawPath();
+#endif
+
     bool isDraw() const { return renderingDAmap_c::isDraw(); }
 
     ResTIMG* getResTIMGPointer() { return mResTIMG; }
@@ -150,7 +187,7 @@ public:
     f32 getPackPlusZ() { return mPackPlusZ; }
     f32 getPackZ() const { return mPackZ; }
     f32 getTexelPerCm() const { return 1.0f / field_0x58; }
-    u16 getTexSizeY() const { return mTexSizeH; }
+    u16 getTexSizeY() const { return mTexSizeY; }
     f32 getRightEdgePlus() { return mRightEdgePlus; }
     f32 getPackX() const { return mPackX; }
     int getStayRoomNo() const { return mStayRoomNo; }
@@ -173,8 +210,8 @@ private:
     /* 0x6C */ f32 mRightEdgePlus;
     /* 0x70 */ f32 mTopEdgePlus;
     /* 0x74 */ int field_0x74;
-    /* 0x78 */ u16 mTexSizeW;
-    /* 0x7A */ u16 mTexSizeH;
+    /* 0x78 */ u16 mTexSizeX;
+    /* 0x7A */ u16 mTexSizeY;
     /* 0x7C */ int mStayRoomNo;
     /* 0x80 */ int field_0x80;
     /* 0x84 */ int field_0x84;
@@ -184,17 +221,44 @@ private:
     /* 0x8E */ u8 field_0x8e;
     /* 0x8F */ u8 field_0x8f;
     /* 0x90 */ u8 field_0x90;
+    /* 0x91 */ u8 field_0x91;
 };  // Size: 0x94
 
-#if DEBUG
-class dMpath_RGBA_c {
+class dMap_HIO_list_c : public dMpath_HIO_n::hioList_c {
 public:
-    GXColor getGXColor() { return mColor; }
-
-    GXColor mColor;
-
-    virtual ~dMpath_RGBA_c() {}
+    virtual void copySrcToHio();
+    virtual void copyHioToDst();
+    virtual void copyBufToHio(const char*);
 };
-#endif
+
+class dMap_HIO_c : public dMpath_HIO_file_base_c  {
+public:
+    dMap_HIO_c();
+    virtual void listenPropertyEvent(const JORPropertyEvent*);
+    virtual void genMessage(JORMContext*);
+    virtual u32 addString(char* param_1, u32 param_2, u32 param_3) { return mList.addString(param_1, param_2, param_3); }
+    virtual u32 addData(char* param_1, u32 param_2, u32 param_3) {
+        UNUSED(param_2);
+        UNUSED(param_3);
+        memcpy(param_1, dMap_HIO_prm_res_dst_s::m_res, 0x1bc);
+        return 0x1bc;
+    }
+    virtual void copyReadBufToData(const char* param_1, s32 param_2) {
+        UNUSED(param_2);
+        mList.copyBufToHio(param_1);
+    }
+    virtual u32 addStringBinary(char* param_1, u32 param_2, u32 param_3) {
+        return mList.addStringBinary(param_1, param_2, param_3);
+    }
+
+    /* 0x04 */ u8 field_0x4[0x08 - 0x04];
+    /* 0x08 */ dMap_HIO_list_c mList;
+
+    static dMap_HIO_c* mMySelfPointer;
+    static const u8 l_listData[];
+    static const dMpath_HIO_n::list_s l_list;
+    static dMap_prm_res_s* m_res_src_p;
+    static dMap_prm_hio_s m_prm_hio;
+};
 
 #endif /* D_MAP_D_MAP_H */

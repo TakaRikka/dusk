@@ -1,7 +1,7 @@
 #ifndef D_D_ITEM_DATA_H
 #define D_D_ITEM_DATA_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 struct dItem_itemInfo {
     /* 0x0 */ u8 mShadowSize;

@@ -53,7 +53,7 @@ public:
     int procSlingHit();
     int execute();
     int draw();
-    cPhs__Step create();
+    cPhs_Step create();
     ~daArrow_c();
 
     void setBombArrowExplode() { field_0x950 = 0; }

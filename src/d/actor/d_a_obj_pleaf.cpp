@@ -9,11 +9,33 @@
 
 static char* l_resName = "J_Hatake";
 
-daObj_Pleaf_c::~daObj_Pleaf_c() {
-    dComIfG_resDelete(&mPhaseReq, getResName());
+daObj_Pleaf_HIOParam const daObj_Pleaf_Param_c::m = {0, -3.0f, 1.0f, 900.0f};
+
+static OBJ_PLEAF_HIO_CLASS l_HIO;
+
+#if DEBUG
+daObj_Pleaf_HIO_c::daObj_Pleaf_HIO_c() {
+    m = daObj_Pleaf_Param_c::m;
 }
 
-daObj_Pleaf_Param_c::params const daObj_Pleaf_Param_c::m = {0, -3.0f, 1.0f, 900.0f};
+void daObj_Pleaf_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    // NONMATCHING
+}
+
+void daObj_Pleaf_HIO_c::genMessage(JORMContext* ctx) {
+    // NONMATCHING
+}
+#endif
+
+daObj_Pleaf_c::~daObj_Pleaf_c() {
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+
+    dComIfG_resDelete(&mPhaseReq, getResName());
+}
 
 int daObj_Pleaf_c::create() {
     fopAcM_ct(this, daObj_Pleaf_c);
@@ -28,6 +50,12 @@ int daObj_Pleaf_c::create() {
         }
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -300.0f, -50.0f, -300.0f, 300.0f, 50.0f, 300.0f);
+
+#if DEBUG
+        mpHIO = &l_HIO;
+        mpHIO->entryHIO("かぼちゃ畑の葉っぱ");
+#endif
+
         mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir,
                      fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this),
                      fopAcM_GetShapeAngle_p(this));
@@ -85,7 +113,7 @@ int daObj_Pleaf_c::Draw() {
     if (mGroundDist != -G_CM3D_F_INF) {
         mShadowKey =
             dComIfGd_setShadow(mShadowKey, 1, mpModel, &current.pos,
-                               daObj_Pleaf_Param_c::m.field_0xc, 20.0f, current.pos.y, mGroundDist,
+                               mpHIO->m.field_0xc, 20.0f, current.pos.y, mGroundDist,
                                mGndChk, &tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
     }
     return 1;
@@ -166,5 +194,3 @@ actor_process_profile_definition g_profile_OBJ_PLEAF = {
     fopAc_ACTOR_e,             // mActorType
     fopAc_CULLBOX_CUSTOM_e,    // cullType
 };
-
-static daObj_Pleaf_Param_c l_HIO;

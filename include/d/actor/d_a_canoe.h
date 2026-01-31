@@ -34,7 +34,7 @@ public:
     J3DModel* getModel() { return mpModel; }
     MtxP getModelMtx() { return mpModel->getBaseTRMtx(); }
     bool checkTandem() { return fopAcM_GetParam(this) == 2; }
-    bool checkJumpRideFlg() { return mJumpRideFlg; }
+    u8 checkJumpRideFlg() const { return mJumpRideFlg; }
     void incShapeOffsetY(f32 offset) { mShapeOffsetY += offset; }
     void incShapeAngleZ(s16 incZ) { shape_angle.z += incZ; }
     void onRodID(fpc_ProcID i_rodID) { mRodID = i_rodID; }

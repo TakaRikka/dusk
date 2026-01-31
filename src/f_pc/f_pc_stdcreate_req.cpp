@@ -10,7 +10,7 @@
 #include "f_pc/f_pc_debug_sv.h"
 #include <dolphin/dolphin.h>
 
-s32 fpcSCtRq_phase_Load(standard_create_request_class* i_request) {
+int fpcSCtRq_phase_Load(standard_create_request_class* i_request) {
     int ret = fpcLd_Load(i_request->process_name);
 
     switch (ret) {
@@ -25,7 +25,7 @@ s32 fpcSCtRq_phase_Load(standard_create_request_class* i_request) {
     }
 }
 
-s32 fpcSCtRq_phase_CreateProcess(standard_create_request_class* i_request) {
+int fpcSCtRq_phase_CreateProcess(standard_create_request_class* i_request) {
     fpcLy_SetCurrentLayer(i_request->base.layer);
     i_request->base.process =
         fpcBs_Create(i_request->process_name, i_request->base.id, i_request->process_append);
@@ -40,7 +40,7 @@ s32 fpcSCtRq_phase_CreateProcess(standard_create_request_class* i_request) {
     }
 }
 
-s32 fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_request) {
+int fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_request) {
     fpcLy_SetCurrentLayer(i_request->base.layer);
     int ret = fpcBs_SubCreate(i_request->base.process);
 
@@ -56,8 +56,9 @@ s32 fpcSCtRq_phase_SubCreateProcess(standard_create_request_class* i_request) {
     return ret;
 }
 
-s32 fpcSCtRq_phase_IsComplete(standard_create_request_class* i_request) {
-    process_node_class* procNode = (process_node_class*)i_request->base.process;
+int fpcSCtRq_phase_IsComplete(standard_create_request_class* i_request) {
+    process_node_class* procNode =
+        (process_node_class*)((standard_create_request_class*)i_request)->base.process;
     if (fpcBs_Is_JustOfType(g_fpcNd_type, procNode->base.subtype) == TRUE) {
         if (fpcLy_IsCreatingMesg(&procNode->layer) == TRUE) {
             return cPhs_INIT_e;
@@ -66,7 +67,7 @@ s32 fpcSCtRq_phase_IsComplete(standard_create_request_class* i_request) {
     return cPhs_NEXT_e;
 }
 
-s32 fpcSCtRq_phase_PostMethod(standard_create_request_class* i_request) {
+int fpcSCtRq_phase_PostMethod(standard_create_request_class* i_request) {
     stdCreateFunc create_func = i_request->create_post_method;
 
     if (create_func != NULL) {
@@ -79,30 +80,31 @@ s32 fpcSCtRq_phase_PostMethod(standard_create_request_class* i_request) {
     return cPhs_NEXT_e;
 }
 
-s32 fpcSCtRq_phase_Done(standard_create_request_class* i_request) {
+int fpcSCtRq_phase_Done(standard_create_request_class* i_request) {
     return cPhs_NEXT_e;
 }
 
-s32 fpcSCtRq_Handler(standard_create_request_class* i_request) {
-    s32 phase_state = cPhs_Do(&i_request->phase_request, i_request);
+int fpcSCtRq_Handler(standard_create_request_class* i_request) {
+    int phase_state = cPhs_Do(&i_request->phase_request, i_request);
 
     switch (phase_state) {
     case cPhs_NEXT_e:
         return fpcSCtRq_Handler(i_request);
     case cPhs_COMPLEATE_e:
         return cPhs_COMPLEATE_e;
-    case cPhs_LOADING_e:
+    case cPhs_INIT_e:
+    case cPhs_UNK3_e:
     case cPhs_ERROR_e:
     default:
         return phase_state;
     }
 }
 
-s32 fpcSCtRq_Delete(standard_create_request_class* i_request) {
+int fpcSCtRq_Delete(standard_create_request_class* i_request) {
     return 1;
 }
 
-s32 fpcSCtRq_Cancel(standard_create_request_class* i_request) {
+int fpcSCtRq_Cancel(standard_create_request_class* i_request) {
     return 1;
 }
 

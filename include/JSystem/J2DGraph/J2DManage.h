@@ -1,7 +1,7 @@
 #ifndef J2DMANAGE_H
 #define J2DMANAGE_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JSUInputStream;
 
@@ -13,7 +13,7 @@ struct J2DResReference {
     /* 0x00 */ u16 mCount;
     /* 0x02 */ u16 mOffsets[1];
 
-    s8* getResReference(u16) const;
+    char* getResReference(u16) const;
     char* getName(u16) const;
 };
 

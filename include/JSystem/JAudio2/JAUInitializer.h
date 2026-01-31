@@ -1,7 +1,7 @@
 #ifndef JAUINITIALIZER_H
 #define JAUINITIALIZER_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JKRSolidHeap;
 

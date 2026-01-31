@@ -48,6 +48,7 @@ public:
     dPath* checkPathMoveNow() { return mpPathMove; }
 
     static u32 getWaitArg() { return 0; }
+    static int getWaterSinkLimit() { return 50; }
 
     BOOL getDeleteFlg() const { return mDeleteFlg; }
 

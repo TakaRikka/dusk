@@ -1,9 +1,9 @@
 #ifndef NW4HBM_LYT_ARC_RESOURCE_ACCESSOR_H
 #define NW4HBM_LYT_ARC_RESOURCE_ACCESSOR_H
 
-#include "revolution/types.h"
+#include <revolution/types.h>
 
-#include "revolution/arc.h"
+#include <revolution/arc.h>
 
 #include "../ut/Font.h"
 #include "../ut/LinkList.h"

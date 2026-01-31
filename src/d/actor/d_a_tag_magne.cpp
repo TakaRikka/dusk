@@ -10,6 +10,8 @@
 
 int daTagMagne_c::Create() {
     if (mTagMagne != NULL) {
+        // "Multiple magnet cord(?) management tags are placed!"
+        OS_REPORT_ERROR("マグネコード管理タグが複数置かれています！\n");
         return 0;
     }
 
@@ -24,13 +26,15 @@ int daTagMagne_c::Create() {
 int daTagMagne_c::create() {
     fopAcM_ct(this, daTagMagne_c);
 
-    if (mTagMagne != NULL && mTagMagne->current.roomNo != current.roomNo) {
+    if (mTagMagne != NULL && fopAcM_GetRoomNo(mTagMagne) != fopAcM_GetRoomNo(this)) {
         return cPhs_INIT_e;
     }
 
     if (!Create()) {
         return cPhs_ERROR_e;
     }
+
+    OS_REPORT("TAG MAGNE PARAM=%x\n", fopAcM_GetParam(this));
 
     return cPhs_COMPLEATE_e;
 }
@@ -41,11 +45,14 @@ int daTagMagne_c::_delete() {
 }
 
 static void daTagMagne_Delete(daTagMagne_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->_delete();
 }
 
 static void daTagMagne_Create(fopAc_ac_c* i_this) {
-    ((daTagMagne_c*)i_this)->create();
+    daTagMagne_c* magne = static_cast<daTagMagne_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    magne->create();
 }
 
 static actor_method_class l_daTagMagne_Method = {

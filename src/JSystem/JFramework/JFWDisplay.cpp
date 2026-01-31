@@ -6,15 +6,15 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTProcBar.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 #include <dolphin/vi.h>
 #include "global.h"
-#include <stdint>
+#include <stdint.h>
 
 void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     mEnableAlpha = enableAlpha;
     mClamp = GX_CLAMP_TOP | GX_CLAMP_BOTTOM;
-    mClearColor.set(0, 0, 0, 0);
+    mClearColor = JUtility::TColor(0, 0, 0, 0);
     mZClear = 0xFFFFFF;
     mGamma = 0;
     mFader = NULL;
@@ -36,19 +36,6 @@ void JFWDisplay::ctor_subroutine(bool enableAlpha) {
     field_0x44 = 0;
 }
 
-static Mtx e_mtx ATTRIBUTE_ALIGN(32) = {
-    {1.0f, 0.0f, 0.0f, 0.0f},
-    {0.0f, 1.0f, 0.0f, 0.0f},
-    {0.0f, 0.0f, 1.0f, 0.0f},
-};
-
-static u8 clear_z_TX[64] ATTRIBUTE_ALIGN(32) = {
-    0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
-    0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-};
-
 JFWDisplay::JFWDisplay(JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_num, bool enableAlpha) {
     ctor_subroutine(enableAlpha);
     mXfbManager = JUTXfb::createManager(p_heap, xfb_num);
@@ -67,6 +54,7 @@ JFWDisplay* JFWDisplay::sManager;
 
 JFWDisplay* JFWDisplay::createManager(_GXRenderModeObj const* p_rObj, JKRHeap* p_heap,
                                       JUTXfb::EXfbNumber xfb_num, bool enableAlpha) {
+    JUT_CONFIRM(173, sManager == NULL);
     if (p_rObj != NULL) {
         JUTVideo::getManager()->setRenderMode(p_rObj);
     }
@@ -79,16 +67,17 @@ JFWDisplay* JFWDisplay::createManager(_GXRenderModeObj const* p_rObj, JKRHeap* p
 }
 
 static void callDirectDraw() {
-    JUTChangeFrameBuffer(JUTXfb::getManager()->getDrawingXfb(),
-                         JUTVideo::getManager()->getEfbHeight(),
-                         JUTVideo::getManager()->getFbWidth());
+    u16 width = JUTVideo::getManager()->getFbWidth();
+    u16 height = JUTVideo::getManager()->getEfbHeight();
+    JUTChangeFrameBuffer(JUTXfb::getManager()->getDrawingXfb(), width, height);
     JUTAssertion::flushMessage();
 }
 
 void JFWDisplay::prepareCopyDisp() {
     u16 width = JUTVideo::getManager()->getFbWidth();
     u16 height = JUTVideo::getManager()->getEfbHeight();
-    f32 y_scaleF = GXGetYScaleFactor(height, JUTVideo::getManager()->getXfbHeight());
+    u16 xfbHeight = JUTVideo::getManager()->getXfbHeight();
+    f32 y_scaleF = GXGetYScaleFactor(height, xfbHeight);
     u16 line_num = GXGetNumXfbLines(height, y_scaleF);
 
     GXSetCopyClear(mClearColor, mZClear);
@@ -109,11 +98,13 @@ void JFWDisplay::prepareCopyDisp() {
 
 void JFWDisplay::drawendXfb_single() {
     JUTXfb* manager = JUTXfb::getManager();
+    s16 idx;
     if (manager->getDrawingXfbIndex() >= 0) {
         prepareCopyDisp();
         JFWDrawDoneAlarm();
         GXFlush();
-        manager->setDrawnXfbIndex(manager->getDrawingXfbIndex());
+        idx = manager->getDrawingXfbIndex();
+        manager->setDrawnXfbIndex(idx);
     }
 }
 
@@ -201,8 +192,10 @@ void JFWDisplay::preGX() {
 }
 
 void JFWDisplay::endGX() {
-    f32 width = JUTVideo::getManager()->getFbWidth();
-    f32 height = JUTVideo::getManager()->getEfbHeight();
+    s32 bufferNum = JUTXfb::getManager()->getBufferNum();
+    u16 width = JUTVideo::getManager()->getFbWidth();
+    u16 height = JUTVideo::getManager()->getEfbHeight();
+    u16 xfbHeight = JUTVideo::getManager()->getXfbHeight();
 
     J2DOrthoGraph ortho(0.0f, 0.0f, width, height, -1.0f, 1.0f);
 
@@ -334,6 +327,7 @@ void JFWDisplay::endFrame() {
     if (field_0x40) {
         static u32 prevFrame = VIGetRetraceCount();;
         u32 retrace_cnt = VIGetRetraceCount();
+        u32 r28 = retrace_cnt - prevFrame;
         JUTProcBar::getManager()->setCostFrame(retrace_cnt - prevFrame);
         prevFrame = retrace_cnt;
     }
@@ -383,10 +377,27 @@ void JFWDisplay::threadSleep(s64 time) {
     s32 status = OSDisableInterrupts();
     alarm.appendLink();
 
-    OSSetAlarm(&alarm, time, JFWThreadAlarmHandler);
+    OSSetAlarm(alarm.getAlarm(), time, JFWThreadAlarmHandler);
     OSSuspendThread(alarm.getThread());
     OSRestoreInterrupts(status);
 }
+
+static void dummy() {
+    JUTXfb::getManager()->setDisplayingXfbIndex(0);
+}
+
+static Mtx e_mtx ATTRIBUTE_ALIGN(32) = {
+    {1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, 1.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+};
+
+static u8 clear_z_TX[64] ATTRIBUTE_ALIGN(32) = {
+    0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+    0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+};
 
 static GXTexObj clear_z_tobj;
 
@@ -401,8 +412,8 @@ void JFWDisplay::clearEfb() {
 }
 
 void JFWDisplay::clearEfb(GXColor color) {
-    int width = JUTVideo::getManager()->getFbWidth();
-    int height = JUTVideo::getManager()->getEfbHeight();
+    u16 width = JUTVideo::getManager()->getFbWidth();
+    u16 height = JUTVideo::getManager()->getEfbHeight();
 
     clearEfb(0, 0, width, height, color);
 }
@@ -432,7 +443,7 @@ void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GX
     GXSetChanCtrl(GX_COLOR1A1, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE,
                   GX_AF_NONE);
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60, GX_DISABLE, 125);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60);
     GXLoadTexObj(&clear_z_tobj, GX_TEXMAP0);
     GXSetNumTevStages(1);
     GXSetTevColor(GX_TEVREG0, color);
@@ -465,6 +476,7 @@ void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GX
 
     GXPosition2u16(param_0, param_1 + param_3);
     GXTexCoord2u8(0, 1);
+    GXEnd();
 
     GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z24X8, 0);
     GXSetZCompLoc(GX_ENABLE);
@@ -481,11 +493,11 @@ void JFWDisplay::calcCombinationRatio() {
     for (; i < unk30; i += vidInterval) {
     }
 
-    s32 tmp = (i - unk30) - field_0x34;
-    if (tmp < 0) {
-        tmp += vidInterval;
+    i = (i - unk30) - field_0x34;
+    if (i < 0) {
+        i += vidInterval;
     }
-    mCombinationRatio = (f32)tmp / (f32)field_0x30;
+    mCombinationRatio = (f32)i / (f32)field_0x30;
     if (mCombinationRatio > 1.0f) {
         mCombinationRatio = 1.0f;
     }
@@ -496,7 +508,9 @@ static void JFWDrawDoneAlarm() {
     s32 status = OSDisableInterrupts();
     alarm.createAlarm();
     alarm.appendLink();
-    OSSetAlarm(&alarm, 0.5 * (*(u32*)0x800000F8 / 4), JFWGXAbortAlarmHandler);
+#if !PLATFORM_SHIELD
+    OSSetAlarm(&alarm, OSSecondsToTicks(0.5), JFWGXAbortAlarmHandler);
+#endif
     GXDrawDone();
     alarm.cancelAlarm();
     alarm.removeLink();

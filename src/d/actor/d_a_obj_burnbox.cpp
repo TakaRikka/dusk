@@ -99,8 +99,8 @@ int daObjBurnBox_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjBurnBox_c::create1st() {
-    cPhs__Step phaseStep = (cPhs__Step) dComIfG_resLoad(&mPhaseReq, l_arcName[getType()]);
+cPhs_Step daObjBurnBox_c::create1st() {
+    cPhs_Step phaseStep = dComIfG_resLoad(&mPhaseReq, l_arcName[getType()]);
     if (phaseStep == cPhs_COMPLEATE_e) {
         int dzb_id = -1;
         u8 type = getType();
@@ -110,7 +110,7 @@ cPhs__Step daObjBurnBox_c::create1st() {
             dzb_id = 7;
         }
 
-        phaseStep = (cPhs__Step) MoveBGCreate(l_arcName[type], dzb_id, dBgS_MoveBGProc_TypicalRotY,
+        phaseStep = MoveBGCreate(l_arcName[type], dzb_id, dBgS_MoveBGProc_TypicalRotY,
                                              l_heap_size[type], NULL);
         if (phaseStep == cPhs_ERROR_e) {
             return phaseStep;

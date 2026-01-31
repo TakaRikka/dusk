@@ -9,7 +9,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "SSystem/SComponent/c_math.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include <math>
+#include <cmath>
 
 static const f32 l_cull_size_box[6] = { -150.0f, -10.0f, -150.0f, 150.0f, 300.0f, 100.0f };
 
@@ -101,7 +101,7 @@ daTbox_ModelInfo* daTbox_c::getModelInfo() {
 
 static const u32 l_open_se_id[3] = { Z2SE_OBJ_TBOX_OPEN_A, Z2SE_OBJ_TBOX_OPEN_B, Z2SE_OBJ_TBOX_OPEN_C };
 
-cPhs__Step daTbox_c::commonShapeSet() {
+cPhs_Step daTbox_c::commonShapeSet() {
     daTbox_ModelInfo* model_info = getModelInfo();
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(model_info->mArcName, model_info->mModelResNo);
@@ -170,15 +170,15 @@ cPhs__Step daTbox_c::commonShapeSet() {
     return cPhs_COMPLEATE_e;
 }
 
-cPhs__Step daTbox_c::effectShapeSet() {
+cPhs_Step daTbox_c::effectShapeSet() {
     return cPhs_COMPLEATE_e;
 }
 
-cPhs__Step daTbox_c::envShapeSet() {
+cPhs_Step daTbox_c::envShapeSet() {
     return cPhs_COMPLEATE_e;
 }
 
-cPhs__Step daTbox_c::bgCheckSet() {
+cPhs_Step daTbox_c::bgCheckSet() {
     daTbox_ModelInfo* model_info = getModelInfo();
 
     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(model_info->mArcName, model_info->mOpenDzbResNo);
@@ -325,7 +325,7 @@ u32 daTbox_c::calcHeapSize() {
 }
 
 int daTbox_c::CreateHeap() {
-    cPhs__Step step = commonShapeSet();
+    cPhs_Step step = commonShapeSet();
     if (step != cPhs_COMPLEATE_e) {
         return false;
     }
@@ -1498,8 +1498,8 @@ void daTbox_c::settingDropDemoCamera() {
     cXyz spA0;
     cXyz spAC;
 
-    spA0.x = stage_arrow_data->position.x;
-    spA0.z = stage_arrow_data->position.z;
+    spA0.x = stage_arrow_data->posX;
+    spA0.z = stage_arrow_data->posZ;
     spAC.x = home.pos.x;
     spAC.z = home.pos.z;
     f32 var_f30 = spA0.abs(spAC);
@@ -1510,16 +1510,16 @@ void daTbox_c::settingDropDemoCamera() {
     s16 angle;
     getDropSAngle(&angle);
 
-    spB8.x = stage_arrow_data->position.x;
+    spB8.x = stage_arrow_data->posX;
     spB8.y = 0.0f;
-    spB8.z = stage_arrow_data->position.z;
+    spB8.z = stage_arrow_data->posZ;
     spB8 -= home.pos;
 
     Mtx mtx;
     MTXRotAxisRad(mtx, &spC4, cM_s2rad(angle));
     mDoMtx_multVec(mtx, &spB8, &spB8);
     spB8 += home.pos;
-    spB8.y = stage_arrow_data->position.y;
+    spB8.y = stage_arrow_data->posY;
 
     cXyz cam_eye;
     cXyz cam_center;
@@ -1527,10 +1527,10 @@ void daTbox_c::settingDropDemoCamera() {
     cam_eye = spB8;
     cam_center = home.pos;
 
-    f32 var_f29 = cM_ssin(stage_arrow_data->angle.x);
-    f32 var_f28 = cM_scos(stage_arrow_data->angle.x);
+    f32 var_f29 = cM_ssin(stage_arrow_data->angleX);
+    f32 var_f28 = cM_scos(stage_arrow_data->angleX);
     f32 dist = var_f30 * (var_f29 / var_f28);
-    if (stage_arrow_data->angle.x > 0) {
+    if (stage_arrow_data->angleX > 0) {
         dist = -dist;
     }
 
@@ -1781,7 +1781,7 @@ void daTbox_c::mode_exec() {
     }
 }
 
-cPhs__Step daTbox_c::create1st() {
+cPhs_Step daTbox_c::create1st() {
     if (!mParamsInit) {
         field_0x980 = home.angle.x;
         field_0x982 = home.angle.z;
@@ -1796,12 +1796,12 @@ cPhs__Step daTbox_c::create1st() {
     }
 
     daTbox_ModelInfo* model_info = getModelInfo();
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, model_info->mArcName);
+    cPhs_Step step = dComIfG_resLoad(&mPhase, model_info->mArcName);
     if (step != cPhs_COMPLEATE_e) {
         return step;
     }
 
-    step = (cPhs__Step)MoveBGCreate(model_info->mArcName, model_info->mClosedDzbResNo,
+    step = MoveBGCreate(model_info->mArcName, model_info->mClosedDzbResNo,
                                     dBgS_MoveBGProc_TypicalRotY, calcHeapSize(), NULL);
     if (step == cPhs_ERROR_e) {
         return step;
@@ -1877,7 +1877,7 @@ int daTbox_c::Delete() {
     return true;
 }
 
-cPhs__Step daTbox_create1st(daTbox_c* i_this) {
+cPhs_Step daTbox_create1st(daTbox_c* i_this) {
     fopAcM_ct(i_this, daTbox_c);
     return i_this->create1st();
 }

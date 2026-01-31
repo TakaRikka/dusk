@@ -1,7 +1,7 @@
 #ifndef JPAMATH_H
 #define JPAMATH_H
 
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 #include "JSystem/JGeometry.h"
 
 void JPAGetDirMtx(JGeometry::TVec3<f32> const& param_0, f32 (*param_1)[4]);

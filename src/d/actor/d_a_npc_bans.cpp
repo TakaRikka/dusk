@@ -137,6 +137,51 @@ enum Type {
     /* 0x5 */ TYPE_DEFAULT,
 };
 
+daNpc_Bans_HIOParam const daNpc_Bans_Param_c::m = {
+    200.0f,
+    -3.0f,
+    1.0f,
+    400.0f,
+    255.0f,
+    190.0f,
+    35.0f,
+    30.0f,
+    0.0f,
+    0.0f,
+    10.0f,
+    -10.0f,
+    30.0f,
+    -10.0f,
+    45.0f,
+    -45.0f,
+    0.6f,
+    12.0f,
+    3,
+    6,
+    5,
+    6,
+    110.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    60,
+    8,
+    0,
+    0,
+    0,
+    false,
+    false,
+    4.0f,
+    -20.0f,
+    0.0f,
+    -20.0f,
+    20.0f,
+    40.0f,
+    20.0f,
+    110.0f,
+    10.0f,
+};
+
 #if DEBUG
 daNpc_Bans_HIO_c::daNpc_Bans_HIO_c() {
     m = daNpc_Bans_Param_c::m;
@@ -150,7 +195,7 @@ void daNpc_Bans_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
     switch ((u32)event->id) {
         case 0x40000002:
-            if (jorFile.open(6, "", NULL, NULL, NULL)) {
+            if (jorFile.open(6, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL)) {
                 memset(buffer, 0, sizeof(buffer));
                 len = 0;
                 daNpcT_cmnListenPropertyEvent(buffer, &len, &m.common);
@@ -168,8 +213,8 @@ void daNpc_Bans_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
 void daNpc_Bans_HIO_c::genMessage(JORMContext* ctx) {
     daNpcT_cmnGenMessage(ctx, &m.common);
-    ctx->genSlider("走り速度        ", &m.run_spd, 0.0f, 32.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("走り速度        ", &m.run_spd, 0.0f, 32.0f);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -325,54 +370,9 @@ daNpc_Bans_c::~daNpc_Bans_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-daNpc_Bans_HIOParam const daNpc_Bans_Param_c::m = {
-    200.0f,
-    -3.0f,
-    1.0f,
-    400.0f,
-    255.0f,
-    190.0f,
-    35.0f,
-    30.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    -10.0f,
-    30.0f,
-    -10.0f,
-    45.0f,
-    -45.0f,
-    0.6f,
-    12.0f,
-    3,
-    6,
-    5,
-    6,
-    110.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    60,
-    8,
-    0,
-    0,
-    0,
-    false,
-    false,
-    4.0f,
-    -20.0f,
-    0.0f,
-    -20.0f,
-    20.0f,
-    40.0f,
-    20.0f,
-    110.0f,
-    10.0f,
-};
-
 static NPC_BANS_HIO_CLASS l_HIO;
 
-cPhs__Step daNpc_Bans_c::create() {
+cPhs_Step daNpc_Bans_c::create() {
     daNpcT_ct(this, daNpc_Bans_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
                        l_evtList, l_resNameList);
@@ -380,7 +380,7 @@ cPhs__Step daNpc_Bans_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = dKy_darkworld_check();
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x, MaxItem:%d, group:%d<%08x> ", fopAcM_getProcNameString(this), mType, mFlowNodeNo,
                   getPathID(), getMaxNumItem(), getGroupId(), fopAcM_GetParam(this));
@@ -439,13 +439,11 @@ cPhs__Step daNpc_Bans_c::create() {
 }
 
 int daNpc_Bans_c::CreateHeap() {
-    J3DModelData* modelData;
-    int bmdIdx;
-    int resIdx;
-    u32 idx = 0;
-    idx = mTwilight == true ? TRUE : FALSE;
-    resIdx = l_bmdData[idx][1];
-    bmdIdx = l_bmdData[idx][0];
+    J3DModelData* modelData = NULL;
+    J3DModel* model = NULL;
+    u32 idx = mTwilight == true ? TRUE : FALSE;
+    int resIdx = l_bmdData[idx][1];
+    int bmdIdx = l_bmdData[idx][0];
     modelData = (J3DModelData*)dComIfG_getObjectRes(l_resNameList[resIdx], bmdIdx);
     if (modelData == NULL) {
         return 0;
@@ -457,7 +455,7 @@ int daNpc_Bans_c::CreateHeap() {
         return 0;
     }
 
-    J3DModel* model = mpMorf[0]->getModel();
+    model = mpMorf[0]->getModel();
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         modelData->getJointNodePointer(i)->setCallBack(ctrlJointCallBack);
     }
@@ -477,8 +475,8 @@ int daNpc_Bans_c::CreateHeap() {
             return 1;
         }
 
-        u32 uVar3 = 0x11000084;
-        mpScoopMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, NULL, J3DMdlFlag_DifferedDLBuffer, uVar3);
+        uVar2 = 0x11000084;
+        mpScoopMorf = new mDoExt_McaMorfSO(modelData, NULL, NULL, NULL, -1, 1.0f, 0, -1, NULL, J3DMdlFlag_DifferedDLBuffer, uVar2);
         if (mpScoopMorf == NULL || mpScoopMorf->getModel() == NULL) {
             return 0;
         }
@@ -517,7 +515,7 @@ int daNpc_Bans_c::CreateHeap() {
 
 int daNpc_Bans_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Bans_c -> Delete\n", g_Counter.mCounter0, this);
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_BANS");
     this->~daNpc_Bans_c();
     return 1;
 }
@@ -547,11 +545,7 @@ int daNpc_Bans_c::Draw() {
         modelData->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    #if DEBUG
-    return draw(chkAction(&daNpc_Bans_c::test), !(mTwilight & 0xFF), mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
-    #else
-    return draw(FALSE, !(mTwilight & 0xFF), mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
-    #endif
+    return draw(NpcT_CHK_ACTION(daNpc_Bans_c), !(mTwilight & 0xFF), mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
 int daNpc_Bans_c::createHeapCallBack(fopAc_ac_c* a_this) {
@@ -1123,10 +1117,10 @@ bool daNpc_Bans_c::setScoopAnm(int i_idx, int i_attr, f32 i_morf) {
     };
 
     J3DAnmTransform* anm = NULL;
-
+    int my_idx = i_idx;
     if (mpScoopMorf != NULL) {
-        if (scoopAnmData[i_idx][0] > 0) {
-            anm = getTrnsfrmKeyAnmP(l_resNameList[scoopAnmData[i_idx][1]], scoopAnmData[i_idx][0]);
+        if (scoopAnmData[my_idx][0] > 0) {
+            anm = getTrnsfrmKeyAnmP(l_resNameList[scoopAnmData[my_idx][1]], scoopAnmData[my_idx][0]);
         }
 
         if (anm != NULL) {
@@ -1137,12 +1131,9 @@ bool daNpc_Bans_c::setScoopAnm(int i_idx, int i_attr, f32 i_morf) {
     return 1;
 }
 
-bool daNpc_Bans_c::afterSetMotionAnm(int i_idx, int i_attr, f32 i_morf, int param_4) {
-    if (mCreating == true) {
-        i_morf = 0.0f;
-    }
-
-    return setScoopAnm(i_idx, i_attr, i_morf);
+bool daNpc_Bans_c::afterSetMotionAnm(int i_idx, int i_attr, f32 i_morf, int) {
+    f32 morf_val = (mCreating == true) ? 0.0f : i_morf;
+    return setScoopAnm(i_idx, i_attr, morf_val);
 }
 
 BOOL daNpc_Bans_c::selectAction() {
@@ -1188,43 +1179,35 @@ BOOL daNpc_Bans_c::setAction(actionFunc action) {
 }
 
 BOOL daNpc_Bans_c::checkPlayerIn2ndFloorOfBombShop() {
-    bool rv = false;
-
     return strcmp("R_SP109", dComIfGp_getStartStageName()) == 0 && dComIfGp_roomControl_getStayNo() == 1 &&
            300.0f < fabsf(daPy_getPlayerActorClass()->current.pos.y - current.pos.y);
 }
 
 void daNpc_Bans_c::orderAngerEvt() {
+    daTag_EvtArea_c* actor = NULL;
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     if (player->checkUseKandelaar(0) && player->getKandelaarFlamePos() != NULL) {
         mEvtNo = EVT_ANGER;
 
         for (int i = 0; i < 2; i++) {
-            daTag_EvtArea_c* actor = (daTag_EvtArea_c*)mActorMngrs[i + 5].getActorP();
-            bool bVar1 = false;
-            bool bVar2 = false;
-
-            if (actor != NULL) {
-                cXyz& pos(player->current.pos);
-                bVar1 = true;
-                if (actor->chkPointInArea(pos)) {
-                    mEvtNo = EVT_ANGER_NEAR;
-                    break;
-                }
+            actor = (daTag_EvtArea_c*)mActorMngrs[i + 5].getActorP();
+            if (actor != NULL && actor->chkPointInArea(player->current.pos)) {
+                mEvtNo = EVT_ANGER_NEAR;
+                break;
             }
         }
     }
 }
 
 fopAc_ac_c* daNpc_Bans_c::getKMsgTagP() {
-    f32 fVar1 = 1000000000.0f;
+    int reg_r29 = 0; // unused
+    f32 fVar1 = G_CM3D_F_INF;
     mFindCount = 0;
     mSrchName = PROC_TAG_KMSG;
     fopAcM_Search(srchActor, this);
-    int i = 0;
 
-    for (; i < mFindCount; i++) {
+    for (int i = 0; i < mFindCount; i++) {
         if (((daTag_KMsg_c*)mFindActorPtrs[i])->getType() == 1) {
             return mFindActorPtrs[i];
         }
@@ -1489,7 +1472,7 @@ int daNpc_Bans_c::cutPurchase(int i_staffId) {
     return rv;
 }
 
-int daNpc_Bans_c::wait(void* param_1) {
+int daNpc_Bans_c::wait(void*) {
     daNpc_Len_c* actor_p = NULL;
 
     switch (mMode) {
@@ -1603,7 +1586,7 @@ int daNpc_Bans_c::wait(void* param_1) {
     return 1;
 }
 
-int daNpc_Bans_c::tend(void* param_1) {
+int daNpc_Bans_c::tend(void*) {
     fopAc_ac_c* actor_p = NULL;
 
     switch (mMode) {
@@ -1735,7 +1718,7 @@ int daNpc_Bans_c::tend(void* param_1) {
     return 1;
 }
 
-int daNpc_Bans_c::talk(void* param_1) {
+int daNpc_Bans_c::talk(void*) {
     switch (mMode) {
         case 0:
         case 1:
@@ -1783,7 +1766,7 @@ int daNpc_Bans_c::talk(void* param_1) {
     return 0;
 }
 
-int daNpc_Bans_c::shop(void* param_1) {
+int daNpc_Bans_c::shop(void*) {
     switch (mMode) {
         case 0:
         case 1:
@@ -1824,7 +1807,7 @@ int daNpc_Bans_c::shop(void* param_1) {
     return 0;
 }
 
-int daNpc_Bans_c::test(void* param_1) {
+int daNpc_Bans_c::test(void*) {
     int rv = 0;
     
     switch (mMode) {
@@ -1864,7 +1847,7 @@ static int daNpc_Bans_Draw(void* i_this) {
     return static_cast<daNpc_Bans_c*>(i_this)->Draw();
 }
 
-static int daNpc_Bans_IsDelete(void* i_this) {
+static int daNpc_Bans_IsDelete(void*) {
     return 1;
 }
 

@@ -68,44 +68,37 @@ daObjSwChain_HIO_c::daObjSwChain_HIO_c() {
 
 void daObjSwChain_HIO_c::genMessage(JORMContext* ctx) {
     // Chain Switch
-    ctx->genLabel("チェーンスイッチ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("チェーンスイッチ", 0);
     // Gravity
-    ctx->genSlider("重力", &mGravity, -100.0f, -1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("重力", &mGravity, -100.0f, -1.0f);
     // Tension
-    ctx->genSlider("張力", &mTension, 0.0f, 20.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("張力", &mTension, 0.0f, 20.0f);
     // Tension (Boots Equipped)
-    ctx->genSlider("張力（ブーツ装備）", &mTensionBootsEquipped, 0.0f, 20.0f, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    ctx->genSlider("張力（ブーツ装備）", &mTensionBootsEquipped, 0.0f, 20.0f);
     // Tension (Wolf)
-    ctx->genSlider("張力（狼）", &mTensionWolf, 0.0f, 20.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("張力（狼）", &mTensionWolf, 0.0f, 20.0f);
     // SWITCH ON Tension
-    ctx->genSlider("ＳＷＯＮの張力", &mSwitchOnTension, 0.0f, 20.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider("ＳＷＯＮの張力", &mSwitchOnTension, 0.0f, 20.0f);
     // SWITCH ON Time
-    ctx->genSlider("ＳＷＯＮの時間", &mSwitchOnTime, 0, 64.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider("ＳＷＯＮの時間", &mSwitchOnTime, 0, 64.0f);
     // -- Normal --
-    ctx->genLabel("-- ノーマル --", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-- ノーマル --", 0);
     // Return Speed
-    ctx->genSlider("戻る速度", &mReturnSpeed, 0.0f, 50.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("戻る速度", &mReturnSpeed, 0.0f, 50.0f);
     // -- With Chandelier --
-    ctx->genLabel("-- シャンデリア付き --", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-- シャンデリア付き --", 0);
     // Return Speed・High
-    ctx->genSlider("戻る速度・高速", &mReturnSpeedHigh, 0.0f, 50.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider("戻る速度・高速", &mReturnSpeedHigh, 0.0f, 50.0f);
     // Return Speed・Low
-    ctx->genSlider("戻る速度・低速", &mReturnSpeedLow, 0.0f, 50.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider("戻る速度・低速", &mReturnSpeedLow, 0.0f, 50.0f);
     // Process Stop
-    ctx->genCheckBox("処理停止", &mProcessStop, '\x01', 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox("処理停止", &mProcessStop, '\x01');
     // Clawshot Related
-    ctx->genLabel("-- フックショット関係 --", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("-- フックショット関係 --", 0);
     // Reaction Angle Display
-    ctx->genCheckBox("反応角度表示", &mReactionAngleDisplay, '\x01', 0, NULL, 0xffff, 0xffff, 0x200,
-                     0x18);
+    ctx->genCheckBox("反応角度表示", &mReactionAngleDisplay, '\x01');
     // Clawshot Reaction Angle
-    ctx->genSlider("フックショット反応角度", &mReactionAngle, 0, 0x7fff, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
+    ctx->genSlider("フックショット反応角度", &mReactionAngle, 0, 0x7fff);
 }
 
 static daObjSwChain_HIO_c l_HIO;
@@ -1180,14 +1173,14 @@ static int daObjSwChain_Execute(daObjSwChain_c* i_this) {
 }
 
 static int daObjSwChain_Delete(daObjSwChain_c* i_this) {
-    fpc_ProcID unused = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "SwChain");
     return i_this->_delete();
 }
 
-static int daObjSwChain_Create(fopAc_ac_c* a_this) {
-    daObjSwChain_c* i_this = (daObjSwChain_c*)a_this;
-    fpc_ProcID unused = fopAcM_GetID(a_this);
-    return i_this->create1st();
+static int daObjSwChain_Create(fopAc_ac_c* i_this) {
+    daObjSwChain_c* a_this = (daObjSwChain_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "SwChain");
+    return a_this->create1st();
 }
 
 static actor_method_class l_daObjSwChain_Method = {

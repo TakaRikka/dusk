@@ -6,9 +6,56 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_tag_lantern.h"
+
+#include "JSystem/JHostIO/JORFile.h"
+#include "d/d_debug_viewer.h"
 #include "d/d_procname.h"
 
-daTag_Lantern_c::~daTag_Lantern_c() {}
+static TAG_LANTERN_HIO_CLASS l_HIO;
+
+daTag_Lantern_HIOParam const daTag_Lantern_Param_c::m = {0};
+
+#if DEBUG
+daTag_Lantern_HIO_c::daTag_Lantern_HIO_c() {
+    m = daTag_Lantern_Param_c::m;
+}
+
+void daTag_Lantern_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    JORReflexible::listenPropertyEvent(event);
+    JORFile file;
+    switch ((int)event->id) {
+    case 0x40000002:
+        if (file.open(JORFile::EFlags_WRITE | JORFile::EFlags_UNK_0x4, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL)) {
+            char sp138[0x7d0];
+            memset(sp138, 0, sizeof(sp138));
+            int msgLen = 0;
+            sprintf(sp138 + msgLen, "%d,   \t//  デバグ情報ＯＮ\n", m.enable_debug_info);
+            msgLen = strlen(sp138);
+            file.writeData(sp138, msgLen);
+            file.close();
+            OS_REPORT("write append success!::%6d\n", msgLen);
+        } else {
+            OS_REPORT("write append failure!\n");
+        }
+        break;
+    }
+}
+
+void daTag_Lantern_HIO_c::genMessage(JORMContext* ctx) {
+    // "Debug information ON"
+    ctx->genCheckBox("デバグ情報ＯＮ  ", &m.enable_debug_info, 1);
+    // "Export file"
+    ctx->genButton("ファイル書き出し", 0x40000002, 0);
+}
+#endif
+
+daTag_Lantern_c::~daTag_Lantern_c() {
+#if DEBUG
+    if (mpHIO != NULL) {
+        mpHIO->removeHIO();
+    }
+#endif
+}
 
 int daTag_Lantern_c::create() {
     fopAcM_ct(this, daTag_Lantern_c);
@@ -17,6 +64,7 @@ int daTag_Lantern_c::create() {
 }
 
 int daTag_Lantern_c::Delete() {
+    fopAcM_RegisterDeleteID(this, "TAG_LANTERN");
     this->~daTag_Lantern_c();
     return 1;
 }
@@ -58,11 +106,24 @@ int daTag_Lantern_c::Execute() {
 }
 
 int daTag_Lantern_c::Draw() {
+#if DEBUG
+    if (mpHIO->m.enable_debug_info) {
+        dDbVw_drawCylinderXlu(current.pos, scale.x, scale.y,
+                              (GXColor){0x80, 0x80, 0x80, 0x80}, 1);
+    }
+#endif
+
     return 1;
 }
 
 void daTag_Lantern_c::initialize() {
     fopAcM_setCullSizeBox(this, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+#if DEBUG
+    mpHIO = &l_HIO;
+    // "Lantern check tag"
+    mpHIO->entryHIO("カンテラチェックタグ");
+#endif
 
     if (home.angle.z != 0xFFFF) {
         mFlowIndex = home.angle.z;
@@ -99,8 +160,6 @@ static int daTag_Lantern_Draw(void* i_this) {
 static int daTag_Lantern_IsDelete(void* i_this) {
     return 1;
 }
-
-static daTag_Lantern_Param_c l_HIO;
 
 static actor_method_class daTag_Lantern_MethodTable = {
     (process_method_func)daTag_Lantern_Create,  (process_method_func)daTag_Lantern_Delete,

@@ -23,7 +23,7 @@ struct daTagCsw_c : public fopAc_ac_c, public request_of_phase_process_class {
     int getSw2() { return fopAcM_GetParamBit(this, 9, 8); }
     int getType() { return fopAcM_GetParamBit(this, 0, 1); }
     int getParam(int param_1, int param_2, int param_3) {
-        return (1 << param_3) - 1U & param_1 >> (param_2 & 0x3fU);
+        return (1 << param_3) - 1U & param_1 >> param_2;
     }
     int getArg0() { return getParam(current.angle.x, 0, 8); }
     int getItemBit() { return fopAcM_GetParamBit(this, 17, 8); }

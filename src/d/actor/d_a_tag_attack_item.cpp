@@ -1,13 +1,24 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_tag_attack_item.h"
+
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_player.h"
+#include "d/d_debug_viewer.h"
 
-void daTagAtkItem_c::setBaseMtx() {
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(shape_angle);
-}
+class daTagAtkItem_HIO_c : public mDoHIO_entry_c {
+public:
+    daTagAtkItem_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    f32 field_0x8;
+    u8 show_range;
+};
+
+#if DEBUG
+daTagAtkItem_HIO_c l_HIO;
+#endif
 
 static dCcD_SrcCyl l_cyl_src = {
     {
@@ -17,13 +28,27 @@ static dCcD_SrcCyl l_cyl_src = {
         {0x0},                                              // mGObjCo
     },                                                      // mObjInf
     {
-        {
-            {0.0f, 0.0f, 0.0f},  // mCenter
-            50.0f,               // mRadius
-            100.0f               // mHeight
-        }                        // mCyl
+            {
+                {0.0f, 0.0f, 0.0f},  // mCenter
+                50.0f,               // mRadius
+                100.0f               // mHeight
+            }                        // mCyl
     }
 };
+
+#if DEBUG
+void daTagAtkItem_HIO_c::genMessage(JORMContext* ctx) {
+    // "Attack reaction item"
+    ctx->genLabel("攻撃反応アイテム", 0);
+    // "Show range"
+    ctx->genCheckBox("範囲表示", &show_range, 1);
+}
+#endif
+
+void daTagAtkItem_c::setBaseMtx() {
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+}
 
 int daTagAtkItem_c::Create() {
     mCcStts.Init(0, 0xFF, this);
@@ -36,6 +61,11 @@ int daTagAtkItem_c::Create() {
     return 1;
 }
 
+daTagAtkItem_HIO_c::daTagAtkItem_HIO_c() {
+    field_0x8 = 0.0f;
+    show_range = 0;
+}
+
 int daTagAtkItem_c::create() {
     fopAcM_ct(this, daTagAtkItem_c);
 
@@ -44,6 +74,11 @@ int daTagAtkItem_c::create() {
     }
 
     OS_REPORT("攻撃反応アイテム：<%x>\n", fopAcM_GetParam(this));
+
+#if DEBUG
+    l_HIO.entryHIO("攻撃反応アイテム");
+#endif
+
     return cPhs_COMPLEATE_e;
 }
 
@@ -108,12 +143,7 @@ BOOL daTagAtkItem_c::checkHit() {
 void daTagAtkItem_c::createItem() {
     csXyz angle(0, 0, 0);
 
-    int create_num;
-    if (getNum() == 0xFF) {
-        create_num = 1;
-    } else {
-        create_num = getNum();
-    }
+    int create_num = getNum() == 0xFF ? 1 : getNum();
 
     int item_bit = getItemBit();
     for (int i = 0; i < create_num; i++) {
@@ -128,8 +158,27 @@ void daTagAtkItem_c::createItem() {
     }
 }
 
-int daTagAtkItem_c::_delete() {
+int daTagAtkItem_c::draw() {
+#if DEBUG
+    if (l_HIO.show_range) {
+        GXColor color = (GXColor){0, 0, 0xff, 0x80};
+        dDbVw_drawCylinderXlu(current.pos, scale.x * 50.0f, scale.y * 100.0f, color, 1);
+    }
+#endif
+
     return 1;
+}
+
+int daTagAtkItem_c::_delete() {
+#if DEBUG
+    l_HIO.removeHIO();
+#endif
+
+    return 1;
+}
+
+static int daTagAtkItem_Draw(daTagAtkItem_c* i_this) {
+    return i_this->draw();
 }
 
 static int daTagAtkItem_Execute(daTagAtkItem_c* i_this) {
@@ -137,10 +186,12 @@ static int daTagAtkItem_Execute(daTagAtkItem_c* i_this) {
 }
 
 static int daTagAtkItem_Delete(daTagAtkItem_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
 static int daTagAtkItem_Create(daTagAtkItem_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->create();
 }
 
@@ -149,7 +200,11 @@ static actor_method_class l_daTagAtkItem_Method = {
     (process_method_func)daTagAtkItem_Delete,
     (process_method_func)daTagAtkItem_Execute,
     (process_method_func)NULL,
+#if DEBUG
+    (process_method_func)daTagAtkItem_Draw,
+#else
     (process_method_func)NULL,
+#endif
 };
 
 actor_process_profile_definition g_profile_Tag_AttackItem = {

@@ -1,7 +1,7 @@
 #ifndef NW4HBM_LYT_RESOURCE_ACCESSOR_H
 #define NW4HBM_LYT_RESOURCE_ACCESSOR_H
 
-#include "revolution/types.h"
+#include <revolution/types.h>
 
 namespace nw4hbm {
 

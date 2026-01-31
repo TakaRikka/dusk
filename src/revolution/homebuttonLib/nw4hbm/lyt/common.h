@@ -1,8 +1,8 @@
 #ifndef NW4HBM_LYT_COMMON_H
 #define NW4HBM_LYT_COMMON_H
 
-#include "revolution/tpl.h"
-#include "revolution/types.h"
+#include <revolution/tpl.h>
+#include <revolution/types.h>
 
 #include "../ut/Color.h"
 

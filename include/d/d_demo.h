@@ -10,6 +10,7 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include "Z2AudioLib/Z2SoundStarter.h"
 #include "f_op/f_op_actor_mng.h"
+#include "SSystem/SComponent/c_angle.h"
 
 class J3DModel;
 class dDemo_actor_c;
@@ -83,7 +84,7 @@ public:
     fopAc_ac_c* getActor();
     void setActor(fopAc_ac_c*);
     f32 getPrm_Morf();
-    int getDemoIDData(int*, int*, int*, u16*, u8*);
+    int getDemoIDData(int* o_arg0, int* o_arg1, int* o_arg2, u16* o_resID, u8*);
     
     virtual ~dDemo_actor_c();
     virtual void JSGSetData(u32, void const*, u32);
@@ -118,9 +119,9 @@ public:
         *o_scale = mScale;
     }
     virtual void JSGGetRotation(Vec* param_0) const {
-        param_0->x = mRotate.x * 0.005493164f;
-        param_0->y = mRotate.y * 0.005493164f;
-        param_0->z = mRotate.z * 0.005493164f;
+        param_0->x = S2DEG(mRotate.x);
+        param_0->y = S2DEG(mRotate.y);
+        param_0->z = S2DEG(mRotate.z);
     }
 
     void setModel(J3DModel* p_model) { mModel = p_model; }
@@ -380,13 +381,17 @@ public:
     static s16 getBranchNum() { return m_branchNum; }
     static jmessage_tControl* getMesgControl() { return m_mesgControl; }
 
+    static void setBranchNum(u16 num) {
+        m_branchNum = num;
+    }
+
     static dDemo_camera_c* getCamera() {
         JUT_ASSERT(0, m_object != NULL);
         return m_object->getActiveCamera();
     }
 
     static s16 m_branchId;
-    static s16 m_branchNum;
+    static u16 m_branchNum;
     static dDemo_system_c* m_system;
     static JStudio::TControl* m_control;
     static JStudio_JStage::TCreateObject* m_stage;

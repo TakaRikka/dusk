@@ -1,7 +1,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J2DGraph/J2DGrafContext.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 J2DGrafContext::J2DGrafContext(f32 x, f32 y, f32 width, f32 height)
     : mBounds(x, y, x + width, y + height), mScissorBounds(x, y, x + width, y + height) {

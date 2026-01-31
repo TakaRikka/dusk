@@ -23,7 +23,7 @@ public:
     void setBaseMtx();
     static int createHeapCallBack(fopAc_ac_c*);
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     int execute();
     void actionMain();
     void effectSet();

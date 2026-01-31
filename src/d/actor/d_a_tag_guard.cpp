@@ -13,7 +13,8 @@ int daTagGuard_c::getAppearPoint(Vec* i_appearPnt) {
         return 0;
     }
 
-    *i_appearPnt = dPath_GetPnt(mPath, mPath->m_num - 1)->m_position;
+    dPnt* pnt = dPath_GetPnt(mPath, mPath->m_num - 1);
+    *i_appearPnt = pnt->m_position;
     return 1;
 }
 
@@ -21,8 +22,9 @@ void daTagGuard_c::createGuard(u32 i_parameters) {
     cXyz pos = current.pos;
 
     if (getPathID() != 0xFF) {
-        pos = dPath_GetPnt(mPath, 0)->m_position;
-        i_parameters |= (getPathID() << 0x10);
+        dPnt* pnt = dPath_GetPnt(mPath, 0);
+        pos.set(pnt->m_position);
+        i_parameters |= getPathID() << 0x10;
     }
 
     fopAcM_createChild(PROC_NPC_GUARD, fopAcM_GetID(this), i_parameters, &pos,
@@ -38,20 +40,31 @@ int daTagGuard_c::create() {
 void daTagGuard_c::create_init() {
     mPath = dPath_GetRoomPath(getPathID(), fopAcM_GetHomeRoomNo(this));
 
+    JUT_ASSERT(135, mPath != NULL);
+
     dPnt* pnt1 = dPath_GetPnt(mPath, 0);
     dPnt* pnt2 = dPath_GetPnt(mPath, 1);
 
+#if DEBUG
+    current.pos.set(pnt1->m_position);
+#else
+    //TODO: fakematch, using ::set causes a misplaced mr on GCN versions
     current.pos.x = pnt1->m_position.x;
     current.pos.y = pnt1->m_position.y;
     current.pos.z = pnt1->m_position.z;
+#endif
+
     current.angle.y = cLib_targetAngleY(&pnt1->m_position, &pnt2->m_position);
 }
 
 static int daTagGuard_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagGuard_c*>(i_this)->create();
+    daTagGuard_c* guard = static_cast<daTagGuard_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return guard->create();
 }
 
 static int daTagGuard_Delete(daTagGuard_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagGuard_c();
     return 1;
 }

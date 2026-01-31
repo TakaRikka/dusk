@@ -8,7 +8,7 @@
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 u32 mDoLib_setResTimgObj(ResTIMG const* i_img, GXTexObj* o_texObj, u32 tlut_name,
                         GXTlutObj* o_tlutObj) {
@@ -46,7 +46,7 @@ void mDoLib_clipper::setup(f32 fovy, f32 aspect, f32 near, f32 far) {
     mSystemFar = far;
     mClipper.calcViewFrustum();
 
-    s16 tmp = fovy * 182.04444885253906f;
+    s16 tmp = DEG2S(fovy);
 
     mFovyRate = cM_scos(tmp) / cM_ssin(tmp);
 }
@@ -119,6 +119,7 @@ void mDoLib_pos2camera(Vec* src, Vec* dst) {
 }
 
 static void dummy() {
+    std::tan(0.0f);
     J3DAlphaComp* alphaComp = NULL;
     alphaComp->setAlphaCompInfo((J3DAlphaCompInfo){});
     J3DPEBlock* peBlock = NULL;

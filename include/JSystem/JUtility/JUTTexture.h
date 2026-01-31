@@ -2,7 +2,7 @@
 #define JUTTEXTURE_H
 
 #include <dolphin/gx.h>
-#include <stdint>
+#include <stdint.h>
 
 class JUTPalette;
 

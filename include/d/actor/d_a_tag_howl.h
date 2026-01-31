@@ -14,7 +14,7 @@ public:
     int destroy();
     int execute();
     int draw();
-    u8 isAreaCheck();
+    bool isAreaCheck();
     int getParam();
     u8 getSwitchBit();
     virtual ~daTag_Howl_c() {}

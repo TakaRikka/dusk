@@ -21,11 +21,11 @@ typedef struct layer_management_tag_class {
     /* 0x1A */ u16 node_list_priority;
 } layer_management_tag_class;
 
-s32 fpcLyTg_QueueTo(layer_management_tag_class* i_layer_tag);
-s32 fpcLyTg_ToQueue(layer_management_tag_class* i_layer_tag, unsigned int i_layerID, u16 i_listID,
+int fpcLyTg_QueueTo(layer_management_tag_class* i_layer_tag);
+int fpcLyTg_ToQueue(layer_management_tag_class* i_layer_tag, unsigned int i_layerID, u16 i_listID,
                     u16 i_listPriority);
-s32 fpcLyTg_Move(layer_management_tag_class* i_layer_tag, unsigned int i_layerID, u16 i_listID,
+int fpcLyTg_Move(layer_management_tag_class* i_layer_tag, unsigned int i_layerID, u16 i_listID,
                  u16 i_listPriority);
-s32 fpcLyTg_Init(layer_management_tag_class* i_layer_tag, unsigned int i_id, void* i_data);
+int fpcLyTg_Init(layer_management_tag_class* i_layer_tag, unsigned int i_id, void* i_data);
 
 #endif

@@ -1,6 +1,6 @@
 #include "Z2AudioLib/Z2Calc.h"
 #include "JSystem/JMath/random.h"
-#include <math>
+#include <cmath>
 
 f32 Z2Calc::linearTransform(f32 inValue, f32 inMin, f32 inMax, f32 outMin, f32 outMax, bool noClamp) {
     f32 transformed = outMin + ((inValue - inMin) * ((outMax - outMin) / (inMax - inMin)));

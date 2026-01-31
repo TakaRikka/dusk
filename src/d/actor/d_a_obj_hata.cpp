@@ -52,10 +52,10 @@ int daObjHata_c::createHeap() {
     return 1;
 }
 
-cPhs__Step daObjHata_c::create() {
+cPhs_Step daObjHata_c::create() {
     fopAcM_ct(this, daObjHata_c);
 
-    cPhs__Step phase_step = (cPhs__Step)dComIfG_resLoad(this, l_arcName);
+    cPhs_Step phase_step = dComIfG_resLoad(this, l_arcName);
     if (phase_step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, daObjHata_c_createHeap, 0x870)) {
             return cPhs_ERROR_e;

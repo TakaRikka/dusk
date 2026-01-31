@@ -214,15 +214,15 @@ int daObjL6Bm_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjL6Bm_c::create1st() {
+cPhs_Step daObjL6Bm_c::create1st() {
     if (fopAcM_isSwitch(this, getSwBit())) {
         OS_REPORT("ビーモス破壊済み！<%d>\n", getSwBit() & 0xFF); // Beamos has been destroyed! <%d>\n
         return cPhs_ERROR_e;
     }
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
-        phase = (cPhs__Step)MoveBGCreate(l_arcName, DZB_K_BIMO00, NULL, 0x4000, NULL);
+        phase = MoveBGCreate(l_arcName, DZB_K_BIMO00, NULL, 0x4000, NULL);
         if (phase == cPhs_ERROR_e) {
             return phase;
         }

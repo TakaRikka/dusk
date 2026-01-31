@@ -1232,7 +1232,7 @@ static int daE_HZELDA_Execute(e_hzelda_class* i_this) {
             sp108.z = player->current.pos.z - i_this->mTrianglePos.z;
             cMtx_YrotS(*calc_mtx, -i_this->mTriangleRotY);
             MtxPosition(&sp108, &sp114);
-
+            // 57.295 is close to 180 / PI, but not quite, probably a hand written constant
             f32 var_f31 = fabsf(57.295f * cM_atan2f(sp114.x, sp114.z));
             if (var_f31 >= 60.0f && var_f31 <= 120.0f) {
                 var_f31 = 120.0f - var_f31;

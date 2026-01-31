@@ -3,6 +3,35 @@
 
 #include "f_op/f_op_actor_mng.h"
 
+struct daObj_SMTile_HIOParam {
+    /* 0x00 */ f32 field_0x0;
+    /* 0x04 */ f32 field_0x4;
+};
+
+class daObj_SMTile_Param_c {
+public:
+    virtual ~daObj_SMTile_Param_c() {}
+
+    static daObj_SMTile_HIOParam const m;
+};
+
+#if DEBUG
+class daObj_SMTile_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_SMTile_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    daObj_SMTile_HIOParam m;
+};
+
+#define OBJ_SMTILE_HIO_CLASS daObj_SMTile_HIO_c
+#else
+#define OBJ_SMTILE_HIO_CLASS daObj_SMTile_Param_c
+#endif
+
 /**
  * @ingroup actors-objects
  * @class daObj_SMTile_c
@@ -14,7 +43,7 @@
 class daObj_SMTile_c : public fopAc_ac_c {
 private:
     /* 0x568 */ mDoExt_brkAnm mBrk;
-    /* 0x580 */ int field_0x580;
+    /* 0x580 */ OBJ_SMTILE_HIO_CLASS* mpHIO;
     /* 0x584 */ request_of_phase_process_class mPhase;
     /* 0x58C */ J3DModel* mModel;
     /* 0x590 */ cXyz field_0x590[21];
@@ -51,13 +80,6 @@ public:
 };
 
 STATIC_ASSERT(sizeof(daObj_SMTile_c) == 0xb30);
-
-class daObj_SMTile_Param_c {
-public:
-    virtual ~daObj_SMTile_Param_c() {}
-
-    static f32 const m[2];
-};
 
 
 #endif /* D_A_OBJ_SMTILE_H */

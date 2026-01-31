@@ -3,15 +3,6 @@
 
 #include "d/actor/d_a_npc.h"
 
-/**
- * @ingroup actors-npcs
- * @class daNpc_Aru_c
- * @brief Fado
- *
- * @details
- *
-*/
-
 struct daNpc_Aru_HIOParam {
     /* 0x00 */ daNpcT_HIOParam common;
     /* 0x8C */ f32 warning_range;       // 警戒範囲 - Warning Range
@@ -22,11 +13,6 @@ struct daNpc_Aru_HIOParam {
     /* 0x9C */ f32 forward_visibility;  // 前方視界 - Forward Visibility        
 };
 
-class daNpc_Aru_HIO_c : public mDoHIO_entry_c {
-public:
-    /* 0x8 */ daNpc_Aru_HIOParam param;
-};
-
 class daNpc_Aru_Param_c {
 public:
     virtual ~daNpc_Aru_Param_c() {}
@@ -34,6 +20,30 @@ public:
     static daNpc_Aru_HIOParam const m;
 };
 
+#if DEBUG
+class daNpc_Aru_HIO_c : public mDoHIO_entry_c {
+public:
+    daNpc_Aru_HIO_c();
+
+    void listenPropertyEvent(const JORPropertyEvent*);
+
+    void genMessage(JORMContext*);
+
+    /* 0x8 */ daNpc_Aru_HIOParam m;
+};
+#define NPC_ARU_HIO_CLASS daNpc_Aru_HIO_c
+#else
+#define NPC_ARU_HIO_CLASS daNpc_Aru_Param_c
+#endif
+
+/**
+ * @ingroup actors-npcs
+ * @class daNpc_Aru_c
+ * @brief Fado
+ *
+ * @details
+ *
+*/
 class daNpc_Aru_c : public daNpcT_c {
 public:
     enum Joint {
@@ -84,7 +94,7 @@ public:
     typedef int (daNpc_Aru_c::*cutFunc)(int);
 
     ~daNpc_Aru_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();
@@ -143,7 +153,9 @@ public:
             char** i_arcNames)
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
-        i_arcNames) {}
+        i_arcNames) {
+        OS_REPORT("|%06d:%x|daNpc_Aru_c -> コンストラクト\n", g_Counter.mCounter0, this);
+    }
     u16 getEyeballMaterialNo() { return ARU_EYEBALL_M; }
     s32 getHeadJointNo() { return JNT_HEAD; }
     s32 getNeckJointNo() { return JNT_NECK; }
@@ -155,20 +167,16 @@ public:
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;
-        if (nodeNo == 0xffff) {
-            return -1;
-        }
-
-        return nodeNo;
+        return (nodeNo == 0xFFFF) ? -1 : nodeNo;
     }
-    int getPathID() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
+    u8 getPathID() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
     void setLastIn() { mLastGoatIn = true; }
 
     static char* mCutNameList[7];
     static cutFunc mCutList[7];
 
 private:
-    /* 0xE40 */ daNpc_Aru_HIO_c* mHIO;
+    /* 0xE40 */ NPC_ARU_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;
     /* 0xF84 */ daNpcT_ActorMngr_c mActorMngrs[4];

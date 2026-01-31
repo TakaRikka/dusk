@@ -24,7 +24,7 @@ struct daNpc_Moi_HIOParam {
 
 class daNpc_Moi_Param_c {
 public:
-    virtual ~daNpc_Moi_Param_c() {};
+    virtual ~daNpc_Moi_Param_c() {}
 
     static const daNpc_Moi_HIOParam m;
 };

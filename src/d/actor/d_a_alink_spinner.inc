@@ -84,7 +84,6 @@ bool daAlink_c::checkSpinnerTriggerAttack() {
     return false;
 }
 
-
 void daAlink_c::setSpinnerSyncPos() {
     daSpinner_c* spinner = (daSpinner_c*)mRideAcKeep.getActor();
 
@@ -150,8 +149,8 @@ int daAlink_c::procSpinnerReady() {
     return 1;
 }
 
-void daAlink_c::setSpinnerStatus(u8 status, u8 flag) {
-    dComIfGp_setDoStatus(status, flag);
+void daAlink_c::setSpinnerStatus(u8 i_status, u8 i_flag) {
+    dComIfGp_setDoStatus(i_status, i_flag);
 }
 
 int daAlink_c::procSpinnerWaitInit() {
@@ -159,7 +158,7 @@ int daAlink_c::procSpinnerWaitInit() {
         return 0;
     }
 
-    mRideStatus = 5;
+    mRideStatus = RIDETYPE_SPINNER;
     setBgCheckParam();
     setSingleAnimeBaseSpeed(ANM_RIDE_CROUCH, mpHIO->mItem.mBoard.m.mSitAnmSpeed, 4.0f);
     speed.y = 0.0f;
@@ -177,12 +176,12 @@ int daAlink_c::procSpinnerWaitInit() {
     return 1;
 }
 
-
 int daAlink_c::procSpinnerWait() {
     daSpinner_c* spinner = (daSpinner_c*)mRideAcKeep.getActor();
 
     if (spinner == NULL || spinner->getDeleteFlg() || checkWindSpeedOnXZ() ||
-        checkEndResetFlg1(ERFLG1_UNK_1) || checkEndResetFlg0(ERFLG0_UNK_2)) {
+        checkEndResetFlg1(ERFLG1_NS_SCREAM) || checkEndResetFlg0(ERFLG0_FORCE_WOLF_CHANGE))
+    {
         mNormalSpeed = 0.0f;
         setJumpMode();
         return procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);
@@ -200,7 +199,7 @@ int daAlink_c::procSpinnerWait() {
             spinner->setMove(mNormalSpeed, getSpinnerRideMoveTime());
         } else if (checkInputOnR()) {
             int direction = getDirectionFromAngle(mStickAngle);
-            s16 angle = field_0x33ac * 384.0f * field_0x33ac;
+            s16 angle = mMoveValue * 384.0f * mMoveValue;
 
             if (direction == DIR_LEFT) {
                 shape_angle.y += angle;
@@ -226,10 +225,10 @@ int daAlink_c::procSpinnerWait() {
 
         if (spinner->checkPathMoveNow() == NULL) {
             seStartOnlyReverbLevel(Z2SE_AL_SPINNER_RIDE);
-            setSpinnerStatus(ACTION_STR_ATTACK, ACTION_FLG_DEFAULT);
+            setSpinnerStatus(BUTTON_STATUS_ATTACK, BUTTON_STATUS_FLAG_NONE);
         } else {
             seStartOnlyReverbLevel(Z2SE_AL_SPINNER_RAIL);
-            setSpinnerStatus(ACTION_STR_JUMP2, ACTION_FLG_DEFAULT);
+            setSpinnerStatus(BUTTON_STATUS_UNK_101, BUTTON_STATUS_FLAG_NONE);
         }
 
         mNormalSpeed = spinner->speedF;
@@ -237,7 +236,7 @@ int daAlink_c::procSpinnerWait() {
 
         if (spinner->checkSpinnerTagIntoIncRot()) {
             mProcVar5.field_0x3012 = 1;
-            setSpinnerStatus(ACTION_STR_SPIN, ACTION_FLG_CONTINUATION);
+            setSpinnerStatus(BUTTON_STATUS_SPIN, BUTTON_STATUS_FLAG_CONTINUATION);
 
             if (field_0x3198 != ANM_RIDE_KICK && field_0x2060->getOldFrameRate() < 0.01f) {
                 setSingleAnimeBaseSpeed(ANM_RIDE_CROUCH, mpHIO->mItem.mBoard.m.mSitAnmSpeed,
@@ -247,9 +246,9 @@ int daAlink_c::procSpinnerWait() {
             }
         } else if (spinner->checkSpinnerTagInto()) {
             if (mProcVar5.field_0x3012 != 0) {
-                setSpinnerStatus(ACTION_STR_SPIN, ACTION_FLG_CONTINUATION);
+                setSpinnerStatus(BUTTON_STATUS_SPIN, BUTTON_STATUS_FLAG_CONTINUATION);
             } else {
-                setSpinnerStatus(ACTION_STR_SPIN, ACTION_FLG_DEFAULT);
+                setSpinnerStatus(BUTTON_STATUS_SPIN, BUTTON_STATUS_FLAG_NONE);
             }
 
             if ((field_0x3198 == ANM_RIDE_KICK && field_0x2060->getOldFrameRate() < 0.01f) ||
@@ -276,7 +275,7 @@ int daAlink_c::procSpinnerWait() {
                                mpHIO->mItem.mBoard.m.mAirborneAnm.mEndFrame, -1.0f);
                 mProcVar4.field_0x3010 = 1;
             }
-        } else if ((field_0x3198 == ANM_RIDE_JUMP_LAND && frameCtrl->checkAnmEnd()) ||
+        } else if ((field_0x3198 == ANM_RIDE_JUMP_LAND && checkAnmEnd(frameCtrl)) ||
                    (field_0x3198 != ANM_RIDE_JUMP_LAND && field_0x3198 != ANM_RIDE_CROUCH)) {
             setSingleAnimeBaseSpeed(ANM_RIDE_CROUCH, mpHIO->mItem.mBoard.m.mSitAnmSpeed,
                                     mpHIO->mItem.mBoard.m.mSitInterpolation);

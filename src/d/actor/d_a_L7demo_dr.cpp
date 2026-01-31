@@ -289,7 +289,7 @@ static int daDr_IsDelete(daDr_c* i_this) {
 }
 
 int daDr_c::_delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "DR");
 
     if (heap != NULL) {
         mpModelMorf->stopZelAnime();

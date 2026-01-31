@@ -5,7 +5,7 @@
 
 class daTag_EvtArea_c : public fopAc_ac_c {
 public:
-    cPhs__Step create();
+    cPhs_Step create();
     BOOL Delete();
     BOOL Execute();
     BOOL Draw();

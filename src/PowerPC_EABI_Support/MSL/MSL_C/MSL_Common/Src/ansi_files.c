@@ -1,3 +1,4 @@
+#include "alloc.h"
 #include "ansi_files.h"
 #include "critical_regions.h"
 
