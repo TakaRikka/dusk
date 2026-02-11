@@ -5,7 +5,7 @@
 #include "d/d_msg_flow.h"
 
 struct daTag_Lantern_HIOParam {
-    u8 field_0x0;
+    u8 enable_debug_info;
 };
 
 class daTag_Lantern_Param_c {

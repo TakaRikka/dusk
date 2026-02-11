@@ -92,7 +92,7 @@ daObj_Kago_c::~daObj_Kago_c() {
     dComIfG_resDelete(&mPhase, l_resNameList[l_bmdData[0][1]]);
 }
 
-cPhs__Step daObj_Kago_c::create() {
+cPhs_Step daObj_Kago_c::create() {
     static int const heapSize[5] = {
         0x0820, 0x0820, 0, 0x0820, 0,
     };
@@ -101,7 +101,7 @@ cPhs__Step daObj_Kago_c::create() {
 
     mType = getType();
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_resNameList[l_bmdData[0][1]]);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_resNameList[l_bmdData[0][1]]);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) <%08x> -> roomNo.%d", fopAcM_getProcNameString(this), getType(), fopAcM_GetParam(this), fopAcM_GetRoomNo(this));
         if (mType == 0 && isDelete()) {
@@ -191,7 +191,7 @@ int daObj_Kago_c::Execute() {
     scale.set(mpHIO->m.field_0x08 * field_0xb0c, mpHIO->m.field_0x08 * field_0xb0c, mpHIO->m.field_0x08 * field_0xb0c);
     attention_info.flags = 0;
     fopAcM_OffCarryType(this, fopAcM_CARRY_CHICKEN);
-    attention_info.distances[4] = 13;
+    attention_info.distances[fopAc_attn_CARRY_e] = 13;
 
     if (mType == 0) {
         mStts.SetWeight(mpHIO->m.mWeight);

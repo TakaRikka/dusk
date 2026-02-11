@@ -356,7 +356,7 @@ inline void dMsgObject_demoMessageGroup() {
 }
 
 inline bool dMsgObject_isTalkNowCheck() {
-    return dMsgObject_getMsgObjectClass()->getStatus() != 1 ? true : false;
+    return dMsgObject_getMsgObjectClass()->getStatus() == 1 ? false : true;
 }
 
 inline bool dMsgObject_isKillMessageFlag() {
@@ -421,11 +421,11 @@ inline void dMsgObject_setTalkActor(fopAc_ac_c* actor) {
     }
 }
 
-inline bool dMsgObject_getString(u32 param_0, J2DTextBox* param_1, J2DTextBox* param_2,
-                                 JUTFont* param_3, COutFont_c* param_4, char* param_5,
-                                 char* param_6, char* param_7, s16* param_8) {
-    return dMsgObject_getMsgObjectClass()->getString(param_0, param_1, param_2, param_3, param_4, param_5, param_6,
-                                   param_7, param_8);
+inline bool dMsgObject_getString(u32 i_msgId, J2DTextBox* i_tbox, J2DTextBox* i_rubyTbox,
+                                 JUTFont* i_font, COutFont_c* i_outFont, char* o_text,
+                                 char* o_ruby, char* o_textS, s16* param_8) {
+    return dMsgObject_getMsgObjectClass()->getString(i_msgId, i_tbox, i_rubyTbox, i_font, i_outFont, o_text, o_ruby,
+                                   o_textS, param_8);
 }
 
 inline void dMsgObject_onCameraCancelFlag() {
@@ -449,7 +449,7 @@ inline void dMsgObject_endFlowGroup() {
 }
 
 inline void dMsgObject_setSmellType(u8 type) {
-    dMsgObject_c::setSmellType(type);
+    dMsgObject_getMsgObjectClass()->setSmellType(type);
 }
 
 inline u8 dMsgObject_getSelectCursorPos() {
@@ -485,7 +485,7 @@ inline void dMsgObject_setEquipBombInfo() {
 }
 
 inline bool dMsgObject_isHowlHearingMode() {
-    return dMsgObject_c::isHowlHearingMode();
+    return dMsgObject_getMsgObjectClass()->isHowlHearingMode();
 }
 
 inline void dMsgObject_onMsgSend() {

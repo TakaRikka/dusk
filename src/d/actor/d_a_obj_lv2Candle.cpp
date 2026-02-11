@@ -84,13 +84,13 @@ int daLv2Candle_c::CreateHeap() {
     return true;
 }
 
-cPhs__Step daLv2Candle_c::create() {
+cPhs_Step daLv2Candle_c::create() {
     fopAcM_ct(this, daLv2Candle_c);
     mModelType = getModelType();
     if (mModelType == 0xf) {
         mModelType = 0;
     }
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, l_resNameIdx[mModelType]);
+    cPhs_Step step = dComIfG_resLoad(&mPhase, l_resNameIdx[mModelType]);
     if (step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x1000)) {
             return cPhs_ERROR_e;
@@ -382,7 +382,7 @@ static int daLv2Candle_Delete(daLv2Candle_c* i_this) {
     return i_this->Delete();
 }
 
-static cPhs__Step daLv2Candle_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daLv2Candle_Create(fopAc_ac_c* i_this) {
     return static_cast<daLv2Candle_c*>(i_this)->create();
 }
 

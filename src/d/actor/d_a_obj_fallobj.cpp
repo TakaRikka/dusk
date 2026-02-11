@@ -10,6 +10,15 @@
 #include "d/d_bg_w.h"
 #include "d/d_debug_viewer.h"
 #include "d/d_procname.h"
+#include "d/d_s_play.h"
+
+
+static char* l_arcName = "K_drock00";
+
+static cull_box l_cull_box = {
+    {-200.0f, -10000.0f, -200.0f},
+    {200.0f, 600.0f, 200.0f},
+};
 
 #if DEBUG
 
@@ -22,19 +31,18 @@ daObjFallObj_HIO_c::daObjFallObj_HIO_c() {
 
 void daObjFallObj_HIO_c::genMessage(JORMContext* ctx) {
     // Falling Object
-    ctx->genLabel("落下ＯＢＪ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("落下ＯＢＪ", 0);
     // Movement Shake
-    ctx->genSlider("移動時揺れ", &mMovementShake, 0, 1000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("移動時揺れ", &mMovementShake, 0, 1000);
     // Static Shake
-    ctx->genSlider("静止時揺れ", &mStaticShake, 0, 1000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("静止時揺れ", &mStaticShake, 0, 1000);
     // No Fall
-    ctx->genCheckBox("落下しない", &mNoFall, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox("落下しない", &mNoFall, 0x1);
     // Check Display
-    ctx->genCheckBox("チェック表示", &mCheckDisplay, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox("チェック表示", &mCheckDisplay, 0x1);
 }
 
 static daObjFallObj_HIO_c l_HIO;
-
 #endif
 
 void daObjFallObj_c::initBaseMtx() {
@@ -51,13 +59,6 @@ void daObjFallObj_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
-
-static char* l_arcName = "K_drock00";
-
-static cull_box l_cull_box = {
-    {-200.0f, -10000.0f, -200.0f},
-    {200.0f, 600.0f, 200.0f},
-};
 
 int daObjFallObj_c::Create() {
     u8 uVar1 = field_0x5d8 - 1;
@@ -82,7 +83,7 @@ int daObjFallObj_c::Create() {
 }
 
 s16 daObjFallObj_c::getFallTime() {
-    u32 time = getTime();
+    u8 time = getTime();
     if (time == 0) {
         return 1;
     }
@@ -95,24 +96,29 @@ s16 daObjFallObj_c::getFallTime() {
 }
 
 f32 daObjFallObj_c::getFallHeight() {
-    u32 pos = getPos();
+    u8 pos = getPos();
+    f32 ret;
     if (pos == 0xff) {
-        return 450.0f;
+        ret = 450.0f;
+    } else {
+        ret = pos * 50.0f + 300.0f;
     }
-
-    return pos * 50.0f + 300.0f;
+    return ret;
 }
 
 int daObjFallObj_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
     JUT_ASSERT(260, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000084);
-    return mpModel != NULL ? TRUE : FALSE;
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 int daObjFallObj_c::create1st() {
     field_0x5d8 = 1;
-    int phase = dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         phase =
             MoveBGCreate(l_arcName, 7, dBgS_MoveBGProc_Typical, 0x2700, NULL);
@@ -128,8 +134,9 @@ int daObjFallObj_c::create1st() {
     return phase;
 }
 
+// TODO: Debug Nonmatching / Fakematch (bVar1)
 int daObjFallObj_c::Execute(Mtx** i_mtx) {
-    cXyz cStack_d8(0.0f, 150.0f, 160.0f);
+    cXyz cStack_d8(0.0f, 150.0f, 160.0f + KREG_F(0));
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -140,7 +147,7 @@ int daObjFallObj_c::Execute(Mtx** i_mtx) {
 
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-    f32 dVar12 = fabsf(player->current.pos.y - cStack_d8.y);
+    f32 dVar12 = std::fabs(player->current.pos.y - cStack_d8.y);
     f32 dVar13 = cStack_d8.absXZ(player->current.pos);
     f32 dVar14 = player->current.pos.abs(cStack_d8);
 
@@ -148,18 +155,37 @@ int daObjFallObj_c::Execute(Mtx** i_mtx) {
     linChk.Set(&player->eyePos, &attention_info.position, this);
 
     bool bVar1 = false;
-    if (!dComIfG_Bgsp().LineCross(&linChk) && !checkHang2() && dVar12 < dVar13 && dVar14 < 2150.0f && mAction == ACTION_WAIT)  {
+
+#if DEBUG
+    int check3 = 0;
+    int check2 = 0;
+    int check1 = 0;
+    if (!dComIfG_Bgsp().LineCross(&linChk) && !checkHang2()) {
+        check1 = 1;
+    }
+    if (check1 && dVar12 - KREG_F(4) < dVar13) {
+        check2 = 1;
+    }
+    if (check2 && dVar14 < 2150.0f - KREG_F(5)) {
+        check3 = 1;
+    }
+    if (check3 && mAction == ACTION_WAIT) {
         bVar1 = true;
     }
+#else
+    if (!dComIfG_Bgsp().LineCross(&linChk) && !checkHang2() && dVar12 - KREG_F(4) < dVar13 && dVar14 < 2150.0f - KREG_F(5) && mAction == ACTION_WAIT)  {
+        bVar1 = true;
+    }
+#endif
 
-    if (bVar1) {
+    if (((bool) bVar1) != 0) {
         attention_info.distances[fopAc_attn_BATTLE_e] = 0x22;
         attention_info.flags |= fopAc_AttnFlag_BATTLE_e;
     } else {
         attention_info.distances[fopAc_attn_BATTLE_e] = 0x0;
         attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
     }
-    
+
     field_0x5e0 += 1;
     action();
     *i_mtx = &mBgMtx;
@@ -203,19 +229,22 @@ void daObjFallObj_c::action() {
 }
 
 bool daObjFallObj_c::action_wait(bool param_1) {
-    if (param_1) {
+    bool cond = param_1;
+    if (cond) {
         mTimer = 10;
         mAction = ACTION_FALL_START;
     }
 
     if (parentActorID != fpcM_ERROR_PROCESS_ID_e) {
-        fopAc_ac_c* parent = fopAcM_SearchByID(parentActorID);
-        if (parent != NULL && checkFallStart(parent)) {
+        daObjFallObj_c* parent = (daObjFallObj_c*) fopAcM_SearchByID(parentActorID);
+        if (parent != NULL && parent->checkFallStart()) {
             mAction = ACTION_FOLLOW_FALL;
         }
     }
-    return param_1;
+    return cond;
 }
+
+
 
 bool daObjFallObj_c::action_fallStart() {
     cLib_calcTimer(&mTimer);
@@ -243,9 +272,15 @@ bool daObjFallObj_c::action_fallStart() {
 }
 
 void daObjFallObj_c::action_countdown() {
-    bool bVar1 = true;
+    bool noFall = false;
+#if DEBUG
+    if (l_HIO.mNoFall) {
+        noFall = true;
+    }
+#endif
+
     daPy_py_c* player = daPy_getPlayerActorClass();
-    if (bVar1) {
+    if (!noFall) {
         speed.y = -(getFallHeight() - 50.0f) / getFallTime();
         current.pos.y += speed.y;
         mSoundObj.startLevelSound(Z2SE_OBJ_POLE_FALLING, 0, -1);
@@ -257,17 +292,23 @@ void daObjFallObj_c::action_countdown() {
     }
 
     if (player->getSpeedF() != 0.0f) {
+#if DEBUG
+        field_0x5de = l_HIO.mMovementShake;
+    } else {
+        field_0x5de = l_HIO.mStaticShake;
+#else
         field_0x5de = 0;
     } else {
         field_0x5de = 0;
+#endif
     }
 
     cLib_chaseS(&field_0x5dc, field_0x5de, 0x32);
-    shape_angle.x = field_0x5dc * cM_scos(field_0x5e0 * 1500);
-    shape_angle.z = field_0x5dc * cM_ssin(field_0x5e0 * 2000);
+    shape_angle.x = field_0x5dc * cM_scos(field_0x5e0 * (KREG_S(2) + 1500));
+    shape_angle.z = field_0x5dc * cM_ssin(field_0x5e0 * (KREG_S(4) + 2000));
     if (parentActorID != fpcM_ERROR_PROCESS_ID_e) {
-        fopAc_ac_c* parent = fopAcM_SearchByID(parentActorID);
-        if (parent != NULL && checkFallStart(parent)) {
+        daObjFallObj_c* parent = (daObjFallObj_c*) fopAcM_SearchByID(parentActorID);
+        if (parent != NULL && parent->checkFallStart()) {
             mAction = ACTION_FOLLOW_FALL;
         }
     }
@@ -280,7 +321,7 @@ void daObjFallObj_c::action_fall() {
     }
 
     current.pos.y += speed.y;
-    if (fabsf(home.pos.y - current.pos.y) > 10000.0f) {
+    if (std::fabs(home.pos.y - current.pos.y) > 10000.0f) {
         fopAcM_delete(this);
     }
 }
@@ -294,7 +335,7 @@ void daObjFallObj_c::action_follow_fall() {
             current.pos.y += parent->speed.y;
         }
 
-        if (fabsf(home.pos.y - current.pos.y) > 10000.0f) {
+        if (std::fabs(home.pos.y - current.pos.y) > 10000.0f) {
             fopAcM_delete(this);
         }
     }
@@ -303,7 +344,9 @@ void daObjFallObj_c::action_follow_fall() {
 bool daObjFallObj_c::checkHang() {
     bool rv = false;
     daPy_py_c* player = daPy_getPlayerActorClass();
-    if (dComIfGp_checkPlayerStatus1(0, 0x2000000) && fopAcM_searchPlayerDistanceXZ(this) < 250.0f &&
+    
+    u32 status = dComIfGp_checkPlayerStatus1(0, 0x2000000);
+    if (status && fopAcM_searchPlayerDistanceXZ(this) < 250.0f &&
         player->current.pos.y > current.pos.y - 100.0f &&
         player->current.pos.y < current.pos.y + 300.0f)
     {
@@ -401,7 +444,7 @@ static int daObjFallObj_MoveBGExecute(daObjFallObj_c* i_this) {
 }
 
 static int daObjFallObj_MoveBGDraw(daObjFallObj_c* i_this) {
-    return i_this->Draw();
+    return i_this->MoveBGDraw();
 }
 
 static actor_method_class daObjFallObj_METHODS = {

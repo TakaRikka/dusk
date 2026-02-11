@@ -175,7 +175,7 @@ static dCcD_SrcCyl l_cyl_src = {
     }
 };
 
-cPhs__Step daObjWaterFall_c::Create() {
+cPhs_Step daObjWaterFall_c::Create() {
     initBaseMtx();
 
     mCylColliderStts.Init(0, 0xFF, this);
@@ -244,7 +244,7 @@ actor_process_profile_definition g_profile_Obj_WaterFall = {
   fopAc_CULLBOX_CUSTOM_e,   // cullType
 };
 
-cPhs__Step daObjWaterFall_c::create() {
+cPhs_Step daObjWaterFall_c::create() {
     fopAcM_ct(this, daObjWaterFall_c);
 
     if(Create() == cPhs_INIT_e) {

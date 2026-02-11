@@ -16,6 +16,23 @@ public:
     static const daTag_Msg_HIO_Param_c m;
 };
 
+#if DEBUG
+class daTag_Msg_HIO_c : public JORReflexible {
+public:
+    daTag_Msg_HIO_c();
+    ~daTag_Msg_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    s8 mChild;
+    daTag_Msg_HIO_Param_c m;
+};
+
+#define TAG_MSG_HIO_CLASS daTag_Msg_HIO_c
+#else
+#define TAG_MSG_HIO_CLASS daTag_Msg_Param_c
+#endif
+
 class daTag_Msg_c : public fopAc_ac_c {
 public:
     virtual ~daTag_Msg_c();
@@ -39,9 +56,9 @@ public:
     /* 0x5CC */ int mOrderEvtNum;
     /* 0x5D0 */ s16 mEventIdx;
     /* 0x5D2 */ u8 field_0x5D2[0x5D8 - 0x5D2];
-    /* 0x5D8 */ daTag_Msg_Param_c* mParam;
-    /* 0x5DC */ u8 field_0x5dc;
-    /* 0x5DD */ u8 field_0x5dd;
+    /* 0x5D8 */ TAG_MSG_HIO_CLASS* mpHIO;
+    /* 0x5DC */ bool field_0x5dc;
+    /* 0x5DD */ bool field_0x5dd;
     /* 0x5DE */ u8 mOnSwitch;
     /* 0x5DF */ u8 mOffSwitch;
     /* 0x5E0 */ u16 mOnSaveLabel;

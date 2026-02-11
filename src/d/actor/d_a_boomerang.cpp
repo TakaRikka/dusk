@@ -1341,6 +1341,7 @@ daBoomerang_c::~daBoomerang_c() {
 }
 
 static int daBoomerang_Delete(daBoomerang_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this, "Boomerang");
     i_this->~daBoomerang_c();
     return 1;
 }
@@ -1419,7 +1420,7 @@ static dCcD_SrcCyl l_windAtCylSrc = {
 };
 
 int daBoomerang_c::create() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterCreateID(this, "Boomerang");
     fopAcM_ct(this, daBoomerang_c);
 
     if (!fopAcM_entrySolidHeap(this, daBoomerang_createHeap, 0xC0D0)) {

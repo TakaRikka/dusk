@@ -31,7 +31,7 @@ public:
     u8 getGoldWolfIdx();
 
     s8 getTuneId() { return fopAcM_GetParamBit(this, 4, 4); }
-    int getNextSceneId() { return fopAcM_GetParamBit(this, 0, 4); }
+    s8 getNextSceneId() { return fopAcM_GetParamBit(this, 0, 4); }
     u32 getSwBit1() { return home.angle.x & 0xff; }
     u32 getSwBit2() { return fopAcM_GetParamBit(this, 8, 8); }
     u32 getDelEveFlgId() { return fopAcM_GetParamBit(this, 0x10, 0x10); }

@@ -250,9 +250,9 @@ void daE_RDY_HIO_c::genMessage(JORMContext* context) {
     context->genSlider("飛びＺ", &field_0x44, 0.0f, 50.0f);
     context->genSlider("飛びＹ", &field_0x4c, 0.0f, 50.0f);
     context->genSlider("飛びＧ", &field_0x40, 0.0f, 20.0f);
-    context->genCheckBox("不死身", &field_0x39, 1);
-    context->genCheckBox("目ポリゴン", &mDrawEyeModel, 1);
-    context->genCheckBox("一撃必殺", &field_0x3b, 1);
+    context->genCheckBox("不死身", &field_0x39, 0x1);
+    context->genCheckBox("目ポリゴン", &mDrawEyeModel, 0x1);
+    context->genCheckBox("一撃必殺", &field_0x3b, 0x1);
     context->genSlider("一騎（ダ）サイズ", &field_0x3c, 0.0f, 150.0f);
 }
 #endif
@@ -4758,7 +4758,7 @@ static int daE_RDY_IsDelete(e_rdy_class* i_this) {
 
 static int daE_RDY_Delete(e_rdy_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
-    fpc_ProcID unused = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_RDY");
     dComIfG_resDelete(&i_this->mPhase, i_this->mpArcName);
 
     if (i_this->mHIOInit) {
@@ -4869,7 +4869,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daE_RDY_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daE_RDY_Create(fopAc_ac_c* i_this) {
     e_rdy_class* _this = (e_rdy_class*)i_this;
     fopAcM_ct(&_this->actor, e_rdy_class);
 
@@ -4881,7 +4881,7 @@ static cPhs__Step daE_RDY_Create(fopAc_ac_c* i_this) {
     }
 
     _this->mpArcName = "E_rdy";
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhase, _this->mpArcName);
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhase, _this->mpArcName);
     if (step == cPhs_COMPLEATE_e) {
         OS_REPORT("E_RDY PARAM %x\n", fopAcM_GetParam(i_this));
         if (_this->field_0x5b8 != 3) {

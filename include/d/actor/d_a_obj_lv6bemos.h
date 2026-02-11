@@ -21,7 +21,7 @@ public:
     void setBaseMtx();
     int Create();
     int CreateHeap();
-    cPhs__Step create1st();
+    cPhs_Step create1st();
     int Execute(Mtx**);
     void action();
     void actionWait();

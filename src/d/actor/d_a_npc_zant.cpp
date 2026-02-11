@@ -261,9 +261,9 @@ void daNpc_Zant_c::setParam() {
 
     s16 sVar1 = mpHIO->m.common.talk_distance;
     s16 sVar2 = mpHIO->m.common.talk_angle;
-    attention_info.distances[0] = daNpcT_getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] = daNpcT_getDistTableIdx(sVar1, sVar2);
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(mpHIO->m.common.attention_distance, mpHIO->m.common.attention_angle);
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(sVar1, sVar2);
 
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
 

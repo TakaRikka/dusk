@@ -7,7 +7,7 @@
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JSupport/JSupport.h"
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 
 J3DAnmBase* J3DAnmLoaderDataBase::load(const void* i_data, J3DAnmLoaderDataBaseFlag flag) {
     const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;

@@ -244,12 +244,12 @@ daE_ST_HIO_c::daE_ST_HIO_c() {
 #if DEBUG
 void daE_ST_HIO_c::genMessage(JORMContext* ctext) {
     // "stalchura" - a.k.a. skultula
-    ctext->genLabel("  スタルチュラ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("基本サイズ", &basic_size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("PL認識距離", &pl_recognize_dist, 0.0f, 5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("戦闘開始距離", &combat_start_dist, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("攻撃前間", &time_before_attack, 0, 50, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
-    ctext->genSlider("ダウン時間", &down_time, 0, 300, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genLabel("  スタルチュラ", 0x80000001);
+    ctext->genSlider("基本サイズ", &basic_size, 0.0f, 5.0f);
+    ctext->genSlider("PL認識距離", &pl_recognize_dist, 0.0f, 5000.0f);
+    ctext->genSlider("戦闘開始距離", &combat_start_dist, 0.0f, 1000.0f);
+    ctext->genSlider("攻撃前間", &time_before_attack, 0, 50);
+    ctext->genSlider("ダウン時間", &down_time, 0, 300);
 }
 #endif
 
@@ -3005,11 +3005,11 @@ static BOOL roof_initial_pos_set(e_st_class* i_this) {
     return FALSE;
 }
 
-static cPhs__Step daE_ST_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daE_ST_Create(fopAc_ac_c* a_this) {
     e_st_class* i_this = (e_st_class*)a_this;
     fopAcM_ct(&i_this->actor, e_st_class);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "E_st");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "E_st");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_st PARAM %x\n", fopAcM_GetParam(a_this));
         i_this->arg0 = fopAcM_GetParam(a_this) & 0xF;

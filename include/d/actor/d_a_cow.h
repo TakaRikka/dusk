@@ -194,16 +194,16 @@ public:
     daCow_c* getCowP() { return mCowP; }
 
     // cLib_onBit<u16>(mFlags, (mask))
-    void setCrazyBeforeCatch() { mFlags |= Flag_CrazyBeforeCatch; }
-    void setCrazyCatch() { mFlags |= Flag_CrazyCatch; }
-    void setCrazyDash() { mFlags |= Flag_CrazyDash; }
-    void setCrazyThrowLeft() { mFlags |= Flag_CrazyThrowLeft; }
-    void setCrazyThrowRight() { mFlags |= Flag_CrazyThrowRight; }
-    void setCrazyReady() { mFlags |= Flag_CrazyReady; }
-    void setCrazyGo() { mFlags |= Flag_CrazyGo; }
-    void setNaderu() { mFlags |= Flag_Naderu; }
-    void setNaderuFinish() { mFlags |= Flag_NaderuFinish; }
-    void setCrazyReadyDrawOn() { mFlags |= Flag_CrazyReadyDrawOn; }
+    void setCrazyBeforeCatch() { mFlags |= (u16)Flag_CrazyBeforeCatch; }
+    void setCrazyCatch() { mFlags |= (u16)Flag_CrazyCatch; }
+    void setCrazyDash() { mFlags |= (u16)Flag_CrazyDash; }
+    void setCrazyThrowLeft() { mFlags |= (u16)Flag_CrazyThrowLeft; }
+    void setCrazyThrowRight() { mFlags |= (u16)Flag_CrazyThrowRight; }
+    void setCrazyReady() { mFlags |= (u16)Flag_CrazyReady; }
+    void setCrazyGo() { mFlags |= (u16)Flag_CrazyGo; }
+    void setNaderu() { mFlags |= (u16)Flag_Naderu; }
+    void setNaderuFinish() { mFlags |= (u16)Flag_NaderuFinish; }
+    void setCrazyReadyDrawOn() { mFlags |= (u16)Flag_CrazyReadyDrawOn; }
 
     u8 getCowIn() { return mCowIn; }
     u8 getNoNearCheckTimer() { return mNoNearCheckTimer; }

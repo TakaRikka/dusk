@@ -2,7 +2,7 @@
 #define D_A_OBJ_HATA_H
 
 #include "SSystem/SComponent/c_phase.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "f_op/f_op_actor.h"
 
 /**
@@ -19,7 +19,7 @@ public:
     daObjHata_c();
     virtual ~daObjHata_c();
     int createHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     int Delete();
     int draw();
     int execute();

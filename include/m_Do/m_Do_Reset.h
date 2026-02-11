@@ -1,7 +1,7 @@
 #ifndef M_DO_M_DO_RESET_H
 #define M_DO_M_DO_RESET_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 void mDoRst_reset(int, u32, int);
 void mDoRst_resetCallBack(int, void*);

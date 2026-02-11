@@ -6,6 +6,7 @@
 
 // Fixes weak .data
 #include <cmath> // IWYU pragma: export
+#include <limits> // IWYU pragma: export
 #include "JSystem/J3DGraphBase/J3DMatBlock.h" // IWYU pragma: export
 #include "Z2AudioLib/Z2Calc.h" // IWYU pragma: export
 
@@ -17,11 +18,11 @@
 #include "JSystem/JKernel/JKRDisposer.h" // IWYU pragma: export
 #include "JSystem/JGadget/linklist.h" // IWYU pragma: export
 #include "JSystem/J3DGraphBase/J3DPacket.h" // IWYU pragma: export
-#include "JSystem/J3DGraphAnimator/J3DJoint.h" // IWYU pragma: export
 #include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h" // IWYU pragma: export
 #include "JSystem/J3DGraphAnimator/J3DShapeTable.h" // IWYU pragma: export
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h" // IWYU pragma: export
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h" // IWYU pragma: export
+#include "JSystem/J3DGraphAnimator/J3DJoint.h" // IWYU pragma: export
 #include "JSystem/JUtility/JUTGamePad.h" // IWYU pragma: export
 #include "JSystem/J3DGraphBase/J3DSys.h" // IWYU pragma: export
 #include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h" // IWYU pragma: export

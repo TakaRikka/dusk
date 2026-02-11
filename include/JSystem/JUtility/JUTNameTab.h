@@ -1,7 +1,7 @@
 #ifndef JUTNAMETAB_H
 #define JUTNAMETAB_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 /**
 * @ingroup jsystem-jutility

@@ -10,7 +10,20 @@
 #include <dolphin/dolphin.h>
 #include <stdint.h>
 
+struct CallbackObject {
+    /* 0x00 */ JUTExceptionUserCallback callback;
+    /* 0x04 */ u16 error;
+    /* 0x08 */ OSContext* context;
+    /* 0x0C */ int param_3;
+    /* 0x10 */ int param_4;
+};
+
 OSMessageQueue JUTException::sMessageQueue = {0};
+
+STATIC_ASSERT(sizeof(CallbackObject) == 0x14);
+static CallbackObject exCallbackObject;
+
+JSUList<JUTException::JUTExMapFile> JUTException::sMapFileList(false);
 
 static OSTime c3bcnt[4] = {0, 0, 0, 0};
 
@@ -38,10 +51,16 @@ JUTException* JUTException::sErrorManager;
 
 JUTExceptionUserCallback JUTException::sPreUserCallback;
 
- JUTExceptionUserCallback JUTException::sPostUserCallback;
+JUTExceptionUserCallback JUTException::sPostUserCallback;
+
+#if PLATFORM_GCN
+const int stack_size = 0x1C00;
+#else
+const int stack_size = 0x4000;
+#endif
 
 JUTException::JUTException(JUTDirectPrint* directPrint)
-    : JKRThread(0x1C00, 0x10, 0), mDirectPrint(directPrint) {
+    : JKRThread(stack_size, 0x10, 0), mDirectPrint(directPrint) {
     OSSetErrorHandler(__OS_EXCEPTION_DSI, (OSErrorHandler)errorHandler);
     OSSetErrorHandler(__OS_EXCEPTION_ISI, (OSErrorHandler)errorHandler);
     OSSetErrorHandler(__OS_EXCEPTION_PROGRAM, (OSErrorHandler)errorHandler);
@@ -73,16 +92,6 @@ JUTException* JUTException::create(JUTDirectPrint* directPrint) {
 }
 
 OSMessage JUTException::sMessageBuffer[1] = {0};
-
-struct CallbackObject {
-    /* 0x00 */ JUTExceptionUserCallback callback;
-    /* 0x04 */ u16 error;
-    /* 0x06 */ u16 pad_0x06;
-    /* 0x08 */ OSContext* context;
-    /* 0x0C */ int param_3;
-    /* 0x10 */ int param_4;
-    /* 0x14 */
-};
 
 void* JUTException::run() {
     u32 msr = PPCMfmsr();
@@ -118,9 +127,6 @@ void* JUTException::run() {
     }
 }
 
-STATIC_ASSERT(sizeof(CallbackObject) == 0x14);
-static CallbackObject exCallbackObject;
-
 void* JUTException::sConsoleBuffer;
 
 u32 JUTException::sConsoleBufferSize;
@@ -153,8 +159,6 @@ void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, 
     OSEnableScheduler();
     OSYieldThread();
 }
-
-JSUList<JUTException::JUTExMapFile> JUTException::sMapFileList(false);
 
 void JUTException::panic_f_va(char const* file, int line, char const* format, va_list args) {
     char buffer[256];
@@ -525,12 +529,8 @@ bool JUTException::isEnablePad() const {
 bool JUTException::readPad(u32* out_trigger, u32* out_button) {
     bool result = false;
     OSTime start_time = OSGetTime();
-    OSTime ms;
     do {
-        OSTime end_time = OSGetTime();
-        OSTime ticks = end_time - start_time;
-        ms = ticks / (OS_TIMER_CLOCK / 1000);
-    } while (ms < 0x32);
+    } while (OSTicksToMilliseconds(OSGetTime() - start_time) < 0x32);
 
     if (mGamePad == (JUTGamePad*)0xffffffff) {
         JUTGamePad gamePad0(JUTGamePad::EPort1);
@@ -750,24 +750,19 @@ void JUTException::printContext(OSError error, OSContext* context, u32 dsisr, u3
 }
 
 void JUTException::waitTime(s32 timeout_ms) {
-    if (timeout_ms) {
-        OSTime start_time = OSGetTime();
-        OSTime ms;
-        do {
-            OSTime end_time = OSGetTime();
-            OSTime ticks = end_time - start_time;
-            ms = ticks / (OS_TIMER_CLOCK / 1000);
-        } while (ms < timeout_ms);
+    if (!timeout_ms) {
+        return;
     }
+
+    OSTime start_time = OSGetTime();
+    do {
+    } while (OSTicksToMilliseconds(OSGetTime() - start_time) < timeout_ms);
 }
 
 void JUTException::createFB() {
     _GXRenderModeObj* renderMode = &GXNtsc480Int;
     void* end = (void*)OSGetArenaHi();
-    u16 width = ALIGN_NEXT(renderMode->fbWidth, 16);
-    u16 height = renderMode->xfbHeight;
-    u32 pixel_count = width * height;
-    u32 size = pixel_count * 2;
+    u32 size = (u16(ALIGN_NEXT(u16(renderMode->fbWidth), 16)) * renderMode->xfbHeight) * 2;
 
     void* begin = (void*)ALIGN_PREV((uintptr_t)end - size, 32);
     void* object = (void*)ALIGN_PREV((s32)begin - sizeof(JUTExternalFB), 32);
@@ -807,7 +802,7 @@ void JUTException::appendMapFile(char const* path) {
     }
 
     for (JSUListIterator<JUTExMapFile> iterator = sMapFileList.getFirst(); iterator != sMapFileList.getEnd(); iterator++) {
-        if (strcmp(path, iterator->mPath) == 0) {
+        if (strcmp(path, iterator.getObject()->mPath) == 0) {
             return;
         }
     }

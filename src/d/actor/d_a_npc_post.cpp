@@ -194,9 +194,9 @@ void daNpc_Post_HIO_c::listenPropertyEvent(const JORPropertyEvent* evt) {
 
 void daNpc_Post_HIO_c::genMessage(JORMContext* ctx) {
     daNpcT_cmnGenMessage(ctx, &m.common);
-    ctx->genSlider("走り速度        ", &m.run_spd, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("頷き間隔        ", &m.nod_interval, 0, 1000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("走り速度        ", &m.run_spd, 0.0f, 100.0f);
+    ctx->genSlider("頷き間隔        ", &m.nod_interval, 0, 1000);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -385,7 +385,7 @@ daNpc_Post_HIOParam const daNpc_Post_Param_c::m = {
     60,
 };
 
-cPhs__Step daNpc_Post_c::create() {
+cPhs_Step daNpc_Post_c::create() {
     daNpcT_ct(this, daNpc_Post_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData,
               4, l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -393,7 +393,7 @@ cPhs__Step daNpc_Post_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = dKy_darkworld_check();
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d, BitSW:%02x<%08x> ", fopAcM_getProcNameString(this), mType, mFlowNodeNo,
                   getBitSW(), fopAcM_GetParam(this));
@@ -521,7 +521,7 @@ int daNpc_Post_c::CreateHeap() {
 
 int daNpc_Post_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Post_c -> コンストラクト\n", g_Counter.mCounter0, this);
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_POST");
     this->~daNpc_Post_c();
     return 1;
 }
@@ -536,13 +536,7 @@ int daNpc_Post_c::Draw() {
         modelData->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    return draw(
-#if DEBUG
-        chkAction(&daNpc_Post_c::test),
-#else
-        0,
-#endif
-        0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
+    return draw(NpcT_CHK_ACTION(daNpc_Post_c), FALSE, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
 int daNpc_Post_c::createHeapCallBack(fopAc_ac_c* i_this) {

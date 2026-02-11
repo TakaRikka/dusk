@@ -38,7 +38,7 @@ public:
     void setBaseMtx();
     /*  inline  */ inline int Draw();
     bool CreateChk();
-    cPhs__Step create();
+    cPhs_Step create();
 
 private:
     /* 0x590 */ dBgS_GndChk mGndChk;

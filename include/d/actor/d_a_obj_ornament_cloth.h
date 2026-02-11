@@ -57,7 +57,7 @@ public:
     inline int draw();
     inline int execute();
     inline ~daObjOnCloth_c();
-    inline cPhs__Step create();
+    inline cPhs_Step create();
 
     const daObjOnCloth_Attr_c& attr() const { return M_attr; }
 

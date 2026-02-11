@@ -15,12 +15,15 @@ int daTagAJnot_c::create() {
 }
 
 static int daTagAJnot_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagAJnot_c*>(i_this)->create();
+    daTagAJnot_c* ajNot = static_cast<daTagAJnot_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return ajNot->create();
 }
 
 daTagAJnot_c::~daTagAJnot_c() {}
 
 static int daTagAJnot_Delete(daTagAJnot_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagAJnot_c();
     return 1;
 }

@@ -87,9 +87,9 @@ int daObjBkDoor_c::CreateHeap() {
 int daObjBkDoor_c::create1st() {
     mOrientation = fopAcM_GetParamBit(this, 0, 1);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (step == cPhs_COMPLEATE_e) {
-        step = (cPhs__Step)MoveBGCreate(l_arcName, l_dzb[mOrientation], dBgS_MoveBGProc_TypicalRotY,
+        step = MoveBGCreate(l_arcName, l_dzb[mOrientation], dBgS_MoveBGProc_TypicalRotY,
                                         0xBD0, NULL);
         if (step == cPhs_ERROR_e) {
             return step;

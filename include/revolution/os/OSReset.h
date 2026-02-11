@@ -28,6 +28,8 @@ struct OSShutdownFunctionInfo {
 
 void OSRegisterShutdownFunction(OSShutdownFunctionInfo* info);
 void OSUnregisterShutdownFunction(OSShutdownFunctionInfo* info);
+void OSShutdownSystem();
+void OSRestart(u32 resetCode);
 void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu);
 u32 OSGetResetCode();
 u32 OSSetBootDol(u32 dolOffset);

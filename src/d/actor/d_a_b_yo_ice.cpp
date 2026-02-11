@@ -1010,9 +1010,9 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 }
 
 // data/rodata swap
-cPhs__Step daB_YOI_c::create() {
+cPhs_Step daB_YOI_c::create() {
     fopAcM_ct(this, daB_YOI_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, "B_YO");
+    cPhs_Step step = dComIfG_resLoad(&mPhase, "B_YO");
 
     if (step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, useHeapInit, 0x1CA0)) {
@@ -1087,7 +1087,7 @@ daB_YOI_c::daB_YOI_c() {
     /* empty function */
 }
 
-static cPhs__Step daB_YOI_Create(daB_YOI_c* i_this) {
+static cPhs_Step daB_YOI_Create(daB_YOI_c* i_this) {
     return i_this->create();
 }
 

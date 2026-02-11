@@ -752,11 +752,11 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daE_YC_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daE_YC_Create(fopAc_ac_c* i_this) {
     e_yc_class* _this = static_cast<e_yc_class*>(i_this);
     fopAcM_ct(i_this, e_yc_class);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhase, "E_yc");
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhase, "E_yc");
     if (step == cPhs_COMPLEATE_e) {
         _this->mParam = (u8)fopAcM_GetParam(_this);
 

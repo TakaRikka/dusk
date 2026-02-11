@@ -857,7 +857,7 @@ s32 mDoMemCd_Ctrl_c::checkspaceNAND() {
 mDoMemCd_Ctrl_c g_mDoMemCd_control;
 
 static int mDoMemCd_main(void*) {
-    { JKRThread thread(OSGetCurrentThread(), 0); }
+    JKRThread(OSGetCurrentThread(), 0);
 
     JKRSetCurrentHeap(mDoExt_getAssertHeap());
 

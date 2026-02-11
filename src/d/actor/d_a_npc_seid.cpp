@@ -272,9 +272,9 @@ void daNpc_seiD_c::setParam() {
     dComIfGp_getAttention()->getDistTable(0x27).mDistMax = mpHIO->m.field_0x90;
     dComIfGp_getAttention()->getDistTable(0x27).mDistMaxRelease = mpHIO->m.field_0x90;
 
-    attention_info.distances[0] = 39;
-    attention_info.distances[1] = 39;
-    attention_info.distances[3] = 39;
+    attention_info.distances[fopAc_attn_LOCK_e] = 39;
+    attention_info.distances[fopAc_attn_TALK_e] = 39;
+    attention_info.distances[fopAc_attn_SPEAK_e] = 39;
     attention_info.flags = 0;
 
     scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale, mpHIO->m.common.scale);

@@ -14,6 +14,7 @@ public:
     u16 getAreaType();
     u16 getAreaNoChk();
     int execute();
+    int draw();
 
     inline int create();
 

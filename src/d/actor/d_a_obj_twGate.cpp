@@ -31,7 +31,7 @@ daTwGate_HIO_c::daTwGate_HIO_c() {
 #if DEBUG
 void daTwGate_HIO_c::genMessage(JORMContext* ctx) {
     // Range
-    ctx->genSlider("範囲", &mRange, 0.0f, 500000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("範囲", &mRange, 0.0f, 500000.0f);
 }
 #endif
 
@@ -207,7 +207,8 @@ static int daTwGate_Delete(daTwGate_c* i_this) {
 }
 
 static int daTwGate_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daTwGate_c, i_this, "daTwGate");
+    daTwGate_c* a_this = (daTwGate_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "daTwGate");
     return a_this->create();
 }
 

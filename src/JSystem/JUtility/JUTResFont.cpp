@@ -5,7 +5,7 @@
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 JUTResFont::JUTResFont() {
     initialize_state();

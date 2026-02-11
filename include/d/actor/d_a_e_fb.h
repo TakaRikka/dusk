@@ -37,7 +37,7 @@ public:
     int execute();
     int _delete();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     daE_FB_c();
 
 private:

@@ -58,6 +58,7 @@ public:
     void setMarkState(u8 state) { mMarkState = state; }
 
     static Z2CreatureLink* mLinkPtr;
+    static Z2CreatureLink* getLink() { return mLinkPtr; }
 
     friend class Z2LinkSoundStarter;
     friend class Z2RideSoundStarter;
@@ -96,7 +97,7 @@ private:
 };  // Size: 0xD0
 
 inline Z2CreatureLink* Z2GetLink() {
-    return Z2CreatureLink::mLinkPtr;
+    return Z2CreatureLink::getLink();
 }
 
 class Z2CreatureRide;

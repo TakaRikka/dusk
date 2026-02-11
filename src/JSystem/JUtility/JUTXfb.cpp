@@ -3,7 +3,7 @@
 #include "JSystem/JUtility/JUTXfb.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 void JUTXfb::clearIndex() {
     mDrawingXfbIndex = -1;

@@ -71,14 +71,14 @@ int daObjZraRock_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjZraRock_c::create() {
+cPhs_Step daObjZraRock_c::create() {
     fopAcM_ct(this, daObjZraRock_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (step == cPhs_ERROR_e || step == cPhs_UNK3_e) {
         return cPhs_ERROR_e;
     } else if (step == cPhs_COMPLEATE_e) {
         int dzb_id = dComIfG_getObjctResName2Index(l_arcName, "H_ZoraRock.dzb");
-        step = (cPhs__Step)MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_Trans, 0x2050, NULL);
+        step = MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_Trans, 0x2050, NULL);
         if (dComIfGs_isSwitch((fopAcM_GetParam(this) >> 8) & 0xff, fopAcM_GetRoomNo(this))) {
             step = cPhs_ERROR_e;
         }
@@ -136,7 +136,7 @@ static int daObjZraRock_Delete(daObjZraRock_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-static cPhs__Step daObjZraRock_create(fopAc_ac_c* i_this) {
+static cPhs_Step daObjZraRock_create(fopAc_ac_c* i_this) {
     return static_cast<daObjZraRock_c*>(i_this)->create();
 }
 

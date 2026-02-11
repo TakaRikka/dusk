@@ -67,8 +67,8 @@ dmg_rod_HIO_c::dmg_rod_HIO_c() {
 #if DEBUG
 void dmg_rod_HIO_c::genMessage(JORMContext* ctx) {
     // Fishing System
-    ctx->genLabel("　釣りシステム　", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->startComboBox("強制魚メッセージ出力", &force_fish_msg_output, 0, NULL, 0xFFFF, 0xFFFF, 0x100, 0x1A);
+    ctx->genLabel("　釣りシステム　", 0x80000001);
+    ctx->startComboBox("強制魚メッセージ出力", &force_fish_msg_output);
     ctx->genComboBoxItem("通常", 0); // Normal
     ctx->genComboBoxItem("バス", 1); // Bass
     ctx->genComboBoxItem("ドジョウ", 2); //Loach
@@ -6059,7 +6059,7 @@ static int dmg_rod_IsDelete(dmg_rod_class* i_this) {
 
 static int dmg_rod_Delete(dmg_rod_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "Mg_rod");
     dComIfG_resDelete(&i_this->phase, i_this->arcname);
 
     if (i_this->HIOInit) {
@@ -6075,10 +6075,6 @@ static int dmg_rod_Delete(dmg_rod_class* i_this) {
     dMeter2Info_onWindowAccept(3);
     Z2GetAudioMgr()->changeFishingBgm(0);
     return 1;
-}
-
-static void dummy_report_str_1() {
-    OS_REPORT("Delete -> Mg_rod(id=%d)\n");
 }
 
 static int useHeapInit(fopAc_ac_c* i_this) {

@@ -16,7 +16,7 @@
 class daNpcFgd_c : public daNpcCd2_c {
 public:
     void initPosAngle(Vec&, s16);
-    cPhs__Step create();
+    cPhs_Step create();
     void create_init();
     inline virtual ~daNpcFgd_c();
 

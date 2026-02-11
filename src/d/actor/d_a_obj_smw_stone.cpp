@@ -29,9 +29,9 @@ static u8 const lit_3776[12] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-cPhs__Step daSmWStone_c::create() {
+cPhs_Step daSmWStone_c::create() {
     fopAcM_ct(this, daSmWStone_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(this, l_arcName);
+    cPhs_Step step = dComIfG_resLoad(this, l_arcName);
 
     if (step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, daSmWStone_c_createHeap, 0x1000)) {
@@ -170,7 +170,7 @@ bool daSmWStone_c::chkWlfInRange() {
     return false;
 }
 
-static cPhs__Step daSmWStone_create(daSmWStone_c* i_this) {
+static cPhs_Step daSmWStone_create(daSmWStone_c* i_this) {
     fopAcM_ct(i_this, daSmWStone_c);
     return i_this->create();
 }

@@ -101,7 +101,7 @@ daTbox_ModelInfo* daTbox_c::getModelInfo() {
 
 static const u32 l_open_se_id[3] = { Z2SE_OBJ_TBOX_OPEN_A, Z2SE_OBJ_TBOX_OPEN_B, Z2SE_OBJ_TBOX_OPEN_C };
 
-cPhs__Step daTbox_c::commonShapeSet() {
+cPhs_Step daTbox_c::commonShapeSet() {
     daTbox_ModelInfo* model_info = getModelInfo();
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(model_info->mArcName, model_info->mModelResNo);
@@ -170,15 +170,15 @@ cPhs__Step daTbox_c::commonShapeSet() {
     return cPhs_COMPLEATE_e;
 }
 
-cPhs__Step daTbox_c::effectShapeSet() {
+cPhs_Step daTbox_c::effectShapeSet() {
     return cPhs_COMPLEATE_e;
 }
 
-cPhs__Step daTbox_c::envShapeSet() {
+cPhs_Step daTbox_c::envShapeSet() {
     return cPhs_COMPLEATE_e;
 }
 
-cPhs__Step daTbox_c::bgCheckSet() {
+cPhs_Step daTbox_c::bgCheckSet() {
     daTbox_ModelInfo* model_info = getModelInfo();
 
     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(model_info->mArcName, model_info->mOpenDzbResNo);
@@ -325,7 +325,7 @@ u32 daTbox_c::calcHeapSize() {
 }
 
 int daTbox_c::CreateHeap() {
-    cPhs__Step step = commonShapeSet();
+    cPhs_Step step = commonShapeSet();
     if (step != cPhs_COMPLEATE_e) {
         return false;
     }
@@ -1781,7 +1781,7 @@ void daTbox_c::mode_exec() {
     }
 }
 
-cPhs__Step daTbox_c::create1st() {
+cPhs_Step daTbox_c::create1st() {
     if (!mParamsInit) {
         field_0x980 = home.angle.x;
         field_0x982 = home.angle.z;
@@ -1796,12 +1796,12 @@ cPhs__Step daTbox_c::create1st() {
     }
 
     daTbox_ModelInfo* model_info = getModelInfo();
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, model_info->mArcName);
+    cPhs_Step step = dComIfG_resLoad(&mPhase, model_info->mArcName);
     if (step != cPhs_COMPLEATE_e) {
         return step;
     }
 
-    step = (cPhs__Step)MoveBGCreate(model_info->mArcName, model_info->mClosedDzbResNo,
+    step = MoveBGCreate(model_info->mArcName, model_info->mClosedDzbResNo,
                                     dBgS_MoveBGProc_TypicalRotY, calcHeapSize(), NULL);
     if (step == cPhs_ERROR_e) {
         return step;
@@ -1877,7 +1877,7 @@ int daTbox_c::Delete() {
     return true;
 }
 
-cPhs__Step daTbox_create1st(daTbox_c* i_this) {
+cPhs_Step daTbox_create1st(daTbox_c* i_this) {
     fopAcM_ct(i_this, daTbox_c);
     return i_this->create1st();
 }

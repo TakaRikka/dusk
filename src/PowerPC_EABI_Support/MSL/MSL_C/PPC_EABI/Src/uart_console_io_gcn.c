@@ -1,5 +1,5 @@
 #include "uart_console_io_gcn.h"
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 
 int InitializeUART(size_t);
 int WriteUARTN(unsigned char*, size_t);

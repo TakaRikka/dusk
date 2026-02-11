@@ -51,9 +51,9 @@ int daLv1Cdl00_c::CreateHeap() {
     return true;
 }
 
-cPhs__Step daLv1Cdl00_c::create() {
+cPhs_Step daLv1Cdl00_c::create() {
     fopAcM_ct(this, daLv1Cdl00_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, "lv1cdl00");
+    cPhs_Step step = dComIfG_resLoad(&mPhase, "lv1cdl00");
     if (step == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x820)) {
             return cPhs_ERROR_e;
@@ -263,7 +263,7 @@ static int daLv1Cdl00_Delete(daLv1Cdl00_c* i_this) {
     return i_this->Delete();
 }
 
-static cPhs__Step daLv1Cdl00_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daLv1Cdl00_Create(fopAc_ac_c* i_this) {
     return static_cast<daLv1Cdl00_c*>(i_this)->create();
 }
 

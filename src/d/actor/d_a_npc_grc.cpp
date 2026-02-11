@@ -301,7 +301,7 @@ daNpc_grC_c::~daNpc_grC_c() {
 #endif
 }
 
-cPhs__Step daNpc_grC_c::create() {
+cPhs_Step daNpc_grC_c::create() {
     fopAcM_ct(this, daNpc_grC_c);
 
     mTwilight = dKy_darkworld_check();
@@ -320,7 +320,7 @@ cPhs__Step daNpc_grC_c::create() {
     int res_count = 0;
     int i = 0;
     for (; l_loadRes_list[mType][i] >= 0; i++) {
-        cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
+        cPhs_Step step = dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
 
         if (step == cPhs_ERROR_e || step == cPhs_UNK3_e) {
             return cPhs_ERROR_e;

@@ -310,11 +310,11 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
 
 #if REGION_PAL
             if (i_value == 1 ||
-                (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_FRENCH &&
+                (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_FRENCH &&
                     i_value == 0)) {
 #elif !REGION_USA
             if (i_value == 1 ||
-                (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_SPANISH &&
+                (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_SPANISH &&
                     i_value == 0)) {
 #else
             if (i_value == 1) {

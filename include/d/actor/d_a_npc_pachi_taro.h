@@ -78,7 +78,7 @@ public:
     typedef int (daNpc_Pachi_Taro_c::*cutFunc)(int);
 
     ~daNpc_Pachi_Taro_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

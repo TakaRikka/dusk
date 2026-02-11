@@ -360,7 +360,7 @@ void dMenu_ItemExplain_c::open_init() {
         u8 itemNo = field_0xe1;
         s32 iVar = -1;
         if (itemNo == 0x26) {
-            if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 0x11) {
+            if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV2) {
                 s32 itemsObtained = 0;
                 for (int i = 0; i < 3; i++) {
                     if (checkItemGet(i + fpcNm_ITEM_L2_KEY_PIECES1, 1) != 0) {
@@ -377,7 +377,7 @@ void dMenu_ItemExplain_c::open_init() {
                     itemNo = 0xfd;
                 }
             } else {
-                if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 0x14) {
+                if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV5) {
                     itemNo = 0xf6;
                 }
             }
@@ -622,7 +622,7 @@ u8 dMenu_ItemExplain_c::openExplainDmap(u8 param_0, u8 param_1, u8 param_2, bool
     u8 ret = 0;
     s32 itemsObtained = 0;
 
-    if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 0x11 && param_0 == 0x26) {
+    if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV2 && param_0 == 0x26) {
         for (int i = 0; i < 3; i++) {
             if (checkItemGet(i + fpcNm_ITEM_L2_KEY_PIECES1, 1) != 0) {
                 itemsObtained++;
@@ -644,7 +644,7 @@ u8 dMenu_ItemExplain_c::openExplainDmap(u8 param_0, u8 param_1, u8 param_2, bool
         mStatus = 1;
         field_0xe1 = param_0;
         field_0xcc = itemNo + 0x165;
-        if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == 0x14 && itemNo == 0x23) {
+        if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_LV5 && itemNo == 0x23) {
             field_0xcc = 0x5bf;
         }
         if (itemNo == 0x25 && dComIfGs_isDungeonItemWarp(0x16)) {

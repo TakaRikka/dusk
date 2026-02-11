@@ -3,7 +3,7 @@
  * Description:
  */
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 asm void TRK_flush_cache(u32, int) {
     // clang-format off

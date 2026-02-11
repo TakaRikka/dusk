@@ -270,5 +270,5 @@ lbl_88_data_1BD8 = .data:0x00001BD8; // type:object size:0x24
 @120156 = .data:0x00001DD4; // type:object size:0xC scope:local data:string
 @120184 = .data:0x00001DF4; // type:object size:0xD scope:local data:string
 l_HIO = .bss:0x00000000; // type:object size:0x4 scope:global
-lbl_88_bss_4 = .bss:0x00000004; // type:object size:0x1 data:byte
+@GUARD@setAttnPos__12daNpc_Taro_cFv@prtclScl = .bss:0x00000004; // type:object size:0x1 data:byte
 @LOCAL@setAttnPos__12daNpc_Taro_cFv@prtclScl = .bss:0x00000008; // type:object size:0xC scope:local align:4 data:float

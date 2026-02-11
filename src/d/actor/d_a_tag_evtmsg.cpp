@@ -10,6 +10,13 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
+enum evt_cut_e {
+    EVT_CUT_NONE_e,
+    EVT_CUT_TALK_e,
+    EVT_CUT_WAIT_e,
+    NUM_EVT_CUTS_e,
+};
+
 char* daTag_EvtMsg_c::mEvtCutNameList[] = {"", "TALK", "WAIT"};
 
 EvtCutFunc daTag_EvtMsg_c::mEvtCutList[] = {
@@ -21,6 +28,8 @@ EvtCutFunc daTag_EvtMsg_c::mEvtCutList[] = {
 static char* l_myName = "EvtMsg";
 
 int daTag_EvtMsg_c::create() {
+    int var_r28 = 0;
+
     fopAcM_ct(this, daTag_EvtMsg_c);
 
     scale.x *= 100.0f;
@@ -67,6 +76,10 @@ int daTag_EvtMsg_c::Execute() {
                 staff_id = evt_mng.getMyStaffId(l_myName, this, -1);
                 if (staff_id != -1) {
                     int evtCutNo = evt_mng.getMyActIdx(staff_id, mEvtCutNameList, 3, 0, 0);
+
+                    JUT_ASSERT(165, (0 <= evtCutNo) && (evtCutNo < NUM_EVT_CUTS_e));
+                    JUT_ASSERT(166, NULL != mEvtCutList[evtCutNo]);
+
                     if ((this->*mEvtCutList[evtCutNo])(staff_id) != 0) {
                         evt_mng.cutEnd(staff_id);
                     }
@@ -82,18 +95,18 @@ int daTag_EvtMsg_c::Execute() {
             }
         } else if (isDelete()) {
             fopAcM_delete(this);
-        } else if (mFlowID != -1) {
-            if (chkPointInArea(daPy_getPlayerActorClass()->current.pos)) {
+        } else {
+            if (mFlowID != -1 && chkPointInArea(daPy_getPlayerActorClass()->current.pos)) {
                 if (getProcType() == 0) {
-                    s16 var_r0 = (s16)(fopAcM_searchPlayerAngleY(this) + 0x7FFF);
-                    var_r0 = var_r0 - daPy_getPlayerActorClass()->current.angle.y;
+                    s16 var_r28 = (s16)(fopAcM_searchPlayerAngleY(this) + 0x7FFF);
+                    var_r28 = var_r28 - daPy_getPlayerActorClass()->current.angle.y;
 
-                    if (var_r0 < 0) {
-                        var_r0 = -var_r0;
+                    if (var_r28 < 0) {
+                        var_r28 = -var_r28;
                     }
 
-                    if (var_r0 <= 0x1000) {
-                        mEventID = evt_mng.getEventIdx(this, "DEFAULT_EVT_TALK", 0xFF);
+                    if (var_r28 <= 0x1000) {
+                        mEventID = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_EVT_TALK", 0xFF);
                         fopAcM_orderOtherEventId(this, mEventID, 0xFF, 0xFFFF, 0, 1);
                     }
                 } else {
@@ -117,20 +130,12 @@ int daTag_EvtMsg_c::Draw() {
 
 u32 daTag_EvtMsg_c::getOnEvtBit() {
     u32 bit = fopAcM_GetParam(this) & 0xFFF;
-    if (bit != 0xFFF) {
-        return bit;
-    }
-
-    return -1;
+    return bit == 0xFFF ? -1 : bit;
 }
 
 u32 daTag_EvtMsg_c::getOffEvtBit() {
-    u32 bit = (fopAcM_GetParam(this) >> 0xC) & 0xFFF;
-    if (bit != 0xFFF) {
-        return bit;
-    }
-
-    return -1;
+    u32 bit = (fopAcM_GetParam(this) & 0xFFF000) >> 12;
+    return bit == 0xFFF ? -1 : bit;
 }
 
 u8 daTag_EvtMsg_c::getOnSwBit() {
@@ -138,7 +143,7 @@ u8 daTag_EvtMsg_c::getOnSwBit() {
 }
 
 u8 daTag_EvtMsg_c::getOffSwBit() {
-    return (home.angle.x >> 8) & 0xFF;
+    return (home.angle.x & 0xFF00) >> 8;
 }
 
 u8 daTag_EvtMsg_c::getProcType() {
@@ -175,7 +180,8 @@ BOOL daTag_EvtMsg_c::chkPointInArea(cXyz param_0) {
 }
 
 BOOL daTag_EvtMsg_c::ECut_talk(int i_staffID) {
-    if (dComIfGp_getEventManager().getIsAddvance(i_staffID)) {
+    dEvent_manager_c& eventMgr = dComIfGp_getEventManager();
+    if (eventMgr.getIsAddvance(i_staffID)) {
         mMsgFlow.init(this, mFlowID, 0, NULL);
     }
 
@@ -188,9 +194,10 @@ BOOL daTag_EvtMsg_c::ECut_talk(int i_staffID) {
 
 BOOL daTag_EvtMsg_c::ECut_wait(int i_staffID) {
     dEvent_manager_c& evt_mng = dComIfGp_getEventManager();
+    int* data_p = NULL;
     int timer = 0;
 
-    int* data_p = dComIfGp_evmng_getMyIntegerP(i_staffID, "timer");
+    data_p = dComIfGp_evmng_getMyIntegerP(i_staffID, "timer");
     if (data_p != NULL) {
         timer = *data_p;
     }

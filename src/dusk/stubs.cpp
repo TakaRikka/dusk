@@ -5,7 +5,10 @@
 
 // Credits: Super Monkey Ball
 
+<<<<<<< HEAD
 # pragma mark OS
+=======
+>>>>>>> wip/linkfix2
 void OSReport(const char *msg, ...) {
   va_list args;
   va_start(args, msg);
@@ -694,6 +697,13 @@ void JORMContext::updateCheckBoxSub(u32 mode, u32 id, u16 value, u16 mask, u32 p
   puts("JORServer::updateCheckBoxSub is a stub");
 }
 
+<<<<<<< HEAD
+=======
+int JOREventCallbackListNode::JORAct(u32, const char*) {
+    return 0;
+}
+
+>>>>>>> wip/linkfix2
 # pragma mark JSUMemoryOutputStream
 #include <JSystem/JSupport/JSUMemoryStream.h>
 s32 JSUMemoryOutputStream::getAvailable() const {
@@ -1649,3 +1659,90 @@ void dMsgObject_c::setWord(const char* i_word) {
 void dMsgObject_c::setSelectWord(int i_no, const char* i_word) {
   puts("dMsgObject_c::setSelectWord is a stub");
 }
+<<<<<<< HEAD
+=======
+
+#pragma mark HIO
+#include <revolution/hio2.h>
+#include <dolphin/hio.h>
+BOOL HIO2Close(s32 handle) {
+  puts("HIO2Close is a stub");
+  return FALSE;
+}
+
+BOOL HIO2EnumDevices(HIO2EnumCallback callback) {
+  puts("HIO2EnumDevices is a stub");
+  return FALSE;
+}
+
+BOOL HIO2Init(void) {
+  puts("HIO2Init is a stub");
+  return FALSE;
+}
+
+s32 HIO2Open(HIO2DeviceType type, HIO2UnkCallback exiCb, HIO2DisconnectCallback disconnectCb) {
+  puts("HIO2Open is a stub");
+  return 0;
+}
+
+BOOL HIO2Read(s32 handle, u32 addr, void* buffer, s32 size) {
+  puts("HIO2Read is a stub");
+  return FALSE;
+}
+
+BOOL HIO2Write(s32 handle, u32 addr, void* buffer, s32 size) {
+  puts("HIO2Write is a stub");
+  return FALSE;
+}
+
+BOOL HIORead(u32 addr, void* buffer, s32 size) {
+  puts("HIORead is a stub");
+  return FALSE;
+}
+
+BOOL HIOWrite(u32 addr, void* buffer, s32 size) {
+  puts("HIOWrite is a stub");
+  return FALSE;
+}
+
+#pragma mark JHICommBuf
+#include <JSystem/JHostIO/JHIComm.h>
+void JHICommBufHeader::init() {
+  puts("JHICommBufHeader::init is a stub");
+}
+
+int JHICommBufHeader::load() {
+  puts("JHICommBufHeader::load is a stub");
+}
+
+int JHICommBufReader::read(void*, int) {
+  puts("JHICommBufReader::read is a stub");
+  return 0;
+}
+void JHICommBufReader::readEnd() {
+  puts("JHICommBufReader::readEnd is a stub");
+}
+
+int JHICommBufReader::readBegin() {
+  puts("JHICommBufReader::readBegin is a stub");
+}
+
+int JHICommBufWriter::writeBegin() {
+  puts("JHICommBufWriter::writeBegin is a stub");
+  return 0;
+}
+
+int JHICommBufWriter::write(void*, int) {
+  puts("JHICommBufWriter::write is a stub");
+  return 0;
+}
+
+void JHICommBufWriter::writeEnd() {
+  puts("JHICommBufWriter::writeEnd is a stub");
+}
+
+u32 JHICommBufReader::Header::getReadableSize() const {
+  puts("JHICommBufReader::Header::getReadableSize is a stub");
+  return 0;
+}
+>>>>>>> wip/linkfix2

@@ -56,7 +56,7 @@ public:
     int Draw();
     int Delete();
     void setBaseMtx();
-    cPhs__Step Create();
+    cPhs_Step Create();
 private:
     /* 0x5AC */ int field_0x5ac;
     /* 0x5B0 */ int field_0x5b0;

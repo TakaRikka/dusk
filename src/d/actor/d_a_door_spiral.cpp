@@ -1173,7 +1173,8 @@ int daSpiral_Delete(daSpiral_c* i_this) {
 }
 
 int daSpiral_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daSpiral_c, i_this, "Door10");
+    daSpiral_c* a_this = (daSpiral_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "Door10");
     fopAcM_ct(a_this, daSpiral_c);
     return a_this->create();
 }

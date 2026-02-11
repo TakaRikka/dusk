@@ -47,17 +47,17 @@ int daTag_ShopItem_c::create() {
 
         if (getSwitchBit1() != 0xFF) {
             if (dComIfGs_isSaveSwitch(getSwitchBit1())) {
-                mCreateTimer = 150;
                 // "Already Sold\n"
                 OS_REPORT("もう売れたよ\n");
+                mCreateTimer = 150;
             }
         }
 
         if (getSwitchBit2() != 0xFF) {
             if (!dComIfGs_isSaveSwitch(getSwitchBit2())) {
-                mCreateTimer = 150;
                 // "Not sold yet\n"
                 OS_REPORT("まだ売れない\n");
+                mCreateTimer = 150;
             }
         }
     }
@@ -79,7 +79,7 @@ int daTag_ShopItem_c::Execute() {
     if (mProcessID == fpcM_ERROR_PROCESS_ID_e) {
         if (mCreateTimer == 0) {
             mProcessID =
-                fopAcM_create(PROC_ShopItem, (getType() & 0xFF) | (getGroupID() << 0x1C),
+                fopAcM_create(PROC_ShopItem, getType() | (getGroupID() << 28),
                               &current.pos, fopAcM_GetRoomNo(this), &current.angle, NULL, -1);
 
         } else {
@@ -126,19 +126,25 @@ int daTag_ShopItem_c::Draw() {
 }
 
 u8 daTag_ShopItem_c::getType() {
-    return fopAcM_GetParam(this) & 0xFF;
+    u8 result = fopAcM_GetParam(this);
+    return result;
 }
 
 u8 daTag_ShopItem_c::getGroupID() {
-    return fopAcM_GetParam(this) >> 0x1C;
+    u8 result = (fopAcM_GetParam(this) & 0xF0000000) >> 28;
+    return result;
 }
 
 u8 daTag_ShopItem_c::getSwitchBit1() {
-    return home.angle.z & 0xFF;
+    u16 angleZ = home.angle.z;
+    u8 result = angleZ;
+    return result;
 }
 
 u8 daTag_ShopItem_c::getSwitchBit2() {
-    return home.angle.z >> 8 & 0xFF;
+    u16 angleZ = home.angle.z;
+    u8 result = (angleZ & 0xFF00) >> 8;
+    return result;
 }
 
 void daTag_ShopItem_c::initialize() {

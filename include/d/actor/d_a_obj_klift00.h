@@ -16,7 +16,7 @@
  */
 class daObjKLift00_c : public dBgS_MoveBgActor, public request_of_phase_process_class {
 public:
-    cPhs__Step create1st();
+    cPhs_Step create1st();
     void setMtx();
     void rideActor(fopAc_ac_c*);
     int CreateHeap();

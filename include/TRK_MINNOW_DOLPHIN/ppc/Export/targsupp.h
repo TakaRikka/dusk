@@ -1,7 +1,7 @@
 #ifndef PPC_EXPORT_TARGSUPP_H
 #define PPC_EXPORT_TARGSUPP_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 #ifdef __cplusplus
 extern "C" {

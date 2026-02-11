@@ -5,7 +5,7 @@
 #include "JSystem/JUtility/JUTPalette.h"
 #include "JSystem/JUtility/JUTResFont.h"
 #include "JSystem/JUtility/JUTTexture.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 void J2DColorBlock::initialize() {
     for (int i = 0; i < 2; i++) {

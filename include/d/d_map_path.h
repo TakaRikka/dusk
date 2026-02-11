@@ -4,22 +4,50 @@
 #include "d/d_drawlist.h"
 #include "JSystem/JHostIO/JORMContext.h"
 
+struct dMpath_RGB5A3_s {
+    u16 color;
+};
+
+namespace dMpath_ColorCnv_n {
+    void convertRGB5A3_To_GXColor(_GXColor&, const dMpath_RGB5A3_s&);
+}
+
+struct dMpath_RGB5A3_palDt_s {
+    /* 0x0 */ dMpath_RGB5A3_s field_0x0;
+    /* 0x2 */ dMpath_RGB5A3_s field_0x2;
+    /* 0x4 */ dMpath_RGB5A3_s field_0x4;
+    /* 0x6 */ dMpath_RGB5A3_s field_0x6;
+};
+
+class dMpath_RGBA_c {
+public:
+    GXColor mColor;
+
+    dMpath_RGBA_c() {}
+    virtual ~dMpath_RGBA_c() {}
+    GXColor getGXColor() const { return mColor; }
+    void setGXColor(const GXColor&);
+    void setRGB5A3_palDt(const dMpath_RGB5A3_palDt_s&);
+};
+
 namespace dMpath_HIO_n {
     struct list_s {
-        /* 0x00 */ void* field_0x0;
+        /* 0x00 */ const void* field_0x0;
         /* 0x04 */ u32 field_0x4;
     };
 
-    class hioList_c {
-    public:
-        /* 0x00 */ list_s mList;
+    struct resData_s {};
+    struct hioList_s : public list_s, resData_s {};
 
+    // RTTI does not match debug
+    class hioList_c : public hioList_s {
+    public:
         virtual ~hioList_c() {}
         virtual void copySrcToHio() = 0;
         virtual void copyHioToDst() = 0;
         virtual void copyBufToHio(const char*) = 0;
 
-        void set(const list_s& param_1) { mList = param_1; }
+        void set(const list_s& param_1) { *static_cast<list_s*>(this) = param_1; }
         void gen(JORMContext*);
         void update(JORMContext*);
         u32 addString(char*, u32, u32) const;
@@ -42,6 +70,42 @@ public:
     BOOL writeBinaryFile(const char*);
     void binaryDump(const void*, u32);
     bool readBinaryFile(const char*);
+};
+
+class dMpath_RGB5A3_c {
+public:
+    dMpath_RGB5A3_s mColor;
+
+    dMpath_RGB5A3_c(GXColor c) { set(c); }
+    virtual ~dMpath_RGB5A3_c() {}
+    void set(u8 r, u8 g, u8 b, u8 a) {
+        u32 color;
+        if (a >= 224) {
+            color =  (r & 0xf8) << 7 | (g & 0xf8) << 2 | (b & 0xf8) >> 3 | 0x8000;
+        } else {
+            color = (r & 0xf0)  << 4 | g & 0xf0 | (b & 0xf0) >> 4 | (a & 0xe0) << 7;
+        }
+        mColor.color = color;
+    }
+    void set(const GXColor& c) { set(c.r, c.g, c.b, c.a); }
+    const dMpath_RGB5A3_s& getRGB5A3() const { return mColor; }
+};
+
+class dMpath_RGB5A3_palDt_c {
+public:
+    dMpath_RGB5A3_palDt_s field_0x0;
+
+    dMpath_RGB5A3_palDt_c() {}
+    virtual ~dMpath_RGB5A3_palDt_c() {}
+    dMpath_RGB5A3_palDt_s& getRGB5A3_palDt_s() { return field_0x0; }
+
+    void setGXColor(const GXColor& c) {
+        dMpath_RGB5A3_c rgb5a3(c);
+        field_0x0.field_0x0 = rgb5a3.getRGB5A3();
+        field_0x0.field_0x2 = rgb5a3.getRGB5A3();
+        field_0x0.field_0x4 = rgb5a3.getRGB5A3();
+        field_0x0.field_0x6 = rgb5a3.getRGB5A3();
+    }
 };
 
 class dDrawPath_c : public dDlst_base_c {
@@ -176,35 +240,29 @@ public:
 struct dMpath_n {
     class dTexObjAggregate_c {
     public:
+        static const int TEX_OBJ_NUMBER = 7;
+
         void create();
         void remove();
         ~dTexObjAggregate_c() { remove(); };
 
-        GXTexObj* getTexObjPointer(int i_no) { return mp_texObj[i_no]; }
+        GXTexObj* getTexObjPointer(int i_no) {
+            JUT_ASSERT(44, i_no >= 0 && i_no < TEX_OBJ_NUMBER);
+            return mp_texObj[i_no];
+        }
 
         dTexObjAggregate_c() {
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < TEX_OBJ_NUMBER; i++) {
                 mp_texObj[i] = NULL;
             }
         }
 
-        /* 0x0 */ GXTexObj* mp_texObj[7];
+        /* 0x0 */ GXTexObj* mp_texObj[TEX_OBJ_NUMBER];
     };
 
     static dTexObjAggregate_c m_texObjAgg;
 };
 
 STATIC_ASSERT(sizeof(dMpath_n::dTexObjAggregate_c) == 28);
-
-struct dMpath_RGB5A3_s {
-    u16 color;
-};
-
-struct dMpath_RGB5A3_palDt_s {
-    /* 0x0 */ dMpath_RGB5A3_s field_0x0;
-    /* 0x2 */ dMpath_RGB5A3_s field_0x2;
-    /* 0x4 */ dMpath_RGB5A3_s field_0x4;
-    /* 0x6 */ dMpath_RGB5A3_s field_0x6;
-};
 
 #endif /* D_MAP_D_MAP_PATH_H */

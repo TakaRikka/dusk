@@ -41,7 +41,7 @@ public:
     void moveSwingFall();
     void hookSwingInitParm();
 
-    virtual cPhs__Step create1st();
+    virtual cPhs_Step create1st();
     virtual ~daObjChandelier_c();
 
     u8 getSW_0() { return fopAcM_GetParamBit(this, 4, 8); }

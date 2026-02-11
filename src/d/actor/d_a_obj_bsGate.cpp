@@ -32,9 +32,9 @@ int daBsGate_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daBsGate_c::create() {
+cPhs_Step daBsGate_c::create() {
     fopAcM_ct(this, daBsGate_c);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, "S_Zgate");
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, "S_Zgate");
     if (step == cPhs_COMPLEATE_e) {
         if (MoveBGCreate("S_Zgate", 7, dBgS_MoveBGProc_TypicalRotY, 0xf00, NULL) == cPhs_ERROR_e) {
             return cPhs_ERROR_e;
@@ -158,7 +158,7 @@ static int daBsGate_Delete(daBsGate_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-static cPhs__Step daBsGate_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daBsGate_Create(fopAc_ac_c* i_this) {
     return static_cast<daBsGate_c*>(i_this)->create();
 }
 

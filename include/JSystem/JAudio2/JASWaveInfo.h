@@ -1,7 +1,7 @@
 #ifndef JASWAVEINFO_H
 #define JASWAVEINFO_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JASWaveArc;
 

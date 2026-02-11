@@ -1,7 +1,7 @@
 #ifndef JPAEMITTERMANAGER_H
 #define JPAEMITTERMANAGER_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "JSystem/JParticle/JPAList.h"
 #include "JSystem/JParticle/JPADrawInfo.h"
 #include "JSystem/JSupport/JSUList.h"

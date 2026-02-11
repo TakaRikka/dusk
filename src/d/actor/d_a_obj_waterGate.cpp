@@ -26,7 +26,7 @@ daWtGate_HIO_c::daWtGate_HIO_c() {
 #if DEBUG
 void daWtGate_HIO_c::genMessage(JORMContext* ctx) {
     // "Maximum speed"
-    ctx->genSlider("最大速度", &mMaxSpeed, 0.1, 500.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("最大速度", &mMaxSpeed, 0.1, 500.0);
 }
 #endif
 
@@ -49,10 +49,10 @@ int daWtGate_c::CreateHeap() {
         return 1;
 }
 
-cPhs__Step daWtGate_c::create() {
+cPhs_Step daWtGate_c::create() {
     fopAcM_ct(this, daWtGate_c);
 
-    const cPhs__Step resPhase = static_cast<cPhs__Step>(dComIfG_resLoad(&mPhase, "S_Zsuimon"));
+    const cPhs_Step resPhase = static_cast<cPhs_Step>(dComIfG_resLoad(&mPhase, "S_Zsuimon"));
     if(resPhase == cPhs_COMPLEATE_e) {
         if(MoveBGCreate("S_Zsuimon", 7, dBgS_MoveBGProc_TypicalRotY, 0xE00, NULL) == cPhs_ERROR_e)
             return cPhs_ERROR_e;
@@ -196,13 +196,13 @@ static int daWtGate_Execute(daWtGate_c* i_this) {
 }
 
 static int daWtGate_Delete(daWtGate_c* i_this) {
-    const fpc_ProcID procID = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "daWtGate");
     return i_this->MoveBGDelete();
 }
 
 static int daWtGate_Create(fopAc_ac_c* i_this) {
     daWtGate_c* const waterGate = static_cast<daWtGate_c*>(i_this);
-    const fpc_ProcID procID = fopAcM_GetID(i_this);
+    fopAcM_RegisterCreateID(i_this, "daWtGate");
     return waterGate->create();
 }
 

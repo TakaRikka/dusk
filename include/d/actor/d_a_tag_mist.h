@@ -11,6 +11,7 @@ public:
     int Create();
     int create();
     int execute();
+    int draw();
     int _delete();
 
     static u8 getPlayerNo();
@@ -28,18 +29,18 @@ public:
 
 namespace daTagMist_prm {
 inline u8 getSwNoNum(daTagMist_c* i_this) {
-    return fopAcM_GetParam(i_this) >> 0x10;
+    return (fopAcM_GetParam(i_this) >> 16) & 0xFF;
 }
 inline u8 getMySwNo(daTagMist_c* i_this) {
-    return fopAcM_GetParam(i_this) >> 0x8;
+    return (fopAcM_GetParam(i_this) >> 8) & 0xFF;
 }
 inline u8 getTopSwNo(daTagMist_c* i_this) {
     return fopAcM_GetParam(i_this);
 }
 inline u8 getExitNo(daTagMist_c* i_this) {
-    return (fopAcM_GetParam(i_this) >> 0x18) & 0x3F;
+    return (fopAcM_GetParam(i_this) >> 24) & 0x3F;
 }
-inline int getSwNo2(daTagMist_c* i_this) {
+inline u8 getSwNo2(daTagMist_c* i_this) {
     return i_this->field_0x5a2 & 0xFF;
 }
 }  // namespace daTagMist_prm

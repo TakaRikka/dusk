@@ -219,9 +219,9 @@ void daNpc_Fairy_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
 void daNpc_Fairy_HIO_c::genMessage(JORMContext* ctx) {
     daNpcT_cmnGenMessage(ctx, &m.common);
-    ctx->genSlider("残留思念の幅", &m.spirit_width, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("残留思念の高さ", &m.spirit_height, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("残留思念の幅", &m.spirit_width, 0.0f, 1000.0f);
+    ctx->genSlider("残留思念の高さ", &m.spirit_height, 0.0f, 1000.0f);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -518,7 +518,7 @@ daNpc_Fairy_c::~daNpc_Fairy_c() {
 
 static NPC_FAIRY_HIO_CLASS l_HIO;
 
-cPhs__Step daNpc_Fairy_c::Create() {
+cPhs_Step daNpc_Fairy_c::Create() {
     daNpcT_ct(this, daNpc_Fairy_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -526,7 +526,7 @@ cPhs__Step daNpc_Fairy_c::Create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x8000)) {
             return cPhs_ERROR_e;
@@ -726,7 +726,7 @@ bool daNpc_Fairy_c::afterSetMotionAnm(int i_idx, int i_bck_attr, f32 i_morf, int
 
 int daNpc_Fairy_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_Fairy_c -> Delete\n", g_Counter.mCounter0, this);
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_FAIRY");
     this->~daNpc_Fairy_c();
     return 1;
 }
@@ -748,11 +748,7 @@ int daNpc_Fairy_c::Draw() {
         mdlData_p->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    #if DEBUG
-    return draw(chkAction(&daNpc_Fairy_c::test), TRUE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
-    #else
-    return draw(FALSE, TRUE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
-    #endif
+    return draw(NpcT_CHK_ACTION(daNpc_Fairy_c), TRUE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
 void daNpc_Fairy_c::drawOtherMdl() {

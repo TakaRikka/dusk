@@ -4880,35 +4880,26 @@ dKankyo_lightHIO_c::dKankyo_lightHIO_c() {
 }
 
 void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("「カラーパレット＆ライト位置情報の設定」", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
-                   0x200, 0x18);
-    mctx->startComboBox("■ HOSTIO設定", &m_HOSTIO_setting, 0, NULL, 0xFFFF, 0xFFFF, 0x100,
-                        0x1a);
+    mctx->genLabel("「カラーパレット＆ライト位置情報の設定」", 0x80000001);
+    mctx->startComboBox("■ HOSTIO設定", &m_HOSTIO_setting);
     mctx->genComboBoxItem("未使用", 0);
     mctx->genComboBoxItem("ＨＯＳＴＩＯ設定！", 1);
     mctx->endComboBox();
-    mctx->genLabel("ＨＯＳＴＩＯ設定にすると、ゲーム内の現在データが入ります！", 0x80000001, 0,
-                   NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("これをしないとカラー変更が利きません！", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
-                   0x200, 0x18);
+    mctx->genLabel("ＨＯＳＴＩＯ設定にすると、ゲーム内の現在データが入ります！", 0x80000001);
+    mctx->genLabel("これをしないとカラー変更が利きません！", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // ● Adjustment of kantera, wolf lights, and underwater lights.
-    mctx->genLabel("●カンテラ・狼ライト・水中ライトの調整", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
-                   0x200, 0x18);
-    mctx->genCheckBox("調整開始", &g_kankyoHIO.navy.use_debug, 1, 0, NULL, 0xFFFF,
-                      0xFFFF, 0x200, 0x18);
+    mctx->genLabel("●カンテラ・狼ライト・水中ライトの調整", 0x80000001);
+    mctx->genCheckBox("調整開始", &g_kankyoHIO.navy.use_debug, 0x1);
     mctx->genSlider("地形のみ高さ補正", &g_kankyoHIO.navy.terrain_height_crr, -5000.0f,
-                    5000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                    5000.0f);
     mctx->genSlider("影響力　倍率", &g_kankyoHIO.navy.influence_multiplier, 0.0f,
-                    100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                    100.0f);
     mctx->genSlider("cutoff　倍率", &g_kankyoHIO.navy.cutoff_multiplier, 0.01f,
-                    10.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("● 部屋ライトタイプのＳｍＬLL切り替え（調整用）", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
-    mctx->startComboBox("選択", &g_kankyoHIO.navy.room_light_type, 0, NULL, 0xFFFF,
-                        0xFFFF, 0x100, 0x1a);
+                    10.0f);
+    mctx->genLabel("● 部屋ライトタイプのＳｍＬLL切り替え（調整用）", 0x80000001);
+    mctx->startComboBox("選択", &g_kankyoHIO.navy.room_light_type);
     mctx->genComboBoxItem("ゲームまかせ", 0);
     mctx->genComboBoxItem("（ Ｓ ）", 1);
     mctx->genComboBoxItem("（ Ｍ ）", 2);
@@ -4916,27 +4907,19 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("（ＬＬ）", 4);
     mctx->endComboBox();
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
-    mctx->genLabel("● ポリゴンコードによる設定(ファイル出力無し)", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("● ポリゴンコードによる設定(ファイル出力無し)", 0x80000001);
     mctx->genLabel("ここで取り決めた数値を該当のポリゴンコードのカラーに設定してください",
-                   0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("「アクタへの生ライトの影響率」", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                   0x18);
-    mctx->genSlider("影響率(0%-200%)", &g_env_light.mActorLightEffect, 0, 200, 0,
-                    NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                   0x80000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("「アクタへの生ライトの影響率」", 0x80000001);
+    mctx->genSlider("影響率(0%-200%)", &g_env_light.mActorLightEffect, 0, 200);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     //● TEV_TYPE_DOOR attribute set to the actor's argument (no file output)
-    mctx->genLabel("● TEV_TYPE_DOOR属性アクタの引数へ設定する(ファイル出力無し)", 0x80000001, 0,
-                   NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("「ドアなど引数へ設定する物への生ライトの影響率」", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
-    mctx->startComboBox("選択", &g_kankyoHIO.navy.door_light_influence_ratio, 0, NULL,
-                        0xFFFF, 0xFFFF, 0x100, 0x1a);
+    mctx->genLabel("● TEV_TYPE_DOOR属性アクタの引数へ設定する(ファイル出力無し)", 0x80000001);
+    mctx->genLabel("「ドアなど引数へ設定する物への生ライトの影響率」", 0x80000001);
+    mctx->startComboBox("選択", &g_kankyoHIO.navy.door_light_influence_ratio);
     mctx->genComboBoxItem("ゲームまかせ", 0xff);
     mctx->genComboBoxItem("0-20%", 0);
     mctx->genComboBoxItem("1-30%", 1);
@@ -4948,41 +4931,28 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("7-120%", 7);
     mctx->genComboBoxItem("↓で新設", 0x99);
     mctx->endComboBox();
-    mctx->genLabel("新たな％を試したい場合はコチラ、プログラム対応必要です。ささきまで", 0x80000001,
-                   0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("新たな％を試したい場合はコチラ、プログラム対応必要です。ささきまで", 0x80000001);
     mctx->genSlider("影響率(0%-200%)", &g_kankyoHIO.navy.unk_light_influence_ratio, 0,
-                    200, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                    200);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
-    mctx->genLabel("● カラーパレットごとに入っている設定値", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
-                   0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("● カラーパレットごとに入っている設定値", 0x80000001);
     mctx->genSlider("地形ライト影響率 ", &g_env_light.bg_light_influence, 0.0f,
-                    2.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("雲影の濃さ ", &g_env_light.mFogDensity, 0, 0xff, 0, NULL,
-                    0xFFFF, 0xFFFF, 0x200, 0x18);
+                    2.0f);
+    mctx->genSlider("雲影の濃さ ", &g_env_light.mFogDensity, 0, 0xff);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("●草ライト影響率 「部屋情報」にてセット", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
-                   0x200, 0x18);
-    mctx->genCheckBox("調整開始", &g_kankyoHIO.navy.grass_light_debug, 1, 0, NULL,
-                      0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("影響率 ", &g_kankyoHIO.navy.grass_light_influence_ratio, 0, 200,
-                    0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("● 草Amb 草を配置時に引数にセット", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                   0x18);
-    mctx->genCheckBox("調整開始", &g_kankyoHIO.navy.grass_adjust_ON, 1, 0, NULL,
-                      0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("引数１ r", &g_kankyoHIO.navy.grass_ambcol.r, 0, 30, 0, NULL,
-                    0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("引数２ g", &g_kankyoHIO.navy.grass_ambcol.g, 0, 30, 0, NULL,
-                    0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("引数３ b", &g_kankyoHIO.navy.grass_ambcol.b, 0, 30, 0, NULL,
-                    0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("●草ライト影響率 「部屋情報」にてセット", 0x80000001);
+    mctx->genCheckBox("調整開始", &g_kankyoHIO.navy.grass_light_debug, 0x1);
+    mctx->genSlider("影響率 ", &g_kankyoHIO.navy.grass_light_influence_ratio, 0, 200);
+    mctx->genLabel("● 草Amb 草を配置時に引数にセット", 0x80000001);
+    mctx->genCheckBox("調整開始", &g_kankyoHIO.navy.grass_adjust_ON, 0x1);
+    mctx->genSlider("引数１ r", &g_kankyoHIO.navy.grass_ambcol.r, 0, 30);
+    mctx->genSlider("引数２ g", &g_kankyoHIO.navy.grass_ambcol.g, 0, 30);
+    mctx->genSlider("引数３ b", &g_kankyoHIO.navy.grass_ambcol.b, 0, 30);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->startComboBox("■飽和パターン", &g_kankyoHIO.bloom.m_saturationPattern, 0,
-                        NULL, 0xFFFF, 0xFFFF, 0x100, 0x1a);
+    mctx->genLabel("", 0x80000001);
+    mctx->startComboBox("■飽和パターン", &g_kankyoHIO.bloom.m_saturationPattern);
     mctx->genComboBoxItem("使用しない", 0);
     mctx->genComboBoxItem("1 トワイライト(く)", 1);
     mctx->genComboBoxItem("2 トワイライト_弱(く)", 2);
@@ -5020,102 +4990,93 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("45 デモ：溶岩Ｗ", 45);
     mctx->endComboBox();
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
-    mctx->genLabel("● CSV情報のファイル書き出し", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("(カラーパレット情報のファイル書き出し)", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
-                   0x200, 0x18);
-    mctx->genButton("パレットWRITE", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("(生ライト位置情報リストファイル書き出し)", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
-                   0x200, 0x18);
-    mctx->genButton("位置情報WRITE", 0x40000003, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("● CSV情報のファイル書き出し", 0x80000001);
+    mctx->genLabel("(カラーパレット情報のファイル書き出し)", 0x80000001);
+    mctx->genButton("パレットWRITE", 0x40000002);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("(生ライト位置情報リストファイル書き出し)", 0x80000001);
+    mctx->genButton("位置情報WRITE", 0x40000003);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
-    mctx->genLabel("● CSV情報のファイル読み込み（確認用）", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
-                   0x200, 0x18);
-    mctx->genLabel("(カラーパレット情報のファイル読み込み)", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
-                   0x200, 0x18);
-    mctx->genButton("FILEREAD", 0x40000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("(生ライト位置情報リストファイル読み込み)", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF,
-                   0x200, 0x18);
-    mctx->genButton("位置情報READ", 0x41000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("● CSV情報のファイル読み込み（確認用）", 0x80000001);
+    mctx->genLabel("(カラーパレット情報のファイル読み込み)", 0x80000001);
+    mctx->genButton("FILEREAD", 0x40000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("(生ライト位置情報リストファイル読み込み)", 0x80000001);
+    mctx->genButton("位置情報READ", 0x41000001);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
-    mctx->genLabel("● アンビエント", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("● アンビエント", 0x80000001);
     mctx->genLabel("-----------------------------------------------------------------------------------------",
-                   0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("(アクタ)", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("■ ACTOR_Amb Ｒ", &g_env_light.actor_amb_col.r, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("             Ｇ", &g_env_light.actor_amb_col.g, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("             Ｂ", &g_env_light.actor_amb_col.b, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +100", 0x40000010, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     + 10", 0x40000011, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +  1", 0x40000012, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -  1", 0x40000013, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     - 10", 0x40000014, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -100", 0x40000015, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                   0x80000001);
+    mctx->genLabel("(アクタ)", 0x80000001);
+    mctx->genSlider("■ ACTOR_Amb Ｒ", &g_env_light.actor_amb_col.r, 0, 0xff);
+    mctx->genSlider("             Ｇ", &g_env_light.actor_amb_col.g, 0, 0xff);
+    mctx->genSlider("             Ｂ", &g_env_light.actor_amb_col.b, 0, 0xff);
+    mctx->genButton("RGB同時加算     +100", 0x40000010);
+    mctx->genButton("RGB同時加算     + 10", 0x40000011);
+    mctx->genButton("RGB同時加算     +  1", 0x40000012);
+    mctx->genButton("RGB同時加算     -  1", 0x40000013);
+    mctx->genButton("RGB同時加算     - 10", 0x40000014);
+    mctx->genButton("RGB同時加算     -100", 0x40000015);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("(地形)", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("■ ＢＧ０_Amb Ｒ", &g_env_light.bg_amb_col[0].r, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("              Ｇ", &g_env_light.bg_amb_col[0].g, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("        　　　Ｂ", &g_env_light.bg_amb_col[0].b, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +100", 0x40000016, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     + 10", 0x40000017, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +  1", 0x40000018, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -  1", 0x40000019, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     - 10", 0x4000001a, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -100", 0x4000001b, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("(地形)", 0x80000001);
+    mctx->genSlider("■ ＢＧ０_Amb Ｒ", &g_env_light.bg_amb_col[0].r, 0, 0xff);
+    mctx->genSlider("              Ｇ", &g_env_light.bg_amb_col[0].g, 0, 0xff);
+    mctx->genSlider("        　　　Ｂ", &g_env_light.bg_amb_col[0].b, 0, 0xff);
+    mctx->genButton("RGB同時加算     +100", 0x40000016);
+    mctx->genButton("RGB同時加算     + 10", 0x40000017);
+    mctx->genButton("RGB同時加算     +  1", 0x40000018);
+    mctx->genButton("RGB同時加算     -  1", 0x40000019);
+    mctx->genButton("RGB同時加算     - 10", 0x4000001a);
+    mctx->genButton("RGB同時加算     -100", 0x4000001b);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("■ ＢＧ１_Amb Ｒ", &g_env_light.bg_amb_col[1].r, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("        　　　Ｇ", &g_env_light.bg_amb_col[1].g, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("        　　　Ｂ", &g_env_light.bg_amb_col[1].b, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +100", 0x4000001c, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     + 10", 0x4000001d, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +  1", 0x4000001e, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -  1", 0x4000001f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     - 10", 0x40000020, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -100", 0x40000021, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("水面α  Ａ", &g_env_light.bg_amb_col[1].a, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("補佐α  Ａ２", &g_env_light.bg_amb_col[2].a, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genSlider("■ ＢＧ１_Amb Ｒ", &g_env_light.bg_amb_col[1].r, 0, 0xff);
+    mctx->genSlider("        　　　Ｇ", &g_env_light.bg_amb_col[1].g, 0, 0xff);
+    mctx->genSlider("        　　　Ｂ", &g_env_light.bg_amb_col[1].b, 0, 0xff);
+    mctx->genButton("RGB同時加算     +100", 0x4000001c);
+    mctx->genButton("RGB同時加算     + 10", 0x4000001d);
+    mctx->genButton("RGB同時加算     +  1", 0x4000001e);
+    mctx->genButton("RGB同時加算     -  1", 0x4000001f);
+    mctx->genButton("RGB同時加算     - 10", 0x40000020);
+    mctx->genButton("RGB同時加算     -100", 0x40000021);
+    mctx->genSlider("水面α  Ａ", &g_env_light.bg_amb_col[1].a, 0, 0xff);
+    mctx->genSlider("補佐α  Ａ２", &g_env_light.bg_amb_col[2].a, 0, 0xff);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("■ ＢＧ２_Amb Ｒ", &g_env_light.bg_amb_col[2].r, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("        　　　Ｇ", &g_env_light.bg_amb_col[2].g, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("        　　　Ｂ", &g_env_light.bg_amb_col[2].b, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +100", 0x40000022, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     + 10", 0x40000023, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +  1", 0x40000024, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -  1", 0x40000025, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     - 10", 0x40000026, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -100", 0x40000027, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genSlider("■ ＢＧ２_Amb Ｒ", &g_env_light.bg_amb_col[2].r, 0, 0xff);
+    mctx->genSlider("        　　　Ｇ", &g_env_light.bg_amb_col[2].g, 0, 0xff);
+    mctx->genSlider("        　　　Ｂ", &g_env_light.bg_amb_col[2].b, 0, 0xff);
+    mctx->genButton("RGB同時加算     +100", 0x40000022);
+    mctx->genButton("RGB同時加算     + 10", 0x40000023);
+    mctx->genButton("RGB同時加算     +  1", 0x40000024);
+    mctx->genButton("RGB同時加算     -  1", 0x40000025);
+    mctx->genButton("RGB同時加算     - 10", 0x40000026);
+    mctx->genButton("RGB同時加算     -100", 0x40000027);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("■ ＢＧ３_Amb Ｒ", &g_env_light.bg_amb_col[3].r, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("        　　　Ｇ", &g_env_light.bg_amb_col[3].g, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("        　　　Ｂ", &g_env_light.bg_amb_col[3].b, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +100", 0x40000028, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     + 10", 0x40000029, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +  1", 0x4000002a, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -  1", 0x4000002b, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     - 10", 0x4000002c, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -100", 0x4000002d, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("ウソFog　Ａ", &g_env_light.bg_amb_col[3].a, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genSlider("■ ＢＧ３_Amb Ｒ", &g_env_light.bg_amb_col[3].r, 0, 0xff);
+    mctx->genSlider("        　　　Ｇ", &g_env_light.bg_amb_col[3].g, 0, 0xff);
+    mctx->genSlider("        　　　Ｂ", &g_env_light.bg_amb_col[3].b, 0, 0xff);
+    mctx->genButton("RGB同時加算     +100", 0x40000028);
+    mctx->genButton("RGB同時加算     + 10", 0x40000029);
+    mctx->genButton("RGB同時加算     +  1", 0x4000002a);
+    mctx->genButton("RGB同時加算     -  1", 0x4000002b);
+    mctx->genButton("RGB同時加算     - 10", 0x4000002c);
+    mctx->genButton("RGB同時加算     -100", 0x4000002d);
+    mctx->genSlider("ウソFog　Ａ", &g_env_light.bg_amb_col[3].a, 0, 0xff);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
-    mctx->genLabel("● フォグ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("● フォグ", 0x80000001);
     mctx->genLabel("-----------------------------------------------------------------------------------------",
-                   0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->startComboBox("fog type", &m_fogtype, 0, NULL, 0xFFFF, 0xFFFF, 0x100, 0x1a);
+                   0x80000001);
+    mctx->startComboBox("fog type", &m_fogtype);
     mctx->genComboBoxItem("STAN-BY", 2);
     mctx->genComboBoxItem("GX_FOG_NONE", 0);
     mctx->genComboBoxItem("GX_FOG_LIN", 2);
@@ -5124,33 +5085,28 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("GX_FOG_REVEXP", 6);
     mctx->genComboBoxItem("GX_FOG_REVEXP2", 7);
     mctx->endComboBox();
-    mctx->genSlider("■ ＦＯＧ   Ｒ", &g_env_light.fog_col.r, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("            Ｇ", &g_env_light.fog_col.g, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("            Ｂ", &g_env_light.fog_col.b, 0, 0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +100", 0x4000002e, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     + 10", 0x4000002f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     +  1", 0x40000030, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -  1", 0x40000031, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     - 10", 0x40000032, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genButton("RGB同時加算     -100", 0x40000033, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genSlider("■ ＦＯＧ   Ｒ", &g_env_light.fog_col.r, 0, 0xff);
+    mctx->genSlider("            Ｇ", &g_env_light.fog_col.g, 0, 0xff);
+    mctx->genSlider("            Ｂ", &g_env_light.fog_col.b, 0, 0xff);
+    mctx->genButton("RGB同時加算     +100", 0x4000002e);
+    mctx->genButton("RGB同時加算     + 10", 0x4000002f);
+    mctx->genButton("RGB同時加算     +  1", 0x40000030);
+    mctx->genButton("RGB同時加算     -  1", 0x40000031);
+    mctx->genButton("RGB同時加算     - 10", 0x40000032);
+    mctx->genButton("RGB同時加算     -100", 0x40000033);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("          near", &g_env_light.mFogNear, -2500000.0f, 2500000.0f, 0,
-                    NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("           far", &g_env_light.mFogFar, -2500000.0f, 2500000.0f, 0,
-                    NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genSlider("          near", &g_env_light.mFogNear, -2500000.0f, 2500000.0f);
+    mctx->genSlider("           far", &g_env_light.mFogFar, -2500000.0f, 2500000.0f);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
-    mctx->genLabel("● 生ライト", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("● 生ライト", 0x80000001);
     mctx->genLabel("-----------------------------------------------------------------------------------------",
-                   0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                   0x80000001);
     mctx->genCheckBox("デバッグ球の表示",
-                      &g_kankyoHIO.dungeonLight.displayDebugSphere, 1, 0, NULL,
-                      0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->startComboBox("■ 使用ライト", &g_kankyoHIO.dungeonLight.usedLights, 0, NULL,
-                        0xFFFF, 0xFFFF, 0x100, 0x1a);
+                      &g_kankyoHIO.dungeonLight.displayDebugSphere, 0x1);
+    mctx->startComboBox("■ 使用ライト", &g_kankyoHIO.dungeonLight.usedLights);
     mctx->genComboBoxItem("なし", 0);
     mctx->genComboBoxItem("２", 1);
     mctx->genComboBoxItem("２ ３", 2);
@@ -5164,226 +5120,161 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
         switch (i) {
         case 0:
             mctx->genLabel("-----------------------------------------------------------------------------------------",
-                            0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genLabel("（ライト０）―えせポイントライト", 0x80000001, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
-            mctx->genLabel("（ライト１）―エフェクトライト", 0x80000001, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
+                            0x80000001);
+            mctx->genLabel("（ライト０）―えせポイントライト", 0x80000001);
+            mctx->genLabel("（ライト１）―エフェクトライト", 0x80000001);
             mctx->genLabel("-----------------------------------------------------------------------------------------",
-                            0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                            0x80000001);
             mctx->genLabel("● ● ●  ラ イ ト ２  ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●",
-                            0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genLabel("※太陽が存在する場合、設定は上書きされます", 0x80000001, 0, NULL,
-                            0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("プレイヤー位置にライト２を移動", 0x40000004, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
-            mctx->genButton("カメラCTR 位置にライト２を移動", 0x400000a0, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genButton("(((ライト２位置へワープ！！)))", 0x4000000a, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                            0x80000001);
+            mctx->genLabel("※太陽が存在する場合、設定は上書きされます", 0x80000001);
+            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001);
+            mctx->genButton("プレイヤー位置にライト２を移動", 0x40000004);
+            mctx->genButton("カメラCTR 位置にライト２を移動", 0x400000a0);
+            mctx->genLabel("", 0x80000001);
+            mctx->genButton("(((ライト２位置へワープ！！)))", 0x4000000a);
+            mctx->genLabel("", 0x80000001);
             break;
         case 1:
             mctx->genLabel("-----------------------------------------------------------------------------------------",
-                            0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                            0x80000001);
             mctx->genLabel("● ● ●  ラ イ ト ３  ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●",
-                            0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genLabel("※月が存在する場合、設定が上書きされます", 0x80000001, 0, NULL,
-                            0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("プレイヤー位置にライト３を移動！", 0x40000005, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
-            mctx->genButton("カメラCTR 位置にライト３を移動", 0x400000a1, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genButton("(((ライト３位置へワープ！！)))", 0x4000000b, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                            0x80000001);
+            mctx->genLabel("※月が存在する場合、設定が上書きされます", 0x80000001);
+            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001);
+            mctx->genButton("プレイヤー位置にライト３を移動！", 0x40000005);
+            mctx->genButton("カメラCTR 位置にライト３を移動", 0x400000a1);
+            mctx->genLabel("", 0x80000001);
+            mctx->genButton("(((ライト３位置へワープ！！)))", 0x4000000b);
+            mctx->genLabel("", 0x80000001);
             break;
         case 2:
             mctx->genLabel("-----------------------------------------------------------------------------------------",
-                            0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                            0x80000001);
             mctx->genLabel("● ● ●  ラ イ ト ４  ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●",
-                            0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("プレイヤー位置にライト４を移動！", 0x40000006, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
-            mctx->genButton("カメラCTR 位置にライト４を移動", 0x400000a2, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genButton("(((ライト４位置へワープ！！)))", 0x4000000c, 0, NULL, 0xFFFF,
-                            0xFFFF, 0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                            0x80000001);
+            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001);
+            mctx->genButton("プレイヤー位置にライト４を移動！", 0x40000006);
+            mctx->genButton("カメラCTR 位置にライト４を移動", 0x400000a2);
+            mctx->genLabel("", 0x80000001);
+            mctx->genButton("(((ライト４位置へワープ！！)))", 0x4000000c);
+            mctx->genLabel("", 0x80000001);
             break;
         case 3:
             mctx->genLabel("-----------------------------------------------------------------------------------------",
-                           0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                           0x80000001);
             mctx->genLabel("● ● ●  ラ イ ト ５  ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●",
-                           0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genButton("プレイヤー位置にライト５を移動！", 0x40000007, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genButton("カメラCTR 位置にライト５を移動", 0x400000a3, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genButton("(((ライト５位置へワープ！！)))", 0x4000000d, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                           0x80000001);
+            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001);
+            mctx->genButton("プレイヤー位置にライト５を移動！", 0x40000007);
+            mctx->genButton("カメラCTR 位置にライト５を移動", 0x400000a3);
+            mctx->genLabel("", 0x80000001);
+            mctx->genButton("(((ライト５位置へワープ！！)))", 0x4000000d);
+            mctx->genLabel("", 0x80000001);
             break;
         case 4:
             mctx->genLabel("-----------------------------------------------------------------------------------------",
-                           0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                           0x80000001);
             mctx->genLabel("● ● ●  ラ イ ト ６  ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●",
-                           0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genButton("プレイヤー位置にライト６を移動！", 0x40000008, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genButton("カメラCTR 位置にライト６を移動", 0x400000a4, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genButton("(((ライト６位置へワープ！！)))", 0x4000000e, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                           0x80000001);
+            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001);
+            mctx->genButton("プレイヤー位置にライト６を移動！", 0x40000008);
+            mctx->genButton("カメラCTR 位置にライト６を移動", 0x400000a4);
+            mctx->genLabel("", 0x80000001);
+            mctx->genButton("(((ライト６位置へワープ！！)))", 0x4000000e);
+            mctx->genLabel("", 0x80000001);
             break;
         case 5:
             mctx->genLabel("-----------------------------------------------------------------------------------------",
-                           0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                           0x80000001);
             mctx->genLabel("● ● ●  ラ イ ト ７  ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●",
-                           0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genButton("プレイヤー位置にライト７を移動！", 0x40000009, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genButton("カメラCTR 位置にライト７を移動", 0x400000a5, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-            mctx->genButton("(((ライト７位置へワープ！！)))", 0x4000000f, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                           0x80000001);
+            mctx->genLabel("↓↓↓ 誤押注意 ↓↓↓", 0x80000001);
+            mctx->genButton("プレイヤー位置にライト７を移動！", 0x40000009);
+            mctx->genButton("カメラCTR 位置にライト７を移動", 0x400000a5);
+            mctx->genLabel("", 0x80000001);
+            mctx->genButton("(((ライト７位置へワープ！！)))", 0x4000000f);
+            mctx->genLabel("", 0x80000001);
             break;
         }
 
-        mctx->genLabel("※色を変える場合はカラーパレットのファイル作成も忘れずに！", 0x80000001, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+        mctx->genLabel("※色を変える場合はカラーパレットのファイル作成も忘れずに！", 0x80000001);
         mctx->genSlider("色  Ｒ", &g_env_light.dungeonlight[i].mColor.r, 0,
-                        0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        0xff);
         mctx->genSlider("    Ｇ", &g_env_light.dungeonlight[i].mColor.g, 0,
-                        0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        0xff);
         mctx->genSlider("    Ｂ", &g_env_light.dungeonlight[i].mColor.b, 0,
-                        0xff, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        0xff);
 
         switch (i) {
         case 0:
-            mctx->genButton("RGB同時加算     +100", 0x40000034, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genButton("RGB同時加算     + 10", 0x40000035, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genButton("RGB同時加算     +  1", 0x40000036, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genButton("RGB同時加算     -  1", 0x40000037, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genButton("RGB同時加算     - 10", 0x40000038, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
-            mctx->genButton("RGB同時加算     -100", 0x40000039, 0, NULL, 0xFFFF, 0xFFFF,
-                            0x200, 0x18);
+            mctx->genButton("RGB同時加算     +100", 0x40000034);
+            mctx->genButton("RGB同時加算     + 10", 0x40000035);
+            mctx->genButton("RGB同時加算     +  1", 0x40000036);
+            mctx->genButton("RGB同時加算     -  1", 0x40000037);
+            mctx->genButton("RGB同時加算     - 10", 0x40000038);
+            mctx->genButton("RGB同時加算     -100", 0x40000039);
             break;
         case 1:
-            mctx->genButton("RGB同時加算     +100", 0x4000003a, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     + 10", 0x4000003b, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     +  1", 0x4000003c, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     -  1", 0x4000003d, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     - 10", 0x4000003e, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     -100", 0x4000003f, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
+            mctx->genButton("RGB同時加算     +100", 0x4000003a);
+            mctx->genButton("RGB同時加算     + 10", 0x4000003b);
+            mctx->genButton("RGB同時加算     +  1", 0x4000003c);
+            mctx->genButton("RGB同時加算     -  1", 0x4000003d);
+            mctx->genButton("RGB同時加算     - 10", 0x4000003e);
+            mctx->genButton("RGB同時加算     -100", 0x4000003f);
             break;
         case 2:
-            mctx->genButton("RGB同時加算     +100", 0x40000040, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     + 10", 0x40000041, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     +  1", 0x40000042, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     -  1", 0x40000043, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     - 10", 0x40000044, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     -100", 0x40000045, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
+            mctx->genButton("RGB同時加算     +100", 0x40000040);
+            mctx->genButton("RGB同時加算     + 10", 0x40000041);
+            mctx->genButton("RGB同時加算     +  1", 0x40000042);
+            mctx->genButton("RGB同時加算     -  1", 0x40000043);
+            mctx->genButton("RGB同時加算     - 10", 0x40000044);
+            mctx->genButton("RGB同時加算     -100", 0x40000045);
             break;
         case 3:
-            mctx->genButton("RGB同時加算     +100", 0x40000046, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     + 10", 0x40000047, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     +  1", 0x40000048, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     -  1", 0x40000049, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     - 10", 0x4000004a, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     -100", 0x4000004b, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
+            mctx->genButton("RGB同時加算     +100", 0x40000046);
+            mctx->genButton("RGB同時加算     + 10", 0x40000047);
+            mctx->genButton("RGB同時加算     +  1", 0x40000048);
+            mctx->genButton("RGB同時加算     -  1", 0x40000049);
+            mctx->genButton("RGB同時加算     - 10", 0x4000004a);
+            mctx->genButton("RGB同時加算     -100", 0x4000004b);
             break;
         case 4:
-            mctx->genButton("RGB同時加算     +100", 0x4000004c, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     + 10", 0x4000004d, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     +  1", 0x4000004e, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     -  1", 0x4000004f, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     - 10", 0x40000050, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     -100", 0x40000051, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
+            mctx->genButton("RGB同時加算     +100", 0x4000004c);
+            mctx->genButton("RGB同時加算     + 10", 0x4000004d);
+            mctx->genButton("RGB同時加算     +  1", 0x4000004e);
+            mctx->genButton("RGB同時加算     -  1", 0x4000004f);
+            mctx->genButton("RGB同時加算     - 10", 0x40000050);
+            mctx->genButton("RGB同時加算     -100", 0x40000051);
             break;
         case 5:
-            mctx->genButton("RGB同時加算     +100", 0x40000052, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     + 10", 0x40000053, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     +  1", 0x40000054, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     -  1", 0x40000055, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     - 10", 0x40000056, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
-            mctx->genButton("RGB同時加算     -100", 0x40000057, 0, NULL, 0xFFFF, 0xFFFF, 0x200,
-                            0x18);
+            mctx->genButton("RGB同時加算     +100", 0x40000052);
+            mctx->genButton("RGB同時加算     + 10", 0x40000053);
+            mctx->genButton("RGB同時加算     +  1", 0x40000054);
+            mctx->genButton("RGB同時加算     -  1", 0x40000055);
+            mctx->genButton("RGB同時加算     - 10", 0x40000056);
+            mctx->genButton("RGB同時加算     -100", 0x40000057);
             break;
         }
 
-        mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+        mctx->genLabel("", 0x80000001);
         mctx->genSlider("位置Ｘ", &g_env_light.dungeonlight[i].mPosition.x,
-                        -300000.0f, 300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        -300000.0f, 300000.0f);
         mctx->genSlider("    Ｙ", &g_env_light.dungeonlight[i].mPosition.y,
-                        -300000.0f, 300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        -300000.0f, 300000.0f);
         mctx->genSlider("    Ｚ", &g_env_light.dungeonlight[i].mPosition.z,
-                        -300000.0f, 300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        -300000.0f, 300000.0f);
         mctx->genSlider("ref_distance",
-                        &g_env_light.dungeonlight[i].mRefDistance, 0.01, 10000.0f,
-                        0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        &g_env_light.dungeonlight[i].mRefDistance, 0.01, 10000.0f);
         mctx->startComboBox("距離減衰　○推奨",
-                            &g_env_light.dungeonlight[i].mDistAttenuation, 0, NULL,
-                            0xFFFF, 0xFFFF, 0x100, 0x1a);
+                            &g_env_light.dungeonlight[i].mDistAttenuation);
         mctx->genComboBoxItem("※減衰なし [GX_DA_OFF]", 0);
         mctx->genComboBoxItem("おだやか [GX_DA_GENTLE]", 1);
         mctx->genComboBoxItem("中間     [GX_DA_MEDIUM]", 2);
         mctx->genComboBoxItem("○険しい   [GX_DA_STEEP]", 3);
         mctx->endComboBox();
         mctx->startComboBox("角度減衰　○推奨",
-                            &g_env_light.dungeonlight[i].mAngleAttenuation, 0, NULL,
-                            0xFFFF, 0xFFFF, 0x100, 0x1a);
+                            &g_env_light.dungeonlight[i].mAngleAttenuation);
         mctx->genComboBoxItem("○ポイント [GX_SP_OFF]", 0);
         mctx->genComboBoxItem("※直角     [GX_SP_FLAT]", 1);
         mctx->genComboBoxItem("○COS曲線  [GX_SP_COS]", 2);
@@ -5393,53 +5284,45 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
         mctx->genComboBoxItem("リング状2[GX_SP_RING2]", 6);
         mctx->endComboBox();
         mctx->genLabel("角度減衰をポイント以外に設定したらスポットライトなので以下も設定を！",
-                       0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                       0x80000001);
         mctx->genSlider("カットオフ角度",
-                        &g_env_light.dungeonlight[i].mCutoffAngle, 0.001, 90.0f,
-                        0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        &g_env_light.dungeonlight[i].mCutoffAngle, 0.001, 90.0f);
         mctx->genSlider("Ｘ角度(紫軸)", &g_env_light.dungeonlight[i].mAngleX,
-                        -360.0f, 360.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        -360.0f, 360.0f);
         mctx->genSlider("Ｙ角度(緑軸)", &g_env_light.dungeonlight[i].mAngleY,
-                        -360.0f, 360.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                        -360.0f, 360.0f);
+        mctx->genLabel("", 0x80000001);
     }
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
     mctx->genLabel("● ● ●  えせライト地形反映特別版　 ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●",
-                   0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genLabel("「地形反映えせライト」を配置した部屋で有効です。", 0x80000001, 0, NULL, 0xFFFF,
-                   0xFFFF, 0x200, 0x18);
+                   0x80000001);
+    mctx->genLabel("「地形反映えせライト」を配置した部屋で有効です。", 0x80000001);
     mctx->genLabel("調整した値をマップツールで「地形反映えせライト」のパラメータへ指定して下さい",
-                   0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                   0x80000001);
     mctx->genSlider("位置Ｘ", &g_kankyoHIO.light.m_BG_fakelight_pos.x, -300000.0f,
-                    300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                    300000.0f);
     mctx->genSlider("    Ｙ", &g_kankyoHIO.light.m_BG_fakelight_pos.y, -300000.0f,
-                    300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                    300000.0f);
     mctx->genSlider("    Ｚ", &g_kankyoHIO.light.m_BG_fakelight_pos.z, -300000.0f,
-                    300000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("Color    R", &g_kankyoHIO.light.m_BG_fakelight_R, 0, 0xff, 0,
-                    NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("         G", &g_kankyoHIO.light.m_BG_fakelight_G, 0, 0xff, 0,
-                    NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("         B", &g_kankyoHIO.light.m_BG_fakelight_B, 0, 0xff, 0,
-                    NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("Power    ", &g_kankyoHIO.light.m_BG_fakelight_power, 0.0f, 1000.0f,
-                    0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                    300000.0f);
+    mctx->genSlider("Color    R", &g_kankyoHIO.light.m_BG_fakelight_R, 0, 0xff);
+    mctx->genSlider("         G", &g_kankyoHIO.light.m_BG_fakelight_G, 0, 0xff);
+    mctx->genSlider("         B", &g_kankyoHIO.light.m_BG_fakelight_B, 0, 0xff);
+    mctx->genSlider("Power    ", &g_kankyoHIO.light.m_BG_fakelight_power, 0.0f, 1000.0f);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
     mctx->genLabel("=========================================================================================",
-                   0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("カラー設定ＴＶ画面確認表示", &m_displayTVColorSettings, 1, 0,
-                      NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                   0x80000001);
+    mctx->genCheckBox("カラー設定ＴＶ画面確認表示", &m_displayTVColorSettings, 0x1);
     mctx->genCheckBox("カラーパレットチェック画面表示", &m_displayColorPaletteCheckInfo,
-                      1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                      1);
     mctx->genCheckBox("カラーパレットチェック画面表示詳細", &m_displayColorPaletteCheckInfo,
-                      2, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+                      2);
 
     mctx->genLabel("=========================================================================================",
-                   0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->startComboBox("強制パレット指定", &m_forcedPalette, 0, NULL, 0xFFFF, 0xFFFF, 0x100,
-                        0x1a);
+                   0x80000001);
+    mctx->startComboBox("強制パレット指定", &m_forcedPalette);
     mctx->genComboBoxItem("しない", 0);
     mctx->genComboBoxItem("パレット０使用", 1);
     mctx->genComboBoxItem("パレット１使用", 2);
@@ -5459,7 +5342,7 @@ void dKankyo_lightHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("パレット１５使用", 16);
     mctx->endComboBox();
 
-    mctx->genLabel("=========================================================================================", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("=========================================================================================", 0x80000001);
 }
 
 void dKankyo_lightHIO_c::dKankyo_lightHIOInfoUpDateF() {
@@ -6208,21 +6091,16 @@ dKankyo_vrboxHIO_c::dKankyo_vrboxHIO_c() {
 
 void dKankyo_vrboxHIO_c::genMessage(JORMContext* mctx) {
     // "VR-BOX color setting TV screen confirmation display"
-    mctx->genCheckBox("VR-BOXカラー設定ＴＶ画面確認表示", &m_displayVrboxTVColorSettings, 1, 0, NULL,
-                      0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
+    mctx->genCheckBox("VR-BOXカラー設定ＴＶ画面確認表示", &m_displayVrboxTVColorSettings, 0x1);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // “Set the elevation (horizon) *Entered in the room settings in the map tool”
-    mctx->genCheckBox("海抜（地平線）の設定 ※マップツールの部屋設定に入力", &field_0x14, 1, 0, NULL,
-                      0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("海抜（地平線）の設定 ※マップツールの部屋設定に入力", &field_0x14, 0x1);
     // "Height above sea level"
-    mctx->genSlider("海抜の高さ", &m_horizonHeight, -100000.0f, 100000.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
+    mctx->genSlider("海抜の高さ", &m_horizonHeight, -100000.0f, 100000.0f);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // "VRBOX settings"
-    mctx->startComboBox("■VRBOX設定", &m_VrboxSetting, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->startComboBox("■VRBOX設定", &m_VrboxSetting);
     // "Do not"
     mctx->genComboBoxItem("しない", 0);
     // HOSTIO settings
@@ -6230,23 +6108,19 @@ void dKankyo_vrboxHIO_c::genMessage(JORMContext* mctx) {
     mctx->endComboBox();
 
     // "The moment you select the HOSTIO setting, the current data will be entered!"
-    mctx->genLabel("ＨＯＳＴＩＯ設定を選択した瞬間、現在データが入ります！", 0x80000001, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("ＨＯＳＴＩＯ設定を選択した瞬間、現在データが入ります！", 0x80000001);
     // "●Export VR-BOX information to a CSV file"
-    mctx->genLabel("●VR-BOX情報のCSVファイル書き出し", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    mctx->genButton("FILE WRITE", 0x40000002, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("●VR-BOX情報のCSVファイル書き出し", 0x80000001);
+    mctx->genButton("FILE WRITE", 0x40000002);
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
     // "●Loading CSV file of VR-BOX information (for confirmation)"
-    mctx->genLabel("●VR-BOX情報のCSVファイル読み込み（確認用）", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    mctx->genButton("FILE READ", 0x40000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("●VR-BOX情報のCSVファイル読み込み（確認用）", 0x80000001);
+    mctx->genButton("FILE READ", 0x40000001);
 
-    mctx->genLabel("------------------------------------------------------", 0x80000001, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("------------------------------------------------------", 0x80000001);
     // "Forced VRBOX specification"
-    mctx->startComboBox("強制VRBOX指定", &field_0x7, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->startComboBox("強制VRBOX指定", &field_0x7);
     // "Do not"
     mctx->genComboBoxItem("しない", 0);
     // "Using pattern 0"
@@ -6283,170 +6157,142 @@ void dKankyo_vrboxHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("パターン１５使用", 16);
     mctx->endComboBox();
 
-    mctx->genLabel("------------------------------------------------------", 0x80000001, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
+    mctx->genLabel("------------------------------------------------------", 0x80000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // "● Sky color"
-    mctx->genLabel("● 空の色", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("● 空の色", 0x80000001);
     // "Set fog color"
-    mctx->genButton("fog色をセット", 0x40000004, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("fog色をセット", 0x40000004);
     // "Color R"
-    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_sky_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     Ｇ", &g_env_light.vrbox_sky_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     Ｂ", &g_env_light.vrbox_sky_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_sky_col.r, 0, 0xff);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_sky_col.g, 0, 0xff);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_sky_col.b, 0, 0xff);
     // "RGB simultaneous addition +100"
-    mctx->genButton("RGB同時加算     +100", 0x40000005, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +100", 0x40000005);
     // "RGB simultaneous addition + 10"
-    mctx->genButton("RGB同時加算     + 10", 0x40000006, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     + 10", 0x40000006);
     // "RGB simultaneous addition +  1"
-    mctx->genButton("RGB同時加算     +  1", 0x40000007, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +  1", 0x40000007);
     // "RGB simultaneous addition -  1"
-    mctx->genButton("RGB同時加算     -  1", 0x40000008, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -  1", 0x40000008);
     // "RGB simultaneous addition - 10"
-    mctx->genButton("RGB同時加算     - 10", 0x40000009, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     - 10", 0x40000009);
     // "RGB simultaneous addition -100"
-    mctx->genButton("RGB同時加算     -100", 0x4000000a, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -100", 0x4000000a);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // "● Upper cloud color"
-    mctx->genLabel("● 上雲カラー", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("● 上雲カラー", 0x80000001);
     // "Set fog color"
-    mctx->genButton("fog色をセット", 0x4000000b, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("fog色をセット", 0x4000000b);
     // "Color R"
-    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kumo_top_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kumo_top_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kumo_top_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kumo_top_col.r, 0, 0xff);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kumo_top_col.g, 0, 0xff);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kumo_top_col.b, 0, 0xff);
     // "RGB simultaneous addition +100"
-    mctx->genButton("RGB同時加算     +100", 0x4000000c, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +100", 0x4000000c);
     // "RGB simultaneous addition + 10"
-    mctx->genButton("RGB同時加算     + 10", 0x4000000d, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     + 10", 0x4000000d);
     // "RGB simultaneous addition +  1"
-    mctx->genButton("RGB同時加算     +  1", 0x4000000e, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +  1", 0x4000000e);
     // "RGB simultaneous addition -  1"
-    mctx->genButton("RGB同時加算     -  1", 0x4000000f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -  1", 0x4000000f);
     // "RGB simultaneous addition - 10"
-    mctx->genButton("RGB同時加算     - 10", 0x40000010, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     - 10", 0x40000010);
     // "RGB simultaneous addition -100"
-    mctx->genButton("RGB同時加算     -100", 0x40000011, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -100", 0x40000011);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // "Lower cloud color"
-    mctx->genLabel("● 下雲カラー", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("● 下雲カラー", 0x80000001);
     // "Set fog color"
-    mctx->genButton("fog色をセット", 0x40000012, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("fog色をセット", 0x40000012);
     // "Color R"
-    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kumo_bottom_col.r, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kumo_bottom_col.g, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kumo_bottom_col.b, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kumo_bottom_col.r, 0, 0xff);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kumo_bottom_col.g, 0, 0xff);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kumo_bottom_col.b, 0, 0xff);
     // "RGB simultaneous addition +100"
-    mctx->genButton("RGB同時加算     +100", 0x40000013, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +100", 0x40000013);
     // "RGB simultaneous addition + 10"
-    mctx->genButton("RGB同時加算     + 10", 0x40000014, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     + 10", 0x40000014);
     // "RGB simultaneous addition +  1"
-    mctx->genButton("RGB同時加算     +  1", 0x40000015, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +  1", 0x40000015);
     // "RGB simultaneous addition -  1"
-    mctx->genButton("RGB同時加算     -  1", 0x40000016, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -  1", 0x40000016);
     // "RGB simultaneous addition - 10"
-    mctx->genButton("RGB同時加算     - 10", 0x40000017, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     - 10", 0x40000017);
     // "RGB simultaneous addition -100"
-    mctx->genButton("RGB同時加算     -100", 0x40000018, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -100", 0x40000018);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // "● Lower cloud shadow color"
-    mctx->genLabel("● 下雲影カラー", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("● 下雲影カラー", 0x80000001);
     // "Set fog color"
-    mctx->genButton("fog色をセット", 0x40000019, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("fog色をセット", 0x40000019);
     // "Color R"
-    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kumo_shadow_col.r, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kumo_shadow_col.g, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kumo_shadow_col.b, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     α", &g_env_light.vrbox_kumo_top_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kumo_shadow_col.r, 0, 0xff);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kumo_shadow_col.g, 0, 0xff);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kumo_shadow_col.b, 0, 0xff);
+    mctx->genSlider("     α", &g_env_light.vrbox_kumo_top_col.a, 0, 0xff);
     // "RGB simultaneous addition +100"
-    mctx->genButton("RGB同時加算     +100", 0x4000001a, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +100", 0x4000001a);
     // "RGB simultaneous addition + 10"
-    mctx->genButton("RGB同時加算     + 10", 0x4000001b, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     + 10", 0x4000001b);
     // "RGB simultaneous addition +  1"
-    mctx->genButton("RGB同時加算     +  1", 0x4000001c, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +  1", 0x4000001c);
     // "RGB simultaneous addition -  1"
-    mctx->genButton("RGB同時加算     -  1", 0x4000001d, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -  1", 0x4000001d);
     // "RGB simultaneous addition - 10"
-    mctx->genButton("RGB同時加算     - 10", 0x4000001e, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     - 10", 0x4000001e);
     // "RGB simultaneous addition -100"
-    mctx->genButton("RGB同時加算     -100", 0x4000001f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -100", 0x4000001f);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // "● Near kasumi"
-    mctx->genLabel("● 前かすみ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("● 前かすみ", 0x80000001);
     // "Set fog color"
-    mctx->genButton("fog色をセット", 0x40000020, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("fog色をセット", 0x40000020);
     // "Color R"
-    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kasumi_outer_col.r, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kasumi_outer_col.g, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kasumi_outer_col.b, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     α", &g_env_light.vrbox_kasumi_outer_col.a, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kasumi_outer_col.r, 0, 0xff);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kasumi_outer_col.g, 0, 0xff);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kasumi_outer_col.b, 0, 0xff);
+    mctx->genSlider("     α", &g_env_light.vrbox_kasumi_outer_col.a, 0, 0xff);
     // "RGB simultaneous addition +100"
-    mctx->genButton("RGB同時加算     +100", 0x40000021, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +100", 0x40000021);
     // "RGB simultaneous addition + 10"
-    mctx->genButton("RGB同時加算     + 10", 0x40000022, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     + 10", 0x40000022);
     // "RGB simultaneous addition +  1"
-    mctx->genButton("RGB同時加算     +  1", 0x40000023, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +  1", 0x40000023);
     // "RGB simultaneous addition -  1"
-    mctx->genButton("RGB同時加算     -  1", 0x40000024, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -  1", 0x40000024);
     // "RGB simultaneous addition - 10"
-    mctx->genButton("RGB同時加算     - 10", 0x40000025, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     - 10", 0x40000025);
     // "RGB simultaneous addition -100"
-    mctx->genButton("RGB同時加算     -100", 0x40000026, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -100", 0x40000026);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // "● Inner kasumi"
-    mctx->genLabel("● 奥かすみ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("● 奥かすみ", 0x80000001);
     // "Set fog color"
-    mctx->genButton("fog色をセット", 0x40000027, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("fog色をセット", 0x40000027);
     // "Color R"
-    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kasumi_inner_col.r, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kasumi_inner_col.g, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kasumi_inner_col.b, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("     α", &g_env_light.vrbox_kasumi_inner_col.a, 0, 0xff, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
+    mctx->genSlider("色   Ｒ", &g_env_light.vrbox_kasumi_inner_col.r, 0, 0xff);
+    mctx->genSlider("     Ｇ", &g_env_light.vrbox_kasumi_inner_col.g, 0, 0xff);
+    mctx->genSlider("     Ｂ", &g_env_light.vrbox_kasumi_inner_col.b, 0, 0xff);
+    mctx->genSlider("     α", &g_env_light.vrbox_kasumi_inner_col.a, 0, 0xff);
     // "RGB simultaneous addition +100"
-    mctx->genButton("RGB同時加算     +100", 0x40000028, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +100", 0x40000028);
     // "RGB simultaneous addition + 10"
-    mctx->genButton("RGB同時加算     + 10", 0x40000029, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     + 10", 0x40000029);
     // "RGB simultaneous addition +  1"
-    mctx->genButton("RGB同時加算     +  1", 0x4000002a, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     +  1", 0x4000002a);
     // "RGB simultaneous addition -  1"
-    mctx->genButton("RGB同時加算     -  1", 0x4000002b, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -  1", 0x4000002b);
     // "RGB simultaneous addition - 10"
-    mctx->genButton("RGB同時加算     - 10", 0x4000002c, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     - 10", 0x4000002c);
     // "RGB simultaneous addition -100"
-    mctx->genButton("RGB同時加算     -100", 0x4000002d, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("RGB同時加算     -100", 0x4000002d);
 }
 
 void dKankyo_vrboxHIO_c::dKankyo_vrboxHIOInfoUpDateF() {
@@ -6798,23 +6644,20 @@ void dKankyo_bloomHIO_c::listenPropertyEvent(const JORPropertyEvent* property) {
 void dKankyo_bloomHIO_c::genMessage(JORMContext* mctx) {
     int i;
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // "Bloom settings"
-    mctx->genLabel("　飽 和 加 算 設 定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("　飽 和 加 算 設 定", 0x80000001);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // "Options that seem useful for adjustment"
-    mctx->genLabel("□調整用に便利そうな項目", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("□調整用に便利そうな項目", 0x80000001);
     // "Screen display"
-    mctx->genCheckBox("画面表示", &field_0x5, '\x01', 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("画面表示", &field_0x5, '\x01');
+    mctx->genLabel("", 0x80000001);
     // "Time speed"
-    mctx->genSlider("■時刻速度", &g_env_light.time_change_rate, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("■時刻速度", &g_env_light.time_change_rate, 0.0f, 10.0f);
+    mctx->genLabel("", 0x80000001);
     // "Time change"
-    mctx->startComboBox("■時刻切替", &g_kankyoHIO.time_change, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->startComboBox("■時刻切替", &g_kankyoHIO.time_change);
     // "Normal time"
     mctx->genComboBoxItem("通常時間", 0);
     // "Fixed at midnight"
@@ -6832,341 +6675,300 @@ void dKankyo_bloomHIO_c::genMessage(JORMContext* mctx) {
     // "Map settings ignored"
     mctx->genComboBoxItem("マップ設定無視経過", 7);
     mctx->endComboBox();
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
     // "Bloom adjustment"
-    mctx->startComboBox("■飽和値調整を", &field_0x4, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->startComboBox("■飽和値調整を", &field_0x4);
     // "Do not"
     mctx->genComboBoxItem("しない", 0);
     // "Set with HOSTIO!"
     mctx->genComboBoxItem("ＨＯＳＴＩＯで設定！", 1);
     mctx->endComboBox();
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
     // "File output"
-    mctx->genButton("ファイル出力", 0x40000002, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("ファイル出力", 0x40000002);
     // "If you make any changes, please send this file to Sasaki at SRD!"
-    mctx->genLabel("変更した場合はこのファイルをＳＲＤささきまで！", 0x80000001, 0, NULL, 0xffff,
-                  0xffff, 0x200, 0x18);
+    mctx->genLabel("変更した場合はこのファイルをＳＲＤささきまで！", 0x80000001);
     // "Of course, it's okay to just tell me the values of the places you changed or added!"
-    mctx->genLabel("※もちろん、変更・追加した場所の数値のみ伝えてもらってもＯＫです！", 0x80000001,
-                  0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("※もちろん、変更・追加した場所の数値のみ伝えてもらってもＯＫです！", 0x80000001);
+    mctx->genLabel("", 0x80000001);
 
     for (int i = 1; i < ARRAY_SIZE(bloom_info); i++) {
-        mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-        mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                       0xffff, 0x200, 0x18);
+        mctx->genLabel("", 0x80000001);
+        mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
         if (true) {
             switch (i) {
             case 1:
                 // "○ 1 Twilight (ku)"
-                mctx->genLabel("○ １ トワイライト(く)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                               0x18);
+                mctx->genLabel("○ １ トワイライト(く)", 0x80000001);
                 break;
             case 2:
                 // "○ 2 Twilight_weak (ku)"
-                mctx->genLabel("○ ２ トワイライト_弱(く)", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                               0x200, 0x18);
+                mctx->genLabel("○ ２ トワイライト_弱(く)", 0x80000001);
                 break;
             case 3:
                 // "○ 3 Sense"
-                mctx->genLabel("○ ３ センス", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ ３ センス", 0x80000001);
                 break;
             case 4:
                 // "○ 4 Field standard (morning 0)"
-                mctx->genLabel("○ ４ フィールド基準（朝０）", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                               0x200, 0x18);
+                mctx->genLabel("○ ４ フィールド基準（朝０）", 0x80000001);
                 break;
             case 5:
                 // "○ 5 Field standard (morning 1)"
-                mctx->genLabel("○ ５ フィールド基準（朝１）", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                               0x200, 0x18);
+                mctx->genLabel("○ ５ フィールド基準（朝１）", 0x80000001);
                 break;
             case 6:
                 // "○ 6 Field standard (noon)"
-                mctx->genLabel("○ ６ フィールド基準（昼）", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                               0x200, 0x18);
+                mctx->genLabel("○ ６ フィールド基準（昼）", 0x80000001);
                 break;
             case 7:
                 // "○ 7 Field standard (evening 0)"
-                mctx->genLabel("○ ７ フィールド基準（夕０）", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                               0x200, 0x18);
+                mctx->genLabel("○ ７ フィールド基準（夕０）", 0x80000001);
                 break;
             case 8:
                 // "○ 8 Field standard (evening 1)"
-                mctx->genLabel("○ ８ フィールド基準（夕１）", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                               0x200, 0x18);
+                mctx->genLabel("○ ８ フィールド基準（夕１）", 0x80000001);
                 break;
             case 9:
                 // "○ 9 Field standard (night)"
-                mctx->genLabel("○ ９ フィールド基準（夜）", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                               0x200, 0x18);
+                mctx->genLabel("○ ９ フィールド基準（夜）", 0x80000001);
                 break;
             case 10:
                 // "○ 10 Caravan fire"
-                mctx->genLabel("○ 10 キャラバン火事", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                               0x18);
+                mctx->genLabel("○ 10 キャラバン火事", 0x80000001);
                 break;
             case 11:
                 // "○ 11 LV8 Dark Palace"
-                mctx->genLabel("○ 11 LV8闇の宮殿", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ 11 LV8闇の宮殿", 0x80000001);
                 break;
             case 12:
                 // "○ 12 demo28_03"
-                mctx->genLabel("○ 12 demo28_03", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ 12 demo28_03", 0x80000001);
                 break;
             case 13:
                 // "○ 13 Insect glow"
-                mctx->genLabel("○ 13 虫が光る", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ 13 虫が光る", 0x80000001);
                 break;
             case 14:
                 // "○ 14 Sea of Clouds (hero's chamber)"
-                mctx->genLabel("○ 14 雲海(勇者の間)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                              0x18);
+                mctx->genLabel("○ 14 雲海(勇者の間)", 0x80000001);
                 break;
             case 15:
                 // "○ 15 Zora's Domain waterfall TW"
-                mctx->genLabel("○ 15 ゾーラの里 滝TW", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                              0x18);
+                mctx->genLabel("○ 15 ゾーラの里 滝TW", 0x80000001);
                 break;
             case 16:
                 // "○ 16 Zora's Domain throne TW"
-                mctx->genLabel("○ 16 ゾーラの里 玉座TW", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                              0x18);
+                mctx->genLabel("○ 16 ゾーラの里 玉座TW", 0x80000001);
                 break;
             case 17:
                 // "○ 17 Pseudo-sense"
-                mctx->genLabel("○ 17 センスもどき", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                              0x18);
-                mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ 17 センスもどき", 0x80000001);
+                mctx->genLabel("", 0x80000001);
                 break;
             case 18:
                 // "○ 18 Switch between present and past"
-                mctx->genLabel("○ 18 現在過去切替", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                              0x18);
+                mctx->genLabel("○ 18 現在過去切替", 0x80000001);
                 break;
             case 19:
                 // "○ 19 Miyagi's sewer" (E3 demo?)
-                mctx->genLabel("○ 19 宮城さん下水道", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                              0x18);
+                mctx->genLabel("○ 19 宮城さん下水道", 0x80000001);
                 break;
             case 0x14:
                 // "○ 20 Flashback scene"
-                mctx->genLabel("○ 20 回想シーン", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ 20 回想シーン", 0x80000001);
                 break;
             case 0x15:
                 // "○ 21 Twilight gate"
-                mctx->genLabel("○ 21 トワイライトゲート", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                              0x18);
+                mctx->genLabel("○ 21 トワイライトゲート", 0x80000001);
                 break;
             case 0x16:
                 // "○ 22 Underwater (standard)"
-                mctx->genLabel("○ 22 水中（基準）", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ 22 水中（基準）", 0x80000001);
                 break;
             case 0x17:
                 // "● 23 Vacant"
-                mctx->genLabel("● 23 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 23 空き", 0x80000001);
                 break;
             case 0x18:
                 // "○ 24 Vacant"
-                mctx->genLabel("● 24 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-                mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 24 空き", 0x80000001);
+                mctx->genLabel("", 0x80000001);
                 break;
             case 0x19:
                 // "○ 25 Dungeon standard_weak"
-                mctx->genLabel("○ 25 ダンジョン基準_弱", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                               0x18);
+                mctx->genLabel("○ 25 ダンジョン基準_弱", 0x80000001);
                 break;
             case 0x1a:
                 // "○ 26 Dungeon standard_strong"
-                mctx->genLabel("○ 26 ダンジョン基準_強", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                               0x18);
+                mctx->genLabel("○ 26 ダンジョン基準_強", 0x80000001);
                 break;
             case 0x1b:
                 // "○ 27 Lava (ku)"
-                mctx->genLabel("○ 27 溶岩(く)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ 27 溶岩(く)", 0x80000001);
                 break;
             case 0x1c:
                 // "○ Other than Lava_Lv2 (ku)"
-                mctx->genLabel("○ 28 ダ溶岩以外_Lv2(く)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                               0x18);
+                mctx->genLabel("○ 28 ダ溶岩以外_Lv2(く)", 0x80000001);
                 break;
             case 0x1d:
                 // "○ 29 Past"
-                mctx->genLabel("○ 29 過去", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ 29 過去", 0x80000001);
                 break;
             case 0x1e:
                 // "○ 30 City walls"
-                mctx->genLabel("○ 30 城壁", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ 30 城壁", 0x80000001);
                 break;
             case 0x1f:
                 // "● 31 Vacant"
-                mctx->genLabel("● 31 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 31 空き", 0x80000001);
                 break;
             case 0x20:
                 // "● 32 Vacant"
-                mctx->genLabel("● 32 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 32 空き", 0x80000001);
                 break;
             case 0x21:
                 // "● 33 Vacant"
-                mctx->genLabel("● 33 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 33 空き", 0x80000001);
                 break;
             case 0x22:
                 // "● 34 Vacant"
-                mctx->genLabel("● 34 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 34 空き", 0x80000001);
                 break;
             case 0x23:
                 // "● 35 Vacant"
-                mctx->genLabel("● 35 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 35 空き", 0x80000001);
                 break;
             case 0x24:
                 // "● 36 Vacant"
-                mctx->genLabel("● 36 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 36 空き", 0x80000001);
                 break;
             case 0x25:
                 // "● 37 Vacant"
-                mctx->genLabel("● 37 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 37 空き", 0x80000001);
                 break;
             case 0x26:
                 // "● 38 Vacant"
-                mctx->genLabel("● 38 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 38 空き", 0x80000001);
                 break;
             case 0x27:
                 // "● 39 Vacant"
-                mctx->genLabel("● 39 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 39 空き", 0x80000001);
                 break;
             case 0x28:
                 // "○ 40 Demo: Flashback"
-                mctx->genLabel("○ 40 デモ：回想シーン", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                               0x18);
+                mctx->genLabel("○ 40 デモ：回想シーン", 0x80000001);
                 break;
             case 0x29:
                 // "○ 41 Demo: Fake TW"
-                mctx->genLabel("○ 41 デモ：にせＴＷ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                               0x18);
+                mctx->genLabel("○ 41 デモ：にせＴＷ", 0x80000001);
                 break;
             case 0x2a:
                 // "○ 42 Demo: for demo32_03"
-                mctx->genLabel("○ 42 デモ：demo32_03用", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                               0x18);
+                mctx->genLabel("○ 42 デモ：demo32_03用", 0x80000001);
                 break;
             case 0x2b:
                 // "○ 43 Demo: TW flashback scene"
-                mctx->genLabel("○ 43 デモ：ＴＷ回想シーン", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                               0x18);
+                mctx->genLabel("○ 43 デモ：ＴＷ回想シーン", 0x80000001);
                 break;
             case 0x2c:
                 // "○ 44 Demo: for demo31_20"
-                mctx->genLabel("○ 44 デモ：demo31_20用", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                               0x18);
+                mctx->genLabel("○ 44 デモ：demo31_20用", 0x80000001);
                 break;
             case 0x2d:
                 // "○ 45 Demo: Lava W"
-                mctx->genLabel("○ 45 デモ：溶岩Ｗ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("○ 45 デモ：溶岩Ｗ", 0x80000001);
                 break;
             case 0x2e:
                 // "● 46 Vacant"
-                mctx->genLabel("● 46 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 46 空き", 0x80000001);
                 break;
             case 0x2f:
                 // "● 47 Vacant"
-                mctx->genLabel("● 47 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 47 空き", 0x80000001);
                 break;
             case 0x30:
                 // "● 48 Vacant"
-                mctx->genLabel("● 48 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 48 空き", 0x80000001);
                 break;
             case 0x31:
                 // "● 49 Vacant"
-                mctx->genLabel("● 49 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 49 空き", 0x80000001);
                 break;
             case 0x32:
                 // "● 50 Vacant"
-                mctx->genLabel("● 50 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 50 空き", 0x80000001);
                 break;
             case 0x33:
                 // "● 51 Vacant"
-                mctx->genLabel("● 51 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 51 空き", 0x80000001);
                 break;
             case 0x34:
                 // "● 52 Vacant"
-                mctx->genLabel("● 52 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 52 空き", 0x80000001);
                 break;
             case 0x35:
                 // "● 53 Vacant"
-                mctx->genLabel("● 53 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 53 空き", 0x80000001);
                 break;
             case 0x36:
                 // "● 54 Vacant"
-                mctx->genLabel("● 54 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 54 空き", 0x80000001);
                 break;
             case 0x37:
                 // "● 55 Vacant"
-                mctx->genLabel("● 55 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 55 空き", 0x80000001);
                 break;
             case 0x38:
                 // "● 56 Vacant"
-                mctx->genLabel("● 56 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 56 空き", 0x80000001);
                 break;
             case 0x39:
                 // "● 57 Vacant"
-                mctx->genLabel("● 57 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 57 空き", 0x80000001);
                 break;
             case 0x3a:
                 // "● 58 Vacant"
-                mctx->genLabel("● 58 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 58 空き", 0x80000001);
                 break;
             case 0x3b:
                 // "● 59 Vacant"
-                mctx->genLabel("● 59 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 59 空き", 0x80000001);
                 break;
             case 0x3c:
                 // "● 60 Vacant"
-                mctx->genLabel("● 60 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 60 空き", 0x80000001);
                 break;
             case 0x3d:
                 // "● 61 Vacant"
-                mctx->genLabel("● 61 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 61 空き", 0x80000001);
                 break;
             case 0x3e:
                 // "● 62 Vacant"
-                mctx->genLabel("● 62 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 62 空き", 0x80000001);
                 break;
             case 0x3f:
                 // "● 63 Vacant"
-                mctx->genLabel("● 63 空き", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+                mctx->genLabel("● 63 空き", 0x80000001);
             }
         }
-        mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                      0xffff, 0x200, 0x18);
-        mctx->startComboBox("タイプ", &bloom_info[i].mType, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+        mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+        mctx->startComboBox("タイプ", &bloom_info[i].mType);
         mctx->genComboBoxItem("くっきり(0)", 0);
         mctx->genComboBoxItem("やわらか(1)", 1);
         mctx->endComboBox();
-        mctx->genSlider("しきい値", &bloom_info[i].mThreshold, 0, 0xff, 0, NULL, 0xffff, 0xffff,
-                        0x200, 0x18);
-        mctx->genSlider("ぼやけ幅", &bloom_info[i].mBlurAmount, 0, 0xff, 0, NULL, 0xffff, 0xffff,
-                        0x200, 0x18);
-        mctx->genSlider("ぼやけ濃さ", &bloom_info[i].mDensity, 0, 0xff, 0, NULL, 0xffff, 0xffff,
-                        0x200, 0x18);
-        mctx->genSlider("濃さ R", &bloom_info[i].mColorR, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                        0x18);
-        mctx->genSlider("     G", &bloom_info[i].mColorG, 0, 0xff, 0, NULL, 0xffff, 0xffff,
-                        0x200, 0x18);
-        mctx->genSlider("     B", &bloom_info[i].mColorB, 0, 0xff, 0, NULL, 0xffff, 0xffff,
-                        0x200, 0x18);
-        mctx->genSlider("元濃さ", &bloom_info[i].mOrigDensity, 0, 0xff, 0, NULL, 0xffff, 0xffff,
-                        0x200, 0x18);
-        mctx->genSlider("彩度減算 R", &bloom_info[i].mSaturateSubtractR, 0, 0xff, 0, NULL, 0xffff,
-                        0xffff, 0x200, 0x18);
-        mctx->genSlider("         G", &bloom_info[i].mSaturateSubtractG, 0, 0xff, 0, NULL,
-                        0xffff, 0xffff, 0x200, 0x18);
-        mctx->genSlider("         B", &bloom_info[i].mSaturateSubtractB, 0, 0xff, 0, NULL,
-                        0xffff, 0xffff, 0x200, 0x18);
-        mctx->genSlider("         A", &bloom_info[i].mSaturateSubtractA, 0, 0xff, 0, NULL,
-                        0xffff, 0xffff, 0x200, 0x18);
+        mctx->genSlider("しきい値", &bloom_info[i].mThreshold, 0, 0xff);
+        mctx->genSlider("ぼやけ幅", &bloom_info[i].mBlurAmount, 0, 0xff);
+        mctx->genSlider("ぼやけ濃さ", &bloom_info[i].mDensity, 0, 0xff);
+        mctx->genSlider("濃さ R", &bloom_info[i].mColorR, 0, 0xff);
+        mctx->genSlider("     G", &bloom_info[i].mColorG, 0, 0xff);
+        mctx->genSlider("     B", &bloom_info[i].mColorB, 0, 0xff);
+        mctx->genSlider("元濃さ", &bloom_info[i].mOrigDensity, 0, 0xff);
+        mctx->genSlider("彩度減算 R", &bloom_info[i].mSaturateSubtractR, 0, 0xff);
+        mctx->genSlider("         G", &bloom_info[i].mSaturateSubtractG, 0, 0xff);
+        mctx->genSlider("         B", &bloom_info[i].mSaturateSubtractB, 0, 0xff);
+        mctx->genSlider("         A", &bloom_info[i].mSaturateSubtractA, 0, 0xff);
     }
 }
 
@@ -7488,48 +7290,37 @@ dKankyo_navyHIO_c::dKankyo_navyHIO_c() {
 }
 
 void dKankyo_navyHIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
 
-    mctx->genLabel("■ 水中ライト　色", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("col  R", &water_in_light_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("     G", &water_in_light_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("     B", &water_in_light_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("■ 水中ライト　色", 0x80000001);
+    mctx->genSlider("col  R", &water_in_light_col.r, 0, 0xff);
+    mctx->genSlider("     G", &water_in_light_col.g, 0, 0xff);
+    mctx->genSlider("     B", &water_in_light_col.b, 0, 0xff);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
 
-    mctx->genLabel("■ カメライトの設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("現在の設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel(" S Y:1500.0f power:1.25f cutoff 90.0f", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    mctx->genLabel(" M Y:500.0f  power:2.0f  cutoff 70.0f", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    mctx->genLabel(" L Y:2000.0f power:3.0f  cutoff 70.0f", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    mctx->genLabel("LL Y:1500.0f power:4.0f  cutoff 65.0f", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("■ カメライトの設定", 0x80000001);
+    mctx->genLabel("現在の設定", 0x80000001);
+    mctx->genLabel(" S Y:1500.0f power:1.25f cutoff 90.0f", 0x80000001);
+    mctx->genLabel(" M Y:500.0f  power:2.0f  cutoff 70.0f", 0x80000001);
+    mctx->genLabel(" L Y:2000.0f power:3.0f  cutoff 70.0f", 0x80000001);
+    mctx->genLabel("LL Y:1500.0f power:4.0f  cutoff 65.0f", 0x80000001);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genCheckBox("調整開始", &camera_light_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("Ｙずらし", &camera_light_y_shift, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("色        R", &camera_light_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("          G", &camera_light_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("          B", &camera_light_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("power", &camera_light_power, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("cutoff", &camera_light_cutoff, 0.001f, 90.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->startComboBox("距離減衰", &camera_light_da, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genCheckBox("調整開始", &camera_light_adjust_ON, 0x1);
+    mctx->genSlider("Ｙずらし", &camera_light_y_shift, 0.0f, 10000.0f);
+    mctx->genSlider("色        R", &camera_light_col.r, 0, 0xff);
+    mctx->genSlider("          G", &camera_light_col.g, 0, 0xff);
+    mctx->genSlider("          B", &camera_light_col.b, 0, 0xff);
+    mctx->genSlider("power", &camera_light_power, 0.0f, 1000.0f);
+    mctx->genSlider("cutoff", &camera_light_cutoff, 0.001f, 90.0f);
+    mctx->startComboBox("距離減衰", &camera_light_da);
     mctx->genComboBoxItem("減衰なし [GX_DA_OFF]", 0);
     mctx->genComboBoxItem("おだやか [GX_DA_GENTLE]", 1);
     mctx->genComboBoxItem("中間     [GX_DA_MEDIUM]", 2);
     mctx->genComboBoxItem("険しい   [GX_DA_STEEP]", 3);
     mctx->endComboBox();
-    mctx->startComboBox("角度減衰", &camera_light_sp, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->startComboBox("角度減衰", &camera_light_sp);
     mctx->genComboBoxItem("ポイント [GX_SP_OFF]", 0);
     mctx->genComboBoxItem("直角     [GX_SP_FLAT]", 1);
     mctx->genComboBoxItem("COS曲線  [GX_SP_COS]", 2);
@@ -7538,15 +7329,13 @@ void dKankyo_navyHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("リング状 [GX_SP_RING1]", 5);
     mctx->genComboBoxItem("リング状2[GX_SP_RING2]", 6);
     mctx->endComboBox();
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ トワイライト　センスパターン", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ トワイライト　センスパターン", 0x80000001);
 
-    mctx->genCheckBox("ＴＶ画面に表示", &twilight_sense_pat_tv_display_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200,
-                      0x18);
-    mctx->startComboBox("パターン", &twilight_sense_pat, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genCheckBox("ＴＶ画面に表示", &twilight_sense_pat_tv_display_ON, 0x1);
+    mctx->startComboBox("パターン", &twilight_sense_pat);
     mctx->genComboBoxItem("未使用", 0);
     mctx->genComboBoxItem("１：フィールド基本", 1);
     mctx->genComboBoxItem("２：ハイリア湖専用", 2);
@@ -7563,12 +7352,10 @@ void dKankyo_navyHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("１３：デモなど広め", 13);
     mctx->endComboBox();
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ トワイライト　センス専用飽和実験", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("　 ・センス仕様で飽和加算のパターンを変えてみる", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->startComboBox("モード", &twilight_sense_saturation_mode, 0, NULL, 0xffff, 0xffff, 0x100,
-                        0x1a);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ トワイライト　センス専用飽和実験", 0x80000001);
+    mctx->genLabel("　 ・センス仕様で飽和加算のパターンを変えてみる", 0x80000001);
+    mctx->startComboBox("モード", &twilight_sense_saturation_mode);
     mctx->genComboBoxItem("ゲームまかせ", 0);
     mctx->genComboBoxItem("トワイライト（暗）", 32);
     mctx->genComboBoxItem("トワイライト（明）", 33);
@@ -7576,330 +7363,238 @@ void dKankyo_navyHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("影響なし", 35);
     mctx->endComboBox();
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 憑依ゼルダ　女優ライト調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 憑依ゼルダ　女優ライト調整", 0x80000001);
 
-    mctx->genSlider("col  R", &possessed_zelda_light_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     G", &possessed_zelda_light_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     B", &possessed_zelda_light_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("takasa", &possessed_zelda_light_height, -5000.0f, 5000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("power", &possessed_zelda_light_power, 0.0f, 2000.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
+    mctx->genSlider("col  R", &possessed_zelda_light_col.r, 0, 0xff);
+    mctx->genSlider("     G", &possessed_zelda_light_col.g, 0, 0xff);
+    mctx->genSlider("     B", &possessed_zelda_light_col.b, 0, 0xff);
+    mctx->genSlider("takasa", &possessed_zelda_light_height, -5000.0f, 5000.0f);
+    mctx->genSlider("power", &possessed_zelda_light_power, 0.0f, 2000.0f);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 豚ガノン    女優ライト調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 豚ガノン    女優ライト調整", 0x80000001);
 
-    mctx->genSlider("col  R", &beast_ganon_light_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     G", &beast_ganon_light_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     B", &beast_ganon_light_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("takasa", &beast_ganon_light_height, -5000.0f, 5000.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("power", &beast_ganon_light_power, 0.0f, 2000.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
+    mctx->genSlider("col  R", &beast_ganon_light_col.r, 0, 0xff);
+    mctx->genSlider("     G", &beast_ganon_light_col.g, 0, 0xff);
+    mctx->genSlider("     B", &beast_ganon_light_col.b, 0, 0xff);
+    mctx->genSlider("takasa", &beast_ganon_light_height, -5000.0f, 5000.0f);
+    mctx->genSlider("power", &beast_ganon_light_power, 0.0f, 2000.0f);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ MA09水面てらてら具合", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("てらてら率", &g_env_light.mWaterSurfaceShineRate, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ MA09水面てらてら具合", 0x80000001);
+    mctx->genSlider("てらてら率", &g_env_light.mWaterSurfaceShineRate, 0.0f, 1.0f);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 虹の調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("調整開始", &rainbow_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200,
-                      0x18);
-    mctx->genSlider("離れ距離", &rainbow_separation_dist, 0, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("最大α", &rainbow_max_alpha, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 虹の調整", 0x80000001);
+    mctx->genCheckBox("調整開始", &rainbow_adjust_ON, 0x1);
+    mctx->genSlider("離れ距離", &rainbow_separation_dist, 0, 0x7fff);
+    mctx->genSlider("最大α", &rainbow_max_alpha, 0, 0xff);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 釣堀　木の色調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("調整開始", &fish_pond_tree_adjust_ON, 1, 0, NULL, 0xffff, 0xffff,
-                      0x200, 0x18);
-    mctx->genSlider("amb  R", &fish_pond_tree_ambcol.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     G", &fish_pond_tree_ambcol.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     B", &fish_pond_tree_ambcol.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("dif0 R", &fish_pond_tree_dif0_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     G", &fish_pond_tree_dif0_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     B", &fish_pond_tree_dif0_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("dif1 R", &fish_pond_tree_dif1_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     G", &fish_pond_tree_dif1_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     B", &fish_pond_tree_dif1_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genLabel("○現在設定値　はる amb  (r 101) (g  94) (b 105)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("                   dif0 (r  86) (g  75) (b  57)", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("                   dif1 (r  82) (g  65) (b 102)", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("              なつ amb  (r  14) (g  35) (b  11)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("                   dif0 (r  55) (g  40) (b  30)", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("                   dif1 (r  25) (g  15) (b   0)", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("              あき amb  (r  40) (g  20) (b   5)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("                   dif0 (r 110) (g  50) (b  15)", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("                   dif1 (r  70) (g   0) (b  15)", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 釣堀　木の色調整", 0x80000001);
+    mctx->genCheckBox("調整開始", &fish_pond_tree_adjust_ON, 0x1);
+    mctx->genSlider("amb  R", &fish_pond_tree_ambcol.r, 0, 0xff);
+    mctx->genSlider("     G", &fish_pond_tree_ambcol.g, 0, 0xff);
+    mctx->genSlider("     B", &fish_pond_tree_ambcol.b, 0, 0xff);
+    mctx->genSlider("dif0 R", &fish_pond_tree_dif0_col.r, 0, 0xff);
+    mctx->genSlider("     G", &fish_pond_tree_dif0_col.g, 0, 0xff);
+    mctx->genSlider("     B", &fish_pond_tree_dif0_col.b, 0, 0xff);
+    mctx->genSlider("dif1 R", &fish_pond_tree_dif1_col.r, 0, 0xff);
+    mctx->genSlider("     G", &fish_pond_tree_dif1_col.g, 0, 0xff);
+    mctx->genSlider("     B", &fish_pond_tree_dif1_col.b, 0, 0xff);
+    mctx->genLabel("○現在設定値　はる amb  (r 101) (g  94) (b 105)", 0x80000001);
+    mctx->genLabel("                   dif0 (r  86) (g  75) (b  57)", 0x80000001);
+    mctx->genLabel("                   dif1 (r  82) (g  65) (b 102)", 0x80000001);
+    mctx->genLabel("              なつ amb  (r  14) (g  35) (b  11)", 0x80000001);
+    mctx->genLabel("                   dif0 (r  55) (g  40) (b  30)", 0x80000001);
+    mctx->genLabel("                   dif1 (r  25) (g  15) (b   0)", 0x80000001);
+    mctx->genLabel("              あき amb  (r  40) (g  20) (b   5)", 0x80000001);
+    mctx->genLabel("                   dif0 (r 110) (g  50) (b  15)", 0x80000001);
+    mctx->genLabel("                   dif1 (r  70) (g   0) (b  15)", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 釣堀　colreg 色変化", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("調整開始", &this->fish_pond_colreg_adjust_ON, 1, 0, NULL, 0xffff, 0xffff,
-                      0x200, 0x18);
-    mctx->genSlider("c0 R", &fish_pond_colreg_c0.r, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("   G", &fish_pond_colreg_c0.g, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("   B", &fish_pond_colreg_c0.b, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genLabel("○現在設定値　はる (r   0) (g   0) (b   0)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("              なつ (r  -3) (g   0) (b  -4)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("              あき (r   0) (g -10) (b -13)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("              ふゆ (r  14) (g  15) (b  22)", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 釣堀　colreg 色変化", 0x80000001);
+    mctx->genCheckBox("調整開始", &this->fish_pond_colreg_adjust_ON, 0x1);
+    mctx->genSlider("c0 R", &fish_pond_colreg_c0.r, -0xff, 0xff);
+    mctx->genSlider("   G", &fish_pond_colreg_c0.g, -0xff, 0xff);
+    mctx->genSlider("   B", &fish_pond_colreg_c0.b, -0xff, 0xff);
+    mctx->genLabel("○現在設定値　はる (r   0) (g   0) (b   0)", 0x80000001);
+    mctx->genLabel("              なつ (r  -3) (g   0) (b  -4)", 0x80000001);
+    mctx->genLabel("              あき (r   0) (g -10) (b -13)", 0x80000001);
+    mctx->genLabel("              ふゆ (r  14) (g  15) (b  22)", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 強引　水面にごり変更", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("調整開始", &water_mud_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("全体", &field_0x2ea, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("手前", &field_0x2ec, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 強引　水面にごり変更", 0x80000001);
+    mctx->genCheckBox("調整開始", &water_mud_adjust_ON, 0x1);
+    mctx->genSlider("全体", &field_0x2ea, 0, 0xff);
+    mctx->genSlider("手前", &field_0x2ec, 0, 0xff);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ コレクト＆装備　ライティング", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("調整開始", &light_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("AMB R", &adjust_light_ambcol.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    G", &adjust_light_ambcol.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    B", &adjust_light_ambcol.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("○メイン", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("Pos X", &adjust_light_main_pos.x, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("    Y", &adjust_light_main_pos.y, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("    Z", &adjust_light_main_pos.z, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("Dif0 R", &adjust_light_dif0_col_R, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     G", &adjust_light_dif0_col_G, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     B", &adjust_light_dif0_col_B, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genLabel("○反射", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("Pos X", &collect_light_reflect_pos.x, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("    Y", &collect_light_reflect_pos.y, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("    Z", &collect_light_reflect_pos.z, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("Dif1 R", &adjust_light_dif1_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     G", &adjust_light_dif1_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     B", &adjust_light_dif1_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ コレクト＆装備　ライティング", 0x80000001);
+    mctx->genCheckBox("調整開始", &light_adjust_ON, 0x1);
+    mctx->genSlider("AMB R", &adjust_light_ambcol.r, 0, 0xff);
+    mctx->genSlider("    G", &adjust_light_ambcol.g, 0, 0xff);
+    mctx->genSlider("    B", &adjust_light_ambcol.b, 0, 0xff);
+    mctx->genLabel("○メイン", 0x80000001);
+    mctx->genSlider("Pos X", &adjust_light_main_pos.x, -100000.0f, 100000.0f);
+    mctx->genSlider("    Y", &adjust_light_main_pos.y, -100000.0f, 100000.0f);
+    mctx->genSlider("    Z", &adjust_light_main_pos.z, -100000.0f, 100000.0f);
+    mctx->genSlider("Dif0 R", &adjust_light_dif0_col_R, 0, 0xff);
+    mctx->genSlider("     G", &adjust_light_dif0_col_G, 0, 0xff);
+    mctx->genSlider("     B", &adjust_light_dif0_col_B, 0, 0xff);
+    mctx->genLabel("○反射", 0x80000001);
+    mctx->genSlider("Pos X", &collect_light_reflect_pos.x, -100000.0f, 100000.0f);
+    mctx->genSlider("    Y", &collect_light_reflect_pos.y, -100000.0f, 100000.0f);
+    mctx->genSlider("    Z", &collect_light_reflect_pos.z, -100000.0f, 100000.0f);
+    mctx->genSlider("Dif1 R", &adjust_light_dif1_col.r, 0, 0xff);
+    mctx->genSlider("     G", &adjust_light_dif1_col.g, 0, 0xff);
+    mctx->genSlider("     B", &adjust_light_dif1_col.b, 0, 0xff);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 現在セーブ再開位置", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("常に表示", &this->display_save_location, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 現在セーブ再開位置", 0x80000001);
+    mctx->genCheckBox("常に表示", &this->display_save_location, 0x1);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 星", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("最大数", &this->stars_max_number, -1, 2800, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 星", 0x80000001);
+    mctx->genSlider("最大数", &this->stars_max_number, -1, 2800);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 草てかり調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("てかり値", &this->grass_shine_value, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("草ライト影響率 ", &g_env_light.grass_light_inf_rate, 0.0, 2.0, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 草てかり調整", 0x80000001);
+    mctx->genSlider("てかり値", &this->grass_shine_value, 0.0f, 255.0f);
+    mctx->genSlider("草ライト影響率 ", &g_env_light.grass_light_inf_rate, 0.0, 2.0);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 霧沼　トワイライト時　色設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("調整開始", &light_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("c1 R", &mist_twilight_c1_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("   G", &mist_twilight_c1_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("   B", &mist_twilight_c1_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("   a", &mist_twilight_c1_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("c2 R", &mist_twilight_c2_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("   G", &mist_twilight_c2_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("   B", &mist_twilight_c2_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("   A", &mist_twilight_c2_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 霧沼　トワイライト時　色設定", 0x80000001);
+    mctx->genCheckBox("調整開始", &light_adjust_ON, 0x1);
+    mctx->genSlider("c1 R", &mist_twilight_c1_col.r, 0, 0xff);
+    mctx->genSlider("   G", &mist_twilight_c1_col.g, 0, 0xff);
+    mctx->genSlider("   B", &mist_twilight_c1_col.b, 0, 0xff);
+    mctx->genSlider("   a", &mist_twilight_c1_col.a, 0, 0xff);
+    mctx->genSlider("c2 R", &mist_twilight_c2_col.r, 0, 0xff);
+    mctx->genSlider("   G", &mist_twilight_c2_col.g, 0, 0xff);
+    mctx->genSlider("   B", &mist_twilight_c2_col.b, 0, 0xff);
+    mctx->genSlider("   A", &mist_twilight_c2_col.a, 0, 0xff);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ トワイライトＮＰＣ ライト設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 闇ライト一つ設定キャラ設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->startComboBox("モード", &adjust_light_mode, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ トワイライトＮＰＣ ライト設定", 0x80000001);
+    mctx->genLabel("■ 闇ライト一つ設定キャラ設定", 0x80000001);
+    mctx->startComboBox("モード", &adjust_light_mode);
     mctx->genComboBoxItem("ゲームまかせ", 0);
     mctx->genComboBoxItem("ゲームまかせ", 1);
     mctx->genComboBoxItem("カスタム調整", 2);
     mctx->endComboBox();
-    mctx->genSlider("AMB R", &adjust_light_ambcol.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    G", &adjust_light_ambcol.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    B", &adjust_light_ambcol.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("LIGHT0 R", &adjust_light_dif0_col_R, 0, 500, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("       G", &adjust_light_dif0_col_G, 0, 500, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("       B", &adjust_light_dif0_col_B, 0, 500, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("AMB R", &adjust_light_ambcol.r, 0, 0xff);
+    mctx->genSlider("    G", &adjust_light_ambcol.g, 0, 0xff);
+    mctx->genSlider("    B", &adjust_light_ambcol.b, 0, 0xff);
+    mctx->genSlider("LIGHT0 R", &adjust_light_dif0_col_R, 0, 500);
+    mctx->genSlider("       G", &adjust_light_dif0_col_G, 0, 500);
+    mctx->genSlider("       B", &adjust_light_dif0_col_B, 0, 500);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ デモ用？　遠目対応　被写界深度", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("-1:奥にピント 1:手前にピント", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("注目点", &g_env_light.mDemoAttentionPoint, -1.0f, 1.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genCheckBox("調整ＳＷ", &demo_adjust_SW, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("ピント位置", &demo_focus_pos, -0xfe, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("ずらし幅X", &demo_focus_offset_x, -1.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("ずらし幅Y", &demo_focus_offset_y, -1.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ デモ用？　遠目対応　被写界深度", 0x80000001);
+    mctx->genLabel("-1:奥にピント 1:手前にピント", 0x80000001);
+    mctx->genSlider("注目点", &g_env_light.mDemoAttentionPoint, -1.0f, 1.0f);
+    mctx->genCheckBox("調整ＳＷ", &demo_adjust_SW, 0x1);
+    mctx->genLabel("", 0x80000001);
+    mctx->genSlider("ピント位置", &demo_focus_pos, -0xfe, 0xff);
+    mctx->genSlider("ずらし幅X", &demo_focus_offset_x, -1.0f, 1.0f);
+    mctx->genSlider("ずらし幅Y", &demo_focus_offset_y, -1.0f, 1.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 影の濃さ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("調整開始", &shadow_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("通常α", &shadow_normal_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("接近ＭＡＸα", &shadow_max_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 影の濃さ", 0x80000001);
+    mctx->genCheckBox("調整開始", &shadow_adjust_ON, 0x1);
+    mctx->genSlider("通常α", &shadow_normal_alpha, 0.0f, 1.0f);
+    mctx->genSlider("接近ＭＡＸα", &shadow_max_alpha, 0.0f, 1.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ アイテムゲット ライト設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->startComboBox("モード", &adjust_light_mode, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ アイテムゲット ライト設定", 0x80000001);
+    mctx->startComboBox("モード", &adjust_light_mode);
     mctx->genComboBoxItem("ゲームまかせ", 0);
     mctx->genComboBoxItem("ゲームまかせ", 1);
     mctx->genComboBoxItem("カスタム調整", 2);
     mctx->endComboBox();
-    mctx->genSlider("AMB R", &adjust_light_ambcol.r, '\0', 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("    G", &adjust_light_ambcol.g, '\0', 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("    B", &adjust_light_ambcol.b, '\0', 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("Dif0 R", &adjust_light_dif0_col_R, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     G", &adjust_light_dif0_col_G, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     B", &adjust_light_dif0_col_B, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("Dif1 R", &adjust_light_dif1_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     G", &adjust_light_dif1_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("     B", &adjust_light_dif1_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("Pos X", &adjust_light_main_pos.x, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("    Y", &adjust_light_main_pos.y, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genSlider("    Z", &adjust_light_main_pos.z, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("AMB R", &adjust_light_ambcol.r, '\0', 0xff);
+    mctx->genSlider("    G", &adjust_light_ambcol.g, '\0', 0xff);
+    mctx->genSlider("    B", &adjust_light_ambcol.b, '\0', 0xff);
+    mctx->genSlider("Dif0 R", &adjust_light_dif0_col_R, 0, 0xff);
+    mctx->genSlider("     G", &adjust_light_dif0_col_G, 0, 0xff);
+    mctx->genSlider("     B", &adjust_light_dif0_col_B, 0, 0xff);
+    mctx->genSlider("Dif1 R", &adjust_light_dif1_col.r, 0, 0xff);
+    mctx->genSlider("     G", &adjust_light_dif1_col.g, 0, 0xff);
+    mctx->genSlider("     B", &adjust_light_dif1_col.b, 0, 0xff);
+    mctx->genSlider("Pos X", &adjust_light_main_pos.x, -100000.0f, 100000.0f);
+    mctx->genSlider("    Y", &adjust_light_main_pos.y, -100000.0f, 100000.0f);
+    mctx->genSlider("    Z", &adjust_light_main_pos.z, -100000.0f, 100000.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
 
-    mctx->genLabel("■ 女優さんライト", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->startComboBox("種類", &adjust_light_mode, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genLabel("■ 女優さんライト", 0x80000001);
+    mctx->startComboBox("種類", &adjust_light_mode);
     mctx->genComboBoxItem("ありのままで勝負", 0);
     mctx->genComboBoxItem("レフ板", 1);
     mctx->genComboBoxItem("カスタム調整", 2);
     mctx->endComboBox();
 
-    mctx->genSlider("カスタム時 R", &adjust_custom_R, 0, 2000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("           G", &adjust_custom_G, 0, 2000, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("           B", &adjust_custom_B, 0, 2000, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("高さ調整", &adjust_height, -5000.0f, 5000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("カスタム時 R", &adjust_custom_R, 0, 2000);
+    mctx->genSlider("           G", &adjust_custom_G, 0, 2000);
+    mctx->genSlider("           B", &adjust_custom_B, 0, 2000);
+    mctx->genLabel("", 0x80000001);
+    mctx->genSlider("高さ調整", &adjust_height, -5000.0f, 5000.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 沼", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("調整開始", &light_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("水面R", &mist_twilight_c1_col.r, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    G", &mist_twilight_c1_col.g, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("    B", &mist_twilight_c1_col.b, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("補佐α", &mist_twilight_c1_col.a, -0xff, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 沼", 0x80000001);
+    mctx->genCheckBox("調整開始", &light_adjust_ON, 0x1);
+    mctx->genSlider("水面R", &mist_twilight_c1_col.r, -0xff, 0xff);
+    mctx->genSlider("    G", &mist_twilight_c1_col.g, -0xff, 0xff);
+    mctx->genSlider("    B", &mist_twilight_c1_col.b, -0xff, 0xff);
+    mctx->genSlider("補佐α", &mist_twilight_c1_col.a, -0xff, 0xff);
     // "Overall α" (alpha)
-    mctx->genSlider("全体α", &field_0x268, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("泥１R", &mist_twilight_c2_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    G", &mist_twilight_c2_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("    B", &mist_twilight_c2_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("    a", &mist_twilight_c2_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
+    mctx->genSlider("全体α", &field_0x268, 0, 0xff);
+    mctx->genSlider("泥１R", &mist_twilight_c2_col.r, 0, 0xff);
+    mctx->genSlider("    G", &mist_twilight_c2_col.g, 0, 0xff);
+    mctx->genSlider("    B", &mist_twilight_c2_col.b, 0, 0xff);
+    mctx->genSlider("    a", &mist_twilight_c2_col.a, 0, 0xff);
     // "Mud 2 R"
-    mctx->genSlider("泥２R", &field_0x264.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    G", &field_0x264.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    B", &field_0x264.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("泥２R", &field_0x264.r, 0, 0xff);
+    mctx->genSlider("    G", &field_0x264.g, 0, 0xff);
+    mctx->genSlider("    B", &field_0x264.b, 0, 0xff);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ においもやの調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("色設定開始", &smell_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("色　Ｒ", &smell_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider(" 　 Ｇ", &smell_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("  　Ｂ", &smell_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("色　Ｒ", &smell_col2.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider(" 　 Ｇ", &smell_col2.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("  　Ｂ", &smell_col2.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("アルファ", &smell_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("■ においレールタグ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("間隔", &smell_railtag_space, -1000.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ においもやの調整パラメータ", 0x80000001);
+    mctx->genCheckBox("色設定開始", &smell_adjust_ON, 0x1);
+    mctx->genSlider("色　Ｒ", &smell_col.r, 0, 0xff);
+    mctx->genSlider(" 　 Ｇ", &smell_col.g, 0, 0xff);
+    mctx->genSlider("  　Ｂ", &smell_col.b, 0, 0xff);
+    mctx->genSlider("色　Ｒ", &smell_col2.r, 0, 0xff);
+    mctx->genSlider(" 　 Ｇ", &smell_col2.g, 0, 0xff);
+    mctx->genSlider("  　Ｂ", &smell_col2.b, 0, 0xff);
+    mctx->genSlider("アルファ", &smell_alpha, 0.0f, 1.0f);
+    mctx->genLabel("■ においレールタグ", 0x80000001);
+    mctx->genSlider("間隔", &smell_railtag_space, -1000.0f, 1000.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 太陽フレア　加算に切替", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 太陽フレア　加算に切替", 0x80000001);
     // "Change to addition!!"
-    mctx->genCheckBox("加算にチェンジ！！", &field_0x215, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("加算にチェンジ！！", &field_0x215, 0x1);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ ワイプタイプをテスト", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->startComboBox("ワイプテスト", &wipe_test_ON, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ ワイプタイプをテスト", 0x80000001);
+    mctx->startComboBox("ワイプテスト", &wipe_test_ON);
     mctx->genComboBoxItem("フェード黒", 0);
     mctx->genComboBoxItem("フェード白", 1);
     mctx->genComboBoxItem("回転", 2);
@@ -7925,136 +7620,106 @@ void dKankyo_navyHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("黒のまま", 22);
     mctx->genComboBoxItem("通常動作", 255);
     mctx->endComboBox();
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("・フェード時間テスト用　０以外で有効になります", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("フェード速度指定", &fade_test_speed, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("・フェード時間テスト用　０以外で有効になります", 0x80000001);
+    mctx->genSlider("フェード速度指定", &fade_test_speed, 0, 0xff);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 霧壁タグ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("フォグ near", &mist_tag_fog_near, -100000.0f, 100000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("フォグ far", &mist_tag_fog_far, -100000.0f, 100000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 霧壁タグ", 0x80000001);
+    mctx->genSlider("フォグ near", &mist_tag_fog_near, -100000.0f, 100000.0f);
+    mctx->genSlider("フォグ far", &mist_tag_fog_far, -100000.0f, 100000.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 水中カラー割合　現在カラーに乗算します", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("Ｒ", &water_in_col_ratio_R, 0.0f, 2.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("Ｇ", &water_in_col_ratio_G, 0.0f, 2.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("Ｂ", &water_in_col_ratio_B, 0.0f, 2.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 水中カラー割合　現在カラーに乗算します", 0x80000001);
+    mctx->genSlider("Ｒ", &water_in_col_ratio_R, 0.0f, 2.0f);
+    mctx->genSlider("Ｇ", &water_in_col_ratio_G, 0.0f, 2.0f);
+    mctx->genSlider("Ｂ", &water_in_col_ratio_B, 0.0f, 2.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ もや　", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("基本色 R", &moya_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("       G", &moya_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("       B", &moya_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("アルファ", &moya_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ もや　", 0x80000001);
+    mctx->genSlider("基本色 R", &moya_col.r, 0, 0xff);
+    mctx->genSlider("       G", &moya_col.g, 0, 0xff);
+    mctx->genSlider("       B", &moya_col.b, 0, 0xff);
+    mctx->genSlider("アルファ", &moya_alpha, 0.0f, 1.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 雷の調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("色　Ｒ", &thunder_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider(" 　 Ｇ", &thunder_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("  　Ｂ", &thunder_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("高さ", &thunder_height, -50000.0, 50000.0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("黒くする率", &thunder_blacken_rate, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 雷の調整パラメータ", 0x80000001);
+    mctx->genSlider("色　Ｒ", &thunder_col.r, 0, 0xff);
+    mctx->genSlider(" 　 Ｇ", &thunder_col.g, 0, 0xff);
+    mctx->genSlider("  　Ｂ", &thunder_col.b, 0, 0xff);
+    mctx->genSlider("高さ", &thunder_height, -50000.0, 50000.0);
+    mctx->genSlider("黒くする率", &thunder_blacken_rate, 0.0f, 1.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 稲妻", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("デバッグ常時出現", &lightning_debug_mode, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("Xスケールmin", &lightning_scale_x_min, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("Xスケールmax", &lightning_scale_x_max, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("Yスケールmin", &lightning_scale_y_min, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("Yスケールmax", &lightning_scale_y_max, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("最大傾き角度", &lightning_tilt_angle, -0x8000, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("表示d範囲幅 XZ", &collect_light_reflect_pos.x, 0.0f, 1000000.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("表示範囲幅 Y", &collect_light_reflect_pos.y, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                    0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 稲妻", 0x80000001);
+    mctx->genCheckBox("デバッグ常時出現", &lightning_debug_mode, 0x1);
+    mctx->genSlider("Xスケールmin", &lightning_scale_x_min, 0.0f, 1000.0f);
+    mctx->genSlider("Xスケールmax", &lightning_scale_x_max, 0.0f, 1000.0f);
+    mctx->genSlider("Yスケールmin", &lightning_scale_y_min, 0.0f, 1000.0f);
+    mctx->genSlider("Yスケールmax", &lightning_scale_y_max, 0.0f, 1000.0f);
+    mctx->genSlider("最大傾き角度", &lightning_tilt_angle, -0x8000, 0x7fff);
+    mctx->genSlider("表示d範囲幅 XZ", &collect_light_reflect_pos.x, 0.0f, 1000000.0f);
+    mctx->genSlider("表示範囲幅 Y", &collect_light_reflect_pos.y, -100000.0f, 100000.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 月の調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("設定開始", &rainbow_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("色　Ｒ", &moon_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider(" 　 Ｇ", &moon_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("  　Ｂ", &moon_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("  　α", &moon_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("スケール", &moon_scale, 0.0f, 100000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 月の調整パラメータ", 0x80000001);
+    mctx->genCheckBox("設定開始", &rainbow_adjust_ON, 0x1);
+    mctx->genSlider("色　Ｒ", &moon_col.r, 0, 0xff);
+    mctx->genSlider(" 　 Ｇ", &moon_col.g, 0, 0xff);
+    mctx->genSlider("  　Ｂ", &moon_col.b, 0, 0xff);
+    mctx->genSlider("  　α", &moon_col.a, 0, 0xff);
+    mctx->genSlider("スケール", &moon_scale, 0.0f, 100000.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 太陽の調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("色設定開始", &sun_adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("色　Ｒ", &sun_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider(" 　 Ｇ", &sun_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("  　Ｂ", &sun_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("色　Ｒ", &sun_col2.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider(" 　 Ｇ", &sun_col2.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("  　Ｂ", &sun_col2.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 太陽の調整パラメータ", 0x80000001);
+    mctx->genCheckBox("色設定開始", &sun_adjust_ON, 0x1);
+    mctx->genSlider("色　Ｒ", &sun_col.r, 0, 0xff);
+    mctx->genSlider(" 　 Ｇ", &sun_col.g, 0, 0xff);
+    mctx->genSlider("  　Ｂ", &sun_col.b, 0, 0xff);
+    mctx->genSlider("色　Ｒ", &sun_col2.r, 0, 0xff);
+    mctx->genSlider(" 　 Ｇ", &sun_col2.g, 0, 0xff);
+    mctx->genSlider("  　Ｂ", &sun_col2.b, 0, 0xff);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 胞子の調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("最大数", &housi_max_number, 0, 1000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("最大アルファ", &housi_max_alpha, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("最大スケール", &housi_max_scale, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 胞子の調整パラメータ", 0x80000001);
+    mctx->genSlider("最大数", &housi_max_number, 0, 1000);
+    mctx->genSlider("最大アルファ", &housi_max_alpha, 0.0f, 255.0f);
+    mctx->genSlider("最大スケール", &housi_max_scale, 0.0f, 100.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 雲の調整パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("晴れ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("風の影響率", &cloud_sunny_wind_influence_rate, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("高さ　端", &cloud_sunny_bottom_height, 0.0f, 50000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("高さ　てっぺん", &cloud_sunny_top_height, 0.0f, 50000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("大きさ", &cloud_sunny_size, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("高さ縮小率", &cloud_sunny_height_shrink_rate, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("アルファ", &cloud_sunny_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("曇り", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("風の影響率", &cloud_cloudy_wind_influence_rate, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("高さ　端", &cloud_cloudy_bottom_height, 0.0f, 50000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("高さ　てっぺん", &cloud_cloudy_top_height, 0.0f, 50000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("大きさ", &cloud_cloudy_size, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("高さ縮小率", &cloud_cloudy_height_shrink_rate, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("アルファ", &cloud_cloudy_alpha, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 雲の調整パラメータ", 0x80000001);
+    mctx->genLabel("晴れ", 0x80000001);
+    mctx->genSlider("風の影響率", &cloud_sunny_wind_influence_rate, 0.0f, 10000.0f);
+    mctx->genSlider("高さ　端", &cloud_sunny_bottom_height, 0.0f, 50000.0f);
+    mctx->genSlider("高さ　てっぺん", &cloud_sunny_top_height, 0.0f, 50000.0f);
+    mctx->genSlider("大きさ", &cloud_sunny_size, 0.0f, 10000.0f);
+    mctx->genSlider("高さ縮小率", &cloud_sunny_height_shrink_rate, 0.0f, 10.0f);
+    mctx->genSlider("アルファ", &cloud_sunny_alpha, 0.0f, 1.0f);
+    mctx->genLabel("曇り", 0x80000001);
+    mctx->genSlider("風の影響率", &cloud_cloudy_wind_influence_rate, 0.0f, 10000.0f);
+    mctx->genSlider("高さ　端", &cloud_cloudy_bottom_height, 0.0f, 50000.0f);
+    mctx->genSlider("高さ　てっぺん", &cloud_cloudy_top_height, 0.0f, 50000.0f);
+    mctx->genSlider("大きさ", &cloud_cloudy_size, 0.0f, 10000.0f);
+    mctx->genSlider("高さ縮小率", &cloud_cloudy_height_shrink_rate, 0.0f, 10.0f);
+    mctx->genSlider("アルファ", &cloud_cloudy_alpha, 0.0f, 1.0f);
+    mctx->genLabel("", 0x80000001);
 
-    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    mctx->genLabel("■ 星座作成くん", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("設定開始！", &constellation_maker_ON, '\x01', 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("――――――――――――――――――――――――――――――――――――――――――", 0x80000001);
+    mctx->genLabel("■ 星座作成くん", 0x80000001);
+    mctx->genCheckBox("設定開始！", &constellation_maker_ON, '\x01');
     for (int i = 0; i < 10; i++) {
-        mctx->genSlider("X", &constellation_maker_pos[i].x, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                        0xffff, 0x200, 0x18);
-        mctx->genSlider("y", &constellation_maker_pos[i].y, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                        0xffff, 0x200, 0x18);
-        mctx->genSlider("z", &constellation_maker_pos[i].z, -100000.0f, 100000.0f, 0, NULL, 0xffff,
-                        0xffff, 0x200, 0x18);
+        mctx->genSlider("X", &constellation_maker_pos[i].x, -100000.0f, 100000.0f);
+        mctx->genSlider("y", &constellation_maker_pos[i].y, -100000.0f, 100000.0f);
+        mctx->genSlider("z", &constellation_maker_pos[i].z, -100000.0f, 100000.0f);
     }
 }
 
@@ -8085,32 +7750,32 @@ dKankyo_efflightHIO_c::dKankyo_efflightHIO_c() {
 }
 
 void dKankyo_efflightHIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("エフェクトライトカラー", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("設定開始", &adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("第１段階", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("frame", &step1.start_frame, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("色  Ｒ", &step1.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    Ｇ", &step1.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    Ｂ", &step1.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("第２段階", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("frame", &step2.start_frame, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("色  Ｒ", &step2.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    Ｇ", &step2.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    Ｂ", &step2.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("第３段階", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("frame", &step3.start_frame, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("色  Ｒ", &step3.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    Ｇ", &step3.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    Ｂ", &step3.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("第４段階", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("frame", &step4.start_frame, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("色  Ｒ", &step4.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    Ｇ", &step4.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    Ｂ", &step4.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("影響範囲", &power, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("ゆらぎ", &fluctuation, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("エフェクトライトカラー", 0x80000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->genCheckBox("設定開始", &adjust_ON, 0x1);
+    mctx->genLabel("第１段階", 0x80000001);
+    mctx->genSlider("frame", &step1.start_frame, 0, 0xff);
+    mctx->genSlider("色  Ｒ", &step1.r, 0, 0xff);
+    mctx->genSlider("    Ｇ", &step1.g, 0, 0xff);
+    mctx->genSlider("    Ｂ", &step1.b, 0, 0xff);
+    mctx->genLabel("第２段階", 0x80000001);
+    mctx->genSlider("frame", &step2.start_frame, 0, 0xff);
+    mctx->genSlider("色  Ｒ", &step2.r, 0, 0xff);
+    mctx->genSlider("    Ｇ", &step2.g, 0, 0xff);
+    mctx->genSlider("    Ｂ", &step2.b, 0, 0xff);
+    mctx->genLabel("第３段階", 0x80000001);
+    mctx->genSlider("frame", &step3.start_frame, 0, 0xff);
+    mctx->genSlider("色  Ｒ", &step3.r, 0, 0xff);
+    mctx->genSlider("    Ｇ", &step3.g, 0, 0xff);
+    mctx->genSlider("    Ｂ", &step3.b, 0, 0xff);
+    mctx->genLabel("第４段階", 0x80000001);
+    mctx->genSlider("frame", &step4.start_frame, 0, 0xff);
+    mctx->genSlider("色  Ｒ", &step4.r, 0, 0xff);
+    mctx->genSlider("    Ｇ", &step4.g, 0, 0xff);
+    mctx->genSlider("    Ｂ", &step4.b, 0, 0xff);
+    mctx->genLabel("", 0x80000001);
+    mctx->genSlider("影響範囲", &power, 0.0f, 10000.0f);
+    mctx->genSlider("ゆらぎ", &fluctuation, 0.0f, 255.0f);
 }
 
 dKankyo_windHIO_c::dKankyo_windHIO_c() {
@@ -8149,66 +7814,46 @@ dKankyo_demolightHIO_c::dKankyo_demolightHIO_c() {
 }
 
 void dKankyo_demolightHIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("デモ用ポイントライト", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("設定開始", &adjust_ON, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("color R", &light.mColor.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("      G", &light.mColor.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("      B", &light.mColor.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("影響範囲", &light.mPow, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("ゆらぎ", &light.mFluctuation, 0.0f, 255.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
+    mctx->genLabel("デモ用ポイントライト", 0x80000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->genCheckBox("設定開始", &adjust_ON, 0x1);
+    mctx->genSlider("color R", &light.mColor.r, 0, 0xff);
+    mctx->genSlider("      G", &light.mColor.g, 0, 0xff);
+    mctx->genSlider("      B", &light.mColor.b, 0, 0xff);
+    mctx->genSlider("影響範囲", &light.mPow, 0.0f, 10000.0f);
+    mctx->genSlider("ゆらぎ", &light.mFluctuation, 0.0f, 255.0f);
 }
 
 void dKankyo_windHIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("○グローバル風の設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("風向き確認表示", &display_wind_dir, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("風変化補完速度", &wind_change_speed, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
+    mctx->genLabel("○グローバル風の設定", 0x80000001);
+    mctx->genCheckBox("風向き確認表示", &display_wind_dir, 0x1);
+    mctx->genSlider("風変化補完速度", &wind_change_speed, 0.0f, 1.0f);
 
-    mctx->genLabel("===============================================================", 0x80000001, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("HOSTIOでの調整", &use_HOSTIO_adjustment, 1, 0, NULL, 0xffff, 0xffff, 0x200,
-                      0x18);
-    mctx->genLabel("画面中心のバーが設定した向きで", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("Ｘアングル", &global_x_angle, -0x8000, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("Ｙアングル", &global_y_angle, -0x8000, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    mctx->genSlider("風力", &global_wind_power, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("===============================================================", 0x80000001);
+    mctx->genCheckBox("HOSTIOでの調整", &use_HOSTIO_adjustment, 0x1);
+    mctx->genLabel("画面中心のバーが設定した向きで", 0x80000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->genSlider("Ｘアングル", &global_x_angle, -0x8000, 0x7fff);
+    mctx->genSlider("Ｙアングル", &global_y_angle, -0x8000, 0x7fff);
+    mctx->genSlider("風力", &global_wind_power, 0.0f, 1.0f);
 
-    mctx->genLabel("===============================================================", 0x80000001, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("○光の剣実験パラメータ", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("実験風軌道表示", &display_wind_trajectory, 1, 0, NULL, 0xffff, 0xffff, 0x200,
-                      0x18);
-    mctx->genSlider("Ｘアングル", &lightsword_x_angle, -0x7fff, 0x7fff, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("開始スケール", &lightsword_init_scale, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("終了スケール", &lightsword_end_scale, 0.0f, 10000.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("影響力", &influence, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("影響力減衰値", &influence_attenuation, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("移動速度", &lightsword_move_speed, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
+    mctx->genLabel("===============================================================", 0x80000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("○光の剣実験パラメータ", 0x80000001);
+    mctx->genCheckBox("実験風軌道表示", &display_wind_trajectory, 0x1);
+    mctx->genSlider("Ｘアングル", &lightsword_x_angle, -0x7fff, 0x7fff);
+    mctx->genSlider("開始スケール", &lightsword_init_scale, 0.0f, 10000.0f);
+    mctx->genSlider("終了スケール", &lightsword_end_scale, 0.0f, 10000.0f);
+    mctx->genSlider("影響力", &influence, 0.0f, 1.0f);
+    mctx->genSlider("影響力減衰値", &influence_attenuation, 0.0f, 1.0f);
+    mctx->genSlider("移動速度", &lightsword_move_speed, 0.0f, 1000.0f);
 
-    mctx->genLabel("===============================================================", 0x80000001, 0,
-                   NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("○風避けゲーム強風タイマー調整", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    mctx->genSlider("無風継続時間", &minigame_no_wind_duration, 0, 1000, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("弱風継続時間", &minigame_low_wind_duration, 0, 1000, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
-    mctx->genSlider("強風継続時間", &minigame_high_wind_duration, 0, 1000, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
+    mctx->genLabel("===============================================================", 0x80000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("○風避けゲーム強風タイマー調整", 0x80000001);
+    mctx->genSlider("無風継続時間", &minigame_no_wind_duration, 0, 1000);
+    mctx->genSlider("弱風継続時間", &minigame_low_wind_duration, 0, 1000);
+    mctx->genSlider("強風継続時間", &minigame_high_wind_duration, 0, 1000);
 }
 
 dKankyo_dungeonlightHIO_c::dKankyo_dungeonlightHIO_c() {
@@ -8241,21 +7886,17 @@ dKankyo_ParticlelightHIO_c::dKankyo_ParticlelightHIO_c() {
 }
 
 void dKankyo_ParticlelightHIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("パーティクル色　設定", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("五感発動時のみに見えるパーティクルの実験", 0x80000001, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    mctx->genLabel("下をＯＮにしてからテストパーティクルを出してみて下さい", 0x80000001, 0, NULL,
-                   0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("←五感発動時にしか見えなくなります！", &field_0x1a, 1, 0, NULL, 0xffff,
-                      0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("インダイレクトより後に移動！", &field_0x19, 1, 0, NULL, 0xffff, 0xffff,
-                      0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->startComboBox("タイプ", &type, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->genLabel("パーティクル色　設定", 0x80000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("五感発動時のみに見えるパーティクルの実験", 0x80000001);
+    mctx->genLabel("下をＯＮにしてからテストパーティクルを出してみて下さい", 0x80000001);
+    mctx->genCheckBox("←五感発動時にしか見えなくなります！", &field_0x1a, 0x1);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->genCheckBox("インダイレクトより後に移動！", &field_0x19, 0x1);
+    mctx->genLabel("", 0x80000001);
+    mctx->genLabel("", 0x80000001);
+    mctx->startComboBox("タイプ", &type);
     mctx->genComboBoxItem("TESTSMOKE_A01", 0);
     mctx->genComboBoxItem("DASHSMOKE_A", 1);
     mctx->genComboBoxItem("DOWNSMOKE_A", 2);
@@ -8268,15 +7909,15 @@ void dKankyo_ParticlelightHIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("TESTSMOKE_C01", 9);
     mctx->genComboBoxItem("TESTSMOKE_C02", 10);
     mctx->endComboBox();
-    mctx->genSlider("Prim　R", &prim_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("      G", &prim_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    　B", &prim_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("Env 　R", &env_col.r, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("      G", &env_col.g, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("    　B", &env_col.b, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("基本α", &prim_col.a, 0, 0xff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genSlider("ブレンド率", &blend_ratio, 0.001f, 1.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genButton("プレイヤー位置に発生！", 0x40000004, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("Prim　R", &prim_col.r, 0, 0xff);
+    mctx->genSlider("      G", &prim_col.g, 0, 0xff);
+    mctx->genSlider("    　B", &prim_col.b, 0, 0xff);
+    mctx->genSlider("Env 　R", &env_col.r, 0, 0xff);
+    mctx->genSlider("      G", &env_col.g, 0, 0xff);
+    mctx->genSlider("    　B", &env_col.b, 0, 0xff);
+    mctx->genSlider("基本α", &prim_col.a, 0, 0xff);
+    mctx->genSlider("ブレンド率", &blend_ratio, 0.001f, 1.0f);
+    mctx->genButton("プレイヤー位置に発生！", 0x40000004);
 }
 
 void dKankyo_ParticlelightHIO_c::listenPropertyEvent(const JORPropertyEvent* property) {
@@ -8295,10 +7936,9 @@ dKankyo_HIO_c::dKankyo_HIO_c() {
 }
 
 void dKankyo_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genSlider("時刻速度", &g_env_light.time_change_rate, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff,
-                    0x200, 0x18);
+    mctx->genSlider("時刻速度", &g_env_light.time_change_rate, 0.0f, 10.0f);
 
-    mctx->startComboBox("時刻切替", &time_change, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->startComboBox("時刻切替", &time_change);
     mctx->genComboBoxItem("通常時間", 0);
     mctx->genComboBoxItem("朝0時間に固定", 1);
     mctx->genComboBoxItem("朝1時間に固定", 2);
@@ -8309,7 +7949,7 @@ void dKankyo_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("マップ設定無視経過", 7);
     mctx->endComboBox();
 
-    mctx->startComboBox("天候エフェクト", &wether_effect, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->startComboBox("天候エフェクト", &wether_effect);
     mctx->genComboBoxItem("なし", 0);
     mctx->genComboBoxItem("雨", 1);
     mctx->genComboBoxItem("雪", 2);
@@ -8322,7 +7962,7 @@ void dKankyo_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("全消去", 0x99);
     mctx->endComboBox();
 
-    mctx->startComboBox("天候パレット", &wether_palette, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->startComboBox("天候パレット", &wether_palette);
     mctx->genComboBoxItem("通常", 0);
     mctx->genComboBoxItem("晴に変更", 0x40);
     mctx->genComboBoxItem("雨に変更", 1);
@@ -8390,14 +8030,11 @@ void dKankyo_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("63に変更", 63);
     mctx->endComboBox();
 
-    mctx->genCheckBox("環境タグデバッグ表示", &display_env_tag_debug, 1, 0, NULL, 0xffff, 0xffff,
-                      0x200, 0x18);
-    mctx->genCheckBox("天気予報表デバッグ表示", &display_wether_debug, 1, 0, NULL, 0xffff, 0xffff,
-                      0x200, 0x18);
-    mctx->genCheckBox("スケジュールビット表示", &display_schedule_bit, 1, 0, NULL, 0xffff, 0xffff,
-                      0x200, 0x18);
+    mctx->genCheckBox("環境タグデバッグ表示", &display_env_tag_debug, 0x1);
+    mctx->genCheckBox("天気予報表デバッグ表示", &display_wether_debug, 0x1);
+    mctx->genCheckBox("スケジュールビット表示", &display_schedule_bit, 0x1);
 
-    mctx->startComboBox("雨を降らせる", &start_rain, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->startComboBox("雨を降らせる", &start_rain);
     mctx->genComboBoxItem("無し", 0);
     mctx->genComboBoxItem("小雨", 1);
     mctx->genComboBoxItem("大雨", 2);
@@ -8407,20 +8044,17 @@ void dKankyo_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genComboBoxItem("カミナリ&大雨", 6);
     mctx->endComboBox();
 
-    mctx->genCheckBox("エフェクトライトモニタ", &effect_light_monitor, 1, 0, NULL, 0xffff, 0xffff,
-                      0x200, 0x18);
+    mctx->genCheckBox("エフェクトライトモニタ", &effect_light_monitor, 0x1);
 
-    mctx->startComboBox("ポイントライトモニタ", &point_light_monitor, 0, NULL, 0xffff, 0xffff,
-                        0x100, 0x1a);
+    mctx->startComboBox("ポイントライトモニタ", &point_light_monitor);
     mctx->genComboBoxItem("しない", 0);
     mctx->genComboBoxItem("ID一覧", 1);
     mctx->genComboBoxItem("位置も表示", 2);
     mctx->endComboBox();
 
-    mctx->genLabel("", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genCheckBox("settingTevStructをしない", &no_setting_tevstr, 1, 0, NULL, 0xffff, 0xffff,
-                      0x200, 0x18);
-    mctx->genCheckBox("colortypeをしない", &no_color_type, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("", 0x80000001);
+    mctx->genCheckBox("settingTevStructをしない", &no_setting_tevstr, 0x1);
+    mctx->genCheckBox("colortypeをしない", &no_color_type, 0x1);
 
     mctx->genNode("ライト設定", &light, 0, 0);
     mctx->genNode("ＶＲボックス", &vrbox, 0, 0);

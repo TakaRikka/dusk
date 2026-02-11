@@ -24,7 +24,7 @@ public:
 
     void setBaseMtx();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     int Execute(Mtx**);
     void moveGate();
     void init_modeWait();

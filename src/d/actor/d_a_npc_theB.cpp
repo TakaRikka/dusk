@@ -169,7 +169,7 @@ void daNpcTheB_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
 void daNpcTheB_HIO_c::genMessage(JORMContext* ctx) {
     daNpcF_commonGenMessage(ctx, &m.common);
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -234,10 +234,10 @@ daNpcTheB_HIOParam const daNpcTheB_Param_c::m = {
     false,
 };
 
-cPhs__Step daNpcTheB_c::create() {
+cPhs_Step daNpcTheB_c::create() {
     fopAcM_ct(this, daNpcTheB_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x2CB0)) {
             return cPhs_ERROR_e;
@@ -326,7 +326,7 @@ int daNpcTheB_c::CreateHeap() {
 }
 
 int daNpcTheB_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_THEB");
     this->~daNpcTheB_c();
     return 1;
 }

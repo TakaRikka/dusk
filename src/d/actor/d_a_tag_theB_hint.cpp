@@ -6,12 +6,40 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_tag_theB_hint.h"
+#include "d/actor/d_a_npc_theB.h"
+
+int daTagTheBHint_c::create() {
+    fopAcM_ct(this, daTagTheBHint_c);
+    field_0x568 = std::pow(scale.x * 100.0f,2.0f);
+    return cPhs_COMPLEATE_e;
+}
+
+int daTagTheBHint_c::execute() {
+    if (fopAcM_isSwitch(this, getSwitchNo())) {
+        fopAcM_delete(this);
+        return 1;
+    }
+
+    if (fopAcM_searchPlayerDistanceXZ2(this) < field_0x568) {
+        daNpcTheB_c* the_b = (daNpcTheB_c*)fpcM_SearchByName(PROC_NPC_THEB);
+        if (the_b) {
+            int roomNo = getRoomNo() == 0xff ? fopAcM_GetRoomNo(this) : getRoomNo();
+
+            the_b->setHintEvent(getMessageNo(), getLinkID(), roomNo);
+        }
+    }
+
+    return 1;
+}
 
 static int daTagTheBHint_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagTheBHint_c*>(i_this)->create();
+    daTagTheBHint_c* theBHint = static_cast<daTagTheBHint_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return theBHint->create();
 }
 
 static int daTagTheBHint_Delete(daTagTheBHint_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagTheBHint_c();
     return 1;
 }

@@ -9,7 +9,7 @@
 #include "JSystem/JSupport/JSUFileStream.h"
 #include <dolphin/os.h>
 #include <dolphin/os.h>
-#include "dolphin/vi.h"
+#include <dolphin/vi.h>
 #include "global.h"
 #include <string>
 

@@ -229,32 +229,20 @@ void daNpc_ykW_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
 
 void daNpc_ykW_HIO_c::genMessage(JORMContext* ctx) {
     daNpcT_cmnGenMessage(ctx, &m.common);
-    ctx->genSlider("飛ばしフレ－ム  ", &m.mSkipFrame, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("飛ばし速度      ", &m.mFlySpeed, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("飛ばし角度      ", &m.mFlyAngle, 0.0f, 90.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("ジャンプ初速    ", &m.mJumpInitialSpeed, 0.0f, 100.0f, 0, NULL, 0xffff,
-                   0xffff, 0x200, 0x18);
-    ctx->genSlider("滑り加速        ", &m.mSlidingAccel, 0.0f, 8.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("滑り速度        ", &m.mSlidingSpeed, 0.0f, 128.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("競争パラメ－タａ", &m.mCompetParamA, -100, 100, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("競争パラメ－タｂ", &m.mCompetParamB, 1, 100, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("競争パラメ－タｃ", &m.mCompetParamC, 0.0, 10.0f, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("歩き時間        ", &m.mWalkingTime, 0, 10000, 0, NULL, 0xffff, 0xffff,
-                   0x200, 0x18);
-    ctx->genSlider("停止時間        ", &m.mDownTime, 0, 10000, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
-    ctx->genSlider("ステップの速さ  ", &m.mStepSpeed, 0, 100, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider("飛ばしフレ－ム  ", &m.mSkipFrame, 0.0f, 100.0f);
+    ctx->genSlider("飛ばし速度      ", &m.mFlySpeed, 0.0f, 100.0f);
+    ctx->genSlider("飛ばし角度      ", &m.mFlyAngle, 0.0f, 90.0f);
+    ctx->genSlider("ジャンプ初速    ", &m.mJumpInitialSpeed, 0.0f, 100.0f);
+    ctx->genSlider("滑り加速        ", &m.mSlidingAccel, 0.0f, 8.0f);
+    ctx->genSlider("滑り速度        ", &m.mSlidingSpeed, 0.0f, 128.0f);
+    ctx->genSlider("競争パラメ－タａ", &m.mCompetParamA, -100, 100);
+    ctx->genSlider("競争パラメ－タｂ", &m.mCompetParamB, 1, 100);
+    ctx->genSlider("競争パラメ－タｃ", &m.mCompetParamC, 0.0, 10.0f);
+    ctx->genSlider("歩き時間        ", &m.mWalkingTime, 0, 10000);
+    ctx->genSlider("停止時間        ", &m.mDownTime, 0, 10000);
+    ctx->genSlider("ステップの速さ  ", &m.mStepSpeed, 0, 100);
     // "File export"
-    ctx->genButton("ファイル書き出し", 0x40000002, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genButton("ファイル書き出し", 0x40000002);
 }
 #endif
 
@@ -431,7 +419,7 @@ int daNpc_ykW_c::CreateHeap() {
 
 int daNpc_ykW_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_ykW_c -> Delete\n", g_Counter.mCounter0, this);
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_YKW");
     this->~daNpc_ykW_c();
     return 1;
 }

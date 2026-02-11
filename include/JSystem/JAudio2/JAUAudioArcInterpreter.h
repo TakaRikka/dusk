@@ -1,7 +1,7 @@
 #ifndef JAUAUDIOARCINTERPRETER_H
 #define JAUAUDIOARCINTERPRETER_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 /**
  * @ingroup jsystem-jaudio

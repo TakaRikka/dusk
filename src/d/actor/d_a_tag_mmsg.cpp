@@ -8,13 +8,13 @@
 int daTagMmsg_c::create() {
     fopAcM_ct(this, daTagMmsg_c);
 
-    field_0x570 = fpcM_GetParam(this) & 0x3FF;
-    field_0x572 = (fpcM_GetParam(this) >> 10) & 0x3FF;
-    field_0x56b = (fpcM_GetParam(this) >> 29) & 1;
+    field_0x570 = fopAcM_GetParam(this) & 0x3FF;
+    field_0x572 = (fopAcM_GetParam(this) >> 10) & 0x3FF;
+    field_0x56b = (fopAcM_GetParam(this) >> 29) & 0x1;
     field_0x568 = shape_angle.x;
     field_0x569 = (shape_angle.x >> 8) & 0xFF;
 
-    if ((fpcM_GetParam(this) >> 30) & 1) {
+    if ((fopAcM_GetParam(this) >> 30) & 0x1) {
         scale.x *= 10.0f;
         scale.y *= 10.0f;
     }
@@ -24,10 +24,9 @@ int daTagMmsg_c::create() {
     mAttention = shape_angle.y;
 
     if (!checkNoAttention()) {
-        s32 roomNo = fopAcM_GetRoomNo(this);
         stage_arrow_data_class* arrowData =
-            &dComIfGp_getRoomArrow(roomNo)
-                 ->m_entries[dComIfGp_getRoomCamera(roomNo)->m_entries[mAttention].m_arrow_idx];
+            &dComIfGp_getRoomArrow(fopAcM_GetRoomNo(this))
+                 ->m_entries[dComIfGp_getRoomCamera(fopAcM_GetRoomNo(this))->m_entries[mAttention].m_arrow_idx];
         eyePos.set(arrowData->posX, arrowData->posY, arrowData->posZ);
         attention_info.position = eyePos;
     }
@@ -37,18 +36,22 @@ int daTagMmsg_c::create() {
 }
 
 static int daTagMmsg_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagMmsg_c*>(i_this)->create();
+    daTagMmsg_c* mmsg = static_cast<daTagMmsg_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return mmsg->create();
 }
 
 daTagMmsg_c::~daTagMmsg_c() {}
 
 static int daTagMmsg_Delete(daTagMmsg_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagMmsg_c();
     return 1;
 }
 
 int daTagMmsg_c::execute() {
-    if (daPy_py_c::getMidnaActor() == NULL) {
+    daMidna_c* midna = daPy_py_c::getMidnaActor();
+    if (midna == NULL) {
         return 1;
     }
 
@@ -57,13 +60,13 @@ int daTagMmsg_c::execute() {
         return 1;
     }
 
-    if (field_0x569 != 0xFF && dComIfGs_isSwitch(field_0x569, fopAcM_GetHomeRoomNo(this))) {
+    if (field_0x569 != 0xFF && fopAcM_isSwitch(this, field_0x569)) {
         fopAcM_delete(this);
         return 1;
     }
 
     if (mUseFlg && !dComIfGp_event_runCheck() && field_0x56b && field_0x569 != 0xFF) {
-        dComIfGs_onSwitch(field_0x569, fopAcM_GetHomeRoomNo(this));
+        fopAcM_onSwitch(this, field_0x569);
         fopAcM_delete(this);
         return 1;
     }
@@ -73,7 +76,7 @@ int daTagMmsg_c::execute() {
         (fopAcM_searchPlayerDistanceXZ2(this) < field_0x574) &&
         (field_0x570 == 0x3FF ||
          dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[field_0x570])) &&
-        (field_0x568 == 0xFF || dComIfGs_isSwitch(field_0x568, fopAcM_GetHomeRoomNo(this))))
+        (field_0x568 == 0xFF || fopAcM_isSwitch(this, field_0x568)))
     {
         player->setMidnaMsgNum(this, shape_angle.z);
     }

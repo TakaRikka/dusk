@@ -1,7 +1,7 @@
 #ifndef JASAICTRL_H
 #define JASAICTRL_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 enum JASOutputRate {
     OUTPUT_RATE_0,

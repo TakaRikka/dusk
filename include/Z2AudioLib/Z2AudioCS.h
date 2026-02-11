@@ -1,7 +1,7 @@
 #ifndef Z2AUDIOCS_H
 #define Z2AUDIOCS_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JKRHeap;
 class JKRArchive;

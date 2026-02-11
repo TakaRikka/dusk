@@ -51,7 +51,7 @@ public:
     typedef int (daNpc_Kolin_c::*actionFunc)(void*);
 
     ~daNpc_Kolin_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();
@@ -146,8 +146,7 @@ public:
             }
 
             if (strlen(mpEvtData[var_r29].eventName) != 0) {
-                u32 len = strlen(mpArcNames[mpEvtData[var_r29].num]);
-                if (len != 0) {
+                if (strlen(mpArcNames[mpEvtData[var_r29].num]) != 0) {
                     eventInfo.setArchiveName(mpArcNames[mpEvtData[var_r29].num]);
                     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
                 }

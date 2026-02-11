@@ -64,7 +64,7 @@ public:
 
     daNpc_Grz_c();
     ~daNpc_Grz_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

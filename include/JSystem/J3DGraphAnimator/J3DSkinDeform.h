@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DGraphAnimator/J3DCluster.h"
 #include "JSystem/J3DGraphAnimator/J3DMtxBuffer.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class J3DModel;
 class J3DAnmCluster;

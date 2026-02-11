@@ -1,7 +1,7 @@
 #ifndef JSUIOSBASE_H_
 #define JSUIOSBASE_H_
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 enum JSUStreamSeekFrom {
     JSUStreamSeekFrom_SET = 0,  // absolute

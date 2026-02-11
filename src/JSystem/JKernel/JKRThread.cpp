@@ -9,6 +9,8 @@
 
 JSUList<JKRThread> JKRThread::sThreadList(0);
 
+void* JKRIdleThread::sThread;
+
 JKRThreadSwitch* JKRThreadSwitch::sManager;
 
 u32 JKRThreadSwitch::sTotalCount;
@@ -99,6 +101,12 @@ JKRThread* JKRThread::searchThread(OSThread* thread) {
     return NULL;
 }
 
+static void dummy1(JKRThread* thread, JKRThread::TLoad* load) {
+    load->getId();
+    load->isValid();
+    thread->getLoadInfo();
+}
+
 JKRThreadSwitch::JKRThreadSwitch(JKRHeap* param_0) {
     mHeap = param_0;
     OSSetSwitchThreadCallback(JKRThreadSwitch::callback);
@@ -121,6 +129,11 @@ JKRThreadSwitch* JKRThreadSwitch::createManager(JKRHeap* heap) {
 
     sManager = new (heap, 0) JKRThreadSwitch(heap);
     return sManager;
+}
+
+static void dummy2(JKRThread::TLoad* load) {
+    load->setValid(false);
+    load->setId(0);
 }
 
 JKRThread* JKRThreadSwitch::enter(JKRThread* thread, int thread_id) {
@@ -210,6 +223,10 @@ void JKRThreadSwitch::callback(OSThread* current, OSThread* next) {
     }
 }
 
+void dummy3(JKRThreadSwitch* threadSw, JKRThreadName_* name) {
+    threadSw->draw(name);
+}
+
 void JKRThreadSwitch::draw(JKRThreadName_* thread_name_list, JUTConsole* console) {
     const char* print_0 = " total: switch:%3d  time:%d(%df)\n";
     const char* print_1 = " -------------------------------------\n";
@@ -263,15 +280,52 @@ void JKRThreadSwitch::draw(JKRThreadName_* thread_name_list, JUTConsole* console
     }
 }
 
-void* JKRThread::run() {
-    return NULL;
+static void dummy4(JKRTask* thread, JSULink<JKRTask>* link) {
+    thread->getStack();
+    delete link;
 }
 
-void JKRThreadSwitch::draw(JKRThreadName_* thread_name_list) {
-    draw(thread_name_list, NULL);
+JKRTask::~JKRTask() {
+    sTaskList.remove(&mTaskLink);
 }
 
-JKRThreadSwitch::~JKRThreadSwitch() {}
+void* JKRTask::run() {
+    struct TaskMessage {
+        void (*field_0x0)(int);
+        int field_0x4;
+        void* field_0x8;
+    };
+    OSInitFastCast();
+    while (true) {
+        TaskMessage* msg = (TaskMessage*)waitMessageBlock();
+        if (msg->field_0x0) {
+            msg->field_0x0(msg->field_0x4);
+            check();
+            if (field_0x94) {
+                OSSendMessage(field_0x94, msg->field_0x8, OS_MESSAGE_NOBLOCK);
+            }
+        }
+        msg->field_0x0 = NULL;
+    }
+}
+
+int JKRTask::check() {
+    int result = 0;
+    u8* ptr = (u8*)JKRThread::getStack();
+    JUT_ASSERT(1033, *((u32*)ptr) == 0xDEADBABE);
+    ptr += 4;
+    result += 4;
+    while (*ptr++ == 0xDE) { result++; }
+    return result;
+}
+
+#if !PLATFORM_GCN
+static void dummy(JKRIdleThread* thread) {
+    thread->run();
+    delete thread;
+    thread->destroy();
+}
+#endif
 
 #pragma push
 #pragma force_active on

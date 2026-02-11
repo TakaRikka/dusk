@@ -643,7 +643,7 @@ static int daFr_IsDelete(fr_class* i_this) {
 }
 
 static int daFr_Delete(fr_class* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "Fr");
 
     dComIfG_resDelete(&i_this->mPhase, "Fr");
     if (i_this->field_0x9e4) {

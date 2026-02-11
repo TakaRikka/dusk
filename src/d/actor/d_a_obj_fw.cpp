@@ -238,11 +238,11 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return 1;
 }
 
-static cPhs__Step daObj_Fw_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daObj_Fw_Create(fopAc_ac_c* a_this) {
     fopAcM_ct(a_this, obj_fw_class);
     obj_fw_class* i_this = (obj_fw_class*)a_this;
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->mPhase, "RYUW00");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->mPhase, "RYUW00");
     if (phase == cPhs_COMPLEATE_e) {
         if (dComIfGs_isStageBossEnemy()) {
             return cPhs_ERROR_e;

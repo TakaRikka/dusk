@@ -79,38 +79,38 @@ daNpc_Ks_HIO_c::daNpc_Ks_HIO_c() {
 #if DEBUG
 void daNpc_Ks_HIO_c::genMessage(JORMContext* ctext) {
     // little monkey
-    ctext->genLabel("　小猿　", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
-    ctext->genLabel("       　", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
-    ctext->genLabel("       　", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
-    ctext->genLabel("       　", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genLabel("　小猿　", 0x80000001);
+    ctext->genLabel("       　", 0x80000001);
+    ctext->genLabel("       　", 0x80000001);
+    ctext->genLabel("       　", 0x80000001);
     // (below is) lantern monkey related
-    ctext->genLabel("       ↓　カンテラ猿関連　↓　", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genLabel("       ↓　カンテラ猿関連　↓　", 0x80000001);
     // latern swing interval
-    ctext->genSlider("カンテラ振り間隔", &lantern_swing_interval, 0.0f, 20.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("カンテラ振り間隔", &lantern_swing_interval, 0.0f, 20.0f);
     // guided movement speed
-    ctext->genSlider("誘導移動速度", &guided_movement_speed, 0.0f, 60.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("誘導移動速度", &guided_movement_speed, 0.0f, 60.0f);
     // link approach distance
-    ctext->genSlider("リンク接近距離", &link_approach_distance, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("リンク接近距離", &link_approach_distance, 0.0f, 1000.0f);
     // lantern size
-    ctext->genSlider("カンテラサイズ", &lantern_size, 0.0f, 3.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("カンテラサイズ", &lantern_size, 0.0f, 3.0f);
     // (above is) lantern monkey related
-    ctext->genLabel("       ↑　カンテラ猿関連　↑　", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
-    ctext->genLabel("       　", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
-    ctext->genLabel("       　", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
-    ctext->genLabel("       　", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
-    ctext->genLabel("       　", 0x80000001, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genLabel("       ↑　カンテラ猿関連　↑　", 0x80000001);
+    ctext->genLabel("       　", 0x80000001);
+    ctext->genLabel("       　", 0x80000001);
+    ctext->genLabel("       　", 0x80000001);
+    ctext->genLabel("       　", 0x80000001);
     // basic size
-    ctext->genSlider("基本大きさ", &basic_size, 0.0f, 3.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("基本大きさ", &basic_size, 0.0f, 3.0f);
     // pull distance
-    ctext->genSlider("引連間合い", &pull_distance, 0.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("引連間合い", &pull_distance, 0.0f, 500.0f);
     // holding speed L
-    ctext->genSlider("引連速Ｌ", &holding_speed_l, 0.0f, 60.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("引連速Ｌ", &holding_speed_l, 0.0f, 60.0f);
     // holding speed H
-    ctext->genSlider("引連速Ｈ", &holding_speed_h, 0.0f, 60.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("引連速Ｈ", &holding_speed_h, 0.0f, 60.0f);
     // demo speed
-    ctext->genSlider("デモ速", &demo_speed, 0.0f, 60.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("デモ速", &demo_speed, 0.0f, 60.0f);
     // demo speed 2
-    ctext->genSlider("デモ速2", &demo_speed_2, 0.0f, 60.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("デモ速2", &demo_speed_2, 0.0f, 60.0f);
 }
 #endif
 

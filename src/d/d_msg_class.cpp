@@ -1481,7 +1481,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
         switch (i_tag & 0xFF00FFFF) {
         case MSGTAG_PLAYER_GENITIV:
             #if VERSION == VERSION_GCN_PAL
-            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_GERMAN) {
+            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setPlayerName(buffer, 1);
             } else {
                 setPlayerName(buffer, 0);
@@ -1491,7 +1491,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
             return true;
         case MSGTAG_HORSE_GENITIV:
             #if VERSION == VERSION_GCN_PAL
-            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_GERMAN) {
+            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setHorseName(buffer, 1);
             } else {
                 setHorseName(buffer, 0);
@@ -4242,7 +4242,7 @@ bool jmessage_string_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u3
         switch (i_tag & 0xFF00FFFF) {
         case MSGTAG_PLAYER_GENITIV:
             #if VERSION == VERSION_GCN_PAL
-            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_GERMAN) {
+            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setPlayerName(buffer, 1);
             } else {
                 setPlayerName(buffer, 0);
@@ -4253,7 +4253,7 @@ bool jmessage_string_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u3
             break;
         case MSGTAG_HORSE_GENITIV:
             #if VERSION == VERSION_GCN_PAL
-            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_GERMAN) {
+            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setHorseName(buffer, 1);
             } else {
                 setHorseName(buffer, 0);
@@ -4850,7 +4850,7 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
         switch (i_tag & 0xFF00FFFF) {
         case MSGTAG_PLAYER_GENITIV:
             #if VERSION == VERSION_GCN_PAL
-            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_GERMAN) {
+            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setPlayerName(buffer, 1);
             } else {
                 setPlayerName(buffer, 0);
@@ -4861,7 +4861,7 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
             break;
         case MSGTAG_HORSE_GENITIV:
             #if VERSION == VERSION_GCN_PAL
-            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_GERMAN) {
+            if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_GERMAN) {
                 setHorseName(buffer, 1);
             } else {
                 setHorseName(buffer, 0);

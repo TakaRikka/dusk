@@ -9,10 +9,12 @@
 
 static int daTagGra_Create(fopAc_ac_c* i_this) {
     daTagGra_c* gra_tag = (daTagGra_c*)i_this;
+    int id = fopAcM_GetID(i_this);
     return gra_tag->create();
 }
 
 static int daTagGra_Delete(daTagGra_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagGra_c();
     return 1;
 }

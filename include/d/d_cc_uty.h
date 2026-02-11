@@ -2,7 +2,7 @@
 #define D_CC_D_CC_UTY_H
 
 #include "SSystem/SComponent/c_sxyz.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class cCcD_Obj;
 class fopAc_ac_c;

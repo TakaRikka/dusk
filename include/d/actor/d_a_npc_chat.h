@@ -49,13 +49,13 @@ public:
     J3DModel* ObjCreate(int);
     J3DModel* ChairCreate(f32);
     bool isM_();
-    cPhs__Step loadResrc(int, int);
+    cPhs_Step loadResrc(int, int);
     J3DModelData* getNpcMdlDataP(int);
     J3DModelData* getObjMdlDataP(int);
     J3DAnmTexPattern* getTexAnmP(int);
     BOOL removeResrc(int, int);
     BOOL setAttention(int);
-    cPhs__Step Create();
+    cPhs_Step Create();
     BOOL CreateHeap();
     int Delete();
     int Execute();

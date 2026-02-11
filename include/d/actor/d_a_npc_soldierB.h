@@ -43,7 +43,7 @@ public:
 
     daNpc_SoldierB_c();
     ~daNpc_SoldierB_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

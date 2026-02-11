@@ -35,11 +35,11 @@ daObj_ITA_HIO_c::daObj_ITA_HIO_c() {
 
 #if DEBUG
 void daObj_ITA_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("ヒメクジ", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("サーチエリア", &search_area, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("飛ばし方向スピード", &launch_dir_spd, 0.0f, -100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("飛ばし方向Yスピード", &launch_dir_y_spd, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("重力設定", &gravity_settings, 0.0f, -20.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genLabel("ヒメクジ", 0x80000001);
+    ctx->genSlider("サーチエリア", &search_area, 0.0f, 2000.0f);
+    ctx->genSlider("飛ばし方向スピード", &launch_dir_spd, 0.0f, -100.0f);
+    ctx->genSlider("飛ばし方向Yスピード", &launch_dir_y_spd, 0.0f, 100.0f);
+    ctx->genSlider("重力設定", &gravity_settings, 0.0f, -20.0f);
 }
 #endif
 
@@ -170,7 +170,8 @@ static int daObjIta_Delete(daObjIta_c* i_this) {
 }
 
 static int daObjIta_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daObjIta_c, i_this, "Obj_Ita");
+    daObjIta_c* a_this = (daObjIta_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "Obj_Ita");
     return a_this->create();
 }
 
@@ -185,14 +186,14 @@ int daObjIta_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjIta_c::create() {
+cPhs_Step daObjIta_c::create() {
     fopAcM_ct(this, daObjIta_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         int dzb_id = dComIfG_getObjctResName2Index(l_arcName, "M_FloatingDust00.dzb");
         JUT_ASSERT(763, dzb_id != -1);
-        phase = (cPhs__Step)MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0x1320, NULL);
+        phase = MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0x1320, NULL);
         if (phase == cPhs_ERROR_e) {
             return phase;
         }

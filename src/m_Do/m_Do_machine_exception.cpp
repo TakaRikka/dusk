@@ -16,7 +16,7 @@ static JUTConsole* sConsole;
 void print_f(char const* fmt, ...) {
     va_list args;
     va_start(args, fmt);
-    JUTConsole_print_f_va_(sConsole, fmt, args);
+    sConsole->print_f_va(fmt, args);
     va_end(args);
 }
 
@@ -44,8 +44,9 @@ void dispHeapInfo() {
     print_f("Archive %5d / %5d\n", archiveFree / 1024, archiveTotal / 1024);
     print("--------------------------------\n");
 
-    if (JKRAram::getAramHeap()) {
-        JKRAram::getAramHeap()->dump();
+    JKRAramHeap* aramHeap = JKRAram::getAramHeap();
+    if (aramHeap) {
+        aramHeap->dump();
     }
     DynamicModuleControlBase::dump();
     g_dComIfG_gameInfo.mResControl.dump();
@@ -62,8 +63,13 @@ void dispGameInfo() {
 
 void dispDateInfo() {
     print("------------- Date Infomation ---------\n");
+#if DEBUG
+    print(" DEBUG VERSION\n");
+    print("COMPILE USER: Authorized User\n");
+#else
     print(" FINAL VERSION\n");
     print("COMPILE USER: FINAL\n");
+#endif
     print_f("COPYDATE   : %17s\n", mDoMain::COPYDATE_STRING);
 
     OSCalendarTime time;
@@ -84,7 +90,8 @@ void dispDateInfo() {
 }
 
 void dispConsoleToTerminal() {
-    JFWSystem::getSystemConsole()->dumpToTerminal(0xFFFFFFFF);
+    JUTConsole* console = JFWSystem::getSystemConsole();
+    console->dumpToTerminal(0xFFFFFFFF);
 }
 
 void exception_addition(JUTConsole* pConsole) {

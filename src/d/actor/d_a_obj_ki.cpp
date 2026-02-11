@@ -139,10 +139,10 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daObj_Ki_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObj_Ki_Create(fopAc_ac_c* i_this) {
     obj_ki_class* _this = static_cast<obj_ki_class*>(i_this);
     fopAcM_ct(_this, obj_ki_class);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhaseReq, "Obj_Ki");
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhaseReq, "Obj_Ki");
 
     if (step == cPhs_COMPLEATE_e) {
         _this->mBmdIdx = (u8)fopAcM_GetParam(_this);

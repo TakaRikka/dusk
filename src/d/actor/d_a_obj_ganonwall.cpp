@@ -86,7 +86,7 @@ int daObjGWall_c::CreateHeap() {
 
 int daObjGWall_c::create() {
     fopAcM_ct(this, daObjGWall_c);
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3500)) {
             return cPhs_ERROR_e;

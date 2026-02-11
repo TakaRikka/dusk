@@ -8,8 +8,8 @@ public:
     s32 create();
     s32 execute();
 
-    u8 getSwBit() { return fopAcM_GetParam(this) >> 8; }
-    u8 getMode() { return fopAcM_GetParam(this); }
+    u8 getSwBit() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }
+    int getMode() { return fopAcM_GetParam(this) & 0xFF; }
     f32 getExtent() { return scale.x * 100.0f;}
 
 private:

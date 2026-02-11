@@ -36,14 +36,16 @@ int daTag_Howl_c::draw() {
     return 1;
 }
 
-u8 daTag_Howl_c::isAreaCheck() {
+bool daTag_Howl_c::isAreaCheck() {
+    cXyz vec_to_player;
+
     if (getSwitchBit() != 0xFF) {
         if (dComIfGs_isSaveSwitch(getSwitchBit())) {
             return false;
         }
     }
 
-    cXyz vec_to_player = daPy_getPlayerActorClass()->current.pos - current.pos;
+    vec_to_player = daPy_getPlayerActorClass()->current.pos - current.pos;
     if (daPy_py_c::checkNowWolf()) {
         if (vec_to_player.absXZ() < scale.x && -scale.y < vec_to_player.y &&
             vec_to_player.y < scale.y)
@@ -57,7 +59,7 @@ u8 daTag_Howl_c::isAreaCheck() {
 
 int daTag_Howl_c::getParam() {
     mCurveID = fopAcM_GetParam(this) & 0xF;
-    field_0x569 = fopAcM_GetParam(this) >> 0x1E;
+    field_0x569 = (fopAcM_GetParam(this) & 0xC0000000) >> 30;
     scale.x *= 100.0f;
     scale.y *= 100.0f;
     scale.z *= 100.0f;
@@ -65,7 +67,8 @@ int daTag_Howl_c::getParam() {
 }
 
 u8 daTag_Howl_c::getSwitchBit() {
-    return (fopAcM_GetParam(this) >> 4) & 0xFF;
+    u8 param = (fopAcM_GetParam(this) & 0xFF0) >> 4;
+    return param;
 }
 
 static int daTag_Howl_Create(void* i_this) {

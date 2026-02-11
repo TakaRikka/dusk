@@ -1,7 +1,7 @@
 #ifndef J2DMANAGE_H
 #define J2DMANAGE_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JSUInputStream;
 

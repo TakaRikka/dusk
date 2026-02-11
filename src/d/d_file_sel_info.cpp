@@ -170,7 +170,7 @@ void dFile_info_c::setSaveDate(dSv_save_c* i_savedata) {
     sprintf(mSaveDate, "%d.%02d.%02d %02d:%02d", time.year, time.mon + 1, time.mday,
             time.hour, time.min);
     #elif VERSION == VERSION_GCN_PAL
-    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_ENGLISH) {
+    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
         sprintf(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mon + 1, time.mday, time.year, time.hour,
                 time.min);
     } else {

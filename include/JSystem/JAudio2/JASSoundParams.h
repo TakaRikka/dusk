@@ -1,7 +1,7 @@
 #ifndef JASSOUNDPARAMS_H
 #define JASSOUNDPARAMS_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 /**
  * @ingroup jsystem-jaudio

@@ -29,14 +29,13 @@ daObjSwLight_HIO_c::daObjSwLight_HIO_c() {
 
 void daObjSwLight_HIO_c::genMessage(JORMContext* ctx) {
     // Light Candlestick Switch
-    ctx->genLabel("光燭台スイッチ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("光燭台スイッチ", 0);
     // Light Maximum Radius
-    ctx->genSlider("光最大半径", &mLightMaxRadius, 0.0f, 1000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider("光最大半径", &mLightMaxRadius, 0.0f, 1000.0f);
     // Check Rendering
-    ctx->genCheckBox("チェック描画", &mCheckRendering, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox("チェック描画", &mCheckRendering, 0x1);
     // No Light Hit
-    ctx->genCheckBox("光当たり無し", &mNoLightHit, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox("光当たり無し", &mNoLightHit, 0x1);
 }
 
 static daObjSwLight_HIO_c l_HIO;

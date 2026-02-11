@@ -4,7 +4,7 @@
 #ifdef __REVOLUTION_SDK__
 #include <revolution/base/PPCArch.h>
 #else
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -35,7 +35,7 @@ public:
     int execute();
     int _delete();
     void setBaseMtx();
-    cPhs__Step create();
+    cPhs_Step create();
     void kag_setParticle();
     inline int CreateHeap();
     inline int draw();

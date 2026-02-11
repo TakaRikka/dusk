@@ -29,8 +29,8 @@
 #include "DynamicLink.h"
 
 #if !PLATFORM_GCN
-#include "revolution/sc.h"
-#include "revolution/wpad.h"
+#include <revolution/sc.h>
+#include <revolution/wpad.h>
 #endif
 
 #if PLATFORM_GCN
@@ -491,7 +491,7 @@ void forever() {
 #if !PLATFORM_GCN
 void exceptionShutdown() {
     mDoRst_reset(2, 0, 0);
-    //OSShutdownSystem();
+    OSShutdownSystem();
     forever();
 }
 #endif
@@ -501,7 +501,7 @@ void exceptionRestart() {
 #if PLATFORM_GCN
     OSResetSystem(0, 0, 0);
 #else
-    //OSRestart(0);
+    OSRestart(0);
 #endif
     while (true) {}
 }

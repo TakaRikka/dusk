@@ -64,12 +64,15 @@ int daTagMhint_c::create() {
 }
 
 static int daTagMhint_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagMhint_c*>(i_this)->create();
+    daTagMhint_c* mhint = static_cast<daTagMhint_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return mhint->create();
 }
 
 daTagMhint_c::~daTagMhint_c() {}
 
 static int daTagMhint_Delete(daTagMhint_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagMhint_c();
     return 1;
 }
@@ -132,13 +135,14 @@ int daTagMhint_c::execute() {
     } else if (eventInfo.checkCommandTalk()) {
         if (!midna_p->checkShadowModeTalkWait()) {
             if (field_0x56e == 0) {
-                mMsgFlow.init(this, shape_angle.z & 0xFFFF, 0, NULL);
+                mMsgFlow.init(this, (u16)shape_angle.z, 0, NULL);
                 field_0x56e = 1;
                 mDoAud_seStart(Z2SE_NAVI_TALK_START, NULL, 0, 0);
                 field_0x571 = 0;
             } else if (mMsgFlow.doFlow(this, NULL, 0)) {
                 int sp28;
-                if (mMsgFlow.getEventId(&sp28) == 7) {
+                u16 eventId = mMsgFlow.getEventId(&sp28);
+                if (eventId == 7) {
                     dMeter2Info_setPauseStatus(1);
                 }
 

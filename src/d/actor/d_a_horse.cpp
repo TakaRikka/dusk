@@ -791,9 +791,9 @@ int daHorse_c::create() {
 }
 
 static int daHorse_Create(fopAc_ac_c* i_this) {
-    daHorse_c* this_horse = (daHorse_c*)i_this;
-    fpc_ProcID unused = fopAcM_GetID(i_this);
-    return this_horse->create();
+    daHorse_c* a_this = (daHorse_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "HORSE");
+    return a_this->create();
 }
 
 void daHorse_c::setBasAnime(int param_0) {
@@ -4535,7 +4535,7 @@ daHorse_c::~daHorse_c() {
 }
 
 static int daHorse_Delete(daHorse_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "HORSE");
     i_this->~daHorse_c();
     return 1;
 }

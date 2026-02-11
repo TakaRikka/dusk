@@ -2,7 +2,7 @@
 #define D_A_PERU_H
 
 #include "d/actor/d_a_tag_evtarea.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "d/actor/d_a_npc.h"
 #include "SSystem/SComponent/c_counter.h"
 

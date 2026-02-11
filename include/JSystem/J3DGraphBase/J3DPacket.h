@@ -4,8 +4,8 @@
 #include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DEnum.h"
-#include "dolphin/gd/GDBase.h"
-#include "dolphin/mtx.h"
+#include <dolphin/gd/GDBase.h>
+#include <dolphin/mtx.h>
 #include <stdint.h>
 
 class J3DMatPacket;

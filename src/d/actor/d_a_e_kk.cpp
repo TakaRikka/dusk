@@ -876,7 +876,7 @@ void daE_KK_c::executeDead() {
     case 0:
         fopAcM_OffStatus(this, 0);
         attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
-        attention_info.distances[2] = 0;
+        attention_info.distances[fopAc_attn_BATTLE_e] = 0;
         offHeadLockFlg();
         health = 0;
         speedF = 0.0f;
@@ -1266,8 +1266,8 @@ int daE_KK_c::execute() {
             return 1;
         }
 
-        if (attention_info.distances[2] == 0) {
-            attention_info.distances[2] = 0x45;
+        if (attention_info.distances[fopAc_attn_BATTLE_e] == 0) {
+            attention_info.distances[fopAc_attn_BATTLE_e] = 0x45;
             fopAcM_SetGroup(this, 2);
             fopAcM_OnStatus(this, 0);
             attention_info.flags |= fopAc_AttnFlag_BATTLE_e;
@@ -1443,7 +1443,7 @@ int daE_KK_c::create() {
             field_0x760 = current.pos.y;
 
             attention_info.flags = fopAc_AttnFlag_BATTLE_e;
-            attention_info.distances[2] = 0x4C;
+            attention_info.distances[fopAc_attn_BATTLE_e] = 0x4C;
 
             if (field_0x679 != 3) {
                 setActionMode(0, 0);
@@ -1461,7 +1461,7 @@ int daE_KK_c::create() {
         fopAcM_SetMax(this, 600.0f, 600.0f, 600.0f);
 
         if (field_0x679 == 2 && !checkItemGet(fpcNm_ITEM_IRONBALL, 1)) {
-            attention_info.distances[2] = 0;
+            attention_info.distances[fopAc_attn_BATTLE_e] = 0;
             fopAcM_SetGroup(this, 0);
             fopAcM_OffStatus(this, 0);
             attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;

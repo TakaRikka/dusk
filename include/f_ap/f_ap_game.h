@@ -185,6 +185,10 @@ inline u8 fapGmHIO_getGamma() {
 }
 #endif
 
+inline u8 fapGmHIO_getMemoryBlockOff() {
+    return g_HIO.mMemBlockOff;
+}
+
 struct fapGm_dataMem {
     enum HeapType_e {
         HeapType_Error_e,

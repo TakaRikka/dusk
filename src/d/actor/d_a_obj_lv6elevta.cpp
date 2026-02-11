@@ -22,9 +22,8 @@ daObjLv6ElevtA_HIO_c::daObjLv6ElevtA_HIO_c() {
 }
 
 void daObjLv6ElevtA_HIO_c::genMessage(JORMContext* context) {
-    context->genLabel("Lv6回転エレベータ", 0, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("90度回転フレーム数", &mRightAngleTurnFrameCount, 0, 1000, 0, NULL, -1, -1,
-                       0x200, 0x18);
+    context->genLabel("Lv6回転エレベータ", 0);
+    context->genSlider("90度回転フレーム数", &mRightAngleTurnFrameCount, 0, 1000);
 }
 
 static daObjLv6ElevtA_HIO_c l_HIO;

@@ -52,7 +52,7 @@ public:
 
     daNpcIns_c();
     ~daNpcIns_c();
-    cPhs__Step Create();
+    cPhs_Step Create();
     int CreateHeap();
     int Delete();
     int Execute();

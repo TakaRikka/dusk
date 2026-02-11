@@ -1,7 +1,7 @@
 #ifndef D_A_E_OCT_BG_H
 #define D_A_E_OCT_BG_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_acch.h"
 #include "Z2AudioLib/Z2Creature.h"

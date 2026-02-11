@@ -27,16 +27,12 @@ daObjTobyHouse_HIO_c::daObjTobyHouse_HIO_c() {
 
 void daObjTobyHouse_HIO_c::genMessage(JORMContext* ctx) {
     // Toby's Cannon Shed
-    ctx->genLabel("トビー大砲小屋", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("揺れ周期", &mShakingCycle, 0, 8000, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    ctx->genSlider("揺れ振幅", &mShakingAmplitude, 0.0f, 500.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    ctx->genSlider("ＬＯＤ距離", &mLODDistance, 0.0f, 100000.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                    0x18);
-    ctx->genCheckBox("ホークアイ中ＬＯＤ", &mHawkeyeMediumLOD, 1, 0, NULL, 0xffff, 0xffff,
-                        0x200, 0x18);
-    ctx->genCheckBox("コリジョン描画", &mDrawCollision, 1, 0, NULL, 0xffff, 0xffff, 0x200,
-                        0x18);
+    ctx->genLabel("トビー大砲小屋", 0);
+    ctx->genSlider("揺れ周期", &mShakingCycle, 0, 8000);
+    ctx->genSlider("揺れ振幅", &mShakingAmplitude, 0.0f, 500.0f);
+    ctx->genSlider("ＬＯＤ距離", &mLODDistance, 0.0f, 100000.0f);
+    ctx->genCheckBox("ホークアイ中ＬＯＤ", &mHawkeyeMediumLOD, 0x1);
+    ctx->genCheckBox("コリジョン描画", &mDrawCollision, 0x1);
 }
 #endif
 

@@ -140,7 +140,7 @@ public:
 
     daNpcShad_c();
     virtual ~daNpcShad_c();
-    cPhs__Step Create();
+    cPhs_Step Create();
     int CreateHeap();
     int Delete();
     int Execute();

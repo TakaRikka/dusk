@@ -1699,7 +1699,7 @@ static u16 const l_heapsize[4] = {
     0x3120, 0x3120, 0x21E0, 0x2DE0,
 };
 
-cPhs__Step daE_GM_c::create() {
+cPhs_Step daE_GM_c::create() {
     fopAcM_ct(this, daE_GM_c);
 
     mType = fopAcM_GetParam(this);
@@ -1727,11 +1727,11 @@ cPhs__Step daE_GM_c::create() {
         field_0xa54 = uVar1 * 100.0f;
     }
 
-    cPhs__Step phase;
+    cPhs_Step phase;
     if (mType == TYPE_GOMA) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_mg");
+        phase = dComIfG_resLoad(&mPhase, "E_mg");
     } else {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_gm");
+        phase = dComIfG_resLoad(&mPhase, "E_gm");
     }
 
     if (phase == cPhs_COMPLEATE_e) {

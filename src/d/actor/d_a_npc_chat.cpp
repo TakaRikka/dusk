@@ -2494,38 +2494,38 @@ bool daNpcChat_c::isM_() {
     return a_jntNum == JntM_NUM_e;
 }
 
-cPhs__Step daNpcChat_c::loadResrc(int idx, int param_2) {
-    cPhs__Step rv = cPhs_COMPLEATE_e;
+cPhs_Step daNpcChat_c::loadResrc(int idx, int param_2) {
+    cPhs_Step rv = cPhs_COMPLEATE_e;
     if (mTwilight) {
-        rv = (cPhs__Step)dComIfG_resLoad(&mPhase1, l_resNameTbl[idx][1]);
+        rv = dComIfG_resLoad(&mPhase1, l_resNameTbl[idx][1]);
         if (rv != cPhs_COMPLEATE_e) {
             return rv;
         }
     } else {
-        rv = (cPhs__Step)dComIfG_resLoad(&mPhase1, l_resNameTbl[idx][0]);
+        rv = dComIfG_resLoad(&mPhase1, l_resNameTbl[idx][0]);
         if (rv != cPhs_COMPLEATE_e) {
             return rv;
         }
     }
 
-    rv = (cPhs__Step)dComIfG_resLoad(&mPhase2, l_resNameTbl[idx][2]);
+    rv = dComIfG_resLoad(&mPhase2, l_resNameTbl[idx][2]);
     if (rv != cPhs_COMPLEATE_e) {
         return rv;
     }
     
     if (param_2 != 0 || field_0xe51 == 1) {
-        rv = (cPhs__Step)dComIfG_resLoad(&mPhase3, l_resNameTbl[idx][3]);
+        rv = dComIfG_resLoad(&mPhase3, l_resNameTbl[idx][3]);
         if (rv != cPhs_COMPLEATE_e) {
             return rv;
         }
 
         if (mTwilight) {
-            rv = (cPhs__Step)dComIfG_resLoad(&mPhase4, l_resNameTbl[idx][5]);
+            rv = dComIfG_resLoad(&mPhase4, l_resNameTbl[idx][5]);
             if (rv != cPhs_COMPLEATE_e) {
                 return rv;
             }
         } else {
-            rv = (cPhs__Step)dComIfG_resLoad(&mPhase4, l_resNameTbl[idx][4]);
+            rv = dComIfG_resLoad(&mPhase4, l_resNameTbl[idx][4]);
             if (rv != cPhs_COMPLEATE_e) {
                 return rv;
             }
@@ -2675,7 +2675,7 @@ inline f32 CylH(int type) {
     return (f32)(type < 16 ? a_prmTbl_M[type].field_0x30 : a_prmTbl_W[type - 16].field_0x30);
 }
 
-cPhs__Step daNpcChat_c::Create() {
+cPhs_Step daNpcChat_c::Create() {
     fopAcM_ct(this, daNpcChat_c);
 
     mTwilight = dKy_darkworld_check();
@@ -2701,7 +2701,7 @@ cPhs__Step daNpcChat_c::Create() {
 
     mMsgNo = getMessageNo();
 
-    cPhs__Step phase = loadResrc(mType, mObjNum);
+    cPhs_Step phase = loadResrc(mType, mObjNum);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x800022E0)) {
             return cPhs_ERROR_e;
@@ -2777,7 +2777,7 @@ BOOL daNpcChat_c::CreateHeap() {
 }
 
 int daNpcChat_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_CHAT");
     this->~daNpcChat_c();
     return 1;
 }
@@ -3072,9 +3072,12 @@ void daNpcChat_c::setParam() {
         attention_info.flags = 0;
     } else {
         if (mTalkIconType == 0) {
-            attention_info.flags = 0xC0000A;
+            attention_info.flags =
+                fopAc_AttnFlag_TALK_e | fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_UNK_0x400000 |
+                fopAc_AttnFlag_UNK_0x800000;
         } else {
-            attention_info.flags = fopAc_AttnFlag_UNK_0x400000 | fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
+            attention_info.flags =
+                fopAc_AttnFlag_TALK_e | fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_UNK_0x400000;
         }
     }
 

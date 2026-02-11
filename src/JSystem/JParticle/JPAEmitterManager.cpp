@@ -6,7 +6,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 JPAEmitterManager::JPAEmitterManager(u32 i_ptclNum, u32 i_emtrNum, JKRHeap* pHeap, u8 i_gidMax,
                                      u8 i_ridMax) {

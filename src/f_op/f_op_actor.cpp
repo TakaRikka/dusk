@@ -182,21 +182,21 @@ fopac_HIO_c::~fopac_HIO_c() {}
 static fopac_HIO_c l_HIO;
 
 void fopac_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("処理速度調査用", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("アクター番号", &mActorNum, 0, 4000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("動作静止", &mStopExecute, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("描画停止", &mStopDraw, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("Bボタンでアクター番号を表示", &mBBtnInfoDisp, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("メソッド速度調査", &print_error_check_c::mThresholdEnable, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("最高優先度", &print_error_check_c::mPriorityMaximum, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genCheckBox("PRINT抑制", &print_error_check_c::mPrintDisable, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("処理速度調査用", 0x80000001);
+    mctx->genSlider("アクター番号", &mActorNum, 0, 4000);
+    mctx->genCheckBox("動作静止", &mStopExecute, 0x1);
+    mctx->genCheckBox("描画停止", &mStopDraw, 0x1);
+    mctx->genCheckBox("Bボタンでアクター番号を表示", &mBBtnInfoDisp, 0x1);
+    mctx->genCheckBox("メソッド速度調査", &print_error_check_c::mThresholdEnable, 0x1);
+    mctx->genCheckBox("最高優先度", &print_error_check_c::mPriorityMaximum, 0x1);
+    mctx->genCheckBox("PRINT抑制", &print_error_check_c::mPrintDisable, 0x1);
 
-    mctx->genLabel("メソッド閾値", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("EXECUTE", &print_error_check_c::sEXECUTE.timeMs, 0, 10000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("CREATE", &print_error_check_c::sCREATE.timeMs, 0, 10000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("DELETE", &print_error_check_c::sDELETE.timeMs, 0, 10000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("IS_DELETE", &print_error_check_c::sIS_DELETE.timeMs, 0, 10000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    mctx->genSlider("DRAW", &print_error_check_c::sDRAW.timeMs, 0, 10000, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    mctx->genLabel("メソッド閾値", 0);
+    mctx->genSlider("EXECUTE", &print_error_check_c::sEXECUTE.timeMs, 0, 10000);
+    mctx->genSlider("CREATE", &print_error_check_c::sCREATE.timeMs, 0, 10000);
+    mctx->genSlider("DELETE", &print_error_check_c::sDELETE.timeMs, 0, 10000);
+    mctx->genSlider("IS_DELETE", &print_error_check_c::sIS_DELETE.timeMs, 0, 10000);
+    mctx->genSlider("DRAW", &print_error_check_c::sDRAW.timeMs, 0, 10000);
 }
 #endif
 

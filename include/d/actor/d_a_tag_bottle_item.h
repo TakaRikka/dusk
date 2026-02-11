@@ -14,18 +14,18 @@ private:
     /* 0x0576 */ u8 mBottleItemType;
 
 public:
-    s32 create();
-    s32 Delete();
-    s32 Execute();
-    s32 Draw();
+    int create();
+    int Delete();
+    int Execute();
+    int Draw();
     void setTypeFromParam();
     void restart();
     void initialize();
     int checkProcess(ProcessFunc);
     int setProcess(ProcessFunc);
     void setAttnPos();
-    s32 chkEvent();
-    s32 orderEvent();
+    int chkEvent();
+    int orderEvent();
     void makeSoup();
     int wait(void*);
     virtual ~daTag_BottleItem_c();

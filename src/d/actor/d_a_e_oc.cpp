@@ -107,25 +107,25 @@ daE_OC_HIO_c::daE_OC_HIO_c() {
 #if DEBUG
 void daE_OC_HIO_c::genMessage(JORMContext* ctext) {
     // enemy sample
-    ctext->genLabel("敵サンプル", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genLabel("敵サンプル", 0x80000001);
     // basic size
-    ctext->genSlider("基本サイズ", &basic_size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("基本サイズ", &basic_size, 0.0f, 5.0f);
     // player search max radius S
-    ctext->genSlider("プレイヤーサーチ最大半径S", &plyr_srch_max_radius_S, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("プレイヤーサーチ最大半径S", &plyr_srch_max_radius_S, 0.0f, 10000.0f);
     // player search max radius M
-    ctext->genSlider("プレイヤーサーチ最大半径M", &plyr_srch_max_radius_M, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("プレイヤーサーチ最大半径M", &plyr_srch_max_radius_M, 0.0f, 10000.0f);
     // player search min radius
-    ctext->genSlider("プレイヤーサーチ最小半径", &plyr_srch_min_radius, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("プレイヤーサーチ最小半径", &plyr_srch_min_radius, 0.0f, 10000.0f);
     // battle participation radius
-    ctext->genSlider("戦闘参加半径", &battle_participation_radius, 0.0f, 3000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("戦闘参加半径", &battle_participation_radius, 0.0f, 3000.0f);
     // attention radius of slain teammate
-    ctext->genSlider("やられ仲間注目半径", &teammate_attention_radius, 0.0f, 3000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("やられ仲間注目半径", &teammate_attention_radius, 0.0f, 3000.0f);
     // demo waiting time
-    ctext->genSlider("デモ待機時間", &demo_waiting_time, 0.0f, 3000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("デモ待機時間", &demo_waiting_time, 0.0f, 3000.0f);
     // out of range standby distance
-    ctext->genSlider("範囲外待機距離", &standby_distance, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 24);
+    ctext->genSlider("範囲外待機距離", &standby_distance, 0.0f, 10000.0f);
     // radius representation
-    ctext->genCheckBox("半径表示", &radius_representation, 1, 0, NULL, -1, -1, 0x200, 0x18);
+    ctext->genCheckBox("半径表示", &radius_representation, 0x1);
 }
 #endif
 
@@ -613,13 +613,13 @@ int daE_OC_c::getCutType() {
         case daPy_py_c::CUT_TYPE_NM_STAB:
         case daPy_py_c::CUT_TYPE_NM_RIGHT:
         case daPy_py_c::CUT_TYPE_FINISH_STAB:
-        case daPy_py_c::CUT_TYPE_DASH_UNK_26:
+        case daPy_py_c::CUT_TYPE_DASH_RIGHT:
         case daPy_py_c::CUT_TYPE_NM_VERTICAL:
             return 0;
         case daPy_py_c::CUT_TYPE_COMBO_STAB:
-        case daPy_py_c::CUT_TYPE_HORSE_UNK_22:
-        case daPy_py_c::CUT_TYPE_HORSE_UNK_23:
-        case daPy_py_c::CUT_TYPE_DASH_UNK_25:
+        case daPy_py_c::CUT_TYPE_HORSE_LEFT_A:
+        case daPy_py_c::CUT_TYPE_HORSE_LEFT_B:
+        case daPy_py_c::CUT_TYPE_DASH_LEFT:
         case daPy_py_c::CUT_TYPE_NM_LEFT:
             return 1;
         default:
@@ -2669,7 +2669,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return a_this->CreateHeap();
 }
 
-cPhs__Step daE_OC_c::create() {
+cPhs_Step daE_OC_c::create() {
     fopAcM_ct(this, daE_OC_c);
     field_0x6b4 = fopAcM_GetParam(this) & 0xFF;
     if (field_0x6b4 == 0xFF) {
@@ -2706,9 +2706,9 @@ cPhs__Step daE_OC_c::create() {
         mName = "E_OC2";
     }
 
-    cPhs__Step phase = (cPhs__Step) dComIfG_resLoad(&mPhaseReqs[0], mName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhaseReqs[0], mName);
     if (phase == cPhs_COMPLEATE_e) {
-        phase = (cPhs__Step) dComIfG_resLoad(&mPhaseReqs[1], "E_ocb");
+        phase = dComIfG_resLoad(&mPhaseReqs[1], "E_ocb");
         if (phase == cPhs_COMPLEATE_e) {
             OS_REPORT("E_OC PARAM %x\n", fopAcM_GetParam(this));
             if (!fopAcM_entrySolidHeap(this, useHeapInit, 0x2e40)) {

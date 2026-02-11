@@ -716,11 +716,11 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return true;
 }
 
-static cPhs__Step daE_Bee_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daE_Bee_Create(fopAc_ac_c* i_this) {
     e_bee_class* _this = static_cast<e_bee_class*>(i_this);
     fopAcM_ct(_this, e_bee_class);
     
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhase, "E_bee");
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhase, "E_bee");
     if (step == cPhs_COMPLEATE_e) {
         _this->mParam0 = (u8)fopAcM_GetParam(_this);
         _this->mParam1 = (u8)(fopAcM_GetParam(_this) >> 8);

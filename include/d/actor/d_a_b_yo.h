@@ -65,7 +65,7 @@ public:
     int _delete();
     int CreateHeap();
     int CreateHeap2();
-    cPhs__Step create();
+    cPhs_Step create();
 
     u8 getModelNo() { return mModelNo; }
     s16 getFrizadRollAngle() { return mIceAngle; }

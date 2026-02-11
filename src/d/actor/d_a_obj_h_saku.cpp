@@ -80,15 +80,15 @@ int daObjH_Saku_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjH_Saku_c::create() {
+cPhs_Step daObjH_Saku_c::create() {
     fopAcM_ct(this, daObjH_Saku_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         int dzb_id = dComIfG_getObjctResName2Index(l_arcName, "H_Saku.dzb");
         JUT_ASSERT(113, dzb_id != -1);
 
-        phase = (cPhs__Step)MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0x1320, NULL);
+        phase = MoveBGCreate(l_arcName, dzb_id, dBgS_MoveBGProc_TypicalRotY, 0x1320, NULL);
         if (phase == cPhs_ERROR_e) {
             return phase;
         }

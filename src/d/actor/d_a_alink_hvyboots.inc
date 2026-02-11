@@ -18,9 +18,9 @@ void daAlink_c::concatMagneBootInvMtx() {
     }
 }
 
-void daAlink_c::multVecMagneBootInvMtx(cXyz* vec) {
+void daAlink_c::multVecMagneBootInvMtx(cXyz* o_dst) {
     if (checkMagneBootsOn()) {
-        mDoMtx_multVecSR(mMagneBootInvMtx, vec, vec);
+        mDoMtx_multVecSR(mMagneBootInvMtx, o_dst, o_dst);
     }
 }
 
@@ -35,7 +35,7 @@ bool daAlink_c::commonMagneLineCheck(cXyz* i_start, cXyz* i_end) {
 }
 
 BOOL daAlink_c::checkBootsMoveAnime(int param_0) {
-    return (checkHeavyStateOn(param_0, 1) && !checkNoResetFlg0(FLG0_UNDERWATER)) ||
+    return (checkHeavyStateOn(param_0, 1) && !checkNoResetFlg0(FLG0_WATER_IN_MOVE)) ||
            checkDkCaught2Anime();
 }
 
@@ -56,7 +56,7 @@ int daAlink_c::setHeavyBoots(int param_0) {
             deleteEquipItem(TRUE, FALSE);
         }
 
-        if (checkNoResetFlg0(FLG0_UNDERWATER) && !dComIfGp_checkPlayerStatus1(0, 0x2000000)) {
+        if (checkNoResetFlg0(FLG0_WATER_IN_MOVE) && !dComIfGp_checkPlayerStatus1(0, 0x2000000)) {
             return procSwimWaitInit(0);
         }
 
@@ -92,7 +92,6 @@ int daAlink_c::setHeavyBoots(int param_0) {
     return 0;
 }
 
-
 s16 daAlink_c::getMagneBootsLocalAngleY(s16 param_0, int param_1) {
     if (param_1 == 1 || (param_1 != 2 && field_0x3114 <= 0x4000 && field_0x3114 != -0x8000)) {
         return param_0;
@@ -107,12 +106,12 @@ s16 daAlink_c::getMagneBootsLocalAngleY(s16 param_0, int param_1) {
     return vec.atan2sX_Z();
 }
 
-
 void daAlink_c::setMagneBootsMtx(cBgS_PolyInfo* i_polyinfo, int param_1) {
     cM3dGPla poly;
     dComIfG_Bgsp().GetTriPla(*i_polyinfo, &poly);
 
     s16 var_r28 = cM_atan2s(poly.mNormal.absXZ(), poly.mNormal.y);
+    s16 var_r26 = field_0x3116;
     int temp_r3_2 = abs(var_r28);
     if (temp_r3_2 < 500) {
         var_r28 = 0;
@@ -145,16 +144,14 @@ void daAlink_c::setMagneBootsMtx(cBgS_PolyInfo* i_polyinfo, int param_1) {
             cXyz sp44 = mMagneBootsTopVec.outprod(poly.mNormal);
             sp44.normalizeZP();
 
-            f32 var_f1_2 = JMAFastSqrt(1.0f - temp_f1 * temp_f1);
-            f32 temp_f1_2 = cM_atan2f(var_f1_2, temp_f1);
+            f32 temp_f1_2 = cM_atan2f(JMAFastSqrt(1.0f - temp_f1 * temp_f1), temp_f1);
             f32 var_f2 = temp_f1_2 * 0.2f;
 
             if (var_f2 > 0.4f) {
                 var_f2 = 0.4f;
             } else if (var_f2 < 0.025f) {
                 var_f2 = 0.025f;
-
-                if (0.025f > temp_f1_2) {
+                if (var_f2 > temp_f1_2) {
                     var_f2 = temp_f1_2;
                 }
             }
@@ -167,10 +164,10 @@ void daAlink_c::setMagneBootsMtx(cBgS_PolyInfo* i_polyinfo, int param_1) {
 
             field_0x3114 = cM_atan2s(sp40.absXZ(), sp40.y);
 
-            int temp_r3_4 = abs(field_0x3114);
-            if (temp_r3_4 < 500) {
+            temp_r3_2 = abs(field_0x3114);
+            if (temp_r3_2 < 500) {
                 field_0x3114 = 0;
-            } else if (temp_r3_4 > 0x7E0B) {
+            } else if (temp_r3_2 > 0x7E0B) {
                 field_0x3114 = -0x8000;
             }
 
@@ -189,7 +186,7 @@ void daAlink_c::setMagneBootsMtx(cBgS_PolyInfo* i_polyinfo, int param_1) {
             s16 angle = sp40.atan2sX_Z();
             shape_angle.y += angle;
             current.angle.y += angle;
-            field_0x2fe6 += angle;
+            mPrevAngleY += angle;
             field_0x310c += angle;
         }
     }
@@ -200,7 +197,6 @@ void daAlink_c::setMagneBootsMtx(cBgS_PolyInfo* i_polyinfo, int param_1) {
     mDoMtx_inverse(mMagneBootMtx, mMagneBootInvMtx);
     mDoMtx_multVec(mMagneBootMtx, &cXyz::BaseY, &mMagneBootsTopVec);
 }
-
 
 int daAlink_c::cancelMagneBootsOn() {
     offNoResetFlg0(FLG0_MAGNE_BOOTS_ON);
@@ -221,10 +217,10 @@ int daAlink_c::cancelMagneBootsOn() {
         current.pos += mMagneBootsTopVec * 100.0f;
         mLinkGndChk.SetPos(&current.pos);
 
-        f32 gnd_cross = dComIfG_Bgsp().GroundCross(&mLinkGndChk);
+        f32 ground_y = dComIfG_Bgsp().GroundCross(&mLinkGndChk);
         current.pos.y -= 100.0f;
-        if (gnd_cross > current.pos.y) {
-            current.pos.y = gnd_cross;
+        if (ground_y > current.pos.y) {
+            current.pos.y = ground_y;
         }
 
         old.pos = current.pos;
@@ -241,7 +237,6 @@ int daAlink_c::cancelMagneBootsOn() {
     mMagneBootsTopVec = cXyz::BaseY;
     return 0;
 }
-
 
 int daAlink_c::checkMagneBootsFly() {
     if (field_0x2fb8 != 0 && checkEquipHeavyBoots() && !checkDeadHP() &&
@@ -291,13 +286,12 @@ int daAlink_c::procBootsEquip() {
         onModeFlg(4);
         checkNextAction(1);
     } else if (frameCtrl_p->getFrame() >= 5.0f) {
-        field_0x2f92 = 1;
-        field_0x2f93 = 6;
+        mLeftHandIndex = 1;
+        mRightHandIndex = 6;
     }
 
     return 1;
 }
-
 
 int daAlink_c::procMagneBootsFlyInit() {
     cXyz sp44 = field_0x369c.normZP();
@@ -338,20 +332,27 @@ int daAlink_c::procMagneBootsFlyInit() {
     }
 
     field_0x3478 = 0.0f;
-    field_0x594 = mpHIO->mItem.mIronBoots.m.mMaxMagneFlySpeed;
+    mMaxSpeed = mpHIO->mItem.mIronBoots.m.mMaxMagneFlySpeed;
     mProcVar2.field_0x300c = 0;
     voiceStart(Z2SE_AL_V_MAGNET_CAUGHT);
     return 1;
 }
 
-
 int daAlink_c::procMagneBootsFly() {
     field_0x3478 += mpHIO->mItem.mIronBoots.m.mMagneFlyAccelRate;
-    if (field_0x3478 > field_0x594) {
-        field_0x3478 = field_0x594;
+    if (field_0x3478 > mMaxSpeed) {
+        field_0x3478 = mMaxSpeed;
     }
 
-    if (dComIfG_Bgsp().ChkPolySafe(mPolyInfo2) && checkEquipHeavyBoots()) {
+    /* !@bug - If iron boots are unequipped mid-flight, player will still stick to magnetic poly
+     * Fixed in GCN and Wii KOR versions by adding a checkEquipHeavyBoots check
+     */
+    if (dComIfG_Bgsp().ChkPolySafe(mPolyInfo2)
+        #if PLATFORM_GCN || VERSION == VERSION_WII_KOR
+        && checkEquipHeavyBoots()
+        #endif
+        )
+    {
         if (dComIfG_Bgsp().ChkMoveBG(mPolyInfo2)) {
             cXyz old_37c8(field_0x37c8);
             dComIfG_Bgsp().MoveBgTransPos(mPolyInfo2, true, &field_0x37c8, NULL, NULL);
@@ -377,7 +378,7 @@ int daAlink_c::procMagneBootsFly() {
 
         cLib_addCalcAngleS(&shape_angle.x, sp24.atan2sY_XZ() + -0x4000, 5, 0x1000, 0x100);
         cLib_addCalcAngleS(&shape_angle.y, sp24.atan2sX_Z(), 5, 0x1000, 0x100);
-        mProcVar2.field_0x300c += 0x1C00;
+        mProcVar2.field_0x300c += (s16)0x1C00;
     }
 
     return 1;

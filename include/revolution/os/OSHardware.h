@@ -8,11 +8,11 @@
 #ifndef _RVL_SDK_OS_HARDWARE_H
 #define _RVL_SDK_OS_HARDWARE_H
 
-#include "revolution/dvd.h"
-#include "revolution/os.h"
-#include "revolution/os/OSContext.h"
-#include "revolution/os/OSThread.h"
-#include "revolution/types.h"
+#include <revolution/dvd.h>
+#include <revolution/os.h>
+#include <revolution/os/OSContext.h>
+#include <revolution/os/OSThread.h>
+#include <revolution/types.h>
 
 #ifdef __cplusplus
 extern "C" {

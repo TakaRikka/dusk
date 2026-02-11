@@ -47,7 +47,7 @@ public:
 
     daNpc_grC_c();
     ~daNpc_grC_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

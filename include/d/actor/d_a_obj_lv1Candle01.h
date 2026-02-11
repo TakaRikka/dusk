@@ -18,7 +18,7 @@ class daLv1Cdl01_c : public dBgS_MoveBgActor {
 public:
     void setBaseMtx();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     void lightInit();
     void setLight();
     void cutLight();

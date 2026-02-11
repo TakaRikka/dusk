@@ -21,7 +21,7 @@ daObjGOMIKABE_HIO_c::daObjGOMIKABE_HIO_c() {
 #if DEBUG
 void daObjGOMIKABE_HIO_c::genMessage(JORMContext* ctx) {
     // Zora Rock
-    ctx->genLabel("ゾーラ岩", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("ゾーラ岩", 0x80000001);
 }
 #endif
 

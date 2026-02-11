@@ -80,14 +80,14 @@ int daObjWindow_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjWindow_c::create1st() {
+cPhs_Step daObjWindow_c::create1st() {
     mType = getType();
     if (mType == 0xff) {
         mType = 0;
     }
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step step = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (step == cPhs_COMPLEATE_e) {
-        step = (cPhs__Step)MoveBGCreate(l_arcName, 12, NULL, 0xee0, NULL);
+        step = MoveBGCreate(l_arcName, 12, NULL, 0xee0, NULL);
         if (step == cPhs_ERROR_e) {
             return step;
         }
@@ -152,7 +152,7 @@ int daObjWindow_c::Delete() {
     return 1;
 }
 
-static cPhs__Step daObjWindow_create1st(daObjWindow_c* i_this) {
+static cPhs_Step daObjWindow_create1st(daObjWindow_c* i_this) {
     fopAcM_ct(i_this, daObjWindow_c);
     return i_this->create1st();
 }

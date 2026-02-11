@@ -299,7 +299,7 @@ int daObjLv6Bm_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daObjLv6Bm_c::create1st() {
+cPhs_Step daObjLv6Bm_c::create1st() {
     if (fopAcM_isSwitch(this, (u8)getSwNo3())) {
         OS_REPORT("Lv6ビーモス：既に破壊！<%d>\n", getSwNo3()); // Lv6 Beamos: Already destroyed! <%d>
         return cPhs_ERROR_e;
@@ -317,9 +317,9 @@ cPhs__Step daObjLv6Bm_c::create1st() {
         field_0xa36 = 1;
     }
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
-        phase = (cPhs__Step)MoveBGCreate(l_arcName, DZB_BM6, dBgS_MoveBGProc_TypicalRotY, 0x2FA0, NULL);
+        phase = MoveBGCreate(l_arcName, DZB_BM6, dBgS_MoveBGProc_TypicalRotY, 0x2FA0, NULL);
 
         if (phase == cPhs_ERROR_e) {
             return phase;

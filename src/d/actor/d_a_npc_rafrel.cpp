@@ -142,8 +142,8 @@ daNpcRafrel_HIO_c::daNpcRafrel_HIO_c() {
 }
 
 void daNpcRafrel_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genSlider("デモ開始距離", &m.demo_start_dist, 0.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genCheckBox("デモ開始エリア", &m.demo_start_area, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("デモ開始距離", &m.demo_start_dist, 0.0f, 500.0f);
+    ctx->genCheckBox("デモ開始エリア", &m.demo_start_area, 0x1);
     daNpcF_commonGenMessage(ctx, &m.common);
 }
 #endif
@@ -349,9 +349,7 @@ int daNpcRafrel_c::CreateHeap() {
 }
 
 int daNpcRafrel_c::Delete() {
-    "Delete -> NPC_RAFREL(id=%d)\n";
-    
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_RAFREL");
     this->~daNpcRafrel_c();
     return 1;
 }

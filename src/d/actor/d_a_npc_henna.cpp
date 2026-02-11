@@ -271,8 +271,8 @@ static void message_shop(npc_henna_class* i_this) {
     } else {
         fopAcM_OnStatus(&i_this->actor, 0);
         cLib_onBit<u32>(i_this->actor.attention_info.flags, fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e);
-        i_this->actor.attention_info.distances[1] = 4;
-        i_this->actor.attention_info.distances[3] = 4;
+        i_this->actor.attention_info.distances[fopAc_attn_TALK_e] = 4;
+        i_this->actor.attention_info.distances[fopAc_attn_SPEAK_e] = 4;
         i_this->actor.eventInfo.onCondition(1);
         if (dComIfGp_event_runCheck() && i_this->cam_mode == 0 &&
             i_this->actor.eventInfo.checkCommandTalk() != 0)
@@ -2188,7 +2188,7 @@ static void message_guide(npc_henna_class* i_this) {
         fopAcM_OnStatus(actor, 0);
 
         cLib_onBit<u32>(actor->attention_info.flags, (fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e));
-        actor->attention_info.distances[1] = 2;
+        actor->attention_info.distances[fopAc_attn_TALK_e] = 2;
         actor->attention_info.distances[fopAc_attn_SPEAK_e] = 2;
 
         actor->eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -2672,7 +2672,7 @@ static int daNpc_Henna_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, npc_henna_class);
     npc_henna_class* a_this = (npc_henna_class*)i_this;
 
-    cPhs__Step loadResult = (cPhs__Step)dComIfG_resLoad(&a_this->phase, "Henna");
+    cPhs_Step loadResult = dComIfG_resLoad(&a_this->phase, "Henna");
     if (loadResult == cPhs_COMPLEATE_e) {
         OS_REPORT("NPC_HENNA PARAM %x\n", fopAcM_GetParam(i_this));
         a_this->arg0 = fopAcM_GetParam(i_this);

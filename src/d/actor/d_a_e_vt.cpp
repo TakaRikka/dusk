@@ -2759,7 +2759,7 @@ void daE_VA_c::executeOpaciDown() {
         break;
     }
 
-    if (player->getCutCount() > 1 || player->getCutType() == 10) {
+    if (player->getCutCount() > 1 || player->getCutType() == daPy_py_c::CUT_TYPE_JUMP) {
         if (mFadeAwayTimer < 30) {
             mFadeAwayTimer = 30;
         }
@@ -2773,7 +2773,7 @@ void daE_VA_c::executeOpaciDown() {
 void daE_VA_c::executeOpaciDownDamage() {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-    if (player->getCutCount() > 1 || player->getCutType() == 10) {
+    if (player->getCutCount() > 1 || player->getCutType() == daPy_py_c::CUT_TYPE_JUMP) {
         if (mFadeAwayTimer < 30) {
             mFadeAwayTimer = 30;
         }

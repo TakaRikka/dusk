@@ -1,10 +1,12 @@
 #ifndef D_D_TRESURE_H
 #define D_D_TRESURE_H
 
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 
 class dTres_c {
 public:
+    static const int TYPE_GROUP_ENUM_NUMBER = 17;
+
     struct data_s {
         /* 0x00 */ u8 mNo;
         /* 0x01 */ s8 mRoomNo;
@@ -21,18 +23,25 @@ public:
     public:
         data_s* getDataPointer() { return (data_s*)this; }
         const data_s* getConstDataPointer() const { return (data_s*)this; }
-        typeGroupData_c* getNextDataPointer() const { return mNextData; }
-        void setNextDataPointer(typeGroupData_c* data) { mNextData = data; }
-        void setTypeGroupNo(u8 no) { mTypeGroupNo = no; }
         u8 getNo() const { return mNo; }
+        void setNo(u8 no) { mNo = no; }
+        s8 getRoomNo() const { return mRoomNo; }
+        void setRoomNo(s8 roomNo) { mRoomNo = roomNo; }
         u8 getStatus() const { return mStatus; }
         void setStatus(u8 status) { mStatus = status; }
-        void setRoomNo(s8 roomNo) { mRoomNo = roomNo; }
-        s8 getRoomNo() const { return mRoomNo; }
+        void setArg1(u8 arg1) { mArg1 = arg1; }
+        const Vec* getPos() const { return &mPos; }
         void setPos(const Vec& pos) { mPos = pos; }
         u8 getSwBit() const { return mSwBit; }
-        const Vec* getPos() const { return &mPos; }
+        void setSwBit(u8 swBit) { mSwBit = swBit; }
+        void setType(u8 type) { mType = type; }
+        void setArg2(u8 arg2) { mArg2 = arg2; }
         int getAngleY() const { return mAngleY; }
+        void setAngleY(s8 angleY) { mAngleY = angleY; }
+        typeGroupData_c* getNextDataPointer() const { return mNextData; }
+        void setNextDataPointer(typeGroupData_c* data) { mNextData = data; }
+        u8 getTypeGroupNo() { return mTypeGroupNo; }
+        void setTypeGroupNo(u8 no) { mTypeGroupNo = no; }
 
         /* 0x14 */ typeGroupData_c* mNextData;
         /* 0x18 */ u8 mTypeGroupNo;
@@ -63,7 +72,7 @@ public:
     static typeGroupData_c* getNextData(dTres_c::typeGroupData_c*);
     static typeGroupData_c* getNextData(dTres_c::typeGroupData_c const*);
     static void setPosition(int, u8, Vec const*, int);
-    static int getTypeGroupNoToType(u8);
+    static u8 getTypeGroupNoToType(u8);
     static u8 getTypeToTypeGroupNo(u8);
 
     static int getTypeGroupNumber(int index) {

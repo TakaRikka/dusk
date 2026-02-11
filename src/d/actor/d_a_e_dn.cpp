@@ -146,17 +146,17 @@ daE_DN_HIO_c::daE_DN_HIO_c() {
 
 #if DEBUG
 void daE_DN_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("  リザードマン", 0x80000001, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("基本サイズ", &model_size, 0.0f, 5.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("移動速度", &movement_speed, 0.0f, 20.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("突進速度", &dash_speed, 0.0f, 40.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("戦闘開始範囲", &battle_init_range, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("攻撃開始範囲", &attack_init_range, 0.0f, 1000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genCheckBox("不死身", &invulnerable, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genCheckBox("学習なし", &no_learn, 1, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("魂抜間 弱", &soul_disappear_time_weak, 0, 100, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("魂抜間 強", &soul_disappear_time_strong, 0, 100, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("防御静止間", &defense_pause_time, 0, 20, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genLabel("  リザードマン", 0x80000001);
+    ctx->genSlider("基本サイズ", &model_size, 0.0f, 5.0f);
+    ctx->genSlider("移動速度", &movement_speed, 0.0f, 20.0f);
+    ctx->genSlider("突進速度", &dash_speed, 0.0f, 40.0f);
+    ctx->genSlider("戦闘開始範囲", &battle_init_range, 0.0f, 2000.0f);
+    ctx->genSlider("攻撃開始範囲", &attack_init_range, 0.0f, 1000.0f);
+    ctx->genCheckBox("不死身", &invulnerable, 0x1);
+    ctx->genCheckBox("学習なし", &no_learn, 0x1);
+    ctx->genSlider("魂抜間 弱", &soul_disappear_time_weak, 0, 100);
+    ctx->genSlider("魂抜間 強", &soul_disappear_time_strong, 0, 100);
+    ctx->genSlider("防御静止間", &defense_pause_time, 0, 20);
 }
 #endif
 
@@ -3282,7 +3282,7 @@ static int daE_DN_IsDelete(e_dn_class* i_this) {
 
 static int daE_DN_Delete(e_dn_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
-    fpc_ProcID no = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_DN");
 
     dComIfG_resDelete(&i_this->phase, "E_dn");
 
@@ -3358,12 +3358,12 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return 1;
 }
 
-static cPhs__Step daE_DN_Create(fopAc_ac_c* actor) {
+static cPhs_Step daE_DN_Create(fopAc_ac_c* actor) {
     e_dn_class* i_this = (e_dn_class*)actor;
 
     fopAcM_ct(actor, e_dn_class);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&i_this->phase, "E_dn");
+    cPhs_Step phase = dComIfG_resLoad(&i_this->phase, "E_dn");
     if (phase == cPhs_COMPLEATE_e) {
         int swBit = (fopAcM_GetParam(actor) & 0xFF000000) >> 24;
         if (swBit != 0xFF) {

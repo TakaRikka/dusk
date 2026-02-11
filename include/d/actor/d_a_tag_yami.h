@@ -16,8 +16,8 @@ public:
     void offMidnaTagSw2();
     void setCoC(cXyz i_coC) { mCoC = i_coC; }
 
-    u8 get_MTagSw() { return fopAcM_GetParamBit(this, 8, 8); }
-    u8 get_MTagSw2() { return fopAcM_GetParamBit(this, 16, 8); }
+    int get_MTagSw() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }
+    int get_MTagSw2() { return (fopAcM_GetParam(this) >> 16) & 0xFF; }
     s32 get_prm() { return fopAcM_GetParam(this) & 0xff; }
 
     int is_CoHit() { return mIsCoHit; }

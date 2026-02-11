@@ -3095,7 +3095,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daNpc_Ne_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daNpc_Ne_Create(fopAc_ac_c* i_this) {
     npc_ne_class* _this = static_cast<npc_ne_class*>(i_this);
     fopAcM_ct(i_this, npc_ne_class);
 
@@ -3104,7 +3104,7 @@ static cPhs__Step daNpc_Ne_Create(fopAc_ac_c* i_this) {
     } else {
         _this->mResName = "Npc_ne";
     }
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhase, _this->mResName);
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhase, _this->mResName);
 
     if (step == cPhs_COMPLEATE_e) {
         _this->mBehavior = (u8)fopAcM_GetParam(_this);

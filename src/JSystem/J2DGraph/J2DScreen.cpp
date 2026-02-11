@@ -9,7 +9,7 @@
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JSupport/JSUMemoryStream.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 J2DScreen::J2DScreen()
     : J2DPane(NULL, true, 'root', JGeometry::TBox2<f32>(JGeometry::TVec2<f32>(0, 0), JGeometry::TVec2<f32>(640, 480))), mColor() {

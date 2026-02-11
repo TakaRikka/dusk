@@ -779,7 +779,7 @@ static int daE_BS_IsDelete(e_bs_class* i_this) {
 
 static int daE_BS_Delete(e_bs_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_BS");
     dComIfG_resDelete(&i_this->phase, "E_BS");
 
     if (i_this->HIOInit) {

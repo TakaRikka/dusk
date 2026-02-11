@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_nameplate.h"
 #include "d/actor/d_a_alink.h"
 #include "d/d_a_obj.h"
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_math.h"
 

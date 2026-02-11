@@ -18,14 +18,16 @@ int daTagLv7Gate_c::createHeap() {
         return 1;
     }
 
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 11);
-    mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11000084);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 11);
+    JUT_ASSERT(92, modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11000084);
 
     if (mpModel == NULL) {
         return 0;
     }
 
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 7);
+    JUT_ASSERT(100, bck != NULL);
 
     mpBck = new mDoExt_bckAnm();
 
@@ -37,11 +39,14 @@ int daTagLv7Gate_c::createHeap() {
 }
 
 static int createSolidHeap(fopAc_ac_c* i_this) {
-    return static_cast<daTagLv7Gate_c*>(i_this)->createHeap();
+    daTagLv7Gate_c* gate = static_cast<daTagLv7Gate_c*>(i_this);
+    return gate->createHeap();
 }
 
 static int daTagLv7Gate_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagLv7Gate_c*>(i_this)->create();
+    daTagLv7Gate_c* gate = static_cast<daTagLv7Gate_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return gate->create();
 }
 
 int daTagLv7Gate_c::create() {
@@ -66,48 +71,46 @@ int daTagLv7Gate_c::create() {
     return phase;
 }
 
-void daTagLv7Gate_c::setPath(u8 i_path_ID) {
+int daTagLv7Gate_c::setPath(int i_path_ID) {
     mRoomPath = dPath_GetRoomPath(i_path_ID, fopAcM_GetRoomNo(this));
-    if (mRoomPath != NULL) {
-        dPnt* pnt = dPath_GetPnt(mRoomPath, 0);
-        cXyz pos1 = pnt->m_position;
-
-        pnt = dPath_GetPnt(mRoomPath, 1);
-        cXyz pos2 = pnt->m_position;
-
-        mPos1 = pos1;
-
-        // Fake match?
-        s16 angle_y = cLib_targetAngleY(&pos1, &pos2);
-        // s16 angle_x = cLib_targetAngleX(&pos1, &pos2);
-
-        // field_0x594.set(-angle_x, angle_y, 0);
-        field_0x594.x = -cLib_targetAngleX(&pos1, &pos2);
-        // field_0x594.x = -angle_x;
-        field_0x594.y = angle_y;
-        field_0x594.z = 0;
-
-        mDistance = sqrtf(PSVECSquareDistance((Vec*)&mPos1, (Vec*)&pos2));
-        field_0x5a0 = 1;
-        mPos2 = pos2;
+    if (mRoomPath == NULL) {
+        return 0;
     }
+
+    cXyz pos1 = dPath_GetPnt(mRoomPath, 0)->m_position;
+    cXyz pos2 = dPath_GetPnt(mRoomPath, 1)->m_position;
+
+    mPos1.set(pos1);
+
+    field_0x594.set(-cLib_targetAngleX(&pos1, &pos2), cLib_targetAngleY(&pos1, &pos2), 0);
+
+    mDistance = mPos1.abs(pos2);
+    field_0x5a0 = 1;
+    mPos2.set(pos2);
+
+    return 1;
 }
 
 void daTagLv7Gate_c::initBaseMtx() {
-    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    if (mpModel != NULL) {
+        fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+        setBaseMtx();
+    }
 }
 
 void daTagLv7Gate_c::setBaseMtx() {
-    if (mpModel) {
-        cXyz local_34(0.0f, 0.0f, speedF);
-
-        mDoMtx_stack_c::transS(mPos1);
-        mDoMtx_stack_c::ZXYrotM((csXyz&)field_0x594);
-        mDoMtx_stack_c::multVec(&local_34, (Vec*)&mPos1);
-        MTXCopy(mDoMtx_stack_c::get(), mpModel->mBaseTransformMtx);
-
-        attention_info.position = mPos1;
+    if (mpModel == NULL) {
+        return;
     }
+
+    cXyz local_34(0.0f, 0.0f, speedF);
+
+    mDoMtx_stack_c::transS(mPos1);
+    mDoMtx_stack_c::ZXYrotM(field_0x594);
+    mDoMtx_stack_c::multVec(&local_34, &mPos1);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    attention_info.position = mPos1;
 }
 
 void daTagLv7Gate_c::create_init() {
@@ -119,14 +122,11 @@ void daTagLv7Gate_c::create_init() {
     field_0x5b0 = false;
     field_0x5b1 = false;
 
-    setPath(getPathID() & 0xFF);
+    setPath(getPathID());
 
     attention_info.position = mPos1;
 
-    if (mpModel) {
-        initBaseMtx();
-        setBaseMtx();
-    }
+    initBaseMtx();
 
     // City in the Sky clear
     if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[268])) {
@@ -149,13 +149,9 @@ void daTagLv7Gate_c::create_init() {
 
             fopAcM_create(PROC_NPC_TKS, 7, &pos, fopAcM_GetRoomNo(this), &local_54, NULL, -1);
 
-            pos.x = 2603.315f;
-            pos.y = -200.0f;
-            pos.z = 5485.9224f;
+            pos.set(2603.315f, -200.0f, 5485.9224f);
 
-            local_54.x = 0.0f;
-            local_54.y = -0x4000;
-            local_54.z = 0.0f;
+            local_54.set(0, -0x4000, 0);
 
             fopAcM_create(PROC_NPC_TKJ, 0, &pos, fopAcM_GetRoomNo(this), &local_54, NULL, -1);
         }
@@ -163,6 +159,7 @@ void daTagLv7Gate_c::create_init() {
     eventInfo.setArchiveName(l_arcName);
     dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());
     mEvtId = dComIfGp_getEventManager().getEventIdx(this, mEvName, -1);
+    JUT_ASSERT(204, mEvtId != -1);
     fopAcM_orderOtherEventId(this, mEvtId, -1, -1, 2, 1);
 }
 
@@ -187,7 +184,7 @@ void daTagLv7Gate_c::flyAnime() {
 
     if (bck_anm == bck_anm_3) {
         if (field_0x5ac < 150) {
-            field_0x5ac += 1;
+            field_0x5ac += (u16)1;
             if (field_0x5ac >= 150) {
                 bck = bck_anm_4;
                 attribute = J3DFrameCtrl::EMode_NONE;
@@ -199,10 +196,7 @@ void daTagLv7Gate_c::flyAnime() {
             attribute = J3DFrameCtrl::EMode_NONE;
         }
     } else {
-        // } else if (mpBck->isStop()) {
-        // Fake match?
-        mDoExt_bckAnm* tmp = mpBck;
-        if (tmp->isStop()) {
+        if (mpBck->isStop()) {
             if (bck_anm == bck_anm_2) {
                 bck = bck_anm_3;
                 attribute = J3DFrameCtrl::EMode_LOOP;
@@ -287,46 +281,39 @@ int daTagLv7Gate_c::execute() {
     return 1;
 }
 
-bool daTagLv7Gate_c::checkPoint(f32 i_speed) {
+bool daTagLv7Gate_c::checkPoint(cXyz& i_point, f32 i_speed) {
     dPnt* pnt = dPath_GetPnt(mRoomPath, field_0x5a0);
     mDistance -= i_speed;
-    if (sqrtf(PSVECSquareDistance((Vec*)&mPos1, (Vec*)&pnt->m_position)) < i_speed ||
+    if (i_point.abs(pnt->m_position) < i_speed ||
         mDistance < 0.0f) {
         return true;
-    }
+        }
     return false;
 }
 
 bool daTagLv7Gate_c::setNextPoint() {
     bool bVar1;
-    dPath_GetPnt(mRoomPath, field_0x5a0);
+    dPnt* unusedPnt = dPath_GetPnt(mRoomPath, field_0x5a0);
+    dPnt* pnt;
     field_0x5a0 += 1;
     if (field_0x5a0 >= mRoomPath->m_num) {
         field_0x5a0 = mRoomPath->m_num - 1;
         mDistance = 0;
-        bVar1 = true;
+        return true;
     } else {
-        dPnt* pnt = dPath_GetPnt(mRoomPath, field_0x5a0);
-
-        cXyz pos1(mPos1.x, 0.0f, mPos1.z);
-
-        cXyz pos2(pnt->m_position.x, 0.0f, pnt->m_position.z);
-
-        mDistance = sqrtf(PSVECSquareDistance((Vec*)&pos1, (Vec*)&pos2));
-        mPos2 = pnt->m_position;
-        bVar1 = false;
+        pnt = dPath_GetPnt(mRoomPath, field_0x5a0);
+        mDistance = mPos1.absXZ(pnt->m_position);
+        mPos2.set(pnt->m_position);
+        return false;
     }
-    if (bVar1) {
-        field_0x5b1 = false;
-        speedF = 0;
-    }
-    return bVar1;
 }
 
 void daTagLv7Gate_c::calcFly() {
-    f32 speed = speedF;
-    if (checkPoint(speed)) {
-        setNextPoint();
+    if (checkPoint(mPos1, speedF)) {
+        if (setNextPoint()) {
+            field_0x5b1 = false;
+            speedF = 0.0f;
+        }
     }
     s16 angle_x = -cLib_targetAngleX(&mPos1, &mPos2);
     s16 angle_y = cLib_targetAngleY(&mPos1, &mPos2);
@@ -361,6 +348,7 @@ daTagLv7Gate_c::~daTagLv7Gate_c() {
 }
 
 static int daTagLv7Gate_Delete(daTagLv7Gate_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagLv7Gate_c();
     return 1;
 }

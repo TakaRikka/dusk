@@ -20,17 +20,15 @@ daObj_Kita_HIO_c::daObj_Kita_HIO_c() {
 
 #if DEBUG
 void daObj_Kita_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("　 風で動く連続板", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("　 風で動く連続板", 0x80000001);
     // Model Size X
-    ctx->genSlider("モデルサイズＸ", &mModelSizeX, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff, 0x200,
-                   0x18);
+    ctx->genSlider("モデルサイズＸ", &mModelSizeX, 0.0f, 10.0f);
     // Model Size Z
-    ctx->genSlider("モデルサイズＺ", &mModelSizeZ, 0.0f, 10.0f, 0,
-                             NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("モデルサイズＺ", &mModelSizeZ, 0.0f, 10.0f);
     // Gap
-    ctx->genSlider("隙間", &mGap, 0.0f, 500.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("隙間", &mGap, 0.0f, 500.0f);
     // Swing Range
-    ctx->genSlider("揺れ幅", &mSwingRange, 0.0f, 2.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("揺れ幅", &mSwingRange, 0.0f, 2.0f);
 }
 #endif
 

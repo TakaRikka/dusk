@@ -24,35 +24,21 @@ public:
     void default_set() { mAttr = daObjOnCloth_c::M_attr; }
 
     void genMessage(JORMContext* ctx) {
-        ctx->genLabel("§ 飾り布パラメータ設定  §\n", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18); // § Ornamental Fabric Parameter Strings §
-        ctx->genSlider("重力", &mAttr.gravity, 0.0f, 30.0f, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("オフセット", &mAttr.offset, -100.0f, 100.0f, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("windRate", &mAttr.windRate, 0.0f, 5.0f, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("speedRate", &mAttr.speedRate, 0.0f, 5.0f, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("revPowRate", &mAttr.revPowRate, 0.0f, 1.0f, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("回転限界[0]", &mAttr.rotationLimit[0], -0x4000, 0x3FFF, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("回転限界[1]", &mAttr.rotationLimit[1], -0x4000, 0x3FFF, 0, 
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("回転限界[2]", &mAttr.rotationLimit[2], -0x4000, 0x3FFF, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("プレイヤ反応距離", &mAttr.playerReactionDist, 0.0f, 500.0f, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("プレイヤ反応速度", &mAttr.playerReactionSpeed, 0.0f, 50.0f, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("プレイヤ反応係数", &mAttr.playerReactionCoeff, 0.0f, 5.0f, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("反射還元力係数", &mAttr.reflectReducePowCoeff, 0.0f, 1.0f, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genSlider("揺れ遅延フレーム", &mAttr.delayedVibrationFrame, 1, 30, 0,
-                       NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-        ctx->genCheckBox("ジョイント表示", &mAttr.jointDisplay, 1, 0,
-                         NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+        ctx->genLabel("§ 飾り布パラメータ設定  §\n", 0); // § Ornamental Fabric Parameter Strings §
+        ctx->genSlider("重力", &mAttr.gravity, 0.0f, 30.0f);
+        ctx->genSlider("オフセット", &mAttr.offset, -100.0f, 100.0f);
+        ctx->genSlider("windRate", &mAttr.windRate, 0.0f, 5.0f);
+        ctx->genSlider("speedRate", &mAttr.speedRate, 0.0f, 5.0f);
+        ctx->genSlider("revPowRate", &mAttr.revPowRate, 0.0f, 1.0f);
+        ctx->genSlider("回転限界[0]", &mAttr.rotationLimit[0], -0x4000, 0x3FFF);
+        ctx->genSlider("回転限界[1]", &mAttr.rotationLimit[1], -0x4000, 0x3FFF);
+        ctx->genSlider("回転限界[2]", &mAttr.rotationLimit[2], -0x4000, 0x3FFF);
+        ctx->genSlider("プレイヤ反応距離", &mAttr.playerReactionDist, 0.0f, 500.0f);
+        ctx->genSlider("プレイヤ反応速度", &mAttr.playerReactionSpeed, 0.0f, 50.0f);
+        ctx->genSlider("プレイヤ反応係数", &mAttr.playerReactionCoeff, 0.0f, 5.0f);
+        ctx->genSlider("反射還元力係数", &mAttr.reflectReducePowCoeff, 0.0f, 1.0f);
+        ctx->genSlider("揺れ遅延フレーム", &mAttr.delayedVibrationFrame, 1, 30);
+        ctx->genCheckBox("ジョイント表示", &mAttr.jointDisplay, 0x1);
     }
 
     void ct() {
@@ -301,10 +287,10 @@ static int daObjOnCloth_Delete(daObjOnCloth_c* i_this) {
 
 ClothJoint_c::~ClothJoint_c() {}
 
-cPhs__Step daObjOnCloth_c::create() {
+cPhs_Step daObjOnCloth_c::create() {
     fopAcM_ct(this, daObjOnCloth_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createSolidHeap, 0x9A0)) {
             return cPhs_ERROR_e;
@@ -317,7 +303,7 @@ cPhs__Step daObjOnCloth_c::create() {
     return phase;
 }
 
-static cPhs__Step daObjOnCloth_Create(fopAc_ac_c* a_this) {
+static cPhs_Step daObjOnCloth_Create(fopAc_ac_c* a_this) {
     return static_cast<daObjOnCloth_c*>(a_this)->create();
 }
 

@@ -8,7 +8,7 @@
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 u32 mDoLib_setResTimgObj(ResTIMG const* i_img, GXTexObj* o_texObj, u32 tlut_name,
                         GXTlutObj* o_tlutObj) {
@@ -119,6 +119,7 @@ void mDoLib_pos2camera(Vec* src, Vec* dst) {
 }
 
 static void dummy() {
+    std::tan(0.0f);
     J3DAlphaComp* alphaComp = NULL;
     alphaComp->setAlphaCompInfo(COMPOUND_LITERAL(J3DAlphaCompInfo){});
     J3DPEBlock* peBlock = NULL;

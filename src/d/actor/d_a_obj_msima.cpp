@@ -25,19 +25,15 @@ daObj_Msima_HIO_c::daObj_Msima_HIO_c() {
 #if DEBUG
 void daObj_Msima_HIO_c::genMessage(JORMContext* context) {
     // Magma Island
-    context->genLabel("　マグネ島　", 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    context->genLabel("　マグネ島　", 0x80000001);
     // Size
-    context->genSlider("サイズ", (float*)(this + 8), 0.0, 3.0, 0, NULL, 0xffff, 0xffff, 0x200,
-                       0x18);
+    context->genSlider("サイズ", (float*)(this + 8), 0.0, 3.0);
     // Maximum Tilt Angle 
-    context->genSlider("最大傾斜角（浮）", &mMaxTiltAngle, 0, 0x2000, 0, NULL, 0xffff, 0xffff,
-                       0x200, 0x18);
+    context->genSlider("最大傾斜角（浮）", &mMaxTiltAngle, 0, 0x2000);
     // Maximum Slope Angle (Up)
-    context->genSlider("最大傾斜角（上）", &mMaxSlopeAngle, 0, 0x2000, 0, NULL, 0xffff, 0xffff,
-                       0x200, 0x18);
+    context->genSlider("最大傾斜角（上）", &mMaxSlopeAngle, 0, 0x2000);
     // Basic Position
-    context->genSlider("基本位置", &mBasicPosition, -5000.0, 5000.0, 0, NULL, 0xffff, 0xffff, 0x200,
-                       0x18);
+    context->genSlider("基本位置", &mBasicPosition, -5000.0, 5000.0);
 }
 #endif
 

@@ -174,7 +174,7 @@ int daNpcDrSol_c::CreateHeap() {
 }
 
 int daNpcDrSol_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_DRSOL");
     this->~daNpcDrSol_c();
     return 1;
 }

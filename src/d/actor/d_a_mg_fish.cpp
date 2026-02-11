@@ -3232,7 +3232,7 @@ static int daMg_Fish_Execute(mg_fish_class* i_this) {
 #if VERSION == VERSION_GCN_JPN
     lit_1008 = 0;
 #elif VERSION == VERSION_GCN_PAL
-    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_ENGLISH) {
+    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
         lit_1008 = 2;
     } else {
         lit_1008 = 0;
@@ -3845,7 +3845,7 @@ static int daMg_Fish_Create(fopAc_ac_c* i_this) {
 #if VERSION == VERSION_GCN_JPN
     lit_1008 = 0;
 #elif VERSION == VERSION_GCN_PAL
-    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGAUGE_ENGLISH) {
+    if (dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
         lit_1008 = 2;
     } else {
         lit_1008 = 0;
@@ -3854,8 +3854,8 @@ static int daMg_Fish_Create(fopAc_ac_c* i_this) {
     lit_1008 = 1;
 #endif
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&a_this->mPhaseReq, a_this->mResName);
-    cPhs__Step retval = phase;
+    cPhs_Step phase = dComIfG_resLoad(&a_this->mPhaseReq, a_this->mResName);
+    cPhs_Step retval = phase;
 
     if (phase == cPhs_COMPLEATE_e) {
         s32 params_0 = fopAcM_GetParam(i_this) >> 24;

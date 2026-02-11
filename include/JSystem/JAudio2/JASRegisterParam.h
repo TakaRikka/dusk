@@ -1,7 +1,7 @@
 #ifndef JASREGISTERPARAM_H
 #define JASREGISTERPARAM_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 /**
  * @ingroup jsystem-jaudio

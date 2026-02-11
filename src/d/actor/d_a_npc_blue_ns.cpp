@@ -229,7 +229,7 @@ int daNpcBlueNS_c::isDelete() {
 }
 
 int daNpcBlueNS_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_BLUENS");
     this->~daNpcBlueNS_c();
     return 1;
 }

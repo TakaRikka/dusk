@@ -16,6 +16,169 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 
+enum dComIfG_ButtonStatus {
+    /* 0x00 */ BUTTON_STATUS_NONE,
+    /* 0x01 */ BUTTON_STATUS_LET_GO,
+    /* 0x02 */ BUTTON_STATUS_PEEK,
+    /* 0x03 */ BUTTON_STATUS_ATTACK,
+    /* 0x04 */ BUTTON_STATUS_PUT_AWAY,
+    /* 0x05 */ BUTTON_STATUS_HOWL,
+    /* 0x06 */ BUTTON_STATUS_OPEN,
+    /* 0x07 */ BUTTON_STATUS_ENTER,
+    /* 0x08 */ BUTTON_STATUS_CHECK,
+    /* 0x09 */ BUTTON_STATUS_DASH,
+    /* 0x0A */ BUTTON_STATUS_CROUCH,
+    /* 0x0B */ BUTTON_STATUS_DEFEND,
+    /* 0x0C */ BUTTON_STATUS_PICK_UP,
+    /* 0x0D */ BUTTON_STATUS_DIG,
+    /* 0x0E */ BUTTON_STATUS_EAT,
+    /* 0x0F */ BUTTON_STATUS_SELECT,
+    /* 0x10 */ BUTTON_STATUS_LOCK,
+    /* 0x11 */ BUTTON_STATUS_SWITCH,
+    /* 0x12 */ BUTTON_STATUS_BACK,
+    /* 0x13 */ BUTTON_STATUS_THROW,
+    /* 0x14 */ BUTTON_STATUS_PLACE,
+    /* 0x15 */ BUTTON_STATUS_GRAB,
+    /* 0x16 */ BUTTON_STATUS_GET_OFF,
+    /* 0x17 */ BUTTON_STATUS_GET_ON,
+    /* 0x18 */ BUTTON_STATUS_PADDLE,
+    /* 0x19 */ BUTTON_STATUS_JUMP,
+    /* 0x1A */ BUTTON_STATUS_READ,
+    /* 0x1B */ BUTTON_STATUS_LOOK,
+    /* 0x1C */ BUTTON_STATUS_SPEAK,
+    /* 0x1D */ BUTTON_STATUS_LIFT,
+    /* 0x1E */ BUTTON_STATUS_SWING,
+    /* 0x1F */ BUTTON_STATUS_UNK_31,
+    /* 0x20 */ BUTTON_STATUS_UNK_32,
+    /* 0x21 */ BUTTON_STATUS_UNK_33,
+    /* 0x22 */ BUTTON_STATUS_CONFIRM,
+    /* 0x23 */ BUTTON_STATUS_NEXT,
+    /* 0x24 */ BUTTON_STATUS_INFO,
+    /* 0x25 */ BUTTON_STATUS_UNK_37,
+    /* 0x26 */ BUTTON_STATUS_UNK_38,
+    /* 0x27 */ BUTTON_STATUS_UNK_39,
+    /* 0x28 */ BUTTON_STATUS_WHOOP,
+    /* 0x29 */ BUTTON_STATUS_ZOOM,
+    /* 0x2A */ BUTTON_STATUS_QUIT,
+    /* 0x2B */ BUTTON_STATUS_PICK,
+    /* 0x2C */ BUTTON_STATUS_BLOW,
+    /* 0x2D */ BUTTON_STATUS_DODGE,
+    /* 0x2E */ BUTTON_STATUS_CUT,
+    /* 0x2F */ BUTTON_STATUS_HINT,
+    /* 0x30 */ BUTTON_STATUS_FINISH,
+    /* 0x31 */ BUTTON_STATUS_SET_FREE,
+    /* 0x32 */ BUTTON_STATUS_DISMOUNT,
+    /* 0x33 */ BUTTON_STATUS_DROP_DOWN,
+    /* 0x34 */ BUTTON_STATUS_UNK_52,
+    /* 0x35 */ BUTTON_STATUS_TAKE,
+    /* 0x36 */ BUTTON_STATUS_HURRY,
+    /* 0x37 */ BUTTON_STATUS_PULL_DOWN,
+    /* 0x38 */ BUTTON_STATUS_PET,
+    /* 0x39 */ BUTTON_STATUS_UNK_57,
+    /* 0x3A */ BUTTON_STATUS_SHIELD_ATTACK,
+    /* 0x3B */ BUTTON_STATUS_LISTEN,
+    /* 0x3C */ BUTTON_STATUS_DRINK,
+    /* 0x3D */ BUTTON_STATUS_UNK_61,
+    /* 0x3E */ BUTTON_STATUS_COVER,
+    /* 0x3F */ BUTTON_STATUS_PUSH,
+    /* 0x40 */ BUTTON_STATUS_RESIST,
+    /* 0x41 */ BUTTON_STATUS_DIVE,
+    /* 0x42 */ BUTTON_STATUS_PUT_TOGETHER,
+    /* 0x43 */ BUTTON_STATUS_SKIP,
+    /* 0x44 */ BUTTON_STATUS_SLAP,
+    /* 0x45 */ BUTTON_STATUS_SNIFF,
+    /* 0x46 */ BUTTON_STATUS_BITE,
+    /* 0x47 */ BUTTON_STATUS_ROLL,
+    /* 0x48 */ BUTTON_STATUS_FASTEN,
+    /* 0x49 */ BUTTON_STATUS_GET_DOWN,
+    /* 0x4A */ BUTTON_STATUS_HAWKEYE_OFF,
+    /* 0x4B */ BUTTON_STATUS_UNK_75,
+    /* 0x4C */ BUTTON_STATUS_SWIM,
+    /* 0x4D */ BUTTON_STATUS_CANT_SKIP,
+    /* 0x4E */ BUTTON_STATUS_SENSE,
+    /* 0x4F */ BUTTON_STATUS_UNK_79,
+    /* 0x50 */ BUTTON_STATUS_UNK_80,
+    /* 0x51 */ BUTTON_STATUS_LAND,
+    /* 0x52 */ BUTTON_STATUS_HOOK,
+    /* 0x53 */ BUTTON_STATUS_CHANGE_LOCKS,
+    /* 0x54 */ BUTTON_STATUS_EQUIP,
+    /* 0x55 */ BUTTON_STATUS_PULL,
+    /* 0x56 */ BUTTON_STATUS_REEL,
+    /* 0x57 */ BUTTON_STATUS_EXTRACT,
+    /* 0x58 */ BUTTON_STATUS_SPIN,
+    /* 0x59 */ BUTTON_STATUS_UNK_89,
+    /* 0x5A */ BUTTON_STATUS_SPIN_ATTACK,
+    /* 0x5B */ BUTTON_STATUS_REEL_FAST,
+    /* 0x5C */ BUTTON_STATUS_RAISE,
+    /* 0x5D */ BUTTON_STATUS_RELEASE,
+    /* 0x5E */ BUTTON_STATUS_UNK_94,
+    /* 0x5F */ BUTTON_STATUS_MAP,
+    /* 0x60 */ BUTTON_STATUS_ITEMS,
+    /* 0x61 */ BUTTON_STATUS_INSERT,
+    /* 0x62 */ BUTTON_STATUS_DRAW,
+    /* 0x63 */ BUTTON_STATUS_STRIKE,
+    /* 0x64 */ BUTTON_STATUS_BLANK,
+    /* 0x65 */ BUTTON_STATUS_UNK_101,
+    /* 0x66 */ BUTTON_STATUS_POINT_WII_REMOTE,
+    /* 0x67 */ BUTTON_STATUS_FLIP,
+    /* 0x68 */ BUTTON_STATUS_CHANGE_VIEW,
+    /* 0x69 */ BUTTON_STATUS_UNK_105,
+    /* 0x6A */ BUTTON_STATUS_UNK_106,
+    /* 0x6B */ BUTTON_STATUS_CHANCE,
+    /* 0x6C */ BUTTON_STATUS_SCOOP,
+    /* 0x6D */ BUTTON_STATUS_SURVEY,
+    /* 0x6E */ BUTTON_STATUS_CANCEL,
+    /* 0x6F */ BUTTON_STATUS_SEIZE,
+    /* 0x70 */ BUTTON_STATUS_COLLECTION,
+    /* 0x71 */ BUTTON_STATUS_AREA_MAP,
+    /* 0x72 */ BUTTON_STATUS_ACTION,
+    /* 0x73 */ BUTTON_STATUS_SET_HOOK,
+    /* 0x74 */ BUTTON_STATUS_TILT,
+    /* 0x75 */ BUTTON_STATUS_THRUST,
+    /* 0x76 */ BUTTON_STATUS_ROTATE,
+    /* 0x77 */ BUTTON_STATUS_HELM_SPLITTER,
+    /* 0x78 */ BUTTON_STATUS_MOVE,
+    /* 0x79 */ BUTTON_STATUS_UNK_121,
+    /* 0x7A */ BUTTON_STATUS_HOLD_ON,
+    /* 0x7B */ BUTTON_STATUS_UNK_123,
+    /* 0x7C */ BUTTON_STATUS_HELP,
+    /* 0x7D */ BUTTON_STATUS_ZOOM_IN,
+    /* 0x7E */ BUTTON_STATUS_ZOOM_OUT,
+    /* 0x7F */ BUTTON_STATUS_MOVE_CLOSER_TV,
+    /* 0x80 */ BUTTON_STATUS_UNK_128,
+    /* 0x81 */ BUTTON_STATUS_UNK_129,
+    /* 0x82 */ BUTTON_STATUS_UNK_130,
+    /* 0x83 */ BUTTON_STATUS_UNK_131,
+    /* 0x84 */ BUTTON_STATUS_UNK_132,
+    /* 0x85 */ BUTTON_STATUS_UNK_133,
+    /* 0x86 */ BUTTON_STATUS_UNK_134,
+    /* 0x87 */ BUTTON_STATUS_UNK_135,
+    /* 0x88 */ BUTTON_STATUS_UNK_136,
+    /* 0x89 */ BUTTON_STATUS_UNK_137,
+    /* 0x8A */ BUTTON_STATUS_UNK_138,
+    /* 0x8B */ BUTTON_STATUS_UNK_139,
+    /* 0x8C */ BUTTON_STATUS_UNK_140,
+    /* 0x8D */ BUTTON_STATUS_UNK_141,
+    /* 0x8E */ BUTTON_STATUS_UNK_142,
+    /* 0x8F */ BUTTON_STATUS_UNK_143,
+    /* 0x90 */ BUTTON_STATUS_UNK_144,
+    /* 0x91 */ BUTTON_STATUS_UNK_145,
+    /* 0x92 */ BUTTON_STATUS_UNK_146,
+    /* 0x93 */ BUTTON_STATUS_UNK_147,
+    /* 0x94 */ BUTTON_STATUS_UNK_148,
+    /* 0x95 */ BUTTON_STATUS_UNK_149,
+    /* 0x96 */ BUTTON_STATUS_UNK_150,
+    /* 0x97 */ BUTTON_STATUS_UNK_151,
+    /* 0x98 */ BUTTON_STATUS_UNK_152,
+    /* 0x99 */ BUTTON_STATUS_UNK_153,
+};
+
+enum dComIfG_ButtonStatusFlag {
+    /* 0x0 */ BUTTON_STATUS_FLAG_NONE,
+    /* 0x2 */ BUTTON_STATUS_FLAG_EMPHASIS = 2,
+    /* 0x4 */ BUTTON_STATUS_FLAG_CONTINUATION = 4,
+};
+
 class JKRAramArchive;
 class dSmplMdl_draw_c;
 class dTimer_c;
@@ -284,7 +447,7 @@ public:
 
     dMsgObject_c* getMsgObjectClass() { return mItemInfo.mMsgObjectClass; }
     dStage_roomControl_c* getRoomControl() { return &mRoomControl; }
-    dStage_dt_c& getStage() { return mStageData; }
+    dStage_stageDt_c& getStage() { return mStageData; }
     dEvt_control_c* getEvent() { return &mEvent; }
     daHorse_c* getHorseActor() { return (daHorse_c*)mPlayerPtr[1]; }
     J2DGrafContext* getCurrentGrafPort() { return (J2DGrafContext*)mCurrentGrafPort; }
@@ -777,11 +940,11 @@ public:
     /* 0x03F90 */ dEvt_control_c mEvent;
     /* 0x040C0 */ dEvent_manager_c mEvtManager;
     /* 0x04780 */ dAttention_c mAttention;
+    #if PLATFORM_WII || VERSION == VERSION_SHIELD
+    /* 0x04C9C */ u8 unk_0x4c9c[8];
+    #endif
     /* 0x04C9C */ dVibration_c mVibration;
     /* 0x04D2C */ u8 field_0x4d2c[4];
-    #if PLATFORM_WII || VERSION == VERSION_SHIELD
-    /* 0x04D38 */ u8 unk_0x4d38[8];
-    #endif
     /* 0x04D30 */ JKRArchive* mFieldMapArchive2;
     /* 0x04D34 */ JKRArchive* mMsgArchive[11];
     /* 0x04D60 */ JKRArchive* mDemoMsgArchive;
@@ -1946,7 +2109,7 @@ inline u32 dComIfGs_getTurnRestartParam() {
     return g_dComIfG_gameInfo.info.getTurnRestart().getParam();
 }
 
-inline cXyz& dComIfGs_getTurnRestartPos() {
+inline const cXyz& dComIfGs_getTurnRestartPos() {
     return g_dComIfG_gameInfo.info.getTurnRestart().getPos();
 }
 
@@ -1962,7 +2125,7 @@ inline u32 dComIfGs_getRestartRoomParam() {
     return g_dComIfG_gameInfo.info.getRestart().getRoomParam();
 }
 
-inline cXyz& dComIfGs_getRestartRoomPos() {
+inline const cXyz& dComIfGs_getRestartRoomPos() {
     return g_dComIfG_gameInfo.info.getRestart().getRoomPos();
 }
 
@@ -2867,7 +3030,7 @@ inline void dComIfGp_setItem(u8 slot, u8 i_no) {
     g_dComIfG_gameInfo.play.setItem(slot, i_no);
 }
 
-inline dStage_dt_c* dComIfGp_getStage() {
+inline dStage_stageDt_c* dComIfGp_getStage() {
     return &g_dComIfG_gameInfo.play.getStage();
 }
 

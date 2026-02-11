@@ -35,7 +35,7 @@ public:
     int execute();
     int _delete();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
 
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpModelMorf;

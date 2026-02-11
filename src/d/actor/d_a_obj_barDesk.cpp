@@ -46,12 +46,12 @@ int daBarDesk_c::CreateHeap() {
     return 1;
 }
 
-cPhs__Step daBarDesk_c::create() {
+cPhs_Step daBarDesk_c::create() {
     fopAcM_ct(this, daBarDesk_c);
     if (fopAcM_isSwitch(this, (u8)fopAcM_GetParam(this))) {
         return cPhs_ERROR_e;
     }
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase, "KHdesk");
+    cPhs_Step step = dComIfG_resLoad(&mPhase, "KHdesk");
     if (step == cPhs_COMPLEATE_e) {
         if (MoveBGCreate("KHdesk", 7, dBgS_MoveBGProc_TypicalRotY, 0xe50, NULL) == cPhs_ERROR_e) {
             return cPhs_ERROR_e;
@@ -148,7 +148,7 @@ static int daBarDesk_Delete(daBarDesk_c* i_this) {
     return i_this->MoveBGDelete();
 }
 
-static cPhs__Step daBarDesk_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daBarDesk_Create(fopAc_ac_c* i_this) {
     return static_cast<daBarDesk_c*>(i_this)->create();
 }
 

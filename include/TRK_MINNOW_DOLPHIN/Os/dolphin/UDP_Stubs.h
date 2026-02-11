@@ -1,7 +1,7 @@
 #ifndef OS_DOLPHIN_UDP_STUBS_H
 #define OS_DOLPHIN_UDP_STUBS_H
 
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 
 #ifdef __cplusplus
 extern "C" {

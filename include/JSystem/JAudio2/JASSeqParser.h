@@ -1,7 +1,7 @@
 #ifndef JASSEQPARSER_H
 #define JASSEQPARSER_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JASTrack;
 

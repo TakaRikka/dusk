@@ -5,12 +5,14 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_tag_msg.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_tag_msg.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_debug_viewer.h"
 
 static int createHeapCallBack(fopAc_ac_c* i_this) {
-    return ((daTag_Msg_c*)i_this)->createHeap();
+    daTag_Msg_c* msg = (daTag_Msg_c*)i_this;
+    return msg->createHeap();
 }
 
 static char* l_resName = "TagMsg";
@@ -20,8 +22,20 @@ static char* l_evtNameTBL[2] = {
     "SPEAK",
 };
 
+#if DEBUG
+daTag_Msg_HIO_c::daTag_Msg_HIO_c() {
+    m = daTag_Msg_Param_c::m;
+}
+#endif
+
 daTag_Msg_c::~daTag_Msg_c() {
     dComIfG_resDelete(&mPhase, getResName());
+
+#if DEBUG
+    if (mpHIO != NULL) {
+        mDoHIO_deleteChild(mpHIO->mChild);
+    }
+#endif
 }
 
 int daTag_Msg_c::create() {
@@ -38,14 +52,18 @@ int daTag_Msg_c::create() {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x10)) {
             return cPhs_ERROR_e;
         }
+
+#if DEBUG
+        mpHIO->mChild = mDoHIO_createChild("メッセ－ジタグ", mpHIO);
+#endif
     }
 
     return phase_state;
 }
 
 int daTag_Msg_c::createHeap() {
-    mParam = new daTag_Msg_Param_c();
-    if (mParam == NULL) {
+    mpHIO = new TAG_MSG_HIO_CLASS();
+    if (mpHIO == NULL) {
         return 0;
     }
 
@@ -53,6 +71,7 @@ int daTag_Msg_c::createHeap() {
 }
 
 int daTag_Msg_c::destroy() {
+    int id = fopAcM_GetID(this);
     this->~daTag_Msg_c();
     return 1;
 }
@@ -128,6 +147,14 @@ int daTag_Msg_c::execute() {
 }
 
 int daTag_Msg_c::draw() {
+#if DEBUG
+    if (mpHIO->m.mDebugAdjustON) {
+        cXyz sp0C(current.pos);
+        sp0C.y -= scale.y;
+        dDbVw_drawCylinderXlu(sp0C, scale.x, 2.0f * scale.y, (GXColor){0x80, 0x80, 0x80, 0x80}, 1);
+    }
+#endif
+
     return 1;
 }
 
@@ -159,15 +186,15 @@ BOOL daTag_Msg_c::otherCheck() {
 
     if (field_0x5dd) {
         return 1;
-    }
+    } else {
+        s16 var_r28 = fopAcM_searchActorAngleY(this, daPy_getPlayerActorClass()) + 0x7FFF;
+        s16 angle_to_player = var_r28 - daPy_getPlayerActorClass()->current.angle.y;
+        if (angle_to_player < 0) {
+            angle_to_player = -angle_to_player;
+        }
 
-    s16 var_r28 = fopAcM_searchActorAngleY(this, daPy_getPlayerActorClass()) + 0x7FFF;
-    s16 angle_to_player = var_r28 - daPy_getPlayerActorClass()->current.angle.y;
-    if (angle_to_player < 0) {
-        angle_to_player = -angle_to_player;
+        return angle_to_player <= 0x1000;
     }
-
-    return angle_to_player <= 0x1000;
 }
 
 char* daTag_Msg_c::getResName() {
@@ -176,14 +203,15 @@ char* daTag_Msg_c::getResName() {
 
 void daTag_Msg_c::getParam() {
     mOnSwitch = home.angle.x & 0xFF;
-    mOffSwitch = (home.angle.x >> 8) & 0xFF;
+    mOffSwitch = (home.angle.x & 0xFF00) >> 8;
     mOnSaveLabel = fopAcM_GetParam(this) & 0xFFF;
-    mOffSaveLabel = (fopAcM_GetParam(this) >> 0xC) & 0xFFF;
+    mOffSaveLabel = (fopAcM_GetParam(this) & 0xFFF000) >> 12;
     field_0x5dc = (fopAcM_GetParam(this) & 0x1000000) != 0;
     field_0x5dd = (fopAcM_GetParam(this) & 0x2000000) != 0;
 
-    if ((home.angle.z & 0xFFFF) != 0) {
-        mFlowID = home.angle.z & 0xFFFF;
+    u16 var_r30 = (u16)home.angle.z;
+    if (var_r30 != 0) {
+        mFlowID = var_r30;
     } else {
         mFlowID = -1;
     }
@@ -226,6 +254,15 @@ static int daTag_Msg_Draw(void* i_this) {
 static int daTag_Msg_IsDelete(void* i_this) {
     return 1;
 }
+
+#if DEBUG
+daTag_Msg_HIO_c::~daTag_Msg_HIO_c() {
+}
+
+void daTag_Msg_HIO_c::genMessage(JORMContext* ctx) {
+    ctx->genCheckBox("デバグ描画ＯＮ  ", &m.mDebugAdjustON, 1, 0, NULL, -1, -1, 0x200, 0x18);
+}
+#endif
 
 void dummyString() {
     DEAD_STRING("Timer");

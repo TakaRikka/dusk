@@ -1,7 +1,7 @@
 #ifndef D_KANKYO_D_KANKYO_RAIN_H
 #define D_KANKYO_D_KANKYO_RAIN_H
 
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 
 struct cXyz;
 struct _GXColor;

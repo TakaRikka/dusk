@@ -388,7 +388,7 @@ public:
     }
     BOOL checkHide() { return mHide || (mTwilight && !dComIfGs_wolfeye_effect_check()); }
     void setIntDemander(fopAc_ac_c* i_actor) { field_0x824.entry(i_actor); }
-    void setIntFlowNodeNo(int i_flowNodeNo) { mFlowNodeNo = i_flowNodeNo; }
+    void setIntFlowNodeNo(s32 i_flowNodeNo) { mFlowNodeNo = i_flowNodeNo; }
     void setCutType(int i_cutType) { mCutType = i_cutType; }
     void onInterrupt(u8 param_0) { field_0x9ef = param_0; }
     void onHide() { mHide = true; }

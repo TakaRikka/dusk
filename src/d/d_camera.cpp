@@ -10411,18 +10411,18 @@ int dCamera_c::Set(cXyz i_center, cXyz i_eye, s16 i_bank, f32 i_fovy) {
     return 1;
 }
 
-void dCamera_c::Reset(cXyz i_center, cXyz i_eye, f32 i_fovy, s16 i_bank) {
+int dCamera_c::Reset(cXyz i_center, cXyz i_eye, f32 i_fovy, s16 i_bank) {
     mCenter = i_center;
     mEye = i_eye;
     mFovy = i_fovy;
     mBank = cSAngle(i_bank);
-    Reset();
+    return Reset();
 }
 
-void dCamera_c::Reset(cXyz i_center, cXyz i_eye) {
+int dCamera_c::Reset(cXyz i_center, cXyz i_eye) {
     mCenter = i_center;
     mEye = i_eye;
-    Reset();
+    return Reset();
 }
 
 int dCamera_c::Reset() {

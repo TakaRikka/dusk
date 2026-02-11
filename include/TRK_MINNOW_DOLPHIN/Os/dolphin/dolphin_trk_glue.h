@@ -1,7 +1,7 @@
 #ifndef OS_DOLPHIN_DOLPHIN_TRK_GLUE_H
 #define OS_DOLPHIN_DOLPHIN_TRK_GLUE_H
 
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 #include "trk.h"
 
 #ifdef __cplusplus

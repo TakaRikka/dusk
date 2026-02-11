@@ -51,7 +51,7 @@ public:
 
     daNpc_zrC_c();
     ~daNpc_zrC_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

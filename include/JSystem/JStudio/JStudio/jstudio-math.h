@@ -1,7 +1,7 @@
 #ifndef JSTUDIO_MATH_H
 #define JSTUDIO_MATH_H
 
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 #include <cmath>
 
 #define m_PI_D 3.141592653589793

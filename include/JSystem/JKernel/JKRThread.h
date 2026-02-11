@@ -65,7 +65,7 @@ public:
     JKRThread(OSThread* thread, int message_count);
     virtual ~JKRThread();
 
-    /* vt[03] */ virtual void* run();
+    /* vt[03] */ virtual void* run() { return NULL; }
 
     void setCommon_mesgQueue(JKRHeap* heap, int message_count);
     void setCommon_heapSpecified(JKRHeap* heap, u32 stack_size, int param_3);
@@ -134,6 +134,15 @@ public:
     // static u8 sThreadList[12];
 };
 
+class JKRIdleThread : public JKRThread {
+public:
+    virtual void destroy() {}
+    virtual ~JKRIdleThread() { sThread = NULL; }
+    virtual void* run() { while (true); }
+
+    static void* sThread;
+};
+
 typedef void (*JKRThreadSwitch_PreCallback)(OSThread* current, OSThread* next);
 typedef void (*JKRThreadSwitch_PostCallback)(OSThread* current, OSThread* next);
 
@@ -145,8 +154,8 @@ class JKRThreadSwitch {
 public:
     JKRThreadSwitch(JKRHeap*);
     virtual void draw(JKRThreadName_* param_1, JUTConsole* param_2);
-    virtual void draw(JKRThreadName_* param_1);
-    virtual ~JKRThreadSwitch();
+    virtual void draw(JKRThreadName_* thread_name_list) { draw(thread_name_list, NULL); }
+    virtual ~JKRThreadSwitch() {}
 
     static JKRThreadSwitch* createManager(JKRHeap* heap);
 
@@ -176,9 +185,19 @@ private:
     /* 0x24 */ u32 field_0x24;
 };
 
-struct JKRTask {
+class JKRTask : public JKRThread {
+public:
+    virtual ~JKRTask();
+    virtual void* run();
+
+    int check();
+
     static JSUList<JKRTask> sTaskList;
     static u8 sEndMesgQueue[32];
+
+    /* 0x7C */ JSULink<JKRTask> mTaskLink;
+    /* 0x8C */ u8 field_0x8c[0x94 - 0x8C];
+    /* 0x94 */ OSMessageQueue* field_0x94;
 };
 
 #endif /* JKRTHREAD_H */

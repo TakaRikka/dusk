@@ -107,7 +107,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daObj_Udoor_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObj_Udoor_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcSph cc_sph_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x0}}, // mObj
@@ -123,7 +123,7 @@ static cPhs__Step daObj_Udoor_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_udoor_class);
     obj_udoor_class* a_this = static_cast<obj_udoor_class*>(i_this);
     
-    cPhs__Step phase_state = (cPhs__Step)dComIfG_resLoad(&a_this->mPhase, "Obj_udoor");
+    cPhs_Step phase_state = dComIfG_resLoad(&a_this->mPhase, "Obj_udoor");
     if (phase_state == cPhs_COMPLEATE_e) {
         a_this->field_0x570 = fopAcM_GetParam(a_this);
         if (a_this->field_0x570 == 0xff) {

@@ -1,7 +1,7 @@
 #ifndef D_BG_D_BG_PC_H
 #define D_BG_D_BG_PC_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 struct sBgPc {
     /* 0x00 */ u32 code0;

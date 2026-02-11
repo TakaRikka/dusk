@@ -7,11 +7,12 @@
 class daTag_Chk_c : public fopAc_ac_c {
 public:
     int execute();
+    int draw();
 
     u16 getAreaType() { return home.angle.z & 0x100; }
-    u16 getHeight() { return fopAcM_GetParam(this) & 0xff; }
-    u8 getSwBit() { return fopAcM_GetParam(this) >> 8; }
-    u8 getSwBit2() { return fopAcM_GetParam(this) >> 16; }
+    u8 getHeight() { return fopAcM_GetParam(this) & 0xff; }
+    u8 getSwBit() { return (fopAcM_GetParam(this) & 0xff00) >> 8; }
+    u8 getSwBit2() { return (fopAcM_GetParam(this) & 0xff0000) >> 16; }
 
     int create() {
         fopAcM_ct(this, daTag_Chk_c);
@@ -34,8 +35,11 @@ public:
 
         attention_info.position = current.pos;
 
-        u16 height = getHeight();
-        height != 0xff ? attention_info.position.y += height * 10.0f : attention_info.position.y += scale.y * 0.5f;
+        if (getHeight() != 0xff) {
+            attention_info.position.y += getHeight() * 10.0f;
+        } else {
+            attention_info.position.y += scale.y * 0.5f;
+        }
 
         eyePos = attention_info.position;
         return cPhs_COMPLEATE_e;

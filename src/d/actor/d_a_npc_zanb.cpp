@@ -138,7 +138,7 @@ daNpc_zanB_HIOParam const daNpc_zanB_Param_c::m = {
 
 static NPC_ZANB_HIO_CLASS l_HIO;
 
-cPhs__Step daNpc_zanB_c::create() {
+cPhs_Step daNpc_zanB_c::create() {
     daNpcT_ct(this, daNpc_zanB_c, l_faceMotionAnmData,
                        l_motionAnmData, l_faceMotionSequenceData, 4,
                        l_motionSequenceData, 4, l_evtList, l_resNameList);
@@ -147,7 +147,7 @@ cPhs__Step daNpc_zanB_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d<%08x> ", fopAcM_getProcNameString(this), mType, mFlowNodeNo, fopAcM_GetParam(this));
 
@@ -239,7 +239,7 @@ int daNpc_zanB_c::CreateHeap() {
 
 int daNpc_zanB_c::Delete() {
     OS_REPORT("|%06d:%x|daNpc_zanB_c -> Delete\n", g_Counter.mCounter0, this);
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_ZANB");
     this->~daNpc_zanB_c();
     return 1;
 }
@@ -254,14 +254,7 @@ int daNpc_zanB_c::Draw() {
         mdlData_p->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    return draw(
-#if DEBUG
-        chkAction(&daNpc_zanB_c::test),
-#else
-        FALSE,
-#endif
-        FALSE, mRealShadowSize, NULL, 0.0f, TRUE, FALSE, FALSE
-    );
+    return draw(NpcT_CHK_ACTION(daNpc_zanB_c), FALSE, mRealShadowSize, NULL, 0.0f, TRUE, FALSE, FALSE);
 }
 
 int daNpc_zanB_c::createHeapCallBack(fopAc_ac_c* i_this) {

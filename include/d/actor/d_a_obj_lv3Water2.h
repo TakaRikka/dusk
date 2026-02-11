@@ -20,7 +20,7 @@ public:
 
     void setBaseMtx();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     int Execute(Mtx**);
     void mode_proc_wait();
     void mode_init_levelCtrl();

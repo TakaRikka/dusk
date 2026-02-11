@@ -46,7 +46,7 @@ public:
     int execute();
     int _delete();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     daB_YOI_c();
 
     void setSubNumber(int i_subNumber) { mSubNumber = i_subNumber; }

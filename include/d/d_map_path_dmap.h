@@ -74,9 +74,9 @@ public:
     static void remove();
 
     static s8 getNowStayFloorNo() {
-        JUT_ASSERT(0, mNowStayFloorNoDecisionFlg);
-
         s8 floor_no = 0;
+        JUT_ASSERT(195, mNowStayFloorNoDecisionFlg);
+
         if (mNowStayFloorNoDecisionFlg) {
             floor_no = mNowStayFloorNo;
         }

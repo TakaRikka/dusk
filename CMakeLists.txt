@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 if (APPLE)
-    project(dusk LANGUAGES C CXX OBJC)
+    project(dusk LANGUAGES C CXX OBJC OBJCXX)
 else ()
     project(dusk LANGUAGES C CXX)
 endif ()
@@ -9,8 +9,8 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter -fPIC -Wno-error -Wno-c++11-narrowing")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++ -Wno-register -fPIC -Wno-error -Wno-c++11-narrowing")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas -Wno-unused-variable -Wno-unused-parameter")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -stdlib=libc++ -Wno-register -fPIC")
     set(CMAKE_PREFIX_PATH /usr)
     set(CMAKE_LIBRARY_ARCHITECTURE x86_64-linux-gnu)
     set(CMAKE_LIBRARY_PATH "/usr/lib64" "/usr/lib/x86_64-linux-gnu" CACHE PATH "")
@@ -25,6 +25,8 @@ elseif (MSVC)
     add_compile_options(/bigobj)
     add_compile_options(/Zc:strictStrings-)
 endif ()
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error -Wno-c++11-narrowing")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error -Wno-c++11-narrowing")
 
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
@@ -33,7 +35,7 @@ set(DOLZEL_FILES
     src/m_Do/m_Do_printf.cpp
     src/m_Do/m_Do_audio.cpp
     src/m_Do/m_Do_controller_pad.cpp
-    src/m_Do/m_Re_controller_pad.cpp
+    #src/m_Do/m_Re_controller_pad.cpp
     src/m_Do/m_Do_graphic.cpp
     src/m_Do/m_Do_machine.cpp
     src/m_Do/m_Do_mtx.cpp
@@ -575,6 +577,11 @@ set(JSYSTEM_FILES
     src/JSystem/JMath/JMath.cpp
     src/JSystem/JMath/random.cpp
     src/JSystem/JMath/JMATrigonometric.cpp
+    src/JSystem/JHostIO/JORHostInfo.cpp
+    src/JSystem/JHostIO/JORServer.cpp
+    src/JSystem/JHostIO/JHIhioASync.cpp
+    src/JSystem/JHostIO/JHIRMcc.cpp
+    src/JSystem/JHostIO/JHIMccBuf.cpp
     )
 
 set(REL_FILES
@@ -1338,7 +1345,7 @@ set(REL_FILES
     )
 
 set(DUSK_FILES
-    #src/dusk/imgui.cpp
+    src/dusk/imgui.cpp
     src/dusk/stubs.cpp
     src/dusk/extras.c
     src/dusk/extras.cpp

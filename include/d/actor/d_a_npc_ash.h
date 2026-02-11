@@ -96,7 +96,7 @@ public:
 public:
     daNpcAsh_c();
     ~daNpcAsh_c();
-    cPhs__Step Create();
+    cPhs_Step Create();
     BOOL CreateHeap();
     int Delete();
     int Execute();

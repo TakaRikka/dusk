@@ -31,7 +31,7 @@ public:
     void setRoomNo();
     int Create();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     int Execute(Mtx**);
     int Draw();
     int Delete();

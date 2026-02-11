@@ -79,8 +79,8 @@ public:
 
     MtxP getMtx() { return mpModelMorf->getModel()->getAnmMtx(15); }
 
-    void onTarget() { mTarget = true; }
-    bool isBack() { return arg0; }
+    u8 onTarget() { return mTarget = true; }
+    u8 isBack() { return arg0; }
 
 private:
     /* 0x05AC */ request_of_phase_process_class mPhase;

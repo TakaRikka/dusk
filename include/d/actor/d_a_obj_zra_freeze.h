@@ -16,7 +16,7 @@ class daZraFreeze_c : public fopAc_ac_c {
 public:
     void setBaseMtx();
     BOOL chkActorInScreen();
-    cPhs__Step Create();
+    cPhs_Step Create();
     int CreateHeap();
     void setHitodamaPrtcl();
     int Execute();

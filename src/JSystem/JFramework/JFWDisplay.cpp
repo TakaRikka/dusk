@@ -6,7 +6,7 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTProcBar.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 #include <dolphin/vi.h>
 #include "global.h"
 #include <stdint.h>

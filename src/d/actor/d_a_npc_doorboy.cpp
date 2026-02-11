@@ -185,14 +185,14 @@ daNpcDoorBoy_c::~daNpcDoorBoy_c() {
 #endif
 }
 
-cPhs__Step daNpcDoorBoy_c::Create() {
+cPhs_Step daNpcDoorBoy_c::Create() {
     fopAcM_ct(this, daNpcDoorBoy_c);
 
     mMessageNo = (s16)getMessageNo();
 
-    cPhs__Step phase = cPhs_ERROR_e;
+    cPhs_Step phase = cPhs_ERROR_e;
     for (int i = 0; i < 2; i++) {
-        phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
+        phase = dComIfG_resLoad(&mPhases[i], l_arcNames[i]);
 
         if (phase != cPhs_COMPLEATE_e) {
             return phase;

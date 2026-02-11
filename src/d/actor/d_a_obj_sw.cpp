@@ -732,7 +732,7 @@ static int daObj_Sw_Create(fopAc_ac_c* a_this) {
 
         OS_REPORT("//////////////OBJ_SW SET 2 !!\n");
         if (i_this->field_0x570 == 8) {
-            a_this->attention_info.distances[2] = 22;
+            a_this->attention_info.distances[fopAc_attn_BATTLE_e] = 22;
             a_this->home.pos.y += -70.0f;
             a_this->current.pos.y = a_this->home.pos.y;
 

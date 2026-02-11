@@ -45,7 +45,7 @@ public:
 
     daNpcDoorBoy_c();
     ~daNpcDoorBoy_c();
-    cPhs__Step Create();
+    cPhs_Step Create();
     int CreateHeap();
     int Delete();
     int Execute();

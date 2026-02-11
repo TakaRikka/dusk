@@ -68,7 +68,7 @@ int daSpinner_c::create() {
 
     mAcchCir[0].SetWall(50.01f, 58.0f);
     mAcchCir[1].SetWall(129.99f, 35.0f);
-    mAcchCir[2].SetWall(player->field_0x598, 35.0f);
+    mAcchCir[2].SetWall(player->mHeight, 35.0f);
 
     mPaPo.init(&mAcch, 85.0f, 85.0f);
 

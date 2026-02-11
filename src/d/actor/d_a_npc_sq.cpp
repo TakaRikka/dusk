@@ -316,11 +316,11 @@ static int useHeapInit(fopAc_ac_c* i_this) {
                                  1, 0, 1.0f, 0, -1) ? 1 : 0;
 }
 
-static cPhs__Step daNpc_Sq_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daNpc_Sq_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, npc_sq_class);
     npc_sq_class* _this = static_cast<npc_sq_class*>(i_this);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhaseReq, "Sq");
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhaseReq, "Sq");
     if (step == cPhs_COMPLEATE_e) {
             /* dSv_event_flag_c::D_0001 - Ordon Village - Stopped by squirrel in front of house at night */
         if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[25])) {

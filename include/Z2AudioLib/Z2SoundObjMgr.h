@@ -82,7 +82,7 @@ enum Z2EnemyID {
     /* 0x3F */ Z2_ENEMY_TN,
 };
  
-class Z2SoundObjMgr : public JASGlobalInstance<Z2SoundObjMgr>, protected JSUList<Z2CreatureEnemy> {
+class Z2SoundObjMgr : public JASGlobalInstance<Z2SoundObjMgr> {
 public:
     Z2SoundObjMgr();
     void setForceBattleArea(bool forceBattle, u16, u16, u16);
@@ -98,13 +98,14 @@ public:
     u8 getEnemyNumNear() const { return enemuNumNear_; }
     u8 getEnemyNumVeryFar() const { return enemuNumVeryFar_; }
     bool isForceBattle() { return forceBattle_; }
-    JSUList<Z2CreatureEnemy>* getEnemyList() { return this; }
+    JSUList<Z2CreatureEnemy>* getEnemyList() { return &field_0x0; }
 
     #if DEBUG
     JSUList<Z2SoundObjBase>* getAllList() { return &allList_; }
     #endif
 
 private:
+    /* 0x00 */ JSUList<Z2CreatureEnemy> field_0x0;
     #if DEBUG
     /* 0x0C */ JSUList<Z2SoundObjBase> allList_;
     #endif

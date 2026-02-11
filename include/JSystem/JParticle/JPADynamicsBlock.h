@@ -3,7 +3,7 @@
 
 #include "JSystem/JGeometry.h"
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JPAEmitterWorkData;
 

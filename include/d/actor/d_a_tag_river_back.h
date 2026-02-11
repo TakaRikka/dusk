@@ -31,9 +31,11 @@ public:
 
     void setAction(u8 i_action) { mAction = i_action; }
 
-    u8 getSwBit() { return fopAcM_GetParamBit(this, 8, 8); }
+    u8 getSwbit() { return fopAcM_GetParamBit(this, 8, 8); }
 
-    u8 getSwBit2() { return fopAcM_GetParamBit(this, 0x10, 8); }
+    u8 getSwbit2() { return fopAcM_GetParamBit(this, 0x10, 8); }
+
+    u8 getNextSceneNo() { return fopAcM_GetParamBit(this, 0, 8); }
 
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ u8 mTimer;

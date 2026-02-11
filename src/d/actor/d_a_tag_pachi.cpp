@@ -3,6 +3,7 @@
 #include "d/actor/d_a_tag_pachi.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_s_play.h"
 
 daTagPati_c::~daTagPati_c() {}
 
@@ -24,6 +25,7 @@ static dCcD_SrcCyl const l_sph_src = {
 
 int daTagPati_c::create() {
     fopAcM_ct(this, daTagPati_c);
+    OS_REPORT("-------------- TAG YAMI CREATE!!\n");
     field_0x6E0 = get_prm();
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(l_sph_src);
@@ -39,25 +41,41 @@ int daTagPati_c::Execute() {
 }
 
 void daTagPati_c::col_set() {
-    mCyl.SetR(1350.f);
+    f32 var_f31 = 1350.f;
+    if (field_0x6E0 == 0 || field_0x6E0 == 1) {
+        var_f31 += tREG_F(18);
+    } else if (field_0x6E0 == 2 || field_0x6E0 == 3) {
+        var_f31 += tREG_F(19);
+    }
+    mCyl.SetR(var_f31);
     mCyl.SetH(300000.0f);
     mCyl.SetC(home.pos);
     dComIfG_Ccsp()->Set(&mCyl);
 }
 
 u32 daTagPati_c::chk_CoHit() {
-    return mCyl.ChkCoHit() ? 1 : 0;
+    if (mCyl.ChkCoHit()) {
+        OS_REPORT("----mtype = %d\n", field_0x6E0);
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 static int daTagPati_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagPati_c*>(i_this)->create();
+    daTagPati_c* pati = static_cast<daTagPati_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return pati->create();
 }
 
 static int daTagPati_Execute(fopAc_ac_c* i_this) {
-    return static_cast<daTagPati_c*>(i_this)->Execute();
+    daTagPati_c* pati = static_cast<daTagPati_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return pati->Execute();
 }
 
 static int daTagPati_Delete(daTagPati_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagPati_c();
     return 1;
 }

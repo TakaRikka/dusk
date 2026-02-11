@@ -9,10 +9,12 @@
 
 static int daTagSchedule_Create(fopAc_ac_c* i_this) {
     daTagSchedule_c* schedule_tag = (daTagSchedule_c*)i_this;
+    int id = fopAcM_GetID(i_this);
     return schedule_tag->create();
 }
 
 static int daTagSchedule_Delete(daTagSchedule_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagSchedule_c();
     return 1;
 }

@@ -6,7 +6,7 @@
 
 #include "JSystem/JAudio2/JASCmdStack.h"
 #include "JSystem/JAudio2/JASCriticalSection.h"
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 
 JASPortCmd::TPortHead JASPortCmd::sCommandListOnce;
 

@@ -2,7 +2,7 @@
 #define JORENTRY_H
 
 #include "JSystem/JHostIO/JHIComm.h"
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 
 template<typename T, int I>
 class JHIpvector {

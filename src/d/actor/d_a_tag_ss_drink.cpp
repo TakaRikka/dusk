@@ -26,7 +26,8 @@ int daTag_SSDrink_c::Delete() {
 }
 
 int daTag_SSDrink_c::Execute() {
-    if (chkEvent()) {
+    int eventResult = chkEvent();
+    if (eventResult) {
         if (mProcessFunc) {
             (this->*mProcessFunc)(0);
         }
@@ -40,8 +41,9 @@ int daTag_SSDrink_c::Draw() {
     return 1;
 }
 
-int daTag_SSDrink_c::getTypeFromParam() {
-    switch (fopAcM_GetParamBit(this, 0, 4)) {
+u8 daTag_SSDrink_c::getTypeFromParam() {
+    u8 param = fopAcM_GetParam(this) & 0xF;
+    switch (param) {
     case 0:
         field_0x5D3 = 0x69;
         return 0;
@@ -70,28 +72,18 @@ int daTag_SSDrink_c::getTypeFromParam() {
 }
 
 u8 daTag_SSDrink_c::getSwitchFromParam() {
-    return fopAcM_GetParamBit(this, 4, 8);
+    u8 result = (fopAcM_GetParam(this) & 0xFF0) >> 4;
+    return result;
 }
 
 u16 daTag_SSDrink_c::getFlowNodeNum() {
-    u16 num = home.angle.x;
-    bool bVar1 = false;
-    if (num == 0xFFFF || num == 0) {
-        bVar1 = true;
-    }
-
-    u16 num2;
-    if (!bVar1) {
-        num2 = num;
-    } else {
-        num2 = 0xFFFF;
-    }
-
-    return num2 & 0xFFFF;
+    u16 angleX = home.angle.x;
+    return angleX == 0xFFFF || angleX == 0 ? 0xFFFF : angleX;
 }
 
 u16 daTag_SSDrink_c::getValue() {
-    return fopAcM_GetParamBit(this, 12, 16);
+    u16 result = (fopAcM_GetParam(this) & 0xFFFF000) >> 12;
+    return result;
 }
 
 void daTag_SSDrink_c::restart() {
@@ -117,7 +109,7 @@ int daTag_SSDrink_c::setProcess(ProcessFunc i_processFunc) {
     int retVal = 0;
 
     if (checkProcess(i_processFunc)) {
-        return 0;
+        return retVal;
     } else {
         mEventType = 2;
         if (mProcessFunc) {
@@ -167,7 +159,7 @@ int daTag_SSDrink_c::chkEvent() {
 }
 
 int daTag_SSDrink_c::orderEvent() {
-    if (!dComIfGp_getLinkPlayer()->checkWolf() && fopAcM_isSwitch(this, getSwitchFromParam()) &&
+    if (!daPy_py_c::checkNowWolf() && fopAcM_isSwitch(this, getSwitchFromParam()) &&
         field_0x5D3 != 0x60 && getFlowNodeNum() != 0xFFFF)
     {
         attention_info.flags = (fopAc_AttnFlag_TALKREAD_e | fopAc_AttnFlag_SPEAK_e);
@@ -176,7 +168,7 @@ int daTag_SSDrink_c::orderEvent() {
     }
 
     if (attention_info.flags == (fopAc_AttnFlag_TALKREAD_e | fopAc_AttnFlag_SPEAK_e)) {
-        if (fopAcM_searchPlayerDistanceXZ(this) <= 160.0f && fopAcM_seenPlayerAngleY() <= 0x2000) {
+        if (fopAcM_searchPlayerDistanceXZ(this) <= 160.0f && fopAcM_seenPlayerAngleY(this) <= 0x2000) {
             attention_info.distances[fopAc_attn_TALK_e] = 0x9D;
             attention_info.distances[fopAc_attn_SPEAK_e] = 0x9D;
             eventInfo.onCondition(1);
@@ -192,7 +184,7 @@ int daTag_SSDrink_c::wait(void* param_0) {
         if (!eventInfo.checkCommandCatch()) {
             if (fopAcM_isSwitch(this, getSwitchFromParam())) {
                 if (fopAcM_searchPlayerDistanceXZ(this) <= 160.0f &&
-                    fopAcM_seenPlayerAngleY() <= 0x2000)
+                    fopAcM_seenPlayerAngleY(this) <= 0x2000)
                 {
                     fopAc_ac_c* player = dComIfGp_getPlayer(0);
                     cXyz local_28 = attention_info.position - player->attention_info.position;

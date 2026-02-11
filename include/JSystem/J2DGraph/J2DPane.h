@@ -4,7 +4,7 @@
 #include "JSystem/JGeometry.h"
 #include "JSystem/JSupport/JSUList.h"
 #include <dolphin/gx.h>
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
 
 class J2DAnmBase;
 class J2DAnmColor;

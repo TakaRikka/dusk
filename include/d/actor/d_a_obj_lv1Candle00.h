@@ -20,7 +20,7 @@ class daLv1Cdl00_c : public fopAc_ac_c {
 public:
     void setBaseMtx();
     int CreateHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     static int createHeapCallBack(fopAc_ac_c*);
     void lightInit();
     void setLight();

@@ -25,12 +25,15 @@ int daTagHinit_c::create() {
 }
 
 static int daTagHinit_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagHinit_c*>(i_this)->create();
+    daTagHinit_c* hInit = static_cast<daTagHinit_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return hInit->create();
 }
 
 daTagHinit_c::~daTagHinit_c() {}
 
 static int daTagHinit_Delete(daTagHinit_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagHinit_c();
     return 1;
 }

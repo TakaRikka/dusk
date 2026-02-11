@@ -1315,7 +1315,7 @@ int daE_GE_c::create() {
             l_HIO.id = mDoHIO_CREATE_CHILD("グェー", &l_HIO);
         }
 
-        attention_info.flags = 4;
+        attention_info.flags = fopAc_AttnFlag_BATTLE_e;
         fopAcM_SetMtx(this, mpMorfSO->getModel()->getBaseTRMtx());
         fopAcM_SetMin(this, -200.0f, -200.0f, -200.0f);
         fopAcM_SetMax(this, 200.0f, 200.0f, 200.0f);

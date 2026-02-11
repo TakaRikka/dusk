@@ -332,7 +332,7 @@ int daObj_Kanban2_c::getKanbanCutType() {
     case daPy_py_c::CUT_TYPE_NM_VERTICAL:
     case daPy_py_c::CUT_TYPE_NM_RIGHT:
     case daPy_py_c::CUT_TYPE_FINISH_LEFT:
-    case daPy_py_c::CUT_TYPE_DASH_UNK_26:
+    case daPy_py_c::CUT_TYPE_DASH_RIGHT:
         if (angle_to_player < 0x3800) {
             return DAMAGE_TLBR_DIAGONAL;
         }
@@ -351,7 +351,7 @@ int daObj_Kanban2_c::getKanbanCutType() {
         }
         return DAMAGE_HORIZONTAL_SPLIT;
     case daPy_py_c::CUT_TYPE_NM_LEFT:
-    case daPy_py_c::CUT_TYPE_DASH_UNK_25:
+    case daPy_py_c::CUT_TYPE_DASH_LEFT:
         return DAMAGE_HORIZONTAL_SPLIT;
     case daPy_py_c::CUT_TYPE_TURN_RIGHT:
     case daPy_py_c::CUT_TYPE_LARGE_JUMP_INIT:

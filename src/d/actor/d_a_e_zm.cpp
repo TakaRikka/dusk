@@ -417,7 +417,7 @@ void daE_ZM_c::executeWait() {
                 mTimer = l_HIO.wait_time_to_appear_after_attack;
                 attention_info.distances[fopAc_attn_BATTLE_e] = 0;
                 fopAcM_OffStatus(this, 0);
-                attention_info.flags &= 0xFFFFFFFB;
+                attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
                 shape_angle.x = 0;
                 field_0x6f4.set(0.0f, 0.0f, 0.0f);
                 setActionMode(ACTION_WAIT, MODE_0);
@@ -905,10 +905,10 @@ static int useHeapInit(fopAc_ac_c* a_this) {
     return static_cast<daE_ZM_c*>(a_this)->CreateHeap();
 }
 
-cPhs__Step daE_ZM_c::create() {
+cPhs_Step daE_ZM_c::create() {
     fopAcM_ct(this, daE_ZM_c);
 
-    cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhase, "E_ZM");
+    cPhs_Step phase = dComIfG_resLoad(&mPhase, "E_ZM");
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("E_ZM PARAM %x\n", fopAcM_GetParam(this));
 

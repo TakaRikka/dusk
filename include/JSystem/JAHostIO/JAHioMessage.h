@@ -1,7 +1,7 @@
 #ifndef JAHIOMESSAGE_H
 #define JAHIOMESSAGE_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JAHioNode;
 class JORMContext;

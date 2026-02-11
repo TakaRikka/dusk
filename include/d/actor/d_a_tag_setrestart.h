@@ -8,6 +8,7 @@ public:
     int Create();
     int create();
     int execute();
+    int draw();
     int _delete();
 
     /* 0x568 */ s8 mPlayerRoomNo;

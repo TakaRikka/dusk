@@ -162,14 +162,14 @@ daNpc_ZelRo_c::~daNpc_ZelRo_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-cPhs__Step daNpc_ZelRo_c::create() {
+cPhs_Step daNpc_ZelRo_c::create() {
     daNpcT_ct(this, daNpc_ZelRo_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4, l_motionSequenceData, 4, l_evtList, l_resNameList);
 
     mType = getType();
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x71C0)) {
             return cPhs_ERROR_e;
@@ -277,13 +277,7 @@ int daNpc_ZelRo_c::Draw() {
         mdlData_p->getMaterialNodePointer(getEyeballRMaterialNo())->setMaterialAnm(mpMatAnm[1]);
     }
 
-    return draw(
-#if DEBUG
-        chkAction(&daNpc_ZelRo_c::test),
-#else
-        FALSE,
-#endif
-        TRUE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE
+    return draw(NpcT_CHK_ACTION(daNpc_ZelRo_c), TRUE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE
     );
 }
 

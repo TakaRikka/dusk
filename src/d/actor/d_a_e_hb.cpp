@@ -1323,7 +1323,7 @@ static int daE_HB_IsDelete(e_hb_class* i_this) {
 
 static int daE_HB_Delete(e_hb_class* i_this) {
     fopAc_ac_c* actor = &i_this->enemy;
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "E_HB");
     dComIfG_resDelete(&i_this->phase, "E_hb");
 
     if (i_this->HIOInit) {

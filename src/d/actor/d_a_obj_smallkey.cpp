@@ -539,13 +539,14 @@ static int daKey_Execute(daKey_c* i_this) {
 }
 
 static int daKey_Delete(daKey_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this, "ObjSKey");
     return i_this->_delete();
 }
 
 static int daKey_Create(fopAc_ac_c* i_this) {
-    fpc_ProcID id = fopAcM_GetID(i_this);
-    return ((daKey_c*)i_this)->create();
+    daKey_c* a_this = (daKey_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "ObjSKey");
+    return a_this->create();
 }
 
 static actor_method_class l_daKey_Method = {

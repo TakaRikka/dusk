@@ -2456,18 +2456,18 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return static_cast<daE_DT_c*>(i_this)->CreateHeap();
 }
 
-cPhs__Step daE_DT_c::create() {
+cPhs_Step daE_DT_c::create() {
     fopAcM_ct(this, daE_DT_c);
 
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&mPhase[0], "E_DT");
+    cPhs_Step step = dComIfG_resLoad(&mPhase[0], "E_DT");
     if (step != cPhs_COMPLEATE_e) {
         return step;
     }
-    step = (cPhs__Step)dComIfG_resLoad(&mPhase[1], "Dalways");
+    step = dComIfG_resLoad(&mPhase[1], "Dalways");
     if (step != cPhs_COMPLEATE_e) {
         return step;
     }
-    step = (cPhs__Step)dComIfG_resLoad(&mPhase[2], "E_OT");
+    step = dComIfG_resLoad(&mPhase[2], "E_OT");
     if (step != cPhs_COMPLEATE_e) {
         return step;
     }
@@ -2548,7 +2548,7 @@ cPhs__Step daE_DT_c::create() {
     return step;
 }
 
-static cPhs__Step daE_DT_Create(daE_DT_c* i_this) {
+static cPhs_Step daE_DT_Create(daE_DT_c* i_this) {
     return i_this->create();
 }
 

@@ -21,15 +21,12 @@ public:
     void default_set() { mAttr = daObjFlag3_c::M_attr; }
 
     void genMessage(JORMContext* ctx) {
-        ctx->genLabel("§ 旗オブジェパラメータ設定  §\n", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-        ctx->genSlider("重力", &mAttr.mGravity, -10.0f, 0.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-        ctx->genSlider("バネ係数", &mAttr.mSpringCoeeficient, 0.0f, 10.0f, 0, NULL, 0xffff, 0xffff,
-                       0x200, 0x18);
-        ctx->genSlider("減衰率", &mAttr.mDecayRate, 0.0f, 1.0f, 0, NULL, 0xffff, 0xffff,
-                       0x200, 0x18);
-        ctx->genSlider("風係数", &mAttr.mWindCoefficient, 0.0f, 100.0f, 0, NULL, 0xffff, 0xffff,
-                       0x200, 0x18);
-        ctx->genSlider("竜巻", &mAttr.mTornado, 0.0f, 500.0f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+        ctx->genLabel("§ 旗オブジェパラメータ設定  §\n", 0);
+        ctx->genSlider("重力", &mAttr.mGravity, -10.0f, 0.0f);
+        ctx->genSlider("バネ係数", &mAttr.mSpringCoeeficient, 0.0f, 10.0f);
+        ctx->genSlider("減衰率", &mAttr.mDecayRate, 0.0f, 1.0f);
+        ctx->genSlider("風係数", &mAttr.mWindCoefficient, 0.0f, 100.0f);
+        ctx->genSlider("竜巻", &mAttr.mTornado, 0.0f, 500.0f);
     }
 
     void ct() {

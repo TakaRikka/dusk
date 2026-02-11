@@ -4,7 +4,7 @@
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRDecomp.h"
 #include "JSystem/JUtility/JUTException.h"
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 
 JKRAMCommand* JKRAramPiece::prepareCommand(int direction, u32 src, u32 dst, u32 length,
                                            JKRAramBlock* block,

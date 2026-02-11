@@ -1,7 +1,7 @@
 #ifndef D_A_PPOLAMP_H
 #define D_A_PPOLAMP_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 #include "f_op/f_op_actor_mng.h"
 
 /**

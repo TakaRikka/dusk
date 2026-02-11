@@ -14,7 +14,7 @@ public:
     int Delete();
     int Execute();
     int Draw();
-    int getTypeFromParam();
+    u8 getTypeFromParam();
     u8 getSwitchFromParam();
     u16 getFlowNodeNum();
     u16 getValue();
@@ -29,7 +29,6 @@ public:
     int talk(void*);
     ~daTag_SSDrink_c();
 
-    s32 fopAcM_seenPlayerAngleY() { return fopAcM_seenActorAngleY(this, dComIfGp_getPlayer(0)); }
     bool checkShopOil() const { return field_0x5D2 == 4; }
 
     /* 0x578 */ dMsgFlow_c field_0x578;

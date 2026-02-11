@@ -94,7 +94,7 @@ public:
     typedef int (daNpc_Aru_c::*cutFunc)(int);
 
     ~daNpc_Aru_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();
@@ -152,7 +152,9 @@ public:
             daNpcT_evtData_c const* i_evtData, char** i_arcNames)
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
-        i_arcNames) {}
+        i_arcNames) {
+        OS_REPORT("|%06d:%x|daNpc_Aru_c -> コンストラクト\n", g_Counter.mCounter0, this);
+    }
     u16 getEyeballMaterialNo() { return ARU_EYEBALL_M; }
     s32 getHeadJointNo() { return JNT_HEAD; }
     s32 getNeckJointNo() { return JNT_NECK; }
@@ -164,13 +166,9 @@ public:
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;
-        if (nodeNo == 0xffff) {
-            return -1;
-        }
-
-        return nodeNo;
+        return (nodeNo == 0xFFFF) ? -1 : nodeNo;
     }
-    int getPathID() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
+    u8 getPathID() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
     void setLastIn() { mLastGoatIn = true; }
 
     static char* mCutNameList[7];

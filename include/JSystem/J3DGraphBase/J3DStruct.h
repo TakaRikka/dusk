@@ -2,8 +2,8 @@
 #define J3DSTRUCT_H
 
 #include <dolphin/gx.h>
-#include "dolphin/mtx.h"
-#include "dolphin/mtx.h"
+#include <dolphin/mtx.h>
+#include <dolphin/mtx.h>
 #include "global.h"
 
 /**

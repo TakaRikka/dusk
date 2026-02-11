@@ -283,7 +283,7 @@ daNpc_GWolf_c::~daNpc_GWolf_c() {
 #endif
 }
 
-cPhs__Step daNpc_GWolf_c::create() {
+cPhs_Step daNpc_GWolf_c::create() {
     fopAcM_ct(this, daNpc_GWolf_c);
 
     mType = getTypeFromParam();
@@ -307,7 +307,7 @@ cPhs__Step daNpc_GWolf_c::create() {
     int iVar1 = 0;
     int i;
     for (i = 0; l_loadRes_list[mType][i] >= 0; i++) {
-        cPhs__Step phase = (cPhs__Step)dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
+        cPhs_Step phase = dComIfG_resLoad(&mPhases[i], l_resNames[l_loadRes_list[mType][i]]);
         if (phase == cPhs_ERROR_e || phase == cPhs_UNK3_e) {
             return cPhs_ERROR_e;
         }

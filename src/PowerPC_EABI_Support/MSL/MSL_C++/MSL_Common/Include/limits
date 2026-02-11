@@ -73,17 +73,31 @@ class numeric_limits<float> {
 public:
 	inline static float min();
 	inline static float max() { return FLT_MAX; }
-	inline static float signaling_NaN() { return *(float*)__float_nan; }
+	inline static float signaling_NaN() {
+#if __REVOLUTION_SDK__
+        static const unsigned long x = 0x7fbfffffUL;
+        return *reinterpret_cast<const float*>(&x);
+#else
+        return *(float*)__float_nan;
+#endif
+    }
 };
 
 #if __REVOLUTION_SDK__
 template <>
 class numeric_limits<double> {
 public:
-	static const unsigned long long x = 0x7ff0000000000001ULL;
 	inline static double min();
 	inline static double max();
-	inline static double signaling_NaN() { return *reinterpret_cast<const double*>(&x); }
+	inline static double signaling_NaN() {
+        static const unsigned long long x = 0x7ff7ffffffffffffULL;
+        return *reinterpret_cast<const double*>(&x);
+    }
+    //TODO: this function is almost certainly fake, but for some reason the constant shows up twice in debug .rodata
+	inline static double signaling_NaN_2() {
+        static const unsigned long long x = 0x7ff7ffffffffffffULL;
+        return *reinterpret_cast<const double*>(&x);
+    }
 };
 #endif
 

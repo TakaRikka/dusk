@@ -69,10 +69,10 @@ dEvM_HIO_c::dEvM_HIO_c() {
 }
 
 void dEvM_HIO_c::genMessage(JORMContext* mctx) {
-    mctx->genLabel("- ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("- ", 0);
 
     /* "- Event Manager Testing" */
-    mctx->genLabel("- イベントマネージャーテスト用", LBL_EVENT_MANAGER_TESTING, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("- イベントマネージャーテスト用", LBL_EVENT_MANAGER_TESTING);
 
     // "Playback test"
     mctx->genNode("再生テスト", &m_playtest, 0, 0);
@@ -90,57 +90,57 @@ void dEvM_HIO_c::genMessage(JORMContext* mctx) {
     mctx->genNode("一時Ｒ", &m_temp_reg, 0, 0);
 
     // "Read"
-    mctx->genButton("読み込み", BTN_READ, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("読み込み", BTN_READ);
 
     // "evM Debug"
-    mctx->genCheckBox("evM デバック", &m_evm_debug, 1, 0, NULL, 0xffff,  0xffff, 0x200, 0x18);
+    mctx->genCheckBox("evM デバック", &m_evm_debug, 0x1);
 
     // "evD Debug"
-    mctx->genCheckBox("evD デバック", &m_evd_debug, 1, 0, NULL, 0xffff,  0xffff, 0x200, 0x18);
+    mctx->genCheckBox("evD デバック", &m_evd_debug, 0x1);
 
     // "eve Debug"
-    mctx->genCheckBox("eve デバック", &m_eve_debug, 1, 0, NULL, 0xffff,  0xffff, 0x200, 0x18);
+    mctx->genCheckBox("eve デバック", &m_eve_debug, 0x1);
 
     // "EV data output"
-    mctx->genCheckBox("ＥＶデータ出力", &m_EVdata_output, 1, 0, NULL , 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("ＥＶデータ出力", &m_EVdata_output, 0x1);
 
     // "evD unfinished"
-    mctx->genCheckBox("evD 未終了", &m_evd_unfinished, 1, 0, NULL, 0xffff , 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("evD 未終了", &m_evd_unfinished, 0x1);
 
     // "Scene switching prohibited"
-    mctx->genCheckBox("シーン切替禁止", &m_prevent_scene_switch, 1, 0,  NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("シーン切替禁止", &m_prevent_scene_switch, 0x1);
 
   
-    mctx->genLabel("- ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("- ", 0);
 
     /* "- Map Tool Data" */
-    mctx->genLabel("- マップツールデータ", 0, 0, NULL, 0xffff, 0xffff, 0x200 , 0x18);
+    mctx->genLabel("- マップツールデータ", 0);
 
     // "Corrective Sound Adjustment"
-    mctx->genSlider("　正解音調整",&m_corrective_sound_adjustment, -200, 200, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genSlider("　正解音調整",&m_corrective_sound_adjustment, -200, 200);
 
 
-    mctx->genLabel("- ",0,0,NULL,0xffff,0xffff,0x200,0x18);
+    mctx->genLabel("- ",0);
 
     /* "- Event Data" */
-    mctx->genLabel("- イベントデータ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("- イベントデータ", 0);
 
     // "Continuously prioritize"
-    mctx->genCheckBox("常駐優先", &m_prioritize_file, 1, 0, NULL, 0xffff , 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("常駐優先", &m_prioritize_file, 0x1);
 
 
     /* "- Apply then Reset" */
-    mctx->genLabel("- つけてから要リセット", 0, 0, NULL, 0xffff, 0xffff,  0x200, 0x18);
+    mctx->genLabel("- つけてから要リセット", 0);
 
     // "Skip enabled"
-    mctx->genCheckBox("スキップ有効", &m_enable_skip, 1, 0, NULL,  0xffff, 0xffff, 0x200, 0x18);
+    mctx->genCheckBox("スキップ有効", &m_enable_skip, 0x1);
 
 
-    mctx->genLabel("- ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
-    mctx->genLabel("- ", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("- ", 0);
+    mctx->genLabel("- ", 0);
 
     // "Forced termination"
-    mctx->genButton("強制終了", BTN_FORCED_TERMINATION, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("強制終了", BTN_FORCED_TERMINATION);
 }
 
 void dEvM_HIO_c::listenPropertyEvent(const JORPropertyEvent* param_0) {
@@ -233,16 +233,16 @@ void dEvM_play_HIO_c::genMessage(JORMContext* mctx) {
     dEvDtEvent_c* const list = dComIfGp_getPEvtManager()->getEventList(1);
 
     /* "Event Playback Test" */
-    mctx->genLabel("イベントの再生テスト", LBL_EVENT_PLAYBACK_TESTING, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("イベントの再生テスト", LBL_EVENT_PLAYBACK_TESTING);
 
     // "Playback"
-    mctx->genButton("再生", BTN_PLAYBACK, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("再生", BTN_PLAYBACK);
 
     // "Stop"
-    mctx->genButton("停止", BTN_STOP, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("停止", BTN_STOP);
 
     // "Target event"
-    mctx->startComboBox("対象イベント", &mTargetEvent, 0, NULL, 0xffff, 0xffff, 0x100, 0x1a);
+    mctx->startComboBox("対象イベント", &mTargetEvent);
 
     int i;
     if (!header) {
@@ -284,10 +284,10 @@ dEvM_bit_HIO_c::dEvM_bit_HIO_c() {
 
 void dEvM_bit_HIO_c::genMessage(JORMContext* mctx) {
     /* "----Event Save Bit---" */
-    mctx->genLabel("----イベント セーブビット---", LBL_EVENT_SAVE_BIT, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("----イベント セーブビット---", LBL_EVENT_SAVE_BIT);
 
     // "Update"
-    mctx->genButton("更新", BTN_UPDATE, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("更新", BTN_UPDATE);
 
     int i = 0;
     u32 labelPosY = 0;
@@ -300,7 +300,7 @@ void dEvM_bit_HIO_c::genMessage(JORMContext* mctx) {
                 mFlagTables->mBitTable[i].mIsSet = dComIfGs_isTmpBit(mFlagTables->mBitTable[i].mFlagValue);
 
             mctx->genCheckBox(mFlagTables->mBitTable[i].mFlagName, &mFlagTables->mBitTable[i].mIsSet, 1, 0, NULL, 0xffff, 0xffff, 0xfa, 0x18);
-            mctx->genLabel(mFlagTables->mBitTable[i].mFlagDescription, i + (1 << 31) + (1 << 1), 0, NULL, 0x100, labelPosY * 25 + 50, 0x200, 0x18);
+            mctx->genLabel(mFlagTables->mBitTable[i].mFlagDescription, i + (1 << 31) + (1 << 1), 0, NULL, 0x100, labelPosY * 25 + 50);
 
             labelPosY++;
         }
@@ -362,10 +362,10 @@ dEvM_reg_HIO_c::dEvM_reg_HIO_c() {
 
 void dEvM_reg_HIO_c::genMessage(JORMContext* mctx) {
     /* "----Event Save Register---" */
-    mctx->genLabel("----イベント セーブレジスター---", LBL_EVENT_SAVE_REGISTER, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genLabel("----イベント セーブレジスター---", LBL_EVENT_SAVE_REGISTER);
     
     // "Update"
-    mctx->genButton("更新", BTN_UPDATE, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    mctx->genButton("更新", BTN_UPDATE);
 
     int i = 0;
     u8 flagVal;
@@ -376,9 +376,9 @@ void dEvM_reg_HIO_c::genMessage(JORMContext* mctx) {
             else
                 mFlagTables->mRegTable[i].mIsSet = dComIfGs_getTmpReg(mFlagTables->mRegTable[i].mFlagValue);
 
-            mctx->genLabel(mFlagTables->mRegTable[i].mFlagDescription, 0x80000001, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+            mctx->genLabel(mFlagTables->mRegTable[i].mFlagDescription, 0x80000001);
             flagVal = mFlagTables->mRegTable[i].mFlagValue;
-            mctx->genSlider(mFlagTables->mRegTable[i].mFlagName, &mFlagTables->mRegTable[i].mIsSet, 0, flagVal, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+            mctx->genSlider(mFlagTables->mRegTable[i].mFlagName, &mFlagTables->mRegTable[i].mIsSet, 0, flagVal);
         }
     }
 }

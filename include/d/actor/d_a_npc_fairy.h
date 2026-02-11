@@ -161,7 +161,7 @@ public:
     typedef int (daNpc_Fairy_c::*cutFunc)(int);
 
     ~daNpc_Fairy_c();
-    cPhs__Step Create();
+    cPhs_Step Create();
     int CreateHeap();
     void setAnmData();
     bool setMotionAnm(int, f32, int);

@@ -1,10 +1,12 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_tag_camera.h"
 #include <cmath>
 #include "d/actor/d_a_alink.h"
-#include "d/d_com_inf_game.h"
 #include "d/actor/d_a_horse.h"
+#include "d/actor/d_a_tag_camera.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_debug_viewer.h"
+#include "d/d_s_play.h"
 
 namespace {
 bool always_true() {
@@ -107,19 +109,19 @@ u8 daTag_Cam_c::getSwType() {
 }
 
 u8 daTag_Cam_c::getPrio() {
-    return (fopAcM_GetParam(this) >> 4) & 0xF;
+    return (fopAcM_GetParam(this) & 0xF0) >> 4;
 }
 
 u8 daTag_Cam_c::getSwBit() {
-    return (fopAcM_GetParam(this) >> 8) & 0xFF;
+    return (fopAcM_GetParam(this) & 0xFF00) >> 8;
 }
 
 u8 daTag_Cam_c::getCondition() {
-    return (fopAcM_GetParam(this) >> 0x10) & 0xFF;
+    return (fopAcM_GetParam(this) & 0xFF0000) >> 16;
 }
 
 u8 daTag_Cam_c::getCameraId() {
-    return (fopAcM_GetParam(this) >> 0x18) & 0xFF;
+    return (fopAcM_GetParam(this) & 0xFF000000) >> 24;
 }
 
 u8 daTag_Cam_c::getRailID() {
@@ -184,8 +186,10 @@ int daTag_Cam_c::create() {
         is_player_hugging_eal,
     };
 
+    int var_r27 = 22;
+
     u8 func_index = getCondition();
-    if ((int)func_index > 22) {
+    if ((int)func_index > var_r27) {
         func_index = 3;
     }
 
@@ -251,7 +255,11 @@ int daTag_Cam_c::execute() {
         bool set_camera = mCheckFunc();
 
         if (condition == 0xFF) {
+#if PLATFORM_SHIELD
+            priority |= (u16)0x8000;
+#else
             priority |= 0x8000;
+#endif
         } else if (condition == 0xFA) {
             if (dCam_getBody()->CheckFlag(0x8000000)) {
                 set_camera = true;
@@ -269,6 +277,28 @@ int daTag_Cam_c::execute() {
 }
 
 static int daTag_Cam_Draw(daTag_Cam_c* i_this) {
+#if DEBUG
+    return i_this->draw();
+#else
+    return 1;
+#endif
+}
+
+int daTag_Cam_c::draw() {
+#if DEBUG
+    if (g_envHIO.mOther.mDisplayTransparentCyl != 0) {
+        if (getAreaType() == 0) {
+            cXyz sp3C = (mBoundsHi - mBoundsLo) * 0.5f;
+            cXyz sp30 = mBoundsLo + sp3C;
+            csXyz sp10(0, 0, 0);
+            dDbVw_drawCubeXlu(sp30, sp3C, sp10, (GXColor){0xc0, 0xff, 0x78, 0xa0});
+        } else {
+            cXyz cStack_3c = current.pos;
+            dDbVw_drawCylinderXlu(cStack_3c, scale.x, scale.y, (GXColor){0xc0, 0xff, 0x78, 0xa0},
+                                  1);
+        }
+    }
+#endif
     return 1;
 }
 
@@ -282,13 +312,16 @@ static int daTag_Cam_IsDelete(daTag_Cam_c* i_this) {
 }
 
 static int daTag_Cam_Delete(daTag_Cam_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTag_Cam_c();
     return 1;
 }
 
 static int daTag_Cam_Create(fopAc_ac_c* i_this) {
-    daTag_Cam_c* a_this = (daTag_Cam_c*)i_this;
-    return a_this->create();
+    daTag_Cam_c* cam = (daTag_Cam_c*)i_this;
+    int id = fopAcM_GetID(i_this);
+    int result = cam->create();
+    return result;
 }
 
 static actor_method_class l_daTag_Cam_Method = {

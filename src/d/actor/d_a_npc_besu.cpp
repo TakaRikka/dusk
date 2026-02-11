@@ -10,6 +10,10 @@
 #include "d/actor/d_a_tag_push.h"
 #include "d/d_com_static.h"
 #include "d/d_item.h"
+#if DEBUG
+#include "JSystem/JHostIO/JORFile.h"
+#include "d/d_debug_viewer.h"
+#endif
 
 enum Besu_RES_File_ID {
     /* BMDR */
@@ -279,9 +283,90 @@ enum Event {
     /* 0xC */ EVENT_CONVERSATION_ABOUT_ZORA,
 };
 
-#if !DEBUG
-#endif
+const daNpc_Besu_HIOParam daNpc_Besu_Param_c::m = {
+    160.0f,
+    -3.0f,
+    1.0f,
+    400.0f,
+    255.0f,
+    140.0f,
+    35.0f,
+    30.0f,
+    0.0f,
+    0.0f,
+    10.0f,
+    -10.0f,
+    30.0f,
+    -10.0f,
+    45.0f,
+    -45.0f,
+    0.6f,
+    12.0f,
+    3,
+    6,
+    5,
+    6,
+    110.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    60,
+    8,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4.0f,
+    -15.0f,
+    0.0f,
+    -15.0f,
+    15.0f,
+    30.0f,
+    15.0f,
+    70.0f,
+    1.0f,
+};
 
+#if DEBUG
+daNpc_Besu_HIO_c::daNpc_Besu_HIO_c() {
+    m = daNpc_Besu_Param_c::m;
+}
+
+void daNpc_Besu_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
+    char msg_buffer[2000];
+
+    JORReflexible::listenPropertyEvent(event);
+
+    JORFile aJStack_910;
+    int len;
+    switch ((u32)event->id) {
+    case 0x40000002:
+        if (aJStack_910.open(6, "すべてのファイル(*.*)\0*.*\0", NULL, NULL, NULL) != 0) {
+            memset(msg_buffer, 0, 2000);
+            len = 0;
+            daNpcT_cmnListenPropertyEvent(msg_buffer, &len, &m.common);
+            // animation playback speed
+            sprintf(msg_buffer + len, "%.3ff,\t//  アニメ再生速度\n", m.field_0x8c);
+            len = strlen(msg_buffer);
+            aJStack_910.writeData(msg_buffer, len);
+            aJStack_910.close();
+            OS_REPORT("write append success!::%6d\n", len);
+        } else {
+            OS_REPORT("write append failure!\n");
+        }
+        break;
+    }
+}
+
+void daNpc_Besu_HIO_c::genMessage(JORMContext* ctx) {
+    daNpcT_cmnGenMessage(ctx, &m.common);
+    // animation playback speed:
+    ctx->genSlider("アニメ再生速度  ", &m.field_0x8c, -0.0f, 16.0f);
+    // export file:
+    ctx->genButton("ファイル書き出し", 0x40000002);
+}
+#endif
 
 static int l_bmdData[6][2] = {
     {3, 1},
@@ -529,20 +614,6 @@ daNpc_Besu_c::cutFunc daNpc_Besu_c::mCutList[15] = {
 
 static NPC_BESU_HIO_CLASS l_HIO;
 
-#if DEBUG
-daNpc_Besu_HIO_c::daNpc_Besu_HIO_c() {
-    m = daNpc_Besu_Param_c::m;
-}
-
-void daNpc_Besu_HIO_c::listenPropertyEvent(const JORPropertyEvent* event) {
-    // NONMATCHING
-}
-
-void daNpc_Besu_HIO_c::genMessage(JORMContext* ctx) {
-    // NONMATCHING
-}
-#endif
-
 daNpc_Besu_c::~daNpc_Besu_c() {
     // "Destruct":
     OS_REPORT("|%06d:%x|daNpc_Besu_c -> デストラクト\n", g_Counter.mCounter0, this);
@@ -563,51 +634,6 @@ daNpc_Besu_c::~daNpc_Besu_c() {
     deleteRes((l_loadResPtrnList)[mType], (const char**)l_resNameList);
 }
 
-const daNpc_Besu_HIOParam daNpc_Besu_Param_c::m = {
-    160.0f,
-    -3.0f,
-    1.0f,
-    400.0f,
-    255.0f,
-    140.0f,
-    35.0f,
-    30.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    -10.0f,
-    30.0f,
-    -10.0f,
-    45.0f,
-    -45.0f,
-    0.6f,
-    12.0f,
-    3,
-    6,
-    5,
-    6,
-    110.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    60,
-    8,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4.0f,
-    -15.0f,
-    0.0f,
-    -15.0f,
-    15.0f,
-    30.0f,
-    15.0f,
-    70.0f,
-    1.0f,
-};
-
 int daNpc_Besu_c::create() {
     static int const heapSize[19] = {
         0x35C0, 0x35C0, 0x3510, 0x35D0,
@@ -627,7 +653,7 @@ int daNpc_Besu_c::create() {
         mTwilight = false;
     }
 
-    cPhs__Step rv = (cPhs__Step) loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step rv = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (rv == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d, PathID:%02x, BitSW:%02x<%08x> ",
                   fopAcM_getProcNameString(this), mType, mFlowNodeNo, getPathID(),
@@ -768,8 +794,8 @@ int daNpc_Besu_c::CreateHeap() {
 }
 
 int daNpc_Besu_c::Delete() {
-    OS_REPORT("|%06d:%x|daNpc_Besu_c -> Delete\n", g_Counter, this);
-    fopAcM_GetID(this);
+    OS_REPORT("|%06d:%x|daNpc_Besu_c -> Delete\n", g_Counter.mCounter0, this);
+    fopAcM_RegisterDeleteID(this, "NPC_BESU");
     this->~daNpc_Besu_c();
     return 1;
 }
@@ -779,18 +805,17 @@ int daNpc_Besu_c::Execute() {
 }
 
 int daNpc_Besu_c::Draw() {
-    daNpcT_MatAnm_c* matAnm = mpMatAnm[0];
-    if (matAnm != NULL) {
+    if (mpMatAnm[0] != NULL) {
         J3DModelData* modelData = mpMorf[0]->getModel()->getModelData();
-        J3DMaterial* material = modelData->getMaterialNodePointer(getEyeballMaterialNo());
-        material->setMaterialAnm(matAnm);
+        modelData->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    return draw(FALSE, 0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
+    return draw(NpcT_CHK_ACTION(daNpc_Besu_c), 0, mRealShadowSize, NULL, 100.0f, 0, 0, 0);
 }
 
 int daNpc_Besu_c::createHeapCallBack(fopAc_ac_c* i_this) {
-    return static_cast<daNpc_Besu_c*>(i_this)->CreateHeap();
+    daNpc_Besu_c* a_this = static_cast<daNpc_Besu_c*>(i_this);
+    return a_this->CreateHeap();
 }
 
 int daNpc_Besu_c::ctrlJointCallBack(J3DJoint* param_0, int param_1) {
@@ -806,7 +831,8 @@ int daNpc_Besu_c::ctrlJointCallBack(J3DJoint* param_0, int param_1) {
 }
 
 u8 daNpc_Besu_c::getType() {
-    switch (fopAcM_GetParam(this) & 0xFF) {
+    u8 prm = fopAcM_GetParam(this);
+    switch (prm & 0xFF) {
         case 0:
             return 0;
         case 1:
@@ -1013,7 +1039,7 @@ void daNpc_Besu_c::setParam() {
     s16 talk_ang = mpHIO->m.common.talk_angle;
     s16 att_dist = mpHIO->m.common.attention_distance;
     s16 att_ang = mpHIO->m.common.attention_angle;
-    if (daNpcKakashi_chkSwdTutorialStage() & 0xFF) {
+    if (daNpcKakashi_chkSwdTutorialStage()) {
         talk_dist = 11;
         talk_ang = 6;
         att_dist = 15;
@@ -1049,9 +1075,9 @@ void daNpc_Besu_c::setParam() {
         }
     }
 
-    attention_info.distances[0] = daNpcT_getDistTableIdx(att_dist, att_ang);
-    attention_info.distances[1] = attention_info.distances[0];
-    attention_info.distances[3] = daNpcT_getDistTableIdx(talk_dist, talk_ang);
+    attention_info.distances[fopAc_attn_LOCK_e] = daNpcT_getDistTableIdx(att_dist, att_ang);
+    attention_info.distances[fopAc_attn_TALK_e] = attention_info.distances[fopAc_attn_LOCK_e];
+    attention_info.distances[fopAc_attn_SPEAK_e] = daNpcT_getDistTableIdx(talk_dist, talk_ang);
     attention_info.flags = att_flags;
 
     scale.set(mpHIO->m.common.scale, mpHIO->m.common.scale,
@@ -1270,31 +1296,13 @@ void daNpc_Besu_c::action() {
     ) {
         mStagger.setParam(this, actor_p, mCurAngle.y);
         setDamage(0, 0xC, 0x12);
-        // FIXME: Fakematch
-#if DEBUG
         mStagger.setPower(0.0f);
-#else
-        for (int i = 0; i < 2; i++) {
-            mStagger.mPower[i] = 0.0f;
-        }
-#endif
         mDamageTimerStart = 0;
         mJntAnm.lookNone(1);
     }
 
     if (mStagger.checkRebirth()) {
-        // FIXME: Fakematch
-#if DEBUG
         mStagger.initialize();
-#else
-        for (int i = 0; i < 2; i++) {
-            mStagger.mAngle[i].setall(0);
-            mStagger.mPower[i] = 0.0f;
-        }
-        mStagger.mStagger = 0;
-        mStagger.field_0x16 = 0;
-        mStagger.mRebirth = 0;
-#endif
         mMode = 1;
     }
 
@@ -1405,6 +1413,7 @@ void daNpc_Besu_c::setAttnPos() {
 void daNpc_Besu_c::setCollision() {
     cXyz cStack_48;
     if (!mHide) {
+        u32 co_sprm = 0x79;
         int tgType = 0xD8FBFDFF;
         int tgSPrm = 0x1F;
         if (mTwilight) {
@@ -1415,7 +1424,7 @@ void daNpc_Besu_c::setCollision() {
             tgSPrm = 0;
         }
 
-        mCyl1.SetCoSPrm(0x79);
+        mCyl1.SetCoSPrm(co_sprm);
         mCyl1.SetTgType(tgType);
         mCyl1.SetTgSPrm(tgSPrm);
         mCyl1.OnTgNoHitMark();
@@ -1455,7 +1464,8 @@ void daNpc_Besu_c::setCollision() {
                 mDoMtx_stack_c::YrotS(mCurAngle.y);
                 mDoMtx_stack_c::multVec(&cStack_48, &cStack_48);
                 cStack_48 += current.pos;
-                mCyl2.SetCoSPrm(0x19);
+                co_sprm = 0x19;
+                mCyl2.SetCoSPrm(co_sprm);
                 mCyl2.SetH(cylH);
                 mCyl2.SetR(wallR);
                 mCyl2.SetC(cStack_48);
@@ -1470,6 +1480,17 @@ void daNpc_Besu_c::setCollision() {
 }
 
 int daNpc_Besu_c::drawDbgInfo() {
+#if DEBUG
+    if (mpHIO->m.common.debug_info_ON) {
+        f32 dist_max_speak = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_SPEAK_e]).mDistMax;
+        f32 dist_max_talk = dComIfGp_getAttention()->getDistTable(attention_info.distances[fopAc_attn_TALK_e]).mDistMax;
+        dDbVw_drawCircleOpa(attention_info.position, dist_max_speak, (GXColor){0x00, 0xC8, 0x00, 0xFF}, 1, 12);
+        dDbVw_drawCircleOpa(attention_info.position, dist_max_talk, (GXColor){0xC8, 0x00, 0x00, 0xFF}, 1, 12);
+        dDbVw_drawSphereXlu(eyePos, 18.0f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
+        dDbVw_drawSphereXlu(attention_info.position, 9.0f, (GXColor){0x80, 0x80, 0x80, 0xA0}, 1);
+    }
+#endif
+
     return false;
 }
 
@@ -1513,9 +1534,10 @@ bool daNpc_Besu_c::setCupAnm(int arg0, int i_attr, f32 i_morf) {
     };
 
     J3DAnmTransform* transform_p = NULL;
+    int reg_r29 = arg0;
     if (mpCupModelMorf != NULL) {
-        if (cupAnmData[arg0][0] > 0) {
-            transform_p = getTrnsfrmKeyAnmP(l_resNameList[cupAnmData[arg0][1]], cupAnmData[arg0][0]);
+        if (cupAnmData[reg_r29][0] > 0) {
+            transform_p = getTrnsfrmKeyAnmP(l_resNameList[cupAnmData[reg_r29][1]], cupAnmData[reg_r29][0]);
         }
 
         if (transform_p != NULL && transform_p != mpCupModelMorf->getAnm()) {
@@ -1616,17 +1638,23 @@ void daNpc_Besu_c::changeBtp(int* arg0, int* arg1) {
 
 void daNpc_Besu_c::changeBtk(int* arg0, int* arg1) {
     if (mType == 0x11) {
-        if (*arg0 != 0x16) {
-            return;
+        switch (*arg0) {
+            case 0x16:
+                *arg0 = 0x10;
+                *arg1 = 7;
         }
-
-        *arg0 = 0x10;
-        *arg1 = 7;
     }
 }
 
 int daNpc_Besu_c::selectAction() {
     mNextAction = NULL;
+#if DEBUG
+    if (mpHIO->m.common.debug_mode_ON) {
+        mNextAction = &daNpc_Besu_c::test;
+        return 1;
+    }
+#endif
+
     switch (mType) {
         case 6:
             mNextAction = &daNpc_Besu_c::nurse;
@@ -1638,7 +1666,7 @@ int daNpc_Besu_c::selectAction() {
             mNextAction = &daNpc_Besu_c::nurse;
             break;
         case 14:
-            if (daNpcKakashi_chkSwdTutorialStage() & 0xFF) {
+            if (daNpcKakashi_chkSwdTutorialStage()) {
                 mNextAction = &daNpc_Besu_c::swdTutorial;
             } else {
                 mNextAction = &daNpc_Besu_c::wait;
@@ -1954,7 +1982,8 @@ int daNpc_Besu_c::cutConversationAboutWoodSwd(int arg0) {
         case 1: {
             if (talkProc(NULL, 0, speakers, 0)) {
                 int ev_id;
-                switch (mFlow.getEventId(&ev_id)) {
+                int event_id = mFlow.getEventId(&ev_id);
+                switch (event_id) {
                     case 2: {
                         dStage_changeScene(0xC, 0.0f, 0U, fopAcM_GetRoomNo(this), 0, -1);
                         break;
@@ -2669,7 +2698,7 @@ int daNpc_Besu_c::wait(void* param_0) {
                     attention_info.flags = 0;
                 } else {
                     u8 var_r28 = 0;
-                    if (daNpcKakashi_chkSwdTutorialStage() & 0xFF) {
+                    if (daNpcKakashi_chkSwdTutorialStage()) {
                         mPlayerActorMngr.remove();
                     } else {
                         if (mType == 11 || mType == 17) {
@@ -2725,7 +2754,7 @@ int daNpc_Besu_c::wait(void* param_0) {
                                 mMode = 1;
                             }
                             attention_info.flags = 0;
-                        } else if (daNpcKakashi_chkSwdTutorialStage() & 0xFF) {
+                        } else if (daNpcKakashi_chkSwdTutorialStage()) {
                             mJntAnm.lookPlayer(0);
                         } else if (mTwilight == 0) {
                             srchPlayerActor();
@@ -2946,7 +2975,7 @@ int daNpc_Besu_c::giveHotWater(void* param_0) {
     return 1;
 }
 
-int daNpc_Besu_c::talk(void* param_0) {
+int daNpc_Besu_c::talk(void*) {
     switch (mMode) {
         case 0:
         case 1: {
@@ -2988,6 +3017,26 @@ int daNpc_Besu_c::talk(void* param_0) {
     }
 
     return 0;
+}
+
+BOOL daNpc_Besu_c::test(void*) {
+    switch(mMode) {
+    case 0:
+    case 1:
+        speedF = 0.0f;
+        speed.setall(0.0f);
+        mMode = 2;
+        // fallthrough
+    case 2:
+        mFaceMotionSeqMngr.setNo(mpHIO->m.common.face_expression, -1.0f, 0, 0);
+        mMotionSeqMngr.setNo(mpHIO->m.common.motion, -1.0f, 0, 0);
+        mJntAnm.lookNone(0);
+        attention_info.flags = 0;
+        break;
+    case 3:
+        break;
+    }
+    return 1;
 }
 
 static int daNpc_Besu_Create(void* i_this) {

@@ -718,10 +718,10 @@ static int useHeapIe_fst(fopAc_ac_c* i_this) {
     return 1;
 }
 
-static cPhs__Step daE_Fs_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daE_Fs_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, e_fs_class);
     e_fs_class* _this = (e_fs_class*)(i_this);
-    cPhs__Step step = (cPhs__Step)dComIfG_resLoad(&_this->mPhase, "E_FS");
+    cPhs_Step step = dComIfG_resLoad(&_this->mPhase, "E_FS");
 
     if (step == cPhs_COMPLEATE_e) {
         _this->field_0x5b4 = fopAcM_GetParam(_this) & 0xff;

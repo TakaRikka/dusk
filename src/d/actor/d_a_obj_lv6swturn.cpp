@@ -20,11 +20,11 @@ daObjLv6SwTurn_HIO_c::daObjLv6SwTurn_HIO_c() {
 }
 
 void daObjLv6SwTurn_HIO_c::genMessage(JORMContext* context) {
-    context->genLabel("Ｌｖ６回転スイッチ", 0, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("タメ時間（初回）", &mWaitTime, 0, 100, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("タメ時間（連続）", &mChargeTime, 0, 100, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genSlider("回転時間", &mRotationTime, 0, 500, 0, NULL, -1, -1, 0x200, 0x18);
-    context->genCheckBox("チェック描画", &mDrawFlag, 1, 0, NULL, -1, -1, 0x200, 0x18);
+    context->genLabel("Ｌｖ６回転スイッチ", 0);
+    context->genSlider("タメ時間（初回）", &mWaitTime, 0, 100);
+    context->genSlider("タメ時間（連続）", &mChargeTime, 0, 100);
+    context->genSlider("回転時間", &mRotationTime, 0, 500);
+    context->genCheckBox("チェック描画", &mDrawFlag, 0x1);
 }
 #endif
 

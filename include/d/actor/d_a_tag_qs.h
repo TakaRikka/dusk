@@ -17,7 +17,7 @@ public:
     int execute();
     int draw();
 
-    u8 getType() { return fopAcM_GetParamBit(this, 0, 1); }
+    u32 getType() { return fopAcM_GetParamBit(this, 0, 1); }
     int getSwNo() { return fopAcM_GetParamBit(this, 1, 8); }
 
     /* 0x568 */ f32 field_0x568;

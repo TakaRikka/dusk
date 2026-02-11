@@ -1,7 +1,7 @@
 #ifndef OBJECT_ID_H
 #define OBJECT_ID_H
 
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 namespace JStudio {
 namespace object {

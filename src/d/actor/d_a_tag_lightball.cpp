@@ -17,7 +17,7 @@ void daTagLightBall_c::setBaseMtx() {
 
 int daTagLightBall_c::Create() {
     initBaseMtx();
-    u8 swbit = getSwBit();
+    u8 swbit = getSwbit();
     if (fopAcM_GetRoomNo(this) == 7) {
         if (!fopAcM_isSwitch(this, 70)) {
             fopAcM_offSwitch(this, swbit);
@@ -56,7 +56,7 @@ int daTagLightBall_c::create() {
 }
 
 int daTagLightBall_c::execute() {
-    u8 swbit = getSwBit();
+    u8 swbit = getSwbit();
     if (swbit != 0xFF) {
         if (getType() == 15) {
             if (field_0x57c && !fopAcM_isSwitch(this, swbit)) {
@@ -102,11 +102,14 @@ static int daTagLightBall_Execute(daTagLightBall_c* i_this) {
 }
 
 static int daTagLightBall_Delete(daTagLightBall_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
 static int daTagLightBall_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagLightBall_c*>(i_this)->create();
+    daTagLightBall_c* lightBall = static_cast<daTagLightBall_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return lightBall->create();
 }
 
 static actor_method_class l_daTagLightBall_Method = {

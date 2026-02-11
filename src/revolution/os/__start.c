@@ -1,5 +1,5 @@
-#include "revolution/revolution.h"
-#include "revolution/os/OSHardware.h"
+#include <revolution/revolution.h>
+#include <revolution/os/OSHardware.h>
 #include "__ppc_eabi_linker.h"
 
 extern void InitMetroTRK();

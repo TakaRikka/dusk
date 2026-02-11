@@ -99,7 +99,7 @@ public:
     typedef int (daNpc_Kolinb_c::*actionFunc)(void*);
 
     ~daNpc_Kolinb_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

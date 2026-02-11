@@ -139,7 +139,7 @@ const daNpc_yamiS_HIOParam daNpc_yamiS_Param_c::m = {
 
 static NPC_YAMIS_HIO_CLASS l_HIO;
 
-cPhs__Step daNpc_yamiS_c::create() {
+cPhs_Step daNpc_yamiS_c::create() {
     daNpcT_ct(this, daNpc_yamiS_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData,
               4, l_motionSequenceData, 4, l_evtList, l_resNameList);
 
@@ -147,7 +147,7 @@ cPhs__Step daNpc_yamiS_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x3540)) {
             return cPhs_ERROR_e;
@@ -232,7 +232,7 @@ int daNpc_yamiS_c::CreateHeap() {
 }
 
 int daNpc_yamiS_c::Delete() {
-    fpc_ProcID reg_r30 = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_YAMIS");
     this->~daNpc_yamiS_c();
     return 1;
 }

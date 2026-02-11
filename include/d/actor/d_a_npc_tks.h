@@ -73,7 +73,7 @@ public:
 
     daNpcTks_c();
     ~daNpcTks_c();
-    cPhs__Step Create();
+    cPhs_Step Create();
     int CreateHeap();
     int Delete();
     int Execute();

@@ -11,7 +11,26 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_horse.h"
 
+class daTagHjump_HIO_c : public mDoHIO_entry_c {
+public:
+    daTagHjump_HIO_c();
+
+    void genMessage(JORMContext*);
+
+    f32 depth;
+    f32 height;
+};
+
 static char const l_arcName[] = "Hfence";
+
+#if DEBUG
+daTagHjump_HIO_c l_HIO;
+
+void daTagHjump_HIO_c::genMessage(JORMContext* ctx) {
+    ctx->genSlider("高さ", &height, 0.0f, 500.0f);
+    ctx->genSlider("奥行き", &depth, 0.0f, 1000.0f);
+}
+#endif
 
 int daTagHjump_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
@@ -43,7 +62,7 @@ int daTagHjump_c::create() {
 
             if (phase == cPhs_COMPLEATE_e) {
                 fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-                tevStr.room_no = fopAcM_GetRoomNo(this);
+                tevStr.room_no = (int)fopAcM_GetRoomNo(this);
 
                 mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
                 mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -60,6 +79,11 @@ int daTagHjump_c::create() {
 
                 fopAcM_SetMin(this, -scale.x, 0.0f, -50.0f);
                 fopAcM_SetMax(this, scale.x, 200.0f, 50.0f);
+
+#if DEBUG
+                // "Horse jumping fence"
+                l_HIO.entryHIO("馬ジャンプ柵");
+#endif
 
                 field_0x5ae = 0x2000;
                 fopAcM_setCullSizeFar(this, 5.0f);
@@ -85,23 +109,41 @@ int daTagHjump_c::create() {
     return phase;
 }
 
+daTagHjump_HIO_c::daTagHjump_HIO_c() {
+    height = 350.0f;
+    depth = 400.0f;
+}
+
 static int daTagHjump_Create(fopAc_ac_c* i_this) {
-    return static_cast<daTagHjump_c*>(i_this)->create();
+    daTagHjump_c* hJump = static_cast<daTagHjump_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return hJump->create();
 }
 
 daTagHjump_c::~daTagHjump_c() {
     if (mType != TYPE_TRIGGER_e) {
         dComIfG_resDelete(&mPhase, l_arcName);
+
+#if DEBUG
+       l_HIO.removeHIO();
+#endif
     }
 }
 
 static int daTagHjump_Delete(daTagHjump_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->MoveBGDelete();
     i_this->~daTagHjump_c();
     return 1;
 }
 
 int daTagHjump_c::execute() {
+#if DEBUG
+    if (mType != 0) {
+        scale.y = l_HIO.height;
+        scale.z = l_HIO.depth;
+    }
+#endif
     daHorse_c* horse_p = dComIfGp_getHorseActor();
 
     if (horse_p != NULL &&

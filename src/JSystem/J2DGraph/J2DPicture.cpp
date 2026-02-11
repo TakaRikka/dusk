@@ -7,7 +7,7 @@
 #include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JUtility/JUTResource.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
-#include "dolphin/gx.h"
+#include <dolphin/gx.h>
 
 J2DPicture::J2DPicture() : mPalette(NULL) {
     for (u32 i = 0; i < 2; i++) {

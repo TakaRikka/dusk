@@ -12,6 +12,8 @@
 int daTagLv2PrChk_c::Create() {
     mSwbit2 = getSwbit2();
     if (mSwbit2 == 0xFF) {
+        // "Boomerang puzzle monitoring tag: switch 2 is not specified"
+        OS_REPORT("\x1b[43;30mブーメランネタ監視タグ：スイッチ２の指定がありません\n\x1b[m");
         return 0;
     }
 
@@ -20,6 +22,9 @@ int daTagLv2PrChk_c::Create() {
     } else {
         mAction = ACTION_CHECK_e;
     }
+
+    // "Boomerang puzzle monitoring tag: switch 1 <%d> switch 2 <%d>"
+    OS_REPORT("ブーメランネタ監視タグ：スイッチ１<%d>スイッチ２<%d>\n", getSwbit(), getSwbit2());
 
     return 1;
 }
@@ -120,6 +125,8 @@ void daTagLv2PrChk_c::actionCheck() {
     case MODE_PUZZLE_CLEAR:
         fopAcM_onSwitch(this, getSwbit());
         mAction = ACTION_END_e;
+        // "Boomerang puzzle monitoring tag: SW<%d> was turned on"
+        OS_REPORT("ブーメランネタ監視タグ：ＳＷ<%d>オンしました\n", getSwbit());
         break;
     case MODE_CHECK_RESET:
         if (!switch_1 && !switch_2 && !switch_3 && !switch_4) {
@@ -151,6 +158,8 @@ void daTagLv2PrChk_c::actionEnd() {}
 
 void daTagLv2PrChk_c::seStartWrong() {
     Z2GetAudioMgr()->seStart(Z2SE_SYS_RESULT_WRONG, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    // "♪ Wrong answer!!!!"
+    OS_REPORT("♪ハズレ！！！！\n");
 }
 
 int daTagLv2PrChk_c::_delete() {
@@ -162,10 +171,12 @@ static int daTagLv2PrChk_Execute(daTagLv2PrChk_c* i_this) {
 }
 
 static int daTagLv2PrChk_Delete(daTagLv2PrChk_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->_delete();
 }
 
 static int daTagLv2PrChk_Create(daTagLv2PrChk_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     return i_this->create();
 }
 

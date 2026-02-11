@@ -1,7 +1,7 @@
 #ifndef JUTASSERT_H
 #define JUTASSERT_H
 
-#include "dolphin/os.h"
+#include <dolphin/os.h>
 
 #if DEBUG
 #define JUT_SHOW_ASSERT(LINE, COND) JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, #COND)

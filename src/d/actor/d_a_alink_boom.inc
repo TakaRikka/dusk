@@ -94,9 +94,12 @@ bool daAlink_c::checkBoomerangChargeEnd() {
 }
 
 BOOL daAlink_c::checkBoomerangCarry(fopAc_ac_c* i_grabActor) {
-    if (checkNoResetFlg0(FLG0_UNK_20) && !checkEventRun() && !checkWolf() &&
-        checkModeFlg(0x10000000) &&
-        (checkHorseNoUpperAnime() || checkHorseTurnAnime() || checkBoomerangThrowAnime())) {
+    if (checkNoResetFlg0(FLG0_UNK_20)
+        && !checkEventRun()
+        && !checkWolf()
+        && checkModeFlg(0x10000000)
+        && (checkHorseNoUpperAnime() || checkHorseTurnAnime() || checkBoomerangThrowAnime()))
+    {
         deleteEquipItem(FALSE, FALSE);
         seStartOnlyReverb(JA_SE_LK_BOOM_CATCH);
         offNoResetFlg0(FLG0_UNK_20);
@@ -110,13 +113,12 @@ BOOL daAlink_c::checkBoomerangCarry(fopAc_ac_c* i_grabActor) {
     return 0;
 }
 
-void daAlink_c::initBoomerangUpperAnimeSpeed(int param_0) {
+void daAlink_c::initBoomerangUpperAnimeSpeed(BOOL param_0) {
     if (!checkBoomerangThrowAnime()) {
-        if (param_0 != 0) {
-            f32 tmp = 0.0f;
-            mUpperFrameCtrl[2].setRate(tmp);
-            mUpperFrameCtrl[2].setFrame(tmp);
-            getNowAnmPackUpper(UPPER_2)->setFrame(tmp);
+        if (param_0) {
+            mUpperFrameCtrl[2].setRate(0.0f);
+            mUpperFrameCtrl[2].setFrame(0.0f);
+            getNowAnmPackUpper(UPPER_2)->setFrame(0.0f);
         } else {
             mUpperFrameCtrl[2].setRate(mpHIO->mItem.mBoomerang.m.mIdleAnmSpeed);
         }
@@ -129,37 +131,36 @@ BOOL daAlink_c::checkBoomerangAnime() const {
 
 BOOL daAlink_c::checkBoomerangThrowAnime() const {
     return (mEquipItem == fpcNm_ITEM_BOOMERANG || checkNoResetFlg1(FLG1_UNK_2) || mEquipItem == 0x102) &&
-           checkUpperAnime(0x53);
+           checkUpperAnime(dRes_ID_ALANM_BCK_BOOMTHROW_e);
 }
 
 void daAlink_c::setBoomerangReadyQuake() {
-    f32 tmp_0 = 0.0f;
-    dComIfGp_getVibration().StartQuake(1, 1, cXyz(tmp_0, 1.0f, tmp_0));
+    dComIfGp_getVibration().StartQuake(VIBMODE_Q_POWER1, 1, cXyz(0.0f, 1.0f, 0.0f));
 
     onNoResetFlg3(FLG3_UNK_4);
     mItemVar0.field_0x3018 = mpHIO->mItem.mBoomerang.m.mChargeTime;
 }
 
 void daAlink_c::setBoomerangReadyAnime() {
-    f32 var_f31;
-    if (checkAttentionLock()) {
-        var_f31 = mpHIO->mItem.mBoomerang.m.mIdleAnmSpeed;
+    f32 anm_speed;
+    if (!checkAttentionLock()) {
+        anm_speed = 0.0f;
     } else {
-        var_f31 = 0.0f;
+        anm_speed = mpHIO->mItem.mBoomerang.m.mIdleAnmSpeed;
     }
 
-    setUpperAnimeBaseSpeed(0x54, var_f31, 3.0f);
+    setUpperAnimeBaseSpeed(dRes_ID_ALANM_BCK_BOOMWAIT_e, anm_speed, 3.0f);
     setBoomerangReadyQuake();
 }
 
 void daAlink_c::setThrowBoomerangAnime() {
-    setUpperAnimeParam(0x53, UPPER_2, &mpHIO->mItem.mBoomerang.m.mThrowAnm);
+    setUpperAnimeParam(dRes_ID_ALANM_BCK_BOOMTHROW_e, UPPER_2, &mpHIO->mItem.mBoomerang.m.mThrowAnm);
     cancelItemUseQuake(0);
 }
 
 void daAlink_c::setBoomerangCatchAnime() {
-    setUpperAnimeParam(0x52, UPPER_2, &mpHIO->mItem.mBoomerang.m.mCatchAnm);
-    setFacePriBck(0xE8);
+    setUpperAnimeParam(dRes_ID_ALANM_BCK_BOOMCATCH_e, UPPER_2, &mpHIO->mItem.mBoomerang.m.mCatchAnm);
+    setFacePriBck(dRes_ID_ALANM_BCK_FAT_e);
     field_0x2f97 = 254;
 
     if (mEquipItem != fpcNm_ITEM_COPY_ROD) {
@@ -234,12 +235,20 @@ void daAlink_c::throwBoomerang() {
 int daAlink_c::returnBoomerang(int param_0) {
     dComIfGp_clearPlayerStatus0(0, 0x400000);
 
-    if (mEquipItem == fpcNm_ITEM_NONE && !checkMagneBootsOn() && mItemAcKeep.getActor() == NULL &&
-        !checkBoardRide() && !checkBoarRide() && !checkWolf() &&
-        (mProcID != PROC_HANG_READY || field_0x3198 != 3) && (!checkEventRun() || param_0 != 0) &&
-        (checkNoUpperAnime() || checkPlayerGuard() || checkHorseTurnAnime() ||
-         checkDashDamageAnime() || checkBoomerangAnime()) &&
-        !checkModeFlg(0x1BD0810)) {
+    if (mEquipItem == fpcNm_ITEM_NONE
+        && !checkMagneBootsOn()
+        && mItemAcKeep.getActor() == NULL
+        #if !PLATFORM_SHIELD
+        && !checkBoardRide()
+        && !checkBoarRide()
+        #endif
+        && !checkWolf()
+        && (mProcID != PROC_HANG_READY || field_0x3198 != 3)
+        && (!checkEventRun() || param_0 != 0)
+        && (checkNoUpperAnime() || checkPlayerGuard() || checkHorseTurnAnime() ||
+            checkDashDamageAnime() || checkBoomerangAnime())
+        && !checkModeFlg(0x1BD0810))
+    {
         mItemAcKeep = mThrowBoomerangAcKeep;
         mThrowBoomerangAcKeep.clearData();
 
@@ -247,8 +256,7 @@ int daAlink_c::returnBoomerang(int param_0) {
         field_0x2f94 = 2;
         onNoResetFlg0(FLG0_UNK_20);
 
-        f32 tmp_0 = 0.0f;
-        dComIfGp_getVibration().StartShock(1, 1, cXyz(tmp_0, 1.0f, tmp_0));
+        dComIfGp_getVibration().StartShock(VIBMODE_S_POWER1, 1, cXyz(0.0f, 1.0f, 0.0f));
         return 1;
     }
 
@@ -349,7 +357,7 @@ void daAlink_c::setBoomerangSight() {
 
         daBoomerang_c* boomerang = (daBoomerang_c*)mItemAcKeep.getActor();
         if (boomerang->getLockReserve() || (check_line && !boomerang->getLockCntMax())) {
-            setItemActionButtonStatus(0x10);
+            setItemActionButtonStatus(BUTTON_STATUS_LOCK);
             itemActionTrigger();
         }
     }
@@ -376,7 +384,7 @@ int daAlink_c::procBoomerangSubject() {
     }
 
     if (checkBoomerangReadyAnime()) {
-        setDoStatus(0x12);
+        setDoStatus(BUTTON_STATUS_BACK);
     }
 
     setShapeAngleToAtnActor(0);
@@ -414,14 +422,14 @@ int daAlink_c::procBoomerangMove() {
     }
 
     if (!checkNextAction(0)) {
-        f32 var_f31 = -1.0f;
+        f32 morf = -1.0f;
 
         if (checkZeroSpeedF()) {
             onModeFlg(1);
 
             if (field_0x2f98 != 3) {
                 field_0x2f98 = 3;
-                var_f31 = mpHIO->mBasic.m.mBasicInterpolation;
+                morf = mpHIO->mBasic.m.mBasicInterpolation;
             }
         } else {
             offModeFlg(1);
@@ -432,7 +440,7 @@ int daAlink_c::procBoomerangMove() {
             }
         }
 
-        setBlendAtnMoveAnime(var_f31);
+        setBlendAtnMoveAnime(morf);
         setBodyAngleXReadyAnime(0);
     }
 
@@ -459,7 +467,7 @@ int daAlink_c::procBoomerangCatch() {
         onModeFlg(4);
     }
 
-    if (frameCtrl->checkAnmEnd()) {
+    if (checkAnmEnd(frameCtrl)) {
         resetUpperAnime(UPPER_2, -1.0f);
         checkNextAction(0);
     } else {

@@ -4,7 +4,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_bg_s_acch.h"
 #include "f_op/f_op_actor.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class dBgW;
 
@@ -64,7 +64,7 @@ public:
     /* 0x840 */ /* vtable */
 
     virtual ~daObj_Bed_c();
-    cPhs__Step create();
+    cPhs_Step create();
     int CreateHeap();
     int Delete();
     int Execute();

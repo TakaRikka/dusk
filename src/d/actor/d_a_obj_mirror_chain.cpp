@@ -477,10 +477,10 @@ void daObjMirrorChain_c::create_init() {
     initBaseMtx();
 }
 
-cPhs__Step daObjMirrorChain_c::create() {
+cPhs_Step daObjMirrorChain_c::create() {
     fopAcM_ct(this, daObjMirrorChain_c);
 
-    cPhs__Step phase_state = (cPhs__Step)dComIfG_resLoad(&mPhaseReq, l_arcName);
+    cPhs_Step phase_state = dComIfG_resLoad(&mPhaseReq, l_arcName);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createSolidHeap, 0x71b0)) {
             return cPhs_ERROR_e;
@@ -491,7 +491,7 @@ cPhs__Step daObjMirrorChain_c::create() {
     return phase_state;
 }
 
-static cPhs__Step daObjMirrorChain_Create(fopAc_ac_c* i_this) {
+static cPhs_Step daObjMirrorChain_Create(fopAc_ac_c* i_this) {
     fopAcM_GetID(i_this);
     return ((daObjMirrorChain_c*)i_this)->create();
 }

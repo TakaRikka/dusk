@@ -274,14 +274,14 @@ daNpc_Kolinb_c::~daNpc_Kolinb_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-cPhs__Step daNpc_Kolinb_c::create() {
+cPhs_Step daNpc_Kolinb_c::create() {
     daNpcT_ct(this, daNpc_Kolinb_c, l_faceMotionAnmData, l_motionAnmData, l_faceMotionSequenceData, 4, l_motionSequenceData, 4, l_evtList, l_resNameList);
 
     mType = getType();
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         OS_REPORT("\t(%s:%d) flowNo:%d, modelType:%02x<%08x> ", fopAcM_getProcNameString(this), mType, mFlowNodeNo, (getModelType() >> 32) & 0xFF, fopAcM_GetParam(this));
 

@@ -2,7 +2,7 @@
 #define JPAFIELDBLOCK_H
 
 #include "JSystem/JGeometry.h"
-#include "dolphin/types.h"
+#include <dolphin/types.h>
 
 class JKRHeap;
 class JPAEmitterWorkData;

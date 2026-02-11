@@ -31,16 +31,16 @@ struct daYkgr_HIO_c : public mDoHIO_entry_c {
 
 #if DEBUG
 void daYkgr_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genLabel("竜の山陽炎HIO", 0, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("アルファ速度", &field_0xc, 0, 255, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genCheckBox("アルファチェック", &field_0x4, 0x01, 0, NULL, 0xFFFF, 0xFFFF, 512, 24);
-    ctx->genSlider("アルファ", &field_0x8, 0, 255, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("INDMTX PARAM", &field_0x10, -17.0f, 47.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("min_param", &field_0x14, -17.0f, 47.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("max_param", &field_0x18, -17.0f, 47.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("default_rate", &field_0x1c, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("outside_range", &field_0x20, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("inside_range", &field_0x24, 0.0f, 10000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genLabel("竜の山陽炎HIO", 0);
+    ctx->genSlider("アルファ速度", &field_0xc, 0, 255);
+    ctx->genCheckBox("アルファチェック", &field_0x4, 0x01);
+    ctx->genSlider("アルファ", &field_0x8, 0, 255);
+    ctx->genSlider("INDMTX PARAM", &field_0x10, -17.0f, 47.0f);
+    ctx->genSlider("min_param", &field_0x14, -17.0f, 47.0f);
+    ctx->genSlider("max_param", &field_0x18, -17.0f, 47.0f);
+    ctx->genSlider("default_rate", &field_0x1c, 0.0f, 1.0f);
+    ctx->genSlider("outside_range", &field_0x20, 0.0f, 10000.0f);
+    ctx->genSlider("inside_range", &field_0x24, 0.0f, 10000.0f);
 }
 #endif
 

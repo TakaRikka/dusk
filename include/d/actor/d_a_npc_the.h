@@ -129,7 +129,7 @@ public:
     BOOL test(void*);
     BOOL EvCut_TwResistance(int);
     BOOL EvCut_Introduction(int);
-    cPhs__Step create();
+    cPhs_Step create();
     void reset();
     /*  inline  */ inline int Draw();
     inline void setParam();

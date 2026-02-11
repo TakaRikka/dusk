@@ -78,22 +78,22 @@ daNpcTkc_HIO_c::daNpcTkc_HIO_c() {
 }
 
 void daNpcTkc_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genSlider("ワープ初期位置", &m.warp_initial_pos, 0.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("下移動速度", &m.down_move_spd, 0.0f, 30.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("上移動速度", &m.up_move_spd, 0.0f, 30.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("回転周期", &m.rotation_interval, 0, 0x7FFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("楕円幅", &m.ellipse_width, 0.0f, 200.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("Step", &m.step, 0.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("飛行範囲", &m.flight_range, 0.0f, 200.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("目標高さ", &m.target_height, 0.0f, 2000.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("振幅", &m.amplitude, -100.0f, 100.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("周期", &m.interval, 0, 0x7FFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("Div", &m.div, 0.0f, 1.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("Max", &m.max, 0.0f, 500.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("Min", &m.min, 0.0f, 300.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("会話距離", &m.conversation_dist, 0.0f, 300.0f, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("X 角度", &m.x_angle, -0x8000, 0x7FFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
-    ctx->genSlider("Z 角度", &m.z_angle, -0x8000, 0x7FFF, 0, NULL, 0xFFFF, 0xFFFF, 0x200, 0x18);
+    ctx->genSlider("ワープ初期位置", &m.warp_initial_pos, 0.0f, 500.0f);
+    ctx->genSlider("下移動速度", &m.down_move_spd, 0.0f, 30.0f);
+    ctx->genSlider("上移動速度", &m.up_move_spd, 0.0f, 30.0f);
+    ctx->genSlider("回転周期", &m.rotation_interval, 0, 0x7FFF);
+    ctx->genSlider("楕円幅", &m.ellipse_width, 0.0f, 200.0f);
+    ctx->genSlider("Step", &m.step, 0.0f, 100.0f);
+    ctx->genSlider("飛行範囲", &m.flight_range, 0.0f, 200.0f);
+    ctx->genSlider("目標高さ", &m.target_height, 0.0f, 2000.0f);
+    ctx->genSlider("振幅", &m.amplitude, -100.0f, 100.0f);
+    ctx->genSlider("周期", &m.interval, 0, 0x7FFF);
+    ctx->genSlider("Div", &m.div, 0.0f, 1.0f);
+    ctx->genSlider("Max", &m.max, 0.0f, 500.0f);
+    ctx->genSlider("Min", &m.min, 0.0f, 300.0f);
+    ctx->genSlider("会話距離", &m.conversation_dist, 0.0f, 300.0f);
+    ctx->genSlider("X 角度", &m.x_angle, -0x8000, 0x7FFF);
+    ctx->genSlider("Z 角度", &m.z_angle, -0x8000, 0x7FFF);
     daNpcF_commonGenMessage(ctx, &m.common);
 }
 #endif
@@ -200,7 +200,7 @@ daNpcTkc_HIOParam const daNpcTkc_Param_c::m = {
     0,
 };
 
-cPhs__Step daNpcTkc_c::Create() {
+cPhs_Step daNpcTkc_c::Create() {
     fopAcM_ct(this, daNpcTkc_c);
 
     if (getType() != TYPE_2) {
@@ -216,8 +216,8 @@ cPhs__Step daNpcTkc_c::Create() {
         }
     }
 
-    cPhs__Step phase = cPhs_ERROR_e;
-    phase = (cPhs__Step)dComIfG_resLoad(&mPhase, l_arcName);
+    cPhs_Step phase = cPhs_ERROR_e;
+    phase = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x2030)) {
             return cPhs_ERROR_e;
@@ -297,7 +297,7 @@ int daNpcTkc_c::CreateHeap() {
 }
 
 int daNpcTkc_c::Delete() {
-    fpc_ProcID id = fopAcM_GetID(this);
+    fopAcM_RegisterDeleteID(this, "NPC_TKC");
     this->~daNpcTkc_c();
     return 1;
 }

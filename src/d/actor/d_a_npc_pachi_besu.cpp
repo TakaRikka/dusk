@@ -542,7 +542,7 @@ daNpc_Pachi_Besu_c::~daNpc_Pachi_Besu_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-cPhs__Step daNpc_Pachi_Besu_c::create() {
+cPhs_Step daNpc_Pachi_Besu_c::create() {
     daNpcT_ct(this, daNpc_Pachi_Besu_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
                        l_evtList, l_resNameList);
@@ -552,7 +552,7 @@ cPhs__Step daNpc_Pachi_Besu_c::create() {
     mFlowNodeNo = getFlowNodeNo();
     mTwilight = false;
 
-    cPhs__Step phase = (cPhs__Step)loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
+    cPhs_Step phase = loadRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0x35B0)) {
             return cPhs_ERROR_e;
@@ -655,15 +655,7 @@ int daNpc_Pachi_Besu_c::Draw() {
         modelData->getMaterialNodePointer(getEyeballMaterialNo())->setMaterialAnm(mpMatAnm[0]);
     }
 
-    return draw(
-#if DEBUG
-        chkAction(&daNpc_Pachi_Besu_c::test),
-#else
-        FALSE,
-#endif
-        FALSE,
-        mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE
-    );
+    return draw(NpcT_CHK_ACTION(daNpc_Pachi_Besu_c), FALSE, mRealShadowSize, NULL, 100.0f, FALSE, FALSE, FALSE);
 }
 
 int daNpc_Pachi_Besu_c::createHeapCallBack(fopAc_ac_c* a_this) {

@@ -38,17 +38,17 @@ daObjDamCps_HIO_c::daObjDamCps_HIO_c() {
 
 void daObjDamCps_HIO_c::genMessage(JORMContext* ctx) {
     // Damage Cylinder
-    ctx->genLabel("ダメージ円柱", 0, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genLabel("ダメージ円柱", 0);
     // Adjustment
-    ctx->genCheckBox("調整", &mAdj, 1, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genCheckBox("調整", &mAdj, 0x1);
     // X Angle
-    ctx->genSlider("Ｘ角度", &mAngle.x, -0x7fff, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("Ｘ角度", &mAngle.x, -0x7fff, 0x7fff);
     // Y Angle
-    ctx->genSlider("Ｙ角度", &mAngle.y, -0x7fff, 0x7fff, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("Ｙ角度", &mAngle.y, -0x7fff, 0x7fff);
     // X Scale
-    ctx->genSlider("Ｘスケール", &mScale.x, 0.0f, 25.5f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("Ｘスケール", &mScale.x, 0.0f, 25.5f);
     // Y Scale
-    ctx->genSlider("Ｙスケール", &mScale.y, 0.0f, 25.5f, 0, NULL, 0xffff, 0xffff, 0x200, 0x18);
+    ctx->genSlider("Ｙスケール", &mScale.y, 0.0f, 25.5f);
 }
 
 void daObjDamCps_c::initBaseMtx() {
@@ -188,7 +188,8 @@ static int daObjDamCps_Delete(daObjDamCps_c* i_this) {
 }
 
 static int daObjDamCps_Create(fopAc_ac_c* i_this) {
-    fopAcM_RegisterCreateID(daObjDamCps_c, i_this, "DamCps");
+    daObjDamCps_c* a_this = (daObjDamCps_c*)i_this;
+    fopAcM_RegisterCreateID(i_this, "DamCps");
     return a_this->create();
 }
 

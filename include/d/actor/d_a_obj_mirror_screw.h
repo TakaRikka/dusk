@@ -39,7 +39,7 @@ public:
     void executeWait();
     void initDown();
     void executeDown();
-    inline cPhs__Step create();
+    inline cPhs_Step create();
     int CreateHeap();
     inline void setBaseMtx();
     inline void initBaseMtx();

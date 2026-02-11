@@ -8,6 +8,10 @@
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_hostIO.h"
 
+#if DEBUG
+#pragma nosyminline on
+#endif
+
 static int fopScn_Draw(scene_class* i_this) {
     int ret = fpcNd_DrawMethod((nodedraw_method_class*)i_this->submethod, i_this);
     return ret;

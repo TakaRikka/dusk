@@ -253,7 +253,7 @@ public:
     int initInvModel(u16, J3DModel**, mDoExt_invisibleModel*, u32);
     int initDemoModel(J3DModel**, char const*, u32);
     int createHeap();
-    cPhs__Step create();
+    cPhs_Step create();
     void allAnimePlay();
     void setMatrix();
     void setBodyPartMatrix();

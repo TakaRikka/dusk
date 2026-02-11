@@ -8,12 +8,19 @@
 #include "d/actor/d_a_tag_escape.h"
 #include "d/d_procname.h"
 
-static int daTagEscape_Create(fopAc_ac_c* i_this) {
-    fopAcM_ct(i_this, daTagEscape_c);
+int daTagEscape_c::create() {
+    fopAcM_ct(this, daTagEscape_c);
     return cPhs_COMPLEATE_e;
 }
 
+static int daTagEscape_Create(fopAc_ac_c* i_this) {
+    daTagEscape_c* escape = static_cast<daTagEscape_c*>(i_this);
+    int id = fopAcM_GetID(i_this);
+    return escape->create();
+}
+
 static int daTagEscape_Delete(daTagEscape_c* i_this) {
+    int id = fopAcM_GetID(i_this);
     i_this->~daTagEscape_c();
     return 1;
 }

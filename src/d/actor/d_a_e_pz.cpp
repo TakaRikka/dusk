@@ -265,14 +265,14 @@ u8 daE_PZ_c::getCutType() {
     case daPy_py_c::CUT_TYPE_NM_STAB:
     case daPy_py_c::CUT_TYPE_NM_RIGHT:
     case daPy_py_c::CUT_TYPE_FINISH_VERTICAL:
-    case daPy_py_c::CUT_TYPE_DASH_UNK_26:
+    case daPy_py_c::CUT_TYPE_DASH_RIGHT:
         return 1;
     case daPy_py_c::CUT_TYPE_NM_LEFT:
     case daPy_py_c::CUT_TYPE_FINISH_LEFT:
     case daPy_py_c::CUT_TYPE_COMBO_STAB:
-    case daPy_py_c::CUT_TYPE_HORSE_UNK_22:
-    case daPy_py_c::CUT_TYPE_HORSE_UNK_23:
-    case daPy_py_c::CUT_TYPE_DASH_UNK_25:
+    case daPy_py_c::CUT_TYPE_HORSE_LEFT_A:
+    case daPy_py_c::CUT_TYPE_HORSE_LEFT_B:
+    case daPy_py_c::CUT_TYPE_DASH_LEFT:
         return 2;
     default:
         return 3;

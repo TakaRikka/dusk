@@ -548,7 +548,7 @@ int daE_ZS_c::create() {
 
         shape_angle.z = 0;
         shape_angle.x = 0;
-        attention_info.distances[2] = 0;
+        attention_info.distances[fopAc_attn_BATTLE_e] = 0;
         daE_ZS_Execute(this);
         mCyl.OffTgSetBit();
         mCyl.OffCoSetBit();
