@@ -58,8 +58,13 @@ int daPPolamp_c::draw() {
     g_env_light.setLightTevColorType_MAJI(mModel1, &tevStr);
     mDoExt_modelUpdateDL(mModel1);
     g_env_light.setLightTevColorType_MAJI(mModel2, &tevStr);
+    #ifdef __MWERKS__
     static J3DGXColorS10 TEV_COLOR_1 = (GXColorS10){0x48, 0x85, 0xff, 0xff};
     static J3DGXColorS10 TEV_COLOR_2 = (GXColorS10){0, 0, 0xff, 0xff};
+    #else
+    static J3DGXColorS10 TEV_COLOR_1 = GXColorS10 {0x48, 0x85, 0xff, 0xff};
+    static J3DGXColorS10 TEV_COLOR_2 = GXColorS10 {0, 0, 0xff, 0xff};
+    #endif
     J3DModelData* modelData = mModel2->getModelData();
     for (u16 i = 0; i < modelData->getMaterialNum(); i++)
     {

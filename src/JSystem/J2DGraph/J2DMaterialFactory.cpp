@@ -178,7 +178,11 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
 }
 
 JUtility::TColor J2DMaterialFactory::newMatColor(int param_0, int param_1) const {
+#ifdef __MWERKS__
     JUtility::TColor local_20 = (GXColor){0xff,0xff,0xff,0xff};
+#else
+    JUtility::TColor local_20 = GXColor{0xff,0xff,0xff,0xff};
+#endif
     J2DMaterialInitData* iVar2 = &field_0x4[field_0x8[param_0]];
     if (iVar2->field_0x8[param_1] != 0xffff) {
         return field_0x10[iVar2->field_0x8[param_1]];

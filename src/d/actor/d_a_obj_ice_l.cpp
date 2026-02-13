@@ -14,7 +14,7 @@
 #include "d/d_s_play.h"
 #include <cmath>
 
-f32 dummyLiteral() {
+static f32 dummyLiteral() {
     return 0.0f;
 }
 

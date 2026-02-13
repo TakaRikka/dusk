@@ -25,9 +25,10 @@ elseif (MSVC)
     add_compile_options(/bigobj)
     add_compile_options(/Zc:strictStrings-)
 endif ()
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error -Wno-c++11-narrowing")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error -Wno-c++11-narrowing")
-
+if (NOT MSVC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error -Wno-c++11-narrowing")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error -Wno-c++11-narrowing")
+endif ()
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
 set(DOLZEL_FILES
@@ -1353,6 +1354,7 @@ set(DUSK_FILES
     src/dusk/mtx.cpp
     src/dusk/J3DTransforms_C.cpp
     src/dusk/m_Do_ext_dusk.cpp
+	src/dusk/jsystem_stubs.cpp
     )
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES})

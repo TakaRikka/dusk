@@ -1,7 +1,7 @@
 #ifndef J3DSHAPETABLE_H
 #define J3DSHAPETABLE_H
 
-#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/J3DAssert.h"
 
 class J3DVertexData;
 struct J3DDrawMtxData;

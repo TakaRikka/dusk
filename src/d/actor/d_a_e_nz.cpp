@@ -129,7 +129,7 @@ static int daE_NZ_Draw(e_nz_class* i_this) {
     return 1;
 }
 
-bool hio_set;
+static bool hio_set;
 
 static daE_NZ_HIO_c l_HIO;
 

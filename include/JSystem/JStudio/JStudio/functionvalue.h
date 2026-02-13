@@ -333,7 +333,11 @@ public:
             return r1.pf_ == r2.pf_;
         }
 
+#ifdef __MWERKS__
         f32 operator*() {
+#else
+        f32 operator*() const {
+#endif
             // this guard is required - removing it breaks float regalloc in std::upper_bound
             #if DEBUG
             JUT_ASSERT(947, pf_!=NULL);
@@ -444,7 +448,11 @@ public:
             return r1.pf_ == r2.pf_;
         }
 
+#ifdef __MWERKS__
         f32 operator*() {
+#else
+        f32 operator*() const {
+#endif
 #if DEBUG
             JUT_ASSERT(1098, pf_!=NULL);
 #endif

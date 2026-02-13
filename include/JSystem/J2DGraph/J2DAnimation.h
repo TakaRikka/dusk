@@ -527,6 +527,32 @@ inline f32 J2DHermiteInterpolation(__REGISTER f32 pp1, __REGISTER s16* pp2, __RE
     }
     // clang-format on
     return fout;
+#else 
+    f32 time1 = (f32)*pp2;
+    f32 value1 = (f32)*pp3;
+    f32 tangent1 = (f32)*pp4;
+    f32 time2 = (f32)*pp5;
+    f32 value2 = (f32)*pp6;
+    f32 tangent2 = (f32)*pp7;
+
+    f32 duration = time2 - time1;
+    f32 t = (pp1 - time1) / duration;
+    f32 t2 = t * t;
+
+    f32 dv = value2 - value1;
+    f32 ff4 = dv - duration * tangent1;
+
+    f32 ff0 = tangent2 * duration + value1;
+    ff0 = ff0 - value2;
+    ff0 = ff0 - ff4;
+    ff0 = t2 * ff0;
+
+    f32 fout = duration * tangent1 + ff0;
+    fout = fout * t + value1;
+    fout = ff4 * t2 + fout;
+    fout = fout - ff0;
+
+    return fout;
 #endif
 }
 

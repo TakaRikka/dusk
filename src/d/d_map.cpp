@@ -694,14 +694,16 @@ GXColor* renderingAmap_c::getLineColor(int param_0, int param_1) {
 
     if (param_1 == 4) {
         switch (field_0x3c) {
-        case 0:
+        case 0: {
             static const GXColor borderColor0 = {0xB4, 0x00, 0x00, 0x00};
             *color = borderColor0;
             break;
-        case 1:
+        }
+        case 1: {
             static const GXColor borderColor1 = {0xB8, 0x00, 0x00, 0x00};
             *color = borderColor1;
             break;
+        }
         default:
             JUT_ASSERT(1636, FALSE);
             break;

@@ -127,7 +127,7 @@ static f32 dummy_117095() {
 }
 #endif
 
-bool hio_set;
+static bool hio_set;
 
 static daE_FB_HIO_c l_HIO;
 

@@ -146,7 +146,7 @@ int daObj_Maki_Delete(obj_maki_class* i_this) {
     return 1;
 }
 
-int useHeapInit(fopAc_ac_c* i_this) {
+static int useHeapInit(fopAc_ac_c* i_this) {
     obj_maki_class* a_this = (obj_maki_class*)i_this;
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Obj_maki", 4);

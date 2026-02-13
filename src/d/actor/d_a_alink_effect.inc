@@ -1246,7 +1246,7 @@ void daAlink_c::setWolfDigEffect() {
         } else if (field_0x3198 == 7) {
             var_r29 = 0;
             var_r28 = ID_ZI_J_DASHWTRA_C;
-            setEmitterPolyColor(&field_0x32cc, ID_ZI_J_DASHWTRA_A, mPolyInfo2, &field_0x37d4, &sp18);
+            setEmitterPolyColor((u32*)&field_0x32cc, ID_ZI_J_DASHWTRA_A, mPolyInfo2, &field_0x37d4, &sp18);
             setEmitterPolyColor(&field_0x31bc, ID_ZI_J_DASHWTRA_B, mPolyInfo2, &field_0x37d4, &sp18);
         } else {
             var_r29 = 0;
@@ -1281,7 +1281,7 @@ void daAlink_c::setWolfSwimEndEffect(JPABaseEmitter** param_0, JPABaseEmitter** 
         var_r30 = 1;
     }
 
-    *param_0 = setEmitterColor(&field_0x32cc, name0[var_r30], &field_0x37c8, &shape_angle);
+    *param_0 = setEmitterColor((u32*)&field_0x32cc, name0[var_r30], &field_0x37c8, &shape_angle);
 
     if (var_r30 != 0) {
         *param_1 = setEmitterColor(&field_0x31bc, name1[var_r30], &field_0x37c8, &shape_angle);

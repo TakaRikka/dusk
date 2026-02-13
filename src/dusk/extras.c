@@ -1,9 +1,9 @@
 #include "dusk/extras.h"
 #include <ctype.h>
 #include <string.h>
-#include <strings.h>
 #include <stdint.h>
 
+#ifndef _MSC_VER
 int stricmp(const char* str1, const char* str2) {
 	char a_var;
 	char b_var;
@@ -46,6 +46,7 @@ int strnicmp(const char* str1, const char* str2, int n) {
 
     return 0;
 }
+#endif
 
 
 void *_memcpy(void* dest, void const* src, int n) {

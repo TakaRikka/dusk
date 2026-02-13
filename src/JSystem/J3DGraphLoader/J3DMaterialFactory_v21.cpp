@@ -167,7 +167,11 @@ J3DMaterial* J3DMaterialFactory_v21::create(J3DMaterial* i_material, int i_idx, 
 }
 
 J3DGXColor J3DMaterialFactory_v21::newMatColor(int i_idx, int i_no) const {
+    #ifdef __MWERKS__
     J3DGXColor defaultColor = (GXColor){0xff, 0xff, 0xff, 0xff};
+    #else
+    J3DGXColor defaultColor = GXColor{0xff, 0xff, 0xff, 0xff};
+    #endif
     J3DMaterialInitData_v21* mtl_init_data = &mpMaterialInitData[mpMaterialID[i_idx]];
     if (mtl_init_data->mMatColorIdx[i_no] != 0xffff) {
         return J3DGXColor(mpMatColor[mtl_init_data->mMatColorIdx[i_no]]);
@@ -262,7 +266,11 @@ J3DGXColorS10 J3DMaterialFactory_v21::newTevColor(int i_idx, int i_no) const {
 }
 
 J3DGXColor J3DMaterialFactory_v21::newTevKColor(int i_idx, int param_1) const {
+    #ifdef __MWERKS__ 
     J3DGXColor defaultColor = (GXColor){0xff, 0xff, 0xff, 0xff};
+    #else
+    J3DGXColor defaultColor = GXColor{0xff, 0xff, 0xff, 0xff};
+    #endif
     J3DMaterialInitData_v21* mtl_init_data = &mpMaterialInitData[mpMaterialID[i_idx]];
     if (mtl_init_data->mTevKColorIdx[param_1] != 0xffff) {
         return J3DGXColor(mpTevKColor[mtl_init_data->mTevKColorIdx[param_1]]);

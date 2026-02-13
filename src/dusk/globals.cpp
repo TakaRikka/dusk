@@ -12,5 +12,10 @@ u32 __OSFpscrEnableBits;
 GDLObj* __GDCurrentDL;
 
 // DSP
+#include <dolphin/dsp.h>
 DSPTaskInfo* __DSP_first_task;
 DSPTaskInfo* __DSP_curr_task;
+
+// mDo_dvd
+#include <m_Do/m_Do_dvd_thread.h>
+u8 mDoDvdThd::DVDLogoMode;

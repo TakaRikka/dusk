@@ -116,7 +116,7 @@ static int l_bmdData[2][2] = {
     {11, 1}, {5, 2},
 };
 
-daNpcT_evtData_c l_evtList[15] = {
+static daNpcT_evtData_c l_evtList[15] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE", 0},

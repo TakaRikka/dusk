@@ -264,7 +264,7 @@ void daTag_Msg_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-void dummyString() {
+static void dummyString() {
     DEAD_STRING("Timer");
 }
 

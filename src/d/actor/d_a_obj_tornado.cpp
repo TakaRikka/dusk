@@ -216,7 +216,7 @@ static int daObjTrnd_Create(daObjTrnd_c* i_this) {
     return i_this->create();
 }
 
-void dummyString() {
+static void dummyString() {
     DEAD_STRING("");
 }
 

@@ -3,7 +3,7 @@
 
 #include <dolphin/types.h>
 
-class JASTrack;
+struct JASTrack;
 
 /**
  * @ingroup jsystem-jaudio

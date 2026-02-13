@@ -68,7 +68,7 @@ public:
     } id_;
 };
 
-class JASTrack;
+struct JASTrack;
 
 /**
  * @ingroup jsystem-jaudio
@@ -250,7 +250,7 @@ public:
 
 class JAISoundHandle;
 class JAIAudible;
-class JAIAudience;
+struct JAIAudience;
 class JAISe;
 class JAISeq;
 class JAISoundChild;
