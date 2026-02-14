@@ -89,7 +89,7 @@ void daObjSakuita_c::setBaseMtx() {
     cMtx_copy(mDoMtx_stack_c::get(), mMtx);
 }
 
-f32 dummyLiteral() { return 0.5f; }
+static f32 dummyLiteral() { return 0.5f; }
 
 void daObjSakuita_c::setPlatePos() {
     cXyz cStack_24;

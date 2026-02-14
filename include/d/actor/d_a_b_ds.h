@@ -332,8 +332,6 @@ private:
     /* 0x2EDC */ dMsgFlow_c mMsgFlow;
 };
 
-cXyz daB_DS_c::getHandPosR() { return mHandPos[1]; }
-cXyz daB_DS_c::getHandPosL() { return mHandPos[0]; }
 
 STATIC_ASSERT(sizeof(daB_DS_c) == 0x2F28);
 

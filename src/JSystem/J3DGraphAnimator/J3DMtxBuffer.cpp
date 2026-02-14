@@ -15,11 +15,11 @@ Mtx* J3DMtxBuffer::sNoUseDrawMtxPtr = &J3DMtxBuffer::sNoUseDrawMtx;
 Mtx33* J3DMtxBuffer::sNoUseNrmMtxPtr = &J3DMtxBuffer::sNoUseNrmMtx;
 
 // force .sdata2 order
-f32 dummy1() {
+static f32 dummy1() {
     return 1.0f;
 }
 
-f32 dummy0() {
+static f32 dummy0() {
     return 0.0f;
 }
 

@@ -209,7 +209,7 @@ daNpc_Uri_c::cutFunc daNpc_Uri_c::mCutList[7] = {
     &daNpc_Uri_c::cutMeetingAgain,
 };
 
-NPC_URI_HIO_CLASS l_HIO;
+static NPC_URI_HIO_CLASS l_HIO;
 
 daNpc_Uri_c::~daNpc_Uri_c() {
     if (mpMorf[0] != 0) {

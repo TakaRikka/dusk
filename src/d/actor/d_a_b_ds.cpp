@@ -5426,6 +5426,10 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     return static_cast<daB_DS_c*>(i_this)->CreateHeap();
 }
 
+
+cXyz daB_DS_c::getHandPosR() { return mHandPos[1]; }
+cXyz daB_DS_c::getHandPosL() { return mHandPos[0]; }
+
 cPhs_Step daB_DS_c::create() {
     fopAcM_ct(this, daB_DS_c);
 

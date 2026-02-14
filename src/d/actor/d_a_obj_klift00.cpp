@@ -109,7 +109,7 @@ static const int l_dzbidx[] = {9};
 #endif
 
 // force dCcD_Sph::~dCcD_Sph to be emitted earlier than it otherwise would
-void dummy() {
+static void dummy() {
     delete (dCcD_Sph*)NULL;
     delete (dCcD_Cyl*)NULL;
 }

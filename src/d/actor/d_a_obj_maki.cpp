@@ -146,7 +146,7 @@ int daObj_Maki_Delete(obj_maki_class* i_this) {
     return 1;
 }
 
-int useHeapInit(fopAc_ac_c* i_this) {
+static int useHeapInit(fopAc_ac_c* i_this) {
     obj_maki_class* a_this = (obj_maki_class*)i_this;
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Obj_maki", 4);
@@ -176,7 +176,7 @@ int useHeapInit(fopAc_ac_c* i_this) {
     return 1;
 }
 
-daObj_Maki_HIO_c l_HIO;
+static daObj_Maki_HIO_c l_HIO;
 
 cPhs_Step daObj_Maki_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_maki_class);

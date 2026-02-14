@@ -354,13 +354,13 @@ static BOOL other_bg_check2(e_dn_class* i_this, cXyz* i_pos) {
     return FALSE;
 }
 
-u8 hio_set;
+static u8 hio_set;
 
-daE_DN_HIO_c l_HIO;
+static daE_DN_HIO_c l_HIO;
 
 fopAc_ac_c* target_info[10];
 
-int target_info_count;
+static int target_info_count;
 
 static void* s_b_sub(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && dBomb_c::checkBombActor((fopAc_ac_c*)i_actor) && !((dBomb_c*)i_actor)->checkStateExplode() && target_info_count < 10) {
@@ -2978,7 +2978,7 @@ static void anm_se_set(e_dn_class* i_this) {
     }
 }
 
-int c_start;
+static int c_start;
 
 static int daE_DN_Execute(e_dn_class* i_this) {
     if (i_this->status != 0) {
@@ -3298,9 +3298,9 @@ static int daE_DN_Delete(e_dn_class* i_this) {
     return 1;
 }
 
-Vec jv_offset = { 0.0f, 0.0f, 0.0f };
+static Vec jv_offset = { 0.0f, 0.0f, 0.0f };
 
-dJntColData_c jc_data[12] = {
+static dJntColData_c jc_data[12] = {
     {0, 1, 2, 40.0f, &jv_offset}, {0, 1, 3, 30.0f, &jv_offset},
     {0, 1, 22, 40.0f, &jv_offset}, {0, 1, 11, 15.0f, &jv_offset},
     {0, 1, 12, 10.0f, &jv_offset}, {0, 1, 17, 15.0f, &jv_offset},

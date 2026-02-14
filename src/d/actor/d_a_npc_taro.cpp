@@ -20,7 +20,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include <dolphin/types.h>
 
-daNpc_Maro_c::actionFunc dummy_lit_3931() {
+static daNpc_Maro_c::actionFunc dummy_lit_3931() {
     return &daNpc_Maro_c::choccai;
 }
 

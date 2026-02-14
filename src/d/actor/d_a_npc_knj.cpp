@@ -130,7 +130,7 @@ daNpc_Knj_c::cutFunc daNpc_Knj_c::mCutList[1] = {
     NULL,
 };
 
-NPC_KNJ_HIO_CLASS l_HIO;
+static NPC_KNJ_HIO_CLASS l_HIO;
 
 daNpc_Knj_c::~daNpc_Knj_c() {
     if (heap != NULL) {

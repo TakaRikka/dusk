@@ -129,7 +129,7 @@ daNpc_grA_HIO_c::daNpc_grA_HIO_c() {
 }
 #endif
 
-NPC_GRA_HIO_CLASS l_HIO;
+static NPC_GRA_HIO_CLASS l_HIO;
 
 static char* l_evtNames[11] = {
     NULL,

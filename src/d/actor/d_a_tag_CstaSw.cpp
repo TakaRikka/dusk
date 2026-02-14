@@ -10,7 +10,7 @@
 #include "d/d_debug_viewer.h"
 #include "d/d_procname.h"
 
-daTagCstaSw_HIO_c l_HIO;
+ static daTagCstaSw_HIO_c l_HIO;
 
 daTagCstaSw_HIO_c::daTagCstaSw_HIO_c() {
     show_range = 0;

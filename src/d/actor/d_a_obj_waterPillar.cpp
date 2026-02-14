@@ -110,7 +110,7 @@ const dCcD_SrcGObjInf daWtPillar_c::mCcDObjCoInfo = {
     {},  // mGObjCo
 };
 
-daWtPillar_HIO_c l_HIO;
+static daWtPillar_HIO_c l_HIO;
 
 dCcD_SrcCps daWtPillar_c::mCcDCps = {
     daWtPillar_c::mCcDObjInfo,

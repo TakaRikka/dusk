@@ -673,25 +673,6 @@ void Z2AudioCS::extensionProcess(s32, s32) {
 
 # pragma mark JORServer
 #include <JSystem/JHostIO/JORServer.h>
-void JORServer::releaseMCTX(JORMContext*) {
-  puts("releaseMCTX is a stub");
-}
-
-JORMContext* JORServer::attachMCTX(u32) {
-  puts("attachMCTX is a stub");
-  return NULL;
-}
-
-JORServer* JORServer::instance;
-
-void JORMContext::genCheckBoxSub(u32 kind, const char* label, u32 id, u32 style, u16 initValue, u16 mask,
-                                 JOREventListener* pListener, u16 posX, u16 posY, u16 width,
-                                 u16 height) {
-  puts("JORServer::genCheckBoxSub is a stub");
-}
-void JORMContext::updateCheckBoxSub(u32 mode, u32 id, u16 value, u16 mask, u32 param_4) {
-  puts("JORServer::updateCheckBoxSub is a stub");
-}
 
 int JOREventCallbackListNode::JORAct(u32, const char*) {
     return 0;
@@ -727,13 +708,6 @@ mDoExt_offCupOnAupPacket::~mDoExt_offCupOnAupPacket() {
 mDoExt_onCupOffAupPacket::~mDoExt_onCupOffAupPacket() {
   puts("mDoExt_onCupOffAupPacket_c destructor is a stub");
 }
-
-# pragma mark mDoExt
-namespace mDoExt {
-    u8 CurrentHeapAdjustVerbose;
-    u8 HeapAdjustVerbose;
-    u8 HeapAdjustQuiet;
-};
 
 # pragma mark dKankyo_vrboxHIO_c
 #include <d/d_kankyo.h>
@@ -1513,7 +1487,7 @@ void GXInitTexCacheRegion(GXTexRegion* region, u8 is_32b_mipmap, u32 tmem_even, 
   puts("GXInitTexCacheRegion is a stub");
 }
 // XXX, this should be some struct?
-GXRenderModeObj GXNtsc480IntDf;
+// GXRenderModeObj GXNtsc480IntDf;
 GXRenderModeObj GXNtsc480Int;
 void GXPeekZ(u16 x, u16 y, u32* z) {
   puts("GXPeekZ is a stub");
@@ -1643,9 +1617,6 @@ u8 fapGm_HIO_c::mCaptureScreenDivH = 1;
 
 # pragma mark dMsgObject
 #include <d/d_msg_object.h>
-void dMsgObject_c::setSelectWordFlag(u8 flag) {
-  puts("dMsgObject_c::setSelectWordFlag is a stub");
-}
 void dMsgObject_c::setWord(const char* i_word) {
   puts("dMsgObject_c::setWord is a stub");
 }

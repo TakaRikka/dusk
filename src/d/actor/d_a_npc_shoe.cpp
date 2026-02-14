@@ -54,7 +54,7 @@ void daNpcShoe_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-NPC_SHOE_HIO_CLASS l_HIO;
+static NPC_SHOE_HIO_CLASS l_HIO;
 
 void daNpcShoe_c::setLookMode(int i_lookMode) {
     if (mLookMode != i_lookMode) {
