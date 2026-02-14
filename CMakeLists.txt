@@ -1351,7 +1351,6 @@ set(DUSK_FILES
     src/dusk/globals.cpp
     src/dusk/mtx.cpp
     src/dusk/J3DTransforms_C.cpp
-    src/dusk/m_Do_ext_dusk.cpp
     )
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES})
