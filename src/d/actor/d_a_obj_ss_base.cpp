@@ -15,7 +15,3 @@ daObj_SSBase_c::~daObj_SSBase_c() {}
 u32 daObj_SSBase_c::getProcessID() {
     return fopAcM_GetID(this);
 }
-
-void daObj_SSBase_c::setSoldOut() {
-    /* empty function */
-}

@@ -1189,7 +1189,7 @@ static bool daNpc_Pouya_IsDelete(void* i_this) {
     return 1;
 }
 
-NPC_POUYA_HIO_CLASS l_HIO;
+static NPC_POUYA_HIO_CLASS l_HIO;
 
 static actor_method_class daNpc_Pouya_MethodTable = {
     (process_method_func)daNpc_Pouya_Create,  (process_method_func)daNpc_Pouya_Delete,

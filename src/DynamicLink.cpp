@@ -453,14 +453,6 @@ const char* DynamicModuleControl::getModuleTypeString() const {
     return strings[mResourceType & 3];
 }
 
-extern "C" void ModuleProlog() {
-    /* empty function */
-}
-
-extern "C" void ModuleEpilog() {
-    /* empty function */
-}
-
 extern "C" void ModuleUnresolved() {
     // "\nError: Unlinked function was called.\n"
     OSReport_Error("\nError: リンクされていない関数が呼び出されました.\n");

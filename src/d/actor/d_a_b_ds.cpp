@@ -5703,7 +5703,9 @@ actor_process_profile_definition g_profile_B_DS = {
     fopAc_CULLBOX_CUSTOM_e,
 };
 
+#ifndef __MWERKS__
 cXyz daB_DS_c::getHandPosR() { return mHandPos[1]; }
 cXyz daB_DS_c::getHandPosL() { return mHandPos[0]; }
+#endif
 
 AUDIO_INSTANCES;

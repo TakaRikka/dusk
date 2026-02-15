@@ -307,7 +307,7 @@ static char* l_evtArcs[14] = {
 
 static char* l_myName = "Shad";
 
-NPC_SHAD_HIO_CLASS l_HIO;
+static NPC_SHAD_HIO_CLASS l_HIO;
 
 daNpcShad_c::EventFn daNpcShad_c::mEvtSeqList[14] = {
     NULL,

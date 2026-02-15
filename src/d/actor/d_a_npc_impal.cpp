@@ -45,7 +45,7 @@ daNpcImpal_HIOParam const daNpcImpal_Param_c::m = {
     300.0f,        // demo_start_dist
 };
 
-NPC_IMPAL_HIO_CLASS l_HIO;
+static NPC_IMPAL_HIO_CLASS l_HIO;
 
 static daNpc_GetParam2 l_bckGetParamList[18] = {
     {-1, 2, 0}, {14, 0, 0}, {8, 0, 0},  {7, 2, 0},  {11, 0, 0}, {13, 0, 0},

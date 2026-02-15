@@ -3006,7 +3006,7 @@ void mDoExt_3DlineMatSortPacket::draw() {
     J3DShape::resetVcdVatCache();
 }
 
-#if DEBUG
+#if DEBUG || !__MWERKS__
 mDoExt_cube8pPacket::mDoExt_cube8pPacket(cXyz* i_points, const GXColor& i_color) {
     cXyz* pnt_array = mPoints;
 

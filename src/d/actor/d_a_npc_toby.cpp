@@ -265,7 +265,7 @@ daNpc_Toby_c::cutFunc daNpc_Toby_c::mCutList[7] = {
     &daNpc_Toby_c::cutConversationAboutZra,
 };
 
-NPC_TOBY_HIO_CLASS l_HIO;
+static NPC_TOBY_HIO_CLASS l_HIO;
 
 daNpc_Toby_c::~daNpc_Toby_c() {
     OS_REPORT("|%06d:%x|daNpc_Toby_c -> デストラクト\n", g_Counter.mCounter0, this);

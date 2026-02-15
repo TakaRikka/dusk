@@ -1,17 +1,15 @@
 #ifndef _DOLPHIN_OS_H_
 #define _DOLPHIN_OS_H_
 
-#ifdef __MWERKS__
 #include <cstdio>
-#else
-#include <stdio.h>
-#endif
 
 #ifdef __REVOLUTION_SDK__
 #include <revolution/os.h>
 #else
+
 #include <dolphin/types.h>
 #include <dolphin/gx/GXStruct.h>
+
 void OSReportInit(void);
 void OSSwitchFiberEx(u32, u32, u32, u32, u32, u32);
 void OSVAttention(const char* fmt, va_list args);
@@ -246,7 +244,7 @@ extern u8 __OSReport_enable;
 #define OSRoundUp32B(x)   (((u32)(x) + 32 - 1) & ~(32 - 1))
 #define OSRoundDown32B(x) (((u32)(x)) & ~(32 - 1))
 
-#ifndef __MWERKS__
+#ifdef TARGET_PC
 
 static inline void* OSPhysicalToCached(u32 paddr) {
     return reinterpret_cast<void*>(static_cast<uintptr_t>(paddr));
@@ -267,7 +265,7 @@ static inline void* OSUncachedToCached(void* ucaddr) {
     return ucaddr;
 }
 
-#else 
+#else // non-TARGET_PC
 
 void* OSPhysicalToCached(u32 paddr);
 void* OSPhysicalToUncached(u32 paddr);
@@ -276,9 +274,9 @@ u32 OSUncachedToPhysical(void* ucaddr);
 void* OSCachedToUncached(void* caddr);
 void* OSUncachedToCached(void* ucaddr);
 
-#endif 
+#endif // TARGET_PC
 
-#if !DEBUG && defined(__MWERKS__)
+#if !DEBUG && !defined(TARGET_PC)
 #define OSPhysicalToCached(paddr)    ((void*) ((u32)(OS_BASE_CACHED   + (u32)(paddr))))
 #define OSPhysicalToUncached(paddr)  ((void*) ((u32)(OS_BASE_UNCACHED + (u32)(paddr))))
 #define OSCachedToPhysical(caddr)    ((u32)   ((u32)(caddr)  - OS_BASE_CACHED))

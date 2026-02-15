@@ -61,7 +61,7 @@ void daNpcThe_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-NPC_THE_HIO_CLASS l_HIO;
+static NPC_THE_HIO_CLASS l_HIO;
 
 static daNpc_GetParam1 l_bmdGetParamList[2] = {
     {23, 0},  // the

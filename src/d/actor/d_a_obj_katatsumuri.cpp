@@ -157,11 +157,11 @@ static f32 dummy1() {
     return 0.4f;
 }
 
-f32 dummy2() {
+static f32 dummy2() {
     return 10.0f;
 }
 
-f32 dummy3() {
+static f32 dummy3() {
     return 0.02f;
 }
 

@@ -780,7 +780,7 @@ static int daNpc_clerkA_IsDelete(void* i_this) {
     return 1;
 }
 
-NPC_CLERKA_HIO_CLASS l_HIO;
+static NPC_CLERKA_HIO_CLASS l_HIO;
 
 static actor_method_class daNpc_clerkA_MethodTable = {
     (process_method_func)daNpc_clerkA_Create,  (process_method_func)daNpc_clerkA_Delete,

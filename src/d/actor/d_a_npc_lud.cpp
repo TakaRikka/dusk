@@ -693,7 +693,7 @@ void daNpc_Lud_c::beforeMove() {
     }
 }
 
-NPC_LUD_HIO_CLASS l_HIO;
+static NPC_LUD_HIO_CLASS l_HIO;
 
 void daNpc_Lud_c::setAttnPos() {
     cXyz cStack_70(5.0f, 30.0f, 0.0f);

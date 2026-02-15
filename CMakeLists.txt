@@ -1355,6 +1355,7 @@ set(DUSK_FILES
     src/dusk/J3DTransforms_C.cpp
     src/dusk/m_Do_ext_dusk.cpp
 	src/dusk/jsystem_stubs.cpp
+    src/m_Do/m_Do_main.cpp # TODO: move this to a more appropriate location, it's not really dusk-specific
     )
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES})

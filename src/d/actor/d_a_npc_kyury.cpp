@@ -136,7 +136,7 @@ daNpc_Kyury_c::cutFunc daNpc_Kyury_c::mCutList[2] = {
     &daNpc_Kyury_c::cutConversation,
 };
 
-NPC_KYURY_HIO_CLASS l_HIO;
+static NPC_KYURY_HIO_CLASS l_HIO;
 
 #if DEBUG
 daNpc_Kyury_HIO_c::daNpc_Kyury_HIO_c() {

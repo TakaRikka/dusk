@@ -57,7 +57,7 @@ void daNpcAsh_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-NPC_ASH_HIO_CLASS l_HIO;
+static NPC_ASH_HIO_CLASS l_HIO;
 
 void daNpcAsh_c::setLookMode(int i_lookMode, fopAc_ac_c* i_talkPartner) {
     if (i_lookMode != mLookMode || i_talkPartner != mTalkPartner) {

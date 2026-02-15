@@ -631,42 +631,100 @@ u32 VIGetRetraceCount() {
 }
 
 u32 VIGetNextField() {
-    puts("VIGetNextField is a stub");
-    return 0;
+  puts("VIGetNextField is a stub");
+  return 0;
 }
 
-void VISetBlack(BOOL black) {
-    puts("VISetBlack is a stub");
-}
+void VISetBlack(BOOL black) { puts("VISetBlack is a stub"); }
 
-void VISetNextFrameBuffer(void* fb) {
-    // puts("VISetNextFrameBuffer is a stub");
+void VISetNextFrameBuffer(void *fb) {
+  // puts("VISetNextFrameBuffer is a stub");
 }
 
 void VIWaitForRetrace() {
-    if (sVIRetraceCallback) {
-        sVIRetraceCallback(0);
-    }
+  if (sVIRetraceCallback) {
+    sVIRetraceCallback(0);
+  }
 }
 
 void* VIGetCurrentFrameBuffer(void) {
-    puts("VIGetCurrentFrameBuffer is a stub");
-    return NULL;
+  puts("VIGetCurrentFrameBuffer is a stub");
+  return NULL;
 }
 
 u32 VIGetDTVStatus(void) {
-    puts("VIGetDTVStatus is a stub");
-    return 0;
+  puts("VIGetDTVStatus is a stub");
+  return 0;
 }
 
 void* VIGetNextFrameBuffer(void) {
-    puts("VIGetNextFrameBuffer is a stub");
-    return NULL;
+  puts("VIGetNextFrameBuffer is a stub");
+  return NULL;
 }
 
 VIRetraceCallback VISetPostRetraceCallback(VIRetraceCallback callback) {
-    sVIRetraceCallback = callback;
-    return callback;
+  sVIRetraceCallback = callback;
+  return callback;
+}
+
+VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback cb) {
+  puts("VISetPreRetraceCallback is a stub");
+  return cb;
+}
+
+} // extern "C"
+
+# pragma mark DSP
+#include <dolphin/dsp.h>
+extern "C" void __DSP_insert_task(DSPTaskInfo* task) {
+  puts("__DSP_insert_task is a stub");
+}
+
+extern "C" void __DSP_boot_task(DSPTaskInfo*) {
+  puts("__DSP_boot_task is a stub");
+}
+
+extern "C" void __DSP_exec_task(DSPTaskInfo*, DSPTaskInfo*) {
+  puts("__DSP_exec_task is a stub");
+}
+
+extern "C" void __DSP_remove_task(DSPTaskInfo* task) {
+  puts("__DSP_remove_task is a stub");
+}
+
+void DSPAssertInt(void) {
+  puts("DSPAssertInt is a stub");
+}
+u32 DSPCheckMailFromDSP(void) {
+  puts("DSPCheckMailFromDSP is a stub");
+  return 0;
+}
+u32 DSPCheckMailToDSP(void) {
+  puts("DSPCheckMailToDSP is a stub");
+  return 0;
+}
+void DSPInit(void) {
+  puts("DSPInit is a stub");
+}
+u32 DSPReadMailFromDSP(void) {
+  puts("DSPReadMailFromDSP is a stub");
+  return 0;
+}
+void DSPSendMailToDSP(u32 mail) {
+  puts("DSPSendMailToDSP is a stub");
+}
+
+# pragma mark Z2Audio
+#include <Z2AudioLib/Z2AudioCS.h>
+void Z2AudioCS::extensionProcess(s32, s32) {
+  puts("Z2AudioMgr::play is a stub");
+}
+
+# pragma mark JORServer
+#include <JSystem/JHostIO/JORServer.h>
+
+int JOREventCallbackListNode::JORAct(u32, const char*) {
+    return 0;
 }
 
 VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback cb) {
@@ -776,14 +834,7 @@ mDoExt_onCupOffAupPacket::~mDoExt_onCupOffAupPacket() {
     puts("mDoExt_onCupOffAupPacket_c destructor is a stub");
 }
 
-// #pragma mark mDoExt
-// namespace mDoExt {
-// u8 CurrentHeapAdjustVerbose;
-// u8 HeapAdjustVerbose;
-// u8 HeapAdjustQuiet;
-// };  // namespace mDoExt
-
-#pragma mark dKankyo_vrboxHIO_c
+# pragma mark dKankyo_vrboxHIO_c
 #include <d/d_kankyo.h>
 void dKankyo_vrboxHIO_c::dKankyo_vrboxHIOInfoUpDateF() {
     puts("dKankyo_vrboxHIO_c::dKankyo_vrboxHIOInfoUpDateF is a stub");
@@ -1567,7 +1618,7 @@ void GXInitTexCacheRegion(GXTexRegion* region, u8 is_32b_mipmap, u32 tmem_even,
     puts("GXInitTexCacheRegion is a stub");
 }
 // XXX, this should be some struct?
-//GXRenderModeObj GXNtsc480IntDf;
+// GXRenderModeObj GXNtsc480IntDf;
 GXRenderModeObj GXNtsc480Int;
 void GXPeekZ(u16 x, u16 y, u32* z) {
     puts("GXPeekZ is a stub");
@@ -1697,9 +1748,6 @@ u8 fapGm_HIO_c::mCaptureScreenDivH = 1;
 
 #pragma mark dMsgObject
 #include <d/d_msg_object.h>
-// void dMsgObject_c::setSelectWordFlag(u8 flag) {
-//     puts("dMsgObject_c::setSelectWordFlag is a stub");
-// }
 void dMsgObject_c::setWord(const char* i_word) {
     puts("dMsgObject_c::setWord is a stub");
 }
