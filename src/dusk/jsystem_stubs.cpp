@@ -1,6 +1,7 @@
+/*
 #include <cstdio>
 #include <cstring>
-
+*/
 #pragma mark J3DShapeTable
 #include "JSystem/J3DGraphAnimator/J3DShapeTable.h"
 
@@ -46,7 +47,7 @@ bool JASVoiceBank::getInstParam(int a, int b, int c, JASInstParam* param) const 
 }
 
 // JASSeqParser::sCallBackFunc is compiled from JASSeqParser.obj
-
+/*
 #pragma mark JHICommBuf
 #include "JSystem/JHostIO/JHIComm.h"
 
@@ -137,7 +138,7 @@ int JOREventCallbackListNode::JORAct(u32 eventID, const char* eventName) {
     puts("JOREventCallbackListNode::JORAct is a stub");
     return 0;
 }
-
+*/
 #pragma mark J3DPSMtxArrayConcat
 void J3DPSMtxArrayConcat(float (*a)[4], float (*b)[4], float (*out)[4], unsigned long count) {
     puts("J3DPSMtxArrayConcat is a stub");

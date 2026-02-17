@@ -54,5 +54,9 @@ void *_memcpy(void* dest, void const* src, int n) {
 }
 
 void DCZeroRange(void* addr, uint32_t nBytes) {
+#ifdef _MSC_VER
+    memset(addr, 0, nBytes);
+#else
     bzero(addr, nBytes);
+#endif
 }

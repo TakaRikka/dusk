@@ -5,14 +5,14 @@
 
 // Credits: Super Monkey Ball
 
-#pragma mark OS
 /*
 void OSReport(const char* msg, ...) {
     va_list args;
     va_start(args, msg);
     vprintf(msg, args);
     va_end(args);
-}*/
+}
+*/
 
 u32 OSGetConsoleType() {
     return OS_CONSOLE_RETAIL1;
@@ -76,6 +76,7 @@ void OSCancelAlarm(OSAlarm* alarm) {
 
 s32 OSCheckActiveThreads(void) {
     puts("OSCheckActiveThreads is a stub");
+
     return 0;
 }
 
@@ -235,14 +236,15 @@ void OSExitThread(void* val) {
     puts("OSExitThread is a stub");
 }
 
+static void* sArenaLo = nullptr;
+static void* sArenaHi = nullptr;
+
 void* OSGetArenaHi(void) {
-    puts("OSGetArenaHi is a stub");
-    return NULL;
+    return sArenaHi;
 }
 
 void* OSGetArenaLo(void) {
-    puts("OSGetArenaLo is a stub");
-    return NULL;
+    return sArenaLo;
 }
 
 OSContext* OSGetCurrentContext(void) {
@@ -326,11 +328,11 @@ int OSSendMessage(OSMessageQueue* mq, void* msg, s32 flags) {
 }
 
 void OSSetArenaHi(void* newHi) {
-    puts("OSSetArenaHi is a stub");
+    sArenaHi = newHi;
 }
 
 void OSSetArenaLo(void* newLo) {
-    puts("OSSetArenaLo is a stub");
+    sArenaLo = newLo;
 }
 
 void OSSetPeriodicAlarm(OSAlarm* alarm, OSTime start, OSTime period, OSAlarmHandler handler) {
@@ -631,100 +633,42 @@ u32 VIGetRetraceCount() {
 }
 
 u32 VIGetNextField() {
-  puts("VIGetNextField is a stub");
-  return 0;
+    puts("VIGetNextField is a stub");
+    return 0;
 }
 
-void VISetBlack(BOOL black) { puts("VISetBlack is a stub"); }
+void VISetBlack(BOOL black) {
+    puts("VISetBlack is a stub");
+}
 
-void VISetNextFrameBuffer(void *fb) {
-  // puts("VISetNextFrameBuffer is a stub");
+void VISetNextFrameBuffer(void* fb) {
+    // puts("VISetNextFrameBuffer is a stub");
 }
 
 void VIWaitForRetrace() {
-  if (sVIRetraceCallback) {
-    sVIRetraceCallback(0);
-  }
+    if (sVIRetraceCallback) {
+        sVIRetraceCallback(0);
+    }
 }
 
 void* VIGetCurrentFrameBuffer(void) {
-  puts("VIGetCurrentFrameBuffer is a stub");
-  return NULL;
+    puts("VIGetCurrentFrameBuffer is a stub");
+    return NULL;
 }
 
 u32 VIGetDTVStatus(void) {
-  puts("VIGetDTVStatus is a stub");
-  return 0;
+    puts("VIGetDTVStatus is a stub");
+    return 0;
 }
 
 void* VIGetNextFrameBuffer(void) {
-  puts("VIGetNextFrameBuffer is a stub");
-  return NULL;
+    puts("VIGetNextFrameBuffer is a stub");
+    return NULL;
 }
 
 VIRetraceCallback VISetPostRetraceCallback(VIRetraceCallback callback) {
-  sVIRetraceCallback = callback;
-  return callback;
-}
-
-VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback cb) {
-  puts("VISetPreRetraceCallback is a stub");
-  return cb;
-}
-
-} // extern "C"
-
-# pragma mark DSP
-#include <dolphin/dsp.h>
-extern "C" void __DSP_insert_task(DSPTaskInfo* task) {
-  puts("__DSP_insert_task is a stub");
-}
-
-extern "C" void __DSP_boot_task(DSPTaskInfo*) {
-  puts("__DSP_boot_task is a stub");
-}
-
-extern "C" void __DSP_exec_task(DSPTaskInfo*, DSPTaskInfo*) {
-  puts("__DSP_exec_task is a stub");
-}
-
-extern "C" void __DSP_remove_task(DSPTaskInfo* task) {
-  puts("__DSP_remove_task is a stub");
-}
-
-void DSPAssertInt(void) {
-  puts("DSPAssertInt is a stub");
-}
-u32 DSPCheckMailFromDSP(void) {
-  puts("DSPCheckMailFromDSP is a stub");
-  return 0;
-}
-u32 DSPCheckMailToDSP(void) {
-  puts("DSPCheckMailToDSP is a stub");
-  return 0;
-}
-void DSPInit(void) {
-  puts("DSPInit is a stub");
-}
-u32 DSPReadMailFromDSP(void) {
-  puts("DSPReadMailFromDSP is a stub");
-  return 0;
-}
-void DSPSendMailToDSP(u32 mail) {
-  puts("DSPSendMailToDSP is a stub");
-}
-
-# pragma mark Z2Audio
-#include <Z2AudioLib/Z2AudioCS.h>
-void Z2AudioCS::extensionProcess(s32, s32) {
-  puts("Z2AudioMgr::play is a stub");
-}
-
-# pragma mark JORServer
-#include <JSystem/JHostIO/JORServer.h>
-
-int JOREventCallbackListNode::JORAct(u32, const char*) {
-    return 0;
+    sVIRetraceCallback = callback;
+    return callback;
 }
 
 VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback cb) {
@@ -780,27 +724,12 @@ void Z2AudioCS::extensionProcess(s32, s32) {
     puts("Z2AudioMgr::play is a stub");
 }
 
-// #pragma mark JORServer
-// #include <JSystem/JHostIO/JORServer.h>
-// void JORServer::releaseMCTX(JORMContext*) {
-//     puts("releaseMCTX is a stub");
-// }
-//
-// JORMContext* JORServer::attachMCTX(u32) {
-//     puts("attachMCTX is a stub");
-//     return NULL;
-// }
-//
-// JORServer* JORServer::instance;
-//
-// void JORMContext::genCheckBoxSub(u32 kind, const char* label, u32 id, u32 style, u16 initValue,
-//                                  u16 mask, JOREventListener* pListener, u16 posX, u16 posY,
-//                                  u16 width, u16 height) {
-//     puts("JORServer::genCheckBoxSub is a stub");
-// }
-// void JORMContext::updateCheckBoxSub(u32 mode, u32 id, u16 value, u16 mask, u32 param_4) {
-//     puts("JORServer::updateCheckBoxSub is a stub");
-// }
+#pragma mark JORServer
+#include <JSystem/JHostIO/JORServer.h>
+
+int JOREventCallbackListNode::JORAct(u32, const char*) {
+    return 0;
+}
 
 #pragma mark JSUMemoryOutputStream
 #include <JSystem/JSupport/JSUMemoryStream.h>
@@ -834,7 +763,7 @@ mDoExt_onCupOffAupPacket::~mDoExt_onCupOffAupPacket() {
     puts("mDoExt_onCupOffAupPacket_c destructor is a stub");
 }
 
-# pragma mark dKankyo_vrboxHIO_c
+#pragma mark dKankyo_vrboxHIO_c
 #include <d/d_kankyo.h>
 void dKankyo_vrboxHIO_c::dKankyo_vrboxHIOInfoUpDateF() {
     puts("dKankyo_vrboxHIO_c::dKankyo_vrboxHIOInfoUpDateF is a stub");
@@ -1755,6 +1684,92 @@ void dMsgObject_c::setSelectWord(int i_no, const char* i_word) {
     puts("dMsgObject_c::setSelectWord is a stub");
 }
 
+#pragma mark HIO
+#include <dolphin/hio.h>
+#include <revolution/hio2.h>
+BOOL HIO2Close(s32 handle) {
+    puts("HIO2Close is a stub");
+    return FALSE;
+}
+
+BOOL HIO2EnumDevices(HIO2EnumCallback callback) {
+    puts("HIO2EnumDevices is a stub");
+    return FALSE;
+}
+
+BOOL HIO2Init(void) {
+    puts("HIO2Init is a stub");
+    return FALSE;
+}
+
+s32 HIO2Open(HIO2DeviceType type, HIO2UnkCallback exiCb, HIO2DisconnectCallback disconnectCb) {
+    puts("HIO2Open is a stub");
+    return 0;
+}
+
+BOOL HIO2Read(s32 handle, u32 addr, void* buffer, s32 size) {
+    puts("HIO2Read is a stub");
+    return FALSE;
+}
+
+BOOL HIO2Write(s32 handle, u32 addr, void* buffer, s32 size) {
+    puts("HIO2Write is a stub");
+    return FALSE;
+}
+
+BOOL HIORead(u32 addr, void* buffer, s32 size) {
+    puts("HIORead is a stub");
+    return FALSE;
+}
+
+BOOL HIOWrite(u32 addr, void* buffer, s32 size) {
+    puts("HIOWrite is a stub");
+    return FALSE;
+}
+
+#pragma mark JHICommBuf
+#include <JSystem/JHostIO/JHIComm.h>
+void JHICommBufHeader::init() {
+    puts("JHICommBufHeader::init is a stub");
+}
+
+int JHICommBufHeader::load() {
+    puts("JHICommBufHeader::load is a stub");
+    return 0;
+}
+
+int JHICommBufReader::read(void*, int) {
+    puts("JHICommBufReader::read is a stub");
+    return 0;
+}
+void JHICommBufReader::readEnd() {
+    puts("JHICommBufReader::readEnd is a stub");
+}
+
+int JHICommBufReader::readBegin() {
+    puts("JHICommBufReader::readBegin is a stub");
+    return 0;
+}
+
+int JHICommBufWriter::writeBegin() {
+    puts("JHICommBufWriter::writeBegin is a stub");
+    return 0;
+}
+
+int JHICommBufWriter::write(void*, int) {
+    puts("JHICommBufWriter::write is a stub");
+    return 0;
+}
+
+void JHICommBufWriter::writeEnd() {
+    puts("JHICommBufWriter::writeEnd is a stub");
+}
+
+u32 JHICommBufReader::Header::getReadableSize() const {
+    puts("JHICommBufReader::Header::getReadableSize is a stub");
+    return 0;
+}
+
 #pragma mark dMeter2Info
 #include <d/d_meter2_info.h>
 void dMeter2Info_c::getString(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry) {
@@ -1765,6 +1780,3 @@ void dMeter2Info_c::getStringKanji(u32 i_stringID, char* o_string, JMSMesgEntry_
 }
 
 dPa_particleTracePcallBack_c JPTracePCB4;
-
-
-

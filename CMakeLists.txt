@@ -24,6 +24,8 @@ elseif (APPLE)
 elseif (MSVC)
     add_compile_options(/bigobj)
     add_compile_options(/Zc:strictStrings-)
+    add_compile_options(/MP)
+    add_compile_options(/W0)
 endif ()
 if (NOT MSVC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error -Wno-c++11-narrowing")
@@ -1353,14 +1355,15 @@ set(DUSK_FILES
     src/dusk/globals.cpp
     src/dusk/mtx.cpp
     src/dusk/J3DTransforms_C.cpp
-    src/dusk/m_Do_ext_dusk.cpp
+    #src/dusk/m_Do_ext_dusk.cpp
 	src/dusk/jsystem_stubs.cpp
-    src/m_Do/m_Do_main.cpp # TODO: move this to a more appropriate location, it's not really dusk-specific
+    src/dusk/dvd_emu.cpp
     )
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES})
 source_group("dusk" FILES ${DUSK_FILES})
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(game SHARED ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${SSYSTEM_FILES} ${JSYSTEM_FILES} ${REL_FILES} ${DUSK_FILES})
 target_compile_definitions(game PRIVATE TARGET_PC VERSION=0 NDEBUG=1 NDEBUG_DEFINED=1 DEBUG_DEFINED=0)
 # TODO: version handling for res includes

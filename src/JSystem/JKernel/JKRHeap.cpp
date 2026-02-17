@@ -8,8 +8,15 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
+#ifdef __MWERKS__
 #include <stdint.h>
+#else
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#endif
 #include <string>
+#include <dolphin/os.h>
 
 #if DEBUG
 u8 JKRValue_DEBUGFILL_NOTUSE = 0xFD;
@@ -95,12 +102,28 @@ JKRHeap::JKRFreeCallback JKRHeap::sFreeCallback;
 bool JKRHeap::initArena(char** memory, u32* size, int maxHeaps) {
     void* arenaLo = OSGetArenaLo();
     void* arenaHi = OSGetArenaHi();
-#if !PLATFORM_GCN
-    OSReport("original arenaLo = %p arenaHi = %p\n", arenaLo, arenaHi);
-#endif
+
+    OSReport("[JKRHeap] initArena: Lo=%p Hi=%p Size=0x%X\n", arenaLo, arenaHi,
+             (uintptr_t)arenaHi - (uintptr_t)arenaLo);
+
     if (arenaLo == arenaHi)
         return false;
 
+#ifdef TARGET_PC
+    // PC: Simple arena setup without GameCube-specific memory management
+    arenaLo = (void*)ALIGN_NEXT((uintptr_t)arenaLo, 0x20);
+    arenaHi = (void*)ALIGN_PREV((uintptr_t)arenaHi, 0x20);
+
+    mCodeStart = nullptr;
+    mCodeEnd = nullptr;
+    mUserRamStart = arenaLo;
+    mUserRamEnd = arenaHi;
+    mMemorySize = (uintptr_t)arenaHi - (uintptr_t)arenaLo;
+
+    *memory = (char*)arenaLo;
+    *size = (uintptr_t)arenaHi - (uintptr_t)arenaLo;
+    return true;
+#else
     arenaLo = OSInitAlloc(arenaLo, arenaHi, maxHeaps);
     arenaLo = (void*)ALIGN_NEXT((uintptr_t)arenaLo, 0x20);
     arenaHi = (void*)ALIGN_PREV((uintptr_t)arenaHi, 0x20);
@@ -119,6 +142,7 @@ bool JKRHeap::initArena(char** memory, u32* size, int maxHeaps) {
     *memory = (char*)arenaLo;
     *size = (uintptr_t)arenaHi - (uintptr_t)arenaLo;
     return true;
+#endif
 }
 
 #if PLATFORM_WII || PLATFORM_SHIELD
@@ -468,37 +492,113 @@ bool JKRHeap::isSubHeap(JKRHeap* heap) const {
     return false;
 }
 
+#ifdef __MWERKS__
 void* operator new(size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
 }
+#else
+void* operator new(size_t size) {
+    if (JKRHeap::sCurrentHeap == NULL) {
+        return malloc(size);
+    }
+    void* mem = JKRHeap::alloc(size, 4, NULL);
+    if (mem == NULL) {
+        OSReport("[NEW] JKRHeap FULL! Fallback to malloc for size %u\n", (unsigned)size);
+        mem = malloc(size);
+    }
+    return mem;
+}
+#endif
 
+#ifdef __MWERKS__
 void* operator new(size_t size, int alignment) {
     return JKRHeap::alloc(size, alignment, NULL);
 }
+#else
+void* operator new(size_t size, int alignment) {
+    if (JKRHeap::sCurrentHeap == nullptr)
+        return _aligned_malloc(size, alignment);
+    void* mem = JKRHeap::alloc(size, alignment, nullptr);
+    if (mem == nullptr) {
+        OSReport("[NEW] JKRHeap FULL! Fallback to aligned_malloc size %u\n", (unsigned)size);
+        return _aligned_malloc(size, alignment);
+    }
+    return mem;
+}
+#endif
 
 void* operator new(size_t size, JKRHeap* heap, int alignment) {
     return JKRHeap::alloc(size, alignment, heap);
 }
 
+#ifdef __MWERKS__
 void* operator new[](size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
 }
+#else
+void* operator new[](size_t size) {
+    if (JKRHeap::sCurrentHeap == NULL)
+        return malloc(size);
+    void* mem = JKRHeap::alloc(size, 4, NULL);
+    if (mem == NULL) {
+        mem = malloc(size);
+    }
+    return mem;
+}
+#endif
 
+#ifdef __MWERKS__
 void* operator new[](size_t size, int alignment) {
     return JKRHeap::alloc(size, alignment, NULL);
 }
+#else
+void* operator new[](size_t size, int alignment) {
+    if (JKRHeap::sCurrentHeap == nullptr)
+        return _aligned_malloc(size, alignment);
+    void* mem = JKRHeap::alloc(size, alignment, nullptr);
+    if (mem == nullptr)
+        return _aligned_malloc(size, alignment);
+    return mem;
+}
+#endif
 
 void* operator new[](size_t size, JKRHeap* heap, int alignment) {
     return JKRHeap::alloc(size, alignment, heap);
 }
 
+#ifdef __MWERKS__
 void operator delete(void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
+#else
+void operator delete(void* ptr) {
+    if (ptr == NULL)
+        return;
+    JKRHeap* heap = JKRHeap::findFromRoot(ptr);
+    if (heap == NULL) {
+        free(ptr);
+        return;
+    }
+    JKRHeap::free(ptr, NULL);
+}
+#endif
 
+#ifdef __MWERKS__
 void operator delete[](void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
+#else
+void operator delete[](void* ptr) {
+    if (ptr == NULL)
+        return;
+    JKRHeap* heap = JKRHeap::findFromRoot(ptr);
+    if (heap == NULL) {
+        free(ptr);
+        return;
+    }
+    JKRHeap::free(ptr, NULL);
+}
+#endif
 
 s32 fillcheck_dispcount = 100;
 bool data_8074A8D0_debug = true;
