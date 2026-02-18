@@ -24,8 +24,11 @@ elseif (APPLE)
 elseif (MSVC)
     add_compile_options(/bigobj)
 endif ()
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error -Wno-c++11-narrowing")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error -Wno-c++11-narrowing")
+
+if(NOT MSVC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error -Wno-c++11-narrowing")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error -Wno-c++11-narrowing")
+endif()
 
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 
